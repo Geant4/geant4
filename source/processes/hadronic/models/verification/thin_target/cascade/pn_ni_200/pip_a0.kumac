@@ -1,0 +1,66 @@
+
+opt zfl
+opt nfit
+opt nsta
+opt nbox
+opt ngri
+set MSCF 0.80
+set XLAB 1.2
+set NDVX 010206
+set NDVY 010205
+ zone
+ opt logy
+ 
+ null 0 60 0.000001 1
+ atitle 'E?kin!(MeV) secondary pi+' 'ds/dEdo (mb/MeV/sr) theta = 22 deg'
+ 
+ 
+* hi/file 1 prec.paw
+* set dmod 3
+* hi/pl 28 shist
+* line 100 1.6 110 1.6
+* itx 115 35 'PREC'
+* close 1
+ 
+ 
+ hi/file 1 kin.paw
+ set dmod 1
+ hi/pl 46 shist
+ line 100 -1 110 -1
+ itx 115 0.1 'KIN'
+ close 1
+ 
+ve/create X(10) R 20 25 27.5 30 32.5 35 40 45 50 60
+ve/create Y(10) R 0.000634 0.000896 0.000971 0.000988 0.001003 0.000955 0.000909 0.00074 0.000578 0.0001 
+ve/create Z1(10) R 0 0 0 0 0 0 0 0 0 0 
+ve/create Z(10) R 0.000019 0.000018 0.000025 0.000017 0.000022 0.00002 0.000018 0.000015 0.000012 0.000004
+gr/h/error X Y Z1 Z 10 21 0.2
+
+ exe ../prf pip_a0 eps
+
+  null 0 60 0.000001 1
+ atitle 'E?kin!(MeV) secondary pi+' 'ds/dEdo (mb/MeV/sr) theta = 22 deg'
+ 
+gr/h/error X Y Z1 Z 10 21 0.2
+
+  hi/file 1 par.paw
+ set dmod 3
+ hi/pl 46 shist
+ line 100 -0.3 110 -0.3
+ itx 115 0.5 'LEPAR'
+ close 1
+ 
+  hi/file 1 chips.paw
+ set dmod 1
+ hi/pl 46 shist
+ line 100 -1 110 -1
+ itx 115 0.1 'CHIPS'
+ close 1
+
+ 
+ opt liny
+
+exe ../prf pipk_a0 eps
+
+
+

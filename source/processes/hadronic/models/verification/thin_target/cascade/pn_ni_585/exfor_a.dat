@@ -1,0 +1,2677 @@
+                EXFOR: Experimental Nuclear Reaction Data Retrievals
+                                         HELP
+               Other Databases: EVA, CINDA, Program abstracts
+
+  ------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+ENTRY            A0344     970324
+SUBENT        A0344001     970324
+BIB                  9         28
+TITLE      On the Depth Dependence of Spallation Reactions in
+           A Spherical Thick Diorite Target Homogeneously
+           Irradiated by 600 MeV Protons. Simulation of
+           Production of Cosmogenic Nuclides in Small Meteorites
+AUTHOR     (R.MICHEL, P.DRAGOVITSCH, P.ENGLERT, F.PEIFFER,
+           R.STUEK, S.THEIS, F.BEGEMANN, H.WEBER, P.SIGNER,
+           R.WIELER, D.FILGES, P.CLOTH)
+REFERENCE  (J,NIM/B,16,61,86)
+           (R,NEANDC(E)-272U,28,86). Short Report.
+           (R,JUEL-2130,,87). Theory.
+           (W,MICHEL,970303) To Delete Co-59(P,X)Fe-59 Data.
+INSTITUTE  (2GERKLN)
+           (2GERUH)
+           (2GERJUL)
+           (2SWTETH) And Max-Planck-Institut Fur Chemie, Mainz,
+           Frg.
+FACILITY   (SYNCY,2ZZZCER)
+HISTORY    (870914C) F.E.
+           (970213A) Transform to Lower Case. Reaction Lines are
+           Detailed.
+           (970324U) Last checking has been done.
+METHOD     (STTA,BCINT)
+ADD-RES    Simulation of Production of Cosmogenic Nuclides in
+           Small Meteorites.
+COMMENT    /by Comriler/. Detailed Information About Target
+           Device See in Reference.
+           -By Compiler- Corrections on Secondary Particles
+           Influence were Partically Only, Probably.
+ENDBIB              28
+NOCOMMON
+ENDSUBENT           31
+------------------------------------------------------------------------
+SUBENT        A0344009     970324
+BIB                  5         30
+REACTION  B(28-NI-0(P,X)4-BE-7,,SIG,,,EXP) Independent
+          S(28-NI-0(P,X)21-SC-46-G,M+,SIG,,,EXP)  Independent
+          V(28-NI-0(P,X)23-V-48,IND,SIG,,,EXP)
+          8(28-NI-0(P,X)24-CR-48,CUM,SIG,,,EXP)
+          1(28-NI-0(P,X)24-CR-51,CUM,SIG,,,EXP)
+          2(28-NI-0(P,X)25-MN-52-G,CUM,SIG,,,EXP)
+          4(28-NI-0(P,X)25-MN-54,,SIG,,,EXP) Independent
+METHOD     (ACTIV)
+           (GSPEC)
+DETECTOR   (GELI)
+ERR-ANALYS (ERR-T). Quoted Errors Include Counting Statistics,
+           The Realative Efficiency Calibration and
+           Inhomogeneities of Target Thickness. Its do not
+           Consider Those Errors Which Systematically Affect All
+           The Samples in the Same Way Such As Absolute Efficiency
+           Calibration, Absolute Flux Determination, and Errors of
+           Monitor Cross Sections. The Overall Error of the Latter
+           Effects is About 7%. It has to be Quadratically Added
+           To Those Quoted If Absolute Errors are Required For
+           Comparison with the Results of Other Authors.
+DECAY-DATAB(4-BE-7,53.29D,DG,477.56,0.103)
+          S(21-SC-46-G,83.82D,DG,889.26,0.9998)
+          V(23-V-48,15.97D,DG,983.50,1.,
+                           DG,1311.6,0.98)
+          8(24-CR-48,21.6HR,DG,112.5,0.98,
+                            DG,308.3,0.99)
+          1(24-CR-51,27.70D,DG,320.07,0.0983)
+          2(25-MN-52-G,5.6D,DG,744.20,0.85,
+                          DG,1434.30,1.)
+          4(25-MN-54,312.2D,DG,834.81,0.9998)
+ENDBIB              30
+NOCOMMON
+DATA                15          1
+EN         DATA      BERR-T     BDATA      SERR-T     SDATA      V
+ERR-T     VDATA      8ERR-T     8DATA      1ERR-T     1DATA      2
+ERR-T     2DATA      4ERR-T     4
+MEV        MB         MB         MB         MB         MB
+MB         MB         MB         MB         MB         MB
+MB         MB         MB
+       600.       2.73       0.06       4.94       0.05       22.5
+       0.19      1.861      0.019       41.8        0.4      16.08
+       0.19      16.08       0.19
+ENDDATA              9
+ENDSUBENT           44
+------------------------------------------------------------------------
+SUBENT        A0344010     970324
+BIB                  5         24
+REACTION  F(28-NI-0(P,X)26-FE-59,CUM,SIG,,,EXP)
+          6(28-NI-0(P,X)27-CO-56,CUM,SIG,,,EXP)
+          7(28-NI-0(P,X)27-CO-57,IND,SIG,,,EXP)
+          8(28-NI-0(P,X)27-CO-58-G,M+,SIG,,,EXP) Independent
+          N(28-NI-0(P,X)28-NI-57,IND,SIG,,,EXP)
+METHOD     (ACTIV)
+           (GSPEC)
+DETECTOR   (GELI)
+ERR-ANALYS (ERR-T). Quoted Errors Include Counting Statistics,
+           The Realative Efficiency Calibration and
+           Inhomogeneities of Target Thickness. Its do not
+           Consider Those Errors Which Systematically Affect All
+           The Samples in the Same Way Such As Absolute Efficiency
+           Calibration, Absolute Flux Determination, and Errors of
+           Monitor Cross Sections. The Overall Error of the Latter
+           Effects is About 7%. It has to be Quadratically Added
+           To Those Quoted If Absolute Errors are Required For
+           Comparison with the Results of Other Authors.
+DECAY-DATAF(26-FE-59,45.1D,DG,1099.22,0.565,
+                           DG,1291.56,0.432)
+          6(27-CO-56,78.76D,DG,846.75,0.9999)
+          7(27-CO-57,271.3D,DG,122.07,0.856)
+          8(27-CO-58-G,70.78D,DG,810.75,0.9945)
+          N(28-NI-57,36.0HR,DG,1377.62,0.849)
+ENDBIB              24
+NOCOMMON
+DATA                11          1
+EN         DATA      FERR-T     FDATA      6ERR-T     6DATA      7
+ERR-T     7DATA      8ERR-T     8DATA      NERR-T     N
+MEV        MB         MB         MB         MB         MB
+MB         MB         MB         MB         MB
+       600.       3.12       0.01       36.5        0.4       69.8
+        0.7       20.9        0.2        23.        0.3
+ENDDATA              6
+ENDSUBENT           35
+------------------------------------------------------------------------
+ENTRY            50408          0
+SUBENT        50408001          0
+BIB
+TITLE      THIN-TARGET EXCITATION FUNCTIONS FOR PROTON-PRODUCED
+           LONG-LIVED RADIONUCLIDES.
+AUTHOR     (B.DITTRICH,U.HERPERS,TH.SCHIFFMANN)
+REFERENCE  (R,INDC(GER)-32/LN+SPECIAL,33,88)
+INSTITUTE  (2GERKLN)
+FACILITY   (SPECM,2GERKLN)
+ADD-RES    (COMP).THE EXPERIMENTAL RESULTS PARTLY WERE
+           COMPARED WITH THE THEORETICAL CALCULATIONS BY THE
+           PROGRAM SPALL.
+HISTORY    (890414C)
+           (890414U)
+METHOD     (SITA)
+ERR-ANALYS (DATA-ERR).THE UNCERTAINTY IS REPORTED BY AUTHORS.
+ENDBIB
+NOCOMMON             0          0
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        50408007     900226
+BIB
+REACTION  1(28-NI-0(P,X)11-NA-22,,SIG,,,EXP)
+          2(28-NI-0(P,X)11-NA-22,,SIG,,,CALC)
+          3(28-NI-0(P,X)25-MN-54,,SIG,,,EXP)
+          4(28-NI-0(P,X)25-MN-54,,SIG,,,CALC)
+          5(28-NI-0(P,X)27-CO-60,,SIG,,,EXP)
+          6(28-NI-0(P,X)27-CO-60,,SIG,,,CALC)
+SAMPLE     NICKEL WAS USED AS TARGET.
+ENDBIB
+NOCOMMON             0          0
+DATA                10          1
+EN         DATA      1DATA-ERR  1DATA      2DATA      3DATA-ERR  3
+DATA      4DATA      5DATA-ERR5 5DATA      6
+MEV        MB         MB         MB         MB         MB
+MB         MB         MB         MB
+ 6.0000E+02 3.9000E-01 2.0000E-02 3.9300E-01 1.8210E+01 6.6000E-01
+ 2.4200E+01 1.8300E+00 7.0000E-02 1.0400E+01
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+ENTRY            A0479          0
+SUBENT        A0479001          0
+BIB                  9         18
+TITLE      Integral Excitation Functions For the Production of
+           Long-Lived be-10 and Al-26 by Proton-Induced Reactions.
+AUTHOR     (B.DITTRICH,U.HERPERS,R.BODEMANN,M.LUEPKE,R.MICHEL,
+           P.SIGNER,R.WIELER,H.J.HOFMANN,W.WOELFLI)
+INSTITUTE  (2GERKLN)
+           (2GERUH)
+           (2SWTETH)
+REFERENCE  (R,NEANDC(E)-312-U,51,90)
+           (J,RCA,50,11,90) Partial Publication. See O0098.
+HISTORY    (910718C)
+           (950411A) Reference is Added.
+           (960805A) Correction Institute, Method, Some Reactions.
+           (970117U) Last checking has been done.
+FACILITY   (MESON,1USALAS)   800 MeV Protons.
+           (LINAC,2FR SAC)
+DETECTOR   (GELI)
+METHOD     (STTA)
+ERR-ANALYS (ERR-T).The Uncertainty is Reported by Authors.
+ENDBIB              18
+NOCOMMON
+ENDSUBENT           21
+------------------------------------------------------------------------
+SUBENT        A0479008     970117
+BIB                  3          4
+REACTION   (28-NI-0(P,X)4-BE-10,,SIG,,,EXP)     Independent
+METHOD     (CHSEP)
+           (AMS)
+ERR-ANALYS (EN-ERR).Data-Point Reader Uncertainty.
+ENDBIB               4
+NOCOMMON
+DATA                 4         11
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+       57.2        1.1     0.0035     0.0015
+       88.4        0.6     0.0081     0.0024
+      115.0        1.6     0.0235     0.0063
+      132.0        1.5     0.0198     0.0024
+      148.0        1.4     0.0285     0.0030
+      166.0        1.7     0.0290     0.0056
+      188.0        1.5     0.0209     0.0033
+       600.                 0.428      0.016
+       800.                 0.762      0.030
+      1200.                  1.45       0.06
+      2600.                  2.91       0.11
+ENDDATA             13
+ENDSUBENT           22
+------------------------------------------------------------------------
+SUBENT        A0479012     970117
+BIB                  3          7
+REACTION   (28-NI-0(P,X)13-AL-26-G,IND,SIG,,,EXP)
+COMMENT    -By Compiler- Al-26-G Production Due to Si-26 Decay  is
+           Impossible  As  this  Decay  Produces Isomeric State of
+           Al-26 Only.  Direct Isomeric Transition to Ground State
+           Of Al-26 is Absent.
+METHOD     (CHSEP)
+           (AMS)
+ENDBIB               7
+NOCOMMON
+DATA                 4          5
+EN         DATA-MIN   DATA       ERR-T
+MEV        MB         MB         MB
+       148.      0.262
+       600.                 0.393      0.072
+       800.                 0.763      0.059
+      1200.                  1.62       0.10
+      2600.                  2.75       0.24
+ENDDATA              7
+ENDSUBENT           19
+------------------------------------------------------------------------
+ENTRY            60085     800418
+SUBENT        60085001     800418
+BIB
+TITLE      MEASUREMENTS OF SPALLATION CROSS SECTIONS FOR 590 MEV
+           PROTONS ON THIN TARGETS OF COPPER, NICKEL, IRON AND
+           ALUMINIUM
+AUTHOR     (J.E.CLINE, E.B.NIESCHMIDT)
+INSTITUTE  (1USAMTR)
+REFERENCE  (J,NP/A,169,437,71)
+METHOD     (INTB,SITA,MOSEP).FOR LONG LIVED PRODUCTS
+           (EXTB,SITA,MOSEP).FOR SHORT LIVED PRODUCTS
+           THE TARGETS WERE IRRADIATED IN AIR AT A DISTANCE OF
+           4 METERS FROM A 60 DEGREE BENDING MAGNET AND OF 1 METER
+           FROM A THIN AL WINDOW AT THE END OF THE VACUUM SYSTEM,
+           THUS STRONGLY REDUCING THE SECONDARY NEUTRON FLUX AT
+           THE TARGET POSITION.
+           SHORT-LIVED ACTIVITIES (ABOUT LESS THAN 15 MINUTES
+           HALF-LIFE) WERE TRANSPORTED BY MEANS OF A RABBIT SYSTEM
+           AND NOT NORMALIZED TO THE MONITOR REACTION GIVEN.
+           'SINCE THE AUTHORS QUOTE ABSOLUTE CROSS SECTIONS
+           IT CAN BE ASSUMED THAT THE MEASURED RELATIVE CROSS
+           SECTIONS HAVE BEEN NORMALIZED TO ONE OF THE LONG-LIVED
+           ACTIVITIES (COMMENT BY THE COMPILER).'
+FACILITY   (SYNCY,1USASRE)
+SAMPLE     FOILS OF NATURAL CU, NI, FE AND AL WITH THICKNESSES
+           RANGING FROM 50 TO 1000 MG/CM**2 AND PURITIES RANGING
+           FROM 99.90 PER CENT FOR FE TO 99.999 PER CENT FOR THE
+           OTHER FOILS WERE IRRADIATED SIMULTANEOUSLY. TO PREVENT
+           CONTAMINATION FROM RECOIL NUCLEI THE FOILS WERE
+           SEPARATED BY 18 MG/CM**2 PLASTIC. THE TOTAL PACKAGE
+           WAS THIN ENOUGH THAT THERE WERE NO MEASURABLE EFFECTS
+           FROM SECONDARY PARTICLES.
+           SHORT-LIVED ACTIVITIES WITH HALF-LIVES LESS THAN ABOUT
+           15 MINUTES WERE PRODUCED IN CYLINDRICAL TARGETS OF
+           7 MM DIAMETER AND 15 MM LENGTH TRANSPORTED BY A FAST
+           RABBIT SYSTEM. IT IS NOT EXPLICITLY QUOTED IN THE
+           PUBLICATION WHICH OF THE MEASURED ACTIVITIES WERE
+           OBTAINED FROM THIS KIND OF TARGET. THE IRON RABBITS
+           SHOWED A HIGHER DEGREE OF IMPURITIES THAN THE OTHER
+           RABBITS AND THE TARGET FOILS RESULTING IN A HIGHER
+           MANGANESE CONCENTRATION IN THE SPALLATION PRODUCTS
+           RELATIVE TO THE PRODUCED SCANDIUM.
+DETECTOR   (GELI)
+MONITOR    (13-AL-27(P,N+3P)11-NA-24,M+/UND,SIG,,,EXP)
+           A CROSS SECTION OF 10.8 MB WAS USED
+MONIT-REF  (,J.M.MILLER+,J,ARN,9,159,59)
+           PROBABLY ONE OF THE NUMEROUS REFERENCES CITED IN THIS
+           REVIEW ARTICLE CONTAINS THE NUMERICAL VALUE USED IN
+           THE PRESENT PAPER.
+DECAY-MON  (11-NA-24-G,15.0HR,DG,1368.5)
+ERR-ANALYS THE ERRORS GIVEN INCLUDE UNCERTAINTIES AND
+           REPRODUCIBILITIES OF THE GAMMA-RAY INTENSITIES
+           DETERMINED. FOR STRONGER TRANSITIONS THE ABSOLUTE
+           INTENSITY WAS ACCURATE TO 5 PER CENT. INCLUDED ARE
+           ALSO UNCERTAINTIES OF THE BRANCHING RATIOS AND
+           HALF-LIVES. NOT INCLUDED IS THE ERROR IN THE MONITOR
+           CROSS SECTION.
+ADD-RES    (COMP)
+           THE RESULTS ARE COMPARED TO CALCULATED CROSS SECTIONS
+           ACCORDING TO THE FORMULA OF K.F.CHACKETT ET AL., NUCL.
+           PHYS. A100,633,1967.
+REL-REF    (N,B0096001,C.J.ORTH+,J,JIN,38,13,76)
+           MORE RECENT AND REFINED EXPERIMENTS WITH FE- AND
+           CU-TARGETS REVEALED IN PART STRONGLY DEVIATING RESULTS.
+HISTORY    (771201C)LAPF
+           (800415A)  IN MANY CASES SEVERAL REACTIONS FORMERLY
+           GIVEN IN SEPARATE SUBENTRIES HAVE BEEN CONDENSED INTO
+           ONE SUBENTRY.
+ENDBIB
+COMMON               1          3
+EN
+MEV
+ 5.9000E+02
+ENDCOMMON
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085012     850729
+BIB
+REACTION   (28-NI-0(P,X)ELEM/MASS,,SIG,,,EXP)
+DECAY-DATA ((1.)28-NI-57,36.HR,DG,1377.6)
+           ((2.)28-NI-56,6.1D,DG,812.0)
+           ((3.)27-CO-58-M,9.0HR).100 PER CENT ISOMERIC TRANSITION
+            (COMMENT BY THE COMPILER)
+           ((3.)27-CO-58-G,72.D,DG,810.8)
+           ((4.)27-CO-58-G,72.D,DG,810.8)
+           ((5.)27-CO-57,270.D,DG,122.1)
+           ((6.)27-CO-56,77.D,DG,1238.3)
+           ((7.)27-CO-55,18.2HR,DG,931.3)
+           ((8.)23-V-53,2.0MIN,DG,1006.3)
+           ((9.)23-V-48,16.1D,DG,983.5)
+           ((10.)26-FE-52,8.2HR,DG,169.0)
+           ((11.)25-MN-56,2.58HR,DG,846.8)
+           ((12.)25-MN-54,303.D,DG,834.8)
+           ((13.)25-MN-52-M,21.MIN,DG,1434.0)
+           ((14.)25-MN-52-G,5.7D,DG,744.2)
+           ((15.)17-CL-34-M,,DG)
+           DECAY DATA ARE MISSING (COMMENT BY THE COMPILER)
+ENDBIB
+NOCOMMON             0          0
+DATA                 6         15
+ELEMENT    MASS       ISOMER     DECAY-FLAG DATA       DATA-ERR
+NO-DIM     NO-DIM     NO-DIM     NO-DIM     MB         MB
+ 2.8000E+01 5.7000E+01            1.0000E+00 1.8100E+01 2.0000E+00
+ 2.8000E+01 5.6000E+01            2.0000E+00 2.8900E+00 5.0000E-01
+ 2.7000E+01 5.8000E+01 1.0000E+00 3.0000E+00 1.5000E+01 3.0000E+00
+ 2.7000E+01 5.8000E+01 0.0000E+00 4.0000E+00 1.9700E+01 3.0000E+00
+ 2.7000E+01 5.7000E+01            5.0000E+00 5.6500E+01 6.0000E+00
+ 2.7000E+01 5.6000E+01            6.0000E+00 4.3500E+01 5.0000E+00
+ 2.7000E+01 5.5000E+01            7.0000E+00 1.1300E+01 1.5000E+00
+ 2.6000E+01 5.2000E+01            1.0000E+01 1.2000E+00 3.0000E-01
+ 2.5000E+01 5.6000E+01            1.1000E+01 7.0000E-01 2.0000E-01
+ 2.5000E+01 5.4000E+01            1.2000E+01 1.6500E+01 1.7000E+00
+ 2.5000E+01 5.2000E+01 1.0000E+00 1.3000E+01 1.8100E+01 2.0000E+00
+ 2.5000E+01 5.2000E+01 0.0000E+00 1.4000E+01 1.9200E+01 2.0000E+00
+ 2.3000E+01 5.3000E+01            8.0000E+00 2.5000E-01 3.0000E-02
+ 2.3000E+01 4.8000E+01            9.0000E+00 2.1700E+01 2.0000E+00
+ 1.7000E+01 3.4000E+01 1.0000E+00 1.5000E+01 9.0000E-02 3.0000E-02
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085013     850729
+BIB
+REACTION  1(28-NI-0(P,X)27-CO-61,CUM,SIG,,,EXP)
+          2(28-NI-0(P,X)27-CO-60,M+,SIG,,,EXP)
+DECAY-DATA1(27-CO-61,1.65HR,DG,67.4)
+          2(27-CO-60-G,5.27YR,DG,1332.5)
+           (27-CO-60-M).HALF-LIFE 10.5 MIN, 99.75 PER CENT
+           ISOMERIC TRANSITION (COMMENT BY THE COMPILER)
+ENDBIB
+NOCOMMON             0          0
+DATA                 4          1
+DATA      1DATA-ERR  1DATA      2DATA-ERR  2
+MB         MB         MB         MB
+ 3.5000E+01 4.5000E+00 4.1400E+01 8.0000E+00
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085014     850729
+BIB
+REACTION  1(28-NI-0(P,X)21-SC-48,,SIG,,,EXP)
+          2(28-NI-0(P,X)21-SC-47,(CUM),SIG,,,EXP)
+           IT IS UNCERTAIN WHETHER OR NOT THE PRECURSOR CA-47 IS
+           AT LEAST PARTIALLY INCLUDED (COMMENT BY THE COMPILER).
+          3(28-NI-0(P,X)21-SC-46,M+,SIG,,,EXP)
+          4(28-NI-0(P,X)21-SC-44-M,,SIG,,,EXP)
+          5(28-NI-0(P,X)21-SC-44-G,,SIG,,,EXP)
+DECAY-DATA1(21-SC-48,1.83D,DG,983.5)
+          2(21-SC-47,3.4D,DG,159.4)
+          3(21-SC-46-G,83.9D,DG,889.3)
+           (21-SC-46-M,20.SEC,DG,142.6).100 PER CENT ISOMERIC
+           TRANSITION (COMMENT BY THE COMPILER).
+          4(21-SC-44-M,2.44D,DG,271.2)
+          5(21-SC-44-G,3.92HR,DG,1156.2)
+ENDBIB
+NOCOMMON             0          0
+DATA                10          1
+DATA      1DATA-ERR  1DATA      2DATA-ERR  2DATA      3DATA-ERR  3
+DATA      4DATA-ERR  4DATA      5DATA-ERR  5
+MB         MB         MB         MB         MB         MB
+MB         MB         MB         MB
+ 3.4000E+00 2.5000E+00 2.9000E+00 1.0000E+00 4.1000E+00 5.0000E-01
+ 1.0600E+01 1.2000E+00 4.1000E+00 5.0000E-01
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085015     850729
+BIB
+REACTION  1(28-NI-0(P,X)24-CR-56,,SIG,,,EXP)
+          2(28-NI-0(P,X)24-CR-51,CUM,SIG,,,EXP)
+          3(28-NI-0(P,X)24-CR-49,,SIG,,,EXP)
+          4(28-NI-0(P,X)24-CR-48,,SIG,,,EXP)
+DECAY-DATA1(24-CR-56,5.9MIN,DG,84.5)
+          2(24-CR-51,27.8D,DG,320.1)
+          3(24-CR-49,42.MIN,DG,153.0)
+          4(24-CR-48,23.5HR,DG,308.5)
+ENDBIB
+NOCOMMON             0          0
+DATA                 8          1
+DATA      1DATA-ERR  1DATA      2DATA-ERR  2DATA      3DATA-ERR  3
+DATA      4DATA-ERR  4
+MB         MB         MB         MB         MB         MB
+MB         MB
+ 6.8000E-01 1.0000E-01 5.1800E+01 6.0000E+00 4.6000E+00 6.0000E-01
+ 1.8000E+00 2.5000E-01
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085016     850729
+BIB
+REACTION  1(28-NI-0(P,X)19-K-43,CUM,SIG,,,EXP)
+          2(28-NI-0(P,X)19-K-42,,SIG,,,EXP)
+DECAY-DATA1(19-K-43,22.4HR,DG,372.8)
+          2(19-K-42,12.4HR,DG,1524.7)
+ENDBIB
+NOCOMMON             0          0
+DATA                 4          1
+DATA      1DATA-ERR  1DATA      2DATA-ERR  2
+MB         MB         MB         MB
+ 1.5000E+00 8.0000E-01 1.8000E+00 3.0000E-01
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085050     850729
+BIB
+REACTION   (28-NI-0(P,X)28-NI-57,,SIG,,,EXP)
+DECAY-DATA (28-NI-57,36.HR,DG,1377.6)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 1.8100E+01 2.0000E+00
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085051     850729
+BIB
+REACTION   (28-NI-0(P,X)28-NI-56,,SIG,,,EXP)
+DECAY-DATA (28-NI-56,6.1D,DG,812.0)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 2.8900E+00 5.0000E-01
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085052     850729
+BIB
+REACTION   (28-NI-0(P,X)27-CO-61,CUM,SIG,,,EXP)
+DECAY-DATA (27-CO-61,1.65HR,DG,67.4)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 3.5000E+01 4.5000E+00
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085053     850729
+BIB
+REACTION   (28-NI-0(P,X)27-CO-60,M+,SIG,,,EXP)
+RAD-DET    (27-CO-60-G,DG)
+DECAY-DATA (27-CO-60-G,5.27YR,DG,1332.5)
+           (27-CO-60-M).HALF-LIFE 10.5 MIN, 99.75 PER CENT
+           ISOMERIC TRANSITION (COMMENT BY THE COMPILER)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 4.1400E+01 8.0000E+00
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085054     850729
+BIB
+REACTION   (28-NI-0(P,X)27-CO-58-M,,SIG,,,EXP)
+RAD-DET    (27-CO-58-G,DG)
+DECAY-DATA (27-CO-58-M,9.0HR).100 PER CENT ISOMERIC TRANSITION
+            (COMMENT BY THE COMPILER)
+           (27-CO-58-G,72.D,DG,810.8)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 1.5000E+01 3.0000E+00
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085055     850729
+BIB
+REACTION   (28-NI-0(P,X)27-CO-58-G,,SIG,,,EXP)
+DECAY-DATA (27-CO-58-G,72.D,DG,810.8)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 1.9700E+01 3.0000E+00
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085056     850729
+BIB
+REACTION   (28-NI-0(P,X)27-CO-57,,SIG,,,EXP)
+DECAY-DATA (27-CO-57,270.D,DG,122.1)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 5.6500E+01 6.0000E+00
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085057     850729
+BIB
+REACTION   (28-NI-0(P,X)27-CO-56,,SIG,,,EXP)
+DECAY-DATA (27-CO-56,77.D,DG,1238.3)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 4.3500E+01 5.0000E+00
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085058     850729
+BIB
+REACTION   (28-NI-0(P,X)27-CO-55,,SIG,,,EXP)
+DECAY-DATA (27-CO-55,18.2HR,DG,931.3)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 1.1300E+01 1.5000E+00
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085059     850729
+BIB
+REACTION   (28-NI-0(P,X)23-V-53,,SIG,,,EXP)
+DECAY-DATA (23-V-53,2.0MIN,DG,1006.3)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 2.5000E-01 3.0000E-02
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085060     850729
+BIB
+REACTION   (28-NI-0(P,X)23-V-48,,SIG,,,EXP)
+DECAY-DATA (23-V-48,16.1D,DG,983.5)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 2.1700E+01 2.0000E+00
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085061     850729
+BIB
+REACTION   (28-NI-0(P,X)21-SC-48,,SIG,,,EXP)
+DECAY-DATA (21-SC-48,1.83D,DG,983.5)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 3.4000E+00 2.5000E+00
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085062     850729
+BIB
+REACTION   (28-NI-0(P,X)21-SC-47,(CUM),SIG,,,EXP)
+           AT LEAST PARTIALLY INCLUDED (COMMENT BY THE COMPILER).
+RAD-DET    (21-SC-47,DG)
+DECAY-DATA (21-SC-47,3.4D,DG,159.4)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 2.9000E+00 1.0000E+00
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085063     850729
+BIB
+REACTION   (28-NI-0(P,X)21-SC-46,M+,SIG,,,EXP)
+RAD-DET    (21-SC-46-G,DG)
+DECAY-DATA (21-SC-46-G,83.9D,DG,889.3)
+           (21-SC-46-M,20.SEC,DG,142.6).100 PER CENT ISOMERIC
+           TRANSITION (COMMENT BY THE COMPILER).
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 4.1000E+00 5.0000E-01
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085064     850729
+BIB
+REACTION   (28-NI-0(P,X)21-SC-44-M,,SIG,,,EXP)
+DECAY-DATA (21-SC-44-M,2.44D,DG,271.2)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 1.0600E+01 1.2000E+00
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085065     850729
+BIB
+REACTION   (28-NI-0(P,X)21-SC-44-G,,SIG,,,EXP)
+DECAY-DATA (21-SC-44-G,3.92HR,DG,1156.2)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 4.1000E+00 5.0000E-01
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085066     850729
+BIB
+REACTION   (28-NI-0(P,X)26-FE-52,,SIG,,,EXP)
+DECAY-DATA (26-FE-52,8.2HR,DG,169.0)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 1.2000E+00 3.0000E-01
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085067     850729
+BIB
+REACTION   (28-NI-0(P,X)25-MN-56,,SIG,,,EXP)
+DECAY-DATA (25-MN-56,2.58HR,DG,846.8)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 7.0000E-01 2.0000E-01
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085068     850729
+BIB
+REACTION   (28-NI-0(P,X)25-MN-54,,SIG,,,EXP)
+DECAY-DATA (25-MN-54,303.D,DG,834.8)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 1.6500E+01 1.7000E+00
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085069     850729
+BIB
+REACTION   (28-NI-0(P,X)25-MN-52-M,,SIG,,,EXP)
+DECAY-DATA (25-MN-52-M,21.MIN,DG,1434.0)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 1.8100E+01 2.0000E+00
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085070     850729
+BIB
+REACTION   (28-NI-0(P,X)25-MN-52-G,,SIG,,,EXP)
+DECAY-DATA (25-MN-52-G,5.7D,DG,744.2)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 1.9200E+01 2.0000E+00
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085071     850729
+BIB
+REACTION   (28-NI-0(P,X)24-CR-56,,SIG,,,EXP)
+DECAY-DATA (24-CR-56,5.9MIN,DG,84.5)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 6.8000E-01 1.0000E-01
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085072     850729
+BIB
+REACTION   (28-NI-0(P,X)24-CR-51,CUM,SIG,,,EXP)
+DECAY-DATA (24-CR-51,27.8D,DG,320.1)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 5.1800E+01 6.0000E+00
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085073     850729
+BIB
+REACTION   (28-NI-0(P,X)24-CR-49,,SIG,,,EXP)
+DECAY-DATA (24-CR-49,42.MIN,DG,153.0)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 4.6000E+00 6.0000E-01
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085074     850729
+BIB
+REACTION   (28-NI-0(P,X)24-CR-48,,SIG,,,EXP)
+DECAY-DATA (24-CR-48,23.5HR,DG,308.5)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 1.8000E+00 2.5000E-01
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085075     850729
+BIB
+REACTION   (28-NI-0(P,X)19-K-43,CUM,SIG,,,EXP)
+DECAY-DATA (19-K-43,22.4HR,DG,372.8)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 1.5000E+00 8.0000E-01
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085076     850729
+BIB
+REACTION   (28-NI-0(P,X)19-K-42,,SIG,,,EXP)
+DECAY-DATA (19-K-42,12.4HR,DG,1524.7)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 1.8000E+00 3.0000E-01
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+SUBENT        60085077     850729
+BIB
+REACTION   (28-NI-0(P,X)17-CL-34-M,,SIG,,,EXP)
+DECAY-DATA (17-CL-34-M,,DG)
+           DECAY DATA ARE MISSING (COMMENT BY THE COMPILER)
+ENDBIB
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+ 5.9000E+02 9.0000E-02 3.0000E-02
+ENDDATA
+ENDSUBENT
+------------------------------------------------------------------------
+ENTRY            O0077     970121
+SUBENT        O0077001     970121
+BIB                 11         33
+TITLE      Formation Cross Sections of Various Radionuclides from
+           Ni,Fe,Si,Mg,O and C For Protons of Energies Between
+            0.5 and 2.9 GeV.
+AUTHOR     (G.V.S.RAYUDU)
+HISTORY    (950214C)
+           (961123A) Correction For All Subenties.
+           (970121U) Last checking has been done.
+INSTITUTE  (1USACAR)
+REFERENCE  (J,JIN,30,2311,68)
+MONITOR    ((MONIT)13-AL-27(P,N+3P)11-NA-24,CUM/UND,SIG,,,EXP)
+DETECTOR   (NAICR).The Rest of the Nuclides were Measured Using
+           A 5*5 Cm Nai(TL) Scintillation Detector in Conjunction
+           With a 256-Channel Pulse-Height Analyzer.
+           Co-56 was Measured Using a Low-Beta-Sharp Counter.
+MONIT-REF  (C0224001,J.B.CUMMING+,J,PR,128,2392,62)
+           (B0022001,J.B.CUMMING,J,ARN,13,261,63)
+FACILITY   (SYNCY,1USABNL).The Cosmotron at the Brookhaven
+           National Laboratory.
+METHOD     (ACTIV,INTB,SITA)
+ERR-ANALYS (ERR-1).About 15 Per Cent Overall Uncertainty was
+           Estimated  For  Co-56,Mn-54,Mn-52,Cr-51,V-48,Na-24  and
+           Be-7 Cross Sections  from  Fe  and  Ni,at  1.5,2.2  and
+           2.9-GeV Proton Energies.
+           (ERR-2).About 20-25 Per Cent Uncertainty was Estimated
+           For the Same Nuclides at 0.5 and 0.8 GeV,Because of Low
+           Beam Currents at these Enegries,Whereas in the Case  of
+           P-32 from Fe and Ni.
+           (ERR-3).An Average of 12 % Uncertainty was Estimated
+           At All Energies.
+           (ERR-4).For the Cross Sections Measurements of Cr-48,
+           Sc-47, Sc-44-M from Fe;Na-24,Na-22 and be-7 from Si and
+           Mg, and be-7 from C and O,About 20 Per Cent Uncertainty
+           Was Estimated at All Energies.
+ENDBIB              33
+COMMON               5          3
+ERR-1      ERR-2      ERR-3      ERR-4      MONIT
+PER-CENT   PER-CENT   PER-CENT   PER-CENT   MB
+        15.        25.        12.        20.        10.
+ENDCOMMON            3
+ENDSUBENT           40
+------------------------------------------------------------------------
+SUBENT        O0077013     970121
+BIB                  6          9
+REACTION   (28-NI-0(P,X)27-CO-56,IND,SIG,,,EXP)
+SAMPLE     Metal Foil of Nickel,Thickness 45 Mg/Cm**2,was Used.
+METHOD     (CHSEP) Chemical Separations were Started Three Days
+           After the Irradiations.
+RAD-DET    (27-CO-56,B+)
+DECAY-DATA (27-CO-56,77.D,B+,,0.18)
+CRITIQUE   Author Suggestes That Independent Cross Section was
+           Measured. But any Information About Cross Section For
+           Parent of Co-56 is Absent.
+ENDBIB               9
+NOCOMMON
+DATA                 2          5
+EN         DATA
+GEV        MB
+        0.5        32.
+        0.8        25.
+        1.5        25.
+        2.2        28.
+        2.9        21.
+ENDDATA              7
+ENDSUBENT           21
+------------------------------------------------------------------------
+SUBENT        O0077014     970121
+BIB                  5          7
+REACTION   (28-NI-0(P,X)25-MN-54,,SIG,,,EXP) Independent
+SAMPLE     Metal Foil of Nickel,Thickness 45 Mg/Cm**2,was Used.
+METHOD     (CHSEP) Chemical Separations were Started Three Days
+           After the Irradiations.
+           (GSPEC)
+RAD-DET    (25-MN-54,DG)
+DECAY-DATA (25-MN-54,310.D,DG,850.,1.)
+ENDBIB               7
+NOCOMMON
+DATA                 2          5
+EN         DATA
+GEV        MB
+        0.5        6.6
+        0.8        4.5
+        1.5        4.9
+        2.2        4.9
+        2.9        4.2
+ENDDATA              7
+ENDSUBENT           19
+------------------------------------------------------------------------
+SUBENT        O0077015     970121
+BIB                  6          8
+REACTION   (28-NI-0(P,X)25-MN-52-G,CUM,SIG,,,EXP)
+SAMPLE     Metal Foil of Nickel,Thickness 45 Mg/Cm**2,was Used.
+METHOD     (CHSEP) Chemical Separations were Started Three Days
+           After the Irradiations.
+RAD-DET    (25-MN-52-G,B+)
+DECAY-DATA (25-MN-52-G,5.7D,B+,,0.33)
+COMMENT    -By Compiler- Any Information For Detector of B+ is
+            Absent.
+ENDBIB               8
+NOCOMMON
+DATA                 2          5
+EN         DATA
+GEV        MB
+        0.5       18.7
+        0.8       12.0
+        1.5       12.4
+        2.2       12.2
+        2.9        8.9
+ENDDATA              7
+ENDSUBENT           20
+------------------------------------------------------------------------
+SUBENT        O0077016     970121
+BIB                  5          7
+REACTION   (28-NI-0(P,X)24-CR-51,CUM,SIG,,,EXP)
+SAMPLE     Metal Foil of Nickel,Thickness 45 Mg/Cm**2,was Used.
+METHOD     (CHSEP) Chemical Separations were Started Three Days
+           After the Irradiations.
+           (GSPEC)
+RAD-DET    (24-CR-51,DG)
+DECAY-DATA (24-CR-51,27.8D,DG,320.0,0.10)
+ENDBIB               7
+NOCOMMON
+DATA                 2          5
+EN         DATA
+GEV        MB
+        0.5       18.2
+        0.8       15.8
+        1.5       14.1
+        2.2       14.7
+        2.9       11.6
+ENDDATA              7
+ENDSUBENT           19
+------------------------------------------------------------------------
+SUBENT        O0077017     970121
+BIB                  5          7
+REACTION   (28-NI-0(P,X)23-V-48,CUM,SIG,,,EXP)
+SAMPLE     Metal Foil of Nickel,Thickness 45 Mg/Cm**2,was Used.
+METHOD     (CHSEP) Chemical Separations were Started Three Days
+           After the Irradiations.
+           (GSPEC)
+RAD-DET    (23-V-48,DG)
+DECAY-DATA (23-V-48,16.1D,DG,1330.,1.)
+ENDBIB               7
+NOCOMMON
+DATA                 2          5
+EN         DATA
+GEV        MB
+        0.5        6.1
+        0.8        7.1
+        1.5        7.9
+        2.2        8.8
+        2.9        8.5
+ENDDATA              7
+ENDSUBENT           19
+------------------------------------------------------------------------
+SUBENT        O0077018     970121
+BIB                  6          7
+REACTION   (28-NI-0(P,X)15-P-32,IND,SIG,,,EXP)
+SAMPLE     Metal Foil of Nickel,Thickness 45 Mg/Cm**2,was Used.
+METHOD     (CHSEP)
+RAD-DET    (15-P-32,B-)
+DECAY-DATA (15-P-32,14.3D,B-,,1.)
+COMMENT     -By Compiler- Any Information For Detector of B- Is
+            Absent.
+ENDBIB               7
+NOCOMMON
+DATA                 2          5
+EN         DATA
+GEV        MB
+        0.5       0.89
+        0.8        2.1
+        1.5        3.4
+        2.2        4.5
+        2.9        4.6
+ENDDATA              7
+ENDSUBENT           19
+------------------------------------------------------------------------
+SUBENT        O0077019     970121
+BIB                  5          5
+REACTION   (28-NI-0(P,X)11-NA-24,CUM,SIG,,,EXP)
+SAMPLE     Metal Foil of Nickel,Thickness 45 Mg/Cm**2,was Used.
+METHOD     (GSPEC)
+RAD-DET    (11-NA-24,DG)
+DECAY-DATA (11-NA-24,15.HR,DG,2750.,1.)
+ENDBIB               5
+NOCOMMON
+DATA                 2          5
+EN         DATA
+GEV        MB
+        0.5      0.185
+        0.8       0.65
+        1.5       1.82
+        2.2        3.4
+        2.9        3.9
+ENDDATA              7
+ENDSUBENT           17
+------------------------------------------------------------------------
+SUBENT        O0077020     970121
+BIB                  5          7
+REACTION   (28-NI-0(P,X)4-BE-7,,SIG,,,EXP)  Independent
+SAMPLE     Metal Foil of Nickel,Thickness 45 Mg/Cm**2,was Used.
+METHOD     (CHSEP) Chemical Separations were Started Three Days
+           After the Irradiations.
+           (GSPEC)
+RAD-DET    (4-BE-7,DG)
+DECAY-DATA (4-BE-7,53.D,DG,470.,0.11)
+ENDBIB               7
+NOCOMMON
+DATA                 2          5
+EN         DATA
+GEV        MB
+        0.5       1.62
+        0.8        2.4
+        1.5        4.9
+        2.2        6.5
+        2.9        7.2
+ENDDATA              7
+ENDSUBENT           19
+------------------------------------------------------------------------
+ENTRY            O0080     970121
+SUBENT        O0080001     970121
+BIB                 10         20
+TITLE      Proton-Induced Spallation Between 600 and 2000 MeV.
+AUTHOR     (M.LUEPKE,R.MICHEL,B.DITTRICH,U.HERPERS,
+           P.DRAGOVITCH,D.FILDGES,H.J.HOFMANN,W.WOELFLI)
+INSTITUTE  (2GERUH)
+           (2GERKLN)
+           (2GERJUL)
+           (2SWTZUR)
+REFERENCE  (C,91JUELIC,,702,91)
+SAMPLE     High-Purity Foils or Chemical Compounds.
+           Small Stacks of Foils were Used As Targets Which
+           Degraded Tye Proton-Energy by Less Than 15 MeV.
+MONITOR    ((MONIT)13-AL-27(P,3N+3P)11-NA-22,CUM,SIG,,,EVAL)
+FACILITY   (SYNCY,2ZZZCER)
+           (LINAC,1USALAS)
+           (LINAC,2FR SAC)
+METHOD     (STTA,ACTIV)
+ERR-ANALYS  Any Information is Absent.
+HISTORY    (950301C) By F.E.C
+           (970118A).Some Reaction Lines are Corrected.
+           (970121U) Last checking has been done.
+ENDBIB              20
+NOCOMMON
+ENDSUBENT           23
+------------------------------------------------------------------------
+SUBENT        O0080006     970121
+BIB                  4          4
+REACTION   (28-NI-0(P,X)13-AL-26-G,IND,SIG,,,EXP)
+ERR-ANALYS (DATA-ERR). This is Symbol Size on Figure.
+STATUS     (CURVE) By CAJAD.
+METHOD     (AMS)
+ENDBIB               4
+COMMON               1          3
+DATA-ERR
+PER-CENT
+         8.
+ENDCOMMON            3
+DATA                 3          5
+EN         DATA       MONIT
+MEV        MB         MB
+       600.      0.364        16.
+       605.      0.403
+       800.      0.746       15.5
+      1200.       1.55       14.4
+      2600.       2.66       11.6
+ENDDATA              7
+ENDSUBENT           20
+------------------------------------------------------------------------
+ENTRY            O0088     970121
+SUBENT        O0088001     970121
+BIB                 11         16
+TITLE      Survey of 600 MeV Proton Cross-Sections For Spallogenic
+           Radionuclides in Quartz-,Fe-,Co- And Ni-Targets.
+AUTHOR     (H.WEIGEL,R.MICHEL,U.HERPERS,W.HERR)
+FACILITY   (SYNCY,2ZZZCER)
+REFERENCE  (J,RRL,21,293,75)
+HISTORY    (950303C)
+           (961204A) Some Reaction Lines are Corrected.
+           (970121U) Last checking has been done.
+ADD-RES    (COMP).The Resulting Cross Sections are Compared with
+           Literature Values.
+DETECTOR   (GELI)
+ANALYSIS   (AREA)
+INSTITUTE  (2GERKLN)
+METHOD     (EXTB)
+           (GSPEC)
+ERR-ANALYS (DATA-ERR).The Uncertainty is Reported by Authors.
+ENDBIB              16
+NOCOMMON
+ENDSUBENT           19
+------------------------------------------------------------------------
+SUBENT        O0088020     970121
+BIB                  7         10
+REACTION   (28-NI-0(P,X)28-NI-57,CUM,SIG,,,EXP)
+RAD-DET    (28-NI-57,DG)
+DECAY-DATA (28-NI-57,36.HR,DG,1377.,0.86)
+SAMPLE     High Purity Foils (DIAMETER=41 MM,THICKNESS-0.025 MM)
+           Was Used.
+METHOD     (SITA)
+MONITOR    ((MONIT1)13-AL-27(P,N+3P)11-NA-24,CUM/UND,SIG,,,EXP)
+           ((MONIT2)13-AL-27(P,3N+3P)11-NA-22,CUM/UND,SIG,,,EXP)
+           ((MONIT3)13-AL-27(P,11N+10P)4-BE-7,UND,SIG,,,EXP)
+REL-REF    (D,B0085001,J.E.CLINE+,J,NP/A,169,437,71)
+ENDBIB              10
+COMMON               3          3
+MONIT1     MONIT2     MONIT3
+MB         MB         MB
+        11.       17.3        4.8
+ENDCOMMON            3
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+       600.       28.3        6.2
+ENDDATA              3
+ENDSUBENT           22
+------------------------------------------------------------------------
+SUBENT        O0088021     970121
+BIB                  6         10
+REACTION   (28-NI-0(P,X)27-CO-60-G,IND/M+,SIG,,,EXP)
+RAD-DET    (27-CO-60-G,DG)
+DECAY-DATA (27-CO-60-G,5.26YR,DG,1332.,1.,
+                            DG,1173.,0.99)
+SAMPLE     High Purity Foils (DIAMETER=41 MM,THICKNESS-0.025 MM)
+           Was Used.
+METHOD     (SITA)
+MONITOR    ((MONIT1)13-AL-27(P,N+3P)11-NA-24,CUM/UND,SIG,,,EXP)
+           ((MONIT2)13-AL-27(P,3N+3P)11-NA-22,CUM/UND,SIG,,,EXP)
+           ((MONIT3)13-AL-27(P,11N+10P)4-BE-7,UND,SIG,,,EXP)
+ENDBIB              10
+COMMON               3          3
+MONIT1     MONIT2     MONIT3
+MB         MB         MB
+        11.       17.3        4.8
+ENDCOMMON            3
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+       600.       17.9        4.3
+ENDDATA              3
+ENDSUBENT           22
+------------------------------------------------------------------------
+SUBENT        O0088022     970121
+BIB                  6          9
+REACTION   (28-NI-0(P,X)27-CO-58-G,M+,SIG,,,EXP) Independent
+RAD-DET    (27-CO-58-G,DG)
+DECAY-DATA (27-CO-58-G,71.D,DG,810.,0.995)
+SAMPLE     High Purity Foils (DIAMETER=41 MM,THICKNESS-0.025 MM)
+           Was Used.
+METHOD     (SITA)
+MONITOR    ((MONIT1)13-AL-27(P,N+3P)11-NA-24,CUM/UND,SIG,,,EXP)
+           ((MONIT2)13-AL-27(P,3N+3P)11-NA-22,CUM/UND,SIG,,,EXP)
+           ((MONIT3)13-AL-27(P,11N+10P)4-BE-7,UND,SIG,,,EXP)
+ENDBIB               9
+COMMON               3          3
+MONIT1     MONIT2     MONIT3
+MB         MB         MB
+        11.       17.3        4.8
+ENDCOMMON            3
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+       600.       20.8        4.5
+ENDDATA              3
+ENDSUBENT           21
+------------------------------------------------------------------------
+SUBENT        O0088023     970121
+BIB                  6         12
+REACTION   (28-NI-0(P,X)27-CO-57,IND,SIG,,,EXP)
+RAD-DET    (27-CO-57,DG)
+           (28-NI-57,DG)
+DECAY-DATA (27-CO-57,270.D,DG,136.,0.114,
+                           DG,122.,0.85)
+           (28-NI-57,36.HR,DG,1377.,0.86)
+SAMPLE     High Purity Foils (DIAMETER=41 MM,THICKNESS-0.025 MM)
+           Was Used.
+METHOD     (SITA)
+MONITOR    ((MONIT1)13-AL-27(P,N+3P)11-NA-24,CUM/UND,SIG,,,EXP)
+           ((MONIT2)13-AL-27(P,3N+3P)11-NA-22,CUM/UND,SIG,,,EXP)
+           ((MONIT3)13-AL-27(P,11N+10P)4-BE-7,UND,SIG,,,EXP)
+ENDBIB              12
+COMMON               3          3
+MONIT1     MONIT2     MONIT3
+MB         MB         MB
+        11.       17.3        4.8
+ENDCOMMON            3
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+       600.       29.8        6.5
+ENDDATA              3
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0088024     970121
+BIB                  7         11
+REACTION   (28-NI-0(P,X)27-CO-56,CUM,SIG,,,EXP)
+RAD-DET    (27-CO-56,DG)
+DECAY-DATA (27-CO-56,77.3D,DG,1238.,0.691,
+                           DG,846.,0.988)
+SAMPLE     High Purity Foils (DIAMETER=41 MM,THICKNESS-0.025 MM)
+           Was Used.
+METHOD     (SITA)
+MONITOR    ((MONIT1)13-AL-27(P,N+3P)11-NA-24,CUM/UND,SIG,,,EXP)
+           ((MONIT2)13-AL-27(P,3N+3P)11-NA-22,CUM/UND,SIG,,,EXP)
+           ((MONIT3)13-AL-27(P,11N+10P)4-BE-7,UND,SIG,,,EXP)
+REL-REF    (D,B0085001,J.E.CLINE+,J,NP/A,169,437,71)
+ENDBIB              11
+COMMON               3          3
+MONIT1     MONIT2     MONIT3
+MB         MB         MB
+        11.       17.3        4.8
+ENDCOMMON            3
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+       600.       31.2        6.8
+ENDDATA              3
+ENDSUBENT           23
+------------------------------------------------------------------------
+SUBENT        O0088025     970121
+BIB                  7         10
+REACTION   (28-NI-0(P,X)25-MN-54,,SIG,,,EXP)  Independent
+RAD-DET    (25-MN-54,DG)
+DECAY-DATA (25-MN-54,308.D,DG,834.,1.)
+SAMPLE     High Purity Foils (DIAMETER=41 MM,THICKNESS-0.025 MM)
+           Was Used.
+METHOD     (SITA)
+MONITOR    ((MONIT1)13-AL-27(P,N+3P)11-NA-24,CUM/UND,SIG,,,EXP)
+           ((MONIT2)13-AL-27(P,3N+3P)11-NA-22,CUM/UND,SIG,,,EXP)
+           ((MONIT3)13-AL-27(P,11N+10P)4-BE-7,UND,SIG,,,EXP)
+REL-REF    (A,B0085001,J.E.CLINE+,J,NP/A,169,437,71)
+ENDBIB              10
+COMMON               3          3
+MONIT1     MONIT2     MONIT3
+MB         MB         MB
+        11.       17.3        4.8
+ENDCOMMON            3
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+       600.       31.2        6.8
+ENDDATA              3
+ENDSUBENT           22
+------------------------------------------------------------------------
+SUBENT        O0088026     970121
+BIB                  7         11
+REACTION   (28-NI-0(P,X)25-MN-52-G,CUM,SIG,,,EXP)
+RAD-DET    (25-MN-52-G,DG)
+DECAY-DATA (25-MN-52-G,5.7D,DG,1434.,1.,
+                          DG,744.,0.85)
+SAMPLE     High Purity Foils (DIAMETER=41 MM,THICKNESS-0.025 MM)
+           Was Used.
+METHOD     (SITA)
+MONITOR    ((MONIT1)13-AL-27(P,N+3P)11-NA-24,CUM/UND,SIG,,,EXP)
+           ((MONIT2)13-AL-27(P,3N+3P)11-NA-22,CUM/UND,SIG,,,EXP)
+           ((MONIT3)13-AL-27(P,11N+10P)4-BE-7,UND,SIG,,,EXP)
+REL-REF    (D,B0085001,J.E.CLINE+,J,NP/A,169,437,71)
+ENDBIB              11
+COMMON               3          3
+MONIT1     MONIT2     MONIT3
+MB         MB         MB
+        11.       17.3        4.8
+ENDCOMMON            3
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+       600.       14.5        3.3
+ENDDATA              3
+ENDSUBENT           23
+------------------------------------------------------------------------
+SUBENT        O0088027     970121
+BIB                  7         10
+REACTION   (28-NI-0(P,X)24-CR-51,CUM,SIG,,,EXP)
+RAD-DET    (24-CR-51,DG)
+DECAY-DATA (24-CR-51,27.8D,DG,320.,0.099)
+SAMPLE     High Purity Foils (DIAMETER=41 MM,THICKNESS-0.025 MM)
+           Was Used.
+METHOD     (SITA)
+MONITOR    ((MONIT1)13-AL-27(P,N+3P)11-NA-24,CUM/UND,SIG,,,EXP)
+           ((MONIT2)13-AL-27(P,3N+3P)11-NA-22,CUM/UND,SIG,,,EXP)
+           ((MONIT3)13-AL-27(P,11N+10P)4-BE-7,UND,SIG,,,EXP)
+REL-REF    (D,B0085001,J.E.CLINE+,J,NP/A,169,437,71)
+ENDBIB              10
+COMMON               3          3
+MONIT1     MONIT2     MONIT3
+MB         MB         MB
+        11.       17.3        4.8
+ENDCOMMON            3
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+       600.       43.9        9.3
+ENDDATA              3
+ENDSUBENT           22
+------------------------------------------------------------------------
+SUBENT        O0088028     970121
+BIB                  6         10
+REACTION   (28-NI-0(P,X)23-V-48,CUM,SIG,,,EXP)
+RAD-DET    (23-V-48,DG)
+DECAY-DATA (23-V-48,16.2D,DG,1312.,0.99,
+                          DG,983.,1.)
+SAMPLE     High Purity Foils (DIAMETER=41 MM,THICKNESS-0.025 MM)
+           Was Used.
+METHOD     (SITA)
+MONITOR    ((MONIT1)13-AL-27(P,N+3P)11-NA-24,CUM/UND,SIG,,,EXP)
+           ((MONIT2)13-AL-27(P,3N+3P)11-NA-22,CUM/UND,SIG,,,EXP)
+           ((MONIT3)13-AL-27(P,11N+10P)4-BE-7,UND,SIG,,,EXP)
+ENDBIB              10
+COMMON               3          3
+MONIT1     MONIT2     MONIT3
+MB         MB         MB
+        11.       17.3        4.8
+ENDCOMMON            3
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+       600.       21.4        4.7
+ENDDATA              3
+ENDSUBENT           22
+------------------------------------------------------------------------
+SUBENT        O0088029     970121
+BIB                  8         12
+REACTION   (28-NI-0(P,X)21-SC-47,(CUM),SIG,,,EXP)
+COMMENT    /by Compiler/.The Production of Sc-47 by Radioactive
+           Decay of Ca-47 is not Excluded.
+RAD-DET    (21-SC-47,DG)
+DECAY-DATA (21-SC-47,3.35D,DG,159.,0.70)
+SAMPLE     High Purity Foils (DIAMETER=41 MM,THICKNESS-0.025 MM)
+           Was Used.
+METHOD     (SITA)
+MONITOR    ((MONIT1)13-AL-27(P,N+3P)11-NA-24,CUM/UND,SIG,,,EXP)
+           ((MONIT2)13-AL-27(P,3N+3P)11-NA-22,CUM/UND,SIG,,,EXP)
+           ((MONIT3)13-AL-27(P,11N+10P)4-BE-7,UND,SIG,,,EXP)
+REL-REF    (D,B0085001,J.E.CLINE+,J,NP/A,169,437,71)
+ENDBIB              12
+COMMON               3          3
+MONIT1     MONIT2     MONIT3
+MB         MB         MB
+        11.       17.3        4.8
+ENDCOMMON            3
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+       600.        9.6        2.3
+ENDDATA              3
+ENDSUBENT           24
+------------------------------------------------------------------------
+SUBENT        O0088030     970121
+BIB                  7         11
+REACTION   (28-NI-0(P,X)21-SC-46-G,M+,SIG,,,EXP) Independent
+RAD-DET    (21-SC-46-G,DG)
+DECAY-DATA (21-SC-46-G,84.D,DG,1120.,1.,
+                          DG,889.,1.)
+SAMPLE     High Purity Foils (DIAMETER=41 MM,THICKNESS-0.025 MM)
+           Was Used.
+METHOD     (SITA)
+MONITOR    ((MONIT1)13-AL-27(P,N+3P)11-NA-24,CUM/UND,SIG,,,EXP)
+           ((MONIT2)13-AL-27(P,3N+3P)11-NA-22,CUM/UND,SIG,,,EXP)
+           ((MONIT3)13-AL-27(P,11N+10P)4-BE-7,UND,SIG,,,EXP)
+REL-REF    (A,B0085001,J.E.CLINE+,J,NP/A,169,437,71)
+ENDBIB              11
+COMMON               3          3
+MONIT1     MONIT2     MONIT3
+MB         MB         MB
+        11.       17.3        4.8
+ENDCOMMON            3
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+       600.        4.8        1.1
+ENDDATA              3
+ENDSUBENT           23
+------------------------------------------------------------------------
+SUBENT        O0088031     970121
+BIB                  7         10
+REACTION   (28-NI-0(P,X)21-SC-44-M,IND,SIG,,,EXP)
+RAD-DET    (21-SC-44-M,DG)
+DECAY-DATA (21-SC-44-M,2.4D,DG,271.,0.86)
+SAMPLE     High Purity Foils (DIAMETER=41 MM,THICKNESS-0.025 MM)
+           Was Used.
+METHOD     (SITA)
+MONITOR    ((MONIT1)13-AL-27(P,N+3P)11-NA-24,CUM/UND,SIG,,,EXP)
+           ((MONIT2)13-AL-27(P,3N+3P)11-NA-22,CUM/UND,SIG,,,EXP)
+           ((MONIT3)13-AL-27(P,11N+10P)4-BE-7,UND,SIG,,,EXP)
+REL-REF    (A,B0085001,J.E.CLINE+,J,NP/A,169,437,71)
+ENDBIB              10
+COMMON               3          3
+MONIT1     MONIT2     MONIT3
+MB         MB         MB
+        11.       17.3        4.8
+ENDCOMMON            3
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+       600.       12.5        2.9
+ENDDATA              3
+ENDSUBENT           22
+------------------------------------------------------------------------
+ENTRY            O0095          0
+SUBENT        O0095001          0
+BIB                 15         52
+TITLE      PRODUCTION OF ARGON ISOTOPES BY SPALLATION OF SC,TI,
+           FE,CO,NI AND CU.
+AUTHOR     (S.REGNIER)
+INSTITUTE  (2FR GRA)
+REFERENCE  (J,PR/C,20,1517,79)
+HISTORY    (950321C)
+           (950412U)
+SAMPLE     THE TARGETS CONSISTED OF STACKS OF 20*20 MM SQUARES OF
+           METAL FOIL OF THICKNESS 0.010 TO 0.050 MM.AL FOIL WAS
+           INSERTED BETWEEN THE TARGET FOILS (SC,TI,V,FE,CO,NI
+           AND CU) TO SERVE AS QUARDS,RECOIL COLLECTORS AND
+           MONITORS.THE THICKNESSES OF THE STACKS WERE 0.15 G/
+           CM**2 FOR THE IRRADIATION AT 0.080 GEV,0.3 TO 0.5 G/
+           CM**2 AT 0.15,0.6,AND 24 GEV,AND 1.5 G/CM**2 AT 1.05
+           GEV.EACH TARGET CONTAINED EITHER 3 TO 6 MONITORS.
+ADD-RES    (COMP).SEMIEMPIRICAL FITS.
+MONITOR    ((MONIT)13-AL-27(P,3N+3P)11-NA-22,,SIG,,,EXP)
+MONIT-REF  (,J.TOBAILEM+,R,CEA-N-1466,,71)
+DETECTOR   (MAGSP) THE ARGON SAMPLES WERE ANALYZED IN A 60 DEGREE
+           SECTOR,12 CM RADIUS MASS SPECTROMETER (A MODIFIED
+           MICROMASS-12).
+FACILITY   .THE IRRADIATED WERE CARRIED OUT IN THE FOLLOWING
+           ACCELERATORS-LOUVAIN-LA-NEUVE (0.080GEV),SATURNE (1.05
+           GEV),ORSAY (0.150 GEV) AND CERN (0.6 AND 24 GEV).
+METHOD     (STTA)
+           (ASEP)
+           (INTB).AT THE 0.080,1.05,0.150 GEV.
+           (EXTB).AT 0.6 AND 24 GEV.TO TEST THE INFLUENCE OF BEAM
+           INTENSITY.
+ERR-ANALYS THE ROOT MEAN SQUARE OF THE VARIOUS ERRORS IS
+           CALCULATED FOR EACH MEASUREMENT,I.E.,TARGET PREPARATION
+            (THICKNESS,0.5 TO 3%,IMPURITIES,0 TO 1%),MONITORING
+           AND ALIGNMENT (3 TO 7%),BLANKS FOR APPARATUS AND METALS
+            (IN MOST CASES,O TO 1%,SOMETIMES 1 TO 80%),ZERO-TIME
+           CORRECTIONS TO MASS-SPECTROMETER ANALYSIS (0 TO 1%,
+           SOMETIMES 1 TO 5%),RE-EXTRACTIONS (0 TO 1%) AND
+           CALIBRATION (7 TO 12%).FOR ISOTOPE RATIOS THE MOST
+           IMPORTANT ERRORS CANCEL OUT,BUT AN ERROR OF 2% IS
+           ADDED TO ACCOUNT FOR A POSSIBLE SYSTEMATIC INSTRUMENTAL
+           ERROR.
+           1.THE UNCERTAINTY IN THE CROSS SECTION MEASUREMENTS
+           IS FROM 10 TO 20 PER CENT.
+           2.THE UNCERTAINTY IN THE RATIOS IS FROM 2 TO 5 PER
+           CENT.
+           (DATA-ERR1).SEE 1.
+           (DATA-ERR2).SEE 2.
+           (DATA-ERR).THE UNCERTAINTY IS REPORTED BY AUTHORS.
+STATUS     (TABLE)
+COMMENT    /BY AUTHORS/.IN GENERAL,EACH TARGET ELEMENT WAS
+           SUBJECTED TO THREE INDEPENDENT IRRADIATIONS AT EACH
+           ENERGY E(P) AND TWO YEARS,AT LEAST,ELAPSED BETWEEN
+           IRRADIATION ANA ANALYSIS.
+ENDBIB              52          0
+COMMON               2          3
+DATA-ERR1  DATA-ERR2
+PER-CENT   PER-CENT
+        20.         5.
+ENDCOMMON            3          0
+ENDSUBENT           59          0
+------------------------------------------------------------------------
+SUBENT        O0095014     950321
+BIB                  2          4
+REACTION   ((28-NI-0(P,X)18-AR-38,CUM,SIG,,,EXP)/
+           (28-NI-0(P,X)18-AR-36,(CUM),SIG,,,EXP))
+COMMENT    /BY COMPILER/THE PRODUCTION OF AR-36 DUE TO RADOACTIVE
+           DECAY OF K-36 COULD NOT BE EXCLUDED.
+ENDBIB               4          0
+NOCOMMON             0          0
+DATA                 4          3
+EN         DATA       DATA-ERR   MONIT
+GEV        NO-DIM     NO-DIM     MB
+      0.150        5.9        0.4       17.2
+       1.05       5.37       0.10       15.3
+       24.0       5.05       0.08       10.0
+ENDDATA              5          0
+ENDSUBENT           14          0
+------------------------------------------------------------------------
+SUBENT        O0095015     950321
+BIB                  1          2
+REACTION   ((28-NI-0(P,X)18-AR-38,CUM,SIG,,,EXP)/
+           (28-NI-0(P,X)18-AR-39,CUM,SIG,,,EXP))
+ENDBIB               2          0
+NOCOMMON             0          0
+DATA                 4          3
+EN         DATA       DATA-ERR   MONIT
+GEV        NO-DIM     NO-DIM     MB
+      0.150       2.75       0.06       17.2
+       1.05       2.37       0.04       15.3
+       24.0       2.37       0.03       10.0
+ENDDATA              5          0
+ENDSUBENT           12          0
+------------------------------------------------------------------------
+SUBENT        O0095016     950321
+BIB                  2          4
+REACTION   ((28-NI-0(P,X)18-AR-38,CUM,SIG,,,EXP)/
+           (28-NI-0(P,X)18-AR-42,(CUM),SIG,,,EXP))
+COMMENT    /BY COMPILER/THE PRODUCTION OF AR-42 DUE TO RADOACTIVE
+           DECAY OF CL-42 COULD NOT BE EXCLUDED.
+ENDBIB               4          0
+NOCOMMON             0          0
+DATA                 4          3
+EN         DATA       DATA-ERR   MONIT
+GEV        NO-DIM     NO-DIM     MB
+      0.150       142.        80.       17.2
+       1.05       293.        24.       15.3
+       24.0       228.         9.       10.0
+ENDDATA              5          0
+ENDSUBENT           14          0
+------------------------------------------------------------------------
+SUBENT        O0095036     950321
+BIB                  2          3
+REACTION   (28-NI-0(P,X)18-AR-36,(CUM),SIG,,,EXP)
+COMMENT    /BY COMPILER/THE PRODUCTION OF AR-36 DUE TO RADOACTIVE
+           DECAY OF K-36 COULD NOT BE EXCLUDED.
+ENDBIB               3          0
+NOCOMMON             0          0
+DATA                 4          3
+EN         DATA       DATA-ERR   MONIT
+GEV        MB         MB         MB
+      0.150      0.014      0.003       17.2
+       1.05        2.6        0.2       15.3
+       24.0       2.09       0.15       10.0
+ENDDATA              5          0
+ENDSUBENT           13          0
+------------------------------------------------------------------------
+SUBENT        O0095037     950321
+BIB                  1          1
+REACTION   (28-NI-0(P,X)18-AR-38,CUM,SIG,,,EXP)
+ENDBIB               1          0
+NOCOMMON             0          0
+DATA                 4          3
+EN         DATA       DATA-ERR   MONIT
+GEV        MB         MB         MB
+      0.150      0.080      0.015       17.2
+       1.05       14.1        1.0       15.3
+       24.0       10.6        0.7       10.0
+ENDDATA              5          0
+ENDSUBENT           11          0
+------------------------------------------------------------------------
+SUBENT        O0095038     950321
+BIB                  1          1
+REACTION   (28-NI-0(P,X)18-AR-39,CUM,SIG,,,EXP)
+ENDBIB               1          0
+NOCOMMON             0          0
+DATA                 4          3
+EN         DATA       DATA-ERR   MONIT
+GEV        MB         MB         MB
+      0.150      0.029      0.006       17.2
+       1.05        6.0        0.4       15.3
+       24.0        4.5        0.3       10.0
+ENDDATA              5          0
+ENDSUBENT           11          0
+------------------------------------------------------------------------
+SUBENT        O0095039     950321
+BIB                  2          3
+REACTION   (28-NI-0(P,X)18-AR-42,(CUM),SIG,,,EXP)
+COMMENT    /BY COMPILER/THE PRODUCTION OF AR-42 DUE TO RADOACTIVE
+           DECAY OF CL-42 COULD NOT BE EXCLUDED.
+ENDBIB               3          0
+NOCOMMON             0          0
+DATA                 4          3
+EN         DATA       DATA-ERR   MONIT
+GEV        MB         MB         MB
+      0.150     0.0006     0.0003       17.2
+       1.05      0.048      0.005       15.3
+       24.0      0.046      0.004       10.0
+ENDDATA              5          0
+ENDSUBENT           13          0
+------------------------------------------------------------------------
+ENTRY            O0104          0
+SUBENT        O0104001          0
+BIB                 11         25
+TITLE      MEASUREMENTS OF CA-41 SPALLATION CROSS SECTIONS AND
+           CA-41 CONCENTRATIONS IN THE GRANT METEORITE BY
+           ACCELERATOR MASS SPECTROMETRY.
+AUTHOR     (D.FINK,M.PAUL,G.HOLLOS,S.THEIS,S.VOGT,R.STUECK,
+           P.ENGLERT,R.MICHEL)
+INSTITUTE  (3ISLHEB)
+           (3ISLWZI)
+           (2GERKLN)
+           (1USAIBM)
+           (2GERUH)
+REFERENCE  (J,NIM/B,29,275,87)
+HISTORY    (950426C)
+           (950904U). LAST CHECKING HAS BEEN DONE.
+ADD-RES    .AMS MEASUREMENTS TO THE CA-41 CONCENTRATION.
+DETECTOR   .A MULTIPARAMETER HEAVY-ION DETECTOR SYSTEM.
+FACILITY   (VDGT,3ISLWZI).14 UD PELLETRON TANDEM ACCELERATOR
+           LABORATORY UTILIZING THE AMS HEAVY-ION DETECTOR SYSTEM.
+           (CYCLO,2FR PAR).FROM 80 TO 200 MEV.
+           (SYNCY,2ZZZCER).AT 600 MEV.
+METHOD     (TOF,CHSEP,EDE)
+STATUS     (TABLE)
+ERR-ANALYS THE QUOTED ERRORS,BEING LARGELY STATISTICAL,INCLUDE
+           A 5-10% ERROR FOR MEASURED CA-40 CURRENTS AND THE
+           ERROR DUE TO BLANK SUBTRACTION,TAKEN IN QUADRATURE.
+           (DATA-ERR).THE UNCERTAINTY IS REPORTED BY AUTHORS.
+ENDBIB              25          0
+NOCOMMON
+ENDSUBENT           28          0
+------------------------------------------------------------------------
+SUBENT        O0104011     950426
+BIB                  3          5
+REACTION   (28-NI-0(P,X)20-CA-41,CUM,SIG,,,EXP)
+SAMPLE     NATURAL ELEMENTAL THIN TARGET OF FE,MASS 107.5 MG,
+           WAS USED.
+COMMENT    /BY COMPILER/.THE TARGET OF NATURAL TITANIUM WAS
+           IRRADIATED MORE THAN 3 YEARS BEFORE THIS MEASURMENT.
+ENDBIB               5          0
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA       DATA-ERR
+MEV        MB         MB
+       600.       9.50       0.90
+ENDDATA              3          0
+ENDSUBENT           13          0
+------------------------------------------------------------------------
+ENTRY            O0276     971021
+SUBENT        O0276001     971021
+BIB                 16        137
+TITLE      Cross Sections For the Production of Residual Nuclides
+           By Low- And Medium-Energy Protons from the Target
+           Elements C, N, O, Mg, Al, Si, Ca, Ti, V, Mn, Fe, Co,
+           Ni, Cu, Sr, Y, Zr, Nb, Ba and Au.
+AUTHOR     (R.MICHEL, R.BODEMANN, H.BUSEMANN, R.DAUNKE, M.GLORIS,
+           H.-J.LANGE, B.KLUG, A.KRINS, I.LEYA, M.LUEPKE,
+           S.NEUMANN, H.REINHARDT, M.SCHNATZ-BUETTGEN,
+           U.HERPERS, TH.SCHIEKEL, F.SUDBROCK, B.HOLMQVIST,
+           H.CONDE, P.MALMBORG, M.SUTER, B.DITTRICH-HANNEN,
+           P.-W.KUBIK, H.-A.SINAL,D.FILGES)
+INSTITUTE  (2GERKLN) University of Cologne.
+           (2GERUH)  University of Hannover.
+           (2SWTETH) Institut  of Particle Physics and Paul
+           Scherrer Institute.
+           (2SWDUPP) University of Uppsala.
+           (2GERJUL) Kfa Julich.
+REFERENCE  (J,NIM/B,129,153,97) Final Publication.
+           (W,MICHEL,96) To be Submitted in Nim/B.
+REL-REF    (N,O0281001,B.DITTRICH+,J,NIM/B,52,588,90) Chemical
+           Separation Method.
+           (N,O0282001,R.BODEMANN+,J,NIM/B,82,9,93) The Stacks
+           Constraction Details.
+           (N,,W.WESTMEIER,J,NIM,180,205,81) Method to Analyse
+           Gamma Spectra.
+           (N,,W.WESTMEYER,J,NIM/A,242,437,86) Method to Analyse
+           Gamma Spectra.
+SAMPLE     The Targets in the Stacks were Pure Element Foils
+           Besides Nitrogen, Oxygen, Calcium, Manganese,
+           Strontium and Barium. Composition Materials For these
+           Elements will be Described in Suitable Subentries.
+           Mostly, at Least Three Foils of Each Element were
+           Irradiated Together in Order to Compensate For Reciol
+           Losses and to Avoid Cross Contamination by Analyzing
+           Only the Inner One were Used For Measurements.
+           Exceptions were the Elements Ca, Sr and Ba, For Which
+           Only One Foil, Each, was Used.
+           All Elemental Target Sets were Separated by Sets of
+           Three Thin Al-Foils (0.035 MM) And Cu-Foils (0.050MM)
+           In Order to Minimize Cross Contamination. In Addition,
+           The Inner Ones of the Three Thin Al and Cu Foils
+           Between the Different Target Elements were Used For
+           Flux Monitoring.
+HISTORY    (960816C)  By CAJAD.
+           (961223A)  Sample is Corrected.
+           (971020A)  Final Reference is Added. Some Reactions are
+           Corrected Too.
+           (971021U) Last checking has been done.
+MONITOR   1(13-AL-27(P,3N+3P)11-NA-22,CUM/UND,SIG,,,EVAL)
+          2(29-CU-0(P,X)30-ZN-65,IND,SIG,,,EXP) For E<45 MeV
+MONIT-REF 1(,J.TOBAILLEM+,R,CEA-N-1466,81) For E>200 MeV
+          1(A0497001,G.F.STEYN+,J,ARI,41,315,90) For E<200 MeV.
+          2(A0507001,S.J.MILLS+,J,ARI,43,1019,92) For E<45 MeV
+FACILITY   (ISOCY,2SWDUPP)  70 MeV200 MeV
+           (CYCLO,2SWTPSI)  E<72 MeV
+           (VDG,2SWTETH) For Ams Method.
+METHOD     (STTA)
+           (EXTB)
+           (EDEG) For E<180 MeV
+           After Finishing the Irradiations of a Set of Typically
+           5 Stacks, the Irradiated Targets were Transported to
+           Cologhe Ad Hannover Within 12 Hours and 24 Hours,
+           Respectivilly. Repeated Measurements During One Year
+           Allowed to Get a Minimum 3 Spectra For All Isotopes
+           Investigated. Often Up to 15 Spectra were Available For
+           The Evaluation.
+           Commerial Available Code (GAMA-V) Ver 15.03 was Used
+           For Unfolding of Complex Gamma Spectra.
+           For Villigen Measurements Only:
+           After the End of Irradiation, First Measurements of
+           Short-Lived Nuclides were Performed at Villigen.
+ADD-RES    (COMP) Hybrid Model of Preequilibrium Reaction in Form
+           Of the Arel Code, Which Ia a Relativistic Version of
+           The Alice Livermore Code. Intranuclear Cascade
+           Evaporation (INC/E) Model was Used in Form of the
+           Het/Kfa2 Code.
+           2.Quantification of the Agreement Between Experiment
+           And Theory.
+           3.Predictive Capabilities of the Arel and Het/Kfa2
+           Codes have Been Studied.
+           4.Modelling Production Cross Sections by the Arel and
+           Het/Kfa2 Codes.
+STATUS     (TABLE) From R.Michel.
+COMMENT    -By Authors-
+           1. Data Tables of this Work Contain the Data For Equal
+           Energies.  These Measurments are Independent.
+           2. This is First Publication of this Group Where New
+           Monitor Data have Been Used.
+CORRECTION Needed Correction For Interference by Reactions of
+           Secondary Particles is Included.
+           Correction on Self-Absorption of Gamma-Rays in the
+           Sample is Included Too.
+ERR-ANALYS (ERR-1) Uncertainty in the Determination of the Number
+           Of Target Atoms.
+           (ERR-2)  Overall Error Due to Fluctuation in Beam
+           Intensity Duing to Irradiation.
+           (ERR-3) Upper Limit of Uncertainty of the
+           Measurement of the Monitoring Radionuclide.
+           (ERR-4) Upper Limit For the Error of Absolute
+           Efficiency Calibration of Gamma-Rays Spectrometer.
+           (ERR-5) Upper Limit For the Error of Relative
+           Efficiency Calibraton of Gamma-Rays Spectrometer.
+           (ERR-6) Upper Limit of the Uncertaity Due to
+           Gamma-Gamma Coincidences.
+           (EN-ERR).  Beam Energy Uncertainty Takes in Account the
+           Finite Thickness of the Foils As  Well  As  the  Energy
+           Straggling  For  Last  Target  of Experiment at Uppsala
+           Beam Energy at this Target was 58 +-1.5 MeV.   This  is
+           Upper Limit For Experiments with Stacks.
+           8. Error of Monitor Cross Section was not Considered.
+           9. Reproducibility of Photopeak Integration - Up to 15
+           Measurements were Used For the Determination of Each
+           Nuclide, Thus Allowing to Properly Account For this
+           Source of Error.
+           10. Dead Time and Pile Up Losses in Gamma-Spectrometry-
+           By Varying the Distance Between Sources and Detector,
+           Dead Time was Always Kept Below 10%, Where the
+           Automatic Dead Time Correction O the Measuring Devices
+           Can be Assumed to be Correct.
+           11. Statistical Counting Error. This Source of
+           Uncertainty is Included by Calculating the Errors of
+           Individual Photopeaks. The Error of Background
+           Subtraction was Taken Into Account.
+           ------------------------------------------------------
+           All these Error were Quadratically Added to Obtain
+           Absolute Errors of the Cross Sections. However, Some of
+           The Sources of Errors are General Ones Affecting All
+           Data of this Experiment in the Same Way, While Others
+           Individually Affect Each Reaction. The General Errors
+           Sum Up Quadratically to About 6% and have to be
+           Quadratically Subtracted When Discussing Ratios of
+           Gross Sections from this Work.
+           ------------------------------------------------------
+           (ERR-T) These Uncertainties are Absolute Ones and
+           Consider  All Sources of Errors Affecting the
+           Determination of Cross Sections.
+ENDBIB             137
+COMMON               6          3
+ERR-1      ERR-2      ERR-3      ERR-4      ERR-5      ERR-6
+PER-CENT   PER-CENT   PER-CENT   PER-CENT   PER-CENT   PER-CENT
+         2.         2.         1.         5.         2.         1.
+ENDCOMMON            3
+ENDSUBENT          144
+------------------------------------------------------------------------
+SUBENT        O0276097     970118
+BIB                  4          7
+REACTION   (28-NI-0(P,X)4-BE-10,,SIG,,,EXP) Independent
+METHOD     (AMS)
+           (CHSEP)
+COMMENT    -By Authors- The Measured Isotope Ratios have Been
+           Normalized to the Standard S555 with
+           10-Be/9-Be=(9.55+-0.23)E-11.
+ERR-ANALYS (ERR-7) Uncertainty of Used Standard.
+ENDBIB               7
+COMMON               1          3
+ERR-7
+PER-CENT
+        20.
+ENDCOMMON            3
+DATA                 4          8
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+  0.980E+02             0.150E-01  0.200E-02
+  0.140E+03             0.380E-01  0.200E-02
+  0.194E+03             0.580E-01  0.200E-02
+  0.231E+03  0.160E+01  0.354E-01  0.873E-02
+  0.275E+03  0.110E+01  0.689E-01  0.739E-02
+  0.341E+03  0.159E+01  0.111E+00  0.111E-01
+  0.378E+03  0.109E+01  0.142E+00  0.138E-01
+  0.160E+04  0.100E+01  0.112E+01  0.610E-01
+ENDDATA             10
+ENDSUBENT           26
+------------------------------------------------------------------------
+SUBENT        O0276098     970118
+BIB                  6          8
+REACTION   (28-NI-0(P,X)11-NA-22,CUM,SIG,,,EXP)
+METHOD     (ACTIV)
+           (GSPEC)
+ANALYSIS   (AREA)
+RAD-DET    (11-NA-22,DG)
+DECAY-DATA (11-NA-22,2.603YR,DG,1274.,0.999)
+DETECTOR   (GELI).
+           (HPGE)
+ENDBIB               8
+NOCOMMON
+DATA                 4          3
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+  0.600E+03             0.500E+00  0.600E-01
+  0.120E+04  0.102E+01  0.168E+01  0.134E+00
+  0.160E+04  0.103E+01  0.233E+01  0.170E+00
+ENDDATA              5
+ENDSUBENT           18
+------------------------------------------------------------------------
+SUBENT        O0276099     970118
+BIB                  4          7
+REACTION   (28-NI-0(P,X)17-CL-36,,SIG,,,EXP) Independent.
+COMMENT    -By Authors- For 36-Cl the Standard 'K380/4' was Used,
+           Which has a 36-Cl/Nat-Cl Ratio of
+            (1.53+-0.15)*10**(-11)
+METHOD     (AMS)
+           (CHSEP)
+ERR-ANALYS (ERR-7) Uncertainty of Standard 36Cl/Nat-Cl Ratio.
+ENDBIB               7
+COMMON               1          3
+ERR-7
+PER-CENT
+        10.
+ENDCOMMON            3
+DATA                 4         12
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+  0.106E+03  0.160E+01  0.300E-01  0.300E-02
+  0.125E+03  0.130E+01  0.270E-01  0.100E-02
+  0.147E+03  0.140E+01  0.118E+00  0.500E-02
+  0.231E+03  0.160E+01  0.523E+00  0.440E-01
+  0.275E+03  0.110E+01  0.651E+00  0.458E-01
+  0.341E+03  0.159E+01  0.118E+01  0.828E-01
+  0.378E+03  0.109E+01  0.185E+01  0.153E+00
+  0.800E+03  0.100E+01  0.716E+01  0.658E+00
+  0.120E+04  0.100E+01  0.930E+01  0.510E+00
+  0.120E+04  0.100E+01  0.875E+01  0.132E+01
+  0.160E+04  0.100E+01  0.981E+01  0.500E+00
+  0.160E+04  0.100E+01  0.917E+01  0.580E+00
+ENDDATA             14
+ENDSUBENT           30
+------------------------------------------------------------------------
+SUBENT        O0276100     970118
+BIB                  7         13
+REACTION   (28-NI-0(P,X)21-SC-44-M,IND,SIG,,,EXP)
+COMMENT    - By Compiler - Radoactive Decay of 44-Ti to Isomer
+           State 0F 44-Sc is Impossible.
+METHOD     (ACTIV)
+           (GSPEC)
+ANALYSIS   (AREA)
+RAD-DET    (21-SC-44-M,DG)
+           (21-SC-44-G,DG)
+DECAY-DATA (21-SC-44-M,2.44D,
+                             DG,1157.0,0.0139)
+           (21-SC-44-G,3.92HR,DG,1157.0,0.999)
+DETECTOR   (GELI).
+           (HPGE)
+ENDBIB              13
+NOCOMMON
+DATA                 4          5
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+  0.148E+03  0.140E+01  0.968E+00  0.118E+00
+  0.120E+04  0.104E+01  0.909E+01  0.656E+00
+  0.120E+04  0.102E+01  0.896E+01  0.655E+00
+  0.160E+04  0.104E+01  0.795E+01  0.559E+00
+  0.160E+04  0.103E+01  0.800E+01  0.576E+00
+ENDDATA              7
+ENDSUBENT           25
+------------------------------------------------------------------------
+SUBENT        O0276101     970118
+BIB                  6          9
+REACTION   (28-NI-0(P,X)21-SC-46-G,M+,SIG,,,EXP) Independent
+METHOD     (ACTIV)
+           (GSPEC)
+ANALYSIS   (AREA)
+RAD-DET    (21-SC-46-G,DG)
+DECAY-DATA (21-SC-46-G,83.82D,DG,889.2,1.00)
+           (21-SC-46-M,18.7SEC)
+DETECTOR   (GELI).
+           (HPGE)
+ENDBIB               9
+NOCOMMON
+DATA                 4         11
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+  0.106E+03  0.160E+01  0.187E+00  0.420E-01
+  0.106E+03  0.162E+01  0.201E+00  0.313E-01
+  0.126E+03  0.150E+01  0.456E+00  0.510E-01
+  0.126E+03  0.147E+01  0.447E+00  0.372E-01
+  0.147E+03  0.140E+01  0.683E+00  0.550E-01
+  0.148E+03  0.140E+01  0.701E+00  0.516E-01
+  0.231E+03  0.160E+01  0.183E+01  0.140E+00
+  0.120E+04  0.104E+01  0.549E+01  0.404E+00
+  0.120E+04  0.102E+01  0.559E+01  0.409E+00
+  0.160E+04  0.104E+01  0.501E+01  0.356E+00
+  0.160E+04  0.103E+01  0.501E+01  0.355E+00
+ENDDATA             13
+ENDSUBENT           27
+------------------------------------------------------------------------
+SUBENT        O0276102     970118
+BIB                  7         11
+REACTION   (28-NI-0(P,X)22-TI-44,CUM,SIG,,,EXP)
+COMMENT    -By Compiler- The Production of 44-Ti Due to Decay of
+           44-V is not Excluded.
+METHOD     (ACTIV)
+           (GSPEC)
+ANALYSIS   (AREA)
+RAD-DET    (22-TI-44,DG)
+DECAY-DATA (22-TI-44,47.3YR,DG,67.8,0.880,
+                            DG,78.,0.945)
+DETECTOR   (GELI).
+           (HPGE)
+ENDBIB              11
+NOCOMMON
+DATA                 4         11
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+  0.231E+03  0.160E+01  0.494E+00  0.553E-01
+  0.275E+03  0.110E+01  0.664E+00  0.586E-01
+  0.341E+03  0.159E+01  0.102E+01  0.891E-01
+  0.378E+03  0.109E+01  0.129E+01  0.109E+00
+  0.600E+03             0.137E+01  0.190E+00
+  0.800E+03             0.198E+01  0.147E+00
+  0.800E+03             0.138E+01  0.100E+00
+  0.120E+04             0.182E+01  0.139E+00
+  0.120E+04             0.174E+01  0.180E+00
+  0.160E+04             0.160E+01  0.156E+00
+  0.260E+04             0.924E+00  0.690E-01
+ENDDATA             13
+ENDSUBENT           29
+------------------------------------------------------------------------
+SUBENT        O0276103     970118
+BIB                  6         10
+REACTION   (28-NI-0(P,X)23-V-48,CUM,SIG,,,EXP)
+METHOD     (ACTIV)
+           (GSPEC)
+ANALYSIS   (AREA)
+RAD-DET    (23-V-48,DG)
+DECAY-DATA (23-V-48,15.97D,
+                           DG,983.5,1.0,
+                           DG,1312.1,0.975)
+DETECTOR   (GELI).
+           (HPGE)
+ENDBIB              10
+NOCOMMON
+DATA                 4         19
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+  0.479E+02  0.830E+00  0.420E-01  0.170E-01
+  0.521E+02  0.790E+00  0.253E+00  0.430E-01
+  0.568E+02  0.740E+00  0.359E+00  0.610E-01
+  0.621E+02  0.680E+00  0.238E+00  0.400E-01
+  0.673E+02  0.610E+00  0.109E+01  0.180E+00
+  0.721E+02  0.540E+00  0.203E+01  0.410E+00
+  0.762E+02  0.976E+00  0.389E+01  0.401E+00
+  0.768E+02  0.450E+00  0.301E+01  0.440E+00
+  0.901E+02  0.710E+00  0.472E+01  0.481E+00
+  0.106E+03  0.160E+01  0.514E+01  0.370E+00
+  0.106E+03  0.162E+01  0.511E+01  0.433E+00
+  0.126E+03  0.150E+01  0.870E+01  0.610E+00
+  0.126E+03  0.147E+01  0.790E+01  0.612E+00
+  0.147E+03  0.140E+01  0.101E+02  0.760E+00
+  0.148E+03  0.140E+01  0.104E+02  0.758E+00
+  0.120E+04  0.102E+01  0.199E+02  0.147E+01
+  0.120E+04  0.102E+01  0.211E+02  0.156E+01
+  0.160E+04  0.103E+01  0.175E+02  0.124E+01
+  0.160E+04  0.103E+01  0.185E+02  0.131E+01
+ENDDATA             21
+ENDSUBENT           36
+------------------------------------------------------------------------
+SUBENT        O0276105     970118
+BIB                  6          8
+REACTION   (28-NI-0(P,X)24-CR-51,CUM,SIG,,,EXP)
+RAD-DET    (24-CR-51,DG)
+DECAY-DATA (24-CR-51,27.7D,DG,320.1,0.0983)
+METHOD     (ACTIV)
+           (GSPEC)
+ANALYSIS   (AREA)
+DETECTOR   (GELI).
+           (HPGE)
+ENDBIB               8
+NOCOMMON
+DATA                 4         34
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+  0.290E+02  0.649E+00  0.920E+00  0.351E+00
+  0.361E+02  0.522E+00  0.245E+01  0.840E+00
+  0.366E+02  0.520E+00  0.189E+01  0.393E+00
+  0.384E+02  0.118E+01  0.138E+01  0.444E+00
+  0.401E+02  0.433E+00  0.145E+01  0.417E+00
+  0.404E+02  0.189E+01  0.111E+01  0.251E+00
+  0.405E+02  0.442E+00  0.129E+01  0.446E+00
+  0.433E+02  0.371E+00  0.714E+00  0.252E+00
+  0.479E+02  0.830E+00  0.214E+01  0.320E+00
+  0.520E+02  0.946E+00  0.142E+01  0.244E+00
+  0.521E+02  0.790E+00  0.538E+01  0.590E+00
+  0.525E+02  0.120E+01  0.226E+01  0.368E+00
+  0.568E+02  0.740E+00  0.872E+01  0.870E+00
+  0.576E+02  0.844E+00  0.484E+01  0.369E+00
+  0.602E+02  0.127E+01  0.876E+01  0.915E+00
+  0.621E+02  0.680E+00  0.142E+02  0.110E+01
+  0.630E+02  0.739E+00  0.146E+02  0.787E+00
+  0.673E+02  0.610E+00  0.262E+02  0.240E+01
+  0.681E+02  0.615E+00  0.269E+02  0.139E+01
+  0.721E+02  0.540E+00  0.333E+02  0.300E+01
+  0.762E+02  0.976E+00  0.339E+02  0.345E+01
+  0.768E+02  0.450E+00  0.342E+02  0.270E+01
+  0.863E+02  0.703E+00  0.342E+02  0.356E+01
+  0.901E+02  0.710E+00  0.307E+02  0.311E+01
+  0.106E+03  0.160E+01  0.323E+02  0.230E+01
+  0.106E+03  0.162E+01  0.315E+02  0.244E+01
+  0.126E+03  0.150E+01  0.370E-01  0.260E+01
+  0.126E+03  0.147E+01  0.361E+02  0.269E+01
+  0.147E+03  0.140E+01  0.389E+02  0.270E+01
+  0.148E+03  0.140E+01  0.381E+02  0.276E+01
+  0.120E+04  0.104E+01  0.350E+02  0.254E+01
+  0.120E+04  0.102E+01  0.363E+02  0.262E+01
+  0.160E+04  0.104E+01  0.307E+02  0.216E+01
+  0.160E+04  0.103E+01  0.310E+02  0.217E+01
+ENDDATA             36
+ENDSUBENT           49
+------------------------------------------------------------------------
+SUBENT        O0276106     970118
+BIB                  6         10
+REACTION   (28-NI-0(P,X)25-MN-52-G,CUM,SIG,,,EXP)
+RAD-DET    (25-MN-52-G,DG)
+DECAY-DATA (25-MN-52-G,5.60D,DG,744.2,0.90,
+                             DG,935.5,0.945,
+                             DG,1434.1,1.0)
+METHOD     (ACTIV)
+           (GSPEC)
+ANALYSIS   (AREA)
+DETECTOR   (GELI).
+           (HPGE)
+ENDBIB              10
+NOCOMMON
+DATA                 4         31
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+  0.366E+02  0.520E+00  0.302E-01  0.139E-01
+  0.384E+02  0.118E+01  0.218E+00  0.245E-01
+  0.401E+02  0.433E+00  0.305E+00  0.220E-01
+  0.404E+02  0.189E+01  0.466E+00  0.523E-01
+  0.405E+02  0.442E+00  0.360E+00  0.263E-01
+  0.433E+02  0.371E+00  0.116E+01  0.634E-01
+  0.456E+02  0.105E+01  0.401E+01  0.205E+00
+  0.479E+02  0.830E+00  0.822E+01  0.740E+00
+  0.520E+02  0.946E+00  0.169E+02  0.864E+00
+  0.521E+02  0.790E+00  0.163E+02  0.130E+01
+  0.568E+02  0.740E+00  0.214E+02  0.170E+01
+  0.576E+02  0.844E+00  0.253E+02  0.129E+01
+  0.602E+02  0.127E+01  0.234E+02  0.237E+01
+  0.621E+02  0.680E+00  0.199E+02  0.160E+01
+  0.630E+02  0.739E+00  0.251E+02  0.130E+01
+  0.673E+02  0.610E+00  0.177E+02  0.140E+01
+  0.681E+02  0.615E+00  0.224E+02  0.116E+01
+  0.721E+02  0.540E+00  0.153E+02  0.120E+01
+  0.762E+02  0.976E+00  0.158E+02  0.161E+01
+  0.768E+02  0.450E+00  0.133E+02  0.110E+01
+  0.901E+02  0.710E+00  0.169E+02  0.171E+01
+  0.106E+03  0.160E+01  0.198E+02  0.140E+01
+  0.106E+03  0.162E+01  0.180E+02  0.391E+01
+  0.126E+03  0.150E+01  0.204E+02  0.150E+01
+  0.126E+03  0.147E+01  0.240E+02  0.428E+01
+  0.147E+03  0.140E+01  0.200E-01  0.150E+01
+  0.148E+03  0.140E+01  0.209E+02  0.147E+01
+  0.120E+04  0.104E+01  0.144E+02  0.104E+01
+  0.120E+04  0.102E+01  0.148E+02  0.107E+01
+  0.160E+04  0.104E+01  0.126E+02  0.881E+00
+  0.160E+04  0.103E+01  0.129E+02  0.912E+00
+ENDDATA             33
+ENDSUBENT           48
+------------------------------------------------------------------------
+SUBENT        O0276107     970118
+BIB                  6          8
+REACTION   (28-NI-0(P,X)25-MN-54,,SIG,,,EXP) Independent
+RAD-DET    (25-MN-54,DG)
+DECAY-DATA (25-MN-54,312.2D,DG,834.8,1.00)
+METHOD     (ACTIV)
+           (GSPEC)
+ANALYSIS   (AREA)
+DETECTOR   (GELI).
+           (HPGE)
+ENDBIB               8
+NOCOMMON
+DATA                 4         44
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+  0.191E+02  0.807E+00  0.106E-01  0.291E-02
+  0.244E+02  0.317E+01  0.108E+00  0.339E-01
+  0.244E+02  0.317E+01  0.154E+00  0.236E-01
+  0.244E+02  0.317E+01  0.141E+00  0.364E-01
+  0.404E+02  0.189E+01  0.434E+00  0.658E-01
+  0.433E+02  0.371E+00  0.346E+00  0.311E-01
+  0.456E+02  0.105E+01  0.153E+01  0.865E-01
+  0.479E+02  0.830E+00  0.456E+01  0.500E+00
+  0.520E+02  0.946E+00  0.683E+01  0.352E+00
+  0.521E+02  0.790E+00  0.101E+02  0.900E+00
+  0.525E+02  0.120E+01  0.928E+01  0.800E+00
+  0.525E+02  0.120E+01  0.804E+01  0.837E+00
+  0.525E+02  0.120E+01  0.849E+01  0.830E+00
+  0.568E+02  0.740E+00  0.151E+02  0.140E+01
+  0.576E+02  0.844E+00  0.138E+02  0.709E+00
+  0.602E+02  0.127E+01  0.188E+02  0.156E+01
+  0.602E+02  0.127E+01  0.158E+02  0.161E+01
+  0.602E+02  0.127E+01  0.168E+02  0.186E+01
+  0.621E+02  0.680E+00  0.191E+02  0.170E+01
+  0.630E+02  0.739E+00  0.213E+02  0.108E+01
+  0.673E+02  0.610E+00  0.236E+02  0.210E+01
+  0.681E+02  0.615E+00  0.255E+02  0.129E+01
+  0.721E+02  0.540E+00  0.245E+02  0.220E+01
+  0.762E+02  0.976E+00  0.274E+02  0.224E+01
+  0.762E+02  0.976E+00  0.234E+02  0.237E+01
+  0.762E+02  0.976E+00  0.259E+02  0.264E+01
+  0.768E+02  0.450E+00  0.231E+02  0.210E+01
+  0.863E+02  0.700E+00  0.269E+02  0.210E+01
+  0.863E+02  0.703E+00  0.236E+02  0.245E+01
+  0.863E+02  0.700E+00  0.251E+02  0.240E+01
+  0.901E+02  0.710E+00  0.247E+02  0.205E+01
+  0.901E+02  0.710E+00  0.212E+02  0.215E+01
+  0.901E+02  0.710E+00  0.222E+02  0.215E+01
+  0.106E+03  0.160E+01  0.217E+02  0.150E+01
+  0.106E+03  0.162E+01  0.219E+02  0.153E+01
+  0.126E+03  0.150E+01  0.216E+02  0.150E+01
+  0.126E+03  0.147E+01  0.212E+02  0.149E+01
+  0.147E+03  0.140E+01  0.206E+02  0.150E+01
+  0.148E+03  0.140E+01  0.205E+02  0.143E+01
+  0.600E+03             0.149E+02  0.180E+01
+  0.120E+04  0.104E+01  0.150E+02  0.111E+01
+  0.120E+04  0.102E+01  0.152E+02  0.111E+01
+  0.160E+04  0.104E+01  0.133E+02  0.953E+00
+  0.160E+04  0.103E+01  0.135E+02  0.954E+00
+ENDDATA             46
+ENDSUBENT           59
+------------------------------------------------------------------------
+SUBENT        O0276108     970118
+BIB                  6          9
+REACTION   (28-NI-0(P,X)27-CO-55,CUM,SIG,,,EXP)
+RAD-DET    (27-CO-55,DG)
+DECAY-DATA (27-CO-55,17.54HR,
+                             DG,931.3,0.750),
+METHOD     (ACTIV)
+           (GSPEC)
+ANALYSIS   (AREA)
+DETECTOR   (GELI).
+           (HPGE)
+ENDBIB               9
+NOCOMMON
+DATA                 4         15
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+  0.183E+02  0.854E+00  0.232E+02  0.121E+01
+  0.238E+02  0.734E+00  0.678E+01  0.373E+00
+  0.361E+02  0.522E+00  0.384E+01  0.227E+00
+  0.396E+02  0.439E+00  0.641E+01  0.355E+00
+  0.479E+02  0.830E+00  0.289E+02  0.380E+01
+  0.521E+02  0.790E+00  0.369E+02  0.440E+01
+  0.568E+02  0.740E+00  0.386E+02  0.460E+01
+  0.621E+02  0.680E+00  0.328E+02  0.430E+01
+  0.673E+02  0.610E+00  0.310E+02  0.370E+01
+  0.721E+02  0.540E+00  0.287E+02  0.340E+01
+  0.768E+02  0.450E+00  0.292E+02  0.380E+01
+  0.120E+04  0.104E+01  0.124E+02  0.236E+01
+  0.120E+04  0.102E+01  0.121E+02  0.114E+01
+  0.160E+04  0.104E+01  0.110E+02  0.888E+00
+  0.160E+04  0.103E+01  0.120E+02  0.114E+01
+ENDDATA             17
+ENDSUBENT           31
+------------------------------------------------------------------------
+SUBENT        O0276109     970118
+BIB                  6          9
+REACTION   (28-NI-0(P,X)27-CO-56,CUM,SIG,,,EXP)
+RAD-DET    (27-CO-56,DG)
+DECAY-DATA (27-CO-56,77.26D,DG,846.8,0.999,
+                            DG,1238.3,0.670)
+METHOD     (ACTIV)
+           (GSPEC)
+ANALYSIS   (AREA)
+DETECTOR   (GELI).
+           (HPGE)
+ENDBIB               9
+NOCOMMON
+DATA                 4         46
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+  0.191E+02  0.807E+00  0.993E+00  0.524E-01
+  0.238E+02  0.734E+00  0.834E+01  0.113E+01
+  0.244E+02  0.317E+01  0.153E+02  0.154E+01
+  0.244E+02  0.317E+01  0.158E+02  0.137E+01
+  0.245E+02  0.718E+00  0.141E+02  0.724E+00
+  0.290E+02  0.649E+00  0.648E+02  0.333E+01
+  0.330E+02  0.582E+00  0.156E+03  0.799E+01
+  0.361E+02  0.522E+00  0.202E+03  0.106E+02
+  0.366E+02  0.520E+00  0.210E+03  0.108E+02
+  0.384E+02  0.118E+01  0.226E+03  0.114E+02
+  0.396E+02  0.439E+00  0.215E+03  0.112E+02
+  0.401E+02  0.433E+00  0.226E+03  0.116E+02
+  0.404E+02  0.189E+01  0.219E+03  0.185E+02
+  0.404E+02  0.189E+01  0.206E+03  0.209E+02
+  0.405E+02  0.442E+00  0.221E+03  0.114E+02
+  0.433E+02  0.371E+00  0.201E+03  0.103E+02
+  0.456E+02  0.105E+01  0.185E+03  0.930E+01
+  0.479E+02  0.830E+00  0.141E+03  0.140E+02
+  0.520E+02  0.946E+00  0.135E+03  0.685E+01
+  0.521E+02  0.790E+00  0.128E+03  0.130E+02
+  0.525E+02  0.120E+01  0.140E+03  0.110E+02
+  0.525E+02  0.120E+01  0.133E+03  0.139E+02
+  0.568E+02  0.740E+00  0.116E+03  0.110E+02
+  0.576E+02  0.844E+00  0.118E+03  0.604E+01
+  0.602E+02  0.127E+01  0.114E+03  0.976E+01
+  0.602E+02  0.127E+01  0.107E+03  0.109E+02
+  0.621E+02  0.680E+00  0.101E+03  0.100E+02
+  0.630E+02  0.739E+00  0.115E+03  0.580E+01
+  0.673E+02  0.610E+00  0.102E+03  0.100E+02
+  0.681E+02  0.615E+00  0.111E+03  0.562E+01
+  0.721E+02  0.540E+00  0.990E+02  0.110E+02
+  0.762E+02  0.976E+00  0.102E+03  0.779E+01
+  0.762E+02  0.976E+00  0.964E+02  0.976E+01
+  0.768E+02  0.450E+00  0.920E+02  0.100E+02
+  0.863E+02  0.700E+00  0.975E+02  0.770E+01
+  0.863E+02  0.703E+00  0.927E+02  0.962E+01
+  0.901E+02  0.710E+00  0.891E+02  0.722E+01
+  0.901E+02  0.710E+00  0.841E+02  0.851E+01
+  0.106E+03  0.160E+01  0.814E+02  0.570E+01
+  0.106E+03  0.162E+01  0.722E+02  0.543E+01
+  0.126E+03  0.150E+01  0.739E+02  0.520E+01
+  0.126E+03  0.147E+01  0.640E+02  0.483E+01
+  0.147E+03  0.140E+01  0.665E+02  0.470E+01
+  0.148E+03  0.140E+01  0.581E+02  0.443E+01
+  0.120E+04  0.102E+01  0.315E+02  0.234E+01
+  0.160E+04  0.103E+01  0.286E+02  0.204E+01
+ENDDATA             48
+ENDSUBENT           62
+------------------------------------------------------------------------
+SUBENT        O0276114     970118
+BIB                  6         12
+REACTION   (28-NI-0(P,X)28-NI-56,CUM,SIG,,,EXP)
+RAD-DET    (28-NI-56,DG)
+DECAY-DATA (28-NI-56,6.075D,DG,158.4,0.988,
+                            DG,269.5,0.365,
+                            DG,480.4,0.365,
+                            DG,750.0,0.495,
+                            DG,811.9,0.860)
+METHOD     (ACTIV)
+           (GSPEC)
+ANALYSIS   (AREA)
+DETECTOR   (GELI).
+           (HPGE)
+ENDBIB              12
+NOCOMMON
+DATA                 4         38
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+  0.191E+02  0.807E+00  0.272E+00  0.262E-01
+  0.238E+02  0.734E+00  0.817E+00  0.652E-01
+  0.244E+02  0.317E+01  0.921E+00  0.943E-01
+  0.245E+02  0.718E+00  0.957E+00  0.580E-01
+  0.290E+02  0.649E+00  0.288E+01  0.162E+00
+  0.361E+02  0.522E+00  0.929E+01  0.498E+00
+  0.366E+02  0.520E+00  0.101E+02  0.534E+00
+  0.384E+02  0.118E+01  0.100E+02  0.133E+01
+  0.396E+02  0.439E+00  0.112E+02  0.583E+00
+  0.401E+02  0.433E+00  0.123E+02  0.637E+00
+  0.404E+02  0.189E+01  0.113E+02  0.116E+01
+  0.405E+02  0.442E+00  0.121E+02  0.636E+00
+  0.433E+02  0.371E+00  0.121E+02  0.660E+00
+  0.456E+02  0.105E+01  0.946E+01  0.997E+00
+  0.479E+02  0.830E+00  0.832E+01  0.830E+00
+  0.520E+02  0.946E+00  0.922E+01  0.802E+00
+  0.521E+02  0.790E+00  0.813E+01  0.810E+00
+  0.568E+02  0.740E+00  0.767E+01  0.770E+00
+  0.576E+02  0.844E+00  0.775E+01  0.803E+00
+  0.602E+02  0.127E+01  0.819E+01  0.830E+00
+  0.621E+02  0.680E+00  0.691E+01  0.830E+00
+  0.630E+02  0.739E+00  0.777E+01  0.776E+00
+  0.673E+02  0.610E+00  0.677E+01  0.740E+00
+  0.681E+02  0.615E+00  0.799E+01  0.791E+00
+  0.721E+02  0.540E+00  0.652E+01  0.720E+00
+  0.762E+02  0.976E+00  0.749E+01  0.759E+00
+  0.768E+02  0.450E+00  0.607E+01  0.670E+00
+  0.901E+02  0.710E+00  0.674E+01  0.682E+00
+  0.106E+03  0.160E+01  0.614E+01  0.430E+00
+  0.106E+03  0.162E+01  0.480E+01  0.120E+01
+  0.126E+03  0.150E+01  0.570E+01  0.400E+00
+  0.126E+03  0.147E+01  0.614E+01  0.124E+01
+  0.147E+03  0.140E+01  0.507E+01  0.360E+00
+  0.148E+03  0.140E+01  0.450E+01  0.418E+00
+  0.120E+04  0.104E+01  0.197E+01  0.150E+00
+  0.120E+04  0.102E+01  0.211E+01  0.153E+00
+  0.160E+04  0.104E+01  0.187E+01  0.139E+00
+  0.160E+04  0.103E+01  0.197E+01  0.139E+00
+ENDDATA             40
+ENDSUBENT           57
+------------------------------------------------------------------------
+SUBENT        O0276115     970118
+BIB                  6          8
+REACTION   (28-NI-0(P,X)28-NI-57,CUM,SIG,,,EXP)
+RAD-DET    (28-NI-57,DG)
+DECAY-DATA (28-NI-57,36.0HR, DG,1377.6,0.779)
+METHOD     (ACTIV)
+           (GSPEC)
+ANALYSIS   (AREA)
+DETECTOR   (GELI).
+           (HPGE)
+ENDBIB               8
+NOCOMMON
+DATA                 4         35
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+  0.122E+02  0.102E+01  0.574E+00  0.340E-01
+  0.183E+02  0.854E+00  0.892E+02  0.491E+01
+  0.191E+02  0.807E+00  0.104E+03  0.540E+01
+  0.238E+02  0.734E+00  0.165E+03  0.908E+01
+  0.244E+02  0.317E+01  0.161E+03  0.163E+02
+  0.245E+02  0.718E+00  0.171E+03  0.891E+01
+  0.290E+02  0.649E+00  0.157E+03  0.821E+01
+  0.361E+02  0.522E+00  0.997E+02  0.552E+01
+  0.366E+02  0.520E+00  0.946E+02  0.494E+01
+  0.384E+02  0.118E+01  0.956E+02  0.515E+01
+  0.396E+02  0.439E+00  0.886E+02  0.489E+01
+  0.401E+02  0.433E+00  0.872E+02  0.463E+01
+  0.404E+02  0.189E+01  0.849E+02  0.859E+01
+  0.405E+02  0.442E+00  0.833E+02  0.434E+01
+  0.433E+02  0.371E+00  0.789E+02  0.412E+01
+  0.456E+02  0.105E+01  0.850E+02  0.456E+01
+  0.479E+02  0.830E+00  0.677E+02  0.810E+01
+  0.520E+02  0.946E+00  0.830E+02  0.446E+01
+  0.521E+02  0.790E+00  0.706E+02  0.850E+01
+  0.568E+02  0.740E+00  0.689E+02  0.830E+01
+  0.576E+02  0.844E+00  0.802E+02  0.431E+01
+  0.602E+02  0.127E+01  0.729E+02  0.738E+01
+  0.621E+02  0.680E+00  0.624E+02  0.810E+01
+  0.630E+02  0.739E+00  0.760E+02  0.447E+01
+  0.673E+02  0.610E+00  0.613E+02  0.800E+01
+  0.681E+02  0.615E+00  0.750E+02  0.442E+01
+  0.721E+02  0.540E+00  0.590E+02  0.710E+01
+  0.762E+02  0.976E+00  0.659E+02  0.669E+01
+  0.768E+02  0.450E+00  0.587E+02  0.700E+01
+  0.901E+02  0.710E+00  0.601E+02  0.608E+01
+  0.148E+03  0.140E+01  0.447E+02  0.317E+01
+  0.120E+04  0.104E+01  0.254E+02  0.184E+01
+  0.120E+04  0.102E+01  0.240E+02  0.191E+01
+  0.160E+04  0.104E+01  0.240E+02  0.169E+01
+  0.160E+04  0.103E+01  0.227E+02  0.160E+01
+ENDDATA             37
+ENDSUBENT           50
+------------------------------------------------------------------------
+SUBENT        O0276116     970118
+BIB                  6         10
+REACTION   (28-NI-0(P,X)26-FE-59,CUM,SIG,,,EXP)
+RAD-DET    (26-FE-59,DG)
+DECAY-DATA (26-FE-59,44.503D,
+                             DG,1099.3,0.565,
+                             DG,1291.,0.432)
+METHOD     (ACTIV)
+           (GSPEC)
+ANALYSIS   (AREA)
+DETECTOR   (GELI).
+           (HPGE)
+ENDBIB              10
+NOCOMMON
+DATA                 4          7
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+  0.602E+02  0.127E+01  0.139E+00  0.433E-01
+  0.762E+02  0.976E+00  0.119E+00  0.386E-01
+  0.901E+02  0.710E+00  0.166E+00  0.384E-01
+  0.126E+03  0.147E+01  0.182E+00  0.630E-01
+  0.148E+03  0.140E+01  0.196E+00  0.440E-01
+  0.120E+04  0.102E+01  0.335E+00  0.267E-01
+  0.160E+04  0.103E+01  0.317E+00  0.251E-01
+ENDDATA              9
+ENDSUBENT           24
+------------------------------------------------------------------------
+ENTRY            O0281          0
+SUBENT        O0281001          0
+BIB                 14         42
+TITLE      Ams Measurements of Thin-Target Cross Sections For the
+           Production of 10-Be and 26-Al by High-Energy Protons.
+AUTHOR     (B.DITTRICH, U.HERPERS, H.J.HOFMANN, W.WOLFLI,
+           R.BODEMANN, M.LUPKE, R.MICHEL, P.DRAGOVITSCH, D.FILGES)
+INSTITUTE  (2GERKLN) University of Cologne.
+           (2GERUH)  University of Hannover.
+           (2SWTETH) Institut of Fuer Mittelenergiephysik.
+           (2GERJUL) Institut Fuer Kernphysik
+REFERENCE  (J,NIM/B,52,588,90)
+REL-REF    (N,A0479001,B.DITTRICH+,R,NEANDC(E)-312-U,51,90)
+            Preliminary Report.
+           (N,,B.DITTRICH,T,DITTRICH,90) Chemical Separation
+           Method
+           (N,,M.SUTER+,J,NIM/B,5,117,84) The Technique of Ams
+           Determination.
+METHOD     (STTA) For Energies Below 200 MeV, Where Generally
+           The Production of Secondaries is Less Important,
+           (SITA) For 600,800,1200 and 2600 MeV Protons.
+           (EXTB)
+           (CHSEP)
+           (AMS).
+SAMPLE     Metallic Foils.
+HISTORY    (960712C)  By CAJAD.
+           (970111U) Last checking has been done.
+MONITOR    ((MONIT)13-AL-27(P,3N+3P)11-NA-22,CUM/UND,SIG,,,EVAL)
+MONIT-REF  (,J.TOBAILLEM+,R,CEA-N-1466,81)
+FACILITY   (SYNCY,2ZZZCER) 600 MeV.
+           (MESON,1USALAS) 800 MeV.
+           (LINAC,2FR SAC) 1200 and 2600 MeV.
+           (CYCLO,2SWDUPP) Energies Below 100 MeV.
+           (ISOCY,2FR PAR) For Energies Between 100 and 200 MeV.
+           (CYCLO,2BLGLVN) For Energies 73.7 and 80.0 MeV.
+           (SPECM,2GERMPM) Ams Facility.
+ADD-RES    (COMP) Hetc Code.
+           Chemical Separation Procedure.
+ERR-ANALYS (ERR-T) Total Uncertainties from Author Tables.
+           (ERR-1) Uncertainty of Determination of Target Masses.
+           (ERR-2) Uncertainty of Chemical Separation and Yields.
+           (ERR-3) Uncertainty of the Gamma-Spectrometric Flux
+           Determination.
+           No Error was Assigned to the Monitor Cross-Section.
+STATUS     (TABLE) From R.Michel.
+ENDBIB              42
+COMMON               3          3
+ERR-1      ERR-2      ERR-3
+PER-CENT   PER-CENT   PER-CENT
+         1.         3.         2.
+ENDCOMMON            3
+ENDSUBENT           49
+------------------------------------------------------------------------
+SUBENT        O0281008     970111
+BIB                  5         17
+REACTION   (28-NI-0(P,X)4-BE-10,,SIG,,,EXP) Independent.
+COMMENT    -By Authors- For 10-Be the Standard 'S433' was Used,
+           Which has a 10-Be/9-Be Ratio of (9.31+-0.23)*10**(-11).
+           -By Authors- Data Section Includes Revised Data. See
+           'Rel-Ref'.
+REL-REF    (R,O0282001,R.BODEMANN+,J,NIM/B,82,9,93) Revised
+            Experimental Cross Section For the Production of 10-Be
+            . The Data are Recalculated According to the New
+            Initial Proton Energy and Superseded Those in Original
+            Paper.
+ERR-ANALYS (ERR-4) Uncertainty of Standard 10be/9be Ratio.
+           (EN-ERR) From Authors' Data Tables.
+FLAG       (1.) This Data Line has Been Revised, See 'Rel-Ref'.
+           (2.) Additional Data from S.Theis, Thesis, University
+           Of Cologne. These Data are Quoted in Original Paper,
+           But Ones was not Included by R.Michel in His Data
+           Table.
+ENDBIB              17
+COMMON               1          3
+ERR-4
+PER-CENT
+        2.5
+ENDCOMMON            3
+DATA                 6         13
+EN         EN-ERR     DATA       ERR-T      MONIT      FLAG
+MEV        MEV        MB         MB         MB         NO-DIM
+  0.533E+02  0.120E+01  0.300E-02  0.100E-02                    1.
+  0.869E+02  0.700E+00  0.700E-02  0.200E-02                    1.
+  0.115E+03  0.160E+01  0.210E-01  0.600E-02
+  0.132E+03  0.150E+01  0.180E-01  0.200E-02
+      140.7        1.4      0.034      0.002                    2.
+  0.148E+03  0.140E+01  0.250E-01  0.300E-02
+  0.166E+03  0.170E+01  0.260E-01  0.500E-02
+  0.188E+03  0.150E+01  0.190E-01  0.300E-02
+      194.0        1.5      0.047      0.002                    2.
+  0.600E+03             0.380E+00  0.200E-01       16.0
+  0.800E+03             0.680E+00  0.300E-01       15.5
+  0.120E+04             0.129E+01  0.600E+00       14.6
+  0.260E+04             0.258E+01  0.120E+00       11.7
+ENDDATA             15
+ENDSUBENT           41
+------------------------------------------------------------------------
+SUBENT        O0281012     970111
+BIB                  3         10
+REACTION   (28-NI-0(P,X)13-AL-26-G,IND,SIG,,,EXP)
+COMMENT    -By Authors- For 26-Al the Standard 'Al9' was Used,
+           Which has a 26-Al/27-Al Ratio of (1.19)*10**(-9).
+           -By Compiler- Al-26-G Production Due to Si-26 Decay  is
+           Impossible  As  this  Decay  Produces Isomeric State of
+           Al-26 Only.  Direct Isomeric Transition to Ground State
+           Of Al-26 is Absent.
+FLAG       (1.) These Data are Quoted in Original Paper,
+           But Ones was not Included by R.Michel in His Data
+           Table.
+ENDBIB              10
+NOCOMMON
+DATA                 6          5
+EN         DATA       ERR-T      MONIT      DATA-MAX   FLAG
+MEV        MB         MB         MB         MB         NO-DIM
+       148.                                       0.262         1.
+  0.600E+03  0.390E+00  0.700E-01       16.0
+  0.800E+03  0.760E+00  0.600E-01       15.5
+  0.120E+04  0.162E+01  0.100E+00       14.6
+  0.260E+04  0.275E+01  0.240E+00       11.7
+ENDDATA              7
+ENDSUBENT           22
+------------------------------------------------------------------------
+ENTRY            O0303          0
+SUBENT        O0303001          0
+BIB                 19         45
+TITLE      Tritium Production by High-Energy Protons.
+AUTHOR     (L.A.CURRIE,W.F.LIBBY,R.L.WOLFGANG)
+INSTITUTE  (1USACHI)
+           (1USABNL)
+REFERENCE  (J,PR,101,1557,56)
+REL-REF    (N,O0305001,L.A.CURRIE,J,PR,114,878,59) 6. GeV Data.
+HISTORY    (960303C)
+           (970309U) Last checking has been done.
+SAMPLE     The Substances Bombarded Consisted of Metal and Salts
+           Having Thicknesses Varying from About 0.4 G/Cm**2
+           To About 25 G/Cm**2. All Targets Bombarded in the
+           Cosmotron had Areas of About 2.5 Cm by 5.8 Cm, While
+           Those Bombarded in the Synchrocyclotron had Areas of
+           About 2 Cm Square. The Organic Targets, Bexamethylene
+           Tetramine and Oxalic Acid, were Formed by Heating the
+           Respective Powders Under Slight Pressure Until
+           Sublimamation  Gave  Well-Sintered Structures. The
+           Targets  were  Then  Carved  Into  the Proper Shape and
+           Allowed to De-Gas Overnight Under Vacuum.
+MONITOR    (13-AL-27(P,N+3P)11-NA-24,CUM/UND,SIG,,,EXP)
+           (79-AU-197(P,X)65-TB-149-G,,SIG,,,EXP). At 2.05 GeV an
+           Additional Monitor, a Gold Foil, was Used.
+MONIT-REF  (,L.MARQUEZ,J,PR,86,405,52) 10.8+-1.1 Mb at 420 MeV.
+           (,FRIEDLANDER+,J,PR,99,263,55) 9.0Mb +-30% at 2,2 GeV.
+COMMENT    /by Authors/.The Amount of Tritium Found in a Given
+           Target May be Different from That Produced in the
+           Primary Interactions For Three Major Reasons-
+           Secondary Production, Recoil Loss and Diffusion Loss.
+MISC-COL   (MISC2) Number of Target.
+PART-DET   (B-)
+DETECTOR   (GEMUC).A Geiger Counter.
+FACILITY   (CYCLO,1USABNL).The Brookhaven Cosmotron.
+           (SYNCY,1USACHI).The Chicago Synchrocyclotron.
+METHOD     (REC)
+           (ACTIV)
+           (STTA)
+           (CHSEP)
+ANALYSIS   (DECAY)
+ADD-RES    The Relative Tritium Cross Section As a Function of
+           Target Depth was Measured.
+ERR-ANALYS The Errors Given in the Data-Sections are the Relative
+           Errors at Each Energy Only. Additional Errors in the
+           Absolute Values are 11% at 450 MeV and 21% at 2.05 GeV.
+           (ERR-T). The Uncertainty is Reported by Authors.
+STATUS     (TABLE)
+ENDBIB              45
+NOCOMMON
+ENDSUBENT           48
+------------------------------------------------------------------------
+SUBENT        O0303008     970309
+BIB                  6         14
+REACTION   (28-NI-0(P,X)1-H-3,,SIG,,,EXP)
+SAMPLE     Nickel Target was Used.
+ERR-ANALYS (ERR-1).Error of the Secondary Correction at 2.05 GeV.
+MISC-COL   (MISC1) Primary Cross Section. This Cross Section is
+           Not Corrected For Tritium Loss.
+           (MISC1-ERR) Uncertainty of Uncorrected Datum.
+FLAG       (1.) 10% Error Included Because of Recoil Correction.
+           10% Error Included Because  of Diffusion Correction.
+           (2.) 10% Error Included Because of Diffusion Correction
+           (3.) 10% Error Included Because of Secondary Correction
+           For Misc1 Data.
+           (4.) Superseded Result from O0305001. Previous Result
+           Corrected For Change in Monitor Cross Section.
+STATUS     (SPSDD,O0305001) For 2005 MeV
+ENDBIB              14
+COMMON               1          3
+ERR-1
+PER-CENT
+        10.
+ENDCOMMON            3
+DATA                 8          4
+EN         DATA       ERR-T      THICKNESS  MISC1      MISC1-ERR
+MISC2      FLAG
+MEV        MB         MB         G/CM-SQ    MB         MB
+NO-DIM     NO-DIM
+       450.        23.         4.       0.48        22.         3.
+        40.         1.
+       450.        22.         3.        1.5
+        45.         2.
+      2050.       100.        12.        5.6        75.        12.
+       209.         3.
+      2050.        90.
+                    4.
+ENDDATA             12
+ENDSUBENT           35
+------------------------------------------------------------------------
+ENTRY            O0353          0
+SUBENT        O0353001          0
+BIB                 13         33
+TITLE      On the Production of Cl-36 by High Energy Protons in
+           Thin and Thick Targets.
+AUTHOR     (TH.SCHIEKEL,F.SUDBROCK,U.HERPERS,M.GLORIS,I.LEYA,
+           R.MICHEL,H.A.SYNAL,M.SUTER)
+INSTITUTE  (2GERKLN)
+           (2GERUH)
+           (2SWTETH)
+REFERENCE  (J,NIM/B,113,484,96)
+HISTORY    (970606C)
+           (970613U) Last checking has been done.
+ADD-RES    (COMP).Alice 900 Code and Het Code.
+FACILITY   (VDGT,2SWTETH).Tandem Ams Facility in Zurich.
+METHOD     (STTA).The Stacked Foil Technique was Used.Targets
+           In the Form of Pure Elements or As Well Defined
+           Chemical Compounds were Used. An Energy Range is from
+            45 MeV Up 2.6 GeV.
+           (SITA).Two Spheres Made Out of Gabbro (A STONE WITH A
+           MEAN DENSITY AND MEAN ATOMIC NUMBER SIMILAR TO
+           CHONDRITES) And Iron with Radii of 25 and 10 Cm,
+           Respectively were Irradiated Isotropically with 1600
+           MeV Protons.
+           (AMS)
+MONITOR    (13-AL-27(P,3N+3P)11-NA-22,CUM/UND,SIG,,,EXP)
+MONIT-REF  (,J.TOBAILEM+,R,CEA-N-1466,,81)
+           (A0497001,G.F.STEYN+,J,ARI,41,315,90)
+SAMPLE     Containers with Pure Target Materials were Inserted at
+           Different Locations in Perpendicular Cores of the
+           Spheres,of Which Ti,Fe and Ni have Been Chosen For a
+           Determination of the Elemental Production Rates of
+           Cl-36 in Thick Targets.
+CORRECTION In Case of Proton Energies > 200 MeV Minor
+           Contributions (<10%) Of Secondary Particles.
+STATUS     (TABLE)
+ENDBIB              33
+NOCOMMON
+ENDSUBENT           36
+------------------------------------------------------------------------
+SUBENT        O0353007     970613
+BIB                  2          3
+REACTION   (28-NI-0(P,X)17-CL-36,UND,SIG,,,EXP) Shielded
+ERR-ANALYS (ERR-T).The Uncertainty is Reported by Authors.
+           (EN-ERR).The Uncertainty is Repoted by Authors.
+ENDBIB               3
+NOCOMMON
+DATA                 4         13
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+       106.        1.6       0.03      0.003
+       125.        1.3      0.027      0.002
+       147.        1.4      0.118      0.007
+       231.        1.6      0.523      0.044
+       275.        1.1      0.651      0.046
+       341.        1.6       1.18       0.08
+       378.        1.1       1.85       0.15
+       800.         1.       7.01       0.54
+      1200.         1.        9.3       0.51
+      1600.         1.       9.81        0.5
+      1600.         1.       9.17       0.58
+      1600.         1.       9.12       0.79
+      2600.         1.       8.22       0.41
+ENDDATA             15
+ENDSUBENT           23

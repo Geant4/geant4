@@ -1,0 +1,41 @@
+ 
+ opt zfl
+opt nfit
+opt nsta
+opt nbox
+opt ngri
+set MSCF 0.80
+set XLAB 1.2
+set NDVX 010206
+set NDVY 010205
+ zone
+ opt logy
+ 
+ null 0.5 27.5 0.01 1000
+ atitle 'baryon number' 'cross section(mb)'
+ 
+
+ 
+ hi/file 1 chips.paw
+ set dmod 3
+ hi/pl 27 shist
+ line 10 2.4 11 2.4
+ itx 11.5 220 'CHIPS'
+ close 1
+ 
+ hi/file 1 kin.paw
+ set dmod 1
+ hi/pl 27 shist
+ line 10 2.2 11 2.2
+ itx 11.5 150 'KIN'
+ close 1
+ 
+ ve/create X(12) R 2 3 4  7 10 14 18 20 21 22 24 26 
+ ve/create Y(12) R 169 107 308 5 1.17 1.5 7.25 23.69 24.52 14.5 20
+ ve/create DX(12) R 0 0 0 0 0 0 0 0 0 0 0 0
+ ve/create DY(12) R 17 5 10 0.1 0.1 0.2 1 0.13 0.18 1 2
+ gr/h/err X Y DX DY 12 21 0.2 1
+
+ 
+ opt liny
+exe ../prf bar1 eps

@@ -1,0 +1,138 @@
+ENTRY            60094     790511
+TITLE      THE C-12(P,PN)C-11 AND AL-27(P,3PN)NA-24 CROSS SECTIONS
+           AT 591 MEV
+AUTHOR     (K.GOEBEL, D.HARTING, J.C.KLUYVER, A.KUSUMEGI,
+           H.SCHULTES)
+INSTITUTE  (2ZZZCER)
+REFERENCE  (J,NP,24,28,61)
+           (R,CERN-60-3,60)
+METHOD     (EXTB,SITA,BCINT)
+           THE BEAM CURRENT WAS MEASURED EXTERNALLY USING A
+           SECONDARY EMISSION CHAMBER (SEE G.W.TAUTFEST ET AL.,
+           REV.SCI.INSTR.26,229(1955)) THROUGH WHICH THE BEAM
+           TRAVERSED BEFORE HITTING THE TARGET.
+           THIS CHAMBER WAS CALIBRATED BEFOR EACH IRRADIATION BY
+           COMPARISON WITH AN IONIZATION CHAMBER. THE SENSITIVITY
+           WAS FOUND TO BE CONSTANT WITHIN 2 PER CENT.
+REACTION   (13-AL-27(P,X)9-F-18,CUM,SIG,,,EXP)
+RAD-DET    (9-F-18,B+)
+DECAY-DATA (9-F-18,1.9HR,B+)
+DETECTOR   (GEMUC)
+           THE COUNTING EFFICIENCY WAS DETERMINED BY CALIBRATION
+           WITH NA-24 STANDARD SOURCES
+COMMENT    THE F-18 CROSS SECTION WAS A BY-PRODUCT OF THE ACCURATE
+           NA-24 CROSS SECTION DETERMINATION AND WAS OBTAINED
+           FROM THE SAME IRRADIATIONS (SEE SUBENTRY B0094002).
+SAMPLE     AL-FOILS, THICKNESS 10 MG/CM**2 +-0.5 PER CENT
+           DETERMINED BY ABSORPTION MEASUREMENT AND WEIGHING,
+           PURITY 99.99 PER CENT
+ERR-ANALYS THE ERROR IS ONLY 3 PER CENT RELATIVE TO THAT OF THE
+           NA-24 CROSS SECTION WHICH HAS AN ACCURACY OF 5 PER
+           CENT OR 0.5 MB (SEE B0094002)
+ENDBIB
+NOCOMMON             0          0
+DATA                 2          1
+EN         DATA
+MEV        MB
+ 5.9100E+02 8.0000E+00
+ENDDATA
+---
+TITLE      LIGHT-FRAGMENT PRODUCTION IN P-NUCLEUS INTERACTIONS
+           AT 600 MEV.ASTROPHYSICAL APPLICATION.
+AUTHOR     (J.P.ALARD,A.BALDIT,R.BRUN,J.P.COSTILHES,J.DHERMAIN,
+           J.FARGEIX,L.FRAYSSE,J.PELLET,G.ROCHE,J.C.TAMAIN)
+INSTITUTE  (2FR CLE)
+           (2ZZZCER)
+           (2ITYMIL)
+HISTORY    (941031C)
+           (950517U)
+           (941209A).THE CORRECTION OF DATA.
+REFERENCE  (J,NC/A,30,320,75)
+FACILITY   (SYNCY,2ZZZCER)
+SAMPLE     SPECTRA HAVE BEEN MEASURED FOR SEVEN TARGET NUCLEI (BE,
+           C,NA,AL,CA,FE,AU).ANOTHER INFORMATION ABOUT TARGET IS
+           ABSENT.
+DETECTOR   (TELES,SOLST,SCIN).DELTA-E-E TELESCOPES (SEMICONDUCTOR
+           AND SCINTILLATOR DETECTORS).
+METHOD     (SITA)
+ADD-RES    (COMP).A TWO-STEP MODEL AND A THERMODYNAMICAL MODEL.
+           ASTROPHYSICAL APPLICATION.A SLIGHT STRUCTURE IN THE
+           ENEGRY SPECTRA FROM BE AND CA TARGETS.
+REL-REF    (R,,G.ROCHE+,J,NIM,101,231,72).EXPERIMENTAL METHOD.
+COMMENT    /BY AUTHORS/.THE TOTAL CROSS SECTIONS HAVE BEEN
+           OBTAINED BY NUMERICAL INTEGRATION OVER ENERGIES AND
+           ANGLES FOR C,AL,FE AND AU TARGET FOR P,D,T,HE3 AND
+           ALPHA FRAGMENTS.
+EN
+MEV
+       600.
+REACTION  1(13-AL-27(P,X)1-H-1,,SIG,,,EXP)
+          2(13-AL-27(P,X)1-H-2,,SIG,,,EXP)
+          3(13-AL-27(P,X)1-H-3,,SIG,,,EXP)
+          4(13-AL-27(P,X)2-HE-3,,SIG,,,EXP)
+          5(13-AL-27(P,X)2-HE-4,,SIG,,,EXP)
+ANALYSIS   (INTAD)
+ENDBIB               6
+NOCOMMON
+DATA                 5          1
+DATA      1DATA      2DATA      3DATA      4DATA      5
+MB         MB         MB         MB         MB
+       670.       169.        44.        80.       295.
+ENDDATA              3
+-----
+ENTRY            A0344     970324
+TITLE      On the Depth Dependence of Spallation Reactions in
+           A Spherical Thick Diorite Target Homogeneously
+           Irradiated by 600 MeV Protons. Simulation of
+           Production of Cosmogenic Nuclides in Small Meteorites
+AUTHOR     (R.MICHEL, P.DRAGOVITSCH, P.ENGLERT, F.PEIFFER,
+           R.STUEK, S.THEIS, F.BEGEMANN, H.WEBER, P.SIGNER,
+           R.WIELER, D.FILGES, P.CLOTH)
+REFERENCE  (J,NIM/B,16,61,86)
+           (R,NEANDC(E)-272U,28,86). Short Report.
+           (R,JUEL-2130,,87). Theory.
+           (W,MICHEL,970303) To Delete Co-59(P,X)Fe-59 Data.
+INSTITUTE  (2GERKLN)
+           (2GERUH)
+           (2GERJUL)
+           (2SWTETH) And Max-Planck-Institut Fur Chemie, Mainz,
+           Frg.
+ADD-RES    Simulation of Production of Cosmogenic Nuclides in
+           Small Meteorites.
+COMMENT    /by Comriler/. Detailed Information About Target
+           Device See in Reference.
+           -By Compiler- Corrections on Secondary Particles
+           Influence were Partically Only, Probably.
+REACTION  3(13-AL-27(P,X)2-HE-3,IND,SIG,,,EXP)
+          4(13-AL-27(P,X)2-HE-4,,SIG,,,EXP)
+          7(13-AL-27(P,X)4-BE-7,,SIG,,,EXP) Independent
+          5(13-AL-27(P,4D)10-NE-20,CUM/UND,SIG,,,EXP)
+          1(13-AL-27(P,3N+4P)10-NE-21,CUM/UND,SIG,,,EXP)
+          2(13-AL-27(P,2N+4P)10-NE-22,IND/UND,SIG,,,EXP)
+          C(13-AL-27(P,2N+4P)10-NE-22,CUM/UND,SIG,,,EXP)
+          N(13-AL-27(P,N+3P)11-NA-24-G,CUM/UND,SIG,,,EXP)
+METHOD     (ASEP)
+MONITOR    ((MONIT)13-AL-27(P,3D)11-NA-22,CUM/UND,SIG,,,EVAL)
+ERR-ANALYS (ERR-T). Quoted Errors Include Counting Statistics,
+           The Realative Efficiency Calibration and
+           Inhomogeneities of Target Thickness. Its do not
+           Consider Those Errors Which Systematically Affect All
+           The Samples in the Same Way Such As Absolute Efficiency
+           Calibration, Absolute Flux Determination, and Errors of
+           Monitor Cross Sections. The Overall Error of the Latter
+           Effects is About 7%. It has to be Quadratically Added
+           To Those Quoted If Absolute Errors are Required For
+           Comparison with the Results of Other Authors.
+MONIT
+MB
+      15.99
+EN         DATA      3ERR-T     3DATA      4ERR-T     4DATA      7
+ERR-T     7DATA      5ERR-T     5DATA      1ERR-T     1DATA      2
+ERR-T     2DATA      CERR-T     CDATA      NERR-T     N
+MEV        MB         MB         MB         MB         MB
+MB         MB         MB         MB         MB         MB
+MB         MB         MB         MB         MB
+       600.      26.51       0.13      321.5         2.       5.02
+       0.09      23.69       0.13      24.54       0.18      12.76
+       0.09      28.89       0.22       10.3        0.7
+ENDDATA              9

@@ -1,0 +1,220 @@
+
+opt zfl
+opt nfit
+opt sta
+opt nbox
+opt ngri
+set MSCF 0.80
+set XLAB 0.6
+set NDVX 010206
+set NDVY 010205
+ zone
+ zone 2 2
+ 
+ hi/file 1 100/p_al_22_par.paw
+ hi/pl 3
+ itx 100 800 'protons 22.4 MeV on Al'
+ itx 0 400 'LEPAR'
+ close 1
+ 
+ hi/file 1 100/p_al_22_prec.paw
+ hi/pl 3
+ itx 0 400 'PREC'
+ close 1
+ 
+ hi/file 1 100/p_al_22_chips.paw
+ hi/pl 3
+ itx 0 400 'CHIPS'
+ close 1
+ 
+ hi/file 1 100/p_al_22_kin.paw
+ hi/pl 3
+ itx 0 400 'KIN'
+ close 1
+
+* exe kumac/prf 100/p_al_22_phi eps
+
+ hi/file 1 100/p_al_22_par.paw
+ hi/pl 4
+ itx 100 220 'protons 22.4 MeV on Al'
+ itx 100 150 'LEPAR'
+ close 1
+ 
+ hi/file 1 100/p_al_22_prec.paw
+ hi/pl 4
+ itx 100 100 'PREC'
+ close 1
+ 
+ hi/file 1 100/p_al_22_chips.paw
+ hi/pl 4
+ itx 100 150 'CHIPS'
+ close 1
+ 
+ hi/file 1 100/p_al_22_kin.paw
+ hi/pl 4
+ itx 100 150 'KIN'
+ close 1
+
+* exe kumac/prf 100/p_al_22_pz eps
+
+ hi/file 1 100/p_al_22_par.paw
+ hi/pl 17
+ itx 0 4200 'protons 22.4 MeV on Al'
+ itx 0.5 1500 'LEPAR'
+ close 1
+ 
+ hi/file 1 100/p_al_22_prec.paw
+ hi/pl 17
+ itx 0.5 1000 'PREC'
+ close 1
+ 
+ hi/file 1 100/p_al_22_chips.paw
+ hi/pl 17
+ itx 0.5 1500 'CHIPS'
+ close 1
+ 
+ hi/file 1 100/p_al_22_kin.paw
+ hi/pl 17
+ itx 0.5 1500 'KIN'
+ close 1
+
+* exe kumac/prf 100/p_al_22_dpz eps
+
+ hi/file 1 100/p_al_22_par.paw
+ hi/pl 18
+ itx 0 6200 'protons 22.4 MeV on Al'
+ itx 0.5 1500 'LEPAR'
+ close 1
+ 
+ hi/file 1 100/p_al_22_prec.paw
+ hi/pl 18
+ itx 0.5 1000 'PREC'
+ close 1
+ 
+ hi/file 1 100/p_al_22_chips.paw
+ hi/pl 18
+ itx 0.5 1500 'CHIPS'
+ close 1
+ 
+ hi/file 1 100/p_al_22_kin.paw
+ hi/pl 18
+ itx 0.5 1500 'KIN'
+ close 1
+
+* exe kumac/prf 100/p_al_22_dpt eps
+
+ hi/file 1 100/p_al_22_par.paw
+ hi/pl 16
+ itx 0 1.20 'protons 22.4 MeV on Al'
+ itx 0.5 0.5 'LEPAR'
+ close 1
+ 
+ hi/file 1 100/p_al_22_prec.paw
+ hi/pl 16
+ itx 0.5 1000 'PREC'
+ close 1
+ 
+ hi/file 1 100/p_al_22_chips.paw
+ hi/pl 16
+ itx 0.5 1500 'CHIPS'
+ close 1
+ 
+ hi/file 1 100/p_al_22_kin.paw
+ hi/pl 16
+ itx 0.5 0.5 'KIN'
+ close 1
+
+* exe kumac/prf 100/p_al_22_de eps
+
+ hi/file 1 100/p_al_22_par.paw
+ hi/pl 8
+ itx 150 400 'protons 22.4 MeV on Al'
+ itx 150 200 'LEPAR'
+ close 1
+ 
+ hi/file 1 100/p_al_22_prec.paw
+ hi/pl 8
+ itx 150 100 'PREC'
+ close 1
+ 
+ hi/file 1 100/p_al_22_chips.paw
+ hi/pl 8
+ itx 150 150 'CHIPS'
+ close 1
+ 
+ hi/file 1 100/p_al_22_kin.paw
+ hi/pl 8
+ itx 150 100 'KIN'
+ close 1
+
+* exe kumac/prf 100/p_al_22_ptp eps
+
+ hi/file 1 100/p_al_22_par.paw
+ hi/pl 11
+ itx 150 190 'protons 22.4 MeV on Al'
+ itx 100 100 'LEPAR'
+ close 1
+ 
+ hi/file 1 100/p_al_22_prec.paw
+ hi/pl 11
+ itx 150 10 'PREC'
+ close 1
+ 
+ hi/file 1 100/p_al_22_chips.paw
+ hi/pl 11
+ itx 150 50 'CHIPS'
+ close 1
+ 
+ hi/file 1 100/p_al_22_kin.paw
+ hi/pl 11
+ itx 150 100 'KIN'
+ close 1
+
+* exe kumac/prf 100/p_al_22_ptn eps
+
+ hi/file 1 100/p_al_22_par.paw
+ hi/pl 12
+ itx 15 500 'protons 22.4 MeV on Al'
+ itx 10 300 'LEPAR'
+ close 1
+ 
+ hi/file 1 100/p_al_22_prec.paw
+ hi/pl 12
+ itx 15 300 'PREC'
+ close 1
+ 
+ hi/file 1 100/p_al_22_chips.paw
+ hi/pl 12
+ itx 15 500 'CHIPS'
+ close 1
+ 
+ hi/file 1 100/p_al_22_kin.paw
+ hi/pl 12
+ itx 15 100 'KIN'
+ close 1
+ 
+ * exe kumac/prf 100/p_al_22_ep eps
+
+ hi/file 1 100/p_al_22_par.paw
+ hi/pl 15
+ itx 15 500 'protons 22.4 MeV on Al'
+ itx 10 300 'LEPAR'
+ close 1
+ 
+ hi/file 1 100/p_al_22_prec.paw
+ hi/pl 15
+ itx 15 300 'PREC'
+ close 1
+ 
+ hi/file 1 100/p_al_22_chips.paw
+ hi/pl 15
+ itx 15 500 'CHIPS'
+ close 1
+ 
+ hi/file 1 100/p_al_22_kin.paw
+ hi/pl 15
+ itx 15 100 'KIN'
+ close 1
+
+
+

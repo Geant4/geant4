@@ -1,0 +1,625 @@
+ENTRY            O0313          0
+TITLE      Production of Tritium in Al,Sn,Pb and Bi by High
+           Energy Protons.
+AUTHOR     (B.N.MEKHEDOV,V.N.MEKHEDOV)
+INSTITUTE  (4RUSRUS).Voronezhskiy State University.
+           (4ZZZDUB)
+REFERENCE  (J,YF,11,708,70)
+SAMPLE     Target of Al,Sn,Pb and Bi,Dimensions 3*2*16 mm**3,
+           Were Used.
+MONITOR    (13-AL-27(P,N+3P)11-NA-24,CUM/UND,SIG,,,EXP)
+           For Proton Beam Monitoring.
+DETECTOR   (GEMUC).Hydrogen Counter with Volume 200 Cm**3.
+FACILITY   (SYNCY,4ZZZDUB)
+REACTION   (13-AL-27(P,12N+13P)1-H-3,UND,SIG,,,EXP)
+ERR-ANALYS (ERR-T).The Uncertainty is Reported by Authors.
+REL-REF    (A,O0304001,V.N.MEKHEDOV+,J,YF,5,34,67)
+           (A,,K.GOEBEL+,P,CERN-64-12,,64)
+           (A,O0305001,A.CURRIE,J,PR,114,878,59)
+           (A,O0303001,A.CURRIE+,J,PR,101,1557,56)
+METHOD     (INTB) Irradiation Time was 1.5 Hours.
+ENDBIB               7
+NOCOMMON
+DATA                 3          4
+EN         DATA       ERR-T
+GEV        MB         MB
+      0.153         9.         1.
+       0.34        16.        1.6
+       0.48       17.5        1.8
+       0.66        30.         3.
+ENDDATA              6
+--
+ENTRY            A0581     971023
+TITLE       (P,X) Reactions Cross Sections in Aluminium at
+           Medium Energy Protons.
+AUTHOR     (YU.V.ALEKSANDROV,S.K.VASIL'EV,
+           R.B.IVANOV, L.M.KRIZHANSKIJ, M.A.MIKHAYLOVA,
+           V.P.PRIKHODTSEVA, V.G.EISMONT)
+INSTITUTE  (4RUSRI)
+REFERENCE  (C,96MOSCOW,,223,96)
+           (971023U) Last checking has been done.
+REL-REF    (E,B0022001,J.B.CUMMING,J,ARN,13,261,63)
+           (E,O0080001,M.LUEPKE,C,91JUELIC,,702,91)
+           (E,A0100001,R.MICHEL,J,NP/A,441,617,85)
+           (E,O0277001,R.MICHEL,J,NIM/B,103,183,95)
+           (E,,R.SCHNEIDER+,J,NIM/B,29,271,87)
+           (E,A0497001,G.F.STEYN+,J,ARI,41,315,90)
+           (E,,J.B.CUMMING+,J,NIM,180,37,81)
+           (E,,R.BODEMANN+,R,INDC(GER)-040,29,95)
+COMMENT    -By Compiler- Evaluated Data are Presented As Smooth
+           Curve Without any Remarkable Data Points. Therefore
+           Data Points have Been Read Step by Step Across Equal
+           Distances Approximately.
+ERR-ANALYS (EN-ERR)  Data Point Reader Uncertanty.
+           (DATA-ERR) Data Point Reader Uncertainty.
+REACTION   (13-AL-27(P,3D)11-NA-22,CUM/UND,SIG,,,EVAL)
+ENDBIB               1
+COMMON               2          3
+EN-ERR     DATA-ERR
+PER-CENT   MB
+        1.4       0.12
+ENDCOMMON            3
+DATA                 2         41
+EN         DATA
+MEV        MB
+      109.3        19.
+      117.7      18.76
+      124.1      18.52
+      133.6      18.12
+      142.3      17.72
+      151.7       17.4
+      158.2      16.99
+      168.6      16.76
+      175.8      16.52
+      185.4      16.19
+      195.5      15.79
+      206.1      15.43
+      212.7      14.98
+       229.      14.91
+       244.      14.67
+       271.      14.69
+       298.      14.87
+       321.      15.21
+       346.      15.55
+       372.      15.81
+       400.      16.15
+       440.      16.25
+       474.      16.34
+       550.      16.28
+       579.      16.21
+       644.      16.06
+       693.      15.91
+       739.      15.75
+       804.       15.6
+       884.      15.45
+       972.      15.22
+      1057.       14.9
+      1127.      14.75
+      1239.      14.51
+      1377.      14.12
+      1498.      13.88
+      1701.      13.49
+      1910.      13.02
+      2123.      12.79
+      2290.      12.63
+      2490.      12.48
+ENDDATA             43
+--
+SUBENT        A0581002     970506
+BIB                  1          1
+REACTION   (13-AL-27(P,N+3P)11-NA-24,CUM/UND,SIG,,,EVAL)
+ENDBIB               1
+COMMON               2          3
+EN-ERR     DATA-ERR
+PER-CENT   MB
+        1.4       0.11
+ENDCOMMON            3
+DATA                 2         32
+EN         DATA
+MEV        MB
+      109.1      10.71
+      116.2      10.64
+      127.7      10.65
+      138.9       10.5
+      144.9      10.35
+      152.7      10.19
+      164.4       9.88
+      178.8       9.81
+      188.5       9.65
+      202.9       9.58
+      213.8       9.51
+       230.       9.44
+       264.       9.54
+       293.       9.88
+       315.      10.05
+       357.      10.32
+       392.      10.41
+       445.      10.59
+       499.      10.61
+       554.      10.71
+       609.      10.72
+       698.      10.74
+       800.      10.68
+       936.      10.62
+      1051.      10.56
+      1143.      10.41
+      1324.      10.11
+      1471.      10.04
+      1668.       9.82
+      1873.       9.75
+      2102.       9.61
+      2330.       9.46
+ENDDATA             34
+--
+ENTRY            C0207     980304
+REFERENCE  (J,NP,18,638,60)
+AUTHOR     (VASTUPAL PARIKH)
+TITLE      Cross-sections for Al27(p,3pn)Na24, Al27(p,5p5n)F18
+            and C12(p,3p3n)Be7 relative to C12(p,pn)C11
+FACILITY   (SYNCY)
+INC-SOURCE Mean energy of proton beam was accurate to +-15 MeV
+SAMPLE     2 sets of target plates consisting of aluminum
+            sandwiched between two carbon plates.
+           .thick sample 0.31 (carbon) and 0.08 g/cm2 (aluminum),
+           .thin sample 0.54 (carbon) and 0.05 g/cm2 (aluminum).
+METHOD     (ACTIV,BCINT,INTB)
+DETECTOR   (GEMUC)
+CORRECTION Counting rates corrected for background radiation and
+            deadtime of Geiger counter.
+HISTORY    (870319C)
+           (980304A) BIB update. Converted to lower case.
+EN-ERR
+MEV
+ 15.
+REACTION   (13-AL-27(P,N+3P)11-NA-24,,SIG)
+DECAY-DATA (11-NA-24-G,15.1HR)
+           No other data given by authors.
+EN         DATA
+MEV        MB
+  100.000     10.000
+  149.000      9.470
+  200.000      9.560
+  250.000      9.760
+  295.000      9.970
+  343.000     10.100
+  397.000     10.000
+  448.000     10.100
+  495.000     10.000
+  594.000      9.980
+  693.000      9.770
+  800.000      9.570
+  894.000      9.320
+ 1000.000      8.960
+ENDDATA             16          0
+--
+ENTRY            60022     780509
+TITLE      MONITOR REACTIONS FOR HIGH ENERGY PROTON BEAMS
+AUTHOR     (J.B.CUMMING)
+INSTITUTE  (1USABNL).CHEMISTRY DEPARTMENT
+REFERENCE  (J,ARN,13,261,63)
+COMMENT    ADOPTED VALUES FOR MONITOR REACTIONS ARE GIVEN AFTER
+           CRITICAL EXAMINATION OF SELECTED CROSS SECTION DATA.
+REACTION   (13-AL-27(P,X)9-F-18,,SIG,,,EVAL)
+DECAY-DATA (9-F-18,110.MIN,B+,,0.97)
+COMMENT    THE VALUES HAVE BEEN OBTAINED FROM MEASUREMENTS OF THE
+           RATIOS OF EITHER F-18/C-11 OR F-18/NA-24.
+REL-REF    (E,,J.B.CUMMING+,J,PR,127,950,62)
+           (E,,J.B.CUMMING+,J,PR,128,2392,62)
+           (E,B0094004,K.GOEBEL+,J,NP,24,28,61)
+           (E,,P.BENIOFF,J,PR,119,316,60)
+           (E,,V.PARIKH,J,NP,18,638,60)
+           (E,B0076004,N.M.HINTZ+,J,PR,88,19,52)
+           (E,B0094004,K.GOEBEL+,R,CERN-60-3,,60)
+           (E,,D.HARTING+,R,CERN-60-17,,60)
+ERR-ANALYS THE GENERAL ACCURACY OVER THE ENTIRE ENERGY RANGE IS
+           ESTIMATED BY THE AUTHORS TO BE 6.5 PER CENT.
+ENDBIB
+NOCOMMON             0          0
+DATA                 2         10
+EN         DATA
+MEV        MB
+ 2.0000E+02 5.7000E+00
+ 3.0000E+02 6.6000E+00
+ 4.0000E+02 7.7000E+00
+ 6.0000E+02 7.9000E+00
+ 1.0000E+03 8.0000E+00
+ 2.0000E+03 7.3000E+00
+ 3.0000E+03 6.8000E+00
+ 6.0000E+03 6.5000E+00
+ 1.0000E+04 6.3000E+00
+ 2.8000E+04 6.2000E+00
+ENDDATA
+--
+ENTRY            C0196          0
+REFERENCE  (C,96DENTON,811,199611)
+AUTHOR     (J.M.SISTERSON,K.KIM,A.BEVERDING,P.A.J.ENGLERT,
+           M.W.CAFFEE,J.VINCENT,C.CASTANEDA,R.C.REEDY)
+TITLE      Measuring excitation functions needed to interpret
+            cosmogenic nuclide production in lunar rocks.
+SAMPLE     Thin targets. Catcher foils placed on either side of
+            target.
+STATUS     Data taken from reference.
+           (APRVD) Approved by J. Sisterson, 1998/12/24.
+REACTION   (13-AL-27(P,X)4-BE-7,,SIG)
+FACILITY   (MESON,1CANTMF)
+METHOD     (GSPEC)
+DECAY-DATA (4-BE-7,53.29D,DG,477.6,0.1035)
+ERR-ANALYS (DATA-ERR) Includes uncertainties in:
+           . number of protons incident on target (5%),
+           . target areal density (2%).
+           . counting (1-5%)
+           . detector efficiency (5%)
+ENDBIB               9          0
+COMMON               1          3
+EN-ERR
+MEV
+  1.
+ENDCOMMON            3          0
+DATA                 3          3
+EN         DATA       DATA-ERR
+MEV        MB         MB
+200.         1.9        0.1
+400.         3.4        0.3
+500.         5.2        1.0
+ENDDATA              5          0
+--
+ENTRY            C0196          0
+AUTHOR     (J.M.SISTERSON,K.KIM,A.BEVERDING,P.A.J.ENGLERT,
+           M.W.CAFFEE,J.VINCENT,C.CASTANEDA,R.C.REEDY)
+TITLE      Measuring excitation functions needed to interpret
+            cosmogenic nuclide production in lunar rocks.
+SAMPLE     Thin targets. Catcher foils placed on either side of
+            target.
+REACTION   (13-AL-27(P,X)4-BE-10,,SIG)
+FACILITY   (MESON,1CANTMF)
+METHOD     (AMS,CHSEP). At Lawrence Livermore National Laboratory.
+ERR-ANALYS (DATA-ERR) Includes uncertainties in:
+           . number of protons incident on target (5%),
+           . target areal density (2%).
+           . AMS error (typically 1-2%, but as high as 15%).
+EN-ERR
+MEV
+  1.
+EN         DATA       DATA-ERR
+MEV        MB         MB
+200.         0.3        0.02
+300.         0.5        0.05
+400.         0.8        0.05
+500.         1.0        0.07
+ENDDATA              6          0
+--
+ENTRY            C0196          0
+REFERENCE  (C,96DENTON,811,199611)
+AUTHOR     (J.M.SISTERSON,K.KIM,A.BEVERDING,P.A.J.ENGLERT,
+           M.W.CAFFEE,J.VINCENT,C.CASTANEDA,R.C.REEDY)
+TITLE      Measuring excitation functions needed to interpret
+            cosmogenic nuclide production in lunar rocks.
+SAMPLE     Thin targets. Catcher foils placed on either side of
+            target.
+REACTION   (13-AL-27(P,X)11-NA-22,,SIG)
+ERR-ANALYS (DATA-ERR) Includes uncertainties in:
+           . number of protons incident on target (5%),
+           . target areal density (2%).
+           . counting (1-5%)
+           . detector efficiency (5%)
+MEV
+  1.
+ENDCOMMON            3          0
+DATA                 3          4
+EN         DATA       DATA-ERR
+MEV        MB         MB
+200.        15.1        1.1
+300.        15.1        1.2
+400.        14.5        1.1
+500.        14.8        1.1
+ENDDATA              6          0
+--
+ENTRY            C0196          0
+REFERENCE  (C,96DENTON,811,199611)
+AUTHOR     (J.M.SISTERSON,K.KIM,A.BEVERDING,P.A.J.ENGLERT,
+           M.W.CAFFEE,J.VINCENT,C.CASTANEDA,R.C.REEDY)
+TITLE      Measuring excitation functions needed to interpret
+            cosmogenic nuclide production in lunar rocks.
+SAMPLE     Thin targets. Catcher foils placed on either side of
+            target.
+REACTION   (13-AL-27(P,X)13-AL-26,,SIG)
+FACILITY   (MESON,1CANTMF)
+METHOD     (AMS,CHSEP). At Lawrence Livermore National Laboratory.
+ERR-ANALYS (DATA-ERR) Includes uncertainties in:
+           . number of protons incident on target (5%),
+           . target areal density (2%).
+           . AMS error (typically 1-2%, but as high as 15%).
+EN-ERR
+MEV
+  1.
+EN         DATA       DATA-ERR
+MEV        MB         MB
+200.        30.3        2.1
+300.        22.0        1.4
+400.        23.0        1.4
+500.        20.3        1.4
+ENDDATA              6          0
+--
+ENTRY            O0276     971021
+TITLE      Cross Sections For the Production of Residual Nuclides
+           By Low- And Medium-Energy Protons from the Target
+           Elements C, N, O, Mg, Al, Si, Ca, Ti, V, Mn, Fe, Co,
+           Ni, Cu, Sr, Y, Zr, Nb, Ba and Au.
+AUTHOR     (R.MICHEL, R.BODEMANN, H.BUSEMANN, R.DAUNKE, M.GLORIS,
+           H.-J.LANGE, B.KLUG, A.KRINS, I.LEYA, M.LUEPKE,
+           S.NEUMANN, H.REINHARDT, M.SCHNATZ-BUETTGEN,
+           U.HERPERS, TH.SCHIEKEL, F.SUDBROCK, B.HOLMQVIST,
+           H.CONDE, P.MALMBORG, M.SUTER, B.DITTRICH-HANNEN,
+           P.-W.KUBIK, H.-A.SINAL,D.FILGES)
+REFERENCE  (J,NIM/B,129,153,97) Final Publication.
+           (W,MICHEL,96) To be Submitted in Nim/B.
+REL-REF    (N,O0281001,B.DITTRICH+,J,NIM/B,52,588,90) Chemical
+           Separation Method.
+           (N,O0282001,R.BODEMANN+,J,NIM/B,82,9,93) The Stacks
+           Constraction Details.
+           (N,,W.WESTMEIER,J,NIM,180,205,81) Method to Analyse
+           Gamma Spectra.
+           (N,,W.WESTMEYER,J,NIM/A,242,437,86) Method to Analyse
+           Gamma Spectra.
+SAMPLE     The Targets in the Stacks were Pure Element Foils
+           Besides Nitrogen, Oxygen, Calcium, Manganese,
+           Strontium and Barium. Composition Materials For these
+           Elements will be Described in Suitable Subentries.
+           Mostly, at Least Three Foils of Each Element were
+           Irradiated Together in Order to Compensate For Reciol
+           Losses and to Avoid Cross Contamination by Analyzing
+           Only the Inner One were Used For Measurements.
+           Exceptions were the Elements Ca, Sr and Ba, For Which
+           Only One Foil, Each, was Used.
+           All Elemental Target Sets were Separated by Sets of
+           Three Thin Al-Foils (0.035 MM) And Cu-Foils (0.050MM)
+           In Order to Minimize Cross Contamination. In Addition,
+           The Inner Ones of the Three Thin Al and Cu Foils
+           Between the Different Target Elements were Used For
+           Flux Monitoring.
+MONITOR   1(13-AL-27(P,3N+3P)11-NA-22,CUM/UND,SIG,,,EVAL)
+          2(29-CU-0(P,X)30-ZN-65,IND,SIG,,,EXP) For E<45 MeV
+MONIT-REF 1(,J.TOBAILLEM+,R,CEA-N-1466,81) For E>200 MeV
+          1(A0497001,G.F.STEYN+,J,ARI,41,315,90) For E<200 MeV.
+          2(A0507001,S.J.MILLS+,J,ARI,43,1019,92) For E<45 MeV
+METHOD     (STTA)
+           (EXTB)
+           (EDEG) For E<180 MeV
+           After Finishing the Irradiations of a Set of Typically
+           5 Stacks, the Irradiated Targets were Transported to
+           Cologhe Ad Hannover Within 12 Hours and 24 Hours,
+           Respectivilly. Repeated Measurements During One Year
+           Allowed to Get a Minimum 3 Spectra For All Isotopes
+           Investigated. Often Up to 15 Spectra were Available For
+           The Evaluation.
+           Commerial Available Code (GAMA-V) Ver 15.03 was Used
+           For Unfolding of Complex Gamma Spectra.
+           For Villigen Measurements Only:
+           After the End of Irradiation, First Measurements of
+           Short-Lived Nuclides were Performed at Villigen.
+ADD-RES    (COMP) Hybrid Model of Preequilibrium Reaction in Form
+           Of the Arel Code, Which Ia a Relativistic Version of
+           The Alice Livermore Code. Intranuclear Cascade
+           Evaporation (INC/E) Model was Used in Form of the
+           Het/Kfa2 Code.
+           2.Quantification of the Agreement Between Experiment
+           And Theory.
+           3.Predictive Capabilities of the Arel and Het/Kfa2
+           Codes have Been Studied.
+           4.Modelling Production Cross Sections by the Arel and
+           Het/Kfa2 Codes.
+COMMENT    -By Authors-
+           1. Data Tables of this Work Contain the Data For Equal
+           Energies.  These Measurments are Independent.
+           2. This is First Publication of this Group Where New
+           Monitor Data have Been Used.
+ERR-ANALYS (ERR-1) Uncertainty in the Determination of the Number
+           Of Target Atoms.
+           (ERR-2)  Overall Error Due to Fluctuation in Beam
+           Intensity Duing to Irradiation.
+           (ERR-3) Upper Limit of Uncertainty of the
+           Measurement of the Monitoring Radionuclide.
+           (ERR-4) Upper Limit For the Error of Absolute
+           Efficiency Calibration of Gamma-Rays Spectrometer.
+           (ERR-5) Upper Limit For the Error of Relative
+           Efficiency Calibraton of Gamma-Rays Spectrometer.
+           (ERR-6) Upper Limit of the Uncertaity Due to
+           Gamma-Gamma Coincidences.
+           (EN-ERR).  Beam Energy Uncertainty Takes in Account the
+           Finite Thickness of the Foils As  Well  As  the  Energy
+           Straggling  For  Last  Target  of Experiment at Uppsala
+           Beam Energy at this Target was 58 +-1.5 MeV.   This  is
+           Upper Limit For Experiments with Stacks.
+           8. Error of Monitor Cross Section was not Considered.
+           9. Reproducibility of Photopeak Integration - Up to 15
+           Measurements were Used For the Determination of Each
+           Nuclide, Thus Allowing to Properly Account For this
+           Source of Error.
+           10. Dead Time and Pile Up Losses in Gamma-Spectrometry-
+           By Varying the Distance Between Sources and Detector,
+           Dead Time was Always Kept Below 10%, Where the
+           Automatic Dead Time Correction O the Measuring Devices
+           Can be Assumed to be Correct.
+           11. Statistical Counting Error. This Source of
+           Uncertainty is Included by Calculating the Errors of
+           Individual Photopeaks. The Error of Background
+           Subtraction was Taken Into Account.
+           ------------------------------------------------------
+           All these Error were Quadratically Added to Obtain
+           Absolute Errors of the Cross Sections. However, Some of
+           The Sources of Errors are General Ones Affecting All
+           Data of this Experiment in the Same Way, While Others
+           Individually Affect Each Reaction. The General Errors
+           Sum Up Quadratically to About 6% and have to be
+           Quadratically Subtracted When Discussing Ratios of
+           Gross Sections from this Work.
+           ------------------------------------------------------
+           (ERR-T) These Uncertainties are Absolute Ones and
+           Consider  All Sources of Errors Affecting the
+           Determination of Cross Sections.
+ERR-1      ERR-2      ERR-3      ERR-4      ERR-5      ERR-6
+PER-CENT   PER-CENT   PER-CENT   PER-CENT   PER-CENT   PER-CENT
+         2.         2.         1.         5.         2.         1.
+REACTION   (13-AL-27(P,X)4-BE-10,,SIG,,,EXP) Independent
+METHOD     (AMS)
+COMMENT    -By Authors- The Measured Isotope Ratios have Been
+           Normalized to the Standard S555 with
+           10-Be/9-Be=(9.55+-0.23)E-11.
+ERR-7
+PER-CENT
+        20.
+ENDCOMMON            3
+DATA                 4         25
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+  0.571E+02        0.8  0.799E-02  0.142E-02
+  0.643E+02        0.7  0.179E-01  0.228E-02
+  0.686E+02        0.7  0.361E-01  0.424E-02
+  0.751E+02      0.698  0.389E-01  0.365E-02
+  0.787E+02        0.5  0.422E-01  0.394E-02
+   0.85E+02        0.5  0.571E-01  0.531E-02
+  0.909E+02        0.5  0.686E-01  0.606E-02
+  0.965E+02        0.4  0.747E-01  0.648E-02
+  0.115E+03   0.11E+01      0.105  0.889E-02
+  0.117E+03   0.14E+01       0.13    0.1E-01
+  0.129E+03   0.13E+01       0.14    0.1E-01
+  0.132E+03    0.1E+01      0.127  0.107E-01
+  0.139E+03   0.12E+01       0.15    0.1E-01
+  0.148E+03        0.8       0.15  0.126E-01
+  0.151E+03   0.11E+01       0.18    0.1E-01
+  0.161E+03   0.11E+01      0.162  0.139E-01
+  0.162E+03    0.1E+01       0.22    0.1E-01
+  0.172E+03        0.9        0.2  0.172E-01
+  0.184E+03        0.6      0.203  0.174E-01
+    0.2E+03        0.4      0.244  0.203E-01
+  0.256E+03   0.13E+01      0.359  0.344E-01
+  0.298E+03      0.614       0.55  0.513E-01
+  0.362E+03  0.129E+01      0.713  0.649E-01
+  0.398E+03      0.612      0.852  0.804E-01
+    0.6E+03             0.116E+01    0.7E-01
+ENDDATA             27
+--
+ENTRY            O0154          0
+TITLE      ISOTOPIC EFFECTS IN HIGH-ENERGY NUCLEAR REACTIONS AND
+           ISOSPIN CORRELATIONS OF FRAGMENTATION CROSS SECTIONS.
+AUTHOR     (V.I.BOGATIN,V.F.LITVIN,O.V.LOZHKIN,N.A.PERFILOV,
+           YU.P.YAKOVLEV)
+INSTITUTE  (4RUSRI)
+REFERENCE  (J,NP/A,260,446,76)
+DETECTOR   (TELES,SOLST,SOLST,SOLST).THE THREE-COUNTER TELESCOPE
+           COMPOSED  OF  THREE SILICON-SURFACE BARRIER DETECTORS-A
+           DELTA E DETECTOR OF 23, 40 OR  120  MUM  THICKNESS,  AN
+           E-DETECTOR OF 800 OR 2500 MUM THICKNESS AND A REJECTION
+           DETECTOR (DELTA) OF 500 MUM THICKNESS, WHICH  WAS  USED
+           IN  ANTICOINCIDENCE  TO EXCLUDE PARTICLES WHICH DID NOT
+           STOP IN THE E-DETECTOR.THE DELTA E AND E DETECTORS  HAD
+           SENSITIVE  AREAS OF ABOUT 1 CM**2 AND A HIGH UNIFORMITY
+           IN THICKNESS AND THE  DEAD  LAYERS  ON  BOTH  SIDES  OF
+           DETECTORS WERE PORTIONS OF THE ORDER OF MUM.
+ERR-ANALYS THE OVERALL ERROR OF 10 PER CENT WAS CONSIDERED
+           APPROPRIATE FOR THE ABSOLUTE NORMALIZATION OF ALL
+           CROSS SECTIONS.
+REACTION   (13-AL-27(P,X)1-H-3,,SIG,,,EXP)
+ERR-ANALYS (DATA-ERR).DATA-POINT READER UNCERTAINTY.
+           (ERR-T).THE UNCERTAINTY IS REPORTED BY AUTHORS.
+           (EN-ERR).DATA-POINT READER UNCERTAINTY.
+EN-ERR     DATA-ERR
+PER-CENT   PER-CENT
+        1.4        1.4
+EN         DATA       ERR-T
+GEV        MB         PER-CENT
+     0.1927        18.        30.
+      0.288        20.        60.
+      0.315       17.2        13.
+      0.437       22.7        10.
+      0.438        35.        20.
+      0.482       18.1        14.
+      0.525        33.        24.
+      0.545        42.        26.
+      0.575        33.         9.
+      0.636        42.        14.
+      0.652        32.        13.
+      0.654        46.        26.
+      1.942        38.        11.
+      1.943        43.
+       5.57       49.3
+       24.8       71.1
+ENDDATA             18          0
+--
+ENTRY            O0154          0
+TITLE      ISOTOPIC EFFECTS IN HIGH-ENERGY NUCLEAR REACTIONS AND
+           ISOSPIN CORRELATIONS OF FRAGMENTATION CROSS SECTIONS.
+AUTHOR     (V.I.BOGATIN,V.F.LITVIN,O.V.LOZHKIN,N.A.PERFILOV,
+           YU.P.YAKOVLEV)
+REFERENCE  (J,NP/A,260,446,76)
+DETECTOR   (TELES,SOLST,SOLST,SOLST).THE THREE-COUNTER TELESCOPE
+           COMPOSED  OF  THREE SILICON-SURFACE BARRIER DETECTORS-A
+           DELTA E DETECTOR OF 23, 40 OR  120  MUM  THICKNESS,  AN
+           E-DETECTOR OF 800 OR 2500 MUM THICKNESS AND A REJECTION
+           DETECTOR (DELTA) OF 500 MUM THICKNESS, WHICH  WAS  USED
+           IN  ANTICOINCIDENCE  TO EXCLUDE PARTICLES WHICH DID NOT
+           STOP IN THE E-DETECTOR.THE DELTA E AND E DETECTORS  HAD
+           SENSITIVE  AREAS OF ABOUT 1 CM**2 AND A HIGH UNIFORMITY
+           IN THICKNESS AND THE  DEAD  LAYERS  ON  BOTH  SIDES  OF
+           DETECTORS WERE PORTIONS OF THE ORDER OF MUM.
+ADD-RES    (COMP).TWO-DIMENSIONAL ISOSPIN CORRELATION OF CROSS
+REACTION   (13-AL-27(P,X)4-BE-7,,SIG,,,EXP)
+STATUS     (CURVE).BY CAJAD.
+EN-ERR     DATA-ERR
+PER-CENT   PER-CENT
+        1.4        1.4
+EN         DATA       ERR-T
+GEV        MB         PER-CENT
+       0.15       0.99        19.
+     0.1601        1.4        21.
+     0.1975        1.6        19.
+      0.237       2.18        13.
+      0.285        2.6        60.
+      0.328      1.356
+      0.357        2.9        17.
+      0.395        3.2        16.
+      0.646        4.2         7.
+      0.984        7.3        19.
+       1.34        7.9        25.
+      2.113       10.5        26.
+       2.77        7.6         9.
+       3.04       11.5        23.
+       5.53        8.6         7.
+       29.4        7.6        11.
+ENDDATA             18          0
+--
+ENTRY            C0555          0
+REFERENCE  (J,GCA,62,3025,1998)
+AUTHOR     (A.J.T.JULL,S.CLOUDT,D.J.DONAHUE,J.M.SISTERSON,
+           R.C.REEDY,J.MASARIK)
+TITLE      14C depth profiles in Apollo 15 and 17 core and
+            lunar rock 68815
+INC-SPECT  Energy loss in any target was less than 2 MeV.
+SAMPLE     Thin foils which limited energy losses in each target
+            to < 2 MeV per foil, < 10 MeV per stack.
+METHOD     (AMS)
+CORRECTION Corrected for 14C occurring naturally in targets by
+            analyzing an unirradiated sample.
+ERR-ANALYS (ERR-T) Includes uncertainties due to:
+           . the determination of target atoms (2%),
+           . determination of number of protons through the
+             target (5%),
+           . determination of 14C by AMS.
+REACTION   (13-AL-27(P,X)6-C-14,CUM,SIG)
+FACILITY   (MESON,1CANTMF)
+METHOD     (BCINT) Beam currents measured directly and calibrated
+            at each incident energy with a Faraday cup.
+ENDBIB               4          0
+NOCOMMON             0          0
+DATA                 3          4
+EN         DATA       ERR-T
+MEV        MB         MB
+ 500.         1.480      0.081
+ 400.         0.853      0.047
+ 300.         0.753      0.042
+ 200.         0.586      0.032
+ENDDATA              6          0
+--
+
+
+

@@ -1,0 +1,110 @@
+TITLE      Preequilibrium Analysis of (P,N) Spectra on Various
+           Targets at Proton Energies of 25 to 45 MeV.
+AUTHOR     (M.BLANN,R.R.DOERING,AARON GALONSKY,D.M.PATTERSON,
+           F.E.SERR)
+INSTITUTE  (1USAROC)
+           (1USAMSU)
+           (1USATEX)
+           (1USASTF)
+REFERENCE  (J,NP/A,257,15,76)
+HISTORY    (960605C)
+           (961208A) O0222001 Bib Section was Corrected.
+           (970116U) Last checking has been done.
+ADD-RES    (COMP).The Geometry-Dependent Hydrid Model.
+DETECTOR   (SCIN).A 7.0 Cm Diameter by 3.3 Cm Thick Ne213
+           Scintillator Coupled to an Rca 8575 Photomultiplier
+           Tube.
+FACILITY   (CYCLO,1USAMSU)
+METHOD     (TOF)
+ANALYSIS   (INTAD) Measured Angular Distributions Included
+           The Angles from 0 Upto 160 Degrees with Step 5 Degrees.
+ERR-ANALYS The 20% Error Estimate Also Includes 10% Uncertainties
+           In the Neutron Detection Efficiencies Calculated with
+           A Modified Version of Kurz' Code and 5% Contributions
+           From the Measurements of Target Thickness and the
+           Calculations of Neutron Attenuation Along the Flight
+           Path.
+           (ERR-T).The Uncertainty is Reported by Authors.
+           (E-ERR).Data-Point Reader Uncertainty.
+STATUS     (CURVE).By CAJAD.
+COMMENT    - By Compiler - The Size of Published Figures is Very
+           Small.  Experimental Points Could not be Distinguished.
+           Therefore Compiler Read Data from Smooth Curves.
+ENDBIB              32
+COMMON               2          3
+E-ERR      ERR-T
+MEV        PER-CENT
+       0.15        20.
+ENDCOMMON            3
+ENDSUBENT           39
+------------------------------------------------------------------------
+SUBENT        O0222011     970116
+BIB                  4          5
+REACTION   (82-PB-208(P,X)0-NN-1,,DE,,,EXP)  Fig.7
+EN-SEC     (E,N)
+SAMPLE     Pb-208,Isotopic Enrichments-99.14%,Thickness was
+           Approximately 30 Mg/Cm**2.
+ERR-ANALYS (DATA-ERR).Data-Point Reader Uncertainty.
+ENDBIB               5
+COMMON               2          3
+EN         DATA-ERR
+MEV        PER-CENT
+        35.        1.4
+ENDCOMMON            3
+DATA                 2         38
+E          DATA
+MEV        MB/MEV
+      10.66       35.4
+      11.43       32.1
+       12.2       29.1
+      12.97       26.4
+      13.97        24.
+      14.41       22.8
+      15.29       21.7
+      15.73       20.9
+      16.17       21.7
+      16.39       26.4
+      16.61       23.5
+      16.94       21.7
+      17.27      19.71
+      17.38      17.19
+      17.94      14.13
+      18.82      13.33
+      19.48      12.21
+       19.7      12.82
+      19.92      12.09
+      20.58      10.54
+      21.03       9.94
+      21.69       9.02
+      22.79       8.02
+      23.01       7.87
+      23.78       7.42
+      23.89       7.13
+        25.       6.46
+      25.66       5.93
+      26.21        6.1
+      26.54       5.87
+      26.76       5.93
+       27.2       5.32
+      28.01       5.32
+      28.42       5.33
+      28.97       5.33
+      29.63       4.78
+      30.07       4.13
+       30.4        3.4
+ENDDATA             40
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

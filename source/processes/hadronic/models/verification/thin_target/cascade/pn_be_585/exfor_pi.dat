@@ -1,0 +1,170 @@
+TITLE      Measurment of Cross Sections and Asymmetry Parameters
+           For the Production of Charged Pions from Various Nuclei
+           By 585-MeV Protons.
+AUTHOR     (J.F.CRAWFORD,M.DAUM,G.H.EATON,R.FROSCH,H.HIRSCHMANN,
+           R.HORISBERGER,J.W.MCCULLOCH,E.STEINER,R.HAUSAMMANN,
+           R.HESS,D.WERREN)
+INSTITUTE  (2SWTVIL)
+           (2SWTGVE). Department of Nuclear Physics.
+REFERENCE  (J,PR/C,22,1184,80)
+SAMPLE     The Target Materials are:
+           Ch/2, C/6D/12, be, C, Al, Al/2O/3, Ni, Cu, Mo and Pb.
+           The Three Materials Ch/2, C/6D/12 and Al/2O/3 were Used
+           To Determine the Cross Section For the Proton, the
+           Deuteron, and the Oxigen Nucleus, Respectively.
+DETECTOR   (MWPC).  The Position and Profile of the Polarized
+           Proton  Beam  Near  the  Pion  Production  Target  were
+           Monitored Continually Throughout the Experiment with an
+           Analog Readout Multiwre Proportional Chamber.
+           (TELES,SCIN,SCIN) The Intensity of the Proton Beam was
+           Monutored Using a Scintillation Telescope Detecting
+           Particles Scattered at 30 Degree to the Beam Direction
+           From 5 mm Thick Ch/2 Target.
+           (MAGSP). To Detect the Pions.
+           (COIN,SCIN,SCIN,SCIN). To Detect Pions by Tof Method.
+FACILITY   (SYNCY,2SWTVIL).
+METHOD     (EXTB,SITA,BCINT,TOF)
+HISTORY    (950628C)
+           (961004A). Transformation to Lower Case. Inc-Spect is
+           Included. Part Det in O0156030 is Corrected.
+           (970129U) Last checking has been done.
+ADD-RES    Cross Section For P+P Scattering.
+           Assymetry Parameter For Pions Production.
+ERR-ANALYS (EN-ERR). Standart Deviation of Proton Beam Energy.
+           (ERR-1). The Uncertainty Due to the Monitoring of the
+           Beam Intensity.
+           (ERR-2). This Uncertaity is Arised from the Monte Carlo
+           Calculation of the Direct Muon and Inscattered Pion and
+           Muon Contribution to the Direct Pion Tof Peak.
+           (ERR-3). The Quadratic Sum of the Estimates of All
+           Systematic Uncertainties is 7% (ONE STANDART DEVIATION)
+ENDBIB              40
+COMMON               5          3
+EN         EN-ERR     ERR-1      ERR-2      ERR-3
+MEV        MEV        PER-CENT   PER-CENT   PER-CENT
+       585.         2.         3.         5.         7.
+ENDCOMMON            3
+ENDSUBENT           47
+------------------------------------------------------------------------
+SUBENT        O0156009     970129
+BIB                  5          6
+REACTION   (4-BE-9(P,PIP+X),SEQ,DA/DE,,,EXP)
+EN-SEC     (E,PIP)
+PART-DET   (PIP)
+STATUS     (CURVE) By CAJAD.
+ERR-ANALYS (ERR-T). Error Bars As Shown on the Figure.
+           (DATA-ERR). Data Point Reader Uncertainty.
+ENDBIB               6
+NOCOMMON
+DATA                 5         24
+ANG        E          DATA       ERR-T      DATA-ERR
+ADEG       MEV        MUB/SR/MEV MUB/SR/MEV MUB/SR/MEV
+       22.5        24.       4.91                  0.16
+       22.5        35.       6.07                  0.16
+       22.5        88.      14.71                  0.16
+       22.5       151.      25.09                  0.16
+       22.5       254.      21.61                  0.16
+        45.        24.       4.85                  0.17
+        45.        35.        6.6        0.8
+        45.        88.       16.3        1.2
+        45.       151.       14.1        0.8
+        45.       192.       11.4        0.6
+        60.        24.       5.63                  0.13
+        60.        35.        8.4        0.6
+        60.        46.        8.8        0.9
+        60.        88.       14.1        0.7
+        60.       151.        9.4        0.5
+        90.        24.         9.        1.3
+        90.        35.       11.7        1.1
+        90.        46.       11.5        1.1
+        90.        88.      11.53       0.22
+        90.       151.       3.32                  0.15
+       135.        24.       11.7                  0.25
+       135.        35.       13.3                  0.25
+       135.        46.      13.14                  0.25
+       135.        88.       5.25                  0.25
+ENDDATA             26
+ENDSUBENT           37
+------------------------------------------------------------------------
+SUBENT        O0156028     970129
+BIB                  5          8
+REACTION  1(4-BE-9(P,PIP+X),SEQ,SIG,,,EXP)
+          2(4-BE-9(P,PIN+X),SEQ,SIG,,,EXP)
+PART-DET   (PI)
+ERR-ANALYS (ERR-T). This Uncertainty is Shown in Data Table by
+           Authors.
+ANALYSIS   (INTED)
+           (INTAD)
+STATUS     (TABLE)
+ENDBIB               8
+NOCOMMON
+DATA                 4          1
+DATA      1ERR-T     1DATA      2ERR-T     2
+MB         MB         MB         MB
+       22.7        2.8       4.75       0.59
+ENDDATA              3
+------------------------------------------------------------------------
+ENDBIB              40
+COMMON               5          3
+EN         EN-ERR     ERR-1      ERR-2      ERR-3
+MEV        MEV        PER-CENT   PER-CENT   PER-CENT
+       585.         2.         3.         5.         7.
+ENDCOMMON            3
+ENDSUBENT           47
+------------------------------------------------------------------------
+SUBENT        O0156019     970129
+BIB                  4          4
+REACTION   (4-BE-9(P,PIN+X),SEQ,DA/DE,,,EXP)
+EN-SEC     (E,PIN)
+PART-DET   (PIN)
+STATUS     (CURVE) By CAJAD.
+ENDBIB               4
+NOCOMMON
+DATA                 3         24
+ANG        E          DATA
+ADEG       MEV        MUB/SR/MEV
+       22.5        24.       1.88
+       22.5        35.       2.18
+       22.5        88.       3.65
+       22.5       151.       4.23
+       22.5       254.       1.85
+        45.        24.       1.86
+        45.        35.       2.49
+        45.        88.        4.1
+        45.       151.       3.48
+        45.       192.       2.71
+        60.        24.       1.11
+        60.        35.       2.06
+        60.        46.        2.1
+        60.        88.       3.18
+        60.       151.       1.28
+        90.        24.       2.19
+        90.        35.       2.91
+        90.        48.       3.14
+        90.        88.        2.8
+        90.       151.       0.68
+       135.        24.       3.27
+       135.        35.       3.55
+       135.        48.       3.43
+       135.        88.       1.86
+ENDDATA             26
+ENDSUBENT           35
+------------------------------------------------------------------------
+SUBENT        O0156028     970129
+BIB                  5          8
+REACTION  1(4-BE-9(P,PIP+X),SEQ,SIG,,,EXP)
+          2(4-BE-9(P,PIN+X),SEQ,SIG,,,EXP)
+PART-DET   (PI)
+ERR-ANALYS (ERR-T). This Uncertainty is Shown in Data Table by
+           Authors.
+ANALYSIS   (INTED)
+           (INTAD)
+STATUS     (TABLE)
+ENDBIB               8
+NOCOMMON
+DATA                 4          1
+DATA      1ERR-T     1DATA      2ERR-T     2
+MB         MB         MB         MB
+       22.7        2.8       4.75       0.59
+ENDDATA              3
+ENDSUBENT           16

@@ -1,0 +1,20 @@
+ exe bar1
+ exe n_e1
+ exe n_a
+ exe n_a0
+ exe n_a1
+ exe n_a2
+ exe n_a3
+ exe n_a4
+ exe pip_a0
+ exe pip_a1
+ exe pip_a2
+ exe pip_a3
+ exe pip_a4
+ exe pin_a0
+ exe pin_a1
+ exe pin_a2
+ exe pin_a3
+ exe pin_a4
+ shell rm *.old
+ shell rm *~
