@@ -19,12 +19,14 @@
 #include "G4BREPSolidPCone.hh"
 #include "G4Timer.hh"
 
+#include <iomanip.h>
 
 int main(int argc, char **argv)
 {
   G4Timer timer;
+  const G4int noZplanes= 8; 
   
-  double RMINVec[8];
+  double RMINVec[noZplanes];
   RMINVec[0] = 30;
   RMINVec[1] = 30;
   RMINVec[2] =  0;
@@ -34,7 +36,7 @@ int main(int argc, char **argv)
   RMINVec[6] = 40;
   RMINVec[7] = 40;  
 
-  double RMAXVec[8];
+  double RMAXVec[noZplanes];
   RMAXVec[0] = 70;
   RMAXVec[1] = 70;
   RMAXVec[2] = 70;
@@ -44,7 +46,7 @@ int main(int argc, char **argv)
   RMAXVec[6] = 80;
   RMAXVec[7] = 60; 
 
-  double Z_Values[8];
+  double Z_Values[noZplanes];
   Z_Values[0] =-20;
   Z_Values[1] =-10;
   Z_Values[2] =-10;
@@ -53,20 +55,42 @@ int main(int argc, char **argv)
   Z_Values[5] = 20;
   Z_Values[6] = 30;
   Z_Values[7] = 40;
-  
+
+  G4double start_angle= 0.0;
+  G4double opening_angle= 2*pi;
+
+  G4double zstart= Z_Values[0]; 
+
   G4cout << "\n=======     PCon test      ========";
 
   G4BREPSolidPCone *MyPCone = new G4BREPSolidPCone ("MyPCone",
-						    0        ,
-						    2*pi     ,
-						    8        ,
-						    -20      ,
-						    Z_Values ,
-						    RMINVec  ,
-						    RMAXVec   );
+						    start_angle,
+						    opening_angle,
+						    noZplanes,
+						    zstart,
+						    Z_Values,
+						    RMINVec,
+						    RMAXVec );
   
   G4cout << "\n\nPCone created ! "<<endl;
   G4cout << "Variety is G4BREPSolidPolycone"<<endl;
+
+  G4cout << "Its parameters are: "<<endl;
+
+  ///////////////////////////////////////////////////
+  // Temporary
+  for (G4int x = 0; x < noZplanes; x++)
+  {
+    G4cout <<    " Z[" << x << "]=" << setw(5) << Z_Values[x];
+    G4cout << " Rmin[" << x << "]=" << setw(5) << RMINVec[x];
+    G4cout << " Rmax[" << x << "]=" << setw(5) << RMAXVec[x]<<endl;
+  }
+
+  G4cout<<" start   angle ="<<start_angle<<endl;
+  G4cout<<" opening angle ="<<opening_angle<<endl;
+  G4cout<<" zstart =" << zstart << endl;
+
+
   // -> Check methods :
   //  - Inside
   //  - DistanceToIn
@@ -148,7 +172,7 @@ int main(int argc, char **argv)
     d2 = MyPCone->DistanceToIn(start2, dir2);
     G4cout<<"  distance to in="<<d2;
     d2 = MyPCone->DistanceToIn(start2);
-    G4cout<<"  distance to in="<<d2<<endl;
+    G4cout<<"  closest distance to in="<<d2<<endl;
   }
 
   G4cout<<"\n\n==================================================";
