@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.cc,v 1.7 2000-05-02 09:51:30 johna Exp $
+// $Id: G4VViewer.cc,v 1.8 2000-05-04 19:15:12 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,21 +17,20 @@
 #include "G4ios.hh"
 #include "g4std/strstream"
 
-#include "G4VisManager.hh"
 #include "G4VGraphicsSystem.hh"
 #include "G4VSceneHandler.hh"
+#include "G4Scene.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Transform3D.hh"
 #include "G4Event.hh"
 
-G4VViewer::G4VViewer (G4VSceneHandler& scene, G4int id, const G4String& name):
-fSceneHandler (scene),
+G4VViewer::G4VViewer (G4VSceneHandler& sceneHandler,
+		      G4int id, const G4String& name):
+fSceneHandler (sceneHandler),
 fViewId (id),
 fModified (true),
 fNeedKernelVisit (true)
 {
-  G4VisManager* pVMan = G4VisManager::GetInstance ();
-  fVP = pVMan -> GetCurrentViewParameters ();
   if (name == "") {
     char charname [50];
     G4std::ostrstream ost (charname, 50);
@@ -43,6 +42,13 @@ fNeedKernelVisit (true)
   }
   fShortName = fName (0, fName.find (' '));
   fShortName.strip ();
+
+  // Initialise current target point if possible.  In other respects
+  // the view parameters take default values.
+  const G4Scene* scene = fSceneHandler.GetScene();
+  if (scene) {
+    fVP.SetCurrentTargetPoint(scene->GetStandardTargetPoint());
+  }
 }
 
 G4VViewer::~G4VViewer () {}
