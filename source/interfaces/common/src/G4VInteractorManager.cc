@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VInteractorManager.cc,v 1.9 2001-07-11 10:01:23 gunter Exp $
+// $Id: G4VInteractorManager.cc,v 1.10 2001-10-22 08:10:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -59,7 +59,7 @@ G4VInteractorManager::~G4VInteractorManager (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(argv!=NULL) {
-    for(int argi=0;argi<argc;argi++) {
+    for(G4int argi=0;argi<argc;argi++) {
       if(argv[argi]!=NULL) free(argv[argi]);
     }
     free (argv);
@@ -76,7 +76,7 @@ G4VInteractorManager::~G4VInteractorManager (
 }
 /***************************************************************************/
 void G4VInteractorManager::SetArguments (
- int    a_argc
+ G4int  a_argc
 ,char** a_argv
 )
 /***************************************************************************/
@@ -84,7 +84,7 @@ void G4VInteractorManager::SetArguments (
 {
   // Free previous values.
   if(argv!=NULL) {
-    for(int argi=0;argi<argc;argi++) {
+    for(G4int argi=0;argi<argc;argi++) {
       if(argv[argi]!=NULL) free(argv[argi]);
     }
     free(argv);
@@ -96,7 +96,7 @@ void G4VInteractorManager::SetArguments (
     argv = (char**)malloc(a_argc * sizeof(char*));
     if(argv!=NULL) {
       argc = a_argc;
-      for(int argi=0;argi<a_argc;argi++) {
+      for(G4int argi=0;argi<a_argc;argi++) {
 	argv[argi] = (char*)NewString (a_argv[argi]);
       }
     }
@@ -104,7 +104,7 @@ void G4VInteractorManager::SetArguments (
 }
 /***************************************************************************/
 char** G4VInteractorManager::GetArguments (
- int* a_argc
+ G4int* a_argc
 )
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -172,10 +172,9 @@ void G4VInteractorManager::DispatchEvent (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  int dispatchern = dispatchers.size();
+  G4int dispatchern = dispatchers.size();
   G4DispatchFunction func;
-  G4bool status;
-  for(int count=0;count<dispatchern;count++) {
+  for(G4int count=0;count<dispatchern;count++) {
     func = dispatchers[count];
     if(func!=NULL) {
       if(func(a_event)==true) return;
@@ -199,8 +198,8 @@ void G4VInteractorManager::SecondaryLoopPreActions (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  int preActionn = preActions.size();
-  for(int count=0;count<preActionn;count++) {
+  G4int preActionn = preActions.size();
+  for(G4int count=0;count<preActionn;count++) {
     if(preActions[count]!=NULL) preActions[count]();
   }
 }
@@ -221,8 +220,8 @@ void G4VInteractorManager::SecondaryLoopPostActions (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  int postActionn = postActions.size();
-  for(int count=0;count<postActionn;count++) {
+  G4int postActionn = postActions.size();
+  for(G4int count=0;count<postActionn;count++) {
     if(postActions[count]!=NULL) postActions[count]();
   }
 }
@@ -243,7 +242,7 @@ void G4VInteractorManager::SecondaryLoop (
     alreadyInSecondaryLoop   = TRUE;
     exitSecondaryLoop        = 0;
     SecondaryLoopPreActions  ();
-    //for(int count=0;count<shelln;count++) XWidgetUniconify(shells[count]);
+    //for(G4int count=0;count<shelln;count++) XWidgetUniconify(shells[count]);
     void*                    event;
     while(1) {
       event = GetEvent();
@@ -256,7 +255,7 @@ void G4VInteractorManager::SecondaryLoop (
 }
 /***************************************************************************/
 void G4VInteractorManager::RequireExitSecondaryLoop (
- int a_code
+ G4int a_code
 ) 
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -265,11 +264,11 @@ void G4VInteractorManager::RequireExitSecondaryLoop (
   if(a_code==0)            a_code = 1;
   exitSecondaryLoop        = a_code;
   alreadyInSecondaryLoop   = FALSE;
-  // for(int count=0;count<shelln;count++) XWidgetIconify(shells[count]);
+  // for(G4int count=0;count<shelln;count++) XWidgetIconify(shells[count]);
   // if(shelln!=0)            XSync(XtDisplay(topWidget),False);
 }
 /***************************************************************************/
-int G4VInteractorManager::GetExitSecondaryLoopCode (
+G4int G4VInteractorManager::GetExitSecondaryLoopCode (
 ) 
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
