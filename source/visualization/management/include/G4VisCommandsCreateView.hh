@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCreateView.hh,v 1.4 1999-12-15 14:54:21 gunter Exp $
+// $Id: G4VisCommandsCreateView.hh,v 1.5 2001-02-05 02:33:53 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,7 @@ public:
     return "Creates a new scene and a new view; both become current.";
   }
   void SetValue () {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/create\".");
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     if (pVMan -> IsValidView ()) {
       pVMan -> CreateSceneHandler ();

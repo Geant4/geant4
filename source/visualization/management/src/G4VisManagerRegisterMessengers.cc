@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.24 2001-02-04 20:27:18 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.25 2001-02-05 02:34:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -202,7 +202,7 @@ Most viewer commands respond to the viewer "short name", which is the
 name up to the first space character, if any.  Thus, a viewer name can
 contain spaces but must be unique up to the first space.
 
-# /vis/viewer/clear
+/vis/viewer/clear
   Affects current viewer.
 
 # /vis/viewer/clone
@@ -329,12 +329,9 @@ to know the type of the parameter, so we need separate commands.)
     of objects with curved lines/surfaces.
   Affects current viewer.
 
-# /vis/viewer/set/projection_style
-  o[rthogonal]|p[erspective] [<field-angle>] [deg|rad]
-  default: none                    30           deg
-#or# /vis/viewer/set/orthgonal
-#or# /vis/viewer/set/perspective [<field-angle>] [deg|rad]
-  default:                           30          deg
+/vis/viewer/set/projection
+  o[rthogonal]|p[erspective] [<field-half-angle>] [deg|rad]
+  default: none                       30             deg
   Affects current viewer.
 
 #special# /vis/viewer/set/orbit (parameters)
@@ -403,26 +400,35 @@ General Commands
 Compound Commands
 =================
 
-/vis/open [<graphics-system-name>]     /vis/sceneHandler/create $1
-                                       /vis/viewer/create
-default:          error
+/vis/open [<graphics-system-name>] [<[pixels>]
+default:          error                600
+  /vis/sceneHandler/create $1
+  /vis/viewer/create ! ! $2
 
 # /vis/draw <physical-volume-name> but this clashes with old /vis~/draw/, so...
-/vis/drawVolume [<physical-volume-name>] /vis/scene/create
-default:             world               /vis/scene/add/volume $1
-                                         /vis/sceneHandler/attach
-                                         /vis/viewer/refresh
+/vis/drawVolume [<physical-volume-name>]
+default:             world
+  /vis/scene/create
+  /vis/scene/add/volume $1
+  /vis/sceneHandler/attach
+  /vis/viewer/refresh
+
 /vis/drawView [<theta-deg>] [<phi-deg>]
               [<pan-right>] [<pan-up>] [<pan-unit>]
               [<zoom-factor>]
               [<dolly>] [<dolly-unit>]
 default: 0 0 0 0 cm 1 0 cm
+  /vis/viewer/viewpointThetaPhi $1 $2 deg
+  /vis/viewer/panTo $3 $4 $5
+  /vis/viewer/zoomTo $6
+  /vis/viewer/dollyTo $7 $8
 
-/vis/specify <logical-volume-name>  /geometry/print $1
-                                    /vis/scene/create
-                                    /vis/scene/add/logicalVolume $1
-                                    /vis/sceneHandler/attach
-                                    /vis/viewer/refresh
+/vis/specify <logical-volume-name>
+  /geometry/print $1
+  /vis/scene/create
+  /vis/scene/add/logicalVolume $1
+  /vis/sceneHandler/attach
+  /vis/viewer/refresh
 
   ******************************************************************/
 
@@ -466,6 +472,7 @@ default: 0 0 0 0 cm 1 0 cm
 
   command = new G4UIdirectory ("/vis/viewer/");
   command -> SetGuidance ("Operations on Geant4 viewers.");
+  fMessengerList.append (new G4VisCommandViewerClear);
   fMessengerList.append (new G4VisCommandViewerCreate);
   fMessengerList.append (new G4VisCommandViewerDolly);
   fMessengerList.append (new G4VisCommandViewerLights);

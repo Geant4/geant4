@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewerSet.hh,v 1.6 2001-02-04 20:26:22 johna Exp $
+// $Id: G4VisCommandsViewerSet.hh,v 1.7 2001-02-05 02:34:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -37,6 +37,7 @@ private:
   G4UIcmdWithABool*   fpCommandHiddenEdge;
   G4UIcmdWithABool*   fpCommandHiddenMarker;
   G4UIcmdWithAString* fpCommandLightsMove;
+  G4UIcommand*        fpCommandProjection;
   G4UIcmdWithAString* fpCommandStyle;
 };
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessCamera.cc,v 1.6 2001-02-04 01:37:40 johna Exp $
+// $Id: G4VisManMessCamera.cc,v 1.7 2001-02-05 02:34:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -187,6 +187,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 
   ///////////////////////////////  /vis~/camera/dolly ////
   if (commandPath == "/vis~/camera/dolly") {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/dolly\".");
     if (ViewValid ()) {
       G4double in;
       const char* aString = newValues;
@@ -214,6 +215,8 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 
   ////////////////////////////////  /vis~/camera/orbit  ////
   if (commandPath  == "/vis~/camera/orbit") {
+    G4VisManager::PrintCommandDeprecation
+      ("This command will no longer be maintained.");
     if (ViewValid ()) {
       G4int nFrames;
       G4double dbeta;
@@ -232,6 +235,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 
   ///////////////////////////////  /vis~/camera/pan  ////
   if (commandPath == "/vis~/camera/pan") {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/pan\".");
     if (ViewValid ()) {
       G4double right, up;
       const char* aString = newValues;
@@ -260,6 +264,8 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 
   /////////////////////////////////////  /vis~/camera/projection_style  ////
   if (commandPath == "/vis~/camera/projection_style") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/viewer/set/projection\".");
     G4int iStyle;
     G4double fieldHalfAngleDegrees;
     const char* aString = newValues;
@@ -323,6 +329,8 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 
   ////////////////////////////////  /vis~/camera/spin  ////
   if (commandPath  == "/vis~/camera/spin") {
+    G4VisManager::PrintCommandDeprecation
+      ("This command will no longer be maintained.");
     if (ViewValid ()) {
       G4int nFrames;
       G4double dbeta;
@@ -341,6 +349,9 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 
   ////////////////////////////////////////  /vis~/camera/viewpoint  ////
   if (commandPath == "/vis~/camera/viewpoint") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/viewer/viewpointThetaPhi\" or"
+       " \"/vis/viewer/viewpointVector\".");
     G4double theta, phi ;
     const char* aString = newValues;
     G4std::istrstream is((char*) aString) ; is >> theta >> phi;
@@ -377,6 +388,9 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 
   ///////////////////////////////////////  /vis~/camera/window_size_hint  ////
   if (commandPath == "/vis~/camera/window_size_hint") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/viewer/create ! ! <pixels>\" or"
+       " \"/vis/open <system> <pixels>\".");
     G4int size;
     const char* aString = newValues;
     G4std::istrstream is((char*) aString) ; is >> size;
@@ -391,6 +405,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 
   ////////////////////////////////  /vis~/camera/zoom  ////
   if (commandPath  == "/vis~/camera/zoom") {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/zoom\".");
     if (ViewValid ()) {
       G4double zoomBy;
       const char* aString = newValues;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessDraw.cc,v 1.5 1999-12-15 14:54:27 gunter Exp $
+// $Id: G4VisManMessDraw.cc,v 1.6 2001-02-05 02:34:34 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -209,7 +209,9 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
 
   //////////////////////////  /vis~/draw/volume  /////
   if (commandPath == "/vis~/draw/volume") {
-    // Find physical_volume.
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/scene/add/volume\" or \"/vis/drawVolume\".");
+     // Find physical_volume.
     G4String name;
     const char* aString = newValues;
     G4std::istrstream is((char*) aString) ; is >> name;
@@ -220,6 +222,8 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
   }
   //////////////////////////  /vis~/draw/ghosts  /////
   if (commandPath == "/vis~/draw/ghosts") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/scene/add/ghosts\".");
     // preliminaries
     G4VisManager* theVisManager;
     if(!(theVisManager= G4VisManager::GetInstance())) {

@@ -1,4 +1,4 @@
-$Id: History,v 1.104 2001-02-04 21:56:04 johna Exp $
+$Id: History,v 1.105 2001-02-05 02:35:34 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,12 +24,23 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-4th February 2001  John Allison
+4th February 2001  John Allison  (vis-V03-00-04)
 - /vis/viewer commands no longer update vis manager's view parameters.
+- Most /vis~/ copmmands give DEPRECATED warning, except:
+  /vis~/draw/axes
+  /vis~/draw/text
+  /vis~/set/section_plane
+  /vis~/set/sides
+  /vis~/set/verbose
+  which have still to be re-implemented.  All /vis~/ commands are still
+  available through /vis/ for the time being.  (Window size hint no longer
+   works.)
 - Added "auto refresh" to view parameters.
 - Added "default" view parameters to viewers.
 - Made OpenGL viewers "auto refresh" by default.
-- Added "/vis/viewer/set/autoRefresh".
+- Added:
+  /vis/viewer/set/autoRefresh
+  /vis/viewer/set/projection
 - Added compound command:
   /vis/drawView [<theta-deg>] [<phi-deg>]
                 [<pan-right>] [<pan-up>] [<pan-unit>]

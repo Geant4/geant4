@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisToOldVisCommands.cc,v 1.4 1999-12-15 14:54:27 gunter Exp $
+// $Id: G4VisToOldVisCommands.cc,v 1.5 2001-02-05 02:34:45 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,12 @@ G4VisToOldVisCommands::G4VisToOldVisCommands () {
       // G4cout << "NewSubCommandPath: " << newCommandPath << G4endl;
       G4UIcommand* newCommand = new G4UIcommand (newCommandPath, this);
       newCommand -> SetRange (command -> GetRange ());
+      newCommand -> SetGuidance
+	("**** DEPRECATED COMMAND ****"
+	 "  Will be discontinued after Geant4 3.0.");
+      newCommand -> SetGuidance
+	("**** DEPRECATED COMMAND ****"
+	 "  Will still be available under /vis~/ for a while.");
       G4int nGuidances = command -> GetGuidanceEntries ();
       int k;
       for (k = 0; k < nGuidances; k++) {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSet.hh,v 1.5 2001-02-01 17:35:22 johna Exp $
+// $Id: G4VisCommandsSet.hh,v 1.6 2001-02-05 02:34:01 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@ public:
       IsCulling ();
   }
   void SetValue (G4bool value) {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/set/culling\".");
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     pVMan -> SetCurrentViewParameters ().SetCulling (value);
     G4VViewer* pView = pVMan -> GetCurrentViewer ();
@@ -74,6 +75,7 @@ public:
       IsCullingCovered ();
   }
   void SetValue (G4bool value) {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/set/culling\".");
     G4cout << "\nNote: this is only effective in surface drawing style,"
       "\nand then only if the volumes are visible and opaque, and then"
       "\nonly if no sections or cutways are in operation."
@@ -105,6 +107,7 @@ public:
       IsCullingInvisible ();
   }
   void SetValue (G4bool value) {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/set/culling\".");
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     pVMan -> SetCurrentViewParameters ().SetCullingInvisible (value);
     G4VViewer* pView = pVMan -> GetCurrentViewer ();

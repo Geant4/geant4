@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.21 2001-02-04 20:26:24 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.22 2001-02-05 02:34:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -60,13 +60,58 @@ void G4VVisCommandViewer::UpdateCandidateLists () {
   }
 }
 
+////////////// /vis/viewer/clear ///////////////////////////////////////
+
+G4VisCommandViewerClear::G4VisCommandViewerClear () {
+  G4bool omitable, currentAsDefault;
+  fpCommand = new G4UIcmdWithAString ("/vis/viewer/clear", this);
+  fpCommand -> SetGuidance ("/vis/viewer/clear [<viewer-name>]");
+  fpCommand -> SetGuidance ("Clears viewer.");
+  fpCommand -> SetGuidance ("Viewer becomes current.");
+  fpCommand -> SetGuidance
+    ("Specify viewer by name (\"/vis/viewer/list\""
+     "\n  to see possibilities).");
+  fpCommand -> SetParameterName ("viewer-name",
+				 omitable = true,
+				 currentAsDefault = true);
+  viewerNameCommands.push_back (fpCommand);
+}
+
+G4VisCommandViewerClear::~G4VisCommandViewerClear () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerClear::GetCurrentValue (G4UIcommand* command) {
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+  if (viewer) {
+    return viewer -> GetName ();
+  }
+  else {
+    return "none";
+  }
+}
+
+void G4VisCommandViewerClear::SetNewValue (G4UIcommand* command,
+					    G4String newValue) {
+  G4String& clearName = newValue;
+  G4VViewer* viewer = fpVisManager -> GetViewer (clearName);
+  if (!viewer) {
+    G4cout << "Viewer \"" << clearName
+	   << "\" not found - \"/vis/viewer/list\" to see possibilities."
+	   << G4endl;
+    return;
+  }
+
+  viewer->ClearView();   
+}
+
 ////////////// /vis/viewer/create ///////////////////////////////////////
 
 G4VisCommandViewerCreate::G4VisCommandViewerCreate (): fId (0) {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/viewer/create", this);
   fpCommand -> SetGuidance
-    ("/vis/viewer/create  [<scene-handler>] [<viewer-name>]");
+    ("/vis/viewer/create  [<scene-handler>] [<viewer-name>] [<pixels>]");
   fpCommand -> SetGuidance
     ("Creates an viewer for a specific scene handler.");
   fpCommand -> SetGuidance
@@ -77,12 +122,17 @@ G4VisCommandViewerCreate::G4VisCommandViewerCreate (): fId (0) {
     ("to the name for identification - only the characters up to the first");
   fpCommand -> SetGuidance
     ("blank are used for removing, selecting, etc.)");
+  fpCommand -> SetGuidance
+    ("The 3rd parameter is a window size hint.");
   fpCommand -> SetGuidance ("This scene handler and viewer become current.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("scene-handler", 's', omitable = true);
   parameter -> SetCurrentAsDefault (true);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("viewer-name", 's', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("pixels", 'd', omitable = true);
   parameter -> SetCurrentAsDefault (true);
   fpCommand -> SetParameter (parameter);
   viewerNameCommands.push_back (fpCommand);
@@ -123,17 +173,7 @@ G4String G4VisCommandViewerCreate::GetCurrentValue (G4UIcommand* command) {
   currentValue += NextName ();
   currentValue += '"';
 
-  /* Replaces currentValue += NextName ();
-  // Now need to handle the possibility that NextName contains
-  // embedded blanks.
-  currentValue += '"';
-  const int charLength = 100;
-  char nextName [charLength];
-  strncpy (nextName, NextName (), charLength);
-  for (int i = 0; nextName[i]; i++) {
-    currentValue += nextName[i];
-  }
-  */
+  currentValue += " 600";  // Default number of pixels for window size hint.
 
   return currentValue;
 }
@@ -141,14 +181,26 @@ G4String G4VisCommandViewerCreate::GetCurrentValue (G4UIcommand* command) {
 void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
   G4String sceneHandlerName, newName;
+  G4int windowSizeHint;
   G4std::istrstream is ((char*)newValue.data());
   is >> sceneHandlerName;
+
   // Now need to handle the possibility that the second string
-  // contains embedded blanks within quotation marks.
+  // contains embedded blanks within quotation marks...
   char c;
-  while (is.get (c)) newName += c;
+  while (is.get(c) && c == ' ');
+  if (c == '"') {
+    while (is.get(c) && c != '"') newName += c;
+  }
+  else {
+    newName += c;
+    while (is.get(c) && c != ' ') newName += c;
+  }
   newName = newName.strip (G4String::both, ' ');
   newName = newName.strip (G4String::both, '"');
+
+  // Now get number of pixels...
+  is >> windowSizeHint;
 
   const G4SceneHandlerList& sceneHandlerList =
     fpVisManager -> GetAvailableSceneHandlers ();
@@ -200,6 +252,12 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
       }
     }
   }
+
+  fpVisManager->SetCurrentViewParameters().SetWindowSizeHint
+    (windowSizeHint, windowSizeHint);
+  // Currently the viewer does not pick up the above.  So a viewer
+  // picks up a default set of view parameters adn thus, the default
+  // window size for the moment.
 
   // Create viewer.
   fpVisManager -> CreateViewer (newName);

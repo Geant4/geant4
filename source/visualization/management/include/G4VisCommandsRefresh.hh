@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsRefresh.hh,v 1.3 1999-12-15 14:54:21 gunter Exp $
+// $Id: G4VisCommandsRefresh.hh,v 1.4 2001-02-05 02:33:59 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,7 @@ public:
       "double buffer and graphical database, if any.";
   }
   void SetValue () {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/refresh\".");
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     if (pVMan -> IsValidView ()) {
       pVMan -> RefreshCurrentView ();

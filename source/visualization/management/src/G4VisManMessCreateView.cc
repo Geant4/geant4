@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessCreateView.cc,v 1.5 1999-12-15 14:54:27 gunter Exp $
+// $Id: G4VisManMessCreateView.cc,v 1.6 2001-02-05 02:34:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,6 +63,8 @@ void G4VisManMessenger::DoCommandCreateView (const G4String& commandPath,
 
   ///////////////////  /vis~/create_view/new_graphics_system  /////
   if (commandPath == "/vis~/create_view/new_graphics_system") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/scenehandler/create\" or \"/vis/open\".");
     G4String selector;
     const char* aString = newValues;
     G4std::istrstream is ((char*) aString) ; is >> selector;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.hh,v 1.14 2001-02-03 18:39:52 johna Exp $
+// $Id: G4VisManager.hh,v 1.15 2001-02-05 02:34:07 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -300,6 +300,9 @@ public: // With description
 
   G4bool IsValidView ();
   // True if view is valid.  Prints messages and sanitises varoius data.
+
+  static void PrintCommandDeprecation(const G4String&);
+  // Temporary deprecation printing.
 
 protected:
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisFeaturesOfDAWNFILE.cc,v 1.3 1999-12-15 14:54:26 gunter Exp $
+// $Id: G4VisFeaturesOfDAWNFILE.cc,v 1.4 2001-02-05 02:34:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4VisFeaturesOfDAWNFILE.hh"
@@ -22,5 +22,6 @@ G4String G4VisFeaturesOfDAWNFILE () {
     "\n                   connection via g4.prim file to Fukui Renderer DAWN etc."
     "\n    Disadvantages: compute intensive, takes time (use a fast graphics"
     "\n                   system, such as OpenGL, to select view, then copy"
-    "\n                   to this renderer - /vis~/copy/view, /vis~/set/view).";
+    "\n                   view parameters to this renderer:"
+    "\n                   \"/vis/viewer/set/all <OpenGL-view>\".";
 }

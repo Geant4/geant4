@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.5 2001-02-04 20:26:26 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.6 2001-02-05 02:34:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -88,6 +88,23 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet () {
   // fpCommandLightsMove->SetCandidates("move-with-camera move-with-object");
   // Own parsing.
 
+  fpCommandProjection = new G4UIcommand("/vis/viewer/set/projection",this);
+  fpCommandProjection->SetGuidance
+    ("/vis/viewer/set/projection"
+     " o[rthogonal]|p[erspective] [<field-half-angle>] [deg|rad]");
+  fpCommandProjection->SetGuidance
+    ("Note: 1st parameter will be parsed for first character \"o\" or \"p\".");
+  fpCommandProjection->SetGuidance("Default: orthogonal 30 deg");
+  parameter = new G4UIparameter("projection",'s',omitable = true);
+  parameter->SetDefaultValue("orthogonal");
+  fpCommandProjection->SetParameter(parameter);
+  parameter = new G4UIparameter("field-half-angle",'d',omitable = true);
+  parameter->SetDefaultValue(30.);
+  fpCommandProjection->SetParameter(parameter);
+  parameter = new G4UIparameter("unit",'s',omitable = true);
+  parameter->SetDefaultValue("deg");
+  fpCommandProjection->SetParameter(parameter);
+
   fpCommandStyle = new G4UIcmdWithAString ("/vis/viewer/set/style",this);
   fpCommandStyle->SetGuidance ("/vis/viewer/set/style wireframe|surface");
   fpCommandStyle->SetGuidance
@@ -103,6 +120,8 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandEdge;
   delete fpCommandHiddenEdge;
   delete fpCommandHiddenMarker;
+  delete fpCommandLightsMove;
+  delete fpCommandProjection;
   delete fpCommandStyle;
 }
 
@@ -111,7 +130,7 @@ G4String G4VisCommandsViewerSet::GetCurrentValue(G4UIcommand* command) {
 }
 
 void G4VisCommandsViewerSet::SetNewValue
-(G4UIcommand* command,G4String newValue) {
+(G4UIcommand* command, G4String newValue) {
 
   G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
@@ -292,6 +311,56 @@ void G4VisCommandsViewerSet::SetNewValue
     G4cout << "be hidden under solid objects." << G4endl;
   }
 
+  else if (command == fpCommandLightsMove) {
+    G4String s (newValue);
+    if (s.find("cam") != G4String::npos) vp.SetLightsMoveWithCamera(true);
+    else if(s.find("obj") != G4String::npos) vp.SetLightsMoveWithCamera(false);
+    else {
+      G4cout << "\"" << newValue << "\" not recognised."
+	"  Looking for \"cam\" or \"obj\" in string." << G4endl;
+    }
+    G4cout << "Lights move with ";
+    if (vp.GetLightsMoveWithCamera())
+      G4cout << "camera (object appears to rotate).";
+    else G4cout << "object (the viewer appears to be moving).";
+    G4cout << G4endl;
+  }
+
+  else if (command == fpCommandProjection) {
+    G4double fieldHalfAngle;
+    if (newValue[0] == 'o') {  // "orthogonal"
+      fieldHalfAngle = 0.;
+    }
+    else if (newValue[0] == 'p') {  // "perspective"
+      G4String dummy;
+      G4String unit;
+      G4std::istrstream is ((char*)newValue.data());
+      is >> dummy >> fieldHalfAngle >> unit;
+      fieldHalfAngle *= ValueOf(unit);
+      if (fieldHalfAngle > 89.5 * deg || fieldHalfAngle <= 0.0) {
+	G4cout << "Field half angle should be 0 < angle <= 89.5 degrees.";
+	G4cout << G4endl;
+	return;
+      }
+    }
+    else {
+      G4cout << "\"" << newValue << "\" not recognised."
+	"  Looking for 'o' or 'p' first character." << G4endl;
+      return;
+    }
+    vp.SetFieldHalfAngle(fieldHalfAngle);
+    G4cout << "Projection style of viewer \"" << currentViewer->GetName()
+	   << "\" set to ";
+    if (fieldHalfAngle == 0.) {
+      G4cout << "orthogonal.";
+    }
+    else {
+      G4cout << "perspective\n  with half angle " << fieldHalfAngle / deg
+	     << " degrees.";
+    }
+    G4cout << G4endl;
+  }
+
   else if (command == fpCommandStyle) {
     G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
     if (newValue[0] == 'w') {  // "wireframe"
@@ -323,29 +392,13 @@ void G4VisCommandsViewerSet::SetNewValue
       }
     }
     else {
-      G4cout <<
-	"G4VisCommandsViewerSet::SetNewValue: style: unrecognised style."
-	     << G4endl;
+      G4cout << "\"" << newValue << "\" not recognised."
+	"  Looking for 'w' or 's' first character." << G4endl;
       return;
     }
     G4cout << "Drawing style of viewer \"" << currentViewer->GetName()
 	   << "\" set to " << vp.GetDrawingStyle()
 	   << G4endl;
-  }
-
-  else if (command == fpCommandLightsMove) {
-    G4String s (newValue);
-    if (s.find("cam") != G4String::npos) vp.SetLightsMoveWithCamera(true);
-    else if(s.find("obj") != G4String::npos) vp.SetLightsMoveWithCamera(false);
-    else {
-      G4cout << "\"" << newValue << "\" not recognised."
-	"  Looking for \"cam\" or \"obj\" in string." << G4endl;
-    }
-    G4cout << "Lights move with ";
-    if (vp.GetLightsMoveWithCamera())
-      G4cout << "camera (object appears to rotate).";
-    else G4cout << "object (the viewer appears to be moving).";
-    G4cout << G4endl;
   }
 
   else {

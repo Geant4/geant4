@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessLights.cc,v 1.5 2000-08-19 18:23:37 johna Exp $
+// $Id: G4VisManMessLights.cc,v 1.6 2001-02-05 02:34:37 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,6 +52,8 @@ void G4VisManMessenger::DoCommandLights (const G4String& commandPath,
 
   ////////////////////////////////////////  /vis~/lights/direction  ////
   if (commandPath == "/vis~/lights/direction") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/viewer/lightsThetaPhi\" or \"/vis/viewer/lightsVector\".");
     G4double theta, phi ;
     const char* aString = newValues;
     G4std::istrstream is((char*) aString) ; is >> theta >> phi;

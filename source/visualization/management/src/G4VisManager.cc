@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.18 2001-01-16 18:33:58 johna Exp $
+// $Id: G4VisManager.cc,v 1.19 2001-02-05 02:34:41 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1021,6 +1021,14 @@ G4bool G4VisManager::IsValidView () {
     }
   }
   return isValid;
+}
+
+void G4VisManager::PrintCommandDeprecation(const G4String& message) {
+  G4cout <<
+    "**** DEPRECATED COMMAND ***"
+    "\n****  Will be discontinued as a \"/vis/\" command after Geant4 3.0."
+    "\n****  Will still be available as a \"/vis~/\" command for a while."
+    "\n****  " << message << G4endl;
 }
 
 // "No functionality" graphics systems to trap accidental attempt to

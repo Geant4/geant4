@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsLights.hh,v 1.5 2001-02-01 17:35:20 johna Exp $
+// $Id: G4VisCommandsLights.hh,v 1.6 2001-02-05 02:33:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,8 @@ public:
       GetLightsMoveWithCamera ();
   }
   void SetValue (G4bool value) {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/viewer/set/lightsMove\".");
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     pVMan -> SetCurrentViewParameters ().SetLightsMoveWithCamera (value);
     G4VViewer* pView = pVMan -> GetCurrentViewer ();

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessSet.cc,v 1.8 2001-02-01 17:35:43 johna Exp $
+// $Id: G4VisManMessSet.cc,v 1.9 2001-02-05 02:34:39 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -200,6 +200,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 
   ///////////////////////////////////////////  /vis~/set/cull_by_density  ////
   if (commandPath == "/vis~/set/cull_by_density") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/viewer/set/culling\".");
     G4String choice;
     G4double density;  // Units in this section are g / cm3 - WARNING!!!
     const char* t = newValues;
@@ -247,6 +249,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 
   ///////////////////////////////////////////  /vis~/set/drawing_style  ////
   if (commandPath == "/vis~/set/drawing_style") {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/set/style\".");
     G4int iStyle;
     const char* aString = newValues;
     G4std::istrstream is((char*) aString) ; is >> iStyle;
@@ -349,6 +352,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 
   ////////////////////////////////////////  /vis~/set/marker_choices  ////
   if (commandPath == "/vis~/set/marker_choices") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/viewer/set/hiddenMarker\".");
     G4int iChoice;
     const char* aString = newValues;
     G4std::istrstream is((char*) aString) ; is >> iChoice;
@@ -463,6 +468,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 
   ///////////////////////////////////////////  /vis~/set/rep_style  ////
   if (commandPath == "/vis~/set/rep_style") {
+    G4VisManager::PrintCommandDeprecation
+      ("This command will no longer be maintained.");
     G4int iStyle;
     const char* aString = newValues;
     G4std::istrstream is((char*) aString) ; is >> iStyle;
@@ -498,6 +505,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 
   ///////////////////////////////////  /vis~/set/scene  ////
   if (commandPath == "/vis~/set/scene") {
+    G4VisManager::PrintCommandDeprecation
+      ("This command will no longer be maintained.");
     static G4int iState = 0;
     static G4int nOptions = 2;
     G4int iSelector;
@@ -627,6 +636,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 
   ///////////////////////////////////////////  /vis~/set/view  /////////
   if (commandPath == "/vis~/set/view") {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/select\".");
     // Make List of available views.
     G4RWTPtrOrderedVector<G4VViewer> vList;
     const G4SceneHandlerList& gml = fpVMan -> GetAvailableSceneHandlers ();

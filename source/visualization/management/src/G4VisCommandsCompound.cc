@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCompound.cc,v 1.8 2001-02-04 20:27:16 johna Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.9 2001-02-05 02:34:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -135,15 +135,16 @@ void G4VisCommandDrawVolume::SetNewValue
 
 G4VisCommandOpen::G4VisCommandOpen() {
   G4bool omitable;
-  fpCommand = new G4UIcmdWithAString("/vis/open", this);
-  fpCommand->SetGuidance("/vis/open [<graphics-system-name>]");
+  fpCommand = new G4UIcommand("/vis/open", this);
+  fpCommand->SetGuidance("/vis/open [<graphics-system-name>] [<pixels>]");
   fpCommand->SetGuidance
     ("For this graphics system, creates a scene handler ready for drawing.");
   fpCommand->SetGuidance("The scene handler becomes current.");
   fpCommand->SetGuidance("The scene handler name is auto-generated.");
-  fpCommand->SetParameterName("graphics-system-name", omitable = true);
-  fpCommand->SetDefaultValue("error");
-  const G4GraphicsSystemList& gslist =
+  fpCommand->SetGuidance("The 2nd parameter is the window size hint.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter("graphics-system-name", 's', omitable = false);
+   const G4GraphicsSystemList& gslist =
     fpVisManager->GetAvailableGraphicsSystems();
   G4String candidates;
   for (int igslist = 0; igslist < gslist.entries(); igslist++) {
@@ -158,7 +159,11 @@ G4VisCommandOpen::G4VisCommandOpen() {
     candidates += " ";
   }
   candidates = candidates.strip();
-  fpCommand->SetCandidates(candidates);
+  parameter->SetParameterCandidates(candidates);
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("pixels", 'i', omitable = true);
+  parameter->SetDefaultValue(600);
+  fpCommand->SetParameter(parameter);
 }
 
 G4VisCommandOpen::~G4VisCommandOpen() {
@@ -166,11 +171,15 @@ G4VisCommandOpen::~G4VisCommandOpen() {
 }
 
 void G4VisCommandOpen::SetNewValue (G4UIcommand* command, G4String newValue) {
+  G4String systemName, windowSizeHint;
+  const char* t = newValue;
+  G4std::istrstream is((char*)t);
+  is >> systemName >> windowSizeHint;
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
   UImanager->SetVerboseLevel(2);
-  UImanager->ApplyCommand("/vis/sceneHandler/create " + newValue);
-  UImanager->ApplyCommand("/vis/viewer/create");
+  UImanager->ApplyCommand("/vis/sceneHandler/create " + systemName);
+  UImanager->ApplyCommand("/vis/viewer/create ! ! " + windowSizeHint);
   UImanager->SetVerboseLevel(keepVerbose);
 }
 

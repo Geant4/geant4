@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCompound.hh,v 1.4 2001-02-04 20:27:14 johna Exp $
+// $Id: G4VisCommandsCompound.hh,v 1.5 2001-02-05 02:33:50 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -45,7 +45,7 @@ public:
 private:
   G4VisCommandOpen (const G4VisCommandOpen&);
   G4VisCommandOpen& operator = (const G4VisCommandOpen&);
-  G4UIcmdWithAString* fpCommand;
+  G4UIcommand* fpCommand;
 };
 
 class G4VisCommandSpecify: public G4VVisCommand {
