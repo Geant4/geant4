@@ -39,6 +39,7 @@
 
 #include "hTestDetectorMessenger.hh"
 #include "hTestDetectorConstruction.hh"
+#include "hTestHisto.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -238,8 +239,11 @@ void hTestDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == NumOfEvt )
    { hDet->SetNumberOfEvents(NumOfAbsCmd->GetNewIntValue(newValue));}
 
-  if( command == verbCmd )
-   { hDet->SetVerbose(verbCmd->GetNewIntValue(newValue));}
+  if( command == verbCmd ){ 
+     G4int ver = verbCmd->GetNewIntValue(newValue);
+     hDet->SetVerbose(ver);
+     (hTestHisto::GetPointer())->SetVerbose(ver);
+   }
 
   if( command == intCmd )
    { hDet->SetNumAbsorbersSaved(intCmd->GetNewIntValue(newValue));}

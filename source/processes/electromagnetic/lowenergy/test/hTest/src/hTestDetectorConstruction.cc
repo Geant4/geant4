@@ -186,6 +186,10 @@ void hTestDetectorConstruction::DefineMaterials()
   a = 63.55*g/mole;
   G4Material* Cu = new G4Material(name="Copper"   , z=29., a, density);
 
+  density = 5.323*g/cm3;
+  a = 72.61*g/mole;
+  G4Material* Ge = new G4Material(name="Germanium", z=32., a, density);
+
   density = 19.32*g/cm3;
   a =196.97*g/mole;
   G4Material* Au = new G4Material(name="Gold"   , z=79., a, density);

@@ -163,6 +163,7 @@ void hTestCalorimeterSD::EndOfEvent(G4HCofThisEvent*)
 
   theHisto->SaveToTuple(G4String("backE"),backEnergy);      
   theHisto->SaveToTuple(G4String("leakE"),leakEnergy);      
+  G4double etot = 0.0;
 
   // The histogramm on the energy deposition profile
   if(numAbs > 0) {
@@ -170,9 +171,12 @@ void hTestCalorimeterSD::EndOfEvent(G4HCofThisEvent*)
     G4double z = -0.5 * s;
     for(i=0; i<numAbs; i++) {
       z += s; 
+      etot += energy[i];
       theHisto->AddEnergy(energy[i], z);
     }
   }
+  theHisto->SaveToTuple(G4String("Edep"),etot);      
+  theHisto->SaveToTuple(G4String("Evt"),G4double(evno));      
 
   // Integrated energy deposition to nTuple
   G4int nMax = 60;
@@ -209,9 +213,13 @@ void hTestCalorimeterSD::EndOfEvent(G4HCofThisEvent*)
   // Dump information about this event 
   theHisto->SaveEvent();
 
-  if(0 < theHisto->GetVerbose()) 
+  if(0 < theHisto->GetVerbose()) { 
     G4cout << "hTestCalorimeterSD: Event #" << evno << " ended" << G4endl;
-  
+    G4cout << "Edep(MeV)= " << etot/MeV 
+           << "; backE(MeV)= " << backEnergy/MeV
+           << "; leakE(MeV)= " << leakEnergy/MeV
+           << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

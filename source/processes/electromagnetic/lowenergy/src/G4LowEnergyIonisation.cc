@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.50 2001-07-31 14:51:15 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.51 2001-08-02 16:14:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,6 +65,7 @@
 // 24.04.01 V.Ivanchenko remove RogueWave 
 // 22.05.01 V.Ivanchenko update calculation of delta-ray kinematic + 
 //                       clean up the code 
+// 02.08.01 V.Ivanchenko fix his bag - energy conservation 
 //                                                                 
 // --------------------------------------------------------------
  
@@ -1115,8 +1116,8 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
   dirz += del* costheta;
   G4double norm = 1.0/sqrt(dirx*dirx + diry*diry + dirz*dirz);
   
-  G4double finalKineticEnergy = KineticEnergy - deltaKinEnergy;
   deltaKinEnergy -= 2.0*BindingEn;
+  G4double finalKineticEnergy = KineticEnergy - deltaKinEnergy - BindingEn;
 
   // create G4DynamicParticle object for delta ray
   G4DynamicParticle* theDeltaRay = new G4DynamicParticle();
@@ -1186,10 +1187,11 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
 	  
 	  if(fluorPar[2] >= CutForLowEnergySecondaryPhotons){
 	    
-	    theEnergyDeposit -= fluorPar[2]*MeV;
+            G4double e = fluorPar[2]*MeV;
+            if(e > theEnergyDeposit) e = theEnergyDeposit;
+	    theEnergyDeposit -= e;
 	    newPart = new G4DynamicParticle (G4Gamma::Gamma(), 
-					     newPartDirection, 
-					     fluorPar[2]);
+					     newPartDirection, e);
 	    
 	    photvec.push_back(newPart);
 	  }

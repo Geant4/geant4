@@ -106,7 +106,8 @@ void hTestHisto::EndOfHisto()
     G4cout<<"========================================================"<<G4endl;
     G4cout << setprecision(4) << "Range(mm)= " << zend/mm 
            << "; Stragling(mm)= " << sig/mm 
-           << setprecision(2) << " +- " << zend2/mm << G4endl;
+           << setprecision(2) << " +- " << zend2/mm 
+           << "    " << zEvt << " events" << G4endl;
     G4cout<<"========================================================"<<G4endl;
   }  
 
@@ -121,7 +122,9 @@ void hTestHisto::EndOfHisto()
 
 void hTestHisto::SaveEvent()
 {
-  if(0 < nHisto) ntup->dumpData();
+  if(0 < nHisto) {
+    ntup->dumpData();
+  }                       
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -41,6 +41,7 @@
 #include "G4UImessenger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -68,6 +69,7 @@ class hTestPrimaryGeneratorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* sigmaZCmd;
     G4UIcmdWithADoubleAndUnit* sigmaECmd;
     G4UIcmdWithADoubleAndUnit* maxThetaCmd;
+    G4UIcmdWithAString* partCmd;
 
 };
 

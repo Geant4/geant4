@@ -38,6 +38,7 @@
 
 #include "hTestPrimaryGeneratorMessenger.hh"
 #include "hTestPrimaryGeneratorAction.hh"
+#include "G4UImanager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -90,10 +91,15 @@ hTestPrimaryGeneratorMessenger::hTestPrimaryGeneratorMessenger(
   sigmaECmd->AvailableForStates(PreInit,Idle);
 
   beamECmd = new G4UIcmdWithADoubleAndUnit("/hTest/gun/beamE",this);
-  beamECmd->SetGuidance("Set the beam Gussian width for energy");
+  beamECmd->SetGuidance("Set the beam kinetic energy");
   beamECmd->SetParameterName("beamE",false);
   beamECmd->SetUnitCategory("Energy");
   beamECmd->AvailableForStates(PreInit,Idle);
+
+  partCmd = new G4UIcmdWithAString("/hTest/gun/particle",this);
+  partCmd->SetGuidance("Set the name of the particle");
+  partCmd->SetParameterName("part",false);
+  partCmd->AvailableForStates(PreInit,Idle);
 
   maxThetaCmd = new G4UIcmdWithADoubleAndUnit("/hTest/gun/maxTheta",this);
   maxThetaCmd->SetGuidance("Set the beam maxTheta in degrees.");
@@ -116,6 +122,7 @@ hTestPrimaryGeneratorMessenger::~hTestPrimaryGeneratorMessenger()
   delete sigmaECmd;
   delete beamECmd;
   delete maxThetaCmd;
+  delete partCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -147,6 +154,8 @@ void hTestPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
     {theGen->SetBeamEnergy(beamECmd->GetNewDoubleValue(newValue));}
   if(command == maxThetaCmd)
     {theGen->SetBeamMinCosTheta(cos(maxThetaCmd->GetNewDoubleValue(newValue)));}
+  if(command == partCmd)
+    {(G4UImanager::GetUIpointer())->ApplyCommand("/gun/particle "+newValue);}
   if(0 < theGen->GetVerbose())
     {G4cout << "hTestPrimaryGeneratorMessenger: O'K " << G4endl;}
   }
