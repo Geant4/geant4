@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisStateDependent.hh,v 1.1 1999-11-29 15:20:35 johna Exp $
+// $Id: G4VisStateDependent.hh,v 1.2 1999-12-07 11:06:59 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // A "state dependent" service class for G4VisManager.
@@ -24,7 +24,7 @@
 class G4VisManager;
 
 class G4VisStateDependent: public G4VStateDependent {
-  friend G4VisManager;
+  friend class G4VisManager;
 private:
   G4VisStateDependent (G4VisManager *);
   G4bool Notify (G4ApplicationState requestedState);
