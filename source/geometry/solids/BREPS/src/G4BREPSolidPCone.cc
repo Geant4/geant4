@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.cc,v 1.2 1999-01-14 16:12:26 broglia Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.3 1999-01-15 14:28:12 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4BREPSolidPCone.hh"
@@ -395,21 +395,11 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
 
 
 G4ThreeVector G4BREPSolidPCone::SurfaceNormal(const G4ThreeVector& Pt) const
-{
-  G4cout<<" SurfaceNormal() of G4BREPSolidPCone modified by L. Broglia";
+{  
   
-  G4Vector3D   Ptv          = Pt;
   G4Vector3D   n(0,0,0);
-  G4double     zCoord       = Pt.z();
   const G4int  num_z_planes = original_parameters.Num_z_planes;
   G4int        iplane;
- 
-  // Find the appropriate z "slice" 
-  //
-  for(iplane=0; iplane< num_z_planes; iplane++) 
-    if (  (zCoord < original_parameters.Z_values[iplane+1]) &&
-	  (zCoord >= original_parameters.Z_values[iplane])      ) 
-      break;
     
   G4Vector3D norm;
   G4Ray r( Pt, G4Vector3D(1, 0, 0) );
