@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2002-06-18 15:17:39 ahoward Exp $
+# $Id: GNUmakefile,v 1.7 2002-06-18 15:57:42 ahoward Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -16,7 +16,7 @@ ifdef DMXENV_GPS_USE
 endif
 
 ifdef G4ANALYSIS_USE
-  CPPFLAGS += -G4ANALYSIS_USE
+  CPPFLAGS += -DG4ANALYSIS_USE
 endif
 
 
