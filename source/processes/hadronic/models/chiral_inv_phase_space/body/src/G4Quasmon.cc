@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.7 2000-08-22 09:06:44 hpw Exp $
+// $Id: G4Quasmon.cc,v 1.8 2000-08-22 14:23:18 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -97,7 +97,7 @@ G4Quasmon::G4Quasmon(const G4Quasmon &right) {}
 G4Quasmon::~G4Quasmon()
 {
   theQCandidates.clearAndDestroy();                // @@ This vector can be static ??
-//  theQHadrons.clearAndDestroy();
+  theQHadrons.clearAndDestroy();
 }
 
 G4double G4Quasmon::Temperature=180.;  
@@ -1591,7 +1591,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
 #ifdef pdebug
 	cout<<"G4Quasm::FillHadrVect: nucl="<<qNuc<<",nPDG="<<thePDG<<",GSM="<<GSMass<<endl;
 #endif
-    if(abs(totMass-GSMass)<.1)
+    if(abs(totMass-GSMass)<.1)                 // the Nucleus is too close the Ground State
     {
       G4QContent totQC=qNuc.GetQCZNS();        // Total Quark Content of Residual Nucleus
       G4int    nN     =qNuc.GetN();            // A#of neutrons in the Nucleus
@@ -1599,7 +1599,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
       G4int    bA     =qNuc.GetA();            // A#of baryons in the Nucleus
       G4double nResM  =1000000.;               // Prototype of mass of residual for a neutron
       G4int    nResPDG=0;                      // Prototype of PDGCode of residual for a neutron
-      if(nN>0&&bA>1)
+      if(nN>0&&bA>1)                           // It's nucleus and there is a neutron
 	  {
         G4QContent resQC=totQC-neutQC;
         G4QNucleus resN(resQC);                // Pseudo nucleus for the Residual Nucleus
@@ -1608,7 +1608,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
 	  }
       G4double pResM  =1000000.;               // Prototype of mass of residual for a proton
       G4int    pResPDG=0;                      // Prototype of PDGCode of residual for a proton
-      if(nZ>0&&bA>1)
+      if(nZ>0&&bA>1)                           // It's nucleus and there is a proton
 	  {
         G4QContent resQC=totQC-protQC;
         G4QNucleus resN(resQC);                // Pseudo nucleus for the Residual Nucleus
@@ -1624,19 +1624,31 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
         G4int resPDG = 90002002;
         G4double barM= mAlpha;
         G4double resM= mAlpha;
-		if     (totMass>nResM+mNeut)
+		if     (totMass>nResM+mNeut)           // Can radiate a neutron (priority 1)
 		{
           barPDG = 90000001;
           resPDG = nResPDG;
           barM= mNeut;
           resM= nResM;
 		}
-		else if(totMass>pResM+mProt)
+		else if(totMass>pResM+mProt)           // Can radiate a proton (priority 2)
 		{
           barPDG=90001000;
           resPDG=pResPDG;
           barM  =mProt;
           resM  =pResM;
+		}
+        else if(thePDG!=90004004&&totMass>GSMass)// If it's not Be8 decay in gamma
+		{
+          barPDG=22;
+          resPDG=thePDG;
+          barM  =0.;
+          resM  =pResM;
+		}
+        else if(thePDG!=90004004)
+		{
+          cerr<<"***G4Q::FillHadronVector:PDG="<<thePDG<<",M="<<totMass<<"< GSM="<<GSMass<<endl;
+          G4Exception("***G4Quasmon::FillHadronVector: Below GSM but can not decay in p or n");
 		}
         G4QHadron* HadrB = new G4QHadron(barPDG);
         G4QHadron* HadrR = new G4QHadron(resPDG);
@@ -2961,14 +2973,21 @@ G4ThreeVector G4Quasmon::RndmDir()
   return G4ThreeVector(x/r,y/r,z/r);
 }
 
-G4QHadronVector * 
-G4Quasmon::Fragment()
-{
+//The public Hadronisation routine with delete responsibility of User (!)
+G4QHadronVector* G4Quasmon::Fragment()
+{//              =====================
+#ifdef pdebug
+  cout<<"G4Quasmon::Fragment is called"<<endl;
+#endif
   HadronizeQuasmon();
-  G4QHadronVector * theResult = new G4QHadronVector;
-  for(G4int particle=0; particle<theQHadrons.entries(); particle++)
+#ifdef pdebug
+  cout<<"G4Quasmon::Fragment after HadronizeQuasmon is called"<<endl;
+#endif
+  G4QHadronVector* theFragments = new G4QHadronVector;
+  for (int hadron=0; hadron<theQHadrons.entries(); hadron++)
   {
-    theResult->insert(theQHadrons[particle]);
+    G4QHadron* curHadr = new G4QHadron(theQHadrons[hadron]);
+    theFragments->insert(curHadr);
   }
-  return theResult;
+  return theFragments;
 }
