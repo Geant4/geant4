@@ -61,6 +61,12 @@ echo "On this machine the G4LIB=\$G4LIB"
 fi
 
 #+
+if [ X$g4lib != X ] ; then 
+G4BIN="$g4lib/../bin"
+export G4BIN
+fi
+
+#+
 if [ X$g4levelgammadata != X ] ; then 
 G4LEVELGAMMADATA="$g4levelgammadata"
 export G4LEVELGAMMADATA
@@ -99,6 +105,12 @@ fi
 # g4clhep.U
 #
 if [ X$g4clhep_base_dir != X ] ; then 
+CLHEP_BASE_DIR="$g4clhep_base_dir"
+export CLHEP_BASE_DIR
+echo "On this machine the CLHEP_BASE_DIR=\$CLHEP_BASE_DIR"
+fi
+
+if [ X$g4clhep_base_dir != X/usr -o X$g4clhep_base_dir != X/usr/local ] ; then 
 CLHEP_BASE_DIR="$g4clhep_base_dir"
 export CLHEP_BASE_DIR
 echo "On this machine the CLHEP_BASE_DIR=\$CLHEP_BASE_DIR"
@@ -342,8 +354,6 @@ fi
 
 #####################################################################
 
-echo g4conf=$g4conf
-
 #####################################################################
 # Create GNUmakefile.db to keep ALL GNUmakefile DB :)
 
@@ -358,7 +368,7 @@ mkdir -p \$G4LIB/\$G4SYSTEM
 $g4make -n -p -f \$G4INSTALL/config/scripts/GNUmakefile > \$G4LIB/\$G4SYSTEM/GNUmakefile.db
 
 echo ""
-echo "Starting installation..."
+echo "Starting build..."
 echo ""
 cd $g4install/source
 #echo `pwd`
@@ -384,33 +394,52 @@ rm -rf $g4conf/g4make.log
 $g4make dll 2>&1 | tee $g4conf/g4make.log
 fi
 
-# Check for errors in log file
-export err=\$[ \`grep Error $g4conf/g4make.log | wc -w\` ]
-export int=\$[ \`grep Stop\. $g4conf/g4make.log | wc -w\` ]
-# echo err=\$err
+if [ X$g4lib_build_dyn = Xy ] ; then
+echo ""
+rm -rf $g4conf/g4make.log
+$g4make global G4LIB_BUILD_SHARED=1 2>&1 | tee $g4conf/g4make.log
+fi
 
-if [ X\$err = X0 -a X\$int = X0 ] ; then
+# Check for errors in log file
+if test -f \$g4conf/g4make.log ; then
+
+# There are two (at least) shells 'sh' and 'bash' with
+# different arithmetic expansion...So we are doing it by 'text'
+# in two steps...
+ 
+err=\`grep Error $g4conf/g4make.log | wc -w\` 
+int=\`grep Stop\. $g4conf/g4make.log | wc -w\` 
+
+err2=\`echo \$err\`
+int2=\`echo \$int\`
+
+if [ X\$err2 = X0 -a X\$int2 = X0 ] ; then
 echo ""
 echo "####################################################"
-echo "# Your Geant4 installation seems to be successful! #"
-echo "# To be sure please have a look into the log file: #"
-echo "# $g4conf/g4make.log				 #"
+echo "# Your Geant4 installation seems to be successful!  "
+echo "# To be sure please have a look into the log file:  "
+echo "# $g4conf/g4make.log				  "
 echo "####################################################"
 echo ""
 else
 echo ""
 echo "############################################################"
-echo "# It looks like you had errors during Geant4 installation  #"
-echo "# (or interrupted installation)!				 #"
-echo "# Please check log file:				      	 #"
-echo "# $g4conf/g4make.log					 #"
+echo "# It looks like you had errors during Geant4 installation   "
+echo "# (or interrupted installation)!				  "
+echo "# Please check log file:				      	  "
+echo "# $g4conf/g4make.log					  "
 echo "############################################################"
 echo ""
 fi 
-
-# There is no env!
-if [ X$g4includes_flag = Xy ] ; then
-$g4make includes
+else
+echo ""
+echo "############################################################"
+echo "# It looks like you had errors during Geant4 installation   "
+echo "# (or interrupted installation)!				  "
+echo "# You have no log file:				      	  "
+echo "# $g4conf/g4make.log					  "
+echo "############################################################"
+echo ""
 fi
 
 !GROK!THIS!
