@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.77 2002-03-25 18:52:29 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.78 2002-03-28 11:49:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -84,6 +84,7 @@
 // 28.10.01 V.Ivanchenko    update printout
 // 29.11.01 V.Ivanchenko    New parametrisation introduced
 // 25.03.02 V.Ivanchneko    Fix in fluorescence
+// 28.03.02 V.Ivanchenko    Add flag of fluorescence
 //
 // --------------------------------------------------------------
 
@@ -503,7 +504,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
  
   // Fluorescence data start from element 6
   
-  if (Z > 5 && (bindingEnergy >= cutForPhotons 
+  if (Fluorescence() && Z > 5 && (bindingEnergy >= cutForPhotons 
             ||  bindingEnergy >= cutForElectrons)) {
 
     secondaryVector = deexcitationManager.GenerateParticles(Z, shellId);
@@ -682,10 +683,12 @@ G4double G4LowEnergyIonisation::GetMeanFreePath(const G4Track& track,
 void G4LowEnergyIonisation::SetCutForLowEnSecPhotons(G4double cut)
 {
   cutForPhotons = cut;
+  ActivateFluorescence(true);
 }   
 
 void G4LowEnergyIonisation::SetCutForLowEnSecElectrons(G4double cut)
 {
   cutForElectrons = cut;
+  ActivateFluorescence(true);
 }
 

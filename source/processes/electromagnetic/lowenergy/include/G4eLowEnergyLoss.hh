@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.hh,v 1.7 2001-11-23 11:45:20 vnivanch Exp $
+// $Id: G4eLowEnergyLoss.hh,v 1.8 2002-03-28 11:48:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,7 @@
 //  10.02.00 modifications, new e.m. structure , L.Urban
 //  18.10.01 Revision to improve code quality and consistency with design
 //  23.11.01 V.Ivanchenko Move static member-functions from header to source
+//  28.03.02 V.Ivanchenko add fluorescence flag
 // ------------------------------------------------------------
  
 #ifndef G4eLowEnergyLoss_h
@@ -137,7 +138,12 @@ class G4eLowEnergyLoss : public G4VeLowEnergyLoss
     static G4double GetLowerBoundEloss(); 
     static G4double GetUpperBoundEloss(); 
     static G4int    GetNbinEloss(); 
- 
+
+    void ActivateFluorescence(G4bool val);
+    // Set fluorescence flag on/off
+
+    G4bool Fluorescence() const;
+    // Get flurescence flag 
                                             
   protected:
 
@@ -225,6 +231,8 @@ class G4eLowEnergyLoss : public G4VeLowEnergyLoss
     static G4PhysicsTable* thepRangeCoeffCTable;
     
     static G4EnergyLossMessenger* eLossMessenger;
+
+    G4bool theFluo;                     // Fluorescence flag 
          
 };
  
