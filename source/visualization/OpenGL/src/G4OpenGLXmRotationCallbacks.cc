@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.3 1999-01-11 00:47:50 allison Exp $
+// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.4 1999-02-07 17:09:35 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -216,10 +216,11 @@ void G4OpenGLXmViewer::wobble_callback (Widget w,
 		 NULL);
   
   pView->original_vp = pView->fVP.GetViewpointDirection();
-  pView->wobble_timer = XtAppAddTimeOut (pView->app,
-					 1000. * (1. / pView->wob_sens),
-					 G4OpenGLXmViewer::wobble_timer_callback,
-					 pView);
+  pView->wobble_timer = XtAppAddTimeOut
+    (pView->app,
+     (long unsigned int) (1000. * (1. / pView->wob_sens)),
+     G4OpenGLXmViewer::wobble_timer_callback,
+     pView);
 }  
 
 void G4OpenGLXmViewer::wobble_timer_callback (XtPointer clientData,
@@ -249,10 +250,11 @@ void G4OpenGLXmViewer::wobble_timer_callback (XtPointer clientData,
       pView->DrawView ();
    }
   } else {
-    pView->wobble_timer = XtAppAddTimeOut (pView->app,
-					   1000. * (1. / pView->wob_sens),
-					   G4OpenGLXmViewer::wobble_timer_callback,
-					   pView);
+    pView->wobble_timer = XtAppAddTimeOut
+      (pView->app,
+       (long unsigned int) (1000. * (1. / pView->wob_sens)),
+       G4OpenGLXmViewer::wobble_timer_callback,
+       pView);
   }
 }
 
