@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: XrayTelAnalysis.hh,v 1.5 2002-11-13 15:57:27 santin Exp $
+// $Id: XrayTelAnalysis.hh,v 1.6 2002-11-19 18:03:14 santin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
@@ -58,6 +58,7 @@
 #define G4PROCESSTESTANALYSIS_HH
 
 #include "globals.hh"
+#include "G4ios.hh"
 
 #ifdef G4ANALYSIS_USE
 #include "AIDA/IAnalysisFactory.h"
@@ -78,7 +79,6 @@
 #include "AIDA/ITuple.h"
 
 #include "AIDA/IManagedObject.h"
-#endif
 
 // Histogramming from AIDA 
 class IAnalysisFactory;
@@ -86,9 +86,9 @@ class ITree;
 class IHistogramFactory;
 class ITupleFactory;
 class ITuple;
+#endif
 
 class G4Track;
-class NTuple;
 
 class XrayTelAnalysis
 {
@@ -132,8 +132,11 @@ private:
   G4double dirY;
   G4double dirZ;
 
+  G4String asciiFileName;
   G4String histFileName;
   G4String histFileType;
+
+  //  G4std::ofstream asciiFile;
 
 };
 
