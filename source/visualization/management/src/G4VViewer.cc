@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.cc,v 1.15 2001-07-30 23:34:27 johna Exp $
+// $Id: G4VViewer.cc,v 1.16 2001-08-14 18:34:47 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,12 +84,26 @@ const G4VisAttributes* G4VViewer::GetApplicableVisAttributes
 }
 
 void G4VViewer::NeedKernelVisit () {
-  // Notify all views that a kernel visit is required.
+
+  fNeedKernelVisit = true;
+
+  // At one time I thought we'd better notify all viewers.  But I guess
+  // each viewer can take care of itself, so the following code is
+  // redundant (but keep it commented out for now).   (John Allison)
+  // Notify all viewers that a kernel visit is required.
+  // const G4ViewerList& viewerList = fSceneHandler.GetViewerList ();
+  // G4ViewerListConstIterator i;
+  // for (i = viewerList.begin(); i != viewerList.end(); i++) {
+  //   (*i) -> SetNeedKernelVisit ();
+  // }
+  // ??...but, there's a problem in OpenGL Stored which seems to
+  // require *all* viewers to revisit the kernel, so...
   const G4ViewerList& viewerList = fSceneHandler.GetViewerList ();
   G4ViewerListConstIterator i;
   for (i = viewerList.begin(); i != viewerList.end(); i++) {
     (*i) -> SetNeedKernelVisit ();
   }
+
 }
 
 void G4VViewer::FinishView () {}
@@ -98,16 +112,17 @@ void G4VViewer::ShowView () {}
 
 void G4VViewer::ProcessView () {
 
-  // If view parameters have been modified, SetView () works out consequences. 
+  // If view parameters have been modified, SetView works out consequences...
   if (fModified) {
     fModified = false;
     SetView ();
   }
 
-  // If the scene data has changed (fNeedVisit is set to true in
-  // G4VSceneHandler::SetSceneData), or if the concrete view has decided that it
-  // necessary to visit the kernel (this should be Done in the concrete
-  // object's DrawView ())...
+  // If ClearStore has been requested, e.g., if the scene has changed,
+  // of if the concrete viewer has decided that it necessary to visit
+  // the kernel, perhaps because the view parameters have changed
+  // drastically (this should be done in the concrete viewer's
+  // DrawView)...
   if (fNeedKernelVisit) {
     fSceneHandler.ProcessScene (*this);
     fNeedKernelVisit = false;
