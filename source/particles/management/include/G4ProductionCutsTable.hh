@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.hh,v 1.2 2002-12-16 11:15:43 gcosmo Exp $
+// $Id: G4ProductionCutsTable.hh,v 1.3 2002-12-16 14:20:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,7 +89,7 @@ class G4ProductionCutsTable
    static G4ProductionCutsTable* fG4ProductionCutsTable;
 
    typedef G4std::vector<G4MaterialCutsCouple*> G4CoupleTable;
-   typedef G4std::vector<G4MaterialCutsCouple*>::iterator CoupleTableIterator;
+   typedef G4std::vector<G4MaterialCutsCouple*>::const_iterator CoupleTableIterator;
    typedef G4std::vector<G4double> G4CutVectorForAParticle;
    typedef G4std::vector<G4CutVectorForAParticle*> G4CutTable;
    G4CoupleTable coupleTable;
