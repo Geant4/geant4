@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.8 2003-01-16 14:11:50 guatelli Exp $
+// $Id: test50.cc,v 1.9 2003-01-16 16:31:15 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,6 +61,7 @@ HepRandom::setTheEngine(new RanecuEngine);
  G4bool RangeOn=false;
  G4bool MaxStep=false;
  G4bool end=true;
+ G4bool SP=false;
  G4String filename="test50.out";
 
  G4cout.setf(ios::scientific, ios::floatfield);
@@ -76,7 +77,8 @@ HepRandom::setTheEngine(new RanecuEngine);
  G4cout<<"Available commands are: "<<G4endl;
  G4cout<<"#processes (LowE/Standard)"<<G4endl; 
   G4cout<<"#range (on/off)"<<G4endl;  
- G4cout<<"#setMaxStep (on/off)"<<G4endl;  
+ G4cout<<"#setMaxStep (on/off)"<<G4endl;
+ G4cout<<"#StoppingPower(on/off)"<<G4endl; 
 
  G4String line, line1, line2;
  
@@ -99,6 +101,9 @@ HepRandom::setTheEngine(new RanecuEngine);
  if (line=="#setMaxStep"){line1="";(*fin)>>line1;
 
        if(line1=="on"){MaxStep=true; G4cout<<MaxStep<<"maxStep"<<G4endl;}}       
+ if (line=="#StoppingPower"){line1="";(*fin)>>line1;
+
+       if(line1=="on"){SP=true; G4cout<<SP<<"StoppingPower"<<G4endl;}}       
 
    if (line=="end"){end=false;}
 
@@ -107,7 +112,7 @@ HepRandom::setTheEngine(new RanecuEngine);
      }while(end);           
      
    if (RangeOn==true) filename="Range.out";
-  
+   if (SP==true) filename="StoppingPower.out";   
  G4int seed=time(NULL);
    HepRandom ::setTheSeed(seed);
   //my Verbose output class
@@ -120,7 +125,7 @@ HepRandom::setTheEngine(new RanecuEngine);
   Tst50DetectorConstruction* Tst50detector = new Tst50DetectorConstruction( MaxStep);
   runManager->SetUserInitialization(Tst50detector);
 
-  Tst50PhysicsList* fisica = new Tst50PhysicsList(lowE,RangeOn);
+  Tst50PhysicsList* fisica = new Tst50PhysicsList(lowE,RangeOn,SP);
   runManager->SetUserInitialization(fisica);
   
 #ifdef G4VIS_USE
@@ -139,7 +144,7 @@ HepRandom::setTheEngine(new RanecuEngine);
  
    runManager->SetUserAction(pEventAction );
      
- Tst50SteppingAction* steppingaction =new Tst50SteppingAction(pEventAction,p_Primary,p_run, Tst50detector, filename);
+ Tst50SteppingAction* steppingaction =new Tst50SteppingAction(pEventAction,p_Primary,p_run, Tst50detector, filename,SP,RangeOn);
  runManager->SetUserAction(steppingaction);
 
   //Initialize G4 kernel
@@ -152,12 +157,24 @@ G4std::ofstream ofs;
 	ofs.open(filename);
 		{
 
-		  ofs<<"e-  energy (MeV)"<<'\t'<<"range(g/cm2)"<<'\t'<<G4endl;}
+		  ofs<<"range(g/cm2)"<<'\t'<<"e- energy (MeV)"<<'\t'<<G4endl;}
 	       
        ofs.close();                     
 		
     }
-  
+  if(SP)
+    {
+G4std::ofstream ofs;
+
+	ofs.open(filename);
+		{
+
+		  ofs<<"StoppingPower(MeV*cm2/g)"<<'\t'<<"e- energy (MeV)"<<'\t'<<G4endl;}
+	       
+       ofs.close();                     
+		
+    }
+   
   //get the pointer to the User Interface manager 
   G4UImanager * UI = G4UImanager::GetUIpointer();  
  UI->ApplyCommand("/run/verbose 0");

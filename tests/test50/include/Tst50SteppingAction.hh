@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.hh,v 1.7 2003-01-16 14:11:50 guatelli Exp $
+// $Id: Tst50SteppingAction.hh,v 1.8 2003-01-16 16:31:15 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +46,7 @@ class Tst50DetectorConstruction;
 class Tst50SteppingAction : public G4UserSteppingAction
 {
   public:
-    Tst50SteppingAction(Tst50EventAction*,Tst50PrimaryGeneratorAction*,Tst50RunAction*, Tst50DetectorConstruction*,G4String);
+    Tst50SteppingAction(Tst50EventAction*,Tst50PrimaryGeneratorAction*,Tst50RunAction*, Tst50DetectorConstruction*,G4String,G4bool,G4bool);
    ~Tst50SteppingAction();
 
     void UserSteppingAction(const G4Step* Step);
@@ -62,6 +62,8 @@ private:
   G4double range;
   G4double  KinE_stepBeginning;
   G4String filename;
+  G4bool StoppingPower;
+  G4bool Range;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

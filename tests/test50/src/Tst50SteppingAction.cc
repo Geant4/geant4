@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.10 2003-01-16 14:58:02 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.11 2003-01-16 16:31:15 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,8 +47,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst50SteppingAction::Tst50SteppingAction(Tst50EventAction* EA, Tst50PrimaryGeneratorAction* PG, Tst50RunAction* RA, Tst50DetectorConstruction* DET,G4String file ):
-  IDold(-1),eventaction (EA), p_Primary(PG), runaction(RA), detector(DET), filename(file) 
+Tst50SteppingAction::Tst50SteppingAction(Tst50EventAction* EA, Tst50PrimaryGeneratorAction* PG, Tst50RunAction* RA, 
+ Tst50DetectorConstruction* DET,G4String file,G4bool SP,G4bool range ):
+  IDold(-1),eventaction (EA), p_Primary(PG), runaction(RA), detector(DET), filename(file), StoppingPower(SP),Range(range) 
 { 
 
   
@@ -219,8 +220,11 @@ if (process=="LowEnConversion"||process=="conv")
 
 
  runaction->Trans_number();
-	}}}}}}
- else {
+ }}}}}}*/
+ 
+    if(StoppingPower)
+      {
+G4std::ofstream pmtfile(filename, G4std::ios::app);
 if(particle_name=="e-"){
 
     //new particle    
@@ -243,15 +247,22 @@ if(0 ==Step->GetTrack()->GetParentID() )
       G4double energyLost=abs(Step->GetDeltaEnergy());
       G4double stepLength= Step->GetTrack()-> GetStepLength();
   
-      G4cout<<"lunghezza dello step in cm:"<<stepLength/cm<<G4endl;
+     
    
 if(stepLength!=0) 
 {
 G4double TotalStoppingPower=(energyLost/stepLength);
- G4cout<<"TotalStoppingPower in MeV/cm:"<<TotalStoppingPower/(MeV/cm)<<G4endl;}}
-}}
-*/
 
+if(pmtfile.is_open()){
+  pmtfile<<'\t'<<(TotalStoppingPower/(detector->GetDensity()))/(MeV* (cm2)/g)<<'\t'<<initial_energy/MeV<<G4endl;
+ 
+
+}
+}}
+}}}
+}
+if(Range)
+{
 G4std::ofstream pmtfile(filename, G4std::ios::app);
 
 range=0.;
@@ -278,12 +289,12 @@ if(0 ==Step->GetTrack()->GetParentID() )
  initial_energy<<" initialenergy"<<G4endl;
  
 		      if(pmtfile.is_open()){
-			G4cout<<"arrivo qui dentro"<<G4endl; 
-          pmtfile<<'\t'<<initial_energy/MeV<<'\t'<<range2/(g/cm2)<<'\t'<<G4endl;}
+			
+       pmtfile<<'\t'<<range2/(g/cm2)<<'\t'<<initial_energy/MeV<<'\t'<<G4endl;}
 	       
 
 		   }
-}
+}}
  /*
  //Radiation yield
  G4String process=Step->GetPostStepPoint()->GetProcessDefinedStep()

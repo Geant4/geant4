@@ -10,8 +10,7 @@
 /target/setTargetThick 1500. cm
 /target/setTargetX 1500. cm
 /target/setTargetY 1500. cm
-/target/setMaxStep 0.000001 cm
-#/le/range_processes off
+/target/setMaxStep 0.00001 cm
 #cut alto sempre per il test in range
 /le/cutE 1. m
 /target/update
