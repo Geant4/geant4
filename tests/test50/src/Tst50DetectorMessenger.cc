@@ -1,4 +1,3 @@
-
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -22,9 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorMessenger.cc,v 1.2 2002-12-16 13:50:08 guatelli Exp $
+// $Id: Tst50DetectorMessenger.cc,v 1.3 2003-01-07 15:29:39 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
 // 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -33,79 +34,90 @@
 #include "Tst50DetectorConstruction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
-#include "globals.hh"
+#include "G4UIcmdWithoutParameter.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst50DetectorMessenger::Tst50DetectorMessenger(Tst50DetectorConstruction* myDet)
-:myDetector(myDet)
+Tst50DetectorMessenger::Tst50DetectorMessenger(
+                                           Tst50DetectorConstruction* Tst50Det)
+:Tst50Detector(Tst50Det)
 { 
+  Tst50detDir = new G4UIdirectory("/target/");
+  Tst50detDir->SetGuidance("Tst50 target control.");
+      
+  AbsMaterCmd = new G4UIcmdWithAString("/target/setTargetMat",this);
+  AbsMaterCmd->SetGuidance("Select Material of the Target.");
+  AbsMaterCmd->SetParameterName("choice",false);
+  AbsMaterCmd->AvailableForStates(Idle);
+  
+     
+  AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/target/setTargetThick",this);
+  AbsThickCmd->SetGuidance("Set Thickness of the target");
+  AbsThickCmd->SetParameterName("Size",false);
+  AbsThickCmd->SetRange("Size>=0.");
+  AbsThickCmd->SetUnitCategory("Length");
+  AbsThickCmd->AvailableForStates(Idle);
+  
+  XThickCmd = new G4UIcmdWithADoubleAndUnit("/target/setTargetX",this);
+  XThickCmd->SetGuidance("Set X dimension of the target");
+  XThickCmd->SetParameterName("Size",false);
+  XThickCmd->SetRange("Size>=0.");
+  XThickCmd->SetUnitCategory("Length");
+  XThickCmd->AvailableForStates(Idle);
+  
+  YThickCmd = new G4UIcmdWithADoubleAndUnit("/target/setTargetY",this);
+  YThickCmd->SetGuidance("Set Y dimension of the target");
+  YThickCmd->SetParameterName("Size",false);
+  YThickCmd->SetRange("Size>=0.");
+  YThickCmd->SetUnitCategory("Length");
+  YThickCmd->AvailableForStates(Idle);
 
-  mydetDir = new G4UIdirectory("/mydet/");
-  mydetDir->SetGuidance("Tst50 detector control.");
-  
-  TargMatCmd = new G4UIcmdWithAString("/mydet/setTargetMate",this);
-  TargMatCmd->SetGuidance("Select Material of the Target.");
-  TargMatCmd->SetParameterName("choice",false);
-  TargMatCmd->AvailableForStates(PreInit,Idle);
-  
-  ChamMatCmd = new G4UIcmdWithAString("/mydet/setChamberMate",this);
-  ChamMatCmd->SetGuidance("Select Material of the Target.");
-  ChamMatCmd->SetParameterName("choice",false);
-  ChamMatCmd->AvailableForStates(PreInit,Idle);  
-  
- 
-}
+  UpdateCmd = new G4UIcmdWithoutParameter("/target/update",this);
+  UpdateCmd->SetGuidance("Update calorimeter geometry.");
+  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
+  UpdateCmd->AvailableForStates(Idle);
+      
+ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Tst50DetectorMessenger::~Tst50DetectorMessenger()
 {
-  delete TargMatCmd;
-  delete ChamMatCmd;
  
-  delete mydetDir;
+  delete AbsMaterCmd; 
+  delete AbsThickCmd; 
+ delete YThickCmd; 
+ delete XThickCmd; 
+  delete UpdateCmd;
+
+    delete Tst50detDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Tst50DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == TargMatCmd )
-   { myDetector->setTargetMaterial(newValue);}
+  if( command == AbsMaterCmd )
+   { Tst50Detector->SetTargetMaterial(newValue);}
    
+ 
   
+  if( command == AbsThickCmd )
+   { Tst50Detector->SetTargetThickness(AbsThickCmd
+                                               ->GetNewDoubleValue(newValue));}
+  
+ if( command == XThickCmd )
+   { Tst50Detector->SetTargetX(XThickCmd->GetNewDoubleValue(newValue));}
+  
+ if( command == YThickCmd )
+   { Tst50Detector->SetTargetY(YThickCmd->GetNewDoubleValue(newValue));}
+  
+ if( command == UpdateCmd )
+   { Tst50Detector->UpdateGeometry(); }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PrimaryGeneratorAction.hh,v 1.3 2002-12-18 17:04:42 guatelli Exp $
+// $Id: Tst50PrimaryGeneratorAction.hh,v 1.4 2003-01-07 15:29:39 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,24 +45,22 @@ class Tst50PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   public:
     Tst50PrimaryGeneratorAction();    
    ~Tst50PrimaryGeneratorAction();
-    
-  G4double GetInitialEnergy();
 
-  public:
+ public:
+  G4double GetInitialEnergy();
+  G4String GetParticle();
+  
+ public:
     void GeneratePrimaries(G4Event*);
-    
+    void SetRndmDirection (G4String val) {rndmDirection = val;}
   private:
     G4ParticleGun* particleGun;
     Tst50PrimaryGeneratorMessenger* gunMessenger; 
-    G4double energy;
+    G4String rndmDirection;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-inline G4double Tst50PrimaryGeneratorAction::GetInitialEnergy()
-{
-  return energy;
 
-}
 #endif
 
 

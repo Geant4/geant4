@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PhysicsList.hh,v 1.1 2002-11-26 17:57:48 guatelli Exp $
+// $Id: Tst50PhysicsList.hh,v 1.2 2003-01-07 15:29:39 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +38,7 @@
 class G4LowEnergyIonisation;
 class G4LowEnergyPhotoElectric;
 class G4LowEnergyBremsstrahlung;
+class Tst50PhysicsListMessenger;
 
 
 class Tst50PhysicsList: public G4VUserPhysicsList
@@ -45,8 +46,11 @@ class Tst50PhysicsList: public G4VUserPhysicsList
   public:
     Tst50PhysicsList();
    ~Tst50PhysicsList();
+public:
+  void SetRangeConditions(G4String );
+  void SetElectronCut(G4double);
 
-  protected:
+ protected:
     // Construct particle and physics
     void ConstructParticle();
     void ConstructProcess();
@@ -70,7 +74,9 @@ private:
   G4LowEnergyIonisation*  loweIon;
   G4LowEnergyPhotoElectric* lowePhot;
   G4LowEnergyBremsstrahlung* loweBrem;
-  
+  Tst50PhysicsListMessenger* physicsListMessenger;
+  G4String rangeOn; 
+   G4double cutForElectron;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,4 +84,8 @@ private:
 #endif
 
  
+
+
+
+
 

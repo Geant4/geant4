@@ -1,11 +1,13 @@
 #cosi' e' possibile mettere la configurazione per il calcolo del CSDA range e de gli Stopping Power degli elettroni.
 
 /gun/particle e-
-/gun/energy 10. MeV 
+/gun/energy 0.1  MeV 
 #esempio di energia
 /gun/position 0. 0. 0.
 /gun/randomDirection on 
-/target/setTargetThick 20. cm
-/target/setTargetX 20. cm
-/target/setTargetY 20. cm
+/target/setTargetThick 300. cm
+/target/setTargetX 300. cm
+/target/setTargetY 300. cm
+#/le/range_processes off
+/le/cutE 1. m
 /target/update

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PhysicsList.cc,v 1.2 2002-12-16 13:50:08 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.3 2003-01-07 15:29:39 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,13 +29,14 @@
 
 #include "globals.hh"
 #include "Tst50PhysicsList.hh"
-
+#include "Tst50PhysicsListMessenger.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
+#include"G4VeLowEnergyLoss.hh"
 #include "G4Material.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"                
@@ -44,14 +45,19 @@
 
 Tst50PhysicsList::Tst50PhysicsList():  G4VUserPhysicsList()
 {
-  defaultCutValue = 0.1*mm;
+  rangeOn = "off";
+  defaultCutValue = 1.*mm;
    SetVerboseLevel(1);
+ physicsListMessenger = new Tst50PhysicsListMessenger(this);
+ // cutForElectron = defaultCutValue ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Tst50PhysicsList::~Tst50PhysicsList()
-{}
+{
+  delete  physicsListMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -213,15 +219,24 @@ void Tst50PhysicsList::ConstructEM()
       //pmanager->SetProcessOrdering(theeminusMultipleScattering, idxPostStep,1);
       // pmanager->SetProcessOrdering(theeminusIonisation,         idxPostStep,2);
       //pmanager->SetProcessOrdering(theeminusBremsstrahlung,     idxPostStep,3);
+
      loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
      loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
-    
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+   
+ if (rangeOn=="on")
+ 
+   {  G4VProcess*  multipleScattering= new G4MultipleScattering();
+						
+       pmanager->AddProcess(multipleScattering, -1, 1,1);
+   }  
       pmanager->AddProcess(loweIon,     -1, 2,2);
       pmanager->AddProcess(loweBrem,    -1,-1,3);      
 
 
+if (rangeOn=="off"){ G4VeLowEnergyLoss::SetEnlossFluc(false); 
+      G4cout<<"no energy loss fluct"<<G4endl;}
 
+     
     } else if (particleName == "e+") {
     //positron
       G4VProcess* theeplusMultipleScattering = new G4MultipleScattering();
@@ -304,6 +319,8 @@ else if( particleName == "mu+" ||
 
     */ 
   }
+
+  G4cout<< rangeOn<<"-----------------------------"<<G4endl;
 }
     
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -329,14 +346,54 @@ void Tst50PhysicsList::ConstructGeneral()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Tst50PhysicsList::SetCuts()
-{
-  //G4VUserPhysicsList::SetCutsWithDefault method sets 
-  //the default cut value for all particle types 
-  //
-  SetCutsWithDefault();
-     
+{ 
+if (verboseLevel >0)
+  {
+    G4cout << "Tst50PhysicsList::SetCuts:";
+    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
+  } 
+ G4VUserPhysicsList::SetCutsWithDefault();
+// method sets 
+   //  the default cut value for all particle types 
+  
+ /*
+ G4VUserPhysicsList::SetCutValue(cutForElectron,"e-");
+  G4cout<<"arrivo dopo gli e-"<<G4endl;
+
+   G4VUserPhysicsList:: SetCutValueForOthers(defaultCutValue);
+   G4cout<<"arrivo dopo tutte"<<G4endl;
+ */
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void  Tst50PhysicsList::SetRangeConditions(G4String val)
+{ 
+ rangeOn = val;
+ ConstructEM();
+ /*
+if (rangeOn=="off")
+      { G4VeLowEnergyLoss::SetEnlossFluc(false); 
+      G4cout<<"no energy loss fluct"<<G4endl;}
+
+if (rangeOn=="on")
+      { G4VeLowEnergyLoss::SetEnlossFluc(true); 
+      G4cout<<"energy loss fluct on"<<G4endl;}
+ */
+}
+
+void Tst50PhysicsList::SetElectronCut(G4double val)
+{
+  ResetCuts();
+ defaultCutValue = val;
+
+}
+
+
+
+
+
+
+
+
 

@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.4 2002-12-18 17:04:41 guatelli Exp $
+// $Id: test50.cc,v 1.5 2003-01-07 15:29:38 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,7 +60,7 @@ HepRandom::setTheEngine(new RanecuEngine);
   G4RunManager * runManager = new G4RunManager;
 
   // UserInitialization classes (mandatory)
-  Tst50DetectorConstruction* Tst50detector = new Tst50DetectorConstruction;
+  Tst50DetectorConstruction* Tst50detector = new Tst50DetectorConstruction();
   runManager->SetUserInitialization(Tst50detector);
   runManager->SetUserInitialization(new Tst50PhysicsList);
   
@@ -80,7 +80,7 @@ HepRandom::setTheEngine(new RanecuEngine);
  
    runManager->SetUserAction(pEventAction );
      
- Tst50SteppingAction* steppingaction =new Tst50SteppingAction(pEventAction,p_Primary,p_run);
+ Tst50SteppingAction* steppingaction =new Tst50SteppingAction(pEventAction,p_Primary,p_run, Tst50detector);
  runManager->SetUserAction(steppingaction);
 
   //Initialize G4 kernel

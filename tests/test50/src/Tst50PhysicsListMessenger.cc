@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PrimarygeneratorMessenger.cc
+// $Id: XrayFluoPhysicsListMessenger.cc
 // GEANT4 tag $Name: xray_fluo-V04-01-03
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
@@ -32,60 +32,77 @@
 //
 // -------------------------------------------------------------------
 
-#include "Tst50PrimaryGeneratorMessenger.hh"
-#include "Tst50PrimaryGeneratorAction.hh"
+#include "Tst50PhysicsListMessenger.hh"
+#include "Tst50PhysicsList.hh"
+
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Tst50PrimaryGeneratorMessenger::Tst50PrimaryGeneratorMessenger(Tst50PrimaryGeneratorAction* Tst50Gun)
-:Tst50Action(Tst50Gun)
-{ 
-  
-  RndmDir = new G4UIcmdWithAString("/gun/randomDirection",this);
-  RndmDir->SetGuidance("Shoot  incident particle with random direction.");
-  RndmDir->SetGuidance("  Choice : on, off (default)");
-  RndmDir->SetParameterName("choice",true);
-  RndmDir->SetDefaultValue("off");
-  RndmDir->SetCandidates("on off");
-  RndmDir->AvailableForStates(PreInit,Idle);
-
-  spectrum = new G4UIcmdWithAString("/gun/spectrum",this);
-  spectrum->SetGuidance("Shoot the incident particle with a certain energy spectrum.");
-  spectrum->SetGuidance("  Choice : on(default), off");
-  spectrum->SetParameterName("choice",true);
-  spectrum->SetDefaultValue("on");
-  spectrum->SetCandidates("on off");
-  spectrum->AvailableForStates(PreInit,Idle);
-
-  isoDir = new G4UIcmdWithAString("/gun/isoDir",this);
-  isoDir->SetGuidance("Shoot the incident particle from an isotrofic direction.");
-  isoDir->SetGuidance("  Choice : on(default), off");
-  isoDir->SetParameterName("choice",true);
-  isoDir->SetDefaultValue("on");
-  isoDir->SetCandidates("on off");
-  isoDir->AvailableForStates(PreInit,Idle);
-
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-Tst50PrimaryGeneratorMessenger::~Tst50PrimaryGeneratorMessenger()
+Tst50PhysicsListMessenger::Tst50PhysicsListMessenger(Tst50PhysicsList * List)
+:Tst50List(List)
 {
+
+  lowEnDir = new G4UIdirectory("/le/");
+  lowEnDir->SetGuidance("LowEnergy commands");
+ 
   
-  delete  RndmDir;
-  delete spectrum;
-  delete isoDir;
+  RangeDir = new G4UIcmdWithAString("/le/range_processes",this);
+  RangeDir->SetGuidance("Multiple scattering and energy loss fluctuations switched.");
+  RangeDir->SetGuidance("  Choice : on (default), off");
+  RangeDir->SetParameterName("choice",true);
+  RangeDir->SetDefaultValue("on");
+  RangeDir->SetCandidates("on off");
+  RangeDir->AvailableForStates(PreInit,Idle); 
+
+ cutECmd = new G4UIcmdWithADoubleAndUnit("/le/cutE",this);
+  cutECmd->SetGuidance("Set cut values by RANGE for e- e+.");
+  cutECmd->SetParameterName("range",true);
+  cutECmd->SetDefaultValue(1.);
+  cutECmd->SetDefaultUnit("mm");
+  cutECmd->AvailableForStates(Idle);
+
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Tst50PrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
-{ 
-  if( command == RndmDir )
-   { Tst50Action->SetRndmDirection(newValue);} 
+Tst50PhysicsListMessenger::~Tst50PhysicsListMessenger()
+{
+
+  
+
+  delete  cutECmd;
+  delete RangeDir;
+  delete lowEnDir;
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+void Tst50PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+{
+  /*
+  if(command == cutELowLimCmd)
+    { Tst50List->SetElectronLowLimit(cutELowLimCmd->GetNewDoubleValue(newValue));}
+  */
+ if( command == RangeDir )
+   { Tst50List->SetRangeConditions(newValue);
+   G4cout<<"arrivo al PhysicsMessenger"<<G4endl;} 
+
+if( command == cutECmd  )
+ { Tst50List->SetElectronCut(cutECmd->GetNewDoubleValue(newValue));}
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+
+
+
 

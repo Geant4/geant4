@@ -56,17 +56,17 @@ private:
 
   Tst50PrimaryGeneratorAction* Tst50Action; 
 
-  //command to set a random impact point
-  G4UIcmdWithAString*          RndmCmd;
+ 
+ 
 
  //command to choose a plane circular source
-  G4UIcmdWithAString*          RndmVert;
+  G4UIcmdWithAString*          RndmDir;
  
   //command to shot particles according to certain spectra
   G4UIcmdWithAString*        spectrum;
 
  //command to shot particles from an isotropic source
-  G4UIcmdWithAString*        isoVert;
+  G4UIcmdWithAString*        isoDir;
 };
 
 #endif

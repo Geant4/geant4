@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.5 2002-12-16 17:36:39 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.6 2003-01-07 15:29:40 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Tst50SteppingAction.hh"
+#include "Tst50DetectorConstruction.hh"
 #include "G4SteppingManager.hh"
 #include "G4Step.hh"
 #include "G4Track.hh"
@@ -42,13 +43,18 @@
 #include "Tst50RunAction.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst50SteppingAction::Tst50SteppingAction(Tst50EventAction* EA, Tst50PrimaryGeneratorAction* PG, Tst50RunAction* RA ):
-  IDold(-1),eventaction (EA), p_Primary(PG), runaction(RA) 
+Tst50SteppingAction::Tst50SteppingAction(Tst50EventAction* EA, Tst50PrimaryGeneratorAction* PG, Tst50RunAction* RA, Tst50DetectorConstruction* DET ):
+  IDold(-1),eventaction (EA), p_Primary(PG), runaction(RA), detector(DET) 
 { 
-  initial_energy= p_Primary->GetInitialEnergy();
+
+  //initial_energy= p_Primary->GetInitialEnergy();
+  //G4cout<<initial_energy<<"form stepping"<<G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+Tst50SteppingAction::~Tst50SteppingAction()
+
+{;}
 
 void Tst50SteppingAction::UserSteppingAction(const G4Step* Step)
 { 
@@ -56,11 +62,16 @@ void Tst50SteppingAction::UserSteppingAction(const G4Step* Step)
 Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
 #endif
 G4int evno = eventaction->GetEventno() ;//mi dice a che evento siamo 
+
+//prendo l'energia iniziale delle particelle primarie
+  initial_energy= p_Primary->GetInitialEnergy();
  
   //IDnow identifica univocamente la particella//
 IDnow = evno+10000*(Step->GetTrack()->GetTrackID())+
           100000000*(Step->GetTrack()->GetParentID()); 
-  //G4String CurV;
+ 
+
+ //G4String CurV;
   //G4String NexV;
 
     G4String PTyp;
@@ -87,7 +98,8 @@ IDnow = evno+10000*(Step->GetTrack()->GetTrackID())+
     //NexV = Step->GetTrack()->GetNextVolume()->GetName();
 
     PTyp = Step->GetTrack()->GetDefinition()->GetParticleType();    
-   	
+  
+    //prendo l'energia cinetica della particella  	
     KinE = Step->GetTrack()->GetKineticEnergy();
 
 //    EDep = Step->GetTrack()->GetTotalEnergyDeposit();
@@ -115,8 +127,13 @@ IDnow = evno+10000*(Step->GetTrack()->GetTrackID())+
     }
   
     //susanna, istogrammo i processi delle particelle primarie// 
- 
-        
+
+   G4String particle_name= p_Primary->GetParticle(); 
+   
+   
+
+if(particle_name=="gamma")
+     {    
       if(0 == Step->GetTrack()->GetParentID() ) //primary particle 
 	{ 
          G4String process=Step->GetPostStepPoint()->GetProcessDefinedStep()
@@ -152,7 +169,7 @@ if (process=="LowEnConversion")
 	   }
 
 
-	}
+	
       //per il coeff di attenuazione// 
       // G4cout<<Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()<<G4endl; 
  if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
@@ -167,9 +184,41 @@ if (process=="LowEnConversion")
 
 
  runaction->Trans_number();
-}}}}
-}
+	}}}}}}
+ else {if(particle_name=="e-"){
   
+   //new particle    
+if(IDnow != IDold){ 
+
+   //range
+range=0.;
+IDold=IDnow ;  
+if(0 ==Step->GetTrack()->GetParentID() ) 
+  {
+  
+ 
+ if(0.0 == KinE) 
+                   {  
+		   
+                     G4double  xend= Step->GetTrack()->GetPosition().x()/mm ;
+                     G4double yend= Step->GetTrack()->GetPosition().y()/mm ;
+                     G4double  zend= Step->GetTrack()->GetPosition().z()/mm ;
+       
+		      range=(sqrt(xend*xend+yend*yend+zend*zend)); 
+		    
+		      G4cout<<"range di e- in cm: "<<range/cm<<G4endl;
+		     
+ 
+ 
+		  
+		   }
+
+  }
+}
+ }
+ }
+}
+       
     /*
     G4cout << "UserSteppingAction:"
 //	   << " CurV " << CurV
