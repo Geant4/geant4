@@ -5,8 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: testG4Trap.cc,v 1.6 2000-01-19 19:46:00 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+
 // testG4Trap
 //             Ensure asserts are compiled in
 
