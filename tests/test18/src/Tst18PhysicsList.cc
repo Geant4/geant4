@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst18PhysicsList.cc,v 1.6 2000-06-27 16:14:07 flei Exp $
+// $Id: Tst18PhysicsList.cc,v 1.7 2000-08-18 10:35:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,7 +93,6 @@ void Tst18PhysicsList::ConstructProcess()
 #include "G4MuPairProduction.hh"
 
 #include "G4hIonisation.hh"
-#include "G4ionIonisation.hh"
 
 void Tst18PhysicsList::ConstructEM()
 {
@@ -174,7 +173,7 @@ void Tst18PhysicsList::ConstructEM()
      pmanager->SetProcessOrdering(aPairProduction, idxPostStep, 4);
      
      /*    } else if( particleName == "GenericIon" ) {
-     G4VProcess* aionIonization = new G4ionIonisation;
+     G4VProcess* aionIonization = new G4hIonisation;
      G4VProcess* aMultipleScattering = new G4MultipleScattering();
      pmanager->AddProcess(aionIonization);
      pmanager->AddProcess(aMultipleScattering);
