@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReferenceCountedHandle.hh,v 1.3 2001-03-26 15:49:02 radoone Exp $
+// $Id: G4ReferenceCountedHandle.hh,v 1.1 2001-03-26 15:52:27 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
