@@ -1,4 +1,4 @@
-// $Id: A01Trajectory.cc,v 1.1 2002-11-13 07:24:12 duns Exp $
+// $Id: A01Trajectory.cc,v 1.2 2002-11-14 05:19:52 duns Exp $
 // --------------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
@@ -53,7 +53,7 @@ A01Trajectory::A01Trajectory(A01Trajectory & right)
   fTrackID = right.fTrackID;
   fParentID = right.fParentID;
   positionRecord = new A01TrajectoryPointContainer();
-  for(int i=0;i<right.positionRecord->size();i++)
+  for(int i=0;i<(int)right.positionRecord->size();i++)
   {
     G4TrajectoryPoint* rightPoint = (G4TrajectoryPoint*)((*(right.positionRecord))[i]);
     positionRecord->push_back(new G4TrajectoryPoint(*rightPoint));
@@ -94,7 +94,7 @@ void A01Trajectory::DrawTrajectory(G4int i_mode) const
    G4ThreeVector pos;
 
    G4Polyline pPolyline;
-   for (int i = 0; i < positionRecord->size() ; i++) {
+   for (int i = 0; i < (int)positionRecord->size() ; i++) {
      G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[i]);
      pos = aTrajectoryPoint->GetPosition();
      pPolyline.push_back( pos );

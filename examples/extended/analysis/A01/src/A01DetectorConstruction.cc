@@ -1,4 +1,4 @@
-// $Id: A01DetectorConstruction.cc,v 1.1 2002-11-13 07:22:50 duns Exp $
+// $Id: A01DetectorConstruction.cc,v 1.2 2002-11-14 05:19:48 duns Exp $
 // --------------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
@@ -46,13 +46,13 @@
 #include "A01HadCalorimeter.hh"
 
 A01DetectorConstruction::A01DetectorConstruction()
- : armAngle(30.*deg), secondArmPhys(0),
-   air(0), argonGas(0), scintillator(0), CsI(0), lead(0),
+ : air(0), argonGas(0), scintillator(0), CsI(0), lead(0),
    hodoscope1(0), hodoscope2(0), chamber1(0), chamber2(0),
    EMcalorimeter(0), HadCalorimeter(0), worldVisAtt(0), magneticVisAtt(0),
    armVisAtt(0), hodoscopeVisAtt(0), chamberVisAtt(0),
    wirePlaneVisAtt(0), EMcalorimeterVisAtt(0), cellVisAtt(0),
-   HadCalorimeterVisAtt(0), HadCalorimeterCellVisAtt(0)
+   HadCalorimeterVisAtt(0), HadCalorimeterCellVisAtt(0),
+   armAngle(30.*deg), secondArmPhys(0)
 
 {
   messenger = new A01DetectorConstMessenger(this);
