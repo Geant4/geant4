@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyDetectorConstruction.cc,v 1.6 2000-01-11 15:50:21 johna Exp $
+// $Id: MyDetectorConstruction.cc,v 1.7 2000-01-17 10:30:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,6 +27,7 @@
 #include "G4Tubs.hh"
 #include "G4Sphere.hh"
 #include "G4UnionSolid.hh"
+#include "G4DisplacedSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
@@ -137,6 +138,19 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
     = new G4LogicalVolume(tracker_tube,Ar,"tracker_L",0,0,0);
   new G4PVPlacement(0,G4ThreeVector(0.*cm,trackerPos,0.*cm),
                     "tracker_phys",tracker_log,experimentalHall_phys,
+                    false,0);
+
+  //------------------------------ displaced box
+  G4Box * undisplaced_box = new G4Box("undisplaced_box",30.*cm,50.*cm,70.*cm);
+  G4DisplacedSolid* displaced_box = new G4DisplacedSolid
+    ("displaced_box",undisplaced_box,
+     G4Transform3D(G4RotationMatrix().rotateZ(20.*deg),
+		   G4ThreeVector(200.*cm,0.,0.)));
+  G4LogicalVolume * displaced_box_log
+    = new G4LogicalVolume(displaced_box,Ar,"displaced_box_L",0,0,0);
+  new G4PVPlacement(0,G4ThreeVector(0.*cm,-200.*cm,0.*cm),
+                    "displaced_box_phys",displaced_box_log,
+		    experimentalHall_phys,
                     false,0);
 
   //-------------------------------------------- Boolean solids
@@ -265,14 +279,6 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
                      );
 
 
-  G4cout << "-> "
-         << PD_vol_crystal->GetInsideRadius()/cm << ", "
-         << PD_vol_crystal->GetOuterRadius()/cm << ", "
-         << PD_vol_crystal->GetStartPhiAngle()/degree << ", "
-         << PD_vol_crystal->GetDeltaPhiAngle()/degree << ", "
-         << PD_vol_crystal->GetStartThetaAngle()/degree << ", "
-         << PD_vol_crystal->GetDeltaThetaAngle()/degree << endl;
-
   G4LogicalVolume* PD_log_crystal
     = new G4LogicalVolume(PD_vol_crystal,Ar,"Test");
 
@@ -305,4 +311,3 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 
   return experimentalHall_phys;
 }
-
