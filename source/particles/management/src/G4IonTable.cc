@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.26 2000-09-14 10:00:22 hpw Exp $
+// $Id: G4IonTable.cc,v 1.27 2001-04-06 03:08:50 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,6 +25,7 @@
 //          -----
 //      Modified GetIon methods         17 Aug. 99 H.Kurashige
 //      New design using G4VIsotopeTable          5 Oct. 99 H.Kurashige
+//      Modified Element Name for Z>103  06 Apr. 01 H.Kurashige
 
 
 #include "G4IonTable.hh"
@@ -429,7 +430,7 @@ const G4String G4IonTable::elementName[] = {
                    "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au", "Hg", "Tl", "Pb", "Bi", "Po", "At", "Rn", 
   "Fr", "Ra", 
               "Ac", "Th", "Pa",  "U", "Np", "Pu", "Am", "Cm", "Bk", "Cf", "Es", "Fm", "Md", "No", "Lr",
-              "Db", "Jl", "Rf", "Bh", "Hn", "Mt", "Xa"
+              "Rf", "Db", "Sg", "Bh", "Hs", "Mt", "Xa"
   
 };
 
