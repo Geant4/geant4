@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.50 2004-06-22 13:48:50 stesting Exp $
+# $Id: Configure,v 1.51 2004-06-23 16:30:08 stesting Exp $
 #
-# Generated on Tue Jun 22 15:43:23 CEST 2004 [metaconfig 3.0 PL70]
+# Generated on Wed Jun 23 18:15:52 CEST 2004 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2401,10 +2401,10 @@ esac
 
 case "$g4install" in
 '')
-	if [ X$HOME = X/ ] ; then
+	if [ X"$HOME" = X/ ] ; then
 	HOME=""
 	fi
-	g4install=$HOME/geant4
+	g4install="$HOME"/geant4
 
 # Check for Windows!
 if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
@@ -4551,7 +4551,7 @@ echo "CONFIG=true" >> $g4conf/config.sh
 : propagate old symbols
 if $test -f .config/UU/config.sh; then
 	<.config/UU/config.sh sort | uniq >.config/UU/oldconfig.sh
-	sed -n 's/^\([a-zA-Z_0-9]*\)=.*/\1/p' config.sh config.sh .config/UU/oldconfig.sh |\
+	sed -n 's/^\([a-zA-Z_0-9]*\)=.*/\1/p' $g4conf/config.sh $g4conf/config.sh .config/UU/oldconfig.sh |\
 	sort | uniq -u >.config/UU/oldsyms
 	set X `cat .config/UU/oldsyms`
 	shift

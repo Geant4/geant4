@@ -88,6 +88,13 @@ export NeutronHPCrossSections
 echo "On this machine the NeutronHPCrossSections=\$NeutronHPCrossSections"
 fi
 
+#+
+if [ X$g4elasticdata != X ] ; then 
+G4ELASTICDATA="$g4elasticdata"
+export G4ELASTICDATA
+echo "On this machine the G4ELASTICDATA=\$g4elasticdata"
+fi
+
 #
 # g4clhep.U
 #
@@ -378,11 +385,19 @@ $g4make dll 2>&1 | tee $g4conf/g4make.log
 fi
 
 # Check for errors in log file
-export err=\$[ \`grep Error $g4conf/g4make.log | wc -w\` ]
-export int=\$[ \`grep Stop\. $g4conf/g4make.log | wc -w\` ]
-# echo err=\$err
+if test -f \$g4conf/g4make.log ; then
 
-if [ X\$err = X0 -a X\$int = X0 ] ; then
+# There are two (at least) shells 'sh' and 'bash' with
+# different arithmetic expansion...So we are doing it by 'text'
+# in two steps...
+ 
+err=\`grep Error $g4conf/g4make.log | wc -w\` 
+int=\`grep Stop\. $g4conf/g4make.log | wc -w\` 
+
+err2=\`echo \$err\`
+int2=\`echo \$int\`
+
+if [ X\$err2 = X0 -a X\$int2 = X0 ] ; then
 echo ""
 echo "####################################################"
 echo "# Your Geant4 installation seems to be successful! #"
@@ -400,6 +415,16 @@ echo "# $g4conf/g4make.log					 #"
 echo "############################################################"
 echo ""
 fi 
+else
+echo ""
+echo "############################################################"
+echo "# It looks like you had errors during Geant4 installation  #"
+echo "# (or interrupted installation)!				 #"
+echo "# You have no log file:				      	 #"
+echo "# $g4conf/g4make.log					 #"
+echo "############################################################"
+echo ""
+fi
 
 # There is no env!
 if [ X$g4includes_flag = Xy ] ; then
