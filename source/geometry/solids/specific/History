@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2003-06-16 13:09:35 gcosmo Exp $
+$Id: History,v 1.26 2003-07-04 16:05:22 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-16-Jun-2003, G.Cosmo
+16-Jun-2003, G.Cosmo (geom-specific-V05-02-00)
 - Added accessors to original_parameters for G4Polycone and G4Polyhedra.
   Made G4PolyconeHistorical and G4PolyhedraHistorical classes in global
   scope (temporary solution).
