@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2002-11-21 16:53:32 gcosmo Exp $
+$Id: History,v 1.48 2002-12-03 14:32:44 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03/12/2002 : G. Cosmo          breps-V04-01-04
+- Fix to concrete BREPS for porting code on Windows: explicitely name the
+  internal struct type holding the solid parameters.
 
 21/11/2002 : G. Cosmo          breps-V04-01-03
 - G4Ray[.hh.icc.cc], G4Surface[.hh.icc.cc]: made static inline methods not

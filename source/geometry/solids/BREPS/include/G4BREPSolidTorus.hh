@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidTorus.hh,v 1.6 2002-11-06 23:28:52 radoone Exp $
+// $Id: G4BREPSolidTorus.hh,v 1.7 2002-12-03 14:32:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -71,7 +71,8 @@ class G4BREPSolidTorus : public G4BREPSolid
   G4BREPSolidTorus& operator=(const G4BREPSolidTorus&);
     // Private copy constructor and assignment operator.
 
-  struct {
+  struct G4BREPTorusParams
+  {
     G4ThreeVector origin;
     G4ThreeVector axis;
     G4ThreeVector direction;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidSphere.hh,v 1.7 2002-11-06 23:28:51 radoone Exp $
+// $Id: G4BREPSolidSphere.hh,v 1.8 2002-12-03 14:32:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -109,7 +109,8 @@ class G4BREPSolidSphere : public G4BREPSolid
   G4BREPSolidSphere& operator=(const G4BREPSolidSphere&);
     // Private copy constructor and assignment operator.
 
-  struct {
+  struct G4BREPSphereParams
+  {
     G4Vector3D origin;
 	  G4Vector3D xhat;
 	  G4Vector3D zhat;

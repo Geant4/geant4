@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidPolyhedra.hh,v 1.10 2002-11-06 23:28:50 radoone Exp $
+// $Id: G4BREPSolidPolyhedra.hh,v 1.11 2002-12-03 14:32:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -154,7 +154,8 @@ private:
   //
   // R. Chytracek, Nov 2002, Update to new IO dumping mechanism
   
-  struct {
+  struct G4BREPPolyhedraParams
+  {
     G4double  start_angle;
     G4double  opening_angle;
     G4int     sides;

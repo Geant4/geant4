@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidCylinder.hh,v 1.6 2002-11-06 23:28:47 radoone Exp $
+// $Id: G4BREPSolidCylinder.hh,v 1.7 2002-12-03 14:32:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -72,7 +72,8 @@ class G4BREPSolidCylinder : public G4BREPSolid
     G4BREPSolidCylinder& operator=(const G4BREPSolidCylinder&);
       // Private copy constructor and assignment operator.
 
-  struct {
+  struct G4BREPCylinderParams
+  {
     G4ThreeVector origin;
     G4ThreeVector axis;
     G4ThreeVector direction;
