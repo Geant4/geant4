@@ -51,11 +51,11 @@ public:
    G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* )
    {
      // decay the strong resonances
-     static int call_count = 0;
-     if(call_count++<10)
-     {
-       G4cout << "Security print-out: Entering G4DecayStrongResonances::Propagate";
-     }
+     //static int call_count = 0;
+     //if(call_count++<10)
+     //{
+     //  G4cout << "Security print-out: Entering G4DecayStrongResonances::Propagate";
+     //}
      G4ReactionProductVector * theResult;
      try
      {

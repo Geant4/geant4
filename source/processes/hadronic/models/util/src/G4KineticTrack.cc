@@ -507,7 +507,20 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      //	 cout << "DECAY Total Width " << theTotalActualWidth << G4endl;
      G4double r = theTotalActualWidth * G4UniformRand();
      G4ParticleDefinition* theDefinition = this->GetDefinition();
+     if(!theDefinition)
+     {
+       G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
+       G4cerr << "  track has no particle definition associated."<<G4endl;
+       return 0;
+     }
      G4DecayTable* theDecayTable = theDefinition->GetDecayTable();
+     if(!theDecayTable)
+     {
+       G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
+       G4cerr << "  particle definiton has no decay table associated."<<G4endl;
+       G4cerr << "  particle was "<<theDefinition->GetParticleName()<<G4endl;
+       return 0;
+     }
      G4VDecayChannel* theDecayChannel=NULL;
      for (index = nChannels - 1; index >= 0; index--)
         {
@@ -520,6 +533,14 @@ G4KineticTrackVector* G4KineticTrack::Decay()
             }
         }
         
+     if(!theDecayChannel)
+     {
+       G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
+       G4cerr << "  decay channel has 0x0 channel associated."<<G4endl;
+       G4cerr << "  particle was "<<theDefinition->GetParticleName()<<G4endl;
+       G4cerr << "  channel index "<< chosench << "of "<<nChannels<<"channels"<<G4endl;
+       return 0;
+     }
      G4String theParentName = theDecayChannel->GetParentName();
      G4double theParentMass = this->GetActualMass();
      G4double theBR = theActualWidth[index];
@@ -562,6 +583,16 @@ G4KineticTrackVector* G4KineticTrack::Decay()
 		                                        theDaughtersName2,
 		                                        theDaughtersName3);
      G4DecayProducts* theDecayProducts = thePhaseSpaceDecayChannel.DecayIt();
+     if(!theDecayProducts)
+     {
+       G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
+       G4cerr << "  phase-space decay failed."<<G4endl;
+       G4cerr << "  particle was "<<theDefinition->GetParticleName()<<G4endl;
+       G4cerr << "  channel index "<< chosench << "of "<<nChannels<<"channels"<<G4endl;
+       G4cerr << "  "<<theNumberOfDaughters<< " Daughter particles: "
+              << theDaughtersName1<<" "<<theDaughtersName2<<" "<<theDaughtersName3<<G4endl;
+       return 0;
+     }
 		                                        
 //
 //      Create the kinetic track List associated to the decay products
