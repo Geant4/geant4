@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPIOtest.cc,v 1.3 2002-12-13 11:56:40 gcosmo Exp $
+// $Id: G4BREPIOtest.cc,v 1.4 2003-03-28 13:12:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,8 +39,7 @@
 #include "g4std/iostream"
 
 
-int
-main( int argc, char* argv[] )
+int main()
 {
   G4cout << "Testing generic BREP solid:" << G4endl;
   G4BREPSolid gbs("Generic BREP");

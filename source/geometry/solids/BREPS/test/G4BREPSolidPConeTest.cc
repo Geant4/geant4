@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: G4BREPSolidPConeTest.cc,v 1.12 2002-01-28 16:16:23 radoone Exp $
+// $Id: G4BREPSolidPConeTest.cc,v 1.13 2003-03-28 13:12:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -113,7 +113,7 @@ void checkSolid( const G4String& where, G4BREPSolid* solid, G4ThreeVector& posit
   }
 }
 
-int main(G4int argc, char **argv)
+int main()
 {
   const G4int noZplanes= 8; 
   

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: G4BREPSolidPolyhedraTest.cc,v 1.8 2001-07-20 16:07:39 gcosmo Exp $
+// $Id: G4BREPSolidPolyhedraTest.cc,v 1.9 2003-03-28 13:12:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -43,7 +43,7 @@
 #include "G4BREPSolidPolyhedra.hh"
 
 
-int main(G4int argc, char **argv)
+int main()
 {
   
   G4double RMINVec[5];
