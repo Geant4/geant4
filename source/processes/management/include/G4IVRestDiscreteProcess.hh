@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IVRestDiscreteProcess.hh,v 1.1 1999-01-07 16:13:53 gunter Exp $
+// $Id: G4IVRestDiscreteProcess.hh,v 1.2 1999-04-09 10:36:18 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -96,7 +96,6 @@ class G4IVRestDiscreteProcess : public G4VProcess
    protected:
       G4PhysicsTable* theNlambdaTable ;
       G4PhysicsTable* theInverseNlambdaTable ;
-      G4double BIGSTEP ;
 
 
 };
@@ -130,6 +129,7 @@ inline G4double G4IVRestDiscreteProcess::
   G4double nl,nlold,range,rangeold,rangenext,
            KineticEnergyOld,KineticEnergyNext,value;
   G4bool isOut;
+  const G4double BIGSTEP=1.e10 ;
   const G4DynamicParticle* particle = track.GetDynamicParticle();
   const G4ParticleDefinition* particletype = particle->GetDefinition() ;
   G4double KineticEnergy = particle->GetKineticEnergy();

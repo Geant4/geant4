@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IVRestDiscreteProcess.cc,v 1.1 1999-01-07 16:13:57 gunter Exp $
+// $Id: G4IVRestDiscreteProcess.cc,v 1.2 1999-04-09 10:35:55 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -22,7 +22,7 @@
 
 #include "G4IVRestDiscreteProcess.hh"
 G4IVRestDiscreteProcess::G4IVRestDiscreteProcess()
-                   :G4VProcess("No Name Discrete Process") 
+                   :G4VProcess("No Name Discrete Process")
 {
   G4Exception("G4IVRestDiscreteProcess:: default constructor is called");
 }
