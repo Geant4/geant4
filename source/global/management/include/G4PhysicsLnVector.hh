@@ -1,10 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: G4PhysicsLnVector.hh,v 1.3 2000-03-23 09:20:09 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //--------------------------------------------------------------------
@@ -12,7 +14,8 @@
 //
 //  G4PhysicsLnVector.hh
 //
-//  Description:
+//  Class description:
+//
 //    A physics vector which has values of energy-loss, cross-section, 
 //    and other physics values of a particle in matter in a given 
 //    range of the energy, momentum, etc. The scale of energy/momentum
@@ -74,17 +77,3 @@ inline size_t G4PhysicsLnVector::FindBinLocation(G4double theEnergy) const {
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
