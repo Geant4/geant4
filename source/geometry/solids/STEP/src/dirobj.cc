@@ -10,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: dirobj.cc,v 1.3 2000-01-21 13:43:07 gcosmo Exp $  */ 
+/* $Id: dirobj.cc,v 1.4 2000-06-08 17:18:12 gcosmo Exp $  */ 
 
 /*
  * DirObj implementation
@@ -145,9 +145,10 @@ int DirObj::Index (const char* name) {
 boolean DirObj::Reset (const char* path) {
     boolean successful = IsADirectory(path);
     if (successful) {
-	DIR* dir = opendir(path);
         ClearFileList();
-
+  // temporary fix for Windows/NT !!!!!!!!!!!!!!!!!!!!!!!
+#ifndef WIN32
+	DIR* dir = opendir(path);
         for (struct dirent* d = readdir(dir); d != NULL; d = readdir(dir)) {
 //#if defined(SYSV)
 //        for (struct dirent* d = readdir(dir); d != NULL; d = readdir(dir)) {
@@ -157,6 +158,7 @@ boolean DirObj::Reset (const char* path) {
             InsertFile(d->d_name, Position(d->d_name));
         }
         closedir(dir);
+#endif
     }
     return successful; 
 }
@@ -183,9 +185,14 @@ boolean DirObj::IsADirectory (const char* path) {
 ///////////////////////////////////////////////////////////////////////////////
 
 const char* DirObj::Home (const char* name) {
+  // temporary fix for Windows/NT !!!!!!!!!!!!!!!!!!!!!!!
+#ifndef WIN32
     struct passwd* pw =
         (name == nil) ? getpwuid(getuid()) : getpwnam((char *)name);
     return (pw == nil) ? nil : pw->pw_dir;
+#else
+    return nil;
+#endif
 }
 
 //////////////////////////////// Normalize() //////////////////////////////////

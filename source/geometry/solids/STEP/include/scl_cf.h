@@ -19,7 +19,9 @@
 #define HAVE_STRING_H 1
 #define HAVE_MEMORY_H 1
 
+#ifndef WIN32
 #define HAVE_UNISTD_H 1
+#endif
 /* #undef HAVE_SYSENT_H */
 #define HAVE_SYS_STAT_H 1
 /* #undef HAVE_STAT_H */

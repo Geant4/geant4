@@ -10,17 +10,19 @@
 * and is not subject to copyright.
 */
 
-/* $Id: ExpDict.cc,v 1.4 2000-01-21 13:42:50 gcosmo Exp $  */ 
+/* $Id: ExpDict.cc,v 1.5 2000-06-08 17:18:11 gcosmo Exp $  */ 
 #include <memory.h>
 #include <math.h>
 #include <stdio.h>
 
+#ifndef WIN32
 // to help ObjectCenter
 #ifndef HAVE_MEMMOVE
 extern "C"
 {
 void * memmove(void *__s1, const void *__s2, size_t __n);
 }
+#endif
 #endif
 
 #include <ExpDict.h> 

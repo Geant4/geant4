@@ -13,7 +13,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: dirobj.h,v 1.3 2000-01-21 13:42:38 gcosmo Exp $  */ 
+/* $Id: dirobj.h,v 1.4 2000-06-08 17:18:10 gcosmo Exp $  */ 
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
@@ -64,6 +64,12 @@
 #include <sysent.h>
 #endif
 
+#ifdef WIN32
+#  ifndef MAXNAMLEN
+#    define MAXNAMLEN 255
+#  endif
+#endif
+
 // sys/stat.h is apparently needed for ObjectCenter and Sun C++ ?
 #ifdef HAVE_SYS_STAT_H
 #include <sys/stat.h>
@@ -82,15 +88,24 @@
 //#include <sys/stat.h>
 //#endif
 
-#include <pwd.h>
-//#include <InterViews/Std/os/auth.h>
+#ifndef WIN32
+#  include <pwd.h>
+#endif
+///#include <InterViews/Std/os/auth.h>
 //#include <InterViews/Std/os/fs.h>
 	// the below is good for g++
 	// if getting it from /usr/include change to __string_h
 #ifndef _std_h
 #include <string.h>
 #endif
-#include <sys/param.h>
+#ifdef WIN32
+#  ifndef MAXPATHLEN
+#    define MAXPATHLEN 1024
+#  endif
+   typedef struct __dirstream DIR;
+#else
+#  include <sys/param.h>
+#endif
 //#include <InterViews/Std/sys/dir.h>
 //#include <InterViews/Std/sys/stat.h>
 

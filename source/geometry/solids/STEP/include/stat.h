@@ -36,7 +36,11 @@ extern "C" {
 #endif
 
 #define KERNEL
-#include "//usr/include/sys/stat.h"
+#ifdef WIN32
+#  include <sys/Stat.h>
+#else
+#  include "//usr/include/sys/stat.h"
+#endif
 #undef KERNEL
 
 /* just in case standard header didn't */
