@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ComptonTest.cc,v 1.5 2001-05-07 19:56:58 pia Exp $
+// $Id: G4ComptonTest.cc,v 1.6 2001-05-23 18:25:47 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 #include "G4LowEnergyBremsstrahlung.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4LowEnergyCompton.hh"
+#include "G4LowEnergyPolarizedCompton.hh"
 #include "G4ComptonScattering.hh"
 #include "G4LowEnergyIonisation.hh"
 #include "G4eIonisation.hh"
@@ -213,9 +214,11 @@ int main()
   // Processes 
 
   G4int processType;
-  G4cout << "LowEnergy [1] or Standard [2] Bremsstrahlung?" << G4endl;
+  G4cout 
+    << "LowEnergy [1] or Standard [2] or LowEnergyPolarized [3]?" 
+    << G4endl;
   cin >> processType;
-  if ( !(processType == 1 || processType == 2))
+  if (processType <1 || processType >3 )
     {
       G4Exception("Wrong input");
     }
@@ -223,7 +226,7 @@ int main()
   G4VContinuousDiscreteProcess* bremProcess;
   G4VContinuousDiscreteProcess* ioniProcess;
 
-  if (processType == 1)
+  if (processType == 1 || processType == 3)
     {
       bremProcess = new G4LowEnergyBremsstrahlung;
       ioniProcess = new G4LowEnergyIonisation;
@@ -252,10 +255,14 @@ int main()
     {
       photonProcess = new G4LowEnergyCompton;
     }
-    else
-      {
-        photonProcess = new G4ComptonScattering;
-      }
+  else if (processType == 2)
+    {
+      photonProcess = new G4ComptonScattering;
+    }
+  else
+    {
+      photonProcess = new G4LowEnergyPolarizedCompton;
+    }
 
   G4ProcessManager* gProcessManager = new G4ProcessManager(gamma);
   gamma->SetProcessManager(gProcessManager);
