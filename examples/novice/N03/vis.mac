@@ -15,9 +15,8 @@
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphic system)
 #
+/vis/open DAWNFILE
 /vis/open OGLIX
-#
-#/vis/open DAWNFILE
 #
 /vis/viewer/refresh
 /vis/viewer/update

@@ -1,4 +1,4 @@
-$Id: README,v 1.6 2000-11-21 11:43:31 maire Exp $
+$Id: README,v 1.7 2001-10-24 11:45:06 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -74,8 +74,8 @@ $Id: README,v 1.6 2000-11-21 11:43:31 maire Exp $
  4- VISUALIZATION
  
  	The Visualization Manager is set in the main().
- 	The initialisation of the drawing is done via a set of /vis commands
-        in the macro initInter.mac. This macro is automatically read from 
+ 	The initialisation of the drawing is done via a set of /vis/ commands
+        in the macro vis.mac. This macro is automatically read from 
  	the main in case of interactive running mode.
  	
  	The detector has a default view which is a longitudinal view of the 

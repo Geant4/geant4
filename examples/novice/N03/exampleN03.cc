@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.14 2001-07-11 09:58:20 gunter Exp $
+// $Id: exampleN03.cc,v 1.15 2001-10-24 11:45:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,10 +109,10 @@ int main(int argc,char** argv) {
   if (session)   // Define UI session for interactive mode.
     {
       // G4UIterminal is a (dumb) terminal.
-      UI->ApplyCommand("/control/execute initInter.mac");    
+      UI->ApplyCommand("/control/execute vis.mac");    
 #ifdef G4UI_USE_XM
       // Customize the G4UIXm menubar with a macro file :
-      UI->ApplyCommand("/control/execute gui.mac");
+      UI->ApplyCommand("/control/execute visTutor/gui.mac");
 #endif
       session->SessionStart();
       delete session;
