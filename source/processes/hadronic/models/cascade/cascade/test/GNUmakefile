@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 1999-12-07 16:45:43 miheikki Exp $
+# $Id: GNUmakefile,v 1.6 2002-11-06 12:53:09 miheikki Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -15,23 +15,27 @@ G4EXEC_BUILD = true
 
 include $(G4INSTALL)/config/architecture.gmk
 
-# Override some variables for binmake.gmk.
-#
-INCFLAGS += \
-            -I$(G4BASE)/global/management/include \
-            -I$(G4BASE)/global/HEPRandom/include \
-            -I$(G4BASE)/global/HEPGeometry/include \
+#INCFLAGS := \
+
+CPPFLAGS += -Wall
+
+CPPFLAGS  += \
+	    -I$(G4BASE)/processes/hadronic/models/generator/include \
+            -I$(G4BASE)/digits+hits/include \
+            -I$(G4BASE)/run/include \
+            -I$(G4BASE)/event/include \
             -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/magneticfield/include \
             -I$(G4BASE)/geometry/solids/CSG/include \
-            -I$(G4BASE)/event/include \
-            -I$(G4BASE)/graphics_reps/include \
-            -I$(G4BASE)/track/include \
-            -I$(G4BASE)/tracking/include \
-            -I$(G4BASE)/intercoms/include \
-            -I$(G4BASE)/digits+hits/include \
-            -I$(G4BASE)/processes/management/include \
+            -I$(G4BASE)/geometry/solids/BREPS/include \
+            -I$(G4BASE)/geometry/solids/STEP//include \
+	    -I$(G4BASE)/global/management/include \
+            -I$(G4BASE)/global/HEPRandom/include \
+            -I$(G4BASE)/global/HEPGeometry/include \
+            -I$(G4BASE)/global/HEPNumerics/include \
+	    -I$(G4BASE)/graphics_reps/include \
+	    -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/materials/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/bosons/include \
@@ -39,76 +43,99 @@ INCFLAGS += \
             -I$(G4BASE)/particles/hadrons/mesons/include \
             -I$(G4BASE)/particles/hadrons/barions/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
-            -I$(G4BASE)/processes/management/include \
+            -I$(G4BASE)/particles/shortlived/include \
             -I$(G4BASE)/processes/general/include \
-
-# Spesific for cascade test
-INCFLAGS += \
-	-I$(G4BASE)/processes/hadronic/management/include \
-	-I$(G4BASE)/processes/hadronic/stopping/include \
-	-I$(G4BASE)/processes/hadronic/util/include \
-	-I$(G4BASE)/processes/hadronic/processes/include \
-	-I$(G4BASE)/processes/hadronic/cross_sections/include \
-	-I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
-	-I$(G4BASE)/processes/hadronic/models/low_energy/include \
-	-I$(G4BASE)/processes/hadronic/models/high_energy/include \
-	-I$(G4BASE)/processes/hadronic/models/generator/management/include \
-	-I$(G4BASE)/processes/hadronic/models/generator/de_excitation/include \
-	-I$(G4BASE)/processes/hadronic/models/generator/diffractive_string/include \
-	-I$(G4BASE)/processes/hadronic/models/generator/high_energy/include \
-	-I$(G4BASE)/processes/hadronic/models/generator/kinetic_model/include \
-	-I$(G4BASE)/processes/hadronic/models/generator/pre_equilibrium/include \
-	-I$(G4BASE)/processes/hadronic/models/generator/string_common/include \
-	-I$(G4BASE)/processes/hadronic/models/generator/string_fragmentation/include \
-	-I$(G4BASE)/processes/hadronic/models/generator/util/include \
-	-I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
-	-I$(G4BASE)/processes/hadronic/models/cascade/evaporation/include \
-
-LDLIBS   := \
-            -lG4track \
-            -lG4partman \
-            -lG4intercoms \
-            -lG4materials
-
-# Spesific for cascade test
-LDLIBS   += \
-	-lG4globman \
-	-lG4hadronic_mgt \
-	-lG4hadronic_stop \
-	-lG4hadronic_util \
-	-lG4hadronic_proc \
-	-lG4hadronic_xsect \
-	-lG4hadronic_neu \
-	-lG4hadronic_LE \
-	-lG4hadronic_HE \
-	-lG4hadronic_man_gen \
-	-lG4hadronic_deex \
-	-lG4hadronic_diffstring \
-	-lG4hadronic_HE_gen \
-	-lG4hadronic_kinetic \
-	-lG4hadronic_preequ \
-	-lG4hadronic_string_common \
-	-lG4hadronic_stringfrag \
-	-lG4hadronic_util_gen \
-	-lG4hadronic_cascade_bertini \
-	-lG4hadronic_cascade_evaporation \
-
-include $(G4INSTALL)/config/binmake.gmk
+            -I$(G4BASE)/processes/management/include \
+	    -I$(G4BASE)/processes/parameterisation/include \
+            -I$(G4BASE)/processes/hadronic/cross_sections/include \
+            -I$(G4BASE)/processes/hadronic/management/include \
+            -I$(G4BASE)/processes/hadronic/models/low_energy/include \
+            -I$(G4BASE)/processes/hadronic/models/high_energy/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/de_excitation/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/diffractive_string/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/high_energy/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/kinetic_model/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/management/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/pre_equilibrium/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/quark_gluon_string/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/string_common/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/string_fragmentation/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/util/include \
+            -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
+            -I$(G4BASE)/processes/hadronic/processes/include \
+            -I$(G4BASE)/processes/hadronic/stopping/include \
+            -I$(G4BASE)/processes/hadronic/util/include \
+            -I$(G4BASE)/processes/electromagnetic/include \
+            -I$(G4BASE)/processes/electromagnetic/utils/include \
+            -I$(G4BASE)/digits+hits/detector/include \
+            -I$(G4BASE)/digits+hits/hits/include \
+            -I$(G4BASE)/digits+hits/digits/include \
+            -I$(G4BASE)/track/include \
+            -I$(G4BASE)/tracking/include 
 
 
+LDLIBS   +=  \
+	-L$(G4INSTALL)/lib/$(G4SYSTEM) \
+	    -lG4globman \
+            -lG4hadronic_bert_cascade \
+#	    -lG4materials \
+#	    -lG4hadronic_diffstring \
+#	    -lG4hadronic_stringfrag \
+#	    -lG4hadronic_string_common \
+#	    -lG4hadronic_util_gen \
+#	    -lG4hadronic_man_gen \
+#	    -lG4hadronic_util_gen \
+#	    -lG4processes \
+#	    -lG4particles \
+#	    -lG4materials \
+#	    -lG4track \
+#            -lG4tracking \
+#            -lG4digits+hits \
+#	    -lG4geometry \
+#	    -lG4graphics_reps \
+#	    -lG4intercoms \
+# 	    -lG4global \
+#	    -lcomplex \
+	#    $(G4BIN)/$(G4SYSTEM)/hbfinit.o \
+        #   -lG4event \
+	    -lCLHEP `cernlib packlib` $(FCLIBS)
 
-SUBDIRS = N03
-.PHONY : all clean clean_libs
-N03:
-	 @for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done
+LOADLIBS := $(G4BIN)/$(G4SYSTEM)/hbfinit.o -l$(CLHEP_LIB)
+LOADLIBS +=    `cernlib packlib` $(FCLIBS)
 
-clean:
-	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean); done
+#include $(G4INSTALL)/config/binmake.gmk
 
-clean_libs:
-	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean_libs); done
+#$(G4TARGET): $(G4BIN)/$(G4SYSTEM)/hbfinit.o
 
-clean_test:
-	rm core main *.*~
+
+DIFFCC = Analyser
+DIFFCC = IntraNucleiCascader
+
+OLDCC = $(addsuffix .cc, $(DIFFCC))
+NEWCC = $(addprefix G4, $(OLDCC))
+
+diffCc:
+	diff $(GM)/cascade/cascade/src/$(NEWCC) $(GM)/cascade/doc/inucl/inuclC/$(OLDCC)
+
+ 
+t1: # :::(t for test)
+	rm -r hetcCascadeTest; rm -r hetcCascadeTest.out; gmake hetcCascadeTest; hetcCascadeTest > hetcCascadeTest.out;cat hetcCascadeTest.out
+
+ 
+t2: # ::: integrated test 
+	rm -r cascade; rm -r cascade.out; gmake cascade; #XScascade > cascade.out; 
+
+tt2: # :: timing for t1
+	time -v gmake t2
+
+a1: # ::: (a for analysis) Integrated analysis root, eps generation for latex 
+	root -b -q cascade.C; convert cascade.ps cascade.eps; mv cascade.eps ../doc/pictures/cascade.eps; gv cascade.ps;
+
+
+release: #::: release latex manual with new pictures
+	cp -r $(GC)/test ~/public/html/geant4/cascade/;cp -r $(GC)/cascade ~/public/html/geant4/cascade/; cd ../doc; p release manCascade
+
+cvsUpdate: # ::: use SCRATCH/geant4/head/geant4 istallation to put updated files to cvs
+
 
 
