@@ -2,10 +2,16 @@
                          Geometry tools
 			 --------------
 
-This directory includes applications and tools for the geometry setup.
+This directory includes tools and examples for the geometry setup.
 
 OLAP
 ----
 Debugging tool for overlapping geometries.
 See notes included in the package for details on how to use it, known
 limitations and defined commands.
+
+CAD
+---
+Example of importing geometries described by CAD systems through AP203
+compliant STEP files.
+
