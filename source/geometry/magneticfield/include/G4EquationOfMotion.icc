@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EquationOfMotion.icc,v 1.5 2001-07-11 09:59:07 gunter Exp $
+// $Id: G4EquationOfMotion.icc,v 1.6 2002-06-10 17:24:28 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,3 +51,23 @@ void G4EquationOfMotion::GetFieldValue( const  G4double Point[3],
 {
   itsField-> GetFieldValue( Point, Field );
 }
+
+inline
+void 
+G4EquationOfMotion::RightHandSide( const  G4double y[],
+				   G4double dydx[]   ) const
+{
+     G4double Field[G4maximum_number_of_field_components];   
+     G4double  PositionAndTime[4];
+
+     // Position
+     PositionAndTime[0] = y[0];
+     PositionAndTime[1] = y[1];
+     PositionAndTime[2] = y[2];
+     // Global Time
+     PositionAndTime[3] = y[7];  // See G4FieldTrack::LoadFromArray
+
+     GetFieldValue(PositionAndTime, Field) ;
+     EvaluateRhsGivenB( y, Field, dydx );
+}
+
