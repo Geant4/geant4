@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03VisManager.cc,v 1.3 1999-12-15 14:49:26 gunter Exp $
+// $Id: ExN03VisManager.cc,v 1.4 2000-06-29 07:16:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,6 +66,10 @@
 #include "G4VRML2File.hh"
 #endif
 
+#ifdef G4VIS_USE_RAYTRACER
+#include "G4RayTracer.hh"
+#endif
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 ExN03VisManager::ExN03VisManager () {}
@@ -118,6 +122,10 @@ void ExN03VisManager::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_VRMLFILE
   RegisterGraphicsSystem (new G4VRML1File);
   RegisterGraphicsSystem (new G4VRML2File);
+#endif
+
+#ifdef G4VIS_USE_RAYTRACER
+  RegisterGraphicsSystem (new G4RayTracer);
 #endif
 
   if (fVerbose > 0) {
