@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2000-01-03 11:39:36 gcosmo Exp $
+$Id: History,v 1.37 2000-01-06 14:27:42 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,10 @@ committal in the CVS repository !
 
 January 3, 2000 G.Cosmo (global-V01-00-00)
 - Syncronized changes with HEAD (mainly CVS headers).
+- Fixed truncation problem in G4Poisson.hh.
 - Removed tphdict_test.cc and tvhdict_test.cc in STLInterface/test.
+- Added wrapper for HP-aCC for missing <fstream> standard header.
+- Removed G4USE_STL from globals.hh and G4Timer[.hh.cc].
 
 November 29, 99 G.Cosmo (global-V00-01-14)
 - Removed g4std/string wrapper since not anymore needed.
