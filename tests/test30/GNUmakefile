@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2002-07-04 10:28:32 vnivanch Exp $
+# $Id: GNUmakefile,v 1.3 2002-07-23 08:10:14 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -25,6 +25,7 @@ include $(G4INSTALL)/config/architecture.gmk
 #
 CPPFLAGS += `aida-config --useHBook --include`
 LDFLAGS  += `aida-config --useHBook --lib`
+EXTRALIBS += -L$(OGLHOME)/lib -lGL
 
 
 include $(G4INSTALL)/config/binmake.gmk

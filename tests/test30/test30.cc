@@ -389,7 +389,7 @@ int main(int argc, char** argv)
       h[24]=hf->create1D("25","cos(theta) protons",nbinsa,-1.,1.);
       h[25]=hf->create1D("26","cos(theta) neutrons",nbinsa,-1.,1.);
 
-      h[26]=hf->create1D("27","Baryon charge",maxn,-0.5,(G4double)maxn + 0.5);
+      h[26]=hf->create1D("27","Baryon number (mbn)",maxn,-0.5,(G4double)maxn + 0.5);
 
       h[27]=hf->create1D("28","ds/dE at theta = 0",nbinsd,0.,emax);
       h[28]=hf->create1D("29","ds/dE at theta = 1",nbinsd,0.,emax);
@@ -429,6 +429,7 @@ int main(int argc, char** argv)
 
     G4double factor = cross_sec*MeV*1000.0*(G4double)nbins/(energy*barn*(G4double)nevt);
     G4double factora= cross_sec*MeV*1000.0*(G4double)nbinsa/(twopi*pi*barn*(G4double)nevt);
+    G4double factorb= cross_sec*1000.0/(barn*(G4double)nevt);
     G4cout << "### factor  = " << factor
            << "### factora = " << factor 
            << "    cross(b)= " << cross_sec/barn << G4endl;
@@ -566,7 +567,7 @@ int main(int argc, char** argv)
 
 	if(usepaw) {
 
-          if(pd) h[26]->fill((G4double)pd->GetBaryonNumber(), 1.0);
+          if(pd) h[26]->fill((G4double)pd->GetBaryonNumber(), factorb);
 
           if(pd == proton) { 
 						
