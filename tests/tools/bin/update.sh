@@ -1,5 +1,5 @@
 #! /bin/sh
-# $Id: update.sh,v 1.1 1999-01-08 16:36:08 gunter Exp $
+# $Id: update.sh,v 1.2 1999-01-20 10:28:27 allison Exp $
 # Edit stt-ref.sdb and execute.
 # Usage: update.sh [-n]
 
@@ -37,11 +37,5 @@ fi
 #
 
 cd $G4INSTALL/..
-if [ `pwd | grep ref+` ]
-then
-  REF=ref+
-else
-  REF=ref
-fi
-geant4beta/tests/tools/bin/updt.sh $1 < geant4beta/tests/stt-${REF}.sdb \
+geant4/tests/tools/bin/updt.sh $1 < geant4/tests/stt-$REF.sdb \
   > $dir/update.log 2>&1

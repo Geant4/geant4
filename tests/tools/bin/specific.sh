@@ -8,16 +8,26 @@
 ####################################################
 #
 
+if [ `pwd | grep ref+` ]; then
+  REF=ref+
+else
+  REF=ref
+fi
+
+if [ $DEBUG ]; then
+  DEBOPT=debug
+else
+  DEBOPT=optim
+fi
+
 UNAMEN=`uname -n `
 ANS=`uname -n | grep rsplus`
 if [ X`uname -n | grep rsplus` != X  -o "$UNAMEN" = "shift51" ]; then
   export CVSROOT=/afs/cern.ch/rd44/cvs
   export G4SYSTEM=AIX-xlC
-  export G4INSTALL=/afs/cern.ch/rd44/stt/ref+/src/geant4beta
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM
+  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-  export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.1
-  export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
   # G4 build flags :
 #  export G4UI_BUILD_TERMINAL_SESSION=1
 #  export G4UI_BUILD_GAG_SESSION=1
@@ -39,11 +49,9 @@ fi
 if [ `uname -n | grep sunasd1` ]; then
   export CVSROOT=/afs/cern.ch/rd44/cvs
   export G4SYSTEM=SUN-CC
-  export G4INSTALL=/afs/cern.ch/rd44/stt/ref+/src/geant4beta
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM
+  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-  export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.1
-  export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
   # G4 build flags :
 #  export G4UI_BUILD_TERMINAL_SESSION=1
 #  export G4UI_BUILD_GAG_SESSION=1
@@ -61,11 +69,9 @@ fi
 if [ `uname -n | grep suncmsb` ]; then
   export CVSROOT=/afs/cern.ch/rd44/cvs
   export G4SYSTEM=SUN-CC
-  export G4INSTALL=/afs/cern.ch/rd44/stt/ref+/src/geant4beta
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM
+  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-  export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.1
-  export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
 #
   export CLHEP_BASE_DIR=/afs/cern.ch/user/s/stesting/work/clhep
   export CLHEP_LIB=CLHEP-CC
@@ -87,11 +93,9 @@ fi
 if [ `uname -n | grep sungeant` ]; then
   export CVSROOT=/afs/cern.ch/rd44/cvs
   export G4SYSTEM=SUN-CC
-  export G4INSTALL=/afs/cern.ch/rd44/stt/ref+/src/geant4beta
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM
+  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-  export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.1
-  export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
   # G4 build flags :
 #  export G4UI_BUILD_TERMINAL_SESSION=1
 #  export G4UI_BUILD_GAG_SESSION=1
@@ -110,11 +114,9 @@ fi
 if [ `uname -n | grep hpplus` ]; then
   export CVSROOT=/afs/cern.ch/rd44/cvs
   export G4SYSTEM=HP-aCC
-  export G4INSTALL=/afs/cern.ch/rd44/stt/ref+/src/geant4beta
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM
+  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-  export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.1
-  export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
   # G4 build flags :
 #  export G4UI_BUILD_TERMINAL_SESSION=1
 #  export G4UI_BUILD_GAG_SESSION=1
@@ -132,11 +134,9 @@ fi
 if [ `uname -n | grep axcnsi` ]; then
   export CVSROOT=/afs/cern.ch/rd44/cvs
   export G4SYSTEM=DEC-cxx
-  export G4INSTALL=/afs/cern.ch/rd44/stt/ref+/src/geant4beta
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM
+  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-  export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.1
-  export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
   # G4 build flags :
 #  export G4UI_BUILD_TERMINAL_SESSION=1
 #  export G4UI_BUILD_GAG_SESSION=1
@@ -154,11 +154,9 @@ fi
 if [ `uname -n | grep dxplus` ]; then
   export CVSROOT=/afs/cern.ch/rd44/cvs
   export G4SYSTEM=DEC-cxx
-  export G4INSTALL=/afs/cern.ch/rd44/stt/ref+/src/geant4beta
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM
+  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-  export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.1
-  export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
   # G4 build flags :
 #  export G4UI_BUILD_TERMINAL_SESSION=1
 #  export G4UI_BUILD_GAG_SESSION=1
@@ -176,11 +174,9 @@ fi
 if [ `uname -n | grep pcitasd04` ]; then
   export CVSROOT=/afs/cern.ch/rd44/cvs
   export G4SYSTEM=Linux-g++
-  export G4INSTALL=/afs/cern.ch/rd44/stt/ref+/src/geant4beta
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM
+  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-  export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.1
-  export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
   # G4 build flags :
 #  export G4UI_BUILD_TERMINAL_SESSION=1
 #  export G4UI_BUILD_GAG_SESSION=1
@@ -199,11 +195,9 @@ fi
 if [ `uname -n | grep sgmedia` ]; then
   export CVSROOT=/afs/cern.ch/rd44/cvs
   export G4SYSTEM=SGI-CC
-  export G4INSTALL=/afs/cern.ch/rd44/stt/ref+/src/geant4beta
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM
+  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-  export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.1
-  export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
   # G4 build flags :
 #  export G4UI_BUILD_TERMINAL_SESSION=1
 #  export G4UI_BUILD_GAG_SESSION=1
@@ -233,16 +227,14 @@ export DAWN_BSD_UNIX_DOMAIN=1
 if [ "$UNAME" = "Linux" ]; then
   export CVSROOT=/afs/cern.ch/rd44/cvs
   export G4SYSTEM=Linux-g++
-  export G4INSTALL=/afs/cern.ch/rd44/stt/ref+/src/geant4beta
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM
+  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-  export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.1
-  export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
 export G4VIS_BUILD_OPENGLX_DRIVER=1
 export G4VIS_USE_OPENGLX=1
 export G4VIS_BUILD_OPENGLXM_DRIVER=1
 export G4VIS_USE_OPENGLXM=1
-export CLHEP_BASE_DIR=/afs/cern.ch/rd44/stt/ref+/Linux-g++/CLHEP
+export CLHEP_BASE_DIR=/afs/cern.ch/rd44/stt/$REF/Linux-g++/CLHEP
 #/usr/local/CLHEP1.3/CLHEP
 export CLHEP_LIB=CLHEP
 #CLHEP-c++
@@ -263,13 +255,9 @@ fi
 #
 if [ `uname -n` = aleph ] ; then
 export CVSROOT=:pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
-if [ `pwd | grep ref+` ] ; then
-export G4INSTALL=/geant4/stt/ref+/src/geant4beta
-else
-export G4INSTALL=/geant4/stt/ref/src/geant4beta
-fi
+export G4INSTALL=/geant4/stt/$REF/src/geant4
 export G4SYSTEM=HP-aCC
-export G4WORKDIR=/geant4/stt/ref+/$G4SYSTEM
+export G4WORKDIR=/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
 export G4DEBUG=1
 # G4 build flags :
 export G4UI_BUILD_XM_SESSION=1
@@ -297,13 +285,9 @@ fi
 #
 if [ `uname -n` = asc ] ; then
 export CVSROOT=':pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs'
-if [ `pwd | grep ref+` ] ; then
-export G4INSTALL=/geant4/stt/ref+/src/geant4beta
-else
-export G4INSTALL=/geant4/stt/ref/src/geant4beta
-fi
+export G4INSTALL=/geant4/stt/$REF/src/geant4
 export G4SYSTEM=OSF1
-export G4WORKDIR=/geant4/stt/ref+/$G4SYSTEM
+export G4WORKDIR=/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
 export G4DEBUG=1
 # G4 build flags :
 export G4UI_BUILD_XM_SESSION=1
@@ -335,12 +319,10 @@ fi
 
 UNAMEN=`uname -n`
 if [ `echo $UNAMEN | grep wagtail` ] ; then
-export G4INSTALL=~/GEANT4/stt/$REF/src/geant4beta
+export G4INSTALL=~/GEANT4/stt/$REF/src/geant4
 export G4SYSTEM=Linux-g++
-export G4WORKDIR=/scratch/stt/$REF/$G4SYSTEM
+export G4WORKDIR=/scratch/stt/$REF/$G4SYSTEM/$DEBOPT
 export G4LIB=$G4WORKDIR/lib
-export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.1
-export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
 # G4 build flags :
 export G4VIS_BUILD_OPENGLX_DRIVER=1
 export G4VIS_BUILD_RAYX_DRIVER=1

@@ -12,25 +12,23 @@
 # Guy Barrand barrand@lal.in2p3.fr
 ####################################################
 
-setenv NeutronHPCrossSections /afs/cern.ch/rd44/stt/ref+/src/G4NDL0.1
-setenv G4LEVELGAMMADATA /afs/cern.ch/user/p/pia/public/ensdf/LevelGamma
-
 if ( `pwd | grep ref+` != "" ) then
-  setenv G4DEBUG 1  ##### ref+ is compiled in debug mode.
+  setenv REF ref+
 else
-  unsetenv G4DEBUG  ##### ref is compiled in optimised mode.
+  setenv REF ref
+endif
+
+if ( $G4DEBUG != "" ) then
+  setenv DEBOPT debug
+else
+  setenv DEBOPT optim
 endif
 
 if ( `uname -n | grep rsplus` != "" ) then
   setenv CVSROOT /afs/cern.ch/rd44/cvs
   setenv G4SYSTEM AIX-xlC
-  if ( `pwd | grep ref+` != "" ) then
-    setenv G4INSTALL /afs/cern.ch/rd44/stt/ref+/src/geant4beta
-    setenv G4WORKDIR  /afs/cern.ch/rd44/stt/ref+/$G4SYSTEM
-  else
-    setenv G4INSTALL /afs/cern.ch/rd44/stt/ref/src/geant4beta
-    setenv G4WORKDIR  /afs/cern.ch/rd44/stt/ref/$G4SYSTEM
-  endif
+  setenv G4INSTALL /afs/cern.ch/rd44/stt/$REF/src/geant4
+  setenv G4WORKDIR  /afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
   setenv G4UI_BUILD_TERMINAL_SESSION 1
@@ -53,13 +51,8 @@ endif
 if ( `uname -n | grep dxplus` != "" ) then
   setenv CVSROOT /afs/cern.ch/rd44/cvs
   setenv G4SYSTEM DEC-cxx
-  if ( `pwd | grep ref+` != "" ) then
-    setenv G4INSTALL /afs/cern.ch/rd44/stt/ref+/src/geant4beta
-    setenv G4WORKDIR  /afs/cern.ch/rd44/stt/ref+/$G4SYSTEM
-  else
-    setenv G4INSTALL /afs/cern.ch/rd44/stt/ref/src/geant4beta
-    setenv G4WORKDIR  /afs/cern.ch/rd44/stt/ref/$G4SYSTEM
-  endif
+  setenv G4INSTALL /afs/cern.ch/rd44/stt/$REF/src/geant4
+  setenv G4WORKDIR  /afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
   setenv G4UI_BUILD_TERMINAL_SESSION 1
@@ -82,13 +75,8 @@ endif
 if ( `uname -n | grep sgmedia` != "" ) then
   setenv CVSROOT /afs/cern.ch/rd44/cvs
   setenv G4SYSTEM SGI-CC
-  if ( `pwd | grep ref+` != "" ) then
-    setenv G4INSTALL /afs/cern.ch/rd44/stt/ref+/src/geant4beta
-    setenv G4WORKDIR  /afs/cern.ch/rd44/stt/ref+/$G4SYSTEM
-  else
-    setenv G4INSTALL /afs/cern.ch/rd44/stt/ref/src/geant4beta
-    setenv G4WORKDIR  /afs/cern.ch/rd44/stt/ref/$G4SYSTEM
-  endif
+  setenv G4INSTALL /afs/cern.ch/rd44/stt/$REF/src/geant4
+  setenv G4WORKDIR  /afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
   #######setenv G4UI_BUILD_TERMINAL_SESSION 1
@@ -107,13 +95,8 @@ endif
 if ( `uname -n | grep sun` != "" ) then
   setenv CVSROOT /afs/cern.ch/rd44/cvs
   setenv G4SYSTEM SUN-CC
-  if ( `pwd | grep ref+` != "" ) then
-    setenv G4INSTALL /afs/cern.ch/rd44/stt/ref+/src/geant4beta
-    setenv G4WORKDIR  /afs/cern.ch/rd44/stt/ref+/$G4SYSTEM
-  else
-    setenv G4INSTALL /afs/cern.ch/rd44/stt/ref/src/geant4beta
-    setenv G4WORKDIR  /afs/cern.ch/rd44/stt/ref/$G4SYSTEM
-  endif
+  setenv G4INSTALL /afs/cern.ch/rd44/stt/$REF/src/geant4
+  setenv G4WORKDIR  /afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
   setenv G4UI_BUILD_TERMINAL_SESSION 1
@@ -132,13 +115,8 @@ endif
 if ( `uname -n | grep hpplus` != "" ) then
   setenv CVSROOT /afs/cern.ch/rd44/cvs
   setenv G4SYSTEM HP-aCC
-  if ( `pwd | grep ref+` != "" ) then
-    setenv G4INSTALL /afs/cern.ch/rd44/stt/ref+/src/geant4beta
-    setenv G4WORKDIR  /afs/cern.ch/rd44/stt/ref+/$G4SYSTEM
-  else
-    setenv G4INSTALL /afs/cern.ch/rd44/stt/ref/src/geant4beta
-    setenv G4WORKDIR  /afs/cern.ch/rd44/stt/ref/$G4SYSTEM
-  endif
+  setenv G4INSTALL /afs/cern.ch/rd44/stt/$REF/src/geant4
+  setenv G4WORKDIR  /afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
   setenv G4UI_BUILD_TERMINAL_SESSION 1
@@ -156,13 +134,9 @@ endif
 
 if ( `uname -n` == aleph ) then
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
-if ( `pwd | grep ref+` != "" ) then
-setenv G4INSTALL                   /geant4/stt/ref+/src/geant4beta
-else
-setenv G4INSTALL                   /geant4/stt/ref/src/geant4beta
-endif
+setenv G4INSTALL                   /geant4/stt/$REF/src/geant4
 setenv G4SYSTEM                    HP-aCC
-setenv G4WORKDIR                   /geant4/stt/ref+/$G4SYSTEM
+setenv G4WORKDIR                   /geant4/stt/$REF/$G4SYSTEM/$DEBOPT
 setenv G4DEBUG                     1
 #setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
 # G4 build flags :
@@ -198,13 +172,9 @@ endif
 #---------------------------------------------------
 if ( `uname -n` == asc ) then
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
-if ( `pwd | grep ref+` != "" ) then
-setenv G4INSTALL                   /geant4/stt/ref+/src/geant4beta
-else
-setenv G4INSTALL                   /geant4/stt/ref/src/geant4beta
-endif
+setenv G4INSTALL                   /geant4/stt/$REF/src/geant4
 setenv G4SYSTEM                    OSF1
-setenv G4WORKDIR                   /geant4/stt/ref+/$G4SYSTEM
+setenv G4WORKDIR                   /geant4/stt/$REF/$G4SYSTEM/$DEBOPT
 setenv G4DEBUG                     1
 #setenv G4MAKESHLIB                 $G4INSTALL/config/makeshlib.sh
 # G4 build flags :

@@ -4,38 +4,54 @@
 ##########################
 
 TREE=$1
-REFTAG=$2
-ACTION=$3
-ACTARG1=$4
-ACTARG2=$5
-ACTARG3=$6
-NONINCREMENTAL=$7
+DEBOPT=$2
+REFTAG=$3
+ACTION=$4
+ACTARG1=$5
+ACTARG2=$6
+ACTARG3=$7
+NONINCREMENTAL=$8
 ##############################################
 # We have agreement about tag name: tag_name+
 ##############################################
 PREVTAG=`echo $REFTAG|cut -d + -f1`
 
-if [ X$TREE = X -o X$REFTAG = X ]
+if [ X$TREE = X -o X$DEBOPT = X -o X$REFTAG = X ]
 then
 echo
-echo "Usage: g4sbr.sh [O]|[D] TAG_NAME Act arg1 arg2 arg3 NonIncrementalFlag"
+echo "Usage: g4sbr.sh [dev|prod] [debug|opt] TAG_NAME Act arg1 arg2 arg3 NonIncrementalFlag"
 echo
 exit
 fi
 #
 
-if [ X$TREE = XD -o X$TREE = Xd ]
+if [ X$TREE = Xdev ]
 then
 REFTREE=ref+
-else
+elif [ X$TREE = Xprod ]
 REFTREE=ref
+else
+echo
+echo Usage: First argument is dev (uses ref+/) or prod (uses ref/).
+exit
+fi
+
+if [ X$DEBOPT = Xdebug ]
+then
+export G4DEBUG=1
+elif [ X$DEBOPT = Xopt ]
+unset G4DEBUG
+else
+echo
+echo Usage: 2nd argument is debug or opt.
+exit
 fi
 
 ####################################################################
 # Setup environment in $REFTREE
 ####################################################################
-cd /afs/cern.ch/rd44/stt/${REFTREE}/src/geant4beta/tests/tools/bin
-. /afs/cern.ch/rd44/stt/ref+/src/geant4beta/tests/tools/bin/setup.sh
+cd /afs/cern.ch/rd44/stt/${REFTREE}/src/geant4/tests/tools/bin
+. /afs/cern.ch/rd44/stt/ref+/src/geant4/tests/tools/bin/setup.sh
 
 env | grep G4
 ulimit -a
@@ -78,7 +94,7 @@ fi
 # Build&run all in ref[+]
 ################################
 cd /afs/cern.ch/rd44/stt/${REFTREE}/${G4SYSTEM}
-. /afs/cern.ch/rd44/stt/ref+/src/geant4beta/tests/tools/bin/limit.sh
+. /afs/cern.ch/rd44/stt/ref+/src/geant4/tests/tools/bin/limit.sh
 
 if [ X$ACTION = Xbuild -o X$ACTION = Xall  ]
 then
@@ -90,7 +106,7 @@ then
 ################
 #${G4INSTALL}/tests/tools/bin/build_specific.sh &
 #${G4INSTALL}/tests/tools/bin/build.sh
-. /afs/cern.ch/rd44/stt/ref+/src/geant4beta/tests/tools/bin/tmpenv.sh
+. /afs/cern.ch/rd44/stt/ref+/src/geant4/tests/tools/bin/tmpenv.sh
 ${G4INSTALL}/tests/tools/bin/build.sh $ACTARG1 $ACTARG2
 #unset $TMPDIR
 #${G4INSTALL}/tests/tools/bin/build.sh test all

@@ -5,7 +5,7 @@
 
 ############################################################
 # 'account' MUST have next in PATH:
-# /afs/cern.ch/rd44/stt/ref+/src/geant4beta/tests/tools/bin 
+# /afs/cern.ch/rd44/stt/ref+/src/geant4/tests/tools/bin 
 ############################################################
 account=stesting
  

@@ -1,10 +1,10 @@
 #! /bin/sh
-# $Id: updt.sh,v 1.1 1999-01-08 16:36:08 gunter Exp $
+# $Id: updt.sh,v 1.2 1999-01-20 10:28:28 allison Exp $
 # Usage:
 #   csh: updt.sh [-n] < something.sdb >& something.update.log
 #    sh: updt.sh [-n] < something.sdb > something.update.log 2>&1
 
-# .sdb files have a special format - see, e.g., geant4beta/tests/beta01-01.sdb.
+# .sdb files have a special format - see, e.g., geant4/tests/stt-ref.sdb.
 
 while read module tag comments
 do

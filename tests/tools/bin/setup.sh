@@ -5,32 +5,22 @@
 #    [ba,k,z]sh> . setup.sh
 ####################################################
 #
-# Execute stt members specifc setup first :
+
 set -x
-if [ `pwd | grep ref+` ]; then
-  REF=ref+
-else
-  REF=ref
-fi
 
-. /afs/cern.ch/rd44/stt/ref+/src/geant4beta/tests/tools/bin/specific.sh
+# Execute stt members specifc setup first :
+. /afs/cern.ch/rd44/stt/ref+/src/geant4/tests/tools/bin/specific.sh
 
-if [ "$REF" = "ref+" ]; then
-    export G4DEBUG=1
-else
-    unset G4DEBUG
-fi
-
-#
 if [ -n "$G4SYSTEM" ]; then
     echo "You are working on a $G4SYSTEM system"
 else
   echo "You have first to set environment variable G4SYSTEM !"
   exit
 fi
+
 # we are working in the stt afs ref area
 if [ "$1" = "sttref" ]; then
-export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4beta
+export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
 export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM
 export G4LIB=$G4WORKDIR/lib
 fi
@@ -54,6 +44,11 @@ if [ -n "$G4LIB" ]; then
 else
 export G4LIB=$G4INSTALL/lib
 fi
+#
+# Other G4 environment variables.
+#
+export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.1
+export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
 #
 # Some alias -kes :
 alias g4root="cd $G4INSTALL"
