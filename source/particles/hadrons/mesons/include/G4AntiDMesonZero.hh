@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiDMesonZero.hh,v 1.4 2001-07-11 10:01:45 gunter Exp $
+// $Id: G4AntiDMesonZero.hh,v 1.5 2001-10-15 10:06:11 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,8 +53,6 @@ class G4AntiDMesonZero : public G4VMeson
 {
  private:
    static G4AntiDMesonZero theAntiDMesonZero;
-   static G4double  theAntiDMesonZeroLengthCut;
-   static G4double* theAntiDMesonZeroKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4AntiDMesonZero(
@@ -74,8 +72,6 @@ class G4AntiDMesonZero : public G4VMeson
 
    static G4AntiDMesonZero* AntiDMesonZeroDefinition();
    static G4AntiDMesonZero* AntiDMesonZero();
-   static G4double GetCuts() {return theAntiDMesonZeroLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theAntiDMesonZeroKineticEnergyCuts;};
 
    virtual void SetCuts(G4double aCut); 
 };

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.hh,v 1.7 2001-07-11 10:01:36 gunter Exp $
+// $Id: G4Neutron.hh,v 1.8 2001-10-15 10:09:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,8 +55,6 @@ class G4Neutron : public G4VBaryon
 {
  private:
    static G4Neutron theNeutron;
-   static G4double  theNeutronLengthCut;
-   static G4double* theNeutronKineticEnergyCuts;
 
  private:
   G4Neutron(
@@ -75,13 +73,7 @@ class G4Neutron : public G4VBaryon
    virtual ~G4Neutron(){}
 
    static G4Neutron* NeutronDefinition();
-   static G4Neutron* Neutron(){return &theNeutron;}
-   static G4double GetCuts() {return theNeutronLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theNeutronKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
+   static G4Neutron* Neutron(){return &theNeutron;} 
 
  public:  //With Description
    G4int    GetAtomicNumber() const;
@@ -91,6 +83,8 @@ class G4Neutron : public G4VBaryon
    void     SetExcitationEnergy(G4double ){}
    // These two methods are dummy because all particles derived from 
    // G4Neutron is "groud state" nuclei  
+
+   virtual void SetCuts(G4double aCut); 
 };
 
 inline
@@ -103,15 +97,6 @@ inline
  G4int G4Neutron::GetAtomicMass() const 
 {
   return 1;
-}
-
-inline
- void G4Neutron::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theNeutronLengthCut = theCutInMaxInteractionLength;  
-  theNeutronKineticEnergyCuts = theKineticEnergyCuts;
 }
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiProton.hh,v 1.6 2001-07-11 10:01:34 gunter Exp $
+// $Id: G4AntiProton.hh,v 1.7 2001-10-15 10:09:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,8 +55,6 @@ class G4AntiProton : public G4VBaryon
 {
  private:
    static G4AntiProton theAntiProton;
-   static G4double  theAntiProtonLengthCut;
-   static G4double* theAntiProtonKineticEnergyCuts;
 
  private: // constructors are hide as private  
 
@@ -77,28 +75,7 @@ class G4AntiProton : public G4VBaryon
   
    static G4AntiProton* AntiProtonDefinition();
    static G4AntiProton* AntiProton();
-   static G4double GetCuts() {return theAntiProtonLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theAntiProtonKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
 };
-
-inline void G4AntiProton::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theAntiProtonLengthCut = theCutInMaxInteractionLength;  
-  theAntiProtonKineticEnergyCuts = theKineticEnergyCuts;
-}
-
-inline void G4AntiProton::RestoreCuts(G4double cutInLength,
-				      const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theAntiProtonLengthCut = theCutInMaxInteractionLength;  
-  theAntiProtonKineticEnergyCuts = theKineticEnergyCuts;
-}
 
 inline G4AntiProton* G4AntiProton::AntiProton()
 { return &theAntiProton; }

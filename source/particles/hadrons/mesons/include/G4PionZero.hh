@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionZero.hh,v 1.5 2001-07-11 10:01:48 gunter Exp $
+// $Id: G4PionZero.hh,v 1.6 2001-10-15 10:06:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,8 +55,6 @@ class G4PionZero : public G4VMeson
 {
  private:
    static G4PionZero thePionZero;
-   static G4double  thePionZeroLengthCut;
-   static G4double* thePionZeroKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4PionZero(
@@ -76,19 +74,7 @@ class G4PionZero : public G4VMeson
 
    static G4PionZero* PionZeroDefinition();
    static G4PionZero* PionZero() {return &thePionZero;}
-   static G4double GetCuts() {return thePionZeroLengthCut;}   
-   static G4double* GetCutsInEnergy() {return thePionZeroKineticEnergyCuts;};
-
-   virtual void        SetCuts(G4double aCut);
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
+   void SetCuts(G4double aCut);
 };
 
-inline void G4PionZero::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  thePionZeroLengthCut = theCutInMaxInteractionLength;  
-  thePionZeroKineticEnergyCuts = theKineticEnergyCuts;
-}
 #endif

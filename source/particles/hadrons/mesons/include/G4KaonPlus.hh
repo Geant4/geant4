@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonPlus.hh,v 1.5 2001-07-11 10:01:47 gunter Exp $
+// $Id: G4KaonPlus.hh,v 1.6 2001-10-15 10:06:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,8 +55,6 @@ class G4KaonPlus : public G4VMeson
 {
  private:
    static G4KaonPlus theKaonPlus;
-   static G4double  theKaonPlusLengthCut;
-   static G4double* theKaonPlusKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4KaonPlus(
@@ -75,28 +73,7 @@ public:
    virtual ~G4KaonPlus(){}
    static G4KaonPlus* KaonPlusDefinition();
    static G4KaonPlus* KaonPlus() {return &theKaonPlus;}
-   static G4double GetCuts() {return theKaonPlusLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theKaonPlusKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
 };
-
-inline void G4KaonPlus::SetCuts(G4double aCut)
-{
-  G4ParticleWithCuts::SetCuts(aCut);
-  theKaonPlusLengthCut = theCutInMaxInteractionLength;  
-  theKaonPlusKineticEnergyCuts = theKineticEnergyCuts;
-}
-
-inline void G4KaonPlus::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theKaonPlusLengthCut = theCutInMaxInteractionLength;  
-  theKaonPlusKineticEnergyCuts = theKineticEnergyCuts;
-}
 
 
 #endif

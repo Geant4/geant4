@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Eta.hh,v 1.4 2001-07-11 10:01:46 gunter Exp $
+// $Id: G4Eta.hh,v 1.5 2001-10-15 10:06:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,8 +55,6 @@ class G4Eta : public G4VMeson
 {
  private:
    static G4Eta    theEta;
-   static G4double  theEtaLengthCut;
-   static G4double* theEtaKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4Eta(
@@ -76,8 +74,6 @@ class G4Eta : public G4VMeson
 
    static G4Eta*      EtaDefinition();
    static G4Eta*      Eta(){return &theEta;}
-   static G4double GetCuts() {return theEtaLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theEtaKineticEnergyCuts;};
 
    virtual void        SetCuts(G4double aCut);
 };

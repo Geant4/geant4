@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BMesonPlus.hh,v 1.4 2001-07-11 10:01:45 gunter Exp $
+// $Id: G4BMesonPlus.hh,v 1.5 2001-10-15 10:06:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,8 +53,6 @@ class G4BMesonPlus : public G4VMeson
 {
  private:
    static G4BMesonPlus theBMesonPlus;
-   static G4double  theBMesonPlusLengthCut;
-   static G4double* theBMesonPlusKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4BMesonPlus(
@@ -74,17 +72,6 @@ class G4BMesonPlus : public G4VMeson
 
    static G4BMesonPlus* BMesonPlusDefinition();
    static G4BMesonPlus* BMesonPlus();
-   static G4double GetCuts() {return theBMesonPlusLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theBMesonPlusKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
 };
-
-inline void G4BMesonPlus::SetCuts(G4double aCut)
-{
-  G4ParticleWithCuts::SetCuts(aCut);
-  theBMesonPlusLengthCut = theCutInMaxInteractionLength;  
-  theBMesonPlusKineticEnergyCuts = theKineticEnergyCuts;
-}
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonZeroLong.hh,v 1.4 2001-07-11 10:01:47 gunter Exp $
+// $Id: G4KaonZeroLong.hh,v 1.5 2001-10-15 10:06:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,8 +55,6 @@ class G4KaonZeroLong : public G4VMeson
 {
  private:
    static G4KaonZeroLong theKaonZeroLong;
-   static G4double  theKaonZeroLongLengthCut;
-   static G4double* theKaonZeroLongKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4KaonZeroLong(
@@ -76,8 +74,6 @@ class G4KaonZeroLong : public G4VMeson
 
    static G4KaonZeroLong* KaonZeroLongDefinition();
    static G4KaonZeroLong* KaonZeroLong(){return &theKaonZeroLong;}
-   static G4double GetCuts() {return theKaonZeroLongLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theKaonZeroLongKineticEnergyCuts;};
 
    virtual void        SetCuts(G4double aCut);
 };

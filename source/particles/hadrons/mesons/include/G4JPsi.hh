@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4JPsi.hh,v 1.4 2001-07-11 10:01:47 gunter Exp $
+// $Id: G4JPsi.hh,v 1.5 2001-10-15 10:06:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,8 +54,6 @@ class G4JPsi : public G4VMeson
 {
  private:
    static G4JPsi theJPsi;
-   static G4double  theJPsiLengthCut;
-   static G4double* theJPsiKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4JPsi(
@@ -75,8 +73,6 @@ class G4JPsi : public G4VMeson
 
    static G4JPsi* JPsiDefinition();
    static G4JPsi* JPsi();
-   static G4double GetCuts() {return theJPsiLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theJPsiKineticEnergyCuts;};
 
    virtual void SetCuts(G4double aCut); 
 };

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiKaonZero.hh,v 1.5 2001-07-11 10:01:45 gunter Exp $
+// $Id: G4AntiKaonZero.hh,v 1.6 2001-10-15 10:06:11 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,9 +56,6 @@ class G4AntiKaonZero : public G4VMeson
 {
  private:
    static G4AntiKaonZero theAntiKaonZero;
-   static G4double  theAntiKaonZeroLengthCut;
-   static G4double* theAntiKaonZeroKineticEnergyCuts;
-
 
  private: // constructors are hide as private  
  
@@ -79,19 +76,8 @@ class G4AntiKaonZero : public G4VMeson
 
    static G4AntiKaonZero* AntiKaonZeroDefinition();
    static G4AntiKaonZero* AntiKaonZero() {return &theAntiKaonZero;}
-   static G4double GetCuts() {return theAntiKaonZeroLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theAntiKaonZeroKineticEnergyCuts;};
 
-   virtual void   SetCuts(G4double aCut);
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
+   void SetCuts(G4double aCut);
 };
 
-inline void G4AntiKaonZero::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theAntiKaonZeroLengthCut = theCutInMaxInteractionLength;  
-  theAntiKaonZeroKineticEnergyCuts = theKineticEnergyCuts;
-}
 #endif

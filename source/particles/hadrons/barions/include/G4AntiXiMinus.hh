@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXiMinus.hh,v 1.5 2001-07-11 10:01:35 gunter Exp $
+// $Id: G4AntiXiMinus.hh,v 1.6 2001-10-15 10:09:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,8 +53,6 @@ class G4AntiXiMinus : public G4VBaryon
 {
  private:
    static G4AntiXiMinus theAntiXiMinus;
-   static G4double  theAntiXiMinusLengthCut;
-   static G4double* theAntiXiMinusKineticEnergyCuts;
 
  private:
    G4AntiXiMinus(
@@ -74,19 +72,7 @@ class G4AntiXiMinus : public G4VBaryon
 
    static G4AntiXiMinus* AntiXiMinusDefinition();
    static G4AntiXiMinus* AntiXiMinus(){return &theAntiXiMinus;}
-   static G4double GetCuts() {return theAntiXiMinusLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theAntiXiMinusKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
 };
-
-inline void G4AntiXiMinus::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theAntiXiMinusLengthCut = theCutInMaxInteractionLength;  
-  theAntiXiMinusKineticEnergyCuts = theKineticEnergyCuts;
-  
-}
 
 
 #endif

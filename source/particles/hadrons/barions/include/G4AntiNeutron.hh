@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.hh,v 1.6 2001-07-11 10:01:34 gunter Exp $
+// $Id: G4AntiNeutron.hh,v 1.7 2001-10-15 10:09:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,8 +55,6 @@ class G4AntiNeutron : public G4VBaryon
 {
  private:
    static G4AntiNeutron theAntiNeutron;
-   static G4double  theAntiNeutronLengthCut;
-   static G4double* theAntiNeutronKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4AntiNeutron(
@@ -76,20 +74,8 @@ class G4AntiNeutron : public G4VBaryon
 
    static G4AntiNeutron* AntiNeutronDefinition();
    static G4AntiNeutron* AntiNeutron(){return &theAntiNeutron;}
-   static G4double GetCuts() {return theAntiNeutronLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theAntiNeutronKineticEnergyCuts;};
 
    virtual void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
 };
 
-inline
- void G4AntiNeutron::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theAntiNeutronLengthCut = theCutInMaxInteractionLength;  
-  theAntiNeutronKineticEnergyCuts = theKineticEnergyCuts;
-}
 #endif

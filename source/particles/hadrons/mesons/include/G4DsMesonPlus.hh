@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DsMesonPlus.hh,v 1.4 2001-07-11 10:01:46 gunter Exp $
+// $Id: G4DsMesonPlus.hh,v 1.5 2001-10-15 10:06:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,8 +53,6 @@ class G4DsMesonPlus : public G4VMeson
 {
  private:
    static G4DsMesonPlus theDsMesonPlus;
-   static G4double  theDsMesonPlusLengthCut;
-   static G4double* theDsMesonPlusKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4DsMesonPlus(
@@ -74,17 +72,6 @@ class G4DsMesonPlus : public G4VMeson
 
    static G4DsMesonPlus* DsMesonPlusDefinition();
    static G4DsMesonPlus* DsMesonPlus();
-   static G4double GetCuts() {return theDsMesonPlusLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theDsMesonPlusKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
 };
-
-inline void G4DsMesonPlus::SetCuts(G4double aCut)
-{
-  G4ParticleWithCuts::SetCuts(aCut);
-  theDsMesonPlusLengthCut = theCutInMaxInteractionLength;  
-  theDsMesonPlusKineticEnergyCuts = theKineticEnergyCuts;
-}
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OmegaMinus.hh,v 1.5 2001-07-11 10:01:37 gunter Exp $
+// $Id: G4OmegaMinus.hh,v 1.6 2001-10-15 10:09:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,8 +53,6 @@ class G4OmegaMinus : public G4VBaryon
 {
  private:
    static G4OmegaMinus theOmegaMinus;
-   static G4double  theOmegaMinusLengthCut;
-   static G4double* theOmegaMinusKineticEnergyCuts;
 
  private:
    G4OmegaMinus(
@@ -74,19 +72,7 @@ class G4OmegaMinus : public G4VBaryon
  
    static G4OmegaMinus* OmegaMinusDefinition();
    static G4OmegaMinus* OmegaMinus() {return &theOmegaMinus;}
-   static G4double GetCuts() {return theOmegaMinusLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theOmegaMinusKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
 };
-
-inline void G4OmegaMinus::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theOmegaMinusLengthCut = theCutInMaxInteractionLength;  
-  theOmegaMinusKineticEnergyCuts = theKineticEnergyCuts;
-  
-}
 
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaZero.hh,v 1.5 2001-07-11 10:01:37 gunter Exp $
+// $Id: G4SigmaZero.hh,v 1.6 2001-10-15 10:09:28 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,8 +53,6 @@ class G4SigmaZero : public G4VBaryon
 {
  private:
    static G4SigmaZero theSigmaZero;
-   static G4double  theSigmaZeroLengthCut;
-   static G4double* theSigmaZeroKineticEnergyCuts;
 
  private:
    G4SigmaZero(
@@ -74,8 +72,6 @@ class G4SigmaZero : public G4VBaryon
 
    static G4SigmaZero* SigmaZeroDefinition();
    static G4SigmaZero* SigmaZero(){return &theSigmaZero;}
-   static G4double GetCuts() {return theSigmaZeroLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theSigmaZeroKineticEnergyCuts;};
 
    virtual void SetCuts(G4double aCut); 
 };

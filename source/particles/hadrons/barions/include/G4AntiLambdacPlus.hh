@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiLambdacPlus.hh,v 1.5 2001-07-11 10:01:34 gunter Exp $
+// $Id: G4AntiLambdacPlus.hh,v 1.6 2001-10-15 10:09:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,8 +54,6 @@ class G4AntiLambdacPlus : public G4VBaryon
 {
  private:
    static G4AntiLambdacPlus theAntiLambdacPlus;
-   static G4double  theAntiLambdacPlusLengthCut;
-   static G4double* theAntiLambdacPlusKineticEnergyCuts;
 
  private:
    G4AntiLambdacPlus(
@@ -75,17 +73,6 @@ class G4AntiLambdacPlus : public G4VBaryon
 
    static G4AntiLambdacPlus* AntiLambdacPlusDefinition();
    static G4AntiLambdacPlus* AntiLambdacPlus();
-   static G4double GetCuts() {return theAntiLambdacPlusLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theAntiLambdacPlusKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
 };
 
-inline void G4AntiLambdacPlus::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theAntiLambdacPlusLengthCut = theCutInMaxInteractionLength;  
-  theAntiLambdacPlusKineticEnergyCuts = theKineticEnergyCuts;
-  
-}
 #endif

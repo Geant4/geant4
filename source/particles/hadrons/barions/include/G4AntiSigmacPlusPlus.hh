@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmacPlusPlus.hh,v 1.5 2001-07-11 10:01:34 gunter Exp $
+// $Id: G4AntiSigmacPlusPlus.hh,v 1.6 2001-10-15 10:09:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,8 +54,6 @@ class G4AntiSigmacPlusPlus : public G4VBaryon
 {
  private:
    static G4AntiSigmacPlusPlus theAntiSigmacPlusPlus;
-   static G4double  theAntiSigmacPlusPlusLengthCut;
-   static G4double* theAntiSigmacPlusPlusKineticEnergyCuts;
 
  private:
    G4AntiSigmacPlusPlus(
@@ -75,19 +73,7 @@ class G4AntiSigmacPlusPlus : public G4VBaryon
 
    static G4AntiSigmacPlusPlus* AntiSigmacPlusPlusDefinition();
    static G4AntiSigmacPlusPlus* AntiSigmacPlusPlus();
-   static G4double GetCuts() {return theAntiSigmacPlusPlusLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theAntiSigmacPlusPlusKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
 };
-
-inline void G4AntiSigmacPlusPlus::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theAntiSigmacPlusPlusLengthCut = theCutInMaxInteractionLength;  
-  theAntiSigmacPlusPlusKineticEnergyCuts = theKineticEnergyCuts;
-  
-}
 
 
 #endif

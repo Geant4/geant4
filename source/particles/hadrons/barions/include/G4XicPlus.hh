@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XicPlus.hh,v 1.5 2001-07-11 10:01:38 gunter Exp $
+// $Id: G4XicPlus.hh,v 1.6 2001-10-15 10:09:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,8 +54,6 @@ class G4XicPlus : public G4VBaryon
 {
  private:
    static G4XicPlus theXicPlus;
-   static G4double  theXicPlusLengthCut;
-   static G4double* theXicPlusKineticEnergyCuts;
 
  private:
    G4XicPlus(
@@ -75,19 +73,6 @@ class G4XicPlus : public G4VBaryon
 
    static G4XicPlus* XicPlusDefinition();
    static G4XicPlus* XicPlus();
-   static G4double GetCuts() {return theXicPlusLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theXicPlusKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
 };
-
-inline void G4XicPlus::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theXicPlusLengthCut = theCutInMaxInteractionLength;  
-  theXicPlusKineticEnergyCuts = theKineticEnergyCuts;
-  
-}
-
 
 #endif

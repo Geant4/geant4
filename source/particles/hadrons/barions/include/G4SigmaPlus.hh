@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaPlus.hh,v 1.5 2001-07-11 10:01:37 gunter Exp $
+// $Id: G4SigmaPlus.hh,v 1.6 2001-10-15 10:09:28 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,8 +53,6 @@ class G4SigmaPlus : public G4VBaryon
 {
  private:
    static G4SigmaPlus theSigmaPlus;
-   static G4double  theSigmaPlusLengthCut;
-   static G4double* theSigmaPlusKineticEnergyCuts;
 
  private:
    G4SigmaPlus(
@@ -74,19 +72,7 @@ class G4SigmaPlus : public G4VBaryon
 
    static G4SigmaPlus* SigmaPlusDefinition();
    static G4SigmaPlus* SigmaPlus() {return &theSigmaPlus;}
-   static G4double GetCuts() {return theSigmaPlusLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theSigmaPlusKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
 };
-
-inline void G4SigmaPlus::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theSigmaPlusLengthCut = theCutInMaxInteractionLength;  
-  theSigmaPlusKineticEnergyCuts = theKineticEnergyCuts;
-  
-}
 
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionPlus.hh,v 1.5 2001-07-11 10:01:48 gunter Exp $
+// $Id: G4PionPlus.hh,v 1.6 2001-10-15 10:06:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,8 +55,6 @@ class G4PionPlus : public G4VMeson
 {
  private:
    static G4PionPlus thePionPlus;
-   static G4double  thePionPlusLengthCut;
-   static G4double* thePionPlusKineticEnergyCuts;
 
  private:
    G4PionPlus(
@@ -76,28 +74,7 @@ class G4PionPlus : public G4VMeson
 
    static G4PionPlus* PionPlusDefinition();
    static G4PionPlus* PionPlus() {return &thePionPlus;}
-   static G4double GetCuts() {return thePionPlusLengthCut;}   
-   static G4double* GetCutsInEnergy() {return thePionPlusKineticEnergyCuts;};
-
-   void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
 };
-
-inline void G4PionPlus::SetCuts(G4double aCut)
-{
-  G4ParticleWithCuts::SetCuts(aCut);
-  thePionPlusLengthCut = theCutInMaxInteractionLength;  
-  thePionPlusKineticEnergyCuts = theKineticEnergyCuts;
-}
-
-inline void G4PionPlus::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  thePionPlusLengthCut = theCutInMaxInteractionLength;  
-  thePionPlusKineticEnergyCuts = theKineticEnergyCuts;
-}
 
 
 #endif
