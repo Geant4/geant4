@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02PhysicsList.cc,v 1.9 2001-01-09 14:34:34 maire Exp $
+// $Id: ExN02PhysicsList.cc,v 1.10 2001-03-02 14:15:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -142,7 +142,7 @@ void ExN02PhysicsList::ConstructProcess()
 
 #include "G4hIonisation.hh"
 
-////#include "G4UserSpecialCuts.hh"
+#include "G4UserSpecialCuts.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

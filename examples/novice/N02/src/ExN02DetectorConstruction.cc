@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.6 2001-01-31 18:05:28 gcosmo Exp $
+// $Id: ExN02DetectorConstruction.cc,v 1.7 2001-03-02 14:15:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
@@ -24,7 +24,7 @@
 #include "G4PVParameterised.hh"
 #include "G4SDManager.hh"
 
-///#include "G4UserLimits.hh"
+#include "G4UserLimits.hh"
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
@@ -122,14 +122,14 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 
   G4double HalfWorldLength = 0.5*fWorldLength;
   
-  solidWorld= new G4Box("World",HalfWorldLength,HalfWorldLength,HalfWorldLength);
+  solidWorld= new G4Box("world",HalfWorldLength,HalfWorldLength,HalfWorldLength);
   logicWorld= new G4LogicalVolume( solidWorld, Air, "World", 0, 0, 0);
   
   //  Must place the World Physical volume unrotated at (0,0,0).
   // 
   physiWorld = new G4PVPlacement(0,               // no rotation
                                  G4ThreeVector(), // at (0,0,0)
-				 "WorldPV",       // its name
+				 "World",         // its name
                                  logicWorld,      // its logical volume
                                  0,               // its mother  volume
                                  false,           // no boolean operations
@@ -141,11 +141,11 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   
   G4ThreeVector positionTarget = G4ThreeVector(0,0,-(targetSize+trackerSize));
    
-  solidTarget = new G4Box("TargetSolid",targetSize,targetSize,targetSize);
-  logicTarget = new G4LogicalVolume(solidTarget,TargetMater,"TargetLV",0,0,0);
+  solidTarget = new G4Box("target",targetSize,targetSize,targetSize);
+  logicTarget = new G4LogicalVolume(solidTarget,TargetMater,"Target",0,0,0);
   physiTarget = new G4PVPlacement(0,               // no rotation
 				  positionTarget,  // at (x,y,z)
-				  "TargetPV",      // its name
+				  "Target",        // its name
 				  logicTarget,     // its logical volume
 				  physiWorld,      // its mother  volume
 				  false,           // no boolean operations
@@ -160,7 +160,7 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   
   G4ThreeVector positionTracker = G4ThreeVector(0,0,0);
   
-  solidTracker = new G4Box("Tracker",trackerSize,trackerSize,trackerSize);
+  solidTracker = new G4Box("tracker",trackerSize,trackerSize,trackerSize);
   logicTracker = new G4LogicalVolume(solidTracker , Air, "Tracker",0,0,0);  
   physiTracker = new G4PVPlacement(0,              // no rotation
 				  positionTracker, // at (x,y,z)
