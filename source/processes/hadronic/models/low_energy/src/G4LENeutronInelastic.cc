@@ -206,7 +206,7 @@
       theParticleChange.AddSecondary( pd );
       return;
     }
-    G4FastVector<G4ReactionProduct,3> vec;  // vec will contain the secondary particles
+    G4FastVector<G4ReactionProduct,4> vec;  // vec will contain the secondary particles
     G4int vecLen = 0;
     vec.Initialize( 0 );
     

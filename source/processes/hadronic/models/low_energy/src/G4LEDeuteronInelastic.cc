@@ -50,7 +50,7 @@
     massVec[7] = massVec[3];
     massVec[8] = targetNucleus.AtomicMass( N,     Z-1.0 )-(Z-1.0)*G4Electron::Electron()->GetPDGMass();
     
-    G4FastVector<G4ReactionProduct,3> vec;  // vec will contain the secondary particles
+    G4FastVector<G4ReactionProduct,4> vec;  // vec will contain the secondary particles
     G4int vecLen = 0;
     vec.Initialize( 0 );
     
