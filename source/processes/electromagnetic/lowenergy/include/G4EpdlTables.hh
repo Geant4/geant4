@@ -36,9 +36,6 @@
 
 // C++ Headers
 
-//RW Headers
-#include <rw/tpslist.h>
-
 // Class Declarations
 class G4VDataFile;
 

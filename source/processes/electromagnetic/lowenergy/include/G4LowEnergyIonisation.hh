@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.2 1999-06-02 17:43:48 aforti Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.3 1999-06-05 13:44:10 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,9 +47,6 @@
 #include "G4SecondLevel.hh"
 #include "G4ThirdLevel.hh"
 
-// RW headers
-#include <rw/tpslist.h> 
-
 typedef G4FirstLevel oneShellTable;
 typedef G4SecondLevel oneAtomTable;
 typedef G4ThirdLevel allAtomTable;
@@ -83,6 +80,7 @@ protected:
   void BuildLossTable(const G4ParticleDefinition& aParticleType);
   void BuildShellCrossSectionTable();
   void BuildFluorTransitionTable();
+  void BuildBindingEnergyTable();
   void BuildSamplingCoeffTable();
 
 private:
