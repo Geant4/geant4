@@ -5,14 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReferenceCountedHandle.hh,v 1.3 2001-06-01 10:31:13 radoone Exp $
+// $Id: G4ReferenceCountedHandle.hh,v 1.4 2001-06-11 15:56:09 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Class G4RereferenceCountedHandle
-//
 // Class description:
-//
 // A class to provide reference counting mechanism for a class which
 // is designed without this support. It is a templated class, a smart pointer,
 // wrapping the class to be counted and performs the reference counting
@@ -22,15 +20,12 @@
 // maniplutation syntax the same as for the normal "dumb" pointers.
 // The basic rule for the use of this class is that it is passed always by
 // reference and is not constructed by calling new.
-//
 // Before the use of this smart pointer object one can test its validity
 // using the operator !() or operator bool().
 //  if( !smartPtrObj ) { ... } // Problem! We must initialize it first!
 //  else               { ... } // OK!
-//
 // The code which tries to delete this object won't compile, because it is
 // not a pointer it is an object.
-//
 // Author:      Radovan Chytracek
 // Version:     1.0
 // Date:        February 2001
@@ -42,27 +37,52 @@ template <class X>
 class G4ReferenceCountedHandle
 {
 private: // with description
-  struct CountedObject {
+  
+  typedef G4ReferenceCountedHandle RCH;
+  
+  class CountedObject {
+  public:
+    inline CountedObject( X* pObj = 0 )
+    : fCount(1), fRep( pObj ) {
+    } // Constructor
+
+    inline ~CountedObject() {
+      delete fRep;
+      fRep = 0;
+    } // Destructor
+    
+    inline X* GetObject() const {
+      return fRep;
+    }
+    
+    inline void SetObject( const X* object ) {
+      fRep = object;
+    }
+    
+    inline unsigned int AddRef() {
+       return( ++fCount );
+    } // Forward to Counter class
+
+    inline unsigned int Release() {
+       return( --fCount );
+    } // Forward to Counter class
+
+    inline unsigned int Count() const {
+       return( fCount );
+    } // Forward to Counter class
+    
+  private:
     unsigned int fCount;
     // Reference counter
     X*           fRep;
     // The counted object
-
-    CountedObject::CountedObject( X* pObj = 0 )
-    : fCount(1), fRep( pObj ) {
-    } // Constructor
-
-    CountedObject::~CountedObject() {
-      delete fRep;
-      fRep = 0;
-    } // Destructor
   };
 
 public: // with description
   G4ReferenceCountedHandle( X* rep = 0 )
   : fObj( 0 ) {
     if( rep != 0 ) {
-	    fObj = new G4ReferenceCountedHandle::CountedObject( rep );
+	    fObj = new RCH::CountedObject( rep );
 	  }
   } // Constructor
 
@@ -70,112 +90,119 @@ public: // with description
     if( 0 == Release() )    {
       if( fObj != 0 )     {
         delete fObj;
+	      fObj = 0;
       }
     }
   } // Destructor
 
   G4ReferenceCountedHandle( const G4ReferenceCountedHandle& right )
   : fObj( 0 ) {
-    fObj = right.fObj;
+    fObj = right.GetCountedObject();
     AddRef();
   } // Copy constructor
   
   template <class T>
   G4ReferenceCountedHandle( const G4ReferenceCountedHandle<T>& right )
   : fObj( 0 ) {
-    fObj = right.fObj;
+    fObj = right.GetCountedObject();
     AddRef();
   } // Copy constructor
 
   G4ReferenceCountedHandle& operator =( const G4ReferenceCountedHandle& right ) {
-    if( &right != this )              {
-      if( 0 == Release() )          {
-        if( fObj != 0 )           {
-          delete fObj;
+    if( this->fObj != right.GetCountedObject() )              {
+      if( 0 == this->Release() )          {
+        if( this->fObj != 0 )           {
+          delete this->fObj;
         }
       }
-      fObj = right.fObj;
-      AddRef();
+      this->fObj = right.GetCountedObject();
+      this->AddRef();
     }
     return *this;
   } // Assignment operator by reference
   
   template <class T>
-  G4ReferenceCountedHandle& operator =( const G4ReferenceCountedHandle<T>& right ) {
-    if( &right != this )              {
-      if( 0 == Release() )          {
-        if( fObj != 0 )           {
-          delete fObj;
+  G4ReferenceCountedHandle& operator=( const G4ReferenceCountedHandle<T>& right ) {
+    if( this->fObj != right.GetCountedObject() )              {
+      if( 0 == this->Release() )          {
+        if( this->fObj != 0 )           {
+          delete this->fObj;
         }
       }
-      fObj = right.fObj;
-      AddRef();
+      this->fObj = right.GetCountedObject();
+      this->AddRef();
     }
     return *this;
   } // Assignment operator by reference
 
   G4ReferenceCountedHandle& operator =( const G4ReferenceCountedHandle* right ) {
-    if( this != right )               {
-      if( 0 == Release() )          {
-        if( fObj != 0 )           {
-          delete fObj;
+    if( this->fObj != right->GetCountedObject() )               {
+      if( 0 == this->Release() )          {
+        if( this->fObj != 0 )           {
+          delete this->fObj;
         }
       }
-      fObj = right->fObj;
-      AddRef();
+      this->fObj = right->GetCountedObject();
+      this->AddRef();
     }
     return *this;
   } // Assignment operator by pointer, should not be ever called 
 
   G4ReferenceCountedHandle& operator =( X* pRefObj ) {
-    if( 0 == Release() )          {
-      if( fObj != 0 )           {
-        delete fObj;
+    if( this->fObj == 0 || pRefObj != this->fObj->GetObject() ) {
+      if( 0 == Release() )          {
+        if( fObj != 0 )           {
+          delete fObj;
+        }
       }
+      fObj = new RCH::CountedObject( pRefObj );
     }
-    fObj = new G4ReferenceCountedHandle::CountedObject( pRefObj );
     return *this;
   } // Assignment operator by pointer to the counted class object
+  
+  RCH::CountedObject* GetCountedObject() const {
+    return fObj;
+  }
 
   inline unsigned int AddRef() {
-     return( ( fObj != 0 ) ? ++fObj->fCount : 0  );
+     return( ( fObj != 0 ) ? fObj->AddRef() : 0  );
   } // Forward to Counter class
 
   inline unsigned int Release() {
-     return( (fObj != 0 ) ? --fObj->fCount : 0 );
+     return( (fObj != 0 ) ? fObj->Release() : 0 );
   } // Forward to Counter class
 
   inline unsigned int Count() const {
-     return( ( fObj != 0 ) ? fObj->fCount : 0 );
+     return( ( fObj != 0 ) ? fObj->Count() : 0 );
   } // Forward to Counter class
 
   X* operator ->() const {
-     return fObj->fRep;
+     return( ( fObj != 0 ) ? fObj->GetObject() : 0 );
   } // Operator -> allowing the access to counted object
     // The check for 0-ness is left out for performance reasons, see operator () bellow
     // May be called on initialized smart-pointer only!
 
   bool operator !() const {
-     return( ( fObj == 0 || fObj->fRep == 0 ) ? true : false );
+     return( ( fObj == 0 || fObj->GetObject() == 0 ) ? true : false );
   } // Validity test operator
   
   operator bool() const {
-    return( ( fObj != 0 && fObj->fRep != 0 ) ? true : false );
+    return( ( fObj != 0 && fObj->GetObject() != 0 ) ? true : false );
   }
 
   X& operator *() const {
-     return *fObj->fRep;
+     return( ( fObj != 0 ) ? *(fObj->GetObject()) : 0 );
   } // Dereference operator to make the feeling of dereferencing a pointer to
     // the counted object
     // May be called on initialized smart-pointer only!
 
   X* operator ()() const {
-     return( ( fObj != 0 ) ? fObj->fRep : 0 );
+     return( ( fObj != 0 ) ? fObj->GetObject() : 0 );
   } // Functor operator (for covinience)
 
 
 private:
-  G4ReferenceCountedHandle::CountedObject*     fObj;
+  RCH::CountedObject*     fObj;
  // Object being the subject to reference counting
 };
 
