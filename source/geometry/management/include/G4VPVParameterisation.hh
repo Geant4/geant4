@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPVParameterisation.hh,v 1.6 2003-11-02 14:00:53 gcosmo Exp $
+// $Id: G4VPVParameterisation.hh,v 1.7 2005-02-15 17:38:28 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VPVParamterisation
@@ -44,6 +44,7 @@
 #include "G4Types.hh"
 
 class G4VPhysicalVolume;
+class G4VTouchable; 
 class G4VSolid;
 class G4Material;
 
@@ -67,7 +68,7 @@ class G4VPVParameterisation
   public:
 
     virtual void ComputeTransformation(const G4int,
-                                       G4VPhysicalVolume *) const = 0;
+                                       G4VPhysicalVolume * ) const = 0;
 
     virtual G4VSolid*   ComputeSolid(const G4int, G4VPhysicalVolume *);
 				       
