@@ -6,8 +6,7 @@
 class G4HadSecondary
 {
   public:
-    G4HadSecondary(G4DynamicParticle * aT, G4double aWeight = 1) :
-    theP(aT), theWeight(aWeight), theTime(-1){}
+    G4HadSecondary(G4DynamicParticle * aT, G4double aWeight = 1);
     G4DynamicParticle * GetParticle() {return theP;}
     G4double GetWeight() {return theWeight;}
     void SetWeight(G4double aW){theWeight= aW;}
