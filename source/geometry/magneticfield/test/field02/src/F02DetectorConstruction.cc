@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02DetectorConstruction.cc,v 1.2 2001-11-19 16:40:27 grichine Exp $
+// $Id: F02DetectorConstruction.cc,v 1.3 2002-02-01 11:07:36 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,10 +65,11 @@ F02DetectorConstruction::F02DetectorConstruction()
   WorldSizeZ = 200.*cm;
   WorldSizeR = 1000.*cm;
 
-  AbsorberThickness = 0.1*mm;
+  AbsorberThickness = 0.01*cm;
 
   AbsorberRadius   = WorldSizeR - 0.1*cm;
-  zAbsorber = 0.5*WorldSizeZ + 0.5*AbsorberThickness - 1.0*cm ;
+  //  zAbsorber = 0.5*WorldSizeZ - 50.5*cm ; // - 0.5*AbsorberThickness ;
+  zAbsorber = 99*cm - 0.5*AbsorberThickness ;
 
   fWindowThick = 51.0*micrometer ;
   fElectrodeThick = 10.0*micrometer ;

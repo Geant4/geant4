@@ -31,9 +31,13 @@
 #/plots/setEnlow 0.0 MeV
 #/plots/setEnhigh 0.1  MeV 
 # 
-/plots/setnbinTt 100
+/plots/setnbinTt 10
 /plots/setTtlow 99.9996 MeV
 /plots/setTthigh 100.0002  MeV  
+#
+/plots/setnbinTglob 20
+/plots/setTgloblow 0.00 ns
+/plots/setTglobhigh 20.0 ns  
 #
 #/calor/cutG 3.0 mm    
 #
@@ -46,14 +50,14 @@
 #
 #/gun/particle chargedgeantino
 # 
-#/gun/energy 200.00 GeV
+#/gun/energy 2000.00 GeV
 #
 /gun/energy 1.0 MeV
 #
 #/tracking/verbose 1
 #
-/event/printModulo 10
-/run/beamOn 100
+/event/printModulo 1
+/run/beamOn 5
 #
 #
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02EventAction.cc,v 1.3 2001-11-19 16:40:27 grichine Exp $
+// $Id: F02EventAction.cc,v 1.4 2002-02-01 11:07:36 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -260,4 +260,14 @@ void F02EventAction::SetRef()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
+
+
+
+
+
+
+
+
+
+
 

@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: F02RunMessenger.hh,v 1.1 2001-10-11 07:17:42 grichine Exp $
+// $Id: F02RunMessenger.hh,v 1.2 2002-02-01 11:07:36 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -88,6 +88,10 @@ class F02RunMessenger: public G4UImessenger
    G4UIcmdWithAnInteger*      setnbinTsecCmd; 
    G4UIcmdWithADoubleAndUnit* setTseclowCmd; 
    G4UIcmdWithADoubleAndUnit* setTsechighCmd; 
+
+   G4UIcmdWithAnInteger*      setnbinTglobCmd; 
+   G4UIcmdWithADoubleAndUnit* setTgloblowCmd; 
+   G4UIcmdWithADoubleAndUnit* setTglobhighCmd; 
 
    G4UIcmdWithAnInteger*      setnbinRCmd; 
    G4UIcmdWithADoubleAndUnit* setRlowCmd; 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02RunAction.hh,v 1.1 2001-10-11 07:17:42 grichine Exp $
+// $Id: F02RunAction.hh,v 1.2 2002-02-01 11:07:36 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,6 +65,7 @@ class F02RunAction : public G4UserRunAction
     void AddTrackLength(G4double tlabs); 
     void AddnStepsCharged(G4double ns);
     void AddnStepsNeutral(G4double ns);
+    void AddnTimeGlob(G4double timeGlob);
 
     void AddTrRef(G4double tr,G4double ref);
 
@@ -78,6 +79,7 @@ class F02RunAction : public G4UserRunAction
     void FillGammaSpectrum(G4double E);
     void FillNbOfSteps(G4double nstep);
     void Fillvertexz(G4double z);
+    void FillTglob(G4double timeGlob);
 
     void SethistName(G4String name) ;
 
@@ -100,6 +102,10 @@ class F02RunAction : public G4UserRunAction
     void SetnbinTsec(G4int nbin);
     void SetTseclow(G4double Tlow);
     void SetTsechigh(G4double Thigh);
+
+    void SetnbinTglob(G4int nbin);
+    void SetTgloblow(G4double Tgloblow);
+    void SetTglobhigh(G4double Tglobhigh);
 
     void SetnbinTh(G4int nbin);
     void SetThlow(G4double Thlow);
@@ -135,7 +141,7 @@ class F02RunAction : public G4UserRunAction
 #ifndef G4NOHIST
     HepTupleManager* hbookManager;
     HepHistogram *histo1, *histo2, *histo3, *histo4, *histo5 ;
-    HepHistogram *histo6, *histo7, *histo8, *histo9, *histo10;
+    HepHistogram *histo6, *histo7, *histo8, *histo9, *histo10, *histo11;
 #endif
 
     G4double EnergySumAbs,EnergySquareSumAbs;
@@ -151,33 +157,46 @@ class F02RunAction : public G4UserRunAction
     G4double entryStep,underStep,overStep,distStep[200];
     G4double Steplow,Stephigh,dStep;
     G4int    nbinStep;
+
     G4double entryEn,underEn,overEn,distEn[200];
     G4double Enlow,Enhigh,dEn;
     G4int    nbinEn;
+
     G4double entryTt,underTt,overTt,distTt[200];
     G4double Ttlow,Tthigh,dTt;
     G4int    nbinTt;
     G4double Ttmean,Tt2mean;
+
     G4double entryTb,underTb,overTb,distTb[200];
     G4double Tblow,Tbhigh,dTb;
     G4int    nbinTb;
     G4double Tbmean,Tb2mean;
+
     G4double entryTsec,underTsec,overTsec,distTsec[200];
     G4double Tseclow,Tsechigh,dTsec;
     G4int    nbinTsec;
+
+    G4double entryTglob,underTglob,overTglob,distTglob[200];
+    G4double Tgloblow,Tglobhigh,dTglob;
+    G4int    nbinTglob;
+
     G4double entryTh,underTh,overTh,distTh[200];
     G4double Thlow,Thhigh,dTh;
     G4int    nbinTh;
+
     G4double entryThback,underThback,overThback,distThback[200];
     G4double Thlowback,Thhighback,dThback;
     G4int    nbinThback;
+
     G4double entryR ,underR ,overR ,distR[200];
     G4double Rlow,Rhigh,dR;
     G4int    nbinR;
+
     G4double Rmean,R2mean;
     G4double entryGamma,underGamma,overGamma,distGamma[200];
     G4double ElowGamma,EhighGamma,dEGamma;
     G4int nbinGamma ;
+
     G4double entryvertexz,undervertexz,oververtexz,distvertexz[200];
     G4double zlow,zhigh,dz;
     G4int nbinvertexz;

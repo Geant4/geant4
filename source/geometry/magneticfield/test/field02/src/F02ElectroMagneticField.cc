@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02ElectroMagneticField.cc,v 1.2 2001-11-13 17:22:39 grichine Exp $
+// $Id: F02ElectroMagneticField.cc,v 1.3 2002-02-01 11:07:36 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -60,7 +60,7 @@
 
 F02ElectroMagneticField::F02ElectroMagneticField()
   :  fStepper(NULL),fChordFinder(NULL),G4UniformElectricField(
-                 G4ThreeVector(0.0,1000.0*kilovolt/cm,1000.0*kilovolt/cm))
+                 G4ThreeVector(0.0,0.0*kilovolt/cm,1000.0*kilovolt/cm))
 {
   fEMfield = new G4UniformElectricField(
                  G4ThreeVector(
@@ -78,7 +78,7 @@ F02ElectroMagneticField::F02ElectroMagneticField()
 
   fFieldManager = G4TransportationManager::GetTransportationManager()
                                          ->GetFieldManager();
-
+  fFieldManager->SetFieldChangesEnergy(true);
   UpdateField();
 
   //  GetGlobalFieldManager()->CreateChordFinder(this);

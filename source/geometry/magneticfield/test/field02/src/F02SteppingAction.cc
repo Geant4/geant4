@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02SteppingAction.cc,v 1.2 2001-11-19 16:40:27 grichine Exp $
+// $Id: F02SteppingAction.cc,v 1.3 2002-02-01 11:07:37 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,9 +66,10 @@ F02SteppingAction::~F02SteppingAction()
 
 void F02SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
+        G4cout.precision(16) ;
 
   G4double Edep,Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,xend,yend,zend,rend ;
-  G4double Tkin ;
+  G4double Tkin, timeGlob, timeLoc, timeProp ;
   G4int evno = eventaction->GetEventno() ; 
 
   IDnow = evno+10000*(aStep->GetTrack()->GetTrackID())+
@@ -138,7 +139,7 @@ void F02SteppingAction::UserSteppingAction(const G4Step* aStep)
         GetParticleName()) == "gamma") 
           eventaction->CountStepsNeutral() ;
   }
-
+  // It is main condition
   if (
       (((aStep->GetTrack()->GetTrackID() == 1) &&
         (aStep->GetTrack()->GetParentID()== 0)) ||
@@ -154,15 +155,27 @@ void F02SteppingAction::UserSteppingAction(const G4Step* aStep)
         (aStep->GetTrack()->GetMomentumDirection().z()>0.)
                                                         )
      {
-       eventaction->SetTr();
-       Theta = acos(aStep->GetTrack()->GetMomentumDirection().z()) ;
-       runaction->FillTh(Theta) ;
-       Ttrans = aStep->GetTrack()->GetKineticEnergy() ;
-       runaction->FillTt(Ttrans) ;
-       yend= aStep->GetTrack()->GetPosition().y() ;
-       xend= aStep->GetTrack()->GetPosition().x() ;
-       rend = sqrt(yend*yend+xend*xend) ;
-       runaction->FillR(rend);
+       eventaction ->SetTr();
+       Theta       = acos(aStep->GetTrack()->GetMomentumDirection().z()) ;
+       runaction   ->FillTh(Theta) ;
+
+       Ttrans      = aStep->GetTrack()->GetKineticEnergy() ;
+       runaction   ->FillTt(Ttrans) ;
+
+       yend        = aStep->GetTrack()->GetPosition().y() ;
+       xend        = aStep->GetTrack()->GetPosition().x() ;
+       rend        = sqrt(yend*yend+xend*xend) ;
+       runaction   ->FillR(rend);
+
+       timeGlob    = aStep->GetTrack()->GetGlobalTime() ;
+       timeLoc     = aStep->GetTrack()->GetLocalTime() ;
+       timeProp    = aStep->GetTrack()->GetProperTime() ;
+       //   timeGlob    = aStep->GetPostStepPoint()->GetGlobalTime() ;
+       runaction   ->FillTglob(timeGlob);
+
+       G4cout<<"aStep->GetTrack()->GetGlobalTime() = "<<timeGlob/ns<<" ns"<<G4endl;
+       G4cout<<"aStep->GetTrack()->GetLocalTime() = "<<timeLoc/ns<<" ns"<<G4endl;
+       G4cout<<"aStep->GetTrack()->GetProperTime() = "<<timeProp/ns<<" ns"<<G4endl;
      }
        
   if (

@@ -9,10 +9,10 @@
 #
 #
 #
-/field/setStepperType 4
-/field/setMinStep 10 mm
+#/field/setStepperType 4
+#/field/setMinStep 10 mm
 #
-/field/update
+#/field/update
 #
 /run/initialize
 #

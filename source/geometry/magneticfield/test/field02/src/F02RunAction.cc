@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02RunAction.cc,v 1.2 2001-11-19 16:40:27 grichine Exp $
+// $Id: F02RunAction.cc,v 1.3 2002-02-01 11:07:37 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@ F02RunAction::F02RunAction()
   saveRndm = 1;  
 #ifndef G4NOHIST
   histo1=0; histo2=0; histo3=0; histo4=0; histo5=0;
-  histo6=0; histo7=0; histo8=0; histo9=0; histo10=0;
+  histo6=0; histo7=0; histo8=0; histo9=0; histo10=0;histo11=0;
 #endif
 }
 
@@ -73,6 +73,7 @@ F02RunAction::~F02RunAction()
   if(histo8) delete histo8 ;
   if(histo9) delete histo9 ;
   if(histo10) delete histo10 ;
+  if(histo11) delete histo11 ;
   delete hbookManager;
 #endif
 }
@@ -136,6 +137,12 @@ void F02RunAction::bookHisto()
     histo8 = hbookManager->histogram("kinetic energy of the charged secondaries (MeV)"
                                      ,nbinTsec,Tseclow,Tsechigh)  ;
     assert (histo8 != 0);
+  }
+  if(nbinTglob>0)
+  {
+    histo11 = hbookManager->histogram("Global time of primary particle (ns)"
+                                     ,nbinTglob,Tgloblow,Tglobhigh)  ;
+    assert (histo11 != 0);
   }
   if(nbinvertexz>0)
   {
@@ -247,6 +254,17 @@ void F02RunAction::BeginOfRunAction(const G4Run* aRun)
     for (G4int its=0; its<nbinTsec; its++)
     {
       distTsec[its]=0.;
+    }
+  }
+  if(nbinTglob>0)
+  {
+    dTglob = (Tglobhigh-Tgloblow)/nbinTglob ;
+    entryTglob=0.;
+    underTglob=0.;
+    overTglob=0.;
+    for (G4int itg=0; itg<nbinTglob; itg++)
+    {
+      distTglob[itg]=0.;
     }
   }
   if(nbinTh>0)
@@ -560,7 +578,8 @@ void F02RunAction::EndOfRunAction(const G4Run* aRun)
    }     
   }
   if(nbinTsec>0)
-  {G4double E , dnorm, norm ;
+  {
+   G4double E , dnorm, norm ;
    G4cout << " energy distribution of charged secondaries " << G4endl ;
    G4cout << "#entries=" << entryTsec << "    #underflows=" << underTsec <<
              "    #overflows=" << overTsec << G4endl ;
@@ -579,6 +598,31 @@ void F02RunAction::EndOfRunAction(const G4Run* aRun)
      }
      G4cout << G4endl;
    }     
+  }
+
+  if( nbinTglob > 0 )
+  {
+    G4double E , dnorm, norm ;
+    G4cout << " global time distribution of primary particle " << G4endl ;
+    G4cout << "#entries=" << entryTglob << "    #underflows=" << underTglob <<
+             "    #overflows=" << overTglob << G4endl ;
+
+    if( entryTglob>0.)
+    {
+      E = Tgloblow - dTglob ;
+      norm = TotNbofEvents*dTglob ;
+      G4cout << " bin nbinTglob      Tglob      entries     normalized " << G4endl ;
+
+      for(G4int itt=0; itt<nbinTglob; itt++)
+      {
+        E += dTglob ;
+        dnorm = distTglob[itt]/norm;
+        G4cout << G4std::setw(5) << itt << G4std::setw(10) << E << 
+                  G4std::setw(12) << distTglob[itt] <<
+                  G4std::setw(12) << dnorm << G4endl ;
+      }
+      G4cout << G4endl;
+    }     
   }
 
   if(nbinR >0)
@@ -954,6 +998,31 @@ void F02RunAction::FillTsec(G4double En)
 #endif
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+void F02RunAction::FillTglob(G4double En)
+{
+#ifndef G4NOHIST
+  G4double bin ;
+  G4int ibin;
+
+  if( histo11 )
+  {
+    entryTglob += 1. ;
+
+    if     ( En <  Tgloblow  ) underTglob += 1. ;
+    else if( En >= Tglobhigh ) overTglob  += 1. ;
+    else
+    {
+      bin              = ( En - Tgloblow )/dTglob ;
+      ibin             = (G4int)bin ;
+      distTglob[ibin] += 1. ;
+    }
+    histo11->accumulate(En/ns) ;
+  }
+#endif
+}
+
 /////////////////////////////////////////////////////////////////////////////
 
 void F02RunAction::FillGammaSpectrum(G4double En)
@@ -1255,6 +1324,28 @@ void F02RunAction::SetTsechigh(G4double Ehigh)
   if(nbinTsec>0)
   G4cout << " Ehigh in the  Tsecondary plot = " << Tsechigh << G4endl ;
 }
+
+
+void F02RunAction::SetnbinTglob(G4int nbin)
+{
+  nbinTglob = nbin ;
+  if(nbinTglob>0)
+  G4cout << " Nb of bins in Tglob  plot = " << nbinTglob << G4endl ;
+}
+
+void F02RunAction::SetTgloblow(G4double Elow)
+{
+  Tgloblow = Elow ;
+  if(nbinTglob>0)
+    G4cout << " Elow  in the  Tglob plot = " << Tgloblow/ns <<" ns"<< G4endl ;
+}
+
+void F02RunAction::SetTglobhigh(G4double Ehigh)
+{
+  Tglobhigh = Ehigh ;
+  if(nbinTglob>0)
+  G4cout << " Ehigh in the  Tglob plot = " << Tglobhigh/ns <<" ns"<< G4endl ;
+}
  
 void F02RunAction::SetnbinR(G4int nbin)
 {
@@ -1357,3 +1448,11 @@ void F02RunAction::AddEP(G4double nele,G4double npos)
 //
 //
 ////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+

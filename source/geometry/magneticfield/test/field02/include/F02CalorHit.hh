@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02CalorHit.hh,v 1.1 2001-10-11 07:17:39 grichine Exp $
+// $Id: F02CalorHit.hh,v 1.2 2002-02-01 11:07:36 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,8 +55,8 @@ class F02CalorHit : public G4VHit
       
   public:
   
-      void AddAbs(G4double de, G4double dl) {EdepAbs += de; TrackLengthAbs += dl;};
-      void AddGap(G4double de, G4double dl) {EdepGap += de; TrackLengthGap += dl;};      
+  void AddAbs(G4double de, G4double dl) {EdepAbs += de; TrackLengthAbs += dl;};
+  void AddGap(G4double de, G4double dl) {EdepGap += de; TrackLengthGap += dl;};      
                  
       G4double GetEdepAbs()     { return EdepAbs; };
       G4double GetTrakAbs()     { return TrackLengthAbs; };

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02RunMessenger.cc,v 1.1 2001-10-11 07:17:44 grichine Exp $
+// $Id: F02RunMessenger.cc,v 1.2 2002-02-01 11:07:37 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -128,6 +128,18 @@ F02RunMessenger::F02RunMessenger(F02RunAction* RA)
   setTsechighCmd->SetGuidance("set upper limit for charged Tsecondary plot ");
   setTsechighCmd->SetParameterName("Tsechigh",false);
 
+  setnbinTglobCmd = new G4UIcmdWithAnInteger("/plots/setnbinTglob",this);
+  setnbinTglobCmd->SetGuidance("set nb of bins in charged Tglobondary plot");
+  setnbinTglobCmd->SetParameterName("nbinTglob",false);
+
+  setTgloblowCmd = new G4UIcmdWithADoubleAndUnit("/plots/setTgloblow",this);
+  setTgloblowCmd->SetGuidance("set lower limit for charged Tglobondary plot ");
+  setTgloblowCmd->SetParameterName("Tgloblow",false);
+
+  setTglobhighCmd = new G4UIcmdWithADoubleAndUnit("/plots/setTglobhigh",this);
+  setTglobhighCmd->SetGuidance("set upper limit for charged Tglobondary plot ");
+  setTglobhighCmd->SetParameterName("Tglobhigh",false);
+
   setnbinRCmd = new G4UIcmdWithAnInteger("/plots/setnbinR",this);
   setnbinRCmd->SetGuidance("set nb of bins in R plot");
   setnbinRCmd->SetParameterName("nbinR",false);
@@ -225,6 +237,10 @@ F02RunMessenger::~F02RunMessenger()
   delete setnbinTsecCmd;
   delete setTseclowCmd;
   delete setTsechighCmd;
+
+  delete setnbinTglobCmd;
+  delete setTgloblowCmd;
+  delete setTglobhighCmd;
 
   delete setnbinRCmd;
   delete setRlowCmd;
@@ -326,6 +342,18 @@ void F02RunMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
   if( command == setTsechighCmd)
     runAction
     ->SetTsechigh( setTsechighCmd->GetNewDoubleValue(newValues));
+
+  if( command == setnbinTglobCmd)
+    runAction
+    ->SetnbinTglob(setnbinTglobCmd->GetNewIntValue(newValues));
+
+  if( command == setTgloblowCmd)
+    runAction
+    ->SetTgloblow( setTgloblowCmd->GetNewDoubleValue(newValues));
+
+  if( command == setTglobhighCmd)
+    runAction
+    ->SetTglobhigh( setTglobhighCmd->GetNewDoubleValue(newValues));
 
   if( command == setnbinRCmd)
     runAction
