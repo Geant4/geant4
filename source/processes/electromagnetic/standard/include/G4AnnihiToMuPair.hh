@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// alpha version of G4AnnihiToMuPair.hh,v   H.Burkhardt, November 2002
+// $Id: G4AnnihiToMuPair.hh,v 1.2 2003-02-04 11:08:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4AnnihiToMuPair physics process ------
@@ -33,23 +33,22 @@
 // (high energy) e+ (atomic) e- ---> mu+ mu-
 // inherit from G4VDiscreteProcess
 //
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......//
+//
+// 04.02.03 : cosmetic simplifications (mma)
+// 27.01.03 : first implementation (hbu)
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4AnnihiToMuPair_h
 #define G4AnnihiToMuPair_h 1
 
-#include "G4ios.hh"
-#include "globals.hh"
-#include "Randomize.hh"
 #include "G4VDiscreteProcess.hh"
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsLogVector.hh"
-#include "G4Element.hh"
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4Step.hh"
+#include "globals.hh"
+
+class G4ParticleDefinition;
+class G4Track;
+class G4Step;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -71,27 +70,26 @@ class G4AnnihiToMuPair : public G4VDiscreteProcess
      void PrintInfoDefinition();
        // Print few lines of informations about the process: validity range,
        // origine ..etc..
-       // Invoked by BuildThePhysicsTable().
+       // Invoked by BuildPhysicsTable().
 
      void SetCrossSecFactor(G4double fac);
        // Set the factor to artificially increase the crossSection (default 1)
 
-     G4double GetCrossSecFactor();
+     G4double GetCrossSecFactor() {return CrossSecFactor;};
        // Get the factor to artificially increase the cross section
+       
+     G4double ComputeCrossSectionPerAtom(G4double PositronEnergy,
+                                         G4double AtomicZ);
+       // Compute total cross section					 
 
      G4double GetMeanFreePath(const G4Track& aTrack,
                               G4double previousStepSize,
-                              G4ForceCondition* condition);
+                              G4ForceCondition* );
        // It returns the MeanFreePath of the process for the current track :
        // (energy, material)
        // The previousStepSize and G4ForceCondition* are not used.
        // This function overloads a virtual function of the base class.
        // It is invoked by the ProcessManager of the Particle.
-
-     G4double GetCrossSectionPerAtom(const G4DynamicParticle* aDynamicPositron,
-                                           G4Element*         anElement);
-       // It returns the total CrossSectionPerAtom of the process,
-       // for the current DynamicPositron (energy), in anElement.
 
      G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
                                     const G4Step& aStep);
@@ -99,15 +97,6 @@ class G4AnnihiToMuPair : public G4VDiscreteProcess
        // returned as a ParticleChange object.
        // This function overloads a virtual function of the base class.
        // It is invoked by the ProcessManager of the Particle.
-
-
-  protected:
-
-     virtual G4double ComputeCrossSectionPerAtom(G4double PositronEnergy,
-               G4double AtomicZ);
-
-     virtual G4double ComputeMeanFreePath (G4double PositronEnergy,
-                                           G4Material* aMaterial);
 
   private:
 
@@ -117,20 +106,15 @@ class G4AnnihiToMuPair : public G4VDiscreteProcess
 
   private:
 
-     G4double LowestEnergyLimit ;     // low  energy limit of the tables
-     G4double HighestEnergyLimit ;    // high energy limit of the tables
+     G4double LowestEnergyLimit;     // Energy threshold of e+
+     G4double HighestEnergyLimit;    // Limit of validity of the model
 
-     G4double fminimalEnergy;         // minimalEnergy of produced particles
-
-     G4double MeanFreePath;           // actual MeanFreePath (current medium)
-     G4double CrossSecFactor;  // factor to artificially increase
-                                      // the cross section, static to make sure to have single value
-
+     G4double CrossSecFactor;        // factor to artificially increase 
+                                     // the cross section, static to make sure
+				     // to have single value
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4AnnihiToMuPair.icc"
 
 #endif
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.74 2003-01-24 16:11:29 vnivanch Exp $
+$Id: History,v 1.75 2003-02-04 11:08:38 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04 feb 03: mma
+- AnnihiToMuPair.hh and cc : first implementation from Helmut Burkhardt.
+  Cosmetic simplifications (mma)
+  
 24 jan 03: V.Ivant (stand-V05-00-02)
-- Migration to "cut per region" 
+- Migration to "cut per region"       
      
 15 jan 03: mma 
 - PhotoElectricEffect::ElecThetaDistribution : if gamma>5 --> costeta=1
