@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.10 2001-08-17 15:41:42 asaim Exp $
+// $Id: G4EventManager.cc,v 1.11 2001-08-28 05:35:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -160,7 +160,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
     }
 #endif
 
-    G4VTrajectory * aTrajectory = NULL;
+    G4VTrajectory * aTrajectory = 0;
 #ifdef G4_STORE_TRAJECTORY
     aTrajectory = trackManager->GimmeTrajectory();
 
