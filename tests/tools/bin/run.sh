@@ -72,7 +72,8 @@ if [ $1 = "all" ] ; then
   nice $G4INSTALL/tests/tools/bin/run.sh test10
   nice $G4INSTALL/tests/tools/bin/run.sh test11
   nice $G4INSTALL/tests/tools/bin/run.sh test12
-  nice $G4INSTALL/tests/tools/bin/run.sh test13
+#  nice $G4INSTALL/tests/tools/bin/run.sh test13
+# test13 tests kinetic model which is not yet available.
   nice $G4INSTALL/tests/tools/bin/run.sh test101
   nice $G4INSTALL/tests/tools/bin/run.sh test102
   nice $G4INSTALL/tests/tools/bin/run.sh test103
