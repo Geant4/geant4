@@ -1,4 +1,4 @@
-$Id: History,v 1.34 1999-11-26 17:17:56 gcosmo Exp $
+$Id: History,v 1.35 1999-11-29 10:17:34 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 29, 99 G.Cosmo (global-V00-01-14)
+- Removed g4std/string wrapper since not anymore needed.
+  It was previously made available only for Win/NT-VC++.
+  Inclusion of system <string> is handled only in g4rw/cstring where
+  G4String is defined.
 
 November 26, 99 G.Cosmo (global-V00-01-13)
 - STLInterface: backed up inline keyword for simple methods in
