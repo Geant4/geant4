@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPFissionData.hh,v 1.3 2000-12-14 09:20:35 hpw Exp $
+// $Id: G4NeutronHPFissionData.hh,v 1.4 2001-05-29 14:13:09 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFissionData_h
@@ -37,7 +37,7 @@ class G4NeutronHPFissionData : public G4VCrossSectionDataSet
    
    G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
 
-   G4double GetCrossSection(const G4DynamicParticle*, const G4Element*);
+   G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, G4double aT);
 
    void BuildPhysicsTable(const G4ParticleDefinition&);
 

@@ -62,6 +62,7 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
     hasAnyData = false;
     hasFSData = false; 
     hasXsec = false;
+    theData.close();
     return;
   }
   // here we go
@@ -121,6 +122,7 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
       G4Exception("Data-type unknown to G4NeutronHPInelasticCompFS");
     }
   }
+  theData.close();
 }
 
 G4int G4NeutronHPInelasticCompFS::SelectExitChannel(G4double eKinetic)
@@ -177,7 +179,8 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
 //        targetMass = theFinalStatePhotons[50]->GetTargetMass();
     G4Nucleus aNucleus;
     G4ReactionProduct theTarget; 
-    theTarget = aNucleus.GetThermalNucleus(targetMass);
+    G4ThreeVector neuVelo = (1./incidentParticle->GetDefinition()->GetPDGMass())*theNeutron.GetMomentum();
+    theTarget = aNucleus.GetBiasedThermalNucleus( targetMass, neuVelo, theTrack.GetMaterial()->GetTemperature());
 
 // prepare the residual mass
     G4double residualMass=0;

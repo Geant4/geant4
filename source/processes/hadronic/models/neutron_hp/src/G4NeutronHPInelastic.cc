@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.7 2000-11-09 16:14:22 hpw Exp $
+// $Id: G4NeutronHPInelastic.cc,v 1.8 2001-05-29 14:13:11 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4NeutronHPInelastic.hh"
@@ -79,32 +79,42 @@
     delete [] theInelastic;
   }
   
+  #include "G4NeutronHPThermalBoost.hh"
+  
   G4VParticleChange * G4NeutronHPInelastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   {
     G4Material * theMaterial = aTrack.GetMaterial();
     G4int n = theMaterial->GetNumberOfElements();
-    xSec = new G4double[n];
-    G4double sum=0;
-    G4int i, it, index;
-    const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
-    G4double rWeight;    
-    for (i=0; i<n; i++)
+    G4int index = theMaterial->GetElement(0)->GetIndex();
+    G4int it=0;
+    if(n!=1)
     {
-      index = theMaterial->GetElement(i)->GetIndex();
-      rWeight = NumAtomsPerVolume[i];
-      xSec[i] = theInelastic[index].GetXsec(aTrack.GetKineticEnergy());
-      xSec[i] *= rWeight;
-      sum+=xSec[i];
+      xSec = new G4double[n];
+      G4double sum=0;
+      G4int i;
+      const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
+      G4double rWeight;    
+      G4NeutronHPThermalBoost aThermalE;
+      for (i=0; i<n; i++)
+      {
+        index = theMaterial->GetElement(i)->GetIndex();
+        rWeight = NumAtomsPerVolume[i];
+        xSec[i] = theInelastic[index].GetXsec(aThermalE.GetThermalEnergy(aTrack.GetDynamicParticle(),
+  		                                                         theMaterial->GetElement(i),
+    								         theMaterial->GetTemperature()));
+        xSec[i] *= rWeight;
+        sum+=xSec[i];
+      }
+      G4double random = G4UniformRand();
+      G4double running = 0;
+      for (i=0; i<n; i++)
+      {
+        running += xSec[i];
+        index = theMaterial->GetElement(i)->GetIndex();
+        it = i;
+        if(random<=running/sum) break;
+      }
+      delete [] xSec;
     }
-    G4double random = G4UniformRand();
-    G4double running = 0;
-    for (i=0; i<n; i++)
-    {
-      running += xSec[i];
-      index = theMaterial->GetElement(i)->GetIndex();
-      it = i;
-      if(random<=running/sum) break;
-    }
-    delete [] xSec;
     return theInelastic[index].ApplyYourself(theMaterial->GetElement(it), aTrack);
   }

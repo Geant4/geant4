@@ -114,6 +114,7 @@
   
   G4double G4NeutronHPVector::GetXsec(G4double e) 
   {
+    if(nEntries == 0) return 0;
     if(!theHash.Prepared()) Hash();
     G4int min = theHash.GetMinIndex(e);
     G4int i;

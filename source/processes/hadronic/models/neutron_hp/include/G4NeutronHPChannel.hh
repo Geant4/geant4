@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPChannel.hh,v 1.4 1999-07-06 16:56:21 stesting Exp $
+// $Id: G4NeutronHPChannel.hh,v 1.5 2001-05-29 14:13:09 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
@@ -95,6 +95,9 @@ public:
   G4ParticleChange * ApplyYourself(const G4Track & theTrack, G4int isoNumber=-1);
     
   inline G4int GetNiso() {return niso;}
+  
+  inline G4double GetN(G4int i) {return theFinalStates[i]->GetN();}
+  inline G4double GetZ(G4int i) {return theFinalStates[i]->GetZ();}
   
   inline G4bool HasDataInAnyFinalState()
   {

@@ -23,12 +23,13 @@
     if(Z==1 && (aFile.GetZ()!=Z || abs(aFile.GetA()-A)>0.0001) )
     {
       if(getenv("NeutronHPNamesLogging")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
+      theChannel.close();
       return false;
     }
-    if(!theChannel) return false;
+    if(!theChannel) {theChannel.close(); return false;}
     // accommodating deficiencie of some compilers
-    if(theChannel.eof()) return false; 
-    if(!theChannel) return false;
+    if(theChannel.eof()) {theChannel.close(); return false;} 
+    if(!theChannel) {theChannel.close(); return false;}
     G4int count;
     G4int dummy; 
     theChannel >> dummy >> dummy;
@@ -41,6 +42,7 @@
 //     G4int hpw;
 //     G4cin >> hpw;
 //    theChannelData->Dump();
+    theChannel.close();
     return result;
   }
   
@@ -64,7 +66,7 @@
     dirName = baseName+"/Capture";
     Init(A, Z, abun, dirName, "/CrossSection/");
     theCaptureData = theChannelData;
-    theChannelData = NULL;
+     theChannelData = NULL;
     dirName = baseName+"/Elastic";
     Init(A, Z, abun, dirName, "/CrossSection/");
     theElasticData = theChannelData;

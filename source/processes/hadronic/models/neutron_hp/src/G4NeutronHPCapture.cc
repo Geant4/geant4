@@ -10,6 +10,8 @@
 
   G4NeutronHPCapture::G4NeutronHPCapture()
   {
+    SetMinEnergy( 0.0 );
+    SetMaxEnergy( 20.*MeV );
 //    G4cout << "Capture : start of construction!!!!!!!!"<<G4endl;
     if(!getenv("NeutronHPCrossSections")) 
        G4Exception("Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
@@ -39,32 +41,40 @@
 //    G4cout << "Leaving G4NeutronHPCapture::~G4NeutronHPCapture"<<G4endl;
   }
   
+  #include "G4NeutronHPThermalBoost.hh"
   G4VParticleChange * G4NeutronHPCapture::ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   {
     G4Material * theMaterial = aTrack.GetMaterial();
     G4int n = theMaterial->GetNumberOfElements();
-    xSec = new G4double[n];
-    G4double sum=0;
-    G4int i, index;
-    const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
-    G4double rWeight;    
-    for (i=0; i<n; i++)
+    G4int index = theMaterial->GetElement(0)->GetIndex();
+    if(n!=1)
     {
-      index = theMaterial->GetElement(i)->GetIndex();
-      rWeight = NumAtomsPerVolume[i];
-      xSec[i] = theCapture[index].GetXsec(aTrack.GetKineticEnergy());
-      xSec[i] *= rWeight;
-      sum+=xSec[i];
+      xSec = new G4double[n];
+      G4double sum=0;
+      G4int i, index;
+      const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
+      G4double rWeight;    
+      G4NeutronHPThermalBoost aThermalE;
+      for (i=0; i<n; i++)
+      {
+        index = theMaterial->GetElement(i)->GetIndex();
+        rWeight = NumAtomsPerVolume[i];
+        xSec[i] = theCapture[index].GetXsec(aThermalE.GetThermalEnergy(aTrack.GetDynamicParticle(),
+  		                                                     theMaterial->GetElement(i),
+  								     theMaterial->GetTemperature()));
+        xSec[i] *= rWeight;
+        sum+=xSec[i];
+      }
+      G4double random = G4UniformRand();
+      G4double running = 0;
+      for (i=0; i<n; i++)
+      {
+        running += xSec[i];
+        index = theMaterial->GetElement(i)->GetIndex();
+        if(random<=running/sum) break;
+      }
+      if(i==n) i=G4std::max(0, n-1);
+      delete [] xSec;
     }
-    G4double random = G4UniformRand();
-    G4double running = 0;
-    for (i=0; i<n; i++)
-    {
-      running += xSec[i];
-      index = theMaterial->GetElement(i)->GetIndex();
-      if(random<=running/sum) break;
-    }
-    if(i==n) i=G4std::max(0, n-1);
-    delete [] xSec;
     return theCapture[index].ApplyYourself(aTrack);
   }

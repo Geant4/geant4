@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPNames.hh,v 1.6 1999-12-15 14:53:13 gunter Exp $
+// $Id: G4NeutronHPNames.hh,v 1.7 2001-05-29 14:13:09 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPNames_h
@@ -32,10 +32,24 @@ class G4NeutronHPNames
   G4String GetName(G4int i) { return theString[i]; }
   void SetMaxOffSet(G4int anOffset) { theMaxOffSet = anOffset; }
   
-  private:
+  public:
   
   static const G4String theString[99];
   G4int theMaxOffSet;
-
+  G4String itoa(int current)
+  {
+    const char theDigits[11] = "0123456789";
+    G4String result;
+    int digit;
+    do
+    {
+      digit = current-10*(current/10);
+      result=theDigits[digit]+result;
+      current/=10;
+    }
+    while(current!=0);
+    return result;
+  }
 };
+
 #endif

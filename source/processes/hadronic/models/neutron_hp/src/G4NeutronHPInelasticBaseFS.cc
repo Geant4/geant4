@@ -65,6 +65,7 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirNam
     hasAnyData = false;
     hasFSData = false; 
     hasXsec = false;
+    theData.close();
     return; // no data for exactly this isotope and FS
   }
   // here we go
@@ -125,6 +126,7 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirNam
       G4Exception("Data-type unknown to G4NeutronHPInelasticBaseFS");
     }
   }
+  theData.close();
 }
   
 void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack, 
@@ -152,7 +154,8 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
       targetMass = theAngularDistribution->GetTargetMass();
   G4Nucleus aNucleus;
   G4ReactionProduct theTarget; 
-  theTarget = aNucleus.GetThermalNucleus(targetMass);
+  G4ThreeVector neuVelo = (1./incidentParticle->GetDefinition()->GetPDGMass())*theNeutron.GetMomentum();
+  theTarget = aNucleus.GetBiasedThermalNucleus( targetMass, neuVelo, theTrack.GetMaterial()->GetTemperature());
 
 // prepare energy in target rest frame
   G4ReactionProduct boosted;

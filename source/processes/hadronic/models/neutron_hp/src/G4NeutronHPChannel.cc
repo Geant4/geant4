@@ -69,7 +69,8 @@
 //        G4cout <<" Init: normal case"<<G4endl;
         G4int A = theElement->GetIsotope(i1)->GetN();
         G4double frac = theElement->GetRelativeAbundanceVector()[i1]/perCent;
-        UpdateData(A, Z, count++, frac);
+        theFinalStates[i1]->SetA_Z(A, Z);
+	UpdateData(A, Z, count++, frac);
       }
     } else {
       G4int first = theStableOnes.GetFirstIsotope(Z);
@@ -79,6 +80,7 @@
       {
         G4int A = theStableOnes.GetIsotopeNucleonCount(first+i1);
         G4double frac = theStableOnes.GetAbundance(first+i1);
+        theFinalStates[i1]->SetA_Z(A, Z);
         UpdateData(A, Z, count++, frac);
       }
     }
@@ -151,18 +153,25 @@
     theStore = theMerge;
   }
 
-  G4ParticleChange * G4NeutronHPChannel::ApplyYourself(const G4Track & theTrack, G4int anIsotope)
+#include "G4NeutronHPThermalBoost.hh"
+
+  G4ParticleChange * G4NeutronHPChannel::
+  ApplyYourself(const G4Track & theTrack, G4int anIsotope)
   {
 //    G4cout << "G4NeutronHPChannel::ApplyYourself+"<<niso<<G4endl;
     if(anIsotope != -1) return theFinalStates[anIsotope]->ApplyYourself(theTrack);
     G4double sum=0;
     G4int it=0;
     G4double * xsec = new G4double[niso];
+    G4NeutronHPThermalBoost aThermalE;
     for (G4int i=0; i<niso; i++)
     {
       if(theFinalStates[i]->HasAnyData())
       {
-        xsec[i] = theIsotopeWiseData[i].GetXsec(theTrack.GetKineticEnergy());
+        xsec[i] = theIsotopeWiseData[i].GetXsec(aThermalE.GetThermalEnergy(theTrack.GetDynamicParticle(),
+		                                                           theFinalStates[i]->GetN(),
+									   theFinalStates[i]->GetZ(),
+						  		           theTrack.GetMaterial()->GetTemperature()));
         sum += xsec[i];
       }
       else
@@ -190,10 +199,9 @@
         if(random<=running/sum) 
         { 
           it = ix;
-          goto OUT;
+	  break;
         }
       }
-      OUT:
       if(it==niso) it--;
     }
     delete [] xsec;

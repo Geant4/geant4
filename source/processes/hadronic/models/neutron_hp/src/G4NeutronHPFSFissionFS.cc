@@ -67,6 +67,7 @@
       }
     }
     targetMass = theFinalStateNeutrons.GetTargetMass();
+    theData.close();
   }
   
   

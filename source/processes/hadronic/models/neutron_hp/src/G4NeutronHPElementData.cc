@@ -32,7 +32,7 @@
     // filename = ein data-set je isotope.
     count = 0;
     G4int nIso = theElement->GetNumberOfIsotopes();
-    G4int Z = theElement->GetZ();
+    G4int Z = static_cast<G4int> (theElement->GetZ());
     G4int i1;
     if(nIso!=0)
     {

@@ -29,7 +29,8 @@
     G4Nucleus aNucleus;
     G4ReactionProduct theTarget; 
     G4double targetMass = theFS.GetMass();
-    theTarget = aNucleus.GetThermalNucleus(targetMass);
+    G4ThreeVector neuVelo = (1./incidentParticle->GetDefinition()->GetPDGMass())*theNeutron.GetMomentum();
+    theTarget = aNucleus.GetBiasedThermalNucleus( targetMass, neuVelo, theTrack.GetMaterial()->GetTemperature());
     
 // set neutron and target in the FS classes 
    theFS.SetNeutron(theNeutron);

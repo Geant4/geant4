@@ -31,7 +31,9 @@
       targetMass = ( G4NucleiPropertiesTable::GetAtomicMass(theBaseZ+eps, theBaseA+eps)-
                        theBaseZ* G4Electron::Electron()->GetPDGMass() ) /
                      G4Neutron::Neutron()->GetPDGMass();
-    theTarget = aNucleus.GetThermalNucleus(targetMass);
+    G4ThreeVector neutronVelocity = 1./G4Neutron::Neutron()->GetPDGMass()*theNeutron.GetMomentum();
+    G4double temperature = theTrack.GetMaterial()->GetTemperature();
+    theTarget = aNucleus.GetBiasedThermalNucleus(targetMass, neutronVelocity, temperature);
 
 // go to nucleus rest system
     theNeutron.Lorentz(theNeutron, -1*theTarget);
@@ -147,4 +149,5 @@
       theFinalStatePhotons.InitAngular(theData); 
       theFinalStatePhotons.InitEnergies(theData); 
     }
+    theData.close();
   }

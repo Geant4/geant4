@@ -37,6 +37,7 @@
     G4double dumm;
     if(!(theData))
     {
+      theData.close();
       hasFSData = false;
       hasXsec = false;
       hasAnyData = false;
@@ -49,6 +50,7 @@
     if (!(theData >> dummy))
     {
       hasFSData = false;
+      theData.close();
       return;
     }
     theData >> dummy;
@@ -58,6 +60,7 @@
     theData >> dummy >> dummy;
 
     theEnergyDistribution.Init(theData);
+    theData.close();
     
   }
   

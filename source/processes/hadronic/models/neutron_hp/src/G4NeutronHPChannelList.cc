@@ -38,8 +38,10 @@
     }
   }
     
+  #include "G4NeutronHPThermalBoost.hh"
   G4ParticleChange * G4NeutronHPChannelList::ApplyYourself(const G4Element * anElement, const G4Track & aTrack)
   {
+    G4NeutronHPThermalBoost aThermalE;
     G4int i, ii;
     // decide on the isotope
     G4int numberOfIsos;
@@ -57,7 +59,11 @@
       {
 	if(theChannels[ii]->HasAnyData(i))
 	{
-	  running[i] +=theChannels[ii]->GetWeightedXsec(aTrack.GetKineticEnergy(), i);
+          running[i] +=theChannels[ii]->GetWeightedXsec(aThermalE.GetThermalEnergy(aTrack.GetDynamicParticle(),
+		                                                  theChannels[ii]->GetN(i),
+								  theChannels[ii]->GetZ(i),
+						  		  aTrack.GetMaterial()->GetTemperature()),
+					                i);
 	}
       }
     }
@@ -78,7 +84,11 @@
       if(i!=0) running[i] = running[i-1];
       if(theChannels[i]->HasAnyData(isotope))
       {
-        running[i] += theChannels[i]->GetFSCrossSection(aTrack.GetKineticEnergy(), isotope);
+        running[i] += theChannels[i]->GetFSCrossSection(aThermalE.GetThermalEnergy(aTrack.GetDynamicParticle(),
+		                                                  theChannels[i]->GetN(isotope),
+								  theChannels[i]->GetZ(isotope),
+						  		  aTrack.GetMaterial()->GetTemperature()),
+					                isotope);
       }
     }
     G4int lChan=0;

@@ -51,16 +51,58 @@ void G4NeutronHPFissionData::DumpPhysicsTable(const G4ParticleDefinition& aP)
   G4cout << "G4NeutronHPFissionData::DumpPhysicsTable still to be implemented"<<G4endl;
 }
 
-G4double G4NeutronHPFissionData::GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE)
+#include "G4NucleiPropertiesTable.hh"
+
+G4double G4NeutronHPFissionData::
+GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
 {
   G4double result = 0;
+  if(anE->GetZ()<90) return result;
   G4bool outOfRange;
   G4int index = anE->GetIndex();
-    
-  if(anE->GetZ()<90) return result;
-  result = (*((*theCrossSections)(index))).GetValue(
-                             aP->GetKineticEnergy(), outOfRange);
-//   cout << "Element "<<anE->GetZ()<<endl;
-//   cout << "FissionHPCrossSection = "<<result<<endl;
+
+  // prepare neutron
+  G4double eKinetic = aP->GetKineticEnergy();
+  G4ReactionProduct theNeutron( aP->GetDefinition() );
+  theNeutron.SetMomentum( aP->GetMomentum() );
+  theNeutron.SetKineticEnergy( eKinetic );
+
+  // prepare thermal nucleus
+  G4Nucleus aNuc;
+  G4double eps = 0.0001;
+  G4double theA = anE->GetN();
+  G4double theZ = anE->GetZ();
+  G4double eleMass; 
+  eleMass = ( G4NucleiPropertiesTable::GetAtomicMass(theZ+eps, theA+eps)-
+              theZ*G4Electron::ElectronDefinition()->GetPDGMass() 
+	     ) / G4Neutron::Neutron()->GetPDGMass();
+  
+  G4ReactionProduct boosted;
+  G4double aXsection;
+  
+  // MC integration loop
+  G4int counter = 0;
+  G4double buffer = 0;
+  G4int size = G4std::max(10., aT/60*kelvin);
+  G4ThreeVector neutronVelocity = 1./G4Neutron::Neutron()->GetPDGMass()*theNeutron.GetMomentum();
+  G4double neutronVMag = neutronVelocity.mag();
+  while(counter == 0 || abs(buffer-result/counter) > 0.01*buffer)
+  {
+    if(counter) buffer = result/counter;
+    while (counter<size)
+    {
+      counter ++;
+      G4ReactionProduct aThermalNuc = aNuc.GetThermalNucleus(eleMass, aT);
+      boosted.Lorentz(theNeutron, aThermalNuc);
+      G4double theEkin = boosted.GetKineticEnergy();
+      aXsection = (*((*theCrossSections)(index))).GetValue(theEkin, outOfRange);
+      // velocity correction.
+      G4ThreeVector targetVelocity = 1./aThermalNuc.GetMass()*aThermalNuc.GetMomentum();
+      aXsection *= (targetVelocity+neutronVelocity).mag()/neutronVMag;
+      result += aXsection;
+    }
+    size += size;
+  }
+  result /= counter;
   return result;
 }

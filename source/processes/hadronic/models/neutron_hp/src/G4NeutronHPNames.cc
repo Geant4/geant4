@@ -35,62 +35,62 @@
     G4String theFileName("");
     G4int offA = 0, offZ = 0, inc = 1;
     
-    G4std::ifstream check;
+    G4std::ifstream * check = new G4std::ifstream(".dummy");
     G4bool first = true;
 //    G4cout << "entered GetName!!!"<<G4endl;
      do   
      {
       aFlag = true;
-      char the1[1000] = {""};
-      G4std::ostrstream ost1(the1, 1000, G4std::ios::out);
-      ost1 <<base<<"/"<<"CrossSection/"<<myZ<<"_"<<myA<<"_"<<theString[myZ-1];
-      G4String * biff = new G4String(the1); // delete here as theName
+      G4String * biff = new G4String(); // delete here as theName
+      *biff = base+"/"+"CrossSection/"+itoa(myZ)+"_"+itoa(myA)+"_"+theString[myZ-1];
+      
       if(theName!=NULL) delete theName;
       theName = biff;
       result.SetName(*theName);
       result.SetA(myA);
       result.SetZ(myZ);
+  G4cout <<"HPWD 1 "<<*theName<<G4endl;
 #ifdef G4USE_STD_NAMESPACE
-      check.open(*theName);
+      check = new G4std::ifstream(*theName);
 #else
-      check.open(*theName,ios::in|ios::nocreate);
+      check = new G4std::ifstream(*theName,G4std::ios::in|G4std::ios::nocreate);
 #endif
-      if(!(check)) 
+      if(!(*check)) 
       {
-	check.close();
+	check->close();
+	delete check;
         aFlag = false;
         if(first)
         {
           aFlag = true;
           first = false;
-          char the1[1000] = {""};
-          G4std::ostrstream ost1(the1, 1000, G4std::ios::out);
-          ost1 <<base<<"/"<<"CrossSection/"<<myZ<<"_"<<"nat"<<"_"<<theString[myZ-1];
-          biff = new G4String(the1); // delete here as theName
+          biff = new G4String(); // delete here as theName
+          *biff = base+"/"+"CrossSection/"+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];
           if(theName!=NULL) delete theName;
           theName = biff;
+      G4cout <<"HPWD 2 "<<*theName<<G4endl;
           result.SetName(*theName);
           G4double natA = myZ/G4SandiaTable::GetZtoA(myZ);
           result.SetA(natA);
           result.SetZ(myZ);
 #ifdef G4USE_STD_NAMESPACE
-          check.open(*theName);
+      check = new G4std::ifstream(*theName);
 #else
-          check.open(*theName,ios::in|ios::nocreate);
+      check = new G4std::ifstream(*theName,G4std::ios::in|G4std::ios::nocreate);
 #endif
-          if (!check) 
+          if (!(*check)) 
           {
-	    check.close();
+	    check->close();
+	    delete check;
             aFlag = false;
           }
           else
           {
-            char the1[1000] = {""};
-            G4std::ostrstream ost1(the1, 1000, G4std::ios::out);
-            ost1 <<base<<"/"<<rest<<myZ<<"_"<<"nat"<<"_"<<theString[myZ-1];  
-            biff = new G4String(the1); // delete here as theName
+            biff = new G4String(); // delete here as theName
             if(theName!=NULL) delete theName;
+            *biff = base+"/"+rest+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];  
             theName = biff;
+      G4cout <<"HPWD 3 "<<*theName<<G4endl;
             result.SetName(*theName);
             G4double natA = myZ/G4SandiaTable::GetZtoA(myZ);
             result.SetA(natA);
@@ -100,12 +100,11 @@
       }
       else
       {
-        char the1[1000] = {""};
-        G4std::ostrstream ost1(the1, 1000, G4std::ios::out);
-        ost1 <<base<<"/"<<rest<<myZ<<"_"<<myA<<"_"<<theString[myZ-1];  
-        biff = new G4String(the1); // delete here as theName
+        biff = new G4String(); // delete here as theName
+        *biff = base+"/"+rest+itoa(myZ)+"_"+itoa(myA)+"_"+theString[myZ-1];  
         if(theName!=NULL) delete theName;
         theName = biff;
+      G4cout <<"HPWD 4 "<<*theName<<G4endl;
         result.SetName(*theName);
         result.SetA(myA);
         result.SetZ(myZ);
@@ -135,7 +134,7 @@
         myA+=inc;
       }
     }
-    while(!(check));
+    while(!(*check));
 //    G4cout << "Names::GetName: last theName proposal = "<< *theName <<" "<<A<<" "<<Z<<G4endl;
 //    G4cout << "File-name: "<<*theName<<G4endl;
     if(getenv("NeutronHPNamesLogging")) G4cout << "Names::GetName: last theName proposal = "<< *theName <<" "<<A<<" "<<Z<<G4endl;
