@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.cc,v 1.11 2000-11-16 10:20:03 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.12 2000-11-16 14:46:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -790,7 +790,7 @@ G4bool G4VUserPhysicsList::StoreCutValues(const G4String& directory)
 	 (particle->GetParticleName() == "mu+"   ) ||
 	 (particle->GetParticleName() == "proton" ) ||
 	 (particle->GetParticleName() == "anti_proton" ) ||
-	 (particle->GetPDGCharge() ==0.0)               ) {
+	 ((particle->GetPDGCharge()==0.0)&&(!particle->IsShortLived())) ) {
  
       // particle name and cut in length
       fOut << G4std::setw(40) << particle->GetParticleName();
