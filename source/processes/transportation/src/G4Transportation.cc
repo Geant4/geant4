@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.21 2001-08-17 17:30:22 japost Exp $
+// $Id: G4Transportation.cc,v 1.22 2001-11-06 15:23:47 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -128,7 +128,8 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
      fPreviousSafety    = 0.0 ; 
      fPreviousSftOrigin = G4ThreeVector(0.,0.,0.) ;
      // ChordFinder reset internal state
-     fFieldPropagator->GetChordFinder()->ResetStepEstimate();
+     if ( this->DoesGlobalFieldExist() )
+        fFieldPropagator->GetChordFinder()->ResetStepEstimate();
   }
 
   // GPILSelection is set to defaule value of CandidateForSelection
