@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.23 2001-11-26 11:21:11 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.24 2001-11-28 16:51:09 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -98,15 +98,16 @@ G4double G4PropagatorInField::
   // (used to calculate the relative accuracy) must be guessed.
   //
   
-  if( CurrentProposedStepLength >= kInfinity )
+  if( CurrentProposedStepLength >= fLargestAcceptableStep )
   {
      G4ThreeVector StartPointA, VelocityUnit;
      StartPointA = pFieldTrack.GetPosition();
      VelocityUnit= pFieldTrack.GetMomentumDir();
 
-     CurrentProposedStepLength= 1.e3 *  ( 10.0 * cm + 
+     G4double trialProposedStep= 1.e2 *  ( 10.0 * cm + 
 		  fNavigator->GetWorldVolume()->GetLogicalVolume()->
                   GetSolid()->DistanceToOut(StartPointA, VelocityUnit) ) ;
+     CurrentProposedStepLength= min( trialProposedStep, fLargestAcceptableStep); 
   }
   epsilon = GetDeltaOneStep() / CurrentProposedStepLength ;
 
@@ -120,8 +121,26 @@ G4double G4PropagatorInField::
      stepTrial= 0.5 * fFull_CurveLen_of_LastAttempt; 
      if( (stepTrial <= 0.0) && (fLast_ProposedStepLength>0.0) ) 
         stepTrial=0.5 * fLast_ProposedStepLength; 
+#ifdef DEBUG_FIELD
+     G4cout << " PiF: NoZeroStep= " << fNoZeroStep
+	    << " CurrentProposedStepLength= " << CurrentProposedStepLength
+            << " Full_curvelen_last=" << fFull_CurveLen_of_LastAttempt
+	    << " last proposed step-length= " << fLast_ProposedStepLength 
+	    << " step trial = " << stepTrial
+	    << endl;
+     //     printStatus( pFieldTrack,  pFieldTrack, CurrentProposedStepLength, 
+     //	                 -1.0,  0,  pPhysVol);
+#endif
      if( fNoZeroStep > 2*fThresholdNo_ZeroSteps ){
         stepTrial *= 0.5;     // Ensure quicker convergence.
+
+#ifdef DEBUG_FIELD
+        // We are already in serious trouble, probably at some boundary
+	//   Let us try to print out some information to guide in 
+	//   diagnosing the problem.
+	// printStatus( pFieldTrack,  pFieldTrack, CurrentProposedStepLength, 
+	//   -1.0,  0,  pPhysVol);
+#endif
 	if(   (stepTrial == 0.0) 
 	   || ( fNoZeroStep > 5*fThresholdNo_ZeroSteps ) ) { 
  	   G4cerr << " G4PropagatorInField::ComputeStep "
@@ -131,7 +150,8 @@ G4double G4PropagatorInField::
 	   G4Exception("G4PropagatorInField::ComputeStep No progress - Looping with zero steps"); 
 	} 
      }
-     CurrentProposedStepLength = stepTrial;
+     if( stepTrial < CurrentProposedStepLength)
+        CurrentProposedStepLength = stepTrial;
   }
   fLast_ProposedStepLength= CurrentProposedStepLength;
 
@@ -216,7 +236,7 @@ G4double G4PropagatorInField::
 	   StepTaken = 
 	   TruePathLength= IntersectPointVelct_G.GetCurveLength()
 	                         - OriginalState.GetCurveLength(); // which is Zero now.
-#ifdef G4VERBOSE
+#ifdef DEBUG_FIELD
 	   if( Verbose() > 0 )
 	      G4cout << " Found intersection after Step of length " << 
 	           StepTaken << G4endl;
@@ -233,15 +253,22 @@ G4double G4PropagatorInField::
 	StepTaken += s_length_taken; 
      }
      first_substep= false;
-     
-#ifdef G4VERBOSE
-    if( Verbose() > 0 )
-      printStatus( SubStepStartState,  // or OriginalState,
+
+#ifdef DEBUG_FIELD
+     // if( fNoZeroStep )
+     if( fNoZeroStep > fThresholdNo_ZeroSteps )
+     {
+     // if( Verbose() > 0 )
+       //if(do_loop_count==0) 
+       //  G4cout << "G4PiF: End of Step " << do_loop_count;
+        printStatus( SubStepStartState,  // or OriginalState,
 		   CurrentState,
 		   CurrentProposedStepLength, 
 		   NewSafety,  
 		   do_loop_count, 
 		   pPhysVol);
+	// G4cout << " Step accepted taken =" << StepTaken << endl;
+     }
 #endif
 
      do_loop_count++;
@@ -292,6 +319,14 @@ G4double G4PropagatorInField::
            << " a difference of " 
 	   << OriginalState.GetCurveLength() + TruePathLength 
               - End_PointAndTangent.GetCurveLength() << G4endl;
+  }
+#endif
+
+#ifdef DEBUG_FIELD
+  if( fNoZeroStep ){
+     G4cout << " PiF: Step returning=" << StepTaken << endl;
+     G4cout << " ------------------------------------------------------- "
+	    << endl;
   }
 #endif
 
@@ -529,6 +564,10 @@ G4PropagatorInField::LocateIntersectionPoint(
 #endif
        }
        if( curveDist < 0.0 ) {
+	     G4cerr << "G4PropagatorInField::LocateIntersectionPoint: "
+		    << "Error in advancing " << endl;
+          printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
+                 -1.0, NewSafety,  substep_no, 0); //  startVolume);
 	  G4Exception("G4PropagatorInField::LocateIntersectionPoint : the final curve point is not further along than the original.");
        }
 
@@ -585,13 +624,13 @@ void G4PropagatorInField::printStatus(
             << G4std::setw( 7) << " N_y " << " "
             << G4std::setw( 7) << " N_z " << " "
             << G4std::setw( 9) << "StepLen" << " "  
-            << G4std::setw( 9) << "PhsStep" << " "  
+            << G4std::setw(12) << "PhsStep" << " "  
             << G4std::setw(12) << "StartSafety" << " "  
             << G4std::setw(18) << "NextVolume" << " "
             << G4endl;
         // Recurse to print the start values 
         printStatus( StartFT,   StartFT,   // 
-                 -1.0, safety,  -1, 0);     //  startVolume);
+                 -1.0, safety,  -1, startVolume);
     }
 
     if( verboseLevel <= 3 )
@@ -609,9 +648,9 @@ void G4PropagatorInField::printStatus(
 	      << G4std::setw( 7) << CurrentUnitVelocity.z() << " ";
        G4cout << G4std::setw( 9) << step_len << " "; 
        if( requestStep != -1.0 ) 
-	  G4cout << G4std::setw( 9) << requestStep << " ";
+	  G4cout << G4std::setw( 12) << requestStep << " ";
        else
-  	  G4cout << G4std::setw( 9) << " InitialStep " << " "; 
+  	  G4cout << G4std::setw( 12) << "InitialStep" << " "; 
        G4cout << G4std::setw(12) << safety << " ";
 
        if( startVolume != 0) {
