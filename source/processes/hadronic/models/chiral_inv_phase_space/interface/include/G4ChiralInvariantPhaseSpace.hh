@@ -67,7 +67,7 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   G4LorentzVector targ4Mom(0.,0.,0.,targetMass);  
   // END OF NOT NECESSARY^^^^^^^^
 
-  G4int nop = 223; // nuclear clusters up to A=21
+  G4int nop = 156; // nuclear clusters up to A=21
   G4double fractionOfSingleQuasiFreeNucleons = 0.15;
   G4double fractionOfPairedQuasiFreeNucleons = 0.01;
   G4double clusteringCoefficient = 5.;
