@@ -1,4 +1,4 @@
-// $Id: G4MCTruthRootIO.cc,v 1.1 2002-12-04 02:44:29 morita Exp $
+// $Id: G4MCTruthRootIO.cc,v 1.2 2002-12-04 14:12:26 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4MCTruthRootIO.cc
@@ -8,7 +8,7 @@
 
 #include "G4MCTruthRootIO.hh"
 
-G4MCTruthRootIO* G4MCTruthRootIO::thePointer=G4MCTruthRootIO::GetG4MCTruthRootIO();
+G4MCTruthRootIO* G4MCTruthRootIO::thePointer=G4MCTruthRootIO::GetMCTruthRootIO();
 
 // Implementation of Store
 bool G4MCTruthRootIO::Store(G4MCTEvent* mctevent)
@@ -22,8 +22,8 @@ bool G4MCTruthRootIO::Retrieve(G4MCTEvent* & mctevent)
   return true;
 }
 
-// Implementation of GetG4MCTruthRootIO
-G4MCTruthRootIO* G4MCTruthRootIO::GetG4MCTruthRootIO()
+// Implementation of GetMCTruthRootIO
+G4MCTruthRootIO* G4MCTruthRootIO::GetMCTruthRootIO()
 {
   return 0;
 }

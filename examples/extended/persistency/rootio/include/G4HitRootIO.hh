@@ -1,4 +1,4 @@
-// $Id: G4HitRootIO.hh,v 1.1 2002-12-04 02:44:28 morita Exp $
+// $Id: G4HitRootIO.hh,v 1.2 2002-12-04 14:12:26 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4HitRootIO.hh
@@ -21,7 +21,7 @@
 //   Manager class to store and retrieve Hit objects.
 // 
 //   This is a singleton class and should be constructed only
-//   by GetG4HitRootIO().
+//   by GetHitRootIO().
 
 class G4HitRootIO
  : public G4VPHitIO
@@ -34,7 +34,7 @@ class G4HitRootIO
       // Destructor
 
     public: // With description
-      static G4HitRootIO* GetG4HitRootIO();
+      static G4HitRootIO* GetHitRootIO();
       // Construct a new singleton G4HitRootIO object if it does not exist.
 
       bool Store(const G4HCofThisEvent* hcevt);

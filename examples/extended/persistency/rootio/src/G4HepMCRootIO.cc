@@ -1,4 +1,4 @@
-// $Id: G4HepMCRootIO.cc,v 1.1 2002-12-04 02:44:28 morita Exp $
+// $Id: G4HepMCRootIO.cc,v 1.2 2002-12-04 14:12:26 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4HepMCRootIO.cc
@@ -12,8 +12,8 @@
 bool G4HepMCRootIO::Store(HepMC::GenEvent* evt)
 {
   // G4RootIOManager* pm =
-  //     (G4RootIOManager*) G4PersistencyCenter::GetG4PersistencyCenter()
-  //                                           ->CurrentG4PersistencyManager();
+  //     (G4RootIOManager*) G4PersistencyCenter::GetPersistencyCenter()
+  //                                           ->CurrentPersistencyManager();
 
   // actual implementation should come in here
 
@@ -27,8 +27,8 @@ bool G4HepMCRootIO::Retrieve(HepMC::GenEvent*& evt, int id)
   evt = 0;
 
   // G4RootIOManager* pm =
-  //      (G4RootIOManager*) G4PersistencyCenter::GetG4PersistencyCenter()
-  //                                            ->CurrentG4PersistencyManager();
+  //      (G4RootIOManager*) G4PersistencyCenter::GetPersistencyCenter()
+  //                                            ->CurrentPersistencyManager();
 
   // actual implementation should come in here
 

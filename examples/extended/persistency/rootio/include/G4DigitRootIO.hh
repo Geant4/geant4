@@ -1,4 +1,4 @@
-// $Id: G4DigitRootIO.hh,v 1.1 2002-12-04 02:44:27 morita Exp $
+// $Id: G4DigitRootIO.hh,v 1.2 2002-12-04 14:12:26 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4DigitRootIO.hh
@@ -21,7 +21,7 @@
 //   Manager class to store and retrieve Digit objects.
 // 
 //   This is a singleton class and should be constructed only
-//   by GetG4DigitRootIO().
+//   by GetDigitRootIO().
 
 class G4DigitRootIO
  : public G4VPDigitIO
@@ -34,7 +34,7 @@ class G4DigitRootIO
       // Destructor
 
     public: // With description
-      static G4DigitRootIO* GetG4DigitRootIO();
+      static G4DigitRootIO* GetDigitRootIO();
       // Construct a new singleton G4DigitRootIO object if it does not exist.
 
       bool Store(const G4DCofThisEvent* dcevt);

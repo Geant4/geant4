@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.2 2002-12-04 09:38:31 morita Exp $
+# $Id: binmake.gmk,v 1.3 2002-12-04 14:12:25 morita Exp $
 # =====================================================================
 # binmake.gmk: GNUmakefile variables for creating the binary executable
 #
@@ -21,6 +21,8 @@ endif
 # dependency option
 GPPFLAGS := "-MM"
 
+headers       := $(wildcard include/*.hh)
+
 sources       := $(wildcard src/*.cc)
 
 objects       := $(patsubst src/%.cc,$(G4PEX_TMP)/%.o,$(sources))
@@ -34,7 +36,13 @@ ifneq ($(G4LIB_BUILD_STATIC),)
    library_name := lib$(TARGET).a
 endif
 
-libraries_to_build := $(G4PEX_LIB)/$(library_name)
+
+ifneq ($(sources),)
+  libraries_to_build := $(G4PEX_LIB)/$(library_name)
+else
+  libraries_to_build := 
+endif
+
 
 # linker option (refer to Standard Installation)
 ifdef G4LIB_BUILD_SHARED
@@ -79,7 +87,6 @@ bin: $(G4PEX_BIN)/$(TARGET)
 lib: $(libraries_to_build) 
 
 # ---------------------------------------------------------------------
-
 CPPFLAGS += $(shell root-config --cflags)
 
 # ROOTCINT LinkDef.h and Dict.cc files
@@ -100,7 +107,9 @@ rootio_d  := $(patsubst rootio/%.rootio, $(G4PEX_TMP)/%Root.d, $(rootio_file))
 rootio_d  += $(patsubst rootio/%.rootio, $(G4PEX_TMP)/%sRoot.d, $(rootio_file))
 rootio_d  += $(patsubst rootio/%.rootio, $(G4PEX_TMP)/%RootIO.d, $(rootio_file))
 
-root_hh   := $(shell grep 'public.*TObject' include/*.hh|awk -F: '{print $$1}'|sort|uniq)
+ifneq ($(headers),)
+  root_hh   := $(shell grep 'public.*TObject' include/*.hh|awk -F: '{print $$1}'|sort|uniq)
+endif
 ifneq ($(rootio_file),)
 root_hh   += $(patsubst rootio/%.rootio, include/%Root.hh, $(rootio_file))
 root_hh   += $(patsubst rootio/%.rootio, include/%sRoot.hh, $(rootio_file))
@@ -149,7 +158,6 @@ endif
 $(root_dict_o): $(root_dict)
 	@echo "Compiling $< with $(CXX) ..."
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
-
 # ---------------------------------------------------------------------
 
 $(G4PEX_BIN)/$(TARGET): $(G4PEX_TMP)/$(TARGET).o $(libraries_to_build) 

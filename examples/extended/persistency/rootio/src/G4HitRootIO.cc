@@ -1,4 +1,4 @@
-// $Id: G4HitRootIO.cc,v 1.1 2002-12-04 02:44:29 morita Exp $
+// $Id: G4HitRootIO.cc,v 1.2 2002-12-04 14:12:26 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4HitRootIO.cc
@@ -21,8 +21,8 @@ G4HitRootIO::G4HitRootIO()
 G4HitRootIO::~G4HitRootIO()
 {}
 
-// Implementation of GetG4HitRootIO
-G4HitRootIO* G4HitRootIO::GetG4HitRootIO()
+// Implementation of GetHitRootIO
+G4HitRootIO* G4HitRootIO::GetHitRootIO()
 {
   G4HitRootIO* hio=0;
   if ( f_G4VPHitIO == 0 ) {

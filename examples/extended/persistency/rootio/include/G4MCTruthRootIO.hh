@@ -1,4 +1,4 @@
-// $Id: G4MCTruthRootIO.hh,v 1.1 2002-12-04 02:44:28 morita Exp $
+// $Id: G4MCTruthRootIO.hh,v 1.2 2002-12-04 14:12:26 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4MCTruthRootIO.hh
@@ -32,8 +32,8 @@ class G4MCTruthRootIO
       virtual bool Retrieve(G4MCTEvent* & mctevent);
       // Method for retrieving MCTruth GenEvent.
 
-      static G4MCTruthRootIO* GetG4MCTruthRootIO();
-      // method #3: GetG4MCTruthRootIO()
+      static G4MCTruthRootIO* GetMCTruthRootIO();
+      // method #3: GetMCTruthRootIO()
 
     private:
       static G4MCTruthRootIO* thePointer;

@@ -1,4 +1,4 @@
-// $Id: G4DigitRootIO.cc,v 1.1 2002-12-04 02:44:28 morita Exp $
+// $Id: G4DigitRootIO.cc,v 1.2 2002-12-04 14:12:26 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4DigitRootIO.cc
@@ -18,8 +18,8 @@ G4DigitRootIO::G4DigitRootIO()
 G4DigitRootIO::~G4DigitRootIO()
 {}
 
-// Implementation of GetG4DigitRootIO
-G4DigitRootIO* G4DigitRootIO::GetG4DigitRootIO()
+// Implementation of GetDigitRootIO
+G4DigitRootIO* G4DigitRootIO::GetDigitRootIO()
 {
   G4DigitRootIO* dio=0;
   if ( f_G4VPDigitIO == 0 ) {
