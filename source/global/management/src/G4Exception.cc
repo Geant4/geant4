@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Exception.cc,v 1.14 2002-08-19 18:20:12 asaim Exp $
+// $Id: G4Exception.cc,v 1.15 2002-12-05 02:32:21 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@ void G4Exception(const char* s)
 	{
 	    G4cerr << s << G4endl;
 	}
-   if(G4StateManager::GetStateManager()->SetNewState(Abort,s)) {
+   if(G4StateManager::GetStateManager()->SetNewState(G4State_Abort,s)) {
      G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
      abort();
    } else {
@@ -64,7 +64,7 @@ void G4Exception(const char* originOfException,
      ->Notify(originOfException,exceptionCode,severity,description);
   if(toBeAborted)
   {
-   if(G4StateManager::GetStateManager()->SetNewState(Abort)) {
+   if(G4StateManager::GetStateManager()->SetNewState(G4State_Abort)) {
      G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
      abort();
    } else {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.cc,v 1.7 2002-12-04 17:39:50 asaim Exp $
+// $Id: G4StateManager.cc,v 1.8 2002-12-05 02:32:21 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -165,9 +165,9 @@ G4StateManager::SetNewState(G4ApplicationState requestedState)
 G4bool
 G4StateManager::SetNewState(G4ApplicationState requestedState, const char* msg)
 {
-   if(requestedState==Abort && suppressAbortion>0) {
+   if(requestedState==G4State_Abort && suppressAbortion>0) {
      if(suppressAbortion==2) return false;
-     if(theCurrentState==EventProc) return false;
+     if(theCurrentState==G4State_EventProc) return false;
    }
    msgptr = msg;
    size_t i=0;
