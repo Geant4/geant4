@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: IdentifiableQuantityVectorType.hh,v 1.2 2002-06-03 12:09:34 radoone Exp $
+// $Id: IdentifiableQuantityVectorType.hh,v 1.3 2002-07-25 10:41:20 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,10 +43,10 @@ public:
   }
   ~IdentifiableQuantityVectorType() {
   }
-  void set_name( std::string& s ) {
+  void set_name( const std::string& s ) {
     m_name = s;
   }
-  void set_name( char* s ) {
+  void set_name( const char* s ) {
     m_name = s;
   }
   std::string get_name() const {
