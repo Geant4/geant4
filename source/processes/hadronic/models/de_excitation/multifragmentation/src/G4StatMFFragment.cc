@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFFragment.cc,v 1.2 2003-11-03 17:53:05 hpw Exp $
+// $Id: G4StatMFFragment.cc,v 1.3 2003-11-04 11:30:35 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
 #include "G4StatMFFragment.hh"
-
+#include "G4HadronicException.hh"
 
 
 // Copy constructor

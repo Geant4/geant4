@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEmissionProbability.cc,v 1.2 2003-11-03 17:53:06 hpw Exp $
+// $Id: G4VEmissionProbability.cc,v 1.3 2003-11-04 11:35:04 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -30,7 +30,7 @@
 
 
 #include "G4VEmissionProbability.hh"
-
+#include "G4HadronicException.hh"
 
 G4VEmissionProbability::G4VEmissionProbability(const G4VEmissionProbability &)
 {

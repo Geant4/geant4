@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroCanonical.cc,v 1.2 2003-11-03 17:53:05 hpw Exp $
+// $Id: G4StatMFMicroCanonical.cc,v 1.3 2003-11-04 11:31:17 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -29,6 +29,7 @@
 
 
 #include "G4StatMFMicroCanonical.hh"
+#include "G4HadronicException.hh"
 #include <numeric>
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporation.cc,v 1.2 2003-11-03 17:53:02 hpw Exp $
+// $Id: G4VEvaporation.cc,v 1.3 2003-11-04 11:24:33 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -30,7 +30,7 @@
 
 
 #include "G4VEvaporation.hh"
-
+#include "G4HadronicException.hh"
 
 G4VEvaporation::G4VEvaporation(const G4VEvaporation &)
 {

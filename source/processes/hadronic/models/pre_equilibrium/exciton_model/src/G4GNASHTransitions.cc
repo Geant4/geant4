@@ -22,6 +22,7 @@
 //
 #include "G4GNASHTransitions.hh"
 #include "G4PreCompoundParameters.hh"
+#include "G4HadronicException.hh"
 
 const G4GNASHTransitions & G4GNASHTransitions::
 operator=(const G4GNASHTransitions & )

@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroPartition.cc,v 1.3 2003-11-03 17:53:05 hpw Exp $
+// $Id: G4StatMFMicroPartition.cc,v 1.4 2003-11-04 11:31:16 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
 // --------------------------------------------------------------------
 
 #include "G4StatMFMicroPartition.hh"
-
+#include "G4HadronicException.hh"
 
 
 // Copy constructor

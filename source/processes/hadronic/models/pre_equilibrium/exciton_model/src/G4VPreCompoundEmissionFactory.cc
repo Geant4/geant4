@@ -24,6 +24,7 @@
 // by V. Lara
 
 #include "G4VPreCompoundEmissionFactory.hh"
+#include "G4HadronicException.hh"
 
 const G4VPreCompoundEmissionFactory & 
 G4VPreCompoundEmissionFactory::operator=(const G4VPreCompoundEmissionFactory & )
