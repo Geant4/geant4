@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLossPlus.cc,v 1.15 1999-10-24 09:22:56 urban Exp $
+// $Id: G4hEnergyLossPlus.cc,v 1.16 1999-10-25 09:37:00 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -1261,13 +1261,22 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
         G4int N=int(fragment*(c0N/(E*T0)+c1N/T0-(c2N+c3N*T0)/Tc)* 
                 (aMaterial->GetTotNbOfElectPerVolume())+0.5) ;
 
+        G4double Px,Py,Pz ;
+        G4ThreeVector ParticleDirection ;
+        ParticleDirection=stepData.GetPostStepPoint()->
+                                   GetMomentumDirection() ;
+        Px =ParticleDirection.x() ;
+        Py =ParticleDirection.y() ;
+        Pz =ParticleDirection.z() ;
+     
+        G4int subdelta = 0;
+
         if(N > 0)
         {
           G4double Tkin,Etot,P,T,p,costheta,sintheta,phi,dirx,diry,dirz,
-                   Pnew,Px,Py,Pz,delToverTc,
+                   Pnew,delToverTc,
                    delTkin,delLoss,rate,
                    urandom ;
-          G4ThreeVector ParticleDirection ;
           G4StepPoint *point ;
   
           Tkin = E ;
@@ -1275,7 +1284,6 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
           P    = sqrt(Tkin*(Etot+mass)) ;
 
           aParticleChange.SetNumberOfSecondaries(N);
-          G4int subdelta = 0;
           do {
                subdelta += 1 ;
 
@@ -1312,8 +1320,6 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
                zd=z1+frperstep*dz*urandom ;
                G4ThreeVector DeltaPosition(xd,yd,zd) ;
                DeltaTime=time0+frperstep*dTime*urandom ;
-               ParticleDirection=stepData.GetPostStepPoint()->
-                                   GetMomentumDirection() ;
 
                G4ThreeVector DeltaDirection(dirx,diry,dirz) ;
                DeltaDirection.rotateUz(ParticleDirection);
@@ -1352,7 +1358,8 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
              } while (subdelta<N) ;
 
              // update the particle direction and kinetic energy
-             aParticleChange.SetMomentumChange(Px,Py,Pz) ;
+             if(subdelta > 0)
+               aParticleChange.SetMomentumChange(Px,Py,Pz) ;
              E = Tkin ;
            }
           }

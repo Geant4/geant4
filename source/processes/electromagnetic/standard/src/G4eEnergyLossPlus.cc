@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLossPlus.cc,v 1.15 1999-10-24 09:22:25 urban Exp $
+// $Id: G4eEnergyLossPlus.cc,v 1.16 1999-10-25 09:37:00 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // $Id: 
@@ -1065,14 +1065,22 @@ G4VParticleChange* G4eEnergyLossPlus::AlongStepDoIt( const G4Track& trackData,
                 (aMaterial->GetTotNbOfElectPerVolume())/T0+0.5) ;
         if(N > Ndeltamax)
            N = Ndeltamax ;
+        G4double Px,Py,Pz ;
+        G4ThreeVector ParticleDirection ;
+        ParticleDirection=stepData.GetPostStepPoint()->
+                                   GetMomentumDirection() ;
+        Px =ParticleDirection.x() ;
+        Py =ParticleDirection.y() ;
+        Pz =ParticleDirection.z() ;
+
+        G4int subdelta = 0;
 
         if(N > 0)
         {
           G4double Tkin,Etot,P,T,p,costheta,sintheta,phi,dirx,diry,dirz,
-                   Pnew,Px,Py,Pz,delToverTc,
+                   Pnew,delToverTc,
                    sumT,delTkin,delLoss,rate,
                    urandom ;
-          G4ThreeVector ParticleDirection ;
           G4StepPoint *point ;
    
           sumT=0.;
@@ -1082,7 +1090,6 @@ G4VParticleChange* G4eEnergyLossPlus::AlongStepDoIt( const G4Track& trackData,
           P    = sqrt(Tkin*(Etot+electron_mass_c2)) ;
 
           aParticleChange.SetNumberOfSecondaries(N);
-          G4int subdelta = 0;
           do {
                subdelta += 1 ;
 
@@ -1157,7 +1164,8 @@ G4VParticleChange* G4eEnergyLossPlus::AlongStepDoIt( const G4Track& trackData,
              } while (subdelta<N) ;
 
              // update the particle direction and kinetic energy
-             aParticleChange.SetMomentumChange(Px,Py,Pz) ;
+             if(subdelta > 0)
+               aParticleChange.SetMomentumChange(Px,Py,Pz) ;
              E = Tkin ;
 
           }  
