@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.11 2001-07-11 10:01:57 gunter Exp $
+// $Id: G4ParticleDefinition.hh,v 1.12 2001-10-15 09:58:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,6 +51,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include "g4std/vector"
 
 class G4ProcessManager;
 class G4DecayTable;
@@ -101,12 +102,18 @@ class G4ParticleDefinition
       // to invoke corresponding methods for each particle type.
       // Actual implementation can be seen in the class 
       // G4ParticleWithCuts  
-      virtual void          ResetCuts();
-      virtual void          SetCuts(G4double );
-      virtual void          ReCalcCuts();
-      virtual G4double      	GetLengthCuts() const;
-      virtual G4double*	        GetEnergyCuts() const;
-      virtual G4double      	GetEnergyThreshold(const G4Material* ) const;
+      virtual void            SetCuts(G4double );
+      virtual void            SetRangeCut(G4double ,const G4Material*);
+      virtual void            SetRangeCutVector(G4std::vector<G4double>&);
+ 
+      virtual G4double*       GetEnergyCuts() const;
+      virtual G4double        GetEnergyThreshold(const G4Material* ) const;
+   
+      virtual G4double*       GetLengthCuts() const;
+      virtual G4double        GetRangeThreshold(const G4Material* ) const;
+  
+      virtual void            ResetCuts();
+      virtual void            ReCalcCuts();
  
       // applyCuts flag
       G4bool                GetApplyCutsFlag() const;
@@ -116,7 +123,7 @@ class G4ParticleDefinition
       // This method concerning cut values is supposed to be used by
       // G4VUserPhysicsList to restore cutvalues witout calculation
       // Actual implementation can be seen in the class G4ParticleWithCuts  
-      virtual void          RestoreCuts(G4double cutInLength,
+      virtual void          RestoreCuts(const G4double* cutInLength,
 					const G4double* cutInEnergy ){}
       
     
@@ -322,111 +329,6 @@ class G4ParticleDefinition
    G4int verboseLevel;
 };
 
-inline 
-G4ParticleTable* G4ParticleDefinition::GetParticleTable()
-{ 
-  return theParticleTable; 
-}
-
-inline
-G4DecayTable* G4ParticleDefinition::GetDecayTable()
-{ 
-  return theDecayTable; 
-}
-
-inline
-void          G4ParticleDefinition::SetDecayTable(G4DecayTable* aDecayTable) 
-{ 
-  theDecayTable = aDecayTable; 
-}
-
-inline 
-void G4ParticleDefinition::SetApplyCutsFlag(G4bool flag)
-{
-  fApplyCutsFlag = flag;
-}
-
-inline 
-G4bool G4ParticleDefinition::GetApplyCutsFlag() const
-{
-  return fApplyCutsFlag;
-}
-
-inline 
-void G4ParticleDefinition::SetVerboseLevel(G4int value)
-{
-   verboseLevel = value;
-}
-
-inline 
-G4int G4ParticleDefinition::GetVerboseLevel() const
-{
-   return verboseLevel;
-}
-
-inline
-G4ProcessManager* G4ParticleDefinition::GetProcessManager() const
-{
-    return theProcessManager;
-}
-
-inline
-void G4ParticleDefinition::SetProcessManager(G4ProcessManager *aProcessManager)
-{
-      theProcessManager = aProcessManager;
-}
-
-inline
-G4int G4ParticleDefinition::GetQuarkContent(G4int flavor) const 
-{ 
-  if ((flavor>0) && (flavor<NumberOfQuarkFlavor)){
-    return theQuarkContent[flavor-1];
-  }else {
-    if (verboseLevel >0) {
-      G4cout << "Invalid Quark Flavor for G4ParticleDefinition::GetQuarkContent";
-      G4cout << ": flavor=" << flavor <<G4endl;
-    }
-    return 0;
-  }  
-}
-
-inline
-G4int G4ParticleDefinition::GetAntiQuarkContent(G4int flavor) const 
-{ 
-  if ((flavor>0) && (flavor<NumberOfQuarkFlavor)){
-    return theAntiQuarkContent[flavor-1];
-  }else {
-    if (verboseLevel >0) {
-      G4cout <<"Invalid Quark Flavor for G4ParticleDefinition::GetAntiQuarkContent";
-      G4cout << ": flavor=" << flavor <<G4endl;
-    }
-    return 0;
-  }  
-}
-
-inline void G4ParticleDefinition::SetParticleSubType(const G4String& subtype)
-{
-  theParticleSubType = subtype;
-}
-
-inline void             G4ParticleDefinition::ResetCuts(){}
-
-inline void             G4ParticleDefinition::SetCuts(G4double ){}
-
-inline void             G4ParticleDefinition::ReCalcCuts(){}
-
-inline G4double         G4ParticleDefinition::GetLengthCuts() const {return -1.0;}
-
-inline G4double*	G4ParticleDefinition::GetEnergyCuts() const {return 0;}
-
-inline G4double      	G4ParticleDefinition::GetEnergyThreshold(const G4Material* ) const     
-{      
-  return -1.0 * eV;   
-}
- 
-inline void             G4ParticleDefinition::SetAntiPDGEncoding(G4int aEncoding)
-{ 
-  theAntiPDGEncoding = aEncoding; 
-}
+#include "G4ParticleDefinition.icc"
 
 #endif

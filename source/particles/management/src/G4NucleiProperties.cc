@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.cc,v 1.7 2001-07-11 10:02:00 gunter Exp $
+// $Id: G4NucleiProperties.cc,v 1.8 2001-10-15 09:58:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -204,3 +204,63 @@ G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
 // };
 
 
+
+G4double G4NucleiProperties::GetMassExcess(const G4int A, const G4int Z)
+{
+  if (A < 1 || Z < 0 || Z > A) {
+    G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " << A 
+	   << " and Z = " << Z << G4endl;
+    return 0.0;
+
+  } else {
+
+    if (G4NucleiPropertiesTable::IsInTable(Z,A)){
+      return G4NucleiPropertiesTable::GetMassExcess(Z,A);
+    } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)){
+      return G4NucleiPropertiesTheoreticalTable::GetMassExcess(Z,A);
+    } else {
+      return MassExcess(A,Z);
+    }
+  }
+
+}
+
+
+G4double G4NucleiProperties::GetAtomicMass(const G4double A, const G4double Z)
+{
+  if (Z < 0 || Z > A) {
+    G4cout << "G4NucleiProperties::GetAtomicMass: Wrong values for A = " << A 
+	   << " and Z = " << Z << G4endl;	return 0.0;
+
+  } else if (abs(A - G4int(A)) > 1.e-10) {
+    return AtomicMass(A,Z);
+
+  } else {
+    if (G4NucleiPropertiesTable::IsInTable(Z,A)) {
+      return G4NucleiPropertiesTable::GetAtomicMass(Z,A);
+    } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)){
+      return G4NucleiPropertiesTheoreticalTable::GetAtomicMass(Z,A);
+    } else {
+      return AtomicMass(A,Z);
+    }
+  }
+}
+
+G4double G4NucleiProperties::GetBindingEnergy(const G4int A, const G4int Z)
+{
+  if (A < 1 || Z < 0 || Z > A) {
+    G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " << A 
+	   << " and Z = " << Z << G4endl;
+    return 0.0;
+
+  } else {
+    if (G4NucleiPropertiesTable::IsInTable(Z,A)) {
+      return G4NucleiPropertiesTable::GetBindingEnergy(Z,A);
+    } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)) {
+      return G4NucleiPropertiesTheoreticalTable::GetBindingEnergy(Z,A);
+    }else {
+      return BindingEnergy(A,Z);
+    }
+
+  }
+}

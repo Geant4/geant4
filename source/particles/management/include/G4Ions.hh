@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.hh,v 1.8 2001-07-11 10:01:56 gunter Exp $
+// $Id: G4Ions.hh,v 1.9 2001-10-15 09:58:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,9 +53,6 @@ class G4Ions : public G4ParticleWithCuts
  //  This class has Excitation Energy in addition to the normal particle
  //
 
- private:
-   G4double  theIonsLengthCut;
-   G4double* theIonsKineticEnergyCuts;
 
  public: //With Description
    G4Ions(
@@ -74,13 +71,6 @@ class G4Ions : public G4ParticleWithCuts
    virtual    			~G4Ions(){};
    G4Ions*    			IonsDefinition();
    G4Ions*    			Ions();
-
- public: //With Description
-   virtual G4double 	   	GetCuts() {return theIonsLengthCut;}   
-   virtual const G4double* 	GetCutsInEnergy() {return theIonsKineticEnergyCuts;};
-
-   virtual void 		SetCuts(G4double aCut); 
-
 
  public:  //With Description
    G4int    GetAtomicNumber() const;
@@ -110,14 +100,6 @@ inline
  void G4Ions::SetExcitationEnergy(G4double value) 
 {
   theExcitationEnergy = value;
-}
-
-inline 
- void G4Ions::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theIonsLengthCut = theCutInMaxInteractionLength;  
-  theIonsKineticEnergyCuts = theKineticEnergyCuts;
 }
 
 #endif

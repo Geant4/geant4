@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.29 2001-07-11 10:02:00 gunter Exp $
+// $Id: G4IonTable.cc,v 1.30 2001-10-15 09:58:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -472,7 +472,8 @@ void  G4IonTable::AddProcessManager(const G4String& name)
   // retreive  /control/verbose 
   G4UImanager::GetUIpointer()->SetVerboseLevel(tempVerboseLevel);
 }
- 
+
+#include "g4std/vector"     
 /////////////////
 void  G4IonTable::SetCuts(G4ParticleDefinition* ion)
 {
@@ -483,13 +484,11 @@ void  G4IonTable::SetCuts(G4ParticleDefinition* ion)
   }  
 
   if (genericIon->GetEnergyCuts() != 0) {
-    ion->SetCuts( genericIon->GetLengthCuts());
-#ifdef G4VERBOSE
-    if (GetVerboseLevel()> 1) {
-      G4cout << "G4IonTable::GetIon() : cut value =";
-      G4cout << genericIon->GetLengthCuts()/mm << "[mm]" <<G4endl;
-    } 
-#endif      
+   G4std::vector<G4double> cuts;
+    for (size_t j=0; j<G4Material::GetNumberOfMaterials(); j +=1) {
+      cuts.push_back( (genericIon->GetLengthCuts())[j] );
+    }
+    ion->SetRangeCutVector(cuts);
 
     G4String name = ion->GetParticleName();
 

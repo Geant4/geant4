@@ -21,25 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleWithCuts.hh,v 1.9 2001-09-19 11:13:29 kurasige Exp $
+// $Id: G4ParticleWithCuts.hh,v 1.10 2001-10-15 09:58:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
-//      History: first implementation, based on object model of
-//      Hisaya Kurashige, 21 Oct 1996
-//      Calculation of Range Table is based on 
-//      implementeation for Muon by L.Urban, 10 May 1996
-// ----------------------------------------------------------------
-//      modified by Hisaya Kurashige, 04 Jan 1997
-//      added verboseLevel by Hisaya Kurashige 13 Nov 1997
-//      added ReCalcCuts() and ResetCuts  H.Kurashige 15 Nov.1996
-//      BuildPhysicsTable() becomes dummy H.Kurashige 06 June 1998
-//      added  GetEnergyThreshold  H.Kurashige 08 June 1998
-//      change Lowest/HighestEnergy as static H.Kurashige 18 June 1998 
-//      added  RestoreCuts  H.Kurashige 09 Mar. 2001
+//      History: 
+//       first implementation, based on object model of Hisaya Kurashige, 
+//                                                      21 Oct 1996
+//       calculation of Range Table is based on implementeation for Muon 
+//                                           by L.Urban, 10 May 1996
+//       added  RestoreCuts  H.Kurashige 09 Mar. 2001
+//       introduced material dependent range cuts   08 Sep. 2001
 // ----------------------------------------------------------------
 // Class Description
 // "theCutInMaxInteractionLength", for charged particles, is
@@ -53,8 +48,10 @@
 //    Sets the cuts values relative to this particle type in stopping
 //    range (or absorption length) and converts those cuts into energy cuts
 //    for all the materials defined in the Material table.
-//    [in protected method of CalcEnergyCuts(G4double aCut) ;
 //    It also triggers the recomputation of the physics tables of the
+// void SetRangeCut(G4double aCut, const G4Material*):
+//    Set a cut value in range for the specified material and converts 
+//    it into an energy cut.
 // void ReCalcCuts():
 //    Re calculate energy cut values with the previous cut value in range
 // void ResetCuts():
@@ -63,15 +60,21 @@
 // G4double GetCuts():
 //    Returns value of the cut in interaction length for all the
 //    processes of this particle type.
-// const G4double* GetCutsInEnergy();
-//    Returns vector of energy cuts (ordered per material)
-//    corresponding to the current stopping range or absorption length
+// const G4double* GetLengthCuts():
+//    Returns an array of cuts in range (ordered per material)
+// G4double  GetRangeThreshold(const G4Material* ) const:
+//    Returns a range cut for a material   
+// const G4double* GetEnergyCuts():
+//    Returns an array of energy cuts (ordered per material)
+// G4double GetEnergyThreshold(const G4Material* ) const:
+//    Returns a energy cut for a material      
 //
 
 #ifndef G4ParticleWithCuts_h
 #define G4ParticleWithCuts_h 1
 
 #include "globals.hh"
+#include "g4std/vector"
 #include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
 
@@ -106,37 +109,75 @@ class G4ParticleWithCuts : public G4ParticleDefinition
    
   //--------------for SetCuts-------------------------------------------
   protected:
-    G4double  theCutInMaxInteractionLength;
-    G4double* theKineticEnergyCuts;
+   G4double*  theCutInMaxInteractionLength;
+   G4double*  theKineticEnergyCuts;
 
   public:  // With Description
+   // G4ParticleWithCuts  
    // virtual methods derived from G4ParticleDefinition
-   virtual void          ResetCuts();
-   // Reset alll cut values in energy 
-   // but theCutInMaxInteractionLength remain unchanged
-   virtual void          ReCalcCuts();
-   // Set cut values in energy derived from theCutInMaxInteractionLength
-   virtual void          SetCuts(G4double aCut);
-   // Set cut values in energy derived from the cut range of aCut
 
-   virtual G4double        	GetLengthCuts() const;
-   virtual G4double* 	        GetEnergyCuts() const;
-  
-   virtual G4double      	GetEnergyThreshold(const G4Material* aMaterial) const;
-   static  void          	SetEnergyRange(G4double, G4double);
+  // Set Cuts methods
+      virtual void              SetCuts(G4double aCut);
+      // Set the range of aCut for all materials
+      virtual void              SetRangeCut(G4double aCut, const G4Material*);
+      // Set the cut range of aCut for a material
+      virtual void              SetRangeCutVector(G4std::vector<G4double>&);
+      // Set the vector of range cuts for all material
+
+     // Get cuts methods
+      virtual G4double*         GetLengthCuts() const;
+      // Get an array of range cuts for all materials      
+      virtual G4double          GetRangeThreshold(const G4Material* ) const;
+      // Get a range cut for a material      
+      virtual G4double*        GetEnergyCuts() const;
+      // Get an array of energy cuts for all materials      
+      virtual G4double         GetEnergyThreshold(const G4Material* ) const;
+      // Get a energy cut for a material      
+
+     // Other methods related with cuts
+      virtual void              ResetCuts();
+      // Reset alll cut values in energy 
+      //  but theCutInMaxInteractionLength remain unchanged
+      virtual void              ReCalcCuts();
+      // Set cut values in energy derived from theCutInMaxInteractionLength
+
+     //  set energy range  
+      static void SetEnergyRange(G4double lowedge, G4double highedge) ;    
+
+     // applyCuts flag
+      G4bool                GetApplyCutsFlag() const;
+      void                  SetApplyCutsFlag(G4bool flag);
 
   public:  // With Description
    // This method concerning cut values is supposed to be used by
    // G4VUserPhysicsList to restore cutvalues witout calculation
 
-   virtual void                  RestoreCuts(G4double cutInLength,
+   virtual void                  RestoreCuts(const G4double* cutInLength,
 					     const G4double* cutInEnergy );
       
  protected:
-    virtual   void  CalcEnergyCuts(G4double aCut);
+    void    SetCutInMaxInteractionLength(G4double aCut);
+    // Set a value of theCutInMaxInteractionLength for all materials
+    void    SetCutInMaxInteractionLength(G4double aCut , G4int matrialIndex);
+    // Set a value of theCutInMaxInteractionLength for a material
+    void    SetCutInMaxInteractionLength(G4double aCut , 
+                                         const G4Material* aMaterial);
+    // Set a value of theCutInMaxInteractionLength for a material       
+    void    SetEnergyCutValues(G4double energyCuts);
+    // Set a energy cut value for all materials
+
+    virtual   void  CalcEnergyCuts();
+    // Calculate energy cut values by using range cuts
 
     // BuildPhysicsTable is defined as a dummy routine
     void  BuildPhysicsTable() {};
+
+  protected:
+  // cut values for proton is used for all heavy charged particles 
+    static G4ParticleDefinition* theProton;
+    G4bool  UseProtonCut();
+
+    G4bool  CheckEnergyBinSetting() const;
 
   //-------------- Loss Table ------------------------------------------
   // theLossTable is a collection of loss vectors for all elements.
@@ -158,8 +199,9 @@ class G4ParticleWithCuts : public G4ParticleDefinition
     virtual G4double ComputeLoss(G4double AtomicNumber,
                                  G4double KineticEnergy
                                 ) const;
+
 //-------------- Range Table ------------------------------------------
-  protected:
+  protected:  
     typedef G4PhysicsLogVector G4RangeVector;
     virtual void BuildRangeVector(const G4Material* aMaterial,
 				  const G4LossTable* aLossTable,
@@ -169,8 +211,9 @@ class G4ParticleWithCuts : public G4ParticleDefinition
 
   protected:  
     G4double ConvertCutToKineticEnergy(
-                            G4RangeVector* theRangeVector
-                          ) const;
+				       G4RangeVector* theRangeVector,
+                                       size_t         materialIndex
+				      ) const;
 
     static G4double RangeLinSimpson(
 			    const G4ElementVector* elementVector,
@@ -189,17 +232,16 @@ class G4ParticleWithCuts : public G4ParticleDefinition
                             G4int nbin, G4int NumEl
                           );
    
-  void SetEnergyCutValues(G4double energyCuts);
 };
 
-inline G4double	G4ParticleWithCuts::GetLengthCuts() const 
+inline G4double*        G4ParticleWithCuts::GetLengthCuts() const 
 {
-	return theCutInMaxInteractionLength;
+        return theCutInMaxInteractionLength;
 }
 
-inline G4double* 	G4ParticleWithCuts::GetEnergyCuts() const 
+inline G4double*        G4ParticleWithCuts::GetEnergyCuts() const 
 {
-	return theKineticEnergyCuts;
+        return theKineticEnergyCuts;
 }
   
 inline void G4ParticleWithCuts::ResetCuts()
@@ -210,26 +252,14 @@ inline void G4ParticleWithCuts::ResetCuts()
 
 inline void G4ParticleWithCuts::ReCalcCuts()
 {
-  if (theCutInMaxInteractionLength>0.0) {
-    CalcEnergyCuts(theCutInMaxInteractionLength);
+  if (theCutInMaxInteractionLength != 0) {
+    CalcEnergyCuts();
   } else {
     if (GetVerboseLevel()>0) {
       G4cout << "G4ParticleWithCuts::ReCalcCuts() :";
       G4cout << "theCutInMaxInteractionLength is not defined " << G4endl; 
     }
   }
-}
-
-inline void G4ParticleWithCuts::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-}
-
-inline 
- void G4ParticleWithCuts::SetEnergyRange(G4double lowedge, G4double highedge)
-{
-  LowestEnergy = lowedge;
-  HighestEnergy = highedge;
 }
 
 #include "G4Material.hh"
@@ -239,6 +269,8 @@ inline
 {
    return theKineticEnergyCuts[aMaterial->GetIndex()]; 
 }
+
+
 #endif
 
 

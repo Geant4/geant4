@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTableB.cc,v 1.6 2001-07-11 10:02:01 gunter Exp $
+// $Id: G4NucleiPropertiesTableB.cc,v 1.7 2001-10-15 09:58:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1144,3 +1144,4 @@ G4double G4NucleiPropertiesTable::BetaEnergy[G4NucleiPropertiesTable::nEntries] 
   -5358.000,  -5990.000,      0.0  ,  -6204.000,  -4391.000,      0.0  ,  -4649.000,  -5624.000,      0.0  ,  -3635.000,      0.0  ,
   -4517.000,      0.0  ,  -6675.000,      0.0  ,      0.0  
 };
+

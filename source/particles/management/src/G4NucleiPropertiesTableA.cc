@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTableA.cc,v 1.6 2001-07-11 10:02:01 gunter Exp $
+// $Id: G4NucleiPropertiesTableA.cc,v 1.7 2001-10-15 09:58:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -115,15 +115,62 @@ G4int G4NucleiPropertiesTable::MaxZ(G4int A)
 
 G4double G4NucleiPropertiesTable::GetNuclearMass(G4int Z, G4int A)
 {
-	G4int i=GetIndex(Z, A);	
-	if (i >= 0){
-		const G4double NuclearMass = GetAtomicMass(Z,A) - G4double(Z)*electron_mass_c2 +
-											 1.433e-5*MeV*pow(G4double(Z),2.39);
-		return NuclearMass;
-	} else { 
-		return 0.0;
-	}
+  G4int i=GetIndex(Z, A);	
+  if (i >= 0){
+    const G4double NuclearMass = GetAtomicMass(Z,A) - G4double(Z)*electron_mass_c2 +
+      1.433e-5*MeV*pow(G4double(Z),2.39);
+    return NuclearMass;
+  } else { 
+    return 0.0;
+  }
 }
 
 
+
+
+G4double G4NucleiPropertiesTable::GetMassExcess(G4int Z, G4int A) 
+{
+    G4int i=GetIndex(Z, A);
+    if (i >= 0) {
+      return MassExcess[i]*keV;
+    } else {
+        return 0.0;
+    }
+}
+
+G4double G4NucleiPropertiesTable::GetBindingEnergy(G4int Z, G4int A)
+{
+  G4int i=GetIndex(Z, A);
+  if (i >= 0){
+      return (G4double(A-Z)*MassExcess[0] + G4double(Z)*MassExcess[1] - MassExcess[i])*keV;
+  } else { 
+    return 0.0;
+  }
+}
+
+G4double  G4NucleiPropertiesTable::GetBetaDecayEnergy(G4int Z, G4int A)
+{
+  G4int i=GetIndex(Z, A);
+    if (i >= 0){
+      return BetaEnergy[i]*keV;
+    } else { 
+      return 0.0;
+    }
+}
+
+G4double  G4NucleiPropertiesTable::GetAtomicMass(G4int Z, G4int A)
+{
+  G4int i=GetIndex(Z, A);	
+  if (i >= 0){
+    return MassExcess[i]*keV + G4double(A)*amu_c2;
+  } else { 
+    return 0.0;
+  }	
+}
+
+
+G4bool G4NucleiPropertiesTable::IsInTable(G4int Z, G4int A)
+{
+  return (Z <= A && A >= 1 && A <= 273 && Z >= 0 && Z <= 110 && GetIndex(Z, A) >= 0);
+}
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.cc,v 1.6 2001-07-11 10:02:04 gunter Exp $
+// $Id: G4PhaseSpaceDecayChannel.cc,v 1.7 2001-10-15 09:58:36 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -491,6 +491,13 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
 }
 
 
+G4double G4PhaseSpaceDecayChannel::Pmx(G4double e, G4double p1, G4double p2)
+{
+   // calcurate momentum of daughter particles in two-body decay
+   G4double ppp = (e+p1+p2)*(e+p1-p2)*(e-p1+p2)*(e-p1-p2)/(4.0*e*e);
+   if (ppp>0) return sqrt(ppp);
+   else       return -1.;
+}
 
 
 

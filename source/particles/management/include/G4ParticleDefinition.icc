@@ -1,0 +1,153 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4ParticleDefinition.icc,v 1.1 2001-10-15 09:58:31 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
+inline 
+ G4ParticleTable* G4ParticleDefinition::GetParticleTable()
+{ 
+  return theParticleTable; 
+}
+
+inline
+ G4DecayTable* G4ParticleDefinition::GetDecayTable()
+{ 
+  return theDecayTable; 
+}
+
+inline
+ void          G4ParticleDefinition::SetDecayTable(G4DecayTable* aDecayTable) 
+{ 
+  theDecayTable = aDecayTable; 
+}
+
+inline 
+ void G4ParticleDefinition::SetApplyCutsFlag(G4bool flag)
+{
+  fApplyCutsFlag = flag;
+}
+
+inline 
+ G4bool G4ParticleDefinition::GetApplyCutsFlag() const
+{
+  return fApplyCutsFlag;
+}
+
+inline 
+ void G4ParticleDefinition::SetVerboseLevel(G4int value)
+{
+   verboseLevel = value;
+}
+
+inline 
+ G4int G4ParticleDefinition::GetVerboseLevel() const
+{
+   return verboseLevel;
+}
+
+inline
+ G4ProcessManager* G4ParticleDefinition::GetProcessManager() const
+{
+    return theProcessManager;
+}
+
+inline
+ void G4ParticleDefinition::SetProcessManager(G4ProcessManager *aProcessManager)
+{
+      theProcessManager = aProcessManager;
+}
+
+inline
+ G4int G4ParticleDefinition::GetQuarkContent(G4int flavor) const 
+{ 
+  if ((flavor>0) && (flavor<NumberOfQuarkFlavor)){
+    return theQuarkContent[flavor-1];
+  }else {
+    if (verboseLevel >0) {
+      G4cout << "Invalid Quark Flavor for G4ParticleDefinition::GetQuarkContent";
+      G4cout << ": flavor=" << flavor <<G4endl;
+    }
+    return 0;
+  }  
+}
+
+inline
+ G4int G4ParticleDefinition::GetAntiQuarkContent(G4int flavor) const 
+{ 
+  if ((flavor>0) && (flavor<NumberOfQuarkFlavor)){
+    return theAntiQuarkContent[flavor-1];
+  }else {
+    if (verboseLevel >0) {
+      G4cout <<"Invalid Quark Flavor for G4ParticleDefinition::GetAntiQuarkContent";
+      G4cout << ": flavor=" << flavor <<G4endl;
+    }
+    return 0;
+  }  
+}
+
+inline 
+ void G4ParticleDefinition::SetParticleSubType(const G4String& subtype)
+{
+  theParticleSubType = subtype;
+}
+
+inline 
+ void             G4ParticleDefinition::ResetCuts(){}
+
+inline 
+ void             G4ParticleDefinition::SetCuts(G4double ){}
+
+inline 
+ void             G4ParticleDefinition::SetRangeCut(G4double, const G4Material*){}
+
+inline 
+ void             G4ParticleDefinition::SetRangeCutVector(G4std::vector<G4double>&){}
+
+inline 
+ void             G4ParticleDefinition::ReCalcCuts(){}
+
+inline 
+ G4double*        G4ParticleDefinition::GetLengthCuts() const {return 0;}
+
+inline 
+ G4double      	G4ParticleDefinition::GetRangeThreshold(const G4Material* ) const     
+{      
+  return -1.0 * mm;   
+}
+ 
+inline 
+ G4double*	  G4ParticleDefinition::GetEnergyCuts() const {return 0;}
+
+inline 
+ G4double      	G4ParticleDefinition::GetEnergyThreshold(const G4Material* ) const     
+{      
+  return -1.0 * eV;   
+}
+ 
+inline 
+ void             G4ParticleDefinition::SetAntiPDGEncoding(G4int aEncoding)
+{ 
+  theAntiPDGEncoding = aEncoding; 
+}
