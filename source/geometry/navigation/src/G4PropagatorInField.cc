@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.4 2003-11-03 17:15:22 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.5 2003-11-08 00:40:35 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -58,8 +58,6 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
                         G4ThreeVector(0.,0.,0.),0.0,0.0,0.0,0.0,0.0),
     fParticleIsLooping(false),
     fVerboseLevel(0),
-    fEpsilonMinDefault(5.0e-7),
-    fEpsilonMaxDefault(0.05),
     fMax_loop_count(1000),
     fNoZeroStep(0), 
     fCharge(0.0), fInitialMomentumModulus(0.0), fMass(0.0),
@@ -67,9 +65,8 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
     fSetFieldMgr(false),
     fpTrajectoryFilter( 0 )
 {
-  fEpsilonMin = fEpsilonMinDefault;
-  fEpsilonMax = fEpsilonMaxDefault;
-  fEpsilonStep = fEpsilonMaxDefault;
+  if(fDetectorFieldMgr) { fEpsilonStep = fDetectorFieldMgr->GetMaximumEpsilonStep();}
+  else                  { fEpsilonStep= 1.0e-5; } 
   fActionThreshold_NoZeroSteps = 2; 
   fSevereActionThreshold_NoZeroSteps = 10; 
   fAbandonThreshold_NoZeroSteps = 50; 
@@ -121,7 +118,7 @@ G4PropagatorInField::ComputeStep(
   //   Set the field manager to the local  one if the volume has one, 
   //                      or to the global one if not
   //
-  if( !fSetFieldMgr ) FindAndSetFieldManager( pPhysVol ); 
+  if( !fSetFieldMgr ) fCurrentFieldMgr= FindAndSetFieldManager( pPhysVol ); 
   // For the next call, the field manager must again be set
   fSetFieldMgr= false;
 
@@ -147,8 +144,10 @@ G4PropagatorInField::ComputeStep(
   }
   epsilon = GetDeltaOneStep() / CurrentProposedStepLength;
   // G4double raw_epsilon= epsilon;
-  if( epsilon < fEpsilonMin ) epsilon = fEpsilonMin;
-  if( epsilon > fEpsilonMax ) epsilon = fEpsilonMax;
+  G4double epsilonMin= fCurrentFieldMgr->GetMinimumEpsilonStep();
+  G4double epsilonMax= fCurrentFieldMgr->GetMaximumEpsilonStep();; 
+  if( epsilon < epsilonMin ) epsilon = epsilonMin;
+  if( epsilon > epsilonMax ) epsilon = epsilonMax;
   SetEpsilonStep( epsilon );
 
   // G4cout << "G4PiF: Epsilon of current step - raw= " << raw_epsilon

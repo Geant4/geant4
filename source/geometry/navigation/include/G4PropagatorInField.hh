@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.4 2003-11-03 17:15:20 gcosmo Exp $
+// $Id: G4PropagatorInField.hh,v 1.5 2003-11-08 00:40:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
@@ -97,21 +97,6 @@ class G4PropagatorInField
    inline G4int  SetVerboseLevel( G4int verbose );
    inline G4int  Verbose() const;
 
-   inline G4double  GetDeltaIntersection() const;
-     // Accuracy for boundary intersection.
-   inline G4double  GetDeltaOneStep() const;
-     // Accuracy for one tracking/physics step.
-                                    
-   inline void    SetAccuraciesWithDeltaOneStep( G4double deltaOneStep );  
-     // Sets both accuracies for the Global (Detector) field, 
-     // maintaining a particular ratio for accuracties 
-     // of volume Intersection and Integration (in One Step).
-
-   inline void    SetDeltaIntersection( G4double deltaIntersection );
-     // Set accuracy of  intersection of a volume.  (only)
-   inline void    SetDeltaOneStep( G4double deltaOneStep );  
-     // Set accuracy for integration of one step.   (only)
-
    inline G4int   GetMaxLoopCount() const;
    inline void    SetMaxLoopCount( G4int new_max );
      // A maximum for the number of steps that a (looping) particle can take.
@@ -126,6 +111,10 @@ class G4PropagatorInField
 
    inline G4FieldTrack GetEndState() const;
 
+   // The following methods are now obsolescent but *for now* will work 
+   //   They are being replaced by same-name methods in G4FieldManager,
+   //   allowing the specialisation in different volumes. 
+   //   Their new behaviour is to change the values for the global field manager. 
    inline G4double  GetMinimumEpsilonStep() const;
    inline void      SetMinimumEpsilonStep( G4double newEpsMin );
      // Minimum for Relative accuracy of any Step 
@@ -135,6 +124,17 @@ class G4PropagatorInField
 
    inline void      SetLargestAcceptableStep( G4double newBigDist );
    inline G4double  GetLargestAcceptableStep();
+
+ public:  // with description
+
+   // The following methods are obsolete and will not work --
+   //   as they have been replaced by the same methods in G4FieldManager
+   //   since Geant4 4.0
+   inline G4double  GetDeltaIntersection() const;
+   inline G4double  GetDeltaOneStep() const;
+   inline void    SetAccuraciesWithDeltaOneStep( G4double deltaOneStep );  
+   inline void    SetDeltaIntersection( G4double deltaIntersection );
+   inline void    SetDeltaOneStep( G4double deltaOneStep );  
 
  public:  // without description
 
@@ -230,15 +230,7 @@ class G4PropagatorInField
    G4int  fVerboseLevel;
      // For debuging purposes
 
-   //  Values for the small possible relative accuracy of a step
-   //  (corresponding to the greatest possible integration accuracy)
-
-   G4double  fEpsilonMinDefault;   // Can be 1.0e-5 to 1.0e-10 ...
-   G4double  fEpsilonMaxDefault;   // Can be 1.0e-1 to 1.0e-3 ...
-   G4double  fEpsilonMin; 
-   G4double  fEpsilonMax;
-     // Limits for the Relative accuracy of any Step 
-
+    // Limit for the number of sub-steps taken in one call to ComputeStep
    G4int  fMax_loop_count;
 
    //  Variables to keep track of "abnormal" case - which causes loop

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.3 2003-11-03 17:15:21 gcosmo Exp $
+// $Id: G4PropagatorInField.icc,v 1.4 2003-11-08 00:40:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -153,38 +153,30 @@ G4FieldTrack G4PropagatorInField::GetEndState() const
   return End_PointAndTangent;
 }
 
-// Minimum for Relative accuracy of any Step 
+// Minimum for Relative accuracy of a Step in volumes of global field
 inline 
 G4double  G4PropagatorInField::GetMinimumEpsilonStep() const
 {
-  return fEpsilonMin; 
+  return fDetectorFieldMgr->GetMinimumEpsilonStep();
 }
 
 inline 
 void      G4PropagatorInField::SetMinimumEpsilonStep( G4double newEpsMin )
 {
-  if( (newEpsMin > 0.0) && (fabs(1.0+newEpsMin) > 1.0) )
-  {
-    fEpsilonMin = newEpsMin;
-  }
+  fDetectorFieldMgr->SetMinimumEpsilonStep(newEpsMin);
 }
 
 // Maximum for Relative accuracy of any Step 
 inline 
 G4double  G4PropagatorInField::GetMaximumEpsilonStep() const
 {
-  return fEpsilonMax; 
+  return fDetectorFieldMgr->GetMaximumEpsilonStep();
 }
 
 inline 
 void      G4PropagatorInField::SetMaximumEpsilonStep( G4double newEpsMax )
 {
-  if(    (newEpsMax > 0.0) 
-      && (newEpsMax >= fEpsilonMin ) 
-      && (fabs(1.0+newEpsMax)>1.0) )
-  {
-    fEpsilonMax = newEpsMax;
-  }
+  fDetectorFieldMgr->SetMaximumEpsilonStep( newEpsMax );
 }
 
 inline
