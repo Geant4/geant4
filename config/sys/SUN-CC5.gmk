@@ -12,6 +12,7 @@ ifeq ($(G4SYSTEM),SUN-CC5)
       CCFLAGS := -g
     endif
   endif
+  CXXFLAGS += -features=no%anachronisms -mt -lpthread
 #  CXXFLAGS += -fnonstd
   ifdef G4LIB_BUILD_SHARED
     CXXFLAGS += -KPIC
@@ -46,6 +47,9 @@ ifeq ($(G4SYSTEM),SUN-CC5)
   LOADLIBS += -L/usr/lib -lsocket -lnsl
   CPPFLAGS += -DG4NOT_ISO_DELETES
   CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
+  ifdef G4ODBMS
+    G4OODDLX_FLAGS += -noline
+  endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_SOLARIS_2_5 -DOS_NEW_CHECK -DOS_STL_ASSERT
     CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
@@ -70,6 +74,5 @@ ifeq ($(G4SYSTEM),SUN-CC5)
     cd $(G4TMP)/$(G4SYSTEM); \
      $(CXX) -G $(CXXTEMPLATE_FLAGS) -o $$libdir/$(@F) -h $(@F) \
                $(foreach dir,$(SUBLIBS),$(dir)/*.o);
-endef
-
+  endef
 endif
