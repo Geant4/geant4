@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassGeometrySampler.cc,v 1.4 2002-10-28 09:57:23 dressel Exp $
+// $Id: G4MassGeometrySampler.cc,v 1.5 2002-10-28 17:47:15 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -74,7 +74,7 @@ void G4MassGeometrySampler::ClearSampling() {
     delete fGCellFinder;
   }
   fIStore = 0;
-  
+  fIsConfigured = false;
 };
 
 G4bool G4MassGeometrySampler::IsConfigured() const{

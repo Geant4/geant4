@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelGeometrySampler.cc,v 1.3 2002-10-22 13:26:04 dressel Exp $
+// $Id: G4ParallelGeometrySampler.cc,v 1.4 2002-10-28 17:47:15 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -79,6 +79,7 @@ void G4ParallelGeometrySampler::ClearSampling() {
     delete fGCellFinder;
   }
   fIStore = 0;
+  fIsConfigured = false;
 };
 
 G4bool G4ParallelGeometrySampler::IsConfigured() const{
