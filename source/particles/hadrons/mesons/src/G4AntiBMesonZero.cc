@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiBMesonZero.cc,v 1.7 2001-09-19 11:16:53 kurasige Exp $
+// $Id: G4AntiBMesonZero.cc,v 1.8 2001-10-15 10:08:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,19 +83,14 @@ G4AntiBMesonZero G4AntiBMesonZero::theAntiBMesonZero(
 
 G4AntiBMesonZero*  G4AntiBMesonZero::AntiBMesonZeroDefinition(){return &theAntiBMesonZero;}
 G4AntiBMesonZero*  G4AntiBMesonZero::AntiBMesonZero(){return &theAntiBMesonZero;}
-// initialization for static cut values
-G4double   G4AntiBMesonZero::theAntiBMesonZeroLengthCut = -1.0;
-G4double*  G4AntiBMesonZero::theAntiBMesonZeroKineticEnergyCuts = NULL;
 
 void G4AntiBMesonZero::SetCuts(G4double aCut)
 {
-  theCutInMaxInteractionLength = aCut;
+  SetCutInMaxInteractionLength( aCut );
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);
 
-  theAntiBMesonZeroLengthCut = theCutInMaxInteractionLength;  
-  theAntiBMesonZeroKineticEnergyCuts = theKineticEnergyCuts;
 }
 
 

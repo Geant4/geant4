@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionZero.cc,v 1.7 2001-09-19 11:16:55 kurasige Exp $
+// $Id: G4PionZero.cc,v 1.8 2001-10-15 10:08:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,9 +107,6 @@ G4PionZero G4PionZero::thePionZero(
 );
 
 G4PionZero* G4PionZero::PionZeroDefinition(){return &thePionZero;}
-// initialization for static cut values
-G4double   G4PionZero::thePionZeroLengthCut = -1.0;
-G4double*  G4PionZero::thePionZeroKineticEnergyCuts = NULL;
 
 // **********************************************************************
 // **************************** SetCuts *********************************
@@ -118,13 +115,11 @@ G4double*  G4PionZero::thePionZeroKineticEnergyCuts = NULL;
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
 void G4PionZero::SetCuts(G4double aCut)
 {
-  theCutInMaxInteractionLength = aCut;
+  SetCutInMaxInteractionLength( aCut );
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);
 
-  thePionZeroLengthCut = theCutInMaxInteractionLength;  
-  thePionZeroKineticEnergyCuts = theKineticEnergyCuts;
 }
 
 

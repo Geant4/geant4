@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EtaPrime.cc,v 1.7 2001-09-19 11:16:54 kurasige Exp $
+// $Id: G4EtaPrime.cc,v 1.8 2001-10-15 10:08:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,9 +104,6 @@ G4EtaPrime G4EtaPrime::theEtaPrime(
 );
 
 G4EtaPrime*    G4EtaPrime::EtaPrimeDefinition(){return &theEtaPrime;}
-// initialization for static cut values
-G4double   G4EtaPrime::theEtaPrimeLengthCut = -1.0;
-G4double*  G4EtaPrime::theEtaPrimeKineticEnergyCuts = NULL;
 
 // **********************************************************************
 // **************************** SetCuts *********************************
@@ -114,13 +111,10 @@ G4double*  G4EtaPrime::theEtaPrimeKineticEnergyCuts = NULL;
 
 void G4EtaPrime::SetCuts(G4double aCut)
 {
-  theCutInMaxInteractionLength = aCut;
+  SetCutInMaxInteractionLength( aCut );
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);
-
-  theEtaPrimeLengthCut = theCutInMaxInteractionLength;  
-  theEtaPrimeKineticEnergyCuts = theKineticEnergyCuts;
 }
 
 

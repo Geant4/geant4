@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DMesonZero.cc,v 1.7 2001-09-19 11:16:54 kurasige Exp $
+// $Id: G4DMesonZero.cc,v 1.8 2001-10-15 10:08:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,9 +83,6 @@ G4DMesonZero G4DMesonZero::theDMesonZero(
 
 G4DMesonZero*  G4DMesonZero::DMesonZeroDefinition(){return &theDMesonZero;}
 G4DMesonZero*  G4DMesonZero::DMesonZero(){return &theDMesonZero;}
-// initialization for static cut values
-G4double   G4DMesonZero::theDMesonZeroLengthCut = -1.0;
-G4double*  G4DMesonZero::theDMesonZeroKineticEnergyCuts = NULL;
 
 // **********************************************************************
 // **************************** SetCuts *********************************
@@ -95,13 +92,11 @@ G4double*  G4DMesonZero::theDMesonZeroKineticEnergyCuts = NULL;
 
 void G4DMesonZero::SetCuts(G4double aCut)
 {
-  theCutInMaxInteractionLength = aCut;
+  SetCutInMaxInteractionLength( aCut );
 
- // Set Energy Cut values to lowest  for all materials
+  // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);
 
-  theDMesonZeroLengthCut = theCutInMaxInteractionLength;  
-  theDMesonZeroKineticEnergyCuts = theKineticEnergyCuts;
 }
 
 

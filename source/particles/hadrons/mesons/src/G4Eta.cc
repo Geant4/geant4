@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Eta.cc,v 1.7 2001-09-19 11:16:54 kurasige Exp $
+// $Id: G4Eta.cc,v 1.8 2001-10-15 10:08:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,9 +107,6 @@ G4Eta G4Eta::theEta(
 );
 
 G4Eta*    G4Eta::EtaDefinition(){return &theEta;}
-// initialization for static cut values
-G4double   G4Eta::theEtaLengthCut = -1.0;
-G4double*  G4Eta::theEtaKineticEnergyCuts = NULL;
 
 // **********************************************************************
 // **************************** SetCuts *********************************
@@ -117,13 +114,10 @@ G4double*  G4Eta::theEtaKineticEnergyCuts = NULL;
 
 void G4Eta::SetCuts(G4double aCut)
 {
-  theCutInMaxInteractionLength = aCut;
+  SetCutInMaxInteractionLength( aCut );
 
- // Set Energy Cut values to lowest  for all materials
+  // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);
-
-  theEtaLengthCut = theCutInMaxInteractionLength;  
-  theEtaKineticEnergyCuts = theKineticEnergyCuts;
 }
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DsMesonMinus.cc,v 1.5 2001-07-11 10:01:49 gunter Exp $
+// $Id: G4DsMesonMinus.cc,v 1.6 2001-10-15 10:08:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,9 +84,6 @@ G4DsMesonMinus G4DsMesonMinus::theDsMesonMinus(
 
 G4DsMesonMinus*  G4DsMesonMinus::DsMesonMinusDefinition(){return &theDsMesonMinus;}
 G4DsMesonMinus*  G4DsMesonMinus::DsMesonMinus(){return &theDsMesonMinus;}
-// initialization for static cut values
-G4double   G4DsMesonMinus::theDsMesonMinusLengthCut = -1.0;
-G4double*  G4DsMesonMinus::theDsMesonMinusKineticEnergyCuts = NULL;
 
 
 

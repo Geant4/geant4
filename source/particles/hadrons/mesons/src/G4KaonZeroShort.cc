@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonZeroShort.cc,v 1.7 2001-09-19 11:16:55 kurasige Exp $
+// $Id: G4KaonZeroShort.cc,v 1.8 2001-10-15 10:08:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,9 +101,6 @@ G4KaonZeroShort G4KaonZeroShort::theKaonZeroShort(
 );
 
 G4KaonZeroShort* G4KaonZeroShort::KaonZeroShortDefinition(){return &theKaonZeroShort;}
-// initialization for static cut values
-G4double   G4KaonZeroShort::theKaonZeroShortLengthCut = -1.0;
-G4double*  G4KaonZeroShort::theKaonZeroShortKineticEnergyCuts = NULL;
 
 
 // **********************************************************************
@@ -114,11 +111,9 @@ G4double*  G4KaonZeroShort::theKaonZeroShortKineticEnergyCuts = NULL;
 
 void G4KaonZeroShort::SetCuts(G4double aCut)
 {
-  theCutInMaxInteractionLength = aCut;
+  SetCutInMaxInteractionLength( aCut );
 
+  // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(LowestEnergy);
-
-  theKaonZeroShortLengthCut = theCutInMaxInteractionLength;  
-  theKaonZeroShortKineticEnergyCuts = theKineticEnergyCuts;
 }
 

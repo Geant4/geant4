@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonPlus.cc,v 1.5 2001-07-11 10:01:50 gunter Exp $
+// $Id: G4KaonPlus.cc,v 1.6 2001-10-15 10:08:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,9 +109,6 @@ G4KaonPlus G4KaonPlus::theKaonPlus(
 );
 
 G4KaonPlus*  G4KaonPlus::KaonPlusDefinition(){return &theKaonPlus;}
-// initialization for static cut values
-G4double   G4KaonPlus::theKaonPlusLengthCut = -1.0;
-G4double*  G4KaonPlus::theKaonPlusKineticEnergyCuts = NULL;
 
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BMesonPlus.cc,v 1.5 2001-07-11 10:01:49 gunter Exp $
+// $Id: G4BMesonPlus.cc,v 1.6 2001-10-15 10:08:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,9 +84,6 @@ G4BMesonPlus G4BMesonPlus::theBMesonPlus(
 
 G4BMesonPlus*  G4BMesonPlus::BMesonPlusDefinition(){return &theBMesonPlus;}
 G4BMesonPlus*  G4BMesonPlus::BMesonPlus(){return &theBMesonPlus;}
-// initialization for static cut values
-G4double   G4BMesonPlus::theBMesonPlusLengthCut = -1.0;
-G4double*  G4BMesonPlus::theBMesonPlusKineticEnergyCuts = NULL;
 
 
 

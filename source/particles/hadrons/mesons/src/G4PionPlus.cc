@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionPlus.cc,v 1.6 2001-07-11 10:01:50 gunter Exp $
+// $Id: G4PionPlus.cc,v 1.7 2001-10-15 10:08:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,9 +98,6 @@ G4PionPlus G4PionPlus::thePionPlus(
 );
 
 G4PionPlus*  G4PionPlus::PionPlusDefinition(){return &thePionPlus;}
-// initialization for static cut values
-G4double   G4PionPlus::thePionPlusLengthCut = -1.0;
-G4double*  G4PionPlus::thePionPlusKineticEnergyCuts = NULL;
 
 
 
