@@ -15,7 +15,6 @@
 ExN06RunAction::ExN06RunAction()
 {
   timer = new G4Timer;
-  runIDcounter = 0;
 }
 
 ExN06RunAction::~ExN06RunAction()
@@ -25,8 +24,6 @@ ExN06RunAction::~ExN06RunAction()
 
 void ExN06RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-   ((G4Run*)(aRun))->SetRunID(runIDcounter++);
-
   G4UImanager* UI = G4UImanager::GetUIpointer();
   UI->ApplyCommand("/event/verbose 1");
   //UI->ApplyCommand("/tracking/verbose 1");

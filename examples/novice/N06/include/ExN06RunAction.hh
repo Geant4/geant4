@@ -30,7 +30,6 @@ class ExN06RunAction : public G4UserRunAction
   private:
 
     G4Timer* timer;
-    G4int runIDcounter;
 };
 
 #endif /*ExN06RunAction_h*/

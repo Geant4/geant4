@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05RunAction.hh,v 1.2 1999-04-16 12:04:59 kurasige Exp $
+// $Id: ExN05RunAction.hh,v 1.3 1999-04-22 21:45:25 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,7 +30,6 @@ class ExN05RunAction : public G4UserRunAction
 
   private:
     G4Timer* timer;
-    G4int runIDcounter;
 };
 
 #endif
