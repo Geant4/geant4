@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2003-10-01 14:51:39 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2003-10-28 10:00:25 japost Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -18,8 +18,6 @@ include $(G4INSTALL)/config/architecture.gmk
 # Override some variables for binmake.gmk.
 #
 INCFLAGS := -I$(G4BASE)/geometry/management/include \
-            -I$(G4BASE)/geometry/volumes/include \
-            -I$(G4BASE)/geometry/navigation/include \
             -I$(G4BASE)/geometry/solids/Boolean/include \
             -I$(G4BASE)/geometry/solids/CSG/include \
             -I$(G4BASE)/global/management/include \
@@ -27,8 +25,9 @@ INCFLAGS := -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/global/HEPGeometry/include \
             -I$(G4BASE)/graphics_reps/include
 
-LDLIBS   := -lG4geomnav -lG4volumes -lG4geomBoolean -lG4csg -lG4geometrymng \
+LDLIBS   := -lG4geomBoolean -lG4csg -lG4geometrymng \
             -lG4graphics_reps \
+            -lG4intercoms \
             -lG4globman
 
 GLOB_LDLIBS   := -lG4geometry \
