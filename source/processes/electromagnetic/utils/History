@@ -1,4 +1,4 @@
-$Id: History,v 1.119 2003-11-03 19:39:57 vnivanch Exp $
+$Id: History,v 1.120 2003-11-07 11:59:35 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Fix problem of rounding of double in G4UniversalFluctuations
+- Fix problem of MSC for 10 PeV muons
 
 03 Nov 03: V.Ivant (utils-V05-02-11)
 - Remove STD processes
