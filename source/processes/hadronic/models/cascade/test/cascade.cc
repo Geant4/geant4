@@ -25,6 +25,9 @@
 #include "G4NucleiModel.hh"
 #include "G4LorentzConvertor.hh"
 
+G4double sumBaryon = 0;
+G4double sumEnergy = 0;
+
 typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
@@ -133,6 +136,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     //    G4InuclParticle* bull = new G4InuclElementaryParticle(bulletMomentum, bulletType);
     G4InuclElementaryParticle* bull = new G4InuclElementaryParticle(bulletMomentum, bulletType);
 
+
     if (verboseLevel > 2) {
       G4cout << "Bullet:  " << G4endl;  
       bull->printParticle();
@@ -141,6 +145,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 				  bulletMomentum[3] * bulletMomentum[3] + bullMass * bullMass) * GeV;
       G4cout << "Bullet total energy: " << bulleTot / GeV  << "GeV"<< G4endl;  
     }
+
 
     G4InuclNuclei* targ = NULL;
     G4InuclParticle* targIsH = NULL;
@@ -213,13 +218,20 @@ G4int printData(G4int i) {
     G4cout << " After Cascade " << G4endl;
     output.printCollisionOutput();
   }
-	  
+
+
+    sumBaryon = A;
+  if (bulletType == proton || bulletType == neutron) {
+    sumBaryon += 1;
+  } 
+
   // Convert Bertini data to Geant4 format
 
   G4std::vector<G4InuclNuclei> nucleiFragments = output.getNucleiFragments();
   G4double eTot = 0;
   G4double eKinTot = 0;
   G4double ekin = 0;
+ 
 
   if(!nucleiFragments.empty()) { 
     nucleiIterator ifrag;
@@ -227,10 +239,10 @@ G4int printData(G4int i) {
     
     for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) {
     
-      //          G4std::vector<G4double> m = ifrag->getMomentum();
+      G4std::vector<G4double> m = ifrag->getMomentum();
 
-    G4std::vector<G4double>  m(3, 0.0);
-	       G4ThreeVector mom(m[1], m[2], m[3]);    
+      //   G4std::vector<G4double>  m(3, 0.0);
+      G4ThreeVector mom(m[1], m[2], m[3]);    
       ekin = ifrag->getKineticEnergy() * GeV;
 
       G4int type = 0; // :::
@@ -243,6 +255,8 @@ G4int printData(G4int i) {
       G4double fEx = ifrag->getExitationEnergyInGeV();
       G4int fA = G4int(ifrag->getA());
       G4int fZ = G4int(ifrag->getZ());
+
+	sumBaryon -= fA;
 
       if (verboseLevel > 2) {
 
@@ -264,7 +278,9 @@ G4int printData(G4int i) {
 	  setw(13) << mom[2]       << 
 	  setw(13) << fA           << 
 	  setw(13) << fZ           << 
-	  setw(13) << fEx          << G4endl;
+	  setw(13) << fEx          << 
+	  setw(13) << sumBaryon    << 
+	  setw(13) << sumEnergy    << G4endl;
       }
       G4double particleMass = ifrag->getMass();
 
@@ -280,10 +296,14 @@ G4int printData(G4int i) {
     particleIterator ipart;
 
     for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-      //   G4std::vector<G4double> mom = ipart->getMomentum();
-    G4std::vector<G4double>  mom(3, 0.0);
+      G4std::vector<G4double> mom = ipart->getMomentum();
+      // G4std::vector<G4double>  mom(3, 0.0);
       ekin = ipart->getKineticEnergy() * GeV;
       G4int type = ipart->type();
+
+      if (type == proton || type == neutron) {
+	sumBaryon -= 1;
+      } 
 
       if (verboseLevel > 0) {
 	cout.precision(4);
@@ -297,7 +317,9 @@ G4int printData(G4int i) {
 	  setw(13) << mom[3]       << 
 	  setw(13) << 0            << 
 	  setw(13) << 0            << 
-	  setw(13) << 0.0          << G4endl;
+	  setw(13) << 0.0          << 
+	  setw(13) << sumBaryon    << 
+	  setw(13) << sumEnergy    << G4endl;
       }
 
       eTot   += sqrt(mom[0] * mom[0]) * GeV;
@@ -305,12 +327,14 @@ G4int printData(G4int i) {
     }
 
   }
-
+  if (sumBaryon != 0) {
+    cout << "ERROR: no baryon number conservation, sum of baryons = " << sumBaryon << endl;
+  }
   if (verboseLevel > 2) {
 
     G4cout << "Total energy           : " << eTot / GeV << "GeV" << G4endl; 
     G4cout << "Total kinetice energy  : " << eKinTot / GeV << "GeV" << G4endl; 
-
+    G4cout << "Baryon sum             : " << sumBaryon << G4endl;
   }
 
   return 0;
@@ -330,3 +354,7 @@ G4int test() {
 
   return 0;
 };
+
+
+
+
