@@ -14,7 +14,7 @@
 #
 /run/initialize
 #
-/run/particle/dumpCutValues
+# /run/particle/dumpCutValues
 #
 /gun/particle e-
 #
@@ -24,8 +24,6 @@
 /gun/energy 500.0 MeV
 /run/beamOn 1
 #
-/run/particle/dumpCutValues false
-
 /gun/energy 250.0 MeV
 /run/beamOn 1
 #
@@ -38,7 +36,13 @@
 /gun/energy  50.0 MeV
 /run/beamOn 1
 #
+/field/update
+/field/setFieldZ 1.0 kG
+
 /gun/energy 500.0 MeV
+/tracking/verbose 1
+/run/beamOn 1
+
 /tracking/verbose 0
 /event/printModulo 10
 /run/beamOn 100
