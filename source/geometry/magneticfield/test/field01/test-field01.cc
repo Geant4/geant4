@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: field01.cc,v 1.1 2001-10-11 07:11:53 grichine Exp $
+// $Id: test-field01.cc,v 1.1 2004-12-02 11:09:47 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
