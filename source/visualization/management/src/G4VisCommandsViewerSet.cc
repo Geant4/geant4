@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.29 2005-01-26 16:30:50 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.30 2005-03-03 16:28:12 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -456,7 +456,7 @@ void G4VisCommandsViewerSet::SetNewValue
     G4String cullingOption, stringFlag, unit;
     G4double density;
     G4bool boolFlag;
-    std::istrstream is ((char*)newValue.data());
+    std::istrstream is (newValue);
     is >> cullingOption >> stringFlag >> density >> unit;
     boolFlag = G4UIcommand::ConvertToBool(stringFlag);
     if (cullingOption == "global") {
@@ -679,7 +679,7 @@ void G4VisCommandsViewerSet::SetNewValue
     else if (newValue[iPos] == 'p') {  // "perspective"
       G4String dummy;
       G4String unit;
-      std::istrstream is ((char*)newValue.data());
+      std::istrstream is (newValue);
       is >> dummy >> fieldHalfAngle >> unit;
       fieldHalfAngle *= G4UIcommand::ValueOf(unit);
       if (fieldHalfAngle > 89.5 * deg || fieldHalfAngle <= 0.0) {
@@ -716,8 +716,7 @@ void G4VisCommandsViewerSet::SetNewValue
   else if (command == fpCommandSectionPlane) {
     G4String choice, unit;
     G4double x, y, z, nx, ny, nz;
-    const char* t = newValue;
-    std::istrstream is ((char*)t);
+    std::istrstream is (newValue);
     is >> choice >> x >> y >> z >> unit >> nx >> ny >> nz;
 
     G4int iSelector = -1;

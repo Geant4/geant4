@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.cc,v 1.13 2004-08-03 15:57:48 johna Exp $
+// $Id: G4VVisCommand.cc,v 1.14 2005-03-03 16:28:12 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Base class for visualization commands - John Allison  9th August 1998
@@ -63,8 +63,7 @@ void G4VVisCommand::ConvertToDoublePair(const G4String& paramString,
   G4double x, y;
   char unts[30];
   
-  const char* t = paramString;
-  std::istrstream is((char*)t);
+  std::istrstream is(paramString);
   is >> x >> y >> unts;
   G4String unt = unts;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.24 2003-06-16 17:14:24 gunter Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.25 2005-03-03 16:28:12 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -239,7 +239,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String graphicsSystem, newName;
-  std::istrstream is ((char*)newValue.data());
+  std::istrstream is (newValue);
   is >> graphicsSystem >> newName;
 
   const G4GraphicsSystemList& gsl =
@@ -354,7 +354,7 @@ G4String G4VisCommandSceneHandlerList::GetCurrentValue (G4UIcommand*) {
 void G4VisCommandSceneHandlerList::SetNewValue (G4UIcommand*,
 						G4String newValue) {
   G4String name, verbosityString;
-  std::istrstream is ((char*)newValue.data());
+  std::istrstream is (newValue);
   is >> name >> verbosityString;
   G4VisManager::Verbosity verbosity =
     fpVisManager->GetVerbosityValue(verbosityString);

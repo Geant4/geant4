@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.41 2005-02-23 11:46:32 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.42 2005-03-03 16:28:12 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -215,7 +215,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4String sceneHandlerName, newName;
   G4int windowSizeHint;
-  std::istrstream is ((char*)newValue.data());
+  std::istrstream is (newValue);
   is >> sceneHandlerName;
 
   // Now need to handle the possibility that the second string
@@ -496,7 +496,7 @@ G4String G4VisCommandViewerList::GetCurrentValue (G4UIcommand*) {
 
 void G4VisCommandViewerList::SetNewValue (G4UIcommand*, G4String newValue) {
   G4String name, verbosityString;
-  std::istrstream is ((char*)newValue.data());
+  std::istrstream is (newValue);
   is >> name >> verbosityString;
   G4String shortName = fpVisManager -> ViewerShortName (name);
   G4VisManager::Verbosity verbosity =
