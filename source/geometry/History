@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2000-11-20 19:16:37 gcosmo Exp $
+$Id: History,v 1.17 2001-02-20 08:18:19 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -127,6 +127,16 @@ Nov  10,  99   John Apostolakis              geometry-V00-01-01
 ===============================================================================
   Geant4 1.0  , 1st STL-based release. 
 ===============================================================================
+June  7,  99   John Apostolakis              geometry-01-00-06
+
+- Tagged.
+
+June  7,  99   D. C. Williams
+ CSG Pcon/Pgon (and supporting classes) :  several changes
+
+June  4,  99   S. Giani
+ G4Trap                 : CalculateExtent fix
+ G4SmartVoxelHeader.cc  : protection against inconsistent CalculateExtent
 
 May  21,  99   John Apostolakis              geometry-01-00-05
 - Tagged.
