@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.4 1999-10-25 10:41:36 johna Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.5 1999-10-25 16:56:35 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,7 +76,7 @@ private:
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.
   //
-  G4std::map<const G4VPhysicalVolume*, const SoSeparator*> SeparatorMap;
+  G4std::map<const G4VPhysicalVolume*, SoSeparator*> SeparatorMap;
   SoSeparator *root;
   SoSeparator *staticRoot;
   SoSeparator *transientRoot;
