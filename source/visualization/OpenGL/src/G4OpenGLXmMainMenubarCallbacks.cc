@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.7 2001-01-25 12:09:57 johna Exp $
+// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.8 2001-04-02 14:04:41 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 	pView->fprotation_top->AddChild (pView->fprotation_button_box);
 	
 	XtCallbackRec* rot_cb_list = new XtCallbackRec[2];
-	rot_cb_list[0].callback = G4OpenGLXmViewer::set_rot_subject_callback;
+	rot_cb_list[0].callback = set_rot_subject_callback;
 	rot_cb_list[0].closure = pView; 
 	rot_cb_list[1].callback = NULL;
 	
@@ -94,7 +94,7 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 	pView->fprotation_top->AddChild (pView->fprotation_slider_box);
 	
 	XtCallbackRec* rot_slider_list = new XtCallbackRec[2];
-	rot_slider_list[0].callback = G4OpenGLXmViewer::set_rot_sens_callback;
+	rot_slider_list[0].callback = set_rot_sens_callback;
 	rot_slider_list[0].closure = pView; 
 	rot_slider_list[1].callback = NULL;
 	
@@ -114,19 +114,19 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 	for (G4int i = 0; i < 4; i++) {
 	  rotation_callbacks[i] = new XtCallbackRec[2];
 	}
-	rotation_callbacks[0][0].callback = G4OpenGLXmViewer::phi_rotation_callback;
+	rotation_callbacks[0][0].callback = phi_rotation_callback;
 	rotation_callbacks[0][0].closure =  pView;
 	rotation_callbacks[0][1].callback	= NULL;
 	
-	rotation_callbacks[1][0].callback = G4OpenGLXmViewer::phi_rotation_callback;
+	rotation_callbacks[1][0].callback = phi_rotation_callback;
 	rotation_callbacks[1][0].closure =  pView;
 	rotation_callbacks[1][1].callback	= NULL;
 	
-	rotation_callbacks[2][0].callback = G4OpenGLXmViewer::theta_rotation_callback;
+	rotation_callbacks[2][0].callback = theta_rotation_callback;
 	rotation_callbacks[2][0].closure =  pView;
 	rotation_callbacks[2][1].callback	= NULL;
 	
-	rotation_callbacks[3][0].callback = G4OpenGLXmViewer::theta_rotation_callback;
+	rotation_callbacks[3][0].callback = theta_rotation_callback;
 	rotation_callbacks[3][0].closure =  pView;
 	rotation_callbacks[3][1].callback	= NULL;
 	
@@ -163,19 +163,19 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 	for (G4int i = 0; i < 4; i++) {
 	  pan_callbacks[i] = new XtCallbackRec[2];
 	}
-	pan_callbacks[0][0].callback = G4OpenGLXmViewer::pan_up_down_callback;
+	pan_callbacks[0][0].callback = pan_up_down_callback;
 	pan_callbacks[0][0].closure = pView; 
 	pan_callbacks[0][1].callback = NULL;
 	
-	pan_callbacks[1][0].callback = G4OpenGLXmViewer::pan_up_down_callback;
+	pan_callbacks[1][0].callback = pan_up_down_callback;
 	pan_callbacks[1][0].closure = pView; 
 	pan_callbacks[1][1].callback = NULL;
 	
-	pan_callbacks[2][0].callback = G4OpenGLXmViewer::pan_left_right_callback;
+	pan_callbacks[2][0].callback = pan_left_right_callback;
 	pan_callbacks[2][0].closure = pView; 
 	pan_callbacks[2][1].callback = NULL;
 	
-	pan_callbacks[3][0].callback = G4OpenGLXmViewer::pan_left_right_callback;
+	pan_callbacks[3][0].callback = pan_left_right_callback;
 	pan_callbacks[3][0].closure = pView; 
 	pan_callbacks[3][1].callback = NULL;
 	
@@ -184,7 +184,7 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 	pView->fppanning_box->AddChild (pView->fppanning_arrows);
 	
 	XtCallbackRec* pan_slider_list = new XtCallbackRec[2];
-	pan_slider_list[0].callback = G4OpenGLXmViewer::set_pan_sens_callback;
+	pan_slider_list[0].callback = set_pan_sens_callback;
 	pan_slider_list[0].closure = pView; 
 	pan_slider_list[1].callback = NULL;
 	
@@ -202,7 +202,7 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 	pView->fppanning_top->AddChild (pView->fpzoom_box);
 	
 	XtCallbackRec* zoom_slider_list = new XtCallbackRec[2];
-	zoom_slider_list[0].callback = G4OpenGLXmViewer::zoom_callback;
+	zoom_slider_list[0].callback = zoom_callback;
 	zoom_slider_list[0].closure = pView; 
 	zoom_slider_list[1].callback = NULL;
 	
@@ -220,7 +220,7 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 	pView->fppanning_top->AddChild (pView->fpdolly_box);
 	
 	XtCallbackRec* dolly_slider_list = new XtCallbackRec[2];
-	dolly_slider_list[0].callback = G4OpenGLXmViewer::dolly_callback;
+	dolly_slider_list[0].callback = dolly_callback;
 	dolly_slider_list[0].closure = pView; 
 	dolly_slider_list[1].callback = NULL;
 	
@@ -277,7 +277,7 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 							&(pView->dolly_low));
 	
 	XtCallbackRec* ok_list = new XtCallbackRec[2];
-	ok_list[0].callback = G4OpenGLXmViewer::update_panels_callback;
+	ok_list[0].callback = update_panels_callback;
 	ok_list[0].closure = pView; 
 	ok_list[1].callback = NULL;
 	
@@ -339,7 +339,7 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 	pView->fpmiscellany_top->AddChild (pView->fpwobble_box);
 	
 	XtCallbackRec* wob_cb_list = new XtCallbackRec[2];
-	wob_cb_list[0].callback = G4OpenGLXmViewer::wobble_callback;
+	wob_cb_list[0].callback = wobble_callback;
 	wob_cb_list[0].closure = pView; 
 	wob_cb_list[1].callback = NULL;
 	
@@ -348,7 +348,7 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 							   wob_cb_list);
 	
 	XtCallbackRec* wobble_slider_list = new XtCallbackRec[2];
-	wobble_slider_list[0].callback = G4OpenGLXmViewer::set_wob_sens_callback;
+	wobble_slider_list[0].callback = set_wob_sens_callback;
 	wobble_slider_list[0].closure = pView; 
 	wobble_slider_list[1].callback = NULL;
 	
@@ -367,9 +367,9 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 	pView->fpmiscellany_top->AddChild (pView->fpreset_box);
 	
 	XtCallbackRec* rst_cb_list = new XtCallbackRec[3];
-	rst_cb_list[0].callback = G4OpenGLXmViewer::reset_callback;
+	rst_cb_list[0].callback = reset_callback;
 	rst_cb_list[0].closure = pView; 
-	rst_cb_list[1].callback = G4OpenGLXmViewer::update_panels_callback;
+	rst_cb_list[1].callback = update_panels_callback;
 	rst_cb_list[1].closure = pView; 
 	rst_cb_list[2].callback = NULL;
 	
@@ -383,7 +383,7 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 	pView->fpmiscellany_top->AddChild (pView->fpproj_style_box);
 	
 	XtCallbackRec* proj_cb_list = new XtCallbackRec[2];
-	proj_cb_list[0].callback = G4OpenGLXmViewer::projection_callback;
+	proj_cb_list[0].callback = projection_callback;
 	proj_cb_list[0].closure = pView; 
 	proj_cb_list[1].callback = NULL;
 	
@@ -440,7 +440,7 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 	pView->fpprint_top->AddChild (pView->fpprint_col_box);
 
 	XtCallbackRec* prcol_cb_list = new XtCallbackRec[2];
-	prcol_cb_list[0].callback = G4OpenGLXmViewer::set_print_colour_callback;
+	prcol_cb_list[0].callback = set_print_colour_callback;
 	prcol_cb_list[0].closure = pView; 
 	prcol_cb_list[1].callback = NULL;
 	
@@ -462,7 +462,7 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 	pView->fpprint_top->AddChild (pView->fpprint_style_box);
 
 	XtCallbackRec* prsty_cb_list = new XtCallbackRec[2];
-	prsty_cb_list[0].callback = G4OpenGLXmViewer::set_print_style_callback;
+	prsty_cb_list[0].callback = set_print_style_callback;
 	prsty_cb_list[0].closure = pView; 
 	prsty_cb_list[1].callback = NULL;
 	
@@ -487,7 +487,7 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 	pView->fpprint_box->AddChild (pView->fpprint_line);
 
 	XtCallbackRec* pri_cb_list = new XtCallbackRec[2];
-	pri_cb_list[0].callback = G4OpenGLXmViewer::print_callback;
+	pri_cb_list[0].callback = print_callback;
 	pri_cb_list[0].closure = pView; 
 	pri_cb_list[1].callback = NULL;
 	

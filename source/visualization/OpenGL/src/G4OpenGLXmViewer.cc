@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.6 2001-03-07 15:29:50 johna Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.7 2001-04-02 14:04:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -200,7 +200,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
     (style_cascade,
      (char*)"rep_style",
      0,
-     G4OpenGLXmViewer::rep_style_callback,
+     rep_style_callback,
      XmVaRADIOBUTTON, polyhedron_str, 'P', NULL, NULL,
      XmVaRADIOBUTTON, nurbs_str, 'N', NULL, NULL,
      XmNradioBehavior, True, 
@@ -244,7 +244,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
     (style_cascade,
      (char*)"drawing_style",
      1,
-     G4OpenGLXmViewer::drawing_style_callback,
+     drawing_style_callback,
      XmVaRADIOBUTTON, wireframe_str, 'W', NULL, NULL,
      XmVaRADIOBUTTON, hlr_str, 'L', NULL, NULL,
      XmVaRADIOBUTTON, hsr_str, 'S', NULL, NULL,
@@ -297,7 +297,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
     (style_cascade,
      (char*)"background_color",
      2,
-     G4OpenGLXmViewer::background_color_callback,
+     background_color_callback,
      XmVaRADIOBUTTON, white_str, 'W', NULL, NULL,
      XmVaRADIOBUTTON, black_str, 'B', NULL, NULL,
      XmNradioBehavior, True, 
@@ -338,7 +338,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
     (menubar,
      (char*)"actions",
      1,
-     G4OpenGLXmViewer::actions_callback,
+     actions_callback,
      XmVaPUSHBUTTON, rot_str, 'R', NULL, NULL,
      XmVaPUSHBUTTON, pan_str, 'P', NULL, NULL,
      XmVaPUSHBUTTON, set_str, 'S', NULL, NULL,
@@ -364,7 +364,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
     (menubar,
      (char*)"miscellany",
      2,
-     G4OpenGLXmViewer::misc_callback,
+     misc_callback,
      XmVaPUSHBUTTON, misc_str, 'M', NULL, NULL,
      XmVaPUSHBUTTON, exit_str, 'E', NULL, NULL,
      XmVaPUSHBUTTON, print_str, 'P', NULL, NULL,
@@ -415,7 +415,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
     (spec_cascade,
      (char*)"transparency",
      0,
-     G4OpenGLXmViewer::transparency_callback,
+     transparency_callback,
      XmVaRADIOBUTTON, off_str, 'f', NULL, NULL,
      XmVaRADIOBUTTON, on_str, 'n', NULL, NULL,
      XmNradioBehavior, True, 
@@ -447,7 +447,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
     (spec_cascade,
      (char*)"antialias",
      1,
-     G4OpenGLXmViewer::antialias_callback,
+     antialias_callback,
      XmVaRADIOBUTTON, off_str, 'f', NULL, NULL,
      XmVaRADIOBUTTON, on_str, 'n', NULL, NULL,
      XmNradioBehavior, True, 
@@ -479,7 +479,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
     (spec_cascade,
      (char*)"haloing",
      2,
-     G4OpenGLXmViewer::haloing_callback,
+     haloing_callback,
      XmVaRADIOBUTTON, off_str, 'f', NULL, NULL,
      XmVaRADIOBUTTON, on_str, 'n', NULL, NULL,
      XmNradioBehavior, True, 
@@ -528,12 +528,12 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   
   XtAddCallback (glxarea, 
 		 XmNexposeCallback, 
-		 G4OpenGLXmViewer::expose_callback, 
+		 expose_callback, 
 		 this);
 
   XtAddCallback (glxarea, 
 		 XmNresizeCallback, 
-		 G4OpenGLXmViewer::resize_callback, 
+		 resize_callback, 
 		 this);
 
   XmMainWindowSetAreas (main_win,  // main widget, children are specified 

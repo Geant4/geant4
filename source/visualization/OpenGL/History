@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2001-03-07 15:29:49 johna Exp $
+$Id: History,v 1.5 2001-04-02 14:04:39 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+2nd April 2001  John Allison (opengl-V03-00-00 wrt vis-V03-00-09)
+- Tidied G4OpenGLXmViewer callback code.  Removed superfluous header files.
 
 7th March 2001  John Allison
 - Changed char* to const char* in many places and that gave problems in

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.3 1999-12-15 14:54:10 gunter Exp $
+// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.4 2001-04-02 14:04:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -237,7 +237,7 @@ void G4OpenGLXmViewer::projection_callback (Widget w,
 {
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*)clientData;
 
-  G4int choice = G4OpenGLXmViewer::get_int_userData (w);
+  G4int choice = get_int_userData (w);
 
   switch (choice) {
   case 0:

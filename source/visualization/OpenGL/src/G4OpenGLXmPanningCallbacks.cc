@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.4 2000-05-13 10:47:52 johna Exp $
+// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.5 2001-04-02 14:04:41 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,7 +98,7 @@ void G4OpenGLXmViewer::pan_left_right_callback (Widget w,
   XmArrowButtonCallbackStruct *cbs = (XmArrowButtonCallbackStruct*) callData;
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
 
-  pView->pan_right = G4OpenGLXmViewer::get_boolean_userData (w);
+  pView->pan_right = get_boolean_userData (w);
 
   if (cbs->reason == XmCR_ARM) {
     left_right_pan_callback (pView,NULL);
@@ -152,7 +152,7 @@ void G4OpenGLXmViewer::pan_up_down_callback (Widget w,
   XmArrowButtonCallbackStruct *cbs = (XmArrowButtonCallbackStruct*) callData;
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
 
-  pView->pan_up = G4OpenGLXmViewer::get_boolean_userData (w);
+  pView->pan_up = get_boolean_userData (w);
 
   if (cbs->reason == XmCR_ARM) {
     up_down_pan_callback (pView,NULL);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmWindowHandlingCallbacks.cc,v 1.3 1999-12-15 14:54:11 gunter Exp $
+// $Id: G4OpenGLXmWindowHandlingCallbacks.cc,v 1.4 2001-04-02 14:04:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,7 +72,7 @@ void G4OpenGLXmViewer::set_print_colour_callback (Widget w,
 {
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*)clientData;
   
-  G4int choice = G4OpenGLXmViewer::get_int_userData (w);
+  G4int choice = get_int_userData (w);
   
   pView->print_colour=(G4bool)choice;
   G4cout << "Print colour set to " << pView->print_colour;
@@ -85,7 +85,7 @@ void G4OpenGLXmViewer::set_print_style_callback (Widget w,
 {
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*)clientData;
   
-  G4int choice = G4OpenGLXmViewer::get_int_userData (w);
+  G4int choice = get_int_userData (w);
   
   pView->vectored_ps=(G4bool)choice;
   G4cout << "`Produce vectored PostScript ?' set to : " << pView->print_colour;

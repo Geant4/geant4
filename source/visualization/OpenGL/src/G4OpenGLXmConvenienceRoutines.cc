@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.3 1999-12-15 14:54:09 gunter Exp $
+// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.4 2001-04-02 14:04:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,7 +19,6 @@
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
-//#include "G4OpenGLXmConvenienceRoutines.hh"
 #include "G4OpenGLXmViewer.hh"
 
 void G4OpenGLXmViewer::Add_four_arrow_buttons (G4OpenGLXmViewer* pView,
@@ -305,7 +304,7 @@ void G4OpenGLXmViewer::Add_set_field (char* w_name,
 
   XtAddCallback (*wid, 
 		 XmNvalueChangedCallback,
-		 G4OpenGLXmViewer::get_double_value_callback,
+		 get_double_value_callback,
 		 val);
 
   Widget sep = XtVaCreateManagedWidget ("sep",
