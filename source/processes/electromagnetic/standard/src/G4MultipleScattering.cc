@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.11 1999-09-30 08:42:12 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.12 1999-10-11 12:55:08 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -52,7 +52,7 @@
        scatteringparameter(0.9),
        tuning (1.00),
        cpar (1.5),
-       NuclCorrPar (0.001),FactPar(0.40),
+       NuclCorrPar (0.005),FactPar(0.40),
        fLatDisplFlag(true) 
   { }
 
@@ -309,7 +309,7 @@
      G4double corrnuclsize,a,x0,w1,w2,w ;
 
      x0 = 1. - NuclCorrPar*ParticleMass/(KineticEnergy*
-               exp(2.*log(AtomicWeight/(g/mole))/3.)) ;
+               exp(log(AtomicWeight/(g/mole))/3.)) ;
      if((x0 < -1.) || (KineticEnergy  <= 10.*MeV))
      {
        x0=-1. ;
