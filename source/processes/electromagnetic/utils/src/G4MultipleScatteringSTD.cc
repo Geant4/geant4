@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScatteringSTD.cc,v 1.19 2003-05-23 09:10:57 urban Exp $
+// $Id: G4MultipleScatteringSTD.cc,v 1.20 2003-05-26 10:33:10 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -337,6 +337,7 @@ G4double G4MultipleScatteringSTD::ComputeTransportCrossSection(
    G4double Z23 = 2.*log(AtomicNumber)/3.; Z23 = exp(Z23);
 
    G4double ParticleMass = aParticleType.GetPDGMass();
+   G4double ParticleKineticEnergy = KineticEnergy ;
 
   // correction if particle .ne. e-/e+
   // compute equivalent kinetic energy
@@ -373,9 +374,9 @@ G4double G4MultipleScatteringSTD::ComputeTransportCrossSection(
   // ( a simple approximation at present)
   G4double corrnuclsize,a,x0,w1,w2,w;
 
-  x0 = 1. - NuclCorrPar*ParticleMass/(KineticEnergy*
+  x0 = 1. - NuclCorrPar*ParticleMass/(ParticleKineticEnergy*
                exp(log(AtomicWeight/(g/mole))/3.));
-  if ( (x0 < -1.) || (KineticEnergy  <= 10.*MeV))
+  if ( (x0 < -1.) || (ParticleKineticEnergy <= 10.*MeV))
       { x0 = -1.; corrnuclsize = 1.;}
   else
       { a = 1.+1./eps;
@@ -385,7 +386,7 @@ G4double G4MultipleScatteringSTD::ComputeTransportCrossSection(
         if (w < epsmin)   w2=-log(w)-1.+2.*w-1.5*w*w;
         else              w2 = log((a-x0)/(a-1.))-(1.-x0)/(a-x0);
         corrnuclsize = w1/w2;
-        corrnuclsize = exp(-FactPar*ParticleMass/KineticEnergy)*
+        corrnuclsize = exp(-FactPar*ParticleMass/ParticleKineticEnergy)*
                       (corrnuclsize-1.)+1.;
       }
 
