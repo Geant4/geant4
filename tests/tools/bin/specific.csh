@@ -492,14 +492,14 @@ if ( `uname -n` == "pc-88172" ) then
 endif
 
 if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Barrand.local ) then
-  set prompt='g4> ' 
+  set prompt='mac-91114-g4> ' 
 # Core :
   setenv MAKECMD make
   setenv CVSROOT :ext:gbarrand@sungeant.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv CVS_RSH ssh
-  setenv G4INSTALL /geant4/geant4-05-02-ref-04
+  setenv G4INSTALL /geant4/geant4.5.2.ref04
   setenv G4SYSTEM Darwin-g++
-  setenv G4WORKDIR $G4INSTALL
+  setenv G4WORKDIR $G4INSTALL/Darwin
   setenv G4STTDIR $G4WORKDIR/stt
   setenv G4LIB $G4WORKDIR/lib
   setenv G4DEBUG 1
@@ -510,16 +510,16 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Bar
   setenv G4RADIOACTIVEDATA $G4WORKDIR/data/RadiativeDecay
   setenv G4LEDATA $G4WORKDIR/data/G4EMLOW0.3
 # AIDA :
-  setenv G4ANALYSIS_USE 1
+#  setenv G4ANALYSIS_USE 1
 # Falsetto implementation :
 #  source $HOME_BARRAND/OpenScientist/Falsetto/v1r2/cmt/setup.csh
 # Lab implementation :
-  source $HOME_BARRAND/OpenScientist/Lab/v10r0/cmt/setup.csh
+#  source $HOME_BARRAND/OpenScientist/Lab/v10r0/cmt/setup.csh
 # Set AIDA compile and link access :
-  setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
-  setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
+#  setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
+#  setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
 # Set PYTHONPATH to access local scripts :
-  setenv PYTHONPATH ${PYTHONPATH}:.
+#  setenv PYTHONPATH ${PYTHONPATH}:.
 endif
 
 if ( `uname -n` == auger5.lal.in2p3.fr ) then
