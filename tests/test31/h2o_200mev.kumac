@@ -1,0 +1,27 @@
+opt zfl
+opt nsta
+zone
+ zone 1 2
+set dmod 1
+
+close 1
+hi/file 1 h2o_st.paw
+
+hi/pl 10 hist
+itx 30 25000 'G4 6.1'
+itx 50 40000 '200 MeV Protons in Water'
+
+close 2
+hi/file 2 h2o_st1000.paw
+
+*set dmod 3
+hi/pl 10 hist
+*itx 30 25000 'G4 5.2p02'
+itx 30 25000 'G4 6.1 1000 bins'
+
+exe ~/kumac/prf h2o_61_1000 ps
+
+opt liny
+
+zone
+
