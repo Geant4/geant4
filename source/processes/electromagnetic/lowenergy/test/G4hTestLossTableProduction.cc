@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hTestLossTableProduction.cc,v 1.1 2001-04-24 14:10:30 chauvie Exp $
+// $Id: G4hTestLossTableProduction.cc,v 1.2 2001-05-13 16:06:14 chauvie Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -57,13 +57,15 @@ main()
   G4cout.setf( ios::scientific, ios::floatfield );
   // -------------------------------------------------------------------
   ofstream out("g4hletestlosstable.dat");
+  ofstream wout("wg4hletestlosstable.dat");
+  ofstream bout("bg4hletestlosstable.dat");
   
   
   //--------- Materials definition ---------
 
   G4Material* Be = new G4Material("Beryllium",    4.,  9.01*g/mole, 1.848*g/cm3);
   G4Material* Graphite = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
-  G4Material* Al  = new G4Material("Aluminium", 13., 26.98*g/mole, 2.7 *g/cm3);
+  G4Material* Al  = new G4Material("Aluminum", 13., 26.98*g/mole, 2.7 *g/cm3);
   G4Material* Si  = new G4Material("Silicon",   14., 28.055*g/mole, 2.33*g/cm3);
   G4Material* LAr = new G4Material("LArgon",   18., 39.95*g/mole, 1.393*g/cm3);
   G4Material* Fe  = new G4Material("Iron",      26., 55.85*g/mole, 7.87*g/cm3);
@@ -203,6 +205,8 @@ main()
   //-----------data-------------------------------------      
        
     if(MaterialName=="Silicon") out<<Tkin[ipnt]/MeV<<"   "<<dedxnow/MeV/mm<<G4endl;
+    if(MaterialName=="Water") wout<<Tkin[ipnt]/MeV<<"   "<<dedxnow/MeV/mm<<G4endl;
+    if(MaterialName=="Beryllium") bout<<Tkin[ipnt]/MeV<<"   "<<dedxnow/MeV/mm<<G4endl;
  
     }
   }// for loop on materials
