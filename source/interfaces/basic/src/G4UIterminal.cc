@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIterminal.cc,v 1.8 2000-03-26 23:04:06 asaim Exp $
+// $Id: G4UIterminal.cc,v 1.9 2000-05-19 06:39:12 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -87,7 +87,16 @@ void G4UIterminal::ExecuteCommand(G4String aCommand)
 {
   if(aCommand.length()<2) return;
 
-  G4int commandStatus= UI-> ApplyCommand(aCommand);
+  G4int returnVal = UI-> ApplyCommand(aCommand);
+
+  G4int paramIndex = returnVal % 100;
+  // 0 - 98 : paramIndex-th parameter is invalid
+  // 99     : convination of parameters is invalid
+  G4int commandStatus = returnVal - paramIndex;
+
+  G4UIcommand* cmd = 0;
+  if(commandStatus!=fCommandSucceeded)
+  { cmd = FindCommand(aCommand); }
 
   switch(commandStatus) {
   case fCommandSucceeded:
@@ -102,8 +111,21 @@ void G4UIterminal::ExecuteCommand(G4String aCommand)
     G4cerr << "illegal application state -- command refused" << G4endl;
     break;
   case fParameterOutOfRange:
-  case fParameterUnreadable:
+    // if(paramIndex<99) {
+    //   G4cerr << "Parameter is out of range (index " << paramIndex << ")" << G4endl;
+    //   G4cerr << "Allowed range : " << cmd->GetParameter(paramIndex)->GetParameterRange() << G4endl;
+    // } else {
+    //   G4cerr << "Parameter is out of range" << G4endl;
+    //   G4cerr << "Allowed range : " << cmd->GetRange() << G4endl;
+    // }
+    break;
   case fParameterOutOfCandidates:
+    G4cerr << "Parameter is out of candidate list (index " << paramIndex << ")" << G4endl;
+    G4cerr << "Candidates : " << cmd->GetParameter(paramIndex)->GetParameterCandidates() << G4endl;
+    break;
+  case fParameterUnreadable:
+    G4cerr << "Parameter is wrong type and/or is not omittable (index " << paramIndex << ")" << G4endl;
+    break;
   default:
     G4cerr << "command refused (" << commandStatus << ")" << G4endl;
   }
