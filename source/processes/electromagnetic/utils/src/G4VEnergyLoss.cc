@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.cc,v 1.4 2000-03-01 09:08:04 urban Exp $
+// $Id: G4VEnergyLoss.cc,v 1.5 2000-03-07 17:16:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -930,7 +930,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
         if(a1>alim)
         {
           siga=sqrt(a1) ;
-          p1 = max(0,int(RandGauss::shoot(a1,siga)+0.5));
+          p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
         }
         else
           p1 = G4Poisson(a1);
@@ -948,7 +948,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a1>alim)
       {
         siga=sqrt(a1) ;
-        p1 = max(0,int(RandGauss::shoot(a1,siga)+0.5));
+        p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
       }
       else
        p1 = G4Poisson(a1);
@@ -957,7 +957,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a2>alim)
       {
         siga=sqrt(a2) ;
-        p2 = max(0,int(RandGauss::shoot(a2,siga)+0.5));
+        p2 = G4std::max(0,int(RandGauss::shoot(a2,siga)+0.5));
       }
       else
         p2 = G4Poisson(a2);
@@ -974,7 +974,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a3>alim)
       {
         siga=sqrt(a3) ;
-        p3 = max(0,int(RandGauss::shoot(a3,siga)+0.5));
+        p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
       }
       else
         p3 = G4Poisson(a3);
