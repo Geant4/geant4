@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.27 2001-09-10 10:53:14 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.28 2001-11-12 18:20:55 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -69,7 +69,8 @@ G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
   fpCommand = new G4UIcommand ("/vis/scene/add/axes", this);
   fpCommand -> SetGuidance
     ("/vis/scene/add/axes [<x0>] [<y0>] [<z0>] [<length>] [<unit>]");
-    ("Default: 0 0 0 1 m");
+  fpCommand -> SetGuidance ("Default: 0 0 0 1 m");
+  fpCommand -> SetGuidance
     ("Draws axes at (x0, y0, z0) of given length.");
   G4UIparameter* parameter;
   parameter =  new G4UIparameter ("x0", 'd', omitable = true);
@@ -185,8 +186,8 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
   G4ParticleTable* theParticleTable=G4ParticleTable::GetParticleTable();
   
   if(newValue=="all") {
-    G4VFlavoredParallelWorld* CurrentFlavoredWorld;
-    G4bool successful;
+    G4VFlavoredParallelWorld* CurrentFlavoredWorld(0);
+    G4bool successful(false);
     for (G4int iParticle=0; iParticle<theParticleTable->entries(); 
 	 iParticle++)
       CurrentFlavoredWorld = theGlobalFastSimulationManager->
@@ -340,7 +341,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
   G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
   int nLV = pLVStore -> size ();
   int iLV;
-  G4LogicalVolume* pLV;
+  G4LogicalVolume* pLV(0);
   for (iLV = 0; iLV < nLV; iLV++ ) {
     pLV = (*pLVStore) [iLV];
     if (pLV -> GetName () == name) break;
