@@ -1,4 +1,4 @@
-$Id: History,v 1.55 2002-06-25 12:49:55 gcosmo Exp $
+$Id: History,v 1.56 2002-07-11 16:18:35 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 11, 2002 M.Dressel 
+- add:
+ include/G4MapPtkStandardCellScorer.hh 
+ include/G4ParallelSamplerMessenger.hh  
+ include/G4StandardCellScoreValues.hh
+ include/G4StandardCellScorer.hh
+ include/G4StandardScoreTable.hh
+ include/G4StandardScorer.hh
+ src/G4MapPtkStandardCellScorer.cc
+ src/G4ParallelSamplerMessenger.cc
+ src/G4StandardCellScorer.cc
+ src/G4StandardScoreTable.cc
+ src/G4StandardScoreTable.cc
+ src/G4StandardScorer.cc
+- the G4StandardScorer.cc needs the G4EventManager
+  G4ParallelSamplerMessenger.hh needs G4StandardScorer.
+  The other classes are needed in turn. 
 
 Jun 25, 2002 G.Cosmo (run-V04-00-04)
 - Changed date to G4RunManager.cc for release 4.1.
