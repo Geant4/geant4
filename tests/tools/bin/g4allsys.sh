@@ -5,7 +5,7 @@
 
 ############################################################
 # 'account' MUST have next in PATH:
-# /afs/cern.ch/sw/geant4/stt/ref[+]/src/geant4/tests/tools/bin 
+# /afs/cern.ch/sw/geant4/stt/prod[dev]/src/geant4/tests/tools/bin 
 # This is no loner required - but leave because there are side effects
 #   to solve.
 ############################################################
@@ -16,9 +16,9 @@ do
     sym_devprod=`echo $devprod|cut -c 1`
     if [ X$sym_devprod = Xd ]
     then
-	REF=ref+
+	REF=dev
     else
-	REF=ref
+	REF=prod
     fi
 
     g4sbr=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4/tests/tools/bin/g4sbr.sh
