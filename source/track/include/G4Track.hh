@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.hh,v 1.7 2000-06-02 05:36:49 asaim Exp $
+// $Id: G4Track.hh,v 1.8 2000-06-02 10:16:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -165,7 +165,7 @@ public: // With description
 
   // step information
    const G4Step* GetStep() const;
-   void SetStep(G4Step* aValue);
+   void SetStep(const G4Step* aValue);
 
    G4int GetCurrentStepNumber() const;
    void IncrementCurrentStepNumber();
@@ -242,7 +242,7 @@ public: // With description
      // to execute inclusive simulation for hadronic/electomagnetic shower
      // and neutron transportation etc. 
 
-   G4Step* fpStep;
+   const G4Step* fpStep;
 
    G4ThreeVector fVtxPosition;          // (x,y,z) of the vertex
    G4ThreeVector fVtxMomentumDirection; // Momentum direction at the vertex

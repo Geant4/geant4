@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.icc,v 1.4 2000-06-02 09:09:47 asaim Exp $
+// $Id: G4Track.icc,v 1.5 2000-06-02 10:16:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-----------------------------------------------------------------
@@ -245,8 +245,8 @@
    inline const G4Step* G4Track::GetStep() const
    { return fpStep; }
 
-   inline void G4Track::SetStep(G4Step* aValue)
-   { fpStep = aValue; }
+   inline void G4Track::SetStep(const G4Step* aValue)
+   { fpStep = (aValue); }
 
 
 
