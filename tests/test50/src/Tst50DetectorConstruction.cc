@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.15 2003-02-10 11:21:04 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.16 2003-02-10 15:49:07 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@
 Tst50DetectorConstruction::Tst50DetectorConstruction(G4bool  max_Step)
 :TargetMaterial(0),defaultMaterial(0),
  solidWorld(0),logicWorld(0),physiWorld(0),
- solidTarget(0),logicTarget(0),physiTarget(0)
+ solidTarget(0),logicTarget(0),physiTarget(0), pTargetSD(0)
  
 {
   // default parameter values of the calorimeter
@@ -608,11 +608,11 @@ G4VPhysicalVolume* Tst50DetectorConstruction::ConstructWorld()
   if (pTargetSD ==0)
     {
   G4String targetSD_name = "target";
-  pTargetSD = new Tst50TrackerSD( targetSD_name  );
-  if(pTargetSD)
-   { SDman->AddNewDetector( pTargetSD );
-  logicTarget->SetSensitiveDetector( pTargetSD );}
-    }
+  pTargetSD = new Tst50TrackerSD( targetSD_name  );}
+  // qui il problema
+   SDman->AddNewDetector( pTargetSD );
+  logicTarget->SetSensitiveDetector( pTargetSD );
+    
 
  
   // Visualization attributes

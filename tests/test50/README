@@ -1,0 +1,131 @@
+--------> Available tests
+1) CSDA range test for e- 
+2) Stopping Power for e-
+3) Radiation Yeld for e-
+4) particles impinging on a target
+                       (Energy deposit, transmission, backscattering,
+                       (bremmstrahlung spectra, track length, 
+                       (number of steps in a track, step length, proton mean range,
+                       (gamma attenuation coefficient 
+
+-------> Test Configuration
+
+for every test: file.in 
+in batch mode: file.in and file.mac
+
+-----------------------------------------------------------------------------
+In file.in you can define:
+
+1) The user must define the test type
+
+The tests are exclusive with each other
+
+////////////////////////////////////////////////////
+   Command            |  Test Type
+////////////////////////////////////////////////////
+ 
+   #range             |  CSDA range test for e- 
+   on 
+
+   #StoppingPower     |  Stopping Power for e-
+   on
+
+   #RadiationYield    |  Radiation Yeld for e-
+   on
+
+   #Foil              |  Energy deposit, transmission, backscattering,
+   on                    bremmstrahlung spectra, track length, 
+                         number of steps in a track, step length, proton mean range,
+                         gamma attenuation coefficient 
+  
+2) The user can change the following features:
+
+///////////////////////////////////////////////////////////////////////////////////////
+   Command |                        |Default configuration     | Other 
+//////////////////////////////////////////////////////////////////////////////////////
+
+#processes |The Geant4  LowE Models |Standard model  
+LowE       |are set for e-, gamma,  |for all the particles  
+           |protons                 |
+ 
+#setMaxStep|The max step for all    |the max step is not fixed |it must be set for e-
+on         |the tracks is fixed     |                          |CSDA range and e-
+                                                               |Stopping Power 
+
+#Hadronic  |The hadronic            |the hadronic              |they must be set
+on         |interactions are        |interactions are          |to calculate the mean 
+           |switched on for protons |switched off              |proton range
+
+______________________________________________________________________________________
+
+How to define parameters for each test in the file.mac:
+
+/////////////////////////////////////////////////////////////////////////////////
+1) e- CSDA  range, e- StoppingPower 
+if the physics is Standard:             /process/eLoss/fluct false
+
+definition of the particle:             /gun/particle e-
+
+primary particle initial position:      /gun/position 0. 0. 0.
+
+primary particle initial energy:        /gun/energy 0.1 MeV
+
+primary particle direction is random:   /gun/randomDirection on 
+
+set target material:                    /target/setTargetMat Hydrogen
+
+the target must be a box:               /target/setTargetThick 1500. cm
+                                        /target/setTargetX 1500. cm
+                                        /target/setTargetY 1500. cm
+                                        /target/update
+
+the Max Step must be fixed:            /target/setMaxStep 0.001 cm
+(1/100 of the theorical range value) 
+
+Cut in range high:                     /le/cutE 1. m
+No interest in secondary particles
+
+for the tracking:                     /tracking/storeTrajectory 1
+beamOn :                              /run/beamOn 1 
+the e- CSDA or Stopping Power value 
+is fixed. One event is ok
+
+/////////////////////////////////////////////////////////////////////////////////
+2) Energy deposit, transmission, backscattering,
+   bremmstrahlung spectra, track length, 
+   number of steps in a track, step length, proton mean range,
+   gamma attenuation coefficient 
+
+The test configuration consists in a beam impinging a target;
+il the file.mac you can define:
+
+1)for the tracking:             /tracking/storeTrajectory 1
+2)the target thickness:         /target/setTargetThick 5. mm
+                                /target/update
+3)the target material:          /target/setTargetMat  Silicon
+                              
+4) the cut in range:            /le/cutE 0.1 micrometer
+if you are interested in
+secondary particles info
+(cut lower, more info on
+ secondary particles)
+
+5)the primary particle:        /gun/particle gamma
+ (e-, e+, gamma, proton)
+
+6)the primary particle energy: /gun/energy 10. MeV
+
+7)the number of events:        /run/beamOn 1000000
+1000000 for each configuration
+
+________________________________________________________________________
+
+--------->Output
+
+1) CSDA range test for e- : Range.txt 
+2) Stopping Power for e-  : StoppingPower.txt
+3) Radiation Yield for e-  : radiationYield.txt
+4) particles impinging on a target : test50.hbk
+                                     Transmission.txt
+
+                       

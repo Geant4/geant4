@@ -16,11 +16,11 @@
 /vis/viewer/update
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
-/target/setTargetThick 5. mm
+#/target/setTargetThick 5. mm
 /target/setTargetMat  Silicon
 /target/update
 #/le/cutE 0.1 micrometer
-/gun/particle gamma
-/gun/energy 10. MeV
-/run/beamOn 10000
+/gun/particle e-
+/gun/energy 1. MeV
+/run/beamOn 1000
 
