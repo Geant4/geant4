@@ -1,4 +1,4 @@
-$Id: History,v 1.51 2003-02-07 11:48:38 gcosmo Exp $
+$Id: History,v 1.52 2003-03-05 18:08:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 05, 2003  G. Cosmo                   geommng-V05-00-05
+- G4LogicalVolume.icc: added check for invalid geometry constructions.
+  Issue an exception if a placement is attempted in a volume already
+  containing a replicated daughter.
+- Cosmetic formatting changes in G4PVPlacement.cc and G4VPhysicalVolume.cc.
 
 February 07, 2003  G. Cosmo                geommng-V05-00-04
 - Added method FindOrCreateRegion() to G4RegionStore.
