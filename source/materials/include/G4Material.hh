@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.hh,v 1.2 1999-04-14 12:48:59 maire Exp $
+// $Id: G4Material.hh,v 1.3 1999-07-20 17:32:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,6 +51,7 @@
 // 04-08-98, new method GetMaterial(materialName), M.Maire
 // 05-10-98, change name: NumDensity -> NbOfAtomsPerVolume
 // 18-11-98, SandiaTable interface modified.
+// 19-07-99, new data member (chemicalFormula) added by V.Ivanchenko
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -91,6 +92,31 @@ public:
                      G4double  pressure = STP_Pressure);	//pressure
 
     //
+    // Constructor to create a material with chemical formula from scratch.
+    //
+    G4Material(const G4String& name,				//its name
+	       const G4String& chFormula,                       //chemical formula
+                     G4double  z, 				//atomic number
+                     G4double  a,				//mass of mole
+                     G4double  density, 			//density
+                     G4State   state    = kStateUndefined,	//solid,liqid,gas
+                     G4double  temp     = STP_Temperature,	//temperature
+                     G4double  pressure = STP_Pressure);	//pressure
+
+    //
+    // Constructor to create a material with chemical formula from a 
+    // combination of elements and/or materials subsequently added via 
+    // AddElement and/or AddMaterial
+    //
+    G4Material(const G4String& name,				//its name
+	       const G4String& chFormula,                       //chemical formula
+                     G4double  density, 			//density
+                     G4int     nComponents,			//nb of components 
+                     G4State   state    = kStateUndefined,	//solid,liquid,gas
+                     G4double  temp     = STP_Temperature,	//temperature
+                     G4double  pressure = STP_Pressure);	//pressure
+
+    //
     // Constructor to create a material from a combination of elements
     // and/or materials subsequently added via AddElement and/or AddMaterial
     //
@@ -123,6 +149,7 @@ public:
     // retrieval methods
     // 
     G4String GetName()        const {return fName;};
+    G4String GetChemicalFormula() const {return fChemicalFormula;};
     G4double GetDensity()     const {return fDensity;};
 
     G4State  GetState()       const {return fState;};
@@ -202,6 +229,7 @@ private:
 //
 
     G4String         fName;                 // Material name
+    G4String         fChemicalFormula;      // Material chemical formula
     G4double         fDensity;              // Material density
    
     G4State          fState;                // Material state (defaults to undefined,  

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.cc,v 1.3 1999-04-14 12:49:03 maire Exp $
+// $Id: G4Material.cc,v 1.4 1999-07-20 17:32:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,7 +34,8 @@
 // 05-10-98, change names: NumDensity -> NbOfAtomsPerVolume
 // 18-11-98, new interface to SandiaTable
 // 19-01-99  enlarge tolerance on test of coherence of gas conditions
- 
+// 19-07-99, Constructors with chemicalFormula added by V.Ivanchenko
+// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 #include "G4Material.hh"
@@ -52,6 +53,91 @@ G4Material::G4Material(const G4String& name, G4double z,
                        G4double a, G4double density, 
                        G4State state, G4double temp, G4double pressure)
 :fName(name)		       
+{
+    InitializePointers();
+    
+    if (density < universe_mean_density)
+       { G4cout << "--- Warning from G4Material::G4Material()"
+              << " define a material with density=0 is not allowed. \n"
+              << " The material " << name << " will be constructed with the"
+              << " default minimal density: " << universe_mean_density/(g/cm3) 
+              << "g/cm3" << endl;
+         density = universe_mean_density;
+       } 
+
+    fDensity  = density;
+    fState    = state;
+    fTemp     = temp;
+    fPressure = pressure;
+    fChemicalFormula = " ";
+
+    // Initialize theElementVector allocating one
+    // element corresponding to this material
+    maxNbComponents = fNumberOfComponents = fNumberOfElements = 1;
+    theElementVector    = new G4ElementVector(1);
+    theElementVector[0] = new G4Element(name, " ", z, a);
+    fMassFractionVector = new G4double[1];
+    fMassFractionVector[0] = 1. ;
+
+    if (fState == kStateUndefined)
+      {
+       if (fDensity > kGasThreshold) fState = kStateSolid;
+       else                          fState = kStateGas;
+      }
+
+    ComputeDerivedQuantities();
+
+    // Store in the table of Materials
+    theMaterialTable.insert(this);
+    fIndexInTable = theMaterialTable.index(this);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+// Constructor to create a material from a List of constituents
+// (elements and/or materials)  added with AddElement or AddMaterial
+
+G4Material::G4Material(const G4String& name, G4double density, G4int nComponents,
+                       G4State state, G4double temp, G4double pressure)
+:fName(name)		       
+{
+ 
+    InitializePointers();
+    
+    if (density < universe_mean_density)
+      {G4cout << "--- Warning from G4Material::G4Material()"
+            << " define a material with density=0 is not allowed. \n"
+            << " The material " << name << " will be constructed with the"
+            << " default minimal density: " << universe_mean_density/(g/cm3) 
+            << "g/cm3" << endl;
+       density = universe_mean_density;
+      }
+        
+    fDensity  = density;
+    fState    = state;
+    fTemp     = temp;
+    fPressure = pressure;
+    fChemicalFormula = " ";
+    
+    maxNbComponents     = nComponents;
+    fNumberOfComponents = fNumberOfElements = 0;
+    theElementVector    = new G4ElementVector(maxNbComponents);
+    
+    if (fState == kStateUndefined) 
+      {
+       if (fDensity > kGasThreshold) fState = kStateSolid;
+       else                          fState = kStateGas;
+      }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+// Constructor to create a material with chemical formula from scratch
+
+G4Material::G4Material(const G4String& name, const G4String& chFormula, 
+                       G4double z, G4double a, G4double density, 
+                       G4State state, G4double temp, G4double pressure)
+:fName(name),fChemicalFormula(chFormula)
 {
     InitializePointers();
     
@@ -92,12 +178,14 @@ G4Material::G4Material(const G4String& name, G4double z,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-// Constructor to create a material from a List of constituents
-// (elements and/or materials)  added with AddElement or AddMaterial
+// Constructor to create a material with chemical formula from a List 
+// of constituents (elements and/or materials)  added with AddElement 
+// or AddMaterial
 
-G4Material::G4Material(const G4String& name, G4double density, G4int nComponents,
+G4Material::G4Material(const G4String& name, const G4String& chFormula, 
+                       G4double density, G4int nComponents,
                        G4State state, G4double temp, G4double pressure)
-:fName(name)		       
+:fName(name),fChemicalFormula(chFormula)
 {
  
     InitializePointers();
@@ -375,6 +463,7 @@ const G4Material& G4Material::operator=(const G4Material& right)
   if (this != &right)
     {
       fName                    = right.fName;
+      fChemicalFormula         = right.fChemicalFormula;
       fDensity                 = right.fDensity;
       fState                   = right.fState;
       fTemp                    = right.fTemp;
@@ -420,6 +509,7 @@ ostream& operator<<(ostream& flux, G4Material* material)
   
   flux
     << " Material: "      << setw(8) <<  material->fName
+    << " " << material->fChemicalFormula << " "
     << "  density: "     << setw(6) << setprecision(3)  
                           << G4BestUnit(material->fDensity,"Volumic Mass") 
     << "  temperature: " << setw(6) << setprecision(2)  
