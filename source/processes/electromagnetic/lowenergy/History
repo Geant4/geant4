@@ -1,4 +1,4 @@
-$Id: History,v 1.207 2004-11-17 17:24:23 pia Exp $
+$Id: History,v 1.208 2004-11-17 18:25:13 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17.11.2004   MGP, tag emlowen-V06-02-03
+             Software improvement in G4PenelopeCompton (by L. Pandola)
 
 17.11.2004   MGP, tag emlowen-V06-02-02
              Revision of G4LowEnergyPhotoelectric to allow for new
