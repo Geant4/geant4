@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03PhysicsList.cc,v 1.4 1999-10-03 10:04:54 kurasige Exp $
+// $Id: ExN03PhysicsList.cc,v 1.5 1999-11-15 11:10:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,7 +28,7 @@
 
 ExN03PhysicsList::ExN03PhysicsList():  G4VUserPhysicsList()
 {
-  currentDefaultCut = defaultCutValue = 2.0*mm;
+  currentDefaultCut = defaultCutValue = 1.0*mm;
   cutForGamma       = defaultCutValue;
   cutForElectron    = defaultCutValue;
   cutForProton      = defaultCutValue;

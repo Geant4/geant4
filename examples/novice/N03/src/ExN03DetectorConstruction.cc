@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.2 1999-02-03 16:07:23 maire Exp $
+// $Id: ExN03DetectorConstruction.cc,v 1.3 1999-11-15 11:10:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -371,11 +371,12 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
 
 void ExN03DetectorConstruction::PrintCalorParameters()
 {
-  G4cout << "\n The calorimeter is made of " << NbOfLayers << " layers of: [ "
-       << AbsorberThickness/mm << "mm of " << AbsorberMaterial->GetName() 
-       << " + "
-       << GapThickness/mm << "mm of " << GapMaterial->GetName() << " ] " 
-       << endl;
+  G4cout << "\n------------------------------------------------------------"
+         << "\n---> The calorimeter is " << NbOfLayers << " layers of: [ "
+         << AbsorberThickness/mm << "mm of " << AbsorberMaterial->GetName() 
+         << " + "
+         << GapThickness/mm << "mm of " << GapMaterial->GetName() << " ] " 
+         << "\n------------------------------------------------------------\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -5,19 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN03.cc,v 1.8 1999-11-10 18:36:14 maire Exp $
+// $Id: exampleN03.cc,v 1.9 1999-11-15 11:10:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
-//      GEANT 4 - exampleN02 
+//      GEANT 4 - exampleN03 
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD Group
 // --------------------------------------------------------------
 // Comments
 //
-// 
+//#define G4UI_USE_XM 
+//
 // --------------------------------------------------------------
 
 #include "G4RunManager.hh"
