@@ -5,11 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4RotationMatrix.hh,v 1.2 1999-12-05 17:50:04 gcosmo Exp $
+// $Id: G3toG4RotationMatrix.hh,v 1.3 1999-12-09 01:27:47 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#ifndef _G3toG4ROTATION_
-#define _G3toG4ROTATION_
+#ifndef G3TOG4ROTATION_HH
+#define G3TOG4ROTATION_HH 1
 
 #include "G4RotationMatrix.hh"
 #include "globals.hh"
@@ -29,5 +29,4 @@ public:
     
     ~G3toG4RotationMatrix();
 };
-
 #endif    

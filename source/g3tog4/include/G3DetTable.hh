@@ -1,5 +1,3 @@
-#ifndef G3DETTABLE
-#define G3DETTABLE 1
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -7,10 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3DetTable.hh,v 1.4 1999-12-05 17:50:01 gcosmo Exp $
+// $Id: G3DetTable.hh,v 1.5 1999-12-09 01:27:42 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G3DetTable class
+
+#ifndef G3DETTABLE_HH
+#define G3DETTABLE_HH 1
 
 #include "g4std/map"
 #include "globals.hh"

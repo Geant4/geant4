@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.hh,v 1.9 1999-12-05 17:50:03 gcosmo Exp $
+// $Id: G3RotTable.hh,v 1.10 1999-12-09 01:27:46 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
 
-#ifndef G3_ROT_TABLE_H
-#define G3_ROT_TABLE_H
+#ifndef G3ROTTABLEH_HH
+#define G3ROTTABLEH_HH 1
 
 #include "G3RotTableEntry.hh"
 
@@ -43,4 +43,4 @@ class G3RotTable
 
 extern G3RotTable G3Rot;
 
-#endif //G3_ROT_TABLE_H
+#endif

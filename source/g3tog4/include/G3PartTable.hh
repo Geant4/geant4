@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3PartTable.hh,v 1.4 1999-12-05 17:50:03 gcosmo Exp $
+// $Id: G3PartTable.hh,v 1.5 1999-12-09 01:27:43 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -13,6 +13,8 @@
 // Maps G3 material indices to their G4 material object counterparts.
 // Maintains a linked List of G3 material index/G4 material pointer pairs.
 
+#ifndef G3PARTTABLE_HH
+#define G3PARTTABLE_HH 1
 #include "g4std/map"
 #include "G4ParticleDefinition.hh"
 
@@ -28,5 +30,5 @@ public:
   void Put(G4int partid, G4ParticleDefinition* partpt);
   void PrintAll();
 };
-
 extern G3PartTable G3Part;
+#endif

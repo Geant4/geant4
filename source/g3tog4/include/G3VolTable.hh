@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTable.hh,v 1.11 1999-12-05 17:50:03 gcosmo Exp $
+// $Id: G3VolTable.hh,v 1.12 1999-12-09 01:27:46 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, 13.10.99
 
-#ifndef _G3VOLTABLE_
-#define _G3VOLTABLE_ 1
+#ifndef G3VOLTABLE_HH
+#define G3VOLTABLE_HH 1
 
 #include "g4std/map"
 #include "G3VolTableEntry.hh"

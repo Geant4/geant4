@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3CalcParams.hh,v 1.2 1999-12-05 17:50:00 gcosmo Exp $
+// $Id: G3CalcParams.hh,v 1.3 1999-12-09 01:27:41 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G3CalcParams
@@ -17,7 +17,7 @@
 // 03.09.96 T. Wenaus  Initial version
 
 #ifndef G3CALCPARAMS_HH
-#define G3CALCPARAMS_HH
+#define G3CALCPARAMS_HH 1
 
 #include <math.h>
 #include "globals.hh"

@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MatTable.hh,v 1.7 1999-12-05 17:50:01 gcosmo Exp $
+// $Id: G3MatTable.hh,v 1.8 1999-12-09 01:27:42 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
 
-#ifndef G3_MAT_TABLE_H
-#define G3_MAT_TABLE_H
+#ifndef G3MATTABLE_HH
+#define G3MATTABLE_HH 1
 
 #include "G3MatTableEntry.hh"
 
@@ -41,4 +41,4 @@ class G3MatTable
 
 extern G3MatTable G3Mat;
 
-#endif //G3_MAT_TABLE_H
+#endif

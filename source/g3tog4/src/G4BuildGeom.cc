@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BuildGeom.cc,v 1.10 1999-12-09 00:05:00 lockman Exp $
+// $Id: G4BuildGeom.cc,v 1.11 1999-12-09 01:27:49 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I. Hrivnacova, 13.10.99 
@@ -82,7 +82,7 @@ G4LogicalVolume* G4BuildGeom(G4String& inFile){
         
         // check the geometry here
 
-  if (G3toG4Debug != 0){
+  if (G3toG4Debug() != 0){
     G4cout << "scan through G4LogicalVolumeStore:" << endl;
     checkVol();
   }

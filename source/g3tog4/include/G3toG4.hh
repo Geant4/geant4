@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4.hh,v 1.4 1999-12-05 17:50:04 gcosmo Exp $
+// $Id: G3toG4.hh,v 1.5 1999-12-09 01:27:46 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, 27 Sep 99
 
-#ifndef _G3TOG4_
-#define _G3TOG4_
+#ifndef G3TOG4_HH
+#define G3TOG4_HH 1
 
 #include "globals.hh"
 
@@ -56,5 +56,4 @@ void G3fillParams(G4String *tokens, char *ptypes);
 #define PTgsdeth "ssiSIRR"
 #define PTgsdetd "ssiSI"
 #define PTgsdetu "ssiR"
-
 #endif

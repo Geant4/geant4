@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3Pos.hh,v 1.6 1999-12-05 17:50:03 gcosmo Exp $
+// $Id: G3Pos.hh,v 1.7 1999-12-09 01:27:45 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, 13.10.99
 
-#ifndef _G3POS_
-#define _G3POS_ 1
+#ifndef G3POS_HH
+#define G3POS_HH 1
 
 #include "G4ThreeVector.hh"
 

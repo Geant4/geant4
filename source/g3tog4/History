@@ -1,4 +1,4 @@
-$Id: History,v 1.28 1999-12-09 00:04:54 lockman Exp $
+$Id: History,v 1.29 1999-12-09 01:27:41 lockman Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
@@ -6,8 +6,9 @@ G3toG4 Modification History (reverse chronological order, please !)
 g3tog4- 06-Dec-1999 W.Lockman
 - removed G3fillParams.cc
 - G3Eletable.cc: cast double Z to int
-- added G3toG4Debug global variable (yuch)
+- added G3toG4Debug() global function (yuch)
 - removed G4.cc.omit
+- made sure all header files are protected with #ifndef ... #endif
 
 g3tog4-V00-01-cand03 05-Dec-1999  G.Cosmo
 - Merged HEAD of main trunk with tag "wsl-991205" which now includes

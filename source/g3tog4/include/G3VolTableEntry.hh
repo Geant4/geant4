@@ -5,18 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTableEntry.hh,v 1.2 1999-12-05 17:50:03 gcosmo Exp $
+// $Id: G3VolTableEntry.hh,v 1.3 1999-12-09 01:27:46 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 13.10.99
 
-#ifndef G3_VOL_TABLE_ENTRY_H
-#define G3_VOL_TABLE_ENTRY_H
+#ifndef G3VOLTABLEENTRY_HH
+#define G3VOLTABLEENTRY_HH 1
 
 #include "globals.hh"
 #include "G3Pos.hh"
 #include "G3Division.hh"
-
 #include "g4rw/tpordvec.h"
 
 class G4LogicalVolume;
@@ -100,4 +99,15 @@ inline void G3VolTableEntry::SetDivision(G3Division* division)
 inline G3Division* G3VolTableEntry::GetDivision()
 { return fDivision; }
 
-#endif //G3_VOL_TABLE_ENTRY_H
+#endif
+
+
+
+
+
+
+
+
+
+
+

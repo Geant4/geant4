@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3Division.hh,v 1.2 1999-12-05 17:50:01 gcosmo Exp $
+// $Id: G3Division.hh,v 1.3 1999-12-09 01:27:42 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, V.Berejnoi, 27 Sep 99
 
-#ifndef G3_DIVISION_H
-#define G3_DIVISION_H
+#ifndef G3DIVISION_HH
+#define G3DIVISION_HH 1
 
 #include "globals.hh"
 #include "geomdefs.hh"

@@ -5,12 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3G4Interface.hh,v 1.6 1999-12-09 00:04:58 lockman Exp $
+// $Id: G3G4Interface.hh,v 1.7 1999-12-09 01:27:42 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 //   Interfaces for G3 equivalent routines
 //
+
+#ifndef G3G4INTERFACE_HH
+#define G3G4INTERFACE_HH 1
 
 #include "globals.hh"
 
@@ -85,6 +87,11 @@ void G4gsdetu(G4String chset, G4String chdet, G4int nupar, G4double* upar);
 void G4ggclos();
 
 G4LogicalVolume* G4BuildGeom(G4String& inFile);
+#endif
+
+
+
+
 
 
 

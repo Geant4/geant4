@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4BuildTree.cc,v 1.9 1999-12-09 00:04:59 lockman Exp $
+// $Id: G3toG4BuildTree.cc,v 1.10 1999-12-09 01:27:49 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I. Hrivnacova, 2.8.99 
@@ -89,7 +89,7 @@ void G3toG4BuildTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
 	
         // verbose
 	  
-	  if (G3toG4Debug != 0) 
+	  if (G3toG4Debug() != 0) 
 	    G4cout << "PV: " << i << "th copy of " << curVTE->GetName()
 		   << "  in " << motherVTE->GetName() << "  copyNo: " 
 		   << copyNo << "  irot: " << irot << "  pos: " 
@@ -102,7 +102,7 @@ void G3toG4BuildTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
     if (curVTE->GetDivision()) {
       curVTE->GetDivision()->CreatePVReplica();
       // verbose
-      if (G3toG4Debug != 0) {
+      if (G3toG4Debug() != 0) {
 	G4cout << "CreatePVReplica: " << curVTE->GetName() 
 	       << " in "  << motherVTE->GetName() << endl;
       }

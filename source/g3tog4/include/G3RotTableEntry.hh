@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTableEntry.hh,v 1.2 1999-12-05 17:50:03 gcosmo Exp $
+// $Id: G3RotTableEntry.hh,v 1.3 1999-12-09 01:27:46 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
 
-#ifndef G3_ROT_TABLE_ENTRY_H
-#define G3_ROT_TABLE_ENTRY_H
+#ifndef G3ROTTABLEENTRY_HH
+#define G3ROTTABLEENTRY_HH 1
 
 #include "globals.hh"
 #include "G4RotationMatrix.hh"
@@ -48,4 +48,4 @@ inline G4int G3RotTableEntry::GetID() const
 inline G4RotationMatrix* G3RotTableEntry::GetMatrix() const
 { return fMatrix; }
 
-#endif //G3_ROT_TABLE_ENTRY_H
+#endif

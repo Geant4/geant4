@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MatTableEntry.hh,v 1.2 1999-12-05 17:50:02 gcosmo Exp $
+// $Id: G3MatTableEntry.hh,v 1.3 1999-12-09 01:27:43 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
 
-#ifndef G3_MAT_TABLE_ENTRY_H
-#define G3_MAT_TABLE_ENTRY_H
+#ifndef G3MATTABLEENTRY_HH
+#define G3MATTABLEENTRY_HH 1
 
 #include "globals.hh"
 
@@ -47,4 +47,4 @@ inline G4int G3MatTableEntry::GetID() const
 inline G4Material* G3MatTableEntry::GetMaterial() const
 { return fMaterial; }
 
-#endif //G3_MAT_TABLE_ENTRY_H
+#endif
