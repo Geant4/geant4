@@ -8,7 +8,8 @@ G4NeutronIsotopeProduction()
   for(G4int i=0; i< numberOfElements; i++)
   {
     theData[i] = new G4NeutronElementIsoCrossSections;
-    if((*(G4Element::GetElementTable()))(i)->GetZ()>12) // @@@@@@ workarround to ne fixed in G4NeutronHPNames.
+    if((*(G4Element::GetElementTable()))(i)->GetZ()>12 ||
+       (*(G4Element::GetElementTable()))(i)->GetZ()<84) // @@@@@@ workaround to ne fixed in G4NeutronHPNames.
     {
       theData[i]->Init((*(G4Element::GetElementTable()))(i));
     }
@@ -36,7 +37,8 @@ GetIsotope(const G4Track& aTrack,
 
   // get the isotope
   G4Material * theMaterial = aTrack.GetMaterial();
-  if(theMaterial->GetZ()<13) return NULL; //@@@@@@ workarround to ne fixed in G4NeutronHPNames.
+  if(theMaterial->GetZ()<13) return NULL; //@@@@@@ workaround to ne fixed in G4NeutronHPNames.
+  if(theMaterial->GetZ()>83) return NULL; //@@@@@@ workaround to ne fixed in G4NeutronHPNames.
   G4int nEleInMat = theMaterial->GetNumberOfElements();
   G4int index;
   G4double * xSec = new G4double[nEleInMat];
