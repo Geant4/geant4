@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2001-02-01 08:22:50 gcosmo Exp $
+$Id: History,v 1.39 2001-02-21 15:47:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Feb 21,   01   V. Grichine               geom-solids-csg-V03-00-03
+- G4Tubs.cc:
+  o Fixed bug in function Inside(p) in computation of pPhi
+    for points at phi = 0 if the (start phi)+(delta phi) is at phi = 0.
+  o Temporarly modified CalculateExtent(...), now simply based on
+    G4Box::CalculateExtent(...). Updated unit test testG4Tubs.cc.
 
 Feb 01,   01   V. Grichine               geom-solids-csg-V03-00-02
 - G4Box: introduced checks against negative (or <2*kCarTolerance) dimensions
