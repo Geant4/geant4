@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.9 2003-02-13 15:51:48 grichine Exp $
+// $Id: testG4Sphere.cc,v 1.10 2003-10-28 10:24:56 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -596,17 +596,99 @@ G4ThreeVector s9v(-0.6542770611918751,
 		}
 	}
 
-	return 0;
+        G4bool checkPoint( const G4Sphere& pSph, G4ThreeVector origin,
+                           G4double  d,    G4ThreeVector dir,    EInside  exp); 
 
+        G4Sphere SpAroundX("SpAroundX",  10.*mm, 1000.*mm, -1.0*degree, 2.0*degree, 0.*degree, 180.0*degree );
+
+	G4double  sinOneDeg = sin( 1.0 * degree );
+	G4double  radOne = 100.0 * mm;
+
+	G4ThreeVector  ptPhiSurfExct= G4ThreeVector( radOne * cos( -1.0 * degree ) , 
+			             - radOne *  sinOneDeg, 
+				      0.0 );
+        G4cout << " Starting from point " << ptPhiSurfExct << G4endl;
+        G4cout << "   using direction   " << vy << G4endl; 
+        checkPoint( SpAroundX, ptPhiSurfExct, -radOne * kAngTolerance * 1.5, 
+                    vy,   kOutside); 
+        checkPoint( SpAroundX, ptPhiSurfExct, -radOne * kAngTolerance * 0.49, 
+                    vy,   kSurface); 
+        checkPoint( SpAroundX, ptPhiSurfExct, -radOne * kAngTolerance * 0.25, 
+                    vy,   kSurface); 
+        checkPoint( SpAroundX, ptPhiSurfExct,  0.0,
+                    vy,   kSurface); 
+        checkPoint( SpAroundX, ptPhiSurfExct,  radOne * kAngTolerance * 0.25, 
+                    vy,   kSurface); 
+        checkPoint( SpAroundX, ptPhiSurfExct,  radOne * kAngTolerance * 0.49, 
+                    vy,   kSurface); 
+        checkPoint( SpAroundX, ptPhiSurfExct,  radOne * kAngTolerance * 1.5, 
+                    vy,   kInside); 
+	return 0;
 }
 
+G4bool
+checkPoint( const G4Sphere &rSphere, 
+            G4ThreeVector  origin, 
+            G4double       dist, 
+            G4ThreeVector  direction, 
+            EInside        expectedInResult)
+{
+    G4ThreeVector newPoint; 
+    G4double  distIn=-1.0, distOut=-1.0; 
 
+    newPoint = origin + dist * direction; 
 
+    // G4cout << " --- Sphere " << rSphere.GetName() << "" << G4endl;
+    G4cout << G4endl;
+    // G4cout << " Sphere " << rSphere.GetName();
+    G4int oldPrecision= G4cout.precision(10); 
+    G4cout << " dir= " << direction;
+    G4cout << " dist= " << dist;
 
+    EInside  inSphere=  rSphere.Inside( newPoint ) ; 
+                              /*======*/
+    G4cout.precision(15); 
+    // G4cout << " NewPoint  " << newPoint << " is " 
+    G4cout << " New point " << " is " 
+      <<  OutputInside( inSphere ) 
+      <<  " vs "
+      <<  OutputInside( expectedInResult ) 
+      <<  " expected."
+      <<  G4endl ;
 
+    G4bool good= (inSphere == expectedInResult) ; 
+    if ( !good ) {
+        G4cout << " ************ Unexpected Result for Inside *************** " << G4endl;
+    } 
 
+    distIn = rSphere.DistanceToIn( newPoint, direction ); 
+                    /*===========*/
+    G4cout << " DistToIn (p, dir) = " << distIn << G4endl;
+    if( (inSphere == kOutside) 
+        && (distIn < 0.0 ) // Cannot use 0.5*kCarTolerance for Angular tolerance!! 
+      ){
+       G4cout << " ********** Unexpected Result for DistanceToIn from outside ********* " << G4endl;
+       // G4cout << " It should be " << G4endl;
+       good = false;
+    }
+    if( (inSphere == kSurface ) 
+        && ( (distIn < 0.0) || (distIn >= kInfinity )) 
+      ){
+       G4cout << " ********** Unexpected Result for DistanceToIn ********* " << G4endl;
+       // if ( (distIn != 0.0) ) 
+       //  -  Can check that the return value must be 0.0
+       //     But in general case the direction can be away from the solid, 
+       //        and then a finite or kInfinity answer is correct
+       //        --> must check the direction against the normal
+       //            in order to perform this check in general case.
 
+       good = false;
+    }
 
+    distOut = rSphere.DistanceToOut( newPoint, direction ); 
+                    /*=============*/
+    G4cout << " DistToOut (p, dir) = " << distOut << G4endl;
+    G4cout.precision(oldPrecision); 
 
-
-
+    return good;
+}
