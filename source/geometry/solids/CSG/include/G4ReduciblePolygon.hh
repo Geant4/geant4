@@ -68,6 +68,8 @@ class G4ReduciblePolygon {
 	
 	G4bool RemoveDuplicateVertices( const G4double tolerance );
 	G4bool RemoveRedundantVertices( const G4double tolerance );
+	
+	void ReverseOrder();
 
 	//
 	// Tests
