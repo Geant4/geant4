@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.cc,v 1.2 2003-10-28 18:29:56 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.3 2003-10-29 17:46:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -91,8 +91,8 @@ void HistoManager::SetFactory(G4String fileName)
   tree = tf->create(fileName, "hbook", readOnly, createNew);
 
  // Creating a histogram factory, whose histograms will be handled by the tree
-  std::auto_ptr< AIDA::IHistogramFactory > hf(af->createHistogramFactory( *tree ));
-  // hf = af->createHistogramFactory(*tree);
+ // std::auto_ptr< AIDA::IHistogramFactory > hf(af->createHistogramFactory( *tree ));
+  hf = af->createHistogramFactory(*tree);
  
  // histograms
   for (G4int k=0; k<MaxHisto; k++) { histo[k] = 0; histoUnit[k] = 1.;}
@@ -107,7 +107,9 @@ void HistoManager::SetFactory(G4String fileName)
 void HistoManager::SetHisto(G4int ih, 
                  G4int nbBins, G4double valmin, G4double valmax, G4String unit)
 { 
+  G4cout << "ih= " << ih << G4endl;
   if (!factoryOn) SetFactory("testem5.paw");
+  G4cout << "1 " << G4endl;
    
   if (ih > MaxHisto) {
     G4cout << "---> warning from HistoManager::SetHisto() : histo " << ih
@@ -136,9 +138,12 @@ void HistoManager::SetHisto(G4int ih,
 		  "(reflect , neutral) : space angle at exit",		//15
 		  "(reflect , neutral) : projected angle at exit",	//16
                  };
+  G4cout << "2 " << G4endl;
 		 
   G4String titl = title[ih];
+  G4cout << "3 " << G4endl;
   G4double vmin = valmin, vmax = valmax;
+  G4cout << "4 " << G4endl;
   
   if (ih == 3) { vmin = log10(valmin/MeV); vmax = log10(valmax/MeV);}
   else if (unit != "none") {
@@ -146,8 +151,10 @@ void HistoManager::SetHisto(G4int ih,
     histoUnit[ih] = G4UnitDefinition::GetValueOf(unit);
     vmin = valmin/histoUnit[ih]; vmax = valmax/histoUnit[ih];
   }
+  G4cout << "5 " << G4endl;
   
   histo[ih] = hf->createHistogram1D(id[ih],titl,nbBins,vmin,vmax);
+  G4cout << "6 " << G4endl;
   
   binWidth[ih] = (valmax-valmin)/nbBins;
   
