@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.19 2004-05-12 12:25:26 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.20 2004-05-14 20:35:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -243,7 +243,10 @@ public:
   void SetMinSubRange(G4double val);
 
   void SetStepLimits(G4double v1, G4double v2);
+
   void SetStepFunction(G4double v1, G4double v2);
+
+  void SetLambdaFactor(G4double val);
 
   G4bool TablesAreBuilt() const;
 
@@ -320,6 +323,10 @@ private:
 
   G4double GetPreciseRange(G4double kineticEnergy);
 
+  G4double GetLambda(G4double scaledKinEnergy);
+
+  void ComputeLambda(G4double scaledKinEnergy);
+
   G4double ScaledKinEnergyForLoss(G4double range);
 
   // hide  assignment operator
@@ -351,6 +358,8 @@ private:
   G4PhysicsTable*  theSubLambdaTable;
   G4double*        theDEDXAtMaxEnergy;
   G4double*        theRangeAtMaxEnergy;
+  G4double*        theEnergyOfCrossSectionMax;
+  G4double*        theCrossSectionMax;
 
   const G4DataVector*         theCuts;
 
@@ -379,6 +388,7 @@ private:
   G4double chargeSqRatio;
 
   G4double preStepLambda;
+  G4double preStepMFP;
   G4double fRange;
   G4double preStepKinEnergy;
   G4double preStepScaledEnergy;
@@ -388,6 +398,7 @@ private:
   G4double finalRange;
   G4double defaultRoverRange;
   G4double defaultIntegralRange;
+  G4double lambdaFactor;
 
   G4bool lossFluctuationFlag;
   G4bool rndmStepFlag;
@@ -487,6 +498,26 @@ inline G4double G4VEnergyLossProcess::GetRangeForLoss(G4double e)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline G4double G4VEnergyLossProcess::GetLambda(G4double e)
+{
+  G4bool b;
+  return chargeSqRatio*(((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEnergyLossProcess::ComputeLambda(G4double e)
+{
+  meanFreePath  = false;
+  G4double emax = theEnergyOfCrossSectionMax[currentMaterialIndex];
+  if (e <= emax)  preStepLambda = GetLambda(e);
+  else if (e*lambdaFactor > emax) 
+                  preStepLambda = GetLambda(e*lambdaFactor);
+  else            preStepLambda = chargeSqRatio*theCrossSectionMax[currentMaterialIndex];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline G4double G4VEnergyLossProcess::GetKineticEnergy(G4double& range,
                                                  const G4MaterialCutsCouple* couple)
 {
@@ -536,15 +567,13 @@ inline G4double G4VEnergyLossProcess::GetMeanFreePath(const G4Track& track,
   preStepKinEnergy = track.GetKineticEnergy();
   preStepScaledEnergy = preStepKinEnergy*massRatio;
   if (meanFreePath) {
-    G4bool b;
-    preStepLambda = (((*theLambdaTable)[currentMaterialIndex])->
-                      GetValue(preStepScaledEnergy, b)) * chargeSqRatio;
-    if (integral) meanFreePath = false;
-  }
-  G4double x = DBL_MAX;
-  if(0.0 < preStepLambda) x = 1.0/preStepLambda;
-  // G4cout << GetProcessName() << ": e= " << preStepKinEnergy << " mfp= " << x << G4endl;
-  return x;
+    if (integral) ComputeLambda(preStepScaledEnergy);
+    else          preStepLambda = GetLambda(preStepScaledEnergy);
+    if(0.0 < preStepLambda) preStepMFP = 1.0/preStepLambda;
+    else                    preStepMFP = DBL_MAX;   
+  } 
+  // G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" mfp= "<<preStepMFP<<G4endl;
+  return preStepMFP;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.20 2004-05-12 12:25:26 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.21 2004-05-14 20:35:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -123,6 +123,8 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   theSubLambdaTable(0),
   theDEDXAtMaxEnergy(0),
   theRangeAtMaxEnergy(0),
+  theEnergyOfCrossSectionMax(0),
+  theCrossSectionMax(0),
   particle(0),
   baseParticle(0),
   secondaryParticle(0),
@@ -134,6 +136,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   minSubRange(0.1),
   defaultRoverRange(0.2),
   defaultIntegralRange(1.0),
+  lambdaFactor(0.1),
   lossFluctuationFlag(true),
   rndmStepFlag(false),
   hasRestProcess(true),
@@ -197,6 +200,8 @@ void G4VEnergyLossProcess::Clear()
     if(theSubLambdaTable) theSubLambdaTable->clearAndDestroy();
     if(theDEDXAtMaxEnergy) delete [] theDEDXAtMaxEnergy;
     if(theRangeAtMaxEnergy) delete [] theRangeAtMaxEnergy;
+    if(theEnergyOfCrossSectionMax) delete [] theEnergyOfCrossSectionMax;
+    if(theCrossSectionMax) delete [] theCrossSectionMax;
   }
 
   theDEDXTable = 0;
@@ -289,6 +294,7 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
   currentCouple = 0;
   preStepLambda = 0.0;
+  preStepMFP = DBL_MAX;
   if(0 < verboseLevel) {
     G4cout << "========================================================" << G4endl;
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() for "
@@ -352,10 +358,11 @@ void G4VEnergyLossProcess::UpdateEmModel(const G4String& nam, G4double emin, G4d
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLossProcess::AddSubCutoffProcessor(G4VSubCutoffProcessor* p,
-                                       const G4Region* r)
+                                           const G4Region* r)
 {
   if( !p ) {
-    G4cout << "G4VEnergyLossProcess::AddSubCutoffProcessor WARNING: no SubCutoffProcessor defined." << G4endl;
+    G4cout << "G4VEnergyLossProcess::AddSubCutoffProcessor WARNING: no SubCutoffProcessor defined." 
+           << G4endl;
     return;
   }
   G4RegionStore* regionStore = G4RegionStore::GetInstance();
@@ -720,11 +727,7 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
 
   // Integral approach
   if (integral) {
-    G4bool b;
-    G4double postStepLambda = chargeSqRatio*
-      (((*theLambdaTable)[currentMaterialIndex])->GetValue(postStepScaledEnergy,b));
-
-    if(preStepLambda*G4UniformRand() > postStepLambda)
+    if(preStepLambda*G4UniformRand() > GetLambda(postStepScaledEnergy))
       return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
   }
 
@@ -809,7 +812,7 @@ void G4VEnergyLossProcess::PrintInfoDefinition()
 
 void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p)
 {
-  if(theDEDXTable) theDEDXTable->clearAndDestroy();
+  if(theDEDXTable && !baseParticle) theDEDXTable->clearAndDestroy();
   theDEDXTable = p;
 }
 
@@ -817,7 +820,7 @@ void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p)
 
 void G4VEnergyLossProcess::SetPreciseRangeTable(G4PhysicsTable* p)
 {
-  if(thePreciseRangeTable) thePreciseRangeTable->clearAndDestroy();
+  if(thePreciseRangeTable && !baseParticle) thePreciseRangeTable->clearAndDestroy();
   if(theDEDXAtMaxEnergy) delete [] theDEDXAtMaxEnergy;
   if(theRangeAtMaxEnergy) delete [] theRangeAtMaxEnergy;
 
@@ -847,7 +850,7 @@ void G4VEnergyLossProcess::SetPreciseRangeTable(G4PhysicsTable* p)
 
 void G4VEnergyLossProcess::SetRangeTableForLoss(G4PhysicsTable* p)
 {
-  if(theRangeTableForLoss) theRangeTableForLoss->clearAndDestroy();
+  if(theRangeTableForLoss && !baseParticle) theRangeTableForLoss->clearAndDestroy();
   theRangeTableForLoss = p;
 }
 
@@ -862,7 +865,7 @@ void G4VEnergyLossProcess::SetSecondaryRangeTable(G4PhysicsTable* p)
 
 void G4VEnergyLossProcess::SetInverseRangeTable(G4PhysicsTable* p)
 {
-  if(theInverseRangeTable) theInverseRangeTable->clearAndDestroy();
+  if(theInverseRangeTable && !baseParticle) theInverseRangeTable->clearAndDestroy();
   theInverseRangeTable = p;
 }
 
@@ -870,16 +873,46 @@ void G4VEnergyLossProcess::SetInverseRangeTable(G4PhysicsTable* p)
 
 void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
 {
-  if(theLambdaTable) theLambdaTable->clearAndDestroy();
+  if(theLambdaTable && !baseParticle) theLambdaTable->clearAndDestroy();
   theLambdaTable = p;
   tablesAreBuilt = true;
+  if(theEnergyOfCrossSectionMax) delete [] theEnergyOfCrossSectionMax;
+  if(theCrossSectionMax) delete [] theCrossSectionMax;
+
+  if(p) {
+    size_t n = p->length();
+    G4PhysicsVector* pv = (*p)[0];
+    size_t nb = pv->GetVectorLength();
+    G4double emax = pv->GetLowEdgeEnergy(nb);
+    G4double e, s, smax = 0.0;
+    theEnergyOfCrossSectionMax = new G4double [n];
+    theCrossSectionMax = new G4double [n];
+    G4bool b;
+
+    for (size_t i=0; i<n; i++) {
+      pv = (*p)[i];
+      smax = 0.0;
+      for (size_t j=0; j<nb; j++) {
+        e = pv->GetLowEdgeEnergy(j);
+        s = pv->GetValue(e,b);
+        if(s > smax) {
+          smax = s;
+          emax = e;
+	}
+      }
+      theEnergyOfCrossSectionMax[i] = emax;
+      theCrossSectionMax[i] = smax;
+      // G4cout << "i= " << i << " e2(MeV)= " << emax/MeV 
+      //       << " lambda= " << smax << G4endl;
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLossProcess::SetSubLambdaTable(G4PhysicsTable* p)
 {
-  if(theSubLambdaTable) theSubLambdaTable->clearAndDestroy();
+  if(theSubLambdaTable && !baseParticle) theSubLambdaTable->clearAndDestroy();
   theSubLambdaTable = p;
   if (nSCoffRegions) {
     for (G4int i=0; i<nSCoffRegions; i++) {
@@ -1377,7 +1410,15 @@ void G4VEnergyLossProcess::ActivateFluorescence(G4bool, const G4Region*)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLossProcess::ActivateAugerElectronProduction(G4bool, const G4Region*)
+
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetLambdaFactor(G4double val)
+{
+  if(val > 0.0 && val <= 1.0) lambdaFactor = val;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
