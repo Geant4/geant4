@@ -1069,7 +1069,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   
   G4KineticTrackVector oldSecondaries;
   oldSecondaries.push_back(primary);
-//#ifdef debug_G4BinaryCascade
+#ifdef debug_G4BinaryCascade
   if ( (finalBaryon-initialBaryon) != 0 || (finalCharge-initialCharge) != 0 ) 
      {
         G4cout << "G4BinaryCascade: Error in Balancing: " << G4endl;
@@ -1088,7 +1088,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
        PrintKTVector(&collision->GetTargetCollection(),std::string(" Target particles"));
        G4cout << G4endl<<G4endl;
      }
-//#endif
+#endif
 
   G4KineticTrackVector oldTarget = collision->GetTargetCollection();
   primary->Hit();
@@ -1401,9 +1401,9 @@ void G4BinaryCascade::StepParticlesOut()
 
     if(countreset>100)
     {
-//#ifdef debug_G4BinaryCascade
+#ifdef debug_G4BinaryCascade
        G4cerr << "G4BinaryCascade.cc: Warning - aborting looping particle(s)" << G4endl;
-//#endif
+#endif
 
 //  add left secondaries to FinalSate
        std::vector<G4KineticTrack *>::iterator iter;
@@ -1991,7 +1991,7 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
 	     currentZ += G4lrint((*iter)->GetDefinition()->GetPDGCharge());
 	     if ((*iter)->GetDefinition()->GetBaryonNumber()==1 ) ++currentA;
 	   } 
-//#ifdef debug_BIC_CorrectBarionsOnBoundary
+#ifdef debug_BIC_CorrectBarionsOnBoundary
 	   else
 	   {
 	      G4cout << "Not correcting outgoing " << *iter << " " 
@@ -1999,7 +1999,7 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
 		     << (*iter)->GetDefinition()->GetParticleName() << G4endl;
 	      PrintKTVector(out,std::string("outgoing, one not corrected"));
 	   }   	      
-//#endif
+#endif
 	}   
      }
 
