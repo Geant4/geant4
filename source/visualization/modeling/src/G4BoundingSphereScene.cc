@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.cc,v 1.5 2001-07-11 10:09:22 gunter Exp $
+// $Id: G4BoundingSphereScene.cc,v 1.6 2001-07-22 00:59:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -88,8 +88,24 @@ void G4BoundingSphereScene::AccrueBoundingSphere
     }
     else {
       G4Vector3D unitJoin = join.unit ();
-      G4Point3D extremity1 = fCentre - fRadius * unitJoin;
-      G4Point3D extremity2 = thisCentre + thisRadius * unitJoin;
+      G4Point3D oldExtremity1 = fCentre - fRadius * unitJoin;
+      G4Point3D newExtremity1 = thisCentre - thisRadius * unitJoin;
+      G4Point3D oldExtremity2 = fCentre + fRadius * unitJoin;
+      G4Point3D newExtremity2 = thisCentre + thisRadius * unitJoin;
+      G4Point3D extremity1;
+      if (oldExtremity1 * unitJoin < newExtremity1 * unitJoin) {
+	extremity1 = oldExtremity1;
+      }
+      else {
+	extremity1 = newExtremity1;
+      }
+      G4Point3D extremity2;
+      if (oldExtremity2 * unitJoin > newExtremity2 * unitJoin) {
+	extremity2 = oldExtremity2;
+      }
+      else {
+	extremity2 = newExtremity2;
+      }
       fCentre = 0.5 * (extremity2 + extremity1);
       fRadius = 0.5 * (extremity2 - extremity1).mag ();
     }
