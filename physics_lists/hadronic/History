@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2004-12-13 16:38:57 gcosmo Exp $
+$Id: History,v 1.2 2004-12-13 16:55:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13.12.2004, G.Cosmo - ghad-lists-V06-02-03
+- Imported lists from top-level directory.
 
 10.12.2004, G.Cosmo - ghad-lists-V06-02-02
 - Removed debug printout in G4HadronQEDBuilder.hh.
