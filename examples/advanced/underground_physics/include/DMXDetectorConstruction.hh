@@ -68,8 +68,11 @@ public:
   G4double  GetMaxTime() const      { return theMaxTimeCuts;  }
   G4double  GetMaxStepSize() const  { return theMaxStepSize;  }
 
+  G4double  GetRoomTime() const      { return theRoomTimeCut;  }
+
   void  SetMaxTime(G4double value);  
   void  SetMaxStepSize(G4double value);  
+  void  SetRoomTime(G4double value);
 
 private:
 
@@ -79,6 +82,8 @@ private:
   G4UserLimits*    theUserLimits; 
   G4double         theMaxTimeCuts;
   G4double         theMaxStepSize;
+  
+  G4double         theRoomTimeCut;
 
   G4Material*     world_mat;            // materials used
   G4Material*       lab_mat;        

@@ -238,7 +238,7 @@ void DMXEventAction::EndOfEventAction(const G4Event* evt) {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 void DMXEventAction::writeScintHitsToFile(void) {
 
-  G4String filename="analysis/hits.out";
+  G4String filename="hits.out";
   G4std::ofstream hitsfile(filename, G4std::ios::app);
   if(!event_id) {
     G4std::ofstream hitsfile(filename);
@@ -285,7 +285,7 @@ void DMXEventAction::writeScintHitsToFile(void) {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 void DMXEventAction::writePmtHitsToFile(const DMXPmtHitsCollection* hits) {
 
-  G4String filename="analysis/pmt.out";
+  G4String filename="pmt.out";
   G4std::ofstream pmtfile(filename);
 
   if(pmtfile.is_open()) {

@@ -1,0 +1,95 @@
+UR	      OOAD			Implemention		  Test
+-------------------------------------------------------------------------------
+1.1	DMX Class Diagram	DMXRunAction			Start Run
+	
+1.2	DMX Class Diagram	DMXEventAction			Run events
+
+
+2.1	DMX Class Diagram	DMXDetectorConstruction		Visualisation
+
+2.2	DMX Class Diagram	DMXScintHit			Event output
+
+2.3	DMX Class Diagram	DMXPhysicsList			Visualisation
+
+2.4	DMX Class Diagram	DMXDetectorConstruction	    Track visualisation
+
+2.5	DMX Class Diagram	DMXPmtHit			Record photons 
+
+
+3.1	DMX Class Diagram	DMXPhysicsList       Compare output E with expt
+
+3.2	DMX Class Diagram	DMXPhysicsList	     Compare output E with expt
+
+3.3	DMX Class Diagram	DMXPhysicsList	     Compare output E with expt
+
+3.4	DMX Class Diagram	DMXPhysicsList	     Compare output E with expt
+
+3.5	DMX Class Diagram	DMXPhysicsList	     Compare output E with expt
+
+3.6	DMX Class Diagram	DMXPhysicsList	     Compare output E with expt
+
+3.7	DMX Class Diagram	DMXPhysicsList	     Compare output E with expt
+
+3.8	DMX Class Diagram	DMXPhysicsList	     Compare output E with expt
+
+3.9	DMX Class Diagram	DMXPhysicsList	     Compare output E with expt
+
+3.10	DMX Class Diagram	DMXPhysicsList	     Compare output E with expt
+
+3.11	DMX Class Diagram	DMXPhysicsList	     Compare output E with expt
+
+3.12	DMX Class Diagram	DMXPhysicsList	     Compare output E with expt
+
+
+4.1	DMX Class Diagram	DMXParticleSource    Vis. and Event summary
+
+4.2	DMX Class Diagram	DMXParticleSource    Vis. and Event summary
+
+4.3	DMX Class Diagram	DMXParticleSource    Vis. and Event summary
+
+4.4	DMX Class Diagram	DMXParticleSource    Vis. and Event summary
+
+
+5.1	DMX Class Diagram	DMXPhysicsList	     Run control and output
+
+5.2	DMX Class Diagram	DMXPhysicsList	     Run control and output 
+
+5.3	DMX Class Diagram	DMXPhysicsList	     Run control and output 
+
+
+6.1	DMX Class Diagram	DMXEventAction	         Saved output file
+
+6.2	DMX Class Diagram	DMXEventAction		 Saved output file
+
+
+7.1	DMX Class Diagram	DMXVisManager		    Visualisation 
+
+7.2	DMX Class Diagram	DMXEventAction		    Visualisation
+
+7.3	DMX Class Diagram	DMXEventActionMessenger	    Visualisation  
+
+7.4	DMX Class Diagram	DMXSteppingAction	    Visualisation
+
+7.5	DMX Class Diagram	DMXVisManager		 Outputfile into wired
+
+
+8.1	DMX Class Diagram	DMXParticleSourceMessenger    User Control
+
+8.2	DMX Class Diagram				      User Control
+
+8.3	DMX Class Diagram	DMXEventAction		      User Control
+
+8.4	DMX Class Diagram	DMXEventAction		      User Control
+
+8.5	DMX Class Diagram	DMXEventAction		      User Control
+
+8.6	DMX Class Diagram	DMXStackingActionMessenger    User Control
+
+
+
+9.1	DMX Class Diagram	DMXMaxTimeCuts		   Output summary file
+
+9.2	DMX Class Diagram	DMXStackingAction	Output and optimisation
+
+
+

@@ -5,44 +5,54 @@ UNDERGROUND PHYSICS
 
 An example of a underground dark matter example.
 
-Physics included:
+Please see the UserRequirements.txt and related web-pages at the end of that
+document.
+
+Over-view:
+A single liquid xenon cell is simulated within Geant4 and the scintillation
+light produced from interactions from various calibration species is recorded
+as PhotoMultiplier hits.  The output is then written to an ASCII file for
+future off-line analysis.
+
+Geometry:
+Experimental set-up:
+
+A "cavern" 5m x 6m x 3m with concrete walls is defined as the World Volume.
+In the centre of the cavern a steel vacuum vessel containing liquid and gaseous
+xenon is placed.  The internal construction of the vessel accurately
+reproduces a prototype Dark Matter detector that has allows experimentally
+comparison.  A series of metal rings, copper thermal equalisation and an
+internal PhotoMultilier Tube are incorporated.
 
 
+Hits Output:
+An ASCII file containing the following information:
+"Event# TotalEnergyDeposit LXeDeposit LXeTime PMTHits PmtTime FirstParticle   
+Flags to indicate which particles have been hits" 
+
+Pmt Output:
+"Hit#    X, mm   Y, mm   Z, mm"
+Photon hit positions within the PMT face
 
 
-Timescale for completion by 30th November:
-TO DO:
+To Run:
+Either run the macro files interactively or in batch if the command
+DMX macro_name.mac
+is executed.
 
-Test on multiple platforms SUN platform - so far tested with egcs and g++.
-
-Also add Analysis and possibly
-Digits+Hits
-
-Documentation
-
-Include cavern rock outside of your "wall"
-
-Analysis - will make validation easier
-
-Random engine - from extended example?
-
-Seeds handling
-
-Caveats:
-
-G4NeutronHPNames.cc needs modification/bug-fix - place
-G4NeutronHPNames.cc_required in
-$G4INSTALL/source/processes/hadronic/models/neutron_hp/src
-as G4NeutronHPNames.cc and re-make neutron_hp and then libmap
+Note:
+The output file hits.out contains an event summary.  However, if using the
+RadioactiveDecay of nuclei the time information is erroneous due to the
+precision required to detect a scintillation time ~10's nanoseconds on a global
+time of 432 years (in the case of 241Am decay)
 
 
-Am241 running:
-G4RadiativeDecayData has to add file z95.a241
-To use it you will have first to make a small change to the file
-G4NucleusLimits.cc in the 
-source/processes/hadronics/model/radiative_decay/src directory. At the
-moment the upper limit for the applicable nucleus is A=240. You need to
-change this to, say, 250 and rebuild the lib.
+Note: The following environment variables need to be set:
+G4RADIOACTIVEDATA -> points to Radioactive Decay Data files
+G4LEDATA -> points to low energy data base - G4EMLOW0.4
+G4LEVELGAMMADATA -> points to PhotoEvaporation data
+NeutronHPCrossSections -> points to neutron data files G4NDL3.5
+
 
 
 NB:
@@ -65,26 +75,7 @@ config/sys/Linux-egcs.gmk to be altered so that CXX is set to kgcc
 
 --------------------------------------
 
-Physics checking:
 
-A very easy way to check which processes are assigned to what
- is to do
-
-   /particle/select e-
-   /particle/process/dump -1
-
-
- 2. RDM
-
- apart from the changes to 
- /processes/hadronic/models/radiative_decay/src/G4NucleusLimits.cc
-
- we also need to change
- /hadronic/models/generator/de_excitation/src/G4DiscreteGammaDeexcitation.cc
- to include Am241 as a discrete deexcitation (change to A,Z limits again)
- - i.e. change Z>92 to Z>95
-
-committed to CVS 27/11/01
-
+Alex Howard, 29/11/01
 
 

@@ -117,10 +117,12 @@ int main(int argc,char** argv) {
 
       // G4UIterminal is a (dumb) terminal.
       UI->ApplyCommand("/control/execute initInter.mac");    
-#ifdef G4UI_USE_XM
-      // Customize the G4UIXm menubar with a macro file :
-      UI->ApplyCommand("/control/execute gui.mac");
-#endif
+      /*
+	#ifdef G4UI_USE_XM
+	// Customize the G4UIXm menubar with a macro file :
+	UI->ApplyCommand("/control/execute gui.mac");
+	#endif
+      */
       session->SessionStart();
       delete session;
     }

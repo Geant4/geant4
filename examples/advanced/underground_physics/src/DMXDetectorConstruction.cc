@@ -88,6 +88,8 @@ DMXDetectorConstruction::DMXDetectorConstruction()
   //  - note also number of steps cut in stepping action = MaxNoSteps
   theMaxTimeCuts = DBL_MAX;
   theMaxStepSize = DBL_MAX;
+
+  theRoomTimeCut = 10000. * s;
 }
 
 
@@ -759,6 +761,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
     ("pmt_surf", liqPhase_phys, pmt_phys, pmt_opsurf);
 
   G4VisAttributes* pmt_vat= new G4VisAttributes(blue);
+  pmt_vat->SetForceSolid(true);
   pmt_vat->SetVisibility(true);
   pmt_log->SetVisAttributes(pmt_vat);
 

@@ -1,0 +1,313 @@
+UNDERGROUND PHYSICS ADVANCED EXAMPLE - DMX
+
+UserRequirements.txt - Alex Howard, e-mail: a.s.howard@ic.ac.uk, 29/11/01.
+
+Introduction:
+
+This document is an initial introduction to the Dark Matter Example - DMX.
+A single liquid xenon cell is simulated within Geant4 and the scintillation
+light produced from interactions from various calibration species is recorded
+as PhotoMultiplier hits.  The output is then written to an ASCII file for
+future off-line analysis.
+
+-------------------------------------------------------------------------------
+
+			User Requirements:
+
+General
+
+UR 1.1:    Configure the run management
+
+UR 1.2:    Configure the event loop
+
+
+
+Geometry:
+Experimental set-up:
+
+UR 2.1:
+A "cavern" 5m x 6m x 3m with concrete walls is defined as the World Volume.
+In the centre of the cavern a steel vacuum vessel containing liquid and gaseous
+xenon is placed.  The internal construction of the vessel accurately
+reproduces a prototype Dark Matter detector that has allows experimentally
+comparison.  A series of metal rings, copper thermal equalisation and an
+internal PhotoMultiplier Tube are incorporated.
+
+An accurate simulation of the above set-up should be carried.  
+
+UR 2.2:
+Record the energy deposited in the sensitive volume of the xenon chamber
+
+UR 2.3:
+Produce scintillation light with different time constants depending upon the
+species of particle causing the excitation - either nuclear recoil or electron
+recoil type interactions.
+
+UR 2.4:
+Implement reflectivities and transmission probabilities for all materials
+concerned.
+
+UR 2.5:
+Ray trace the scintillation back to the PMT and record hit times, positions and
+number of photons.
+
+
+PHYSICS:
+
+The following areas of physics should be included:
+
+UR 3.1:  ·     Low Energy Electromagnetic - to 250eV for both e and photons
+               Maximum energy range around 10 MeV for any particle
+UR 3.2:  ·     Compton Scattering
+UR 3.3:  ·     Photoelectric
+UR 3.4:  ·     Bremsstrahlung
+UR 3.5:  ·     Rayleigh Scattering - both for optical photons and hard
+               X-rays/Gammas
+UR 3.6:  ·     Electromagnetic ionisation
+UR 3.7:  ·     Delta Rays
+	       Produced discretely down to 250eV to allow secondaries and
+               tertiaries to be properly handled
+UR 3.8:  ·     Heavy Ion Transport - to 250eV for protons, alphas and nuclei
+	       Allows separate scintillation time and yield compared to gammas
+               (electrons)
+UR 3.9:  ·     Radioactive Decay - induced
+	       All materials are sensitive to induced activity as a consequence
+               of photonuclear or neutron capture
+UR 3.10: ·     Radioactive Decay - sources
+	       Specific nuclei can be decayed within the geometry to reproduce
+               experimental calibration the experiment
+UR 3.11: ·     Neutron tracking from medium energy (few MeV) to thermal capture
+	       Discretely transported through-out the volume to give full
+               detector like response of both neutron capture activation and
+               elastic and inelastic interaction in the target volume
+UR 3.12: ·     Scintillation light production and ray-tracing to PMT
+	       Optical photon transport introduced to allow true detector
+               response to be produced.
+
+ParticleSource:
+
+UR 4.1:
+Implement a generic particle source that allows various particles, ions and
+nuclei to be fired or decayed anywhere within the volume
+
+UR 4.2:
+Allow confinement of the particle source to within given volumes and randomly
+select particle or ion production within that volume
+
+UR 4.3:
+Allow various source shapes - rectangular, plane, sphere, cylinder to be
+implemented
+
+UR 4.4:
+Allow spectrum of energies to be chosen as well as a monoenergetic particle
+type.
+
+
+Radioactive Decay Module:
+
+UR 5.1:
+Allows specific ions to be decayed within set nuclear limits and energies and
+positions - linked to Particle Source above
+
+UR 5.2:
+Can control induced activity to specific volumes
+
+UR 5.3:
+Allows increased functionality in terms of choice of weighting for the decay
+and other non-analogue MC techiniques.
+
+
+Analysis:
+
+UR 6.1:
+Output the deposited energy, scintillation time, photon hits in the PMT and
+type of particle causing first and then subsequent energy depositions.
+
+UR 6.2:
+Record of particle type history important for identifying and differentiating
+between elastic and inelastic neutron interactions.
+
+
+
+Visualisation:
+
+UR 7.1:
+Visualise the experimental set-up
+
+UR 7.2:
+Visualise tracks in the experimental set-up
+
+UR 7.3:
+Allow the choice between scintillation, PMT surface hits, and full tracking to
+be displayed
+
+UR 7.4:
+Allow the user to choose specific track colours for gammas, neutrons,
+charged-plus and charged-minus tracks
+
+UR 7.5:
+Allow output to stored interactive files using the HEPREP interface which can
+then be read into Wired and other XML packages
+
+
+User Interface:
+
+UR 8.1:
+
+Allow control of the particle source via the /dmx/gun control:
+
+Command directory path : /dmx/gun/
+Guidance :
+Particle Source control commands.
+
+ Sub-directories : 
+ Commands : 
+ 1) List * List available particles.
+ 2) particle * Set particle to be generated.
+ 3) direction * Set momentum direction.
+ 4) energy * Set kinetic energy.
+ 5) position * Set starting position of the particle.
+ 6) ion * Set properties of ion to be generated.
+ 7) type * Sets source distribution type.
+ 8) shape * Sets source shape type.
+ 9) centre * Set centre coordinates of source.
+ 10) halfz * Set z half length of source.
+ 11) radius * Set radius of source.
+ 12) confine * Confine source to volume (NULL to unset).
+ 13) angtype * Sets angular source distribution type
+ 14) energytype * Sets energy distribution type
+ 15) verbose * Set Verbose level for gun
+
+
+UR 8.2:
+Control verbosities via:
+The user should have the ability to change several features including
+    a) verbosities can be controlled for
+    /control/verbose
+    /run/verbose 
+    /tracking/verbose
+    /hits/verbose
+    /grdm/verbose
+    /dmx/gun/verbose
+    
+
+UR 8.3:
+Control the output to the screen into Modulo N events:
+using printModulo control
+
+Command /dmx/printModulo
+Guidance :
+Print events modulo n
+ Range of parameters : EventNb>0
+
+Parameter : EventNb
+ Parameter type  : i
+ Omittable       : False
+
+
+UR 8.4:
+Draw commands controlled via /dmx/draw/:
+
+DM Example draw commands.
+
+ Sub-directories : 
+ Commands : 
+ 1) drawColours * Tracks drawn by Event (standard colours) or by Step (custom colours)
+ 2) drawTracks * Draw the tracks in the event
+ 3) drawHits * Set flag to draw hits in PMT.
+ 4) neutronColour * Colour of neutron in the event
+ 5) gammaColour * Colour of gamma in the event
+ 6) opticalColour * Colour of gamma in the event
+ 7) chargedplusColour * colour of chargedplus in the event
+ 8) chargedminusColour * colour of chargedminus in the event
+
+
+
+UR 8.5:
+Control the files to be saved - either PMT hits or event summary in terms of
+energy deposit and number of photon hits observed
+
+Command /dmx/savePmt
+Guidance :
+Set flag to save (x,y,z) of hits in PMT
+into file 'pmt.out'
+Default = false
+
+Parameter : savePmtFlag
+ Parameter type  : b
+ Omittable       : False
+
+
+Command /dmx/saveHits
+Guidance :
+Set flag to save hits in each run
+into file 'hits.out'
+Default = true
+
+Parameter : saveHitsFlag
+ Parameter type  : b
+ Omittable       : False
+
+
+
+UR 8.6:
+Allow the suppression of physics processes within specific volumes in order to
+optimise running of the neutron transport code.
+
+Gammas are killed in the concrete wall in order to reduce processing time significantly.
+
+Command /dmx/KillGammasInConcrete
+Guidance :
+Kills gammas produced by neutrons in the concrete wall
+Default = false
+
+Parameter : KillGammasFlag
+ Parameter type  : b
+ Omittable       : False
+ Default value   : 0
+
+
+
+CUTS:
+
+UR 9.1:
+User can apply special cuts to time and step length to tracks.  If the global
+time is exceeded then the track is killed
+
+UR 9.2:
+Allow gammas to be killed in the concrete wall in order to optimise processing
+time for neutron transport
+
+------------------------------------------------------------------------------
+
+
+
+Background Information/Links
+ 
+Information on the experimental side of this project can be obtained from the
+following:
+ 
+Who we are:
+ Imperial College High Energy Physics Group -> http://www.hep.ph.ic.ac.uk/
+
+ Imperial College Astrophysics -> http://astro.ic.ac.uk/
+ 
+Dark Matter collaboration and existing experimental programme:
+ Boulby Collaboration Home Page -> http://hepwww.rl.ac.uk/ukdmc/ 
+ 
+ 
+Full Users Requirement Document
+ 
+A draft of the full users requirement document for the advanced example can be
+downloaded/viewed at the following:
+ 
+	Word Document -> 
+	     http://icva.hep.ph.ic.ac.uk/~howard/g4_project/urd_draft1.doc
+ 
+	Web Page ->
+	     http://icva.hep.ph.ic.ac.uk/~howard/g4_project/urd_draft1.htm
+	     
+ 
+
+
+
