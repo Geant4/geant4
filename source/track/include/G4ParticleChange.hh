@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.hh,v 1.8 2001-10-20 08:07:49 kurasige Exp $
+// $Id: G4ParticleChange.hh,v 1.9 2001-11-21 14:05:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -239,7 +239,8 @@ class G4ParticleChange: public G4VParticleChange
     G4double theChargeChange;
     //  The Changed (final) charge of a given track
   
-
+    const G4Track* theCurrentTrack;
+    
   public:
   // these methods is used for switch on/off EB in all ParticleChange objects
   // static void SwOnAllEB();
