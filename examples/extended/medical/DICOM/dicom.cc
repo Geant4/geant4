@@ -43,7 +43,11 @@
 #include "Randomize.hh"
 
 #include "DicomPhysicsList.hh"
+
+#ifdef G4VIS_USE
 #include "DicomVisManager.hh"
+#endif
+
 #include "DicomGeometry.hh"
 #include "DicomPrimaryGeneratorAction.hh"
 #include "DicomEventAction.hh"
@@ -66,9 +70,11 @@ int main(int argc,char** argv)
 
   runManager->Initialize();
 
+#ifdef G4VIS_USE
   // visualisation manager
   G4VisManager* visManager = new DicomVisManager;
   visManager->Initialize();
+#endif
 
   HepRandom::setTheEngine(new RanecuEngine);
 
@@ -89,7 +95,11 @@ int main(int argc,char** argv)
     }
 
   delete runManager;
+
+#ifdef G4VIS_USE
   delete visManager;
+#endif
+
   delete dcmHandler;
 
   return 0;

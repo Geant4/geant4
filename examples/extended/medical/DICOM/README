@@ -49,7 +49,8 @@ visualisation package: OpenGL
 ---> 3) Run the example:
 
 - batch mode:
-dicom run.mac
+  -dicom vis.mac :the geometry is visualised with OPENGL
+  -dicom run.mac :no geometry visualisation
 
 - interactive mode:
 dicom
