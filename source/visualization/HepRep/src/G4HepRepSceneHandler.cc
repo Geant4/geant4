@@ -273,7 +273,7 @@ void G4HepRepSceneHandler::close() {
 
 void G4HepRepSceneHandler::openFile(G4String name) {
     out = new ofstream(name.c_str(), std::ios::out | std::ios::binary );
-    writer = factory->createHepRepWriter(out, extension == ".heprep.zip", (extension == ".heprep.zip") || (extension == "heprep.gz"));
+    writer = factory->createHepRepWriter(out, extension == ".heprep.zip", (extension == ".heprep.zip") || (extension == ".heprep.gz"));
 }
 
 void G4HepRepSceneHandler::closeFile() {

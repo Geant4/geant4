@@ -18,6 +18,7 @@ XMLHepRepWriter::XMLHepRepWriter(ostream* out, bool randomAccess, bool compress)
         zip = new ZipOutputStream(*out);
         zip->setLevel(compress ? 6 : 0);
         out = zip;
+        gz = NULL;
     } else {
         zip = NULL;
         if (compress) {
