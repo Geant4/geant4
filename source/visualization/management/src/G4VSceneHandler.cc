@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.cc,v 1.13 2001-05-03 11:14:32 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.14 2001-05-21 14:04:07 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -184,7 +184,7 @@ void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   case G4Polymarker::line:
     {
       G4Polyline polyline (polymarker);
-      for (int iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+      for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
 	polyline.push_back (polymarker[iPoint]);
       }
       AddPrimitive (polyline);
@@ -192,7 +192,7 @@ void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
     break;
   case G4Polymarker::dots:
     {
-      for (int iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+      for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
 	G4Circle dot (polymarker);
         dot.SetPosition (polymarker[iPoint]);
 	dot.SetWorldSize  (0.);
@@ -203,7 +203,7 @@ void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
     break;
   case G4Polymarker::circles:
     {
-      for (int iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+      for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
 	G4Circle circle (polymarker);
 	circle.SetPosition (polymarker[iPoint]);
 	AddPrimitive (circle);
@@ -212,7 +212,7 @@ void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
     break;
   case G4Polymarker::squares:
     {
-      for (int iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+      for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
 	G4Square Square (polymarker);
 	Square.SetPosition (polymarker[iPoint]);
 	AddPrimitive (Square);
@@ -298,7 +298,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer& view) {
   if (runDurationModelList.size ()) {
     G4cout << "Traversing scene data..." << G4endl;
     G4ModelingParameters* pMP = CreateModelingParameters ();
-    for (int i = 0; i < runDurationModelList.size (); i++) {
+    for (size_t i = 0; i < runDurationModelList.size (); i++) {
       G4VModel* pModel = runDurationModelList[i];
       const G4ModelingParameters* tempMP =
 	pModel -> GetModelingParameters ();
@@ -455,15 +455,15 @@ G4double G4VSceneHandler::GetMarkerSize (const G4VMarker& marker,
   G4bool userSpecified = marker.GetWorldSize() || marker.GetScreenSize();
   const G4VMarker& defaultMarker =
     fpViewer -> GetViewParameters().GetDefaultMarker();
-  G4double size;
-  if (size = // Assignment intentional.
-      userSpecified ? marker.GetWorldSize() : defaultMarker.GetWorldSize()) {
+  G4double size = userSpecified ?
+    marker.GetWorldSize() : defaultMarker.GetWorldSize();
+  if (size) {
     // Draw in world coordinates.
     markerSizeType = world;
   }
   else {
-    size = // Assignment intentional.
-      userSpecified ? marker.GetScreenSize() : defaultMarker.GetScreenSize();
+    size = userSpecified ?
+      marker.GetScreenSize() : defaultMarker.GetScreenSize();
     // Draw in screen coordinates.
     markerSizeType = screen;
   }
@@ -476,7 +476,7 @@ G4std::ostream& operator << (G4std::ostream& os, const G4VSceneHandler& s) {
 
   os << "Scene " << s.fName << " has "
      << s.fViewerList.size () << " viewers:";
-  for (int i = 0; i < s.fViewerList.size (); i++) {
+  for (size_t i = 0; i < s.fViewerList.size (); i++) {
     os << "\n  " << *(s.fViewerList [i]);
   }
 
