@@ -3,7 +3,7 @@
 #                                 Intel icc 7.1
 ifeq ($(G4SYSTEM),Linux-icc)
   CXX       := icc
-  CXXFLAGS  := -ansi
+  CXXFLAGS  := -ansi -Xa -w1
   ifdef G4OPTIMISE
     CXXFLAGS  += -O
     FCFLAGS   := -O
@@ -16,8 +16,8 @@ ifeq ($(G4SYSTEM),Linux-icc)
     endif
   endif
   ifdef G4PROFILE
-    CXXFLAGS  += -pg
-    FCFLAGS   += -pg
+    CXXFLAGS  += -qp
+    FCFLAGS   += -qp
     CCFLAGS   += -pg
   endif
   ifdef G4LIB_BUILD_SHARED
@@ -25,11 +25,12 @@ ifeq ($(G4SYSTEM),Linux-icc)
     FCFLAGS   += -fPIC
     CCFLAGS   += -fPIC
   endif
-  G4RUNPATHOPTION := -Wl,-rpath 
+  G4RUNPATHOPTION := -Xlinker
   CC := gcc
-  FC := g77
-  FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
-  FCLIBS := -lg2c -lnsl
+  FC := ifc
+  #FCFLAGS +=
+  FCLIBS := 
+  AR := xiar r
   ECHO    := /bin/echo -e
   SHEXT   := so
   X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
