@@ -38,24 +38,20 @@
 
 // Class Description: 
 //
-// Abstract class provided the interface to energy spectrum of secondary
-// particles for electromagnetic processes. 
+// Abstract interface for the energy spectrum of secondary particles in
+// electromagnetic processes. 
 //
 // Class Description: End 
 
 // -------------------------------------------------------------------
 //
 
-#ifndef G4VEnergySpectrum_h
-#define G4VEnergySpectrum_h 1
+#ifndef G4VENERGYSPECTRUM_HH
+#define G4VENERGYSPECTRUM_HH 1
 
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 class G4ParticleDefinition;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4VEnergySpectrum 
 {
@@ -71,26 +67,25 @@ public:
 			       G4double maxKineticEnergy,
                                G4double kineticEnergy,
                                G4int shell = 0,
-                         const G4ParticleDefinition* pd = 0) const = 0;
+			       const G4ParticleDefinition* pd = 0) const = 0;
 
   virtual G4double AverageEnergy(G4int Z,
-			       G4double minKineticEnergy,
-			       G4double maxKineticEnergy,
-                               G4double kineticEnergy,
-                               G4int shell = 0,
-                         const G4ParticleDefinition* pd = 0) const = 0;
+				 G4double minKineticEnergy,
+				 G4double maxKineticEnergy,
+				 G4double kineticEnergy,
+				 G4int shell = 0,
+				 const G4ParticleDefinition* pd = 0) const = 0;
 
   virtual G4double SampleEnergy(G4int Z,
-			       G4double minKineticEnergy,
-			       G4double maxKineticEnergy,
-                               G4double kineticEnergy,
-                               G4int shell = 0,
-                         const G4ParticleDefinition* pd = 0) const = 0;
+				G4double minKineticEnergy,
+				G4double maxKineticEnergy,
+				G4double kineticEnergy,
+				G4int shell = 0,
+				const G4ParticleDefinition* pd = 0) const = 0;
 
-  virtual G4double MaxEnergyOfSecondaries(
-                               G4double kineticEnergy,
-                               G4int Z = 0,
-                         const G4ParticleDefinition* pd = 0) const = 0;
+  virtual G4double MaxEnergyOfSecondaries(G4double kineticEnergy,
+					  G4int Z = 0,
+					  const G4ParticleDefinition* pd = 0) const = 0;
 
   virtual void PrintData() const = 0;
 
@@ -98,13 +93,11 @@ protected:
 
 private:
 
-  // hide assignment operator 
+  // Hide copy constructor and assignment operator 
   G4VEnergySpectrum(const  G4VEnergySpectrum&);
   G4VEnergySpectrum & operator=(const  G4VEnergySpectrum &right);
 
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
 
