@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.18 2001-09-10 10:56:00 johna Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.19 2001-11-06 13:04:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -73,6 +73,7 @@ void G4VisCommandDrawTree::SetNewValue
   UImanager->SetVerboseLevel(newVerbose);
   UImanager->ApplyCommand("/vis/open " + system);
   UImanager->ApplyCommand("/vis/drawVolume " + pvname);
+  UImanager->ApplyCommand("/vis/viewer/flush");
   UImanager->SetVerboseLevel(keepVerbose);
 }
 
@@ -190,17 +191,23 @@ G4VisCommandDrawVolume::~G4VisCommandDrawVolume() {
 
 void G4VisCommandDrawVolume::SetNewValue
 (G4UIcommand* command, G4String newValue) {
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
   G4int newVerbose(0);
-  if (keepVerbose >= 2 ||
-      fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
+  if (keepVerbose >= 2 || verbosity >= G4VisManager::confirmations)
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
   UImanager->ApplyCommand("/vis/scene/create");
   UImanager->ApplyCommand("/vis/scene/add/volume " + newValue);
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
   UImanager->SetVerboseLevel(keepVerbose);
+  if (verbosity >= G4VisManager::warnings) {
+    G4cout <<
+      "WARNING: For systems which are not \"auto-refresh\" you will need to"
+      "\n  issue \"/vis/viewer/refresh\" or \"/vis/viewer/flush\"."
+	   << G4endl;
+  }
 }
 
 ////////////// /vis/open ///////////////////////////////////////
@@ -291,4 +298,10 @@ void G4VisCommandSpecify::SetNewValue
   UImanager->ApplyCommand("/vis/scene/add/logicalVolume " + newValue);
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
   UImanager->SetVerboseLevel(keepVerbose);
+  if (verbosity >= G4VisManager::warnings) {
+    G4cout <<
+      "WARNING: For systems which are not \"auto-refresh\" you will need to"
+      "\n  issue \"/vis/viewer/refresh\" or \"/vis/viewer/flush\"."
+	   << G4endl;
+  }
 }
