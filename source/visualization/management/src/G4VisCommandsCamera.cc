@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCamera.cc,v 1.5 2000-01-11 17:23:25 johna Exp $
+// $Id: G4VisCommandsCamera.cc,v 1.6 2000-05-04 19:15:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,11 +25,7 @@ void G4VisCommandCameraReset::SetValue () {
     vp.SetViewpointDirection (G4Vector3D (0., 0., 1.));
     vp.SetUpVector (G4Vector3D (0., 1., 0.));
     G4cout << "Target point reset to centre of scene, ("
-	   << G4BestUnit (pScene -> GetStandardTargetPoint ().x(), "Length")
-	   << ", "
-	   << G4BestUnit (pScene -> GetStandardTargetPoint ().y(), "Length")
-	   << ", "
-	   << G4BestUnit (pScene -> GetStandardTargetPoint ().z(), "Length")
+	   << G4BestUnit (pScene -> GetStandardTargetPoint (), "Length")
 	   << ")";
     G4cout << "\nZoom factor reset to 1.";
     G4cout << "\nDolly distance reset to 0.";
