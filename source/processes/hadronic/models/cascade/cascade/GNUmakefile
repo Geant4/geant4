@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.2 1999-11-08 16:27:41 miheikki Exp $
+# $Id: GNUmakefile,v 1.3 1999-11-11 15:56:26 miheikki Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
 
-name := G4hadronic_cascade_ber
+name := G4hadronic_cascade_bertini
 
 ifndef G4INSTALL
   G4INSTALL = ../../../../../..
