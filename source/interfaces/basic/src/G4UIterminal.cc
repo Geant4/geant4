@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIterminal.cc,v 1.12 2000-06-15 07:54:46 johna Exp $
+// $Id: G4UIterminal.cc,v 1.13 2000-06-23 08:46:50 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -141,7 +141,10 @@ G4String G4UIterminal::GetCommand()
   newCommand= shell-> GetCommandLine();
 
   G4String nC= newCommand.strip(G4String::leading);
-  if( nC(0) == '#' ) {  
+  if( nC.length() == 0 ) {
+    newCommand= nullString;
+
+  } else if( nC(0) == '#' ) {  
     G4cout << nC << G4endl;
     newCommand= nullString;
 

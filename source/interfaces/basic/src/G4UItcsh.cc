@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UItcsh.cc,v 1.2 2000-06-14 03:19:00 asaim Exp $
+// $Id: G4UItcsh.cc,v 1.3 2000-06-23 08:46:49 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -579,7 +579,8 @@ G4String G4UItcsh::GetCommandLine()
 
   G4String newCommand= ReadLine();  // read line...
   // multi-line
-  while( newCommand[newCommand.length()-1] == '_' ) {
+  while( (newCommand.length() > 0) &&
+	 ( newCommand[newCommand.length()-1] == '_') ) {
     newCommand.remove(newCommand.length()-1);
     G4cout << G4endl;
     promptString= "? ";
