@@ -6,13 +6,13 @@
 // first prototype
 
 G4CollisionInitialState * G4MesonAbsorption::
-GetCollision(G4KineticTrack * projectile, vector<G4KineticTrack *> targets)
+GetCollision(G4KineticTrack * projectile, std::vector<G4KineticTrack *> targets)
 {
 }
 
 
-vector<G4KineticTrack *> * G4MesonAbsorption::
-Scatter(G4KineticTrack * projectile, vector<G4KineticTrack *> & targets)
+std::vector<G4KineticTrack *> * G4MesonAbsorption::
+Scatter(G4KineticTrack * projectile, std::vector<G4KineticTrack *> & targets)
 {
   // Only 2-body absorption for the time being.
   // If insufficient, use 2-body absorption and clusterization to emulate 3-,4-,etc body absorption.
@@ -70,7 +70,7 @@ Scatter(G4KineticTrack * projectile, vector<G4KineticTrack *> & targets)
   G4KineticTrack * f2 = 
       new G4KineticTrack(targets[1]->GetDefinition(), 0., 
                         targets[1]->GetPosition(), final2);
-  vector<G4KineticTrack *> * result = new vector<G4KineticTrack *>;
+  std::vector<G4KineticTrack *> * result = new std::vector<G4KineticTrack *>;
   result->push_back(f1);
   result->push_back(f2);
 

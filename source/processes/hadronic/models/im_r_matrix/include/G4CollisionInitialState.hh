@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionInitialState.hh,v 1.1 2003-10-07 12:37:26 hpw Exp $
+// $Id: G4CollisionInitialState.hh,v 1.2 2003-10-10 14:08:22 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: G4CollisionInitialState.hh,v 1.0 1998/06/30
@@ -36,6 +36,8 @@
 #define G4CollisionInitialState_hh
 
 #include "G4KineticTrack.hh"
+#include "G4KineticTrackVector.hh"
+class G4BCAction;
 
 class G4CollisionInitialState 
 {
@@ -44,6 +46,11 @@ public:
   G4CollisionInitialState();
   G4CollisionInitialState(G4double time, G4KineticTrack * aPrimary,
 			  G4KineticTrack * aTarget);
+// +new interface post pion:
+  G4CollisionInitialState(G4double time, G4KineticTrack * aPrimary,
+			  const G4KineticTrackVector & aTarget,
+			  G4BCAction * aFSGenerator);
+// -new interface post pion:
 
   G4CollisionInitialState(G4CollisionInitialState & right);
 
@@ -57,20 +64,55 @@ public:
   int operator==(const G4CollisionInitialState& right) const
     {return (theCollisionTime == right.theCollisionTime);}
 
-  G4KineticTrack * GetPrimary(void)            {return thePrimary;}
-  void SetPrimary(G4KineticTrack * aPrimary)   {thePrimary = aPrimary;}
+  G4KineticTrack * GetPrimary(void)            
+    {return thePrimary;}
+  void SetPrimary(G4KineticTrack * aPrimary)   
+    {thePrimary = aPrimary;}
  
-  G4KineticTrack * GetTarget(void)             {return theTarget;}
-  void SetTarget(G4KineticTrack * aTarget)     {theTarget = aTarget;}
+  G4KineticTrack * GetTarget(void)             
+    {return theTarget;}
+  void SetTarget(G4KineticTrack * aTarget)     
+    {theTarget = aTarget;}
 
-  G4double GetCollisionTime(void)             {return theCollisionTime;}
-  void SetCollisionTime(G4double value)       {theCollisionTime = value;}
+// +new interface post pion:
+  void AddTarget(G4KineticTrack * aTarget)     
+    {theTs.push_back(aTarget);}
+  G4KineticTrackVector  & GetTargetCollection(void)
+    {return theTs;}
+  G4KineticTrackVector * GetFinalState();
+  G4int GetTargetBaryonNumber()
+  {
+    G4double result=0;
+    for(size_t i=0; i<theTs.size(); i++)
+    {
+      result += theTs[i]->GetDefinition()->GetBaryonNumber();
+    }
+    return static_cast<G4int>(result+.1);
+  }
+  G4int GetTargetCharge()
+  {
+    G4double result=0;
+    for(size_t i=0; i<theTs.size(); i++)
+    {
+      result += theTs[i]->GetDefinition()->GetPDGCharge();
+    }
+    return static_cast<G4int>(result+.1);
+  }
+    
+// -new interface post pion:
+
+  G4double GetCollisionTime(void)             
+    {return theCollisionTime;}
+  void SetCollisionTime(G4double value)       
+    {theCollisionTime = value;}
 
 private:
 
   G4double theCollisionTime;
   G4KineticTrack * thePrimary;
   G4KineticTrack * theTarget;
+  G4KineticTrackVector theTs;
+  G4BCAction * theFSGenerator;
 };
 
 #endif

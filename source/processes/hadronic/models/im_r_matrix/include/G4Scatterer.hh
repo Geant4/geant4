@@ -20,24 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Scatterer.hh,v 1.1 2003-10-07 12:37:31 hpw Exp $ //
+// $Id: G4Scatterer.hh,v 1.2 2003-10-10 14:08:22 hpw Exp $ //
 //
 //
-// -------------------------------------------------------------------
-//      GEANT4 Class file
-//
-//
-//      File name:    G4Scatterer.hh
-//
-//      Author:       Maria Grazia Pia
-// 
-//      Creation date: 1 January 2000
-//
-//      Modifications: 
-//      
-//      
-// ----------------------------------------------------------------------
-
+// removing a auther spec that was part of a template.
 
 #ifndef G4SCATTERER_HH
 #define G4SCATTERER_HH
@@ -48,10 +34,11 @@
 #include "G4VCollision.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4CollisionVector.hh"
+#include "G4BCAction.hh"
 
 class G4KineticTrack;
 
-class G4Scatterer : public G4VScatterer
+class G4Scatterer : public G4VScatterer, public G4BCAction
 {
 public:
 
@@ -68,6 +55,14 @@ public:
   virtual G4KineticTrackVector* Scatter(const G4KineticTrack& trk1, 	
 					   const G4KineticTrack& trk2);
 
+  virtual const std::vector<G4CollisionInitialState *> &
+         GetCollisions(G4KineticTrack * aProjectile, 
+	               std::vector<G4KineticTrack *> & someCandidates,
+		       G4double aCurrentTime);
+
+  virtual G4KineticTrackVector * 
+         GetFinalState(G4KineticTrack * aProjectile, 
+	               std::vector<G4KineticTrack *> & theTargets);
 
 private:
 
@@ -75,6 +70,7 @@ private:
 			      const G4KineticTrack& trk2);
   
   G4CollisionVector collisions;
+  std::vector<G4CollisionInitialState *> theCollisions;
 
 }; 
 #endif 

@@ -9,9 +9,9 @@ class G4MesonAbsorption
 {
   public:
   G4CollisionInitialState * GetCollision(G4KineticTrack * projectile, 
-                                         vector<G4KineticTrack *> targets);
-  vector<G4KineticTrack *> * Scatter(G4KineticTrack * projectile,  
-                                     vector<G4KineticTrack *> & targets);
+                                         std::vector<G4KineticTrack *> targets);
+  std::vector<G4KineticTrack *> * Scatter(G4KineticTrack * projectile,  
+                                     std::vector<G4KineticTrack *> & targets);
   private:
   
 };

@@ -39,6 +39,10 @@ public:
   G4int Entries();
   void AddCollision(G4double time, G4KineticTrack * proj,
 		    G4KineticTrack * target = NULL);
+  void AddCollision(G4CollisionInitialState * collision)
+  {
+    theCollisionList->push_back(collision);
+  }
   void RemoveCollision(G4CollisionInitialState * collision);
   void RemoveTracksCollisions(G4KineticTrackVector * ktv);
   void ClearAndDestroy();

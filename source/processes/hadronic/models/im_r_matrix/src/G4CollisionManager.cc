@@ -68,11 +68,11 @@ void G4CollisionManager::RemoveCollision(G4CollisionInitialState * collision)
 }
 
 
-void G4CollisionManager::RemoveTracksCollisions(G4KineticTrackVector * ktv)
+void G4CollisionManager::RemoveTracksCollisions(G4KineticTrackVector * toBeCaned)
 {
-  if(ktv == NULL)
+  if(toBeCaned == NULL)
     return;
-  if(ktv->empty())
+  if(toBeCaned->empty())
     return;
 
   G4CollisionInitialState * collision;
@@ -81,10 +81,12 @@ void G4CollisionManager::RemoveTracksCollisions(G4KineticTrackVector * ktv)
   G4ListOfCollisions toRemove;
 
   for(collIter = theCollisionList->begin();
-      collIter != theCollisionList->end(); ++collIter)
+      collIter != theCollisionList->end(); collIter++)
   {
     collision = *collIter;
-    for(trackIter = ktv->begin(); trackIter != ktv->end(); ++trackIter)
+    G4KineticTrackVector & targets = collision->GetTargetCollection();
+    G4bool getNextCollision = false;
+    for(trackIter = toBeCaned->begin(); trackIter != toBeCaned->end(); ++trackIter)
     {
       if((collision->GetTarget() == *trackIter) ||
 	 (collision->GetPrimary() == *trackIter))
@@ -92,6 +94,16 @@ void G4CollisionManager::RemoveTracksCollisions(G4KineticTrackVector * ktv)
 	toRemove.push_back(collision);
 	break;  // exit from the "trackIter" loop
       }
+      for(size_t tcount=0; tcount<targets.size(); tcount++)
+      {
+        if(targets[tcount] == *trackIter)
+        {
+	  toRemove.push_back(collision);
+	  getNextCollision = true;
+	  break;
+	}
+      }
+      if(getNextCollision) break;
     }
   }
 

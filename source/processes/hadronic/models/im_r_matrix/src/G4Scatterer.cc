@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.1 2003-10-07 12:37:40 hpw Exp $ //
+// $Id: G4Scatterer.cc,v 1.2 2003-10-10 14:08:22 hpw Exp $ //
 //
 
 #include "globals.hh"
@@ -35,6 +35,8 @@
 #include "G4CollisionNN.hh"
 #include "G4CollisionPN.hh"
 #include "G4CollisionMesonBaryon.hh"
+
+#include "G4CollisionInitialState.hh"
 
 G4Scatterer::G4Scatterer()
 {
@@ -370,3 +372,35 @@ G4double G4Scatterer::GetCrossSection(const G4KineticTrack& trk1,
    return aCrossSection;
 }
 
+
+const std::vector<G4CollisionInitialState *> & G4Scatterer::
+GetCollisions(G4KineticTrack * aProjectile, 
+              std::vector<G4KineticTrack *> & someCandidates,
+	      G4double aCurrentTime)
+{
+  theCollisions.clear();
+  std::vector<G4KineticTrack *>::iterator j=someCandidates.begin();
+  for(; j != someCandidates.end(); ++j)
+  {
+    G4double collisionTime = GetTimeToInteraction(*aProjectile, **j);
+    if(collisionTime == DBL_MAX)  // no collision
+    {
+      continue;
+    }
+    G4KineticTrackVector aTarget;
+    aTarget.push_back(*j);
+    theCollisions.push_back(
+      new G4CollisionInitialState(collisionTime+aCurrentTime, aProjectile, aTarget, this) );
+//      G4cerr <<" !!!!!! debug collisions "<<collisionTime<<" "<<pkt->GetDefinition()->GetParticleName()<<G4endl;      
+   }
+   return theCollisions;
+}
+
+
+G4KineticTrackVector * G4Scatterer::
+GetFinalState(G4KineticTrack * aProjectile, 
+	      std::vector<G4KineticTrack *> & theTargets)
+{
+    G4KineticTrack target_reloc(*(theTargets[0]));
+    return Scatter(*aProjectile, target_reloc);
+}
