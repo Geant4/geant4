@@ -48,5 +48,3 @@ void Tst14TrackingAction::PreUserTrackingAction(const G4Track* aTrack )
     ((G4Track*)aTrack)->SetPolarization(newPol);
   }
 }
-
-

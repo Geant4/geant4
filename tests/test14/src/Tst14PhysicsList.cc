@@ -21,13 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PhysicsList.cc,v 1.11 2001-07-11 10:09:58 gunter Exp $
+// $Id: Tst14PhysicsList.cc,v 1.12 2001-09-23 22:59:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "Tst14PhysicsList.hh"
 #include "Tst14PhysicsListMessenger.hh"
@@ -36,9 +32,12 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
+//#include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 //#include "G4EnergyLossTables.hh"
 //#include "G4Material.hh"
@@ -46,7 +45,6 @@
 
 //#include "G4UImanager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst14PhysicsList::Tst14PhysicsList()
 : G4VUserPhysicsList()
@@ -58,14 +56,12 @@ Tst14PhysicsList::Tst14PhysicsList()
   physicsListMessenger = new Tst14PhysicsListMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst14PhysicsList::~Tst14PhysicsList()
 {
   delete physicsListMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Tst14PhysicsList::ConstructParticle()
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14DetectorConstruction.cc,v 1.8 2001-07-11 10:09:58 gunter Exp $
+// $Id: Tst14DetectorConstruction.cc,v 1.9 2001-09-23 22:59:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -265,13 +265,13 @@ void Tst14DetectorConstruction::PrintCalorParameters()
 
 void Tst14DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 {
-  // get the pointer to the material table
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   // search the material by its name   
   G4Material* pttoMaterial;
-  for (size_t J=0 ; J<theMaterialTable->length() ; J++)
-    { pttoMaterial = (*theMaterialTable)(J);     
+  for (size_t J=0 ; numOfMaterials ; J++)
+    { pttoMaterial = (*theMaterialTable)[J];     
     if (pttoMaterial->GetName() == materialChoice)
       {AbsorberMaterial = pttoMaterial;
       logicAbsorber->SetMaterial(pttoMaterial); 
@@ -288,11 +288,12 @@ void Tst14DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 {
   // get the pointer to the material table
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   // search the material by its name   
   G4Material* pttoMaterial;
-  for (size_t J=0 ; J<theMaterialTable->length() ; J++)
-    { pttoMaterial = (*theMaterialTable)(J);     
+  for (size_t J=0 ; numOfMaterials ; J++)
+    { pttoMaterial = (*theMaterialTable)[J];     
     if (pttoMaterial->GetName() == materialChoice)
       {WorldMaterial = pttoMaterial;
       logicWorld->SetMaterial(pttoMaterial); 
