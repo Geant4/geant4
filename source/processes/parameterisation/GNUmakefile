@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2000-07-13 14:22:34 grichine Exp $
+# $Id: GNUmakefile,v 1.4 2000-07-14 08:18:04 grichine Exp $
 # ------------------------------------------------------------
 # GNUmakefile for transportation library.  G.Folger 10-Dec-97.
 # ------------------------------------------------------------
@@ -21,6 +21,11 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
 	    -I$(G4BASE)/geometry/solids/CSG/include \
 	    -I$(G4BASE)/intercoms/include   \
 	    -I$(G4BASE)/track/include \
+	    -I$(G4BASE)/tracking/include \
+	    -I$(G4BASE)/step/include \
+	    -I$(G4BASE)/digits+hits/detector/include \
+	    -I$(G4BASE)/digits+hits/digits/include \
+	    -I$(G4BASE)/digits+hits/hits/include \
 	    -I$(G4BASE)/processes/management/include \
 	    -I$(G4BASE)/processes/electromagnetic/standard/include \
 	    -I$(G4BASE)/processes/electromagnetic/utils/include \
