@@ -1,5 +1,5 @@
 
-$Id: History,v 1.10 2000-06-06 11:00:54 johna Exp $
+$Id: History,v 1.11 2000-06-24 14:29:22 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ June 6   2000  John Apostolakis     geom-solid-bool-V01-01-02
+
+  - Protecting the use of pointers validNorm and n, if calcNorm is false
 
  June 6   2000  John Allison         geom-solid-bool-V01-01-01
 
