@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.4 1999-07-23 11:52:29 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.5 1999-07-23 11:53:29 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -513,7 +513,7 @@ void G4PropagatorInField::printStatus(
 		  const G4FieldTrack&  CurrentFT, 
                   G4double             requestStep, 
                   G4double             safety,
-                  G4int                Step, 
+                  G4int                stepNo, 
                   G4VPhysicalVolume*   startVolume)
 		  //   G4VPhysicalVolume* endVolume)
 {
@@ -526,7 +526,7 @@ void G4PropagatorInField::printStatus(
     G4double step_len= CurrentFT.GetCurveLength() 
                          - StartFT.GetCurveLength();
       
-    if( (Step == 0) && (verboseLevel <= 3) )
+    if( (stepNo == 0) && (verboseLevel <= 3) )
     {
        G4cout.precision(3);
        // G4cout.setf(ios_base::fixed,ios_base::floatfield);
@@ -540,18 +540,52 @@ void G4PropagatorInField::printStatus(
             << setw( 7) << " N_x " << " "
             << setw( 7) << " N_y " << " "
             << setw( 7) << " N_z " << " "
-	   // << setw( 9) << "KinE(MeV)" << " "
-	   // << setw( 9) << "dE(MeV)" << " "  
             << setw( 9) << "StepLen" << " "  
             << setw( 9) << "PhsStep" << " "  
             << setw(12) << "StartSafety" << " "  
             << setw(18) << "NextVolume" << " "
             << endl;
+        // Recurse to print the start values 
+        printStatus( CurrentFT,   CurrentFT,   // 
+                 -1.0, safety,  -1, 0);     //  startVolume);
     }
- 
-    //
-    if( verboseLevel > 3 )
+
+    if( verboseLevel <= 3 )
     {
+       G4cout.precision(3);
+       if( stepNo < 0)
+ 	  G4cout << setw( 5) << stepNo << " ";
+       else
+	  G4cout << setw( 5) << "Start" << " ";
+       G4cout << setw( 9) << CurrentPosition.x() << " "
+	      << setw( 9) << CurrentPosition.y() << " "
+	      << setw( 9) << CurrentPosition.z() << " "
+	      << setw( 7) << CurrentUnitVelocity.x() << " "
+	      << setw( 7) << CurrentUnitVelocity.y() << " "
+	      << setw( 7) << CurrentUnitVelocity.z() << " ";
+       G4cout << setw( 9) << step_len << " "; 
+       if( requestStep != -1.0 ) 
+	  G4cout << setw( 9) << requestStep << " ";
+       else
+  	  G4cout << setw( 9) << " InitialStep " << " "; 
+       G4cout << setw(12) << safety << " ";
+
+       if( startVolume != 0) {
+	  G4cout << setw(12) << startVolume->GetName() << " ";
+       } else {
+	  if( step_len != -1 )
+	     G4cout << setw(12) << "OutOfWorld" << " ";
+	  else
+	     G4cout << setw(12) << "NotGiven" << " ";
+       }
+
+       G4cout << endl;
+    }
+
+    else // if( verboseLevel > 3 )
+    {
+       //  Multi-line output
+       
       // G4cout << "Current  Position is " << CurrentPosition << endl 
       //    << " and UnitVelocity is " << CurrentUnitVelocity << endl;
        G4cout << "Step taken was " << step_len  
@@ -560,38 +594,5 @@ void G4PropagatorInField::printStatus(
 
        G4cout << "Chord length = " << (CurrentPosition-StartPosition).mag() << endl;
        G4cout << endl; 
-    }
-    else // if( verboseLevel > 0 )
-    {
-       G4cout.precision(3);
-       G4cout << setw( 5) << Step << " "
-	    << setw( 9) << CurrentPosition.x() << " "
-	    << setw( 9) << CurrentPosition.y() << " "
-	    << setw( 9) << CurrentPosition.z() << " "
-	    << setw( 7) << CurrentUnitVelocity.x() << " "
-	    << setw( 7) << CurrentUnitVelocity.y() << " "
-	    << setw( 7) << CurrentUnitVelocity.z() << " "
-	 //    << setw( 9) << KineticEnergy << " "
-	 //    << setw( 9) << EnergyDifference << " "
-	    << setw( 9) << step_len << " "
-	    << setw( 9) << requestStep << " "
-	    << setw(12) << safety << " ";
-       if( startVolume != 0) {
-	 G4cout << setw(12) << startVolume->GetName() << " ";
-       } else {
-	 G4cout << setw(12) << "OutOfWorld" << " ";
-       }
-
-#if 0
-       if( CurrentVolume != 0) 
-       {
-	 G4cout << setw(12) << CurrentVolume()->GetName() << " ";
-       } 
-       else 
-       {
-	 G4cout << setw(12) << "OutOfWorld or Unknown" << " ";
-       }
-#endif
-       G4cout << endl;
     }
 }
