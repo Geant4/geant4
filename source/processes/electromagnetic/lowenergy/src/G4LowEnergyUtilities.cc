@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyUtilities.cc,v 1.6 2000-11-16 14:30:13 pia Exp $
+// $Id: G4LowEnergyUtilities.cc,v 1.7 2000-12-14 09:43:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,6 @@
 #include "G4Element.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Material.hh"
-#include "CLHEP/String/Strings.h"
 #include "g4std/fstream"
 #include "g4std/fstream"
 #include "g4std/strstream"
