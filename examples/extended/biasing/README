@@ -54,7 +54,7 @@ This example shows how to  use scoring in the "tracking" geometry.
 It scores several values for neutrons for every physical volume
 in the tracking geometry. 
 All scored values are printed after the running. In addition a more
-exclusive output of selected values is printed. The way how the
+exclusive output of selected values is printed. The way the
 last output is produced shows how to extract certain values from all
 scored values.
 
@@ -74,12 +74,17 @@ II. Examples for biasing without scoring
 II. 1. Example B03
 ------------------
 This example shows how to use biasing in the "tracking" geometry. 
-It does not do scoring. 
+It does not do scoring. The importances are setup during the
+mass detector construction in the file:
+B03/src/B03DetectorConstruction.cc. 
+
 
 II. 2. Example B04
 ------------------
 This example shows how to use biasing according to a "parallel" 
-or "importance" geometry.
+or "importance" geometry. The importances are setup during the 
+construction of the parallel geometry in the file:
+B04/src/B04ImportanceDetectorConstruction.cc.
 
 
 
@@ -89,16 +94,28 @@ III. Examples for biasing and scoring
 III. 1. Example B05
 -------------------
 Biasing and Scoring in the "tracking" geometry.
+The importances are setup during the mass detector construction
+in the file: B05/src/B05DetectorConstruction.cc.
+Scoring is done with G4PIScorer from transportation. G4PIScorer
+scores several values for all the physical volumes of a geometry.
+It also checks that the importance value times track weight = 1, 
+which should hold in "simple" cases.
+
 
 III. 2. Example B06
 -------------------
 Biasing and scoring in a "parallel" geometry.
+The importances are setup during the construction of the parallel geometry
+in the file B06/src/B06ImportanceDetectorConstruction.cc.
+Customised scorer B06Scorer and printer B06ScorePrinter are  used.
+
+
 
 III. 3. Example B07
 -------------------
 Biasing neutrons and gammas in a "parallel" geometry.
 The physics list used in this example creates only processes for 
-gammas and neutrons. Other particles that my be produce
+gammas and neutrons. Other particles that my be produced
 will have no processes and can therefore not produce 
 any particles.
 The idea is to have the simulation performing somewhat like a 
