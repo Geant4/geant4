@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.4 2003-10-17 09:38:23 gcosmo Exp $
+// $Id: G4PVDivision.cc,v 1.5 2003-10-21 09:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PVDivision Implementation file
@@ -31,6 +31,7 @@
 
 #include "G4PVDivision.hh"
 #include "G4LogicalVolume.hh"
+#include "G4VSolid.hh"
 #include "G4ParameterisationBox.hh"
 #include "G4ParameterisationTubs.hh"
 #include "G4ParameterisationCons.hh"
@@ -38,7 +39,6 @@
 #include "G4ParameterisationPara.hh"
 #include "G4ParameterisationPolycone.hh"
 #include "G4ParameterisationPolyhedra.hh"
-#include "G4VSolid.hh"
 
 //--------------------------------------------------------------------------
 G4PVDivision::G4PVDivision(const G4String& pName,

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.cc,v 1.2 2003-10-16 10:42:43 arce Exp $
+// $Id: G4VDivisionParameterisation.cc,v 1.3 2003-10-21 09:04:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation Implementation file
@@ -113,6 +113,9 @@ G4double
 G4VDivisionParameterisation::
 CalculateWidth( G4double motherDim, G4int nDiv, G4double offset ) const
 { 
-  G4cout << " CalculateWidth " << ( motherDim - offset ) / nDiv << " " << motherDim << " " << offset << " " << nDiv << G4endl;
+  G4cout << " CalculateWidth: " << ( motherDim - offset ) / nDiv
+	 << ", Motherdim: " << motherDim << ", Offset: " << offset
+	 << ", Number of divisions: " << nDiv << G4endl;
   return ( motherDim - offset ) / nDiv;
 }
+

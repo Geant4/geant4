@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.hh,v 1.4 2003-10-17 09:38:23 gcosmo Exp $
+// $Id: G4PVDivision.hh,v 1.5 2003-10-21 09:04:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PVDivision
@@ -71,6 +71,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4VDivisionParameterisation.hh"
 
+class G4LogicalVolume;
 class G4VSolid;
 
 class G4PVDivision : public G4VPhysicalVolume
