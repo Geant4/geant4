@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyDetectorConstruction.cc,v 1.13 2000-07-03 10:33:10 johna Exp $
+// $Id: MyDetectorConstruction.cc,v 1.14 2001-03-15 12:30:26 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -235,7 +235,9 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   G4VisAttributes * grey
     = new G4VisAttributes(G4Colour(0.5,0.5,0.5,0.5));
 
-  G4Tubs* tube = new G4Tubs("tube",20*cm,50*cm,30*cm,0,2*M_PI);
+
+  G4double tube_dPhi = 2. * M_PI;
+  G4Tubs* tube = new G4Tubs("tube",20*cm,50*cm,30*cm,0.,tube_dPhi);
   G4LogicalVolume * tube_log
     = new G4LogicalVolume(tube,Ar,"tube_L",0,0,0);
   G4VisAttributes * tube_VisAtt
@@ -245,27 +247,32 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
                     "tube_phys",tube_log,experimentalHall_phys,
                     false,0);
 
+  G4double divided_tube_dPhi = tube_dPhi / 6.;
   G4Tubs* divided_tube = new G4Tubs
     ("divided_tube",
-     20*cm,50*cm,30*cm,0,M_PI/3.);
+     20*cm,50*cm,30*cm,-divided_tube_dPhi/2.,divided_tube_dPhi);
   G4LogicalVolume * divided_tube_log
     = new G4LogicalVolume(divided_tube,Ar,"divided_tube_L",0,0,0);
   divided_tube_log->SetVisAttributes(grey);
   new G4PVReplica("divided_tube_phys",divided_tube_log,tube_log,
-  		  kPhi,6,M_PI/3.);
+  		  kPhi,6,divided_tube_dPhi);
   /************ 
   for (iCopy = 0; iCopy < 6; iCopy++) {
     new G4PVPlacement
-      (G4Transform3D(G4RotationMatrix().rotateZ(iCopy*M_PI/3.),
-		     G4ThreeVector()),
+      (G4Transform3D
+       (G4RotationMatrix().rotateZ(divided_tube_dPhi/2.+iCopy*M_PI/3.),
+	G4ThreeVector()),
        divided_tube_log,"divided_tube_phys",tube_log,
        false,iCopy);
   }
   *********/
 
+  G4double divided_tube_inset_dPhi = divided_tube_dPhi - 2. * alp;
   G4Tubs* divided_tube_inset = new G4Tubs
     ("divided_tube_inset",
-     20*cm+2.*eps,50*cm-2.*eps,30*cm-2.*eps,2.*alp,M_PI/3.-4.*alp);
+     20*cm+eps,50*cm-eps,30*cm-eps,
+     -divided_tube_inset_dPhi/2.,
+     divided_tube_inset_dPhi);
   G4LogicalVolume * divided_tube_inset_log
     = new G4LogicalVolume(divided_tube_inset,Ar,"divided_tube_inset_L",0,0,0);
   G4VisAttributes * divided_tube_inset_VisAtt
@@ -275,20 +282,25 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
                     divided_tube_inset_log,"divided_tube_inset_phys",
 		    divided_tube_log,false,0);
 
+  G4double sub_divided_tube_dPhi = divided_tube_inset_dPhi / 4.;
   G4Tubs* sub_divided_tube = new G4Tubs
     ("sub_divided_tube",
-     20*cm+2.*eps,50*cm-2.*eps,30*cm-2.*eps,0.,M_PI/12.-alp);
+     20*cm+eps,50*cm-eps,30*cm-eps,
+     -sub_divided_tube_dPhi/2.,sub_divided_tube_dPhi);
   G4LogicalVolume * sub_divided_tube_log
     = new G4LogicalVolume(sub_divided_tube,Ar,"sub_divided_tube_L",0,0,0);
   sub_divided_tube_log->SetVisAttributes(grey);
   new G4PVReplica("sub_divided_tube_phys",
   		  sub_divided_tube_log,divided_tube_inset_log,
-		  kPhi,4,M_PI/12.-alp,2.*alp);
+		  kPhi,4,sub_divided_tube_dPhi,-divided_tube_inset_dPhi/2.);
   /************ 
   for (iCopy = 0; iCopy < 4; iCopy++) {
     new G4PVPlacement
-      (G4Transform3D(G4RotationMatrix().rotateZ(iCopy*(M_PI/12.-alp)+2.*alp),
-		     G4ThreeVector()),
+      (G4Transform3D
+       (G4RotationMatrix().rotateZ
+	(-divided_tube_inset_dPhi/2.
+	 +(iCopy+0.5)*sub_divided_tube_dPhi),
+        G4ThreeVector()),
        sub_divided_tube_log,"sub_divided_tube_phys",divided_tube_inset_log,
        false,iCopy);
   }
@@ -319,7 +331,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   new G4PVPlacement(0,G4ThreeVector(2*cm,0.,0.),
                     grand_daughter_box2_log,"grand_daughter_box2_phys",
 		    daughter_box_log,false,0);
-  new G4PVPlacement(0,G4ThreeVector(40*cm,5.*cm,0.),
+  new G4PVPlacement(0,G4ThreeVector(40*cm,0.,0.),
                     daughter_box_log,"daughter_box_phys",
 		    sub_divided_tube_log,false,0);
 
