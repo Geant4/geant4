@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc,v 1.6 2001-10-09 11:23:28 vnivanch Exp $
+// $Id: G4VCrossSectionHandler.cc,v 1.7 2001-10-09 15:35:02 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -30,7 +30,7 @@
 // -----------
 // 1 Aug 2001   MGP        Created
 // 09.10.01  V.Ivanchenko  Add FindValue with 3 parameters 
-//                          + NumberOfComponents
+//                         + NumberOfComponents
 //
 // -------------------------------------------------------------------
 
@@ -358,18 +358,21 @@ G4double G4VCrossSectionHandler::FindValue(G4int Z, G4double energy,
       // the syntax pos->first or pos->second
       // G4VEMDataSet* dataSet = pos->second;
       G4VEMDataSet* dataSet = (*pos).second;
-      if(shellIndex >= 0) {
-        if(shellIndex < dataSet->NumberOfComponents())
-          value = dataSet->GetComponent(shellIndex)->FindValue(energy);
-        else {
-          G4cout << "WARNING: G4VCrossSectionHandler::FindValue did not find"
-                 << " shellIndex= " << shellIndex
-                 << " for  Z= "
-                 << Z << G4endl;
-        }
-      } else {
-        value = dataSet->FindValue(energy);
-      }
+      if (shellIndex >= 0) 
+	{
+	  if(shellIndex < dataSet->NumberOfComponents())    
+	    // - MGP - Why doesn't it use G4VEMDataSet::FindValue directly?
+	    value = dataSet->GetComponent(shellIndex)->FindValue(energy);
+	  else 
+	    {
+	      G4cout << "WARNING: G4VCrossSectionHandler::FindValue did not find"
+		     << " shellIndex= " << shellIndex
+		     << " for  Z= "
+		     << Z << G4endl;
+	    }
+	} else {
+	  value = dataSet->FindValue(energy);
+	}
     }
   else
     {
@@ -435,7 +438,7 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(
 	}
     }
 
-  crossSections = BuildCrossSectionsForMaterials(energyVector, energyCuts);
+  crossSections = BuildCrossSectionsForMaterials(energyVector,energyCuts);
 
   if (crossSections == 0) 
     G4Exception("G4VCrossSectionHandler::BuildMeanFreePathForMaterials, crossSections = 0");

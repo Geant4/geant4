@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.hh,v 1.7 2001-10-09 11:23:26 vnivanch Exp $
+// $Id: G4VCrossSectionHandler.hh,v 1.8 2001-10-09 15:34:57 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -88,17 +88,16 @@ public:
 
   void PrintData() const;
   
+  void Clear();
+
+protected: 
+   
+  //  G4int NumberOfComponents(G4int Z) const;
+
   G4double FindValue(G4int Z, G4double e) const;
 
   G4double FindValue(G4int Z, G4double e, G4int shellIndex) const;
 
-  G4int NumberOfComponents(G4int Z) const;
-
-  void Clear();
-
-
-protected: 
-   
   G4double ValueForMaterial(const G4Material* material, G4double e) const;
 
   void ActiveElements();
