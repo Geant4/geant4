@@ -21,7 +21,9 @@
 // ********************************************************************
 //
 //
-
+// $Id: PhysicsList.cc,v 1.3 2004-03-16 18:38:42 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
