@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2001-02-27 18:19:38 japost Exp $
+$Id: History,v 1.8 2001-03-19 12:13:38 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Mar  19, 2001   J. Apostolakis  transport-V03-00-01
+------------------------------
+G4Transportation modified to use new FieldTrack, and get Kinetic Energy from it. 
+
+This new FieldTrack together with changes in associated Equation of Motion
+classes implement the momentum vector as independent variable in place of the
+velocity. 
+
+So this tag requires 
+ - new geometry/magneticfield tag "field-V03-00-01",  and 
+ - new geometry/volumes  tag "geomvol-V03-00-03" for new G4PropagatorInField ().
+
 
 Feb  27, 2001   J. Apostolakis  (transport-V03-00-00)
 ------------------------------
