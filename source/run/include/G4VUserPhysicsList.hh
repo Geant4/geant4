@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.15 2002-12-16 11:33:19 gcosmo Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.16 2003-01-14 22:46:33 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -172,10 +172,29 @@ class G4VUserPhysicsList
     void DumpList() const;
 
   public: // with description
-    // Print out information of cut values
-    void DumpCutValuesTable() const;
-    void DumpCutValues(const G4String &particle_name = "ALL") const;
-    void DumpCutValues(G4ParticleDefinition* ) const;
+    // Request to print out information of cut values
+    // Printing will be performed when all tables are made
+    void DumpCutValuesTable(G4int nParticles=3);
+
+    // The following method actually trigger the print-out requested
+    // by the above method. This method must be invoked by RunManager
+    // at the proper moment.
+    void DumpCutValuesTableIfRequested();
+
+    void DumpCutValues(const G4String &particle_name = "ALL") const
+   {
+    G4cerr << "WARNING !" << G4endl;
+    G4cerr << " DumpCutValues() became obsolete." << G4endl;
+    G4cerr << " Please use DumpCutValuesTable() instead." << G4endl;
+    G4cerr << " This dummy method implementation will be removed soon." << G4endl;
+   }
+    void DumpCutValues(G4ParticleDefinition* ) const
+   {
+    G4cerr << "WARNING !" << G4endl;
+    G4cerr << " DumpCutValues() became obsolete." << G4endl;
+    G4cerr << " Please use DumpCutValuesTable() instead." << G4endl;
+    G4cerr << " This dummy method implementation will be removed soon." << G4endl;
+   }
 
   public: // with description
     void  SetVerboseLevel(G4int value);
@@ -275,6 +294,9 @@ class G4VUserPhysicsList
    // directory name for physics table files 
    G4String directoryPhysicsTable;   
 
+   // flag for displaying the range cuts & energy thresholds
+   G4int fDisplayThreshold;
+
   private:
    enum { FixedStringLengthForStore = 32 }; 
 
@@ -287,7 +309,7 @@ class G4VUserPhysicsList
     G4cerr << "WARNING !" << G4endl;
     G4cerr << " SetCutValueForOthers became obsolete." << G4endl;
     G4cerr << " It is harmless to remove this invokation without any side effects." << G4endl;
-    G4cerr << " This dummy methhod implementation will be removed soon." << G4endl;
+    G4cerr << " This dummy method implementation will be removed soon." << G4endl;
    }
 
 };

@@ -1,4 +1,4 @@
-$Id: History,v 1.71 2002-12-16 11:33:32 gcosmo Exp $
+$Id: History,v 1.72 2003-01-14 22:46:33 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan 14, 2003, M.Asai (run-V05-00-01)
+- Fix problems in run-V05-00-00 tag
 
 Dec 16, 2002, G.Cosmo (run-V05-00-00)
 - Merged branch "geant4-04-01-ref-02-cuts-branch" to HEAD.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.27 2002-12-16 11:33:20 gcosmo Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.28 2003-01-14 22:46:34 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,6 +55,11 @@
 #include "G4UserPhysicsListMessenger.hh"
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
+#include "G4RegionStore.hh"
+#include "G4Region.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4ProductionCuts.hh"
+#include "G4MaterialCutsCouple.hh"
 
 #include "G4ios.hh"
 #include "g4std/iomanip"                
@@ -67,7 +72,8 @@ G4VUserPhysicsList::G4VUserPhysicsList()
 		    fStoredInAscii(true),
 		    fIsCheckedForRetrievePhysicsTable(false),
 		    fIsRestoredCutValues(false),
-                    directoryPhysicsTable(".")
+                    directoryPhysicsTable("."),
+                    fDisplayThreshold(0)
 {
   // default cut value  (1.0mm) 
   defaultCutValue = 1.0*mm;
@@ -498,145 +504,140 @@ void G4VUserPhysicsList::DumpList() const
 }
 
 ///////////////////////////////////////////////////////////////
-void G4VUserPhysicsList::DumpCutValues(const G4String &particle_name) const
-{
-  G4ParticleDefinition* particle;
-  if ((particle_name == "ALL") || (particle_name == "all")) {
-    theParticleIterator->reset();
-    while( (*theParticleIterator)() ){
-      particle = theParticleIterator->value();
-      DumpCutValues(particle);
-    }
-  } else {
-     particle = theParticleTable->FindParticle(particle_name);
-     if (particle != 0) DumpCutValues(particle);
-  }
-}
+//void G4VUserPhysicsList::DumpCutValues(const G4String &particle_name) const
+//{
+//  G4ParticleDefinition* particle;
+//  if ((particle_name == "ALL") || (particle_name == "all")) {
+//    theParticleIterator->reset();
+//    while( (*theParticleIterator)() ){
+//      particle = theParticleIterator->value();
+//      DumpCutValues(particle);
+//    }
+//  } else {
+//     particle = theParticleTable->FindParticle(particle_name);
+//     if (particle != 0) DumpCutValues(particle);
+//  }
+//}
 
 ///////////////////////////////////////////////////////////////
-void G4VUserPhysicsList::DumpCutValues( G4ParticleDefinition* particle) const
-{
-  if (particle == 0) return;
-  
-  G4int prec = G4cout.precision(3);
-
-  if (particle->IsShortLived()) {
-    // name field
-    G4cout << " --- " << particle->GetParticleName() << " is a short lived particle ------ " << G4endl;
-  } else {
-    // name field
-    G4cout << " --- " << particle->GetParticleName() << " ------ " << G4endl;
-
-    // cut value in range
-    G4double* theRangeCuts = particle->GetLengthCuts();
-
-    // material and energy cut value for the material 
-    G4double*  theKineticEnergyCuts = particle->GetEnergyCuts();
-    
-    if (theRangeCuts != 0) {
-      const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-      size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
-      G4cout << "   - Material --- Cut in range ------------- Energy Cut ---" << G4endl;
-      for (size_t idx=0; idx<numberOfMaterials; idx++){
-	G4cout << "     " << G4std::setw(19) << (*materialTable)[idx]->GetName(); 
-	G4cout <<" : ";
-	G4cout << G4std::setw(12)<< G4BestUnit(theRangeCuts[idx],"Length");
-	if (theKineticEnergyCuts ==0) {
-	  G4cout << " : --------------------------------";
-	} else {
-	  G4cout << " : ";
-	  G4cout << G4std::setw(10)<< G4BestUnit(theKineticEnergyCuts[idx],"Energy");
-	}	
-	G4cout << G4endl;
-      }
-      if (theKineticEnergyCuts ==0) {
-	G4cout << "   - Cuts in energy are not calculated yet --" << G4endl;
-	G4cout << " Enter /run/initialize command to calculate cuts " << G4endl;
-      }
-    } else {
-      G4cout << "   - Cuts in range are not set yet --" << G4endl;
-    }
-
-  }
-  G4cout.precision(prec);
-}
+//void G4VUserPhysicsList::DumpCutValues( G4ParticleDefinition* particle) const
+//{
+//  if (particle == 0) return;
+//  
+//  G4int prec = G4cout.precision(3);
+//
+//  if (particle->IsShortLived()) {
+//    // name field
+//    G4cout << " --- " << particle->GetParticleName() << " is a short lived particle ------ " << G4endl;
+//  } else {
+//    // name field
+//    G4cout << " --- " << particle->GetParticleName() << " ------ " << G4endl;
+//
+//    // cut value in range
+//    G4double* theRangeCuts = particle->GetLengthCuts();
+//
+//    // material and energy cut value for the material 
+//    G4double*  theKineticEnergyCuts = particle->GetEnergyCuts();
+//    
+//    if (theRangeCuts != 0) {
+//      const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
+//      size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
+//      G4cout << "   - Material --- Cut in range ------------- Energy Cut ---" << G4endl;
+//      for (size_t idx=0; idx<numberOfMaterials; idx++){
+//	G4cout << "     " << G4std::setw(19) << (*materialTable)[idx]->GetName(); 
+//	G4cout <<" : ";
+//	G4cout << G4std::setw(12)<< G4BestUnit(theRangeCuts[idx],"Length");
+//	if (theKineticEnergyCuts ==0) {
+//	  G4cout << " : --------------------------------";
+//	} else {
+//	  G4cout << " : ";
+//	  G4cout << G4std::setw(10)<< G4BestUnit(theKineticEnergyCuts[idx],"Energy");
+//	}	
+//	G4cout << G4endl;
+//      }
+//      if (theKineticEnergyCuts ==0) {
+//	G4cout << "   - Cuts in energy are not calculated yet --" << G4endl;
+//	G4cout << " Enter /run/initialize command to calculate cuts " << G4endl;
+//      }
+//    } else {
+//      G4cout << "   - Cuts in range are not set yet --" << G4endl;
+//    }
+//
+//  }
+//  G4cout.precision(prec);
+//}
 
 ///////////////////////////////////////////////////////////////
-void G4VUserPhysicsList::DumpCutValuesTable() const
+void G4VUserPhysicsList::DumpCutValuesTable(G4int nParticles) 
+{ fDisplayThreshold = nParticles; }
+
+void G4VUserPhysicsList::DumpCutValuesTableIfRequested()
 {
+  if(fDisplayThreshold==0) return;
+
   // This methods Print out a table of cut value information
-  // for "e-", "e+", "gamma", "proton" and "neutron"
+  // for "gamma", "e-", "e+", "proton" and "neutron"
   G4int prec = G4cout.precision(3);
   const G4int size = 5;
   G4String name[size] = {"gamma", "e-", "e+", "proton", "neutron"};
   G4ParticleDefinition* particle[size];
-  G4bool IsOK = true;
-  G4int size_display=2;
+  G4int size_display=fDisplayThreshold;
+  if(size_display>size) size_display=size;
   G4int idx; 
   for (idx=0; idx <size_display; idx++) {
     particle[idx] = theParticleTable->FindParticle(name[idx]);
   }
 
-  //line 1
-  G4cout << "============= The cut Energy ==============================" <<G4endl;
-  
-  // line 2
-  G4cout << "                     ";
-  for (idx=0; idx <size_display; idx++) {
-    G4cout << " " << G4std::setw(11) << name[idx] << "    ";
-  }
   G4cout << G4endl;
+  G4cout << "======== Table of production thresholds in range and energy ===========" << G4endl;
 
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
-  // line 3
-  G4cout << "Cut in range       " << G4endl;
-  for (size_t I=0; I<numberOfMaterials; I++) {
-    G4cout << " " << G4std::setw(18) << ((*materialTable)[I])->GetName();
+  typedef G4std::vector<G4Region*>::iterator regionIterator;
+  G4RegionStore* fG4RegionStore = G4RegionStore::GetInstance();
+  for(regionIterator rItr=fG4RegionStore->begin();rItr!=fG4RegionStore->end();rItr++)
+  {
+    G4cout << G4endl;
+    G4cout << "-----------------------------------------------------------------------" << G4endl;
+    G4cout << "Region : " << (*rItr)->GetName() << G4endl;
+    G4cout << "-----------------------------------------------------------------------" << G4endl;
+
+  
+    G4cout << "                             ";
     for (idx=0; idx <size_display; idx++) {
-      if (particle[idx] == 0) {
-        G4cout << "            ";
-      } else {
-        if (particle[idx]->GetLengthCuts() == 0) {
-          G4cout << " ---------- ";
-        } else {
-          G4cout << " " << G4std::setw(11) << G4BestUnit((particle[idx]->GetLengthCuts())[I],"Length");
-        }
-      }
+      G4cout << " " << G4std::setw(11) << name[idx] << "    ";
     }
     G4cout << G4endl;
-  }
 
-  // line 4
-  G4cout << "Cut in energy";
-  G4cout << G4endl;
-
-  // line 5 ..
-  for (size_t J=0; J<numberOfMaterials; J++) {
-    G4cout << " " << G4std::setw(18) << ((*materialTable)[J])->GetName();
+    const G4ProductionCuts* aCut = (*rItr)->GetProductionCuts();
+    G4cout << "Threshold in range ";
     for (idx=0; idx <size_display; idx++) {
-      if (particle[idx] == 0) {
-	G4cout << "            ";
-      } else {
-        if (particle[idx]->GetEnergyCuts() == 0) {
-	  G4cout << " ---------- ";
-          IsOK = false;
-	} else {
-	  G4cout << " " << G4std::setw(11) << G4BestUnit((particle[idx]->GetEnergyCuts())[J],"Energy");
-	}
-      }
+      if(aCut->GetProductionCut(name[idx])<=0.0)
+      { G4cout << " ---------- "; }
+      else
+      { G4cout << " " << G4std::setw(11) << G4BestUnit(aCut->GetProductionCut(name[idx]),"Length"); }
     }
     G4cout << G4endl;
-  }
-  
-  if (!IsOK) {
-    G4cout << " Cuts in energy have not calculated yet !!" << G4endl;
-    G4cout << " Enter /run/initialize command to calculate cuts " << G4endl;
-  }
 
-  // last line 
-  G4cout << "===================================================" << G4endl;
+    G4std::vector<G4Material*>::const_iterator mItr = (*rItr)->GetMaterialIterator();
+    size_t nMaterial = (*rItr)->GetNumberOfMaterials();
+    for (size_t I=0; I<nMaterial; I++) {
+      G4cout << " " << G4std::setw(19) << (*mItr)->GetName();
+      for (idx=0; idx <size_display; idx++) {
+        G4int coupleIndex = G4ProductionCutsTable::GetProductionCutsTable()->GetCoupleIndex((*mItr),aCut);
+        if(coupleIndex<0)
+        { G4cout << " ---------- "; }
+        else
+        { G4cout << " " << G4std::setw(11) << G4BestUnit((particle[idx]->GetEnergyCuts())[coupleIndex],"Energy"); }
+      }
+      G4cout << G4endl;
+      mItr++;
+    }
+  }
+ 
+  G4cout << "=======================================================================" << G4endl;
+  G4cout << G4endl;
+
   G4cout.precision(prec);
+  //fDisplayThreshold=0;
 }
 
 

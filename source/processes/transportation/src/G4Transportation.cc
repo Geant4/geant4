@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.34 2003-01-10 12:33:51 vnivanch Exp $
+// $Id: G4Transportation.cc,v 1.35 2003-01-14 22:43:39 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -37,9 +37,6 @@
 //
 // =======================================================================
 // Modified:   
-//            10 Jan  2003, V.Ivanchenko add protection for pointer on
-//                          MaterialCutsCouple + initialisation G4ParticleChange
-//                          in PostStepDoIt
 //            29 June 2001, J. Apostolakis, D. Cote-Ahern, P. Gumplinger: 
 //                          correction for spin tracking   
 //            20 Febr 2001, J. Apostolakis:  update for new FieldTrack
@@ -473,7 +470,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
 
   //   Initialize ParticleChange  (by setting all its members equal
   //                               to corresponding members in G4Track)
-  fParticleChange.Initialize(track) ;  // To initialise TouchableChange
+  // fParticleChange.Initialize(track) ;  // To initialise TouchableChange
 
   fParticleChange.SetStatusChange(track.GetTrackStatus()) ;
 
@@ -610,7 +607,8 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
 
   const G4MaterialCutsCouple* pNewMaterialCutsCouple = 0;
   if( pNewVol != 0 ) pNewMaterialCutsCouple=pNewVol->GetLogicalVolume()->GetMaterialCutsCouple();
-  if( pNewVol!=0 && pNewMaterialCutsCouple!=0 && pNewMaterialCutsCouple->GetMaterial()!=pNewMaterial )
+
+  if( pNewVol!=0 && pNewMaterialCutsCouple->GetMaterial()!=pNewMaterial )
   {
     // for parametrized volume
     pNewMaterialCutsCouple
@@ -618,8 +616,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
         ->GetMaterialCutsCouple(pNewMaterial,
           pNewMaterialCutsCouple->GetProductionCuts());
   }
-  if(pNewMaterialCutsCouple)
-    fParticleChange.SetMaterialCutsCoupleChange( pNewMaterialCutsCouple );
+  fParticleChange.SetMaterialCutsCoupleChange( pNewMaterialCutsCouple );
 
   //    temporarily until Get/Set Material of ParticleChange, 
   //    and StepPoint can be made const. 
