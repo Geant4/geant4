@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.12 2004-03-19 15:30:42 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.13 2004-03-19 16:37:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -70,6 +70,7 @@
 // 27-02-04 Fix problem of loss in low presure gases, cleanup precise range
 //          calculation, use functions ForLoss in AlongStepDoIt (V.Ivanchenko)
 // 10-03-04 Fix a problem of Precise Range table (V.Ivanchenko)
+// 19-03-04 Fix a problem energy below lowestKinEnergy (V.Ivanchenko)
 //
 // Class Description:
 //
