@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.22 2002-05-08 13:25:26 johna Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.23 2002-10-24 15:12:26 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -205,7 +205,7 @@ void G4VisCommandDrawVolume::SetNewValue
   if (verbosity >= G4VisManager::warnings) {
     G4cout <<
       "WARNING: For systems which are not \"auto-refresh\" you will need to"
-      "\n  issue \"/vis/viewer/update\" or \"/vis/viewer/flush\"."
+      "\n  issue \"/vis/viewer/refresh\" or \"/vis/viewer/flush\"."
 	   << G4endl;
   }
 }
@@ -301,7 +301,7 @@ void G4VisCommandSpecify::SetNewValue
   if (verbosity >= G4VisManager::warnings) {
     G4cout <<
       "WARNING: For systems which are not \"auto-refresh\" you will need to"
-      "\n  issue \"/vis/viewer/update\" or \"/vis/viewer/flush\"."
+      "\n  issue \"/vis/viewer/refresh\" or \"/vis/viewer/flush\"."
 	   << G4endl;
   }
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.45 2002-04-26 21:23:31 asaim Exp $
+// $Id: G4VisManager.cc,v 1.46 2002-10-24 15:12:39 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -496,7 +496,7 @@ void G4VisManager::CreateViewer (G4String name) {
 	  G4cout <<
 	    "WARNING: objects with visibility flag set to \"false\""
 	    " will not be drawn!"
-	    "\n  \"/vis/set/culling off\" to Draw such objects."
+	    "\n  \"/vis/viewer/set/culling global false\" to Draw such objects."
 		 << G4endl;
 	}
       }
@@ -510,15 +510,14 @@ void G4VisManager::CreateViewer (G4String name) {
 	warn = true;
 	if (fVerbosity >= warnings) {
 	  G4cout <<
-	    "WARNING: covered objects in solid mode will not be part of"
-	    " the scene!"
-	    "\n  \"/vis/set/cull_covered_daughters off\" to reverse this."
+	    "WARNING: covered objects in solid mode will not be rendered!"
+	    "\n  \"/vis/viewer/set/culling coveredDaughters false\" to reverse this."
 		 << G4endl;
 	}
       }
       if (warn) {
 	if (fVerbosity >= warnings) {
-	  G4cout << "  Also see other \"/vis/set\" commands."
+	  G4cout << "  Also see other \"/vis/viewer/set\" commands."
 		 << G4endl;
 	}
       }
@@ -1055,7 +1054,7 @@ void G4VisManager::EndOfEvent () {
 void G4VisManager::EndOfRun () {
   //G4cout << "G4VisManager::EndOfRun" << G4endl;
   if (fpConcreteInstance && IsValidView ()) {
-    fpSceneHandler->SetMarkForClearingTransientStore(false);
+    fpSceneHandler->SetMarkForClearingTransientStore(true);
   }
 }
 
