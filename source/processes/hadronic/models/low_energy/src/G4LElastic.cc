@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4LElastic.cc,v 1.7 2002-12-12 19:18:08 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Physics model class G4LElastic
 //
@@ -39,16 +37,20 @@
 #include "globals.hh"
 #include "G4LElastic.hh"
 #include "Randomize.hh"
+#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 
 
 G4VParticleChange*
 G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
 {
+   G4cout << "entering elastic scattering"<<G4endl; 
+   if(getenv("debug_LElastic")) verboseLevel = 5;
    theParticleChange.Initialize(aTrack);
 
    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
    G4double atno2 = targetNucleus.GetN();
-
+   
 // Elastic scattering off Hydrogen
 
    G4DynamicParticle* aSecondary = 0;
@@ -188,23 +190,94 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
       G4cout << "INCIDENT " << pxinc << " " << pyinc << " " << pzinc << G4endl;
    }
 
+  // hpw trial start
+  
+  //  G4double pxt,pyt,pzt, ppro,ptarg;
+  //    ppro = p;
+  //    pxt=-px;
+  //    pyt =-py;
+  //    pzt = p-ppro*cost;      
+  //    ptarg = sqrt(pxt*pxt+pyt*pyt+pzt*pzt);
+  //    G4double ptold = ptarg;
+  //    G4double Mt = targetNucleus.AtomicMass(targetNucleus.GetN(), targetNucleus.GetZ());
+  //  G4cout << "verifying target momentum "<<ptarg<<" "<<ptarg*ptarg/(2.*Mt/GeV)<<" "<<ppro<<" "<<G4endl;
+  // hpw trial end
+  
 // Transform scattered particle to reflect direction of incident particle
    G4double pxnew, pynew, pznew;
    Defs1(p, px, py, pz, pxinc, pyinc, pzinc, &pxnew, &pynew, &pznew);
 // Normalize:
-   pxnew = pxnew/p;
-   pynew = pynew/p;
-   pznew = pznew/p;
-   if (verboseLevel > 1) {
-      G4cout << "DoIt: returning new momentum vector" << G4endl;
-      G4cout << pxnew << " " << pynew << " " << pznew << G4endl;
+   
+  // get nucleus momentum estimate from projectile-secondary
+  G4double pxt,pyt,pzt;
+  pxt=pxinc-pxnew;
+  pyt=pyinc-pynew;
+  pzt=pzinc-pznew;  
+  // get total energy estimate
+  G4double mt = G4ParticleTable::GetParticleTable()
+                ->GetIonTable()->GetIonMass(targetNucleus.GetZ(), targetNucleus.GetN())/GeV;
+  G4double secmass = aParticle->GetDefinition()->GetPDGMass()/GeV;
+  if(aSecondary) secmass = aSecondary->GetDefinition()->GetPDGMass()/GeV;
+  G4double efs = sqrt(mt*mt+pxt*pxt+pyt*pyt+pzt*pzt)
+               + sqrt(secmass*secmass+pxnew*pxnew+pynew*pynew+pznew*pznew);
+  G4double eis = aParticle->GetTotalEnergy()/GeV+mt;
+  if (verboseLevel > 1) G4cout << "Energy balance "<<eis*GeV<<" "<<efs*GeV<<" "<<eis/efs-1<<" "<<(eis-efs)*GeV<<G4endl;
+  
+  G4double pnew =sqrt(pxnew*pxnew+pynew*pynew+pznew*pznew-(efs-eis));
+  while(abs((eis-efs)*GeV)>1*keV)
+  {
+  // scale secondary momentum to conserve energy
+  pnew = sqrt(pxnew*pxnew+pynew*pynew+pznew*pznew-(efs-eis));
+  pxnew*=pnew/p;
+  pynew*=pnew/p;
+  pznew*=pnew/p;
+  // get new nucleus momentum estimate from projectile-secondary
+  pxt=pxinc-pxnew;
+  pyt=pyinc-pynew;
+  pzt=pzinc-pznew;  
+
+  efs = sqrt(mt*mt+pxt*pxt+pyt*pyt+pzt*pzt)
+               + sqrt(secmass*secmass+pxnew*pxnew+pynew*pynew+pznew*pznew);
+  eis = aParticle->GetTotalEnergy()/GeV+mt;
+  p=pnew;
+  }
+  if (verboseLevel > 1) G4cout << "Energy balance 1 "<<eis*GeV<<" "<<efs*GeV<<" "<<eis/efs-1<<" "<<(eis-efs)*GeV<<" "<<pnew/p<<G4endl;
+
+  // that is it in first approximation.
+
+   pxnew = pxnew/pnew;
+   pynew = pynew/pnew;
+   pznew = pznew/pnew;
+   if (verboseLevel > 1) 
+   {
+     G4cout << "DoIt: returning new momentum vector" << G4endl;
+     G4cout << pxnew << " " << pynew << " " << pznew << G4endl;
+     G4double Mt = targetNucleus.AtomicMass(targetNucleus.GetN(), targetNucleus.GetZ());
+     G4cout << "Target kinetic energy cap: "<<p<<" "<<p*p/(2.*Mt/GeV)<<G4endl;
+     G4cout << "### calculating target momentum and kinetic energy ###"<<G4endl;
+     G4double p_hpw=sqrt(sqr(pxinc-pxnew) + sqr(pyinc-pynew) + sqr(pzinc-pznew));
+     G4cout <<"it - "<<p_hpw*p_hpw/(2.*Mt/GeV)<<" "<<p_hpw<<" "<<G4endl<<G4endl;
+     G4cout << "Nuclear properties A, Z = "<<targetNucleus.GetN()<<" "<< targetNucleus.GetZ()<<G4endl;
    }
 
    if (aSecondary)
       aSecondary->SetMomentumDirection(pxnew, pynew, pznew);
    else
+   {
       theParticleChange.SetMomentumChange(pxnew, pynew, pznew);
-
+      G4ParticleDefinition * theRec;
+      G4double aA=targetNucleus.GetN();
+      G4double rest = aA-static_cast<G4int>(aA);
+      G4int theA = static_cast<G4int>(aA);
+      if(G4UniformRand()<rest) theA++;
+      theRec = G4ParticleTable::GetParticleTable()->FindIon(targetNucleus.GetZ(), theA,0,targetNucleus.GetZ());
+      G4ThreeVector aRecMom(pxt, pyt, pzt);
+      if (verboseLevel > 1) G4cout << " !!!! Recoil properties A, Z = "<<theA<<" "<< targetNucleus.GetZ()<<G4endl;
+      G4DynamicParticle* aRecoil = new G4DynamicParticle(theRec, aRecMom);
+      theParticleChange.SetNumberOfSecondaries(1);
+      theParticleChange.AddSecondary(aRecoil);
+   }
+   
    return &theParticleChange;
 }
 
