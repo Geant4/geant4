@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.cc,v 1.4 2003-06-16 17:13:26 gunter Exp $
+// $Id: G4VTrajectory.cc,v 1.5 2004-07-05 17:08:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,6 +47,14 @@
 #include "G4Polyline.hh"
 #include "G4Polymarker.hh"
 #include "G4Colour.hh"
+
+G4VTrajectory::G4VTrajectory() {;}
+G4VTrajectory::~G4VTrajectory() {;}
+
+G4bool G4VTrajectory::operator == (const G4VTrajectory& right) const
+{
+  return (this==&right);
+}
 
 void G4VTrajectory::ShowTrajectory(std::ostream& os) const
 {
