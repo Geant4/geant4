@@ -49,43 +49,43 @@ G4BertiniEvaporationChannel::~G4BertiniEvaporationChannel()
 }
 
 
-inline void G4BertiniEvaporationChannel::setVerboseLevel( const G4int level )
+void G4BertiniEvaporationChannel::setVerboseLevel( G4int level )
 {
   verboseLevel = level;
 }
 
 
-inline void G4BertiniEvaporationChannel::setNucleusA( const G4int a )
+void G4BertiniEvaporationChannel::setNucleusA( G4int a )
 {
   nucleusA = a;
 }
 
 
-inline void G4BertiniEvaporationChannel::setNucleusZ( const G4int z )
+void G4BertiniEvaporationChannel::setNucleusZ( G4int z )
 {
   nucleusZ = z;
 }
 
 
-inline G4int G4BertiniEvaporationChannel::getParticleA()
+G4int G4BertiniEvaporationChannel::getParticleA()
 {
   return particleA;
 }
 
 
-inline G4int G4BertiniEvaporationChannel::getParticleZ()
+G4int G4BertiniEvaporationChannel::getParticleZ()
 {
   return particleZ;
 }
 
 
-inline void G4BertiniEvaporationChannel::setExcitationEnergy(const G4double energy )
+void G4BertiniEvaporationChannel::setExcitationEnergy(G4double energy )
 {
   excitationEnergy = energy;
 }
 
 
-void G4BertiniEvaporationChannel::setPairingCorrection( const G4int isCorrection )
+void G4BertiniEvaporationChannel::setPairingCorrection( G4int isCorrection )
 {
   G4int residualZ = nucleusZ - particleZ;
   G4int residualA = nucleusA - particleA;
@@ -98,23 +98,23 @@ void G4BertiniEvaporationChannel::setPairingCorrection( const G4int isCorrection
 }
 
 
-inline G4double G4BertiniEvaporationChannel::getProbability()
+G4double G4BertiniEvaporationChannel::getProbability()
 {
   if ( verboseLevel >= 4 )
     G4cout << "G4BerEvaporationChannel : probability of particle " << name 
-	   << " is " << emissionProbability << endl;
+	   << " is " << emissionProbability << G4endl;
 
   return emissionProbability;
 }
 
 
-inline G4String G4BertiniEvaporationChannel::getName()
+G4String G4BertiniEvaporationChannel::getName()
 {
   return name;
 }
 
 
-inline void G4BertiniEvaporationChannel::setProbability( const G4double newProb )
+void G4BertiniEvaporationChannel::setProbability( G4double newProb )
 {
   emissionProbability = newProb;
   return;
@@ -162,20 +162,20 @@ G4double G4BertiniEvaporationChannel::getCoulomb()
          ( pow( residualA, 0.33333333 ) + rho ) * MeV;
   
   if ( verboseLevel >= 10 )
-    G4cout << " G4BertiniEvaporationChannel::getThresh() " << endl
-	   << "        residualZ " << residualZ << endl
-	   << "        residualA " << residualA << endl
-	   << "         qmFactor " << qmFactor() << endl
-	   << "               Q  " << getQ() << endl      
-	   << "             rho  " << rho << endl
-	   << "           part Z " << particleZ << endl
-	   << "     (correction) " << correction << endl;
+    G4cout << " G4BertiniEvaporationChannel::getThresh() " << G4endl
+	   << "        residualZ " << residualZ << G4endl
+	   << "        residualA " << residualA << G4endl
+	   << "         qmFactor " << qmFactor() << G4endl
+	   << "               Q  " << getQ() << G4endl      
+	   << "             rho  " << rho << G4endl
+	   << "           part Z " << particleZ << G4endl
+	   << "     (correction) " << correction << G4endl;
 
   return coulomb;
 }
 
 
-inline G4double G4BertiniEvaporationChannel::qmFactor()
+G4double G4BertiniEvaporationChannel::qmFactor()
 {
   //  Coefficient k_p for empirical cross section
   //  formula presented in Dostrovsky, Phys. Rev.,

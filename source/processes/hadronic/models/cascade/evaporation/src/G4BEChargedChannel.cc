@@ -53,7 +53,7 @@ void G4BEChargedChannel::calculateProbability()
        excitationEnergy - getThresh() - correction < 0 )
     {
       if ( verboseLevel >= 6 )
-	G4cout << "G4BEChargedChannel : calculateProbability for " << getName() << " = 0 " << endl;
+	G4cout << "G4BEChargedChannel : calculateProbability for " << getName() << " = 0 " << G4endl;
       emissionProbability = 0;
       return;
     }
@@ -69,19 +69,19 @@ void G4BEChargedChannel::calculateProbability()
   emissionProbability = constant * pow( residualA, 0.6666666 ) * eye1;
 
   if ( verboseLevel >= 6 )
-    G4cout << "G4BEChargedChannel : calculateProbability for " << getName() << endl
-	   << "                    res A = " << residualA << endl 
-	   << "                    res Z = " << residualZ << endl 
-	   << "                 c*(c_i+1) = "<< constant << endl
-	   << "                  qmfactor = "<< qmFactor() << endl
-	   << "             coulombfactor = "<< coulombFactor() << endl
-	   << "                        E = " << excitationEnergy << endl
-	   << "               correction = " << correction << endl
-	   << "                     eye1 = " << eye1 << endl
-	   << "               levelParam = " << levelParam << endl
-	   << "                   thresh = " << getThresh() << endl
-	   << "                        s = " << s << endl
-	   << "              probability = " << emissionProbability << endl;
+    G4cout << "G4BEChargedChannel : calculateProbability for " << getName() << G4endl
+	   << "                    res A = " << residualA << G4endl 
+	   << "                    res Z = " << residualZ << G4endl 
+	   << "                 c*(c_i+1) = "<< constant << G4endl
+	   << "                  qmfactor = "<< qmFactor() << G4endl
+	   << "             coulombfactor = "<< coulombFactor() << G4endl
+	   << "                        E = " << excitationEnergy << G4endl
+	   << "               correction = " << correction << G4endl
+	   << "                     eye1 = " << eye1 << G4endl
+	   << "               levelParam = " << levelParam << G4endl
+	   << "                   thresh = " << getThresh() << G4endl
+	   << "                        s = " << s << G4endl
+	   << "              probability = " << emissionProbability << G4endl;
 
   return;
 }
@@ -106,13 +106,13 @@ G4double G4BEChargedChannel::sampleKineticEnergy()
 //    kineticEnergy = 0.5 * ( randExp1 + randExp2 ) * kineticEnergyAv + getThresh() - getQ();
 
 //    if ( verboseLevel >= 10 )
-//      G4cout << "  G4BEChargedChannel : sampleKineticEnergy() " << endl
-//  	   << "         kinetic e = " << kineticEnergy << endl
-//  	   << "           average = " << kineticEnergyAv << endl
-//  	   << "                 s = " << s << endl
-//  	   << "        levelParam = " << levelParam << endl
-//  	   << "          randExp1 = " << randExp1 << endl
-//  	   << "          randExp2 = " << randExp2 << endl;
+//      G4cout << "  G4BEChargedChannel : sampleKineticEnergy() " << G4endl
+//  	   << "         kinetic e = " << kineticEnergy << G4endl
+//  	   << "           average = " << kineticEnergyAv << G4endl
+//  	   << "                 s = " << s << G4endl
+//  	   << "        levelParam = " << levelParam << G4endl
+//  	   << "          randExp1 = " << randExp1 << G4endl
+//  	   << "          randExp2 = " << randExp2 << G4endl;
 
   G4double levelParam;
   levelParam = getLevelDensityParameter();
@@ -133,14 +133,14 @@ G4double G4BEChargedChannel::sampleKineticEnergy()
     }
   while (  r1 * exp ( 2 * sqrt ( levelParam * ( xMax - r1 ) ) )  < r2 );
 
-//  G4cout << "Q ch " << koe << endl;
+//  G4cout << "Q ch " << koe << G4endl;
   G4double kineticEnergy = r1 + getCoulomb(); // add coulomb potential;
 
   if ( verboseLevel >= 10 )
-    G4cout << " G4BENeutronChannel : sampleKineticEnergy() " << endl
-	   << "       kinetic n e = " << kineticEnergy << endl
-	   << "        levelParam = " << levelParam << endl
-	   << "             thresh= " << getThresh() << endl;
+    G4cout << " G4BENeutronChannel : sampleKineticEnergy() " << G4endl
+	   << "       kinetic n e = " << kineticEnergy << G4endl
+	   << "        levelParam = " << levelParam << G4endl
+	   << "             thresh= " << getThresh() << G4endl;
 
   return kineticEnergy;
 }

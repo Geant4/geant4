@@ -42,8 +42,8 @@
 
 G4BertiniEvaporation::G4BertiniEvaporation()
 {
-    G4cout << "Info G4BertiniEvaporation: This is still very fresh code."<<G4endl;
-    G4cout << "     G4BertiniEvaporation: feed-back for improvement is very wellcome."<<G4endl;
+    G4cout << "Info G4BertiniEvaporation: This is still very fresh code."<< G4endl;
+    G4cout << "     G4BertiniEvaporation: feed-back for improvement is very wellcome."<< G4endl;
     verboseLevel = 0;
  
     channelVector.push_back( new G4BENeutronChannel );
@@ -70,7 +70,7 @@ void G4BertiniEvaporation::setVerboseLevel( const G4int verbose )
   verboseLevel = verbose;
 
   // Update verbose level to all evaporation channels.
-  vector< G4BertiniEvaporationChannel * >::iterator iChannel = channelVector.begin();  
+  G4std::vector< G4BertiniEvaporationChannel * >::iterator iChannel = channelVector.begin();  
   for ( ; iChannel != channelVector.end() ; *iChannel++ )                  
     ( *iChannel )->setVerboseLevel( verboseLevel );
 }
@@ -89,7 +89,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
   G4double mRes; // Mass of residual nucleus.
   G4ThreeVector nucleusMomentumVector;
   G4DynamicParticle *pEmittedParticle;
-  vector< G4DynamicParticle * > secondaryParticleVector;
+  G4std::vector< G4DynamicParticle * > secondaryParticleVector;
   G4FragmentVector * result = new G4FragmentVector;
   
   // Read properties of the nucleus.
@@ -103,8 +103,8 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
 			    * nucleusMomentumVector ); // xx mass ok?
 
   if ( verboseLevel >= 10 )
-    G4cout << " G4BertiniEvaporation : initial kinematics : boostToLab vector = " << boostToLab << endl
-	   << "                     excitation energy  : " << excE<< endl;
+    G4cout << " G4BertiniEvaporation : initial kinematics : boostToLab vector = " << boostToLab << G4endl
+	   << "                     excitation energy  : " << excE<< G4endl;
 
   if ( nucleusA == 8 && nucleusZ == 4 )
     {
@@ -115,7 +115,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
   
   // Initialize evaporation channels and calculate sum of emission
   // probabilities.
-  vector< G4BertiniEvaporationChannel * >::iterator iChannel = channelVector.begin();  
+  G4std::vector< G4BertiniEvaporationChannel * >::iterator iChannel = channelVector.begin();  
   totalProbability = 0;
   for ( ; iChannel != channelVector.end() ; *iChannel++ )                  
      {
@@ -131,7 +131,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
   if ( totalProbability == 0 )
     {
       if ( verboseLevel >= 4 )
-	G4cout << "G4BertiniEvaporation : no emission possible with pairing correction, trying without it" << endl;
+	G4cout << "G4BertiniEvaporation : no emission possible with pairing correction, trying without it" << G4endl;
       for ( iChannel = channelVector.begin() ; iChannel != channelVector.end() ; *iChannel++ )
 	{
 	  ( *iChannel )->setPairingCorrection(0);
@@ -139,7 +139,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
 	  totalProbability += ( *iChannel )->getProbability();
 	}
       if ( verboseLevel >= 4 )
-	G4cout << "                       probability without correction " << totalProbability << endl;
+	G4cout << "                       probability without correction " << totalProbability << G4endl;
 
     }
 
@@ -151,7 +151,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
 
       // Sample active emission channel.
       G4double sampledProbability = G4UniformRand() * totalProbability;
-      if ( verboseLevel >= 10 ) G4cout << "          RandomProb : " << sampledProbability << endl;
+      if ( verboseLevel >= 10 ) G4cout << "          RandomProb : " << sampledProbability << G4endl;
       for ( iChannel = channelVector.begin() ; iChannel != channelVector.end() ; *iChannel++ )
 	{
 	  sampledProbability -= ( *iChannel )->getProbability();
@@ -162,7 +162,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
 	G4Exception( "G4BertiniEvaporation : Error while sampling evaporation particle" );
 
       if ( verboseLevel >= 4 ) 
-	G4cout << "G4BertiniEvaporation : particle " << pSelectedChannel->getName() << " selected " << endl;
+	G4cout << "G4BertiniEvaporation : particle " << pSelectedChannel->getName() << " selected " << G4endl;
 
       // Max 10 tries to get a physically acceptable particle energy
       // in this emission channel.
@@ -190,11 +190,11 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
 	  newExcitation = excE - pEmittedParticle->GetKineticEnergy() - nucleusKineticEnergy - pSelectedChannel->getQ();
 
  	  if ( verboseLevel >= 10)
-	    G4cout << "G4BertiniEvaporation : Kinematics " << endl
+	    G4cout << "G4BertiniEvaporation : Kinematics " << G4endl
 		   << "                    part kinetic E in CMS = " 
-		   << pEmittedParticle->GetKineticEnergy() << endl
+		   << pEmittedParticle->GetKineticEnergy() << G4endl
 		   << "                    new excitation E      =  " 
-		   << newExcitation << endl;
+		   << newExcitation << G4endl;
 
 	  i++;
 	  if ( !( newExcitation > 0 ) && i < 10) delete pEmittedParticle;
@@ -210,7 +210,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
 
 	  if ( verboseLevel >= 4 )
 	    G4cout << "G4BertiniEvaporation : No appropriate energy for particle " 
-		   << pSelectedChannel->getName() << " found." << endl;
+		   << pSelectedChannel->getName() << " found." << G4endl;
 
 	  pSelectedChannel->setProbability( 0 );
 
@@ -240,17 +240,17 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
 	  boostToLab = G4ThreeVector ( ( 1/mRes ) * nucleusFourVector.vect() );
 
 	  if ( verboseLevel >= 10 )
-	    G4cout << "  particle mom in cms " << pEmittedParticle->GetMomentum() << endl 
-		   << "  particle mom in cms " << pEmittedParticle->GetTotalMomentum() << endl 
-		   << "          Etot in cms " << pEmittedParticle->GetTotalEnergy() << endl
-		   << "          Ekin in cms " << pEmittedParticle->GetKineticEnergy() << endl
-		   << "        particle mass " << pEmittedParticle->GetMass() << endl
-		   << "          boost  vect " << boostToLab << endl
-		   << "          boosted 4v  " << particleFourVector << endl
-		   << "          nucleus 4v  " << nucleusFourVector << endl
-		   << "          nucl cm mom " << nucleusTotalMomentum << endl
-		   << " particle k.e. in lab " << pPartLab->GetKineticEnergy() << endl
-		   << "     new boost vector " << boostToLab << endl;
+	    G4cout << "  particle mom in cms " << pEmittedParticle->GetMomentum() << G4endl 
+		   << "  particle mom in cms " << pEmittedParticle->GetTotalMomentum() << G4endl 
+		   << "          Etot in cms " << pEmittedParticle->GetTotalEnergy() << G4endl
+		   << "          Ekin in cms " << pEmittedParticle->GetKineticEnergy() << G4endl
+		   << "        particle mass " << pEmittedParticle->GetMass() << G4endl
+		   << "          boost  vect " << boostToLab << G4endl
+		   << "          boosted 4v  " << particleFourVector << G4endl
+		   << "          nucleus 4v  " << nucleusFourVector << G4endl
+		   << "          nucl cm mom " << nucleusTotalMomentum << G4endl
+		   << " particle k.e. in lab " << pPartLab->GetKineticEnergy() << G4endl
+		   << "     new boost vector " << boostToLab << G4endl;
 
 	  delete pEmittedParticle;
 
@@ -304,7 +304,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
       totalDeExcEnergy += gammaEnergy; 
 
       if ( verboseLevel >= 10 )
-	G4cout << " G4BertiniEvaporation : gamma de-excitation, g of " << gammaEnergy << " MeV " << endl;
+	G4cout << " G4BertiniEvaporation : gamma de-excitation, g of " << gammaEnergy << " MeV " << G4endl;
       
       G4LorentzVector gammaFourVector( pEmittedParticle->GetMomentum(),
 				       pEmittedParticle->GetKineticEnergy() );
@@ -328,7 +328,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
 
 void G4BertiniEvaporation::splitBe8( const G4double E,
 				     const G4ThreeVector boostToLab,
-				     vector< G4DynamicParticle * > & secondaryParticleVector )
+				     G4std::vector< G4DynamicParticle * > & secondaryParticleVector )
 {
   G4double kineticEnergy; 
   G4double u;
@@ -337,7 +337,7 @@ void G4BertiniEvaporation::splitBe8( const G4double E,
   const G4double Be8DecayEnergy = 0.093 * MeV; 
 
   if ( E <= 0 ) G4Exception( "G4BertiniEvaporation : excitation energy < 0 " );
-  if ( verboseLevel >= 4 ) G4cout << "     Be8 split to 2 x He4" << endl;
+  if ( verboseLevel >= 4 ) G4cout << "     Be8 split to 2 x He4" << G4endl;
 
   kineticEnergy = 0.5 * ( E + Be8DecayEnergy ); 
   
@@ -376,7 +376,7 @@ void G4BertiniEvaporation::splitBe8( const G4double E,
 }
 
 
-void G4BertiniEvaporation::fillResult( vector<G4DynamicParticle *> secondaryParticleVector,
+void G4BertiniEvaporation::fillResult( G4std::vector<G4DynamicParticle *> secondaryParticleVector,
 				      G4FragmentVector * aResult )
 {
   // Fill the vector pParticleChange with secondary particles stored in vector.

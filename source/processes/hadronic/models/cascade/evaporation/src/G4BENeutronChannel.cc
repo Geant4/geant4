@@ -64,7 +64,7 @@ void G4BENeutronChannel::calculateProbability()
        excitationEnergy - getThresh() - correction < 0 )
     {
       if ( verboseLevel >= 6 )
-	G4cout << "G4BENeutronChannel : calculateProbability = 0 " << endl;
+	G4cout << "G4BENeutronChannel : calculateProbability = 0 " << G4endl;
       emissionProbability = 0;
       return;
     }
@@ -83,19 +83,19 @@ void G4BENeutronChannel::calculateProbability()
   emissionProbability = pow( residualA, 0.666666 ) * alpha() * ( eye1 + beta() * eye0 );
   
   if ( verboseLevel >= 6 )
-    G4cout << "G4BENeutronChannel : calculateProbability " << endl
-	   << "                    res A = " << residualA << endl 
-	   << "                    res Z = " << residualZ << endl 
-	   << "                    alpha = " << alpha() << endl 
-	   << "                     beta = " << beta() << endl
-	   << "                        E = " << excitationEnergy << endl
-	   << "               correction = " << correction << endl
-	   << "                     eye1 = " << eye1 << endl
-	   << "                     eye0 = " <<  eye0 << endl
-	   << "               levelParam = " << levelParam << endl
-	   << "                   thresh = " << getThresh() << endl
-	   << "                        s = " << s << endl
-	   << "              probability = " << emissionProbability << endl;
+    G4cout << "G4BENeutronChannel : calculateProbability " << G4endl
+	   << "                    res A = " << residualA << G4endl 
+	   << "                    res Z = " << residualZ << G4endl 
+	   << "                    alpha = " << alpha() << G4endl 
+	   << "                     beta = " << beta() << G4endl
+	   << "                        E = " << excitationEnergy << G4endl
+	   << "               correction = " << correction << G4endl
+	   << "                     eye1 = " << eye1 << G4endl
+	   << "                     eye0 = " <<  eye0 << G4endl
+	   << "               levelParam = " << levelParam << G4endl
+	   << "                   thresh = " << getThresh() << G4endl
+	   << "                        s = " << s << G4endl
+	   << "              probability = " << emissionProbability << G4endl;
 
   return;
 }
@@ -156,15 +156,15 @@ G4double  G4BENeutronChannel::sampleKineticEnergy()
     }
   while (  r1 * exp ( 2 * sqrt ( levelParam * ( xMax - r1 ) ) )  < r2 );
 
-//  G4cout <<  koe << endl;
+//  G4cout <<  koe << G4endl;
   G4double kineticEnergy = r1 - beta();
 
   if ( verboseLevel >= 10 )
-    G4cout << " G4BENeutronChannel : sampleKineticEnergy() " << endl
-	   << "       kinetic n e = " << kineticEnergy << endl
-	   << "        levelParam = " << levelParam << endl
-	   << "             thresh= " << getThresh() << endl
-	   << "               beta= " << beta() << endl;
+    G4cout << " G4BENeutronChannel : sampleKineticEnergy() " << G4endl
+	   << "       kinetic n e = " << kineticEnergy << G4endl
+	   << "        levelParam = " << levelParam << G4endl
+	   << "             thresh= " << getThresh() << G4endl
+	   << "               beta= " << beta() << G4endl;
 
   return kineticEnergy;
 }
