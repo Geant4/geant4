@@ -1,46 +1,48 @@
-# $Id: stt-dev.sdb,v 1.6 1999-09-16 13:59:51 stesting Exp $
+# $Id: stt-dev.sdb,v 1.7 1999-10-06 16:15:31 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
 # Super-categories
-geant4/config           geant4-00-01-ref-01
-geant4/data             geant4-00-01-ref-01
+geant4/config           geant4-00-01-ref-02
+geant4/data             geant4-00-01-ref-02
 # geant4/documents - not currently part of reference versions
-geant4/environments     geant4-00-01-ref-01
-geant4/examples         examples-V00-01-00
+geant4/environments     geant4-00-01-ref-02
+geant4/examples         examples-V00-01-04
 # geant4/source - split into categories - see below.
 # geant4/tests - checkout HEAD by hand and use this script.
 # Source categories
-geant4/source/GNUmakefile      geant4-00-01-ref-01
-geant4/source/digits+hits      geant4-00-01-ref-01
-geant4/source/event            geant4-00-01-ref-01
-geant4/source/g3tog4           g3tog4-V00-01-00
-geant4/source/geometry/GNUmakefile   geant4-00-01-ref-01
-geant4/source/geometry/History       geant4-00-01-ref-01
-geant4/source/geometry/magneticfield geant4-00-01-ref-01
-geant4/source/geometry/management    geant4-00-01-ref-01
-geant4/source/geometry/solids        geant4-00-01-ref-01
-geant4/source/geometry/solids/BREPS  geant4-00-01-ref-01
-geant4/source/geometry/volumes       geant4-00-01-ref-01
-geant4/source/global           global-V00-01-00
-geant4/source/graphics_reps    geant4-00-01-ref-01
-geant4/source/intercoms        geant4-00-01-ref-01
-geant4/source/interfaces       geant4-00-01-ref-01
-geant4/source/materials        geant4-00-01-ref-01
-geant4/source/particles        geant4-00-01-ref-01
-geant4/source/persistency      geant4-00-01-ref-01
-geant4/source/processes/GNUmakefile         geant4-00-01-ref-01
-geant4/source/processes/History             geant4-00-01-ref-01
-geant4/source/processes/decay	            geant4-00-01-ref-01
-geant4/source/processes/electromagnetic	    em-V00-01-00
-geant4/source/processes/hadronic            geant4-00-01-ref-01
-geant4/source/processes/management          geant4-00-01-ref-01
-geant4/source/processes/optical	            geant4-00-01-ref-01
-geant4/source/processes/parameterisation    geant4-00-01-ref-01
-geant4/source/processes/photolepton_hadron  geant4-00-01-ref-01
-geant4/source/processes/transportation      geant4-00-01-ref-01
-geant4/source/readout          geant4-00-01-ref-01
-geant4/source/run              geant4-00-01-ref-01
-geant4/source/track            geant4-00-01-ref-01
-geant4/source/tracking         geant4-00-01-ref-01
-geant4/source/visualization    vis-V00-01-03
+geant4/source/GNUmakefile      geant4-00-01-ref-02
+geant4/source/digits+hits      geant4-00-01-ref-02
+geant4/source/event            event-V00-01-00
+geant4/source/g3tog4           geant4-00-01-ref-02
+geant4/source/geometry/GNUmakefile   geant4-00-01-ref-02
+geant4/source/geometry/History       geant4-00-01-ref-02
+geant4/source/geometry/magneticfield geant4-00-01-ref-02
+geant4/source/geometry/management    geant4-00-01-ref-02
+geant4/source/geometry/solids        geant4-00-01-ref-02
+geant4/source/geometry/solids/BREPS  geant4-00-01-ref-02
+geant4/source/geometry/volumes       geant4-00-01-ref-02
+geant4/source/global           geant4-00-01-ref-02
+geant4/source/graphics_reps    greps-V00-01-00
+geant4/source/intercoms        geant4-00-01-ref-02
+geant4/source/interfaces       geant4-00-01-ref-02
+geant4/source/materials        geant4-00-01-ref-02
+geant4/source/particles        geant4-00-01-ref-02
+geant4/source/particles/shortlived    shortlived-V00-01-00
+geant4/source/particles/hadrons       hadrons-V00-01-00a
+geant4/source/persistency      geant4-00-01-ref-02
+geant4/source/processes/GNUmakefile         geant4-00-01-ref-02
+geant4/source/processes/History             geant4-00-01-ref-02
+geant4/source/processes/decay	            geant4-00-01-ref-02
+geant4/source/processes/electromagnetic	    geant4-00-01-ref-02
+geant4/source/processes/hadronic            geant4-00-01-ref-02
+geant4/source/processes/management          geant4-00-01-ref-02
+geant4/source/processes/optical	            geant4-00-01-ref-02
+geant4/source/processes/parameterisation    param-V00-01-00
+geant4/source/processes/photolepton_hadron  geant4-00-01-ref-02
+geant4/source/processes/transportation      geant4-00-01-ref-02
+geant4/source/readout          geant4-00-01-ref-02
+geant4/source/run              geant4-00-01-ref-02
+geant4/source/track            geant4-00-01-ref-02
+geant4/source/tracking         geant4-00-01-ref-02
+geant4/source/visualization    vis-V00-01-04
