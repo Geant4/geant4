@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: globals.hh,v 1.18 2001-10-11 14:04:06 gcosmo Exp $
+// $Id: globals.hh,v 1.19 2001-10-12 12:18:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -71,6 +71,13 @@
 // templated functions min and max should be _MIN _MAX
   #define min _MIN
   #define max _MAX
+#endif
+
+#ifndef FALSE
+  #define FALSE 0
+#endif
+#ifndef TRUE
+  #define TRUE 1
 #endif
 
 // min, max, abs and sqr are in TemplateFunctions.h.
