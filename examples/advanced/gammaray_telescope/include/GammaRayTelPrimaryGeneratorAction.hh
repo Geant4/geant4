@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.hh,v 1.2 2000-11-15 20:27:39 flongo Exp $
+// $Id: GammaRayTelPrimaryGeneratorAction.hh,v 1.3 2000-12-06 16:53:13 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -16,7 +16,7 @@
 //      CERN, IT Division, ASD group
 //
 //      ------------ GammaRayTelPrimaryGeneratorAction  ------
-//           by G.Santin, F.Longo & R.Giannitrapani (13 nov 2000)
+//           by G.Santin, F.Longo & R.Giannitrapani (30 nov 2000)
 //
 // ************************************************************
 

@@ -1,6 +1,6 @@
 # ----------------------------------------------
 # Example macro file for the GammaRayTel
-# Visualization with OpenGL 
+# Visualization with DAWN
 # ----------------------------------------------
 # Authors: R.Giannitrapani, F.Longo and G.Santin 
 # ----------------------------------------------
@@ -32,7 +32,7 @@
 
 #
 # Create a scene handler for a specific graphics system
-/vis/sceneHandler/create OGLSX
+/vis/sceneHandler/create DAWNFILE
 
 # Create a viewer
 /vis/viewer/create

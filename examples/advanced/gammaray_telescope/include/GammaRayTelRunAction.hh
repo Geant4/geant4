@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelRunAction.hh,v 1.2 2000-11-15 20:27:39 flongo Exp $
+// $Id: GammaRayTelRunAction.hh,v 1.3 2000-12-06 16:53:13 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -27,6 +27,10 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
+#ifdef G4ANALYSIS_USE
+#include "GammaRayTelAnalysisManager.hh"
+#endif
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4Run;
@@ -34,13 +38,21 @@ class G4Run;
 class GammaRayTelRunAction : public G4UserRunAction
 {
 public:
+#ifdef G4ANALYSIS_USE
+  GammaRayTelRunAction(GammaRayTelAnalysisManager* analysisMgr);
+#else
   GammaRayTelRunAction();
+#endif
   ~GammaRayTelRunAction();
   
 public:
   void BeginOfRunAction(const G4Run*);
   void EndOfRunAction(const G4Run*);
-  
+
+private:
+#ifdef G4ANALYSIS_USE
+    GammaRayTelAnalysisManager* analysisManager;
+#endif  
 };
 
 #endif

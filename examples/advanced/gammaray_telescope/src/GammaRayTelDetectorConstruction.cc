@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelDetectorConstruction.cc,v 1.3 2000-11-20 16:49:23 flongo Exp $
+// $Id: GammaRayTelDetectorConstruction.cc,v 1.4 2000-12-06 16:53:13 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -392,8 +392,6 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
       
       // Tracker Structure (Plane + Converter + TKRDetectorX + TKRDetectorY)
       
-      
-
       solidPlane = new G4Box("Plane",			
 			     TKRSizeXY/2,TKRSizeXY/2,TKRSupportThickness/2); 
       
@@ -559,14 +557,6 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 	}
 
 
-
-
-
-
-
-
-
- 
       // Calorimeter Structure (CALDetectorX + CALDetectorY)
       
       
@@ -612,61 +602,63 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
       //                               
       // Sensitive Detectors: TKRDetector
       //
-      
-      
 
       G4SDManager* SDman = G4SDManager::GetSDMpointer();
       if(!payloadSD)
 	{
 	  payloadSD = new GammaRayTelPayloadSD("PayloadSD",this);
-	  //	  SDman->AddNewDetector( payloadSD );
+	  SDman->AddNewDetector( payloadSD );		
 	}
-      
       
       G4String ROgeometryName = "PayloadROGeom";
       G4VReadOutGeometry* payloadRO = 
-	new GammaRayTelPayloadROGeometry(ROgeometryName, this);
+	payloadRO = new GammaRayTelPayloadROGeometry(ROgeometryName, this);
+
       payloadRO->BuildROGeometry();
       payloadSD->SetROgeometry(payloadRO);
-      SDman->AddNewDetector( payloadSD );
-      
+
+
       //  if (logicTKRDetector)
       //  logicTKRDetector->SetSensitiveDetector(payloadSD); // sensitive planes  
       
       if (logicTKRActiveTileX)
-	logicTKRActiveTileX->SetSensitiveDetector(payloadSD); // sensitive planes  
+	logicTKRActiveTileX->SetSensitiveDetector(payloadSD); // sensitive tile
       if (logicTKRActiveTileY)
-	logicTKRActiveTileY->SetSensitiveDetector(payloadSD); // sensitive planes  
-      
-      
+	logicTKRActiveTileY->SetSensitiveDetector(payloadSD); // sensitive tile
+            
       //                                        
-  // Visualization attributes
-  //
-  logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
-  logicTKR->SetVisAttributes(G4VisAttributes::Invisible);  
-  logicTKRDetectorX->SetVisAttributes(G4VisAttributes::Invisible);  
-  logicTKRDetectorY->SetVisAttributes(G4VisAttributes::Invisible);  
-  logicPlane->SetVisAttributes(G4VisAttributes::Invisible);  
-  logicConverter->SetVisAttributes(G4VisAttributes::Invisible);
+      // Visualization attributes
+      //
   
-  G4VisAttributes* VisAtt1= new G4VisAttributes(G4Colour(0.3,0.8,0.1));
-  VisAtt1->SetVisibility(true);
-  VisAtt1->SetForceSolid(TRUE);
+      // Invisible Volume
+      logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
+      logicPayload->SetVisAttributes (G4VisAttributes::Invisible);
+      logicTKR->SetVisAttributes(G4VisAttributes::Invisible);  
+      logicTKRActiveTileX->SetVisAttributes(G4VisAttributes::Invisible);  
+      logicTKRActiveTileY->SetVisAttributes(G4VisAttributes::Invisible);  
+      logicPlane->SetVisAttributes(G4VisAttributes::Invisible);  
+      logicConverter->SetVisAttributes(G4VisAttributes::Invisible);
+  
+      // Some visualization styles
+      G4VisAttributes* VisAtt1= new G4VisAttributes(G4Colour(0.3,0.8,0.1));
+      VisAtt1->SetVisibility(true);
+      VisAtt1->SetForceSolid(TRUE);
 
-  G4VisAttributes* VisAtt2= new G4VisAttributes(G4Colour(0.2,0.3,0.8));
-  VisAtt2->SetVisibility(true);
-  VisAtt2->SetForceSolid(FALSE);
+      G4VisAttributes* VisAtt2= new G4VisAttributes(G4Colour(0.2,0.3,0.8));
+      VisAtt2->SetVisibility(true);
+      VisAtt2->SetForceSolid(FALSE);
 
-  G4VisAttributes* VisAtt3= new G4VisAttributes(G4Colour(0.8,0.2,0.3));
-  VisAtt3->SetVisibility(true);
-  VisAtt3->SetForceWireframe(TRUE);
+      G4VisAttributes* VisAtt3= new G4VisAttributes(G4Colour(0.8,0.2,0.3));
+      VisAtt3->SetVisibility(true);
+      VisAtt3->SetForceWireframe(TRUE);
 
-  logicCAL->SetVisAttributes(VisAtt1);
-  logicTKRDetectorX->SetVisAttributes(VisAtt2);
-  logicTKRDetectorY->SetVisAttributes(VisAtt3);
-  logicACT->SetVisAttributes(VisAtt3);  
-  logicACL1->SetVisAttributes(VisAtt3);  
-  logicACL2->SetVisAttributes(VisAtt3);
+      // Visible Volumes
+      logicCAL->SetVisAttributes(VisAtt1);
+      logicTKRDetectorX->SetVisAttributes(VisAtt2);
+      logicTKRDetectorY->SetVisAttributes(VisAtt2);
+      logicACT->SetVisAttributes(VisAtt3);  
+      logicACL1->SetVisAttributes(VisAtt3);  
+      logicACL2->SetVisAttributes(VisAtt3);
   
   //
   //always return the physical World

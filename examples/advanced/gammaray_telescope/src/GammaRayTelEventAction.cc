@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelEventAction.cc,v 1.3 2000-11-24 16:57:00 flongo Exp $
+// $Id: GammaRayTelEventAction.cc,v 1.4 2000-12-06 16:53:14 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -23,8 +23,8 @@
 #include "GammaRayTelPayloadHit.hh"
 #include "g4rw/tvordvec.h"
 
-#ifdef G4HIS_USE_AIDA
-#include "GammaRayTelHistogram.hh"
+#ifdef G4ANALYSIS_USE
+#include "GammaRayTelAnalysisManager.hh"
 #endif
 
 #include "G4Event.hh"
@@ -40,20 +40,20 @@
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
 
-// This file is a global variabe in which we store energy deposition per hit
+// This file is a global variable in which we store energy deposition per hit
 // and other relevant information
 extern G4std::ofstream outFile;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifdef G4HIS_USE_AIDA
-GammaRayTelEventAction::GammaRayTelEventAction(GammaRayTelHistogram* hMgr)
-  :drawFlag("all"), printModulo(10000),trackerCollID(-1),histoManager(hMgr)
+#ifdef G4ANALYSIS_USE
+GammaRayTelEventAction::GammaRayTelEventAction(GammaRayTelAnalysisManager* aMgr)
+  :drawFlag("all"),trackerCollID(-1),analysisManager(aMgr)
 {
 }
 #else
 GammaRayTelEventAction::GammaRayTelEventAction()
-  :drawFlag("all"), printModulo(10000),trackerCollID(-1)
+  :drawFlag("all"), trackerCollID(-1)
 {
 }
 #endif
@@ -68,18 +68,16 @@ GammaRayTelEventAction::~GammaRayTelEventAction()
 
 void GammaRayTelEventAction::BeginOfEventAction(const G4Event* evt)
 {
-  
+
   G4int evtNb = evt->GetEventID();
-  if (evtNb%printModulo == 0)
-    { 
-      G4cout << "\n---> Event: " << evtNb << G4endl;
-    }
+  G4cout << "Event: " << evtNb << G4endl;
   
   if (trackerCollID==-1)
     {
       G4SDManager * SDman = G4SDManager::GetSDMpointer();
       trackerCollID = SDman->GetCollectionID("PayloadCollection");
-    } 
+    }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -87,23 +85,12 @@ void GammaRayTelEventAction::BeginOfEventAction(const G4Event* evt)
 void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 {
   G4int event_id = evt->GetEventID();
+
   
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;
   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
   
-  
-#ifdef G4HIS_USE_AIDA
-  IHistogram1D * Edeposited;
-  vector<IHistogram1D *> * hlist = histoManager->getH1DList();
-  Edeposited = (*hlist)[0]; // 1D-histo # 0 is kinetic engergy
-  IHistogram2D * posXZHist;
-  // 2D-histo # 0 is posXZ
-  posXZHist = (*(histoManager->getH2DList()))[0];
-  IHistogram2D * posYZHist;
-  // 2D-histo # 1 is posYZ
-  posYZHist = (*(histoManager->getH2DList()))[1];
-#endif
   
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   GammaRayTelPayloadHitsCollection* CHC = NULL;
@@ -116,41 +103,47 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
       G4cout << "Number of hits in this event =  " << n_hit << G4endl;
       G4double ESil=0;
       G4int NStrip, NPlane, IsX;
+      // This is a cycle on all the hits of this event
       for (int i=0;i<n_hit;i++)
 	{
-	  // Here I put the energy deposition per hit in the file for 
+	  // Here we put the hit data in a an ASCII file for 
 	  // later analysis 
 	  ESil = (*CHC)[i]->GetEdepSil();
 	  NStrip = (*CHC)[i]->GetNStrip();
 	  NPlane = (*CHC)[i]->GetNSilPlane();
 	  IsX = (*CHC)[i]->GetPlaneType();
-	  outFile << G4std::setw(7) << ESil/keV << " " << NStrip << 
+
+	  outFile << G4std::setw(7) << event_id << " " << 
+	    ESil/keV << " " << NStrip << 
 	    " " << NPlane << " " << IsX << " " <<
-	    (*CHC)[i]->GetPos().x() <<" "<<
-	    (*CHC)[i]->GetPos().y() <<" "<<
-	    (*CHC)[i]->GetPos().z() <<" "<<
+	    (*CHC)[i]->GetPos().x()/mm <<" "<<
+	    (*CHC)[i]->GetPos().y()/mm <<" "<<
+	    (*CHC)[i]->GetPos().z()/mm <<" "<<
 	    G4endl;
 	  
-#ifdef G4HIS_USE_AIDA
-	  Edeposited->fill(ESil);
-	  if(IsX) 
-	    posXZHist->fill((*CHC)[i]->GetPos().x(),
-			    (*CHC)[i]->GetPos().z());
+#ifdef G4ANALYSIS_USE
+	  // Here we fill the histograms of the Analysis manager
+	  if(IsX)
+	    {
+	      if (analysisManager->GetHisto2DMode()=="position")
+		analysisManager->InsertPositionXZ((*CHC)[i]->GetPos().x()/mm,(*CHC)[i]->GetPos().z()/mm);
+	      else
+		analysisManager->InsertPositionXZ(NStrip, NPlane);  	      
+	      if (NPlane == 0) analysisManager->InsertEnergy(ESil/keV);
+	      analysisManager->InsertHits(NPlane);
+	    }
 	  else
-	    posYZHist->fill((*CHC)[i]->GetPos().y(),
-			    (*CHC)[i]->GetPos().z());
+	    if (analysisManager->GetHisto2DMode()=="position")
+	      analysisManager->InsertPositionYZ((*CHC)[i]->GetPos().y()/mm,(*CHC)[i]->GetPos().z()/mm);  
+	    else 
+	      analysisManager->InsertPositionYZ(NStrip, NPlane);  	      
 #endif
 	}
-      
-#ifdef G4HIS_USE_AIDA
-      histoManager->plot1(posXZHist);
-      histoManager->plot2(posYZHist);
-      histoManager->getPlotter1()->refresh();
-      histoManager->getPlotter2()->refresh();
-      histoManager->getPlotter1()->psPrint("plotXZ.ps");
-      histoManager->getPlotter2()->psPrint("plotYZ.ps");
-#endif
 
+      // Here we call the analysis manager function for visualization
+#ifdef G4ANALYSIS_USE
+      analysisManager->EndOfEvent(n_hit);
+#endif
     }
   
   

@@ -1,6 +1,6 @@
 # ----------------------------------------------
 # Example macro file for the GammaRayTel
-# Visualization with OpenGL and VRML
+# Visualization with VRML
 # ----------------------------------------------
 # Authors: R.Giannitrapani, F.Longo and G.Santin 
 # ----------------------------------------------
@@ -19,7 +19,7 @@
 /gun/direction 0 0 -1
 
 # You can modify the geometry of the telescope via a messenger
-/payload/setNbOfTKRLayers 3
+/payload/setNbOfTKRLayers 10
 /payload/update
 
 #
@@ -32,7 +32,7 @@
 
 #
 # Create a scene handler for a VRML file
-/vis/sceneHandler/create VRML
+/vis/sceneHandler/create VRML2FILE
 
 # Create a viewer
 /vis/viewer/create
@@ -40,9 +40,6 @@
 # Positioning of the camera
 /vis/camera/viewpoint 30 30 
 
-
-# Create a scene handler for a OpenGL file
-/vis/sceneHandler/create OGLSX
 
 # Create a viewer
 /vis/viewer/create

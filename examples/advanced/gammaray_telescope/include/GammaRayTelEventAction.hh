@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelEventAction.hh,v 1.2 2000-11-15 20:27:39 flongo Exp $
+// $Id: GammaRayTelEventAction.hh,v 1.3 2000-12-06 16:53:13 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -29,18 +29,17 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-#ifdef G4HIS_USE_AIDA
-#include "GammaRayTelHistogram.hh"
+#ifdef G4ANALYSIS_USE
+#include "GammaRayTelAnalysisManager.hh"
 #endif
-//class GammaRayTelEventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class GammaRayTelEventAction : public G4UserEventAction
 {
   public:
-#ifdef G4HIS_USE_AIDA
-  GammaRayTelEventAction(GammaRayTelHistogram* histoMgr);
+#ifdef G4ANALYSIS_USE
+  GammaRayTelEventAction(GammaRayTelAnalysisManager* analysisMgr);
 #else
   GammaRayTelEventAction();
 #endif
@@ -51,14 +50,12 @@ class GammaRayTelEventAction : public G4UserEventAction
   virtual void   EndOfEventAction(const G4Event*);
   
   void SetDrawFlag   (G4String val)  {drawFlag = val;};
-  void SetPrintModulo(G4int    val)  {printModulo = val;};
 
   private:
     G4int       trackerCollID;                
     G4String    drawFlag;
-    G4int       printModulo;                         
-#ifdef G4HIS_USE_AIDA
-    GammaRayTelHistogram* histoManager;
+#ifdef G4ANALYSIS_USE
+    GammaRayTelAnalysisManager* analysisManager;
 #endif
 };
 

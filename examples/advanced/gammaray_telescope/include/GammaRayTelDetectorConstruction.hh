@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelDetectorConstruction.hh,v 1.3 2000-11-20 16:49:44 flongo Exp $
+// $Id: GammaRayTelDetectorConstruction.hh,v 1.4 2000-12-06 16:53:13 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -32,6 +32,7 @@ class G4Material;
 class G4UniformMagField;
 class GammaRayTelDetectorMessenger;
 class GammaRayTelPayloadSD;
+class GammaRayTelPayloadROGeometry;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -225,7 +226,7 @@ private:
   
   GammaRayTelDetectorMessenger* detectorMessenger;  //pointer to the Messenger
   GammaRayTelPayloadSD* payloadSD;  //pointer to the sensitive detector
-  
+
 private:
     
   void DefineMaterials();

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelRunAction.cc,v 1.2 2000-11-15 20:27:42 flongo Exp $
+// $Id: GammaRayTelRunAction.cc,v 1.3 2000-12-06 16:53:14 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -25,16 +25,25 @@
 
 #include "GammaRayTelRunAction.hh"
 
+#include <stdlib.h>
 #include "G4Run.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+extern ofstream outFile;
 
+#ifdef G4ANALYSIS_USE
+GammaRayTelRunAction::GammaRayTelRunAction(GammaRayTelAnalysisManager* aMgr)
+  :analysisManager(aMgr)
+{
+}
+#else
 GammaRayTelRunAction::GammaRayTelRunAction()
 {
 }
+#endif
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -45,25 +54,50 @@ GammaRayTelRunAction::~GammaRayTelRunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void GammaRayTelRunAction::BeginOfRunAction(const G4Run* aRun)
-{
-  
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-  
+{  
+  char name[15];
+
+  // Open the file for the tracks of this run
+  sprintf(name,"Tracks_%d.dat", aRun->GetRunID());
+  outFile.open(name);
+
+  // Prepare the visualization
   if (G4VVisManager::GetConcreteInstance())
     {
       G4UImanager* UI = G4UImanager::GetUIpointer(); 
       UI->ApplyCommand("/vis/scene/notifyHandlers");
     } 
+
+  // If analysis is used reset the histograms
+#ifdef G4ANALYSIS_USE
+  analysisManager->BeginOfRun();
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelRunAction::EndOfRunAction(const G4Run* )
+void GammaRayTelRunAction::EndOfRunAction(const G4Run* aRun)
 {
+  // Run ended, update the visualization
   if (G4VVisManager::GetConcreteInstance()) {
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
   }
+
+  // Close the file with the hits information
+  outFile.close();
+
+  // If analysis is used, print out the histograms
+#ifdef G4ANALYSIS_USE
+  analysisManager->EndOfRun(aRun->GetRunID());
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+
+
+
+
 

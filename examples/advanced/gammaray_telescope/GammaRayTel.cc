@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTel.cc,v 1.2 2000-11-15 20:27:38 flongo Exp $
+// $Id: GammaRayTel.cc,v 1.3 2000-12-06 16:53:12 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,8 +17,8 @@
 //      CERN, IT Division, ASD group
 //
 //      ------------ GammaRayTel example main program ------
-//           by F.Longo, R.Giannitrapani & G.Santin (13 nov 2000)
-//
+//           by F.Longo, R.Giannitrapani & G.Santin (29 nov 2000)
+//           See README file for details on this example            
 // ************************************************************
 
 #include "G4RunManager.hh"
@@ -28,7 +28,6 @@
 #ifdef G4UI_USE_XM
 #include "G4UIXm.hh"
 #endif
-
 
 #ifdef G4VIS_USE
 #include "GammaRayTelVisManager.hh"
@@ -40,78 +39,76 @@
 #include "GammaRayTelRunAction.hh"
 #include "GammaRayTelEventAction.hh"
 
-#ifdef G4HIS_USE_AIDA
-#include "GammaRayTelHistogram.hh"
+#ifdef G4ANALYSIS_USE
+#include "GammaRayTelAnalysisManager.hh"
 #endif
 
-#include "g4std/vector"
 
-// This global file is used to store relevant data for
-// analysis with a separate program
+/* This global file is used to store relevant data for
+   analysis with external tools */
+G4std::ofstream outFile;
 
-G4std::ofstream outFile("tracks.dat");
-
-G4bool drawEvent;
-G4std::vector<G4String> EnteringParticles;
-G4std::vector<G4double> EnteringEnergy;
-G4std::vector<G4ThreeVector> EnteringDirection;
-
+// This is the main function 
 int main(int argc, char** argv)
 {
   // Construct the default run manager
   G4RunManager* runManager = new G4RunManager;
   
-  // set mandatory initialization classes
-  GammaRayTelDetectorConstruction* detector = new GammaRayTelDetectorConstruction;
+  // Set mandatory user initialization classes
+  GammaRayTelDetectorConstruction* detector = 
+    new GammaRayTelDetectorConstruction;
   runManager->SetUserInitialization(detector);
-  
   runManager->SetUserInitialization(new GammaRayTelPhysicsList);
 
-  
-#ifdef G4HIS_USE_AIDA
-  // Creation of the histogram manager
-  GammaRayTelHistogram histoMgr(detector);
+  // Set mandatory user action classes
+  runManager->SetUserAction(new GammaRayTelPrimaryGeneratorAction(detector));
+
+
+#ifdef G4ANALYSIS_USE
+  // Creation of the analysis manager
+  GammaRayTelAnalysisManager* analysisMgr = new GammaRayTelAnalysisManager(detector);
 #endif
-  
+
+  // Set optional user action classes
+#ifdef G4ANALYSIS_USE
+  GammaRayTelEventAction* eventAction = 
+    new GammaRayTelEventAction(analysisMgr);
+  GammaRayTelRunAction* runAction =
+    new GammaRayTelRunAction(analysisMgr);
+#else 
+  GammaRayTelEventAction* eventAction = new GammaRayTelEventAction();
+  GammaRayTelRunAction* runAction = new GammaRayTelRunAction();
+#endif
+  runManager->SetUserAction(eventAction);
+  runManager->SetUserAction(runAction);
+
+  // Set visualization and user interface
+  // Initialization of the User Interface Session
   G4UIsession* session=0;
-  
 #ifdef G4UI_USE_XM
+  // Create a XMotif user interface
   session = new G4UIXm(argc,argv);
 #else
+  // Create the standard user interface
   session = new G4UIterminal;
 #endif
-  
 #ifdef G4VIS_USE
-  // visualization manager
+  // Visualization manager
   G4VisManager* visManager = new GammaRayTelVisManager;
   visManager->Initialize();
 #endif
-
-  // set mandatory user action classes
-  runManager->SetUserAction(new GammaRayTelPrimaryGeneratorAction(detector));
-  runManager->SetUserAction(new GammaRayTelRunAction);
-  
-  // set optional user action classes
-#ifdef G4HIS_USE_AIDA
-  GammaRayTelEventAction* eventAction = new GammaRayTelEventAction(&histoMgr);
-#else 
-  GammaRayTelEventAction* eventAction = new GammaRayTelEventAction();
-#endif
-  
-  runManager->SetUserAction(eventAction);
   
   // Initialize G4 kernel
   runManager->Initialize();
   
-
-  // get the pointer to the UI manager and set verbosities
+  // Get the pointer to the UI manager
   G4UImanager* UI = G4UImanager::GetUIpointer();
   
   if (session) 
     {
-      // prerunGammaRayTel.mac is loaded by default
-      // if macro file i exists, it is passed as the argument
-      // of the executable
+      /* prerunGammaRayTel.mac is loaded by default
+	 unless a macro file is passed as the argument
+	 of the executable */
 
       if(argc>1)
 	{
@@ -127,9 +124,12 @@ int main(int argc, char** argv)
       delete session;
     }
 
-  // job termination
+  // Job termination
 #ifdef G4VIS_USE
   delete visManager;
+#endif
+#ifdef G4ANALYSIS_USE
+  delete analysisMgr;
 #endif
   delete runManager;
   return 0;

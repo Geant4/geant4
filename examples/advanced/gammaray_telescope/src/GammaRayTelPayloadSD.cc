@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelPayloadSD.cc,v 1.4 2000-11-24 16:57:00 flongo Exp $
+// $Id: GammaRayTelPayloadSD.cc,v 1.5 2000-12-06 16:53:14 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -84,7 +84,6 @@ G4bool GammaRayTelPayloadSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
   
   // This TouchableHistory is used to obtain the physical volume
   // of the hit
-
   G4TouchableHistory* theTouchable
     = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
  
@@ -95,31 +94,19 @@ G4bool GammaRayTelPayloadSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
   PlaneNumber=plane->GetCopyNo();
   G4String PlaneName = plane->GetName();
 
-  //  G4cout << " Plane Number = " << PlaneNumber << PlaneName << G4endl;
-  
-
   // The RO History is used to obtain the real strip
   // of the hit
-  // some problems with the RO tree
-
 
   G4int StripNumber = 0;
   G4VPhysicalVolume* strip = 0;
   strip = ROhist->GetVolume();
   G4String StripName = strip->GetName();
   StripNumber= strip->GetCopyNo();  
-  //  G4cout << StripName << " " << StripNumber << G4endl;       
-       
-  //G4ThreeVector pos_obj = strip->GetObjectTranslation();
-  //G4ThreeVector pos_particle = aStep->GetPreStepPoint()->GetPosition();
-  //G4cout << StripName << " " << pos_obj << " " << pos_particle << G4endl;
 
-  
   ROhist->MoveUpHistory();
   G4VPhysicalVolume* tile = ROhist->GetVolume(); 
   G4int TileNumber = tile->GetCopyNo();  
   G4String TileName = tile->GetName();   
-  // G4cout << " Tile Number = " << TileNumber << TileName << G4endl;
   
   G4int NTile = (TileNumber%TileTotal);  
   G4int j=0;
@@ -129,23 +116,19 @@ G4bool GammaRayTelPayloadSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
       if(NTile==j) StripNumber += StripTotal*NTile;
     }  
   
-  G4cout << " Plane Number = " << PlaneNumber << PlaneName << G4endl;
-  G4cout << StripName << " " << StripNumber << G4endl;       
+  // G4cout << " Plane Number = " << PlaneNumber << " " << PlaneName << G4endl;
+  // G4cout << StripName << " " << StripNumber << G4endl;       
   
   ROhist->MoveUpHistory();
   
-  
-
   G4VPhysicalVolume* ROPlane = ROhist->GetVolume(); 
   G4int ROPlaneNumber = ROPlane->GetCopyNo();
   G4String ROPlaneName = ROPlane->GetName();   
-  //  G4cout << " Number ROPlane = " << ROPlaneNumber << ROPlaneName << G4endl;
-
-  
-  
+    
   if (PlaneName == "TKRDetectorX" )
     // The hit is on an X silicon plane
     {
+      // This is a new hit
       if (HitXID[StripNumber][PlaneNumber]==-1)
 	{       
 	  GammaRayTelPayloadHit* PayloadHit = new GammaRayTelPayloadHit();
@@ -157,17 +140,17 @@ G4bool GammaRayTelPayloadSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
 	  HitXID[StripNumber][PlaneNumber] = 
 	    PayloadCollection->insert(PayloadHit) -1;
 	}
-      else
+      else // This is not new
 	{
-          G4cout << HitXID[StripNumber][PlaneNumber] << G4endl;
 	  (*PayloadCollection)[HitXID[StripNumber][PlaneNumber]]->AddSil(edep);
-          G4cout << "X" << PlaneNumber << " " << StripNumber << G4endl;
+          // G4cout << "X" << PlaneNumber << " " << StripNumber << G4endl;
 	}
     }
  
   if (PlaneName == "TKRDetectorY")
     // The hit is on an Y silicon plane    
-    {      
+    {   
+      // This is a new hit
       if (HitYID[StripNumber][PlaneNumber]==-1)
 	{       
 	  GammaRayTelPayloadHit* PayloadHit = new GammaRayTelPayloadHit();
@@ -179,19 +162,13 @@ G4bool GammaRayTelPayloadSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
 	  HitYID[StripNumber][PlaneNumber] = 
 	    PayloadCollection->insert(PayloadHit)-1;
 	}
-      else
+      else // This is not new
 	{
-          G4cout << HitYID[StripNumber][PlaneNumber] << G4endl;
 	  (*PayloadCollection)[HitYID[StripNumber][PlaneNumber]]->AddSil(edep);
-          G4cout << "Y" << PlaneNumber << " " << StripNumber << G4endl;
-
+          // G4cout << "Y" << PlaneNumber << " " << StripNumber << G4endl;
 	}
-      
-      
-
     }
   
-    
   return true;
 }
 

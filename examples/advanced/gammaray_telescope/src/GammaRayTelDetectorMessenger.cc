@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelDetectorMessenger.cc,v 1.2 2000-11-15 20:27:41 flongo Exp $
+// $Id: GammaRayTelDetectorMessenger.cc,v 1.3 2000-12-06 16:53:14 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -247,7 +247,6 @@ void GammaRayTelDetectorMessenger::SetNewValue(G4UIcommand* command,G4String new
   if( command == MagFieldCmd )
     { GammaRayTelDetector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
