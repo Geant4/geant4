@@ -1,0 +1,49 @@
+############################################################################
+# Example for Bline visualisation
+############################################################################
+
+# User section
+# -- here the user should add commands for defining start position and time 
+ 
+
+# BlineTracer tracking commands
+#
+/tracking/storeTrajectory 1
+
+# Next computed bline will be stored as Polyline and Polymarker
+#
+/vis/blineTracer/stockLines true
+/vis/blineTracer/stockPoints true
+
+# Size of the marker
+#
+/vis/blineTracer/setPointSize 12.
+
+# Line will be in green
+#
+/vis/blineTracer/setColour 0 1 0
+
+# For smooth trajectory choose a small max step length
+#
+/vis/blineTracer/setMaxStepLength 1. m
+
+# One line is computed
+#
+/vis/blineTracer/computeBline 1
+
+# One possible initialisation of visualisation driver and scene-handler
+#
+/vis/sceneHandler/remove scene-handler-0
+/vis/sceneHandler/create VRML2FILE scene-handler-0 3000
+/vis/viewer/create
+/vis/viewer/set/viewpointThetaPhi 35. 35. deg
+/vis/viewer/zoom .35
+/vis/viewer/set/style surface2
+
+# Stored field lines are added to the visualisation scene
+#
+/vis/blineTracer/show
+
+# The computed field line is visualised with the detector component
+#
+/vis/viewer/flush
