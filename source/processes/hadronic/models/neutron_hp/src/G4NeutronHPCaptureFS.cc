@@ -90,14 +90,15 @@
        G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
                                         ->FindIon(theBaseZ, theBaseA+1, 0, theBaseZ);
        theOne->SetDefinition(aRecoil);
-       // Now energy; assume that momentum gets taken by 'surrounding'.
+       // Now energy; 
+       // Can be done slightly better @
        G4ThreeVector aMomentum =  theTrack.GetMomentum()
                                  +theTarget.GetMomentum()
 				 -thePhotons->at(0)->GetMomentum();
+
        G4ThreeVector theMomUnit = aMomentum.unit();
        G4double aKinEnergy =  theTrack.GetKineticEnergy()
-                             +theTarget.GetKineticEnergy()
-			     -thePhotons->at(0)->GetKineticEnergy();
+                             +theTarget.GetKineticEnergy(); // gammas come from Q-value
        G4double theResMass = aRecoil->GetPDGMass();
        G4double theResE = aRecoil->GetPDGMass()+aKinEnergy;
        G4double theAbsMom = sqrt(theResE*theResE - theResMass*theResMass);
