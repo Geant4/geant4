@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.40 2003-12-04 14:04:10 gcosmo Exp $
+# $Id: GNUmakefile,v 1.41 2003-12-05 07:44:10 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -117,12 +117,12 @@ clean:
 	@rm -rf $(G4BINDIR)
 	@rm -rf $(G4INSTALL)/.config/bin/$(G4SYSTEM)
 	@echo Removing physics-lists installation ...
-ifndef LISTS_BASE
+ifndef G4LISTS_BASE
 	@rm -rf $(G4LIB)/.lists_build/$(G4SYSTEM)
 	@rm -rf $(G4TMP)/.lists_build/$(G4SYSTEM)
 else
-	@rm -rf $(LISTS_BASE)/lists/.lists_build/lib/$(G4SYSTEM)
-	@rm -rf $(LISTS_BASE)/lists/.lists_build/tmp/$(G4SYSTEM)
+	@rm -rf $(G4LISTS_BASE)/lists/.lists_build/lib/$(G4SYSTEM)
+	@rm -rf $(G4LISTS_BASE)/lists/.lists_build/tmp/$(G4SYSTEM)
 endif
 ifdef CFRONT
 	@rm -rf $(G4TREP)
@@ -130,12 +130,12 @@ endif
 
 clean_lists:
 	@echo Removing physics-lists installation ...
-ifndef LISTS_BASE
+ifndef G4LISTS_BASE
 	@rm -rf $(G4LIB)/.lists_build/$(G4SYSTEM)
 	@rm -rf $(G4TMP)/.lists_build/$(G4SYSTEM)
 else
-	@rm -rf $(LISTS_BASE)/lists/.lists_build/lib/$(G4SYSTEM)
-	@rm -rf $(LISTS_BASE)/lists/.lists_build/tmp/$(G4SYSTEM)
+	@rm -rf $(G4LISTS_BASE)/lists/.lists_build/lib/$(G4SYSTEM)
+	@rm -rf $(G4LISTS_BASE)/lists/.lists_build/tmp/$(G4SYSTEM)
 endif
 
 # Pay _extremely_ attention before executing the following target !!
@@ -150,9 +150,9 @@ clean_all:
 	@rm -rf $(G4BIN)
 	@echo Removing $(G4INCLUDE) ...
 	@rm -rf $(G4INCLUDE)
-ifdef LISTS_BASE
+ifdef G4LISTS_BASE
 	@echo Removing physics-lists installation ...
-	@rm -rf $(LISTS_BASE)/lists/.lists_build
+	@rm -rf $(G4LISTS_BASE)/lists/.lists_build
 endif
 	@echo Removing installation configurations ...
 	@rm -rf $(G4INSTALL)/.config

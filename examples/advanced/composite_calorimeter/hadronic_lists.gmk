@@ -1,13 +1,13 @@
-# $Id: hadronic_lists.gmk,v 1.2 2003-12-04 13:22:50 gcosmo Exp $
+# $Id: hadronic_lists.gmk,v 1.3 2003-12-05 07:38:39 gcosmo Exp $
 # --------------------------------------------------------------
 # hadronic physics-lists setup - H.P.Wellisch
 # --------------------------------------------------------------
 
-ifndef LISTS_BASE
+ifndef G4LISTS_BASE
   EXTRALIBS += -L$(G4LIB)/.lists_build/$(G4SYSTEM)
-  LISTS_BASE = $(G4INSTALL)/hadronic_lists
+  G4LISTS_BASE = $(G4INSTALL)/hadronic_lists
 else
-  EXTRALIBS += -L$(LISTS_BASE)/lists/.lists_build/lib/$(G4SYSTEM)
+  EXTRALIBS += -L$(G4LISTS_BASE)/lists/.lists_build/lib/$(G4SYSTEM)
 endif
 
 # EXTRALIBS += -lFTFC
@@ -78,27 +78,27 @@ EXTRALIBS += -lG4hadronic_util
 
 EXTRALIBS += -lG4shortlived
 
-CPPFLAGS += -I$(LISTS_BASE)/lists/FTFC/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/FTFP/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/LBE/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/LHEP/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/LHEP_BERT/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/LHEP_BIC/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/LHEP_GN/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/LHEP_HP/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/LHEP_BERT_HP/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/LHEP_BIC_HP/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/LHEP_LEAD/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/LHEP_LEAD_HP/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/LHEP_PRECO/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/LHEP_PRECO_HP/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/Packaging/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/QGSC/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/QGSC_LEAD/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/QGSC_LEAD_HP/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/QGSP/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/QGSP_BERT/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/QGSP_BIC/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/QGSP_GN/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/QGSP_HP/include
-CPPFLAGS += -I$(LISTS_BASE)/lists/QGSP_Model/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/FTFC/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/FTFP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/LBE/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_BERT/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_BIC/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_GN/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_HP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_BERT_HP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_BIC_HP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_LEAD/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_LEAD_HP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_PRECO/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/LHEP_PRECO_HP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/Packaging/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSC/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSC_LEAD/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSC_LEAD_HP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSP_BERT/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSP_BIC/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSP_GN/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSP_HP/include
+CPPFLAGS += -I$(G4LISTS_BASE)/lists/QGSP_Model/include

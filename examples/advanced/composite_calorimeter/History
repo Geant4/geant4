@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.20 2003-12-04 16:49:55 ribon Exp $
+$Id: History,v 1.21 2003-12-05 07:38:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.20 2003-12-04 16:49:55 ribon Exp $
 
                       Example History file
                       ---------------------
+
+05.12.03 - G.Cosmo (ccal-V05-02-07)
+- Changed LISTS_BASE to G4LISTS_BASE for hadronic physics lists path.
+  Cowork with "ghad-lists-V05-02-01".
 
 04.12.03 - A.Ribon (ccal-V05-02-06)
 - Added some recent modifications and improvements from Sunanda.
