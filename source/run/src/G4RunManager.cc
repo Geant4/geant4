@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.59 2003-01-30 08:27:36 gcosmo Exp $
+// $Id: G4RunManager.cc,v 1.60 2003-01-31 00:26:57 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -466,24 +466,30 @@ void G4RunManager::AbortEvent()
 void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
 {
   // check if this is different from previous
-  if(currentWorld==worldVol) return;
+  //////if(currentWorld==worldVol) return;
   // The world volume MUST NOT have a region defined by the user.
   if(worldVol->GetLogicalVolume()->GetRegion())
   {
-    G4cerr << "The world volume has a user-defined region <" 
+    if(worldVol->GetLogicalVolume()->GetRegion()!=defaultRegion)
+    {
+      G4cerr << "The world volume has a user-defined region <" 
            << worldVol->GetLogicalVolume()->GetRegion()->GetName()
            << ">." << G4endl;
-    G4Exception("G4RunManager::DefineWorldVolume",
+      G4Exception("G4RunManager::DefineWorldVolume",
                 "RUN:WorldHasUserDefinedRegion",
                 FatalException,
                 "World would have a default region assigned by RunManager.");
+    }
+  }
+  else
+  {
+  // set the default region to the world
+    G4LogicalVolume* worldLog = currentWorld->GetLogicalVolume();
+    worldLog->SetRegion(defaultRegion);
+    defaultRegion->AddRootLogicalVolume(worldLog);
   }
 
-  // set the default region to the world
   currentWorld = worldVol; 
-  G4LogicalVolume* worldLog = currentWorld->GetLogicalVolume();
-  worldLog->SetRegion(defaultRegion);
-  defaultRegion->AddRootLogicalVolume(worldLog);
 
   // set the world volume to the Navigator
   G4TransportationManager::GetTransportationManager()
