@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.2 2002-01-16 17:02:20 grichine Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.3 2002-01-18 17:26:21 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -74,7 +74,9 @@ G4double G4VXTRenergyLoss::fCofTR     = fine_structure_const/pi ;
 //
 // Constructor, destructor
 
-G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope, G4double a, G4double b,
+G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope, 
+				   G4Material* foilMat,G4Material* gasMat,
+                                    G4double a, G4double b,
                                     G4int n,const G4String& processName) :
   G4VContinuousProcess(processName)
 {
@@ -90,29 +92,27 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope, G4double a, G4do
 
   fPlateThick = a ;
   fGasThick   = b ;
+
   fTotalDist  = fPlateNumber*(fPlateThick+fGasThick) ;  
+  G4cout<<"total radiator thickness = "<<fTotalDist/cm<<" cm"<<G4endl ;
 
   // index of plate material
-  fMatIndex1 = fEnvelope->GetDaughter(0)->GetLogicalVolume()->
-                           GetMaterial()->GetIndex()  ;
-  G4cout<<"plate material = "<<fEnvelope->GetDaughter(0)->GetLogicalVolume()->
-                           GetMaterial()->GetName()<<G4endl ;
+  fMatIndex1 = foilMat->GetIndex()  ;
+  G4cout<<"plate material = "<<foilMat->GetName()<<G4endl ;
 
   // index of gas material
-  fMatIndex2 = fEnvelope->GetMaterial()->GetIndex()  ;
-  G4cout<<"gas material = "<<fEnvelope->
-                           GetMaterial()->GetName()<<G4endl ;
+  fMatIndex2 = gasMat->GetIndex()  ;
+  G4cout<<"gas material = "<<gasMat->GetName()<<G4endl ;
 
   // plasma energy squared for plate material
 
-  fSigma1 = fPlasmaCof*fEnvelope->GetDaughter(0)->GetLogicalVolume()->
-                           GetMaterial()->GetElectronDensity()  ;
+  fSigma1 = fPlasmaCof*foilMat->GetElectronDensity()  ;
   //  fSigma1 = (20.9*eV)*(20.9*eV) ;
   G4cout<<"plate plasma energy = "<<sqrt(fSigma1)/eV<<" eV"<<G4endl ;
 
   // plasma energy squared for gas material
 
-  fSigma2 = fPlasmaCof*fEnvelope->GetMaterial()->GetElectronDensity()  ;
+  fSigma2 = fPlasmaCof*gasMat->GetElectronDensity()  ;
   G4cout<<"gas plasma energy = "<<sqrt(fSigma2)/eV<<" eV"<<G4endl ;
 
   // Compute cofs for preparation of linear photo absorption
@@ -281,10 +281,11 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
   G4int iTkin, iPlace,   numOfTR, iTR ;
   G4double energyTR, meanNumOfTR, theta, phi, dirX, dirY, dirZ, rand ;
   G4double W, W1, W2, E1, E2 ;
+    G4cout<<"Start of G4VXTRenergyLoss::AlongStepDoIt "<<G4endl ;
 
-  if( aTrack.GetVolume()->GetLogicalVolume() != fEnvelope &&
-      aTrack.GetVolume()->GetMother()->GetLogicalVolume() != fEnvelope)
+  if( aTrack.GetVolume()->GetLogicalVolume() != fEnvelope ) 
   {
+    G4cout<<"Go out from G4VXTRenergyLoss::AlongStepDoIt: wrong volume "<<G4endl ;
     return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
   }
   aParticleChange.Initialize(aTrack);
@@ -297,10 +298,10 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
  
   // Now we are ready to Generate TR photons
 
-  G4double chargeSq = charge*charge ;
-  G4double kinEnergy     = aParticle->GetKineticEnergy() ;
-  G4double mass = aParticle->GetDefinition()->GetPDGMass() ;
-  G4double gamma = 1.0 + kinEnergy/mass ;
+  G4double chargeSq  = charge*charge ;
+  G4double kinEnergy = aParticle->GetKineticEnergy() ;
+  G4double mass      = aParticle->GetDefinition()->GetPDGMass() ;
+  G4double gamma     = 1.0 + kinEnergy/mass ;
 
   if(verboseLevel > 0 )
   {
@@ -323,6 +324,7 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
 
   if(iTkin == 0) // Tkin is too small, neglect of TR photon generation
   {
+    G4cout<<"Go out from G4VXTRenergyLoss::AlongStepDoIt: iTkin=0 "<<G4endl ;
     return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
   } 
   else          // general case: Tkin between two vectors of the material
@@ -357,11 +359,12 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
     if( numOfTR == 0 ) // no change, return 
     {
       aParticleChange.SetNumberOfSecondaries(0);
+    G4cout<<"Go out from G4VXTRenergyLoss::AlongStepDoIt: numOfTR=0 "<<G4endl ;
       return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep); 
     }
     else
     {
-      // G4cout<<"Number of X-ray TR photons = "<<numOfTR<<endl ;
+      G4cout<<"Number of X-ray TR photons = "<<numOfTR<<endl ;
 
       aParticleChange.SetNumberOfSecondaries(numOfTR);
 
@@ -382,7 +385,7 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
 
       energyTR = GetXTRrandomEnergy(TkinScaled,iTkin) ;
 
-	  // G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<endl ;
+	   G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<endl ;
 
         sumEnergyTR += energyTR ;
 
@@ -421,8 +424,8 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
 
         G4Track* aSecondaryTrack = new G4Track( aPhotonTR, 
 		                                aSecondaryTime,positionTR ) ;
-        aSecondaryTrack->SetTouchableHandle((G4VTouchable*)0);
-
+        aSecondaryTrack->SetTouchableHandle(aStep.GetPostStepPoint()
+                                                  ->GetTouchableHandle());
         aSecondaryTrack->SetParentID(aTrack.GetTrackID());
 
 	aParticleChange.AddSecondary(aSecondaryTrack);
@@ -431,7 +434,8 @@ G4VParticleChange* G4VXTRenergyLoss::AlongStepDoIt( const G4Track& aTrack,
       aParticleChange.SetEnergyChange(kinEnergy) ;
     }
   }
-	
+  // return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
+  return &aParticleChange;
 }
 
 ///////////////////////////////////////////////////////////////////////

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularXTRadiator.hh,v 1.1 2002-01-16 16:57:16 grichine Exp $
+// $Id: G4RegularXTRadiator.hh,v 1.2 2002-01-18 17:26:20 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,8 @@ class G4RegularXTRadiator : public G4VXTRenergyLoss
 {
 public:
 
-   G4RegularXTRadiator (G4LogicalVolume *anEnvelope,G4double,G4double,G4int,
+  G4RegularXTRadiator (G4LogicalVolume *anEnvelope,G4Material*,G4Material*,
+                        G4double,G4double,G4int,
                         const G4String & processName = "XTRegularRadiator");
   ~G4RegularXTRadiator ();
 

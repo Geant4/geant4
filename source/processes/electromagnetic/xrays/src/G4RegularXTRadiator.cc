@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularXTRadiator.cc,v 1.1 2002-01-16 16:57:16 grichine Exp $
+// $Id: G4RegularXTRadiator.cc,v 1.2 2002-01-18 17:26:21 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,12 +36,13 @@
 //
 // Constructor, destructor
 
-G4RegularXTRadiator::G4RegularXTRadiator(G4LogicalVolume *anEnvelope, 
+G4RegularXTRadiator::G4RegularXTRadiator(G4LogicalVolume *anEnvelope,
+					 G4Material* foilMat,G4Material* gasMat, 
                                          G4double a, G4double b, G4int n,
                                          const G4String& processName) :
-  G4VXTRenergyLoss(anEnvelope,a,b,n,processName)
+  G4VXTRenergyLoss(anEnvelope,foilMat,gasMat,a,b,n,processName)
 {
-  G4cout<<"Regular X-ray TR dE/dx radiator model is called"<<G4endl ;
+  G4cout<<"Regular X-ray TR  radiator EM process is called"<<G4endl ;
 
   // Build energy and angular integral spectra of X-ray TR photons from
   // a radiator

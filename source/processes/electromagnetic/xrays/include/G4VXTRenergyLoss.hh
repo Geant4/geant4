@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.2 2002-01-16 17:02:19 grichine Exp $
+// $Id: G4VXTRenergyLoss.hh,v 1.3 2002-01-18 17:26:21 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,8 @@ class G4VXTRenergyLoss : public G4VContinuousProcess
 {
 public:
 
-  G4VXTRenergyLoss (G4LogicalVolume *anEnvelope,G4double,G4double,G4int,
+  G4VXTRenergyLoss (G4LogicalVolume *anEnvelope,G4Material*,G4Material*,
+                    G4double,G4double,G4int,
                      const G4String & processName = "XTRenergyLoss");
    virtual  ~G4VXTRenergyLoss ();
 
