@@ -1,0 +1,21 @@
+# $Id: TestEm6.in,v 1.4 2002-05-23 13:30:13 maire Exp $
+#
+# Macro file for "TestEm6.cc"
+# (can be run in batch, without graphic)
+#
+#
+/control/verbose 2
+#
+/run/initialize
+#
+/calor/setMat Iron
+/calor/setSize 500 m
+/calor/update
+#
+/gun/particle gamma
+/gun/energy 100 TeV
+#
+/run/verbose 2
+/tracking/verbose 1
+#
+/run/beamOn 5

@@ -1,50 +1,71 @@
+$Id: README,v 1.2 2002-05-23 13:30:11 maire Exp $
+-------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                            TestEm6
+                            TestEm6 
                             -------
      This example is intended to test the process of
      gamma conversion to a pair of muons.
      To make this process more visible, the usually much more frequent
      gamma conversion to a pair of electrons is not selected in the
      physics list.
-
+	
  1- GEOMETRY DEFINITION
-
+ 
      The geometry consists of a single block of a homogenous material.
-     The default material and length is 1 rad.length of iron.
-
+     	
+     Two parameters define the geometry :
+ 	- the material of the box,
+	- the (full) size of the box.
+     The default is 500 m of iron.
+     	 	
+     In addition a transverse uniform magnetic field can be applied.
+ 	
      The default geometry is constructed in DetectorConstruction class,
-     but all of the above parameters can be modified interactively via
+     but all of the above parameters can be changed interactively via
      the commands defined in the DetectorMessenger class.
  	
- 2- AN EVENT : THE PRIMARY GENERATOR
-
+ 2- PHYSICS LIST
+ 
+     The particle list is the one of novice/exampleN03.
+     The physics list contains the 'standard' electromagnetic processes,
+     and decay.
+     
+     For Gamma, only the GammaConversionToMuons has been registered.
+ 		
+ 	 
+ 3- AN EVENT : THE PRIMARY GENERATOR
+ 
      The primary kinematic consists of a single particle which hits the
      block perpendicular to the input face. The type of the particle
      and its energy are set in the PrimaryGeneratorAction class, and can
      changed via the G4 build-in commands of ParticleGun class (see
      the macros provided with this example).
- 	
+     The default is a Gamma of 100 TeV.
+     	
+     In addition one can choose randomly the impact point of the incident
+     particle. The corresponding interactive command is built in
+     PrimaryGeneratorMessenger class.
+	 	
      A RUN is a set of events.
+ 	
  				
- 3- VISUALIZATION
-
-     The Visualization Manager is set in the main().
-     The initialisation of the drawing is done via the commands
-     /vis/.. in the macro vis.mac. In interactive session:
-     PreInit or Idle > /control/execute vis.mac
-
-     The detector has a default view which is a longitudinal view of the
-     cylinder.
+ 4- VISUALIZATION
  
+     The Visualization Manager is set in the main().
+     The initialisation of the drawing is done via the command
+     > /control/execute vis.mac
+ 	
+     The detector has a default view which is a longitudinal view of the box.
+ 	
      The tracks are drawn at the end of event, and erased at the end of run.
      Optionaly one can choose to draw all particles, only the charged one,
      or none. This command is defined in EventActionMessenger class.
 
- 4- PHYSICS DEMO
+ 5- PHYSICS DEMO
 
      The particle's type and the physic processes which will be available
      in this example are set in PhysicsList class.
@@ -55,25 +76,36 @@
      The threshold for producing secondaries can be changed.
      eg: /run/particle/setCut 100 microm
          /run/initialize
-
- 5- HOW TO START ?
-
+	  	
+ 6- HOW TO START ?
+ 
      - compile and link to generate an executable
- 		% cd TestEm6
- 		% gmake
+	% cd geant4/examples/extended/electromagnetic/TestEm6 
+ 	% gmake
  		
-     - execute TestEm6 in 'batch' mode from macro files
- 		% TestEm6   run01.mac
+     - execute Test  in 'batch' mode from macro files
+ 	% TestEm6    run01.mac
  		
-     - execute TestEm6 in 'interactive mode' with visualization
- 		% TestEm6
+     - execute Test  in 'interactive mode' with visualization
+ 	% TestEm6 
  		....
- 		Idle> type your commands. For instance:
- 		Idle> /control/execute newgeom.mac
+ 	Idle> type your commands
  		....
- 		Idle> exit
+ 	Idle> exit
+ 	
+ 7- HISTOGRAMS
+ 
+     Testem6 produces 6 histograms (saved as testem6.paw) which illustrate
+     the final state of the GammaConversionToMuons process.
+     See their definitions in RunAction.cc
+     
+ Note that, histograms are disabled via the flag G4NOHIST in the GNUmakefile.
+ Currently, histograms in this example are implemented through the obsolete
+ CLHEP/Hist package, which is no longer supported. The implementation will
+ be replaced by direct call to the "analysis" module in a near future.
 
- 6- How to increase statistics on gamma -> mu+mu-  ?
+ 8- HOW TO INCREASE STATISTICS ON gamma -> mu+mu- ?
+ 
      The process of gamma -> mu+mu- has a low cross section but can be important
      for leakage through thick absorbers and calorimeters.
      Straight forward simulation will be quite time consuming.
@@ -83,28 +115,3 @@
 
      /run/process/setGammaToMuPairFac 1000
  
-     The interpretation of the results should be straight forward
-     as long as the number of muons per event remains small (less than one)
-     and as long as the energy carried away be the muons remains is small.
-
- 7- HISTOGRAMS
-
-     TestEm6 produces several histo and an ntuple which are saved as testem6.rzfile
-
-     Content of these histo:
-
-      1 : energy deposit       per event
-      2 : charged track length per event
-      3 : neutral track length per event
-
-      4 : longitudinal energy profile
-      5 : cumulated longitudinal energy profile
-      6 : rms of cumulated longitudinal energy profile
-
-      7 : gamma's flux
-      8 : positron's flux
-      9 : electron's flux
-
- Note that, histograming can be disabled via the flag G4NOHIST in the GNUmakefile.
- Currently, histograming in this example is implemented through the obsolete
- CLHEP/Hist package, which is no longer supported.

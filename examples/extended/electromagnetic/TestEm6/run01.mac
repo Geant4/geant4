@@ -1,28 +1,13 @@
-# run01.mac   gamma -> mu+mu-
+# $Id: run01.mac,v 1.2 2002-05-23 13:30:14 maire Exp $
+#
+# Macro file for "TestEm6.cc"
+# (can be run in batch, without graphic)
+#
+#
 /control/verbose 2
-# hbu, increase cuts from default 1 mm,  to save computing time, 5cm, 5 cm ok for all materials
-/run/particle/setGCut 10 cm
-/run/particle/setECut 10 cm
-
 #
 /run/initialize
-/run/verbose 2
-
-# artificially increase the cross section (do after /run/initialize)
-/run/process/setGammaToMuPairFac 100
-
-# change the material
-# /calor/setMat Be
-
-# change geometry
-# go to 10 layers longitudinally of 56.8653 rad. length each (10 m length)
-/calor/setLbin 10 56.8653
-/calor/update
-
 #
-/event/drawTracks none
-/event/printModulo 1000
-/gun/particle gamma
-# /gun/energy 1500 GeV
-/gun/energy 10 GeV
-/run/beamOn 10000
+/run/verbose 2
+#
+/run/beamOn 100000

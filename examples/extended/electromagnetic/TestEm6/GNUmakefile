@@ -1,10 +1,11 @@
+# $Id: GNUmakefile,v 1.6 2002-05-23 13:30:10 maire Exp $
+# --------------------------------------------------------------
+# GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
+# --------------------------------------------------------------
 
 name := TestEm6
 G4TARGET := $(name)
 G4EXLIB := true
-
-	@echo CPPFLAGS = $(CPPFLAGS)
-	@echo LOADLIBS = $(LOADLIBS)
 
 ifndef G4INSTALL
   G4INSTALL = ../../../..
@@ -15,29 +16,13 @@ all: lib bin
 
 include $(G4INSTALL)/config/architecture.gmk
 
-#hbu****************** do not define G4NOHIST to get histogramming
-#G4NOHIST := true
+G4NOHIST := true
 ifdef G4NOHIST
   CPPFLAGS += -DG4NOHIST
 else
   LDFLAGS  += -L$(CERN)/pro/lib
   LOADLIBS += -lpacklib $(FCLIBS)
 endif
-
-#hbu add verbose
-# CPPFLAGS += -v
-# LOADLIBS += -v
-
-#hbu add also this dir to get access to extra header files
-# CPPFLAGS += $(G4INSTALL)/examples/extended/electromagnetic/TestEm6
-# CPPFLAGS += -I $(HOME)/public/geant4/examples/extended/electromagnetic/TestEm6
-
-#hbu
-info:
-	@echo CPPFLAGS = $(CPPFLAGS)
-	@echo LOADLIBS = $(LOADLIBS)
-	@echo HOME = $(HOME)
-
 
 include $(G4INSTALL)/config/binmake.gmk
 

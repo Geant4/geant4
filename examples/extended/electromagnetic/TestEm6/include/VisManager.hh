@@ -13,53 +13,56 @@
 // * regarding  this  software system or assume any liability for its *
 // * use.                                                             *
 // *                                                                  *
-// Em6PrimaryGeneratorAction.cc
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: VisManager.hh,v 1.1 2002-05-23 13:30:35 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em6PrimaryGeneratorAction.hh"
+// Example Visualization Manager implementing virtual function
+//   RegisterGraphicsSystems.  Exploits C-pre-processor variables
+//   G4VIS_USE_DAWN, etc., which are set by the GNUmakefiles if
+//   environment variables of the same name are set.
 
-#include "Em6DetectorConstruction.hh"
-#include "G4Event.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
+// So all you have to do is set environment variables and compile and
+//   instantiate this in your main().
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Em6PrimaryGeneratorAction::Em6PrimaryGeneratorAction(
-                                               Em6DetectorConstruction* det)
-:Em6Detector(det)
-{
-  G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);
-
-  G4ParticleDefinition* particle
-                 = G4ParticleTable::GetParticleTable()->FindParticle("e-");
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(5.*GeV);
-  G4double position = -0.5*(Em6Detector->GetfullLength());
-  particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
-}
+// Alternatively, you can implement an empty function here and just
+//   register the systems you want in your main(), e.g.:
+//   G4VisManager* myVisManager = new MyVisManager;
+//   myVisManager -> RegisterGraphicsSystem (new MyGraphicsSystem);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em6PrimaryGeneratorAction::~Em6PrimaryGeneratorAction()
-{
-  delete particleGun;
-}
+#ifndef VisManager_h
+#define VisManager_h 1
+
+#include "G4VisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em6PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
-  //this function is called at the begining of event
-  //
-  G4double position = -0.5*(Em6Detector->GetfullLength());
-  particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
-  particleGun->GeneratePrimaryVertex(anEvent);
-}
+class VisManager: public G4VisManager {
+
+public:
+
+  VisManager ();
+
+private:
+
+  void RegisterGraphicsSystems ();
+
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#endif
