@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScatteringx.icc,v 1.7 2001-08-23 08:37:19 urban Exp $
+// $Id: G4MultipleScatteringx.icc,v 1.8 2001-08-23 08:42:52 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    ------- G4MultipleScatteringx physics process ------
@@ -186,10 +186,7 @@ G4VParticleChange* G4MultipleScatteringx::AlongStepDoIt(
 {				                 
   // only a geom path->true path transformation is performed
 
-  const G4DynamicParticle* aParticle ;
-  G4Material* aMaterial ;
-  static const G4double tfacmx = 10. ;
-  G4double tau,geomPathLength, truePathLength ;
+  G4double geomPathLength, truePathLength ;
 
   fParticleChange.Initialize(track);
 
