@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLossPlus.cc,v 1.3 1999-02-24 13:45:14 urban Exp $
+// $Id: G4eEnergyLossPlus.cc,v 1.4 1999-03-04 15:53:04 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // $Id: 
@@ -944,7 +944,7 @@ G4VParticleChange* G4eEnergyLossPlus::AlongStepDoIt( const G4Track& trackData,
  
   if (E < MinKineticEnergy)   finalT = 0.;
  
-  else if (E<LowestKineticEnergy)
+  else if (E<=LowestKineticEnergy)
   {
     if (Step >= fRangeNow)  finalT = 0.;
     else finalT = E - Step*fdEdx;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLoss.cc,v 1.4 1999-03-04 10:09:35 urban Exp $
+// $Id: G4hEnergyLoss.cc,v 1.5 1999-03-04 15:53:05 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -1094,7 +1094,8 @@ G4VParticleChange* G4hEnergyLoss::AlongStepDoIt(
   {
     if(Step >= fRangeNow ) MeanLoss = E ;
 
-    else if( E > HighestKineticEnergy) MeanLoss = Step*fdEdx ; 
+    else if(( E > HighestKineticEnergy)||( E <= LowestKineticEnergy))
+              MeanLoss = Step*fdEdx ; 
      
     else
     {
