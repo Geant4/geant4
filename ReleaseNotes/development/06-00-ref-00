@@ -173,7 +173,7 @@ hadronic_lists                                   ghad-lists-V05-02-01
   The module can only be built and installed separately in addition
   to the standard libraries installation.
 
-examples                                         examples-V05-02-08
+examples                                         examples-V05-02-09
 --------
 - Updated reference outputs.
 - advanced:
@@ -260,7 +260,7 @@ examples                                         examples-V05-02-08
   o N07 (exampleN07-V05-02-01)
     + Removed OPACS from vis-manager.
 
-tests                                                 tests-V05-02-06
+tests                                                 tests-V05-02-10
 -----
 - Updated reference outputs.
 - Removed all references to OPACS driver.
