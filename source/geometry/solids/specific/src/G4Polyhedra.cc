@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.14 2003-11-06 10:32:49 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.15 2003-11-18 09:48:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -110,6 +110,23 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
   G4int i;
   for (i=0; i<numZPlanes; i++)
   {
+    if ( zPlane[i] == zPlane[i+1] )
+    {
+      if( (rInner[i]   >= rOuter[i+1])
+        ||(rInner[i+1] >= rOuter[i])   )
+      {
+        DumpInfo();
+        G4cerr << "ERROR - G4Polyhedra::G4Polyhedra()"
+               << G4endl
+               << "        Segments are not contiguous !" << G4endl
+               << "        rMin[" << i << "] = " << rInner[i]
+               << " -- rMax[" << i+1 << "] = " << rOuter[i+1] << G4endl
+               << "        rMin[" << i+1 << "] = " << rInner[i+1]
+               << " -- rMax[" << i << "] = " << rOuter[i] << G4endl;
+        G4Exception("G4Polyhedra::G4Polyhedra()","InvalidSetup",FatalException, 
+                    "Cannot create a Polyhedra with no contiguous segments.");
+      }
+    }
     original_parameters->Z_values[i] = zPlane[i];
     original_parameters->Rmin[i] = rInner[i]/convertRad;
     original_parameters->Rmax[i] = rOuter[i]/convertRad;

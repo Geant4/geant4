@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.16 2003-11-06 10:32:49 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.17 2003-11-18 09:48:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,11 +72,28 @@ G4Polycone::G4Polycone( const G4String& name,
   G4int i;
   for (i=0; i<numZPlanes; i++)
   {
+    if ( zPlane[i] == zPlane[i+1] )
+    {
+      if( (rInner[i]   >= rOuter[i+1])
+        ||(rInner[i+1] >= rOuter[i])   )
+      {
+        DumpInfo();
+        G4cerr << "ERROR - G4Polycone::G4Polycone()"
+               << G4endl
+               << "        Segments are not contiguous !" << G4endl
+               << "        rMin[" << i << "] = " << rInner[i]
+               << " -- rMax[" << i+1 << "] = " << rOuter[i+1] << G4endl
+               << "        rMin[" << i+1 << "] = " << rInner[i+1]
+               << " -- rMax[" << i << "] = " << rOuter[i] << G4endl;
+        G4Exception("G4Polycone::G4Polycone()", "InvalidSetup", FatalException, 
+                    "Cannot create a Polycone with no contiguous segments.");
+      }
+    } 
     original_parameters->Z_values[i] = zPlane[i];
     original_parameters->Rmin[i] = rInner[i];
     original_parameters->Rmax[i] = rOuter[i];
   }
-    
+
   //
   // Build RZ polygon using special PCON/PGON GEANT3 constructor
   //
