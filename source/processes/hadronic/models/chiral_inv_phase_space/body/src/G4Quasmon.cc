@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.25 2001-09-13 15:16:06 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.26 2001-09-13 15:19:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -2628,7 +2628,8 @@ G4double G4Quasmon::GetQPartonMomentum(G4double kMax, G4double mC2)
   G4double qMass = q4Mom.m();
   G4double kLim  = qMass/2.;               //Kinematikal limit for "k"
   G4double twM   = qMass+qMass;
-  if(kLim<kMax) kMax  = kLim;
+  kMax  = kLim;                            //@@@@@@@@@
+  //if(kLim<kMax) kMax  = kLim;
   G4double kMin  = mC2/twM;
   //if(mR2!=0.)
   //{
