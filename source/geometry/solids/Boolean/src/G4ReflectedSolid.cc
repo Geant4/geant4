@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.4 2002-02-15 15:06:25 grichine Exp $
+// $Id: G4ReflectedSolid.cc,v 1.5 2002-03-26 14:06:23 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4ReflectedSolid class for boolean 
@@ -250,21 +250,38 @@ G4ReflectedSolid::CalculateExtent( const EAxis pAxis,
                                          G4double& pMax           ) const 
 {
   G4AffineTransform sumTransform ;
+  G4Transform3D sumT, pt3d ;
+
+  G4ReflectX3D tX ;
+  G4ReflectY3D tY ;
+  G4ReflectZ3D tZ ;
+
   G4bool extentR, extent ;
   G4double min, max, minR, maxR ;
 
-  sumTransform.Product(*fDirectTransform,pTransform) ;
+  pt3d= G4Transform3D(pTransform.NetRotation().inverse(),
+                      pTransform.NetTranslation()          );
+  sumT = pt3d * (*fDirectTransform3D) ;
+  sumT = ((sumT*tX)*tY)*tZ;
+  sumTransform = G4AffineTransform( sumT.getRotation().inverse(),
+                                    sumT.getTranslation()         );
 
-  extent  = fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,pTransform,
-                                      min,max) ;
+
+
+  //  sumTransform.Product(*fDirectTransform,pTransform) ;
+  //  extent  = fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,pTransform,min,max) ;
+
   extentR = fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,sumTransform,
                                        minR,maxR) ;
+  /*
   if( maxR > 0 ) pMax = 2.0*maxR ;
   else           pMax = 0.5*maxR ;
 
   if( minR > 0 ) pMin = 0.5*minR ;
   else           pMin = 2.0*minR ;
-
+  */
+  pMin = -maxR ;  // minR ; 
+  pMax = -minR ;  //maxR ; 
   return extentR ;
 }
  
