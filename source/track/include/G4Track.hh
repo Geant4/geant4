@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.hh,v 1.8 2000-06-02 10:16:38 kurasige Exp $
+// $Id: G4Track.hh,v 1.9 2000-10-18 15:00:09 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -88,7 +88,7 @@ public: // With description
    void SetParentID(const G4int aValue);
 
   // dynamic particle 
-   G4DynamicParticle* GetDynamicParticle() const;
+   const G4DynamicParticle* GetDynamicParticle() const;
 
   // particle definition
    G4ParticleDefinition* GetDefinition() const;
