@@ -1,4 +1,4 @@
-$Id: History,v 1.122 2004-11-29 06:12:59 kurasige Exp $
+$Id: History,v 1.123 2004-12-07 09:13:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 7th, 2004 G.Cosmo (run-V06-02-08)
+- Changed date in G4RunManagerKernel for release 7.0.
+
 November 27th, 2004 H.Kurashige (run-V06-02-07)
 - Change "ConstructParticle" and "ConstructProcess" methods to 'public'
 
