@@ -1,4 +1,4 @@
-?RCS: $Id: Finish.U,v 1.1 2001-05-17 10:12:21 sadilov Exp $
+?RCS: $Id: Finish.U,v 1.2 2001-05-21 13:01:43 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.1  2001/05/17 10:12:21  sadilov
+?RCS: Import 'config'.
+?RCS:
 ?RCS: Revision 1.3  2000/12/16 14:54:25  sadilov
 ?RCS: Corrections according to Gabriele's remarks.
 ?RCS:
@@ -134,7 +137,7 @@ else
 	echo " "
 	echo "WARNING: Geant4 is NOT installed yet!"
 	echo "You (or the administrator if you have not enough privileges)"
-	echo "should start with \$G4INSTALL/config/Configure -install"
+	echo "should start with \$G4INSTALL/Configure -install"
 	echo "(where \$G4INSTALL is Geant4 install directory)."
 	echo " "
 fi
