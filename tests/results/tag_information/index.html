@@ -36,7 +36,7 @@ test11     |         |         |          |          |          |          |    
 test12     |         |         |          | W7       |          |          |          | W3       | abend   |         | abend   | W7 W3   |
 test13     |         |         |          |          |          |          |          |          | abend   | W6      | abend   |         |
 test14     |         |         |          |          |          |          |          |          |         |         |         |         |
-test15     | link    |         |          |          |          |          |          |          | abend   | testing | abend   |         |
+test15     | Err 10  |         |          |          |          |          |          |          | abend   | testing | abend   |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test16     |         |         |          |          |          |          | W3       | W3       | abend   |         | abend   |         |
 test17     |         |         |          |          |          |          |          |          |         |         |         |         |
@@ -45,20 +45,16 @@ test20     |         |         |          |          |          |          |    
 test21     |         |         |          |          |          |          | abend(?) |          | abend   | abend   | abend   | abend   |
 test22     |         |         |          |          |          |          |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-test103    |........ |         |          |          |          |          |          |          |         |         |         |         |
-test104    |........ |         |          |          |          |          |          |          | abend(?)| abend   | abend(?)| abend   |
+test103    |         |         |          |          |          |          |          |          |         |         |         |         |
+test104    |         |         |          |          |          |          |          |          | abend(?)| abend   | abend(?)| abend   |
 test104.Em |         |         |          |          |          |          |          |          |         |         |         |         |
 test502    |         |         |          |          |          |          |          |          |         |         |         |         |
 test508    |         |         |          |          |          |          |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 
- (anno) change in annotation, layout and formatting.
- dis/ch - test was disabled, but is checking now
  abend  - crash without clue
  testing - under testing now
  ? - last time was!
-
- Error  3         has not been reproduced.
 
  It would be really nice to get rid of these warnings, particularly for the Large_N tests.
 
@@ -80,6 +76,19 @@ G4 Warn 6
 G4 Warn 7
 ---------
 Warning: eliminating target particle
+
+
+Err 10
+--------------------
+Linking test15 ...
+Undefined                       first referenced
+ symbol                             in file
+hbarc                               /afs/cern.ch/sw/geant4/stt/dev1/SUN-CC/optim_ISO/lib/SUN-CC/l
+ibG4hadronic_iso.a(R4nhcZo-V6bx13mJ9ifH.o)
+fermi                               /afs/cern.ch/sw/geant4/stt/dev1/SUN-CC/optim_ISO/lib/SUN-CC/l
+ibG4hadronic_iso.a(R4nhcZo-V6bx13mJ9ifH.o)
+ld: fatal: Symbol referencing errors. No output written to /afs/cern.ch/sw/geant4/stt/dev1/SUN-CC
+/optim_ISO/bin/SUN-CC/test15
 
 
 </pre>
