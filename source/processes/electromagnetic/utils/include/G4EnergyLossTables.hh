@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.hh,v 1.3 1999-03-05 14:23:34 urban Exp $
+// $Id: G4EnergyLossTables.hh,v 1.4 1999-04-13 09:01:11 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -34,6 +34,7 @@
 // L.Urban , 13/10/98 , revision
 // L.Urban,  26/10/98 , revision, Interpolate removed 
 // L.Urban , 08/02/99,  cache mechanism 
+// L.Urban , 12/04/99 , bug fixed
 // don't use the helper class.
 // It can't be hidden for Rogue Wave uses it.
 
@@ -149,6 +150,7 @@ private:
   static const G4ParticleDefinition* lastParticle ;
   static G4double Chargesquare ;
   static G4int oldIndex ;
+  static G4double rmin,rmax,Thigh ;
 
 };
 

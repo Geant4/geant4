@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.icc,v 1.4 1999-03-05 14:23:35 urban Exp $
+// $Id: G4EnergyLossTables.icc,v 1.5 1999-04-13 09:01:12 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -14,6 +14,7 @@
 // first version created by P.Urban , 06/04/1998
 // modified by L.Urban , 27/05/98
 // cache mechanism , L.Urban , 11/02/99
+// bug fixed , L.Urban , 12/04/99
 //
 
 inline unsigned G4EnergyLossTables::HashFun(
@@ -437,9 +438,8 @@ inline G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
   G4double scaledrange,scaledKineticEnergy ;
   G4bool isOut ;
 
-  static G4double rmin,rmax,Thigh ;
- 
   G4int materialIndex = aMaterial->GetIndex() ;
+
   if(materialIndex != oldIndex)
   {
     oldIndex = materialIndex ;

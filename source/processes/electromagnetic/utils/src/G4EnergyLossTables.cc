@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.cc,v 1.5 1999-04-09 11:07:00 urban Exp $
+// $Id: G4EnergyLossTables.cc,v 1.6 1999-04-13 09:01:13 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,6 +13,7 @@
 // modifications + "precise" functions added by L.Urban , 27/05/98
 // modifications , TOF functions , 26/10/98, L.Urban
 // cache mechanism in order to gain time, 11/02/99, L.Urban
+// bug fixed , 12/04/99 , L.Urban
 
 #include "G4EnergyLossTables.hh"
 
@@ -20,6 +21,9 @@ G4EnergyLossTablesHelper G4EnergyLossTables::t  ;
 const G4ParticleDefinition* G4EnergyLossTables::lastParticle = NULL ; 
 G4double G4EnergyLossTables::Chargesquare ;
 G4int    G4EnergyLossTables::oldIndex = -1 ;
+G4double G4EnergyLossTables::rmin = 0. ;
+G4double G4EnergyLossTables::rmax = 0. ;
+G4double G4EnergyLossTables::Thigh = 0. ;
 
 RWTValHashDictionary<const G4ParticleDefinition*, G4EnergyLossTablesHelper>
 G4EnergyLossTables::dict(G4EnergyLossTables::HashFun);
@@ -103,7 +107,7 @@ void G4EnergyLossTables::Register(
 
   G4int materialIndex = aMaterial->GetIndex();
 
-  G4double Thigh = t.theHighestKineticEnergy*t.theLowestKineticEnergy/
+  G4double Thighr = t.theHighestKineticEnergy*t.theLowestKineticEnergy/
                    (*rangeTable)(materialIndex)->
                    GetLowEdgeEnergy(1) ;
 
@@ -117,13 +121,13 @@ void G4EnergyLossTables::Register(
             (*rangeTable)(materialIndex)->GetValue(
               t.theLowestKineticEnergy,isOut);
 
-  } else if (scaledKineticEnergy>Thigh) {
+  } else if (scaledKineticEnergy>Thighr) {
 
     Range = (*rangeTable)(materialIndex)->GetValue(
-	      Thigh,isOut)+
-            (scaledKineticEnergy-Thigh)/
+	      Thighr,isOut)+
+            (scaledKineticEnergy-Thighr)/
             (*dEdxTable)(materialIndex)->GetValue(
-              Thigh,isOut);
+              Thighr,isOut);
 
   } else {
     
