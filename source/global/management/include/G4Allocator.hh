@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Allocator.hh,v 1.7 2001-07-11 10:00:49 gunter Exp $
+// $Id: G4Allocator.hh,v 1.8 2002-01-17 10:49:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,7 +64,7 @@ public:
   {
     Type *anElement;
 
-    if (fFreeList != NULL)
+    if (fFreeList != 0)
     {
       fFreeList->deleted = Allocated;
       anElement = &fFreeList->fElement;
@@ -102,8 +102,8 @@ public:
 template <class Type>
 G4Allocator<Type>::G4Allocator()
 {
-  fPages = NULL;
-  fFreeList = NULL;
+  fPages = 0;
+  fFreeList = 0;
   AddNewPage();
   return;
 }
@@ -115,15 +115,15 @@ G4Allocator<Type>::~G4Allocator()
   G4AllocatorPage<Type> *aNextPage;
 
   aPage = fPages;
-  while (aPage != NULL)
+  while (aPage != 0)
   {
     aNextPage = aPage->fNext;
     free(aPage->fUnits);
     delete aPage;
     aPage = aNextPage;
   }
-  fPages = NULL;
-  fFreeList = NULL;
+  fPages = 0;
+  fFreeList = 0;
   return;
 }
 
