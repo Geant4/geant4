@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Visible.hh,v 1.2 1999-05-12 16:10:58 johna Exp $
+// $Id: G4Visible.hh,v 1.3 1999-10-04 15:18:57 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,13 @@ public:
 
   void SetVisAttributes (const G4VisAttributes* pVA);
   void SetVisAttributes (const G4VisAttributes& VA);
+  // The G4VisAttributes object is not stored in a G4Visible; only a
+  // reference, a const pointer, is kept.  Therefore the
+  // G4VisAttributes object to which it refers must have a life long
+  // enough to satisfy all uses of the G4Visible object.  E.g., if the
+  // G4Visible object is created on the heap (using `new') then the
+  // associated G4VisAttributes object would normally also be created
+  // on the heap and managed in the same way.
 
 protected:
 
