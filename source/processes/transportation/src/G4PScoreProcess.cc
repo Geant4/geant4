@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PScoreProcess.cc,v 1.6 2002-11-04 10:47:56 dressel Exp $
+// $Id: G4PScoreProcess.cc,v 1.7 2003-04-02 16:59:16 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -57,8 +57,8 @@ G4PScoreProcess::~G4PScoreProcess()
 }
 
 G4double G4PScoreProcess::
-PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-				     G4double   previousStepSize,
+PostStepGetPhysicalInteractionLength(const G4Track &,
+				     G4double ,
 				     G4ForceCondition* condition)
 {
   *condition = Forced;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreConfigurator.cc,v 1.4 2002-11-04 10:47:56 dressel Exp $
+// $Id: G4MScoreConfigurator.cc,v 1.5 2003-04-02 16:59:12 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -56,7 +56,7 @@ GetTrackTerminator() const{
   return fMScoreProcess;
 }
 
-void G4MScoreConfigurator::Configure(G4VSamplerConfigurator *preConf)
+void G4MScoreConfigurator::Configure(G4VSamplerConfigurator *)
 {
   fMScoreProcess = new G4MScoreProcess(fScorer);
   if (!fMScoreProcess) {

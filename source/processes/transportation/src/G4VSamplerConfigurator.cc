@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSamplerConfigurator.cc,v 1.1 2002-10-16 16:27:42 dressel Exp $
+// $Id: G4VSamplerConfigurator.cc,v 1.2 2003-04-02 16:59:25 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
