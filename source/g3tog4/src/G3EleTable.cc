@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3EleTable.cc,v 1.4 1999-05-28 21:08:50 lockman Exp $
+// $Id: G3EleTable.cc,v 1.5 1999-07-29 03:41:38 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -23,7 +23,7 @@ G3EleTable::G3EleTable() :_MaxEle(109){
 G3EleTable::~G3EleTable(){
   delete [] _EleNames;
   delete [] _Ele;
-  G4cout << "Deleted G3EleTable..." << endl;
+  // G4cout << "Deleted G3EleTable..." << endl;
 };
 
 G4Element* 

@@ -1,7 +1,10 @@
-$Id: History,v 1.19 1999-07-20 14:15:53 lockman Exp $
+$Id: History,v 1.20 1999-07-29 03:38:26 lockman Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V00-01-00 28-Jul-1999 Lockman
+- Commented out "Deleted..." in destructors.
 
 g3tog4-01-01-00 19-Jul-1999 Lockman
 - G3matTable, G3MedTable, G3RotTable: convert from lists RWTPtrOrderedVector 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.cc,v 1.7 1999-07-20 14:16:49 lockman Exp $
+// $Id: G3RotTable.cc,v 1.8 1999-07-29 03:43:56 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -21,8 +21,8 @@ G3RotTable::G3RotTable(){
 
 G3RotTable::~G3RotTable(){
   _Rot->clear();
-  G4cout << "Deleted G3RotTable..." << endl;
   delete _Rot;
+  // G4cout << "Deleted G3RotTable..." << endl;
 };
 
 G3toG4RotationMatrix*

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MedTable.cc,v 1.7 1999-07-20 14:16:45 lockman Exp $
+// $Id: G3MedTable.cc,v 1.8 1999-07-29 03:43:02 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -20,8 +20,8 @@ G3MedTable::G3MedTable(){
 
 G3MedTable::~G3MedTable(){
   _Med->clear();
-  G4cout << "Deleted G3MedTable..." << endl;
   delete _Med;
+  // G4cout << "Deleted G3MedTable..." << endl;
 };
 
 G4Material*
