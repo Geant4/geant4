@@ -378,19 +378,16 @@ void G4OpenInventorViewer::Help(const G4String& aTopic) {
   if(aTopic=="controls") {
   G4cout <<
 "\n\
-#######################################################################\n\
-#   Controls on an Inventor examiner viewer are :                     #\n\
-#  - in picking mode (cursor is the upper left arrow)                 #\n\
-#   Ctrl + pick a volume : see daughters.                             #\n\
-#   Shift + pick a volume : see mother.                               #\n\
-#  - in viewing mode (cursor is the hand)                             #\n\
-#   Left-button + pointer move : rotate.                              #\n\
-#   Ctrl+Left-button + pointer move : pane.                           #\n\
-#   Ctrl+Shift+Left-button + pointer move : scale.                    #\n\
-#   Middle-button + pointer move : pane.                              #\n\
-#   Right-button : popup menu.                                        #\n\
-#                                                                     #\n\
-#######################################################################\n\
+ Controls on an Inventor examiner viewer are :\n\
+- in picking mode (cursor is the upper left arrow)\n\
+  Ctrl + pick a volume : see daughters.\n\
+  Shift + pick a volume : see mother.\n\
+- in viewing mode (cursor is the hand)\n\
+  Left-button + pointer move : rotate.\n\
+  Ctrl+Left-button + pointer move : pane.\n\
+  Ctrl+Shift+Left-button + pointer move : scale.\n\
+  Middle-button + pointer move : pane.\n\
+  Right-button : popup menu.\n\
 " << G4endl;
   }
 }

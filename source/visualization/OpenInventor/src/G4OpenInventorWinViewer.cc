@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.13 2004-11-15 14:53:30 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.14 2004-11-22 08:12:10 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -71,6 +71,10 @@ public:
 #define ID_ETC_COUNT_TRIANGLES 101
 #define ID_ETC_ERASE_DETECTOR 102
 #define ID_ETC_ERASE_EVENT 103
+#define ID_ETC_SET_SOLID 104
+#define ID_ETC_SET_WIRE_FRAME 105
+#define ID_ETC_UPDATE_SCENE 106
+#define ID_ETC_HELP_CONTROLS 107
 
 //static void SecondaryLoopPostAction ();
 
@@ -123,7 +127,11 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer(
     ::AppendMenu(menuBar,MF_POPUP,(UINT)casc,"Etc");
     ::AppendMenu(casc,MF_STRING,ID_ETC_COUNT_TRIANGLES,"Triangles");
     ::AppendMenu(casc,MF_STRING,ID_ETC_ERASE_DETECTOR,"Erase detector");
-    ::AppendMenu(casc,MF_STRING,ID_ETC_ERASE_EVENT,"Erase event");}
+    ::AppendMenu(casc,MF_STRING,ID_ETC_ERASE_EVENT,"Erase event");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_SOLID,"Set solid");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_WIRE_FRAME,"Set wire frame");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_UPDATE_SCENE,"Update scene");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_HELP_CONTROLS,"Help controls");}
 
     fShell = ::CreateWindow(className, shellName.c_str(), 
                             WS_OVERLAPPEDWINDOW |
@@ -244,6 +252,14 @@ LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc (
           This->EraseDetector();
         } else if(aWParam==ID_ETC_ERASE_EVENT) {
           This->EraseEvent();
+        } else if(aWParam==ID_ETC_SET_SOLID) {
+          This->SetSolid();
+        } else if(aWParam==ID_ETC_SET_WIRE_FRAME) {
+          This->SetWireFrame();
+        } else if(aWParam==ID_ETC_UPDATE_SCENE) {
+          This->UpdateScene();
+        } else if(aWParam==ID_ETC_HELP_CONTROLS) {
+          This->Help();
         }
       }
     }
