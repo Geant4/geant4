@@ -542,7 +542,7 @@ void G4HepRepSceneHandler::SetLine (HepRepInstance *instance, const G4Visible& v
     G4VisAttributes atts = visible.GetVisAttributes();
     instance->addAttValue("LineWidth", atts.GetLineWidth());
     switch (atts.GetLineStyle()) {
-        case G4VisAttributes::LineStyle::dotted:
+        case G4VisAttributes::dotted:
             instance->addAttValue("LineStyle", G4String("Dotted"));
             break;
         case G4VisAttributes::LineStyle::dashed:
