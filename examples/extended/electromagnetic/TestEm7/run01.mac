@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.4 2003-10-10 16:21:20 maire Exp $
+# $Id: run01.mac,v 1.5 2004-07-08 16:28:40 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -11,14 +11,21 @@
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
 #
-####/testem/phys/addPhysics  standard	#em physics
-####/testem/phys/addPhysics  g4v52	#em physics
-####/testem/phys/addPhysics  binary	#hadronic physics
+/testem/det/tallyMat Water
+/testem/det/tallySize 2. 2. 2. mm
+/testem/det/tallyPosition -9.9 0. 0. cm
+/testem/det/tallyPosition -5.  0. 0. cm
+/testem/det/tallyPosition  0.  0. 0. cm
+/testem/det/tallyPosition  5.  0. 0. cm
+#
+/testem/phys/addPhysics  standard	#em physics
+###/testem/phys/addPhysics  binary	#hadronic physics
 #
 /run/initialize
 #
 /gun/particle proton
 /gun/energy 160 MeV
+/testem/gun/rndm 2 mm
 #
 /testem/event/printModulo 1000
 /testem/stepMax 1 mm
