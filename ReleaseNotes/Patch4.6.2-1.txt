@@ -71,7 +71,8 @@ List of fixes included in this public patch since release 6.2:
 
   o Tracking:
     --------
-    + Fix in G4SteppingManager to correct the number of total secondaries.
+    + Fix in G4SteppingManager to correct the ordering of secondary tracks
+      generated in a step.
     + Moved inlined constructor/destructor for G4Vtrajectory and
       G4VtrajectoryPoint to not inline, and corrected signature of
       operator==() to canonical form. 
