@@ -54,7 +54,7 @@ x=0  y=0  z=20 is outside  distance to in1 =60  distance to in2 =42.4264
 x=0  y=0  z=25 is outside  distance to in1 =45  distance to in2 =31.8198
 x=0  y=0  z=30 is outside  distance to in1 =30  distance to in2 =21.2132
 x=0  y=0  z=35 is outside  distance to in1 =30  distance to in2 =21.2132
-x=0  y=0  z=40 is outside  distance to in1 =30  distance to in2 =9e+99
+x=0  y=0  z=40 is outside  distance to in1 =30  distance to in2 =21.2132
 x=0  y=0  z=45 is outside  distance to in1 =9e+99  distance to in2 =9e+99
 
 
@@ -70,7 +70,7 @@ x=-110  y=-110  z=20 is outside  distance to in =84.8528
 x=-110  y=-110  z=25 is outside  distance to in =84.8528
 x=-110  y=-110  z=30 is outside  distance to in =84.8528
 x=-110  y=-110  z=35 is outside  distance to in =91.9239
-x=-110  y=-110  z=40 is outside  distance to in =9e+99
+x=-110  y=-110  z=40 is outside  distance to in =98.9949
 x=-110  y=-110  z=45 is outside  distance to in =9e+99
 
 
