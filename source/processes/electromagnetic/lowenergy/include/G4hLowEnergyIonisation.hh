@@ -42,6 +42,7 @@
 // 09 August 2000 V.Ivanchenko Add GetContinuousStepLimit
 // 17 August 2000 V.Ivanchenko Add IonFluctuationModel
 // 23 Oct    2000 V.Ivanchenko Renew comments
+// 30 Oct    2000 V.Ivanchenko Add minGammaEnergy and minElectronEnergy
 // ------------------------------------------------------------
  
 // Class Description:
@@ -78,6 +79,11 @@
 #include "G4hIonEffChargeSquare.hh"
 #include "G4IonChuFluctuationModel.hh"
 #include "G4IonYangFluctuationModel.hh"
+#include "G4AtomicDeexcitation.hh"
+
+class G4VEMDataSet;
+class G4ShellVacancy;
+class G4VhShellCrossSection;
 
 class G4hLowEnergyIonisation : public G4hLowEnergyLoss
 {
@@ -169,6 +175,13 @@ public: // With description
                              G4double kineticEnergy);
   // This method returns electronic dE/dx for protons or antiproton.
 
+  void SetCutForSecondaryPhotons(G4double cut);
+  // Set threshold energy for fluorescence 
+
+  void SetCutForAugerElectrons(G4double cut);
+  // Set threshold energy for Auger electron production
+
+
 protected:
 
 private:
@@ -177,9 +190,11 @@ private:
 
   void InitializeParametrisation();
 
-  void BuildLossTable(const G4ParticleDefinition& aParticleType) ;
+  void BuildLossTable(const G4ParticleDefinition& aParticleType);
 
-  void BuildLambdaTable(const G4ParticleDefinition& aParticleType) ;
+  void BuildDataForFluorescence(const G4ParticleDefinition& aParticleType);
+
+  void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
   
   void SetProtonElectronicStoppingPowerModel(const G4String& dedxTable) 
                               {theProtonTable = dedxTable ;};
@@ -224,6 +239,14 @@ private:
                                            G4double meanLoss,
                                            G4double step) const;
   // Function to sample electronic losses
+
+  G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4Material* material,
+					          G4double incidentEnergy,
+					          G4double hMass,
+					          G4double eLoss);
+
+  G4int SelectRandomAtom(const G4Material* material, 
+                               G4double kineticEnergy) const;
 		    
   // hide assignment operator 
   G4hLowEnergyIonisation & operator=(const G4hLowEnergyIonisation &right);
@@ -254,7 +277,10 @@ private:
   G4bool nStopping;
   G4bool theBarkas;
 
-  G4double* deltaCutInKineticEnergy;
+  G4DataVector cutForDelta;
+  G4DataVector cutForGamma;
+  G4double minGammaEnergy;
+  G4double minElectronEnergy;
   G4PhysicsTable* theMeanFreePathTable;
   
   const G4double paramStepLimit; // parameter limits the step at low energy
@@ -264,13 +290,40 @@ private:
   G4double charge;       //
   G4double chargeSquare; //
  
-protected:
-
-private:
+  G4AtomicDeexcitation deexcitationManager;
+  G4ShellVacancy* shellVacancy;
+  G4VhShellCrossSection* shellCS;
+  G4std::vector<G4VEMDataSet*> zFluoDataVector;
 
 };
 
-#include "G4hLowEnergyIonisation.icc"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+         
+inline G4double G4hLowEnergyIonisation::GetContinuousStepLimit(
+                                        const G4Track& track,
+                                              G4double,
+                                              G4double currentMinimumStep,
+                                              G4double&)
+{ 
+  G4double Step =
+    GetConstraints(track.GetDynamicParticle(),track.GetMaterial()) ;
+
+  if((Step>0.0)&&(Step<currentMinimumStep))
+     currentMinimumStep = Step ;
+
+  return Step ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4hLowEnergyIonisation::IsApplicable(
+                                const G4ParticleDefinition& particle) 
+{
+   return(particle.GetPDGCharge() != 0.0 
+       && particle.GetPDGMass() > proton_mass_c2*0.1);
+}
+         
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
  
