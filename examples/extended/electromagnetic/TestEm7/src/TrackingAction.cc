@@ -20,50 +20,34 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.2 2004-07-08 16:15:44 maire Exp $
+// $Id: TrackingAction.cc,v 1.1 2004-07-08 16:15:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PrimaryGeneratorAction_h
-#define PrimaryGeneratorAction_h 1
+#include "TrackingAction.hh"
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ParticleGun.hh"
-#include "globals.hh"
+#include "RunAction.hh"
 
-class G4Event;
-class DetectorConstruction;
-class PrimaryGeneratorMessenger;
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+TrackingAction::TrackingAction(RunAction* run)
+:runAction(run)
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
-  public:
-    PrimaryGeneratorAction(DetectorConstruction*);    
-   ~PrimaryGeneratorAction();
-
-  public:  
-    void SetRndmBeam(G4double val)  {rndmBeam = val;}   
-    void GeneratePrimaries(G4Event*);
-    
-    void   ResetEbeamCumul() {EbeamCumul = 0.;}
-    G4double GetEbeamCumul() {return EbeamCumul;}
-     
-    G4ParticleGun* GetParticleGun() {return particleGun;}
-    
-  private:
-    G4ParticleGun*             particleGun;
-    DetectorConstruction*      detector;
-    G4double                   rndmBeam;
-    G4double                   EbeamCumul;       
-    PrimaryGeneratorMessenger* gunMessenger;     
-};
+  // extract Projected Range of primary particle
+  if (aTrack->GetTrackID() == 1) {
+    G4double x = aTrack->GetPosition().x() + runAction->GetOffsetX();
+    runAction->AddProjRange(x);
+  }  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#endif
-
 

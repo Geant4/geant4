@@ -20,11 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PhysicsList.cc,v 1.11 2004-07-01 13:07:54 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.12 2004-07-08 16:15:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -116,8 +114,6 @@ PhysicsList::~PhysicsList()
 #include "G4He3.hh"
 #include "G4GenericIon.hh"
 
-#include "IonC12.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
@@ -125,10 +121,10 @@ void PhysicsList::ConstructParticle()
 // pseudo-particles
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition();
-
+  
 // gamma
   G4Gamma::GammaDefinition();
-
+  
 // optical photon
   G4OpticalPhoton::OpticalPhotonDefinition();
 
@@ -141,7 +137,7 @@ void PhysicsList::ConstructParticle()
   G4NeutrinoE::NeutrinoEDefinition();
   G4AntiNeutrinoE::AntiNeutrinoEDefinition();
   G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
+  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
 
 // mesons
   G4PionPlus::PionPlusDefinition();
@@ -168,7 +164,6 @@ void PhysicsList::ConstructParticle()
   G4He3::He3Definition();
   G4Alpha::AlphaDefinition();
   G4GenericIon::GenericIonDefinition();
-  IonC12::IonDefinition();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -181,14 +176,14 @@ void PhysicsList::ConstructProcess()
   // transportation
   //
   AddTransportation();
-
+  
   // electromagnetic physics list
   //
   emPhysicsList->ConstructProcess();
-
+  
   // hadronic physics lists
   for(size_t i=0; i<hadronPhys.size(); i++) hadronPhys[i]->ConstructProcess();
-
+  
   // decay process
   //
   G4Decay* fDecayProcess = new G4Decay();
@@ -198,7 +193,7 @@ void PhysicsList::ConstructProcess()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (fDecayProcess->IsApplicable(*particle)&&!particle->IsShortLived()) {
+    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) { 
 
       pmanager ->AddProcess(fDecayProcess);
 
@@ -208,9 +203,9 @@ void PhysicsList::ConstructProcess()
 
     }
   }
-
+  
   // step limitation (as a full process)
-  //
+  //  
   AddStepMax();
 }
 
@@ -270,7 +265,7 @@ void PhysicsList::AddStepMax()
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
 
-      if (stepMaxProcess->IsApplicable(*particle)&&!particle->IsShortLived())
+      if (stepMaxProcess->IsApplicable(*particle))
         {
 	  pmanager ->AddDiscreteProcess(stepMaxProcess);
         }

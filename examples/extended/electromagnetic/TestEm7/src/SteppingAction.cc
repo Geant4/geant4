@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.4 2004-03-31 17:09:46 maire Exp $
+// $Id: SteppingAction.cc,v 1.5 2004-07-08 16:15:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,10 +32,6 @@
 #include "G4SteppingManager.hh"
 #include "G4VProcess.hh"
 #include "G4ParticleTypes.hh"
-
-#ifdef USE_AIDA
- #include "AIDA/IHistogram1D.h"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,12 +50,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
  G4double edep = aStep->GetTotalEnergyDeposit();
  if (edep <= 0.) return;
- 	   
-#ifdef USE_AIDA
+ 
+ //Bragg curve
+ //	   
  G4double x = aStep->GetTrack()->GetPosition().x() + runAction->GetOffsetX();
  G4double binLength = runAction->GetBinLength();
- runAction->GetHisto(0)->fill(x, (edep/binLength)/(MeV/mm));
-#endif
+ runAction->FillHisto(0, x, (edep/binLength)/(MeV/mm));
 
  //fill tallies
  //

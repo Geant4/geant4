@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.4 2004-03-31 17:09:45 maire Exp $
+// $Id: RunAction.hh,v 1.5 2004-07-08 16:15:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,12 +37,10 @@ class PhysicsList;
 class PrimaryGeneratorAction;
 class G4Run;
 
-#ifdef USE_AIDA
 namespace AIDA {
  class ITree;
  class IHistogram1D;
 } 
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,14 +55,13 @@ class RunAction : public G4UserRunAction
     void   EndOfRunAction(const G4Run*);
     
     G4double* GetTallyEdep() {return tallyEdep;};
-    
-#ifdef USE_AIDA
-    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
-#endif
        
     G4double GetBinLength() {return binLength;};
     G4double GetOffsetX()   {return offsetX;} 
-           
+    void     FillHisto(G4int id, G4double e, G4double weight = 1.0);
+    
+    void AddProjRange (G4double x) {projRange += x; projRange2 += x*x;};
+                   
   private:  
     void bookHisto();
     void cleanHisto();
@@ -74,15 +71,12 @@ class RunAction : public G4UserRunAction
     PhysicsList*            physics;
     PrimaryGeneratorAction* kinematic;
     G4double*               tallyEdep;   
+    G4double                binLength;
+    G4double                offsetX;
+    G4double                projRange, projRange2;         
 
-  private:
-#ifdef USE_AIDA          
-    AIDA::ITree* tree;
-    AIDA::IHistogram1D* histo[1];
-#endif
-            
-    G4double binLength;
-    G4double offsetX;                   
+    AIDA::ITree*            tree;
+    AIDA::IHistogram1D*     histo[1];        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
