@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.38 2003-04-08 18:04:26 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.39 2003-04-17 17:38:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation physics process -------------------------------
@@ -53,6 +53,7 @@
 // 10-03-03 Use SubType for GenericIons (V.Ivanchenko)
 // 07-04-03 Fix problem of several runs (V.Ivanchenko)
 // 08-04-03 finalRange is region aware (V.Ivanchenko)
+// 17-04-03 fix problem of hadron tests (V.Ivanchenko)
 //
 //------------------------------------------------------------------------------
 
@@ -171,8 +172,8 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
      if( CutsWhereModified() || !theDEDXpTable )
     {
       BuildLossTable(*theProton);
-      RecorderOfpProcess[CounterOfpProcess] = (*this).theLossTable;
-      CounterOfpProcess++;
+      RecorderOfpProcess[0] = (*this).theLossTable;
+//      CounterOfpProcess++;
       makeTables = true;
     }
    }
@@ -181,8 +182,8 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
      if( CutsWhereModified() || !theDEDXpbarTable )
     {
       BuildLossTable(*(G4AntiProton::AntiProton())) ;
-      RecorderOfpbarProcess[CounterOfpbarProcess] = (*this).theLossTable;
-      CounterOfpbarProcess++;
+      RecorderOfpProcess[0] = (*this).theLossTable;
+//      CounterOfpbarProcess++;
       makeTables = true;
     }
    }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.43 2003-04-09 16:33:27 vnivanch Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.44 2003-04-17 17:38:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -56,6 +56,7 @@
 // 25-03-03 add finalRangeRequested (mma)
 // 07-04-03 add verbosity (V.Ivanchenko)
 // 08-04-03 finalRange is region aware (V.Ivanchenko)
+// 17-04-03 fix problem of hadron tests (V.Ivanchenko)
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -222,33 +223,19 @@ void G4VhEnergyLoss::BuildDEDXTable(
    //              different processes.
    if (Charge >0.)
     {
-      RecorderOfProcess=RecorderOfpProcess;
-      CounterOfProcess=CounterOfpProcess;
-
-      if(CounterOfProcess == NbOfProcesses)
-      {
         if(theDEDXpTable) {theDEDXpTable->clearAndDestroy();
                            delete theDEDXpTable;}
         theDEDXpTable = new G4PhysicsTable(numOfCouples);
         theDEDXTable  = theDEDXpTable;
-      }
     }
    else
     {
-      RecorderOfProcess=RecorderOfpbarProcess;
-      CounterOfProcess=CounterOfpbarProcess;
-
-      if(CounterOfProcess == NbOfProcesses)
-      {
         if(theDEDXpbarTable) {theDEDXpbarTable->clearAndDestroy();
                               delete theDEDXpbarTable;}
         theDEDXpbarTable = new G4PhysicsTable(numOfCouples);
         theDEDXTable     = theDEDXpbarTable;
-      }
     }
 
-   if(CounterOfProcess == NbOfProcesses)
-    {
      //  loop for materials
      //
      G4bool isOutRange;
@@ -269,7 +256,7 @@ void G4VhEnergyLoss::BuildDEDXTable(
           // loop for the contributing processes
           for (G4int process=0; process < NbOfProcesses; process++)
           {
-            pointer= RecorderOfProcess[process];
+            pointer= RecorderOfpProcess[process];
             Value += (*pointer)[J]->GetValue(LowEdgeEnergy,isOutRange);
           }
 
@@ -279,9 +266,6 @@ void G4VhEnergyLoss::BuildDEDXTable(
         theDEDXTable->insert(aVector);
       }
 
-      // reset counter to zero
-      if(Charge >0.) CounterOfpProcess=0;
-      else           CounterOfpbarProcess=0;
 
       if(Charge > 0.)
       {
@@ -359,7 +343,7 @@ void G4VhEnergyLoss::BuildDEDXTable(
                                      thepbarRangeCoeffCTable,
                                      theInverseRangepbarTable,
                                      LowerBoundEloss,UpperBoundEloss,NbinEloss);
-      }
+      
     }
   }
 
