@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorMessenger.cc,v 1.4 2001-10-25 15:12:06 maire Exp $
+// $Id: Em2DetectorMessenger.cc,v 1.5 2001-10-31 17:34:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@ Em2DetectorMessenger::Em2DetectorMessenger(Em2DetectorConstruction * Det)
   MaterCmd = new G4UIcmdWithAString("/calor/setMat",this);
   MaterCmd->SetGuidance("Select Material.");
   MaterCmd->SetParameterName("material",false);
-  MaterCmd->AvailableForStates(PreInit,Idle);
+  MaterCmd->AvailableForStates(Idle);
   
   LBinCmd = new G4UIcmdWith3Vector("/calor/setLbin",this);
   LBinCmd->SetGuidance("set longitudinal bining");
@@ -70,7 +70,7 @@ Em2DetectorMessenger::Em2DetectorMessenger(Em2DetectorConstruction * Det)
   FieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   FieldCmd->SetParameterName("Bz",false);
   FieldCmd->SetUnitCategory("Magnetic flux density");
-  FieldCmd->AvailableForStates(PreInit,Idle);
+  FieldCmd->AvailableForStates(Idle);
   
   UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
   UpdateCmd->SetGuidance("Update geometry.");
