@@ -1,14 +1,15 @@
 /control/verbose 2
+/run/initialize
 /N07/verbose 1
 /run/dumpRegion
-/run/beamOn 50
+/run/beamOn 10 
 #
 #
 /N07/numberOfLayers 4
 /run/dumpRegion
-/run/beamOn 50
+/run/beamOn 10 
 #
 #
 /N07/setGapMat Water
 /run/dumpRegion
-/run/beamOn 50
+/run/beamOn 10 

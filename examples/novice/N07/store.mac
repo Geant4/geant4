@@ -1,4 +1,6 @@
 /control/verbose 2
+/run/initialize
+
 /run/setCutForRegion Calor-A 0.2 mm
 /run/setCutForRegion Calor-B 2 mm
 /run/setCutForRegion Calor-C 2 cm

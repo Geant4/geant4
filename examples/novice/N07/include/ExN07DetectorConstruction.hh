@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07DetectorConstruction.hh,v 1.1 2003-03-10 01:43:35 asaim Exp $
+// $Id: ExN07DetectorConstruction.hh,v 1.2 2004-11-17 03:07:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,6 +50,7 @@ class ExN07DetectorConstruction : public G4VUserDetectorConstruction
     virtual G4VPhysicalVolume* Construct();
      
   public:
+    void CreateMaterial(G4String materialChoice);
     void UpdateGeometry();
     void PrintCalorParameters() const;
     void SetAbsorberMaterial(G4String materialChoice);     

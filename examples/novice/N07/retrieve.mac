@@ -1,9 +1,13 @@
 /control/verbose 2
 
+### Add material
+/N07/addMat Iron
+/run/initialize
+
 ### retrieve physics table
-/run/particle/retrievePhysicsTable physTable
 ###  set store format : 0 binary   1 ascii
-/run/particle/setStoredInAscii 0 
+/run/particle/retrievePhysicsTable physTable
+/run/particle/setStoredInAscii 0
 #/run/particle/verbose 3 
 
 ### set range cut for Calor-A,B,C 
@@ -35,3 +39,17 @@
 /tracking/verbose 0
 /run/beamOn 10
 
+###Modify Absorber material
+/N07/setAbsMat Iron
+
+### 1 event 
+#/tracking/verbose 1
+/run/beamOn 1
+
+### dump couples
+/run/dumpRegion
+/run/dumpCouples
+
+###  10 events
+/tracking/verbose 0
+/run/beamOn 10
