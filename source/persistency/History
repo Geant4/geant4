@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5 December, 00   Y.Morita
+- added SRM comments to some classes
+
 17 November, 00  Y.Morita (persistency-V02-00-01)
 - more workaround on G4PGeometryObjectMap for ooddlx
 
