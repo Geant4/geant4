@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Run.hh,v 1.1 1999-01-07 16:14:15 gunter Exp $
+// $Id: G4Run.hh,v 1.2 1999-11-01 03:12:02 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -18,6 +18,13 @@
 class G4Event;
 class G4HCtable;
 class G4DCtable;
+
+// class description:
+//
+//  This class represents a run. An object of this class is constructed
+// and deleted by G4RunManager. Basically the user should use only the
+// get methods. All properties are set by G4RunManager.
+//  
 
 class G4Run
 {
@@ -33,23 +40,29 @@ class G4Run
     G4HCtable* HCtable;
     G4DCtable* DCtable;
 
+  public: // with description
+    inline G4int GetRunID() const
+    { return runID; }
+    //  Returns the run ID. Run ID is set by G4RunManager.
+    inline G4int GetNumberOfEvent() const
+    { return numberOfEvent; }
+    //  Returns number of events processed in this run. The number is
+    // incremented at the end of each event processing.
+    inline const G4HCtable* GetHCtable() const
+    { return HCtable; }
+    //  List of names of hits collection
+    inline const G4DCtable* GetDCtable() const
+    { return DCtable; }
+    //  List of names of digi collection
   public:
     inline void SetRunID(G4int id)
     { runID = id; }
-    inline G4int GetRunID() const
-    { return runID; }
-    inline G4int GetNumberOfEvent() const
-    { return numberOfEvent; }
     inline virtual void RecordEvent(G4Event*) 
     { numberOfEvent++; }
     inline void SetHCtable(G4HCtable* HCtbl)
     { HCtable = HCtbl; }
-    inline const G4HCtable* GetHCtable() const
-    { return HCtable; }
     inline void SetDCtable(G4DCtable* DCtbl)
     { DCtable = DCtbl; }
-    inline const G4DCtable* GetDCtable() const
-    { return DCtable; }
 };
 
 extern G4Allocator<G4Run> aRunAllocator;

@@ -5,11 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunMessenger.hh,v 1.3 1999-07-25 05:05:19 asaim Exp $
+// $Id: G4RunMessenger.hh,v 1.4 1999-11-01 03:12:02 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //	GEANT 4 class header file 
+
+// class description:
 //
 //      This is a messenger class for G4RunManager.
 //      Implemented commands are following;
@@ -25,10 +27,9 @@
 //    geometryModified *    Force geometry to be closed again.
 //    cutoffModified *      Force closssection tables to be calculated again.
 //           (and rebuilding physics table will be invoked)
+//    storeRandomNumberStatus *   Set the flag for storing random number status
+//    restoreRandomNumberStatus * Restore the stored random number status
 // 
-//	History
-//        first version                              by Makoto Asai 
-// ------------------------------------------------------------
 
 #ifndef G4RunMessenger_h
 #define G4RunMessenger_h 1
@@ -49,7 +50,7 @@ class G4RunMessenger: public G4UImessenger
   public:
     G4RunMessenger(G4RunManager* runMgr);
     ~G4RunMessenger();
-    
+
   public:
     void SetNewValue(G4UIcommand * command,G4String newValues);
     G4String GetCurrentValue(G4UIcommand * command);
