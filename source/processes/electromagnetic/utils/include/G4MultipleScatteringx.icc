@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScatteringx.icc,v 1.5 2001-08-08 16:09:31 maire Exp $
+// $Id: G4MultipleScatteringx.icc,v 1.6 2001-08-23 08:31:04 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    ------- G4MultipleScatteringx physics process ------
@@ -30,6 +30,9 @@
 // Modified:
 //
 // 18-05-01 V.Ivanchenko Clean up against Linux ANSI compilation 
+// 23-08-01, new angle and z distribution,energy dependence reduced,
+//           Store,Retrieve methods commented out temporarily, L.Urban
+/
 //
 //---------------------------------------------------------------
 
@@ -58,16 +61,14 @@ inline G4double G4MultipleScatteringx::GetContinuousStepLimit(
                                      G4double currentMinimumStep,
                                      G4double&)
 {
-  G4double zPathLength,tPathLength;
-  const G4DynamicParticle* aParticle; 
-  G4Material* aMaterial;
-  G4double KineticEnergy,tau;
-  G4bool isOut;
+  G4double zPathLength,tPathLength ;
+  const G4DynamicParticle* aParticle ;
+  G4Material* aMaterial ;
+  G4double KineticEnergy,tau,z0,kz ;
+  G4bool isOut ;
 
   static const G4double tlimmin = 1.e-6*mm;
   G4double tlimit;
-
-  G4double etau,beta2,cc,ccc,u;
 
   // this process is not a candidate for selection by default !!!!!!!!
   valueGPILSelectionMSC = NotCandidateForSelection;
@@ -108,23 +109,54 @@ inline G4double G4MultipleScatteringx::GetContinuousStepLimit(
     }   
   }
 
-  // do the true -> geom transformation
-  tau = tPathLength/fTransportMeanFreePath ;
+  //  do the true -> geom transformation
+  lambda1 = -1. ;
+  z1 = 1.e10 ;
 
-  if     (tau < tausmall) zPathLength = tPathLength;
-  else if(tau < taulim)   zPathLength = tPathLength*(1.-0.5*tau);
-  else          // sample zPathLength
+  if(fTransportMeanFreePath > biglambda) 
+  {
+    zPathLength = tPathLength ;
+  }
+  else
+  {
+    range = G4EnergyLossTables::GetRange(aParticle->GetDefinition(),
+                                         KineticEnergy,aMaterial);
+    tau = tPathLength/fTransportMeanFreePath ;
+
+    if(tPathLength/range < dtrl)
     {
-      etau = exp(-tau);
-      cc=0.5/scatteringparameter1-1.5;
-      ccc=2.*scatteringparameter1*exp(cc);
-      beta2 = 0.5*(1.+scatteringparameter1)*(1.-etau)/(tau-1+etau);
-      do {
-           u = -log(1.-G4UniformRand())/beta2;
-         } while (G4UniformRand() > (1.-scatteringparameter1+
-                    2.*scatteringparameter1*beta2*u)*exp(-beta2*u)/ccc );
-      zPathLength = tPathLength/(1.+u) ;
+      zmean       = fTransportMeanFreePath*(1.-exp(-tau)) ;
     }
+    else
+    {  
+      T1 = G4EnergyLossTables::GetPreciseEnergyFromRange(aParticle->GetDefinition(),
+                                  range-0.5*tPathLength,aMaterial);
+      lambda1 = (*theTransportMeanFreePathTable)
+                        (materialIndex)->GetValue(T1,isOut);
+      z1          = fTransportMeanFreePath*(1.-exp(-0.5*tau)) ;
+      cth1 = exp(-0.5*tau) ;
+      zmean       = z1 +      
+                    lambda1*(1.-exp(-0.5*tPathLength/lambda1))*cth1 ;
+    }
+    
+    //  sample z
+    if((pcz > 0.) && (tau < 1.5))
+    {
+      z0 = zmean+pcz*(tPathLength-zmean) ;
+      kz = (2.*zmean-tPathLength)/(z0-zmean) ;
+   
+      if(G4UniformRand() < z0/tPathLength)
+      {
+         zPathLength = z0*exp(log(G4UniformRand())/(kz+1.)) ;
+      }
+      else
+      {
+         zPathLength = tPathLength-(tPathLength-z0)*exp(log(1.-G4UniformRand())/(kz+1.)) ;
+      }
+    }
+    else
+     zPathLength = zmean ;
+  }
 
   tLast = tPathLength;
   zLast = zPathLength; 
@@ -155,48 +187,42 @@ G4VParticleChange* G4MultipleScatteringx::AlongStepDoIt(
 {				                 
   // only a geom path->true path transformation is performed
 
+  const G4DynamicParticle* aParticle ;
+  G4Material* aMaterial ;
   static const G4double tfacmx = 10. ;
   G4double tau,geomPathLength, truePathLength ;
-
-  G4double ltau,cc,ccc,beta2,u ;
 
   fParticleChange.Initialize(track);
 
   geomPathLength = track.GetStepLength() ;
-
-  if(geomPathLength == zLast)
-  { 
+  
+  if(fTransportMeanFreePath > biglambda) 
+  {                                              
+    truePathLength = geomPathLength ;  
+  }                                             
+  else if(geomPathLength == zLast)
+  {     
     truePathLength = tLast ;
-  }
-  else
-  {
-    tau = geomPathLength/fTransportMeanFreePath ;
-
-    if( tau < tausmall)
-    {
-      truePathLength = geomPathLength ;  
-    }
-    else if(tau < taulim)
-    {
-      truePathLength = geomPathLength*(1.+0.5*tau) ;
-    }
-    else if(tau < 1.)
-    {
-      // sample tPathLength
-      ltau = -log(1.-tau) ;
-      cc=0.5/scatteringparameter1-1.5 ;
-      ccc=2.*scatteringparameter1*exp(cc) ;
-       
-      beta2 = (1.+scatteringparameter1)*tau/(2.*(ltau-tau)) ;
-      do {
-           u = -log(1.-G4UniformRand())/beta2 ;
-         } while (G4UniformRand() > (1.-scatteringparameter1+
-                      2.*scatteringparameter1*beta2*u)*exp(-beta2*u)/ccc );
-      truePathLength = geomPathLength*(1.+u) ;
-    }
-    else
-      truePathLength = tfacmx*fTransportMeanFreePath;
-  }
+  }   
+  else 
+  { 
+     if(geomPathLength <= z1)
+     {
+       truePathLength = -fTransportMeanFreePath*log(1.-geomPathLength/fTransportMeanFreePath) ;
+       lambda1 = -1. ;
+     }
+     else
+     {
+       if(1.-(geomPathLength-z1)/(cth1*lambda1)>0.) 
+       {
+         truePathLength = 0.5*tLast-lambda1*log(1.-(geomPathLength-z1)/(cth1*lambda1)) ;
+       }
+       else 
+       {
+         truePathLength = range ;
+       }
+     }
+  } 
 
   fParticleChange.SetTrueStepLength(truePathLength);
 

@@ -21,13 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScatteringx.hh,v 1.4 2001-08-08 16:09:31 maire Exp $
+// $Id: G4MultipleScatteringx.hh,v 1.5 2001-08-23 08:31:04 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //    --------- G4MultipleScatteringx physics process --------
 //               by Laszlo Urban, March 2001   
 //
 // 07-08-01, new methods Store/Retrieve PhysicsTable 
+// 23-08-01, new angle and z distribution,energy dependence reduced,
+//           Store,Retrieve methods commented out temporarily, L.Urban
 //            
 // --------------------------------------------------------------
 
@@ -75,13 +77,13 @@ class G4MultipleScatteringx : public G4VContinuousDiscreteProcess
 
    void PrintInfoDefinition();
    
-   G4bool StorePhysicsTable(G4ParticleDefinition* ,
-			    const G4String& directory, G4bool);
+ //  G4bool StorePhysicsTable(G4ParticleDefinition* ,
+ //			    const G4String& directory, G4bool);
        // store TransportMeanFreePath tables into an external file
        // specified by 'directory' (must exist before invokation)
 
-   G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
-		               const G4String& directory, G4bool);
+ //  G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
+ //		               const G4String& directory, G4bool);
        // retrieve TransportMeanFreePath tables from an external file
        // specified by 'directory' 
 
@@ -99,19 +101,25 @@ class G4MultipleScatteringx : public G4VContinuousDiscreteProcess
    G4VParticleChange* PostStepDoIt(const G4Track& aTrack,const G4Step& aStep) ;
 
 
+   G4double GetLambda(G4double KineticEnergy,G4Material* material);
+
+   void Setpalfa(G4double value) { palfa = value ; } ;
+   void Setpbeta(G4double value) { pbeta = value ; } ;
+   void Setpgamma(G4double value) { pgamma = value ; } ;
+   void Setpq0(G4double value) { pq0 = value ; } ;
+   void Setpq1(G4double value) { pq1 = value ; } ;
+   void Setpc0(G4double value) { pc0 = value ; } ;
+   void Setpcz(G4double value) { pcz = value ; } ;
+   void Setdtrl(G4double value) { dtrl = value ; } ;
+
+   void SetBoundary(G4bool value) { boundary = value ;} ;
+   void SetFactlim(G4double val) { factlim=val;};
+
    G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
                                                   G4double  previousStepSize,
                                                   G4double  currentMinimumStep,
                                                   G4double& currentSafety,
                                                   G4GPILSelection* selection);
-
-   G4double GetLambda(G4double KineticEnergy, G4Material* material);
-
-   void SetScatteringParameter1(G4double value) {scatteringparameter1 = value;};
-   void SetScatteringParameter2(G4double value) {scatteringparameter2 = value;};
-   void SetScatteringParameter3(G4double value) {scatteringparameter3 = value;};
-   void SetBoundary(G4bool value)               {boundary = value;};
-   void SetFactlim(G4double val)                {factlim=val;};
 
    void SetTuning(G4double value)               {tuning = value;};
    void SetCparm (G4double value)               {cparm  = value;};
@@ -143,7 +151,7 @@ class G4MultipleScatteringx : public G4VContinuousDiscreteProcess
 
    G4double fTransportMeanFreePath;
 
-   G4double taubig,tausmall,taulim;
+   G4double biglambda,taubig,tausmall,taulim ;
 
    G4double LowestKineticEnergy;
    G4double HighestKineticEnergy;
@@ -160,13 +168,15 @@ class G4MultipleScatteringx : public G4VContinuousDiscreteProcess
    G4double zLast;
 
    // model parameters
-   G4double scatteringparameter1;  // param. for z/t distr.
-   G4double scatteringparameter2;  // 
-   G4double scatteringparameter3;  // 
-
-   G4bool boundary;                // spec. handling near boundaries
-   G4double factlim;
+   G4bool boundary ;               // spec. handling near boundaries
+   G4double factlim ;
    G4GPILSelection  valueGPILSelectionMSC ;
+
+   G4double pcz,zmean ;                  // z distribution 
+
+   G4double palfa,pbeta,pgamma,pq0,pq1,pc0 ; // theta distr.
+
+   G4double range,T1,lambda1,cth1,z1,t1,dtrl ;
 
    G4double tuning;        //  param. for lambda tuning
    G4double cparm;         //          "
@@ -178,7 +188,6 @@ class G4MultipleScatteringx : public G4VContinuousDiscreteProcess
    G4double NuclCorrPar;
    G4double FactPar;
 
-   //New ParticleChange
    G4ParticleChangeForMSC fParticleChange;
    
 };

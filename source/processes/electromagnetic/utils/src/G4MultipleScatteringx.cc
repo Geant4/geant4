@@ -21,13 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScatteringx.cc,v 1.7 2001-08-08 16:09:31 maire Exp $
+// $Id: G4MultipleScatteringx.cc,v 1.8 2001-08-23 08:31:30 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
 // 16/05/01  value of cparm changed , L.Urban
 // 18/05/01  V.Ivanchenko Clean up against Linux ANSI compilation
 // 07/08/01  new methods Store/Retrieve PhysicsTable (mma) 
+// 23-08-01, new angle and z distribution,energy dependence reduced,
+//           Store,Retrieve methods commented out temporarily, L.Urban
+/
 // --------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -43,7 +46,7 @@ G4MultipleScatteringx::G4MultipleScatteringx(const G4String& processName)
      : G4VContinuousDiscreteProcess(processName),
        theTransportMeanFreePathTable(0),
        fTransportMeanFreePath (1.e12),
-       taubig(10.),tausmall(1.e-12),taulim(1.e-6),
+       biglambda(1.e10),taubig(10.),tausmall(1.e-12),taulim(1.e-6),
        LowestKineticEnergy(0.1*keV),
        HighestKineticEnergy(100.*TeV),
        TotBin(100),
@@ -54,11 +57,12 @@ G4MultipleScatteringx::G4MultipleScatteringx(const G4String& processName)
        materialIndex(0),
        tLast (0.0),
        zLast (0.0),
-       scatteringparameter1(1.0),
-       scatteringparameter2(2.3407),
-       scatteringparameter3(1.0142),
        boundary(true),
-       factlim(1.0),
+       factlim(0.25),
+       valueGPILSelectionMSC(NotCandidateForSelection),
+       pcz(0.17),zmean(0.),
+       palfa(0.9698),pbeta(0.4138),pgamma(2.0001),pq0(0.272),pq1(50.14),pc0(4.024),
+       range(1.0),T1(1.0),lambda1(-1.),cth1(1.),z1(1.e10),dtrl(0.15),
        tuning (1.00),
        cparm (1.5),
        fLatDisplFlag(true),
@@ -375,73 +379,118 @@ G4double G4MultipleScatteringx::ComputeTransportCrossSection(
      sigma /= corrnuclsize;
 
   return sigma;
-}
-   
+
+  } 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VParticleChange* G4MultipleScatteringx::PostStepDoIt(const G4Track& trackData,
-                                                       const G4Step& stepData)
-{
-  static G4double kappa = 2.5, kappapl1 = kappa+1., kappami1 = kappa-1.;
-  G4double KineticEnergy,truestep,tau,prob,cth,sth,phi,
-           dirx,diry,dirz,w,etau,rmean,safetyminustolerance;
-  G4bool isOut;
+  G4VParticleChange* G4MultipleScatteringx::PostStepDoIt(
+                                               const G4Track& trackData,
+                                               const G4Step& stepData)
+  {
+    static G4double kappa = 2.5, kappapl1 = kappa+1., kappami1 = kappa-1. ;
+    const G4DynamicParticle* aParticle ;
+    G4double KineticEnergy,truestep,tau,prob,cth,sth,phi,
+             dirx,diry,dirz,w,etau,rmean,safetyminustolerance;
+    G4bool isOut;
 
-  fParticleChange.Initialize(trackData);
+    fParticleChange.Initialize(trackData) ;
 
-  truestep = stepData.GetStepLength();
+    truestep = stepData.GetStepLength() ;
 
-  const G4DynamicParticle* aParticle = trackData.GetDynamicParticle();
-  KineticEnergy = aParticle->GetKineticEnergy() ;
+    aParticle = trackData.GetDynamicParticle() ;
 
-  fTransportMeanFreePath = (*theTransportMeanFreePathTable)
+    KineticEnergy = aParticle->GetKineticEnergy() ;
+
+    fTransportMeanFreePath = (*theTransportMeanFreePathTable)
                              (materialIndex)->GetValue(KineticEnergy,isOut);
 
-  //  change direction first ( scattering ) ..........................
-  static G4double cq = 0.99985 ;
-  G4double e,alfa,alfamin,a,b,b1,x0,q ;
-  G4double w1,w2 ;
+    //  change direction first ( scattering ) ..........................
+    G4double e,a,ap1,am1,b,c,cp1,cm1,gamma1,q ;
+    G4double aw1,bw1,cw1;
+    G4double w1,w2 ;
 
-  prob = 1.;
-  q = 0.;
+    prob = 1. ;
 
-  tau = truestep/fTransportMeanFreePath;
-  if     (tau < tausmall) cth = 1.;
-  else if(tau > taubig)   cth = -1.+2.*G4UniformRand();
-  else {
-         e=exp(-tau);
-         alfamin= 2.*e/(1.-e);
-         alfa = alfamin*scatteringparameter2;
-         a = alfa/(alfa+2.);
-         b=scatteringparameter3/e;
-         prob = (cq*e-1./b)/(a-1./b);
-         x0 = -1.+2.*exp(-1./alfa);
-         q=(1.-cq)*e/((2.+x0)/3.-cq*e);
-         if(G4UniformRand() <= q) cth = x0+(1.-x0)*sqrt(G4UniformRand());
-         else {
-               if (G4UniformRand() <= prob)
-                                cth = -1.+2.*exp(log(G4UniformRand())/alfa);
+    tau = truestep/fTransportMeanFreePath ;
 
-               else {
-                      b1=b-1.;
-                      cth = b-b1*(b+1.)/sqrt(b1*b1+4.*b*G4UniformRand());
-                    }
-              } 
-       }
-       
-  sth  = sqrt(1.-cth*cth);
-  phi  = twopi*G4UniformRand();
-  dirx = sth*cos(phi); diry = sth*sin(phi); dirz = cth;
+    if(tau < tausmall)
+    {
+      cth = 1. ;
+    }
+    else if(tau > taubig)
+    {
+      cth = -1.+2.*G4UniformRand() ;
+    }
+    else 
+    {
+      if(lambda1 > 0.)
+      {
+        tau = 0.5*tLast/lambda1+(truestep-0.5*tLast)/fTransportMeanFreePath ;
+      }
+     
+      e=exp(-tau) ;
+     
+      if(palfa < 0.)
+        cth = e ;
+      else
+      {
+        a=exp(palfa*tau) ;
+        aw1 = 1./a;
+        ap1=a+1. ;
+        am1=a-1. ;
+  
+        w = exp(-pbeta*tau) ;
+        b = 2.*w/(1.-w) ;
+        bw1=w ;
 
-  G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
+        gamma1=pgamma-1. ;
 
-  G4ThreeVector newDirection(dirx,diry,dirz);
-  newDirection.rotateUz(ParticleDirection);
-  fParticleChange.SetMomentumChange(newDirection.x(),
+        q=1.-exp(-pq0-pq1*tau) ;
+
+        c=1.+pc0*tau ;
+        cp1=c+1. ;
+        cm1=c-1. ;
+
+        w1=exp(log(cp1)*gamma1) ;
+        w2=exp(log(cm1)*gamma1) ;
+
+        cw1 = c-gamma1*(w1*cm1-w2*cp1)/((gamma1-1.)*(w1-w2)) ;
+
+        prob = (e-cw1)/(q*aw1+(1.-q)*bw1-cw1) ;
+
+        if(G4UniformRand() <= prob)
+        {
+          if(G4UniformRand() <= q)
+          {
+            cth = a-am1*ap1/sqrt(am1*am1+4.*a*G4UniformRand()) ;
+          }
+          else
+          {
+            cth = -1.+2.*exp(log(G4UniformRand())/(b+1.));
+          }
+        }
+        else
+        {
+          cth = c-cp1*cm1/exp(log(w2+(w1-w2)*G4UniformRand())/gamma1) ;
+        }
+      }
+    } 
+
+    sth = sqrt(1.-cth*cth) ;
+
+    phi  = twopi*G4UniformRand();
+    dirx = sth*cos(phi); diry = sth*sin(phi); dirz = cth;
+
+    G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
+
+    G4ThreeVector newDirection(dirx,diry,dirz);
+    newDirection.rotateUz(ParticleDirection);
+    fParticleChange.SetMomentumChange(newDirection.x(),
                                     newDirection.y(),
                                     newDirection.z());
 
-  if (fLatDisplFlag)
+    if (fLatDisplFlag)
     {
       // compute mean lateral displacement ...............
       // only for safety > tolerance !!!!!!!!!
@@ -494,52 +543,52 @@ G4VParticleChange* G4MultipleScatteringx::PostStepDoIt(const G4Track& trackData,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4MultipleScatteringx::StorePhysicsTable(G4ParticleDefinition* particle,
-				              const G4String& directory, 
-				              G4bool          ascii)
-{
-  G4String filename;
+ // G4bool G4MultipleScatteringx::StorePhysicsTable(G4ParticleDefinition* particle,
+	//			              const G4String& directory, 
+	//			              G4bool          ascii)
+// {
+ // G4String filename;
   // store mean free path table
-  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
-  if (!theTransportMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
-      G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
-           << G4endl;
-    return false;
-  }
+ // filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+ // if (!theTransportMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
+ //     G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
+ //          << G4endl;
+ //   return false;
+ // }
   
-  G4cout << GetProcessName() << ": Success in storing the PhysicsTables in "  
-         << directory << G4endl;
-  return true;
-}
+ // G4cout << GetProcessName() << ": Success in storing the PhysicsTables in "  
+ //        << directory << G4endl;
+ // return true;
+// }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4MultipleScatteringx::RetrievePhysicsTable(G4ParticleDefinition* particle,
-					         const G4String& directory, 
-				                 G4bool          ascii)
-{
+// G4bool G4MultipleScatteringx::RetrievePhysicsTable(G4ParticleDefinition* particle,
+//					         const G4String& directory, 
+//				                 G4bool          ascii)
+// {
   // delete theTransportMeanFreePathTable
-  if (theTransportMeanFreePathTable != 0) {
-    theTransportMeanFreePathTable->clearAndDestroy();
-    delete theTransportMeanFreePathTable;
-  }
+ // if (theTransportMeanFreePathTable != 0) {
+ //   theTransportMeanFreePathTable->clearAndDestroy();
+ //   delete theTransportMeanFreePathTable;
+ // }
 
-  G4String filename;
+ // G4String filename;
 
   // retreive mean free path table
-  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
-  theTransportMeanFreePathTable = 
-                       new G4PhysicsTable(G4Material::GetNumberOfMaterials());
-  if (!theTransportMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
-           << G4endl;  
-    return false;
-  }
+ // filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+ // theTransportMeanFreePathTable = 
+ //                      new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+ // if (!theTransportMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
+ //   G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
+ //          << G4endl;  
+ //   return false;
+ // }
   
-  G4cout << GetProcessName() << ": Success in retrieving the PhysicsTables from "
-         << directory << G4endl;
-  return true;
-}
+ // G4cout << GetProcessName() << ": Success in retrieving the PhysicsTables from "
+ //        << directory << G4endl;
+ // return true;
+// }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
