@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.cc,v 1.7 2001-07-24 21:50:34 johna Exp $
+// $Id: G4BoundingSphereScene.cc,v 1.8 2001-07-25 21:10:22 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,9 +31,11 @@
 #include "G4BoundingSphereScene.hh"
 
 #include "G4VSolid.hh"
+#include "G4PhysicalVolumeModel.hh"
 #include "G4Vector3D.hh"
 
-G4BoundingSphereScene::G4BoundingSphereScene ():
+G4BoundingSphereScene::G4BoundingSphereScene (G4VModel* pModel):
+  fpModel (pModel),
   fRadius (-1.),
   fpObjectTransformation (0)
 {}
@@ -51,17 +53,18 @@ G4VisExtent G4BoundingSphereScene::GetBoundingSphereExtent () {
 }
 
 void G4BoundingSphereScene::Accrue (const G4VSolid& solid) {
-  const G4VisExtent& thisExtent = solid.GetExtent ();
-  G4Point3D thisCentre = thisExtent.GetExtentCentre ();
+
+  const G4VisExtent& newExtent = solid.GetExtent ();
+  G4Point3D newCentre = newExtent.GetExtentCentre ();
   if (fpObjectTransformation) {
-    thisCentre.transform (*fpObjectTransformation);
+    newCentre.transform (*fpObjectTransformation);
   }
-  const G4double thisRadius = thisExtent.GetExtentRadius ();
-  AccrueBoundingSphere (thisCentre, thisRadius);
-  /***********************************************
-    G4cout << "G4BoundingSphereScene::Accrue: centre: " << fCentre
-           << ", radius: " << fRadius << G4endl;
-  ***********************************************/
+  const G4double newRadius = newExtent.GetExtentRadius ();
+  AccrueBoundingSphere (newCentre, newRadius);
+
+  // Curtail descent - can assume daughters are contained within mother...
+  G4PhysicalVolumeModel* pPVM = fpModel->GetG4PhysicalVolumeModel();
+  if (pPVM) pPVM->CurtailDescent();
 }
 
 void G4BoundingSphereScene::ResetBoundingSphere () {
