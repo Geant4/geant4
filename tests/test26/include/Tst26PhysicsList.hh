@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PhysicsList.hh,v 1.4 2003-02-14 11:28:49 vnivanch Exp $
+// $Id: Tst26PhysicsList.hh,v 1.5 2003-02-19 17:07:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -33,6 +33,7 @@
 // Modified:
 //
 // 14-02-03 Make G4ProductionCuts to be members of the class (V.Ivanchenko)
+// 19-02-03 Rename G4ProductionCuts (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -59,22 +60,22 @@ class Tst26PhysicsList: public G4VModularPhysicsList
    ~Tst26PhysicsList();
 
     void AddPhysicsList(const G4String& name);
-    
+
     void SetCuts();
     void SetCutForWorld(G4double);
-    void SetCutForVertex(G4double);
-    void SetCutForMuon(G4double);
-       
+    void SetCutForVertexDetector(G4double);
+    void SetCutForMuonDetector(G4double);
+
   private:
     G4double cutForWorld;
-    G4double cutForVertex; 
-    G4double cutForMuon; 
+    G4double cutForVertexDetector;
+    G4double cutForMuonDetector;
 
     G4bool   emPhysicsListIsRegistered;
-    
+
     Tst26PhysicsListMessenger* pMessenger;
-    G4ProductionCuts* vertexCuts;         
-    G4ProductionCuts* muonCuts;         
+    G4ProductionCuts* vertexDetectorCuts;
+    G4ProductionCuts* muonDetectorCuts;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

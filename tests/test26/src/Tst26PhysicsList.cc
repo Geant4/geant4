@@ -30,6 +30,7 @@
 // Modified:
 //
 // 14-02-03 Make G4ProductionCuts to be members of the class (V.Ivanchenko)
+// 19-02-03 Rename G4ProductionCuts (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -54,12 +55,12 @@
 
 Tst26PhysicsList::Tst26PhysicsList() : G4VModularPhysicsList(),
 				       emPhysicsListIsRegistered(false),
-				       vertexCuts(0),
-				       muonCuts(0)
-{   
-  cutForWorld         = 1.0*mm;
-  cutForVertex        = 0.001*mm;
-  cutForMuon          = 10.*mm;
+				       vertexDetectorCuts(0),
+				       muonDetectorCuts(0)
+{
+  cutForWorld          = 1.0*mm;
+  cutForVertexDetector = 0.001*mm;
+  cutForMuonDetector   = 10.*mm;
 
   pMessenger = new Tst26PhysicsListMessenger(this);
 
@@ -137,23 +138,23 @@ void Tst26PhysicsList::SetCuts()
   SetCutValue(cutForWorld, "e-");
   SetCutValue(cutForWorld, "e+");   
 
-  if( !vertexCuts ) vertexCuts = new G4ProductionCuts();
+  if( !vertexDetectorCuts ) vertexDetectorCuts = new G4ProductionCuts();
   
-  vertexCuts->SetProductionCut(cutForVertex, 0);  
-  vertexCuts->SetProductionCut(cutForVertex, 1);  
-  vertexCuts->SetProductionCut(cutForVertex, 2);  
+  vertexDetectorCuts->SetProductionCut(cutForVertexDetector, idxG4GammaCut);
+  vertexDetectorCuts->SetProductionCut(cutForVertexDetector, idxG4ElectronCut);
+  vertexDetectorCuts->SetProductionCut(cutForVertexDetector, idxG4PositronCut);
 
-  if( !muonCuts ) muonCuts = new G4ProductionCuts();
-  
-  muonCuts->SetProductionCut(cutForMuon, 0);  
-  muonCuts->SetProductionCut(cutForMuon, 1);  
-  muonCuts->SetProductionCut(cutForMuon, 2);  
-  
+  if( !muonDetectorCuts ) muonDetectorCuts = new G4ProductionCuts();
+
+  muonDetectorCuts->SetProductionCut(cutForMuonDetector, idxG4GammaCut);
+  muonDetectorCuts->SetProductionCut(cutForMuonDetector, idxG4ElectronCut);
+  muonDetectorCuts->SetProductionCut(cutForMuonDetector, idxG4PositronCut);
+
   G4Region* region = (G4RegionStore::GetInstance())->GetRegion("VertexDetector");
-  region->SetProductionCuts(vertexCuts);
+  region->SetProductionCuts(vertexDetectorCuts);
   region = (G4RegionStore::GetInstance())->GetRegion("MuonDetector");
-  region->SetProductionCuts(muonCuts);
-  
+  region->SetProductionCuts(muonDetectorCuts);
+
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
@@ -167,18 +168,18 @@ void Tst26PhysicsList::SetCutForWorld(G4double cut)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Tst26PhysicsList::SetCutForVertex(G4double cut)
+void Tst26PhysicsList::SetCutForVertexDetector(G4double cut)
 {
   ResetCuts();
-  cutForVertex = cut;
+  cutForVertexDetector = cut;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Tst26PhysicsList::SetCutForMuon(G4double cut)
+void Tst26PhysicsList::SetCutForMuonDetector(G4double cut)
 {
   ResetCuts();
-  cutForMuon = cut;
+  cutForMuonDetector = cut;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

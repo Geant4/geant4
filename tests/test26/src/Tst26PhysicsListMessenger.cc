@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PhysicsListMessenger.cc,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
+// $Id: Tst26PhysicsListMessenger.cc,v 1.4 2003-02-19 17:07:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,8 @@
 // Created: 31.01.03 V.Ivanchenko
 //
 // Modified:
+//
+// 19-02-03 Rename G4ProductionCuts (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -96,11 +98,11 @@ void Tst26PhysicsListMessenger::SetNewValue(G4UIcommand* command,
    { pPhysicsList->SetCutForWorld(wCutCmd->GetNewDoubleValue(newValue));}
      
   if( command == eCutCmd )
-   { pPhysicsList->SetCutForVertex(eCutCmd->GetNewDoubleValue(newValue));}
+   { pPhysicsList->SetCutForVertexDetector(eCutCmd->GetNewDoubleValue(newValue));}
 
   if( command == mCutCmd )
-   { pPhysicsList->SetCutForMuon(mCutCmd->GetNewDoubleValue(newValue));}
-     
+   { pPhysicsList->SetCutForMuonDetector(mCutCmd->GetNewDoubleValue(newValue));}
+
   if( command == pListCmd )
    { pPhysicsList->AddPhysicsList(newValue);}
 }
