@@ -1,4 +1,4 @@
-$Id: History,v 1.61 2002-10-28 18:54:25 vnivanch Exp $
+$Id: History,v 1.62 2002-10-30 17:33:57 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+30 oct 02: mma (utils-V04-01-07)
+- G4MultipleScattering: modified angle distribution, mods in boundary algorithm,
+  changes in data members, rename variable cm -> Ecm
+  This new parametrisation improves the ~100 MeV proton scattering.
+- propagated to G4MultipleScatteringSTD
+- G4VEnergyLoss: minor changes in fluctuations   
 
 28 oct 02: V.Ivanchenko (utils-V04-01-06)
 - fix in G4MultipleScattringSTD + cleanup warnings in STD classes

@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4MultipleScatteringSTD.cc,v 1.5 2002-10-30 17:33:58 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
 // 16/05/01 value of cparm changed , L.Urban
