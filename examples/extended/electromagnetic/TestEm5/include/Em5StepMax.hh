@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5StepMax.hh,v 1.1 2003-04-30 14:12:35 maire Exp $
+// $Id: Em5StepMax.hh,v 1.2 2003-06-06 15:55:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -57,9 +57,8 @@ class Em5StepMax : public G4VDiscreteProcess
 
      G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-     G4double GetMeanFreePath(const G4Track& aTrack,G4double previousStepSize,
-                              G4ForceCondition* condition)
-     {return 0.;};     // it is not needed here !
+     G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
+       {return 0.;};     // it is not needed here !
 
   private:
 

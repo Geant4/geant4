@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5DetectorConstruction.cc,v 1.12 2003-05-30 10:28:04 urban Exp $
+// $Id: Em5DetectorConstruction.cc,v 1.13 2003-06-06 15:55:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,10 @@
 #include "G4TransportationManager.hh"
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
+
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
@@ -239,7 +243,12 @@ G4VPhysicalVolume* Em5DetectorConstruction::ConstructCalorimeter()
 {
   // complete the Calor parameters definition and Print 
   ComputeCalorParameters();
-
+  
+  // Cleanup old geometry
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+  
   //     
   // World
   //

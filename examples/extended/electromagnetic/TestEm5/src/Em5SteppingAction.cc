@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5SteppingAction.cc,v 1.11 2003-05-30 10:28:05 urban Exp $
+// $Id: Em5SteppingAction.cc,v 1.12 2003-06-06 15:55:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -113,12 +113,11 @@ void Em5SteppingAction::UserSteppingAction(const G4Step* aStep)
         eventaction->AddCharged() ;
         eventaction->AddE() ;
         Tsec = track->GetKineticEnergy() ;  // !!!!!!!!!!!!
-        Tsec += aStep->GetTotalEnergyDeposit() ;        // !!!!!!!!!!!!
+        Tsec += aStep->GetTotalEnergyDeposit() ;        // !!!!!!!!!!!!		 	  	
 #ifndef G4NOHIST
         if(runaction->GetHisto(7) != 0)
            runaction->GetHisto(7)->fill(Tsec/MeV) ;
 #endif
-
     }
     else
     if(((track->GetDynamicParticle()->GetDefinition()->

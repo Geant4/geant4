@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5CalorHit.cc,v 1.5 2003-04-30 14:12:38 maire Exp $
+// $Id: Em5CalorHit.cc,v 1.6 2003-06-06 15:55:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,7 @@ G4Allocator<Em5CalorHit> Em5CalorHitAllocator;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5CalorHit::Em5CalorHit()
+:G4VHit()
 {
    EdepAbs = 0.; TrackLengthAbs = 0.;
    EdepGap = 0.; TrackLengthGap = 0.;
@@ -49,6 +50,7 @@ Em5CalorHit::~Em5CalorHit()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5CalorHit::Em5CalorHit(const Em5CalorHit& right)
+:G4VHit()
 {
   EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
   EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
@@ -61,13 +63,6 @@ const Em5CalorHit& Em5CalorHit::operator=(const Em5CalorHit& right)
   EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
   EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
   return *this;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-int Em5CalorHit::operator==(const Em5CalorHit& right) const
-{
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

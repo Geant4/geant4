@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5RunAction.cc,v 1.16 2003-05-30 10:28:05 urban Exp $
+// $Id: Em5RunAction.cc,v 1.17 2003-06-06 15:55:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -198,7 +198,7 @@ void Em5RunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em5RunAction::EndOfRunAction(const G4Run* aRun)
+void Em5RunAction::EndOfRunAction(const G4Run*)
 {
   G4double sAbs,sigAbs,sigstep,sigcharged,signeutral;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5CalorHit.hh,v 1.5 2003-04-30 14:12:32 maire Exp $
+// $Id: Em5CalorHit.hh,v 1.6 2003-06-06 15:55:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,6 @@ class Em5CalorHit : public G4VHit
   ~Em5CalorHit();
    Em5CalorHit(const Em5CalorHit&);
    const Em5CalorHit& operator=(const Em5CalorHit&);
-   int operator==(const Em5CalorHit&) const;
 
    inline void* operator new(size_t);
    inline void  operator delete(void*);

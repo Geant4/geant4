@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Em5StepMax.cc,v 1.1 2003-04-30 14:12:40 maire Exp $
+// $Id: Em5StepMax.cc,v 1.2 2003-06-06 15:55:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +55,7 @@ void Em5StepMax::SetMaxStep(G4double step) {MaxChargedStep = step;}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double Em5StepMax::PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-                                                    G4double previousStepSize,
+                                                  G4double,
                                                   G4ForceCondition* condition )
 {
   // condition is set to "Not Forced"

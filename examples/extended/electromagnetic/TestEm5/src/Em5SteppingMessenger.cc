@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5SteppingMessenger.cc,v 1.6 2003-05-30 10:28:05 urban Exp $
+// $Id: Em5SteppingMessenger.cc,v 1.7 2003-06-06 15:55:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,7 +46,7 @@ Em5SteppingMessenger::~Em5SteppingMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em5SteppingMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
+void Em5SteppingMessenger::SetNewValue(G4UIcommand*, G4String)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
