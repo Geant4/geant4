@@ -35,6 +35,7 @@
 // 13 Mar 2003 L.Pandola    Code "cleaned"
 // 25 Mar 2003 L.Pandola    Changed the name of the database file to read
 // 24 Apr 2003 V.Ivanchenko Cut per region mfpt
+// 17 Mar 2004 L.Pandola    Removed unnecessary calls to pow(a,b)
 // --------------------------------------------------------------
 
 #include "G4PenelopeGammaConversion.hh"
@@ -326,8 +327,13 @@ G4double G4PenelopeGammaConversion::CoulombCorrection(G4double a)
 {
   G4double fc=0;
   G4double b[7] = {0.202059,-0.03693,0.00835,-0.00201,0.00049,-0.00012,0.00003};
-  fc = ((1.0/(1.0+a*a))+b[0]+b[1]*pow(a,2)+b[2]*pow(a,4)+b[3]*pow(a,6)+b[4]*pow(a,8)+b[5]*pow(a,10)+b[6]*pow(a,12));
-  fc=pow(a,2)*fc;
+  G4double aSquared = a*a;
+  G4double aFourth = aSquared*aSquared;
+  G4double aEighth = aFourth*aFourth;
+
+  fc = ((1.0/(1.0+a*a))+b[0]+b[1]*aSquared+b[2]*aFourth+b[3]*(aSquared*aFourth)+
+	b[4]*aEighth+b[5]*(aEighth*aSquared)+b[6]*(aEighth*aFourth));
+  fc=aSquared*fc;
   return fc;
 }
 
@@ -336,8 +342,9 @@ G4double G4PenelopeGammaConversion::LowEnergyCorrection(G4double a,G4double eki)
   G4double f0=0,t=0;
   G4double b[12] = {-1.744,-12.10,11.18,8.523,73.26,-41.41,-13.52,-121.1,94.41,8.946,62.05,-63.41};
   t=sqrt(2.0*eki);
-  f0=(b[0]+b[1]*a+b[2]*a*a)*t+(b[3]+b[4]*a+b[5]*a*a)*pow(t,2)+(b[6]+b[7]*a+b[8]*a*a)*pow(t,3)+
-    (b[9]+b[10]*a+b[11]*a*a)*pow(t,4);
+  G4double tSq = t*t;
+  f0=(b[0]+b[1]*a+b[2]*a*a)*t+(b[3]+b[4]*a+b[5]*a*a)*(tSq)+(b[6]+b[7]*a+b[8]*a*a)*(tSq*t)+
+    (b[9]+b[10]*a+b[11]*a*a)*(tSq*tSq);
   return f0;
 }
 
