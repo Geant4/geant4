@@ -95,6 +95,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4double inpactPar2 = impactX*impactX + impactY*impactY;
   
   G4double radius2 = theNucleus->GetNuclearRadius(theInnerCoreDensityCut*perCent);
+  radius2 *= radius2;
   G4double pathlength = 0;
   if(radius2 - inpactPar2>0) pathlength = 2.*sqrt(radius2 - inpactPar2);
   G4double theEnergyLostInFragmentation = theEnergyLossPerFermi*pathlength/fermi;
@@ -154,7 +155,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     if(current->second->GetDefinition() == G4Neutron::Neutron())
       runningEnergy-=G4Neutron::Neutron()->GetPDGMass();
       G4cout << "sorted rapidities "<<current->second->Get4Momentum().rapidity()<<G4endl;  
-    if(runningEnergy > theEnergyLostInFragmentation) continue;
+    if(runningEnergy > theEnergyLostInFragmentation) break;
     
      G4cout <<"ABSORBED STRING particles "<<current->second->GetDefinition()->GetPDGCharge()<<" "
            << current->second->GetDefinition()->GetPDGEncoding()<<" "
