@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2002-06-20 10:00:53 gcosmo Exp $
+$Id: History,v 1.2 2002-07-04 16:20:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 04, 02 G.Cosmo (cadex-V04-01-00)
+- GNUmakefile: parse 'g++' string in G4SYSTEM to detect non-ISO setup for
+  gcc-2.95 and higher.
 
 June 27, 98 G.Cosmo
 - Created.

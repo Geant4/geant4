@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2001-11-29 16:50:01 gcosmo Exp $
+$Id: History,v 1.10 2002-07-04 16:17:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 4, 2002  Gabriele Cosmo (STEP-V04-01-00)
+- GNUmakefile: parse 'g++' string in G4SYSTEM to detect non-ISO setup for
+  gcc-2.95 and higher.
 
 November 29, 2001       Gabriele Cosmo (STEP-V03-02-01)
 - Fixes for compilation on gcc-2.96.98 and gcc-3.0.2 compilers to overcome warnings

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2002-06-20 10:01:40 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2002-07-04 16:20:09 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
@@ -16,7 +16,7 @@ include $(G4INSTALL)/config/architecture.gmk
 # To avoid incompatibilities with ANSI standard treatment of strings, the
 # NIST STEP reader on gcc-2.95.X and later must be compiled in non-ANSI mode.
 #
-ifneq (,$(findstring Linux-g++,$(G4SYSTEM)))
+ifneq (,$(findstring g++,$(G4SYSTEM)))
   ansi_options = -Wall -ansi -pedantic
   NCXX = $(filter-out $(ansi_options),$(CXXFLAGS))
   NCPP = $(CPPFLAGS)
