@@ -52,11 +52,8 @@
       CALL GZEBRA( NGBANK)
       CALL HLIMIT(-NHBOOK)
 *
-* *** Open metafile
-      CALL HPLINT (0)
-      OPEN (unit=8,file='testem3.view.ps',status='unknown',
-     &      form='formatted')
-      CALL HPLCAP (-8)
+* *** initialize HIGZ
+      CALL HPLINT(0)
 *
 * *** GEANT initialisation
       CALL UGINIT
@@ -395,14 +392,13 @@
 *                                                                               
 * *** drawing
 *                                                          
-        IF (ISWIT(1).NE.0) THEN
-+self,if=batch.
-         CALL ICLRWK (0,0)
-+self.
++self,if=-batch.
+      IF (ISWIT(1).NE.0) THEN
          CALL GDHEAD (110110,'TestEm3',0.)
          CALL GDSHOW (3)
          CALL GDXYZ  (0)
       END IF
++self.      
 *
 *     ntuple: energies and track length per event
       sumevent(1) = Edep1
@@ -469,7 +465,7 @@
 * *** geant termination                                                                               
       CALL GLAST
 *
-* *** close HIGZ file
+* *** close HIGZ
       CALL HPLEND
 *                                                                               
 * *** Save ntuple                                                  
@@ -492,7 +488,7 @@ MATE   8  (Imat1) 5 (Imat2)
 CALOR  50 (nbLay) 0.23(thck1) 0.57 (thck2) 40. (calorYZ) 0. (field)
 TRIG   1000
 KINE   3 (Itype) 1.0 (Ekine) -23.9 (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
-DEBUG  10  5 1000
+DEBUG  10  5 100
 SWIT   0 (draw) 1 (save)
 CUTS   10.e-6 (cutgam)    100.e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
 ABAN   0
