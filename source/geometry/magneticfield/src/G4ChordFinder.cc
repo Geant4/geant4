@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.cc,v 1.5 1999-07-06 19:57:03 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.6 1999-07-12 09:36:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -232,7 +232,8 @@ G4FieldTrack G4ChordFinder::ApproxCurvePointV(
   curve_length= 
        CurveB_PointVelocity.CurveS() - CurveA_PointVelocity.CurveS();  
 
-  const G4double  integrationInaccuracyLimit= max( perMillion, 0.5*eps_step ); 
+  // const 
+  G4double  integrationInaccuracyLimit= max( perMillion, 0.5*eps_step ); 
   if( curve_length < ABdist * (1. - integrationInaccuracyLimit) ){ 
 //  #ifdef G4DEBUG
     G4cerr << " Warning in G4ChordFinder::ApproxCurvePoint: " << endl <<
