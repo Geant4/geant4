@@ -37,6 +37,7 @@
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
+// 18-04-03 Use IonFluctuations (V.Ivanchenko)
 //
 //
 // -------------------------------------------------------------------
@@ -50,7 +51,7 @@
 #include "G4AntiProton.hh"
 #include "G4BraggModel.hh"
 #include "G4BetheBlochModel.hh"
-#include "G4UniversalFluctuation.hh"
+#include "G4IonFluctuations.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -82,7 +83,7 @@ void G4ionIonisation::InitialiseProcess()
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
 
-  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
+  G4VEmFluctuationModel* fm = new G4IonFluctuations();
 
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);
