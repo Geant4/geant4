@@ -87,7 +87,7 @@ G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4S
     factory = new XMLHepRepFactory();
     writer = NULL;
 
-    Open(GetScene() == NULL ? "G4HepRepOutput.zip" : GetScene()->GetName());
+    Open(GetScene() == NULL ? G4String("G4HepRepOutput.zip") : GetScene()->GetName());
     OpenHepRep();
 }
 

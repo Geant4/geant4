@@ -71,7 +71,7 @@ HepRepInstanceTree* DefaultHepRep::getInstanceTreeTop(string, string) {
     return NULL;
 }
 
-HepRepInstanceTree* DefaultHepRep::getInstances(string, strings,
+HepRepInstanceTree* DefaultHepRep::getInstances(string, string,
                                                 vector<string>) {
     cerr << "DefaultHepRep::getInstances(string, string, vector<string>) not implemented." << endl;
     return NULL;
