@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTable.cc,v 1.5 1999-05-18 02:40:38 lockman Exp $
+// $Id: G3VolTable.cc,v 1.6 1999-05-18 18:43:20 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -61,7 +61,7 @@ VolTableEntry::VolTableEntry(G4String& Vname, G4String& Shape,
 };
 
 VolTableEntry::~VolTableEntry(){
-  if (_Rpar!=0) delete [] _Rpar;
+  if (_Rpar!=0 && _Npar>0) delete [] _Rpar;
 };
 
 VolTableEntry*

@@ -5,49 +5,48 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3PartTable.cc,v 1.2 1999-05-06 04:23:16 lockman Exp $
+// $Id: G3PartTable.cc,v 1.3 1999-05-18 18:41:53 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+
+#include <strstream.h>
+#include "globals.hh" 
 #include "G3PartTable.hh"
 
-RWBoolean PartTableMatch(const PartTableEntry *PartTentry, const void *pt){
-    G4int partid;
-    partid = *((G4int*) pt);
-    if (PartTentry->partid == partid)
-        {
-            return TRUE;
-        } else {
-            return FALSE;
-        }
-}
-
 G3PartTable::G3PartTable(){
-    PartTable = &PartT;
+  _PTD = new RWTPtrHashDictionary<G4String,G4ParticleDefinition>(G4String::hash);
 }
 
 G3PartTable::~G3PartTable(){
-    while (! PartTable->isEmpty()) {
-        PartTableEntry *PartTentry = PartTable->last();
-        PartTable->removeReference(PartTentry);
-        delete PartTentry;
-    }
-    delete PartTable;
-}
+  _PTD->clearAndDestroy();
+  delete _PTD;
+  G4cout << "Destructing Particle Table Hash Dictionary" << endl;
+};
 
-G4ParticleDefinition *G3PartTable::get(G4int partid){
-    const void *pt;
-    pt = &partid;
-    PartTableEntry *PartTentry = PartTable->find(PartTableMatch, pt);
-    if (PartTentry == NULL) {
-        return NULL;
-    } else {
-        return PartTentry->partpt;
-    }
-}
+G4ParticleDefinition*
+G3PartTable::get(G4int partid){
+  G4String _ShashID; // static
+  HashID(partid, _ShashID);
+  return _PTD->findValue(&_ShashID);
+};
 
-void G3PartTable::put(G4int *partid, G4ParticleDefinition *partpt){
-    PartTableEntry *PartTentry = new PartTableEntry;
-    PartTentry->partid = *partid;
-    PartTentry->partpt = partpt;
-    PartTable->append(PartTentry);
-}
+void 
+G3PartTable::put(G4int partid, G4ParticleDefinition *partpt){
+  G4String* _HashID = new G4String(); // Dynamic
+  HashID(partid, _HashID);
+  _PTD->insertKeyAndValue(_HashID, partpt);
+};
+
+void
+G3PartTable::HashID(G4int partid, G4String& _HashID){
+  char s[20];
+  ostrstream ostr(s, sizeof s);
+  ostr << "Part" << partid << ends;
+  _HashID = s;
+};
+
+void 
+G3PartTable::HashID(G4int partid, G4String* _HashID){
+  HashID(partid, *_HashID);
+};
+

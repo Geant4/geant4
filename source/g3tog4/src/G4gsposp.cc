@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsposp.cc,v 1.5 1999-05-18 02:40:57 lockman Exp $
+// $Id: G4gsposp.cc,v 1.6 1999-05-18 18:44:33 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4LogicalVolume.hh"
@@ -15,10 +15,9 @@
 #include "G3toG4.hh"
 #include "G3VolTable.hh"
 #include "G3RotTable.hh"
+#include "G4makevol.hh"
 
 G4bool G3IsMany(G4String);
-G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
-                           G4double Rpar[], G4int npar);
 
 void PG4gsposp(RWCString tokens[]){
   // fill the parameter containers
