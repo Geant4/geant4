@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.icc,v 1.5 2001-02-03 18:39:41 johna Exp $
+// $Id: G4VViewer.icc,v 1.6 2001-02-04 20:23:57 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,6 +33,14 @@ inline G4VSceneHandler* G4VViewer::GetSceneHandler () const {
 
 inline const G4ViewParameters& G4VViewer::GetViewParameters () const {
   return fVP;
+}
+
+inline const G4ViewParameters& G4VViewer::GetDefaultViewParameters () const {
+  return fDefaultVP;
+}
+
+inline void G4VViewer::SetDefaultViewParameters (const G4ViewParameters& vp) {
+  fDefaultVP = vp;
 }
 
 inline void G4VViewer::SetNeedKernelVisit () {

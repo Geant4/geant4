@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.hh,v 1.7 2000-05-02 09:51:22 johna Exp $
+// $Id: G4VViewer.hh,v 1.8 2001-02-04 20:23:55 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,8 +68,10 @@ public: // With description
   void                    SetName           (const G4String&);
   G4int                   GetViewId         () const;
   G4VSceneHandler*        GetSceneHandler   () const;
-  const G4ViewParameters& GetViewParameters () const;
-  void SetViewParameters  (const G4ViewParameters& vp);
+  const G4ViewParameters& GetViewParameters        () const;
+  const G4ViewParameters& GetDefaultViewParameters () const;
+  void SetViewParameters         (const G4ViewParameters& vp);
+  void SetDefaultViewParameters  (const G4ViewParameters& vp);
 
   //////////////////////////////////////////////////////////////
   // Public utility functions.
@@ -95,7 +97,8 @@ protected:
   G4int            fViewId;    // Id of this instance.
   G4String         fName;
   G4String         fShortName; // Up to first ' ' character, if any.
-  G4ViewParameters fVP;        // Viewing parameters.
+  G4ViewParameters fVP;        // View parameters.
+  G4ViewParameters fDefaultVP; // Default view parameters.
 
   //////////////////////////////////////////////////////////////
   // Other parameters.
