@@ -1,4 +1,4 @@
-$Id: History,v 1.104 2003-06-16 14:45:10 vnivanch Exp $
+$Id: History,v 1.105 2003-07-24 09:15:57 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 July 03: V.Ivant (utils-V05-02-00)
+-Update model interface - substitute G4Material by G4MaterialCutsCouple
+ in dE/dx and CrossSection methods
+-Add Set methods to energy range of msc table
+-Add method to change the nergy range of model 
 
 16 June 03: V.Ivant (utils-V05-01-07)
 - ShortLived particles are not applicable for msc
