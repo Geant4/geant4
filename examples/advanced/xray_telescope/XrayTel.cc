@@ -49,6 +49,13 @@
 // CHANGE HISTORY
 // --------------
 //
+// 05.12.2001 R. Nartallo
+// -Removed XM vis option
+//
+// 07.11.2001 M.G. Pia
+// - Modified the analysis management
+// - Small design iteration
+//
 // 30.11.2000 R. Nartallo, A. Pfeiffer
 // - Implementation of analysis manager code for histograming
 //
@@ -79,8 +86,6 @@
 #include <iostream.h>
 #include "g4std/vector"
 
-#include "XrayTelAnalysisManager.hh"
-
 int main( int argc, char** argv )
 {
   // Construct the default run manager
@@ -90,22 +95,11 @@ int main( int argc, char** argv )
   runManager->SetUserInitialization(new XrayTelDetectorConstruction ) ;
   runManager->SetUserInitialization(new XrayTelPhysicsList);
 
-  // setup some of the common variables
-  G4bool drawEvent;
-  G4std::vector<G4double*> EnteringEnergy;
-  G4std::vector<G4ThreeVector*> EnteringDirection;
-
-  // create manager for analysis. 
-  char* s = getenv("G4ANALYSIS_SYSTEM");
-  XrayTelAnalysisManager* analysisManager = new XrayTelAnalysisManager(s?s:"");
-
   // set mandatory user action class
   runManager->SetUserAction(new XrayTelPrimaryGeneratorAction);
-  runManager->SetUserAction(new XrayTelRunAction(&EnteringEnergy,
-				&EnteringDirection, &drawEvent, analysisManager));
-  runManager->SetUserAction(new XrayTelEventAction(&drawEvent));
-  runManager->SetUserAction(new XrayTelSteppingAction(
-				&EnteringEnergy, &EnteringDirection, &drawEvent, analysisManager));
+  runManager->SetUserAction(new XrayTelRunAction);
+  runManager->SetUserAction(new XrayTelEventAction);
+  runManager->SetUserAction(new XrayTelSteppingAction);
 
   // visualization manager
   G4VisManager* visManager = new XrayTelVisManager;
@@ -133,7 +127,6 @@ int main( int argc, char** argv )
 
   // job termination
   delete visManager;
-  delete analysisManager;
   delete runManager;
   return 0;
 }
