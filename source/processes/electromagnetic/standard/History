@@ -1,4 +1,4 @@
-$Id: History,v 1.85 2003-04-08 18:04:25 vnivanch Exp $
+$Id: History,v 1.86 2003-04-11 08:00:15 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 Apr 03: V.Ivant (stand-V05-00-10)
+- fix problem of MFP for PAI
 
 08 Apr 03: V.Ivant (stand-V05-00-09)
 - finalRange is region aware

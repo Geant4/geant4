@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.cc,v 1.34 2003-03-10 10:50:56 vnivanch Exp $
+// $Id: G4PAIonisation.cc,v 1.35 2003-04-11 07:59:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -448,6 +448,8 @@ G4VParticleChange*
 G4PAIonisation::PostStepDoIt( const G4Track& trackData,
                               const G4Step& stepData          )
 {
+//    G4cout << "PAI PostStep " << G4endl;
+    ClearNumberOfInteractionLengthLeft();
     G4double kinE,  massRatio, scaledTkin, energyTransfer, finalTkin ;
 
     aParticleChange.Initialize(trackData) ;
@@ -455,6 +457,7 @@ G4PAIonisation::PostStepDoIt( const G4Track& trackData,
 
     if( trackData.GetMaterial()->GetIndex() != fMatIndex )
     {
+//    G4cout << "Wrong material " << G4endl;
       return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
     }
     kinE = aParticle->GetKineticEnergy() ;
@@ -482,6 +485,7 @@ G4PAIonisation::PostStepDoIt( const G4Track& trackData,
     aParticleChange.SetNumberOfSecondaries(0) ;
     aParticleChange.SetEnergyChange( finalTkin ) ;
     aParticleChange.SetLocalEnergyDeposit (energyTransfer) ;
+    //  G4cout<<"PAI::energyTransfer = "<<energyTransfer/keV<<" keV"<<G4endl ;
 
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
     //  return &aParticleChange ;
@@ -490,14 +494,14 @@ G4PAIonisation::PostStepDoIt( const G4Track& trackData,
 
 /////////////////////////////////////////////////////////////////////////
 //
-// compute the energy loss after a Step 
+// compute the energy loss after a Step
 //
 
 G4VParticleChange* G4PAIonisation::AlongStepDoIt( const G4Track& trackData,
-                                                   const G4Step& stepData    ) 
+                                                   const G4Step& stepData    )
 {
-  //  G4cout<<"G4PAIonisation::AlongStepDoIt is called"<<G4endl ;
-  
+//  G4cout<<"G4PAIonisation::AlongStepDoIt is called"<<G4endl ;
+
   const G4DynamicParticle* aParticle;
  //G4bool isOut;
   //G4double E,ScaledE,finalT,Step,Tbin,rangebin, delta ;
@@ -571,7 +575,7 @@ G4VParticleChange* G4PAIonisation::AlongStepDoIt( const G4Track& trackData,
   aParticleChange.SetNumberOfSecondaries(0);
   aParticleChange.SetEnergyChange( finalT ) ;
   aParticleChange.SetLocalEnergyDeposit(E-finalT) ;
-
+//  G4cout << "Edep= " << E-finalT << G4endl;
   return &aParticleChange ;
 
 }
@@ -580,11 +584,11 @@ G4VParticleChange* G4PAIonisation::AlongStepDoIt( const G4Track& trackData,
 //
 // Returns random energy loss from step
 
-G4double  
+G4double
 G4PAIonisation::GetLossWithFluct( G4double Step,
                                    const G4DynamicParticle* aParticle,
                                    G4Material* aMaterial               )
-{  
+{
   G4int iTkin, iTransfer  ;
   G4long numOfCollisions;
   //  G4long iCollision, numOfCollisions ;
