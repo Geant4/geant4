@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.cc,v 1.49 2003-08-29 07:34:04 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.cc,v 1.50 2003-08-29 13:56:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -338,7 +338,7 @@ void G4VEnergyLossSTD::SetParticles(const G4ParticleDefinition* p1,
   if(particle && baseParticle) {
     if((particle->GetPDGMass() < MeV && baseParticle->GetPDGMass() > MeV) ||
        (particle->GetPDGMass() > MeV && baseParticle->GetPDGMass() < MeV)) yes = false;
-    
+
   }
   if(!yes) {
     G4cout << "Warning in G4VEnergyLossSTD::SetParticle: "
@@ -991,8 +991,6 @@ void G4VEnergyLossSTD::SetStepLimits(G4double v1, G4double v2)
 
 void G4VEnergyLossSTD::SetStepFunction(G4double v1, G4double v2)
 {
-  G4cout << "Warning! SetStepFunction is obsolete. Please, use SetStepLimits"
-         << G4endl;
   dRoverRange = v1;
   finalRange = v2;
   if (dRoverRange > 0.999) dRoverRange = 1.0;
@@ -1003,7 +1001,7 @@ void G4VEnergyLossSTD::SetStepFunction(G4double v1, G4double v2)
 void G4VEnergyLossSTD::SetParticle(const G4ParticleDefinition* p)
 {
   particle = p;
-  if(!baseParticle) baseParticle = DefineBaseParticle(particle);
+  baseParticle = DefineBaseParticle(particle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
