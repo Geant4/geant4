@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TstVADetectorConstruction.cc,v 1.8 2003-06-16 16:52:14 gunter Exp $
+// $Id: TstVADetectorConstruction.cc,v 1.9 2003-11-02 14:02:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -103,11 +103,6 @@ void TstVADetectorConstruction::SwitchDetector()
 
   // Let the navigator to know about the new top of the new geometry
   G4RunManager::GetRunManager()->DefineWorldVolume( worldVol );
-  // Notify run manager that the new geometry has been built
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
-  // We have to tweak the navigator's state.
-  // By the following call we ensure that navigator's state is reset properly
-  G4RunManager::GetRunManager()->ResetNavigator();
 }
 
 void TstVADetectorConstruction::SelectDetector(G4String val)

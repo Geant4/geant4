@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TstVASteppingAction.hh,v 1.4 2001-07-11 09:59:24 gunter Exp $
+// $Id: TstVASteppingAction.hh,v 1.5 2003-11-02 14:02:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -31,7 +31,6 @@
 
 #include "globals.hh"
 #include "G4UserSteppingAction.hh"
-#include "Histo.hh"
 
 class TstVASteppingAction : public G4UserSteppingAction
 {
@@ -40,9 +39,6 @@ class TstVASteppingAction : public G4UserSteppingAction
     virtual ~TstVASteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
-private:
-  odHisto Steplength;
-  odHisto SteplengthProfile;
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TstDrawVox01SteppingAction.cc,v 1.4 2003-06-16 16:52:20 gunter Exp $
+// $Id: TstDrawVox01SteppingAction.cc,v 1.5 2003-11-02 14:02:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,53 +31,25 @@
 
 #include "TstDrawVox01SteppingAction.hh"
 #include "G4SteppingManager.hh"
-#include "math.h"
 #include <fstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-TstDrawVox01SteppingAction::TstDrawVox01SteppingAction() : Steplength(100,0.,100.),
-SteplengthProfile(100,0.,2*M_PI)
-{ }
+TstDrawVox01SteppingAction::TstDrawVox01SteppingAction()
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 TstDrawVox01SteppingAction::~TstDrawVox01SteppingAction()
 {
-  std::ofstream o("test01.stepLength.plt");
-  Steplength.output(o);
-  o.close();
-  o.open("test01.stepLengthProfile.plt");
-  SteplengthProfile.output(o);
-  o.close();
- 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void TstDrawVox01SteppingAction::UserSteppingAction(const G4Step* aStep)
+void TstDrawVox01SteppingAction::UserSteppingAction(const G4Step*)
 {
-  Steplength.accumulate(aStep->GetStepLength());
-
-  G4double phi = aStep->GetDeltaPosition().phi();
-  if (phi < 0.) phi = phi + twopi;
-  SteplengthProfile.accumulate(phi,aStep->GetStepLength());
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

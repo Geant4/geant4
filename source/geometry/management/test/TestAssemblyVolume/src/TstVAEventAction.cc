@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TstVAEventAction.cc,v 1.6 2003-06-16 16:52:16 gunter Exp $
+// $Id: TstVAEventAction.cc,v 1.7 2003-11-02 14:02:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -54,22 +54,8 @@ TstVAEventAction::~TstVAEventAction()
   delete eventMessenger;
 }
 
-void TstVAEventAction::BeginOfEventAction(const G4Event* evt)
+void TstVAEventAction::BeginOfEventAction(const G4Event*)
 {
-/*  
- G4int evtNb = evt->GetEventID();
- if (evtNb%printModulo == 0)
-   { 
-    G4cout << "\n---> Begin of event: " << evtNb << G4endl;
-    HepRandom::showEngineStatus();
-   }
-    
- if (calorimeterCollID==-1)
-   {
-    G4SDManager * SDman = G4SDManager::GetSDMpointer();
-    calorimeterCollID = SDman->GetCollectionID("CalCollection");
-   } 
-*/
 }
 
 void TstVAEventAction::EndOfEventAction(const G4Event* evt)

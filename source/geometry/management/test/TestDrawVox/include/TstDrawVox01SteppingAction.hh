@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TstDrawVox01SteppingAction.hh,v 1.3 2001-07-11 09:59:27 gunter Exp $
+// $Id: TstDrawVox01SteppingAction.hh,v 1.4 2003-11-02 14:02:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,9 +32,7 @@
 #ifndef TstDrawVox01SteppingAction_h
 #define TstDrawVox01SteppingAction_h 1
 
-#include "math.h"
 #include "G4UserSteppingAction.hh"
-#include "Histo.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -45,9 +43,6 @@ class TstDrawVox01SteppingAction : public G4UserSteppingAction
     virtual ~TstDrawVox01SteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
-private:
-  odHisto Steplength;
-  odHisto SteplengthProfile;
 };
 
 #endif
