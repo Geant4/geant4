@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.15 2002-08-19 20:20:18 asaim Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.16 2003-08-12 02:27:55 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -187,6 +187,7 @@ void G4PrimaryTransformer::SetDecayProducts
 #endif
       G4DynamicParticle*DP 
         = new G4DynamicParticle(partDef,daughter->GetMomentum());
+      DP->SetPrimaryParticle(daughter);
       decayProducts->PushProducts(DP);
       SetDecayProducts(daughter,DP);
     }

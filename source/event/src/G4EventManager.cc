@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.15 2003-08-02 00:18:30 asaim Exp $
+// $Id: G4EventManager.cc,v 1.16 2003-08-12 02:27:55 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -256,7 +256,16 @@ void G4EventManager::StackTracks(G4TrackVector *trackVector,G4bool IDhasAlreadyS
     {
       newTrack = (*trackVector)[ i ];
       trackIDCounter++;
-      if(!IDhasAlreadySet) newTrack->SetTrackID( trackIDCounter );
+      if(!IDhasAlreadySet)
+      {
+        newTrack->SetTrackID( trackIDCounter );
+        if(newTrack->GetDynamicParticle()->GetPrimaryParticle())
+        {
+          G4PrimaryParticle* pp
+            = (G4PrimaryParticle*)(newTrack->GetDynamicParticle()->GetPrimaryParticle());
+          pp->SetTrackID(trackIDCounter);
+        }
+      }
       trackContainer->PushOneTrack( newTrack );
 #ifdef G4VERBOSE
       if ( verboseLevel > 1 )
