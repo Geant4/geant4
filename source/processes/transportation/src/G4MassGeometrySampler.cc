@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassGeometrySampler.cc,v 1.3 2002-10-22 13:26:04 dressel Exp $
+// $Id: G4MassGeometrySampler.cc,v 1.4 2002-10-28 09:57:23 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -50,7 +50,9 @@ G4MassGeometrySampler(const G4String &particlename)
   fMImportanceConfigurator(0),
   fMScoreConfigurator(0),
   fGCellFinder(0),
-  fWeightCutOffConfigurator(0)
+  fWeightCutOffConfigurator(0),
+  fIStore(0),
+  fIsConfigured(false)
 {}
 
 G4MassGeometrySampler::~G4MassGeometrySampler(){
