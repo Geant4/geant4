@@ -10,7 +10,7 @@
 ./source/processes/electromagnetic/muons		muons-V03-00-00
 ./source/processes/electromagnetic/standard		stand-V03-00-01
 ./source/processes/electromagnetic/utils		utils-V03-00-00
-./source/processes/optical		op-V03-00-02
+./source/processes/optical		op-V03-00-03
 ./tests		tests-V03-00-00
 .		geant4-02-00-cand-05
 .		persistency-V02-00-03
