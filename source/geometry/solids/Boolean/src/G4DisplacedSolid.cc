@@ -90,13 +90,13 @@ const G4DisplacedSolid* G4DisplacedSolid::GetDisplacedSolidPtr() const
 G4VSolid* G4DisplacedSolid::GetConstituentMovedSolid()
 { return fPtrSolid; } 
 
-const G4AffineTransform  G4DisplacedSolid::GetTransform() const
+G4AffineTransform  G4DisplacedSolid::GetTransform() const
 {
    G4AffineTransform aTransform= *fPtrTransform;
    return aTransform;
 }
 
-const G4AffineTransform  G4DisplacedSolid::GetDirectTransform() const
+G4AffineTransform  G4DisplacedSolid::GetDirectTransform() const
 {
    G4AffineTransform aTransform= *fDirectTransform;
    return aTransform;
