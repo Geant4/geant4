@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisation.cc,v 1.9 2004-01-20 08:33:31 pandola Exp $
+// $Id: G4PenelopeIonisation.cc,v 1.10 2004-03-10 17:22:33 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -43,6 +43,7 @@
 //                              to eliminate leaks
 // 20.01.04 L.Pandola           Changed returns in CalculateDiscreteForPositrons()
 //                              to eliminate the same bug 
+// 10.03.04 L.Pandola           Bug fixed with reference system of delta rays
 // --------------------------------------------------------------
 
 #include "G4PenelopeIonisation.hh"
@@ -362,7 +363,6 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
   
   std::vector<G4DynamicParticle*>* photonVector=0;
   G4DynamicParticle* aPhoton;
- 
   if (Z>5 && (ionEnergy > cutg || ionEnergy > cute))
     {
       photonVector = deexcitationManager.GenerateParticles(Z,shellId);
@@ -399,7 +399,7 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
   G4double yEl = sin2 * sin(phi2);
   G4double zEl = cosThetaSecondary;
   G4ThreeVector eDirection(xEl,yEl,zEl); //electron direction
-  
+  eDirection.rotateUz(electronDirection0);
   electron = new G4DynamicParticle (G4Electron::Electron(),
 				    eDirection,eKineticEnergy) ;
   nbOfSecondaries++;
