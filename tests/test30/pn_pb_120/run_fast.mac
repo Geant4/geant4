@@ -19,9 +19,9 @@ Pb
 #emax(MeV)
 120
 #nbinse
-120
+60
 #nbinsd
-120
+60
 #elim(MeV)
 30.
 #nangle

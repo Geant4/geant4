@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-20000
+100000
 //--------Proton_processes
 #particle
 proton
@@ -25,7 +25,7 @@ H
 #nbinsd
 60
 #nbinspi
-25
+30
 #nangle
 0
 #dangle

@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-20000
+100000
 //--------Proton_processes
 #particle
 proton
@@ -21,15 +21,15 @@ Pb
 #elim(MeV)
 2.
 #emaxpi(MeV)
-250.
+300.
 #emax(MeV)
 600.
 #nbinse
 120
 #nbinsd
-50
+60
 #nbinspi
-25
+30
 #nangle
 5
 #angles

@@ -222,12 +222,13 @@ int main(int argc, char** argv)
             if(j == 0) {
               f2  = cs[j+1]; 
               y2  = (*f2)[i]; 
+	      //            y1  = std::max(y1,y2);
               ct1 = 1.0;
 	    } else if (j == na-2) {
               f2  = cs[j-1]; 
               y2  = (*f2)[i]; 
               ct2 = cos((*angle)[j-1]);
-              y2 -= (y2 - y1)*(ct2 + 1.0)/(ct2 - ct1);
+	      //  y2 -= (y2 - y1)*(ct2 + 1.0)/(ct2 - ct1);
               ct2 = -1.0;
               if(y2 < 0.0) y2 = 0.0;
             } else {
