@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedLambdaConstructor.hh,v 1.4 2000-02-27 07:48:50 kurasige Exp $
+// $Id: G4ExcitedLambdaConstructor.hh,v 1.5 2001-04-06 03:04:02 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -124,11 +124,11 @@ inline
     // s-quark
     quark = 3;
   } else if ( iQ == 1 ){
-    // u-quark
-    quark = 2;
-  }  else if ( iQ == 2 ){
     // d-quark
     quark = 1;
+  }  else if ( iQ == 2 ){
+    // u-quark
+    quark = 2;
   } 
   return quark;
 }
