@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.2 2004-06-30 15:48:57 maire Exp $
+// $Id: SteppingAction.cc,v 1.3 2004-09-07 17:02:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,10 +66,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   if (etrans > 0.) lgepsE = log10(etrans/E1);
 
   G4int id = 0;
-  if (procName == "MuIoni")     id = 1; 
-  if (procName == "MuPairProd") id = 2;
-  if (procName == "MuBrems")    id = 3;
-  if (procName == "MuNucl")     id = 4;    
+  if (procName == "muIoni")     id = 1; 
+  if (procName == "muPairProd") id = 2;
+  if (procName == "muBrems")    id = 3;
+  if (procName == "muNucl")     id = 4;    
   histoManager->FillHisto(id,lgepsE);		       
 }
 
