@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.cc,v 1.63 2003-11-18 15:44:10 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.64 2003-11-18 18:11:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -4404,6 +4404,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           if(dem>.1)
           {
             G4cerr<<"***G4QE::FSI:E/Mom conservation="<<tot4Mom<<dem<<".Correction!"<<G4endl;
+            G4LorentzVector cor4M(0.,0.,0.,mNeut);  // Prototype for the neutron
             if(dmo<0.0001 && re>900.)            // Momentum is conserved - recover the missing part
 			{
               if(fabs(re-mNeut)<.01)
@@ -4413,38 +4414,45 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
               }
 			  else if(fabs(re-mProt)<.01)
 			  {
+                cor4M=G4LorentzVector(0.,0.,0.,mProt);
                 G4QHadron* theH = new G4QHadron(90001000,G4LorentzVector(0.,0.,0.,mProt));
                 theQHadrons.push_back(theH);        // (delete equivalent for the proton)
               }
 			  else if(fabs(re-mDeut)<.01)
 			  {
+                cor4M=G4LorentzVector(0.,0.,0.,mDeut);
                 G4QHadron* theH = new G4QHadron(90001001,G4LorentzVector(0.,0.,0.,mDeut));
                 theQHadrons.push_back(theH);        // (delete equivalent for the proton)
               }
 			  else if(fabs(re-mTrit)<.01)
 			  {
+                cor4M=G4LorentzVector(0.,0.,0.,mTrit);
                 G4QHadron* theH = new G4QHadron(90001002,G4LorentzVector(0.,0.,0.,mTrit));
                 theQHadrons.push_back(theH);        // (delete equivalent for the proton)
               }
 			  else if(fabs(re-mHe3)<.01)
 			  {
+                cor4M=G4LorentzVector(0.,0.,0.,mHe3);
                 G4QHadron* theH = new G4QHadron(90002001,G4LorentzVector(0.,0.,0.,mHe3));
                 theQHadrons.push_back(theH);        // (delete equivalent for the proton)
               }
 			  else if(fabs(re-mAlph)<.01)
 			  {
+                cor4M=G4LorentzVector(0.,0.,0.,mAlph);
                 G4QHadron* theH = new G4QHadron(90002002,G4LorentzVector(0.,0.,0.,mAlph));
                 theQHadrons.push_back(theH);        // (delete equivalent for the proton)
               }
-			  else if(fabs(re-mNeut-mNeut))
+			  else if(fabs(re-mNeut-mNeut)<.01)
 			  {
+                cor4M=G4LorentzVector(0.,0.,0.,mNeut+mNeut);
                 G4QHadron* theH1 = new G4QHadron(90000001,G4LorentzVector(0.,0.,0.,mNeut));
                 theQHadrons.push_back(theH1);        // (delete equivalent for the proton)
                 G4QHadron* theH2 = new G4QHadron(90000001,G4LorentzVector(0.,0.,0.,mNeut));
                 theQHadrons.push_back(theH2);        // (delete equivalent for the proton)
               }
-			  else if(fabs(re-mProt-mProt))
+			  else if(fabs(re-mProt-mProt)<.01)
 			  {
+                cor4M=G4LorentzVector(0.,0.,0.,mProt+mProt);
                 G4QHadron* theH1 = new G4QHadron(90001000,G4LorentzVector(0.,0.,0.,mProt));
                 theQHadrons.push_back(theH1);        // (delete equivalent for the proton)
                 G4QHadron* theH2 = new G4QHadron(90001000,G4LorentzVector(0.,0.,0.,mProt));
@@ -4453,6 +4461,8 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 			  else throw G4QException("***G4QEnvironment::FSInteract: Increase the Correction");
 			}
             else throw G4QException("***G4QEnvironment::FSInteract: Energy/Momentum conservation");
+            tot4Mom=tot4Mom-cor4M;
+            G4cerr<<"---G4QE::FSI:Eenergy conservation error is corrected:"<<cor4M<<G4endl;
           }
 		  //#endif
           G4QHadron* prevHadr = theQHadrons[nHadr-2]; // GetPointer to theHadr previous to theLast
