@@ -1,4 +1,4 @@
-$Id: History,v 1.120 2000-11-30 15:10:13 gunter Exp $
+$Id: History,v 1.121 2000-12-01 08:37:43 gunter Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+1st December 2000 Gunter Folger
+- Change -M to -M -MG in common.gmk, binmake.gmk. This will output a "correct"
+  dependency file even when missing  header files are missing. Correct in the
+  sense that liblist will work, and that the missing header is supposed to be
+  (made) in the source directory.
 
 17th November 2000 Gunter Folger
 - Link with CLHEP using -L/-l instead of absolute filename; this allows 

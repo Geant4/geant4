@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.51 2000-11-16 12:55:55 gunter Exp $
+# $Id: binmake.gmk,v 1.52 2000-12-01 08:37:43 gunter Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -238,7 +238,11 @@ else
   LDLIBS = $(LDLIBS_PREFINAL)
 endif
 
-
+ifdef transform-RPath
+#invoke system specific transformation of 
+include $(G4INSTALL)/config/sys/$(G4SYSTEM)-runpath.gmk
+endif
+	
 sources := $(wildcard $(G4TARGET).cc)
 objects := $(patsubst %.cc,$(G4TMPDIR)/exe/%.o,$(sources))
 dependencies := $(patsubst %.cc,$(G4TMPDIR)/exe/%.d,$(sources))
@@ -315,7 +319,7 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@if [ ! -d $(G4TMPDIR)/exe ] ; then mkdir $(G4TMPDIR)/exe ;fi
 	@echo Making dependency for file $<...
 	@($(ECHO) $(G4TMPDIR)/exe/\\c ; \
-	g++ -M $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
+	g++ -M -MG $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
 -include $(dependencies)
 endif
 

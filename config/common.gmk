@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.18 2000-11-03 16:49:48 gunter Exp $
+# $Id: common.gmk,v 1.19 2000-12-01 08:37:43 gunter Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -147,7 +147,7 @@ $(G4TMPDIR)/%.d: src/%.cc
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 	@echo Making dependency for file $< ...
 	@($(ECHO) $(G4TMPDIR)/\\c ; \
-	g++ -M $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/$*.o!& $@!' >$@
+	g++ -M -MG $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/$*.o!& $@!' >$@
 -include $(dependencies)
 endif
 
