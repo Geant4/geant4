@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PointReplicaCreator.cc,v 1.4 2002-11-21 16:49:49 gcosmo Exp $
+// $Id: G4PointReplicaCreator.cc,v 1.5 2003-03-28 15:47:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,6 +52,6 @@ G4PointReplicaCreator G4PointReplicaCreator::GetInstance()
   return csc;
 }
 
-void G4PointReplicaCreator::CreateG4Geometry(STEPentity& Ent) {}
+void G4PointReplicaCreator::CreateG4Geometry(STEPentity&) {}
 
-void G4PointReplicaCreator::CreateSTEPGeometry(void* G4obj) {}
+void G4PointReplicaCreator::CreateSTEPGeometry(void*) {}

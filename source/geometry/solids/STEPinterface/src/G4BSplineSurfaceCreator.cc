@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineSurfaceCreator.cc,v 1.6 2002-11-21 16:49:47 gcosmo Exp $
+// $Id: G4BSplineSurfaceCreator.cc,v 1.7 2003-03-28 15:47:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -139,11 +139,6 @@ void G4BSplineSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
   createdObject = bSpline;
 }
 
-
-
-
-void G4BSplineSurfaceCreator::CreateSTEPGeometry(void* G4obj)
+void G4BSplineSurfaceCreator::CreateSTEPGeometry(void*)
 {
-
 }
-

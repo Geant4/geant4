@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ManifoldSolidBrepCreator.cc,v 1.5 2002-11-21 16:49:49 gcosmo Exp $
+// $Id: G4ManifoldSolidBrepCreator.cc,v 1.6 2003-03-28 15:47:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,6 +72,6 @@ void G4ManifoldSolidBrepCreator::CreateG4Geometry(STEPentity& Ent)
   createdObject = sld;
 }
 
-void G4ManifoldSolidBrepCreator::CreateSTEPGeometry(void* G4obj)
+void G4ManifoldSolidBrepCreator::CreateSTEPGeometry(void*)
 {
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Axis2PlacementsCreator.cc,v 1.5 2002-11-21 16:49:47 gcosmo Exp $
+// $Id: G4Axis2PlacementsCreator.cc,v 1.6 2003-03-28 15:47:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -53,10 +53,10 @@ G4Axis2PlacementsCreator G4Axis2PlacementsCreator::GetInstance()
   return csc;
 }
 
-void G4Axis2PlacementsCreator::CreateG4Geometry(STEPentity& Ent)
+void G4Axis2PlacementsCreator::CreateG4Geometry(STEPentity&)
 {
 }
 
-void G4Axis2PlacementsCreator::CreateSTEPGeometry(void* G4obj)
+void G4Axis2PlacementsCreator::CreateSTEPGeometry(void*)
 {
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FaceBoundCreator.cc,v 1.6 2002-11-21 16:49:48 gcosmo Exp $
+// $Id: G4FaceBoundCreator.cc,v 1.7 2003-03-28 15:47:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -75,6 +75,6 @@ void G4FaceBoundCreator::CreateG4Geometry(STEPentity& Ent)
   createdObject = crv;
 }
 
-void G4FaceBoundCreator::CreateSTEPGeometry(void* G4obj)
+void G4FaceBoundCreator::CreateSTEPGeometry(void*)
 {
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FaceOuterBoundCreator.cc,v 1.4 2002-11-21 16:49:48 gcosmo Exp $
+// $Id: G4FaceOuterBoundCreator.cc,v 1.5 2003-03-28 15:47:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -51,6 +51,6 @@ G4FaceOuterBoundCreator::G4FaceOuterBoundCreator()
 
 G4FaceOuterBoundCreator::~G4FaceOuterBoundCreator() {}
 
-void G4FaceOuterBoundCreator::CreateSTEPGeometry(void* G4obj)
+void G4FaceOuterBoundCreator::CreateSTEPGeometry(void*)
 {
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipseCreator.cc,v 1.5 2002-11-21 16:49:48 gcosmo Exp $
+// $Id: G4EllipseCreator.cc,v 1.6 2003-03-28 15:47:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -81,6 +81,6 @@ void G4EllipseCreator::CreateG4Geometry(STEPentity& Ent)
   semi2 = *Attr->ptr.r;  
 }
 
-void G4EllipseCreator::CreateSTEPGeometry(void* G4obj)
+void G4EllipseCreator::CreateSTEPGeometry(void*)
 {
 }
