@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.59 2004-06-24 16:58:54 stesting Exp $
+# $Id: Configure,v 1.60 2004-06-29 09:33:29 stesting Exp $
 #
-# Generated on Thu Jun 24 18:58:33 CEST 2004 [metaconfig 3.0 PL70]
+# Generated on Tue Jun 29 11:27:51 CEST 2004 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2400,7 +2400,7 @@ esac
 case "$g4install" in
 '')
 if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
-	g4install="c:/geant4/"
+	g4install="c:/geant4"
 else
 	if [ X"$HOME" = X/ ] ; then
 	HOME=""
@@ -2874,17 +2874,6 @@ gans=$ans
 	esac
 done
 
-if test "X$g4clhep_base_dir" = "X/usr" -o "X$g4clhep_base_dir" = "X/usr/local"; then
-g4clhep_base_dir=""
-fi
-
-if test "X$g4clhep_include_dir" = "X/usr/include" -o "X$g4clhep_include_dir" = "X/usr/local/include"; then
-g4clhep_include_dir=""
-fi
-
-if test "X$g4clhep_lib_dir" = "X/usr/lib" -o "X$g4clhep_lib_dir" = "X/usr/local/lib"; then
-g4clhep_lib_dir=""
-fi
 
 echo " "
 
