@@ -5,11 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SandiaTable.cc,v 1.8 2001-02-16 17:16:05 maire Exp $
+// $Id: G4SandiaTable.cc,v 1.9 2001-02-22 15:02:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
+// 22.02.01 GetsandiaCofForMaterial(energy) return 0 below lowest interval  mma  
 // 16.02.01 adapted for STL.  mma
 // 31.01.01 redesign of ComputeMatSandiaMatrix().  mma
 // 18.11.98 simplified public interface; new methods for materials.  mma
@@ -163,6 +164,9 @@ G4double  G4SandiaTable::GetSandiaCofForMaterial(G4int interval, G4int j)
 
 G4double* G4SandiaTable::GetSandiaCofForMaterial(G4double energy)
 {
+   G4double nulcof[4] = {0.,0.,0.,0.};
+   if (energy < (*(*fMatSandiaMatrix)[0])[0]) return nulcof;
+   
    G4int interval = fMatNbOfIntervals - 1;
    while ((interval>0)&&(energy<(*(*fMatSandiaMatrix)[interval])[0])) interval--; 
    return &((*(*fMatSandiaMatrix)[interval])[1]);
