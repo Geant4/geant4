@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremAngularGeneratorTest.cc,v 1.3 2003-07-21 13:53:20 silvarod Exp $
+// $Id: G4BremAngularGeneratorTest.cc,v 1.4 2003-11-10 17:50:50 trindade Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,7 +57,7 @@
 #include "G4LowEnergyBremsstrahlung.hh"
 #include "G4VBremAngularDistribution.hh"
 #include "G4ModifiedTsai.hh"
-#include "G4Generator2BS.hh"
+//#include "G4Generator2BS.hh"
 #include "G4Generator2BN.hh"
 
 #include "AIDA/IManagedObject.h"
@@ -84,7 +84,7 @@ int main()
   std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
   std::auto_ptr< AIDA::ITreeFactory > tf (af->createTreeFactory());
   std::auto_ptr< AIDA::ITree > tree (tf->create("brem_angular_test.hbook","hbook",false,true));
-  cout << "Tree store: " << tree->storeName() << G4endl;
+  G4cout << "Tree store: " << tree->storeName() << G4endl;
   std::auto_ptr< AIDA::IHistogramFactory > hf (af->createHistogramFactory(*tree));
   std::auto_ptr< AIDA::IHistogram1D> histo_1 (hf->createHistogram1D("1","Polar Angle", 100,0.,3.14159)); 
  
@@ -97,7 +97,7 @@ int main()
 
   G4int gType;
   G4cout << "Modified Tsai Generator [1]" << G4endl;
-  G4cout << "2BS Generator [2]" << G4endl;
+//  G4cout << "2BS Generator [2]" << G4endl;
   G4cout << "2BN Generator [3]" << G4endl;
   G4cin >> gType;
   if ( !(gType < 4)) G4Exception("Wrong input");
@@ -111,7 +111,7 @@ int main()
 
   if(gType == 2)
     {
-      angularDistribution = new G4Generator2BS("2BSGenerator");
+//      angularDistribution = new G4Generator2BS("2BSGenerator");
     }
 
   if(gType == 3)

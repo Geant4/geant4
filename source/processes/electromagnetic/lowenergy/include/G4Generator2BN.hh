@@ -36,6 +36,7 @@
 //
 // Modifications: 
 // 02 Jun 2003                           First implementation acording with new design
+// 07 Nov 2003                           Lockup tables for fast initialization
 //               
 //
 // Class Description: 
@@ -89,11 +90,11 @@ private:
 
   G4double b;
   G4int index_min, index_max;
-  G4double* Atab;
-  G4double* ctab;
   G4double kmin, Ekmin;
   G4double dtheta;
   G4double kcut;
+  static G4double Atab[320];
+  static G4double ctab[320];
 
   // hide assignment operator 
   G4Generator2BN & operator=(const  G4Generator2BN &right);
