@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SubtractionSolid.cc,v 1.10 2000-11-02 12:25:47 gcosmo Exp $
+// $Id: G4SubtractionSolid.cc,v 1.11 2000-11-20 17:56:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -324,7 +324,7 @@ G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p,
 G4double 
 G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p ) const 
 {
-  G4double dist;
+  G4double dist=kInfinity;
 
   if( Inside(p) == kOutside )
   { 
@@ -333,7 +333,7 @@ G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p ) const
   else
   {
      dist= G4std::min(fPtrSolidA->DistanceToOut(p),
-               fPtrSolidB->DistanceToIn(p) ) ; 
+                      fPtrSolidB->DistanceToIn(p) ) ; 
   }
   return dist; 
 }

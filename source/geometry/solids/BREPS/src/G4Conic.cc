@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Conic.cc,v 1.4 2000-11-08 14:22:09 gcosmo Exp $
+// $Id: G4Conic.cc,v 1.5 2000-11-20 17:54:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -26,7 +26,7 @@ G4Conic::~G4Conic()
 }
 
 G4Conic::G4Conic(const G4Conic& right)
-  : pShift(right.pShift), position(right.position)
+  : position(right.position), pShift(right.pShift)
 {
   bBox      = right.bBox;
   start     = right.start;

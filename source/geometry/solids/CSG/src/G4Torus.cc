@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.cc,v 1.17 2000-11-10 17:46:32 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.18 2000-11-20 17:58:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -412,7 +412,7 @@ G4int G4Torus::SolveCubic(double c[], double s[]  ) const
 	}
 	else // one single and one double solution 
 	{
-	    G4double u = cbrt(-q);
+	    G4double u = pow(-q,1./3.);
 	    s[ 0 ] = 2 * u;
 	    s[ 1 ] = - u;
 	    num = 2;
@@ -431,8 +431,8 @@ G4int G4Torus::SolveCubic(double c[], double s[]  ) const
     else // one real solution 
     {
 	G4double sqrt_D = sqrt(D);
-	G4double u = cbrt(sqrt_D - q);
-	G4double v = - cbrt(sqrt_D + q);
+	G4double u = pow(sqrt_D - q,1./3.);
+	G4double v = - pow(sqrt_D + q,1./3.);
 
 	s[ 0 ] = u + v;
 	num = 1;
@@ -456,7 +456,7 @@ G4int G4Torus::SolveBiQuadraticNew(double c[], double s[]  ) const
 
     G4double  coeffs[ 4 ];
     G4double  w1, w2, w3;
-    G4double  z, u, v, sub;
+    G4double  sub;
     G4double  A, B, C, D;
     G4double  A2, p, q, r ;
     G4int     i,j, num;
@@ -573,12 +573,11 @@ G4int G4Torus::SolveCubicNew(double c[], double s[], double& cubic_discr ) const
 // From drte3 by McLareni; rewritten by O.Cremonesi
     const G4double eps = 1.e-6;
     const G4double delta = 1.e-15;
-    G4int     i, j, num;
+    G4int     i, j;
     G4double  sub;
-    G4double  y[3], z[3];
+    G4double  y[3];
     G4double  A, B, C;
     G4double  A2, p, q;
-    G4double  p3, D;
     G4double  h1,h2,h3;
     G4double  u,v;
 
@@ -607,10 +606,10 @@ G4int G4Torus::SolveCubicNew(double c[], double s[], double& cubic_discr ) const
       h2 = sqrt( cubic_discr );
       u = -h1+h2;
       v = -h1-h2;
-      if( u < 0 ) u = -cbrt(-u);
-      else u = cbrt(u);
-      if( v < 0 ) v = -cbrt(-v);
-      else v = cbrt(v);
+      if( u < 0 ) u = -pow(-u,1./3.);
+      else u = pow(u,1./3.);
+      if( v < 0 ) v = -pow(-v,1./3.);
+      else v = pow(v,1./3.);
       s[0] = u+v-sub;
       s[1] = -(u+v)/2.0-sub;
       s[2] = fabs(u-v)*sqrt(3.0)/2.0;
@@ -630,8 +629,8 @@ G4int G4Torus::SolveCubicNew(double c[], double s[], double& cubic_discr ) const
     {
       cubic_discr = 0.;
 
-      if( h1 < 0 ) u = cbrt(-h1);
-      else         u = -cbrt(h1);
+      if( h1 < 0 ) u = pow(-h1,1./3.);
+      else         u = -pow(h1,1./3.);
 
       s[0] =  u + u - sub ;
       s[1] = -u - sub ;
@@ -661,7 +660,7 @@ G4int G4Torus::SolveCubicNew(double c[], double s[], double& cubic_discr ) const
       h3 =fabs(p/3.);
       h3 = sqrt(h3*h3*h3);
       h2 = acos(-h1/h3)/3.;
-      h1 = cbrt(h3);
+      h1 = pow(h3,1./3.);
       u = h1*cos(h2);
       v = sqrt(3.)*h1*sin(h2);
       s[0] = u+u-sub;
@@ -861,6 +860,8 @@ G4bool G4Torus::CalculateExtent(const EAxis pAxis,
 	pMin=zMin;
 	pMax=zMax;
 	break;
+      default:
+        break;
     }
     pMin -= kCarTolerance ;
     pMax += kCarTolerance ;
@@ -1131,9 +1132,9 @@ G4double G4Torus::DistanceToIn(const G4ThreeVector& p,
 //                                            check validity
 
   G4bool seg;				// true if segmented
-  G4double hDPhi,hDPhiOT,hDPhiIT,cosHDPhiOT,cosHDPhiIT;
+  G4double hDPhi,hDPhiOT,hDPhiIT,cosHDPhiOT=0.,cosHDPhiIT=0.;
 					// half dphi + outer tolerance
-  G4double cPhi,sinCPhi,cosCPhi;	// central phi
+  G4double cPhi,sinCPhi=0.,cosCPhi=0.;	// central phi
 
   G4double tolORMin2,tolIRMin2;	// `generous' radii squared
   G4double tolORMax2,tolIRMax2 ;
@@ -1515,7 +1516,7 @@ G4double G4Torus::DistanceToOut(const G4ThreeVector& p,
 			        G4bool *validNorm,
 				G4ThreeVector  *n    ) const
 {
-  ESide    side = kNull, sidephi ;
+  ESide    side = kNull, sidephi = kNull ;
   G4double snxt = kInfinity, sphi, c[5], s[4] ;
 
   G4double sinSPhi, cosSPhi, ePhi, sinEPhi, cosEPhi;// Vars for phi intersection
@@ -1968,11 +1969,11 @@ G4double G4Torus::DistanceToOut(const G4ThreeVector& p,
 
 	default:
 
-	  /* It seems we go here from time to time .. */
+	  /* It seems we go here from time to time ..
 	  G4cout << "Side is " << side << G4endl ;
 	  G4cout << "Valid ESide are :" << kNull << " " << kRMin << " " << kRMax 
 		 << " " << kSPhi << " " << kEPhi << G4endl;
-
+	  */
 	  G4cout.precision(16);
 	  G4cout << G4endl;
 	  G4cout << "Torus parameters:" << G4endl << G4endl;

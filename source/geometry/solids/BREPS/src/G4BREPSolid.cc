@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolid.cc,v 1.16 2000-11-10 17:41:29 gcosmo Exp $
+// $Id: G4BREPSolid.cc,v 1.17 2000-11-20 17:54:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -33,8 +33,8 @@ G4int G4BREPSolid::NumberOfSolids=0;
 
 G4BREPSolid::G4BREPSolid(const G4String& name)
  : G4VSolid(name),
-   place(0), Box(0), Convex(0), AxisBox(0), PlaneSolid(0),
-   active(1), intersectionDistance(kInfinity), startInside(0),
+   Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0),
+   intersectionDistance(kInfinity), active(1), startInside(0),
    solidname(name)
 {
 }
@@ -43,8 +43,8 @@ G4BREPSolid::G4BREPSolid( const G4String& name        ,
 			  G4Surface**     srfVec      , 
 			  G4int           numberOfSrfs  )
  : G4VSolid(name),
-   place(0), Box(0), Convex(0), AxisBox(0), PlaneSolid(0),
-   active(1), intersectionDistance(kInfinity), startInside(0),
+   Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0),
+   intersectionDistance(kInfinity), active(1), startInside(0),
    nb_of_surfaces(numberOfSrfs), SurfaceVec(srfVec)
 {
   Initialize();
@@ -109,7 +109,6 @@ void G4BREPSolid::CheckSurfaceNormals()
   
   // Loop through each face and check the G4Vector3D of the Normal
   G4Surface* srf;
-  G4Vector3D *Normal1, Normal2;
   G4Point3D V;
   
   G4int PointNum=0;
@@ -155,8 +154,6 @@ void G4BREPSolid::CheckSurfaceNormals()
   G4Point3D Pt3;
   G4Point3D Pt4;
   
-  G4int ConnectingPoints=0;
-  
   G4Vector3D N1;
   G4Vector3D N2;    
   G4Vector3D N3;    
@@ -166,8 +163,6 @@ void G4BREPSolid::CheckSurfaceNormals()
 
   for(a=0; a<nb_of_surfaces; a++)
     ConnectedList[a]=0;
-  
-  G4int Connections=0;
   
   G4Surface* ConnectedSrf;
 
@@ -609,6 +604,8 @@ G4bool G4BREPSolid::CalculateExtent(const EAxis pAxis,
 	  pMin=zMin;
 	  pMax=zMax;
 	  break;
+	default:
+	  break;
 	}
 
       pMin-=kCarTolerance;
@@ -706,9 +703,6 @@ EInside G4BREPSolid::Inside(register const G4ThreeVector& Pt)const
   // This function find if the point Pt is inside, 
   // outside or on the surface of the solid
 
-
-  G4double halfTolerance = kCarTolerance*0.5;
-
   G4Vector3D v(1, 0, 0.01);
   G4Vector3D Pttmp(Pt);
   G4Vector3D Vtmp(v);
@@ -805,7 +799,6 @@ G4double G4BREPSolid::DistanceToIn(const G4ThreeVector& Pt) const
 
 
   G4double *dists = new G4double[nb_of_surfaces];
-  G4double halfTolerance = kCarTolerance*0.5;  
   G4int a;
 
   // Set the surfaces to active again
@@ -981,7 +974,6 @@ G4double G4BREPSolid::DistanceToOut(const G4ThreeVector& Pt)const
   // Return 0 if the point is already outside.	
 
   G4double *dists = new G4double[nb_of_surfaces];
-  G4double halfTolerance = kCarTolerance*0.5;  
   G4int a;
 
   // Set the surfaces to active again
@@ -1227,10 +1219,6 @@ G4int G4BREPSolid::Intersect(register const G4Ray& rayref) const
       result = srf->Intersect(rayref);
       if(result)
       {
-	register G4Surface* tmp;
-	   
-	
-
 	// Get the evaluated point on the surface
 	const G4Point3D& closest_point = srf->GetClosestHit();
 
@@ -1328,7 +1316,6 @@ G4int G4BREPSolid::FinalEvaluation(register const G4Ray& rayref,
   register G4Surface* srf;
   G4double halfTolerance = 0.5*kCarTolerance;
   G4double Dist=0;
-  G4int count=0;
   ((G4BREPSolid*)this)->intersectionDistance = kInfinity;
   
   for(register G4int a=0;a<nb_of_surfaces;a++)

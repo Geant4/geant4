@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BezierSurface.cc,v 1.4 2000-11-08 14:22:09 gcosmo Exp $
+// $Id: G4BezierSurface.cc,v 1.5 2000-11-20 17:54:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -283,7 +283,7 @@ void G4BezierSurface::ClipSurface()
   //    G4cout << "\nBezier clip.";
   
   register G4int i,j;
-  register G4ConvexHull *ch_ptr, *ch_tmp, *ch_first;
+  register G4ConvexHull *ch_ptr=0, *ch_tmp=0, *ch_first=0;
   register G4int col_size = ctl_points->GetCols();
   register G4int row_size = ctl_points->GetRows();
   
@@ -922,7 +922,7 @@ void G4BezierSurface::SplitNURBSurface()
   
   register G4double value;
   register G4int i;
-  register G4int k_index;
+  register G4int k_index=0;
   G4BezierSurface *srf1, *srf2;
   G4int nr,nc;
   

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.cc,v 1.13 2000-11-10 17:41:29 gcosmo Exp $
+// $Id: G4FConicalSurface.cc,v 1.14 2000-11-20 17:54:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -102,7 +102,6 @@ void G4FConicalSurface::CalcBBox()
   G4Point3D Max   = G4Point3D(-PINFINITY);
   G4Point3D Min   = G4Point3D( PINFINITY);
   G4Point3D Tmp;
-  G4double  delta = small_radius / tan_angle;
 
   G4Point3D Origin    = Position.GetLocation();
   G4Point3D EndOrigin = G4Point3D( Origin + (length * Position.GetAxis()) );

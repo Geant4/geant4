@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2000-11-10 17:41:28 gcosmo Exp $
+$Id: History,v 1.20 2000-11-20 17:54:36 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20/11/2000 : G. Cosmo            breps-V02-00-03
+- Fixes to remove warnings from "-Wall -ansi -pedantic" g++ compiler options:
+  o commented out variables declared and not used.
+  o fixed declaration of variables used before being initialised.
+  o fixed order of initialisation of member data in constructors.
+  o fixed usage of unsigned-int (size_t) for array indeces.
 
 10/11/2000 : G. Cosmo            breps-V02-00-02
 - Still minor QA fixes in G4Axis2Placement3D, G4BREPSolid, G4FConicalSurface.

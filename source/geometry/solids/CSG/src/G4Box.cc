@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Box.cc,v 1.8 2000-11-16 14:28:08 grichine Exp $
+// $Id: G4Box.cc,v 1.9 2000-11-20 17:57:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -170,6 +170,8 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
 	pMin=zMin;
 	pMax=zMax;
 	break;
+      default:
+        break;
     }
     pMin -= kCarTolerance ;
     pMax += kCarTolerance ;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.cc,v 1.10 2000-11-08 14:22:10 gcosmo Exp $
+// $Id: G4FPlane.cc,v 1.11 2000-11-20 17:54:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -70,7 +70,7 @@ G4FPlane::G4FPlane(const G4Point3DVector* pVec,
 
   polygon= new G4CompositeCurve(*pVec);
  
-  for (G4int i=0; i< polygon->GetSegments().length(); i++) 
+  for (size_t i=0; i< polygon->GetSegments().length(); i++) 
     polygon->GetSegments()[i]->SetSameSense(sameSense);
 
   bounds.insert(polygon);
@@ -81,7 +81,7 @@ G4FPlane::G4FPlane(const G4Point3DVector* pVec,
   {
     polygon= new G4CompositeCurve(*iVec);
 
-    for (G4int i=0; i< polygon->GetSegments().length(); i++) 
+    for (size_t i=0; i< polygon->GetSegments().length(); i++) 
     polygon->GetSegments()[i]->SetSameSense(sameSense);
 
     bounds.insert(polygon);
@@ -89,7 +89,7 @@ G4FPlane::G4FPlane(const G4Point3DVector* pVec,
   
   // Set sense for boundaries  
   
-  for (G4int j=0; j< bounds.length(); j++) 
+  for (size_t j=0; j< bounds.length(); j++) 
     bounds[j]->SetSameSense(sameSense);
   
 
@@ -173,8 +173,8 @@ void G4FPlane::CalcNormal()
 void G4FPlane::Project()
 {
     // Project
-    const G4Plane& Plane1 = NormalX->GetPlane(1);
-    const G4Plane& Plane2 = NormalX->GetPlane(2);
+    // const G4Plane& Plane1 = NormalX->GetPlane(1);
+    // const G4Plane& Plane2 = NormalX->GetPlane(2);
 
     // probably not necessary
     // projections of the boundary should be handled by the intersection

@@ -1,5 +1,5 @@
 
-$Id: History,v 1.14 2000-11-02 12:25:44 gcosmo Exp $
+$Id: History,v 1.15 2000-11-20 17:56:00 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Nov 20  2000  Gabriele Cosmo       geom-solid-bool-V02-00-02
+
+  - Fixes to remove warnings from "-Wall -ansi -pedantic" g++ compiler options:
+    o commented out variables declared and not used.
+    o fixed declaration of variables used before being initialised.
+    o fixed order of initialisation of member data in constructors.
+    o fixed usage of unsigned-int (size_t) for array indeces.
 
  Nov 2   2000  Gabriele Cosmo       geom-solid-bool-V02-00-01
 

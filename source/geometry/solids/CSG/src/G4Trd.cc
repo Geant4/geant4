@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trd.cc,v 1.6 2000-05-05 10:05:56 grichine Exp $
+// $Id: G4Trd.cc,v 1.7 2000-11-20 17:58:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -229,6 +229,8 @@ G4bool G4Trd::CalculateExtent(const EAxis pAxis,
 		    pMin=zMin;
 		    pMax=zMax;
 		    break;
+		default:
+		    break;
 		}
 // Add 2*Tolerance to avoid precision troubles ?  
 	    pMin-=kCarTolerance;
@@ -446,7 +448,7 @@ G4double G4Trd::DistanceToIn(const G4ThreeVector& p,
   G4double snxt = kInfinity ;		// snxt = default return value
   G4double smin,smax;
   G4double s1,s2,tanxz,tanyz,ds1,ds2;
-  G4double ss1,ss2,sn1,sn2,Dist;
+  G4double ss1,ss2,sn1=0.,sn2=0.,Dist;
 
   if ( v.z() )  // Calculate valid z intersect range
   {
@@ -723,10 +725,10 @@ G4double G4Trd::DistanceToOut(const G4ThreeVector& p,
 			        G4bool *validNorm,
                                 G4ThreeVector *n) const
 {
-    ESide side = kUndefined, snside;
+    ESide side = kUndefined, snside = kUndefined;
     G4double snxt,pdist;
-    G4double central,ss1,ss2,ds1,ds2,sn,sn2;
-    G4double tanxz,cosxz,tanyz,cosyz;
+    G4double central,ss1,ss2,ds1,ds2,sn=0.,sn2=0.;
+    G4double tanxz=0.,cosxz=0.,tanyz=0.,cosyz=0.;
 
     if (calcNorm) *validNorm=true; // All normals are valid
 

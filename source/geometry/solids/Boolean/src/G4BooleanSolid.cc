@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BooleanSolid.cc,v 1.3 2000-04-27 09:59:39 gcosmo Exp $
+// $Id: G4BooleanSolid.cc,v 1.4 2000-11-20 17:56:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for the abstract base class for solids created by boolean 
@@ -84,7 +84,7 @@ G4BooleanSolid::~G4BooleanSolid()
 // If the solid is not a "Boolean", return 0
 const G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no) const
 {
-  const G4VSolid*  subSolid;
+  const G4VSolid*  subSolid=0;
   if( no == 0 )  
     subSolid = fPtrSolidA;
   else if( no == 1 ) 
@@ -97,7 +97,7 @@ const G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no) const
 
   G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no)
 {
-  G4VSolid*  subSolid;
+  G4VSolid*  subSolid=0;
   if( no == 0 )  
     subSolid = fPtrSolidA;
   else if( no == 1 ) 

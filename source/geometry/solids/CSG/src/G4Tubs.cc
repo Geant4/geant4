@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.21 2000-10-31 16:28:19 grichine Exp $
+// $Id: G4Tubs.cc,v 1.22 2000-11-20 17:58:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -268,6 +268,8 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
 	pMax = zMax ;
 	break ;
       }
+      default:
+        break;
     }
     pMin -= kCarTolerance ;
     pMax += kCarTolerance ;
@@ -592,10 +594,10 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 
   G4bool seg ;				// true if segmented
 
-  G4double hDPhi, hDPhiOT, hDPhiIT, cosHDPhiOT, cosHDPhiIT ;
+  G4double hDPhi, hDPhiOT, hDPhiIT, cosHDPhiOT=0., cosHDPhiIT=0. ;
 					// half dphi + outer tolerance
 
-  G4double cPhi, sinCPhi, cosCPhi ;	// central phi
+  G4double cPhi, sinCPhi=0., cosCPhi=0. ;	// central phi
 
   G4double tolORMin2, tolIRMax2 ;	// `generous' radii squared
 
@@ -984,7 +986,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 			        G4bool *validNorm,
                                 G4ThreeVector *n    ) const
 {
-  ESide side = kNull , sider, sidephi ;
+  ESide side = kNull , sider = kNull, sidephi = kNull ;
 
   G4double snxt, sr = kInfinity, sphi = kInfinity, pdist ;
 

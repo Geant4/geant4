@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Para.cc,v 1.5 2000-04-11 16:04:28 johna Exp $
+// $Id: G4Para.cc,v 1.6 2000-11-20 17:57:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -284,6 +284,8 @@ G4bool G4Para::CalculateExtent(const EAxis pAxis,
 		case kZAxis:
 		    pMin=zMin;
 		    pMax=zMax;
+		    break;
+		default:
 		    break;
 		}
 

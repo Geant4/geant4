@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.cc,v 1.16 2000-11-08 14:22:08 gcosmo Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.17 2000-11-20 17:54:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -397,8 +397,6 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
   // This function find if the point Pt is inside, 
   // outside or on the surface of the solid
 
-  G4double halfTolerance = kCarTolerance*0.5;
-
   //  G4Vector3D v(1, 0, 0.01);
   G4Vector3D v(1, 0, 0);
   G4Vector3D Pttmp(Pt);
@@ -497,7 +495,6 @@ G4double G4BREPSolidPCone::DistanceToIn(const G4ThreeVector& Pt) const
 
 
   G4double *dists = new G4double[nb_of_surfaces];
-  G4double halfTolerance = kCarTolerance*0.5;  
   G4int a;
 
   // Set the surfaces to active again
@@ -663,7 +660,6 @@ G4double G4BREPSolidPCone::DistanceToOut(const G4ThreeVector& Pt) const
   // Return 0 if the point is already outside.	
 
   G4double *dists = new G4double[nb_of_surfaces];
-  G4double halfTolerance = kCarTolerance*0.5;  
   G4int a;
 
   // Set the surfaces to active again

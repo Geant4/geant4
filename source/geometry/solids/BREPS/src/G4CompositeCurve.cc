@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CompositeCurve.cc,v 1.7 2000-11-08 20:26:05 gcosmo Exp $
+// $Id: G4CompositeCurve.cc,v 1.8 2000-11-20 17:54:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -24,8 +24,7 @@ G4CompositeCurve::G4CompositeCurve(){}
 G4CompositeCurve::G4CompositeCurve(const G4Point3DVector& vertices)
 {
   G4CurveVector cv;
-  G4Line* l;
-  for (G4int i=0; i<vertices.length(); i++) 
+  for (size_t i=0; i<vertices.length(); i++) 
   {
     G4Point3D p1= vertices[i];
     G4Point3D p2= vertices[(i+1) % vertices.length()];
@@ -53,7 +52,7 @@ G4Curve* G4CompositeCurve::Project(const G4Transform3D& tr)
 {
   G4CurveVector newSegments;
   
-  for (G4int i=0; i<segments.entries(); i++) 
+  for (size_t i=0; i<segments.entries(); i++) 
   {
     G4Curve* c= segments[i]->Project(tr);
     if (c==0) 
@@ -117,7 +116,7 @@ G4int G4CompositeCurve::IntersectRay2D(const G4Ray& ray)
   G4int nbinter = 0;
   G4int temp = 0;
  
-  for (G4int i=0; i<segments.entries(); i++) 
+  for (size_t i=0; i<segments.entries(); i++) 
   {
     G4Curve& c= *(segments(i));
     temp = c.IntersectRay2D(ray);
@@ -148,7 +147,7 @@ void G4CompositeCurve::InitBounded()
   const G4BoundingBox3D* b= segments[0]->BBox();
   bBox.Init(b->GetBoxMin(), b->GetBoxMax());
   
-  for (G4int i=1; i<segments.entries(); i++) 
+  for (size_t i=1; i<segments.entries(); i++) 
   {
     b= segments[i]->BBox();
     bBox.Extend(b->GetBoxMin());

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Axis2Placement3D.cc,v 1.4 2000-11-10 17:41:29 gcosmo Exp $
+// $Id: G4Axis2Placement3D.cc,v 1.5 2000-11-20 17:54:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -24,8 +24,8 @@ G4Axis2Placement3D::~G4Axis2Placement3D(){}
 // copy constructor (used in STEPinterface module)
 //
 G4Axis2Placement3D::G4Axis2Placement3D(const G4Axis2Placement3D& place)
-  : refDirection(place.refDirection), 
-    axis(place.axis), location(place.location),
+  : location(place.location), axis(place.axis),
+    refDirection(place.refDirection), 
     pX(place.pX), pY(place.pY), pZ(place.pZ),
     toPlacementCoordinates(place.toPlacementCoordinates),
     fromPlacementCoordinates(place.fromPlacementCoordinates)

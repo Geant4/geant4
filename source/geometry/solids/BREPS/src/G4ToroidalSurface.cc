@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ToroidalSurface.cc,v 1.4 2000-11-08 14:22:11 gcosmo Exp $
+// $Id: G4ToroidalSurface.cc,v 1.5 2000-11-20 17:54:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -225,7 +225,7 @@ G4int G4ToroidalSurface::Intersect(const G4Ray& Ray)
     }
     
     // If two Inside bbox, find closest 
-    G4int Closest=0;
+    // G4int Closest=0;
     
     //	    if(Counter>1)
     //		if(rhits[InsideBox[0]] > rhits[InsideBox[1]])
@@ -234,8 +234,8 @@ G4int G4ToroidalSurface::Intersect(const G4Ray& Ray)
     // Project polygon and do point in polygon
     // Projection also for curves etc.
     // Should probably be implemented in the curve class. 
-    G4Plane Plane1 = Ray.GetPlane(1);
-    G4Plane Plane2 = Ray.GetPlane(2);
+    // G4Plane Plane1 = Ray.GetPlane(1);
+    // G4Plane Plane2 = Ray.GetPlane(2);
     
     // Point in polygon
     return 1;
@@ -370,7 +370,7 @@ G4int G4ToroidalSurface::SolveCubic(G4double c[], G4double s[]  )
     }
     else // one single and one G4double solution 
     {
-      G4double u = cbrt(-q);
+      G4double u = pow(-q,1./3.);
       s[ 0 ] = 2 * u;
       s[ 1 ] = - u;
       num = 2;
@@ -389,8 +389,8 @@ G4int G4ToroidalSurface::SolveCubic(G4double c[], G4double s[]  )
   else // one real solution 
   {
     G4double sqrt_D = sqrt(D);
-    G4double u = cbrt(sqrt_D - q);
-    G4double v = - cbrt(sqrt_D + q);
+    G4double u = pow(sqrt_D - q,1./3.);
+    G4double v = - pow(sqrt_D + q,1./3.);
     
     s[ 0 ] = u + v;
     num = 1;

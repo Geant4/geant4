@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trap.cc,v 1.7 2000-04-11 16:04:30 johna Exp $
+// $Id: G4Trap.cc,v 1.8 2000-11-20 17:58:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -707,6 +707,8 @@ G4bool G4Trap::CalculateExtent(const EAxis pAxis,
 		    pMin=zMin;
 		    pMax=zMax;
 		    break;
+		default:
+		    break;
 		}
 
 	    pMin-=kCarTolerance;
@@ -816,6 +818,8 @@ G4bool G4Trap::CalculateExtent(const EAxis pAxis,
 		    pMin=zMin;
 		    pMax=zMax;
 		    break;
+		default:
+		    break;
 		}
 
 	    
@@ -889,7 +893,7 @@ EInside G4Trap::Inside(const G4ThreeVector& p) const
 G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p) const
 {
     G4double safe=kInfinity,Dist,safez;
-    G4int i,imin;
+    G4int i,imin=0;
     for (i=0;i<4;i++)
 	{
 	    Dist=fabs(fPlanes[i].a*p.x()+fPlanes[i].b*p.y()+fPlanes[i].c*p.z()+fPlanes[i].d);
@@ -1337,6 +1341,8 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 		    break;
 		case kPZ:
 		    *n=G4ThreeVector(0,0,1);
+		    break;
+		default:
 		    break;
 	    }
 	}

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.hh,v 1.9 2000-11-08 14:22:01 gcosmo Exp $
+// $Id: G4FConicalSurface.hh,v 1.10 2000-11-20 17:54:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -14,18 +14,19 @@
 // Class description:
 // 
 // Definition of a generic conical surface.
-//
-//     Position.axis|
-//                  |
-//    --         ---|---   small_radius  
-//  l  |        /   |   \
-//  e  |       /    |    \
-//  n  |      /     |     \
-//  g  |     /      |      \
-//  t  |    /       |       \
-//  h  |   /        |        \
-//    --   ---------|---------  large_radius
-//               Position
+/*
+       Position.axis|
+                    |
+      --         ---|---   small_radius  
+    l  |        /   |   \
+    e  |       /    |    \
+    n  |      /     |     \
+    g  |     /      |      \
+    t  |    /       |       \
+    h  |   /        |        \
+      --   ---------|---------  large_radius
+                 Position
+*/
 
 // The code for G4FConicalSurface has been derived from the original
 // implementation in the "Gismo" package.

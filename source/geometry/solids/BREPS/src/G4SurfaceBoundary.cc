@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SurfaceBoundary.cc,v 1.7 2000-11-08 20:26:05 gcosmo Exp $
+// $Id: G4SurfaceBoundary.cc,v 1.8 2000-11-20 17:54:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@ void G4SurfaceBoundary::Init(const G4CurveVector& bounds0)
   const G4BoundingBox3D* b= bounds[0]->BBox();
   bBox.Init(b->GetBoxMin(), b->GetBoxMax());
   
-  G4int i;
+  size_t i;
   for ( i=1; i<bounds.entries(); i++) 
   {
     b= bounds[i]->BBox();
@@ -47,7 +47,7 @@ void G4SurfaceBoundary::Init(const G4CurveVector& bounds0)
   // the points array is probably unused, so the following code is useless
   G4int cnt= 0;
 
-  G4int entr = bounds.entries();
+  size_t entr = bounds.entries();
 
   for (i=0; i < entr; i++) 
   {
@@ -75,7 +75,7 @@ void G4SurfaceBoundary::Init(const G4CurveVector& bounds0)
       G4CompositeCurve* cc = (G4CompositeCurve*)c;
       const G4CurveVector& segments = cc->GetSegments();
      
-      for (G4int i=0; i<segments.entries(); i++) 
+      for (size_t i=0; i<segments.entries(); i++) 
       {
 	G4Curve* ccc = segments(i);
 	G4Point3D p  = ccc->GetEnd();
@@ -98,7 +98,7 @@ G4SurfaceBoundary* G4SurfaceBoundary::Project(const G4Transform3D& tr)
 {
   G4CurveVector newBounds;
   
-  for (G4int i=0; i<bounds.entries(); i++)
+  for (size_t i=0; i<bounds.entries(); i++)
   {
     G4Curve* c= bounds[i]->Project(tr);
     
@@ -143,7 +143,7 @@ G4int G4SurfaceBoundary::IntersectRay2D(const G4Ray& ray)
   G4int nbinter = 0;
   G4int temp = 0;
 
-  for (G4int i=0; i < bounds.entries(); i++) 
+  for (size_t i=0; i < bounds.entries(); i++) 
   {   
     G4Curve& c = *bounds.at(i);
     temp = c.IntersectRay2D(ray);

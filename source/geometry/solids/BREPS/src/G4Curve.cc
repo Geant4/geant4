@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Curve.cc,v 1.4 2000-11-08 14:22:09 gcosmo Exp $
+// $Id: G4Curve.cc,v 1.5 2000-11-20 17:54:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -18,7 +18,7 @@
 #include "G4Curve.hh"
 
 G4Curve::G4Curve()
- : bounded(false), bBox(G4BoundingBox3D::space), sameSense(true)
+ : bBox(G4BoundingBox3D::space), bounded(false), sameSense(true)
 {
 }
 

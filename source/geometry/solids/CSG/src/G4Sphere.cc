@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Sphere.cc,v 1.7 2000-04-11 16:04:28 johna Exp $
+// $Id: G4Sphere.cc,v 1.8 2000-11-20 17:57:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -280,6 +280,8 @@ G4bool G4Sphere::CalculateExtent( const EAxis pAxis,
 		case kZAxis:
 		    pMin=zMin;
 		    pMax=zMax;
+		    break;
+		default:
 		    break;
 		}
 
@@ -699,7 +701,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
     G4double rho2, rad2, pDotV2d, pDotV3d, pTheta ;
 
     G4double tolIRMin2, tolORMin2, tolORMax2, tolIRMax2 ;
-    G4double tolSTheta, tolETheta ;
+    G4double tolSTheta=0., tolETheta=0. ;
 
 // Intersection point
 
@@ -712,8 +714,8 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 // Phi flag and precalcs
 
     G4bool segPhi ;				
-    G4double hDPhi, hDPhiOT, hDPhiIT, cPhi, sinCPhi, cosCPhi ; 
-    G4double cosHDPhiOT, cosHDPhiIT ;
+    G4double hDPhi, hDPhiOT, hDPhiIT, cPhi, sinCPhi=0., cosCPhi=0. ; 
+    G4double cosHDPhiOT=0., cosHDPhiIT=0. ;
     G4double Dist, cosPsi ;
 
     G4bool segTheta ;                             // Theta flag and precals
@@ -1775,7 +1777,7 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 {
   G4double snxt = kInfinity;     // snxt is default return value
   G4double sphi= kInfinity,stheta= kInfinity;
-  ESide side=kNull,sidephi,sidetheta;  
+  ESide side=kNull,sidephi=kNull,sidetheta=kNull;  
 
   G4double t1,t2;
   G4double b,c,d;
@@ -1788,7 +1790,7 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
     
   G4double rho2,rad2,pDotV2d,pDotV3d,pTheta;
 
-  G4double tolSTheta,tolETheta;
+  G4double tolSTheta=0.,tolETheta=0.;
   G4double xi,yi,zi;	    // Intersection point
 
   // G4double Comp; // Phi intersection
@@ -1798,8 +1800,8 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
   G4double cosHDPhiOT,cosHDPhiIT;
 
   G4bool segTheta;                             // Theta flag and precals
-  G4double tanSTheta,tanETheta, rhoSecTheta;
-  G4double tanSTheta2,tanETheta2;
+  G4double tanSTheta=0.,tanETheta, rhoSecTheta;
+  G4double tanSTheta2=0.,tanETheta2=0.;
   G4double dist2STheta,dist2ETheta;
   G4double d2,s;
 

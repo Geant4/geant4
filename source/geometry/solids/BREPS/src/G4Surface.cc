@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Surface.cc,v 1.6 2000-11-08 14:22:11 gcosmo Exp $
+// $Id: G4Surface.cc,v 1.7 2000-11-20 17:54:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -168,7 +168,7 @@ G4double G4Surface::ClosestDistanceToPoint(const G4Point3D& Pt)
     {
       G4CompositeCurve* cc= (G4CompositeCurve*)c;
       const G4CurveVector& segments= cc->GetSegments();
-      for (G4int i=0; i<segments.entries(); i++) 
+      for (size_t i=0; i<segments.entries(); i++) 
       {
 	G4Curve* ccc= segments(i);
 	tmpDistance= (G4Point3D(Pt.x(), Pt.y(), Pt.z())-ccc->GetEnd()).mag2();

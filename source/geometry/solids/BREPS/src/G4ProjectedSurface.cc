@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProjectedSurface.cc,v 1.5 2000-11-08 14:22:10 gcosmo Exp $
+// $Id: G4ProjectedSurface.cc,v 1.6 2000-11-20 17:54:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -256,7 +256,7 @@ void G4ProjectedSurface::SplitNURBSurface()
     
   register G4double value;
   register G4int i;
-  register G4int k_index;
+  register G4int k_index=0;
   register G4ProjectedSurface *srf1, *srf2;
   register G4int nr,nc;
     

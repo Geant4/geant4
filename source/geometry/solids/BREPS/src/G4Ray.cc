@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ray.cc,v 1.4 2000-11-08 14:22:11 gcosmo Exp $
+// $Id: G4Ray.cc,v 1.5 2000-11-20 17:54:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -149,23 +149,23 @@ void G4Ray::MatVecOrtho(register G4Vector3D &out,
 //  This follows the outward-pointing Normal convention, and the
 //  right-hand rule for cross products.
 //
-//
-//                      C
-//                      *
-//                      |\
-//                      | \
-//         ^     N      |  \
-//         |      \     |   \
-//         |       \    |    \
-//         |C-A     \   |     \
-//         |         \  |      \
-//         |          \ |       \
-//                     \|        \
-//                      *---------*
-//                      A         B
-//                         ----->
-//                          B-A
-//
+/*
+                        C
+                        *
+                        |\
+                        | \
+           ^     N      |  \
+           |      \     |   \
+           |       \    |    \
+           |C-A     \   |     \
+           |         \  |      \
+           |          \ |       \
+                       \|        \
+                        *---------*
+                        A         B
+                           ----->
+                            B-A
+*/
 //  If the points are given in the order A B C (eg, *counter*-clockwise),
 //  then the outward pointing surface Normal N = (B-A) x (C-A).
 //

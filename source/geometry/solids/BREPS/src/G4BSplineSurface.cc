@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurface.cc,v 1.9 2000-11-08 14:22:09 gcosmo Exp $
+// $Id: G4BSplineSurface.cc,v 1.10 2000-11-20 17:54:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -474,9 +474,9 @@ G4PointRat& G4BSplineSurface::InternalEvalCrv(int i, G4ControlPoints* crv)
 	crv->CalcValues(k1, param, *(G4PointRat*)pts1, k2, *(G4PointRat*)pts2);
 	crv->put(0, j, *(G4PointRat*)pts2);	      
       }
-      */
       register G4PointRat* pts1 = &crv->GetRat(i,j-1);
       register G4PointRat* pts2 = &crv->GetRat(i,j  );
+      */
     } 		
 
     j--;

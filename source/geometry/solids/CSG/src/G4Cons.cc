@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cons.cc,v 1.15 2000-10-26 13:09:35 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.16 2000-11-20 17:57:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -435,6 +435,9 @@ G4bool G4Cons::CalculateExtent( const EAxis              pAxis,
 	pMin = zMin ;
 	pMax = zMax ;
       break ;
+      
+      default:
+      break ;
     }
     pMin -= kCarTolerance ;
     pMax += kCarTolerance ;
@@ -630,9 +633,9 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   G4double snxt = kInfinity ;			// snxt = default return value
 
   G4bool seg ;				// true if segmented in phi
-  G4double hDPhi,hDPhiOT,hDPhiIT,cosHDPhiOT,cosHDPhiIT ;
+  G4double hDPhi,hDPhiOT,hDPhiIT,cosHDPhiOT=0.,cosHDPhiIT=0. ;
 					// half dphi + outer tolerance
-  G4double cPhi,sinCPhi,cosCPhi ;	// central phi
+  G4double cPhi,sinCPhi=0.,cosCPhi=0. ;	// central phi
 
   G4double tanRMax,secRMax,rMaxAv,rMaxOAv ;	// Data for cones
   G4double tanRMin,secRMin,rMinAv,rMinIAv,rMinOAv ;
@@ -642,7 +645,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
   G4double tolORMax2 ;
   G4double tolODz,tolIDz ;
 
-  G4double Dist,s,xi,yi,zi,ri,rho2,cosPsi ; // Intersection point variables
+  G4double Dist,s,xi,yi,zi,ri=0.,rho2,cosPsi ; // Intersection point variables
 
   G4double t1,t2,t3,b,c,d ;		// Quadratic solver variables 
   G4double nt1,nt2,nt3 ;
@@ -1249,7 +1252,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 			              G4bool *validNorm,
 			              G4ThreeVector *n) const
 {
-  ESide side = kNull, sider, sidephi ;
+  ESide side = kNull, sider = kNull, sidephi = kNull;
 
   G4double snxt,sr,sphi,pdist ;
 
