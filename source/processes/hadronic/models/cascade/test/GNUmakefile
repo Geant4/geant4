@@ -86,10 +86,22 @@ h:	# ::: compare h2 h1
 	make h2; make h1
 
 h1:	# ::: (H) A = 1 protiun 2 * 585 = 1170
-	make t; rm -f cascade.out; cascade  10000 1 585 1 1 > cascade.out; make a;
+#	make t; rm -f cascade.out; cascade  10 1 585 1 1 
+#	make t; rm -f cascade.out; cascade  1 1 585 1 1 > cascade.out; cat cascade.out
+#	make t; rm -f cascade.out; cascade  10000 1 585 1 1 > cascade.out; make a;
 #	make t; rm -f cascade.out; cascade  100 1 585 1 1 > cascade.out; cat cascade.out
-#	make t; rm -f cascade.out; cascade  2 1 585 1 1 
-#	cascade  10000 1 5000 1 1;
+#	make t; rm -f cascade.out; cascade  2 1 585 1 1
+	cascade  10000 1 30000 1 1; # tested upperlimit
+#	cascade  10000 1 30000 1 1; # tested upperlimit
+#	cascade  10000 1 25000 1 1; # tested upperlimit
+#	cascade  10000 1 20000 1 1; # tested upperlimit
+#	cascade  10000 1 15000 1 1; # tested upperlimit
+#	cascade  10000 1 10000 1 1; # tested upperlimit
+#	cascade  10000 1 9000 1 1; # tested upperlimit
+#	cascade  10000 1 8000 1 1; # tested upperlimit 
+#	cascade  10000 1 7000 1 1; # tested upperlimit
+#	cascade  10000 1 6000 1 1; # tested upperlimit
+#	cascade  10000 1 5000 1 1; # tested upperlimit for relese 5.0
 #	cascade  10000 1 4500 1 1;
 #	cascade  10000 1 4000 1 1;
 #	cascade  10000 1 3500 1 1;
@@ -111,6 +123,16 @@ h1:	# ::: (H) A = 1 protiun 2 * 585 = 1170
 #	cascade  10000 1  800 1 1;
 #	cascade  10000 1  750 1 1;
 #	cascade  10000 1  700 1 1;	
+#	cascade  10000 1  650 1 1;	
+#	cascade  10000 1  600 1 1;	
+#	cascade  10000 1  585 1 1;	
+#	cascade  10000 1  550 1 1;	
+#	cascade  10000 1  500 1 1;	
+#	cascade  10000 1  450 1 1;	
+#	cascade  10000 1  400 1 1;	
+#	cascade  10000 1  350 1 1;	
+#	cascade  10000 1  330 1 1;	# lower limit
+#	cascade  10000 1  300 1 1;	# too low
 
 #	make t; rm -f cascade.out; cascade  1000 7 300 1 1 > cascade.out; make a;
 
@@ -138,6 +160,27 @@ leak:	# ::: find memory leaks
 
 time: 	# :: timing for target t
 	time -v gmake t
+timing: # :: systematic timing Al (27.,13.), Fe (56.,26.), Pb (208.,82.)
+	time cascade  100000 1  500 1  1
+	time cascade  100000 1 1000 1  1
+	time cascade  100000 1 2000 1  1
+	time cascade  100000 1 4000 1  1
+	time cascade  100000 1 8000 1  1
+#	time cascade  1000 1  500 27 13
+#	time cascade  1000 1 1000 27 13
+#	time cascade  1000 1 2000 27 13
+#	time cascade  1000 1 4000 27 13
+#	time cascade  1000 1 8000 27 13
+#	time cascade  1000 1  500 56 26
+#	time cascade  1000 1 1000 56 26
+#	time cascade  1000 1 2000 56 26
+#	time cascade  1000 1 4000 56 26
+#	time cascade  1000 1 8000 56 26
+#	time cascade  1000 1  500 208 82
+#	time cascade  1000 1 1000 208 82
+#	time cascade  1000 1 2000 208 82
+#	time cascade  1000 1 4000 208 82
+#	time cascade  1000 1 8000 208 82
 
 da:
 	rm -f data.eps; root -b -q data.C; gv data.eps;
