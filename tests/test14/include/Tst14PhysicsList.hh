@@ -20,14 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst14PhysicsList.hh,v 1.9 2003-02-23 09:49:14 pia Exp $
+// $Id: Tst14PhysicsList.hh,v 1.10 2003-02-23 10:46:06 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+// Author: Original author unknown (contact: Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 22 Feb 2003 MGP          Created
+// 22 Feb 2003 MGP          Redesigned for modular PhysicsList
 //
 // -------------------------------------------------------------------
 
