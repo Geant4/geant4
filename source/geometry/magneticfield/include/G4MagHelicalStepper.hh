@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.hh,v 1.8 2003-10-31 14:35:52 gcosmo Exp $
+// $Id: G4MagHelicalStepper.hh,v 1.9 2005-02-15 17:37:27 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -74,13 +74,13 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
 
     inline void LinearStep( const G4double  yIn[],
                                   G4double  h,
-                                  G4double  yHelix[]);
+                                  G4double  yHelix[]) const;
       // A linear Step in regions without magnetic field.
 
     void AdvanceHelix( const G4double  yIn[],
                              G4ThreeVector   Bfld,
                              G4double  h,
-                             G4double  yHelix[]);    // output 
+                             G4double  yHelix[]) const;    // output 
       // A first order Step along a helix inside the field.
 
     inline void MagFieldEvaluate( const G4double y[], G4ThreeVector& Bfield );
