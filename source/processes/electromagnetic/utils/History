@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2001-01-24 14:55:04 urban Exp $
+$Id: History,v 1.9 2001-02-01 15:23:43 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+01 feb 01: L.Urban
+- bug fixed in the fluctuation code , in G4VEnergyLoss.cc
+  This bug affected the width of the energy loss/energy deposit
+  distribution in the case of small cut value, the distribution
+  was too narrow....
      
 16 jan 01: mma (utils-V03-00-00)
 - bug fixed in MultipleScattering.cc L.Urban 11-01-01 
