@@ -4,16 +4,16 @@
 #include "G4NeutronHPVector.hh"
  
   // if the ranges do not match, constant extrapolation is used.
-  G4NeutronHPVector & operator + (const G4NeutronHPVector & left, const G4NeutronHPVector & right)
+  G4NeutronHPVector & operator + ( G4NeutronHPVector & left,  G4NeutronHPVector & right)
   {
     G4NeutronHPVector * result = new G4NeutronHPVector;
     G4int j=0;
     G4double x;
     G4double yl, yr, y;
     G4int running = 0;
-    for(G4int i=0; i<left.nEntries; i++)
+    for(G4int i=0; i<left.GetVectorLength(); i++)
     {
-      while(j<right.nEntries)
+      while(j<right.GetVectorLength())
       {
         if(right.GetX(j)<left.GetX(i)*1.001)
         {
@@ -34,7 +34,7 @@
           break;
         }
       }
-      if(j==right.nEntries)
+      if(j==right.GetVectorLength())
       {
         x = left.GetX(i);
         y = left.GetY(i)+right.GetY(x);
@@ -54,8 +54,22 @@
     theIntegral=NULL;
     totalIntegral=-1;
     isFreed = 0;
+    maxValue = -DBL_MAX;
+
   }
   
+  G4NeutronHPVector::G4NeutronHPVector(G4int n)
+  {
+    theData = new G4NeutronHPDataPoint[G4std::max(n, 100)]; 
+    nPoints=G4std::max(n, 100);
+    nEntries=0;
+    Verbose=0;
+    theIntegral=NULL;
+    totalIntegral=-1;
+    isFreed = 0;
+    maxValue = -DBL_MAX;
+  }
+
   G4NeutronHPVector::~G4NeutronHPVector()
   {
 //    if(Verbose==1)G4cout <<"G4NeutronHPVector::~G4NeutronHPVector"<<G4endl;
@@ -90,81 +104,36 @@
     return *this;
   }
 
-  G4double G4NeutronHPVector::GetXsec(G4double e) const
+  
+  G4double G4NeutronHPVector::GetXsec(G4double e) 
   {
-    if(nEntries <= 1) 
+    if(!theHash.Prepared()) Hash();
+    G4int min = theHash.GetMinIndex(e);
+    G4int i;
+    for(i=min ; i<nEntries; i++)
     {
-      if(nEntries == 0) return 0;
-      return theData[0].GetY();
+      if(theData[i].GetX()>e) break;
     }
-    G4int found = 0;
-    G4int low   = 0;
-    G4int high  = 0;
-    G4double eps = 0.00001*e;  // fast fix of precision problems, needs improvement @@@
-//    if(Verbose==1) G4cout <<"G4NeutronHPVector::GetXsec";
-    if(e<=theData[0].GetX()) return theData[0].GetY();
-    G4int i=0, ii;
-    for (ii=0; ii<nEntries/10+1; ii++) // von null weg, weil sonst <10 im argen liegt.
+    G4int low = i-1;
+    G4int high = i;
+    if(i==0)
     {
-      i = ii;
-      if(theData[10*i].GetX()+eps>e) break;
+      low = 0;
+      high = 1;
     }
-//    if(Verbose==1) G4cout << low<<" "<<high<<" "<<i<<" "<<nEntries<<" ";
-    if(i!=(nEntries/10))
+    else if(i==nEntries)
     {
-      i=10*i;
-      for (G4int j=0; j<11; j++)
-      {
-        if(theData[i].GetX()<e+eps) break;
-        i--;
-      }
-      if(i>nEntries-2) i = nEntries-2;
-      low = i;
-      high = i+1;
+      low = nEntries-2;
+      high = nEntries-1;
+    }
+    G4double y;
+    if(e<theData[nEntries-1].GetX()) 
+    {
+      y = theInt.Interpolate(theManager.GetScheme(high), e, 
+                             theData[low].GetX(), theData[high].GetX(),
+			     theData[low].GetY(), theData[high].GetY());
     }
     else
-    {
-      i=G4std::max(0,10*(i-1));
-      while (i<nEntries)
-      {
-        if(theData[i].GetX()>e) break;
-        i++;
-      } 
-      if(i>nEntries-1) i = nEntries-1;
-      low  = i-1;
-      high = i;
-    }
-//    if(Verbose==1) G4cout << "sss"<<low<<" "<<high<<" ";
-    G4double x1, x2, y1, y2, x, y;
-    while ( theData[low].GetX()-e > 0.0000001*e ) 
-    {
-      low--;
-      if(low<0) return theData[0].GetY();
-    }
-    while ( theData[high].GetX()-e < -0.0000001*e && high!=nEntries-1)
-    {
-      high++;
-    }
-    while( theData[high].GetX()-theData[low].GetX()<0.0000001*e)
-    {
-      if(high<nEntries-1)
-      {
-        high++;
-      }
-      else
-      {
-        low--;
-        if(low<0) return theData[0].GetY();
-      }
-    }
-//    if(Verbose==1) G4cout << "ddd"<<low<<" "<<high<<" ";
-    x = e;
-    x1 = theData[low] .GetX();
-    x2 = theData[high].GetX();
-    y1 = theData[low] .GetY();
-    y2 = theData[high].GetY();
-    y = theInt.Interpolate(theManager.GetScheme(high), x, x1, x2, y1, y2);
-    if(e>=theData[nEntries-1].GetX()) 
     {
       y=theData[nEntries-1].GetY();
     }
@@ -186,26 +155,16 @@
   
   void G4NeutronHPVector::Check(G4int i)
   {
-//    G4cout << "1: i: "<<i<<" nEntries: "<<nEntries<<" nPoints: "<<nPoints<<G4endl;
     if(i>nEntries) G4Exception("Skipped some index numbers in G4NeutronHPVector");
     if(i==nPoints)
     {
-      nPoints += 50;
-//    G4cout << "2a: i: "<<i<<" nEntries: "<<nEntries<<" nPoints: "<<nPoints<<G4endl;
+      nPoints *= 1.5;
       G4NeutronHPDataPoint * buff = new G4NeutronHPDataPoint[nPoints];
-//    G4cout << "2b: i: "<<i<<" nEntries: "<<nEntries<<" nPoints: "<<nPoints<<G4endl;
-      if(nPoints!=50)
-      {
-//        G4cout << "copying 1: nEntries="<<nEntries<<" nPoints="<<nPoints<<G4endl;
-        for (G4int j=0; j<nEntries; j++) buff[j] = theData[j];
-//        G4cout << "copying 2"<<G4endl;
-        delete [] theData;
-//    G4cout << "3: i: "<<i<<" nEntries: "<<nEntries<<" nPoints: "<<nPoints<<G4endl;
-      }
+      for (G4int j=0; j<nEntries; j++) buff[j] = theData[j];
+      delete [] theData;
       theData = buff;
     }
     if(i==nEntries) nEntries=i+1;
-//    G4cout << "4: i: "<<i<<" nEntries: "<<nEntries<<" nPoints: "<<nPoints<<G4endl;
   }
 
   void G4NeutronHPVector::

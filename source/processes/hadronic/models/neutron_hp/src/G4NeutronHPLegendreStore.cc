@@ -70,6 +70,7 @@ G4double G4NeutronHPLegendreStore::SampleMax (G4double anEnergy)
     } 
     value = theInt.Interpolate(theManager.GetScheme(high), x, x1, x2, v1, v2);
     random = G4UniformRand();
+    if(0>=theNorm) break; // Workaround for negative cross-section values. @@@@ 31 May 2000
   }
   while(random>value/theNorm);
   

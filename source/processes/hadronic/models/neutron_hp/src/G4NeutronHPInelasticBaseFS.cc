@@ -256,10 +256,13 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
     boosted.Lorentz(theNeutron, theTarget);
     G4double anEnergy = boosted.GetKineticEnergy();
     thePhotons = theFinalStatePhotons->GetPhotons(anEnergy);
-    for(i=0; i<thePhotons->length(); i++)
+    if(thePhotons!=NULL)
     {
-      // back to lab
-      thePhotons->at(i)->Lorentz(*(thePhotons->at(i)), -1.*theTarget);
+      for(i=0; i<thePhotons->length(); i++)
+      {
+        // back to lab
+        thePhotons->at(i)->Lorentz(*(thePhotons->at(i)), -1.*theTarget);
+      }
     }
   }
   else if(theEnergyAngData!=NULL)

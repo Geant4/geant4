@@ -110,7 +110,7 @@
   {
     if(theNew == NULL) return;
     G4int s = 0, n=0, i=0, m=0;
-    G4NeutronHPVector * theMerge = new G4NeutronHPVector;
+    G4NeutronHPVector * theMerge = new G4NeutronHPVector(theStore->GetVectorLength());
     G4bool flag;
 //    G4cout << "Harmonise 1: "<<theStore->GetEnergy(s)<<" "<<theNew->GetEnergy(0)<<G4endl;
     while ( theStore->GetEnergy(s)<theNew->GetEnergy(0)&&s<theStore->GetVectorLength() )

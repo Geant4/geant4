@@ -24,6 +24,7 @@ G4NeutronHPVector * G4NeutronHPPartial::GetY(G4double e1)
        if(X[i]>e1) break;
     }
     if(i==nData) i--;
+    if(0==i) i=1;
     G4double x1,x2,y1,y2,y, off, slope;
     G4int i1=0, ib=0;
     G4double E1 = X[i-1];
