@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2000-05-25 15:40:46 johna Exp $
+$Id: History,v 1.48 2000-05-26 07:55:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 25, 2000 J.Allison
-- Added new G4UnitDefinition("kg/m3",... to G4UnitsTable.cc.
+May 25, 2000 J.Allison (global-V01-01-03)
+- Added new G4UnitDefinition("kg/m3",...) to G4UnitsTable.cc.
 
 March 23, 2000 G.Cosmo (global-V01-01-02)
 - Added class G4PhysicsLnVector[.hh.cc] implementing a physics vector
