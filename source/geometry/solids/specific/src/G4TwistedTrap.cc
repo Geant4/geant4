@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TwistedTrap.cc,v 1.2 2004-11-13 18:26:26 gcosmo Exp $
+// $Id: G4TwistedTrap.cc,v 1.3 2004-11-24 17:03:09 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

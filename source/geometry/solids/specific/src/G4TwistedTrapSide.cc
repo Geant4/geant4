@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapSide.cc,v 1.5 2004-11-13 18:26:26 gcosmo Exp $
+// $Id: G4TwistedTrapSide.cc,v 1.6 2004-11-24 17:03:11 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,7 +81,6 @@ G4TwistedTrapSide::G4TwistedTrapSide(const G4String     &name,
   SetBoundaries() ;
 
 }
-
 
 
 //=====================================================================
@@ -265,7 +264,15 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
     c[2] = ( b12*Lvy +   amd3*phiyz  + amd6*Lvx  - b6 *phixz    ) / ctmp ;
     c[3] = ( -b6*Lvx -   amd *phixz  + amd3*Lvy  - b2 *phiyz    ) / ctmp ;
     c[4] = 1 ;
-    
+
+#ifdef G4SPECSDEBUG
+    G4cout << "coef = " << c[0] << " " 
+	   <<  c[1] << " "  
+	   <<  c[2] << " "  
+	   <<  c[3] << " "  
+	   <<  c[4] << G4endl ;
+#endif    
+
   // solve the polynom analytically
     G4ApproxPolySolver trapEq ;
     G4int num = trapEq.SolveBiQuadratic(c,s);
@@ -276,11 +283,9 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
     G4double pi2 = 2*pi ;
 
     for (G4int i = 0 ; i<num ; i++ ) {
-
 #ifdef G4SPECSDEBUG
       G4cout << "Solution " << i << " : " << s[i] << G4endl ;
 #endif
-
       G4double stmp = fmod(s[i] , pi2) ;
       if ( s[i] < 0 && stmp > 0 ) { stmp -= 2*pi ; }
       G4double ztmp = L*s[i]/fPhiTwist ;
@@ -339,13 +344,19 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
     G4double deltaXtmp = ( xx[0] - xxonsurface ).mag() ; 
 
 #ifdef G4SPECSDEBUG
-    G4cout << "i = " << i << ", distance = " << distance[0] << ", " << deltaXtmp << G4endl ;
+    G4cout << "Step i = " << i << ", distance = " << distance[0] << ", " << deltaXtmp << G4endl ;
+
     G4cout << "X = " << xx[0] << G4endl ;
 #endif
     if ( deltaX <= deltaXtmp && i> 1 ) { break ; } ;
 
     // the new point xx is accepted and phi/psi replaced
     GetPhiUAtX(xx[0], PhiR, uR) ;
+
+#ifdef G4SPECSDEBUG
+    G4cout << "approximated phiR = " << PhiR << ", uR = " << uR << G4endl ; 
+#endif
+
     deltaX = deltaXtmp ;
 
     if ( deltaX <= 0.5*kCarTolerance ) { break ; }
@@ -363,7 +374,7 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
   }
 
 #ifdef G4SPECSDEBUG
-  G4cout << "refined solution "  << PhiR << " , " << uR << " , " <<  G4endl ;
+  G4cout << "refined solution "  << PhiR << " , " << uR  <<  G4endl ;
   G4cout << "distance = " << distance[0] << G4endl ;
   G4cout << "X = " << xx[0] << G4endl ;
 #endif
@@ -717,11 +728,12 @@ void G4TwistedTrapSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u)
   G4ThreeVector dvec  ( - (fDx1-fDx2)/(2*fDy) * cos(phi) - sin(phi), 
                         cos(phi) - (fDx1-fDx2)/(2*fDy)*sin(phi) ,
                         0. ) ;   // direction vector
+
   G4ThreeVector xx ;                                   // the intersection point on the line
 
   DistanceToLine(p ,X0 , dvec , xx) ;
   
-  u = ( xx - X0 ).mag() ;  // X0 is choosen such that u = 0
+  u = ( xx - X0 ).mag() / dvec.mag() ;  // X0 is choosen such that u = 0
 
 }
 
