@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.4 2001-11-02 17:33:44 vnivanch Exp $
+// $Id: G4eIonisationSpectrum.cc,v 1.5 2001-11-06 10:47:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -340,6 +340,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 
     if(aleft > amaj) {
 
+      aleft *= 1.5;
       q3 = (a1 + bindingEnergy);
       aleft *= q3*q3; 
       q1 = 1./q3;
@@ -371,7 +372,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 
         if(fun > amaj) {
           G4cout << "WARNING in G4eIonisationSpectrum::SampleEnergy:" 
-                 << " 1st majoranta " << amaj 
+                 << " 1-st majoranta " << amaj 
                  << " < " << fun
                  << G4endl;
         }
@@ -403,6 +404,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 
     if(aleft > amaj) {
 
+      aleft *= 1.5;
       q3 = (a1 + bindingEnergy);
       aleft *= q3*q3; 
       q1 = 1./q3;
@@ -434,7 +436,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 
         if(fun > amaj) {
           G4cout << "WARNING in G4eIonisationSpectrum::SampleEnergy:" 
-                 << " 3d majoranta " << amaj 
+                 << " 3-d majoranta " << amaj 
                  << " < " << fun
                  << G4endl;
         }
