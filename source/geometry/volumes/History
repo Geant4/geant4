@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2000-05-11 09:51:28 japost Exp $
+$Id: History,v 1.26 2000-05-31 14:52:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May     17th, 2000   G. Cosmo
+
+G4ReplicaNavigation.cc:
+- Added check to returned safety value in DistanceToOut(). Zero is
+  returned if the computed velue is less than kCarTolerance.
+- Introduced temporary fix to ComputeStep() in the first step computation
+  for replica boundaries. 'ourStep' is not set to the computed 'sampleStep'
+  if 'sampleStep' happens to be zero.
+  This fix helps to get rid of infinite loops when a point is on a
+  shared surface of a replica or on a shared vertex; a more definitive
+  solution to the problem is needed for the correct replica location.
+
 May      9th, 2000   J. Apostolakis - geomvol-V01-01-00
 
 Improvements in G4PropagatorInField  incorporating include file fixes
