@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc,v 1.12 2003-03-13 09:59:39 jwellisc Exp $
+// $Id: G4DynamicParticle.cc,v 1.13 2003-06-12 10:06:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,6 +51,9 @@
 //         remove    theKillProcess
 //      revised by Hisaya Kurashige, 5  Mar 2001
 //         fixed  SetDefinition()
+//      revised by V.Ivanchenko,    12 June 2003
+//         fixed problem of massless particles
+//
 //--------------------------------------------------------------
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
@@ -151,14 +154,20 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
                          aParticleMomentum.y()/pModule,
                          aParticleMomentum.z()/pModule);
     G4double totalenergy = aParticleMomentum.t();
-    if (totalenergy > pModule) {
-      G4double mass = sqrt(totalenergy*totalenergy - pModule2);
-      theDynamicalMass = mass;
-      SetKineticEnergy(totalenergy-mass);
-    } else {
-      theDynamicalMass = 0.;
+    if(theDynamicalMass == 0.) {
       SetKineticEnergy(totalenergy);
+    } else {
+      G4double etot2 = totalenergy*totalenergy;
+      if (etot2 > pModule2) {
+        G4double mass = sqrt(etot2 - pModule2);
+        theDynamicalMass = mass;
+        SetKineticEnergy(G4std::max(0.,totalenergy-mass));
+      } else {
+        theDynamicalMass = 0.;
+        SetKineticEnergy(totalenergy);
+      }
     }
+
   } else {  
     SetMomentumDirection(1.0,0.0,0.0);
     SetKineticEnergy(0.0);
@@ -186,13 +195,19 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
     SetMomentumDirection(aParticleMomentum.x()/pModule,
                          aParticleMomentum.y()/pModule,
                          aParticleMomentum.z()/pModule);
-    if (totalEnergy > pModule) {
-      G4double mass = sqrt(totalEnergy*totalEnergy - pModule2);
-      theDynamicalMass = mass;
-      SetKineticEnergy(totalEnergy-mass);
-    } else {
-      theDynamicalMass = 0.;
+    
+    if(theDynamicalMass == 0.) {
       SetKineticEnergy(totalEnergy);
+    } else {
+      G4double etot2 = totalEnergy*totalEnergy;
+      if (etot2 > pModule2) {
+        G4double mass = sqrt(etot2 - pModule2);
+        theDynamicalMass = mass;
+        SetKineticEnergy(G4std::max(0.,totalEnergy-mass));
+      } else {
+        theDynamicalMass = 0.;
+        SetKineticEnergy(totalEnergy);
+      }
     }
   } else {
     SetMomentumDirection(1.0,0.0,0.0);
@@ -359,13 +374,18 @@ void G4DynamicParticle::Set4Momentum(const G4LorentzVector &momentum )
                          momentum.y()/pModule,
                          momentum.z()/pModule);
     G4double totalenergy = momentum.t();
-    if (totalenergy > pModule) {
-      G4double mass = sqrt(G4std::max(0., totalenergy*totalenergy - pModule2) );
-      theDynamicalMass = mass;
-      SetKineticEnergy(totalenergy-mass);
-    } else {
-      theDynamicalMass = 0.;
+    if(theDynamicalMass == 0.) {
       SetKineticEnergy(totalenergy);
+    } else {
+      G4double etot2 = totalenergy*totalenergy;
+      if (etot2 > pModule2) {
+        G4double mass = sqrt(etot2 - pModule2);
+        theDynamicalMass = mass;
+        SetKineticEnergy(G4std::max(0.,totalenergy-mass));
+      } else {
+        theDynamicalMass = 0.;
+        SetKineticEnergy(totalenergy);
+      }
     }
   } else {  
     SetMomentumDirection(1.0,0.0,0.0);
