@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.cc,v 1.8 2002-10-17 09:00:29 vnivanch Exp $
+// $Id: G4IonisParamElm.cc,v 1.9 2004-09-06 11:02:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -89,11 +89,16 @@ G4IonisParamElm::G4IonisParamElm(G4double Z)
 
     // Shell correction factors
     fShellCorrectionVector = new G4double[3];
+    rate = 0.001*fMeanExcitationEnergy/eV;
     G4double rate2 = rate*rate;
-    
+    /*    
     fShellCorrectionVector[0] = ( 1.10289e5 + 5.14781e8*rate)*rate2 ;
     fShellCorrectionVector[1] = ( 7.93805e3 - 2.22565e7*rate)*rate2 ;
     fShellCorrectionVector[2] = (-9.92256e1 + 2.10823e5*rate)*rate2 ;
+    */
+    fShellCorrectionVector[0] = ( 0.422377   + 3.858019*rate)*rate2 ;
+    fShellCorrectionVector[1] = ( 0.0304043  - 0.1667989*rate)*rate2 ;
+    fShellCorrectionVector[2] = (-0.00038106 + 0.00157955*rate)*rate2 ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.10 2002-10-29 16:17:05 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.11 2004-09-06 11:02:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,12 +76,12 @@ void G4IonisParamMat::ComputeMeanParameters()
   {
     fShellCorrectionVector[j] = 0.;
 
-    for (size_t k=0; k<fMaterial->GetNumberOfElements(); k++)
+    for (size_t k=0; k<fMaterial->GetNumberOfElements(); k++) {
       fShellCorrectionVector[j] += (fMaterial->GetVecNbOfAtomsPerVolume())[k] 
               *((*(fMaterial->GetElementVector()))[k]->GetIonisation()
                                                      ->GetShellCorrectionVector()[j]);
-     
-    fShellCorrectionVector[j] /= fMaterial->GetTotNbOfElectPerVolume();
+    }
+    fShellCorrectionVector[j] *= 2.0/fMaterial->GetTotNbOfElectPerVolume();
   } 
 }
 
