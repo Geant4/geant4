@@ -1,4 +1,4 @@
-# $Id: stt-ref+.sdb,v 1.52 1999-05-27 09:28:52 stesting Exp $
+# $Id: stt-ref+.sdb,v 1.53 1999-05-27 10:16:36 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -35,6 +35,7 @@ geant4/source/processes/History             geant4-00-cand-09b
 geant4/source/processes/decay	            geant4-00-cand-09b
 geant4/source/processes/electromagnetic	    geant4-00-cand-09b
 geant4/source/processes/hadronic            geant4-00-cand-09b
+geant4/source/processes/hadronic/stopping/src/G4PiMinusStopAbsorption.cc 1.3
 geant4/source/processes/management          geant4-00-cand-09b
 geant4/source/processes/optical	            geant4-00-cand-09b
 geant4/source/processes/parameterisation    geant4-00-cand-09b
