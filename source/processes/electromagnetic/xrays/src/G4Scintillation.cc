@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.14 2002-11-25 18:48:34 gum Exp $
+// $Id: G4Scintillation.cc,v 1.15 2002-11-26 00:39:11 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -233,10 +233,10 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                  G4double YieldRatio = aMaterialPropertiesTable->
                                           GetConstProperty("YIELDRATIO");
                  if ( ExcitationRatio == 1.0 ) {
-                    Num = (G4int) G4std::min(YieldRatio,1.0) * NumPhotons;
+                    Num = G4int (G4std::min(YieldRatio,1.0) * NumPhotons);
                  }
                  else {
-                    Num = (G4int) G4std::min(ExcitationRatio,1.0) * NumPhotons;
+                    Num = G4int (G4std::min(ExcitationRatio,1.0) * NumPhotons);
                  }
                  ScintillationTime   = aMaterialPropertiesTable->
                                           GetConstProperty("FASTTIMECONSTANT");
@@ -258,7 +258,11 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
  
 	    G4double CIImax = ScintillationIntegral->GetMaxValue();
 		
+            G4cout << " Component: " << scnt << " NUM: " << Num << endl;
+
 	    for (G4int i = 0; i < Num; i++) {
+
+                G4cout << " Component: " << scnt << endl; 
 
 		// Determine photon momentum
 
