@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2002-11-11 18:18:15 johna Exp $
+$Id: History,v 1.15 2002-12-11 16:01:24 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+11th December 2002  John Allison  (vis-V04-01-10)
+- Fix for SUN-CC warnings: AddThis hides the virtual function...
+- Fix memory leak in RayTracer.
 
 11th November 2002  Hajime Yoshida and Minamimoto (raytracer-V04-00-01)
 - Corrected G4RayTracer.cc devide-by-zero.
