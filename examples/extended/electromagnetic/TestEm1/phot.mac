@@ -1,0 +1,28 @@
+# $Id: phot.mac,v 1.1 2002-02-06 13:57:58 maire Exp $
+#
+# Macro file for "TestEm1.cc"
+# (can be run in batch, without graphic)
+#
+#  PhotoElectricEffect; Gamma 1 Mev
+#
+/control/verbose 2
+#
+/run/initialize
+#
+/calor/setMat Germanium
+/calor/setSize 1 cm
+/calor/update
+#
+/gun/setDefault 1
+#
+/run/verbose 2
+#
+/gun/particle gamma
+/gun/energy 1 MeV
+/gun/rndm  0.8
+#
+/tracking/verbose 1
+#
+#/run/particle/applyCuts
+#
+#/run/beamOn 100000
