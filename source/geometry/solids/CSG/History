@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2001-01-18 16:37:16 gcosmo Exp $
+$Id: History,v 1.37 2001-01-29 13:24:12 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan 29,   00   G. Cosmo                  geom-solids-csg-V03-00-01
+- G4Box: introduced fixes to algorithm for computation of rotated vertices
+  in CalculateExtent() as previously committed in tag geom-solids-csg-V02-00-10.
+- G4Torus: extracted logic for G4PolynomialSolver now included in
+  global/HEPNumerics. Coworks with tag global-V03-00-02.
+- Added dependency to global/HEPNumerics in GNUmakefile.
 
 Jan 18,   00   V. Grichine               geom-solids-csg-V03-00-00
 - Fixed condition from (pPhi<0) to (pPhi<-0.5*kAngleTolerance) in
