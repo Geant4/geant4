@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.7 2004-02-27 17:54:48 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.8 2004-03-10 11:34:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -49,6 +49,7 @@
 // 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 14-01-04 Activate precise range calculation (V.Ivanchenko)
+// 10-03-04 Fix problem of step limit calculation (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -196,7 +197,7 @@ public:
   G4PhysicsTable* DEDXTable() const {return theDEDXTable;};
 
   void SetRangeTable(G4PhysicsTable* pRange);
-  G4PhysicsTable* RangeTable() const {return theRangeTable;};
+  G4PhysicsTable* RangeTable() const {return thePreciseRangeTable;};
 
   void SetRangeTableForLoss(G4PhysicsTable* p);
   G4PhysicsTable* RangeTableForLoss() const {return theRangeTableForLoss;};
@@ -317,6 +318,8 @@ private:
 
   G4double GetRangeForLoss(G4double kineticEnergy);
 
+  G4double GetPreciseRange(G4double kineticEnergy);
+
   G4double GetKineticEnergyForLoss(G4double range);
 
   // hide  assignment operator
@@ -340,8 +343,8 @@ private:
 
   // tables and vectors
   G4PhysicsTable*  theDEDXTable;
-  G4PhysicsTable*  theRangeTable;
   G4PhysicsTable*  theRangeTableForLoss;
+  G4PhysicsTable*  thePreciseRangeTable;
   G4PhysicsTable*  theSecondaryRangeTable;
   G4PhysicsTable*  theInverseRangeTable;
   G4PhysicsTable*  theLambdaTable;
@@ -438,16 +441,27 @@ inline G4double G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
                                          const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
+  G4double x = DBL_MAX;
+  if(thePreciseRangeTable)      x = GetPreciseRange(kineticEnergy);
+  else if(theRangeTableForLoss) x = GetRangeForLoss(kineticEnergy);
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::GetPreciseRange(G4double kineticEnergy)
+{
   G4bool b;
   G4double x;
   G4double e = kineticEnergy*massRatio;
-  if (e <= minKinEnergy) {
-    x = (((*theRangeTable)[currentMaterialIndex])->GetValue(minKinEnergy, b))*sqrt(e/minKinEnergy);
-  } else if (e < maxKinEnergyForRange) {
-    x = ((*theRangeTable)[currentMaterialIndex])->GetValue(e, b);
+
+  if (e < maxKinEnergyForRange) {
+    x = ((*thePreciseRangeTable)[currentMaterialIndex])->GetValue(e, b);
+    if(e < minKinEnergy) x *= sqrt(e/minKinEnergy);
+
   } else {
     x = theRangeAtMaxEnergy[currentMaterialIndex] +
-      (e - maxKinEnergyForRange)/theDEDXAtMaxEnergy[currentMaterialIndex];
+         (e - maxKinEnergyForRange)/theDEDXAtMaxEnergy[currentMaterialIndex];
   }
   return x*reduceFactor;
 }
@@ -548,22 +562,19 @@ inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(const G4Track&,
                                       G4double, G4double currentMinStep, G4double&)
 {
   G4double x = DBL_MAX;
-
-  if (theRangeTable) {
+  if(theRangeTableForLoss) {
     fRange = GetRange(preStepKinEnergy, currentCouple);
 
     x = fRange;
     G4double y = x*dRoverRange;
+
     if(x > minStepLimit && y < currentMinStep ) {
-      if (integral) x = std::max(y,minStepLimit);
-      else {
-        x = y + minStepLimit*(1.0 - dRoverRange)*(2.0 - minStepLimit/fRange);
-        if(x > fRange) x = fRange;
-        if(rndmStepFlag) x = minStepLimit + (x-minStepLimit)*G4UniformRand();
-      }
+
+      x = y + minStepLimit*(1.0 - dRoverRange)*(2.0 - minStepLimit/fRange);
+      if(x >fRange || x<minStepLimit) G4cout << "!!! StepLimit problem!!!" << G4endl;
+      if(rndmStepFlag) x = minStepLimit + G4UniformRand()*(x-minStepLimit);
     }
   }
-
   return x;
 }
 

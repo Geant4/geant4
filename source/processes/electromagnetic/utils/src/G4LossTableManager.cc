@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.41 2004-02-27 17:54:48 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.42 2004-03-10 11:34:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -51,6 +51,7 @@
 // 04-11-03 Add checks in RetrievePhysicsTable (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 14-01-04 Activate precise range calculation (V.Ivanchenko)
+// 10-03-04 Fix a problem of Precise Range table (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -344,7 +345,7 @@ void G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition* aParticle
         G4VEnergyLossProcess* em = loss_vector[i];
         if(aParticle == part_vector[i]) SetParameters(loss_vector[i]);
         if (tables_are_built[i] && em->SecondaryParticle() == theElectron && eIonisation ) {
-                em->SetSecondaryRangeTable(eIonisation->RangeTable());
+                em->SetSecondaryRangeTable(eIonisation->RangeTableForLoss());
         }
       }
     }
@@ -370,7 +371,7 @@ void G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition* aParticle
 	      em->SetSubLambdaTable(hIonisation->SubLambdaTable());
 	      loss_map[part_vector[j]] = em;
               if (em->SecondaryParticle() == theElectron && eIonisation) {
-                em->SetSecondaryRangeTable(eIonisation->RangeTable());
+                em->SetSecondaryRangeTable(eIonisation->RangeTableForLoss());
               }
               if (0 < verbose) {
                  G4cout << "For " << loss_vector[j]->GetProcessName()
@@ -396,7 +397,7 @@ void G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition* aParticle
               em->SetSubLambdaTable(hIonisation->SubLambdaTable());
               loss_map[part_vector[i]] = em;
               if (em->SecondaryParticle() == theElectron && eIonisation)
-                  em->SetSecondaryRangeTable(eIonisation->RangeTable());
+                  em->SetSecondaryRangeTable(eIonisation->RangeTableForLoss());
               if (0 < verbose) {
                  G4cout << "For " << em->GetProcessName()
                         << " for " << part_vector[i]->GetParticleName()
@@ -452,7 +453,7 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
       if((n_loss-1 == i && part_vector[n_loss-1] != G4Proton::Proton()) ||
          (n_loss-2 == i && part_vector[n_loss-1] == G4Proton::Proton())) isLast = true;
       tables_are_built[i] = true;
-      if (theLoss->RangeTable()) {
+      if (theLoss->RangeTableForLoss()) {
         if (part_vector[i] == theElectron) {
 	  eIonisation = theLoss;
           electron_table_are_built = true;
@@ -466,7 +467,7 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
         }
       }
       if (electron_table_are_built && theLoss->SecondaryParticle() == theElectron)
-        theLoss->SetSecondaryRangeTable(eIonisation->RangeTable());
+        theLoss->SetSecondaryRangeTable(eIonisation->RangeTableForLoss());
       break;
     }
   }
@@ -484,7 +485,7 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
         em->SetLambdaTable(theLoss->LambdaTable());
         em->SetSubLambdaTable(theLoss->SubLambdaTable());
         if (electron_table_are_built && em->SecondaryParticle() == theElectron)
-           em->SetSecondaryRangeTable(eIonisation->RangeTable());
+           em->SetSecondaryRangeTable(eIonisation->RangeTableForLoss());
         loss_map[part_vector[j]] = em;
         if (1 < verbose) {
           G4String nm = "0";
@@ -588,6 +589,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
   em->SetInverseRangeTable(invrange);
   inv_range_vector[iem] = invrange;
   em->SetRangeTableForLoss(range);
+  range_vector[iem] = range;
 
   if(buildPreciseRange) {
     std::vector<G4PhysicsTable*> newlist;
@@ -604,16 +606,15 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
     }
     newlist.clear();
     range = tableBuilder->BuildRangeTable(dedxForRange);
+    em->SetRangeTable(range);
     delete dedxForRange;
   }
 
-  em->SetRangeTable(range);
-  range_vector[iem] = range;
 
   loss_map[aParticle] = em;
   for (G4int j=0; j<n_dedx; j++) {
     if(loss_list[j]->SecondaryParticle() == theElectron && eIonisation)
-       loss_list[j]->SetSecondaryRangeTable(eIonisation->RangeTable());
+       loss_list[j]->SetSecondaryRangeTable(eIonisation->RangeTableForLoss());
 
     G4PhysicsTable* lambdaTable = loss_list[j]->BuildLambdaTable();
     loss_list[j]->SetLambdaTable(lambdaTable);
