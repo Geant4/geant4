@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2001-03-12 11:36:01 gcosmo Exp $
+$Id: History,v 1.33 2001-03-19 12:10:41 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+March 12th, 2001     J. Apostolakis - geomvol-V03-00-03
+- G4PropagatorInField: 
+     Modified to use new (not obsolete) methods of G4FieldTrack. 
+     Deleted old/obsolete ComputeStep method 
+         (that was being used only for testing purposes, but
+          could not be used anymore after change to Momentum Integration.)
 
 March 12th, 2001     G. Cosmo - geomvol-V03-00-02
 - G4ReplicaNavigation::ComputeStep(): apply push of kCarTolerance to ourStep
