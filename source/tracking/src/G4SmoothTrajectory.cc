@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc,v 1.4 2002-11-05 16:15:51 jacek Exp $
+// $Id: G4SmoothTrajectory.cc,v 1.5 2002-11-08 18:27:39 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,12 +41,11 @@
 #include "G4SmoothTrajectory.hh"
 #include "G4SmoothTrajectoryPoint.hh"
 #include "G4ParticleTable.hh"
-#include "G4ThreeVector.hh"
-#include "G4Polyline.hh"
-#include "G4Circle.hh"
-#include "G4Colour.hh"
-#include "G4VisAttributes.hh"
-#include "G4VVisManager.hh"
+#include "G4AttDefStore.hh"
+#include "G4AttDef.hh"
+#include "G4AttValue.hh"
+#include "G4UnitsTable.hh"
+#include "g4std/strstream"
 
 G4Allocator<G4SmoothTrajectory> aSmoothTrajectoryAllocator;
 
@@ -101,29 +100,87 @@ G4SmoothTrajectory::~G4SmoothTrajectory()
 
 void G4SmoothTrajectory::ShowTrajectory(G4std::ostream& os) const
 {
-   os << G4endl << "TrackID =" << fTrackID 
-        << ":ParentID=" << fParentID << G4endl;
-   os << "Particle name : " << ParticleName 
-        << "  Charge : " << PDGCharge << G4endl;
-   os << "  Current trajectory has " << positionRecord->size() 
-        << " points." << G4endl;
-
-   for( size_t i=0 ; i < positionRecord->size() ; i++){
-       G4SmoothTrajectoryPoint* aTrajectoryPoint = (G4SmoothTrajectoryPoint*)((*positionRecord)[i]);
-       os << "Point[" << i << "]" 
-            << " Position= " << aTrajectoryPoint->GetPosition() << G4endl;
-   }
+  // Invoke the default implementation in G4VTrajectory...
+  G4VTrajectory::ShowTrajectory(os);
+  // ... or override with your own code here.
 }
 
 void G4SmoothTrajectory::DrawTrajectory(G4int i_mode) const
 {
+  // Invoke the default implementation in G4VTrajectory...
+  G4VTrajectory::DrawTrajectory(i_mode);
+  // ... or override with your own code here.
 }
 
 const G4std::map<G4String,G4AttDef>* G4SmoothTrajectory::GetAttDefs() const
-{ return 0; }  // Empty for now.
+{
+  G4bool isNew;
+  G4std::map<G4String,G4AttDef>* store
+    = G4AttDefStore::GetInstance("G4SmoothTrajectory",isNew);
+  if (isNew) {
+
+    G4String ID("ID");
+    (*store)[ID] = G4AttDef(ID,"Track ID","Bookkeeping","","G4int");
+
+    G4String PID("PID");
+    (*store)[PID] = G4AttDef(PID,"Parent ID","Bookkeeping","","G4int");
+
+    G4String PN("PN");
+    (*store)[PN] = G4AttDef(PN,"Particle Name","Physics","","G4String");
+
+    G4String Ch("Ch");
+    (*store)[Ch] = G4AttDef(Ch,"Charge","Physics","","G4double");
+
+    G4String PDG("PDG");
+    (*store)[PDG] = G4AttDef(PDG,"PDG Encoding","Physics","","G4int");
+
+    G4String IMom("IMom");
+    (*store)[IMom] = G4AttDef(IMom, "Momentum of track at start of trajectory",
+			      "Physics","","G4ThreeVector");
+
+    G4String NTP("NTP");
+    (*store)[NTP] = G4AttDef(NTP,"No. of points","Physics","","G4int");
+
+  }
+  return store;
+}
+
 
 G4std::vector<G4AttValue>* G4SmoothTrajectory::CreateAttValues() const
-{ return 0; }  // Empty for now.
+{
+  char c[100];
+  G4std::ostrstream s(c,100);
+
+  G4std::vector<G4AttValue>* values = new G4std::vector<G4AttValue>;
+
+  s.seekp(G4std::ios::beg);
+  s << fTrackID << G4std::ends;
+  values->push_back(G4AttValue("ID",c,""));
+
+  s.seekp(G4std::ios::beg);
+  s << fParentID << G4std::ends;
+  values->push_back(G4AttValue("PID",c,""));
+
+  values->push_back(G4AttValue("PN",ParticleName,""));
+
+  s.seekp(G4std::ios::beg);
+  s << PDGCharge << G4std::ends;
+  values->push_back(G4AttValue("Ch",c,""));
+
+  s.seekp(G4std::ios::beg);
+  s << PDGEncoding << G4std::ends;
+  values->push_back(G4AttValue("PDG",c,""));
+
+  s.seekp(G4std::ios::beg);
+  s << G4BestUnit(initialMomentum,"Energy") << G4std::ends;
+  values->push_back(G4AttValue("IMom",c,""));
+
+  s.seekp(G4std::ios::beg);
+  s << GetPointEntries() << G4std::ends;
+  values->push_back(G4AttValue("NTP",c,""));
+
+  return values;
+}
 
 void G4SmoothTrajectory::AppendStep(const G4Step* aStep)
 {

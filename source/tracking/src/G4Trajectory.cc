@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.cc,v 1.19 2002-10-28 12:14:36 johna Exp $
+// $Id: G4Trajectory.cc,v 1.20 2002-11-08 18:27:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,12 +41,6 @@
 #include "G4Trajectory.hh"
 #include "G4TrajectoryPoint.hh"
 #include "G4ParticleTable.hh"
-#include "G4ThreeVector.hh"
-#include "G4Polyline.hh"
-#include "G4Circle.hh"
-#include "G4Colour.hh"
-#include "G4VisAttributes.hh"
-#include "G4VVisManager.hh"
 #include "G4AttDefStore.hh"
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
@@ -106,63 +100,16 @@ G4Trajectory::~G4Trajectory()
 
 void G4Trajectory::ShowTrajectory(G4std::ostream& os) const
 {
-   os << G4endl << "TrackID =" << fTrackID 
-        << ":ParentID=" << fParentID << G4endl;
-   os << "Particle name : " << ParticleName 
-        << "  Charge : " << PDGCharge << G4endl;
-   os << "  Current trajectory has " << positionRecord->size() 
-        << " points." << G4endl;
-
-   for( size_t i=0 ; i < positionRecord->size() ; i++){
-       G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[i]);
-       os << "Point[" << i << "]" 
-            << " Position= " << aTrajectoryPoint->GetPosition() << G4endl;
-   }
+  // Invoke the default implementation in G4VTrajectory...
+  G4VTrajectory::ShowTrajectory(os);
+  // ... or override with your own code here.
 }
 
 void G4Trajectory::DrawTrajectory(G4int i_mode) const
 {
-
-   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-   G4ThreeVector pos;
-
-   if(i_mode>=0)
-   {
-     G4Polyline pPolyline;
-     for (size_t i = 0; i < positionRecord->size() ; i++) {
-       G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[i]);
-       pos = aTrajectoryPoint->GetPosition();
-       pPolyline.push_back( pos );
-     }
-
-     G4Colour colour;
-     if(PDGCharge<0.) 
-        colour = G4Colour(1.,0.,0.);
-     else if(PDGCharge>0.) 
-        colour = G4Colour(0.,0.,1.);
-     else 
-        colour = G4Colour(0.,1.,0.);
-
-     G4VisAttributes attribs(colour);
-     pPolyline.SetVisAttributes(attribs);
-     if(pVVisManager) pVVisManager->Draw(pPolyline);
-   }
-
-   if(i_mode!=0)
-   {
-     for(size_t j=0; j<positionRecord->size(); j++) {
-       G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[j]);
-       pos = aTrajectoryPoint->GetPosition();
-       G4Circle circle( pos );
-       circle.SetScreenSize(0.001*i_mode);
-       circle.SetFillStyle(G4Circle::filled);
-       G4Colour colSpot(0.,0.,0.);
-       G4VisAttributes attSpot(colSpot);
-       circle.SetVisAttributes(attSpot);
-       if(pVVisManager) pVVisManager->Draw(circle);
-     }
-   }
-
+  // Invoke the default implementation in G4VTrajectory...
+  G4VTrajectory::DrawTrajectory(i_mode);
+  // ... or override with your own code here.
 }
 
 const G4std::map<G4String,G4AttDef>* G4Trajectory::GetAttDefs() const
@@ -171,25 +118,65 @@ const G4std::map<G4String,G4AttDef>* G4Trajectory::GetAttDefs() const
   G4std::map<G4String,G4AttDef>* store
     = G4AttDefStore::GetInstance("G4Trajectory",isNew);
   if (isNew) {
+
+    G4String ID("ID");
+    (*store)[ID] = G4AttDef(ID,"Track ID","Bookkeeping","","G4int");
+
+    G4String PID("PID");
+    (*store)[PID] = G4AttDef(PID,"Parent ID","Bookkeeping","","G4int");
+
     G4String PN("PN");
     (*store)[PN] = G4AttDef(PN,"Particle Name","Physics","","G4String");
+
+    G4String Ch("Ch");
+    (*store)[Ch] = G4AttDef(Ch,"Charge","Physics","","G4double");
+
+    G4String PDG("PDG");
+    (*store)[PDG] = G4AttDef(PDG,"PDG Encoding","Physics","","G4int");
+
     G4String IMom("IMom");
     (*store)[IMom] = G4AttDef(IMom, "Momentum of track at start of trajectory",
 			      "Physics","","G4ThreeVector");
+
+    G4String NTP("NTP");
+    (*store)[NTP] = G4AttDef(NTP,"No. of points","Physics","","G4int");
+
   }
   return store;
 }
 
 G4std::vector<G4AttValue>* G4Trajectory::CreateAttValues() const
 {
+  char c[100];
+  G4std::ostrstream s(c,100);
+
   G4std::vector<G4AttValue>* values = new G4std::vector<G4AttValue>;
+
+  s.seekp(G4std::ios::beg);
+  s << fTrackID << G4std::ends;
+  values->push_back(G4AttValue("ID",c,""));
+
+  s.seekp(G4std::ios::beg);
+  s << fParentID << G4std::ends;
+  values->push_back(G4AttValue("PID",c,""));
 
   values->push_back(G4AttValue("PN",ParticleName,""));
 
-  char c[100];
-  G4std::ostrstream s(c,100);
+  s.seekp(G4std::ios::beg);
+  s << PDGCharge << G4std::ends;
+  values->push_back(G4AttValue("Ch",c,""));
+
+  s.seekp(G4std::ios::beg);
+  s << PDGEncoding << G4std::ends;
+  values->push_back(G4AttValue("PDG",c,""));
+
+  s.seekp(G4std::ios::beg);
   s << G4BestUnit(initialMomentum,"Energy") << G4std::ends;
   values->push_back(G4AttValue("IMom",c,""));
+
+  s.seekp(G4std::ios::beg);
+  s << GetPointEntries() << G4std::ends;
+  values->push_back(G4AttValue("NTP",c,""));
 
   return values;
 }
