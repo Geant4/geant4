@@ -59,6 +59,9 @@ ifeq ($(G4SYSTEM),SUN-CC5)
     ifndef G4NO_STD_NAMESPACE
       G4USE_STD_NAMESPACE := yes
       CPPFLAGS += -DG4USE_STD_NAMESPACE
+      ifdef G4ODBMS
+        G4DDLX_FLAGS += -DG4std="std"
+      endif
     else
       CXXFLAGS += -compat
     endif
