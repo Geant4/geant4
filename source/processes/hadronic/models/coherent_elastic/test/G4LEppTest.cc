@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LEppTest.cc,v 1.1 2000-10-18 13:04:54 fjones Exp $
+// $Id: G4LEppTest.cc,v 1.2 2000-10-20 14:26:01 fjones Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -93,7 +93,7 @@
 //      thePS->AddElement( elC, 8 );
 //      thePS->AddElement( elH, 8 );
 //      theMaterials[1] = thePS;
-      G4Material *theH = new G4Material(name="Hydrogenee", density=1.032*g/cm3, nEl=1);
+      G4Material *theH = new G4Material(name="Hydrogen", density=1.032*g/cm3, nEl=1);
       theH->AddElement( elH, 1 );
       theMaterials[1] = theH;
 // 
@@ -264,7 +264,7 @@
     // ----------- here all material have been defined -----------
     
 //    G4Element::DumpInfo(); 
-//    G4Material::DumpInfo();
+    //    G4Material::DumpInfo();
     
     // ----------- the following is needed for building a track...... ------------
     
@@ -298,6 +298,7 @@
    G4HadronElasticProcess theProcess; 
    G4LEpp theModel;
    G4cout << "Model instanciated!!!"<<G4endl;
+   theModel.SetVerboseLevel(2);
    theProcess.RegisterMe(&theModel);
    theProtonProcessManager->AddDiscreteProcess(&theProcess);
    theProcesses[0] = &theProcess;
