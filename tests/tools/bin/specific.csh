@@ -498,6 +498,48 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
   set prompt='g4-pc-gbp> ' 
 endif
 #
+#
+if ( `uname -n` == "lx-si1.lal.in2p3.fr" ) then
+  setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
+  setenv G4INSTALL /geant4/geant4-03-02-ref-00
+  setenv G4WORKDIR $G4INSTALL
+  setenv G4STTDIR  $G4WORKDIR/stt
+  setenv G4LIB     $G4WORKDIR/lib
+  setenv G4SYSTEM  Linux-g++
+  setenv G4DEBUG   1
+  setenv G4LIB_BUILD_SHARED 1
+  # G4 build flags :
+#  setenv G4UI_BUILD_XM_SESSION       1
+#  setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
+#  setenv G4VIS_BUILD_OPENGLX_DRIVER  1
+#  setenv G4VIS_BUILD_OIX_DRIVER      1
+  setenv G4VIS_BUILD_DAWN_DRIVER     1
+  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
+  setenv G4VIS_BUILD_VRML_DRIVER     1
+  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
+#  setenv G4ANALYSIS_BUILD_LAB        1
+#  setenv G4ANALYSIS_BUILD_JAS        1
+#  setenv G4ANALYSIS_BUILD_LIZARD     1
+  #setenv G4ANALYSIS_TUPLE 1
+  #setenv G4ANALYSIS_CLOUD 1
+#  setenv G4ANALYSIS_LAB_VISUALIZATION 1
+  # G4 use flags :
+#  setenv G4UI_USE_XM                 1
+#  setenv G4VIS_USE_OPENGLXM          1
+#  setenv G4VIS_USE_OPENGLX           1
+#  setenv G4VIS_USE_OIX               1
+  setenv G4VIS_USE_DAWN              1
+  setenv G4VIS_USE_DAWNFILE          1
+  setenv G4VIS_USE_VRML              1
+  setenv G4VIS_USE_VRMLFILE          1
+#  setenv G4ANALYSIS_USE_LAB          1
+#  setenv G4ANALYSIS_USE_JAS          1
+#  setenv G4ANALYSIS_USE_LIZARD       1
+#  setenv G4ANALYSIS_SYSTEM           Lab
+  # CLHEP :
+  setenv CLHEP_BASE_DIR /lal/CLHEP/1.6.0.0/Linux-gxx
+endif
+#
 if ( `uname -n | grep lxplus` != "" ) then
 if ( `whoami` == "gbarrand" ) then
   setenv CVSROOT   /afs/cern.ch/sw/geant4/cvs
