@@ -316,6 +316,16 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     #ifndef G4HadSignalHandler_off
     G4HadSignalHandler aHandler(G4HadronicProcess_local::G4HadronicProcessHandler_1);
     #endif
+    if(aTrack.GetTrackStatus() != fAlive) 
+    {
+      G4cerr << "G4HadronicProcess: track in unusable state - "
+             <<aTrack.GetTrackStatus()<<G4endl;
+      G4cerr << "G4HadronicProcess: returning unchanged track "<<G4endl;
+      G4Exception("G4HadronicProcess", "001", JustWarning, "bailing out");
+      theTotalResult->Clear();
+      theTotalResult->Initialize(aTrack);
+      return theTotalResult;
+    }
     const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
     G4Material *aMaterial = aTrack.GetMaterial();
     G4double originalEnergy = aParticle->GetKineticEnergy();
