@@ -1,4 +1,4 @@
-# $Id: ionC12.mac,v 1.4 2004-03-19 09:05:15 vnivanch Exp $
+# $Id: ionC12.mac,v 1.5 2004-03-19 10:58:59 maire Exp $
 #
 # Macro file for "TestEm3.cc"
 # (can be run in batch, without graphic)
@@ -6,8 +6,7 @@
 # CsI 1 layer;
 #
 /control/verbose 2
-/tracking/verbose 1
-/run/verbose 1
+/run/verbose 2
 #
 #  select EM PhysicsList
 #
@@ -21,16 +20,14 @@
 /testem/det/setAbsor 0 CsI 1.99 cm
 /testem/det/setSizeYZ 3 cm
 #
-/testem/gun/setDefault
-/testem/tracking/stepMax  0.5 mm
 /run/initialize
 #
-/testem/event/printModulo 1000
-#
+/testem/gun/setDefault
 /gun/particle ionC12
 /gun/energy 108 GeV
 #
-/testem/run/setHisto 0 100 3.e-3 6.e-3
+/testem/run/setHisto 0 200 350. 550. MeV
 #
-/run/beamOn 2
+/testem/event/printModulo 1000
+/run/beamOn 5000
 
