@@ -1,4 +1,4 @@
-$Id: History,v 1.34 2001-10-26 07:08:54 gcosmo Exp $
+$Id: History,v 1.35 2001-11-08 13:36:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov. 08, 01  G.Cosmo (track-V03-02-05)
+- Merge changes included in "track-V03-02-02a".
+
 Oct. 22, 01  H.Kurashige (track-V03-02-04)
 - Modify to intorduce TouchableHandle (Radovan)
 
