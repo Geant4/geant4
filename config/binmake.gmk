@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.52 2000-12-01 08:37:43 gunter Exp $
+# $Id: binmake.gmk,v 1.53 2000-12-05 14:54:26 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -319,7 +319,7 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@if [ ! -d $(G4TMPDIR)/exe ] ; then mkdir $(G4TMPDIR)/exe ;fi
 	@echo Making dependency for file $<...
 	@($(ECHO) $(G4TMPDIR)/exe/\\c ; \
-	g++ -M -MG $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
+	g++ -MM $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
 -include $(dependencies)
 endif
 
