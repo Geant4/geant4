@@ -1,14 +1,14 @@
-# $Id: GNUmakefile,v 1.6 2001-10-25 16:36:36 elena Exp $
+# $Id: GNUmakefile,v 1.7 2001-11-27 14:54:11 elena Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := fluoTest
+name := XrayFluo
 G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../../../../../
+  G4INSTALL = ../../../
 endif
 
 .PHONY: all
@@ -17,7 +17,7 @@ all: lib bin
 include $(G4INSTALL)/config/architecture.gmk
 
 
-C_FLAGS += -I$(LHCXX_REL_DIR)/include
+CPPFLAGS += -I$(LHCXX_REL_DIR)/include
 LDFLAGS += -L$(LHCXX_REL_DIR)/lib
 #LOADLIBS += -L$(LHCXX_REL_DIR)/lib
 # general stuff:

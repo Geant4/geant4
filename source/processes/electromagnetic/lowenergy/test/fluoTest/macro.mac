@@ -1,6 +1,6 @@
 
 #/tracking/verbose 2
-#/lowenergy/lowlimGE 250 eV
+/lowenergy/lowlimGE 250 eV
 #/lowenergy/cutG 0.01 mum
 #/lowenergy/cutE 0.01 mum
 #/lowenergy/cutP 0.01 mum
@@ -14,5 +14,5 @@
 /gun/particle gamma
 /gun/energy 6 keV
 
-/run/beamOn 1000000
+/run/beamOn 10000000000
 #/run/beamOn 100

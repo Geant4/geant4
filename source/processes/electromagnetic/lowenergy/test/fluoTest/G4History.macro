@@ -11,8 +11,9 @@
 /vis/viewer/refresh
 /vis/viewer/update
 /tracking/storeTrajectory 1
-/gun/randomVert on
 /gun/particle gamma
-/gun/energy 5 keV
-/run/beamOn 100000
+/gun/energy 6 keV
+/gun/randomVert on
+/run/beamOn 100
 /vis/scene/notifyHandlers
+/vis/viewer/update
