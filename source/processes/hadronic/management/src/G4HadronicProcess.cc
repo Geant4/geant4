@@ -663,7 +663,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
       }
       if(GetProcessName() != "LElastic"
          &&
-	 getenv("AlwaysKillLeadingHadron") 
+	 AlwaysKillLeadingHadron() 
          && 
 	 theTotalResult->GetStatusChange()==fAlive
 	 &&
