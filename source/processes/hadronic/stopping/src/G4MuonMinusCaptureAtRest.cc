@@ -301,7 +301,7 @@ G4ReactionProductVector * G4MuonMinusCaptureAtRest::DoMuCapture(G4double aMuKine
     }
 
     // Gett the nu momentum in the CMS
-    G4double aNMass = G4Proton::ProtonDefinition()->GetPDGMass();
+    G4double aNMass = G4Proton::ProtonDefinition()->GetPDGMass()/2.;
     G4LorentzVector theNeutronMom(sqrt(aNMass*aNMass+fermiMom.mag2()), fermiMom);
     G4LorentzVector theCMS = theNeutronMom+aMuMom;
     G4double p1 = (theCMS.mag()*theCMS.mag()-aNMass*aNMass)/(2.*theCMS.mag());
