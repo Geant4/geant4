@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2002-06-12 15:28:46 gcosmo Exp $
+$Id: History,v 1.54 2002-06-14 09:16:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 June 2002, Hajime Yoshida (interfaces-V04-00-04)
+- Added protection #ifndef WIN32 to new class G4UIGainServer in definition
+  and body, to prevent compilation on Windows platforms.
 
 12 June 2002, Gabriele Cosmo (interfaces-V04-00-03)
 - Fixes for porting on platforms other than Linux.
