@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.47 2005-03-11 15:39:00 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.48 2005-03-11 15:47:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -881,7 +881,7 @@ void G4VEnergyLossProcess::SetRangeTableForLoss(G4PhysicsTable* p)
 {
   if(theRangeTableForLoss != p) {
     theRangeTableForLoss = p;
-    if(0 < verboseLevel) {
+    if(1 < verboseLevel) {
       G4cout << "### Set Range table " << p << " for " << particle->GetParticleName()
              << " and process " << GetProcessName() << G4endl;
     }
@@ -901,7 +901,7 @@ void G4VEnergyLossProcess::SetInverseRangeTable(G4PhysicsTable* p)
 {
   if(theInverseRangeTable != p) {
     theInverseRangeTable = p;
-    if(0 < verboseLevel) {
+    if(1 < verboseLevel) {
       G4cout << "### Set InverseRange table " << p << " for " << particle->GetParticleName()
              << " and process " << GetProcessName() << G4endl;
     }
