@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.8 2004-01-21 17:29:26 maire Exp $
+// $Id: RunAction.hh,v 1.9 2004-03-15 11:14:45 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,13 +42,20 @@
 class G4Run;
 class RunActionMessenger;
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
 namespace AIDA {
  class ITree;
  class IHistogramFactory;
  class IHistogram1D;
 }
 #endif
+
+#ifdef USE_ROOT
+  class TFile;
+  class TH1F;  
+#endif
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {
@@ -61,15 +68,20 @@ class RunAction : public G4UserRunAction
     void   EndOfRunAction(const G4Run*);
 
     void fillPerEvent(G4int,G4double,G4double,G4double);
-
-#ifdef G4ANALYSIS_USE
-    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
-    G4double GetHistoUnit(G4int id) {return histoUnit[id];}
-#endif
-
+    
     void SetFileName(const G4String& s) {fileName = s;};
     void SetHisto (G4int, G4int, G4double, G4double, G4String);
 
+#ifdef USE_AIDA
+    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
+#endif
+
+#ifdef USE_ROOT
+    TH1F* GetHisto(G4int id) {return histo[id];}
+#endif
+
+    G4double GetHistoUnit(G4int id) {return histoUnit[id];}
+    
     void PrintDedxTables();
     
   private:
@@ -87,12 +99,17 @@ class RunAction : public G4UserRunAction
     G4double hmin [MaxAbsor],  hmax  [MaxAbsor];
     G4double histoUnit[MaxAbsor];
     
-#ifdef G4ANALYSIS_USE    
+#ifdef USE_AIDA    
     AIDA::ITree* tree;
     AIDA::IHistogramFactory* hf;
     AIDA::IHistogram1D* histo[MaxAbsor];
-#endif      
-             
+#endif
+      
+#ifdef USE_ROOT         
+    TFile* tree;
+    TH1F*  histo[MaxAbsor];
+#endif
+                
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

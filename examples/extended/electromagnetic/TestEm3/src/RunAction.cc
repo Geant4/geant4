@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.11 2004-01-21 17:29:27 maire Exp $
+// $Id: RunAction.cc,v 1.12 2004-03-15 11:14:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,8 +39,13 @@
 #include "Randomize.hh"
 #include <iomanip>
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  #include "AIDA/AIDA.h"
+#endif
+
+#ifdef USE_ROOT
+ #include "TFile.h"
+ #include "TH1F.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,7 +83,12 @@ void RunAction::SetHisto(G4int k,
   hmax[k]   = valmax/valunit;
   histoUnit[k] = valunit;
   
-#ifdef G4ANALYSIS_USE  
+#ifdef USE_AIDA  
+  G4cout << "---->SetHisto: " << title << " ; " << nbins << " bins from "
+         << hmin[k] << " " + unit << " to " << hmax[k] << " " + unit  << G4endl;  
+#endif
+
+#ifdef USE_ROOT  
   G4cout << "---->SetHisto: " << title << " ; " << nbins << " bins from "
          << hmin[k] << " " + unit << " to " << hmax[k] << " " + unit  << G4endl;  
 #endif  
@@ -105,7 +115,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   //histograms
   //
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
   // Creating the analysis factory
   std::auto_ptr<AIDA::IAnalysisFactory> af(AIDA_createAnalysisFactory());
 
@@ -128,6 +138,18 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   }
 #endif
 
+#ifdef USE_ROOT
+ // Create a ROOT file
+ tree = new TFile(fileName,"recreate");
+ 
+ // histograms
+ for (G4int k=0; k<MaxAbsor; k++) {
+  if (hbins[k] > 0)
+   histo[k] = new TH1F(hid[k],htitle[k],hbins[k],hmin[k],hmax[k]);
+  else histo[k] = 0;
+ } 
+#endif 
+ 
   //example of print dEdx tables
   //
   ////PrintDedxTables();
@@ -199,13 +221,20 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   //save histograms and delete factory
   //  
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
   G4cout << "---> Histograms are saved" << G4endl;
   delete hf;
   delete tree;
 #endif
+
+#ifdef USE_ROOT
+  tree->Write();        // Writing the histograms to the file
+  tree->Close();        // and closing the file 
+  G4cout << "---> Histograms are saved" << G4endl;   
+  delete tree;
+#endif     
 
   // show Rndm status
   HepRandom::showEngineStatus();

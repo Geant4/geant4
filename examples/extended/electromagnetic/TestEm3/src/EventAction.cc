@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.4 2004-01-21 17:29:27 maire Exp $
+// $Id: EventAction.cc,v 1.5 2004-03-15 11:14:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,8 +39,12 @@
 #include "G4Trajectory.hh"
 #include "G4VVisManager.hh"
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  #include "AIDA/IHistogram1D.h"
+#endif
+
+#ifdef USE_ROOT
+  #include "TH1F.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,10 +91,17 @@ void EventAction::EndOfEventAction(const G4Event* evt)
   for (G4int k=0; k<detector->GetNbOfAbsor(); k++) {
      runAct->fillPerEvent(k,energyDeposit[k],trackLengthCh[k],
                             energyLeaving[k]/(G4double)(detector->GetNbOfLayers()));
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
       if (runAct->GetHisto(k)) {
 	G4double unit = runAct->GetHistoUnit(k); 
 	runAct->GetHisto(k)->fill(energyDeposit[k]/unit);
+      }  
+#endif
+
+#ifdef USE_ROOT
+      if (runAct->GetHisto(k)) {
+	G4double unit = runAct->GetHistoUnit(k); 
+	runAct->GetHisto(k)->Fill(energyDeposit[k]/unit);
       }  
 #endif
   }

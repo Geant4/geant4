@@ -1,4 +1,4 @@
-$Id: README,v 1.12 2004-01-21 17:29:22 maire Exp $
+$Id: README,v 1.13 2004-03-15 11:14:45 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -123,7 +123,7 @@ $Id: README,v 1.12 2004-01-21 17:29:22 maire Exp $
  /testem/run/setFileName  name  (default testem3.paw)
  
  Note that, by default, histograms are disabled. To activate them, uncomment
- the flag G4ANALYSIS_USE in GNUmakefile.
+ the flag USE_AIDA or USE_ROOT (exclusive or) in GNUmakefile.
 
  8- Using the Anaphe implementation of the AIDA 3.0 histograms:
  --------------------------------------------------------------
@@ -140,3 +140,8 @@ $Id: README,v 1.12 2004-01-21 17:29:22 maire Exp $
  At cern 'setupAnaphe' is available at: 
  /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe.csh
  (or /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe)
+ 
+ 9- ROOT
+ 
+ To install root, see http://root.cern.ch
+ Make sure that the environment variable ROOTSYS used in GNUmakefile is defined.
