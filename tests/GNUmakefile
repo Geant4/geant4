@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.15 2000-01-14 11:24:23 stesting Exp $
+# $Id: GNUmakefile,v 1.16 2000-01-17 11:58:41 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -58,8 +58,6 @@ all:
 # Making links in the source tree can be a problem if more than one
 # jobs try to do it at the same time.  So disable and always do by
 # hand with: gmake examples_links_source
-	@$(ECHO) Making links to examples binaries...
-	@$(MAKE) examples_links_binaries
 	@$(ECHO) Making examples...
 	@for nn in $(EXAMPLES); do \
 	  (cd test1$$nn; $(MAKE)); \
@@ -76,6 +74,8 @@ endif
 	  do (cd $$dir; $(MAKE) -f GNUmakefile.hadronic.exerciser); done;:
 	@$(ECHO) Making System Tests...
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done;:
+	@$(ECHO) Making links to examples binaries...
+	@$(MAKE) examples_links_binaries
 
 clean:
 	@for nn in $(EXAMPLES); do \
