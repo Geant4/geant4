@@ -5,7 +5,7 @@
 
 
 //
-// $Id: STEPselect.cc,v 1.2 1999-05-21 20:20:52 japost Exp $
+// $Id: STEPselect.cc,v 1.3 1999-11-17 08:34:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -291,10 +291,10 @@ SdaiSelect::STEPread  (istream& in, ErrorDescriptor *err, InstMgr * instances,
     }
     else // case A
     {    //  the type can be determined from the value 
-      if (_type && ! _type -> UniqueElements ())  {
-	err->AppendToDetailMsg("Type for value of SELECT is ambiguous.\n" );
-	err->GreaterSeverity( SEVERITY_WARNING );
-      }
+//      if (_type && ! _type -> UniqueElements ())  {
+//	err->AppendToDetailMsg("Type for value of SELECT is ambiguous.\n" );
+//	err->GreaterSeverity( SEVERITY_WARNING );
+//      }
 	switch (c)
 	{
 	  case '$':  
