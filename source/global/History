@@ -1,4 +1,4 @@
-$Id: History,v 1.133 2004-11-01 13:08:18 gcosmo Exp $
+$Id: History,v 1.134 2004-11-01 13:15:10 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 Nov 01, 2004  H.Kurasige (global-V06-02-03)
-- Code cleanup in G4PhysicsParticle implementation.
+- Code cleanup in G4PhysicsTable implementation.
 - Added push_back() method.
 
 Oct 29, 2004  G.Cosmo (global-V06-02-02)
