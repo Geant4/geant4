@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.28 2004-10-10 10:44:21 johna Exp $
+// $Id: G4Box.cc,v 1.29 2004-11-11 14:38:07 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -379,6 +379,8 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
   disty = fabs(fabs(p.y()) - fDy) ;
   distz = fabs(fabs(p.z()) - fDz) ;
 
+#ifndef G4NEW_SURF_NORMAL
+
   if ( distx <= disty )
   {
     if ( distx <= distz )     // Closest to X
@@ -405,6 +407,129 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
       else             norm = G4ThreeVector(0,0, 1.0) ;
     }
   }
+
+#else
+
+  // New code for particle on surface including edges and corners with specific
+  // normals
+
+  G4double delta    = 0.5*kCarTolerance;
+  G4ThreeVector nX  = G4ThreeVector( 1.0, 0,0  );
+  G4ThreeVector nmX = G4ThreeVector(-1.0, 0,0  );
+  G4ThreeVector nY  = G4ThreeVector( 0, 1.0,0  );
+  G4ThreeVector nmY = G4ThreeVector( 0,-1.0,0  );
+  G4ThreeVector nZ  = G4ThreeVector( 0, 0,  1.0);
+  G4ThreeVector nmZ = G4ThreeVector( 0, 0,- 1.0);
+
+  if (distx <= delta)         // on X/mX surface and around
+  {
+    if ( p.x() >= 0.)         // on X surface
+    {
+      if (disty <= delta)
+      {
+        if (distz <= delta)   // corners around X surface
+        {
+          if ( p.y() >= 0.)
+	  {
+            if ( p.z() >= 0.) norm = ( nX + nY + nZ  ).unit();
+            else              norm = ( nX + nY + nmZ ).unit(); 
+	  }
+          else
+	  {
+            if ( p.z() >= 0.) norm = ( nX + nmY + nZ  ).unit();
+            else              norm = ( nX + nmY + nmZ ).unit(); 
+	  }
+        }
+        else                  // on XY edges
+	{
+          if ( p.y() >= 0.)   norm = ( nX + nY  ).unit();
+          else                norm = ( nX + nmY ).unit();
+	}        
+      }
+      else
+      {
+        if (distz <= delta)   // on XZ edges
+        {
+          if ( p.z() >= 0.)   norm = ( nX + nZ  ).unit();
+          else                norm = ( nX + nmZ ).unit();
+        }
+        else                  norm = nX;        
+      }
+    }
+    else                      // on mX surface
+    {
+      if (disty <= delta)
+      {
+        if (distz <= delta)   // corners around mX surface
+        {
+          if ( p.y() >= 0.)
+	  {
+            if ( p.z() >= 0.) norm = ( nmX + nY + nZ  ).unit();
+            else              norm = ( nmX + nY + nmZ ).unit(); 
+	  }
+          else
+	  {
+            if ( p.z() >= 0.) norm = ( nmX + nmY + nZ  ).unit();
+            else              norm = ( nmX + nmY + nmZ ).unit(); 
+	  }
+        }
+        else                  // on mXY edges
+	{
+          if ( p.y() >= 0.)   norm = ( nmX + nY  ).unit();
+          else                norm = ( nmX + nmY ).unit();
+	}        
+      }
+      else
+      {
+        if (distz <= delta)   // on mXZ edges
+        {
+          if ( p.z() >= 0.)   norm = ( nmX + nZ  ).unit();
+          else                norm = ( nmX + nmZ ).unit();
+        }
+        else                  norm = nmX;        
+      }
+    }
+  }
+  else
+  {
+    if (disty <= delta)
+    {
+      if (distz <= delta)     // on YZ edges
+      {
+        if ( p.y() >= 0.)
+	{
+          if ( p.z() >= 0.)   norm = ( nY + nZ  ).unit();
+          else                norm = ( nY + nmZ ).unit(); 
+	}
+        else
+	{
+            if ( p.z() >= 0.) norm = ( nmY + nZ  ).unit();
+            else              norm = ( nmY + nmZ ).unit(); 
+	}
+      }
+      else                    // on Y/mY surfaces
+      {
+        if ( p.y() >= 0.)     norm = nY;
+        else                  norm = nmY;
+      } 
+    }
+    else                      // on Z/mZ surfaces
+    {
+      if (distz <= delta) 
+      {
+          if ( p.z() >= 0.)   norm = nZ;
+          else                norm = nmZ; 
+      }
+      else                    // is not on surface !?
+      {
+        G4Exception("G4Box::SurfaceNormal(p)", "Notification", JustWarning, 
+                    "Point p is not on surface !?" ); 
+      }
+    }      
+  }
+
+#endif
+
   return norm;
 }
 
