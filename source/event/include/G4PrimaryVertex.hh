@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryVertex.hh,v 1.4 2000-07-22 10:40:51 asaim Exp $
+// $Id: G4PrimaryVertex.hh,v 1.5 2000-10-19 15:19:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,6 +52,7 @@ class G4PrimaryVertex
       G4PrimaryParticle * theTail;
       G4PrimaryVertex* nextVertex;
       G4int numberOfParticle;
+      G4double Weight0;
 
   public:
       inline G4ThreeVector GetPosition() const
@@ -110,6 +111,10 @@ class G4PrimaryVertex
       }
       inline G4PrimaryVertex* GetNext() const
       { return nextVertex; }
+      inline G4double GetWeight() const
+      { return Weight0; }
+      inline void SetWeight(G4double w)
+      { Weight0 = w; }
 };
 
 extern G4Allocator<G4PrimaryVertex> aPrimaryVertexAllocator;

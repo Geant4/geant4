@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryParticle.cc,v 1.2 1999-12-15 14:49:41 gunter Exp $
+// $Id: G4PrimaryParticle.cc,v 1.3 2000-10-19 15:19:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -19,33 +19,33 @@ G4Allocator<G4PrimaryParticle> aPrimaryParticleAllocator;
 G4PrimaryParticle::G4PrimaryParticle()
 :PDGcode(0),G4code(NULL),Px(0.),Py(0.),Pz(0.),
  nextParticle(NULL),daughterParticle(NULL),trackID(-1),
- mass(0.),polX(0.),polY(0.),polZ(0.)
+ mass(0.),polX(0.),polY(0.),polZ(0.),Weight0(1.0)
 {;}
 
 G4PrimaryParticle::G4PrimaryParticle(G4int Pcode)
 :PDGcode(Pcode),Px(0.),Py(0.),Pz(0.),
  nextParticle(NULL),daughterParticle(NULL),trackID(-1),
- mass(0.),polX(0.),polY(0.),polZ(0.)
+ mass(0.),polX(0.),polY(0.),polZ(0.),Weight0(1.0)
 { G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); }
 
 G4PrimaryParticle::G4PrimaryParticle(G4int Pcode,
                         G4double px,G4double py,G4double pz)
 :PDGcode(Pcode),Px(px),Py(py),Pz(pz),
  nextParticle(NULL),daughterParticle(NULL),trackID(-1),
- mass(0.),polX(0.),polY(0.),polZ(0.)
+ mass(0.),polX(0.),polY(0.),polZ(0.),Weight0(1.0)
 { G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); }
 
 G4PrimaryParticle::G4PrimaryParticle(G4ParticleDefinition* Gcode)
 :G4code(Gcode),Px(0.),Py(0.),Pz(0.),
  nextParticle(NULL),daughterParticle(NULL),trackID(-1),
- mass(0.),polX(0.),polY(0.),polZ(0.)
+ mass(0.),polX(0.),polY(0.),polZ(0.),Weight0(1.0)
 { PDGcode = Gcode->GetPDGEncoding(); }
 
 G4PrimaryParticle::G4PrimaryParticle(G4ParticleDefinition* Gcode,
                         G4double px,G4double py,G4double pz)
 :G4code(Gcode),Px(px),Py(py),Pz(pz),
  nextParticle(NULL),daughterParticle(NULL),trackID(-1),
- mass(0.),polX(0.),polY(0.),polZ(0.)
+ mass(0.),polX(0.),polY(0.),polZ(0.),Weight0(1.0)
 { PDGcode = Gcode->GetPDGEncoding(); }
 
 G4PrimaryParticle::~G4PrimaryParticle()
@@ -86,6 +86,7 @@ void G4PrimaryParticle::Print() const
   G4cout << "     Momentum ( " << Px << ", " << Py << ", " << Pz << " )" << G4endl;
   G4cout << "     Polarization ( " << polX << ", " << polY << ", "
                                  << polZ << " )" << G4endl;
+  G4cout << "     Weight : " << Weight0 << G4endl;
   if(daughterParticle != NULL)
   {
     G4cout << ">>>> Daughters" << G4endl;

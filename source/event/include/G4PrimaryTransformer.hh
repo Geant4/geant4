@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryTransformer.hh,v 1.3 1999-12-15 14:49:39 gunter Exp $
+// $Id: G4PrimaryTransformer.hh,v 1.4 2000-10-19 15:19:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,7 +45,7 @@ class G4PrimaryTransformer
   private:
     void GenerateTracks(G4PrimaryVertex* primaryVertex);
     void GenerateSingleTrack(G4PrimaryParticle* primaryParticle,
-              G4double x0,G4double y0,G4double z0,G4double t0);
+              G4double x0,G4double y0,G4double z0,G4double t0,G4double wv);
     void SetDecayProducts(G4PrimaryParticle* mother,
                             G4DynamicParticle* motherDP);
     inline G4ParticleDefinition* GetDefinition(G4PrimaryParticle*pp)

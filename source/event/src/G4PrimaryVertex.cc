@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryVertex.cc,v 1.2 1999-12-15 14:49:41 gunter Exp $
+// $Id: G4PrimaryVertex.cc,v 1.3 2000-10-19 15:19:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -16,18 +16,18 @@ G4Allocator<G4PrimaryVertex> aPrimaryVertexAllocator;
 
 G4PrimaryVertex::G4PrimaryVertex()
 :X0(0.),Y0(0.),Z0(0.),T0(0.),numberOfParticle(0),nextVertex(NULL),
- theParticle(NULL),theTail(NULL)
+ theParticle(NULL),theTail(NULL),Weight0(1.0)
 {;}
 
 G4PrimaryVertex::G4PrimaryVertex(
           G4double x0,G4double y0,G4double z0,G4double t0)
 :X0(x0),Y0(y0),Z0(z0),T0(t0),numberOfParticle(0),nextVertex(NULL),
- theParticle(NULL),theTail(NULL)
+ theParticle(NULL),theTail(NULL),Weight0(1.0)
 {;}
 
 G4PrimaryVertex::G4PrimaryVertex(G4ThreeVector xyz0,G4double t0)
 :T0(t0),numberOfParticle(0),nextVertex(NULL),
- theParticle(NULL),theTail(NULL)
+ theParticle(NULL),theTail(NULL),Weight0(1.0)
 {
   X0=xyz0.x();
   Y0=xyz0.y();
@@ -53,7 +53,8 @@ int G4PrimaryVertex::operator!=(const G4PrimaryVertex &right) const
 void G4PrimaryVertex::Print() const
 {
   G4cout << "Vertex  ( "
-       << X0 << ", " << Y0 << ", " << Z0 << ", " << T0 << " )" << G4endl;
+       << X0 << ", " << Y0 << ", " << Z0 << ", " << T0 << " )" 
+       << " Weight " << Weight0 << G4endl;
   G4cout << "#### Primary particles" << G4endl;
   G4PrimaryParticle* aPrim = theParticle;
   if(aPrim != NULL)
