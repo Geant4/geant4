@@ -1,0 +1,11 @@
+
+tau- 15
+0 1 0 0
+1.7770500e+00 2.2650000e-12 -1.0000000e+00
+2.9560000e-13
+2.5200000e-01 3 Phase Space pi0 pi- nu_tau 
+1.7800000e-01 3 Tau Leptonic Decay e- anti_nu_e nu_tau 
+1.7400000e-01 3 Tau Leptonic Decay mu- anti_nu_mu nu_tau 
+1.1300000e-01 2 Phase Space pi- nu_tau 
+9.8000000e-02 4 Phase Space pi- pi- pi+ nu_tau 
+9.3000000e-02 4 Phase Space pi0 pi0 pi- nu_tau 
