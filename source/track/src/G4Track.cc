@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.16 2001-12-12 11:07:39 kurasige Exp $
+// $Id: G4Track.cc,v 1.17 2001-12-13 15:31:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -132,6 +132,13 @@ G4Track & G4Track::operator=(const G4Track &right)
    fpUserInformation = right.fpUserInformation;
   }
   return *this;
+}
+
+///////////////////
+void G4Track::CopyTrackInfo(const G4Track& right)
+//////////////////
+{
+  *this = right;
 }
 
 ///////////////////

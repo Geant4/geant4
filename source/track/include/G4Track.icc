@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.icc,v 1.8 2001-10-22 04:19:40 kurasige Exp $
+// $Id: G4Track.icc,v 1.9 2001-12-13 15:31:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-----------------------------------------------------------------
@@ -42,8 +42,8 @@
    { aTrackAllocator.FreeSingle((G4Track *) aTrack);}
       // Override "delete" for "G4Allocator".
 
-   inline int G4Track::operator==( const G4Track& s)
-   { return (this==&s) ? 1 : 0; }
+   inline G4bool G4Track::operator==( const G4Track& s)
+   { return (this==&s);  }
       // Define "==" operator because "G4TrackVector" uses 
       // "RWPtrOrderdVector" which requires this.
 
