@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.19 2002-11-18 10:16:48 hpw Exp $
+# $Id: GNUmakefile,v 1.20 2002-11-18 10:31:54 hpw Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -24,6 +24,7 @@ SUBDIRS += hadronic/models/coherent_elastic
 SUBDIRS += hadronic/models/generator/de_excitation
 SUBDIRS += hadronic/models/generator/diffractive_string
 SUBDIRS += hadronic/models/generator/high_energy
+SUBDIRS += hadronic/models/generator/scattering
 SUBDIRS += hadronic/models/generator/kinetic_model
 SUBDIRS += hadronic/models/generator/management
 SUBDIRS += hadronic/models/generator/pre_equilibrium
