@@ -1,11 +1,11 @@
-G4AssemblyTriplet::G4AssemblyTriplet()
+inline G4AssemblyTriplet::G4AssemblyTriplet()
 : fVolume( 0 ), fRotation( 0 )
 {
   G4ThreeVector v(0.,0.,0.);
   fTranslation = v;
 }
 
-G4AssemblyTriplet::G4AssemblyTriplet( G4LogicalVolume* pVolume
+inline G4AssemblyTriplet::G4AssemblyTriplet( G4LogicalVolume* pVolume
                                      ,G4ThreeVector& translation
                                      ,G4RotationMatrix* pRotation
                                     )
@@ -13,14 +13,14 @@ G4AssemblyTriplet::G4AssemblyTriplet( G4LogicalVolume* pVolume
 {
 }
 
-G4AssemblyTriplet::G4AssemblyTriplet( const G4AssemblyTriplet& second )
+inline G4AssemblyTriplet::G4AssemblyTriplet( const G4AssemblyTriplet& second )
 {
   fVolume      = second.GetVolume();
   fRotation    = second.GetRotation();
   fTranslation = second.GetTranslation();
 }
 
-G4AssemblyTriplet::~G4AssemblyTriplet()
+inline G4AssemblyTriplet::~G4AssemblyTriplet()
 {
 }
 
