@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.cc,v 1.8 2000-05-02 15:12:45 grichine Exp $
+// $Id: G4PAIonisation.cc,v 1.9 2000-07-04 16:18:00 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -95,7 +95,13 @@ G4PAIonisation::~G4PAIonisation()
      fPAItransferBank->clearAndDestroy() ;
      delete fPAItransferBank ;
    }
+   for(G4int i=0;i<fSandiaIntervalNumber;i++)
+   {
+     delete[] fSandiaPhotoAbsCof[i] ;
+   }
+   delete[] fSandiaPhotoAbsCof ;
  
+   //  if(fProtonEnergyVector) delete fProtonEnergyVector ; 
 }
  
 /////////////////////////////////////////////////////////////////////////
@@ -741,14 +747,14 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
   G4double      Tkin = aParticle->GetKineticEnergy() ;
   G4double MassRatio = proton_mass_c2/aParticle->GetDefinition()->GetPDGMass() ;
   G4double TkinScaled = Tkin*MassRatio ;
-  G4PhysicsLogVector* 
-  aLogVector = new G4PhysicsLogVector( G4PAIonisation::GetMinKineticEnergy(),
-                                       G4PAIonisation::GetMaxKineticEnergy(),
-                                       G4PAIonisation::GetBinNumber()        ) ;
+  //  G4PhysicsLogVector* 
+  //  aLogVector = new G4PhysicsLogVector( G4PAIonisation::GetMinKineticEnergy(),
+  //                           G4PAIonisation::GetMaxKineticEnergy(),
+  //                          G4PAIonisation::GetBinNumber()        ) ;
 
   for(iTkin=0;iTkin<G4PAIonisation::GetBinNumber();iTkin++)
   {
-    if(TkinScaled < aLogVector->GetLowEdgeEnergy(iTkin)) // <= ?
+    if(TkinScaled < fProtonEnergyVector->GetLowEdgeEnergy(iTkin)) // <= ?
     {
       break ;
     } 
@@ -801,8 +807,8 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
     } 
     else // general case: Tkin between two vectors of the material
     {
-      E1 = aLogVector->GetLowEdgeEnergy(iTkin - 1) ; 
-      E2 = aLogVector->GetLowEdgeEnergy(iTkin)     ;
+      E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
+      E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
        W = 1.0/(E2 - E1) ;
       W1 = (E2 - TkinScaled)*W ;
       W2 = (TkinScaled - E1)*W ;
