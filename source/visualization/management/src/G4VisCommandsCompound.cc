@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.16 2001-08-09 20:13:01 johna Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.17 2001-08-24 20:49:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -255,7 +255,6 @@ void G4VisCommandOpen::SetNewValue (G4UIcommand* command, G4String newValue) {
       fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
-  UImanager->ApplyCommand("/vis/scene/create");
   UImanager->ApplyCommand("/vis/sceneHandler/create " + systemName);
   UImanager->ApplyCommand("/vis/viewer/create ! ! " + windowSizeHint);
   UImanager->SetVerboseLevel(keepVerbose);

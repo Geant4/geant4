@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.25 2001-08-17 23:00:45 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.26 2001-08-24 20:49:33 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -93,8 +93,12 @@ void G4VVisCommandScene::UpdateVisManagerScene
 
   // Scene has changed.  Trigger a rebuild of graphical database...
   G4VViewer* pViewer = fpVisManager -> GetCurrentViewer();
-  if (pViewer && pViewer -> GetViewParameters().IsAutoRefresh()) {
-    G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/scene/notifyHandlers");
+  G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentSceneHandler();
+  if (sceneHandler && sceneHandler -> GetScene ()) {
+    if (pViewer && pViewer -> GetViewParameters().IsAutoRefresh()) {
+      G4UImanager::GetUIpointer () ->
+	ApplyCommand ("/vis/scene/notifyHandlers");
+    }
   }
 }
 
@@ -475,9 +479,11 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
   G4VSceneHandler* pCurrentSceneHandler =
     fpVisManager -> GetCurrentSceneHandler();
   G4VViewer* pCurrentViewer = fpVisManager -> GetCurrentViewer();
-  if (pCurrentSceneHandler)
+  if (pCurrentSceneHandler) {
     pCurrentSceneHandler -> SetCurrentViewer (pCurrentViewer);
-  if (pCurrentViewer) pCurrentViewer -> SetView ();
+    if (pCurrentViewer && pCurrentSceneHandler->GetScene())
+      pCurrentViewer -> SetView ();
+  }
 }
 
 ////////////// /vis/scene/remove ///////////////////////////////////////

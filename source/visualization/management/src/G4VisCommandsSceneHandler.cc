@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.20 2001-08-09 20:12:40 johna Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.21 2001-08-24 20:49:35 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -100,7 +100,7 @@ void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand* command,
   if (sceneName.length () == 0) {
     if (verbosity >= G4VisManager::warnings) {
       G4cout <<
-	"WARNING: Null string specified.  Maybe there are no scenes available"
+	"WARNING: No scene specified.  Maybe there are no scenes available"
 	"\n  yet.  Please create one." << G4endl;
     }
     return;
@@ -313,7 +313,8 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
   }
 
   // Attach scene.
-  G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/sceneHandler/attach");
+  if (fpVisManager -> GetCurrentScene ())
+    G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/sceneHandler/attach");
 
   UpdateCandidateLists ();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.32 2001-08-14 18:32:06 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.33 2001-08-24 20:49:37 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -48,12 +48,15 @@ void G4VVisCommandViewer::SetViewParameters
 (G4VViewer* viewer, const G4ViewParameters& viewParams) {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   viewer->SetViewParameters(viewParams);
-  if (viewParams.IsAutoRefresh()) {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
-  }
-  else {
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
+  G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
+  if (sceneHandler && sceneHandler->GetScene()) {
+    if (viewParams.IsAutoRefresh()) {
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+    }
+    else {
+      if (verbosity >= G4VisManager::confirmations) {
+	G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
+      }
     }
   }
 }
@@ -756,8 +759,8 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand* command,
 
   G4Scene* scene = sceneHandler->GetScene();
   if (!scene) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: SceneHandler \"" << sceneHandler->GetName()
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: SceneHandler \"" << sceneHandler->GetName()
 	     << "\", to which viewer \"" << refreshName << "\"" <<
 	"\n  is attached, has no scene - \"/vis/scene/create\" and"
 	"\"/vis/sceneHandler/attach\""
@@ -768,9 +771,9 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand* command,
   }
   G4bool successful = scene -> AddWorldIfEmpty (warn);
   if (!successful) {
-    if (verbosity >= G4VisManager::errors) {
+    if (verbosity >= G4VisManager::warnings) {
       G4cout <<
-	"ERROR: Scene is empty.  Perhaps no geometry exists."
+	"WARNING: Scene is empty.  Perhaps no geometry exists."
 	"\n  Try /run/initialize."
  	     << G4endl;
    }
