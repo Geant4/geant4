@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExVDivTester.cc,v 1.1 2003-11-19 18:00:45 gcosmo Exp $
+// $Id: ExVDivTester.cc,v 1.2 2004-05-13 14:57:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class ExVDivTester Implementation file
@@ -36,6 +36,8 @@
 
 #include "Randomize.hh"
 
+#include "G4PVDivisionFactory.hh"
+#include "G4ReflectionFactory.hh"
 #include "G4PVReplica.hh"
 #include "G4PVDivision.hh"
 
@@ -50,13 +52,15 @@ G4bool ExVDivTester::bDivCylindrical = 0;
 
 //--------------------------------------------------------------------------
 ExVDivTester::
-ExVDivTester( PVType& pvtype, std::vector<G4String>& extraPars )
-  : thePVType( pvtype ), theExtraPars( extraPars )
+ExVDivTester( PVType& pvtype, PlaceType& postype,
+              std::vector<G4String>& extraPars )
+  : thePVType( pvtype ), thePosType( postype ), theExtraPars( extraPars )
 {
   verbose = 2;
   //--- set the number of replicas
   theWorldLengthXY = 1*m;
   theWorldLengthZ = 8*theWorldLengthXY;
+  theWorldGap = 10*cm;
   //--- default material
   theMate = new G4Material("Pb", 82., 207.19*g/mole, 11.35*g/cm3);
 
@@ -67,6 +71,10 @@ ExVDivTester( PVType& pvtype, std::vector<G4String>& extraPars )
 
   theStartPhi = 0.*deg;
   theDeltaPhi = 360.*deg;
+
+  // Create the division factory singleton
+  //
+  G4PVDivisionFactory::GetInstance();
 
   //---- extract PVType from extraPars (NREPLICAS, WIDTH, NREPLICAS&WIDTH)
   if( theExtraPars.size() != 0 )
@@ -92,14 +100,14 @@ void ExVDivTester::readExtraPars()
     } else if( theExtraPars[ii].substr(0,7) == "divtype" ) {
       G4int ival = int(getValueFromExtraPar( theExtraPars[ii] ));
       if( ival == 0 ){
-	theDivType = DivNDIVandWIDTH;
-	ifound = 1;
+        theDivType = DivNDIVandWIDTH;
+        ifound = 1;
       }else if( ival == 1 ){
-	theDivType = DivNDIV;
-	ifound = 1;
+        theDivType = DivNDIV;
+        ifound = 1;
       }else if( ival == 2 ){
-	theDivType = DivWIDTH;
-	ifound = 1;
+        theDivType = DivWIDTH;
+        ifound = 1;
       }
     }else if( theExtraPars[ii].substr(0,8) == "startphi" ) {
       theStartPhi = getValueFromExtraPar( theExtraPars[ii] )*deg;
@@ -112,7 +120,7 @@ void ExVDivTester::readExtraPars()
     if( !ifound ) {
       G4String msg = "Extra Parameter not in list! : "+theExtraPars[ii];
       G4Exception("ExVDivTester::readExtraPars()",
-		  "IllegalConstruct", FatalException, msg.c_str() );
+                  "IllegalConstruct", FatalException, msg.c_str() );
     }
   }
 }
@@ -127,8 +135,8 @@ G4double ExVDivTester::getValueFromExtraPar( G4String& epar )
   if( ieq == -1 ) {
     G4String msg ="Extra Parameter does not have an '='! :"+epar;
     G4Exception("ExVDivTester::getValueFromExtraPar()",
-		"IllegalConstruct", FatalException, msg.c_str() );
-		
+                "IllegalConstruct", FatalException, msg.c_str() );
+
   } else {
     G4String eparValue = epar.substr(ieq+1,epar.size() );
     val = atof( eparValue.c_str() );
@@ -165,7 +173,9 @@ G4VPhysicalVolume* ExVDivTester::BuildGeometry()
   // Build the world volume
   //
   G4Box *worldSolid =
-    new G4Box ("Big Cube", theWorldLengthXY, theWorldLengthXY, theWorldLengthZ);
+    new G4Box ("Big Cube", theWorldLengthXY+theWorldGap,
+                           theWorldLengthXY+theWorldGap,
+                           theWorldLengthZ+theWorldGap);
 
   // Air
   G4double a, density;
@@ -179,11 +189,11 @@ G4VPhysicalVolume* ExVDivTester::BuildGeometry()
   Air->AddElement(elO, .3);
 
   G4LogicalVolume *worldLog=new G4LogicalVolume(worldSolid,Air,
-						"World",0,0,0);
+                                                "World",0,0,0);
   
   G4PVPlacement *worldPhys=new G4PVPlacement(0,G4ThreeVector(0,0,0),
-					     "World",worldLog,
-					     0,false,0);
+                                             "World",worldLog,
+                                             0,false,0);
   G4VisAttributes* worldVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   worldLog->SetVisAttributes(worldVisAtt);
 
@@ -218,10 +228,24 @@ void ExVDivTester::BuildParentVolumes( G4LogicalVolume* worldLog )
     new G4LogicalVolume(theParentSolids[1],theMate,"parentLog-2",0,0,0);
   G4LogicalVolume* parent3Log =
     new G4LogicalVolume(theParentSolids[2],theMate,"parentLog-3",0,0,0);
+
   G4VisAttributes* parentVisAtt = new G4VisAttributes(G4Colour(1.0,0.0,0.0));
   parent1Log->SetVisAttributes(parentVisAtt);
   parent2Log->SetVisAttributes(parentVisAtt);
   parent3Log->SetVisAttributes(parentVisAtt);
+  if ( thePosType == pvReflected )
+  {
+    G4LogicalVolume* parent1LogRefl
+      = G4ReflectionFactory::Instance()->GetReflectedLV(parent1Log);
+    G4LogicalVolume* parent2LogRefl
+      = G4ReflectionFactory::Instance()->GetReflectedLV(parent2Log);
+    G4LogicalVolume* parent3LogRefl
+      = G4ReflectionFactory::Instance()->GetReflectedLV(parent2Log);
+    if(parent1LogRefl) parent1LogRefl->SetVisAttributes(parentVisAtt);
+    if(parent2LogRefl) parent2LogRefl->SetVisAttributes(parentVisAtt);
+    if(parent3LogRefl) parent3LogRefl->SetVisAttributes(parentVisAtt);
+  }
+
   theParentLogs.push_back(parent1Log);
   theParentLogs.push_back(parent2Log);
   theParentLogs.push_back(parent3Log);
@@ -236,10 +260,26 @@ void ExVDivTester::BuildParentVolumes( G4LogicalVolume* worldLog )
     std::ostrstream os(buf,10);
     os << ii << '\0';
     parentstr += buf;
-    theParentPhyss.push_back( new G4PVPlacement( 0,
-                                G4ThreeVector(0.,0.,(ii-1)*7*theWorldLengthXY),
-                                theParentLogs[ii] , parentstr,
-                                worldLog, FALSE, 0 ) );
+    if ( thePosType == pvReflected )
+    {
+      // With reflection
+      G4Translate3D translate(0.,0.,(ii-1)*7*theWorldLengthXY);
+      G4ReflectZ3D  reflect;
+      G4Transform3D transform = translate * reflect; 
+
+      G4PhysicalVolumesPair pvPair
+        = G4ReflectionFactory::Instance()
+          ->Place(transform, parentstr, theParentLogs[ii], worldLog, FALSE, 0);  
+      theParentPhyss.push_back(pvPair.first);
+    }
+    else
+    {
+      // Without reflection
+      theParentPhyss.push_back( new G4PVPlacement( 0,
+                              G4ThreeVector(0.,0.,(ii-1)*7*theWorldLengthXY),
+                              theParentLogs[ii] , parentstr,
+                              worldLog, FALSE, 0 ) );
+    }
   }
 }
 
@@ -263,6 +303,8 @@ void ExVDivTester::BuildChildrenVolumes()
 {
   G4int ii;
   G4VisAttributes* childVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  G4VisAttributes* childVisAtt2 = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
+
   G4int nParents = theAxis.size();
   for( ii = 0; ii < nParents; ii++ )
   {
@@ -289,36 +331,88 @@ void ExVDivTester::BuildChildrenVolumes()
       std::ostrstream os(buf,10);
       os << ii << '\0';
       childstr += buf;
-      if( theDivType == DivNDIVandWIDTH )
+
+      if ( thePosType == pvReflected )
       {
-	new G4PVDivision(childstr, theChildLogs[ii], theParentLogs[ii], 
-			 theAxis[ii],
-			 theNDiv, 
-			 theWidths[ii]*theWidthFactor,
-			 theOffsets[ii] );
-	if( verbose >= 1 ) G4cout << "division NDIVandWIDTH " << theNDiv
-               << " " << theWidths[ii]*theWidthFactor
-               << " " << theOffsets[ii]*theOffsetFactor << G4endl;
-      }
-      else if( theDivType == DivNDIV )
-      {
-	new G4PVDivision(childstr, theChildLogs[ii], theParentLogs[ii], 
-			 theAxis[ii],
-			 theNDiv, 
-			 theOffsets[ii] );
-	if( verbose >= 1 )
-          G4cout << "division NDIV " << theNDiv << " "
-                 << theOffsets[ii] << G4endl;
-      }
-      else if( theDivType == DivWIDTH )
-      {
-	new G4PVDivision(childstr, theChildLogs[ii], theParentLogs[ii], 
-			 theAxis[ii],
-			 theWidths[ii]*theWidthFactor, 
-			 theOffsets[ii] );
-	if( verbose >= 1 )
-          G4cout << "division WIDTH " << theWidths[ii]*theWidthFactor
+        // With reflection
+        //
+        G4ReflectionFactory::Instance()->SetVerboseLevel(2);
+        if( theDivType == DivNDIVandWIDTH )
+        {
+          G4ReflectionFactory::Instance()
+            ->Divide(childstr, theChildLogs[ii], theParentLogs[ii],
+                               theAxis[ii],
+                               theNDiv, 
+                               theWidths[ii]*theWidthFactor,
+                               theOffsets[ii] );
+
+          if( verbose >= 1 ) G4cout << "division NDIVandWIDTH " << theNDiv
+                 << " " << theWidths[ii]*theWidthFactor
                  << " " << theOffsets[ii]*theOffsetFactor << G4endl;
+        }
+        else if( theDivType == DivNDIV )
+        {
+          G4ReflectionFactory::Instance()
+            ->Divide(childstr, theChildLogs[ii], theParentLogs[ii],
+                               theAxis[ii],
+                               theNDiv, 
+                               theOffsets[ii] );
+          if( verbose >= 1 )
+            G4cout << "division NDIV " << theNDiv << " "
+                   << theOffsets[ii] << G4endl;
+        }
+        else if( theDivType == DivWIDTH )
+        {
+          G4ReflectionFactory::Instance()
+            ->Divide(childstr, theChildLogs[ii], theParentLogs[ii],
+                               theAxis[ii],
+                               theWidths[ii]*theWidthFactor,
+                               theOffsets[ii] );
+          if( verbose >= 1 )
+            G4cout << "division WIDTH " << theWidths[ii]*theWidthFactor
+                   << " " << theOffsets[ii]*theOffsetFactor << G4endl;
+        }
+
+        // set vis attributes to reflected volumes
+        G4LogicalVolume* childLogRefl
+          = G4ReflectionFactory::Instance()->GetReflectedLV(theChildLogs[ii]);
+        if (childLogRefl) childLogRefl->SetVisAttributes(childVisAtt2);
+      }
+      else
+      {
+        // Without reflection
+        //
+        if( theDivType == DivNDIVandWIDTH )
+        {
+          new G4PVDivision(childstr, theChildLogs[ii], theParentLogs[ii], 
+                           theAxis[ii],
+                           theNDiv, 
+                           theWidths[ii]*theWidthFactor,
+                           theOffsets[ii] );
+          if( verbose >= 1 ) G4cout << "division NDIVandWIDTH " << theNDiv
+                 << " " << theWidths[ii]*theWidthFactor
+                 << " " << theOffsets[ii]*theOffsetFactor << G4endl;
+        }
+        else if( theDivType == DivNDIV )
+        {
+          new G4PVDivision(childstr, theChildLogs[ii], theParentLogs[ii], 
+                           theAxis[ii],
+                           theNDiv, 
+                           theOffsets[ii] );
+          if( verbose >= 1 )
+            G4cout << "division NDIV " << theNDiv << " "
+                   << theOffsets[ii] << G4endl;
+        }
+        else if( theDivType == DivWIDTH )
+        {
+          new G4PVDivision(childstr, theChildLogs[ii], theParentLogs[ii], 
+                           theAxis[ii],
+                           theWidths[ii]*theWidthFactor, 
+                           theOffsets[ii] );
+          if( verbose >= 1 )
+            G4cout << "division WIDTH " << theWidths[ii]*theWidthFactor
+                   << " " << theOffsets[ii]*theOffsetFactor << G4endl;
+        }
       }
     }
   }
@@ -332,11 +426,28 @@ void ExVDivTester::BuildChildrenVolumes()
       std::ostrstream os(buf,10);
       os << ii << '\0';
       childstr += buf;
-      new G4PVReplica(childstr, theChildLogs[ii], theParentLogs[ii], 
-		      theAxis[ii],
-		      theNDiv, 
-		      theWidths[ii]*theWidthFactor, 
-		      theOffsets[ii] );
+      if ( thePosType == pvReflected )
+      {
+        G4ReflectionFactory::Instance()
+          ->Replicate(childstr, theChildLogs[ii], theParentLogs[ii],
+                                theAxis[ii],
+                                theNDiv, 
+                                theWidths[ii]*theWidthFactor,
+                                theOffsets[ii] );
+
+        // set vis attributes to reflected volumes
+        G4LogicalVolume* childLogRefl
+          = G4ReflectionFactory::Instance()->GetReflectedLV(theChildLogs[ii]);
+        if (childLogRefl) childLogRefl->SetVisAttributes(childVisAtt2);
+      }
+      else
+      {
+        new G4PVReplica(childstr, theChildLogs[ii], theParentLogs[ii], 
+                                  theAxis[ii],
+                                  theNDiv, 
+                                  theWidths[ii]*theWidthFactor, 
+                                  theOffsets[ii] );
+      }
       if( verbose >= 1 )
         G4cout << "replica " <<  theNDiv << " "
                << theWidths[ii]*theWidthFactor << " "

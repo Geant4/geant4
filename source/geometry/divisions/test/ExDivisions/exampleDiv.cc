@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleDiv.cc,v 1.1 2003-11-19 18:00:42 gcosmo Exp $
+// $Id: exampleDiv.cc,v 1.2 2004-05-13 14:57:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -56,6 +56,7 @@ int main(int argc,char** argv)
 {
   G4String theSolidTypeStr="box";
   G4String thePVTypeStr="division";
+  G4String thePosTypeStr="normal";
   std::vector<G4String> theExtraPars;
 
   // First argument is the type of divisioning replica or division
@@ -71,6 +72,8 @@ int main(int argc,char** argv)
   {
     G4cout << "!!! No input division type provided. Defaulting to 'division' "
            << G4endl;
+    G4cout << "!!! No positioning type provided. Defaulting to 'normal' "
+           << G4endl;
     G4cout << "!!! No input solid type provided. Defaulting to 'box' "
            << G4endl;
   }
@@ -78,18 +81,29 @@ int main(int argc,char** argv)
   {
     if( narg == 2 )
     {
+      G4cout << "!!! No positioning type provided. Defaulting to 'normal' "
+             << G4endl;
       G4cout << "!!! No input solid type provided. Defaulting to 'box' "
              << G4endl;
     }
     else
     {
-      theSolidTypeStr = G4String(vsarg[2]);
+      if( narg == 3 )
+      {
+        G4cout << "!!! No input solid type provided. Defaulting to 'box' "
+               << G4endl;
+      }
+      else
+      {
+        theSolidTypeStr = G4String(vsarg[3]);
+      }
+        thePosTypeStr = G4String(vsarg[2]);
     }
     thePVTypeStr = G4String(vsarg[1]);
   }
-  if( narg > 3 )
+  if( narg > 4 )
   {
-    for( G4int ii = 3; ii < narg; ii++ )
+    for( G4int ii = 4; ii < narg; ii++ )
     {
       theExtraPars.push_back( vsarg[ii] );
     }
@@ -103,7 +117,8 @@ int main(int argc,char** argv)
 
   // UserInitialization classes (mandatory)
   ExDivDetectorConstruction* ExDivdetector =
-    new ExDivDetectorConstruction(theSolidTypeStr, thePVTypeStr, theExtraPars );
+    new ExDivDetectorConstruction(theSolidTypeStr, thePVTypeStr,
+                                  thePosTypeStr, theExtraPars );
   runManager->SetUserInitialization(ExDivdetector);
   runManager->SetUserInitialization(new ExDivPhysicsList);
   

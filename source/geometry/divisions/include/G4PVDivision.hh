@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.hh,v 1.7 2003-11-19 11:51:22 gcosmo Exp $
+// $Id: G4PVDivision.hh,v 1.8 2004-05-13 14:57:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PVDivision
@@ -61,9 +61,9 @@
 //   n=0..nReplicas-1
 
 // History:
-// 09.05.01 - P.Arce Initial version
-// ********************************************************************
-
+// -------
+// 09.05.01 - P.Arce, Initial version
+// ----------------------------------------------------------------------
 #ifndef G4PVDIVISION_HH
 #define G4PVDIVISION_HH
 

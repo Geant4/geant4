@@ -41,8 +41,9 @@ class ExDivTesterPolyhedra : public ExVDivTester
 { 
   public:  
 
-  ExDivTesterPolyhedra( PVType& pvtype, std::vector<G4String>& extraPars );
-  virtual ~ExDivTesterPolyhedra(){};
+  ExDivTesterPolyhedra( PVType& pvtype, PlaceType& postype,
+                        std::vector<G4String>& extraPars );
+  virtual ~ExDivTesterPolyhedra(){}
 
   virtual void GenerateScanPoints();
   virtual void BuildParentSolids();

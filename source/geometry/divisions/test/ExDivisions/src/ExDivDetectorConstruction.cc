@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExDivDetectorConstruction.cc,v 1.1 2003-11-19 18:00:44 gcosmo Exp $
+// $Id: ExDivDetectorConstruction.cc,v 1.2 2004-05-13 14:57:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -49,9 +49,11 @@
 ExDivDetectorConstruction::
 ExDivDetectorConstruction( const G4String& solidTypeStr,
                            const G4String& PVTypeStr,
+                           const G4String& PosTypeStr,
                            const std::vector<G4String>& extraPars )
   : theSolidTypeStr( solidTypeStr ),
     thePVTypeStr( PVTypeStr ),
+    thePosTypeStr( PosTypeStr ),
     theExtraPars( extraPars )
 {
 }
@@ -67,7 +69,8 @@ ExDivDetectorConstruction::~ExDivDetectorConstruction()
 G4VPhysicalVolume* ExDivDetectorConstruction::Construct()
 {
 
-  theDivTester = CreateSolidTester(theSolidTypeStr,thePVTypeStr,theExtraPars);
+  theDivTester = CreateSolidTester(theSolidTypeStr, thePVTypeStr,
+                                   thePosTypeStr, theExtraPars);
 
   //-  SolidType soltype = getSolidType( theSolidTypeStr );
   //  PVType pvtype = pvDivision;
@@ -95,28 +98,30 @@ G4VPhysicalVolume* ExDivDetectorConstruction::Construct()
 ExVDivTester*
 ExDivDetectorConstruction::CreateSolidTester( const G4String& stype,
                                               const G4String& thePVTypeStr,
+                                              const G4String& thePosTypeStr,
                                               std::vector<G4String>& extraPars )
 {
   PVType pvtype = getPVType( thePVTypeStr );
+  PlaceType postype = getPosType( thePosTypeStr );
 
   ExVDivTester* theSolidTester = 0;
   if( stype == "box" ) {
-   theSolidTester = new ExDivTesterBox( pvtype, extraPars );
+   theSolidTester = new ExDivTesterBox( pvtype, postype, extraPars );
   } else if( stype == "tubs" ) {
-    theSolidTester = new ExDivTesterTubs( pvtype, extraPars );
+    theSolidTester = new ExDivTesterTubs( pvtype, postype, extraPars );
     ExVDivTester::bDivCylindrical = 1;
   } else if( stype == "cons" ) {
-    theSolidTester = new ExDivTesterCons( pvtype, extraPars );
+    theSolidTester = new ExDivTesterCons( pvtype, postype, extraPars );
     ExVDivTester::bDivCylindrical = 1;
   } else if( stype == "trd" ) {
-    theSolidTester = new ExDivTesterTrd( pvtype, extraPars );
+    theSolidTester = new ExDivTesterTrd( pvtype, postype, extraPars );
   } else if( stype == "para" ) {
-    theSolidTester = new ExDivTesterPara( pvtype, extraPars );
+    theSolidTester = new ExDivTesterPara( pvtype, postype, extraPars );
   } else if( stype == "pcone" ) {
-    theSolidTester = new ExDivTesterPolycone( pvtype, extraPars );
+    theSolidTester = new ExDivTesterPolycone( pvtype, postype, extraPars );
     ExVDivTester::bDivCylindrical = 1;
   } else if( stype == "phedra" ) {
-    theSolidTester = new ExDivTesterPolyhedra( pvtype, extraPars );
+    theSolidTester = new ExDivTesterPolyhedra( pvtype, postype, extraPars );
   } else {
     G4cout << "ERROR - ExDivDetectorConstruction::CreateSolidTester()"
            << G4endl
@@ -153,4 +158,28 @@ PVType ExDivDetectorConstruction::getPVType( const G4String& pvt )
                 "PV type can only be 'division' or 'replica' ");
   }
   return vtype;
+}
+
+
+//--------------------------------------------------------------------------
+PlaceType ExDivDetectorConstruction::getPosType( const G4String& pos )
+{
+  G4cout << pos << G4endl;
+  PlaceType ptype = pvNormal;
+
+  if( pos == "normal")
+  {
+    ptype = pvNormal; 
+  }
+  else if( pos == "reflected")
+  {
+    ptype = pvReflected; 
+  }
+  else
+  {
+    G4Exception("ExDivDetectorConstruction::getPosType()",
+                "InvalidArgument", FatalException,
+                "The positioning type can only be 'normal' or 'reflected' ");
+  }
+  return ptype;
 }

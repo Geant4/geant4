@@ -41,8 +41,9 @@ class ExDivTesterPara : public ExVDivTester
 { 
   public:  
 
-  ExDivTesterPara( PVType& pvtype, std::vector<G4String>& extraPars );
-  virtual ~ExDivTesterPara(){};
+  ExDivTesterPara( PVType& pvtype, PlaceType& postype,
+                   std::vector<G4String>& extraPars );
+  virtual ~ExDivTesterPara(){}
 
   virtual void GenerateScanPoints();
   virtual void BuildParentSolids();

@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationBox.cc,v 1.5 2003-11-19 11:51:23 gcosmo Exp $
+// $Id: G4ParameterisationBox.cc,v 1.6 2004-05-13 14:57:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationBox Implementation file
 //
-// 26.05.03 - P.Arce Initial version
-// ********************************************************************
+// 26.05.03 - P.Arce, Initial version
+// 08.04.04 - I.Hrivnacova, Implemented reflection
+// --------------------------------------------------------------------
 
 #include "G4ParameterisationBox.hh"
 
@@ -36,26 +37,49 @@
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4ReflectedSolid.hh"
 #include "G4Box.hh"
+
+//--------------------------------------------------------------------------
+G4VParameterisationBox::
+G4VParameterisationBox( EAxis axis, G4int nDiv, G4double width,
+                        G4double offset, G4VSolid* msolid,
+                        DivisionType divType )
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+{
+  G4Box* msol = (G4Box*)(msolid);
+  if (msolid->GetEntityType() == "G4ReflectedSolid")
+  {
+    // Get constituent solid  
+    G4VSolid* mConstituentSolid 
+       = ((G4ReflectedSolid*)msolid)->GetConstituentMovedSolid();
+    msol = (G4Box*)(mConstituentSolid);
+    fmotherSolid = msol;
+  }    
+}
+
+//--------------------------------------------------------------------------
+G4VParameterisationBox::~G4VParameterisationBox()
+{
+}
 
 //--------------------------------------------------------------------------
 G4ParameterisationBoxX::
 G4ParameterisationBoxX( EAxis axis, G4int nDiv, G4double width,
                         G4double offset, G4VSolid* msolid,
                         DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  :  G4VParameterisationBox( axis, nDiv, width, offset, msolid, divType )
 {
   CheckParametersValidity();
   SetType( "DivisionBoxX" );
 
+  G4Box* mbox = (G4Box*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
-    G4Box* mbox = (G4Box*)(msolid);
     fnDiv = CalculateNDiv( 2*mbox->GetXHalfLength(), width, offset );
   }
   else if( divType == DivNDIV )
   {
-    G4Box* mbox = (G4Box*)(msolid);
     fwidth = CalculateWidth( 2*mbox->GetXHalfLength(), nDiv, offset );
   }
 #ifdef G4DIVDEBUG
@@ -149,19 +173,18 @@ G4ParameterisationBoxY::
 G4ParameterisationBoxY( EAxis axis, G4int nDiv, G4double width,
                         G4double offset, G4VSolid* msolid,
                         DivisionType divType)
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  :  G4VParameterisationBox( axis, nDiv, width, offset, msolid, divType )
 {
   CheckParametersValidity();
   SetType( "DivisionBoxY" );
 
+  G4Box* mbox = (G4Box*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
-    G4Box* mbox = (G4Box*)(msolid);
     fnDiv = CalculateNDiv( 2*mbox->GetYHalfLength(), width, offset );
   }
   else if( divType == DivNDIV )
   {
-    G4Box* mbox = (G4Box*)(msolid);
     fwidth = CalculateWidth( 2*mbox->GetYHalfLength(), nDiv, offset );
   }
 
@@ -254,19 +277,18 @@ G4ParameterisationBoxZ::
 G4ParameterisationBoxZ( EAxis axis, G4int nDiv, G4double width,
                         G4double offset, G4VSolid* msolid,
                         DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  :  G4VParameterisationBox( axis, nDiv, width, offset, msolid, divType )
 {
   CheckParametersValidity();
   SetType( "DivisionBoxZ" );
 
+  G4Box* mbox = (G4Box*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
-    G4Box* mbox = (G4Box*)(msolid);
     fnDiv = CalculateNDiv( 2*mbox->GetZHalfLength(), width, offset );
   }
   else if ( divType == DivNDIV )
   {
-    G4Box* mbox = (G4Box*)(msolid);
     fwidth = CalculateWidth( 2*mbox->GetZHalfLength(), nDiv, offset );
   }
 #ifdef G4DIVDEBUG

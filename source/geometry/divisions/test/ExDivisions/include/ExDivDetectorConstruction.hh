@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExDivDetectorConstruction.hh,v 1.1 2003-11-19 18:00:42 gcosmo Exp $
+// $Id: ExDivDetectorConstruction.hh,v 1.2 2004-05-13 14:57:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,24 +46,33 @@ class ExDivDetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
   
-  ExDivDetectorConstruction( const G4String& solidTypeStr, const G4String& PVTypeStr, const std::vector<G4String>& extraPars );
+    ExDivDetectorConstruction( const G4String& solidTypeStr,
+                               const G4String& PVTypeStr,
+                               const G4String& PosTypeStr,
+                               const std::vector<G4String>& extraPars );
     ~ExDivDetectorConstruction();
 
   public:
   
      G4VPhysicalVolume* Construct();
-     ExVDivTester* CreateSolidTester( const G4String& stype, const G4String& thePVTypeStr, std::vector<G4String>& extraPars );
-     PVType getPVType( const G4String& pvt );
-     G4double GetWorldLengthXY()   {return theDivTester->GetWorldLengthXY();}
+     ExVDivTester* CreateSolidTester( const G4String& stype,
+                                      const G4String& thePVTypeStr,
+                                      const G4String& thePosTypeStr,
+                                      std::vector<G4String>& extraPars );
+     PVType    getPVType ( const G4String& pvt );
+     PlaceType getPosType( const G4String& pos );
+     G4double GetWorldLengthXY()  {return theDivTester->GetWorldLengthXY();}
      G4double GetWorldLengthZ()   {return theDivTester->GetWorldLengthZ();}
-
+     G4double GetWorldGap()       {return theDivTester->GetWorldGap();}
 
   private:
-  G4String theSolidTypeStr;
-  G4String thePVTypeStr;
-  std::vector<G4String> theExtraPars;
 
-  ExVDivTester* theDivTester;
+    G4String theSolidTypeStr;
+    G4String thePVTypeStr;
+    G4String thePosTypeStr;
+    std::vector<G4String> theExtraPars;
+
+    ExVDivTester* theDivTester;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

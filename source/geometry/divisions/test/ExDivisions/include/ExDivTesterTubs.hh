@@ -41,8 +41,9 @@ class ExDivTesterTubs : public ExVDivTester
 { 
   public:  
 
-  ExDivTesterTubs( PVType& pvtype, std::vector<G4String>& extraPars );
-  virtual ~ExDivTesterTubs(){};
+  ExDivTesterTubs( PVType& pvtype, PlaceType& postype,
+                   std::vector<G4String>& extraPars );
+  virtual ~ExDivTesterTubs(){}
 
   virtual void GenerateScanPoints();
   virtual void BuildParentSolids();

@@ -46,13 +46,15 @@ class G4Material;
 
 enum SolidType{g4box, g4tube, g4tubs, g4cone, g4cons, g4trd, g4para, g4polycone, g4polyhedra };
 enum PVType{pvDivision, pvReplica, pvPlacement };
+enum PlaceType{pvNormal, pvReflected};
 //-enum DivType{divNDiv, divWidth, divNDivWidth };
 
 class ExVDivTester
 { 
   public:  // with description
   
-    ExVDivTester( PVType& pvtype, std::vector<G4String>& extraPars );
+    ExVDivTester( PVType& pvtype, PlaceType& postype,
+                  std::vector<G4String>& extraPars );
     virtual ~ExVDivTester();
 
     void readExtraPars();
@@ -72,6 +74,7 @@ class ExVDivTester
 
     inline G4double GetWorldLengthXY() { return theWorldLengthXY; }
     inline G4double GetWorldLengthZ() { return theWorldLengthZ; }
+    inline G4double GetWorldGap() { return theWorldGap; }
 
   private:
     void BuildParentVolumes( G4LogicalVolume* worldLog );
@@ -84,6 +87,7 @@ class ExVDivTester
   protected:
 
     PVType thePVType;
+    PlaceType thePosType;
     DivisionType theDivType;
     std::vector<G4String> theExtraPars;
     std::vector<G4double> theWidths;
@@ -103,6 +107,7 @@ class ExVDivTester
 
     G4double theWorldLengthXY;
     G4double theWorldLengthZ;
+    G4double theWorldGap;
 
     G4Material* theMate;
 

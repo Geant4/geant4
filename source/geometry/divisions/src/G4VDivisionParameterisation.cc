@@ -21,18 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.cc,v 1.8 2003-11-19 11:51:23 gcosmo Exp $
+// $Id: G4VDivisionParameterisation.cc,v 1.9 2004-05-13 14:57:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation Implementation file
 //
-// 26.05.03 - P.Arce Initial version
-// ********************************************************************
+// 26.05.03 - P.Arce, Initial version
+// 08.04.04 - I.Hrivnacova, Implemented reflection
+// --------------------------------------------------------------------
 
 #include "G4VDivisionParameterisation.hh" 
 #include "G4VSolid.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4RotationMatrix.hh"
+#include "G4ReflectedSolid.hh"
 
 G4int G4VDivisionParameterisation::verbose = 5;
 
@@ -41,8 +43,8 @@ G4VDivisionParameterisation::
 G4VDivisionParameterisation( EAxis axis, G4int nDiv,
                              G4double step, G4double offset,
                              DivisionType divType, G4VSolid* motherSolid )
-  : faxis(axis), fnDiv( nDiv), fwidth(step),
-    foffset(offset), fDivisionType(divType), fmotherSolid( motherSolid ) 
+  : faxis(axis), fnDiv( nDiv), fwidth(step), foffset(offset),
+    fDivisionType(divType), fmotherSolid( motherSolid ), fDeleteSolid(false) 
 {
 #ifdef G4DIVDEBUG
   if (verbose >= 1)
@@ -60,7 +62,21 @@ G4VDivisionParameterisation( EAxis axis, G4int nDiv,
 //--------------------------------------------------------------------------
 G4VDivisionParameterisation::~G4VDivisionParameterisation()
 {
+  if (fDeleteSolid) delete fmotherSolid; 
 }
+
+//--------------------------------------------------------------------------
+G4VSolid* 
+G4VDivisionParameterisation::
+ComputeSolid( const G4int i, G4VPhysicalVolume* pv )
+{
+  G4VSolid* solid = G4VPVParameterisation::ComputeSolid(i, pv);
+  if (solid->GetEntityType() == "G4ReflectedSolid")
+  {
+    solid = ((G4ReflectedSolid*)solid)->GetConstituentMovedSolid();
+  }
+  return solid;
+}      
 
 //--------------------------------------------------------------------------
 void

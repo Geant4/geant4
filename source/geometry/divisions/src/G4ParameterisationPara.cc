@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPara.cc,v 1.6 2003-11-19 11:51:23 gcosmo Exp $
+// $Id: G4ParameterisationPara.cc,v 1.7 2004-05-13 14:57:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPara Implementation file
 //
-// 26.05.03 - P.Arce Initial version
-// ********************************************************************
+// 26.05.03 - P.Arce, Initial version
+// 08.04.04 - I.Hrivnacova, Implemented reflection
+// --------------------------------------------------------------------
 
 #include "G4ParameterisationPara.hh"
 
@@ -37,26 +38,63 @@
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4ReflectedSolid.hh"
 #include "G4Para.hh"
+
+//--------------------------------------------------------------------------
+G4VParameterisationPara::
+G4VParameterisationPara( EAxis axis, G4int nDiv, G4double width,
+                         G4double offset, G4VSolid* msolid,
+                         DivisionType divType )
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+{
+  G4Para* msol = (G4Para*)(msolid);
+  if (msolid->GetEntityType() == "G4ReflectedSolid")
+  {
+    // Get constituent solid  
+    G4VSolid* mConstituentSolid 
+       = ((G4ReflectedSolid*)msolid)->GetConstituentMovedSolid();
+    msol = (G4Para*)(mConstituentSolid);
+    fmotherSolid = msol;
+
+    // Create a new solid with inversed parameters
+    G4Para* newSolid
+      = new G4Para(msol->GetName(),
+                   msol->GetXHalfLength(), 
+                   msol->GetYHalfLength(),
+                   msol->GetZHalfLength(),
+                   atan(msol->GetTanAlpha()),
+                   M_PI - msol->GetSymAxis().theta(),
+                   msol->GetSymAxis().phi());
+   
+    msol = newSolid;
+    fmotherSolid = newSolid;
+    fDeleteSolid = true;
+  }    
+}
+
+//------------------------------------------------------------------------
+G4VParameterisationPara::~G4VParameterisationPara()
+{
+}
 
 //------------------------------------------------------------------------
 G4ParameterisationParaX::
 G4ParameterisationParaX( EAxis axis, G4int nDiv,
                          G4double width, G4double offset,
                          G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  :  G4VParameterisationPara( axis, nDiv, width, offset, msolid, divType )
 {
   CheckParametersValidity();
   SetType( "DivisionParaX" );
 
+  G4Para* mpara = (G4Para*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
-    G4Para* mpara = (G4Para*)(msolid);
     fnDiv = CalculateNDiv( 2*mpara->GetXHalfLength(), width, offset );
   }
   else if( divType == DivNDIV )
   {
-    G4Para* mpara = (G4Para*)(msolid);
     fwidth = CalculateWidth( 2*mpara->GetXHalfLength(), nDiv, offset );
   }
 
@@ -145,19 +183,18 @@ G4ParameterisationParaY::
 G4ParameterisationParaY( EAxis axis, G4int nDiv,
                          G4double width, G4double offset,
                          G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  :  G4VParameterisationPara( axis, nDiv, width, offset, msolid, divType )
 {
   CheckParametersValidity();
   SetType( "DivisionParaY" );
 
+  G4Para* mpara = (G4Para*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
-    G4Para* mpara = (G4Para*)(msolid);
     fnDiv = CalculateNDiv( 2*mpara->GetYHalfLength(), width, offset );
   }
   else if( divType == DivNDIV )
   {
-    G4Para* mpara = (G4Para*)(msolid);
     fwidth = CalculateWidth( 2*mpara->GetYHalfLength(), nDiv, offset );
   }
 
@@ -248,19 +285,18 @@ G4ParameterisationParaZ::
 G4ParameterisationParaZ( EAxis axis, G4int nDiv,
                          G4double width, G4double offset,
                          G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  :  G4VParameterisationPara( axis, nDiv, width, offset, msolid, divType )
 {
   CheckParametersValidity();
   SetType( "DivisionParaZ" );
 
+  G4Para* mpara = (G4Para*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
-    G4Para* mpara = (G4Para*)(msolid);
     fnDiv = CalculateNDiv( 2*mpara->GetZHalfLength(), width, offset );
   }
   else if( divType == DivNDIV )
   {
-    G4Para* mpara = (G4Para*)(msolid);
     fwidth = CalculateWidth( 2*mpara->GetZHalfLength(), nDiv, offset );
   }
 

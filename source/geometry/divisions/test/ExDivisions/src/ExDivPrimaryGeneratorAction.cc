@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExDivPrimaryGeneratorAction.cc,v 1.1 2003-11-19 18:00:44 gcosmo Exp $
+// $Id: ExDivPrimaryGeneratorAction.cc,v 1.2 2004-05-13 14:57:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,8 +66,9 @@ ExDivPrimaryGeneratorAction::~ExDivPrimaryGeneratorAction()
 
 void ExDivPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
-  G4double position = -myDetector->GetWorldLengthZ();
-  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,position));
+  G4double position = -myDetector->GetWorldLengthZ()
+                      -myDetector->GetWorldGap()/2;
+  particleGun->SetParticlePosition(G4ThreeVector(5.*cm,0.,position));
   
   particleGun->GeneratePrimaryVertex(anEvent);
 }

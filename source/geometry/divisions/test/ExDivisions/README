@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2003-11-19 18:00:42 gcosmo Exp $
+$Id: README,v 1.2 2004-05-13 14:57:15 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,16 +17,18 @@ $Id: README,v 1.1 2003-11-19 18:00:42 gcosmo Exp $
  	      % gmake
 		
       - execute in 'interactive mode' with visualization.
-        --> exampleDiv [mode] [shape] [[option1] [option2] ...]
+        --> exampleDiv [mode] [[placement] [[shape] [[option1] [option2] ...]]]
 	For example:
- 	 % exampleDiv division box  {or cons, tubs, para, trd, pcone, phedra}
-         % exampleDiv replica box  {or cons, tubs, para, trd, pcone, phedra}
+ 	 % exampleDiv division reflected box  {or cons, tubs, para, trd, pcone, phedra}
+         % exampleDiv replica normal box  {or cons, tubs, para, trd, pcone, phedra}
  	      ....
  	      Idle> type your commands. For instance:
 	      Idle> /run/beamOn 10
 	      ....
  	      Idle> exit
- 	
+
+      - mode: replica, division
+      - placement: normal, reflected 
       - options can be specified, for example:
          % exampleDiv division tubs offset=1. divtype=0 width=0.1 startphi=90. deltaphi=360
 

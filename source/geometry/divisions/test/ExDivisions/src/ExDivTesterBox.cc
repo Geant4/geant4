@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExDivTesterBox.cc,v 1.1 2003-11-19 18:00:44 gcosmo Exp $
+// $Id: ExDivTesterBox.cc,v 1.2 2004-05-13 14:57:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class ExDivTesterBox Implementation file
@@ -39,8 +39,9 @@
 
 //--------------------------------------------------------------------------
 ExDivTesterBox::
-ExDivTesterBox( PVType& pvtype, std::vector<G4String>& extraPars )
-  : ExVDivTester( pvtype, extraPars )
+ExDivTesterBox( PVType& pvtype, PlaceType& postype,
+                std::vector<G4String>& extraPars )
+  : ExVDivTester( pvtype, postype, extraPars )
 {
   //----- Get the axis of division
   theAxis.push_back( kXAxis );

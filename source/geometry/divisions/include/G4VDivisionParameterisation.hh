@@ -21,20 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.hh,v 1.6 2003-11-19 11:51:23 gcosmo Exp $
+// $Id: G4VDivisionParameterisation.hh,v 1.7 2004-05-13 14:57:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation
 //
 // Class description:
 //
-// ......
-//
-// Member data:
-//
+// Base class for parameterisations defining divisions of volumes
+// for different kind of CSG and specific solids.
 
 // History:
-// 09.05.01 - P.Arce Initial version
+// -------
+// 09.05.01 - P.Arce, Initial version
+// 08.04.04 - I.Hrivnacova, Implemented reflection
 //---------------------------------------------------------------------
 #ifndef G4VDivisionParameterisation_H
 #define G4VDivisionParameterisation_H 1
@@ -58,6 +58,8 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
                                  G4VSolid* motherSolid = 0);
     virtual ~G4VDivisionParameterisation();
   
+    virtual G4VSolid* ComputeSolid(const G4int, G4VPhysicalVolume *);
+
     virtual void ComputeTransformation(const G4int copyNo,
                                        G4VPhysicalVolume *physVol) const = 0;
   
@@ -94,6 +96,7 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
     G4double foffset;
     DivisionType fDivisionType;
     G4VSolid* fmotherSolid;
+    G4bool fDeleteSolid;
   
     static G4int verbose;
     G4int theVoluFirstCopyNo;

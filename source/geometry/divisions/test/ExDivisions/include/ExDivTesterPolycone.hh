@@ -41,8 +41,9 @@ class ExDivTesterPolycone : public ExVDivTester
 { 
   public:  
 
-  ExDivTesterPolycone( PVType& pvtype, std::vector<G4String>& extraPars );
-  virtual ~ExDivTesterPolycone(){};
+  ExDivTesterPolycone( PVType& pvtype, PlaceType& postype,
+                       std::vector<G4String>& extraPars );
+  virtual ~ExDivTesterPolycone(){}
 
   virtual void GenerateScanPoints();
   virtual void BuildParentSolids();
