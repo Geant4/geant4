@@ -2,6 +2,7 @@
 <html>
 <head>
 <title> Geant4 System Test Team Procedures </title>
+<!-- Changed by: Serguei SADILOV, 20-Aug-2002 -->
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
    <meta name="GENERATOR" content="Mozilla/4.7 [en] (X11; I; Linux 2.2.12-20 i686) [Netscape]">
 </head>
@@ -10,7 +11,7 @@
 <h1> System Test Procedures</h1>
 <P>
 <b>Please note: Sytem Test Procedures are being updated.</b>
-<br>John, Serguei and Steve, 5th April 2000.
+<br>John, Serguei and Steve, 19th August 2002.
 <h1>
 The System Testing Area at CERN</h1>
 All source, binaries and output are kept under <b><tt>/afs/cern.ch/sw/geant4/stt/</tt></b>.&nbsp;
@@ -33,12 +34,13 @@ and one subdirectory per system, e.g., <b><tt>DEC-cxx/</tt></b>,
 <b><tt>Linux-g++/</tt></b>,
 <b><tt>SUN-CC/</tt></b>,
 <b><tt>SUN-CC5/</tt></b>.
+The data directories (which are not in distribution!) are used 
+from <b><tt>/afs/cern.ch/sw/geant4/dev/data</tt></b> : 
+<b><tt>G4NDL3.5</tt></b>, <b><tt>G4EMLOW1.1</tt></b>.
+
 <blockquote>
 <li>
-<b><tt>src/</tt></b>: this contains <b><tt>G4EMLOW0.3/</tt></b>,
-<b><tt>G4NDL0.2/</tt></b>
-and <b><tt>geant4/</tt></b>.&nbsp; The first two are data directories as
-obtained from the <b>Source</b> web page, the last is checked out/updated
+<b><tt>src/</tt></b>: this contains <b><tt>geant4/</tt></b>.&nbsp; This is checked out/updated
 from the <b><tt>geant4</tt></b> CVS repository as defined by the <b><tt>*.sdb</tt></b>
 files (see Defining the Geant4 Source Tree).</li>
 
@@ -195,7 +197,7 @@ and/or <b><tt>G4STTNONISO</tt></b> if required, and <b><tt>source setup.csh</tt>
 
 <li>
 Prepare an update driver file, say <b><tt>bonsaiXXX.sdb</tt></b>, from
-the Bonsai database.</li>
+the Bonsai database (by Hasami.plx).</li>
 
 <li>
 Update the code, e.g., <b><tt>update.sh [-n] &lt;bonsaiXXX.sdb >&amp;bonsaiXXX.log
@@ -207,7 +209,7 @@ Check the log file for unexpected CVS flags <b><tt>C</tt></b>, <b><tt>M</tt></b>
 or <b><tt>?</tt></b>.</li>
 
 <li>
-Prepare a file, say <b><tt>hostsXXX.data</tt></b>, for piping into <b><tt>g4allsys.sh</tt></b>
+Prepare a file, say <b><tt>hostsXXX.data</tt></b> (by Hasami.plx), for piping into <b><tt>g4allsys.sh</tt></b>
 and run it, e.g., <b><tt>g4allsys.sh &lt;hostsXXX.data</tt></b>.</li>
 
 <li>
@@ -225,6 +227,10 @@ compare the <b><tt>.out</tt></b> files with the "reference"
 files in the source tree, e.g.,
 <b><tt>test01.diff</tt></b> is <b><tt>diff
 -w test01.out $G4INSTALL/tests/test01/test01.out</tt></b>.
+
+<p>We are using <b><tt>Tinderbox</tt></b> to check <b><tt>gmake.log</tt></b> 
+and output/diff files: <b><tt>http://pcitapiww/tinderbox/tinderbox/html/</tt></b>
+
 <p>If all's well, update the Bonsai database and mark the tag(s) "Accepted"
 or "Rejected".&nbsp; <i>Notify the category coordinator.</i>
 <p>After a few tags have built up, or for the monthly reference tag, consider
@@ -262,6 +268,6 @@ where <b><tt>zz</tt></b> refers to the next global reference tag.
 <br><i><a href="mailto:John.Allison@man.ac.uk">John Allison</a> ,
 <a href="mailto:Serguei.Sadilov@cern.ch">Serguei
 Sadilov</a>&nbsp; and <a href="mailto:Steve.O'Neale@cern.ch">Steve O'Neale</a>&nbsp;
-28th June 2000</i>
+19th August 2002</i>
 </body>
 </html>
