@@ -560,7 +560,7 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Bar
   setenv G4VIS_BUILD_OIX_DRIVER 1
   setenv G4VIS_USE_OIX 1
   setenv OIVHOME /usr/local/SGI-Inventor/2.1.5.10/usr
-  setenv DYLD_LIBRARY_PATH "$OIVHOME/lib"
+  setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:"$OIVHOME/lib"
   #setenv OIVHOME $HOME/OpenScientsit/v12r0/CoinGL/v1r200p0
   #setenv OIXHOME $HOME/OpenScientsit/v12r0/CoinXt/v1r50p0
   #setenv OIVFLAGS "-I$OIVHOME/include -I$OIXHOME/include"
