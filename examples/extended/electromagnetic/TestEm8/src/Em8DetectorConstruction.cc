@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.cc,v 1.12 2004-05-24 16:56:31 grichine Exp $
+// $Id: Em8DetectorConstruction.cc,v 1.13 2004-05-27 08:39:05 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,16 +35,32 @@
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "G4UniformMagField.hh"
+
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
 #include "G4SDManager.hh"
+#include "G4GeometryManager.hh"
 #include "G4RunManager.hh"
 
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 #include "G4ProductionCuts.hh"
+
+#include "G4VisAttributes.hh"
+#include "G4Colour.hh"
+
+#include "G4UnitsTable.hh"
 #include "G4ios.hh"
+
+
+
+const G4double Em8DetectorConstruction::fDelta = 0.0001*mm;
+
+
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -55,15 +71,15 @@ Em8DetectorConstruction::Em8DetectorConstruction()
 fWorldChanged(false),
 fWorldMaterial(NULL),fSolidWorld(NULL),fLogicWorld(NULL),fPhysicsWorld(NULL),
 fAbsorberMaterial(NULL),fSolidAbsorber(NULL),fLogicAbsorber(NULL),
-fPhysicsAbsorber(NULL),
-fCalorimeterSD(NULL)
+fPhysicsAbsorber(NULL),fDetectorMessenger(NULL),
+fCalorimeterSD(NULL),fRegGasDet(NULL)
 {
   // default parameter values of the calorimeter
 
   //  G4double inch = 2.54*cm ;
   // G4double  mil = inch/1000.0 ;
 
-  G4double delta = 0.0001*mm;
+  // G4double delta = 0.0001*mm;
 
   fAbsorberThickness = 23.0*mm;
   fAbsorberRadius    = 10.*cm;
@@ -71,14 +87,9 @@ fCalorimeterSD(NULL)
 
   fWindowThick       = 51.0*micrometer ;
 
-  fWorldSizeZ = fAbsorberThickness + 2*fWindowThick + 2*delta;
-  fWorldSizeR = fAbsorberRadius + delta;
-
-  
-
-
-
-  // create commands for interactive definition of the calorimeter  
+  fGammaCut    = 23*mm; 
+  fElectronCut = 23*mm; 
+  fPositronCut = 23*mm; 
 
   fDetectorMessenger = new Em8DetectorMessenger(this);
 }
@@ -445,19 +456,25 @@ H2O->AddElement(elO, natoms=1);
   
 G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
 {
-  //  G4int i, j ; 
-  //  G4double zModule, zRadiator, rModule, rRadiator ; 
+  // Cleanup old geometry
 
-  // complete the Calor parameters definition and Print 
+  G4GeometryManager::GetInstance()->OpenGeometry();
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+
+  //  G4RegionStore::GetInstance()->Clean();
+
+  // complete the Calor parameters definition and print 
 
   ComputeCalorParameters();
   PrintCalorParameters();
       
   // World
   
-  if(fSolidWorld)   delete fSolidWorld ;
-  if(fLogicWorld)   delete fLogicWorld ;
-  if(fPhysicsWorld) delete fPhysicsWorld ;
+  // if(fSolidWorld)   delete fSolidWorld ;
+  // if(fLogicWorld)   delete fLogicWorld ;
+  // if(fPhysicsWorld) delete fPhysicsWorld ;
 
   fSolidWorld = new G4Tubs("World",				//its name
                    0.,fWorldSizeR,fWorldSizeZ/2.,0.,twopi)       ;//its size
@@ -478,9 +495,9 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
 
   if (fAbsorberThickness > 0.) 
   { 
-      if(fSolidAbsorber)   delete fSolidAbsorber ;
-      if(fLogicAbsorber)   delete fLogicAbsorber ;
-      if(fPhysicsAbsorber) delete fPhysicsAbsorber ;
+    // if(fSolidAbsorber)   delete fSolidAbsorber ;
+    // if(fLogicAbsorber)   delete fLogicAbsorber ;
+    // if(fPhysicsAbsorber) delete fPhysicsAbsorber ;
 
       fSolidAbsorber = new G4Tubs("Absorber",		
                           0.,fAbsorberRadius,fAbsorberThickness/2.,0.,twopi); 
@@ -498,13 +515,27 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
                                         0);                
                                         
   }
-  G4Region* regGasDet = new G4Region("VertexDetector");
-  regGasDet->AddRootLogicalVolume(fLogicAbsorber);                                 
-  G4ProductionCuts* cuts = new G4ProductionCuts();
-  cuts->SetProductionCut(23.*mm,"gamma");
-  cuts->SetProductionCut(23.*mm,"e-");
-  cuts->SetProductionCut(23.*mm,"e+");
-  regGasDet->SetProductionCuts(cuts);
+  if( fRegGasDet != 0 )  // remove obsolete root logical volume
+  {
+    fRegGasDet->RemoveRootLogicalVolume(fLogicAbsorber);
+  }
+  G4ProductionCuts* cuts = 0;
+
+  if( fRegGasDet == 0 ) // First time - instantiate a region and a cut objects
+  {    
+    fRegGasDet = new G4Region("VertexDetector");
+    cuts = new G4ProductionCuts();
+    fRegGasDet->SetProductionCuts(cuts);
+  }
+  else  // Second time - get a cut object from region
+  {   
+    cuts = fRegGasDet->GetProductionCuts();
+  }
+  fRegGasDet->AddRootLogicalVolume(fLogicAbsorber);                               
+
+  cuts->SetProductionCut(fGammaCut,"gamma");
+  cuts->SetProductionCut(fElectronCut,"e-");
+  cuts->SetProductionCut(fPositronCut,"e+");
 
   // Sensitive Detectors: Absorber 
   

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.hh,v 1.6 2004-05-24 16:56:29 grichine Exp $
+// $Id: Em8DetectorConstruction.hh,v 1.7 2004-05-27 08:39:05 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,6 +38,7 @@ class G4Tubs;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
+class G4Region;
 class G4UniformMagField;
 class Em8DetectorMessenger;
 class Em8CalorimeterSD;
@@ -53,15 +54,20 @@ class Em8DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
      
-     void SetAbsorberMaterial (G4String);     
-     void SetAbsorberThickness(G4double);     
-     void SetAbsorberRadius(G4double);          
+  void SetAbsorberMaterial (G4String);     
+  void SetAbsorberThickness(G4double);     
+  void SetAbsorberRadius(G4double);          
       
-     void SetAbsorberZpos(G4double);
+  void SetAbsorberZpos(G4double);
 
-     void SetWorldMaterial(G4String);
-     void SetWorldSizeZ(G4double);
-     void SetWorldSizeR(G4double);
+  void SetWorldMaterial(G4String);
+  void SetWorldSizeZ(G4double);
+  void SetWorldSizeR(G4double);
+
+  void SetGammaCut(G4double    cut){fGammaCut    = cut;};
+  void SetElectronCut(G4double cut){fElectronCut = cut;};
+  void SetPositronCut(G4double cut){fPositronCut = cut;};
+
 
   //  void SetMagField(G4double);
      
@@ -91,6 +97,8 @@ class Em8DetectorConstruction : public G4VUserDetectorConstruction
                  
   private:
      
+  static const G4double fDelta;
+
   G4bool             fWorldChanged;
   G4double           fAbsorberThickness;
   G4double           fAbsorberRadius;
@@ -107,19 +115,21 @@ class Em8DetectorConstruction : public G4VUserDetectorConstruction
   G4double           fWorldSizeR;
   G4double           fWorldSizeZ;
             
-  G4Tubs*            fSolidWorld;    //pointer to the solid World 
-  G4LogicalVolume*   fLogicWorld;    //pointer to the logical World
-  G4VPhysicalVolume* fPhysicsWorld;    //pointer to the physical World
+  G4Tubs*            fSolidWorld;     //pointer to the solid World 
+  G4LogicalVolume*   fLogicWorld;     //pointer to the logical World
+  G4VPhysicalVolume* fPhysicsWorld;   //pointer to the physical World
 
 
   G4Material*        fAbsorberMaterial;
-  G4Tubs*             fSolidAbsorber; //pointer to the solid Absorber
-  G4LogicalVolume*   fLogicAbsorber; //pointer to the logical Absorber
+  G4Tubs*            fSolidAbsorber;    //pointer to the solid Absorber
+  G4LogicalVolume*   fLogicAbsorber;   //pointer to the logical Absorber
   G4VPhysicalVolume* fPhysicsAbsorber; //pointer to the physical Absorber
 
+  G4double fElectronCut, fGammaCut, fPositronCut;
      
   Em8DetectorMessenger* fDetectorMessenger;  //pointer to the Messenger
-  Em8CalorimeterSD* fCalorimeterSD;  //pointer to the sensitive detector
+  Em8CalorimeterSD*     fCalorimeterSD;      //pointer to the sensitive detector
+  G4Region*             fRegGasDet;
       
   private:
     
@@ -134,14 +144,17 @@ class Em8DetectorConstruction : public G4VUserDetectorConstruction
 inline void Em8DetectorConstruction::ComputeCalorParameters()
 {
   // Compute derived parameters of the calorimeter
-     if(!fWorldChanged)
-     {
+
+  if( !fWorldChanged )
+  {
        //  WorldSizeR=2.*AbsorberRadius ;
        //  WorldSizeZ=2.*AbsorberThickness ;
-     }
-     
-     fStartAbsZ = fAbsorberZ - 0.5*fAbsorberThickness; 
-     fEndAbsZ   = fAbsorberZ + 0.5*fAbsorberThickness; 
+  } 
+  fWorldSizeZ = fAbsorberThickness + 2*fWindowThick + 2*fDelta;
+  fWorldSizeR = fAbsorberRadius + fDelta;
+
+  fStartAbsZ = fAbsorberZ - 0.5*fAbsorberThickness; 
+  fEndAbsZ   = fAbsorberZ + 0.5*fAbsorberThickness; 
 
 }
 
