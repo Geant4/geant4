@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2005-03-01 17:16:17 gcosmo Exp $
+$Id: History,v 1.54 2005-03-18 16:26:42 link Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 18, 2005  Oliver Link
+- New generic framework for twisted solids G4TwistedBox,
+  G4TwistedTrd and G4TwistedTrap. The virtual class is
+  G4VTwistedFaceted.
+- Added G4TwistedTrd and general G4TwistedTrap as test cases in test
 
 01-Mar-2005, O.Link (geom-specific-V07-00-01)
 - Fixed compilation warnings on WIN32-VC for G4VSurface.cc.

@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2004-11-29 17:02:20 gcosmo Exp $
+$Id: History,v 1.3 2005-03-18 16:24:05 link Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 18, 2005  Oliver Link
+- Added G4TwistedTrd and general G4TwistedTrap as test cases
 
 Nov 29th, 2004  Vladimir Grichine, Oliver Link (schecker-V06-02-00)
 - Added G4TwistedTrap and G4TwistedBox.
