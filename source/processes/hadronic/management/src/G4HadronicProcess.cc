@@ -90,6 +90,7 @@
  G4VParticleChange *G4HadronicProcess::GeneralPostStepDoIt(
   const G4Track &aTrack, const G4Step &)
   {
+      theTotalResult.SetNumberOfSecondaries(9);
     const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
     G4Material *aMaterial = aTrack.GetMaterial();
     G4double kineticEnergy = aParticle->GetKineticEnergy();
