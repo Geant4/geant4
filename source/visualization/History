@@ -1,4 +1,4 @@
-$Id: History,v 1.225 2003-09-22 10:46:44 johna Exp $
+$Id: History,v 1.226 2003-10-03 15:08:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,12 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+4th October 2003  Gabriele Cosmo  (vis-V05-02-01)
+- Modified GNUmakefiles:
+  o added dependency to new module "geometry/navigation".
+  o replaced "digits+hits" with "digits_hits".
+- Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
 
 22nd September 2003  John Allison  (vis-V05-02-00, greps-V05-02-00)
 - Incorporates raytracer-V05-02-01 (needs greps-V05-02-00) - see
