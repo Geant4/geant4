@@ -1,0 +1,98 @@
+                       geant4-01-01-ref-04
+                       ===================
+
+The recommended reference tag "geant4-01-01-ref-04" for Geant4 members
+is now available.
+Libraries, examples and tests have been built successfully on the
+supported platforms as part of the testing cycle.
+In addition, validation tests have been built and run successfully
+on DEC-cxx (v. 6.1, native STL) and HP-aCC (v. A.01.23, native STL).
+
+Please see below for details of the most relevant fixes
+included in this 'development-release'.
+
+The next tag for the public release 2.0 is scheduled for June 30th.
+
+Some of the improvements and fixes included since the last
+recommended reference tag are:
+    - updated most headers in the geometry module for comments to be
+      included in the Software Reference Manual.
+      Fixes to magnetic-field and solids/CSG modules.
+    - Fixed configuration problem in persistency module.
+A more complete list is available below.
+
+
+How to update a development tree
+--------------------------------
+
+Access to the Geant4 CVS repository is required in order to update
+a source code directory of Geant4. If you maintain such a development
+tree to update it you should do the following:
+
+ cd $G4INSTALL
+ cvs update -r geant4-01-01-ref-04 -d -P
+
+For developers only:
+ |    You will need an extract step in order to update the tree of
+ |  the category that you develop.  Assuming that your developments
+ |  are in the head of CVS, you should do the following:
+ |
+ |      cd 
+ |      cvs update -d -P -A
+ |
+ |  Then you'll need to resolve any clashes you may get.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the full list of changes is the following:
+
+config
+------
+- Implemented modular setup. Now system specific configurations are 
+  grouped in separated files $G4SYSTEM.gmk and placed in the new 
+  directory config/sys. 
+
+electromagnetic processes
+-------------------------
+- Low-energies processes:
+  o fixes in G4LowEnergyBremsstrahlung for continuous energy loss.
+
+geometry
+--------
+- Magnetic Field: 
+  o fixes to G4MagErrorStepper (check on chord endpoint), 
+    G4RKG3_Stepper (deleted error message from StepNoErr), 
+    G4MagIntegratorDriver (modified debug information). 
+  o minor fix to dummy implementation of assignment operator 
+    in G4MagneticField.hh. 
+  o modified method for finding new trial step in G4ChordFinder. 
+- Volumes:
+  o introduced kCarTolerance for check over taken step length and 
+    TruePathLength in G4PropagatorInField::ComputeStep(). 
+- CSG Solids:
+  o fixes in DistanceToIn(p,v) for G4Box and G4Trd to return zero
+    distance in case computed value is less than 0.5*kCarTolerance.
+  o fix to G4Tubs::DistanceToOut(p,v,...) in computation of xi, yi
+    for (sphi>=-0.5*kCarTolerance). Fixes problem reports #76 and #91. 
+  o added more diagnostics in case of invalid enum for DistanceToOut.
+- Boolean Solids:
+  o temporarily disabled CreatePolyhedron() by forcing return of NULL
+    pointer. Therefore, visualization of Boolean solids is temporarily
+    disabled, pending definitive fix in graphics_reps BooleanProcessor.
+- Changed comments to headers for the Software Reference Manual in
+  management, volumes, magnetic-field, CSG/Boolean modules.
+  Removed obsolete file G4Transform.hh.
+
+graphics representations
+------------------------
+- Minor fix to HepPolyhedron code for ISO/ANSI compliance.
+
+visualization
+-------------
+- Added command /vis/viewer/reset. 
+- G4VViewer: added method GetShortName(), corrected SetName(...). 
+- G4ViewParameters.hh: improved class description. 
+- G4VisManager: added ViewerShortName(...) and GetViewer(...) utilities. 
+- G4RayTracer: set out-of-world ray to black. 
+- G4RayTracerViewer: corrected trapping of orthogonal projection. 

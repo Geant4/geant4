@@ -1,0 +1,28 @@
+                 Problems with geant4-01-01-ref-05
+                 =================================
+
+This tag co-works with CLHEP-1.5 which has fixed the
+G4VParticleChange::CheckIt problem.  Other problems are as
+geant4-01-01-ref-04.
+
+Problems with geant4-01-01-ref-05 are:
+--------------------------------------
+
+All ISO modes: T11, T15: problem reading neutron data.
+
+
+Large N problems:
+-----------------
+
+Conducted only on Sun and Linux.  Note that the problem with T02 in
+"SUN: debug: NON-ISO" prevented other tests, possibly masking other
+problems.
+
+SUN: debug: NON-ISO: T02 loops - grows to 90+MB after an hour or so, then
+                     stable for at least 100 hours.
+     optim: NON-ISO: T09: theListOfSecondaries is not empty.
+            NON-ISO: T11: G4VParticleChange::CheckIt: the energy deposit
+                          is negative!!
+
+Linux: debug: T11: G4VParticleChange::CheckIt: the energy deposit is negative!!
+       optim: T11: G4VParticleChange::CheckIt: the energy deposit is negative!!

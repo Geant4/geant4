@@ -1,0 +1,137 @@
+                  geant4-01-01-ref-05
+                  ===================
+
+This is a "convenience" tag for the use of testing and release
+procedures.  Roughly speaking it is geant4-01-01-ref-04 plus Group 1
+(low-level category) tags, plus other tags that were thought useful to
+include.
+
+geant4-01-01-ref-05 is geant4-01-01-ref-04 plus:
+
+tag:         config-V01-01-04
+description:
+Added radiative_decay path to binmake.gmk.
+
+
+tag:         examples-V01-01-04
+description:
+N02 and N06.out changes for CLHEP 5.
+
+tag:         geometry-V01-01-03
+description:
+Groups field-V01-01-03, geomvol-V01-01-00, geom-solids-csg-V01-01-02.
+- magneticfield (field-V01-01-03):
+  o fixes to G4MagErrorStepper (check on chord endpoint),
+    G4RKG3_Stepper (deleted error message from StepNoErr),
+    G4MagIntegratorDriver (modified debug information).
+  o minor fix to dummy implementation of assignment operator
+    in G4MagneticField.hh.
+  o modified method for finding new trial step in G4ChordFinder.
+- volumes (geomvol-V01-01-00):
+  o introduced kCarTolerance for check over taken step length and
+    TruePathLength in G4PropagatorInField::ComputeStep().
+- solids/CSG (geom-solids-csg-V01-01-02):
+  o fixes in DistanceToIn(p,v) for G4Box and G4Trd to return 0 distance
+    in case computed value is less than 0.5*kCarTolerance.
+
+tag:         geom-solids-csg-V01-01-03
+description:
+Fix to G4Tubs::DistanceToOut(p,v,...)
+- G4Tubs.cc:
+  o introduced fix in DistanceToOut(p,v,...) in computation of xi, yi for
+    (sphi >= -0.5*kCarTolerance). This fixes problem reports #76 and #91.
+  o added more diagnostics in case of invalid enum for DistanceToOut.
+- Updated unit test for G4Tubs.
+
+
+tag:         global-V01-01-03
+description:
+Added new G4UnitDefinition("kg/m3",...) to G4UnitsTable.cc.
+
+
+tag:         greps-V01-01-03
+description:
+Temporary workaround to avoid caseIE() and caseEE.
+
+tag:         particles-V01-01-01b
+description:
+Removed pow() from G4VDecayChannel.cc
+
+tag:         persistency-V01-00-01
+description:
+- moved G4PHype from geometry/solids/CSG to geometry/solids/specific
+- modified GNUmakefile's to add G4pspecsolids
+
+
+tag:         emlowen-V01-01-09
+description:
+19.04.2000 - MGP, tag emlowen-V01-01-09
+             same as emlowen-V01-01-08, with modifications by V.L. for
+             first implementation of continuous energy loss in 
+             G4LowEnergyBremsstrahlung
+
+tag:         transport-V01-01-01
+description:
+Corrects the material for Parameterised volumes that parameterise
+the material.  (In this case after PostStep of Transportation, the
+PreStepPoint could have an incorrect material.)
+
+Co-works with latest track tag, track-V01-01-01, which it requires.
+
+tag:         track-V01-01-02
+description:
+June 2, 2000 M.Asai  (track-V01-01-02)
+- Add G4VUserTrackInformation class and its pointer data member in G4Track
+- Add "const" to pointer to G4Step in G4Track (Hisaya) 
+
+this tag co-works with tracking-V01-01-01 and transport-V01-01-01
+
+tag:         tracking-V01-01-01
+description:
+- Add SetUserTrackInformation(G4VUserTrackInformation*) to
+ G4TrackingManager (Makoto)
+- Fix problems in deleteing Touchable in G4SteppingManager (Hisaya) 
+
+tag:         vis-V01-01-02
+description:
+geometry-V01-01-02 compatibility.
+/vis/viewer/reset
+
+2nd May 2000  John Allison  vis-V01-01-02
+- Added /vis/viewer/reset.
+- G4VSceneHandler, G4VViewer, G4OpenGLXmMainMenubarCallbacks: corrected
+  some name anomolies - "scene" was still being used in places where it
+  meant "scene handler".
+- G4VViewer: added GetShortName(), corrected SetName(...).
+- G4ViewParameters.hh: improved class description.
+- G4VisManager: added ViewerShortName(...) and GetViewer(...) utilities.
+- G4RayTracer: set out-of-world ray to black.
+- G4RayTracerViewer: corrected trapping of orthogonal projection.
+- Some minor enhancements to tests.
+
+27th April 2000  Gabriele Cosmo
+- Removed unnecessary #include "G4Transform.hh" from VRML.  (Since
+  geometry-V01-01-02 G4Transform.hh no longer exists.)  
+
+27th April 2000  John Allison
+- Updated README file.
+
+
+tag:         tests-V01-01-01
+description:
+tests-V01-01-01  3rd May 2000  John Allison
+- test14.out updated for em-V01-01-01.
+- Changed update.sh for Bonsai.
+
+tag:         tests-gmk-V01-01-00
+description:
+Retired test04 (old persistency test).
+
+tag:         test14-V01-01-02
+description:
+3rd May 2000  John Allison  (test14-V01-01-02)
+- Updated test14.out for em-V01-01-01.
+
+
+
+                   Best Regards, Steve O'Neale

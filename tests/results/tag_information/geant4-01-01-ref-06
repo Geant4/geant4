@@ -1,0 +1,40 @@
+                      geant4-01-01-ref-06
+                      ===================
+
+This is a "convenience" tag for the use of testing and release
+procedures.  Roughly speaking it is geant4-01-01-ref-05 plus Group 2
+tags, plus a view "safe" tags from Group 3.  It includes tags of all
+electromagnetic processes for the release but no hadron tags.
+
+geant4-01-01-ref-06 is:
+
+.               geant4-01-01-ref-05
+./environments          envs-V01-01-01
+./examples              examples-V01-01-06
+./examples/extended/electromagnetic             testem-V01-01-02
+./examples/novice/N03           exampleN03-V01-01-07
+./source/GNUmakefile            source-gmk-V01-01-00
+./source/geometry/management            geommng-V01-01-00
+./source/geometry/solids/BREPS          breps-V01-01-00
+./source/geometry/solids/Boolean                geom-solid-bool-V01-01-01
+./source/geometry/solids/STEP           STEP-V01-01-00
+./source/geometry/volumes               geomvol-V01-01-01
+./source/graphics_reps          greps-V01-01-04
+./source/interfaces             interfaces-V01-01-04
+./source/persistency            persistency-V01-00-02
+./source/processes/electromagnetic/lowenergy            emlowen-V01-01-17
+./source/processes/electromagnetic/muons                muons-V01-01-04
+./source/processes/electromagnetic/standard             stand-V01-01-04
+./source/processes/electromagnetic/test         test-V01-01-02
+./source/processes/electromagnetic/utils                utils-V01-01-02
+./source/processes/electromagnetic/xrays                xrays-V01-01-02
+./source/processes/management           procman-V01-01-00
+./source/processes/photolepton_hadron           photolepton_hadronV01-01-00
+./source/tracking               tracking-V01-01-02
+./source/visualization          vis-V01-01-06
+./tests/GNUmakefile             tests-gmk-V01-01-02
+./tests/test01          test01-V01-01-00
+./tests/test05          test05-V01-01-00
+./tests/test17          test17-V01-01-01
+./tests/test201         test201-V01-01-00a
+./tests/tools           testtools-V01-01-00

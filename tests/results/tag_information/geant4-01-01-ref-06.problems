@@ -1,0 +1,81 @@
+                 Problems with geant4-01-01-ref-06
+                 =================================
+
+This tag contains all electromagnetic tags for the release, but no
+hadron tags.  New problems seem to be:
+
+N02: terminated abnormally on DEC and SUN.
+T14: G4VParticleChange::CheckIt on HP.
+T17: Command terminated by signal 11 on Linux (this could be related
+     to the problem seen on Linux with the first em tags, fixed by new
+     tags of em standard and muons).
+
+Summary
+-------
+
+NOTE: STTBASE=/afs/cern.ch/user/s/stesting/stt/dev2
+      STTTAG=stt.geant4-01-01-ref-05+tags111
+
+All platforms: Em2: parameter value is not listed in the candidate List.
+
+All ISO modes: T11, T15: problem reading neutron data.
+
+DEC: debug:     ISO: N02: terminated abnormally.
+DEC: debug: NON-ISO: N02: terminated abnormally.
+DEC: optim:     ISO: N02: terminated abnormally.
+                     T02.hadron: terminated abnormally.
+DEC: optim: NON-ISO: (Not run due to system change.)
+
+HP: debug: T14: G4VParticleChange::CheckIt: the energy deposit is negative!!
+                (see $STTBASE/HP-aCC/debug/$STTTAG/HP-aCC/test14.out for
+                more details.)
+HP: optim: T14: (As debug.)
+
+Linux: debug: T17: Command terminated by signal 11.
+Linux: optim: T17: (As debug.)
+
+SUN: debug: NON-ISO: N02: terminated abnormally.
+SUN: optim: NON-ISO: N02: (As debug.)
+
+
+Quibbles:
+---------
+
+The following messages appear on error output (G4cerr) but do not
+cause a G4Exception.  Either, output should go to G4cout or
+G4Exception should be called?  From a testing point of view we would
+like to know that error output indicates a significant error.
+
+In general, messages from intercoms is written to G4cerr.  E.g.,
+"parameter value is not listed in the candidate List".
+
+DEC: debug:     ISO: T02.hadron: (Large N report - see below.)
+
+SUN: debug: NON-ISO: P02: Warnings on error output - see
+                     $STTBASE/SUN-CC/debug-NONISO/$STTTAG/SUN-CC/test402.err
+                     (could these be moved to G4cout?).
+
+
+Large N problems (where these differ from the above problems):
+--------------------------------------------------------------
+
+The following problems from previous large N tests seem to be fixed:
+
+SUN: debug: NON-ISO: T02 loops - grows to 90+MB after an hour or so, then
+                     stable for at least 100 hours.
+     optim: NON-ISO: T09: theListOfSecondaries is not empty.
+            NON-ISO: T11: G4VParticleChange::CheckIt: the energy deposit
+                          is negative!!
+
+Linux: debug: T11: G4VParticleChange::CheckIt: the energy deposit is negative!!
+       optim: T11: G4VParticleChange::CheckIt: the energy deposit is negative!!
+
+
+A different problem now manifests itself.  Tests run on DEC, Linux and
+SUN (not run on HP due to system problem).
+
+DEC: debug:     ISO: T02.hadron: *** Error in G4HEInelastic::GenerateNBodyEvent
+                                 total mass (1.87654) >= total energy (1.8557)
+                                 but it runs to completion (user 3350.7).
+                                 (Should it cause a G4Exception?)
+DEC: debug: NON-ISO: T02.hadron: As ISO (user 2405.4).

@@ -1,0 +1,32 @@
+                 Problems with geant4-01-01-ref-04
+                 =================================
+
+Same as geant4-01-01-ref-03, namely:
+------------------------------------
+
+All platforms: N02: G4ParticleChangeForMSC::CheckIt.
+
+All ISO modes: T11, T15: problem reading neutron data.
+
+DEC: optim: NON-ISO: T02.hadron, T11:  G4VParticleChange::CheckIt: the
+                                       energy deposit  is negative  !! (see
+                                       geant4-01-01-ref-02 problems for
+                                       details.)
+                ISO: T02.hadron: as NON-ISO.
+
+
+Large N problems:
+-----------------
+
+Conducted only on Sun and Linux.  Note that the problem with T02 in
+"SUN: debug: NON-ISO" prevented other tests, possibly masking other
+problems.
+
+SUN: debug: NON-ISO: T02 loops - grows to 90+MB after an hour or so, then
+                     stable for at least 100 hours.
+     optim: NON-ISO: T09: theListOfSecondaries is not empty.
+            NON-ISO: T11: G4VParticleChange::CheckIt: the energy deposit
+                          is negative!!
+
+Linux: debug: T11: G4VParticleChange::CheckIt: the energy deposit is negative!!
+       optim: T11: G4VParticleChange::CheckIt: the energy deposit is negative!!
