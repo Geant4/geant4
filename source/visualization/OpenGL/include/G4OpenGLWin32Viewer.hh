@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.hh,v 1.6 2002-10-24 15:28:05 johna Exp $
+// $Id: G4OpenGLWin32Viewer.hh,v 1.7 2003-06-05 10:13:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,6 @@
 //Win32 includes?
 
 #include <GL/gl.h>
-#include <GL/glx.h>
 #include <GL/glu.h>
 
 class G4OpenGLSceneHandler;

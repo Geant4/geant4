@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.14 2002-10-16 10:44:16 johna Exp $
+// $Id: G4OpenGLViewer.cc,v 1.15 2003-06-05 10:13:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -114,9 +114,9 @@ void G4OpenGLViewer::SetView () {
   const G4double cameraDistance = fVP.GetCameraDistance (radius);
   const G4Point3D cameraPosition =
     targetPoint + cameraDistance * fVP.GetViewpointDirection().unit();
-  const GLdouble near   = fVP.GetNearDistance (cameraDistance, radius);
-  const GLdouble far    = fVP.GetFarDistance  (cameraDistance, near, radius);
-  const GLdouble right  = fVP.GetFrontHalfHeight (near, radius);
+  const GLdouble pnear   = fVP.GetNearDistance (cameraDistance, radius);
+  const GLdouble pfar    = fVP.GetFarDistance  (cameraDistance, pnear, radius);
+  const GLdouble right  = fVP.GetFrontHalfHeight (pnear, radius);
   const GLdouble left   = -right;
   const GLdouble bottom = left;
   const GLdouble top    = right;
@@ -125,10 +125,10 @@ void G4OpenGLViewer::SetView () {
   glLoadIdentity();
   
   if (fVP.GetFieldHalfAngle() == 0.) {
-    glOrtho (left, right, bottom, top, near, far);
+    glOrtho (left, right, bottom, top, pnear, pfar);
   }
   else {
-    glFrustum (left, right, bottom, top, near, far);
+    glFrustum (left, right, bottom, top, pnear, pfar);
   }
   
   glMatrixMode (GL_MODELVIEW); // apply further transformations to scene.
