@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.8 2005-03-15 17:45:04 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.9 2005-03-18 14:45:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,6 @@
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
-#include "G4eBremsstrahlungCMS.hh"
 #include "G4eplusAnnihilation.hh"
 
 #include "G4MuIonisation.hh"
@@ -82,15 +81,13 @@ void PhysListEmStandard::ConstructProcess()
       //electron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      ///pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
-      pmanager->AddProcess(new G4eBremsstrahlungCMS("brCMS", 10*GeV),-1,3,3);
+      pmanager->AddProcess(new G4eBremsstrahlung("brem", 10*GeV),-1,3,3);
 	    
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      ///pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
-      pmanager->AddProcess(new G4eBremsstrahlungCMS("brCMS", 10*GeV),-1,3,3);
+      pmanager->AddProcess(new G4eBremsstrahlung("brem", 10*GeV),-1,3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
       
     } else if( particleName == "mu+" || 
