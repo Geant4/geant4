@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.3 2000-12-10 08:42:44 chauvie Exp $
+$Id: History,v 1.4 2002-12-06 16:32:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.3 2000-12-10 08:42:44 chauvie Exp $
 
                       Category History file
                       ---------------------
+
+06.12.2002 - Gabriele Cosmo, tag brachy-V04-01-04
+             Migration to new G4ApplicationState.
 
 09.11.2000 - SA, tag brachy-V02-00-00
              (dvnote) First submission of Brachytherapy advanced example.
