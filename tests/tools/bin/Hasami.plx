@@ -120,11 +120,12 @@ sub ExtractBonsaiSdb {
     
     #  Extract from the database, needs perl version on pcgeant2 which requires
     #  files in /afs/cern.ch/user/s/stesting/webtools/bonsai (or a change of path).
+    #  pcitapi08 replaces pcgeant2
     
-    system("rsh pcgeant2 \"( cd /afs/cern.ch/user/s/stesting/webtools/bonsai; /home/sadilov/webtools/local/bin/perl -w makesdb.pl )\" ");
+    system("rsh pcitapi08 \"( cd /afs/cern.ch/user/s/stesting/webtools/bonsai; /home/sadilov/webtools/local/bin/perl -w makesdb.pl )\" ");
     system("cp -p  /afs/cern.ch/user/s/stesting/webtools/bonsai/stt-dev.sdb bonsai.sdb");
     unless(-e "bonsai.sdb") { 
-        print "Unable to retrieve stt-dev.sdb from remote sql query on pcgeant2 \n"; 
+        print "Unable to retrieve stt-dev.sdb from remote sql query on pcitapi08 \n"; 
         die;
     }
     $Age=(-M "bonsai.sdb"); # this might be fun
