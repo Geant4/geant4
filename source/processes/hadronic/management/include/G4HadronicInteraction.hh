@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh,v 1.10 2002-12-12 19:16:52 gunter Exp $
+// $Id: G4HadronicInteraction.hh,v 1.11 2003-07-01 15:05:32 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Interaction  abstract base class
@@ -45,12 +45,13 @@
 #ifndef G4HadronicInteraction_h
 #define G4HadronicInteraction_h 1
  
-#include "G4ParticleChange.hh"
+#include "G4HadFinalState.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ReactionDynamics.hh"
 #include "G4Material.hh"
 #include "G4Nucleus.hh"
 #include "G4Track.hh"
+#include "G4HadProjectile.hh"
 #include "G4HadronicInteractionRegistry.hh"
 
  class G4HadronicInteraction
@@ -136,8 +137,8 @@
 public: // With description
     // This is the interface to implement for final state production code.
     
-    virtual G4VParticleChange *ApplyYourself(
-     const G4Track &aTrack, G4Nucleus & targetNucleus ) = 0;
+    virtual G4HadFinalState *ApplyYourself(
+            const G4HadProjectile &aTrack, G4Nucleus & targetNucleus ) = 0;
 public: // Without description
 
     void DeActivateFor( G4Material *aMaterial );
@@ -163,8 +164,8 @@ public: // Without description
     
  protected:
     
-    G4ParticleChange theParticleChange;
-    // the G4VParticleChange object which is modified and returned
+    G4HadFinalState theParticleChange;
+    // the G4HadFinalState object which is modified and returned
     // by address by the ApplyYourself method,
     // (instead of aParticleChange as found in G4VProcess)
     

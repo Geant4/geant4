@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4StableIsotopes.cc,v 1.5 2002-12-12 19:18:40 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4StableIsotopes.hh"
 

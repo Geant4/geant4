@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReactionDynamics.hh,v 1.7 2002-12-12 19:18:39 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Reaction Dynamics
  // original by H.P. Wellisch
@@ -40,7 +38,8 @@
 #include "G4ReactionProduct.hh"
 #include "G4Nucleus.hh"
 #include "G4FastVector.hh"
- 
+#include "G4HadProjectile.hh"
+
  class G4ReactionDynamics 
  {
  public:
@@ -59,7 +58,7 @@
      G4FastVector<G4ReactionProduct,128> &vec,
      G4int &vecLen,
      G4ReactionProduct &modifiedOriginal, // Fermi motion & evap. effect included
-     const G4DynamicParticle *originalIncident,
+     const G4HadProjectile *originalIncident,
      G4ReactionProduct &currentParticle,
      G4ReactionProduct &targetParticle,
      const G4Nucleus &targetNucleus,
@@ -82,7 +81,7 @@
      G4FastVector<G4ReactionProduct,128> &vec,
      G4int &vecLen,
      G4ReactionProduct &modifiedOriginal, // Fermi motion & evap. effect included
-     const G4DynamicParticle *originalIncident,
+     const G4HadProjectile *originalIncident,
      G4ReactionProduct &currentParticle,
      G4ReactionProduct &targetParticle,
      const G4Nucleus &targetNucleus,
@@ -122,7 +121,7 @@
     void NuclearReaction(                     // derived from NUCREC
      G4FastVector<G4ReactionProduct,4> &vec,
      G4int &vecLen,
-     const G4DynamicParticle *originalIncident,
+     const G4HadProjectile *originalIncident,
      const G4Nucleus &aNucleus,
      const G4double theAtomicMass,
      const G4double *massVec );
@@ -133,7 +132,7 @@
      const G4double numberofFinalStateNucleons,
      const G4ThreeVector &temp,
      const G4ReactionProduct &modifiedOriginal, // Fermi motion & evap. effect included
-     const G4DynamicParticle *originalIncident,
+     const G4HadProjectile *originalIncident,
      const G4Nucleus &targetNucleus,
      G4ReactionProduct &currentParticle,
      G4ReactionProduct &targetParticle,

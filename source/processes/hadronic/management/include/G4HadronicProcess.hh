@@ -142,13 +142,15 @@
     
  private:
     
-    G4VParticleChange * DoIsotopeCounting(G4VParticleChange * aResult,
+    G4HadFinalState * DoIsotopeCounting(G4HadFinalState * aResult,
                                           const G4Track & aTrack,
                                           const G4Nucleus & aNucleus);
                                           
     G4IsoResult * ExtractResidualNucleus(const G4Track & aTrack,
                                          const G4Nucleus & aNucleus,
-                                         G4VParticleChange * aResult);
+                                         G4HadFinalState * aResult);
+    void FillTotalResult(G4HadFinalState * aR, const G4Track & aT);
+    
     
  private:
     
@@ -169,6 +171,7 @@
     static G4IsoParticleChange * theIsoResult;
     static G4IsoParticleChange * theOldIsoResult;
     
+    G4ParticleChange theTotalResult;    
  };
  
 #endif

@@ -21,7 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoNuclearCrossSection.hh,v 1.9 2003-06-16 17:03:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

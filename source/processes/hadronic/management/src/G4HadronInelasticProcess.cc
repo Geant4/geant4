@@ -36,6 +36,8 @@
  
 #include "G4HadronInelasticProcess.hh"
 #include "G4GenericIon.hh"
+#include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
  
  G4double G4HadronInelasticProcess::GetMeanFreePath(
   const G4Track &aTrack,
@@ -45,9 +47,22 @@
     const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
     if( aParticle->GetDefinition() != theParticle && 
         theParticle != G4GenericIon::GenericIon())
+    {
+      G4cout << "Unrecoverable error: "<<G4endl;
+      G4ProcessManager * it = aParticle->GetDefinition()->GetProcessManager();
+      G4ProcessVector * itv = it->GetProcessList();
+      G4cout <<aParticle->GetDefinition()->GetParticleName()<< 
+	         " has the following processes:"<<G4endl;
+      for(G4int i=0; i<itv->size(); i++)
+      {
+	G4cout <<"  "<<(*itv)[i]->GetProcessName()<<G4endl;		 
+      }
+      G4cout << "for kinetic energy "<<aParticle->GetKineticEnergy()<<G4endl;
+      G4cout << "and material "<<aTrack.GetMaterial()->GetName()<<G4endl;
       G4Exception( this->GetProcessName()+
-                   " called for "+
+                   " was called for "+
                    aParticle->GetDefinition()->GetParticleName() );
+    }
     G4Material *aMaterial = aTrack.GetMaterial();
     G4int nElements = aMaterial->GetNumberOfElements();
     

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronInelasticDataSet.cc,v 1.5 2002-12-12 19:16:52 gunter Exp $
+// $Id: G4HadronInelasticDataSet.cc,v 1.6 2003-07-01 15:08:46 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

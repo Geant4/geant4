@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GHEKinematicsVector.hh,v 1.6 2003-06-16 17:12:20 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file --- Copyright CERN 1998

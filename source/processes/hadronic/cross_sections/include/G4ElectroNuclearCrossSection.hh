@@ -21,7 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.hh,v 1.10 2003-06-16 17:03:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

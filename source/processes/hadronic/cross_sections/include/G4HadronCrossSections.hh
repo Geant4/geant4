@@ -21,7 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronCrossSections.hh,v 1.9 2003-06-03 09:21:38 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

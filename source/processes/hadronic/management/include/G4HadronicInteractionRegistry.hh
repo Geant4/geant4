@@ -35,10 +35,11 @@ class G4HadronicInteractionRegistry
   
   static void RegisterMe(G4HadronicInteraction * aModel);
   static void RemoveMe(G4HadronicInteraction * aModel);
-  
+    
   protected:
 
   G4HadronicInteractionRegistry(G4String ) 
+  static G4HadronicInteractionRegistry & theRegistry();
   { G4Exception("G4HadronicInteractionRegistry meant as a singleton; please do not inherit");}
 
   private:
@@ -56,7 +57,6 @@ class G4HadronicInteractionRegistry
   
   G4int nModels;
   std::vector <G4HadronicInteraction *> allModels;
-  static G4HadronicInteractionRegistry theRegistry;
 
 };
 

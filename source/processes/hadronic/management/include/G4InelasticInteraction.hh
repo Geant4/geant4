@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InelasticInteraction.hh,v 1.8 2003-02-12 09:55:00 jwellisc Exp $
+// $Id: G4InelasticInteraction.hh,v 1.9 2003-07-01 15:05:32 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Inelastic Interaction 
@@ -79,7 +79,7 @@
     
     void CalculateMomenta( G4FastVector<G4ReactionProduct,128> &vec,
                            G4int &vecLen,
-                           const G4DynamicParticle *originalIncident,
+                           const G4HadProjectile *originalIncident,
                            const G4DynamicParticle *originalTarget,
                            G4ReactionProduct &modifiedOriginal,
                            G4Nucleus &targetNucleus,

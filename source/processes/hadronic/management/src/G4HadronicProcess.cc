@@ -32,6 +32,7 @@
 #include "G4HadronicProcess.hh"
 #include "G4EffectiveCharge.hh"
 #include "G4NoModelFound.hh"
+#include "G4HadProjectile.hh"
 
 //@@ add model name info, once typeinfo available #include <typeinfo.h>
  
@@ -107,18 +108,25 @@
       G4cout << " - Particle type = "<<aParticle->GetDefinition()->GetParticleName()<<G4endl;
       G4Exception("GetHadronicProcess: No model found for this energy range");
     }
-    G4VParticleChange *result =
-      theInteraction->ApplyYourself( aTrack, targetNucleus);
+    G4HadProjectile thePro(aTrack);
+    G4HadFinalState *result =
+      theInteraction->ApplyYourself( thePro, targetNucleus);
+    if(result->GetStatusChange() == isAlive && thePro.GetDefinition() != aTrack.GetDefinition())
+    {
+      G4DynamicParticle * aP = const_cast<G4DynamicParticle *>(aTrack.GetDynamicParticle());
+      aP->SetDefinition(const_cast<G4ParticleDefinition *>(thePro.GetDefinition()));
+    }
+    result->SetTrafoToLab(thePro.GetTrafoToLab());
     for(G4int i=0; i<result->GetNumberOfSecondaries(); i++)
     {
-      G4Track* aSecTrack = result->GetSecondary(i);
+      G4DynamicParticle* aSecTrack = result->GetSecondary(i)->GetParticle();
       if(aSecTrack->GetDefinition()->GetPDGCharge()>1.5)
       {
          G4EffectiveCharge aCalculator;
 	 G4double charge = aCalculator.GetCharge(aMaterial, kineticEnergy,
 	                                        aSecTrack->GetDefinition()->GetPDGMass(),
 						aSecTrack->GetDefinition()->GetPDGCharge());
-	 (const_cast<G4DynamicParticle *>(aSecTrack->GetDynamicParticle()))->SetCharge(charge);
+	 aSecTrack->SetCharge(charge);
       }
     }
 
@@ -142,11 +150,12 @@
       }
     }
     if(getenv("LeadingParticleBiasingActivated")) result = theBias->Bias(result);
-    return result;
+    FillTotalResult(result, aTrack);
+    return &theTotalResult;
   }
 
-  G4VParticleChange * G4HadronicProcess::
-  DoIsotopeCounting(G4VParticleChange * aResult,
+  G4HadFinalState * G4HadronicProcess::
+  DoIsotopeCounting(G4HadFinalState * aResult,
                     const G4Track & aTrack,
                     const G4Nucleus & aNucleus)
   {
@@ -186,7 +195,7 @@
   G4IsoResult * G4HadronicProcess::
   ExtractResidualNucleus(const G4Track & ,
                          const G4Nucleus & aNucleus,
-                         G4VParticleChange * aResult)
+                         G4HadFinalState * aResult)
   {
     G4double A = aNucleus.GetN();
     G4double Z = aNucleus.GetZ();
@@ -197,14 +206,14 @@
     // cash the max
     for(G4int i=0; i<aResult->GetNumberOfSecondaries(); i++)
     {
-      G4Track* aSecTrack = aResult->GetSecondary(i);
-      if(bufferA<aSecTrack->GetDefinition()->GetBaryonNumber())
+      G4HadSecondary* aSecTrack = aResult->GetSecondary(i);
+      if(bufferA<aSecTrack->GetParticle()->GetDefinition()->GetBaryonNumber())
       {
-        bufferA = aSecTrack->GetDefinition()->GetBaryonNumber();
-        bufferZ = aSecTrack->GetDefinition()->GetPDGCharge();
+        bufferA = aSecTrack->GetParticle()->GetDefinition()->GetBaryonNumber();
+        bufferZ = aSecTrack->GetParticle()->GetDefinition()->GetPDGCharge();
       }
-      Z-=aSecTrack->GetDefinition()->GetPDGCharge();
-      A-=aSecTrack->GetDefinition()->GetBaryonNumber();
+      Z-=aSecTrack->GetParticle()->GetDefinition()->GetPDGCharge();
+      A-=aSecTrack->GetParticle()->GetDefinition()->GetBaryonNumber();
     }
     
     // if the fragment was part of the final state, it is 
@@ -228,5 +237,51 @@
     return theResult;
   }
 
-
+    void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
+{
+      theTotalResult.Clear();
+      theTotalResult.Initialize(aT);
+      theTotalResult.SetSecondaryWeightByProcess(true);
+      theTotalResult.SetStatusChange(fAlive);
+      G4double rotation = 2.*pi*G4UniformRand();
+      G4ThreeVector it(0., 0., 1.);
+      if(aR->GetStatusChange()==stopAndKill)
+      {
+        theTotalResult.SetStatusChange(fStopAndKill);
+        theTotalResult.SetEnergyChange( 0.0 );
+      }
+      if(aR->GetStatusChange()==suspend)
+      {
+        theTotalResult.SetStatusChange(fSuspend);
+      }
+      if(aR->GetStatusChange()!=stopAndKill )
+      {
+	theTotalResult.SetWeightChange(aR->GetWeightChange()); // This is multiplicative
+	if(aR->GetEnergyChange()>-.5) theTotalResult.SetEnergyChange(aR->GetEnergyChange());
+	G4LorentzVector newDirection(aR->GetMomentumChange().unit(), 1.);
+	//G4cout << "Token before "<<
+        //       " "<< "in="<<aT.GetMomentum().unit()<<" out="<<newDirection.vect()<<G4endl;
+	newDirection*=aR->GetTrafoToLab();
+	//G4cout << "Token after "<<aT.GetMomentum().unit()-newDirection.vect()<<
+        //       " "<< "in="<<aT.GetMomentum().unit()<<" out="<<newDirection.vect()<<G4endl;
+	theTotalResult.SetMomentumDirectionChange(newDirection.vect());
+      }
+      theTotalResult.SetLocalEnergyDeposit(aR->GetLocalEnergyDeposit());
+      theTotalResult.SetNumberOfSecondaries(aR->GetNumberOfSecondaries());
+      for(G4int i=0; i<aR->GetNumberOfSecondaries(); i++)
+      {
+        G4LorentzVector theM = aR->GetSecondary(i)->GetParticle()->Get4Momentum();
+        theM.rotate(rotation, it);
+	theM*=aR->GetTrafoToLab();
+	aR->GetSecondary(i)->GetParticle()->Set4Momentum(theM);
+	G4double time = aR->GetSecondary(i)->GetTime();
+	if(time<0) time = aT.GetGlobalTime();
+        G4Track* track = new G4Track(aR->GetSecondary(i)->GetParticle(),
+				     aT.GetGlobalTime(),
+				     aT.GetPosition());
+	track->SetWeight(aT.GetWeight()*aR->GetSecondary(i)->GetWeight());
+	theTotalResult.AddSecondary(track);
+      }
+      return;
+    }
  /* end of file */

@@ -97,7 +97,7 @@
    G4FastVector<G4ReactionProduct,128> &vec,
    G4int &vecLen,
    G4ReactionProduct &modifiedOriginal,   // Fermi motion & evap. effects included
-   const G4DynamicParticle *originalIncident,   // the original incident particle
+   const G4HadProjectile *originalIncident,   // the original incident particle
    G4ReactionProduct &currentParticle,
    G4ReactionProduct &targetParticle,
    const G4Nucleus &targetNucleus,
@@ -1431,7 +1431,7 @@
    G4FastVector<G4ReactionProduct,128> &vec,
    G4int &vecLen,
    G4ReactionProduct &modifiedOriginal, // Fermi motion & evap. effects included
-   const G4DynamicParticle *originalIncident, // the original incident particle
+   const G4HadProjectile *originalIncident, // the original incident particle
    G4ReactionProduct &currentParticle,
    G4ReactionProduct &targetParticle,
    const G4Nucleus &targetNucleus,
@@ -2837,7 +2837,7 @@
   const G4double numberofFinalStateNucleons,
   const G4ThreeVector &temp,
   const G4ReactionProduct &modifiedOriginal, // Fermi motion & evap. effect included
-  const G4DynamicParticle *originalIncident, // original incident particle
+  const G4HadProjectile *originalIncident, // original incident particle
   const G4Nucleus &targetNucleus,
   G4ReactionProduct &currentParticle,
   G4ReactionProduct &targetParticle,
@@ -3689,7 +3689,7 @@
   G4ReactionDynamics::NuclearReaction(
    G4FastVector<G4ReactionProduct,4> &vec,
    G4int &vecLen,
-   const G4DynamicParticle *originalIncident,
+   const G4HadProjectile *originalIncident,
    const G4Nucleus &targetNucleus,
    const G4double theAtomicMass,
    const G4double *mass )

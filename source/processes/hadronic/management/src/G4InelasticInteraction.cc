@@ -169,7 +169,7 @@
   G4InelasticInteraction::CalculateMomenta(
    G4FastVector<G4ReactionProduct,128> &vec,
    G4int &vecLen,
-   const G4DynamicParticle *originalIncident,   // the original incident particle
+   const G4HadProjectile *originalIncident,   // the original incident particle
    const G4DynamicParticle *originalTarget,
    G4ReactionProduct &modifiedOriginal,   // Fermi motion and evap. effects included
    G4Nucleus &targetNucleus,
@@ -179,8 +179,8 @@
    G4bool &targetHasChanged,
    G4bool quasiElastic )
   {
-    what = originalIncident->GetMomentum();
     cache = 0;
+    what = originalIncident->Get4Momentum().vect();
     theReactionDynamics.ProduceStrangeParticlePairs( vec, vecLen,
                                                      modifiedOriginal, originalTarget,
                                                      currentParticle, targetParticle,
@@ -338,6 +338,7 @@
    G4ReactionProduct &targetParticle,
    G4bool &incidentHasChanged )
   {
+    theParticleChange.Clear();
     G4ParticleDefinition *aKaonZL = G4KaonZeroLong::KaonZeroLong();
     G4ParticleDefinition *aKaonZS = G4KaonZeroShort::KaonZeroShort();
     G4int i;
@@ -378,17 +379,15 @@
     }      
     if( incidentHasChanged )
     {
-      theParticleChange.SetNumberOfSecondaries( vecLen+2 );
       G4DynamicParticle* p0 = new G4DynamicParticle;
       p0->SetDefinition( currentParticle.GetDefinition() );
       p0->SetMomentum( currentParticle.GetMomentum() );
       theParticleChange.AddSecondary( p0 );
-      theParticleChange.SetStatusChange( fStopAndKill );
+      theParticleChange.SetStatusChange( stopAndKill );
       theParticleChange.SetEnergyChange( 0.0 );
     }
     else
     {
-      theParticleChange.SetNumberOfSecondaries( vecLen+1 );
       G4double p = currentParticle.GetMomentum().mag()/MeV;
       G4ThreeVector m = currentParticle.GetMomentum();
       if( p > DBL_MIN )

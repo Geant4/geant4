@@ -20,7 +20,6 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadLeadBias.hh,v 1.4 2003-06-16 17:03:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -29,12 +28,12 @@
 
 #include "G4VLeadingParticleBiasing.hh"
 #include <vector>
-#include "G4VParticleChange.hh"
+#include "G4HadFinalState.hh"
 
 class G4HadLeadBias : public G4VLeadingParticleBiasing
 {
   public:
-  virtual G4VParticleChange * Bias(G4VParticleChange * result);
+  virtual G4HadFinalState * Bias(G4HadFinalState * result);
   virtual ~G4HadLeadBias() {};
 };
 

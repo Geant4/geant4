@@ -23,20 +23,24 @@
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4HadronicInteraction.hh"
 
-G4HadronicInteractionRegistry G4HadronicInteractionRegistry::
-theRegistry;
+G4HadronicInteractionRegistry & G4HadronicInteractionRegistry::theRegistry()
+{
+  static G4HadronicInteractionRegistry theRegistryInstance;
+  return theRegistryInstance;
+}
 
 void G4HadronicInteractionRegistry::
 RegisterMe(G4HadronicInteraction * aModel)
 {
-  theRegistry.AddModel(aModel);
+  theRegistry().AddModel(aModel);
 }
 
 void G4HadronicInteractionRegistry::
 RemoveMe(G4HadronicInteraction * aModel)
 {
-  theRegistry.allModels.erase(std::find(theRegistry.allModels.begin(), theRegistry.allModels.end(), aModel));
-  theRegistry.nModels = theRegistry.allModels.size();
+  theRegistry().allModels.erase(std::find(theRegistry().allModels.begin(),
+                                          theRegistry().allModels.end(), aModel));
+  theRegistry().nModels = theRegistry().allModels.size();
 }
 
 G4HadronicInteractionRegistry::~G4HadronicInteractionRegistry()
