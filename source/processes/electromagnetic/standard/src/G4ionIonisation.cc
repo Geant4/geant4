@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ionIonisation.cc,v 1.2 1999-04-15 07:47:48 urban Exp $
+// $Id: G4ionIonisation.cc,v 1.3 1999-04-15 16:04:10 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -28,12 +28,88 @@
 // constructor and destructor
  
 G4ionIonisation::G4ionIonisation(const G4String& processName)
-   : G4hEnergyLoss(processName)
+   : G4VContinuousDiscreteProcess(processName),
+     ParticleMass(proton_mass_c2),Charge(eplus),
+     dEdx(1.*MeV/mm),MinKineticEnergy(1.*keV)
 { PrintInfoDefinition() ; }
 
      
 G4ionIonisation::~G4ionIonisation() 
 { }
+
+G4double G4ionIonisation::GetConstraints(const G4DynamicParticle *aParticle,
+                                              G4Material *aMaterial)
+{
+  // returns the Step limit
+  // dRoverRange is the max. allowed relative range loss in one step
+  // it calculates dEdx and the range as well....
+  const G4double minstep=0.01*mm ;
+
+  G4double KineticEnergy,StepLimit;
+
+  Charge = aParticle->GetDefinition()->GetPDGCharge()/eplus ;
+
+  KineticEnergy = aParticle->GetKineticEnergy();
+
+  G4double massratio=proton_mass_c2/
+           aParticle->GetDefinition()->GetPDGMass() ;
+
+  G4double Tscaled= KineticEnergy*massratio ;
+  G4double ChargeSquare = Charge*Charge ;
+
+  dEdx=ComputedEdx(aParticle,aMaterial) ;
+  StepLimit = 0.2*KineticEnergy/dEdx ;
+  if(StepLimit < minstep)
+    StepLimit = minstep ;
+
+  return StepLimit ;
+}
+
+G4VParticleChange* G4ionIonisation::AlongStepDoIt(
+                              const G4Track& trackData,const G4Step& stepData)
+ // compute the energy loss after a step
+{
+  const G4DynamicParticle* aParticle;
+  G4Material* aMaterial;
+  G4double E,finalT,Step,ChargeSquare,MeanLoss ;
+
+  aParticleChange.Initialize(trackData) ;
+  aMaterial = trackData.GetMaterial() ;
+ 
+  // get the actual (true) Step length from stepData
+  Step = stepData.GetStepLength() ;
+
+  aParticle = trackData.GetDynamicParticle() ;
+  G4double massratio=proton_mass_c2/
+           aParticle->GetDefinition()->GetPDGMass() ;
+  ChargeSquare = Charge*Charge ;
+
+  G4int index = aMaterial->GetIndex() ;
+  E = aParticle->GetKineticEnergy() ;
+
+  if(E < MinKineticEnergy) MeanLoss = E ;
+  else
+  {
+     MeanLoss = Step*dEdx ;
+     MeanLoss /= (massratio*ChargeSquare) ;
+  }
+  finalT = E - MeanLoss ;
+
+  if(finalT < MinKineticEnergy) finalT = 0. ;
+
+   //  kill the particle if the kinetic energy <= 0
+  if (finalT <= 0. )
+  {
+    finalT = 0.;
+    aParticleChange.SetStatusChange(fStopAndKill);
+  }
+
+  aParticleChange.SetEnergyChange( finalT ) ;
+  aParticleChange.SetLocalEnergyDeposit(E-finalT) ;
+
+  return &aParticleChange ;
+}
+
  
  G4double G4ionIonisation::GetMeanFreePath(
                                            const G4Track& trackData,
@@ -50,9 +126,8 @@ G4ionIonisation::~G4ionIonisation()
    aMaterial = trackData.GetMaterial() ;
 
    G4double KineticEnergy = aParticle->GetKineticEnergy() ;
-   G4double ChargeSquare=(aParticle->GetDefinition()->GetPDGCharge())*
-                         (aParticle->GetDefinition()->GetPDGCharge())/
-                         (eplus*eplus);
+   Charge=(aParticle->GetDefinition()->GetPDGCharge())/eplus;
+   G4double ChargeSquare=Charge*Charge ;
 
   // compute the (macroscopic) cross section first
  
@@ -119,6 +194,140 @@ G4double G4ionIonisation::ComputeMicroscopicCrossSection(
  
     return TotalCrossSection ;
 }
+
+G4double G4ionIonisation::ComputedEdx(const G4DynamicParticle* aParticle,
+                     G4Material* material)
+{
+  // cuts for  electron ....................
+  DeltaCutInKineticEnergy = G4Electron::Electron()->GetCutsInEnergy() ;
+
+  G4double KineticEnergy , ionloss ;
+  G4double  RateMass ;
+  G4bool isOutRange ;
+  const G4double twoln10 = 2.*log(10.) ;
+  const G4double Factor = twopi_mc2_rcl2 ;
+  const G4double bg2lim = 0.0169 , taulim = 8.4146e-3 ;
+
+  RateMass = electron_mass_c2/proton_mass_c2 ;
+
+    // get material parameters needed for the energy loss calculation
+
+    G4double ElectronDensity,Eexc,Eexc2,Cden,Mden,Aden,X0den,X1den,taul ;
+    G4double* ShellCorrectionVector;
+
+    ElectronDensity = material->GetElectronDensity();
+    Eexc = material->GetIonisation()->GetMeanExcitationEnergy();
+    Eexc2 = Eexc*Eexc ;
+    Cden = material->GetIonisation()->GetCdensity();
+    Mden = material->GetIonisation()->GetMdensity();
+    Aden = material->GetIonisation()->GetAdensity();
+    X0den = material->GetIonisation()->GetX0density();
+    X1den = material->GetIonisation()->GetX1density();
+    taul = material->GetIonisation()->GetTaul() ;
+    ShellCorrectionVector = material->GetIonisation()->
+                                          GetShellCorrectionVector();
+
+    // get elements in the actual material,
+    // they are needed for the low energy part ....
+
+    const G4ElementVector* theElementVector=
+                   material->GetElementVector() ;
+    const G4double* theAtomicNumDensityVector=
+                   material->GetAtomicNumDensityVector() ;
+    const G4int NumberOfElements=
+                   material->GetNumberOfElements() ;
+
+    // get  electron cut in kin. energy for the material
+    DeltaCutInKineticEnergyNow =
+         DeltaCutInKineticEnergy[material->GetIndex()] ;
+
+    // some local variables -------------------
+    G4double tau,tau0,Tmax,gamma,bg2,beta2,rcut,delta,x,sh ;
+
+    KineticEnergy=aParticle->GetKineticEnergy();
+
+
+      tau = KineticEnergy/proton_mass_c2 ;
+
+      if ( tau < taul )
+      //  low energy part , parametrized energy loss formulae
+      {
+        ionloss = 0. ;
+        //  loop for the elements in the material
+        for (G4int iel=0; iel<NumberOfElements; iel++)
+        {
+          const G4Element* element = (*theElementVector)(iel);
+
+          if ( tau < element->GetIonisation()->GetTau0())
+            ionloss += theAtomicNumDensityVector[iel]
+                       *( element->GetIonisation()->GetAlow()*sqrt(tau)
+                       +element->GetIonisation()->GetBlow()*tau) ;
+          else
+            ionloss += theAtomicNumDensityVector[iel]
+                       *  element->GetIonisation()->GetClow()/sqrt(tau) ;
+        }
+      }
+      else
+      // high energy part , Bethe-Bloch formula
+      {
+        gamma = tau +1. ;
+        bg2 = tau*(tau+2.) ;
+        beta2 = bg2/(gamma*gamma) ;
+        Tmax = 2.*electron_mass_c2*bg2
+               /(1.+2.*gamma*RateMass+RateMass*RateMass) ;
+
+        if ( DeltaCutInKineticEnergyNow < Tmax)
+          rcut = DeltaCutInKineticEnergyNow/Tmax ;
+        else
+          rcut = 1.;
+
+        ionloss = log(2.*electron_mass_c2*bg2*Tmax/Eexc2)
+
+                  +log(rcut)-(1.+rcut)*beta2 ;
+
+        // density correction
+
+        x = log(bg2)/twoln10 ;
+        if ( x < X0den )
+          delta = 0. ;
+        else
+        {
+          delta = twoln10*x - Cden ;
+          if ( x < X1den )
+            delta += Aden*pow((X1den-x),Mden) ;
+        }
+
+        // shell correction
+
+        if ( bg2 > bg2lim ) {
+          sh = 0. ;
+          x = 1. ;
+          for (G4int k=0; k<=2; k++) {
+            x *= bg2 ;
+            sh += ShellCorrectionVector[k]/x;
+          }
+        }
+        else {
+          sh = 0. ;
+          x = 1. ;
+          for (G4int k=0; k<=2; k++) {
+             x *= bg2lim ;
+             sh += ShellCorrectionVector[k]/x;
+          }
+          sh *= log(tau/taul)/log(taulim/taul) ;
+        }
+
+        // now you can compute the total ionization loss
+
+        ionloss -= delta + sh ;
+        ionloss *= Factor*ElectronDensity/beta2 ;
+      }
+      if ( ionloss <= 0.)
+        ionloss = 0. ;
+
+      dEdx = ionloss ;
+   return dEdx ;
+}  
  
  
 G4VParticleChange* G4ionIonisation::PostStepDoIt(
