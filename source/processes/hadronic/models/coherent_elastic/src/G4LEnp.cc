@@ -310,9 +310,6 @@ G4LEnp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
            << (newP->GetMomentum()+targetParticle->GetMomentum()).mag()/GeV
            << G4endl;
     }
-    G4cout << "ERR " << newP->GetMomentum() <<" "<<targetParticle->GetMomentum()<<G4endl;
-    G4cout << "ERR " << newP->GetDefinition()->GetParticleName() 
-                     <<" "<<targetParticle->GetDefinition()->GetParticleName()<<G4endl;
 
     // charge symmetry....
     if(G4UniformRand()<.5)
