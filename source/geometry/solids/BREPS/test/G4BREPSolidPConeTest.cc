@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: G4BREPSolidPConeTest.cc,v 1.11 2002-01-28 10:06:55 radoone Exp $
+// $Id: G4BREPSolidPConeTest.cc,v 1.12 2002-01-28 16:16:23 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -62,7 +62,7 @@ void checkSurfInOut( G4BREPSolid* solid, G4ThreeVector& position, G4ThreeVector&
   G4double d;
   
   G4cout << G4endl
-         << "\tTest of In & Out" << solid->GetName()   << G4endl
+         << "\tTest of In & Out " << solid->GetName()   << G4endl
          << "\t--------------------------------------" << G4endl;
   
   d = solid->DistanceToIn( position, direction );
@@ -117,35 +117,9 @@ int main(G4int argc, char **argv)
 {
   const G4int noZplanes= 8; 
   
-  G4double RMINVec[noZplanes];
-  RMINVec[0] = 30;
-  RMINVec[1] = 30;
-  RMINVec[2] =  0;
-  RMINVec[3] =  0;
-  RMINVec[4] =  0;  
-  RMINVec[5] =  0;
-  RMINVec[6] = 40;
-  RMINVec[7] = 40;  
-
-  G4double RMAXVec[noZplanes];
-  RMAXVec[0] = 70;
-  RMAXVec[1] = 70;
-  RMAXVec[2] = 70;
-  RMAXVec[3] = 40;
-  RMAXVec[4] = 40;
-  RMAXVec[5] = 80;
-  RMAXVec[6] = 80;
-  RMAXVec[7] = 60; 
-
-  G4double Z_Values[noZplanes];
-  Z_Values[0] =-20;
-  Z_Values[1] =-10;
-  Z_Values[2] =-10;
-  Z_Values[3] =  0;
-  Z_Values[4] = 10;
-  Z_Values[5] = 20;
-  Z_Values[6] = 30;
-  Z_Values[7] = 40;
+  G4double RMINVec[noZplanes]  = {  30,  30,   0,  0,   0,   0,  40,  40 };
+  G4double RMAXVec[noZplanes]  = {  70,  70,  70, 40,  40,  80,  80,  60 };
+  G4double Z_Values[noZplanes] = { -20, -10, -10,  0,  10,  20,  30,  40 };
 
   G4double start_angle= 0.0;
   G4double opening_angle= 2*pi;
@@ -337,7 +311,9 @@ int main(G4int argc, char **argv)
   G4ThreeVector gds1surfout( -1, 0, 0 );
   G4ThreeVector gps1surfin( 0*mm, 25*mm, 0*mm );
   G4ThreeVector gds1surfin( 0, 1, 0 );
-  G4ThreeVector gps1plansurfleft( 150*mm, 0*mm, -100*mm );
+  G4ThreeVector gps1plansurfleftout( 150*mm, 0*mm, -100*mm );
+  G4ThreeVector gps1plansurfleftin( 30*mm, 0*mm, -100*mm );
+  G4ThreeVector gps1plansurfleftfict( 0*mm, 0*mm, -100*mm );
   G4ThreeVector gds1plansurfleft( 0, 0, 1 );
   G4ThreeVector gps1plansurfright( 150*mm, 0*mm, 100*mm );
   G4ThreeVector gds1plansurfright( 0, 0, -1 );
@@ -347,10 +323,15 @@ int main(G4int argc, char **argv)
   checkSolid( "edge", s1, gps1edge, gds1edge, 0, 400 );  
   checkSolid( "outer surface", s1, gps1surfout, gds1surfout, 0, 100 );  
   checkSolid( "inner surface", s1, gps1surfin, gds1surfin, 0, 175 );  
-  checkSolid( "left planar surface", s1, gps1plansurfleft, gds1plansurfleft, 0, 200 );  
-  checkSolid( "left planar surface inv", s1, gps1plansurfleft, gds1plansurfright, 0 );  
+  checkSolid( "left outer planar surface", s1, gps1plansurfleftout, gds1plansurfleft, 0, 200 );  
+  checkSolid( "left outer planar surface inv", s1, gps1plansurfleftout, gds1plansurfright, kInfinity, 0 );  
+  checkSolid( "fictious left planar surface", s1, gps1plansurfleftfict, gds1plansurfleft, kInfinity, 25 );  
+  checkSolid( "fictious left planar surface inv", s1, gps1plansurfleftfict, gds1plansurfright, kInfinity, 25 );  
+  checkSolid( "left inner planar surface", s1, gps1plansurfleftin, gds1plansurfleft, 0, 200 );  
+  checkSolid( "left inner planar surface inv", s1, gps1plansurfleftin, gds1plansurfright, kInfinity, 0 );  
   checkSolid( "right planar surface", s1, gps1plansurfright, gds1plansurfright, 0, 200 );  
   checkSolid( "right planar surface inv", s1, gps1plansurfright, gds1plansurfleft, 0 );  
 
   return EXIT_SUCCESS;
 }
+
