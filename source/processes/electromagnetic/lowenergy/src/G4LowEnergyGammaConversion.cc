@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4LowEnergyGammaConversion.cc,v 1.32 2003-06-16 17:00:11 gunter Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.33 2004-11-18 12:08:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -293,12 +293,12 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
 						       positronDirection, positronKineEnergy);
   aParticleChange.AddSecondary(particle2) ; 
 
-  aParticleChange.SetLocalEnergyDeposit(localEnergyDeposit) ;
+  aParticleChange.ProposeLocalEnergyDeposit(localEnergyDeposit) ;
   
   // Kill the incident photon 
-  aParticleChange.SetMomentumChange(0.,0.,0.) ;
-  aParticleChange.SetEnergyChange(0.) ; 
-  aParticleChange.SetStatusChange(fStopAndKill) ;
+  aParticleChange.ProposeMomentumDirection(0.,0.,0.) ;
+  aParticleChange.ProposeEnergy(0.) ; 
+  aParticleChange.ProposeTrackStatus(fStopAndKill) ;
 
   //  Reset NbOfInteractionLengthLeft and return aParticleChange
   return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisation.cc,v 1.14 2004-07-01 09:24:57 gcosmo Exp $
+// $Id: G4PenelopeIonisation.cc,v 1.15 2004-11-18 12:09:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -322,23 +322,23 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
 
   G4ThreeVector electronDirection1(dirx,diry,dirz);
   electronDirection1.rotateUz(electronDirection0);
-  aParticleChange.SetMomentumDirectionChange(electronDirection1) ;
+  aParticleChange.ProposeMomentumDirection(electronDirection1) ;
 
   if (kineticEnergy1 > 0.)
     {
-      aParticleChange.SetEnergyChange(kineticEnergy1) ;
+      aParticleChange.ProposeEnergy(kineticEnergy1) ;
     }
   else
     {    
-      aParticleChange.SetEnergyChange(0.) ;
+      aParticleChange.ProposeEnergy(0.) ;
       if (aParticleType->GetProcessManager()->GetAtRestProcessVector()->size()) 
 	//In this case there is at least one AtRest process
 	{
-	  aParticleChange.SetStatusChange(fStopButAlive);
+	  aParticleChange.ProposeTrackStatus(fStopButAlive);
 	}
       else
 	{
-	  aParticleChange.SetStatusChange(fStopAndKill);
+	  aParticleChange.ProposeTrackStatus(fStopAndKill);
 	}
     }
 
@@ -431,7 +431,7 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
 	     << G4endl;
       energyDeposit=0;
     }
-  aParticleChange.SetLocalEnergyDeposit(energyDeposit);
+  aParticleChange.ProposeLocalEnergyDeposit(energyDeposit);
   return G4VContinuousDiscreteProcess::PostStepDoIt(track, step);
 }
 

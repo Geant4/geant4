@@ -264,12 +264,12 @@ G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack
 						       positronDirection, positronKineEnergy);
   aParticleChange.AddSecondary(particle2) ;
 
-  aParticleChange.SetLocalEnergyDeposit(localEnergyDeposit) ;
+  aParticleChange.ProposeLocalEnergyDeposit(localEnergyDeposit) ;
 
   // Kill the incident photon
-  aParticleChange.SetMomentumChange(0.,0.,0.) ;
-  aParticleChange.SetEnergyChange(0.) ;
-  aParticleChange.SetStatusChange(fStopAndKill) ;
+  aParticleChange.ProposeMomentumDirection(0.,0.,0.) ;
+  aParticleChange.ProposeEnergy(0.) ;
+  aParticleChange.ProposeTrackStatus(fStopAndKill) ;
 
   //  Reset NbOfInteractionLengthLeft and return aParticleChange
   return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.99 2004-11-12 16:32:55 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.100 2004-11-18 12:08:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -494,7 +494,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
   if(finalKinEnergy < 0.0) {
     theEnergyDeposit += finalKinEnergy;
     finalKinEnergy    = 0.0;
-    aParticleChange.SetStatusChange(fStopAndKill);
+    aParticleChange.ProposeTrackStatus(fStopAndKill);
 
   } else {
 
@@ -502,10 +502,10 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
     finalPx *= norm;
     finalPy *= norm;
     finalPz *= norm;
-    aParticleChange.SetMomentumChange(finalPx, finalPy, finalPz);
+    aParticleChange.ProposeMomentumDirection(finalPx, finalPy, finalPz);
   }
 
-  aParticleChange.SetEnergyChange(finalKinEnergy);
+  aParticleChange.ProposeEnergy(finalKinEnergy);
 
   // Generation of Fluorescence and Auger
   size_t nSecondaries = 0;
@@ -574,7 +574,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
            << theEnergyDeposit/eV << " eV" << G4endl;
     theEnergyDeposit = 0.0;
   }
-  aParticleChange.SetLocalEnergyDeposit(theEnergyDeposit);
+  aParticleChange.ProposeLocalEnergyDeposit(theEnergyDeposit);
 
   return G4VContinuousDiscreteProcess::PostStepDoIt(track, step);
 }

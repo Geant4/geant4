@@ -969,12 +969,12 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
      finalT = 0.0;
       if(!particle->GetDefinition()->GetProcessManager()->
                      GetAtRestProcessVector()->size())
-        aParticleChange.SetStatusChange(fStopAndKill);
+        aParticleChange.ProposeTrackStatus(fStopAndKill);
       else
-        aParticleChange.SetStatusChange(fStopButAlive);
+        aParticleChange.ProposeTrackStatus(fStopButAlive);
   }
 
-  aParticleChange.SetEnergyChange( finalT );
+  aParticleChange.ProposeEnergy( finalT );
   eloss = kineticEnergy-finalT;
 
   // Deexcitation only of ionised atoms
@@ -1026,7 +1026,7 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
     delete newpart;
   }
 
-  aParticleChange.SetLocalEnergyDeposit(eloss);
+  aParticleChange.ProposeLocalEnergyDeposit(eloss);
   return &aParticleChange ;
 }
 
@@ -1272,7 +1272,7 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
       shellCS->SetTotalCS(totalCrossSectionMap[Z]);
       if (shell==1) {
 	aParticleChange.SetLocalEnergyDeposit (KineticEnergy);
-	aParticleChange.SetEnergyChange(0);
+	aParticleChange.ProposeEnergy(0);
       }
     }
 
@@ -1342,22 +1342,22 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
       finalPy /= finalMomentum ;
       finalPz /= finalMomentum ;
 
-      aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
+      aParticleChange.ProposeMomentumDirection( finalPx,finalPy,finalPz );
     }
   else
     {
       edep = finalKineticEnergy;
       finalKineticEnergy = 0.;
-      aParticleChange.SetMomentumChange(ParticleDirection.x(),
+      aParticleChange.ProposeMomentumDirection(ParticleDirection.x(),
                       ParticleDirection.y(),ParticleDirection.z());
       if(!aParticle->GetDefinition()->GetProcessManager()->
                      GetAtRestProcessVector()->size())
-        aParticleChange.SetStatusChange(fStopAndKill);
+        aParticleChange.ProposeTrackStatus(fStopAndKill);
       else
-        aParticleChange.SetStatusChange(fStopButAlive);
+        aParticleChange.ProposeTrackStatus(fStopButAlive);
     }
 
-  aParticleChange.SetEnergyChange( finalKineticEnergy );
+  aParticleChange.ProposeEnergy( finalKineticEnergy );
   aParticleChange.SetLocalEnergyDeposit (edep);
   aParticleChange.SetNumberOfSecondaries(totalNumber);
   aParticleChange.AddSecondary(theDeltaRay);

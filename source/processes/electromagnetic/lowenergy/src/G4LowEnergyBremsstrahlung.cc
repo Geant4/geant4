@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.68 2004-01-08 17:04:52 silvarod Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.69 2004-11-18 12:08:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -349,8 +349,8 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& track,
       
   aParticleChange.SetNumberOfSecondaries(1);
   G4double norm = 1./sqrt(finalX*finalX + finalY*finalY + finalZ*finalZ);
-  aParticleChange.SetMomentumChange(finalX*norm, finalY*norm, finalZ*norm);
-  aParticleChange.SetEnergyChange( finalEnergy );
+  aParticleChange.ProposeMomentumDirection(finalX*norm, finalY*norm, finalZ*norm);
+  aParticleChange.ProposeEnergy( finalEnergy );
 
   // create G4DynamicParticle object for the gamma 
   G4DynamicParticle* aGamma= new G4DynamicParticle (G4Gamma::Gamma(),

@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4PenelopeRayleigh.cc,v 1.11 2004-03-18 13:40:36 pandola Exp $
+// $Id: G4PenelopeRayleigh.cc,v 1.12 2004-11-18 12:09:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
@@ -208,9 +208,9 @@ G4VParticleChange* G4PenelopeRayleigh::PostStepDoIt(const G4Track& aTrack,
 
   if (photonEnergy0 <= lowEnergyLimit)
     {
-      aParticleChange.SetStatusChange(fStopAndKill);
-      aParticleChange.SetEnergyChange(0.);
-      aParticleChange.SetLocalEnergyDeposit(photonEnergy0);
+      aParticleChange.ProposeTrackStatus(fStopAndKill);
+      aParticleChange.ProposeEnergy(0.);
+      aParticleChange.ProposeLocalEnergyDeposit(photonEnergy0);
       return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
     }
 
@@ -291,8 +291,8 @@ G4VParticleChange* G4PenelopeRayleigh::PostStepDoIt(const G4Track& aTrack,
   G4ThreeVector photonDirection1(dirX, dirY, dirZ);
 
   photonDirection1.rotateUz(photonDirection0);
-  aParticleChange.SetEnergyChange(photonEnergy0);
-  aParticleChange.SetMomentumChange(photonDirection1);
+  aParticleChange.ProposeEnergy(photonEnergy0);
+  aParticleChange.ProposeMomentumDirection(photonDirection1);
   
   aParticleChange.SetNumberOfSecondaries(0);
 

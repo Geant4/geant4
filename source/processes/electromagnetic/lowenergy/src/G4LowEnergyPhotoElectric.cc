@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.52 2004-05-12 09:22:02 silvarod Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.53 2004-11-18 12:08:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -156,9 +156,9 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4double photonEnergy = incidentPhoton->GetKineticEnergy();
   if (photonEnergy <= lowEnergyLimit)
     {
-      aParticleChange.SetStatusChange(fStopAndKill);
-      aParticleChange.SetEnergyChange(0.);
-      aParticleChange.SetLocalEnergyDeposit(photonEnergy);
+      aParticleChange.ProposeTrackStatus(fStopAndKill);
+      aParticleChange.ProposeEnergy(0.);
+      aParticleChange.ProposeLocalEnergyDeposit(photonEnergy);
       return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
     }
  
@@ -297,11 +297,11 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
     }
 
   // Kill the incident photon
-  aParticleChange.SetMomentumChange( 0., 0., 0. );
-  aParticleChange.SetEnergyChange( 0. );
+  aParticleChange.ProposeMomentumDirection( 0., 0., 0. );
+  aParticleChange.ProposeEnergy( 0. );
 
-  aParticleChange.SetLocalEnergyDeposit(energyDeposit);
-  aParticleChange.SetStatusChange( fStopAndKill );
+  aParticleChange.ProposeLocalEnergyDeposit(energyDeposit);
+  aParticleChange.ProposeTrackStatus( fStopAndKill );
 
   // Reset NbOfInteractionLengthLeft and return aParticleChange
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );

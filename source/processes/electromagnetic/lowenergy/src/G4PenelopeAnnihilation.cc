@@ -209,11 +209,11 @@ G4VParticleChange* G4PenelopeAnnihilation::PostStepDoIt(const G4Track& aTrack,
    }   
    else  localEnergyDeposit += photon2Energy;
      
-   aParticleChange.SetLocalEnergyDeposit(localEnergyDeposit);
+   aParticleChange.ProposeLocalEnergyDeposit(localEnergyDeposit);
 
-   aParticleChange.SetMomentumChange( 0., 0., 0. );
-   aParticleChange.SetEnergyChange(0.); 
-   aParticleChange.SetStatusChange(fStopAndKill);
+   aParticleChange.ProposeMomentumDirection( 0., 0., 0. );
+   aParticleChange.ProposeEnergy(0.); 
+   aParticleChange.ProposeTrackStatus(fStopAndKill);
 
    return &aParticleChange;
 }
@@ -235,11 +235,11 @@ G4VParticleChange* G4PenelopeAnnihilation::AtRestDoIt(const G4Track& aTrack,
    aParticleChange.AddSecondary(new G4DynamicParticle (G4Gamma::Gamma(),
                                            -direction, electron_mass_c2) ); 
 
-   aParticleChange.SetLocalEnergyDeposit(0.);
+   aParticleChange.ProposeLocalEnergyDeposit(0.);
 
    // Kill the incident positron 
    //
-   aParticleChange.SetStatusChange(fStopAndKill);
+   aParticleChange.ProposeTrackStatus(fStopAndKill);
       
    return &aParticleChange;
 }

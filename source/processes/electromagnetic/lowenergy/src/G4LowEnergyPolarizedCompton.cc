@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.17 2003-11-18 16:39:21 pia Exp $
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.18 2004-11-18 12:08:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -185,9 +185,9 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
 
   if(gammaEnergy0 <= lowEnergyLimit)
     {
-      aParticleChange.SetStatusChange(fStopAndKill);
-      aParticleChange.SetEnergyChange(0.);
-      aParticleChange.SetLocalEnergyDeposit(gammaEnergy0);
+      aParticleChange.ProposeTrackStatus(fStopAndKill);
+      aParticleChange.ProposeEnergy(0.);
+      aParticleChange.ProposeLocalEnergyDeposit(gammaEnergy0);
       return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
     }
 
@@ -347,14 +347,14 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
 
   if (gammaEnergy1 > 0.)
     {
-      aParticleChange.SetEnergyChange( gammaEnergy1 ) ;
-      aParticleChange.SetMomentumChange( gammaDirection1 );
-      aParticleChange.SetPolarizationChange( gammaPolarization1 );
+      aParticleChange.ProposeEnergy( gammaEnergy1 ) ;
+      aParticleChange.ProposeMomentumDirection( gammaDirection1 );
+      aParticleChange.ProposePolarization( gammaPolarization1 );
     }
   else
     {
-      aParticleChange.SetEnergyChange(0.) ;
-      aParticleChange.SetStatusChange(fStopAndKill);
+      aParticleChange.ProposeEnergy(0.) ;
+      aParticleChange.ProposeTrackStatus(fStopAndKill);
     }
 
   //
@@ -375,12 +375,12 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
       G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(),ElecDirection.unit(),ElecKineEnergy) ;
       aParticleChange.SetNumberOfSecondaries(1);
       aParticleChange.AddSecondary(electron);
-      aParticleChange.SetLocalEnergyDeposit(0.); 
+      aParticleChange.ProposeLocalEnergyDeposit(0.); 
     }
   else
     {
       aParticleChange.SetNumberOfSecondaries(0);
-      aParticleChange.SetLocalEnergyDeposit(ElecKineEnergy);
+      aParticleChange.ProposeLocalEnergyDeposit(ElecKineEnergy);
     }
   
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);

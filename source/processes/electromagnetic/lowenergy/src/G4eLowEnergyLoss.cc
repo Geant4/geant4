@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.32 2004-06-01 14:03:55 vnivanch Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.33 2004-11-18 12:10:07 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -452,13 +452,13 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   if (finalT <= 0. )
   {
     finalT = 0.;
-    if(Charge > 0.0) aParticleChange.SetStatusChange(fStopButAlive);
-    else             aParticleChange.SetStatusChange(fStopAndKill);
+    if(Charge > 0.0) aParticleChange.ProposeTrackStatus(fStopButAlive);
+    else             aParticleChange.ProposeTrackStatus(fStopAndKill);
   }
 
   G4double edep = E - finalT;
 
-  aParticleChange.SetEnergyChange(finalT);
+  aParticleChange.ProposeEnergy(finalT);
 
   // Deexcitation of ionised atoms
   std::vector<G4DynamicParticle*>* deexcitationProducts = 0;
@@ -507,7 +507,7 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   }
   delete deexcitationProducts;
 
-  aParticleChange.SetLocalEnergyDeposit(edep);
+  aParticleChange.ProposeLocalEnergyDeposit(edep);
 
   return &aParticleChange;
 }

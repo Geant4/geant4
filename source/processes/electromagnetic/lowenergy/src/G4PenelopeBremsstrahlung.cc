@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlung.cc,v 1.15 2004-06-01 15:07:10 pandola Exp $
+// $Id: G4PenelopeBremsstrahlung.cc,v 1.16 2004-11-18 12:09:13 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -358,25 +358,25 @@ G4VParticleChange* G4PenelopeBremsstrahlung::PostStepDoIt(const G4Track& track,
 
   aParticleChange.SetNumberOfSecondaries(1);
   G4double norm = 1./sqrt(finalX*finalX + finalY*finalY + finalZ*finalZ); 
-  aParticleChange.SetMomentumChange(finalX*norm, finalY*norm, finalZ*norm);
+  aParticleChange.ProposeMomentumDirection(finalX*norm, finalY*norm, finalZ*norm);
 
   const G4ParticleDefinition* particle = track.GetDefinition();
 
   if (finalEnergy > 0.)
     {
-      aParticleChange.SetEnergyChange(finalEnergy) ;
+      aParticleChange.ProposeEnergy(finalEnergy) ;
     }
   else
     {    
-      aParticleChange.SetEnergyChange(0.) ;
+      aParticleChange.ProposeEnergy(0.) ;
       if (particle->GetProcessManager()->GetAtRestProcessVector()->size()) 
 	//In this case there is at least one AtRest process
 	{
-	  aParticleChange.SetStatusChange(fStopButAlive);
+	  aParticleChange.ProposeTrackStatus(fStopButAlive);
 	}
       else
 	{
-	  aParticleChange.SetStatusChange(fStopAndKill);
+	  aParticleChange.ProposeTrackStatus(fStopAndKill);
 	}
     }
  

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.23 2004-11-17 18:21:57 pia Exp $
+// $Id: G4PenelopeCompton.cc,v 1.24 2004-11-18 12:09:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -240,9 +240,9 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 
   if (photonEnergy0 <= lowEnergyLimit)
     {
-      aParticleChange.SetStatusChange(fStopAndKill);
-      aParticleChange.SetEnergyChange(0.);
-      aParticleChange.SetLocalEnergyDeposit(photonEnergy0);
+      aParticleChange.ProposeTrackStatus(fStopAndKill);
+      aParticleChange.ProposeEnergy(0.);
+      aParticleChange.ProposeLocalEnergyDeposit(photonEnergy0);
       return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
     }
 
@@ -438,17 +438,17 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
   
   G4ThreeVector photonDirection1(dirx,diry,dirz);
   photonDirection1.rotateUz(photonDirection0);
-  aParticleChange.SetMomentumChange(photonDirection1) ;
+  aParticleChange.ProposeMomentumDirection(photonDirection1) ;
   G4double photonEnergy1 = epsilon * photonEnergy0;   
 
   if (photonEnergy1 > 0.)
     {
-      aParticleChange.SetEnergyChange(photonEnergy1) ;
+      aParticleChange.ProposeEnergy(photonEnergy1) ;
     }
   else
     {    
-      aParticleChange.SetEnergyChange(0.) ;
-      aParticleChange.SetStatusChange(fStopAndKill);
+      aParticleChange.ProposeEnergy(0.) ;
+      aParticleChange.ProposeTrackStatus(fStopAndKill);
     }
 
 
@@ -558,7 +558,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	     << G4endl;
       energyDeposit=0;
     }
-  aParticleChange.SetLocalEnergyDeposit(energyDeposit);
+  aParticleChange.ProposeLocalEnergyDeposit(energyDeposit);
   
 
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
