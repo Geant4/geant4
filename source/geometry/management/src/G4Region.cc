@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.5 2003-03-05 19:01:24 asaim Exp $
+// $Id: G4Region.cc,v 1.6 2003-03-22 19:17:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,6 +83,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
   if (region)
   {
     currentRegion = this;
+    lv->SetRegion(currentRegion);
 
     pos = G4std::find(fMaterials.begin(),fMaterials.end(),volMat);
     if (pos == fMaterials.end())
@@ -110,7 +111,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
       }
     }
     G4LogicalVolume* daughterLVol = daughterPVol->GetLogicalVolume();
-    daughterLVol->SetRegion(currentRegion);
+//    daughterLVol->SetRegion(currentRegion);
     ScanVolumeTree(daughterLVol, region);
   }
   else
@@ -123,7 +124,7 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
         // Sets daughter's LV to be a region and stores materials in
         // the materials list, if the LV is not already a root region
         //
-        daughterLVol->SetRegion(currentRegion);
+//        daughterLVol->SetRegion(currentRegion);
         ScanVolumeTree(daughterLVol, region);
       }
     }
