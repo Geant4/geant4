@@ -175,7 +175,7 @@
     // prepare the IsoResult.
     char the1[100] = {""};
     G4std::ostrstream ost1(the1, 100, G4std::ios::out);
-    ost1 <<Z<<"_"<<A;
+    ost1 <<Z<<"_"<<A<<"\0";
     G4String * biff = new G4String(the1);
     G4IsoResult * theResult = new G4IsoResult(*biff, aNucleus);
     
