@@ -2,8 +2,8 @@ LIST
 C 
 C  dE/dx (MeV/cm) for mu+ in Scintillator
 C
-KINE   (mu+)
-MATE   (Scintillator)
+KINE  5  (mu+)
+MATE  14 (Scintillator)
 ERAN  1.00e-05 (ekmin)	1.00e+04 (ekmax)	90 (nekbin)
 CUTS  1.00e-05 (cutgam)	1.00e-05 (cutele)
 G4VAL 
