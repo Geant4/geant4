@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungSpectrum.cc,v 1.9 2003-02-28 08:42:18 vnivanch Exp $
+// $Id: G4eBremsstrahlungSpectrum.cc,v 1.10 2003-05-20 20:16:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -119,7 +119,7 @@ G4double G4eBremsstrahlungSpectrum::AverageEnergy(G4int Z,
                                                   G4double tmax,
                                                   G4double e,
                                                   G4int,
-                                         const G4ParticleDefinition*) const
+						  const G4ParticleDefinition*) const
 {
   G4double tm = G4std::min(tmax, e);
   G4double t0 = G4std::max(tmin, lowestE);
@@ -173,7 +173,7 @@ G4double G4eBremsstrahlungSpectrum::SampleEnergy(G4int Z,
                                                  G4double tmax,
                                                  G4double e,
                                                  G4int,
-                                        const G4ParticleDefinition*) const
+						 const G4ParticleDefinition*) const
 {
   G4double tm = G4std::min(tmax, e);
   G4double t0 = G4std::max(tmin, lowestE);
@@ -217,7 +217,7 @@ G4double G4eBremsstrahlungSpectrum::SampleEnergy(G4int Z,
 
 G4double G4eBremsstrahlungSpectrum::IntSpectrum(G4double xMin,
                                                 G4double xMax,
-                                          const G4DataVector& p) const
+						const G4DataVector& p) const
 {
   G4double x1 = G4std::min(xMin, xp[0]);
   G4double x2 = G4std::min(xMax, xp[0]);
@@ -243,7 +243,7 @@ G4double G4eBremsstrahlungSpectrum::IntSpectrum(G4double xMin,
 
 G4double G4eBremsstrahlungSpectrum::AverageValue(G4double xMin,
                                                  G4double xMax,
-			                   const G4DataVector& p) const
+						 const G4DataVector& p) const
 {
   G4double x1 = G4std::min(xMin, xp[0]);
   G4double x2 = G4std::min(xMax, xp[0]);
@@ -273,7 +273,7 @@ G4double G4eBremsstrahlungSpectrum::AverageValue(G4double xMin,
 }
 
 G4double G4eBremsstrahlungSpectrum::Function(G4double x,
-                                       const G4DataVector& p) const
+					     const G4DataVector& p) const
 {
   G4double f = 0.0;
 
@@ -296,13 +296,13 @@ G4double G4eBremsstrahlungSpectrum::Function(G4double x,
 void G4eBremsstrahlungSpectrum::PrintData() const
 { theBRparam->PrintData(); }
 
-G4double G4eBremsstrahlungSpectrum::Excitation(G4int Z, G4double kineticEnergy) const
+G4double G4eBremsstrahlungSpectrum::Excitation(G4int , G4double ) const
 {
   return 0.0;
 }
 
 G4double G4eBremsstrahlungSpectrum::MaxEnergyOfSecondaries(G4double kineticEnergy,
-							   G4int Z,
+							   G4int, // Z,
 							   const G4ParticleDefinition*) const
 {
   return kineticEnergy;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlung.cc,v 1.5 2003-04-24 14:51:10 vnivanch Exp $
+// $Id: G4PenelopeBremsstrahlung.cc,v 1.6 2003-05-20 20:16:13 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -33,6 +33,8 @@
 //
 // Modifications:
 // 24.04.2003 V.Ivanchenko - Cut per region mfpt
+// 20.05.2003 MGP          - Removed compilation warnings
+//                           Restored NotForced in GetMeanFreePath
 //
 //----------------------------------------------------------------
 
@@ -412,10 +414,10 @@ G4bool G4PenelopeBremsstrahlung::IsApplicable(const G4ParticleDefinition& partic
 
 
 G4double G4PenelopeBremsstrahlung::GetMeanFreePath(const G4Track& track,
-						    G4double previousStepSize,
+						   G4double, // previousStepSize
 						    G4ForceCondition* cond)
 {
-  //*cond = NotForced;
+  *cond = NotForced;
   G4int index = (track.GetMaterialCutsCouple())->GetIndex();
   const G4VEMDataSet* data = theMeanFreePath->GetComponent(index);
   G4double meanFreePath = data->FindValue(track.GetKineticEnergy());

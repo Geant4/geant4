@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BremsstrahlungCrossSectionHandler.cc,v 1.6 2003-01-22 18:47:26 vnivanch Exp $
+// $Id: G4BremsstrahlungCrossSectionHandler.cc,v 1.7 2003-05-20 20:16:12 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,7 +52,7 @@
 #include "G4ProductionCutsTable.hh"
 
 G4BremsstrahlungCrossSectionHandler::G4BremsstrahlungCrossSectionHandler(const G4VEnergySpectrum* spec,
-									 G4VDataSetAlgorithm* alg)
+									 G4VDataSetAlgorithm* )
   : theBR(spec)
 {
   interp = new G4SemiLogInterpolation();

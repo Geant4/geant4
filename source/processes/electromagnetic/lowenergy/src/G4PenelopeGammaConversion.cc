@@ -101,7 +101,7 @@ G4PenelopeGammaConversion::~G4PenelopeGammaConversion()
   delete rangeTest;
 }
 
-void G4PenelopeGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& photon)
+void G4PenelopeGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& )
 {
 
   crossSectionHandler->Clear();
@@ -280,8 +280,8 @@ G4bool G4PenelopeGammaConversion::IsApplicable(const G4ParticleDefinition& parti
 }
 
 G4double G4PenelopeGammaConversion::GetMeanFreePath(const G4Track& track,
-						     G4double previousStepSize,
-						     G4ForceCondition*)
+						    G4double, // previousStepSize
+						    G4ForceCondition*)
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();
   G4double energy = photon->GetKineticEnergy();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.15 2003-04-24 14:19:37 vnivanch Exp $
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.16 2003-05-20 20:16:13 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -127,7 +127,7 @@ G4LowEnergyPolarizedCompton::~G4LowEnergyPolarizedCompton()
 }
 
 
-void G4LowEnergyPolarizedCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
+void G4LowEnergyPolarizedCompton::BuildPhysicsTable(const G4ParticleDefinition& )
 {
 
   crossSectionHandler->Clear();
@@ -569,7 +569,7 @@ G4bool G4LowEnergyPolarizedCompton::IsApplicable(const G4ParticleDefinition& par
 
 
 G4double G4LowEnergyPolarizedCompton::GetMeanFreePath(const G4Track& track,
-						      G4double previousStepSize,
+						      G4double,
 						      G4ForceCondition*)
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();

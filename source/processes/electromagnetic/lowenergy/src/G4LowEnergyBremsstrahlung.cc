@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.59 2003-03-26 10:44:42 silvarod Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.60 2003-05-20 20:16:12 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -54,15 +54,12 @@
 // 21.01.2003 VI  Cut per region
 // 21.02.2003 V.Ivanchenko    Energy bins for spectrum are defined here
 // 28.02.03 V.Ivanchenko    Filename is defined in the constructor
-// 24.03.2003 P.Rodrigues Changes to accommodate new angular generators
 //
 // --------------------------------------------------------------
 
 #include "G4LowEnergyBremsstrahlung.hh"
 #include "G4eBremsstrahlungSpectrum.hh"
 #include "G4BremsstrahlungCrossSectionHandler.hh"
-#include "G4VBremAngularDistribution.hh"
-#include "G4ModifiedTsai.hh"
 #include "G4VDataSetAlgorithm.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4VEMDataSet.hh"
@@ -81,21 +78,6 @@ G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& nam)
 {
   cutForPhotons = 0.;
   verboseLevel = 0;
-  angularDistribution = new G4ModifiedTsai("TsaiGenerator"); // default generator
-  angularDistribution->PrintGeneratorInformation();
-}
-
-G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& nam, G4VBremAngularDistribution* distribution)
-  : G4eLowEnergyLoss(nam),
-    crossSectionHandler(0),
-    theMeanFreePath(0),
-    energySpectrum(0),
-    angularDistribution(distribution)
-{
-  cutForPhotons = 0.;
-  verboseLevel = 0;
-
-  angularDistribution->PrintGeneratorInformation();
 }
 
 
@@ -203,7 +185,7 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
 }
 
 
-void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType)
+void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& )
 {
   // Build table for energy loss due to soft brems
   // the tables are built for *MATERIALS* binning is taken from LowEnergyLoss
@@ -300,15 +282,20 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& track,
   G4int Z = crossSectionHandler->SelectRandomAtom(couple, kineticEnergy);
 
   G4double tGamma = energySpectrum->SampleEnergy(Z, tCut, kineticEnergy, kineticEnergy);
+
+  // Sample gamma angle (Z - axis along the parent particle).
+  // Universal distribution suggested by L. Urban (Geant3 manual (1993)
+  // Phys211) derived from Tsai distribution (Rev Mod Phys 49,421(1977))
+
   G4double totalEnergy = kineticEnergy + electron_mass_c2;
-  G4double initial_momentum = sqrt((totalEnergy + electron_mass_c2)*kineticEnergy);
 
-  G4double finalEnergy = kineticEnergy - tGamma; // electron/positron final energy  
-  G4double totalFinalEnergy = finalEnergy +  electron_mass_c2;
-  G4double final_momentum =  sqrt((totalFinalEnergy + electron_mass_c2)*finalEnergy);
+  const G4double a1 = 0.625, a2 = 3.*a1, d = 27.;
+  G4double u = - log(G4UniformRand()*G4UniformRand());
 
-  G4double theta = angularDistribution->PolarAngle(kineticEnergy,initial_momentum,finalEnergy,final_momentum,Z);
+  if (9./(9.+d) > G4UniformRand()) u /= a1;
+  else                             u /= a2;
 
+  G4double theta = u*electron_mass_c2/totalEnergy;
   G4double phi   = twopi * G4UniformRand();
   G4double dirZ  = cos(theta);
   G4double sinTheta  = sqrt(1. - dirZ*dirZ);
@@ -317,11 +304,14 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& track,
 
   G4ThreeVector gammaDirection (dirX, dirY, dirZ);
   G4ThreeVector electronDirection = track.GetMomentumDirection();
-
+    
+  gammaDirection.rotateUz(electronDirection);   
+  
   //
   // Update the incident particle 
   //
-  gammaDirection.rotateUz(electronDirection);   
+    
+  G4double finalEnergy = kineticEnergy - tGamma;  
     
   // Kinematic problem
   if (finalEnergy < 0.) {
@@ -368,7 +358,7 @@ G4bool G4LowEnergyBremsstrahlung::IsApplicable(const G4ParticleDefinition& parti
 
 
 G4double G4LowEnergyBremsstrahlung::GetMeanFreePath(const G4Track& track,
-						    G4double previousStepSize,
+						    G4double,
 						    G4ForceCondition* cond)
 {
   *cond = NotForced;

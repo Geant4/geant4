@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.cc,v 1.8 2002-05-28 09:20:21 pia Exp $
+// $Id: G4ShellEMDataSet.cc,v 1.9 2003-05-20 20:16:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -71,7 +71,7 @@ G4ShellEMDataSet::~G4ShellEMDataSet()
   delete algorithm;
 }
 
-G4double G4ShellEMDataSet::FindValue(G4double e, G4int id) const
+G4double G4ShellEMDataSet::FindValue(G4double e, G4int ) const
 {
   // Returns the sum over the shells corresponding to e
   G4double value = 0.;

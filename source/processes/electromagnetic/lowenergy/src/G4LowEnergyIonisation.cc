@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.93 2003-04-12 16:40:29 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.94 2003-05-20 20:16:13 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -224,8 +224,7 @@ void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParti
 }
 
 
-void G4LowEnergyIonisation::BuildLossTable(
-                        const G4ParticleDefinition& aParticleType)
+void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& )
 {
   // Build table for energy loss due to soft brems
   // the tables are built for *MATERIALS* binning is taken from LowEnergyLoss
@@ -682,7 +681,7 @@ G4LowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
 }
 
 G4double G4LowEnergyIonisation::GetMeanFreePath(const G4Track& track,
-						G4double previousStepSize,
+						G4double , // previousStepSize
 						G4ForceCondition* cond)
 {
    *cond = NotForced;

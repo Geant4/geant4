@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.20 2002-07-19 17:32:50 vnivanch Exp $
+// $Id: G4eIonisationSpectrum.cc,v 1.21 2003-05-20 20:16:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,7 +74,7 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
 					    G4double tMax, 
 					    G4double e,
 					    G4int shell,
-				      const G4ParticleDefinition* part) const
+					    const G4ParticleDefinition* ) const
 {
   // Please comment what Probability does and what are the three 
   // functions mentioned below
@@ -160,7 +160,7 @@ G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
 					      G4double tMax, 
 					      G4double e,
 					      G4int shell,
-				        const G4ParticleDefinition* part) const
+					      const G4ParticleDefinition* ) const
 {
   // Please comment what AverageEnergy does and what are the three 
   // functions mentioned below
@@ -242,7 +242,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 					     G4double tMax, 
 				             G4double e,
 				             G4int shell,
-				       const G4ParticleDefinition* part) const
+					     const G4ParticleDefinition* ) const
 {
   // Please comment what SampleEnergy does
   G4double tDelta = 0.0;
@@ -563,6 +563,10 @@ void G4eIonisationSpectrum::PrintData() const
   theParam->PrintData();
 }
 
+G4double G4eIonisationSpectrum::MaxEnergyOfSecondaries(G4double kineticEnergy,
+						       G4int, // Z = 0,
+						       const G4ParticleDefinition* ) const
+  { return 0.5 * kineticEnergy; };
 
 
 

@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4LowEnergyGammaConversion.cc,v 1.30 2003-04-24 14:19:37 vnivanch Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.31 2003-05-20 20:16:13 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,7 +109,7 @@ G4LowEnergyGammaConversion::~G4LowEnergyGammaConversion()
   delete rangeTest;
 }
 
-void G4LowEnergyGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& photon)
+void G4LowEnergyGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& )
 {
 
   crossSectionHandler->Clear();
@@ -310,7 +310,7 @@ G4bool G4LowEnergyGammaConversion::IsApplicable(const G4ParticleDefinition& part
 }
 
 G4double G4LowEnergyGammaConversion::GetMeanFreePath(const G4Track& track, 
-						     G4double previousStepSize, 
+						     G4double, // previousStepSize
 						     G4ForceCondition*)
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();

@@ -70,52 +70,40 @@ G4QAOLowEnergyLoss::G4QAOLowEnergyLoss(const G4String& name)
   sizeL2 = 14;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4QAOLowEnergyLoss::~G4QAOLowEnergyLoss()
 {;}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4QAOLowEnergyLoss::HighEnergyLimit(
-                             const G4ParticleDefinition* aParticle,
-                             const G4Material* material) const
+G4double G4QAOLowEnergyLoss::HighEnergyLimit(const G4ParticleDefinition* ,
+					     const G4Material* ) const
 {
   return 2.0*MeV ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4QAOLowEnergyLoss::LowEnergyLimit(
-                             const G4ParticleDefinition* aParticle,
-                             const G4Material* material) const
+G4double G4QAOLowEnergyLoss::LowEnergyLimit(const G4ParticleDefinition* ,
+					    const G4Material* ) const
 {
   //  return 50.0*keV ;
   return 5.0*keV ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4QAOLowEnergyLoss::HighEnergyLimit(
-                             const G4ParticleDefinition* aParticle) const
+G4double G4QAOLowEnergyLoss::HighEnergyLimit(const G4ParticleDefinition* ) const
 {
   return 2.0*MeV ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4QAOLowEnergyLoss::LowEnergyLimit(
-                             const G4ParticleDefinition* aParticle) const
+G4double G4QAOLowEnergyLoss::LowEnergyLimit(const G4ParticleDefinition* ) const
 {
   //  return 50.0*keV ;
   return 5.0*keV ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4QAOLowEnergyLoss::IsInCharge(
-			    const G4DynamicParticle* particle,
-			    const G4Material* material) const
+G4bool G4QAOLowEnergyLoss::IsInCharge(const G4DynamicParticle* particle,
+				      const G4Material* material) const
 {
   G4bool isInCharge = false;
 
@@ -129,10 +117,8 @@ G4bool G4QAOLowEnergyLoss::IsInCharge(
   return isInCharge;
 
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4QAOLowEnergyLoss::IsInCharge(
-				      const G4ParticleDefinition* aParticle,
+G4bool G4QAOLowEnergyLoss::IsInCharge(const G4ParticleDefinition* aParticle,
 				      const G4Material* material) const
 {
   
@@ -150,7 +136,6 @@ G4bool G4QAOLowEnergyLoss::IsInCharge(
   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4QAOLowEnergyLoss::TheValue(const G4DynamicParticle* particle,
 	       	                      const G4Material* material) 
@@ -163,11 +148,10 @@ G4double G4QAOLowEnergyLoss::TheValue(const G4DynamicParticle* particle,
   return eloss ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4QAOLowEnergyLoss::TheValue(const G4ParticleDefinition* aParticle,
        		                      const G4Material* material,
-                                            G4double kineticEnergy) 
+				      G4double kineticEnergy) 
 {
   G4double zParticle = (aParticle->GetPDGCharge())/eplus;
 
@@ -177,11 +161,10 @@ G4double G4QAOLowEnergyLoss::TheValue(const G4ParticleDefinition* aParticle,
 }
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
-                                              G4double kineticEnergy,
-                                              G4double zParticle) const 
+					G4double kineticEnergy,
+					G4double zParticle) const 
 {
   G4int nbOfShell = GetNumberOfShell(material);
   if(nbOfShell < 1) nbOfShell = 1;
@@ -260,7 +243,6 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
                             
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4int G4QAOLowEnergyLoss::GetNumberOfShell(const G4Material* material) const
 {
@@ -282,7 +264,6 @@ G4int G4QAOLowEnergyLoss::GetNumberOfShell(const G4Material* material) const
 }
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4QAOLowEnergyLoss::GetShellEnergy(const G4Material* material,
                                             G4int nbOfTheShell) const
@@ -306,7 +287,6 @@ G4double G4QAOLowEnergyLoss::GetShellEnergy(const G4Material* material,
   return  shellEnergy;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4QAOLowEnergyLoss::GetOscillatorEnergy(const G4Material* material,
                                                  G4int nbOfTheShell) const
@@ -345,7 +325,6 @@ G4double squaredPlasmonEnergy = 28.816 * 28.816  * 1e-6
   return  oscShellEnergy;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4QAOLowEnergyLoss::GetShellStrength(const G4Material* material,
                                               G4int nbOfTheShell) const
@@ -369,8 +348,6 @@ G4double G4QAOLowEnergyLoss::GetShellStrength(const G4Material* material,
   return shellStrength;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4double G4QAOLowEnergyLoss::GetOccupationNumber(G4int Z, G4int ShellNb) const
 {
 
@@ -380,7 +357,6 @@ G4double G4QAOLowEnergyLoss::GetOccupationNumber(G4int Z, G4int ShellNb) const
   return nbOfElectronPerSubShell[indice+1];
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4QAOLowEnergyLoss::GetL0(G4double normEnergy) const 
 {
@@ -399,7 +375,6 @@ G4double G4QAOLowEnergyLoss::GetL0(G4double normEnergy) const
   return bethe ;
   
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4QAOLowEnergyLoss::GetL1(G4double normEnergy) const
 {
@@ -420,7 +395,6 @@ G4double G4QAOLowEnergyLoss::GetL1(G4double normEnergy) const
   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4QAOLowEnergyLoss::GetL2(G4double normEnergy) const
 {
@@ -439,7 +413,6 @@ G4double G4QAOLowEnergyLoss::GetL2(G4double normEnergy) const
   return bloch;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const G4int G4QAOLowEnergyLoss::materialAvailable[6] = {13,14,29,73,79,78};
   /*
@@ -465,7 +438,6 @@ G4double G4QAOLowEnergyLoss::auShellStrength[6]={ 0.0139, 0.0803, 0.2473, 0.423,
 G4double G4QAOLowEnergyLoss::ptShellEnergy[6]={ 95017e-6, 25590e-6, 4063e-6, 576e-6, 81.9e-6, 31.4e-6};
 G4double G4QAOLowEnergyLoss::ptShellStrength[6]={ 0.0129, 0.0745, 0.2295, 0.4627, 0.1324, 0.0879};
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const G4double G4QAOLowEnergyLoss::L0[67][2] =
 {
@@ -537,7 +509,6 @@ const G4double G4QAOLowEnergyLoss::L0[67][2] =
   {1000.00, 6.90474}
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const G4double G4QAOLowEnergyLoss::L1[22][2] =
 {
@@ -565,7 +536,6 @@ const G4double G4QAOLowEnergyLoss::L1[22][2] =
   {20.00,	1.16752}
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const G4double G4QAOLowEnergyLoss::L2[14][2] =
 {
@@ -585,7 +555,6 @@ const G4double G4QAOLowEnergyLoss::L2[14][2] =
   {40.00,      -1.13902}
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const G4int G4QAOLowEnergyLoss::nbOfElectronPerSubShell[1540] = 
 {
@@ -719,7 +688,5 @@ const G4int G4QAOLowEnergyLoss::fNumberOfShells[101] =
 27 , 27 , 27 , 26 , 26 ,   27 , 27 , 26 , 26 , 26    // 91 - 100
 
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 

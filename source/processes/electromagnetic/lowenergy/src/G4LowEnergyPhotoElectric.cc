@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.49 2003-01-22 18:47:28 vnivanch Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.50 2003-05-20 20:16:13 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -118,7 +118,7 @@ G4LowEnergyPhotoElectric::~G4LowEnergyPhotoElectric()
   delete rangeTest;
 }
 
-void G4LowEnergyPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& photon)
+void G4LowEnergyPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& )
 {
 
   crossSectionHandler->Clear();
@@ -300,7 +300,7 @@ G4bool G4LowEnergyPhotoElectric::IsApplicable(const G4ParticleDefinition& partic
 }
 
 G4double G4LowEnergyPhotoElectric::GetMeanFreePath(const G4Track& track,
-					       G4double previousStepSize,
+						   G4double, // previousStepSize
 					       G4ForceCondition*)
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopePhotoElectric.cc,v 1.5 2003-03-13 17:04:10 pandola Exp $
+// $Id: G4PenelopePhotoElectric.cc,v 1.6 2003-05-20 20:16:13 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola
@@ -93,7 +93,7 @@ G4PenelopePhotoElectric::~G4PenelopePhotoElectric()
   delete rangeTest;
 }
 
-void G4PenelopePhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& photon)
+void G4PenelopePhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& )
 {
   
   crossSectionHandler->Clear();
@@ -109,7 +109,7 @@ void G4PenelopePhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& phot
 }
 
 G4VParticleChange* G4PenelopePhotoElectric::PostStepDoIt(const G4Track& aTrack,
-							  const G4Step& aStep)
+							 const G4Step& aStep)
 {
   // Fluorescence generated according to:
   // J. Stepanek ,"A program to determine the radiation spectra due to a single atomic
@@ -277,8 +277,8 @@ G4bool G4PenelopePhotoElectric::IsApplicable(const G4ParticleDefinition& particl
 }
 
 G4double G4PenelopePhotoElectric::GetMeanFreePath(const G4Track& track, 
-					       G4double previousStepSize, 
-					       G4ForceCondition*)
+						  G4double, // previousStepSize
+						  G4ForceCondition*)
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();
   G4double energy = photon->GetKineticEnergy();

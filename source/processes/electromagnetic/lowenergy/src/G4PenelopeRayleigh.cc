@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4PenelopeRayleigh.cc,v 1.7 2003-03-13 16:55:35 pandola Exp $
+// $Id: G4PenelopeRayleigh.cc,v 1.8 2003-05-20 20:16:13 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
@@ -94,7 +94,7 @@ G4PenelopeRayleigh::~G4PenelopeRayleigh()
   delete samplingFunction_y;
 }
 
-void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& photon)
+void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& )
 {
 
   G4DataVector energyVector;
@@ -297,7 +297,7 @@ G4bool G4PenelopeRayleigh::IsApplicable(const G4ParticleDefinition& particle)
 }
 
 G4double G4PenelopeRayleigh::GetMeanFreePath(const G4Track& track,
-					      G4double previousStepSize, 
+					     G4double, // previousStepSize
 					      G4ForceCondition*)
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();

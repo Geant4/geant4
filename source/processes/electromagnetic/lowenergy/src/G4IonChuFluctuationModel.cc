@@ -99,62 +99,55 @@ G4double G4IonChuFluctuationModel::TheValue(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonChuFluctuationModel::HighEnergyLimit(
-                             const G4ParticleDefinition* aParticle,
-                             const G4Material* material) const
+G4double G4IonChuFluctuationModel::HighEnergyLimit(const G4ParticleDefinition*,
+						   const G4Material* ) const
 {
   return 1.0*TeV ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonChuFluctuationModel::LowEnergyLimit(
-                             const G4ParticleDefinition* aParticle,
-                             const G4Material* material) const
+G4double G4IonChuFluctuationModel::LowEnergyLimit(const G4ParticleDefinition*,
+						  const G4Material*) const
 {
   return 0.0 ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonChuFluctuationModel::HighEnergyLimit(
-                             const G4ParticleDefinition* aParticle) const
+G4double G4IonChuFluctuationModel::HighEnergyLimit(const G4ParticleDefinition*) const
 {
   return 1.0*TeV ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonChuFluctuationModel::LowEnergyLimit(
-                             const G4ParticleDefinition* aParticle) const
+G4double G4IonChuFluctuationModel::LowEnergyLimit(const G4ParticleDefinition*) const
 {
   return 0.0 ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4bool G4IonChuFluctuationModel::IsInCharge(
-                           const G4DynamicParticle* particle,
-    	                   const G4Material* material) const
+G4bool G4IonChuFluctuationModel::IsInCharge(const G4DynamicParticle*,
+					    const G4Material*) const
 {
   return true ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4bool G4IonChuFluctuationModel::IsInCharge(
-                           const G4ParticleDefinition* aParticle,
-      	                   const G4Material* material) const
+G4bool G4IonChuFluctuationModel::IsInCharge(const G4ParticleDefinition*,
+					    const G4Material*) const
 {
   return true ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonChuFluctuationModel::ChuFluctuationModel(
-                                   const G4Material* material,
-                                         G4double kineticEnergy,
-                                         G4double particleMass) const
+G4double G4IonChuFluctuationModel::ChuFluctuationModel(const G4Material* material,
+						       G4double kineticEnergy,
+						       G4double particleMass) const
 {
   // The aproximation of energy loss fluctuations 
   // Q.Yang et al., NIM B61(1991)149-155.

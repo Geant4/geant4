@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -726,8 +727,8 @@ G4double G4hLowEnergyIonisation::ComputeMicroscopicCrossSection(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hLowEnergyIonisation::GetMeanFreePath(const G4Track& trackData,
-                                                   G4double previousStepSize,
-                                              enum G4ForceCondition* condition)
+						 G4double, // previousStepSize
+						 enum G4ForceCondition* condition)
 {
    const G4DynamicParticle* aParticle = trackData.GetDynamicParticle();
    const G4MaterialCutsCouple* couple = trackData.GetMaterialCutsCouple();

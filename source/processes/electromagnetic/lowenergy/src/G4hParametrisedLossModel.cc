@@ -139,8 +139,8 @@ G4hParametrisedLossModel::~G4hParametrisedLossModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hParametrisedLossModel::TheValue(
-                          const G4DynamicParticle* particle,
-	       	          const G4Material* material) 
+					    const G4DynamicParticle* particle,
+					    const G4Material* material) 
 {
   G4double scaledEnergy = (particle->GetKineticEnergy())
                         * proton_mass_c2/(particle->GetMass());
@@ -153,9 +153,9 @@ G4double G4hParametrisedLossModel::TheValue(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hParametrisedLossModel::TheValue(
-                          const G4ParticleDefinition* aParticle,
-		          const G4Material* material,
-                                G4double kineticEnergy) 
+					    const G4ParticleDefinition* aParticle,
+					    const G4Material* material,
+					    G4double kineticEnergy) 
 {
   G4double scaledEnergy = kineticEnergy
                         * proton_mass_c2/(aParticle->GetPDGMass());
@@ -171,8 +171,8 @@ G4double G4hParametrisedLossModel::TheValue(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
 G4double G4hParametrisedLossModel::LowEnergyLimit(
-                          const G4ParticleDefinition* aParticle,
-                          const G4Material* material) const
+						  const G4ParticleDefinition* ,
+						  const G4Material*) const
 {
   return lowEnergyLimit;
 } 
@@ -180,15 +180,15 @@ G4double G4hParametrisedLossModel::LowEnergyLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
 G4double G4hParametrisedLossModel::HighEnergyLimit(
-                          const G4ParticleDefinition* aParticle,
-                          const G4Material* material) const
+						   const G4ParticleDefinition* ,
+						   const G4Material*) const
 {
   return highEnergyLimit;
 } 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
 G4double G4hParametrisedLossModel::LowEnergyLimit(
-                          const G4ParticleDefinition* aParticle) const
+						  const G4ParticleDefinition* ) const
 {
   return lowEnergyLimit;
 } 
@@ -196,7 +196,7 @@ G4double G4hParametrisedLossModel::LowEnergyLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
 G4double G4hParametrisedLossModel::HighEnergyLimit(
-                          const G4ParticleDefinition* aParticle) const
+						   const G4ParticleDefinition* ) const
 {
   return highEnergyLimit;
 } 
@@ -204,8 +204,8 @@ G4double G4hParametrisedLossModel::HighEnergyLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
 G4bool G4hParametrisedLossModel::IsInCharge(
-                          const G4DynamicParticle* particle,
-		          const G4Material* material) const
+					    const G4DynamicParticle* ,
+					    const G4Material*) const
 {
   return true;
 }
@@ -213,8 +213,8 @@ G4bool G4hParametrisedLossModel::IsInCharge(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
 G4bool G4hParametrisedLossModel::IsInCharge(
-                          const G4ParticleDefinition* aParticle,
-		          const G4Material* material) const
+					    const G4ParticleDefinition* ,
+					    const G4Material*) const
 {
   return true;
 }
@@ -222,13 +222,13 @@ G4bool G4hParametrisedLossModel::IsInCharge(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hParametrisedLossModel::StoppingPower(
-                          const G4Material* material,
-                                G4double kineticEnergy) 
+						 const G4Material* material,
+						 G4double kineticEnergy) 
 {
   G4double eloss = 0.0;
   const G4int numberOfElements = material->GetNumberOfElements() ;
   const G4double* theAtomicNumDensityVector =
-                                 material->GetAtomicNumDensityVector() ;
+    material->GetAtomicNumDensityVector() ;
   
   // pure material
   if(1 == numberOfElements) {
