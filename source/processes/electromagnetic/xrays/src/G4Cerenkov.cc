@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.12 2001-11-07 17:07:40 radoone Exp $
+// $Id: G4Cerenkov.cc,v 1.13 2002-05-16 21:21:14 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -181,8 +181,10 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	aParticleChange.SetNumberOfSecondaries(NumPhotons);
 
-	if (fTrackSecondariesFirst)
-		aParticleChange.SetStatusChange(fSuspend);
+        if (fTrackSecondariesFirst) {
+           if (aTrack.GetTrackStatus() == fAlive )
+                   aParticleChange.SetStatusChange(fSuspend);
+        }
 	
 	////////////////////////////////////////////////////////////////
 
