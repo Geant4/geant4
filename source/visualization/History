@@ -1,4 +1,4 @@
-$Id: History,v 1.138 2001-07-22 01:09:51 johna Exp $
+$Id: History,v 1.139 2001-07-24 22:06:59 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,20 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+24th July 2001  John Allison  (vis-V03-02-06)
+- Needs greps-V03-02-01 for small interface change to G4Scale.
+- Includes modeling-V03-02-02.
+- Force rebuild of graphics "stores" (graphical databases) and, if
+  auto-refresh is true, refresh of all views
+  (/vis/scene/notifyHandlers) after an addition to scene.
+- Improvements to /vis/scene/add/scale:
+  o Added colour.
+  o Assigned a genuine extent.
+
+23rd July 2001  John Allison  (vis-V03-02-05)
+- Improved /vis/scene/add/scale.
+- Improved auto-refreshing.
 
 21st July 2001  John Allison  (vis-V03-02-04)
 - Added /vis/scene/add/scale.  Needs greps-V03-02-00 and intercoms-V03-02-02.
