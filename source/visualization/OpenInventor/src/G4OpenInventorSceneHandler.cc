@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.8 2000-05-28 13:42:34 barrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.9 2001-01-25 15:28:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -277,6 +277,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& Square) {
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   if(currentSeparator==NULL) return;
+  if (polyhedron.GetNoFacets() == 0) return;
 #define MAXPOLYH	32767
   //
   // Assume all facets are convex quadrilaterals.

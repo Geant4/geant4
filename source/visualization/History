@@ -1,4 +1,4 @@
-$Id: History,v 1.97 2001-01-25 12:11:30 johna Exp $
+$Id: History,v 1.98 2001-01-25 15:28:05 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,15 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+25th January 2001  John Allison
+- Added protection against empty G4Polyhedron objects.
+   FukuiRenderer/src/G4FRSceneFunc.icc
+   OPACS/src/G4GoSceneHandler.cc
+   OpenGL/src/G4OpenGLSceneHandler.cc
+   OpenInventor/src/G4OpenInventorSceneHandler.cc
+   VRML/src/G4VRML1SceneHandlerFunc.icc
+   VRML/src/G4VRML2SceneHandlerFunc.icc
 
 25th January 2001  John Allison  (opengl-V03-00-00)
 - Implemented running re-calculation of up-vector in the case of "object

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.7 2001-01-18 11:59:36 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.8 2001-01-25 15:28:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -327,6 +327,8 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   //Assume all facets are convex quadrilaterals.
   //Draw each G4Facet individually
   
+  if (polyhedron.GetNoFacets() == 0) return;
+
   G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (polyhedron);
   
   //Get colour, etc..

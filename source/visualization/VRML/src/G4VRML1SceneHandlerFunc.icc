@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1SceneHandlerFunc.icc,v 1.5 1999-12-27 07:49:22 stanaka Exp $
+// $Id: G4VRML1SceneHandlerFunc.icc,v 1.6 2001-01-25 15:28:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1SceneHandlerFunc.icc
@@ -251,6 +251,9 @@ void G4VRML1SCENE::AddPrimitive(const G4Polyhedron& polyhedron)
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddPrimitive(G4Polyhedron)" << "\n";
 #endif
+
+	if (polyhedron.GetNoFacets() == 0) return;
+
 	VRMLBeginModeling () ;
 
 	fDest << "Separator {" << "\n";
