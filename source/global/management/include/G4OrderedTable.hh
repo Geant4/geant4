@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OrderedTable.hh,v 1.2 1999-11-11 10:47:30 gunter Exp $
+// $Id: G4OrderedTable.hh,v 1.3 1999-11-15 07:56:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@ class G4ValVector : public G4RWTValOrderedVector<G4double>
 
   public:
 
-      G4ValVector(size_t capac=RWDEFAULT_CAPACITY)
+      G4ValVector(size_t capac=G4RWDEFAULT_CAPACITY)
         : G4RWTValOrderedVector<G4double>(capac) {;}
 
       virtual ~G4ValVector() {;}
