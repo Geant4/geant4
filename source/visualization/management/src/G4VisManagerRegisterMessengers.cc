@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.19 2000-05-19 09:18:17 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.20 2000-06-07 08:43:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -141,7 +141,7 @@ The G4VisManager has a list of scenes.
 
 /vis/scene/notifyHandlers
   Refreshes all viewers of current scene.
-  Does not issue "show" (see /vis/viewer/show).
+  Does not issue "update" (see /vis/viewer/update).
 
 * /vis/scene/add/axes
   Adds to current scene.
@@ -183,10 +183,10 @@ The G4VisManager has a list of scene handlers.
 
 * /vis/sceneHandler/processScene
   Refreshes all viewers of current scene handler.
-  Does not issue "show" (see /vis/viewer/show).
+  Does not issue "update" (see /vis/viewer/update).
 
 * /vis/sceneHandler/notifyEndOfProcessing
-  Issues "show" for each viewer of current scene handler.
+  Issues "update" for each viewer of current scene handler.
 
 
 Viewers
@@ -354,11 +354,11 @@ to know the type of the parameter, so we need separate commands.)
   default:                       0     0     1
   Affects current viewer.
 
-* /vis/viewer/notifyOption immediate|delayed ?Issue of "show" after "set"?
+* /vis/viewer/notifyOption immediate|delayed ?Issue of "update" after "set"?
 
 * /vis/viewer/notifyHandler ??
 
-/vis/viewer/show [<viewer-name>]
+/vis/viewer/update [<viewer-name>]
   default:     current viewer name
   This viewer becomes current.
 
@@ -408,13 +408,13 @@ Compound Commands
 Default:             world             /vis/scene/add/volume $1
                                        /vis/sceneHandler/attach
                                        /vis/viewer/refresh
-                                       /vis/viewer/show
+                                       /vis/viewer/update
 
 /vis/specify <logical-volume-name>     /vis/scene/create
                                        /vis/scene/add/logicalVolume $1
                                        /vis/sceneHandler/attach
                                        /vis/viewer/refresh
-                                       /vis/viewer/show
+                                       /vis/viewer/update
                                        /geometry/print $1
 
   ******************************************************************/
@@ -465,7 +465,7 @@ Default:             world             /vis/scene/add/volume $1
   fMessengerList.append (new G4VisCommandViewerRemove);
   fMessengerList.append (new G4VisCommandViewerReset);
   fMessengerList.append (new G4VisCommandViewerSelect);
-  fMessengerList.append (new G4VisCommandViewerShow);
+  fMessengerList.append (new G4VisCommandViewerUpdate);
 
   command = new G4UIdirectory ("/vis/viewer/set/");
   command -> SetGuidance ("Set view parameters of current viewer.");

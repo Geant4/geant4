@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCompound.cc,v 1.3 2000-06-02 12:24:53 johna Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.4 2000-06-07 08:43:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -45,7 +45,7 @@ void G4VisCommandDrawVolume::SetNewValue
   UImanager->ApplyCommand("/vis/scene/add/volume " + newValue);
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
   UImanager->ApplyCommand("/vis/viewer/refresh");
-  UImanager->ApplyCommand("/vis/viewer/show");
+  UImanager->ApplyCommand("/vis/viewer/update");
   UImanager->SetVerboseLevel(keepVerbose);
 }
 
@@ -116,7 +116,7 @@ void G4VisCommandSpecify::SetNewValue
   UImanager->ApplyCommand("/vis/scene/add/logicalVolume " + newValue);
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
   UImanager->ApplyCommand("/vis/viewer/refresh");
-  UImanager->ApplyCommand("/vis/viewer/show");
+  UImanager->ApplyCommand("/vis/viewer/update");
   UImanager->ApplyCommand("/geometry/print " + newValue);
   UImanager->SetVerboseLevel(keepVerbose);
 }

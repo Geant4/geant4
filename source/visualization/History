@@ -1,4 +1,4 @@
-$Id: History,v 1.85 2000-06-07 02:54:40 asaim Exp $
+$Id: History,v 1.86 2000-06-07 08:43:27 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+7th June 2000  John Allison
+- /vis/viewer/update preferred, synonym /vis/viewer/show deprecated.
 
 7th June 2000  Makoto Asai
 - Fix the flip view of RayTracer.

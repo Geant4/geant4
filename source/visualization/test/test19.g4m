@@ -58,7 +58,7 @@ help /vis/sceneHandler/create
 /vis/viewer/refresh
 /vis/draw/axes     0 0 0 500
 /vis/draw/text     0 0 0 mm 50 -120 -200   exampleN03
-/vis/viewer/show
+/vis/viewer/update
 #
 # Create another viewer.
 /vis/viewer/create
@@ -70,7 +70,7 @@ help /vis/sceneHandler/create
 /vis/viewer/refresh
 /vis/draw/axes     0 0 0 500
 /vis/draw/text     0 0 0 mm 50 -120 -200   exampleN03
-/vis/viewer/show
+/vis/viewer/update
 #
 /vis/set/drawing_style 0
 /vis/camera/projection_style 0
@@ -85,7 +85,7 @@ help /vis/sceneHandler/create
 /vis/viewer/create
 /vis/camera/viewpoint 35 35
 /vis/scene/notifyHandlers
-/vis/viewer/show
+/vis/viewer/update
 #
 # Logical volume of Boolean solids...
 /vis/scene/create
@@ -95,7 +95,7 @@ help /vis/sceneHandler/create
 /vis/viewer/reset
 /vis/camera/viewpoint 35 35
 /vis/scene/notifyHandlers
-/vis/viewer/show
+/vis/viewer/update
 #
 /vis/scene/create
 /vis/scene/add/logicalVolume subtraction_L
@@ -103,7 +103,7 @@ help /vis/sceneHandler/create
 /vis/viewer/reset
 /vis/camera/viewpoint 35 35
 /vis/viewer/refresh
-/vis/viewer/show
+/vis/viewer/update
 #
 /vis/scene/create
 /vis/scene/add/logicalVolume union_L
@@ -111,7 +111,7 @@ help /vis/sceneHandler/create
 /vis/viewer/reset
 /vis/camera/viewpoint 35 35
 /vis/viewer/refresh
-/vis/viewer/show
+/vis/viewer/update
 #
 # Send geantino through...
 /vis/scene/create
@@ -124,7 +124,7 @@ help /vis/sceneHandler/create
 /vis/camera/viewpoint 35 35
 /vis/scene/notifyHandlers
 /run/beamOn 1
-/vis/viewer/show
+/vis/viewer/update
 #
 # G4Trap1
 /vis/viewer/reset
@@ -237,7 +237,7 @@ help /vis/sceneHandler/create
 /run/beamOn
 /gun/position -20 280 -180 cm
 /run/beamOn
-/vis/viewer/show
+/vis/viewer/update
 #
 # G4Trap2
 /vis/viewer/reset
@@ -263,7 +263,7 @@ help /vis/sceneHandler/create
 /run/beamOn
 /gun/position -200 460 -20 cm
 /run/beamOn
-/vis/viewer/show
+/vis/viewer/update
 #
 # Displaced solid.
 /vis/viewer/reset
@@ -274,7 +274,7 @@ help /vis/sceneHandler/create
 /gun/position 100 -180 0 cm
 /gun/direction 1 0 0
 /run/beamOn
-/vis/viewer/show
+/vis/viewer/update
 #
 # Boolean solid.
 /vis/viewer/reset
@@ -335,7 +335,7 @@ help /vis/sceneHandler/create
 /run/beamOn
 /gun/position 50 20 0 cm
 /run/beamOn
-/vis/viewer/show
+/vis/viewer/update
 #
 # To view replicas...
 # Investigating BaBar problem...
@@ -377,22 +377,22 @@ help /vis/sceneHandler/create
 /run/beamOn
 /gun/direction 1 -1 0
 /run/beamOn
-/vis/viewer/show
+/vis/viewer/update
 #...end
 #
 /vis/camera/viewpoint 30 30
 /vis/camera/projection_style 1 30
 /vis/viewer/refresh
-/vis/viewer/show
+/vis/viewer/update
 #
 /vis/sceneHandler/create RayTracer
 /vis/viewer/create
 /vis/viewer/reset
 /vis/camera/viewpoint 30 30
 /vis/viewer/refresh
-/vis/viewer/show
+/vis/viewer/update
 #
 #/vis/rayTracer/column 1000
 #/vis/rayTracer/row 1000
 #/vis/viewer/refresh
-#/vis/viewer/show
+#/vis/viewer/update

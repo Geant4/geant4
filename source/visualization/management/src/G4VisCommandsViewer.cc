@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.18 2000-05-15 11:12:48 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.19 2000-06-07 08:43:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -341,7 +341,7 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand* command,
     viewer -> ClearView ();
     viewer -> DrawView ();
     G4cout << "Viewer \"" << viewer -> GetName () << "\"" << " refreshed."
-	   "\n  (You might also need \"/vis/viewer/show\".)" << G4endl;
+	   "\n  (You might also need \"/vis/viewer/update\".)" << G4endl;
   }
   else {
     G4cout << "Viewer \"" << refreshName << "\"" <<
@@ -521,13 +521,13 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand* command,
   }
 }
 
-////////////// /vis/viewer/show ///////////////////////////////////////
-// Synonym (deprecated): /vis/viewer/update ///////////////////////////
+////////////// /vis/viewer/update ///////////////////////////////////////
+// Synonym (deprecated): /vis/viewer/show ///////////////////////////
 
-G4VisCommandViewerShow::G4VisCommandViewerShow () {
+G4VisCommandViewerUpdate::G4VisCommandViewerUpdate () {
   G4bool omitable, currentAsDefault;
-  fpCommand = new G4UIcmdWithAString ("/vis/viewer/show", this);
-  fpCommand -> SetGuidance ("/vis/viewer/show [<viewer-name>]");
+  fpCommand = new G4UIcmdWithAString ("/vis/viewer/update", this);
+  fpCommand -> SetGuidance ("/vis/viewer/update [<viewer-name>]");
   fpCommand -> SetGuidance
     ("Triggers graphical database post-processing for viewers"
      " using that technique.");
@@ -541,21 +541,21 @@ G4VisCommandViewerShow::G4VisCommandViewerShow () {
 				 omitable = true,
 				 currentAsDefault = true);
   viewerNameCommands.push_back (fpCommand);
-  fpCommand1 = new G4UIcmdWithAString ("/vis/viewer/update", this);
+  fpCommand1 = new G4UIcmdWithAString ("/vis/viewer/show", this);
   fpCommand1 -> SetGuidance
-    ("Synonym for \"/vis/viewer/show\" - see that command for guidance.");
+    ("Synonym for \"/vis/viewer/update\" - see that command for guidance.");
   fpCommand1 -> SetParameterName ("viewer-name",
 				  omitable = true,
 				  currentAsDefault = true);
   viewerNameCommands.push_back (fpCommand1);
 }
 
-G4VisCommandViewerShow::~G4VisCommandViewerShow () {
+G4VisCommandViewerUpdate::~G4VisCommandViewerUpdate () {
   delete fpCommand;
   delete fpCommand1;
 }
 
-G4String G4VisCommandViewerShow::GetCurrentValue 
+G4String G4VisCommandViewerUpdate::GetCurrentValue 
 (G4UIcommand* command) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
   if (viewer) {
@@ -566,10 +566,10 @@ G4String G4VisCommandViewerShow::GetCurrentValue
   }
 }
 
-void G4VisCommandViewerShow::SetNewValue (G4UIcommand* command,
+void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
-  G4String& showName = newValue;
-  G4VViewer* viewer = fpVisManager -> GetViewer (showName);
+  G4String& updateName = newValue;
+  G4VViewer* viewer = fpVisManager -> GetViewer (updateName);
 
   if (viewer) {
     G4cout << "Viewer \"" << viewer -> GetName () << "\"";
@@ -577,7 +577,7 @@ void G4VisCommandViewerShow::SetNewValue (G4UIcommand* command,
     viewer -> ShowView ();
   }
   else {
-    G4cout << "Viewer \"" << showName << "\"";
+    G4cout << "Viewer \"" << updateName << "\"";
     G4cout << " not found - \"/vis/viewer/list\""
       "\n  to see possibilities." << G4endl;
   }
