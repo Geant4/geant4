@@ -1,4 +1,4 @@
-$Id: History,v 1.157 2004-07-27 10:39:20 vnivanch Exp $
+$Id: History,v 1.158 2004-08-06 11:34:41 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06 Augest 04: V.Ivanchenko (utils-V06-02-05)
+- Change manes of private member functions to make they be more clear
+- Distribute pointers to dedx tables between processes
+- Add interfaces to G4Emcalculator
 
 27 July 04: V.Ivanchenko (utils-V06-02-04)
 - Fix a compilation problem connected with removal of the dependence
