@@ -28,6 +28,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
     CCFLAGS   += -fPIC
   endif
   G4RUNPATHOPTION := -Wl,-rpath 
+  CC := gcc
   FC := g77
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   FCLIBS := -lg2c -lnsl
