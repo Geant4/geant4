@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.14 2001-09-27 07:04:26 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.15 2001-09-28 15:20:01 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -654,7 +654,8 @@ G4VParticleChange* G4MultipleScattering::PostStepDoIt(
     return false;
   }
   
-  G4cout << GetProcessName() << ": Success to store the PhysicsTables in "  
+  G4cout << GetProcessName() << " for " << particle->GetParticleName()
+         << ": Success to store the PhysicsTables in "  
          << directory << G4endl;
   return true;
 }
@@ -684,7 +685,8 @@ G4bool G4MultipleScattering::RetrievePhysicsTable(
     return false;
   }
   
-  G4cout << GetProcessName() << ": Success to retrieve the PhysicsTables from "
+  G4cout << GetProcessName() << " for " << particle->GetParticleName()
+         << ": Success to retrieve the PhysicsTables from "
          << directory << G4endl;
   return true;
 }
