@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorStepper.hh,v 1.8 2002-05-07 16:11:59 japost Exp $
+// $Id: G4MagIntegratorStepper.hh,v 1.9 2002-11-20 18:09:22 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -31,9 +31,16 @@
 //
 // Abstract base class for integrator of particle's equation of motion,
 // used in tracking in space dependent magnetic field
+//
+//  A Stepper must integrate over                NumberOfVariables elements,
+//   and also copy (from input to output) any of NoStateVariables  
+//   not included in the NumberOfVariables.  
+// 
+//  So it is expected that NoStateVariables >= NumberOfVariables
 
 // History:
-// - 15.01.97  J.Apostolakis (J.Apostolakis@cern.ch)
+// - 15.01.97  J. Apostolakis (J.Apostolakis@cern.ch)
+// - 20.11.02  J. Apostolakis: Added new "State" elements
 
 #ifndef G4MAGIntegratorSTEPPER
 #define G4MAGIntegratorSTEPPER
@@ -45,7 +52,9 @@ class G4MagIntegratorStepper
 {
   public:  // with description
 
-     G4MagIntegratorStepper(G4EquationOfMotion *Equation, G4int num_variables);
+     G4MagIntegratorStepper(G4EquationOfMotion *Equation, 
+			    G4int              numIntegrationVariables,
+			    G4int              numStateVariables=12);
      virtual ~G4MagIntegratorStepper();
        // Constructor and destructor. No actions.
 
@@ -71,8 +80,12 @@ class G4MagIntegratorStepper
        // Right Hand side of the associated equation.
 
      inline G4int  GetNumberOfVariables() const;
-     inline void   SetNumberOfVariables(G4int newNo);
-       // Get/Set the number of variables that the stepper will compile over.
+       // Get the number of variables that the stepper will integrate over.
+
+     // void   SetNumberOfVariables(G4int newNo);  // Dangerous & obsolete ...
+
+     inline G4int  GetNumberOfStateVariables() const;
+       // Get the number of variables of state variables (>= above, integration)
 
      virtual G4int IntegratorOrder() const = 0;
        // Returns the order of the integrator
@@ -102,8 +115,9 @@ class G4MagIntegratorStepper
   private:
 
      G4EquationOfMotion *fEquation_Rhs;
-     G4int              fNumberOfVariables;
-
+     const G4int  fNoIntegrationVariables;  // Number of Variables in integration
+     const G4int  fNoStateVariables;        // Number required for FieldTrack
+     // const G4int  fNumberOfVariables;
 };
 
 #include  "G4MagIntegratorStepper.icc"
