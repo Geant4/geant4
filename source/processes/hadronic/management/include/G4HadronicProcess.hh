@@ -51,6 +51,7 @@
 #include "g4std/vector"
 #include "G4VIsotopeProduction.hh"
 #include "G4IsoParticleChange.hh"
+#include "G4HadLeadBias.hh"
  
  class G4HadronicProcess : public G4VDiscreteProcess
  {
@@ -58,10 +59,16 @@
     
     G4HadronicProcess( const G4String &processName = "Hadronic" ) :
       G4VDiscreteProcess( processName )
-    { isoIsOnAnyway = 0; }
+    { 
+      isoIsOnAnyway = 0; 
+      theBias = new G4HadLeadBias();
+    }
     
     virtual ~G4HadronicProcess()
-    { unsigned int i; for(i=0; i<theProductionModels.size(); i++) delete theProductionModels[i]; }
+    { 
+      unsigned int i; for(i=0; i<theProductionModels.size(); i++) delete theProductionModels[i]; 
+      delete theBias;
+    }
     
     inline void RegisterMe( G4HadronicInteraction *a )
     { GetManagerPointer()->RegisterMe( a ); }
@@ -155,6 +162,8 @@
     
     G4IsoParticleChange theIsoPC;
     G4std::vector<G4VIsotopeProduction *> theProductionModels;
+    
+    G4VLeadingParticleBiasing * theBias;
 
     static G4IsoParticleChange * theIsoResult;
     static G4IsoParticleChange * theOldIsoResult;

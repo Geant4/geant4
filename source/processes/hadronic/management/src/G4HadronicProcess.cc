@@ -125,6 +125,7 @@
         result = DoIsotopeCounting(result, aTrack, targetNucleus);
       }
     }
+    if(getenv("LeadingParticleBiasingActivated")) result = theBias->Bias(result);
     return result;
   }
 

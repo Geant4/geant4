@@ -82,7 +82,7 @@
     G4VParticleChange *PostStepDoIt(
      const G4Track &aTrack, const G4Step &aStep )
     {
-      if(0==theLastCrossSection)
+      if(0==theLastCrossSection&&!getenv("DebugNeutronHP"))
       {
         G4cerr << "G4HadronInelasticProcess: called for final state, while cross-section was zero"<<G4endl;
 	G4cerr << "                          Returning empty particle change...."<<G4endl;
