@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPolarizedCompton.hh,v 1.2 2001-05-24 18:19:35 pia Exp $
+// $Id: G4LowEnergyPolarizedCompton.hh,v 1.3 2001-05-25 16:00:08 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -18,10 +18,11 @@
 // --------- G4LowEnergyPolarizedCompton class -----
 //
 //           by G.Depaola & F.Longo (21 may 2001)
-// 21 May 2001 - MGP      Modified to inherit from G4VDiscreteProcess
+// 24 May 2001 - MGP      Modified to inherit from G4VDiscreteProcess
+// 25 May 2001 - MGP      Added protections to avoid crashes
 //
 // Class description:
-// Low Energy electromagnetic process, Polarised Compton
+// Low Energy electromagnetic process, Polarised Compton scattering
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // ------------------------------------------------------------
