@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagneticField.hh,v 1.5 2000-11-01 15:15:50 gcosmo Exp $
+// $Id: G4MagneticField.hh,v 1.6 2001-01-29 10:13:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,7 +45,7 @@ class G4MagneticField : public G4Field
 
 inline  G4MagneticField::G4MagneticField() {}
 inline  G4MagneticField::~G4MagneticField() {}
-inline  G4MagneticField::G4MagneticField(const G4MagneticField &) {}
+inline  G4MagneticField::G4MagneticField(const G4MagneticField &):G4Field() {}
 inline  G4MagneticField& G4MagneticField::operator = (const G4MagneticField &p)
  { if (&p == this) return *this; *this = p; return *this; }
 
