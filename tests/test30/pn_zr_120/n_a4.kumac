@@ -11,7 +11,7 @@ set NDVY 010205
  zone
  opt logy
  
- null 0 125 0.001 10
+ null 0 125 0.0001 100
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 45 deg'
  
  hi/file 1 prec.paw
@@ -29,16 +29,18 @@ set NDVY 010205
  itx 115 1.5 'KIN'
  close 1
  
-ve/create X(19) R 32.5 37.5 42.5 47.5 52.5 57.5 62.5 67.5 72.5 77.5 82.5 87.5 92.5 97.5 102.5 107.5 112.5 117.5 122.5 
-ve/create Y(19) R 1.315 1.368 1.242 1.083 0.974 0.91 0.841 0.744 0.641 0.559 0.472 0.372 0.281 0.212 0.15 0.107 0.0136 0.0015 0.0016
-gr/h/symb X Y 19 21 0.2
+    ve/create X(18) R  32.5 37.5 42.5 47.5 52.5 57.5 62.5 67.5 72.5 77.5 82.5 87.5 92.5 97.5 102.5 107.5 112.5 117.5
+    
+    ve/create Y(18) R   1.3082 1.367 1.2489 1.09161 0.97817 0.91131 0.84576 0.75123 0.64591 0.56214 0.47706 0.37697 0.28537 0.211855 0.145169 0.108373 0.00741292 0.0014118
+
+gr/h/symb X Y 18 21 0.2
  
  exe ../prf n_a4 eps
 
- null 0 125 0.001 10
+ null 0 125 0.0001 100
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 45 deg'
  
-  gr/h/symb X Y 19 21 0.2
+  gr/h/symb X Y 18 21 0.2
 
  hi/file 1 par.paw
  set dmod 4
@@ -56,7 +58,7 @@ gr/h/symb X Y 19 21 0.2
  
  opt liny
 
-exe ../prf nk_a4 eps
+ exe ../prf nk_a4 eps
 
 
 

@@ -47,7 +47,6 @@
 #include <stdlib.h>
 #include <strstream.h>
 
-
 int main(int argc, char** argv)
 {
   int verbose = 1;
@@ -78,6 +77,16 @@ int main(int argc, char** argv)
   string fname3 = "dsdedtet.dat";
   fout_c->open(fname3.c_str(), std::ios::out|std::ios::trunc);
 
+  ofstream* fout_a1 = new ofstream();
+  string fname4 = "dsde.out";
+  fout_a1->open(fname4.c_str(), std::ios::out|std::ios::trunc);
+  ofstream* fout_b1 = new ofstream();
+  string fname5 = "dsdtet.out";
+  fout_b1->open(fname5.c_str(), std::ios::out|std::ios::trunc);
+  ofstream* fout_c1 = new ofstream();
+  string fname6 = "dsdedtet.out";
+  fout_c1->open(fname6.c_str(), std::ios::out|std::ios::trunc);
+
   //there can't be lines longer than nmax characters
   const size_t nmax = 200;
   char line[nmax]; 
@@ -85,7 +94,7 @@ int main(int argc, char** argv)
   G4bool end = true;
 
   G4DataVector* energy = new G4DataVector();
-  int nbin = 32;
+  int nbin = 28;
   int n, ibin, inum;
   int counter = 0;
   double bin = 5.0*MeV;
@@ -144,6 +153,9 @@ int main(int argc, char** argv)
         if(1 < verbose) {
           cout << "e1= " << e1 << " e2= " << e2 << " cross= " << x << endl;
         }  
+
+        e1 = 0.5*(e1 + e2);
+
         for(int j=ibin; j<nbin; j++) {
           e0 = (*energy)[j];
           if(e1 >= e0 && e1 < e0 + bin) break;
@@ -154,12 +166,7 @@ int main(int argc, char** argv)
         (*cross)[j] += x;
         inum++;
         ibin = j;
-        if(e2 > e0 + bin) {
-          if(inum) (*cross)[j] /= (double)inum;
-          ibin++;
-          inum = 1;
-          cross->push_back(x);
-        }
+        if(i == n-1 && inum)  (*cross)[j] /= (double)inum;
       }
       if(inum) (*cross)[nbin-1] /= (double)inum;
       cs.push_back(cross);
@@ -167,10 +174,15 @@ int main(int argc, char** argv)
         (*fout_c) << "#####..Result.of.parcing..#######..E(MeV)= " << e
                   << " Angle(degree)= " << an/degree
                   << G4endl;
+        (*fout_c1) << "#####..Result.of.parcing..####### n= " << nbin 
+                   << " Angle(degree)= " << (*angle)[angle->size()-1]/degree
+                   << G4endl;
         for(i=0; i<nbin; i++) {
           (*fout_c) << "e(MeV)= " << 0.5*((*energy)[i] + (*energy)[i+1]) 
                     << " cross(mb/MeV/sr)= " << (*cross)[i] << endl;
+          (*fout_c1) << (*cross)[i] << " ";
 	}
+	(*fout_c1) << " " << endl;
       }  
     }
   } while (end);
@@ -187,6 +199,18 @@ int main(int argc, char** argv)
      (*fout_b) << "#####..Result.of.integration..#####..E(MeV)= " << e
                << " Elim(MeV)= " << elim
                << G4endl;
+     (*fout_a1) << "#####..Result.of.integration..Energy points"
+                << G4endl;
+     (*fout_b1) << "#####..Result.of.integration..#####.. Elim(MeV)= " 
+                << elim/MeV
+                << G4endl;
+
+     for(int ii=0; ii<nbin; ii++) {
+        (*fout_a1) << 0.5*((*energy)[ii] + (*energy)[ii+1]) << " ";
+     }
+     (*fout_a1) << G4endl;
+     (*fout_a1) << "#####..Result.of.integration" << G4endl;
+
      for(i=0; i<nbin; i++) {
         
        x = 0.0;
@@ -194,13 +218,11 @@ int main(int argc, char** argv)
          f1  = cs[j];  
          y1  = (*f1)[i];  
          ct1 = cos((*angle)[j]);
+         ct2 = cos((*angle)[j+1]);
             if(j == 0) {
               f2  = cs[j+1]; 
               y2  = (*f2)[i]; 
-              ct2 = cos((*angle)[j+1]);
-              y1 += (y2 - y1)*(1.0 - ct1)/(ct2 - ct1);
               ct1 = 1.0;
-              if(y1 < 0.0) y1 = 0.0;
 	    } else if (j == na-2) {
               f2  = cs[j-1]; 
               y2  = (*f2)[i]; 
@@ -213,15 +235,15 @@ int main(int argc, char** argv)
               y2  = (*f2)[i]; 
               ct2 = cos((*angle)[j+1]);
 	    }
-	 //         cout << "f1= " << f1 << " f2= " << f2 << endl;
-	 //         cout << "y1= " << y1 << " y2= " << y2 << endl;
-	 //         cout << "ct1= " << ct1 << " ct2= " << ct2 << endl;
          x  += 0.5*(y1 + y2)*(ct1 - ct2);  
        }        
        x *= twopi;
        (*fout_a) << "e(MeV)= " << 0.5*((*energy)[i] + (*energy)[i+1]) 
             << " cross(mb/MeV)= " << x << endl;
+       (*fout_a1) << x << " ";
      }
+
+     (*fout_a1) << G4endl;
      (*fout_a) << "#####..End..#####" << G4endl;
      for(int j=0; j<na-1; j++) {
        f1  = cs[j];  
@@ -240,7 +262,9 @@ int main(int argc, char** argv)
        }
        (*fout_b) << "cos(theta)= " << an 
                  << " cross(mb/sr)= " << x << endl;
+       (*fout_b1) << x << " ";
      }
+     (*fout_b1) << G4endl ;
      (*fout_b) << "#####..End..#####" << G4endl;
   }  
 }

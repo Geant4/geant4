@@ -12,7 +12,7 @@ set NDVX 010206
  zone
  opt logy
  
- null 0 125 0.001 10
+ null 0 125 0.0001 10
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dE/do (mb/MeV/sr) theta = 82 deg'
  
  hi/file 1 prec.paw
@@ -29,17 +29,19 @@ set NDVX 010206
  itx 115 1.5 'KIN'
  close 1
  
-ve/create X(20) R 27.5 32.5 37.5 42.5 47.5 52.5 57.5 62.5 67.5 72.5 77.5 82.5 87.5 92.5 97.5 102.5 107.5 112.5 117.5 122.5 127.5 132.5 137.5 142.5 147.5 152.5 157.5
-ve/create Y(20) R 0.41 0.351 0.307 0.246 0.178 0.134 0.102 0.0763 0.0549 0.037 0.024 0.0153 0.009 0.0049 0.0024 0.0012 0.0004 0.00016 0.00010.00014
-gr/h/symb X Y 20 21 0.2
+ ve/create X(18) R  32.5 37.5 42.5 47.5 52.5 57.5 62.5 67.5 72.5 77.5 82.5 87.5 92.5 97.5 102.5 107.5 112.5 117.5
+ 
+ ve/create Y(18) R  0.35449 0.30994 0.25071 0.18105 0.1355 0.103391 0.0774758 0.055947 0.0377558 0.024268 0.0156947 0.00923562 0.00502061 0.00242969 0.00109615 0.000369014 0.000141843 9.54734e-05
+ 
+ gr/h/symb X Y 18 21 0.2
  
 
 exe ../prf n_a7 eps
  
-  null 0 125 0.001 10
+  null 0 125 0.0001 10
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dE/do (mb/MeV/sr) theta = 82 deg'
  
- gr/h/symb X Y 20 21 0.2
+  gr/h/symb X Y 18 21 0.2
 
   hi/file 1 par.paw
  set dmod 4
@@ -55,7 +57,7 @@ exe ../prf n_a7 eps
  line 100 0.4 110 0.4
  itx 115 2.2 'CHIPS'
  close 1
- 
+
  opt liny
 
 exe ../prf nk_a7 eps

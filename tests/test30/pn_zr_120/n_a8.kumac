@@ -30,17 +30,19 @@ set NDVX 010206
  itx 115 1.5 'KIN'
  close 1
  
-ve/create X(20) R 27.5 32.5 37.5 42.5 47.5 52.5 57.5 62.5 67.5 72.5 77.5 82.5 87.5 92.5 97.5 102.5 107.5 112.5 117.5 122.5 
-ve/create Y(20) R 0.268 0.217 0.175 0.133 0.0917 0.0643 0.0452 0.0314 0.0217 0.0142 0.009 0.0056 0.0034 0.0017 0.00089 0.00049 0.00027 0.00015 0.00015 0.00012
-gr/h/symb X Y 20 21 0.2
+ ve/create X(18) R  32.5 37.5 42.5 47.5 52.5 57.5 62.5 67.5 72.5 77.5 82.5 87.5 92.5 97.5 102.5 107.5 112.5 117.5
+ 
+ ve/create Y(18) R  0.21952 0.17751 0.13507 0.0933544 0.0654365 0.0459927 0.0319723 0.0221129 0.0144351 0.00921968 0.0057576 0.00341858 0.00179435 0.000888118 0.00048941 0.00027688 0.000152917 0.000153462
+
+gr/h/symb X Y 18 21 0.2
  
 
 exe ../prf n_a8 eps
  
-null 0 125 0.0001 10
-atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 95 deg'
+ null 0 125 0.0001 10
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 95 deg'
  
-  gr/h/symb X Y 20 21 0.2
+  gr/h/symb X Y 18 21 0.2
 
   hi/file 1 par.paw
  set dmod 4
@@ -60,4 +62,5 @@ atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 95 deg'
  opt liny
 
 exe ../prf nk_a8 eps
+
 
