@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepViewer.cc,v 1.24 2004-05-27 05:58:01 duns Exp $
+// $Id: G4HepRepViewer.cc,v 1.25 2004-05-27 05:59:08 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -121,5 +121,3 @@ void G4HepRepViewer::FinishView () {
 void G4HepRepViewer::reset() {
     geometryIncluded = false;
 }  
-
- 
