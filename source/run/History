@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2002-08-20 17:49:49 radoone Exp $
+$Id: History,v 1.65 2002-08-20 17:50:42 radoone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Aug 20, 2002 R. Chytracek (run-V04-01-02)
+Aug 20, 2002 R. Chytracek (run-V04-01-03)
 - Introducing ResetNavigator() method needed in cases where a geometry
   has been modified between runs in order to properly re-initialize navigator's
   state
