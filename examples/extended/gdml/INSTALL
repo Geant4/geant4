@@ -1,39 +1,41 @@
+# $Id: INSTALL,v 1.2 2002-05-31 17:44:40 radoone Exp $
 GDML Processor for Geant4 setup and build instructions
 ======================================================
-
-Requirements
-------------
-Build Geant4 with shared libraries support enbled, e.g.:
-
-export G4LIB_BUILD_SHARED=1
-
-
-Unpacking
----------
-
-cd $G4INSTALL/examples/advanced
-tar zvxf /path/to/gdml.tgz
 
 Xerces-C XML Parser
 -------------------
 
 Set the environment variable XERCESCROOT:
 
-export XERCESROOT=$G4INSTALL/examples/advanced/gdml/xerces-c
+For example AFS users can do:
+
+export XERCESROOT=/afs/cern.ch/sw/geant4/dev/XercesC/$G4SYSTEM
 
 Build GDML Processor
 --------------------
 
-cd $G4INSTALL/examples/advanced/gdml
+cd $G4INSTALL/examples/extended/gdml
 gmake
 
-Run sample application
-----------------------
+Run sample applications
+-----------------------
 
 Set LD_LIBRARY_PATH to the location of the G4 shared libraries + Xerces-C libraries:
 
-export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:$XERCESCROOT/lib:.
+export LD_LIBRARY_PATH=\
+$G4WORKDIR/lib/$G4SYSTEM:\
+$G4WORKDIR/tmp/$G4SYSTEM:\
+/afs/cern.ch/sw/geant4/dev/Mesa/$G4SYSTEM/lib:\
+$XERCESCROOT/lib:.
 
-cd $G4INSTALL/examples/advanced/gdml/sample
+1. sample
+
+cd $G4INSTALL/examples/extended/gdml/sample
 $G4WORKDIR/bin/$G4SYSTEM/gogdml
+
+2. N03gdml
+
+cd $G4INSTALL/examples/extended/gdml/N03gdml
+$G4WORKDIR/bin/$G4SYSTEM/N03gdml
+
 

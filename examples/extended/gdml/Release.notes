@@ -1,20 +1,19 @@
+# $Id: Release.notes,v 1.2 2002-05-31 17:44:42 radoone Exp $
 GDML Processor for Geant4 RC 1.0 RELEASE NOTES
 ----------------------------------------------
 
 Platforms
 ---------
 
-Developed and tested on Linux, G4SYSTEM: Linux-g++
+Supported platforms(not final):
+CERN Linux RH 6.1.1 and RH 7.2.1, compiler GCC 2.95.2,            G4SYSTEM: Linux-g++
+CERN Linux RH 6.1.1,              compiler EGCS 1.1.2 (2.91.66),  G4SYSTEM: Linux-egcs
+CERN SUN Solaris,                 compiler SUN WS 6.1 CC 5.2,     G4SYSTEM: SUN-CC
 
-Requirements
-------------
+Additional Requirements
+-----------------------
 
-CERN RH 7.2.1
-gcc 2.95.2
-Apache Xerces-C 1.6.0 or better (included version 1.7.0.)
-
-Planned support for:
-Solaris and Windows
+Apache Xerces-C 1.6.0 or better (built with version 1.7.0.)
 
 Supported GDML Features
 -----------------------
@@ -22,18 +21,18 @@ Supported GDML Features
 GDML Schema 1.0 compatible features include:
 
 a) Expressions support
-   - constants,physics constants, translations and rotations, num. expressions
+   - constants,physics constants, translations and rotations, numerical expressions
    - including CLHEP units
 
 b) Full materials support
    - isotopes, elements, compounds anf mixtures
 
 c) CSG solids
-   - all Geant4 CSG solids
+   - standard CSG solids
    - boolean solids, e.g. union, subtraction, intersection
 
 d) geometrical structure
-   - volumes, placements (single, so far)
+   - volume, assembly, placements (single, so far)
 
 e) geometry setups
    - more then one setup is possible
@@ -46,18 +45,23 @@ Known issues and problems
 > Current implementation works only when build with shared libraries enabled.
 > It's understood issue of bootstraping of the components in statically linked
 > executables. It's being worked on it.
-SOLVED!
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> THIS HAS BEEN SOLVED!
 
 2.
 > Only GDML DTD is here due to lack of time, GDML Schema is work in progress,
 > hopefully released soon.
-SOLVED!
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> THIS HAS BEEN SOLVED!
 
 3.
 > The Saxana components' interfaces are a bit messy, this issue is being addressed already in the new
 > development tree together with support for XML Schema.
 Still an issue. The Saxana engine will be rewritten with generative version of XML Engine.
 Work on it is in progress.
+
+4. When linking for Linux-g++ G4SYSTEM on RH 7.2.1 against Xerces-C libraries build on RH 6.1.1 with
+   compiler GCC 2.95.2 the linker warning can be so far ignored as the resulting binary can run.
+   We will look at this issue. Looks like G4SYSTEM needs to be again extended for Linux systems.
+
 
 Any feedback is welcome
 

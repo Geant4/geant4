@@ -1,7 +1,8 @@
+# $Id: README,v 1.2 2002-05-31 17:44:41 radoone Exp $
 GDML Processor for Geant4 release candidate 1.0
 -----------------------------------------------
 
-This release is packaged as a G4 advanced example including
+This release is packaged as a G4 extended example including
 the lateset stable version of Xerces-C 1.7.0 XML parser for Linux, see [1].
 The functionality is as described at the CHEP'01 conference, see [2].
 
