@@ -32,4 +32,4 @@ class G4HadronicInteractionRegistry
 
 };
 
-#endif;
+#endif
