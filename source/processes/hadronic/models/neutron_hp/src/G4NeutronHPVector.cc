@@ -129,9 +129,17 @@
     G4double y;
     if(e<theData[nEntries-1].GetX()) 
     {
-      y = theInt.Interpolate(theManager.GetScheme(high), e, 
-                             theData[low].GetX(), theData[high].GetX(),
-			     theData[low].GetY(), theData[high].GetY());
+      // Protect against doubled-up x values
+      if( (theData[high].GetX()-theData[low].GetX())/theData[high].GetX() < 0.000001)
+      {
+        y = theData[low].GetY();
+      }
+      else
+      {
+        y = theInt.Interpolate(theManager.GetScheme(high), e, 
+                               theData[low].GetX(), theData[high].GetX(),
+		  	       theData[low].GetY(), theData[high].GetY());
+      }
     }
     else
     {
