@@ -1,4 +1,4 @@
-// $Id: Tst05DetectorConstruction.cc,v 1.5 2000-02-25 16:56:42 gcosmo Exp $
+// $Id: Tst05DetectorConstruction.cc,v 1.6 2000-05-12 14:45:39 gcosmo Exp $
 // ------------------------------------------------------------
 
 #include "G4AssemblyCreator.hh"
@@ -13,7 +13,11 @@
 #include "G4Material.hh"
 #include "G4Element.hh"
 
-Tst05DetectorConstruction::Tst05DetectorConstruction():detectorChoice(0)
+#include "G4VisAttributes.hh"
+#include "G4Colour.hh"
+
+Tst05DetectorConstruction::Tst05DetectorConstruction()
+  : detectorChoice(0)
 {
   expHall_x = 1111600.*cm;
   expHall_y = 1111600.*cm;
@@ -74,8 +78,10 @@ G4VPhysicalVolume* Tst05DetectorConstruction::Construct()
     = new G4PVPlacement(0,G4ThreeVector(),"expHall_P",
                         experimentalHall_log,0,false,0);
 
+  experimentalHall_log->SetVisAttributes (G4VisAttributes::Invisible);
+  
+  //------------------------------ STEP assembly creation
 
-  // STEP assembly creation
   const char * stepfile;
 
   switch(detectorChoice)
@@ -99,8 +105,14 @@ G4VPhysicalVolume* Tst05DetectorConstruction::Construct()
   G4Assembly* assembly = new G4Assembly();
   assembly->SetPlacedVector(*(G4PlacedVector*)tmp);
 
+  // Set vis attribute to "transparent" blue
+  G4VisAttributes * visAttr = new G4VisAttributes(G4Colour(0.,0.,1.,.5));
+  visAttr->SetVisibility(true);
+
   G4PlacedSolid* ps=0;
   G4int solids = assembly->GetNumberOfSolids();
+  G4cout << "Now placing " << solids << " logical volumes... ";
+  
   for(G4int c=0;c<solids;c++)
     {
       ps = assembly->GetPlacedSolid(c);
@@ -116,7 +128,9 @@ G4VPhysicalVolume* Tst05DetectorConstruction::Construct()
 			experimentalHall_phys,
 			false,
 			c);
+      lv->SetVisAttributes(visAttr);
     }
+  G4cout << "Done !" << G4endl;
 
   return experimentalHall_phys;
 }
@@ -130,17 +144,3 @@ void Tst05DetectorConstruction::SelectDetector(G4String val)
   { detectorChoice = 0; }
   G4cout << "Now Detector is " << val << G4endl;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

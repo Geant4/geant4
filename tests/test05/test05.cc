@@ -1,4 +1,4 @@
-// $Id: test05.cc,v 1.2 2000-02-25 16:56:40 gcosmo Exp $
+// $Id: test05.cc,v 1.3 2000-05-12 14:45:37 gcosmo Exp $
 // ------------------------------------------------------------
 
 #include "Tst05DetectorConstruction.hh"
@@ -12,7 +12,14 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
+
+#if defined(G4UI_USE_XM)
+  #include "G4UIXm.hh"
+#elif defined(G4UI_USE_XAW)
+  #include "G4UIXaw.hh"
+#else
+  #include "G4UIterminal.hh"
+#endif
 
 int main(int argc, char** argv) {
 
@@ -42,7 +49,13 @@ int main(int argc, char** argv) {
   if(argc==1)
   {
     // G4UIterminal is a (dumb) terminal
-    G4UIsession * session = new G4UIterminal;
+    #if defined(G4UI_USE_XM)
+      G4UIsession * session = new G4UIXm(argc,argv);
+    #elif defined(G4UI_USE_XAW)
+      G4UIsession * session = new G4UIXaw(argc,argv);
+    #else
+      G4UIsession * session = new G4UIterminal;
+    #endif
     session->SessionStart();
     delete session;
   }

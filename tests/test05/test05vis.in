@@ -1,8 +1,3 @@
-/vis/scene/create
-/vis/sceneHandler/create OGLSX
-/vis/sceneHandler/attach
-/vis/viewer/create
-/vis/scene/notifyHandlers
 /mydet/SelectDetector rod_place_asm
 /control/verbose 2
 #/tracking/verbose 1
@@ -10,8 +5,20 @@
 # Initialize GEANT4
 #
 /run/initialize
-/vis/camera/zoom 4.2
-/vis/refresh/view
+/vis/scene/create
+/vis/scene/add/volume
+/vis/sceneHandler/create RayTracer
+/vis/viewer/create
+/vis/camera/projection_style 1 30
+/vis/set/culling off
+/vis/scene/notifyHandlers
+#/vis/rayTracer/eyePosition 0 0 -200 cm
+#/vis/rayTracer/target 20 20 -50 cm
+#/vis/rayTracer/lightDirection 30 30 60
+#/vis/rayTracer/column 640
+#/vis/rayTracer/row 640
+#/vis/rayTracer/span 5 deg
+#/vis/rayTracer/trace brep.jpg
 #
 # Run 100 events
 #
