@@ -1,0 +1,171 @@
+
+                       geant4-06-00-ref-02
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Updated mass and width to meet with PDG 2002 data.
+  o Updated parameterizations in G4MuPairProductionModel and radiative
+    corrections for G4MuBetheBlochModel.
+  o Fixes in G4PropagatorInField::ReEstimateEndpoint() to cope with rare
+    failures of AccurateAdvance().
+  o Fix for suspended particles in G4HadronicProcess. Solves a problem seen
+    in neutron elastic scattering.
+  o Major improvement of the CHIPS nuclear fragmentation model: added
+    Sigmas, Xi and Omega hyperons to the fragmentation algorithm.
+  o Added new processes statuses to G4OpBoundaryProcess and fixed problem
+    at initialisation.
+  o Fixes in G4PropagatorInField::ReEstimateEndpoint() to cope with a rare
+    failure of AccurateAdvance().
+  o Added experimental setup for Intel/icc compiler on Linux (Linux-icc).
+    Implemented first-level porting for icc-8.0.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                  config-V06-00-03
+------
+- architecture.gmk:
+  o Protected OGLFLAGS against containing -I/usr/include which may
+    cause wrong includes to be picked up.
+- WIN32-VC7.gmk: added material to build shared-libs for Windows (DLLs).
+- Added program win32def.c to help building DLLs, built from
+  source/GNUmakefile through a specialised target and placed in
+  $G4LIB/$G4SYSTEM.
+- Added configuration file Linux-icc.gmk for Intel/icc compiler
+  on Linux systems.
+- Configure script:
+  o Corrected defaults for shared-libs build.
+
+geometry/magneticfield                  field-V06-00-00
+----------------------
+- G4UniformMagField:
+  o Added missing implementation for GetConstantFieldValue().
+    Fixes bug report #575.
+
+geometry/navigation                     geomnav-V06-00-00
+-------------------
+- G4PropagatorInField:
+  o Modified ReEstimateEndpoint() to cope with a failure of AccurateAdvance(),
+    by calling it iteratively up maximum 20 times.
+  o Fix in SetVerboseLevel(): now forwarding the verbosity to integration
+    driver.
+
+materials                               materials-V06-00-01
+---------
+- Fixed problem in destructor of G4SandiaTable.
+- GNUmakefile: experimentally modified to provide an example of macro
+  GLOBLIBS used by the DLL builder in order to have global lib dependencies.
+
+particles                               particles-V06-00-01
+---------
+- Updated mass and width to meet with PDG 2002 data.
+
+processes/electromagnetic/lowenergy              emlowen-V06-00-01
+-----------------------------------
+- Implemented optimization of Bremsstrahlung angular generators.
+
+processes/electromagnetic/muons                  muons-V06-00-01
+-------------------------------
+- Updated parameterizations in G4MuPairProductionModel.
+- Updated radiative corrections for G4MuBetheBlochModel.
+
+processes/electromagnetic/standard               stand-V06-00-03
+----------------------------------
+- Minor fixes in G4PAIonisation and G4PAIModel.
+
+processes/electromagnetic/utils                  utils-V06-00-04
+-------------------------------
+- Minor cleanup in ionisation models.
+
+processes/hadronic                               ghad-V06-00-04
+------------------
+- management:
+  o Fix for suspended particles. Solves a problem seen in neutron_hp
+    elastic scattering.
+- chiral_inv_phase_space/body:
+  o Major improvement of the CHIPS nuclear fragmentation model: in
+    addition to Lambdas, now Sigmas, Xi, and Omega hyperons are added to
+    the fragmentation algorithm (together with N+Sigma and NN+Sigma nuclear
+    fragments); Delta isobars together with iso-nuclei are implemented as an
+    intermediate states of fragmentation; all leptons are added to the
+    CHIPSWorld of particles, so that now the CHIPS model is ready for nuclear
+    muon-minus capture at rest process and for the neutrino-nuclear reactions.
+    In addition, starting this version the weak decays of particles can be
+    included in CHIPS. All these changes make CHIPS more flexible in simulation
+    of pions and strange particles production.
+    As the phase space distribution is changed the new version of CHIPS needs
+    additional tuning of the internal parameters with the physics tests.
+    Delta-,Delta- below the n,n,pi-,pi- threshold is resolved.
+- chiral_inv_phase_space/interface:
+  o Porting of experimental interface classes.
+  o Provided implementation of missing cases which was cause of crashes in
+    ATLAS production.
+- neutron_hp:
+  o Fixed conflict with system variable name.
+- parton_string:
+  o Lower bound added to transverse mass distribution, to enable
+    diffractive scattering for gammas. Was cause of a crash in ATLAS
+    productions.
+
+processes/optical                                op-V06-00-02
+-----------------
+- G4OpBoundaryProcess:
+  o Added process status "NotAtBoundary", "SameMaterial", "StepTooSmall",
+    "NoRINDEX". Allowing for a skin-surface between mother and daughter
+     volumes, with the daughter skin taking precedence.
+  o Fix in the initialization at the beginning of its DoIt(), now set to
+    "Undefined". This should allow a user to correctly get the process flag
+    from the UserSteppingAction() through the public function GetStatus()
+    even when the (forced) DoIt() was called when the optical photon track
+    was not at a boundary, or when medium1 == medium2.
+
+process/transportation                           transport-V06-00-00
+----------------------
+- Fixed a bug in G4UserSpecialCuts related to 'charged-geantino'.
+
+run                                              run-V06-00-00
+---
+- Updated date to run-manager kernel.
+
+visualization/HepRep                             vis-HepRep-V06-00-04
+--------------------
+- Fixed handling of symbols zcalloc and zcfree of the zlib library being
+  called as C++ mangled names. 
+- Renamed zutil.h, zlib.h and zconf.h into HepRep-zutil.h, ... to avoid
+  conflicts with those files on Unix systems if /usr/include or
+  /usr/local/include is on the include search path.
+- Fixed compilation problems on Intel-icc compiler.
+
+visualization/management                         visman-V06-00-00
+------------------------
+- Fixed compilation problems on Intel-icc compiler. Added missing
+  forward declaration of G4VisStateDependent to G4VisManager.
+
+visualization/OpenGL                             
+--------------------
+- Fixed wrong order of statements in G4OpenGLXViewer desctructor.
+  Fixes bug report #581.
+
+examples                                         examples-V06-00-02
+--------
+- Updated reference outputs.
+- advanced:
+  o analysis/A01 (exampleA01-V06-00-00)
+    + Fixed physics lists for EM processes.
+- extended/electromagnetic:
+  o TestEm5 (testem5-V06-00-00)
+    + Modified histo 7: projected position at exit.
+    + RunAction: removed UI commands for visualisation,
+                 added a function ComputeMscHighland().
+  o TestEm7 (testem7-V06-00-00)
+    + Removed "add binary" from TestEm7.in macro.
+
+tests                                            tests-V06-00-02
+-----
+- Updated reference outputs.
+- tests/test40 (test40-V06-00-01)
+  o Fixed compilation problem on gcc-3.2 in RunAction for usage
+    of std stream manipulators.
