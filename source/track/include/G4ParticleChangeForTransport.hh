@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForTransport.hh,v 1.3 2000-02-16 16:10:03 kurasige Exp $
+// $Id: G4ParticleChangeForTransport.hh,v 1.4 2000-05-12 13:15:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,7 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     //   values of the Position, Momentum, etc.
 
     const G4VTouchable* GetTouchableChange() const;
-    void  SetTouchableChange(G4VTouchable* fTouchable);
+    void  SetTouchableChange(const G4VTouchable* fTouchable);
     //  Get/Set the touchable of the current particle.
     //  Note: Touchable in PostStepPoint will be updated only after PostStepDoIt
     G4Material* GetMaterialChange() const;
@@ -80,7 +80,7 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     virtual void DumpInfo() const;
 
   protected:
-    G4VTouchable* theTouchableChange;
+    const G4VTouchable* theTouchableChange;
     //  The changed touchable of a given particle.
 
   private:
