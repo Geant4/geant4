@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8PhysicsListMessenger.cc,v 1.4 2002-12-05 00:24:26 asaim Exp $
+// $Id: Em8PhysicsListMessenger.cc,v 1.5 2003-08-27 17:25:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,27 +55,6 @@ Em8PhysicsListMessenger::Em8PhysicsListMessenger(Em8PhysicsList * List)
   cutECmd->SetDefaultUnit("mm");
   cutECmd->AvailableForStates(G4State_Idle);
 
-  cutPCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutP",this);
-  cutPCmd->SetGuidance("Set cut values by RANGE for proton and others.");
-  cutPCmd->SetParameterName("range",true);
-  cutPCmd->SetDefaultValue(1.);
-  cutPCmd->SetDefaultUnit("mm");
-  cutPCmd->AvailableForStates(G4State_Idle);
-
-  eCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutEnergy",this);
-  eCmd->SetGuidance("Set cut values by ENERGY for charged particles.");
-  eCmd->SetParameterName("energy",true);
-  eCmd->SetDefaultValue(10.);
-  eCmd->SetDefaultUnit("keV");
-  eCmd->AvailableForStates(G4State_Idle);
-
-  rCmd = new G4UIcmdWithADoubleAndUnit("/calor/range",this);
-  rCmd->SetGuidance("Display the RANGE of Electron for the current material.");
-  rCmd->SetParameterName("energy",true);
-  rCmd->SetDefaultValue(10.);
-  rCmd->SetDefaultUnit("keV");
-  rCmd->AvailableForStates(G4State_Idle);
-
   setMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/step/setMaxStep",this);
   setMaxStepCmd->SetGuidance("Set max. step length in the detector");
   setMaxStepCmd->SetParameterName("mxStep",true);
@@ -92,26 +71,17 @@ Em8PhysicsListMessenger::~Em8PhysicsListMessenger()
 
   delete cutGCmd;
   delete cutECmd;
-  delete cutPCmd;
-  delete rCmd;
-  delete eCmd;
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
+
 void Em8PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
   if(command == cutGCmd)
     { Em8List->SetGammaCut(cutGCmd->GetNewDoubleValue(newValue));}
   if(command == cutECmd)
     { Em8List->SetElectronCut(eCmd->GetNewDoubleValue(newValue));}
-  if(command == cutPCmd)
-    { Em8List->SetProtonCut(eCmd->GetNewDoubleValue(newValue));}
-  if(command == eCmd)
-    { Em8List->SetCutsByEnergy(cutECmd->GetNewDoubleValue(newValue));}
-  if(command == rCmd)
-    { Em8List->GetRange(rCmd->GetNewDoubleValue(newValue));}
   if(command == setMaxStepCmd)
     { Em8List->SetMaxStep(setMaxStepCmd->GetNewDoubleValue(newValue));}
 }

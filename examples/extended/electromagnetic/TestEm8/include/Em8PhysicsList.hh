@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8PhysicsList.hh,v 1.4 2001-07-11 09:57:54 gunter Exp $
+// $Id: Em8PhysicsList.hh,v 1.5 2003-08-27 17:25:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -83,18 +83,15 @@ class Em8PhysicsList: public G4VUserPhysicsList
     void AddParameterisation();
     void ConstructGeneral();
     void ConstructEM();
-    
+
   public:
 
     void SetGammaCut(G4double);
     void SetElectronCut(G4double);
-    void SetProtonCut(G4double);
-    void SetCutsByEnergy(G4double);
-    void GetRange(G4double);
 
     void SetMaxStep(G4double);
 
-  public:   
+  public:
 
     G4double MaxChargedStep;
 
@@ -103,14 +100,14 @@ class Em8PhysicsList: public G4VUserPhysicsList
     G4PhotoElectricEffect* thePhotoElectricEffect;
     G4ComptonScattering*   theComptonScattering;
     G4GammaConversion*     theGammaConversion;
-    
+
     G4MultipleScattering*  theeminusMultipleScattering;
     G4eIonisation*         theeminusIonisation;
     G4eBremsstrahlung*     theeminusBremsstrahlung;
 
     G4PAIonisation*        fPAIonisation ;
     G4ForwardXrayTR*       fForwardXrayTR ;
-    
+
     G4MultipleScattering*  theeplusMultipleScattering;
     G4eIonisation*         theeplusIonisation;
     G4eBremsstrahlung*     theeplusBremsstrahlung;
@@ -121,7 +118,6 @@ class Em8PhysicsList: public G4VUserPhysicsList
 
     G4double cutForGamma;
     G4double cutForElectron;
-    G4double cutForProton;
 
     Em8DetectorConstruction* pDet;
     Em8PhysicsListMessenger* physicsListMessenger;
