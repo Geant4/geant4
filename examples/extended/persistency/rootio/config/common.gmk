@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.1 2002-12-04 02:44:27 morita Exp $
+# $Id: common.gmk,v 1.2 2002-12-04 09:39:24 morita Exp $
 # =====================================================================
 # common.gmk: GNUmakefile variables for building the library files.
 #
@@ -142,6 +142,9 @@ $(G4PEX_TMP)/%.d: src/%.cc
 	@echo "Making dependency file for $< ..."
 	@($(ECHO) $(G4PEX_TMP)/\\c ; \
 	g++ $(GPPFLAGS) $(CPPFLAGS) $< ) | sed 's!$(G4PEX_TMP)/$*.o!& $@!' >$@
+ifneq ($(dependencies),)
+-include $(dependencies)
+endif
 
 clean:
 ifneq ($(cleanup_target),)
