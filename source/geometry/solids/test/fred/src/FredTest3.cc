@@ -164,7 +164,7 @@ void FredTest3::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
 	//
 	// Set clock
 	//
-	clock();
+	// clock_t start = clock();
 	
 	//
 	// Loop over points

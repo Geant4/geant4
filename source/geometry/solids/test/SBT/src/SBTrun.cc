@@ -192,7 +192,7 @@ void SBTrun::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
   //
   // Set clock
   //
-  clock_t start = clock();
+  // clock_t start = clock();
 
   //
   // Loop over points
