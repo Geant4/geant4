@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.10 2004-06-14 11:23:41 vnivanch Exp $
+// $Id: G4ParticleChangeForLoss.hh,v 1.11 2004-06-14 12:48:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -209,7 +209,8 @@ inline void G4ParticleChangeForLoss::InitializeForAlongStep(const G4Track& track
   InitializeSecondaries(track);
   proposedKinEnergy = track.GetKineticEnergy();
   currentCharge = track.GetDynamicParticle()->GetCharge();
-  theProposedWeight = track.GetWeight();
+  theParentWeight   = track.GetWeight();
+  theProposedWeight = theParentWeight;
 }
 
 inline void G4ParticleChangeForLoss::InitializeForPostStep(const G4Track& track)
@@ -219,7 +220,8 @@ inline void G4ParticleChangeForLoss::InitializeForPostStep(const G4Track& track)
   InitializeSecondaries(track);
   proposedKinEnergy = track.GetKineticEnergy();
   currentCharge = track.GetDynamicParticle()->GetCharge();
-  theProposedWeight = track.GetWeight();
+  theParentWeight   = track.GetWeight();
+  theProposedWeight = theParentWeight;
   proposedMomentumDirection = track.GetMomentumDirection();
   currentTrack = &track;
 }
