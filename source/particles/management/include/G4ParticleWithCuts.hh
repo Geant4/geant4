@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleWithCuts.hh,v 1.13 2001-10-28 05:08:37 kurasige Exp $
+// $Id: G4ParticleWithCuts.hh,v 1.14 2001-10-30 20:08:46 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,9 +57,6 @@
 // void ResetCuts():
 //    Reset alll cut values in energy, though theCutInMaxInteractionLength
 //    remains unchanged
-// G4double GetCuts():
-//    Returns value of the cut in interaction length for all the
-//    processes of this particle type.
 // const G4double* GetLengthCuts():
 //    Returns an array of cuts in range (ordered per material)
 // G4double  GetRangeThreshold(const G4Material* ) const:
