@@ -1,0 +1,80 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4hLowEnergyIonisation.icc,v 1.1 1999-07-27 20:01:53 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// ---------------------------------------------------------------
+//      GEANT 4 class inlined methods file 
+//
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//      ------------ G4hLowEnergyIonisation physics process ------
+//                by Vladimir Ivanchenko, 27 July 1999 
+//                was made on the base of G4hIonisation class
+//                developed by Laszlo Urban
+// ***************************************************************
+// It is the first implementation of the NEW IONISATION PROCESS.               
+// It calculates the ionisation of charged hadrons.
+// ***************************************************************
+// 24/09/97: corrected by L.Urban
+// 20/11/97: correction on MeanFreePath for KineticEnergy > HighestLimit
+
+// ************************************************************
+// It is the extention of the ionisation process for the slow 
+// charged hadrons.
+// ************************************************************
+// ---------------------------------------------------------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4hLowEnergyIonisation::GetMeanFreePath(
+                                               const G4Track& trackData,
+                                               G4double previousStepSize,
+                                               G4ForceCondition* condition) 
+{
+   const G4DynamicParticle* aParticle ;
+   G4Material* aMaterial ;
+   G4double MeanFreePath;
+   G4bool isOutRange ;
+ 
+   *condition = NotForced ;
+
+   aParticle = trackData.GetDynamicParticle() ;
+   aMaterial = trackData.GetMaterial() ;
+
+   G4double KineticEnergy = aParticle->GetKineticEnergy() ;
+
+   if(KineticEnergy < LowestKineticEnergy)
+     MeanFreePath = DBL_MAX;
+   else {
+     if(KineticEnergy > HighestKineticEnergy)
+                                   KineticEnergy = HighestKineticEnergy;
+     MeanFreePath = ((*theMeanFreePathTable)(aMaterial->GetIndex()))->
+                    GetValue(KineticEnergy,isOutRange) ;
+     }
+
+   return MeanFreePath ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4hLowEnergyIonisation::IsApplicable(
+                            const G4ParticleDefinition& particle)
+{
+   return(particle.GetPDGCharge() != 0.);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4hLowEnergyIonisation::GetFreeElectronGasLoss(G4double paramA, G4double tau)
+{
+     G4double ionl = paramA * sqrt(tau) ;
+     return ionl ;
+}
+         

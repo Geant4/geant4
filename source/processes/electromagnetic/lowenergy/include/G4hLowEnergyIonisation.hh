@@ -5,9 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyIonisation.hh,v 1.3 1999-07-27 09:53:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
 // ------------------------------------------------------------
 //      GEANT 4 class header file 
@@ -18,6 +15,8 @@
 //      2nd December 1995, G.Cosmo
 //      ---------- G4hLowEnergyIonisation physics process -----
 //                by Vladimir Ivanchenko, 14 July 1999 
+//                was made on the base of G4hIonisation class
+//                developed by Laszlo Urban
 // ************************************************************
 // It is the extention of the ionisation process for the slow 
 // charged hadrons.
@@ -27,16 +26,49 @@
 #ifndef G4hLowEnergyIonisation_h
 #define G4hLowEnergyIonisation_h 1
  
-#include "G4hIonisation.hh"
+#include "G4ios.hh"
+#include "globals.hh"
+#include "Randomize.hh"
+#include "G4hEnergyLoss.hh"
+#include "globals.hh"
+#include "G4Track.hh"
+#include "G4Step.hh"
+#include "G4Electron.hh"
+#include "G4PhysicsLogVector.hh"
+#include "G4PhysicsLinearVector.hh"
   
-class G4hLowEnergyIonisation : public G4hIonisation 
+class G4hLowEnergyIonisation : public G4hEnergyLoss
  
 {
   public:
  
-     G4hLowEnergyIonisation(const G4String& processName = "hLowEIoni"); 
+    G4hLowEnergyIonisation(const G4String& processName = "hLowEIoni"); 
 
     ~G4hLowEnergyIonisation();
+
+    G4bool IsApplicable(const G4ParticleDefinition&);
+
+    void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
+
+    void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
+
+    void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
+
+    G4double GetMeanFreePath(
+                             const G4Track& track,
+                             G4double previousStepSize,
+                             G4ForceCondition* condition ) ;
+ 
+    G4VParticleChange *PostStepDoIt(const G4Track& track,
+                                    const G4Step& Step  ) ;                 
+  protected:
+
+    virtual G4double ComputeMicroscopicCrossSection(
+                            const G4ParticleDefinition& aParticleType,
+                            G4double KineticEnergy,
+                            G4double AtomicNumber);
+
+  public:
 
     void BuildLossTable(const G4ParticleDefinition& aParticleType);
 
@@ -103,30 +135,19 @@ class G4hLowEnergyIonisation : public G4hIonisation
     const G4Proton* theProton;
     const G4AntiProton* theAntiProton;
 
+    const G4double* DeltaCutInKineticEnergy ; 
+ 
+    G4double DeltaCutInKineticEnergyNow ;
+
     G4double ProtonMassAMU;
     G4double ZieglerFactor; // Factor to convert the Stopping Power 
                             // unit [ev/(10^15 atoms/cm^2]
                             // into the Geant4 dE/dx unit
 
-protected:
-
-    // LowestKineticEnergy = lower limit of particle kinetic energy
-    // HighestKineticEnergy = upper limit of particle kinetic energy 
-    // TotBin = number of bins 
-    //  ---------in the energy ionisation loss table-------------------
-    G4double LowestKineticEnergy;
-    G4double HighestKineticEnergy;
-    G4int TotBin;
  
 };
- 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4hLowEnergyIonisation::GetFreeElectronGasLoss(G4double paramA, G4double tau)
-{
-     G4double ionl = paramA * sqrt(tau) ;
-     return ionl ;
-}
+  
+#include "G4hLowEnergyIonisation.icc"
 
 #endif
  
