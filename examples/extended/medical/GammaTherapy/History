@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2004-12-13 16:22:13 stesting Exp $
+$Id: History,v 1.8 2004-12-15 12:07:39 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15 Dec 04: V.Ivant (gtherapy-V06-02-07)
+- Uncomment out the StepFunction in GammaTherapy.in
+- Uncommnet line in PhysicsList constructor,w hich is needed to 
+  get UI command
 
 13 Dec 04: S.Sadilov (gtherapy-V06-02-06)
 - Comment out the StepFunction in GammaTherapy.in

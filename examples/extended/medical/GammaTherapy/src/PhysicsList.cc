@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.3 2004-12-02 10:34:08 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.4 2004-12-15 12:07:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -75,7 +75,7 @@ PhysicsList::PhysicsList()
   ionIsRegisted = false;
   gnucIsRegisted = false;
   verbose = 0;
-  //  G4LossTableManager::Instance()->SetVerbose(0);
+  G4LossTableManager::Instance()->SetVerbose(0);
   defaultCutValue = 1.*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
