@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.39 2003-11-04 15:06:41 gcosmo Exp $
+// $Id: G4ChordFinder.cc,v 1.40 2003-11-05 10:45:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,16 +36,34 @@
 
 #include <iomanip>
 
-//  For the moment fDeltaChord is a constant!
+// ..........................................................................
 
-const G4double G4ChordFinder::fDefaultDeltaChord  = 3. * mm; 
+G4ChordFinder::G4ChordFinder(G4MagInt_Driver* pIntegrationDriver)
+  : fDefaultDeltaChord( 3.00 * mm),     // Change to 0.25 * mm ? 
+    fDeltaChord( fDefaultDeltaChord ),
+    fAllocatedStepper(false),
+    fEquation(0), 
+    fDriversStepper(0), 
+    fNoTrials(0), fNoCalls(0)
+{
+  // Simple constructor which does not create equation, ..
+      // fDeltaChord= fDefaultDeltaChord; 
+  fIntgrDriver= pIntegrationDriver;
+  fAllocatedStepper= false;
+  fLastStepEstimate_Unconstrained = DBL_MAX;          // Should move q, p to
+}
 
 // ..........................................................................
 
 G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
                               G4double                stepMinimum, 
                               G4MagIntegratorStepper* pItsStepper )
-  : fDeltaChord( fDefaultDeltaChord )
+  : fDefaultDeltaChord( 3.00 * mm),     // Change to 0.25 * mm ? 
+    fDeltaChord( fDefaultDeltaChord ),
+    fAllocatedStepper(false),
+    fEquation(0), 
+    fDriversStepper(0), 
+    fNoTrials(0), fNoCalls(0)
 {
   //  Construct the Chord Finder
   //  by creating in inverse order the  Driver, the Stepper and EqRhs ...
