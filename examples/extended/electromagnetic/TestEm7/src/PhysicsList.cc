@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.6 2003-06-05 13:35:24 maire Exp $
+// $Id: PhysicsList.cc,v 1.7 2003-06-14 16:01:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -150,19 +150,19 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddStepMax()
-{  
+{
   // Step limitation seen as a process
   stepMaxProcess = new StepMax();
-  
+
   theParticleIterator->reset();
   while ((*theParticleIterator)()){
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
-	
+
       if (stepMaxProcess->IsApplicable(*particle))
-        { 
-          pmanager ->AddDiscreteProcess(stepMaxProcess);
-        }	
+        {
+	  pmanager ->AddDiscreteProcess(stepMaxProcess);
+        }
   }
 }
 

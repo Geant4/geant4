@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.cc,v 1.3 2003-06-05 12:25:14 maire Exp $
+// $Id: StepMax.cc,v 1.4 2003-06-14 16:01:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +45,7 @@ StepMax::~StepMax() { delete pMess; }
 
 G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
 {
-  return (particle.GetPDGCharge() != 0.);
+  return (particle.GetPDGCharge() != 0. && !particle.IsShortLived());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

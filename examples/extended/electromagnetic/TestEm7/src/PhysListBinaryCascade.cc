@@ -67,6 +67,7 @@ void PhysListBinaryCascade::ConstructProcess()
                                     new G4ProtonInelasticProcess("inelastic");
       theInelasticProcess->RegisterMe(theBC);
       pmanager->AddDiscreteProcess(theInelasticProcess);
+          G4cout << "Add hadronic physics for proton" << G4endl;
 
     } else if (particleName == "neutron") {
 
@@ -86,6 +87,7 @@ void PhysListBinaryCascade::ConstructProcess()
       G4LCapture* theCaptureModel = new G4LCapture;
       theCaptureProcess->RegisterMe(theCaptureModel);
       pmanager->AddDiscreteProcess(theCaptureProcess);
+          G4cout << "Add hadronic physics for neutron" << G4endl;
       /*
     if (particle == G4IonC12::IonC12()) {
       pManager->AddDiscreteProcess(&theIonProcess);
