@@ -34,11 +34,6 @@
 #include "G4UnitsTable.hh"
 #include "G4EnergyLossTables.hh"
 
-G4double G4hLowEnergyIonisation::LowerBoundLambda = 10.*eV ;
-G4double G4hLowEnergyIonisation::UpperBoundLambda = 100.*TeV ;
-G4int	 G4hLowEnergyIonisation::NbinLambda = 200 ;
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
@@ -61,14 +56,9 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     HeMassAMU(4.0026),
     ZieglerFactor(eV*cm2*1.0e-15) 
 { 
-   // set bining for energy loss table
     LowestKineticEnergy = 10.*eV ;
     HighestKineticEnergy = 100.*TeV ;
     TotBin = 200 ;
-    SetLowerBoundEloss( LowestKineticEnergy) ;
-    SetUpperBoundEloss(HighestKineticEnergy) ;
-    SetNbinEloss(TotBin) ;
-
     MassRatio = 1.0 ;
     DeltaCutInKineticEnergy = 0; 
 }
@@ -164,11 +154,6 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
   // Tables for different hadrons will be different because of
   // small difference in Tmax connected with RateMass
   // RateMass = electron_mass_c2 / (aParticleType.GetPDGMass()) ;
-
-  // get bining from EnergyLoss
-  LowestKineticEnergy  = GetLowerBoundEloss() ;
-  HighestKineticEnergy = GetUpperBoundEloss() ;
-  TotBin	       = GetNbinEloss() ;
 
   // cuts for  electron ....................
   DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
@@ -318,6 +303,15 @@ G4double G4hLowEnergyIonisation::GetPreciseDEDX  (G4Material* aMaterial,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4hLowEnergyIonisation::SetPhysicsTableBining(G4double lowE, G4double highE,
+						   G4int nBins)
+{
+  LowestKineticEnergy = lowE;  HighestKineticEnergy = highE;
+  TotBin = nBins ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4hLowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 
   //  just call BuildLossTable+BuildLambdaTable
@@ -398,9 +392,9 @@ void G4hLowEnergyIonisation::BuildLambdaTable(const G4ParticleDefinition& aParti
     { 
       //create physics vector then fill it ....
       
-      G4PhysicsLogVector* aVector = new G4PhysicsLogVector(LowerBoundLambda, 
-                                                           UpperBoundLambda, 
-                                                           NbinLambda);
+      G4PhysicsLogVector* aVector = new G4PhysicsLogVector(LowestKineticEnergy, 
+                                                           HighestKineticEnergy, 
+                                                           TotBin);
       
       // compute the (macroscopic) cross section first
       
