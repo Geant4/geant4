@@ -20,52 +20,45 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#ifndef TST14PHYSICSLIST_HH
-#define TST14PHYSICSLIST_HH 1
+// $Id: Tst14ElectronStandard.hh,v 1.1 2003-02-23 09:18:01 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Created
+//
+// -------------------------------------------------------------------
 
-#include "G4VModularPhysicsList.hh"
+// Class description:
+// System test for e/gamma, standard photon processes for PhysicsList
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
+// -------------------------------------------------------------------
+
+#ifndef TST14ELECTRONSTANDARD_HH
+#define TST14ELECTRONSTANDARD_HH 1
+
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class Tst14PhysicsListMessenger;
+class Tst14ElectronStandard : public G4VPhysicsConstructor {
 
-class Tst14PhysicsList: public G4VModularPhysicsList
-{
-public:
+public: 
 
-  Tst14PhysicsList();
-
-  virtual ~Tst14PhysicsList();
+  Tst14ElectronStandard(const G4String& name = "electron-standard");
   
-  // Register PhysicsList chunks
-  void AddPhysicsList(const G4String& name);
-
-  // Cuts (what for?)
-  void SetGammaCut(G4double);
-  void SetElectronCut(G4double);
-
-  void SetGammaLowLimit(G4double);
-  void SetElectronLowLimit(G4double);
-  void SetGELowLimit(G4double);
-
-  void SetLowEnSecPhotCut(G4double);
-  void SetLowEnSecElecCut(G4double);
- 
-  void ActivateAuger(G4bool);
-
-private:
-
-  G4bool electronIsRegistered;
-  G4bool positronIsRegistered;
-  G4bool photonIsRegistered;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-
-  Tst14PhysicsListMessenger* messenger;
-
+  virtual ~Tst14ElectronStandard();
+  
+  // This method is dummy for physics
+  virtual void ConstructParticle() {};
+  
+  virtual void ConstructProcess();
 };
 
 #endif
+
 
 
 
