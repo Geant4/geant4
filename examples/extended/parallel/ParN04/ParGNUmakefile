@@ -1,4 +1,4 @@
-# $Id: ParGNUmakefile,v 1.3 2002-03-09 09:49:59 cooperma Exp $
+# $Id: ParGNUmakefile,v 1.4 2002-06-06 17:27:25 cooperma Exp $
 # --------------------------------------------------------------
 #This file should be included in GNUmakefile of local directory.
 
@@ -19,8 +19,8 @@ ifndef REMOTE_SHELL
   REMOTE_SHELL=ssh
 endif
 
-# MACROFILE=ParN04.in
-MACROFILE=ParN04.EMtest.large_N.in
+MACROFILE=ParN04.in
+# MACROFILE=ParN04.EMtest.large_N.in
 
 DATAFILE=
 DATAFILE=pythia_event.data
