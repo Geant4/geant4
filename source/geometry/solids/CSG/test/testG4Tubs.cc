@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Tubs.cc,v 1.11 2002-01-08 16:16:57 gcosmo Exp $
+// $Id: testG4Tubs.cc,v 1.12 2002-04-16 08:24:19 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -94,6 +94,14 @@ G4bool testG4Tubs()
     G4Tubs t1("Solid Tube #1",0,50*mm,50*mm,0,2*pi);
 
     G4Tubs t2("Hole Tube #2",45*mm,50*mm,50*mm,0,2*pi);
+
+    G4Tubs t2a("Hole Tube #2",5*mm,50*mm,50*mm,0,2*pi);
+
+    G4Tubs t2b("Hole Tube #2",15*mm,50*mm,50*mm,0,2*pi);
+
+    G4Tubs t2c("Hole Tube #2",25*mm,50*mm,50*mm,0,2*pi);
+
+    G4Tubs t2d("Hole Tube #2",35*mm,50*mm,50*mm,0,2*pi);
 
     G4Tubs t3("Solid Sector #3",0,50*mm,50*mm,halfpi,halfpi);
 
@@ -368,35 +376,529 @@ G4bool testG4Tubs()
 
 // CalculateExtent
 
-    G4VoxelLimits limit;		// Unlimited
+    G4VoxelLimits unlimit;		// Unlimited
+
+    G4VoxelLimits limitX, limitY, limitZ, limitXYZ,limitXsYZ, limitXYsZ;
+
+    limitX.AddLimit(kXAxis,-20,-10);
+    limitY.AddLimit(kYAxis,30,40);
+    limitZ.AddLimit(kZAxis,-40,-30);
+
+    limitXYZ.AddLimit(kXAxis,-20,-10);
+    limitXYZ.AddLimit(kYAxis,30,40);
+    limitXYZ.AddLimit(kZAxis,-40,-30);
+
+    limitXsYZ.AddLimit(kXAxis,-60,-10);
+    limitXsYZ.AddLimit(kYAxis,30,40);
+    limitXsYZ.AddLimit(kZAxis,-40,-30);
+
+    limitXYsZ.AddLimit(kXAxis,-20,-10);
+    limitXYsZ.AddLimit(kYAxis,30,60);
+    limitXYsZ.AddLimit(kZAxis,-40,-30);
+
     G4RotationMatrix noRot;
     G4AffineTransform origin;
     G4double min,max;
-    assert(t1.CalculateExtent(kXAxis,limit,origin,min,max));
-    assert(min<=-50&&max>=50);
-    assert(t1.CalculateExtent(kYAxis,limit,origin,min,max));
-    assert(min<=-50&&max>=50);
-    assert(t1.CalculateExtent(kZAxis,limit,origin,min,max));
-    assert(min<=-50&&max>=50);
-    
+    G4bool clipped;
+
     G4ThreeVector pmxmymz(-100,-110,-120);
     G4AffineTransform tPosOnly(pmxmymz);
-    assert(t1.CalculateExtent(kXAxis,limit,tPosOnly,min,max));
-    assert(min<=-150&&max>=-50);
-    assert(t1.CalculateExtent(kYAxis,limit,tPosOnly,min,max));
-    assert(min<=-160&&max>=-60);
-    assert(t1.CalculateExtent(kZAxis,limit,tPosOnly,min,max));
-    assert(min<=-170&&max>=-70);
 
     G4RotationMatrix r90Z;
     r90Z.rotateZ(halfpi);
     G4AffineTransform tRotZ(r90Z,pzero);
-    assert(t1.CalculateExtent(kXAxis,limit,tRotZ,min,max));
+    G4AffineTransform tRotZpos(r90Z,pmxmymz);
+
+
+    assert(t1.CalculateExtent(kXAxis,unlimit,origin,min,max));
     assert(min<=-50&&max>=50);
-    assert(t1.CalculateExtent(kYAxis,limit,tRotZ,min,max));
+    assert(t1.CalculateExtent(kYAxis,unlimit,origin,min,max));
     assert(min<=-50&&max>=50);
-    assert(t1.CalculateExtent(kZAxis,limit,tRotZ,min,max));
+    assert(t1.CalculateExtent(kZAxis,unlimit,origin,min,max));
     assert(min<=-50&&max>=50);
+
+    assert(t3.CalculateExtent(kXAxis,unlimit,origin,min,max));
+    assert(min<=-50&&max>=0);
+    assert(t3.CalculateExtent(kYAxis,unlimit,origin,min,max));
+    assert(min<=0&&max>=50);
+    assert(t3.CalculateExtent(kZAxis,unlimit,origin,min,max));
+    assert(min<=-50&&max>=50);
+
+    /////////////////////////////////////////////////////
+
+    assert(t1.CalculateExtent(kXAxis,limitXYZ,origin,min,max));
+    G4cout<<"t1.CE(kXAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    assert(t1.CalculateExtent(kYAxis,limitXYZ,origin,min,max));
+    G4cout<<"t1.CE(kYAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    assert(t1.CalculateExtent(kZAxis,limitXYZ,origin,min,max));
+    G4cout<<"t1.CE(kZAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t2.CalculateExtent(kXAxis,limitXYZ,origin,min,max);
+    G4cout<<"t2.CE(kXAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t2.CalculateExtent(kYAxis,limitXYZ,origin,min,max);
+    G4cout<<"t2.CE(kYAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t2.CalculateExtent(kZAxis,limitXYZ,origin,min,max);
+    G4cout<<"t2.CE(kZAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t2a.CalculateExtent(kXAxis,limitXYZ,origin,min,max);
+    G4cout<<"t2a.CE(kXAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t2a.CalculateExtent(kYAxis,limitXYZ,origin,min,max);
+    G4cout<<"t2a.CE(kYAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t2a.CalculateExtent(kZAxis,limitXYZ,origin,min,max);
+    G4cout<<"t2a.CE(kZAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t2b.CalculateExtent(kXAxis,limitXYZ,origin,min,max);
+    G4cout<<"t2b.CE(kXAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t2b.CalculateExtent(kYAxis,limitXYZ,origin,min,max);
+    G4cout<<"t2b.CE(kYAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t2b.CalculateExtent(kZAxis,limitXYZ,origin,min,max);
+    G4cout<<"t2b.CE(kZAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t2c.CalculateExtent(kXAxis,limitXYZ,origin,min,max);
+    G4cout<<"t2c.CE(kXAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t2c.CalculateExtent(kYAxis,limitXYZ,origin,min,max);
+    G4cout<<"t2c.CE(kYAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t2c.CalculateExtent(kZAxis,limitXYZ,origin,min,max);
+    G4cout<<"t2c.CE(kZAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t2d.CalculateExtent(kXAxis,limitXYZ,origin,min,max);
+    G4cout<<"t2d.CE(kXAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t2d.CalculateExtent(kYAxis,limitXYZ,origin,min,max);
+    G4cout<<"t2d.CE(kYAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t2d.CalculateExtent(kZAxis,limitXYZ,origin,min,max);
+    G4cout<<"t2d.CE(kZAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+
+    clipped=t3.CalculateExtent(kXAxis,limitXYZ,origin,min,max);
+    G4cout<<"t3.CE(kXAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+
+    clipped=t3.CalculateExtent(kYAxis,limitXYZ,origin,min,max);
+    G4cout<<"t3.CE(kYAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t3.CalculateExtent(kZAxis,limitXYZ,origin,min,max);
+    G4cout<<"t3.CE(kZAxis,limitXYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t1.CalculateExtent(kXAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t1.CE(kXAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t1.CalculateExtent(kYAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t1.CE(kYAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t1.CalculateExtent(kZAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t1.CE(kZAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t2.CalculateExtent(kXAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t2.CE(kXAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t2.CalculateExtent(kYAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t2.CE(kYAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t2.CalculateExtent(kZAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t2.CE(kZAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t2a.CalculateExtent(kXAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t2a.CE(kXAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t2a.CalculateExtent(kYAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t2a.CE(kYAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t2a.CalculateExtent(kZAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t2a.CE(kZAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t2b.CalculateExtent(kXAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t2b.CE(kXAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t2b.CalculateExtent(kYAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t2b.CE(kYAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t2b.CalculateExtent(kZAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t2b.CE(kZAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t2c.CalculateExtent(kXAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t2c.CE(kXAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t2c.CalculateExtent(kYAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t2c.CE(kYAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t2c.CalculateExtent(kZAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t2c.CE(kZAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t2d.CalculateExtent(kXAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t2d.CE(kXAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t2d.CalculateExtent(kYAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t2.CE(kYAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t2.CalculateExtent(kZAxis,limitXsYZ,origin,min,max);
+    G4cout<<"t2d.CE(kZAxis,limitXsYZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+
+     ///////////////////////////////////////////////////////////
+    
+
+    assert(t3.CalculateExtent(kXAxis,limitX,origin,min,max));
+    G4cout<<"t3.CE(kXAxis,limitX,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    assert(min<=-20&&max>=-30);
+
+
+
+    assert(t3.CalculateExtent(kYAxis,limitY,origin,min,max));
+    G4cout<<"t3.CE(kYAxis,limitY,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    assert(min<=30&&max>=40);
+
+    assert(t3.CalculateExtent(kZAxis,limitZ,origin,min,max));
+    G4cout<<"t3.CE(kZAxis,limitZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    assert(min<=-40&&max>=-30);
+    
+    assert(t2.CalculateExtent(kXAxis,limitX,origin,min,max));
+    G4cout<<"t2.CE(kXAxis,limitX,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    assert(min<=-20&&max>=-30);
+
+    assert(t2.CalculateExtent(kYAxis,limitY,origin,min,max));
+    G4cout<<"t2.CE(kYAxis,limitY,origin,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    assert(min<=30&&max>=40);
+
+    assert(t2.CalculateExtent(kZAxis,limitZ,origin,min,max));
+    G4cout<<"t2.CE(kZAxis,limitZ,origin,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    assert(min<=-40&&max>=-30);
+    
+    assert(t4.CalculateExtent(kXAxis,unlimit,origin,min,max));
+    assert(min<=-50&&max>=0);
+    assert(t4.CalculateExtent(kYAxis,unlimit,origin,min,max));
+    assert(min<=0&&max>=50);
+    assert(t4.CalculateExtent(kZAxis,unlimit,origin,min,max));
+    assert(min<=-50&&max>=50);
+
+    //////////////////////////////////////////////////////////
+    
+
+    assert(t1.CalculateExtent(kXAxis,unlimit,tPosOnly,min,max));
+    assert(min<=-150&&max>=-50);
+    assert(t1.CalculateExtent(kYAxis,unlimit,tPosOnly,min,max));
+    assert(min<=-160&&max>=-60);
+    assert(t1.CalculateExtent(kZAxis,unlimit,tPosOnly,min,max));
+    assert(min<=-170&&max>=-70);
+
+    assert(t3.CalculateExtent(kXAxis,unlimit,tPosOnly,min,max));
+    assert(min<=-150&&max>=-100);
+    assert(t3.CalculateExtent(kYAxis,unlimit,tPosOnly,min,max));
+    assert(min<=-110&&max>=-60);
+    assert(t3.CalculateExtent(kZAxis,unlimit,tPosOnly,min,max));
+    assert(min<=-170&&max>=-70);
+
+    assert(t4.CalculateExtent(kXAxis,unlimit,tPosOnly,min,max));
+    assert(min<=-150&&max>=-100);
+    assert(t4.CalculateExtent(kYAxis,unlimit,tPosOnly,min,max));
+    assert(min<=-110&&max>=-60);
+    assert(t4.CalculateExtent(kZAxis,unlimit,tPosOnly,min,max));
+    assert(min<=-170&&max>=-70);
+
+
+    /////////////////////////////////////////////////////////////
+
+    assert(t1.CalculateExtent(kXAxis,unlimit,tRotZ,min,max));
+    assert(min<=-50&&max>=50);
+    assert(t1.CalculateExtent(kYAxis,unlimit,tRotZ,min,max));
+    assert(min<=-50&&max>=50);
+    assert(t1.CalculateExtent(kZAxis,unlimit,tRotZ,min,max));
+    assert(min<=-50&&max>=50);
+
+    assert(t3.CalculateExtent(kXAxis,unlimit,tRotZ,min,max));
+    G4cout<<"t3.CE(kXAxis,unlimit,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    assert(min<=0&&max>=50);
+
+    assert(t3.CalculateExtent(kYAxis,unlimit,tRotZ,min,max));
+    G4cout<<"t3.CE(kYAxis,unlimit,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    assert(min<=0&&max>=50);
+
+    assert(t3.CalculateExtent(kZAxis,unlimit,tRotZ,min,max));
+    G4cout<<"t3.CE(kZAxis,unlimit,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    assert(min<=-50&&max>=50);
+
+    clipped=t1.CalculateExtent(kXAxis,limitX,tRotZ,min,max);
+    G4cout<<"t1.CE(kXAxis,limitX,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t1.CalculateExtent(kYAxis,limitY,tRotZ,min,max);
+    G4cout<<"t1.CE(kYAxis,limitY,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t1.CalculateExtent(kZAxis,limitZ,tRotZ,min,max);
+    G4cout<<"t1.CE(kZAxis,limitZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t3.CalculateExtent(kXAxis,limitX,tRotZ,min,max);
+    G4cout<<"t3.CE(kXAxis,limitX,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t3.CalculateExtent(kYAxis,limitY,tRotZ,min,max);
+    G4cout<<"t3.CE(kYAxis,limitY,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t3.CalculateExtent(kZAxis,limitZ,tRotZ,min,max);
+    G4cout<<"t3.CE(kZAxis,limitZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t2.CalculateExtent(kXAxis,limitX,tRotZ,min,max);
+    G4cout<<"t2.CE(kXAxis,limitX,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t2.CalculateExtent(kYAxis,limitY,tRotZ,min,max);
+    G4cout<<"t2.CE(kYAxis,limitY,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t2.CalculateExtent(kZAxis,limitZ,tRotZ,min,max);
+    G4cout<<"t2.CE(kZAxis,limitZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    /* *******************************
+    ******************************** */
+
+    clipped=t1.CalculateExtent(kXAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t1.CE(kXAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+
+    clipped=t1.CalculateExtent(kYAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t1.CE(kYAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t1.CalculateExtent(kZAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t1.CE(kZAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t2.CalculateExtent(kXAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t2.CE(kXAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t2.CalculateExtent(kYAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t2.CE(kYAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t2.CalculateExtent(kZAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t2.CE(kZAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t2a.CalculateExtent(kXAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t2a.CE(kXAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t2a.CalculateExtent(kYAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t2a.CE(kYAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t2a.CalculateExtent(kZAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t2a.CE(kZAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t2b.CalculateExtent(kXAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t2b.CE(kXAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t2b.CalculateExtent(kYAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t2b.CE(kYAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t2b.CalculateExtent(kZAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t2b.CE(kZAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t2c.CalculateExtent(kXAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t2c.CE(kXAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t2c.CalculateExtent(kYAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t2c.CE(kYAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t2c.CalculateExtent(kZAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t2c.CE(kZAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t2d.CalculateExtent(kXAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t2d.CE(kXAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t2d.CalculateExtent(kYAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t2d.CE(kYAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t2d.CalculateExtent(kZAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t2d.CE(kZAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+    clipped=t3.CalculateExtent(kXAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t3.CE(kXAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=-20&&max>=-30);
+
+    clipped=t3.CalculateExtent(kYAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t3.CE(kYAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=30&&max>=40);
+
+    clipped=t3.CalculateExtent(kZAxis,limitXYZ,tRotZ,min,max);
+    G4cout<<"t3.CE(kZAxis,limitXYZ,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-40&&max>=-30);
+
+
+    assert(t4.CalculateExtent(kXAxis,unlimit,tRotZ,min,max));
+    G4cout<<"t4.CE(kXAxis,unlimit,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=0&&max>=50);
+
+    assert(t4.CalculateExtent(kYAxis,unlimit,tRotZ,min,max));
+    G4cout<<"t4.CE(kYAxis,unlimit,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    // assert(min<=0&&max>=50);
+
+    assert(t4.CalculateExtent(kZAxis,unlimit,tRotZ,min,max));
+    G4cout<<"t4.CE(kZAxis,unlimit,tRotZ,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    // assert(min<=-50&&max>=50);
+
+    assert(t3.CalculateExtent(kXAxis,unlimit,tRotZpos,min,max));
+    G4cout<<"t3.CE(kXAxis,unlimit,tRotZpos,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    assert(min<=-100&&max>=-50);
+
+    assert(t3.CalculateExtent(kYAxis,unlimit,tRotZpos,min,max));
+    G4cout<<"t3.CE(kYAxis,unlimit,tRotZpos,min = "
+          <<min<<"; max = "<<max<<G4endl;
+    assert(min<=-110&&max>=-60);
+
+    assert(t3.CalculateExtent(kZAxis,unlimit,tRotZpos,min,max));
+    G4cout<<"t3.CE(kZAxis,unlimit,tRotZpos,min = "
+          <<min<<"; max = "<<max<<G4endl<<G4endl;
+    assert(min<=-170&&max>=-70);
 
 // Check that clipped away
     G4VoxelLimits xClip;
@@ -408,11 +910,13 @@ G4bool testG4Tubs()
     allClip.AddLimit(kXAxis,-5,+5);
     allClip.AddLimit(kYAxis,-5,+5);
     allClip.AddLimit(kZAxis,-5,+5);
+
     G4RotationMatrix genRot;
     genRot.rotateX(pi/6);
     genRot.rotateY(pi/6);
     genRot.rotateZ(pi/6);
     G4AffineTransform tGen(genRot,vx);
+
     assert(t1.CalculateExtent(kXAxis,allClip,tGen,min,max));
     assert(min<=-5&&max>=5);
     assert(t1.CalculateExtent(kYAxis,allClip,tGen,min,max));
@@ -421,61 +925,69 @@ G4bool testG4Tubs()
     assert(min<=-5&&max>=5);
 
 
-// Test z clipping ok
+// Test t1 z clipping ok
+
     for (G4double zTest=-100;zTest<100;zTest+=9)
-	{
-	    G4VoxelLimits zTestClip;
-	    zTestClip.AddLimit(kZAxis,-kInfinity,zTest);
-	    if (zTest<-50)
-		{
-		    assert(!t1.CalculateExtent(kZAxis,zTestClip,origin,min,max));
-		}
-	    else
-		{
-		    assert(t1.CalculateExtent(kZAxis,zTestClip,origin,min,max));
-		    G4double testMin=-50;
-		    G4double testMax=(zTest<50) ? zTest : 50;
-		    assert (ApproxEqual(min,testMin)
-			    &&ApproxEqual(max,testMax));
-		}
-	}
+    {
+      G4VoxelLimits zTestClip;
+      zTestClip.AddLimit(kZAxis,-kInfinity,zTest);
+      if (zTest<-50)
+      {
+	assert(!t1.CalculateExtent(kZAxis,zTestClip,origin,min,max));
+      }
+      else
+      {
+	assert(t1.CalculateExtent(kZAxis,zTestClip,origin,min,max));
+	G4double testMin=-50;
+	G4double testMax=(zTest<50) ? zTest : 50;
+	assert ( ApproxEqual(min,testMin) && ApproxEqual(max,testMax) );
+      }
+    }
+    G4cout<<"Test t1 z clipping ok"<<G4endl;
 
-// Test y clipping ok
+// Test t1 y clipping ok
+
     for (G4double xTest=-100;xTest<100;xTest+=9)
-	{
-	    G4VoxelLimits xTestClip;
-	    xTestClip.AddLimit(kXAxis,-kInfinity,xTest);
-	    if (xTest<-50)
-	    {
-		    assert(!t1.CalculateExtent(kYAxis,xTestClip,origin,min,max));
-	    }
-	    else
-	    {
-		   assert(t1.CalculateExtent(kYAxis,xTestClip,origin,min,max));
+    {
+      G4VoxelLimits xTestClip;
+      xTestClip.AddLimit(kXAxis,-kInfinity,xTest);
+      if (xTest<-50)
+      {
+        assert(!t1.CalculateExtent(kYAxis,xTestClip,origin,min,max));
+      }
+      else
+      {
+	assert(t1.CalculateExtent(kYAxis,xTestClip,origin,min,max));
 // Calc max y coordinate
-		   // G4double testMax=(xTest<0) ? sqrt(50*50-xTest*xTest) : 50;
-	           // assert (ApproxEqual(min,-testMax)&&ApproxEqual(max,testMax));
-		}
-	}
+// G4double testMax=(xTest<0) ? sqrt(50*50-xTest*xTest) : 50;
+// assert (ApproxEqual(min,-testMax)&&ApproxEqual(max,testMax));
+      }
+    }
+    G4cout<<"Test t1 y clipping ok"<<G4endl;
 
-// Test x clipping ok
+// Test t1 x clipping ok
+
     for (G4double yTest=-100;yTest<100;yTest+=9)
-	{
-	    G4VoxelLimits yTestClip;
-	    yTestClip.AddLimit(kYAxis,-kInfinity,yTest);
-	    if (yTest<-50)
-		{
-		    assert(!t1.CalculateExtent(kXAxis,yTestClip,origin,min,max));
-		}
-	    else
-	    {
-	      assert(t1.CalculateExtent(kXAxis,yTestClip,origin,min,max));
+    {
+      G4VoxelLimits yTestClip;
+      yTestClip.AddLimit(kYAxis,-kInfinity,yTest);
+      if (yTest<-50)
+      {
+	assert(!t1.CalculateExtent(kXAxis,yTestClip,origin,min,max));
+      }
+      else
+      {
+	assert(t1.CalculateExtent(kXAxis,yTestClip,origin,min,max));
 // Calc max y coordinate
 	      //  G4double testMax=(yTest<0) ? sqrt(50*50-yTest*yTest) : 50;
 	      //  assert (ApproxEqual(min,-testMax)&&ApproxEqual(max,testMax));
-		}
-	}
+      }
+    }
+    G4cout<<"Test t1 x clipping ok"<<G4endl;
 
+
+    /* ********************************
+    ************************************ */
 
     return true;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.32 2002-01-10 15:42:26 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.33 2002-04-16 08:24:18 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,9 @@
 // 07.12.00 V.Grichine, phi-section algorithm was changed in Inside(p)
 // 20.02.01 V.Grichine, bug fixed in Inside(p) and CalculateExtent was 
 //                      simplified base on G4Box::CalculateExtent
+// 20.07.01 V.Grichine, bug fixed in Inside(p)
+//
+//
 
 #include "G4Tubs.hh"
 
@@ -159,9 +162,11 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
 			              G4double&          pMin, 
                                       G4double&          pMax    ) const
 {
+  /*  
   G4Box box("box",fRMax,fRMax,fDz) ;
   return box.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax) ;
-/*
+  */
+
   if ( !pTransform.IsRotated() && fDPhi == 2.0*M_PI && fRMin == 0 )
   {
 // Special case handling for unrotated solid tubes
@@ -304,19 +309,34 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
     G4int i, noEntries, noBetweenSections4 ;
     G4bool existsAfterClip = false ;
     G4ThreeVectorList* vertices = CreateRotatedVertices(pTransform) ;
-
+    
     pMin = +kInfinity ;
     pMax = -kInfinity ;
 
-    noEntries = vertices->entries() ;
+    noEntries = vertices->size() ;
     noBetweenSections4 = noEntries - 4 ;
-	    
+    /*
+    G4cout<<"vertices = "<<noEntries<<"\t"<<"v-4 = "<<noBetweenSections4<<G4endl;
+    G4cout<<G4endl;
+    for(i = 0 ; i < noEntries ; i++ )
+    {
+      G4cout<<i<<"\t"<<"v.x = "<<((*vertices)[i]).x()<<"\t"
+                     <<"v.y = "<<((*vertices)[i]).y()<<"\t"
+                     <<"v.z = "<<((*vertices)[i]).z()<<"\t"
+            <<G4endl;
+    }	    
+    G4cout<<G4endl;
+    G4cout<<"ClipCrossSection"<<G4endl;
+    */
     for (i = 0 ; i < noEntries ; i += 4 )
     {
-       ClipCrossSection(vertices,i,pVoxelLimit,pAxis,pMin,pMax) ;
+      // G4cout<<"section = "<<i<<G4endl;
+      ClipCrossSection(vertices,i,pVoxelLimit,pAxis,pMin,pMax) ;
     }
+    // G4cout<<"ClipBetweenSections"<<G4endl;
     for (i = 0 ; i < noBetweenSections4 ; i += 4 )
     {
+      // G4cout<<"between sections = "<<i<<G4endl;
        ClipBetweenSections(vertices,i,pVoxelLimit,pAxis,pMin,pMax) ;
     }
     if (pMin != kInfinity || pMax != -kInfinity )
@@ -347,7 +367,7 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
     delete vertices;
     return existsAfterClip;
   }
-*/
+
 }
 
 
@@ -371,7 +391,8 @@ EInside G4Tubs::Inside(const G4ThreeVector& p) const
 	    
     if (r2 >= tolRMin*tolRMin && r2 <= tolRMax*tolRMax)
     {
-      if ( fDPhi == 2*M_PI || r2 == 0 )  in = kInside ;
+      //  if ( fDPhi == 2*M_PI || r2 == 0 )  in = kInside ;
+      if ( fDPhi == 2*M_PI )  in = kInside ;
       else
       {
 // Try inner tolerant phi boundaries (=>inside)
@@ -1644,11 +1665,11 @@ G4Tubs::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   G4ThreeVectorList* vertices ;
   G4ThreeVector vertex0, vertex1, vertex2, vertex3 ;
   G4double meshAngle, meshRMax, crossAngle, cosCrossAngle, sinCrossAngle, sAngle;
-  G4double rMaxX, rMaxY, rMinX, rMinY ;
+  G4double rMaxX, rMaxY, rMinX, rMinY, meshRMin ;
   G4int crossSection, noCrossSections;
 
 // Compute no of cross-sections necessary to mesh tube
-  noCrossSections =G4int(fDPhi/kMeshAngleDefault) + 1 ;
+  noCrossSections = G4int(fDPhi/kMeshAngleDefault) + 1 ;
 
   if ( noCrossSections < kMinMeshSections )
   {
@@ -1656,11 +1677,16 @@ G4Tubs::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   }
   else if (noCrossSections>kMaxMeshSections)
   {
-    noCrossSections=kMaxMeshSections ;
+    noCrossSections = kMaxMeshSections ;
   }
-  meshAngle = fDPhi/(noCrossSections - 1) ;
-  meshRMax  = fRMax/cos(meshAngle*0.5) ;
+  // noCrossSections = 4 ;
 
+  meshAngle = fDPhi/(noCrossSections - 1) ;
+  //  meshAngle = fDPhi/(noCrossSections) ;
+
+  meshRMax  = (fRMax+100*kCarTolerance)/cos(meshAngle*0.5) ;
+  meshRMin = fRMin - 100*kCarTolerance ; 
+ 
 // If complete in phi, set start angle such that mesh will be at fRMax
 // on the x axis. Will give better extent calculations when not rotated.
 
@@ -1672,18 +1698,27 @@ G4Tubs::CreateRotatedVertices(const G4AffineTransform& pTransform) const
     
   if ( vertices )
   {
-    for (crossSection=0;crossSection<noCrossSections;crossSection++)
+    for (crossSection = 0 ; crossSection < noCrossSections ; crossSection++ )
     {
 // Compute coordinates of cross section at section crossSection
+
       crossAngle    = sAngle + crossSection*meshAngle ;
       cosCrossAngle = cos(crossAngle) ;
       sinCrossAngle = sin(crossAngle) ;
 
       rMaxX = meshRMax*cosCrossAngle ;
       rMaxY = meshRMax*sinCrossAngle ;
-      rMinX = fRMin*cosCrossAngle ;
-      rMinY = fRMin*sinCrossAngle ;
 
+      if(meshRMin <= 0.0)
+      {
+        rMinX = 0.0 ;
+        rMinY = 0.0 ;
+      }
+      else
+      {
+        rMinX = meshRMin*cosCrossAngle ;
+        rMinY = meshRMin*sinCrossAngle ;
+      }
       vertex0 = G4ThreeVector(rMinX,rMinY,-fDz) ;
       vertex1 = G4ThreeVector(rMaxX,rMaxY,-fDz) ;
       vertex2 = G4ThreeVector(rMaxX,rMaxY,+fDz) ;
