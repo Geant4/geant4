@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.47 2002-11-11 18:33:36 johna Exp $
+// $Id: G4VisManager.cc,v 1.48 2002-11-20 17:19:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -232,7 +232,7 @@ void G4VisManager::Enable() {
 }
 
 void G4VisManager::Disable() {
-  fpConcreteInstance = 0;
+  SetConcreteInstance(0);
   if (fVerbosity >= confirmations) {
     G4cout <<
       "G4VisManager::Disable: visualization disabled."
@@ -434,7 +434,7 @@ void G4VisManager::CreateViewer (G4String name) {
       fpSceneHandler -> AddViewerToList (fpViewer);
       fpSceneHandler -> SetCurrentViewer (fpViewer);
       // Make it possible for user action code to Draw.
-      fpConcreteInstance = this;
+      SetConcreteInstance(this);
 
       const G4ViewParameters& vp = fpViewer->GetViewParameters();
       G4bool warn = false;
@@ -522,7 +522,7 @@ void G4VisManager::DeleteCurrentSceneHandler () {
     fpSceneHandler = fAvailableSceneHandlers [0];
     fpViewer = 0;
     // Make it impossible for user action code to Draw.
-    fpConcreteInstance = 0;
+    SetConcreteInstance(0);
     if (fVerbosity >= warnings) {
       G4cout << "WARNING: scene handler is now \""
 	     << fpSceneHandler -> GetName ();
@@ -534,7 +534,7 @@ void G4VisManager::DeleteCurrentSceneHandler () {
     fpSceneHandler = 0;
     fpViewer  = 0;
     // Make it impossible for user action code to Draw.
-    fpConcreteInstance = 0;
+    SetConcreteInstance(0);
     if (fVerbosity >= warnings) {
       G4cout <<
 	"WARNING: There are now no scene handlers left."
@@ -573,7 +573,7 @@ void G4VisManager::DeleteCurrentViewer () {
     fpViewer = 0;
     fpSceneHandler -> SetCurrentViewer (0);
     // Make it impossible for user action code to Draw.
-    fpConcreteInstance = 0;
+    SetConcreteInstance(0);
     if (fVerbosity >= warnings) {
       G4cout <<
 	"WARNING: There are now no viewers left for this scene handler."
@@ -719,14 +719,14 @@ void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
       else {
 	fpViewer = 0;
 	// Make it impossible for user action code to Draw.
-	fpConcreteInstance = 0;
+	SetConcreteInstance(0);
       }
     }
     else {
       fpSceneHandler = 0;
       fpViewer = 0;
       // Make it impossible for user action code to Draw.
-      fpConcreteInstance = 0;
+      SetConcreteInstance(0);
     }
   }
 }
@@ -770,7 +770,7 @@ void G4VisManager::SetCurrentSceneHandler (G4VSceneHandler* pSceneHandler) {
   else {
     fpViewer = 0;
     // Make it impossible for user action code to Draw.
-    fpConcreteInstance = 0;
+    SetConcreteInstance(0);
     if (fVerbosity >= warnings) {
       G4cout <<
 	"WARNING: No viewers for this scene handler - please create one."
@@ -984,7 +984,7 @@ void G4VisManager::BeginOfEvent () {
 
 void G4VisManager::EndOfEvent () {
   //G4cout << "G4VisManager::EndOfEvent" << G4endl;
-  if (fpConcreteInstance && IsValidView ()) {
+  if (GetConcreteInstance() && IsValidView ()) {
     ClearTransientStoreIfMarked();
     fVisManagerModelingParameters
       = *(fpSceneHandler -> CreateModelingParameters ());
@@ -1006,7 +1006,7 @@ void G4VisManager::EndOfEvent () {
 
 void G4VisManager::EndOfRun () {
   //G4cout << "G4VisManager::EndOfRun" << G4endl;
-  if (fpConcreteInstance && IsValidView ()) {
+  if (GetConcreteInstance() && IsValidView ()) {
     fpSceneHandler->SetMarkForClearingTransientStore(true);
   }
 }
@@ -1136,7 +1136,7 @@ G4bool G4VisManager::IsValidView () {
 
   if (!fInitialised) Initialise ();
 
-  fpConcreteInstance = 0;
+  SetConcreteInstance(0);
   // Unless we survive a few preliminary tests, users must not use.
 
   if (!fpGraphicsSystem) return false;
@@ -1200,7 +1200,7 @@ G4bool G4VisManager::IsValidView () {
     return false;
   }
 
-  fpConcreteInstance = this;  // Unless we find another problem, users can use!
+  SetConcreteInstance(this);  // Unless we find another problem, users can use!
   G4bool isValid = true;
   if (fpScene -> IsEmpty ()) {  // Add world by default if possible...
     G4bool warn(fVerbosity >= warnings);
@@ -1215,7 +1215,7 @@ G4bool G4VisManager::IsValidView () {
 	       << G4endl;
       }
       isValid = false;
-      fpConcreteInstance = 0;  // Users must not use!
+      SetConcreteInstance(0);  // Users must not use!
     }
     else {
       G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/viewer/reset");

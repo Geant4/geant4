@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.31 2002-11-11 18:31:27 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.32 2002-11-20 17:19:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -385,7 +385,7 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
     ("Defaults: 1 m x 1 0 0 auto 0 0 0 m");
   fpCommand -> SetGuidance 
     ("Adds an annotated scale line to the current scene.");
-  fpCommand -> SetGuidance (G4Scale::GuidanceString);
+  fpCommand -> SetGuidance (G4Scale::GuidanceString());
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("length", 'd', omitable = true);
   parameter->SetDefaultValue (1.);
