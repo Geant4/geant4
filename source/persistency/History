@@ -15,7 +15,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 26, 99  Y.Morita (persistency-V00-01-08)
+November 29, 99  Y.Morita (persistency-V00-01-08)
+- bug fix for persistent hits (works with PersistentEx02-V00-01-01)
+
+November 26, 99  Y.Morita
 - Introduced G4TransactionManager for sustained transaction control
 
 November 23, 99  Y.Morita (persistency-V00-01-07)
