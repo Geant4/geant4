@@ -56,10 +56,8 @@ G4PersistencyCenterMessenger::G4PersistencyCenterMessenger(G4PersistencyCenter* 
 
   vname = name + "store/";
 
-  G4UIcommand* directory;
-
-  directory = new G4UIdirectory(vname.c_str());
-  directory->SetGuidance("Specifiy object types for store");
+  subdir1 = new G4UIdirectory(vname.c_str());
+  subdir1->SetGuidance("Specifiy object types for store");
 
   wrObj.push_back("HepMC");
   wrObj.push_back("MCTruth");
@@ -82,8 +80,8 @@ G4PersistencyCenterMessenger::G4PersistencyCenterMessenger(G4PersistencyCenter* 
   }
 
   vname += "using/";
-  directory = new G4UIdirectory(vname.c_str());
-  directory->SetGuidance("Select I/O manager for store");
+  subdir2 = new G4UIdirectory(vname.c_str());
+  subdir2->SetGuidance("Select I/O manager for store");
 
   cmd = vname + "hitIO";
   regHitIO = new G4UIcmdWithAString(cmd.c_str(),this);
@@ -91,12 +89,12 @@ G4PersistencyCenterMessenger::G4PersistencyCenterMessenger(G4PersistencyCenter* 
   regHitIO->SetParameterName("Name of Hits I/O Manager", true, true);
 
   vname = name + "set/";
-  directory = new G4UIdirectory(vname.c_str());
-  directory->SetGuidance("Set various parameters"); 
+  subdir3 = new G4UIdirectory(vname.c_str());
+  subdir3->SetGuidance("Set various parameters"); 
 
   vname += "writeFile/";
-  directory = new G4UIdirectory(vname.c_str());
-  directory->SetGuidance("Set output file names for object types");
+  subdir4 = new G4UIdirectory(vname.c_str());
+  subdir4->SetGuidance("Set output file names for object types");
 
   for ( i = 0; i < 3; i++ )
   {
@@ -108,8 +106,8 @@ G4PersistencyCenterMessenger::G4PersistencyCenterMessenger(G4PersistencyCenter* 
   }
 
   vname = name + "set/ReadFile/";
-  directory = new G4UIdirectory(vname.c_str());
-  directory->SetGuidance("Set input file names for object types");
+  subdir5 = new G4UIdirectory(vname.c_str());
+  subdir5->SetGuidance("Set input file names for object types");
 
   rdObj.push_back("Hits");
 
@@ -129,6 +127,11 @@ G4PersistencyCenterMessenger::G4PersistencyCenterMessenger(G4PersistencyCenter* 
 G4PersistencyCenterMessenger::~G4PersistencyCenterMessenger()
 {
   delete directory;
+  delete subdir1;
+  delete subdir2;
+  delete subdir3;
+  delete subdir4;
+  delete subdir5;
   delete verboseCmd;
   delete select;
   delete regHitIO;
