@@ -21,77 +21,89 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoDataSet.hh
+// $Id: XrayFluoAnalysisManager.hh
 // GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
-//  28 Nov 2001  Elena Guardincerri   Created
+//  30 Nov 2001 Guy Barrand : migrate to AIDA-2.2.
+//  28 Nov 2001 Elena Guardincerri   Created
 //
 // -------------------------------------------------------------------
 
-//for the documentation of this class see also G4EMDataSet class
+#ifndef G4PROCESSTESTANALYSIS_HH
+#define G4PROCESSTESTANALYSIS_HH
 
-#ifndef FluoDataSet_hh
-#define FluoDataSet_hh 1
+//#ifndef XrayFluoAnalysisManager_h
+//#define XrayFluoAnalysisManager_h 1
 
 #include "globals.hh"
-#include "G4DataVector.hh"
-#include "G4VEMDataSet.hh"
+#include "g4std/vector"
+#include "G4ThreeVector.hh"
+#include "XrayFluoDataSet.hh"
 
-class G4VDataSetAlgorithm;
 
-class XrayFluoDataSet : public G4VEMDataSet {
+class G4Step;
+//class XrayFluoEventAction;
 
+class IAnalysisFactory;
+class IHistogramFactory;
+class ITree;
+class ITupleFactory;
+class ITuple;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+class XrayFluoAnalysisManager
+{
 public:
-
-  XrayFluoDataSet(G4int Z,
-		  G4DataVector* points, 
-	      G4DataVector* values,
-	      const G4VDataSetAlgorithm* interpolation,
-	      G4double unitE = MeV, G4double unitData = barn);
-  
-  XrayFluoDataSet(G4int Z,
-		  const G4String& dataFile,
-	      const G4VDataSetAlgorithm* interpolation,
-	      G4double unitE = MeV, G4double unitData = barn);
-
-  ~XrayFluoDataSet();
  
-  //find the value corresponding to the energy e in the set
-  //identified by id
-  G4double FindValue(G4double e, G4int id = 0) const;
-
-  virtual const G4VEMDataSet* GetComponent(G4int i) const { return 0;} 
-
-  virtual void AddComponent(G4VEMDataSet* dataSet) { }
-
-  virtual size_t NumberOfComponents() const { return 0; }
-
-
-  void PrintData() const;
-
-  const G4DataVector& GetEnergies(G4int i) const { return *energies; }
-  const G4DataVector& GetData(G4int i) const { return *data; }
-
-private:
-
-  void LoadData(const G4String& dataFile);
-  G4int z;
-  G4int FindBinLocation(G4double energy) const;
-
-  G4DataVector* energies; // Owned pointer
-  G4DataVector* data;     // Owned pointer
-
-  const G4VDataSetAlgorithm* algorithm; // Not owned pointer 
+  virtual ~XrayFluoAnalysisManager();
   
-  G4double unit1;
-  G4double unit2;
+  void book();
+  
+  void finish();
+  
+  //fill histograms with data from XrayFluoSteppingAction
+  void analyseStepping(const G4Step* aStep);
+  
+ //fill histograms with data from XrayFluoEventAction
+  void analyseEnergyDep(G4double eDep);
+  
+ //fill histograms with data from XrayFluoPrimarygeneratoraction
+  void analysePrimaryGenerator(G4double energy);
+  
+  //method to call to create an instance of this class
+  static XrayFluoAnalysisManager* getInstance();
 
-  size_t numberOfBins;
+  G4double XrayFluoAnalysisManager::ResponseFunction(G4double energy);
+
+ 
+private:
+  //private constructor in order to create a singleton
+  XrayFluoAnalysisManager();
+ 
+  static XrayFluoAnalysisManager* instance;
+  
+  //pointer to the analysis messenger
+ 
+  //XrayFluoEventAction* pEvent;
+
+  IAnalysisFactory* analysisFactory;
+  ITree* tree;
+
+  IHistogramFactory *histogramFactory;
+  ITupleFactory* tupleFactory;
+
+  
+  ITuple* tuple;
+
 
 };
- 
+
 #endif
+
+
+

@@ -16,14 +16,14 @@
 # (Edit the next line(s) to choose another graphic system)
 #
 
-/vis/open VRML1FILE
-
+/vis/open OGLIX
+/vis/viewer/flush
 
 #
 # draw scene
 #
-/vis/drawVolume
-/vis/viewer/update
+#/vis/drawVolume
+#/vis/viewer/update
 #
 # for drawing the tracks
 # (if too many tracks cause core dump => storeTrajectory 0)

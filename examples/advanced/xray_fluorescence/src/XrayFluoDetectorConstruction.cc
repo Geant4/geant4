@@ -130,7 +130,7 @@ void XrayFluoDetectorConstruction::DefineMaterials()
   a = 69.72* g/mole;
   G4Element * Ga = new G4Element(name="gallium",symbol="Ga",z= 31.,a);
   
-  a = 55.85*g/mole;
+  a = 55.847*g/mole;
   G4Element* Fe = new G4Element(name="Iron"  ,symbol="Fe", z=26., a);
   //define hydrogen
   
@@ -166,7 +166,7 @@ void XrayFluoDetectorConstruction::DefineMaterials()
   //define silicon
   
   density = 2.333*g/cm3;
-  a = 28.09*g/mole;
+  a = 28.0855*g/mole;
   G4Material* Si = new G4Material(name="Silicon",z=14., a,density);
   
   //define copper
@@ -178,7 +178,7 @@ void XrayFluoDetectorConstruction::DefineMaterials()
   
   //define carbon
   
-  a = 12.01*g/mole;
+  a = 12.0107*g/mole;
   G4Element* C  = new G4Element(name="Carbon"  ,symbol="C" , z= 6., a);
   
   
@@ -197,12 +197,12 @@ void XrayFluoDetectorConstruction::DefineMaterials()
   
   //define titanium 
   density = 4.54 *g/cm3;
- a = 47.867*g/mole;
- G4Material* Ti  = new G4Material(name="Titanium",z=22.,a,density);
+  a = 47.867*g/mole;
+  G4Material* Ti  = new G4Material(name="Titanium",z=22.,a,density);
+  
 
 
-
-//define lead
+  //define lead
   
   density = 11.35*g/cm3;
   a=207.19*g/mole;
@@ -213,7 +213,7 @@ void XrayFluoDetectorConstruction::DefineMaterials()
   a = 14.01*g/mole;
   G4Element* N  = new G4Element(name="Nitrogen",symbol="N" , z= 7., a);
   
-  a = 16.00*g/mole;
+  a = 15.9994*g/mole;
   G4Element* O  = new G4Element(name="Oxygen"  ,symbol="O" , z= 8., a);
   
   G4double fractionmass;
@@ -229,12 +229,40 @@ void XrayFluoDetectorConstruction::DefineMaterials()
   temperature = 2.73*kelvin;
   G4Material * Vacuum = new G4Material(name="Galactic", z=1., a=1.01*g/mole, density,
 				       kStateGas,temperature,pressure);
+  // define Titanium
+  a = 47.88*g/mole;
+  G4Element* elTi = new G4Element(name="Titanium",symbol="Ti" , z= 22., a);
+  // define Calcium
+  a = 40.078*g/mole;
+  G4Element* Ca = new G4Element(name="Calcium",symbol="Ca" , z= 20., a);
+  // define silicon
+  a = 28.0855*g/mole;
+  G4Element* elSi = new G4Element(name="Silicon",symbol="Si" , z= 14., a);
+
+  a = 26.98154*g/mole;
+  G4Element* elAl = new G4Element(name="Aluminium",symbol="Al" , z= 13., a);
+  
+  a = 24.305*g/mole;
+  G4Element* Mg = new G4Element(name="Magnesium",symbol="Mg" , z= 12., a);
+  
+  //define basalt
+  density = 3.*g/cm3; 
+  G4Material* Basalt = new G4Material(name="Basalt", density, ncomponents=7);
+  Basalt->AddElement(Fe, fractionmass=0.1200);
+  Basalt->AddElement(elTi, fractionmass=0.0160);
+  Basalt->AddElement(Ca, fractionmass=0.0750);
+  Basalt->AddElement(elSi, fractionmass=0.2160);
+  Basalt->AddElement(elAl, fractionmass=0.0710);
+  Basalt->AddElement(Mg, fractionmass=0.0590);
+  Basalt->AddElement(O , fractionmass=0.4430);
+
+  // end basalt
   
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
   
   //default materials of the apparate
   
-  sampleMaterial = Ti;
+  sampleMaterial = Basalt;
   Dia1Material = Pb;
   Dia3Material = Pb;
   pixelMaterial = HPGe;

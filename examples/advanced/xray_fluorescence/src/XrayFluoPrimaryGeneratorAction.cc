@@ -64,11 +64,11 @@ XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
   G4ParticleDefinition* particle
-    = particleTable->FindParticle(particleName="e-");
+    = particleTable->FindParticle(particleName="gamma");
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   
-  particleGun->SetParticleEnergy(50.*MeV);
+  particleGun->SetParticleEnergy(6.*keV);
   G4double position = -0.5*(XrayFluoDetector->GetWorldSizeZ());
   particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
   

@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2001-12-11 13:07:14 gcosmo Exp $
+$Id: README,v 1.3 2002-06-16 14:57:45 mantero Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -81,7 +81,7 @@ source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.5/install/sharedstart.csh
 
 #path to the lowEnergy data base
 
-setenv G4LEDATA /afs/cern.ch/sw/geant4/stt/dev1/src/G4EMLOW0.5
+setenv G4LEDATA /afs/cern.ch/sw/geant4/stt/dev1/src/G4EMLOW1.1
 
 1. Run
 To execute a sample simulation with visualisation of tracks
@@ -112,20 +112,13 @@ XrayFluoParticleGeneratorAction.cc
 
 5. Analysis
 
-At present there are two options for analysis packages: either 
-explicitely the Anaphe 3.6.5 (or compatible) version is selected, 
-or any AIDA-2.2 compliant analysis system is chosen.  This dual
-approach will be removed in the next release when only the AIDA
-compliant version will be present. Presently, the OpenScientist 
-package (version 8) provides an implementation of AIDA 2.2, 
-other packages as Anaphe and JAS will follow soon. The AIDA 
-compliant version has not been tested by the developers and is
-here as a example of "forward compatibility" on how to use analysis.
+At present the analisys is provided by any AIDA-2.2 compliant analysis system. 
+In the example the Anaphe toolkit is used.
 
 To build and execute the example on platforms where there is no
 implementation of the analysis system, the environment variables 
 must not be set.
 
 The example provides also two Python files used to display and fit the 
-histograms.
+histograms with Lizard 1.3.x.
 

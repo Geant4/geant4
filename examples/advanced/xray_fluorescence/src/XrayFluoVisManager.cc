@@ -44,8 +44,8 @@
 #include "G4GAGTree.hh"
 #include "G4HepRepFile.hh"
 #include "G4RayTracer.hh"
-#include "G4VRML1File.hh"
-#include "G4VRML2File.hh"
+//#include "G4VRML1File.hh"
+//#include "G4VRML2File.hh"
 
 // Needing external packages or libraries...
 
@@ -80,12 +80,12 @@
 #ifdef G4VIS_USE_OIWIN32
 #include "G4OpenInventorWin32.hh"
 #endif
-
+/*
 #ifdef G4VIS_USE_VRML
 #include "G4VRML1.hh"
 #include "G4VRML2.hh"
 #endif
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoVisManager::XrayFluoVisManager () {}
@@ -100,8 +100,8 @@ void XrayFluoVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4GAGTree);
   RegisterGraphicsSystem (new G4HepRepFile);
   RegisterGraphicsSystem (new G4RayTracer);
-  RegisterGraphicsSystem (new G4VRML1File);
-  RegisterGraphicsSystem (new G4VRML2File);
+  // RegisterGraphicsSystem (new G4VRML1File);
+  //RegisterGraphicsSystem (new G4VRML2File);
 
   // Graphics systems needing external packages or libraries...
 
@@ -136,12 +136,13 @@ void XrayFluoVisManager::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_OIWIN32
   RegisterGraphicsSystem (new G4OpenInventorWin32);
 #endif
-
+ 
+ /*
 #ifdef G4VIS_USE_VRML
   RegisterGraphicsSystem (new G4VRML1);
   RegisterGraphicsSystem (new G4VRML2);
 #endif
-
+  */
   if (fVerbose > 0) {
     G4cout <<
       "\nYou have successfully chosen to use the following graphics systems."
