@@ -1,0 +1,22 @@
+/control/verbose 1
+/run/verbose 1
+# create empty scene
+#
+#/vis/scene/create
+#
+# Create a scene handler for a specific graphics system
+# (Edit the next line(s) to choose another graphic system)
+#/control/saveHistory
+#
+#/vis/open OGLIX
+#/vis/open DAWNFILE
+#/vis/viewer/flush
+#/vis/viewer/update
+/tracking/storeTrajectory 1
+#/vis/scene/endOfEventAction accumulate
+/target/setTargetThick 1. cm
+/target/update
+/gun/particle e-
+/gun/energy 200 keV
+/run/beamOn 2000
+
