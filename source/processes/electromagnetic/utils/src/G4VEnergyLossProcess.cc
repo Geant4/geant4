@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.11 2004-03-15 16:48:52 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.12 2004-03-19 15:30:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -704,14 +704,14 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
         const G4ParticleDefinition* pd = t->GetDefinition();
         if (pd != G4Gamma::Gamma() && pd != G4Electron::Electron() ) e += pd->GetPDGMass();
 
-        preStepKinEnergy -= e;
+        eloss += e;
         pParticleChange->AddSecondary(t);
       }
     }
     delete newp;
   }
 
-  preStepKinEnergy -= eloss;
+  G4double finalT = preStepKinEnergy - eloss;
 
 /*
   if(-1 < verboseLevel) {
@@ -722,17 +722,16 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   }
 */
 
-  if (preStepKinEnergy <= lowestKinEnergy) {
+  if (finalT <= lowestKinEnergy) {
 
-    eloss += preStepKinEnergy;
-    preStepKinEnergy = 0.0;
+    finalT = 0.0;
 
     if (hasRestProcess) fParticleChange.SetStatusChange(fStopButAlive);
     else                fParticleChange.SetStatusChange(fStopAndKill);
   }
 
-  fParticleChange.SetProposedKineticEnergy(preStepKinEnergy);
-  fParticleChange.SetLocalEnergyDeposit(eloss);
+  fParticleChange.SetProposedKineticEnergy(finalT);
+  fParticleChange.SetLocalEnergyDeposit(preStepKinEnergy-finalT);
 
   return &fParticleChange;
 }
