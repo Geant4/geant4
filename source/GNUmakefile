@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 1999-06-24 06:44:45 stesting Exp $
+# $Id: GNUmakefile,v 1.11 1999-06-24 10:49:47 johna Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake glob" makes global libraries for each subdomain.
@@ -21,6 +21,8 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 G4BINDIR := $(G4BIN)/$(G4SYSTEM)
+G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
+G4TMPDIR := $(G4TMP)/$(G4SYSTEM)
 unique := $(shell echo $$$$)
 
 .PHONY: all glob global libmap clean_libs clean clean_all
@@ -36,7 +38,7 @@ glob global:
 	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE)); done
 	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE)); done
 
-libmap: $(G4BINDIR)/liblist
+libmap: $(G4LIBDIR)/liblist
 	@echo "WARNING: Making a library map of granular libraries."
 	@echo "         This is a list of libraries in order of use, and for"
 	@echo "         each library a list of other libraries used."
@@ -64,33 +66,32 @@ libmap: $(G4BINDIR)/liblist
 	  echo $$i >> /tmp/G4libname.map.starter.$(unique); \
 	done
 	@echo "Making libname.map..."
-	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ]; then mkdir $(G4TMP)/$(G4SYSTEM);fi
-	@rm -f $(G4TMP)/$(G4SYSTEM)/libname.map;
-	G4TMP=$(G4TMP); export G4TMP; $(G4BINDIR)/liblist -l \
-	  -d $(G4TMP)/$(G4SYSTEM) \
+	@rm -f $(G4LIBDIR)/libname.map;
+	G4TMP=$(G4TMP); export G4TMP; \
+	  $(G4LIBDIR)/liblist -l -d $(G4TMPDIR) \
 	  < /tmp/G4libname.map.starter.$(unique) \
-	  > $(G4TMP)/$(G4SYSTEM)/libname.map
+	  > $(G4LIBDIR)/libname.map
 	@rm -f /tmp/G4_all_lib_makefiles.$(unique);
 	@rm -f /tmp/G4_granlib_makefiles.$(unique);
 	@rm -f /tmp/G4libname.map.starter.$(unique);
 
-$(G4BINDIR)/liblist: $(G4INSTALL)/config/liblist.c
+$(G4LIBDIR)/liblist: $(G4INSTALL)/config/liblist.c
 	@echo "Compiling liblist.c..."
-	@if [ ! -d $(G4BINDIR) ] ; then mkdir $(G4BINDIR) ;fi
-	$(CC) $(CCFLAGS) -o $(G4BINDIR)/liblist $(G4INSTALL)/config/liblist.c
+	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
+	$(CC) $(CCFLAGS) -o $(G4LIBDIR)/liblist $(G4INSTALL)/config/liblist.c
 
 clean_libs:
 	@echo Removing all libraries ...
 	@for dir in $(SUBDIR1); do (cd $$dir; $(MAKE) clean_libs); done
 	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE) clean_libs); done
 	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE) clean_libs); done
-	@rm -rf $(G4TMP)/$(G4SYSTEM)/libname.map
+	@rm -rf $(G4LIBDIR)/libname.map
 
 clean:
 	@echo Removing current $(G4SYSTEM) installation ...
-	@rm -rf $(G4TMP)/$(G4SYSTEM)
-	@rm -rf $(G4LIB)/$(G4SYSTEM)
-	@rm -rf $(G4BIN)/$(G4SYSTEM)
+	@rm -rf $(G4TMPDIR)
+	@rm -rf $(G4LIBDIR)
+	@rm -rf $(G4BINDIR)
 ifdef CFRONT
 	@rm -rf $(G4TREP)
 endif
