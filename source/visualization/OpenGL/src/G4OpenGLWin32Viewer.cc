@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.cc,v 1.12 2004-04-08 15:12:01 gbarrand Exp $
+// $Id: G4OpenGLWin32Viewer.cc,v 1.13 2004-04-08 15:36:32 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -203,8 +203,8 @@ LRESULT CALLBACK G4OpenGLWin32Viewer::WindowProc (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  switch (aMessage) { 
 /*
+  switch (aMessage) { 
   case WM_PAINT:{
     printf("debug : PAINT\n");
     HDC	hDC;
@@ -225,13 +225,15 @@ LRESULT CALLBACK G4OpenGLWin32Viewer::WindowProc (
       glViewport(0,0,This->WinSize_x,This->WinSize_y);
       This->ClearView();
       This->DrawView();
+      // WARNING : the below empty the Windows message queue...
       This->FinishView();
     }
   } return 0;
-*/
   default:
     return DefWindowProc(aWindow,aMessage,aWParam,aLParam);
   }
+*/
+  return DefWindowProc(aWindow,aMessage,aWParam,aLParam);
 }
 
 //////////////////////////////////////////////////////////////////////////////

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Win32.cc,v 1.7 2004-04-08 08:16:34 gbarrand Exp $
+// $Id: G4Win32.cc,v 1.8 2004-04-08 15:35:05 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -123,6 +123,11 @@ void G4Win32::FlushAndWaitExecution (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
+  MSG event;
+  while ( ::PeekMessage(&event, NULL, 0, 0, PM_REMOVE) ) {
+    ::TranslateMessage(&event);
+    ::DispatchMessage (&event);
+  }
 }
 /***************************************************************************/
 G4bool G4Win32::dispatchWin32Event  (
