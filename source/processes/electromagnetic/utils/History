@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2000-08-11 10:40:51 maire Exp $
+$Id: History,v 1.5 2000-11-04 16:47:25 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+04 nov 00: mma (utils-V02-00-03)
+- EnergyLossTable: const G4Material* in all functions
+- G4VEnergyLoss and Messenger slighy modified for more flexibility
+  only (Laszlo)
      
 11 aug 00: mma (utils-V02-00-01)
 

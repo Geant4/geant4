@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.icc,v 1.11 2000-05-23 14:24:47 urban Exp $
+// $Id: G4EnergyLossTables.icc,v 1.12 2000-11-04 16:47:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -118,7 +118,7 @@ inline G4EnergyLossTablesHelper G4EnergyLossTables::GetTables(
 inline G4double G4EnergyLossTables::GetDEDX(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    G4Material *aMaterial)
+    const G4Material *aMaterial)
 {
   if(aParticle != lastParticle)
   {
@@ -162,7 +162,7 @@ inline G4double G4EnergyLossTables::GetDEDX(
 inline G4double G4EnergyLossTables::GetLabTime(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    G4Material *aMaterial)
+    const G4Material *aMaterial)
 {
   if(aParticle != lastParticle)
   {
@@ -205,7 +205,7 @@ inline G4double G4EnergyLossTables::GetDeltaLabTime(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergyStart,
     G4double KineticEnergyEnd,
-    G4Material *aMaterial)
+    const G4Material *aMaterial)
 {
   if(aParticle != lastParticle)
   {
@@ -280,7 +280,7 @@ inline G4double G4EnergyLossTables::GetDeltaLabTime(
 inline G4double G4EnergyLossTables::GetProperTime(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    G4Material *aMaterial)
+    const G4Material *aMaterial)
 {
   if(aParticle != lastParticle)
   {
@@ -323,7 +323,7 @@ inline G4double G4EnergyLossTables::GetDeltaProperTime(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergyStart,
     G4double KineticEnergyEnd,
-    G4Material *aMaterial)
+    const G4Material *aMaterial)
 {
   if(aParticle != lastParticle)
   {
@@ -398,7 +398,7 @@ inline G4double G4EnergyLossTables::GetDeltaProperTime(
 inline G4double G4EnergyLossTables::GetRange(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    G4Material *aMaterial)
+    const G4Material *aMaterial)
 {
   if(aParticle != lastParticle)
   {
@@ -445,7 +445,7 @@ inline G4double G4EnergyLossTables::GetRange(
 inline G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
                                      const G4ParticleDefinition *aParticle,
                                            G4double range,
-                                           G4Material *aMaterial)
+                                     const G4Material *aMaterial)
 // it returns the value of the kinetic energy for a given range
 {
   if( aParticle != lastParticle)

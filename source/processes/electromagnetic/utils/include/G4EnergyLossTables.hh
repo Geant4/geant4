@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.hh,v 1.9 1999-12-15 14:52:01 gunter Exp $
+// $Id: G4EnergyLossTables.hh,v 1.10 2000-11-04 16:47:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -98,42 +98,42 @@ public:
   static G4double GetDEDX(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    G4Material *aMaterial);
+    const G4Material *aMaterial);
   static G4double GetRange(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    G4Material *aMaterial);  
+    const G4Material *aMaterial);  
   static G4double GetLabTime(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    G4Material *aMaterial);  
+    const G4Material *aMaterial);  
   static G4double GetDeltaLabTime(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergyStart,
     G4double KineticEnergyEnd,
-    G4Material *aMaterial);  
+    const G4Material *aMaterial);  
   static G4double GetProperTime(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    G4Material *aMaterial);  
+    const G4Material *aMaterial);  
   static G4double GetDeltaProperTime(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergyStart,
     G4double KineticEnergyEnd,
-    G4Material *aMaterial);  
+    const G4Material *aMaterial);  
 
   static G4double GetPreciseDEDX(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    G4Material *aMaterial);
+    const G4Material *aMaterial);
   static G4double GetPreciseRangeFromEnergy(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    G4Material *aMaterial);  
+    const G4Material *aMaterial);  
   static G4double GetPreciseEnergyFromRange(
     const G4ParticleDefinition *aParticle,
     G4double range,
-    G4Material *aMaterial); 
+    const G4Material *aMaterial); 
   
   // to be called only by energy loss processes
   static void Register(
