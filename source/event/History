@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2001-11-22 19:24:35 gcosmo Exp $
+$Id: History,v 1.36 2002-01-23 03:20:37 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan 22 2002, M.Asai (event-V04-00-00)
+- Remove the check G4PrimaryTransformer whether the primary vertex is inside
+  the world volume. The check has been moved to G4SteppingManager.
 
 Nov 21 2001, M.Asai (event-V03-02-09)
 - G4PrimaryTransformer.cc: now considering case where a primary is placed on the

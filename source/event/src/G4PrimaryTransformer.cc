@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.13 2001-11-22 18:53:13 asaim Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.14 2002-01-23 03:20:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,11 +33,6 @@
 #include "G4Track.hh"
 #include "G4ThreeVector.hh"
 #include "G4DecayProducts.hh"
-#include "G4TransportationManager.hh"
-#include "G4Navigator.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VSolid.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
 
@@ -83,18 +78,6 @@ void G4PrimaryTransformer::GenerateTracks(G4PrimaryVertex* primaryVertex)
            << T0 / nanosecond << "(nsec))" << G4endl;
   }
 #endif
-
-  //Check whether the vertex is inside the world volume
-  G4Navigator* navi = 
-    G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
-  G4VSolid* theWorldSolid = navi->GetWorldVolume()->GetLogicalVolume()->GetSolid();
-  if(theWorldSolid->Inside(G4ThreeVector(X0,Y0,Z0))==kOutside)
-  {
-    G4cerr << "Primary vertex "
-           << G4BestUnit(G4ThreeVector(X0,Y0,Z0),G4String("Length"))
-           << " is outside of the world volume." << G4endl;
-    G4Exception("G4PrimaryTransformer::Primary vertex outside of the world");
-  }
 
   G4PrimaryParticle* primaryParticle = primaryVertex->GetPrimary();
   while( primaryParticle != 0 )
