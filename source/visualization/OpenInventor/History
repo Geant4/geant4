@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2004-11-06 10:08:42 gbarrand Exp $
+$Id: History,v 1.11 2004-11-07 17:04:13 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,13 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+7th November 2004  Guy Barrand
+- Have SoMarkerSet.h, .cc in the repository.
+- G4OpenInventorSceneHandler : 
+  Have a AddPrimitive(G4Polymarker) using SoMarkerSet.
+  SoMarkerSet draws markers in the frame buffer. It is much
+  more performant than having SoSphere and SoCube for markers.
 
 6th November 2004  Guy Barrand
 - G4OpenInventorXtViewer : restore the escape button.

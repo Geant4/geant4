@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.17 2004-06-14 09:27:38 gcosmo Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.18 2004-11-07 17:03:05 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,6 +62,8 @@
 #include "HEPVis/nodes/SoCons.h"
 #include "HEPVis/nodes/SoTrd.h"
 #include "HEPVis/nodes/SoTrap.h"
+#include "HEPVis/nodes/SoMarkerSet.h"
+typedef HEPVis_SoMarkerSet SoMarkerSet;
 #include "HEPVis/nodekits/SoDetectorTreeKit.h"
 
 #include "G4Scene.hh"
@@ -76,6 +78,7 @@
 #include "G4Text.hh"
 #include "G4Circle.hh"
 #include "G4Square.hh"
+#include "G4Polymarker.hh"
 #include "G4Polyhedron.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
@@ -170,6 +173,59 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
   currentSeparator->addChild(pLine);
 
   delete [] pCoords;
+}
+
+void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
+  //G4VSceneHandler::AddPrimitive (polymarker);
+  if(currentSeparator==0) return;
+
+  G4int pointn = polymarker.size();
+  if(pointn<=0) return;
+
+  if(polymarker.GetMarkerType()==G4Polymarker::line) {
+    // Why a polymarker of type line is not a G4Polyline ???
+    G4Polyline polyline (polymarker);
+    for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+      polyline.push_back (polymarker[iPoint]);
+    }
+    AddPrimitive(polyline);
+    return;
+  }
+
+  SbVec3f* points = new SbVec3f[pointn];
+  for (G4int iPoint = 0; iPoint < pointn ; iPoint++) {
+    points[iPoint].setValue(polymarker[iPoint].x(),
+                            polymarker[iPoint].y(),
+                            polymarker[iPoint].z());
+  }
+
+  SoMaterial* material = new SoMaterial;
+  const G4Colour& c = GetColour (polymarker);
+  material->diffuseColor.setValue(c.GetRed (), c.GetGreen (), c.GetBlue ());
+  currentSeparator->addChild(material);
+  
+  SoCoordinate3* coordinate3 = new SoCoordinate3;
+  coordinate3->point.setValues(0,pointn,points);
+  currentSeparator->addChild(coordinate3);
+  
+  SoMarkerSet* markerSet = new SoMarkerSet;
+  markerSet->numPoints = pointn;
+  switch (polymarker.GetMarkerType()) {
+  default:
+  // Are available 5_5, 7_7 and 9_9
+  case G4Polymarker::dots:{
+    markerSet->markerIndex = SoMarkerSet::CIRCLE_LINE_5_5;
+  }break;
+  case G4Polymarker::circles:{
+    markerSet->markerIndex = SoMarkerSet::CIRCLE_LINE_7_7;
+  }break;
+  case G4Polymarker::squares:{
+    markerSet->markerIndex = SoMarkerSet::SQUARE_LINE_7_7;
+  }break;
+  }
+  currentSeparator->addChild(markerSet);
+
+  delete [] points;
 }
 
 // ********* NOTE ********* NOTE ********* NOTE ********* NOTE *********
