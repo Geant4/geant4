@@ -1,0 +1,411 @@
+
+                       geant4-05-02-ref-00
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Removed obsolete 'g4std' wrappers and definition of G4std.
+    Migrated code to standard C++ calls to std namespace and STL headers.
+  o Made STEP and STEPinterface modules optional in compilation.
+  o Fixes in magnetic-field to address performance. Introduced ability
+    to configure the field-manager with different accuracy parameters
+    depending on energy, particle-ID, volume, or other track state.
+  o Fixes in G4DynamicParticle's constructors for the calculation of masses
+    to avoid negative values result of precision loss when massless particles
+    (like photons) are treated.
+  o Cleared most compilation warnings in hadronic modules.
+  o First implementation of GL viewer on WIN32 platforms for native
+    Windows OpenGL.
+  o Added new extended and advanced examples:
+    extended/electromagnetic/TestEm7, extended/medical/DICOM,
+    advanced/Rich, advanced/Tiara.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+global code migration
+---------------------
+** Replaced usage of G4std:: with std::
+** Replaced statements:
+     #include "g4std/XXX"
+   with:
+     #include <XXX>
+
+config                                  config-V05-01-05
+------
+- architecture.gmk, binmake.gmk:
+  o added flags G4LIB_BUILD_STEP/G4USE_STEP to make optional the compilation
+    of the STEP library and interface module.
+    By default the libraries will not be built.
+- architecture.gmk and specific setups in sys:
+  o get rid of G4_HAVE_BOOL macro. Now using default 'bool' type,
+    defined in all supported compilers.
+  o Removed flag G4USE_STD_NAMESPACE from specific setups in sys.
+    Follows migration from G4std apported in source/global and whole code.
+- G4VIS_BUILD.gmk, G4VIS_USE.gmk, G4UI_BUILD.gmk, G4UI_USE.gmk, and
+  sys/{Linux-g++,SUN-CC}.gmk:
+  o When building shared libraries needing external libs like OpenGL...,
+    add these at shared library building, so these libs know about their
+    dependencies and have these resolved.
+- Added UI32LIBS to interactivity.gmk to handle UI libraries on WIN32
+  platforms.
+- Added libraries for OpenGL and UI to default setup of WIN32-VC and
+  WIN32-VC7. Removed some obsolete compilation options.
+
+digits+hits                             digits_hits-V05-01-01
+-----------
+- Fixed trivial warning in G4VHit.cc.
+
+event                                   event-V05-01-02
+-----
+- Fixes for inclusion of <strstream> in G4HEPEvtInterface.cc in view
+  of the g4std wrappers migration.
+- Fixed trivial warning in G4GeneralParticleSourceMessenger.cc.
+
+geometry/biasing                        geombias-V05-01-00
+----------------
+- Fixes for inclusion of <strstream> in G4ImportanceAlgorithm.cc and
+  G4ImportanceFinder.cc in view  of the g4std wrappers migration.
+
+geometry/magneticfield                  field-V05-01-06
+----------------------
+- G4FieldManager:
+  o Revised into 'slightly' abstract class with one (new) virtual method:
+      ConfigureForTrack( const G4Track *)
+    to enable the user to configure it with different accuracy parameters
+    depending on energy, particle id, volume, or other track state.
+- G4ChordFinder:
+  o Minor revision of interfaces:
+    - FindNextChord() now provides next Step estimate (for accuracy
+      in Integration)
+    - AdvanceChordLimited() to use FindNextChord() and initial-step.
+  o Fix to initialise several member data in simple constructor
+  o Fixed unitialised variable for next step (now used for optimisation).
+  o Protected assignment of fLastStepEstimate_Unconstrained in case of
+    unitialised value.
+- G4MagIntegratorDriver:
+  o Keep simple statistics on number of steps, total error and step size.
+  o Took out unneccessary square roots and two divisions.
+    Giving 15% performance boost.
+  o Added extra argument for suggested initial step size 'hinitial' to
+    Accurate Advance.
+
+geometry/solids                         geomsolids-V05-01-00
+---------------
++ Made compilation of STEP and STEPinterface modules optional
+  controlled by variable G4LIB_BUILD_STEP/G4USE_STEP. By default modules
+  are not built.
++ Boolean (geom-bool-V05-01-02)
+  -------
+  - G4ReflectionFactory:
+    o Made public accessors: GetConstituentLV(), GetReflectedLV(),
+      IsConstituent() and IsReflected().
+    o Added accessor GetReflectedVolumesMap() to access list of
+      reflected volumes.
++ CSG (geom-csg-V05-01-00)
+  ---
+  - Updated disclaimer to unit test.
++ BREPS (breps-V05-01-01)
+  -----
+  - Fixes for inclusion of <strstream> in G4BREPSolidPCone.cc in view
+    of the g4std wrappers migration.
++ STEP (STEP-V05-01-00)
+  ----
+  - STEPattribute.h: commented unused definition of 'real' since clashing
+    with system headers.
+  - STEPattribute.cc, sdaiString.cc: removed usage of G4USE_STD_NAMESPACE
+    macro, according to migration from g4std wrappers.
+
+geometry/volumes                        geomvol-V05-01-04
+----------------
+- G4PropagatorInField:
+  o Implemented use of safety to reduce calls to navigator.
+  o Changed the default value of "maximum step count" from 10000 to 1000.
+    This will cause more particles to be recognised to loop earlier as this
+    parameter controls this behavior too.
+  o Added new method FindAndSetFieldManager() to find the current field
+    manager and set it for the Propagator.  The class currently ensures
+    that this method is always called once for each call to ComputeStep().
+  o Added new method SetDetectorFieldManager(), so as to have it updated
+    when the global field manager is changed.
+- G4TransportationManager: corrected the method SetFieldManager().
+  It now messages the current global PropagatorInField to notify it.
+
+global                                  global-V05-02-00
+------
+- Archived g4std wrappers. Removed definition of G4std in G4Types.hh.
+- Removed usage of G4USE_STD_NAMESPACE macro.
+
+intercoms                               intercoms-V05-01-02
+---------
+- G4UItokenNum.hh: fixed longstanding bug in the definition of the
+  struct "yystype": defined operator= and copy-constructor, defined
+  default constructor with default initialisation of members.
+  The fix makes happy Valgrind, concerning the usage of uninitialised
+  values.
+
+interfaces                              interfaces-V05-01-02
+----------
+- G4UIWin32.cc: cleared warning on redefinition of 'pascal' reported on
+  WIN32-VC system.
+- G4UIGainServer: fixed compilation problem on Darwin-g++ with gcc-3.X.
+- Fixes for inclusion of <strstream> in G4UIXm.cc, G4UItcsh.cc and
+  G4UIterminal.cc in view of the g4std wrappers migration.
+- Fixed few pedantic warnings.
+
+materials                               materials-V05-01-01
+---------
+- G4Isotope.cc G4Element.cc, G4Material.cc:
+  o Removed usage of G4USE_STD_NAMESPACE after g4std migration.
+
+particles
+---------
+- particles/management                  partman-V05-01-03
+  o G4DynamicParticle.cc:
+    - fix in constructors for the calculation of masses to avoid negative
+      values result of precision loss when massless particles
+      (like photons) are treated. Fixes problem report #489.
+    - use condition m^2<0.001MeV^2 to identify massless particles
+  o G4ProductionCutsTable.cc:
+    - removed usage of G4USE_STD_NAMESPACE after migration from G4std
+
+persistency                             persistency-V05-01-01
+-----------
+- Fixes for inclusion of <strstream> in G4MCTSimParticle.cc and
+  G4MCTSimVertex.cc in view of the g4std wrappers migration.
+- Fixed few pedantic warnings.
+
+processes/electromagnetic/lowenergy     emlowen-V05-01-04
+-----------------------------------
+- Fixed argument to pow() in G4LinLogLogInterpolation.cc and
+  G4LogLogInterpolation.cc to allow for porting on .NET 7.1 compiler.
+
+processes/electromagnetic/muons         muons-V05-01-06
+-------------------------------
+- Bug fix in cross section at high energies in G4MuPairProductionSTD.
+- Updated initialisation for STD processes.
+- Fixed few pedantic compilation warnings.
+
+processes/electromagnetic/standard      stand-V05-01-05
+----------------------------------
+- Short-lived particles no longer applicable for G4hIonisation.
+- Fixed initialisation for STD processes: integral Bohr fluctuations.
+- Trivial fixes in G4PAIxSection on arguments to pow() for porting on
+  .NET 7.1 compiler.
+- Fixed few pedantic compilation warnings.
+
+processes/electromagnetic/utils         utils-V05-01-07a
+-------------------------------
+- Short-lived particles no longer applicable for multiple scattering.
+- STD processes:
+  o removed and replaced obsolete multiple-scattering classes
+    with "model" variant
+  o cleared debug printout from G4VEnergyLossSTD for ions
+  o removed tracking cut
+  o fixed initialisation of integral approach - correct definition
+    of STD fluctuation model
+  o establish limits on eloss for Bohr and Ion fluctuations.
+- Fixed misprint for multiple-scattering at Tev energies.
+- Fix minor problem in nuclear form-factor calculations for multiple
+  scattering
+- Fixed few pedantic compilation warnings.
+
+processes/electromagnetic/xrays         xrays-V05-01-01
+-------------------------------
+- G4VXTRenergyLoss:
+  o modifications in BuildPhysicsTable: angle range 0-0.3, Legendre96
+    integration in 0-0.3-0.6-1.0*fMaxThetaTR
+- Fixed few pedantic compilation warnings.
+
+processes/hadronic                      ghad-V05-01-02
+------------------
++ Cleared most compilation warnings.
++ cross_sections (gcross-V05-01-02)
+  o Fixed usage of arguments to pow() for porting on .NET 7.1 compiler.
++ management (ghad-man-V05-01-01)
+  o Fixed warning generated after migration from g4std.
++ models/cascade/evaporation (ghad-evap-V05-01-00)
+  o Fixed usage of arguments to pow() for porting on .NET 7.1 compiler.
++ models/chiral_inv_phase_space (ghad-chips-V05-01-00)
+  o Fixed usage of arguments to pow() for porting on .NET 7.1 compiler.
++ models/generator/de_excitation (ghad-deex-V05-01-05)
+  o Fixed case of floating-point exception in internal conversion.
+  o Fixed usage of arguments to pow() for porting on .NET 7.1 compiler.
+  o Removed usage of G4USE_STD_NAMESPACE.
++ models/generator/kinetic_model (ghad-bin-V05-01-04)
+  o Corrected dummy declaration of virtual function to allow porting
+    on WIN32 platforms.
++ models/generator/pre_equilibrium (ghad-preco-V05-01-05)
+  o Fixed compilation problem on WIN32 platforms.
+  o Removed usage of G4USE_STD_NAMESPACE.
++ models/generator/scattering (ghad-scatt-V05-01-04)
+  o Fixed long-standing error on SUN dealing with ordering of static
+    construction.
++ models/generator/util (ghad-genutil-V05-01-05)
+  o Cleared printout on value of excitation energy.
+  o Fixed usage of arguments to pow() for porting on .NET 7.1 compiler.
+  o Removed usage of G4USE_STD_NAMESPACE.
++ models/neutron_hp (ghad-neu-V05-01-01)
+  o Removed usage of G4USE_STD_NAMESPACE.
+  o Fixed usage of arguments to pow() for porting on .NET 7.1 compiler.
++ models/radiative_decay (radiative_decay-V05-01-00)
+  o Fix in G4ITDecayChannel and G4RadioactiveDecay for porting on
+    Windows .NET (WIN23-VC7) compiler: changed signature in constructor
+    for G4ITDecayChannel to use G4Ions instead of generic G4ParticleDefinition.
++ stopping (ghad-stop-V05-01-01)
+  o Fixed bug in alpha evaporation from nucleus observed when mu- stops
+    in air.
+  o Adopt trivial workaround to avoid "internal compiler error" on WIN32
+    platforms.
++ util (ghad_util-V05-01-00)
+  o Cleanup compilation warnings.
+
+processes/photolepton_hadron            photolepton_hadron-V05-01-00
+----------------------------
+- Fixed few pedantic compilation warnings.
+
+processes/transportation                transport-V05-01-05
+------------------------
+- G4Transportation:
+  o Use new method of PropagatorInField to simplify choice of
+    global/local field.
+  o Activated new capability of a (user derived) field manager to configure
+    itself with different accuracy parameters depending on track's energy,
+    particle identity, or other property.
+- Fixes for inclusion of <strstream> in G4ParallelImportanceProcess
+  and G4ParallelTransport in view  of the g4std wrappers migration.
+- Fixed few pedantic compilation warnings.
+
+run                                     run-V05-01-04
+---
+- G4VUserPhysicsList:
+  o Added check for IsShortLived() before building the
+    physics table in BuildPhysicsTable().
+- G4RunManager: changed date for release 5.2.
+
+track                                   track-V05-01-03
+-----
+- Fixed compilation warning in G4ParticleChangeForRadDecay.
+
+tracking                                tracking-V05-01-01
+--------
+- Fixed compilation warnings in trajectory classes.
+
+visualization                           vis-V05-01-01
+-------------
+- Fixed compilation warnings
+- HepRep (vis-HepRep-V05-01-00)
+  o Added disclaimer of liability
+- OpenGL (opengl-V05-01-02)
+  o Added first implementation of G4OpenGLWin32Viewer for Windows GL.
+  o Fixes for porting compilation on WIN32:
+    - G4OpenGLWin32Viewer[.hh.cc]: removed inclusion of <GL/glx.h>.
+    - G4OpenGLViewer.cc: replaced local variables near/far with pnear/pfar
+      since declared 'obsolete' in WIN32 platforms.
+    - Fixed ciompilation warnings on Windows in viewers classes.
+    - Added inclusion of <windows.h> for WIN32 platforms when GL headers
+      are included.
+- RayTracer (raytracer-V05-01-01)
+  o Removed usage of G4USE_STD_NAMESPACE.
+
+g3tog4                                  g3tog4-V05-01-00
+------
+- Fixes for inclusion of <strstream> in G3EleTable.cc, G3PartTable.cc
+  and G4gsmixt.cc in view of the g4std wrappers migration.
+
+examples                                examples-V05-01-01
+--------
+- Updated reference outputs.
+- advanced:
+  o brachytherapy (brachy-V05-01-04)
+    + Implementation revision.
+    + Cleared compilation warnings.
+  o composite_calorimeter (ccal-V05-01-03)
+    + Updated physics lists.
+  o gammaray_telescope (GammaRayTel-V05-01-01)
+    + Updated to ANAPHE 5.0.5 and cuts-by-region.
+    + Added disclaimer of liability where needed.
+  o lAr_calorimeter (lAr_calorimeter-v05-01-03)
+    + Updated physics lists.
+    + Added disclaimer of liability where needed.
+  o Rich (Rich-V05-01-03)
+    + New application simulating the TestBeam setup of the Rich
+      detector in LHCb.
+  o Tiara (Tiara-V05-01-05)
+    + New application implementing a simulation of the neutron
+      shielding experiment TIARA using importance biasing.
+  o underground_physics (DMX-V05-01-02)
+    + Fixes to physics list.
+    + Added HepRep visualization.
+    + Fixes to hits collection: fixed hits deposition on photocathode
+      material.
+  o xray_fluorescence (XrayFluo-V05-01-01)
+    + Bug fixes for energy deposition in the detector.
+    + Cleared compilation warnings.
+- extended:
+  o analysis
+    + A01 (exA01-V05-01-00)
+      o Updated AIDA scripts.
+      o Included disclaimer of liability.
+    + AnaEx01 (AnaEx01-V05-01-04)
+      o Updated to AIDA 3.0.
+  o biasing (exbiasing-V05-01-00)
+    + Included disclaimer of liability where needed.
+  o electromagnetic
+    + TestEm1 (testem1-V05-01-03)
+      TestEm2 (testem1-V05-01-03)
+      TestEm3 (testem3-V05-01-03)
+      o Removed usage of G4USE_STD_NAMESPACE after migration from G4std
+        in run-manager classes.
+      o Fixed compilation warnings.
+    + TestEm4 (testem4-V05-01-00)
+      o Fixed compilation warnings.
+    + TestEm5 (testem5-V05-01-01)
+      o New histogram (ID=11) for the projeted angle at exit.
+        Bug corrected in gustep.
+      o New macros for multiple-scattering tests: run61,71,81,91
+      o Proper deletion of old geometry when it is updated.
+      o Fixed compilation warnings.
+    + TestEm6 (testem6-V05-01-00)
+      o Fixed compilation warnings.
+    + TestEm7 (testem7-V05-01-04)
+      o New example simulating energy deposited by particles absorbed
+        in a given material (Bragg peak).
+  o field (fieldex-V05-01-00)
+    + Fixed geometry construction in case of switching of detector.
+    + Cleared pedantic compilation warnings.
+  o geometry
+    + cad (cadex-V05-01-00)
+      o GNUmakefile: added control through G4USE_STEP variable.
+    + olap (olapex-V05-01-00)
+      o Cleared pedantic compilation warnings.
+  o medical
+    + DICOM (DICOM-V05-01-07)
+      o New application implementing a Geant4 interface to the DICOM
+        image format for the simulation of a phantom geometry.
+  o persistency (persistencyEx-V05-01-00)
+    + Updates to README and scripts.
+- novice (exnovice-V05-01-00)
+  o Get rid of pedantic compilation warnings
+  o N03 (exampleN03-V05-01-02)
+    + Moved heprep.mac to visTutor.
+
+tests                                   tests-V05-01-01
+-----
+- Updated reference outputs.
+- test05 (test05-V05-01-00)
+  o GNUmakefile: added control through G4USE_STEP variable.
+- test17 (test17-V05-01-00)
+  o Cleared compilation warnings.
+- test22 (test22-V05-01-01)
+  o Made test more effective for scaling of the gamma-nuclear
+    cross-sections. Modified physics-list and input script.
+  o Reduced statistics in input script. Made largeN macro corresponding
+    to standard macro with more statistics
+  o Cleared compilation warnings and added description to README.
+- test33 (test33-V05-01-01)
+  o Implementation revision.
+- test50 (test50-V05-01-03)
+  o New test for statistical validation of EM processes.
