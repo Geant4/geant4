@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConvexHull.hh,v 1.5 2001-07-11 09:59:33 gunter Exp $
+// $Id: G4ConvexHull.hh,v 1.6 2002-02-26 11:16:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -44,7 +44,7 @@ class G4ConvexHull
 
   G4ConvexHull(){}
   G4ConvexHull(G4double pparam, G4double mmin, G4double mmax)
-    : next(this), param (pparam), min(mmin), max(mmax){}
+    : param (pparam), min(mmin), max(mmax) { next=this; }
     // Constructors
   
   ~G4ConvexHull(){}
