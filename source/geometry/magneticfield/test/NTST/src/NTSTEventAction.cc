@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: NTSTEventAction.cc,v 1.1 2003-11-07 21:30:29 japost Exp $
+// $Id: NTSTEventAction.cc,v 1.2 2003-11-07 22:08:59 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,7 +93,7 @@ NTSTEventAction::~NTSTEventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void NTSTEventAction::BeginOfEventAction(const G4Event* evt)
+void NTSTEventAction::BeginOfEventAction(const G4Event* ) // evt)
 {  
   EventTime->Start();
 }
