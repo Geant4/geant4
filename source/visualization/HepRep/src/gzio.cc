@@ -5,7 +5,7 @@
  * Compile this file with -DNO_DEFLATE to avoid the compression code.
  */
 
-/* @(#) $Id: gzio.cc,v 1.2 2003-07-11 17:15:22 duns Exp $ */
+/* @(#) $Id: gzio.cc,v 1.3 2003-07-11 17:20:42 duns Exp $ */
 
 #include <stdio.h>
 
@@ -13,9 +13,10 @@
 
 struct internal_state {int dummy;}; /* for buggy compilers */
 
-//MD
-extern FILE *fdopen;
-// (int __fd, __const char *__modes) __THROW;
+//MD: g++ does not seem to have fdopen in C++ mode
+#ifdef __GLIBC__
+extern FILE *fdopen(int __fd, __const char *__modes) __THROW;
+#endif
 
 #ifndef Z_BUFSIZE
 #  ifdef MAXSEG_64K
