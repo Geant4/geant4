@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.18 2001-10-24 09:21:05 pia Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.19 2001-10-24 10:56:59 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -410,7 +410,7 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
     G4double t = preStep->GetGlobalTime();
     G4double deltaT = postStep->GetGlobalTime();
     deltaT -= t;
-    G4double time, q, e;
+    G4double time, q;
     G4ThreeVector position;
  
     for (size_t i=0; i<nSecondaries; i++) {
