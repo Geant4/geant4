@@ -1,0 +1,26 @@
+$Id: History,v 1.1 2000-02-14 12:24:00 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+   Please keep a summary of these message in geometry/History!
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+January 31, 2000	Gabriele Cosmo (STEP-V01-00-00)
+- Upgraded NIST STEP Reader to SCL (STEP Class Library) 3.2.
+- Implemented porting on supported platforms/compilers.
+- Implemented changes for ISO-ANSI C++ compliance.
+- Added README and History files.
