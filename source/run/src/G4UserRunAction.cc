@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserRunAction.cc,v 1.5 2003-03-10 01:50:21 asaim Exp $
+// $Id: G4UserRunAction.cc,v 1.6 2003-05-21 21:06:01 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,9 +36,9 @@ G4UserRunAction::~G4UserRunAction()
 G4Run* G4UserRunAction::GenerateRun()
 { return 0; }
 
-void G4UserRunAction::BeginOfRunAction(const G4Run* aRun)
+void G4UserRunAction::BeginOfRunAction(const G4Run*)
 {;}
 
-void G4UserRunAction::EndOfRunAction(const G4Run* aRun)
+void G4UserRunAction::EndOfRunAction(const G4Run*)
 {;}
 

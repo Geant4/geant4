@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.77 2003-05-16 09:12:33 gcosmo Exp $
+// $Id: G4RunManager.cc,v 1.78 2003-05-21 21:06:01 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -330,8 +330,8 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
 void G4RunManager::AnalyzeEvent(G4Event* anEvent)
 {
   G4VPersistencyManager* fPersM = G4VPersistencyManager::GetPersistencyManager();
-  if(fPersM) fPersM->Store(currentEvent);
-  currentRun->RecordEvent(currentEvent);
+  if(fPersM) fPersM->Store(anEvent);
+  currentRun->RecordEvent(anEvent);
 }
 
 void G4RunManager::RunTermination()
