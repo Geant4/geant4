@@ -35,7 +35,6 @@ class G4ElectroNuclearReaction : public G4HadronicInteraction
   public: 
     virtual ~G4ElectroNuclearReaction()
     {
-     G4int i=0; i/2.; // to be able to make a breakpoint
     }
     
     G4VParticleChange * ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus);
@@ -50,8 +49,8 @@ inline
 G4VParticleChange * G4ElectroNuclearReaction::
 ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
 {
-  const G4ParticleDefinition * aD(aTrack.GetDynamicParticle()->GetDefinition());
-  if(aD != G4Electron::ElectronDefinition() && aD != G4Positron::PositronDefinition())
+  const G4ParticleDefinition* aD = aTrack.GetDynamicParticle()->GetDefinition();
+  if((aD != G4Electron::ElectronDefinition()) && (aD != G4Positron::PositronDefinition()))
   {
     G4Exception("Called G4ElectroNuclearReaction for particle other than electron or positron");
   }
