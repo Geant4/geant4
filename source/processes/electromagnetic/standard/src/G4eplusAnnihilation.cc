@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.cc,v 1.16 2004-03-10 16:48:46 vnivanch Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.17 2004-08-05 10:33:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,6 +74,12 @@ G4eplusAnnihilation::~G4eplusAnnihilation()
       theMeanFreePathTable->clearAndDestroy();
       delete theMeanFreePathTable;
    }
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G4eplusAnnihilation::IsApplicable( const G4ParticleDefinition& particle)
+{
+   return ( &particle == G4Positron::Positron() ); 
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -171,6 +177,92 @@ G4double G4eplusAnnihilation::ComputeCrossSectionPerAtom
          *((gama2+4*gama+1.)*log(gama+sqgama2) - (gama+3.)*sqgama2) 
          /((gama2-1.)*(gama+1.));
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4eplusAnnihilation::ComputeMeanFreePath( G4double PositKinEnergy,
+                                                   G4Material* aMaterial)
+
+// returns the positron mean free path in GEANT4 internal units
+
+{
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+  const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();   
+
+  G4double SIGMA = 0 ;
+
+  for (size_t elm=0 ; elm < aMaterial->GetNumberOfElements() ; elm++ )
+     {             
+        SIGMA += NbOfAtomsPerVolume[elm] * 
+                 ComputeCrossSectionPerAtom(PositKinEnergy,
+                                            (*theElementVector)[elm]->GetZ());
+     }       
+
+  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4eplusAnnihilation::GetCrossSectionPerAtom(
+                                           G4DynamicParticle* aDynamicPositron,
+                                           G4Element*         anElement)
+ 
+// return the total cross section per atom in GEANT4 internal units
+
+{
+   G4double crossSection;
+   G4double PositronEnergy = aDynamicPositron->GetKineticEnergy();
+   G4bool isOutRange ;
+
+   if (PositronEnergy > HighestEnergyLimit)
+     crossSection = 0. ;
+   else {
+     if (PositronEnergy < LowestEnergyLimit) PositronEnergy = 1.01*LowestEnergyLimit;
+     crossSection = (*theCrossSectionTable)(anElement->GetIndex())->
+                    GetValue( PositronEnergy, isOutRange );
+   }
+
+   return crossSection; 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+G4double G4eplusAnnihilation::GetMeanFreePath(const G4Track& aTrack,
+                                                     G4double,
+                                                     G4ForceCondition*)
+ 
+// returns the positron mean free path in GEANT4 internal units
+
+{
+  const G4DynamicParticle* aDynamicPositron = aTrack.GetDynamicParticle();
+  G4double PositronEnergy = aDynamicPositron->GetKineticEnergy();
+  G4Material* aMaterial = aTrack.GetMaterial();
+
+  G4double MeanFreePath;
+  G4bool isOutRange ;
+
+  if (PositronEnergy > HighestEnergyLimit) MeanFreePath = DBL_MAX;
+  else 
+    {
+     if (PositronEnergy < LowestEnergyLimit)
+                                    PositronEnergy = 1.01*LowestEnergyLimit;
+     MeanFreePath = (*theMeanFreePathTable)(aMaterial->GetIndex())->
+                    GetValue( PositronEnergy, isOutRange );
+    }
+
+  return MeanFreePath; 
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4eplusAnnihilation::GetMeanLifeTime(const G4Track&,
+                                                     G4ForceCondition*)
+ 
+// returns the annihilation mean life time in GEANT4 internal units
+
+{
+   return 0.0; 
+} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.hh,v 1.11 2004-03-10 16:48:45 vnivanch Exp $
+// $Id: G4eplusAnnihilation.hh,v 1.12 2004-08-05 10:33:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,7 +33,8 @@
 // 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
 // 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
-// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)   
+// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
+// 05-08-04, suppress .icc file   
 // 
 
 // class description
@@ -161,8 +162,6 @@ class G4eplusAnnihilation : public G4VRestDiscreteProcess
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4eplusAnnihilation.icc"
   
 #endif
  
