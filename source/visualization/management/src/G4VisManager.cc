@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.5 1999-01-11 00:48:40 allison Exp $
+// $Id: G4VisManager.cc,v 1.6 1999-02-07 17:35:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,7 +24,6 @@
 #include "G4VGraphicsSystem.hh"
 #include "G4VSceneHandler.hh"
 #include "G4VViewer.hh"
-#include "G4TransportationManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
@@ -34,9 +33,9 @@
 #include "G4Polyline.hh"
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
-#include "G4PhysicalVolumeModel.hh"
 #include "G4NullModel.hh"
 #include "G4ModelingParameters.hh"
+#include "G4TransportationManager.hh"
 
 #include "G4VisManMessenger.hh"
 // TEMPORARY /vis/ -> /vis~/ equivalence.
@@ -154,7 +153,7 @@ void G4VisManager::Initialise () {
 const G4GraphicsSystemList& G4VisManager::GetAvailableGraphicsSystems () {
   G4int nSystems = fAvailableGraphicsSystems.entries ();
   if (nSystems == 0) {
-    G4cerr << "G4VisManager::GetAvailableGraphicsSystems: WARNING: no graphics"
+    G4cout << "G4VisManager::GetAvailableGraphicsSystems: WARNING: no graphics"
       " system available!"
       "\n  1) Did you have environment variables G4VIS_BUILD_xxxx_DRIVER set"
       "\n     when you compiled/built the visualization code?"
@@ -170,15 +169,15 @@ const G4GraphicsSystemList& G4VisManager::GetAvailableGraphicsSystems () {
 
 G4bool G4VisManager::RegisterGraphicsSystem (G4VGraphicsSystem* pSystem) {
   if (pSystem -> GetFunctionality () == G4VGraphicsSystem::noFunctionality) {
-    G4cerr << "G4VisManager::RegisterGraphicsSystem: WARNING: attempt to"
+    G4cout << "G4VisManager::RegisterGraphicsSystem: WARNING: attempt to"
       "\n  register a \"no functionality\" graphics system, probably an"
       "\n  unbuilt system, i.e., a system not available locally.  Please"
       "\n  consult your computer manager.  System was "
 	 << pSystem -> GetName ();
     if (pSystem -> GetNickname () != "") {
-      G4cerr << " (" << pSystem -> GetNickname () << ")";
+      G4cout << " (" << pSystem -> GetNickname () << ")";
     }
-    G4cerr << endl;
+    G4cout << endl;
     return false;
   }
   else {
@@ -458,7 +457,7 @@ void G4VisManager::CreateSceneHandler (G4String name) {
       fpSceneHandler = pSceneHandler;                         // Make current.
     }
     else {
-      G4cerr << "Error in G4VisManager::CreateSceneHandler during "
+      G4cout << "Error in G4VisManager::CreateSceneHandler during "
 	   << fpGraphicsSystem -> GetName ()
 	   << " scene creation."
 	   << endl;
@@ -653,7 +652,18 @@ void G4VisManager::GeometryHasChanged () {
 
 void G4VisManager::SetCurrentGraphicsSystemAndCreateViewer
 (G4VGraphicsSystem* pSystem) {
+  // This is used only by the deprecated
+  // /vis~/create_view/new_graphics_system command.  Hence the ad hoc
+  // creation of "scene-vis~" below as a working solution while these
+  // old commands exist.
   fpGraphicsSystem = pSystem;
+  if (!fpScene) {
+    fpScene = new G4Scene ("scene-vis~");
+    fSceneList.append (fpScene);
+    G4cout << "G4VisManager::SetCurrentGraphicsSystemAndCreateViewer:"
+      "\n  Empty scene \"scene-vis~\" created."
+	   << endl;
+  }
   CreateSceneHandler ();
   CreateViewer ();
 }
@@ -870,18 +880,18 @@ void G4VisManager::PrintAvailableGraphicsSystems () const {
 }
 
 void G4VisManager::PrintInvalidPointers () const {
-  G4cerr << "Error in G4VisManager::PrintInvalidPointers:";
+  G4cout << "Error in G4VisManager::PrintInvalidPointers:";
   if (!fpGraphicsSystem) {
-    G4cerr << "\n null graphics system pointer.";
+    G4cout << "\n null graphics system pointer.";
   }
   else {
-    G4cerr << "\n graphics system is " << fpGraphicsSystem -> GetName ()
+    G4cout << "\n graphics system is " << fpGraphicsSystem -> GetName ()
 	 << " but:";
-    if (!fpScene) G4cerr << "\nNull scene pointer. ";
-    if (!fpSceneHandler) G4cerr << "\nNull scene handler pointer. ";
-    if (!fpViewer ) G4cerr << "\nNull viewer pointer. ";
+    if (!fpScene) G4cout << "\nNull scene pointer. ";
+    if (!fpSceneHandler) G4cout << "\nNull scene handler pointer. ";
+    if (!fpViewer ) G4cout << "\nNull viewer pointer. ";
   }
-  G4cerr << endl;
+  G4cout << endl;
 }
 
 void G4VisManager::RefreshCurrentView  () {  // Soft clear, then redraw.
@@ -896,53 +906,64 @@ G4bool G4VisManager::IsValidView () {
 
   if (!fInitialised) Initialise ();
 
+  fpConcreteInstance = 0;
+  // Unless we survive a few preliminary tests, users must not use.
+
   if (!fpGraphicsSystem) return false;
   // Simply return without printing - we do not want printing if the
   // user simply does not want to use graphics, e.g., in batch mode.
 
-  G4bool isValid = true;
-  fpConcreteInstance = this;  // Unless we find a problem, users can use!
   if ((!fpScene) || (!fpSceneHandler) || (!fpViewer)) {
-    G4cerr << "G4VisManager::IsValidView ():";
-    G4cerr << "\n  Current view is not valid.";
-    G4cerr << endl;
+    G4cout << "G4VisManager::IsValidView ():"
+      "\n  Current view is not valid.";
+    G4cout << endl;
     PrintInvalidPointers ();
-    isValid = false;
-    fpConcreteInstance = 0;  // Users must not use!
+    return false;
   }
-  else if (fpScene -> IsEmpty ()) {
-    G4VPhysicalVolume* pWorld =
-      G4TransportationManager::GetTransportationManager ()
-      -> GetNavigatorForTracking () -> GetWorldVolume ();
-    if (pWorld) {
-      const G4VisAttributes* pVisAttribs =
-	pWorld -> GetLogicalVolume () -> GetVisAttributes ();
-      if (!pVisAttribs || pVisAttribs -> IsVisible ()) {
-	G4cout << 
-	  "Your \"world\" has no vis attributes or is marked as visible."
-	  "\n  For a better view of the contents, mark the world as"
-	  " invisible, e.g.,"
-	  "\n  myWorldLogicalVol ->"
-	  " SetVisAttributes (G4VisAttributes::Invisible);"
-	       << endl;
-      }
-      fpScene -> AddRunDurationModel (new G4PhysicalVolumeModel (pWorld));
-      // Note: default depth and no modeling parameters.
-      G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/camera/reset");
-      G4cout <<
-	"G4VisManager: the scene was empty, \"world\" has been added"
-	"\n  and the view parameters have been reset.";
-      G4cout << endl;
+
+  if (fpScene != fpSceneHandler -> GetScene ()) {
+    G4cout << "G4VisManager::IsValidView ():";
+    if (fpSceneHandler -> GetScene ()) {
+      G4cout << "\n  Pointers of current scene \""
+	     << fpScene -> GetName ()
+	     << "\" and scene \""
+	     << fpSceneHandler -> GetScene () -> GetName ()
+	     << "\" of current scene handler \""
+	     << fpSceneHandler -> GetName ()
+	     << "\" do not correspond."
+	"\n  This shouldn't happen.  Please report circumstances."
+	     << endl;
     }
     else {
-      G4cerr << "G4VisManager::IsViewValid ():";
-      G4cerr <<
+      G4cout << "\n  Scene handler \""
+	     << fpSceneHandler -> GetName ()
+	     << "\" has null scene pointer."
+	"\n  Attach a scene with /vis/sceneHandler/attach [<scene-name>]"
+	     << endl;
+    }
+    return false;
+  }
+
+  fpConcreteInstance = this;  // Unless we find another problem, users can use!
+  G4bool isValid = true;
+  if (fpScene -> IsEmpty ()) {
+    fpScene -> AddWorldIfEmpty ();  // Add world by default if possible.
+    if (fpScene -> IsEmpty ()) {    // If still empty...
+      G4cout << "G4VisManager::IsViewValid ():";
+      G4cout <<
 	"\n  Attempt at some drawing operation when scene is empty."
 	"\n  Maybe the geometry has not yet been defined."
 	"  Try /run/initialize."
 	     << endl;
       isValid = false;
       fpConcreteInstance = 0;  // Users must not use!
+    }
+    else {
+      G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/camera/reset");
+      G4cout <<
+	"G4VisManager: the scene was empty, \"world\" has been added"
+	"\n  and the view parameters have been reset.";
+      G4cout << endl;
     }
   }
   return isValid;
