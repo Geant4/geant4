@@ -1,0 +1,8 @@
+#
+grep G4Propa $*  |  \
+ awk 'BEGIN { over1c=0; over1k=0; n=0; maxit=0; } \
+      { it=$6; n++; sumit+=it; if(it>maxit){maxit=it;} }  \
+      $6 >  100 { over1c++; }   \
+      $6 > 1000 { over1k++; }   \
+      $6 > 5000 { print; }  \
+END { print "Number over 50 iterations is ", n, "over hundred= ", over1c, "over 1000= ", over1k, "Max it", maxit, " sum large it=", sumit; } '
