@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2000-11-09 08:25:51 gcosmo Exp $
+$Id: History,v 1.18 2000-11-09 19:12:52 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -35,9 +35,6 @@ committal in the CVS repository !
   o Changed return value to be "const" pointer to functions:
     - G4BREPSolid::GetPlace()
     - G4BREPSolid::GetBBox()
-    - G4PlacedSolid::GetSolid()
-    - G4PlacedSolid::GetRotation()
-    - G4PlacedSolid::GetTraslation()
   o G4Assembly: fix in destructor, added call to clearAndDestroy().
   o G4BREPSolid: changed method NumberOfFaces() to GetNumberOfFaces().
   o G4Curve: fixed obsolete workaround for XlC compiler.
