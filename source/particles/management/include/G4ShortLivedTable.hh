@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShortLivedTable.hh,v 1.2 1999-10-28 23:24:13 kurasige Exp $
+// $Id: G4ShortLivedTable.hh,v 1.3 1999-10-29 00:06:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,9 +26,8 @@
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 
-#define G4Ptbl_USE_MAP
 
-#ifdef G4Ptbl_USE_MAP
+#ifdef G4USE_STL
 #include "g4std/vector"
 #else
 #include <rw/tpordvec.h>
@@ -44,7 +43,7 @@ class G4ShortLivedTable
  //
 
  public:
-#ifdef G4Ptbl_USE_MAP
+#ifdef G4USE_STL
    // Use STL Vector as list of shortlives
    typedef vector<G4ParticleDefinition*>  G4ShortLivedList;
 #else
@@ -83,7 +82,7 @@ class G4ShortLivedTable
 
 inline G4bool  G4ShortLivedTable::Contains(const G4ParticleDefinition* particle) const
 {
-#ifdef G4Ptbl_USE_MAP
+#ifdef G4USE_STL
   G4ShortLivedList::iterator i;
   for (i = fShortLivedList->begin(); i!= fShortLivedList->end(); ++i) {
     if (**i==*particle) return true;
@@ -96,7 +95,7 @@ inline G4bool  G4ShortLivedTable::Contains(const G4ParticleDefinition* particle)
 
 inline G4int G4ShortLivedTable::Entries() const
 {
-#ifdef G4Ptbl_USE_MAP
+#ifdef G4USE_STL
   return fShortLivedList->size();
 #else
   return fShortLivedList->entries();

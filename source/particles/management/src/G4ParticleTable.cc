@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.cc,v 1.10 1999-10-28 23:24:24 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.11 1999-10-29 00:07:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -37,7 +37,7 @@
 #include "G4IonTable.hh"
 #include "G4ShortLivedTable.hh"
 
-#ifndef G4Ptbl_USE_MAP
+#ifndef G4USE_STL
 const G4int G4ParticleTableDefaultBucket = 32;
 const G4int G4ParticleTableMaxInABucket = 64;
 #endif
@@ -45,7 +45,7 @@ const G4int G4ParticleTableMaxInABucket = 64;
 ////////////////////
 G4ParticleTable::G4ParticleTable():verboseLevel(0),fParticleMessenger(0),noName(" ")
 {
-#ifdef G4Ptbl_USE_MAP
+#ifdef G4USE_STL
   fDictionary = new G4PTblDictionary();
   fIterator   = new G4PTblDicIterator( *fDictionary );
   fEncodingDictionary = new G4PTblEncodingDictionary();
@@ -202,7 +202,7 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
       G4PTblDictionary *pdic =  fDictionary;
 	  G4PTblEncodingDictionary *pedic =  fEncodingDictionary;  
 
-#ifdef G4Ptbl_USE_MAP
+#ifdef G4USE_STL
       (*pdic)[GetKey(particle)] = particle;
       // insert into EncodingDictionary
       G4int code = particle->GetPDGEncoding();
@@ -244,7 +244,7 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
 {
-#ifdef G4Ptbl_USE_MAP
+#ifdef G4USE_STL
   
   G4PTblDictionary::iterator it =  fDictionary->find(GetKey(particle));
   if (it != fDictionary->end()) {
@@ -352,7 +352,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
 
     G4PTblEncodingDictionary *pedic =  fEncodingDictionary;
     G4ParticleDefinition* particle =0;  
-#ifdef G4Ptbl_USE_MAP
+#ifdef G4USE_STL
     G4PTblEncodingDictionary::iterator it =  pedic->find(aPDGEncoding );
     if (it != pedic->end()) {
       particle = it->second;
