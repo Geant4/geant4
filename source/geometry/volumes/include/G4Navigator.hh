@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.17 2002-06-01 01:26:37 japost Exp $
+// $Id: G4Navigator.hh,v 1.18 2002-06-03 10:17:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -124,9 +124,9 @@ class G4Navigator
     // Destructor. No actions.
 
   G4double ComputeStep(const G4ThreeVector &pGlobalPoint,
-		       const G4ThreeVector &pDirection,
-		       const G4double pCurrentProposedStepLength,
-		       G4double	&pNewSafety);
+                       const G4ThreeVector &pDirection,
+                       const G4double pCurrentProposedStepLength,
+                             G4double  &pNewSafety);
     // Calculate the distance to the next boundary intersected
     // along the specified NORMALISED vector direction and
     // from the specified point in the global coordinate
@@ -140,31 +140,32 @@ class G4Navigator
     // is returned together with the computed isotropic safety
     // distance. Geometry must be closed.
 
-  inline G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector &point,
-                                                      const G4ThreeVector &direction,
-                                                      const G4TouchableHistory &h);
+  inline
+  G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector &point,
+                                               const G4ThreeVector &direction,
+                                               const G4TouchableHistory &h);
 
   G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector& point,
-                                               const G4ThreeVector* direction=0,
-                                               const G4bool pRelativeSearch=true,
-                                               const G4bool ignoreDirection=true);
+                                             const G4ThreeVector* direction=0,
+                                             const G4bool pRelativeSearch=true,
+                                             const G4bool ignoreDirection=true);
     // Search the geometrical hierarchy for the volumes deepest in the hierarchy
     // containing the point in the global coordinate space. Two main cases are:
     //  i) If pRelativeSearch=false it makes use of no previous/state
     //     information. Returns the physical volume containing the point, 
     //     with all previous mothers correctly set up.
-    // ii) If pRelativeSearch is set to true, the search begin is the geometrical
-    //     hierarchy at the location of the last located point, or the endpoint of
-    //     the previous Step if SetGeometricallyLimitedStep() has been called
-    //     immediately before.
+    // ii) If pRelativeSearch is set to true, the search begin is the
+    //     geometrical hierarchy at the location of the last located point,
+    //     or the endpoint of the previous Step if SetGeometricallyLimitedStep()
+    //     has been called immediately before.
     // The direction is used (to check if a volume is entered) if either
     //   - the argument ignoreDirection is false, or
-    //   - the Navigator has determined that it is on an edge shared by two or more
-    //     volumes.  (This is state information.)
+    //   - the Navigator has determined that it is on an edge shared by two or
+    //     more volumes.  (This is state information.)
     // 
     // Important Note: In order to call this the geometry MUST be closed.
 
-  void LocateGlobalPointWithinVolume( const  G4ThreeVector& position);
+  void LocateGlobalPointWithinVolume(const G4ThreeVector& position);
     // Notify the Navigator that a track has moved to the new Global point
     // 'position', that is known to be within the current safety.
     // No check is performed to ensure that it is within  the volume. 
@@ -174,27 +175,27 @@ class G4Navigator
     // only if the point is within safety.
 
   void LocateGlobalPointAndUpdateTouchableHandle(
-			  const G4ThreeVector&       position,
-			  const G4ThreeVector&       direction,
-				G4TouchableHandle&         oldTouchableToUpdate,
-			  const G4bool               RelativeSearch  =true);
+                const G4ThreeVector&       position,
+                const G4ThreeVector&       direction,
+                      G4TouchableHandle&   oldTouchableToUpdate,
+                const G4bool               RelativeSearch = true);
     // First, search the geometrical hierarchy like the above method
     // LocateGlobalPointAndSetup(). Then use the volume found and its
     // navigation history to update the touchable.
 
   inline void LocateGlobalPointAndUpdateTouchable(
-			  const G4ThreeVector&       position,
-			  const G4ThreeVector&       direction,
-				G4VTouchable*              touchableToUpdate,
-			  const G4bool               RelativeSearch  =true);
+                const G4ThreeVector&       position,
+                const G4ThreeVector&       direction,
+                      G4VTouchable*        touchableToUpdate,
+                const G4bool               RelativeSearch = true);
     // First, search the geometrical hierarchy like the above method
     // LocateGlobalPointAndSetup(). Then use the volume found and its
     // navigation history to update the touchable.
 
   inline void LocateGlobalPointAndUpdateTouchable(
-			  const G4ThreeVector&       position,
-				G4VTouchable*              touchableToUpdate,
-			  const G4bool               RelativeSearch  =true);
+                const G4ThreeVector&       position,
+                      G4VTouchable*        touchableToUpdate,
+                const G4bool               RelativeSearch = true);
     // Old version (missing direction).
     // Not recommended replace with newer version above.
 
@@ -203,7 +204,7 @@ class G4Navigator
     // by the geometry was taken in its entirety.
 
   G4double ComputeSafety(const G4ThreeVector &globalpoint,
- 		         const G4double pProposedMaxLength=DBL_MAX );
+                         const G4double pProposedMaxLength = DBL_MAX);
     // Calculate the isotropic distance to the nearest boundary from the
     // specified point in the global coordinate system. 
     // The globalpoint utilised must be within the current volume.
@@ -340,20 +341,20 @@ class G4Navigator
 
   G4bool fEnteredDaughter;    // A memory of whether in this Step a daughter
                               //  volume is entered (set in Compute & Locate)
-			      //  After Compute: it expects to enter a daughter
+                              //  After Compute: it expects to enter a daughter
                               //  After Locate:  it has entered a daughter
   G4bool fExitedMother;       // A similar memory whether the Step exited 
                               //  current "mother" volume completely, 
                               //  not entering daughter.
   
-  G4bool fValidExitNormal;	// Set true if have leaving volume normal
-  G4ThreeVector fExitNormal;	// Leaving volume normal, in the
-				// volume containing the exited
-				// volume's coordinate system
+  G4bool fValidExitNormal;    // Set true if have leaving volume normal
+  G4ThreeVector fExitNormal;  // Leaving volume normal, in the
+                              // volume containing the exited
+                              // volume's coordinate system
   G4ThreeVector fGrandMotherExitNormal;  // Leaving volume normal, in its 
-                                    // own coordinate system
+                                         // own coordinate system
   G4NavigationHistory fHistory;
-				// Transformation & `path' history
+                                // Transformation & `path' history
                                 // of current path through geomtrical
                                 // hierarchy
 
@@ -377,7 +378,7 @@ class G4Navigator
   // BEGIN Tracking Invariants
   //
 
-  G4VPhysicalVolume	*fTopPhysical;
+  G4VPhysicalVolume  *fTopPhysical;
     // A link to the topmost physical volume in the detector.
     // Must be positioned at the origin and unrotated.
 

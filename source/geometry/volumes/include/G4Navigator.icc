@@ -21,22 +21,31 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.8 2001-12-04 16:49:51 radoone Exp $
+// $Id: G4Navigator.icc,v 1.9 2002-06-03 10:17:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4Navigator Inline implementation
+//
+// ********************************************************************
 
-// Return the local coordinate of the current track
+// ********************************************************************
+// GetCurrentLocalCoordinate
+//
+// Returns the local coordinate of the current track
+// ********************************************************************
 //
 inline
 G4ThreeVector G4Navigator::GetCurrentLocalCoordinate() const
 {
-    return fLastLocatedPointLocal;
+  return fLastLocatedPointLocal;
 }
 
-
-// Return local direction of vector direction in world coord system
+// ********************************************************************
+// ComputeLocalAxis
+//
+// Returns local direction of vector direction in world coord system
+// ********************************************************************
 //
 inline
 G4ThreeVector G4Navigator::ComputeLocalAxis(const G4ThreeVector& pVec) const
@@ -45,83 +54,111 @@ G4ThreeVector G4Navigator::ComputeLocalAxis(const G4ThreeVector& pVec) const
          ? fHistory.GetTopTransform().TransformAxis(pVec) : pVec ;
 }
 
-// Return local coordinates of a point in the world coord system
+// ********************************************************************
+// ComputeLocalPoint
+//
+// Returns local coordinates of a point in the world coord system
+// ********************************************************************
 //
 inline
-G4ThreeVector G4Navigator::ComputeLocalPoint(const G4ThreeVector& pGlobalPoint) const
+G4ThreeVector
+G4Navigator::ComputeLocalPoint(const G4ThreeVector& pGlobalPoint) const
 {
   return ( fHistory.GetTopTransform().TransformPoint(pGlobalPoint) ) ;
 }
 
-// Return the current  world (`topmost') volume
+// ********************************************************************
+// GetWorldVolume
+//
+// Returns the current  world (`topmost') volume
+// ********************************************************************
 //
 inline
 G4VPhysicalVolume* G4Navigator::GetWorldVolume() const
 {
-    return fTopPhysical;
+  return fTopPhysical;
 }
 
-// Set the world (`topmost') volume
+// ********************************************************************
+// SetWorldVolume
+//
+// Sets the world (`topmost') volume
+// ********************************************************************
 //
 inline
 void G4Navigator::SetWorldVolume(G4VPhysicalVolume* pWorld)
 {
-// Setup the volume
-  pWorld->Setup(0);	// No mother since world volume
-  if (!(pWorld->GetTranslation()==G4ThreeVector(0,0,0)))
-    {
-      G4Exception ("G4Navigator::SetWorldVolume - Must be centred on origin");
-    }
-  const G4RotationMatrix* rm=pWorld->GetRotation();
-  if (rm&&(!rm->isIdentity()))
-    {
-      G4Exception ("G4Navigator::SetWorldVolume - Must not be rotated");
-    }
-  fTopPhysical=pWorld;
+  pWorld->Setup(0);  // No mother since world volume
+  if ( !(pWorld->GetTranslation()==G4ThreeVector(0,0,0)) )
+  {
+    G4Exception ("G4Navigator::SetWorldVolume - Must be centred on origin");
+  }
+  const G4RotationMatrix* rm = pWorld->GetRotation();
+  if ( rm && (!rm->isIdentity()) )
+  {
+    G4Exception ("G4Navigator::SetWorldVolume - Must not be rotated");
+  }
+  fTopPhysical = pWorld;
   fHistory.SetFirstEntry(pWorld);
 }
 
-// Inform the navigator that the previous Step calculated
+// ********************************************************************
+// SetGeometrycallyLimitedStep
+//
+// Informs the navigator that the previous Step calculated
 // by the geometry was taken in its entirety
+// ********************************************************************
 //
 inline
 void G4Navigator::SetGeometricallyLimitedStep()
 {
-    fWasLimitedByGeometry=true;
+  fWasLimitedByGeometry=true;
 }
 
-// Reset stack and minimum of navigator state `machine'
+// ********************************************************************
+// ResetState
+//
+// Resets stack and minimum of navigator state `machine'
+// ********************************************************************
 //
 inline
 void G4Navigator::ResetState()
 {
-    fWasLimitedByGeometry=false;
-    fEntering=false;
-    fExiting=false;
-    fLocatedOnEdge = false;
-    fLastStepWasZero= false;
-    fEnteredDaughter = false;
-    fExitedMother = false;
+  fWasLimitedByGeometry=false;
+  fEntering=false;
+  fExiting=false;
+  fLocatedOnEdge = false;
+  fLastStepWasZero= false;
+  fEnteredDaughter = false;
+  fExitedMother = false;
   
-    fValidExitNormal = false;
-    fExitNormal = G4ThreeVector(0,0,0);
+  fValidExitNormal = false;
+  fExitNormal = G4ThreeVector(0,0,0);
 
-    fPreviousSftOrigin = G4ThreeVector(0,0,0);
-    fPreviousSafety = 0.0; 
+  fPreviousSftOrigin = G4ThreeVector(0,0,0);
+  fPreviousSafety = 0.0; 
     
-    fBlockedPhysicalVolume=0;
-    fBlockedReplicaNo=-1;
+  fBlockedPhysicalVolume=0;
+  fBlockedReplicaNo=-1;
 }
 
-// Reset stack and minimum of navigator state `machine'
+// ********************************************************************
+// ResetStackAndState
+//
+// Resets stack and minimum of navigator state `machine'
+// ********************************************************************
 //
 inline
 void G4Navigator::ResetStackAndState()
 {
-    fHistory.Reset();
-    ResetState();
+  fHistory.Reset();
+  ResetState();
 }
 
+// ********************************************************************
+// VolumeType
+// ********************************************************************
+//
 inline
 EVolume G4Navigator::VolumeType(const G4VPhysicalVolume *pVol) const
 {
@@ -130,18 +167,22 @@ EVolume G4Navigator::VolumeType(const G4VPhysicalVolume *pVol) const
   G4int nReplicas;
   G4double width,offset;
   G4bool consuming;
-  if (pVol->IsReplicated())
-    {
-      pVol->GetReplicationData(axis,nReplicas,width,offset,consuming);
-      type=(consuming) ? kReplica : kParameterised;
-    }
+  if ( pVol->IsReplicated() )
+  {
+    pVol->GetReplicationData(axis,nReplicas,width,offset,consuming);
+    type = (consuming) ? kReplica : kParameterised;
+  }
   else
-    {
-      type=kNormal;
-    }
+  {
+    type = kNormal;
+  }
   return type;
 }
 
+// ********************************************************************
+// CharacteriseDahghters
+// ********************************************************************
+//
 inline
 EVolume G4Navigator::CharacteriseDaughters(const G4LogicalVolume *pLog) const
 {
@@ -152,29 +193,31 @@ EVolume G4Navigator::CharacteriseDaughters(const G4LogicalVolume *pLog) const
   G4bool consuming;
   G4VPhysicalVolume *pVol;
 
-  if (pLog->GetNoDaughters()==1)
+  if ( pLog->GetNoDaughters()==1 )
+  {
+    pVol = pLog->GetDaughter(0);
+    if (pVol->IsReplicated())
     {
-      pVol=pLog->GetDaughter(0);
-      if (pVol->IsReplicated())
-	{
-	  pVol->GetReplicationData(axis,nReplicas,width,offset,consuming);
-	  type=(consuming) ? kReplica : kParameterised;
-	}
-      else
-	{
-	  type=kNormal;
-	}
+      pVol->GetReplicationData(axis,nReplicas,width,offset,consuming);
+      type = (consuming) ? kReplica : kParameterised;
     }
+    else
+    {
+      type = kNormal;
+    }
+  }
   else
-    {
-      type=kNormal;
-    }
+  {
+    type = kNormal;
+  }
   return type;
 }
 
-//    JA  April 30th, 1997
+// ********************************************************************
+// IsExitNormalCalid
 //
-//  Is the Surface Normal valid?
+// Is the Surface Normal valid?
+// ********************************************************************
 //
 inline
 G4bool G4Navigator::IsExitNormalValid()
@@ -182,8 +225,12 @@ G4bool G4Navigator::IsExitNormalValid()
   return fExiting && fValidExitNormal;
 }
 
-// Obtain the Normal vector to a surface (in local coordinates)
+// ********************************************************************
+// GetLocalExitNormal
+//
+// Obtains the Normal vector to a surface (in local coordinates)
 // (It is valid only if Navigator replied true to above function)
+// ********************************************************************
 //
 inline
 G4ThreeVector G4Navigator::GetLocalExitNormal()
@@ -191,9 +238,13 @@ G4ThreeVector G4Navigator::GetLocalExitNormal()
   return fExitNormal;
 }
 
-// Return local to global transformation.
+// ********************************************************************
+// GetGlobalToLocalTransform
+//
+// Returns local to global transformation.
 // I.e. transformation that will take point or axis in world coord system
 // and return one in the local coord system
+// ********************************************************************
 //
 inline
 const G4AffineTransform& G4Navigator::GetGlobalToLocalTransform() const
@@ -201,17 +252,25 @@ const G4AffineTransform& G4Navigator::GetGlobalToLocalTransform() const
   return fHistory.GetTopTransform();
 }
 
-// Return global to local transformation 
+// ********************************************************************
+// GetLocalToGlobalTransform
+//
+// Returns global to local transformation 
+// ********************************************************************
 //
 inline
 const G4AffineTransform G4Navigator::GetLocalToGlobalTransform() const
 {
   G4AffineTransform  tempTransform;
-  tempTransform= fHistory.GetTopTransform().Inverse(); 
-  return  tempTransform;
+  tempTransform = fHistory.GetTopTransform().Inverse(); 
+  return tempTransform;
 }
 
-// Compute+return the local->global translation of current volume.
+// ********************************************************************
+// NetTranslation
+//
+// Computes+returns the local->global translation of current volume
+// ********************************************************************
 //
 inline
 G4ThreeVector G4Navigator::NetTranslation() const
@@ -220,7 +279,11 @@ G4ThreeVector G4Navigator::NetTranslation() const
   return tf.NetTranslation();
 }
 
-// Compute+return the local->global rotation of current volume.
+// ********************************************************************
+// NetRotation
+//
+// Computes+returns the local->global rotation of current volume
+// ********************************************************************
 //
 inline
 G4RotationMatrix G4Navigator::NetRotation() const
@@ -229,30 +292,41 @@ G4RotationMatrix G4Navigator::NetRotation() const
   return tf.NetRotation();
 }
 
-// `Touchable' creation method: caller has deletion responsibility.
+// ********************************************************************
+// CreateGRSVolume
+//
+// `Touchable' creation method: caller has deletion responsibility
+// ********************************************************************
 //
 inline
 G4GRSVolume* G4Navigator::CreateGRSVolume() const
 {
   G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
   return new G4GRSVolume(fHistory.GetTopVolume(),
-			 tf.NetRotation(),
-			 tf.NetTranslation());
+                         tf.NetRotation(),
+                         tf.NetTranslation());
 }
 
-// `Touchable' creation method: caller has deletion responsibility.
+// ********************************************************************
+// CreateGRSSolid
+//
+// `Touchable' creation method: caller has deletion responsibility
+// ********************************************************************
 //
 inline
 G4GRSSolid* G4Navigator::CreateGRSSolid() const
 {
   G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
   return new G4GRSSolid(fHistory.GetTopVolume()->GetLogicalVolume()->GetSolid(),
-			tf.NetRotation(),
-			tf.NetTranslation());
-			
+                        tf.NetRotation(),
+                        tf.NetTranslation());
 }
 
-// `Touchable' creation method: caller has deletion responsibility.
+// ********************************************************************
+// CreateTouchableHistory
+//
+// `Touchable' creation method: caller has deletion responsibility
+// ********************************************************************
 //
 inline
 G4TouchableHistory* G4Navigator::CreateTouchableHistory() const
@@ -260,7 +334,11 @@ G4TouchableHistory* G4Navigator::CreateTouchableHistory() const
   return new G4TouchableHistory(fHistory);
 }
 
-// To inform the caller if the track is entering a daughter volume.
+// ********************************************************************
+// EnteredDaughterVolume
+//
+// To inform the caller if the track is entering a daughter volume
+// ********************************************************************
 //
 inline
 G4bool  G4Navigator::EnteredDaughterVolume()
@@ -274,77 +352,108 @@ G4bool  G4Navigator::EnteredDaughterVolume()
 //   return fExitedCurrent;
 // }
 
+// ********************************************************************
+// LocateGlobalPointAndSetup
+// ********************************************************************
+//
 inline
 G4VPhysicalVolume*
 G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector &p,
                                        const G4ThreeVector &direction,
-                                       const G4TouchableHistory &h
-                                       )
+                                       const G4TouchableHistory &h)
 {
   ResetState();
-  fHistory=*h.GetHistory();
+  fHistory = *h.GetHistory();
   SetupHierarchy();
   return LocateGlobalPointAndSetup(p, &direction, true, false);
 }
 
+// ********************************************************************
+// LocateGlobalPointAndUpdateTouchable
+// ********************************************************************
+//
 inline
 void G4Navigator::LocateGlobalPointAndUpdateTouchable(
-			  const G4ThreeVector&       position,
-				G4VTouchable*        touchableToUpdate,
-			  const G4bool               RelativeSearch )
+                           const G4ThreeVector&       position,
+                                 G4VTouchable*        touchableToUpdate,
+                           const G4bool               RelativeSearch )
 {
   G4VPhysicalVolume* pPhysVol;
-  pPhysVol= LocateGlobalPointAndSetup( position, 0, RelativeSearch);  
+  pPhysVol = LocateGlobalPointAndSetup( position, 0, RelativeSearch);  
   touchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
 }
 
+// ********************************************************************
+// LocateGlobalPointAndUpdateTouchable
+//
+// Use direction
+// ********************************************************************
+//
 inline
 void G4Navigator::LocateGlobalPointAndUpdateTouchable(
-			  const G4ThreeVector&       position,
-                          const G4ThreeVector&       direction,
-				G4VTouchable*        touchableToUpdate,
-			  const G4bool               RelativeSearch  )
+                           const G4ThreeVector&       position,
+                           const G4ThreeVector&       direction,
+                                 G4VTouchable*        touchableToUpdate,
+                           const G4bool               RelativeSearch  )
 {
   G4VPhysicalVolume* pPhysVol;
-  pPhysVol= LocateGlobalPointAndSetup( position, &direction, RelativeSearch);  
+  pPhysVol = LocateGlobalPointAndSetup( position, &direction, RelativeSearch);  
   touchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
 }
 
+// ********************************************************************
+// LocateGlobalPointAndUpdateTouchableHandle
+// ********************************************************************
+//
 inline
 void G4Navigator::LocateGlobalPointAndUpdateTouchableHandle(
-                          const G4ThreeVector&       position,
-                          const G4ThreeVector&       direction,
-                                G4TouchableHandle&   oldTouchableToUpdate,
-                          const G4bool               RelativeSearch )
+                               const G4ThreeVector&       position,
+                               const G4ThreeVector&       direction,
+                                     G4TouchableHandle&   oldTouchableToUpdate,
+                               const G4bool               RelativeSearch )
 {
-//  G4VPhysicalVolume* pPhysVol=LocateGlobalPointAndSetup( position, 0, RelativeSearch);
-  G4VPhysicalVolume* pPhysVol=LocateGlobalPointAndSetup( position, &direction, RelativeSearch);
+  G4VPhysicalVolume* pPhysVol;
+  pPhysVol = LocateGlobalPointAndSetup( position,&direction,RelativeSearch );
   if( fEnteredDaughter || fExitedMother )
   {
      oldTouchableToUpdate = CreateTouchableHistory();
-     if( pPhysVol == 0 ){
-              // We want to ensure that the touchable is correct in this case.
-              //  The method below should do this and recalculate a lot more ....
-        oldTouchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+     if( pPhysVol == 0 )
+     {
+       // We want to ensure that the touchable is correct in this case.
+       //  The method below should do this and recalculate a lot more ....
+       //
+       oldTouchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
      }
   }
   return;
 }
 
+// ********************************************************************
+// CreateTouchableHistoryHandle
+// ********************************************************************
+//
 inline
 G4TouchableHistoryHandle G4Navigator::CreateTouchableHistoryHandle() const
 {
   return G4TouchableHistoryHandle( CreateTouchableHistory() );
 }
 
+// ********************************************************************
+// GetVerboseLevel
+// ********************************************************************
+//
 inline
 G4int G4Navigator::GetVerboseLevel()
 {
-   return fVerbose;
+  return fVerbose;
 }
 
+// ********************************************************************
+// SetVerboseLevel
+// ********************************************************************
+//
 inline
 void  G4Navigator::SetVerboseLevel(G4int level)
 {
-   fVerbose=level;
+  fVerbose = level;
 }
