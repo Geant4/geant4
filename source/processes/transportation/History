@@ -1,4 +1,4 @@
-$Id: History,v 1.85 2003-09-25 05:50:43 kurasige Exp $
+$Id: History,v 1.86 2003-09-25 08:19:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,13 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Sep 25th   H.Kurashige transport-V05-02-04
+Sep. 25th, H.Kurashige transport-V05-02-04
+----------------------
 - modify GNUmakefile to use processes/cuts category
-- migrade to model variant of EM physics (V.Iva)
-
+- migrate to model variant of EM physics in G4UserSpecialCuts (V.Ivantchenko)
 
 Aug. 27th, M.Dressel transport-V05-02-03
-----------------------------------------
+--------------------
 - cleanup of header file inclusions
 
 Aug. 19th, M.Dressel transport-V05-02-02
