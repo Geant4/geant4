@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.8 2001-07-18 01:25:44 asaim Exp $
+// $Id: G4EventManager.hh,v 1.9 2001-07-19 00:14:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -132,6 +132,8 @@ class G4EventManager
       // Set and get methods for user action classes. User action classes
       // which should belong to the other managers will be sent to the 
       // corresponding managers.
+      void SetNumberOfAdditionalWaitingStacks(G4int iAdd)
+      { trackContainer->SetNumberOfAdditionalWaitingStacks(iAdd); }
 
   public: // with description
       inline G4int GetVerboseLevel()

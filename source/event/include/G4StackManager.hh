@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.hh,v 1.7 2001-07-13 15:01:46 gcosmo Exp $
+// $Id: G4StackManager.hh,v 1.8 2001-07-19 00:14:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -84,6 +84,20 @@ class G4StackManager
       // stack are send to the urgent stack and then the user's NewStage()
       // method is invoked.
 
+      void SetNumberOfAdditionalWaitingStacks(G4int iAdd);
+      //  Set the number of additional (optional) waiting stacks.
+      // This method must be invoked at PreInit, Init or Idle states.
+      // Once the user set the number of additional waiting stacks,
+      // he/she can use the corresponding ENUM in G4ClassificationOfNewTrack.
+      // The user should invoke G4RunManager::SetNumberOfAdditionalWaitingStacks
+      // method, which invokes this method.
+
+      void TransferStackedTracks(G4ClassificationOfNewTrack origin, G4ClassificationOfNewTrack destination);
+      //  Transfter stacked track from the origin stack to the destination stack.
+      // The destination stack needs not be empty.
+      // If the destination is fKill, tracks are deleted.
+      // If the origin is fKill, nothing happen.
+
   private:
       G4UserStackingAction * userStackingAction;
       G4int verboseLevel;
@@ -91,27 +105,42 @@ class G4StackManager
       G4TrackStack * waitingStack;
       G4TrackStack * postponeStack;
       G4StackingMessenger* theMessenger;
+      G4std::vector<G4TrackStack*> additionalWaitingStacks;
+      G4int numberOfAdditionalWaitingStacks;
 
   public:
       inline void clear()
       { 
         ClearUrgentStack();
         ClearWaitingStack();
+        for(int i=1;i<=numberOfAdditionalWaitingStacks;i++) {ClearWaitingStack(i);}
       }
       inline void ClearUrgentStack()
       { urgentStack->clear(); }
-      inline void ClearWaitingStack()
-      { waitingStack->clear(); }
+      inline void ClearWaitingStack(int i=0)
+      {
+        if(i==0) {
+          waitingStack->clear(); 
+        } else {
+          if(i<=numberOfAdditionalWaitingStacks) additionalWaitingStacks[i-1]->clear();
+        }
+      }
       inline void ClearPostponeStack()
       { postponeStack->clear(); }
       inline G4int GetNTotalTrack() const
-      { return urgentStack->GetNTrack()
-             + waitingStack->GetNTrack()
-             + postponeStack->GetNTrack(); }
+      { int n = urgentStack->GetNTrack() + waitingStack->GetNTrack() + postponeStack->GetNTrack();
+        for(int i=1;i<=numberOfAdditionalWaitingStacks;i++) {n += additionalWaitingStacks[i-1]->GetNTrack();}
+        return n;
+      }
       inline G4int GetNUrgentTrack() const
       { return urgentStack->GetNTrack(); }
-      inline G4int GetNWaitingTrack() const
-      { return waitingStack->GetNTrack(); }
+      inline G4int GetNWaitingTrack(int i=0) const
+      { if(i==0) { return waitingStack->GetNTrack(); }
+        else {
+         if(i<=numberOfAdditionalWaitingStacks) { return additionalWaitingStacks[i-1]->GetNTrack();}
+        }
+        return 0;
+      }
       inline G4int GetNPostponedTrack() const
       { return postponeStack->GetNTrack(); }
       inline void SetVerboseLevel( G4int const value )

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClassificationOfNewTrack.hh,v 1.4 2001-07-11 09:58:47 gunter Exp $
+// $Id: G4ClassificationOfNewTrack.hh,v 1.5 2001-07-19 00:14:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,10 +37,16 @@
 
 enum G4ClassificationOfNewTrack
 { 
-  fUrgent,    // put into the urgent stack
-  fWaiting,   // put into the waiting stack
-  fPostpone,  // postpone to the next event
-  fKill       // kill
+  fUrgent=0,     // put into the urgent stack
+  fWaiting=1,    // put into the waiting stack
+  fPostpone=-1,  // postpone to the next event
+  fKill=-9,      // kill
+  //----------------------------------------------------------------
+  // following ENUM are available only if the user increases the
+  // number of waiting stacks
+  //----------------------------------------------------------------
+  fWaiting_1=11, fWaiting_2=12, fWaiting_3=13, fWaiting_4=14, fWaiting_5=15,
+  fWaiting_6=16, fWaiting_7=17, fWaiting_8=18, fWaiting_9=19, fWaiting_10=20
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.cc,v 1.5 2001-07-13 15:01:54 gcosmo Exp $
+// $Id: G4StackManager.cc,v 1.6 2001-07-19 00:14:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,7 +35,7 @@
 #include "G4ios.hh"
 
 G4StackManager::G4StackManager()
-:userStackingAction(0),verboseLevel(0)
+:userStackingAction(0),verboseLevel(0),numberOfAdditionalWaitingStacks(0)
 {
   theMessenger = new G4StackingMessenger(this);
   urgentStack = new G4TrackStack;
@@ -50,6 +50,11 @@ G4StackManager::~G4StackManager()
   delete waitingStack;
   delete postponeStack;
   delete theMessenger;
+  if(numberOfAdditionalWaitingStacks>0) {
+    for(int i=0;i<numberOfAdditionalWaitingStacks;i++) {
+      delete additionalWaitingStacks[i];
+    }
+  }
 }
 
 const G4StackManager & G4StackManager::operator=
@@ -96,6 +101,14 @@ G4int G4StackManager::PushOneTrack(G4Track *newTrack,G4VTrajectory *newTrajector
         break;
       case fKill:
         break;
+      default:
+        G4int i = classification - 10;
+        if(i<1||i>numberOfAdditionalWaitingStacks) {
+          G4Exception("G4StackManager : invalid classification");
+        } else {
+          additionalWaitingStacks[i-1]->PushToStack( newStackedTrack );
+        }
+        break;
     }
   }
 
@@ -120,6 +133,15 @@ G4Track * G4StackManager::PopNextTrack(G4VTrajectory**newTrajectory)
                       << " waiting tracks are re-classified to" << G4endl;
 #endif
     waitingStack->TransferTo(urgentStack);
+    if(numberOfAdditionalWaitingStacks>0) {
+      for(int i=0;i<numberOfAdditionalWaitingStacks;i++) {
+        if(i==0) {
+          additionalWaitingStacks[0]->TransferTo(waitingStack);
+        } else {
+          additionalWaitingStacks[i]->TransferTo(additionalWaitingStacks[i-1]);
+        }
+      }
+    }
     if(userStackingAction) userStackingAction->NewStage();
 #ifdef G4VERBOSE
     if( verboseLevel > 0 ) G4cout << "     " << GetNUrgentTrack()
@@ -177,6 +199,14 @@ void G4StackManager::ReClassify()
       case fPostpone:
         postponeStack->PushToStack( aStackedTrack );
         break;
+      default:
+        G4int i = classification - 10;
+        if(i<1||i>numberOfAdditionalWaitingStacks) {
+          G4Exception("G4StackManager : invalid classification");
+        } else {
+          additionalWaitingStacks[i-1]->PushToStack( aStackedTrack );
+        }
+        break;
     }
   }
 }
@@ -233,6 +263,14 @@ G4int G4StackManager::PrepareNewEvent()
             break;
           case fKill:
             break;
+          default:
+            G4int i = classification - 10;
+            if(i<1||i>numberOfAdditionalWaitingStacks) {
+              G4Exception("G4StackManager : invalid classification");
+            } else {
+              additionalWaitingStacks[i-1]->PushToStack( aStackedTrack );
+            }
+            break;
         }
       }
     }
@@ -240,5 +278,86 @@ G4int G4StackManager::PrepareNewEvent()
 
   return n_passedFromPrevious;
 }
+
+void G4StackManager::SetNumberOfAdditionalWaitingStacks(G4int iAdd)
+{
+  if(iAdd > numberOfAdditionalWaitingStacks)
+  {
+    for(int i=numberOfAdditionalWaitingStacks;i<iAdd;i++)
+    {
+      G4TrackStack* newStack = new G4TrackStack;
+      additionalWaitingStacks.push_back(newStack);
+    }
+    numberOfAdditionalWaitingStacks = iAdd;
+  }
+  else if (iAdd < numberOfAdditionalWaitingStacks)
+  {
+    for(int i=numberOfAdditionalWaitingStacks;i>iAdd;i--)
+    {
+      delete additionalWaitingStacks[i];
+    }
+  }
+}
+
+void G4StackManager::TransferStackedTracks(G4ClassificationOfNewTrack origin, G4ClassificationOfNewTrack destination)
+{
+  G4TrackStack* originStack = 0;
+  switch(origin)
+  {
+    case fUrgent:
+      originStack = urgentStack;
+      break;
+    case fWaiting:
+      originStack = waitingStack;
+      break;
+    case fPostpone:
+      originStack = postponeStack;
+      break;
+    case fKill:
+      break;
+    default:
+      int i = origin - 10;
+      if(i<=numberOfAdditionalWaitingStacks) originStack = additionalWaitingStacks[i-1];
+      break;
+  }
+  if(!originStack) return;
+
+  if(destination==fKill)
+  {
+    G4StackedTrack * aStackedTrack;
+    while( (aStackedTrack=originStack->PopFromStack()) != 0 )
+    {
+      delete aStackedTrack->GetTrack();
+      delete aStackedTrack;
+    }
+  } 
+  else
+  {
+    G4TrackStack* targetStack = 0;
+    switch(destination)
+    {
+      case fUrgent:
+        targetStack = urgentStack;
+        break;
+      case fWaiting:
+        targetStack = waitingStack;
+        break;
+      case fPostpone:
+        targetStack = postponeStack;
+        break;
+      default:
+        int i = origin - 10;
+        if(i<=numberOfAdditionalWaitingStacks) targetStack = additionalWaitingStacks[i-1];
+        break;
+    }
+    if(!targetStack) return;
+    if(originStack==targetStack) return;
+    originStack->TransferTo(targetStack);
+  }
+  return;
+}
+
+
+
 
 
