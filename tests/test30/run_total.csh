@@ -1,4 +1,7 @@
 
+setenv TARGET pn_al_022
+source run_long.csh
+
 setenv TARGET pn_al_160
 source run_long.csh
 
@@ -17,9 +20,15 @@ source run_long.csh
 setenv TARGET pn_zr_256
 source run_long.csh
 
+setenv TARGET pn_zr_800
+source run_long.csh
+
 setenv TARGET pn_pb_160
 source run_long.csh
 
 setenv TARGET pn_pb_256
+source run_long.csh
+
+setenv TARGET pn_pb_800
 source run_long.csh
 

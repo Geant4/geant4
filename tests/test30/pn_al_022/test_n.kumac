@@ -6,13 +6,5 @@
  exe n_a2
  exe n_a3
  exe n_a4
- exe n_a5
- exe n_a6
- exe n_a7
- exe n_a8
- exe n_a9
- exe n_a10
- exe n_a11
- exe n_a12
  shell rm *.old
  shell rm *~
