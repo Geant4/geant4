@@ -25,109 +25,47 @@ Current available graphics systems are:
 
 ***** Table : Nb of materials = 11 *****
 
- Material: Air            density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m
-   --->  Element: NitrogenN   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
-   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+ Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
 
- Material: H2liquid            density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923 m
-   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: H2liquid     density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923 m  
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: Water            density:  1.000 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm
-   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
-   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+ Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
 
- Material: liquidArgon            density:  1.390 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm
-   --->  Element: liquidArgon    Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
+   --->  Element: liquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: Aluminium            density:  2.700 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm
-   --->  Element: Aluminium    Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
+   --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: Silicon            density:  2.330 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm
-   --->  Element: Silicon    Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material:  Silicon     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
+   --->  Element:  Silicon      Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: Germanium            density:  5.323 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.301 cm
-   --->  Element: Germanium    Z = 32.0   N =  72.6   A =  72.61 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: Germanium     density:  5.323 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.301 cm 
+   --->  Element: Germanium      Z = 32.0   N =  72.6   A =  72.61 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: Iron            density:  7.870 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm
-   --->  Element: Iron    Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
+   --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: Tungsten            density: 19.300 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm
-   --->  Element: Tungsten    Z = 74.0   N = 183.8   A = 183.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: Tungsten     density: 19.300 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm 
+   --->  Element: Tungsten      Z = 74.0   N = 183.8   A = 183.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: Lead            density: 11.350 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm
-   --->  Element: Lead    Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
+   --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: Uranium            density: 18.950 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.166 mm
-   --->  Element: Uranium    Z = 92.0   N = 238.0   A = 238.03 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material:  Uranium     density: 18.950 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.166 mm 
+   --->  Element:  Uranium      Z = 92.0   N = 238.0   A = 238.03 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
 
 
- The Box is 20 m of Aluminium
+ The Box is 20 m   of Aluminium
 
 phot:  Total cross sections from Sandia parametrisation. 
-Em1PhysicsList::SetCuts:CutLength : 1 mm
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : Yes
- Material : Air
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  is not ready to print
-
-Index : 1     used in the geometry : No      recalculation needed : Yes
- Material : H2liquid
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  is not ready to print
-
-Index : 2     used in the geometry : No      recalculation needed : Yes
- Material : Water
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  is not ready to print
-
-Index : 3     used in the geometry : No      recalculation needed : Yes
- Material : liquidArgon
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  is not ready to print
-
-Index : 4     used in the geometry : Yes     recalculation needed : Yes
- Material : Aluminium
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 5     used in the geometry : No      recalculation needed : Yes
- Material : Silicon
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  is not ready to print
-
-Index : 6     used in the geometry : No      recalculation needed : Yes
- Material : Germanium
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  is not ready to print
-
-Index : 7     used in the geometry : No      recalculation needed : Yes
- Material : Iron
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  is not ready to print
-
-Index : 8     used in the geometry : No      recalculation needed : Yes
- Material : Tungsten
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  is not ready to print
-
-Index : 9     used in the geometry : No      recalculation needed : Yes
- Material : Lead
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  is not ready to print
-
-Index : 10     used in the geometry : No      recalculation needed : Yes
- Material : Uranium
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  is not ready to print
-
-====================================================================
-
+Em1PhysicsList::SetCuts:CutLength : 1 mm 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -140,7 +78,7 @@ conv:  Total cross sections from a parametrisation. Good description from 1.5 Me
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
@@ -159,7 +97,7 @@ annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -169,7 +107,7 @@ hIoni:    Knock-on electron cross sections .
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 MuIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -183,17 +121,33 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                              gamma            e-            e+           
-Threshold in range          2.2 mm          6.05 mum          6.05 mum
-   Aluminium                          9.99 keV          9.97 keV          9.97 keV
-=======================================================================
-
+============= The cut Energy ==============================
+                            gamma              e-    
+Cut in range       
+                Air         2.2 mm         6.05 mum
+           H2liquid         2.2 mm         6.05 mum
+              Water         2.2 mm         6.05 mum
+        liquidArgon         2.2 mm         6.05 mum
+          Aluminium         2.2 mm         6.05 mum
+            Silicon         2.2 mm         6.05 mum
+          Germanium         2.2 mm         6.05 mum
+               Iron         2.2 mm         6.05 mum
+           Tungsten         2.2 mm         6.05 mum
+               Lead         2.2 mm         6.05 mum
+            Uranium         2.2 mm         6.05 mum
+Cut in energy
+                Air         990 eV          990 eV 
+           H2liquid         990 eV          990 eV 
+              Water        4.06 keV        3.27 keV
+        liquidArgon        9.08 keV        3.98 keV
+          Aluminium        9.99 keV        9.97 keV
+            Silicon          10 keV        8.45 keV
+          Germanium        31.6 keV        32.7 keV
+               Iron        31.1 keV        43.3 keV
+           Tungsten         139 keV        59.7 keV
+               Lead         124 keV        42.8 keV
+            Uranium         188 keV        56.1 keV
+===================================================
 #
 /process/eLoss/StepFunction 0.183 170 micrometer
 #
@@ -202,79 +156,6 @@ Threshold in range          2.2 mm          6.05 mum          6.05 mum
 /gun/particle e-
 /gun/energy 100 MeV
 /run/beamOn 100
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : H2liquid
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  gamma 4.05579 keV    e- 3.27334 keV    e+ 3.23329 keV
-
-Index : 3     used in the geometry : No      recalculation needed : No 
- Material : liquidArgon
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  gamma 9.07554 keV    e- 3.97618 keV    e+ 3.92753 keV
-
-Index : 4     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  gamma 9.98636 keV    e- 9.96618 keV    e+ 9.96618 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  gamma 10.0347 keV    e- 8.44545 keV    e+ 8.44545 keV
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : Germanium
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  gamma 31.6328 keV    e- 32.6589 keV    e+ 32.2593 keV
-
-Index : 7     used in the geometry : No      recalculation needed : No 
- Material : Iron
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  gamma 31.105 keV    e- 43.3478 keV    e+ 42.8175 keV
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Tungsten
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  gamma 138.512 keV    e- 59.6998 keV    e+ 58.9694 keV
-
-Index : 9     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  gamma 124.469 keV    e- 42.8175 keV    e+ 41.7761 keV
-
-Index : 10     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma 2.2 mm    e- 6.05 mum    e+ 6.05 mum
- Energy thresholds :  gamma 188.067 keV    e- 56.1359 keV    e+ 55.4491 keV
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                              gamma            e-            e+           
-Threshold in range          2.2 mm          6.05 mum          6.05 mum
-   Aluminium                          9.99 keV          9.97 keV          9.97 keV
-=======================================================================
-
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -292,18 +173,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.4s Real=4.5s Sys=0.02s
+  User=11s Real=15s Sys=2.3s
 
- nb tracks/event   neutral:    27.7000   charged:   694.4100
- nb  steps/event   neutral:   148.4900   charged:  1328.5200
+ nb tracks/event   neutral:    27.8100   charged:   700.3100
+ nb  steps/event   neutral:   151.8700   charged:  1338.0800
 
  nb of process calls per event: 
-   eIonieBremcomptphotconvannihil        
-      1302.1000     25.1000    120.7900     26.3800      1.3200      1.3200
+          eIoni       eBrem       compt        phot        conv     annihil
+      1311.6600     25.0000    124.0600     26.3900      1.4200      1.4200
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 579848635, 1313654518
+ Current couple of seeds = 1272479250, 468362791
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
