@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateSpin.cc,v 1.4 2001-07-11 09:59:14 gunter Exp $
+// $Id: testPropagateSpin.cc,v 1.5 2002-06-07 18:23:49 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -111,8 +111,6 @@ G4VPhysicalVolume* BuildGeometry()
     G4Box *mySmallBox= new G4Box("smaller cube",2.5*m,2.5*m,2.5*m);
     G4Box *myTinyBox=  new G4Box("tiny  cube",.25*m,.25*m,.25*m);
 
-    G4Box *myVariableBox=new G4Box("Variable Box",10,5,5);
-
     //  World Volume
     //
     G4LogicalVolume *worldLog=new G4LogicalVolume(myHugeBox,0,
@@ -141,25 +139,31 @@ G4VPhysicalVolume* BuildGeometry()
 //
 //  1) Two big boxes in the world volume
 //
-    G4PVPlacement *BigTg1Phys=new G4PVPlacement(0,G4ThreeVector(0,0,-15*m),
+    // G4PVPlacement *BigTg1Phys=
+    new G4PVPlacement(0,G4ThreeVector(0,0,-15*m),
 						"Big Target 1",BigBoxLog,
 						worldPhys,false,0);
-    G4PVPlacement *BigTg2Phys=new G4PVPlacement(0,G4ThreeVector(0,0, 15*m),
+    // G4PVPlacement *BigTg2Phys=
+    new G4PVPlacement(0,G4ThreeVector(0,0, 15*m),
 						"Big Target 2",BigBoxLog,
 						worldPhys,false,0);
 
 //  2) Four (medium) boxes in X & Y near the origin of the world volume
 //
-    G4PVPlacement *MedTg3a_Phys=new G4PVPlacement(0,G4ThreeVector(0, 7.5*m,0),
+    // G4PVPlacement *MedTg3a_Phys=
+    new G4PVPlacement(0,G4ThreeVector(0, 7.5*m,0),
 					      "Target 3a",smallBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *MedTg3b_Phys=new G4PVPlacement(0,G4ThreeVector(0,-7.5*m,0),
+    // G4PVPlacement *MedTg3b_Phys=
+    new G4PVPlacement(0,G4ThreeVector(0,-7.5*m,0),
 					      "Target 3b",smallBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *MedTg3c_Phys=new G4PVPlacement(0,G4ThreeVector(-7.5*m,0,0),
+    // G4PVPlacement *MedTg3c_Phys=
+    new G4PVPlacement(0,G4ThreeVector(-7.5*m,0,0),
 					      "Target 3c",smallBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *MedTg3d_Phys=new G4PVPlacement(0,G4ThreeVector( 7.5*m,0,0),
+    // G4PVPlacement *MedTg3d_Phys=
+    new G4PVPlacement(0,G4ThreeVector( 7.5*m,0,0),
 					      "Target 3d",smallBoxLog,
 					      worldPhys,false,0);
 
@@ -167,29 +171,37 @@ G4VPhysicalVolume* BuildGeometry()
 //  3) Eight small boxes around the origin of the world volume 
 //        (in +-X, +-Y & +-Z)
 //
-    G4PVPlacement *SmTg4a_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4a_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector( 0.3*m, 0.3*m,0.3*m), "Target 4a",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4b_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4b_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector( 0.3*m,-0.3*m,0.3*m), "Target 4b",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4c_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4c_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector(-0.3*m,-0.3*m,0.3*m), "Target 4c",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4d_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4d_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector(-0.3*m, 0.3*m,0.3*m), "Target 4d",tinyBoxLog,
 					      worldPhys,false,0);
 
-    G4PVPlacement *SmTg4e_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4e_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector( 0.3*m, 0.3*m,-0.3*m), "Target 4e",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4f_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4f_Phys=
+    new G4PVPlacement
           (0,G4ThreeVector( 0.3*m,-0.3*m,-0.3*m), "Target 4f",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4g_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4g_Phys=
+          new G4PVPlacement
           (0,G4ThreeVector(-0.3*m,-0.3*m,-0.3*m), "Target 4g",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4h_Phys=new G4PVPlacement
+    // G4PVPlacement *SmTg4h_Phys=
+          new G4PVPlacement
           (0,G4ThreeVector(-0.3*m, 0.3*m,-0.3*m), "Target 4h",tinyBoxLog,
 					      worldPhys,false,0);
 
@@ -233,7 +245,7 @@ G4FieldManager* SetupField(G4int type)
       case 3: pStepper = new G4SimpleHeum( fEquation, ncompspin ); break;
       case 4: pStepper = new G4ClassicalRK4( fEquation, ncompspin ); break;
       // case 8: pStepper = new G4CashKarpRKF45( fEquation, ncompspin );    break;
-      default: pStepper = 0;
+      default: pStepper = new G4ClassicalRK4( fEquation, ncompspin ); break;
     }
     
     pFieldMgr= G4TransportationManager::GetTransportationManager()->
@@ -252,7 +264,8 @@ G4FieldManager* SetupField(G4int type)
 
 G4PropagatorInField*  SetupPropagator( G4int type)
 {
-    G4FieldManager* fieldMgr= SetupField( type) ;
+    // G4FieldManager* fieldMgr= 
+    SetupField( type) ;
 
     // G4ChordFinder  theChordFinder( &MagField, 0.05*mm ); // Default stepper
  
@@ -286,11 +299,13 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 {
     void report_endPV(G4ThreeVector    Position, 
                   G4ThreeVector UnitVelocity,
+                  G4ThreeVector Spin,
 		  G4double step_len, 
                   G4double physStep, 
                   G4double safety,
 		  G4ThreeVector EndPosition, 
                   G4ThreeVector EndUnitVelocity,
+                  G4ThreeVector EndSpin,
                   G4int             Step, 
                   G4VPhysicalVolume* startVolume);
 
@@ -397,7 +412,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 	  //       --------
 	  G4FieldTrack  EndFieldTrack= pMagFieldPropagator->GetEndState();
 	  G4ThreeVector EndSpin=         EndFieldTrack.GetSpin();
-          // G4ThreeVector EndVelocity    = EndFieldTrack.Get ??
+          G4ThreeVector EndUnitMomentum  = EndFieldTrack.GetMomentumDir();
 
 //          G4cout << " EndPosition " << EndPosition << G4endl;
 //          G4cout << " EndUnitMomentum " << EndUnitMomentum << G4endl;
@@ -418,15 +433,15 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 	  assert( MoveVec.mag() < physStep*(1.+1.e-9) );
 
 	  // G4cout << " testPropagatorInField: After stepI " << istep  << " : " << G4endl;
-	  report_endPV(Position, Velocity, step_len, physStep, safety,
-		       EndPosition, EndVelocity, istep, located );
+	  report_endPV(Position, UnitMomentum, initialSpin, step_len, physStep, safety,
+		       EndPosition, EndUnitMomentum, EndSpin, istep, located );
 
 	  assert(safety>=0);
 	  pNavig->SetGeometricallyLimitedStep();
 	  // pMagFieldPropagator->SetGeometricallyLimitedStep();
 
 	  Position=     EndPosition;
-          Velocity=     EndVelocity;
+          // Velocity=     EndVelocity;
 	  UnitMomentum= EndUnitMomentum;
 	  initialSpin = EndSpin;
           
@@ -465,11 +480,13 @@ int main(int argc, char **argv)
 
 void report_endPV(G4ThreeVector    Position, 
                   G4ThreeVector UnitVelocity,
+                  G4ThreeVector Spin,
 		  G4double step_len, 
                   G4double physStep, 
                   G4double safety,
 		  G4ThreeVector EndPosition, 
                   G4ThreeVector EndUnitVelocity,
+                  G4ThreeVector EndSpin,
                   G4int             Step, 
                   G4VPhysicalVolume* startVolume)
 		  //   G4VPhysicalVolume* endVolume)
@@ -487,6 +504,9 @@ void report_endPV(G4ThreeVector    Position,
             << G4std::setw( 7) << " N_x " << " "
             << G4std::setw( 7) << " N_y " << " "
             << G4std::setw( 7) << " N_z " << " "
+            << G4std::setw( 7) << " S_x " << " "
+            << G4std::setw( 7) << " S_y " << " "
+            << G4std::setw( 7) << " S_z " << " "
 	   // << G4std::setw( 9) << "KinE(MeV)" << " "
 	   // << G4std::setw( 9) << "dE(MeV)" << " "  
             << G4std::setw( 9) << "StepLen" << " "  
@@ -518,6 +538,9 @@ void report_endPV(G4ThreeVector    Position,
 	    << G4std::setw( 7) << EndUnitVelocity.x() << " "
 	    << G4std::setw( 7) << EndUnitVelocity.y() << " "
 	    << G4std::setw( 7) << EndUnitVelocity.z() << " "
+	    << G4std::setw( 7) << EndSpin.x() << " "
+	    << G4std::setw( 7) << EndSpin.y() << " "
+	    << G4std::setw( 7) << EndSpin.z() << " "
 	 //    << G4std::setw( 9) << KineticEnergy << " "
 	 //    << G4std::setw( 9) << EnergyDifference << " "
 	    << G4std::setw( 9) << step_len << " "
