@@ -146,14 +146,16 @@ void G4HepRepSceneHandler::open(G4String name) {
         cout << "G4HepRepSceneHandler::Open() " << name << endl;
 #endif
         string ext[] = {".heprep", ".heprep.xml", ".heprep.zip", ".heprep.gz"};
-        for (int i=0; i < ext->length(); i++) {
+        unsigned int i=0; 
+        while (i < ext->length()) {
             if (name.substr(name.size()-ext[i].size(), ext[i].size()) == ext[i]) break;
+            i++;
         }
         extension = (i != ext->length()) ? ext[i] : "";
         baseName = name.substr(0, name.length() - extension.length());
         
         // look for 0000 pattern in G4Output-0000.heprep
-        int digit = baseName.length()-1;
+        unsigned int digit = baseName.length()-1;
         char c = baseName.at(digit);
         while (isdigit(c)) {
             digit--;
@@ -477,8 +479,7 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& trajectory) {
     setAttribute(trajectoryInstance, "LineWidth", 1.0);
 
     // Specify the polyline by using the trajectory points.
-    G4int i;
-    for (i = 0; i < trajectory.GetPointEntries(); i++) {
+    for (int i = 0; i < trajectory.GetPointEntries(); i++) {
         G4VTrajectoryPoint* trajectoryPoint = trajectory.GetPoint(i);
         G4Point3D vertex = trajectoryPoint->GetPosition();
         HepRepPoint* point = factory->createHepRepPoint(trajectoryInstance, vertex.x(), vertex.y(), vertex.z());
@@ -500,8 +501,7 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& trajectory) {
 //        addAttVals(point, pointAttDefs, pointAttValues);
         if (pointAttValues != NULL) {
             // Copy the point's G4AttValues to HepRepAttValues.
-            vector<G4AttValue>::iterator attValIterator;
-            for (attValIterator = pointAttValues->begin(); attValIterator != pointAttValues->end(); attValIterator++) {
+            for (vector<G4AttValue>::iterator attValIterator = pointAttValues->begin(); attValIterator != pointAttValues->end(); attValIterator++) {
                 // Pos already in points being written
                 if (attValIterator->GetName() == "Pos") continue;
                 
@@ -706,8 +706,7 @@ void G4HepRepSceneHandler::addAttVals(HepRepInstance* instance, const map<G4Stri
     if (attValues == NULL) return;
 
     // Copy the instance's G4AttValues to HepRepAttValues.
-    vector<G4AttValue>::iterator attValIterator;
-    for (attValIterator = attValues->begin(); attValIterator != attValues->end(); attValIterator++) {
+    for (vector<G4AttValue>::iterator attValIterator = attValues->begin(); attValIterator != attValues->end(); attValIterator++) {
         // Use GetDesc rather than GetName once WIRED can handle names with spaces in them.
         //attribute->addAttValue(iAttDef->second.GetDesc(), iAttVal->GetValue());
         
@@ -923,6 +922,12 @@ HepRepTypeTree* G4HepRepSceneHandler::getEventTypeTree() {
         HepRepTreeID* eventTreeID = factory->createHepRepTreeID("G4EventTypes", "1.0");
         _eventTypeTree = factory->createHepRepTypeTree(eventTreeID);
         getHepRep()->addTypeTree(_eventTypeTree);
+        
+        // force inclusion of all subtypes
+        getEventType();
+        getTrajectoryType();
+        getHitType();
+        getCalHitType();
     }
     return _eventTypeTree;
 }

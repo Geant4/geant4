@@ -36,11 +36,12 @@ zlib and zipios++ include directories and further licensed and described there.
 
 HepRep XML files can contain multiple HepRep events/geometries.
 If the file contains more than one HepRep it is not strictly XML anymore.
-Files can be written in .heprep.zip or .heprep format. The former is the
-default for file output, the latter is the default for stdout and stderr.
+Files can be written in .heprep.zip .heprep.gz or .heprep format. 
+The .heprep.zip is the default for file output, the .heprep is the default 
+for stdout and stderr.
 
 (Optional) To set the filename, where the extension should be .heprep.zip 
-or .heprep (zip will compress), use:
+.heprep.gz or .heprep (.zip and .gz will compress), use:
 
 /vis/scene/create filename.heprep.zip
 

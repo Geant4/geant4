@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "zipios++/zipoutputstream.h"
+#include "zipios++/gzipoutputstream.h"
 
 #include "HEPREP/HepRep.h"
 #include "HEPREP/HepRepFactory.h"
@@ -36,6 +37,7 @@ class XMLHepRepWriter : public virtual HEPREP::HepRepWriter {
         std::string nameSpace;
         XMLWriter *xml;
         zipios::ZipOutputStream *zip;
+        zipios::GZIPOutputStream *gz;
 
     public:
         XMLHepRepWriter(std::ostream* out, bool randomAccess, bool compress);

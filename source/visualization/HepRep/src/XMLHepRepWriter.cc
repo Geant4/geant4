@@ -12,8 +12,6 @@ using namespace HEPREP;
 
 XMLHepRepWriter::XMLHepRepWriter(ostream* out, bool randomAccess, bool compress) {
 
-    if (compress && !randomAccess) cerr << "WARNING: GZIP compression is unsupported, use randomAccess to get ZIP compression" << endl;
-
     this->nameSpace = NAMESPACE;
 
     if (randomAccess) {
@@ -22,11 +20,18 @@ XMLHepRepWriter::XMLHepRepWriter(ostream* out, bool randomAccess, bool compress)
         out = zip;
     } else {
         zip = NULL;
+        if (compress) {
+            gz = new GZIPOutputStream(*out);
+            out = gz;
+        } else {
+            gz = NULL;
+        }
     }
     xml = new XMLWriter(out, "  ", NAMESPACE);
 }
 
 XMLHepRepWriter::~XMLHepRepWriter() {
+    delete gz;
     delete zip;
     delete xml;
 }
@@ -36,6 +41,10 @@ bool XMLHepRepWriter::close() {
     if (zip != NULL) {
         zip->finish();
         zip->close();
+    }
+    if (gz != NULL) {
+        gz->finish();
+        gz->close();
     }
     xml->close();
     return true;
