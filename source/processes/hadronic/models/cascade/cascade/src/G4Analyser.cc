@@ -108,7 +108,8 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
   if (withNuclei) {
     G4std::vector<G4InuclNuclei> nucleus = output.getNucleiFragments();
 
-    if (nucleus.size() >= 0) {
+    //    if (nucleus.size() >= 0) {
+    if (nucleus.size() > 0) {
       G4int nbig = 0;
       averageNucleiFragments += nucleus.size();
 
@@ -290,7 +291,7 @@ void G4Analyser::handleWatcherStatistics() {
   G4double checked = 0.0;
 
   for (G4int iw = 0; iw < G4int(ana_watchers.size()); iw++) {
-    ana_watchers[iw].setInuclCs(inel_csec, eventNumber);
+    ana_watchers[iw].setInuclCs(inel_csec, G4int(eventNumber));
     ana_watchers[iw].print();
 
     if (ana_watchers[iw].to_check()) {
