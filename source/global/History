@@ -1,4 +1,4 @@
-$Id: History,v 1.26 1999-11-11 10:47:21 gunter Exp $
+$Id: History,v 1.27 1999-11-12 12:26:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 11, 99 G.Cosmo (global-V00-01-07)
+- Migration RWT->G4RWT performed:
+  o Moved STLInterface wrapper classes to STLinterface/g4rw.
+  o Renamed RWCString to G4String and removed related typedef.
+  o Removed RW_NPOS from defs.h and renamed other RW types/constants
+    according to the migration.
 
 November 10, 99 G.Cosmo (global-V00-01-06)
 - Temporarly redefined RW_NPOS in STLInterface/rw/defs.h.
