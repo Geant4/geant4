@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelPayloadSD.hh,v 1.2 2000-11-15 20:27:39 flongo Exp $
+// $Id: GammaRayTelPayloadSD.hh,v 1.3 2000-11-24 16:56:59 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -50,11 +50,16 @@ private:
   
   GammaRayTelPayloadHitsCollection*  PayloadCollection;      
   GammaRayTelDetectorConstruction* Detector;
-  G4int*                   HitID;
-  
+  G4int (*HitXID)[30];
+  G4int (*HitYID)[30];
+  G4int NbOfTKRLayers;
+  G4int NbOfTKRStrips;
+
 };
 
 #endif
+
+
 
 
 

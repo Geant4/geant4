@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.cc,v 1.2 2000-11-15 20:27:41 flongo Exp $
+// $Id: GammaRayTelPrimaryGeneratorAction.cc,v 1.3 2000-11-24 16:57:00 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -74,19 +74,22 @@ void GammaRayTelPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event
   // 
-  G4double z0 = 0.95*(GammaRayTelDetector->GetWorldSizeZ());
+  G4double z0 = 0.5*(GammaRayTelDetector->GetWorldSizeZ());
   G4double x0 = 0.*cm, y0 = 0.*cm;
   
   G4ThreeVector pos0;
   G4ThreeVector dir0;
   G4ThreeVector vertex0 = G4ThreeVector(x0,y0,z0);
   
+  dir0 = G4ThreeVector(0.,0.,-1.);
+
   G4double theta, phi, y, f;
   G4double theta0,phi0;
   
   switch(nSourceType) {
   case 0:
     particleGun->SetParticlePosition(vertex0);
+    particleGun->SetParticleMomentumDirection(dir0);
     break;
   case 1:
     // GS: Generate random position on the 4PIsphere to create a unif. distrib.

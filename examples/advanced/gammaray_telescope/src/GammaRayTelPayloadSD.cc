@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelPayloadSD.cc,v 1.3 2000-11-20 16:48:51 flongo Exp $
+// $Id: GammaRayTelPayloadSD.cc,v 1.4 2000-11-24 16:57:00 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -39,6 +39,13 @@ GammaRayTelPayloadSD::GammaRayTelPayloadSD(G4String name,
                                    GammaRayTelDetectorConstruction* det)
 :G4VSensitiveDetector(name),Detector(det)
 {
+  G4int NbOfTKRTiles  =  Detector->GetNbOfTKRTiles();
+  NbOfTKRStrips  = Detector->GetNbOfTKRStrips();
+  NbOfTKRLayers  = Detector->GetNbOfTKRLayers();  
+  NbOfTKRStrips = NbOfTKRStrips*NbOfTKRTiles;  
+  
+  HitXID = new G4int[NbOfTKRStrips][30];
+  HitYID = new G4int[NbOfTKRStrips][30];
   collectionName.insert("PayloadCollection");
 }
 
@@ -46,6 +53,8 @@ GammaRayTelPayloadSD::GammaRayTelPayloadSD(G4String name,
 
 GammaRayTelPayloadSD::~GammaRayTelPayloadSD()
 {
+  delete [] HitXID;
+  delete [] HitYID;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -53,7 +62,13 @@ GammaRayTelPayloadSD::~GammaRayTelPayloadSD()
 void GammaRayTelPayloadSD::Initialize(G4HCofThisEvent*HCE)
 {
   PayloadCollection = new GammaRayTelPayloadHitsCollection
-                      (SensitiveDetectorName,collectionName[0]); 
+    (SensitiveDetectorName,collectionName[0]);
+  for (G4int i=0;i<NbOfTKRStrips;i++)
+    for (G4int j=0;j<NbOfTKRLayers;j++) 
+      {
+	HitXID[i][j] = -1;
+	HitYID[i][j] = -1;
+      };
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -66,7 +81,7 @@ G4bool GammaRayTelPayloadSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
   
   G4int StripTotal = Detector->GetNbOfTKRStrips();
   G4int TileTotal  = Detector->GetNbOfTKRTiles();  
-
+  
   // This TouchableHistory is used to obtain the physical volume
   // of the hit
 
@@ -80,7 +95,7 @@ G4bool GammaRayTelPayloadSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
   PlaneNumber=plane->GetCopyNo();
   G4String PlaneName = plane->GetName();
 
-  G4cout << " Plane Number = " << PlaneNumber << PlaneName << G4endl;
+  //  G4cout << " Plane Number = " << PlaneNumber << PlaneName << G4endl;
   
 
   // The RO History is used to obtain the real strip
@@ -93,7 +108,7 @@ G4bool GammaRayTelPayloadSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
   strip = ROhist->GetVolume();
   G4String StripName = strip->GetName();
   StripNumber= strip->GetCopyNo();  
-  G4cout << StripName << " " << StripNumber << G4endl;       
+  //  G4cout << StripName << " " << StripNumber << G4endl;       
        
   //G4ThreeVector pos_obj = strip->GetObjectTranslation();
   //G4ThreeVector pos_particle = aStep->GetPreStepPoint()->GetPosition();
@@ -104,7 +119,7 @@ G4bool GammaRayTelPayloadSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
   G4VPhysicalVolume* tile = ROhist->GetVolume(); 
   G4int TileNumber = tile->GetCopyNo();  
   G4String TileName = tile->GetName();   
-  G4cout << " Tile Number = " << TileNumber << TileName << G4endl;
+  // G4cout << " Tile Number = " << TileNumber << TileName << G4endl;
   
   G4int NTile = (TileNumber%TileTotal);  
   G4int j=0;
@@ -113,39 +128,67 @@ G4bool GammaRayTelPayloadSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
     { 
       if(NTile==j) StripNumber += StripTotal*NTile;
     }  
-      
+  
+  G4cout << " Plane Number = " << PlaneNumber << PlaneName << G4endl;
+  G4cout << StripName << " " << StripNumber << G4endl;       
+  
   ROhist->MoveUpHistory();
-
+  
   
 
   G4VPhysicalVolume* ROPlane = ROhist->GetVolume(); 
   G4int ROPlaneNumber = ROPlane->GetCopyNo();
   G4String ROPlaneName = ROPlane->GetName();   
-  G4cout << " Number ROPlane = " << ROPlaneNumber << ROPlaneName << G4endl;
-  
+  //  G4cout << " Number ROPlane = " << ROPlaneNumber << ROPlaneName << G4endl;
 
-  // The hit is on an X silicon plane
-  if (PlaneName == "TKRDetectorX" )
-    { 
-      GammaRayTelPayloadHit* PayloadHit = new GammaRayTelPayloadHit();
-      PayloadHit->SetPlaneType(1);
-      PayloadHit->AddSil(edep);
-      PayloadHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
-      PayloadHit->SetNSilPlane(PlaneNumber);
-      PayloadHit->SetNStrip(StripNumber);
-      PayloadCollection->insert(PayloadHit);
-    }
   
-  // The hit is on an Y silicon plane
+  
+  if (PlaneName == "TKRDetectorX" )
+    // The hit is on an X silicon plane
+    {
+      if (HitXID[StripNumber][PlaneNumber]==-1)
+	{       
+	  GammaRayTelPayloadHit* PayloadHit = new GammaRayTelPayloadHit();
+	  PayloadHit->SetPlaneType(1);
+	  PayloadHit->AddSil(edep);
+	  PayloadHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
+	  PayloadHit->SetNSilPlane(PlaneNumber);
+	  PayloadHit->SetNStrip(StripNumber);
+	  HitXID[StripNumber][PlaneNumber] = 
+	    PayloadCollection->insert(PayloadHit) -1;
+	}
+      else
+	{
+          G4cout << HitXID[StripNumber][PlaneNumber] << G4endl;
+	  (*PayloadCollection)[HitXID[StripNumber][PlaneNumber]]->AddSil(edep);
+          G4cout << "X" << PlaneNumber << " " << StripNumber << G4endl;
+	}
+    }
+ 
   if (PlaneName == "TKRDetectorY")
-    { 
-      GammaRayTelPayloadHit* PayloadHit = new GammaRayTelPayloadHit();
-      PayloadHit->SetPlaneType(0);
-      PayloadHit->AddSil(edep);
-      PayloadHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
-      PayloadHit->SetNSilPlane(PlaneNumber);
-      PayloadHit->SetNStrip(StripNumber);
-      PayloadCollection->insert(PayloadHit);
+    // The hit is on an Y silicon plane    
+    {      
+      if (HitYID[StripNumber][PlaneNumber]==-1)
+	{       
+	  GammaRayTelPayloadHit* PayloadHit = new GammaRayTelPayloadHit();
+	  PayloadHit->SetPlaneType(0);
+	  PayloadHit->AddSil(edep);
+	  PayloadHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
+	  PayloadHit->SetNSilPlane(PlaneNumber);
+	  PayloadHit->SetNStrip(StripNumber);
+	  HitYID[StripNumber][PlaneNumber] = 
+	    PayloadCollection->insert(PayloadHit)-1;
+	}
+      else
+	{
+          G4cout << HitYID[StripNumber][PlaneNumber] << G4endl;
+	  (*PayloadCollection)[HitYID[StripNumber][PlaneNumber]]->AddSil(edep);
+          G4cout << "Y" << PlaneNumber << " " << StripNumber << G4endl;
+
+	}
+      
+      
+
     }
   
     
@@ -162,6 +205,14 @@ void GammaRayTelPayloadSD::EndOfEvent(G4HCofThisEvent* HCE)
       HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
     }
   HCE->AddHitsCollection(HCID,PayloadCollection);
+
+
+  for (G4int i=0;i<NbOfTKRLayers;i++) 
+    for (G4int j=0;j<NbOfTKRStrips;j++)
+      {
+	HitXID[i][j] = -1;
+	HitYID[i][j] = -1;
+      };
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

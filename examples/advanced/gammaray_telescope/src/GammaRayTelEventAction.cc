@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: GammaRayTelEventAction.cc,v 1.2 2000-11-15 20:27:41 flongo Exp $
+// $Id: GammaRayTelEventAction.cc,v 1.3 2000-11-24 16:57:00 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -165,6 +165,8 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 	}
     }
 }
+
+
 
 
 
