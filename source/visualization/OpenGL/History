@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2004-02-17 18:17:20 johna Exp $
+$Id: History,v 1.31 2004-07-01 15:29:03 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,25 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+1st July 2004  John Alllison  (opengl-V06-02-00)
+- Rationalised G4OpenGLSceneHandler ready for hidden line removal.
+- Bug fix in G4OpenGLXmPanningCallbacks.cc for dolly control.
+
+18th June 2004  Gunter Folger (geant4-06-02)
+9th June 2004  Gabriele Cosmo  (vis-V06-01-03)
+7th June 2004  Gabriele Cosmo  (vis-V06-01-02)
+- GNUmakefile and disclaimer changes - see visualization/History.
+
+9th April 2004  John Allison  (vis-V06-01-01 + interfaces-V06-01-00)
+- Tagged OpenGL as below.  Joint with interfaces-V06-01-00.
+
+7th April 2004  Guy Barrand
+- visualization/OpenGL/* : use the G4OpenGL.hh file.
+- Added : visualization/OpenGL/include/G4OpenGL.hh to encapsulate
+  the include of gl/gl.h and gl/glu.h that may be platform dependant.
+  It permits to rm some #ifdef WIN32 spread in the code. It opens also
+  the way to the usage of the Apple OpenGL on a Mac.
 
 17th February 2004  John Allison  (opengl-V06-00-00)
 - Fixed bug #581: wrong order of statements in

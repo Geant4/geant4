@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.15 2004-04-07 15:17:12 gbarrand Exp $
+// $Id: G4OpenGLSceneHandler.hh,v 1.16 2004-07-01 15:29:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,7 +80,6 @@ protected:
 			G4int id,
 			const G4String& name = "");
   virtual ~G4OpenGLSceneHandler ();
-  G4bool initialize_hlr;
 
 private:
   void AddCircleSquare (const G4VMarker&, G4int nSides);
@@ -98,7 +97,10 @@ private:
   // Draws in world coordinates a polygon in the screen plane knowing
   // viewpoint direction and up vector.
 
-  GLdouble clear_colour[4];
+  void DrawQuads(const G4Polyhedron& polyhedron);
+  // Encapsulates drawing of quadrilaterals (which has to be repeated
+  // 3 times for hidden line removal).
+
   static const GLubyte fStippleMaskHashed [128];
 };
 
