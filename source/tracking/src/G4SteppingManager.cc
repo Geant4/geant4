@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.22 2001-11-27 13:52:36 japost Exp $
+// $Id: G4SteppingManager.cc,v 1.23 2001-12-04 17:15:50 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -87,7 +87,7 @@ G4SteppingManager::G4SteppingManager()
    SetNavigator(G4TransportationManager::GetTransportationManager()
      ->GetNavigatorForTracking());
 
-   fTouchableHandle = new G4TouchableHistory();
+//   fTouchableHandle = new G4TouchableHistory();
 }
 
 ///////////////////////////////////////
@@ -263,15 +263,26 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
    }
 
 // Set Touchable to track and a private attribute of G4SteppingManager
-  fNavigator->LocateGlobalPointAndSetup( fTrack->GetPosition() );
+ 
 
   if ( ! fTrack->GetTouchableHandle() ) {
+     G4ThreeVector direction= fTrack->GetMomentumDirection();
+     fNavigator->LocateGlobalPointAndSetup( fTrack->GetPosition(), &direction, true, false);
      fTouchableHandle = fNavigator->CreateTouchableHistory();
 
      fTrack->SetTouchableHandle( fTouchableHandle );
      fTrack->SetNextTouchableHandle( fTouchableHandle );
   }else{
-     fTrack->SetNextTouchableHandle( fTrack->GetTouchableHandle() );  
+     fTrack->SetNextTouchableHandle( fTrack->GetTouchableHandle() );
+     G4VPhysicalVolume* oldTopVolume= fTrack->GetTouchableHandle()->GetVolume();
+     G4VPhysicalVolume* newTopVolume=
+     fNavigator->LocateGlobalPointAndSetup( fTrack->GetPosition(), 
+         fTrack->GetMomentumDirection(),*((G4TouchableHistory*)fTrack->GetTouchableHandle()()) );
+     if(newTopVolume != oldTopVolume ){
+        fTouchableHandle = fNavigator->CreateTouchableHistory();
+        fTrack->SetTouchableHandle( fTouchableHandle );
+        fTrack->SetNextTouchableHandle( fTouchableHandle );
+     }
   }
 // Set vertex information of G4Track at here
    if ( fTrack->GetCurrentStepNumber() == 0 ) {
