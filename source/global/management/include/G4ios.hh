@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ios.hh,v 1.7 2003-06-06 16:17:14 gcosmo Exp $
+// $Id: G4ios.hh,v 1.8 2004-06-07 12:11:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,8 +48,8 @@
 
 #include <iostream>
 
-extern std::ostream G4cout;
-extern std::ostream G4cerr;
+G4extern std::ostream G4cout;
+G4extern std::ostream G4cerr;
 
 #define G4cin std::cin
 #define G4endl std::endl

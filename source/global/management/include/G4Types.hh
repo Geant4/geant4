@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Types.hh,v 1.7 2003-06-17 08:14:50 gcosmo Exp $
+// $Id: G4Types.hh,v 1.8 2004-06-07 12:11:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,11 +32,20 @@
 #ifndef G4TYPES_HH
 #define G4TYPES_HH
 
-// Disable warning C4786 on WIN32 architectures: identifier was truncated
-// to '255' characters in the debug information
-//
 #ifdef WIN32
+  // Disable warning C4786 on WIN32 architectures:
+  // identifier was truncated to '255' characters
+  // in the debug information
+  //
   #pragma warning ( disable : 4786 )
+  //
+  // Define DLL export macro for WIN32 systems for
+  // importing external symbols to DLLs
+  //
+  #define G4extern extern __declspec( dllimport )
+  #pragma warning ( disable : 4273 )
+#else
+  #define G4extern extern
 #endif
 
 // Disable deprecated warnings for usage of strstream on Linux
@@ -45,7 +54,7 @@
 #if (__GNUC__==3) && (__GNUC_MINOR__>0)
   #undef __DEPRECATED
 #endif
-
+  
 #include <CLHEP/config/CLHEP.h>
 #include <complex>
 
