@@ -1,9 +1,7 @@
 #include "G4CascadeInterface.hh"
-
 #include "globals.hh"
 #include "G4DynamicParticleVector.hh"
 #include "G4IonTable.hh"
-
 #include "G4InuclCollider.hh"
 #include "G4IntraNucleiCascader.hh"
 #include "G4ElementaryParticleCollider.hh"
@@ -19,7 +17,6 @@
 #include "G4Track.hh"
 #include "G4Nucleus.hh"
 #include "G4NucleiModel.hh"
-
 
 typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
@@ -47,13 +44,14 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   G4cerr << "Reaction number "<< counter << " "<<aTrack.GetDynamicParticle()->GetDefinition()->GetParticleName()<<" "<< aTrack.GetDynamicParticle()->GetKineticEnergy()<<G4endl;
 #endif
 
-
-  
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadeInterface::ApplyYourself" << G4endl;
   };
 
   theResult.Initialize(aTrack);
+
+  G4double sumBaryon = 0;
+  G4double sumEnergy = 0;
 
   // Make conversion between native Geant4 and Bertini cascade classes.
   // NOTE: Geant4 units are MeV = 1 and GeV = 1000. Cascade code by default use GeV = 1.
@@ -63,12 +61,12 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   G4int bulletType = 0;
 
   // Coding particles 
-  if(aTrack.GetDefinition() ==    G4Proton::Proton()    ) bulletType = proton;
-  if(aTrack.GetDefinition() ==   G4Neutron::Neutron()   ) bulletType = neutron;
-  if(aTrack.GetDefinition() ==  G4PionPlus::PionPlus()  ) bulletType = pionPlus;
-  if(aTrack.GetDefinition() == G4PionMinus::PionMinus() ) bulletType = pionMinus;
-  if(aTrack.GetDefinition() ==  G4PionZero::PionZero()  ) bulletType = pionZero;
-  if(aTrack.GetDefinition() ==     G4Gamma::Gamma()     ) bulletType = photon;
+  if (aTrack.GetDefinition() ==    G4Proton::Proton()    ) bulletType = proton;
+  if (aTrack.GetDefinition() ==   G4Neutron::Neutron()   ) bulletType = neutron;
+  if (aTrack.GetDefinition() ==  G4PionPlus::PionPlus()  ) bulletType = pionPlus;
+  if (aTrack.GetDefinition() == G4PionMinus::PionMinus() ) bulletType = pionMinus;
+  if (aTrack.GetDefinition() ==  G4PionZero::PionZero()  ) bulletType = pionZero;
+  if (aTrack.GetDefinition() ==     G4Gamma::Gamma()     ) bulletType = photon;
 
   // Code momentum and energy.
   G4std::vector<G4double> momentumBullet(4);
@@ -77,8 +75,12 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   momentumBullet[2] =aTrack.GetDynamicParticle()->Get4Momentum().py() / GeV;
   momentumBullet[3] =aTrack.GetDynamicParticle()->Get4Momentum().pz() / GeV;
 
-  G4InuclParticle *  bullet = new G4InuclElementaryParticle(momentumBullet, bulletType); 
+  G4InuclElementaryParticle *  bullet = new G4InuclElementaryParticle(momentumBullet, bulletType); 
 
+  sumEnergy = bullet->getKineticEnergy(); // In GeV 
+  if (bulletType == proton || bulletType == neutron) {
+    sumBaryon += 1;
+  } 
 
   // Set target
   G4InuclNuclei*   target  = NULL;
@@ -94,6 +96,8 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 				theNucleus.GetZ());
     target->setEnergy();
 
+    sumBaryon = theNucleusA;
+
     if (verboseLevel > 2) {
       G4cout << "Target:  " << G4endl;  
       target->printParticle();
@@ -102,8 +106,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
   G4CollisionOutput output;
 
-
-    // Colliders initialisation
+  // Colliders initialisation
   G4ElementaryParticleCollider*   colep = new G4ElementaryParticleCollider;
   G4IntraNucleiCascader*            inc = new G4IntraNucleiCascader; // the actual cascade
   inc->setInteractionCase(1); // Interaction type is particle with nuclei.
@@ -112,9 +115,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   G4EquilibriumEvaporator*         eqil = new G4EquilibriumEvaporator;
   G4Fissioner*                     fiss = new G4Fissioner;
   G4BigBanger*                     bigb = new G4BigBanger;
-
   G4InuclCollider*             collider = new G4InuclCollider(colep, inc, noneq, eqil, fiss, bigb);
-
 
   if ( theNucleusA < 1.5 ) 
     {
@@ -122,6 +123,8 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
       G4NucleiModel* model = new G4NucleiModel(new G4InuclNuclei(targetMomentum, 1, 1));
       targetH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); 
       
+      sumBaryon = 1;
+
       if (verboseLevel > 2) {
 	G4cout << "Target:  " << G4endl;  
 	targetH->printParticle();
@@ -144,7 +147,6 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
       output.printCollisionOutput();
     }
   
-
   // Convert cascade data to use hadronics interface
 
   G4std::vector<G4InuclNuclei>             nucleiFragments = output.getNucleiFragments();
@@ -154,16 +156,22 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   theResult.SetStatusChange(fStopAndKill);
   theResult.SetNumberOfSecondaries(numSecondaries);
 
-  if(!particles.empty()) { 
+  if (!particles.empty()) { 
     particleIterator ipart;
     G4int outgoingParticle;
 
-    for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
+    for (ipart = particles.begin(); ipart != particles.end(); ipart++) {
       outgoingParticle = ipart->type();
       G4std::vector<G4double> mom = ipart->getMomentum();
       G4double ekin = ipart->getKineticEnergy() * GeV;
       G4ThreeVector aMom(mom[1], mom[2], mom[3]);
       aMom = aMom.unit();
+
+      if (outgoingParticle == proton ||  outgoingParticle == neutron) {
+	sumBaryon -= 1;
+      } 
+
+      sumEnergy -= ekin / GeV;
 
       G4DynamicParticle* cascadeParticle = NULL;
 
@@ -228,10 +236,10 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   G4DynamicParticle * aFragment(0);
   G4ParticleDefinition * aIonDef(0);
   G4ParticleTable *theTableOfParticles = G4ParticleTable::GetParticleTable();
-  if(!nucleiFragments.empty()) { 
+  if (!nucleiFragments.empty()) { 
     nucleiIterator ifrag;
 
-    for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) 
+    for (ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) 
       {
 	G4double eKin = ifrag->getKineticEnergy() * GeV;
 	G4std::vector<G4double> mom = ifrag->getMomentum();
@@ -249,9 +257,30 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 	aIonDef = theTableOfParticles->FindIon(Z,A,0,Z);
       
 	aFragment =  new G4DynamicParticle(aIonDef, aMom, eKin);
+
+
+	sumBaryon -= A;
+	sumEnergy -= eKin / GeV;
+
 	theResult.AddSecondary(aFragment); 
       }
   }
 
+  if (verboseLevel > 2) {
+
+    if (sumBaryon != 0) {
+      cout << "ERROR: no baryon number conservation, sum of baryons = " << sumBaryon << G4endl;
+    }
+
+    if (verboseLevel > 2) {
+      if (sumEnergy > 0.01 ) {
+	cout << "ERROR: energy conservation violated by " << sumEnergy << " GeV" << G4endl;
+      }
+    }
+
+    if (sumEnergy < -5.0e-5 ) { // 0.05 MeV
+      cout << "FATAL ERROR: energy created  " << sumEnergy * GeV << " MeV" << G4endl;
+    }
+  }
   return &theResult;
 }
