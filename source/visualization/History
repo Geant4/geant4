@@ -1,4 +1,4 @@
-$Id: History,v 1.221 2003-05-30 13:01:18 johna Exp $
+$Id: History,v 1.222 2003-05-30 13:05:11 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,7 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-30th May 2003  John Allison  (vis-V05-00-02)
+30th May 2003  John Allison  (vis-V05-00-02 - does not include HepRep below)
 - Improved README.built_in_commands.  Removed unlikely-to-be-implemented
   commands.
 - Eliminated pedantic warnings.
