@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.hh,v 1.8 2004-10-25 13:20:22 vnivanch Exp $
+// $Id: G4MollerBhabhaModel.hh,v 1.9 2005-03-18 12:48:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,14 +65,6 @@ public:
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double HighEnergyLimit(const G4ParticleDefinition* p);
-
-  G4double LowEnergyLimit(const G4ParticleDefinition* p);
-
-  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
-
-  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
-
   G4double MinEnergyCut(const G4ParticleDefinition*,
                         const G4MaterialCutsCouple*);
 
@@ -101,12 +93,10 @@ public:
                                       G4double tmin,
                                       G4double maxEnergy);
 
-  G4double MaxSecondaryEnergy(const G4DynamicParticle*);
-
 protected:
 
-  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-                                    G4double kinEnergy);
+  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+                                            G4double kinEnergy);
 
 private:
 
@@ -118,8 +108,6 @@ private:
 
   const G4ParticleDefinition* particle;
   G4ParticleDefinition* theElectron;
-  G4double highKinEnergy;
-  G4double lowKinEnergy;
   G4double twoln10;
   G4double lowLimit;
   G4bool   isElectron;
@@ -132,15 +120,6 @@ inline G4double G4MollerBhabhaModel::MaxSecondaryEnergy(
                 G4double kinEnergy) 
 {
   G4double tmax = kinEnergy;
-  if(isElectron) tmax *= 0.5;
-  return tmax;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4MollerBhabhaModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
-{
-  G4double tmax = dp->GetKineticEnergy();
   if(isElectron) tmax *= 0.5;
   return tmax;
 }

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.hh,v 1.11 2004-12-01 19:37:13 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.hh,v 1.12 2005-03-18 12:48:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,18 +67,9 @@ public:
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double HighEnergyLimit(const G4ParticleDefinition* p);
-
-  G4double LowEnergyLimit(const G4ParticleDefinition* p);
-
-  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
-
-  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
-
-  G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4MaterialCutsCouple*);
-
   G4bool IsInCharge(const G4ParticleDefinition*);
+
+  G4double MinEnergyCut(const G4ParticleDefinition*, const G4MaterialCutsCouple*);
 
   G4double ComputeDEDX(const G4MaterialCutsCouple*,
                        const G4ParticleDefinition*,
@@ -106,8 +97,6 @@ public:
   void   SetLPMflag(G4bool val) {theLPMflag = val;};
   G4bool LPMflag() const {return theLPMflag;};
 
-  virtual G4double MaxSecondaryEnergy(
-				const G4DynamicParticle* dynParticle);
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
@@ -189,15 +178,6 @@ G4double G4eBremsstrahlungModel::ScreenFunction2(G4double ScreenVariable)
 
    return screenVal;
 } 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4double G4eBremsstrahlungModel::MaxSecondaryEnergy(
-				 const G4DynamicParticle* dynParticle)
-{
-  return dynParticle->GetKineticEnergy();
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

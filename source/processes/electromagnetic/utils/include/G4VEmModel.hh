@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.25 2005-03-17 20:17:15 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.26 2005-03-18 12:48:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -142,7 +142,7 @@ public:
 
   virtual void SetDeexcitation(G4bool fluo, G4bool auger);
 
-  G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
+  G4double MaxSecondaryKinEnergy(const G4DynamicParticle* dynParticle);
 
   const G4String& GetName() const;
 
@@ -169,7 +169,7 @@ public:
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-    				            G4double kineticEnergy);
+    				               G4double kineticEnergy);
 
 private:
 
@@ -269,7 +269,7 @@ inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
   return 0.0;
 }
 
-inline G4double G4VEmModel::MaxSecondaryEnergy(const G4DynamicParticle* dynParticle)
+inline G4double G4VEmModel::MaxSecondaryKinEnergy(const G4DynamicParticle* dynParticle)
 {
   return MaxSecondaryEnergy(dynParticle->GetDefinition(), dynParticle->GetKineticEnergy());
 }

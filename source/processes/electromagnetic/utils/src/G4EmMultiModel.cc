@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmMultiModel.cc,v 1.1 2004-05-03 13:13:07 vnivanch Exp $
+// $Id: G4EmMultiModel.cc,v 1.2 2005-03-18 12:48:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -206,7 +206,7 @@ G4double G4EmMultiModel:: MaxSecondaryEnergy(const G4DynamicParticle* dp)
 {
   G4double tmax = 0.0;
   if(nModels) {
-    tmax = (model[0])-> MaxSecondaryEnergy(dp);
+    tmax = (model[0])-> MaxSecondaryKinEnergy(dp);
   } 
   return tmax;
 }

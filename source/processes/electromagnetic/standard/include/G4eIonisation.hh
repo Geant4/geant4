@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.hh,v 1.25 2004-11-10 08:53:18 vnivanch Exp $
+// $Id: G4eIonisation.hh,v 1.26 2005-03-18 12:48:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -187,7 +187,8 @@ inline void G4eIonisation::SecondariesPostStep(
                                                   G4double& tcut,
                                                   G4double& kinEnergy)
 {
-  G4DynamicParticle* delta = model->SampleSecondary(couple, dp, tcut, kinEnergy);
+  std::vector<G4DynamicParticle*>* newp = model->SampleSecondaries(couple, dp, tcut, kinEnergy);
+  G4DynamicParticle* delta = (*newp)[0];
   G4ThreeVector finalP = dp->GetMomentum();
   kinEnergy -= delta->GetKineticEnergy();
   finalP -= delta->GetMomentum();
@@ -195,6 +196,7 @@ inline void G4eIonisation::SecondariesPostStep(
   fParticleChange.SetNumberOfSecondaries(1);
   fParticleChange.AddSecondary(delta);
   fParticleChange.SetProposedMomentumDirection(finalP);
+  delete newp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.48 2005-03-11 15:47:43 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.49 2005-03-18 12:48:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -750,7 +750,7 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   G4VEmModel* currentModel = SelectModel(postStepScaledEnergy);
   G4double tcut = (*theCuts)[currentMaterialIndex];
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
-  G4double tmax = currentModel->MaxSecondaryEnergy(dynParticle);
+  G4double tmax = currentModel->MaxSecondaryKinEnergy(dynParticle);
 
   if (tcut < tmax)
     SecondariesPostStep(currentModel,currentCouple,dynParticle,tcut,finalT);
