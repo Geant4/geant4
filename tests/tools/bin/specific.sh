@@ -123,7 +123,6 @@ if [ `uname -n | grep sungeant` ]; then
   export G4VIS_BUILD_DAWNFILE_DRIVER=1
   export G4VIS_BUILD_VRML_DRIVER=1
   export G4VIS_BUILD_VRMLFILE_DRIVER=1
-  export LD_LIBRARY_PATH=/opt/SUNWspro/lib:/usr/openwin/lib:/usr/dt/lib:/usr/local/lib:/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/new/lib
 fi
 
 
@@ -234,7 +233,6 @@ if [ `uname -n | grep pcgeant` ]; then
   export G4VIS_BUILD_DAWNFILE_DRIVER=1
   export G4VIS_BUILD_VRML_DRIVER=1
   export G4VIS_BUILD_VRMLFILE_DRIVER=1
-  export LD_LIBRARY_PATH=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/new/lib
 fi
 
 
