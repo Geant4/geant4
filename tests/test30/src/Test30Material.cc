@@ -81,6 +81,8 @@ void Test30Material::Initialise()
 	list.push_back(ma);  
 	ma  = new G4Material("Au",    79., 196.97*g/mole, 19.32*g/cm3);
   list.push_back(ma);
+	ma  = new G4Material("Ta",     73., 180.9479*g/mole, 16.67*g/cm3);
+  list.push_back(ma);			 
 	ma  = new G4Material("W",     74., 183.85*g/mole, 19.30*g/cm3);
   list.push_back(ma);
 	ma  = new G4Material("Pb",    82., 207.19*g/mole, 11.35*g/cm3);

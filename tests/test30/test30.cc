@@ -257,10 +257,10 @@ int main(int argc, char** argv)
     h[0]=hbookManager->histogram("Number of Secondaries",50,-0.5,49.5);
     h[1]=hbookManager->histogram("Type of Secondaries",10,-0.5,9.5);
     h[2]=hbookManager->histogram("Phi(degrees) of Secondaries",90,-180.0,180.0);
-    h[3]=hbookManager->histogram("P (MeV) for protons",100,0.,pmax);
-    h[4]=hbookManager->histogram("P (MeV) for pi-",100,0.,pmax);
-    h[5]=hbookManager->histogram("P (MeV) for pi+",100,0.,pmax);
-    h[6]=hbookManager->histogram("P (MeV) for neutrons",100,0.,pmax);
+    h[3]=hbookManager->histogram("Pz (MeV) for protons",100,-pmax,pmax);
+    h[4]=hbookManager->histogram("Pz (MeV) for pi-",100,-pmax,pmax);
+    h[5]=hbookManager->histogram("Pz (MeV) for pi+",100,-pmax,pmax);
+    h[6]=hbookManager->histogram("Pz (MeV) for neutrons",100,-pmax,pmax);
     h[7]=hbookManager->histogram("Pt (MeV) for protons",100,0.,pmax);
     h[8]=hbookManager->histogram("Pt (MeV) for pi-",100,0.,pmax);
     h[9]=hbookManager->histogram("Pt (MeV) for pi+",100,0.,pmax);
@@ -270,7 +270,7 @@ int main(int argc, char** argv)
     h[13]=hbookManager->histogram("E (MeV) for pi+",100,0.,energy);
     h[14]=hbookManager->histogram("E (MeV) for neutrons",100,0.,energy);
     h[15]=hbookManager->histogram("delta E (MeV)",20,-1.,1.);
-    h[16]=hbookManager->histogram("delta P (GeV)",20,-1.,1.);
+    h[16]=hbookManager->histogram("delta Pz (GeV)",20,-1.,1.);
     h[17]=hbookManager->histogram("delta Pt (GeV)",20,-1.,1.);
 		/*
     h[18]=hbookManager->histogram("pi+pi- inv mass (GeV)",100,0.,2.);
@@ -386,7 +386,7 @@ int main(int argc, char** argv)
 				if(pd == proton) { 
 						
           h[1]->accumulate(1.0, 1.0);						
-          h[3]->accumulate(p/MeV, 1.0); 
+          h[3]->accumulate(pz/MeV, 1.0); 
           h[7]->accumulate(pt/MeV, 1.0);
           h[11]->accumulate(e/MeV, 1.0);
 		
@@ -413,7 +413,7 @@ int main(int argc, char** argv)
         } else if(pd == pin) {
     
 			  	h[1]->accumulate(4.0, 1.0);						
-          h[4]->accumulate(p/MeV, 1.0); 
+          h[4]->accumulate(pz/MeV, 1.0); 
           h[8]->accumulate(pt/MeV, 1.0);
           h[12]->accumulate(e/MeV, 1.0);
 		
@@ -438,14 +438,14 @@ int main(int argc, char** argv)
         } else if(pd == pip) {
     
 					h[1]->accumulate(3.0, 1.0);						
-          h[5]->accumulate(p/MeV, 1.0); 
+          h[5]->accumulate(pz/MeV, 1.0); 
           h[9]->accumulate(pt/MeV, 1.0);
           h[13]->accumulate(e/MeV, 1.0);
 		
         } else if(pd == neutron) {
     
 					h[1]->accumulate(2.0, 1.0);						
-          h[6]->accumulate(p/MeV, 1.0); 
+          h[6]->accumulate(pz/MeV, 1.0); 
           h[10]->accumulate(pt/MeV, 1.0);
           h[14]->accumulate(e/MeV, 1.0);
 				}
@@ -461,7 +461,7 @@ int main(int argc, char** argv)
 			pz = labv.pz();							
       p  = sqrt(px*px +py*py + pz*pz);
       pt = sqrt(px*px +py*py);
-			h[16]->accumulate(p/GeV, 1.0);
+			h[16]->accumulate(pz/GeV, 1.0);
 			h[17]->accumulate(pt/GeV, 1.0);
 			aChange->Clear();
 	

@@ -65,6 +65,12 @@
 #include "G4Alpha.hh"
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
+#include "G4BosonConstructor.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4IonConstructor.hh"
+#include "G4ShortLivedConstructor.hh"
 #include "G4LEPionPlusInelastic.hh"
 #include "G4LEPionMinusInelastic.hh"
 #include "G4LEProtonInelastic.hh"
@@ -109,8 +115,31 @@ void Test30Physics::Initialise()
   G4PionPlus::PionPlusDefinition();
   G4PionMinus::PionMinusDefinition();
   G4PionZero::PionZeroDefinition();
+  G4Eta::EtaDefinition();
+  G4EtaPrime::EtaPrimeDefinition();
   G4KaonPlus::KaonPlusDefinition();
   G4KaonMinus::KaonMinusDefinition();
+  G4KaonZero::KaonZeroDefinition();
+  G4AntiKaonZero::AntiKaonZeroDefinition();
+  G4KaonZeroLong::KaonZeroLongDefinition();
+  G4KaonZeroShort::KaonZeroShortDefinition();
+
+	  // Strange barions
+  G4Lambda::LambdaDefinition();
+  G4AntiLambda::AntiLambdaDefinition();
+  G4SigmaZero::SigmaZeroDefinition();
+  G4AntiSigmaZero::AntiSigmaZeroDefinition();
+  G4SigmaPlus::SigmaPlusDefinition();
+  G4AntiSigmaPlus::AntiSigmaPlusDefinition();
+  G4SigmaMinus::SigmaMinusDefinition();
+  G4AntiSigmaMinus::AntiSigmaMinusDefinition();
+  G4XiZero::XiZeroDefinition();
+  G4AntiXiZero::AntiXiZeroDefinition();
+  G4XiMinus::XiMinusDefinition();
+  G4AntiXiMinus::AntiXiMinusDefinition();
+  G4OmegaMinus::OmegaMinusDefinition();
+  G4AntiOmegaMinus::AntiOmegaMinusDefinition();
+
 
 	G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
