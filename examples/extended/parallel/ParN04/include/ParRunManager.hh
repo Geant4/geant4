@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: ParRunManager.hh,v 1.1 2002-03-05 15:22:13 gcosmo Exp $
+// $Id: ParRunManager.hh,v 1.2 2002-06-06 17:05:05 cooperma Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -60,6 +60,8 @@ class ParRunManager : public G4RunManager
     static G4int n_event;
     static G4int n_select;
     static G4String msg;
+
+    G4int i_event;  // Used in lieu of i_event in RunManager::DoEventLoop()
 
     inline void ImportDoEventLoopLocals(
 	 G4StateManager* stateManager, G4int n_event,

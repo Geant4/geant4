@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: ParRunManager.cc,v 1.2 2002-03-09 06:17:35 cooperma Exp $
+// $Id: ParRunManager.cc,v 1.3 2002-06-06 17:04:40 cooperma Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -129,6 +129,7 @@ void ParRunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_sele
   ImportDoEventLoopLocals( stateManager, n_event, n_select, msg );
 
   // This is where all the parallelism occurs
+  i_event = -1;  //  ParRunManager::GenerateEventInput() will increment this.
   TOPC_master_slave(MyGenerateEventInput, MyDoEvent, MyCheckEventResult, NULL);
 
   if(verboseLevel>0)
@@ -150,8 +151,6 @@ void ParRunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_sele
 
 TOPC_BUF ParRunManager::GenerateEventInput()
 {
-  static G4int i_event = -1;
-
   if(runAborted) return NOTASK;
 
   i_event++;
@@ -192,10 +191,10 @@ TOPC_ACTION ParRunManager::CheckEventResult( void * input_buf, void *output_buf 
     ("G4RunManager::BeamOn - G4VUserPrimaryGeneratorAction is not defined.");
   }
 
-  //This creates a trivial event in lieu of GenerateEvent(i_event);
+  // This creates a trivial event in lieu of GenerateEvent(i_event);
   currentEvent = new G4Event(i_event);
 
-  //Original UserEventAction was saved and set to NULL.  Do it now on master.
+  // Original UserEventAction was saved and set to NULL.  Do it now on master.
   if (origUserEventAction)
     origUserEventAction->BeginOfEventAction( currentEvent );
 
@@ -209,7 +208,7 @@ TOPC_ACTION ParRunManager::CheckEventResult( void * input_buf, void *output_buf 
   marshaledObj.UnmarshalSlaveHCofThisEvent();
   // UnmarshalSlaveHCofThisEvent placed slave Hits in ParRunManager::currentEvent
 
-  //Original UserEventAction was saved and set to NULL.  Do it now on master.
+  // Original UserEventAction was saved and set to NULL.  Do it now on master.
   if (origUserEventAction)
     origUserEventAction->EndOfEventAction( currentEvent );
 
@@ -219,7 +218,7 @@ TOPC_ACTION ParRunManager::CheckEventResult( void * input_buf, void *output_buf 
     stateManager->SetNewState(GeomClosed);
     StackPreviousEvent(currentEvent);
     currentEvent = NULL;
-    //Move this to GenerateEventInput:
+    // Move this to GenerateEventInput:
     // if(runAborted) break;
     return NO_ACTION;
 }
