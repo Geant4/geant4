@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Cons2.cc,v 1.4 2000-08-10 10:01:59 grichine Exp $
+// $Id: testG4Cons2.cc,v 1.5 2000-08-16 08:02:36 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Simple test of G4Cons
@@ -32,17 +32,17 @@
 //         true if error
 G4bool OutRange(G4double actual,G4double wanted)
 {
-    G4bool rng=false;
-    if (actual<wanted-DELTA||actual>wanted+DELTA) rng=true;
-    return rng;
+    G4bool rng = false ;
+    if (actual < wanted-DELTA || actual > wanted + DELTA ) rng = true ;
+    return rng ;
 }
 G4bool OutRange(G4ThreeVector actual,G4ThreeVector wanted)
 {
-    G4bool rng=false;
+    G4bool rng = false ;
     if (OutRange(actual.x(),wanted.x())
 	||OutRange(actual.y(),wanted.y())
-	||OutRange(actual.z(),wanted.z())  ) rng=true;
-    return rng;
+	||OutRange(actual.z(),wanted.z())  ) rng = true ;
+    return rng ;
 }
 
 int main(void)
@@ -68,34 +68,38 @@ int main(void)
 
 	G4ThreeVector proot1(0,125,-1000),proot2(0,75,-1000);
 	
-	G4ThreeVector pparr1(0,25,-150);                // Test case parallel to both rs of c8
+	G4ThreeVector pparr1(0,25,-150);   // Test case parallel to both rs of c8
 	G4ThreeVector pparr2(0,75,-50),pparr3(0,125,50);
 	G4ThreeVector vparr(0,1./sqrt(5.),2./sqrt(5.)); 
 
 	G4ThreeVector vnphi1(-sin(M_PI/6),-cos(M_PI/6),0),
 	              vnphi2(-sin(M_PI/6),cos(M_PI/6),0);
 
-	G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1),
-	              vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1),
-		      vxy(1./sqrt(2.),1./sqrt(2.),0),
-	              vxmy(1./sqrt(2.),-1./sqrt(2.),0),
-	              vmxmy(-1./sqrt(2.),-1./sqrt(2.),0),
-	              vmxy(-1./sqrt(2.),1./sqrt(2.),0),
-	              vxmz(1./sqrt(2.),0,-1./sqrt(2.));
+  G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1),
+	        vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1),
+		vxy(1./sqrt(2.),1./sqrt(2.),0),
+	        vxmy(1./sqrt(2.),-1./sqrt(2.),0),
+	        vmxmy(-1./sqrt(2.),-1./sqrt(2.),0),
+	        vmxy(-1./sqrt(2.),1./sqrt(2.),0),
+                vx2mz(1.0/sqrt(5.0),0,-2.0/sqrt(5.0)),
+	        vxmz(1./sqrt(2.),0,-1./sqrt(2.));
 	
 	G4RotationMatrix r90X,r90Y,r90Z,r180X,r45X,r30Y;
 	
-	G4Cons c1("Hollow Full Tube",50,100,50,100,50,0,2*M_PI),
-	       c2("Hollow Full Cone",50,100,50,200,50,-1,2*M_PI),
-	       c3("Hollow Cut Tube",50,100,50,100,50,-M_PI/6,M_PI/3),
-	       c4("Hollow Cut Cone",50,100,50,200,50,-M_PI/6,M_PI/3),
-	       c5("Hollow Cut Cone",25,50,75,150,50,0,3*M_PI/2),
- 	       c6("Solid Full Cone",0,150,0,150,50,0,2*M_PI),
-	       c7("Thin Tube",95,100,95,100,50,0,2*M_PI),
-	       c8a("Solid Full Cone2",0,100,0,150,50,0,2*M_PI),
-	       c8b("Hollow Full Cone2",50,100,100,150,50,0,2*M_PI),
-	  c8c("Hollow Full Cone2inv",100,150,50,100,50,0,2*M_PI),
-	cms("cms cone",0.0,70.0,0.0,157.8,2949.0,0.0,6.2831853071796);
+  G4Cons c1("Hollow Full Tube",50,100,50,100,50,0,2*M_PI),
+	 c2("Hollow Full Cone",50,100,50,200,50,-1,2*M_PI),
+	 c3("Hollow Cut Tube",50,100,50,100,50,-M_PI/6,M_PI/3),
+	 c4("Hollow Cut Cone",50,100,50,200,50,-M_PI/6,M_PI/3),
+	 c5("Hollow Cut Cone",25,50,75,150,50,0,3*M_PI/2),
+ 	 c6("Solid Full Tube",0,150,0,150,50,0,2*M_PI),
+	 c7("Thin Tube",95,100,95,100,50,0,2*M_PI),
+	 c8a("Solid Full Cone2",0,100,0,150,50,0,2*M_PI),
+	 c8b("Hollow Full Cone2",50,100,100,150,50,0,2*M_PI),
+	 c8c("Hollow Full Cone2inv",100,150,50,100,50,0,2*M_PI),
+	 c9("Excotic Cone",50,60,
+	    0,           // 1.0e-7,   500*kRadTolerance,
+                           10,50,0,2*M_PI), 
+	 cms("cms cone",0.0,70.0,0.0,157.8,2949.0,0.0,6.2831853071796);
 
 	G4ThreeVector norm,*pNorm;
 	G4bool *pgoodNorm,goodNorm,calcNorm=true;
@@ -399,6 +403,30 @@ int main(void)
 	    OutRange(*pNorm,G4ThreeVector(0,2./sqrt(5.),-1.0/sqrt(5.))))
 	    G4cout << "Error hollow parr3d " <<dist << G4endl;
 
+	dist=c9.DistanceToOut(G4ThreeVector(1e3*kRadTolerance,0,50),
+                              vx2mz,calcNorm,pgoodNorm,pNorm);
+	*pNorm=pNorm->unit();
+	if (OutRange(dist,111.8033988)||
+	    !*pgoodNorm||
+	    OutRange(*pNorm,G4ThreeVector(0,0,-1.0)))
+G4cout<<"Error:c9.Out((1e3*kRadTolerance,0,50),vx2mz,...) = " <<dist << G4endl;
+
+	dist=c9.DistanceToOut(G4ThreeVector(5,0,50),
+                              vx2mz,calcNorm,pgoodNorm,pNorm);
+	*pNorm=pNorm->unit();
+	if (OutRange(dist,111.8033988)||
+	    !*pgoodNorm||
+	    OutRange(*pNorm,G4ThreeVector(0,0,-1.0)))
+	    G4cout << "Error:c9.Out((5,0,50),vx2mz,...) = " <<dist << G4endl;
+
+	dist=c9.DistanceToOut(G4ThreeVector(10,0,50),
+                              vx2mz,calcNorm,pgoodNorm,pNorm);
+	*pNorm=pNorm->unit();
+	if (OutRange(dist,111.8033988)||
+	    !*pgoodNorm||
+	    OutRange(*pNorm,G4ThreeVector(0,0,-1.0)))
+	    G4cout << "Error:c9.Out((10,0,50),vx2mz,...) = " <<dist << G4endl;
+
 	dist=cms.DistanceToOut(
         G4ThreeVector(0.28628920024909,-0.43438111004815,-2949.0),
         G4ThreeVector(6.0886686196674e-05,-9.2382200635766e-05,0.99999999387917),
@@ -425,7 +453,9 @@ int main(void)
 	/////////////////////////////////////////////
 	//
 
-	G4cout << "Testing G4Cons::DistanceToIn...\n";
+	G4cout << "Testing G4Cons::DistanceToIn(p) ...\n";
+
+
 	dist=c1.DistanceToIn(pzero);
 	if (OutRange(dist,50))
 	  G4cout << "Error A " << dist << G4endl;
@@ -457,7 +487,7 @@ int main(void)
 	/////////////////////////////////////////////////////
 	//
 
-	G4cout << "Testing G4Cons::DistanceToIn...\n";
+	G4cout << "Testing G4Cons::DistanceToIn(p,v,...) ...\n";
 
 	dist=c1.DistanceToIn(pplz,vmz);
 	if (OutRange(dist,kInfinity))
@@ -499,9 +529,19 @@ int main(void)
 	if (OutRange(dist,kInfinity))
 	G4cout << "Error:c8c.DistanceToIn(pplz,vmz) = " << dist << G4endl;
 
+	dist=c9.DistanceToIn(pplz,vmz);
+	if (OutRange(dist,kInfinity))
+	G4cout << "Error:c9.DistanceToIn(pplz,vmz) = " << dist << G4endl;
+
+	dist=c9.DistanceToIn(G4ThreeVector(0,0,50),vmz);
+	if (OutRange(dist,kInfinity))
+	G4cout << "Error:c9.DistanceToIn((0,0,50),vmz) = " << dist << G4endl;
+
+	///////////////
+
 	dist=c1.DistanceToIn(pmiz,vz);
 	if (OutRange(dist,kInfinity))
-	  G4cout << "Error A " << dist << G4endl;
+	G4cout << "Error A " << dist << G4endl;
 
 	dist=c2.DistanceToIn(pmiz,vz);
 	if (OutRange(dist,kInfinity))
@@ -539,6 +579,11 @@ int main(void)
 	if (OutRange(dist,kInfinity))
 	G4cout << "Error:c8c.DistanceToIn(pmiz,vz) = " << dist << G4endl;
 
+	dist=c9.DistanceToIn(pmiz,vz);
+	if (OutRange(dist,kInfinity))
+	G4cout << "Error:c9.DistanceToIn(pmiz,vz) = " << dist << G4endl;
+
+	//////////////
 
 	dist=c1.DistanceToIn(pplx,vmx);
 	if (OutRange(dist,20))
