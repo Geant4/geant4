@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.23 2001-11-21 16:51:30 gcosmo Exp $
+// $Id: G4ChordFinder.cc,v 1.24 2001-11-30 17:36:18 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -94,9 +94,9 @@ G4ChordFinder::AdvanceChordLimited( G4FieldTrack& yCurrent,
   G4double dyErr;
   G4FieldTrack yEnd( yCurrent);
   G4double  startCurveLen= yCurrent.GetCurveLength();
-  G4bool dbg= false; 
 
-#ifdef G4VERBOSE
+#ifdef G4DEBUG_FIELD
+  static G4bool dbg= false; 
   if( dbg ) 
     G4cerr << "Entered AdvanceChordLimited with:\n yCurrent: " << yCurrent
 	   << " and initial Step=stepMax=" <<  stepMax << " mm. " << G4endl;
@@ -114,7 +114,7 @@ G4ChordFinder::AdvanceChordLimited( G4FieldTrack& yCurrent,
   {
      // Advance more accurately to "end of chord"
      good_advance = fIntgrDriver->AccurateAdvance(yCurrent, stepPossible, epsStep);
-     #ifdef G4VERBOSE
+     #ifdef G4DEBUG_FIELD
      if (dbg) G4cerr << "Accurate advance to end of chord attemped"
 		       << "with result " << good_advance << G4endl ;
      #endif
@@ -124,7 +124,7 @@ G4ChordFinder::AdvanceChordLimited( G4FieldTrack& yCurrent,
      }
   }
 
-#ifdef G4VERBOSE
+#ifdef G4DEBUG_FIELD
   if( dbg ) G4cerr << "Exiting FindNextChord Limited with:\n yCurrent: " 
 		 << yCurrent<< G4endl; 
 #endif
@@ -212,7 +212,7 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
  	G4cout << " d-";
      G4cout.precision(5);
      G4cout <<  " new_step= "        << G4std::setw(10) << fLastStepEstimate_Unconstrained
-            << " new_step_constr= " << G4std::setw(10) << stepTrial << endl;
+            << " new_step_constr= " << G4std::setw(10) << stepTrial << G4endl;
 #endif
      noTrials++; 
   }
@@ -220,8 +220,9 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
 
   stepOfLastGoodChord = stepTrial;
 #ifdef  TEST_CHORD_PRINT
-  G4cout << "ChordF/FindNextChord:  NoTrials= " << noTrials 
-	 << " StepForGoodChord=" << G4std::setw(10) << stepTrial << endl;
+  if( dbg ) 
+    G4cout << "ChordF/FindNextChord:  NoTrials= " << noTrials 
+	   << " StepForGoodChord=" << G4std::setw(10) << stepTrial << G4endl;
 #endif
 
   yEnd=  yCurrent;  
@@ -230,12 +231,11 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
 
 // ----------------------------------------------------------------------------
 #if 0          
-       // First debug print             //    older OPTIONAL code 
 //   #ifdef G4VERBOSE
-     if( dbg ) {
-        G4cerr << "Returned from QuickAdvance with: yCur=" << yCurrent <<G4endl;
-        G4cerr << " dChordStep= "<< dChordStep <<" dyErr=" << dyErr << G4endl; 
-     }
+if( dbg ) {
+   G4cerr << "Returned from QuickAdvance with: yCur=" << yCurrent <<G4endl;
+   G4cerr << " dChordStep= "<< dChordStep <<" dyErr=" << dyErr << G4endl; 
+}
 #endif
 // ----------------------------------------------------------------------------
 
@@ -329,14 +329,12 @@ G4FieldTrack G4ChordFinder::ApproxCurvePointV(
       " curve length = " << curve_length 
 	   << " relativeDiff = " << (curve_length-ABdist)/ABdist 
 	   << G4endl;
-#endif
     if( curve_length < ABdist * (1. - 10*eps_step) ) {
-#ifdef G4DEBUG_FIELD
       G4cerr << " ERROR: the size of the above difference exceeds allowed limits.  Aborting." 
 	     << G4endl;
-#endif
       G4Exception("G4ChordFinder::ApproxCurvePoint> Unphysical curve length.");
     }
+#endif
     // Take default corrective action: 
     //    -->  adjust the maximum curve length. 
     //  NOTE: this case only happens for relatively straight paths.
@@ -344,12 +342,15 @@ G4FieldTrack G4ChordFinder::ApproxCurvePointV(
   }
 
   G4double  new_st_length; 
+
   if ( ABdist > 0.0 ){
      AE_fraction = ChordAE_Vector.mag() / ABdist;
   }else{
-     G4cout << " Warning in G4ChordFinder::ApproxCurvePoint: A and B are the same point\n" <<
-      " Chord AB length = " << ChordAE_Vector.mag()  << G4endl << G4endl;
      AE_fraction = 0.5;                         // Guess .. ?; 
+#ifdef G4DEBUG_FIELD
+     G4cout << "Warning in G4ChordFinder::ApproxCurvePoint: A and B are the same point\n" <<
+      " Chord AB length = " << ChordAE_Vector.mag()  << G4endl << G4endl;
+#endif
   }
   
   if( (AE_fraction> 1.0 + perMillion) || (AE_fraction< 0.) ){
