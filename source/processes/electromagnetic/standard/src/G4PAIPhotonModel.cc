@@ -150,10 +150,10 @@ G4double G4PAIPhotonModel::LowEnergyLimit( const G4ParticleDefinition* p )
 ////////////////////////////////////////////////////////////////////////////
 
 G4double G4PAIPhotonModel::MinEnergyCut( const G4ParticleDefinition*,
-                                   const G4MaterialCutsCouple* couple )
+                                   const G4MaterialCutsCouple*)
 {
   //  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
-  return 0.*eV; // any positive cut
+  return 0.0; // any positive cut
 }
 
 ////////////////////////////////////////////////////////////////////////////
