@@ -54,8 +54,8 @@ DicomPatientParameterisation::~DicomPatientParameterisation()
 }
 
 DicomPatientParameterisation::DicomPatientParameterisation(G4int NoVoxels, 
-							   double max_density, 
-							   double min_density ,
+							   G4double max_density, 
+							   G4double min_density ,
 							   G4Material* lunginhale,
 							   G4Material* lungexhale,
 							   G4Material* adipose_tissue,

@@ -46,7 +46,7 @@
 
 using namespace std;
 
-DicomGeometry *DicomGeometry::theDetector=NULL;
+DicomGeometry *DicomGeometry::theDetector=0;
 
 DicomGeometry::DicomGeometry()
 {
@@ -56,7 +56,7 @@ DicomGeometry::DicomGeometry()
 
 DicomGeometry::~DicomGeometry()
 {
-  theDetector=NULL;
+  theDetector=0;
   delete patientConstructor;
   delete air;
   delete lunginhale;
@@ -90,7 +90,7 @@ void DicomGeometry::PatientConstruction()
   logical_param = new G4LogicalVolume(Parameterisation_Box,air,"Parameterisation Mother (logical)");
   logical_param->SetVisAttributes(Attributes_param);
 
-  double MiddleLocationValue=0;
+  G4double MiddleLocationValue=0;
   for (int i=0;i< totalNumberOfFile;i++)
     {
       ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[i] );
