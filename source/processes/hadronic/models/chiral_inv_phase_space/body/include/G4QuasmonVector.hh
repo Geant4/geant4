@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasmonVector.hh,v 1.12 2003-09-09 09:13:37 mkossov Exp $
+// $Id: G4QuasmonVector.hh,v 1.13 2003-09-15 17:11:03 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QuasmonVector ----------------

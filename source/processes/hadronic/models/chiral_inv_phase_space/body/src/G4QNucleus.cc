@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.30 2003-09-09 09:13:41 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.31 2003-09-15 17:11:07 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -544,7 +544,7 @@ void G4QNucleus::SetZNSQC(G4int z, G4int n, G4int s)
 }
   
 // Tests if it is possible to split one Baryon (n,p,Lambda) or alpha from the Nucleus
-G4bool G4QNucleus::SplitBaryon()
+G4int G4QNucleus::SplitBaryon()
 {//  ===========================
   static const G4QContent neutQC(2,1,0,0,0,0);
   static const G4QContent protQC(1,2,0,0,0,0);
@@ -557,7 +557,7 @@ G4bool G4QNucleus::SplitBaryon()
   static const G4double mDeut= G4QPDGCode(2112).GetNuclMass(1,1,0);
   static const G4double mAlph= G4QPDGCode(2112).GetNuclMass(2,2,0);
   G4int     baryn=GetA();                         // Baryon Number of the Nucleus
-  if(baryn<2) return false;
+  if(baryn<2) return 0;
   //G4double   totM=GetGSMass();                    // GS Mass value of the Nucleus
   G4double   totM=Get4Momentum().m();             // Real Mass value of the Nucleus
   G4QContent valQC=GetQCZNS();                    // Quark Content of the Nucleus
@@ -574,7 +574,7 @@ G4bool G4QNucleus::SplitBaryon()
 #ifdef pdebug
     G4cout<<"G4QNucleus::SplitBaryon: (neutron),sM="<<sM<<",d="<<totM-sM<<G4endl;
 #endif
-    if(sM<totM) return true;
+    if(sM<totM) return 2112;
   }
   G4int PQ=valQC.GetP();
   if(PQ)                                          // ===> "Can try to split a proton" case
@@ -588,7 +588,7 @@ G4bool G4QNucleus::SplitBaryon()
 #ifdef pdebug
     G4cout<<"G4QNucleus::SplitBaryon: (proton),sM="<<sM<<",d="<<totM-sM<<G4endl;
 #endif
-    if(sM<totM) return true;
+    if(sM<totM) return 2212;
   }
   G4int LQ=valQC.GetL();
   if(LQ)                                          // ===> "Can try to split a lambda" case
@@ -600,10 +600,10 @@ G4bool G4QNucleus::SplitBaryon()
 #ifdef pdebug
     G4cout<<"G4QNucleus::SplitBaryon: (lambda),sM="<<sM<<",d="<<totM-sM<<G4endl;
 #endif
-    if(sM<totM) return true;
+    if(sM<totM) return 3122;
   }
   G4int AQ=NQ+PQ+LQ;
-  if(NQ>0&&PQ>0&&AQ>2)                            // ===> "Can try to split an deuteron" case
+  if(NQ>0&&PQ>0&&AQ>2)                            // ===> "Can try to split a deuteron" case
   {
     G4QContent resQC=valQC-deutQC;                // QC of Residual for the Deuteron
     G4int    resPDG=resQC.GetSPDGCode();          // PDG of Residual for the Deuteron
@@ -614,7 +614,7 @@ G4bool G4QNucleus::SplitBaryon()
 #ifdef pdebug
     G4cout<<"G4QNucleus::SplitBaryon: (deuteron),sM="<<sM<<",d="<<totM-sM<<G4endl;
 #endif
-    if(sM<totM) return true;
+    if(sM<totM) return 90001001;
   }
   if(NQ>1&&PQ>1&&AQ>4)                            // ===> "Can try to split an alpha" case
   {
@@ -627,9 +627,9 @@ G4bool G4QNucleus::SplitBaryon()
 #ifdef pdebug
     G4cout<<"G4QNucleus::SplitBaryon: (alpha),sM="<<sM<<",d="<<totM-sM<<G4endl;
 #endif
-    if(sM<totM) return true;
+    if(sM<totM) return 90002002;
   }
-  return false;
+  return 0;
 }
   
 // Tests if it is possible to split two Baryons (nn,np,pp,Ln,Lp,LL) from the Nucleus
@@ -2586,7 +2586,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
 #ifdef pdebug
   G4double sZ=0.;                                // Percent of protons
   G4double sN=0.;                                // Percent of neutrons
-  G4cout<<"G4QNucleus::PrepareCand:#C=="<<mCand<<",dZ="<<dZ<<",dN="<<dN<<",Z="<<Z<<",N="<<N<<G4endl;
+  G4cout<<"G4QNucl::PrepC:#C="<<mCand<<",dZ="<<dZ<<",dN="<<dN<<",ZNS="<<Z<<","<<N<<","<<S<<G4endl;
 #endif
   for (G4int index=0; index<mCand; index++)
   {
@@ -2646,7 +2646,8 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
             acm=1;
 #ifdef pdebug
             if(pos)
-		    G4cout<<"G4QN::PrC:mp="<<mp<<",p="<<pos<<",A=1,(Z="<<zc<<",N="<<nc<<"),m="<<mac<<G4endl;
+			  G4cout<<"G4QN::PrC:mp="<<mp<<",pos="<<pos<<",ae="<<ae
+                    <<",Z="<<zc<<",N="<<nc<<",mac="<<mac<<G4endl;
             sZ+=pos*zc;
             sN+=pos*nc;
 #endif

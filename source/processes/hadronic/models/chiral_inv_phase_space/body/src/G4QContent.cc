@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.23 2003-09-09 09:13:39 mkossov Exp $
+// $Id: G4QContent.cc,v 1.24 2003-09-15 17:11:04 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
@@ -1175,10 +1175,7 @@ G4int G4QContent::GetSPDGCode() const
       else return 10;
 	}
     // Normal One Baryon States: Heavy quark should come first
-    if(n>5)
-    {
-      return GetZNSPDGCode();                    //B+M+M Tripolino etc
-    }
+    if(n>5) return GetZNSPDGCode();              //B+M+M Tripolino etc
     if(n==5) return 10;                          //B+M Chipolino
     if(mS>0)                                     // Strange Baryons
 	{
@@ -1193,7 +1190,7 @@ G4int G4QContent::GetSPDGCode() const
 #ifdef debug
           G4cout<<"***G4QC::SPDG: Exotic BaryonSS, U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<G4endl;
 #endif
-          return 0;
+          return GetZNSPDGCode();
         }
 	  }
       else if (mS==1)
@@ -1206,7 +1203,7 @@ G4int G4QContent::GetSPDGCode() const
 #ifdef debug
           G4cout<<"***G4QC::SPDG:Exotic BaryonS, U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<G4endl;
 #endif
-          return 0;
+          return GetZNSPDGCode();
         }
 	  }
       else                                       // Superstrange case
@@ -1214,7 +1211,7 @@ G4int G4QContent::GetSPDGCode() const
 #ifdef debug
         G4cout<<"***G4QContent::GetSPDG:ExoBaryonS, U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<G4endl;
 #endif
-        return 0;
+        return GetZNSPDGCode();
       }
 	}
     else if (mU>0)                               // Not Strange Baryons
@@ -1228,7 +1225,7 @@ G4int G4QContent::GetSPDGCode() const
 #ifdef debug
         G4cout<<"***G4QC::SPDG: Exotic BaryonU, U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<G4endl;
 #endif
-        return 0;
+        return GetZNSPDGCode();
       }
 	}
     else if (mD==3) p=1114;                      // Decuplet
@@ -1237,7 +1234,7 @@ G4int G4QContent::GetSPDGCode() const
 #ifdef debug
       G4cout<<"***G4QC::SPDG: Exotic BaryonD, U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<G4endl; 
 #endif
-      return 0;
+      return GetZNSPDGCode();
 	}
     if (b<0) p=-p;
   }

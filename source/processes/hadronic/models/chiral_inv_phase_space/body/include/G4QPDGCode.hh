@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.hh,v 1.14 2003-09-09 09:13:36 mkossov Exp $
+// $Id: G4QPDGCode.hh,v 1.15 2003-09-15 17:11:02 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -220,7 +220,7 @@ inline G4int    G4QPDGCode::GetBaryNum() const {return GetQuarkContent().GetBary
 inline G4int    G4QPDGCode::GetSpin()    const 
 {
   if(thePDGCode<80000000)               return thePDGCode%10;
-  else if(GetQuarkContent().GetTot()%2) return 3;
+  else if(GetQuarkContent().GetTot()%2) return 3; // @@ Take into account higher resonances (?)
   else                                  return 1;
 }
 inline void     G4QPDGCode::NegPDGCode()     {thePDGCode=-thePDGCode;}

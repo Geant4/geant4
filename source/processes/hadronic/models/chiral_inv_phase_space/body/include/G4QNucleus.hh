@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.15 2003-09-09 09:13:36 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.16 2003-09-15 17:11:02 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -69,7 +69,7 @@ public:
 
   // Specific Modifiers
   G4bool     EvaporateBaryon(G4QHadron* h1,G4QHadron* h2); // Evaporate one Baryon from Nucleus
-  G4bool     SplitBaryon();                                // Is it possible to split a baryon/alpha
+  G4int      SplitBaryon();                                // Is it possible to split a baryon/alpha
   G4bool     Split2Baryons();                              // Is it possible to split two baryons?
   void       InitByPDG(G4int newPDG);                      // Init existing nucleus by new PDG
   void       InitByQC(G4QContent newQC);                   // Init existing nucleus by new QCont

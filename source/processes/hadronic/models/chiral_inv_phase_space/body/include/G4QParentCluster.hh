@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParentCluster.hh,v 1.13 2003-09-09 09:13:36 mkossov Exp $
+// $Id: G4QParentCluster.hh,v 1.14 2003-09-15 17:11:02 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QParentCluster ----------------

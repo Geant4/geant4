@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.11 2003-09-09 09:13:36 mkossov Exp $
+// $Id: G4QEnvironment.hh,v 1.12 2003-09-15 17:11:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -68,6 +68,7 @@ private:
   void             PrepareInteractionProbabilities(const G4QContent& projQC, G4double AP);
   void             EvaporateResidual(G4QHadron* evap, G4bool corFlag = false);// Final Evaporation
   void             DecayDibaryon(G4QHadron* dB);      // Decay of any di-baryon (deuteron is kept)
+  void             DecayIsonucleus(G4QHadron* dB);    // Decay nP+(Pi+) or nN+(Pi-) system
   void             DecayThreeBaryon(G4QHadron* dB);   // Decay of ppp, nnn or LLL states
   void             DecayAntiStrange(G4QHadron* dB);   // Decay of the nucleus, containing K+/K0
   void             DecayAlphaBar(G4QHadron* dB);      // Decay of alpha+p or alpha+n states

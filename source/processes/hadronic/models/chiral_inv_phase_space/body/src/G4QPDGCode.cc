@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.31 2003-09-09 09:13:41 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.32 2003-09-15 17:11:07 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -564,13 +564,20 @@ G4double G4QPDGCode::GetWidth()
 G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
 //      ===================================================
 {
-  static const G4double mP  = G4QPDGCode(2212).GetMass();
-  static const G4double mN  = G4QPDGCode(2112).GetMass();
+  static const G4double mP  = G4QPDGCode(2212).GetMass(); // Proton
+  static const G4double mN  = G4QPDGCode(2112).GetMass(); // Neutron
   static const G4double mL  = G4QPDGCode(3122).GetMass(); // Lambda
-  //////////static const G4double mSm = G4QPDGCode(3112).GetMass(); // Sigma-
-  //////////static const G4double mSp = G4QPDGCode(3222).GetMass(); // Sigma+
-  //////////static const G4double mKm = G4QPDGCode(3312).GetMass(); // Ksi-
-  //////////static const G4double mKz = G4QPDGCode(3322).GetMass(); // Ksi0
+  static const G4double dmP = mP+mP;                      // DiProton
+  static const G4double dmN = mN+mN;                      // DiNeutron
+  static const G4double dmL = mL+mL;                      // DiLambda
+  static const G4double mSm = G4QPDGCode(3112).GetMass(); // Sigma-
+  static const G4double mSp = G4QPDGCode(3222).GetMass(); // Sigma+
+  static const G4double dSP = mSp+mP;                      // ProtonSigma+
+  static const G4double dSN = mSm+mN;                      // NeutronSigma-
+  static const G4double mKm = G4QPDGCode(3312).GetMass(); // Ksi-
+  static const G4double mKz = G4QPDGCode(3322).GetMass(); // Ksi0
+  static const G4double dKN = mKm+mN;                     // NeutronKsi-
+  static const G4double dKP = mKz+mP;                     // ProtonKsi0
   static const G4double mK  = G4QPDGCode( 321).GetMass();
   static const G4double mK0 = G4QPDGCode( 311).GetMass();
   static const G4double mPi = G4QPDGCode( 211).GetMass();
@@ -625,6 +632,7 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   static const G4double a3=2.2;        // Lambda binding energy for (t or He3)+Lambda system (MeV)
   static const G4double um=931.49432;  // Umified atomic mass unit (MeV)
   static const G4double me =0.511;     // electron mass (MeV) :: n:8.071, p:7.289
+  static const G4double eps =0.0001;   // security addition for multybaryons
   static G4double c[9][9]={// z=1     =2     =3     =4     =5     =6     =7     =8     =9
                             {13.136,14.931,25.320,38.000,45.000,55.000,65.000,75.000,85.000},  //n=1
 				            {14.950, 2.425,11.680,18.374,27.870,35.094,48.000,60.000,72.000},  //n=2
@@ -638,7 +646,7 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
 #ifdef debug
   G4cout<<"G4QPDGCode::GetNuclMass called with Z="<<Z<<",N="<<N<<", S="<<S<<G4endl;
 #endif
-  if(!N&&!Z&&!S)   
+  if(!N&&!Z&&!S)
   {
 #ifdef debug
     G4cout<<"G4QPDGCode::GetNuclMass(0,0,0)="<<mPi0<<"#0"<<G4endl;
@@ -646,18 +654,21 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
     //return mPi0;
     return 0.;
   }
+  else if(!N&&!Z&&S>1) return mL*S+eps;
+  else if(!N&&Z>1&&!S) return mP*Z+eps;
+  else if(N>1&&!Z&&!S) return mN*N+eps;
   G4int A=Z+N;
   G4int Bn=A+S;
   //if((Z<0||N<0)&&!Bn)
   //{
-  //  if     (N<0) return Bn*mL-Z*mK - N*mK0+0.001*   S ;
-  //  else              return Bn*mL+N*mPi-A*mK +0.001*(N+S);
+  //  if     (N<0) return Bn*mL-Z*mK - N*mK0+eps*   S ;
+  //  else              return Bn*mL+N*mPi-A*mK +eps*(N+S);
   //}
   if(A<0&&Bn>=0)                      // Bn*LAMBDA's + (-(N+Z))*Kaons
   {
-    if     (N<0&&Z<0) return Bn*mL-Z*mK -N*mK0+0.001*   S ;
-    else if(N<0)      return Bn*mL+Z*mPi-A*mK0+0.001*(Z+S);
-    else              return Bn*mL+N*mPi-A*mK +0.001*(N+S);
+    if     (N<0&&Z<0) return Bn*mL-Z*mK -N*mK0+eps*   S ;
+    else if(N<0)      return Bn*mL+Z*mPi-A*mK0+eps*(Z+S);
+    else              return Bn*mL+N*mPi-A*mK +eps*(N+S);
   }
   if(!Bn)                      // => "GS Mesons - octet" case (without eta&pi0)
   {
@@ -666,53 +677,137 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
     else if(S==1&&Z==-1||S==-1&&Z==1) return mK;
     else return 0.;                 // Exotic mesons (4q)
   }
-  if(Bn==1)                    // => "GS Baryons - decuplet" case (withoutSigma0)
+  else if(Bn==1)                    // => "GS Baryons - octet" case (withoutSigma0)
   {
     if     (Z== 1 && N== 0 && S== 0) return mP;
     else if(Z== 0 && N== 1 && S== 0) return mN;
     else if(Z== 0 && N== 0 && S== 1) return mL;
-    // @@ For future improvement of Octet baryon production (@@change decays!)
-    //else if(Z== 1 && N==-1 && S== 1) return mSp;  // Lower than LAMBDA + pi+
-    //else if(Z==-1 && N== 1 && S== 1) return mSm;  // Lower than LAMBDA + pi-
-    //else if(Z== 0 && N==-1 && S== 2) return mKz;  // Lower than LAMBDA + K0
-    //else if(Z==-1 && N== 0 && S== 2) return mKm;  // Lower than LAMBDA + K-
+    else if(Z== 1 && N==-1 && S== 1) return mSp;  // Lower than LAMBDA + pi+
+    else if(Z==-1 && N== 1 && S== 1) return mSm;  // Lower than LAMBDA + pi-
+    else if(Z== 0 && N==-1 && S== 2) return mKz;  // Lower than LAMBDA + K0
+    else if(Z==-1 && N== 0 && S== 2) return mKm;  // Lower than LAMBDA + K-
+  }
+  else if(Bn==2)                    // => "GS Baryons - decuplet" case (NP,LP, and LN are made below)
+  {
+    if     (Z== 2 && N== 0 && S== 0) return dmP;
+    else if(Z== 0 && N== 2 && S== 0) return dmN;
+    else if(Z== 0 && N== 0 && S== 2) return dmL;
+    else if(Z== 2 && N==-1 && S== 1) return dSP;
+    else if(Z==-1 && N== 2 && S== 1) return dSN;
+    else if(Z== 1 && N==-1 && S== 2) return dKP;
+    else if(Z==-1 && N== 1 && S== 2) return dKN;
   }
   // === Start mesonic extraction ===
   G4double k=0.;                      // Mass Sum of K+ mesons
-  if(S<0)                             // @@ Can be improved by K0/K+ search of minimum
+  if(S<0&&Bn>0)                       // @@ Can be improved by K0/K+ search of minimum
   {
-    if(Bn<0) return 0.;               // @@ Make it for antinuclei @@ (Bn<0)
-    if(Z>0)
+    G4int sH=(-S)/2;                  // SmallHalfS || The algorithm must be the same
+    G4int bH=-S-sH;                   // BigHalhS   || as in G4QE::DecayAntiStrange
+    if(Z>0 && Z>N)
 	{
-      if(Z>=-S)                       // => "Enough protons in nucleus" case
+      if(Z>=bH)                       // => "Enough protons in nucleus" case
 	  {
-        k=-S*mK;
-        Z+=S;
+        if(N>=sH)
+        {
+          k=bH*mK+sH*mK0;
+          Z-=bH;
+          N-=sH;
+        }
+        else
+        {
+          G4int dN=Z-N;
+          if(dN>=-S)
+          {
+            k=-S*mK;
+            Z+=S;
+          }
+          else
+          {
+            G4int sS=(-S-dN)/2;
+            G4int bS=-S-dN-sS;
+            sS+=dN;
+            if(Z>=sS&&N>=bS)
+            {
+              k=sS*mK+bS*mK0;
+              Z-=sS;
+              N-=bS;
+            }
+            else if(Z<sS)
+            {
+              G4int dS=-S-Z;
+              k=Z*mK+dS*mK0;
+              N-=dS;
+              Z=0;
+            }
+            else
+            {
+              G4int dS=-S-N;
+              k=dS*mK+N*mK0;
+              Z-=dS;
+              N=0;
+            }
+          }
+        }
 	  }
-      else
+      else // Must not be here
 	  {
-        k=Z*mK-(S+Z)*mK0;
-        N+=S+Z;
-        if(N<0) return 0.;            // @@ Antiparticles aren't implemented @@
-        Z=0;
+#ifdef debug
+        G4cout<<"***G4QPDGC::GetNuclMass:Antimatter? Z="<<Z<<",N="<<N<<",S="<<S<<G4endl;
+#endif
+        return 0.;            // @@ Antiparticles aren't implemented @@
 	  }
 	}
-    else if(N>0)
+    else if(N>=bH)
 	{
-      if(N>=-S)                         // => "Enough neutrons in nucleus" case
-	  {
-        k-=S*mK0;
-        N+=S;
-	  }
+      if(Z>=sH)
+      {
+        k=sH*mK+bH*mK0;
+        Z-=sH;
+        N-=bH;
+      }
       else
-	  {
-        k+=N*mK0-(S+N)*mK;
-        Z+=S+N;
-        if(Z<0) return 0.;            // @@ Antiparticles aren't implemented @@
-        N=0;
-	  }
+      {
+        G4int dN=N-Z;
+        if(dN>=-S)
+        {
+          k=-S*mK0;
+          N+=S;
+        }
+        else
+        {
+          G4int sS=(-S-dN)/2;
+          G4int bS=-S-dN-sS;
+          bS+=dN;
+          if(N>=bS&&Z>=sS)
+          {
+            k=sS*mK+bS*mK0;
+            Z-=sS;
+            N-=bS;
+          }
+          else if(N<bS)
+          {
+            G4int dS=-S-N;
+            k=dS*mK+N*mK0;
+            Z-=dS;
+            N=0;
+          }
+          else
+          {
+            G4int dS=-S-Z;
+            k=Z*mK+dS*mK0;
+            N-=dS;
+            Z=0;
+          }
+        }
+      }
 	}
-    else return 0.;                   // @@ Antiparticles aren't implemented @@
+    else // Must not be here
+	{
+      return 0.;                   // @@ Antiparticles aren't implemented @@
+#ifdef debug
+        G4cout<<"***G4QPDGC::GetNuclMass:Antimatter? N="<<N<<",Z="<<Z<<",S="<<S<<G4endl;
+#endif
+	}
     S=0;
   }
   if(N<0)
@@ -728,7 +823,7 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
     Z=0;
   }
   A=Z+N;
-  if (!A) return k+S*mL+S*.001;       // @@ multy LAMBDA states are not implemented
+  if (!A) return k+S*mL+S*eps;       // @@ multy LAMBDA states are not implemented
   G4double m=k+A*um;                  // Expected mass in atomic units
   G4double D=N-Z;                     // Isotopic shift of the nucleus
   if(A+S<1&&k==0.||Z<0||N<0)          // @@ Can be generalized to anti-nuclei
@@ -747,7 +842,7 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
     if(G4NucleiPropertiesTable::IsInTable(Z,A)) m=k+G4NucleiProperties::GetNuclearMass(A,Z);
     else m+=-sh[Z]-sh[N]+b1*D*D*pow(A,b2)+b3*(1.-2./(1.+exp(b4*D)))+Z*Z*(b5*pow(A,b9)+b6/A);
   }
-  G4double maxM= k+Z*mP+N*mN+S*mL+.001;       // @@ .001 ?? Wings of the Mass parabola
+  G4double maxM= k+Z*mP+N*mN+S*mL+eps;       // @@ eps -- Wings of the Mass parabola
   if(m>maxM) m=maxM;
   if(S>0)
   {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChanVector.hh,v 1.11 2003-09-09 09:13:36 mkossov Exp $
+// $Id: G4QDecayChanVector.hh,v 1.12 2003-09-15 17:11:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidateVector ----------------

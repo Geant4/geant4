@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.26 2003-09-09 09:13:40 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.27 2003-09-15 17:11:07 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -80,6 +80,7 @@ G4QHadron::G4QHadron(G4QContent QC, G4LorentzVector p) :
   theMomentum(p),valQ(QC),nFragm(0)
 {
   G4int curPDG=valQ.GetSPDGCode();
+  if(curPDG==10&&valQ.GetBaryonNumber()>0) curPDG=valQ.GetZNSPDGCode();
   if(curPDG&&curPDG!=10) theQPDG.SetPDGCode(curPDG);
 }
 
@@ -245,8 +246,8 @@ G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
   G4double sM2 = s4Mom.m2();
   G4double iM  = theMomentum.m();          // Mass of the decaying hadron
   G4double iM2 = theMomentum.m2();
-#ifdef pdebug
-  G4cout<<"G4QHadron::DecayIn2: iM="<<iM<<theMomentum<<" => fM="<<fM<<" + sM="<<sM<<G4endl;
+#ifdef debug
+  G4cout<<"G4QHadron::DecayIn2: iM="<<iM<<" => fM="<<fM<<" + sM="<<sM<<" = "<<fM+sM<<G4endl;
 #endif
   //@@ Later on make a quark content check for the decay
   if (abs(iM-fM-sM)<.001)
@@ -257,19 +258,20 @@ G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
     s4Mom=sR*theMomentum;
     return true;
   }
-#ifdef pdebug
   else if (iM+.001<fM+sM || iM==0.)
   {
+#ifdef pdebug
     G4cerr<<"***G4QHadron::DecayIn2*** fM="<<fM<<" + sM="<<sM<<"="<<fM+sM<<" > iM="<<iM<<", d="
           <<iM-fM-sM<<G4endl;
+#endif
     return false;
   }
-#endif
+
   G4double d2 = iM2-fM2-sM2;
   G4double p2 = (d2*d2/4.-fM2*sM2)/iM2;    // Decay momentum(^2) in CMS of Quasmon
   if (p2<0.)
   {
-#ifdef pdebug
+#ifdef debug
     G4cerr<<"***G4QHadr::DecayIn2:p2="<<p2<<"<0,d2^2="<<d2*d2/4.<<"<4*fM2*sM2="<<4*fM2*sM2<<G4endl;
 #endif
     p2=0.;
@@ -456,9 +458,20 @@ G4bool G4QHadron::DecayIn3(G4LorentzVector& f4Mom,G4LorentzVector& s4Mom,G4Loren
   G4double fM  = f4Mom.m();        // Mass of the 1st hadron
   G4double sM  = s4Mom.m();        // Mass of the 2nd hadron
   G4double tM  = t4Mom.m();        // Mass of the 3rd hadron
-  if (iM+.001<fM+sM+tM)
+  G4double eps = 0.001;            // Accuracy of the split condition
+  if (abs(iM-fM-sM-tM)<=eps)
   {
-    G4cerr<<"***G4QHadron::DecayIn3:fM="<<fM<<" + sM="<<sM<<" + tM="<<tM<<" > iM="<<iM<<",d="
+    G4double fR=fM/iM;
+    G4double sR=sM/iM;
+    G4double tR=tM/iM;
+    f4Mom=fR*theMomentum;
+    s4Mom=sR*theMomentum;
+    t4Mom=tR*theMomentum;
+    return true;
+  }
+  if (iM+eps<fM+sM+tM)
+  {
+    G4cout<<"***G4QHadron::DecayIn3:fM="<<fM<<" + sM="<<sM<<" + tM="<<tM<<" > iM="<<iM<<",d="
           <<iM-fM-sM-tM<<G4endl;
     return false;
   }
@@ -471,7 +484,9 @@ G4bool G4QHadron::DecayIn3(G4LorentzVector& f4Mom,G4LorentzVector& s4Mom,G4Loren
   G4double m12sBase=(iM-tM)*(iM-tM)-m12sMin;
   G4double rR = 0.;
   G4double rnd= 1.;
-  /////////////G4int    tr = 0;                 //@@ Comment if "cout" below is skiped @@
+#ifdef debug
+  G4int    tr = 0;                 //@@ Comment if "cout" below is skiped @@
+#endif
   G4double m12s = 0.;              // Fake definition before the Loop
   while (rnd > rR)
   {
@@ -507,7 +522,7 @@ G4bool G4QHadron::DecayIn3(G4LorentzVector& f4Mom,G4LorentzVector& s4Mom,G4Loren
 #endif
   if(!G4QHadron(dh4Mom).DecayIn2(f4Mom,s4Mom))
   {
-    G4cerr<<"***G4QHadron::DecayIn3: Exception2"<<G4endl;
+    G4cerr<<"***G4QHadron::DecayIn3: Error in DecayIn2 -> Exception2"<<G4endl;
 	//G4Exception("G4QHadron::DecayIn3(): DecayIn2 did not succeed");
     return false;
   }
@@ -526,7 +541,7 @@ G4double G4QHadron::RandomizeMass(G4QParticle* pPart, G4double maxM)
   if(maxM<meanM-3*width) 
   {
 #ifdef debug
-    G4cerr<<"***G4QHadr::RandMass:m=0 maxM="<<maxM<<"< meanM="<<meanM<<" - 3*halfW="<<width<<G4endl;
+    G4cout<<"***G4QHadr::RandMass:m=0 maxM="<<maxM<<"< meanM="<<meanM<<" - 3*halfW="<<width<<G4endl;
 #endif
     return 0.;
   }
@@ -548,7 +563,7 @@ G4double G4QHadron::RandomizeMass(G4QParticle* pPart, G4double maxM)
   if(minM>maxM)
   {
 #ifdef debug
-	G4cerr<<"***G4QHadron::RandomizeMass:for PDG="<<theQPDG.GetPDGCode()<<" minM="<<minM
+	G4cout<<"***G4QHadron::RandomizeMass:for PDG="<<theQPDG.GetPDGCode()<<" minM="<<minM
           <<" > maxM="<<maxM<<G4endl;
 #endif
     return 0.;
