@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.3 2004-08-02 10:44:43 vnivanch Exp $
+// $Id: G4EmCalculator.hh,v 1.4 2004-08-09 09:03:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -131,7 +131,7 @@ public:
 
 private:
 
-  void UpdateParticle(const G4ParticleDefinition*, G4double kinEnergy);
+  G4bool UpdateParticle(const G4ParticleDefinition*, G4double kinEnergy);
   const G4ParticleDefinition* FindParticle(const G4String&, G4double kinEnergy);
  
   void FindMaterial(const G4Material*);
@@ -172,6 +172,7 @@ private:
   G4double                     chargeSquare;
   G4double                     massRatio;
   G4bool                       isIon;
+  G4bool                       isApplicable;
 
   G4String                     currentParticleName;
   G4String                     currentMaterialName;

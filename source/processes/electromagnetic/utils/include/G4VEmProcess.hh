@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.9 2004-08-08 12:09:38 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.10 2004-08-09 09:03:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,7 +36,7 @@
 //
 // Modifications:
 // 30-06-04 make destructor virtual (V.Ivanchenko)
-//
+// 30-09-08 optimise integral option (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -223,6 +223,7 @@ private:
   G4double                     mfpKinEnergy;
   G4double                     preStepKinEnergy;
   G4double                     preStepLambda;
+  G4double                     preStepMFP;
 
   G4bool                       integral;
   G4bool                       meanFreePath;
@@ -289,17 +290,17 @@ inline G4double G4VEmProcess::GetMeanFreePath(const G4Track& track,
                                                     G4ForceCondition* condition)
 {
   *condition = NotForced;
-  G4double mfp = DBL_MAX;
   preStepKinEnergy = track.GetKineticEnergy();
-  if(aboveCSmax && preStepKinEnergy < mfpKinEnergy) meanFreePath = false;
+  if(aboveCSmax && preStepKinEnergy < mfpKinEnergy) ResetNumberOfInteractionLengthLeft();
   DefineMaterial(track.GetMaterialCutsCouple());
   if (meanFreePath) {
     if (integral) ComputeLambda(preStepKinEnergy);
     else          preStepLambda = GetLambda(preStepKinEnergy);
     if(0.0 < preStepLambda) mfp = 1.0/preStepLambda;
+    else                    preStepMFP = DBL_MAX;
   }
-  //  G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" mfp= "<<preStepMFP<<G4endl;
-  return mfp;
+  //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<< " eCSmax= " <<mfpKinEnergy<< " mfp= "<<preStepMFP<<G4endl;
+  return preStepMFP;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

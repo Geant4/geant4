@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.9 2004-08-08 12:09:44 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.10 2004-08-09 09:03:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 //
 // Modifications:
 // 30-06-04 make it to be pure discrete process (V.Ivanchenko)
+// 30-09-08 optimise integral option (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -83,7 +84,6 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
 
   minKinEnergy    = 0.1*keV;
   maxKinEnergy    = 100.0*GeV;
-  mfpKinEnergy    = DBL_MAX;
 
   pParticleChange = &fParticleChange;
 
@@ -134,6 +134,7 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   currentCouple = 0;
   preStepLambda = 0.0;
   mfpKinEnergy  = DBL_MAX;
+  preStepMFP    = DBL_MAX;
 
   if( !particle ) particle = &part;
 
@@ -409,6 +410,7 @@ G4bool G4VEmProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
   currentCouple = 0;
   preStepLambda = 0.0;
   mfpKinEnergy  = DBL_MAX;
+  preStepMFP    = DBL_MAX;
 
   if(0 < verboseLevel) {
     G4cout << "G4VEmProcess::RetrievePhysicsTable() for "
