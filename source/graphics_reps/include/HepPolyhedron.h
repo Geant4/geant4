@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.h,v 1.14 2005-03-09 16:42:25 allison Exp $
+// $Id: HepPolyhedron.h,v 1.15 2005-03-22 16:42:52 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -184,10 +184,8 @@ class G4Facet {
 class HepPolyhedron {
   friend std::ostream& operator<<(std::ostream&, const HepPolyhedron &ph);
 
- private:
-  static int fNumberOfRotationSteps;
-
  protected:
+  static int fNumberOfRotationSteps;
   int nvert, nface;
   HepPoint3D *pV;
   G4Facet    *pF;
