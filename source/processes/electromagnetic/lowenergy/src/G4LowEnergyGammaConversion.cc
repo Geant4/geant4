@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4LowEnergyGammaConversion.cc,v 1.28 2003-01-22 18:47:27 vnivanch Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.29 2003-03-25 12:26:46 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,7 @@
 // 24.04.01 V.Ivanchenko remove RogueWave
 // 27.07.01 F.Longo correct bug in energy distribution
 // 21.01.03 V.Ivanchenko Cut per region
+// 25.03.03 F.Longo fix in angular distribution of e+/e-
 //
 // --------------------------------------------------------------
 
@@ -237,29 +238,32 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
       u = - log(G4UniformRand() * G4UniformRand()) / a2 ;
     }
 
-  G4double theta = u * electron_mass_c2 / photonEnergy ;
-  G4double phi  = twopi * G4UniformRand() ;
-  G4double dirX = sin(theta) * cos(phi);
-  G4double dirY = sin(theta) * sin(phi);
-  G4double dirZ = cos(theta);
-  
-// Kinematics of the created pair:
-// the electron and positron are assumed to have a symetric angular 
-// distribution with respect to the Z axis along the parent photon
+  G4double thetaEle = u*electron_mass_c2/electronTotEnergy;
+  G4double thetaPos = u*electron_mass_c2/positronTotEnergy;
+  G4double phi  = twopi * G4UniformRand();
 
+  G4double dxEle= sin(thetaEle)*cos(phi),dyEle= sin(thetaEle)*sin(phi),dzEle=cos(thetaEle);
+  G4double dxPos=-sin(thetaPos)*cos(phi),dyPos=-sin(thetaPos)*sin(phi),dzPos=cos(thetaPos);
+  
+  
+  // Kinematics of the created pair:
+  // the electron and positron are assumed to have a symetric angular 
+  // distribution with respect to the Z axis along the parent photon
+  
   G4double localEnergyDeposit = 0. ;
   
   aParticleChange.SetNumberOfSecondaries(2) ; 
   G4double electronKineEnergy = G4std::max(0.,electronTotEnergy - electron_mass_c2) ;
-
+  
   // Generate the electron only if with large enough range w.r.t. cuts and safety
-
+  
   G4double safety = aStep.GetPostStepPoint()->GetSafety();
-
+  
   if (rangeTest->Escape(G4Electron::Electron(),couple,electronKineEnergy,safety))
     {
-      G4ThreeVector electronDirection ( dirX, dirY, dirZ );
+      G4ThreeVector electronDirection (dxEle, dyEle, dzEle);
       electronDirection.rotateUz(photonDirection);
+      
       G4DynamicParticle* particle1 = new G4DynamicParticle (G4Electron::Electron(),
 							    electronDirection,
 							    electronKineEnergy);
@@ -279,9 +283,10 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
       localEnergyDeposit += positronKineEnergy ;
       positronKineEnergy = 0. ;
     }
-  G4ThreeVector positronDirection(-dirX,-dirY,dirZ);
+
+  G4ThreeVector positronDirection (dxPos, dyPos, dzPos);
   positronDirection.rotateUz(photonDirection);   
- 
+  
   // Create G4DynamicParticle object for the particle2 
   G4DynamicParticle* particle2 = new G4DynamicParticle(G4Positron::Positron(),
 						       positronDirection, positronKineEnergy);
