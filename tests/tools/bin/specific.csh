@@ -412,10 +412,10 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" ) then
   setenv CLHEP_BASE_DIR /lal/CLHEP/1.5/Linux-gxx
   setenv OGLHOME        /usr/X11R6
   #  setenv OGLHOME        /lal/Mesa/3.2/Linux
-  setenv OIVHOME        /lal/SoFree/v2r9
-  setenv HEPVISHOME     /lal/HEPVis/v5r1-05-LAL
+  setenv OIVHOME        /lal/SoFree/v3r1
+  setenv HEPVISHOME     /lal/HEPVis/v5r1p7
   setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
-  setenv OIVLIBS        "-L$HEPVISHOME/Linux-gxx-SF -lHEPVis -L$OIVHOME/Linux-gxx -lSoFree"
+  setenv OIVLIBS        "-L$HEPVISHOME/Linux-gxx -lHEPVis -L$OIVHOME/Linux-gxx -lSoFree"
   setenv SOFREEUSER     $OIVHOME/user/
   # OPACS :
   setenv G4UI_BUILD_WO_SESSION       1
@@ -424,7 +424,7 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" ) then
   setenv G4VIS_USE_OPACS             1
   source /lal/OPACS/v3/setup.csh
   setenv JDKHOME /lal/JDK/jdk1.2.2
-  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$OIVHOME/Linux-gxx:$HEPVISHOME/Linux-gxx-SF:${OGLHOME}/lib
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$OIVHOME/Linux-gxx:$HEPVISHOME/Linux-gxx:${OGLHOME}/lib
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$JDKHOME/jre/lib/i386:$JDKHOME/jre/lib/i386/classic:$JDKHOME/jre/lib/i386/native_threads
 set jars=/lal/jas/2.0alpha4/release/lib
   setenv CLASSPATH ${CLASSPATH}:$jars/collections.jar:$jars/hep.jar:$jars/jas.jar
