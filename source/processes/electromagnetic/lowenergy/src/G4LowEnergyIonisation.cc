@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.74 2001-10-30 19:50:02 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.75 2001-11-07 20:51:33 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -102,6 +102,7 @@
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
  
+#include "G4CutsPerMaterialWarning.hh"
 
 G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& nam)
   : G4eLowEnergyLoss(nam), 
@@ -131,6 +132,9 @@ void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParti
     G4cout << "G4LowEnergyIonisation::BuildPhysicsTable start"
            << G4endl;
       }
+  
+  G4CutsPerMaterialWarning warning;
+  warning.PrintWarning(&aParticleType);
 
   cutForDelta.clear();
 
@@ -259,7 +263,8 @@ void G4LowEnergyIonisation::BuildLossTable(
     const G4Material* material= (*theMaterialTable)[m];
 
     // the cut cannot be below lowest limit
-    G4double tCut = ((G4Electron::Electron())->GetCutsInEnergy())[m];
+    G4double tCut = G4Electron::Electron()->GetEnergyThreshold(material);
+		     //GetCutsInEnergy())[m];
     if(tCut > highKineticEnergy) tCut = highKineticEnergy;
     cutForDelta.push_back(tCut);
 

@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.26 2001-10-08 07:49:01 pia Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.27 2001-11-07 20:47:30 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -59,6 +59,8 @@
 #include "G4CompositeEMDataSet.hh"
 #include "G4VDataSetAlgorithm.hh"
 #include "G4LogLogInterpolation.hh"
+
+#include "G4CutsPerMaterialWarning.hh"
 
 G4LowEnergyRayleigh::G4LowEnergyRayleigh(const G4String& processName)
   : G4VDiscreteProcess(processName),
@@ -100,6 +102,10 @@ G4LowEnergyRayleigh::~G4LowEnergyRayleigh()
 
 void G4LowEnergyRayleigh::BuildPhysicsTable(const G4ParticleDefinition& photon)
 {
+  
+  G4CutsPerMaterialWarning warning;
+  warning.PrintWarning(&photon);
+
   crossSectionHandler->Clear();
   G4String crossSectionFile = "rayl/re-cs-";
   crossSectionHandler->LoadData(crossSectionFile);

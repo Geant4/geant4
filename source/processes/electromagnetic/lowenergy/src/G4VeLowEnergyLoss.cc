@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.15 2001-09-23 23:08:58 pia Exp $
+// $Id: G4VeLowEnergyLoss.cc,v 1.16 2001-11-07 20:47:30 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -798,7 +798,7 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       ipotLogFluct = aMaterial->GetIonisation()->GetLogMeanExcEnergy();
     }
   G4double threshold,w1,w2,C,
-           beta2,suma,e0,loss,lossc ,w;
+           beta2,suma,e0,loss,lossc,w;
   G4double a1,a2,a3;
   G4int p1,p2,p3;
   G4int nb;
@@ -815,7 +815,7 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 
   //  G4cout << "MGP -- Fluc Tkin " << Tkin/keV << " keV "  << " MeanLoss = " << MeanLoss/keV << G4endl;
 
-  threshold =((*G4Electron::Electron()).GetCutsInEnergy())[imat];
+  threshold = G4Electron::Electron()->GetEnergyThreshold(aMaterial);
   G4double rmass = electron_mass_c2/ParticleMass;
   G4double tau   = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);
   G4double Tm    = 2.*electron_mass_c2*tau2/(1.+2.*tau1*rmass+rmass*rmass);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.12 2001-09-23 23:08:58 pia Exp $
+// $Id: G4hLowEnergyLoss.cc,v 1.13 2001-11-07 20:47:30 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -178,7 +178,12 @@ void G4hLowEnergyLoss::BuildDEDXTable(
   // create table if there is no table or there is a new cut value
   G4bool MakeTable = false ;
      
-  G4double ElectronCutInRange = G4Electron::Electron()->GetCuts();
+  // ---- MGP ---- workaround for the deprecated "cuts per material"
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  const G4Material* material = (*theMaterialTable)[0];  
+  G4double ElectronCutInRange = G4Electron::Electron()->GetEnergyThreshold(material);
+  //                    was   = G4Electron::Electron()->GetCuts(); 
+  // ---- MGP ----
 
   // create/fill proton or antiproton tables depending on the charge 
   Charge = aParticleType.GetPDGCharge()/eplus;

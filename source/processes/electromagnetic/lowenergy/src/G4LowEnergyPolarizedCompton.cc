@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.9 2001-10-24 09:07:37 flongo Exp $
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.10 2001-11-07 20:47:29 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -70,6 +70,8 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4VRangeTest.hh"
 #include "G4RangeTest.hh"
+
+#include "G4CutsPerMaterialWarning.hh"
 
 // constructor
 
@@ -121,6 +123,10 @@ G4LowEnergyPolarizedCompton::~G4LowEnergyPolarizedCompton()
 
 void G4LowEnergyPolarizedCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
 {
+  
+  G4CutsPerMaterialWarning warning;
+  warning.PrintWarning(&photon);
+
   crossSectionHandler->Clear();
   G4String crossSectionFile = "comp/ce-cs-";
   crossSectionHandler->LoadData(crossSectionFile);

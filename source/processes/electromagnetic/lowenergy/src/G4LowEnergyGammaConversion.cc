@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4LowEnergyGammaConversion.cc,v 1.24 2001-10-08 07:48:58 pia Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.25 2001-11-07 20:47:29 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,6 +67,8 @@
 #include "G4VRangeTest.hh"
 #include "G4RangeTest.hh"
 
+#include "G4CutsPerMaterialWarning.hh"
+
 G4LowEnergyGammaConversion::G4LowEnergyGammaConversion(const G4String& processName)
   : G4VDiscreteProcess(processName),   
     lowEnergyLimit(1.022000*MeV),
@@ -108,6 +110,10 @@ G4LowEnergyGammaConversion::~G4LowEnergyGammaConversion()
 
 void G4LowEnergyGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& photon)
 {
+  
+  G4CutsPerMaterialWarning warning;
+  warning.PrintWarning(&photon);
+
   crossSectionHandler->Clear();
   G4String crossSectionFile = "pair/pp-cs-";
   crossSectionHandler->LoadData(crossSectionFile);

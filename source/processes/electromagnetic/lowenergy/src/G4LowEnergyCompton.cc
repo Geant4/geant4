@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.32 2001-10-08 07:48:58 pia Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.33 2001-11-07 20:47:29 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -58,6 +58,8 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4VRangeTest.hh"
 #include "G4RangeTest.hh"
+
+#include "G4CutsPerMaterialWarning.hh"
 
 G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
   : G4VDiscreteProcess(processName),
@@ -102,6 +104,10 @@ G4LowEnergyCompton::~G4LowEnergyCompton()
 
 void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
 {
+  
+  G4CutsPerMaterialWarning warning;
+  warning.PrintWarning(&photon);
+
   crossSectionHandler->Clear();
   G4String crossSectionFile = "comp/ce-cs-";
   crossSectionHandler->LoadData(crossSectionFile);

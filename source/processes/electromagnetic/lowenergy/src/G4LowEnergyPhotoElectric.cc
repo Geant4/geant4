@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.40 2001-10-08 15:29:38 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.41 2001-11-07 20:47:29 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -77,6 +77,8 @@
 #include "G4AtomicTransitionManager.hh"
 #include "G4AtomicShell.hh"
 
+#include "G4CutsPerMaterialWarning.hh"
+
 G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
   : G4VDiscreteProcess(processName), lowEnergyLimit(250*eV), highEnergyLimit(100*GeV),
     intrinsicLowEnergyLimit(10*eV),
@@ -112,8 +114,12 @@ G4LowEnergyPhotoElectric::~G4LowEnergyPhotoElectric()
   delete rangeTest;
 }
 
-void G4LowEnergyPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& PhotonType)
+void G4LowEnergyPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& photon)
 {
+  
+  G4CutsPerMaterialWarning warning;
+  warning.PrintWarning(&photon);
+
   crossSectionHandler->Clear();
   G4String crossSectionFile = "phot/pe-cs-";
   crossSectionHandler->LoadData(crossSectionFile);

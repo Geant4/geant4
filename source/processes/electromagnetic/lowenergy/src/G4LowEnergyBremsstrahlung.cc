@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.52 2001-10-30 19:50:02 vnivanch Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.53 2001-11-07 20:50:11 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -63,6 +63,7 @@
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
 
+#include "G4CutsPerMaterialWarning.hh"
 
 G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& nam)
   : G4eLowEnergyLoss(nam), 
@@ -89,6 +90,9 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
     G4cout << "G4LowEnergyBremsstrahlung::BuildPhysicsTable start"
            << G4endl;
       }
+  
+  G4CutsPerMaterialWarning warning;
+  warning.PrintWarning(&aParticleType);
 
   cutForSecondaryPhotons.clear();
 
@@ -202,7 +206,8 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
 
     // the cut cannot be below lowest limit
     G4double tCut = G4std::min(highKineticEnergy,
-			       ((G4Gamma::Gamma())->GetCutsInEnergy())[j]);
+			       ((G4Gamma::Gamma())->GetEnergyThreshold(material)));
+			       //			       ((G4Gamma::Gamma())->GetCutsInEnergy())[j]);
     cutForSecondaryPhotons.push_back(tCut);
 
     const G4ElementVector* theElementVector = material->GetElementVector();
