@@ -45,7 +45,8 @@ closedir(TT);
 foreach $Platform (@Platforms) {
 #  print "PLATFORM:  $Platform\n";
 #  next unless (-d "$TestTop/$Platform");
-   next if ( "AIX-xlC" eq "$Platform" || "SUN-CC5" eq "$Platform" );
+#  next if ( "AIX-xlC" eq "$Platform" || "SUN-CC5" eq "$Platform" );
+   next if ( "AIX-xlC" eq "$Platform" );
    $PDir="$TestTop/$Platform";
    next unless (-d "$PDir");
    opendir(PLATFORM,"$PDir")  || die "Failed to opendir Platform $PDir $! ";
@@ -56,6 +57,13 @@ foreach $Platform (@Platforms) {
 # Linux and Sun are linked/mounted locally.
 #
    foreach $Option (@Options) {
+
+# SUN-CC5 is in afs for refsol7 - skip other directories and links
+      next if ( "$Platform" eq "SUN-CC5" && "$Option" eq "sungeant_debug_ISO" );
+      next if ( "$Platform" eq "SUN-CC5" && "$Option" eq "sungeant_optim_ISO" );
+      next if ( "$Platform" eq "SUN-CC5" && "$Option" eq "OPAL_optim_ISO" );
+      next if ( "$Platform" eq "SUN-CC5" && "$Option" eq "debug" );
+      next if ( "$Platform" eq "SUN-CC5" && "$Option" eq "optim" );
       $TestDir="$PDir/$Option/$SttTag/$Platform";
       opendir(TD,"$TestDir") || { print  "Failed to opendir TestDir $TestDir $! \n"} ;
       opendir(TD,"$TestDir") || { next };
