@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh,v 1.11 2004-12-02 06:38:00 kurasige Exp $
+// $Id: G4Step.hh,v 1.12 2005-02-11 19:08:23 dwright Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,6 +51,7 @@
 //   Separate implementation of inline functions inti G4Step.icc
 //   Add updating mass/charge  
 //                                                  6 Oct. 1999 H.Kurashige
+//   Repository test - Dennis Wright
 //
 #ifndef G4Step_h
 #define G4Step_h 1
