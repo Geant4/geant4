@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2002-06-01 02:45:04 japost Exp $
+$Id: History,v 1.60 2002-06-07 18:30:29 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Jun   7th, 2002   J. Apostolakis - field-V04-00-04
+--------------------------------
+ - G4Mag_SpinEqRhs.cc
+    o Fix to momentum component of Rhs.
+
 May  31st, 2002   J. Apostolakis - field-V04-00-03
 --------------------------------
  - G4MagHelicalStepper.icc
