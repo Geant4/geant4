@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.18 2000-06-07 12:30:02 johna Exp $
+# $Id: GNUmakefile,v 1.19 2000-06-21 08:27:56 stesting Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake glob" makes global libraries for each subdomain.
@@ -74,7 +74,7 @@ libmap: $(G4LIBDIR)/liblist
 	@echo "Weeding out tests, global level GNUmakefiles, etc..."
 	@for i in `cat /tmp/G4_all_lib_makefiles.$(unique)`; \
 	do \
-	  echo $$i | $(GREP) -q test || \
+	  echo $$i | $(GREP) -q '/test' || \
 	  $(GREP) -q SUBDIR $$i || \
 	  $(GREP) -q G4hepgeometry $$i || \
 	  echo $$i >> /tmp/G4_granlib_makefiles.$(unique); \
