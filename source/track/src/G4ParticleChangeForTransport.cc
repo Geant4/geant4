@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.7 2000-05-16 00:34:27 kurasige Exp $
+// $Id: G4ParticleChangeForTransport.cc,v 1.8 2001-03-06 09:59:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -130,8 +130,13 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAlongStep(G4Step* pStep)
     G4ThreeVector pMomentum =  pPostStepPoint->GetMomentum() 
                      + ( CalcMomentum(theEnergyChange, theMomentumDirectionChange, mass)
 	                  - pPreStepPoint->GetMomentum());
-    G4double      tMomentum_inv = 1.0 / pMomentum.mag();
-    pPostStepPoint->SetMomentumDirection(pMomentum*tMomentum_inv);
+    G4double      tMomentum = pMomentum.mag();
+    G4ThreeVector direction(1.0,0.0,0.0); 
+    if( tMomentum > 0. ){
+      G4double  inv_Momentum= 1.0 / tMomentum; 
+      direction= pMomentum * inv_Momentum;
+    }
+    pPostStepPoint->SetMomentumDirection(direction);
     pPostStepPoint->SetKineticEnergy( energy );
   }
 
