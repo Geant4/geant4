@@ -1,4 +1,4 @@
-$Id: History,v 1.91 2002-11-29 18:21:26 japost Exp $
+$Id: History,v 1.92 2002-12-02 11:45:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,10 @@ committal in the CVS repository !
 Nov 29th, 2002      J. Apostolakis - geomvol-V04-01-08
 - G4PropagatorInField:  Use safety in G4PropagatorInField.
     (Adds to the state of this class).
+
+Nov 29th, 2002      S. Sadilov - geomvol-V04-01-07a
+- Minor corrections (cout/G4cout, endl/G4endl) to files
+  G4IdentityTrajectoryFilter.cc G4VCurvedTrajectoryFilter.cc 
 
 Nov 27th, 2002      G. Cosmo - geomvol-V04-01-07
 - G4BlockingList.cc: fixed initialisation of fBlockTagNo to 1.
