@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2003-10-03 10:16:34 gcosmo Exp $
+$Id: History,v 1.2 2003-10-03 10:31:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 4, 03 G.Cosmo
+- Imported from digits+hits directory.
 
 June 3, 03 G.Cosmo
 - Fixed trivial warning in G4VHit.cc.
