@@ -1,4 +1,4 @@
-$Id: History,v 1.127 2000-12-08 09:41:39 gcosmo Exp $
+$Id: History,v 1.128 2000-12-13 08:31:31 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13th December 2000 Gunter Folger (config-V02-00-14)
+- common.gmk: fix to rule for building dependencies, parsing is skip
+  if $(dependencies) is empty.
+- Added comments to "includes" rules.
 
 8th December 2000 Gabriele Cosmo (config-V02-00-13)
 - Changed G4LIB_BUILD_ARCHIVE to G4LIB_BUILD_STATIC in architecture.gmk,
