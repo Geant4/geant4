@@ -1,5 +1,5 @@
 
-$Id: History,v 1.29 2002-02-15 16:17:14 gcosmo Exp $
+$Id: History,v 1.30 2002-03-26 14:23:06 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Mar 26  2002  Vladimir Grichine    geom-bool-V04-00-03
+  - G4ReflectedSolid.cc: modified implementation of CalculateExtent() to
+    properly consider transformation of reflected extent.
 
  Feb 15  2002  Vladimir Grichine    geom-bool-V04-00-02
   - G4ReflectedSolid[.hh.cc]:
