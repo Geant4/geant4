@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07Run.hh,v 1.1 2003-03-10 01:43:36 asaim Exp $
+// $Id: ExN07Run.hh,v 1.2 2003-04-08 15:47:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -51,6 +51,12 @@ class ExN07Run : public G4Run
     G4double totE[6];
     G4double totL[6];
     G4int nStep[6];
+    G4int nGamma[6];
+    G4int nElectron[6];
+    G4int nPositron[6];
+    G4double eMinGamma[6];
+    G4double eMinElectron[6];
+    G4double eMinPositron[6];
 
   public:
     inline G4double GetTotalE(G4int i) const
@@ -59,6 +65,18 @@ class ExN07Run : public G4Run
     { return totL[i]; }
     inline G4int GetNStep(G4int i) const
     { return nStep[i]; }
+    inline G4int GetNGamma(G4int i) const
+    { return nGamma[i]; }
+    inline G4int GetNElectron(G4int i) const
+    { return nElectron[i]; }
+    inline G4int GetNPositron(G4int i) const
+    { return nPositron[i]; }
+    inline G4double GetEMinGamma(G4int i) const
+    { return eMinGamma[i]; }
+    inline G4double GetEMinElectron(G4int i) const
+    { return eMinElectron[i]; }
+    inline G4double GetEMinPositron(G4int i) const
+    { return eMinPositron[i]; }
 };
 
 extern G4Allocator<ExN07Run> anExN07RunAllocator;

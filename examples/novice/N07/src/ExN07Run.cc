@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07Run.cc,v 1.1 2003-03-10 01:43:37 asaim Exp $
+// $Id: ExN07Run.cc,v 1.2 2003-04-08 15:47:01 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "ExN07Run.hh"
 #include "ExN07CalorHit.hh"
+#include "ExN07StackingAction.hh"
 
 #include "G4Event.hh"
 #include "G4HCofThisEvent.hh"
@@ -40,6 +41,12 @@ ExN07Run::ExN07Run()
     totE[i] = 0.;
     totL[i] = 0.;
     nStep[i] = 0;
+    nGamma[i] = 0;
+    nElectron[i] = 0; 
+    nPositron[i] = 0;
+    eMinGamma[i] = DBL_MAX;
+    eMinElectron[i] = DBL_MAX;
+    eMinPositron[i] = DBL_MAX;
   }
 }
 
@@ -49,6 +56,18 @@ ExN07Run::~ExN07Run()
 void ExN07Run::RecordEvent(G4Event* evt)
 {
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
+  for(int j=0;j<6;j++)
+  {
+    nGamma[j] += ExN07StackingAction::GetNGamma(j);
+    nElectron[j] += ExN07StackingAction::GetNElectron(j);
+    nPositron[j] += ExN07StackingAction::GetNPositron(j);
+    if(eMinGamma[j]>ExN07StackingAction::GetEMinGamma(j))
+    { eMinGamma[j] = ExN07StackingAction::GetEMinGamma(j); }
+    if(eMinElectron[j]>ExN07StackingAction::GetEMinElectron(j))
+    { eMinElectron[j] = ExN07StackingAction::GetEMinElectron(j); }
+    if(eMinPositron[j]>ExN07StackingAction::GetEMinPositron(j))
+    { eMinPositron[j] = ExN07StackingAction::GetEMinPositron(j); }
+  }
   if(!HCE) return;
   numberOfEvent++;
   ExN07CalorHitsCollection* CHC = 0;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07DetectorMessenger.hh,v 1.1 2003-03-10 01:43:35 asaim Exp $
+// $Id: ExN07DetectorMessenger.hh,v 1.2 2003-04-08 15:46:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,6 +54,7 @@ class ExN07DetectorMessenger: public G4UImessenger
     G4UIcmdWithAString*        GapMaterCmd;
     G4UIcmdWithAnInteger*      numLayerCmd;
     G4UIcmdWithABool*          SerialCmd;
+    G4UIcmdWithAnInteger*      verboseCmd;
 };
 
 

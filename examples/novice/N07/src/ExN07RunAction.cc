@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07RunAction.cc,v 1.1 2003-03-10 01:43:37 asaim Exp $
+// $Id: ExN07RunAction.cc,v 1.2 2003-04-08 15:47:01 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -66,20 +66,37 @@ void ExN07RunAction::EndOfRunAction(const G4Run* aRun)
     G4Region* region = G4RegionStore::GetInstance()->GetRegion(regName[i]);
     G4ProductionCuts* cuts = region->GetProductionCuts();
     G4cout << "Region : " << region->GetName() << G4endl;
-    G4cout << "  Production thresholds :" 
+    G4cout << " Production thresholds :" << G4endl << "   "
            << " gamma " << G4BestUnit(cuts->GetProductionCut("gamma"),"Length")
            << "    e- " << G4BestUnit(cuts->GetProductionCut("e-"),"Length")
            << "    e+ " << G4BestUnit(cuts->GetProductionCut("e+"),"Length")
            << G4endl;
-    G4cout << "  Average energy deposition :"
+    G4cout << " Average energy deposition in an event :" << G4endl << "   "
            << " Absorber " << G4BestUnit((theRun->GetTotalE(ih1))/nEvt,"Energy")
            << "      Gap " << G4BestUnit((theRun->GetTotalE(ih2))/nEvt,"Energy")
            << G4endl;
-    G4cout << "  Average track length of e+/e- :"
+    G4cout << " Average number of secondaries in an event :" << G4endl << "   "
+           << " gamma in Absorber " << (theRun->GetNGamma(ih1))/nEvt
+           << "    in Gap " << (theRun->GetNGamma(ih2))/nEvt << G4endl << "   "
+           << " e-    in Absorber " << (theRun->GetNElectron(ih1))/nEvt
+           << "    in Gap " << (theRun->GetNElectron(ih2))/nEvt << G4endl << "   "
+           << " e+    in Absorber " << (theRun->GetNPositron(ih1))/nEvt
+           << "    in Gap " << (theRun->GetNPositron(ih2))/nEvt << G4endl;
+    G4cout << " Minimum kinetic energy of generated secondaries :" << G4endl << "   "
+           << " gamma in Absorber " << G4BestUnit(theRun->GetEMinGamma(ih1),"Energy")
+           << "    in Gap " << G4BestUnit(theRun->GetEMinGamma(ih2),"Energy")
+           << G4endl << "   "
+           << " e-    in Absorber " << G4BestUnit(theRun->GetEMinElectron(ih1),"Energy")
+           << "    in Gap " << G4BestUnit(theRun->GetEMinElectron(ih2),"Energy")
+           << G4endl << "   "
+           << " e+    in Absorber " << G4BestUnit(theRun->GetEMinPositron(ih1),"Energy")
+           << "    in Gap " << G4BestUnit(theRun->GetEMinPositron(ih2),"Energy")
+           << G4endl;
+    G4cout << " Average track length of e+/e- in an event :" << G4endl << "   "
            << " Absorber " << G4BestUnit((theRun->GetTotalL(ih1))/nEvt,"Length")
            << "      Gap " << G4BestUnit((theRun->GetTotalL(ih2))/nEvt,"Length")
            << G4endl;
-    G4cout << "  Average number of steps of e+/e- :"
+    G4cout << " Average number of steps of e+/e- in an event :" << G4endl << "   "
            << " Absorber " << (theRun->GetNStep(ih1))/nEvt
            << "      Gap " << (theRun->GetNStep(ih2))/nEvt
            << G4endl;

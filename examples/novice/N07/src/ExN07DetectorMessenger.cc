@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07DetectorMessenger.cc,v 1.1 2003-03-10 01:43:36 asaim Exp $
+// $Id: ExN07DetectorMessenger.cc,v 1.2 2003-04-08 15:47:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "ExN07DetectorMessenger.hh"
 
 #include "ExN07DetectorConstruction.hh"
+#include "ExN07EventAction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithABool.hh"
@@ -71,6 +72,11 @@ ExN07DetectorMessenger::ExN07DetectorMessenger(
   SerialCmd->SetGuidance("Select calorimeters to be placed in serial or parallel.");
   SerialCmd->SetParameterName("serialize",false);
   SerialCmd->AvailableForStates(G4State_Idle);
+
+  verboseCmd = new G4UIcmdWithAnInteger("/N07/verbose", this);
+  verboseCmd->SetGuidance("Set verbosity of each event.");
+  verboseCmd->SetParameterName("vl",true,true);
+  verboseCmd->SetRange("vl>=0 && vl<10");
 }
 
 ExN07DetectorMessenger::~ExN07DetectorMessenger()
@@ -79,6 +85,7 @@ ExN07DetectorMessenger::~ExN07DetectorMessenger()
   delete GapMaterCmd;
   delete numLayerCmd;
   delete SerialCmd;
+  delete verboseCmd;
   delete N07Dir;  
 }
 
@@ -92,6 +99,8 @@ void ExN07DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   { ExN07Detector->SetNumberOfLayers(numLayerCmd->GetNewIntValue(newValue));}
   else if( command == SerialCmd )
   { ExN07Detector->SetSerialGeometry(SerialCmd->GetNewBoolValue(newValue));}
+  else if( command == verboseCmd )
+  { ExN07EventAction::SetVerboseLevel(verboseCmd->GetNewIntValue(newValue));}
 }
 
 G4String ExN07DetectorMessenger::GetCurrentValue(G4UIcommand * command)
@@ -105,6 +114,8 @@ G4String ExN07DetectorMessenger::GetCurrentValue(G4UIcommand * command)
   { ans=numLayerCmd->ConvertToString(ExN07Detector->GetNumberOfLayers()); }
   else if( command == SerialCmd )
   { ans=SerialCmd->ConvertToString(ExN07Detector->IsSerial()); }
+  else if( command == verboseCmd )
+  { ans=verboseCmd->ConvertToString(ExN07EventAction::GetVerboseLevel()); }
   return ans;
 }
 

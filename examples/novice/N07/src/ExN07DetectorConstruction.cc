@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07DetectorConstruction.cc,v 1.2 2003-03-11 06:33:15 asaim Exp $
+// $Id: ExN07DetectorConstruction.cc,v 1.3 2003-04-08 15:47:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -175,20 +175,21 @@ G4VPhysicalVolume* ExN07DetectorConstruction::Construct()
   //  
   G4VSolid* calorSolid = new G4Box("Calor",0.5*m,0.5*m,1.*m);
   G4int i;
+  G4String calNam[3] = {"Cal-A","Cal-B","Cal-C"};
   for(i=0;i<3;i++)
   {
-    calorLogical[i] = new G4LogicalVolume(calorSolid,absorberMaterial,"Cal");
+    calorLogical[i] = new G4LogicalVolume(calorSolid,absorberMaterial,calNam[i]);
     if(serial)
     {
       calorPhysical[i] = new G4PVPlacement(0,
                  G4ThreeVector(0.,0.,G4double(i-1)*2.*m),
-                 calorLogical[i],"Cal",worldLogical,false,i);
+                 calorLogical[i],calNam[i],worldLogical,false,i);
     }
     else
     {
       calorPhysical[i] = new G4PVPlacement(0,
                  G4ThreeVector(0.,G4double(i-1)*m,0.),
-                 calorLogical[i],"Cal",worldLogical,false,i);
+                 calorLogical[i],calNam[i],worldLogical,false,i);
     }
   }
  

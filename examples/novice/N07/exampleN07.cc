@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN07.cc,v 1.1 2003-03-10 01:43:35 asaim Exp $
+// $Id: exampleN07.cc,v 1.2 2003-04-08 15:46:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,8 +46,7 @@
 #include "ExN07PrimaryGeneratorAction.hh"
 #include "ExN07RunAction.hh"
 #include "ExN07EventAction.hh"
-//#include "ExN07TrackingAction.hh"
-//#include "ExN07SteppingAction.hh"
+#include "ExN07StackingAction.hh"
 
 int main(int argc,char** argv) {
 
@@ -68,8 +67,7 @@ int main(int argc,char** argv) {
  runManager->SetUserAction(new ExN07PrimaryGeneratorAction);
  runManager->SetUserAction(new ExN07RunAction);
  runManager->SetUserAction(new ExN07EventAction);
- //runManager->SetUserAction(new ExN07TrackingAction);
- //runManager->SetUserAction(new ExN07SteppingAction);
+ runManager->SetUserAction(new ExN07StackingAction);
   
  //Initialize G4 kernel
  runManager->Initialize();

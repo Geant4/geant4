@@ -20,39 +20,41 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: ExN07EventAction.hh,v 1.2 2003-04-08 15:47:00 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 
-#ifndef ExN07EventAction_h
-#define ExN07EventAction_h 1
+#ifndef ExN07StackingAction_H
+#define ExN07StackingAction_H 1
 
-#include "G4UserEventAction.hh"
 #include "globals.hh"
+#include "G4UserStackingAction.hh"
 
-class ExN07EventAction : public G4UserEventAction
+class G4Track;
+
+class ExN07StackingAction : public G4UserStackingAction
 {
   public:
-    ExN07EventAction();
-    virtual ~ExN07EventAction();
+    ExN07StackingAction();
+    virtual ~ExN07StackingAction();
 
   public:
-    virtual void   BeginOfEventAction(const G4Event*);
-    virtual void   EndOfEventAction(const G4Event*);
-    
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack);
+    virtual void PrepareNewEvent();
+
   private:
-    G4int          calorimeterCollID[6];                
-    static G4int   verboseLevel;
+    static G4int nGamma[6];
+    static G4int nElectron[6];
+    static G4int nPositron[6];
+    static G4double eMinGamma[6];
+    static G4double eMinElectron[6];
+    static G4double eMinPositron[6];
 
   public:
-    static void SetVerboseLevel(G4int i)
-    { verboseLevel = i; }
-    static G4int GetVerboseLevel()
-    { return verboseLevel; }
+    static G4int GetNGamma(G4int i) { return nGamma[i]; }
+    static G4int GetNElectron(G4int i) { return nElectron[i]; }
+    static G4int GetNPositron(G4int i) { return nPositron[i]; }
+    static G4double GetEMinGamma(G4int i) { return eMinGamma[i]; }
+    static G4double GetEMinElectron(G4int i) { return eMinElectron[i]; }
+    static G4double GetEMinPositron(G4int i) { return eMinPositron[i]; }
 };
-
 
 #endif
 
-    
