@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include <strstream.h>
 
+using namespace std;
 
 int main(int argc, char** argv)
 {

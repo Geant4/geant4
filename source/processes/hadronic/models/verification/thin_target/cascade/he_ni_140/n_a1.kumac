@@ -14,12 +14,18 @@ set NDVY 010205
  null 0 150 0.001 100
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 45 deg'
 
-
  hi/file 1 bin.paw
  set dmod 1
  hi/pl 29 shist
- line 100 1.6 110 1.6
- itx 115 35 'Binary'
+ line 90 1.4 100 1.4
+ itx 105 25 'Binary'
+ close 1
+
+ hi/file 1 abr.paw
+ set dmod 3
+ hi/pl 29 shist
+ line 90 1 100 1
+ itx 105 10 'Abrasion'
  close 1
 
 ve/create X(9) R 39.7 43.1 45 51.3 56.3 61.9 68.4 75.9 84.7
