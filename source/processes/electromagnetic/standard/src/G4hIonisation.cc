@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisation.cc,v 1.4 1999-07-27 10:41:34 urban Exp $
+// $Id: G4hIonisation.cc,v 1.5 1999-07-28 13:08:26 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -31,10 +31,6 @@
 
 #include "G4hIonisation.hh"
 #include "G4UnitsTable.hh"
-
-G4double G4hEnergyLoss::LowestKineticEnergy= 1.00*keV;
-G4double G4hEnergyLoss::HighestKineticEnergy= 100.*TeV;
-G4int G4hEnergyLoss::TotBin  ;
 
 // constructor and destructor
  
@@ -66,6 +62,13 @@ void G4hIonisation::SetPhysicsTableBining(G4double lowE, G4double highE,
 void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 //  just call BuildLossTable+BuildLambdaTable
 {
+  if(&aParticleType == G4Proton::Proton())
+  {
+                        LowestKineticEnergy= 1.00*keV;
+                        HighestKineticEnergy= 100.*TeV;
+                        TotBin=100  ;
+  }
+
   ParticleMass = aParticleType.GetPDGMass() ;
 
   Charge = aParticleType.GetPDGCharge();

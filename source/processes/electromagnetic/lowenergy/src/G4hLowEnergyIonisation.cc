@@ -28,10 +28,6 @@
 #include "G4hLowEnergyIonisation.hh"
 #include "G4UnitsTable.hh"
 
-G4double G4hEnergyLoss::LowestKineticEnergy  = 10.0*eV ;
-G4double G4hEnergyLoss::HighestKineticEnergy = 100.0*TeV ;
-G4int    G4hEnergyLoss::TotBin = 300 ;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
@@ -101,6 +97,13 @@ void G4hLowEnergyIonisation::SetNuclearStoppingOff()
 
 void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 {
+  if(&aParticleType == G4Proton::Proton())
+  {
+    LowestKineticEnergy = 10.*eV ;
+    HighestKineticEnergy = 100.*TeV ;
+    TotBin = 300 ;
+  }
+
   // cuts for  electron ....................
   DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
 
