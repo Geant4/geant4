@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeplusAnnihilation.cc,v 1.4 1999-05-03 11:04:14 urban Exp $
+// $Id: G4IeplusAnnihilation.cc,v 1.5 1999-06-25 14:59:19 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -75,10 +75,6 @@ G4IeplusAnnihilation::~G4IeplusAnnihilation()
       theMeanFreePathTable->clearAndDestroy();
       delete theMeanFreePathTable;
    }
-     if (theMeanFreePathTable) {
-        theMeanFreePathTable->clearAndDestroy();
-        delete theMeanFreePathTable;
-     }
      if (theNlambdaTable) {
         theNlambdaTable->clearAndDestroy();
         delete theNlambdaTable;
