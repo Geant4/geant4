@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.5 1999-07-19 17:19:58 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.6 1999-07-23 14:10:14 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,7 @@ G4MagInt_Driver::AccurateAdvance(
   G4double y[G4FieldTrack::ncompSVEC], dydx[G4FieldTrack::ncompSVEC];
   G4double ystart[G4FieldTrack::ncompSVEC]; 
   G4double  x1, x2;
-  G4bool succeeded = true;
+  G4bool succeeded = true, lastStepSucceeded;
 
   //  Assume that hstep > 0 
 
@@ -85,9 +85,7 @@ G4MagInt_Driver::AccurateAdvance(
   nstp=1;
 
   do{
-#ifdef G4DEBUG
-     G4ThreeVector StartPos( y[0], y[1], y[2] ); 
-#endif
+     G4ThreeVector StartPos( y[0], y[1], y[2] );   
 
      pIntStepper->RightHandSide( y, dydx );
 
@@ -100,18 +98,109 @@ G4MagInt_Driver::AccurateAdvance(
                           //   could otherwise force lots of small last steps.
      }
 
+     // Perform the Integration
+     // 
      OneGoodStep(y,dydx,x,h,eps,hdid,hnext) ;
+     //--------------------------------------
 
+     lastStepSucceeded= (hdid == h);   
 #ifdef G4DEBUG
-     if(hdid == h) noFullIntegr++ ; else noSmallIntegr++ ;
+     if(lastStepSucceeded) noFullIntegr++ ; else noSmallIntegr++ ;
      G4ThreeVector EndPos( y[0], y[1], y[2] );
 
+     // Check the endpoint
      G4double endPointDist= (EndPos-StartPos).mag(); 
      if( endPointDist >= h*(1.+perMillion) ){
+        WarnEndPointTooFar ( endPointDist, h, eps, dbg ); 
+        noBadSteps  ++;
+     } else { // ie (!dbg)
+        noGoodSteps ++;
+     } 
+     
+#endif
+
+     // Check the proposed next stepsize
+     if(fabs(hnext) <= Hmin())
+     {
+        // If simply a very small interval is being integrated, do not warn
+        if( (x < x2 * (1-eps) ) &&     //  The last step can be small: it's OK
+            (fabs(hstep) > Hmin())     //   and if we are asked, it's OK
+            //   && (hnext < hstep * PerThousand ) 
+          )
+	  //  Issue WARNING
+	  WarnSmallStepSize( hnext, hstep, h, x-x1, nstp ); 
+        else 
+	  succeeded = false;  // Meaningful only if we break out of the loop.
+
+        lastStep = true;   // ensure that this was the last step
+     }
+
+     h = hnext ;
+  }while (((nstp++)<=maxstp) &&
+          (x < x2)           //  Have we reached the end ?
+                             //   --> a better test might be x-x2 > an_epsilon
+          && (!lastStep)
+         );
+
+  if(lastStep) 
+     succeeded= lastStepSucceeded;   // If it was a "forced" last step
+
+  for(i=0;i<nvar;i++)  ystart[i] = y[i] ;
+
+  if(nstp > maxstp){
+     WarnTooManyStep( x1, x2, x );  //  Issue WARNING
+     succeeded = false;
+  }
+
+  // Put back the values.
+  y_current.LoadFromArray( ystart );
+  y_current.SetCurveLength( x );
+
+  return succeeded;
+
+}  // end of AccurateAdvance ...........................
+
+void
+G4MagInt_Driver::WarnSmallStepSize( G4double hnext, G4double hstep, 
+				    G4double h, G4double xDone,
+				    G4int nstp)
+{
+  static G4int noWarningsIssued =0;
+  const  G4int maxNoWarnings = 100; 
+  if( noWarningsIssued < maxNoWarnings ){
+    G4cerr<< " Warning (G4MagIntegratorDriver): The stepsize for the " 
+	  << " next iteration=" << hnext << " is too small - in Step number "
+	  << nstp << "." << endl;
+    G4cerr << "     Requested step size was " << hstep << " ." << endl ;
+    G4cerr << "     Previous  step size was " << h     << " ." << endl ;
+    G4cerr << "     The minimum for the driver is " << Hmin()  << endl ;
+    G4cerr << "     The integrations has already gone " << xDone << endl ;
+  }
+  noWarningsIssued++;
+}
+
+void
+G4MagInt_Driver::WarnTooManyStep( G4double x1start, 
+				  G4double x2end, 
+				  G4double xCurrent)
+{
+    G4cerr << " Warning (G4MagIntegratorDriver): The number of steps " 
+         << "used in the Integration driver (Runge-Kutta) is too many.  "
+	 << endl ;
+    G4cerr << "Integration of the interval was not completed - only a " 
+         << (xCurrent-x1start)*100/(x2end-x1start)
+	   <<" % fraction of it was Done." << endl;
+}
+
+void
+G4MagInt_Driver::WarnEndPointTooFar (G4double endPointDist, 
+				     G4double   h , 
+				     G4double  eps,
+				     G4int     dbg)
+{
 	static G4double maxRelError= 0.0;
 	G4bool isNewMax, prNewMax;
 
-        noBadSteps  ++;
         isNewMax = endPointDist > (1.0 + maxRelError) * h;
         prNewMax = endPointDist > (1.0 + 1.05 * maxRelError) * h;
 	if( isNewMax )
@@ -136,63 +225,8 @@ G4MagInt_Driver::AccurateAdvance(
 		     << "  rel = " << (h-endPointDist) / h 
 		     << endl;
 	   }
-	} else { // ie (!dbg)
-	   noGoodSteps ++;
-	} // end if (dbg)
-     }
-#endif
-
-     if(fabs(hnext) <= Hmin())
-     {
-        // If simply a very small interval is being integrated, do not warn
-        if( (x < x2 * (1-eps) ) &&     //  The last step can be small: it's OK
-            (fabs(hstep) > Hmin())     //   and if we are asked, it's OK
-            //   && (hnext < hstep * PerThousand ) 
-          )
-        { 
-	   G4cerr<< " Warning (G4MagIntegratorDriver): The stepsize for the " 
-	       " next iteration=" << hnext << " is too small - in Step number "
-		 <<nstp << "." << endl;
-	   G4cerr << "     Requested step size was " << hstep << " ." << endl ;
-	   G4cerr << "     Previous  step size was " << h     << " ." << endl ;
-	   G4cerr << "     The minimum for the driver is " << Hmin()  << endl ;
-        }
-        else 
-	  succeeded = false;  // Meaningful only if we break out of the loop.
-
-        lastStep = true;   // ensure that this was the last step
-     }
-
-     h = hnext ;
-  }while (((nstp++)<=maxstp) &&
-          (x < x2)           //  Have we reached the end ?
-                             //   --> a better test might be x-x2 > an_epsilon
-          && (!lastStep)
-         );
-
-  if(lastStep) 
-     succeeded= (hdid == h);   // If it was a "forced" last step
-
-  for(i=0;i<nvar;i++)  ystart[i] = y[i] ;
-
-  if(nstp > maxstp){
-   
-    G4cerr << " Warning (G4MagIntegratorDriver): The number of steps " 
-         << "used in the Integration driver (Runge-Kutta) is too many.  "
-	 << endl ;
-    G4cerr << "Integration of the interval was not completed - only a " 
-         << (x-x1)*100/(x2-x1)<<" % fraction of it was Done." << endl;
-    succeeded = false;
-  }
-
-  // Put back the values.
-  y_current.LoadFromArray( ystart );
-  y_current.SetCurveLength( x );
-
-  return succeeded;
-
-}  // end of AccurateAdvance ...........................
-
+	}
+}
 // ---------------------------------------------------------
 
 void
