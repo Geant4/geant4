@@ -3,9 +3,8 @@
 #
 ifeq ($(G4SYSTEM),Linux-g++)
   CXX       := g++
-  GNU_GCC = 1
-  CXXFLAGS  := -ansi -pedantic -W -Wall -Wno-non-virtual-dtor -Wno-long-long
-  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe -DGNU_GCC
+  CXXFLAGS  := -W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
+  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
   ifdef G4OPTIMISE
     CXXFLAGS  += -O
     FCFLAGS   := -O

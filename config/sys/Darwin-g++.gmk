@@ -12,8 +12,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
 # choice of GNU compilers:
   CXX       := g++2
 # CXX       := g++3
-  GNU_GCC = 1
-  CXXFLAGS  := -Wall -ansi -pedantic -pipe -fno-for-scope -DGNU_GCC
+  CXXFLAGS  := -Wall -ansi -pedantic -pipe
 # optionally add verbose flag
 # CXXFLAGS  += -v
   ifdef G4OPTIMISE
