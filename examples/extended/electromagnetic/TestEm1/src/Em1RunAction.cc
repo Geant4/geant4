@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1RunAction.cc,v 1.16 2002-06-03 13:49:28 maire Exp $
+// $Id: Em1RunAction.cc,v 1.17 2002-12-05 16:08:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -154,8 +154,14 @@ void Em1RunAction::EndOfRunAction(const G4Run* aRun)
     { //nb of tracks and steps per event
       G4double dNbOfEvents = double(NbOfEvents);
     
-      G4long oldform = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
-      G4int  oldprec = G4cout.precision(4);
+#ifdef G4USE_STD_NAMESPACE
+      G4std::ios::fmtflags mode = G4cout.flags();
+      G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#else 
+      G4long mode = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#endif
+
+      G4int  prec = G4cout.precision(4);
       
       G4cout << "\n nb tracks/event"
              << "   neutral: " << G4std::setw(10) << NbOfTraks0/dNbOfEvents
@@ -176,8 +182,8 @@ void Em1RunAction::EndOfRunAction(const G4Run* aRun)
                                                                /dNbOfEvents;
       G4cout << G4endl;    
                          
-      G4cout.setf(oldform,G4std::ios::floatfield);
-      G4cout.precision(oldprec);       
+      G4cout.setf(mode,G4std::ios::floatfield);
+      G4cout.precision(prec);       
     }         
 
   // delete and remove all contents in ProcCounter 
