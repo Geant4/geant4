@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.43 2002-11-29 18:05:29 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.44 2002-11-29 18:19:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -746,6 +746,7 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
        }
     }
 
+#ifdef DEBUG_INTERSECTS_CHORD
     // printIntersection( 
     // StartPointA, EndPointB, LinearStepLength, IntersectionPoint, NewSafety
 
@@ -757,6 +758,7 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
 	   << "In T/F " << intersects     << "  " 
 	   << "IntrPt=" << G4std::setw(8) << IntersectionPoint << " " 
 	   << G4endl;
+#endif
 
     return intersects;
 }
