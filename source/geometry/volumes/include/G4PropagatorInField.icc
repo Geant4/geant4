@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.icc,v 1.7 2000-04-25 16:15:03 gcosmo Exp $
+// $Id: G4PropagatorInField.icc,v 1.8 2000-05-16 17:39:25 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,6 +112,16 @@ inline void G4PropagatorInField::SetAccuraciesWithDeltaOneStep(G4double valDelta
 { 
   fDelta_One_Step_Value= valDeltaOneStep;  
   fDelta_Intersection_Val = 0.4 * fDelta_One_Step_Value;
+}
+
+inline void G4PropagatorInField::SetDeltaOneStep(G4double valDeltaOneStep)
+{ 
+  fDelta_One_Step_Value= valDeltaOneStep;  
+}
+
+inline void G4PropagatorInField::SetDeltaIntersection(G4double valDeltaIntersection)
+{
+  fDelta_Intersection_Val = valDeltaIntersection;
 }
 
 inline
