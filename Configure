@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.14 2001-12-11 11:40:44 sadilov Exp $
+# $Id: Configure,v 1.15 2001-12-12 23:06:04 sadilov Exp $
 #
-# Generated on Mon Dec 10 23:26:27 CET 2001 [metaconfig 3.0 PL70]
+# Generated on Wed Dec 12 23:57:15 CET 2001 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -129,9 +129,9 @@ true)
 esac
 
 : Configure runs within the UU subdirectory
-test -d UU || mkdir UU
+test -d .config/UU || mkdir -p .config/UU
 unset CDPATH
-cd UU && rm -f ./*
+cd .config/UU && rm -f ./*
 
 eunicefix=''
 g4compiler=''
@@ -426,14 +426,14 @@ while test $# -gt 0; do
 	-install) shift; install=yes;;
 	-f)
 		shift
-		cd ..
+		cd ../..
 		if test -r "$1"; then
 			config_sh="$1"
 		else
 			echo "$me: cannot read config file $1." >&2
 			error=true
 		fi
-		cd UU
+		cd .config/UU
 		shift;;
 	-h) shift; error=true;;
 	-r) shift; reuseval=true;;
@@ -688,7 +688,7 @@ case "$src" in
 #echo "rsrc=$rsrc"
 ;;
 ./*) 	cur_dir=`pwd`
-	cd ../$src
+	cd ../../$src
 	src=`pwd`
 	cd $cur_dir
 	rsrc="$src/.."
@@ -696,7 +696,7 @@ rsrc="$src/.."
 #echo "src=$src"
 #echo "rsrc=$rsrc"
 ;;
-*) rsrc="../$src"
+*) rsrc="../../$src"
 #echo "rsrc=$rsrc"
 ;;
 esac
@@ -709,10 +709,10 @@ then
 else
 	rsrc=''
 	for src in . .. ../.. ../../.. ../../../..; do
-		if test -f ../$src/Configure && \
-			$contains "^package=$package" ../$src/Configure >/dev/null 2>&1
+		if test -f ../../$src/Configure && \
+			$contains "^package=$package" ../../$src/Configure >/dev/null 2>&1
 		then
-			rsrc=../$src
+			rsrc=../../$src
 			break
 		fi
 	done
@@ -733,10 +733,11 @@ case "$rsrc" in
 		echo "Ok, I've found them under $src"
 	else
 		echo "Sorry, I can't seem to be able to locate $package sources." >&4
+		echo "Please, use absolute path or relative with './' to Configure." >&4
 		exit 1
 	fi
 	;;
-../.) ;;
+../../.) ;;
 *)
 	echo " "
 	echo "Sources for $package found in $src" >&4
@@ -860,9 +861,9 @@ true)
 	. $config
 	test "$override" && . ./optdef.sh
 	echo " "
-	cd ..
-	. UU/extract
-	rm -rf UU
+	cd ../..
+	. .config/UU/extract
+	rm -rf .config/UU
 	echo "Done."
 	exit 0
 	;;
@@ -891,7 +892,7 @@ echo " "
 echo " "
 fi
 
-trap 'echo " ";rm -rf ../UU; test -d ../UU && rm -rf X $rmlist; exit 1' 1 2 3 15
+trap 'echo " ";rm -rf ../../.config/UU; test -d ../../.config/UU && rm -rf X $rmlist; exit 1' 1 2 3 15
 
 : create .config dir to save info across Configure sessions
 test -d ../.config || mkdir ../.config
@@ -910,7 +911,7 @@ case "$user" in
 '') user=`whoami 2>&1`;;
 esac
 if [ X$install = Xyes ] ; then
-if $contains "^$user\$" ../.config/instruct >/dev/null 2>&1; then
+if $contains "^$user\$" ../../.config/instruct >/dev/null 2>&1; then
 	firsttime=false
 	echo " "
 	rp='Would you like to see the instructions?'
@@ -976,7 +977,7 @@ EOH
 	dflt='Type carriage return to continue'
 	. ./myread
 	case "$firsttime" in
-	true) echo $user >>../.config/instruct;;
+	true) echo $user >>../../.config/instruct;;
 	esac
 fi
 
@@ -1220,9 +1221,11 @@ esac
 : Get old answers from old config file if Configure was run on the
 : same system, otherwise use the hints.
 hint=default
-cd ..
+cd ../..
 
+	if $test -d $src/hints ; then
 	(cd $src/hints; ls -C *.sh 2> /dev/null) | $sed 's/\.sh/   /g' >&4 
+	fi
 	dflt=''
 	: Half the following guesses are probably wrong... If you have better
 	: tests or hints, please send them to Serguei.Sadilov@cern.ch
@@ -1434,11 +1437,11 @@ cd ..
 		esac
 	else
 		if test -f /vmunix -a -f $src/hints/news_os.sh; then
-			(what /vmunix | UU/tr '[A-Z]' '[a-z]') > UU/kernel.what 2>&1
-			if $contains news-os UU/kernel.what >/dev/null 2>&1; then
+			(what /vmunix | .config/UU/tr '[A-Z]' '[a-z]') > .config/UU/kernel.what 2>&1
+			if $contains news-os .config/UU/kernel.what >/dev/null 2>&1; then
 				osname=news_os
 			fi
-			$rm -f UU/kernel.what
+			$rm -f .config/UU/kernel.what
 		elif test -d c:/.; then
 			set X $myuname
 			osname=os2
@@ -1493,12 +1496,12 @@ If your OS version has no hints, DO NOT give a wrong version -- say "none".
 
 EOM
 	rp="Which of these apply, if any?"
-	. UU/myread
+	. .config/UU/myread
 	tans=$ans
 	for file in $tans; do
 		if $test -f $src/hints/$file.sh; then
 			. $src/hints/$file.sh
-			$cat $src/hints/$file.sh >> UU/config.sh
+			$cat $src/hints/$file.sh >> .config/UU/config.sh
 		elif $test X$tans = X -o X$tans = Xnone ; then
 			: nothing
 		else
@@ -1506,11 +1509,11 @@ EOM
 			echo "$file.sh does not exist"
 			dflt=$file
 			rp="hint to use instead?"
-			. UU/myread
+			. .config/UU/myread
 			for file in $ans; do
 				if $test -f "$src/hints/$file.sh"; then
 					. $src/hints/$file.sh
-					$cat $src/hints/$file.sh >> UU/config.sh
+					$cat $src/hints/$file.sh >> .config/UU/config.sh
 				elif $test X$ans = X -o X$ans = Xnone ; then
 					: nothing
 				else
@@ -1606,7 +1609,7 @@ EOM`
 
 dflt="Press [Enter] for default settings"
 rp=$g4message
-. UU/myread
+. .config/UU/myread
 gans=$ans
 
 	case $gans in
@@ -1634,7 +1637,7 @@ gans=$ans
 		esac
 		dflt=$g4osname
 		rp="What is your OS'?"
-		. UU/myread
+		. .config/UU/myread
 		tans=$ans
 
 		if test X$tans != X$g4osnamerec ; then
@@ -1649,7 +1652,7 @@ EOM
 
 		dflt=$tans
 		rp="Confirm your selection or set native '$g4osnamerec'!"
-		. UU/myread
+		. .config/UU/myread
 		tans=$ans
 		fi
 
@@ -1678,7 +1681,7 @@ EOM
 		esac
 		dflt=$g4compiler
 		rp="Which C++ compiler?"
-		. UU/myread
+		. .config/UU/myread
 		tans=$ans
 
 		if test X$tans != X$g4compilerrec ; then
@@ -1693,7 +1696,7 @@ EOM
 
 		dflt=$tans
 		rp="Confirm your selection or set recommended '$g4compilerrec'!"
-		. UU/myread
+		. .config/UU/myread
 		tans=$ans
 		fi
 
@@ -1721,7 +1724,7 @@ G4SYSTEM is now set to $g4system.
 
 EOM
 
-cd UU
+cd .config/UU
 
 myuname=`( ($uname -a) 2>/dev/null || hostname) 2>&1`
 myuname=`echo $myuname | $sed -e 's/^[^=]*=//' -e 's/\///g' | \
@@ -1729,7 +1732,7 @@ myuname=`echo $myuname | $sed -e 's/^[^=]*=//' -e 's/\///g' | \
 newmyuname="$myuname"
 dflt=n
 
-cd ..
+cd ../..
 if [ X$install = X ] ; then
 	if test -f $src/.config/bin/$g4system/env.sh; then
 	cat >&2 <<EOM
@@ -1748,7 +1751,7 @@ You can use these files for further modifications
 (adding your own environments).
 ---------------------------------------------------
 EOM
-	$rm -rf UU
+	$rm -rf .config/UU
 
 cp -i $src/.config/bin/$g4system/env.csh .
 cp -i $src/.config/bin/$g4system/env.sh  .
@@ -1761,15 +1764,15 @@ else
 	echo "should start with \$G4INSTALL/Configure -install."
 	echo "(where \$G4INSTALL is Geant4 install directory)."
 	echo " "
-	$rm -rf UU
+	$rm -rf .config/UU
 	exit 1
 	fi
 fi
-cd UU
+cd .config/UU
 
 case "$knowitall" in
 '')
-	cd ..
+	cd ../..
 	if test -f $src/.config/bin/$g4system/config.sh; then
 		if $contains myuname= $src/.config/bin/$g4system/config.sh >/dev/null 2>&1; then
 			eval "`grep myuname= $src/.config/bin/$g4system/config.sh`"
@@ -1778,17 +1781,17 @@ case "$knowitall" in
 			dflt=y
 		fi
 	fi
-	cd UU
+	cd .config/UU
 	;;
 *) dflt=y;;
 esac
 
-cd ..
+cd ../..
 
 if test -f $src/.config/bin/$g4system/config.sh; then
 	echo " "
 	rp="There exists a config.sh file. Shall I use it to set the defaults?"
-	. UU/myread
+	. .config/UU/myread
 	case "$ans" in
 	n*|N*) echo "OK, I'll ignore it."; mv $src/.config/bin/$g4system/config.sh $src/.config/bin/$g4system/config.sh.old;;
 	*)  echo "Fetching default answers from your old config.sh file..." >&4
@@ -1796,7 +1799,7 @@ if test -f $src/.config/bin/$g4system/config.sh; then
 		tmp_c="$c"
 		tmp_sh="$sh"
 		. $src/.config/bin/$g4system/config.sh
-		cp $src/.config/bin/$g4system/config.sh UU
+		cp $src/.config/bin/$g4system/config.sh .config/UU
 		n="$tmp_n"
 		c="$tmp_c"
 		: Older versions did not always set $sh.  Catch re-use of such
@@ -1809,18 +1812,18 @@ if test -f $src/.config/bin/$g4system/config.sh; then
 	esac
 fi
 
-cd UU
+cd .config/UU
 ;;
 *)
 	echo " "
 	echo "Fetching default answers from $config_sh..." >&4
 	tmp_n="$n"
 	tmp_c="$c"
-	cd ..
+	cd ../..
 	cp $config_sh config.sh 2>/dev/null
 	chmod +w config.sh
 	. ./config.sh
-	cd UU
+	cd .config/UU
 	cp ../config.sh .
 	n="$tmp_n"
 	c="$tmp_c"
@@ -1979,7 +1982,7 @@ case "$exp_file" in
 	;;
 esac
 
-cd ..
+cd ../..
 while test "$type"; do
 	redo=''
 	rp="$orig_rp"
@@ -1987,9 +1990,9 @@ while test "$type"; do
 	case "$tilde" in
 	true) rp="$rp ";;
 	esac
-	. UU/myread
-	if test -f UU/getfile.ok && \
-		$contains "^$ans\$" UU/getfile.ok >/dev/null 2>&1
+	. .config/UU/myread
+	if test -f .config/UU/getfile.ok && \
+		$contains "^$ans\$" .config/UU/getfile.ok >/dev/null 2>&1
 	then
 		value="$ans"
 		ansexp="$ans"
@@ -2008,7 +2011,7 @@ while test "$type"; do
 		'') value="$ans"
 			ansexp="$ans";;
 		*)
-			value=`UU/filexp $ans`
+			value=`.config/UU/filexp $ans`
 			case $? in
 			0)
 				if test "$ans" != "$value"; then
@@ -2098,7 +2101,7 @@ while test "$type"; do
 					dflt=n
 				fi
 				rp="$what $value doesn't exist.  Use that name anyway?"
-				. UU/myread
+				. .config/UU/myread
 				dflt=''
 				case "$ans" in
 				y*) type='';;
@@ -2111,7 +2114,7 @@ while test "$type"; do
 		;;
 	esac
 done
-cd UU
+cd .config/UU
 ans="$value"
 rp="$orig_rp"
 dflt="$orig_dflt"
@@ -2125,9 +2128,9 @@ echo " "
 #echo "SSS"
 
 if [ X$src = X. ] ; then
-	cd ..
+	cd ../..
 	abssrc=`pwd`
-	cd UU
+	cd .config/UU
 else
 	abssrc=$src
 fi
@@ -2328,12 +2331,11 @@ CLHEP_BASE_DIR:			$g4clhep_base_dir
 
 According to it will be set:
 
-CLHEP_INCLUDE_DIR:		\\$CLHEP_BASE_DIR/include
-CLHEP_LIB_DIR:			\\$CLHEP_BASE_DIR/lib
-CLHEP_LIB:			CLHEP
+CLHEP_INCLUDE_DIR		
+CLHEP_LIB_DIR			
+CLHEP_LIB		
 
-If you need to change one of those last three you can do it by editing
-the generated config.sh at the end of this session.
+You will be asked about customizing these next.
 EOM`
 
 
@@ -2383,6 +2385,58 @@ rp=$g4message
 #		;;
 #	esac
 #done
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+You can customize paths of you CLHEP installation:
+
+1) CLHEP_INCLUDE_DIR:		$g4clhep_include_dir
+2) CLHEP_LIB_DIR:			$g4clhep_lib_dir
+3) CLHEP_LIB:			$g4clhep_lib
+
+Select from list above (e.g. 2) 
+EOM`
+
+
+dflt="Press [Enter] for default settings"
+#fn='d~'
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+
+	1) 
+		dflt=$g4clhep_include_dir
+		fn='d~'
+		rp="Where is CLHEP include directory?"
+		. ./getfile
+		g4clhep_include_dir=$ans
+		;;
+	2) 
+		dflt=$g4clhep_lib_dir
+		fn='d~'
+		rp="Where is CLHEP lib directory?"
+		. ./getfile
+		g4clhep_lib_dir=$ans
+		;;
+	3) 
+		dflt=$g4clhep_lib
+		rp="What is CLHEP lib title?"
+		. ./myread
+		g4clhep_lib=$ans
+		;;
+#	[eE]) 
+##		break
+##		;;
+	*) 
+#		echo " "
+		break
+		;;
+	esac
+done
 echo " "
 
 case "$g4data" in
@@ -2825,6 +2879,12 @@ fi
 
 echo " "
 
+case "$g4ui_none" in
+'')
+	g4ui_none=n
+	;;
+esac
+
 # Set by default!
 case "$g4ui_build_terminal_session" in
 '')
@@ -2909,6 +2969,34 @@ case "$g4ui_use_tcsh" in
 esac
 
 echo ""
+
+g4message=`cat << EOM
+
+  G4UI_NONE
+
+If set, no UI sessions nor any UI libraries are built. This can be useful
+when running a pure batch job or in a user framework having its own UI system.
+
+EOM`
+
+dflt=$g4ui_none
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_none=n
+		;;
+	y*|Y*) 
+		g4ui_none=y
+		;;
+	esac
+
+case $g4ui_none in
+
+n)
 
 g4message=`cat << EOM
 
@@ -3103,7 +3191,8 @@ gans=y
 		;;
 	esac
 
-
+;;
+esac
 echo " "
 case "$g4use_hepodbms" in
 '')
@@ -3330,7 +3419,7 @@ g4message=`cat << EOM
 
   G4VIS_NONE
 
-DESCRIPTION
+If specified, no visualization drivers will be built or used.
 
 EOM`
 
@@ -3348,6 +3437,10 @@ gans=$ans
 		g4vis_none=y
 		;;
 	esac
+
+case $g4vis_none in
+
+n)
 
 g4message=`cat << EOM
 
@@ -3742,6 +3835,8 @@ gans=y
 		;;
 	esac
 
+;;
+esac
 echo " "
 
 case "$g4wanalysis_use" in
@@ -3784,8 +3879,8 @@ echo "End of configuration phase."
 echo " "
 
 : back to where it started
-if test -d ../UU; then
-	cd ..
+if test -d ../../.config/UU; then
+	cd ../..
 fi
 
 : configuration may be patched via a 'config.over' file
@@ -3793,7 +3888,7 @@ if $test -f config.over; then
 	echo " "
 	dflt=y
 	rp='A config.over file exists.  Do you wish to load it?'
-	. UU/myread
+	. .config/UU/myread
 	case "$ans" in
 	n*) echo "OK, I'll ignore it.";;
 	*)	. ./config.over
@@ -3939,11 +4034,11 @@ awk '/^#define/ {printf "%s=%s\n",$2,$3}' $src/patchlevel.h >> $g4conf/config.sh
 echo "CONFIG=true" >> $g4conf/config.sh
 
 : propagate old symbols
-if $test -f UU/config.sh; then
-	<UU/config.sh sort | uniq >UU/oldconfig.sh
-	sed -n 's/^\([a-zA-Z_0-9]*\)=.*/\1/p' config.sh config.sh UU/oldconfig.sh |\
-	sort | uniq -u >UU/oldsyms
-	set X `cat UU/oldsyms`
+if $test -f .config/UU/config.sh; then
+	<.config/UU/config.sh sort | uniq >.config/UU/oldconfig.sh
+	sed -n 's/^\([a-zA-Z_0-9]*\)=.*/\1/p' config.sh config.sh .config/UU/oldconfig.sh |\
+	sort | uniq -u >.config/UU/oldsyms
+	set X `cat .config/UU/oldsyms`
 	shift
 	case $# in
 	0) ;;
@@ -3955,7 +4050,7 @@ Hmm...You had some extra variables I don't know about...
 
 EOM
 		echo "# Variables propagated from previous config.sh file." >>.config/bin/$g4system/config.sh
-		for sym in `cat UU/oldsyms`; do
+		for sym in `cat .config/UU/oldsyms`; do
 			echo "    Propagating $hint variable "'$'"$sym..."
 			eval 'tmp="$'"${sym}"'"'
 			echo "$tmp" | \
@@ -3971,7 +4066,7 @@ Id='$Id'
 : Finish up by extracting the .SH files
 case "$alldone" in
 exit)
-	$rm -rf UU
+	$rm -rf .config/UU
 	echo "Done."
 	exit 0
 	;;
@@ -3990,7 +4085,7 @@ To do so, use a shell escape now (e.g. !vi $g4conf/config.sh).
 
 EOM
 	rp="Press [Enter] to start installation or use a shell escape to edit config.sh:"
-	. UU/myread
+	. .config/UU/myread
 	nostick=''
 	case "$ans" in
 	'') ;;
@@ -4005,7 +4100,7 @@ esac
 
 echo " "
 exec 1>&4
-. ./UU/extract
+. ./.config/UU/extract
 
 if $contains '^depend:' [Mm]akefile >/dev/null 2>&1; then
 	dflt=y
@@ -4022,7 +4117,7 @@ EOM
 		;;
 	esac
 	rp="Run make depend now?"
-	. UU/myread
+	. .config/UU/myread
 	case "$ans" in
 	y*)
 		make depend && echo "Now you must run a make."
@@ -4049,7 +4144,7 @@ else
 fi
 
 $rm -f kit*isdone ark*isdone
-$rm -rf UU
+$rm -rf .config/UU
 
 : End of Configure
 
