@@ -183,7 +183,7 @@
    }
    delete [] theDecayConstants;
 //    cout << "all delayed "<<delayed<<G4endl; 
-   G4int nPhotons = 0;
+   unsigned int nPhotons = 0;
    if(thePhotons!=NULL)
    {
      nPhotons = thePhotons->size();
