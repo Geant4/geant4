@@ -1,4 +1,4 @@
-$Id: History,v 1.16 1999-05-06 02:17:08 gcosmo Exp $
+$Id: History,v 1.17 1999-05-06 15:47:26 stesting Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+6th May 1999  John Allison
+- Removed extra library for circular dependencies.  Now all solved!
 
 5th May 1999  Gabriele Cosmo
 - Fixed typo in architecture.gmk and defined OSPACEDIR to point to the G4
