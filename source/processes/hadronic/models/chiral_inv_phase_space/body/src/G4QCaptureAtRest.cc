@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.5 2004-11-09 11:11:09 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.6 2004-12-01 15:16:29 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -434,6 +434,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #endif
     G4ParticleDefinition* theDefinition;
     if     (PDGCode==90000001) theDefinition = G4Neutron::Neutron();
+    else if(PDGCode==90001000) theDefinition = G4Proton::Proton();//While it can be in ions
     else if(PDGCode==91000000) theDefinition = G4Lambda::Lambda();
     else if(PDGCode==91000999) theDefinition = G4SigmaPlus::SigmaPlus();
     else if(PDGCode==90999001) theDefinition = G4SigmaMinus::SigmaMinus();
@@ -479,9 +480,9 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
 #endif
   }
   delete output;
-  if(projPDG==13) aParticleChange.SetLocalEnergyDeposit(0.);   // Fill EnDepMuon(EMCascade)
-  else aParticleChange.SetLocalEnergyDeposit(EnergyDeposition);// Fill EnergyDepos for Tau
-  aParticleChange.SetStatusChange(fStopAndKill);           // Kill the absorbed particle
+  if(projPDG==13) aParticleChange.ProposeLocalEnergyDeposit(0.);   // Fill EnDepMuon(EMCascade)
+  else aParticleChange.ProposeLocalEnergyDeposit(EnergyDeposition);// Fill EnergyDepos for Tau
+  aParticleChange.ProposeTrackStatus(fStopAndKill);           // Kill the absorbed particle
   //return &aParticleChange;                               // This is not enough (ClearILL)
   return G4VRestProcess::AtRestDoIt(track, step);
 }

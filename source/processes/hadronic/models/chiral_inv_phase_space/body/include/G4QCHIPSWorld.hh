@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.hh,v 1.22 2004-03-25 10:44:30 gunter Exp $
+// $Id: G4QCHIPSWorld.hh,v 1.23 2004-12-01 15:16:28 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCHIPSWorld ----------------
@@ -65,7 +65,7 @@ public:
 // Body
 private:
   //static G4QCHIPSWorld* aWorld;             // Pointer to the CHIPS World
-  static G4QParticleVector & GetQWorld();
+  static G4QParticleVector& GetQWorld();
 };
 
  
