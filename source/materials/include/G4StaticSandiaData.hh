@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4StaticSandiaData.hh,v 1.5 2001-07-11 10:01:26 gunter Exp $
+// $Id: G4StaticSandiaData.hh,v 1.6 2002-04-15 16:50:36 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
+// 15.04.02 V.Grichine, bug fixed in Pb: comma after  15.861, 
 // 09.11.98 simplified public interface; removed mixting stuf.  MMA
 // 10.06.97 created. V. Grichine
 //
@@ -1140,7 +1141,7 @@ const G4double G4SandiaTable::fSandiaTable[981][5] =
 { 3.066,        0.6749E+02,  0.6789E+03,  0.1401E+06, -0.2437E+06 } ,
 { 13.035,      -0.7125E+02,  0.7126E+04,  0.2931E+06, -0.2779E+06 } ,
 { 15.2,        -0.1363E+03,  0.1992E+05,  0.2721E+06, -0.4887E+06 } ,
-{ 15.861       -0.8206E+01,  0.4058E+04,  0.7950E+06, -0.4115E+07 } ,
+{ 15.861,      -0.8206E+01,  0.4058E+04,  0.7950E+06, -0.4115E+07 } ,
 { 88.004,       0.7595E+01,  0.4692E+04,  0.6429E+07, -0.1747E+09 } ,
 { 500.0,        0.4240E+01,  0.8883E+04,  0.4754E+07,  0.3448E+08 } ,
 
