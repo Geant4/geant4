@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.28 2001-11-08 15:56:52 maire Exp $
+// $Id: G4VEnergyLoss.cc,v 1.29 2002-02-11 16:00:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,6 +36,7 @@
 //  17-09-01 migration of Materials to pure STL (mma)
 //  26-10-01 static inline functions moved from .hh file (mma) 
 //  08.11.01 some static methods,data members are not static L.Urban
+//  11.02.02 subSecFlag = false --> No sucutoff generation (mma) 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -48,19 +49,19 @@
 G4bool       G4VEnergyLoss::rndmStepFlag   = false;
 G4bool       G4VEnergyLoss::EnlossFlucFlag = true;
 
-G4bool       G4VEnergyLoss::subSecFlag     = true;
-G4double     G4VEnergyLoss::MinDeltaCutInRange = 0.100*mm ;
-G4double*    G4VEnergyLoss::MinDeltaEnergy	    = NULL   ;
-G4bool*      G4VEnergyLoss::LowerLimitForced        = NULL ;
-G4bool	     G4VEnergyLoss::setMinDeltaCutInRange = false ;
+G4bool       G4VEnergyLoss::subSecFlag     = false;
+G4double     G4VEnergyLoss::MinDeltaCutInRange = 0.100*mm;
+G4double*    G4VEnergyLoss::MinDeltaEnergy	    = 0;
+G4bool*      G4VEnergyLoss::LowerLimitForced        = 0;
+G4bool	     G4VEnergyLoss::setMinDeltaCutInRange = false;
 
 G4double     G4VEnergyLoss::dRoverRange    = 20*perCent;
 G4double     G4VEnergyLoss::finalRange     = 200*micrometer;
-G4double     G4VEnergyLoss::c1lim = dRoverRange ;
-G4double     G4VEnergyLoss::c2lim = 2.*(1.-dRoverRange)*finalRange ;
+G4double     G4VEnergyLoss::c1lim = dRoverRange;
+G4double     G4VEnergyLoss::c2lim = 2.*(1.-dRoverRange)*finalRange;
 G4double     G4VEnergyLoss::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
-G4EnergyLossMessenger* G4VEnergyLoss::ELossMessenger  = NULL;
+G4EnergyLossMessenger* G4VEnergyLoss::ELossMessenger  = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

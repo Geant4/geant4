@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2001-11-08 15:56:51 maire Exp $
+$Id: History,v 1.39 2002-02-11 16:00:39 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+11 feb 02: mma (utils-V04-00-00)
+- subSecFlag = false --> No sucutoff generation
+    
 08 nov 01: mma (utils-V03-02-11)
 - G4VEnergyLoss: some data members and functions are no more static
      
