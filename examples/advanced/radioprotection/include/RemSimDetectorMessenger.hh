@@ -21,49 +21,46 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimDetectorConstruction.hh,v 1.4 2004-05-19 09:29:33 guatelli Exp $
+//    *****************************************
+//    *                                       *
+//    *      RemSimDetectrorMessenger.hh      *
+//    *                                       *
+//    *****************************************
+//
+// $Id: RemSimDetectorMessenger.hh,v 1.4 2004-05-19 09:29:33 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// 
+#ifndef RemSimDetectorMessenger_h
+#define RemSimDetectorMessenger_h 1
 
-#ifndef RemSimDetectorConstruction_H
-#define RemSimDetectorConstruction_H 1
-
-#include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-class G4LogicalVolume;
-class G4VPhysicalVolume;
-class RemSimMaterial;
-class RemSimDetectorMessenger;
-class G4Box;
-class G4VisAttributes;
-class RemSimVGeometryComponent;
-class RemSimDecorator;
-class RemSimDetectorConstruction : public G4VUserDetectorConstruction
+class RemSimDetectorConstruction;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithADoubleAndUnit;
+class RemSimDetectorMessenger: public G4UImessenger
 {
 public:
-
-  RemSimDetectorConstruction();
-  ~RemSimDetectorConstruction();
-
-  G4VPhysicalVolume* Construct();
-
-  void ConstructVolume();
-  void AddShielding(G4String);
-  void ChangeShieldingMaterial(G4String);
-  void ChangeShieldingThickness(G4double);
+  RemSimDetectorMessenger(RemSimDetectorConstruction* );
+  ~RemSimDetectorMessenger();
+    
+  void SetNewValue(G4UIcommand*, G4String);
+  
 private:
-  RemSimDecorator* retrieveDecorator();
+  RemSimDetectorConstruction*  detector;//pointer to detector
+  G4UIdirectory*               vehicleDir; // control the geometry configuration
+  G4UIcmdWithAString*          vehicleCmd; //change set-up configuration 
+  G4UIcmdWithAString*          shieldingCmd;//add a shielding layer
 
-  G4LogicalVolume* experimentalHall_log;
-  G4VPhysicalVolume* experimentalHall_phys;
-  G4VPhysicalVolume* phantomPhys;
-  G4VPhysicalVolume* detectorPhys;
-  RemSimVGeometryComponent* pVehicle;
-  RemSimMaterial*  pMaterial;
-  RemSimDetectorMessenger* messenger; 
-  RemSimDecorator* decorator; 
-  G4String decoratorValue;
+  G4UIdirectory*               shieldingDir;//control the shielding parameters 
+  G4UIcmdWithAString*          materialCmd; //change the material of 
+                                            //the shielding
+  G4UIcmdWithADoubleAndUnit*   thicknessCmd; //change the thickness of the
+                                             // shielding
+
 };
 #endif
 

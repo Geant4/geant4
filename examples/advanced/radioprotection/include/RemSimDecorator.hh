@@ -10,11 +10,13 @@ class RemSimDecorator: public RemSimVGeometryComponent
 {
 public:
   RemSimDecorator(RemSimVGeometryComponent*);
-    ~RemSimDecorator();
+  ~RemSimDecorator();
 
   virtual void ConstructComponent(G4VPhysicalVolume*);
   virtual void DestroyComponent(); 
-
+  virtual void ChangeThickness(G4double)=0;
+  virtual void ChangeMaterial(G4String)=0;
+ 
 private:
    RemSimVGeometryComponent* component;
 };
