@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSurface.icc,v 1.6 2003-11-02 14:01:21 gcosmo Exp $
+// $Id: G4LogicalSurface.icc,v 1.7 2003-11-28 00:39:34 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -30,21 +30,26 @@
 //
 // File:        G4LogicalSurface.icc
 // Description: A Surface class 
+// Version:     1.0
 // Created:     1997-06-26
 // Author:      John Apostolakis
 //
-// ------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////
 
-inline G4OpticalSurface*
-G4LogicalSurface::GetOpticalSurface() const
+/////////////////////////
+// Class Inline Methods
+/////////////////////////
+
+inline G4SurfaceProperty*
+G4LogicalSurface::GetSurfaceProperty() const
 {
-	return theOpticalSurface;
+	return theSurfaceProperty;
 } 
 
 inline void
-G4LogicalSurface::SetOpticalSurface(G4OpticalSurface* ptrOpticalSurface) 
+G4LogicalSurface::SetSurfaceProperty(G4SurfaceProperty* ptrSurfaceProperty) 
 {
-	theOpticalSurface = ptrOpticalSurface;
+	theSurfaceProperty = ptrSurfaceProperty;
 } 
 
 inline G4String
@@ -82,7 +87,7 @@ G4LogicalSurface::operator=(const G4LogicalSurface &right)
 {
 	if (&right == this) return *this;
 	theName = right.theName;
-	theOpticalSurface = right.theOpticalSurface;
+	theSurfaceProperty = right.theSurfaceProperty;
 	theTransRadSurface = right.theTransRadSurface;
 	
 	return *this;
@@ -105,9 +110,9 @@ G4LogicalSurface::operator!=(const G4LogicalSurface &right) const
   /////////////////
 
 inline G4LogicalSurface::G4LogicalSurface(const G4String&         name,
-					 G4OpticalSurface* opticalSurface) 
+					 G4SurfaceProperty* surfaceProperty) 
 		: theName(name),
-		  theOpticalSurface(opticalSurface)
+		  theSurfaceProperty(surfaceProperty)
 {
 }
 
