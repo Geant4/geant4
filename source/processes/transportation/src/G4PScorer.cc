@@ -7,6 +7,9 @@
 G4PScorer::G4PScorer(){}
 G4PScorer::~G4PScorer(){}
 
+// for collisions check
+#include "G4VProcess.hh"
+
 void G4PScorer::Score(const G4Step &aStep, const G4PStep &aPstep){
   G4Track *track = aStep.GetTrack();
 
@@ -30,8 +33,11 @@ void G4PScorer::Score(const G4Step &aStep, const G4PStep &aPstep){
     } 
     else { 
       // Pstep with both points in the same I volume
-      fPtkTallys[post_ptk]["Collisions"].Xin(1);
-      fPtkTallys[post_ptk]["WeighteOfCollisions"].Xin(weight);
+      const G4VProcess* p = aStep.GetPostStepPoint()->GetProcessDefinedStep();
+      if (p->GetProcessName() != "Transportation") {
+	fPtkTallys[post_ptk]["Collisions"].Xin(1);
+	fPtkTallys[post_ptk]["WeighteOfCollisions"].Xin(weight);
+      }
     }
   }
 }
