@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2000-08-08 15:55:16 gcosmo Exp $
+$Id: History,v 1.22 2000-08-16 10:31:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 16,   00   V. Grichine		 geom-solids-csg-V02-00-02
+- G4Cons.cc:
+  o fix in constructor to check if one of the Rmin is equal to 0,
+    if so, it will be set to 1e3*kRadTolerance.
+  o Deactivated call to G4Exception in DistanceToOut(p) if p is outside,
+    replaced by simple warning.
+- G4Tubes.cc, G4Box.cc:
+  o Deactivated call to G4Exception in DistanceToOut(p) if p is outside,
+    replaced by simple warning.
 
 Aug 08,   00   V. Grichine               geom-solids-csg-V02-00-01
 - G4Cons.cc, G4Tubs.cc:
