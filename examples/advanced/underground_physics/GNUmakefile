@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2002-06-16 21:01:08 ahoward Exp $
+# $Id: GNUmakefile,v 1.6 2002-06-18 15:17:39 ahoward Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -14,6 +14,11 @@ endif
 ifdef DMXENV_GPS_USE
   CPPFLAGS += -DDMXENV_GPS_USE
 endif
+
+ifdef G4ANALYSIS_USE
+  CPPFLAGS += -G4ANALYSIS_USE
+endif
+
 
 include $(G4INSTALL)/config/architecture.gmk
 
