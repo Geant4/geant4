@@ -1,0 +1,22 @@
+electromagnetic/standard:
+    muls: Fine tuning and bug fixed for low energy e-.
+          Inclusion of nuclear size effect for high energy
+           (e > 100 Mev, h > 1 GeV)
+
+    IonisationPlus: production version for electrons and hadrons.
+
+    Eloss fluctuation: use G4Poisson instead of CLHEP.
+
+    PAI model: bugs fixed
+
+electromagnetic/lowEnergy:
+   hadron ionisation implemented.
+   ion    ionisation implemented.
+   minor bug fixed in photo electric. 
+
+electromagntic/xrays:
+   bug fixed in cerenkov.
+
+electromagnetic/test:
+  TestEm6 for low energy hadron.
+  All tests moved in examples/extended/electromagnetic.
