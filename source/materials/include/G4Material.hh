@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.hh,v 1.8 2001-01-28 16:58:58 maire Exp $
+// $Id: G4Material.hh,v 1.9 2001-03-12 17:48:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -14,7 +14,7 @@
 // Materials defined via the G4Material class are used to define the
 // composition of Geant volumes.
 // a Material is always made of Elements. It can be defined directly
-// from scratch (defined by a single element), specifying :
+// from scratch (defined by an implicit, single element), specifying :
 //                                             its name,
 //                                             density,
 //                                             state informations,
@@ -53,6 +53,7 @@
 // 05-10-98, change name: NumDensity -> NbOfAtomsPerVolume
 // 18-11-98, SandiaTable interface modified.
 // 19-07-99, new data member (chemicalFormula) added by V.Ivanchenko
+// 12-03-01, G4bool fImplicitElement (mma)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -144,7 +145,7 @@ public:  // with description
                      G4double   fraction);			//fraction of mass
                      
                      
-   ~G4Material();
+   virtual ~G4Material();
                         
     //
     // retrieval methods
@@ -269,6 +270,7 @@ private:
 
     size_t           fNumberOfElements;     // Number of Elements in the material
     G4ElementVector* theElementVector;      // vector of constituent Elements
+    G4bool           fImplicitElement;      // implicit Element created by this?
     G4double*        fMassFractionVector;   // composition by fractional mass
     G4int*           fAtomsVector;          // composition by atom count
 

@@ -5,17 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonisParamElm.cc,v 1.5 2000-11-27 08:36:17 vnivanch Exp $
+// $Id: G4IonisParamElm.cc,v 1.6 2001-03-12 17:48:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-//      ------------ class G4IonisParamElm ------------
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
-// 09-07-98, data moved from G4Element. M.Maire
+// 08-03-01, correct handling of fShellCorrectionVector. M.Maire
 // 22-11-00, tabulation of ionisation potential from 
 //           the ICRU Report N#37. V.Ivanchenko
+// 09-07-98, data moved from G4Element. M.Maire
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -38,7 +37,7 @@ G4IonisParamElm::G4IonisParamElm(G4double Z)
 
      // Mean excitation energy
      // from "Stopping Powers for Electrons and Positrons"
-     // ICRU Report N#37, 1984
+     // ICRU Report N#37, 1984  (energy in eV)
     static double exc[100] = { 
     21.8, 20.9,	13.3, 15.9, 15.2, 13.0,	11.7, 11.9, 11.5, 13.7,
     13.6, 13.0,	12.8, 12.4, 11.5, 11.3,	10.2, 10.4, 10.0,  9.6,
@@ -84,13 +83,15 @@ G4IonisParamElm::G4IonisParamElm(G4double Z)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4IonisParamElm::~G4IonisParamElm()
-{ }
+{
+  if (fShellCorrectionVector) delete [] fShellCorrectionVector; 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4IonisParamElm::G4IonisParamElm(G4IonisParamElm& right)
 {
-    *this = right;
+  *this = right;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -110,21 +111,27 @@ const G4IonisParamElm& G4IonisParamElm::operator=(const G4IonisParamElm& right)
       fBlow                  = right.fBlow;
       fClow                  = right.fClow;
       fMeanExcitationEnergy  = right.fMeanExcitationEnergy;
-      fShellCorrectionVector = right.fShellCorrectionVector;
+      if (fShellCorrectionVector) delete [] fShellCorrectionVector;             
+      fShellCorrectionVector = new G4double[3];            
+      fShellCorrectionVector[0] = right.fShellCorrectionVector[0];
+      fShellCorrectionVector[1] = right.fShellCorrectionVector[1];
+      fShellCorrectionVector[2] = right.fShellCorrectionVector[2];      
      } 
   return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4int G4IonisParamElm::operator==(const G4IonisParamElm &right) const
+G4int G4IonisParamElm::operator==(const G4IonisParamElm& right) const
 {
   return (this == (G4IonisParamElm *) &right);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4int G4IonisParamElm::operator!=(const G4IonisParamElm &right) const
+G4int G4IonisParamElm::operator!=(const G4IonisParamElm& right) const
 {
   return (this != (G4IonisParamElm *) &right);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

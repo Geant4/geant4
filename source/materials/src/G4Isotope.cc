@@ -5,24 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Isotope.cc,v 1.2 1999-12-15 14:50:51 gunter Exp $
+// $Id: G4Isotope.cc,v 1.3 2001-03-12 17:48:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-// --------------------------------------------------------------
-//	GEANT 4 class implementation file
-//
-//	For information related to this code contact:
-//	CERN, CN Division, ASD Group
-//
-//      ---------- class G4Isotope ---------
-//
-//           Torre Wenaus, November 1995
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-// 26-06-96, Code uses operators (+=, *=, ++, -> etc.) correctly, P. Urban
-// 29-01-97, Forbidden to create Isotope with Z<1 or N<Z, M.Maire
+// 29-01-97: Forbidden to create Isotope with Z<1 or N<Z, M.Maire
+// 26-06-96: Code uses operators (+=, *=, ++, -> etc.) correctly, P. Urban
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -53,14 +42,18 @@ G4Isotope::~G4Isotope() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4Isotope::G4Isotope(G4Isotope &right)
+G4Isotope::G4Isotope(G4Isotope& right)
 {
-    *this = right;
+  *this = right;
+  
+  //insert this new isotope in table
+  theIsotopeTable.insert(this);
+  fIndexInTable = theIsotopeTable.index(this);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4Isotope & G4Isotope::operator=(const G4Isotope &right)
+G4Isotope & G4Isotope::operator=(const G4Isotope& right)
 {
   if (this != &right)
   {
@@ -68,8 +61,7 @@ G4Isotope & G4Isotope::operator=(const G4Isotope &right)
     fZ = right.fZ;
     fN = right.fZ;
     fA = right.fA;
-    theIsotopeTable = right.theIsotopeTable;
-    fIndexInTable = right.fIndexInTable;
+    fIndexInTable = theIsotopeTable.index(this);     
   }
   return *this;
 }
@@ -125,4 +117,6 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4IsotopeTable IsotopeTable)
    for (G4int i=0; i<IsotopeTable.length(); i++) flux << IsotopeTable[i] << G4endl;
 
    return flux;
-}      
+}
+      
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

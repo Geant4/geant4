@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Element.hh,v 1.5 1999-12-16 18:11:08 maire Exp $
+// $Id: G4Element.hh,v 1.6 2001-03-12 17:48:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -92,7 +92,7 @@ public:  // with description
                     G4double   RelativeAbundance);	//fraction of nb of 
                     					//atomes per volume
                     					
-   ~G4Element();
+   virtual ~G4Element();
    
     //
     // retrieval methods
@@ -145,15 +145,15 @@ public:  // with description
     friend G4std::ostream& operator<<(G4std::ostream&, G4ElementTable);
 
 public:  // without description
-    
+
     G4int operator==(const G4Element&) const;
     G4int operator!=(const G4Element&) const;
-     
+
 private:
 
-    G4Element(G4Element &right);
-    const G4Element & operator=(const G4Element &right);
-
+    G4Element(G4Element&);
+    const G4Element & operator=(const G4Element&);
+       
 private:
 
     void InitializePointers();

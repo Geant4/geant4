@@ -5,12 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonisParamMat.cc,v 1.5 2001-01-16 16:56:29 maire Exp $
+// $Id: G4IonisParamMat.cc,v 1.6 2001-03-12 17:48:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
+// 08-02-01, fShellCorrectionVector correctly handled (mma)
 // 16-01-01, bug corrected in ComputeDensityEffect() E100eV (L.Urban)
 // 18-07-98, bug corrected in ComputeDensityEffect() for gas
 // 09-07-98, data moved from G4Material, M.Maire
@@ -176,13 +177,15 @@ void G4IonisParamMat::ComputeFluctModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4IonisParamMat::~G4IonisParamMat()
-{ }
+{
+  if (fShellCorrectionVector) delete [] fShellCorrectionVector;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4IonisParamMat::G4IonisParamMat(const G4IonisParamMat &right)
+G4IonisParamMat::G4IonisParamMat(const G4IonisParamMat& right)
 {
-    *this = right;
+  *this = right;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -191,40 +194,44 @@ const G4IonisParamMat& G4IonisParamMat::operator=(const G4IonisParamMat& right)
 {
   if (this != &right)
     {
-      fMaterial              = right.fMaterial;
-      fMeanExcitationEnergy  = right.fMeanExcitationEnergy;
-      fLogMeanExcEnergy      = right.fLogMeanExcEnergy;
-      fShellCorrectionVector = right.fShellCorrectionVector;
-      fTaul                  = right.fTaul;
-      fCdensity              = right.fCdensity;
-      fMdensity              = right.fMdensity;
-      fAdensity              = right.fAdensity;
-      fX0density             = right.fX0density;
-      fX1density             = right.fX1density;
-      fF1fluct               = right.fF1fluct;
-      fF2fluct               = right.fF2fluct;
-      fEnergy1fluct          = right.fEnergy1fluct;
-      fLogEnergy1fluct       = right.fLogEnergy1fluct;      
-      fEnergy2fluct          = right.fEnergy2fluct;
-      fLogEnergy2fluct       = right.fLogEnergy2fluct;      
-      fEnergy0fluct          = right.fEnergy0fluct;
-      fRateionexcfluct       = right.fRateionexcfluct;
+      fMaterial                 = right.fMaterial;
+      fMeanExcitationEnergy     = right.fMeanExcitationEnergy;
+      fLogMeanExcEnergy         = right.fLogMeanExcEnergy;
+      if (fShellCorrectionVector) delete [] fShellCorrectionVector;      
+      fShellCorrectionVector    = new G4double[3];             
+      fShellCorrectionVector[0] = right.fShellCorrectionVector[0];
+      fShellCorrectionVector[1] = right.fShellCorrectionVector[1];
+      fShellCorrectionVector[2] = right.fShellCorrectionVector[2];
+      fTaul                     = right.fTaul;
+      fCdensity                 = right.fCdensity;
+      fMdensity                 = right.fMdensity;
+      fAdensity                 = right.fAdensity;
+      fX0density                = right.fX0density;
+      fX1density                = right.fX1density;
+      fF1fluct                  = right.fF1fluct;
+      fF2fluct                  = right.fF2fluct;
+      fEnergy1fluct             = right.fEnergy1fluct;
+      fLogEnergy1fluct          = right.fLogEnergy1fluct;      
+      fEnergy2fluct             = right.fEnergy2fluct;
+      fLogEnergy2fluct          = right.fLogEnergy2fluct;      
+      fEnergy0fluct             = right.fEnergy0fluct;
+      fRateionexcfluct          = right.fRateionexcfluct;
      } 
   return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4int G4IonisParamMat::operator==(const G4IonisParamMat &right) const
+G4int G4IonisParamMat::operator==(const G4IonisParamMat& right) const
 {
-  return (this == (G4IonisParamMat *) &right);
+  return (this == (G4IonisParamMat*) &right);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4int G4IonisParamMat::operator!=(const G4IonisParamMat &right) const
+G4int G4IonisParamMat::operator!=(const G4IonisParamMat& right) const
 {
-  return (this != (G4IonisParamMat *) &right);
+  return (this != (G4IonisParamMat*) &right);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

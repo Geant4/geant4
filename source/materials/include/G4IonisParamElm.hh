@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonisParamElm.hh,v 1.4 1999-12-16 18:11:08 maire Exp $
+// $Id: G4IonisParamElm.hh,v 1.5 2001-03-12 17:48:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -17,7 +17,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-// 09-07-98, data moved from G4Element. M.Maire
+// 09.03.01: copy constructor and assignement operator in public (mma)
+// 09.07.98: data moved from G4Element (mma) 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -34,7 +35,7 @@ class G4IonisParamElm
 public:  // with description
 
     G4IonisParamElm(G4double Z);
-   ~G4IonisParamElm();
+    virtual ~G4IonisParamElm();
 
     // retrieval methods
     
@@ -60,15 +61,12 @@ public:  // with description
                                        // shell correction coefficients
    
 public:  // without description
-   
+
+    G4IonisParamElm(G4IonisParamElm&);
+    const G4IonisParamElm& operator=(const G4IonisParamElm&);   
     G4int operator==(const G4IonisParamElm&) const;
     G4int operator!=(const G4IonisParamElm&) const;
      
-private:
-
-    G4IonisParamElm(G4IonisParamElm&);
-    const G4IonisParamElm& operator=(const G4IonisParamElm&);
-
 
 private:
 
@@ -86,7 +84,7 @@ private:
     G4double  fTaul ;                 // 2*MeV/proton mass
     G4double  fBetheBlochLow;         // Bethe-Bloch at fTaul*particle mass   
     G4double  fAlow,fBlow,fClow;      // parameters for the low energy ion.loss
-    G4double  fMeanExcitationEnergy;  // 16*pow(Z,0.9)*eV    
+    G4double  fMeanExcitationEnergy;  //     
     G4double* fShellCorrectionVector; // shell correction coefficients
 };
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2001-02-22 15:09:41 maire Exp $
+$Id: History,v 1.16 2001-03-12 17:48:47 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+22.03.01 M.Maire - materials-V03-00-06
+         revision of destructor, copy constructor, assignement operator in
+	 G4IonisParamElm, G4IonisParamMat, G4Isotope, G4Element, G4Material
+	      
 22.02.01 M.Maire - materials-V03-00-05
          G4SandiaTable : protection added in GetSandiaCofForMaterial(energy)
 	            

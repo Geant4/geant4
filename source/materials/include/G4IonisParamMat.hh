@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonisParamMat.hh,v 1.4 1999-12-16 18:11:09 maire Exp $
+// $Id: G4IonisParamMat.hh,v 1.5 2001-03-12 17:48:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -17,7 +17,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-// 09-07-98, data moved from G4Material, M.Maire
+// 09.03.01: copy constructor and assignement operator in public (mma)
+// 09-07-98: data moved from G4Material (mma)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -36,7 +37,7 @@ class G4IonisParamMat  // with description
 public:
 
     G4IonisParamMat(G4Material*); 
-   ~G4IonisParamMat();
+    virtual ~G4IonisParamMat();
 
     //
     // retrieval methods
@@ -66,15 +67,14 @@ public:
     G4double  GetRateionexcfluct()        const {return fRateionexcfluct;};
 
 public:  // without description
-          
+
+    G4IonisParamMat(const G4IonisParamMat&);
+    const G4IonisParamMat& operator=(const G4IonisParamMat&);          
     G4int operator==(const G4IonisParamMat&) const;
     G4int operator!=(const G4IonisParamMat&) const;
 
 private:
-
-    G4IonisParamMat(const G4IonisParamMat&);
-    const G4IonisParamMat& operator=(const G4IonisParamMat&);
-     
+    
     // Compute mean parameters : ExcitationEnergy,Shell corretion vector ...
     void ComputeMeanParameters();
 

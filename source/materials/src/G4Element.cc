@@ -5,27 +5,24 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Element.cc,v 1.3 1999-12-15 14:50:51 gunter Exp $
+// $Id: G4Element.cc,v 1.4 2001-03-12 17:48:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-//      ------------ class G4Element ------------
-//
-//             Torre Wenaus, November 1995
-//
-//
-// 26-06-96, Code uses operators (+=, *=, ++, -> etc.) correctly, P. Urban
-// 09-07-96, new data members added by L.Urban
-// 17-01-97, aesthetic rearrangement, M.Maire
-// 20-01-97, Compute Tsai's formula for the rad length, M.Maire
-// 21-01-97, remove mixture flag, M.Maire
-// 24-01-97, ComputeIonisationParameters(). 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+// 26-06-96: Code uses operators (+=, *=, ++, -> etc.) correctly, P. Urban
+// 09-07-96: new data members added by L.Urban
+// 17-01-97: aesthetic rearrangement, M.Maire
+// 20-01-97: Compute Tsai's formula for the rad length, M.Maire
+// 21-01-97: remove mixture flag, M.Maire
+// 24-01-97: ComputeIonisationParameters(). 
 //           new data member: fTaul, M.Maire
-// 29-01-97, Forbidden to create Element with Z<1 or N<Z, M.Maire
-// 20-03-97, corrected initialization of pointers, M.Maire
-// 28-04-98, atomic subshell binding energies stuff, V. Grichine  
-// 09-07-98, Ionisation parameters removed from the class, M.Maire
-// 16-11-98, name Subshell -> Shell; GetBindingEnergy(), mma
+// 29-01-97: Forbidden to create Element with Z<1 or N<Z, M.Maire
+// 20-03-97: corrected initialization of pointers, M.Maire
+// 28-04-98: atomic subshell binding energies stuff, V. Grichine  
+// 09-07-98: Ionisation parameters removed from the class, M.Maire
+// 16-11-98: name Subshell -> Shell; GetBindingEnergy() (mma)
+// 09-03-01: assignement operator revised (mma)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -162,51 +159,6 @@ G4Element::~G4Element()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4Element::G4Element(G4Element &right)
-{
-    *this = right;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-const G4Element& G4Element::operator=(const G4Element& right)
-{
-  if (this != &right)
-    {
-      fName                    = right.fName;
-      fSymbol                  = right.fSymbol;
-      fZeff                    = right.fZeff;
-      fNeff                    = right.fNeff;
-      fAeff                    = right.fAeff;
-      fNbOfAtomicShells        = right.fNbOfAtomicShells;
-      fAtomicShells            = right.fAtomicShells;
-      fNumberOfIsotopes        = right.fNumberOfIsotopes;
-      theIsotopeVector         = right.theIsotopeVector;
-      fRelativeAbundanceVector = right.fRelativeAbundanceVector;
-      fIndexInTable            = right.fIndexInTable;
-      fCoulomb                 = right.fCoulomb;
-      fRadTsai                 = right.fRadTsai;
-      fIonisation              = right.fIonisation;
-     } 
-  return *this;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-G4int G4Element::operator==(const G4Element &right) const
-{
-  return (this == (G4Element *) &right);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-G4int G4Element::operator!=(const G4Element &right) const
-{
-  return (this != (G4Element *) &right);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
 void G4Element::ComputeDerivedQuantities()
 {
   // some basic functions of the atomic number
@@ -215,7 +167,8 @@ void G4Element::ComputeDerivedQuantities()
      ComputeCoulombFactor();
      ComputeLradTsaiFactor(); 
 
-  // parameters for energy loss by ionisation   
+  // parameters for energy loss by ionisation 
+     if (fIonisation) delete fIonisation;  
      fIonisation = new G4IonisParamElm(fZeff);
 }
 
@@ -266,6 +219,70 @@ G4double G4Element::GetAtomicShell(G4int i) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
+G4Element::G4Element(G4Element& right)
+{
+      InitializePointers();
+      *this = right;
+
+      // Store this new element in table and set the index
+      theElementTable.insert(this);
+      fIndexInTable = theElementTable.index(this);	   
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+const G4Element& G4Element::operator=(const G4Element& right)
+{
+  if (this != &right)
+    {
+      fName                    = right.fName;
+      fSymbol                  = right.fSymbol;
+      fZeff                    = right.fZeff;
+      fNeff                    = right.fNeff;
+      fAeff                    = right.fAeff;
+      
+      if (fAtomicShells) delete [] fAtomicShells;      
+      fNbOfAtomicShells        = right.fNbOfAtomicShells;
+      fAtomicShells     = new G4double[fNbOfAtomicShells];
+      for (G4int i=0;i<fNbOfAtomicShells;i++)      
+         fAtomicShells[i]      = right.fAtomicShells[i];
+	 
+      if (theIsotopeVector) delete theIsotopeVector;
+      if (fRelativeAbundanceVector) delete [] fRelativeAbundanceVector;
+	      	 
+      fNumberOfIsotopes        = right.fNumberOfIsotopes;
+      if (fNumberOfIsotopes > 0)
+        {
+	 theIsotopeVector         = new G4IsotopeVector(fNumberOfIsotopes);
+	 fRelativeAbundanceVector = new G4double[fNumberOfIsotopes];
+	 for (G4int i=0;i<fNumberOfIsotopes;i++)
+	    {
+             (*theIsotopeVector)[i]      = (*right.theIsotopeVector)[i];
+             fRelativeAbundanceVector[i] = right.fRelativeAbundanceVector[i];
+	    }
+	}   
+      ComputeDerivedQuantities();
+      fIndexInTable = right.fIndexInTable;
+     } 
+  return *this;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4int G4Element::operator==(const G4Element& right) const
+{
+  return (this == (G4Element*) &right);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4int G4Element::operator!=(const G4Element& right) const
+{
+  return (this != (G4Element*) &right);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
 G4std::ostream& operator<<(G4std::ostream& flux, G4Element* element)
 { 
   long mode = flux.setf(G4std::ios::fixed,G4std::ios::floatfield);
@@ -307,5 +324,6 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4ElementTable ElementTable)
                                                       << G4endl << G4endl;
 
    return flux;
-}      
-          
+}
+      
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....          
