@@ -1,0 +1,124 @@
+
+    =========================================================
+    Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+    =========================================================
+
+                       Extended Example for G4GeneralParticleSource (GPS)
+                       --------------------------------------- 
+
+  exGPS is created to demonstrate the usage of G4GeneralParticleSource for generating 
+  primary incident particle according to user defined distributions. These range from simple 
+  monocromatic point source to complicated mutiple sources with various biasing schemes. 
+  
+  More detailed information on the usage of GPS are available on its home site: 
+	http://reat.space.qinetiq.com/gps
+
+  -------------------------------------------------------------------------------------------
+  1. GEOMETRY
+
+     Simple geometry consists of a "Vacuum" world and, in it with two other components:	     
+ 
+       - An alunimium box : 20 x 20 x 20 cm in size, cerntered at the origin.
+		  
+       - A SiO2 sphere: 5 cm in radius and is placed in the centre of the aluminium box. 
+
+  2. PHYSICS
+
+	Tranportation process only for all particles.
+
+  3. EVENT:
+
+     The event generator is the G4GeneralParticleSource (GPS). The instantiation of G4GeneralParticleSource
+     is same as that for G4ParticleGun. See the exGPSPrimaryGeneratorAction.cc file for details .  
+  
+  5. VISUALIZATION:
+ 
+     Visualisation of the geometry and the tracks is possible with many of the G4 visualisation packages. An
+     example of displaying the geometry and tracks using VRML is given in the macro file display_vrml.mac.  
+
+  6. ANALYSIS:
+
+     This example implements an AIDA-compliant analysis manager which creates histograms and ntuples. 
+     If user has an AIDA-compliant tool such as AIDAJNI, ANAPHE, or PI installed on his/her system, 
+     the analysis part of this example can be activated by: 
+
+	setenv G4ANALYSIS_USE 1
+
+     This needs to be done before building the executable.  
+
+     At the end of an excution, an xml file "exgps.aida" is created by default which contains 
+     histograms and ntuples. User can change the name and type of this output file with the commands
+	
+	/analysis/filetype new-type
+	/analysis/fileName new-filename
+
+	e.g.
+
+	/analysis/filetype hbook
+	/analysis/filename exgps.hbook
+
+     these change the output file type to "hbook" and name to "exgps.hbbok"
+
+     The output file conatins 6 histograms and one ntuple:
+
+	histogram 1: The energy spectrum of the primary particles.
+	histogram 2: 2d histogram of primary particle incident position distribution in the X-Y plane.
+	histogram 3: 2d histogram of primary particle incident position distribution in the X-Z plane.
+	histogram 4: 2d histogram of primary particle incident position distribution in the Y-Z plane.
+	histogram 5: 2d histogram of primary particle incident angle distribution in terms of Phi/Cos(Theta).
+	histogram 6: 2d histogram of primary particle incident angle distribution in terms of Phi/Theta.
+
+     The binnings of the histograms can be changed with the UI commands avialable under the 
+     /analysis directory.
+ 
+     In the ntuple the following data are recorded for each incident particle:  
+
+	Particle Name
+	Incident Position (x,y,z);
+	Incident Angle (theta,phi);
+	Particle weight;
+
+
+  7. GETTING STARTED:
+
+     i) If you have an AIDA-compliant analysis package installed, then you should switch on the analysis 
+     part of the example by: 
+
+	setenv G4ANALYSIS_USE 1
+
+     otherwise make sure the G4ANALYSIS_USE is not defined:
+ 
+	unsetenv G4ANALYSIS_USE
+ 
+     ii) Build the exGPS executable:
+
+         cd to exgps
+         gmake clean
+         gmake
+
+     gmake will create tmp and bin directories in your $G4TMP and $G4BIN directories. 
+     The executable, named exGPS, will be created in the $G4BIN/$G4SYSTEM/ directory.
+
+     iii) Run the executable: 
+
+     while in the exgps directory do 
+
+         $G4BIN/$G4SYSTEM/exGPS exrgps.in
+
+     If G4ANALYSIS_USE is defined, one should see a display of the six histograms. If JAIDA is used, one has 
+     to close the plotter window in order to terminate the execution. After the termination one will find 
+     the "exgps.aida", as well as a vrml file "g4_00.wrl" in the directory.
+
+ 8. FURTHER EXAMPLES of MACRO FILES:
+
+    There are a number of g4mac files in the ./macros subdirectory, to show the various features of GPS. 
+    Most of them will lead to the creation of an aida file in the same name as the macro file. 
+    These aida files can be examed and analysed with an analysis tool such as JAS3.
+
+	Please see the README file there for further information.
+
+
+ 
+
+
+  
