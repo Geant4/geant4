@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.28 2001-11-06 13:00:46 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.29 2001-11-08 21:48:24 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -396,7 +396,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
   G4std::istrstream is ((char*)newValue.data());
   is >> sceneName >> refresh_flush;
   G4bool flush(false);
-  if (refresh_flush[0] == 'f') flush = true;
+  if (refresh_flush(0) == 'f') flush = true;
 
   const G4SceneList& sceneList = fpVisManager -> GetSceneList ();
   G4SceneHandlerList& sceneHandlerList =
