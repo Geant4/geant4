@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2003-06-20 12:45:10 japost Exp $
+$Id: History,v 1.76 2003-06-20 22:47:27 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Jun 21st, 2003  J.Apostolakis - field-V05-01-03
+-----------------------------
+G4ChordFinder:
+  Revised:
+  * FindNextChord now provides next Step estimate (for accuracy in Integr.)
+  * AdvanceChordLimited to use
+    - above extra argument to FindNextChord
+    - the next Step argument as initial-step suggested to Accurate Advance
+
+G4MagIntegratorDriver
+  * Added extra argument to Accurate Advance:
+      hinitial: suggested initial step size
+
 Jun 20th, 2003  J.Apostolakis - field-V05-01-02
 -----------------------------
 G4MagIntegratorDriver Quick Advance:
