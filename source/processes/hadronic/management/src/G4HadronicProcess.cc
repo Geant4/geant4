@@ -757,6 +757,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 	  }
 	}*/
 	
+	track->SetTouchableHandle(aT->GetTouchableHandle());
 	theTotalResult->AddSecondary(track);
       }
       aR->Clear();
