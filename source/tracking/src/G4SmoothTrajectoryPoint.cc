@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.cc,v 1.6 2002-11-08 18:28:30 johna Exp $
+// $Id: G4SmoothTrajectoryPoint.cc,v 1.7 2002-11-08 23:44:37 jacek Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,6 +53,12 @@ G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(G4ThreeVector pos)
   fPosition = pos;
 }
 
+G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(G4ThreeVector pos,
+						 G4std::vector<G4ThreeVector>* auxiliaryPoints)
+: fPosition(pos),
+  fAuxiliaryPointVector(auxiliaryPoints)
+{}
+
 G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(const G4SmoothTrajectoryPoint &right)
 : fPosition(right.fPosition),fAuxiliaryPointVector(right.fAuxiliaryPointVector)
 {
@@ -60,10 +66,11 @@ G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(const G4SmoothTrajectoryPoint &
 
 G4SmoothTrajectoryPoint::~G4SmoothTrajectoryPoint()
 {
-  if(!fAuxiliaryPointVector) {
+  if(fAuxiliaryPointVector) {
     delete fAuxiliaryPointVector;
   }
 }
+
 
 const G4std::map<G4String,G4AttDef>*
 G4SmoothTrajectoryPoint::GetAttDefs() const

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc,v 1.5 2002-11-08 18:27:39 johna Exp $
+// $Id: G4SmoothTrajectory.cc,v 1.6 2002-11-08 23:44:37 jacek Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -67,6 +67,10 @@ G4SmoothTrajectory::G4SmoothTrajectory(const G4Track* aTrack)
    positionRecord = new TrajectoryPointContainer();
    // Following is for the first trajectory point
    positionRecord->push_back(new G4SmoothTrajectoryPoint(aTrack->GetPosition()));
+
+   // The first point has no auxiliary points, so set the auxiliary
+   // points vector to NULL (jacek 31/10/2002)
+   positionRecord->push_back(new G4SmoothTrajectoryPoint(aTrack->GetPosition(), NULL));
 }
 
 G4SmoothTrajectory::G4SmoothTrajectory(G4SmoothTrajectory & right)
@@ -107,9 +111,50 @@ void G4SmoothTrajectory::ShowTrajectory(G4std::ostream& os) const
 
 void G4SmoothTrajectory::DrawTrajectory(G4int i_mode) const
 {
-  // Invoke the default implementation in G4VTrajectory...
-  G4VTrajectory::DrawTrajectory(i_mode);
-  // ... or override with your own code here.
+   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+
+   if(i_mode>=0)
+   {
+     G4Polyline pPolyline;
+     for (size_t i = 0; i < positionRecord->size() ; i++) {
+       // Copy auxiliary points ...
+       const G4std::vector<G4ThreeVector>& auxiliaryPoints = 
+	 *((*positionRecord)[i]->GetAuxiliaryPoints());
+       if(&auxiliaryPoints) {
+	 for (size_t j = 0; j < auxiliaryPoints.size(); ++j ) {
+	   pPolyline.push_back( auxiliaryPoints[j] );
+	 }
+       }
+       pPolyline.push_back( (*positionRecord)[i]->GetPosition() );
+     }
+
+     G4Colour colour;
+     if(PDGCharge<0.)
+        colour = G4Colour(1.,0.,0.);
+     else if(PDGCharge>0.) 
+        colour = G4Colour(0.,0.,1.);
+     else
+        colour = G4Colour(0.,1.,0.);
+
+     G4VisAttributes attribs(colour);
+     pPolyline.SetVisAttributes(attribs);
+     if(pVVisManager) pVVisManager->Draw(pPolyline);
+   }
+
+   if(i_mode!=0)
+   {
+     // NB Not bothering with the auxiliary points in here for now,
+     // remember to do it later (jacek 31/10/2002)
+     for(size_t j=0; j<positionRecord->size(); j++) {
+       G4Circle circle( (*positionRecord)[j]->GetPosition() );
+       circle.SetScreenSize(0.001*i_mode);
+       circle.SetFillStyle(G4Circle::filled);
+       G4Colour colSpot(0.,0.,0.);
+       G4VisAttributes attSpot(colSpot);
+       circle.SetVisAttributes(attSpot);
+       if(pVVisManager) pVVisManager->Draw(circle);
+     }
+   }
 }
 
 const G4std::map<G4String,G4AttDef>* G4SmoothTrajectory::GetAttDefs() const
@@ -184,8 +229,10 @@ G4std::vector<G4AttValue>* G4SmoothTrajectory::CreateAttValues() const
 
 void G4SmoothTrajectory::AppendStep(const G4Step* aStep)
 {
-   positionRecord->push_back( new G4SmoothTrajectoryPoint(aStep->GetPostStepPoint()->
-                                 GetPosition() ));
+  // (jacek 30/10/2002)
+  positionRecord->push_back(
+      new G4SmoothTrajectoryPoint(aStep->GetPostStepPoint()->GetPosition(),
+				  aStep->GetPointerToVectorOfAuxiliaryPoints()));
 }
   
 G4ParticleDefinition* G4SmoothTrajectory::GetParticleDefinition()

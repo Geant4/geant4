@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.hh,v 1.5 2002-11-05 16:15:50 jacek Exp $
+// $Id: G4SmoothTrajectoryPoint.hh,v 1.6 2002-11-08 23:44:36 jacek Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,6 +52,10 @@ public: // without description
 
 // Constructor/Destructor
    G4SmoothTrajectoryPoint();
+   // No auxiliary points setter, so must set the points in the
+   // constructor already (jacek 31/10/2002)
+   G4SmoothTrajectoryPoint(G4ThreeVector pos,
+			   G4std::vector<G4ThreeVector>* auxiliaryPoints);
    G4SmoothTrajectoryPoint(G4ThreeVector pos);
    G4SmoothTrajectoryPoint(const G4SmoothTrajectoryPoint &right);
    virtual ~G4SmoothTrajectoryPoint();
