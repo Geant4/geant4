@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsFreeVector.cc,v 1.1 1999-01-07 16:09:05 gunter Exp $
+// $Id: G4PhysicsFreeVector.cc,v 1.2 1999-11-16 17:46:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -123,10 +123,3 @@ void G4PhysicsFreeVector::PutValue( size_t theBinNumber, G4double theBinValue,
      edgeMin = binVector(0);
   }
 }
-
-
-
-
-
-
-

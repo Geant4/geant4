@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsLinearVector.cc,v 1.1 1999-01-07 16:09:06 gunter Exp $
+// $Id: G4PhysicsLinearVector.cc,v 1.2 1999-11-16 17:46:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,9 +81,3 @@ G4PhysicsLinearVector::G4PhysicsLinearVector(G4double theEmin,
 }  
 
 G4PhysicsLinearVector::~G4PhysicsLinearVector(){}
-
-
-
-
-
-
