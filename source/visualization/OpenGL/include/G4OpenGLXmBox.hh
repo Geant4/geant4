@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmBox.hh,v 1.4 2001-02-03 18:39:07 johna Exp $
+// $Id: G4OpenGLXmBox.hh,v 1.5 2001-03-07 14:56:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,7 +28,7 @@ class G4OpenGLXmBox : public G4OpenGLXmVWidgetContainer
 {
 
 public:
-  G4OpenGLXmBox (char* = NULL,
+  G4OpenGLXmBox (const char* = NULL,
 		 G4bool = False);   //constructor
   virtual ~G4OpenGLXmBox ();  //destructor
 
@@ -38,11 +38,11 @@ public:
   Widget* GetPointerToParent ();
   Widget* GetPointerToWidget ();
   
-  char* GetName ();
-  void SetName (char*);
+  const char* GetName ();
+  void SetName (const char*);
 
 protected:
-  char* name;
+  const char* name;
   Widget* parent;
   Widget box_row_col;
   G4bool radio;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmFramedBox.cc,v 1.3 1999-12-15 14:54:09 gunter Exp $
+// $Id: G4OpenGLXmFramedBox.cc,v 1.4 2001-03-07 14:56:19 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Framed box container class
@@ -17,7 +17,7 @@
 #include "G4OpenGLXmVWidgetComponent.hh"
 #include "G4OpenGLXmVWidgetShell.hh"
 
-G4OpenGLXmFramedBox::G4OpenGLXmFramedBox (char* n, 
+G4OpenGLXmFramedBox::G4OpenGLXmFramedBox (const char* n, 
 					  G4bool r) :
 G4OpenGLXmBox (n, r)
 {

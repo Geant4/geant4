@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmSliderBar.hh,v 1.4 2001-02-03 18:39:16 johna Exp $
+// $Id: G4OpenGLXmSliderBar.hh,v 1.5 2001-03-07 14:56:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,7 +22,7 @@ class G4OpenGLXmSliderBar : public G4OpenGLXmVWidgetComponent
 {
 
 public:
-  G4OpenGLXmSliderBar (char* = NULL,           // name of slider bar
+  G4OpenGLXmSliderBar (const char* = NULL,     // name of slider bar
 		       XtCallbackRec* = NULL,  // callbacks for slider bar
 		       G4bool = False,         // show current value if True
 		       short = 0,              // decimal places for show value
@@ -34,7 +34,7 @@ public:
                                                //constructor
   virtual ~G4OpenGLXmSliderBar ();             //destructor
 
-  void SetName (char*);
+  void SetName (const char*);
   void SetShow (G4bool);
   void SetDecimalPlaces (short);
   void SetInitialValue (G4double);
@@ -44,7 +44,7 @@ public:
   void SetDirection (unsigned char);
 
  
-  char* GetName ();
+  const char* GetName ();
   G4bool GetShow ();
   short GetDecimalPlaces ();
   G4double GetInitialValue ();
@@ -61,7 +61,7 @@ public:
 private:
   G4OpenGLXmSliderBar (const G4OpenGLXmSliderBar&);
   G4OpenGLXmSliderBar& operator = (const G4OpenGLXmSliderBar&);
-  char* name;
+  const char* name;
   XtCallbackRec* callback;
   Widget sliderbar;
   Widget* parent;

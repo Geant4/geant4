@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmTextField.hh,v 1.4 2001-02-03 18:39:17 johna Exp $
+// $Id: G4OpenGLXmTextField.hh,v 1.5 2001-03-07 14:56:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,16 +23,16 @@ class G4OpenGLXmTextField : public G4OpenGLXmVWidgetComponent
 {
 
 public:
-  G4OpenGLXmTextField (char*,G4double*); //constructor
-  G4OpenGLXmTextField (char*,char*);     //constructor
-  virtual ~G4OpenGLXmTextField ();       //destructor
+  G4OpenGLXmTextField (const char*,G4double*);   //constructor
+  G4OpenGLXmTextField (const char*,const char*); //constructor
+  virtual ~G4OpenGLXmTextField ();               //destructor
 
-  void SetName (char*);
-  char* GetName ();
+  void SetName (const char*);
+  const char* GetName ();
 
   void SetValue (G4double);
-  void SetValue (char*);
-  char* GetValue ();
+  void SetValue (const char*);
+  const char* GetValue ();
 
   void AddYourselfTo (G4OpenGLXmVWidgetContainer*);
 
@@ -42,7 +42,7 @@ public:
 private:
   G4OpenGLXmTextField (const G4OpenGLXmTextField&);
   G4OpenGLXmTextField& operator = (const G4OpenGLXmTextField&);
-  char* name;
+  const char* name;
   void* value;
   G4bool text;
   char* initial;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmTextField.cc,v 1.3 1999-12-15 14:54:10 gunter Exp $
+// $Id: G4OpenGLXmTextField.cc,v 1.4 2001-03-07 14:56:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Text field class. Inherits from G4OpenGLXmVWidgetComponent
@@ -18,7 +18,7 @@
 #include <X11/Intrinsic.h>
 #include "globals.hh"
 
-G4OpenGLXmTextField::G4OpenGLXmTextField (char* n,
+G4OpenGLXmTextField::G4OpenGLXmTextField (const char* n,
 					  G4double* val)
 {
   name = n;
@@ -28,8 +28,8 @@ G4OpenGLXmTextField::G4OpenGLXmTextField (char* n,
   text=false;
 }
 
-G4OpenGLXmTextField::G4OpenGLXmTextField (char* n,
-					  char* val)
+G4OpenGLXmTextField::G4OpenGLXmTextField (const char* n,
+					  const char* val)
 {
   name = n;
   initial = new char[50];
@@ -44,17 +44,17 @@ G4OpenGLXmTextField::~G4OpenGLXmTextField ()
   delete[] initial;
 }
 
-void G4OpenGLXmTextField::SetName (char* n) 
+void G4OpenGLXmTextField::SetName (const char* n) 
 {
   name = n;
-  XmString text_string = XmStringCreateLocalized (name);
+  XmString text_string = XmStringCreateLocalized ((char*)name);
   XtVaSetValues (text_label,
 		 XmNlabelString, text_string,
 		 NULL);
   XmStringFree (text_string);
 }
 
-char* G4OpenGLXmTextField::GetName () 
+const char* G4OpenGLXmTextField::GetName () 
 {
   return name;
 }
@@ -69,7 +69,7 @@ void G4OpenGLXmTextField::SetValue (G4double val)
   
 }
 
-void G4OpenGLXmTextField::SetValue (char* val)
+void G4OpenGLXmTextField::SetValue (const char* val)
 {
   sprintf (initial, "%s", val);
   //  strcpy (initial, val);
@@ -80,7 +80,7 @@ void G4OpenGLXmTextField::SetValue (char* val)
   
 }
 
-char* G4OpenGLXmTextField::GetValue ()
+const char* G4OpenGLXmTextField::GetValue ()
 {
   return initial;
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmBox.cc,v 1.3 1999-12-15 14:54:09 gunter Exp $
+// $Id: G4OpenGLXmBox.cc,v 1.4 2001-03-07 14:56:18 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Box container class
@@ -17,7 +17,7 @@
 #include "G4OpenGLXmVWidgetComponent.hh"
 #include "G4OpenGLXmVWidgetShell.hh"
 
-G4OpenGLXmBox::G4OpenGLXmBox (char* n, 
+G4OpenGLXmBox::G4OpenGLXmBox (const char* n, 
 			      G4bool r)
 {
   name = n;
@@ -76,12 +76,12 @@ Widget* G4OpenGLXmBox::GetPointerToWidget ()
   return &box_row_col;
 }
 
-char* G4OpenGLXmBox::GetName ()
+const char* G4OpenGLXmBox::GetName ()
 {
   return name;
 }
 
-void G4OpenGLXmBox::SetName (char* n)
+void G4OpenGLXmBox::SetName (const char* n)
 {
   name = n;
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmSliderBar.cc,v 1.3 1999-12-15 14:54:10 gunter Exp $
+// $Id: G4OpenGLXmSliderBar.cc,v 1.4 2001-03-07 14:56:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Slider bar class. Inherits from G4OpenGLXmVWidgetComponent
@@ -19,7 +19,7 @@
 #include <Xm/Scale.h>
 #include "globals.hh"
 
-G4OpenGLXmSliderBar::G4OpenGLXmSliderBar (char* n,
+G4OpenGLXmSliderBar::G4OpenGLXmSliderBar (const char* n,
 					  XtCallbackRec* c,
 					  G4bool s,
 					  short dp,
@@ -43,7 +43,7 @@ G4OpenGLXmSliderBar::G4OpenGLXmSliderBar (char* n,
 G4OpenGLXmSliderBar::~G4OpenGLXmSliderBar ()
 {}
 
-char* G4OpenGLXmSliderBar::GetName () 
+const char* G4OpenGLXmSliderBar::GetName () 
 {
   return name;
 }
@@ -83,10 +83,10 @@ unsigned char G4OpenGLXmSliderBar::GetDirection ()
   return direction;
 }
 
-void G4OpenGLXmSliderBar::SetName (char* n) 
+void G4OpenGLXmSliderBar::SetName (const char* n) 
 {
   name = n;
-  XmString sliderbar_string = XmStringCreateLocalized (name);
+  XmString sliderbar_string = XmStringCreateLocalized ((char*)name);
   XtVaSetValues (sliderbar,
 		 XmNlabelString, sliderbar_string,
 		 NULL);
@@ -163,7 +163,7 @@ void G4OpenGLXmSliderBar::AddYourselfTo (G4OpenGLXmVWidgetContainer* container)
   ProcesspView ();
 
   parent = container->GetPointerToWidget ();
-  XmString name_string = XmStringCreateLocalized (name);
+  XmString name_string = XmStringCreateLocalized ((char*)name);
   sliderbar = XtVaCreateManagedWidget (name,
 				       xmScaleWidgetClass,
 				       *parent,

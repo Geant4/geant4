@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmFramedBox.hh,v 1.4 2001-02-03 18:39:10 johna Exp $
+// $Id: G4OpenGLXmFramedBox.hh,v 1.5 2001-03-07 14:56:16 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@ class G4OpenGLXmFramedBox : public G4OpenGLXmBox
 {
 
 public:
-  G4OpenGLXmFramedBox (char* = NULL, 
+  G4OpenGLXmFramedBox (const char* = NULL, 
 		       G4bool = False);   //constructor
   virtual ~G4OpenGLXmFramedBox ();               //destructor
 
