@@ -1,4 +1,4 @@
-$Id: History,v 1.94 2003-08-22 10:19:27 gcosmo Exp $
+$Id: History,v 1.95 2003-09-12 19:20:47 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Sep 12, 2003  M.Asai (particles-V05-02-02)
+- Add DecayProperTime to deep copy of G4DecayProduct.
 
 - Aug 22, 2003  H.Kurasige (particles-V05-02-01)
 - G4DynamicParticle.cc: fixed memory leak for 'theElectronOccupancy'
