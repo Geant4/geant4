@@ -1,4 +1,4 @@
-$Id: History,v 1.124 2001-11-08 10:09:00 pia Exp $
+$Id: History,v 1.125 2001-11-09 17:16:26 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09.11.2001 - MGP, tag emlowen-V03-02-43
+             Fixed name in test/processTest/GNUmakefile causing
+             problems with library map
 
 08.11.2001 - MGP, tag emlowen-V03-02-42
              Modifications to be compliant with the unsupported, 
