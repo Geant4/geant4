@@ -1,4 +1,4 @@
-$Id: History,v 1.202 2002-11-21 17:48:09 gcosmo Exp $
+$Id: History,v 1.203 2002-11-22 11:53:09 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,19 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-19th November 2002  Gabriele Cosmo (config-V04-01-05)
+22nd November 2002  Gabriele Cosmo (config-V04-01-05)
 - liblist.c:
   o Enhanced script to provide the whole list of installed libraries
     in the correct order, without requiring parsing of dependencies.
-    The funcionality is achieved by invoking "liblist" with option '-m",
-    i.e. - liblist -m < libname.map
+    The functionality is achieved by invoking "liblist" with option '-m",
+      i.e. - liblist -m [libpath] < libname.map
+    where [libpath] is the path where libraries are placed
+    (i.e. $G4LIB/$G4SYSTEM).
 - binmake.gmk:
-  o Use "liblist -m" to retrieve the list of libraries to link in case
-    headers are installed in $G4INCLUDE, and granular libraries are used.
-    NOTE: the feature is not yet activated since it requires still more
-    enhancements to liblist, in order to exclude optional modules libs
-    from the link list (like... visualization, UI, persistency, ...)
-    according to what required by a generic application.
+  o Use "liblist -m [libpath]" to retrieve the list of libraries to link in
+    case headers are installed in $G4INCLUDE, and granular libraries are used.
+- G4UI_USE.gmk, G4VIS_USE.gmk:
+  o Protected specification of -I paths for headers, in case $G4INCLUDE is
+    used. A single -I$G4INCLUDE path will be used for compilation in such case.
 
 16th November 2002  Hans-Peter Wellisch
 - binmake.gmk:

@@ -1,4 +1,4 @@
-# $Id: G4UI_USE.gmk,v 1.5 2001-11-13 16:00:44 johna Exp $
+# $Id: G4UI_USE.gmk,v 1.6 2002-11-22 11:53:02 gcosmo Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for interfaces USE phase.
 #   John Allison, 6th July 1998.
@@ -21,11 +21,13 @@ UILIBS :=
 # C-pre-processor variable G4UI_USE_TERMINAL is set by default, although
 # there is no need to use it.
 
-CPPFLAGS += -I$(G4BASE)/interfaces/basic/include
+ifneq ($(G4INCLUDE_EXEC),1)
+  CPPFLAGS += -I$(G4BASE)/interfaces/basic/include
+  CPPFLAGS += -I$(G4BASE)/interfaces/common/include
+  CPPFLAGS += -I$(G4BASE)/interfaces/GAG/include
+endif
 UILIBS   += -lG4UIbasic
-CPPFLAGS += -I$(G4BASE)/interfaces/common/include
 UILIBS   += -lG4UIcommon
-CPPFLAGS += -I$(G4BASE)/interfaces/GAG/include
 UILIBS   += -lG4UIGAG
 
 ifdef G4UI_USE_TERMINAL
@@ -74,7 +76,9 @@ ifdef G4UI_USE_WO
   G4UI_USE  = 1
   G4INTY_USE_XT  = 1
   CPPFLAGS  += -DG4UI_USE_WO
-  CPPFLAGS  += -I$(G4BASE)/interfaces/OPACS/include
+  ifneq ($(G4INCLUDE_EXEC),1)
+    CPPFLAGS  += -I$(G4BASE)/interfaces/OPACS/include
+  endif
   UILIBS    += -lG4UIOPACS
   INC_OPACS  = 1
   LOAD_OPACS = 1

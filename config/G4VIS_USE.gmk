@@ -1,4 +1,4 @@
-# $Id: G4VIS_USE.gmk,v 1.13 2002-03-09 03:12:33 johna Exp $
+# $Id: G4VIS_USE.gmk,v 1.14 2002-11-22 11:53:09 gcosmo Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for visualization USE phase.
 #   John Allison, 24th January 1998.
@@ -13,25 +13,28 @@ endif
 # Set old USE C-pre-processor flags for backwards compatibility of user code...
 
 CPPFLAGS += -DG4VIS_USE_DAWNFILE
-CPPFLAGS += -I$(G4BASE)/visualization/FukuiRenderer/include
 VISLIBS  += -lG4FR
 
 CPPFLAGS += -DG4VIS_USE_HEPREPFILE
-CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include
 VISLIBS  += -lG4visHepRep
 
 CPPFLAGS += -DG4VIS_USE_RAYTRACER
-CPPFLAGS += -I$(G4BASE)/visualization/RayTracer/include
 VISLIBS  += -lG4RayTracer
 
 CPPFLAGS += -DG4VIS_USE_VRMLFILE
-CPPFLAGS += -I$(G4BASE)/visualization/VRML/include
 VISLIBS  += -lG4VRML
 
 CPPFLAGS += -DG4VIS_USE_ASCIITREE
 CPPFLAGS += -DG4VIS_USE_GAGTREE
-CPPFLAGS += -I$(G4BASE)/visualization/Tree/include
 VISLIBS  += -lG4Tree
+
+ifneq ($(G4INCLUDE_EXEC),1)
+  CPPFLAGS += -I$(G4BASE)/visualization/FukuiRenderer/include
+  CPPFLAGS += -I$(G4BASE)/visualization/HepRep/include
+  CPPFLAGS += -I$(G4BASE)/visualization/RayTracer/include
+  CPPFLAGS += -I$(G4BASE)/visualization/VRML/include
+  CPPFLAGS += -I$(G4BASE)/visualization/Tree/include
+endif
 
 ifdef G4VIS_USE_DAWN
   CPPFLAGS += -DG4VIS_USE_DAWN
@@ -42,7 +45,9 @@ ifdef G4VIS_USE_OPACS
   INC_OPACS  = 1
   LOAD_OPACS = 1
   CPPFLAGS += -DG4VIS_USE_OPACS
-  CPPFLAGS += -I$(G4BASE)/visualization/OPACS/include
+  ifneq ($(G4INCLUDE_EXEC),1)
+    CPPFLAGS += -I$(G4BASE)/visualization/OPACS/include
+  endif
   VISLIBS += -lG4OPACS
 endif
 
@@ -64,7 +69,9 @@ ifdef G4VIS_USE_OPENGLWIN32
 endif
 ifdef G4VIS_USE_OPENGL
   CPPFLAGS += -DG4VIS_USE_OPENGL
-  CPPFLAGS += -I$(G4BASE)/visualization/OpenGL/include
+  ifneq ($(G4INCLUDE_EXEC),1)
+    CPPFLAGS += -I$(G4BASE)/visualization/OpenGL/include
+  endif
   VISLIBS  += -lG4OpenGL
   INC_GL    = 1
   LOAD_GL   = 1
@@ -82,7 +89,9 @@ ifdef G4VIS_USE_OIWIN32
 endif
 ifdef G4VIS_USE_OI
   CPPFLAGS += -DG4VIS_USE_OI
-  CPPFLAGS += -I$(G4BASE)/visualization/OpenInventor/include
+  ifneq ($(G4INCLUDE_EXEC),1)
+    CPPFLAGS += -I$(G4BASE)/visualization/OpenInventor/include
+  endif
   VISLIBS += -lG4OpenInventor
   INC_IV    = 1
   LOAD_IV   = 1
@@ -106,8 +115,10 @@ endif
 ifdef G4_SOLVE_VIS_TEMPLATES
   CPPFLAGS += -DG4_SOLVE_VIS_TEMPLATES
 endif
-CPPFLAGS += -I$(G4BASE)/visualization/management/include
-CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
+ifneq ($(G4INCLUDE_EXEC),1)
+  CPPFLAGS += -I$(G4BASE)/visualization/management/include
+  CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
+endif
 VISLIBS  += -lG4vis_management
 VISLIBS  += -lG4modeling
 

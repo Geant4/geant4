@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.16 2002-11-19 16:36:34 gcosmo Exp $ */
+/* $Id: liblist.c,v 1.17 2002-11-22 11:53:10 gcosmo Exp $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory
@@ -9,7 +9,8 @@ of .d dependency files liblist produces:
      original libname.map file, then reordered according to the dependencies
      found in the .d files.  This option is used for compiling the file
      libname.map from all the dependencies.
-  c) with -m option, the whole library list ordered according to the libname.map.
+  c) with -m <lpath> option, the whole existing libraries list ordered
+     according to the libname.map, where libraries are placed in <lpath>.
 The .d files are specified in the argument(s).
 The libname.map is on standard input.
 
@@ -19,9 +20,11 @@ Usage:
   liblist -l *.d < libname.map
   liblist -ld <ddir> < libname.map
   liblist -l -d <ddir> < libname.map
-  liblist -m < libname.map
-where <ddir> is a directory name of a directory which is recursively
-searched for dependency files.
+  liblist -m <lpath> < libname.map
+where:
+  <ddir>  is a directory name of a directory which is recursively
+          searched for dependency files
+  <lpath> is the path where libraries are located
 
 Frank Behner, John Allison 13th February 1999.
 */
@@ -124,8 +127,9 @@ char** parsedir(char *directory,int *argc)
 int main (int argc, char** argv) {
 
   char static buffer[BUFSIZE],*bufferPtr,workbuf[256];
-  char *ptr,*p,**pp,**pp1,**pp2,*directory=0;
+  char *ptr,*p,**pp,**pp1,**pp2,*directory=0,*libpath=0;
   char **rargv;
+  char libname[128];
   int i,optl=0,optm=0,swapping,c,rargc;
   FILE *fp;
 
@@ -146,7 +150,7 @@ int main (int argc, char** argv) {
   struct libmap_ *libmap=0,*libmapPtr=0,*libmapPtr1=0,*libmapPtr2=0,
     *prevPtr1,*prevPtr2,*tmpp,*userLibmapPtr;
 
-  while((c=getopt(argc,argv,"ld: m::"))!=EOF)
+  while((c=getopt(argc,argv,"ld: m:"))!=EOF)
     {
       switch(c)
 	{
@@ -158,6 +162,7 @@ int main (int argc, char** argv) {
 	  break;
         case 'm':
           optm=1;
+	  libpath=strdup(optarg);
           break;
 	}
     }
@@ -535,8 +540,21 @@ int main (int argc, char** argv) {
       /* Write out full library list... */
       for(libmapPtr=libmap;libmapPtr;libmapPtr=libmapPtr->next)
       {
-        printf("-l%s ",libmapPtr->lib);
-        libmapPtr=libmapPtr->next;
+        /* Check existance of libraries and print out only installed ones */
+	sprintf(libname, "%s/lib%s.a", libpath, libmapPtr->lib);
+        if (access(libname,R_OK))
+	{
+	  sprintf(libname, "%s/lib%s.so", libpath, libmapPtr->lib);
+          if (!access(libname,R_OK))
+	  {
+            printf("-l%s ",libmapPtr->lib);
+	  }
+	}
+        else
+	{
+          printf("-l%s ",libmapPtr->lib);
+	}
+	libmapPtr=libmapPtr->next;
       }
     }
   else

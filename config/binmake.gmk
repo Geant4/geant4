@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.80 2002-11-19 16:37:34 gcosmo Exp $
+# $Id: binmake.gmk,v 1.81 2002-11-22 11:53:09 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -9,6 +9,11 @@ ifndef LDFLAGS
 endif
 
 G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
+
+# Define variable checking for existence of centrally installed headers.
+# If check will be true, avoid explicit definition of paths to INCFLAGS.
+#
+G4INCLUDE_EXEC := $(shell [ -r $(G4INCLUDE)/globals.hh ] && echo 1)
 
 include $(G4INSTALL)/config/G4UI_USE.gmk
 include $(G4INSTALL)/config/G4VIS_USE.gmk
@@ -27,18 +32,6 @@ ifndef SHAREDLIBS
   SHAREDLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4globman.$(SHEXT) && echo yes)
 endif
   
-# Define variable checking for existence of centrally installed headers,
-# and global compound libraries installed (in future, the mechanism will
-# be extended to the granular libraries as well. The liblist application
-# must be re-engineered for that).
-# If check will be true, avoid explicit definition of paths to INCFLAGS.
-#
-ifndef GLOBALLIBS
-  G4INCLUDE_EXEC := 0
-else
-  G4INCLUDE_EXEC := $(shell [ -r $(G4INCLUDE)/globals.hh ] && echo 1)
-endif
-
 ifndef INCFLAGS
  ifeq ($(G4INCLUDE_EXEC),1)
   INCFLAGS := -I$(G4INCLUDE)
@@ -117,9 +110,9 @@ ifndef INCFLAGS
               -I$(G4BASE)/event/include \
               -I$(G4BASE)/graphics_reps/include \
               -I$(G4BASE)/intercoms/include
-ifdef G4USE_G3TOG4
- INCFLAGS +=  -I$(G4BASE)/g3tog4/include
-endif
+  ifdef G4USE_G3TOG4
+    INCFLAGS +=  -I$(G4BASE)/g3tog4/include
+  endif
  endif
 endif
 
@@ -210,15 +203,15 @@ ifdef GLOBALLIBS
              -lG4intercoms \
              -lG4global
 else
-# The next line specifically should read LDLIBS2 = , not LDLIBS2 :=, so
-#   that it is not expanded until the directory G4TMPDIR is created.
+# The next lines specifically should read LDLIBS2 = , not LDLIBS2 :=, so
+# that it is not expanded until the directory G4TMPDIR is created.
   ifeq ($(G4INCLUDE_EXEC),1)
     LDLIBS2 = $(shell \
         G4TMP=$(G4TMP); export G4TMP; \
 	if [ \( -f $(G4LIB)/$(G4SYSTEM)/liblist \
 	  -a -f $(G4LIB)/$(G4SYSTEM)/libname.map \) ]; then \
 	$(G4LIB)/$(G4SYSTEM)/liblist \
-	  -m \
+	  -m $(G4LIB)/$(G4SYSTEM) \
 	  < $(G4LIB)/$(G4SYSTEM)/libname.map; fi)
   else
     LDLIBS2 = $(shell \
