@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.6 2004-02-27 09:41:08 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.7 2004-02-27 17:54:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -195,7 +195,7 @@ public:
   void SetDEDXTable(G4PhysicsTable* p);
   G4PhysicsTable* DEDXTable() const {return theDEDXTable;};
 
-  void SetRangeTable(G4PhysicsTable* p);
+  void SetRangeTable(G4PhysicsTable* pRange);
   G4PhysicsTable* RangeTable() const {return theRangeTable;};
 
   void SetRangeTableForLoss(G4PhysicsTable* p);
@@ -313,7 +313,11 @@ private:
 
   void DefineMaterial(const G4MaterialCutsCouple* couple);
 
-  G4double GetRangeForLoss(G4double& kineticEnergy, const G4MaterialCutsCouple* couple);
+  G4double GetDEDXForLoss(G4double kineticEnergy);
+
+  G4double GetRangeForLoss(G4double kineticEnergy);
+
+  G4double GetKineticEnergyForLoss(G4double range);
 
   // hide  assignment operator
 
@@ -407,7 +411,7 @@ inline void G4VEnergyLossProcess::DefineMaterial(const G4MaterialCutsCouple* cou
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossProcess::GetDEDX(G4double& kineticEnergy,
-                                    const G4MaterialCutsCouple* couple)
+                                        const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
   G4bool b;
@@ -419,8 +423,19 @@ inline G4double G4VEnergyLossProcess::GetDEDX(G4double& kineticEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline G4double G4VEnergyLossProcess::GetDEDXForLoss(G4double kineticEnergy)
+{
+  G4bool b;
+  G4double e = kineticEnergy*massRatio;
+  G4double x = ((*theDEDXTable)[currentMaterialIndex]->GetValue(e, b))*chargeSqRatio;
+  if(e < minKinEnergy) x *= sqrt(e/minKinEnergy);
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline G4double G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
-                                            const G4MaterialCutsCouple* couple)
+                                         const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
   G4bool b;
@@ -439,10 +454,8 @@ inline G4double G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossProcess::GetRangeForLoss(G4double& kineticEnergy,
-                                                const G4MaterialCutsCouple* couple)
+inline G4double G4VEnergyLossProcess::GetRangeForLoss(G4double kineticEnergy)
 {
-  DefineMaterial(couple);
   G4bool b;
   G4double e = kineticEnergy*massRatio;
   G4double x = ((*theRangeTableForLoss)[currentMaterialIndex])->GetValue(e, b);
@@ -453,10 +466,34 @@ inline G4double G4VEnergyLossProcess::GetRangeForLoss(G4double& kineticEnergy,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossProcess::GetKineticEnergy(G4double& range,
-                                             const G4MaterialCutsCouple* couple)
+                                                 const G4MaterialCutsCouple* couple)
 {
-  DefineMaterial(couple);
-  G4bool b;
+  G4double del = fRange - range;
+  G4double e   = minKinEnergy;
+  if(couple == currentCouple && del > 0.0 && del < fRange*linLossLimit) {
+    e = preStepKinEnergy - del*GetDEDXForLoss(preStepKinEnergy);
+    if(e < 0.0) e = 0.0;
+  } else {
+    DefineMaterial(couple);
+    G4double r = range/reduceFactor;
+    G4PhysicsVector* v = (*theInverseRangeTable)[currentMaterialIndex];
+    G4double rmin = v->GetLowEdgeEnergy(0);
+    if(r <= rmin) {
+      r /= rmin;
+      e *= r*r;
+    } else {
+      G4bool b;
+      e = v->GetValue(r, b);
+    }
+    e /= massRatio;
+  }
+  return e;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::GetKineticEnergyForLoss(G4double range)
+{
   G4double r = range/reduceFactor;
   G4PhysicsVector* v = (*theInverseRangeTable)[currentMaterialIndex];
   G4double rmin = v->GetLowEdgeEnergy(0);
@@ -465,6 +502,7 @@ inline G4double G4VEnergyLossProcess::GetKineticEnergy(G4double& range,
     r /= rmin;
     e *= r*r;
   } else {
+    G4bool b;
     e = v->GetValue(r, b);
   }
   return e/massRatio;
@@ -489,7 +527,6 @@ inline G4double G4VEnergyLossProcess::GetDEDXDispersion(
 inline G4double G4VEnergyLossProcess::GetMeanFreePath(const G4Track& track,
                                                             G4double, G4ForceCondition*)
 {
-//  *cond = NotForced;
   DefineMaterial(track.GetMaterialCutsCouple());
   preStepKinEnergy = track.GetKineticEnergy();
   preStepScaledEnergy = preStepKinEnergy*massRatio;
@@ -508,14 +545,11 @@ inline G4double G4VEnergyLossProcess::GetMeanFreePath(const G4Track& track,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(const G4Track&,
-                                  G4double, G4double currentMinStep, G4double&)
+                                      G4double, G4double currentMinStep, G4double&)
 {
   G4double x = DBL_MAX;
 
   if (theRangeTable) {
-    //G4bool b;
-    //    fRange = ((*theRangeTableForLoss)[currentMaterialIndex])->
-    //        GetValue(preStepScaledEnergy, b)*reduceFactor;
     fRange = GetRange(preStepKinEnergy, currentCouple);
 
     x = fRange;
@@ -630,7 +664,7 @@ inline G4double G4VEnergyLossProcess::MaxKinEnergy() const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossProcess::GetLambda(G4double kineticEnergy,
-                                      const G4MaterialCutsCouple* couple)
+                                          const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
   G4double x = DBL_MAX;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.20 2004-01-14 18:01:56 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.21 2004-02-27 17:54:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -148,9 +148,9 @@ public:
   void SetMaxEnergyForPreciseRange(G4double val);
 
   void SetMaxEnergyForMuons(G4double val);
-  
+
   void SetDEDXBinning(G4int val);
-  
+
   void SetDEDXBinningForPreciseRange(G4int val);
 
   void SetLambdaBinning(G4int val);
@@ -164,6 +164,12 @@ public:
   G4EnergyLossMessenger* GetMessenger();
 
   G4bool IsRecalcNeeded(const G4ParticleDefinition* aParticle);
+
+  const std::vector<G4VEnergyLossProcess*>& GetEnergyLossProcessVector();
+
+  const std::vector<G4VEmProcess*>& GetEmProcessVector();
+
+  const std::vector<G4VMultipleScattering*>& GetMultipleScatteringVector();
 
 private:
 

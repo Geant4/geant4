@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.40 2004-01-21 18:05:10 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.41 2004-02-27 17:54:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -596,12 +596,15 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
       newlist.push_back(loss_list[i]->BuildDEDXTableForPreciseRange());
     }
     G4PhysicsTable* dedxForRange = newlist[0];
-    if (1 < n_dedx) dedxForRange = tableBuilder->BuildDEDXTable(newlist);
-    range = tableBuilder->BuildRangeTable(dedxForRange);
-    for(G4int j=0; j<n_dedx; j++) {
-      newlist[j]->clearAndDestroy();
+    if (1 < n_dedx) {
+      dedxForRange = tableBuilder->BuildDEDXTable(newlist);
+      for(G4int j=0; j<n_dedx; j++) {
+        newlist[j]->clearAndDestroy();
+      }
     }
     newlist.clear();
+    range = tableBuilder->BuildRangeTable(dedxForRange);
+    delete dedxForRange;
   }
 
   em->SetRangeTable(range);
@@ -817,6 +820,27 @@ void G4LossTableManager::SetParameters(G4VEnergyLossProcess* p)
   if(integralActive)     p->SetIntegral(integral);
   if(minEnergyActive)    p->SetMinKinEnergy(minKinEnergy);
   if(maxEnergyActive)    p->SetMaxKinEnergy(maxKinEnergy);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+const std::vector<G4VEnergyLossProcess*>& G4LossTableManager::GetEnergyLossProcessVector()
+{
+  return loss_vector;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+const std::vector<G4VEmProcess*>& G4LossTableManager::GetEmProcessVector()
+{
+  return emp_vector;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+const std::vector<G4VMultipleScattering*>& G4LossTableManager::GetMultipleScatteringVector()
+{
+  return msc_vector;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

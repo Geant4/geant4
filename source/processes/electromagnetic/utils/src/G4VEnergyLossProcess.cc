@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.5 2004-02-27 09:41:09 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.6 2004-02-27 17:54:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -579,7 +579,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaSubTable()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
-                                                   const G4Step& step)
+                                                       const G4Step& step)
 {
   fParticleChange.InitializeForAlongStep(track);
   // The process has range table - calculate energy loss
@@ -588,7 +588,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   // Get the actual (true) Step length
   G4double length = step.GetStepLength();
   G4double eloss  = 0.0;
-  G4bool b;
+//  G4bool b;
 
 /*
   if(-1 < verboseLevel) {
@@ -608,29 +608,25 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   if (length >= fRange) {
     eloss = preStepKinEnergy;
 
+/*
   } else if(preStepScaledEnergy <= minKinEnergy) {
 
     G4double x = 1.0 - length/fRange;
     eloss = preStepKinEnergy*(1.0 - x*x);
-
+*/
   // Short step
   } else if( length <= linLossLimit * fRange ) {
-    eloss = (((*theDEDXTable)[currentMaterialIndex])->
-               GetValue(preStepScaledEnergy, b))*length*chargeSqRatio;
+    eloss = GetDEDXForLoss(preStepKinEnergy)*length*chargeSqRatio;
 
   // Long step
   } else {
-    G4double x = (((*theRangeTableForLoss)[currentMaterialIndex])->
-                  GetValue(preStepScaledEnergy, b) - length)/reduceFactor;
-    //G4double x = (fRange-length)/reduceFactor;
-    G4double postStepScaledEnergy = ((*theInverseRangeTable)[currentMaterialIndex])->
-             GetValue(x, b);
-    eloss = (preStepScaledEnergy - postStepScaledEnergy)/massRatio;
+    G4double x = (GetRangeForLoss(preStepKinEnergy) - length)/reduceFactor;
+    G4double postStepScaledEnergy = GetKineticEnergyForLoss(x);
 
-    if (eloss <= 0.0) {
-      eloss = (((*theDEDXTable)[currentMaterialIndex])->
-               GetValue(preStepScaledEnergy, b))*length*chargeSqRatio;
-    }
+    if (preStepScaledEnergy > postStepScaledEnergy)
+      eloss = (preStepScaledEnergy - postStepScaledEnergy)/massRatio;
+    else
+      eloss = GetDEDXForLoss(preStepKinEnergy)*length*chargeSqRatio;
 
 /*
     if(-1 < verboseLevel) {
@@ -851,17 +847,18 @@ void G4VEnergyLossProcess::SetRangeTable(G4PhysicsTable* p)
   size_t n = p->length();
   if(0 < n) {
     G4PhysicsVector* pv = (*p)[0];
+    G4double emax = pv->GetLowEdgeEnergy(pv->GetVectorLength());
     G4bool b;
     theDEDXAtMaxEnergy = new G4double [n];
     theRangeAtMaxEnergy = new G4double [n];
 
     for (size_t i=0; i<n; i++) {
       pv = (*p)[i];
-      G4double r2 = pv->GetValue(maxKinEnergyForRange, b);
-      G4double dedx = ((*theDEDXTable)[i])->GetValue(maxKinEnergyForRange,b);
+      G4double r2 = pv->GetValue(emax, b);
+      G4double dedx = ((*theDEDXTable)[i])->GetValue(emax,b);
       theDEDXAtMaxEnergy[i] = dedx;
       theRangeAtMaxEnergy[i] = r2;
-      //G4cout << "i= " << i << " e2(MeV)= " << maxKinEnergyForRange/MeV << " r2= " << r2 
+      //G4cout << "i= " << i << " e2(MeV)= " << emax/MeV << " r2= " << r2
       //       << " dedx= " << dedx << G4endl;
     }
   }
