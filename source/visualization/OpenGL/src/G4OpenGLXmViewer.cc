@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.3 1999-12-15 14:54:11 gunter Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.4 2000-05-22 08:14:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -587,40 +587,17 @@ fpdolly_slider (NULL)
 
   WinSize_x = 100;
   WinSize_y = 100;
-  vi_immediate = 0;
-  vi_stored = 0;
   
   GetXmConnection ();
   if (fViewId < 0) return;
 
-  // Try for a visual suitable for OpenGLImmediate..
-  // first try for a single buffered RGB window
-  if (vi_immediate =
-      glXChooseVisual (dpy, XDefaultScreen (dpy), snglBuf_RGBA)) {
-    attributeList = snglBuf_RGBA;
-    doublebuffer = false;
-  }
-
-  if (!vi_immediate){
-    // next try for a double buffered RGB, but Draw to top buffer
-    if (vi_immediate =
-	glXChooseVisual (dpy, XDefaultScreen (dpy), dblBuf_RGBA)) {
-      attributeList = dblBuf_RGBA;
-      doublebuffer = true;
-    }
-  }
-
-  // Now try for a visual suitable for OpenGLStored...
-  // Try for a double buffered RGB window
-  if (vi_stored = glXChooseVisual (dpy, XDefaultScreen (dpy), dblBuf_RGBA)) {
-    attributeList = dblBuf_RGBA;
-    doublebuffer = true;
-  }
-
 }
+
 G4OpenGLXmViewer::~G4OpenGLXmViewer ()
 {
   XtDestroyWidget  (shell);
+  win = 0; // ...to avoid XDestroyWindow in G4OpenGLXViewer base class
+  // because XtDestroyWidget has already destroyed it.
   G4Xt::getInstance () ->RemoveShell (shell);
 
 /******************************
