@@ -17,5 +17,14 @@ class G4StringChipsParticleLevelInterface : public G4VIntraNuclearTransportModel
   
     G4ChiralInvariantPhaseSpace theModel;
     G4double theEnergyLossPerFermi;
+    
+    G4double fractionOfSingleQuasiFreeNucleons;
+    G4double fractionOfPairedQuasiFreeNucleons;
+    G4double clusteringCoefficient;
+    G4double temperature;
+    G4double halfTheStrangenessOfSee;
+    G4double etaToEtaPrime;
+    G4double fusionToExchange;
+    G4int nop;
 };
 #endif

@@ -4,6 +4,8 @@
 #include "g4std/list"
 #include "G4KineticTrackVector.hh"
 #include "G4Nucleon.hh"
+#include "G4Proton.hh"
+#include "G4Neutron.hh"
 #include "G4LorentzRotation.hh"
 
 G4StringChipsParticleLevelInterface::G4StringChipsParticleLevelInterface()
@@ -12,6 +14,30 @@ G4StringChipsParticleLevelInterface::G4StringChipsParticleLevelInterface()
   G4cin >> theEnergyLossPerFermi;
   theEnergyLossPerFermi *= GeV;
   // theEnergyLossPerFermi = 1.*GeV;
+  G4cout << "Please enter nop"<<G4endl;
+  G4cin >> nop;
+  // G4int nop = 223; // ??????
+  G4cout << "Please enter the fractionOfSingleQuasiFreeNucleons"<<G4endl;
+  G4cin >> fractionOfSingleQuasiFreeNucleons;
+  // G4double fractionOfSingleQuasiFreeNucleons = 0.45;
+  G4cout << "Please enter the fractionOfPairedQuasiFreeNucleons"<<G4endl;
+  G4cin >> fractionOfPairedQuasiFreeNucleons;
+  // G4double fractionOfPairedQuasiFreeNucleons = 0.15;
+  G4cout << "Please enter the clusteringCoefficient"<<G4endl;
+  G4cin >> clusteringCoefficient;
+  //G4double clusteringCoefficient = 5.;
+  G4cout << "Please enter the temperature"<<G4endl;
+  G4cin >> temperature;
+  G4double temperature = 180.;
+  G4cout << "Please enter halfTheStrangenessOfSee"<<G4endl;
+  G4cin >> halfTheStrangenessOfSee;
+  //G4double halfTheStrangenessOfSee = 0.1; // = s/d = s/u
+  G4cout << "Please enter the etaToEtaPrime"<<G4endl;
+  G4cin >> etaToEtaPrime;
+  //G4double etaToEtaPrime = 0.3;
+  G4cout << "Please enter the fusionToExchange"<<G4endl;
+  G4cin >> fusionToExchange;
+  //G4double fusionToExchange = 0.000001;
 }
 
 G4VParticleChange* G4StringChipsParticleLevelInterface::
@@ -121,6 +147,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   {
     firstEscaping = current;
     runningEnergy += current->second->Get4Momentum().t();
+    if(current->second->GetDefinition() == G4Proton::Proton())
+      runningEnergy-=G4Proton::Proton()->GetPDGMass();
+    if(current->second->GetDefinition() == G4Neutron::Neutron())
+      runningEnergy-=G4Neutron::Neutron()->GetPDGMass();
     if(runningEnergy > theEnergyLostInFragmentation) break;
     
      G4cout <<"ABSORBED STRING particles "<<current->second->GetDefinition()->GetPDGCharge()<<" "
@@ -183,17 +213,11 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     }
   }
   // construct the quasmon
-  G4int nop = 223; // ??????
-  G4double fractionOfSingleQuasiFreeNucleons = 0.15;
-  G4double fractionOfPairedQuasiFreeNucleons = 0.01;
-  G4double clusteringCoefficient = 5.;
-  G4double temperature = 180.;
-  G4double halfTheStrangenessOfSee = 0.1; // = s/d = s/u
-  G4double etaToEtaPrime = 0.3;
 
   G4QNucleus::SetParameters(fractionOfSingleQuasiFreeNucleons,
                             fractionOfPairedQuasiFreeNucleons,
-			                clusteringCoefficient, 0.01);
+			                clusteringCoefficient, 
+					fusionToExchange);
   G4Quasmon::SetParameters(temperature,
                            halfTheStrangenessOfSee,
 			               etaToEtaPrime);
