@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2000-05-24 15:36:10 maire Exp $
+$Id: History,v 1.2 2000-06-22 13:39:05 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+22 jun 00: mma  (utils-V01-01-03)
+- muls: do not nuclear size correction for electron
+- move Eloss messenger --> G4VEnergyLoss
+          
 24 may 00: mma  (utils-V01-01-02)
 - merge "plus" processes into standard      
      
