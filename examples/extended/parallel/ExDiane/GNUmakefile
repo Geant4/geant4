@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2004-05-25 08:52:47 guatelli Exp $
+# $Id: GNUmakefile,v 1.2 2004-05-25 12:39:07 guatelli Exp $
 # --------------------------------------------------------------
 
 name := Brachy
@@ -11,7 +11,14 @@ ifndef G4INSTALL
 endif
 
 .PHONY: all
+
+ifdef G4DIANE_USE
 all: lib bin
+	@echo "Linking DIANE libraries..."
+	@g++ -shared -o${G4WORKDIR}/tmp/${G4SYSTEM}/${name}/libDIANE_${name}.so -L${G4WORKDIR}/tmp/${G4SYSTEM}/${name} -l${name} ${LDFLAGS} ${LDLIBS} 
+else
+all: lib bin
+endif
 
 include $(G4INSTALL)/config/binmake.gmk
 ifdef G4ANALYSIS_USE  

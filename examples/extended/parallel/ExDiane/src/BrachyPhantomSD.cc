@@ -29,7 +29,7 @@
 //    *                              *
 //    ********************************
 //
-// $Id: BrachyPhantomSD.cc,v 1.2 2004-05-25 08:36:18 guatelli Exp $
+// $Id: BrachyPhantomSD.cc,v 1.3 2004-05-25 12:39:09 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomSD.hh"
@@ -70,9 +70,6 @@ G4bool BrachyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
   G4double energyDeposit = aStep -> GetTotalEnergyDeposit();
   if(energyDeposit == 0.)
     return false;
-
-  G4VPhysicalVolume* physVol = ROhist -> GetVolume();
-    
   
   if(energyDeposit != 0)                       
     {             
@@ -91,11 +88,11 @@ G4bool BrachyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
  
       BrachyAnalysisManager* analysis = 
 	BrachyAnalysisManager::getInstance();   
-      if (yy<0.5*mm && yy> -0.5*mm)
+      if (y < 0.8*mm && y > -0.8*mm)
 	{ 
 	  analysis -> FillHistogramWithEnergy(x,z,energyDeposit/MeV);
    
-	  if (zz<0.5*mm && zz> -0.5*mm)
+	  if (z < 0.8*mm && z > -0.8*mm)
 	    analysis -> DoseDistribution(x,energyDeposit/MeV);
 	}
 #endif  
@@ -103,7 +100,7 @@ G4bool BrachyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
   return true;
 }
 
-void BrachyPhantomSD::EndOfEvent(G4HCofThisEvent*HCE)
+void BrachyPhantomSD::EndOfEvent(G4HCofThisEvent*)
 {
 }
 
