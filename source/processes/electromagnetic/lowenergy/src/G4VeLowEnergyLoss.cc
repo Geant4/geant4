@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.16 2001-11-07 20:47:30 pia Exp $
+// $Id: G4VeLowEnergyLoss.cc,v 1.17 2001-11-23 11:45:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 // 22/11/00 minor fix in fluctuations V.Ivanchenko
 // 10/05/01  V.Ivanchenko Clean up againist Linux compilation with -Wall
 // 22/05/01  V.Ivanchenko Update range calculation
+// 23/11/01  V.Ivanchenko Move static member-functions from header to source
 //
 // --------------------------------------------------------------
 
@@ -95,11 +96,29 @@ G4VeLowEnergyLoss::G4VeLowEnergyLoss(G4VeLowEnergyLoss& right)
 {
 }
 
-//    
+void G4VeLowEnergyLoss::SetRndmStep(G4bool value) 
+{
+   rndmStepFlag   = value;
+}
+
+void G4VeLowEnergyLoss::SetEnlossFluc(G4bool value) 
+{
+   EnlossFlucFlag = value;
+}
+
+void G4VeLowEnergyLoss::SetStepFunction (G4double c1, G4double c2)
+{
+   dRoverRange = c1; 
+   finalRange = c2;
+   c1lim=dRoverRange;
+   c2lim=2.*(1-dRoverRange)*finalRange;
+   c3lim=-(1.-dRoverRange)*finalRange*finalRange;
+}
 
 G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeTable(
         G4PhysicsTable* theDEDXTable,G4PhysicsTable* theRangeTable,            
-        G4double lowestKineticEnergy,G4double highestKineticEnergy,G4int TotBin)
+        G4double lowestKineticEnergy,G4double highestKineticEnergy,
+        G4int TotBin)
 // Build range table from the energy loss table
 {
    

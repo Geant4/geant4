@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.13 2001-11-07 20:47:30 pia Exp $
+// $Id: G4hLowEnergyLoss.cc,v 1.14 2001-11-23 11:45:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -44,6 +44,7 @@
 // 31/03/00   rename to lowenergy as G4hLowEnergyLoss.cc V.Ivanchenko
 // 05/11/00   new method to calculate particle ranges
 // 10/05/01   V.Ivanchenko Clean up againist Linux compilation with -Wall
+// 23/11/01   V.Ivanchenko Move static member-functions from header to source
 // --------------------------------------------------------------
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -159,6 +160,66 @@ G4hLowEnergyLoss::~G4hLowEnergyLoss()
         theLossTable->clearAndDestroy();
         delete theLossTable;
      }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4int G4hLowEnergyLoss::GetNumberOfProcesses()    
+{   
+    return NumberOfProcesses; 
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hLowEnergyLoss::SetNumberOfProcesses(G4int number)
+{
+    NumberOfProcesses=number; 
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hLowEnergyLoss::PlusNumberOfProcesses()
+{ 
+    NumberOfProcesses++; 
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hLowEnergyLoss::MinusNumberOfProcesses()
+{ 
+    NumberOfProcesses--; 
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hLowEnergyLoss::SetdRoverRange(G4double value) 
+{
+    dRoverRange = value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hLowEnergyLoss::SetRndmStep (G4bool   value) 
+{
+    rndmStepFlag = value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hLowEnergyLoss::SetEnlossFluc (G4bool value) 
+{
+    EnlossFlucFlag = value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hLowEnergyLoss::SetStepFunction (G4double c1, G4double c2)
+{
+    dRoverRange = c1; 
+    finalRange = c2;
+    c1lim=dRoverRange;
+    c2lim=2.*(1-dRoverRange)*finalRange;
+    c3lim=-(1.-dRoverRange)*finalRange*finalRange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.hh,v 1.12 2001-09-10 18:05:17 pia Exp $
+// $Id: G4hLowEnergyLoss.hh,v 1.13 2001-11-23 11:45:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -49,6 +49,7 @@
 // 02/02/99 L.Urban several bugs fixed
 // 31/03/00 V.Ivanchenko rename to lowenergy as G4hLowEnergyLoss.hh 
 // 09/08/00 V.Ivanchenko remove GetContinuousStepLimit and IsApplicable
+// 23/11/01 V.Ivanchenko Move static member-functions from header to source
 //
 // Class description:
 // Class for Low Energy electromagnetic energy loss of hadrons 
@@ -126,29 +127,21 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
   public:
 
     //  get the number of processes contributing to the cont.energy loss
-    static G4int GetNumberOfProcesses()    { return NumberOfProcesses; }; 
+    static G4int GetNumberOfProcesses(); 
 
     //  set the number of processes contributing to the cont.energy loss
-    static void SetNumberOfProcesses(G4int number)
-                                {NumberOfProcesses=number ; }; 
+    static void SetNumberOfProcesses(G4int number);
 
     //  Increment the number of processes contributing to the cont.energy loss
-    static void PlusNumberOfProcesses()
-                                { NumberOfProcesses++  ; }; 
+    static void PlusNumberOfProcesses();
 
     //  decrement the number of processes contributing to the cont.energy loss
-    static void MinusNumberOfProcesses()
-                                { NumberOfProcesses--  ; }; 
+    static void MinusNumberOfProcesses();
 
-    static void SetdRoverRange(G4double value) {dRoverRange = value;}
-    static void SetRndmStep     (G4bool   value) {rndmStepFlag   = value;}
-    static void SetEnlossFluc   (G4bool   value) {EnlossFlucFlag = value;}
-    static void SetStepFunction (G4double c1, G4double c2)
-                               {dRoverRange = c1; finalRange = c2;
-                                c1lim=dRoverRange ;
-                                c2lim=2.*(1-dRoverRange)*finalRange;
-                                c3lim=-(1.-dRoverRange)*finalRange*finalRange;
-                               }
+    static void SetdRoverRange(G4double value);
+    static void SetRndmStep     (G4bool   value);
+    static void SetEnlossFluc   (G4bool   value);
+    static void SetStepFunction (G4double c1, G4double c2);
 
   protected:
 

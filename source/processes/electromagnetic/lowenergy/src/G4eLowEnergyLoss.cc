@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.22 2001-10-26 09:34:34 vnivanch Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.23 2001-11-23 11:45:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -53,6 +53,7 @@
 // 19/10/01  update according to new design, V.Ivanchenko
 // 24/10/01  MGP - Protection against negative energy loss in AlongStepDoIt
 // 26/10/01  VI Clean up access to deexcitation 
+// 23/11/01  VI Move static member-functions from header to source
 //
 // --------------------------------------------------------------
  
@@ -142,6 +143,55 @@ G4eLowEnergyLoss::~G4eLowEnergyLoss()
        }
 }
 
+void G4eLowEnergyLoss::SetNbOfProcesses(G4int nb) 
+{
+    NbOfProcesses=nb;
+}
+
+void G4eLowEnergyLoss::PlusNbOfProcesses()        
+{
+    NbOfProcesses++;
+}
+
+void G4eLowEnergyLoss::MinusNbOfProcesses() 
+{
+    NbOfProcesses--;
+}                                      
+
+G4int G4eLowEnergyLoss::GetNbOfProcesses() 
+{
+    return NbOfProcesses;
+}
+    
+void G4eLowEnergyLoss::SetLowerBoundEloss(G4double val) 
+{
+    LowerBoundEloss=val;
+} 
+    
+void G4eLowEnergyLoss::SetUpperBoundEloss(G4double val) 
+{
+    UpperBoundEloss=val;
+} 
+    
+void G4eLowEnergyLoss::SetNbinEloss(G4int nb)
+{
+    NbinEloss=nb;
+}
+ 
+G4double G4eLowEnergyLoss::GetLowerBoundEloss() 
+{
+    return LowerBoundEloss;
+} 
+    
+G4double G4eLowEnergyLoss::GetUpperBoundEloss() 
+{
+    return UpperBoundEloss;
+} 
+    
+G4int G4eLowEnergyLoss::GetNbinEloss() 
+{
+    return NbinEloss;
+} 
 //     
 
 void G4eLowEnergyLoss::BuildDEDXTable(

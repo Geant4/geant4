@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeLowEnergyLoss.hh,v 1.6 2001-09-10 18:05:17 pia Exp $
+// $Id: G4VeLowEnergyLoss.hh,v 1.7 2001-11-23 11:45:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 3.4.2000 Veronique Lefebure:
@@ -49,7 +49,8 @@
 //  -----------------------------------------------------------
 //
 //  Modifications:
-// 20/09/00 update fluctuations V.Ivanchenko
+// 20/09/00 V.Ivanchenko update fluctuations 
+// 23/11/01 V.Ivanchenko Move static member-functions from header to source
 //
 // Class description:
 // Abstract class for Low Energy Electromagnetic electron energy loss
@@ -127,20 +128,15 @@ class G4VeLowEnergyLoss : public G4VContinuousDiscreteProcess
 
   public:  // With description
 
-    static void SetRndmStep     (G4bool   value) {rndmStepFlag   = value;}
+    static void SetRndmStep     (G4bool   value);
     // use / do not use randomisation in energy loss steplimit
     // ( default = no randomisation)
 
-    static void SetEnlossFluc   (G4bool   value) {EnlossFlucFlag = value;}
+    static void SetEnlossFluc   (G4bool   value);
     // compute energy loss with/without fluctuation
     // ( default : with fluctuation)
 
-    static void SetStepFunction (G4double c1, G4double c2)
-                               {dRoverRange = c1; finalRange = c2;
-                                c1lim=dRoverRange ;
-                                c2lim=2.*(1-dRoverRange)*finalRange;
-                                c3lim=-(1.-dRoverRange)*finalRange*finalRange;
-                               }
+    static void SetStepFunction (G4double c1, G4double c2);
     // sets values for data members used to compute the step limit:
     //   dRoverRange : max. relative range change in one step,
     //   finalRange  : if range <= finalRange --> last step for the particle.
