@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.13 2003-02-04 17:21:32 parlati Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.14 2003-02-07 11:42:55 parlati Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -206,7 +206,7 @@ G4Material* ClMat = new G4Material(name="Chlorine", z=17., a, density);
 
 density = 1.390*g/cm3;
 a = 39.95*g/mole;
-G4Material* lAr = new G4Material(name="liquidArgon", z=18., a, density);
+G4Material* lArMat = new G4Material(name="liquidArgon", z=18., a, density);
 
 a = 39.098*g/mole;
 density= 8.62e-1*g/cm3;
@@ -348,21 +348,122 @@ density =4.93*g/cm3;
 a =126.90447*g/mole;
  G4Material* IMat = new G4Material(name="Iodine"  , z=53., a, density);
 
+
+density =5.48536e-3*g/cm3;
+a =131.293*g/mole;
+ G4Material* XeMat = new G4Material(name="Xenon"  , z=54., a, density);
+
+density =1.873*g/cm3;
+a =132.90545*g/mole;
+ G4Material* CsMat = new G4Material(name="Cesium"  , z=55., a, density);
+
+density =3.5*g/cm3;
+a =137.327*g/mole;
+ G4Material* BaMat = new G4Material(name="Barium"  , z=56., a, density);
+
+
+density =6.154*g/cm3;
+a =138.9055*g/mole;
+ G4Material* LaMat = new G4Material(name="Lanthanum" , z=57., a, density);
+
+density =6.657*g/cm3;
+a =140.116*g/mole;
+ G4Material* CeMat = new G4Material(name="Cerium" , z=58., a, density);
+
+density =6.71*g/cm3;
+a =140.90765*g/mole;
+ G4Material* PrMat = new G4Material(name="Praseodymium" , z=59., a, density);
+
+density =6.9*g/cm3;
+a =144.24*g/mole;
+ G4Material* NdMat = new G4Material(name="Neodymium" , z=60., a, density);
+
+density =7.22*g/cm3;
+a =145.*g/mole;
+ G4Material* PmMat = new G4Material(name="Promethium" , z=61., a, density);
+
 density =7.46*g/cm3;
 a =150.36*g/mole;
  G4Material* SmMat = new G4Material(name="Samarium"  , z=62., a, density);
+
+density =5.243*g/cm3;
+a =151.964*g/mole;
+ G4Material* EuMat = new G4Material(name="Europium"  , z=63., a, density);
+
+
+density =7.9004*g/cm3;
+a =157.25*g/mole;
+ G4Material* GdMat = new G4Material(name="Gadolinium"  , z=64., a, density);
+
+
+density =8.229*g/cm3;
+a =158.92534*g/mole;
+ G4Material* TbMat = new G4Material(name="Terbium"  , z=65., a, density);
+
+density =8.55*g/cm3;
+a =162.500*g/mole;
+ G4Material* DyMat = new G4Material(name="Dysprosium"  , z=66., a, density);
+
+density =8.795*g/cm3;
+a =164.93032*g/mole;
+ G4Material* HoMat = new G4Material(name="Holmium"  , z=67., a, density);
+
+density =9.066*g/cm3;
+a =167.259*g/mole;
+ G4Material* ErMat = new G4Material(name="Erbium"  , z=68., a, density);
+
+
+density =9.321*g/cm3;
+a =168.93421*g/mole;
+ G4Material* TmMat = new G4Material(name="Thulium"  , z=69., a, density);
 
 density =6.73*g/cm3;
 a =173.04*g/mole;
  G4Material* YbMat = new G4Material(name="Ytterbium"  , z=70., a, density);
 
+density =9.84*g/cm3;
+a =174.967*g/mole;
+ G4Material* LuMat = new G4Material(name="Lutetium"  , z=71., a, density);
+
+density =13.31*g/cm3;
+a =178.49*g/mole;
+ G4Material* HfMat = new G4Material(name="Hafnium"  , z=72., a, density);
+
+density =16.6540*g/cm3;
+a =180.9479*g/mole;
+ G4Material* TaMat = new G4Material(name="Tantalum"  , z=73., a, density);
+
 density =19.3*g/cm3;
 a =183.84*g/mole;
  G4Material* WMat = new G4Material(name="Tungsten"  , z=74., a, density);
 
+density =21.020*g/cm3;
+a =186.207*g/mole;
+ G4Material* ReMat = new G4Material(name="Rhenium"  , z=75., a, density);
+
+density =22.57*g/cm3;
+a =190.23*g/mole;
+ G4Material* OsMat = new G4Material(name="Osmium"  , z=76., a, density);
+
+density =22.42*g/cm3;
+a =192.217*g/mole;
+ G4Material* IrMat = new G4Material(name="Iridium"  , z=77., a, density);
+
+density =21.45*g/cm3;
+a =195.078*g/mole;
+ G4Material* PtMat = new G4Material(name="Platinum"  , z=78., a, density);
+
 density = 19.32*g/cm3;
 a = 196.966*g/mole;
 G4Material* AuMat = new G4Material(name="Gold"     , z=79., a, density);
+
+density =13.54*g/cm3;
+a =200.59*g/mole;
+G4Material* HgMat = new G4Material(name="Mercury"     , z=80., a, density);
+
+density =11.72*g/cm3;
+a =204.3833*g/mole;
+G4Material* TlMat = new G4Material(name="Thallium"     , z=81., a, density);
 
 density = 11.35*g/cm3;
 a = 207.19*g/mole;
@@ -435,7 +536,7 @@ pressure    = 2.e-2*bar;
 temperature = STP_Temperature;         //from PhysicalConstants.h
 
 
-  TargetMaterial =lAr;
+  TargetMaterial =lArMat;
 
 
   defaultMaterial  = Vacuum;
