@@ -31,29 +31,28 @@ ifeq ($(G4SYSTEM),WIN32-VC7)
   endif
 
 #
-# Buildign DLLs (from G.Barrand) :
+# Building DLLs (from G.Barrand)
+# -------------
 #  The below commands permit to build DLLs from the archive libraries.
-#  From a libG4xxx.a, you have to extract the symbols 
-#  from the archive library with :
+#  From a libG4xxx.a, it will extract the symbols with :
 #    DOS> dumpbin /symbols libG4xxx.a > G4xxx.dumpbin
-#  From that you have to produce a G4xxx.def with the win32def program.
-#  The G4xxx.def comtains the list of symbols that are "exported"
-#  or made public for people using the DLL.
-#  win32def.c is in config/sys. The binary is also distributed here, 
-#  but you can reconstruct it there with :
+#  After that it will produce a G4xxx.def using the 'win32def' program.
+#  The G4xxx.def file will contain the list of symbols that are "exported"
+#  or made public for using the DLLs.
+#  The source win32def.c is in config/sys. The binary is built during the
+#  library installation process, and will be placed in $G4LIB/G4SYSTEM. 
+#  If can also be built as follows :
 #    DOS> cl.exe /Fowin32def.exe win32def.c 
-#  Then :
+#  Then, to use it :
 #    DOS> win32def G4xxx < G4xxx.dumpbin > G4xxx.def
-#  Then, you can construct libG4xxx.lib (used by people to link their 
-#  application) with :
+#  Libraries libG4xxx.lib can also be built with :
 #    DOS> lib /def:G4xxx.def /out:libG4xxx.lib
-#  It produces also a libG4xxx.exp used to build the dll.
-#  Construct the DLL with :
+#  It also produces a libG4xxx.exp used to build the DLL.
+#  The DLL can be built with :
 #    DOS> link /dll /out:G4xxx.dll libG4xxx.exp libG4xxx.a <dependencies>
-#  Note that a DLL must be fully linked. You can't have undefined 
-#  symbols at the output of the link command.
+#  Note that a DLL must be fully linked. You should NOT have undefined 
+#  symbols as output of the link command.
 #
-
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`;\
     cd $(G4TMP)/$(G4SYSTEM);\
