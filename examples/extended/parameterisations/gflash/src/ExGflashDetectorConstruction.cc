@@ -1,3 +1,4 @@
+// Created by Joanna Weng 26.11.2004
 #include <iostream>
 // G4 Classes
 #include "globals.hh"
@@ -95,7 +96,12 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
 	//------------------------------
 	// Simplified `CMS-like` PbWO4 crystal calorimeter  
 
-	m_NbOfCrystals = 10;
+	m_NbOfCrystals = 10;  // this are the crystals PER ROW in this example 
+	                      // cube of 10 x 10 crystals 
+	                      // don't change it @the moment, since 
+	                      // the readout in event action assumes this 
+	                      // dimensions and is not automatically adapted
+	                      // in this version of the example :-( 
 	m_CrystalWidht = 3*cm;
 	m_CrystalLenght= 24*cm;
 	m_calo_xside=(m_CrystalWidht*m_NbOfCrystals)+1*cm;
