@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.hh,v 1.5 2003-03-10 07:57:38 asaim Exp $
+// $Id: G4ProductionCuts.hh,v 1.6 2003-03-10 08:18:52 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -110,7 +110,6 @@ class G4ProductionCuts
   G4bool                          isModified;
 };
 
-#include "G4ProductionCuts.icc"
 
 #endif
 
