@@ -57,7 +57,7 @@ G4PImportanceWWindowScoreManager::~G4PImportanceWWindowScoreManager()
   }
   if (fPWeightWindowProcess) {
     G4ProcessPlacer placer(fParallelManager.GetParticleName());
-    placer.RemoveProcess(fPScoreProcess);
+    placer.RemoveProcess(fPWeightWindowProcess);
     delete fPWeightWindowProcess;
   }
   delete &fParallelImportanceManager;

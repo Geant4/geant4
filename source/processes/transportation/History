@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2002-05-24 08:17:18 dressel Exp $
+$Id: History,v 1.32 2002-05-29 10:07:03 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May   29, 2002  M.Dressel internal-2-transport-V04-00-05
+--------------------------------------------------------
+- bug fix in G4PImportanceWWindowScoreManager.cc
+  and G4ParallelImportanceManager.hh.
+
 May   24, 2002  M.Dressel internal-1-transport-V04-00-05
 -------------------------
 - Change in G4VProcessPlacer and G4ProcessPlacer: add member function

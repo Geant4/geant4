@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceManager.hh,v 1.5 2002-04-10 13:14:16 dressel Exp $
+// $Id: G4ParallelImportanceManager.hh,v 1.6 2002-05-29 10:07:03 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -76,7 +76,7 @@ public: // used internally by importance sampling
 			      G4ParallelManager &pmanager);
     // create G4ParallelManager and G4ImportanceSampler
   
-  virtual ~G4ParallelImportanceManager();
+  ~G4ParallelImportanceManager();
     // delete G4ParallelManager and G4ImportanceSampler
     // and G4ImportanceAgorithm and G4ParallelImportanceProcess
     // if created
