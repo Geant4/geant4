@@ -106,12 +106,12 @@ else
     echo stt.${REFTAG} already exists - aborting.
     exit
   fi
+  echo 'REMOVE bin/* lib/* tmp/*'
+  rm -r bin/* lib/* tmp/*
   echo CREATE stt.${REFTAG} and RESET stt symbolic link.
   mkdir stt.${REFTAG}
   rm -rf stt
   ln -s stt.${REFTAG} stt
-  echo 'REMOVE bin/* lib/* tmp/*'
-  rm -r bin/* lib/* tmp/*
 fi
 ########################################################
 
