@@ -1,4 +1,4 @@
-$Id: History,v 1.211 2003-04-01 13:24:23 gcosmo Exp $
+$Id: History,v 1.212 2003-05-08 08:44:52 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-31st March 2003  Gabriele Cosmo
+31st March 2003  Gabriele Cosmo (config-V05-01-00)
 - Added more strict compiler options for Linux-g++ platform.
 - Removed obsolete usage of GNU_GCC specific option for g++ compilers.
 
