@@ -24,9 +24,9 @@
 #define debug
 
 CMSPrimaryGeneratorAction::CMSPrimaryGeneratorAction(): particleGun(0),
-  generatorInput(singleFixed), isInitialized(0),
-  verboseLevel(0), scanSteps(0), n_particle(1), particleName("pi-"),
-  particleEnergy(100*GeV), particlePosition(0.,0.,0.), particleDir(1.,1.,0.1) {
+  generatorInput(singleFixed),  verboseLevel(0), n_particle(1), 
+  particleName("pi-"), particleEnergy(100*GeV), particlePosition(0.,0.,0.),
+  particleDir(1.,1.,0.1), isInitialized(0), scanSteps(0) {
   
   //Initialise the messenger
   gunMessenger = new CMSPrimaryGeneratorMessenger(this);

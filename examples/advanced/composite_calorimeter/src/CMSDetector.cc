@@ -53,7 +53,7 @@ void CMSDetector::construct() {
     
     if (isgood) {
       constructDaughters();
-      for (int i=0; i < theDetectorsInside.size(); i++) {
+      for (unsigned int i=0; i < theDetectorsInside.size(); i++) {
 	theDetectorsInside[i]->constructHierarchy();
       }
     }
@@ -88,7 +88,7 @@ ostream& operator<<(ostream& os, const CMSDetector& det) {
   os << "With " << det.theDetectorsInside.size() 
      << " detectors inside { "<< endl;
 
-  for (int i=0; i<det.theDetectorsInside.size(); i++)
+  for (unsigned int i=0; i<det.theDetectorsInside.size(); i++)
     os << det.theDetectorsInside[i] << endl;
 
   os << "}" << endl;
