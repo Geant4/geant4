@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.7 2003-11-03 18:17:32 gcosmo Exp $
+// $Id: G4Orb.cc,v 1.8 2003-11-04 13:56:24 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -57,6 +57,8 @@ enum ESide {kNull,kRMax};
 enum ENorm {kNRMax};
 
 
+const G4double G4Orb::fEpsilon = 2.e-11;  // relative tolerance of fRmax
+
 ////////////////////////////////////////////////////////////////////////
 //
 // constructor - check positive radius
@@ -68,11 +70,14 @@ G4Orb::G4Orb( const G4String& pName,G4double pRmax )
 
   // Check radius
 
-  if (pRmax >= 10*kCarTolerance )
-    fRmax = pRmax;  
+  if (pRmax >= 10*kCarTolerance ) fRmax = pRmax;  
   else
+  {
     G4Exception("G4Orb::G4Orb()", "InvalidSetup", FatalException,
                 "Invalid radius > 10*kCarTolerance.");
+  }
+  fRmaxTolerance =  std::max( kRadTolerance, fEpsilon*fRmax);
+
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -119,6 +124,7 @@ G4bool G4Orb::CalculateExtent( const EAxis pAxis,
     xoffset=pTransform.NetTranslation().x();
     xMin=xoffset-fRmax;
     xMax=xoffset+fRmax;
+
     if (pVoxelLimit.IsXLimited())
     {
       if ( (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance)
@@ -138,10 +144,10 @@ G4bool G4Orb::CalculateExtent( const EAxis pAxis,
         }
       }
     }
-
     yoffset=pTransform.NetTranslation().y();
     yMin=yoffset-fRmax;
     yMax=yoffset+fRmax;
+
     if (pVoxelLimit.IsYLimited())
     {
       if ( (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance)
@@ -161,10 +167,10 @@ G4bool G4Orb::CalculateExtent( const EAxis pAxis,
         }
       }
     }
-
     zoffset=pTransform.NetTranslation().z();
     zMin=zoffset-fRmax;
     zMax=zoffset+fRmax;
+
     if (pVoxelLimit.IsZLimited())
     {
       if ( (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance)
@@ -192,7 +198,8 @@ G4bool G4Orb::CalculateExtent( const EAxis pAxis,
       case kXAxis:
         yoff1=yoffset-yMin;
         yoff2=yMax-yoffset;
-        if (yoff1>=0&&yoff2>=0)
+
+        if ( yoff1 >= 0 && yoff2 >= 0 )
         {
           // Y limits cross max/min x => no change
           //
@@ -244,8 +251,8 @@ G4bool G4Orb::CalculateExtent( const EAxis pAxis,
       default:
         break;
     }
-    pMin-=kCarTolerance;
-    pMax+=kCarTolerance;
+    pMin -= fRmaxTolerance;
+    pMax += fRmaxTolerance;
 
     return true;  
   
@@ -263,18 +270,18 @@ EInside G4Orb::Inside( const G4ThreeVector& p ) const
   EInside in;
 
 
-  rad2 = p.x()*p.x() + p.y()*p.y() + p.z()*p.z() ;
+  rad2 = p.x()*p.x()+p.y()*p.y()+p.z()*p.z() ;
 
   // G4double rad = sqrt(rad2);
   // Check radial surface
   // sets `in'
   
-  tolRMax = fRmax - kRadTolerance*0.5 ;
+  tolRMax = fRmax - fRmaxTolerance*0.5 ;
     
   if ( rad2 <= tolRMax*tolRMax )  in = kInside ;
   else
   {
-    tolRMax = fRmax + kRadTolerance*0.5 ;       
+    tolRMax = fRmax + fRmaxTolerance*0.5 ;       
     if ( rad2 <= tolRMax*tolRMax ) in = kSurface ;
     else                           in = kOutside ;
   }
@@ -289,14 +296,14 @@ EInside G4Orb::Inside( const G4ThreeVector& p ) const
 
 G4ThreeVector G4Orb::SurfaceNormal( const G4ThreeVector& p ) const
 {
-  ENorm side=kNRMax;
+  ENorm side = kNRMax;
   G4ThreeVector norm;
-  G4double rad=sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
+  G4double rad = sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
 
   switch (side)
   {
     case kNRMax: 
-      norm=G4ThreeVector(p.x()/rad,p.y()/rad,p.z()/rad);
+      norm = G4ThreeVector(p.x()/rad,p.y()/rad,p.z()/rad);
       break;
    default:
       DumpInfo();
@@ -318,7 +325,7 @@ G4ThreeVector G4Orb::SurfaceNormal( const G4ThreeVector& p ) const
 //        - if  valid phi,theta return intersection Dist
 
 G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
-                                 const G4ThreeVector& v  ) const
+                              const G4ThreeVector& v  ) const
 {
   G4double snxt = kInfinity ;      // snxt = default return value
 
@@ -332,8 +339,8 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
 
   // Radial Precalcs
 
-  tolORMax2 = (fRmax+kRadTolerance*0.5)*(fRmax+kRadTolerance*0.5) ;
-  tolIRMax2 = (fRmax-kRadTolerance*0.5)*(fRmax-kRadTolerance*0.5) ;
+  tolORMax2 = (fRmax+fRmaxTolerance*0.5)*(fRmax+fRmaxTolerance*0.5) ;
+  tolIRMax2 = (fRmax-fRmaxTolerance*0.5)*(fRmax-fRmaxTolerance*0.5) ;
 
   // Outer spherical shell intersection
   // - Only if outside tolerant fRmax
@@ -351,10 +358,10 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
 
   c = rad2 - fRmax*fRmax ;
 
-  if ( c > kRadTolerance*fRmax )
+  if ( c > fRmaxTolerance*fRmax )
   {
     // If outside tolerant boundary of outer G4Orb
-    // [ should be sqrt(rad2) - fRmax > kRadTolerance*0.5 ]
+    // [ should be sqrt(rad2) - fRmax > fRmaxTolerance*0.5 ]
 
     d2 = pDotV3d*pDotV3d - c ;
 
@@ -372,10 +379,10 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
   }
   else
   {
-    if ( c > -kRadTolerance*fRmax )  // on surface  
+    if ( c > -fRmaxTolerance*fRmax )  // on surface  
     {             
       if ( pDotV3d >= 0 ) return snxt = kInfinity;
-      else                return snxt = 0;
+      else                return snxt = 0.;
     }
     else // inside ???
     {
@@ -436,22 +443,18 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
   //
   // => s=-pDotV3d+-sqrt(pDotV3d^2-(rad2-R^2))
   
-  //  const G4double  fractionTolerance   = 1.0e-14;
-  const G4double  flexRadMaxTolerance = kRadTolerance;
-    // std::max(kRadTolerance, 
-    //  fractionTolerance * fRmax);
-  const G4double  Rmax_plus = fRmax + flexRadMaxTolerance*0.5;
+  const G4double  Rmax_plus = fRmax + fRmaxTolerance*0.5;
 
   if( rad2 <= Rmax_plus*Rmax_plus )
   {
     c = rad2-fRmax*fRmax ;
 
-    if ( c < flexRadMaxTolerance*fRmax) 
+    if ( c < fRmaxTolerance*fRmax) 
     {
       // Within tolerant Outer radius 
       // 
       // The test is
-      //     rad  - fRmax < 0.5*kRadTolerance
+      //     rad  - fRmax < 0.5*fRmaxTolerance
       // =>  rad  < fRmax + 0.5*kRadTol
       // =>  rad2 < (fRmax + 0.5*kRadTol)^2
       // =>  rad2 < fRmax^2 + 2.*0.5*fRmax*kRadTol + 0.25*kRadTol*kRadTol
@@ -459,7 +462,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
 
       d2 = pDotV3d*pDotV3d - c;
 
-      if( ( c > -flexRadMaxTolerance*fRmax) &&    // on tolerant surface
+      if( ( c > -fRmaxTolerance*fRmax) &&    // on tolerant surface
           ( ( pDotV3d >= 0 ) || ( d2 < 0 )) )     // leaving outside from Rmax 
                                                   // not re-entering
       {
@@ -609,3 +612,18 @@ G4NURBS* G4Orb::CreateNURBS () const
 // End of G4Orb.cc 
 //
 /////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

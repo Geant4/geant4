@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Orb.hh,v 1.2 2003-10-31 09:00:42 gcosmo Exp $
+// $Id: G4Orb.hh,v 1.3 2003-11-04 13:56:23 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,6 +36,7 @@
 //   fRmax  outer radius
 
 //  History:
+// 04.11.03 V.Grichine - fRmaxTolerance is based on relative numerical accuracy
 // 20.08.03 V.Grichine - created
 // --------------------------------------------------------------------
 
@@ -111,7 +112,10 @@ class G4Orb : public G4CSGSolid
 
   private:
 
-    G4double fRmax;
+  static const G4double fEpsilon;
+  G4double fRmax;
+  G4double fRmaxTolerance;
+  
 };
 
 
