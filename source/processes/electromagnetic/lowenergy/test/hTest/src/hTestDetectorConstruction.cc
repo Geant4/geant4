@@ -54,7 +54,8 @@ hTestDetectorConstruction::hTestDetectorConstruction():
   physAbs(0),
   magField(0),
   calorimeterSD(0),
-  verbose(0)
+  verbose(0),
+  nEvents(1)
 {
   // Default parameter values of the calorimeter
   // corresponds to water test

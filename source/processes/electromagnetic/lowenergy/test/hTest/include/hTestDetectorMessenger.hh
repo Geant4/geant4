@@ -63,6 +63,7 @@ public: // Without description
     G4UIcmdWithADoubleAndUnit* YMagFieldCmd;
     G4UIcmdWithADoubleAndUnit* ZMagFieldCmd;
     G4UIcmdWithAString*        HistoCmd;
+    G4UIcmdWithAnInteger*      NumOfEvt;
 
 };
 

@@ -50,17 +50,18 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
 
   public:
      
-    void SetAbsorberMaterial (G4String);     
-    void SetNumberOfAbsorbers(G4int);     
-    void SetAbsorberThickness(G4double);     
-    void SetAbsorberSizeXY   (G4double);          
+    inline void SetAbsorberMaterial (G4String);     
+    inline void SetNumberOfAbsorbers(G4int);     
+    inline void SetAbsorberThickness(G4double);     
+    inline void SetAbsorberSizeXY   (G4double);          
       
-    void SetWorldMaterial(G4String);
-    void SetWorldSizeZ   (G4double);
+    inline void SetWorldMaterial(G4String);
+    inline void SetWorldSizeZ   (G4double);
 
-    void SetMagField(G4double,G4int);
-    void SetVerbose(G4int val) {verbose = val;};
-    void SetHistoName(G4String name) {histoName = name;};
+    inline void SetMagField(G4double,G4int);
+    inline void SetVerbose(G4int val) {verbose = val;};
+    inline void SetHistoName(G4String name) {histoName = name;};
+    inline void SetNumberOfEvents(G4int val) {nEvents = val;};
      
     G4VPhysicalVolume* Construct();
 
@@ -68,18 +69,19 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
      
     void PrintGeomParameters(); 
                     
-    G4Material* GetAbsorberMaterial()  {return AbsorberMaterial;};
-    G4double    GetAbsorberThickness() {return AbsorberThickness;};      
-    G4double    GetAbsorberSizeXY()    {return SizeXY;};
+    inline G4Material* GetAbsorberMaterial()  {return AbsorberMaterial;};
+    inline G4double    GetAbsorberThickness() {return AbsorberThickness;};      
+    inline G4double    GetAbsorberSizeXY()    {return SizeXY;};
           
-    G4Material* GetWorldMaterial()     {return WorldMaterial;};
-    G4double    GetWorldSizeZ()        {return WorldSizeZ;}; 
-    G4double    GetWorldSizeXY()       {return SizeXY;};
+    inline G4Material* GetWorldMaterial()     {return WorldMaterial;};
+    inline G4double    GetWorldSizeZ()        {return WorldSizeZ;}; 
+    inline G4double    GetWorldSizeXY()       {return SizeXY;};
      
-    const G4VPhysicalVolume* GetPhysWorld() {return physWorld;};           
-    const G4LogicalVolume*   GetAbsorber()  {return logicAbs;};
+    inline const G4VPhysicalVolume* GetPhysWorld() {return physWorld;};           
+    inline const G4LogicalVolume*   GetAbsorber()  {return logicAbs;};
 
-    G4String GetHistoName() const {return histoName;};
+    inline G4String GetHistoName() const {return histoName;};
+    inline G4int GetNumberOfEvents() const {return nEvents;};
                  
   private:
 
@@ -119,6 +121,7 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
 
      G4int verbose;      
      G4String histoName;
+     G4int nEvents;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

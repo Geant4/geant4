@@ -15,7 +15,7 @@
 //  
 // Description: Virtual class to build Hadron Physics List for Geant4
 //
-// Authors:     V.Ivanchenko 29/03/01
+// Authors:    08.04.01 V.Ivanchenko 
 //
 // Modified:
 //

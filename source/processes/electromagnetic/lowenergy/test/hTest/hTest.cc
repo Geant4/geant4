@@ -51,6 +51,7 @@ int main(int argc,char** argv) {
   // set mandatory initialization classes
   hTestDetectorConstruction* det = new hTestDetectorConstruction();
   runManager->SetUserInitialization(det);
+  
   runManager->SetUserInitialization(new hTestPhysicsList(det));
 
 #ifdef G4VIS_USE
@@ -64,34 +65,42 @@ int main(int argc,char** argv) {
  
   // set user action classes
   runManager->SetUserAction(new hTestPrimaryGeneratorAction(det));
-  hTestRunAction* runaction = new hTestRunAction;
-  runManager->SetUserAction(runaction);
+  hTestRunAction* run = new hTestRunAction;
+  runManager->SetUserAction(run);
 
-  hTestEventAction* eventaction = new hTestEventAction(runaction);
-  runManager->SetUserAction(eventaction);
+  hTestEventAction* event = new hTestEventAction(run,det);
+  runManager->SetUserAction(event);
 
-  hTestSteppingAction* steppingaction = new hTestSteppingAction(det,
-                                               eventaction, runaction);
-  runManager->SetUserAction(steppingaction);
+  runManager->SetUserAction(new hTestTrackingAction(run));
+  runManager->SetUserAction(new hTestSteppingAction(run,event,det));
   
-  //Initialize G4 kernel
-  runManager->Initialize();
-    
   // get the pointer to the User Interface manager 
-    G4UImanager* UI = G4UImanager::GetUIpointer();  
- 
+  G4UImanager* UI = G4UImanager::GetUIpointer();  
+     
   if (argc==1)   // Define UI terminal for interactive mode  
     { 
+     // Initialize G4 kernel
+     runManager->Initialize();
+
      G4UIsession * session = new G4UIterminal;
      UI->ApplyCommand("/control/execute init.mac");    
      session->SessionStart();
      delete session;
     }
-  else           // Batch mode
+  else  // Batch mode with 1 or more files no beamOn command in the 1st
     { 
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UI->ApplyCommand(command+fileName);
+
+     // Initialize G4 kernel
+     runManager->Initialize();
+
+     // 
+     runManager->BeamOn(det->GetNumberOfEvents());
+
+     // next file
+     if(argc>1) UI->ApplyCommand(command+argv[2]);
     }
     
   // job termination

@@ -35,8 +35,8 @@ public: // Without description
     void SetGammaCut(G4double);
     void SetElectronCut(G4double);
     void SetProtonCut(G4double);
-    void SetCutsByEnergy(G4double);
-    void GetRange(G4double);
+    void SetElectronCutByEnergy(G4double);
+    void SetLowEnergyLimit(G4double);
     void SetMaxStep(G4double);
     void SetVerbose(G4int val) {verbose = val;};    
     void SetEMPhysicsList(const G4String&);  
@@ -48,6 +48,7 @@ protected:
     void ConstructProcess();
 
 private:
+    void InitializeMe();
     void SetCuts();
 
     // these methods Construct particles 
@@ -58,19 +59,20 @@ private:
     void ConstructIons();
 
   // these methods Construct physics processes and register them
-    void ConstructGeneral();
+    void ConstructDecay();
     
   private:
 
     hTestDetectorConstruction* pDet;
     hTestPhysicsListMessenger* theMessenger;
-    hTestVEMPhysicsList* theHadList;
+    hTestVEMPhysicsList* theEMList;
     hTestVHadronPhysicsList* theHadList;
 
     G4double cutForGamma;
     G4double cutForElectron;
     G4double cutForProton;
     G4double maxChargedStep;    
+    G4double lowEnergyLimit;
 
     G4String emPhysics;
     G4String hadronPhysics;

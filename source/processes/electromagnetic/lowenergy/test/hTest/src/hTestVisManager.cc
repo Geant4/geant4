@@ -1,3 +1,4 @@
+//---------------------------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -5,8 +6,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// 
-// John Allison 24th January 1998.
+//---------------------------------------------------------------------------
+//
+// ClassName:   hTestVisManager
+//
+//  
+// Authors:   08.04.01  V.Ivanchenko take from John Allison Examples 
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -40,24 +40,36 @@
 #include "G4EnergyLossTables.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"                
+#include "G4Decay.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-hTestPhysicsList::hTestPhysicsList(hTestDetectorConstruction* p)
-:G4VUserPhysicsList()
+hTestPhysicsList::hTestPhysicsList(hTestDetectorConstruction* p):
+  pDet(p)
 {
-  pDet = p;
+  InitializeMe(); 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+hTestPhysicsList::InitializeMe()
+{
+  verbose = pDet->GetVerbose();
  
-  defaultCutValue = 0.1*cm;
+  // default cuts
   cutForGamma     = 1.0*cm;
-  cutForElectron  = defaultCutValue;
-  cutForProton    = defaultCutValue;
-  
-  //  MaxChargedStep = DBL_MAX; 
-  MaxChargedStep = 0.1*cm; 
-  
-  SetVerboseLevel(2);
+  cutForElectron  = 1.0*mm;
+  cutForProton    = 1.0*mm;
+  maxChargedStep  = DBL_MAX; 
+  lowEnergyLimit  = 250.0*eV;
+
   physicsListMessenger = new hTestPhysicsListMessenger(this);
+
+  emPhysics = G4String("");
+  hadronPhysics = G4String("");
+  SetEMPhysicsList(G4String("LowEnergy"));  
+  SetHadronPhysicsList(G4String("none"));
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -120,6 +132,12 @@ void hTestPhysicsList::ConstructMesons()
   G4PionZero::PionZeroDefinition();
   G4KaonPlus::KaonPlusDefinition();
   G4KaonMinus::KaonMinusDefinition();
+  G4Eta::EtaDefinition();
+  G4EtaPrime::EtaPrimeDefinition();
+  G4KaonZero::KaonZeroDefinition();
+  G4AntiKaonZero::AntiKaonZeroDefinition();
+  G4KaonZeroLong::KaonZeroLongDefinition();
+  G4KaonZeroShort::KaonZeroShortDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -129,6 +147,13 @@ void hTestPhysicsList::ConstructBarions()
 //  barions
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
+  G4Neutron::NeutronDefinition();
+  G4AntiNeutron::AntiNeutronDefinition();
+  G4Lambda::LambdaDefinition();
+  G4SigmaZero::SigmaZeroDefinition();
+  G4SigmaPlus::SigmaPlusDefinition();
+  G4SigmaMinus::SigmaMinusDefinition();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -148,26 +173,29 @@ void hTestPhysicsList::ConstructIons()
 
 void hTestPhysicsList::ConstructProcess()
 {
+  verbose = pDet->GetVerbose();
   AddTransportation();
-  ConstructEM();
-  ConstructHad();
-  ConstructGeneral();
+  SetCuts();
+  if(theEMList)  theEMList->ConstructEM();
+  if(theHadList) theHadList->ConstructHad();
+  ConstructDecay();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4Decay.hh"
-
-void hTestPhysicsList::ConstructGeneral()
+void hTestPhysicsList::ConstructDecay()
 {
   // Add Decay Process
-   G4Decay* theDecayProcess = new G4Decay();
+  G4Decay* theDecayProcess = new G4Decay();
   theParticleIterator->reset();
+
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
+
     if (theDecayProcess->IsApplicable(*particle)) { 
       pmanager ->AddProcess(theDecayProcess);
+
       // set ordering for PostStepDoIt and AtRestDoIt
       pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
       pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
@@ -179,24 +207,20 @@ void hTestPhysicsList::ConstructGeneral()
 
 void hTestPhysicsList::SetCuts()
 {
-  // G4Timer theTimer ;
-  // theTimer.Start() ;
 
   //special for low energy physics
-  //
-  G4double lowlimit=1*eV;  
-  G4Gamma   ::SetEnergyRange(lowlimit,100*GeV);
-  G4Electron::SetEnergyRange(lowlimit,100*GeV);
-  G4Positron::SetEnergyRange(lowlimit,100*GeV);
+  G4Gamma   ::SetEnergyRange(lowEnergyLimit,100*GeV);
+  G4Electron::SetEnergyRange(lowEnergyLimit,100*GeV);
+  G4Positron::SetEnergyRange(lowEnergyLimit,100*GeV);
    
-  if (verboseLevel >0){
-    G4cout << "hTestPhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(MaxChargedStep,"Length") << G4endl;
+  if (verbose > 0){
+    G4cout << "hTestPhysicsList::SetCuts: "
+           << "CutLength = " << G4BestUnit(maxChargedStep,"Length") << G4endl;
   }  
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
 
-      G4cout << "Set cuts for all particles! " << G4endl; 
+   G4cout << "hTestPhysicsList: Set cuts for all particles! " << G4endl; 
 
    SetCutValue(cutForGamma,"gamma");
 
@@ -215,15 +239,12 @@ void hTestPhysicsList::SetCuts()
 
   SetCutValueForOthers(cutForProton);
 
-  //  G4cout << "Dump the table!" << G4endl;
+  G4cout << "Dump the table!" << G4endl;
               
-  if (verboseLevel>0) DumpCutValuesTable();
-
-  //  theTimer.Stop();
-  //  G4cout.precision(6);
-  //  G4cout << G4endl ;
-  //  G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<G4endl;
-
+  if (verbose > 0) {
+    G4cout << "hTestPhysicsList: Dump the table!" << G4endl;
+    DumpCutValuesTable();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -252,65 +273,111 @@ void hTestPhysicsList::SetProtonCut(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void hTestPhysicsList::SetCutsByEnergy(G4double val)
+void hTestPhysicsList::SetElectronCutByEnergy(G4double energy)
 {
   G4ParticleTable* thehTestParticleTable =  G4ParticleTable::GetParticleTable();
   G4Material* currMat = pDet->GetAbsorberMaterial();
+  G4ParticleDefinition* part = G4Electron::ElectronDefinition();
 
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-  G4ParticleDefinition* part;
-  G4double cut;
-
-  part = thehTestParticleTable->FindParticle("e-");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "e-");
-
-  part = thehTestParticleTable->FindParticle("e+");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "e+");
-
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton
-  part = thehTestParticleTable->FindParticle("proton");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "proton");
-
-  part = thehTestParticleTable->FindParticle("anti_proton");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "anti_proton");
-
-  SetCutValueForOthers(cut);
+  // Get range from electron energy and set it as a cut
+  SetElectronCut(G4EnergyLossTables::GetRange(part,energy,currMat));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void hTestPhysicsList::GetRange(G4double val)
+void hTestPhysicsList::SetLowEnergyLimit(G4double energy)
 {
-  G4ParticleTable* thehTestParticleTable =  G4ParticleTable::GetParticleTable();
-  G4Material* currMat = pDet->GetAbsorberMaterial();
-
-  G4ParticleDefinition* part;
-  G4double cut;
-  part = thehTestParticleTable->FindParticle("e-");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  G4cout << "material : " << currMat->GetName() << G4endl;
-  G4cout << "particle : " << part->GetParticleName() << G4endl;
-  G4cout << "energy   : " << val / keV << " (keV)" << G4endl;
-  G4cout << "range    : " << cut / mm << " (mm)" << G4endl;
+  ResetCuts();
+  lowEnergyLimit = step;
+  G4cout << "hTestPhysicsList: lowEnergyLimit = " 
+         << lowEnergyLimit/eV << " eV" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void hTestPhysicsList::SetMaxStep(G4double step)
 {
-  MaxChargedStep = step ;
-  G4cout << " MaxChargedStep=" << MaxChargedStep << G4endl;
-  G4cout << G4endl;
+  maxChargedStep = step;
+  G4cout << "hTestPhysicsList: MaxChargedStep = " 
+         << MaxChargedStep/mm << " mm" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void hTestPhysicsList::SetEMPhysicsList(const G4String& name)
+{
+  verbose = pDet->GetVerbose();
+  // Name is not changed
+  if(name == emPhysics) return;
+
+  // Define hadronic process class
+  G4String stand = G4String("Standard");
+  G4String lowe  = G4String("LowEnergy");
+  G4String none  = G4String("none");
+
+  if(name == stand) {
+    theEMList = new hTestStanPhysicsList();
+    theEMList->SetVerbose(verbose);
+
+  } else if (name == lowe) {
+    theEMList = new hTestLowEPhysicsList1();
+    theEMList->SetVerbose(verbose);
+
+  } else if (name == none) {
+    theEMList = 0;
+
+  } else {
+    G4cout << "HsPhysicsList: There are no EMPhysicsList called <"
+           << name << ">, so old one is used" << G4endl;
+    return;
+
+  emPhysics = name;   
+  G4cout << "HsPhysicsList: <" << name 
+         << "> EMPhysicsList is set" << G4endl;
+  ResetCuts(); 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void hTestPhysicsList::SetHadronPhysicsList(const G4String& name)
+{
+  verbose = pDet->GetVerbose();
+  // Name is not changed
+  if(name == hadronPhysics) return;
+
+  // Define hadronic process class
+  G4String stand = G4String("standard");
+  G4String hado  = G4String("hadrons_only");
+  G4String frag  = G4String("ion_fragmentation");
+  G4String none  = G4String("none");
+
+  if(name == stand) {
+    theHadList = new HsHadronPhysicsList();
+    theHadList->SetVerbose(verbose);
+
+  } else if (name == hado) {
+    theHadList = new HsHadronPhysicsList1();
+    theHadList->SetVerbose(verbose);
+
+    //not implemented yet
+  } else if (name == frag) {
+    theHadList = 0;
+
+  } else if (name == none) {
+    theHadList = 0;
+
+  } else {
+    G4cout << "HsPhysicsList: There are no HadronicPhysicsList called <"
+           << name << ">, so old one is used" << G4endl;
+    return;
+
+  hadronPhysics = name;   
+  G4cout << "HsPhysicsList: <" << name 
+         << "> HadronicPhysicsList is set" << G4endl;
+  ResetCuts(); 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 

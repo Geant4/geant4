@@ -108,6 +108,11 @@ hTestDetectorMessenger::hTestDetectorMessenger(hTestDetectorConstruction* h):
   HistoCmd->SetParameterName("histo",false);
   HistoCmd->AvailableForStates(Idle);
 
+  NumOfEvt = new G4UIcmdWithAnInteger("/hTest/eventNumber",this);
+  NumOfEvt->SetGuidance("Set number of event to be simulated");
+  NumOfEvt->SetParameterName("Nevt",false);
+  NumOfEvt->AvailableForStates(Idle);
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -125,6 +130,7 @@ hTestDetectorMessenger::~hTestDetectorMessenger()
   delete YMagFieldCmd;
   delete ZMagFieldCmd;
   delete HistoCmd;
+  delete NumOfEvt;
   delete hTestdetDir;
 }
 
@@ -164,6 +170,10 @@ void hTestDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == HistoCmd )
    { hDet->SetHistoName(newValue);}
+
+  if( command == NumOfEvt )
+   { hDet->SetNumberOfEvents(NumOfAbsCmd->GetNewIntValue(newValue));}
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

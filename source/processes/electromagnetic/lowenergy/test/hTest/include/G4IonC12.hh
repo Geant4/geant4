@@ -1,3 +1,7 @@
+#ifndef G4IonC12_h
+#define G4IonC12_h 1
+
+//---------------------------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -5,33 +9,26 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonC12.hh,v 1.1 2000-05-21 18:37:45 chauvie Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//---------------------------------------------------------------------------
 //
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file
+// ClassName:   G4IonAr40
 //
-//      For information related to this code contact:
-//      CERN, CN Division, ASD group
-//      History: first implementation, based on object model of
-//      4-th April 1996, G.Cosmo
-// ****************************************************************
-//  Added particle definitions, H.Kurashige, 19 April 1996
-//  Revised, G.Cosmo, 6 June 1996
-//  Added not static GetEnergyCuts() and GetLengthCuts(), G.Cosmo, 11 July 1996
-// ----------------------------------------------------------------
-
 // Class Description:
-// The new ion C12+ is defined as G4VIon.
+// The new static ion Ar40+ is defined as G4VIon.
 // Each class inheriting from G4VIon
 // corresponds to a particle type; one and only one
 // instance for each class is guaranteed.
 // Class Description - end
+//  
+// Authors:   08.04.01  V.Ivanchenko 
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 
-
-#ifndef G4IonC12_h
-#define G4IonC12_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -71,6 +68,8 @@ public: // Without description
    void SetCuts(G4double aCut); 
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline void G4IonC12::SetCuts(G4double aCut)
 {
   CalcEnergyCuts(aCut);
@@ -78,5 +77,7 @@ inline void G4IonC12::SetCuts(G4double aCut)
   theIonC12KineticEnergyCuts = theKineticEnergyCuts;
   
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif

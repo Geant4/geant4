@@ -1,3 +1,4 @@
+//---------------------------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -5,25 +6,24 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonAr40.cc,v 1.2 2000-06-22 12:50:18 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//---------------------------------------------------------------------------
 //
-// 
-// ----------------------------------------------------------------------
-//      GEANT 4 class implementation file
+// ClassName:   G4IonAr40
+//  
+// Description: Static Ar40 ion
 //
-//      For information related to this code contact:
-//      CERN, CN Division, ASD Group
-//      History: first implementation, based on object model of
-//      4th April 1996, G.Cosmo
-// **********************************************************************
-//  Added by J.L.Chuma, TRIUMF, 27 June 1996
-//  Added  G4IonAr40::IonAr40Definition() by H.Kurashige 27 June 1996
-//  Fixed  parameters by H.Kurashige, 25 Apr 1998
-// ----------------------------------------------------------------------
+// Authors:   08.04.01  V.Ivanchenko 
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+//#include "g4std/fstream"
+//#include "g4std/iomanip"
 
 #include "G4IonAr40.hh"
 
@@ -44,12 +44,14 @@ G4IonAr40::G4IonAr40(
  : G4VIon( aName,mass,width,charge,iSpin,iParity,
            iConjugation,iIsospin,iIsospin3,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable )
-{
-}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4IonAr40::~G4IonAr40()
-{
-}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 // ......................................................................
 // ...                 static member definitions                      ...
@@ -75,5 +77,6 @@ G4IonAr40* G4IonAr40::IonAr40Definition(){return &theIonAr40;}
 G4double   G4IonAr40::theIonAr40LengthCut;
 G4double*  G4IonAr40::theIonAr40KineticEnergyCuts;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
