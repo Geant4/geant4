@@ -36,35 +36,42 @@
 Test17PhysicsListMessenger::Test17PhysicsListMessenger(Test17PhysicsList * List)
 :Test17List(List)
 {
-  cutGCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutG",this);
+  cutGCmd = new G4UIcmdWithADoubleAndUnit("/test17/cutG",this);
   cutGCmd->SetGuidance("Set cut values by RANGE for Gamma.");
   cutGCmd->SetParameterName("cutG",false);
   cutGCmd->SetRange("cutG>0.");
   cutGCmd->SetUnitCategory("Length");
   cutGCmd->AvailableForStates(Idle);
 
-  cutECmd = new G4UIcmdWithADoubleAndUnit("/calor/cutE",this);
+  cutECmd = new G4UIcmdWithADoubleAndUnit("/test17/cutE",this);
   cutECmd->SetGuidance("Set cut values by RANGE for e- e+.");
   cutECmd->SetParameterName("cutE",false);
   cutECmd->SetRange("cutE>0.");
   cutECmd->SetUnitCategory("Length");  
   cutECmd->AvailableForStates(Idle);
 
-  cutPCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutP",this);
+  cutPCmd = new G4UIcmdWithADoubleAndUnit("/test17/cutP",this);
   cutPCmd->SetGuidance("Set cut values by RANGE for proton and others.");
   cutPCmd->SetParameterName("cutP",false);
   cutPCmd->SetRange("cutP>0.");
   cutPCmd->SetUnitCategory("Length");    
   cutPCmd->AvailableForStates(Idle);
 
-  eCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutEnergy",this);
-  eCmd->SetGuidance("Set cut values by ENERGY for charged particles.");
+  eCmd = new G4UIcmdWithADoubleAndUnit("/test17/cutGammaEnergy",this);
+  eCmd->SetGuidance("Set cut values by ENERGY for secondary gamma.");
   eCmd->SetParameterName("cutenergy",false);
   eCmd->SetRange("cutenergy>0.");
   eCmd->SetUnitCategory("Energy");   
   eCmd->AvailableForStates(Idle);
 
-  rCmd = new G4UIcmdWithADoubleAndUnit("/calor/range",this);
+  eaCmd = new G4UIcmdWithADoubleAndUnit("/test17/cutAugerEnergy",this);
+  eaCmd->SetGuidance("Set cut values by ENERGY for Auger electrons.");
+  eaCmd->SetParameterName("cutAenergy",false);
+  eaCmd->SetRange("cutAenergy>0.");
+  eaCmd->SetUnitCategory("Energy");   
+  eaCmd->AvailableForStates(Idle);
+
+  rCmd = new G4UIcmdWithADoubleAndUnit("/test17/range",this);
   rCmd->SetGuidance("Display the RANGE of Electron for the current material.");
   rCmd->SetParameterName("range",false);
   rCmd->SetRange("range>0.");
@@ -87,6 +94,7 @@ Test17PhysicsListMessenger::~Test17PhysicsListMessenger()
   delete cutPCmd;
   delete rCmd;
   delete eCmd;
+  delete eaCmd;
   delete setMaxStepCmd;
 }
 
@@ -101,7 +109,9 @@ void Test17PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newVa
   if(command == cutPCmd)
     { Test17List->SetProtonCut(cutPCmd->GetNewDoubleValue(newValue));}
   if(command == eCmd)
-    { Test17List->SetCutsByEnergy(eCmd->GetNewDoubleValue(newValue));}
+    {Test17List->SetCutForSecondaryPhotons(eCmd->GetNewDoubleValue(newValue));}
+  if(command == eaCmd)
+    {Test17List->SetCutForAugerElectrons(eaCmd->GetNewDoubleValue(newValue));}
   if(command == rCmd)
     { Test17List->GetRange(rCmd->GetNewDoubleValue(newValue));}
   if(command == setMaxStepCmd)

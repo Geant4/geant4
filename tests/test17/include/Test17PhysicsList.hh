@@ -34,9 +34,11 @@
 
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
+#include "g4std/vector"
 
 class Test17DetectorConstruction;
 class Test17PhysicsListMessenger;
+class G4hLowEnergyIonisationVI;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -75,6 +77,8 @@ public: // Without description
     void SetCutsByEnergy(G4double);
     void GetRange(G4double);
     void SetMaxStep(G4double);
+    void SetCutForSecondaryPhotons(G4double);
+    void SetCutForAugerElectrons(G4double);
 
   private:
 
@@ -83,6 +87,8 @@ public: // Without description
     G4double cutForProton;
     
     G4double MaxChargedStep;    
+
+    G4std::vector<G4hLowEnergyIonisationVI*> hionVector;
 
     Test17DetectorConstruction* pDet;
     Test17PhysicsListMessenger* physicsListMessenger;

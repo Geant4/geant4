@@ -47,7 +47,6 @@ class G4VPhysicalVolume;
 class G4Material;
 class G4UniformMagField;
 class Test17DetectorMessenger;
-class Test17CalorimeterSD;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -124,7 +123,7 @@ class Test17DetectorConstruction : public G4VUserDetectorConstruction
      G4UniformMagField* magField;      //pointer to the magnetic field
      
      Test17DetectorMessenger* detectorMessenger;  //pointer to the Messenger
-     Test17CalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
+  //Test17CalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
       
   private:
     

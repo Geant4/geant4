@@ -202,8 +202,8 @@ void Test17PhysicsList::ConstructEM()
     } else if (particleName == "e-") {
       //electron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4LowEnergyIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4LowEnergyBremsstrahlung,    -1,-1,3);       
+      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);       
 
       Test17StepCut* theeminusStepCut = new Test17StepCut();
       theeminusStepCut->SetMaxStep(MaxChargedStep);  
@@ -260,6 +260,7 @@ void Test17PhysicsList::ConstructEM()
       //   hIon->SetElectronicStoppingPowerModel(particle,"ICRU_R49p") ;
 
       pmanager->AddProcess(hIon,-1,2,2);
+      hionVector.push_back(hIon);
       
       Test17StepCut* thehadronStepCut = new Test17StepCut();
       thehadronStepCut->SetMaxStep(MaxChargedStep);          		       
@@ -281,10 +282,8 @@ void Test17PhysicsList::ConstructEM()
 
       // Standard ionisation with low energy extantion
         G4hLowEnergyIonisationVI* iIon = new G4hLowEnergyIonisationVI() ;
-	//G4ionLowEnergyIonisation* iIon = new G4ionLowEnergyIonisation() ;
       //      iIon->SetNuclearStoppingOff() ;
 	//  iIon->SetNuclearStoppingOn() ;
-	// iIon->SetIonDefinition(particle) ;
 
       //iIon->SetStoppingPowerTableName("Ziegler1977He") ;
       //iIon->SetStoppingPowerTableName("Ziegler1977H") ;
@@ -293,6 +292,7 @@ void Test17PhysicsList::ConstructEM()
       //iIon->SetStoppingPowerTableName("ICRU_R49PowersHe") ;
 
       pmanager->AddProcess(iIon,-1,2,2);
+      hionVector.push_back(iIon);
       
       Test17StepCut* theIonStepCut = new Test17StepCut();
       theIonStepCut->SetMaxStep(MaxChargedStep);          		       
@@ -458,7 +458,29 @@ void Test17PhysicsList::SetMaxStep(G4double step)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void Test17PhysicsList::SetCutForSecondaryPhotons(G4double cut)
+{
+  size_t n = hionVector.size();
+  G4cout << " Cut for secondary gamma = " << cut/keV << " keV" << G4endl;
 
+  for (size_t i=0; i<n; i++) {    
+    hionVector[i]->SetCutForSecondaryPhotons(cut);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Test17PhysicsList::SetCutForAugerElectrons(G4double cut)
+{
+  size_t n = hionVector.size();
+  G4cout << " Cut for Auger electrons = " << cut/keV << " keV" << G4endl;
+
+  for (size_t i=0; i<n; i++) {    
+    hionVector[i]->SetCutForAugerElectrons(cut);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 

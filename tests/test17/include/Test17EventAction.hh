@@ -36,7 +36,6 @@
 #include "globals.hh"
 
 class Test17RunAction;
-class Test17EventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -47,36 +46,28 @@ public: // Without description
     Test17EventAction(Test17RunAction* Test17RA);
    ~Test17EventAction();
 
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
-    G4int GetEventno();
-    void setEventVerbose(G4int level);
+    void  BeginOfEventAction(const G4Event*);
+    void  EndOfEventAction(const G4Event*);
+
+    G4int GetEventNo() const {return evtNo;};
+    void  setEventVerbose(G4int level) {verbose = level;};
     
-    void CountStepsCharged(G4double step) ;
-    G4double TrackLength() const {return totLAbs;} ;
-    void CountStepsNeutral() ;
-    void AddCharged() ;
-    void AddNeutral() ;
-    void AddE(G4double En);
-    void AddP();   
-    void SetTr();
-    void SetRef();
-    
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
+    void CountStepsCharged(G4double step) {totLength += step;};
+    G4double TrackLength() const {return totLength;} ;
+    void AddCharged() {nCharged++;};
+    void AddNeutral() {nNeutral++;};
+    void AddE(G4double e) {edep += e;};
+    void CountEvent(G4bool val) {good = val;};
     
   private:
-    Test17EventActionMessenger*  eventMessenger;
     Test17RunAction* runaction;
-    G4int verboselevel;
-    G4double nstep,nstepCharged,nstepNeutral;
-    G4double Nch,Nne;
-    G4double NE,NP;
-    G4double Transmitted,Reflected ;
-    G4double EnergyDeposition ;
-    G4double totLAbs ;
-    G4double totEAbs ;
-
-    G4String drawFlag;
+    G4int verbose;
+    G4int evtNo;
+    G4int nCharged;
+    G4int nNeutral;
+    G4double edep;
+    G4double totLength;
+    G4bool good;
 };
 
 #endif

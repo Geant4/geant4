@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonC12.cc,v 1.6 2001-10-29 11:05:56 vnivanch Exp $
+// $Id: G4IonC12.cc,v 1.7 2001-10-30 22:02:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,9 +31,6 @@
 //      History: first implementation, based on object model of
 //      4th April 1996, G.Cosmo
 // **********************************************************************
-//  Added by J.L.Chuma, TRIUMF, 27 June 1996
-//  Added  G4IonC12::IonC12Definition() by H.Kurashige 27 June 1996
-//  Fixed  parameters by H.Kurashige, 25 Apr 1998
 // ----------------------------------------------------------------------
 
 #include "g4std/fstream"

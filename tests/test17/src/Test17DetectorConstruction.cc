@@ -36,7 +36,6 @@
 #include "Test17DetectorConstruction.hh"
 #include "Test17DetectorMessenger.hh"
 
-#include "Test17CalorimeterSD.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
@@ -44,10 +43,7 @@
 #include "G4UniformMagField.hh"
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
-#include "G4SDManager.hh"
 #include "G4RunManager.hh"
-#include "G4Colour.hh"
-#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -61,8 +57,7 @@ Test17DetectorConstruction::Test17DetectorConstruction():
   solidAbsorber(0),
   logicAbsorber(0),
   physiAbsorber(0),
-  magField(0),
-  calorimeterSD(0)
+  magField(0)
 {
   // default parameter values of the calorimeter
   AbsorberThickness = 100.0*mm;
@@ -263,13 +258,13 @@ G4VPhysicalVolume* Test17DetectorConstruction::ConstructCalorimeter()
   //                               
   // Sensitive Detectors: Absorber 
   //
-
+  /*
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
 
   calorimeterSD = new Test17CalorimeterSD("CalorSD",this);
   SDman->AddNewDetector( calorimeterSD );
   logicAbsorber->SetSensitiveDetector(calorimeterSD);
-      
+  */  
   
   //
   //always return the physical World

@@ -41,7 +41,6 @@
 class Test17DetectorConstruction;
 class Test17RunAction;
 class Test17EventAction;
-class Test17SteppingMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -59,10 +58,8 @@ public: // Without description
     Test17DetectorConstruction* detector;
     Test17EventAction*          eventaction;
     Test17RunAction*            runaction;
-    Test17SteppingMessenger*    steppingMessenger;
 
     G4int IDnow,IDold;
-    G4int evnoold ;
     G4bool prim;
 
 };
