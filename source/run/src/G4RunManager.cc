@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.50 2002-08-20 17:39:41 radoone Exp $
+// $Id: G4RunManager.cc,v 1.51 2002-11-27 17:55:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,7 @@ G4RunManager::G4RunManager()
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
  storeRandomNumberStatus(false)
 {
-  new G4ExceptionHandler();
+  defaultExceptionHandler = new G4ExceptionHandler();
   if(fRunManager)
   { G4Exception("G4RunManager constructed twice."); }
   //G4UnitDefinition::BuildUnitsTable();
@@ -157,6 +157,7 @@ G4RunManager::~G4RunManager()
     delete pStateManager;
     if(verboseLevel>1) G4cout << "StateManager deleted." << G4endl;
   }
+  delete defaultExceptionHandler;
   if(verboseLevel>1) G4cout << "RunManager is deleting." << G4endl;
 }
 

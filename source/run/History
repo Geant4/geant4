@@ -1,4 +1,4 @@
-$Id: History,v 1.65 2002-08-20 17:50:42 radoone Exp $
+$Id: History,v 1.66 2002-11-27 17:55:06 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 27, 2002 M.Asai (run-V04-01-04)
+- Fix memory leak in G4RunManager by deleting G4ExceptionHandler object.
 
 Aug 20, 2002 R. Chytracek (run-V04-01-03)
 - Introducing ResetNavigator() method needed in cases where a geometry

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.25 2002-08-20 17:39:01 radoone Exp $
+// $Id: G4RunManager.hh,v 1.26 2002-11-27 17:55:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,6 +80,7 @@ class G4Timer;
 class G4RunMessenger;
 class G4DCtable;
 class G4Run;
+class G4ExceptionHandler;
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -204,6 +205,7 @@ class G4RunManager
 
   private:
     G4RunMessenger* runMessenger;
+    G4ExceptionHandler* defaultExceptionHandler;
 
   protected:
     G4bool geometryInitialized;
