@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst27PhysicsList.cc,v 1.1 2003-11-14 15:07:24 gunter Exp $
+// $Id: Tst27PhysicsList.cc,v 1.2 2003-11-17 15:54:10 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -42,6 +42,7 @@
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
 #include <iomanip>                
+#include "G4IonsShenCrossSection.hh"
 
 
 Tst27PhysicsList::Tst27PhysicsList():  G4VUserPhysicsList()
@@ -327,7 +328,8 @@ void Tst27PhysicsList::ConstructHad()
     theIonBC->SetMinEnergy(80*MeV);
     theIonBC->SetMaxEnergy(20*GeV);
     
-    G4TripathiCrossSection * TripathiCrossSection= new G4TripathiCrossSection();
+    G4TripathiCrossSection * TripathiCrossSection= new G4TripathiCrossSection;
+    G4IonsShenCrossSection * aShen = new G4IonsShenCrossSection;
 // replace the default string fragmentation function (Lund) to QGSM
 //      G4VLongitudinalStringDecay * theFragmentation = new G4QGSMFragmentation;
 //      G4ExcitedStringDecay * theStringDecay = new G4ExcitedStringDecay(theFragmentation);
@@ -565,6 +567,7 @@ void Tst27PhysicsList::ConstructHad()
                                  new G4LEDeuteronInelastic;
 	   theInelasticModel->SetMaxEnergy(100*MeV);
 	 theInelasticProcess->AddDataSet(TripathiCrossSection);
+	 theInelasticProcess->AddDataSet(aShen);
          theInelasticProcess->RegisterMe(theInelasticModel);
 	 theInelasticProcess->RegisterMe(theIonBC);
          theInelasticProcess->RegisterMe(theTheoModel);
@@ -578,6 +581,7 @@ void Tst27PhysicsList::ConstructHad()
                                  new G4LETritonInelastic;
 	   theInelasticModel->SetMaxEnergy(100*MeV);
 	 theInelasticProcess->AddDataSet(TripathiCrossSection);
+	 theInelasticProcess->AddDataSet(aShen);
          theInelasticProcess->RegisterMe(theInelasticModel);
 	 theInelasticProcess->RegisterMe(theIonBC);
          theInelasticProcess->RegisterMe(theTheoModel);
@@ -590,6 +594,7 @@ void Tst27PhysicsList::ConstructHad()
          G4LEAlphaInelastic* theInelasticModel = 
                                  new G4LEAlphaInelastic;
 	 theInelasticProcess->AddDataSet(TripathiCrossSection);
+	 theInelasticProcess->AddDataSet(aShen);
          theInelasticProcess->RegisterMe(theInelasticModel);
 	 theInelasticProcess->RegisterMe(theIonBC);
          theInelasticProcess->RegisterMe(theTheoModel);
@@ -600,6 +605,7 @@ void Tst27PhysicsList::ConstructHad()
          G4IonInelasticProcess* theInelasticProcess = 
                             new G4IonInelasticProcess();
 	 theInelasticProcess->AddDataSet(TripathiCrossSection);
+	 theInelasticProcess->AddDataSet(aShen);
          G4BinaryLightIonReaction * theGenIonBC= new G4BinaryLightIonReaction;
          theGenIonBC->SetMinEnergy(1*MeV);
          theGenIonBC->SetMaxEnergy(10*GeV);

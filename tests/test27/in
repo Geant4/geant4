@@ -1,7 +1,7 @@
 #
 # Hand-generated test input file for test12 hadronics.
 #
-# /control/verbose 2
+/control/verbose 2
 /run/verbose 2
 /run/particle/setCut 1 m
 /run/initialize
@@ -54,21 +54,21 @@
 #
 # deuteron at 1 GeV/nucleon in U
 #
-/gun/particle helium
+/gun/particle alpha
 /gun/energy 1.0 GeV
 /mydet/SelectMaterial U
 /run/beamOn 200
 #
-# helium at 1 GeV/nucleon on H 
+# alpha at 1 GeV/nucleon on H 
 #
-/gun/particle helium
+/gun/particle alpha
 /gun/energy 1.0 GeV
 /mydet/SelectMaterial H
 /run/beamOn 200
 #
-# helium at 1 GeV/nucleon on Silicon 
+# alpha at 1 GeV/nucleon on Silicon 
 #
-/gun/particle helium
+/gun/particle alpha
 /gun/energy 1.0 GeV
 /mydet/SelectMaterial Si
 /run/beamOn 200
@@ -76,26 +76,26 @@
 
 # deuteron at 200 MeV/nucleon in U
 #
-/gun/particle helium
+/gun/particle alpha
 /gun/energy 200 MeV
 /mydet/SelectMaterial U
 /run/beamOn 200
 #
-# helium at 200 MeV/nucleon on H 
+# alpha at 200 MeV/nucleon on H 
 #
-/gun/particle helium
+/gun/particle alpha
 /gun/energy 200 MeV
 /mydet/SelectMaterial H
 /run/beamOn 200
 #
-# helium at 200 MeV/nucleon on Silicon 
+# alpha at 200 MeV/nucleon on Silicon 
 #
-/gun/particle helium
+/gun/particle alpha
 /gun/energy 200 MeV
 /mydet/SelectMaterial Si
 /run/beamOn 200
 #
-#  .....end helium............
+#  .....end alpha............
 #
 # C(12,6)++ at 1 GeV/nucleon in U
 #
