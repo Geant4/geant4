@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.hh,v 1.18 2001-05-18 14:14:31 johna Exp $
+// $Id: G4VisManager.hh,v 1.19 2001-07-10 23:21:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,6 @@
 #include "g4std/iostream"
 #include "g4std/vector"
 
-class G4VisManMessenger;
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4VSolid;
@@ -116,7 +115,6 @@ class G4VisManager: public G4VVisManager {
   friend class G4VisStateDependent;
 
   // Now classes associated with the old commands...
-  friend class G4VisManMessenger;
   friend class G4VisCommandCameraReset;
   friend class G4VisCommandClearScene;
   friend class G4VisCommandClearView;
@@ -327,7 +325,6 @@ protected:
   G4SceneHandlerList    fAvailableSceneHandlers;
   G4ViewParameters      fVP;                // Current viewing parameters.
   G4int                 fVerbose;           // Verbosity level 0-10.
-  G4VisManMessenger*    fpMessenger;        // Pointer to messenger.
   G4std::vector<G4UImessenger*> fMessengerList;
   G4std::vector<G4UIcommand*>   fDirectoryList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.

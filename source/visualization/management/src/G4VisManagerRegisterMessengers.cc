@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.30 2001-05-18 14:14:33 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.31 2001-07-10 23:21:49 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,34 +17,15 @@
 #include "G4VisCommandsCompound.hh"
 #include "G4VisCommandsScene.hh"
 #include "G4VisCommandsSceneAdd.hh"
-#include "G4VisCommandsSceneInclude.hh"  // Deprecated
 #include "G4VisCommandsSceneHandler.hh"
 #include "G4VisCommandsViewer.hh"
 #include "G4VisCommandsViewerSet.hh"
-
-// OLD STYLE!!
-#include "G4VisManMessenger.hh"
-#include "G4VisCommandTemplates.hh"
-#include "G4VisCommandsCamera.hh"
-#include "G4VisCommandsClear.hh"
-#include "G4VisCommandsCopy.hh"
-#include "G4VisCommandsCreateScene.hh"
-#include "G4VisCommandsCreateView.hh"
-#include "G4VisCommandsDelete.hh"
-#include "G4VisCommandsDraw.hh"
-#include "G4VisCommandsLights.hh"
-#include "G4VisCommandsPrint.hh"
-#include "G4VisCommandsRefresh.hh"
-#include "G4VisCommandsSet.hh"
-#include "G4VisCommandsShow.hh"
-// END OLD STYLE!!
-
-#include "G4ios.hh"
-#include <assert.h>
+#include "G4UIcommand.hh"
+#include "G4UIdirectory.hh"
 
 void G4VisManager::RegisterMessengers () {
 
-  /******************************************************************
+/******************************************************************
 
 (Extract for working note.)
 
@@ -440,7 +421,7 @@ default: 0 0 0 0 cm 1 0 cm
   /vis/sceneHandler/attach
   /vis/viewer/refresh
 
-  ******************************************************************/
+******************************************************************/
 
   // Instantiate individual messengers/commands (usually one command
   // per messenger).
@@ -474,12 +455,6 @@ default: 0 0 0 0 cm 1 0 cm
   fMessengerList.push_back (new G4VisCommandSceneAddText);
   fMessengerList.push_back (new G4VisCommandSceneAddTrajectories);
   fMessengerList.push_back (new G4VisCommandSceneAddVolume);
-
-  directory = new G4UIdirectory ("/vis/scene/include/");
-  directory -> SetGuidance ("Deprecated commands; now in /vis/scene/add/.");
-  fDirectoryList.push_back (directory);
-  fMessengerList.push_back (new G4VisCommandSceneIncludeHits);
-  fMessengerList.push_back (new G4VisCommandSceneIncludeTrajectories);
 
   directory = new G4UIdirectory ("/vis/sceneHandler/");
   directory -> SetGuidance ("Operations on Geant4 scene handlers.");
@@ -518,91 +493,5 @@ default: 0 0 0 0 cm 1 0 cm
   fMessengerList.push_back (new G4VisCommandDrawView);
   fMessengerList.push_back (new G4VisCommandOpen);
   fMessengerList.push_back (new G4VisCommandSpecify);
-
-  // Camera - OLD STYLE!!
-  fMessengerList.push_back
-    (new G4VisCommandDirectoryMessenger <G4VisCommandCamera>);
-  fMessengerList.push_back
-    (new G4VisSimpleCommandMessenger <G4VisCommandCameraReset>);
-
-  // Clear - OLD STYLE!!
-  fMessengerList.push_back
-    (new G4VisCommandDirectoryMessenger <G4VisCommandClear>);
-//  fMessengerList.push_back
-//    (new G4VisSimpleCommandMessenger <G4VisCommandClearScene>);
-  fMessengerList.push_back
-    (new G4VisSimpleCommandMessenger <G4VisCommandClearView>);
-//  fMessengerList.push_back
-//    (new G4VisSimpleCommandMessenger <G4VisCommandClearViewAndScene>);
-
-  // Copy - OLD STYLE!!
-  fMessengerList.push_back
-    (new G4VisCommandDirectoryMessenger <G4VisCommandCopy>);
-//  fMessengerList.push_back
-//    (new G4VisSimpleCommandMessenger <G4VisCommandCopyAll>);
-//  fMessengerList.push_back
-//    (new G4VisSimpleCommandMessenger <G4VisCommandCopyScene>);
-  fMessengerList.push_back
-    (new G4VisSimpleCommandMessenger <G4VisCommandCopyView>);
-
-  // Create Scene - OLD STYLE!!
-  fMessengerList.push_back
-    (new G4VisCommandDirectoryMessenger <G4VisCommandCreateScene>);
-  fMessengerList.push_back
-    (new G4VisSimpleCommandMessenger <G4VisCommandCreateSceneClear>);
-
-  // Create View - OLD STYLE!!
-  fMessengerList.push_back
-    (new G4VisCommandDirectoryMessenger <G4VisCommandCreateView>);
-  fMessengerList.push_back
-    (new G4VisSimpleCommandMessenger <G4VisCommandCreateViewNewScene>);
-  fMessengerList.push_back
-    (new G4VisSimpleCommandMessenger <G4VisCommandCreateViewNewView>);
-
-  // Delete - OLD STYLE!!
-  fMessengerList.push_back
-    (new G4VisCommandDirectoryMessenger <G4VisCommandDelete>);
-  fMessengerList.push_back
-    (new G4VisSimpleCommandMessenger <G4VisCommandDeleteScene>);
-  fMessengerList.push_back
-    (new G4VisSimpleCommandMessenger <G4VisCommandDeleteView>);
-
-  // Draw - OLD STYLE!!
-  fMessengerList.push_back
-    (new G4VisCommandDirectoryMessenger <G4VisCommandDraw>);
-  fMessengerList.push_back
-    (new G4VisSimpleCommandMessenger <G4VisCommandDrawCurrent>);
-
-  // Lights - OLD STYLE!!
-  fMessengerList.push_back
-    (new G4VisCommandDirectoryMessenger <G4VisCommandLights>);
-  fMessengerList.push_back
-    (new G4VisButtonCommandMessenger <G4VisCommandLightsMoveWithCamera>);
-
-  // Print - OLD STYLE!!
-  fMessengerList.push_back
-    (new G4VisCommandDirectoryMessenger <G4VisCommandPrint>);
-
-  // Refresh - OLD STYLE!!
-  fMessengerList.push_back
-    (new G4VisCommandDirectoryMessenger <G4VisCommandRefresh>);
-  fMessengerList.push_back
-    (new G4VisSimpleCommandMessenger <G4VisCommandRefreshView>);
-
-  // Set - OLD STYLE!!
-  fMessengerList.push_back
-    (new G4VisCommandDirectoryMessenger <G4VisCommandSet>);
-  fMessengerList.push_back
-    (new G4VisButtonCommandMessenger <G4VisCommandSetCulling>);
-  fMessengerList.push_back
-    (new G4VisButtonCommandMessenger <G4VisCommandSetCullCoveredDaughters>);
-  fMessengerList.push_back
-    (new G4VisButtonCommandMessenger <G4VisCommandSetCullInvisible>);
-
-  // Show - OLD STYLE!!
-  fMessengerList.push_back
-    (new G4VisCommandDirectoryMessenger <G4VisCommandShow>);
-  fMessengerList.push_back
-    (new G4VisSimpleCommandMessenger <G4VisCommandShowView>);
 
 }

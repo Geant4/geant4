@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.26 2001-06-15 16:25:25 johna Exp $
+// $Id: G4VisManager.cc,v 1.27 2001-07-10 23:21:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,12 +36,6 @@
 #include "G4ModelingParameters.hh"
 #include "G4TransportationManager.hh"
 
-#include "G4VisManMessenger.hh"
-// TEMPORARY /vis/ -> /vis~/ equivalence.
-#include "G4VisToOldVisCommands.hh"
-
-#include "G4ios.hh"
-
 G4VisManager* G4VisManager::fpInstance = 0;
 
 G4VisManager::G4VisManager ():
@@ -51,7 +45,6 @@ G4VisManager::G4VisManager ():
   fpSceneHandler   (0),
   fpViewer         (0),
   fVerbose         (0),
-  fpMessenger      (0),
   fpStateDependent (0)   // All other objects use default constructors.
 {
   if (fpInstance) {
@@ -89,7 +82,6 @@ G4VisManager::~G4VisManager () {
   for (i = 0; i < fMessengerList.size (); ++i) {
     delete fMessengerList[i];
   }
-  delete fpMessenger;
   for (i = 0; i < fDirectoryList.size (); ++i) {
     delete fDirectoryList[i];
   }
@@ -163,12 +155,6 @@ void G4VisManager::Initialise () {
   RegisterGraphicsSystems ();
 
   RegisterMessengers ();
-
-  // Remaining commands - not yet template-ised.
-  fpMessenger = new G4VisManMessenger (this);
-
-  // TEMPORARY /vis/ -> /vis~/ equivalence.
-  fMessengerList.push_back (new G4VisToOldVisCommands);  
 
   fInitialised = true;
 }
