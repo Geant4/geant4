@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.51 1999-11-25 15:57:30 gcosmo Exp $
+# $Id: architecture.gmk,v 1.52 1999-11-30 09:30:35 morita Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -99,11 +99,11 @@ endif
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4BIN) ] && mkdir -p $(G4BIN) )
 
 # If not specified, the default path for G4 schema G4SCHEMA_DIR is
-# set to $G4WORKDIR/schema ...
+# set to $G4WORKDIR/schema/$G4SYSTEM ...
 #
 ifndef G4SCHEMA_DIR
-  G4SCHEMA_DIR := $(G4WORKDIR)/schema
-  G4SCHEMA_INCLUDE := $(G4WORKDIR)/schema/include
+  G4SCHEMA_DIR := $(G4WORKDIR)/schema/$(G4SYSTEM)
+  G4SCHEMA_INCLUDE := $(G4SCHEMA_DIR)/include
   G4SCHEMA_FDID := 207
 endif
 ifdef G4ODBMS
@@ -115,13 +115,11 @@ endif
 # set to $G4WORKDIR/tmp/schema (for building persistency library)...
 #
 ifndef G4TMPSCHEMA_DIR
-  G4TMPSCHEMA_DIR := $(G4WORKDIR)/tmp/schema
-  G4TMPSCHEMA_INCLUDE := $(G4WORKDIR)/tmp/schema/include
+  G4TMPSCHEMA_DIR := $(G4WORKDIR)/tmp/schema/$(G4SYSTEM)
   G4TMPSCHEMA_BOOT := $(G4TMPSCHEMA_DIR)/G4SCHEMA
 endif
 ifdef G4ODBMS
   G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TMPSCHEMA_DIR) ] && mkdir -p $(G4TMPSCHEMA_DIR) )
-  G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TMPSCHEMA_INCLUDE) ] && mkdir -p $(G4TMPSCHEMA_INCLUDE) )
 endif
 
 # If not specified, the default path for G4 example federated database is
