@@ -1,4 +1,4 @@
-$Id: History,v 1.93 1999-12-15 15:06:06 johna Exp $
+$Id: History,v 1.94 2000-01-03 11:48:17 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd January 2000  Gabriele Cosmo (config-V01-00-00)
+- Syncronized with HEAD.
 
 16th December 1999  John Allison
 - Cosmetic improvement to echo line in binmake.gmk.
