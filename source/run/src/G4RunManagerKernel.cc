@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.22 2005-02-18 11:12:05 gcosmo Exp $
+// $Id: G4RunManagerKernel.cc,v 1.23 2005-03-22 19:12:20 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -199,10 +199,7 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
 void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 {
   physicsList = uPhys;
-  // Following line is tentatively moved to the constructor
   // G4ParticleTable::GetParticleTable()->SetReadiness();
-  if(verboseLevel>1) G4cout << "physicsList->ConstructParticle() start." << G4endl;
-  physicsList->ConstructParticle();
 }
   
 void G4RunManagerKernel::InitializePhysics()
@@ -226,8 +223,12 @@ void G4RunManagerKernel::InitializePhysics()
                 "G4VUserPhysicsList is not defined");
   }
 
+  if(verboseLevel>1) G4cout << "physicsList->ConstructParticle() start." << G4endl;
+  physicsList->ConstructParticle();
+
   if(verboseLevel>1) G4cout << "physicsList->Construct() start." << G4endl;
   physicsList->Construct();
+
   if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
   physicsList->SetCuts();
   CheckRegions();
