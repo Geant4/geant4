@@ -1,4 +1,4 @@
-$Id: README,v 1.4 1999-07-01 09:59:57 barrand Exp $
+$Id: README,v 1.5 1999-08-24 04:37:55 stanaka Exp $
 
 Below are some steps for making GEANT4 with visualization run on
 rsplus.cern.ch.
@@ -297,11 +297,11 @@ The following graphics systems drivers are supported in the GEANT4 distribution:
     Disadvantages: Requires Open Inventor license ($$), Hepvis library (Free).
 
   VRML1     (produces VRML 1 file over network)
-  VRML1File (produces VRML 1 file locally    )
+  VRML1FILE (produces VRML 1 file locally    )
 
-  VRML2     (produces VRML 2 file over network), in preparation
+  VRML2     (produces VRML 2 file over network)
 
-  VRML2File (produces VRML 2 file locally    ), in preparation
+  VRML2FILE (produces VRML 2 file locally    )
 
 The following graphics systems drivers are installed on your system:
   DAWN     (socket connection to the Fukui Renderer DAWN)
@@ -496,8 +496,6 @@ File  g4.prim  is generated.
 No viewer is invoked.
 Viewer "viewer-0 (DAWNFILE)" of scene handler "scene-handler-0"
   refreshed at request of scene "scene-0".
-/vis/show/view
-/vis~/show/view 
 #
 # for drawing the tracks
 # if too many tracks cause core dump => storeTrajectory 0
