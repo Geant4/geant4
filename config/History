@@ -1,4 +1,4 @@
-$Id: History,v 1.192 2002-06-20 10:54:01 gcosmo Exp $
+$Id: History,v 1.193 2002-06-26 17:27:18 gcosmo Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -18,8 +18,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-20th June 2002  Gabriele Cosmo (config-V04-00-10)
+26th June 2002  Gabriele Cosmo (config-V04-00-10)
 - Moved STEP PERL scripts to examples/extended/geometry/cad/scripts.
+- Updated scripts for Configure.
 
 18th June 2002  Gabriele Cosmo (config-V04-00-09)
 - Added -DG4USE_OSPACE for obsolete systems using ObjectSpace STL.
