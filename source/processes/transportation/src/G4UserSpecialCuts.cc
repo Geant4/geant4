@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserSpecialCuts.cc,v 1.8 2003-04-02 10:09:21 gcosmo Exp $
+// $Id: G4UserSpecialCuts.cc,v 1.9 2003-04-07 14:14:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// 
+//
 // --------------------------------------------------------------
 // History
 //
-// 15-04-98 first implementation, mma                   
+// 15-04-98 first implementation, mma
+// 07-04-03 migrade to cut per region (V.Ivanchenko)
 // --------------------------------------------------------------
 
 #include "G4UserSpecialCuts.hh"
@@ -96,9 +97,9 @@ PostStepGetPhysicalInteractionLength( const G4Track& aTrack,
      if (Particle->GetPDGCharge() != 0.)
      {
        G4double              Ekine    = aTrack.GetKineticEnergy();
-       G4Material*           Material = aTrack.GetMaterial();
+       const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
        G4double RangeNow =
-                G4EnergyLossTables::GetRange(Particle,Ekine,Material);
+                G4EnergyLossTables::GetRange(Particle,Ekine,couple);
        temp = (RangeNow - pUserLimits->GetUserMinRange(aTrack));
        if (temp < 0.) return 0.;
        if (ProposedStep > temp) ProposedStep = temp;
@@ -106,12 +107,12 @@ PostStepGetPhysicalInteractionLength( const G4Track& aTrack,
        // min kinetic energy (only for charged particle)
        //
        G4double Emin = pUserLimits->GetUserMinEkine(aTrack);
-       G4double Rmin = G4EnergyLossTables::GetRange(Particle,Emin,Material);
+       G4double Rmin = G4EnergyLossTables::GetRange(Particle,Emin,couple);
        temp = RangeNow - Rmin;
        if (temp < 0.) return 0.;
        if (ProposedStep > temp) ProposedStep = temp;
-     }         
-   }   
+     }
+   }
    return ProposedStep;
 }
 
@@ -121,8 +122,8 @@ G4VParticleChange*
 G4UserSpecialCuts::PostStepDoIt( const G4Track& aTrack,
                                  const G4Step&  )
 //
-// Kill the current particle, if requested by G4UserLimits 
-// 
+// Kill the current particle, if requested by G4UserLimits
+//
 {
    aParticleChange.Initialize(aTrack);
    aParticleChange.SetEnergyChange(0.) ;
