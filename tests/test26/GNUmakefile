@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.1 2003-01-31 18:12:54 vnivanch Exp $
+# $Id: GNUmakefile,v 1.2 2003-01-31 18:43:56 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
 
-name := test01
+name := test26
 G4TARGET := $(name)
 G4EXLIB := true
 
