@@ -12,7 +12,7 @@ set NDVY 010205
  opt logy
  
  null 0 160 0.01 100
- atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 0 deg'
  
  
  hi/file 1 prec.paw
@@ -37,14 +37,13 @@ gr/h/symb X Y 27 21 0.2
  exe ../prf n_a0 eps
 
   null 0 160 0.01 100
- atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 0 deg'
  
  gr/h/symb X Y 27 21 0.2
 
   hi/file 1 par.paw
  set dmod 3
  hi/pl 28 shist
-* itx 20 200 'proton 160.3 MeV on Al secondary neutrons at theta=0'
  line 100 1.8 110 1.8
  itx 115 60 'LEPAR'
  close 1
