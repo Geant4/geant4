@@ -5,8 +5,7 @@
 #include "globals.hh"
 #include "g4std/iostream"
 #include "G4PTouchableKey.hh"
-
-class G4Sigma;
+#include "G4Sigma.hh"
 
 typedef G4std::map<const char *, G4Sigma> G4PMapNameTally;
 
