@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.1 1999-01-07 16:05:48 gunter Exp $
+// $Id: ExN02DetectorConstruction.cc,v 1.2 1999-12-03 16:31:53 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,6 +58,7 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 
   G4double a, iz, z, density;
   G4String name, symbol;
+  G4double temperature, pressure;
   G4int nel;
 
   //Air
@@ -81,9 +82,17 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
     G4Material* Pb = new G4Material(name="Pb", z=82., a, density);
     
   //Vacuum
-    a = 1.*g/mole;
-    density = 1.e-20*g/cm3;
-    G4Material* Vacuum = new G4Material(name="Vacuum",z=1.,a,density);  
+    density     = universe_mean_density;    //from PhysicalConstants.h
+    pressure    = 3.e-18*pascal;
+    temperature = 2.73*kelvin;
+    G4Material* Vacuum = 
+            new G4Material(name="Vacuum", z=1., a=1.01*g/mole, density,
+                   kStateGas,temperature,pressure);
+
+  // Print all the materials defined.
+  //
+    G4cout << endl << "The materials defined are : " << endl << endl;
+    G4cout << *(G4Material::GetMaterialTable()) << endl;
 
 //--------- Sizes of the principal geometrical components (solids)  ---------
   
