@@ -43,33 +43,14 @@
 
 DicomPatientParameterisation::DicomPatientParameterisation(G4int, // NoVoxels, 
 							   G4double maxDensity, 
-							   G4double minDensity ,
-							   G4Material* lunginhale,
-							   G4Material* lungexhale,
-							   G4Material* adipose,
-							   G4Material* breast,
-							   G4Material* phantom,
-							   G4Material* muscle,
-							   G4Material* liver,
-							   G4Material* denseBone,
-							   G4Material* trabecularBone)
-{ 
-  lungExhale = lungexhale;
-  lungInhale = lunginhale;
-  adiposeTissue = adipose;
-  breastTissue = breast;
-  phantomTissue = phantom;
-  muscleTissue = muscle;
-  liverTissue = liver;
-  denseBoneTissue = denseBone;
-  trabecularBoneTissue = trabecularBone;
- 
+							   G4double minDensity)
+{  
   DicomConfiguration dicomConfiguration;
   dicomConfiguration.ReadDataFile();	
-				
+  
   // images must have the same dimension
   G4int totalNumberOfFile = dicomConfiguration.GetTotalNumberOfFile();
- 
+  
   for ( G4int i = 0; i < totalNumberOfFile; i++)
     {
       dicomConfiguration.ReadG4File( dicomConfiguration.GetListOfFile()[i] );
@@ -150,19 +131,21 @@ DicomPatientParameterisation::DicomPatientParameterisation(G4int, // NoVoxels,
   G4std::fscanf(readData,"%s %s",rowsBuf,columnsBuf);
   rows = atoi(rowsBuf);
   columns = atoi(columnsBuf);
+
   G4std::fscanf(readData,"%s %s",pixelSpacingXBuf,pixelSpacingYBuf);
   pixelSpacingX = atof(pixelSpacingXBuf);
   pixelSpacingY = atof(pixelSpacingYBuf);
+
   G4std::fscanf(readData,"%s",sliceThicknessBuf);
   sliceThickness = atoi(sliceThicknessBuf);
+
   G4std::fscanf(readData,"%s",sliceLocationBuf);
   sliceLocation = atof(sliceLocationBuf);
+
   G4std::fscanf(readData,"%s",compressionBuf);
   compression = atoi(compressionBuf);
     
   GetDensity( maxDensity , minDensity );
-
- 
 }
 
 DicomPatientParameterisation::~DicomPatientParameterisation()
@@ -177,18 +160,7 @@ DicomPatientParameterisation::~DicomPatientParameterisation()
   delete attributeTrabecularBone;
   delete attributeLungINhale;
   delete attributeDenseBone;
-  delete attributeAir;
-  
-  // materials ...
-  delete trabecularBoneTissue;
-  delete denseBoneTissue;
-  delete liverTissue;
-  delete muscleTissue;
-  delete phantomTissue;
-  delete breastTissue; 
-  delete adiposeTissue;
-  delete lungInhale;
-  delete lungExhale;
+  delete attributeAir;  
 }
 
 void DicomPatientParameterisation::ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const
@@ -214,54 +186,63 @@ G4Material*  DicomPatientParameterisation::ComputeMaterial(const G4int copyNo,G4
     {
       physVol->SetName("Physical_LungINhale");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeLungINhale );
+      G4Material* lungInhale = G4Material::GetMaterial("Lung_Inhale");
       return lungInhale;
     }
   else if ( density[copyNo] >= 0.481 && density[copyNo] <= 0.534 )
     {
       physVol->SetName("Physical_LungEXhale");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeLungEXhale );
+      G4Material* lungExhale = G4Material::GetMaterial("Lung_Exhale");
       return lungExhale;
     }
   else if ( density[copyNo] >= 0.919 && density[copyNo] <= 0.979 )
     {
       physVol->SetName("Physical_Adipose");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeAdipose );
+      G4Material* adiposeTissue = G4Material::GetMaterial("adipose_tissue");
       return adiposeTissue;
     }
   else if ( density[copyNo] > 0.979 && density[copyNo] <= 1.004 )
     {
       physVol->SetName("Physical_Breast");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeBreast );
+      G4Material* breastTissue = G4Material::GetMaterial("Breast");
       return breastTissue;
     }
   else if ( density[copyNo] > 1.004 && density[copyNo] <= 1.043 )
     {
       physVol->SetName("Physical_Phantom");
       physVol->GetLogicalVolume()->SetVisAttributes( attributePhantom );
+      G4Material* phantomTissue = G4Material::GetMaterial("Phantom");
       return phantomTissue;
     }
   else if ( density[copyNo] > 1.043 && density[copyNo] <= 1.109 )
     {
       physVol->SetName("Physical_Muscle");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeMuscle );
+      G4Material* muscleTissue = G4Material::GetMaterial("Muscle");
       return muscleTissue;
     }
   else if ( density[copyNo] > 1.109 && density[copyNo] <= 1.113 )
     {
       physVol->SetName("Physical_Liver");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeLiver );
+      G4Material* liverTissue = G4Material::GetMaterial("Liver");
       return liverTissue;
     }
   else if ( density[copyNo] > 1.113 && density[copyNo] <= 1.217 )
     {
       physVol->SetName("Physical_TrabecularBone");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeTrabecularBone );
+      G4Material* trabecularBoneTissue = G4Material::GetMaterial("Skeleton_Spongiosa");
       return trabecularBoneTissue;
     }
   else if ( density[copyNo] > 1.496 && density[copyNo] <= 1.654 )
     {
       physVol->SetName("Physical_DenseBone");
       physVol->GetLogicalVolume()->SetVisAttributes( attributeDenseBone );
+      G4Material* denseBoneTissue = G4Material::GetMaterial("Skeleton_ribs");
       return denseBoneTissue;
     }
 

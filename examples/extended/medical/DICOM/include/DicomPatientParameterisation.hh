@@ -17,16 +17,7 @@ public:
 
   DicomPatientParameterisation(G4int nVoxels, 
 			       G4double maxDensity, 
-			       G4double minDensity ,
-			       G4Material* lunginhale,
-			       G4Material* lungexhale,
-			       G4Material* adipose_tissue,
-			       G4Material* breast,
-			       G4Material* phantom,
-			       G4Material* muscle,
-			       G4Material* liver,
-			       G4Material* dense_bone,
-			       G4Material* trabecular_bone);
+			       G4double minDensity);
 
   virtual ~DicomPatientParameterisation();
 
@@ -76,17 +67,6 @@ public:
 
 private:
  
-  //materials ...
-  G4Material* lungExhale;
-  G4Material* lungInhale;
-  G4Material* adiposeTissue;
-  G4Material* breastTissue;
-  G4Material* phantomTissue;
-  G4Material* muscleTissue;
-  G4Material* liverTissue;
-  G4Material* denseBoneTissue;
-  G4Material* trabecularBoneTissue;
-
   G4VisAttributes* attributeAir;
   G4VisAttributes* attributeLungINhale;
   G4VisAttributes* attributeLungEXhale;

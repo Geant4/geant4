@@ -316,16 +316,7 @@ void DicomGeometry::PatientConstruction()
 
   G4VPVParameterisation* paramLungINhale = new DicomPatientParameterisation
     ( numberOfVoxels,
-      2.0 , 0.207 ,
-      lunginhale,
-      lungexhale,
-      adiposeTissue,
-      breast,
-      phantom,
-      muscle,
-      liver,
-      denseBone,
-      trabecularBone );
+      2.0 , 0.207 );
 
   physicalLungINhale = 
     new G4PVParameterised( "Physical_LungINhale" , 
