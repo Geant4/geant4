@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPVector.hh,v 1.10 2000-07-24 14:06:15 hpw Exp $
+// $Id: G4NeutronHPVector.hh,v 1.11 2000-07-26 08:16:12 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPVector_h
@@ -94,18 +94,12 @@ class G4NeutronHPVector
     theData[i].SetY(x);
   }
   inline G4double GetEnergy(G4int i) const { return theData[i].GetX(); }
-  inline G4double GetXsec(G4int i) const { return theData[i].GetY(); }
+  inline G4double GetXsec(G4int i) { return theData[i].GetY(); }
   inline G4double GetX(G4int i) const 
   { 
     if (i<0) i=0;
     if(i>=GetVectorLength()) i=GetVectorLength()-1;
     return theData[i].GetX();
-  }
-  inline G4double GetY(G4int i)
-  { 
-    if (i<0) i=0;
-    if(i>=GetVectorLength()) i=GetVectorLength()-1;
-    return theData[i].GetY(); 
   }
   inline const G4NeutronHPDataPoint & GetPoint(G4int i) const { return theData[i]; }
   
@@ -129,6 +123,19 @@ class G4NeutronHPVector
   inline G4double GetY(G4double x)  {return GetXsec(x);}
   inline G4int GetVectorLength() const {return nEntries;}
 
+  inline G4double GetY(G4int i)
+  { 
+    if (i<0) i=0;
+    if(i>=GetVectorLength()) i=GetVectorLength()-1;
+    return theData[i].GetY(); 
+  }
+
+  inline G4double GetY(G4int i) const
+  {
+    if (i<0) i=0;
+    if(i>=GetVectorLength()) i=GetVectorLength()-1;
+    return theData[i].GetY(); 
+  }
   void Dump();
   
   inline void InitInterpolation(G4std::ifstream & aDataFile)
