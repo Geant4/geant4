@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02TrackerHit.hh,v 1.2 2003-07-04 15:36:50 gcosmo Exp $
+// $Id: ExN02TrackerHit.hh,v 1.3 2003-12-03 14:15:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,5 +98,3 @@ inline void ExN02TrackerHit::operator delete(void *aHit)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
