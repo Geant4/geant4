@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.hh,v 1.2 2000-02-10 14:22:52 urban Exp $
+// $Id: G4VEnergyLoss.hh,v 1.3 2000-02-17 09:08:42 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,9 +93,9 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
     G4int imat;
     G4double f1Fluct,f2Fluct,e1Fluct,e2Fluct,rateFluct,ipotFluct;
     G4double e1LogFluct,e2LogFluct,ipotLogFluct;
-    const G4double MaxExcitationNumber ;
-    const G4int nmaxDirectFluct,nmaxCont1,nmaxCont2 ;
 
+    const G4double MaxExcitationNumber ;
+    const G4int nmaxCont1,nmaxCont2 ;
 
   // static part of the class 
 
@@ -194,6 +194,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
                                   G4PhysicsTable* theRangeCoeffCTable,
                                   G4double Tmin,G4double Tmax,G4int nbin,
                        G4int materialIndex,G4PhysicsLogVector* rangeVector);
+
 
   // data members
   protected:
