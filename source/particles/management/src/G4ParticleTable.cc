@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.cc,v 1.12 1999-10-29 05:34:27 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.13 1999-10-29 08:03:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -67,26 +67,32 @@ G4ParticleTable::G4ParticleTable():verboseLevel(0),fParticleMessenger(0),noName(
 ////////////////////
 G4ParticleTable::~G4ParticleTable()
 {
-  if(fDictionary)
-    {
-      fDictionary->clear();
-      delete fDictionary;
-	  if (fIterator!=0 )delete fIterator;
-  }
+  // delete Short Lived table and contents
+  if (fShortLivedTable!=0) delete fShortLivedTable;
+  fShortLivedTable =0;
 
-  if (fParticleMessenger!=0) delete fParticleMessenger;  
+
+  //delete Ion Table and contents
+  if (fIonTable!=0) delete fIonTable;
+  fIonTable =0;
 
   // delete dictionary for encoding
   if (fEncodingDictionary!=0){
     fEncodingDictionary -> clear();
     delete fEncodingDictionary;
+    fEncodingDictionary =0;
   }
 
-  //delete Ion Table and contents
-  if (fIonTable!=0) delete fIonTable;
- 
-  // delete Short Lived table and contents
-  if (fShortLivedTable!=0) delete fShortLivedTable;
+  if(fDictionary){
+    fDictionary->clear();
+    delete fDictionary;
+    fDictionary =0;
+    if (fIterator!=0 )delete fIterator;
+    fIterator =0;
+  }
+
+  if (fParticleMessenger!=0) delete fParticleMessenger;  
+  fParticleMessenger =0;
 }
 
 ////////////////////
@@ -167,7 +173,7 @@ void G4ParticleTable::RemoveAllParticles()
   // delete dictionary
   if (fDictionary)
     {
-	  if (fIterator!=0 )delete fIterator;
+      if (fIterator!=0 )delete fIterator;
       fIterator =0;
       fDictionary->clear();
       delete fDictionary;
@@ -187,7 +193,9 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
     }
 #endif
     return 0;
+
   }else {  
+
     if (contains(particle)) {
 #ifdef G4VERBOSE
       if (verboseLevel>0){
@@ -198,9 +206,10 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
       }
 #endif
       return  FindParticle(particle);
+
     } else {
       G4PTblDictionary *pdic =  fDictionary;
-	  G4PTblEncodingDictionary *pedic =  fEncodingDictionary;  
+      G4PTblEncodingDictionary *pedic =  fEncodingDictionary;  
 
 #ifdef G4USE_STL_MAP
       (*pdic)[GetKey(particle)] = particle;
@@ -230,7 +239,7 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
         fIonTable->Insert(particle);
       }
 
-      // insert it in SHortLivedTable if "shortlived"
+      // insert it in ShortLivedTable if "shortlived"
       if (particle->IsShortLived() ){
 	fShortLivedTable->Insert(particle);
       }
@@ -355,7 +364,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
 #ifdef G4USE_STL_MAP
     G4PTblEncodingDictionary::iterator it =  pedic->find(aPDGEncoding );
     if (it != pedic->end()) {
-      particle = it->second;
+      particle = (*it).second;
     }
 #else
     particle = pedic -> findValue( &aPDGEncoding );

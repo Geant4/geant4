@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.hh,v 1.9 1999-10-29 05:34:20 kurasige Exp $
+// $Id: G4ParticleTable.hh,v 1.10 1999-10-29 08:03:52 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,9 +59,9 @@ class G4ParticleTable
 
  public:
 #ifdef G4USE_STL_MAP
-   typedef G4std::map<G4String, G4ParticleDefinition* > G4PTblDictionary;
+   typedef G4ParticleTableIterator<G4String, G4ParticleDefinition*>::Map G4PTblDictionary;
    typedef G4ParticleTableIterator<G4String, G4ParticleDefinition*> G4PTblDicIterator;
-   typedef G4std::map<G4int, G4ParticleDefinition*> G4PTblEncodingDictionary;
+   typedef G4ParticleTableIterator<G4int, G4ParticleDefinition*>::Map G4PTblEncodingDictionary;
    typedef G4ParticleTableIterator<G4int, G4ParticleDefinition*> G4PTblEncodingDicIterator;
 #else
    typedef RWTPtrHashDictionary<G4String,G4ParticleDefinition> G4PTblDictionary;

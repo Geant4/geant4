@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.19 1999-10-29 05:34:26 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.20 1999-10-29 08:03:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,6 +59,9 @@ G4IonTable::~G4IonTable()
 {
   // delete IsotopeTable if exists
   if (fIsotopeTable != 0) delete fIsotopeTable;
+  fIsotopeTable =0;
+
+  if (fIonList ==0) return;
 
   // delete ion objects
   G4ParticleDefinition* particle;
@@ -90,6 +93,7 @@ G4IonTable::~G4IonTable()
   fIonList->clear();
 
   delete fIonList;
+  fIonList =0;
 }
 
 

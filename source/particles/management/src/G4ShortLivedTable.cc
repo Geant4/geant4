@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShortLivedTable.cc,v 1.5 1999-10-29 05:34:28 kurasige Exp $
+// $Id: G4ShortLivedTable.cc,v 1.6 1999-10-29 08:03:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,7 @@ G4ShortLivedTable::G4ShortLivedTable()
 
 G4ShortLivedTable::~G4ShortLivedTable()
 {
+  if (fShortLivedList ==0) return;
   // remove all contents in the short lived List and delete all particles  
 #ifdef G4USE_STL_MAP
   G4ShortLivedList::iterator i;
@@ -50,6 +51,7 @@ G4ShortLivedTable::~G4ShortLivedTable()
   fShortLivedList->clearAndDestroy();
 #endif
   delete fShortLivedList;
+  fShortLivedList =0;
 }
 
 G4int G4ShortLivedTable::GetVerboseLevel() const

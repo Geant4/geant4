@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.icc,v 1.3 1999-10-29 05:34:21 kurasige Exp $
+// $Id: G4ParticleTable.icc,v 1.4 1999-10-29 08:03:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@ inline
 #ifdef G4USE_STL_MAP
   G4PTblDictionary::iterator it =  fDictionary->find(particle_name);
   if (it != fDictionary->end()) {
-    return it->second;
+    return (*it).second;
   }else {
     return 0;
   }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTableIterator.hh,v 1.1 1999-10-28 23:24:13 kurasige Exp $
+// $Id: G4ParticleTableIterator.hh,v 1.2 1999-10-29 08:03:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,13 +20,14 @@
 
 #ifndef G4ParticleTableIterator_h
 #define G4ParticleTableIterator_h 1
+
 #include "g4std/map"
 
-template < class K, class V >
-class  G4ParticleTableIterator
+template < class K, class V > class G4ParticleTableIterator
 {
  public:
-  G4ParticleTableIterator(map<K,V> &adict):
+  typedef  G4std::map<K, V, less<K> > Map;
+  G4ParticleTableIterator( Map &adict):
     mydict(&adict),it(adict.begin()),defined(false){}
 
   G4bool operator++ ()
@@ -52,8 +53,8 @@ class  G4ParticleTableIterator
   V  value() const { return (*it).second; }
 
  private:
-  map<K,V>::iterator it;  
-  map<K,V> * mydict;
+  typename Map::iterator it;  
+  Map * mydict;
   G4bool defined;
 };
 
