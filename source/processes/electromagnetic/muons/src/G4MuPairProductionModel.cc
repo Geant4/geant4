@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.19 2004-05-05 18:45:42 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.20 2004-11-01 09:48:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,6 +48,7 @@
 // 10-02-04 Update parameterisation using R.Kokoulin model (V.Ivanchenko)
 // 28-04-04 For complex materials repeat calculation of max energy for each
 //          material (V.Ivanchenko)
+// 01-11-04 Fix bug in expression inside ComputeDMicroscopicCrossSection (R.Kokoulin)
 
 //
 // Class Description:
@@ -305,8 +306,10 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
   G4double xi0 = 0.25*massratio2*a1;
   G4double del = c8/a0;
 
-  G4double tmnexp = (alf+2.*del*a3)/(1.+(1.-del)*sqrt(a3));
-  if(tmnexp <= 0.) return cross;
+  G4double rta3 = sqrt(a3);
+  G4double tmnexp = alf/(1. + rta3) + del*rta3;
+  if(tmnexp >= 1.0) return cross;
+
   G4double tmn = log(tmnexp);
   G4double sum = 0.;
 
