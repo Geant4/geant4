@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.1 2003-04-22 16:25:06 maire Exp $
+// $Id: EventAction.cc,v 1.2 2003-06-03 09:33:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,15 +58,15 @@ EventAction::~EventAction()
 void EventAction::BeginOfEventAction(const G4Event* evt)
 {
  G4int evtNb = evt->GetEventID();
- 
+
  //printing survey
- if (evtNb%printModulo == 0) 
+ if (evtNb%printModulo == 0)
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::EndOfEventAction(const G4Event* evt)
+void EventAction::EndOfEventAction(const G4Event*)
 {
   if (G4VVisManager::GetConcreteInstance())
   {

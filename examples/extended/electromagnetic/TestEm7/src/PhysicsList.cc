@@ -40,11 +40,13 @@
 #include "G4Positron.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
+  G4LossTableManager::Instance();
   defaultCutValue = 1.*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;

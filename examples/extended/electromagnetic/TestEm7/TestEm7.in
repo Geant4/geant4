@@ -1,4 +1,4 @@
-# $Id: TestEm7.in,v 1.2 2003-05-15 11:23:51 vnivanch Exp $
+# $Id: TestEm7.in,v 1.3 2003-06-03 09:33:44 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -26,8 +26,6 @@
 /testem/det/tallyPosition -5.  0. 0. cm
 /testem/det/tallyPosition  0.  0. 0. cm
 /testem/det/tallyPosition  5.  0. 0. cm
-#
-#/testem/det/update
 #
 /run/initialize
 #

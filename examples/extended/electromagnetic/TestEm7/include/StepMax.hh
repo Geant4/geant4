@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.hh,v 1.1 2003-04-22 16:25:05 maire Exp $
+// $Id: StepMax.hh,v 1.2 2003-06-03 09:33:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,26 +40,25 @@ class StepMaxMessenger;
 
 class StepMax : public G4VDiscreteProcess
 {
-  public:     
+  public:
 
      StepMax(const G4String& processName = "UserMaxStep");
     ~StepMax();
-    
+
      G4bool IsApplicable(const G4ParticleDefinition&);
-    
+
      void SetMaxStep(G4double);
-     
+
      G4double GetMaxStep() {return MaxChargedStep;};
-     
+
      G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
 			                       G4double previousStepSize,
 			                       G4ForceCondition* condition);
 
      G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-     G4double GetMeanFreePath(const G4Track& aTrack, G4double previousStepSize,
-                             G4ForceCondition* condition) 
-     {return 0.;};    // it is not needed here !
+     G4double GetMeanFreePath(const G4Track&, G4double,G4ForceCondition*)
+     {return DBL_MAX;};    
 
   private:
 

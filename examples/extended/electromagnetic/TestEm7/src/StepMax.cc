@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.cc,v 1.1 2003-04-22 16:25:07 maire Exp $
+// $Id: StepMax.cc,v 1.2 2003-06-03 09:33:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,27 +36,28 @@ StepMax::StepMax(const G4String& processName)
 {
   pMess = new StepMaxMessenger(this);
 }
- 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::~StepMax() { delete pMess; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle) 
-{ 
+G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
+{
   return (particle.GetPDGCharge() != 0.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-    
+
 void StepMax::SetMaxStep(G4double step) {MaxChargedStep = step;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track& aTrack,
-                                                    G4double previousStepSize,
-                                                  G4ForceCondition* condition )
+G4double StepMax::PostStepGetPhysicalInteractionLength( 
+                                                 const G4Track& aTrack,
+                                                       G4double,
+                                                       G4ForceCondition* condition )
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
