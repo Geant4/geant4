@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonDecayChannel.cc,v 1.6 2000-02-25 07:36:24 kurasige Exp $
+// $Id: G4MuonDecayChannel.cc,v 1.7 2001-02-28 07:29:28 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,7 +16,8 @@
 //      CERN, CN Division, ASD group
 //      History: first implementation, based on object model of
 //      30 May  1997 H.Kurashige
-//      10 June 1997 H.Kurashige
+//
+//      Fix bug in calcuration of electron energy in DecayIt 28 Feb. 01 H.Kurashige 
 // ------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
@@ -104,7 +105,7 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
     do {
       r = G4UniformRand();
       x = xmax*G4UniformRand();
-    } while (r < (3.0 - 2.0*x)*x*x);    
+    } while (r > (3.0 - 2.0*x)*x*x);    
     energy = x*parentmass/2.0 - daughtermass[0];
    } while (energy <0.0);
   //create daughter G4DynamicParticle 
