@@ -1,4 +1,4 @@
-$Id: History,v 1.42 2001-05-18 08:14:43 gcosmo Exp $
+$Id: History,v 1.43 2001-08-27 13:22:22 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 27, 2001   V.Grichine                geom-solids-csg-V03-02-00
+- G4Sphere.cc: bug fixed in G4Sphere::SurfaceNormal for the case kNETheta.
+  Fixes problem report #290.
 
 May 18, 2001   G.Cosmo                   geom-solids-csg-V03-01-02
 - Added G4CSGDEBUG preprocessor flag to discriminate for debug verbosity
