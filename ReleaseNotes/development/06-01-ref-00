@@ -18,17 +18,17 @@ Some of the development/fixes included since the last reference tag are:
 
 Summarised, the list of changes is the following:
 
-digits_hits                             digits_hits-V06-00-01
+digits_hits                                      digits_hits-V06-00-01
 -----------
 - Added methods to G4HCtable for additional verbosity.
 
-event                                   events-V06-00-01
+event                                            events-V06-00-01
 -----
 - LocateGlobalPointAndSetup() method of G4Navigator is now invoked at the
   beginning of each new event to reset the navigation history.
 - Bug Fix in the destructor of G4ParticleGunMessenger.
 
-geometry/navigation                     geomnav-V06-00-02
+geometry/navigation                              geomnav-V06-00-02
 -------------------
 - G4Navigator: fixed old outstanding bug in ComputeStep() for the location
   of the the local point in the calculation of a valid exit normal.
@@ -40,22 +40,22 @@ geometry/navigation                     geomnav-V06-00-02
   when in G4VERBOSE mode and verbosity level selected.
   Fixed output formatting when entering/exiting verbose blocks.
 
-geometry/solids/Boolean                 geom-bool-V06-00-00
+geometry/solids/Boolean                          geom-bool-V06-00-00
 -----------------------
 - G4UnionSolid, G4SubtractionSolid: fix in debug printout for SurfaceNomal().
 
-global                                  global-V06-00-01
+global                                           global-V06-00-01
 ------
 - Removed obsolete "includes" target in management/GNUmakefile.
 - Corrected comments in G4UserLimits header.
 
-particles                               particles-V06-00-02
+particles                                        particles-V06-00-02
 ---------
 - Added classes for retrieving particle properties from file:
   o Base class G4VParticlePropertyRetriever.
   o Classes G4TextPPReporter and G4TextPPRetriever.
 
-processes/decay                         decay-V06-00-00
+processes/decay                                  decay-V06-00-00
 ---------------
 - Fixed bug in PostStepGPIL() in case of stopping during AlongStep actions.
 
@@ -89,8 +89,11 @@ processes/electromagnetic/utils                  utils-V06-00-08
 
 processes/hadronic                               ghad-V06-00-05
 ------------------
-- models/binary_cascade (ghad-bin-V06-00-00)
-  o Fixed a few memory leaks. Corrected a logic bug.
+- models/binary_cascade (ghad-bin-V06-00-02)
+  o Fixed a few memory leaks in G4BinaryLightIonReaction.
+    Corrected a logic bug.
+  o Removed one recurring run time warning from G4RKPropagation.
+    Relates to problem report #593. 
 - models/chiral_inv_phase_space/body (ghad-chips-body-V06-00-04):
   o Implemented new debug system of step by step energy/momentum and
     charge/baryon_number conservation control.
@@ -104,8 +107,12 @@ processes/hadronic                               ghad-V06-00-05
     Delta-Delta-,(k*n) under (k+2)*n+2pi- threshold and Delta++,Delta++,(k*p)
     under  (k+2)*p+2pi+ threshold possible fragmentation states. 
 
-process/readout                                  readout-V06-00-00
----------------
+processes/optical                                op-V06-00-03
+-----------------
+- G4OpBoundaryProcess: initialise all class members in constructor.
+
+readout                                          readout-V06-00-00
+-------
 - Added some methods in G4DCtable to enhance a verbosity.
 
 run                                              run-V06-00-02
@@ -145,6 +152,10 @@ examples                                         examples-V06-00-02
 - extended/medical:
   o DICOM (DICOM-V06-00-00)
     + ????.
+- novice
+  o N06 (exampleN06-V06-00-00)
+    + DetectorConstruction: changed surface model between
+      OpWaterSurface and OpAirSurface.
 
 tests                                            tests-V06-00-02
 -----
