@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14ElectronEPDL.hh,v 1.1 2003-02-23 09:18:01 pia Exp $
+// $Id: Tst14ElectronEEDL.hh,v 1.1 2003-02-23 09:30:23 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -33,24 +33,24 @@
 // -------------------------------------------------------------------
 
 // Class description:
-// System test for e/gamma, electron processes based on EPDL for PhysicsList
+// System test for e/gamma, electron processes based on EEDL for PhysicsList
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------
 
-#ifndef TST14ELECTRONEPDL_HH
-#define TST14ELECTRONEPDL_HH 1
+#ifndef TST14ELECTRONEEDL_HH
+#define TST14ELECTRONEEDL_HH 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class Tst14ElectronEPDL : public G4VPhysicsConstructor {
+class Tst14ElectronEEDL : public G4VPhysicsConstructor {
 
 public: 
 
-  Tst14ElectronEPDL(const G4String& name = "electron-epdl");
+  Tst14ElectronEEDL(const G4String& name = "electron-epdl");
   
-  virtual ~Tst14ElectronEPDL();
+  virtual ~Tst14ElectronEEDL();
   
   // This method is dummy for physics
   virtual void ConstructParticle() {};
