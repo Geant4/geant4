@@ -65,7 +65,6 @@ hTestEventAction::~hTestEventAction()
 void hTestEventAction::BeginOfEventAction(const G4Event* evt)
 {  
   // New event
-  if(nEvt == 0) (hTestHisto::GetPointer())->BeginOfHisto(0);
   nEvt++;
 
   // Switch on verbose mode

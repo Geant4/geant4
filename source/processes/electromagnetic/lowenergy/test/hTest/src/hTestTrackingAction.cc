@@ -67,9 +67,10 @@ void hTestTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
   G4ParticleDefinition* particle = aTrack->GetDefinition();
   G4String name = particle->GetParticleName();
   theHisto->ResetTrackLength();
+  G4int pid = aTrack->GetParentID(); 
 
   if(0 < theHisto->GetVerbose() ||
-    theHisto->GetMaxEnergy() < aTrack->GetKineticEnergy()) {
+    (theHisto->GetMaxEnergy() < aTrack->GetKineticEnergy() && pid > 0)) {
     G4cout << "Track #" 
            << aTrack->GetTrackID() << " of " << name
            << " Emax(MeV)= " << theHisto->GetMaxEnergy()/MeV
@@ -81,7 +82,6 @@ void hTestTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
   }
 
   //Save primary parameters
-  G4int pid = aTrack->GetParentID(); 
 
   if(0 == pid) {
 

@@ -116,6 +116,7 @@ void hTestHisto::EndOfHisto()
    // Write histogram file
   if(0 < nHisto) {
     hbookManager->write();
+    delete hbookManager;
     G4cout << "Histograms and Ntuples are saved" << G4endl;
   }
 }

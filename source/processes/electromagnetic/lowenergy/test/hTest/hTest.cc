@@ -117,15 +117,18 @@ int main(int argc,char** argv) {
      UI->ApplyCommand(command+fileName);
 
      // Initialize G4 kernel
-     G4cout << "Start initialisation" << G4endl;
-     runManager->Initialize();
+     G4int nev = det->GetNumberOfEvents();
+     if(nev > 0) {
+       G4cout << "Start initialisation for hTest" << G4endl;
+       runManager->Initialize();
 
-     if(verbose >0) {
-       G4cout << "Start event loop for " << det->GetNumberOfEvents() 
-              << " events" << G4endl;
+       if(verbose >0) {
+         G4cout << "Start event loop for " << nev  
+                << " events" << G4endl;
+       }
+
+       runManager->BeamOn(nev);
      }
-
-     runManager->BeamOn(det->GetNumberOfEvents());
 
      // next file
      if(argc==3) {

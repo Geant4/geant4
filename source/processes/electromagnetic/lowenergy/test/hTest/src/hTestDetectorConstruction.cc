@@ -72,7 +72,7 @@ hTestDetectorConstruction::hTestDetectorConstruction():
   calorimeterSD(0),
   theEvent(0),
   myVerbose(0),
-  nEvents(1),
+  nEvents(0),
   detIsConstructed(false),
   nAbsSaved(0),
   nHisto(1),

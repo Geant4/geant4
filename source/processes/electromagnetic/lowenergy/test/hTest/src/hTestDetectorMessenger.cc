@@ -238,7 +238,7 @@ void hTestDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    { hDet->SetMagField(ZMagFieldCmd->GetNewDoubleValue(newValue),3);}
 
   if( command == HistoCmd ) 
-   { hDet->SetHistoName(newValue);}
+   { (hTestHisto::GetPointer())->SetHistoName(newValue);}
 
   if( command == NumOfEvt )
    { hDet->SetNumberOfEvents(NumOfAbsCmd->GetNewIntValue(newValue));}

@@ -56,8 +56,10 @@ hTestRunAction::~hTestRunAction()
 
 void hTestRunAction::BeginOfRunAction(const G4Run* aRun)
 {  
-  G4cout << "### Run " << aRun->GetRunID() << " start" << G4endl;
-  
+  G4int id = aRun->GetRunID();
+  G4cout << "### Run " << id << " start" << G4endl;
+  (hTestHisto::GetPointer())->BeginOfHisto(id);
+
 #ifdef G4VIS_USE
   G4UImanager* UI = G4UImanager::GetUIpointer();
    

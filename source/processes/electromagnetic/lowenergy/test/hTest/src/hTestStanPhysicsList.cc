@@ -139,9 +139,9 @@ void hTestStanPhysicsList::ConstructProcess()
                || particleName == "IonC12"  
                || particleName == "IonAr40"  
                || particleName == "IonFe56"  
-               || particleName == "GenericIon"  
-               || (particleType == "nucleus" && charge != 0) 
-              )
+               || particleName == "GenericIon"
+               || particleType == "nucleus") 
+              
     {
       //      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
 
@@ -150,7 +150,8 @@ void hTestStanPhysicsList::ConstructProcess()
       }
 
       G4hIonisation* iIon = new G4hIonisation();
-      pmanager->AddProcess(iIon,-1,2,2);
+      iIon->SetVerboseLevel(1);
+      pmanager->AddProcess(iIon,-1,1,1);
     }
   }
 }
