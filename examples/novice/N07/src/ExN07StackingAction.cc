@@ -57,8 +57,6 @@ ExN07StackingAction::ClassifyNewTrack(const G4Track * aTrack)
       G4int layerNumber = theTouchable->GetReplicaNumber();
       i += layerNumber%2;
       G4ParticleDefinition * particleType = aTrack->GetDefinition();
-      if(aTrack->GetKineticEnergy()==0.)
-G4cout << "#########" << aTrack->GetDefinition()->GetParticleName() << " " << aTrack->GetTrackID() << " " << aTrack->GetKineticEnergy() << G4endl;
       if(particleType==G4Gamma::GammaDefinition())
       { nGamma[i]++;
         if(eMinGamma[i]>aTrack->GetKineticEnergy()) eMinGamma[i]=aTrack->GetKineticEnergy(); }
