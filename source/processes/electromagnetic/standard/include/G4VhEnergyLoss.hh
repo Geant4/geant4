@@ -21,19 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.hh,v 1.13 2001-11-08 08:17:16 urban Exp $
+// $Id: G4VhEnergyLoss.hh,v 1.14 2001-11-09 13:56:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-//
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ---------- G4VhEnergyLoss physics process -----------
+// ------------- G4VhEnergyLoss physics process --------------------------------
 //                by Laszlo Urban, 30 May 1997 
 //
-// ************************************************************             
-// It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.
 // It calculates the continuous energy loss for charged hadrons.
 // Processes giving contribution to the continuous loss :
 //   ionisation (= cont.ion.loss + delta ray production)
@@ -43,10 +36,7 @@
 // The energy loss for other charged hadrons is calculated from the p/pbar
 // tables with scaled kinetic energy.
 //
-// **************************************************************************** 
-// It is assumed that the cut in range is the same for all the charged hadrons! 
-// ****************************************************************************
-//
+// -----------------------------------------------------------------------------
 // 7/10/98 some bugs fixed + some cleanup , L.Urban 
 // 22/10/98 cleanup , L.Urban
 // 02/02/99 several bugs fixed, L.Urban
@@ -55,6 +45,8 @@
 // 29-10-01 all static functions no more inlined (mma)
 // 08-11-01 BuildDEDXTable not static,Charge local variable, L.Urban
 //
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4VhEnergyLoss_h
 #define G4VhEnergyLoss_h 1
@@ -73,6 +65,8 @@
 #include "G4Step.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 class G4VhEnergyLoss : public G4VEnergyLoss
  
@@ -87,29 +81,21 @@ class G4VhEnergyLoss : public G4VEnergyLoss
 
     void BuildDEDXTable(const G4ParticleDefinition& aParticleType);
 
-    G4double GetContinuousStepLimit(
-                                    const G4Track& track,
+    G4double GetContinuousStepLimit(const G4Track& track,
                                     G4double previousStepSize,
                                     G4double currentMinimumStep,
-                                    G4double& currentSafety) ; 
+                                    G4double& currentSafety); 
 
-    G4VParticleChange* AlongStepDoIt(const G4Track& track ,const G4Step& Step) ;
+    G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step& Step);
 
-    virtual G4double GetMeanFreePath(
-                                      const G4Track& track,
-                                      G4double previousStepSize,
-                                      G4ForceCondition* condition
-                                                         ) = 0 ;
+    virtual G4double GetMeanFreePath(const G4Track& track,
+                                     G4double previousStepSize,
+                                     G4ForceCondition* condition) = 0;
 
     virtual G4VParticleChange* PostStepDoIt(const G4Track& track,
-                                               const G4Step& Step) = 0 ;
+                                            const G4Step& Step) = 0; 
 
   private:
-
-  // hide  assignment operator 
-
-    G4VhEnergyLoss(G4VhEnergyLoss &);
-    G4VhEnergyLoss & operator=(const G4VhEnergyLoss &right);
 
     G4double GetConstraints(const G4DynamicParticle *aParticle,
                             G4Material *aMaterial);
@@ -119,29 +105,28 @@ class G4VhEnergyLoss : public G4VEnergyLoss
                                          G4double ChargeSquare,
                                          G4double MeanLoss,
                                          G4double Step);
+					 
+    //hide assignment operator
+    G4VhEnergyLoss(G4VhEnergyLoss &);
+    G4VhEnergyLoss & operator=(const G4VhEnergyLoss &right);
                                        
-// =====================================================================
-
-  public:
-
-
   protected:
 
-    G4PhysicsTable* theLossTable ;
+    G4PhysicsTable* theLossTable;
    
-    G4double MinKineticEnergy ;
+    G4double MinKineticEnergy;
 
   private:
 
-    static G4PhysicsTable* theDEDXTable ;
+    static G4PhysicsTable* theDEDXTable;
 
-    G4double fdEdx;      // computed in GetContraints
-    G4double fRangeNow ; // computed in GetContraints
-    G4double linLossLimit ;
+    G4double fdEdx;         // computed in GetContraints
+    G4double fRangeNow;     // computed in GetContraints
+    G4double linLossLimit;
 
-
-// ====================================================================
+//
 //  static part of the cc:  // With description
+//
   public:
 
     static void  SetNbOfProcesses(G4int nb);
@@ -168,29 +153,29 @@ class G4VhEnergyLoss : public G4VEnergyLoss
 
   protected:
 
-    static G4PhysicsTable* theDEDXpTable ;
-    static G4PhysicsTable* theDEDXpbarTable ;
-    static G4PhysicsTable* theRangepTable ;
-    static G4PhysicsTable* theRangepbarTable ;
+    static G4PhysicsTable* theDEDXpTable;
+    static G4PhysicsTable* theDEDXpbarTable;
+    static G4PhysicsTable* theRangepTable;
+    static G4PhysicsTable* theRangepbarTable;
 
     //inverse of the range tables
-    static G4PhysicsTable* theInverseRangepTable ;
-    static G4PhysicsTable* theInverseRangepbarTable ;
+    static G4PhysicsTable* theInverseRangepTable;
+    static G4PhysicsTable* theInverseRangepbarTable;
 
     //lab and proper time tables
-    static G4PhysicsTable* theLabTimepTable ;
-    static G4PhysicsTable* theLabTimepbarTable ;
+    static G4PhysicsTable* theLabTimepTable;
+    static G4PhysicsTable* theLabTimepbarTable;
 
-    static G4PhysicsTable* theProperTimepTable ;
-    static G4PhysicsTable* theProperTimepbarTable ;
+    static G4PhysicsTable* theProperTimepTable;
+    static G4PhysicsTable* theProperTimepbarTable;
 
     //  processes inherited from G4VhEnergyLoss 
     //   register themselves  in the static array Recorder
-    static G4int NbOfProcesses     ;
+    static G4int NbOfProcesses;
     static G4PhysicsTable** RecorderOfpProcess;
     static G4PhysicsTable** RecorderOfpbarProcess;
-    static G4int CounterOfpProcess ;
-    static G4int CounterOfpbarProcess ;
+    static G4int CounterOfpProcess;
+    static G4int CounterOfpbarProcess;
 
     // cut in range
     static G4double* ptableElectronCutInRange;
@@ -198,8 +183,8 @@ class G4VhEnergyLoss : public G4VEnergyLoss
 
   private:
 
-    static G4int NbinEloss;               // number of bins in table,
-                                          // calculated in BuildPhysicTable
+    static G4int NbinEloss;              // number of bins in table,
+                                         // calculated in BuildPhysicTable
     static G4double LowerBoundEloss;
     static G4double UpperBoundEloss;
     static G4double RTable,LOGRTable;    // LOGRTable=log(UpperBoundEloss-
@@ -217,11 +202,13 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     static G4PhysicsTable* thepbarRangeCoeffBTable;
     static G4PhysicsTable* thepbarRangeCoeffCTable;
 
-    static G4double cN ;                // coeff to compute nb of deltas
-    static G4int Ndeltamax ;             // upper limit for nb of subcutoff
-                                         // delta rays in one step
+    static G4double cN;                 // coeff to compute nb of deltas
+    static G4int Ndeltamax;             // upper limit for nb of subcutoff
+                                        // delta rays in one step
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 #include "G4VhEnergyLoss.icc"
 

@@ -21,30 +21,31 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.cc,v 1.23 2001-10-29 16:23:42 maire Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.24 2001-11-09 13:59:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //      ------------ G4eBremsstrahlung physics process --------
 //                     by Michel Maire, 24 July 1996
 // 
-// 26-09-96 : extension of the total crosssection above 100 GeV, M.Maire
-//  1-10-96 : new type G4OrderedTable; ComputePartialSumSigma(), M.Maire
-// 16-10-96 : DoIt() call to the non static GetEnergyCuts(), L.Urban
-// 13-12-96 : Sign corrected in grejmax and greject
-//            error definition of screenvar, L.Urban
-// 20-03-97 : new energy loss+ionisation+brems scheme, L.Urban
-// 07-04-98 : remove 'tracking cut' of the diffracted particle, MMa
-// 13-08-98 : new methods SetBining() PrintInfo()
-// 03-03-99 : Bug fixed in LPM effect, L.Urban
-// 10-02-00 : modifications , new e.m. structure, L.Urban
-// 07-08-00 : new cross section/en.loss parametrisation, LPM flag , L.Urban
-// 21-09-00 : corrections in the LPM implementation, L.Urban
-// 28-05-01 : V.Ivanchenko minor changes to provide ANSI -wall compilation
-// 09-08-01 : new methods Store/Retrieve PhysicsTable (mma)
-// 17-09-01 : migration of Materials to pure STL (mma)
-// 21-09-01  completion of RetrievePhysicsTable() (mma)
-// 29-10-01: all static functions no more inlined (mma)
+// 26-09-96 extension of the total crosssection above 100 GeV, M.Maire
+//  1-10-96 new type G4OrderedTable; ComputePartialSumSigma(), M.Maire
+// 16-10-96 DoIt() call to the non static GetEnergyCuts(), L.Urban
+// 13-12-96 Sign corrected in grejmax and greject
+//          error definition of screenvar, L.Urban
+// 20-03-97 new energy loss+ionisation+brems scheme, L.Urban
+// 07-04-98 remove 'tracking cut' of the diffracted particle, MMa
+// 13-08-98 new methods SetBining() PrintInfo()
+// 03-03-99 Bug fixed in LPM effect, L.Urban
+// 10-02-00 modifications , new e.m. structure, L.Urban
+// 07-08-00 new cross section/en.loss parametrisation, LPM flag , L.Urban
+// 21-09-00 corrections in the LPM implementation, L.Urban
+// 28-05-01 V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 09-08-01 new methods Store/Retrieve PhysicsTable (mma)
+// 17-09-01 migration of Materials to pure STL (mma)
+// 21-09-01 completion of RetrievePhysicsTable() (mma)
+// 29-10-01 all static functions no more inlined (mma)
+// 08-11-01 particleMass becomes a local variable
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -172,7 +173,7 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
   const G4double Factorhigh = 36./(1450.*GeV);
   const G4double coef1 = -0.5, coef2 = 2./9.;
 
-  ParticleMass = aParticleType.GetPDGMass() ;
+  G4double particleMass = aParticleType.GetPDGMass() ;
   G4double* GammaCutInKineticEnergy = G4Gamma::Gamma()->GetEnergyCuts();
   
   //  create table
@@ -206,7 +207,7 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
        for (G4int i=0; i<TotBin; i++)
          {
           KineticEnergy = aVector->GetLowEdgeEnergy(i) ;
-          TotalEnergy = KineticEnergy+ParticleMass ;
+          TotalEnergy = KineticEnergy+particleMass ;
           Cut = GammaCutInKineticEnergy[J] ;
           if (Cut < MinThreshold)  Cut = MinThreshold;
           if (Cut > KineticEnergy) Cut = KineticEnergy;
@@ -223,7 +224,7 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
                 if (KineticEnergy <= Thigh)
                   {
                    //loss for MinKinEnergy<KineticEnergy<=100 GeV
-                   x=log(TotalEnergy/ParticleMass);
+                   x=log(TotalEnergy/particleMass);
                    loss = ComputeBremLoss(Z,natom,KineticEnergy,Cut,x) ;
                    if (&aParticleType==G4Positron::Positron())
                       loss *= ComputePositronCorrFactorLoss(Z,KineticEnergy,Cut) ;   
@@ -231,7 +232,7 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
                 else
                   {
                    // extrapolation for KineticEnergy>100 GeV
-                   x=log(Thigh/ParticleMass) ; 
+                   x=log(Thigh/particleMass) ; 
                    if (Cut<Thigh)
                      {
                       losslim = ComputeBremLoss(Z,natom,Thigh,Cut,x) ;

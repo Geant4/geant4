@@ -21,18 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.icc,v 1.6 2001-11-08 08:45:43 urban Exp $
+// $Id: G4VeEnergyLoss.icc,v 1.7 2001-11-09 13:56:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 // 
-// 18/11/98, L. Urban
-//  It is a modified version of G4VeEnergyLoss:
-//  continuous energy loss with generation of subcutoff delta rays
+// 18/11/98 L. Urban
+//          It is a modified version of G4VeEnergyLoss:
+//          continuous energy loss with generation of subcutoff delta rays
 // 08-11-01 Charge,lastCharge not data members, L.Urban
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4VeEnergyLoss::GetConstraints(
                                  const G4DynamicParticle* aParticle,
@@ -65,7 +65,7 @@ inline G4double G4VeEnergyLoss::GetConstraints(
   return StepLimit;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4VeEnergyLoss::GetContinuousStepLimit(
                                                const G4Track& track,
@@ -82,7 +82,7 @@ inline G4double G4VeEnergyLoss::GetContinuousStepLimit(
   return Step ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4bool G4VeEnergyLoss::IsApplicable(const G4ParticleDefinition&
                                                      particle)
@@ -91,4 +91,4 @@ inline G4bool G4VeEnergyLoss::IsApplicable(const G4ParticleDefinition&
            ||(&particle == G4Positron::Positron()) );
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

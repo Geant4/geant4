@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.hh,v 1.16 2001-10-29 16:23:41 maire Exp $
+// $Id: G4hIonisation.hh,v 1.17 2001-11-09 13:56:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------- G4hIonisation physics process -------------------------------
@@ -141,15 +141,15 @@ class G4hIonisation : public G4VhEnergyLoss
   
   private:
 
-    static G4double Tmincut;
-
     static G4double LowerBoundLambda;      // bining for lambda table
     static G4double UpperBoundLambda; 
     static G4int    NbinLambda;
     
-    G4double LowestKineticEnergy;         // binning for dE/dx table
+    G4double LowestKineticEnergy;          // binning for dE/dx table
     G4double HighestKineticEnergy;
     G4int    TotBin;
+    
+    G4double Tmincut;                      // min energy of d-rays
 
   public:  // with description
 

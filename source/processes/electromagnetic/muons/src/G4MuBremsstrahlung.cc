@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.21 2001-10-29 13:53:18 maire Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.22 2001-11-09 13:52:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    
-//--------------- G4MuBremsstrahlung physics process ------------------
+//--------------- G4MuBremsstrahlung physics process ---------------------------
 //                by Laszlo Urban, September 1997
 //
 // 08-04-98 remove 'tracking cut' of muon in oIt, MMa
@@ -36,7 +36,8 @@
 // 17-09-01 migration of Materials to pure STL (mma)
 // 26-09-01 completion of store/retrieve PhysicsTable (mma)
 // 28-09-01 suppression of theMuonPlus ..etc..data members (mma)
-// 29-10-01 all static functions no more inlined (mma)  
+// 29-10-01 all static functions no more inlined (mma)
+// 08-11-01 particleMass becomes a local variable (mma)  
 //------------------------------------------------------------------------------
 
 #include "G4MuBremsstrahlung.hh"
@@ -158,7 +159,7 @@ void G4MuBremsstrahlung::BuildLossTable(
 
   const G4MaterialTable* theMaterialTable =
                                 G4Material::GetMaterialTable();
-  ParticleMass = aParticleType.GetPDGMass();
+  G4double particleMass = aParticleType.GetPDGMass();
   GammaCutInKineticEnergy = G4Gamma::Gamma()->GetEnergyCuts() ;
 
   G4int numOfMaterials = G4Material::GetNumberOfMaterials();
@@ -186,7 +187,7 @@ void G4MuBremsstrahlung::BuildLossTable(
     for (G4int i=0; i<TotBin; i++)
     {
       KineticEnergy = aVector->GetLowEdgeEnergy(i) ;
-      TotalEnergy = KineticEnergy+ParticleMass ;
+      TotalEnergy = KineticEnergy+particleMass ;
       Cut = GammaCutInKineticEnergyNow ;
       if(Cut>KineticEnergy) Cut = KineticEnergy ;
       bremloss = 0.;      
@@ -222,8 +223,9 @@ G4double G4MuBremsstrahlung::ComputeBremLoss(
   G4double xgi[]={0.03377,0.16940,0.38069,0.61931,0.83060,0.96623};
   G4double wgi[]={0.08566,0.18038,0.23396,0.23396,0.18038,0.08566};
   G4double loss = 0. ;
-
-  TotalEnergy=KineticEnergy+ParticleMass ;
+  
+  G4double particleMass = aParticleType->GetPDGMass();
+  TotalEnergy=KineticEnergy+particleMass ;
   vcut = GammaEnergyCut/TotalEnergy ;
   vmax = KineticEnergy/TotalEnergy ;
 
@@ -342,8 +344,9 @@ G4double G4MuBremsstrahlung::ComputeMicroscopicCrossSection(
   G4double xgi[]={0.03377,0.16940,0.38069,0.61931,0.83060,0.96623};
   G4double wgi[]={0.08566,0.18038,0.23396,0.23396,0.18038,0.08566};
   G4double CrossSection = 0. ;
-
-  TotalEnergy=KineticEnergy+ParticleMass ;
+  
+  G4double particleMass = ParticleType->GetPDGMass();
+  TotalEnergy=KineticEnergy+particleMass ;
   vcut = GammaEnergyCut/TotalEnergy ;
   vmax = KineticEnergy/TotalEnergy ;
   if(vmax <= vcut) return CrossSection;
@@ -396,9 +399,11 @@ G4double G4MuBremsstrahlung::ComputeDMicroscopicCrossSection(
                                            G4double GammaEnergy)
 //  differential cross section
 {
+  G4double particleMass = ParticleType->GetPDGMass();
+    
   static const G4double sqrte=sqrt(exp(1.)) ;
   static const G4double bh=202.4,bh1=446.,btf=183.,btf1=1429. ;
-  static const G4double rmass=ParticleMass/electron_mass_c2 ;
+  static const G4double rmass=particleMass/electron_mass_c2 ;
   static const G4double cc=classic_electr_radius/rmass ;
   static const G4double coeff= 16.*fine_structure_const*cc*cc/3. ;
 
@@ -407,9 +412,9 @@ G4double G4MuBremsstrahlung::ComputeDMicroscopicCrossSection(
   if( GammaEnergy > KineticEnergy) return dxsection ;
 
   G4double A = AtomicMass/(g/mole) ;     // !!!!!!!!!!!!!!!!!!!
-  G4double E=KineticEnergy+ParticleMass ;
+  G4double E=KineticEnergy+particleMass ;
   G4double v=GammaEnergy/E ;
-  G4double delta=0.5*ParticleMass*ParticleMass*v/(E-GammaEnergy) ;
+  G4double delta=0.5*particleMass*particleMass*v/(E-GammaEnergy) ;
   G4double rab0=delta*sqrte ;
 
   G4double z13=exp(-log(AtomicNumber)/3.) ;
@@ -433,15 +438,15 @@ G4double G4MuBremsstrahlung::ComputeDMicroscopicCrossSection(
   // nucleus contribution logarithm
   G4double rab1=b*z13;
   G4double fn=log(rab1/(dnstar*(electron_mass_c2+rab0*rab1))*
-              (ParticleMass+delta*(dnstar*sqrte-2.))) ;
+              (particleMass+delta*(dnstar*sqrte-2.))) ;
   if(fn <0.) fn = 0. ;
   // electron contribution logarithm
-  G4double epmax1=E/(1.+0.5*ParticleMass*rmass/E) ; 
+  G4double epmax1=E/(1.+0.5*particleMass*rmass/E) ; 
   G4double fe=0.;
   if(GammaEnergy<epmax1)
   {
     G4double rab2=b1*z13*z13 ;
-    fe=log(rab2*ParticleMass/((1.+delta*rmass/(electron_mass_c2*sqrte))*
+    fe=log(rab2*particleMass/((1.+delta*rmass/(electron_mass_c2*sqrte))*
                               (electron_mass_c2+rab0*rab2))) ;
     if(fe<0.) fe=0. ;
   }
@@ -461,7 +466,7 @@ void G4MuBremsstrahlung::MakeSamplingTables(
   G4double AtomicNumber,AtomicWeight,KineticEnergy,
            TotalEnergy,Maxep ;
 
-   ParticleMass = ParticleType->GetPDGMass() ;
+   G4double particleMass = ParticleType->GetPDGMass() ;
 
    for (G4int iz=0; iz<nzdat; iz++)
    {
@@ -471,7 +476,7 @@ void G4MuBremsstrahlung::MakeSamplingTables(
      for (G4int it=0; it<ntdat; it++)
      {
        KineticEnergy = tdat[it];
-       TotalEnergy = KineticEnergy + ParticleMass;
+       TotalEnergy = KineticEnergy + particleMass;
        Maxep = KineticEnergy ;
 
        G4double CrossSection = 0.0 ;

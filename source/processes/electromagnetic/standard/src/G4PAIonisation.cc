@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.cc,v 1.21 2001-10-29 16:23:41 maire Exp $
+// $Id: G4PAIonisation.cc,v 1.22 2001-11-09 13:59:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // **************************************************************
 //
+// 08.11.01 particleMass becomes a local variable (mma)
 // 17.09.01 migration of Materials to pure STL (mma)
 // 28.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // 17.05.01 V. Grichine, low energy extension down to 10*keV of proton
@@ -405,16 +406,16 @@ ComputeMicroscopicCrossSection( const G4ParticleDefinition& aParticleType,
 	     TotalCrossSection, tempvar ;
     const G4double SmallCrossSection = DBL_MIN;
 
-    ParticleMass=aParticleType.GetPDGMass() ; // get particle data 
-    TotalEnergy=KineticEnergy + ParticleMass;
+    G4double particleMass=aParticleType.GetPDGMass() ; // get particle data 
+    TotalEnergy=KineticEnergy + particleMass;
 
-    betasquare = KineticEnergy*(TotalEnergy+ParticleMass)   //  kinematics
+    betasquare = KineticEnergy*(TotalEnergy+particleMass)   //  kinematics
                  /(TotalEnergy*TotalEnergy);
 
-    tempvar = ParticleMass+electron_mass_c2;
+    tempvar = particleMass+electron_mass_c2;
 
     MaxKineticEnergyTransfer = 2.*electron_mass_c2*KineticEnergy
-                     *(TotalEnergy+ParticleMass)
+                     *(TotalEnergy+particleMass)
                      /(tempvar*tempvar+2.*electron_mass_c2*KineticEnergy);
 
     //  total cross section

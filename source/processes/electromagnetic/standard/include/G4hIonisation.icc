@@ -21,13 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.icc,v 1.6 2001-09-28 15:38:14 maire Exp $
+// $Id: G4hIonisation.icc,v 1.7 2001-11-09 13:56:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-//      GEANT 4 class inlined methods file 
-//
-//------------------ G4hIonisation physics process ------------------
+//------------------ G4hIonisation physics process -----------------------------
 //                   by Laszlo Urban, 30 May 1997
 //------------------------------------------------------------------------------
 //
@@ -35,7 +33,7 @@
 // 20/11/97: correction on MeanFreePath for KineticEnergy > HighestLimit
 // 14-08-01: 'cleanup' of GetMeanFreePath (mma)
 // 
-//---------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

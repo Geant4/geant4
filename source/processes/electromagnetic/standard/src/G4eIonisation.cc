@@ -21,24 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.cc,v 1.21 2001-10-29 16:23:42 maire Exp $
+// $Id: G4eIonisation.cc,v 1.22 2001-11-09 13:59:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4eIonisation physics process --------------------------------
 //                by Laszlo Urban, 20 March 1997 
 //------------------------------------------------------------------------------
 //
-// 07-04-98: remove 'tracking cut' of the ionizing particle, mma 
-// 04-09-98: new methods SetBining() PrintInfo()
-// 07-09-98: Cleanup
-// 02-02-99: correction inDoIt , L.Urban
-// 10-02-00  modifications , new e.m. structure, L.Urban
-// 28-05-01  V.Ivanchenko minor changes to provide ANSI -wall compilation 
-// 09-08-01  new methods Store/Retrieve PhysicsTable (mma)
-// 13-08-01  new function ComputeRestrictedMeandEdx()  (mma)
-// 17-09-01  migration of Materials to pure STL (mma) 
-// 21-09-01  completion of RetrievePhysicsTable() (mma)
+// 07-04-98 remove 'tracking cut' of the ionizing particle, mma 
+// 04-09-98 new methods SetBining() PrintInfo()
+// 07-09-98 Cleanup
+// 02-02-99 correction inDoIt , L.Urban
+// 10-02-00 modifications , new e.m. structure, L.Urban
+// 28-05-01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 09-08-01 new methods Store/Retrieve PhysicsTable (mma)
+// 13-08-01 new function ComputeRestrictedMeandEdx()  (mma)
+// 17-09-01 migration of Materials to pure STL (mma) 
+// 21-09-01 completion of RetrievePhysicsTable() (mma)
 // 29-10-01 all static functions no more inlined (mma)
+// 07-11-01 particleMass and Charge become local variables 
 //------------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -255,11 +256,11 @@ G4double G4eIonisation::ComputeRestrictedMeandEdx (
  // calculate the dE/dx due to the ionization process (Geant4 internal units)
  // Seltzer-Berger formula
  //
- ParticleMass = aParticleType.GetPDGMass();      
+ G4double particleMass = aParticleType.GetPDGMass();      
  
  G4double ElectronDensity = material->GetElectronDensity();
  G4double Eexc = material->GetIonisation()->GetMeanExcitationEnergy();
- Eexc  /= ParticleMass; G4double Eexcm2 = Eexc*Eexc;
+ Eexc  /= particleMass; G4double Eexcm2 = Eexc*Eexc;
 
  // for the lowenergy extrapolation
  G4double Zeff = material->GetTotNbOfElectPerVolume()/
@@ -268,7 +269,7 @@ G4double G4eIonisation::ComputeRestrictedMeandEdx (
  G4double Tsav = 0.;
  if (KineticEnergy < Th) {Tsav = KineticEnergy; KineticEnergy = Th;}
  
- G4double tau = KineticEnergy/ParticleMass;
+ G4double tau = KineticEnergy/particleMass;
  G4double gamma = tau + 1., gamma2 = gamma*gamma, bg2 = tau*(tau+2.);
  G4double beta2 = bg2/gamma2;
  
@@ -278,7 +279,7 @@ G4double G4eIonisation::ComputeRestrictedMeandEdx (
  if (&aParticleType==G4Electron::Electron())
    {
      Tmax = KineticEnergy/2.;  
-     d = G4std::min(DeltaThreshold, Tmax)/ParticleMass;
+     d = G4std::min(DeltaThreshold, Tmax)/particleMass;
      dEdx = log(2.*(tau+2.)/Eexcm2)-1.-beta2
             + log((tau-d)*d)+tau/(tau-d)
             + (0.5*d*d+(2.*tau+1.)*log(1.-d/tau))/gamma2;
@@ -287,7 +288,7 @@ G4double G4eIonisation::ComputeRestrictedMeandEdx (
  else        //positron
    {
      Tmax = KineticEnergy;  
-     d = G4std::min(DeltaThreshold, Tmax)/ParticleMass;
+     d = G4std::min(DeltaThreshold, Tmax)/particleMass;
      G4double d2=d*d/2., d3=d*d*d/3., d4=d*d*d*d/4.;
      G4double y=1./(1.+gamma);
      dEdx = log(2.*(tau+2.)/Eexcm2)+log(tau*d)
@@ -335,12 +336,12 @@ G4double G4eIonisation::ComputeCrossSectionPerAtom(
   // calculates the cross section per atom (Geant4 internal units) 
   //(it is called for elements , AtomicNumber = Z )
   
-  ParticleMass = aParticleType.GetPDGMass();
-  G4double TotalEnergy = KineticEnergy + ParticleMass;
+  G4double particleMass = aParticleType.GetPDGMass();
+  G4double TotalEnergy = KineticEnergy + particleMass;
 
-  G4double betasquare = KineticEnergy*(TotalEnergy+ParticleMass)
+  G4double betasquare = KineticEnergy*(TotalEnergy+particleMass)
                        /(TotalEnergy*TotalEnergy);
-  G4double gamma = TotalEnergy/ParticleMass, gamma2 = gamma*gamma;
+  G4double gamma = TotalEnergy/particleMass, gamma2 = gamma*gamma;
   G4double x=DeltaThreshold/KineticEnergy, x2 = x*x;
 
   G4double MaxKineticEnergyTransfer;
@@ -381,10 +382,11 @@ G4VParticleChange* G4eIonisation::PostStepDoIt( const G4Track& trackData,
   G4Material*               aMaterial = trackData.GetMaterial();
   const G4DynamicParticle*  aParticle = trackData.GetDynamicParticle();
 
-  ParticleMass = aParticle->GetDefinition()->GetPDGMass();
+  G4double particleMass = aParticle->GetDefinition()->GetPDGMass();
+  G4double Charge       = aParticle->GetDefinition()->GetPDGCharge();  
   G4double KineticEnergy = aParticle->GetKineticEnergy();
-  G4double TotalEnergy = KineticEnergy + ParticleMass;
-  G4double Psquare = KineticEnergy*(TotalEnergy+ParticleMass);
+  G4double TotalEnergy = KineticEnergy + particleMass;
+  G4double Psquare = KineticEnergy*(TotalEnergy+particleMass);
   G4double TotalMomentum = sqrt(Psquare);
   G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
 
@@ -407,7 +409,7 @@ G4VParticleChange* G4eIonisation::PostStepDoIt( const G4Track& trackData,
   // normal case
   G4double cc,y,y2,c2,b0,b1,b2,b3,b4,x,x1,grej,grejc;
  
-  G4double tau = KineticEnergy/ParticleMass;
+  G4double tau = KineticEnergy/particleMass;
   G4double gamma = tau+1., gamma2=gamma*gamma;
   G4double xc = DeltaThreshold/KineticEnergy, xc1=1.-xc;
 

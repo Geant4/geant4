@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.icc,v 1.9 2001-09-28 15:38:14 maire Exp $
+// $Id: G4eIonisation.icc,v 1.10 2001-11-09 13:56:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-//----------------- G4eIonisation physics process ---------------------
+//----------------- G4eIonisation physics process ------------------------------
 //                  by Laszlo Urban, 20 March 1997
 //------------------------------------------------------------------------------
 //

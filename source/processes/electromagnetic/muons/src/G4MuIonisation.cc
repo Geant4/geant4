@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.cc,v 1.23 2001-11-07 16:26:15 maire Exp $
+// $Id: G4MuIonisation.cc,v 1.24 2001-11-09 13:52:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------- G4MuIonisation physics process ------------------------------
@@ -39,6 +39,7 @@
 // 26-09-01 completion of RetrievePhysicsTable (mma)
 // 29-10-01 all static functions no more inlined (mma)  
 // 07-11-01 correction(Tmax+xsection computation) L.Urban
+// 08-11-01 particleMass becomes a local variable (mma)
 // -----------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -248,15 +249,15 @@ G4double G4MuIonisation::ComputeRestrictedMeandEdx (
  // calculate the dE/dx due to the ionization process (Geant4 internal units)
  // Bethe-Bloch formula
  //
- ParticleMass = aParticleType.GetPDGMass();     
+ G4double particleMass = aParticleType.GetPDGMass();     
  
  G4double ElectronDensity = material->GetElectronDensity();
  G4double Eexc = material->GetIonisation()->GetMeanExcitationEnergy();
  G4double Eexc2 = Eexc*Eexc;
  
- G4double tau = KineticEnergy/ParticleMass;
+ G4double tau = KineticEnergy/particleMass;
  G4double gamma = tau + 1., bg2 = tau*(tau+2.), beta2 = bg2/(gamma*gamma);
- G4double RateMass = electron_mass_c2/ParticleMass;
+ G4double RateMass = electron_mass_c2/particleMass;
  G4double Tmax=2.*electron_mass_c2*bg2/(1.+2.*gamma*RateMass+RateMass*RateMass);
 
  G4double taul = material->GetIonisation()->GetTaul();
@@ -302,10 +303,10 @@ G4double G4MuIonisation::ComputeRestrictedMeandEdx (
      dEdx -= (delta + sh); dEdx /= beta2;
      
      // correction of R. Kokoulin  // has been taken out *************** 
-     //  G4double E = KineticEnergy+ParticleMass;
-     //  G4double epmax = RateMass*E*E/(RateMass*E+ParticleMass);
+     //  G4double E = KineticEnergy+particleMass;
+     //  G4double epmax = RateMass*E*E/(RateMass*E+particleMass);
      //  G4double apar = log(2.*epmax/electron_mass_c2);
-     //  dEdx += fine_structure_const*(log(2.*E/ParticleMass)-apar/3.)*
+     //  dEdx += fine_structure_const*(log(2.*E/particleMass)-apar/3.)*
      //                                  apar*apar/twopi; 
      
      dEdx *= twopi_mc2_rcl2*ElectronDensity;
@@ -362,11 +363,11 @@ G4double G4MuIonisation::ComputeCrossSectionPerAtom(
  //    ( it is called for elements , AtomicNumber = Z )
  //
      
- ParticleMass = aParticleType.GetPDGMass();     
- G4double TotalEnergy = KineticEnergy + ParticleMass;
- G4double tempvar = ParticleMass+electron_mass_c2;
+ G4double particleMass = aParticleType.GetPDGMass();     
+ G4double TotalEnergy = KineticEnergy + particleMass;
+ G4double tempvar = particleMass+electron_mass_c2;
  G4double KnockonMaxEnergy = 2.*electron_mass_c2*KineticEnergy
-                     *(TotalEnergy+ParticleMass)
+                     *(TotalEnergy+particleMass)
                      /(tempvar*tempvar+2.*electron_mass_c2*KineticEnergy);
 
  G4double TotalCrossSection = 0.;
@@ -412,12 +413,13 @@ G4double G4MuIonisation::ComputeDifCrossSectionPerAtom(
  //   using the cross section formula of R.P. Kokoulin (10/98)
 {
   const G4double alphaprime = fine_structure_const/twopi;
-  G4double TotalEnergy = KineticEnergy + ParticleMass;
-  G4double betasquare = KineticEnergy*(TotalEnergy+ParticleMass)
+  G4double particleMass = ParticleType.GetPDGMass();      
+  G4double TotalEnergy = KineticEnergy + particleMass;
+  G4double betasquare = KineticEnergy*(TotalEnergy+particleMass)
                       /(TotalEnergy*TotalEnergy);
-  G4double tempvar = ParticleMass+electron_mass_c2;
+  G4double tempvar = particleMass+electron_mass_c2;
   G4double KnockonMaxEnergy = 2.*electron_mass_c2*KineticEnergy
-                     *(TotalEnergy+ParticleMass)
+                     *(TotalEnergy+particleMass)
                      /(tempvar*tempvar+2.*electron_mass_c2*KineticEnergy);
 
   G4double DifCrossSection = 0.;
@@ -429,7 +431,7 @@ G4double G4MuIonisation::ComputeDifCrossSectionPerAtom(
                    (betasquare*KnockonEnergy*KnockonEnergy);
   G4double a1 = log(1.+2.*KnockonEnergy/electron_mass_c2);
   G4double a3 = log(4.*TotalEnergy*(TotalEnergy-KnockonEnergy)/
-                    (ParticleMass*ParticleMass));
+                    (particleMass*particleMass));
   DifCrossSection *= (1.+alphaprime*a1*(a3-a1)); 
 
   return DifCrossSection;
@@ -445,13 +447,13 @@ G4VParticleChange* G4MuIonisation::PostStepDoIt(const G4Track& trackData,
  G4Material* aMaterial = trackData.GetMaterial();
  const G4DynamicParticle*  aParticle = trackData.GetDynamicParticle();
 
- ParticleMass = aParticle->GetDefinition()->GetPDGMass();
+ G4double particleMass = aParticle->GetDefinition()->GetPDGMass();
  G4double KineticEnergy = aParticle->GetKineticEnergy();
- G4double TotalEnergy = KineticEnergy + ParticleMass;
- G4double Psquare = KineticEnergy*(TotalEnergy+ParticleMass);
+ G4double TotalEnergy = KineticEnergy + particleMass;
+ G4double Psquare = KineticEnergy*(TotalEnergy+particleMass);
  G4double Esquare = TotalEnergy*TotalEnergy;
  G4double betasquare=Psquare/Esquare; 
- G4double summass = ParticleMass + electron_mass_c2;
+ G4double summass = particleMass + electron_mass_c2;
  G4double MaxKineticEnergyTransfer = 2.*electron_mass_c2*Psquare
                       /(summass*summass+2.*electron_mass_c2*KineticEnergy);
  G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
@@ -474,13 +476,13 @@ G4VParticleChange* G4MuIonisation::PostStepDoIt(const G4Track& trackData,
  // sampling follows ...
  G4double x,twoep,a1,grej;
  const G4double alphaprime = fine_structure_const/twopi; 
- G4double a0=log(2.*TotalEnergy/ParticleMass); 
+ G4double a0=log(2.*TotalEnergy/particleMass); 
  G4double grejc=(1.-xc*(betasquare*xc-xc*te2))*(1.+ alphaprime*a0*a0);
  do { x=xc/(1.-(1.-xc)*G4UniformRand());
       twoep = 2.*x*MaxKineticEnergyTransfer;
       a1    = log(1.+twoep/electron_mass_c2);
       grej  = (1.-x*(betasquare-x*te2))*(1.+alphaprime*a1*
-           (a0+log((2.*TotalEnergy-twoep)/ParticleMass)-a1))/grejc ;
+           (a0+log((2.*TotalEnergy-twoep)/particleMass)-a1))/grejc ;
     } while(G4UniformRand() > grej);
     
  G4double  DeltaKineticEnergy = x * MaxKineticEnergyTransfer;

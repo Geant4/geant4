@@ -21,42 +21,37 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.icc,v 1.3 2001-07-11 10:03:29 gunter Exp $
+// $Id: G4VhEnergyLoss.icc,v 1.4 2001-11-09 13:56:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ---------------------------------------------------------------
-//      GEANT 4 class inlined methods file 
 //
-//      History: based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4VhEnergyLoss physics process ------------
+// ---------------- G4VhEnergyLoss physics process -----------------------------
 //                  by Laszlo Urban, 30 May 1997
-// ***************************************************************
-// It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.   
-// It calculates the energy loss of charged hadrons.
-// ***************************************************************
+//
+// -----------------------------------------------------------------------------
 // 22/10/98: cleanup , L.Urban
-// ---------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
 inline G4bool G4VhEnergyLoss::IsApplicable(const G4ParticleDefinition&
                                                      particle)
 {
    return(particle.GetPDGCharge()!= 0.);
 }
-         
-inline G4double G4VhEnergyLoss::GetContinuousStepLimit(
-                                               const G4Track& track,
-                                               G4double,
-                                               G4double currentMinimumStep,
-                                               G4double&)
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+          
+inline G4double G4VhEnergyLoss::GetContinuousStepLimit(const G4Track& track,
+                                                    G4double,
+                                                    G4double currentMinimumStep,
+                                                    G4double&)
 {
- 
-  G4double Step =
-    GetConstraints(track.GetDynamicParticle(),track.GetMaterial()) ;
-
-  if((Step>0.0)&&(Step<currentMinimumStep))
-     currentMinimumStep = Step ;
-
-  return Step ;
+ G4double Step = GetConstraints(track.GetDynamicParticle(),track.GetMaterial());
+ if ((Step > 0.0)&&(Step < currentMinimumStep)) currentMinimumStep = Step;
+ return Step;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
