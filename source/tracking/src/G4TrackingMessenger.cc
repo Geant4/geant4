@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingMessenger.cc,v 1.2 1999-03-24 04:46:58 tsasaki Exp $
+// $Id: G4TrackingMessenger.cc,v 1.3 1999-07-05 10:56:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,10 +55,12 @@ G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager * trMan)
   AbortCmd = new G4UIcmdWithoutParameter("/tracking/abort",this);
   AbortCmd->SetGuidance("Abort current G4Track processing.");
 
-
   ResumeCmd = new G4UIcmdWithoutParameter("/tracking/resume",this);
   ResumeCmd->SetGuidance("Resume current G4Track processing.");
-
+  
+  VerboseWithUnitsCmd = new G4UIcmdWithoutParameter("/tracking/verboseWithUnits",this);
+  VerboseWithUnitsCmd->SetGuidance("verbose: print unit per item.");
+  
   StoreTrajectoryCmd = new G4UIcmdWithAnInteger("/tracking/storeTrajectory",this);
   StoreTrajectoryCmd->SetGuidance("Store trajectories or not.");
   StoreTrajectoryCmd->SetGuidance(" 1 : Store trajectories.");
@@ -72,7 +74,7 @@ G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager * trMan)
 #ifdef G4VERBOSE
   VerboseCmd->SetGuidance("Set Verbose level of tracking category.");
   VerboseCmd->SetGuidance(" 0 : Silent.");
-  VerboseCmd->SetGuidance(" 1 : Minium information of each Step.");
+  VerboseCmd->SetGuidance(" 1 : Minimum information of each Step.");
   VerboseCmd->SetGuidance(" 2 : Addition to Level=1, info of secondary particles.");
   VerboseCmd->SetGuidance(" 3 : Addition to Level=1, pre/postStepoint information");
   VerboseCmd->SetGuidance("     after all AlongStep/PostStep process executions.");
@@ -95,6 +97,7 @@ G4TrackingMessenger::~G4TrackingMessenger()
   delete TrackingDirectory;
   delete AbortCmd;
   delete ResumeCmd;
+  delete VerboseWithUnitsCmd;
   delete StoreTrajectoryCmd;
   delete VerboseCmd;
 }
@@ -127,6 +130,12 @@ void G4TrackingMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     is >> vl;
     trackingManager->SetStoreTrajectory(vl!=0);
   }
+  
+  if( command == VerboseWithUnitsCmd ){
+#ifdef G4VERBOSE  
+    steppingManager->SetVerbose(new G4SteppingVerboseWithUnits(steppingManager));
+#endif    
+  }  
 }
 
 

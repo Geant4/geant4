@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingVerbose.hh,v 1.3 1999-03-24 04:42:47 tsasaki Exp $
+// $Id: G4SteppingVerbose.hh,v 1.4 1999-07-05 10:56:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -26,8 +26,9 @@
 
 class G4SteppingVerbose;
 
-#ifndef G4SteppingVerose_h
-#define G4SteppingVerose_h 1
+#ifndef G4SteppingVerbose_h
+#define G4SteppingVerbose_h 1
+
 #include <rw/tvordvec.h>            // Include from 'RogueWave'
 
 #include "G4ios.hh"
@@ -46,41 +47,39 @@ class G4Track;
 class G4UserSteppingAction;
 class G4StepPoint;
 class G4VTouchable;
-#include "G4VSteppingVerbose.hh"
 
-class G4SteppingVerbose : public G4VSteppingVerbose {
+
+class G4SteppingVerbose {
 public:   
 // Constructor/Destructor
 //  G4SteppingVerbose();
   G4SteppingVerbose(G4SteppingManager* const );
- ~G4SteppingVerbose();
+ virtual ~G4SteppingVerbose();
 //
-  void NewStep();
-  void CopyState();
-  void AtRestDoItInvoked();
-  void AlongStepDoItAllDone();
-  void PostStepDoItAllDone();
-  void AlongStepDoItOneByOne();
-  void PostStepDoItOneByOne();
-  void StepInfo();
-  void TrackingStarted();
-  void DPSLStarted();
-  void DPSLUserLimit();
-  void DPSLPostStep();
-  void DPSLAlongStep();
+  virtual void NewStep();
+  virtual void CopyState();
+  virtual void AtRestDoItInvoked();
+  virtual void AlongStepDoItAllDone();
+  virtual void PostStepDoItAllDone();
+  virtual void AlongStepDoItOneByOne();
+  virtual void PostStepDoItOneByOne();
+  virtual void StepInfo();
+  virtual void TrackingStarted();
+  virtual void DPSLStarted();
+  virtual void DPSLUserLimit();
+  virtual void DPSLPostStep();
+  virtual void DPSLAlongStep();
 //  void DPSLAlongStepDoItOneByOne();
 //  void DPSLPostStepDoItOneByOne();
-  void VerboseTrack();
-  void VerboseParticleChange();
-  void ShowStep() const;
+  virtual void VerboseTrack();
+  virtual void VerboseParticleChange();
+  virtual void ShowStep() const;
 //
 // Member data
-private:
-  G4SteppingManager* fManager;
+protected:
+   G4SteppingManager* fManager;
 
    G4UserSteppingAction* fUserSteppingAction;
-
-   G4SteppingVerbose* fVerbose;
 
    G4double PhysicalStep;
    G4double GeometricalStep;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.hh,v 1.3 1999-04-16 02:14:50 tsasaki Exp $
+// $Id: G4SteppingManager.hh,v 1.4 1999-07-05 10:56:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,16 +45,17 @@ class G4VSensitiveDetector;
 //#include "G4DynamicParticleVector.hh" // Include from 'piim'
 //#include "G4Hit.hh"                   // Include from 'Hit/dig'
 
-#include "G4Track.hh"                 // Include from 'tracking'
-#include "G4TrackVector.hh"           // Include from 'tracking'
-#include "G4TrackStatus.hh"           // Include from 'tracking'
-#include "G4StepStatus.hh"            // Include from 'tracking'
-#include "G4UserSteppingAction.hh"    // Include from 'tracking'
-#include "G4Step.hh"                  // Include from 'tracking'
-#include "G4StepPoint.hh"             // Include from 'tracking'
-#include "G4SteppingVerbose.hh"       // Include from 'tracking'
-#include "G4VTouchable.hh"            // Include from 'geometry'
-#include "G4TouchableHistory.hh"      // Include from 'geometry'
+#include "G4Track.hh"                    // Include from 'tracking'
+#include "G4TrackVector.hh"              // Include from 'tracking'
+#include "G4TrackStatus.hh"              // Include from 'tracking'
+#include "G4StepStatus.hh"               // Include from 'tracking'
+#include "G4UserSteppingAction.hh"       // Include from 'tracking'
+#include "G4Step.hh"                     // Include from 'tracking'
+#include "G4StepPoint.hh"                // Include from 'tracking'
+#include "G4SteppingVerbose.hh"          // Include from 'tracking'
+#include "G4SteppingVerboseWithUnits.hh" // Include from 'tracking'
+#include "G4VTouchable.hh"               // Include from 'geometry'
+#include "G4TouchableHistory.hh"         // Include from 'geometry'
 
 //  must be changed in elegant way
 static const G4int SIZEofSelectedDoIt=100;
@@ -93,7 +94,7 @@ class G4SteppingManager
    void SetUserAction(G4UserSteppingAction* apAction);
    G4Track* GetTrack() const;
    void SetVerboseLevel(G4int vLevel);
-   void SetVerbose(G4VSteppingVerbose*);
+   void SetVerbose(G4SteppingVerbose*);
    G4Step* GetStep() const;
 
 
@@ -195,7 +196,7 @@ class G4SteppingManager
 
    G4UserSteppingAction* fUserSteppingAction;
 
-   G4VSteppingVerbose* fVerbose;
+   G4SteppingVerbose* fVerbose;
 
    G4double PhysicalStep;
    G4double GeometricalStep;
@@ -489,7 +490,7 @@ class G4SteppingManager
     verboseLevel = vLevel; 
   }
 
-  inline void G4SteppingManager::SetVerbose(G4VSteppingVerbose* yourVerbose){
+  inline void G4SteppingManager::SetVerbose(G4SteppingVerbose* yourVerbose){
      fVerbose = yourVerbose;
   }
 
