@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.27 2000-01-26 09:50:00 lefebure Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.28 2000-02-18 10:28:47 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,18 @@
 //      ---------- G4LowEnergyIonisation low energy modifications -----------
 //                by Alessandra Forti May 1999  
 // **************************************************************
+//   17.02.2000 Veronique Lefebure
+// - 5 bugs corrected: 
+//   *in Fluorescence, 2 bugs affecting 
+//   . localEnergyDeposition and
+//   . number of emitted photons that was then always 1 less
+//   *in EnergySampling method: 
+//   . expon = Parms[13]+1; (instead of uncorrect -1)
+//   . rejection /= Parms[6];(instead of uncorrect Parms[7])
+//   . Parms[6] is apparently corrupted in the data file (often = 0)  
+//     -->Compute normalisation into local variable rejectionMax
+//     and use rejectionMax  in stead of Parms[6]
+//
 // Added Livermore data table construction methods A. Forti
 // Modified BuildMeanFreePath to read new data tables A. Forti
 // Added EnergySampling method A. Forti
@@ -632,10 +644,10 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 	if(ThereAreShells != FALSE){
 	  
 	  thePrimaryShell = (G4int) fluorPar[0];
-	  theEnergyDeposit -= fluorPar[2]*MeV;
 	  
 	  if(fluorPar[2] >= CutForLowEnergySecondaryPhotons){
 	    
+	    theEnergyDeposit -= fluorPar[2]*MeV;
 	    newPart = new G4DynamicParticle (G4Gamma::Gamma(), 
 					     newPartDirection, 
 					     fluorPar[2]);
@@ -654,7 +666,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 	  G4double lastTransEnergy = (*(*theBindEnVec)[1])[k];
 	  thePrimaryShell = (G4int) fluorPar[0];
 	  
-	  if(fluorPar[2] >= CutForLowEnergySecondaryPhotons){
+	  if(lastTransEnergy >= CutForLowEnergySecondaryPhotons){
 	    
 	    theEnergyDeposit -= lastTransEnergy*MeV;
 	    
@@ -978,8 +990,8 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
   G4double aa=1./low ;
   G4double bb=1./high ;
   G4double saa = aa, sbb = bb;
-  G4double llow = low*low;
-  G4double s1 = 0. ;
+  G4double llow = low;
+  G4double rejectionMax = 0. ;
   
   for (G4int ii = 1; ii < 7; ii++){
 
@@ -993,7 +1005,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
     //
     //function itself at the minimum value (0.1*eV)
     //
-    s1 += Parms[ii-1]/llow;
+    rejectionMax += Parms[ii-1]/llow;
     llow *= low ;
   }
   
@@ -1010,7 +1022,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
 
     // Second Function: B1*energy**B2
     //
-    G4double expon = Parms[13]-1;
+    G4double expon = Parms[13]+1;
     
     // area2: integral of the normalized second function
     area2 = (Parms[12]/expon)*(pow(sndCut,expon)-pow(fstCut,expon));
@@ -1099,7 +1111,8 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
       rejection = Parms[0]/arg+Parms[1]/pow(arg,2)+Parms[2]/pow(arg,3)+
 	Parms[3]/pow(arg,4)+Parms[4]/pow(arg,5)+Parms[5]/pow(arg,6);
       
-      rejection /= Parms[7];
+      //rejection /= Parms[6];
+      rejection /= rejectionMax;
       
     }while(rejection < G4UniformRand()); 
   }
@@ -1107,7 +1120,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
   else if(rand1 > area1 && rand1 <= areaDue){
     
     //Sampling from the second function only 9 subshells
-    G4double expon = Parms[13]-1;
+    G4double expon = Parms[13]+1;
     G4double norm = (pow(sndCut,expon)-pow(fstCut,expon));
     G4double sum = norm*G4UniformRand()+pow(fstCut,expon);
     G4double exponInv = 1/expon;
