@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2002-03-28 14:36:17 gcosmo Exp $
+$Id: History,v 1.25 2002-04-08 08:26:52 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 8, 2002 M.Dressel - transport-V04-00-03
+---------------------
+- Resolved compilation problems on HP-aCC.
+
+Apr 4, 2002 M.Dressel - transport-V04-00-02
+---------------------
+- Cleaned compilation problems for G4std/std.
+
+Apr 4, 2002 M.Dressel - transport-V04-00-01
+---------------------
+- Resolved compilation problems on SUN-CC and Linux-egcs.
 
 Mar  28, 2002 M.Dressel - transport-V04-00-00
 -----------------------
