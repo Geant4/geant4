@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ions.hh,v 1.6 1999-12-15 14:51:10 gunter Exp $
+// $Id: G4Ions.hh,v 1.7 2001-05-18 15:16:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,7 +13,7 @@
 //      GEANT 4 class header file
 //
 //      For information related to this code contact:
-//      CERN, CN Division, ASD group
+//      GEANT4 Collaboration
 //      History: first implementation, based on object model of
 //      Hisaya Kurashige, 27 June 1998
 // ----------------------------------------------------------------
@@ -87,18 +87,6 @@ inline
 }
 
 inline
- G4int G4Ions::GetAtomicNumber() const 
-{
-  return int(GetPDGCharge()/eplus); 
-}
-
-inline
- G4int G4Ions::GetAtomicMass() const 
-{
-  return GetBaryonNumber();
-}
-
-inline
  G4double G4Ions::GetExcitationEnergy() const 
 {
   return theExcitationEnergy;
@@ -119,9 +107,3 @@ inline
 }
 
 #endif
-
-
-
-
-
-

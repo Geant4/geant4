@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.27 2001-04-06 03:08:50 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.28 2001-05-18 15:16:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -205,7 +205,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
   }
   // Search ions with A, Z ,E
   //  !! J is moitted now !!
-  G4ParticleDefinition* ion;
+  G4ParticleDefinition* ion=0;
   G4bool isFound = false;
 
   // -- loop over all particles in Ion table
@@ -221,7 +221,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
     G4double anExcitaionEnergy =0.0;
 
     if ( IsLightIon(ion) ) {
-      anAtomicNumber = int(ion->GetPDGCharge()/eplus);
+      anAtomicNumber = G4int(ion->GetPDGCharge()/eplus);
       anAtomicMass = ion->GetBaryonNumber();
       anExcitaionEnergy = 0.0;
 
@@ -301,7 +301,6 @@ G4ParticleDefinition* G4IonTable::GetLightIon(G4int Z, G4int A) const
   // returns pointer to pre-defined ions 
 
   G4ParticleDefinition* ion=0;
-  G4double mass;
   if ( (Z<=2) ) {
     if ( (Z==1)&&(A==1) ) {
       ion = G4ParticleTable::GetParticleTable()->FindParticle("proton"); // proton 

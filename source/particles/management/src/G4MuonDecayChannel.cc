@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonDecayChannel.cc,v 1.7 2001-02-28 07:29:28 kurasige Exp $
+// $Id: G4MuonDecayChannel.cc,v 1.8 2001-05-18 15:16:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,7 +95,6 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
 
   // calculate daughter momentum
   G4double daughtermomentum[3];
-  G4double momentumsum = 0.0;
   G4double energy;
   // calcurate electron energy
   G4double xmax = (1.0+daughtermass[0]*daughtermass[0]/parentmass/parentmass);

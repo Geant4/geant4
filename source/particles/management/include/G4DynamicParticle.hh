@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.hh,v 1.9 2001-01-18 12:46:05 kurasige Exp $
+// $Id: G4DynamicParticle.hh,v 1.10 2001-05-18 15:16:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,7 +13,7 @@
 //	GEANT 4 class header file 
 //
 //	For information related to this code contact:
-//	CERN, CN Division, ASD group
+//	GEANT4 Collaboration
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
 //      ---------------- G4DynamicParticle  ----------------
@@ -213,13 +213,3 @@ class G4DynamicParticle
 #include "G4DynamicParticle.icc"
 
 #endif
-
-
-
-
-
-
-
-
-
-

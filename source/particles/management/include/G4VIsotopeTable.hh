@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VIsotopeTable.hh,v 1.3 2000-01-26 10:52:04 kurasige Exp $
+// $Id: G4VIsotopeTable.hh,v 1.4 2001-05-18 15:16:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,7 +13,7 @@
 //	GEANT 4 class header file 
 //
 //	For information related to this code contact:
-//	CERN, IT Division, ASD group
+//	GEANT4 Collaboration
 //----------------------------------------------------------
 //      New design                               5 Oct. 99 H.Kurashige
 #ifndef G4VIsotopeTable_h
@@ -60,15 +60,14 @@ class G4VIsotopeTable
   void                 SetVerboseLevel(G4int level);  
 
  private:
-  G4int                verboseLevel;
   G4String             fName;
+  G4int                verboseLevel;
 };
 
 inline
- G4VIsotopeTable::G4VIsotopeTable(const G4String& name):
-                 fName(name),verboseLevel(0)
+ G4VIsotopeTable::G4VIsotopeTable(const G4String& name)
+  : fName(name), verboseLevel(0)
 {
-
 }
 
 inline
@@ -89,13 +88,3 @@ inline
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-

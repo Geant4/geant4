@@ -5,15 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.cc,v 1.10 2000-10-20 11:35:57 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.11 2001-05-18 15:16:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
 //
-//	For information related to this code contact:
-//	CERN, IT Division, ASD Group
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
 //      ---------------- G4ParticleDefinition -----------------
@@ -71,23 +69,23 @@ G4ParticleDefinition::G4ParticleDefinition(
 		   thePDGiIsospin3(iIsospin3),
 		   thePDGIsospin(iIsospin*0.5),
 		   thePDGIsospin3(iIsospin3*0.5),
-		   theParticleType(pType), 
-		   theParticleSubType(""), 
 		   theLeptonNumber(lepton),
 		   theBaryonNumber(baryon),
+		   theParticleType(pType), 
+		   theParticleSubType(""), 
 		   thePDGEncoding(encoding),
 		   theAntiPDGEncoding(-1*encoding),
+		   fShortLivedFlag(shortlived),
 		   thePDGStable(stable), 
 		   thePDGLifeTime(lifetime), 
                    theDecayTable(decaytable),
 		   theProcessManager(0),
-		   fShortLivedFlag(shortlived),
 		   fApplyCutsFlag(false),
                    verboseLevel(1)
 {
    // check name and register this particle into ParticleTable
    theParticleTable = G4ParticleTable::GetParticleTable();
-   G4ParticleDefinition *ptr = theParticleTable->Insert(this);
+   theParticleTable->Insert(this);
 
    // check quark contents
 #ifdef G4VERBOSE

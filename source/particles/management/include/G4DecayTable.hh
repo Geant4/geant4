@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayTable.hh,v 1.5 2000-02-25 07:36:14 kurasige Exp $
+// $Id: G4DecayTable.hh,v 1.6 2001-05-18 15:16:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -13,7 +13,7 @@
 //      GEANT 4 class header file
 //
 //      For information related to this code contact:
-//      CERN, CN Division, ASD group
+//      GEANT4 Collaboration
 //      History: first implementation, based on object model of
 //      7 July 1996 H.Kurashige
 //
@@ -97,7 +97,7 @@ inline
  G4VDecayChannel* G4DecayTable::GetDecayChannel(G4int index) const
 {
   G4VDecayChannel* selectedChannel = 0;
-  if ( (index>=0) && (index<channels->size()) ){
+  if ( (index>=0) && (index<G4int(channels->size())) ){
     selectedChannel = (*channels)[index];
   }
   return selectedChannel;

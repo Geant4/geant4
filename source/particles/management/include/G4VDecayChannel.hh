@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDecayChannel.hh,v 1.7 2000-03-23 16:43:41 hweber Exp $
+// $Id: G4VDecayChannel.hh,v 1.8 2001-05-18 15:16:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -13,7 +13,7 @@
 //      GEANT 4 class header file
 //
 //      For information related to this code contact:
-//      CERN, CN Division, ASD group
+//      GEANT4 Collaboration
 //      History: first implementation, based on object model of
 //      27 July 1996 H.Kurashige
 //      30 May  1997 H.Kurashige

@@ -5,15 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.cc,v 1.9 2001-03-05 08:32:38 kurasige Exp $
+// $Id: G4DynamicParticle.cc,v 1.10 2001-05-18 15:16:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
 //
-//	For information related to this code contact:
-//	CERN, CN Division, ASD Group
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
 //      ---------------- G4DynamicParticle  ----------------
@@ -51,8 +49,8 @@ static const G4double EnergyMomentumRelationAllowance = keV;
 
 ////////////////////
 G4DynamicParticle::G4DynamicParticle():
-		   theParticleDefinition(0),
 		   theMomentumDirection(),
+		   theParticleDefinition(0),
 		   theKineticEnergy(0.0),
  		   theProperTime(0.0),
                    thePreAssignedDecayProducts(0),
@@ -70,8 +68,8 @@ G4DynamicParticle::G4DynamicParticle():
 G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
 				     const G4ThreeVector& aMomentumDirection,
 				     G4double aKineticEnergy):
-		   theParticleDefinition(aParticleDefinition),
 		   theMomentumDirection(aMomentumDirection),
+		   theParticleDefinition(aParticleDefinition),
 		   theKineticEnergy(aKineticEnergy),
  		   theProperTime(0.0),
                    thePreAssignedDecayProducts(0),
@@ -118,8 +116,8 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
 				     const G4LorentzVector   &aParticleMomentum):
 		   theParticleDefinition(aParticleDefinition),
  		   theProperTime(0.0),
-                   thePreAssignedDecayTime(-1.0),
                    thePreAssignedDecayProducts(0),
+                   thePreAssignedDecayTime(-1.0),
 		   verboseLevel(1)
 {
    // set dynamic charge/mass
@@ -155,8 +153,8 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
                                      G4double totalEnergy,  
 				     const G4ThreeVector &aParticleMomentum):
                    theParticleDefinition(aParticleDefinition),
-                   thePreAssignedDecayProducts(0),
                    theProperTime(0.0),
+                   thePreAssignedDecayProducts(0),
                    thePreAssignedDecayTime(-1.0),
 		   verboseLevel(1)
 {
@@ -405,7 +403,3 @@ G4double  G4DynamicParticle::GetElectronMass() const
 
   return electronMass;
 }
-
-
-
-

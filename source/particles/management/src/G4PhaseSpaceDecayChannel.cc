@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhaseSpaceDecayChannel.cc,v 1.4 1999-12-15 14:51:15 gunter Exp $
+// $Id: G4PhaseSpaceDecayChannel.cc,v 1.5 2001-05-18 15:16:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,8 +107,6 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::OneBodyDecayIt()
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::OneBodyDecayIt()"<<G4endl;
 #endif
-  G4double parentmass = parent_mass;
-  G4double daughtermass = daughters_mass[0];
 
   //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
@@ -144,7 +142,6 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
   G4double daughtermomentum;
   daughtermass[0] = daughters_mass[0];
   daughtermass[1] = daughters_mass[1];
-  G4double sumofdaughtermass =  daughtermass[0] + daughtermass[1];
 
   //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;

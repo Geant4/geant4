@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.hh,v 1.9 2001-04-03 06:41:23 kurasige Exp $
+// $Id: G4ParticleDefinition.hh,v 1.10 2001-05-18 15:16:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,7 +13,7 @@
 //	GEANT 4 class header file 
 //
 //	For information related to this code contact:
-//	CERN, CN Division, ASD group
+//	GEANT4 Collaboration
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
 // ---------------- G4ParticleDefinition ----------------
@@ -236,15 +236,15 @@ class G4ParticleDefinition
       G4int thePDGiConjugation;
       //  This charge conjugation quantum number in units of 1.
 
+      G4int thePDGiGParity;
+      //  The value of the G-parity quantum number.
+
       G4int thePDGiIsospin;
       G4int thePDGiIsospin3;
       //  The isospin and its 3rd-component in units of 1/2.
       G4double thePDGIsospin;
       G4double thePDGIsospin3;
       //  The isospin quantum number in units of 1.
-
-      G4int thePDGiGParity;
-      //  The value of the G-parity quantum number.
 
       G4int theLeptonNumber;
       //  The lepton quantum number.
@@ -416,24 +416,3 @@ inline void             G4ParticleDefinition::SetAntiPDGEncoding(G4int aEncoding
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

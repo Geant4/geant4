@@ -5,15 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ions.cc,v 1.4 1999-12-15 14:51:12 gunter Exp $
+// $Id: G4Ions.cc,v 1.5 2001-05-18 15:16:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
-//      For information related to this code contact:
-//      CERN, CN Division, ASD Group
 //      History: first implementation, based on object model of
 //      4th April 1996, G.Cosmo
 // **********************************************************************
@@ -45,8 +43,17 @@ G4Ions::G4Ions(
    theExcitationEnergy = 0.0;
 }
 
-
 G4Ions* G4Ions::IonsDefinition()
 {
   return this;
+}
+
+G4int G4Ions::GetAtomicNumber() const 
+{
+  return G4int(GetPDGCharge()/eplus); 
+}
+
+G4int G4Ions::GetAtomicMass() const 
+{
+  return GetBaryonNumber();
 }

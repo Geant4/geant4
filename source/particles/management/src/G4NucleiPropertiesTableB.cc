@@ -5,15 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiPropertiesTableB.cc,v 1.4 1999-12-15 14:51:14 gunter Exp $
+// $Id: G4NucleiPropertiesTableB.cc,v 1.5 2001-05-18 15:16:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
-//      GEANT 4 class file --- Copyright CERN 1997
-//      CERN Geneva Switzerland
-//
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
+//      GEANT 4 class implementation file 
 //
 //      File name:     G4NucleiPropertiesTable.cc 
 //

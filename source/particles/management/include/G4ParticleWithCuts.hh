@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleWithCuts.hh,v 1.6 2001-03-12 05:58:21 kurasige Exp $
+// $Id: G4ParticleWithCuts.hh,v 1.7 2001-05-18 15:16:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,7 +13,7 @@
 //      GEANT 4 class header file
 //
 //      For information related to this code contact:
-//      CERN, IT Division, ASD group
+//      GEANT4 Collaboration
 //      History: first implementation, based on object model of
 //      Hisaya Kurashige, 21 Oct 1996
 //      Calculation of Range Table is based on 
