@@ -54,19 +54,7 @@ G4EpdlTables::G4EpdlTables(G4VDataFile& DFile):
 // Destructor  
 G4EpdlTables::~G4EpdlTables()
 {
-  cout<<"EpdlTables destructor"<<endl;
-  /*  if(theDataTable1){
 
-    theDataTable1->clearAndDestroy(); delete theDataTable1;
-  }
-  if(theDataTable2){
-
-    theDataTable2->clearAndDestroy(); delete theDataTable2;
-  }
-  if(theDataTable3){
-
-    theDataTable3->clearAndDestroy(); delete theDataTable3;
-    }*/
 }
 
 // Member Functions
@@ -87,6 +75,7 @@ void G4EpdlTables::FillDataTable() {
     
     theDataTable1->clearAndDestroy(); delete theDataTable1;
   }
+
   if(theDataTable2){    
     
     theDataTable2->clearAndDestroy(); delete theDataTable2;
@@ -125,7 +114,6 @@ void G4EpdlTables::FillDataTable() {
     if(llength == 68 || llength == 69) {
 
 	lineMatch = datfile.FindTheProcess();
-	cout<<"ET "<<lineMatch<<endl;
 	continue;
     }
 
@@ -193,6 +181,7 @@ void G4EpdlTables::FillDataTable() {
 
 	numTable++;
 	lineMatch = FALSE;
+	vecList.clear();
 	if(numTable == 99){
 	  break;
 	}
@@ -351,13 +340,11 @@ void G4EpdlTables::MakeNtuple(const char* fname){
       if(theDataTable2->length()){
 
         outVec2 = (*theDataTable2)(N);
-	cout<<"after theDataTable2 "<<N<<endl;
       }
 
       if(theDataTable3->length()){
 
         outVec3 = (*theDataTable3)(N);
-	cout<<"after theDataTable3 "<<N<<endl;
       }
 
       for(G4int i = 0; i < outVec->GetVectorLength(); i++){
