@@ -17,7 +17,7 @@ esac
 
 echo ""
 
-	g4_gmake_version=`(gmake -v)`
+	g4_gmake_version=`(gmake -v) 2>/dev/null` 
 				case $g4_gmake_version in
 				GNU*) 
 				g4_gmake=y				
@@ -27,7 +27,7 @@ echo ""
 				;;
 				esac				
 
-	g4_make_version=`(make -v)`
+	g4_make_version=`(make -v) 2>/dev/null`
 				case $g4_make_version in
 				GNU*) 
 				g4_make=y				
