@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test19.cc,v 1.15 2001-09-27 10:11:40 johna Exp $
+// $Id: test19.cc,v 1.16 2001-11-06 12:46:55 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,13 +41,9 @@
 #include "MyEventAction.hh"
 #include "MySteppingAction.hh"
 
-#ifdef G4UI_USE_TERMINAL
-  #include "G4UIterminal.hh"
-  #include "G4UItcsh.hh"
-#endif
-#ifdef G4UI_USE_GAG
-  #include "G4UIGAG.hh"
-#endif
+#include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
+#include "G4UIGAG.hh"
 #ifdef G4UI_USE_WO
   #include "G4UIWo.hh"
 #endif
@@ -98,9 +94,7 @@ int main (int argc, char** argv) {
 #ifdef G4UI_USE_XAW
     else if (strcmp (argv[1], "Xaw")==0) session = new G4UIXaw (argc, argv);
 #endif
-#ifdef G4UI_USE_GAG
     else if (strcmp (argv[1], "gag")==0) session = new G4UIGAG ;
-#endif
     else                                 session =
 					   new G4UIterminal();
   }
