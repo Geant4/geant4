@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineCurve.hh,v 1.1 1999-01-07 16:07:26 gunter Exp $
+// $Id: G4BSplineCurve.hh,v 1.2 1999-01-14 15:59:06 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef __BSPLINECURVE_H
@@ -33,8 +33,8 @@ public:
 			   G4Transform3D::Identity);
 
   virtual G4bool Tangent(G4CurvePoint& cp, G4Vector3D& v);
-  virtual void IntersectRay2D(const G4Ray& ray, G4CurveRayIntersection& is);
-
+  //virtual void IntersectRay2D(const G4Ray& ray, G4CurveRayIntersection& is);
+  virtual G4int IntersectRay2D(const G4Ray& ray);
   virtual G4double  GetPMax();
   virtual G4Point3D GetPoint(G4double param);
   virtual G4double  GetPPoint(const G4Point3D& p);

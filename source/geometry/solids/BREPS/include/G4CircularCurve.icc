@@ -29,10 +29,21 @@ inline G4double G4CircularCurve::GetPPoint(const G4Point3D& pt) {
 
 #include "G4CurveRayIntersection.hh"
 
+/*
 inline void G4CircularCurve::IntersectRay2D(const G4Ray& ray,
 					    G4CurveRayIntersection& is)
 {
   G4Exception("G4CircularCurve is always 3D!");
   exit(1);
 }
+*/
+
+inline G4int G4CircularCurve::IntersectRay2D(const G4Ray& ray)
+{
+  G4Exception("G4CircularCurve is always 3D!");
+  return 0;
+}
+
+
+
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Curve.hh,v 1.1 1999-01-07 16:07:29 gunter Exp $
+// $Id: G4Curve.hh,v 1.2 1999-01-14 16:01:07 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef __CURVE_H
@@ -70,7 +70,8 @@ public:
   // no intersection: return false
   // intersection: return true, and set intersection0
   //   the intersection point is ray.start+ray.dir*intersection0
-  virtual void IntersectRay2D(const G4Ray& ray, G4CurveRayIntersection& is)= 0;
+  // virtual void IntersectRay2D(const G4Ray& ray, G4CurveRayIntersection& is)= 0;
+  virtual G4int IntersectRay2D(const G4Ray& ray)= 0;
 
   // start and endpoints
   // in 3D space
