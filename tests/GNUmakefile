@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 1999-11-18 15:01:48 stesting Exp $
+# $Id: GNUmakefile,v 1.8 1999-11-25 16:11:40 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -36,9 +36,10 @@ all:
           test104/test104.EMtest.in
 	@ln -s $(G4INSTALL)/examples/novice/N04/exampleN04.EMtest.out \
           test104/test104.EMtest.out
+	@cd tools/lib; $(MAKE)
 	@for dir in $(HADEXERDIRS); \
-	  do (cd $$dir; $(MAKE) -f GNUmakefile.hadronic.exerciser); done; \
-	  for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done; \
+	  do (cd $$dir; $(MAKE) -f GNUmakefile.hadronic.exerciser); done
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done; \
 	  for example in $(EXAMPLES); do \
 	  testdir=test1$$example; \
 	  testin=test1$$example.in; \
