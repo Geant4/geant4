@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.19 2004-11-12 09:05:39 gcosmo Exp $
+// $Id: G4LogicalVolume.cc,v 1.20 2004-11-13 17:22:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -229,6 +229,30 @@ G4LogicalVolume::FindMotherLogicalVolumeForEnvelope()
     }
   }
   return motherLogVol;
+}
+
+// ********************************************************************
+// TotalVolumeEntities
+//
+// Returns the total number of physical volumes (replicated or placed)
+// in the tree represented by the current logical volume.
+// ********************************************************************
+//
+G4int G4LogicalVolume::TotalVolumeEntities() const
+{
+  G4int vols = 0;
+
+  for (G4PhysicalVolumeList::const_iterator itDau = fDaughters.begin();
+       itDau != fDaughters.end(); itDau++)
+  {
+    vols++;
+    G4VPhysicalVolume* physDaughter = (*itDau);
+    for (G4int i=0; i<physDaughter->GetMultiplicity(); i++)
+    {
+      vols += physDaughter->GetLogicalVolume()->TotalVolumeEntities();
+    }
+  }
+  return vols;
 }
 
 // ********************************************************************

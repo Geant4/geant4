@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh,v 1.18 2004-11-12 09:05:39 gcosmo Exp $
+// $Id: G4LogicalVolume.hh,v 1.19 2004-11-13 17:22:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -156,10 +156,10 @@ class G4LogicalVolume
     inline G4int GetNoDaughters() const;
       // Returns the number of daughters (0 to n).
     inline G4VPhysicalVolume* GetDaughter(const G4int i) const;
-      // Return the ith daughter. Note numbering starts from 0,
+      // Returns the ith daughter. Note numbering starts from 0,
       // and no bounds checking is performed.
     inline void AddDaughter(G4VPhysicalVolume* p);
-      // Add the volume p as a daughter of the current logical volume.
+      // Adds the volume p as a daughter of the current logical volume.
     inline G4bool IsDaughter(const G4VPhysicalVolume* p) const;
       // Returns true if the volume p is a daughter of the current
       // logical volume.
@@ -168,11 +168,15 @@ class G4LogicalVolume
       // volumes established by the current logical volume. Scans
       // recursively the volume tree.
     inline void RemoveDaughter(const G4VPhysicalVolume* p);
-      // Remove the volume p from the List of daughter of the current
+      // Removes the volume p from the List of daughter of the current
       // logical volume.
     inline void ClearDaughters();
-      // Clear the list of daughters. Used by the phys-volume store when
+      // Clears the list of daughters. Used by the phys-volume store when
       // the geometry tree is cleared, since modified at run-time.
+    G4int TotalVolumeEntities() const;
+      // Returns the total number of physical volumes (replicated or placed)
+      // in the tree represented by the current logical volume.
+
 
     inline G4VSolid* GetSolid() const;
     inline void SetSolid(G4VSolid *pSolid);
@@ -182,7 +186,7 @@ class G4LogicalVolume
     inline void SetMaterial(G4Material *pMaterial);
       // Gets and sets the current material.
     inline void UpdateMaterial(G4Material *pMaterial);
-      // Set material and corresponding MaterialCutsCouple.
+      // Sets material and corresponding MaterialCutsCouple.
       // This method is invoked by G4Navigator while it is navigating through 
       // material parameterization.
     G4double GetMass(G4bool forced=false, G4Material* parMaterial=0);
