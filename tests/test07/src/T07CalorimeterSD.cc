@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: T07CalorimeterSD.cc,v 1.3 2001-07-11 10:09:43 gunter Exp $
+// $Id: T07CalorimeterSD.cc,v 1.4 2004-03-16 15:05:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,7 @@ T07CalorimeterSD::~T07CalorimeterSD()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void T07CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
+void T07CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
   CalCollection = new T07CalorHitsCollection
                       (SensitiveDetectorName,collectionName[0]); 
@@ -70,7 +70,7 @@ void T07CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool T07CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool T07CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: T07PhysicsList.cc,v 1.7 2003-06-16 17:14:49 gunter Exp $
+// $Id: T07PhysicsList.cc,v 1.8 2004-03-16 15:05:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,13 +45,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 T07PhysicsList::T07PhysicsList():  G4VUserPhysicsList(),
- thePhotoElectricEffect(NULL),theComptonScattering(NULL),
- theGammaConversion(NULL),
- theeminusMultipleScattering(NULL),theeminusIonisation(NULL),
- theeminusBremsstrahlung(NULL),
- theeplusMultipleScattering(NULL),theeplusIonisation(NULL),
- theeplusBremsstrahlung(NULL),
- theeplusAnnihilation(NULL)
+ thePhotoElectricEffect(0),theComptonScattering(0),
+ theGammaConversion(0),
+ theeminusMultipleScattering(0),theeminusIonisation(0),
+ theeminusBremsstrahlung(0),
+ theeplusMultipleScattering(0),theeplusIonisation(0),
+ theeplusBremsstrahlung(0),
+ theeplusAnnihilation(0)
 {
   defaultCutValue = 2.0*mm;
   SetVerboseLevel(1);

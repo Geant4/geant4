@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: T07PhysicsListMessenger.cc,v 1.3 2001-07-11 10:09:44 gunter Exp $
+// $Id: T07PhysicsListMessenger.cc,v 1.4 2004-03-16 15:05:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,7 +52,7 @@ T07PhysicsListMessenger::~T07PhysicsListMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
-void T07PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void T07PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String)
 {
   if(command == ProcessCmd) T07List->SetStatusEmProcess();
 }

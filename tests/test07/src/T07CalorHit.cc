@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: T07CalorHit.cc,v 1.3 2001-07-11 10:09:43 gunter Exp $
+// $Id: T07CalorHit.cc,v 1.4 2004-03-16 15:05:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,6 +49,7 @@ T07CalorHit::~T07CalorHit()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 T07CalorHit::T07CalorHit(const T07CalorHit& right)
+  : G4VHit()
 {
   EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
   EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
@@ -67,7 +68,7 @@ const T07CalorHit& T07CalorHit::operator=(const T07CalorHit& right)
 
 int T07CalorHit::operator==(const T07CalorHit& right) const
 {
-  return 0;
+  return (this==&right) ? 1 : 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

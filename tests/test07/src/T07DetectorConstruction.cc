@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: T07DetectorConstruction.cc,v 1.4 2002-12-09 10:57:11 gcosmo Exp $
+// $Id: T07DetectorConstruction.cc,v 1.5 2004-03-16 15:05:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -256,7 +256,7 @@ G4VPhysicalVolume* T07DetectorConstruction::ConstructCalorimeter()
   				 G4ThreeVector(),	//at (0,0,0)
                                  "World",		//its name
                                  logicWorld,		//its logical volume
-                                 NULL,			//its mother  volume
+                                 0,			//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
   
@@ -458,7 +458,7 @@ void T07DetectorConstruction::SetMagField(G4double fieldValue)
     fieldMgr->SetDetectorField(magField);
     fieldMgr->CreateChordFinder(magField);
   } else {
-    magField = NULL;
+    magField = 0;
     fieldMgr->SetDetectorField(magField);
   }
 }
