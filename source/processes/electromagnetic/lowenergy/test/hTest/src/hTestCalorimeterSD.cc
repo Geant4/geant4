@@ -108,9 +108,9 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   const G4Track* track = aStep->GetTrack();
   G4int trIDnow  = track->GetTrackID();
   G4double tkin  = track->GetKineticEnergy(); 
-  G4double theta = (track->GetMomentumDirection()).theta();
+  //  G4double theta = (track->GetMomentumDirection()).theta();
   G4double zend  = aStep->GetPostStepPoint()->GetPosition().z();
-  G4double zstart= aStep->GetPreStepPoint()->GetPosition().z();
+  //  G4double zstart= aStep->GetPreStepPoint()->GetPosition().z();
 
   G4bool stop = false;
   G4bool primary = false;

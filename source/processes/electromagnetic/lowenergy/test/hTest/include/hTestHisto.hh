@@ -81,7 +81,7 @@ public: // Without description
     void SaveEvent();
     G4double GetTrackLength() const {return trackLength;};
     void ResetTrackLength() {trackLength = 0.0, trackAbs = true;};
-    G4bool SetTrackOutAbsorber() {trackAbs = false;};
+    void SetTrackOutAbsorber() {trackAbs = false;};
     G4bool GetTrackInAbsorber() const {return trackAbs;};
     void AddTrackLength(G4double x)   {trackLength += x;};
     void AddEndPoint(G4double);

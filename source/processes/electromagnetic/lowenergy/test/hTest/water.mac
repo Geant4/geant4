@@ -11,10 +11,9 @@
 /hTest/physics/cutGamma    1.0 mm
 /hTest/physics/cutElectron 0.2 mm
 /hTest/physics/MaxStep     1.0 mm
-/hTest/physics/verbose     2
+/hTest/physics/verbose     0
 #/hTest/physics/EMList      LowEnergy
-#/hTest/physics/EMList      Standard
-/hTest/physics/EMList      StandardNew
+/hTest/physics/EMList      Standard
 /hTest/physics/HadronList  LowEnergy
 #/hTest/physics/HadronList  none
 /hTest/AbsorberMaterial    Water

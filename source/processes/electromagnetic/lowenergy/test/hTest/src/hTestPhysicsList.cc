@@ -44,7 +44,6 @@
 #include "hTestPhysicsListMessenger.hh"
 #include "hTestLowEPhysicsList.hh"
 #include "hTestStanPhysicsList.hh"
-#include "hTestStanMAPhysicsList.hh"
 #include "hTestHadronPhysicsList.hh"
 #include "hTestHadronPhysicsList1.hh"
 #include "hTestStepCut.hh"
@@ -351,10 +350,6 @@ void hTestPhysicsList::SetEMPhysicsList(const G4String& name)
 
   if(name == "Standard") {
     theEMList = new hTestStanPhysicsList();
-    theEMList->SetVerbose(verbose);
-
-  } else if (name == "MAstandard") {
-    theEMList = new hTestStanMAPhysicsList();
     theEMList->SetVerbose(verbose);
 
   } else if (name == "LowEnergy") {
