@@ -1,4 +1,4 @@
-$Id: History,v 1.151 2001-07-27 21:49:13 johna Exp $
+$Id: History,v 1.152 2001-08-01 17:37:58 gcosmo Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+1st August 2001 Gabriele Cosmo (config-V03-02-02)
+- Included recent updates to scripts sources for 'Configure'.
 
 27th July 2001  John Allison  (config-V03-02-01)
 - Introduced environment variable G4VIS_NONE that, if set, no visualization
