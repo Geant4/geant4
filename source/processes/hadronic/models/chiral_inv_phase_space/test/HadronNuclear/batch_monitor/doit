@@ -1,0 +1,1 @@
+sed "s/Analysis\/src/HadronNuclear\/batch_monitor/g" $1>$1@;mv $1@ $1

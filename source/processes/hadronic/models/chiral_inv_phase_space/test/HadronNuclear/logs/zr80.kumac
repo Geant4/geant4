@@ -1,0 +1,41 @@
+opt a4
+zone 1 2
+ve/del *
+title_gl 'neutron final state'
+exec inclusive 80. ../logs/liste.p_zr.80mev.neutron.integral ../data/zr.80mev/p.zr.80mev.dsig_n.dt
+
+zone 3 4 7 s
+exec prepare ../data/zr.80mev/p.zr.80mev.dsig_n.dt.domega
+
+exec analyse ../logs/liste.p_zr.80mev.neutron.0degree 0. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.neutron.11degree 11. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.neutron.24degree 24. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.neutron.35degree 35. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.neutron.45degree 45. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.neutron.56degree 56. 80. 1.
+zone 2 4
+exec analyse ../logs/liste.p_zr.80mev.neutron.69degree 69. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.neutron.82degree 82. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.neutron.95degree 95. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.neutron.106degree 106. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.neutron.120degree 120. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.neutron.133degree 133. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.neutron.144degree 144. 80. 1.
+
+ve/del *
+zone 2 4
+title_gl 'proton final state'
+exec prepare ../data/zr.80mev/p.zr.80mev.dsig_p.dt.domega
+exec analyse ../logs/liste.p_zr.80mev.proton.24degree 24. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.proton.35degree 35. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.proton.45degree 45. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.proton.56degree 56. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.proton.69degree 69. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.proton.82degree 82. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.proton.96degree 96. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.proton.106degree 106. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.proton.121degree 121. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.proton.134degree 134. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.proton.140degree 140. 80. 1.
+exec analyse ../logs/liste.p_zr.80mev.proton.145degree 145. 80. 1.
+title_gl 'neutron final state'

@@ -1,0 +1,9 @@
+opt a4
+zone 2 3
+exec prepare_two_odd ../data/pb.800mev/p.pb.800mev.dsig_n.dt.domega ../data/pb.800mev/p.pb.800mev.dsig_n.dt.domega_2 
+
+exec analyse ../logs/liste.p_pb.800mev.neutron.7.5degree 7.5 800 1.
+exec analyse ../logs/liste.p_pb.800mev.neutron.30degree 30. 800 1.
+exec analyse ../logs/liste.p_pb.800mev.neutron.60degree 60. 800 1.
+exec analyse ../logs/liste.p_pb.800mev.neutron.120degree 120. 800 1.
+exec analyse ../logs/liste.p_pb.800mev.neutron.150degree 150. 800 1.

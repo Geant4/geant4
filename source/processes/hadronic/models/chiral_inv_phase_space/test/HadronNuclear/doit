@@ -1,0 +1,9 @@
+sed "s/SECONDARIES info//g" current > current@
+mv current@ current
+sed "s/)/ /g" current > current@
+mv current@ current
+sed "s/(/ /g" current > current@
+mv current@ current
+sed "s/,/ /g" current > current@
+mv current@ current
+

@@ -1,0 +1,127 @@
+*** Begin of history file: Fri Sep 21 17:26:52 2001
+exec pb120
+shell
+exec pb256
+exec pb256
+exec pb256
+exec pb256
+exec pb256
+exec pb256
+exec pb256
+exec pb256
+shell ls *256*
+exec pb256
+exec pb256
+exec pb256
+exec pb256
+exec pb256
+exec pb256
+exec pb256
+exec pb256
+exec pb256
+exec pb256
+shell ls ../data/pb.256mev/p.pb.256mev.dsig_n.dt.domega_1
+shell vi ../data/pb.256mev/p.pb.256mev.dsig_n.dt.domega_1
+exec pb256
+exec pb256
+exec pb25
+exec pb25
+shell ls *.25*
+exec pb25
+exec pb25
+exec pb25
+exec pb25
+exec pb25
+exec pb25
+exec pb25
+exec pb25
+exec pb25
+exec pb25
+exec pb45
+exec pb45
+exec pb45
+opt pto
+exec pb45
+exec pb45
+shell ls ../data/pb.45mev/p.pb.45mev.dsig_n.dt.domega
+shell vi ../data/pb.45mev/p.pb.45mev.dsig_n.dt.domega
+exec pb45
+exec pb45
+exec pb45
+exec pb597
+exec pb597
+exec pb597
+exec pb597
+exec pb597
+exec pb597
+exec pb597
+exec pb597
+exec pb597
+exec pb597
+exec pb597
+exec pb597
+exec pb597
+exec pb800
+exec pb800
+exec pb800
+exec pb800
+exec pb800
+ve/pri sig
+ve/pri sig(1:500)
+ve/pri sig(1:50)
+ve/pri sig(1:5000)
+ve/pri sig(1:500020)
+ve/pri sig(1:5020)
+shell less ../data/pb.800mev/p.pb.800mev.dsig_n.dt.domega
+shell vi ../data/pb.800mev/p.pb.800mev.dsig_n.dt.domega
+exec pb800
+exec pb80
+exec pb80
+exec pb80
+exec pb80
+exec pb80
+exec pb80
+exec pb80
+exec pb80
+exec pb80
+exec pb80
+exec zr160
+exec zr160
+exec zr160
+shell ls *zr*
+shell ls -t
+shell ls -t | less
+exec zr160
+exec zr160shell ls *zr*
+shell ls *zr*
+shell less liste.p_zr.160mev.neutron.45degree
+exec zr160
+exec zr160
+shell ls ../data/zr.160mev/p.pb.160mev.dsig_p.dt.domega
+shell ls ../data/zr.160mev/p.pb.160mev.*
+shell ls ../data/zr.160mev/
+exec zr160
+exec zr256.kumac
+exec zr256.kumac
+exec zr256.kumac
+shell ls *zr*256*
+shell less liste.p_zr.256mev.neutron.60degree
+exec zr256.kumac
+exec zr256.kumac
+exec zr25.kumac
+exec zr25.kumac
+exec zr25.kumac
+shell ls ../data/pb.25mev/p.pb.25mev.dsig_n.dt
+shell ls ../data/pb.25mev/
+exec zr160
+exec zr160
+exec zr160
+exec zr160
+shell ls ../data/zr.160mev/p.zr.160mev.dsig_n.dt.domega
+shell vi ../data/zr.160mev/p.zr.160mev.dsig_n.dt.domega
+exec zr160
+exec zr160
+exec zr25.kumac
+exec zr25.kumac
+exec zr25.kumac
+*** End   of history file: Fri Sep 21 19:09:16 2001

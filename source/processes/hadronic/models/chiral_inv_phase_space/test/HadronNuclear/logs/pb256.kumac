@@ -1,0 +1,9 @@
+opt a4
+zone 2 3
+exec prepare_two_odd ../data/pb.256mev/p.pb.256mev.dsig_n.dt.domega ../data/pb.256mev/p.pb.256mev.dsig_n.dt.domega_1 
+
+exec analyse ../logs/liste.p_pb.256mev.neutron.7.5degree 7.5 256 1.
+exec analyse ../logs/liste.p_pb.256mev.neutron.30degree 30. 256 1.
+exec analyse ../logs/liste.p_pb.256mev.neutron.60degree 60. 256 1.
+exec analyse ../logs/liste.p_pb.256mev.neutron.120degree 120. 256 1.
+exec analyse ../logs/liste.p_pb.256mev.neutron.150degree 150. 256 1.

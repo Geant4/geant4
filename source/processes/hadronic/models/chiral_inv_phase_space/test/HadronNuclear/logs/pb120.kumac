@@ -1,0 +1,17 @@
+opt a4
+zone 4 4
+exec prepare ../data/pb.120mev/p.pb.120mev.dsig_n.dt.domega
+
+exec analyse ../logs/liste.p_pb.120mev.neutron.0degree 0. 120 1.
+exec analyse ../logs/liste.p_pb.120mev.neutron.11degree 11. 120 1.
+exec analyse ../logs/liste.p_pb.120mev.neutron.24degree 24. 120 1.
+exec analyse ../logs/liste.p_pb.120mev.neutron.35degree 35. 120 1.
+exec analyse ../logs/liste.p_pb.120mev.neutron.45degree 45. 120 1.
+exec analyse ../logs/liste.p_pb.120mev.neutron.56degree 56. 120 1.
+exec analyse ../logs/liste.p_pb.120mev.neutron.69degree 69. 120 1.
+exec analyse ../logs/liste.p_pb.120mev.neutron.82degree 82. 120 1.
+exec analyse ../logs/liste.p_pb.120mev.neutron.95degree 95. 120 1.
+exec analyse ../logs/liste.p_pb.120mev.neutron.106degree 106. 120 1.
+exec analyse ../logs/liste.p_pb.120mev.neutron.121degree 121. 120 1.
+exec analyse ../logs/liste.p_pb.120mev.neutron.134degree 134. 120 1.
+exec analyse ../logs/liste.p_pb.120mev.neutron.145degree 145. 120 1.
