@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2000-03-02 11:48:26 stesting Exp $
+$Id: History,v 1.44 2000-03-06 16:29:08 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+6th March 2000  John Allison  (examples-V01-00-04)
+- testem-V01-00-02 for TestEm1-5.
+- testem-V01-00-03 for TestEm6.
+- geant4-01-00-ref-07 for TestEm8.
+- changes to TestEm1/2/3 physics lists for ref-07 (Hisaya).
 
 2nd March 2000  John Allison  (examples-V01-00-03)
 - Updated exampleN04.out geant4-01-00-ref-07.
