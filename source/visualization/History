@@ -1,4 +1,4 @@
-$Id: History,v 1.153 2001-08-24 21:51:51 johna Exp $
+$Id: History,v 1.154 2001-08-24 23:26:53 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+24th August 2001  Joseph Perl
+- First inclusion of HepRep graphics driver.
 
 24th August 2001  John Allison  (vis-V03-02-13)
 - Fixed bugs in G4VisManager::GeometryHasChanged.

@@ -1,4 +1,4 @@
-$Id: README,v 1.9 2001-07-27 22:32:52 johna Exp $
+$Id: README,v 1.10 2001-08-24 23:26:56 perl Exp $
 
 Note: Specific graphics systems must be instantiated in a high level
 library to avoid circular dependencies.  Also, some specifically need
