@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.12 2002-09-10 16:59:58 radoone Exp $
+// $Id: G4AssemblyVolume.cc,v 1.13 2002-09-10 17:07:15 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -302,7 +302,6 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
   }
 }
 
-// The following two methods manipulate the current object's counter value
 unsigned int G4AssemblyVolume::GetInstanceCount() const
 {
   return G4AssemblyVolume::fsInstanceCounter;
@@ -313,7 +312,6 @@ void         G4AssemblyVolume::SetInstanceCount( unsigned int value )
   G4AssemblyVolume::fsInstanceCounter = value;
 }
 
-// The following two methods manipulate the counter of the class instances
 void         G4AssemblyVolume::InstanceCountPlus()
 {
   G4AssemblyVolume::fsInstanceCounter++;
