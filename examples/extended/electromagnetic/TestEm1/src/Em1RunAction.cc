@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1RunAction.cc,v 1.15 2002-05-31 17:10:35 maire Exp $
+// $Id: Em1RunAction.cc,v 1.16 2002-06-03 13:49:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -106,9 +106,8 @@ void Em1RunAction::cleanHisto()
 #ifndef G4NOHIST
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
-  
+ 
   delete tree;
-  delete [] histo;
 #endif   
 }
 
