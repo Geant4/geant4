@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatSurface.hh,v 1.4 2004-05-24 12:09:46 gcosmo Exp $
+// $Id: G4FlatSurface.hh,v 1.5 2004-11-10 17:57:40 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
