@@ -1,21 +1,11 @@
 
-
-//
-
-
-
-//
-// $Id: editordefines.h,v 1.2 1999-05-21 20:20:39 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 #ifndef editordefines_h
 #define editordefines_h
 
 /*
 * NIST STEP Editor Class Library
 * cleditor/editordefines.h
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -23,7 +13,7 @@
 * and is not subject to copyright.
 */
 
-/*  */ 
+/* $Id: editordefines.h,v 1.3 2000-01-21 13:42:39 gcosmo Exp $ */ 
 
 class GenericNode;
 class GenNodeList;
@@ -46,11 +36,11 @@ enum displayStateEnum {
 //////////////////////////////////////////////////////////////////////////////
 
 enum stateEnum {
-		 noStateSE,	// state undefined, not on a List
-		 completeSE,	// on saved complete List
-		 incompleteSE,	// on saved incomplete List
-		 deleteSE,	// on delete List
-		 newSE		// on newly created List
+		 noStateSE,	// state undefined, not on a list
+		 completeSE,	// on saved complete list
+		 incompleteSE,	// on saved incomplete list
+		 deleteSE,	// on delete list
+		 newSE		// on newly created list
 		}  ;
 
 /*

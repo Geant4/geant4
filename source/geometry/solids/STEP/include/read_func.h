@@ -1,13 +1,3 @@
-
-
-//
-
-
-
-//
-// $Id: read_func.h,v 1.3 1999-12-15 14:50:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #ifndef READ_FUNC_H
 #define	READ_FUNC_H
 
@@ -15,30 +5,36 @@
 
 #define MAX_COMMENT_LENGTH 512
 
-// Print Error information for debugging purposes
+// print Error information for debugging purposes
 extern void PrintErrorState(ErrorDescriptor &err);
 
-// Print G4std::istream error information for debugging purposes
+// print G4std::istream error information for debugging purposes
 extern void IStreamState(G4std::istream &in);
 
 extern int 
-ReadInteger(SdaiInteger &val, G4std::istream &in, ErrorDescriptor *err, 
+ReadInteger(SCLP23(Integer) &val, G4std::istream &in, ErrorDescriptor *err, 
 	    char *tokenList);
 
 extern int 
-ReadInteger(SdaiInteger &val, const char *s, ErrorDescriptor *err, 
+ReadInteger(SCLP23(Integer) &val, const char *s, ErrorDescriptor *err, 
 	    char *tokenList);
 
 extern Severity 
 IntValidLevel (const char *attrValue, ErrorDescriptor *err,
 	       int clearError, int optional, char *tokenList);
 
+extern char * 
+WriteReal(SCLP23(Real) val, SCLstring &s);
+
+extern void
+WriteReal(SCLP23(Real) val, G4std::ostream &out);
+
 extern int
-ReadReal(SdaiReal &val, G4std::istream &in, ErrorDescriptor *err, 
+ReadReal(SCLP23(Real) &val, G4std::istream &in, ErrorDescriptor *err, 
 	 char *tokenList);
 
 extern int
-ReadReal(SdaiReal &val, const char *s, ErrorDescriptor *err, 
+ReadReal(SCLP23(Real) &val, const char *s, ErrorDescriptor *err, 
 	 char *tokenList);
 
 extern Severity 
@@ -46,11 +42,11 @@ RealValidLevel (const char *attrValue, ErrorDescriptor *err,
 		int clearError, int optional, char *tokenList);
 
 extern int
-ReadNumber(SdaiReal &val, G4std::istream &in, ErrorDescriptor *err, 
+ReadNumber(SCLP23(Real) &val, G4std::istream &in, ErrorDescriptor *err, 
 	   char *tokenList);
 
 extern int
-ReadNumber(SdaiReal &val, const char *s, ErrorDescriptor *err, 
+ReadNumber(SCLP23(Real) &val, const char *s, ErrorDescriptor *err, 
 	   char *tokenList);
 
 extern Severity 
@@ -97,7 +93,7 @@ extern const char *ReadComment(SCLstring &ss, const char *s);
 
 extern const char *ReadComment(G4std::istream& in, SCLstring &s);
 
-extern Severity    ReadPcd(G4std::istream& in);   //Print control directive
+extern Severity    ReadPcd(G4std::istream& in);   //print control directive
 
 extern void        ReadTokenSeparator(G4std::istream& in, SCLstring *comments = 0);
 

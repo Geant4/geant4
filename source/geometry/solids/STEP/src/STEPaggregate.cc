@@ -1,18 +1,8 @@
 
-
-//
-
-
-
-//
-// $Id: STEPaggregate.cc,v 1.3 1999-12-15 14:50:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 /*
 * NIST STEP Core Class Library
 * clstepcore/STEPaggregate.cc
-* May 1995
+* April 1997
 * K. C. Morris
 * David Sauder
 
@@ -20,21 +10,22 @@
 * and is not subject to copyright.
 */
 
-/*  */
+/* $Id: STEPaggregate.cc,v 1.4 2000-01-21 13:42:56 gcosmo Exp $ */
 
 #include <stdio.h> 
 
 #include <read_func.h>
 #include <STEPaggregate.h>
 #include <STEPattribute.h>
-#include <STEPentity.h>
+//#include <STEPentity.h>
 #include <instmgr.h>
+#include <ExpDict.h>
 
 const int Real_Num_Precision = REAL_NUM_PRECISION; // from STEPattribute.h
 
 #define STRING_DELIM '\''
 
-static char rcsid[] = "";
+static char rcsid[] = "$Id: STEPaggregate.cc,v 1.4 2000-01-21 13:42:56 gcosmo Exp $";
 
 /******************************************************************
 **	  Functions for manipulating aggregate attributes
@@ -77,13 +68,14 @@ STEPaggregate::AggrValidLevel(const char *value, ErrorDescriptor *err,
 			      int optional, char *tokenList, int addFileId, 
 			      int clearError)
 {
+    SCLstring buf;
     if(clearError)
 	err->ClearErrorMsg();
 
     G4std::istrstream in ((char *)value); // sz defaults to length of s
 
     ReadValue(in, err, elem_type, insts, addFileId, 0, 0);
-    CheckRemainingInput(in, err, elem_type->AttrTypeName(), tokenList);
+    CheckRemainingInput(in, err, elem_type->AttrTypeName(buf), tokenList);
     if( optional && (err->severity() == SEVERITY_INCOMPLETE) )
 	err->severity(SEVERITY_NULL);
     return err->severity();
@@ -96,11 +88,12 @@ STEPaggregate::AggrValidLevel(G4std::istream &in, ErrorDescriptor *err,
 			      int optional, char *tokenList, int addFileId, 
 			      int clearError)
 {
+    SCLstring buf;
     if(clearError)
 	err->ClearErrorMsg();
 
     ReadValue(in, err, elem_type, insts, addFileId, 0, 1);
-    CheckRemainingInput(in, err, elem_type->AttrTypeName(), tokenList);
+    CheckRemainingInput(in, err, elem_type->AttrTypeName(buf), tokenList);
     if( optional && (err->severity() == SEVERITY_INCOMPLETE) )
 	err->severity(SEVERITY_NULL);
     return err->severity();
@@ -109,14 +102,15 @@ STEPaggregate::AggrValidLevel(G4std::istream &in, ErrorDescriptor *err,
 // if exchangeFileFormat == 1 then paren delims are required.
 
 Severity 
-STEPaggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err, 
-			 const TypeDescriptor *elem_type, 
-			 InstMgr *insts, int addFileId, 
-			 int assignVal, int exchangeFileFormat)
+STEPaggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
+			 const TypeDescriptor *elem_type, InstMgr *insts,
+			 int addFileId, int assignVal, int exchangeFileFormat,
+			 const char *)
 {
     ErrorDescriptor errdesc;
     char errmsg[BUFSIZ];
     int value_cnt = 0;
+    SCLstring buf;
 
     if(assignVal)
 	Empty ();  // read new values and discard existing ones
@@ -142,7 +136,7 @@ STEPaggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
     }
     else if(exchangeFileFormat)
     {	// error did not find opening delim
-	    // cannot recover so give up and let STEPattribute recover
+	// cannot recover so give up and let STEPattribute recover
 	err->GreaterSeverity(SEVERITY_INPUT_ERROR);
 	return SEVERITY_INPUT_ERROR;
     }
@@ -153,8 +147,18 @@ STEPaggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
     }
 
     STEPnode * item = 0;
-    if(!assignVal)  // if not assigning values only need one node.  So only 
-		    // one node is created. It is used to read the values
+
+    in >> G4std::ws;
+    // take a peek to see if there are any elements before committing to an 
+    // element
+    c = in.peek(); // does not advance input
+    if(c == ')')
+    {
+	in.get(c);
+    }
+    // if not assigning values only need one node. So only one node is created.
+    // It is used to read the values
+    else if(!assignVal)
 	item = (STEPnode*)NewNode();
 
 	// ')' is the end of the aggregate
@@ -173,7 +177,7 @@ STEPaggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
 
 	// read up to the next delimiter and set errors if garbage is
 	// found before specified delims (i.e. comma and quote)
-	CheckRemainingInput(in, &errdesc, elem_type->AttrTypeName(), ",)");
+	CheckRemainingInput(in, &errdesc, elem_type->AttrTypeName(buf), ",)");
 
 	if (errdesc.severity() < SEVERITY_INCOMPLETE)
 	{
@@ -214,12 +218,23 @@ STEPaggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
 */
 	}
     }
+    if(c == ')')
+    {
+	_null = 0;
+//	validDelims = 1; // expectation for end paren delim is met
+    }
+    else // expectation for end paren delim has not been met
+    {
+	err->GreaterSeverity(SEVERITY_INPUT_ERROR);
+	err->AppendToUserMsg("Missing close paren for aggregate value");
+	return SEVERITY_INPUT_ERROR;
+    }
     return err->severity();
 }
 
-Severity 
-STEPaggregate::StrToVal(const char *s, ErrorDescriptor *err, 
-			const TypeDescriptor *elem_type, InstMgr *insts, 
+Severity
+STEPaggregate::StrToVal(const char *s, ErrorDescriptor *err,
+			const TypeDescriptor *elem_type, InstMgr *insts,
 			int addFileId)
 {
     G4std::istrstream in((char *)s);
@@ -228,15 +243,15 @@ STEPaggregate::StrToVal(const char *s, ErrorDescriptor *err,
 
 ///////////////////////////////////////////////////////////////////////////////
 
-Severity 
-STEPaggregate::STEPread(G4std::istream& in, ErrorDescriptor *err, 
-			const TypeDescriptor *elem_type, 
-			InstMgr *insts, int addFileId)
+Severity
+STEPaggregate::STEPread(G4std::istream& in, ErrorDescriptor *err,
+			const TypeDescriptor *elem_type, InstMgr *insts,
+			int addFileId, const char *currSch)
 {
-    return ReadValue(in, err, elem_type, insts, addFileId, 1, 1);
+    return ReadValue(in, err, elem_type, insts, addFileId, 1, 1, currSch);
 }
 
-const char * 
+const char *
 STEPaggregate::asStr(SCLstring & s) const
 {
     s.set_null();
@@ -258,7 +273,7 @@ STEPaggregate::asStr(SCLstring & s) const
 }
 
 void
-STEPaggregate::STEPwrite(G4std::ostream& out) const
+STEPaggregate::STEPwrite(G4std::ostream& out, const char *currSch) const
 {
     if(!_null)
     {
@@ -267,7 +282,7 @@ STEPaggregate::STEPwrite(G4std::ostream& out) const
 	SCLstring s;
 	while (n)  
 	{
-	    out << n->STEPwrite (s);
+	    out << n->STEPwrite (s, currSch);
 	    if ( n = (STEPnode *)(n -> NextNode ()) )
 		out <<  ',';
 	}
@@ -378,11 +393,26 @@ STEPnode::asStr(SCLstring &s)
 }
 
 const char *
-STEPnode::STEPwrite (SCLstring &s)
+STEPnode::STEPwrite (SCLstring &s, const char *currSch)
+    /*
+     * NOTE - second argument will contain name of current schema.  We may need
+     * this if STEPnode belongs to an aggregate of selects.  If so, each node
+     * will be written out by calling STEPwrite on its select, and to write a
+     * select out, the name of its underlying type will be written.  Finally,
+     * the underlying type's name depends on the current schema.  This is be-
+     * cause e.g. type X may be defined in schema A, and may be USEd in schema
+     * B and renamed to Y (i.e., "USE from A (X as Y)").  Thus, if currSch = B,
+     * Y will have to be written out rather than X.  Actually, this concern
+     * only applies for SelectNode.  To accomodate those cases, all the signa-
+     * tures of STEPwrite(SCLstring) contain currSch.  (As an additional note,
+     * 2D aggregates should make use of currSch in case they are 2D aggrs of
+     * selects.  But since currently (3/27/97) the SCL handles 2D+ aggrs using
+     * SCLundefined's, this is not implemented.)
+     */
 {
   G4cerr << "Internal error:  " << __FILE__ << ": " <<  __LINE__ << "\n" ;
- G4cerr << "function:  STEPnode::STEPwrite called instead of virtual function.\n"
-      << _POC_ << "\n";
+  G4cerr << "function:  STEPnode::STEPwrite called instead of virtual function.\n"
+       << _POC_ << "\n";
 
  return "";
 }
@@ -399,10 +429,23 @@ STEPnode::STEPwrite (G4std::ostream& out)
 // GenericAggregate
 ///////////////////////////////////////////////////////////////////////////////
 
+GenericAggregate::GenericAggregate() 
+{
+}
+
+GenericAggregate::~GenericAggregate() 
+{
+}
+
 SingleLinkNode *
 GenericAggregate::NewNode () 
 {
+#ifdef __OSTORE__
+    return new (os_segment::of(this),
+		GenericAggrNode::get_os_typespec()) GenericAggrNode();
+#else
     return new GenericAggrNode();
+#endif
 }
 
 STEPaggregate& 
@@ -415,7 +458,13 @@ GenericAggregate::ShallowCopy (const STEPaggregate& a)
 
     while (next) 
     {
+#ifdef __OSTORE__
+	copy = new (os_segment::of(this), 
+		    GenericAggrNode::get_os_typespec()) 
+				GenericAggrNode (*(GenericAggrNode*)next);
+#else
 	copy = new GenericAggrNode (*(GenericAggrNode*)next);
+#endif
 	AddNode(copy);
 	next = next->NextNode();
     }
@@ -452,7 +501,12 @@ GenericAggrNode::~GenericAggrNode()
 SingleLinkNode *
 GenericAggrNode::NewNode () 
 {
+#ifdef __OSTORE__
+    return new (os_segment::of(this), 
+		GenericAggrNode::get_os_typespec()) GenericAggrNode();
+#else
     return new GenericAggrNode();
+#endif
 }
 
 Severity 
@@ -490,7 +544,7 @@ GenericAggrNode::asStr(SCLstring &s)
 }
 
 const char *
-GenericAggrNode::STEPwrite(SCLstring &s)
+GenericAggrNode::STEPwrite(SCLstring &s, const char *currSch)
 {
     return value.STEPwrite(s);
 /*
@@ -524,15 +578,16 @@ EntityAggregate::~EntityAggregate ()
 
 // if exchangeFileFormat == 1 then delims are required.
 
-Severity 
-EntityAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err, 
-			 const TypeDescriptor *elem_type, 
-			 InstMgr *insts, int addFileId, 
-			 int assignVal, int exchangeFileFormat)
+Severity
+EntityAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
+			   const TypeDescriptor *elem_type, InstMgr *insts,
+			   int addFileId, int assignVal,
+			   int exchangeFileFormat, const char *)
 {
     ErrorDescriptor errdesc;
     char errmsg[BUFSIZ];
     int value_cnt = 0;
+    SCLstring buf;
 
     if(assignVal)
 	Empty ();  // read new values and discard existing ones
@@ -569,15 +624,32 @@ EntityAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
     }
 
     EntityNode * item = 0;
-    if(!assignVal)  // if not assigning values only need one node.  So only 
-		    // one node is created. It is used to read the values
+
+    in >> G4std::ws;
+    // take a peek to see if there are any elements before committing to an 
+    // element
+    c = in.peek(); // does not advance input
+    if(c == ')')
+    {
+	in.get(c);
+    }
+    // if not assigning values only need one node. So only one node is created.
+    // It is used to read the values
+    else if(!assignVal) 
+      // OSTORE note - since this is temporary and deleted anyway don't worry
+      // about persistent new
 	item = new EntityNode();
 
     while (in.good() && (c != ')') )
     {
 	value_cnt++;
 	if(assignVal) // create a new node each time through the loop
+#ifdef __OSTORE__
+	    item = new (os_segment::of(this), 
+			EntityNode::get_os_typespec()) EntityNode();
+#else
 	    item = new EntityNode();
+#endif
 
 	errdesc.ClearErrorMsg();
 
@@ -588,7 +660,7 @@ EntityAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
 
 	// read up to the next delimiter and set errors if garbage is
 	// found before specified delims (i.e. comma and quote)
-	CheckRemainingInput(in, &errdesc, elem_type->AttrTypeName(), ",)");
+	CheckRemainingInput(in, &errdesc, elem_type->AttrTypeName(buf), ",)");
 
 	if (errdesc.severity() < SEVERITY_INCOMPLETE)
 	{
@@ -629,6 +701,17 @@ EntityAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
 */
 	}
     }
+    if(c == ')')
+    {
+	_null = 0;
+//	validDelims = 1; // expectation for end paren delim is met
+    }
+    else // expectation for end paren delim has not been met
+    {
+	err->GreaterSeverity(SEVERITY_INPUT_ERROR);
+	err->AppendToUserMsg("Missing close paren for aggregate value");
+	return SEVERITY_INPUT_ERROR;
+    }
     return err->severity();
 }
 
@@ -639,7 +722,12 @@ EntityAggregate::ShallowCopy (const STEPaggregate& a)
     const EntityNode * tmp = (const EntityNode*) a.GetHead ();
     while (tmp) 
     {
+#ifdef __OSTORE__
+	AddNode (new (os_segment::of(this), 
+		      EntityNode::get_os_typespec()) EntityNode (tmp -> node));
+#else
 	AddNode (new EntityNode (tmp -> node));
+#endif
 	tmp = (const EntityNode*) tmp -> NextNode ();
     }
     if(head)
@@ -654,21 +742,39 @@ EntityAggregate::ShallowCopy (const STEPaggregate& a)
 SingleLinkNode *	
 EntityAggregate::NewNode ()  
 {
-    return new EntityNode ();
+#ifdef __OSTORE__
+    return new (os_segment::of(this), 
+		EntityNode::get_os_typespec()) EntityNode();
+#else
+    return new EntityNode();
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // EntityNode
 ///////////////////////////////////////////////////////////////////////////////
 
-EntityNode::EntityNode  (STEPentity * e) : node (e) 
+EntityNode::EntityNode() 
+{
+}
+
+EntityNode::~EntityNode() 
+{
+}
+
+EntityNode::EntityNode  (SCLP23(Application_instance) * e) : node (e) 
 {
 }
 
 SingleLinkNode *	
 EntityNode::NewNode ()  
 {
-    return new EntityNode ();
+#ifdef __OSTORE__
+    return new (os_segment::of(this), 
+		EntityNode::get_os_typespec()) EntityNode();
+#else
+    return new EntityNode();
+#endif
 }
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -677,8 +783,10 @@ EntityNode::StrToVal(const char *s, ErrorDescriptor *err,
 		     const TypeDescriptor *elem_type,
 		     InstMgr *insts, int addFileId)
 {
-    STEPentity *se = ReadEntityRef(s, err, ",)", insts, addFileId);
-//    STEPentity *se = ReadEntityRef(s, err, 0, insts, addFileId);
+    SCLP23(Application_instance) *se = ReadEntityRef(s, err, (char*)(",)"),
+                                                     insts, addFileId);
+//    SCLP23(Application_instance) *se = ReadEntityRef(s, err, 0, insts, 
+//						     addFileId);
     if( se != S_ENTITY_NULL )
     {
 	ErrorDescriptor error;
@@ -719,7 +827,8 @@ EntityNode::STEPread(G4std::istream &in, ErrorDescriptor *err,
 		     const TypeDescriptor *elem_type,
 		     InstMgr *insts, int addFileId)
 {
-    STEPentity *se = ReadEntityRef(in, err, ",)", insts, addFileId);
+    SCLP23(Application_instance) *se = ReadEntityRef(in, err, (char*)(",)"),
+                                                     insts, addFileId);
     if( se != S_ENTITY_NULL )
     {
 	ErrorDescriptor error;
@@ -755,7 +864,7 @@ EntityNode::asStr (SCLstring &s)
 }    
 
 const char *
-EntityNode::STEPwrite(SCLstring &s)
+EntityNode::STEPwrite(SCLstring &s, const char *)
 {
     if (!node || (node == S_ENTITY_NULL) )     //  nothing
     {
@@ -792,15 +901,16 @@ SelectAggregate::~SelectAggregate ()
 
 // if exchangeFileFormat == 1 then delims are required.
 
-Severity 
-SelectAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err, 
-			   const TypeDescriptor *elem_type, 
-			   InstMgr *insts, int addFileId, 
-			   int assignVal, int exchangeFileFormat)
+Severity
+SelectAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
+			   const TypeDescriptor *elem_type, InstMgr *insts,
+			   int addFileId, int assignVal,
+			   int exchangeFileFormat, const char *currSch)
 {
     ErrorDescriptor errdesc;
     char errmsg[BUFSIZ];
     int value_cnt = 0;
+    SCLstring buf;
 
     if(assignVal)
 	Empty ();  // read new values and discard existing ones
@@ -837,9 +947,19 @@ SelectAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
     }
 
     SelectNode * item = 0;
-    if(!assignVal)  // if not assigning values only need one node.  So only 
-		    // one node is created. It is used to read the values
-    item = (SelectNode *) NewNode ();
+
+    in >> G4std::ws;
+    // take a peek to see if there are any elements before committing to an 
+    // element
+    c = in.peek(); // does not advance input
+    if(c == ')')
+    {
+	in.get(c);
+    }
+    // if not assigning values only need one node. So only one node is created.
+    // It is used to read the values
+    else if(!assignVal)
+	item = (SelectNode *) NewNode ();
 
     while (in.good() && (c != ')') )
     {
@@ -850,13 +970,13 @@ SelectAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
 	errdesc.ClearErrorMsg();
 
 	if(exchangeFileFormat)
-	    item->STEPread(in, &errdesc, elem_type, insts, addFileId);
+	    item->STEPread(in, &errdesc, elem_type, insts, addFileId, currSch);
 	else
-	    item->StrToVal(in, &errdesc, elem_type, insts, addFileId);
+	    item->StrToVal(in, &errdesc, elem_type, insts, addFileId, currSch);
 
 	// read up to the next delimiter and set errors if garbage is
 	// found before specified delims (i.e. comma and quote)
-	CheckRemainingInput(in, &errdesc, elem_type->AttrTypeName(), ",)");
+	CheckRemainingInput(in, &errdesc, elem_type->AttrTypeName(buf), ",)");
 
 	if (errdesc.severity() < SEVERITY_INCOMPLETE)
 	{
@@ -882,6 +1002,17 @@ SelectAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
 	    return SEVERITY_INPUT_ERROR;
 	}
     }
+    if(c == ')')
+    {
+	_null = 0;
+//	validDelims = 1; // expectation for end paren delim is met
+    }
+    else // expectation for end paren delim has not been met
+    {
+	err->GreaterSeverity(SEVERITY_INPUT_ERROR);
+	err->AppendToUserMsg("Missing close paren for aggregate value");
+	return SEVERITY_INPUT_ERROR;
+    }
     return err->severity();
 }
 
@@ -892,7 +1023,13 @@ SelectAggregate::ShallowCopy (const STEPaggregate& a)
     const SelectNode * tmp = (const SelectNode*) a.GetHead ();
     while (tmp) 
     {
+#ifdef __OSTORE__
+	AddNode (new (os_segment::of(this), 
+		      SelectNode::get_os_typespec()) SelectNode (tmp -> node));
+#else
 	AddNode (new SelectNode (tmp -> node));
+#endif
+
 	tmp = (const SelectNode*) tmp -> NextNode ();
     }
     if(head)
@@ -907,17 +1044,39 @@ SelectAggregate::ShallowCopy (const STEPaggregate& a)
 SingleLinkNode *	
 SelectAggregate::NewNode ()  
 {
-    return new SelectNode ();
+#ifdef __OSTORE__
+    return new (os_segment::of(this), 
+		SelectNode::get_os_typespec()) SelectNode();
+#else
+    return new SelectNode();
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // SelectNode
 ///////////////////////////////////////////////////////////////////////////////
 
+SelectNode::SelectNode(SCLP23(Select) * s) :  node (s) 
+{
+}
+
+SelectNode::SelectNode() 
+{
+}
+
+SelectNode::~SelectNode() 
+{
+}
+
 SingleLinkNode *	
 SelectNode::NewNode ()  
 {
-    return new SelectNode ();
+#ifdef __OSTORE__
+    return new (os_segment::of(this), 
+		SelectNode::get_os_typespec()) SelectNode();
+#else
+    return new SelectNode();
+#endif
 }
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -927,7 +1086,8 @@ SelectNode::StrToVal(const char *s, ErrorDescriptor *err,
 		     InstMgr *insts, int addFileId)
 {
 /*
-    STEPentity *se = ReadEntityRef(s, err, ",)", insts, addFileId);
+    SCLP23(Application_instance) *se = ReadEntityRef(s, err, ",)", insts, 
+						     addFileId);
     if( se != S_ENTITY_NULL )
     {
 	ErrorDescriptor error;
@@ -954,9 +1114,9 @@ SelectNode::StrToVal(const char *s, ErrorDescriptor *err,
 Severity 
 SelectNode::StrToVal(G4std::istream &in, ErrorDescriptor *err, 
 		     const TypeDescriptor *elem_type,
-		     InstMgr *insts, int addFileId)
+		     InstMgr *insts, int addFileId, const char *currSch)
 {
-    return STEPread(in, err, elem_type, insts, addFileId);
+    return STEPread(in, err, elem_type, insts, addFileId, currSch);
 }
 
 Severity 
@@ -971,7 +1131,7 @@ SelectNode::STEPread(const char *s, ErrorDescriptor *err,
 Severity 
 SelectNode::STEPread(G4std::istream &in, ErrorDescriptor *err, 
 		     const TypeDescriptor *elem_type,
-		     InstMgr *insts, int addFileId)
+		     InstMgr *insts, int addFileId, const char *currSch)
 {
   if (!node)  {
     G4cerr << "Internal error:  " << __FILE__ << ": " <<  __LINE__ << "\n" 
@@ -979,7 +1139,7 @@ SelectNode::STEPread(G4std::istream &in, ErrorDescriptor *err,
     G4cerr << "function:  SelectNode::STEPread \n" << "\n";
     return SEVERITY_BUG;
   }
-  err->severity( node->STEPread(in, err, insts, addFileId));
+  err->severity( node->STEPread(in, err, insts, 0, addFileId, currSch) );
   CheckRemainingInput(in, err, "select", ",)");
   return err->severity();
 }
@@ -998,7 +1158,7 @@ SelectNode::asStr (SCLstring &s)
 }    
 
 const char *
-SelectNode::STEPwrite(SCLstring &s)
+SelectNode::STEPwrite(SCLstring &s, const char *currSch)
 {
     s.set_null();
     if ( !node || (node->is_null()) )     //  nothing
@@ -1006,7 +1166,7 @@ SelectNode::STEPwrite(SCLstring &s)
 	s = "$";
 	return "$";
     }
-    node -> STEPwrite (s);
+    node -> STEPwrite (s, currSch);
     return s.chars();
 }
 
@@ -1028,6 +1188,14 @@ STEPaggregate&
 StringAggregate::ShallowCopy (const STEPaggregate&);
 ******************************************************************/
 
+StringAggregate::StringAggregate() 
+{
+}
+
+StringAggregate::~StringAggregate() 
+{
+}
+
 STEPaggregate& 
 StringAggregate::ShallowCopy (const STEPaggregate& a)
 {
@@ -1038,7 +1206,13 @@ StringAggregate::ShallowCopy (const STEPaggregate& a)
 
     while (next) 
     {
+#ifdef __OSTORE__
+	copy = new (os_segment::of(this), 
+		    StringNode::get_os_typespec()) 
+				StringNode (*(StringNode*)next);
+#else
 	copy = new StringNode (*(StringNode*)next);
+#endif
 	AddNode(copy);
 	next = next->NextNode();
     }
@@ -1053,12 +1227,26 @@ StringAggregate::ShallowCopy (const STEPaggregate& a)
 SingleLinkNode *
 StringAggregate::NewNode () 
 {
-    return new StringNode ();
+#ifdef __OSTORE__
+    return new (os_segment::of(this), 
+		StringNode::get_os_typespec()) StringNode();
+#else
+    return new StringNode();
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // StringNode
 ///////////////////////////////////////////////////////////////////////////////
+
+StringNode::StringNode() 
+{
+    value = 0;
+}
+
+StringNode::~StringNode() 
+{
+}
 
 StringNode::StringNode(StringNode& sn)
 {
@@ -1067,7 +1255,7 @@ StringNode::StringNode(StringNode& sn)
 
 StringNode::StringNode(const char * sStr)
 {
-    // value is an SdaiString (the memory is copied)
+    // value is an SCLP23(String) (the memory is copied)
     value = sStr;
 
 /*
@@ -1081,7 +1269,12 @@ StringNode::StringNode(const char * sStr)
 SingleLinkNode *
 StringNode::NewNode () 
 {
-    return new StringNode ();
+#ifdef __OSTORE__
+    return new (os_segment::of(this), 
+		StringNode::get_os_typespec()) StringNode();
+#else
+    return new StringNode();
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1133,7 +1326,7 @@ StringNode::asStr(SCLstring &s)
 }
 
 const char *
-StringNode::STEPwrite (SCLstring &s)
+StringNode::STEPwrite (SCLstring &s, const char *)
 {
     value.STEPwrite(s);
     return s.chars();
@@ -1153,6 +1346,14 @@ STEPaggregate&
 BinaryAggregate::ShallowCopy (const STEPaggregate&);
 ******************************************************************/
 
+BinaryAggregate::BinaryAggregate() 
+{
+}
+
+BinaryAggregate::~BinaryAggregate() 
+{
+}
+
 STEPaggregate& 
 BinaryAggregate::ShallowCopy (const STEPaggregate& a)
 {
@@ -1163,7 +1364,13 @@ BinaryAggregate::ShallowCopy (const STEPaggregate& a)
 
     while (next) 
     {
+#ifdef __OSTORE__
+	copy = new (os_segment::of(this), 
+		    BinaryNode::get_os_typespec()) 
+				BinaryNode (*(BinaryNode*)next);
+#else
 	copy = new BinaryNode (*(BinaryNode*)next);
+#endif
 	AddNode(copy);
 	next = next->NextNode();
     }
@@ -1178,12 +1385,26 @@ BinaryAggregate::ShallowCopy (const STEPaggregate& a)
 SingleLinkNode *
 BinaryAggregate::NewNode () 
 {
-    return new BinaryNode ();
+#ifdef __OSTORE__
+    return new (os_segment::of(this), 
+		BinaryNode::get_os_typespec()) BinaryNode();
+#else
+    return new BinaryNode();
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // BinaryNode
 ///////////////////////////////////////////////////////////////////////////////
+
+BinaryNode::BinaryNode() 
+{
+    value = 0;
+}
+
+BinaryNode::~BinaryNode() 
+{
+}
 
 BinaryNode::BinaryNode(BinaryNode& bn)
 {
@@ -1192,14 +1413,19 @@ BinaryNode::BinaryNode(BinaryNode& bn)
 
 BinaryNode::BinaryNode(const char *sStr)
 {
-    // value is an SdaiBinary (the memory is copied)
+    // value is an SCLP23(Binary) (the memory is copied)
     value = sStr;
 }
 
 SingleLinkNode *
 BinaryNode::NewNode () 
 {
-    return new BinaryNode ();
+#ifdef __OSTORE__
+    return new (os_segment::of(this), 
+		BinaryNode::get_os_typespec()) BinaryNode();
+#else
+    return new BinaryNode();
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1250,7 +1476,7 @@ BinaryNode::asStr(SCLstring &s)
 }
 
 const char *
-BinaryNode::STEPwrite (SCLstring &s)
+BinaryNode::STEPwrite (SCLstring &s, const char *)
 {
     value.STEPwrite(s);
     return s.chars();
@@ -1302,7 +1528,7 @@ EnumAggregate::~EnumAggregate ()
  ** Procedure:  EnumAggregate::NewNode
  ** Parameters:  
  ** Returns:  a new EnumNode which is of the correct derived type
- ** Description:  creates a node to put in an List of enumerated values
+ ** Description:  creates a node to put in an list of enumerated values
  **               function is virtual so that the right node will be 
  **               created
  ** Side Effects:  
@@ -1324,6 +1550,18 @@ EnumAggregate::NewNode ()
 ///////////////////////////////////////////////////////////////////////////////
 // EnumNode
 ///////////////////////////////////////////////////////////////////////////////
+
+EnumNode::EnumNode(SCLP23(Enum) * e) :  node (e) 
+{
+}
+
+EnumNode::EnumNode()
+{
+}
+
+EnumNode::~EnumNode()
+{
+}
 
 SingleLinkNode *
 EnumNode::NewNode ()
@@ -1380,7 +1618,7 @@ EnumNode::StrToVal(const char *s, ErrorDescriptor *err)
 		  default:
 		    sev = SEVERITY_WARNING;
 		    err->GreaterSeverity(SEVERITY_WARNING);
-		    sprintf(messageBuf, "Invalid boolean value: \'%s\'.\n",
+		    sprintf(messageBuf, "Invalid Boolean value: \'%s\'.\n",
 			    val);
 		    err->AppendToDetailMsg(messageBuf);
 		    break;
@@ -1393,7 +1631,7 @@ EnumNode::StrToVal(const char *s, ErrorDescriptor *err)
 	if(1 && sev > SEVERITY_WARNING)
 	    node -> put (val);
     }
-//STEPenumeration::EnumValidLevel(const char *value, ErrorDescriptor *err,
+//SCLP23(Enum)::EnumValidLevel(const char *value, ErrorDescriptor *err,
 //				int optional, char *tokenList, 
 //				int needDelims, int clearError)
 
@@ -1458,7 +1696,7 @@ EnumNode::asStr (SCLstring &s)
 }
 
 const char *
-EnumNode::STEPwrite (SCLstring &s)
+EnumNode::STEPwrite (SCLstring &s, const char *)
 {
     node->STEPwrite(s);
     return s.chars();
@@ -1490,37 +1728,104 @@ EnumNode::STEPwrite (G4std::ostream& out)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Logicals
+// LOGICALS
 ///////////////////////////////////////////////////////////////////////////////
+
+LOGICALS::LOGICALS() 
+{
+}
+
+LOGICALS::~LOGICALS() 
+{
+}
 
 //EnumNode * 
-
 SingleLinkNode *
-Logicals::NewNode ()  
+LOGICALS::NewNode ()  
 {
-    return new EnumNode (new Logical);
+#ifdef __OSTORE__
+    return new (os_segment::of(this), EnumNode::get_os_typespec()) 
+			EnumNode( new (os_segment::of(this), 
+				       SCLP23(LOGICAL)::get_os_typespec()) SCLP23(LOGICAL) );
+#else
+    return new EnumNode (new SCLP23(LOGICAL));
+#endif
 }	
 
+#ifdef __OSTORE__
+LOGICALS * 
+create_LOGICALS(os_database *db)
+{
+    return new (db, LOGICALS::get_os_typespec()) LOGICALS;
+}
+#else
+LOGICALS * 
+create_LOGICALS()
+{
+    return new LOGICALS;
+}
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
-// Booleans
+// BOOLS
 ///////////////////////////////////////////////////////////////////////////////
+
+BOOLS::BOOLS() 
+{
+}
+
+BOOLS::~BOOLS() 
+{
+}
 
 //EnumNode * 
-
 SingleLinkNode *
-Booleans::NewNode ()  
+BOOLS::NewNode ()  
 {
-    return new EnumNode (new Boolean);
+#ifdef __OSTORE__
+    return new (os_segment::of(this), EnumNode::get_os_typespec()) 
+			EnumNode( new (os_segment::of(this), 
+				       SCLP23(BOOL)::get_os_typespec()) SCLP23(BOOL) );
+#else
+    return new EnumNode (new SCLP23(BOOL));
+#endif
 }	
+
+#ifdef __OSTORE__
+BOOLS * 
+create_BOOLS(os_database *db)
+{
+    return new (db, BOOLS::get_os_typespec()) BOOLS;
+}
+#else
+BOOLS * 
+create_BOOLS()
+{
+    return new BOOLS ; 
+}
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // RealAggregate
 ///////////////////////////////////////////////////////////////////////////////
 
+RealAggregate::RealAggregate() 
+{
+}
+
+RealAggregate::~RealAggregate() 
+{
+}
+
 SingleLinkNode *
 RealAggregate::NewNode ()  
 {
+#ifdef __OSTORE__
+    return new (os_segment::of(this), 
+		RealNode::get_os_typespec()) RealNode();
+#else
     return new RealNode();
+#endif
 }	
 
 // COPY
@@ -1548,10 +1853,23 @@ RealAggregate::ShallowCopy (const STEPaggregate& a)
 // IntAggregate
 ///////////////////////////////////////////////////////////////////////////////
 
+IntAggregate::IntAggregate() 
+{
+}
+
+IntAggregate::~IntAggregate() 
+{
+}
+
 SingleLinkNode *
 IntAggregate::NewNode ()  
 {
+#ifdef __OSTORE__
+    return new (os_segment::of(this), 
+		IntNode::get_os_typespec()) IntNode();
+#else
     return new IntNode();
+#endif
 }	
 
 // COPY
@@ -1579,16 +1897,30 @@ IntAggregate::ShallowCopy (const STEPaggregate& a)
 // RealNode
 ///////////////////////////////////////////////////////////////////////////////
 
+RealNode::RealNode()
+{
+    value = S_REAL_NULL; 
+}
+
+RealNode::~RealNode()
+{
+}
+
 SingleLinkNode *
 RealNode::NewNode ()  
 {
+#ifdef __OSTORE__
+    return new (os_segment::of(this), 
+		RealNode::get_os_typespec()) RealNode();
+#else
     return new RealNode();
+#endif
 }	
 
 Severity 
 RealNode::StrToVal(const char *s, ErrorDescriptor *err)
 {
-    if( ReadReal(value, s, err, ",)") ) // returns true if value is assigned
+    if( ReadReal(value, s, err, (char*)(",)")) ) // returns true if value is assigned
 	_null = 0;
     else
     {
@@ -1601,7 +1933,7 @@ RealNode::StrToVal(const char *s, ErrorDescriptor *err)
 Severity 
 RealNode::StrToVal(G4std::istream &in, ErrorDescriptor *err)
 {
-    if( ReadReal(value, in, err, ",)") ) // returns true if value is assigned
+    if( ReadReal(value, in, err, (char*)(",)")) ) // returns true if value is assigned
 	_null = 0;
     else
     {
@@ -1615,7 +1947,7 @@ RealNode::StrToVal(G4std::istream &in, ErrorDescriptor *err)
 Severity 
 RealNode::STEPread(const char *s, ErrorDescriptor *err)
 {
-    if( ReadReal(value, s, err, ",)") ) // returns true if value is assigned
+    if( ReadReal(value, s, err, (char*)(",)")) ) // returns true if value is assigned
 	_null = 0;
     else
     {
@@ -1628,7 +1960,7 @@ RealNode::STEPread(const char *s, ErrorDescriptor *err)
 Severity 
 RealNode::STEPread(G4std::istream &in, ErrorDescriptor *err)
 {
-    if( ReadReal(value, in, err, ",)") ) // returns true if value is assigned
+    if( ReadReal(value, in, err, (char*)(",)")) ) // returns true if value is assigned
 	_null = 0;
     else
     {
@@ -1646,14 +1978,15 @@ RealNode::asStr(SCLstring &s)
 }
 
 const char *
-RealNode::STEPwrite(SCLstring &s)
+RealNode::STEPwrite(SCLstring &s, const char *)
 {
     char tmp[BUFSIZ];
     if(value != S_REAL_NULL)
     {
 //	sprintf(tmp, "%.15g", value);
-	sprintf(tmp, "%.*g", Real_Num_Precision, value);
-	s = tmp;
+//	sprintf(tmp, "%.*g", Real_Num_Precision, value);
+//	s = tmp;
+	WriteReal(value,s);
     }
     else
 	s.set_null();
@@ -1671,16 +2004,30 @@ RealNode::STEPwrite(G4std::ostream& out)
 // IntNode
 ///////////////////////////////////////////////////////////////////////////////
 
+IntNode::IntNode()
+{
+    value = S_INT_NULL;
+}
+
+IntNode::~IntNode()
+{
+}
+
 SingleLinkNode *
 IntNode::NewNode ()  
 {
+#ifdef __OSTORE__
+    return new (os_segment::of(this), 
+		IntNode::get_os_typespec()) IntNode();
+#else
     return new IntNode();
+#endif
 }	
 
 Severity 
 IntNode::StrToVal(const char *s, ErrorDescriptor *err)
 {
-    if( ReadInteger(value, s, err, ",)") ) // returns true if value is assigned
+    if( ReadInteger(value, s, err, (char*)(",)")) ) // returns true if value is assigned
 	_null = 0;
     else
     {
@@ -1693,7 +2040,7 @@ IntNode::StrToVal(const char *s, ErrorDescriptor *err)
 Severity 
 IntNode::StrToVal(G4std::istream &in, ErrorDescriptor *err)
 {
-    if( ReadInteger(value, in, err, ",)") )// returns true if value is assigned
+    if( ReadInteger(value, in, err, (char*)(",)")) )// returns true if value is assigned
 	_null = 0;
     else
     {
@@ -1706,7 +2053,7 @@ IntNode::StrToVal(G4std::istream &in, ErrorDescriptor *err)
 Severity 
 IntNode::STEPread(const char *s, ErrorDescriptor *err)
 {
-    if( ReadInteger(value, s, err, ",)") ) // returns true if value is assigned
+    if( ReadInteger(value, s, err, (char*)(",)")) ) // returns true if value is assigned
 	_null = 0;
     else
     {
@@ -1719,7 +2066,7 @@ IntNode::STEPread(const char *s, ErrorDescriptor *err)
 Severity 
 IntNode::STEPread(G4std::istream &in, ErrorDescriptor *err)
 {
-    if( ReadInteger(value, in, err, ",)") ) // returns true if value is assigned
+    if( ReadInteger(value, in, err, (char*)(",)")) ) // returns true if value is assigned
 	_null = 0;
     else
     {
@@ -1737,7 +2084,7 @@ IntNode::asStr(SCLstring &s)
 }
 
 const char *
-IntNode::STEPwrite(SCLstring &s)
+IntNode::STEPwrite(SCLstring &s, const char *)
 {
     char tmp[BUFSIZ];
     if(value != S_INT_NULL)

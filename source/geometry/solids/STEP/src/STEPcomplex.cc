@@ -1,26 +1,17 @@
 
-
-//
-
-
-
-//
-// $Id: STEPcomplex.cc,v 1.3 1999-12-15 14:50:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 #include <ctype.h>
 
 #include <STEPcomplex.h>
+#include <complexSupport.h>
+#include <STEPattribute.h>
 
 extern const char *
 ReadStdKeyword(G4std::istream& in, SCLstring &buf, int skipInitWS);
 
 
 STEPcomplex::STEPcomplex(Registry *registry, int fileid)
-: STEPentity(fileid, 1),  sc(0), _registry(registry), visited(0)
+: SCLP23(Application_instance)(fileid, 1),  sc(0), head(this), _registry(registry), visited(0)
 {
-    head = this;
 /*
     _complex = 1;
     _registry = registry;
@@ -29,74 +20,136 @@ STEPcomplex::STEPcomplex(Registry *registry, int fileid)
 */
 }
 
-STEPcomplex::STEPcomplex(Registry *registry, const SCLstring **names, 
-			 int fileid) 
-: STEPentity(fileid, 1),  sc(0), _registry(registry), visited(0)
+STEPcomplex::STEPcomplex(Registry *registry, const SCLstring **names,
+			 int fileid, const char *schnm)
+: SCLP23(Application_instance)(fileid, 1),  sc(0), head(this), _registry(registry), visited(0)
 {
-    head = this;
-/*
-    _complex = 1;
-    _registry = registry;
-    sc = 0;
-    visited = 0;
-*/
+    char *nms[BUFSIZ];
+    SCLstring *name;
+    int j, k;
 
-    if(names[0])
-    {
-	BuildAttrs( names[0]->chars() );
+    // Create a char ** list of names and call Initialize to build all:
+    for ( j=0; names[j]; j++ ) {
+	nms[j] = new char[ (names[j])->Length() + 1 ];
+	strcpy( nms[j], names[j]->chars() );
     }
-    int i = 1;
-    while(!eDesc && names[i])
-    {
-	// at least 1 entity part did not have a valid name
-	_error.GreaterSeverity(SEVERITY_INCOMPLETE);
-	BuildAttrs( names[i]->chars() );
-	i++;
+    nms[j] = NULL;
+    Initialize( (const char **)nms, schnm );
+    for ( k=0; k<j; k++ ) {
+	delete nms[k];
     }
-    if(!eDesc) // no entity part had a valid name
-	_error.GreaterSeverity(SEVERITY_WARNING);
-
-    while(names[i])
-    {
-	AddEntityPart( names[i]->chars() );
-	i++;
-    }
-    AssignDerives();
 }
 
-STEPcomplex::STEPcomplex(Registry *registry, const char **names, 
-			 int fileid)
-: STEPentity(fileid, 1),  sc(0), _registry(registry), visited(0)
+STEPcomplex::STEPcomplex(Registry *registry, const char **names, int fileid,
+			 const char *schnm)
+: SCLP23(Application_instance)(fileid, 1),  sc(0), head(this), _registry(registry), visited(0)
 {
-    head = this;
-/*
-    _complex = 1;
-    _registry = registry;
-    sc = 0;
-    visited = 0;
-*/
+    Initialize( names, schnm );
+}
 
-    if(names[0])
-    {
-	BuildAttrs(names[0]);
-    }
-    int i = 1;
-    while(!eDesc && names[i])
-    {
-	// at least 1 entity part did not have a valid name
-	_error.GreaterSeverity(SEVERITY_INCOMPLETE);
-	BuildAttrs( names[i] );
-	i++;
-    }
-    if(!eDesc) // no entity part had a valid name
-	_error.GreaterSeverity(SEVERITY_WARNING);
+void
+STEPcomplex::Initialize( const char **names, const char *schnm )
+    /*
+     * Called by the STEPcomplex constructors to validate the names in our
+     * list, see if they represent a legal entity combination, and build the
+     * complex list.  schnm is the name of the current schema if applicable.
+     * (One may be defined under the FILE_SCHEMA section of a Part 21 file
+     * header.)  If the current schema is not the schema in which an entity
+     * was defined, it may be referenced by a different name in this schema.
+     * (This is the case if schema B USEs or REFERENCEs entity X from schema
+     * A and renames it to Y.)  Registry::FindEntity() below knows how to
+     * search using the current name of each entity based on schnm.
+     */
+{
+    // Create an EntNode list consisting of all the names in the complex ent:
+    EntNode *ents = new EntNode( names ), 
+            *eptr = ents, *prev = NULL, *enext;
+    const EntityDescriptor *enDesc;
+    char nm[BUFSIZ];
+    int invalid = 0, outOfOrder = 0;
 
-    while(names[i])
-    {
-	AddEntityPart( names[i] );
-	i++;
+    // Splice out the invalid names from our list:
+    while ( eptr ) {
+	enext = eptr->next;
+	enDesc = _registry->FindEntity( *eptr, schnm );
+	if ( enDesc ) {
+	    if ( enDesc->Supertypes().EntryCount() > 1 ) {
+		eptr->multSuprs( TRUE );
+	    }
+	    if ( StrCmpIns( *eptr, enDesc->Name() ) ) {
+		// If this entity was referred by another name rather than the
+		// original.  May be the case if FindEntity() determined that
+		// eptr's name was a legal renaming of enDesc's.  (Entities and
+		// types may be renamed with the USE/REF clause - see header
+		// comments.)  If so, change eptr's name (since the complex
+		// support structs only deal with the original names) and have
+		// ents re-ort eptr properly in the list:
+		eptr->Name( StrToLower( enDesc->Name(), nm ) );
+		outOfOrder = 1;
+	    }
+	    prev = eptr;
+	} else {
+	    invalid = 1;
+	    G4cerr << "ERROR: Invalid entity \"" << eptr->Name()
+	         << "\" found in complex entity.\n";
+	    if ( !prev ) {
+		// if we need to delete the first node,
+		ents = eptr->next;
+	    } else {
+		prev->next = eptr->next;
+	    }
+	    eptr->next = NULL;
+	    // must set eptr->next to NULL or next line would del entire list
+	    delete eptr;
+	}
+	eptr = enext;
+    }
+
+    // If we changed the name of any of the entities, resort:
+    if ( outOfOrder ) {
+	ents->sort( &ents );
+	// This fn may change the value of ents if the list should have a new
+	// first EndNode.
+    }
+
+    // Set error message according to results of above:
+    if ( invalid ) {
+	if ( !ents ) {
+	    // not a single legal name
+	    _error.severity(SEVERITY_WARNING);
+	    // SEV_WARNING - we have to skip this entity altogether, but will
+	    // continue with the next entity.
+	    _error.UserMsg( "No legal entity names found in instance" );
+	    return;
+	}
+	_error.severity(SEVERITY_INCOMPLETE);
+	_error.UserMsg( "Some illegal entity names found in instance" );
+	// some illegal entity names, but some legal
+    }
+
+    // Check if a complex entity can be formed from the resulting combination:
+    if ( !_registry->CompCol()->supports( ents ) ) {
+	_error.severity(SEVERITY_WARNING);
+	_error.UserMsg(
+	     "Entity combination does not represent a legal complex entity" );
+	G4cerr << "ERROR: Could not create instance of the following complex"
+	     << " entity:" << G4endl;
+	eptr = ents;
+	while ( eptr ) {
+	    G4cerr << *eptr << G4endl;
+	    eptr = eptr->next;
+	}
+	G4cerr << G4endl;
+	return;
+    }
+	
+    // Finally, build what we can:
+    BuildAttrs( *ents );
+    for ( eptr = ents->next; eptr; eptr = eptr->next ) {
+	AddEntityPart( *eptr );
     }
     AssignDerives();
+    delete ents;
 }
 
 STEPcomplex::~STEPcomplex()
@@ -131,7 +184,7 @@ STEPcomplex::AssignDerives()
 	while( attrPtr != 0 )
 	{
 	    ad = attrPtr->AttrDesc();
-	    if( (LOGICAL)( ad->Derived() ) == sdaiTRUE)
+	    if( ( ad->Derived() ) == SCLLOG(LTrue) )
 	    {
 		const char *nm = ad->Name();
 		const char *attrNm = 0;
@@ -156,7 +209,7 @@ STEPcomplex::AssignDerives()
 		}
 //		if (a)  a ->Derive ();
 	    }
-	    // Increment attr
+	    // increment attr
 	    attrPtr = (AttrDescLinkNode *)attrPtr->NextNode();
 	}
 	scomp1 = scomp1->sc;
@@ -164,7 +217,7 @@ STEPcomplex::AssignDerives()
 }
 
 // this function should only be called for the head entity
-// in the List of entity parts.
+// in the list of entity parts.
 
 void 
 STEPcomplex::AddEntityPart(const char *name)
@@ -190,7 +243,7 @@ STEPcomplex::AddEntityPart(const char *name)
 }
 
 STEPcomplex *
-STEPcomplex::EntityPart(const char *name)
+STEPcomplex::EntityPart(const char *name, const char *currSch)
 {
     STEPcomplex *scomp = head;
     SCLstring s1, s2;
@@ -198,8 +251,7 @@ STEPcomplex::EntityPart(const char *name)
     {	
 	if(scomp->eDesc)
 	{
-	    if( !strcmp( StrToUpper(name, s1), 
-			 StrToUpper(scomp->eDesc->Name(), s2) ) )
+	    if ( scomp->eDesc->CurrName(name, currSch) )
 		return scomp;
 	}
 	else
@@ -211,11 +263,24 @@ STEPcomplex::EntityPart(const char *name)
 }
 
 int 
-STEPcomplex::EntityExists(const char *name)
+STEPcomplex::EntityExists(const char *name, const char *currSch)
 {
-    return (EntityPart(name) ? 1 : 0);
+    return (EntityPart(name, currSch) ? 1 : 0);
 }
 
+// Check if a given entity (by descriptor) is the same as this one.
+// For a complex entity, we'll check the EntityDescriptor of each entity
+// in the complex 'chain'
+const EntityDescriptor *
+STEPcomplex::IsA(const EntityDescriptor *ed) const
+{
+    const EntityDescriptor *return_ed = eDesc->IsA(ed);
+
+    if (!return_ed && sc)
+        return sc->IsA(ed);
+    else
+        return return_ed;
+}
 
 Severity 
 STEPcomplex::ValidLevel(ErrorDescriptor *error, InstMgr *im, 
@@ -237,7 +302,7 @@ STEPcomplex::AppendEntity(STEPcomplex *stepc)
 // READ
 Severity 
 STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
-		 G4std::istream& in)
+		 G4std::istream& in, const char *currSch, int useTechCor)
 {
     char c;
     SCLstring typeNm;
@@ -268,21 +333,25 @@ STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
 	    c = in.peek();
 	    if(c != '(')
 	    {
-		_error.AppendToDetailMsg("Missing open paren before entity attr values.\n");
+		_error.AppendToDetailMsg(
+                         "Missing open paren before entity attr values.\n");
 		G4cout << "ERROR: missing open paren\n";
 		_error.GreaterSeverity(SEVERITY_INPUT_ERROR);
 		STEPread_error(c,0,in);
 		return _error.severity();
 	    }
 
-	    stepc = EntityPart(typeNm.chars());
+	    stepc = EntityPart(typeNm.chars(), currSch);
 	    if(stepc)
-		stepc->STEPentity::STEPread(id, addFileId, instance_set, in);
+		stepc->SCLP23(Application_instance)::STEPread(id, addFileId, 
+							      instance_set, in,
+							      currSch);
 	    else
 	    {
-		G4cout << "ERROR: complex entity part does not exist.\n";
-		_error.AppendToDetailMsg("Complex entity part of instance does not exist.\n");
-		G4cout << "ERROR: missing open paren\n";
+		G4cout << "ERROR: complex entity part \"" << typeNm.chars()
+                     << "\" does not exist.\n";
+		_error.AppendToDetailMsg(
+                         "Complex entity part of instance does not exist.\n");
 		_error.GreaterSeverity(SEVERITY_INPUT_ERROR);
 		STEPread_error(c,0,in);
 		return _error.severity();
@@ -291,7 +360,8 @@ STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
 	    c = in.peek();
 	}
 	if(c != ')')
-	    G4cout << "ERROR: missing ending paren for complex entity instance.\n";
+	    G4cout <<
+	      "ERROR: missing ending paren for complex entity instance.\n";
 	else
 	    in.get(c); // read the closing paren
     }
@@ -302,7 +372,7 @@ STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
 // READ
 Severity 
 STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
-		 G4std::istream& in)
+		 G4std::istream& in, const char *currSch)
 {
     ClearError(1);
     STEPfile_id = id;
@@ -337,7 +407,7 @@ STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
 	if(c != '(')
 	{
 	    _error.AppendToDetailMsg(
-				     "Missing open paren before entity attr values.\n");
+			 "Missing open paren before entity attr values.\n");
 	    G4cout << "ERROR: missing open paren\n";
 	    _error.GreaterSeverity(SEVERITY_INPUT_ERROR);
 	    STEPread_error(c,0,in);
@@ -348,7 +418,8 @@ STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
 	
 	G4cout << s.chars() << G4endl;
 	BuildAttrs( s.chars() );
-	STEPentity::STEPread(id, addFileId, instance_set, in);
+	SCLP23(Application_instance)::STEPread(id, addFileId, instance_set, 
+					       in, currSch);
 	
 	in >> G4std::ws;
 	in.get(c);
@@ -368,7 +439,7 @@ STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
 	    if(c != '(')
 	    {
 		_error.AppendToDetailMsg(
-					 "Missing open paren before entity attr values.\n");
+			"Missing open paren before entity attr values.\n");
 		G4cout << "ERROR: missing open paren\n";
 		_error.GreaterSeverity(SEVERITY_INPUT_ERROR);
 		STEPread_error(c,0,in);
@@ -382,7 +453,9 @@ STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
 	    STEPcomplex *stepc = new STEPcomplex( _registry );
 	    AppendEntity(stepc);
 	    stepc->BuildAttrs( s.chars() );
-	    stepc->STEPentity::STEPread(id, addFileId, instance_set, in);
+	    stepc->SCLP23(Application_instance)::STEPread(id, addFileId, 
+							  instance_set, in,
+							  currSch);
 	    in >> G4std::ws;
 	    in.get(c);
 	}
@@ -392,7 +465,7 @@ STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
 
 #endif
 
-void 
+void
 STEPcomplex::BuildAttrs(const char *s )
 {
     // assign inherited member variable
@@ -415,51 +488,61 @@ STEPcomplex::BuildAttrs(const char *s )
 	{
 	    const AttrDescriptor *ad = attrPtr->AttrDesc();
 
-	    if( (LOGICAL)( ad->Derived() ) != sdaiTRUE)
+	    if( ( ad->Derived() ) != SCLLOG(LTrue) )
 	    {
 
 		switch ( ad->NonRefType() )
 		{
 		  case INTEGER_TYPE:
-		    a = new STEPattribute (*ad,  new SdaiInteger);
+		    a = new STEPattribute (*ad,  new SCLP23(Integer));
 		    break;
 
 		  case STRING_TYPE:
-		    a = new STEPattribute (*ad,  new SdaiString);
+		    a = new STEPattribute (*ad,  new SCLP23(String));
 		    break;
 
 		  case BINARY_TYPE:
-		    a = new STEPattribute (*ad,  new SdaiBinary);
+		    a = new STEPattribute (*ad,  new SCLP23(Binary));
 		    break;
 
 		  case REAL_TYPE:
-		    a = new STEPattribute (*ad,  new SdaiReal);
+		  case NUMBER_TYPE:
+		    a = new STEPattribute (*ad,  new SCLP23(Real));
 		    break;
 
 		  case BOOLEAN_TYPE:
-		    a = new STEPattribute (*ad,  new Boolean);
+		    a = new STEPattribute (*ad,  new SCLP23(BOOL));
 		    break;
 
 		  case LOGICAL_TYPE:
-		    a = new STEPattribute (*ad,  new Logical);
+		    a = new STEPattribute (*ad,  new SCLP23(LOGICAL));
 		    break;
 
 		  case ENTITY_TYPE:
-		    a = new STEPattribute (*ad,  new (STEPentity *) );
+		    a = new STEPattribute(*ad,  
+					  new (SCLP23(Application_instance)*));
 		    break;
 
 		  case ENUM_TYPE:
 		  {
 		    EnumTypeDescriptor * enumD = 
 				(EnumTypeDescriptor *)ad->ReferentType();
+#ifdef __OSTORE__
+		    a = new STEPattribute (*ad,  enumD->CreateEnum(os_database::of(this)) );
+#else
 		    a = new STEPattribute (*ad,  enumD->CreateEnum() );
+#endif
 		    break;
 		  }
 		  case SELECT_TYPE:
 		  {
 		    SelectTypeDescriptor * selectD = 
 				(SelectTypeDescriptor *)ad->ReferentType();
+#ifdef __OSTORE__
+		    a = new STEPattribute (*ad,  selectD->CreateSelect(os_database::of(this)) );
+#else
 		    a = new STEPattribute (*ad,  selectD->CreateSelect() );
+#endif
 		    break;
 		  }
 		  case AGGREGATE_TYPE:
@@ -470,7 +553,11 @@ STEPcomplex::BuildAttrs(const char *s )
 		  {
 		    AggrTypeDescriptor * aggrD = 
 				(AggrTypeDescriptor *)ad->ReferentType();
+#ifdef __OSTORE__
+		    a = new STEPattribute (*ad,  aggrD->CreateAggregate(os_database::of(this)) );
+#else
 		    a = new STEPattribute (*ad,  aggrD->CreateAggregate() );
+#endif
 		    break;
 		  }
 		}
@@ -503,24 +590,33 @@ STEPcomplex::STEPread_error(char c, int index, G4std::istream& in)
 }
 
 // WRITE
+
+// These functions take into account the current schema, so that if an entity
+// or attribute type is renamed in this schema (using the USE/REF clause) the
+// new name is written out.  They do not, however, comply with the requirement
+// in the standard that the entity parts of a complex entity must be printed in
+// alphabetical order.  The nodes are sorted alphabetically according to their
+// original names but not according to their renamed names (DAR 6/5/97).
+
 void 
-STEPcomplex::STEPwrite(G4std::ostream& out, int writeComment)
+STEPcomplex::STEPwrite(G4std::ostream& out, const char *currSch, int writeComment)
 {
     if(writeComment && p21Comment && !p21Comment->is_null() )
 	out << p21Comment->chars();
     out << "#" << STEPfile_id << "=(";
-    WriteExtMapEntities(out);
+    WriteExtMapEntities(out, currSch);
     out << ");\n";
 }
 
 const char * 
-STEPcomplex::STEPwrite(SCLstring &buf)
+STEPcomplex::STEPwrite(SCLstring &buf, const char *currSch)
 {
     buf.set_null();
 
     buf.Append('#');
     buf.Append(STEPfile_id);
     buf.Append('=');
+    buf.Append('(');
 /*
     char instanceInfo[BUFSIZ];
     sprintf(instanceInfo, "#%d=", STEPfile_id );
@@ -528,7 +624,7 @@ STEPcomplex::STEPwrite(SCLstring &buf)
 /*
     G4std::strstream ss;
     ss << "#" << STEPfile_id << "=(";
-    WriteExtMapEntities(ss);
+    WriteExtMapEntities(ss, currSch);
     ss << ");";
     ss << G4std::ends;
 
@@ -536,33 +632,33 @@ STEPcomplex::STEPwrite(SCLstring &buf)
     buf.Append(tmpstr);
     delete tmpstr;
 */
-    WriteExtMapEntities(buf);
+    WriteExtMapEntities(buf, currSch);
     buf.Append(");");
 
     return buf.chars();
 }
 
 void 
-STEPcomplex::WriteExtMapEntities(G4std::ostream& out)
+STEPcomplex::WriteExtMapEntities(G4std::ostream& out, const char *currSch)
 {
     SCLstring tmp;
-    out << StrToUpper (EntityName(), tmp);
+    out << StrToUpper (EntityName( currSch ), tmp);
     out << "(";
     int n = attributes.list_length();
 
     for (int i = 0 ; i < n; i++) {
-	(attributes[i]).STEPwrite(out);
+	(attributes[i]).STEPwrite(out, currSch);
 	if (i < n-1) out << ",";
     }
     out << ")";
     if(sc)
     {
-	sc->WriteExtMapEntities(out);
+	sc->WriteExtMapEntities(out, currSch);
     }
 }
 
 const char * 
-STEPcomplex::WriteExtMapEntities(SCLstring &buf)
+STEPcomplex::WriteExtMapEntities(SCLstring &buf, const char *currSch)
 {
     char instanceInfo[BUFSIZ];
     
@@ -570,13 +666,13 @@ STEPcomplex::WriteExtMapEntities(SCLstring &buf)
 //    sprintf(instanceInfo, "%s(", (char *)StrToUpper( EntityName(), tmp ) );
 //    buf.Append(instanceInfo);
 
-    buf.Append( (char *)StrToUpper(EntityName(),tmp) );
+    buf.Append( (char *)StrToUpper(EntityName( currSch ),tmp) );
     buf.Append( '(' );
 
     int n = attributes.list_length();
 
     for (int i = 0 ; i < n; i++) {
-	attributes[i].asStr(tmp) ;
+	attributes[i].asStr(tmp, currSch) ;
 	buf.Append (tmp);
 	if (i < n-1) {
 	    buf.Append( ',' );
@@ -586,14 +682,96 @@ STEPcomplex::WriteExtMapEntities(SCLstring &buf)
 
     if(sc)
     {
-	sc->WriteExtMapEntities(buf);
+	sc->WriteExtMapEntities(buf, currSch);
     }
 
     return buf.chars();
 }
 
 void 
-STEPcomplex::CopyAs (STEPentity *)
+STEPcomplex::CopyAs (SCLP23(Application_instance) *se)
 {
-    G4cout << "ERROR: STEPcomplex::CopyAs() not implemented.\n";
+    if( !se->IsComplex() )
+    {
+	char errStr[BUFSIZ];
+	G4cerr << "STEPcomplex::CopyAs() called with non-complex entity:  " 
+	      << __FILE__ <<  __LINE__ << "\n" << _POC_ "\n";
+	    sprintf(errStr, 
+		    "STEPcomplex::CopyAs(): %s - entity #%d.\n",
+		    "Programming ERROR -  called with non-complex entity",
+		    STEPfile_id);
+	    _error.AppendToDetailMsg(errStr);
+	    _error.AppendToUserMsg(errStr);
+	    _error.GreaterSeverity(SEVERITY_BUG);
+	return;
+    }
+    else
+    {
+//	STEPcomplex * sc = 0;
+
+	STEPcomplex * scpartCpyTo = head;
+	STEPcomplex * scpartCpyFrom = ((STEPcomplex *)se)->head;
+	while(scpartCpyTo && scpartCpyFrom)
+	{
+	    scpartCpyTo->SCLP23(Application_instance)::CopyAs (scpartCpyFrom);
+	    scpartCpyTo = scpartCpyTo->sc;
+	    scpartCpyFrom = scpartCpyFrom->sc;
+	}
+    }
+//    G4cout << "ERROR: STEPcomplex::CopyAs() not implemented.\n";
+}
+
+SCLP23(Application_instance) * 
+STEPcomplex::Replicate()
+{
+    if(!IsComplex())
+    {
+	return SCLP23(Application_instance)::Replicate();
+    }
+    else if (!_registry) { return S_ENTITY_NULL; }
+    else
+    {
+	int nameCount = 64;
+
+//      Don't use this syntax it makes the sun compiler think it is a cast. DAS
+//	SCLstring **nameList = new (SCLstring *)[nameCount];
+
+	SCLstring **nameList = new SCLstring *[nameCount];
+	STEPcomplex *scomp = this->head;
+	int i = 0;
+	while( scomp && (i < 63) )
+	{
+	    nameList[i] = new SCLstring;
+	    nameList[i]->Append( scomp->eDesc->Name() );
+	    i++;
+	    scomp = scomp->sc;
+	}
+	nameList[i] = (SCLstring *)0;
+	if(i == 63)
+	{
+	    char errStr[BUFSIZ];
+	    G4cerr << "STEPcomplex::Replicate() name buffer too small:  " 
+	      << __FILE__ <<  __LINE__ << "\n" << _POC_ "\n";
+	    sprintf(errStr, 
+		    "STEPcomplex::Replicate(): %s - entity #%d.\n",
+		    "Programming ERROR - name buffer too small",
+		    STEPfile_id);
+	    _error.AppendToDetailMsg(errStr);
+	    _error.AppendToUserMsg(errStr);
+	    _error.GreaterSeverity(SEVERITY_BUG);
+	}
+
+	STEPcomplex *seNew = new STEPcomplex(_registry, 
+					     (const SCLstring **)nameList, 
+					     1111);
+	seNew -> CopyAs (this);
+	return seNew;
+
+// need to:
+// get registry
+// create list of entity names
+// send them to constructor for STEPcomplex
+// implement STEPcomplex::CopyAs()
+// call seNew->CopyAs()
+    }
 }

@@ -1,18 +1,8 @@
 
-
-//
-
-
-
-//
-// $Id: SingleLinkList_inline.cc,v 1.4 1999-12-15 18:04:20 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 /*
 * NIST STEP Core Class Library
 * clstepcore/SingleLinkList.inline.cc
-* May 1995
+* April 1997
 * David Sauder
 * KC Morris
 
@@ -20,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/*  */
+/* $Id: SingleLinkList_inline.cc,v 1.5 2000-01-21 13:43:06 gcosmo Exp $ */
 
 #include <SingleLinkList.h>
 

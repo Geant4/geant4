@@ -1,13 +1,3 @@
-
-
-//
-
-
-
-//
-// $Id: read_func.cc,v 1.3 1999-12-15 14:50:19 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #ifdef __O3DB__
 #include <OpenOODB.h>
 #endif
@@ -15,8 +5,12 @@
 #include <errordesc.h>
 #include <stdio.h>
 #include <sdai.h>
+#include <read_func.h>
+#include <STEPattribute.h>
 
-// Print Error information for debugging purposes
+const int RealNumPrecision = REAL_NUM_PRECISION;
+
+// print Error information for debugging purposes
 void 
 PrintErrorState(ErrorDescriptor &err)
 {
@@ -45,7 +39,7 @@ PrintErrorState(ErrorDescriptor &err)
     G4cout << err.DetailMsg() << "\n";
 }
 
-// Print G4std::istream error information for debugging purposes
+// print G4std::istream error information for debugging purposes
 void IStreamState(G4std::istream &in)
 {
     if( in.good())
@@ -71,7 +65,7 @@ void IStreamState(G4std::istream &in)
 // * If there is an error then the ErrorDescriptor err is set accordingly with
 //   a severity level and error message (no error MESSAGE is set for severity
 //   incomplete).
-// * tokenList contains characters that Terminate reading the value.
+// * tokenList contains characters that terminate reading the value.
 // * If tokenList is not zero then the G4std::istream will be read until a character 
 //   is found matching a character in tokenlist.  All values read up to the 
 //   terminating character (delimiter) must be valid or err will be set with an
@@ -84,10 +78,10 @@ void IStreamState(G4std::istream &in)
 ///////////////////////////////////////////////////////////////////////////////
 
 int
-ReadInteger(SdaiInteger &val, G4std::istream &in, ErrorDescriptor *err, 
+ReadInteger(SCLP23(Integer) &val, G4std::istream &in, ErrorDescriptor *err, 
 	    char *tokenList)
 {
-    SdaiInteger i = 0;
+    SCLP23(Integer) i = 0;
     in >> G4std::ws;
     in >> i;
 
@@ -109,7 +103,7 @@ ReadInteger(SdaiInteger &val, G4std::istream &in, ErrorDescriptor *err,
 ///////////////////////////////////////////////////////////////////////////////
 
 int
-ReadInteger(SdaiInteger &val, const char *s, ErrorDescriptor *err, 
+ReadInteger(SCLP23(Integer) &val, const char *s, ErrorDescriptor *err, 
 	    char *tokenList)
 {
     G4std::istrstream in((char *)s);
@@ -126,8 +120,8 @@ ReadInteger(SdaiInteger &val, const char *s, ErrorDescriptor *err,
 //   SEVERITY_NULL if it is valid for the value to be missing.  No error 
 //   'message' will be associated with the value being missing so you won\'t 
 //   have to worry about undoing an error message.
-// * tokenList contains characters that Terminate the expected value.
-// * If tokenList is not zero then the value is expected to Terminate before 
+// * tokenList contains characters that terminate the expected value.
+// * If tokenList is not zero then the value is expected to terminate before 
 //   a character found in tokenlist.  All values read up to the 
 //   terminating character (delimiter) must be valid or err will be set with an
 //   appropriate error message.  White space between the value and the 
@@ -161,12 +155,109 @@ IntValidLevel (const char *attrValue, ErrorDescriptor *err,
     }
     else
     {
-	SdaiInteger val = 0;
+	SCLP23(Integer) val = 0;
 	int valAssigned = ReadInteger(val, in, err, tokenList);
 	if(!valAssigned && !optional)
 	    err->GreaterSeverity(SEVERITY_INCOMPLETE);
     }
     return err->severity();
+}
+
+char * 
+WriteReal(SCLP23(Real) val, SCLstring &s)
+{
+
+    char rbuf[64];
+
+//        out << form("%.*G", (int) Real_Num_Precision,tmp);
+    // replace the above line with this code so that writing the '.' is
+    // guaranteed for reals. If you use e or E then you get many 
+    // unnecessary trailing zeros. g and G truncates all trailing zeros
+    // to save space but when no non-zero precision exists it also 
+    // truncates the decimal. The decimal is required by Part 21. 
+    // Also use G instead of g since G writes uppercase E (E instead of e 
+    // is also required by Part 21) when scientific notation is used - DAS
+
+    sprintf(rbuf, "%.*G", (int) RealNumPrecision,val);
+    if(!strchr(rbuf, '.'))
+    {
+	if(strchr(rbuf, 'E') || strchr(rbuf, 'e'))
+	{
+	    char *expon = strchr(rbuf, 'E');
+
+	    if( !expon)
+	    {
+		expon = strchr(rbuf, 'e');
+	    }
+	    *expon = '\0';
+	    s = rbuf;
+	    s.Append('.');
+	    s.Append('E');
+	    expon++;
+	    s.Append(expon);
+	}
+	else 
+	{
+	    int rindex = strlen(rbuf);
+	    rbuf[rindex] = '.';
+	    rbuf[rindex+1] = '\0';
+	    s = rbuf;
+	}
+    }
+    else
+      s = rbuf;
+    return (char *)(s.chars());
+}
+
+void
+WriteReal(SCLP23(Real) val, G4std::ostream &out)
+{
+    SCLstring s;
+
+    out << WriteReal(val,s);
+#if 0
+    char rbuf[64];
+
+//        out << form("%.*G", (int) Real_Num_Precision,tmp);
+    // replace the above line with this code so that writing the '.' is
+    // guaranteed for reals. If you use e or E then you get many 
+    // unnecessary trailing zeros. g and G truncates all trailing zeros
+    // to save space but when no non-zero precision exists it also 
+    // truncates the decimal. The decimal is required by Part 21. 
+    // Also use G instead of g since G writes uppercase E (E instead of e 
+    // is also required by Part 21) when scientific notation is used - DAS
+
+    sprintf(rbuf, "%.*G", (int) RealNumPrecision,val);
+    if(!strchr(rbuf, '.'))
+    {
+	if(strchr(rbuf, 'E') || strchr(rbuf, 'e'))
+	{
+	    char *expon = strchr(rbuf, 'E');
+
+	    if( !expon)
+	    {
+		expon = strchr(rbuf, 'e');
+	    }
+	    *expon = '\0';
+	    s = rbuf;
+	    s.Append('.');
+	    s.Append('E');
+	    expon++;
+	    s.Append(expon);
+	}
+	else 
+	{
+	    int rindex = strlen(rbuf);
+	    rbuf[rindex] = '.';
+	    rbuf[rindex+1] = '\0';
+	    s = rbuf;
+	}
+    }
+    else
+      s = rbuf;
+
+    out << (char *)(s.chars());
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -178,7 +269,7 @@ IntValidLevel (const char *attrValue, ErrorDescriptor *err,
 // * If there is an error then the ErrorDescriptor err is set accordingly with
 //   a severity level and error message (no error MESSAGE is set for severity
 //   incomplete).
-// * tokenList contains characters that Terminate reading the value.
+// * tokenList contains characters that terminate reading the value.
 // * If tokenList is not zero then the G4std::istream will be read until a character 
 //   is found matching a character in tokenlist.  All values read up to the 
 //   terminating character (delimiter) must be valid or err will be set with an
@@ -187,14 +278,132 @@ IntValidLevel (const char *attrValue, ErrorDescriptor *err,
 //   space between the value and the terminating character is not considered 
 //   to be invalid.  If tokenList is null then the value must not be followed
 //   by any characters other than white space (i.e. EOF must happen)
+
+//   skip any leading whitespace characters
+//   read: optional sign, at least one decimal digit, required decimal point,
+//   zero or more decimal digits, optional letter e or E (but lower case e is 
+//   an error), optional sign, at least one decimal digit if there is an E.
+
 ///////////////////////////////////////////////////////////////////////////////
 
 int
-ReadReal(SdaiReal &val, G4std::istream &in, ErrorDescriptor *err, 
+ReadReal(SCLP23(Real) &val, G4std::istream &in, ErrorDescriptor *err, 
 	 char *tokenList)
 {
-    SdaiReal d = 0;
-    in >> G4std::ws;
+    SCLP23(Real) d = 0;
+
+    // Read the real's value into a string so we can make sure it is properly
+    // formatted. e.g. a decimal point is present. If you use the stream to 
+    // read the real, it won't complain if the decimal place is missing.
+    char buf[64];
+    int i = 0;
+    char c;
+    ErrorDescriptor e;
+
+    in >> G4std::ws; // skip white space
+
+    // read optional sign
+    c = in.peek();
+    if(c == '+' || c == '-') { in.get(buf[i++]); c = in.peek(); }
+
+    // check for required initial decimal digit
+    if(!isdigit(c)) 
+    {
+	e.severity(SEVERITY_WARNING);
+	e.DetailMsg("Real must have an initial digit.\n");
+    }
+    // read one or more decimal digits
+    while(isdigit(c))
+    {
+	in.get(buf[i++]);
+	c = in.peek();
+    }
+
+    // read Part 21 required decimal point
+    if(c == '.')
+    {
+	in.get(buf[i++]);
+	c = in.peek();
+    }
+    else
+    {
+	// It may be the number they wanted but it is incompletely specified 
+	// without a decimal and thus it is an error 
+	e.GreaterSeverity(SEVERITY_WARNING);
+	e.AppendToDetailMsg("Reals are required to have a decimal point.\n");
+    }
+
+    // read optional decimal digits
+    while(isdigit(c))
+    {
+	in.get(buf[i++]);
+	c = in.peek();
+    }
+
+    // try to read an optional E for scientific notation 
+    if( (c == 'e') || (c == 'E') )
+    {
+	if(c == 'e')
+	{
+	 // this is incorrectly specified and thus is an error 
+	    e.GreaterSeverity(SEVERITY_WARNING);
+//	    e.GreaterSeverity(SEVERITY_USERMSG); // not flagged as an error
+	    e.AppendToDetailMsg(
+		  "Reals using scientific notation must use upper case E.\n");
+	}
+	in.get(buf[i++]); // read the E
+	c = in.peek();
+
+	// read optional sign
+	if(c == '+' || c == '-')
+	{ in.get(buf[i++]); c = in.peek(); }
+
+	// read required decimal digit (since it has an E)
+	if(!isdigit(c)) 
+	{
+	    e.GreaterSeverity(SEVERITY_WARNING);
+	    e.AppendToDetailMsg(
+				 "Real must have at least one digit following E for scientific notation.\n");
+	}
+	// read one or more decimal digits
+	while(isdigit(c))
+	{
+	    in.get(buf[i++]);
+	    c = in.peek();
+	}
+    }
+    buf[i] = '\0';
+
+/*
+    int success = 0;
+    success = sscanf(buf," %G", &d);
+*/
+    G4std::istrstream in2((char *)buf);
+
+    // now that we have the real the stream will be able to salvage reading 
+    // whatever kind of format was used to represent the real.
+    in2 >> d;
+//    G4cout << "buffer: " << buf << G4endl << "value:  " << d << G4endl << G4endl;
+
+    int valAssigned = 0;
+//    PrintErrorState(err);
+
+//    if(success > 0)
+    if(!in2.fail())
+    {
+	valAssigned = 1;
+	val = d;
+	err->GreaterSeverity(e.severity());
+	err->AppendToDetailMsg(e.DetailMsg());
+    }
+    else
+      val = S_REAL_NULL;
+
+    Severity s = CheckRemainingInput(in, err, "Real", tokenList);
+    return valAssigned;
+
+/* old way - much easier but not thorough enough */
+/*
     in >> d;
 
 //    IStreamState(in);
@@ -209,6 +418,7 @@ ReadReal(SdaiReal &val, G4std::istream &in, ErrorDescriptor *err,
     }
     Severity s = CheckRemainingInput(in, err, "Real", tokenList);
     return valAssigned;
+*/
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -216,7 +426,7 @@ ReadReal(SdaiReal &val, G4std::istream &in, ErrorDescriptor *err,
 ///////////////////////////////////////////////////////////////////////////////
 
 int
-ReadReal(SdaiReal &val, const char *s, ErrorDescriptor *err, 
+ReadReal(SCLP23(Real) &val, const char *s, ErrorDescriptor *err, 
 	 char *tokenList)
 {
     G4std::istrstream in((char *)s);
@@ -233,8 +443,8 @@ ReadReal(SdaiReal &val, const char *s, ErrorDescriptor *err,
 //   SEVERITY_NULL if it is valid for the value to be missing.  No error 
 //   'message' will be associated with the value being missing so you won\'t 
 //   have to worry about undoing an error message.
-// * tokenList contains characters that Terminate the expected value.
-// * If tokenList is not zero then the value is expected to Terminate before 
+// * tokenList contains characters that terminate the expected value.
+// * If tokenList is not zero then the value is expected to terminate before 
 //   a character found in tokenlist.  All values read up to the 
 //   terminating character (delimiter) must be valid or err will be set with an
 //   appropriate error message.  White space between the value and the 
@@ -268,7 +478,7 @@ RealValidLevel (const char *attrValue, ErrorDescriptor *err,
     }
     else
     {
-	SdaiReal val = 0;
+	SCLP23(Real) val = 0;
 	int valAssigned = ReadReal(val, in, err, tokenList);
 	if(!valAssigned && !optional)
 	    err->GreaterSeverity(SEVERITY_INCOMPLETE);
@@ -285,7 +495,7 @@ RealValidLevel (const char *attrValue, ErrorDescriptor *err,
 // * If there is an error then the ErrorDescriptor err is set accordingly with
 //   a severity level and error message (no error MESSAGE is set for severity
 //   incomplete).
-// * tokenList contains characters that Terminate reading the value.
+// * tokenList contains characters that terminate reading the value.
 // * If tokenList is not zero then the G4std::istream will be read until a character 
 //   is found matching a character in tokenlist.  All values read up to the 
 //   terminating character (delimiter) must be valid or err will be set with an
@@ -297,10 +507,10 @@ RealValidLevel (const char *attrValue, ErrorDescriptor *err,
 ///////////////////////////////////////////////////////////////////////////////
 
 int
-ReadNumber(SdaiReal &val, G4std::istream &in, ErrorDescriptor *err, 
+ReadNumber(SCLP23(Real) &val, G4std::istream &in, ErrorDescriptor *err, 
 	   char *tokenList)
 {
-    SdaiReal d = 0;
+    SCLP23(Real) d = 0;
     in >> G4std::ws;
     in >> d;
 
@@ -321,7 +531,7 @@ ReadNumber(SdaiReal &val, G4std::istream &in, ErrorDescriptor *err,
 ///////////////////////////////////////////////////////////////////////////////
 
 int
-ReadNumber(SdaiReal &val, const char *s, ErrorDescriptor *err, 
+ReadNumber(SCLP23(Real) &val, const char *s, ErrorDescriptor *err, 
 	   char *tokenList)
 {
     G4std::istrstream in((char *)s);
@@ -339,8 +549,8 @@ ReadNumber(SdaiReal &val, const char *s, ErrorDescriptor *err,
 //   SEVERITY_NULL if it is valid for the value to be missing.  No error 
 //   'message' will be associated with the value being missing so you won\'t 
 //   have to worry about undoing an error message.
-// * tokenList contains characters that Terminate the expected value.
-// * If tokenList is not zero then the value is expected to Terminate before 
+// * tokenList contains characters that terminate the expected value.
+// * If tokenList is not zero then the value is expected to terminate before 
 //   a character found in tokenlist.  All values read up to the 
 //   terminating character (delimiter) must be valid or err will be set with an
 //   appropriate error message.  White space between the value and the 
@@ -374,7 +584,7 @@ NumberValidLevel (const char *attrValue, ErrorDescriptor *err,
     }
     else
     {
-	SdaiReal val = 0;
+	SCLP23(Real) val = 0;
 	int valAssigned = ReadNumber(val, in, err, tokenList);
 	if(!valAssigned && !optional)
 	    err->GreaterSeverity(SEVERITY_INCOMPLETE);
@@ -560,7 +770,7 @@ FindStartOfInstance(G4std::istream& in, SCLstring&  inst)
 {
     char c =0;
     ErrorDescriptor errs;
-    SdaiString tmp;
+    SCLP23(String) tmp;
 //    SCLstring tmp;
 
     while (in.good ())
@@ -600,7 +810,7 @@ SkipInstance (G4std::istream& in, SCLstring&  inst)
 {
     char c =0;
     ErrorDescriptor errs;
-    SdaiString tmp;
+    SCLP23(String) tmp;
 //    SCLstring tmp;
 
     while (in.good ())
@@ -902,7 +1112,7 @@ ReadComment(G4std::istream& in, SCLstring &s)
 		    if(c == '/') // it is end of comment
 			return s.chars(); // return comment as a string
 		    else	// it is not end of comment
-		    {   	// so Store the * and put back the other char
+		    {   	// so store the * and put back the other char
 			s.Append('*');
 			in.putback(c);
 			commentLength++;
@@ -960,7 +1170,7 @@ ReadPcd(G4std::istream& in)
 This function reads through token separators
 from an G4std::istream. It returns when a token
 separator is not the next thing on the G4std::istream.
-The token separators are blanks, explicit Print control directives,
+The token separators are blanks, explicit print control directives,
 and comments.
 Part 21 considers the blank to be the space character, 
 but this function considers blanks to be the return value of isspace(c)
@@ -996,7 +1206,7 @@ ReadTokenSeparator(G4std::istream& in, SCLstring *comments)
 	    }
 	    break;
 
-	  case '\\': // try to read a Print control directive
+	  case '\\': // try to read a print control directive
 	    ReadPcd(in);
 	    break;
 

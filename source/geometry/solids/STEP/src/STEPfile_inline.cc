@@ -1,18 +1,8 @@
 
-
-//
-
-
-
-//
-// $Id: STEPfile_inline.cc,v 1.4 1999-12-15 18:20:19 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 /*
 * NIST STEP Core Class Library
 * cleditor/STEPfile.inline.cc
-* May 1995
+* April 1997
 * Peter Carr
 * K. C. Morris
 * David Sauder
@@ -21,27 +11,20 @@
 * and is not subject to copyright.
 */
 
-/*  */ 
+/* $Id: STEPfile_inline.cc,v 1.5 2000-01-21 13:42:57 gcosmo Exp $ */ 
 
 #include <STEPfile.h>
+#include <s_HEADER_SCHEMA.h>
+#include <STEPaggregate.h>
 
-#ifdef __GNUG__
+//#ifdef __GNUG__
+//#ifdef __SUNCPLUSPLUS__
+//#ifdef __OBJECTCENTER__
+//#ifdef __xlC__
 extern "C" { 
 double  ceil(double);
 }
-#endif
 
-#ifdef __SUNCPLUSPLUS__
-extern "C" { 
-double  ceil(double);
-}
-#endif
-
-#ifdef __OBJECTCENTER__
-extern "C" { 
-double  ceil(double);
-}
-#endif
 
 extern void HeaderSchemaInit (Registry & reg);
 
@@ -56,6 +39,9 @@ STEPfile::STEPfile(Registry& r, InstMgr& i, const char *filename)
 #else
 : _reg(r), _instances(i), 
 #endif
+#ifdef __OSTORE__
+  db (0),
+#endif
   _headerId(0), _maxErrorCount(5000), 
   _fileName (0), _entsNotCreated(0), _entsInvalid(0), 
   _entsIncomplete(0), _entsWarning(0), 
@@ -67,7 +53,7 @@ STEPfile::STEPfile(Registry& r, InstMgr& i, const char *filename)
     SetFileIdIncrement(); 
     _currentDir = new DirObj("");
 //    _headerRegistry = new Registry(&s_HeaderSchemaInit);
-    _headerRegistry = new Registry(&HeaderSchemaInit);
+    _headerRegistry = new Registry(HeaderSchemaInit);
     _headerInstances = new InstMgr;
     if (filename) ReadExchangeFile(filename);
 }
@@ -94,8 +80,8 @@ STEPfile::SetFileType(FileTypeCode ft)
       {
 	case (VERSION_OLD):
 	  ENTITY_NAME_DELIM = '@';
-	  FILE_DELIM = "STEP;";
-	  END_FILE_DELIM = "ENDSTEP;";
+	  FILE_DELIM = (char*)("STEP;");
+	  END_FILE_DELIM = (char*)("ENDSTEP;");
 /*DAS
 	  if (!_headerRegistryOld) 
 	      _headerRegistryOld = 
@@ -106,13 +92,13 @@ STEPfile::SetFileType(FileTypeCode ft)
 	case (VERSION_UNKNOWN):
 	case (VERSION_CURRENT):
 	  ENTITY_NAME_DELIM = '#';
-	  FILE_DELIM = "ISO-10303-21;";
-	  END_FILE_DELIM = "END-ISO-10303-21;";
+	  FILE_DELIM = (char*)("ISO-10303-21;");
+	  END_FILE_DELIM = (char*)("END-ISO-10303-21;");
 	  break;
 	case (WORKING_SESSION):
 	  ENTITY_NAME_DELIM = '#';
-	  FILE_DELIM = "STEP_WORKING_SESSION;";
-	  END_FILE_DELIM = "END-STEP_WORKING_SESSION;";
+	  FILE_DELIM = (char*)("STEP_WORKING_SESSION;");
+	  END_FILE_DELIM = (char*)("END-STEP_WORKING_SESSION;");
 	  break;
 
 	default:
@@ -129,6 +115,7 @@ STEPfile::SetFileType(FileTypeCode ft)
 const char*
 STEPfile::TruncFileName(const char* filename) const
 {
+    // Put a 'const' qualifier to the temporary string !! - GC
     const char* tmp = strrchr(filename,'/');
     if (tmp) return tmp++;
     else return filename;
@@ -138,7 +125,7 @@ STEPfile::TruncFileName(const char* filename) const
 
 /******************************************************/
 Severity
-STEPfile::ReadExchangeFile(const char* filename)
+STEPfile::ReadExchangeFile(const char* filename, int useTechCor)
 {
     _error.ClearErrorMsg();
     _errorCount = 0;
@@ -153,13 +140,13 @@ STEPfile::ReadExchangeFile(const char* filename)
     if (_headerInstances)
 	_headerInstances->ClearInstances ();
     _headerId = 5;
-    Severity rval = AppendFile (in);
+    Severity rval = AppendFile (in, useTechCor);
     CloseInputFile(in);
     return rval;
 }
 
 Severity 
-STEPfile::AppendExchangeFile (const char* filename)
+STEPfile::AppendExchangeFile (const char* filename, int useTechCor)
 {
     _error.ClearErrorMsg();
     _errorCount = 0;
@@ -169,14 +156,14 @@ STEPfile::AppendExchangeFile (const char* filename)
 	CloseInputFile(in);
 	return _error.severity();  
       }
-    Severity rval = AppendFile (in);
+    Severity rval = AppendFile (in, useTechCor);
     CloseInputFile(in);
     return rval;
 }
 
 /******************************************************/
 Severity
-STEPfile::ReadWorkingFile(const char* filename) 
+STEPfile::ReadWorkingFile(const char* filename, int useTechCor) 
 {
     _error.ClearErrorMsg();
     _errorCount = 0;
@@ -191,7 +178,7 @@ STEPfile::ReadWorkingFile(const char* filename)
     _headerInstances->ClearInstances ();
     SetFileType(WORKING_SESSION);
 
-    Severity rval = AppendFile (in);
+    Severity rval = AppendFile (in, useTechCor);
     SetFileType();
     CloseInputFile(in);
     return rval;
@@ -199,7 +186,7 @@ STEPfile::ReadWorkingFile(const char* filename)
 
 
 Severity
-STEPfile::AppendWorkingFile(const char* filename)
+STEPfile::AppendWorkingFile(const char* filename, int useTechCor)
 {
     _error.ClearErrorMsg();
     _errorCount = 0;
@@ -210,7 +197,7 @@ STEPfile::AppendWorkingFile(const char* filename)
 	return _error.severity();  
       }
     SetFileType(WORKING_SESSION);
-    Severity rval = AppendFile (in);
+    Severity rval = AppendFile (in, useTechCor);
     SetFileType();
     CloseInputFile(in);
     return rval;
@@ -335,11 +322,40 @@ STEPfile::IncrementFileId (int fileid)
 void 
 STEPfile::SetFileIdIncrement()
 {
+    if (instances ().MaxFileId() < 0) _fileIdIncr = 0;
+    else _fileIdIncr = (int)((ceil((instances ().MaxFileId() + 99)/1000) + 1) * 1000);
+}
 
-  if (instances ().MaxFileId() < 0) _fileIdIncr = 0;
-  else
-    {
-      double instMaxFileId = (instances ().MaxFileId()+ 99)/1000;
-      _fileIdIncr = (int)((ceil(instMaxFileId) + 1) * 1000);
+char *STEPfile::schemaName( char *schName )
+    /*
+     * Returns the schema name from the file schema header section (or the 1st
+     * one if more than one exists).  Copies this value into schName.  If there
+     * is no header section or no value for file schema, NULL is returned and
+     * schName is unset.
+     */
+{
+    p21DIS_File_schema *fs;
+    SCLstring tmp;
+    STEPnode *n;
+
+    if ( _headerInstances == NULL ) return NULL;
+    fs = (p21DIS_File_schema *)_headerInstances->GetApplication_instance("File_Schema");
+    if ( fs == ENTITY_NULL ) return NULL;
+
+    n = (STEPnode *)fs->schema_identifiers().GetHead();
+    // (take the first one)
+    if ( n == NULL ) return NULL;
+    n->STEPwrite(tmp);
+    if ( *tmp.chars() == '\0' || *tmp.chars() == '$' ) return NULL;
+    // tmp.chars() returns the string we want plus a beginning and ending
+    // quote mark (').  We remove these below.
+    strncpy( schName, tmp.chars()+1, BUFSIZ-1 );
+    // "+1" to remove beginning '.
+    if ( *(schName + strlen( schName ) - 1) == '\'' ) {
+	// Remove trailing '.  This condition checks that it wasn't removed
+	// already.  That may have happend if strncpy had truncated schName
+	// (it were >= BUFSIZ).
+	*(schName + strlen( schName ) - 1) = '\0';
     }
+    return schName;
 }

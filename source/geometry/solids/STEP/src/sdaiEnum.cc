@@ -1,20 +1,13 @@
 
+//#include <Enum.h>
+//#include <Enumeration.h>
 
-//
-
-
-
-//
-// $Id: Enumeration.cc,v 1.3 1999-12-15 14:50:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
-#include <Enumeration.h>
+#include <sdai.h>
 
 /*
 * NIST STEP Core Class Library
 * clstepcore/Enumeration.cc
-* May 1995
+* April 1997
 * K. C. Morris
 * David Sauder
 
@@ -22,80 +15,520 @@
 * and is not subject to copyright.
 */
 
-/*   */
+/* $Id: sdaiEnum.cc,v 1.1 2000-01-21 13:43:17 gcosmo Exp $  */
 
-//static char rcsid[] ="";
+//static char rcsid[] ="$Id: sdaiEnum.cc,v 1.1 2000-01-21 13:43:17 gcosmo Exp $";
 
 #include "g4std/strstream"
 
+//#ifndef SCLP23(TRUE)
+//#ifndef SCLP23(FALSE)
 // Josh L, 3/31/95
 // These constants have to be initialized outside the SDAI struct.  They
 // are initialized here instead of in the header file in order to avoid
-// mulitple inclusions when building SCL applications.
-const Logical SDAI::UNKNOWN = sdaiUNKNOWN;
-const Boolean SDAI::SdaiTRUE = sdaiTRUE;
-const Boolean SDAI::SdaiFALSE = sdaiFALSE;
+// multiple inclusions when building SCL applications.
+/*
+const SCLP23(BOOL) SCLP23(TRUE)( SCLBOOL(BTrue) );
+const SCLP23(BOOL) SCLP23(FALSE)( SCLBOOL(BFalse) );
+const SCLP23(BOOL) SCLP23(UNSET)( SCLBOOL(BUnset) );
+const SCLP23(LOGICAL) SCLP23(UNKNOWN)( SCLLOG(LUnknown) );
+*/
+//#endif 
+//#endif 
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // class Logical
 ///////////////////////////////////////////////////////////////////////////////
 
-Logical::operator LOGICAL () const  {
-  switch (v) {
-  case sdaiUNKNOWN:  return sdaiUNKNOWN;
-  case sdaiFALSE: return sdaiFALSE;
-  case sdaiTRUE: return sdaiTRUE;
-  default: return sdaiUNKNOWN;
-}}
+#ifdef __OSTORE__
+SCLP23(LOGICAL) * create_LOGICAL(os_database *db) 
+{
+    return new (db, SCLP23(LOGICAL)::get_os_typespec()) SCLP23(LOGICAL);
+}
+#endif
+
+SCLP23(LOGICAL)::SCLP23_NAME(LOGICAL) (char * val)
+{
+    set_value (val);
+}
+
+SCLP23(LOGICAL)::SCLP23_NAME(LOGICAL) (SCLLOG(Logical) state)
+{
+    set_value (state);
+}
+
+SCLP23(LOGICAL)::SCLP23_NAME(LOGICAL) (const SCLP23(LOGICAL)& source) 
+{
+    set_value (source.asInt());
+}
+
+SCLP23(LOGICAL)::SCLP23_NAME(LOGICAL) (int i)  
+{
+    if (i == 0)
+      v =  SCLLOG(LFalse) ;
+    else
+      v =  SCLLOG(LTrue) ;
+}
+
+/*
+SCLP23(LOGICAL)::SCLP23_NAME(LOGICAL) (const BOOL& boo) 
+{
+    v = boo.asInt();
+}
+*/
+
+SCLP23(LOGICAL)::~SCLP23_NAME(LOGICAL) () 
+{
+}
+
+#ifdef __OSTORE__
+void 
+SCLP23(LOGICAL)::Access_hook_in(void *object, 
+				enum os_access_reason reason, void *user_data, 
+				void *start_range, void *end_range)
+{
+    G4cout << "ObjectStore called LOGICAL::Access_hook_in()" 
+      << G4endl;
+}
+#endif
 
 const char * 
-Logical::element_at (int n)  const {
+SCLP23(LOGICAL)::Name() const
+{
+    return "Logical";
+}
+
+int 
+SCLP23(LOGICAL)::no_elements () const
+{
+    return 3;
+}
+
+const char * 
+SCLP23(LOGICAL)::element_at (int n) const
+{
   switch (n)  {
-  case sdaiUNKNOWN:  return "U";
-  case sdaiFALSE: return "F";
-  case sdaiTRUE: return "T";
-  default: return "";
+  case  SCLLOG(LUnknown) :  return "U";
+  case  SCLLOG(LFalse) : return "F";
+  case  SCLLOG(LTrue) : return "T";
+  default: return "UNSET";
   }
 }
 
+int 
+SCLP23(LOGICAL)::exists() const // return 0 if unset otherwise return 1
+{
+    return !(v == 2);
+}
+
+void 
+SCLP23(LOGICAL)::nullify() // change the receiver to an unset status
+{
+    v = 2;
+}
+
+#if 0
+
+SCLP23(LOGICAL)::operator int () const  {
+ // anything other than BFalse should return 1 according to Part 23
+  if (v ==  SCLLOG(LFalse) ) return 0;
+  //#endif
+  else return 1;
+/*
+  switch (v) {
+  case LFalse: return 0;
+  case LTrue: return 1;
+
+  case LUnknown:
+  case LUnset:  // BUnset or anything other than t or f should set error
+		// sdaiVA_NSET i.e. value unset
+  default: return 1;
+}
+*/
+}
+
+#endif
+
+SCLP23(LOGICAL)::operator  SCLLOG(Logical) () const  {
+  switch (v) {
+  case  SCLLOG(LFalse) : return  SCLLOG(LFalse) ;
+  case  SCLLOG(LTrue) : return  SCLLOG(LTrue) ;
+  case  SCLLOG(LUnknown) :  return  SCLLOG(LUnknown) ;
+  case  SCLLOG(LUnset) :
+  default: return  SCLLOG(LUnset) ;
+}}
+
+
+
+SCLP23(LOGICAL)& 
+SCLP23(LOGICAL)::operator= (const SCLP23(LOGICAL)& t)
+{
+    set_value (t.asInt());
+    return *this;
+}
+
+SCLP23(LOGICAL) SCLP23(LOGICAL)::operator ==( const SCLP23(LOGICAL)& t ) const
+{
+  if( v == t.asInt() )
+      return  SCLLOG(LTrue) ;
+  return  SCLLOG(LFalse) ;
+}
+
+int
+SCLP23(LOGICAL)::set_value (const int i)  {  
+    if (i > no_elements() + 1)  {
+	v = 2;
+	return v;
+   }
+    const char *tmp = element_at( i );
+    if ( tmp[0] != '\0' )  return (v =i);
+    // otherwise 
+    G4cerr << "(OLD Warning:) invalid enumeration value " << i
+	<< " for " <<  Name () << "\n";
+    DebugDisplay ();
+    return  no_elements() + 1 ;
+//    return  ENUM_NULL ;
+    
+}
+
+int
+SCLP23(LOGICAL)::set_value (const char * n)  {  
+    //  assigns the appropriate value based on n
+//    if  ( !n || (!strcmp (n, "")) )  return set_value (ENUM_NULL);
+    if  ( !n || (!strcmp (n, "")) ) { nullify(); return asInt(); }
+	
+    int i =0;
+    SCLstring tmp;
+    while ((i < (no_elements() + 1))  &&  
+	   (strcmp ( (char *)StrToUpper( n, tmp ),  element_at (i)) != 0 ) )
+	++i;
+    if ( (no_elements() + 1) == i)  //  exhausted all the possible values 
+    {
+	nullify();
+	return v;
+//	return set_value (ENUM_NULL);
+    }
+    v = i;	
+    return v;
+    
+}
+
+
+Severity 
+SCLP23(LOGICAL)::ReadEnum(G4std::istream& in, ErrorDescriptor *err, int AssignVal,
+			  int needDelims)
+{
+    if(AssignVal)
+	set_null();
+
+    SCLstring str;
+    char c;
+    char messageBuf[512];
+    messageBuf[0] = '\0';
+
+    int validDelimiters = 1;
+
+    in >> G4std::ws; // skip white space
+
+    if( in.good() )
+    {
+	in.get(c);
+	if( c == '.' || isalpha(c))
+	{
+	    if( c == '.' )
+	    {
+		in.get(c); // push past the delimiter
+		// since found a valid delimiter it is now invalid until the 
+		//   matching ending delim is found
+		validDelimiters = 0;
+	    }
+
+	    // look for UPPER
+	    if( in.good() && ( isalpha(c) || c == '_' ) )
+	    {
+		str.Append(c);
+		in.get(c);
+	    }
+
+	    // look for UPPER or DIGIT
+	    while( in.good() && ( isalnum(c) || c == '_' ) )
+	    {
+		str.Append(c);
+		in.get(c);
+	    }
+	    // if character is not the delimiter unread it
+	    if(in.good() && (c != '.') )
+		in.putback(c);
+
+	    // a value was read
+	    if(str.Length() > 0)
+	    {
+		int i =0;
+		const char *strval = str.chars();
+		SCLstring tmp;
+		while( (i < (no_elements()+1))  &&  
+		       (strcmp( (char *)StrToUpper( strval, tmp ), 
+					     element_at (i) ) != 0) )
+		    ++i;
+		if ( (no_elements()+1) == i)
+		{	//  exhausted all the possible values 
+		    err->GreaterSeverity(SEVERITY_WARNING);
+		    err->AppendToDetailMsg("Invalid Enumeration value.\n");
+		    err->AppendToUserMsg("Invalid Enumeration value.\n");
+		}
+		else
+		{
+		    if(AssignVal)
+			v = i;
+		}
+
+		// now also check the delimiter situation
+		if(c == '.') // if found ending delimiter
+		{
+		    // if expecting delim (i.e. validDelimiter == 0)
+		    if(!validDelimiters) 
+		    {
+			validDelimiters = 1; // everything is fine
+		    }
+		    else // found ending delimiter but no initial delimiter
+		    {
+			validDelimiters = 0;
+		    }
+		}
+		// didn't find any delimiters at all and need them.
+		else if(needDelims) 
+		{
+		    validDelimiters = 0;
+		}
+
+		if (!validDelimiters)
+		{	
+		    err->GreaterSeverity(SEVERITY_WARNING);
+		    if(needDelims)
+			sprintf(messageBuf, 
+			  "Enumerated value has invalid period delimiters.\n");
+		    else
+			sprintf(messageBuf, 
+			   "Mismatched period delimiters for enumeration.\n");
+		    err->AppendToDetailMsg(messageBuf);
+		    err->AppendToUserMsg(messageBuf);
+		}
+		return err->severity();
+	    }
+	    // found valid or invalid delimiters with no associated value 
+	    else if( (c == '.') || !validDelimiters)
+	    {
+		err->GreaterSeverity(SEVERITY_WARNING);
+		err->AppendToDetailMsg(
+	   "Enumerated has valid or invalid period delimiters with no value.\n"
+				      );
+		err->AppendToUserMsg(
+	   "Enumerated has valid or invalid period delimiters with no value.\n"
+				      );
+		return err->severity();
+	    }
+	    else // no delims and no value
+		err->GreaterSeverity(SEVERITY_INCOMPLETE);
+
+	}
+	else if( (c == ',') || (c == ')') )
+	{
+	    in.putback(c);
+	    err->GreaterSeverity(SEVERITY_INCOMPLETE);
+	}
+	else
+	{
+	    in.putback(c);
+	    err->GreaterSeverity(SEVERITY_WARNING);
+	    sprintf(messageBuf, "Invalid enumeration value.\n");
+	    err->AppendToDetailMsg(messageBuf);
+	    err->AppendToUserMsg(messageBuf);
+	}
+    }
+    else // hit eof (assuming there was no error state for G4std::istream passed in)
+    {
+	err->GreaterSeverity(SEVERITY_INCOMPLETE);
+    }
+    return err->severity();
+}
+
 ///////////////////////////////////////////////////////////////////////////////
-// class Boolean  29-Sep-1994
+// class BOOL  Jan 97
 ///////////////////////////////////////////////////////////////////////////////
 
-Boolean::Boolean (LOGICAL val)  {
-  if (val == sdaiUNKNOWN) return;
+#ifdef __OSTORE__
+SCLP23(BOOL) * 
+create_BOOL(os_database *db) 
+{
+    return new (db, SCLP23(BOOL)::get_os_typespec()) SCLP23(BOOL); 
+}
+#endif
+
+const char * 
+SCLP23(BOOL)::Name() const
+{
+    return "Bool";
+}
+
+SCLP23(BOOL)::SCLP23_NAME(BOOL) (char * val)
+{
+    set_value (val);
+}
+
+SCLP23(BOOL)::SCLP23_NAME(BOOL) (SCLBOOL(Bool) state)
+{
+    set_value (state);
+}
+
+SCLP23(BOOL)::SCLP23_NAME(BOOL) (const SCLP23_NAME(BOOL)& source)
+{
+    set_value (source.asInt());
+}
+
+SCLP23(BOOL)::~SCLP23_NAME(BOOL)()
+{
+}
+
+int 
+SCLP23(BOOL)::no_elements () const
+{
+    return 2;
+}
+
+SCLP23(BOOL)::SCLP23_NAME(BOOL) (int i)
+{
+  if (i == 0)
+    v =  SCLBOOL(BFalse) ;
+  else
+    v =  SCLBOOL(BTrue) ;
+}
+
+SCLP23(BOOL)::SCLP23_NAME(BOOL) (const SCLP23(LOGICAL)& val)  {
+  if (val.asInt() == SCLLOG(LUnknown)) 
+  { // this should set error code sdaiVT_NVLD i.e. Invalid value type.
+      v = SCLBOOL(BUnset); return; 
+  }
   set_value (val);
 }
 
-Boolean::operator LOGICAL () const  {
+#ifdef __OSTORE__
+void 
+SCLP23(BOOL)::Access_hook_in(void *object, 
+				enum os_access_reason reason, void *user_data, 
+				void *start_range, void *end_range)
+{
+    G4cout << "ObjectStore called BOOL::Access_hook_in()" 
+      << G4endl;
+}
+#endif
+
+SCLP23(BOOL)::operator  SCLBOOL(Bool) () const  {
   switch (v) {
-  case sdaiFALSE: return sdaiFALSE;
-  case sdaiTRUE: return sdaiTRUE;
-  default: return sdaiUNKNOWN;
+  case  SCLBOOL(BFalse) : return  SCLBOOL(BFalse) ;
+  case  SCLBOOL(BTrue) : return  SCLBOOL(BTrue) ;
+  case  SCLBOOL(BUnset) :
+  default: return  SCLBOOL(BUnset) ;
 }}
 
+SCLP23(BOOL)& 
+SCLP23(BOOL)::operator= (const SCLP23(LOGICAL)& t)
+{
+    set_value (t.asInt());
+    return *this;
+}
+
+SCLP23(BOOL)& 
+SCLP23(BOOL)::operator= (const  SCLBOOL(Bool) t)
+{
+    v = t;
+    return *this;
+}
+
+#if 0
+
+SCLP23(BOOL)::operator int () const  {
+ // anything other than BFalse should return 1 according to Part 23
+  switch (v) {
+  case  SCLBOOL(BFalse) : return 0;
+  case  SCLBOOL(BTrue) : return 1;
+  case  SCLBOOL(BUnset) :  // BUnset or anything other than t or f should set 
+		// error sdaiVA_NSET i.e. value unset
+  default: return 1;
+}}
+
+SCLP23(BOOL)::operator  SCLLOG(Logical) () const  {
+  switch (v) {
+  case  SCLBOOL(BFalse) : return  SCLLOG(LFalse) ;
+  case  SCLBOOL(BTrue) : return  SCLLOG(LTrue) ;
+  case  SCLBOOL(BUnset) : return  SCLLOG(LUnset) ;
+  default: return  SCLLOG(LUnknown) ;
+}}
+
+#endif
+
 const char * 
-Boolean::element_at (int n)  const {
+SCLP23(BOOL)::element_at (int n)  const {
   switch (n)  {
-  case sdaiFALSE: return "F";
-  case sdaiTRUE: return "T";
-  default: return "";
+  case  SCLBOOL(BFalse) : return "F";
+  case  SCLBOOL(BTrue) : return "T";
+  default: return "UNSET";
   }
 }
 
-Boolean::operator int () const  {
-  if (v == sdaiFALSE)  return 0;
-  else return 1;
-}
-
-int Boolean::operator ==( LOGICAL log ) const
+SCLP23(LOGICAL) SCLP23(BOOL)::operator ==( const SCLP23(LOGICAL)& t ) const
 {
-  if( v == log )
-      return 1;
-  return 0;
+  if( v == t.asInt() )
+      return  SCLLOG(LTrue) ;
+  return  SCLLOG(LFalse) ;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+
+SCLP23(Enum)::SCLP23_NAME(Enum)()
+{
+    v = 0;
+}
+
+SCLP23(Enum)::~SCLP23_NAME(Enum)()
+{ 
+}
+
+#ifdef __OSTORE__
+void 
+SCLP23(Enum)::Access_hook_in(void *object, 
+				enum os_access_reason reason, void *user_data, 
+				void *start_range, void *end_range)
+{
+    G4cout << "ObjectStore called Enum::Access_hook_in()" 
+      << G4endl;
+}
+#endif
+
+int 
+SCLP23(Enum)::put(int val)
+{
+    return set_value (val);
+}
+
+int 
+SCLP23(Enum)::put(const char * n)
+{
+    return set_value (n);
+}
+
+int 
+SCLP23(Enum)::exists() const // return 0 if unset otherwise return 1
+{
+    return ! (v > no_elements());
+}
+
+void 
+SCLP23(Enum)::nullify() // change the receiver to an unset status
+		// unset is generated to be 1 greater than last element
+{
+    set_value (no_elements()+1);
+}
 
 /******************************************************************
  ** Procedure:  DebugDisplay
@@ -107,20 +540,24 @@ int Boolean::operator ==( LOGICAL log ) const
  ** Status:  ok 2/1/91
  ******************************************************************/
 void
-STEPenumeration::DebugDisplay (G4std::ostream& out) const  {
+SCLP23(Enum)::DebugDisplay (G4std::ostream& out) const 
+{
     SCLstring tmp;
-    out << "Value  :  " <<  v  << "  " 
-	<< asStr (tmp) 
-	    << ": for type " << Name () << "\n";
-    out << "valid values are  ";
-    int i =0;
-    while (element_at (i))  
-      {
-	  out << element_at (i++) << "  ";
-      }
+    out << "Current " << Name() << " value: " << G4endl 
+	<< "  cardinal: " <<  v  << G4endl 
+	<< "  string: " << asStr(tmp) << G4endl
+	<< "  Part 21 file format: ";
     STEPwrite (out);
+    out << G4endl;
+
+    out << "Valid values are: " << G4endl;
+    int i =0;
+    while (i < (no_elements() + 1))
+      {
+	  out << i << " " << element_at (i) << G4endl;
+	  i++;
+      }
     out << "\n";
-	
 }	
 
 // Read an Enumeration value 
@@ -129,7 +566,7 @@ STEPenumeration::DebugDisplay (G4std::ostream& out) const  {
 // returns: Severity of the error.
 // error message and error Severity is written to ErrorDescriptor *err.
 // int AssignVal is: 
-// true => value is assigned to the STEPenumeration; 
+// true => value is assigned to the SCLP23(Enum); 
 // true or false => value is read and appropriate error info is set and 
 // 	returned.
 // int needDelims is: 
@@ -138,7 +575,7 @@ STEPenumeration::DebugDisplay (G4std::ostream& out) const  {
 // true or false => non-matching delimiters are flagged as an error
 
 Severity 
-STEPenumeration::ReadEnum(G4std::istream& in, ErrorDescriptor *err, int AssignVal,
+SCLP23(Enum)::ReadEnum(G4std::istream& in, ErrorDescriptor *err, int AssignVal,
 			  int needDelims)
 {
     if(AssignVal)
@@ -268,7 +705,7 @@ STEPenumeration::ReadEnum(G4std::istream& in, ErrorDescriptor *err, int AssignVa
 	    err->AppendToUserMsg(messageBuf);
 	}
     }
-    else // Hit eof (assuming there was no error state for G4std::istream passed in)
+    else // hit eof (assuming there was no error state for G4std::istream passed in)
     {
 	err->GreaterSeverity(SEVERITY_INCOMPLETE);
     }
@@ -277,7 +714,7 @@ STEPenumeration::ReadEnum(G4std::istream& in, ErrorDescriptor *err, int AssignVa
 
 /*
 Severity 
-STEPenumeration::StrToVal (const char * s)
+SCLP23(Enum)::StrToVal (const char * s)
 {
     put (s);
     return SEVERITY_NULL;
@@ -285,7 +722,7 @@ STEPenumeration::StrToVal (const char * s)
 */
 
 Severity 
-STEPenumeration::StrToVal (const char * s, ErrorDescriptor *err, int optional)
+SCLP23(Enum)::StrToVal (const char * s, ErrorDescriptor *err, int optional)
 {
     G4std::istrstream in ((char *)s); // sz defaults to length of s
 
@@ -298,7 +735,7 @@ STEPenumeration::StrToVal (const char * s, ErrorDescriptor *err, int optional)
 
 // reads an enumerated value in STEP file format 
 Severity
-STEPenumeration::STEPread (const char *s, ErrorDescriptor *err, int optional)
+SCLP23(Enum)::STEPread (const char *s, ErrorDescriptor *err, int optional)
 {
     G4std::istrstream in((char *)s);
     return STEPread (in, err, optional);
@@ -306,7 +743,7 @@ STEPenumeration::STEPread (const char *s, ErrorDescriptor *err, int optional)
 
 // reads an enumerated value in STEP file format 
 Severity
-STEPenumeration::STEPread (G4std::istream& in, ErrorDescriptor *err, int optional)
+SCLP23(Enum)::STEPread (G4std::istream& in, ErrorDescriptor *err, int optional)
 {
     Severity sev = ReadEnum(in, err, 1, 1);
     if( (err->severity() == SEVERITY_INCOMPLETE) && optional)
@@ -317,8 +754,9 @@ STEPenumeration::STEPread (G4std::istream& in, ErrorDescriptor *err, int optiona
 
 
 const char * 
-STEPenumeration::asStr (SCLstring &s) const  {
-    if (v != ENUM_NULL) 
+SCLP23(Enum)::asStr (SCLstring &s) const  {
+//    if (v != ENUM_NULL) 
+    if (exists()) 
     {
 //	s = elements[v];
 	return s = element_at (v);
@@ -328,7 +766,7 @@ STEPenumeration::asStr (SCLstring &s) const  {
 }
 
 void 
-STEPenumeration::STEPwrite (G4std::ostream& out)  const  {
+SCLP23(Enum)::STEPwrite (G4std::ostream& out)  const  {
     if( is_null() )
 	out << '$';
     else
@@ -339,7 +777,7 @@ STEPenumeration::STEPwrite (G4std::ostream& out)  const  {
 }
 
 const char * 
-STEPenumeration::STEPwrite (SCLstring &s) const
+SCLP23(Enum)::STEPwrite (SCLstring &s) const
 {
     if( is_null() )
     {
@@ -355,7 +793,7 @@ STEPenumeration::STEPwrite (SCLstring &s) const
     return s.chars();
 }
 
-//STEPenumeration::STEPenumeration (const char * const e)
+//SCLP23(Enum)::SCLP23_NAME(Enum) (const char * const e)
 //:  elements (e)
 //{  
 //}
@@ -370,12 +808,12 @@ STEPenumeration::STEPwrite (SCLstring &s) const
  ******************************************************************/
 #ifdef OBSOLETE
 void
-STEPenumeration::set_elements (const char * const e [])  {
+SCLP23(Enum)::set_elements (const char * const e [])  {
     elements = e;
 }
 #endif
 Severity 
-STEPenumeration::EnumValidLevel(G4std::istream &in, ErrorDescriptor *err,
+SCLP23(Enum)::EnumValidLevel(G4std::istream &in, ErrorDescriptor *err,
 				int optional, char *tokenList, 
 				int needDelims, int clearError)
 {
@@ -415,7 +853,7 @@ STEPenumeration::EnumValidLevel(G4std::istream &in, ErrorDescriptor *err,
 }
 
 Severity 
-STEPenumeration::EnumValidLevel(const char *value, ErrorDescriptor *err,
+SCLP23(Enum)::EnumValidLevel(const char *value, ErrorDescriptor *err,
 				int optional, char *tokenList, 
 				int needDelims, int clearError)
 {
@@ -499,9 +937,10 @@ STEPenumeration::EnumValidLevel(const char *value, ErrorDescriptor *err,
  ** Status:  ok 2.91
  ******************************************************************/
 int
-STEPenumeration::set_value (const char * n)  {  
+SCLP23(Enum)::set_value (const char * n)  {  
     //  assigns the appropriate value based on n
-    if  ( !n || (!strcmp (n, "")) )  return set_value (ENUM_NULL);
+//    if  ( !n || (!strcmp (n, "")) )  return set_value (ENUM_NULL);
+    if  ( !n || (!strcmp (n, "")) ) { nullify(); return asInt(); }
 	
     int i =0;
     SCLstring tmp;
@@ -509,7 +948,8 @@ STEPenumeration::set_value (const char * n)  {
 	   (strcmp ( (char *)StrToUpper( n, tmp ),  element_at (i)) != 0 ) )
 	++i;
     if ( no_elements () == i)  {  //  exhausted all the possible values 
-	return set_value (ENUM_NULL);
+	return v = no_elements() + 1; // defined as UNSET
+//	return set_value (ENUM_NULL);
     }
     v = i;	
     return v;
@@ -518,10 +958,16 @@ STEPenumeration::set_value (const char * n)  {
 
 //  set_value is the same function as put
 int
-STEPenumeration::set_value (const int i)  {  
+SCLP23(Enum)::set_value (const int i)  {  
+/*
     if (i == ENUM_NULL)  {
 	v = ENUM_NULL;
 	return ENUM_NULL;
+    }
+*/
+    if (i > no_elements())  {
+	v = no_elements() + 1;
+	return v;
     }
     const char *tmp = element_at( i );
     if ( tmp[0] != '\0' )  return (v =i);
@@ -529,25 +975,26 @@ STEPenumeration::set_value (const int i)  {
     G4cerr << "(OLD Warning:) invalid enumeration value " << i
 	<< " for " <<  Name () << "\n";
     DebugDisplay ();
-    return  ENUM_NULL ;
+    return  no_elements() + 1 ;
+//    return  ENUM_NULL ;
     
 }
 
-STEPenumeration& 
-STEPenumeration::operator= (const int i)
+SCLP23(Enum)& 
+SCLP23(Enum)::operator= (const int i)
 {
     put (i);
     return *this;
 }
 
-STEPenumeration&
-STEPenumeration::operator= (const STEPenumeration& Senum)
+SCLP23(Enum)&
+SCLP23(Enum)::operator= (const SCLP23(Enum)& Senum)
 {
     put (Senum.asInt());
     return *this;
 }
 
-G4std::ostream &operator<< ( G4std::ostream& out, const STEPenumeration& a )
+G4std::ostream &operator<< ( G4std::ostream& out, const SCLP23(Enum)& a )
 {
     SCLstring tmp;
     out << a.asStr( tmp );
@@ -559,7 +1006,7 @@ G4std::ostream &operator<< ( G4std::ostream& out, const STEPenumeration& a )
 #ifdef pojoldStrToValNstepRead
 
 Severity 
-STEPenumeration::StrToVal (const char * s, ErrorDescriptor *err, int optional)
+SCLP23(Enum)::StrToVal (const char * s, ErrorDescriptor *err, int optional)
 {
     const char *sPtr = s;
     while(isspace(*sPtr)) sPtr++;
@@ -624,7 +1071,7 @@ STEPenumeration::StrToVal (const char * s, ErrorDescriptor *err, int optional)
 
 
 Severity
-STEPenumeration::STEPread (G4std::istream& in, ErrorDescriptor *err, int optional)
+SCLP23(Enum)::STEPread (G4std::istream& in, ErrorDescriptor *err, int optional)
 {
     char enumValue [BUFSIZ];
     char c;
@@ -636,12 +1083,12 @@ STEPenumeration::STEPread (G4std::istream& in, ErrorDescriptor *err, int optiona
     switch (c)  
       {
 	case '.':
-	  in.getline (enumValue, BUFSIZ, '.');// reads but does not Store the .
+	  in.getline (enumValue, BUFSIZ, '.');// reads but does not store the .
 /*
-  // gcc 2.3.3 - It does and should read the . It doesn't Store it DAS 4/27/93
+  // gcc 2.3.3 - It does and should read the . It doesn't store it DAS 4/27/93
 	  char * pos = index(enumValue, '.');
 	  if (pos) *pos = '\0';
-	  //  NON-STANDARD (GNUism)  getline should not Retrieve .
+	  //  NON-STANDARD (GNUism)  getline should not retrieve .
 	  //  function gcount is unavailable
 */
 	  if(in.fail())
@@ -677,7 +1124,7 @@ STEPenumeration::STEPread (G4std::istream& in, ErrorDescriptor *err, int optiona
 		// read didn't know what to do
 	  err->GreaterSeverity(SEVERITY_INPUT_ERROR); 
 	  sprintf(errStr,
-	       "STEPenumeration::STEPread(): warning : poorly delimited %s %s",
+	       "SCLP23(Enum)::STEPread(): warning : poorly delimited %s %s",
 	        Name(), "enumerated value was ignored.");
 	  err->AppendToDetailMsg(errStr);
 */
@@ -686,3 +1133,4 @@ STEPenumeration::STEPread (G4std::istream& in, ErrorDescriptor *err, int optiona
 }
 
 #endif
+

@@ -1,18 +1,8 @@
 
-
-//
-
-
-
-//
-// $Id: ExpDict.cc,v 1.3 1999-12-15 14:50:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 /*
 * NIST STEP Core Class Library
 * clstepcore/ExpDict.cc
-* May 1995
+* April 1997
 * K. C. Morris
 * David Sauder
 
@@ -20,7 +10,18 @@
 * and is not subject to copyright.
 */
 
-/*   */ 
+/* $Id: ExpDict.cc,v 1.4 2000-01-21 13:42:50 gcosmo Exp $  */ 
+#include <memory.h>
+#include <math.h>
+#include <stdio.h>
+
+// to help ObjectCenter
+#ifndef HAVE_MEMMOVE
+extern "C"
+{
+void * memmove(void *__s1, const void *__s2, size_t __n);
+}
+#endif
 
 #include <ExpDict.h> 
 #include <STEPaggregate.h> 
@@ -58,47 +59,623 @@ extern const TypeDescriptor _t_INTEGER_TYPE
 /*extern const TypeDescriptor _t_GENERIC_TYPE ("GENERIC", GENERIC_TYPE, "Generic") ;*/
 /*const TypeDescriptor * const t_GENERIC_TYPE = &_t_GENERIC_TYPE;*/
 
+Explicit_item_id__set::Explicit_item_id__set (int defaultSize) {
+    _bufsize = defaultSize;
+    _buf = new Explicit_item_id_ptr[_bufsize];
+    _count = 0;
+}
 
+Explicit_item_id__set::~Explicit_item_id__set () { delete _buf; }
 
+void Explicit_item_id__set::Check (int index) {
+    Explicit_item_id_ptr* newbuf;
+
+    if (index >= _bufsize) {
+        _bufsize = (index+1) * 2;
+        newbuf = new Explicit_item_id_ptr[_bufsize];
+        memmove(newbuf, _buf, _count*sizeof(Explicit_item_id_ptr));
+        delete _buf;
+        _buf = newbuf;
+    }
+}
+
+void Explicit_item_id__set::Insert (Explicit_item_id_ptr v, int index) {
+    Explicit_item_id_ptr* spot;
+    index = (index < 0) ? _count : index;
+
+    if (index < _count) {
+        Check(_count+1);
+        spot = &_buf[index];
+        memmove(spot+1, spot, (_count - index)*sizeof(Explicit_item_id_ptr));
+
+    } else {
+        Check(index);
+        spot = &_buf[index];
+    }
+    *spot = v;
+    ++_count;
+}
+
+void Explicit_item_id__set::Append (Explicit_item_id_ptr v) {
+    int index = _count;
+    Explicit_item_id_ptr* spot;
+
+    if (index < _count) {
+        Check(_count+1);
+        spot = &_buf[index];
+        memmove(spot+1, spot, (_count - index)*sizeof(Explicit_item_id_ptr));
+
+    } else {
+        Check(index);
+        spot = &_buf[index];
+    }
+    *spot = v;
+    ++_count;
+}
+
+void Explicit_item_id__set::Remove (int index) {
+    if (0 <= index && index < _count) {
+        --_count;
+        Explicit_item_id_ptr* spot = &_buf[index];
+        memmove(spot, spot+1, (_count - index)*sizeof(Explicit_item_id_ptr));
+    }
+}
+
+int Explicit_item_id__set::Index (Explicit_item_id_ptr v) {
+    for (int i = 0; i < _count; ++i) {
+        if (_buf[i] == v) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+Explicit_item_id_ptr& Explicit_item_id__set::operator[] (int index) {
+    Check(index);
+//    _count = G4std::max(_count, index+1);
+    _count = ( (_count > index+1) ? _count : (index+1) );
+    return _buf[index];
+}
+
+int 
+Explicit_item_id__set::Count()
+{
+    return _count; 
+}
+
+void 
+Explicit_item_id__set::Clear()
+{
+    _count = 0; 
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+Implicit_item_id__set::Implicit_item_id__set (int defaultSize) {
+    _bufsize = defaultSize;
+    _buf = new Implicit_item_id_ptr[_bufsize];
+    _count = 0;
+}
+
+Implicit_item_id__set::~Implicit_item_id__set () { delete _buf; }
+
+void Implicit_item_id__set::Check (int index) {
+    Implicit_item_id_ptr* newbuf;
+
+    if (index >= _bufsize) {
+        _bufsize = (index+1) * 2;
+        newbuf = new Implicit_item_id_ptr[_bufsize];
+        memmove(newbuf, _buf, _count*sizeof(Implicit_item_id_ptr));
+        delete _buf;
+        _buf = newbuf;
+    }
+}
+
+void Implicit_item_id__set::Insert (Implicit_item_id_ptr v, int index) {
+    Implicit_item_id_ptr* spot;
+    index = (index < 0) ? _count : index;
+
+    if (index < _count) {
+        Check(_count+1);
+        spot = &_buf[index];
+        memmove(spot+1, spot, (_count - index)*sizeof(Implicit_item_id_ptr));
+
+    } else {
+        Check(index);
+        spot = &_buf[index];
+    }
+    *spot = v;
+    ++_count;
+}
+
+void Implicit_item_id__set::Append (Implicit_item_id_ptr v) {
+    int index = _count;
+    Implicit_item_id_ptr* spot;
+
+    if (index < _count) {
+        Check(_count+1);
+        spot = &_buf[index];
+        memmove(spot+1, spot, (_count - index)*sizeof(Implicit_item_id_ptr));
+
+    } else {
+        Check(index);
+        spot = &_buf[index];
+    }
+    *spot = v;
+    ++_count;
+}
+
+void Implicit_item_id__set::Remove (int index) {
+    if (0 <= index && index < _count) {
+        --_count;
+        Implicit_item_id_ptr* spot = &_buf[index];
+        memmove(spot, spot+1, (_count - index)*sizeof(Implicit_item_id_ptr));
+    }
+}
+
+int Implicit_item_id__set::Index (Implicit_item_id_ptr v) {
+    for (int i = 0; i < _count; ++i) {
+        if (_buf[i] == v) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+Implicit_item_id_ptr& Implicit_item_id__set::operator[] (int index) {
+    Check(index);
+//    _count = G4std::max(_count, index+1);
+    _count = ( (_count > index+1) ? _count : (index+1) );
+    return _buf[index];
+}
+
+int 
+Implicit_item_id__set::Count()
+{
+    return _count; 
+}
+
+void 
+Implicit_item_id__set::Clear()
+{
+    _count = 0; 
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+Interface_spec__set::Interface_spec__set (int defaultSize) {
+    _bufsize = defaultSize;
+    _buf = new Interface_spec_ptr[_bufsize];
+    _count = 0;
+}
+
+Interface_spec__set::~Interface_spec__set () { delete _buf; }
+
+void Interface_spec__set::Check (int index) {
+    Interface_spec_ptr* newbuf;
+
+    if (index >= _bufsize) {
+        _bufsize = (index+1) * 2;
+        newbuf = new Interface_spec_ptr[_bufsize];
+        memmove(newbuf, _buf, _count*sizeof(Interface_spec_ptr));
+        delete _buf;
+        _buf = newbuf;
+    }
+}
+
+void Interface_spec__set::Insert (Interface_spec_ptr v, int index) {
+    Interface_spec_ptr* spot;
+    index = (index < 0) ? _count : index;
+
+    if (index < _count) {
+        Check(_count+1);
+        spot = &_buf[index];
+        memmove(spot+1, spot, (_count - index)*sizeof(Interface_spec_ptr));
+
+    } else {
+        Check(index);
+        spot = &_buf[index];
+    }
+    *spot = v;
+    ++_count;
+}
+
+void Interface_spec__set::Append (Interface_spec_ptr v) {
+    int index = _count;
+    Interface_spec_ptr* spot;
+
+    if (index < _count) {
+        Check(_count+1);
+        spot = &_buf[index];
+        memmove(spot+1, spot, (_count - index)*sizeof(Interface_spec_ptr));
+
+    } else {
+        Check(index);
+        spot = &_buf[index];
+    }
+    *spot = v;
+    ++_count;
+}
+
+void Interface_spec__set::Remove (int index) {
+    if (0 <= index && index < _count) {
+        --_count;
+        Interface_spec_ptr* spot = &_buf[index];
+        memmove(spot, spot+1, (_count - index)*sizeof(Interface_spec_ptr));
+    }
+}
+
+int Interface_spec__set::Index (Interface_spec_ptr v) {
+    for (int i = 0; i < _count; ++i) {
+        if (_buf[i] == v) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+Interface_spec_ptr& Interface_spec__set::operator[] (int index) {
+    Check(index);
+//    _count = G4std::max(_count, index+1);
+    _count = ( (_count > index+1) ? _count : (index+1) );
+    return _buf[index];
+}
+
+int 
+Interface_spec__set::Count()
+{
+    return _count; 
+}
+
+void 
+Interface_spec__set::Clear()
+{
+    _count = 0; 
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+Interface_spec::Interface_spec() 
+ : _explicit_items(new Explicit_item_id__set), 
+   _implicit_items(0), _all_objects(0)
+{
+}
+
+// not tested
+Interface_spec::Interface_spec(Interface_spec &is) 
+{
+    _explicit_items = new Explicit_item_id__set;
+    int count = is._explicit_items->Count();
+    int i;
+    for (i = 0;i < count; i++)
+    {
+	(*_explicit_items)[i] = 
+	  (*(is._explicit_items))[i];
+    }
+    _current_schema_id = is._current_schema_id;
+    _foreign_schema_id = is._foreign_schema_id;
+    _all_objects = is._all_objects;
+    _implicit_items = 0;
+}
+
+Interface_spec::Interface_spec(const char * cur_sch_id, 
+			       const char * foreign_sch_id, int all_objects) 
+ : _current_schema_id(cur_sch_id), _explicit_items(new Explicit_item_id__set), 
+   _implicit_items(0),_foreign_schema_id(foreign_sch_id), 
+   _all_objects(all_objects)
+{
+}
+
+Interface_spec::~Interface_spec()
+{
+    delete _explicit_items;
+    delete _implicit_items;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+void 
+Schema::AddFunction(const char * f)
+{
+    if(_function_list == 0)
+      _function_list = new scl_char_str__list;
+    _function_list->Append((char *)f);
+}
+
+void 
+Schema::AddGlobal_rule(Global_rule_ptr gr)
+{
+    if(_global_rules == 0) _global_rules = new Global_rule__set;
+    _global_rules->Append(gr);
+}
+
+ // not implemented
+void 
+Schema::global_rules_(Global_rule__set_var &grs)
+{
+}
+
+void 
+Schema::AddProcedure(const char * p)
+{
+    if(_procedure_list == 0)
+      _procedure_list = new scl_char_str__list;
+    _procedure_list->Append((char *)p);
+}
+
+// the whole schema
+void 
+Schema::GenerateExpress(G4std::ostream& out) const
+{
+    SCLstring tmp;
+    out << G4endl << "(* Generating: " << Name() << " *)" << G4endl;
+    out << G4endl << "SCHEMA " << StrToLower(Name(),tmp) << ";" << G4endl;
+    GenerateUseRefExpress(out);
+    // print TYPE definitions
+    out << G4endl << "(* ////////////// TYPE Definitions *)" << G4endl;
+    GenerateTypesExpress(out);
+
+    // print Entity definitions
+    out << G4endl << "(* ////////////// ENTITY Definitions *)" << G4endl;
+    GenerateEntitiesExpress(out);
+
+    int count, i;
+    if(_global_rules != 0)
+    {
+	out << G4endl << "(* *************RULES************* *)" << G4endl;
+	count = _global_rules->Count();
+	for(i = 0; i <  count; i++)
+	{
+	    out << G4endl << (*_global_rules)[i]->rule_text_() << G4endl; 
+	}
+    }
+    if(_function_list != 0)
+    {
+	out << "(* *************FUNCTIONS************* *)" << G4endl;
+	count = _function_list->Count();
+	for(i = 0; i <  count; i++)
+	{
+	    out << G4endl << (*_function_list)[i] << G4endl; 
+	}
+    }
+    if(_procedure_list != 0)
+    {
+	out << "(* *************PROCEDURES************* *)" << G4endl;
+	count = _procedure_list->Count();
+	for(i = 0; i <  count; i++)
+	{
+	    out << G4endl << (*_procedure_list)[i] << G4endl; 
+	}
+    }
+    out << G4endl << "END_SCHEMA;" << G4endl;
+}
+
+// USE, REFERENCE definitions
+void 
+Schema::GenerateUseRefExpress(G4std::ostream& out) const
+{
+    int i,k;
+    int intf_count;
+    int count;
+    Interface_spec_ptr is;
+    int first_time;
+    SCLstring tmp;
+
+    /////////////////////// print USE statements
+
+    intf_count = _use_interface_list->Count();
+    if(intf_count) // there is at least 1 USE interface to a foreign schema
+    {
+	for (i = 0; i < intf_count; i++) // print out each USE interface
+	{
+	    is = (*_use_interface_list)[i]; // the 1st USE interface
+
+	    // count is # of USE items in interface
+	    count = is->explicit_items_()->Count(); 
+
+	    //Explicit_item_id__set_var eiis = is->explicit_items_();
+	    
+	    if(count > 0)
+	    {
+		out << G4endl << "    USE FROM " 
+		   << StrToLower(is->foreign_schema_id_().chars(),tmp) << G4endl;
+		out << "       (";
+
+		first_time = 1;
+		for(k = 0; k < count; k++) // print out each USE item
+		{
+		    if(first_time) first_time = 0;
+		    else out << "," << G4endl << "\t";
+		    if( (*(is->explicit_items_()))[k]->original_id_().is_null() )
+		    { // not renamed
+			out << (*(is->explicit_items_()))[k]->new_id_().chars();
+		    } else { // renamed
+			out << (*(is->explicit_items_()))[k]->original_id_().chars();
+			out << " AS " << (*(is->explicit_items_()))[k]->new_id_().chars();
+		    }
+		}
+		out << ");" << G4endl;
+	    } else if (is->all_objects_()) {
+		out << G4endl << "    USE FROM " 
+		    << StrToLower(is->foreign_schema_id_().chars(),tmp) << ";" 
+		    << G4endl;
+	    }
+	}
+    }
+
+    /////////////////////// print REFERENCE stmts
+
+    intf_count = _ref_interface_list->Count();
+    if(intf_count)//there is at least 1 REFERENCE interface to a foreign schema
+    {
+	for (i = 0; i < intf_count; i++) // print out each REFERENCE interface
+	{
+	    is = (*_ref_interface_list)[i]; // the 1st REFERENCE interface
+
+	    // count is # of REFERENCE items in interface
+	    count = is->explicit_items_()->Count(); 
+
+	    
+	    if(count > 0)
+	    {
+		
+//		out << "    REFERENCE FROM " << (*(is->explicit_items_()))[0]->foreign_schema_().chars() << G4endl;
+		out << G4endl << "    REFERENCE FROM " 
+		   << StrToLower(is->foreign_schema_id_().chars(),tmp) << G4endl;
+		out << "       (";
+
+		first_time = 1;
+		for(k = 0; k < count; k++) // print out each REFERENCE item
+		{
+		    if(first_time) first_time = 0;
+		    else out << "," << G4endl << "\t";
+		    if( (*(is->explicit_items_()))[k]->original_id_().is_null() )
+		    { // not renamed
+			out << (*(is->explicit_items_()))[k]->new_id_().chars();
+		    } else { // renamed
+			out << (*(is->explicit_items_()))[k]->original_id_().chars();
+			out << " AS " 
+			  << (*(is->explicit_items_()))[k]->new_id_().chars();
+		    }
+		}
+		out << ");" << G4endl;
+	    } else if (is->all_objects_()) {
+		out << G4endl << "    REFERENCE FROM " 
+		    << StrToLower(is->foreign_schema_id_().chars(),tmp) << ";" 
+		    << G4endl;
+	    }
+	}
+    }
+}
+
+// TYPE definitions
+void 
+Schema::GenerateTypesExpress(G4std::ostream& out) const
+{
+    TypeDescItr tdi(_typeList);
+    tdi.ResetItr();
+    SCLstring tmp;
+
+    const TypeDescriptor *td = tdi.NextTypeDesc();
+    while (td)
+    {
+	out << G4endl << td->GenerateExpress(tmp);
+	td = tdi.NextTypeDesc();
+    }
+}
+
+// Entity definitions
+void 
+Schema::GenerateEntitiesExpress(G4std::ostream& out) const
+{
+    EntityDescItr edi(_entList);
+    edi.ResetItr();
+    SCLstring tmp;
+
+    const EntityDescriptor *ed = edi.NextEntityDesc();
+    while (ed)
+    {
+	out << G4endl << ed->GenerateExpress(tmp);
+	ed = edi.NextEntityDesc();
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+#ifdef __OSTORE__
+EnumAggregate * create_EnumAggregate(os_database *db)
+{
+    return new (db, EnumAggregate::get_os_typespec()) EnumAggregate; 
+}
+#else
 EnumAggregate * create_EnumAggregate()
 {
     return new EnumAggregate; 
 }
+#endif
 
+#ifdef __OSTORE__
+GenericAggregate * create_GenericAggregate(os_database *db)
+{ 
+    return new (db, GenericAggregate::get_os_typespec()) GenericAggregate; 
+}
+#else
 GenericAggregate * create_GenericAggregate()
 { 
     return new GenericAggregate; 
 }
+#endif
 
+#ifdef __OSTORE__
+EntityAggregate * create_EntityAggregate(os_database *db)
+{
+    return new (db, EntityAggregate::get_os_typespec()) EntityAggregate; 
+}
+#else
 EntityAggregate * create_EntityAggregate()
 {
     return new EntityAggregate; 
 }
+#endif
 
+#ifdef __OSTORE__
+SelectAggregate * create_SelectAggregate(os_database *db)
+{
+    return new (db, SelectAggregate::get_os_typespec()) SelectAggregate;
+}
+#else
 SelectAggregate * create_SelectAggregate()
 {
     return new SelectAggregate; 
 }
+#endif
 
+#ifdef __OSTORE__
+StringAggregate * create_StringAggregate(os_database *db)
+{
+    return new (db, StringAggregate::get_os_typespec()) StringAggregate;
+}
+#else
 StringAggregate * create_StringAggregate()
 {
     return new StringAggregate; 
 }
+#endif
 
+#ifdef __OSTORE__
+BinaryAggregate * create_BinaryAggregate(os_database *db)
+{
+    return new (db, BinaryAggregate::get_os_typespec()) BinaryAggregate;
+}
+#else
 BinaryAggregate * create_BinaryAggregate()
 {
     return new BinaryAggregate; 
 }
+#endif
 
+#ifdef __OSTORE__
+RealAggregate * create_RealAggregate(os_database *db)
+{
+    return new (db, RealAggregate::get_os_typespec()) RealAggregate;
+}
+#else
 RealAggregate * create_RealAggregate()
 {
     return new RealAggregate; 
 }
+#endif
 
+#ifdef __OSTORE__
+IntAggregate * create_IntAggregate(os_database *db)
+{
+    return new (db, IntAggregate::get_os_typespec()) IntAggregate;
+}
+#else
 IntAggregate * create_IntAggregate()
 {
     return new IntAggregate; 
 }
+#endif
 
 const EntityDescriptor * 
 EntityDescItr::NextEntityDesc()
@@ -124,14 +701,14 @@ AttrDescItr::NextAttrDesc()
     return 0;
 } 
 
-const InverseAttrDescriptor * 
-InverseADItr::NextInverseAttrDesc()
+const Inverse_attribute * 
+InverseAItr::NextInverse_attribute()
 {
     if(cur)
     {
-	const InverseAttrDescriptor *iad = cur->InverseAttrDesc();
-	cur = (InverseAttrDescLinkNode *)( cur->NextNode() );
-	return iad;
+	const Inverse_attribute *ia = cur->Inverse_attr();
+	cur = (Inverse_attributeLinkNode *)( cur->NextNode() );
+	return ia;
     }
     return 0;
 } 
@@ -155,16 +732,18 @@ TypeDescItr::NextTypeDesc()
 const char *
 AttrDescriptor::AttrExprDefStr(SCLstring & s) const
 {
+  SCLstring buf;
+
   s = Name ();
   s.Append (" : ");
-  if(_optional.asInt() == T)
+  if(_optional.asInt() == SCLLOG(LTrue))
     s.Append( "OPTIONAL ");
   if(DomainType())
-	s.Append (DomainType()->AttrTypeName());
+	s.Append (DomainType()->AttrTypeName(buf));
   return s.chars();
 }    
 
-const BASE_TYPE 
+const PrimitiveType 
 AttrDescriptor::BaseType() const
 {
     if(_domainType)
@@ -178,7 +757,7 @@ AttrDescriptor::IsAggrType() const
     return ReferentType()->IsAggrType();
 }
 
-const BASE_TYPE 
+const PrimitiveType 
 AttrDescriptor::AggrElemType() const
 {
     if(IsAggrType())
@@ -206,7 +785,7 @@ AttrDescriptor::NonRefTypeDescriptor() const
     return 0;
 }
 
-const BASE_TYPE 
+const PrimitiveType 
 AttrDescriptor::NonRefType() const
 {
     if(_domainType)
@@ -214,7 +793,7 @@ AttrDescriptor::NonRefType() const
     return UNKNOWN_TYPE;
 }
 
-const BASE_TYPE 
+const PrimitiveType 
 AttrDescriptor::Type() const
 {
     if(_domainType)
@@ -227,8 +806,10 @@ AttrDescriptor::Type() const
 const char *
 AttrDescriptor::TypeName() const
 {
+    SCLstring buf;
+
     if(_domainType)
-	return _domainType->AttrTypeName();
+	return _domainType->AttrTypeName(buf);
     else
 	return "";
 }
@@ -238,7 +819,7 @@ const char *
 AttrDescriptor::ExpandedTypeName(SCLstring & s) const
 {
     s.set_null();
-    if ((LOGICAL) Derived () == sdaiTRUE) s = "DERIVE  ";
+    if (Derived() == SCLLOG(LTrue)) s = "DERIVE  ";
     if(_domainType)
     {
 	SCLstring tmp;
@@ -248,27 +829,190 @@ AttrDescriptor::ExpandedTypeName(SCLstring & s) const
 	return 0;
 }
 
+const char * 
+AttrDescriptor::GenerateExpress (SCLstring &buf) const
+{
+    char tmp[BUFSIZ];
+    SCLstring sstr;
+    buf = AttrExprDefStr(sstr);
+    buf.Append(";\n");
+
+/*
+//    buf = "";
+    buf.Append(StrToLower(Name(),tmp));
+    buf.Append(" : ");
+    if(_optional == SCLLOG(LTrue)) {
+	buf.Append("OPTIONAL ");
+    }
+    buf.Append(TypeName());
+    buf.Append(";\n");
+*/
+    return buf.chars();
+}
+
 ///////////////////////////////////////////////////////////////////////////////
-// InverseAttrDescriptor functions
+// Derived_attribute functions
 ///////////////////////////////////////////////////////////////////////////////
+
+const char *
+Derived_attribute::AttrExprDefStr(SCLstring & s) const
+{
+  SCLstring buf;
+
+  s.set_null();
+  if(Name() && strchr(Name(),'.'))
+  {
+      s = "SELF\\";
+  }
+  s.Append(Name ());
+  s.Append (" : ");
+/*
+  if(_optional.asInt() == SCLLOG(LTrue))
+    s.Append( "OPTIONAL ");
+*/
+  if(DomainType())
+	s.Append (DomainType()->AttrTypeName(buf));
+  if(_initializer) // this is supposed to exist for a derived attribute.
+  {
+      s.Append(" \n\t\t:= ");
+      s.Append(_initializer);
+  }
+  return s.chars();
+}    
+
+///////////////////////////////////////////////////////////////////////////////
+// Inverse_attribute functions
+///////////////////////////////////////////////////////////////////////////////
+
+const char *
+Inverse_attribute::AttrExprDefStr(SCLstring & s) const
+{
+  SCLstring buf;
+
+  s = Name ();
+  s.Append (" : ");
+  if(_optional.asInt() == SCLLOG(LTrue))
+    s.Append( "OPTIONAL ");
+  if(DomainType())
+	s.Append (DomainType()->AttrTypeName(buf));
+  s.Append(" FOR ");
+  s.Append(_inverted_attr_id);
+  return s.chars();
+}    
+/*
+const char * 
+Inverse_attribute::GenerateExpress (SCLstring &buf) const
+{
+    char tmp[BUFSIZ];
+    SCLstring sstr;
+    buf = AttrExprDefStr(sstr);
+    buf.Append(";\n");
+
+    return buf.chars();
+}
+*/
 
 ///////////////////////////////////////////////////////////////////////////////
 // EnumDescriptor functions
 ///////////////////////////////////////////////////////////////////////////////
 
-EnumTypeDescriptor::EnumTypeDescriptor (const char * nm, BASE_TYPE ft, 
+EnumTypeDescriptor::EnumTypeDescriptor (const char * nm, PrimitiveType ft, 
+					Schema *origSchema, 
 					const char * d, EnumCreator f)
-: TypeDescriptor (nm, ft, d), CreateNewEnum(f)
+: TypeDescriptor (nm, ft, origSchema, d), CreateNewEnum(f)
 {
+}
+
+#ifdef __OSTORE__
+SCLP23(Enum) *
+EnumTypeDescriptor::CreateEnum(os_database *db)
+{
+    if(CreateNewEnum)
+      return CreateNewEnum(db);
+    else
+      return 0;
+}
+#else
+SCLP23(Enum) *
+EnumTypeDescriptor::CreateEnum()
+{
+    if(CreateNewEnum)
+      return CreateNewEnum();
+    else
+      return 0;
+}
+#endif
+
+const char * 
+EnumTypeDescriptor::GenerateExpress (SCLstring &buf) const
+{
+    char tmp[BUFSIZ];
+    buf = "TYPE ";
+    buf.Append(StrToLower(Name(),tmp));
+    buf.Append(" = ENUMERATION OF \n  (");
+    const char *desc = Description();
+    const char *ptr = &(desc[16]);
+    int count;
+    Where_rule_ptr wr;
+    int i;
+    int all_comments = 1;
+    
+    while(*ptr != '\0') 
+    {
+	if( *ptr == ',')
+	{
+	    buf.Append(",\n  ");
+	} else if (isupper(*ptr)){
+	    buf.Append((char)tolower(*ptr));
+	} else {
+	    buf.Append(*ptr);
+	}
+	ptr++;
+    }
+    buf.Append(";\n");
+///////////////
+    // count is # of WHERE rules
+    if(_where_rules != 0)
+    {
+	count = _where_rules->Count(); 
+	for(i = 0; i < count; i++) // print out each UNIQUE rule
+	{
+	    if( !(*(_where_rules))[i]->_label.is_undefined() )
+	      all_comments = 0;
+	}
+
+	if(all_comments)
+	    buf.Append("  (* WHERE *)\n");
+	else
+	    buf.Append("  WHERE\n");
+
+	for(i = 0; i < count; i++) // print out each WHERE rule
+	{
+	    if( !(*(_where_rules))[i]->_comment.is_null() )
+	    {
+		buf.Append("    ");
+		buf.Append( (*(_where_rules))[i]->comment_() );
+	    }
+	    if( !(*(_where_rules))[i]->_label.is_null() )
+	    {
+		buf.Append("    ");
+		buf.Append( (*(_where_rules))[i]->label_() );
+	    }
+	}
+    }
+
+    buf.Append("END_TYPE;\n");
+    return buf.chars();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // EntityDescriptor functions
 ///////////////////////////////////////////////////////////////////////////////
 
-EntityDescriptor::EntityDescriptor ( ) : _abstractEntity("U")
+EntityDescriptor::EntityDescriptor ( ) 
+: _abstractEntity(SCLLOG(LUnknown)), _extMapping(SCLLOG(LUnknown)),
+  _uniqueness_rules((Uniqueness_rule__set_var)0), NewSTEPentity(0)
 {
-    _originatingSchema = 0;
 //    _derivedAttr = new StringAggregate;
 /*
     _subtypes = 0;
@@ -279,19 +1023,21 @@ EntityDescriptor::EntityDescriptor ( ) : _abstractEntity("U")
 }
 
 EntityDescriptor::EntityDescriptor (const char * name, // i.e. char *
-				    SchemaDescriptor *origSchema, 
-				    LOGICAL abstractEntity, // F U or T
+				    Schema *origSchema, 
+				    SCLLOG(Logical) abstractEntity, // F U or T
+				    SCLLOG(Logical) extMapping,
 				    Creator f
 /*
 				    EntityDescriptorList *subtypes,
 				    EntityDescriptorList *supertypes,
 				    AttrDescriptorList *explicitAttr,
 				    StringAggregate *derivedAttr,
-				    InverseAttrDescriptorList *inverseAttr
+				    Inverse_attributeList *inverseAttr
 */
 				    ) 
-: TypeDescriptor (name, ENTITY_TYPE, name), _originatingSchema (origSchema),  
-  _abstractEntity(abstractEntity), NewSTEPentity(f)
+: TypeDescriptor (name, ENTITY_TYPE, origSchema, name),
+  _abstractEntity(abstractEntity), _extMapping(extMapping), 
+  _uniqueness_rules((Uniqueness_rule__set_var)0), NewSTEPentity(f)
 {
 /*
     _subtypes = subtypes;
@@ -304,6 +1050,204 @@ EntityDescriptor::EntityDescriptor (const char * name, // i.e. char *
 
 EntityDescriptor::~EntityDescriptor ()  
 {
+    delete _uniqueness_rules;
+}
+
+const char * 
+EntityDescriptor::GenerateExpress (SCLstring &buf) const
+{
+    char tmp[BUFSIZ];
+    SCLstring sstr;
+    int count;
+    Where_rule_ptr wr;
+    int i;
+    int all_comments = 1;
+
+    buf = "ENTITY ";
+    buf.Append(StrToLower(Name(),sstr));
+
+    if(strlen(_supertype_stmt.chars()) > 0)
+      buf.Append("\n  ");
+    buf.Append(_supertype_stmt.chars());
+
+    const EntityDescriptor * ed = 0;
+/*
+    EntityDescItr edi_sub(_subtypes);
+    edi_sub.ResetItr();
+    ed = edi_sub.NextEntityDesc();
+    int subtypes = 0;
+    if(ed) {
+	buf.Append("\n  SUPERTYPE OF (ONEOF(");
+	buf.Append(StrToLower(ed->Name(),sstr));
+	subtypes = 1;
+    }
+    ed = edi_sub.NextEntityDesc();
+    while (ed) {
+	buf.Append(",\n\t\t");
+	buf.Append(StrToLower(ed->Name(),sstr));
+	ed = edi_sub.NextEntityDesc();
+    }
+    if(subtypes) {
+	buf.Append("))");
+    }
+*/
+
+    EntityDescItr edi_super(_supertypes);
+    edi_super.ResetItr();
+    ed = edi_super.NextEntityDesc();
+    int supertypes = 0;
+    if(ed) {
+	buf.Append("\n  SUBTYPE OF (");
+	buf.Append(StrToLower(ed->Name(),sstr));
+	supertypes = 1;
+    }
+    ed = edi_super.NextEntityDesc();
+    while (ed) {
+	buf.Append(",\n\t\t");
+	buf.Append(StrToLower(ed->Name(),sstr));
+	ed = edi_super.NextEntityDesc();
+    }
+    if(supertypes) {
+	buf.Append(")");
+    }
+
+    buf.Append(";\n");
+
+    AttrDescItr adi(_explicitAttr);
+
+    adi.ResetItr();
+    const AttrDescriptor *ad = adi.NextAttrDesc();
+
+    while (ad) {
+	if(ad->AttrType() == AttrType_Explicit)
+	{
+	    buf.Append("    ");
+	    buf.Append(ad->GenerateExpress(sstr));
+	}
+	ad = adi.NextAttrDesc();
+    }
+
+    adi.ResetItr();
+    ad = adi.NextAttrDesc();
+
+    count = 1;
+    while (ad) {
+	if(ad->AttrType() == AttrType_Deriving)
+	{
+	    if(count == 1)
+	      buf.Append("  DERIVE\n");
+	    buf.Append("    ");
+	    buf.Append(ad->GenerateExpress(sstr));
+	    count++;
+	}
+	ad = adi.NextAttrDesc();
+    }
+/////////
+
+    InverseAItr iai(_inverseAttr);
+//	const char * AttrTypeName( SCLstring &buf, const char *schnm =NULL ) const;
+
+    iai.ResetItr();
+    const Inverse_attribute *ia = iai.NextInverse_attribute();
+
+    if(ia)
+      buf.Append("  INVERSE\n");
+
+    while (ia) {
+	buf.Append("    ");
+	buf.Append(ia->GenerateExpress(sstr));
+	ia = iai.NextInverse_attribute();
+    }
+///////////////
+    // count is # of UNIQUE rules
+    if(_uniqueness_rules != 0)
+    {
+	count = _uniqueness_rules->Count(); 
+	for(i = 0; i < count; i++) // print out each UNIQUE rule
+	{
+	    if( !(*(_uniqueness_rules))[i]->_label.is_undefined() )
+	      all_comments = 0;
+	}
+
+	if(all_comments)
+	    buf.Append("  (* UNIQUE *)\n");
+	else
+	    buf.Append("  UNIQUE\n");
+	for(i = 0; i < count; i++) // print out each UNIQUE rule
+	{
+	    if( !(*(_uniqueness_rules))[i]->_comment.is_null() )
+	    {
+		buf.Append("    ");
+		buf.Append( (*(_uniqueness_rules))[i]->comment_() );
+		buf.Append("\n");
+	    }
+	    if( !(*(_uniqueness_rules))[i]->_label.is_null() )
+	    {
+		buf.Append("    ");
+		buf.Append( (*(_uniqueness_rules))[i]->label_() );
+		buf.Append("\n");
+	    }
+	}
+    }
+
+///////////////
+    // count is # of WHERE rules
+    if(_where_rules != 0)
+    {
+	all_comments = 1;
+	count = _where_rules->Count(); 
+	for(i = 0; i < count; i++) // print out each UNIQUE rule
+	{
+	    if( !(*(_where_rules))[i]->_label.is_undefined() )
+	      all_comments = 0;
+	}
+
+	if(!all_comments)
+	  buf.Append("  WHERE\n");
+	else
+	  buf.Append("  (* WHERE *)\n");
+	for(i = 0; i < count; i++) // print out each WHERE rule
+	{
+	    if( !(*(_where_rules))[i]->_comment.is_null() )
+	    {
+		buf.Append("    ");
+		buf.Append( (*(_where_rules))[i]->comment_() );
+		buf.Append("\n");
+	    }
+	    if( !(*(_where_rules))[i]->_label.is_null() )
+	    {
+		buf.Append("    ");
+		buf.Append( (*(_where_rules))[i]->label_() );
+		buf.Append("\n");
+	    }
+	}
+    }
+
+    buf.Append("END_ENTITY;\n");
+   
+    return buf.chars();
+}
+
+const char *
+EntityDescriptor::QualifiedName(SCLstring &s) const
+{
+    s.set_null();
+    EntityDescItr edi(_supertypes);
+
+    int count = 1;
+    const EntityDescriptor * ed = 0;
+    while(ed = edi.NextEntityDesc())
+    {
+	if(count > 1)
+	{
+	    s.Append("&");
+	}
+	s.Append(ed->Name());
+	count++;
+    }
+    if(count > 1) s.Append("&");
+    s.Append(Name());
+    return s.chars();
 }
 
 const TypeDescriptor * 
@@ -327,6 +1271,7 @@ EntityDescriptor::IsA (const EntityDescriptor * other)  const {
   }
   return found;
 }
+
 /*
 EntityDescriptor::FindLongestAttribute()
 {
@@ -350,9 +1295,446 @@ EntityDescriptor::FindLongestAttribute()
     }
 }
 */
+
+Type_or_rule::Type_or_rule()
+{
+}
+
+Type_or_rule::Type_or_rule(const Type_or_rule&tor)
+{
+}
+
+Type_or_rule::~Type_or_rule()
+{
+}
+
+
+Where_rule::Where_rule() 
+{
+    _type_or_rule = 0;
+}
+
+
+Where_rule::Where_rule(const Where_rule& wr) 
+{
+    _label = wr._label;
+    _type_or_rule = wr._type_or_rule;
+}
+
+Where_rule::~Where_rule() 
+{
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+Where_rule__list::Where_rule__list (int defaultSize) {
+    _bufsize = defaultSize;
+    _buf = new Where_rule_ptr[_bufsize];
+    _count = 0;
+}
+
+Where_rule__list::~Where_rule__list () { delete _buf; }
+
+void Where_rule__list::Check (int index) {
+    Where_rule_ptr* newbuf;
+
+    if (index >= _bufsize) {
+        _bufsize = (index+1) * 2;
+        newbuf = new Where_rule_ptr[_bufsize];
+        memmove(newbuf, _buf, _count*sizeof(Where_rule_ptr));
+        delete _buf;
+        _buf = newbuf;
+    }
+}
+
+void Where_rule__list::Insert (Where_rule_ptr v, int index) {
+    Where_rule_ptr* spot;
+    index = (index < 0) ? _count : index;
+
+    if (index < _count) {
+        Check(_count+1);
+        spot = &_buf[index];
+        memmove(spot+1, spot, (_count - index)*sizeof(Where_rule_ptr));
+
+    } else {
+        Check(index);
+        spot = &_buf[index];
+    }
+    *spot = v;
+    ++_count;
+}
+
+void Where_rule__list::Append (Where_rule_ptr v) {
+    int index = _count;
+    Where_rule_ptr* spot;
+
+    if (index < _count) {
+        Check(_count+1);
+        spot = &_buf[index];
+        memmove(spot+1, spot, (_count - index)*sizeof(Where_rule_ptr));
+
+    } else {
+        Check(index);
+        spot = &_buf[index];
+    }
+    *spot = v;
+    ++_count;
+}
+
+void Where_rule__list::Remove (int index) {
+    if (0 <= index && index < _count) {
+        --_count;
+        Where_rule_ptr* spot = &_buf[index];
+        memmove(spot, spot+1, (_count - index)*sizeof(Where_rule_ptr));
+    }
+}
+
+int Where_rule__list::Index (Where_rule_ptr v) {
+    for (int i = 0; i < _count; ++i) {
+        if (_buf[i] == v) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+Where_rule_ptr& Where_rule__list::operator[] (int index) {
+    Check(index);
+//    _count = G4std::max(_count, index+1);
+    _count = ( (_count > index+1) ? _count : (index+1) );
+    return _buf[index];
+}
+
+int 
+Where_rule__list::Count()
+{
+    return _count; 
+}
+
+void 
+Where_rule__list::Clear()
+{
+    _count = 0; 
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+Uniqueness_rule::Uniqueness_rule() 
+: _parent_entity(0)
+{
+}
+
+
+Uniqueness_rule::Uniqueness_rule(const Uniqueness_rule& ur) 
+{
+    _label = ur._label;
+    _parent_entity = ur._parent_entity;
+}
+
+Uniqueness_rule::~Uniqueness_rule() 
+{
+    // don't delete _parent_entity
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+Uniqueness_rule__set::Uniqueness_rule__set (int defaultSize) {
+    _bufsize = defaultSize;
+    _buf = new Uniqueness_rule_ptr[_bufsize];
+    _count = 0;
+}
+
+Uniqueness_rule__set::~Uniqueness_rule__set () { delete _buf; }
+
+void Uniqueness_rule__set::Check (int index) {
+    Uniqueness_rule_ptr* newbuf;
+
+    if (index >= _bufsize) {
+        _bufsize = (index+1) * 2;
+        newbuf = new Uniqueness_rule_ptr[_bufsize];
+        memmove(newbuf, _buf, _count*sizeof(Uniqueness_rule_ptr));
+        delete _buf;
+        _buf = newbuf;
+    }
+}
+
+void Uniqueness_rule__set::Insert (Uniqueness_rule_ptr v, int index) {
+    Uniqueness_rule_ptr* spot;
+    index = (index < 0) ? _count : index;
+
+    if (index < _count) {
+        Check(_count+1);
+        spot = &_buf[index];
+        memmove(spot+1, spot, (_count - index)*sizeof(Uniqueness_rule_ptr));
+
+    } else {
+        Check(index);
+        spot = &_buf[index];
+    }
+    *spot = v;
+    ++_count;
+}
+
+void Uniqueness_rule__set::Append (Uniqueness_rule_ptr v) {
+    int index = _count;
+    Uniqueness_rule_ptr* spot;
+
+    if (index < _count) {
+        Check(_count+1);
+        spot = &_buf[index];
+        memmove(spot+1, spot, (_count - index)*sizeof(Uniqueness_rule_ptr));
+
+    } else {
+        Check(index);
+        spot = &_buf[index];
+    }
+    *spot = v;
+    ++_count;
+}
+
+void Uniqueness_rule__set::Remove (int index) {
+    if (0 <= index && index < _count) {
+        --_count;
+        Uniqueness_rule_ptr* spot = &_buf[index];
+        memmove(spot, spot+1, (_count - index)*sizeof(Uniqueness_rule_ptr));
+    }
+}
+
+int Uniqueness_rule__set::Index (Uniqueness_rule_ptr v) {
+    for (int i = 0; i < _count; ++i) {
+        if (_buf[i] == v) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+Uniqueness_rule_ptr& Uniqueness_rule__set::operator[] (int index) {
+    Check(index);
+//    _count = G4std::max(_count, index+1);
+    _count = ( (_count > index+1) ? _count : (index+1) );
+    return _buf[index];
+}
+
+int 
+Uniqueness_rule__set::Count()
+{
+    return _count; 
+}
+
+void 
+Uniqueness_rule__set::Clear()
+{
+    _count = 0; 
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+Global_rule::Global_rule()
+: _entities(0), _where_rules(0), _parent_schema(0)
+{
+}
+
+Global_rule::Global_rule(const char *n, Schema_ptr parent_sch, const char * rt)
+: _name(n), _entities(0), _where_rules(0), _parent_schema(parent_sch), 
+  _rule_text(rt)
+{
+}
+
+// not fully implemented
+Global_rule::Global_rule(Global_rule& gr)
+{
+    _name = gr._name;
+    _parent_schema = gr._parent_schema;
+}
+
+Global_rule::~Global_rule()
+{
+    delete _entities;
+    delete _where_rules;
+}
+
+void 
+Global_rule::entities_(const Entity__set_var &e)
+{
+}
+
+void 
+Global_rule::where_rules_(const Where_rule__list_var &wrl)
+{
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+Global_rule__set::Global_rule__set (int defaultSize) {
+    _bufsize = defaultSize;
+    _buf = new Global_rule_ptr[_bufsize];
+    _count = 0;
+}
+
+Global_rule__set::~Global_rule__set () { delete _buf; }
+
+void Global_rule__set::Check (int index) {
+    Global_rule_ptr* newbuf;
+
+    if (index >= _bufsize) {
+        _bufsize = (index+1) * 2;
+        newbuf = new Global_rule_ptr[_bufsize];
+        memmove(newbuf, _buf, _count*sizeof(Global_rule_ptr));
+        delete _buf;
+        _buf = newbuf;
+    }
+}
+
+void Global_rule__set::Insert (Global_rule_ptr v, int index) {
+    Global_rule_ptr* spot;
+    index = (index < 0) ? _count : index;
+
+    if (index < _count) {
+        Check(_count+1);
+        spot = &_buf[index];
+        memmove(spot+1, spot, (_count - index)*sizeof(Global_rule_ptr));
+
+    } else {
+        Check(index);
+        spot = &_buf[index];
+    }
+    *spot = v;
+    ++_count;
+}
+
+void Global_rule__set::Append (Global_rule_ptr v) {
+    int index = _count;
+    Global_rule_ptr* spot;
+
+    if (index < _count) {
+        Check(_count+1);
+        spot = &_buf[index];
+        memmove(spot+1, spot, (_count - index)*sizeof(Global_rule_ptr));
+
+    } else {
+        Check(index);
+        spot = &_buf[index];
+    }
+    *spot = v;
+    ++_count;
+}
+
+void Global_rule__set::Remove (int index) {
+    if (0 <= index && index < _count) {
+        --_count;
+        Global_rule_ptr* spot = &_buf[index];
+        memmove(spot, spot+1, (_count - index)*sizeof(Global_rule_ptr));
+    }
+}
+
+int Global_rule__set::Index (Global_rule_ptr v) {
+    for (int i = 0; i < _count; ++i) {
+        if (_buf[i] == v) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+Global_rule_ptr& Global_rule__set::operator[] (int index) {
+    Check(index);
+//    _count = G4std::max(_count, index+1);
+    _count = ( (_count > index+1) ? _count : (index+1) );
+    return _buf[index];
+}
+
+int 
+Global_rule__set::Count()
+{
+    return _count; 
+}
+
+void 
+Global_rule__set::Clear()
+{
+    _count = 0; 
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 // TypeDescriptor functions
 ///////////////////////////////////////////////////////////////////////////////
+
+const char * 
+TypeDescriptor::AttrTypeName(SCLstring &buf, const char *schnm ) const 
+{
+    SCLstring sstr;
+    buf = Name(schnm) ? StrToLower(Name(schnm),sstr) : _description;
+    return buf.chars();
+}	    
+
+const char * 
+TypeDescriptor::GenerateExpress (SCLstring &buf) const
+{
+    char tmp[BUFSIZ];
+    buf = "TYPE ";
+    buf.Append(StrToLower(Name(),tmp));
+    buf.Append(" = ");
+    const char *desc = Description();
+    const char *ptr = desc;
+    int count;
+    Where_rule_ptr wr;
+    int i;
+    int all_comments = 1;
+    
+    while(*ptr != '\0') 
+    {
+	if( *ptr == ',')
+	{
+	    buf.Append(",\n  ");
+	} else if( *ptr == '(') {
+	    buf.Append("\n  (");
+	} else if (isupper(*ptr)){
+	    buf.Append((char)tolower(*ptr));
+	} else {
+	    buf.Append(*ptr);
+	}
+	ptr++;
+    }
+    buf.Append(";\n");
+///////////////
+    // count is # of WHERE rules
+    if(_where_rules != 0)
+    {
+	count = _where_rules->Count(); 
+	for(i = 0; i < count; i++) // print out each UNIQUE rule
+	{
+	    if( !(*(_where_rules))[i]->_label.is_undefined() )
+	      all_comments = 0;
+	}
+
+	if(all_comments)
+	    buf.Append("  (* WHERE *)\n");
+	else
+	    buf.Append("    WHERE\n");
+
+	for(i = 0; i < count; i++) // print out each WHERE rule
+	{
+	    if( !(*(_where_rules))[i]->_comment.is_null() )
+	    {
+		buf.Append("    ");
+		buf.Append( (*(_where_rules))[i]->comment_() );
+	    }
+	    if( !(*(_where_rules))[i]->_label.is_null() )
+	    {
+		buf.Append("      ");
+		buf.Append( (*(_where_rules))[i]->label_() );
+	    }
+	}
+    }
+
+    buf.Append("END_TYPE;\n");
+    return buf.chars();
+
+//    buf.Append(Description());
+//    buf.Append("\nEND_TYPE;\n");
+}
 
 	///////////////////////////////////////////////////////////////////////
 	// This is a fully expanded description of the type.
@@ -522,7 +1904,6 @@ TypeDescriptor::TypeString(SCLstring & s) const
 }
 */
 
-
 const TypeDescriptor * 
 TypeDescriptor::IsA (const TypeDescriptor * other)  const {
   if (this == other)  return other;
@@ -532,13 +1913,14 @@ TypeDescriptor::IsA (const TypeDescriptor * other)  const {
 const TypeDescriptor * 
 TypeDescriptor::IsA (const char * other) const  {
   if (!Name())  return 0;
-  if (!strcmp (Name (), PrettyTmpName (other)))  // this is the type
-    return this;
+  if ( !StrCmpIns( _name, other ) ) {  // this is the type
+      return this;
+  }
   return (ReferentType () ? ReferentType () -> IsA (other) : 0);
 }
 
 	///////////////////////////////////////////////////////////////////////
-	// the first BASE_TYPE that is not REFERENCE_TYPE (the first 
+	// the first PrimitiveType that is not REFERENCE_TYPE (the first 
 	// TypeDescriptor *_referentType that does not have REFERENCE_TYPE 
 	// for it's fundamentalType variable).  This would return the same 
 	// as BaseType() for fundamental types.  An aggregate type
@@ -547,7 +1929,7 @@ TypeDescriptor::IsA (const char * other) const  {
 	// would work the same?
 	///////////////////////////////////////////////////////////////////////
 
-const BASE_TYPE 
+const PrimitiveType 
 TypeDescriptor::NonRefType() const
 {
     const TypeDescriptor *td = NonRefTypeDescriptor();
@@ -572,11 +1954,13 @@ TypeDescriptor::NonRefTypeDescriptor() const
 }
 
 	///////////////////////////////////////////////////////////////////////
-	// This returns the BASE_TYPE of the first non-aggregate element of 
+	// This returns the PrimitiveType of the first non-aggregate element of 
 	// an aggregate
 	///////////////////////////////////////////////////////////////////////
 
-TypeDescriptor::IsAggrType() const
+// Added 'int' return type - GC
+
+int TypeDescriptor::IsAggrType() const
 {
     switch(NonRefType())
     {
@@ -592,7 +1976,7 @@ TypeDescriptor::IsAggrType() const
     }
 }
 
-const BASE_TYPE 
+const PrimitiveType 
 TypeDescriptor::AggrElemType() const
 {
     const TypeDescriptor *aggrElemTD = AggrElemTypeDescriptor();
@@ -620,13 +2004,13 @@ TypeDescriptor::AggrElemTypeDescriptor() const
 	// TYPE count = INTEGER;
 	// TYPE ref_count = count;
 	// TYPE count_set = SET OF ref_count;
-	//  each of the above will Generate a TypeDescriptor and for 
-	//  each one, BASE_TYPE BaseType() will return INTEGER_TYPE
+	//  each of the above will generate a TypeDescriptor and for 
+	//  each one, PrimitiveType BaseType() will return INTEGER_TYPE
 	//  TypeDescriptor *BaseTypeDescriptor() returns the TypeDescriptor 
 	//  for Integer
 	////////////////////////////////////////////////////////////
 
-const BASE_TYPE
+const PrimitiveType
 TypeDescriptor::BaseType() const
 {
     const TypeDescriptor *td = BaseTypeDescriptor();
@@ -656,20 +2040,106 @@ EnumerationTypeDescriptor::EnumerationTypeDescriptor( )
 ///////////////////////////////////////////////////////////////////////////////
 // SelectTypeDescriptor functions
 ///////////////////////////////////////////////////////////////////////////////
+
+#ifdef __OSTORE__
+SCLP23(Select) *
+SelectTypeDescriptor::CreateSelect(os_database *db)
+{
+    if(CreateNewSelect)
+      return CreateNewSelect(db);
+    else
+      return 0;
+}
+#else
+SCLP23(Select) *
+SelectTypeDescriptor::CreateSelect()
+{
+    if(CreateNewSelect)
+      return CreateNewSelect();
+    else
+      return 0;
+}
+#endif
+
 const TypeDescriptor *
 SelectTypeDescriptor::IsA (const TypeDescriptor * other) const
 {  return TypeDescriptor::IsA (other);  }
 
+// returns the td among the choices of tds describing elements of this select
+// type but only at this unexpanded level. The td ultimately describing the
+// type may be an element of a td for a select that is returned.
+
 const TypeDescriptor *
 SelectTypeDescriptor::CanBe (const TypeDescriptor * other) const
 {
-  const TypeDescriptor * found =0;
+//  const TypeDescriptor * found =0;
   TypeDescItr elements (GetElements()) ;
   const TypeDescriptor * td =0;
 
   if (this == other) return other;
   while (td = elements.NextTypeDesc ())  {
-    if (found = (td -> CanBe (other))) return found;
+//    if (found = (td -> CanBe (other))) return found;
+    if (td -> CanBe (other)) return td;
+  }
+  return 0;
+}
+
+// returns the td among the choices of tds describing elements of this select
+// type but only at this unexpanded level. The td ultimately describing the
+// type may be an element of a td for a select that is returned.
+
+const TypeDescriptor *
+SelectTypeDescriptor::CanBe (const char * other) const
+{
+  const TypeDescriptor * found =0;
+  TypeDescItr elements (GetElements()) ;
+  const TypeDescriptor * td =0;
+
+  // see if other is the select
+  if ( !StrCmpIns( _name, other ) )
+    return this;
+
+  // see if other is one of the elements
+  while (td = elements.NextTypeDesc ())  {
+    if (td -> CanBe (other)) return td;
+//    if (found = (td -> CanBe (other))) return found;
+  }
+  return 0;
+}
+
+// A modified CanBe, used to determine if "other", a string we have just read,
+// is a possible type-choice of this.  (I.e., our select "CanBeSet" to this
+// choice.)  This deals with the following issue, based on the Tech Corrigendum
+// to Part 21:  Say our select ("selP") has an item which is itself a select
+// ("selQ").  Say it has another select item which is a redefinition of another
+// select ("TYPE selR = selS;").  According to the T.C., if selP is set to one
+// of the members of selQ, "selQ(...)" may not appear in the instantiation.
+// If, however, selP is set to a member of selR, "selR(...)" must appear first.
+// The code below checks if "other" = one of our possible choices.  If one of
+// our choices is a select like selQ, we recurse to see if other matches a
+// member of selQ (and don't look for "selQ").  If we have a choice like selR,
+// we check if other = "selR", but do not look at selR's members.  This func-
+// tion also takes into account schNm, the name of the current schema.  If
+// schNm does not = the schema in which this type was declared, it's possible
+// that it should be referred to with a different name.  This would be the case
+// if schNm = a schema which USEs or REFERENCEs this and renames it (e.g., "USE
+// from XX (A as B)").
+
+const TypeDescriptor *
+SelectTypeDescriptor::CanBeSet (const char * other, const char *schNm) const
+{
+  TypeDescItr elements (GetElements()) ;
+  const TypeDescriptor * td =0;
+
+  while (td = elements.NextTypeDesc ()) {
+      if ( td->Type() == REFERENCE_TYPE && td->NonRefType() == sdaiSELECT ) {
+	  // Just look at this level, don't look at my items (see intro).
+	  if ( td->CurrName( other, schNm ) ) {
+	      return td;
+	  }
+      } else if ( td->CanBeSet( other, schNm ) ) {
+	  return td;
+      }
   }
   return 0;
 }
@@ -678,18 +2148,39 @@ SelectTypeDescriptor::CanBe (const TypeDescriptor * other) const
 // AggrTypeDescriptor functions
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifdef __OSTORE__
+STEPaggregate *
+AggrTypeDescriptor::CreateAggregate(os_database *db)
+{
+    if(CreateNewAggr)
+      return CreateNewAggr(db);
+    else
+      return 0;
+}
+#else
+STEPaggregate *
+AggrTypeDescriptor::CreateAggregate()
+{
+    if(CreateNewAggr)
+      return CreateNewAggr();
+    else
+      return 0;
+}
+#endif
+
+
 AggrTypeDescriptor::AggrTypeDescriptor( ) : 
-		_uniqueElements("UNKNOWN_TYPE")
+		_uniqueElements((char*)("UNKNOWN_TYPE"))
 {
     _bound1 = -1;
     _bound2 = -1;
     _aggrDomainType = 0;
 }
 
-AggrTypeDescriptor::AggrTypeDescriptor(SdaiInteger b1, 
-						 SdaiInteger b2, 
-						 LOGICAL uniqElem, 
-						 TypeDescriptor *aggrDomType)
+AggrTypeDescriptor::AggrTypeDescriptor(SCLP23(Integer) b1, 
+				       SCLP23(Integer) b2, 
+				       SCLLOG(Logical) uniqElem, 
+				       TypeDescriptor *aggrDomType)
 	      : _bound1(b1), _bound2(b2), _uniqueElements(uniqElem)
 {
     _aggrDomainType = aggrDomType;

@@ -1,20 +1,10 @@
-
-
-//
-
-
-
-//
-// $Id: scl_string.h,v 1.3 1999-12-15 18:04:17 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #ifndef _SCL_STRING_H
 #define _SCL_STRING_H
 
 /*
 * NIST Utils Class Library
 * clutils/scl_string.h
-* May 1995
+* April 1997
 * K. C. Morris
 * David Sauder
 
@@ -22,18 +12,27 @@
 * and is not subject to copyright.
 */
 
-/*  */
+/* $Id: scl_string.h,v 1.4 2000-01-21 13:42:42 gcosmo Exp $ */
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
+#endif
+
+#ifdef __OSTORE__
+#include <ostore/ostore.hh>    // Required to access ObjectStore Class Library
 #endif
 
 /*  point of contact for bug reports  */
 #define _POC_  " report problem to dp2@cme.nist.gov "
 
 //#include <std.h> // not found in CenterLine C++
-#ifdef __OBJECTCENTER__
+//#ifdef __OBJECTCENTER__
 // this file is not in gnu C++ but it doesn't seem to be needed.
+//#include <stdarg.h>
+//#endif
+
+// to make ObjectCenter happy?
+#ifdef HAVE_STDARG_H
 #include <stdarg.h>
 #endif
 
@@ -41,7 +40,7 @@
 #include <string.h>
 
 /******************************************************************
- ** Class:  SCLstring
+b** Class:  SCLstring
 ** Description: implements a few basic string handling functions - 
 **              hopefully will be replaced by a standard clas
  ** Status:  26-Jan-1994 kc
@@ -49,6 +48,7 @@
 
 class SCLstring   {
 protected:
+public:
   char * _strBuf;   //  initially empty
   int _strBufSize;  // size of buffer
   int _max_len;  // should be const, but some db\'s don\'t handle that
@@ -56,6 +56,7 @@ protected:
   int newBufSize (int len) const;
 
 public:
+    void PrintContents(G4std::ostream &out = G4cout) const;
 	// returns 1 if _strBuf is a null ptr or if it is an empty string ("")
     int is_null() const;
 	// returns 1 if _strBuf is a null ptr, and 0 otherwise
@@ -67,6 +68,7 @@ public:
     int StrBufSize() const;
     int Length() const;
     int MaxLength() const	{ return _max_len; }
+    void MaxLength(int i)	{ _max_len = i; }
 
     const char * chars () const
 	{ return _strBuf ? _strBuf : ""; }
@@ -96,8 +98,11 @@ public:
     SCLstring (const SCLstring& s);
     ~SCLstring ();
 
+#ifdef __OSTORE__
+    static os_typespec* get_os_typespec();
+#endif
 };
 
-#endif   
+typedef SCLstring String_var;
 
-
+#endif  /*   _SCL_STRING_H  */

@@ -1,18 +1,8 @@
 
-
-//
-
-
-
-//
-// $Id: mgrnodearray.cc,v 1.2 1999-05-21 20:21:10 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 /*
 * NIST STEP Editor Class Library
 * cleditor/mgrnodearray.cc
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -20,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/*  */ 
+/* $Id: mgrnodearray.cc,v 1.3 2000-01-21 13:43:12 gcosmo Exp $ */ 
 
 /*
  * MgrNodeArray - dynamic array object of MgrNodes.
@@ -31,8 +21,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 //	debug_level >= 2 => tells when a command is chosen
 //	debug_level >= 3 => prints values within functions:
-//	   e.g. 1) entity type List when read
-//		2) entity instance List when read
+//	   e.g. 1) entity type list when read
+//		2) entity instance list when read
 ///////////////////////////////////////////////////////////////////////////////
 static int debug_level = 1;
 	// if debug_level is greater than this number then
@@ -43,7 +33,8 @@ static int PrintFunctionTrace = 2;
 //static int PrintValues = 3;
 
 #include <mgrnodearray.h>
-#include <STEPentity.h>
+//#include <STEPentity.h>
+#include <sdai.h>
 
 #include <string.h>	// to get bcopy() - ANSI
 
@@ -51,6 +42,18 @@ static int PrintFunctionTrace = 2;
 //////////////////////////////////////////////////////////////////////////////
 // class MgrNodeArray member functions
 //////////////////////////////////////////////////////////////////////////////
+
+//#ifdef __OSTORE__
+//MgrNodeArray::MgrNodeArray(os_database *db, int defaultSize)
+//	: GenNodeArray(db, defaultSize) 
+//{
+//}
+//#endif
+
+MgrNodeArray::MgrNodeArray(int defaultSize) 
+	: GenNodeArray(defaultSize) 
+{
+}
 
 void MgrNodeArray::AssignIndexAddress(int index)
 {
@@ -124,7 +127,7 @@ int MgrNodeArray::MgrNodeIndex(int fileId)
 	G4cout << "MgrNodeArray::MgrNodeIndex()\n";
     int i;
     for (i = 0; i < _count; ++i) {
-        if( ((MgrNode *)_buf[i])->GetSTEPentity()->GetFileId() == fileId) {
+        if( ((MgrNode *)_buf[i])->GetApplication_instance()->GetFileId() == fileId) {
             return i;
         }
     }
@@ -135,12 +138,24 @@ int MgrNodeArray::MgrNodeIndex(int fileId)
 // class MgrNodeArraySorted member functions
 //////////////////////////////////////////////////////////////////////////////
 
+//#ifdef __OSTORE__
+//MgrNodeArraySorted::MgrNodeArraySorted(os_database *db, int defaultSize)
+//	: GenNodeArray(db, defaultSize) 
+//{
+//}
+//#endif
+
+MgrNodeArraySorted::MgrNodeArraySorted(int defaultSize) 
+	: GenNodeArray(defaultSize) 
+{
+}
+
 int MgrNodeArraySorted::Insert (GenericNode* gn) {
 //    if(debug_level >= PrintFunctionTrace)
 //	G4cout << "MgrNodeArraySorted::Insert()\n";
 
 	// since gn is really a MgrNode
-    int fileId = ((MgrNode *)gn)->GetSTEPentity()->GetFileId();
+    int fileId = ((MgrNode *)gn)->GetApplication_instance()->GetFileId();
 
     int index = FindInsertPosition(fileId);
 
@@ -196,7 +211,7 @@ int MgrNodeArraySorted::FindInsertPosition(const int fileId)
     int curFileId;
 
     for (i = _count-1; i >= 0; --i) {
-	curFileId = ((MgrNode *)_buf[i])->GetSTEPentity()->GetFileId();
+	curFileId = ((MgrNode *)_buf[i])->GetApplication_instance()->GetFileId();
         if (curFileId < fileId /*|| curFileId == fileId*/)
 	{
             return i + 1;
@@ -222,7 +237,7 @@ int MgrNodeArraySorted::MgrNodeIndex(int fileId) {
     while(!found && (low <= high))
     {
 	mid = (low + high) / 2;
-	curFileId = ((MgrNode *)_buf[mid])->GetSTEPentity()->GetFileId();
+	curFileId = ((MgrNode *)_buf[mid])->GetApplication_instance()->GetFileId();
 	if(curFileId == fileId)
 	{
 	    found = 1;

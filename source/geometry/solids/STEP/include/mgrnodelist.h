@@ -1,21 +1,11 @@
 
-
-//
-
-
-
-//
-// $Id: mgrnodelist.h,v 1.2 1999-05-21 20:20:42 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 #ifndef mgrnodelist_h
 #define mgrnodelist_h
 
 /*
 * NIST STEP Editor Class Library
 * cleditor/mgrnodelist.h
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -23,13 +13,14 @@
 * and is not subject to copyright.
 */
 
-/*  */ 
+/* $Id: mgrnodelist.h,v 1.3 2000-01-21 13:42:40 gcosmo Exp $ */ 
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
 #endif
 
 #include <gennode.h>
+//#include <gennode.inline.h>
 #include <gennodelist.h>
 #include <editordefines.h>
 
@@ -50,9 +41,9 @@ public:
     virtual MgrNode *FindFileId(int fileId);
 
 // REDEFINED functions
-		// deletes node from its previous List & appends
+		// deletes node from its previous list & appends
     virtual void Append(GenericNode *node);
-		// deletes newNode from its previous List & inserts in
+		// deletes newNode from its previous list & inserts in
 		//	relation to existNode
     virtual void InsertAfter(GenericNode *newNode, GenericNode *existNode);
     virtual void InsertBefore(GenericNode *newNode, GenericNode *existNode);

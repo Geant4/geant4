@@ -1,20 +1,10 @@
-
-
-//
-
-
-
-//
-// $Id: seeinfodefault.h,v 1.2 1999-05-21 20:20:44 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #ifndef seeinfodefault_h
 #define seeinfodefault_h
 
 /*
 * NIST STEP Editor Class Library
 * cleditor/schemaheader.cc
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -32,7 +22,8 @@
 class MgrNode;
 class DisplayNode;
 class DisplayNodelist;
-class STEPentity;
+#include <sdai.h>
+//class SCLP23(Application_instance);
 
 #include <editordefines.h>
 
@@ -40,13 +31,13 @@ class seeInfo : public DisplayNode
 {
 public:
     seeInfo(MgrNode *node, 
-	    STEPentity *se,
+	    SCLP23(Application_instance) *se,
 	    DisplayNodeList *dnl, displayStateEnum displaySt = mappedWrite);
 
     void *GetSEE()		{ return see; }
 };
 
-inline seeInfo::seeInfo(MgrNode *node, STEPentity *se,
+inline seeInfo::seeInfo(MgrNode *node, SCLP23(Application_instance) *se,
 		 DisplayNodeList *dnl, displayStateEnum displaySt)
 {
     mn = node; 

@@ -1,18 +1,8 @@
 
-
-//
-
-
-
-//
-// $Id: STEPattributeList.cc,v 1.2 1999-05-21 20:20:49 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 /*
 * NIST STEP Core Class Library
 * clstepcore/STEPattributeList.cc
-* May 1995
+* April 1997
 * K. C. Morris
 * David Sauder
 
@@ -20,13 +10,30 @@
 * and is not subject to copyright.
 */
 
-/*  */
+/* $Id: STEPattributeList.cc,v 1.3 2000-01-21 13:42:56 gcosmo Exp $ */
 
 #include <STEPattributeList.h>
 #include <STEPattribute.h>
 
 //#include <stdlib.h>
 
+AttrListNode::AttrListNode(STEPattribute *a)
+{
+    attr = a;
+}
+
+AttrListNode::~AttrListNode()
+{
+}
+
+
+STEPattributeList::STEPattributeList()
+{
+}
+
+STEPattributeList::~STEPattributeList()
+{
+}
 
 STEPattribute& STEPattributeList::operator [] (int n)
 {
@@ -39,12 +46,11 @@ STEPattribute& STEPattributeList::operator [] (int n)
 	    a = (AttrListNode *)(a->next);
 	    x++;
 	}
-    if (a)  return *(a->attr);
-
-   // else
-    G4cerr << "\nERROR in STEP Core library:  " << __FILE__ <<  ":"
-      << __LINE__ << "\n" << _POC_ << "\n\n";
-    return *(((AttrListNode *)head)->attr);
+    // Fixed return value - GC
+    if (!a)
+      G4cerr << "\nERROR in STEP Core library:  " << __FILE__ <<  ":"
+             << __LINE__ << "\n" << _POC_ << "\n\n";
+    return *(a->attr);
 }
 
 int STEPattributeList::list_length()
@@ -54,7 +60,12 @@ int STEPattributeList::list_length()
 
 void STEPattributeList::push(STEPattribute *a)
 {
+#ifdef __OSTORE__
+    AttrListNode *saln = new (os_database::of(this), 
+			      AttrListNode::get_os_typespec()) AttrListNode(a);
+#else
     AttrListNode *saln = new AttrListNode(a);
+#endif
     AppendNode (saln);
 }
 

@@ -1,18 +1,8 @@
 
-
-//
-
-
-
-//
-// $Id: SingleLinkList.cc,v 1.2 1999-05-21 20:21:05 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 /*
 * NIST STEP Core Class Library
 * clstepcore/SingleLinkList.cc
-* May 1995
+* April 1997
 * David Sauder
 * KC Morris
 
@@ -20,9 +10,40 @@
 * and is not subject to copyright.
 */
 
-/*  */
+/* $Id: SingleLinkList.cc,v 1.3 2000-01-21 13:43:05 gcosmo Exp $ */
 
 #include <SingleLinkList.h>
+
+void 
+SingleLinkList::DeleteFollowingNodes (SingleLinkNode *item)
+{
+ if (head) {
+  SingleLinkNode * trailer = 0;
+  SingleLinkNode * leader = head;
+  while (leader) {
+   if (leader == item)  {
+       while(leader)
+       {
+	   if(trailer) trailer->next = leader->next;
+	   else if(leader == head) 
+	   {
+	       head = leader->next;
+	       trailer = head;
+	   }
+	   if(leader == tail) tail = trailer;
+	   delete leader;
+	   leader = trailer->next;
+       }
+   }
+   else {
+    if(trailer)
+     trailer = trailer->NextNode();
+    else trailer = leader;
+    leader = leader->NextNode();
+   }
+  }
+ }
+}
 
 void
 SingleLinkList::AppendNode (SingleLinkNode * item)  
@@ -32,5 +53,29 @@ SingleLinkList::AppendNode (SingleLinkNode * item)
 	tail = item;
     }
     else head = tail = item;
+    item->owner = this;
 }
 
+void 
+SingleLinkList::DeleteNode (SingleLinkNode * item)
+{
+ if (head) {
+  SingleLinkNode * trailer = 0;
+  SingleLinkNode * leader = head;
+  while (leader) {
+   if (leader == item)  {
+    if(trailer) trailer->next = leader->next;
+    leader = leader->next;
+    if(item == head) head = item->next;
+    if(item == tail) tail = trailer;
+    delete item;
+   }
+   else {
+    if(trailer)
+     trailer = trailer->NextNode();
+    else trailer = leader;
+    leader = leader->NextNode();
+   }
+  }
+ }
+}

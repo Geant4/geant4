@@ -1,18 +1,8 @@
 
-
-//
-
-
-
-//
-// $Id: dispnodelist.cc,v 1.2 1999-05-21 20:21:08 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 /*
 * NIST STEP Editor Class Library
 * cleditor/dispnodelist.cc
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -20,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/*  */ 
+/* $Id: dispnodelist.cc,v 1.3 2000-01-21 13:43:08 gcosmo Exp $ */ 
 
 #include <gennode.h>
 #include <gennodelist.h>
@@ -30,32 +20,39 @@
 #include <dispnode.h>
 #include <dispnodelist.h>
 
-	// deletes node from its previous List & appends
-	// actually it puts it at the front of the List.
+
+void DisplayNodeList::Remove(GenericNode *node)
+{
+    GenNodeList::Remove(node);
+// DON'T DO THIS    ((DisplayNode *)node)->displayState = noMapState;
+}
+
+	// deletes node from its previous list & appends
+	// actually it puts it at the front of the list.
 void DisplayNodeList::Append(GenericNode *node)
 {
     InsertBefore(node, head);
 }
 
-		// deletes newNode from its previous List & inserts after
+		// deletes newNode from its previous list & inserts after
 		//	existNode
 void DisplayNodeList::InsertAfter(GenericNode *newNode, 
 					 GenericNode *existNode)
 {
     if(newNode->next != 0){	// remove the node from its previous 
-	newNode->Remove();	//	display state List
+	newNode->Remove();	//	display state list
     }
     GenNodeList::InsertAfter(newNode, existNode);
 // DON'T DO THIS    ((DisplayNode *)newNode)->displayState = listType;
 }
 
-		// deletes newNode from its previous List & inserts before
+		// deletes newNode from its previous list & inserts before
 		//	existNode
 void DisplayNodeList::InsertBefore(GenericNode *newNode,
 					  GenericNode *existNode)
 {
     if(newNode->next != 0){	// remove the node from its previous 
-	newNode->Remove();	//	display state List
+	newNode->Remove();	//	display state list
     }
     GenNodeList::InsertBefore(newNode, existNode);
 // DON'T DO THIS!!!   ((DisplayNode *)newNode)->displayState = listType;

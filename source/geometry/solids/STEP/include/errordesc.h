@@ -1,21 +1,11 @@
 
-
-//
-
-
-
-//
-// $Id: errordesc.h,v 1.3 1999-12-15 14:50:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 #ifndef ERRORDESC_H
 #define	ERRORDESC_H
 
 /*
 * NIST Utils Class Library
 * clutils/errordesc.h
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -23,14 +13,18 @@
 * and is not subject to copyright.
 */
 
-/*   */ 
+/* $Id: errordesc.h,v 1.4 2000-01-21 13:42:39 gcosmo Exp $  */ 
+
+#ifdef __OSTORE__
+#include <ostore/ostore.hh>    // Required to access ObjectStore Class Library
+#endif
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
 #endif
 
 #include <scl_string.h>
-#include "G4ios.hh"
+#include "g4std/iostream"
 
 typedef enum Severity {
     SEVERITY_MAX	= -5,
@@ -83,7 +77,7 @@ class ErrorDescriptor {
     Severity	_severity;
 
     static DebugLevel	_debug_level;
-    static G4std::ostream* _out;
+    static G4std::ostream* _out; // note this will not be persistent
     
     SCLstring *_userMsg;
     SCLstring *_detailMsg;
@@ -93,14 +87,20 @@ class ErrorDescriptor {
 			  DebugLevel d  = DEBUG_OFF);
     ~ErrorDescriptor () { delete _userMsg; delete _detailMsg; }
 
+    void PrintContents(G4std::ostream &out = G4cout) const;
+
     void ClearErrorMsg() {
 	_severity = SEVERITY_NULL;
 	delete _userMsg;   _userMsg = 0;
 	delete _detailMsg; _detailMsg = 0;
     }
 
+	// return the enum value of _severity
     Severity severity() const        { return _severity; }
+	// return _severity as a const char * in the SCLstring provided
+    const char * severity(SCLstring &s) const; 
     Severity severity(Severity s) {  return (_severity = s); }
+    Severity GetCorrSeverity(const char *s);
     Severity GreaterSeverity(Severity s)
 	{ return ((s < _severity) ?  _severity = s : _severity); }
 
@@ -108,21 +108,13 @@ class ErrorDescriptor {
     void UserMsg ( const char *);
     void AppendToUserMsg ( const char *);
     void PrependToUserMsg ( const char *);
-    void AppendToUserMsg ( const char c)
-    {
-      if(!_userMsg) _userMsg = new SCLstring;
-      _userMsg -> Append(c);
-    }    
+    void AppendToUserMsg ( const char c);
 
     const char * DetailMsg () const;
     void DetailMsg ( const char *);
     void AppendToDetailMsg ( const char *);
     void PrependToDetailMsg ( const char *);
-    void AppendToDetailMsg ( const char c)
-    {
-      if(!_detailMsg) _detailMsg = new SCLstring;
-      _detailMsg -> Append(c);
-    }    
+    void AppendToDetailMsg ( const char c);
 
     Severity AppendFromErrorArg(ErrorDescriptor *err)
     {
@@ -135,6 +127,10 @@ class ErrorDescriptor {
     DebugLevel debug_level() const        { return _debug_level; }
     void debug_level(DebugLevel d)   { _debug_level = d; }
     void SetOutput(G4std::ostream *o)      { _out = o; }
+
+#ifdef __OSTORE__
+    static os_typespec* get_os_typespec();
+#endif
     
     // void operator =  (const char* y)  {  SCLstring::operator = (y);  }
     

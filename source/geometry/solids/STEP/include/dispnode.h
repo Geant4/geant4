@@ -1,21 +1,11 @@
 
-
-//
-
-
-
-//
-// $Id: dispnode.h,v 1.2 1999-05-21 20:20:39 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 #ifndef dispnode_h
 #define dispnode_h
 
 /*
 * NIST STEP Editor Class Library
 * cleditor/dispnode.h
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -23,7 +13,7 @@
 * and is not subject to copyright.
 */
 
-/*  */ 
+/* $Id: dispnode.h,v 1.3 2000-01-21 13:42:39 gcosmo Exp $ */ 
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
@@ -35,6 +25,7 @@
 
 #include <gennode.h>
 #include <gennodelist.h>
+//#include <gennode.inline.h>
 #include <editordefines.h>
 //#include <mgrnode.h>
 class MgrNode;

@@ -1,20 +1,10 @@
-
-
-//
-
-
-
-//
-// $Id: s_HEADER_SCHEMA.h,v 1.2 1999-05-21 20:20:43 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #ifndef  S_HEADER_SCHEMA_H
 #define  S_HEADER_SCHEMA_H
 
 /*
 * NIST STEP Editor Class Library
 * cleditor/s_HEADER_SCHEMA.h
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -26,7 +16,7 @@
 // it since your modifications will be lost if fedex_plus is used to
 // regenerate it.
 
-/*  */
+/* $Id: s_HEADER_SCHEMA.h,v 1.3 2000-01-21 13:42:40 gcosmo Exp $ */
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
@@ -34,11 +24,11 @@
 #include <sdai.h>
 #include <Registry.h>
 #include <STEPaggregate.h>
-#include <STEPentity.h>
+//#include <STEPentity.h>
 
 /*	**************  TYPES  	*/
 extern TypeDescriptor *HEADER_SCHEMAt_SCHEMA_NAME;
-typedef 	SdaiString  	p21DIS_Schema_name;
+typedef 	SCLP23(String)  	p21DIS_Schema_name;
 
 /*	**************  ENTITIES  	*/
 extern EntityDescriptor *HEADER_SCHEMAe_FILE_IDENTIFICATION;
@@ -49,14 +39,14 @@ extern AttrDescriptor *a_3ORGANIZATION;
 extern AttrDescriptor *a_4PREPROCESSOR_VERSION;
 extern AttrDescriptor *a_5ORIGINATING_SYSTEM;
 
-class s_N279_file_identification  :    public STEPentity {
+class s_N279_file_identification  :    public SCLP23(Application_instance) {
   protected:
-	SdaiString  _file_name ;
-	SdaiString  _date ;
+	SCLP23(String)  _file_name ;
+	SCLP23(String)  _date ;
 	StringAggregate  _author ;
 	StringAggregate  _organization ;
-	SdaiString  _preprocessor_version ;
-	SdaiString  _originating_system ;
+	SCLP23(String)  _preprocessor_version ;
+	SCLP23(String)  _originating_system ;
   public:  
 
 	s_N279_file_identification ( ); 
@@ -65,29 +55,29 @@ class s_N279_file_identification  :    public STEPentity {
 #ifdef __O3DB__
   void oodb_reInit();
 #endif
-	char *Name () { return "File_Identification"; }
+	char *Name () { return (char*)("File_Identification"); }
 	int opcode ()  { return 0 ; } 
-	const SdaiString & file_name() const;
+	const SCLP23(String) & file_name() const;
 	void file_name (const char * x);
-	const SdaiString & date() const;
+	const SCLP23(String) & date() const;
 	void date (const char * x);
 	StringAggregate & author();
 	void author (StringAggregate & x);
 	StringAggregate & organization();
 	void organization (StringAggregate & x);
-	const SdaiString & preprocessor_version() const;
+	const SCLP23(String) & preprocessor_version() const;
 	void preprocessor_version (const char * x);
-	const SdaiString & originating_system() const;
+	const SCLP23(String) & originating_system() const;
 	void originating_system (const char * x);
 };
-inline STEPentity *
-create_s_N279_file_identification () {  return (STEPentity*) new s_N279_file_identification ;  }
+inline SCLP23(Application_instance) *
+create_s_N279_file_identification () {  return (SCLP23(Application_instance)*) new s_N279_file_identification ;  }
 extern EntityDescriptor *HEADER_SCHEMAe_IMP_LEVEL;
 extern AttrDescriptor *a_6IMPLEMENTATION_LEVEL;
 
-class s_N279_imp_level  :    public STEPentity {
+class s_N279_imp_level  :    public SCLP23(Application_instance) {
   protected:
-	SdaiString  _implementation_level ;
+	SCLP23(String)  _implementation_level ;
   public:  
 
 	s_N279_imp_level ( ); 
@@ -96,13 +86,13 @@ class s_N279_imp_level  :    public STEPentity {
 #ifdef __O3DB__
   void oodb_reInit();
 #endif
-	char *Name () { return "Imp_Level"; }
+	char *Name () { return (char*)("Imp_Level"); }
 	int opcode ()  { return 1 ; } 
-	const SdaiString & implementation_level() const;
+	const SCLP23(String) & implementation_level() const;
 	void implementation_level (const char * x);
 };
-inline STEPentity *
-create_s_N279_imp_level () {  return (STEPentity*) new s_N279_imp_level ;  }
+inline SCLP23(Application_instance) *
+create_s_N279_imp_level () {  return (SCLP23(Application_instance)*) new s_N279_imp_level ;  }
 extern EntityDescriptor *HEADER_SCHEMAe_FILE_NAME;
 extern AttrDescriptor *a_7NAME;
 extern AttrDescriptor *a_8TIME_STAMP;
@@ -113,16 +103,16 @@ extern AttrDescriptor *a_12PREPROCESSOR_VERSION;
 extern AttrDescriptor *a_13ORIGINATING_SYSTEM;
 extern AttrDescriptor *a_14AUTHORISATION;
 
-class p21DIS_File_name  :    public STEPentity {
+class p21DIS_File_name  :    public SCLP23(Application_instance) {
   protected:
-	SdaiString  _name ;
-	SdaiString  _time_stamp ;
+	SCLP23(String)  _name ;
+	SCLP23(String)  _time_stamp ;
 	StringAggregate  _author ;
 	StringAggregate  _organization ;
-//	SdaiString  _step_version ;
-	SdaiString  _preprocessor_version ;
-	SdaiString  _originating_system ;
-	SdaiString  _authorisation ;
+//	SCLP23(String)  _step_version ;
+	SCLP23(String)  _preprocessor_version ;
+	SCLP23(String)  _originating_system ;
+	SCLP23(String)  _authorisation ;
   public:  
 
 	p21DIS_File_name ( ); 
@@ -131,35 +121,35 @@ class p21DIS_File_name  :    public STEPentity {
 #ifdef __O3DB__
   void oodb_reInit();
 #endif
-	char *Name () { return "File_Name"; }
+	char *Name () { return (char*)("File_Name"); }
 	int opcode ()  { return 2 ; } 
-	const SdaiString & name() const;
+	const SCLP23(String) & name() const;
 	void name (const char * x);
-	const SdaiString & time_stamp() const;
+	const SCLP23(String) & time_stamp() const;
 	void time_stamp (const char * x);
 	StringAggregate & author();
 	void author (StringAggregate & x);
 	StringAggregate & organization();
 	void organization (StringAggregate & x);
-//	const SdaiString & step_version() const;
+//	const SCLP23(String) & step_version() const;
 //	void step_version (const char * x);
-	const SdaiString & preprocessor_version() const;
+	const SCLP23(String) & preprocessor_version() const;
 	void preprocessor_version (const char * x);
-	const SdaiString & originating_system() const;
+	const SCLP23(String) & originating_system() const;
 	void originating_system (const char * x);
-	const SdaiString & authorisation() const;
+	const SCLP23(String) & authorisation() const;
 	void authorisation (const char * x);
 };
-inline STEPentity *
-create_p21DIS_File_name () {  return (STEPentity*) new p21DIS_File_name ;  }
+inline SCLP23(Application_instance) *
+create_p21DIS_File_name () {  return (SCLP23(Application_instance)*) new p21DIS_File_name ;  }
 extern EntityDescriptor *HEADER_SCHEMAe_FILE_DESCRIPTION;
 extern AttrDescriptor *a_15DESCRIPTION;
 extern AttrDescriptor *a_16IMPLEMENTATION_LEVEL;
 
-class p21DIS_File_description  :    public STEPentity {
+class p21DIS_File_description  :    public SCLP23(Application_instance) {
   protected:
 	StringAggregate  _description ;
-	SdaiString  _implementation_level ;
+	SCLP23(String)  _implementation_level ;
   public:  
 
 	p21DIS_File_description ( ); 
@@ -168,21 +158,21 @@ class p21DIS_File_description  :    public STEPentity {
 #ifdef __O3DB__
   void oodb_reInit();
 #endif
-	char *Name () { return "File_Description"; }
+	char *Name () { return (char*)("File_Description"); }
 	int opcode ()  { return 3 ; } 
 	StringAggregate & description();
 	void description (StringAggregate & x);
-	const SdaiString & implementation_level() const;
+	const SCLP23(String) & implementation_level() const;
 	void implementation_level (const char * x);
 };
-inline STEPentity *
-create_p21DIS_File_description () {  return (STEPentity*) new p21DIS_File_description ;  }
+inline SCLP23(Application_instance) *
+create_p21DIS_File_description () {  return (SCLP23(Application_instance)*) new p21DIS_File_description ;  }
 extern EntityDescriptor *HEADER_SCHEMAe_S_CLASSIFICATION;
 extern AttrDescriptor *a_17SECURITY_CLASSIFICATION;
 
-class s_N279_classification  :    public STEPentity {
+class s_N279_classification  :    public SCLP23(Application_instance) {
   protected:
-	SdaiString  _security_classification ;
+	SCLP23(String)  _security_classification ;
   public:  
 
 	s_N279_classification ( ); 
@@ -191,19 +181,19 @@ class s_N279_classification  :    public STEPentity {
 #ifdef __O3DB__
   void oodb_reInit();
 #endif
-	char *Name () { return "S_Classification"; }
+	char *Name () { return (char*)("S_Classification"); }
 	int opcode ()  { return 4 ; } 
-	const SdaiString & security_classification() const;
+	const SCLP23(String) & security_classification() const;
 	void security_classification (const char * x);
 };
-inline STEPentity *
-create_s_N279_classification () {  return (STEPentity*) new s_N279_classification ;  }
+inline SCLP23(Application_instance) *
+create_s_N279_classification () {  return (SCLP23(Application_instance)*) new s_N279_classification ;  }
 extern EntityDescriptor *HEADER_SCHEMAe_S_FILE_DESCRIPTION;
 extern AttrDescriptor *a_18DESCRIPTION;
 
-class s_N279_file_description  :    public STEPentity {
+class s_N279_file_description  :    public SCLP23(Application_instance) {
   protected:
-	SdaiString  _description ;
+	SCLP23(String)  _description ;
   public:  
 
 	s_N279_file_description ( ); 
@@ -212,19 +202,19 @@ class s_N279_file_description  :    public STEPentity {
 #ifdef __O3DB__
   void oodb_reInit();
 #endif
-	char *Name () { return "S_File_Description"; }
+	char *Name () { return (char*)("S_File_Description"); }
 	int opcode ()  { return 5 ; } 
-	const SdaiString & description() const;
+	const SCLP23(String) & description() const;
 	void description (const char * x);
 };
-inline STEPentity *
-create_s_N279_file_description () {  return (STEPentity*) new s_N279_file_description ;  }
+inline SCLP23(Application_instance) *
+create_s_N279_file_description () {  return (SCLP23(Application_instance)*) new s_N279_file_description ;  }
 extern EntityDescriptor *HEADER_SCHEMAe_MAXSIG;
 extern AttrDescriptor *a_19MAXIMUM_SIGNIFICANT_DIGIT;
 
-class p21DIS_Maxsig  :    public STEPentity {
+class p21DIS_Maxsig  :    public SCLP23(Application_instance) {
   protected:
-	SdaiInteger  _maximum_significant_digit ;
+	SCLP23(Integer)  _maximum_significant_digit ;
   public:  
 
 	p21DIS_Maxsig ( ); 
@@ -233,19 +223,19 @@ class p21DIS_Maxsig  :    public STEPentity {
 #ifdef __O3DB__
   void oodb_reInit();
 #endif
-	char *Name () { return "Maxsig"; }
+	char *Name () { return (char*)("Maxsig"); }
 	int opcode ()  { return 6 ; } 
-	SdaiInteger  maximum_significant_digit();
-	void maximum_significant_digit (SdaiInteger  x);
+	SCLP23(Integer)  maximum_significant_digit();
+	void maximum_significant_digit (SCLP23(Integer)  x);
 };
-inline STEPentity *
-create_p21DIS_Maxsig () {  return (STEPentity*) new p21DIS_Maxsig ;  }
+inline SCLP23(Application_instance) *
+create_p21DIS_Maxsig () {  return (SCLP23(Application_instance)*) new p21DIS_Maxsig ;  }
 extern EntityDescriptor *HEADER_SCHEMAe_CLASSIFICATION;
 extern AttrDescriptor *a_20SECURITY_CLASSIFICATION;
 
-class p21DIS_Classification  :    public STEPentity {
+class p21DIS_Classification  :    public SCLP23(Application_instance) {
   protected:
-	SdaiString  _security_classification ;
+	SCLP23(String)  _security_classification ;
   public:  
 
 	p21DIS_Classification ( ); 
@@ -254,17 +244,17 @@ class p21DIS_Classification  :    public STEPentity {
 #ifdef __O3DB__
   void oodb_reInit();
 #endif
-	char *Name () { return "Classification"; }
+	char *Name () { return (char*)("Classification"); }
 	int opcode ()  { return 7 ; } 
-	const SdaiString & security_classification() const;
+	const SCLP23(String) & security_classification() const;
 	void security_classification (const char * x);
 };
-inline STEPentity *
-create_p21DIS_Classification () {  return (STEPentity*) new p21DIS_Classification ;  }
+inline SCLP23(Application_instance) *
+create_p21DIS_Classification () {  return (SCLP23(Application_instance)*) new p21DIS_Classification ;  }
 extern EntityDescriptor *HEADER_SCHEMAe_FILE_SCHEMA;
 extern AttrDescriptor *a_21SCHEMA_IDENTIFIERS;
 
-class p21DIS_File_schema  :    public STEPentity {
+class p21DIS_File_schema  :    public SCLP23(Application_instance) {
   protected:
 	StringAggregate  _schema_identifiers ;	  //  of  SCHEMA_NAME
 
@@ -276,12 +266,12 @@ class p21DIS_File_schema  :    public STEPentity {
 #ifdef __O3DB__
   void oodb_reInit();
 #endif
-	char *Name () { return "File_Schema"; }
+	char *Name () { return (char*)("File_Schema"); }
 	int opcode ()  { return 8 ; } 
 	StringAggregate & schema_identifiers();
 	void schema_identifiers (StringAggregate & x);
 };
-inline STEPentity *
-create_p21DIS_File_schema () {  return (STEPentity*) new p21DIS_File_schema ;  }
+inline SCLP23(Application_instance) *
+create_p21DIS_File_schema () {  return (SCLP23(Application_instance)*) new p21DIS_File_schema ;  }
 
 #endif

@@ -1,20 +1,10 @@
-
-
-//
-
-
-
-//
-// $Id: baseType.h,v 1.2 1999-05-21 20:20:37 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #ifndef BASETYPE_H
 #define	BASETYPE_H
 
 /*
 * NIST STEP Core Class Library
 * clstepcore/baseType.h
-* May 1995
+* April 1997
 * David Sauder
 * KC Morris
 
@@ -22,7 +12,7 @@
 * and is not subject to copyright.
 */
 
-/*  */
+/* $Id: baseType.h,v 1.3 2000-01-21 13:42:37 gcosmo Exp $ */
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
@@ -30,19 +20,22 @@
 
 //	**************  TYPES of attributes
 
+// IMS, 9 Aug 95: changed values to make these values usable in a bitmask
+
 enum PrimitiveType {
-	sdaiINTEGER = 0,
-	sdaiREAL,
-	sdaiBOOLEAN,
-	sdaiLOGICAL,
-	sdaiSTRING,
-	sdaiBINARY,
-	sdaiENUMERATION,
-	sdaiSELECT,
-	sdaiINSTANCE,
-	sdaiAGGR,
-	sdaiNUMBER,
+	sdaiINTEGER     = 0x0001,
+	sdaiREAL        = 0x0002,
+	sdaiBOOLEAN     = 0x0004,
+	sdaiLOGICAL     = 0x0008,
+	sdaiSTRING      = 0x0010,
+	sdaiBINARY      = 0x0020,
+	sdaiENUMERATION = 0x0040,
+	sdaiSELECT      = 0x0080,
+	sdaiINSTANCE    = 0x0100,
+	sdaiAGGR        = 0x0200,
+	sdaiNUMBER      = 0x0400,
 // The elements defined below are not part of part 23
+// (IMS: these should not be used as bitmask fields)
 	ARRAY_TYPE,		// DAS
 	BAG_TYPE,		// DAS
 	SET_TYPE,		// DAS

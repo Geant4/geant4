@@ -1,18 +1,8 @@
 
-
-//
-
-
-
-//
-// $Id: STEPundefined.cc,v 1.3 1999-12-15 14:50:17 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 /*
 * NIST STEP Core Class Library
 * clstepcore/STEPundefined.cc
-* May 1995
+* April 1997
 * KC Morris
 * David Sauder
 
@@ -20,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/*  */
+/* $Id: STEPundefined.cc,v 1.4 2000-01-21 13:42:58 gcosmo Exp $ */
 
 #include <stdio.h> // to get the BUFSIZ #define
 #include <STEPundefined.h>
@@ -240,7 +230,7 @@ SCLundefined::STEPread(G4std::istream& in )
 	  if (i < BUFSIZ) buf [i] = c;
 
 	  // BUG:  read up to BUFSIZ -1 number of characters
-	  // if more characters, NULL Terminate and ignore the rest of input 
+	  // if more characters, NULL terminate and ignore the rest of input 
 	  if ((++i == BUFSIZ) && !terminal)  {
 	      G4cerr << "WARNING:  information lost -- value of undefined type is too long\n";
 	      buf [i] = '\0';

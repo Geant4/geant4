@@ -1,21 +1,11 @@
 
-
-//
-
-
-
-//
-// $Id: gennodelist.h,v 1.3 1999-12-15 18:04:17 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 #ifndef gennodelist_h
 #define gennodelist_h
 
 /*
 * NIST Utils Class Library
 * clutils/gennodelist.h
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -23,7 +13,7 @@
 * and is not subject to copyright.
 */
 
-/*   */ 
+/* $Id: gennodelist.h,v 1.4 2000-01-21 13:42:39 gcosmo Exp $  */ 
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
@@ -33,7 +23,7 @@
 
 //////////////////////////////////////////////////////////////////////////////
 // class GenNodeList
-// this class implements a doubly linked List by default.
+// this class implements a doubly linked list by default.
 // If you delete this object it does not delete all of its entries,
 // only its head.  If you want it to delete all of its entries as well
 // as its head, you need to call DeleteEntries().
@@ -46,16 +36,16 @@ public:
 
     GenericNode *GetHead()	{ return head; }
 
-    virtual void ClearEntries(){;}
-    virtual void DeleteEntries(){;}
-		// deletes node from its previous List & appends
+    virtual void ClearEntries();
+    virtual void DeleteEntries();
+		// deletes node from its previous list & appends
     virtual void Append(GenericNode *node);
-		// deletes newNode from its previous List & inserts in
+		// deletes newNode from its previous list & inserts in
 		//	relation to existNode
     virtual void InsertAfter(GenericNode *newNode, GenericNode *existNode);
     virtual void InsertBefore(GenericNode *newNode, GenericNode *existNode);
 
-    virtual void Remove(GenericNode *node){ if (node) node->Remove(); }
+    virtual void Remove(GenericNode *node);
 
 protected:
     GenericNode *head;
@@ -72,34 +62,6 @@ inline GenNodeList::GenNodeList(GenericNode *headNode)
     head = headNode;
     head->next = head;
     head->prev = head;
-}
-
-		// inserts after existNode
-inline void GenNodeList::InsertAfter(GenericNode *newNode, 
-				     GenericNode *existNode)
-{
-    newNode->next = existNode->next;
-    newNode->next->prev = newNode;
-
-    newNode->prev = existNode;
-    existNode->next = newNode;
-}
-
-		// inserts before existNode
-inline void GenNodeList::InsertBefore(GenericNode *newNode, 
-				      GenericNode *existNode)
-{
-    existNode->prev->next = newNode;
-    newNode->prev = existNode->prev;
-
-    newNode->next = existNode;
-    existNode->prev = newNode;
-}
-
-		// inserts before the head node
-inline void GenNodeList::Append(GenericNode *node)
-{
-    InsertBefore(node, head);
 }
 
 #endif

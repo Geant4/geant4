@@ -5,7 +5,7 @@
 
 
 //
-// $Id: classes.h,v 1.2 1999-05-21 20:20:37 japost Exp $
+// $Id: classes.h,v 1.3 2000-01-21 13:42:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*

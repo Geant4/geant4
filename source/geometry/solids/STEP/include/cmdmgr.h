@@ -1,20 +1,10 @@
-
-
-//
-
-
-
-//
-// $Id: cmdmgr.h,v 1.2 1999-05-21 20:20:38 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #ifndef cmdmgr_h
 #define cmdmgr_h
 
 /*
 * NIST STEP Editor Class Library
 * cleditor/cmdmgr.h
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -22,7 +12,7 @@
 * and is not subject to copyright.
 */
 
-/*  */ 
+/* $Id: cmdmgr.h,v 1.3 2000-01-21 13:42:38 gcosmo Exp $ */ 
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
@@ -30,6 +20,7 @@
 
 #include <gennode.h>
 #include <gennodelist.h>
+//#include <gennode.inline.h>
 #include <gennodearray.h>
 
 #include <editordefines.h>
@@ -102,7 +93,7 @@ class ReplicateLinkNode : public SingleLinkNode {
     ReplicateLinkNode() { _repNode = 0; }
     ~ReplicateLinkNode() { }
 
-    char *ClassName () { return "ReplicateLinkNode"; }
+    char *ClassName () { return (char*)("ReplicateLinkNode"); }
 
     MgrNode *ReplicateNode() { return _repNode; }
     void ReplicateNode(MgrNode *rn) { _repNode = rn; }
@@ -130,7 +121,7 @@ class ReplicateList : public SingleLinkList {
     BOOLEAN Remove(ReplicateLinkNode *rln);
     BOOLEAN Remove(MgrNode *rn);
 
-    char *ClassName () { return "ReplicateList"; }
+    char *ClassName () { return (char*)("ReplicateList"); }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -163,10 +154,10 @@ protected:
     void ClearReplicateEntries() { replicateList->Empty(); } 
     ReplicateList *RepList() { return replicateList; } 
 
-			// searches current List for fileId
+			// searches current list for fileId
     MgrNode *StateFindFileId(stateEnum s, int fileId);
 			// returns stateNext or statePrev member variables
-			// i.e. next or previous node on curr state List
+			// i.e. next or previous node on curr state list
 
     int SaveCompleteCmdList(MgrNode *mn)
 	{ return mn->ChangeList(completeList); }

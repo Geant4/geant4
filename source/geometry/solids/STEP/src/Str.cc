@@ -1,18 +1,8 @@
 
-
-//
-
-
-
-//
-// $Id: Str.cc,v 1.3 1999-12-15 14:50:19 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 /*
 * NIST Utils Class Library
 * clutils/Str.cc
-* May 1995
+* April 1997
 * K. C. Morris
 * David Sauder
 
@@ -20,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/*   */ 
+/* $Id: Str.cc,v 1.4 2000-01-21 13:43:06 gcosmo Exp $  */ 
 
 #include <Str.h>
 
@@ -47,6 +37,22 @@ ToUpper  (const char c)
 {
     if (islower (c)) return (toupper (c));
     else return (c);
+}
+
+char *
+StrToLower (const char *strOld, char *strNew)
+    /*
+     * Place in strNew a lowercase version of strOld.
+     */
+{
+    int i = 0;
+
+    while ( strOld[i] != '\0' ) {
+	strNew[i] = ToLower( strOld[i] );
+	i++;
+    }
+    strNew[i] = '\0';
+    return strNew;
 }
 
 const char *
@@ -130,7 +136,6 @@ PrettyTmpName (const char * oldname)
     return newname;
 }
 
-
 char *
 PrettyNewName (const char * oldname)
 {
@@ -140,7 +145,23 @@ PrettyNewName (const char * oldname)
     return name;
 }
 
+int
+StrCmpIns( const char *strA, const char *strB )
+    /*
+     * An insensitive string compare function.  Used most often to compare
+     * names of objects where case is not known and not significant.
+     *
+     * NOTE - cygnus does not define strcmpi/stricmp.  I'm sure there's a nifty
+     * way to add preprocessor commands to check if it exists, and if so to
+     * use it, but I didn't bother.
+     */
+{
+    char str1[BUFSIZ], str2[BUFSIZ];
 
+    strncpy( str1, PrettyTmpName( strA ), BUFSIZ-1 );
+    strncpy( str2, PrettyTmpName( strB ), BUFSIZ-1 );
+    return ( strcmp( str1, str2 ) );
+}
 
 // This function is used to check an input stream following a read.  It writes
 // error messages in the 'ErrorDescriptor &err' argument as appropriate.
@@ -256,7 +277,7 @@ CheckRemainingInput(G4std::istream &in, ErrorDescriptor *err,
 	    }
 	}
 	else if(in.good()) // found a char => error 
-	  // i.e. skipping whitespace did not cause EOF so must have Hit a char
+	  // i.e. skipping whitespace did not cause EOF so must have hit a char
 	{ // remember we are not expecting more input since no tokenList
 
 	    // or 3. since not expecting a delimiter and there is input there 
@@ -273,7 +294,7 @@ CheckRemainingInput(G4std::istream &in, ErrorDescriptor *err,
     }
     else if (in.eof())
     {
-	// Hit EOF when reading for a value 
+	// hit EOF when reading for a value 
 	// don\'t set any error
 	return err->severity();
     }

@@ -1,13 +1,3 @@
-
-
-//
-
-
-
-//
-// $Id: STEPcomplex.h,v 1.3 1999-12-15 14:50:14 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #ifndef STEPCOMPLEX_H
 #define STEPCOMPLEX_H
 
@@ -15,10 +5,10 @@
 #include <sdai.h>
 #include <baseType.h>
 #include <ExpDict.h>
-#include <STEPentity.h>
+//#include <STEPentity.h>
 #include <Registry.h>
 
-class STEPcomplex : public STEPentity {
+class STEPcomplex : public SCLP23(Application_instance) {
   public:
     STEPcomplex * sc;
     STEPcomplex * head;
@@ -27,13 +17,14 @@ class STEPcomplex : public STEPentity {
 
   public:
     STEPcomplex(Registry *registry, int fileid);
-    STEPcomplex(Registry *registry, const SCLstring **names, int fileid);
-    STEPcomplex(Registry *registry, const char **names, int fileid);
-
+    STEPcomplex(Registry *registry, const SCLstring **names, int fileid,
+		const char *schnm =0);
+    STEPcomplex(Registry *registry, const char **names, int fileid,
+		const char *schnm =0);
     virtual ~STEPcomplex();
 
-    int EntityExists(const char *name);
-    STEPcomplex *EntityPart(const char *name);
+    int EntityExists(const char *name, const char *currSch =0);
+    STEPcomplex *EntityPart(const char *name, const char *currSch =0);
 
 /*
     // page 241 Stroustrup
@@ -41,28 +32,37 @@ class STEPcomplex : public STEPentity {
     STEPcomplex &operator[](const int index);
 */
 
+    virtual const EntityDescriptor * IsA(const EntityDescriptor *) const;
+    
     virtual Severity ValidLevel(ErrorDescriptor *error, InstMgr *im, 
 			int clearError = 1);
 // READ
     virtual Severity STEPread(int id, int addFileId, 
-				   InstMgr * instance_set,
-				   G4std::istream& in =G4cin);
+			      class InstMgr * instance_set,
+			      G4std::istream& in =G4cin, const char *currSch =NULL,
+			      int useTechCor =1);
+
     virtual void STEPread_error(char c, int index, G4std::istream& in);
 
 // WRITE
-    virtual void STEPwrite(G4std::ostream& out =G4cout, int writeComment = 1);
-    virtual const char * STEPwrite(SCLstring &buf);
+    virtual void STEPwrite(G4std::ostream& out =G4cout, const char *currSch =NULL,
+			   int writeComment = 1);
+    virtual const char * STEPwrite(SCLstring &buf, const char *currSch =NULL);
 
-    virtual void WriteExtMapEntities(G4std::ostream& out =G4cout);
-    virtual const char * WriteExtMapEntities(SCLstring &buf);
+    SCLP23(Application_instance) *Replicate();
+
+    virtual void WriteExtMapEntities(G4std::ostream& out =G4cout,
+				     const char *currSch =NULL);
+    virtual const char * WriteExtMapEntities(SCLstring &buf,
+					     const char *currSch =NULL);
     virtual void AppendEntity(STEPcomplex *stepc);
 
   protected:
-    virtual void CopyAs (STEPentity *);
-    void BuildAttrs(const char *s );
+    virtual void CopyAs(SCLP23(Application_instance) *);
+    void BuildAttrs(const char *s);
     void AddEntityPart(const char *name);
     void AssignDerives();
-    
+    void Initialize(const char **, const char *);
 };
 
 #endif

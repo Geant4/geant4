@@ -1,18 +1,8 @@
 
-
-//
-
-
-
-//
-// $Id: instmgr.cc,v 1.4 1999-12-15 14:50:19 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 /*
 * NIST STEP Editor Class Library
 * cleditor/instmgr.cc
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -20,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/*  */ 
+/* $Id: instmgr.cc,v 1.5 2000-01-21 13:43:12 gcosmo Exp $ */ 
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -28,7 +18,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include <STEPentity.h>
+#include <sdai.h>
+//#include <STEPentity.h>
 #include <instmgr.h>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -59,17 +50,44 @@ InstMgr::PrintSortedFileIds()
       }
 }
 
-InstMgr::InstMgr()
+InstMgr::InstMgr(int ownsInstances)
+ : maxFileId(-1), _ownsInstances(ownsInstances)
 {
-    maxFileId = -1;
 
+/*
+#ifdef __OSTORE__
+    master = new (os_segment::of(this), MgrNodeArray::get_os_typespec()) 
+		MgrNodeArray();
+    sortedMaster = new (os_segment::of(this), 
+			MgrNodeArraySorted::get_os_typespec())
+		MgrNodeArraySorted();
+#else
+*/
     master = new MgrNodeArray();
     sortedMaster = new MgrNodeArraySorted();
+//#endif
+}
+
+InstMgr::~InstMgr()
+{
+    if(_ownsInstances)
+    {
+	master->DeleteEntries();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void InstMgr::ClearInstances()
+{
+//    delete master;
+//    master = new MgrNodeArray();
+    master->ClearEntries();
+    sortedMaster->ClearEntries();
+    maxFileId = -1;
+}
+
+void InstMgr::DeleteInstances()
 {
 //    delete master;
 //    master = new MgrNodeArray();
@@ -87,7 +105,7 @@ void InstMgr::ClearInstances()
     SEVERITY_INCOMPLETE:  if at least one instance is missing a required attribute
     SEVERITY_WARNING:     
     SEVERITY_INPUT_ERROR: if at least one instance can not be fetched
-                          from the instance List.
+                          from the instance list.
 **************************************************/
 
 enum Severity
@@ -98,17 +116,17 @@ InstMgr::VerifyInstances(ErrorDescriptor& err)
     
     int n = InstanceCount();
     MgrNode* mn;
-    STEPentity* se;
+    SCLP23(Application_instance)* se;
     enum Severity rval = SEVERITY_NULL;
     
-    //for each instance on the List,
+    //for each instance on the list,
     //check the MgrNode state.
     //if the state is complete then do nothing
     //if the state is not complete,
     //   then check if it is valid
-    //   if it is valid then Increment the warning count,
+    //   if it is valid then increment the warning count,
     //      and set the rval to SEVERITY_INCOMPLETE
-    //   if it is not valid, then Increment the error count 
+    //   if it is not valid, then increment the error count 
     //      and set the rval to 
 
     for (int i = 0; i < n; ++i) 
@@ -129,9 +147,13 @@ InstMgr::VerifyInstances(ErrorDescriptor& err)
 	    err.GreaterSeverity(SEVERITY_INPUT_ERROR);
 	    continue;
 	}
+	if (debug_level > 3)
+	  G4cerr << "In VerifyInstances:  " 
+	    << "new MgrNode for " << mn->GetFileId() << " with state " 
+	       << mn->CurrState () << G4endl;
 	if (!mn->MgrNodeListMember(completeSE)) 
 	{
-	    se = mn->GetSTEPentity();
+	    se = mn->GetApplication_instance();
 	    if (se->ValidLevel(&err,this,0) < SEVERITY_USERMSG)
 	    {
 		if (rval > SEVERITY_INCOMPLETE) 
@@ -140,9 +162,9 @@ InstMgr::VerifyInstances(ErrorDescriptor& err)
 		if (errorCount == 1)
 		    sprintf(errbuf,
 			    "VerifyInstances: Unable to verify the following instances: #%d",
-			    se->FileId());
+			    se->StepFileId());
 		else 
-		    sprintf(errbuf,", #%d",se->FileId());
+		    sprintf(errbuf,", #%d",se->StepFileId());
 		err.AppendToDetailMsg(errbuf);
 	    }
 	}
@@ -150,7 +172,7 @@ InstMgr::VerifyInstances(ErrorDescriptor& err)
     if (errorCount) 
     {
 	sprintf(errbuf,
-		"VerifyInstances: %d invalid instances in List.\n", 
+		"VerifyInstances: %d invalid instances in list.\n", 
 		errorCount);
 	err.AppendToUserMsg(errbuf);
 	err.AppendToDetailMsg(".\n");
@@ -173,7 +195,7 @@ MgrNode *InstMgr::FindFileId(int fileId)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-	// get the index into display List given a STEPentity
+	// get the index into display list given a SCLP23(Application_instance)
 	//  called by see initiated functions
 int InstMgr::GetIndex(MgrNode *mn)
 {
@@ -182,9 +204,9 @@ int InstMgr::GetIndex(MgrNode *mn)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-int InstMgr::GetIndex(STEPentity *se)
+int InstMgr::GetIndex(SCLP23(Application_instance) *se)
 {
-    int fileId = se->FileId();
+    int fileId = se->StepFileId();
     return sortedMaster->MgrNodeIndex(fileId);
 }
 
@@ -195,7 +217,7 @@ int InstMgr::VerifyEntity(int fileId, const char *expectedType)
     MgrNode *mn = FindFileId(fileId);
     if(mn) 
     {
-	if(!strcmp(expectedType, mn->GetSTEPentity()->EntityName()))
+	if(!strcmp(expectedType, mn->GetApplication_instance()->EntityName()))
 	    return 2;	// types match
 	else
 	    return 1;	// possible mismatch depending on descendants
@@ -205,23 +227,44 @@ int InstMgr::VerifyEntity(int fileId, const char *expectedType)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-//   Append instance to the List of instances.  Checks the file id and 
-//   sets it if 1) it is not set already or 2) it already exists in the List.
+//   Append instance to the list of instances.  Checks the file id and 
+//   sets it if 1) it is not set already or 2) it already exists in the list.
 
-MgrNode *InstMgr::Append(STEPentity *se, stateEnum listState)
+MgrNode *InstMgr::Append(SCLP23(Application_instance) *se, stateEnum listState)
 {
     if (debug_level > 3)
-	G4cout << "#" << se->FileId() << " append node to InstMgr\n";
+	G4cout << "#" << se->StepFileId() << " append node to InstMgr" << G4endl;
 
-    if ((se  -> FileId () == 0)  // no id assigned
-	|| FindFileId (se -> FileId ())) // id already in List
-      se -> FileId ( NextFileId () );
-    else if (se->FileId() > MaxFileId()) maxFileId = se->FileId();
+    MgrNode *mn =0;
 
-    MgrNode *mn = new MgrNode(se, listState);
+    if (se->StepFileId () == 0)  // no id assigned
+	se->StepFileId( NextFileId () ); // assign a file id
+
+    if (mn = FindFileId (se->StepFileId())) // if id already in list
+	// and it's because instance is already in list
+	if (GetApplication_instance (mn) == se)  
+	    return 0;  // return 0 or mn?
+	else se->StepFileId( NextFileId () ); // otherwise assign a new file id
+
+    // update the maxFileId if needed
+    if (se->StepFileId() > MaxFileId()) maxFileId = se->StepFileId();
+
+/*
+#ifdef __OSTORE__
+    mn = new (os_segment::of(this), MgrNode::get_os_typespec()) 
+	MgrNode(se, listState);
+    G4cout << "Appended entity: " << G4std::flush;
+    G4cout << se->EntityName() << G4endl << G4std::flush;
+#else
+*/
+    mn = new MgrNode(se, listState);
+//#endif
+    if (debug_level > 3)
+      G4cerr << "new MgrNode for " << mn->GetFileId() << " with state " 
+	   << mn->CurrState () << G4endl;
     if(listState == noStateSE)
-	G4cout << "append to InstMgr **ERROR ** node #" << se->FileId() << 
-		" doesn't have state information\n";
+	G4cout << "append to InstMgr **ERROR ** node #" << se->StepFileId() << 
+		" doesn't have state information" << G4endl;
     master->Append(mn);
     sortedMaster->Insert(mn);
 //PrintSortedFileIds();
@@ -232,7 +275,7 @@ MgrNode *InstMgr::Append(STEPentity *se, stateEnum listState)
 
 void InstMgr::Delete(MgrNode *node)
 {
-	// delete the node from its current state List
+	// delete the node from its current state list
     node->Remove();
 
     int index;    
@@ -251,9 +294,9 @@ void InstMgr::Delete(MgrNode *node)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void InstMgr::Delete(STEPentity *se)
+void InstMgr::Delete(SCLP23(Application_instance) *se)
 {
-   Delete (FindFileId (se->FileId()));
+   Delete (FindFileId (se->StepFileId()));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -263,30 +306,30 @@ void InstMgr::ChangeState(MgrNode *node, stateEnum listState)
     switch(listState){
 	case completeSE:
 		if (debug_level > 3)
-		    G4cout << "#" << node->GetSTEPentity()->FileId() << 
-		    " change node to InstMgr's complete List\n";
+		    G4cout << "#" << node->GetApplication_instance()->StepFileId() << 
+		    " change node to InstMgr's complete list\n";
 		node->ChangeState(listState);
 		break;
 	case incompleteSE:
 		if (debug_level > 3)
-		    G4cout << "#" << node->GetSTEPentity()->FileId() << 
-		    " change node to InstMgr's incomplete List\n";
+		    G4cout << "#" << node->GetApplication_instance()->StepFileId() << 
+		    " change node to InstMgr's incomplete list\n";
 		node->ChangeState(listState);
 		break;
 	case newSE:
 		if (debug_level > 3)
-		    G4cout << "#" << node->GetSTEPentity()->FileId() << 
-		    " change node to InstMgr's new List\n";
+		    G4cout << "#" << node->GetApplication_instance()->StepFileId() << 
+		    " change node to InstMgr's new list\n";
 		node->ChangeState(listState);
 		break;
 	case deleteSE:
 		if (debug_level > 3)
-		    G4cout << "#" << node->GetSTEPentity()->FileId() << 
-		    " change node to InstMgr's delete List\n";
+		    G4cout << "#" << node->GetApplication_instance()->StepFileId() << 
+		    " change node to InstMgr's delete list\n";
 		node->ChangeState(listState);
 		break;
 	case noStateSE:
-		G4cout << "#" << node->GetSTEPentity()->FileId() << 
+		G4cout << "#" << node->GetApplication_instance()->StepFileId() << 
 		"ERROR can't change this node state\n";
 		node->Remove();
 		break;
@@ -306,12 +349,12 @@ InstMgr::EntityKeywordCount(const char* name)
 {
     int count = 0;
     MgrNode* node;
-    STEPentity* se;
+    SCLP23(Application_instance)* se;
     int n = InstanceCount();
     for (int j = 0; j<n; ++j) 
       {
 	  node = GetMgrNode(j);
-	  se = node->GetSTEPentity();
+	  se = node->GetApplication_instance();
 	  if (!strcmp(se->EntityName(),
 		      PrettyTmpName(name)))
 	      ++count;
@@ -321,12 +364,22 @@ InstMgr::EntityKeywordCount(const char* name)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-STEPentity *
+SCLP23(Application_instance) *
+InstMgr::GetApplication_instance(int index)
+{
+    MgrNode *mn = (MgrNode*)(*master)[index];
+    if(mn)
+	return mn->GetApplication_instance(); 
+    else
+	return 0;
+}
+
+SCLP23(Application_instance) *
 InstMgr::GetSTEPentity(int index)
 {
     MgrNode *mn = (MgrNode*)(*master)[index];
     if(mn)
-	return mn->GetSTEPentity(); 
+	return mn->GetApplication_instance(); 
     else
 	return 0;
 }
@@ -343,58 +396,41 @@ InstMgr::GetSTEPentity(int index)
     does not wrap around to search indices before the
     starting_index.
 **************************************************/
-STEPentity*
+SCLP23(Application_instance)*
+InstMgr::GetApplication_instance(const char* entityKeyword, int starting_index)
+{
+    MgrNode *node;
+    SCLP23(Application_instance) *se;
+    
+    int count = InstanceCount();
+    for (int j = starting_index; j<count; ++j) 
+      {
+	  node = GetMgrNode(j);
+	  se = node->GetApplication_instance();
+	  if (!strcmp(se->EntityName(),
+		      PrettyTmpName(entityKeyword)))
+	      return se;
+      }
+    return ENTITY_NULL;
+}
+
+SCLP23(Application_instance)*
 InstMgr::GetSTEPentity(const char* entityKeyword, int starting_index) 
 {
-  // L. Broglia
-  G4cout<<"Warning ! This function don`t work correctly...";
-
-  MgrNode *node;
-  STEPentity *se;
-  
-  int count = InstanceCount();
-  for (int j = starting_index; j<count; ++j) 
-  {
-    node = GetMgrNode(j);
-    se = node->GetSTEPentity();
-   
-    if ( ! strcmp( se->EntityName(),PrettyTmpName(entityKeyword)) )
-    {
-      return se;
-    }
-  }
-  
-  return ENTITY_NULL;
+    MgrNode *node;
+    SCLP23(Application_instance) *se;
+    
+    int count = InstanceCount();
+    for (int j = starting_index; j<count; ++j) 
+      {
+	  node = GetMgrNode(j);
+	  se = node->GetApplication_instance();
+	  if (!strcmp(se->EntityName(),
+		      PrettyTmpName(entityKeyword)))
+	      return se;
+      }
+    return ENTITY_NULL;
 }
-////////////////////////////////////////////////////////
-// L. Broglia : new
-
-int InstMgr::GetIndex(const char* entityKeyword, int starting_index)
-{
-  // L. Broglia
-  // When the entity is founded, put return index
-
-  MgrNode *node;
-  STEPentity *se;
-  
-  int count = InstanceCount();
-  const char* tmpname;
-
-  for (int j = starting_index; j<count; ++j) 
-  {
-    node = GetMgrNode(j);
-    se = node->GetSTEPentity();
-    tmpname = se->EntityName();
-
-    if ( !strcmp(tmpname, entityKeyword) )
-    {
-      return j;
-    }
-  }
-  return 0;
-}
-
-
 
 ///////////////////////////////////////////////////////////////////////////////
 

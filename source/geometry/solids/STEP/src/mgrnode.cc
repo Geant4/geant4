@@ -1,18 +1,8 @@
 
-
-//
-
-
-
-//
-// $Id: mgrnode.cc,v 1.3 1999-12-15 18:04:21 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 /*
 * NIST STEP Editor Class Library
 * cleditor/mgrnode.cc
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -20,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/*  */ 
+/* $Id: mgrnode.cc,v 1.4 2000-01-21 13:43:12 gcosmo Exp $ */ 
 
 #include <mgrnode.h>
 #include <mgrnodelist.h>
@@ -28,7 +18,8 @@
 #include <dispnodelist.h>
 
 #include <instmgr.h>
-#include <STEPentity.h>
+//#include <STEPentity.h>
+#include <sdai.h>
 
 #include "G4ios.hh"
 
@@ -52,7 +43,7 @@ void MgrNode::Remove()
 // DON'T DO THIS!!    currState = noStateSE;
 }
 
-	// searches current List for fileId
+	// searches current list for fileId
 MgrNode *MgrNode::StateFindFileId(int fileId)
 {
 //    if(debug_level >= PrintFunctionTrace)
@@ -131,7 +122,7 @@ GenericNode *MgrNode::PrevDisplay()
 
 // STATE LIST OPERATIONS
 
-// deletes from previous cmd List & puts on cmd List cmdList
+// deletes from previous cmd list & puts on cmd list cmdList
 int MgrNode::ChangeList(DisplayNodeList *cmdList)
 {
     if(!di)
@@ -139,7 +130,7 @@ int MgrNode::ChangeList(DisplayNodeList *cmdList)
     return di->ChangeList(cmdList);
 }
 
-// deletes from previous cmd List & puts on cmd List cmdList
+// deletes from previous cmd list & puts on cmd list cmdList
 int MgrNode::ChangeList(MgrNodeList *cmdList)
 {
     Remove();
@@ -167,9 +158,9 @@ int MgrNode::ChangeState(stateEnum s)
     return 1;
 }
 
-void MgrNode::Init(STEPentity *s,
+void MgrNode::Init(SCLP23(Application_instance) *s,
 			  stateEnum listState,
-			  MgrNodeList *List)
+			  MgrNodeList *list)
 {
 //    if(debug_level >= PrintFunctionTrace)
 //	G4cout << "MgrNode::Init()\n";
@@ -177,9 +168,9 @@ void MgrNode::Init(STEPentity *s,
     arrayIndex = -1;
     di = 0;
     currState = listState;
-    if(List)
+    if(list)
     {
-	List->Append(this);
+	list->Append(this);
     }
 }
 
@@ -193,7 +184,7 @@ MgrNode::MgrNode()
     Init(0, noStateSE, 0);
 }
 
-MgrNode::MgrNode(STEPentity *StepEntPtr)
+MgrNode::MgrNode(SCLP23(Application_instance) *StepEntPtr)
 {
 //    if(debug_level >= PrintFunctionTrace)
 //	G4cout << "MgrNode::MgrNode()\n";
@@ -206,7 +197,7 @@ MgrNode::MgrNode(STEPentity *StepEntPtr)
 	//	completeSE - if reading valid exchange file
 	//	incompleteSE or completeSE - if reading working session file
 	//	newSE - if instance is created by user using editor (probe)
-MgrNode::MgrNode(STEPentity *StepEntPtr, stateEnum listState)
+MgrNode::MgrNode(SCLP23(Application_instance) *StepEntPtr, stateEnum listState)
 {
 //    if(debug_level >= PrintFunctionTrace)
 //	G4cout << "MgrNode::MgrNode()\n";
@@ -218,12 +209,12 @@ MgrNode::MgrNode(STEPentity *StepEntPtr, stateEnum listState)
 	//	completeSE - if reading valid exchange file
 	//	incompleteSE or completeSE - if reading working session file
 	//	newSE - if instance is created by user using editor (probe)
-MgrNode::MgrNode(STEPentity *StepEntPtr, stateEnum listState, MgrNodeList *List)
+MgrNode::MgrNode(SCLP23(Application_instance) *StepEntPtr, stateEnum listState, MgrNodeList *list)
 {
 //    if(debug_level >= PrintFunctionTrace)
 //	G4cout << "MgrNode::MgrNode()\n";
 //    if(debug_level >= PrintValues)
 //	G4cout << "MgrNode::this : '" << this << "'\n";
-    Init(StepEntPtr, listState, List);
+    Init(StepEntPtr, listState, list);
 
 }

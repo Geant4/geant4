@@ -1,21 +1,11 @@
 
-
-//
-
-
-
-//
-// $Id: gennode.h,v 1.3 1999-12-15 18:04:16 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 #ifndef gennode_h
 #define gennode_h
 
 /*
 * NIST Utils Class Library
 * clutils/gennode.h
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -23,7 +13,13 @@
 * and is not subject to copyright.
 */
 
-/*   */ 
+/* $Id: gennode.h,v 1.4 2000-01-21 13:42:39 gcosmo Exp $  */ 
+
+/*
+#ifdef __OSTORE__
+#include <ostore/ostore.hh>    // Required to access ObjectStore Class Library
+#endif
+*/
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
@@ -37,7 +33,7 @@ class DisplayNodeList;
 
 //////////////////////////////////////////////////////////////////////////////
 // GenericNode
-// If you delete this object it first removes itself from any List it is in.
+// If you delete this object it first removes itself from any list it is in.
 //////////////////////////////////////////////////////////////////////////////
 
 class GenericNode
@@ -50,11 +46,12 @@ protected:
     GenericNode *next;
     GenericNode *prev;
 public:
-    GenericNode()	{ next = 0; prev = 0; }
-    virtual ~GenericNode()	{ Remove(); }
+    GenericNode();
+    virtual ~GenericNode();
+
     GenericNode *Next()	{ return next; }
     GenericNode *Prev()	{ return prev; }
-    virtual void Append(GenNodeList *List);
+    virtual void Append(GenNodeList *list);
     virtual void Remove()
     {
 	(next) ? (next->prev = prev) : 0;
@@ -69,6 +66,11 @@ public:
 	prev = 0;
 
     }
+/*
+#ifdef __OSTORE__
+    static os_typespec* get_os_typespec();
+#endif
+*/
 };
 
 //////////////////////////////////////////////////////////////////////////////

@@ -1,18 +1,8 @@
 
-
-//
-
-
-
-//
-// $Id: dirobj.cc,v 1.2 1999-05-21 20:21:07 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 /*
 * NIST Utils Class Library
 * clutils/dirobj.cc
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -20,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/*   */ 
+/* $Id: dirobj.cc,v 1.3 2000-01-21 13:43:07 gcosmo Exp $  */ 
 
 /*
  * DirObj implementation
@@ -51,6 +41,22 @@
 
 #include <dirobj.h>
 
+
+// to help ObjectCenter
+#ifndef HAVE_MEMMOVE
+extern "C"
+{
+void * memmove(void *__s1, const void *__s2, size_t __n);
+}
+#endif
+
+//#ifdef __OBJECTCENTER__ 
+//extern "C"
+//{
+//void * memmove(void *__s1, const void *__s2, size_t __n);
+//}
+//#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Create a new DirObj object.
@@ -80,7 +86,7 @@ DirObj::~DirObj () {
 //
 // Returns a real path.  
 // if 'path' is a null string ("\0") or nil (0) return ./
-// otherwise return the path remaining after the following is Done:
+// otherwise return the path remaining after the following is done:
 // send the remaining path after the first '/' in the last occurence
 //	of '//' to InterpTilde() where the last tilde will be expanded
 //	to a full path.
@@ -104,7 +110,7 @@ const char* DirObj::RealPath (const char* path) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-HepBoolean DirObj::LoadDirectory (const char* name) {
+boolean DirObj::LoadDirectory (const char* name) {
     char buf[MAXPATHLEN+2];
     const char* path = buf;
 
@@ -136,18 +142,21 @@ int DirObj::Index (const char* name) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-HepBoolean DirObj::Reset (const char* path) {
-    HepBoolean successful = IsADirectory(path);
+boolean DirObj::Reset (const char* path) {
+    boolean successful = IsADirectory(path);
     if (successful) {
-        ClearFileList();
-  // temporary fix for Windows/NT !!!!!!!!!!!!!!!!!!!!!!!
-#ifndef WIN32
 	DIR* dir = opendir(path);
+        ClearFileList();
+
         for (struct dirent* d = readdir(dir); d != NULL; d = readdir(dir)) {
+//#if defined(SYSV)
+//        for (struct dirent* d = readdir(dir); d != NULL; d = readdir(dir)) {
+//#else
+//        for (struct direct* d = readdir(dir); d != NULL; d = readdir(dir)) {
+//#endif
             InsertFile(d->d_name, Position(d->d_name));
         }
         closedir(dir);
-#endif
     }
     return successful; 
 }
@@ -160,9 +169,9 @@ HepBoolean DirObj::Reset (const char* path) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-HepBoolean DirObj::IsADirectory (const char* path) {
+boolean DirObj::IsADirectory (const char* path) {
     struct stat st;
-    return (stat(path, &st) == 0 && (st.st_mode & S_IFMT) == S_IFDIR) ? true : false ;
+    return stat(path, &st) == 0 && (st.st_mode & S_IFMT) == S_IFDIR;
 }
 
 //////////////////////////////// Home() ///////////////////////////////////////
@@ -174,14 +183,9 @@ HepBoolean DirObj::IsADirectory (const char* path) {
 ///////////////////////////////////////////////////////////////////////////////
 
 const char* DirObj::Home (const char* name) {
-  // temporary fix for Windows/NT !!!!!!!!!!!!!!!!!!!!!!!
-#ifndef WIN32
     struct passwd* pw =
         (name == nil) ? getpwuid(getuid()) : getpwnam((char *)name);
     return (pw == nil) ? nil : pw->pw_dir;
-#else
-    return nil;
-#endif
 }
 
 //////////////////////////////// Normalize() //////////////////////////////////
@@ -315,34 +319,34 @@ const char* DirObj::ElimDot (const char* path) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-//static HepBoolean CollapsedDotDotSlash (const char* path, const char*& start) {
+//static boolean CollapsedDotDotSlash (const char* path, const char*& start) {
 // Josh L, 5/2/95
-static HepBoolean CollapsedDotDotSlash (const char* path, const char* start) {
+static boolean CollapsedDotDotSlash (const char* path, const char* start) {
        // fail  if 'start' is at beginning of path (there is no path) or
        //	if no directory is before start (no '/' before '../')
     if (path == start || *(start-1) != '/') {
-        return false;
+        return 0;
 
 	// succeed if 1st char in path is '/' and start points to the 
 	//  next char (didn't collapse path and shouldn't have
     } else if (path == start-1 && *path == '/') {
-        return true;
+        return 1;
 
     } else if (path == start-2) {               // NB: won't handle '//' right
         start = path;
-        return *start != '.' ? true : false;;
+        return *start != '.';
 
     } else if (path < start-2 && !DotDotSlash(start-3)) {
         for (start -= 2; path <= start; --start) {
             if (*start == '/') {
                 ++start;
-                return true;
+                return 1;
             }
         }
         start = path;
-        return true;
+        return 1;
     }
-    return false;
+    return 0;
 }
 
 //////////////////////////////// ElimDotDot() /////////////////////////////////
@@ -377,7 +381,7 @@ const char* DirObj::ElimDotDot (const char* path) {
 // if 'path' has no tilde or an error happens when expanding the tilde,
 //	return 'path'.
 // if 'path' has a tilde, it must be at the beginning of 'path' or
-//    Follow a '/'
+//    follow a '/'
 //	if a 'name' follows tilde, return a new path consisting of the
 //	    last ~ in 'path' expanded to the 'name's home directory 
 //	    followed by the remaining path after name (if such exists)
@@ -391,20 +395,15 @@ const char* DirObj::ElimDotDot (const char* path) {
 const char* DirObj::InterpTilde (const char* path) {
     static char realpath[MAXPATHLEN+1];
     const char* beg = strrchr(path, '~');
-    int tmp = (beg != NULL && (beg == path || *(beg-1) == '/'));
-    HepBoolean validTilde;
-    if (tmp)
-      validTilde = true;
-    else
-      validTilde = false;
-    
+    boolean validTilde = beg != NULL && (beg == path || *(beg-1) == '/');
+
     if (validTilde) {
         const char* end = strchr(beg, '/');
         int length = (end == nil) ? strlen(beg) : end - beg;
         const char* expandedTilde = ExpandTilde(beg, length);
 
         if (expandedTilde == nil) {
-            validTilde = false;
+            validTilde = 0;
         } else {
             strcpy(realpath, expandedTilde);
             if (end != nil) {

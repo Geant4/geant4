@@ -1,31 +1,29 @@
 
-
-//
-
-
-
-//
-// $Id: STEPstring.cc,v 1.3 1999-12-15 14:50:17 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 /*
 * NIST STEP Core Class Library
-* clstepcore/STEPstring.cc
-* May 1995
+* clstepcore/sdaiString.cc
+* April 1997
 * KC Morris
 
 * Development of this software was funded by the United States Government,
 * and is not subject to copyright.
 */
 
-/*  */
+/* $Id: sdaiString.cc,v 1.1 2000-01-21 13:43:19 gcosmo Exp $ */
 
-#include <STEPstring.h>
+#include <sdai.h>
 #include "g4std/strstream"
 
+
+SCLP23(String)& 
+SCLP23(String)::operator= (const char* s)
+{
+    SCLstring::operator= (s);
+    return *this;
+}
+
 void 
-SdaiString::STEPwrite (G4std::ostream& out) const
+SCLP23(String)::STEPwrite (G4std::ostream& out) const
 {
     const char *str = 0;
 // strings that exist but do not contain any chars should be written as '',
@@ -49,7 +47,7 @@ SdaiString::STEPwrite (G4std::ostream& out) const
 }
 
 void 
-SdaiString::STEPwrite (SCLstring &s) const
+SCLP23(String)::STEPwrite (SCLstring &s) const
 {
     const char *str = 0;
 // null strings should be represented by '', not $ --Josh L, 4/28/95
@@ -75,7 +73,7 @@ SdaiString::STEPwrite (SCLstring &s) const
 }
 
 Severity
-SdaiString::StrToVal (const char * s)
+SCLP23(String)::StrToVal (const char * s)
 {
   operator= (s);
   if (! strcmp (chars (),  s))  return SEVERITY_NULL ; 
@@ -85,7 +83,7 @@ SdaiString::StrToVal (const char * s)
 //  STEPread reads a string in exchange file format
 //  starting with a single quote
 Severity 
-SdaiString::STEPread (G4std::istream& in, ErrorDescriptor *err)
+SCLP23(String)::STEPread (G4std::istream& in, ErrorDescriptor *err)
 {
     int foundEndQuote = 0; // need so this string is not ok: 'hi''
     set_null ();  // clear the old string
@@ -99,6 +97,10 @@ SdaiString::STEPread (G4std::istream& in, ErrorDescriptor *err)
 
     if (c == STRING_DELIM)
     {
+	Append("\0"); // this will make sure that this will not be undefined.
+	   // It will handle the case where '' is read. It will be an
+	   // empty string rather than one that is undefined.
+
 	while( (c != '\0') && in.good() && in.get(c) )
 	{
 	    if (c == STRING_DELIM)   {
@@ -140,7 +142,7 @@ SdaiString::STEPread (G4std::istream& in, ErrorDescriptor *err)
 }
 
 Severity 
-SdaiString::STEPread (const char *s, ErrorDescriptor *err)
+SCLP23(String)::STEPread (const char *s, ErrorDescriptor *err)
 {
     G4std::istrstream in((char *)s);
     return STEPread (in, err);

@@ -1,20 +1,10 @@
-
-
-//
-
-
-
-//
-// $Id: ExpDict.h,v 1.2 1999-05-21 20:20:29 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #ifndef EXPDICT_H
 #define EXPDICT_H
 
 /*
 * NIST STEP Core Class Library
 * clstepcore/ExpDict.h
-* May 1995
+* April, 1997
 * K. C. Morris
 * David Sauder
 
@@ -22,44 +12,41 @@
 * and is not subject to copyright.
 */
 
-/*   */ 
+/* $Id: ExpDict.h,v 1.3 2000-01-21 13:42:30 gcosmo Exp $  */ 
 
+#ifdef __OSTORE__
+#include <ostore/ostore.hh>    // Required to access ObjectStore Class Library
+#endif
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
 #endif
 
-class STEPentity;
-typedef  STEPentity * (* Creator) () ;
+#include <sdai.h>
+//class SCLP23(Application_instance);
+
+#if __OSTORE__
+typedef  SCLP23(Application_instance) * (* Creator) (os_database *) ;
+#else
+typedef  SCLP23(Application_instance) * (* Creator) () ;
+#endif
 //class StringAggregate;
 
+enum AttrType_Enum {
+	AttrType_Explicit = 0,
+	AttrType_Inverse,
+	AttrType_Deriving,
+	AttrType_Redefining
+    };
+
 #include <SingleLinkList.h>
-#include <sdai.h> 
 
 #include <baseType.h>
-
-class SchemaDescriptor;
-class AttrDescriptor;
-class InverseAttrDescriptor;
-class EntityDescriptor;
-class TypeDescriptor;
-class EnumerationTypeDescriptor;
-class AggrTypeDescriptor;
-class ArrayTypeDescriptor;
-class SetTypeDescriptor;
-class ListTypeDescriptor;
-class SelectTypeDescriptor;
-class StringTypeDescriptor;
-class BagTypeDescriptor;
-class RealTypeDescriptor;
-class EntityDescLinkNode;
-class EntityDescriptorList;
-class AttrDescLinkNode;
-class AttrDescriptorList;
-class InverseAttrDescLinkNode;
-class InverseAttrDescriptorList;
-class TypeDescLinkNode;
-class TypeDescriptorList;
+//#include <typeDefs.h>
+#include <dictdefs.h>
+//#include <sdaiDefs.h> 
+#include <Str.h>
+#include <scl_char_str_list.h>
 
 /*
 **  I tried these variations on the TypeDescriptor to get them to be
@@ -91,6 +78,7 @@ extern const TypeDescriptor * const t_BOOLEAN_TYPE;
 extern const TypeDescriptor * const t_LOGICAL_TYPE;
 */
 
+/*
 extern const TypeDescriptor *  t_INTEGER_TYPE;
 extern const TypeDescriptor *  t_REAL_TYPE;
 extern const TypeDescriptor *  t_NUMBER_TYPE;
@@ -98,176 +86,28 @@ extern const TypeDescriptor *  t_STRING_TYPE;
 extern const TypeDescriptor *  t_BINARY_TYPE;
 extern const TypeDescriptor *  t_BOOLEAN_TYPE;
 extern const TypeDescriptor *  t_LOGICAL_TYPE;
+*/
+
+// defined and created in Registry.inline.cc
+extern const TypeDescriptor *  t_sdaiINTEGER;
+extern const TypeDescriptor *  t_sdaiREAL;
+extern const TypeDescriptor *  t_sdaiNUMBER;
+extern const TypeDescriptor *  t_sdaiSTRING;
+extern const TypeDescriptor *  t_sdaiBINARY;
+extern const TypeDescriptor *  t_sdaiBOOLEAN;
+extern const TypeDescriptor *  t_sdaiLOGICAL;
 
 ///////////////////////////////////////////////////////////////////////////////
-// SchemaDescriptor - a class of this type is generated and contains
-// the name of the schema.
+// Dictionary_instance
 ///////////////////////////////////////////////////////////////////////////////
 
-class SchemaDescriptor { 
+class Dictionary_instance {
 
   protected:
-	const char *  _name ;
-  public:  
+    Dictionary_instance() {}
+    Dictionary_instance(const Dictionary_instance&) {}
 
-	SchemaDescriptor (const char *schemaName ) { _name = schemaName; }
-	virtual ~SchemaDescriptor () { }
-
-	const char * Name() const	{ return _name; }
-	void Name (const char *  n)  { _name = n; }
-};
-
-
-///////////////////////////////////////////////////////////////////////////////
-// EntityDescriptor
-// An instance of this class will be generated for each entity type
-// found in the schema.  This should probably be derived from the
-// CreatorEntry class (see STEPentity.h).  Then the binary tree that the
-// current software  builds up containing the entities in the schema
-// will be building the same thing but using the new schema info.
-// nodes (i.e. EntityDesc nodes) for each entity.
-///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-
-class EntityDescLinkNode : public SingleLinkNode {
-
-  private:
-  protected:
-    EntityDescriptor * _entityDesc;
-
-  public:
-    EntityDescLinkNode() { _entityDesc = 0; }
-    virtual ~EntityDescLinkNode() { }
-
-    EntityDescriptor *EntityDesc() const { return _entityDesc; }
-    void EntityDesc(EntityDescriptor *ed) { _entityDesc = ed; }
-};
-
-class EntityDescriptorList : public SingleLinkList {
-
-  private:
-  protected:
-  public:
-    EntityDescriptorList()  { }
-    virtual ~EntityDescriptorList() { }
-
-    virtual SingleLinkNode * NewNode () { return new EntityDescLinkNode; }
-
-    EntityDescLinkNode * AddNode (EntityDescriptor * ed) { 
-	EntityDescLinkNode *node = (EntityDescLinkNode *) NewNode();
-	node->EntityDesc(ed);
-	SingleLinkList::AppendNode(node);
-	return node;
-    }
-};
-
-class EntityDescItr
-{
-  protected:
-    const EntityDescriptorList &edl;
-    const EntityDescLinkNode *cur;
-
-  public:
-    EntityDescItr(const EntityDescriptorList &edList) : edl(edList)
-    {
-	cur = (EntityDescLinkNode *)( edl.GetHead() );
-    }
-    ~EntityDescItr() { };
-
-    void ResetItr() { cur = (EntityDescLinkNode *)( edl.GetHead() ); }
-
-    const EntityDescriptor * NextEntityDesc();
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
-class AttrDescLinkNode : public SingleLinkNode {
-  private:
-  protected:
-    AttrDescriptor *_attrDesc;
-  public:
-    AttrDescLinkNode()  { _attrDesc = 0; }
-    virtual ~AttrDescLinkNode() { }
-
-    const class AttrDescriptor *AttrDesc() const { return _attrDesc; }
-    void AttrDesc(AttrDescriptor *ad) { _attrDesc = ad; }
-};
-
-class AttrDescriptorList : public SingleLinkList {
-  private:
-  protected:
-  public:
-    AttrDescriptorList()  { }
-    virtual ~AttrDescriptorList() { }
-
-    virtual SingleLinkNode * NewNode () { return new AttrDescLinkNode; }
-    AttrDescLinkNode * AddNode (AttrDescriptor * ad) {
-	AttrDescLinkNode *node = (AttrDescLinkNode *) NewNode();
-	node->AttrDesc(ad);
-	SingleLinkList::AppendNode(node);
-	return node;
-    }    
-};
-
-class AttrDescItr
-{
-  protected:
-    const AttrDescriptorList &adl;
-    const AttrDescLinkNode *cur;
-
-  public:
-    AttrDescItr(const AttrDescriptorList &adList) : adl(adList)
-    {
-	cur = (AttrDescLinkNode *)( adl.GetHead() );
-    }
-    ~AttrDescItr() { };
-
-    void ResetItr() { cur = (AttrDescLinkNode *)( adl.GetHead() ); }
-
-    const AttrDescriptor * NextAttrDesc();
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
-class InverseAttrDescLinkNode : public  AttrDescLinkNode {
-  private:
-  protected:
-    class InverseAttrDescriptor *_invAttrDesc;
-  public:
-    InverseAttrDescLinkNode() { _invAttrDesc = 0; }
-    virtual ~InverseAttrDescLinkNode() { }
-
-    const InverseAttrDescriptor *InverseAttrDesc() const { return _invAttrDesc; }
-    void InverseAttrDesc(InverseAttrDescriptor *iad) { _invAttrDesc = iad; }
-};
-
-class InverseAttrDescriptorList : public  AttrDescriptorList {
-  private:
-  protected:
-  public:
-    InverseAttrDescriptorList() { }
-    virtual ~InverseAttrDescriptorList() { }
-    virtual SingleLinkNode * NewNode () { return new InverseAttrDescLinkNode; }
-};
-
-class InverseADItr
-{
-  protected:
-    const InverseAttrDescriptorList &iadl;
-    const InverseAttrDescLinkNode *cur;
-
-  public:
-    InverseADItr (const InverseAttrDescriptorList &iadList) : iadl(iadList)
-    {
-	cur = (InverseAttrDescLinkNode *)( iadl.GetHead() );
-    }
-    ~InverseADItr() { };
-
-    void ResetItr() 
-	{ cur = (InverseAttrDescLinkNode *)( iadl.GetHead() ); }
-
-    const InverseAttrDescriptor * NextInverseAttrDesc();
+    virtual ~Dictionary_instance();
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -277,8 +117,8 @@ class TypeDescLinkNode : public SingleLinkNode {
   protected:
     TypeDescriptor *_typeDesc;
   public:
-    TypeDescLinkNode() { _typeDesc = 0; }
-    virtual ~TypeDescLinkNode() { }
+    TypeDescLinkNode();
+    virtual ~TypeDescLinkNode();
 
     const TypeDescriptor *TypeDesc() const { return _typeDesc; }
     void TypeDesc(TypeDescriptor *td) { _typeDesc = td; }
@@ -288,8 +128,8 @@ class TypeDescriptorList : public SingleLinkList {
   private:
   protected:
   public:
-    TypeDescriptorList() { }
-    virtual ~TypeDescriptorList() { }
+    TypeDescriptorList();
+    virtual ~TypeDescriptorList();
 
     virtual SingleLinkNode * NewNode () { return new TypeDescLinkNode; }
 
@@ -308,15 +148,643 @@ class TypeDescItr
     const TypeDescLinkNode *cur;
 
   public:
-    TypeDescItr (const TypeDescriptorList &tdList) : tdl(tdList)
-    {
-	cur = (TypeDescLinkNode *)( tdl.GetHead() );
-    }
-    ~TypeDescItr() { };
+    TypeDescItr (const TypeDescriptorList &tdList);
+    virtual ~TypeDescItr();
 
     void ResetItr() { cur = (TypeDescLinkNode *)( tdl.GetHead() ); }
 
     const TypeDescriptor * NextTypeDesc();
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+class EntityDescLinkNode : public SingleLinkNode {
+
+  private:
+  protected:
+    EntityDescriptor * _entityDesc;
+
+  public:
+    EntityDescLinkNode();
+    virtual ~EntityDescLinkNode();
+
+    EntityDescriptor *EntityDesc() const { return _entityDesc; }
+    void EntityDesc(EntityDescriptor *ed) { _entityDesc = ed; }
+};
+
+class EntityDescriptorList : public SingleLinkList {
+
+  private:
+  protected:
+  public:
+    EntityDescriptorList();
+    virtual ~EntityDescriptorList();
+
+    virtual SingleLinkNode * NewNode () { return new EntityDescLinkNode; }
+
+    EntityDescLinkNode * AddNode (EntityDescriptor * ed) { 
+	EntityDescLinkNode *node = (EntityDescLinkNode *) NewNode();
+	node->EntityDesc(ed);
+	SingleLinkList::AppendNode(node);
+	return node;
+    }
+};
+
+typedef EntityDescriptorList * Entity__set_ptr;
+typedef Entity__set_ptr Entity__set_var;
+
+class EntityDescItr
+{
+  protected:
+    const EntityDescriptorList &edl;
+    const EntityDescLinkNode *cur;
+
+  public:
+    EntityDescItr(const EntityDescriptorList &edList);
+    virtual ~EntityDescItr();
+
+    void ResetItr() { cur = (EntityDescLinkNode *)( edl.GetHead() ); }
+
+    const EntityDescriptor * NextEntityDesc();
+};
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Interfaced_item
+///////////////////////////////////////////////////////////////////////////////
+
+class Interfaced_item : public Dictionary_instance {
+  protected:
+    Interfaced_item();
+    Interfaced_item(const Interfaced_item&);
+    Interfaced_item(const char *foreign_schema);
+    virtual ~Interfaced_item();
+  public:
+   Express_id _foreign_schema;
+
+    const Express_id foreign_schema_();
+//  private:
+    void foreign_schema_(const Express_id&);
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// Explicit_item_id
+///////////////////////////////////////////////////////////////////////////////
+
+class Explicit_item_id : public Interfaced_item{
+  protected:
+    Explicit_item_id();
+    Explicit_item_id(const Explicit_item_id&);
+    Explicit_item_id(const char *foreign_schema, TypeDescriptor *ld, 
+		     const char *oi, const char *ni) 
+      : Interfaced_item(foreign_schema), _local_definition(ld), _original_id(oi), _new_id(ni) {}
+    virtual ~Explicit_item_id();
+  public:
+    // definition in the local schema. The TypeDescriptor (or subtype) is not
+    // implemented quite right - the name in it is the original (foreign 
+    // schema) name. The USE or REFERENCED renames are listed in 
+    // TypeDescriptor's altNames member variable.
+    // Warning: This is currently a null ptr for objects other than 
+    // types and entities - that is - if this is a USEd FUNCTION or PROCEDURE
+    // this ptr will be null.
+    const TypeDescriptor * _local_definition;
+
+    // name in originating schema - only exists if it has been renamed.
+    Express_id _original_id; 
+
+    Express_id _new_id; // original or renamed name via USE or REFERENCE (non-SDAI)
+
+    const TypeDescriptor *local_definition_() const 
+	{ return _local_definition; }
+
+    const Express_id original_id_() const
+	{ return _original_id; }
+
+    // non-sdai, renamed name
+    const Express_id new_id_() const
+	{ return _new_id; }
+
+    // return string "USE" or "REFERENCE"
+    virtual const char * EXPRESS_type()=0;
+
+//  private:
+    void local_definition_(const TypeDescriptor *td)
+	{ _local_definition = td; }
+    void original_id_(const Express_id& ei)
+	{ _original_id = ei; }
+
+    // non-sdai
+    void new_id_(const Express_id& ni)
+	{ _new_id = ni; }
+};
+
+typedef Explicit_item_id * Explicit_item_id_ptr;
+
+class Used_item : public Explicit_item_id {
+  public:
+    Used_item() {}
+    Used_item(const char *foreign_schema, TypeDescriptor *ld, 
+	      const char *oi, const char *ni) 
+      : Explicit_item_id(foreign_schema, ld, oi, ni) {}
+    virtual ~Used_item();
+
+    const char * EXPRESS_type() { return "USE"; }
+};
+
+typedef Used_item * Used_item_ptr;
+
+class Referenced_item : public Explicit_item_id {
+  public:
+    Referenced_item() {}
+    Referenced_item(const char *foreign_schema, TypeDescriptor *ld, 
+		    const char *oi, const char *ni) 
+      : Explicit_item_id(foreign_schema, ld, oi, ni) {}
+    virtual ~Referenced_item();
+
+    const char * EXPRESS_type() { return "REFERENCE"; }
+};
+
+typedef Referenced_item * Referenced_item_ptr;
+
+class Explicit_item_id__set {
+public:
+    Explicit_item_id__set(int = 16);
+    ~Explicit_item_id__set();
+
+    Explicit_item_id_ptr& operator[](int index);
+    void Insert(Explicit_item_id_ptr, int index);
+    void Append(Explicit_item_id_ptr);
+    void Remove(int index);
+    int Index(Explicit_item_id_ptr);
+
+    int Count();
+    void Clear();
+private:
+    void Check(int index);
+private:
+    Explicit_item_id_ptr* _buf;
+    int _bufsize;
+    int _count;
+};
+
+typedef Explicit_item_id__set* Explicit_item_id__set_ptr;
+typedef Explicit_item_id__set_ptr Explicit_item_id__set_var;
+
+///////////////////////////////////////////////////////////////////////////////
+// Implicit_item_id
+///////////////////////////////////////////////////////////////////////////////
+
+class Implicit_item_id : public Interfaced_item {
+  protected:
+    Implicit_item_id();
+    Implicit_item_id(Implicit_item_id&);
+    virtual ~Implicit_item_id();
+  public:
+    const TypeDescriptor * _local_definition;
+
+    const TypeDescriptor *local_definition_() const 
+	{ return _local_definition; }
+
+//  private:
+    void local_definition_(const TypeDescriptor *td)
+	{ _local_definition = td; }
+};
+
+typedef Implicit_item_id * Implicit_item_id_ptr;
+
+///////////////////////////////////////////////////////////////////////////////
+// Implicit_item_id__set
+///////////////////////////////////////////////////////////////////////////////
+
+class Implicit_item_id__set {
+public:
+    Implicit_item_id__set(int = 16);
+    ~Implicit_item_id__set();
+
+    Implicit_item_id_ptr& operator[](int index);
+    void Insert(Implicit_item_id_ptr, int index);
+    void Append(Implicit_item_id_ptr);
+    void Remove(int index);
+    int Index(Implicit_item_id_ptr);
+
+    int Count();
+    void Clear();
+private:
+    void Check(int index);
+private:
+    Implicit_item_id_ptr* _buf;
+    int _bufsize;
+    int _count;
+};
+
+typedef Implicit_item_id__set* Implicit_item_id__set_ptr;
+typedef Implicit_item_id__set_ptr Implicit_item_id__set_var;
+
+///////////////////////////////////////////////////////////////////////////////
+// Interface_spec
+///////////////////////////////////////////////////////////////////////////////
+
+class Interface_spec : public Dictionary_instance {
+  public:
+    Express_id _current_schema_id; // schema containing the USE/REF stmt
+	// set of objects from USE/REFERENCE stmt(s)
+    Explicit_item_id__set_var _explicit_items; 
+    Implicit_item_id__set_var _implicit_items; //not yet initialized for schema
+
+    // non-SDAI, not useful for SDAI use of Interface_spec (it would need to 
+    // be a list).
+    // schema that defined the USE/REFd objects 
+    Express_id _foreign_schema_id;
+
+    // non-SDAI, not useful for SDAI use of Interface_spec (it would need to 
+    // be a list of ints).
+    // schema USEs or REFERENCEs all objects from foreign schema
+    int _all_objects;
+
+    Interface_spec();
+    Interface_spec(Interface_spec &); // not tested
+    Interface_spec(const char * cur_sch_id, const char * foreign_sch_id,
+		   int all_objects=0);
+    virtual ~Interface_spec();
+
+    Express_id current_schema_id_() { return _current_schema_id; }
+    Express_id foreign_schema_id_() { return _foreign_schema_id; }
+
+    Explicit_item_id__set_var explicit_items_()
+      { return _explicit_items; }
+
+    // this is not yet initialized for the schema
+    Implicit_item_id__set_var implicit_items_()
+      { return _implicit_items; }
+
+//  private:
+    void current_schema_id_(const Express_id &ei) { _current_schema_id = ei; }
+    void foreign_schema_id_(const Express_id &fi) { _foreign_schema_id = fi; }
+
+    int all_objects_() { return _all_objects; }
+    void all_objects_(int ao) { _all_objects = ao; }
+};
+
+typedef Interface_spec * Interface_spec_ptr;
+
+class Interface_spec__set {
+public:
+    Interface_spec__set(int = 16);
+    ~Interface_spec__set();
+
+    Interface_spec_ptr& operator[](int index);
+    void Insert(Interface_spec_ptr, int index);
+    void Append(Interface_spec_ptr);
+    void Remove(int index);
+    int Index(Interface_spec_ptr);
+
+    int Count();
+    void Clear();
+private:
+    void Check(int index);
+private:
+    Interface_spec_ptr* _buf;
+    int _bufsize;
+    int _count;
+};
+
+typedef Interface_spec__set* Interface_spec__set_ptr;
+typedef Interface_spec__set_ptr Interface_spec__set_var;
+
+
+class Type_or_rule : public Dictionary_instance {
+  public:
+    Type_or_rule();
+    Type_or_rule(const Type_or_rule&);
+    virtual ~Type_or_rule();
+};
+
+typedef Type_or_rule* Type_or_rule_ptr;
+typedef Type_or_rule_ptr Type_or_rule_var;
+
+class Where_rule : public Dictionary_instance {
+  public:
+    Express_id _label;
+    Type_or_rule_var _type_or_rule;
+
+    // non-SDAI
+    SCLstring _comment; // Comment contained in the EXPRESS.
+			// Should be properly formatted to include (* *)
+			// Will be written to EXPRESS as-is (w/out formatting)
+
+    Where_rule();
+    Where_rule(const Where_rule&);
+    Where_rule(const char * label, Type_or_rule_var tor=0)
+      : _label(label), _type_or_rule(tor) { }
+    virtual ~Where_rule();
+
+    Express_id label_() const { return _label; }
+    const Type_or_rule_var parent_item() const { return _type_or_rule; }
+    SCLstring comment_() const { return _comment; }
+
+    void label_(const Express_id& ei) { _label = ei; }
+    void parent_item(const Type_or_rule_var& tor) { _type_or_rule = tor; }
+    void comment_(const char* c) { _comment = c; }
+};
+
+typedef Where_rule * Where_rule_ptr;
+
+class Where_rule__list {
+public:
+    Where_rule__list(int = 16);
+    ~Where_rule__list();
+
+    Where_rule_ptr& operator[](int index);
+    void Insert(Where_rule_ptr, int index);
+    void Append(Where_rule_ptr);
+    void Remove(int index);
+    int Index(Where_rule_ptr);
+
+    int Count();
+    void Clear();
+private:
+    void Check(int index);
+private:
+    Where_rule_ptr* _buf;
+    int _bufsize;
+    int _count;
+};
+
+typedef Where_rule__list* Where_rule__list_ptr;
+typedef Where_rule__list_ptr Where_rule__list_var;
+
+class Global_rule : public Dictionary_instance {
+  public:
+    Express_id _name;
+    Entity__set_var _entities; // not implemented
+    Where_rule__list_var _where_rules;
+    Schema_ptr _parent_schema;
+    SCLstring _rule_text; // non-SDAI
+
+    Global_rule();
+    Global_rule(const char *n, Schema_ptr parent_sch, const char * rt);
+    Global_rule(Global_rule&); // not fully implemented
+    virtual ~Global_rule();
+
+    Express_id name_() const { return _name; }
+    const Entity__set_var entities_() const { return _entities; }
+    const Where_rule__list_var where_rules_() const { return _where_rules; }
+    const Schema_ptr parent_schema_() const { return _parent_schema; }
+    const char * rule_text_() { return _rule_text.chars(); }
+
+    void name_(Express_id& n) { _name = n; }
+    void entities_(const Entity__set_var &e); // not implemented
+    void where_rules_(const Where_rule__list_var &wrl); // not implemented
+    void parent_schema_(const Schema_ptr &s) { _parent_schema = s; }
+    void rule_text_(const char * rt) { _rule_text = rt; }
+
+};
+
+typedef Global_rule * Global_rule_ptr;
+
+class Global_rule__set {
+public:
+    Global_rule__set(int = 16);
+    ~Global_rule__set();
+
+    Global_rule_ptr& operator[](int index);
+    void Insert(Global_rule_ptr, int index);
+    void Append(Global_rule_ptr);
+    void Remove(int index);
+    int Index(Global_rule_ptr);
+
+    int Count();
+    void Clear();
+private:
+    void Check(int index);
+private:
+    Global_rule_ptr* _buf;
+    int _bufsize;
+    int _count;
+};
+
+typedef Global_rule__set* Global_rule__set_ptr;
+typedef Global_rule__set_ptr Global_rule__set_var;
+
+class Uniqueness_rule : public Dictionary_instance {
+  public:
+    Express_id _label;
+    const EntityDescriptor * _parent_entity;
+
+    // non-SDAI
+    SCLstring _comment; // Comment contained in the EXPRESS.
+			// Should be properly formatted to include (* *)
+			// Will be written to EXPRESS as-is (w/out formatting)
+
+    Uniqueness_rule();
+    Uniqueness_rule(const Uniqueness_rule&);
+    Uniqueness_rule(const char * label, EntityDescriptor *pe=0)
+      : _label(label), _parent_entity(pe) { }
+    virtual ~Uniqueness_rule();
+
+    Express_id label_() const { return _label; }
+    const EntityDescriptor * parent_() const { return _parent_entity; }
+    SCLstring &comment_() { return _comment; }
+
+    void label_(const Express_id& ei) { _label = ei; }
+    void parent_(const EntityDescriptor * pe) { _parent_entity = pe; }
+    void comment_(const char* c) { _comment = c; }
+
+};
+
+typedef Uniqueness_rule * Uniqueness_rule_ptr;
+
+class Uniqueness_rule__set {
+public:
+    Uniqueness_rule__set(int = 16);
+    ~Uniqueness_rule__set();
+
+    Uniqueness_rule_ptr& operator[](int index);
+    void Insert(Uniqueness_rule_ptr, int index);
+    void Append(Uniqueness_rule_ptr);
+    void Remove(int index);
+    int Index(Uniqueness_rule_ptr);
+
+    int Count();
+    void Clear();
+private:
+    void Check(int index);
+private:
+    Uniqueness_rule_ptr* _buf;
+    int _bufsize;
+    int _count;
+};
+
+typedef Uniqueness_rule__set* Uniqueness_rule__set_ptr;
+typedef Uniqueness_rule__set_ptr Uniqueness_rule__set_var;
+
+///////////////////////////////////////////////////////////////////////////////
+// Schema (was SchemaDescriptor) - a class of this type is generated and 
+// contains schema info.
+///////////////////////////////////////////////////////////////////////////////
+
+
+typedef  SCLP23(Model_contents_ptr) (* ModelContentsCreator) () ;
+
+class Schema : public Dictionary_instance { 
+
+  protected:
+    const char *  _name ;
+    EntityDescriptorList _entList; // list of entities in the schema 
+    TypeDescriptorList _typeList; // list of types in the schema 
+    Interface_spec _interface; // list of USE and REF interfaces  (SDAI)
+
+    // non-SDAI lists
+    Interface_spec__set_var _use_interface_list; // list of USE interfaces
+    Interface_spec__set_var _ref_interface_list; // list of REFERENCE interfaces
+    scl_char_str__list_var _function_list; // of EXPRESS functions
+    scl_char_str__list_var _procedure_list; // of EXPRESS procedures
+
+    Global_rule__set_var _global_rules;
+
+  public:  
+    ModelContentsCreator CreateNewModelContents;
+
+    Schema (const char *schemaName );
+    virtual ~Schema ();
+
+    void AssignModelContentsCreator(ModelContentsCreator f = 0)
+    {
+	CreateNewModelContents = f;
+    }
+
+    const char * Name() const	{ return _name; }
+    void Name (const char *  n)  { _name = n; }
+
+    Interface_spec& interface_() { return _interface; }
+
+    Interface_spec__set_var use_interface_list_() { return
+    _use_interface_list; }
+
+    Interface_spec__set_var ref_interface_list_()
+    { return _ref_interface_list; }
+
+    scl_char_str__list_var function_list_()
+    { return _function_list; }
+
+    void AddFunction(const char * f);
+
+    Global_rule__set_var global_rules_() // const
+    { return _global_rules; }
+
+    void AddGlobal_rule(Global_rule_ptr gr);
+
+    void global_rules_(Global_rule__set_var &grs); // not implemented
+
+    scl_char_str__list_var procedure_list_()
+    { return _procedure_list; }
+
+    void AddProcedure(const char * p);
+
+    EntityDescLinkNode * AddEntity (EntityDescriptor * ed)
+    { return _entList.AddNode(ed); }
+
+    TypeDescLinkNode * AddType (TypeDescriptor * td)
+    { return _typeList.AddNode(td); }
+
+    // the whole schema
+    void GenerateExpress(G4std::ostream& out) const;
+
+    // USE, REFERENCE definitions
+    void GenerateUseRefExpress(G4std::ostream& out) const;
+
+    // TYPE definitions
+    void GenerateTypesExpress(G4std::ostream& out) const;
+
+    // Entity definitions
+    void GenerateEntitiesExpress(G4std::ostream& out) const;
+};
+
+typedef Schema SchemaDescriptor;
+
+///////////////////////////////////////////////////////////////////////////////
+
+class AttrDescLinkNode : public SingleLinkNode {
+  private:
+  protected:
+    AttrDescriptor *_attrDesc;
+  public:
+    AttrDescLinkNode();
+    virtual ~AttrDescLinkNode();
+
+    const AttrDescriptor *AttrDesc() const { return _attrDesc; }
+    void AttrDesc(AttrDescriptor *ad) { _attrDesc = ad; }
+};
+
+class AttrDescriptorList : public SingleLinkList {
+  private:
+  protected:
+  public:
+    AttrDescriptorList();
+    virtual ~AttrDescriptorList();
+
+    virtual SingleLinkNode * NewNode () { return new AttrDescLinkNode; }
+
+    AttrDescLinkNode * AddNode (AttrDescriptor * ad);
+};
+
+class AttrDescItr
+{
+  protected:
+    const AttrDescriptorList &adl;
+    const AttrDescLinkNode *cur;
+
+  public:
+    AttrDescItr(const AttrDescriptorList &adList);
+    virtual ~AttrDescItr();
+
+    void ResetItr() { cur = (AttrDescLinkNode *)( adl.GetHead() ); }
+
+    const AttrDescriptor * NextAttrDesc();
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+class Inverse_attributeLinkNode : public  SingleLinkNode {
+  private:
+  protected:
+    Inverse_attribute *_invAttr;
+  public:
+    Inverse_attributeLinkNode();
+    virtual ~Inverse_attributeLinkNode();
+
+    const Inverse_attribute *Inverse_attr() const { return _invAttr; }
+    void Inverse_attr(Inverse_attribute *ia) { _invAttr = ia; }
+};
+
+class Inverse_attributeList : public  SingleLinkList {
+  private:
+  protected:
+  public:
+    Inverse_attributeList();
+    virtual ~Inverse_attributeList();
+
+    virtual SingleLinkNode * NewNode () { return new Inverse_attributeLinkNode; }
+    Inverse_attributeLinkNode * AddNode (Inverse_attribute * ia);
+};
+
+class InverseAItr
+{
+  protected:
+    const Inverse_attributeList &ial;
+    const Inverse_attributeLinkNode *cur;
+
+  public:
+    InverseAItr (const Inverse_attributeList &iaList);
+    virtual ~InverseAItr();
+
+    void ResetItr() 
+	{ cur = (Inverse_attributeLinkNode *)( ial.GetHead() ); }
+
+    const Inverse_attribute * NextInverse_attribute();
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -331,9 +799,9 @@ class AttrDescriptor {
 	const char *  _name ;	// the attributes name
 		// this defines the domain of the attribute
 	const TypeDescriptor * _domainType ;
-	SdaiLogical _optional;
-	SdaiLogical _unique;
-	SdaiLogical _derived;
+	SCLP23(LOGICAL) _optional;
+	SCLP23(LOGICAL) _unique;
+	AttrType_Enum _attrType; // former attribute _derived
 	
 #ifdef __O3DB__
 	const EntityDescriptor * _owner ;  // the owning entityDescriptor
@@ -345,15 +813,18 @@ class AttrDescriptor {
 	AttrDescriptor(
 		       const char * name,		// i.e. char *
 		       const TypeDescriptor *domainType, 
-		       LOGICAL optional,	// i.e. F U or T
-		       LOGICAL unique,	// i.e. F U or T
-		       LOGICAL derived,	// i.e. F U or T
+		       SCLLOG(Logical) optional,	// i.e. F U or T
+		       SCLLOG(Logical) unique,	// i.e. F U or T
+		       AttrType_Enum at,// AttrType_Explicit, AttrType_Inverse,
+				       // AttrType_Deriving,AttrType_Redefining
 		       const EntityDescriptor & owner 
 		   );
 	virtual ~AttrDescriptor ();
 
+	const char * GenerateExpress (SCLstring &buf) const;
+
 		// the attribute Express def
-	const char *AttrExprDefStr(SCLstring & s) const;
+	virtual const char *AttrExprDefStr(SCLstring & s) const;
 
 		// left side of attr def
 	const char * Name()	const	   { return _name; }
@@ -406,29 +877,39 @@ class AttrDescriptor {
 	void DomainType (const TypeDescriptor *td)  { _domainType = td; }
 	void ReferentType(const TypeDescriptor *td) { _domainType = td; }
 
-	const SdaiLogical & Optional() const { return _optional; }
-	void Optional (SdaiLogical &opt)	{ _optional.put(opt.asInt()); }
-	void Optional (LOGICAL opt)	{ _optional.put(opt); }
+	const SCLP23(LOGICAL) & Optional() const { return _optional; }
+	void Optional (SCLP23(LOGICAL) &opt)	{ _optional.put(opt.asInt()); }
+
+	void Optional (SCLLOG(Logical) opt)	{ _optional.put(opt); }
 	void Optional (const char *opt) { _optional.put(opt); }
 
-	const SdaiLogical & Unique() const { return _unique; }
-	void Unique (SdaiLogical uniq)	{ _unique.put(uniq.asInt()); }
-	void Unique (LOGICAL uniq)	{ _unique.put(uniq); }
+	const SCLP23(LOGICAL) & Unique() const { return _unique; }
+	void Unique (SCLP23(LOGICAL) uniq)	{ _unique.put(uniq.asInt()); }
+	void Unique (SCLLOG(Logical) uniq)	{ _unique.put(uniq); }
 	void Unique (const char *uniq)	{ _unique.put(uniq); }
 
-	const SdaiLogical & Derived() const { return _derived; }
-	void Derived (SdaiLogical x)	{ _derived.put(x.asInt()); }
-	void Derived (LOGICAL x)	{ _derived.put(x); }
-	void Derived (const char *x)	{ _derived.put(x); }
+	void AttrType(enum AttrType_Enum ate) { _attrType = ate; }
+	enum AttrType_Enum AttrType() const { return _attrType; }
 
-	const SdaiLogical & Optionality() const { return _optional; }
-	void Optionality (SdaiLogical &opt)  { _optional.put(opt.asInt()); }
-	void Optionality (LOGICAL opt)	   { _optional.put(opt); }
+	SCLLOG(Logical) Explicit() const;
+	SCLLOG(Logical) Inverse() const;
+	SCLLOG(Logical) Redefining() const;
+	SCLLOG(Logical) Deriving() const;
+
+	//outdated functions, use AttrType func above, new support of redefined
+	SCLLOG(Logical) Derived() const { return Deriving(); }
+	void Derived (SCLLOG(Logical) x);     // outdated DAS
+	void Derived (SCLP23(LOGICAL) x); // outdated DAS
+	void Derived (const char *x); // outdated DAS
+
+	const SCLP23(LOGICAL) & Optionality() const { return _optional; }
+	void Optionality (SCLP23(LOGICAL) &opt) { _optional.put(opt.asInt()); }
+	void Optionality (SCLLOG(Logical) opt)	   { _optional.put(opt); }
 	void Optionality (const char *opt) { _optional.put(opt); }
 
-	const SdaiLogical & Uniqueness() const	{ return _unique; }
-	void Uniqueness (SdaiLogical uniq)	{ _unique.put(uniq.asInt()); }
-	void Uniqueness (LOGICAL uniq)		{ _unique.put(uniq); }
+	const SCLP23(LOGICAL) & Uniqueness() const	{ return _unique; }
+	void Uniqueness (SCLP23(LOGICAL) uniq)	{ _unique.put(uniq.asInt()); }
+	void Uniqueness (SCLLOG(Logical) uniq)		{ _unique.put(uniq); }
 	void Uniqueness (const char *uniq)	{ _unique.put(uniq); }
 
 #ifdef __O3DB__
@@ -440,32 +921,115 @@ class AttrDescriptor {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// InverseAttrDescriptor
+// Inverse_attribute
 ///////////////////////////////////////////////////////////////////////////////
 
-class InverseAttrDescriptor  :    public AttrDescriptor  { 
+class Derived_attribute  :    public AttrDescriptor  { 
+  public:
+    const char *_initializer;
 
-  protected:
-	AttrDescriptor * _inverseAttr ;
+    Derived_attribute(
+		       const char * name,		// i.e. char *
+		       const TypeDescriptor *domainType, 
+		       SCLLOG(Logical) optional,	// i.e. F U or T
+		       SCLLOG(Logical) unique,	// i.e. F U or T
+		       AttrType_Enum at,// AttrType_Explicit, AttrType_Inverse,
+				       // AttrType_Deriving,AttrType_Redefining
+		       const EntityDescriptor & owner 
+		   );
+    virtual ~Derived_attribute();
+    const char * AttrExprDefStr(SCLstring & s) const;
+
+    const char *initializer_() { return _initializer; }
+    void initializer_(const char *i) { _initializer = i; }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// Inverse_attribute
+///////////////////////////////////////////////////////////////////////////////
+
+class Inverse_attribute  :    public AttrDescriptor  { 
+
+  public:  
+    const char *_inverted_attr_id;
+    const char *_inverted_entity_id;
+  protected: 
+	AttrDescriptor * _inverted_attr ; // not implemented
   public:  
 
-	InverseAttrDescriptor(
+	Inverse_attribute(
 		       const char * name,		// i.e. char *
 		       TypeDescriptor *domainType, 
-		       LOGICAL optional,	// i.e. F U or T*/
-		       LOGICAL unique,	// i.e. F U or T
-//		       LOGICAL derived,	// derived will always be F 
+		       SCLLOG(Logical) optional,	// i.e. F U or T*/
+		       SCLLOG(Logical) unique,	// i.e. F U or T
+//		       AttrType_Enum at, // will always be AttrType_Inverse
 		       const EntityDescriptor & owner, 
-		       AttrDescriptor *inverseAttr =0
+		       const char *inverted_attr_id =0
 		   ) : AttrDescriptor( name, domainType, optional, unique, 
-				       F, owner ), _inverseAttr (inverseAttr)
+				       AttrType_Inverse, owner ), 
+		       _inverted_attr_id(inverted_attr_id), 
+		       _inverted_entity_id(0), _inverted_attr(0)
 		{ }
-	virtual ~InverseAttrDescriptor () { }
+	virtual ~Inverse_attribute () { }
 	
+	const char * AttrExprDefStr(SCLstring & s) const;
+
+	const char * inverted_attr_id_() const
+                { return _inverted_attr_id; } 
+	
+	void inverted_attr_id_(const char *iai ) 
+                { _inverted_attr_id = iai; } 
+
+	const char * inverted_entity_id_() const
+                { return _inverted_entity_id; } 
+	
+	void inverted_entity_id_(const char *iei ) 
+                { _inverted_entity_id = iei; } 
+
+	// not implemented 
+	class AttrDescriptor * inverted_attr_() 
+                { return _inverted_attr; } 
+	
+	void inverted_attr_(AttrDescriptor *ia ) 
+                { _inverted_attr = ia; } 
+
+	  // below are obsolete (and not implemented anyway)
 	class AttrDescriptor * InverseAttribute() 
-                { return _inverseAttr; } 
+                { return _inverted_attr; } 
         void InverseOf (AttrDescriptor * invAttr) 
-                { _inverseAttr = invAttr; } 
+                { _inverted_attr = invAttr; } 
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// SchRename is a structure which partially support the concept of USE and RE-
+// FERENCE in EXPRESS.  Say schema A USEs object X from schema B and renames it
+// to Y (i.e., "USE (X as Y);").  SchRename stores the name of the schema (B)
+// plus the new object name for that schema (Y).  Each TypeDescriptor has a
+// SchRename object (actually a linked list of SchRenames) corresponding to all
+// the possible different names of itself depending on the current schema (the
+// schema which is currently reading or writing this object).  (The current
+// schema is determined by the file schema section of the header section of a
+// part21 file (the _headerInstances of STEPfile).
+///////////////////////////////////////////////////////////////////////////////
+
+class SchRename {
+  public:
+    SchRename( const char *sch="\0", const char *newnm="\0" ) : next(0)
+      { strcpy( schName, sch ); strcpy( newName, newnm ); }
+    ~SchRename() { delete next; }
+    const char *objName() const { return newName; }
+    // Added 'int' return type - GC
+    int operator<  ( SchRename &schrnm )
+        { return ( strcmp( schName, schrnm.schName ) < 0 ); }
+    int choice( const char *nm ) const;
+            // is nm one of our possible choices?
+    char *rename( const char *schnm, char *newnm ) const;
+            // given a schema name, returns new object name if exists
+    SchRename *next;
+
+  private:
+    char schName[BUFSIZ];
+    char newName[BUFSIZ];
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -542,7 +1106,7 @@ class InverseAttrDescriptor  :    public AttrDescriptor  {
 	// a subtype of TypeDescriptor.
 //////_description
 	// This is the string description of the type as found in the
-	// EXPRESS file. e.g. aggr of [aggr of ...] [List of ...] someType 
+	// EXPRESS file. e.g. aggr of [aggr of ...] [list of ...] someType 
 	// It is the RIGHT side of an Express TYPE statement 
 	// (i.e. LIST OF STRING as in 
 	// TYPE label_group = LIST OF STRING END_TYPE;) 
@@ -554,30 +1118,72 @@ class TypeDescriptor {
   protected:
 
 		// the name of the type (see above)
+                //
+                // NOTE - memory is not allocated for this, or for _description
+                // below.  It is assumed that at creation, _name will be made
+                // to point to a static location in memory.  The fedex_plus
+                // generated code, for example, places a literal string in its
+                // TypeDesc constructor calls.  This creates a location in me-
+                // mory static throughout the lifetime of the calling program.
 	const char *  _name ;
+
+	        // an alternate name of type - such as one given by a different
+	        // schema which USEs/ REFERENCEs this.  (A complete list of
+	        // alternate names is stored in altNames below.  _altname pro-
+	        // vides storage space for the currently used one.)
+	char _altname[BUFSIZ];
+
+	        // contains list of renamings of type - used by other schemas
+	        // which USE/ REFERENCE this
+	const SchRename * altNames;
 
 		// the type of the type (see above). 
 		// it is an enum see file clstepcore/baseType.h
 //	BASE_TYPE _fundamentalType ;
 	PrimitiveType _fundamentalType ;
 
-		// furthur describes the type (see above)
+	const Schema * _originatingSchema;
+
+		// further describes the type (see above)
 		// most often (or always) points at a subtype.
 	const TypeDescriptor * _referentType ;
 
 		// Express file description (see above)
 		// e.g. the right side of an Express TYPE stmt
+	        // (See note above by _name regarding memory allocation.)
 	const char *  _description ;
 
+      public:
+	// a Where_rule may contain only a comment
+	Where_rule__list_var _where_rules; // initially a null pointer
+
+	Where_rule__list_var& where_rules_()
+	{ return _where_rules; }
+
+	void where_rules_(Where_rule__list * wrl)
+	{ _where_rules = wrl; }
+
+      protected:
+	        // Functions used to check the current name of the type (may
+	        // != _name if altNames has diff name for current schema).
+	int PossName (const char *) const;
+	int OurName  (const char *) const;
+	int AltName  (const char *) const;
+	
   public:  
 
-	TypeDescriptor (const char * nm, PrimitiveType ft, const char * d ); 
+	TypeDescriptor (const char * nm, PrimitiveType ft, const char * d); 
+	TypeDescriptor (const char * nm, PrimitiveType ft, 
+			Schema *origSchema, const char * d);
 	TypeDescriptor ( ); 
-	virtual ~TypeDescriptor () { }
+	virtual ~TypeDescriptor () { /* if ( altNames ) delete altNames; */ }
 
+	virtual const char * GenerateExpress (SCLstring &buf) const;
 
-		// the name of this type
-	const char * Name() const   { return _name; }
+		// The name of this type.  If schnm != NULL, the name we're
+	        // referred to by schema schnm (may be diff name in our alt-
+	        // names list (based on schnm's USE/REF list)).
+	const char * Name( const char *schnm =NULL ) const;
 
 		// The name that would be found on the right side of an 
 		// attribute definition. In the case of a type defined like
@@ -587,9 +1193,10 @@ class TypeDescriptor {
 		// defined in an attribute it will be the _description
 		// member variable since _name will be null. e.g. attr. def.
 		// project_names : ARRAY [1..10] name;
-	const char * AttrTypeName() const {
-	    return _name ? _name : _description;
-	}	    
+	const char * AttrTypeName( SCLstring &buf, const char *schnm =NULL ) const;
+
+	        // Linked link of alternate names for the type:
+	const SchRename *AltNameList() const { return altNames; }
 
 		// This is a fully expanded description of the type.
 		// This returns a string like the _description member variable
@@ -608,7 +1215,7 @@ class TypeDescriptor {
 	   // TYPE count = INTEGER;
 	   // TYPE ref_count = count;
 	   // TYPE count_set = SET OF ref_count;
-	   //  each of the above will Generate a TypeDescriptor and for 
+	   //  each of the above will generate a TypeDescriptor and for 
 	   //  each one, PrimitiveType BaseType() will return INTEGER_TYPE.
 	   //  TypeDescriptor *BaseTypeDescriptor() returns the TypeDescriptor 
 	   //  for Integer.
@@ -639,6 +1246,16 @@ class TypeDescriptor {
 	void ReferentType (const TypeDescriptor * rtype) 
 			{ _referentType = rtype; }
 
+
+	const Schema * OriginatingSchema()  const
+			{ return _originatingSchema; }
+	void OriginatingSchema (const Schema * os)
+			{ _originatingSchema = os; }
+	const char *schemaName() const {
+	    if ( _originatingSchema ) return _originatingSchema->Name();
+	    else return "";
+	}
+
 		// A description of this type's type. Basically you
 		// get the right side of a TYPE statement minus END_TYPE.
 		// For base type TypeDescriptors it is the same as _name.
@@ -646,76 +1263,111 @@ class TypeDescriptor {
 	void Description (const char * desc) { _description = desc; } 
 
         virtual const TypeDescriptor * IsA (const TypeDescriptor *) const;
-        virtual const TypeDescriptor * BaseTypeIsA (const TypeDescriptor *) const;
+        virtual const TypeDescriptor * BaseTypeIsA (const TypeDescriptor *)
+	  const;
         virtual const TypeDescriptor * IsA (const char *) const;
         virtual const TypeDescriptor * CanBe (const TypeDescriptor *n) const
                 {  return TypeDescriptor::IsA (n);  }
-
+	virtual const TypeDescriptor * CanBe (const char *n) const
+		{  return TypeDescriptor::IsA (n); }
+	virtual const TypeDescriptor * CanBeSet (const char *n,
+						 const char *schNm =0) const
+		{  return ( CurrName( n, schNm ) ? this : 0 ); }
+	int CurrName( const char *, const char * =0 ) const;
+	void addAltName( const char *schnm, const char *newnm );
+	        // Adds an additional name, newnm, to be use when schema schnm
+	        // is USE/REFERENCE'ing us (added to altNames).
 };
 
-typedef  STEPenumeration * (* EnumCreator) () ;
+#ifdef __OSTORE__
+typedef  SCLP23(Enum) * (* EnumCreator) (os_database *db) ;
+#else
+typedef  SCLP23(Enum) * (* EnumCreator) () ;
+#endif
 
 class EnumTypeDescriptor  :    public TypeDescriptor  { 
   public:
     EnumCreator CreateNewEnum;
+
+    const char * GenerateExpress (SCLstring &buf) const;
 
     void AssignEnumCreator(EnumCreator f = 0)
     {
 	CreateNewEnum = f;
     }
 
-    STEPenumeration *CreateEnum()
-    {
-	if(CreateNewEnum)
-	    return CreateNewEnum();
-	else
-	    return 0;
-    }
+#ifdef __OSTORE__
+    SCLP23(Enum) *CreateEnum(os_database *db);
+#else
+    SCLP23(Enum) *CreateEnum();
+#endif
 
     EnumTypeDescriptor ( ) { }
-    EnumTypeDescriptor (const char * nm, PrimitiveType ft, const char * d, 
-		    EnumCreator f =0 ); 
+    EnumTypeDescriptor (const char * nm, PrimitiveType ft, 
+			Schema *origSchema, const char * d, 
+			EnumCreator f =0 ); 
 
     virtual ~EnumTypeDescriptor () { }
 };
 
 
+///////////////////////////////////////////////////////////////////////////////
+// EntityDescriptor
+// An instance of this class will be generated for each entity type
+// found in the schema.  This should probably be derived from the
+// CreatorEntry class (see sdaiApplicaton_instance.h).  Then the binary tree 
+// that the current software  builds up containing the entities in the schema
+// will be building the same thing but using the new schema info.
+// nodes (i.e. EntityDesc nodes) for each entity.
+///////////////////////////////////////////////////////////////////////////////
+
 class EntityDescriptor  :    public TypeDescriptor  { 
 
   protected:
-	const SchemaDescriptor * _originatingSchema;
-	SdaiLogical _abstractEntity;
+//	const Schema * _originatingSchema;
+	SCLP23(LOGICAL) _abstractEntity;
+	SCLP23(LOGICAL) _extMapping;
+	  // does external mapping have to be used to create an instance of
+	  // us (see STEP Part 21, sect 11.2.5.1)
 
 	EntityDescriptorList _subtypes;   // OPTIONAL
 	EntityDescriptorList _supertypes; // OPTIONAL
 
 	AttrDescriptorList	  _explicitAttr; // OPTIONAL
-//	StringAggregate		 * _derivedAttr;  // OPTIONAL  
-	InverseAttrDescriptorList _inverseAttr;  // OPTIONAL
+//	StringAggregate		 * _derivedAttr;  // OPTIONAL
+	Inverse_attributeList _inverseAttr;  // OPTIONAL
 
+	SCLstring _supertype_stmt;
   public:
-       // pointer to a function that will create a new instance of a STEPentity
+	Uniqueness_rule__set_var _uniqueness_rules; // initially a null pointer
+
+       // pointer to a function that will create a new instance of a SCLP23(Application_instance)
         Creator NewSTEPentity;
 
 	EntityDescriptor ( );
 	EntityDescriptor (const char * name, // i.e. char *
-			  SchemaDescriptor *origSchema, 
-			  LOGICAL abstractEntity, // i.e. F U or T
-			  Creator f =0		  
+			  Schema *origSchema,
+			  SCLLOG(Logical) abstractEntity, // i.e. F U or T
+			  SCLLOG(Logical) extMapping,
+			  Creator f =0
 			  );
 
 	virtual ~EntityDescriptor ();
 
-	const SchemaDescriptor * OriginatingSchema()  const
-			{ return _originatingSchema; }
-	void OriginatingSchema (const SchemaDescriptor * os)
-			{ _originatingSchema = os; }
+	const char * GenerateExpress (SCLstring &buf) const;
 
-	SdaiLogical & AbstractEntity()         { return _abstractEntity; } 
-	void AbstractEntity (SdaiLogical &ae)
-					   { _abstractEntity.put(ae.asInt()); }
-	void AbstractEntity (LOGICAL ae)     { _abstractEntity.put(ae); }
-	void AbstractEntity (const char *ae) { _abstractEntity.put(ae); }
+	const char * QualifiedName(SCLstring &s) const;
+
+	const SCLP23(LOGICAL) & AbstractEntity() const 
+					{ return _abstractEntity;}
+	const SCLP23(LOGICAL) & ExtMapping() const   { return _extMapping; }
+	void AbstractEntity (SCLP23(LOGICAL) &ae)
+					{ _abstractEntity.put(ae.asInt()); }
+	void ExtMapping (SCLP23(LOGICAL) &em)
+				        { _extMapping.put(em.asInt());     }
+	void AbstractEntity (SCLLOG(Logical) ae) { _abstractEntity.put(ae); }
+	void ExtMapping     (SCLLOG(Logical) em) { _extMapping.put(em);     }
+	void ExtMapping     (const char *em)    { _extMapping.put(em);     }
 
 	const EntityDescriptorList& Subtypes() const
 	  { return _subtypes; } 
@@ -731,19 +1383,26 @@ class EntityDescriptor  :    public TypeDescriptor  {
 
 //	StringAggregate  & DerivedAttr()	{ return *_derivedAttr; }
 
-	const InverseAttrDescriptorList& InverseAttr() const { return _inverseAttr; }
+	const Inverse_attributeList& InverseAttr() const
+	        { return _inverseAttr; }
 
         virtual const EntityDescriptor * IsA (const EntityDescriptor *) const;
-        virtual const TypeDescriptor * IsA (const TypeDescriptor * td) const ;
-        virtual const TypeDescriptor * IsA (const char * n) const  
+        virtual const TypeDescriptor * IsA (const TypeDescriptor * td) const;
+        virtual const TypeDescriptor * IsA (const char * n) const
                 {  return TypeDescriptor::IsA (n);  }
         virtual const TypeDescriptor * CanBe (const TypeDescriptor *o) const
                 {  return o -> IsA (this);  }
+
+	virtual const TypeDescriptor * CanBe (const char *n) const
+		{  return TypeDescriptor::CanBe (n); }
 
     // The following will be used by schema initialization functions
 
 	void AddSubtype(EntityDescriptor *ed) 
 		{ _subtypes.AddNode(ed); }
+	void AddSupertype_Stmt(const char *s) { _supertype_stmt = s; }
+	const char * Supertype_Stmt() { return _supertype_stmt.chars(); }
+	SCLstring& supertype_stmt_() { return _supertype_stmt; }
 
 	void AddSupertype(EntityDescriptor *ed) 
 		{ _supertypes.AddNode(ed); }
@@ -751,8 +1410,13 @@ class EntityDescriptor  :    public TypeDescriptor  {
 	void AddExplicitAttr(AttrDescriptor *ad)
 		{ _explicitAttr.AddNode(ad); }
 
-	void AddInverseAttr(InverseAttrDescriptor *ad)
-		{ _inverseAttr.AddNode(ad); }
+	void AddInverseAttr(Inverse_attribute *ia)
+		{ _inverseAttr.AddNode(ia); }
+	void uniqueness_rules_(Uniqueness_rule__set *urs)
+	  { _uniqueness_rules = urs; }
+	Uniqueness_rule__set_var& uniqueness_rules_()
+	  { return _uniqueness_rules; }
+
 };
 
 
@@ -785,6 +1449,17 @@ class BinaryAggregate;
 class RealAggregate;
 class IntAggregate;
 
+#ifdef __OSTORE__
+typedef  STEPaggregate * (* AggregateCreator) (os_database *db) ;
+typedef  EnumAggregate * (* EnumAggregateCreator) (os_database *db) ;
+typedef  GenericAggregate * (* GenericAggregateCreator) (os_database *db) ;
+typedef  EntityAggregate * (* EntityAggregateCreator) (os_database *db) ;
+typedef  SelectAggregate * (* SelectAggregateCreator) (os_database *db) ;
+typedef  StringAggregate * (* StringAggregateCreator) (os_database *db) ;
+typedef  BinaryAggregate * (* BinaryAggregateCreator) (os_database *db) ;
+typedef  RealAggregate * (* RealAggregateCreator) (os_database *db) ;
+typedef  IntAggregate * (* IntAggregateCreator) (os_database *db) ;
+#else
 typedef  STEPaggregate * (* AggregateCreator) () ;
 typedef  EnumAggregate * (* EnumAggregateCreator) () ;
 typedef  GenericAggregate * (* GenericAggregateCreator) () ;
@@ -794,7 +1469,25 @@ typedef  StringAggregate * (* StringAggregateCreator) () ;
 typedef  BinaryAggregate * (* BinaryAggregateCreator) () ;
 typedef  RealAggregate * (* RealAggregateCreator) () ;
 typedef  IntAggregate * (* IntAggregateCreator) () ;
+#endif
 
+#ifdef __OSTORE__
+EnumAggregate * create_EnumAggregate(os_database *db);
+
+GenericAggregate * create_GenericAggregate(os_database *db);
+
+EntityAggregate * create_EntityAggregate(os_database *db);
+
+SelectAggregate * create_SelectAggregate(os_database *db);
+
+StringAggregate * create_StringAggregate(os_database *db);
+
+BinaryAggregate * create_BinaryAggregate(os_database *db);
+
+RealAggregate * create_RealAggregate(os_database *db);
+
+IntAggregate * create_IntAggregate(os_database *db);
+#else
 EnumAggregate * create_EnumAggregate();
 
 GenericAggregate * create_GenericAggregate();
@@ -810,11 +1503,11 @@ BinaryAggregate * create_BinaryAggregate();
 RealAggregate * create_RealAggregate();
 
 IntAggregate * create_IntAggregate();
-
+#endif
 ///////////////////////////////////////////////////////////////////////////////
 // AggrTypeDescriptor
 // I think we decided on a simplistic representation of aggr. types for now?
-// i.e. just have one AggrTypeDesc for Array of [List of] [set of] someType
+// i.e. just have one AggrTypeDesc for Array of [list of] [set of] someType
 // the inherited variable _referentType will point to the TypeDesc for someType
 // So I don't believe this class was necessary.  If we were to retain
 // info for each of the [aggr of]'s in the example above then there would be
@@ -827,9 +1520,9 @@ class AggrTypeDescriptor  :    public TypeDescriptor  {
 
   protected:
 
-    SdaiInteger  _bound1 ;
-    SdaiInteger  _bound2 ;
-    SdaiLogical _uniqueElements ;
+    SCLP23(Integer)  _bound1 ;
+    SCLP23(Integer)  _bound2 ;
+    SCLP23(LOGICAL) _uniqueElements ;
     TypeDescriptor * _aggrDomainType ;
     AggregateCreator CreateNewAggr;
 
@@ -840,34 +1533,33 @@ class AggrTypeDescriptor  :    public TypeDescriptor  {
 	CreateNewAggr = f;
     }
 
-    STEPaggregate *CreateAggregate()
-    {
-	if(CreateNewAggr)
-	    return CreateNewAggr();
-	else
-	    return 0;
-    }
+#ifdef __OSTORE__
+    STEPaggregate *CreateAggregate(os_database *db);
+#else
+    STEPaggregate *CreateAggregate();
+#endif
 
     AggrTypeDescriptor ( ); 
-    AggrTypeDescriptor(SdaiInteger b1, SdaiInteger b2, 
-		       LOGICAL uniqElem, 
+    AggrTypeDescriptor(SCLP23(Integer) b1, SCLP23(Integer) b2, 
+		       SCLLOG(Logical) uniqElem, 
 		       TypeDescriptor *aggrDomType);
-    AggrTypeDescriptor (const char * nm, PrimitiveType ft, const char * d, 
+    AggrTypeDescriptor (const char * nm, PrimitiveType ft, 
+			Schema *origSchema, const char * d, 
 			AggregateCreator f =0 )
-	: TypeDescriptor (nm, ft, d), CreateNewAggr(f) { }
+	: TypeDescriptor (nm, ft, origSchema, d), CreateNewAggr(f) { }
     virtual ~AggrTypeDescriptor ();
 
 
-    SdaiInteger & Bound1() 		{ return _bound1; }
-    void Bound1 (SdaiInteger  b1)    { _bound1 = b1; } 
+    SCLP23(Integer) & Bound1()	        { return _bound1; }
+    void Bound1 (SCLP23(Integer)  b1)   { _bound1 = b1; } 
 
-    SdaiInteger & Bound2() 		{ return _bound2; }
-    void Bound2 (SdaiInteger  b2)    { _bound2 = b2; } 
+    SCLP23(Integer) & Bound2() 		{ return _bound2; }
+    void Bound2 (SCLP23(Integer)  b2)   { _bound2 = b2; } 
 
-    SdaiLogical& UniqueElements()	{ return _uniqueElements; } 
-    void UniqueElements (SdaiLogical &ue) 
+    SCLP23(LOGICAL)& UniqueElements()	{ return _uniqueElements; } 
+    void UniqueElements (SCLP23(LOGICAL) &ue) 
 					{ _uniqueElements.put(ue.asInt()); } 
-    void UniquesElements (LOGICAL ue)     { _uniqueElements.put(ue); }
+    void UniqueElements (SCLLOG(Logical) ue)     { _uniqueElements.put(ue); }
     void UniqueElements (const char *ue) { _uniqueElements.put(ue); }
 
     class TypeDescriptor * AggrDomainType()    { return _aggrDomainType; } 
@@ -881,23 +1573,26 @@ class AggrTypeDescriptor  :    public TypeDescriptor  {
 class ArrayTypeDescriptor  :    public AggrTypeDescriptor  { 
 
   protected:
-	SdaiLogical _optionalElements ;
+	SCLP23(LOGICAL) _optionalElements ;
   public:  
 
     ArrayTypeDescriptor ( ) : _optionalElements("UNKNOWN_TYPE") { } 
-    ArrayTypeDescriptor (LOGICAL optElem) : _optionalElements(optElem) { } 
-    ArrayTypeDescriptor (const char * nm, PrimitiveType ft, const char * d, 
-			AggregateCreator f =0 )
-	: AggrTypeDescriptor (nm, ft, d, f), _optionalElements("UNKNOWN_TYPE") 
+    ArrayTypeDescriptor (SCLLOG(Logical) optElem) : _optionalElements(optElem)
+      { }
+    ArrayTypeDescriptor (const char * nm, PrimitiveType ft, 
+			 Schema *origSchema, const char * d, 
+			 AggregateCreator f =0 )
+	: AggrTypeDescriptor (nm, ft, origSchema, d, f),
+	  _optionalElements("UNKNOWN_TYPE") 
     { }
 
     virtual ~ArrayTypeDescriptor () {}
 
 
-    SdaiLogical& OptionalElements()       { return _optionalElements; } 
-    void OptionalElements (SdaiLogical &oe) 
+    SCLP23(LOGICAL)& OptionalElements()       { return _optionalElements; } 
+    void OptionalElements (SCLP23(LOGICAL) &oe) 
 				     { _optionalElements.put(oe.asInt()); } 
-    void OptionalElements (LOGICAL oe)     { _optionalElements.put(oe); }
+    void OptionalElements (SCLLOG(Logical) oe)     { _optionalElements.put(oe); }
     void OptionalElements (const char *oe) { _optionalElements.put(oe); }
 };
 
@@ -920,9 +1615,10 @@ class ListTypeDescriptor  :    public AggrTypeDescriptor  {
     }
     */
     ListTypeDescriptor ( ) { }
-    ListTypeDescriptor (const char * nm, PrimitiveType ft, const char * d, 
+    ListTypeDescriptor (const char * nm, PrimitiveType ft, 
+			Schema *origSchema, const char * d, 
 			AggregateCreator f =0 )
-		: AggrTypeDescriptor (nm, ft, d, f) { }
+		: AggrTypeDescriptor (nm, ft, origSchema, d, f) { }
     virtual ~ListTypeDescriptor () { }
 
 };
@@ -933,9 +1629,10 @@ class SetTypeDescriptor  :    public AggrTypeDescriptor  {
   public:  
 
     SetTypeDescriptor ( ) { } 
-    SetTypeDescriptor (const char * nm, PrimitiveType ft, const char * d, 
-			AggregateCreator f =0 )
-		: AggrTypeDescriptor (nm, ft, d, f) { }
+    SetTypeDescriptor (const char * nm, PrimitiveType ft, 
+		       Schema *origSchema, const char * d, 
+		       AggregateCreator f =0 )
+		: AggrTypeDescriptor (nm, ft, origSchema, d, f) { }
     virtual ~SetTypeDescriptor () { }
 
 };
@@ -946,14 +1643,19 @@ class BagTypeDescriptor  :    public AggrTypeDescriptor  {
   public:  
 
     BagTypeDescriptor ( ) { }
-    BagTypeDescriptor (const char * nm, PrimitiveType ft, const char * d, 
-			AggregateCreator f =0 )
-		: AggrTypeDescriptor (nm, ft, d, f) { }
+    BagTypeDescriptor (const char * nm, PrimitiveType ft, 
+		       Schema *origSchema, const char * d, 
+		       AggregateCreator f =0 )
+		: AggrTypeDescriptor (nm, ft, origSchema, d, f) { }
     virtual ~BagTypeDescriptor () { }
 
 };
 
-typedef  SdaiSelect * (* SelectCreator) () ;
+#ifdef __OSTORE__
+typedef  SCLP23(Select) * (* SelectCreator) (os_database *db) ;
+#else
+typedef  SCLP23(Select) * (* SelectCreator) () ;
+#endif
 
 class SelectTypeDescriptor  :    public TypeDescriptor  { 
 
@@ -970,18 +1672,16 @@ class SelectTypeDescriptor  :    public TypeDescriptor  {
 	    CreateNewSelect = f;
 	}
 
-	SdaiSelect *CreateSelect()
-	{
-	    if(CreateNewSelect)
-		return CreateNewSelect();
-	    else
-		return 0;
-	}
-
+#ifdef __OSTORE__
+	SCLP23(Select) *CreateSelect(os_database *db);
+#else
+	SCLP23(Select) *CreateSelect();
+#endif
 
         SelectTypeDescriptor (int b, const char * nm, PrimitiveType ft, 
+			      Schema *origSchema, 
 			      char * d, SelectCreator f =0 ) 
-          : TypeDescriptor (nm, ft, d), 
+          : TypeDescriptor (nm, ft, origSchema, d), 
 	  _unique_elements (b), CreateNewSelect(f)
 		{ }
 	virtual ~SelectTypeDescriptor () { }
@@ -994,39 +1694,41 @@ class SelectTypeDescriptor  :    public TypeDescriptor  {
         virtual const TypeDescriptor * IsA (const char * n) const  
                 {  return TypeDescriptor::IsA (n);  }
         virtual const TypeDescriptor * CanBe (const TypeDescriptor *) const;
+	virtual const TypeDescriptor * CanBe (const char *n) const;
+	virtual const TypeDescriptor * CanBeSet (const char *, const char *)
+	  const;
 };
 
 class StringTypeDescriptor  :    public TypeDescriptor  { 
 
   protected:
-	SdaiInteger  _width ;    //  OPTIONAL
-	SdaiLogical _fixedSize ;
+	SCLP23(Integer)  _width ;    //  OPTIONAL
+	SCLP23(LOGICAL) _fixedSize ;
   public:  
 
 	StringTypeDescriptor ( ) : _fixedSize("UNKNOWN_TYPE") { _width = 0; }
 	virtual ~StringTypeDescriptor () { }
 
 
-	SdaiInteger Width()		{ return _width; }
-	void Width (SdaiInteger  w)	{ _width = w; }
+	SCLP23(Integer) Width()		{ return _width; }
+	void Width (SCLP23(Integer)  w)	{ _width = w; }
 
-	SdaiLogical& FixedSize()		{ return _fixedSize; }
-	void FixedSize (SdaiLogical fs)	{ _fixedSize.put(fs.asInt()); }
-	void FixedSize (LOGICAL fs)	{ _fixedSize.put(fs); }
-	void FixedSize (char * fs)	{ _fixedSize.put(fs); }
+	SCLP23(LOGICAL)& FixedSize()		{ return _fixedSize; }
+	void FixedSize (SCLP23(LOGICAL) fs)	{ _fixedSize.put(fs.asInt()); }
+	void FixedSize (SCLLOG(Logical) fs)	{ _fixedSize.put(fs); }
 };
 
 class RealTypeDescriptor  :    public TypeDescriptor  { 
 
   protected:
-	SdaiInteger  _precisionSpec ;    //  OPTIONAL
+	SCLP23(Integer)  _precisionSpec ;    //  OPTIONAL
   public:  
 
 	RealTypeDescriptor ( ) { _precisionSpec = 0; }
 	virtual ~RealTypeDescriptor () { }
 
-	SdaiInteger PrecisionSpec()		{ return _precisionSpec; }
-	void PrecisionSpec (SdaiInteger  ps)	{ _precisionSpec = ps; }
+	SCLP23(Integer) PrecisionSpec()		 { return _precisionSpec; }
+	void PrecisionSpec (SCLP23(Integer)  ps) { _precisionSpec = ps; }
 };
 
 

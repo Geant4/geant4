@@ -1,21 +1,11 @@
 
-
-//
-
-
-
-//
-// $Id: mgrnodearray.h,v 1.3 1999-12-15 14:50:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 #ifndef mgrnodearray_h
 #define mgrnodearray_h
 
 /*
 * NIST STEP Editor Class Library
 * cleditor/mgrnodearray.h
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -23,7 +13,13 @@
 * and is not subject to copyright.
 */
 
-/*  */ 
+/* $Id: mgrnodearray.h,v 1.4 2000-01-21 13:42:40 gcosmo Exp $ */ 
+
+/*
+#ifdef __OSTORE__
+#include <ostore/ostore.hh>    // Required to access ObjectStore Class Library
+#endif
+*/
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
@@ -33,6 +29,7 @@
 
 #include <gennode.h>
 #include <gennodelist.h>
+//#include <gennode.inline.h>
 
 #include <mgrnode.h>
 #include <mgrnodelist.h>
@@ -44,16 +41,19 @@
 //////////////////////////////////////////////////////////////////////////////
 // class MgrNodeArray
 // This class implements the array of MgrNodes representing the
-// master List for the seInstMgr which will have a one to one
-// mapping by index to the display List of corresponding STEPentities.
+// master list for the seInstMgr which will have a one to one
+// mapping by index to the display list of corresponding STEPentities.
 // If you delete this object it deletes all of the entries it points to.
 //////////////////////////////////////////////////////////////////////////////
 
 class MgrNodeArray : public GenNodeArray
 {
 public:
-    MgrNodeArray(int defaultSize = ARRAY_DEFAULT_SIZE) 
-	: GenNodeArray(defaultSize) { }
+//#ifdef __OSTORE__
+//    MgrNodeArray(os_database *db, int defaultSize = ARRAY_DEFAULT_SIZE);
+//#else
+    MgrNodeArray(int defaultSize = ARRAY_DEFAULT_SIZE);
+//#endif
     ~MgrNodeArray();
 
 // REDEFINED functions
@@ -69,20 +69,28 @@ public:
 // ADDED functions
     virtual int MgrNodeIndex(int fileId);
     void AssignIndexAddress(int index);
+/*
+#ifdef __OSTORE__
+    static os_typespec* get_os_typespec();
+#endif
+*/
 };
 
 //////////////////////////////////////////////////////////////////////////////
 // class MgrNodeArraySorted
 // This class implements the array of MgrNodes representing the
-// sorted master List for the seInstMgr.  This List is sorted by
+// sorted master list for the seInstMgr.  This list is sorted by
 // STEPentity::fileId.
 // If you delete this object it won't delete the entries it points to.
 //////////////////////////////////////////////////////////////////////////////
 
 class MgrNodeArraySorted : public GenNodeArray {
 public:
-    MgrNodeArraySorted(int defaultSize = ARRAY_DEFAULT_SIZE) 
-	: GenNodeArray(defaultSize) {}
+//#ifdef __OSTORE__
+//    MgrNodeArraySorted(os_database *db, int defaultSize = ARRAY_DEFAULT_SIZE);
+//#else
+    MgrNodeArraySorted(int defaultSize = ARRAY_DEFAULT_SIZE);
+//#endif
     ~MgrNodeArraySorted() { }
 
 // REDEFINED functions
@@ -102,6 +110,11 @@ public:
 // ADDED functions
     virtual int MgrNodeIndex(int fileId);
     int FindInsertPosition (const int fileId);
+/*
+#ifdef __OSTORE__
+    static os_typespec* get_os_typespec();
+#endif
+*/
 };
 
 

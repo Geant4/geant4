@@ -1,35 +1,34 @@
 
-
-//
-
-
-
-//
-// $Id: SdaiBinary.cc,v 1.3 1999-12-15 14:50:17 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 /*
 * NIST STEP Core Class Library
-* clstepcore/SdaiBinary.cc
-* May 1995
+* clstepcore/sdaiBinary.cc
+* April 1997
 * David Sauder
 
 * Development of this software was funded by the United States Government,
 * and is not subject to copyright.
 */
 
-/* $Id: SdaiBinary.cc,v */
+/* $Id: sdaiBinary.cc,v */
 
-#include <SdaiBinary.h>
+#include "g4std/strstream"
+#include <sdai.h>
 
 extern Severity 
 CheckRemainingInput(G4std::istream &in, ErrorDescriptor *err, 
 		    const char *typeName, // used in error message
 		    const char *tokenList); // e.g. ",)"
 
+
+SCLP23(Binary)& 
+SCLP23(Binary)::operator= (const char* s)
+{
+    SCLstring::operator= (s);
+    return *this;
+}
+
 void 
-SdaiBinary::STEPwrite (G4std::ostream& out) const
+SCLP23(Binary)::STEPwrite (G4std::ostream& out) const
 {
     const char *str = 0;
     if (is_null ())
@@ -48,7 +47,7 @@ SdaiBinary::STEPwrite (G4std::ostream& out) const
 }
 
 const char * 
-SdaiBinary::STEPwrite (SCLstring &s) const
+SCLP23(Binary)::STEPwrite (SCLstring &s) const
 {
     const char *str = 0;
     if (is_null ())
@@ -71,8 +70,8 @@ SdaiBinary::STEPwrite (SCLstring &s) const
 }
 
 Severity 
-SdaiBinary::ReadBinary(G4std::istream& in, ErrorDescriptor *err, int AssignVal,
-		       int needDelims)
+SCLP23(Binary)::ReadBinary(G4std::istream& in, ErrorDescriptor *err, int AssignVal,
+			   int needDelims)
 {
     if(AssignVal)
 	set_null();
@@ -163,7 +162,7 @@ SdaiBinary::ReadBinary(G4std::istream& in, ErrorDescriptor *err, int AssignVal,
 }
 
 Severity
-SdaiBinary::StrToVal (const char * s, ErrorDescriptor *err)
+SCLP23(Binary)::StrToVal (const char * s, ErrorDescriptor *err)
 {
     G4std::istrstream in ((char *)s); // sz defaults to length of s
     return ReadBinary(in, err, 1, 0);
@@ -256,7 +255,7 @@ SdaiBinary::StrToVal (const char * s, ErrorDescriptor *err)
 //  delimited by double quotes
 
 Severity 
-SdaiBinary::STEPread (G4std::istream& in, ErrorDescriptor *err)
+SCLP23(Binary)::STEPread (G4std::istream& in, ErrorDescriptor *err)
 {
     return ReadBinary(in, err, 1, 1);
 /*
@@ -297,7 +296,7 @@ SdaiBinary::STEPread (G4std::istream& in, ErrorDescriptor *err)
 }
 
 Severity 
-SdaiBinary::STEPread (const char *s, ErrorDescriptor *err)
+SCLP23(Binary)::STEPread (const char *s, ErrorDescriptor *err)
 {
     G4std::istrstream in((char *)s);
     return STEPread (in, err);
@@ -313,8 +312,8 @@ SdaiBinary::STEPread (const char *s, ErrorDescriptor *err)
 //   SEVERITY_NULL if it is valid for the value to be missing.  No error 
 //   'message' will be associated with the value being missing so you won\'t 
 //   have to worry about undoing an error message.
-// * tokenList contains characters that Terminate the expected value.
-// * If tokenList is not zero then the value is expected to Terminate before 
+// * tokenList contains characters that terminate the expected value.
+// * If tokenList is not zero then the value is expected to terminate before 
 //   a character found in tokenlist.  All values read up to the 
 //   terminating character (delimiter) must be valid or err will be set with an
 //   appropriate error message.  White space between the value and the 
@@ -324,9 +323,9 @@ SdaiBinary::STEPread (const char *s, ErrorDescriptor *err)
 ///////////////////////////////////////////////////////////////////////////////
 
 Severity 
-SdaiBinary::BinaryValidLevel (G4std::istream &in, ErrorDescriptor *err,
-				int optional, char *tokenList, 
-				int needDelims, int clearError)
+SCLP23(Binary)::BinaryValidLevel (G4std::istream &in, ErrorDescriptor *err,
+				  int optional, char *tokenList, 
+				  int needDelims, int clearError)
 {
     if(clearError)
 	err->ClearErrorMsg();
@@ -362,9 +361,9 @@ SdaiBinary::BinaryValidLevel (G4std::istream &in, ErrorDescriptor *err,
 }
 
 Severity 
-SdaiBinary::BinaryValidLevel (const char *value, ErrorDescriptor *err,
-				int optional, char *tokenList, 
-				int needDelims, int clearError)
+SCLP23(Binary)::BinaryValidLevel (const char *value, ErrorDescriptor *err,
+				  int optional, char *tokenList, 
+				  int needDelims, int clearError)
 {
     G4std::istrstream in((char *)value);
     return BinaryValidLevel (in, err, optional, tokenList, 

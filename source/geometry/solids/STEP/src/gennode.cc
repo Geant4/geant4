@@ -1,21 +1,8 @@
 
-
-//
-
-
-
-//
-// $Id: gennode_inline.cc,v 1.2 1999-05-21 20:21:08 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
-#ifndef gennode_inline_cc
-#define gennode_inline_cc
-
 /*
 * NIST Utils Class Library
-* clutils/gennode_inline.cc
-* May 1995
+* clutils/gennode.cc
+* September 1996
 * David Sauder
 * K. C. Morris
 
@@ -23,15 +10,14 @@
 * and is not subject to copyright.
 */
 
-/*   */ 
-
-#ifdef __O3DB__
-#include <OpenOODB.h>
-#endif
+/* $Id: gennode.cc,v 1.1 2000-01-21 13:43:10 gcosmo Exp $  */ 
 
 #include <gennode.h>
 #include <gennodelist.h>
 
+#ifdef __O3DB__
+#include <OpenOODB.h>
+#endif
 //////////////////////////////////////////////////////////////////////////////
 // class GenericNode inline functions that depend on other classes
 // 	inline functions
@@ -39,13 +25,13 @@
 // depends on:
 //	void GenNodeList::Append(GenericNode *node) from the gennodelist.h
 //////////////////////////////////////////////////////////////////////////////
-void GenericNode::Append(GenNodeList *List)
+
+void GenericNode::Append(GenNodeList *list)
 {
 //    if(debug_level >= PrintFunctionTrace)
 //	G4cout << "GenericNode::Append()\n";
 //    if(debug_level >= PrintValues)
 //	G4cout << "GenericNode::this : '" << this << "'\n";
-    List->Append(this);
+    list->Append(this);
 }
 
-#endif

@@ -1,21 +1,11 @@
 
-
-//
-
-
-
-//
-// $Id: scl_hash.h,v 1.2 1999-05-21 20:20:43 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 #ifndef SCL_HASH_H
 #define SCL_HASH_H
 
 /*
 * NIST Utils Class Library
 * clutils/scl_hash.h
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -23,7 +13,7 @@
 * and is not subject to copyright.
 */
 
-/*  */
+/* $Id: scl_hash.h,v 1.3 2000-01-21 13:42:41 gcosmo Exp $ */
 
 /************************************************************************
 ** Hash_Table:	Hash_Table
@@ -41,38 +31,34 @@
  * not subject to copyright.
  *
  * $Log: not supported by cvs2svn $
- * Revision 1.1  1999/01/07 16:08:09  gunter
- * Files from release of geant4.0.0- tag geant4-00
+ * Revision 3.0.1.2  1997/11/05 22:33:49  sauderd
+ * Adding a new state DP3.1 and associated revision
  *
- * Revision 2.0  1998/07/02 17:03:57  gunter
- * Set version 2.0
+ * Revision 3.0.1.1  1997/07/28 19:35:28  sauderd
+ * Adding a new state DP3.0.1 and associated revision
  *
- * Revision 1.1  1998/07/02 15:41:11  gunter
- * Import for geant4beta
+ * Revision 3.0.1.0  1997/04/16 19:14:12  dar
+ * Setting the first branch
  *
- * Revision 1.4  1997/08/06 15:51:01  jsulkimo
- *   Going back to Gabrielle's changes - kept only the newly modified
- * SdaiCONFIG_CONTROL_DESIGN.h.
+ * Revision 3.0  1997/04/16  19:14:11  dar
+ * STEP Class Library Pre Release 3.0
  *
- * Revision 1.2  1997/06/28 00:15:30  gcosmo
- * Porting on DEC-OSF1
+ * Revision 2.2.1.0  1997/09/20  20:59:02  sauderd
+ * Setting the first branch
  *
- * Revision 1.1.1.1  1997/02/12 10:52:33  tsasaki
- * GEANT4 alpha
+ * Revision 2.2  1997/09/20 20:59:01  sauderd
+ * STEP Class Library Pre Release 2.2
  *
- * Revision 1.1  1996/08/20 15:32:59  jsulkimo
- * created
- *
- * Revision 2.1.0.1  1995/05/16  14:35:29  lubell
+ * Revision 2.1.0.1  1997/05/16 14:35:29  lubell
  * setting state to dp21
  *
- * Revision 2.1.0.0  1995/05/12  14:13:33  lubell
+ * Revision 2.1.0.0  1997/05/12  14:13:33  lubell
  * setting branch
  *
- * Revision 2.1  1995/05/12  14:13:32  lubell
+ * Revision 2.1  1997/05/12  14:13:32  lubell
  * changing version to 2.1
  *
- * Revision 2.0.1.2  1995/05/09  20:04:42  lubell
+ * Revision 2.0.1.2  1997/05/09  20:04:42  lubell
  * Changed the date from 2/94 to 5/95
  *
  * Revision 2.0.1.1  1994/04/05  16:44:11  sauderd
@@ -109,8 +95,6 @@
  */
 
 typedef enum { HASH_FIND, HASH_INSERT, HASH_DELETE } Action;
-
-struct Symbol { }; /* empty if not used */
 
 struct Element {
 	char		*key;

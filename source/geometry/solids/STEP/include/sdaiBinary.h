@@ -1,27 +1,22 @@
-
-
-//
-
-
-
-//
-// $Id: SdaiBinary.h,v 1.3 1999-12-15 14:50:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #ifndef SDAIBINARY_H
 #define	SDAIBINARY_H 1
 
 /*
 * NIST STEP Core Class Library
-* clstepcore/SdaiBinary.h
-* May 1995
+* clstepcore/sdaiBinary.h
+* April 1997
 * KC Morris
 
 * Development of this software was funded by the United States Government,
 * and is not subject to copyright.
 */
 
-/* $Id: SdaiBinary.h,v */
+/* $Id: sdaiBinary.h,v */
+
+/*
+#ifdef __OSTORE__
+#include <ostore/ostore.hh>    // Required to access ObjectStore Class Library
+#endif
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
@@ -39,24 +34,26 @@ class ErrorDescriptor;
 #ifndef BINARY_DELIM
 #define BINARY_DELIM '\"'
 #endif
+*/
 
-class SdaiBinary : public SCLstring
+class SCLP23_NAME(Binary) : public SCLstring
 {
   public:
 
     //constructor(s) & destructor    
-    SdaiBinary (const char * str = 0, int max =0) : SCLstring (str,max) { }
+    SCLP23_NAME(Binary) (const char * str = 0, int max =0) 
+      : SCLstring (str,max) { }
 
 //Josh L, 3/28/95
-//    SdaiBinary (SCLstring& s)   : SCLstring (s) { }
-//    SdaiBinary (SdaiBinary& s)  : SCLstring (s) { }
-    SdaiBinary (const SCLstring& s)   : SCLstring (s) { }
+//    SCLP23_NAME(Binary) (SCLstring& s)   : SCLstring (s) { }
+//    SCLP23_NAME(Binary) (SCLP23_NAME(Binary)& s)  : SCLstring (s) { }
+    SCLP23_NAME(Binary) (const SCLstring& s)   : SCLstring (s) { }
 
 
-    ~SdaiBinary ()  {  }
+    ~SCLP23_NAME(Binary) ()  {  }
 
     //  operators
-    SdaiBinary& operator= (const char* s);
+    SCLP23_NAME(Binary)& operator= (const char* s);
 
     // format for STEP
     const char * asStr () const  {  return chars ();  }
@@ -74,15 +71,13 @@ class SdaiBinary : public SCLstring
 			       int optional, char *tokenList,
 			       int needDelims = 0, int clearError = 1);
 
+#ifdef __OSTORE__
+    static os_typespec* get_os_typespec();
+#endif
+
  protected:
   Severity ReadBinary(G4std::istream& in, ErrorDescriptor *err, int AssignVal = 1,
 		      int needDelims = 1);
 };
-
-inline
-SdaiBinary& 
-SdaiBinary::operator= (const char* s)
-    { SCLstring::operator= (s);
-      return *this;  }
 
 #endif

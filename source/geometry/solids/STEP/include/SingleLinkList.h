@@ -1,20 +1,10 @@
-
-
-//
-
-
-
-//
-// $Id: SingleLinkList.h,v 1.2 1999-05-21 20:20:36 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #ifndef singlelinklist_h
 #define	singlelinklist_h
 
 /*
 * NIST STEP Core Class Library
 * clstepcore/SingleLinkList.h
-* May 1995
+* April 1997
 * David Sauder
 * KC Morris
 
@@ -22,24 +12,15 @@
 * and is not subject to copyright.
 */
 
-/*  */
+/* $Id: SingleLinkList.h,v 1.3 2000-01-21 13:42:37 gcosmo Exp $ */
+
+#ifdef __OSTORE__
+#include <ostore/ostore.hh>    // Required to access ObjectStore Class Library
+#endif
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
 #endif
-
-class SingleLinkNode {
-    friend class SingleLinkList;
-  protected:
-
-  public:
-    SingleLinkNode* next;
-
-  public:
-    virtual SingleLinkNode *NextNode () const;
-    SingleLinkNode()  { next =0; }
-    virtual ~SingleLinkNode() { }
-};
 
 class SingleLinkList  {
 
@@ -48,22 +29,46 @@ class SingleLinkList  {
     
   protected:
     
-    SingleLinkNode *  head;
+    class  SingleLinkNode *  head;
     SingleLinkNode *  tail;
 
   public:
     
     virtual SingleLinkNode *NewNode();
     virtual void AppendNode (SingleLinkNode *);
+    virtual void DeleteNode (SingleLinkNode *);
 
     virtual void Empty ();
+    virtual void DeleteFollowingNodes (SingleLinkNode *);
     virtual SingleLinkNode * GetHead () const;
     
     int EntryCount() const;
 
     SingleLinkList ();
     virtual ~SingleLinkList ();
-    
+
+#ifdef __OSTORE__
+    static os_typespec* get_os_typespec();
+#endif
+}
+;
+
+
+class SingleLinkNode {
+    friend class SingleLinkList;    
+  protected:
+
+  public:
+    SingleLinkList *owner;
+    SingleLinkNode *next;
+
+    virtual SingleLinkNode *NextNode () const;
+    SingleLinkNode() : owner(0), next(0)  { }
+    virtual ~SingleLinkNode() { }
+
+#ifdef __OSTORE__
+    static os_typespec* get_os_typespec();
+#endif
 };
 
 #endif

@@ -1,27 +1,22 @@
-
-
-//
-
-
-
-//
-// $Id: STEPstring.h,v 1.3 1999-12-15 14:50:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #ifndef STEPSTRING_H
 #define	STEPSTRING_H  1
 
 /*
 * NIST STEP Core Class Library
-* clstepcore/STEPstring.h
-* May 1995
+* clstepcore/sdaiString.h
+* April 1997
 * KC Morris
 
 * Development of this software was funded by the United States Government,
 * and is not subject to copyright.
 */
 
-/*  */
+/* $Id: sdaiString.h,v 1.1 2000-01-21 13:42:46 gcosmo Exp $ */
+
+/*
+#ifdef __OSTORE__
+#include <ostore/ostore.hh>    // Required to access ObjectStore Class Library
+#endif
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
@@ -34,18 +29,20 @@ class ErrorDescriptor;
 #ifndef STRING_DELIM
 #define STRING_DELIM '\''
 #endif
+*/
 
-class SdaiString : public SCLstring {
+class SCLP23_NAME(String) : public SCLstring {
 public:
 
   //constructor(s) & destructor    
-  SdaiString (const char * str = 0, int max =0) : SCLstring (str,max) { }
-  SdaiString (const SCLstring& s)   : SCLstring (s) { }
-  SdaiString (const SdaiString& s)  : SCLstring (s) { }
-  ~SdaiString ()  {  }
+  SCLP23_NAME(String) (const char * str = 0, int max =0) : SCLstring (str,max)
+	{ }
+  SCLP23_NAME(String) (const SCLstring& s)   : SCLstring (s) { }
+  SCLP23_NAME(String) (const SCLP23_NAME(String)& s)  : SCLstring (s) { }
+  ~SCLP23_NAME(String) ()  {  }
 
 //  operators
-  SdaiString& operator= (const char* s);
+  SCLP23_NAME(String)& operator= (const char* s);
 
   // format for STEP
   const char * asStr (SCLstring & s) const  {  return s = chars ();  }
@@ -56,13 +53,10 @@ public:
   Severity STEPread (G4std::istream& in, ErrorDescriptor *err);
   Severity STEPread (const char *s, ErrorDescriptor *err);
 
- protected:
-};
+#ifdef __OSTORE__
+    static os_typespec* get_os_typespec();
+#endif
 
-inline
-SdaiString& 
-SdaiString::operator= (const char* s)
-    { SCLstring::operator= (s);
-      return *this;  }
+};
 
 #endif

@@ -1,21 +1,11 @@
 
-
-//
-
-
-
-//
-// $Id: gennodearray.h,v 1.2 1999-05-21 20:20:40 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 #ifndef gennodearray_h
 #define gennodearray_h
 
 /*
 * NIST Utils Class Library
 * clutils/gennode.h
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -23,7 +13,7 @@
 * and is not subject to copyright.
 */
 
-/*   */ 
+/* $Id: gennodearray.h,v 1.3 2000-01-21 13:42:39 gcosmo Exp $  */ 
 
 /*
  * GenNodeArray - dynamic array object of GenericNodes.
@@ -31,11 +21,18 @@
  * Copyright (c) 1990 Stanford University
  */
 
+/*
+#ifdef __OSTORE__
+#include <ostore/ostore.hh>    // Required to access ObjectStore Class Library
+#endif
+*/
+
 #ifdef __O3DB__
 #include <OpenOODB.h>
 #endif
 
 #include <string.h>
+#include <memory.h>
 #include <stdlib.h> // to get bcopy for CenterLine
 
 #include <gennode.h>
@@ -53,7 +50,12 @@
 class GenNodeArray 
 {
 public:
+
+//#ifdef __OSTORE__
+//    GenNodeArray (os_database *db, int defaultSize = ARRAY_DEFAULT_SIZE);
+//#else
     GenNodeArray(int defaultSize = ARRAY_DEFAULT_SIZE);
+//#endif
     virtual ~GenNodeArray();
 
     GenericNode*& operator[](int index);
@@ -69,6 +71,11 @@ public:
     virtual void ClearEntries();
     virtual void DeleteEntries();
 
+/*
+#ifdef __OSTORE__
+    static os_typespec* get_os_typespec();
+#endif
+*/
 protected:
     virtual void Check(int index);
 
@@ -81,44 +88,10 @@ protected:
 // class GenNodeArray inline public functions
 //////////////////////////////////////////////////////////////////////////////
 
-inline GenNodeArray::GenNodeArray (int defaultSize)
-{
-    _bufsize = defaultSize;
-    _buf = new GenericNode*[_bufsize];
-    memset(_buf, 0, _bufsize*sizeof(GenericNode*));
-    _count = 0;
-}
-
-inline GenNodeArray::~GenNodeArray ()
-{
-
-//    int i;
-	// this is dangerous because several things point at these nodes
-	// also whatever is derived from this thing might do this
-//    for(i = 0; i < _count; i++)
-//	delete _buf[i];
-    delete [] _buf;
-}
-
 inline GenericNode*& GenNodeArray::operator[] (int index) 
 {
     Check(index);
     return _buf[index];
-}
-
-inline int GenNodeArray::Index (GenericNode** gn)
-{
-    return ((gn - _buf) / sizeof(GenericNode*));
-}
-
-inline void GenNodeArray::Append(GenericNode* gn)
-{    
-    Insert(gn, _count); 
-}
-
-inline int GenNodeArray::Insert(GenericNode* gn)
-{
-    return Insert(gn, _count); 
 }
 
 inline int GenNodeArray::Count ()

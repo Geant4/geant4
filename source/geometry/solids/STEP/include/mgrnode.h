@@ -1,20 +1,10 @@
-
-
-//
-
-
-
-//
-// $Id: mgrnode.h,v 1.2 1999-05-21 20:20:41 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #ifndef mgrnode_h
 #define mgrnode_h
 
 /*
 * NIST STEP Editor Class Library
 * cleditor/mgrnode.h
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -22,17 +12,26 @@
 * and is not subject to copyright.
 */
 
-/*  */ 
+/* $Id: mgrnode.h,v 1.3 2000-01-21 13:42:40 gcosmo Exp $ */ 
+
+/*
+#ifdef __OSTORE__
+#include <ostore/ostore.hh>    // Required to access ObjectStore Class Library
+#endif
+*/
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
 #endif
 
+class GenericNode;
 class DisplayNode;
-class STEPentity;
+#include <sdai.h>
+//class SCLP23(Application_instance);
 
 #include <gennode.h>
 #include <gennodelist.h>
+//#include <gennode.inline.h>
 
 #include <editordefines.h>
 
@@ -40,8 +39,8 @@ class InstMgr;
 
 //////////////////////////////////////////////////////////////////////////////
 // class MgrNode
-// If you delete this object, it deletes the STEPentity it represents,
-// the DisplayNode, and removes itself from any List it is in.
+// If you delete this object, it deletes the SCLP23(Application_instance) it represents,
+// the DisplayNode, and removes itself from any list it is in.
 //////////////////////////////////////////////////////////////////////////////
 
 class MgrNode : public GenericNode
@@ -57,8 +56,8 @@ protected:
 	// every node will be on one of the four lists implemented by these:
     stateEnum currState;
 
-	// STEPentity this node is representing info for
-    STEPentity *se;
+	// SCLP23(Application_instance) this node is representing info for
+    SCLP23(Application_instance) *se;
 	// this is the index (in the InstMgr master array) of the ptr to
 	//   this node.
     int arrayIndex;
@@ -69,30 +68,30 @@ protected:
 public:
 	// used for sentinel node on lists of MgrNodes
     MgrNode();
-    MgrNode(STEPentity *se);
+    MgrNode(SCLP23(Application_instance) *se);
 	// 'listState' ==
 	//	completeSE - if reading valid exchange file
 	//	incompleteSE or completeSE - if reading working session file
 	//	newSE - if instance is created by user using editor (probe)
-    MgrNode(STEPentity *se, stateEnum listState);
-    MgrNode(STEPentity *se, stateEnum listState, MgrNodeList *List);
+    MgrNode(SCLP23(Application_instance) *se, stateEnum listState);
+    MgrNode(SCLP23(Application_instance) *se, stateEnum listState, MgrNodeList *list);
     virtual ~MgrNode();
 
 // STATE LIST OPERATIONS
     int MgrNodeListMember(stateEnum s)	{ return (currState == s); }
     stateEnum  CurrState()		{ return  currState;	    }
 		// returns next or prev member variables
-		// i.e. next or previous node on curr state List
-			// searches current List for fileId
+		// i.e. next or previous node on curr state list
+			// searches current list for fileId
     MgrNode *StateFindFileId(int fileId);
 
-			// deletes from previous cmd List, 
-			//	& puts on cmd List cmdList
+			// deletes from previous cmd list, 
+			//	& puts on cmd list cmdList
     int ChangeList(MgrNodeList *cmdList);
     int ChangeState(stateEnum s);
 
-	// Removes from current List. 
-	// 	Called before adding to diff List or when destructor is called.
+	// Removes from current list. 
+	// 	Called before adding to diff list or when destructor is called.
     void Remove();
 
 // DISPLAY LIST OPERATIONS
@@ -102,15 +101,15 @@ public:
     int IsDisplayState(displayStateEnum ds);
 
 		// returns next or prev member variables
-		// i.e. next or previous node on display state List
+		// i.e. next or previous node on display state list
     GenericNode *NextDisplay();
     GenericNode *PrevDisplay();
 
-			// deletes from previous cmd List, 
-			//	& puts on cmd List cmdList
+			// deletes from previous cmd list, 
+			//	& puts on cmd list cmdList
     int ChangeList(DisplayNodeList *cmdList);
-			// deletes from previous display List, assigns ds to 
-			//	displayState & puts on List dsList
+			// deletes from previous display list, assigns ds to 
+			//	displayState & puts on list dsList
     int ChangeState(displayStateEnum ds);
 
 // 	might not want these three? since it won't actually map them?
@@ -120,15 +119,23 @@ public:
 
 // ACCESS FUNCTIONS
     int GetFileId();
-    STEPentity *GetSTEPentity()	{ return se; }
+    SCLP23(Application_instance) *GetApplication_instance() { return se; }
     DisplayNode *&displayNode() { return di; }
     int ArrayIndex()		{ return arrayIndex; }
     void ArrayIndex(int index)	{ arrayIndex = index; }
 
+/*
+#ifdef __OSTORE__
+    static os_typespec* get_os_typespec();
+#endif
+*/
+
+    // OBSOLETE
+    SCLP23(Application_instance) *GetSTEPentity()	{ return se; }
 protected:
 
 private:
-    void Init(STEPentity *s, stateEnum listState, MgrNodeList *List);
+    void Init(SCLP23(Application_instance) *s, stateEnum listState, MgrNodeList *list);
 };
 
 //////////////////////////////////////////////////////////////////////////////

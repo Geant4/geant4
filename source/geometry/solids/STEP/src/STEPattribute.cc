@@ -1,17 +1,7 @@
-
-
-//
-
-
-
-//
-// $Id: STEPattribute.cc,v 1.4 1999-12-15 18:04:20 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 /*
 * NIST STEP Core Class Library
 * clstepcore/STEPattribute.cc
-* May 1995
+* April 1997
 * K. C. Morris
 * David Sauder
 
@@ -19,10 +9,12 @@
 * and is not subject to copyright.
 */
 
-/*  */
+/* $Id: STEPattribute.cc,v 1.5 2000-01-21 13:42:56 gcosmo Exp $ */
 
-//static char rcsid[] ="";
+//static char rcsid[] ="$Id: STEPattribute.cc,v 1.5 2000-01-21 13:42:56 gcosmo Exp $";
 
+
+// Added inclusion of 'stream.h' for non-ISO setup - GC
 #ifndef G4USE_STD_NAMESPACE
   #ifndef WIN32
     #include <stream.h>
@@ -31,13 +23,13 @@
 
 #include <read_func.h>
 #include <STEPattribute.h>
-#include <sdai.h>
+//#include <sdai.h>
 #include <instmgr.h>
 #include <STEPundefined.h>
 #include <STEPaggregate.h>
-#include <STEPentity.h>
-#include <STEPselect.h>
-#include <SdaiBinary.h>
+//#include <STEPentity.h>
+#include <ExpDict.h>
+#include <sdai.h>
 
 // REAL_NUM_PRECISION is defined in STEPattribute.h, and is also used
 // in aggregate real handling (STEPaggregate.cc)  -- IMS 6 Jun 95
@@ -68,12 +60,16 @@ const int Real_Num_Precision = REAL_NUM_PRECISION;
 Severity 
 STEPattribute::StrToVal (const char* s, InstMgr * instances, int addFileId)
 {
+    if ( RedefiningAttr() )  {
+	return RedefiningAttr()->StrToVal(s, instances, addFileId);
+    }
+
     _error.ClearErrorMsg();	// also sets Severity to SEVERITY_NULL
 
     //  set the value to be null (reinitialize the attribute value)
     set_null();
 
-    int nullable = (aDesc->Optional().asInt() == sdaiTRUE);
+    int nullable = ( aDesc->Optional().asInt() == SCLBOOL(BTrue) );
 
     // an empty str gets assigned NULL
     if (!s )
@@ -159,7 +155,7 @@ STEPattribute::StrToVal (const char* s, InstMgr * instances, int addFileId)
 
       case BINARY_TYPE:
       {
-	  ptr.b->StrToVal(s, &_error); // call class SdaiBinary::StrToVal()
+	  ptr.b->StrToVal(s, &_error); // call class SCLP23(Binary)::StrToVal()
 	  break;
       }
       case STRING_TYPE:
@@ -187,7 +183,7 @@ STEPattribute::StrToVal (const char* s, InstMgr * instances, int addFileId)
 	break;
 
       case SELECT_TYPE:
-	if (_error.severity( ptr.sh->STEPread(in, &_error, instances) ) 
+	if (_error.severity( ptr.sh->STEPread(in, &_error, instances, 0) ) 
 		!= SEVERITY_NULL)
 	_error.AppendToDetailMsg (ptr.sh ->Error ());
         break;
@@ -218,12 +214,18 @@ STEPattribute::StrToVal (const char* s, InstMgr * instances, int addFileId)
 // the delim separating the last attribute from the end of the entity (')').
 
 Severity
-STEPattribute::STEPread (G4std::istream& in, InstMgr * instances, int addFileId)
+STEPattribute::STEPread (G4std::istream& in, InstMgr * instances, int addFileId,
+			 const char *currSch)
 {
-
     char errStr[BUFSIZ];
     errStr[0] = '\0';
     char c ='\0';
+
+    // The attribute has been redefined by the attribute pointed
+    // to by _redefAttr so write the redefined value.
+    if ( RedefiningAttr() )  {
+	return RedefiningAttr()->STEPread(in, instances, addFileId, currSch);
+    }
 
     _error.ClearErrorMsg();	// also sets Severity to SEVERITY_NULL
 
@@ -234,13 +236,61 @@ STEPattribute::STEPread (G4std::istream& in, InstMgr * instances, int addFileId)
     in >> c;
     in.putback (c);    //  leave input stream alone
 
+/*
+// This precludes using this attribute to read the value for the redefined 
+// attr.
+
+    // this is redefining another attr, it should not be written in a Part 21 
+    // file. It may be written using an asterisk.
+    if( aDesc->AttrType() == AttrType_Redefining )  
+    {
+	if(c == '*')
+	{
+	    in.get(c);  // take * off the G4std::istream
+	    _error.severity(SEVERITY_WARNING);
+	    sprintf(errStr, "  WARNING: attribute %s of type %s, %s",
+		    aDesc->Name(), aDesc->TypeName(),
+		    "Removing asterisk for redefining attribute.\n");
+	    _error.AppendToDetailMsg(errStr);
+	    CheckRemainingInput(in, &_error, aDesc->TypeName(), ",)");
+	    return _error.severity();
+	}
+	else
+	{ // The redefining attribute should not be mapped to a Part 21 file 
+	  // anyway so pretend that this function was not called and don't
+	  // read anything.
+	    _error.severity(SEVERITY_NULL);
+	    return _error.severity();
+	}
+    }
+*/
+
+    if(IsDerived())
+    {
+	if(c == '*')
+	{
+	    in.get(c);  // take * off the G4std::istream
+	    _error.severity(SEVERITY_NULL);
+	}
+	else
+	{
+	    _error.severity(SEVERITY_WARNING);
+	    sprintf(errStr, "  WARNING: attribute %s of type %s, %s",
+		    aDesc->Name(), aDesc->TypeName(),
+		    "Missing asterisk for derived attribute.\n");
+	    _error.AppendToDetailMsg(errStr);
+	}
+	CheckRemainingInput(in, &_error, aDesc->TypeName(), ",)");
+	return _error.severity();
+    }
+
     //  check for NULL or derived attribute value, return if either
     switch (c)
     {
       case '$':
       case ',':
       case ')':
-	if (c == '$') 
+	if (c == '$')
 	{
 	    in.get(c);
 	    CheckRemainingInput(in, &_error, aDesc->TypeName(), ",)");
@@ -256,18 +306,24 @@ STEPattribute::STEPread (G4std::istream& in, InstMgr * instances, int addFileId)
 	    _error.AppendToDetailMsg(errStr);
 	}
 	return _error.severity();
-
+/*
       case '*':
-	in.get(c);  // take * off the G4std::istream
-	if (IsDerived ())  
+      {
+	  in.get(c);  // take * off the G4std::istream
+	  if( IsDerived() )
 	    _error.severity(SEVERITY_NULL);
-	else {
-	    _error.severity(SEVERITY_INCOMPLETE);
-	    sprintf(errStr, " attribute not derived\n");
-	    _error.AppendToDetailMsg(errStr);
-	}
-	CheckRemainingInput(in, &_error, aDesc->TypeName(), ",)");
-	return _error.severity();
+	  else if( aDesc->AttrType() == AttrType_Redefining )  
+	    _error.severity(SEVERITY_NULL);
+	  else {
+	      _error.severity(SEVERITY_INCOMPLETE);
+	      sprintf(errStr, 
+		      " attribute not derived or redefining an attribute\n");
+	      _error.AppendToDetailMsg(errStr);
+	  }
+	  CheckRemainingInput(in, &_error, aDesc->TypeName(), ",)");
+	  return _error.severity();
+      }
+*/
     }
 
     PrimitiveType attrBaseType = NonRefType();
@@ -275,17 +331,17 @@ STEPattribute::STEPread (G4std::istream& in, InstMgr * instances, int addFileId)
     {
       case INTEGER_TYPE:
   	{
-	    int valAssigned = ReadInteger(*(ptr.i), in, &_error, ",)");
+	    int valAssigned = ReadInteger(*(ptr.i), in, &_error, (char*)(",)"));
 	    return _error.severity();
 	}
       case REAL_TYPE:
   	{
-	    int valAssigned = ReadReal(*(ptr.r), in, &_error, ",)");
+	    int valAssigned = ReadReal(*(ptr.r), in, &_error, (char*)(",)"));
 	    return _error.severity();
 	}
       case NUMBER_TYPE:
   	{
-	    int valAssigned = ReadNumber(*(ptr.r), in, &_error, ",)");
+	    int valAssigned = ReadNumber(*(ptr.r), in, &_error, (char*)(",)"));
 	    return _error.severity();
 	}
       case STRING_TYPE: 
@@ -295,14 +351,14 @@ STEPattribute::STEPread (G4std::istream& in, InstMgr * instances, int addFileId)
 	    return _error.severity();
 	}
       case BINARY_TYPE:
-	{	// call class SdaiBinary::STEPread()
+	{	// call class SCLP23(Binary)::STEPread()
 	    ptr.b->STEPread(in, &_error);
 	    CheckRemainingInput(in, &_error, "binary", ",)");
 	    return _error.severity();
 	}
       case BOOLEAN_TYPE:
   	{
-//	    int nullable = (aDesc->Optional().asInt() == sdaiTRUE);
+//	    int nullable = (aDesc->Optional().asInt() == OPBOOL(BTrue) );
 	    ptr.e->STEPread (in, &_error,  Nullable());
 	    CheckRemainingInput(in, &_error, "boolean", ",)");
 	    return _error.severity();
@@ -327,7 +383,7 @@ STEPattribute::STEPread (G4std::istream& in, InstMgr * instances, int addFileId)
   	{
 	    ptr.a->STEPread(in, &_error, 
 			    aDesc->AggrElemTypeDescriptor(), 
-			    instances, addFileId);
+			    instances, addFileId, currSch);
 
 	    // cannot recover so give up and let STEPentity recover
 	    if(_error.severity() < SEVERITY_WARNING)
@@ -339,7 +395,7 @@ STEPattribute::STEPread (G4std::istream& in, InstMgr * instances, int addFileId)
 	}
       case ENTITY_TYPE:
   	{
-	    STEPentity *se = ReadEntityRef(in, &_error, ",)", instances, 
+	    STEPentity *se = ReadEntityRef(in, &_error, (char*)(",)"), instances, 
 					   addFileId);
 	    if( se != S_ENTITY_NULL )
 	    {
@@ -359,9 +415,11 @@ STEPattribute::STEPread (G4std::istream& in, InstMgr * instances, int addFileId)
 
 	}
       case SELECT_TYPE:
-	    if (_error.severity( ptr.sh->STEPread(in, &_error, instances, addFileId) ) 
-		  != SEVERITY_NULL)
+	    if ( _error.severity( ptr.sh->STEPread(in, &_error, instances, 0,
+						  addFileId, currSch) )
+		                 != SEVERITY_NULL ) {
 		_error.AppendToDetailMsg (ptr.sh ->Error ());
+	    }
 	    CheckRemainingInput(in, &_error, "select", ",)");
 	    return _error.severity();
 
@@ -386,38 +444,61 @@ STEPattribute::STEPread (G4std::istream& in, InstMgr * instances, int addFileId)
     }
 }
 
-/******************************************************************
+/*********************************************************************
  ** Procedure:  asStr
- ** Parameters:  
- ** Returns:  
+ ** Parameters: currSch - used for select type writes.  See commenting
+ **             in SCLP23(Select)::STEPwrite().
+ ** Returns:
  ** Description:  the value of the attribute is returned as a string.
  ** Side Effects:  
  ** Status:  complete 3/91
- ******************************************************************/
+ *********************************************************************/
 const char *
-STEPattribute::asStr (SCLstring& str) const
+STEPattribute::asStr (SCLstring& str, const char *currSch) const
 {
 //  char attrVal[BUFSIZ];
 //  attrVal[0] = '\0';
 
     str.set_null();
+
+    // The attribute has been derived by a subtype's attribute
     if (IsDerived ())  { str = "*"; return str.chars(); }
+
+/*
+    // The attribute is redefining the type of a parent's attribute so...
+    // If explicitly directed to write the attribute value by the
+    //   redefined attribute then write it - indicated by writeRedefined param.
+    // If not explicitly directed to write value, write asterisk - see Part 21.
+    // got rid of param writeRedefined
+    // see technical corrigendum for Part 21
+    if (!writeRedefined && (aDesc->AttrType() == AttrType_Redefining) )  {
+      str = "*";
+      return str.chars();
+    }
+*/
+    // The attribute has been redefined by the attribute pointed 
+    // to by _redefAttr so write the redefined value.
+    if ( _redefAttr )  {
+	return _redefAttr->asStr( str, currSch );
+    }
+
     if (is_null ())  { str = ""; return str.chars(); }
 
     switch (NonRefType()) {
       case INTEGER_TYPE:
-      str.Append (*(ptr.i));
+	str.Append (*(ptr.i));
 //	sprintf ( attrVal,"%ld",*(ptr.i));
 	break;
 
       case NUMBER_TYPE:
       case REAL_TYPE:
-      str.Append (*(ptr.r));
-//	sprintf (attrVal, "%.*g", (int) Real_Num_Precision, *(ptr.r));
+
+	str.Append (*(ptr.r), (int) Real_Num_Precision);
+//	sprintf (attrVal, "%.*G", (int) Real_Num_Precision, *(ptr.r));
 	break;	  
 
       case ENTITY_TYPE:
-	// Print instance id only if not empty pointer
+	// print instance id only if not empty pointer
 	// and has value assigned
 	if ((*(ptr.c) == S_ENTITY_NULL) || (*(ptr.c) == 0))
 	    break;
@@ -453,7 +534,7 @@ STEPattribute::asStr (SCLstring& str) const
 	    return ptr.e -> asStr(str);
 
       case SELECT_TYPE:
-	  ptr.sh -> STEPwrite (str);
+	  ptr.sh -> STEPwrite ( str, currSch );
 	  return str;
 //	  strncpy (attrVal, tmp.chars(), BUFSIZ);
 
@@ -475,11 +556,31 @@ STEPattribute::asStr (SCLstring& str) const
 // The output is in physical file format.
 
 void
-STEPattribute::STEPwrite (G4std::ostream& out) 
+STEPattribute::STEPwrite (G4std::ostream& out, const char *currSch)
 { 
-    if (IsDerived ())  {
+    // The attribute has been derived by a subtype's attribute
+    if ( IsDerived() ) {
       out << "*";
       return;
+    }
+
+/*
+    // The attribute is redefining the type of a parent's attribute so...
+    // If explicitly directed to write the attribute value by the
+    //   redefined attribute then write it - indicated by writeRedefined param.
+    // If not explicitly directed to write value, write asterisk - see Part 21.
+    // got rid of param writeRedefined
+    // see technical corrigendum for Part 21
+    if (!writeRedefined && (aDesc->AttrType() == AttrType_Redefining) )  {
+      out << "*";
+      return;
+    }
+*/
+    // The attribute has been redefined by the attribute pointed 
+    // to by _redefAttr so write the redefined value.
+    if ( RedefiningAttr() )  {
+	RedefiningAttr()->STEPwrite(out);
+	return;
     }
 
     if (is_null ()) {
@@ -496,11 +597,14 @@ STEPattribute::STEPwrite (G4std::ostream& out)
       case NUMBER_TYPE:
       case REAL_TYPE:
       {
-	real tmp = *(ptr.r);
+	  WriteReal(*(ptr.r),out);
+/*
+	char rbuf[64];
+	SCLP23(Real) tmp = *(ptr.r);
 
         // IMS (6 Jun 95):
         // Previously, this code was explicitly rounding reals with
-        // Magnitude smaller than 1e-9, by doing the following:
+        // magnitude smaller than 1e-9, by doing the following:
 
 	// if(tmp > -.00000001 && tmp < .00000001) out << 0.0;
         // else...
@@ -509,15 +613,41 @@ STEPattribute::STEPwrite (G4std::ostream& out)
         // style output used below should shift such things to e-notation
         // automagically.
         
-        char* outBuf="";
-        sprintf(outBuf, "%.*G", (int) Real_Num_Precision,tmp);
-        out << outBuf;
+//        out << form("%.*G", (int) Real_Num_Precision,tmp);
+	// replace the above line with this code so that writing the '.' is
+	// guaranteed for reals. If you use e or E then you get many 
+	// unnecessary trailing zeros. g and G truncates all trailing zeros
+	// to save space but when no non-zero precision exists it also 
+	// truncates the decimal. The decimal is required by Part 21. 
+	// Also use G instead of g since G writes uppercase E (E instead of e 
+	// is also required by Part 21) when scientific notation is used - DAS
 
+        sprintf(rbuf, "%.*G", (int) Real_Num_Precision,tmp);
+	if(!strchr(rbuf, '.'))
+	{
+	    int rindex = strlen(rbuf);
+	    rbuf[rindex] = '.';
+	    rbuf[rindex+1] = '\0';
+	}
+	out << rbuf;
+*/
+        // IMS (21 Jul 95)
+        // Real values, according to Part 21, _must_ have a fractional part.
+        // So make sure we have one on integral values:
+
+	// this works sometimes but doesn't work when the value has enough
+	// significant digits that the fraction gets truncated (and can't be 
+	// represented) but is not big enough that scientific notation gets 
+	// used. There may be other cases where it doesn't work but one is 
+	// enough. DAS
+//        if (tmp == int(tmp))  // tmp doesn't have a fraction
+//            out << ".0";
+        
 	break;	  
       }
 
       case ENTITY_TYPE:
-	// Print instance id only if not empty pointer
+	// print instance id only if not empty pointer
 	if ((*(ptr.c) == 0) ||  
 	    // no value was assigned  <-- this would be a BUG
 	    (*(ptr.c) == S_ENTITY_NULL) )
@@ -553,7 +683,7 @@ STEPattribute::STEPwrite (G4std::ostream& out)
 	    _error.GreaterSeverity(SEVERITY_BUG);
 	    sprintf(errStr,
 		   " Warning: attribute '%s : %s' should be pointing at %s",
-		    Name(), TypeName(), "an SdaiString.\n");
+		    Name(), TypeName(), "an SCLP23(String).\n");
 	    _error.AppendToUserMsg(errStr);
 	    _error.AppendToDetailMsg(errStr);
 	}
@@ -574,7 +704,7 @@ STEPattribute::STEPwrite (G4std::ostream& out)
 	    _error.GreaterSeverity(SEVERITY_BUG);
 	    sprintf(errStr,
 		   " Warning: attribute '%s : %s' should be pointing at %s",
-		    Name(), TypeName(), "an SdaiBinary.\n");
+		    Name(), TypeName(), "an SCLP23(Binary).\n");
 	    _error.AppendToUserMsg(errStr);
 	    _error.AppendToDetailMsg(errStr);
 	}
@@ -585,7 +715,7 @@ STEPattribute::STEPwrite (G4std::ostream& out)
       case BAG_TYPE:		// DAS
       case SET_TYPE:		// DAS
       case LIST_TYPE:		// DAS
-	ptr.a -> STEPwrite (out);
+	ptr.a -> STEPwrite (out, currSch);
 	break;
 
       case ENUM_TYPE:
@@ -604,7 +734,7 @@ STEPattribute::STEPwrite (G4std::ostream& out)
 	    _error.GreaterSeverity(SEVERITY_BUG);
 	    sprintf(errStr,
 		   " Warning: attribute '%s : %s' should be pointing at %s",
-		    Name(), TypeName(), "a STEPenumeration class.\n");
+		    Name(), TypeName(), "a SCLP23(Enum) class.\n");
 	    _error.AppendToUserMsg(errStr);
 	    _error.AppendToDetailMsg(errStr);
 	}
@@ -612,7 +742,7 @@ STEPattribute::STEPwrite (G4std::ostream& out)
 
       case SELECT_TYPE:
 	if(ptr.sh)
-	    ptr.sh -> STEPwrite (out);
+	    ptr.sh -> STEPwrite (out, currSch);
 	else
 	{
 	    out << "$";
@@ -624,7 +754,7 @@ STEPattribute::STEPwrite (G4std::ostream& out)
 	    _error.GreaterSeverity(SEVERITY_BUG);
 	    sprintf(errStr,
 		   " Warning: attribute '%s : %s' should be pointing at %s",
-		    Name(), TypeName(), "a STEPselect class.\n");
+		    Name(), TypeName(), "a SCLP23(Select) class.\n");
 	    _error.AppendToUserMsg(errStr);
 	    _error.AppendToDetailMsg(errStr);
 	}
@@ -646,9 +776,12 @@ STEPattribute::STEPwrite (G4std::ostream& out)
 }
 
 
-BOOLEAN 
+int  
 STEPattribute::ShallowCopy(STEPattribute *sa)
 {
+    if ( RedefiningAttr() )  {
+	return RedefiningAttr()->ShallowCopy(sa);
+    }
     switch(sa->NonRefType())
     {
       case INTEGER_TYPE:
@@ -690,13 +823,16 @@ STEPattribute::ShallowCopy(STEPattribute *sa)
     return 1;
 }
 
-// for a string attribute this means make it not exist i.e. STEPstring will 
-// exist in member variable ptr but STEPstring will be told to report as not
-// containing a value (even a value of no chars).
+// for a string attribute this means, make it not exist i.e. SCLP23(String) 
+// will exist in member variable ptr but SCLP23(string) will be told to report 
+// as not containing a value (even a value of no chars).
 
 Severity 
 STEPattribute::set_null()
 {  
+    if ( RedefiningAttr() )  {
+	return RedefiningAttr()->set_null();
+    }
     switch (NonRefType()) {
       case INTEGER_TYPE:
 	*(ptr.i) = S_INT_NULL;
@@ -769,11 +905,14 @@ STEPattribute::set_null()
 }
 
 // For a string value this reports whether the string exists (as reported by 
-// STEPstring) not whether STEPstring contains a null string.
+// SCLP23(String) ) not whether SCLP23(String) contains a null string.
 
-BOOLEAN
+int 
 STEPattribute::is_null ()  const
 {
+    if ( _redefAttr )  {
+	return _redefAttr->is_null();
+    }
     switch ( NonRefType() )  
       {
 	case INTEGER_TYPE:
@@ -858,6 +997,9 @@ STEPattribute::ValidLevel (const char *attrValue, ErrorDescriptor *error,
     if(clearError)
 	ClearErrorMsg();
 
+    if ( RedefiningAttr() )  {
+	return RedefiningAttr()->ValidLevel(attrValue, error, im, clearError);
+    }
     int optional = Nullable();
 
     if( !attrValue )
@@ -945,7 +1087,7 @@ STEPattribute::ValidLevel (const char *attrValue, ErrorDescriptor *error,
  ** Parameters:  G4std::ostream & out -- output stream
  **              STEPattribute & a -- attribute to output
  ** Returns:  G4std::ostream &
- ** Description:  overloads the output operator to Print an attribute 
+ ** Description:  overloads the output operator to print an attribute 
  ******************************************************************/
 
 G4std::ostream &operator<< ( G4std::ostream& out, STEPattribute& a )
@@ -959,7 +1101,8 @@ G4std::ostream &operator<< ( G4std::ostream& out, STEPattribute& a )
 ///////////////////////////// AddErrorInfo() //////////////////////////////////
 // This adds prepends attribute information to the detailed error msg.  This 
 // is intended to add information to the error msgs written by Enumerations, 
-// Aggregates, and STEPstrings which don't know they are a STEPattribute value.
+// Aggregates, and SCLP23(String)s which don't know they are a STEPattribute 
+// value.
 ///////////////////////////////////////////////////////////////////////////////
 
 void 

@@ -1,21 +1,11 @@
 
-
-//
-
-
-
-//
-// $Id: Str.h,v 1.3 1999-12-15 14:50:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 #ifndef STR_H
 #define STR_H
 
 /*
 * NIST Utils Class Library
 * clutils/Str.h
-* May 1995
+* April 1997
 * K. C. Morris
 * David Sauder
 
@@ -23,7 +13,7 @@
 * and is not subject to copyright.
 */
 
-/*   */ 
+/* $Id: Str.h,v 1.4 2000-01-21 13:42:37 gcosmo Exp $  */ 
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
@@ -41,14 +31,16 @@
 #include <scl_string.h>
 #include <errordesc.h>
 
-char ToLower (const char c);
-char ToUpper  (const char c);
+char         ToLower (const char c);
+char         ToUpper  (const char c);
+char *       StrToLower (const char *, char *);
 const char * StrToLower (const char * word, SCLstring &s);
 const char * StrToUpper (const char * word, SCLstring &s);
 const char * StrToConstant (const char * word, SCLstring &s);
 const char * PrettyTmpName (const char * oldname);
-char * PrettyNewName (const char * oldname);
-char * EntityClassName ( char * oldname);
+char *       PrettyNewName (const char * oldname);
+int          StrCmpIns (const char *, const char *);
+char *       EntityClassName ( char * oldname);
 
 extern Severity CheckRemainingInput
    (G4std::istream &in, ErrorDescriptor *err, 

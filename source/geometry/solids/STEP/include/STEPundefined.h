@@ -1,20 +1,10 @@
-
-
-//
-
-
-
-//
-// $Id: STEPundefined.h,v 1.3 1999-12-15 14:50:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #ifndef	STEPUNDEFINED_H
 #define	STEPUNDEFINED_H
 
 /*
 * NIST STEP Core Class Library
 * clstepcore/STEPundefined.h
-* May 1995
+* April 1997
 * KC Morris
 * David Sauder
 
@@ -22,7 +12,7 @@
 * and is not subject to copyright.
 */
 
-/*  */
+/* $Id: STEPundefined.h,v 1.4 2000-01-21 13:42:33 gcosmo Exp $ */
 
 #ifdef __O3DB__
 #include <OpenOODB.h>

@@ -1,21 +1,11 @@
 
-
-//
-
-
-
-//
-// $Id: instmgr.h,v 1.2 1999-05-21 20:20:41 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 #ifndef instmgr_h
 #define instmgr_h
 
 /*
 * NIST STEP Editor Class Library
 * cleditor/instmgr.h
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -23,21 +13,26 @@
 * and is not subject to copyright.
 */
 
-/*  */ 
+/* $Id: instmgr.h,v 1.3 2000-01-21 13:42:40 gcosmo Exp $ */ 
 
 ///// future? ////////////////
-// InstMgr can maintain an undo List for the last operation
+// InstMgr can maintain an undo list for the last operation
 //	performed on a node 
 // InstMgr can have a startUndo() and endUndo() so it knows when to
-//	start a new undo List and delete the old undo List. 
+//	start a new undo list and delete the old undo list. 
 /////////////////////
+
+/*
+#ifdef __OSTORE__
+#include <ostore/ostore.hh>    // Required to access ObjectStore Class Library
+#endif
+*/
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
 #endif
 
-
-
+typedef unsigned boolean;
 extern char * EntityClassName ( char *);
 
 // IT IS VERY IMPORTANT THAT THE ORDER OF THE FOLLOWING INCLUDE FILES
@@ -45,6 +40,7 @@ extern char * EntityClassName ( char *);
 
 #include <gennode.h>
 #include <gennodelist.h>
+//#include <gennode.inline.h>
 #include <gennodearray.h>
 
 #include <mgrnode.h>
@@ -58,61 +54,79 @@ extern char * EntityClassName ( char *);
 class InstMgr
 {
 protected:
+    int maxFileId;
+    int _ownsInstances; // if true will delete instances inside destructor
+
     MgrNodeArray *master;	// master array of all MgrNodes made up of
 			// complete, incomplete, new, delete MgrNodes lists
-			// this corresponds to the display List object by index
+			// this corresponds to the display list object by index
     MgrNodeArraySorted *sortedMaster;	// master array sorted by fileId
 //    StateList *master; // this will be an sorted array of ptrs to MgrNodes
 
-    int maxFileId;
-
 public:
-    InstMgr();
-    ~InstMgr() {};
+    InstMgr(int ownsInstances = 0);
+    virtual ~InstMgr();
 
 // MASTER LIST OPERATIONS
     int InstanceCount()   		{ return master->Count(); }
-    void ClearInstances();
+
+    int OwnsInstances() { return _ownsInstances; }
+    void OwnsInstances(int ownsInstances) { _ownsInstances = ownsInstances; }
+
+    void ClearInstances(); //clears instance lists but doesn't delete instances
+    void DeleteInstances(); // deletes the instances (ignores _ownsInstances)
+
     Severity VerifyInstances(ErrorDescriptor& e);
 
     // DAS PORT possible BUG two funct's below may create a temp for the cast
-    MgrNode *&operator[](int index)   
-	{ return (MgrNode* &)((*master)[index]); }
-    MgrNode *&GetMgrNode(int index)   
-	{ return (MgrNode* &)((*master)[index]); }
+    MgrNode * GetMgrNode(int index)   
+        { return (MgrNode *) *GetGenNode (index); }
+    GenericNode** GetGenNode(int index)   
+	{ return &(*master) [index]; }
 
     MgrNode *FindFileId(int fileId);
-	// get the index into display List given a STEPentity
+	// get the index into display list given a SCLP23(Application_instance)
 	//  called by see initiated functions
-    int GetIndex(STEPentity *se);
+    int GetIndex(SCLP23(Application_instance) *se);
     int GetIndex(MgrNode *mn);
-
-// L. Broglia : new
-    int GetIndex(const char* entityKeyword, int starting_index);
-
     int VerifyEntity(int fileId, const char *expectedType);
 
 //    void Append(MgrNode *node);
-    MgrNode *Append(STEPentity *se, stateEnum listState);
-		// deletes node from master List structure 
+    MgrNode *Append(SCLP23(Application_instance) *se, stateEnum listState);
+		// deletes node from master list structure 
     void Delete(MgrNode *node);
-    void Delete(STEPentity *se);
+    void Delete(SCLP23(Application_instance) *se);
 
     void ChangeState(MgrNode *node, stateEnum listState);
 
     int MaxFileId()		{ return maxFileId; }
     int NextFileId()		{ return maxFileId = maxFileId +1; }
     int EntityKeywordCount(const char* name);
-    STEPentity *GetSTEPentity(int index);
-    STEPentity *GetSTEPentity(const char* entityKeyword, 
-			      int starting_index =0);
 
-    STEPentity *GetSTEPentity(MgrNode *node) 
-					{ return node->GetSTEPentity(); };
+    SCLP23(Application_instance) *GetApplication_instance(int index);
+    SCLP23(Application_instance) *
+			    GetApplication_instance(const char* entityKeyword, 
+						    int starting_index =0);
+    SCLP23(Application_instance) *GetApplication_instance(MgrNode *node) 
+				   { return node->GetApplication_instance(); };
+
     void *GetSEE(int index);
     void *GetSEE(MgrNode *node) { return node->SEE(); };
 
     void PrintSortedFileIds();
+
+/*
+#ifdef __OSTORE__
+    static os_typespec* get_os_typespec();
+#endif
+*/
+
+    // OBSOLETE
+    SCLP23(Application_instance) *GetSTEPentity(int index);
+    SCLP23(Application_instance) *GetSTEPentity(const char* entityKeyword, 
+			      int starting_index =0);
+    SCLP23(Application_instance) *GetSTEPentity(MgrNode *node) 
+				{ return node->GetApplication_instance(); };
 
 };
 

@@ -1,20 +1,10 @@
-
-
-//
-
-
-
-//
-// $Id: s_HEADER_SCHEMA.cc,v 1.2 1999-05-21 20:21:12 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #ifndef  S_HEADER_SCHEMA_CC
 #define  S_HEADER_SCHEMA_CC
 
 /*
 * NIST STEP Editor Class Library
 * cleditor/s_HEADER_SCHEMA.cc
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -26,9 +16,11 @@
 // it since your modifications will be lost if fedex_plus is used to
 // regenerate it.
 
-/*  */
+/* $Id: s_HEADER_SCHEMA.cc,v 1.3 2000-01-21 13:43:13 gcosmo Exp $ */
 
 #include <s_HEADER_SCHEMA.h> 
+#include <ExpDict.h>
+#include <STEPattribute.h>
 
 /*	**************  TYPES  	*/
 TypeDescriptor *HEADER_SCHEMAt_SCHEMA_NAME;
@@ -82,7 +74,7 @@ s_N279_file_identification::oodb_reInit ()
       }
 #endif
 
-const SdaiString & 
+const SCLP23(String) & 
 s_N279_file_identification::file_name() const
 	{ return _file_name; }
 
@@ -90,7 +82,7 @@ void
 s_N279_file_identification::file_name (const char * x)
 	{ _file_name = x; }
 
-const SdaiString & 
+const SCLP23(String) & 
 s_N279_file_identification::date() const
 	{ return _date; }
 
@@ -114,7 +106,7 @@ void
 s_N279_file_identification::organization (StringAggregate & x)
 	{ _organization = x; }
 
-const SdaiString & 
+const SCLP23(String) & 
 s_N279_file_identification::preprocessor_version() const
 	{ return _preprocessor_version; }
 
@@ -122,7 +114,7 @@ void
 s_N279_file_identification::preprocessor_version (const char * x)
 	{ _preprocessor_version = x; }
 
-const SdaiString & 
+const SCLP23(String) & 
 s_N279_file_identification::originating_system() const
 	{ return _originating_system; }
 
@@ -152,7 +144,7 @@ s_N279_imp_level::oodb_reInit ()
 }
 #endif
 
-const SdaiString & 
+const SCLP23(String) & 
 s_N279_imp_level::implementation_level() const
 	{ return _implementation_level; }
 
@@ -218,7 +210,7 @@ p21DIS_File_name::oodb_reInit ()
 	 eDesc = HEADER_SCHEMAe_FILE_NAME;
        }
 #endif
-const SdaiString & 
+const SCLP23(String) & 
 p21DIS_File_name::name() const
 	{ return _name; }
 
@@ -226,7 +218,7 @@ void
 p21DIS_File_name::name (const char * x)
 	{ _name = x; }
 
-const SdaiString & 
+const SCLP23(String) & 
 p21DIS_File_name::time_stamp() const
 	{ return _time_stamp; }
 
@@ -251,7 +243,7 @@ p21DIS_File_name::organization (StringAggregate & x)
 	{ _organization = x; }
 
 /*
-const SdaiString & 
+const SCLP23(String) & 
 p21DIS_File_name::step_version() const
 	{ return _step_version; }
 
@@ -260,7 +252,7 @@ p21DIS_File_name::step_version (const char * x)
 	{ _step_version = x; }
 */
 
-const SdaiString & 
+const SCLP23(String) & 
 p21DIS_File_name::preprocessor_version() const
 	{ return _preprocessor_version; }
 
@@ -268,7 +260,7 @@ void
 p21DIS_File_name::preprocessor_version (const char * x)
 	{ _preprocessor_version = x; }
 
-const SdaiString & 
+const SCLP23(String) & 
 p21DIS_File_name::originating_system() const
 	{ return _originating_system; }
 
@@ -276,7 +268,7 @@ void
 p21DIS_File_name::originating_system (const char * x)
 	{ _originating_system = x; }
 
-const SdaiString & 
+const SCLP23(String) & 
 p21DIS_File_name::authorisation() const
 	{ return _authorisation; }
 
@@ -319,7 +311,7 @@ void
 p21DIS_File_description::description (StringAggregate & x)
 	{ _description = x; }
 
-const SdaiString & 
+const SCLP23(String) & 
 p21DIS_File_description::implementation_level() const
 	{ return _implementation_level; }
 
@@ -349,7 +341,7 @@ s_N279_classification::oodb_reInit ()
        }
 #endif
 
-const SdaiString & 
+const SCLP23(String) & 
 s_N279_classification::security_classification() const
 	{ return _security_classification; }
 
@@ -379,7 +371,7 @@ s_N279_file_description::oodb_reInit ()
        }
 #endif
 
-const SdaiString & 
+const SCLP23(String) & 
 s_N279_file_description::description() const
 	{ return _description; }
 
@@ -409,12 +401,12 @@ p21DIS_Maxsig::oodb_reInit ()
        }
 #endif
 
-SdaiInteger  
+SCLP23(Integer)  
 p21DIS_Maxsig::maximum_significant_digit()
-	{ return (SdaiInteger ) _maximum_significant_digit; }
+	{ return (SCLP23(Integer) ) _maximum_significant_digit; }
 
 void 
-p21DIS_Maxsig::maximum_significant_digit (SdaiInteger  x)
+p21DIS_Maxsig::maximum_significant_digit (SCLP23(Integer)  x)
 	{ _maximum_significant_digit = x; }
 EntityDescriptor *HEADER_SCHEMAe_CLASSIFICATION =0;
 AttrDescriptor *a_20SECURITY_CLASSIFICATION =0;
@@ -439,7 +431,7 @@ p21DIS_Classification::oodb_reInit ()
        }
 #endif
 
-const SdaiString & 
+const SCLP23(String) & 
 p21DIS_Classification::security_classification() const
 	{ return _security_classification; }
 

@@ -1,14 +1,4 @@
-
-
-//
-
-
-
-//
-// $Id: scl_hash.cc,v 1.2 1999-05-21 20:21:13 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-/*  ""; */
+/*  "$Id: scl_hash.cc,v 1.3 2000-01-21 13:43:15 gcosmo Exp $"; */
 
 /*
  * Dynamic hashing, after CACM April 1988 pp 446-457, by Per-Ake Larson.
@@ -89,7 +79,7 @@ HASHfind(Hash_TableP t,char *s)
 	struct Element *ep;
 
 	e.key = s;
-	e.symbol =0;  /*  Initialize to 0 - 25-Apr-1994 - kcm */
+	e.symbol =0;  /*  initialize to 0 - 25-Apr-1994 - kcm */
 	ep = HASHsearch(t,&e,HASH_FIND);
 	return(ep?ep->data:0);
 }
@@ -101,7 +91,7 @@ HASHinsert(Hash_TableP t,char *s,void *data)
 
 	e.key = s;
 	e.data = data;
-	e.symbol =0;  /*  Initialize to 0 - 25-Apr-1994 - kcm */
+	e.symbol =0;  /*  initialize to 0 - 25-Apr-1994 - kcm */
 	e2 = HASHsearch(t,&e,HASH_INSERT);
 	if (e2) {
 		printf("Redeclaration of %s\n",s);
@@ -115,7 +105,7 @@ HASHcreate(unsigned count)
     Hash_TableP	table;
 
     /*
-    ** Adjust Count to be nearest higher Power of 2, 
+    ** Adjust Count to be nearest higher power of 2, 
     ** minimum SEGMENT_SIZE, then convert into segments.
     */
     i = SEGMENT_SIZE;
@@ -126,7 +116,7 @@ HASHcreate(unsigned count)
     table = (Hash_TableP) HASH_Table_new();
     table->SegmentCount = table->p = (short) (table->KeyCount = 0);
     /*
-    ** First Initialize directory to 0\'s 
+    ** First initialize directory to 0\'s 
     ** DIRECTORY_SIZE must be same as in header
     */
     for (i = 0; i < DIRECTORY_SIZE; i++)  
@@ -138,7 +128,7 @@ HASHcreate(unsigned count)
 /*	table->Directory[i] = (struct Element **) calloc(SEGMENT_SIZE,sizeof(struct Element));*/
       {
 	table->Directory[i] = new struct Element * [SEGMENT_SIZE];
-	for (int h =0; h < SEGMENT_SIZE; h++)  // Initialize to NULL
+	for (int h =0; h < SEGMENT_SIZE; h++)  // initialize to NULL
 	  table->Directory[i][h] = 0;
       }
 
@@ -160,7 +150,7 @@ HASHcreate(unsigned count)
     return(table);
 }
 
-/* Initialize pointer to beginning of hash table so we can Step through it */
+/* initialize pointer to beginning of hash table so we can step through it */
 /* on repeated calls to HASHlist - DEL */
 void
 HASHlistinit(Hash_TableP table,HashEntry *he)
@@ -169,7 +159,7 @@ HASHlistinit(Hash_TableP table,HashEntry *he)
 	he->p = 0;
 	he->table = table;
 	he->type = '*';
-	he->e =0; /*  Initialize to 0 - 25-Apr-1994 - kcm  */
+	he->e =0; /*  initialize to 0 - 25-Apr-1994 - kcm  */
 }
 
 void
@@ -179,10 +169,10 @@ HASHlistinit_by_type(Hash_TableP table,HashEntry *he,char type)
 	he->p = 0;
 	he->table = table;
 	he->type = type;
-	he->e =0; /*  Initialize to 0 - 25-Apr-1994 - kcm  */
+	he->e =0; /*  initialize to 0 - 25-Apr-1994 - kcm  */
 }
 
-/* provide a way to Step through the hash */
+/* provide a way to step through the hash */
 struct Element *
 HASHlist(HashEntry *he)
 {
@@ -385,7 +375,7 @@ HASHexpand_table(Hash_TableP table)
 /*    table->Directory[NewSegmentDir] = (struct Element **) calloc(SEGMENT_SIZE,sizeof(struct Element));*/
       {
 	table->Directory[NewSegmentDir] = new struct Element * [SEGMENT_SIZE];
-	for (int h =0; h < SEGMENT_SIZE; h++)  // Initialize to NULL
+	for (int h =0; h < SEGMENT_SIZE; h++)  // initialize to NULL
 	  table->Directory[NewSegmentDir][h] = 0;
       }
 

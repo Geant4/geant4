@@ -1,18 +1,8 @@
 
-
-//
-
-
-
-//
-// $Id: cmdmgr.cc,v 1.2 1999-05-21 20:21:06 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
 /*
 * NIST STEP Editor Class Library
 * cleditor/cmdmgr.cc
-* May 1995
+* April 1997
 * David Sauder
 * K. C. Morris
 
@@ -20,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/*  */ 
+/* $Id: cmdmgr.cc,v 1.3 2000-01-21 13:43:06 gcosmo Exp $ */ 
 
 #include <cmdmgr.h>
 
@@ -149,7 +139,7 @@ void CmdMgr::ClearInstances()
 
 //    newList->ClearEntries();
 }
-			// searches current List for fileId
+			// searches current list for fileId
 MgrNode *CmdMgr::StateFindFileId(stateEnum s, int fileId)
 {
     switch(s){
@@ -159,7 +149,7 @@ MgrNode *CmdMgr::StateFindFileId(stateEnum s, int fileId)
 		return incompleteList->FindFileId(fileId);
 	case deleteSE:
 		return deleteList->FindFileId(fileId);
-	case newSE: // there is no new List
+	case newSE: // there is no new list
 	case noStateSE:
 	default:
 		G4cout << "ERROR can't find the node containing fileid " <<
@@ -172,11 +162,11 @@ MgrNode *CmdMgr::GetHead(stateEnum listType)
 {
     switch(listType)
     {
-	case completeSE:	// saved complete List
+	case completeSE:	// saved complete list
 		return (MgrNode *)completeList->GetHead();
-	case incompleteSE:	// saved incomplete List
+	case incompleteSE:	// saved incomplete list
 		return (MgrNode *)incompleteList->GetHead();
-	case deleteSE:		// delete List
+	case deleteSE:		// delete list
 		return (MgrNode *)deleteList->GetHead();
 	default:
 		return 0;
@@ -206,13 +196,13 @@ void CmdMgr::ClearEntries(stateEnum listType)
 {
     switch(listType)
     {
-	case completeSE:	// saved complete List
+	case completeSE:	// saved complete list
 		completeList->ClearEntries();
 		break;
-	case incompleteSE:	// saved incomplete List
+	case incompleteSE:	// saved incomplete list
 		incompleteList->ClearEntries();
 		break;
-	case deleteSE:		// delete List
+	case deleteSE:		// delete list
 		deleteList->ClearEntries();
 		break;
 	default:
