@@ -27,6 +27,7 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
 
 #include "FredDetectorConstruction.hh"
 #include "FredPhysicsList.hh"
@@ -59,21 +60,24 @@ int main(int argc,char *argv[])
 	runManager->SetUserAction( new FredEventAction(messenger) );
 	
 	// Give control to interactive terminal
-	G4UIsession *session = new G4UIterminal;
+  G4UIsession *session;
+  
+#ifdef G4UI_USE_TCSH
+  session = new G4UIterminal(new G4UItcsh);      
+#else
+	session = new G4UIterminal;
+#endif
+  
+  if (argc > 1)  {
+    G4UImanager * UI = G4UImanager::GetUIpointer();
 
-        if (argc > 1)
-          {
-            G4UImanager * UI = G4UImanager::GetUIpointer();
-	    
-            for (int i=1;i<argc;i++)
-              {
-                UI->ApplyCommand("/control/execute "+G4String(argv[i]));
-              }
-	  }
-        else
-          {
-	    session->SessionStart();
-	  }
+    for (int i=1;i<argc;i++)    {
+      UI->ApplyCommand("/control/execute "+G4String(argv[i]));
+    }
+  }
+  else  {
+    session->SessionStart();
+  }
 	
 	// All finished...
 	delete session;
