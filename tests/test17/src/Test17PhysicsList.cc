@@ -132,8 +132,8 @@ void Test17PhysicsList::ConstructIons()
   G4Deuteron::DeuteronDefinition();
   G4Alpha::AlphaDefinition();
   G4IonC12::IonC12Definition();
-  G4IonAr40::IonAr40Definition();
-  G4IonFe56::IonFe56Definition();
+  //  G4IonAr40::IonAr40Definition();
+  //  G4IonFe56::IonFe56Definition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
