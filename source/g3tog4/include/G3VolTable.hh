@@ -17,15 +17,23 @@ private:
   G4Material* _Mat;
   G4VSolid* _Solid;
   G4LogicalVolume* _LV;
-  G4int _Code;
-  friend class G3VolTable;
+  G4bool _Deferred;
+  G4bool _NegVolPars;
 
 public:
-  VolTableEntry(G4String& v, G4String& sh, G4double* R, G4int n, G4Material* m,
-		G4VSolid* so, G4LogicalVolume* lv, G4int code);
+  VolTableEntry(G4String& v, G4String& sh, G4double* R, 
+		G4int n, 
+		G4Material* m, G4VSolid* so, 
+		G4LogicalVolume* LV, G4bool Deferred, 
+		G4bool NegVolPars);
   virtual ~VolTableEntry();
-  G4bool NegVolPars();
-  G4bool Deferred();
+  G4bool HasNegVolPars(){return _NegVolPars;}
+  G4bool HasDeferred(){return _Deferred;};
+  G4String GetShape(){return _Shape;}
+  G4double* GetRpar(){return _Rpar;}
+  G4int GetNpar(){return _Npar;}
+  G4Material* GetMaterial(){return _Mat;}
+  G4LogicalVolume* GetLV(){return _LV;}
 };
   
 class G3VolTable{
@@ -42,20 +50,11 @@ private:
 
 public:
   void PutLV(G4String& vname, G4String& shape, G4double* Rpar, G4int Npar,
-	     G4Material* mat, G4VSolid* solid, G4LogicalVolume* lv, G4int cd);
-
+	     G4Material* mat, G4VSolid* solid, G4bool Deferred, G4bool ng);
   VolTableEntry* GetVTE(const G4String& Vname);
-
-  G4LogicalVolume* GetLV(const G4String& Vname, G4String& Shape, 
-			 G4double*& Rpar, G4int& Npar, G4Material*& Mat, 
-			 G4VSolid*& Solid, G4int& Code);
-
   G4LogicalVolume* GetLV(const G4String& vname="-");
-
   G4VPhysicalVolume* GetPV(const G4String& pname="-", G4int pcopy=0);
-
   G3VolTable();
-
   virtual ~G3VolTable();
 };
 extern G3VolTable G3Vol;

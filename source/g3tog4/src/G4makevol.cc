@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4makevol.cc,v 1.8 1999-05-15 00:17:39 lockman Exp $
+// $Id: G4makevol.cc,v 1.9 1999-05-18 02:41:01 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ios.hh"
@@ -26,6 +26,7 @@
 #include "G4Polyhedra.hh"
 #include "G4Para.hh"
 #include "G4Hype.hh"
+#include "G4Material.hh"
         
 G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
                            G4double Rpar[], G4int npar){
@@ -34,12 +35,12 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
   
   // Create the solid if no negative length parameters
   G4VSolid *solid = 0;
-  G4bool NegPars = false;
+  G4bool NegVolPars = false;
 
   // if npar = 0 assume LV deferral
-  G4bool Defer = (npar == 0);
+  G4bool Deferred = (npar == 0);
   
-  if (Defer) {
+  if (Deferred) {
     G4cout << "Defer creation of logical volume '" << vname 
 	   << "' until placement" << endl;
   }
@@ -49,9 +50,9 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
     G4double pY = Rpar[1] = Rpar[1]*cm;
     G4double pZ = Rpar[2] = Rpar[2]*cm;
     
-    NegPars = pX<0 || pY<0 || pZ<0;
+    NegVolPars = pX<0 || pY<0 || pZ<0;
     
-    if (!(NegPars || Defer)) { 
+    if (!(NegVolPars || Deferred)) { 
       solid = new G4Box(vname, pX, pY, pZ);
     }
 
@@ -62,9 +63,9 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
     G4double pdy2 = pdy1;
     G4double pdz  = Rpar[3] = Rpar[3]*cm;
     
-    NegPars = pdx1<0 || pdx2<0 || pdy1<0 || pdz<0;
+    NegVolPars = pdx1<0 || pdx2<0 || pdy1<0 || pdz<0;
 
-    if (!(NegPars || Defer)) {
+    if (!(NegVolPars || Deferred)) {
       solid = new G4Trd(vname, pdx1, pdx2, pdy1, pdy2, pdz);
     }
 
@@ -75,9 +76,9 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
     G4double pdy2 = Rpar[3] = Rpar[3]*cm;
     G4double pdz  = Rpar[4] = Rpar[4]*cm;
 
-    NegPars = pdx1<0 || pdx2<0 || pdy1<0 || pdy2<0 || pdz<0;
+    NegVolPars = pdx1<0 || pdx2<0 || pdy1<0 || pdy2<0 || pdz<0;
  
-    if (!(NegPars || Defer)) {
+    if (!(NegVolPars || Deferred)) {
       solid = new G4Trd(vname, pdx1, pdx2, pdy1, pdy2, pdz);
     }
 
@@ -94,9 +95,9 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
     G4double pDx4   = Rpar[9] = Rpar[9]*cm;
     G4double pAlp2  = Rpar[10]= Rpar[10]*deg;
 
-    NegPars= pDz<0 || pDy1<0 || pDx1<0 || pDx2<0 || pDy2<0 || pDx3<0 || pDx4<0;
+    NegVolPars= pDz<0 || pDy1<0 || pDx1<0 || pDx2<0 || pDy2<0 || pDx3<0 || pDx4<0;
 
-    if (!(NegPars || Defer)) {
+    if (!(NegVolPars || Deferred)) {
       solid = new 
 	G4Trap(vname, pDz, pTheta, pPhi, pDy1, pDx1, pDx2, pAlp1, pDy2, pDx3, 
 	       pDx4, pAlp2);
@@ -109,9 +110,9 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
     G4double pSPhi = 0.*deg;
     G4double pDPhi = 360.*deg;
     
-    NegPars = pRMin<0 || pRMax<0 || pDz<0;
+    NegVolPars = pRMin<0 || pRMax<0 || pDz<0;
     
-    if (!(NegPars || Defer)) {
+    if (!(NegVolPars || Deferred)) {
       solid = new G4Tubs(vname, pRMin, pRMax, pDz, pSPhi, pDPhi);
     }
 
@@ -124,9 +125,9 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
     G4double pDPhi = Rpar[4] - pSPhi;
     if ( Rpar[4] <= pSPhi ) pDPhi = pDPhi + 360.*deg;
 
-    NegPars = pRMin<0 || pRMax<0 || pDz<0;
+    NegVolPars = pRMin<0 || pRMax<0 || pDz<0;
 
-    if (!(NegPars || Defer)){
+    if (!(NegVolPars || Deferred)){
       solid = new G4Tubs(vname, pRMin, pRMax, pDz, pSPhi, pDPhi);
     }
 
@@ -139,9 +140,9 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
     G4double pSPhi = 0.*deg;
     G4double pDPhi = 360.*deg;
 
-    NegPars = pDz<0 || pRmin1<0 || pRmax1<0 || pRmin2<0 || pRmax2<0;
+    NegVolPars = pDz<0 || pRmin1<0 || pRmax1<0 || pRmin2<0 || pRmax2<0;
 
-    if (!(NegPars || Defer)){
+    if (!(NegVolPars || Deferred)){
       solid = new 
 	G4Cons(vname, pRmin1, pRmax1, pRmin2, pRmax2, pDz, pSPhi, pDPhi);
     }
@@ -157,9 +158,9 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
     G4double pDPhi  = Rpar[6]-pSPhi;
     if ( Rpar[6] <= pSPhi ) pDPhi = pDPhi + 360.*deg;
 
-    NegPars = pDz<0 || pRmin1<0 || pRmax1<0 || pRmin2<0 || pRmax2<0;
+    NegVolPars = pDz<0 || pRmin1<0 || pRmax1<0 || pRmin2<0 || pRmax2<0;
 
-    if (!(NegPars || Defer)){
+    if (!(NegVolPars || Deferred)){
       solid = new 
 	G4Cons(vname, pRmin1, pRmax1, pRmin2, pRmax2, pDz, pSPhi, pDPhi);
     }
@@ -174,9 +175,9 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
     G4double pPhi2  = Rpar[5] = Rpar[5]*deg;
     G4double pDPhi  = pPhi2 - pPhi1;
 
-    NegPars = pRmin<0 || pRmax<0;
+    NegVolPars = pRmin<0 || pRmax<0;
 
-    if (!(NegPars || Defer)) {
+    if (!(NegVolPars || Deferred)) {
       solid = new G4Sphere(vname, pRmin, pRmax, pThe1, pDThe, pPhi1, pDPhi);
     }
 
@@ -188,9 +189,9 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
     G4double pThet = Rpar[4]*deg;
     G4double pPhi  = Rpar[5]*deg;
 
-    NegPars = pDx<0 || pDy<0 || pDz<0;
+    NegVolPars = pDx<0 || pDy<0 || pDz<0;
 
-    if (!(NegPars || Defer)){
+    if (!(NegVolPars || Deferred)){
       solid = new G4Para(vname, pDx, pDy, pDz, pAlph, pThet, pPhi);
     }
 
@@ -205,7 +206,7 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
     G4double *Rmin    = new G4double[nz];
     G4double RMIN=1.e-4*cm;
 
-    NegPars = 0;
+    NegVolPars = 0;
 
     for(i=0; i<nz; i++) {
       int i4=3*i+4;
@@ -229,7 +230,7 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
     G4double *Rmax    = new G4double[nz];
     G4double *Rmin    = new G4double[nz];
 
-    NegPars = 0;
+    NegVolPars = 0;
 
     for(i=0; i<nz; i++){
       int i4=3*i+3;
@@ -254,9 +255,9 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
     G4double pDz   = Rpar[2] = Rpar[2]*cm;
     G4double pThet = Rpar[3] = Rpar[3]*deg;
 
-    NegPars = pRmin<0 || pRmax<0 || pDz<0;
+    NegVolPars = pRmin<0 || pRmax<0 || pDz<0;
 
-    if (!(NegPars || Defer)){
+    if (!(NegVolPars || Deferred)){
       solid = new G4Hype(vname, pRmin, pRmax, pThet, pThet, pDz);
     } else {
       G4cerr << "Negative length parameters not supported for shape " 
@@ -281,24 +282,10 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
     assert(material != 0);
   }
 
-  G4int Code=0;               // normal
-  if (Defer) Code+=1;         // deferred (gsposp)
-  if (NegPars) Code+=2;       // deferred (negative parameters)
-
-  G4LogicalVolume* lvol=0;
-  // Create the logical volume
-  if (solid != 0) {
-    lvol = G3Vol.GetLV(vname);
-    if (!lvol){
-      if (Code == 0) lvol = new G4LogicalVolume(solid, material, vname);
-    } else {
-      G4cerr << "Logical volume " << vname << " already exists" << endl;
-    }
-  }
-  
   // external store is needed to handle deferred LV creation 
-  G3Vol.PutLV(vname, shape, Rpar, npar, material, solid, lvol, Code);
-  return lvol;
+  G3Vol.PutLV(vname, shape, Rpar, npar, material, solid, Deferred, NegVolPars);
+
+  return G3Vol.GetLV(vname);
 }
 
 

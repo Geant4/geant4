@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3DetTable.cc,v 1.3 1999-05-07 04:16:11 lockman Exp $
+// $Id: G3DetTable.cc,v 1.4 1999-05-18 02:40:32 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -67,7 +67,7 @@ G3DetTable::getSD(G4String& set, G4String& det){
   if (_DTE != 0) {
     return _DTE->getSD();
   } else {
-    G4cerr << "No G3DetTable entry with key '" << HashID << "'" << endl;
+    //    G4cerr << "No G3DetTable entry with key '" << HashID << "'" << endl;
     return 0;
   }
 };
@@ -83,7 +83,7 @@ G3DetTable::GetID(G4String& set, G4String& det){
   if (_DTE != 0) {
     return _DTE->getid();
   } else {
-    G4cerr << "No G3DetTable entry with key '" << HashID << "'" << endl;
+    //  G4cerr << "No G3DetTable entry with key '" << HashID << "'" << endl;
     return 0;
   }
 };

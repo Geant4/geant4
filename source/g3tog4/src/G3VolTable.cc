@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTable.cc,v 1.4 1999-05-15 00:17:25 lockman Exp $
+// $Id: G3VolTable.cc,v 1.5 1999-05-18 02:40:38 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -37,28 +37,27 @@ G3VolTable::SetMother(G4LogicalVolume* LV){
   }
 };
 
-G4bool
-VolTableEntry::NegVolPars(){return (_Code/2)%2==1;}
-
-G4bool
-VolTableEntry::Deferred(){return _Code%2==1;}
-
-VolTableEntry::VolTableEntry(G4String& Vname, G4String& Shape, G4double* Rpar,
-			     G4int Npar, G4Material* Mat, G4VSolid* Solid,
-			     G4LogicalVolume* LV, G4int Code)
-  : _Rpar(0), _Npar(0), _Mat(0), _Solid(0), _LV(0), _Code(0){
+VolTableEntry::VolTableEntry(G4String& Vname, G4String& Shape, 
+			     G4double* Rpar,
+			     G4int Npar, G4Material* Mat, 
+			     G4VSolid* Solid,
+			     G4LogicalVolume* LV, G4bool Deferred, 
+			     G4bool NegVolPars)
+  : _Rpar(0), _Npar(0), _Mat(0), _Solid(0), _LV(0), _Deferred(0), 
+    _NegVolPars(0){
 
     _Vname = Vname;
     _Shape = Shape;
     if (Rpar!=0 && Npar>0) {
-      _Rpar = new G4double(Npar);
+      _Rpar = new G4double[Npar];
       for (int i=0; i<Npar; i++) _Rpar[i] = Rpar[i];
     }
     _Npar = Npar;
     _Mat = Mat;
     _Solid = Solid;
     _LV = LV;
-    _Code = Code;
+    _NegVolPars = NegVolPars;
+    _Deferred = Deferred;
 };
 
 VolTableEntry::~VolTableEntry(){
@@ -74,42 +73,34 @@ G3VolTable::GetVTE(const G4String& Vname){
 void
 G3VolTable::PutLV(G4String& Vname, G4String& Shape, G4double* Rpar,
 		  G4int Npar, G4Material* Mat, G4VSolid* Solid,
-		  G4LogicalVolume* LV, G4int Code){
-  if (Code == 0) G3Vol.SetMother(LV);
-  _VTE = new VolTableEntry(Vname, Shape, Rpar, Npar, Mat, Solid, LV, Code);
-  G4String* _HashID = new G4String(Vname);
-  _VTD->insertKeyAndValue(_HashID, _VTE);
-};
-
-G4LogicalVolume*
-G3VolTable::GetLV(const G4String& Vname, G4String& Shape, G4double*& Rpar,
-		  G4int& Npar, G4Material*& Mat, G4VSolid*& Solid,
-		  G4int& Code){
-  _VTE = _VTD->findValue(&Vname);
-  if (_VTE != 0) {
-    Shape = _VTE->_Shape;
-    Rpar = _VTE->_Rpar;
-    Npar = _VTE->_Npar;
-    Mat  = _VTE->_Mat;
-    Solid = _VTE->_Solid;
-    Code = _VTE->_Code;
+		  G4bool Deferred, G4bool NegVolPars){
+  G4LogicalVolume* LV = 0;
+  if (GetVTE(Vname) == 0) {
+    if (!(Deferred || NegVolPars)) {
+      // create logical volume now
+      LV = new G4LogicalVolume(Solid, Mat, Vname);
+      SetMother(LV);
+    }
+    // create a VolTableEntry
+    _VTE = new VolTableEntry(Vname, Shape, Rpar, Npar, Mat, Solid, LV, 
+			     Deferred, NegVolPars);
+    G4String* _HashID = new G4String(Vname);
+    // insert into dictionary
+    _VTD->insertKeyAndValue(_HashID, _VTE);
   }
-  return _VTE->_LV;
 };
 
 G4LogicalVolume* 
 G3VolTable::GetLV(const G4String& name){
   if (name == "-") {
     return G3toG4LogicalMother;
-  } else { // loop over the logical volume store, look for name
-    G4LogicalVolumeStore* lvs = G4LogicalVolumeStore::GetInstance();
-    G4int nlv = lvs->entries();
-    for (int i=0; i<nlv; i++){
-      G4String vn = (*lvs)[i]->GetName();
-      if (name == vn) return (*lvs)[i];
+  } else { 
+    _VTE = _VTD->findValue(&name);
+    if (_VTE != 0) {
+      return _VTE->GetLV();
+    } else {
+      return 0;
     }
-    // G4cerr << "G3VolTable: no such logical volume '" << name << "'" << endl;
-    return 0;
   }
 }    
 

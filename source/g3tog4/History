@@ -1,8 +1,12 @@
-$Id: History,v 1.12 1999-05-13 03:55:17 lockman Exp $
+$Id: History,v 1.13 1999-05-18 02:39:51 lockman Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
-12-May-1999 Lockman
+
+
+17-May-1999 Lockman
+- reinstituted VolTableEntry and G3VolTable RWTPtrHashDictionary. Creation of
+  logical volume now done in G3VolTable::PutLV
 - G4makevol.cc: added interface to G4Hype
 
 g3tog4-01-00-04 11-May-1999 Lockman

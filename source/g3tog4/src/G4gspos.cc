@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gspos.cc,v 1.5 1999-05-15 00:17:30 lockman Exp $
+// $Id: G4gspos.cc,v 1.6 1999-05-18 02:40:53 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4LogicalVolume.hh"
@@ -43,15 +43,12 @@ void G4gspos(const G4String& vname, G4int num, const G4String& vmoth,
 
   // retrieve info about the LV from the store
   G4String _Shape;
-  G4double* _Rpar;
-  G4int _Npar;
-  G4Material* _Mat;
-    G4VSolid* _Solid;
-  G4int _Code;
 
-  G4LogicalVolume* _lvol =
-    G3Vol.GetLV(vname, _Shape, _Rpar, _Npar, _Mat, _Solid, _Code);
-  
+  VolTableEntry* _VTE = G3Vol.GetVTE(vname);
+  assert(_VTE != 0);
+
+  G4LogicalVolume* _lvol = _VTE->GetLV();
+
         // get the rotation matrix pointer from the G3 IROT index
   G3toG4RotationMatrix *rotm;
   if (irot>0) {
@@ -68,10 +65,10 @@ void G4gspos(const G4String& vname, G4int num, const G4String& vmoth,
   
   // check for negative parameters in volume definition
   
-  if (_Code > 1) {
+  if (_VTE->HasNegVolPars()) {
     G4cerr << "G4gspos: logical volume '" << vname 
 	   << "' has -ve length parameters" << endl;
-  } else if (_Code > 0) {
+  } else if (_VTE->HasDeferred()) {
     G4cerr << "G4gspos: logical volume '" << vname << "' is deferred" << endl;
   } else {
 

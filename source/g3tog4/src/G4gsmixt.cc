@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsmixt.cc,v 1.3 1999-05-06 17:46:59 lockman Exp $
+// $Id: G4gsmixt.cc,v 1.4 1999-05-18 02:40:46 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,17 +44,43 @@ void G4gsmixt(G4int imate, G4String name, G4double a[], G4double z[],
   G4double theDensity = dens*g/cm3;
 
   G4Material* theMixture = new G4Material(name, dens, nmate); 
+  G4bool ok=true;
   for (int i=0; i< nmate; i++){
     G4Element* theElement = G3Ele.GetEle(z[i]);
     if (nlmat>0) {
       G4double fractionmass = wmat[i];
+      ok = ok && abs(fractionmass)<=1.;
       theMixture->AddElement(theElement, fractionmass);
     } else if (nlmat<0) {
       G4int natoms = wmat[i];
+      ok = ok && wmat[i] == natoms;
       theMixture->AddElement(theElement, natoms);
+    } else {
+      ok=false;
     }
   }
-  G3Mat.put(imate, theMixture);
+  if (ok) {
+    G3Mat.put(imate, theMixture);
+  } else {
+    if (nlmat>0) {
+      G4cerr << "G4gsmixt: for mixture '" << name 
+	     << "' some |weights|>1 : " << endl;
+      for (G4int i=0;i<nlmat; i++) {
+	G4cerr << "Component " << setw(3) << i+1 << " fraction: "
+	       << setw(10) << wmat[i] << endl;
+      }
+    } else if (nlmat<0) {
+      G4cerr << "G4gsmixt: for mixture '" << name 
+	     << "' some #natoms are non-integer: " << endl;
+      for (G4int i=0;i<nlmat; i++) {
+	G4cerr << "Component " << setw(3) << i+1 << " #atoms "
+	       << setw(10) << wmat[i] << endl;
+      }
+    } else {
+      G4cerr << "G4gsmixt: Number of components for mixture '" 
+	     << name << "' (" << nlmat << ") not allowed." << endl;
+    }
+  }
 }
 
 

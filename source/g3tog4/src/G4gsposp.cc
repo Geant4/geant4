@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsposp.cc,v 1.4 1999-05-15 00:17:35 lockman Exp $
+// $Id: G4gsposp.cc,v 1.5 1999-05-18 02:40:57 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4LogicalVolume.hh"
@@ -55,7 +55,7 @@ void G4gsposp(G4String vname, G4int num, G4String vmoth, G4double x,
   G4bool isMany = G3IsMany(vonly);
   
   // check for negative parameters in volume definition.
-  G4bool nvp = G3Vol.GetVTE(vname)->NegVolPars();
+  G4bool nvp = G3Vol.GetVTE(vname)->HasNegVolPars();
 
   // get the logical volume pointer of the mother from the name
   G4LogicalVolume *mothLV = G3Vol.GetLV(vmoth);
