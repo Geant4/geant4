@@ -63,33 +63,20 @@ test31PhysicsListMessenger::test31PhysicsListMessenger(test31PhysicsList* list)
   cutECmd->SetUnitCategory("Length");  
   cutECmd->AvailableForStates(PreInit,Idle);
 
-  cutPCmd = new G4UIcmdWithADoubleAndUnit("/test31/physics/cutHadron",this);
+  cutPCmd = new G4UIcmdWithADoubleAndUnit("/test31/physics/cutPositron",this);
   cutPCmd->SetGuidance("Set cut values by RANGE for proton and others");
   cutPCmd->SetParameterName("cutHadron",false);
   cutPCmd->SetRange("cutHadron>0.");
   cutPCmd->SetUnitCategory("Length");    
   cutPCmd->AvailableForStates(PreInit,Idle);
 
-  eCmd = new G4UIcmdWithADoubleAndUnit("/test31/physics/cutElectronEnergy",this);
+  eCmd = new G4UIcmdWithADoubleAndUnit("/test31/physics/cutAll",this);
   eCmd->SetGuidance("Set cut values by ENERGY for charged particles.");
-  eCmd->SetParameterName("cutElectronEnergy",false);
-  eCmd->SetRange("cutElectronEnergy>0.");
-  eCmd->SetUnitCategory("Energy");   
+  eCmd->SetParameterName("cutForAll",false);
+  eCmd->SetRange("cutForAll>0.");
+  eCmd->SetUnitCategory("Length");   
   eCmd->AvailableForStates(PreInit,Idle);
 
-  lowLimCmd = new G4UIcmdWithADoubleAndUnit("/test31/physics/LowLimit",this);
-  lowLimCmd->SetGuidance("Set low enery limit for charged particles");
-  lowLimCmd->SetParameterName("LowLimit",false);
-  lowLimCmd->SetRange("LowLimit>0.");
-  lowLimCmd->SetUnitCategory("Energy");   
-  lowLimCmd->AvailableForStates(PreInit,Idle);
-
-  highLimCmd = new G4UIcmdWithADoubleAndUnit("/test31/physics/HighLimit",this);
-  highLimCmd->SetGuidance("Set high energy limit for charged particles");
-  highLimCmd->SetParameterName("HighLimit",false);
-  highLimCmd->SetRange("HighLimit>0.");
-  highLimCmd->SetUnitCategory("Energy");   
-  highLimCmd->AvailableForStates(PreInit,Idle);
 
   setMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/test31/physics/MaxStep",this);
   setMaxStepCmd->SetGuidance("Set max charged particle step length");
@@ -98,19 +85,24 @@ test31PhysicsListMessenger::test31PhysicsListMessenger(test31PhysicsList* list)
   setMaxStepCmd->SetUnitCategory("Length");
   setMaxStepCmd->AvailableForStates(PreInit,Idle);
 
-  EMPhysicsCmd = new G4UIcmdWithAString("/test31/physics/EMList",this);
-  EMPhysicsCmd->SetGuidance("Set the name of the EMPhysicsList");
+  EMPhysicsCmd = new G4UIcmdWithAString("/test31/physics/addPhysics",this);
+  EMPhysicsCmd->SetGuidance("Add modular PhysicsList");
   EMPhysicsCmd->SetParameterName("EMList",false);
   EMPhysicsCmd->AvailableForStates(PreInit,Idle);
 
-  HadPhysicsCmd = new G4UIcmdWithAString("/test31/physics/HadronList",this);
-  HadPhysicsCmd->SetGuidance("Set the name of the HadPhysicsList");
-  HadPhysicsCmd->SetParameterName("HadronList",false);
+  tCmd = new G4UIcmdWithAString("/test31/physics/table",this);
+  tCmd->SetGuidance("Define hadron stopping table");
+  tCmd->SetParameterName("h_table",false);
+  tCmd->AvailableForStates(PreInit,Idle);
+
+  HadPhysicsCmd = new G4UIcmdWithAString("/test31/physics/nuclStopping",this);
+  HadPhysicsCmd->SetGuidance("Set on/off for nuclear stopping");
+  HadPhysicsCmd->SetParameterName("nucStopping",false);
   HadPhysicsCmd->AvailableForStates(PreInit,Idle);
 
-  decayCmd = new G4UIcmdWithAString("/test31/physics/decay",this);
-  decayCmd->SetGuidance("Set the name of the decayList");
-  decayCmd->SetParameterName("decay",false);
+  decayCmd = new G4UIcmdWithAString("/test31/physics/Barkas",this);
+  decayCmd->SetGuidance("Set on/off for Barkas effect");
+  decayCmd->SetParameterName("barkas",false);
   decayCmd->AvailableForStates(PreInit,Idle);
 
   verbCmd = new G4UIcmdWithAnInteger("/test31/physics/verbose",this);
@@ -128,10 +120,9 @@ test31PhysicsListMessenger::~test31PhysicsListMessenger()
   delete cutECmd;
   delete cutPCmd;
   delete eCmd;
-  delete lowLimCmd;
-  delete highLimCmd;
   delete setMaxStepCmd;
   delete EMPhysicsCmd;
+  delete tCmd;
   delete HadPhysicsCmd;
   delete decayCmd;
   delete verbCmd;
@@ -146,25 +137,23 @@ void test31PhysicsListMessenger::SetNewValue(G4UIcommand* com, G4String newValue
   }
 
   if(com == cutGCmd)
-    { test31List->SetGammaCut(cutGCmd->GetNewDoubleValue(newValue));}
+    { test31List->SetCutForGamma(cutGCmd->GetNewDoubleValue(newValue));}
   if(com == cutECmd)
-    { test31List->SetElectronCut(cutECmd->GetNewDoubleValue(newValue));}
+    { test31List->SetCutForElectron(cutECmd->GetNewDoubleValue(newValue));}
   if(com == cutPCmd)
-    { test31List->SetProtonCut(cutPCmd->GetNewDoubleValue(newValue));}
+    { test31List->SetCutForPositron(cutPCmd->GetNewDoubleValue(newValue));}
   if(com == eCmd)
-    { test31List->SetElectronCutByEnergy(eCmd->GetNewDoubleValue(newValue));}
-  if(com == lowLimCmd)
-    { test31List->SetLowEnergyLimit(lowLimCmd->GetNewDoubleValue(newValue));}
-  if(com == highLimCmd)
-    { test31List->SetHighEnergyLimit(highLimCmd->GetNewDoubleValue(newValue));}
+    { test31List->SetCutForAll(eCmd->GetNewDoubleValue(newValue));}
   if(com == setMaxStepCmd)
     { test31List->SetMaxStep(setMaxStepCmd->GetNewDoubleValue(newValue));}
   if(com == EMPhysicsCmd)
-    { test31List->SetEMPhysicsList(newValue);}
+    { test31List->AddPhysicsList(newValue);}
+  if(com == tCmd)
+    { test31List->SetStoppingTable(newValue);}
   if(com == HadPhysicsCmd)
-    { test31List->SetHadronPhysicsList(newValue);}
+    { test31List->SetNuclearStopping(newValue);}
   if(com == decayCmd)
-    { test31List->SetDecay(newValue);}
+    { test31List->SetBarkas(newValue);}
   if( com == verbCmd )
    { test31List->SetVerbose(verbCmd->GetNewIntValue(newValue));}
 }

@@ -47,7 +47,7 @@
 #include "G4Step.hh"
 #include "G4Track.hh"
 #include "G4VParticleChange.hh"
-#include "test31PhysicsList.hh"
+//#include "test31PhysicsList.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -58,7 +58,7 @@ class test31StepCut : public G4VDiscreteProcess
 {
 public: // Without description   
 
-   test31StepCut(const G4String&, const test31PhysicsList*);
+   test31StepCut(const G4String& name = "stepCut");
 
   ~test31StepCut();
 
@@ -67,10 +67,11 @@ public: // Without description
 
    G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
+   void SetMaxStep(G4double val) {maxChargedStep = val;};
+
 protected:
 
-     // it is not needed here !
-  G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*);
+   G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*);
 			    
 private:
   
@@ -78,7 +79,8 @@ private:
   test31StepCut(const test31StepCut &right);
   const test31StepCut& operator=(const test31StepCut &right);
 
-  const test31PhysicsList* thePhysics;
+  G4double maxChargedStep;
+
 };
 
 // inlined function members implementation
@@ -94,8 +96,7 @@ inline G4double test31StepCut::PostStepGetPhysicalInteractionLength(
   *condition = NotForced;
    G4double step = DBL_MAX;
 
-   if(aTrack.GetVolume()->GetName() == "Absorber")
-        step = thePhysics->GetMaxChargedStep();
+   if(aTrack.GetVolume()->GetName() == "Absorber") step = maxChargedStep;
 
    return step;
 }
@@ -115,7 +116,7 @@ inline G4VParticleChange* test31StepCut::PostStepDoIt(const G4Track& aTrack,
 inline G4double test31StepCut::GetMeanFreePath(const G4Track&, G4double,
                                               G4ForceCondition*)
 {
-  return 0.;
+  return DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

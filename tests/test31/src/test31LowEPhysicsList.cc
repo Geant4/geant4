@@ -39,6 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "test31LowEPhysicsList.hh"
+#include "G4ProcessManager.hh"
 
 #include "G4LowEnergyRayleigh.hh"
 #include "G4LowEnergyCompton.hh"   
@@ -62,13 +63,24 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-test31LowEPhysicsList::test31LowEPhysicsList()
-{
-  verbose = 0;
-  nuclStop = true;
-  barkas = true;
-  table = G4String("");
-}
+test31LowEPhysicsList::test31LowEPhysicsList(const G4String& name, 
+  G4int ver, G4bool nuc, G4bool bar, const G4String& tab) :
+  G4VPhysicsConstructor(name),
+  verbose(ver),
+  nuclStop(nuc),
+  barkas(bar),
+  table(tab)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+test31LowEPhysicsList::~test31LowEPhysicsList()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void test31LowEPhysicsList::ConstructParticle()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -107,8 +119,11 @@ void test31LowEPhysicsList::ConstructProcess()
       lei->SetCutForLowEnSecElectrons(1.0*MeV);
       lei->SetEnlossFluc(false);
       // lei->ActivateAuger(true);
+      lei->SetVerboseLevel(verbose);
+      G4LowEnergyBremsstrahlung* bre = new G4LowEnergyBremsstrahlung();
+      bre->SetVerboseLevel(verbose);
       pmanager->AddProcess(lei,  -1, 2,2);
-      pmanager->AddProcess(new G4LowEnergyBremsstrahlung(), -1,-1,3);   
+      pmanager->AddProcess(bre,  -1,-1,3);   
 
     } else if (particleName == "e+") {
       if(0 < verbose) G4cout << "LowE e+" << G4endl; 
@@ -139,7 +154,7 @@ void test31LowEPhysicsList::ConstructProcess()
               )
     {
       if(0 < verbose) G4cout << "LowE " << particleName << G4endl; 
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      //      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
       G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
 
       if(nuclStop) hIon->SetNuclearStoppingOn();
@@ -149,9 +164,11 @@ void test31LowEPhysicsList::ConstructProcess()
       else         hIon->SetBarkasOff();
 
       hIon->SetVerboseLevel(verbose);
+           hIon->SetEnlossFluc(false);
 
       if(table == G4String("Ziegler1977He") ||
          table == G4String("Ziegler1977H") ||
+         table == G4String("Ziegler1985p") ||
          table == G4String("ICRU_R49p") ||
          table == G4String("ICRU_R49He") ||
          table == G4String("ICRU_R49PowersHe") ) {

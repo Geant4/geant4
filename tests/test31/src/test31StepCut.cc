@@ -40,16 +40,11 @@
 
 #include "test31StepCut.hh"
 
-#include "G4Step.hh"
-#include "G4UserLimits.hh"
-#include "G4VParticleChange.hh"
-#include "G4EnergyLossTables.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-test31StepCut::test31StepCut(const G4String& aName, const test31PhysicsList* list)
- :G4VDiscreteProcess(aName),
-  thePhysics(list)
+test31StepCut::test31StepCut(const G4String& aName)
+  :G4VDiscreteProcess(aName),
+   maxChargedStep(DBL_MAX)
 {
   if (verboseLevel>0) {
      G4cout << GetProcessName() << " is created "<< G4endl;

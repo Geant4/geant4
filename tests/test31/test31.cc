@@ -58,7 +58,7 @@ int main(int argc,char** argv) {
 
   G4int verbose = 1;
   //choose the Random engine
-  //  HepRandom::setTheEngine(new RanecuEngine);
+  HepRandom::setTheEngine(new RanecuEngine);
   
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager();
@@ -69,7 +69,7 @@ int main(int argc,char** argv) {
   det->SetVerbose(verbose);
   if(verbose >0) G4cout << "Detector Construction is defined" << G4endl;
   
-  runManager->SetUserInitialization(new test31PhysicsList(det));
+  runManager->SetUserInitialization(new test31PhysicsList());
   if(verbose >0) G4cout << "Physics List is defined" << G4endl;
 
 #ifdef G4VIS_USE

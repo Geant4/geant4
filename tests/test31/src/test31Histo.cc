@@ -117,7 +117,7 @@ void test31Histo::EndOfHisto()
     G4double sig = 0.0;
     if(zend2 > 0.) sig = sqrt(zend2);
     zend2 = sig / sqrt(zEvt);
-    G4cout << setprecision(4) << "Range(mm)= " << zend/mm 
+    G4cout << setprecision(5) << "Range(mm)= " << zend/mm 
            << "; Stragling(mm)= " << sig/mm 
            << setprecision(2) << " +- " << zend2/mm 
            << "    " << zEvt << " events for range" << G4endl;

@@ -67,12 +67,11 @@ class test31PhysicsListMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* cutECmd;
     G4UIcmdWithADoubleAndUnit* cutPCmd;
     G4UIcmdWithADoubleAndUnit* eCmd;
-    G4UIcmdWithADoubleAndUnit* lowLimCmd;
-    G4UIcmdWithADoubleAndUnit* highLimCmd;
     G4UIcmdWithADoubleAndUnit* setMaxStepCmd;     
     G4UIcmdWithAString*        EMPhysicsCmd;
     G4UIcmdWithAString*        HadPhysicsCmd;
     G4UIcmdWithAString*        decayCmd;
+    G4UIcmdWithAString*        tCmd;
     G4UIcmdWithAnInteger*      verbCmd;
 
 };

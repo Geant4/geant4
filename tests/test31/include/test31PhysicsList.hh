@@ -20,98 +20,90 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// $Id: test31PhysicsList.hh,v 1.2 2002-10-28 09:57:36 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+//
+// ------------------------------------------------------------
+//	GEANT 4 class header file 
+// Class Description:
+//      This class is an derived class of G4VPhysicsConstructor
+//
+// --------------------------------------------------------------------------- 
+//	History
+//        Created:       14.10.02  V.Ivanchenko provide modular list on base 
+//                                 of old test31PhysicsList
+//
+//        Modified:      
+// 
+// ---------------------------------------------------------------------------
+//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #ifndef test31PhysicsList_h
 #define test31PhysicsList_h 1
 
-//---------------------------------------------------------------------------
-//
-// ClassName:   test31PhysicsList
-//  
-// Description: test31 PhysicsList 
-//
-// Authors:    07.04.01 V.Ivanchenko
-//
-// Modified:
-//
-//----------------------------------------------------------------------------
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#include "G4VUserPhysicsList.hh"
-#include "test31DetectorConstruction.hh"
-#include "test31VEMPhysicsList.hh"
-#include "test31VHadronPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
+#include "test31StepCut.hh"
 #include "globals.hh"
 
 class test31PhysicsListMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class test31PhysicsList: public G4VUserPhysicsList
+class test31PhysicsList: public G4VModularPhysicsList
 {
-public: // Without description
-    test31PhysicsList(const test31DetectorConstruction*);
+  public:
+
+    test31PhysicsList();
    ~test31PhysicsList();
 
-public: // Without description
-    void SetGammaCut(G4double);
-    void SetElectronCut(G4double);
-    void SetProtonCut(G4double);
-    void SetElectronCutByEnergy(G4double);
-    void SetLowEnergyLimit(G4double);
-    void SetHighEnergyLimit(G4double);
-    void SetMaxStep(G4double);
-    void SetEMPhysicsList(const G4String&);  
-    void SetHadronPhysicsList(const G4String&);  
-    void SetDecay(const G4String& name) {decayPhysics = name;};  
-    inline void SetVerbose(G4int val) {verbose = val;};    
-    inline G4int GetVerbose() const {return verbose;};    
-    inline G4double GetMaxChargedStep() const {return maxChargedStep;};    
-
-protected:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
-
-private:
-    void InitializeMe();
+    void AddPhysicsList(const G4String& name);
     void SetCuts();
 
-    // these methods Construct particles 
-    void ConstructMyBosons();
-    void ConstructMyLeptons();
-    void ConstructMyMesons();
-    void ConstructMyBarions();
-    void ConstructMyIons();
+    void SetCutForGamma(G4double);
+    void SetCutForElectron(G4double);
+    void SetCutForPositron(G4double);
+    void SetCutForAll(G4double val) {SetCutForGamma(val);
+                                     SetCutForElectron(val);
+                                     SetCutForPositron(val);}
 
-  // these methods Construct physics processes and register them
-    void ConstructDecay();
-    
+    void SetMaxStep(G4double val)  {theStepCut.SetMaxStep(val);};
+
+    void SetNuclearStopping(G4String st) {if(st == "on") nuclStop = true;
+                                          else           nuclStop = false;}
+    void SetBarkas(G4String st)          {if(st == "on") barkas = true;
+                                          else           barkas = false;}
+    void SetStoppingTable(G4String tab)  {table = tab;}
+
+    void SetVerbose(G4int val) {verbose = val;};    
+    G4int GetVerbose() const {return verbose;};    
+       
   private:
-
-    const test31DetectorConstruction* pDet;
-    test31PhysicsListMessenger* theMessenger;
-    test31VEMPhysicsList* theEMList;
-    test31VHadronPhysicsList* theHadList;
-
     G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForProton;
-    G4double maxChargedStep;    
-    G4double lowEnergyLimit;
-    G4double highEnergyLimit;
-
-    G4String emPhysics;
-    G4String hadronPhysics;
-    G4String decayPhysics;
-
+    G4double cutForElectron; 
+    G4double cutForPositron;
+    G4double currentDefaultCut;
+    G4double theMaxStep;
+    G4bool   nuclStop;
+    G4bool   barkas;
+    G4String table;
     G4int    verbose;
-    G4bool   physicsIsDefined;
+
+    G4bool   emPhysicsListIsRegistered;
+    G4bool   hadPhysicsListIsRegistered;
+    
+    test31PhysicsListMessenger* pMessenger;         
+
+    test31StepCut  theStepCut;    
+
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
-
-
 

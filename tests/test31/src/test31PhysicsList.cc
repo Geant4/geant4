@@ -20,403 +20,208 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//---------------------------------------------------------------------------
-//
-//---------------------------------------------------------------------------
-//
-// ClassName:   test31PhysicsList
-//  
-// Description: test31 PhysicsList for Geant4 tests 
-//
-// Authors:   07.04.01  V.Ivanchenko 
-//
-// Modified:
-//
-//----------------------------------------------------------------------------
-//
+// 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "test31PhysicsList.hh"
-#include "test31DetectorConstruction.hh"
 #include "test31PhysicsListMessenger.hh"
-#include "test31LowEPhysicsList.hh"
-#include "test31StanPhysicsList.hh"
-#include "test31StanMAPhysicsList.hh"
-#include "test31HadronPhysicsList.hh"
-#include "test31HadronPhysicsList1.hh"
-#include "test31StepCut.hh"
-
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
-#include "G4IonC12.hh"
-#include "G4IonAr40.hh"
-#include "G4IonFe56.hh"
-#include "G4ProcessManager.hh"
-#include "G4ProcessVector.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-#include "G4Material.hh"
-#include "G4EnergyLossTables.hh"
-#include "G4ios.hh"
-#include "g4std/iomanip"                
-#include "G4Decay.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-test31PhysicsList::test31PhysicsList(const test31DetectorConstruction* p):
-  pDet(p),
-  physicsIsDefined(false)
-{
-  InitializeMe(); 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void test31PhysicsList::InitializeMe()
-{
-  verbose = pDet->GetVerbose();
  
-  // default cuts
-  cutForGamma     = 1.0*cm;
-  cutForElectron  = 1.0*mm;
-  cutForProton    = 1.0*mm;
-  maxChargedStep  = DBL_MAX; 
-  lowEnergyLimit  = 10.0*eV;
-  highEnergyLimit  = 100.0*GeV;
+#include "G4UnitsTable.hh"
+#include "test31Particles.hh"
+#include "test31GeneralPhysics.hh"
+#include "test31StandardEM.hh"
+#include "test31ModelEM.hh"
+#include "test31LowEPhysicsList.hh"
+#include "test31HadronElastic.hh"
+#include "test31PreCompound.hh"
+#include "test31LEparametrised.hh"
+#include "test31CHIPS.hh"
 
-  theMessenger = new test31PhysicsListMessenger(this);
 
-  emPhysics = G4String("");
-  hadronPhysics = G4String("");
-  decayPhysics = G4String("none");
-  SetEMPhysicsList(G4String("LowEnergy"));  
-  SetHadronPhysicsList(G4String("none"));
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+test31PhysicsList::test31PhysicsList() : G4VModularPhysicsList(),
+  emPhysicsListIsRegistered(false),
+  hadPhysicsListIsRegistered(false)
+{   
+  currentDefaultCut   = 1.0*mm;
+  cutForGamma         = currentDefaultCut;
+  cutForElectron      = currentDefaultCut;
+  cutForPositron      = currentDefaultCut;
+  theMaxStep          = DBL_MAX;
+
+  nuclStop = true;
+  barkas   = true;
+  table    = "";
+  verbose  = 1;
+
+  pMessenger = new test31PhysicsListMessenger(this);
+
+  SetVerboseLevel(verbose);
+
+  // Particles
+  RegisterPhysics( new test31Particles("particles") );
+
+  // General Physics
+  RegisterPhysics( new test31GeneralPhysics("general", &theStepCut) );
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 test31PhysicsList::~test31PhysicsList()
 {
-  delete theMessenger; 
+  delete pMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void test31PhysicsList::ConstructParticle()
+void test31PhysicsList::AddPhysicsList(const G4String& name)
 {
-  // In this method, static member functions should be called
-  // for all particles which you want to use.
-  // This ensures that objects of these particle types will be
-  // created in the program. 
+  if (verboseLevel>1) {
+    G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+  }
 
-  ConstructMyBosons();
-  ConstructMyLeptons();
-  ConstructMyBarions();
-  ConstructMyMesons();
-  ConstructMyIons();
-}
+  if("standard" == name) {
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+    if (emPhysicsListIsRegistered) {
 
-void test31PhysicsList::ConstructMyBosons()
-{
-  // pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();
-  
-  // gamma
-  G4Gamma::GammaDefinition();
-}
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">" 
+             << " cannot be register additionally to existing one"
+             << G4endl;
+    } else {
 
-void test31PhysicsList::ConstructMyLeptons()
-{
-  // leptons
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
-
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void test31PhysicsList::ConstructMyMesons()
-{
- //  mesons
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
-  G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus::KaonMinusDefinition();
-  G4Eta::EtaDefinition();
-  G4EtaPrime::EtaPrimeDefinition();
-  G4KaonZero::KaonZeroDefinition();
-  G4AntiKaonZero::AntiKaonZeroDefinition();
-  G4KaonZeroLong::KaonZeroLongDefinition();
-  G4KaonZeroShort::KaonZeroShortDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void test31PhysicsList::ConstructMyBarions()
-{
-//  barions
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-  G4Neutron::NeutronDefinition();
-  G4AntiNeutron::AntiNeutronDefinition();
-  G4Lambda::LambdaDefinition();
-  G4SigmaZero::SigmaZeroDefinition();
-  G4SigmaPlus::SigmaPlusDefinition();
-  G4SigmaMinus::SigmaMinusDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void test31PhysicsList::ConstructMyIons()
-{
-//  Ions
-  G4Deuteron::DeuteronDefinition();
-  G4Triton::TritonDefinition();
-  G4Alpha::AlphaDefinition();
-  G4IonC12::IonC12Definition();
-  G4IonAr40::IonAr40Definition();
-  G4IonFe56::IonFe56Definition();
-  G4GenericIon::GenericIonDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void test31PhysicsList::ConstructProcess()
-{
-  verbose = pDet->GetVerbose();
-  AddTransportation();
-  if(theEMList)  theEMList->ConstructEM();
-  if(theHadList) theHadList->ConstructHad();
-  ConstructDecay();
-  physicsIsDefined = true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void test31PhysicsList::ConstructDecay()
-{
-  // Add Decay Process
-  G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
-  test31StepCut* theStepCut = new test31StepCut(G4String("user cut"),this);
-
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (theDecayProcess->IsApplicable(*particle) && decayPhysics != "none") { 
-      pmanager ->AddProcess(theDecayProcess);
-
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
+      RegisterPhysics( new test31StandardEM(name) );
+      emPhysicsListIsRegistered = true;
     }
-    if (particle->GetPDGCharge()) { 
-      pmanager ->AddProcess(theStepCut);
-      pmanager ->SetProcessOrdering(theStepCut, idxPostStep);
+
+  } else if("model" == name) {
+
+    if (emPhysicsListIsRegistered) {
+
+      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">" 
+             << " cannot be register additionally to existing one"
+             << G4endl;
+    } else {
+
+      RegisterPhysics( new test31ModelEM(name) );
+      emPhysicsListIsRegistered = true;
     }
+
+  } else if("lowenergy" == name) {
+
+    if (emPhysicsListIsRegistered) {
+
+      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">" 
+             << " cannot be register additionally to existing one"
+             << G4endl;
+    } else {
+
+      RegisterPhysics( new test31LowEPhysicsList(name, verbose, nuclStop, barkas, table) );
+      emPhysicsListIsRegistered = true;
+    }
+
+  } else if("LEparametrised" == name) {
+
+    if (hadPhysicsListIsRegistered) {
+
+      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">" 
+             << " cannot be register additionally to existing one"
+             << G4endl;
+    } else {
+
+      RegisterPhysics( new test31LEparametrised(name) );
+      hadPhysicsListIsRegistered = true;
+    }
+
+  } else if("PreCompound" == name) {
+
+    if (hadPhysicsListIsRegistered) {
+
+      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">" 
+             << " cannot be register additionally to existing one"
+             << G4endl;
+    } else {
+
+      RegisterPhysics( new test31PreCompound(name) );
+      hadPhysicsListIsRegistered = true;
+    }
+
+  } else if("CHIPS" == name) {
+
+    if (hadPhysicsListIsRegistered) {
+
+      G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">" 
+             << " cannot be register additionally to existing one"
+             << G4endl;
+    } else {
+
+      RegisterPhysics( new test31CHIPS(name) );
+      hadPhysicsListIsRegistered = true;
+    }
+  } else if("elastic" == name) {
+
+    RegisterPhysics( new test31HadronElastic(name) );
+
+  } else {
+
+    G4cout << "test31PhysicsList::AddPhysicsList: <" << name << ">" 
+           << " is not defined"
+           << G4endl;
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void test31PhysicsList::SetCuts()
 {
-
-  //special for low energy physics
-  G4Gamma   ::SetEnergyRange(lowEnergyLimit,highEnergyLimit);
-  G4Electron::SetEnergyRange(lowEnergyLimit,highEnergyLimit);
-  G4Positron::SetEnergyRange(lowEnergyLimit,highEnergyLimit);
-   
-  if (verbose > 0){
-    G4cout << "test31PhysicsList::SetCuts: "
-           << "CutLength = " << maxChargedStep/mm << " mm" << G4endl;
+     
+  if (verboseLevel >0){
+    G4cout << "test31PhysicsList::SetCuts:";
+    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }  
+
   // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
-
-   G4cout << "test31PhysicsList: Set cuts for all particles " << G4endl; 
-
-   SetCutValue(cutForGamma,"gamma");
-
-   SetCutValue(cutForElectron,"e-");
-   SetCutValue(cutForElectron,"e+");
-
-   SetCutValue(cutForProton,"mu-");
-   SetCutValue(cutForProton,"mu+");
-
+  // because some processes for e+/e- need cut values for gamma
+  SetCutValue(cutForGamma, "gamma");
+  SetCutValue(cutForElectron, "e-");
+  SetCutValue(cutForPositron, "e+");   
+  
   // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-
-  SetCutValue(cutForProton, "proton");
-
-  SetCutValue(cutForProton, "anti_proton");
-
-  SetCutValueForOthers(cutForProton);
-
-  if (verbose > 1) {
-    G4cout << "test31PhysicsList: Dump the table" << G4endl;
-  }
-  DumpCutValuesTable();
+  // because some processes for hadrons need cut values for proton/anti_proton
+  SetCutValue(currentDefaultCut, "proton");
+  SetCutValue(currentDefaultCut, "anti_proton");
+     
+  SetCutValueForOthers(currentDefaultCut);
+  
+  if (verboseLevel>0) DumpCutValuesTable();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void test31PhysicsList::SetGammaCut(G4double val)
+void test31PhysicsList::SetCutForGamma(G4double cut)
 {
-  if(physicsIsDefined) ResetCuts();
-  cutForGamma = val;
+  ResetCuts();
+  cutForGamma = cut;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void test31PhysicsList::SetElectronCut(G4double val)
+void test31PhysicsList::SetCutForElectron(G4double cut)
 {
-  if(physicsIsDefined) ResetCuts();
-  cutForElectron = val;
+  ResetCuts();
+  cutForElectron = cut;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void test31PhysicsList::SetProtonCut(G4double val)
+void test31PhysicsList::SetCutForPositron(G4double cut)
 {
-  if(physicsIsDefined) ResetCuts();
-  cutForProton = val;
+  ResetCuts();
+  cutForPositron = cut;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void test31PhysicsList::SetElectronCutByEnergy(G4double energy)
-{
-  G4Material* currMat = pDet->GetAbsorberMaterial();
-  G4ParticleDefinition* part = G4Electron::ElectronDefinition();
-
-  // Get range from electron energy and set it as a cut
-  SetElectronCut(G4EnergyLossTables::GetRange(part,energy,currMat));
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void test31PhysicsList::SetLowEnergyLimit(G4double energy)
-{
-  if(physicsIsDefined) ResetCuts();
-  lowEnergyLimit = energy;
-  G4cout << "test31PhysicsList: lowEnergyLimit = " 
-         << lowEnergyLimit/eV << " eV" << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void test31PhysicsList::SetHighEnergyLimit(G4double energy)
-{
-  if(physicsIsDefined) ResetCuts();
-  highEnergyLimit = energy;
-  G4cout << "test31PhysicsList: highEnergyLimit = " 
-         << highEnergyLimit/GeV << " GeV" << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void test31PhysicsList::SetMaxStep(G4double step)
-{
-  maxChargedStep = step;
-  G4cout << "test31PhysicsList: MaxChargedStep = " 
-         << maxChargedStep/mm << " mm" << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void test31PhysicsList::SetEMPhysicsList(const G4String& name)
-{
-  verbose = pDet->GetVerbose();
-  // Name is not changed
-  if(name == emPhysics) return;
-
-  // Define hadronic process class
-
-  if(name == "Standard") {
-    theEMList = new test31StanPhysicsList();
-    theEMList->SetVerbose(verbose);
-
-  } else if (name == "MAstandard") {
-    theEMList = new test31StanMAPhysicsList();
-    theEMList->SetVerbose(verbose);
-
-  } else if (name == "LowEnergy") {
-    theEMList = new test31LowEPhysicsList();
-    theEMList->SetVerbose(verbose);
-
-  } else if (name == "none") {
-    theEMList = 0;
-
-  } else {
-    G4cout << "HsPhysicsList: There are no EMPhysicsList called <"
-           << name << ">, so old one is used" << G4endl;
-    return;
-  }
-
-  emPhysics = name;   
-  G4cout << "HsPhysicsList: <" << name 
-         << "> EMPhysicsList is set" << G4endl;
-  if(physicsIsDefined) ResetCuts(); 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void test31PhysicsList::SetHadronPhysicsList(const G4String& name)
-{
-  verbose = pDet->GetVerbose();
-  // Name is not changed
-  if(name == hadronPhysics) return;
-
-  // Define hadronic process class
-  G4String stand = G4String("Standard");
-  G4String hado  = G4String("LowEnergy");
-  G4String frag  = G4String("IonFragmentation");
-  G4String none  = G4String("none");
-
-  if(name == "LEparametrised") {
-    theHadList = new test31HadronPhysicsList();
-    theHadList->SetVerbose(verbose);
-
-  } else if (name == "CHIPS") {
-    theHadList = new test31HadronPhysicsList1();
-    theHadList->SetVerbose(verbose);
-
-  } else if (name == "none") {
-    theHadList = 0;
-
-  } else {
-    G4cout << "HsPhysicsList: There are no HadronicPhysicsList called <"
-           << name << ">, so old one is used" << G4endl;
-    return;
-  }
-
-  hadronPhysics = name;   
-  G4cout << "HsPhysicsList: <" << name 
-         << "> HadronicPhysicsList is set" << G4endl;
-  if(physicsIsDefined) ResetCuts(); 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
