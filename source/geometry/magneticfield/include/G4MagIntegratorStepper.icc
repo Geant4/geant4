@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorStepper.icc,v 1.6 2002-05-07 16:11:59 japost Exp $
+// $Id: G4MagIntegratorStepper.icc,v 1.7 2002-11-20 18:10:44 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,14 +34,21 @@ G4EquationOfMotion* G4MagIntegratorStepper::GetEquationOfMotion()
 inline
 G4int G4MagIntegratorStepper::GetNumberOfVariables() const
 {
-  return fNumberOfVariables;
+  return fNoIntegrationVariables;
 }
 
+
 inline
-void G4MagIntegratorStepper::SetNumberOfVariables(G4int newNo)
+G4int G4MagIntegratorStepper::GetNumberOfStateVariables() const
 {
-  fNumberOfVariables = newNo;
+  return fNoStateVariables;
 }
+
+// inline
+// void G4MagIntegratorStepper::SetNumberOfVariables(G4int newNo)
+// {
+//   fNumberOfVariables = newNo;
+// }
 
 inline
 void G4MagIntegratorStepper::RightHandSide( const  double y[], double dydx[] )   
