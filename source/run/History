@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2001-10-24 15:25:19 gcosmo Exp $
+$Id: History,v 1.46 2001-10-24 17:59:41 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 24, 2004 M.Asai (run-V03-02-08)
 
 Oct 20, 2001 H.Kurasige
 - Modified Set/GetCuts() related methods in G4VUserPhysicsList
