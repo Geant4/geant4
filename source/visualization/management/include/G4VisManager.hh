@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.36 2005-03-03 16:24:10 allison Exp $
+// $Id: G4VisManager.hh,v 1.37 2005-03-09 16:29:35 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -170,28 +170,28 @@ public: // With description
   // for representing hits, digis, etc.
 
   void Draw (const G4Circle&,
-    const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4NURBS&,
-    const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4Polyhedron&,
-    const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4Polyline&,
-    const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4Polymarker&,
-    const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4Scale&,
-    const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4Square&,
-    const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4Text&,
-    const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   ////////////////////////////////////////////////////////////////////
   // Now functions that implement the pure virtual functions of
@@ -199,8 +199,7 @@ public: // With description
   // visualization attributes needed in some cases override any
   // visualization attributes that are associated with the object
   // itself - thus you can, for example, change the colour of a
-  // physical volume.  The objectTransformation defaults to
-  // G4Transform3D::Identity by inheritance from G4VVisManager.
+  // physical volume.
 
   void Draw (const G4VHit&);
 
@@ -210,13 +209,13 @@ public: // With description
   // i_mode defaults to 0 by inheritance from G4VVisManager.
 
   void Draw (const G4LogicalVolume&, const G4VisAttributes&,
-	     const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4VPhysicalVolume&, const G4VisAttributes&,
-	     const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4VSolid&, const G4VisAttributes&,
-	     const G4Transform3D& objectTransformation);
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   ////////////////////////////////////////////////////////////////////////
   // Now other pure virtual functions of G4VVisManager...
