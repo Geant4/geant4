@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.61 2000-01-31 11:30:04 gcosmo Exp $
+# $Id: architecture.gmk,v 1.62 2000-02-14 11:27:26 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -478,7 +478,7 @@ ifeq ($(G4SYSTEM),HP-aCC)
       CCFLAGS  := -g
     endif
   endif
-  CXXFLAGS += +DAportable
+  CXXFLAGS += +DAportable +W823
   CPPFLAGS += -I/usr
   ifdef G4MAKESHLIB
     CXXFLAGS += +Z
