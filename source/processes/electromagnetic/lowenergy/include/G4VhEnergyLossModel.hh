@@ -41,9 +41,9 @@ class G4VhEnergyLossModel
 
 public:
 
-  G4VhEnergyLossModel();
+  G4VhEnergyLossModel() {};
 
-  virtual ~G4VhEnergyLossModel();
+  virtual ~G4VhEnergyLossModel() {};
 
   virtual G4double EnergyLoss() const = 0;
 
