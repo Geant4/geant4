@@ -48,6 +48,7 @@
 // 15-02-03 Lambda table can be scaled (V.Ivanchenko)
 // 17-02-03 Fix problem of store/restore tables (V.Ivanchenko)
 // 18-02-03 Add control on CutCouple usage (V.Ivanchenko)
+// 26-02-03 Simplify control on GenericIons (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -261,13 +262,11 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
 
   // Are particle defined?
   if( !particle ) particle = &part;
+  const G4ProcessManager* pm = part.GetProcessManager();
+  const G4ProcessManager* im = 
+        (G4GenericIon::GenericIon())->GetProcessManager();
 
-  if(part.GetParticleName() != "GenericIon" &&
-     part.GetParticleType() == "nucleus" &&
-     part.GetParticleSubType() == "generic")
-  {
-     return;
-  }
+  if(part.GetParticleName() != "GenericIon" && pm == im) return;
 
   if( !baseParticle ) baseParticle = DefineBaseParticle(particle);
 
