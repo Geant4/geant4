@@ -5,15 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.3 2000-08-02 16:19:52 vnivanch Exp $
+// $Id: G4hLowEnergyLoss.cc,v 1.4 2000-08-03 08:23:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: 
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file 
 //
 //      For information related to this code contact:
-//      CERN, IT Division, ASD group
+//      GEANT4 Collaboration
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
 //      ---------- G4hEnergyLoss physics process -----------
@@ -1272,7 +1271,7 @@ G4double G4hLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
           if(a1>alim)
           {
             siga=sqrt(a1) ;
-            p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
+            p1 = G4std::max(0,int(G4RandGauss::shoot(a1,siga)+0.5));
           }
           else
             p1 = G4Poisson(a1);
@@ -1285,7 +1284,7 @@ G4double G4hLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
           if(a1>alim)
           {
             siga=sqrt(a1) ;
-            p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
+            p1 = G4std::max(0,int(G4RandGauss::shoot(a1,siga)+0.5));
           }
           else
             p1 = G4Poisson(a1);
@@ -1313,14 +1312,14 @@ G4double G4hLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a1>alim)
       {
         siga=sqrt(a1) ;
-        p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
+        p1 = G4std::max(0,int(G4RandGauss::shoot(a1,siga)+0.5));
       }
       else
        p1 = G4Poisson(a1);
       if(a2>alim)
       {
         siga=sqrt(a2) ;
-        p2 = G4std::max(0,int(RandGauss::shoot(a2,siga)+0.5));
+        p2 = G4std::max(0,int(G4RandGauss::shoot(a2,siga)+0.5));
       }
       else
         p2 = G4Poisson(a2);
@@ -1329,7 +1328,7 @@ G4double G4hLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a3>alim)
       {
         siga=sqrt(a3) ;
-        p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
+        p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
       }
       else
         p3 = G4Poisson(a3);
@@ -1343,14 +1342,14 @@ G4double G4hLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
           namean     = p3*rfac;
 
           sa         = nmaxCont1*rfac;
-          na         = RandGauss::shoot(namean,sa);
+          na         = G4RandGauss::shoot(namean,sa);
           if (na > 0.)
             {
               alfa   = w2*(nmaxCont2+p3)/(w2*nmaxCont2+p3);
               alfa1  = alfa*log(alfa)/(alfa-1.);
               ea     = na*ipotFluct*alfa1;
               sea    = ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
-              lossc += RandGauss::shoot(ea,sea);
+              lossc += G4RandGauss::shoot(ea,sea);
             }
         }
 
