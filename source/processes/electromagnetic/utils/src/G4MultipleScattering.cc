@@ -20,7 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.23 2002-08-12 08:48:20 urban Exp $
+//
+// $Id: G4MultipleScattering.cc,v 1.24 2002-08-15 10:55:50 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -48,7 +49,7 @@
 // 24-05-02 changes in angle distribution and boundary algorithm, L.Urban
 // 11-06-02 bug fixed in ComputeTransportCrossSection, L.Urban
 // 12-08-02 bug fixed in PostStepDoIt (lateral displacement), L.Urban
-//
+// 15-08-02 new angle distribution, L.Urban
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,7 +67,7 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
      : G4VContinuousDiscreteProcess(processName),
        theTransportMeanFreePathTable(0),
        fTransportMeanFreePath (1.e12),kappa(2.5),
-       taubig(10.),tausmall(1.e-15),taulim(1.e-5),
+       taubig(8.0),tausmall(1.e-15),taulim(1.e-5),
        LowestKineticEnergy(0.1*keV),
        HighestKineticEnergy(100.*TeV),
        TotBin(100),
@@ -81,7 +82,6 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
        range(1.0),T1(1.0),lambda1(-1.),cth1(1.),z1(1.e10),dtrl(0.15),
        tuning (1.00),
        cparm (0.0),
-       Tlim(1.e6*MeV),
        fLatDisplFlag(true),
        NuclCorrPar (0.0615),
        FactPar(0.40)
@@ -168,7 +168,6 @@ void G4MultipleScattering::BuildPhysicsTable(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4double G4MultipleScattering::ComputeTransportCrossSection(
                    const G4ParticleDefinition& aParticleType,
                          G4double KineticEnergy,
@@ -189,7 +188,6 @@ G4double G4MultipleScattering::ComputeTransportCrossSection(
                              10000.0*MeV};
 
  // corr. factors for e-/e+ lambda
-
           G4double celectron[15][23] =
           {{1.125,1.072,1.051,1.047,1.047,1.050,1.052,1.054,
             1.054,1.057,1.062,1.069,1.075,1.090,1.105,1.111,
@@ -285,7 +283,6 @@ G4double G4MultipleScattering::ComputeTransportCrossSection(
             1.456,1.412,1.364,1.328,1.307,1.282,1.2026     }};
 
    G4double sigma;
-
    G4double Z23 = 2.*log(AtomicNumber)/3.; Z23 = exp(Z23);
 
    G4double ParticleMass = aParticleType.GetPDGMass();
@@ -334,7 +331,6 @@ G4double G4MultipleScattering::ComputeTransportCrossSection(
   G4double tau=KineticEnergy/electron_mass_c2 ;
   KineticEnergy = sqrt(ParticleMass*ParticleMass+tau*(tau+2.)*
                        electron_mass_c2*electron_mass_c2)-ParticleMass ;
-  
   // interpolate in AtomicNumber and beta2
   // get bin number in Z
   G4int iZ = 14;
@@ -360,16 +356,16 @@ G4double G4MultipleScattering::ComputeTransportCrossSection(
   G4double ratb2 = (beta2-b2small)/(b2big-b2small);
   G4double beta2lim = Tlim*(Tlim+2.*electron_mass_c2)/
                       ((Tlim+electron_mass_c2)*(Tlim+electron_mass_c2));
- 
-  G4double corrfactor ;  
+
+  G4double corrfactor ; 
   if(T < Tlim)
     corrfactor = tuning*(1.+cparm*beta2lim)/(1.+cparm*beta2);
   else
     corrfactor = tuning ;
-  
+
   G4double c1,c2,cc1,cc2,corr;
   if (Charge < 0.)
-    { 
+    {
        c1 = celectron[iZ][iT];
        c2 = celectron[iZ+1][iT];
        cc1 = c1+ratZ*(c2-c1);
@@ -403,9 +399,10 @@ G4double G4MultipleScattering::ComputeTransportCrossSection(
      (aParticleType.GetParticleName() != "e+")   )
      sigma /= corrnuclsize;
 
+
   return sigma;
 
-} 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -581,11 +578,11 @@ G4VParticleChange* G4MultipleScattering::PostStepDoIt(
                            (materialIndex)->GetValue(KineticEnergy,isOut);
 
   //  change direction first ( scattering ) 
-  G4double cth,tau;
-  tau = truestep/fTransportMeanFreePath;
+  G4double cth =1 ;
+  G4double tau = truestep/fTransportMeanFreePath;
 
   if(KineticEnergy <= 0.)
-    cth = -1.+2.*G4UniformRand() ;
+     ;
   else
   {
     if     (tau < tausmall) cth =  1.;
@@ -597,71 +594,74 @@ G4VParticleChange* G4MultipleScattering::PostStepDoIt(
       if(tau > taubig)   cth = -1.+2.*G4UniformRand();
       else
       {
-        const G4double alfa = 0.385 ;
-        const G4double beta = 0.0626 ;
-        const G4double c = 2.500 ;
-        const G4double x2mean3 = 1./3. ;
+       const G4double alfa0 = 2.4212   , alfa1 = 0.8267   ;
+       const G4double amax=25. ;
+       const G4double corra = 1.03 ;
+       const G4double tau1 = 0.2 , tau2 = 1.0 ;
+       const G4double b = 1. ;
+ 
+       G4double a,x0,c,xmean1,xmean2,
+                 xmeanth,prob,qprob ;
+       G4double ea,eaa,b1,bx,eb1,ebx,cnorm1,cnorm2,f1x0,f2x0 ;
 
-        G4double a,b,c1,bp1,bm1,bbp1,bbm1,
-                 xmean1,x2mean1,xmean2,x2mean2,
-                 x2mean,xmeanth,x2meanth,pp,qq ;
+       a = (alfa0-alfa1*sqrt(tau))/tau ;
+       if((tau > tau1) && (tau < tau2)) a *= corra ;
 
-        a = 2.*exp(-alfa*tau)/(1.-exp(-alfa*tau)) ;
+       x0 = exp(-tau) ;
 
-        xmean1 = a/(a+2.) ;
-        x2mean1= (a*a+a+2.)/((a+2.)*(a+3.)) ;
+       // from continuity of the 1st derivatives
+       c =  a*(b-x0) ;
+       if(c == 2.) c=2.000001 ;
 
-        b = exp((1.+beta)*tau) ;
+       if(a*(1.-x0) < amax)
+         ea = exp(-a*(1.-x0)) ;
+       else
+         ea = 0. ;
+       eaa = 1.-ea ; 
 
-        c1 = 1.-c ;
-        bp1=b+1. ;
-        bm1=b-1. ;
-        bbp1=exp(log(bp1)*c1) ;
-        bbm1=exp(log(bm1)*c1) ;
+       xmean1 = 1.-1./a+(1.-x0)*ea/eaa ;       
 
-        xmean2 = -(bbp1+bbm1)/(bbp1-bbm1)+(bp1*bbp1-bm1*bbm1)/
-                 ((2.-c)*(bbp1-bbm1)) ;
-        x2mean2= 1.-2.*(bp1*bbp1+bm1*bbm1)/((2.-c)*(bbp1-bbm1))+
-              2.*(bp1*bp1*bbp1-bm1*bm1*bbm1)/((2.-c)*(3.-c)*(bbp1-bbm1)) ;
+       b1 = b+1. ;
+       bx=b-x0 ;
+       eb1=exp((1.-c)*log(b1)) ;
+       ebx=exp((1.-c)*log(bx)) ;
 
-        xmeanth = exp(-tau) ;
-        x2meanth = (1.+2.*exp(-kappa*tau))/3. ;
+       xmean2 = (b1*eb1-bx*ebx)/((2.-c)*(eb1-ebx))-(eb1+x0*ebx)/(eb1-ebx) ;
 
-        pp = (xmeanth-xmean2)/(xmean1-xmean2) ;
-        x2mean = pp*x2mean1+(1.-pp)*x2mean2 ;
-        if(x2mean >= x2meanth)
-        {
-          qq = 1. ;
-        }
-        else
-        {
-          pp = (x2meanth*xmean1-x2mean1*xmeanth+x2mean3*xmeanth
-                +x2mean1*xmean2-x2mean3*xmean2-x2mean2*xmean1)/
-               (xmean2*x2mean1-xmean2*x2mean3-xmean1*x2mean2+xmean1*x2mean3) ;
+       xmeanth = exp(-tau) ;
 
-          qq = (xmeanth-(1.-pp)*xmean2)/(pp*xmean1) ;
-        }
+       cnorm1 = a/eaa ; 
+       cnorm2 = (1.-c)/(eb1-ebx) ;
+       f1x0 = cnorm1*exp(-a*(1.-x0)) ;
+       f2x0 = cnorm2/exp(c*log(b-x0)) ;
 
-        if(G4UniformRand() < pp)
-        {
-          if(G4UniformRand() < qq)
-          {
-            cth = -1.+2.*exp(log(G4UniformRand())/(1.+a)) ;
-          }
-          else
-          {
-            cth = -1.+2.*G4UniformRand() ;
-          }
-        }
-        else
-        {
-          cth = b- exp(log(bbp1-G4UniformRand()*(bbp1-bbm1))/c1) ;         
-        }
+       // from continuity at x=x0
+       prob = f2x0/(f1x0+f2x0) ;
+       // from xmean = xmeanth
+       qprob = (f1x0+f2x0)*xmeanth/(f2x0*xmean1+f1x0*xmean2) ;
 
+       // *******************************************
+       if(qprob > 1.)
+       {
+         qprob = 1. ;
+         prob = (xmeanth-xmean2)/(xmean1-xmean2) ; 
+       }
+       // *******************************************
+
+       // sampling of costheta
+       if(G4UniformRand() < qprob)
+       {
+         if(G4UniformRand() < prob)
+          cth = 1.+log(ea+G4UniformRand()*eaa)/a ;
+         else
+          cth = b-exp(log(eb1-G4UniformRand()*(eb1-ebx))/(1.-c)) ;
+       }
+       else
+         cth = -1.+2.*G4UniformRand() ;
       }
     }
   }
-  
+
   G4double sth  = sqrt(1.-cth*cth);
   G4double phi  = twopi*G4UniformRand();
   G4double dirx = sth*cos(phi), diry = sth*sin(phi), dirz = cth;
