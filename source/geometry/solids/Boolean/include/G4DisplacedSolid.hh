@@ -79,7 +79,7 @@ public:  // With description
     virtual       G4DisplacedSolid* GetDisplacedSolidPtr();
 
     // Access methods
-    G4VSolid*                GetConstituentSolid();
+    G4VSolid*                GetConstituentMovedSolid();
     const G4AffineTransform  GetTransform() const; 
     
     // Get the rotation/translation, as applied to the frame of reference
