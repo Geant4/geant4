@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.cc,v 1.10 2000-05-10 14:33:24 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.11 2000-05-11 13:11:23 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -19,6 +19,7 @@
 // #include "G4Field.hh"
                                        // #include "G4MagIntegratorStepper.hh"
 #include "G4MagIntegratorDriver.hh"
+#include "g4std/iomanip"
 
 //  For the moment fDeltaChord is a constant!
 
@@ -114,7 +115,7 @@ G4ChordFinder::AdvanceChordLimited(   G4FieldTrack& yCurrent,
   return stepPossible;
 }
 
-// #define  TEST_CHORD_PRINT  1
+#define  TEST_CHORD_PRINT  1
 
 // ..............................................................................
 
@@ -177,10 +178,11 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
 #endif
      }
 #ifdef  TEST_CHORD_PRINT
-     G4cout << " ChF/fnc: notrial " << noTrials 
-            << " this_step= "       << oldStepTrial 
-	    << " dChordStep=  "     << dChordStep
-            << " new_step= "        << stepTrial << endl;
+     G4cout.precision(5);
+     G4cout << " ChF/fnc: notrial " << G4std::setw( 3) << noTrials 
+            << " this_step= "       << G4std::setw(10) << oldStepTrial 
+	    << " dChordStep=  "     << G4std::setw(10) << dChordStep
+            << " new_step= "        << G4std::setw(10) << stepTrial << endl;
 #endif
      noTrials++; 
   }
@@ -189,7 +191,7 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
   stepOfLastGoodChord = stepTrial;
 #ifdef  TEST_CHORD_PRINT
   G4cout << "ChordF/FindNextChord:  NoTrials= " << noTrials 
-	 << " StepForGoodChord=" << stepTrial << endl;
+	 << " StepForGoodChord=" << G4std::setw(10) << stepTrial << endl;
 #endif
 
   yEnd=  yCurrent;  
@@ -219,6 +221,7 @@ G4double G4ChordFinder::NewStep(
 		   
 {
   G4double stepTrial;
+  static G4double lastStepTrial = 1.,  lastDchordStep= 1.;
 
 #if 0 
   if ( dChordStep > 1000. * fDeltaChord ){
@@ -233,11 +236,16 @@ G4double G4ChordFinder::NewStep(
   }
 #else
 
-  if ( dChordStep > 4.0 * fDeltaChord ){
+  const G4double  threshold = 1.21, multiplier = 0.9;   //  0.9 < 1 / sqrt(1.21)
+
+  if ( dChordStep > threshold * fDeltaChord ){
      stepTrial = stepTrialOld * sqrt( fDeltaChord / dChordStep );
   }else{
-     stepTrial= stepTrialOld * 0.5;   
+     stepTrial= stepTrialOld *  multiplier;    
   }
+
+  lastStepTrial = stepTrialOld; 
+  lastDchordStep= dChordStep;
 #endif 
 
   // A more sophisticated chord-finder could figure out a better
