@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst32EminCut.cc,v 1.2 2004-10-29 12:24:30 kurasige Exp $
+// $Id: Tst32EminCut.cc,v 1.3 2004-12-01 17:55:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,7 @@ G4VParticleChange* Tst32EminCut::PostStepDoIt(
 // 			    			    			    
 {
    aParticleChange.Initialize(aTrack);
-   aParticleChange.SetLocalEnergyDeposit (aTrack.GetKineticEnergy()) ;
+   aParticleChange.ProposeLocalEnergyDeposit(aTrack.GetKineticEnergy()) ;
    aParticleChange.ProposeTrackStatus(fStopAndKill);
    return &aParticleChange;
 }
