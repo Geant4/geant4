@@ -39,6 +39,7 @@
 // 20-01-03 Migrade to cut per region (V.Ivanchenko)
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 The set of models is defined for region (V.Ivanchenko)
+// 06-03-03 Fix in energy intervals for models (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -259,6 +260,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
         G4double tmin = model->LowEnergyLimit(particle);
         G4double tmax = model->HighEnergyLimit(particle);
+        if (n) tmin = G4std::max(tmin, eHigh[n-1]);
 
         if(1 < verboseLevel) {
           G4cout << "Model # " << ii << " for region <"
@@ -267,7 +269,6 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
                  << "; tmax(MeV)= " << tmax/MeV
                  << G4endl;
         }
-        if (n) tmin = G4std::max(tmin, eHigh[n]);
 
 	if (tmin < tmax) {
           modelAtRegion.push_back(ii);
@@ -276,9 +277,9 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 	  upperEkin[ii] = tmax;
 	  n++;
 	}
-	eLow[0] = 0.0;
       }
     }
+    eLow[0] = 0.0;
 
     if(1 < verboseLevel) {
       G4cout << "New G4RegionModels set with " << n << " models for region <"
@@ -440,6 +441,7 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
         G4cout << "Material= " << material->GetName()
                << "   E(MeV)= " << e/MeV
                << "  dEdx(MeV/mm)= " << dedx*mm/MeV
+               << "  fac= " << fac
                << G4endl;
     }
     aVector->PutValue(j, dedx);
