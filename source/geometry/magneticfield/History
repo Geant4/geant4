@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999-01-08 11:23:43 gunter Exp $
+$Id: History,v 1.3 1999-02-17 16:45:48 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,47 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov   19th, 1998   J. Apostolakis  -  field-00-04-01head
+February 17th, 1998   J. Apostolakis  -  field-01-00-01  
+
+ Tag  addition of Equation of Motion for Spin 
+      and fixes (which are also required for Energy integration)
+
+
+February 10th, 1998   J. Apostolakis
+
+All the following changes are needed for energy integration also:
+
+G4ChordFinder now passes to the constructed driver the number of variables.
+Because of the need for the stepper to know about it in its Abstract interface
+
+-> Moved theNumberOfVariables  from derived class G4MagErrorStepper
+                               to base class G4MagIntegratorStepper
+
+As a consequense the classes that derived from G4MagIntegratorStepper directly
+were changed: G4CashKarpRKF45, G4MagHelicalStepper, 
+
+
+February  9th, 1998    J. Apostolakis
+
+Equation of Motion:
+G4MagEqRhs.hh  Made SetChargeMomentumMass virtual, so that G4Mag_SpinEqRhs
+                 can initialise its constants too. 
+
+
+February  9th, 1998   P. Gumplinger
+
+Added Equation of Motion for Spin in Magnetic Field.
+
+---------------------------------------------------------------------------
+    ------    Geant 4  Production Release   ------------
+--------------------------------------------------------------------------
+Nov   19th, 1998   J. Apostolakis  -  field-00-04-01head ===> R+D version only
 
  G4PropagatorInField files modified:
 
    - to store the last safety computed and its origin.
    - to give them to a requester
+------------------------------------------------------------------
 
 Nov   19th, 1998   J. Apostolakis  -  field-00-03-03b
 
