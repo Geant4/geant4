@@ -4,9 +4,18 @@
 // Implementation of the face that bounds a polycone or polyhedra at
 // its phi opening.
 //
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 
 #include "G4PolyPhiFace.hh"
 #include "G4ClippablePolygon.hh"
+#include "G4ReduciblePolygon.hh"
 #include "G4AffineTransform.hh"
 
 //
@@ -19,10 +28,21 @@
 //                 |           |          +--> z
 //                [0]---------[3]
 //
-G4PolyPhiFace::G4PolyPhiFace( const G4double *r, const G4double *z, 
-			      const G4int n, const G4double phi, 
-			      const G4double deltaPhi, const G4bool start )
+G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz, const G4double phi, 
+			      const G4double deltaPhi, const G4double phiOther )
 {
+	numEdges = rz->NumVertices();
+	
+	rMin = rz->Amin();
+	rMax = rz->Amax();
+	zMin = rz->Bmin();
+	zMax = rz->Bmax();
+
+	//
+	// Is this the "starting" phi edge of the two?
+	//
+	G4bool start = (phiOther > phi);
+	
 	//
 	// Build radial vector
 	//
@@ -37,37 +57,19 @@ G4PolyPhiFace::G4PolyPhiFace( const G4double *r, const G4double *z,
         //
         // Allocate corners
         //
-        corners = new G4PolyPhiFaceVertex[n];
+        corners = new G4PolyPhiFaceVertex[numEdges];
 
         //
-        // Fill their positions, avoiding duplicates
+        // Fill them
         //
-        rMin = kInfinity; rMax = -kInfinity;
-        zMin = kInfinity; zMax = -kInfinity;
-
-        const G4double *rOne = r, *zOne = z, 
-                       *rNext, *zNext;
-        G4PolyPhiFaceVertex *corn = corners;
-        do {
-                rNext = rOne + 1;
-                zNext = zOne + 1;
-
-                if (rNext == r+n) {rNext = r; zNext = z;}
-		
-		if (*rNext == *rOne && *zNext == *zOne) continue;
-
-                corn->r = *rOne;
-                corn->z = *zOne;
-
-                corn++;
-
-                if (*rOne < rMin) rMin = *rOne;
-                if (*rOne > rMax) rMax = *rOne;
-                if (*zOne < zMin) zMin = *zOne;
-                if (*zOne > zMax) zMax = *zOne;
-        } while( rOne=rNext, zOne=zNext, rOne != r );
-
-        numEdges = corn-corners;
+	G4ReduciblePolygonIterator iterRZ(rz);
+	
+	G4PolyPhiFaceVertex *corn = corners;
+	iterRZ.Begin();
+	do {
+		corn->r = iterRZ.GetA();
+		corn->z = iterRZ.GetB();
+	} while( ++corn, iterRZ.Next() );
 
         //
         // Allocate edges
@@ -98,10 +100,26 @@ G4PolyPhiFace::G4PolyPhiFace( const G4double *r, const G4double *z,
                 edge->tr = dr/edge->length;
                 edge->tz = dz/edge->length;
 		
-		sideNorm = G4ThreeVector( dz*rFact*cosMid, dz*rFact*sinMid, -dr );
-		sideNorm = sideNorm.unit();
+		if ((here->r < 1/kInfinity) && (prev->r < 1/kInfinity)) {
+			//
+			// Sigh! Always exceptions!
+			// This edge runs at r==0, so its adjoing surface is not a
+			// PolyconeSide or PolyhedraSide, but the opposite PolyPhiFace.
+			//
+			G4double zSignOther = start ? -1 : 1;
+			sideNorm = G4ThreeVector(  zSignOther*sin(phiOther), 
+					          -zSignOther*cos(phiOther), 0 );
+		}
+		else {
+			sideNorm = G4ThreeVector( dz*cosMid, dz*sinMid, -dr*rFact );
+			sideNorm = sideNorm.unit();
+		}
 		sideNorm += normal;
-		edge->norm3D = sideNorm.unit();
+		
+		//
+		// --- Just for now --- Leave these normals unnormalized
+		//
+		edge->norm3D = sideNorm;
         } while( edge++, prev=here, ++here < corners+numEdges );
 
         //
@@ -116,25 +134,81 @@ G4PolyPhiFace::G4PolyPhiFace( const G4double *r, const G4double *z,
 		G4double norm = sqrt( rPart*rPart + zPart*zPart );
                 edge->v0->rNorm = +zPart/norm;
                 edge->v0->zNorm = -rPart/norm;
-		
-		//
-		// Corner normal should be average of normals of connecting edges,
-		// or, equivalently, the average of all connecting faces.
-		//
-		// prevEdge->norm3D = normal + side1.normal = A
-		// edge->norm3D     = normal + side2.normal = B
-		// A + B - normal = normal + side1.normal + side2.normal
-		//
-		
+
 		G4ThreeVector norm3D = prevEdge->norm3D + edge->norm3D - normal;
+
+		if (edge->v0->r < 1/kInfinity &&
+		    edge->v1->r > 1/kInfinity &&
+		    prevEdge->v0->r > 1/kInfinity ) {
+		 	//
+			// Oh boy, it doesn't get any more obscure than this!
+			// What we have is a corner point at r==0, without
+			// any adjacent edges along r==0. Example:
+			//
+			//                   \****|
+			//                    \***|         R
+			//                     \**|         ^
+			//                      \*|         |
+			//                       \|         |
+			//  ......(R=0)...........+........ o----> Z
+			//
+			// Implication? This is a 3D corner that has four
+			// adjoining faces, the only possible (phi segmented) 
+			// Polycone/hedra corner
+			// that has more than three. It is quite a special
+			// case, which I will deal with here.
+			//
+			// (BTW: in such interesting shapes like these, the thickness
+			// of the shape on the z axis is zero. The interesting question
+			// is: will a particle traveling exactly along the z axis
+			// intersect the shape? The reasonable answer: yes. This is
+			// dealt with in G4PolyconeSide and G4PolyhedraSide.)
+			//
+			G4double zSignOther = start ? -1 : 1;
+			G4ThreeVector normalOther = G4ThreeVector(  zSignOther*sin(phiOther), 
+								   -zSignOther*cos(phiOther), 0 );
+								   
+			norm3D = prevEdge->norm3D + edge->norm3D + 2*normalOther;
+
+			G4double midPhi = phiOther + (start ? -0.5 : +0.5)*deltaPhi;
+			G4double cosMid = cos(midPhi), 
+				 sinMid = sin(midPhi);
+			G4ThreeVector sideNorm1 = G4ThreeVector( edge->tz*cosMid, 
+						 		 edge->tz*sinMid, -edge->tr*rFact );
+			G4ThreeVector sideNorm2 = G4ThreeVector( prevEdge->tz*cosMid, 
+						 		 prevEdge->tz*sinMid, -prevEdge->tr*rFact );
+
+			norm3D += sideNorm1.unit() + sideNorm2.unit();
+		}
+		else {
+			//
+			// Corner normal should be average of normals of connecting edges,
+			// or, equivalently, the average of all connecting faces.
+			//
+			// prevEdge->norm3D = normal + side1.normal = A
+			// edge->norm3D     = normal + side2.normal = B
+			// A + B - normal = normal + side1.normal + side2.normal
+			//
+			// This trick only works, though, if the edge->norm3D and 
+			// prevEdge->norm3D are left unnormalized!
+			//
+		
+			norm3D = prevEdge->norm3D + edge->norm3D - normal;
+		}
+
+		//
+		// Normalize the resulting vector
+		//
 		edge->v0->norm3D = norm3D.unit();
         } while(  prevEdge=edge, ++edge < edges+numEdges );
 	
 	//
-	// Complain if something is obviously wrong
+	// Okay, go back and normalize the edge normal vectors
 	//
-	if (numEdges <= 2) 
-		G4Exception( "G4PolyPhiFace: more than two unique corners must be specified" );
+	edge = edges;
+	do {
+		edge->norm3D = edge->norm3D.unit();
+	} while( ++edge < edges+numEdges );
 
 	//
 	// Build point on surface
@@ -185,7 +259,7 @@ G4bool G4PolyPhiFace::Intersect( const G4ThreeVector &p, const G4ThreeVector &v,
 	G4ThreeVector ps = p - surface;
 	distFromSurface = -normSign*ps.dot(normal);
 		
-	if (distFromSurface < surfTolerance) return false;
+	if (distFromSurface < -surfTolerance) return false;
 
 	//
 	// Calculate precise distance to intersection with the side
