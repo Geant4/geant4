@@ -1,86 +1,80 @@
-The following is a rough first try at a README file for the
-HepRep Visualization Driver.
-Please forgive me if I much of the following is obvious.
-I have tried to err on the side of completeness.
-
-Instructions to build required freehep C++ library (Linux):
+---Instructions to build required freehep C++ library (Linux):
 
 Need freehep version from Oct 31 20000 (later versions use HepRep2, not HepRep1).
-Discussion of freehep checkout is at:
+
+Some of the following is taken from the freehep checkout
+instructions available at:
 http://java.freehep.org/source.thtml
 
-Check out freehep as follows:
+Checkout freehep as follows:
 setenv CVSROOT :pserver:anoncvs@cvs.freehep.org:/nfs/slac/g/jas/fhroot
 cvs login
 CVS Password: jascvs
 cvs co -D 20001031 freehep
 
+Make sure you have a copy of the Java Development Kit
+(called JDK or SDK), not just the Java Runtime Environment (JRE).
+The latter doesn't contain the compiler, necessary for the make.
+The Java Development Kit is freely available from
+http://java.sun.com/j2se/
+
 Make the freehep C++ library as follows:
-setenv JDK_HOME /afs/slac.stanford.edu/package/java/i386_linux2/jdk1.3.1
-setenv FREEHEP ~/wiredwork/freehep
-setenv OS Linux
-cd $FREEHEP
-tools/bootstrap-freehep
-tools/ant clean
-tools/ant
-gmake clean
-gmake
+  setenv JDK_HOME your_java_directory
+  setenv FREEHEP your_freehep_directory
+  setenv OS Linux
+  cd $FREEHEP
+  tools/bootstrap-freehep
+  tools/ant clean
+  tools/ant
+  gmake clean
+  gmake
+The gmake will end with some errors, but they can be ignored.
 
 
-Instructions to build Geant4 (Linux):
+---Instructions to build Geant4 (Linux):
 
-setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
-setenv G4 ~/wiredwork
-setenv SCRATCH $BFROOT/work/p/perl
-setenv G4INSTALL $G4/geant4
-setenv G4BIN $SCRATCH/bin
-setenv G4LIB $SCRATCH/lib
-setenv G4TMP $SCRATCH/tmp
-setenv G4SYSTEM Linux-g++
-setenv G4LEVELGAMMADATA $G4INSTALL/data/PhotonEvaporation
-setenv CLHEP_BASE_DIR $G4/CLHEP1.7
-setenv G4VIS_BUILD_OPENGLX_DRIVER 1
-setenv G4UI_BUILD_TERMINAL_SESSION 1
-setenv G4UI_USE_TERMINAL 1
-setenv OGLHOME /usr/X11
-setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
-setenv G4UI_BUILD_XM_SESSION 1
-setenv G4UI_USE_XM 1
-setenv G4DEBUG 1
-setenv G4VIS_USE_VRMLFILE
-setenv LD_LIBRARY_PATH /usr/local/lib:$CLHEP_BASE_DIR/lib
-setenv G4VIS_USE_HEPREP 1
-setenv FREEHEP ~/wiredwork/freehep
-setenv JDK_HOME /afs/slac.stanford.edu/package/java/i386_linux2/jdk1.3.1
-setenv G4_HEPREP_OSNAME linux
-setenv G4_HEPREP_ARCH i386
-setenv LD_LIBRARY_PATH "$GLHEP_BASE_DIR/lib:
-$FREEHEP/lib/Linux-g++:$JDK_HOME/jre/lib/i386/hotspot:$JDK_HOME/jre/lib/i386"
-setenv CLASSPATH "$FREEHEP/lib/freehep-2d.jar:$FREEHEP/lib/freehep-heprep.jar:
-$FREEHEP/lib/freehep-base.jar:$FREEHEP/lib/xerces.jar:$FREEHEP/lib/collections.jar"
+Check out geant4 and CLHEP1.7.
 
-cd $G4INSTALL/source
-rm -r $G4TMP
-gmake > & gmake.log &
+  setenv SCRATCH your_scratch_directory
+  setenv JDK_HOME your_java_directory
+  setenv FREEHEP your_freehep_directory
+  setenv G4INSTALL your_geant4_directory
+  setenv CLHEP_BASE_DIR your_CLHEP1.7_directory
 
-cd $G4INSTALL/examples/novice/N03
-gmake >& gmake.log &
-or
-cd $G4INSTALL/source/visualization/test
-touch test19.cc
-gmake
+  setenv G4SYSTEM Linux-g++
+  setenv G4BIN $SCRATCH/bin
+  setenv G4LIB $SCRATCH/lib
+  setenv G4TMP $SCRATCH/tmp
+  setenv G4DEBUG 1
+  setenv G4LEVELGAMMADATA $G4INSTALL/data/PhotonEvaporation
+  setenv LD_LIBRARY_PATH "/usr/local/lib:$CLHEP_BASE_DIR/lib:$FREEHEP/lib/$G4SYSTEM:$JDK_HOME/jre/lib/i386/hotspot:$JDK_HOME/jre/lib/i386"
+  setenv CLASSPATH "$FREEHEP/lib/freehep-2d.jar:$FREEHEP/lib/freehep-heprep.jar:$FREEHEP/lib/freehep-base.jar:$FREEHEP/lib/xerces.jar:$FREEHEP/lib/collections.jar"
+  setenv G4VIS_BUILD_HEPREP_DRIVER 1
+  setenv G4VIS_USE_HEPREP 1
+  setenv G4_HEPREP_OSNAME linux
+  setenv G4_HEPREP_ARCH i386
+
+  cd $G4INSTALL/source
+  gmake > & gmake.log &
+
+  cd $G4INSTALL/source/visualization/test
+  touch test19.cc
+  gmake
 
 
-Instructions to run Geant4 to make heprep xml:
+---Instructions to run Geant4 to make heprep xml:
 
-ln -s $G4BIN/Linux-g++/test19 .
-test19
-/vis/open HepRep
-/vis/viewer/refresh
-/vis/viewer/update
+remove test19.g4m to make the example wait for interactive input.
+
+   ln -s $G4BIN/Linux-g++/test19 .
+   test19
+   /vis/open HepRep
+   /vis/drawVolume
+   /vis/viewer/update
 
 creates output file:
 ~/wiredwork/G4/geant4/source/visualization/test/HepRepTest.xml
 
+
 Joseph Perl
-24 August 2001
+29 August 2001

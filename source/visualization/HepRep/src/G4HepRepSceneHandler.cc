@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.1 2001-08-24 23:27:34 perl Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.2 2001-08-29 22:57:18 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -284,6 +284,7 @@ void G4HepRepSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
     "G4HepRepSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) called."
 	 << G4endl;
   PrintThings();
+  if(polyhedron.GetNoFacets()==0)return;
 
   G4Normal3D surfaceNormal;
   G4Point3D vertex;
