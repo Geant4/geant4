@@ -8,7 +8,7 @@
 
 ulimit -t 600     # the longest test is 508 on hpplus.
 ulimit -v 500000  # is this the way to stop memory leaks ?
-ulimit -f  10000  # plenty for stdout
+ulimit -f 200000  # largest library/executable is ...
 
 echo "STT:BatchLimit  $G4SYSTEM  $G4LARGE_N $TMPDIR"
 ulimit -a
