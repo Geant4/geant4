@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PhysicsList.hh,v 1.5 2003-02-19 17:07:54 vnivanch Exp $
+// $Id: Tst26PhysicsList.hh,v 1.6 2003-03-04 19:08:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -34,6 +34,7 @@
 //
 // 14-02-03 Make G4ProductionCuts to be members of the class (V.Ivanchenko)
 // 19-02-03 Rename G4ProductionCuts (V.Ivanchenko)
+// 04-03-03 Define default EM module (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -50,6 +51,7 @@
 
 class Tst26PhysicsListMessenger;
 class G4ProductionCuts;
+class G4VPhysicsConstructor;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,6 +61,9 @@ class Tst26PhysicsList: public G4VModularPhysicsList
     Tst26PhysicsList();
    ~Tst26PhysicsList();
 
+
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
     void AddPhysicsList(const G4String& name);
 
     void SetCuts();
@@ -71,7 +76,13 @@ class Tst26PhysicsList: public G4VModularPhysicsList
     G4double cutForVertexDetector;
     G4double cutForMuonDetector;
 
-    G4bool   emPhysicsListIsRegistered;
+//    typedef G4std::vector<G4VPhysicsConstructor*> G4PhysConstVector;
+//    G4PhysConstVector* physicsVector;
+
+    G4VPhysicsConstructor*  emPhysicsList;
+    G4VPhysicsConstructor*  generalPhysicsList;
+    G4VPhysicsConstructor*  particleList;
+    G4String emName;
 
     Tst26PhysicsListMessenger* pMessenger;
     G4ProductionCuts* vertexDetectorCuts;

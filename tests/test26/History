@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2003-02-19 17:07:54 vnivanch Exp $
+$Id: History,v 1.5 2003-03-04 19:08:21 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 4, 2003  V.Ivanchenko (test26-V05-00-04)
+- Define default EM PhysicsList
+- Set low energy limits to gamma, e-, e+ 100 eV
 
 February 19, 2003  V.Ivanchenko (test26-V05-00-03)
 - Rename G4ProductionCuts

@@ -31,6 +31,8 @@
 //
 // 14-02-03 Make G4ProductionCuts to be members of the class (V.Ivanchenko)
 // 19-02-03 Rename G4ProductionCuts (V.Ivanchenko)
+// 03-03-03 Add energy limits (V.Ivanchenko)
+// 04-03-03 Define default EM module + limits on g,e-,e+ energy (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -40,7 +42,7 @@
 
 #include "Tst26PhysicsList.hh"
 #include "Tst26PhysicsListMessenger.hh"
- 
+
 #include "G4UnitsTable.hh"
 #include "Tst26PhysListParticles.hh"
 #include "Tst26PhysListGeneral.hh"
@@ -49,12 +51,14 @@
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "G4ProductionCuts.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+#include "G4Gamma.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Tst26PhysicsList::Tst26PhysicsList() : G4VModularPhysicsList(),
-				       emPhysicsListIsRegistered(false),
 				       vertexDetectorCuts(0),
 				       muonDetectorCuts(0)
 {
@@ -63,14 +67,17 @@ Tst26PhysicsList::Tst26PhysicsList() : G4VModularPhysicsList(),
   cutForMuonDetector   = 10.*mm;
 
   pMessenger = new Tst26PhysicsListMessenger(this);
-
   SetVerboseLevel(1);
 
   // Particles
-  RegisterPhysics( new Tst26PhysListParticles("particles") );
+  particleList = new Tst26PhysListParticles("particles");
 
   // General Physics
-  RegisterPhysics( new Tst26PhysListGeneral("general") );
+  generalPhysicsList = new Tst26PhysListGeneral("general");
+
+  // EM physics
+  emName = G4String("standard");
+  emPhysicsList = new Tst26PhysListEmStandard(emName);
 
 }
 
@@ -79,6 +86,25 @@ Tst26PhysicsList::Tst26PhysicsList() : G4VModularPhysicsList(),
 Tst26PhysicsList::~Tst26PhysicsList()
 {
   delete pMessenger;
+  delete emPhysicsList;
+  delete generalPhysicsList;
+  delete particleList;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Tst26PhysicsList::ConstructParticle()
+{
+  particleList->ConstructParticle();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Tst26PhysicsList::ConstructProcess()
+{
+  AddTransportation();
+  generalPhysicsList->ConstructProcess();
+  emPhysicsList->ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -88,36 +114,23 @@ void Tst26PhysicsList::AddPhysicsList(const G4String& name)
   if (verboseLevel>1) {
     G4cout << "Tst26PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
+  if (name == emName) return;
 
-  if(name == "standard") {
+  if (name == "standard") {
 
-    if (emPhysicsListIsRegistered) {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new Tst26PhysListEmStandard(name);
 
-      G4cout << "Tst26PhysicsList::AddPhysicsList: <" << name << ">" 
-             << " cannot be register additionally to existing one"
-             << G4endl;
-    } else {
+  } else if (name == "model") {
 
-      RegisterPhysics( new Tst26PhysListEmStandard(name) );
-      emPhysicsListIsRegistered = true;
-    }
-
-  } else if(name == "model") {
-
-    if (emPhysicsListIsRegistered) {
-
-      G4cout << "Tst26PhysicsList::AddPhysicsList: <" << name << ">" 
-             << " cannot be register additionally to existing one"
-             << G4endl;
-    } else {
-
-      RegisterPhysics( new Tst26PhysListEmModel(name) );
-      emPhysicsListIsRegistered = true;
-    }
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new Tst26PhysListEmModel(name);
 
   } else {
 
-    G4cout << "Tst26PhysicsList::AddPhysicsList: <" << name << ">" 
+    G4cout << "Tst26PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
            << G4endl;
   }
@@ -127,19 +140,24 @@ void Tst26PhysicsList::AddPhysicsList(const G4String& name)
 
 void Tst26PhysicsList::SetCuts()
 {
-     
+
   if (verboseLevel >0){
     G4cout << "Tst26PhysicsList::SetCuts" << G4endl;
-  }  
+  }
+
+  // Limit for low energy electromagnetic particles
+  G4Gamma   ::SetEnergyRange(100.0*eV,100.0*GeV);
+  G4Electron::SetEnergyRange(100.0*eV,100.0*GeV);
+  G4Positron::SetEnergyRange(100.0*eV,100.0*GeV);
 
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
   SetCutValue(cutForWorld, "gamma");
   SetCutValue(cutForWorld, "e-");
-  SetCutValue(cutForWorld, "e+");   
+  SetCutValue(cutForWorld, "e+");
 
   if( !vertexDetectorCuts ) vertexDetectorCuts = new G4ProductionCuts();
-  
+
   vertexDetectorCuts->SetProductionCut(cutForVertexDetector, idxG4GammaCut);
   vertexDetectorCuts->SetProductionCut(cutForVertexDetector, idxG4ElectronCut);
   vertexDetectorCuts->SetProductionCut(cutForVertexDetector, idxG4PositronCut);
