@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.hh,v 1.7 2001-07-11 09:59:07 gunter Exp $
+// $Id: G4ChordFinder.hh,v 1.8 2001-08-16 23:54:15 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,6 +83,9 @@ class G4ChordFinder
       inline void SetIntegrationDriver(G4MagInt_Driver* IntegrationDriver);
       inline G4MagInt_Driver* GetIntegrationDriver();
         // Access and set Driver.
+
+      inline void ResetStepEstimate();
+        // Clear internal state (last step estimate)
 
    protected:   // .........................................................
 
