@@ -30,7 +30,6 @@
 #include "G4VIntraNuclearTransportModel.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4FragmentVector.hh"
-#include "G4ParticleChange.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
 
@@ -51,7 +50,7 @@ private:
    G4int operator!=(G4GeneratorPrecompoundInterface& right) {return (this != &right);}
       
 public:
-   G4VParticleChange* ApplyYourself(const G4Track& aTrack, G4Nucleus& theNucleus);
+   G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus );
    G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus);
 
 

@@ -28,14 +28,14 @@
 // HPW, 10DEC 98, the decay part originally written by Gunter Folger in his FTF-test-program.
 //
       
-   G4VParticleChange* G4GeneratorPrecompoundInterface::
-   ApplyYourself(const G4Track& aTrack, G4Nucleus& theNucleus)
+   G4HadFinalState* G4GeneratorPrecompoundInterface::
+   ApplyYourself(const G4HadProjectile &, G4Nucleus & )
    {
      std::cout << "G4GeneratorPrecompoundInterface: ApplyYourself interface called stand-allone."<< G4endl;
      std::cout << "This class is only a mediator between generator and precompound"<<G4endl;
      std::cout << "Please remove from your physics list."<<G4endl;
      G4Exception("SEVERE: G4GeneratorPrecompoundInterface model interface called stand-allone.");
-     return new G4ParticleChange;
+     return new G4HadFinalState;
    }
    
    G4ReactionProductVector* G4GeneratorPrecompoundInterface::
