@@ -17,7 +17,6 @@ libGL="glu32.lib opengl32.lib"\
 ATLAS_CPPFLAGS="/I $(G4ATLAS)\include /DATLAS"\
 libG4ATLAS="$(G4WORKDIR)\lib\$$(CONFIG)\libG4ATLAS.lib"\
 libWin="/subsystem:windows gdi32.lib user32.lib"
-#libWin="/subsystem:windows /nodefaultlib:libc gdi32.lib user32.lib"
 
 !include $(G4INSTALL)\tests\tools\NT\Config.nmk
 
