@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: HepPolyhedron.h,v 1.1 2000-02-22 15:31:33 johna Exp $
+// $Id: HepPolyhedron.h,v 1.2 2000-03-30 16:01:41 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -293,6 +293,9 @@ class HepPolyhedronTrd2 : public HepPolyhedron {
  public:
   HepPolyhedronTrd2(HepDouble Dx1, HepDouble Dx2,
 		    HepDouble Dy1, HepDouble Dy2, HepDouble Dz);
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
 };
 
 class HepPolyhedronTrd1 : public HepPolyhedronTrd2 {
@@ -300,12 +303,18 @@ class HepPolyhedronTrd1 : public HepPolyhedronTrd2 {
   HepPolyhedronTrd1(HepDouble Dx1, HepDouble Dx2,
 		    HepDouble Dy, HepDouble Dz) :
     HepPolyhedronTrd2(Dx1, Dx2, Dy, Dy, Dz) {}
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
 };
 
 class HepPolyhedronBox : public HepPolyhedronTrd2 {
  public:
   HepPolyhedronBox(HepDouble Dx, HepDouble Dy, HepDouble Dz) :
     HepPolyhedronTrd2(Dx, Dx, Dy, Dy, Dz) {}
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
 };
 
 class HepPolyhedronTrap : public HepPolyhedron {
@@ -315,6 +324,9 @@ public:
 		    HepDouble Dx1, HepDouble Dx2, HepDouble Alp1,
 		    HepDouble Dy2,
 		    HepDouble Dx3, HepDouble Dx4, HepDouble Alp2);
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
 };
 
 class HepPolyhedronPara : public HepPolyhedronTrap {
@@ -322,6 +334,9 @@ public:
   HepPolyhedronPara(HepDouble Dx, HepDouble Dy, HepDouble Dz,
 		    HepDouble Alpha, HepDouble Theta, HepDouble Phi) :
     HepPolyhedronTrap(Dz, Theta, Phi, Dy, Dx, Dx, Alpha, Dy, Dx, Dx, Alpha) {}
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
 };
 
 class HepPolyhedronCons : public HepPolyhedron {
@@ -329,6 +344,9 @@ public:
   HepPolyhedronCons(HepDouble Rmn1, HepDouble Rmx1, 
 		    HepDouble Rmn2, HepDouble Rmx2, HepDouble Dz,
 		    HepDouble Phi1, HepDouble Dphi); 
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
 };
 
 class HepPolyhedronCone : public HepPolyhedronCons {
@@ -336,6 +354,9 @@ public:
   HepPolyhedronCone(HepDouble Rmn1, HepDouble Rmx1, 
 		    HepDouble Rmn2, HepDouble Rmx2, HepDouble Dz)
     : HepPolyhedronCons(Rmn1, Rmx1, Rmn2, Rmx2, Dz, 0*deg, 360*deg) {}
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
 };
 
 class HepPolyhedronTubs : public HepPolyhedronCons {
@@ -343,12 +364,18 @@ public:
   HepPolyhedronTubs(HepDouble Rmin, HepDouble Rmax, HepDouble Dz, 
 		    HepDouble Phi1, HepDouble Dphi)
     : HepPolyhedronCons(Rmin, Rmax, Rmin, Rmax, Dz, Phi1, Dphi) {}
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
 };
 
 class HepPolyhedronTube : public HepPolyhedronCons {
 public:
   HepPolyhedronTube (HepDouble Rmin, HepDouble Rmax, HepDouble Dz)
     : HepPolyhedronCons(Rmin, Rmax, Rmin, Rmax, Dz, 0*deg, 360*deg) {}
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
 };
 
 class HepPolyhedronPgon : public HepPolyhedron {
@@ -357,6 +384,9 @@ public:
 		    const HepDouble *z,
 		    const HepDouble *rmin,
 		    const HepDouble *rmax);
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
 };
 
 class HepPolyhedronPcon : public HepPolyhedronPgon {
@@ -366,6 +396,9 @@ public:
 		    const HepDouble *rmin,
 		    const HepDouble *rmax)
     : HepPolyhedronPgon(phi, dphi, 0, nz, z, rmin, rmax) {}	
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
 };
 
 class HepPolyhedronSphere : public HepPolyhedron {
@@ -373,12 +406,18 @@ public:
   HepPolyhedronSphere(HepDouble rmin, HepDouble rmax,
 		      HepDouble phi, HepDouble dphi,
 		      HepDouble the, HepDouble dthe);
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
 };
 
 class HepPolyhedronTorus : public HepPolyhedron {
 public:
   HepPolyhedronTorus(HepDouble rmin, HepDouble rmax, HepDouble rtor,
                     HepDouble phi, HepDouble dphi);
+  virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
+    return HepPolyhedron::operator = (from);
+  }
 };
 
 #endif /* HEP_POLYHEDRON_HH */

@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2000-02-23 16:57:30 johna Exp $
+$Id: History,v 1.18 2000-03-30 16:01:40 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30th March 2000  John Allison
+- Added virtual operator= to G4Polyhedron.hh and HepPolyhedron.h to avoid
+  warnings about hiding.
 
 23rd February 2000  John Allison
 - Moved G4Polyhedron constructors and destructor to .cc.
