@@ -98,8 +98,7 @@ processes/electromagnetic/utils                  utils-V06-00-08
 
 processes/hadronic                               ghad-V06-00-06
 ------------------
-- Transition from the old G4Pair to std::pair from the <utility> header.
-- management & utils
+- management & utils (ghad-man-V06-00-05, ghad-util-V06-00-06)
   o Added a white-board functionality to allow for in-core inspection of
     reaction conditions in optimized.
   o Added a signal-handler (for SIGSEGV) that prints the reaction 
@@ -110,6 +109,7 @@ processes/hadronic                               ghad-V06-00-06
   o Run-time checking for NaN values of energies of secondaries.
   o Fix for suspended particles (only neutron_hp code has these).
   o Rudimentary verification of consistancy of hadronic physics.
+  o Transition to std::pair in G4Pair from the <utility> header.
 - models/binary_cascade (ghad-bin-V06-00-03)
   o Fixed a few memory leaks in G4BinaryLightIonReaction.
   o Fix for single nucleon spectator, resulting in occasional
