@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserVisAction.hh,v 1.2 2005-02-23 11:30:10 allison Exp $
+// $Id: G4VUserVisAction.hh,v 1.3 2005-03-03 16:22:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,12 +42,14 @@
 #ifndef G4VUSERVISACTION_HH
 #define G4VUSERVISACTION_HH
 
+#include "G4Transform3D.hh"
+
 class G4VUserVisAction {
 
 public: // With description
 
   virtual void Draw() = 0;
-  void operator()() {
+  void operator()(const G4Transform3D& = G4Transform3D::Identity) {
     Draw();
   }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CallbackModel.hh,v 1.2 2005-02-23 11:30:10 allison Exp $
+// $Id: G4CallbackModel.hh,v 1.3 2005-03-03 16:22:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,7 +56,7 @@ template <class F> class G4CallbackModel: public G4VModel {
     fFunction(function) {}
   ~G4CallbackModel() {}
   void DescribeYourselfTo(G4VGraphicsScene&) {
-    (*fFunction)();
+    (*fFunction)(fTransform);
   }
 
 protected:
