@@ -37,8 +37,8 @@
 // -------------------------------------------------------------------
 
 #include "globals.hh"
-#include  "G4hShellCrossSection.hh"
-#include  "G4AtomicTransitionManager.hh"
+#include "G4hShellCrossSection.hh"
+#include "G4AtomicTransitionManager.hh"
 #include "G4Electron.hh"
 
 G4hShellCrossSection::G4hShellCrossSection()
@@ -55,13 +55,16 @@ G4std::vector<G4double> G4hShellCrossSection::Probabilities(G4int Z,
 							    G4double p) const
 {
   // Cross-sections for proton ionization calculated as in
-  // "M. Gryzinski, Two-Particle Collisions. I. General Relations for Collisions
-  // in the Laboratory system, Phys.Rev. 138 A305"
+  // "M. Gryzinski, Two-Particle Collisions. I. General Relations for 
+  // Collisions in the Laboratory system, Phys.Rev. 138 A305"
   // Other reference papers are Gryzinski's "Paper I" and "Paper II"
 
-  G4AtomicTransitionManager*  transitionManager = G4AtomicTransitionManager::Instance();
+  G4AtomicTransitionManager*  transitionManager = 
+                              G4AtomicTransitionManager::Instance();
 
   size_t nShells = transitionManager->NumberOfShells(Z);
+
+  //  G4cout << "Z= " << Z << " nShells= " << nShells << G4endl;
 
   // Vector that stores the calculated cross-sections for each shell:
   G4std::vector<G4double> crossSections;
@@ -101,7 +104,7 @@ G4std::vector<G4double> G4hShellCrossSection::Probabilities(G4int Z,
       // - MGP - To be checked in the original paper
       G4double velocityFunction = elFactor / incFactor *
 	eFactor2 / iFactor2 * (iFactor1 * iFactor1) * eFactor1 / (eFactor1 * eFactor1) + 
-	elFactor / incFactor * 	pow(eFactor2/iFactor2,1.5);
+	elFactor / incFactor * 	pow(eFactor2/iFactor2, 1.5);
       
       G4double eV2 = elVelocity * elVelocity;
       G4double beta2 = beta * beta;
@@ -110,8 +113,11 @@ G4std::vector<G4double> G4hShellCrossSection::Probabilities(G4int Z,
 	(1.-inverseMaxETransfer) *
 	pow((1.-inverseMaxETransfer),(1. + beta2 /eV2));
     
-    aCrossSection = velocityFunction * secondFunction / bindingEnergy * bindingEnergy;
+    aCrossSection = velocityFunction * secondFunction / (bindingEnergy * bindingEnergy);
     
+    // VI only for test
+    //  G4cout << "cross[" << k << "]= " << aCrossSection << G4endl;
+    aCrossSection = 1.;
     // Calculation of total cross-section
     totalCrossSection += aCrossSection;
     
