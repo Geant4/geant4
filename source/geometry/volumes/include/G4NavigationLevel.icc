@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationLevel.icc,v 1.2 1999-05-03 17:21:26 japost Exp $
+// $Id: G4NavigationLevel.icc,v 1.3 1999-05-12 19:09:48 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 30.09.97 J.Apostolakis Initial version. 
@@ -110,9 +110,9 @@ inline void* G4NavigationLevel::operator new(size_t)
 
 // Added for use by STL.  F.Behner  (used for pre-allocation)
 //
-inline void* G4NavigationLevel::operator new(size_t,G4NavigationLevel *&a)
+inline void* G4NavigationLevel::operator new(size_t, void *a)
 {
-  return (void *) a;
+  return a;
 }
 
 inline void G4NavigationLevel::operator delete(void *aLevel)
@@ -120,3 +120,9 @@ inline void G4NavigationLevel::operator delete(void *aLevel)
   aNavigationLevelAllocator.FreeSingle((G4NavigationLevel *) aLevel);
 }
 
+// Added for use by STL.  J. Apostolakis  (used for free-ing pre-allocated?)
+//
+inline void G4NavigationLevel::operator delete(void *, void *)
+{
+  ;
+}
