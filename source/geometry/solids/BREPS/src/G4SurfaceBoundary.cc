@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceBoundary.cc,v 1.10 2001-07-11 09:59:47 gunter Exp $
+// $Id: G4SurfaceBoundary.cc,v 1.11 2003-03-28 13:12:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -192,7 +192,7 @@ G4int G4SurfaceBoundary::IntersectRay2D(const G4Ray& ray)
 }
 
 
-G4bool G4SurfaceBoundary::Tangent(G4CurvePoint& cp, G4Vector3D& v)
+G4bool G4SurfaceBoundary::Tangent(G4CurvePoint&, G4Vector3D& v)
 {
   if (lastIntersection.GetDistance() == kInfinity) 
     return false;

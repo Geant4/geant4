@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConicalSurface.cc,v 1.6 2001-07-11 09:59:44 gunter Exp $
+// $Id: G4ConicalSurface.cc,v 1.7 2003-03-28 13:11:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,7 +41,7 @@ G4ConicalSurface::G4ConicalSurface()
 {  
 }
 
-G4ConicalSurface::G4ConicalSurface( const G4Point3D& o, 
+G4ConicalSurface::G4ConicalSurface( const G4Point3D&, 
 				    const G4Vector3D& a,
 				    G4double e           ) //: G4Surface( o )
 {  

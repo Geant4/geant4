@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Conic.cc,v 1.6 2001-07-11 09:59:43 gunter Exp $
+// $Id: G4Conic.cc,v 1.7 2003-03-28 13:11:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,7 +42,7 @@ G4Conic::~G4Conic()
 }
 
 G4Conic::G4Conic(const G4Conic& right)
-  : position(right.position), pShift(right.pShift)
+  : G4Curve(), position(right.position), pShift(right.pShift)
 {
   bBox      = right.bBox;
   start     = right.start;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CurveRayIntersection.cc,v 1.4 2001-07-11 09:59:44 gunter Exp $
+// $Id: G4CurveRayIntersection.cc,v 1.5 2003-03-28 13:11:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -50,7 +50,7 @@ G4CurveRayIntersection::~G4CurveRayIntersection()
 }
 
 G4CurveRayIntersection::G4CurveRayIntersection(const G4CurveRayIntersection& cr)
-  : r(cr.r), d(cr.d)
+  : G4CurvePoint(), r(cr.r), d(cr.d)
 {
   c = cr.c;
   p = cr.p;

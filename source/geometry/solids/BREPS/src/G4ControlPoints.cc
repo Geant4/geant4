@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ControlPoints.cc,v 1.6 2001-07-11 09:59:44 gunter Exp $
+// $Id: G4ControlPoints.cc,v 1.7 2003-03-28 13:11:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -52,7 +52,7 @@ G4ControlPoints::G4ControlPoints( G4int rows, G4int columns)
 }
 
 
-G4ControlPoints::G4ControlPoints( G4int point_type, G4int rows, G4int columns)
+G4ControlPoints::G4ControlPoints( G4int, G4int rows, G4int columns)
 {
 
 //     point_type is maintained only for compatibility 

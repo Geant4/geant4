@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipse.cc,v 1.7 2001-07-11 09:59:44 gunter Exp $
+// $Id: G4Ellipse.cc,v 1.8 2003-03-28 13:11:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,7 +42,7 @@ G4Ellipse::~G4Ellipse()
 }
 
 G4Ellipse::G4Ellipse(const G4Ellipse& right)
-  : semiAxis1(right.semiAxis1), semiAxis2(right.semiAxis2),
+  : G4Conic(), semiAxis1(right.semiAxis1), semiAxis2(right.semiAxis2),
     ratioAxis2Axis1(right.ratioAxis2Axis1), toUnitCircle(right.toUnitCircle),
     forTangent(right.forTangent)
 {

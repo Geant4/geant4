@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidCone.cc,v 1.10 2002-12-03 14:24:20 gcosmo Exp $
+// $Id: G4BREPSolidCone.cc,v 1.11 2003-03-28 13:11:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -177,9 +177,9 @@ G4double G4BREPSolidCone::DistanceToIn(register const G4ThreeVector& Pt,
 
 G4double G4BREPSolidCone::DistanceToOut(register const G4ThreeVector& Pt, 
 					register const G4ThreeVector& V, 
-					const G4bool calcNorm, 
+					const G4bool, 
 					G4bool *validNorm, 
-					G4ThreeVector *n) const
+					G4ThreeVector *) const
 {
   if(validNorm)
     *validNorm = false;
