@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Electron.cc,v 1.4 2001-07-11 10:01:53 gunter Exp $
+// $Id: G4Electron.cc,v 1.5 2001-09-19 11:14:37 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -171,7 +171,7 @@ void G4Electron::BuildRangeVector(const G4Material* aMaterial,
   for (i=0; i<NumEl; i++)
   {
     G4bool isOut;
-    G4int IndEl = (*elementVector)(i)->GetIndex();
+    G4int IndEl = (*elementVector)[i]->GetIndex();
     loss += atomicNumDensityVector[i]*
            (*aLossTable)[IndEl]->GetValue(tlim,isOut);
   }
@@ -204,6 +204,10 @@ void G4Electron::BuildRangeVector(const G4Material* aMaterial,
     }
   }
 } 
+
+
+
+
 
 
 
