@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXmViewer.cc,v 1.7 2002-02-24 01:48:07 johna Exp $
+// $Id: G4OpenGLImmediateXmViewer.cc,v 1.8 2003-06-10 17:13:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,14 +37,14 @@
 
 #include "G4ios.hh"
 
-G4OpenGLImmediateXmViewer::G4OpenGLImmediateXmViewer
-(G4OpenGLImmediateSceneHandler& scene,
- const G4String& name):
-G4OpenGLViewer (scene),
-G4OpenGLXmViewer (scene),
-G4OpenGLImmediateViewer (scene),
-G4VViewer (scene, scene.IncrementViewCount (), name) {
-
+G4OpenGLImmediateXmViewer::
+G4OpenGLImmediateXmViewer(G4OpenGLImmediateSceneHandler& scene,
+                          const G4String& name)
+ : G4VViewer (scene, scene.IncrementViewCount (), name),
+   G4OpenGLViewer (scene),
+   G4OpenGLXmViewer (scene),
+   G4OpenGLImmediateViewer (scene)
+{
   if (fViewId < 0) return;  // In case error in base class instantiation.
 
 // ensure a suitable window was found

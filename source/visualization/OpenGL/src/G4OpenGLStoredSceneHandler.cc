@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.15 2002-11-27 12:44:09 johna Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.16 2003-06-10 17:13:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,8 +37,6 @@
 // other OpenGL's, as far as I'm aware.   John Allison 18/9/96.
 #define CENTERLINE_CLPP  /* CenterLine C++ workaround: */
 // Also seems to be required for HP's CC and AIX xlC, at least.
-
-#include <GL/gl.h>
 
 #include "G4OpenGLStoredSceneHandler.hh"
 

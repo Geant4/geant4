@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXViewer.cc,v 1.8 2002-02-24 01:48:19 johna Exp $
+// $Id: G4OpenGLStoredXViewer.cc,v 1.9 2003-06-10 17:13:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,13 +37,14 @@
 
 #include "G4ios.hh"
 
-G4OpenGLStoredXViewer::G4OpenGLStoredXViewer (G4OpenGLStoredSceneHandler& scene,
-					  const G4String& name):
-G4OpenGLViewer (scene),
-G4OpenGLXViewer (scene),
-G4OpenGLStoredViewer (scene),
-G4VViewer (scene, scene.IncrementViewCount (), name) {
-
+G4OpenGLStoredXViewer::
+G4OpenGLStoredXViewer (G4OpenGLStoredSceneHandler& scene,
+		 const G4String& name)
+ : G4VViewer (scene, scene.IncrementViewCount (), name),
+   G4OpenGLViewer (scene),
+   G4OpenGLXViewer (scene),
+   G4OpenGLStoredViewer (scene)
+{
   if (fViewId < 0) return;  // In case error in base class instantiation.
 
   if (!vi_stored) {

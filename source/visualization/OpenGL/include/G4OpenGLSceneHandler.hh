@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.12 2002-11-11 18:08:21 johna Exp $
+// $Id: G4OpenGLSceneHandler.hh,v 1.13 2003-06-10 17:13:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,12 +34,17 @@
 #ifndef G4OPENGLSCENEHANDLER_HH
 #define G4OPENGLSCENEHANDLER_HH
 
+#ifdef WIN32
+  #include <windows.h>
+#endif
+
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 #include "G4VSceneHandler.hh"
 #include "G4OpenGLViewer.hh"
 #include "globals.hh"
 #include "G4RotationMatrix.hh"
-
-#include <GL/gl.h>
 
 // Base class for various OpenGLScene classes.
 class G4OpenGLSceneHandler: public G4VSceneHandler {

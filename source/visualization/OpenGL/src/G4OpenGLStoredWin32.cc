@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32.cc,v 1.8 2002-10-16 10:44:15 johna Exp $
+// $Id: G4OpenGLStoredWin32.cc,v 1.9 2003-06-10 17:13:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,10 @@
 
 
 #ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
+
+#ifdef WIN32
+  #include <windows.h>
+#endif
 
 #include <GL/gl.h>
 

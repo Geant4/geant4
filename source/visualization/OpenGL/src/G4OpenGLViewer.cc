@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.15 2003-06-05 10:13:18 gcosmo Exp $
+// $Id: G4OpenGLViewer.cc,v 1.16 2003-06-10 17:13:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,10 @@
 // OpenGL view - opens window, hard copy, etc.
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
+
+#ifdef WIN32
+  #include <windows.h>
+#endif
 
 #include <GL/gl.h>
 #include <GL/glu.h>
