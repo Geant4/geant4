@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyIonisation.hh,v 1.28 2001-10-10 17:46:52 pia Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.29 2001-10-11 11:36:49 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -72,17 +72,18 @@ public:
   
   G4VParticleChange* PostStepDoIt(const G4Track& track,         
 				  const G4Step& step);                 
-  
+ 
+  void SetCutForLowEnSecPhotons(G4double cut);
+
+  void SetCutForLowEnSecElectrons(G4double cut);
+    
+
 protected:
  
   G4double GetMeanFreePath(const G4Track& track,
 			   G4double previousStepSize,
 			   G4ForceCondition* condition );
 
-  void SetCutForLowEnSecPhotons(G4double cut);
-
-  void SetCutForLowEnSecElectrons(G4double cut);
-    
 private:
 
   // Hide copy constructor and assignment operator as private 
