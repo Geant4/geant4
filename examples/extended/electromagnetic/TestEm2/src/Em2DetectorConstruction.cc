@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2DetectorConstruction.cc,v 1.3 2000-02-14 14:09:16 maire Exp $
+// $Id: Em2DetectorConstruction.cc,v 1.4 2000-05-09 13:56:33 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -136,7 +136,12 @@ void Em2DetectorConstruction::DefineMaterials()
     PbWO->AddElement(O , natoms=4);
     PbWO->AddElement(Pb, natoms=1);
     PbWO->AddElement(W , natoms=1);
-     
+    
+  //Tungsten
+    density = 19.30*g/cm3;
+    G4Material* w = new G4Material(name="Tungsten", density, ncomponents=1);
+    w->AddElement(W, fractionmass=1.0);
+         
   //Pb
     density = 11.35*g/cm3;
     G4Material* pb = new G4Material(name="Lead", density, ncomponents=1);
@@ -166,24 +171,24 @@ G4VPhysicalVolume* Em2DetectorConstruction::ConstructVolumes()
                                 "Ecal",logicEcal,0,false,0);
 				
   // Ring
-  solidRing = new G4Tubs("Ring",0.,dR,0.5*EcalLength,0.,360*deg);
-  logicRing = new G4LogicalVolume(solidRing,myMaterial,"Ring",0,0,0);
-  if (nRtot >1)
-     physiRing = new G4PVReplica("Ring",logicRing,physiEcal,
-                               kRho,nRtot,dR);
-  else
-     physiRing = new G4PVPlacement(0,G4ThreeVector(),"Ring",logicRing,
-                                    physiEcal,false,0);
+  //
+  for (G4int i=0; i<nRtot; i++)
+     {
+      solidRing = new G4Tubs("Ring",i*dR,(i+1)*dR,0.5*EcalLength,0.,360*deg);
+      logicRing = new G4LogicalVolume(solidRing,myMaterial,"Ring",0,0,0);
+      physiRing = new G4PVPlacement(0,G4ThreeVector(),"Ring",logicRing,
+                                    physiEcal,false,i);
 				                   				
-  // Slice
-  solidSlice = new G4Tubs("Slice",0.,dR,0.5*dL,0.,360*deg);
-  logicSlice = new G4LogicalVolume(solidSlice,myMaterial,"Slice",0,0,0);
-  if (nLtot >1)
-     physiSlice = new G4PVReplica("Slice",logicSlice,physiRing,
-                                   kZAxis,nLtot,dL);
-  else
-     physiSlice = new G4PVPlacement(0,G4ThreeVector(),"Slice",logicSlice,
-                                    physiRing,false,0);               
+      // Slice
+      solidSlice = new G4Tubs("Slice",i*dR,(i+1)*dR,0.5*dL,0.,360*deg);
+      logicSlice = new G4LogicalVolume(solidSlice,myMaterial,"Slice",0,0,0);
+      if (nLtot >1)
+        physiSlice = new G4PVReplica("Slice",logicSlice,physiRing,
+                                    kZAxis,nLtot,dL);
+      else
+        physiSlice = new G4PVPlacement(0,G4ThreeVector(),"Slice",logicSlice,
+                                    physiRing,false,0);
+     }				                   
 
 
   G4cout << "Absorber is " << G4BestUnit(EcalLength,"Length") 
