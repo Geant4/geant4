@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2004-01-29 16:03:58 gcosmo Exp $
+$Id: History,v 1.5 2004-02-05 11:28:20 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05-02-04 G.Cosmo (test40-V06-00-01)
+- Fixed compilation problem on gcc-3.2 in RunAction for usage
+  of std stream manipulators.
+  NOTE: this test will be soon migrated to conforming class names
+        and brought up to date with the original extended example
+        electromagnetic/TestEm2.
 
 25-01-04 G.Cosmo (test40-V06-00-00)
 - Include it in reference tags.
