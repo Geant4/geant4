@@ -1158,10 +1158,10 @@ G4PAIPhotonModel::GetAlongStepTransfer( G4PhysicsTable* pTable,
 
       while(numOfCollisions)
       {
-        position =( (dNdxCut1+
-                  ((*(*pTable)(iPlace  ))(0)-dNdxCut1))*W1 + 
-                    (dNdxCut2+
-                  ((*(*pTable)(iPlace+1))(0)-dNdxCut2))*W2 )*G4UniformRand();
+        position = dNdxCut1*W1 + dNdxCut2*W2 +
+                   ( ( (*(*pTable)(iPlace  ))(0) - dNdxCut1)*W1 + 
+                    
+                     ( (*(*pTable)(iPlace+1))(0) - dNdxCut2)*W2 )*G4UniformRand();
 
         // G4cout<<position<<"\t" ;
 
