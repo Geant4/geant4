@@ -1,4 +1,4 @@
-$Id: History,v 1.98 2002-04-19 07:11:25 gcosmo Exp $
+$Id: History,v 1.99 2002-05-15 09:32:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 15, 2002 G.Cosmo (global-V04-00-06)
+- G4UnitsTable.cc: fixed bug in operator<< to use the argument 'flux'
+  instead of G4cout.
+- geomdefs.hh: added 'kUndefined' key to specify undefined EAxis.
 
 April 19, 2002 G.Cosmo (global-V04-00-05)
 - Moved inline constructors/destructors to no-inline.
