@@ -302,39 +302,39 @@ return mul + 2;
 
 }
 
-vector<InuclElementaryParticle> ElementaryParticleCollider:: 
-	     generateSCMfinalState(double ekin, double etot_scm, double pscm,
-      InuclElementaryParticle* particle1,
-      InuclElementaryParticle* particle2, LorentzConvertor* toSCM) const {
+vector<G4InuclElementaryParticle> G4ElementaryParticleCollider:: 
+	     generateSCMfinalState(G4double ekin, G4double etot_scm, G4double pscm,
+      G4InuclElementaryParticle* particle1,
+      G4InuclElementaryParticle* particle2, G4LorentzConvertor* toSCM) const {
 
-   const double ang_cut = 0.9999;
-   const double difr_const = 0.3678794;   
-   const int itry_max = 10;
-   InuclElementaryParticle dummy;
-   vector<InuclElementaryParticle> particles;
-   vector<int> particle_kinds;
-   int type1 = particle1->type();
-   int type2 = particle2->type();
-   int is = type1*type2;
+   const G4double ang_cut = 0.9999;
+   const G4double difr_const = 0.3678794;   
+   const G4int itry_max = 10;
+   G4InuclElementaryParticle dummy;
+   vector<G4InuclElementaryParticle> particles;
+   vector<G4int> particle_kinds;
+   G4int type1 = particle1->type();
+   G4int type2 = particle2->type();
+   G4int is = type1*type2;
 #ifdef DEBUG
-   cout << " is " << is << endl;
+   G4cout << " is " << is << G4endl;
 #endif
-   int multiplicity = 0;
-   bool generate = true;
+   G4int multiplicity = 0;
+   G4bool generate = true;
    
    while(generate) { 
      
      if(multiplicity == 0) {
-       multiplicity = generateMultiplicity(is,ekin);
+       multiplicity = generateMultiplicity(is, ekin);
      }
       else {
-       multiplicity = generateMultiplicity(is,ekin);
+       multiplicity = generateMultiplicity(is, ekin);
        particle_kinds.resize(0);
      };
       
      if(multiplicity == 2) { // 2 -> 2
-       int kw;
-       if(reChargering(ekin,is)) { // rechargering
+       G4int kw;
+       if(reChargering(ekin, is)) { // rechargering
          kw = 2;
          switch (is) {
            case 6: // pi+ N -> pi0 P
@@ -354,7 +354,7 @@ vector<InuclElementaryParticle> ElementaryParticleCollider::
 	     particle_kinds.push_back(1);
 	     break;    
 	   default: 
-             cout << " strange recharge: " << is << endl;
+             G4cout << " strange recharge: " << is << G4endl;
 	     particle_kinds.push_back(type1);
 	     particle_kinds.push_back(type2);
              kw = 1;
@@ -365,150 +365,149 @@ vector<InuclElementaryParticle> ElementaryParticleCollider::
          particle_kinds.push_back(type1);
          particle_kinds.push_back(type2);       
        };
-       vector<double> mom;
+       vector<G4double> mom;
        if(kw == 2) { // need to rescale momentum
-         double m1 = dummy.getParticleMass(particle_kinds[0]);
+         G4double m1 = dummy.getParticleMass(particle_kinds[0]);
 	 m1 *= m1;
          double m2 = dummy.getParticleMass(particle_kinds[1]);
 	 m2 *= m2;	 
-	 double a = 0.5*(etot_scm*etot_scm - m1 - m2);
-	 double np = sqrt((a*a - m1*m2)/(m1 + m2 + 2.*a));
-         mom = particleSCMmomentumFor2to2(is,kw,ekin,np);
+	 double a = 0.5 * (etot_scm * etot_scm - m1 - m2);
+	 double np = sqrt((a*a - m1 * m2) / (m1 + m2 + 2.0 * a));
+         mom = particleSCMmomentumFor2to2(is, kw, ekin, np);
        }
         else {
-         mom = particleSCMmomentumFor2to2(is,kw,ekin,pscm);
+         mom = particleSCMmomentumFor2to2(is, kw, ekin, pscm);
        };
 #ifdef DEBUG
-       cout << " before rotation px " << mom[1] << " py " << mom[2] <<
-         " pz " << mom[3] << endl;
+       G4cout << " before rotation px " << mom[1] << " py " << mom[2] <<
+         " pz " << mom[3] << G4endl;
 #endif	 
        mom = toSCM->rotate(mom); 
 #ifdef DEBUG
-       cout << " after rotation px " << mom[1] << " py " << mom[2] <<
-         " pz " << mom[3] << endl;
+       G4cout << " after rotation px " << mom[1] << " py " << mom[2] <<
+         " pz " << mom[3] << G4endl;
 #endif	 
-       vector<double> mom1(4);
-       for(int i = 1; i < 4; i++) mom1[i] = -mom[i];
-       particles.push_back(InuclElementaryParticle(mom,particle_kinds[0]));
-       particles.push_back(InuclElementaryParticle(mom1,particle_kinds[1]));
+       vector<G4double> mom1(4);
+       for(G4int i = 1; i < 4; i++) mom1[i] = -mom[i];
+       particles.push_back(InuclElementaryParticle(mom, particle_kinds[0]));
+       particles.push_back(InuclElementaryParticle(mom1, particle_kinds[1]));
        generate = false;
      }
       else { // 2 -> many
-       particle_kinds = generateOutgoingKindsFor2toMany(is,multiplicity,ekin);
-       int itry = 0;
-       bool bad = true;
-       int knd_last = particle_kinds[multiplicity-1];
-       double mass_last = dummy.getParticleMass(knd_last);
+       particle_kinds = generateOutgoingKindsFor2toMany(is, multiplicity, ekin);
+       G4int itry = 0;
+       G4bool bad = true;
+       G4int knd_last = particle_kinds[multiplicity - 1];
+       G4double mass_last = dummy.getParticleMass(knd_last);
 #ifdef DEBUG
-       cout << " knd_last " << knd_last << " mass " << mass_last << endl;
+       G4cout << " knd_last " << knd_last << " mass " << mass_last << G4endl;
 #endif
-
        while(bad && itry < itry_max) {
          itry++;
 #ifdef DEBUG
-         cout << " itry in while " << itry << endl;
+         G4cout << " itry in while " << itry << G4endl;
 #endif
-	 vector<double> modules = 
-	   generateMomModules(particle_kinds,multiplicity,
-	                                      is,ekin,etot_scm);
+	 vector<G4double> modules = 
+	   generateMomModules(particle_kinds, multiplicity,
+	                                      is, ekin, etot_scm);
          if(modules.size() == multiplicity) {
 	   if(multiplicity == 3) { 
-	     vector<double> mom3 = 
-                     particleSCMmomentumFor2to3(is,knd_last,ekin,
+	     vector<G4double> mom3 = 
+                     particleSCMmomentumFor2to3(is, knd_last, ekin,
                                              modules[2]);
              mom3 = toSCM->rotate(mom3);
-//                 generate the momentum of first
-	     double ct = -0.5*(modules[2]*modules[2] + 
-		   modules[0]*modules[0] - modules[1]*modules[1])/
-		   modules[2]/modules[0];   
+//        generate the momentum of first
+	     double ct = -0.5 * (modules[2] * modules[2] + 
+		   modules[0] * modules[0] - modules[1] * modules[1]) /
+		   modules[2] / modules[0];   
              if(fabs(ct) < ang_cut) {
 #ifdef REPORT
-		 cout << " ok for mult " << multiplicity << endl;
+		 G4cout << " ok for mult " << multiplicity << G4endl;
 #endif
-	       vector<double> mom1 = generateWithFixedTheta(ct,modules[0]);
-               mom1 = toSCM->rotate(mom3,mom1);
-	       vector<double> mom2(4);
-	       for(int i = 1; i < 4; i++) mom2[i] = - (mom3[i] + mom1[i]);
+	       vector<G4double> mom1 = generateWithFixedTheta(ct, modules[0]);
+               mom1 = toSCM->rotate(mom3, mom1);
+	       vector<G4double> mom2(4);
+	       for(G4int i = 1; i < 4; i++) mom2[i] = - (mom3[i] + mom1[i]);
 	       bad = false;
                generate = false;
-               particles.push_back(InuclElementaryParticle(mom1,particle_kinds[0]));
-               particles.push_back(InuclElementaryParticle(mom2,particle_kinds[1]));
-               particles.push_back(InuclElementaryParticle(mom3,particle_kinds[2]));
+               particles.push_back(InuclElementaryParticle(mom1, particle_kinds[0]));
+               particles.push_back(InuclElementaryParticle(mom2, particle_kinds[1]));
+               particles.push_back(InuclElementaryParticle(mom3, particle_kinds[2]));
 	     };
 	   }
 	    else { // multiplicity > 3
-//                 generate first mult - 2 momentums
-             vector<vector<double> > scm_momentums;
-	     vector<double> tot_mom(4);
-             for(int i = 0; i < multiplicity -2; i++) {
-               double p0 = particle_kinds[i] < 3 ? 0.36 : 0.25;
-	       double alf = 1./p0/(p0 - (modules[i] + p0)*
-		           exp(-modules[i]/p0));
-	       double st = 2.;
-	       int itry1 = 0;
+//        generate first mult - 2 momentums
+             vector<vector<G4double> > scm_momentums;
+	     vector<G4double> tot_mom(4);
+             for(G4int i = 0; i < multiplicity - 2; i++) {
+               G4double p0 = particle_kinds[i] < 3 ? 0.36 : 0.25;
+	       G4double alf = 1.0 / p0 / (p0 - (modules[i] + p0) *
+		           exp(-modules[i] / p0));
+	       G4double st = 2.0;
+	       G4int itry1 = 0;
 	       while(fabs(st) > ang_cut && itry1 < itry_max) {
 	         itry1++;
-	         double s1 = modules[i]*inuclRndm();
-	         double s2 = alf*difr_const*p0*inuclRndm();
+	         G4double s1 = modules[i] * inuclRndm();
+	         G4double s2 = alf * difr_const * p0 * inuclRndm();
 #ifdef DEBUG
-	       cout << " s1*alf*exp(-s1/p0) " << s1*alf*exp(-s1/p0) 
-	          << " s2 " << s2 << endl;
+	       G4cout << " s1 * alf * exp(-s1 / p0) " << s1 * alf * exp(-s1 / p0) 
+	          << " s2 " << s2 << G4endl;
 #endif
-	         if(s1*alf*exp(-s1/p0) > s2) st = s1/modules[i];
+	         if(s1 * alf * exp(-s1 / p0) > s2) st = s1 / modules[i];
 	       }; 
 #ifdef DEBUG
-	       cout << " itry1 " << itry1 << " i " << i << " st " << st << endl;
+	       G4cout << " itry1 " << itry1 << " i " << i << " st " << st << G4endl;
 #endif
 	       if(itry1 == itry_max) {
 #ifdef REPORT
-               cout << " high energy angles generation: itry1 " << itry1 <<
-		 endl;
+               G4cout << " high energy angles generation: itry1 " << itry1 <<
+		G4 endl;
 #endif
-	         st = 0.5*inuclRndm();
+	       st = 0.5 * inuclRndm();
 	       };
-	       double ct = sqrt(1. - st*st);
+	       G4double ct = sqrt(1.0 - st * st);
 	       if(inuclRndm() > 0.5) ct = -ct;
-               double pt = modules[i]*st;
-               double phi = randomPHI();
+               G4double pt = modules[i]*st;
+               G4double phi = randomPHI();
 
-               vector<double> mom(4);
-               mom[1] = pt*cos(phi);
-               mom[2] = pt*sin(phi);
-               mom[3] = modules[i]*ct;
-	       for(int i = 1; i < 4; i++) tot_mom[i] += mom[i];		 
+               vector<G4double> mom(4);
+               mom[1] = pt * cos(phi);
+               mom[2] = pt * sin(phi);
+               mom[3] = modules[i] * ct;
+	       for(G4int i = 1; i < 4; i++) tot_mom[i] += mom[i];		 
 	       scm_momentums.push_back(mom);
 	     }; 
-//                handle last two
-	     double tot_mod = sqrt(tot_mom[1]*tot_mom[1] + 
-	         tot_mom[2]*tot_mom[2] + tot_mom[3]*tot_mom[3]); 
-	     double ct = -0.5*(tot_mod*tot_mod + 
-	         modules[multiplicity-2]*modules[multiplicity-2] -
-		 modules[multiplicity-1]*modules[multiplicity-1])/tot_mod/
-		modules[multiplicity-2];  
+//         handle last two
+	     G4double tot_mod = sqrt(tot_mom[1] * tot_mom[1] + 
+	         tot_mom[2] * tot_mom[2] + tot_mom[3] * tot_mom[3]); 
+	     G4double ct = -0.5 * (tot_mod * tot_mod + 
+	         modules[multiplicity - 2] * modules[multiplicity - 2] -
+		 modules[multiplicity - 1] * modules[multiplicity - 1]) / tot_mod /
+		modules[multiplicity - 2];  
 #ifdef DEBUG
-	     cout << " ct last " << ct << endl;
+	     G4cout << " ct last " << ct << G4endl;
 #endif
                
 	     if(fabs(ct) < ang_cut) {
-	       for(int i = 0; i < multiplicity - 2; i++) 
+	       for(G4int i = 0; i < multiplicity - 2; i++) 
 		   scm_momentums[i] = toSCM->rotate(scm_momentums[i]);
                tot_mom = toSCM->rotate(tot_mom);  
-               vector<double> mom = 
-		     generateWithFixedTheta(ct,modules[multiplicity-2]);
-	       mom = toSCM->rotate(tot_mom,mom);
+               vector<G4double> mom = 
+		     generateWithFixedTheta(ct, modules[multiplicity - 2]);
+	       mom = toSCM->rotate(tot_mom, mom);
 	       scm_momentums.push_back(mom);
-//               and the last one
-	       vector<double> mom1(4);
-	       for(int i = 1; i < 4; i++) mom1[i] = - mom[i] - tot_mom[i];
+//         and the last one
+	       vector<G4double> mom1(4);
+	       for(G4int i = 1; i < 4; i++) mom1[i] = -mom[i] - tot_mom[i];
 	       scm_momentums.push_back(mom1);  
 	       bad = false;
 	       generate = false;
 #ifdef REPORT
-		 cout << " ok for mult " << multiplicity << endl;
+		 G4cout << " ok for mult " << multiplicity << G4endl;
 #endif
-               for(int i = 0; i < multiplicity; i++) {
+               for(G4int i = 0; i < multiplicity; i++) {
 	         particles.push_back(InuclElementaryParticle(
-		                      scm_momentums[i],particle_kinds[i]));
+		                      scm_momentums[i], particle_kinds[i]));
 	       };
 	     };
 	   }; 
@@ -516,8 +515,8 @@ vector<InuclElementaryParticle> ElementaryParticleCollider::
        };
        if(itry == itry_max) {
 #ifdef REPORT
-         cout << " cannot generate the distr. for mult " << multiplicity  <<
-	 endl << " and set it to " << multiplicity - 1 << endl;
+         G4cout << " cannot generate the distr. for mult " << multiplicity  <<
+	 G4endl << " and set it to " << multiplicity - 1 << G4endl;
 #endif
        };
      };
@@ -526,47 +525,47 @@ vector<InuclElementaryParticle> ElementaryParticleCollider::
    return particles;
 }
 
-vector<double> 	ElementaryParticleCollider::generateMomModules(
-      const vector<int>& kinds, int mult, 
-                  int is, double ekin, double etot_cm) const {
+vector<G4double> G4ElementaryParticleCollider::generateMomModules(
+      const vector<G4int>& kinds, G4int mult, 
+                  G4int is, G4double ekin, G4double etot_cm) const {
 #ifdef DEBUG
-cout << " mult " << mult << " is " << is << " ekin " << ekin << " etot_cm " <<
-     etot_cm << endl;
+G4cout << " mult " << mult << " is " << is << " ekin " << ekin << " etot_cm " <<
+     etot_cm << G4endl;
 #endif
 
-const int itry_max = 10;
-const double small = 1.e-10;
+const G4int itry_max = 10;
+const G4double small = 1.e-10;
 
-InuclElementaryParticle dummy;
-int itry = 0;
-double sr;
-vector<double> modules(mult);
-vector<double> masses2(mult);
-for(int i = 0; i < mult; i++) {
-  double mass = dummy.getParticleMass(kinds[i]);
-  masses2[i] = mass*mass;
+G4InuclElementaryParticle dummy;
+G4int itry = 0;
+G4double sr;
+vector<G4double> modules(mult);
+vector<G4double> masses2(mult);
+for(G4int i = 0; i < mult; i++) {
+  G4double mass = dummy.getParticleMass(kinds[i]);
+  masses2[i] = mass * mass;
 };
 
-double mass_last = sqrt(masses2[mult-1]);
+G4double mass_last = sqrt(masses2[mult - 1]);
 #ifdef DEBUG
-cout << " knd_last " << kinds[mult-1] << " mlast " << mass_last << endl;
+G4cout << " knd_last " << kinds[mult - 1] << " mlast " << mass_last << G4endl;
 #endif
 
 while (itry < itry_max) {
   itry++;
 #ifdef DEBUG
-         cout << " itry in generateMomModules " << itry << endl;
+         G4cout << " itry in generateMomModules " << itry << G4endl;
 #endif
-  int ilast = -1;
-  double eleft = etot_cm;
-  for(int i = 0; i < mult-1; i++) {
-    double pmod = 
-	     getMomModuleFor2toMany(is,mult,kinds[i],ekin);
+  G4int ilast = -1;
+  G4double eleft = etot_cm;
+  for(G4int i = 0; i < mult - 1; i++) {
+    G4double pmod = 
+	     getMomModuleFor2toMany(is, mult, kinds[i], ekin);
     if(pmod < small) break;
-    eleft -= sqrt(pmod*pmod + masses2[i]);
+    eleft -= sqrt(pmod * pmod + masses2[i]);
 #ifdef DEBUG
-    cout << " kp " << kinds[i] << " pmod " << pmod << " mass2 " << masses2[i] << endl;
-    cout << " x1 " << eleft - mass_last << endl;
+    G4cout << " kp " << kinds[i] << " pmod " << pmod << " mass2 " << masses2[i] << G4endl;
+    G4cout << " x1 " << eleft - mass_last << G4endl;
 #endif   
     if(eleft <= mass_last) break;
     ilast++;
@@ -574,13 +573,13 @@ while (itry < itry_max) {
   };
 
   if(ilast == mult - 2) {
-    double plast = eleft*eleft - masses2[mult-1];
+    G4double plast = eleft * eleft - masses2[mult - 1];
 #ifdef DEBUG
-    cout << " plast**2 " << plast << endl;
+    G4cout << " plast**2 " << plast << G4endl;
 #endif
     if(plast > small) {
       plast = sqrt(plast);
-      modules[mult-1] = plast;
+      modules[mult - 1] = plast;
       
       if(mult == 3) { 
         if(satisfyTriangle(modules)) return modules;
@@ -597,9 +596,9 @@ return modules;
 
 }
 
-bool ElementaryParticleCollider::satisfyTriangle(
-                            const vector<double>& modules) const {
-bool good = true;
+G4bool G4ElementaryParticleCollider::satisfyTriangle(
+                            const vector<G4double>& modules) const {
+G4bool good = true;
 if(modules.size() == 3) {
   if(fabs(modules[1] - modules[2]) > modules[0] || 
      modules[0] > modules[1] + modules[2] ||
@@ -611,13 +610,16 @@ if(modules.size() == 3) {
 return good;
 }
       
-int ElementaryParticleCollider::getIL(int is, int mult) const {
+G4int ElementaryParticleCollider::getIL(G4int is, G4int mult) const {
 
-const int ifdef[4][7] = {
-   2,3,2,2,3,3,2,4,4,3,4,4,4,3,5,6,4,5,5,5,4,7,7,5,7,6,6,5
+const G4int ifdef[4][7] = {
+   2, 3, 2, 2, 3, 3, 2, 
+   4, 4, 3, 4, 4, 4, 3, 
+   5, 6, 4, 5, 5, 5, 4,
+   7, 7, 5, 7, 6, 6, 5
 };
 
-int l = is;
+G4int l = is;
 if(l == 14) {
   l = 5;
 }
@@ -628,14 +630,14 @@ if(l == 14) {
   l = 7;
 };
 
-return ifdef[mult-3][l-1];
+return ifdef[mult - 3][l - 1];
 
 }
 
-vector<int> ElementaryParticleCollider::generateOutgoingKindsFor2toMany(
-        int is, int mult, double ekin) const {
+vector<G4int> G4ElementaryParticleCollider::generateOutgoingKindsFor2toMany(
+        G4int is, G4int mult, G4double ekin) const {
 
-const double bsig[4][20][20] = {
+const G4double bsig[4][20][20] = {
       1.20,3.70,3.98,3.85,3.51,2.90,2.86,2.81,2.77,2.80,
       2.54,2.00,1.90,1.75,1.68,1.61,1.54,1.40,1.25,1.17,
       8.00,14.0,13.0,12.0,11.4,9.70,9.41,8.52,8.03,6.70,
@@ -799,7 +801,7 @@ const double bsig[4][20][20] = {
 };
 
 
-const int ifkn[7][7][18] = {
+const G4int ifkn[7][7][18] = {
       1,1,7,1,1,7,7,1,1,7,7,7,1,1,7,7,7,7,3,2,
       1,1,1,3,5,1,1,7,3,5,1,1,7,7,3,5,0,0,0,1,
       2,7,3,1,2,3,3,5,1,1,3,5,3,5,0,0,0,2,2,3,
@@ -844,9 +846,9 @@ const int ifkn[7][7][18] = {
       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 };
 
-vector<int> kinds;
+vector<G4int> kinds;
 
-int l = is;
+G4int l = is;
 if(l == 10) {
   l = 3;
 }
@@ -857,11 +859,11 @@ if(l == 10) {
   l = 4;
 };
 
-int il = getIL(is,mult);
-pair<int,double> iksk = getPositionInEnergyScale1(ekin);
-int ik = iksk.first;
-double sk = iksk.second;
-int n;      
+G4int il = getIL(is, mult);
+pair<G4int, G4double> iksk = getPositionInEnergyScale1(ekin);
+G4int ik = iksk.first;
+G4double sk = iksk.second;
+G4int n;      
 switch(mult) {
   case 3:
    n = 0;
@@ -876,33 +878,33 @@ switch(mult) {
    n = 13;
    break;
   default:
-   cout << " generateOutgoingKindsFor2toMany: mult " << mult << endl;
+   G4cout << " generateOutgoingKindsFor2toMany: mult " << mult << G4endl;
    n = 13;
 };      
 
-vector<double> sig;
-double stot = 0.;
+vector<G4double> sig;
+G4double stot = 0.0;
 
 if(l == 7 || l == 14) {
-  for(int j = 0; j < il; j++) {
-    sig.push_back(0.5*(bsig[2][n+j][ik-1] + bsig[3][n+j][ik-1] + 
-      sk*(bsig[2][n+j][ik] - bsig[2][n+j][ik-1] +
-         bsig[3][n+j][ik] - bsig[3][n+j][ik-1])));
+  for(G4int j = 0; j < il; j++) {
+    sig.push_back(0.5 * (bsig[2][n + j][ik - 1] + bsig[3][n + j][ik - 1] + 
+      sk * (bsig[2][n + j][ik] - bsig[2][n + j][ik - 1] +
+         bsig[3][n + j][ik] - bsig[3][n + j][ik - 1])));
     stot += sig[j];
   };
 }
  else {
-  for(int j = 0; j < il; j++) { 
-    sig.push_back(bsig[l-1][n+j][ik-1] + 
-       sk*(bsig[l-1][n+j][ik] - bsig[l-1][n+j][ik-1]));
+  for(G4int j = 0; j < il; j++) { 
+    sig.push_back(bsig[l - 1][n + j][ik - 1] + 
+       sk*(bsig[l - 1][n + j][ik] - bsig[l - 1][n + j][ik - 1]));
     stot += sig[j];
   };
 };
-double sl = inuclRndm();
+G4double sl = inuclRndm();
 sl *= stot;
-double ptot = 0.;
-int ml;
-for(int i = 0; i < il; i++) {
+G4double ptot = 0.0;
+G4int ml;
+for(G4int i = 0; i < il; i++) {
   ptot += sig[i];
   if(sl <= ptot) {
     ml = i;
@@ -921,7 +923,7 @@ if(l == 14) {
   l = 7;
 };
 
-int ks;      
+G4int ks;      
 switch(mult) {
   case 3:
    ks = 0;
@@ -936,143 +938,154 @@ switch(mult) {
    ks = 12;
    break;
   default:
-   cout << " generateOutgoingKindsFor2toMany: mult " << mult << endl;
+   G4cout << " generateOutgoingKindsFor2toMany: mult " << mult << G4endl;
    ks = 12;
 };      
-for(int i = 0; i < mult; i++)  
-  kinds.push_back(ifkn[l-1][ml][i+ks]);
+for(G4int i = 0; i < mult; i++)  
+  kinds.push_back(ifkn[l - 1][ml][i + ks]);
 
 return kinds;
   
 }	
 
-double ElementaryParticleCollider::getMomModuleFor2toMany( 
-        int is, int mult, int knd, double ekin) const {
+G4double G4ElementaryParticleCollider::getMomModuleFor2toMany( 
+        G4int is, G4int mult, G4int knd, G4double ekin) const {
 
-const double rmn[14][10][2] = {
-      0.5028,0.6305,3.1442,-3.7333,-7.8172,13.464,8.1667,-18.594,1.6208,
-      1.9439,-4.3139,-4.6268,12.291,9.7879,-15.288,-9.6074,0.,0.,0.,0.,
-      0.9348,2.1801,-10.59,1.5163,29.227,-16.38,-34.55,27.944,
-      -0.2009,-0.3464,1.3641,1.1093,-3.403,-1.9313,3.8559,
-      1.7064,0.,0.,0.,0.,-0.0967,-1.2886,4.7335,-2.457,-14.298,15.129,
-      17.685,-23.295,0.0126,0.0271,-0.0835,-0.1164,0.186,0.2697,-0.2004,
-      -0.3185,0.,0.,0.,0.,-0.025,0.2091,-0.6248,0.5228,2.0282,-2.8687,
-      -2.5895,4.2688,-0.0002,-0.0007,0.0014,0.0051,-0.0024,-0.015,
-      0.0022,0.0196,0.,0.,0.,0.,1.1965,0.9336,-0.8289,-1.8181,
-      1.0426,5.5157,-1.909,-8.5216,1.2419,1.8693,-4.3633,
-      -5.5678,13.743,14.795,-18.592,-16.903,0.,0.,
-      0.,0.,0.287,1.7811,-4.9065,-8.2927,16.264,
-      20.607,-19.904,-20.827,-0.244,-0.4996,1.3158,1.7874,
-      -3.5691,-4.133,4.3867,3.8393,0.,0.,0.,
-      0.,-0.2449,-1.5264,2.9191,6.8433,-9.5776,-16.067,
-      11.938,16.845,0.0157,0.0462,-0.0826,-0.1854,0.2143,
-      0.4531,-0.2585,-0.4627,0.,0.,0.,0.,
-      0.0373,0.2713,-0.422,-1.1944,1.3883,2.7495,-1.7476,
-      -2.9045,-0.0003,-0.0013,0.0014,0.0058,-0.0034,-0.0146,
-      0.0039,0.0156,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-      0.,0.,0.,0.,0.1451,0.0929,0.1538,0.1303,0.,0.,0.,0.,0.,0.,0.,0.,
-      0.,0.,0.,0.,0.,0.,0.,0.,0.4652,0.5389,0.2744,0.4071,0.,0.,0.,
-      0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,-0.033,
-      -0.0545,-0.0146,-0.0288,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-      0.,0.,0.,0.,0.,0.6296,0.1491,0.8381,0.1802,0.,0.,0.,0.,0.,
-      0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.1787,0.385,0.0086,
-      0.3302,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-      0.,0.,0.,-0.0026,-0.0128,0.0033,-0.0094
+const G4double rmn[14][10][2] = {
+      0.5028,  0.6305,  3.1442, -3.7333, -7.8172,  13.464,  8.1667, 
+      -18.594, 1.6208,  1.9439, -4.3139, -4.6268,  12.291,  9.7879, 
+      -15.288, -9.6074, 0.0,     0.0,     0.0,     0.0,     0.9348,  
+      2.1801,  -10.59,  1.5163,  29.227, -16.38,  -34.55,  27.944,
+      -0.2009,-0.3464,  1.3641,  1.1093, -3.403,  -1.9313,  3.8559,
+      1.7064,  0.0,     0.0,     0.0,     0.0,    -0.0967, -1.2886, 
+      4.7335, -2.457, -14.298,   15.129,  17.685, -23.295,  0.0126,  
+      0.0271, -0.0835, -0.1164,  0.186,   0.2697, -0.2004, -0.3185, 
+      0.0,     0.0,     0.0,     0.0,    -0.025,   0.2091, -0.6248,  
+      0.5228, 2.0282, -2.8687,  -2.5895,  4.2688, -0.0002, -0.0007,  
+      0.0014,  0.0051, -0.0024,-0.015,    0.0022,  0.0196,  0.0,     
+      0.0,     0.0,     0.0,     1.1965,  0.9336, -0.8289, -1.8181,
+      1.0426,  5.5157, -1.909,  -8.5216,  1.2419,  1.8693, -4.3633,
+      -5.5678, 13.743,  14.795, -18.592, -16.903,  0.0,     0.0,
+      0.0,     0.0,     0.287,   1.7811, -4.9065, -8.2927,  16.264,
+      20.607,-19.904, -20.827,  -0.244,  -0.4996,  1.3158,  1.7874,
+      -3.5691,-4.133,   4.3867,  3.8393,  0.0,     0.0,     0.0,
+      0.0,    -0.2449, -1.5264,  2.9191,  6.8433, -9.5776, -16.067,
+      11.938, 16.845,   0.0157,  0.0462, -0.0826, -0.1854,  0.2143,
+      0.4531, -0.2585, -0.4627,  0.0,     0.0,     0.0,     0.0,
+      0.0373,  0.2713, -0.422,  -1.1944,  1.3883,  2.7495, -1.7476,
+      -2.9045,-0.0003, -0.0013,  0.0014,  0.0058, -0.0034, -0.0146,
+      0.0039,  0.0156,  0.0,     0.0,     0.0,     0.0,     0.0,    
+      0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     0.0,    
+      0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     
+      0.0,     0.1451,  0.0929,  0.1538,  0.1303,  0.0,     0.0,     
+      0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     
+      0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     
+      0.4652,  0.5389,  0.2744,  0.4071,  0.0,     0.0,     0.0,
+      0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     0.0, 
+      0.0,     0.0,     0.0,     0.0,     0.0,     0.0,    -0.033,
+      -0.0545,-0.0146, -0.0288,  0.0,     0.0,     0.0,     0.0,
+      0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     0.0,
+      0.0,     0.0,     0.0,     0.0,     0.0,     0.6296,  0.1491,
+      0.8381,  0.1802,  0.0,     0.0,     0.0,     0.0,     0.0,
+      0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     0.0,
+      0.0,     0.0,     0.0,     0.0,     0.1787,  0.385,   0.0086,
+      0.3302,  0.0,     0.0,     0.0,     0.0,     0.0,     0.0,
+      0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     0.0,
+      0.0,     0.0,     0.0,    -0.0026, -0.0128,  0.0033, -0.0094
 };
 
-double S = inuclRndm();
-double PS = 0.;
-double PR = 0.;
-double PQ = 0.;
-int KM = 2;
-int IL = 4;
-int JK = 4;
-int JM = 2;
-int IM = 3;
+G4double S = inuclRndm();
+G4double PS = 0.0;
+G4double PR = 0.0;
+G4double PQ = 0.0;
+G4int KM = 2;
+G4int IL = 4;
+G4int JK = 4;
+G4int JM = 2;
+G4int IM = 3;
 if(is == 1 || is == 2 || is == 4) KM = 1;
 if(mult == 3) { IM = 0; IL = 0; };
 if(knd == 1 || knd == 2) JK = 0;
-for(int i = 0; i < 4; i++) {
-  double V = 0.;
-  for(int k = 0; k < 4; k++) V += rmn[k+JK][i+IL][KM-1]*pow(ekin,k);
-  PR += V*pow(S,i);
+for(G4int i = 0; i < 4; i++) {
+  G4double V = 0.0;
+  for(G4int k = 0; k < 4; k++) V += rmn[k + JK][i + IL][KM - 1] * pow(ekin, k);
+  PR += V*pow(S, i);
   PQ += V;
 };  
 
 if(knd == 1 || knd == 2) JM = 1;
-for(int m = 0; m < 3; m++) PS += rmn[8+IM+m][7+JM][KM-1]*pow(ekin,m);
-double PRA = PS*sqrt(S)*(PR+(1-PQ)*pow(S,4));
+for(G4int m = 0; m < 3; m++) PS += rmn[8 + IM + m][7 + JM][KM - 1] * pow(ekin, m);
+G4double PRA = PS * sqrt(S) * (PR + (1 - PQ) * pow(S, 4));
 
 return fabs(PRA);
-
 }
 
-vector<double> ElementaryParticleCollider::particleSCMmomentumFor2to3(
-        int is, int knd, double ekin, double pmod) const {
+vector<G4double> G4ElementaryParticleCollider::particleSCMmomentumFor2to3(
+        G4int is, G4int knd, G4double ekin, G4double pmod) const {
 
-const double abn[4][4][4] = {
-       0.0856, 0.0716, 0.1729, 0.0376, 5.0390, 3.0960, 7.1080, 1.4331,
-      -13.782,-11.125,-17.961,-3.1350, 14.661, 18.130, 16.403, 6.4864,
-       0.0543, 0.0926,-0.1450, 0.2383,-9.2324,-3.2186,-13.032, 1.8253,
-       36.397, 20.273, 41.781, 1.7648,-42.962,-33.245,-40.799,-16.735,
-      -0.0511,-0.0515, 0.0454,-0.1541, 4.6003, 0.8989, 8.3515,-1.5201,
-      -20.534,-7.5084,-30.260,-1.5692, 27.731, 13.188, 32.882, 17.185,
-       0.0075, 0.0058,-0.0048, 0.0250,-0.6253,-0.0017,-1.4095, 0.3059,
-       2.9159, 0.7022, 5.3505, 0.3252,-4.1101,-1.4854,-6.0946,-3.5277 
+const G4double abn[4][4][4] = {
+       0.0856,  0.0716,  0.1729,  0.0376,  5.0390,  3.0960,  7.1080,  1.4331,
+      -13.782, -11.125, -17.961, -3.1350,  14.661,  18.130,  16.403,  6.4864,
+       0.0543,  0.0926, -0.1450,  0.2383, -9.2324, -3.2186, -13.032,  1.8253,
+       36.397,  20.273,  41.781,  1.7648, -42.962, -33.245, -40.799, -16.735,
+      -0.0511, -0.0515,  0.0454, -0.1541,  4.6003,  0.8989,  8.3515, -1.5201,
+      -20.534, -7.5084, -30.260, -1.5692,  27.731,  13.188,  32.882,  17.185,
+       0.0075,  0.0058, -0.0048,  0.0250, -0.6253, -0.0017, -1.4095,  0.3059,
+       2.9159,  0.7022,  5.3505,  0.3252, -4.1101, -1.4854, -6.0946, -3.5277 
 };
 
-const int itry_max = 100;
+const G4int itry_max = 100;
 
-double ct = 2.;
-int K = 3;
-int J = 1;
+G4double ct = 2.0;
+G4int K = 3;
+G4int J = 1;
 if(is == 1 || is == 2 || is == 4) K = 1;
 if(knd == 1 || knd == 2) J = 0;
-int itry = 0;
-while(fabs(ct) > 1. && itry < itry_max) {
+G4int itry = 0;
+while(fabs(ct) > 1.0 && itry < itry_max) {
   itry++;
-  double S = inuclRndm();
-  double U = 0.;
-  double W = 0.;
-  for(int l = 0; l < 4; l++) {
-    double V = 0.;
-    for(int m = 0; m < 4; m++) {
-      V += abn[m][l][K+J-1]*pow(ekin,m);
+  G4double S = inuclRndm();
+  G4double U = 0.0;
+  G4double W = 0.0;
+  for(G4int l = 0; l < 4; l++) {
+    G4double V = 0.0;
+    for(G4int m = 0; m < 4; m++) {
+      V += abn[m][l][K + J - 1] * pow(ekin, m);
     };
     U += V;
-    W += V*pow(S,l);
+    W += V*pow(S, l);
   };  
-  ct = 2.*sqrt(S)*(W + (1.-U)*pow(S,4)) - 1.;
+  ct = 2.0 * sqrt(S) * (W + (1.0 - U) * pow(S, 4)) - 1.0;
 };
 if(itry == itry_max) {
 #ifdef REPORT
-  cout << " particleSCMmomentumFor2to3 -> itry = itry_max " << itry << endl;
+  G4cout << " particleSCMmomentumFor2to3 -> itry = itry_max " << itry << G4endl;
 #endif
-  ct = 2.*inuclRndm() - 1.;
+  ct = 2.0 * inuclRndm() - 1.0;
 };
 
-double pt = pmod*sqrt(1. - ct*ct);
-double phi = randomPHI();
+G4double pt = pmod * sqrt(1.0 - ct * ct);
+G4double phi = randomPHI();
 
-vector<double> mom(4);
-mom[1] = pt*cos(phi);
-mom[2] = pt*sin(phi);
-mom[3] = pmod*ct;
+vector<G4double> mom(4);
+mom[1] = pt * cos(phi);
+mom[2] = pt * sin(phi);
+mom[3] = pmod * ct;
   
 return mom;
   
 }
 	      
-bool ElementaryParticleCollider::reChargering(double ekin, int is) const {
+G4bool G4ElementaryParticleCollider::reChargering(G4double ekin, G4int is) const {
 
-const double ali[31] = {
-     3.9, 6.6, 13.2,42.6,36.6,26.2,17.9,13.5,11.3,10.7,
-     9.5, 6.4,  1.9, 0.8,0.56,0.26,0.19,0.19,0.18, 0.1,
-     0. , 0. ,  0. , 0. ,0.  ,0.  ,0.  ,0.  ,0.  , 0. ,0.
+const G4double ali[31] = {
+     3.9, 6.6, 13.2, 42.6, 36.6, 26.2, 17.9, 13.5, 11.3, 10.7,
+     9.5, 6.4,  1.9, 0.8,  0.56, 0.26, 0.19, 0.19, 0.18, 0.1,
+     0.0, 0.0,  0.0, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0 ,0.0
 };
 
 
-const double asig[4][6][31] = {
+const G4double asig[4][6][31] = {
       1.00,1.00,1.00,1.00,1.00,1.00,24.3,24.1,24.0,26.3,
       28.6,24.8,19.9,19.2,17.4,15.3,13.5,12.3,11.9,10.4,
       11.8,11.4,11.0,10.8,10.9,11.7,11.4,10.2,11.0,11.0,
@@ -1151,18 +1164,18 @@ const double asig[4][6][31] = {
       26.1,25.2,6.92,6.70,0.  ,25.7
 };
 
-  bool rech = false;
+  G4bool rech = false;
   if(is == 6 || is == 5 || is == 7 || is == 14) {
-    pair<int,double> iksk = getPositionInEnergyScale2(ekin);
-    int ik = iksk.first;
-    double sk = iksk.second;
-    double chrg;
-    if(ik == 30 && sk == 1.) {
-      chrg = 1.;    
+    pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
+    G4int ik = iksk.first;
+    G4double sk = iksk.second;
+    G4double chrg;
+    if(ik == 30 && sk == 1.0) {
+      chrg = 1.0;    
     }
      else {
-      chrg = 1. - (ali[ik-1] + sk*(ali[ik] - ali[ik-1]))/
-       (asig[3][0][ik-1] + sk*(asig[3][0][ik] - asig[3][0][ik-1]));
+      chrg = 1.0 - (ali[ik - 1] + sk * (ali[ik] - ali[ik - 1])) /
+       (asig[3][0][ik - 1] + sk * (asig[3][0][ik] - asig[3][0][ik - 1]));
     }; 
     rech = inuclRndm() > chrg; 
   };
@@ -1171,11 +1184,11 @@ const double asig[4][6][31] = {
 
 }
 
-pair<double,double> ElementaryParticleCollider::adjustIntervalForElastic(
-  double ekin, double ak, double ae, int k, int l, const vector<double>& ssv,
-  double st) const {
+pair<G4double, G4double> G4ElementaryParticleCollider::adjustIntervalForElastic(
+  G4double ekin, G4double ak, G4double ae, G4int k, G4int l, const vector<G4double>& ssv,
+  G4double st) const {
 
-const double ang[4][4][13] = {
+const G4double ang[4][4][13] = {
        2.7404,-30.853, 0.1026,-0.3829, 0.2499, 3.9025, 19.402, 0.1579,
        0.3153,-17.953, 0.4217, 0.1499, 0.5369,-9.6998, 106.24,-1.0542,
        3.7587, 32.028,-91.126,-224.46, 2.9671,-7.4981, 109.72, 147.05,
@@ -1204,16 +1217,16 @@ const double ang[4][4][13] = {
        1642.3, 203.81,-165530.,20294.,-640.11,-212.50,-58790., 32058.
 };
   
-const int itry_max = 100;
-const double small = 1.e-4;
-double a = 1.;
-double b = 0.;
+const G4int itry_max = 100;
+const G4double small = 1.e-4;
+double a = 1.0;
+double b = 0.0;
 int adj_type = 0;
-double s1,s2;
+double s1, s2;
 
 if(k == 1) {
   adj_type = 1;
-  s1 = 0.;
+  s1 = 0.0;
   s2 = 0.5;
 }
  else if(k == 2) {
@@ -1222,7 +1235,7 @@ if(k == 1) {
   }
    else { 
     adj_type = 1;
-    s1 = 0.;
+    s1 = 0.0;
     s2 = 0.67;
   };        
 }
@@ -1233,30 +1246,30 @@ if(k == 1) {
    else {
     adj_type = 2;
     s1 = 0.1813;
-    s2 = 1.;
+    s2 = 1.0;
   };     
 };
 
 if(adj_type > 0) {
-  int itry = 0;
-  double su;
-  double ct;
+  G4int itry = 0;
+  G4double su;
+  G4double ct;
   
   if(adj_type == 1) {
-    double s2_old = s2;
-    double s1c = s1;
-    double s2_new;
+    G4double s2_old = s2;
+    G4double s1c = s1;
+    G4double s2_new;
     while(itry < itry_max) {
       itry++;
-      s2_new = 0.5*(s2_old + s1c);
-      su = 0.;      
-      for(int i = 0; i < 4; i++) su += ssv[i]*pow(s2_new,i);
-      ct = ak*sqrt(s2_new)*(su + (1. - st)*pow(s2_new,4)) + ae;
-      if(ct > 1.) {
+      s2_new = 0.5 * (s2_old + s1c);
+      su = 0.0;      
+      for(G4int i = 0; i < 4; i++) su += ssv[i] * pow(s2_new, i);
+      ct = ak * sqrt(s2_new) * (su + (1.0 - st) * pow(s2_new, 4)) + ae;
+      if(ct > 1.0) {
         s2_old = s2_new;
       }
        else {
-        if(1. - ct < small) {
+        if(1.0 - ct < small) {
 	  break;
 	}
 	 else {
@@ -1268,20 +1281,20 @@ if(adj_type > 0) {
     b = s1;
   }
    else {
-    double s1_old = s1;
-    double s2c = s2;
-    double s1_new;
+    G4double s1_old = s1;
+    G4double s2c = s2;
+    G4double s1_new;
     while(itry < itry_max) {
       itry++;
-      s1_new = 0.5*(s1_old + s2c);
-      su = 0.;      
-      for(int i = 0; i < 4; i++) su += ssv[i]*pow(s1_new,i);
-      ct = ak*sqrt(s1_new)*(su + (1. - st)*pow(s1_new,4)) + ae;
-      if(ct < -1.) {
+      s1_new = 0.5 * (s1_old + s2c);
+      su = 0.0;      
+      for(G4int i = 0; i < 4; i++) su += ssv[i] * pow(s1_new, i);
+      ct = ak * sqrt(s1_new) * (su + (1.0 - st) * pow(s1_new, 4)) + ae;
+      if(ct < -1.0) {
         s1_old = s1_new;
       }
        else {
-        if(1. + ct < small) {
+        if(1.0 + ct < small) {
 	  break;
 	}
 	 else {
@@ -1294,21 +1307,21 @@ if(adj_type > 0) {
   }; 
   if(itry == itry_max) {
 #ifdef REPORT
-    cout << " in adjustIntervalForElastic: " << itry_max << endl;
-    cout << " e " << ekin << " ak " << ak << " ae " << ae << endl << " k " << k
-    << " is " << l << " adj_type " << adj_type << endl; 
+    G4cout << " in adjustIntervalForElastic: " << itry_max << G4endl;
+    G4cout << " e " << ekin << " ak " << ak << " ae " << ae << G4endl << " k " << k
+    << " is " << l << " adj_type " << adj_type << G4endl; 
 #endif
-    a = 1.;
-    b = 0.;
+    a = 1.0;
+    b = 0.0;
   };
 };
-return pair<double,double>(a,b);
+return pair<G4double, G4double>(a, b);
 }  
 
-vector<double> ElementaryParticleCollider::particleSCMmomentumFor2to2(
-      int is, int kw, double ekin, double pscm) const {
+vector<G4double> G4ElementaryParticleCollider::particleSCMmomentumFor2to2(
+      G4int is, G4int kw, G4double ekin, G4double pscm) const {
 
-const double ang[4][4][13] = {
+const G4double ang[4][4][13] = {
        2.7404,-30.853, 0.1026,-0.3829, 0.2499, 3.9025, 19.402, 0.1579,
        0.3153,-17.953, 0.4217, 0.1499, 0.5369,-9.6998, 106.24,-1.0542,
        3.7587, 32.028,-91.126,-224.46, 2.9671,-7.4981, 109.72, 147.05,
@@ -1337,9 +1350,9 @@ const double ang[4][4][13] = {
        1642.3, 203.81,-165530.,20294.,-640.11,-212.50,-58790., 32058.
 };
 
-const int itry_max = 100;
-const double ct_cut = 0.9999;
-const double huge = 60.;
+const G4int itry_max = 100;
+const G4double ct_cut = 0.9999;
+const G4double huge = 60.0;
 
 int k = getElasticCase(is,kw,ekin);
 
@@ -1561,3 +1574,65 @@ particles.push_back(InuclElementaryParticle(mom1,particle_kinds[1]));
 return particles;
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
