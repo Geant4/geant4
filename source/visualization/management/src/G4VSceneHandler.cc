@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.36 2005-02-23 11:35:58 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.37 2005-03-03 16:35:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -450,6 +450,10 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
     G4ModelingParameters* pMP = CreateModelingParameters ();
     for (size_t i = 0; i < runDurationModelList.size (); i++) {
       G4VModel* pModel = runDurationModelList[i];
+      // Note: this is not the place to take action on
+      // pModel->GetTransformation().  The model must take care of
+      // this in pModel->DescribeYourselfTo(*this).  See, for example,
+      // G4PhysicalVolumeModel and /vis/scene/add/logo.
       const G4ModelingParameters* tempMP =
 	pModel -> GetModelingParameters ();
       // NOTE THAT pModel->GetModelingParameters() COULD BE ZERO.
