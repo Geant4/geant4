@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.21 2004-07-13 13:17:48 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.22 2004-07-14 10:35:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -475,7 +475,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       glDepthFunc (GL_LEQUAL);  // to make sure line gets drawn.  
       glPolygonMode (GL_FRONT, GL_LINE);
       glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
-
       glBegin (GL_QUADS);
       for (int edgeCount = 0; edgeCount < 4; ++edgeCount) {
 	if (edgeFlag[edgeCount]) {
@@ -488,7 +487,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 		    vertex[edgeCount].z());
       }
       glEnd ();
-      
       glDepthFunc (GL_LESS);   // Revert for next quadrilateral.
     }
   } while (notLastFace);  
