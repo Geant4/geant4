@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.13 1999-07-06 14:35:47 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.14 1999-07-30 15:18:45 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -623,26 +623,26 @@ void G4LowEnergyBremsstrahlung::ComputePartialSumSigma(G4double KineticEnergy,
 
 G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackData,
 							   const G4Step& stepData){
+
   //
-  // The emitted gamma energy is sampled using a parametrized formula from L. Urban.
-  // This parametrization is derived from :
-  //    cross-section values of Seltzer and Berger for electron energies 1 keV - 10 GeV,
-  //    screened Bethe Heilter differential cross section above 10 GeV,
-  //    Migdal corrections in both case. 
-  //  Seltzer & Berger: Nim B 12:95 (1985)
-  //  Nelson, Hirayama & Rogers: Technical report 265 SLAC (1985)
-  //  Migdal: Phys Rev 103:1811 (1956); Messel & Crawford: Pergamon Press (1970)
+  // The emitted gamma energy is from EEDL data fitted with A/E+B function.
+  // Original formula A/E+B+C*E and sampling methods are from  J. Stepanek New Photon, 
+  // Positron and Electron Interaction Data for GEANT in Energy Range from 1 eV to 10
+  // TeV (draft) modified by A. Forti a S. Giani. 
+  // 
+  // This parametrization is derived from : 
+  // Migdal corrections (dielectric suppression). 
+  // Migdal: Phys Rev 103:1811 (1956); Messel & Crawford: Pergamon Press (1970)
+  // left from standard process
   //     
   // A modified version of the random number techniques of Butcher & Messel is used 
   //    (Nuc Phys 20(1960),15).
-  //
-  // GEANT4 internal units.
-  // 
   
   const G4double MigdalConstant = classic_electr_radius
     *electron_Compton_length
     *electron_Compton_length/pi;
   
+
   const G4double LPMconstant = fine_structure_const*electron_mass_c2*
     electron_mass_c2/(8.*pi*hbarc) ;
   
@@ -721,8 +721,8 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
     GammaEnergy = ElectKinEn - R2*(ElectKinEn - lowEnergyCut);
   }
   
-  // now comes the supression due to the LPM effect I leave it
-  
+  // now comes the supression due to the LPM effect (gamma production suppression
+  // due to the multiple scattering of the electron)
   if(GammaEnergy < LPMGammaEnergyLimit){
     
     G4double S2LPM = LPMEnergy*GammaEnergy/TotalEnergysquare ;
@@ -747,7 +747,6 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   //**********************//
   
   //  angles of the emitted gamma. ( Z - axis along the parent particle)
-  //
   //  universal distribution suggested by L. Urban (Geant3 manual (1993) Phys211),
   //  derived from Tsai distribution (Rev Mod Phys 49,421(1977))
 
@@ -833,8 +832,6 @@ G4Element* G4LowEnergyBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) co
   G4double rval = G4UniformRand()*((*PartialSumSigma(Index))(NumberOfElements-1));
   for ( G4int i=0; i < NumberOfElements; i++ )
     if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
-  //  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-  //   << "' has no elements" << endl;
   return (*theElementVector)(0);
 }
 
@@ -842,15 +839,12 @@ G4Element* G4LowEnergyBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) co
 
 void G4LowEnergyBremsstrahlung::PrintInfoDefinition()
 {
-  G4String comments = "Total cross sections from a parametrisation(L.Urban). ";
-           comments += "Good description from 1 KeV to 100 GeV.\n";
-           comments += "        log scale extrapolation above 100 GeV \n";
-           comments += "        Gamma energy sampled from a parametrised formula.";
+  G4String comments = "Total cross sections from EEDL database";
+           comments += "Good description from 1 eV to 100 GeV.\n";
+           comments += "Gamma energy sampled from a parametrised formula.";
                      
-  G4cout << endl << GetProcessName() << ":  " << comments
-         << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,"Energy")
-         << " to " << G4BestUnit(HighestKineticEnergy,"Energy") 
-         << " in " << TotBin << " bins. \n";
+	   G4cout << endl << GetProcessName() << ":  " << comments<<endl;
+
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.10 1999-07-06 15:03:04 aforti Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.11 1999-07-30 15:18:46 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -179,17 +179,22 @@ void G4LowEnergyRayleigh::BuildZVec(){
 G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
 
 //
-// The scattered gamma energy is sampled according to Form Factors and 
-// then accepted or rejected based on Rayleigh distribution.
-// The random number techniques of Butcher & Messel are used 
-// (Nuc Phys 20(1960),15). GEANT4 internal units
-//
+// The scattered gamma energy is sampled according to Form Factors 
+// multiplied by the Rayleigh distribution with a pure rejection technique.  
+// EGS4 W.R. Nelson et al. The EGS4 Code System. SLAC-Report-265 , December 1985 
+// Expression of the angular distribution as Rayleigh distribution and Form factors 
+// is taken from D. E. Cullen "A simple model of photon transport" Nucl. Instr. Meth. 
+// Phys. Res. B 101 (1995). Method of sampling with form factors is different.
+// Reference to the article is from J. Stepanek New Photon, Positron
+// and Electron Interaction Data for GEANT in Energy Range from 1 eV to 10
+// TeV (draft). 
+
+
   aParticleChange.Initialize(aTrack);
-  
   // Dynamic particle quantities  
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
   G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();
-
+  
   if(GammaEnergy0 <= LowestEnergyLimit){
     
     aParticleChange.SetStatusChange(fStopAndKill);
@@ -228,9 +233,8 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
 
     DataFormFactor = util.DataLogInterpolation(x, (*(*oneAtomFF)[0]), 
 					       (*(*oneAtomFF)[1]))/cm;
-
     RandomFormFactor = G4UniformRand()*elementZ;
-      
+
     Theta = Theta_Half*2;
     cosTheta = cos(Theta);
     sinTheta = sin(Theta);
@@ -320,6 +324,7 @@ void G4LowEnergyRayleigh::BuildMeanFreePathTable(){
 
 G4Element* G4LowEnergyRayleigh::SelectRandomAtom(const G4DynamicParticle* aDynamicGamma,
                                                G4Material* aMaterial) {
+
   // select randomly 1 element within the material 
   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
   const G4int NumberOfElements = aMaterial->GetNumberOfElements();

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.16 1999-07-06 15:03:03 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.17 1999-07-30 15:18:46 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -340,6 +340,12 @@ void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
 
 G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
 
+  // First Ionised subshell chosen basing on subshell integrated cross section EPDL97
+  // Fluorescence:
+  // J. Stepanek " A program to determine the radiation spectra due to a single atomic 
+  // subshell ionisation by a particle or due to deexcitation or decay of radionuclides", 
+  // Comp. Phys. Comm. 1206 pp 1-1-9 (1997)
+  // 
   // incoming particle initialization
   aParticleChange.Initialize(aTrack);
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.21 1999-07-20 16:45:46 maire Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.22 1999-07-30 15:18:46 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -136,47 +136,49 @@ void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParti
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
-{
-// Build tables for the ionization energy loss
-//  the tables are built for *MATERIALS*
+void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType) {
 
-    const G4double twoln10 = 2.*log(10.);
-    const G4double Factor = twopi_mc2_rcl2;
+  // Already in standard process
+  
+  // Build tables for the ionization energy loss
+  //  the tables are built for *MATERIALS*
+  
+  const G4double twoln10 = 2.*log(10.);
+  const G4double Factor = twopi_mc2_rcl2;
+  
+  G4double LowEdgeEnergy, ionloss;
+  
+  // material properties
+  G4double ElectronDensity,Eexc,Eexcm2,Cden,Mden,Aden,X0den,X1den ;
+  // some local variables
+  G4double tau,Tmax,gamma,gamma2,bg2,beta2,d,d2,d3,d4,delta,x,y ;
 
-    G4double LowEdgeEnergy, ionloss;
-
-    // material properties
-    G4double ElectronDensity,Eexc,Eexcm2,Cden,Mden,Aden,X0den,X1den ;
-    // some local variables
-    G4double tau,Tmax,gamma,gamma2,bg2,beta2,d,d2,d3,d4,delta,x,y ;
-
-    ParticleMass = aParticleType.GetPDGMass();
-    G4double* ParticleCutInKineticEnergy = aParticleType.GetEnergyCuts() ;
-
-    //  create table
-
-    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-    G4int numOfMaterials = theMaterialTable->length();
-
-     if (theLossTable) { theLossTable->clearAndDestroy();
-                         delete theLossTable;
-                       }
-
-    theLossTable = new G4PhysicsTable(numOfMaterials);
-
-//  loop for materials
-
-    for (G4int J=0; J<numOfMaterials; J++)
+  ParticleMass = aParticleType.GetPDGMass();
+  G4double* ParticleCutInKineticEnergy = aParticleType.GetEnergyCuts() ;
+  
+  //  create table
+  
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  G4int numOfMaterials = theMaterialTable->length();
+  
+  if (theLossTable) { theLossTable->clearAndDestroy();
+  delete theLossTable;
+  }
+  
+  theLossTable = new G4PhysicsTable(numOfMaterials);
+  
+  //  loop for materials
+  
+  for (G4int J=0; J<numOfMaterials; J++)
     {
       // create physics vector and fill it
-
+      
       G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
-                    LowestKineticEnergy, HighestKineticEnergy, TotBin);
-
+							   LowestKineticEnergy, HighestKineticEnergy, TotBin);
+      
       // get material parameters needed for the energy loss calculation
       const G4Material* material= (*theMaterialTable)[J];
-
+      
       ElectronDensity = material->GetElectronDensity();
       Eexc   = material->GetIonisation()->GetMeanExcitationEnergy();
       Eexc  /= ParticleMass; Eexcm2 = Eexc*Eexc;
@@ -186,7 +188,7 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticle
       X0den  = material->GetIonisation()->GetX0density();
       X1den  = material->GetIonisation()->GetX1density();
       // now comes the loop for the kinetic energy values
-
+      
       for (G4int i = 0 ; i < TotBin ; i++)
          {
           LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
@@ -392,6 +394,13 @@ G4double G4LowEnergyIonisation::ComputeCrossSection(const G4double AtomIndex,
  
 G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData,   
 							const G4Step&  stepData){
+
+  // First Ionised subshell chosen basing on subshell integrated cross section EPDL97
+  // Fluorescence:
+  // J. Stepanek " A program to determine the radiation spectra due to a single atomic 
+  // subshell ionisation by a particle or due to deexcitation or decay of radionuclides", 
+  // Comp. Phys. Comm. 1206 pp 1-19 (1997)
+  // 
 
   aParticleChange.Initialize(trackData);
   
@@ -791,7 +800,6 @@ G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell,
       ShellNum++;
     }
     
-    //TransProb start from 1 because the first element of the list is the primary shall id number
     G4int TransProb = 1;
     for(TransProb = 1; TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->length(); TransProb++){ 
       
@@ -829,6 +837,19 @@ G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell,
 G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber, 
 					       const G4int ShellIndex, 
 					       const G4double KinEn){
+
+  // Sampling Method: acceptation - rejection method from
+  // EGS4 W.R. Nelson et al. The EGS4 Code System. SLAC-Report-265 , December 1985 
+  // Fit functions:
+  //
+  // sum_i A_i/(en+bind)^i 
+  // Y.-K.Kim M.E.Rudd http://physics.nist.gov/PhysRefData/Ionization/intro.html
+  // Modified: degree of monomial in the truncated sum is from 2 to 7 instead that from 
+  // 2 to 6.
+  //
+  // B/En^2
+  // Y.K.Kim M.E.Rudd "Bynary-encounter-dipole model for electron-impact ionisation" 
+  // Phys.Rev A 50 (1994) (Rutherford formula)
 
   //  1) Load Coefficients (I need Z number and the index of the shell)
   oneAtomTable* oneAtomCoeffTable = (*theSamplingCoeffTable)[ZNumVec->index(AtomicNumber)];
