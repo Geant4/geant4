@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysisMessenger.cc,v 1.2 2001-07-11 09:56:57 gunter Exp $
+// $Id: GammaRayTelAnalysisMessenger.cc,v 1.3 2001-11-23 17:39:04 santin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -36,18 +36,18 @@
 #ifdef G4ANALYSIS_USE
 #include "GammaRayTelAnalysisMessenger.hh"
 
-#include "GammaRayTelAnalysisManager.hh"
+#include "GammaRayTelAnalysis.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelAnalysisMessenger::GammaRayTelAnalysisMessenger(GammaRayTelAnalysisManager* analysisManager)
-  :GammaRayTelAnalysis(analysisManager)
+GammaRayTelAnalysisMessenger::GammaRayTelAnalysisMessenger(GammaRayTelAnalysis* analysis)
+  :gammaRayTelAnalysis(analysis)
 
 { 
-  GammaRayTelAnalysisDir = new G4UIdirectory("/analysis/");
-  GammaRayTelAnalysisDir->SetGuidance("GammaRayTel analysis control.");
+  gammaRayTelAnalysisDir = new G4UIdirectory("/analysis/");
+  gammaRayTelAnalysisDir->SetGuidance("GammaRayTel analysis control.");
   
   /* 
      Commands for the 1D histograms (energy deposition in the last 
@@ -139,21 +139,21 @@ void GammaRayTelAnalysisMessenger::SetNewValue(G4UIcommand* command,G4String new
   // 1D Histograms
 
   if( command == Histo1DDrawCmd )
-    { GammaRayTelAnalysis->SetHisto1DDraw(newValue);}
+    { gammaRayTelAnalysis->SetHisto1DDraw(newValue);}
 
   if( command == Histo1DSaveCmd )
-    { GammaRayTelAnalysis->SetHisto1DSave(newValue);}
+    { gammaRayTelAnalysis->SetHisto1DSave(newValue);}
 
   // 2D Histograms
 
   if( command == Histo2DDrawCmd )
-    { GammaRayTelAnalysis->SetHisto2DDraw(newValue);}
+    { gammaRayTelAnalysis->SetHisto2DDraw(newValue);}
 
   if( command == Histo2DSaveCmd )
-    { GammaRayTelAnalysis->SetHisto2DSave(newValue);}
+    { gammaRayTelAnalysis->SetHisto2DSave(newValue);}
 
   if( command == Histo2DModeCmd )
-    { GammaRayTelAnalysis->SetHisto2DMode(newValue);}
+    { gammaRayTelAnalysis->SetHisto2DMode(newValue);}
    
 }
 
