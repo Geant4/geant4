@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2001-12-08 15:22:44 japost Exp $
+$Id: History,v 1.23 2002-03-25 17:15:31 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,37 +16,36 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar  25, 2002 G.Cosmo
+---------------------
+- Added dependency to new module geometry/biasing in GNUmakefile.
+
 Dec   8, 2001 J.Apostolakis - transport-V03-02-07
 ---------------------------
- 
-  Activated the killing of 'looping' particles -- to be used also to
-abandon (kill) particles that are stuck (eg at boundaries).
- [ Fix for problems of stuck particles reported by CMS (P.Arce),
-   and Atlas (A.Del'Acqua, A.Rimoldi) ] 
+- Activated the killing of 'looping' particles -- to be used also to
+  abandon (kill) particles that are stuck (eg at boundaries).
+  [ Fix for problems of stuck particles reported by CMS (P.Arce),
+    and Atlas (A.Del'Acqua, A.Rimoldi) ] 
 
 Nov  28, 2001 J.Apostolakis - transport-V03-02-06
 ---------------------------
-
- Fix for the new updating of the time for fields -- correcting previous 
+- Fix for the new updating of the time for fields -- correcting previous 
   tag.  By keeping account whether the field changes the energy (and 
   therefore the velocity) in the field manager.
 
- Requires and co-works with
+  Requires and co-works with
    - "field-V03-02-07" 
    - "geomvol-V03-02-02"
- in order to compile (let alone have any effect.)
-
+  in order to compile (let alone have any effect.)
 
 Nov  10, 2001 J.Apostolakis - transport-V03-02-05
 ---------------------------
 - Motivated by the use case of an Electric Field,
    * in order to achieve reasonable accuracy in time integration,
    * and to enable fields that vary with the global time
-
- changed Transportation to try to obtain the delta_time from FieldTrack.
-
- Co-works with and requires "field-V03-02-03" to have any effect.
-
+  changed Transportation to try to obtain the delta_time from FieldTrack.
+  Co-works with and requires "field-V03-02-03" to have any effect.
 
 Nov   9, 2001   G. Cosmo - transport-V03-02-04
 ------------------------
@@ -54,30 +53,28 @@ Nov   9, 2001   G. Cosmo - transport-V03-02-04
 
 Nov   8, 2001   G. Cosmo - transport-V03-02-03
 ------------------------
-Introduced changes to G4Transportation for reference-counted
-touchables (R.Chytracek). Added methods GetFreeTouchable() and
-SetTheOtherTouchableFree(G4VTouchable*).
+- Introduced changes to G4Transportation for reference-counted
+  touchables (R.Chytracek). Added methods GetFreeTouchable() and
+  SetTheOtherTouchableFree(G4VTouchable*).
 
 Nov   6, 2001   J. Apostolakis - transport-V03-02-02
 ------------------------------
-Added protection in G4Transportation::AlongStepGPIL for messaging
-"ResestStepEstimate" of ChordFinder for the case there is no global field.
-** NOTE this is not a perfect resolution (see NOTE in log file). **
-
---> Thanks to Radovan Chytracek for reporting this problem (move to file log)
+- Added protection in G4Transportation::AlongStepGPIL for messaging
+  "ResestStepEstimate" of ChordFinder for the case there is no global field.
+  ** NOTE this is not a perfect resolution (see NOTE in log file). **
+  --> Thanks to Radovan Chytracek for reporting this problem (move to file log)
 
 Aug  16, 2001   J. Apostolakis - transport-V03-02-01
 ------------------------------
-Tagged.
-(This tag requires field-V03-02-00)
+- Tagged. (This tag requires field-V03-02-00)
 
 Aug  16, 2001   J. Apostolakis
 ------------------------------
 - Erasing state information from previous track at the first step of
-   each track.  (-> this is required to ensure repeatability)
-   This should eliminate any non-repeatability due to the propagation
-   in field.
-    ( Requires updated version of G4ChordFinder )
+  each track.  (-> this is required to ensure repeatability)
+  This should eliminate any non-repeatability due to the propagation
+  in field.
+  ( Requires updated version of G4ChordFinder )
 
 Jul  19, 2001   G. Cosmo  transport-V03-02-00
 ------------------------
@@ -86,33 +83,31 @@ Jul  19, 2001   G. Cosmo  transport-V03-02-00
 
 Apr  11, 2001   J. Apostolakis   transport-V03-01-02
 ------------------------------
-Corrected the last update of G4Transportation.cc, which overwrote the 
-value of the spin in the cases where a particle was not charged (eg photon) or
-a charged particle was not in a field. 
+- Corrected the last update of G4Transportation.cc, which overwrote the 
+  value of the spin in the cases where a particle was not charged (eg photon)
+  or a charged particle was not in a field. 
 
 Apr  11, 2001   P. Gumplinger   transport-V03-01-01
 -----------------------------
-Updated G4Transportation.cc to make spin tracking work correctly:
-- Replaced the line originally commented out:
-    // fTransportEndPolarization= aFieldTrack.GetSpin() ; // Not yet possible
-  with: 
-    fTransportEndSpin = aFieldTrack.GetSpin();
-- Added to the AlongStepDoIt() the following call:
-    fParticleChange.SetPolarizationChange(fTransportEndSpin);
-
+- Updated G4Transportation.cc to make spin tracking work correctly:
+  o Replaced the line originally commented out:
+      // fTransportEndPolarization= aFieldTrack.GetSpin() ; // Not yet possible
+    with: 
+      fTransportEndSpin = aFieldTrack.GetSpin();
+  o Added to the AlongStepDoIt() the following call:
+      fParticleChange.SetPolarizationChange(fTransportEndSpin);
 
 Mar  19, 2001   J. Apostolakis  transport-V03-00-01
 ------------------------------
-G4Transportation modified to use new FieldTrack, and get Kinetic Energy from it. 
-
-This new FieldTrack together with changes in associated Equation of Motion
-classes implement the momentum vector as independent variable in place of the
-velocity. 
-
-So this tag requires 
- - new geometry/magneticfield tag "field-V03-00-01",  and 
- - new geometry/volumes  tag "geomvol-V03-00-03" for new G4PropagatorInField ().
-
+- G4Transportation modified to use new FieldTrack, and get Kinetic
+  Energy from it. 
+  This new FieldTrack together with changes in associated Equation of Motion
+  classes implement the momentum vector as independent variable in place of
+  the velocity. 
+  So this tag requires 
+  - new geometry/magneticfield tag "field-V03-00-01",  and 
+  - new geometry/volumes  tag "geomvol-V03-00-03" for new
+    G4PropagatorInField ().
 
 Feb  27, 2001   J. Apostolakis  (transport-V03-00-00)
 ------------------------------
@@ -120,11 +115,10 @@ Feb  27, 2001   J. Apostolakis  (transport-V03-00-00)
   *   Modified calculation of energy at the end of field step
        to make it more accurate at low velocities,
        (while remaining correct at high gammas). 
-
   This improves the energy determination. 
   Together with electromagnetic/standard tag  "stand-V03-00-03"
   this addresses the main problem in propagating in an electric field
-   (Problem report # 108 )
+  (Problem report # 108 )
 
 Sep  22, 2000   V. Grichine	(transport-V02-00-00)  [recorded by G.Cosmo]
 ---------------------------

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:14:09 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2002-03-25 17:15:31 gcosmo Exp $
 # ------------------------------------------------------------
 # GNUmakefile for transportation library.  G.Folger 10-Dec-97.
 # ------------------------------------------------------------
@@ -17,6 +17,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
 	    -I$(G4BASE)/geometry/management/include \
 	    -I$(G4BASE)/geometry/volumes/include \
 	    -I$(G4BASE)/geometry/magneticfield/include \
+            -I$(G4BASE)/geometry/biasing/include \
 	    -I$(G4BASE)/track/include \
 	    -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
