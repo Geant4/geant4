@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (26-October-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -57,9 +57,13 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /gun/particle e-
 /gun/energy 1 GeV
 #
-###/testem/histo/setFileName testem3.paw
-###/testem/histo/setHisto 0 100 700. 1000. MeV
-###/testem/histo/setHisto 1 100   0.  300. MeV
+#/testem/histo/setFileName PblqArg.paw
+#/testem/histo/setHisto 1 100 700. 1000. MeV	#edep in absor1
+#/testem/histo/setHisto 2 100   0.  300. MeV	#edep in absor2
+#/testem/histo/setHisto 11 52   0.   52.  none	#long. profile in absor1
+#/testem/histo/setHisto 12 52   0.   52.  none	#long. profile in absor2
+#/testem/histo/setHisto 21 102  0.   102. none	#energy flow of primary
+#/testem/histo/setHisto 22 102  0.   102. none	#energy flow of secondaries
 #
 /testem/event/printModulo 50
 #
@@ -119,25 +123,25 @@ msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
-MuIoni:   tables are built for  mu+
+muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
-MuBrems:   tables are built for  mu+
+muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-MuPairProd:   tables are built for  mu+
+muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 ### All dEdx and Range tables are built #####
 
-MuIoni:   tables are built for  mu-
+muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
@@ -208,19 +212,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=41.3s Real=51.42s Sys=6.21s
+  User=43.98s Real=54.83s Sys=6.37s
 
 ------------------------------------------------------------
 material             Total Edep   sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-      Lead: 810.67 MeV +- 13.97 MeV     1.724 +- 0.1724 %      56.1 cm  +- 1.12 cm 
-liquidArgon: 180.55 MeV +- 13.96 MeV     7.733 +- 0.7733 %      89.5 cm  +- 7.29 cm 
+      Lead:  809.7 MeV +- 14.34 MeV     1.771 +- 0.1771 %        56 cm  +- 1.08 cm 
+liquidArgon: 180.62 MeV +- 13.92 MeV     7.706 +- 0.7706 %      89.4 cm  +- 7.09 cm 
 
 ------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 660789644, 742802748
+ Current couple of seeds = 680049547, 1607879973
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (26-October-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -42,16 +42,8 @@ Current available graphics systems are:
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
 #
-/testem/det/tallyMat Water
-/testem/det/tallySize 2. 2. 2. mm
-/testem/det/tallyPosition -9.9 0. 0. cm
-/testem/det/tallyPosition -5.  0. 0. cm
-/testem/det/tallyPosition  0.  0. 0. cm
-/testem/det/tallyPosition  5.  0. 0. cm
-#
 /testem/phys/addPhysics  standard	# em physics     
 PhysicsList::AddPhysicsList: <standard>
-###/testem/phys/addPhysics  g4v52	# em physics
 ###/testem/phys/addPhysics  binary	# hadronic physics
 #
 /run/initialize
@@ -59,13 +51,6 @@ userDetector->Construct() start.
 
 ---------------------------------------------------------
 ---> The Absorber is 20 cm  of Water
-
----------------------------------------------------------
----> There are 4 tallies : 2 2 2 mm  of Water
-tally 0: position = -9.9 0 0 cm 
-tally 1: position = -5 0 0 cm 
-tally 2: position = 0 0 0 fm 
-tally 3: position = 5 0 0 cm 
 
 ---------------------------------------------------------
 World is registered to the default region.
@@ -78,7 +63,6 @@ PhysicsList::SetCuts:CutLength : 1 mm
 #
 /gun/particle proton
 /gun/energy 160 MeV
-/testem/gun/rndm 2 mm
 #
 /testem/event/printModulo 1000
 /testem/stepMax 1 mm
@@ -139,25 +123,25 @@ msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
-MuIoni:   tables are built for  mu+
+muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
-MuBrems:   tables are built for  mu+
+muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-MuPairProd:   tables are built for  mu+
+muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 ### All dEdx and Range tables are built #####
 
-MuIoni:   tables are built for  mu-
+muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
@@ -195,16 +179,6 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
-
-    Voxelisation: top CPU users:
-    Percent   Total CPU    System CPU       Memory  Volume
-    -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            0k Absorber
-
-    Voxelisation: top memory users:
-    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
-    -------   --------     ------   ------   --------   ----------    ----------
-     100.00          0k         1        5          8         0.00    Absorber
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -235,20 +209,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=155.24s Real=296.2s Sys=55.27s
+  User=142.62s Real=278.91s Sys=54.24s
 
----------------------------------------------------------
- Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
-tally 0: 	 	10.37707 GeV	0.64856687 % 	0.00020782383 Gy
-tally 1: 	 	8.000398 GeV	0.50002488 % 	0.0001602257 Gy
-tally 2: 	 	3.673622 GeV	0.22960137 % 	7.3572423e-05 Gy
-tally 3: 	 	1.8590994 GeV	0.11619371 % 	3.7232586e-05 Gy
+ The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 
----------------------------------------------------------
+ projected Range= 17.694 cm    rms= 2.8027 mm 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1530366474, 1972665398
+ Current couple of seeds = 1666420419, 901908397
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
