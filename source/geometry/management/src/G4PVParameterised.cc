@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.cc,v 1.4 2001-07-11 09:59:21 gunter Exp $
+// $Id: G4PVParameterised.cc,v 1.5 2002-10-14 07:42:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,6 +60,11 @@ G4PVParameterised::~G4PVParameterised()
 G4VPVParameterisation* G4PVParameterised::GetParameterisation() const
 {
     return fparam;
+}
+
+G4bool G4PVParameterised::IsParameterised() const
+{
+    return true;
 }
 
 void G4PVParameterised::GetReplicationData(EAxis& axis,

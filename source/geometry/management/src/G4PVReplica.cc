@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.cc,v 1.4 2002-05-15 10:07:20 gcosmo Exp $
+// $Id: G4PVReplica.cc,v 1.5 2002-10-14 07:42:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -127,9 +127,19 @@ G4bool G4PVReplica::IsReplicated() const
     return true;
 }
 
+G4bool G4PVReplica::IsParameterised() const
+{
+    return false;
+}
+
 G4VPVParameterisation* G4PVReplica::GetParameterisation() const
 {
     return 0;
+}
+
+G4int G4PVReplica::GetMultiplicity() const
+{
+    return fnReplicas;
 }
 
 void G4PVReplica::GetReplicationData(EAxis& axis,

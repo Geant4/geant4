@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2002-09-11 12:36:24 gcosmo Exp $
+$Id: History,v 1.39 2002-10-14 07:42:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 14, 2002  G. Cosmo                 geommng-V04-01-01
+- G4PVParameterised[.hh.cc], G4PVPlacement[.hh.cc]:
+  Added new method IsParameterised() to enquire for existing parameterisation
+  for a placed volume.
+- G4PVReplica[.hh.cc], G4VPhysicalVolume[.hh.cc]:
+  Added methods IsParameterised() and GetMultiplicity() to enquire for existing
+  parameterisation of placed volume, and number of replicated volumes.
 
 September 11, 2002  G. Cosmo               geommng-V04-01-00
 - G4AssemblyVolume[.hh.icc.cc]:

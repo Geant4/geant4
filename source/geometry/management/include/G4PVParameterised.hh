@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.hh,v 1.5 2001-07-11 09:59:17 gunter Exp $
+// $Id: G4PVParameterised.hh,v 1.6 2002-10-14 07:42:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,6 +67,9 @@ class G4PVParameterised : public G4PVReplica
 
     virtual ~G4PVParameterised();
       // Virtual empty destructor.
+
+    virtual G4bool IsParameterised() const;
+      // Returns true to identify it is a parameterised physical volume.
 
     virtual G4VPVParameterisation* GetParameterisation() const;
       // Returns the current pointer to the parameterisation.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.4 2001-07-11 09:59:21 gunter Exp $
+// $Id: G4PVPlacement.cc,v 1.5 2002-10-14 07:42:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,6 +120,11 @@ void  G4PVPlacement::SetCopyNo(G4int newCopyNo)
 
 
 G4bool G4PVPlacement::IsReplicated() const
+{
+    return false;
+}
+
+G4bool G4PVPlacement::IsParameterised() const
 {
     return false;
 }

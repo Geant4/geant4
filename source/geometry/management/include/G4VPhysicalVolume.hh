@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.hh,v 1.6 2001-07-11 09:59:18 gunter Exp $
+// $Id: G4VPhysicalVolume.hh,v 1.7 2002-10-14 07:42:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -126,6 +126,10 @@ class G4VPhysicalVolume
     inline void SetName(const G4String& pName);
       // Set the volume's name.
 
+    virtual G4int GetMultiplicity() const;
+      // Returns number of object entities (1 for normal placements,
+      // n for replicas or parameterised).
+
     // Functions required of subclasses
 
     virtual G4bool IsMany() const = 0;
@@ -137,6 +141,9 @@ class G4VPhysicalVolume
     virtual G4bool IsReplicated() const = 0;
       // Return true if replicated (single object instance represents
       // many real volumes), else false.
+    virtual G4bool IsParameterised() const = 0;
+      // Return true if parameterised (single object instance represents
+      // many real parameterised volumes), else false.
     virtual G4VPVParameterisation* GetParameterisation() const = 0;
       // Return replicas parameterisation object (able to compute dimensions
       // and transformations of replicas), or NULL if not applicable.
