@@ -26,7 +26,9 @@ Summarised, the list of changes is the following:
 
 event                                   event-V05-02-05
 -----
-- Introduced G4StackChecker class, utility class for checkin the event stack.
+- Introduced G4StackChecker class, utility class to be used from the
+  user stacking action for enhancing the verbosity on tracks being
+  pushed into the stack.
 - Introduced G4VUserEventInformation class. Objects of this class can be
   associated by the user to G4Event.
 - Introduced new classes G4VUserPrimaryVertexInformation and
