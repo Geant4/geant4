@@ -20,9 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01IonPhysics.cc,v 1.5 2003-10-11 03:00:00 tkoi Exp $
+// $Id: A01IonPhysics.cc,v 1.6 2003-10-14 00:15:48 tkoi Exp $
 // --------------------------------------------------------------
 //
+// 13-Oct-2003 Add Comment for Ionization of Generic Ion by T. Koi 
 
 #include "A01IonPhysics.hh"
 
@@ -67,9 +68,11 @@ void A01IonPhysics::ConstructProcess()
 
    // add process
    G4VProcess* thegionMultipleScattering = new G4MultipleScattering();
+   //
+   // G4hIonization may be not able to use for Geanric Ion in future 
+   // Please take care using this physics list after v5.2.p02 
    G4VProcess* thegionIonisation        = new G4hIonisation();
    //
-   // add processes
    pManager->AddProcess(thegionIonisation);
    pManager->AddProcess(thegionMultipleScattering);
    //
