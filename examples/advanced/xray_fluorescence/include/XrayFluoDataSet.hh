@@ -64,17 +64,17 @@ public:
   //identified by id
   G4double FindValue(G4double e, G4int id = 0) const;
 
-  virtual const G4VEMDataSet* GetComponent(G4int i) const { return 0;} 
+  virtual const G4VEMDataSet* GetComponent(G4int i) const { i = i ; return 0;} 
 
-  virtual void AddComponent(G4VEMDataSet* dataSet) { }
+  virtual void AddComponent(G4VEMDataSet* dataSet) { G4VEMDataSet* dummy; dummy = dataSet;}
 
   virtual size_t NumberOfComponents() const { return 0; }
 
 
   void PrintData() const;
 
-  const G4DataVector& GetEnergies(G4int i) const { return *energies; }
-  const G4DataVector& GetData(G4int i) const { return *data; }
+  const G4DataVector& GetEnergies(G4int i) const { i = i; return *energies; }
+  const G4DataVector& GetData(G4int i) const { i = i; return *data; }
 
 private:
 

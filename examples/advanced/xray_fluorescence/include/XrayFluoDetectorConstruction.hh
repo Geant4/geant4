@@ -250,10 +250,10 @@ inline void XrayFluoDetectorConstruction::ComputeApparateParameters()
   // Compute derived parameters of the apparate
   
   DeviceThickness = PixelThickness+OhmicNegThickness+OhmicPosThickness;
-  DeviceSizeY =NbOfPixelRows*max(ContactSizeXY,PixelSizeXY);
-  DeviceSizeX =NbOfPixelColumns*max(ContactSizeXY,PixelSizeXY);
+  DeviceSizeY =NbOfPixelRows*G4std::max(ContactSizeXY,PixelSizeXY);
+  DeviceSizeX =NbOfPixelColumns*G4std::max(ContactSizeXY,PixelSizeXY);
   
-  WorldSizeZ = (2 * (DistDe  +1.4142 *(max(max(DeviceThickness,DeviceSizeY), DeviceSizeX))))+5*m; 
+  WorldSizeZ = (2 * (DistDe  +1.4142 *(G4std::max(G4std::max(DeviceThickness,DeviceSizeY), DeviceSizeX))))+5*m; 
   WorldSizeXY = 2 * (DistDe +1.4142 *Dia1SizeXY)+5*m;
   
 }
