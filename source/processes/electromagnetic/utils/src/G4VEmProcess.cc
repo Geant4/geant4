@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.5 2004-05-17 09:46:57 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.6 2004-06-29 14:00:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -69,18 +69,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
-                      G4VRestDiscreteProcess(name, type),
+                      G4VDiscreteProcess(name, type),
   theLambdaTable(0),
   theEnergyOfCrossSectionMax(0),
   theCrossSectionMax(0),
   particle(0),
   secondaryParticle(0),
   currentCouple(0),
-  nLambdaBins(90),
-  lambdaFactor(0.1),
-  mfpKinEnergy(0.0),
-  integral(true),
-  meanFreePath(true)
+  nLambdaBins(90)
 {
 
   minKinEnergy         = 0.1*keV;
@@ -95,8 +91,6 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
 G4VEmProcess::~G4VEmProcess()
 {
   if(theLambdaTable) theLambdaTable->clearAndDestroy();
-  if(theEnergyOfCrossSectionMax) delete [] theEnergyOfCrossSectionMax;
-  if(theCrossSectionMax) delete [] theCrossSectionMax;
   modelManager->Clear();
   delete modelManager;
   (G4LossTableManager::Instance())->DeRegister(this);
@@ -107,8 +101,6 @@ G4VEmProcess::~G4VEmProcess()
 void G4VEmProcess::Initialise()
 {
   if(theLambdaTable) theLambdaTable->clearAndDestroy();
-  if(theEnergyOfCrossSectionMax) delete [] theEnergyOfCrossSectionMax;
-  if(theCrossSectionMax) delete [] theCrossSectionMax;
   theLambdaTable = 0;
   modelManager->Clear();
   theCuts = modelManager->Initialise(particle,secondaryParticle,2.,verboseLevel);
@@ -120,7 +112,6 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
   if( !particle ) particle = &part;
   currentCouple = 0;
-  preStepLambda = 0.0;
   if(0 < verboseLevel) {
     G4cout << "G4VEmProcess::BuildPhysicsTable() for "
            << GetProcessName()
@@ -226,17 +217,14 @@ void G4VEmProcess::SetSecondaryParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p,
-                                      G4VEmFluctuationModel*,
-                                const G4Region* region)
+void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p, const G4Region* region)
 {
   modelManager->AddEmModel(order, p, 0, region);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEmProcess::UpdateEmModel(const G4String& nam, G4double emin,
-                                                              G4double emax)
+void G4VEmProcess::UpdateEmModel(const G4String& nam, G4double emin, G4double emax)
 {
   modelManager->UpdateEmModel(nam, emin, emax);
 }
@@ -244,16 +232,10 @@ void G4VEmProcess::UpdateEmModel(const G4String& nam, G4double emin,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
-                                              const G4Step& step)
+                                              const G4Step&)
 {
   aParticleChange.Initialize(track);
   G4double finalT = track.GetKineticEnergy();
-
-  // Integral approach
-  if (integral) {
-    if(preStepLambda*G4UniformRand() > GetLambda(finalT))
-    return G4VRestDiscreteProcess::PostStepDoIt(track,step);
-  }
 
   G4VEmModel* currentModel = SelectModel(finalT);
   G4double tcut = (*theCuts)[currentMaterialIndex];
@@ -283,17 +265,9 @@ void G4VEmProcess::PrintInfoDefinition()
          << G4BestUnit(maxKinEnergy,"Energy")
          << " in " << nLambdaBins << " bins."
          << G4endl;
-  /*
-      G4cout << "DEDXTable address= " << theDEDXTable << G4endl;
-      if(theDEDXTable) G4cout << (*theDEDXTable) << G4endl;
-      G4cout << "RangeTable address= " << theRangeTable << G4endl;
-      if(theRangeTable) G4cout << (*theRangeTable) << G4endl;
-      G4cout << "InverseRangeTable address= " << theInverseRangeTable << G4endl;
-      if(theInverseRangeTable) G4cout << (*theInverseRangeTable) << G4endl;
-  */
+
   if(0 < verboseLevel) {
     G4cout << "Tables are built for " << particle->GetParticleName()
-           << " IntegralFlag= " <<  integral
            << G4endl;
 
     if(2 < verboseLevel) {
@@ -377,7 +351,6 @@ G4bool G4VEmProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
 			  	              G4bool ascii)
 {
   currentCouple = 0;
-  preStepLambda = 0.0;
   if(0 < verboseLevel) {
     G4cout << "G4VEmProcess::RetrievePhysicsTable() for "
            << part->GetParticleName() << " and process "
@@ -464,12 +437,5 @@ void G4VEmProcess::ActivateFluorescence(G4bool, const G4Region*)
 void G4VEmProcess::ActivateAugerElectronProduction(G4bool, const G4Region*)
 
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEmProcess::SetLambdaFactor(G4double val)
-{
-  if(val > 0.0 && val <= 1.0) lambdaFactor = val;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

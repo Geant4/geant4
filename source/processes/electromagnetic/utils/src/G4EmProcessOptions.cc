@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.2 2004-05-17 09:46:56 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.3 2004-06-29 14:00:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -99,13 +99,6 @@ void G4EmProcessOptions::SetIntegral(G4bool val)
   for(itr = v.begin(); itr != v.end(); itr++) {
     G4VEnergyLossProcess* p = *itr;
     if(p) p->SetIntegral(val);
-  }
-  const std::vector<G4VEmProcess*>& w =
-        theManager->GetEmProcessVector();
-  std::vector<G4VEmProcess*>::const_iterator itp;
-  for(itp = w.begin(); itp != w.end(); itp++) {
-    G4VEmProcess* q = *itp;
-    if(q) q->SetIntegral(val);
   }
 }
 
@@ -351,13 +344,7 @@ void G4EmProcessOptions::SetLambdaFactor(G4double val)
     G4VEnergyLossProcess* p = *itr;
     if(p) p->SetLambdaFactor(val);
   }
-  const std::vector<G4VEmProcess*>& w =
-        theManager->GetEmProcessVector();
-  std::vector<G4VEmProcess*>::const_iterator itp;
-  for(itp = w.begin(); itp != w.end(); itp++) {
-    G4VEmProcess* q = *itp;
-    if(q) q->SetLambdaFactor(val);
-  }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
