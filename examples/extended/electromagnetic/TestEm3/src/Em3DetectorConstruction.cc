@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorConstruction.cc,v 1.12 2003-03-28 15:16:15 maire Exp $
+// $Id: Em3DetectorConstruction.cc,v 1.13 2003-03-31 12:44:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -224,7 +224,7 @@ void Em3DetectorConstruction::DefineMaterials()
   G4Material* CsI = new G4Material(name="CsI", density, ncomponents=2);
   CsI->AddElement(Cs, natoms=1);
   CsI->AddElement(I , natoms=1);
-  CsI->GetIonisation()->SetMeanExcitationEnergy(415.689*eV);
+  CsI->GetIonisation()->SetMeanExcitationEnergy(553.1*eV);
 
   //
   // define a material from elements.   case 2: mixture by fractional mass
