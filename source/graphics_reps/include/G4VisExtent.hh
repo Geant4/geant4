@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExtent.hh,v 1.8 2004-12-07 08:42:24 gcosmo Exp $
+// $Id: G4VisExtent.hh,v 1.9 2005-02-19 22:00:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,6 +75,7 @@ public: // With description
   void SetZmin (G4double zmin);
   void SetZmax (G4double zmax);
   friend std::ostream& operator << (std::ostream& os, const G4VisExtent& e);
+  static const G4VisExtent NullExtent;
 
 private:
   G4double fXmin, fXmax, fYmin, fYmax, fZmin, fZmax;

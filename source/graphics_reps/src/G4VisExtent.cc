@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExtent.cc,v 1.8 2004-12-07 08:42:25 gcosmo Exp $
+// $Id: G4VisExtent.cc,v 1.9 2005-02-19 22:00:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,8 @@
 #include "G4VisExtent.hh"
 
 #include "G4ios.hh"
+
+const G4VisExtent G4VisExtent::NullExtent;  // Default extent is null.
 
 G4VisExtent::G4VisExtent (G4double xmin, G4double xmax, 
 			  G4double ymin, G4double ymax, 

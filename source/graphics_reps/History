@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.56 2004-12-10 17:48:24 gcosmo Exp $
+cvs log $Id: History,v 1.57 2005-02-19 22:00:11 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19th February 2005  John Allison  (greps-V07-00-00)
+- Needed for vis-V07-00-06.
+- Added G4VisExtent::NullExtent.
 
 10th December 2004  G.Cosmo  (greps-V06-02-04)
 - Replaced M_PI with CLHEP's pi.
