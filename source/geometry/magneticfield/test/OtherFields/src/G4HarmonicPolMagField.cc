@@ -1,4 +1,4 @@
-/
+//
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HarmonicPolMagField.cc,v 1.1 2002-03-28 13:36:10 japost Exp $
+// $Id: G4HarmonicPolMagField.cc,v 1.2 2002-03-28 13:37:58 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
