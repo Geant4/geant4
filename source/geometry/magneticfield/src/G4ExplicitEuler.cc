@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExplicitEuler.cc,v 1.4 2001-07-11 09:59:11 gunter Exp $
+// $Id: G4ExplicitEuler.cc,v 1.5 2002-11-29 13:50:18 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,8 +41,7 @@
 
 G4ExplicitEuler::G4ExplicitEuler(G4Mag_EqRhs *EqRhs, 
                                  G4int numberOfVariables)
- : G4MagErrorStepper(EqRhs, numberOfVariables),
-   fNumberOfVariables(numberOfVariables)
+ : G4MagErrorStepper(EqRhs, numberOfVariables)
 {
 }
 
@@ -66,17 +65,17 @@ G4ExplicitEuler::DumbStepper( const G4double  yIn[],
 			            G4double  h,
 			 	    G4double  yOut[]        )
 {
-  //  const G4int nvar = 6 ; 
+  const G4int numberOfVariables= GetNumberOfVariables();
+
+  // Initialise time to t0, needed when it is not updated by the integration.
+  // yOut[7] = yIn[7];   //  Better to set it to NaN;  // TODO
 
   G4int i;
 
-  for(i=0;i<fNumberOfVariables;i++)
+  for(i=0;i< numberOfVariables;i++)
   {
     yOut[i] = yIn[i] + h*dydx[i] ;             // 1st and only Step 
   }
-  // NormaliseTangentVector( yOut );           // this could harm more than
-                                               // it helps - FIXME ???
   
   return ;
-
 }  
