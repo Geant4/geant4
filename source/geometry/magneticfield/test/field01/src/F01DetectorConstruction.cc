@@ -1,4 +1,3 @@
-//
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -21,7 +20,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01DetectorConstruction.cc,v 1.1 2001-10-11 07:12:56 grichine Exp $
+// $Id: F01DetectorConstruction.cc,v 1.2 2004-12-02 10:59:46 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,9 +30,6 @@
 
 #include "F01CalorimeterSD.hh"
 #include "F01ElectroMagneticField.hh"
-
-#include "G4VClusterModel.hh"
-#include "G4PAIclusterModel.hh"
 
 #include "G4Material.hh"
 #include "G4Tubs.hh"
