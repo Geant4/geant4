@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.9 1999-12-15 14:50:26 gunter Exp $
+// $Id: G4PropagatorInField.cc,v 1.10 2000-05-05 18:20:09 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -236,7 +236,7 @@ G4PropagatorInField::
 
      do_loop_count++;
   }
-  while( (!intersects ) && (StepTaken < CurrentProposedStepLength) 
+  while( (!intersects ) && (StepTaken + kCarTolerance < CurrentProposedStepLength)  
                         && ( do_loop_count < GetMaxLoopCount() ) );
 				       
 #ifdef G4VERBOSE
@@ -289,7 +289,7 @@ G4PropagatorInField::
   //   In order to correct this efficiently, we identify these cases
   //   and only take corrective action when they occur.
   // 
-  if( TruePathLength == 0.0 )
+  if( TruePathLength < 0.5*kCarTolerance ) 
     fNoZeroStep++;
   else
     fNoZeroStep= 0;
