@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.hh,v 1.12 2001-07-25 21:12:19 johna Exp $
+// $Id: G4VModel.hh,v 1.13 2001-08-24 20:36:26 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -94,7 +94,7 @@ public: // With description
 
   void SetExtent (const G4VisExtent&);
 
-  virtual G4bool Validate ();
+  virtual G4bool Validate (G4bool warn = true);
   // Validate, but allow internal changes (hence non-const function).
 
 protected:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HitsModel.hh,v 1.6 2001-07-22 00:57:16 johna Exp $
+// $Id: G4HitsModel.hh,v 1.7 2001-08-24 20:36:13 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,9 +56,6 @@ public: // With description
 
   virtual G4String GetCurrentTag () const;
   // A tag which depends on the current state of the model.
-
-  virtual G4bool Validate ();
-  // Validate, but allow internal changes (hence non-const function).
 
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NullModel.hh,v 1.5 2001-07-11 10:09:21 gunter Exp $
+// $Id: G4NullModel.hh,v 1.6 2001-08-24 20:36:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,9 +44,6 @@ public:
 
   void DescribeYourselfTo (G4VGraphicsScene&);
   // An exception is thrown if this is called!!!!!!!!!!!!!!!!!!!!
-
-  G4bool Validate ();
-  // Validate, but allow internal changes (hence non-const function).
 
   /////////////////////////////////////////////////
   // Access to other information: use GetModelingParameters()

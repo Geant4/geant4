@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScaleModel.hh,v 1.1 2001-07-22 01:01:00 johna Exp $
+// $Id: G4ScaleModel.hh,v 1.2 2001-08-24 20:36:18 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,9 +57,6 @@ public: // With description
 
   virtual G4String GetCurrentTag () const;
   // A tag which depends on the current state of the model.
-
-  virtual G4bool Validate ();
-  // Validate, but allow internal changes (hence non-const function).
 
 private:
 

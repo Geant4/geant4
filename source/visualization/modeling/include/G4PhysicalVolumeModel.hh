@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.15 2001-07-25 21:12:17 johna Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.16 2001-08-24 20:36:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,7 +92,7 @@ public: // With description
     return this;
   }
 
-  G4bool Validate ();
+  G4bool Validate (G4bool warn);
   // Validate, but allow internal changes (hence non-const function).
 
   void DefinePointersToWorkingSpace (G4int*              pCurrentDepth,
@@ -128,6 +128,8 @@ protected:
 
   G4bool IsDaughterCulled (const G4LogicalVolume* pMotherLV);
 
+  void CalculateExtent ();
+
   /////////////////////////////////////////////////////////
   // Data members...
 
@@ -136,6 +138,7 @@ protected:
   G4int              fTopPVCopyNo;   // ...of the physical volume.
   G4int              fRequestedDepth;
                      // Requested depth of geom. hierarchy search.
+  G4bool             fUseFullExtent; // ...if requested.
   G4int              fCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume* fpCurrentPV;    // Current physical volume.
   G4LogicalVolume*   fpCurrentLV;    // Current logical volume.

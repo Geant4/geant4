@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScaleModel.icc,v 1.1 2001-07-22 01:01:03 johna Exp $
+// $Id: G4ScaleModel.icc,v 1.2 2001-08-24 20:36:19 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 inline G4String G4ScaleModel::GetCurrentTag () const {
@@ -30,8 +30,4 @@ inline G4String G4ScaleModel::GetCurrentTag () const {
 
 inline G4String G4ScaleModel::GetCurrentDescription () const {
   return fGlobalDescription;
-}
-
-inline G4bool G4ScaleModel::Validate () {
-  return true;
 }

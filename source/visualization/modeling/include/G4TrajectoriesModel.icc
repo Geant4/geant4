@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.icc,v 1.5 2001-07-11 10:09:21 gunter Exp $
+// $Id: G4TrajectoriesModel.icc,v 1.6 2001-08-24 20:36:24 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 inline G4String G4TrajectoriesModel::GetCurrentTag () const {
@@ -31,8 +31,3 @@ inline G4String G4TrajectoriesModel::GetCurrentTag () const {
 inline G4String G4TrajectoriesModel::GetCurrentDescription () const {
   return fGlobalDescription;
 }
-
-inline G4bool G4TrajectoriesModel::Validate () {
-  return true;
-}
-

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TextModel.icc,v 1.2 2001-07-11 10:09:21 gunter Exp $
+// $Id: G4TextModel.icc,v 1.3 2001-08-24 20:36:22 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 inline G4String G4TextModel::GetCurrentTag () const {
@@ -30,8 +30,4 @@ inline G4String G4TextModel::GetCurrentTag () const {
 
 inline G4String G4TextModel::GetCurrentDescription () const {
   return fGlobalDescription;
-}
-
-inline G4bool G4TextModel::Validate () {
-  return true;
 }
