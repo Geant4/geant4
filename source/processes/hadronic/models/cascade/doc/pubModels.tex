@@ -3,14 +3,16 @@
 %     of an intermediate-energy intranuclear cascade and evaporation models. 
 [outline, and general description, overview]
 
-Intranuclear cascade model developed by Bertini \cite{}, 
+Intranuclear cascade (INC) model developed by Bertini \cite{bertini68}, solves the Boltzman equation on the average.
+Nuclear model consist of a three-region approximation to the continuously changing density distribution of nuclear matter within nuclei.
 
-Our model is based on re-engineering of INUCL code ~\cite{iljinov94}.
+INC model had been implemented in several codes such as HETC \cite{alsmiller90}. 
+Our model is based on re-engineering of INUCL code ~\cite{titarenko99a}.
 Models included are Bertini intra-nuclear cascade model with exitons, pre-equilibrium model, simple nucleus explosion model, 
-fission model, and evaporation model.
-Reactions from 100~MeV to 5~GeV energy are treated for proton, neutron, pions, photon and nuclear isotopes.
+fission model, and evaporation model. 
 
-Range of targets allowed arbitrary.
+%Fast pahse of initial INC results to highly exited nucleus -> fission / pre-equilibrium emission -> And is followed by slower compound nucleus phase --> fission/evaportaion
+%Protons and neurons are assumed to have a zero-temperature ::: Fermi distribution. Hence, their kinetic energy range from zero to the zero-temperature Fermi energies calculated from the dencity of nucleids in ecah region.
 %range of projectiles allowed p, n, pi and nuclei.
 %From a few Mev to 10 GeV for n, p, pi and up to about 100 MeV / nucleon for nuclei.
 
@@ -19,6 +21,7 @@ Range of targets allowed arbitrary.
 % pion aborption
 % pre-equilibrium exiton model 
 
+Reletivistic kinematics is applied throughout the cascade, with accurate conservation of energy and momentum.
 Cascade is stopped when all the particles, which can escape the nucleus, do it. 
 Then conformity with the energy - conservation law is checked and the given event is accepted, if $E_{exitation} > E_{cut} \approx $a few $MeV$.
 
@@ -32,31 +35,44 @@ Then conformity with the energy - conservation law is checked and the given even
 % \item the products of the interaction are tracked trough the regions  until the energy drops below a cut-off energy.
 % \end{itemize}
 
-We give in the following the overview of submodel features.
+In the following sections we give the overview of submodel features.
 
 %Originally the INUCL code was published in 1983 \cite{stepanov}.
 %Comprison of results between INCUL and LAHET, CEM95, HETC, CASCADE,
 %YIELDX, and ALICE code are presented in Refs. \cite{titarenko99a}.
+
+\subsection{Model limits}
+
+Range of targets allowed is arbitrary.
+Reactions from $\approx$ 100~MeV to $\approx$ 5~GeV energy are treated for proton, neutron, pions, photon and nuclear isotopes.
+
+At energies higher than $\approx$ 10 GeV) the INC picture breaks down, also physical foundation comes approximate at energies less than $\approx 200 MeV$, and needs to be supported with pre-quilibrium model.
 
 \subsection{Nuclei model}
 
 \subsubsection{Layers}
 
 Bertini INC is based on layered nuclei model. Our implementation
-has three layers of :::
+consists of three concentric spheres, each with uniform density of neutrons and protons.
+Nucleon  are supposed to to move in a radius-dependent well which incorporates both muclear and Coulomb effects.
 
 [Nuclear radius]
 Nuclear radius parameterization: By the definition R(A) is derived from eq. $Den(R(A)) = 0.01 Den max$.
+
+%Layer radius 0.1 0.2 0.9.
 
 [Nuclear density]
 Nuclear density distribution are derived from the $Re(V_{opt}(r))$ distribution. In cascade part, nucleus is divided into a finite number of zones with constant density.
 Fermi energy calculated in a local density approximation.
 
+The potential well depth is taken to be 7 MeV.
+
 Nuclear density effects are recalculated after each step.
 
 Impulse distribution
 
-Distribution of potential energy
+Distribution of potential energy.
+
 
 [Mass formula]
 Nucleons binding energies are calculated using mass formula. For pions $V_{opt}$ is taken to be constant (about 7 MeV).
@@ -78,7 +94,7 @@ experimental data. Asymptotic high temperature mass formula is used if it's impo
 % Normalization is set so that when integrating over the reqions, correct number of nucleons is achieved.
  
 % \subsubsection{Impulse distribution}
-% Impulse distribution in each region follows Fermi fermi distribution with zero temperature.
+% Impulse distribution in each region follows Fermi distribution with zero temperature.
 
 % \begin{equation}
 % f(p) = c p ^2
@@ -218,6 +234,9 @@ Cascade model has tabulated cross-sections
 Probabllility for interactions during INC is obtained using free (N, N) cross-sections. 
 %Cross-sections for production of one or two $\pi$ are included. 
 
+%pion absorption
+
+Path lengths of nucleons in the nucleus are sampled according to the local density and to free N-N cross sections.
 %Total inelastic cross section has to be taken from outside to normalize all data. 
 % \item Total reaction cross-sections [mbarn] were calculated by J.R. Letaw's formulae 
 %$45 A^0.7 (1+0.016 sin(5.3-2.63 log10(A)))^(1-0.62 exp(-E / 200) sin(10.9 E^(-0.28)))
@@ -320,9 +339,6 @@ Implementaion inclues holes and quasiparticles.
 %N -> N, N -> N + 2, N -> N -2, N -> N - 1 channels are treated.)
 %The angular distribution is isotropic in the frame of rest of the exiton system.
 
-
-
-
 % The outline of the pre-equilibrium model is as follows~\cite{ferrari96}:
 % \begin{list}{\upshape \arabic{list}. }
 %         {\usecounter{list}
@@ -357,12 +373,11 @@ Implementaion inclues holes and quasiparticles.
 
 % In HETC pre-equilibrium code have been used to replace the INC in in energy range $E < 200~MeV$.
 
+\subsection{Fermi break-up model}
 
-\subsection{Nucleus explosion model}
+Fermi break-up is allowed only in some extreme cases, i.e. for light nuclei ($A < 12$ and  $3(a-z) < Z < 6$ ) and $E(exitation) > 3.*Eb$ 
 
-Fermi breakup is allowed only in some extreme cases, i.e. for light nuclei ($A < 12$ and  $3(a-z) < Z < 6$ ) and $E(exitation) > 3.*Eb$ 
-
-Simple explosion model treating the total nuleus decay into neutrons and protons decreases exotic evaporation processes.
+Simple explosion model decays the nuleus into neutrons and protons and decreases exotic evaporation processes.
 
 \subsection{Fission model}
 
