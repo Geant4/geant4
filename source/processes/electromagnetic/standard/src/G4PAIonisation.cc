@@ -735,48 +735,6 @@ G4PAIonisation::PostStepDoIt( const G4Track& trackData,
  //ResetNumberOfInteractionLengthLeft();
 return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 
-
-  /*
-    G4double kinE,  massRatio, scaledTkin, energyTransfer, finalTkin ;
-    aParticleChange.Initialize(trackData) ;
-    const G4DynamicParticle* aParticle = trackData.GetDynamicParticle() ;
-
-    if( trackData.GetMaterial()->GetIndex() != fMatIndex )
-    {
-//    G4cout << "Wrong material " << G4endl;
-      return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-    }
-    kinE = aParticle->GetKineticEnergy() ;
-    massRatio = proton_mass_c2/aParticle->GetDefinition()->GetPDGMass() ;
-    scaledTkin = kinE*massRatio ;
-    // energyTransfer = GetRandomEnergyTransfer(scaledTkin) ;
-    energyTransfer = GetPostStepTransfer(scaledTkin) ;
-    if( energyTransfer < 0.0 )
-    {
-      //  G4cout<<"PAI::energyTransfer = "<<energyTransfer/keV<<" keV"<<G4endl ;
-      energyTransfer = 0.0 ;
-    }
-    finalTkin = kinE - energyTransfer ;
-
-    //  kill the particle if the kinetic energy <= 0
-
-    if (finalTkin < 0.0 )
-    {
-      finalTkin = 0.0;
-      if (aParticle->GetDefinition()->GetParticleName() == "proton")
-      {
-               aParticleChange.SetStatusChange( fStopAndKill ) ;
-      }
-      else     aParticleChange.SetStatusChange( fStopButAlive ) ;
-    }
-    aParticleChange.SetNumberOfSecondaries(0) ;
-    aParticleChange.SetEnergyChange( finalTkin ) ;
-    aParticleChange.SetLocalEnergyDeposit (energyTransfer) ;
-    //  G4cout<<"PAI::energyTransfer = "<<energyTransfer/keV<<" keV"<<G4endl ;
-
-    return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-    //  return &aParticleChange ;
-  */
 }
 
 
