@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayTable.cc,v 1.3 1999-04-14 10:28:25 kurasige Exp $
+// $Id: G4DecayTable.cc,v 1.4 1999-05-25 02:01:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,6 +19,7 @@
 //      27 July 1996 H.Kurashige
 // ------------------------------------------------------------
 
+#include "globals.hh"
 #include "G4DecayTable.hh"
 #include "Randomize.hh"
 
