@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleWithCuts.cc,v 1.15 2001-10-20 01:29:49 kurasige Exp $
+// $Id: G4ParticleWithCuts.cc,v 1.16 2001-10-20 04:42:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -303,10 +303,12 @@ G4double
 void  G4ParticleWithCuts::RestoreCuts(const G4double* cutInLength,
                                       const G4double* cutInEnergy )
 {
+  size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
+
   // Set cut in stopping range
   if(theCutInMaxInteractionLength) delete [] theCutInMaxInteractionLength;
+  theCutInMaxInteractionLength =  new G4double [numberOfMaterials];
 
-  size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
   // Restore the vector of cuts in energy corresponding to the range cut
   if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
   theKineticEnergyCuts = new G4double [numberOfMaterials];
