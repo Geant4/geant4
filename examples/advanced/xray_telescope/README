@@ -1,12 +1,16 @@
-$Id: README,v 1.9 2002-06-18 23:46:12 pia Exp $
+$Id: README,v 1.10 2002-11-14 16:33:48 santin Exp $
 -------------------------------------------------------------------
 
      =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+               Geant4 - X-Ray Telescope Example
      =========================================================
 
-                            xray_telescope
-                            --------------
+
+NEW: Nov 2002: Migration to AIDA 3.0 - see below
+
+
+Introduction
+------------
 XrayTel is an advanced Geant4 example based on a realistic simulation of 
 an X-ray Telescope.  It is based on work carried out by a team of Geant4 
 experts to simulate the interaction between X-ray Telescopes XMM-Newton 
@@ -29,13 +33,9 @@ in Geant4:
 
  - the generation of particles is done via the new General Particle Source
 
- - histograming facilities are available through the AIDA interfaces.
-   The implementation shown in this example is obsolete, and will be
-   updated in a future release; for an up-to-date illustration of how to
-   embed an AIDA-compliant analysis in a Geant4-based simulation
-   application, please see the other advanced examples in this
-   Geant4 release (brachytherapy, gammaray_telescope, underground_physics,
-   xray_fluorescence).
+ - histograming facilities are available through the AIDA 3.0 interfaces.
+
+ - on-line visualisation of histograms is provided through the AIDA 3.0 interface.
 
 In order to be able to use any of these packages, prior installation is 
 necessary and a number of environment variables will have to be set.
@@ -70,28 +70,41 @@ setenv G4VIS_USE_DAWN               1
 setenv G4VIS_USE_DAWNFILE           1
 setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
 
-# flag that we want to use analysis:
+NOTE: The geometry is refreshed on the viewer at the beginning of each run, 
+      but the tracks are plotted only in case an interesting event occurs. 
+      This is the case only for about 1 every 10**4 events.
+
+
+
+Analysis
+--------
+Set up for the AIDA 3.0 interface:
+In case the variable G4ANALYSIS_USE is set:
 setenv G4ANALYSIS_USE               1
+relevant information from the simulation is processed in the XrayTelAnalysis class and 
+saved, through the AIDA interface, to Histograms and Tuples.
+Compilation and link flags to hook any AIDA compliant system 
+are passed to the Geant4 GNUmakefile system by using the "aida-config" tool
+that should come with any AIDA compliant system. Specifically in the GNUmakefile you find the 2 lines
+  CPPFLAGS += `aida-config --include`
+  LDFLAGS += `aida-config --lib`
 
-# select analysis system: any AIDA 2.2 compliant system or Anaphe 3.6.5
 
-# set up for AIDA 2.2 compliancy:
-# Compilation and link flags to hook and AIDA compliant system 
-# are passed to the Geant4 GNUmakefile system by using the "aida-config" tool
-# that should come with any AIDA compliant system. Examples are:
-# setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --include`
-# setenv G4ANALYSIS_AIDA_CONFIG_LIBS   `aida-config --libs`
 
-#set up Anaphe/Lizard for the gcc-2.95 compiler
-setenv G4ANALYSIS_SYSTEM Lizard
-setenv G4ANALYSIS_USE_LIZARD        1
-setenv G4ANALYSIS_BUILD             1
-setenv G4ANALYSIS_BUILD_LIZARD      1
-setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/3.6.5/bin
-source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.5/install/sharedstart.csh
+On-line plotting
+----------------
+Set-up for the AIDA 3.0 interface:
+In case the variable G4ANALYSIS_USE_PLOTTER is set:
+setenv G4ANALYSIS_USE_PLOTTER 1
+a new window is opened for on-line plotting. 
+NOTE: The histograms are plotted or refreshed only in case an interesting event occurs. 
+      This is the case only for about 1 every 10**4 events.
 
-#add to the LD_LIBRARY_PATH 
-setenv LD_LIBRARY_PATH $OGLHOME/lib
+
+You may need to add the AIDA tool path to your run-time library path 
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:`aida-config -r`
+
+
 
 
 IMPORTANT WARNING! 
@@ -133,21 +146,18 @@ visualisation macros provided are
   - vrml.mac    for VRML display and output file
   - dawn.mac    for dawn display and PS output file
 
+You may need to add some paths to your run-time libraries env. variable,
+for example:
+$ setenv LD_LIBRARY_PATH $OGLHOME/lib
+
 To execute a run without visualisation use 
   - test.mac
 
 
 If the analysis options are set, histograming windows will
 automatically open and the corresponding files will be created.
-A 2D histogram (scatter plot) will display in real time every proton 
-hit that reaches the detector. 
 A 1D histogram will display the energy distribution of the protons
 that reach the detector at the end of the run.
-
-The final energy and (x,y,z) position of the protons that reach the 
-detector is output to a file "detector.hits".  This file is created
-if it does not exist or appended to if it does. 
-
 
 3. Detector description
 
@@ -165,33 +175,16 @@ on the mirror surfaces.
 This is done using the new General Particle Source. Documentation for 
 this can be found in
 
-http://www.space.dera.gov.uk/space_env/gspm.html
+http://www.space.qinetiq.com/geant4/gspm.html
 
 6. Analysis
 
-At present there are two options for analysis packages: either 
-explicitely the Anaphe 3.6.5 (or compatible) version is selected, 
-or any AIDA-2.2 compliant analysis system is chosen.  This dual
-approach will be removed in the next release when only the AIDA
-compliant version will be present. Presently, the OpenScientist 
-package (version 8) provides an implementation of AIDA 2.2, 
-other packages as Anaphe and JAS will follow soon. The AIDA 
-compliant version has not been tested by the developers and is
-here as a example of "forward compatibility" on how to use analysis.
+Presently, the Anaphe tool (http://www.cern.ch/anaphe) 
+(version 5) provides an implementation of AIDA 3.0, 
+other packages as JAS will follow soon.  
 
 To build and execute the example on platforms where there is no
 implementation of the analysis system, the environment variables 
 must not be set, except for G4ANALYSIS_BUILD which is required for 
 building the executable.
-
-
-
-
-
-
-
-
-
-
-
 
