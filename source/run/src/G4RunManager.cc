@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.51 2002-11-27 17:55:07 asaim Exp $
+// $Id: G4RunManager.cc,v 1.52 2002-12-04 21:52:40 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ G4RunManager* G4RunManager::GetRunManager()
 //  if(!fRunManager) return;
 //  G4ApplicationState state 
 //   = G4StateManager::GetStateManager()->GetCurrentState();
-//  if(state==GeomClosed || state==EventProc)
+//  if(state==G4State_GeomClosed || state==G4State_EventProc)
 //  { fRunManager->AbortRun(true); }
 //}
 
@@ -109,7 +109,7 @@ G4RunManager::~G4RunManager()
 {
   if(verboseLevel>0) G4cout << "G4 kernel has come to Quit state." << G4endl;
   G4StateManager* pStateManager = G4StateManager::GetStateManager();
-  pStateManager->SetNewState(Quit);
+  pStateManager->SetNewState(G4State_Quit);
 
   if(verboseLevel>1) G4cout << "Deletion of G4 kernel class start." << G4endl;
   delete timer;
@@ -177,7 +177,7 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
   G4StateManager* stateManager = G4StateManager::GetStateManager();
 
   G4ApplicationState currentState = stateManager->GetCurrentState();
-  if(currentState!=PreInit && currentState!=Idle)
+  if(currentState!=G4State_PreInit && currentState!=G4State_Idle)
   {
     G4cerr << "Illegal application state - BeamOn() ignored." << G4endl;
     return false;
@@ -226,7 +226,7 @@ void G4RunManager::RunInitialization()
     geometryNeedsToBeClosed = false;
   }
   G4StateManager* stateManager = G4StateManager::GetStateManager();
-  stateManager->SetNewState(GeomClosed);
+  stateManager->SetNewState(G4State_GeomClosed);
 
   //previousEvents->clearAndDestroy();
   for(size_t itr=0;itr<previousEvents->size();itr++)
@@ -265,7 +265,7 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
   G4int i_event;
   for( i_event=0; i_event<n_event; i_event++ )
   {
-    stateManager->SetNewState(EventProc);
+    stateManager->SetNewState(G4State_EventProc);
 
     currentEvent = GenerateEvent(i_event);
 
@@ -274,7 +274,7 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
     AnalyzeEvent(currentEvent);
 
     if(i_event<n_select) G4UImanager::GetUIpointer()->ApplyCommand(msg);
-    stateManager->SetNewState(GeomClosed);
+    stateManager->SetNewState(G4State_GeomClosed);
     StackPreviousEvent(currentEvent);
     currentEvent = 0;
     if(runAborted) break;
@@ -336,7 +336,7 @@ void G4RunManager::RunTermination()
   currentRun = 0;
   runIDCounter++;
 
-  stateManager->SetNewState(Idle);
+  stateManager->SetNewState(G4State_Idle);
 }
 
 void G4RunManager::StackPreviousEvent(G4Event* anEvent)
@@ -357,18 +357,18 @@ void G4RunManager::Initialize()
 {
   G4StateManager* stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
-  if(currentState!=PreInit && currentState!=Idle)
+  if(currentState!=G4State_PreInit && currentState!=G4State_Idle)
   {
     G4cerr << "Illegal application state - "
          << "G4RunManager::Initialize() ignored." << G4endl;
     return;
   }
 
-  stateManager->SetNewState(Init);
+  stateManager->SetNewState(G4State_Init);
   if(!geometryInitialized) InitializeGeometry();
   if(!physicsInitialized) InitializePhysics();
   if(!cutoffInitialized) InitializeCutOff();
-  stateManager->SetNewState(Idle);
+  stateManager->SetNewState(G4State_Idle);
   if(!initializedAtLeastOnce) initializedAtLeastOnce = true;
 }
 
@@ -414,7 +414,7 @@ void G4RunManager::AbortRun(G4bool softAbort)
   // This method is valid only for GeomClosed or EventProc state
   G4ApplicationState currentState = 
     G4StateManager::GetStateManager()->GetCurrentState();
-  if(currentState==GeomClosed || currentState==EventProc)
+  if(currentState==G4State_GeomClosed || currentState==G4State_EventProc)
   {
     runAborted = true;
     if(currentState==EventProc && !softAbort)
@@ -434,7 +434,7 @@ void G4RunManager::AbortEvent()
   // This method is valid only for EventProc state
   G4ApplicationState currentState = 
     G4StateManager::GetStateManager()->GetCurrentState();
-  if(currentState==EventProc)
+  if(currentState==G4State_EventProc)
   {
     currentEvent->SetEventAborted();
     eventManager->AbortCurrentEvent();
@@ -471,7 +471,7 @@ void G4RunManager::ResetNavigator() const
     return;
   }
 
-  if( currentState != Idle )
+  if( currentState != G4State_Idle )
   {
     G4cerr << " Geant4 kernel not in Idle state" << G4endl;
     G4cerr << " Navigator is not touched..."     << G4endl;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExceptionHandler.cc,v 1.1 2002-08-19 18:33:30 asaim Exp $
+// $Id: G4ExceptionHandler.cc,v 1.2 2002-12-04 21:52:40 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,7 +91,7 @@ G4bool G4ExceptionHandler::Notify(const char* originOfException,
     abortionForCoreDump = true;
     break;
    case RunMustBeAborted:
-    if(aps==GeomClosed || aps==EventProc)
+    if(aps==G4State_GeomClosed || aps==G4State_EventProc)
     {
       G4cerr << "*** Run Must Be Aborted ";
       G4RunManager::GetRunManager()->AbortRun(false);
@@ -99,7 +99,7 @@ G4bool G4ExceptionHandler::Notify(const char* originOfException,
     abortionForCoreDump = false;
     break;
    case EventMustBeAborted:
-    if(aps==EventProc)
+    if(aps==G4State_EventProc)
     {
       G4cerr << "*** Event Must Be Aborted ";
       G4RunManager::GetRunManager()->AbortEvent();

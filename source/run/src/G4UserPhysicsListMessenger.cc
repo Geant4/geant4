@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.10 2001-10-11 13:44:37 gcosmo Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.11 2002-12-04 21:52:40 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   setCutCmd->SetRange("cut >0.0");
   setCutCmd->SetUnitCandidates("m cm mm microm");
   setCutCmd->SetDefaultUnit("mm");
-  setCutCmd->AvailableForStates(PreInit,Idle);
+  setCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   // /run/particle/DumpList command
   dumpListCmd = new G4UIcmdWithoutParameter("/run/particle/dumpList",this);
@@ -85,21 +85,21 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   dumpCutValuesCmd->SetGuidance("    enter all for all particles");
   dumpCutValuesCmd->SetParameterName("particle", true);
   dumpCutValuesCmd->SetDefaultValue("table");
-  dumpCutValuesCmd->AvailableForStates(Idle,GeomClosed,EventProc);
+  dumpCutValuesCmd->AvailableForStates(G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 
   // /run/particle/addProcManager command
   addProcManCmd = new G4UIcmdWithAString("/run/particle/addProcManager", this);
   addProcManCmd->SetGuidance("add process manager to specified particle type");
   addProcManCmd->SetParameterName("particleType", true);
   addProcManCmd->SetDefaultValue("");
-  addProcManCmd->AvailableForStates(Init,Idle,GeomClosed,EventProc);
+  addProcManCmd->AvailableForStates(G4State_Init,G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 
   // /run/particle/buildPhysicsTable command
   buildPTCmd = new G4UIcmdWithAString("/run/particle/buildPhysicsTable", this);
   buildPTCmd->SetGuidance("build physics table of specified particle type");
   buildPTCmd->SetParameterName("particleType", true);
   buildPTCmd->SetDefaultValue("");
-  buildPTCmd->AvailableForStates(Init,Idle,GeomClosed,EventProc);
+  buildPTCmd->AvailableForStates(G4State_Init,G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 
   // /run/particle/storePhysicsTable command
   storeCmd = new G4UIcmdWithAString("/run/particle/storePhysicsTable",this);
@@ -107,7 +107,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   storeCmd->SetGuidance("  Enter directory name");
   storeCmd->SetParameterName("dirName",true);
   storeCmd->SetDefaultValue("");
-  storeCmd->AvailableForStates(Idle);
+  storeCmd->AvailableForStates(G4State_Idle);
 
   //  /run/particle/retrievePhysicsTable command
   retrieveCmd = new G4UIcmdWithAString("/run/particle/retrievePhysicsTable",this);
@@ -115,7 +115,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   retrieveCmd->SetGuidance("  Enter directory name or OFF to switch off");
   retrieveCmd->SetParameterName("dirName",true);
   retrieveCmd->SetDefaultValue("");
-  retrieveCmd->AvailableForStates(PreInit,Idle);
+  retrieveCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   //  /run/particle/setStoredInAscii command
   asciiCmd = new G4UIcmdWithAnInteger("/run/particle/setStoredInAscii",this);
@@ -123,7 +123,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   asciiCmd->SetGuidance("  Enter 0(binary) or 1(ascii)");
   asciiCmd->SetParameterName("ascii",true);
   asciiCmd->SetDefaultValue(0);
-  asciiCmd->AvailableForStates(PreInit,Idle);
+  asciiCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   asciiCmd->SetRange("ascii ==0 || ascii ==1");
 
   //Commnad    /run/particle/applyCuts command
@@ -138,7 +138,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   param = new G4UIparameter("Particle",'s',true);
   param->SetDefaultValue("all");
   applyCutsCmd->SetParameter(param);
-  applyCutsCmd->AvailableForStates(PreInit,Init,Idle);
+  applyCutsCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 }
 
 G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
