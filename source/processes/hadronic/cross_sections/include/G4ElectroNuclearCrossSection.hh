@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.hh,v 1.5 2001-11-28 10:35:23 gcosmo Exp $
+// $Id: G4ElectroNuclearCrossSection.hh,v 1.6 2001-11-30 14:58:04 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -167,15 +167,13 @@ inline G4double G4ElectroNuclearCrossSection::HighEnergyFun(G4double lEn)
   static const G4double le=log(2000.);
   static const G4double c1=0.16;
   static const G4double f1=.0116/c1/c1;
-  static const G4double gg1=c1*le;
-  static const G4double e1=(gg1-1.)*exp(gg1);
+  static const G4double e1=(c1*le-1.)*exp(c1*le);
   static const G4double c2=-0.26;
   static const G4double f21=.75/c2/c2;
   static const G4double f22=.78/c2/c2;
   static const G4double f23=.9/c2/c2;
   static const G4double f24=1./c2/c2;
-  static const G4double gg2=c2*le;
-  static const G4double e2=(gg2-1.)*exp(gg2);
+  static const G4double e2=(c2*le-1.)*exp(c2*le);
   G4double f2=f24;
   if     (lastH<.005) f2=f21;
   else if(lastH<0.01) f2=f22;
