@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.14 2003-03-11 02:18:45 asaim Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.15 2003-03-11 02:34:47 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,15 +91,6 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   dumpListCmd = new G4UIcmdWithoutParameter("/run/particle/dumpList",this);
   dumpListCmd->SetGuidance("Dump List of particles in G4VUserPhysicsList. ");
 
-  // /run/particle/DumpCutValues command
-  dumpCutValuesCmd = new G4UIcmdWithAString("/run/particle/dumpCutValues",this);
-  dumpCutValuesCmd->SetGuidance("Dump cut value information  ");
-  dumpCutValuesCmd->SetGuidance("Enter particle name ");
-  dumpCutValuesCmd->SetGuidance("    enter all for all particles");
-  dumpCutValuesCmd->SetParameterName("particle", true);
-  dumpCutValuesCmd->SetDefaultValue("table");
-  dumpCutValuesCmd->AvailableForStates(G4State_Idle,G4State_GeomClosed,G4State_EventProc);
-
   // /run/particle/addProcManager command
   addProcManCmd = new G4UIcmdWithAString("/run/particle/addProcManager", this);
   addProcManCmd->SetGuidance("add process manager to specified particle type");
@@ -160,7 +151,6 @@ G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
   delete setCutRCmd; 
   delete verboseCmd;
   delete dumpListCmd;
-  delete dumpCutValuesCmd;
   delete addProcManCmd;
   delete buildPTCmd;
   delete storeCmd;  
@@ -189,13 +179,6 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
 
   } else if( command==dumpListCmd ){
     thePhysicsList->DumpList();
-
-  } else if( command==dumpCutValuesCmd ){ 
-    if (newValue == "table") {
-      thePhysicsList->DumpCutValuesTable();
-    } else {
-      thePhysicsList->DumpCutValues(newValue);
-    }
 
   }  else if( command == addProcManCmd ){
     G4ParticleDefinition* particle = (G4ParticleTable::GetParticleTable())->FindParticle(newValue);

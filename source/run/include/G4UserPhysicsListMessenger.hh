@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.hh,v 1.12 2003-03-10 08:33:56 asaim Exp $
+// $Id: G4UserPhysicsListMessenger.hh,v 1.13 2003-03-11 02:34:47 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,6 @@
 //   Commands : 
 //    SetCuts *  Set default cut value
 //    dumpList * Dump List of particles in G4VUserPhysicsList.
-//    dumpCutValue * Dump cut value information
 //    verbose * Set the Verbose level of G4VUserPhysicsList.
 //    addProcessManager * add process manager
 //    buildPhysicsTable * build physics table
@@ -95,13 +94,11 @@ public: // with description
     G4UIcommand *               setCutRCmd;
     G4UIcmdWithAnInteger *      verboseCmd;
     G4UIcmdWithoutParameter *   dumpListCmd;
-    G4UIcmdWithAString *        dumpCutValuesCmd;
     G4UIcmdWithAString *        addProcManCmd;
     G4UIcmdWithAString *        buildPTCmd;
     G4UIcmdWithAString *        storeCmd;
     G4UIcmdWithAString *        retrieveCmd;
     G4UIcmdWithAnInteger *      asciiCmd;
-    // G4UIcommand          *      applyCutsCmd;
 };
 
 #endif
