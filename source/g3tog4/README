@@ -10,18 +10,18 @@ ascii ("call list") file containing instructions on how to build the
 geometry. The source code for this is fortran. 
 
 Second, a call list interpreter (G4BuildGeom.cc) reads these instructions
-and builds the geometry in the user's G4 client code. Two examples of how
-to use the call list interpreter are supplied in g3tog4/test. 
+and builds the geometry in the user's G4 client code.
 
-The first example, cltog4, is a simple example which simply invokes the
-call list interpreter method G4BuildGeom from G3toG4DetectorConstruction
-class, builds the geometry and exits. 
-
-The second example, clGeometry, is more complete and is patterned after
-the novice G4 examples. It also invokes the call list interpreter, but in
-addition, allows the geometry to be visualized and particles to be
-tracked. Currently, G3toG4 does not provide a method for scoring hits in
-G4.
+Two examples of how to use the call list interpreter are supplied in
+examples/extended/g3tog4:
+ - the first example, cltog4, is a simple example which simply invokes the
+   call list interpreter method G4BuildGeom from G3toG4DetectorConstruction
+   class, builds the geometry and exits. 
+ - the second example, clGeometry, is more complete and is patterned after
+   the novice G4 examples. It also invokes the call list interpreter, but
+   in addition, allows the geometry to be visualized and particles to be
+   tracked. Currently, G3toG4 does not provide a method for scoring hits
+   in G4.
 
 To build these examples, especially the one involving visualization, the
 user must have one or more of the following environment variables set:
@@ -29,16 +29,11 @@ user must have one or more of the following environment variables set:
 setenv G4VIS_BUILD_<driver>_DRIVER
 setenv G4VIS_USE_<driver>
 
-where the G4-supported drivers are listed in $(G4BASE)/visualization/README.
+where the G4-supported drivers are listed in source/visualization/README.
 
 To use the freeware Mesa API, you must have the environment variable
 OGLHOME defined to point to the directory containing the Mesa lib/ directory
 specific to your platform.
-
-Then the user must build the global Geant4 libraries by issuing the
-following command from the geant4/source directory: 
-
-gmake global
 
 To compile and build the G3toG4 libraries, simply type
 
@@ -50,13 +45,9 @@ To build the converter executable "rztog4", simply type
 
 gmake bin
 
-To build the example executables, simply type:
-
-gmake examples
-
 To make everything, simply type:
 
-gmake all
+gmake global
 
 To remove all G3toG4 libraries, executables and .d files, simply type
 

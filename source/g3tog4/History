@@ -1,7 +1,17 @@
-$Id: History,v 1.33 2000-07-21 13:48:30 gcosmo Exp $
+$Id: History,v 1.34 2000-07-24 11:43:20 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V02-00-01 24-Jul-2000 G.Cosmo
+- Moved tests clGeometry and cltog4 from source/g3tog4/test to
+  examples/extended/g3tog4. Default build mechanism is now used.
+- Fixed bug to g3tog4/GNUmakefile for allowing building of shared
+  libraries. Removed targets for building tests now moved to different
+  area. Adapted to work with granular libraries mechanism.
+- Fix in destructor for G3RotTable (I.Hrivnacova).
+- Added handling of ELTU solid, affected files: G3toG4MakeSolid.cc
+  and G3CalcParams.cc (I.Hrivnacova).
 
 g3tog4-V02-00-00 21-Jul-2000 G.Cosmo
 - Fixed G3toG4PhysicsList::ConstructMesons() for test/clGeometry,
