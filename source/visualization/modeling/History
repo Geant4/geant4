@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2000-05-22 07:39:08 johna Exp $
+$Id: History,v 1.6 2000-05-22 08:42:31 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,7 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
-22nd May 2000  John Allison
+22nd May 2000  John Allison  (modeling-V01-01-00)
 - Added G4VTreeGraphicsScene (DTREE).
 - Commented out pVPV->SetCopyNo(n) on Makoto's advice in
   G4PhysicalVolumeModel.cc.
