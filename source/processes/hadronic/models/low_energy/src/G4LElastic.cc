@@ -205,7 +205,7 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    G4double de = (-b-sqrt(std::max(0.0,b*b-4.*a*c)))/(2.*a);
    G4double e1 = sqrt(p*p+m1*m1)-de;
    G4double p12=e1*e1-m1*m1;
-   p1 = sqrt(std::max(0.0,p12));
+   p1 = sqrt(std::max(1.*eV*eV,p12));
    px = p1*sint*sin(phi);
    py = p1*sint*cos(phi);
    pz = p1*cost;
