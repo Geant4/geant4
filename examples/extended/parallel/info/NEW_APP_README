@@ -1,4 +1,4 @@
-$Id: NEW_APP_README,v 1.1 2002-03-09 07:51:08 cooperma Exp $
+$Id: NEW_APP_README,v 1.2 2002-03-09 10:15:01 cooperma Exp $
 ------------------------------------------------------------------------------
 This file and NEW_APP_INSTALL describe important information if you are
   planning to create a new parallel Geant4 application, similarly
@@ -30,11 +30,11 @@ Other qualifications are:
        you may have to write marshalling code for your hits, based
        on the examples in ParN02 and ParN04.
 3.  This should support histograms as long as AnalysisManager::Step() is
-	is tripvial.  However, I have not had the opportunity
+	is trivial.  However, I have not had the opportunity
 	for careful testing.  Please write to gene@ccs.neu.edu if you
 	are including histograms, and especially if you define
 	 AnalysisManager::Step().
-3.  Currently, this distribution does not support:
+4.  Currently, this distribution does not support:
       trajectory stores, n-tuples, track parallelism,
       interactive input commands (no macrofile)
     I plan to add those features according to demand.
