@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.hh,v 1.15 2005-03-15 19:11:35 gcosmo Exp $
+// $Id: G4UnitsTable.hh,v 1.16 2005-03-21 16:04:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -159,6 +159,7 @@ class G4BestUnit
     inline G4double*       GetValue();
     inline const G4String& GetCategory() const;
     inline size_t          GetIndexOfCategory() const;
+    operator G4String () const;  // Conversion to best string.
     
   public:  // with description 
    

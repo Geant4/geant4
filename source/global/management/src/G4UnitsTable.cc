@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.23 2005-03-15 19:11:36 gcosmo Exp $
+// $Id: G4UnitsTable.cc,v 1.24 2005-03-21 16:04:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
@@ -410,6 +410,14 @@ G4BestUnit::G4BestUnit(const G4ThreeVector& value, const G4String& category)
  
 G4BestUnit::~G4BestUnit()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4BestUnit::operator G4String () const {
+  std::ostringstream oss;
+  oss << *this;
+  return oss.str();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
