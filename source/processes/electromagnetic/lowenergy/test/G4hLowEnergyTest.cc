@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyTest.cc,v 1.1 1999-11-09 19:00:34 chauvie Exp $
+// $Id: G4hLowEnergyTest.cc,v 1.2 1999-11-09 20:04:04 chauvie Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // KaonMinusAtRestTest.cc 
@@ -48,6 +48,7 @@
 #include "G4Step.hh"
 #include "G4GRSVolume.hh"
 
+#include  "G4UnitsTable.hh"
 #include "CLHEP/Hist/TupleManager.h"
 #include "CLHEP/Hist/HBookFile.h"
 #include "CLHEP/Hist/Histogram.h"
@@ -172,7 +173,10 @@ main()
   G4ParticleDefinition* gamma = G4Gamma::GammaDefinition();
   G4ParticleDefinition* proton = G4Proton::ProtonDefinition();
   G4ParticleDefinition* antiproton = G4AntiProton::AntiProtonDefinition();
-
+  
+  //my add 8:45
+  electron->SetCuts(1e-6*mm);
+  
   //--------- Processes definition ---------
 
   G4ProcessManager* theProtonProcessManager = new G4ProcessManager(proton);
@@ -186,6 +190,12 @@ main()
   theProtonProcessManager->SetProcessOrdering(&hIonisationProcess,idxAlongStep,1);
   theProtonProcessManager->SetProcessOrdering(&hIonisationProcess,idxPostStep,1);
 
+  // ready for being exploited by antiproton
+  //G4hIonisation hIonisationProcess;
+  //theProtonProcessManager->AddProcess(&hIonisationProcess);
+  //theProtonProcessManager->SetProcessOrdering(&hIonisationProcess,idxAlongStep,1);
+  //theProtonProcessManager->SetProcessOrdering(&hIonisationProcess,idxPostStep,1);
+  
   G4ForceCondition* condition;
 
   // ------- set cut and Build CrossSection Tables -------
@@ -240,6 +250,8 @@ main()
 
   // Initialize the physics tables for ALL processes
 
+  // my adda 8:50
+  hIonisationProcess.SetPhysicsTableBining(0.5*keV, 3*MeV, 100);
   hIonisationProcess.BuildPhysicsTable(*proton);
 
   //hIonisationProcess.BuildPhysicsTable(*antiproton);
