@@ -50,7 +50,7 @@
 
 int main(int argc, char** argv)
 {
-  int verbose = 2;
+  int verbose = 1;
 
   // -------------------------------------------------------------------
   // Control on input
@@ -157,7 +157,7 @@ int main(int argc, char** argv)
           e0 = (*energy)[j];
           de = bin;
           if (e0 < elim) de = bin0;
-          if(e1 >= e0 && e2 <= e0 + de) break;
+          if(e1 >= e0 && e1 < e0 + de) break;
           if(inum) (*cross)[j] /= (double)inum;
           cross->push_back(0.0);
           inum = 0;
