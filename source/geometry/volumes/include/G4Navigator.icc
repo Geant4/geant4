@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.7 2001-12-04 15:30:20 radoone Exp $
+// $Id: G4Navigator.icc,v 1.8 2001-12-04 16:49:51 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -277,12 +277,14 @@ G4bool  G4Navigator::EnteredDaughterVolume()
 inline
 G4VPhysicalVolume*
 G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector &p,
-				       const G4TouchableHistory &h)
+                                       const G4ThreeVector &direction,
+                                       const G4TouchableHistory &h
+                                       )
 {
   ResetState();
   fHistory=*h.GetHistory();
   SetupHierarchy();
-  return LocateGlobalPointAndSetup(p, 0);
+  return LocateGlobalPointAndSetup(p, &direction, true, false);
 }
 
 inline
