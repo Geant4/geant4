@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauLeptonicDecayChannel.cc,v 1.1 2002-03-08 08:47:55 kurasige Exp $
+// $Id: G4TauLeptonicDecayChannel.cc,v 1.2 2002-03-28 10:56:09 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,7 +54,7 @@ G4TauLeptonicDecayChannel::G4TauLeptonicDecayChannel(
     SetBR(theBR);
     SetParent("tau+");
     SetNumberOfDaughters(3);
-    if (theLeptonName[0]=='e'){
+    if ((theLeptonName=="e-"||theLeptonName=="e+")){
       SetDaughter(0, "e+");
       SetDaughter(1, "nu_e");
       SetDaughter(2, "anti_nu_tau");
@@ -67,7 +67,7 @@ G4TauLeptonicDecayChannel::G4TauLeptonicDecayChannel(
     SetBR(theBR);
     SetParent("tau-");
     SetNumberOfDaughters(3);
-    if (theLeptonName[0]=='e'){
+    if ((theLeptonName=="e-"||theLeptonName=="e+")){
       SetDaughter(0, "e-");
       SetDaughter(1, "anti_nu_e");
       SetDaughter(2, "nu_tau");
