@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.21 2003-06-16 17:14:31 gunter Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.22 2003-09-22 10:45:37 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -203,7 +203,6 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	pMaterial = pP -> ComputeMaterial (n, pVPV);
 	pP -> ComputeTransformation (n, pVPV);
 	pSol -> ComputeDimensions (pP, n, pVPV);
-	// pVPV -> SetCopyNo (n);  // Uncertain of effect of this.
 	DescribeAndDescend (pVPV, requestedDepth, pLV, pSol, pMaterial,
 			    theAT, sceneHandler);
       }
