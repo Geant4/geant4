@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: NTSTGunMessenger.cc,v 1.1 2003-11-07 21:30:29 japost Exp $
+// $Id: NTSTGunMessenger.cc,v 1.2 2003-11-07 22:09:32 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -26,9 +26,9 @@
 
 NTSTGunMessenger::NTSTGunMessenger(NTSTGunGenerator * NTSTGun)
   : fNTSTGun(NTSTGun), gunDirectory(0), listCmd(0), particleCmd(0),
-    meanVertexCmd(0), rmsVertexCmd(0), plowCmd(0), phighCmd(0), coslowCmd(0),
-    coshighCmd(0), philowCmd(0), phihighCmd(0), polCmd(0), t0Cmd(0),
-    numberCmd(0)
+    plowCmd(0), phighCmd(0), t0Cmd(0), polCmd(0),  numberCmd(0),
+    meanVertexCmd(0), rmsVertexCmd(0), 
+    coslowCmd(0), coshighCmd(0), philowCmd(0), phihighCmd(0)
 {
   particleTable = G4ParticleTable::GetParticleTable();
 

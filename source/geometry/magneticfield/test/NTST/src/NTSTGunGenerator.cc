@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: NTSTGunGenerator.cc,v 1.1 2003-11-07 21:30:29 japost Exp $
+// $Id: NTSTGunGenerator.cc,v 1.2 2003-11-07 22:09:21 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,8 +23,8 @@
 
 NTSTGunGenerator::NTSTGunGenerator()
 : dMeanVertex(0.,0.,0.), dRmsVertex (0.,0.,0.), dPolarization(0.,0.,0.),
-  dPlow(1.),  dPhigh(1.), dT0(0.), dCoslow(-1.), dCoshigh(+1.0),       
-  dPhilow(0.),dPhihigh(2*pi), dN(1)
+  dPlow(1.),  dPhigh(1.),  dCoslow(-1.), dCoshigh(+1.0),       
+  dPhilow(0.),dPhihigh(2*pi), dT0(0.), dN(1)
 {
   messenger = new NTSTGunMessenger(this);
   MeanVertex = dMeanVertex;

@@ -3,7 +3,7 @@
 #include "NTSTFileRead.hh"
 #include "globals.hh"
 NTSTFileRead::NTSTFileRead(const char* FileName, G4bool echo)
-  : _Istr(0), _LineLength(0), _echo(0), stuff(0){
+  : _LineLength(0), _Istr(0), _echo(0), stuff(0){
   _Istr = new ifstream(FileName);
   if (!*_Istr) {
     G4cerr << "Whoops! No such input file: " << FileName << G4endl;
