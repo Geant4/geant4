@@ -1,4 +1,4 @@
-$Id: History,v 1.107 2004-02-03 15:02:40 vnivanch Exp $
+$Id: History,v 1.108 2004-02-06 17:15:44 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06 Feb 04: V.Ivant (stand-V06-00-00a)
+- Tag for the patch include:
+- Fix in G4PAIModel.cc
+- Minor change in G4PAIonisation.cc 
 
 03 Feb 04: V.Ivant (stand-V06-00-02)
 - Fix in G4PAIModel.cc
