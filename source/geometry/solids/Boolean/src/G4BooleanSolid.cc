@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.11 2003-11-03 17:48:45 gcosmo Exp $
+// $Id: G4BooleanSolid.cc,v 1.12 2004-09-15 09:53:18 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for the abstract base class for solids created by boolean 
@@ -43,7 +43,7 @@
 G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                 G4VSolid* pSolidA ,
                                 G4VSolid* pSolidB   ) :
-  G4VSolid(pName),
+  G4VSolid(pName),fCubVolStatistics(1000000),fCubVolEpsilon(0.001),fCubicVolume(0.),
   createdDisplacedSolid(false)
 {
   fPtrSolidA = pSolidA ;
@@ -59,7 +59,7 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                       G4VSolid* pSolidB ,
                                       G4RotationMatrix* rotMatrix,
                                 const G4ThreeVector& transVector    ) :
-  G4VSolid(pName),
+  G4VSolid(pName),fCubVolStatistics(1000000),fCubVolEpsilon(0.001),fCubicVolume(0.),
   createdDisplacedSolid(true)
 {
   fPtrSolidA = pSolidA ;
@@ -74,7 +74,7 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                       G4VSolid* pSolidA ,
                                       G4VSolid* pSolidB ,
                                 const G4Transform3D& transform    ) :
-  G4VSolid(pName),
+  G4VSolid(pName),fCubVolStatistics(1000000),fCubVolEpsilon(0.001),fCubicVolume(0.),
   createdDisplacedSolid(true)
 {
   fPtrSolidA = pSolidA ;

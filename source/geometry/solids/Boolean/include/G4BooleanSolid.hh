@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.hh,v 1.8 2003-11-03 17:48:45 gcosmo Exp $
+// $Id: G4BooleanSolid.hh,v 1.9 2004-09-15 09:53:18 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -76,8 +76,15 @@ class G4BooleanSolid : public G4VSolid
       // If the solid is not a "Boolean", return 0.
 
     virtual G4GeometryType  GetEntityType() const;
+    inline G4double GetCubicVolume();
 
     std::ostream& StreamInfo(std::ostream& os) const;
+
+  G4int GetCubVolStatistics() const {return fCubVolStatistics;};
+  G4double GetCubVolEpsilon() const {return fCubVolEpsilon;};
+
+  void SetCubVolStatistics(G4int st) {fCubVolStatistics=st;};
+  void SetCubVolEpsilon(G4double ep) {fCubVolEpsilon=ep;};
 
   protected:
   
@@ -92,8 +99,24 @@ class G4BooleanSolid : public G4VSolid
 
   private:
 
-    G4bool  createdDisplacedSolid;
+  G4int    fCubVolStatistics;
+  G4double fCubVolEpsilon;
+  G4double fCubicVolume;
+
+  G4bool  createdDisplacedSolid;
       // If & only if this object created it, it must delete it
+
 } ;
+
+
+///////////////////////////////////////////////////
+
+inline
+G4double G4BooleanSolid::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+  else   fCubicVolume = EstimateCubicVolume(fCubVolStatistics,fCubVolEpsilon); 
+  return fCubicVolume;
+}
 
 #endif

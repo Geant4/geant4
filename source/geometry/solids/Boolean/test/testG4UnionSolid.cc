@@ -89,7 +89,7 @@ int main()
     G4ThreeVector vmxz(-1/sqrt(2.0),0,1/sqrt(2.0));
     G4ThreeVector vmxmz(-1/sqrt(2.0),0,-1/sqrt(2.0));
 
-    G4double dist;
+    G4double dist, vol, volCheck, diff;
     G4ThreeVector *pNorm,norm;
     G4bool *pgoodNorm,goodNorm,calcNorm=true;
 
@@ -104,9 +104,9 @@ int main()
 
     G4Transform3D transform(xRot,G4ThreeVector(0,40,0)) ;
 
-    G4Box b1("Test Box #1",20,30,40);
-    G4Box b2("Test Box #2",10,10,10);
-    G4Box b3("Test Box #3",10,20,50);
+    G4Box  b1("Test Box #1",20,30,40);
+    G4Box  b2("Test Box #2",10,10,10);
+    G4Box  b3("Test Box #3",10,20,50);
     G4Box* b4 = new G4Box("b4",50,50,50) ;
     G4Box* b5 = new G4Box("b5",10,10,60) ;
 
@@ -150,6 +150,27 @@ int main()
     G4UnionSolid t3Ut3Ut3("t3Ut3Ut3",&t3Ut3,&t3,
                                          &identity,G4ThreeVector(0,0,-10)) ;
 
+
+
+
+
+    G4Box * box1 = new G4Box("Box1",1092.500000,240.103374,92.000000);
+    G4Box * box2 = new G4Box("Box2",540.103374,792.500000,92.000000);
+
+    G4double L1 = 1104;
+
+    G4UnionSolid envelope("ECShapeBoxes",
+                     box1,
+                     box2,
+                     0,
+                     G4ThreeVector(-L1/2.,
+                                   L1/2.,
+                                   0.)        );
+
+    G4ThreeVector pPrePre(-301.4252442474112,903.7985455093324,3013.122572566068-2924);
+    G4ThreeVector pPre(-301.5459060972926,904.1596390942879,3014.325585765819-2924);       
+    G4ThreeVector pPos(-301.7139066520877,904.6621760944698,3016-2924);
+
   // Vacuum Cross
 
   G4double startPhi = 0.*deg;
@@ -187,12 +208,38 @@ int main()
 						 &rmVacCross,G4ThreeVector());
 
 
+  // check cubic volume
+
+  vol = b1Ub2.GetCubicVolume();
+  volCheck = 8.*20.*30.*40.;
+  //  G4cout<<"vol = "<<vol<<"; volCheck = "<<volCheck<<G4endl;
+  assert(ApproxEqual(vol,volCheck));
+
+
+  // t2Ut4.SetCubVolStatistics(10000000);
+  vol = t2Ut4.GetCubicVolume();
+  volCheck = 2.*pi*50.*50.*50.;
+  diff = abs(vol-volCheck)/volCheck;
+  G4cout<<"vol = "<<vol<<"; volCheck = "<<volCheck<<"; rel. diff = "<<diff<<G4endl;
+  //  assert(ApproxEqual(vol,volCheck));
+
+
+
 // Check Inside
     EInside side = solidVacCross->Inside(G4ThreeVector( 2.3391096733692156,
                                      1.1325145357709736,
 				     -0.85000000000000009));
     G4cout<<"solidVacCross->Inside(G4ThreeVector( 2.3391... = "
           <<OutputInside(side)<<G4endl;
+
+    side = envelope.Inside(pPrePre);
+    G4cout<<"envelope.Inside(pPrePre) = "<<OutputInside(side)<<G4endl;
+
+    side = envelope.Inside(pPre);
+    G4cout<<"envelope.Inside(pPre) = "<<OutputInside(side)<<G4endl;
+
+    side = envelope.Inside(pPos);
+    G4cout<<"envelope.Inside(pPos) = "<<OutputInside(side)<<G4endl;
 
     assert(b1Ub2.Inside(pzero)==kInside);
     assert(b1Ub2.Inside(pbigz)==kOutside);
