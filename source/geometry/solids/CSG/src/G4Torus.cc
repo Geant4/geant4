@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.cc,v 1.21 2001-01-12 09:02:09 medernac Exp $
+// $Id: G4Torus.cc,v 1.22 2001-01-12 09:03:24 medernac Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 #include "G4NURBStubesector.hh"
 #include "G4PolynomialSolver.hh"
 
-#define DEBUGTORUS 1
+// #define DEBUGTORUS 1
 
 ///////////////////////////////////////////////////////////////
 //
