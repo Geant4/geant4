@@ -106,7 +106,7 @@ You can customize paths of you CLHEP installation:
 2) CLHEP_LIB_DIR:		$g4clhep_lib_dir
 3) CLHEP_LIB:			$g4clhep_lib
 
-Select from list above (e.g. 2) 
+To modify default settings, select number above (e.g. 2) 
 EOM`
 
 
