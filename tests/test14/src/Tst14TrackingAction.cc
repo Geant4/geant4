@@ -1,5 +1,3 @@
-
-
 #include "Tst14TrackingAction.hh"
 #include "G4TrackingManager.hh"
 #include "G4Track.hh"
