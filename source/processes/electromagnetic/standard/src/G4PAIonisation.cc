@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.cc,v 1.4 1999-12-16 09:59:43 grichine Exp $
+// $Id: G4PAIonisation.cc,v 1.5 2000-01-07 09:33:12 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -759,7 +759,7 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
   {
     numOfCollisions = RandPoisson::shoot((*(*fPAItransferBank)(iPlace))(0)*Step) ;
 
-      G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
+    //     G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
 
     while(numOfCollisions)
     {
@@ -780,7 +780,7 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
       numOfCollisions = RandPoisson::
                         shoot((*(*fPAItransferBank)(iPlace+1))(0)*Step) ;
 
-      G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
+      //  G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
 
       while(numOfCollisions)
       {
