@@ -1,14 +1,14 @@
-dxplus02 dev_stl deb	geant4-00-ref-09b+	all all all all 1
-dxplus05 dev_stl opt	geant4-00-ref-09b+	all all all all 1
-# hpplus06 dev_stl deb	geant4-00-ref-09b+	all all all all 1
-hpplus05 dev_stl opt	geant4-00-ref-09b+	all all all all 1
-rsplus06 dev_stl deb	geant4-00-ref-09b+	all all all all 1
-# shift51 dev_stl deb	geant4-00-ref-09b+	all all all all 1
-rsplus04 dev_stl opt	geant4-00-ref-09b+	all all all all 1
-# shift51 dev_stl opt	geant4-00-ref-09b+	all all all all 1
-# sgmedia dev_stl deb	geant4-00-ref-09b+	all all all all 1
-# sgmedia dev_stl opt	geant4-00-ref-09b+	all all all all 1
-sungeant dev_stl deb	geant4-00-ref-09b+	all all all all 1
-# sungeant dev_stl opt	geant4-00-ref-09b+	all all all all 1
-pcgeant dev_stl deb	geant4-00-ref-09b+	all all all all 1
-# pcgeant dev_stl opt	geant4-00-ref-09b+	all all all all 1
+dxplus02 dev_stl deb	geant4-00-ref-09b-tags-27+	all all all all 1
+dxplus05 dev_stl opt	geant4-00-ref-09b-tags-27+	all all all all 1
+# hpplus06 dev_stl deb	geant4-00-ref-09b-tags-27+	all all all all 1
+hpplus05 dev_stl opt	geant4-00-ref-09b-tags-27+	all all all all 1
+rsplus06 dev_stl deb	geant4-00-ref-09b-tags-27+	all all all all 1
+# shift51 dev_stl deb	geant4-00-ref-09b-tags-27+	all all all all 1
+rsplus04 dev_stl opt	geant4-00-ref-09b-tags-27+	all all all all 1
+# shift51 dev_stl opt	geant4-00-ref-09b-tags-27+	all all all all 1
+# sgmedia dev_stl deb	geant4-00-ref-09b-tags-27+	all all all all 1
+# sgmedia dev_stl opt	geant4-00-ref-09b-tags-27+	all all all all 1
+sungeant dev_stl deb	geant4-00-ref-09b-tags-27+	all all all all 1
+# sungeant dev_stl opt	geant4-00-ref-09b-tags-27+	all all all all 1
+pcgeant dev_stl deb	geant4-00-ref-09b-tags-27+	all all all all 1
+# pcgeant dev_stl opt	geant4-00-ref-09b-tags-27+	all all all all 1
