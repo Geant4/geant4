@@ -1,4 +1,4 @@
-?RCS: $Id: Begin.U,v 1.1 2001-05-17 10:12:21 sadilov Exp $
+?RCS: $Id: Begin.U,v 1.2 2001-06-29 09:31:54 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.1  2001/05/17 10:12:21  sadilov
+?RCS: Import 'config'.
+?RCS:
 ?RCS: Revision 1.2  2000/12/16 14:49:56  sadilov
 ?RCS: HEAD of message for USER mode.
 ?RCS:
@@ -59,5 +62,5 @@ fi
 ?X: Make sure the rm below is given a non-empty list for some systems.
 ?X: This is run only when within the UU directory, hence we can safely
 ?X: attempt to rm a non-existent 'X' file...
-trap 'echo " "; test -d ../UU && rm -rf X $rmlist; exit 1' 1 2 3 15
+trap 'echo " ";rm -rf ../UU; test -d ../UU && rm -rf X $rmlist; exit 1' 1 2 3 15
 
