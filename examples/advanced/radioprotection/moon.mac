@@ -1,9 +1,11 @@
-#example of Moon Habitat configuration
-#Activate e.m. physics
+#Example of Moon Habitat configuration
+######################################
+# Activate e.m. physics
 /physics/addPhysics photon-epdl
 /physics/addPhysics electron-eedl
 /physics/addPhysics positron-standard
 /physics/addPhysics ion-ICRU
+# Activate hadronic physics
 /physics/addPhysics hadronic
 /physics/addPhysics muon-standard
 /physics/addPhysics decay
@@ -12,29 +14,12 @@
 /control/verbose 1
 /run/verbose 1
 /event/verbose 0
-#/tracking/verbose 1
-#
-# create empty scene
-#
-#/vis/scene/create
-#
-# Create a scene handler for a specific graphics system
-# (Edit the next line(s) to choose another graphic system)
-#
-#/vis/open OGLIX
-#
-#/vis/open DAWNFILE
-#/vis/open VRML2FILE
-#/vis/drawVolume
-#
-# draw scene
-#
 /run/initialize
 /gun/particle proton
 /gun/generator Moon
 /run/data gcrZ=1.txt
 /configuration/choose moon
-#/configuration/AddRoof On
+/configuration/AddRoof On
 #/configuration/AddRoof Off
-#/roof/thickness 1. m
-/run/beamOn 500
+/roof/thickness 2. m
+/run/beamOn 1000

@@ -66,7 +66,9 @@ RemSimInterplanetarySpaceConfiguration::~RemSimInterplanetarySpaceConfiguration(
 void RemSimInterplanetarySpaceConfiguration::GeneratePrimaries(G4Event* anEvent){
   // Read the ASCII files containing  the fluxes of particles in respect
   // to the energy in MeV
-
+  G4bool value = run -> GetFile();
+  if (value == true)
+    {
   G4DataVector* energies = run -> GetPrimaryParticleEnergy();
   G4DataVector* data = run -> GetPrimaryParticleEnergyDistribution();	 
   G4double sum = run -> GetPrimaryParticleEnergyDistributionSum();
@@ -97,6 +99,12 @@ void RemSimInterplanetarySpaceConfiguration::GeneratePrimaries(G4Event* anEvent)
    }
  
  particleGun -> GeneratePrimaryVertex(anEvent);
+    }
+  else 
+    {
+      G4String excep = "Load data file";
+      G4Exception(excep);
+    }
 }
 
 void RemSimInterplanetarySpaceConfiguration:: MoonConfiguration() 

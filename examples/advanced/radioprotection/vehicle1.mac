@@ -6,9 +6,9 @@
 /physics/addPhysics positron-standard
 /physics/addPhysics ion-ICRU
 #### Add Hadronic Physics, muon physics and decay
-/physics/addPhysics hadronic
-/physics/addPhysics muon-standard
-/physics/addPhysics decay
+#/physics/addPhysics hadronic
+#/physics/addPhysics muon-standard
+#/physics/addPhysics decay
 ##############################
 #### Sets some default verbose
 /control/verbose 1
@@ -28,18 +28,17 @@
 #/vis/viewer/zoom 2
 #/tracking/storeTrajectory 1
 ################
-/gun/generator Interplanetary
 /gun/generator Basic
 /gun/particle proton
-/gun/energy 100. MeV
+/gun/energy 500. MeV
 /run/initialize
 /configuration/choose vehicle
 /configuration/AddShielding On
-#/configuration/AddShielding Off
-#/configuration/AddSPE On
-#/configuration/AddSPE Off
-#/shielding/thickness 30. cm
+/configuration/AddSPE On
+/shielding/thickness 30. cm
 /run/beamOn 1000
+
+
 
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.cc,v 1.6 2004-05-27 08:36:51 guatelli Exp $// Author: Susanna Guatelli, guatelli@ge.infn.it
+// $Id: RemSimPrimaryGeneratorAction.cc,v 1.7 2004-05-27 10:13:54 guatelli Exp $// Author: Susanna Guatelli, guatelli@ge.infn.it
 
 #include "RemSimPrimaryGeneratorAction.hh"
 #include "RemSimPrimaryGeneratorMessenger.hh"
@@ -104,4 +104,7 @@ void RemSimPrimaryGeneratorAction::SelectPrimaries(G4String val)
 
   else G4cout << "This Generator is not defined!" <<G4endl;  
 }
-
+G4String RemSimPrimaryGeneratorAction::GetValue()
+{
+  return value;
+}
