@@ -116,7 +116,7 @@ public:
 
   void BuildPhysicsTable(const G4ParticleDefinition* aParticle);
 
-  void RetrievePhysicsTables(const G4ParticleDefinition* aParticle);
+  void RetrievePhysicsTables(const G4ParticleDefinition* aParticle, G4VEnergyLossSTD* em);
 
   void SetLossFluctuations(G4bool val);
 

@@ -54,6 +54,7 @@
 // 22-03-03 Add Initialisation of cash (V.Ivanchenko)
 // 26-03-03 Remove finalRange modification (V.Ivanchenko)
 // 09-04-03 Fix problem of negative range limit for non integral (V.Ivanchenko)
+// 26-04-03 Fix retrieve tables (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -959,15 +960,18 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
   G4bool res = true;
 
   const G4String particleName = part->GetParticleName();
+  if( !particle ) particle = part;
+  if( !baseParticle ) baseParticle = DefineBaseParticle(particle);
+
   if(particleName != "GenericIon"  &&
      part->GetParticleType() == "nucleus"  &&
      part->GetParticleSubType() == "generic")
   {
-     return res;
+    (G4LossTableManager::Instance())->RegisterIon(part, this);
+    return res;
   }
 
-  if( !particle ) particle = part;
-  if( !baseParticle ) baseParticle = DefineBaseParticle(particle);
+  if( baseParticle ) return true;
   Initialise();
 
   G4bool yes = true;
@@ -1075,7 +1079,7 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
     tablesAreBuilt = true;
   }
 
-  (G4LossTableManager::Instance())->RetrievePhysicsTables(particle);
+  (G4LossTableManager::Instance())->RetrievePhysicsTables(particle, this);
 
 
   if(!baseParticle) PrintInfoDefinition();
