@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.18 2004-12-02 13:54:14 gcosmo Exp $
+// $Id: G4VProcess.hh,v 1.19 2004-12-02 23:30:04 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,6 +53,7 @@
 #define G4VProcess_h 1
 
 #include "globals.hh"
+#include <cmath>
 #include "G4ios.hh"
 
 class G4ParticleDefinition;
