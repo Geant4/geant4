@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.47 2002-06-01 03:14:55 vnivanch Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.48 2002-06-14 17:39:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -54,6 +54,7 @@
 // 18.04.2001 V.Ivanchenko     Fix problem with low energy gammas from fluorescence
 //                             MeanFreePath is calculated by crosSectionHandler directly 
 // 31.05.2002 V.Ivanchenko     Add path of Fluo + Auger cuts to AtomicDeexcitation
+// 14.06.2002 V.Ivanchenko     By default do not cheak range of e-
 //                                  
 // --------------------------------------------------------------
 
@@ -75,7 +76,7 @@
 #include "G4VDataSetAlgorithm.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4VRangeTest.hh"
-#include "G4RangeTest.hh"
+#include "G4RangeNoTest.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4AtomicShell.hh"
 
@@ -97,7 +98,7 @@ G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
   crossSectionHandler = new G4CrossSectionHandler();
   shellCrossSectionHandler = new G4CrossSectionHandler();
   meanFreePathTable = 0;
-  rangeTest = new G4RangeTest;
+  rangeTest = new G4RangeNoTest;
 
   if (verboseLevel > 0) 
     {
@@ -208,15 +209,17 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4int nElectrons = electronVector.size();
   size_t nTotPhotons = 0;
   G4int nPhotons=0;
-  G4double cut = G4std::min(cutForLowEnergySecondaryPhotons,
-                            G4Gamma::Gamma()->GetEnergyThreshold(material));
+  G4double cutg = G4std::min(cutForLowEnergySecondaryPhotons,
+                             G4Gamma::Gamma()->GetEnergyThreshold(material));
+  G4double cute = G4std::min(cutForLowEnergySecondaryElectrons,
+                             G4Electron::Electron()->GetEnergyThreshold(material));
   G4DynamicParticle* aPhoton;  
 
   // Generation of fluorescence
   // Data in EADL are available only for Z > 5
   // Protection to avoid generating photons in the unphysical case of 
   // shell binding energy > photon energy
-  if (Z > 5  && bindingEnergy > cut)
+  if (Z > 5  && (bindingEnergy > cutg || bindingEnergy > cute))
     {
       photonVector = deexcitationManager.GenerateParticles(Z,shellId); 
       nTotPhotons = photonVector->size();
@@ -225,8 +228,11 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	  aPhoton = (*photonVector)[k];
 	  if (aPhoton)
 	    {
+              G4double itsCut = cutg;
+              if(aPhoton->GetDefinition() == G4Electron::Electron()) itsCut = cute;
 	      G4double itsEnergy = aPhoton->GetKineticEnergy();
-	      if (itsEnergy > cut && itsEnergy <= bindingEnergy)
+
+	      if (itsEnergy > itsCut && itsEnergy <= bindingEnergy)
 		{
 		  nPhotons++;
 		  // Local energy deposit is given as the sum of the 
