@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.8 2003-12-02 17:21:41 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.9 2003-12-04 16:20:56 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -522,8 +522,8 @@ G4PropagatorInField::LocateIntersectionPoint(
 		 << " at s=" << ApproxIntersecPointV.GetCurveLength()
 		 << " on way to full s=" << CurveEndPointVelocity.GetCurveLength()
 		 << G4endl;
-#endif
 	}
+#endif
       }
       else  // not Intersects_AF
       {  
