@@ -36,25 +36,25 @@ lowenergy/addPhysics positron-standard
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 # 
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/particle e-
 #---------------
@@ -62,25 +62,25 @@ lowenergy/addPhysics positron-standard
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /calor/setAbsMat Lead      
 #====================
@@ -92,25 +92,25 @@ lowenergy/addPhysics positron-standard
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 # 
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/particle e-
 #---------------
@@ -118,25 +118,25 @@ lowenergy/addPhysics positron-standard
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 #
 /calor/setAbsMat Water
@@ -149,25 +149,25 @@ lowenergy/addPhysics positron-standard
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 # 
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/particle e-
 #-----------------
@@ -175,25 +175,25 @@ lowenergy/addPhysics positron-standard
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 500
 #
 /gun/particle gamma
 #------------------
@@ -210,22 +210,22 @@ lowenergy/addPhysics positron-standard
 #======================
 /tracking/verbose 0
 /gun/energy 2 MeV
-/run/beamOn 1000
+/run/beamOn 500
 /gun/energy 100 MeV
-/run/beamOn 1000
+/run/beamOn 500
 /calor/setAbsMat Lead
 #======================
 /tracking/verbose 0
 /gun/energy 2 MeV
-/run/beamOn 1000
+/run/beamOn 500
 /gun/energy 100 MeV
-/run/beamOn 1000
+/run/beamOn 500
 /calor/setAbsMat Water
 #======================
 /tracking/verbose 0
 /gun/energy 2 MeV
-/run/beamOn 1000
+/run/beamOn 500
 /gun/energy 100 MeV
-/run/beamOn 1000
+/run/beamOn 500
 
 exit
