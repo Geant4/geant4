@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistedFaceted.hh,v 1.1 2005-03-18 15:36:19 link Exp $
+// $Id: G4VTwistedFaceted.hh,v 1.2 2005-03-18 17:11:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------------
@@ -163,7 +163,7 @@ class G4VTwistedFaceted: public G4VSolid
   G4double fDy ;        // maximum side in y
 
   G4double fAlph ;
-  G4double fTAlph ;    // tan(fAlph)
+  G4double fTAlph ;    // std::tan(fAlph)
 
   G4double fdeltaX ;
   G4double fdeltaY ;

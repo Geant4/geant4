@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapBoxSide.hh,v 1.1 2005-03-11 16:04:14 link Exp $
+// $Id: G4TwistedTrapBoxSide.hh,v 1.2 2005-03-18 17:11:53 gcosmo Exp $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -113,7 +113,7 @@ class G4TwistedTrapBoxSide : public G4VSurface
     G4double fDz;         // Half-length along the z axis
 
     G4double fAlph ;
-    G4double fTAlph ;    // tan(fAlph)
+    G4double fTAlph ;    // std::tan(fAlph)
     
     G4double fPhiTwist;   // twist angle ( dphi in surface equation)
 
