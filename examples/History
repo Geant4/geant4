@@ -1,4 +1,4 @@
-$Id: History,v 1.37 1999-12-07 11:33:51 stesting Exp $
+$Id: History,v 1.38 2000-01-14 11:05:44 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13th January 2000  John Allison  (examples-V01-00-00)
+- N02, N03: Introduced ExN0nSteppingVerbose (Michel Maire).
+- N04: Introduced 10 TeV mu- in exampleN04.EMtest.in (John Apostolakis).
+- N05, N06: (Gabriele Cosmo):
+  Replaced #include "G4Timer.hh" by class G4Timer in ExN0nRunAction.hh.
+  Added #include "G4Timer.hh" as first #include in ExN0nRunAction.cc.
+- Updated PersistentEx01.out and PersistentEx02.out for geant4-01-00-ref-01/2.
+- N02, N03, N04, N04.EMtest, N05, N06: updated .out files for -ref-02.
+- N04.EMtest.in: reduced number of events from 100 to 10 for 10 TeV mu-.
 
 7th December 1999  John Allison  (examples-V00-01-19)
 - Updated novice .out files to geant4-01-00.
