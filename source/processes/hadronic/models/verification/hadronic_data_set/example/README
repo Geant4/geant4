@@ -112,8 +112,5 @@ Same condition on A. It works both with < as with >.
 ddZ<6A*mat
 *Z*A*mat
 
-And so on
-
-If you call temp="HELPME"
-you should have the help file which is locate in $G4HADATASET
+If you call temp="HELPME", you should have the help file which is locate in $G4HADATASET
 
