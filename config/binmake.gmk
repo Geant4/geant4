@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.42 2000-02-14 11:24:45 gcosmo Exp $
+# $Id: binmake.gmk,v 1.43 2000-02-17 15:22:25 johna Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -126,6 +126,14 @@ ifdef G4EXLIB
 endif
 LDLIBS1 += $(EXTRALIBS)
 
+ifdef EXTRALIBSSOURCEDIRS
+  CPPFLAGS += $(foreach dir,$(EXTRALIBSSOURCEDIRS), -I$(dir)/include)
+  EXTRALIBSSOURCES := \
+    $(foreach dir,$(EXTRALIBSSOURCEDIRS),$(wildcard $(dir)/src/*cc))
+  EXTRALIBSDEPENDENCIES := $(addprefix $(G4TMPDIR)/exe/, \
+    $(notdir $(patsubst %.cc,%.d,$(EXTRALIBSSOURCES))))
+endif
+
 # VISLIBS and UILIBS are now handled by the granular library script...
 #
 ifdef GLOBALLIBS
@@ -212,7 +220,8 @@ endif
 
 sources := $(wildcard $(G4TARGET).cc)
 objects := $(patsubst %.cc,$(G4TMPDIR)/exe/%.o,$(sources))
-dependencies := $(patsubst %.cc,$(G4TMPDIR)/exe/%.d,$(sources))
+dependencies := $(patsubst %.cc,$(G4TMPDIR)/exe/%.d,$(sources)) \
+                $(EXTRALIBSDEPENDENCIES)
 
 LINK_DEPENDENCIES := $(G4TMPDIR)/exe/obj.last $(EXTRA_LINK_DEPENDENCIES)
 
@@ -225,7 +234,7 @@ endif
 # Make $(G4TARGET) executable.
 bin: $(G4BINDIR)/$(G4TARGET)
 
-$(G4BINDIR)/$(G4TARGET): $(LINK_DEPENDENCIES)
+$(G4BINDIR)/$(G4TARGET): $(LINK_DEPENDENCIES) $(EXTRALIBSDEPENDENCIES)
 ifndef USER_DEFINED_LDLIBS
   ifndef GLOBALLIBS
 	@echo "Using granular libraries ..."
@@ -276,17 +285,41 @@ else
 endif
 
 # Make the $(G4TARGET).d file and include it.
+$(G4TMPDIR)/exe/$(G4TARGET).d:: $(G4TMPDIR)/exe
 ifdef G4SKIP_DEPEND
-$(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
-	@echo Skip dependency file creation for file $< ...
+$(G4TMPDIR)/exe/$(G4TARGET).d:: $(G4TARGET).cc
+	@echo Skip dependency file creation for file $(<F)...
 else
-$(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
+$(G4TMPDIR)/exe/$(G4TARGET).d:: $(G4TARGET).cc
+	@echo Making dependency for file $(<F)...
+	@($(ECHO) $(G4TMPDIR)/exe/\\c ; \
+	g++ -MM $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
+endif
+
+$(G4TMPDIR)/exe:
 	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 	@if [ ! -d $(G4TMPDIR)/exe ] ; then mkdir $(G4TMPDIR)/exe ;fi
-	@echo Making dependency for file $<...
+ifdef EXTRALIBSSOURCEDIRS
+	@for i in $(EXTRALIBSSOURCES); do \
+	rm -f $(G4TMPDIR)/exe/`basename $$i`; ln -s $$i $(G4TMPDIR)/exe/; \
+	done
+endif
+
+# Make the EXTRALIBS dependencies...
+ifdef EXTRALIBSSOURCEDIRS
+ifdef G4SKIP_DEPEND
+$(G4TMPDIR)/exe/%.d: $(G4TMPDIR)/exe/%.cc
+	@echo Skip dependency file creation for file $(<F) ...
+else
+$(G4TMPDIR)/exe/%.d: $(G4TMPDIR)/exe/%.cc
+	@echo Making dependency for external file $(<F)...
 	@($(ECHO) $(G4TMPDIR)/exe/\\c ; \
-	g++ -MM $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
+	g++ -MM $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!$@!' >$@
+endif
+endif
+
+ifndef G4SKIP_DEPEND
 -include $(dependencies)
 endif
 
@@ -331,4 +364,3 @@ endif
 	                            $(G4EXAMPLE_FD) $(G4EXAMPLE_FDID)
 endif
 ############################- targets for G4ODBMS -############################
-

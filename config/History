@@ -1,4 +1,4 @@
-$Id: History,v 1.97 2000-02-14 11:27:42 gcosmo Exp $
+$Id: History,v 1.98 2000-02-17 15:22:25 johna Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th February 2000  John Allison
+- Added EXTRALIBSSOURCEDIRS which are scanned for dependencies.  It is
+  a list directories of canonical structure (i.e., with include/ and
+  src/ subdirectories) from which the "extra" libraries were made.
+  Augments the already existing facility for EXTRALIBS (the list a
+  "extra" libraries) and EXTRA_LINK_DEPENDENCIES (if the user wants to
+  add targets and rules).
 
 14th February 2000  Gabriele Cosmo (config-V01-00-02)
 - architecture.gmk: added option '+W823' to HP-aCC compilation setup to
