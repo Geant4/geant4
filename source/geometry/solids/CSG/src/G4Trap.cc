@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trap.cc,v 1.9 2001-04-18 16:06:11 grichine Exp $
+// $Id: G4Trap.cc,v 1.10 2001-04-18 17:12:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -21,7 +21,6 @@
 // 19.11.99 V.Grichine, kUndefined was added to Eside enum
 // 13.12.99 V.Grichine, bug fixed in DistanceToIn(p,v)
 
-#include <math.h>
 #include "G4Trap.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
