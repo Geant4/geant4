@@ -31,7 +31,7 @@
 //    *********************************
 //
 //
-// $Id: RemSimDetectorMessenger.cc,v 1.5 2004-05-21 08:12:23 guatelli Exp $
+// $Id: RemSimDetectorMessenger.cc,v 1.6 2004-05-21 11:14:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,11 +47,11 @@ RemSimDetectorMessenger::RemSimDetectorMessenger( RemSimDetectorConstruction* De
   vehicleDir = new G4UIdirectory("/configuration/");
   vehicleDir -> SetGuidance("geometry control.");
         
-  vehicleCmd = new G4UIcmdWithAString("/configuration/switch",this);
+  vehicleCmd = new G4UIcmdWithAString("/configuration/choose",this);
   vehicleCmd -> SetGuidance("Assign the geometrical set-up to G4RunManager."); 
   vehicleCmd -> SetParameterName("choice",true);
-  vehicleCmd -> SetCandidates("Vehicle MoonHabitat");
-  vehicleCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
+  vehicleCmd -> SetCandidates("vehicle moon");
+  vehicleCmd -> AvailableForStates(G4State_Idle); 
 
   shieldingCmd =  new G4UIcmdWithAString("/configuration/AddShielding",this); 
   shieldingCmd -> SetGuidance("Add shielding."); 
@@ -95,6 +95,9 @@ RemSimDetectorMessenger::~RemSimDetectorMessenger()
 
 void RemSimDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
+  if(command == vehicleCmd)
+    detector -> ChooseConfiguration(newValue); 
+
   if(command == shieldingCmd)
     detector -> AddShielding(newValue); 
 

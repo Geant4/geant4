@@ -15,6 +15,7 @@ public:
   ~RemSimVehicle1();
   void ConstructComponent(G4VPhysicalVolume*);
   void DestroyComponent(); 
+  void ChooseConfiguration(G4String);
 
 private:
   RemSimMaterial* pMaterial;

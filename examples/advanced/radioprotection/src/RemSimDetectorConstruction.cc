@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimDetectorConstruction.cc,v 1.7 2004-05-21 08:12:23 guatelli Exp $
+// $Id: RemSimDetectorConstruction.cc,v 1.8 2004-05-21 11:14:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,6 +41,7 @@
 #include "G4UserLimits.hh"
 #include "RemSimVGeometryComponent.hh"
 #include "RemSimVehicle1.hh"
+#include "RemSimMoonHabitat.hh"
 #include "G4VisAttributes.hh"
 #include "RemSimSensitiveDetector.hh"
 #include "G4SDManager.hh"
@@ -54,12 +55,16 @@ RemSimDetectorConstruction::RemSimDetectorConstruction()
      phantomPhys(0),detectorPhys(0)
 {
  pMaterial = new RemSimMaterial();
+
  pVehicle = new RemSimVehicle1();
+ pMoon =  new RemSimMoonHabitat();
+
  messenger = new RemSimDetectorMessenger(this);
  decoratorValue ="Nothing";
  astronautValue ="On";
  decorator = 0;  //pointing to shielding
  decorator1 = new RemSimAstronautDecorator(pVehicle); 
+ moon = false;
  //pointing to the astronaut
 }
 
@@ -68,6 +73,7 @@ RemSimDetectorConstruction::~RemSimDetectorConstruction()
   delete decorator1;
   delete decorator;
   delete messenger;
+  delete pMoon;
   delete pVehicle;
   delete pMaterial;
 }
@@ -89,18 +95,29 @@ G4VPhysicalVolume* RemSimDetectorConstruction::Construct()
   experimentalHall_phys = new G4PVPlacement(0,G4ThreeVector(),"world",
                                       experimentalHall_log,0,
                                       false,0);
-  ConstructVolume();
+  //ConstructVolume();
 
   
   return experimentalHall_phys;
 }
 void RemSimDetectorConstruction::ConstructVolume()
-{
-  pVehicle -> ConstructComponent(experimentalHall_phys);
-  decorator1 -> ConstructComponent(experimentalHall_phys);
+{ 
+ if (moon == true)
+    { 
+      pMoon -> ConstructComponent(experimentalHall_phys); 
+      }
+
+  else 
+    {
+     pVehicle -> ConstructComponent(experimentalHall_phys);
+     decorator1 -> ConstructComponent(experimentalHall_phys);
+   }
 }
+
 void RemSimDetectorConstruction::AddShielding(G4String value)
 { 
+  if (moon == false)
+    {
   decoratorValue = value;
   decorator = retrieveDecorator();
   decorator1 = retrieveDecorator1();
@@ -127,6 +144,7 @@ void RemSimDetectorConstruction::AddShielding(G4String value)
          
           else  G4cout<<" The Shielding does not exist!"<<G4endl;
 	}
+    }
 }
 
 void RemSimDetectorConstruction::AddAstronaut()
@@ -186,6 +204,8 @@ void RemSimDetectorConstruction::ChangeShieldingMaterial(G4String material)
 }
 void RemSimDetectorConstruction::ChangeShieldingThickness(G4double thick)
 {  
+ if (moon == false)
+   {
   decorator = retrieveDecorator();
   if (decorator != 0)
     { 
@@ -194,4 +214,17 @@ void RemSimDetectorConstruction::ChangeShieldingThickness(G4double thick)
       G4RunManager::GetRunManager() -> DefineWorldVolume(experimentalHall_phys);
     }
   else G4cout<<" Define the shielding before!"<< G4endl;
+   }
+}
+void RemSimDetectorConstruction:: ChooseConfiguration(G4String value)
+{
+  if (value == "vehicle") ConstructVolume();
+  
+    else if (value == "moon")
+      {
+       moon = true;
+       G4cout << moon << "valore di moon"<<G4endl; 
+       ConstructVolume();
+      }
+ G4RunManager::GetRunManager() -> DefineWorldVolume(experimentalHall_phys);
 }
