@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventActionMessenger.cc,v 1.8 2002-12-05 01:07:01 asaim Exp $
+// $Id: ExN03EventActionMessenger.cc,v 1.9 2002-12-16 16:37:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,7 @@
 #include "ExN03EventActionMessenger.hh"
 
 #include "ExN03EventAction.hh"
+#include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "globals.hh"
@@ -40,8 +41,11 @@
 
 ExN03EventActionMessenger::ExN03EventActionMessenger(ExN03EventAction* EvAct)
 :eventAction(EvAct)
-{ 
-  DrawCmd = new G4UIcmdWithAString("/event/drawTracks",this);
+{
+  eventDir = new G4UIdirectory("/N03/event/");
+  eventDir->SetGuidance("event control");
+   
+  DrawCmd = new G4UIcmdWithAString("/N03/event/drawTracks",this);
   DrawCmd->SetGuidance("Draw the tracks in the event");
   DrawCmd->SetGuidance("  Choice : none, charged(default),neutral, all");
   DrawCmd->SetParameterName("choice",true);
@@ -49,7 +53,7 @@ ExN03EventActionMessenger::ExN03EventActionMessenger(ExN03EventAction* EvAct)
   DrawCmd->SetCandidates("none charged neutral all");
   DrawCmd->AvailableForStates(G4State_Idle);
   
-  PrintCmd = new G4UIcmdWithAnInteger("/event/printModulo",this);
+  PrintCmd = new G4UIcmdWithAnInteger("/N03/event/printModulo",this);
   PrintCmd->SetGuidance("Print events modulo n");
   PrintCmd->SetParameterName("EventNb",false);
   PrintCmd->SetRange("EventNb>0");
@@ -61,7 +65,8 @@ ExN03EventActionMessenger::ExN03EventActionMessenger(ExN03EventAction* EvAct)
 ExN03EventActionMessenger::~ExN03EventActionMessenger()
 {
   delete DrawCmd;
-  delete PrintCmd;   
+  delete PrintCmd;
+  delete eventDir;   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

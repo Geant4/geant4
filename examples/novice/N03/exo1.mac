@@ -1,4 +1,4 @@
-# $Id: exo1.mac,v 1.1 2002-02-14 14:35:01 maire Exp $
+# $Id: exo1.mac,v 1.2 2002-12-16 16:37:25 maire Exp $
 #
 # Macro file for "exampleN03.cc" 
 #
@@ -8,17 +8,17 @@
 # Idle> /control/execute exo1.mac
 # 
 #
-/calor/setNbOfLayers 1
+/N03/det/setNbOfLayers 1
 #
-/calor/setAbsMat Aluminium
-/calor/setAbsThick 10 cm
+/N03/det/setAbsMat Aluminium
+/N03/det/setAbsThick 10 cm
 #
-/calor/setGapMat Air
-/calor/setGapThick  0 cm
+/N03/det/setGapMat Air
+/N03/det/setGapThick  0 cm
 #
-/calor/setSizeYZ   10 cm
+/N03/det/setSizeYZ   10 cm
 #
-/calor/update
+/N03/det/update
 #
 /vis/viewer/zoom 1.3
 #

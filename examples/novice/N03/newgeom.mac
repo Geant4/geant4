@@ -7,18 +7,18 @@
 # Idle> /control/execute newgeom.mac
 # 
 #
-/calor/setNbOfLayers 1
+/N03/det/setNbOfLayers 1
 #
-/calor/setAbsMat Water
-/calor/setAbsThick 40 cm
+/N03/det/setAbsMat Water
+/N03/det/setAbsThick 40 cm
 #
-/calor/setGapMat Air
-/calor/setGapThick  0 cm
+/N03/det/setGapMat Air
+/N03/det/setGapThick  0 cm
 #
-/calor/setSizeYZ   40 cm
+/N03/det/setSizeYZ   40 cm
 #
-/calor/update
+/N03/det/update
 #
-/calor/setField 3 tesla
+/N03/det/setField 3 tesla
 #
 /vis/viewer/zoom 1.3

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.11 2002-01-09 17:24:12 ranjard Exp $
+// $Id: ExN03DetectorConstruction.cc,v 1.12 2002-12-16 16:37:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -157,6 +157,12 @@ density = 1.032*g/cm3;
 G4Material* Sci = new G4Material(name="Scintillator", density, ncomponents=2);
 Sci->AddElement(C, natoms=9);
 Sci->AddElement(H, natoms=10);
+
+density = 1.397*g/cm3;
+G4Material* Myl = new G4Material(name="Mylar", density, ncomponents=3);
+Myl->AddElement(C, natoms=10);
+Myl->AddElement(H, natoms= 8);
+Myl->AddElement(O, natoms= 4);
 
 density = 2.200*g/cm3;
 G4Material* SiO2 = new G4Material(name="quartz", density, ncomponents=2);

@@ -1,4 +1,4 @@
-$Id: History,v 1.51 2002-11-19 16:44:50 jacek Exp $
+$Id: History,v 1.52 2002-12-16 16:37:25 maire Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+16-12-02 mma (exampleN03-V05-00-00)
+- UI directory /N03/
 
 19-11-02 jacek
 - introducing smooth trajectory display

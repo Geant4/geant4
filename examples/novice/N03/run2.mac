@@ -1,4 +1,4 @@
-# $Id: run2.mac,v 1.5 2000-11-21 10:59:43 maire Exp $
+# $Id: run2.mac,v 1.6 2002-12-16 16:37:25 maire Exp $
 #
 # Macro file of "exampleN03.cc"
 #
@@ -14,8 +14,8 @@
 #
 # shoot randomly 20 events
 #
-/event/printModulo 5
-/gun/random on
+/N03/event/printModulo 5
+/N03/gun/rndm on
 /run/beamOn 20
 #
 # activate/inactivate physic processes

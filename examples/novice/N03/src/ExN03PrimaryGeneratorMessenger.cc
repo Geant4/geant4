@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PrimaryGeneratorMessenger.cc,v 1.7 2002-12-05 01:07:01 asaim Exp $
+// $Id: ExN03PrimaryGeneratorMessenger.cc,v 1.8 2002-12-16 16:37:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,7 @@
 #include "ExN03PrimaryGeneratorMessenger.hh"
 
 #include "ExN03PrimaryGeneratorAction.hh"
+#include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,8 +40,11 @@
 ExN03PrimaryGeneratorMessenger::ExN03PrimaryGeneratorMessenger(
                                           ExN03PrimaryGeneratorAction* ExN03Gun)
 :ExN03Action(ExN03Gun)
-{ 
-  RndmCmd = new G4UIcmdWithAString("/gun/random",this);
+{
+  gunDir = new G4UIdirectory("/N03/gun/");
+  gunDir->SetGuidance("PrimaryGenerator control");
+   
+  RndmCmd = new G4UIcmdWithAString("/N03/gun/rndm",this);
   RndmCmd->SetGuidance("Shoot randomly the incident particle.");
   RndmCmd->SetGuidance("  Choice : on(default), off");
   RndmCmd->SetParameterName("choice",true);
@@ -54,6 +58,7 @@ ExN03PrimaryGeneratorMessenger::ExN03PrimaryGeneratorMessenger(
 ExN03PrimaryGeneratorMessenger::~ExN03PrimaryGeneratorMessenger()
 {
   delete RndmCmd;
+  delete gunDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorMessenger.cc,v 1.7 2002-12-05 01:07:01 asaim Exp $
+// $Id: ExN03DetectorMessenger.cc,v 1.8 2002-12-16 16:37:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,53 +44,56 @@ ExN03DetectorMessenger::ExN03DetectorMessenger(
                                            ExN03DetectorConstruction* ExN03Det)
 :ExN03Detector(ExN03Det)
 { 
-  ExN03detDir = new G4UIdirectory("/calor/");
-  ExN03detDir->SetGuidance("ExN03 detector control.");
-      
-  AbsMaterCmd = new G4UIcmdWithAString("/calor/setAbsMat",this);
+  N03Dir = new G4UIdirectory("/N03/");
+  N03Dir->SetGuidance("UI commands of this example");
+  
+  detDir = new G4UIdirectory("/N03/det/");
+  detDir->SetGuidance("detector control");
+       
+  AbsMaterCmd = new G4UIcmdWithAString("/N03/det/setAbsMat",this);
   AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
   AbsMaterCmd->SetParameterName("choice",false);
   AbsMaterCmd->AvailableForStates(G4State_Idle);
   
-  GapMaterCmd = new G4UIcmdWithAString("/calor/setGapMat",this);
+  GapMaterCmd = new G4UIcmdWithAString("/N03/det/setGapMat",this);
   GapMaterCmd->SetGuidance("Select Material of the Gap.");
   GapMaterCmd->SetParameterName("choice",false);
   GapMaterCmd->AvailableForStates(G4State_Idle);
     
-  AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsThick",this);
+  AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/N03/det/setAbsThick",this);
   AbsThickCmd->SetGuidance("Set Thickness of the Absorber");
   AbsThickCmd->SetParameterName("Size",false);
   AbsThickCmd->SetRange("Size>=0.");
   AbsThickCmd->SetUnitCategory("Length");
   AbsThickCmd->AvailableForStates(G4State_Idle);
   
-  GapThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setGapThick",this);
+  GapThickCmd = new G4UIcmdWithADoubleAndUnit("/N03/det/setGapThick",this);
   GapThickCmd->SetGuidance("Set Thickness of the Gap");
   GapThickCmd->SetParameterName("Size",false);
   GapThickCmd->SetRange("Size>=0.");
   GapThickCmd->SetUnitCategory("Length");  
   GapThickCmd->AvailableForStates(G4State_Idle);
   
-  SizeYZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setSizeYZ",this);
+  SizeYZCmd = new G4UIcmdWithADoubleAndUnit("/N03/det/setSizeYZ",this);
   SizeYZCmd->SetGuidance("Set tranverse size of the calorimeter");
   SizeYZCmd->SetParameterName("Size",false);
   SizeYZCmd->SetRange("Size>0.");
   SizeYZCmd->SetUnitCategory("Length");    
   SizeYZCmd->AvailableForStates(G4State_Idle);
   
-  NbLayersCmd = new G4UIcmdWithAnInteger("/calor/setNbOfLayers",this);
+  NbLayersCmd = new G4UIcmdWithAnInteger("/N03/det/setNbOfLayers",this);
   NbLayersCmd->SetGuidance("Set number of layers.");
   NbLayersCmd->SetParameterName("NbLayers",false);
   NbLayersCmd->SetRange("NbLayers>0 && NbLayers<500");
   NbLayersCmd->AvailableForStates(G4State_Idle);
 
-  UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
+  UpdateCmd = new G4UIcmdWithoutParameter("/N03/det/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(G4State_Idle);
       
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
+  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/N03/det/setField",this);  
   MagFieldCmd->SetGuidance("Define magnetic field.");
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false);
@@ -107,7 +110,8 @@ ExN03DetectorMessenger::~ExN03DetectorMessenger()
   delete AbsThickCmd; delete GapThickCmd;
   delete SizeYZCmd;   delete UpdateCmd;
   delete MagFieldCmd;
-  delete ExN03detDir;
+  delete detDir;
+  delete N03Dir;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PrimaryGeneratorMessenger.hh,v 1.5 2002-01-09 17:24:11 ranjard Exp $
+// $Id: ExN03PrimaryGeneratorMessenger.hh,v 1.6 2002-12-16 16:37:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,7 @@
 #include "globals.hh"
 
 class ExN03PrimaryGeneratorAction;
+class G4UIdirectory;
 class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,7 +50,8 @@ class ExN03PrimaryGeneratorMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    ExN03PrimaryGeneratorAction* ExN03Action; 
+    ExN03PrimaryGeneratorAction* ExN03Action;
+    G4UIdirectory*               gunDir; 
     G4UIcmdWithAString*          RndmCmd;
 };
 
