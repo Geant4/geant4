@@ -1,27 +1,36 @@
 /run/verbose 2
 /vis/scene/create
-/vis/open VRML2FILE
-/vis/sceneHandler/create VRML2FILE
+/vis/open OGLIX
+/vis/sceneHandler/create OGLIX
 /vis/sceneHandler/attach
 /vis/viewer/create ! ! 600
+/vis/viewer/refresh
 /vis/drawVolume
 /vis/scene/create
+/vis/scene/notifyHandlers
 /vis/scene/add/volume world
+/vis/scene/notifyHandlers
 /vis/sceneHandler/attach
+/vis/scene/notifyHandlers
 /vis/viewer/update
 /vis/viewer/set/viewpointThetaPhi 90 0 deg
+/vis/viewer/refresh
 /vis/viewer/zoom 1
+/vis/viewer/refresh
 /vis/viewer/flush
 /vis/viewer/refresh viewer-0
 /vis/viewer/update viewer-0
 /run/initialize
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
-/Jaws/X1/DistanceFromAxis -20. cm
-/Jaws/X2/DistanceFromAxis 20. cm
-/Jaws/Y1/DistanceFromAxis -20. cm
-/Jaws/Y2/DistanceFromAxis 20. cm
+/Jaws/X1/DistanceFromAxis 5. cm
+/Jaws/X2/DistanceFromAxis 5. cm
+/Jaws/Y1/DistanceFromAxis -5. cm
+/Jaws/Y2/DistanceFromAxis 5. cm
+/Jaws/update
+/vis/scene/notifyHandlers scene-0
+/vis/scene/notifyHandlers scene-1
 /energy 6.0 MeV
 /sourceType 0.127 MeV
 /vis/viewer/update
-/run/beamOn 4
+/run/beamOn 1

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacDetectorConstruction.cc,v 1.2 2004-04-02 17:48:03 mpiergen Exp $
+// $Id: MedLinacDetectorConstruction.cc,v 1.3 2004-04-05 15:12:34 mpiergen Exp $
 //
 // Code developed by: M. Piergentili
 //
@@ -59,6 +59,10 @@
 #include "G4BooleanSolid.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4VSolid.hh"
+
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
@@ -119,9 +123,6 @@ MedLinacDetectorConstruction::MedLinacDetectorConstruction(G4String SDName)
 
   detectorMessenger = new MedLinacDetectorMessenger(this);
  
-
-  G4cout <<"_+_+_+_+_+_+_+_+_+_DetectorConstruction fieldX1 "<<fieldX1/cm<<"cm"<<G4endl;
-
 }
 
 
@@ -144,8 +145,7 @@ MedLinacDetectorConstruction::~MedLinacDetectorConstruction()
 
   delete detectorMessenger;
 
-  //if (phantomROGeometry) delete phantomROGeometry;
-  //if (phantomSD) delete phantomSD;
+ 
 }
 
 
@@ -158,7 +158,15 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::Construct()
 
 G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
 {
-  //-------------- materials------------------------------
+
+  // Cleanup old geometry
+
+  G4GeometryManager::GetInstance()->OpenGeometry();
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+
+  //    materials
 
   G4double a;  // atomic mass
   G4double z;  // atomic number
@@ -206,6 +214,10 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
   density = 8.960*g/cm3;
   a = 63.55*g/mole;
   G4Material* Cu = new G4Material(name="Copper"   , z=29., a, density);
+
+  //a = 47.88*g/mole;
+  //density = 4.50*g/cm3;
+  //Titanium = new G4Material("titanium" ,z = 22.,a,density);
 
   //density = 19.3*g/cm3;
   density = 18.*g/cm3;
@@ -1097,7 +1109,7 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
    simpleWorldVisAtt->SetVisibility(false);
    experimentalHall_log ->SetVisAttributes(simpleWorldVisAtt);
 
-   //se non voglio vedere phantom, jaws e mirror ...:
+   //if you want not to see phantom, jaws e mirror ...:
 
    //Phantom_log->SetVisAttributes(simpleWorldVisAtt);
    //JawY1_log->SetVisAttributes(simpleWorldVisAtt);
@@ -1138,7 +1150,11 @@ G4VPhysicalVolume* MedLinacDetectorConstruction::ConstructGeom ()
    //layer18_log->SetVisAttributes(simpleWorldVisAtt);
    //layer19_log->SetVisAttributes(simpleWorldVisAtt);
    //layer21_log->SetVisAttributes(simpleWorldVisAtt);
-   //----------------------------------------------------------
+
+
+  //   Sets a max Step length in the detector
+    G4double maxStep = 0.1 *mm;
+   Phantom_log->SetUserLimits(new G4UserLimits(maxStep));
 
    ConstructSensitiveDetector();
    return experimentalHall_phys;
@@ -1156,37 +1172,30 @@ void MedLinacDetectorConstruction::PrintParameters()
 
 
 void MedLinacDetectorConstruction::SetJawX1Pos_x (G4double val)
-{
+{ 
   fieldX1 = val;
-  G4cout <<"==============================DetectorConstruction JawX1 "<< fieldX1/cm<<"cm"<<G4endl;
 }
 
 
 void MedLinacDetectorConstruction::SetJawX2Pos_x (G4double val)
 {
   fieldX2 = val;
-  G4cout <<"==============================DetectorConstruction JawX2  "<< fieldX2/cm<<"cm"<<G4endl;
 }
 
 void MedLinacDetectorConstruction::SetJawY1Pos_y (G4double val)
 {
   fieldY1 = val;
-  G4cout <<"==============================DetectorConstruction JawY1 "<< fieldY1/cm<<"cm"<<G4endl;
 }
-
 
 void MedLinacDetectorConstruction::SetJawY2Pos_y (G4double val)
 {
   fieldY2 = val;
-  G4cout <<"==============================DetectorConstruction JawY2  "<< fieldY2/cm<<"cm"<<G4endl;
+  //G4cout <<"==============================DetectorConstruction JawY2  "<< fieldY2/cm<<"cm"<<G4endl;
 }
 
 
 void MedLinacDetectorConstruction::UpdateGeometry()
 { 
- //delete experimentalHall_log;
- //delete experimentalHall_phys;
-
   G4cout <<"@@@@@@@@@@@@@@@@@@@@@UpdateGeometry "<< G4endl;
 
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructGeom());
@@ -1204,23 +1213,25 @@ void  MedLinacDetectorConstruction::ConstructSensitiveDetector()
     //G4double phantomDim_x = 15.*cm;
     //G4double phantomDim_y = 15.*cm;
     //G4double phantomDim_z = 15.*cm;
-    phantomSD = new MedLinacPhantomSD(sensitiveDetectorName,numberOfVoxelsAlongX,numberOfVoxelsAlongY,numberOfVoxelsAlongZ);
-    G4String ROGeometryName = "PhantomROGeometry";
-    phantomROGeometry = new MedLinacPhantomROGeometry(ROGeometryName, phantomDim_x,phantomDim_y,phantomDim_z,
+    phantomSD = new MedLinacPhantomSD (sensitiveDetectorName,numberOfVoxelsAlongX,numberOfVoxelsAlongY,numberOfVoxelsAlongZ);
+
+    pSDManager->AddNewDetector(phantomSD);
+  }
+
+ G4String ROGeometryName = "PhantomROGeometry";
+    phantomROGeometry = new MedLinacPhantomROGeometry (ROGeometryName, phantomDim_x,phantomDim_y,phantomDim_z,
 						  numberOfVoxelsAlongX,numberOfVoxelsAlongY,numberOfVoxelsAlongZ);
 
-    //G4cout <<" numberOfVoxelsAlongX in det constr---------------------"<< numberOfVoxelsAlongX << G4endl;
-
-    //G4cout <<"sensitiveDetectorName in det constr---------------------"<< sensitiveDetectorName << G4endl;
-
- G4cout <<"__________phantomDim_x---------------------"<< phantomDim_x/cm << G4endl;
- G4cout <<"__________numberOfVoxelsAlongX---------------------"<<numberOfVoxelsAlongX  << G4endl;
     phantomROGeometry->BuildROGeometry();
     phantomSD->SetROgeometry(phantomROGeometry);
-    pSDManager->AddNewDetector(phantomSD);
+
     Phantom_log->SetSensitiveDetector(phantomSD);
-  }
+
 }
+
+
+
+
 
 
 
