@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EdgeCurveCreator.hh,v 1.4 2001-07-11 10:00:04 gunter Exp $
+// $Id: G4EdgeCurveCreator.hh,v 1.5 2002-11-21 16:49:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -56,7 +56,7 @@ class G4EdgeCurveCreator: private G4GeometryCreator
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void* G4obj);
     const char* Name() const { return "Edge_Curve"; }
-    static G4EdgeCurveCreator GetInstance() { return csc; }
+    static G4EdgeCurveCreator GetInstance();
 
   // Members
   

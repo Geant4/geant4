@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PlaneCreator.cc,v 1.4 2001-07-11 10:00:11 gunter Exp $
+// $Id: G4PlaneCreator.cc,v 1.5 2002-11-21 16:49:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,11 @@ G4PlaneCreator::G4PlaneCreator()
 }
 
 G4PlaneCreator::~G4PlaneCreator() {}
+
+G4PlaneCreator G4PlaneCreator::GetInstance()
+{
+  return csc;
+}
 
 void G4PlaneCreator::CreateG4Geometry(STEPentity& Ent)
 {

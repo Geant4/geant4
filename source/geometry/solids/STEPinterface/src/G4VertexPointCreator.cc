@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VertexPointCreator.cc,v 1.4 2001-07-11 10:00:12 gunter Exp $
+// $Id: G4VertexPointCreator.cc,v 1.5 2002-11-21 16:49:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,11 @@ G4VertexPointCreator::G4VertexPointCreator()
 }
 
 G4VertexPointCreator::~G4VertexPointCreator() {}
+
+G4VertexPointCreator G4VertexPointCreator::GetInstance()
+{
+  return csc;
+}
 
 void G4VertexPointCreator::CreateG4Geometry(STEPentity& Ent)
 {

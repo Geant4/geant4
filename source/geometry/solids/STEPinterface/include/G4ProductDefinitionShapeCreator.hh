@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductDefinitionShapeCreator.hh,v 1.4 2001-07-11 10:00:06 gunter Exp $
+// $Id: G4ProductDefinitionShapeCreator.hh,v 1.5 2002-11-21 16:49:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -57,7 +57,7 @@ class G4ProductDefinitionShapeCreator: private G4GeometryCreator
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void*);
     const char* Name() const { return "Product_Definition_Shape"; }
-    static G4ProductDefinitionShapeCreator GetInstance() { return csc; }
+    static G4ProductDefinitionShapeCreator GetInstance();
 
   // Members
 

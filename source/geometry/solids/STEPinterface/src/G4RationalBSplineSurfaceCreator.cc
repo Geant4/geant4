@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RationalBSplineSurfaceCreator.cc,v 1.4 2001-07-11 10:00:11 gunter Exp $
+// $Id: G4RationalBSplineSurfaceCreator.cc,v 1.5 2002-11-21 16:49:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,12 @@ G4RationalBSplineSurfaceCreator::G4RationalBSplineSurfaceCreator()
 }
 
 G4RationalBSplineSurfaceCreator::~G4RationalBSplineSurfaceCreator() {}
+
+G4RationalBSplineSurfaceCreator
+G4RationalBSplineSurfaceCreator::GetInstance()
+{
+  return csc;
+}
 
 void G4RationalBSplineSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 {

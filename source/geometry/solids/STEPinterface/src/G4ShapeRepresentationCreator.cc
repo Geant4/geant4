@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShapeRepresentationCreator.cc,v 1.5 2001-07-11 10:00:12 gunter Exp $
+// $Id: G4ShapeRepresentationCreator.cc,v 1.6 2002-11-21 16:49:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,12 @@ G4ShapeRepresentationCreator::G4ShapeRepresentationCreator()
 }
 
 G4ShapeRepresentationCreator::~G4ShapeRepresentationCreator() {}
+
+G4ShapeRepresentationCreator
+G4ShapeRepresentationCreator::GetInstance()
+{
+  return csc;
+}
 
 void G4ShapeRepresentationCreator::CreateG4Geometry(STEPentity& Ent)
 {

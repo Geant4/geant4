@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Axis2Placement3dCreator.cc,v 1.6 2001-09-21 16:11:29 gcosmo Exp $
+// $Id: G4Axis2Placement3dCreator.cc,v 1.7 2002-11-21 16:49:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,6 +45,11 @@ G4Axis2Placement3dCreator::G4Axis2Placement3dCreator()
 }
 
 G4Axis2Placement3dCreator::~G4Axis2Placement3dCreator() {}
+
+G4Axis2Placement3dCreator G4Axis2Placement3dCreator::GetInstance()
+{
+  return csc;
+}
 
 void G4Axis2Placement3dCreator::CreateG4Geometry(STEPentity& Ent)
 {

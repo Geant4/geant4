@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HyperbolaCreator.cc,v 1.3 2001-07-11 10:00:10 gunter Exp $
+// $Id: G4HyperbolaCreator.cc,v 1.4 2002-11-21 16:49:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,11 @@ G4HyperbolaCreator::G4HyperbolaCreator()
 }
 
 G4HyperbolaCreator::~G4HyperbolaCreator() {}
+
+G4HyperbolaCreator G4HyperbolaCreator::GetInstance()
+{
+  return csc;
+}
 
 void G4HyperbolaCreator::CreateG4Geometry(STEPentity& Ent)
 {

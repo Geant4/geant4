@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RepresentationRelationshipWithTransformationCreator.hh,v 1.4 2001-07-11 10:00:06 gunter Exp $
+// $Id: G4RepresentationRelationshipWithTransformationCreator.hh,v 1.5 2002-11-21 16:49:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -58,8 +58,7 @@ class G4RepresentationRelationshipWithTransformationCreator
     void CreateSTEPGeometry(void*);
     const char* Name() const
       { return "Representation_Relationship_With_Transformation"; }
-    static G4RepresentationRelationshipWithTransformationCreator GetInstance()
-      { return csc; }
+    static G4RepresentationRelationshipWithTransformationCreator GetInstance();
 
   // Members
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AdvancedFaceCreator.hh,v 1.4 2001-07-11 10:00:02 gunter Exp $
+// $Id: G4AdvancedFaceCreator.hh,v 1.5 2002-11-21 16:49:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -56,7 +56,7 @@ class G4AdvancedFaceCreator: private G4GeometryCreator
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void* G4obj);
     const char* Name() const { return "Advanced_Face"; }
-    static G4AdvancedFaceCreator GetInstance() { return csc; }
+    static G4AdvancedFaceCreator GetInstance();
 
   // Members
 

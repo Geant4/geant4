@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineCurveWithKnotsCreator.cc,v 1.7 2001-07-11 10:00:08 gunter Exp $
+// $Id: G4BSplineCurveWithKnotsCreator.cc,v 1.8 2002-11-21 16:49:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -50,6 +50,12 @@ G4BSplineCurveWithKnotsCreator::G4BSplineCurveWithKnotsCreator()
 
 
 G4BSplineCurveWithKnotsCreator::~G4BSplineCurveWithKnotsCreator() {}
+
+
+G4BSplineCurveWithKnotsCreator G4BSplineCurveWithKnotsCreator::GetInstance()
+{
+  return csc;
+}
 
 
 void G4BSplineCurveWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)

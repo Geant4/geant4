@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyCreator.cc,v 1.10 2001-09-21 16:12:03 gcosmo Exp $
+// $Id: G4AssemblyCreator.cc,v 1.11 2002-11-21 16:49:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -49,6 +49,11 @@ G4AssemblyCreator G4AssemblyCreator::ci;
 G4AssemblyCreator::G4AssemblyCreator()
 {
   G4GeometryTable::RegisterObject(this);
+}
+
+G4AssemblyCreator G4AssemblyCreator::GetInstance()
+{
+  return ci;
 }
 
 G4AssemblyCreator::G4AssemblyCreator(const G4AssemblyCreator& c)

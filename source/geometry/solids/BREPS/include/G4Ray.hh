@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ray.hh,v 1.6 2001-07-11 09:59:37 gunter Exp $
+// $Id: G4Ray.hh,v 1.7 2002-11-21 16:52:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -113,35 +113,35 @@ public:  // with description
   inline void Vsetall(G4Vector3D &a, G4double s);
     // Sets all elements of vector to the same scalar value.
   
-  static inline void Vcross(G4Plane &a, const G4Vector3D &b,
-                                        const G4Vector3D &c);
+  static void Vcross(G4Plane &a, const G4Vector3D &b,
+                                 const G4Vector3D &c);
     // Cross product of 'b' and 'c'. Stores result in 'a' (G4Plane).
 
-  static inline void Vcross(G4Vector3D &a, const G4Vector3D &b,
-                                           const G4Vector3D &c);
+  static void Vcross(G4Vector3D &a, const G4Vector3D &b,
+                                    const G4Vector3D &c);
     // Cross product of 'b' and 'c'. Stores result in 'a' (G4Vector3D).
   
-  static inline void Vmove(G4Point3D &a, const G4Point3D &b);
+  static void Vmove(G4Point3D &a, const G4Point3D &b);
     // Sets 'a' equal to 'b'.
 
-  static inline void Vadd2(G4Point3D &a, const G4Point3D &b,
-                                         const G4Vector3D &c );
+  static void Vadd2(G4Point3D &a, const G4Point3D &b,
+                                  const G4Vector3D &c );
     // Adds vector 'c' to 'b'. Stores result in 'a'.
   
-  static inline void Vsub2(G4Vector3D &a, const G4Point3D &b,
-                                          const G4Point3D &c);
+  static void Vsub2(G4Vector3D &a, const G4Point3D &b,
+                                   const G4Point3D &c);
     // Subtracts vector 'c' from 'b'. Stores result in 'a'.
 
-  static inline void Vscale(G4Plane& a, const G4Plane& b, G4double c);
+  static void Vscale(G4Plane& a, const G4Plane& b, G4double c);
     // Scales vector at `b' by scalar `c'. Stores result in `a'.
 
-  static inline  G4double Vdot(const G4Plane &a, const G4Point3D &b);
+  static G4double Vdot(const G4Plane &a, const G4Point3D &b);
     // Computes dot product of vectors at `a' and `b'.
   
-  static inline G4double Magsq(const G4Plane &a);
+  static G4double Magsq(const G4Plane &a);
     // Returns scalar Magnitude squared of vector at `a'.
   
-  static inline G4double Magnitude(const G4Plane &a);
+  static G4double Magnitude(const G4Plane &a);
     // Returns scalar Magnitude of vector at `a'.
 
 public:  // without description

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Axis2Placement3dCreator.hh,v 1.4 2001-07-11 10:00:03 gunter Exp $
+// $Id: G4Axis2Placement3dCreator.hh,v 1.5 2002-11-21 16:49:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -56,7 +56,7 @@ class G4Axis2Placement3dCreator: private G4GeometryCreator
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void*);
     const char* Name() const { return "Axis2_Placement_3d"; }
-    static G4Axis2Placement3dCreator GetInstance() { return csc; }
+    static G4Axis2Placement3dCreator GetInstance();
 
   // Members
 

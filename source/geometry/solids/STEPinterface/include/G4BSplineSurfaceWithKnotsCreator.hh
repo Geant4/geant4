@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineSurfaceWithKnotsCreator.hh,v 1.4 2001-07-11 10:00:04 gunter Exp $
+// $Id: G4BSplineSurfaceWithKnotsCreator.hh,v 1.5 2002-11-21 16:49:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -56,7 +56,7 @@ class G4BSplineSurfaceWithKnotsCreator: public G4BSplineSurfaceCreator
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void*);
     const char* Name() const { return "B_Spline_Surface_With_Knots"; }
-    static G4BSplineSurfaceWithKnotsCreator GetInstance() { return csc; }
+    static G4BSplineSurfaceWithKnotsCreator GetInstance();
 
   // Members
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RepresentationRelationshipWithTransformationCreator.cc,v 1.3 2001-07-11 10:00:12 gunter Exp $
+// $Id: G4RepresentationRelationshipWithTransformationCreator.cc,v 1.4 2002-11-21 16:49:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,6 +49,12 @@ G4RepresentationRelationshipWithTransformationCreator::
 
 G4RepresentationRelationshipWithTransformationCreator::
   ~G4RepresentationRelationshipWithTransformationCreator() {}
+
+G4RepresentationRelationshipWithTransformationCreator
+G4RepresentationRelationshipWithTransformationCreator::GetInstance()
+{
+  return csc;
+}
 
 void G4RepresentationRelationshipWithTransformationCreator::
   CreateG4Geometry(STEPentity& Ent)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Surface.cc,v 1.9 2001-07-11 09:59:47 gunter Exp $
+// $Id: G4Surface.cc,v 1.10 2002-11-21 16:52:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -284,6 +284,13 @@ const G4Point3D& G4Surface::GetPoint(G4int) const
 G4Ray* G4Surface::Norm()
 {
   return (G4Ray*)0;
+}
+
+void G4Surface::Project (G4double& Coord,
+                         const G4Point3D& Pt2, 
+                         const G4Plane& Pl1)
+{
+  Coord = Pt2.x()*Pl1.a + Pt2.y()*Pl1.b + Pt2.z()*Pl1.c - Pl1.d;
 }
 
 /*

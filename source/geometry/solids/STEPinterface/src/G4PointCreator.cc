@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PointCreator.cc,v 1.3 2001-07-11 10:00:11 gunter Exp $
+// $Id: G4PointCreator.cc,v 1.4 2002-11-21 16:49:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,11 @@ G4PointCreator::G4PointCreator()
 }
 
 G4PointCreator::~G4PointCreator() {}
+
+G4PointCreator G4PointCreator::GetInstance()
+{
+  return csc;
+}
 
 void G4PointCreator::CreateG4Geometry(STEPentity& Ent) {}
 

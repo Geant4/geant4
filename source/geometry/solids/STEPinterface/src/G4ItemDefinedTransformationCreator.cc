@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ItemDefinedTransformationCreator.cc,v 1.5 2001-07-11 10:00:10 gunter Exp $
+// $Id: G4ItemDefinedTransformationCreator.cc,v 1.6 2002-11-21 16:49:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,12 @@ G4ItemDefinedTransformationCreator::G4ItemDefinedTransformationCreator()
 }
 
 G4ItemDefinedTransformationCreator::~G4ItemDefinedTransformationCreator() {}
+
+G4ItemDefinedTransformationCreator
+G4ItemDefinedTransformationCreator::GetInstance()
+{
+  return csc;
+}
 
 void G4ItemDefinedTransformationCreator::CreateG4Geometry(STEPentity& Ent)
 {

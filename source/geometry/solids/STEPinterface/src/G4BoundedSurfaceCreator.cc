@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundedSurfaceCreator.cc,v 1.6 2001-07-11 10:00:08 gunter Exp $
+// $Id: G4BoundedSurfaceCreator.cc,v 1.7 2002-11-21 16:49:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -50,6 +50,11 @@ G4BoundedSurfaceCreator::G4BoundedSurfaceCreator()
 }
 
 G4BoundedSurfaceCreator::~G4BoundedSurfaceCreator() {}
+
+G4BoundedSurfaceCreator G4BoundedSurfaceCreator::GetInstance()
+{
+  return csc;
+}
 
 void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 {

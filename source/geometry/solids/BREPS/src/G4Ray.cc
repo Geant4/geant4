@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ray.cc,v 1.7 2001-07-11 09:59:46 gunter Exp $
+// $Id: G4Ray.cc,v 1.8 2002-11-21 16:52:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -244,4 +244,72 @@ void G4Ray::RayCheck()
   dir= dir.unit();
   r_min = 0;
   r_max = 0;
+}
+
+
+void G4Ray::Vcross(G4Plane &a, const G4Vector3D &b, const G4Vector3D &c) 
+{ 
+  a.a = b.y()  * c.z()  - b.z()  * c.y() ;
+  a.b = b.z()  * c.x()  - b.x()  * c.z() ;
+  a.c = b.x()  * c.y()  - b.y()  * c.x() ;
+}
+
+
+void G4Ray::Vcross(G4Vector3D &a, const G4Vector3D &b, const G4Vector3D &c) 
+{ 
+  a.setX(b.y()  * c.z()  - b.z()  * c.y()) ;
+  a.setY(b.z()  * c.x()  - b.x()  * c.z()) ;
+  a.setZ(b.x()  * c.y()  - b.y()  * c.x()) ;
+}
+
+
+void G4Ray::Vmove(G4Point3D &a, const G4Point3D &b) 
+{ 
+  a.setX(b.x());
+  a.setY(b.y());
+  a.setZ(b.z());
+}
+
+
+void G4Ray::Vadd2(G4Point3D &a, const G4Point3D &b, const G4Vector3D &c) 
+{
+  a.setX(b.x() + c.x()) ;
+  a.setY(b.y() + c.y()) ;
+  a.setZ(b.z() + c.z()) ;
+}	
+  
+
+void G4Ray::Vsub2(G4Vector3D &a, const G4Point3D &b, const G4Point3D &c) 
+{
+  a.setX(b.x() - c.x());
+  a.setY(b.y() - c.y());
+  a.setZ(b.z() - c.z());
+}
+
+
+void G4Ray::Vscale(G4Plane& a, const G4Plane& b, G4double c) 
+{ 
+  a.a = b.a * c;
+  a.b = b.b * c;
+  a.c = b.c * c;
+}
+
+
+G4double G4Ray::Vdot(const G4Plane &a, const G4Point3D &b) 
+{
+  return (a.a * b.x() + 
+	  a.b * b.y() + 
+	  a.c * b.z());
+}
+  
+
+G4double G4Ray::Magsq(const G4Plane &a) 
+{
+  return ( a.a * a.a + a.b * a.b + a.c *a.c );
+}
+  
+
+G4double G4Ray::Magnitude(const G4Plane &a) 
+{
+  return (sqrt( Magsq( a )) );
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PointCreator.hh,v 1.4 2001-07-11 10:00:06 gunter Exp $
+// $Id: G4PointCreator.hh,v 1.5 2002-11-21 16:49:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -56,7 +56,7 @@ class G4PointCreator: private G4GeometryCreator
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void* G4obj);
     const char* Name() const { return "Point"; }
-    static G4PointCreator GetInstance() { return csc; }
+    static G4PointCreator GetInstance();
 
   // Members
 

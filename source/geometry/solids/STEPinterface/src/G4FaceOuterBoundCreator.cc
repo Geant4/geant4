@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FaceOuterBoundCreator.cc,v 1.3 2001-07-11 10:00:10 gunter Exp $
+// $Id: G4FaceOuterBoundCreator.cc,v 1.4 2002-11-21 16:49:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,6 +38,11 @@
 #include "G4GeometryTable.hh"
 
 G4FaceOuterBoundCreator G4FaceOuterBoundCreator::csc;
+
+G4FaceOuterBoundCreator G4FaceOuterBoundCreator::GetInstance()
+{
+  return csc;
+}
 
 G4FaceOuterBoundCreator::G4FaceOuterBoundCreator()
 {

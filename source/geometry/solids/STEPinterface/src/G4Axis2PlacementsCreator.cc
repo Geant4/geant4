@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Axis2PlacementsCreator.cc,v 1.4 2001-07-11 10:00:08 gunter Exp $
+// $Id: G4Axis2PlacementsCreator.cc,v 1.5 2002-11-21 16:49:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -47,6 +47,11 @@ G4Axis2PlacementsCreator::G4Axis2PlacementsCreator()
 }
 
 G4Axis2PlacementsCreator::~G4Axis2PlacementsCreator() {}
+
+G4Axis2PlacementsCreator G4Axis2PlacementsCreator::GetInstance()
+{
+  return csc;
+}
 
 void G4Axis2PlacementsCreator::CreateG4Geometry(STEPentity& Ent)
 {

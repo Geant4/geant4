@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Surface.hh,v 1.7 2001-07-11 09:59:38 gunter Exp $
+// $Id: G4Surface.hh,v 1.8 2002-11-21 16:52:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -110,8 +110,8 @@ public:  // with description
 
 public:  // without description
 
-  inline static void Project (G4double& Coord, const G4Point3D& Pt, 
-			      const G4Plane& Pl);
+  static void Project (G4double& Coord, const G4Point3D& Pt, 
+			                const G4Plane& Pl);
     // Utility function returning the projection (Coord) of a point Pt
     // on a plane Pl.
 
