@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2001-10-24 11:45:06 maire Exp $
+$Id: README,v 1.8 2001-11-27 11:10:31 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -58,7 +58,7 @@ $Id: README,v 1.7 2001-10-24 11:45:06 maire Exp $
  	In this example a CalorHit is defined as a set of 4 informations per
 	layer :
  	- the total energy deposit in the absorber plate,
- 	- the total tracklength of all charged particles in the absorber plate,  
+ 	- the total tracklength of all charged particles in the absorber plate,
  	- the total energy deposit in the detection gap,
  	- the total tracklength of all charged particles in the detection gap.
  	
@@ -83,7 +83,7 @@ $Id: README,v 1.7 2001-10-24 11:45:06 maire Exp $
  	
  	The tracks are drawn at the end of event, and erased at the end of run.
  	Optionaly one can choose to draw all particles, only the charged,
- 	or neutral or none. This command is defined in EventActionMessenger class.
+ 	or neutral or none. This command is build in EventActionMessenger class.
 	
 	NB 1: the visualization (with OpenGL driver) assumes two things:
 	    1- the visualisation & interfaces categories have been compiled

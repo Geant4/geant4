@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.8 2001-11-05 08:24:50 gcosmo Exp $
+// $Id: ExN03DetectorConstruction.cc,v 1.9 2001-11-27 11:10:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -200,14 +200,14 @@ G4Material* steam = new G4Material(name="WaterSteam", density, ncomponents=1,
 steam->AddMaterial(H2O, fractionmass=1.);
 
 //
-// example of vacuum
+// examples of vacuum
 //
-//
-// density     = universe_mean_density;
-// pressure    = 3.e-18*pascal;
-// temperature = 2.73*kelvin;
-// G4Material* Vacuum = new G4Material(name="Galactic", z=1., a=1.01*g/mole,
-//                                     density,kStateGas,temperature,pressure);
+
+density     = universe_mean_density;
+pressure    = 3.e-18*pascal;
+temperature = 2.73*kelvin;
+G4Material* Vacuum = new G4Material(name="Galactic", z=1., a=1.01*g/mole,
+                                    density,kStateGas,temperature,pressure);
 
 density     = 1.e-5*g/cm3;
 pressure    = 2.e-2*bar;
@@ -221,7 +221,7 @@ G4cout << *(G4Material::GetMaterialTable()) << G4endl;
   //default materials of the calorimeter
   AbsorberMaterial = Pb;
   GapMaterial      = lAr;
-  defaultMaterial  = Air;
+  defaultMaterial  = Vacuum;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -9,13 +9,13 @@
 #
 /calor/setNbOfLayers 1
 #
-/calor/setAbsMat Aluminium
-/calor/setAbsThick 10. cm
+/calor/setAbsMat Water
+/calor/setAbsThick 40 cm
 #
 /calor/setGapMat Air
-/calor/setGapThick  0.1 cm
+/calor/setGapThick  0 cm
 #
-/calor/setSizeYZ   10. cm
+/calor/setSizeYZ   40 cm
 #
 /calor/update
 #
