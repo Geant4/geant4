@@ -1,0 +1,55 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4Scale.icc,v 1.1 2001-07-22 00:49:37 johna Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// John Allison  21st July 2001.
+
+inline G4double G4Scale::GetLength() const {
+  return fLength;
+}
+
+inline const G4String& G4Scale::GetAnnotation() const {
+  return fAnnotation;
+}
+inline G4Scale::Direction G4Scale::GetDirection() const {
+  return fDirection;
+}
+
+inline G4bool G4Scale::GetAutoPlacing() const {
+  return fAutoPlacing;
+}
+
+inline G4double G4Scale::GetX() const {
+  return fX0;
+}
+
+inline G4double G4Scale::GetY() const {
+  return fY0;
+}
+
+inline G4double G4Scale::GetZ() const {
+  return fZ0;
+}
