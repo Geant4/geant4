@@ -1,108 +1,32 @@
 \section{Introduction}
 
-\subsection{Hadronic Models Framework in Geant4}
+[General medium energy hadronic physics INC stuff]
 
+%There are several General Monte Carlo simulation toolkits implementing cascade models with various approachies
+%such as HETC \cite}{}, and FLUKA \cite{}. 
 
-% Geant4 is a Monte Carlo particle detector simulation toolkit for
-% various computing platforms and en\-vi\-ron\-ments\cite{G4UserRequirements}.
-% In order to match the needs of the LHC in high energy physics
-% community. Other requirements are also set by medical and space
-% science applications. Geant4 has been developed by a world-wide collaboration of over 40
-% institutions~\cite{wellisch99,MoURD44}.  
-% The objectives of the Geant4 development project are to redesign and
-% re-engineer the major CERN software tool Geant3.21 for an Object Oriented (OO) environment. 
+Our presentations describes implementation of INC model in {\sc Geant4} hadronic physics framework \cite{}.
 
-% Geant4 collaboration websites \cite{webG4INFN}.
+[Geant4 stuff]
+Geant4 is a Monte Carlo particle detector simulation toolkit, having applications also in  medical and space
+science. 
+Geant4 provides a flexible framework for the modular implementation of
+various kinds of hadronic interactions. 
+Geant4 exploits advanced Software Engineering techniques and Object
+Oriented technology to achieve the transparency of the physics
+implementation and to this way provide the possibility of validating the
+physics results. 
 
-
-% Geant4 exploits advanced Software Engineering techniques and Object
-% Oriented technology to achieve the transparency of the physics
-% implementation and to this way provide the possibility of validating the
-% physics results. The stringent requirements~\cite{wellisch99} of the
-% LHC and other future experiments require from the hadronic simulation framework a high
-% level of flexibility, customizability, extendibility and transparency,
-% which can be attained only by a systematic OO software engineering
-% approach. Easy maintenance and distributed development are also
-% important issues for the framework design.
-
-% The hadronic models framework is based on concepts of physics
-% processes and models. While the process is a general concept, models
-% are allowed to have restrictions in process type, material, element
-% and energy range.  Several models can be utilized by one model class; for instance, a
-% process class for inelastic collisions can use distinct models for different energies.
-
-% Geant4 provides a flexible framework for the modular implementation of
-% various kinds of hadronic interactions.  There are distinct process
-% classes for different type of interactions (i.e. elastic and
-% inelastic).  Process classes utilize model classes to determine the
-% secondaries produced in the interaction and to calculate the momenta
-% of the particles.  Several model classes for different particles and
-% energy regimes can be used by the process classes. 
-
-% Geant4 process classes contain two kinds of important methods used in
-% tracking: {\it GetPhysicalInteractionLength} (GPIL) and {\it
-%   DoIt}.  The {\it GPIL} method gives the step length from the current
-% space-time position to the next space-time point where the {\it DoIt}
-% method is invoked to describe what happens in the interaction.  It
-% describes the change of energy and momentum direction, change of
-% position and secondary tracks by returning an instance of the class {\it G4VParticleChange}.
-
-% All physics process classes are derived from the class {\it G4VProcess}. It
-% has three pure virtual {\it DoIt} methods: {\it PostStepDoIt},
-% {\it AlongStepDoIt} and {\it AtRestDoIt}.
-
-% These methods return {\it G4VParticleChange} classes. 
-% {\it G4VProcess} also has corresponding pure virtual GPIL
-% methods, which return a {\it G4double} for the interaction length. There are
-% also some other pure virtual methods common for all physics processes.
-
-% For simple processes, there are base classes such as {\it
-%   G4VRestProcess}, {\it G4VContinuous\-Process} and {\it G4VDiscrete\-Process}
-% available. In these classes only one of the above mentioned {\it DoIt}
-% methods is active. The {\it DoIt} method returns an instance of
-% ``Particle Change'' class (derived from {\it G4VParticleChange}),
-% which is responsible for updating the step class {\it G4Step} used in
-% tracking.
-
-% All hadronic process objects are derived from the abstract class {\it
-%   G4Hadronic\.Process} (which itself is derived from {\it
-%   G4VDis\-crete\-Process} and {\it G4VProcess}), and have one or more
-% cross-section data sets associated with them. These objects
-% encapsulate methods and data for calculating total cross-sections for
-% a given process. The default cross-sections can be overridden in whole
-% or in part (for certain materials and energy regimes) by the user.
-% Thus the cross-sections and physical models are implemented independently.
-
-% The Geant4 hadronic model framework allows flexible use of several models
-% without the need for the implementation of a special interface. 
-% This way, highly specialised models can be easily used in the same
-% application together with more general code. Forexample, models wich
-% are valid only for one material and particle and applicable only in a restricted energy range.
-
-% Geant4 models can be divided into parametrisation driven, data driven and
-%theory driven models~\cite{privAmelin, wellisch99}.
-% In parametrisation driven models, the existing data for hadronic
-% reactions and energies is parametrized for generating the final
-% state. In Geant4, inelastic scattering models based on this paradigm are
-% available for low and high particle energies.
-
-% Data driven models are typically used in Geant4 for the simulation of
-% nuclear low energy neutron scattering.  It is also used in the
-% simulation of the absorption of some particle coming to rest. When the data
-% coverage is not sufficient other types of models are used.
-
-% Theory driven models are available in Geant4 for inelastic scattering
-% in a first implementation, covering the full energy range of LHC
-% experiments (up to $\rm14~TeV$). Theory driven models are used to
-% extract the missing cross-sections from the measured ones, or at high
-% energies to predict the cross-sections by using the Regge theory.
+The hadronic models framework is based on concepts of physics
+processes and models. While the process is a general concept, models
+are allowed to have restrictions in process type, material, element
+and energy range.  Several models can be utilized by one model class; for instance, a
+process class for inelastic collisions can use distinct models for different energies.
+Process classes utilize model classes to determine the
+secondaries produced in the interaction and to calculate the momenta
+of the particles.  Several model classes for different particles and
+energy regimes can be used by the process classes.
 
 
 
-\subsection{Bertini Intranuclear Cascades}
-
-Intranuclear cascade  model basen on work by Bertini~\cite{iljinov94}.
-
-
-%The phenomena of intermediate nuclear physics provides a challenging simulations task.
 
