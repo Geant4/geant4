@@ -1,4 +1,4 @@
-// $Id: G4VPEventIO.hh,v 1.2 2002-12-04 10:25:49 gcosmo Exp $
+// $Id: G4VPEventIO.hh,v 1.3 2002-12-04 11:33:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4VPEventIO.hh
@@ -10,9 +10,12 @@
 #define V_P_EVENT_I_O_HH 1
 
 #include "G4Event.hh"
-#include "CLHEP/HepMC/GenEvent.h"
-// not yet // #include "G4MCTEvent.hh"
+
+#ifndef WIN32
+  #include "CLHEP/HepMC/GenEvent.h"
+  // not yet // #include "G4MCTEvent.hh"
 #include "G4Pevent.hh"
+#endif
 
 // Class Description:
 //   Abstract base class for storing and retrieving an event object
@@ -35,11 +38,11 @@ class G4VPEventIO
 
       virtual G4bool Store( const G4Event* anEvent ) =0;
       // Store a Geant4 event.
-
+#ifndef WIN32
       // virtual G4bool Store( HepMC::GenEvent* hepevt, G4MCTEvent* mctevt, const G4Event* anEvent ) =0;
       virtual G4bool Store( HepMC::GenEvent* hepevt, const G4Event* anEvent ) =0;
       // Store a Geant4 event.
-
+#endif
       virtual G4bool Retrieve( G4Event*& anEvent ) =0;
       // Retrieve a Geant4 event.
 
