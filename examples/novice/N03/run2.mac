@@ -1,10 +1,9 @@
-# $Id: run2.mac,v 1.4 2000-06-05 09:54:36 maire Exp $
+# $Id: run2.mac,v 1.5 2000-11-21 10:59:43 maire Exp $
 #
 # Macro file of "exampleN03.cc"
 #
-# (in iteractive it must be executed after initialization)
-# (otherwise type: /control/execute prerunN03.mac)
-# (graphic needed: OpenGL or Mesa) 
+# can be run in batch, without graphic
+# or interactively: Idle> /control/execute run2.mac
 #
 /control/verbose 2
 # 

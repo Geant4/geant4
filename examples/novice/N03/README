@@ -1,4 +1,4 @@
-$Id: README,v 1.4 1999-09-14 02:34:09 stanaka Exp $
+$Id: README,v 1.5 2000-11-21 10:59:36 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -74,16 +74,16 @@ $Id: README,v 1.4 1999-09-14 02:34:09 stanaka Exp $
  4- VISUALIZATION
  
  	The Visualization Manager is set in the main().
- 	The initialisation of the drawing is done via the command
- 	a set of /vis commands in the macro prerunN03.mac. This macro is
- 	automatically read from the main in case of interactive running mode.
+ 	The initialisation of the drawing is done via a set of /vis commands
+        in the macro initInter.mac. This macro is automatically read from 
+ 	the main in case of interactive running mode.
  	
  	The detector has a default view which is a longitudinal view of the 
  	calorimeter.
  	
  	The tracks are drawn at the end of event, and erased at the end of run.
- 	Optionaly one can choose to draw all particles, only the charged one,
- 	or none. This command is defined in EventActionMessenger class.
+ 	Optionaly one can choose to draw all particles, only the charged,
+ 	or neutral or none. This command is defined in EventActionMessenger class.
 	
 	NB 1: the visualization (with OpenGL driver) assumes two things:
 	    1- the visualisation & interfaces categories have been compiled
@@ -95,9 +95,10 @@ $Id: README,v 1.4 1999-09-14 02:34:09 stanaka Exp $
 	       with the environment variable G4VIS_BUILD_DAWNFILE_DRIVER.
 	    2- exampleN03.cc has been compiled with G4VIS_USE_DAWNFILE.   
  	
-	NN 3: The macros "exN03VisX.mac" are tutorial macros for 
+	NN 3: The macros "visN03/exN03VisX.mac" are tutorial macros for 
               visualization.  They can be tried as:
-               % $G4BINDIR/exampleN03 exN03VisX.mac
+               % $G4BINDIR/exampleN03
+	       idle > /control/execute visN03/exN03VisX.mac
               For details, see comment lines  described in the macro files.
               These macros are designed to help your understanding the 
               User's Guide.    
@@ -107,7 +108,8 @@ $Id: README,v 1.4 1999-09-14 02:34:09 stanaka Exp $
  	The particle's type and the physic processes which will be available
  	in this example are set in PhysicsList class.
  	
- 	In addition a build-in interactive command (/process/inactivate proname)
+ 	In addition the build-in interactive command:
+	         /process/(in)activate processName
  	allows to activate/inactivate the processes one by one.
  	Then one can well visualize the processes one by one, especially 
  	in the bubble chamber setup with a transverse magnetic field.

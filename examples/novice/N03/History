@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2000-10-19 12:40:45 stanaka Exp $
+$Id: History,v 1.30 2000-11-21 10:59:36 maire Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+21-11-00, mma (exampleN03-V02-00-02)
+- introduce G4UItcsh in exampleN03.cc
+- put all vis macros in a new subdirectory visTutor
+- prerunN03 simplified (compound vis commands) and renamed initInter.mac
+- code to control the drawing of tracks reinstalled in eventAction
+- bug corrected in PhysicsList::GetCutForProton()
+- PrimaryGenerator : default particle e- 50 MeV 
 
 October 19, 2000  Satoshi Tanaka  (exampleN03-V02-00-01)
 - Updated exN03Vis0-4.mac, incorporating recent development 

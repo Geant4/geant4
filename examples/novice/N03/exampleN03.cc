@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN03.cc,v 1.12 2000-06-14 09:10:57 johna Exp $
+// $Id: exampleN03.cc,v 1.13 2000-11-21 10:59:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,6 +22,7 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
 
 #ifdef G4UI_USE_XM
 #include "G4UIXm.hh"
@@ -64,8 +65,12 @@ int main(int argc,char** argv) {
       // G4UIterminal is a (dumb) terminal.
 #ifdef G4UI_USE_XM
       session = new G4UIXm(argc,argv);
+#else           
+#ifdef G4UI_USE_TCSH
+      session = new G4UIterminal(new G4UItcsh);      
 #else
-      session = new G4UIterminal;
+      session = new G4UIterminal();
+#endif
 #endif
     }
   
@@ -90,7 +95,7 @@ int main(int argc,char** argv) {
   if (session)   // Define UI session for interactive mode.
     {
       // G4UIterminal is a (dumb) terminal.
-      UI->ApplyCommand("/control/execute prerunN03.mac");    
+      UI->ApplyCommand("/control/execute initInter.mac");    
 #ifdef G4UI_USE_XM
       // Customize the G4UIXm menubar with a macro file :
       UI->ApplyCommand("/control/execute gui.mac");

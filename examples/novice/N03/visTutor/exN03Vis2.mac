@@ -1,18 +1,18 @@
 #######################################################################
-#  MACRO FILE NAME: exN03Vis3.mac                                     #
+#  MACRO FILE NAME: exN03Vis2.mac                                     #
 #                                                                     #
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE: November 10, 1999                                            #
-#        May      20, 2000                                            # 
+#        May      20, 2000                                            #
 #        June     06, 2000                                            # 
 #        October  17, 2000                                            # 
 #                                                                     #
-#  CONTENTS: A basic macro for demonstrating various drawing styles   #
+#  CONTENTS: A basic macro for visualization of events                #
 #                                                                     #
 #  USAGE:  % gmake visclean                                           #
 #          % $G4BINDIR/exampleN03                                     #
-#          Idle> /control/execute exN03Vis3.mac                       #
+#          Idle> /control/execute visTutor/exN03Vis2.mac              #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
 #                                  DAWN (version 3.85 or after)       #
@@ -21,7 +21,7 @@
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
-#    % setenv OGLHOME     ... (e.g. /usr/local)                       #
+#    % setenv OGLHOME     ... (e.g. /usr/X11R6)                       #
 #    % setenv G4VIS_BUILD_OPENGLX_DRIVER   1                          # 
 #    % setenv G4VIS_BUILD_DAWNFILE_DRIVER  1                          #
 #                                                                     #
@@ -40,19 +40,19 @@
 #                                                                     #
 #######################################################################
 
-##############################################
-Store particle trajactories for visualization
-##############################################
+#################################################
+# Store particle trajactories for visualization
+#################################################
 /tracking/storeTrajectory 1
 
-######################################################
-# Visualization with OGLIX (OpenGL Immediate X) driver
-######################################################
+#####################################################
+# Visualization with OGLSX (OpenGL Stored X) driver
+#####################################################
 
-# Invoke the OGLIX driver 
-/vis/open OGLIX
+# Invoke the OGLSX driver 
+/vis/open OGLSX
 
-# Create a new scene
+# Create a new scene 
 /vis/scene/create
 
 # Attach the current visualization driver 
@@ -63,14 +63,29 @@ Store particle trajactories for visualization
 /vis/scene/add/volume
 
 # Add trajectories to the current scene
-/vis/scene/add/trajectories
+#/vis/scene/add/trajectories
 
-# Bird-eye view of events with 
-#  the hidden-surface drawing style
+# Set drawing style to "surface"
+/vis/viewer/set/style surface
+
+# Set camera 
+#  viewpoint  : (theta,phi) = (10*deg, 10*deg).
+#  zoom factor: 0.9 x (full screen size)
 /vis/camera/reset
-/vis/camera/viewpoint    45 45 
-/vis/viewer/set/style    surface
-/run/beamOn              10
+/vis/camera/viewpoint   10  10
+/vis/camera/zoom        0.9 
+
+# Generate one event and visualize it.
+/run/beamOn 1
+
+# Slide show (spinning). 
+#  Draw 18 frames with steps of 20 degrees.
+#  The OGLSX driver stores the previously visualized view
+#  in the display list.  So the particle trajectories are 
+#  also rotated together with the detector geometry.
+#  
+/vis/camera/spin      18 20
+
 
 ##########################################################
 # Visualization with DAWNFILE driver
@@ -79,13 +94,12 @@ Store particle trajactories for visualization
 #    with the "vectorized" PostScript format.
 #
 #  * In order to make the file "g4_XX.eps" printable, 
-#    append the "showpage" PostScript command to the file. 
+#    append the "showpage" PostScript command to the file 
 #    You can do it with the 4th page of the DAWN GUI panel
 #    or by editing the file by hand.
 #
 #  * Set an environmental variable to skip DAWN GUI:
 #    % setenv G4DAWNFILE_VIEWER "dawn -d"
-#
 ##########################################################
 
 # Invoke the DAWNFILE driver 
@@ -102,27 +116,24 @@ Store particle trajactories for visualization
 /vis/scene/add/volume
 
 # Add trajectories to the current scene
-/vis/scene/add/trajectories
+#/vis/scene/add/trajectories
 
-# Set camera 
-#  Camera is zoomed up by 1.5 times of the standard setting.
-/vis/camera/reset 
-/vis/camera/zoom 1.5
-/vis/camera/viewpoint    45 45 
+# Set the drawing style to "wireframe". 
+/vis/viewer/set/style  wireframe
 
-# Bird-eye view of events with the 
-#  wireframe drawing style
-/vis/viewer/set/style    wireframe
-/run/beamOn              5
+# Visualize many events (bird's eye view)
+#  viewpoint  : (theta,phi) = (45*deg, 45*deg) 
+#  zoom factor: 1.5 x (full screen size)
+/vis/camera/reset
+/vis/camera/viewpoint   45 45
+/vis/camera/zoom        1.5
+/run/beamOn             50
 
-# Bird-eye view of events with the 
-#  hidden-surface drawing style
-/vis/viewer/set/style    surface
-/run/beamOn              50
+# Visualize many events (zoomed-up view)
+#  viewpoint  : (theta,phi) = (90*deg, 0) 
+#  zoom factor: 5 x (full screen size)
+/vis/camera/reset
+/vis/camera/viewpoint   90 0
+/vis/camera/zoom        5
+/run/beamOn             50
 
-# Cull detector geometry and show only trajectories.
-/vis/camera/reset 
-/vis/set/culling         on 
-/vis/set/cull_by_density on 999
-/vis/viewer/set/style    wireframe
-/run/beamOn              10

@@ -1,8 +1,9 @@
-# $Id: run1.mac,v 1.1 1999-01-07 16:05:53 gunter Exp $
+# $Id: run1.mac,v 1.2 2000-11-21 10:59:42 maire Exp $
 #
 # Macro file for "exampleN03.cc"
 # 
-# (can be run in batch, without graphic)
+# can be run in batch, without graphic
+# or interactively: Idle> /control/execute run1.mac
 #
 /control/verbose 2
 /control/saveHistory

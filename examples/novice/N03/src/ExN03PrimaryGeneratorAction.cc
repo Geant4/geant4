@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03PrimaryGeneratorAction.cc,v 1.2 1999-12-15 14:49:25 gunter Exp $
+// $Id: ExN03PrimaryGeneratorAction.cc,v 1.3 2000-11-21 10:59:45 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@ ExN03PrimaryGeneratorAction::ExN03PrimaryGeneratorAction(
                     = particleTable->FindParticle(particleName="e-");
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
-  particleGun->SetParticleEnergy(30.*MeV);
+  particleGun->SetParticleEnergy(50.*MeV);
   G4double position = -0.5*(ExN03Detector->GetWorldSizeX());
   particleGun->SetParticlePosition(G4ThreeVector(position,0.*cm,0.*cm));
 

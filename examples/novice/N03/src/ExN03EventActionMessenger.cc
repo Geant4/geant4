@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03EventActionMessenger.cc,v 1.3 1999-12-15 14:49:25 gunter Exp $
+// $Id: ExN03EventActionMessenger.cc,v 1.4 2000-11-21 10:59:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,10 +27,10 @@ ExN03EventActionMessenger::ExN03EventActionMessenger(ExN03EventAction* EvAct)
 { 
   DrawCmd = new G4UIcmdWithAString("/event/drawTracks",this);
   DrawCmd->SetGuidance("Draw the tracks in the event");
-  DrawCmd->SetGuidance("  Choice : none, charged(default), all");
+  DrawCmd->SetGuidance("  Choice : none, charged(default),neutral, all");
   DrawCmd->SetParameterName("choice",true);
-  DrawCmd->SetDefaultValue("charged");
-  DrawCmd->SetCandidates("none charged all");
+  DrawCmd->SetDefaultValue("all");
+  DrawCmd->SetCandidates("none charged neutral all");
   DrawCmd->AvailableForStates(Idle);
   
   PrintCmd = new G4UIcmdWithAnInteger("/event/printModulo",this);
