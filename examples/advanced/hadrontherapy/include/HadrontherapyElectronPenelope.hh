@@ -20,69 +20,39 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhysicsList.hh,v 1.6 2005-03-10 12:58:52 mpiergen Exp $
+//
+// $Id: HadrontherapyElectronPenelope.hh,v 1.1 2005-03-10 12:58:52 mpiergen Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
+// -------------------------------------------------------------------
+// Class description:
+// System test for e/gamma, electron processes a' la Penelope for PhysicsList
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // -------------------------------------------------------------------
 
-#ifndef HADRONTHERAPYPHYSICSLIST_HH
-#define HADRONTHERAPYPHYSICSLIST_HH 1
+#ifndef HADRONTHERAPYELECTRONPENELOPE_HH
+#define HADRONTHERAPYELECTRONPENELOPE_HH 1
 
-#include "G4VModularPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class  HadrontherapyPhysicsListMessenger;
+class HadrontherapyElectronPenelope : public G4VPhysicsConstructor {
 
-class  HadrontherapyPhysicsList: public G4VModularPhysicsList {
-public:
+public: 
+
+  HadrontherapyElectronPenelope(const G4String& name = "electron-penelope");
   
-  HadrontherapyPhysicsList();
-
-  virtual ~HadrontherapyPhysicsList();
-
-  virtual void SetCuts();
+  virtual ~HadrontherapyElectronPenelope();
   
-  // Register PhysicsList chunks
-  void AddPhysicsList(const G4String& name);
-
-  // Production thresholds, expressed in range
-  void SetGammaCut(G4double cut);
-  void SetElectronCut(G4double cut);
-
-  // Production thresholds, expressed in energy, for photons, electrons and both
-  void SetGammaLowLimit(G4double cut);
-  void SetElectronLowLimit(G4double cut);
-  void SetGELowLimit(G4double cut);
-
-  // Cut for generation of secondaries for EEDL/EPDL processes
-  void SetLowEnSecPhotCut(G4double cut);
-  void SetLowEnSecElecCut(G4double cut);
- 
-  // Activation of Auger effect in electron ionisation and photoelectric effect
-  void ActivateAuger(G4bool flag);
-
-  // Select angular distribution
-  void SetAngularDistribution(const G4String& name);
-
-private:
-
-  G4bool electronIsRegistered;
-  G4bool positronIsRegistered;
-  G4bool photonIsRegistered;
-  G4bool protonIsRegistered;
-  G4bool protonHadroIsRegistered;
-  G4bool muonIsRegistered;
-  G4bool decayIsRegistered;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-
-  HadrontherapyPhysicsListMessenger* messenger;
-
+  // This method is dummy for physics
+  virtual void ConstructParticle() {};
+  
+  virtual void ConstructProcess();
 };
 
 #endif
+
 
 
 

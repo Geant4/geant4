@@ -56,8 +56,8 @@ HadrontherapyAnalysisManager::HadrontherapyAnalysisManager() :
 
  //parameters for the TreeFactory
  
-  G4String fileName="protontherapy.hbk";
-  theTree = treeFact->create(fileName,"hbook",false, true);
+  G4String fileName="protontherapy.xml";
+  theTree = treeFact->create(fileName,"xml",false, true,"uncompress" );
   delete treeFact;
   histFact = aFact->createHistogramFactory( *theTree );
   tupFact  = aFact->createTupleFactory    ( *theTree );

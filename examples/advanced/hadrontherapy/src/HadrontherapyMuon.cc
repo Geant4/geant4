@@ -20,73 +20,50 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhysicsList.hh,v 1.6 2005-03-10 12:58:52 mpiergen Exp $
+// $Id: HadrontherapyMuon.cc,v 1.1 2005-03-10 12:59:11 mpiergen Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 // -------------------------------------------------------------------
 
-#ifndef HADRONTHERAPYPHYSICSLIST_HH
-#define HADRONTHERAPYPHYSICSLIST_HH 1
+#include "HadrontherapyMuon.hh"
 
-#include "G4VModularPhysicsList.hh"
-#include "globals.hh"
+#include "G4ProcessManager.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
+#include "G4MultipleScattering.hh"
+#include "G4MuIonisation.hh"
+#include "G4MuBremsstrahlung.hh"
+#include "G4MuPairProduction.hh"
+#include "G4MuonMinusCaptureAtRest.hh"
 
-class  HadrontherapyPhysicsListMessenger;
+HadrontherapyMuon::HadrontherapyMuon(const G4String& name): G4VPhysicsConstructor(name)
+{ }
 
-class  HadrontherapyPhysicsList: public G4VModularPhysicsList {
-public:
+HadrontherapyMuon::~HadrontherapyMuon()
+{ }
+
+void HadrontherapyMuon::ConstructProcess()
+{
   
-  HadrontherapyPhysicsList();
+  theParticleIterator->reset();
 
-  virtual ~HadrontherapyPhysicsList();
+  while( (*theParticleIterator)() )
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* manager = particle->GetProcessManager();
+      G4String particleName = particle->GetParticleName();
+     
+      if (particleName == "mu+" || 
+	       particleName == "mu-" )
 
-  virtual void SetCuts();
-  
-  // Register PhysicsList chunks
-  void AddPhysicsList(const G4String& name);
-
-  // Production thresholds, expressed in range
-  void SetGammaCut(G4double cut);
-  void SetElectronCut(G4double cut);
-
-  // Production thresholds, expressed in energy, for photons, electrons and both
-  void SetGammaLowLimit(G4double cut);
-  void SetElectronLowLimit(G4double cut);
-  void SetGELowLimit(G4double cut);
-
-  // Cut for generation of secondaries for EEDL/EPDL processes
-  void SetLowEnSecPhotCut(G4double cut);
-  void SetLowEnSecElecCut(G4double cut);
- 
-  // Activation of Auger effect in electron ionisation and photoelectric effect
-  void ActivateAuger(G4bool flag);
-
-  // Select angular distribution
-  void SetAngularDistribution(const G4String& name);
-
-private:
-
-  G4bool electronIsRegistered;
-  G4bool positronIsRegistered;
-  G4bool photonIsRegistered;
-  G4bool protonIsRegistered;
-  G4bool protonHadroIsRegistered;
-  G4bool muonIsRegistered;
-  G4bool decayIsRegistered;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-
-  HadrontherapyPhysicsListMessenger* messenger;
-
-};
-
-#endif
+	{
+	  manager->AddProcess(new G4MultipleScattering,     -1,1,1); 
+	  manager->AddProcess(new G4MuIonisation,      -1, 2,2);
+	  manager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
+	  manager->AddProcess(new G4MuPairProduction,  -1,-1,4);
 
 
-
-
-
-
-
+	}   
+    }
+}

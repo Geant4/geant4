@@ -56,6 +56,8 @@
 
 #ifdef G4VIS_USE
 #include "HadrontherapyVisManager.hh"
+//#include "G4VisExecutive.hh"
+//#include "G4XXX.hh"
 #endif
 
 #include "HadrontherapyDetectorConstruction.hh"
@@ -88,22 +90,25 @@ int main(int argc,char** argv) {
   HadrontherapyDetectorConstruction* detector;
   detector = new HadrontherapyDetectorConstruction;
   runManager -> SetUserInitialization(detector);
-  runManager -> SetUserInitialization(new HadrontherapyPhysicsList(detector));
+  runManager -> SetUserInitialization(new HadrontherapyPhysicsList);
 
   //***********************************************
   // Set the visualization if you chose to have it!
   //***********************************************
 
 #ifdef G4VIS_USE
+   // Instantiate and initialise Visualization Manager.
+   //G4VisManager* visManager = new G4VisExecutive;
   G4VisManager* visManager = new HadrontherapyVisManager;
-  visManager -> Initialize();
+   //visManager -> RegisterGraphicsSystem(new G4XXX);
+   visManager -> Initialize ();
 #endif 
 
   //**********************************
   // set mandatory user action class
   //********************************
 
-  runManager -> SetUserAction(new HadrontherapyPrimaryGeneratorAction( detector ));
+  runManager -> SetUserAction(new HadrontherapyPrimaryGeneratorAction);
  
   //****************************************
   // set the optional user action classes
@@ -122,7 +127,7 @@ int main(int argc,char** argv) {
   // Initialize G4 kernel
   //*********************
 
-  runManager -> Initialize();
+  //runManager -> Initialize();
 
   //***********************************************
   // get the pointer to the User Interface manager 
@@ -156,7 +161,7 @@ int main(int argc,char** argv) {
   if (session)   // Define UI session for interactive mode.
     {
       
-      UI->ApplyCommand("/control/execute defaultMacro.mac");    
+      UI->ApplyCommand("/control/execute/defaultMacro.mac");    
       session -> SessionStart();
       delete session;
     }

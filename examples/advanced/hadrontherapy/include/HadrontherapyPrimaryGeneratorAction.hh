@@ -47,22 +47,28 @@ class HadrontherapyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 // ---------------------------------------------------------------------------
 {
 public:
-  HadrontherapyPrimaryGeneratorAction(HadrontherapyDetectorConstruction*);    
+  HadrontherapyPrimaryGeneratorAction();   
   ~HadrontherapyPrimaryGeneratorAction();
   
 public:
   void SetDefaultKinematic();
   void GeneratePrimaries(G4Event*);
-
+  void SetEnergy(G4double val){ pEnergy = val;}
+  void SetSourceType(G4double val) { sigmaK = val;}
+  void SetXPosition(G4double val) {x0 = val;}
+  void SetSpotSizeY(G4double val) { sigmaY = val;}
+  void SetSpotSizeZ(G4double val) { sigmaZ = val;}
 private:
   G4ParticleGun*                particleGun;
-  HadrontherapyDetectorConstruction*      HadrontherapyDetector;
-  
-  G4double X0;
-  G4double Y0;
-  G4double Z0;
 
-  G4double sigmaX;
+  G4double                      pEnergy;
+  G4double                      sigmaK;
+
+  G4double x0;
+  //G4double y0;
+  //G4double z0;
+
+  //G4double sigmaX;
   G4double sigmaY;
   G4double sigmaZ;
 

@@ -20,69 +20,71 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhysicsList.hh,v 1.6 2005-03-10 12:58:52 mpiergen Exp $
+//
+// $Id: HadrontherapyPhysicsListMessenger.hh,v 1.1 2005-03-10 12:58:52 mpiergen Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 //
 // -------------------------------------------------------------------
 
-#ifndef HADRONTHERAPYPHYSICSLIST_HH
-#define HADRONTHERAPYPHYSICSLIST_HH 1
+// Class description:
+// System test for e/gamma, UI for PhysicsList
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
 
-#include "G4VModularPhysicsList.hh"
+// -------------------------------------------------------------------
+
+#ifndef HADRONTHERAPYPHYSICSLISTMESSENGER_HH
+#define HADRONTHERAPYPHYSICSLISTMESSENGER_HH 1
+
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-class  HadrontherapyPhysicsListMessenger;
+class HadrontherapyPhysicsList;
+class G4UIdirectory;
+class G4UIcmdWithoutParameter;
+class G4UIcmdWithADouble;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithABool;
+class G4UIcmdWithAString;
 
-class  HadrontherapyPhysicsList: public G4VModularPhysicsList {
+class HadrontherapyPhysicsListMessenger: public G4UImessenger {
+
 public:
   
-  HadrontherapyPhysicsList();
-
-  virtual ~HadrontherapyPhysicsList();
-
-  virtual void SetCuts();
+  HadrontherapyPhysicsListMessenger(HadrontherapyPhysicsList* physList);
   
-  // Register PhysicsList chunks
-  void AddPhysicsList(const G4String& name);
-
-  // Production thresholds, expressed in range
-  void SetGammaCut(G4double cut);
-  void SetElectronCut(G4double cut);
-
-  // Production thresholds, expressed in energy, for photons, electrons and both
-  void SetGammaLowLimit(G4double cut);
-  void SetElectronLowLimit(G4double cut);
-  void SetGELowLimit(G4double cut);
-
-  // Cut for generation of secondaries for EEDL/EPDL processes
-  void SetLowEnSecPhotCut(G4double cut);
-  void SetLowEnSecElecCut(G4double cut);
- 
-  // Activation of Auger effect in electron ionisation and photoelectric effect
-  void ActivateAuger(G4bool flag);
-
-  // Select angular distribution
-  void SetAngularDistribution(const G4String& name);
-
+  ~HadrontherapyPhysicsListMessenger();
+  
+  void SetNewValue(G4UIcommand*, G4String);
+  
 private:
+  
+  HadrontherapyPhysicsList*          physicsList;    // not owned pointer
+  
+  G4UIdirectory* lowEnDir;
+  G4UIdirectory* listDir;
 
-  G4bool electronIsRegistered;
-  G4bool positronIsRegistered;
-  G4bool photonIsRegistered;
-  G4bool protonIsRegistered;
-  G4bool protonHadroIsRegistered;
-  G4bool muonIsRegistered;
-  G4bool decayIsRegistered;
+  G4UIcmdWithADoubleAndUnit* cutGLowLimCmd;
+  G4UIcmdWithADoubleAndUnit* cutELowLimCmd;
+  G4UIcmdWithADoubleAndUnit* cutGELowLimCmd;
 
-  G4double cutForGamma;
-  G4double cutForElectron;
+  G4UIcmdWithADoubleAndUnit* cutSecPhotCmd;
+  G4UIcmdWithADoubleAndUnit* cutSecElecCmd;
 
-  HadrontherapyPhysicsListMessenger* messenger;
+  G4UIcmdWithADoubleAndUnit* cutGCmd;
+  G4UIcmdWithADoubleAndUnit* cutECmd;
+
+  G4UIcmdWithABool*          augerCmd;
+
+  G4UIcmdWithAString*        physicsListCmd;
+
+  G4UIcmdWithAString*        angularDistributionCmd;
 
 };
 
 #endif
+
 
 
 

@@ -3,18 +3,18 @@
 #  visulisation.mac
 #
 #***********************
-
+/run/initialize
 /process/activate Transportation all
 /hits/activate
 /hits/verbose 0
-
 /gun/particle proton
 
 
 /tracking/verbose 0
 /run/initialize
 /vis/scene/create
-/vis/open OGLIX
+#/vis/open OGLIX
+/vis/open DAWN
 
 /vis/viewer/set/viewpointThetaPhi 40 160 deg
 
@@ -27,6 +27,6 @@
 #/modulator/angle/modAngle 45 deg
 #/vis/viewer/refresh
 #######
-/run/beamOn 50
+/run/beamOn 5
 
 
