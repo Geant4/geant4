@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2002-03-28 14:28:51 gcosmo Exp $
+$Id: History,v 1.25 2002-04-10 12:34:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 10, 2002   Gabriele Cosmo               geometry-V04-00-02
+-----------------------------
+- Fixed compilation problems for porting on supported and non-ISO platforms
+  on 'biasing' module. Includes "geomvol-V04-00-05" and "geombias-V04-00-03"
+  on top of previous global geometry tag.
 
 Mar 25, 2002   Gabriele Cosmo               geometry-V04-00-01
 -----------------------------
