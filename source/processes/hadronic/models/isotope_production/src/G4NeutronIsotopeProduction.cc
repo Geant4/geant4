@@ -33,6 +33,7 @@ GetIsotope(const G4Track& aTrack,
 
   // get the isotope
   G4Material * theMaterial = aTrack.GetMaterial();
+  if(theMaterial->GetZ()<13) return NULL; //@@@@@@ workarround to ne fixed in G4NeutronHPNames.
   G4int nEleInMat = theMaterial->GetNumberOfElements();
   G4int index;
   G4double * xSec = new G4double[nEleInMat];
