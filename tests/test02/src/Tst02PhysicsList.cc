@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst02PhysicsList.cc,v 1.1 1999-01-08 16:34:39 gunter Exp $
+// $Id: Tst02PhysicsList.cc,v 1.2 1999-04-16 09:41:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,6 +19,12 @@
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
+#include "G4BosonConstructor.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BarionConstructor.hh"
+#include "G4IonConstructor.hh"
+#include "G4ShortLivedConstructor.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
@@ -49,6 +55,48 @@ void Tst02PhysicsList::ConstructParticle()
   ConstructAllBarions();
   ConstructAllIons();
 //  ConstructAllShortLiveds();
+}
+
+void Tst02PhysicsList::ConstructAllBosons()
+{
+  // Construct all bosons
+  G4BosonConstructor pConstructor;
+  pConstructor.ConstructParticle();
+}
+
+void Tst02PhysicsList::ConstructAllLeptons()
+{
+  // Construct all leptons
+  G4LeptonConstructor pConstructor;
+  pConstructor.ConstructParticle();
+}
+
+void Tst02PhysicsList::ConstructAllMesons()
+{
+  //  Construct all mesons
+  G4MesonConstructor pConstructor;
+  pConstructor.ConstructParticle();
+}
+
+void Tst02PhysicsList::ConstructAllBarions()
+{
+  //  Construct all barions
+  G4BarionConstructor pConstructor;
+  pConstructor.ConstructParticle();
+}
+
+void Tst02PhysicsList::ConstructAllIons()
+{
+  //  Construct light ions
+  G4IonConstructor pConstructor;
+  pConstructor.ConstructParticle();  
+}
+
+void Tst02PhysicsList::ConstructAllShortLiveds()
+{
+  //  Construct  resonaces and quarks
+  G4ShortLivedConstructor pConstructor;
+  pConstructor.ConstructParticle();  
 }
 
 void Tst02PhysicsList::ConstructProcess()
@@ -167,6 +215,7 @@ void Tst02PhysicsList::ConstructEM()
      // set ordering for PostStepDoIt
      pmanager->SetProcessOrdering(aMultipleScattering, idxPostStep, 1);
      pmanager->SetProcessOrdering(aionIonization, idxPostStep, 2);
+
    } else if ((!particle->IsShortLived()) &&
 	      (particle->GetPDGCharge() != 0.0) && 
 	      (particle->GetParticleName() != "chargedgeantino")) {
@@ -645,27 +694,9 @@ void Tst02PhysicsList::AddParameterisation()
   }
 }
 
-void Tst02PhysicsList::SetCuts(G4double cut)
+void Tst02PhysicsList::SetCuts()
 {
-  if (verboseLevel >0){
-    G4cout << "Tst02PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
-  }  
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
-  SetCutValue(cut, "gamma");
-  SetCutValue(cut, "e-");
-  SetCutValue(cut, "e+");
- 
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-  SetCutValue(cut, "proton");
-  SetCutValue(cut, "anti_proton");
-  
-  SetCutValueForOthers(cut);
-
-  if (verboseLevel>1) {
-    DumpCutValuesTable();
-  }
+ //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //   the default cut value for all particle types 
+  SetCutsWithDefault();   
 }

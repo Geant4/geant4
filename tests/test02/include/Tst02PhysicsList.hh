@@ -16,7 +16,7 @@ protected:
   virtual void ConstructProcess();
   
   // 
-  virtual void SetCuts(G4double aCut);
+  virtual void SetCuts();
   
 protected:
   // these methods Construct physics processes and register them
@@ -25,6 +25,14 @@ protected:
   virtual void ConstructEM();
   virtual void ConstructHad();
   virtual void ConstructLeptHad();
+
+  // these methods Construct all particles in each category
+  virtual void ConstructAllBosons();
+  virtual void ConstructAllLeptons();
+  virtual void ConstructAllMesons();
+  virtual void ConstructAllBarions();
+  virtual void ConstructAllIons();
+  virtual void ConstructAllShortLiveds();
 };
 
 #endif
