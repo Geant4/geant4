@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsScene.cc,v 1.14 2000-05-28 13:52:48 barrand Exp $
+// $Id: G4VisCommandsScene.cc,v 1.15 2000-05-29 09:21:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -318,27 +318,33 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
   for (G4int iSH = 0; iSH < nSceneHandlers; iSH++) {
     G4VSceneHandler* aSceneHandler = sceneHandlerList [iSH];
     G4Scene* aScene = aSceneHandler -> GetScene ();
-    if(aScene) {
-    const G4String& aSceneName = aScene -> GetName ();
-    if (sceneName == aSceneName) {
-      aSceneHandler -> ClearStore ();
-      aSceneHandler -> ClearTransientStore ();
-      G4ViewerList& viewerList = aSceneHandler -> SetViewerList ();
-      const G4int nViewers = viewerList.entries ();
-      for (G4int iV = 0; iV < nViewers; iV++) {
-	G4VViewer* aViewer = viewerList [iV];
-	aViewer -> ClearView ();
-	aViewer -> DrawView ();
-	// Triggers rebuild of graphical database by notifying the scene
-	// handler.  The viewer is supposed to be smart enough to know
-	// when not to do this.  E.g., the second viewer of a scene
-	// handler does not do it.
-	G4cout << "Viewer \"" << aViewer -> GetName ()
-	       << "\" of scene handler \"" << aSceneHandler -> GetName ()
-	       << "\"\n  prepared at request of scene \"" << sceneName
-	       << "\"." << G4endl;
+    if (aScene) {
+      const G4String& aSceneName = aScene -> GetName ();
+      if (sceneName == aSceneName) {
+	aSceneHandler -> ClearStore ();
+	aSceneHandler -> ClearTransientStore ();
+	G4ViewerList& viewerList = aSceneHandler -> SetViewerList ();
+	const G4int nViewers = viewerList.entries ();
+	for (G4int iV = 0; iV < nViewers; iV++) {
+	  G4VViewer* aViewer = viewerList [iV];
+	  aViewer -> ClearView ();
+	  aViewer -> DrawView ();
+	  // Triggers rebuild of graphical database by notifying the scene
+	  // handler.  The viewer is supposed to be smart enough to know
+	  // when not to do this.  E.g., the second viewer of a scene
+	  // handler does not do it.
+	  G4cout << "Viewer \"" << aViewer -> GetName ()
+		 << "\" of scene handler \"" << aSceneHandler -> GetName ()
+		 << "\"\n  prepared at request of scene \"" << sceneName
+		 << "\"." << G4endl;
+	}
       }
     }
+    else {
+      G4cout << "G4VisCommandSceneNotifyHandlers: scene handler \""
+	     << aSceneHandler->GetName()
+	     << "\" has a null scene."
+	       << G4endl;
     }
   }
 }
