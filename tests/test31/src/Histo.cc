@@ -239,7 +239,7 @@ void Histo::fill(G4int i, G4double x, G4double w)
   }
 #ifdef G4ANALYSIS_USE  
   if(i>=0 && i<m_Histo) {
-    m_histo[i]->fill(x/m_unit[i], w);
+    if(m_active[i]) m_histo[i]->fill(x/m_unit[i], w);
   } else {
     G4cout << "Histo::fill: WARNING! wrong histogram ID " << i << G4endl;
   }
@@ -255,7 +255,7 @@ void Histo::scale(G4int i, G4double x)
   }
 #ifdef G4ANALYSIS_USE  
   if(i>=0 && i<m_Histo) {
-    m_histo[i]->scale(x);
+    if(m_active[i]) m_histo[i]->scale(x);
   } else {
     G4cout << "Histo::scale: WARNING! wrong histogram ID " << i << G4endl;
   }
@@ -397,7 +397,7 @@ void Histo::PrintHisto(G4int id)
 {
   if(id>=0 && id<m_Histo) {
 #ifdef G4ANALYSIS_USE  
-    // m_histo[id]->print();
+    // if(m_active[i]) m_histo[id]->print();
 #endif
   }
 }

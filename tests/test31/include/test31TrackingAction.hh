@@ -52,7 +52,7 @@ class test31TrackingAction : public G4UserTrackingAction
     ~test31TrackingAction();
 
     void PreUserTrackingAction(const G4Track*);
-    void PostUserTrackingAction(const G4Track*) {};
+    void PostUserTrackingAction(const G4Track*);
 
   private:
 

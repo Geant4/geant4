@@ -52,12 +52,12 @@
 
 test31TrackingAction::test31TrackingAction():
   theHisto(test31Histo::GetPointer())
-{;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 test31TrackingAction::~test31TrackingAction()
-{;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -133,7 +133,18 @@ void test31TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
       G4cout << "test31TrackingAction: Secondary gamma " << G4endl;
     }
     theHisto->AddPhoton(aTrack->GetDynamicParticle());
+  }
 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void test31TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
+{
+  if(aTrack->GetParentID() == 0) {
+    const G4VProcess* process = 
+          aTrack->GetStep()->GetPostStepPoint()->GetProcessDefinedStep();
+    if (process) theHisto->CountProcess(process->GetProcessName());
   }
 }
 

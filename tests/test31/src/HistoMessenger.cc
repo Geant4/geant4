@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.cc,v 1.2 2004-09-16 14:28:14 vnivanch Exp $
+// $Id: HistoMessenger.cc,v 1.3 2004-09-21 10:41:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,6 +49,12 @@ HistoMessenger::HistoMessenger(Histo* manager)
 
   fileCmd = new G4UIcmdWithAString("/testem/histo/fileType",this);
   fileCmd->SetGuidance("set type (hbook, XML) for the histograms file");
+
+  saveCmd = new G4UIcommand("/testem/histo/save",this);
+  saveCmd->SetGuidance("Fill histograms and save to file");
+
+  listCmd = new G4UIcmdWithAnInteger("/testem/histo/list",this);
+  listCmd->SetGuidance("printout of histogram parameters");
 
   verbCmd = new G4UIcmdWithAnInteger("/testem/histo/verbose",this);
   verbCmd->SetGuidance("set verbose level");
@@ -89,6 +95,8 @@ HistoMessenger::~HistoMessenger()
   delete fileCmd;
   delete histoCmd;
   delete verbCmd;
+  delete saveCmd;
+  delete listCmd;
   delete factoryCmd;
   delete histoDir;
 }
@@ -103,8 +111,14 @@ void HistoMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
   if (command == fileCmd)
     histo->setFileType(newValues);
 
+  if (command == saveCmd)
+    histo->save();
+
   if (command == verbCmd)
     histo->setVerbose(verbCmd->GetNewIntValue(newValues));
+
+  if (command == listCmd)
+    histo->ListHistogram(listCmd->GetNewIntValue(newValues));
     
   if (command == histoCmd)
    { G4int ih,nbBins; G4double vmin,vmax; char unts[30];

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Histo.hh,v 1.4 2004-09-13 14:05:04 vnivanch Exp $
+// $Id: Histo.hh,v 1.5 2004-09-21 10:41:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef Histo_h

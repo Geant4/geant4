@@ -98,6 +98,9 @@ void test31Histo::BeginOfHisto(G4int num)
   n_charged_back = 0;
   n_gam_back = 0;
 
+  n_mumu = 0;
+  n_pipi = 0;
+
   if(0 < nHisto) {
     bookHisto();
     histo->book();
@@ -142,6 +145,8 @@ void test31Histo::EndOfHisto()
   G4double xgl = x*(G4double)n_gam_leak;
   G4double xcb = x*(G4double)n_charged_back;
   G4double xgb = x*(G4double)n_gam_back;
+  G4double xmu = x*(G4double)n_mumu;
+  G4double xpi = x*(G4double)n_pipi;
   G4cout                    << "Number of events               " << n_evt <<G4endl;
   G4cout << std::setprecision(4) << "Average energy deposit         " << etot/MeV << " MeV" << G4endl;
   G4cout << std::setprecision(4) << "Average number of e-           " << xe << G4endl;
@@ -152,6 +157,8 @@ void test31Histo::EndOfHisto()
   G4cout << std::setprecision(4) << "Average number of leak gamma   " << xgl << G4endl;
   G4cout << std::setprecision(4) << "Average number of back charged " << xcb << G4endl;
   G4cout << std::setprecision(4) << "Average number of back gamma   " << xgb << G4endl;
+  G4cout << std::setprecision(4) << "Average number of mu+mu-       " << xmu << G4endl;
+  G4cout << std::setprecision(4) << "Average number of pi+pi-       " << xpi << G4endl;
   G4cout<<"===================================================================="<<G4endl;
 
   if(0 < nHisto) {
@@ -292,7 +299,7 @@ void test31Histo::TableControl()
 {
   G4EmCalculator cal;
   cal.SetVerbose(1);
-// parameters
+  // parameters
   G4double tmin = 1.*keV;
   G4double tmax = 1.*GeV;
   G4int    nbin = 60;
@@ -300,7 +307,7 @@ void test31Histo::TableControl()
   G4double cut  = 1.*GeV; 
   //G4ParticleDefinition* part = G4Proton::Proton();
   //  G4ParticleDefinition* part = G4Electron::Electron();
-//  G4ParticleDefinition* part = G4Alpha::Alpha();
+  //  G4ParticleDefinition* part = G4Alpha::Alpha();
   // cal.PrintDEDXTable(part);
   // cal.PrintRangeTable(part);
   // cal.PrintInverseRangeTable(part);
@@ -347,8 +354,10 @@ void test31Histo::TableControl()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void test31Histo::CrossSections()
+void test31Histo::CountProcess(const G4String& name)
 {
+  if(name == "AnnihiToMuPair") n_mumu++;  
+  if(name == "ee2hadr") n_pipi++;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

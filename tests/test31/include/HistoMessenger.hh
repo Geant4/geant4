@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: HistoMessenger.hh,v 1.1 2004-08-26 15:07:49 vnivanch Exp $
+// $Id: HistoMessenger.hh,v 1.2 2004-09-21 10:41:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,7 +63,9 @@ private:
   G4UIcmdWithAString*     factoryCmd;
   G4UIcmdWithAString*     fileCmd;
   G4UIcmdWithAnInteger*   verbCmd;
+  G4UIcmdWithAnInteger*   listCmd;
   G4UIcommand*            histoCmd;
+  G4UIcommand*            saveCmd;
 
 };
 

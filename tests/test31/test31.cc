@@ -50,6 +50,7 @@
 #include "test31EventAction.hh"
 #include "test31TrackingAction.hh"
 #include "test31RunAction.hh"
+#include "StackingAction.hh"
 
 #include "G4Timer.hh"
 
@@ -96,6 +97,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(event);
   if(verbose >0) G4cout << "EventAction is defined" << G4endl;
 
+  runManager->SetUserAction(new StackingAction());
   runManager->SetUserAction(new test31TrackingAction());
   if(verbose >0) G4cout << "TrackingAction is defined" << G4endl;
 
