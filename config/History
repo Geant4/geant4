@@ -1,4 +1,4 @@
-$Id: History,v 1.201 2002-11-19 16:37:34 gcosmo Exp $
+$Id: History,v 1.202 2002-11-21 17:48:09 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-19th November 2002  Gabriele Cosmo
+19th November 2002  Gabriele Cosmo (config-V04-01-05)
 - liblist.c:
   o Enhanced script to provide the whole list of installed libraries
     in the correct order, without requiring parsing of dependencies.
@@ -25,7 +25,11 @@ committal in the CVS repository !
     i.e. - liblist -m < libname.map
 - binmake.gmk:
   o Use "liblist -m" to retrieve the list of libraries to link in case
-    heeaders are installed in $G4INCLUDE, and granular libraries are used.
+    headers are installed in $G4INCLUDE, and granular libraries are used.
+    NOTE: the feature is not yet activated since it requires still more
+    enhancements to liblist, in order to exclude optional modules libs
+    from the link list (like... visualization, UI, persistency, ...)
+    according to what required by a generic application.
 
 16th November 2002  Hans-Peter Wellisch
 - binmake.gmk:
