@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.cc,v 1.3 2004-02-03 08:29:35 kurasige Exp $
+// $Id: G4ProductionCuts.cc,v 1.4 2004-06-07 13:47:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -78,5 +78,33 @@ G4int G4ProductionCuts::operator==(const G4ProductionCuts &right) const
 G4int G4ProductionCuts::operator!=(const G4ProductionCuts &right) const
 {
   return (this !=  &right);
+}
+
+
+G4int  G4ProductionCuts::GetIndex(const G4String& name)
+{
+  G4int index;
+  if       ( name == "gamma" )        { index =  0; }
+  else  if ( name == "e-" )           { index =  1; }
+  else  if ( name == "e+" )           { index =  2; }
+  else                                { index = -1; }
+
+  return index;
+}
+
+
+G4int  G4ProductionCuts::GetIndex(const G4ParticleDefinition* ptcl)
+{ 
+  if(!ptcl) return -1;
+  if(gammaDef==0 && ptcl->GetParticleName()=="gamma") { gammaDef = ptcl; }
+  if(electDef==0 && ptcl->GetParticleName()=="e-") { electDef = ptcl; }
+  if(positDef==0 && ptcl->GetParticleName()=="e+") { positDef = ptcl; }
+  G4int index;
+  if(ptcl==gammaDef)      { index = 0; }
+  else if(ptcl==electDef) { index = 1; }
+  else if(ptcl==positDef) { index = 2; }
+  else                    { index = -1; }
+
+  return index;
 }
 
