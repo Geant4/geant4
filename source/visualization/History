@@ -1,4 +1,4 @@
-$Id: History,v 1.95 2001-01-18 12:23:02 johna Exp $
+$Id: History,v 1.96 2001-01-18 12:24:45 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -28,6 +28,8 @@ History file for visualization category
 - Corrected G4PhysicalVolumeModel.  This corrects a bug whereby the
   requested drawing of a physical volume and its decendants starting
   at a depth greater than 2 was incorrectly positioned on the screen.
+- /vis/scene/include commands withdrawn - use equivalent commands
+  /vis/scene/add.
 - OpenGL: cosmetic and minor performance improvements.
 
 16th January 2001  John Allison  (vis-03-00-00)
