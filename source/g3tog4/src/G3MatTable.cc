@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MatTable.cc,v 1.9 1999-07-29 03:42:17 lockman Exp $
+// $Id: G3MatTable.cc,v 1.10 1999-10-20 13:28:09 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -66,7 +66,8 @@ G3MatTable::print(G4int matid){
 	G4String a = *iter.key();
 	G4int lngth = a.length()-3;
 	Mat = iter.value();
-	G4cout << "Matid " << a(3,lngth) << " ";
+	G4String matid (a(3,lngth));
+	G4cout << "Matid " << matid << " ";
 	G4cout << Mat << endl;
       }
     } else {

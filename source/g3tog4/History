@@ -1,7 +1,10 @@
-$Id: History,v 1.20 1999-07-29 03:38:26 lockman Exp $
+$Id: History,v 1.21 1999-10-20 13:28:07 stesting Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+20-Oct-99 Allison
+- G3MatTable.cc: introduced G4String matid (a(3,lngth)) to help STL Interface.
 
 g3tog4-V00-01-00 28-Jul-1999 Lockman
 - Commented out "Deleted..." in destructors.
