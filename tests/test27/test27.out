@@ -147,7 +147,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=9.4s Real=10s Sys=0.1s
+  User=9.4s Real=9.7s Sys=0.08s
 #
 # deuteron at 1 GeV/nucleon on H 
 #
@@ -389,7 +389,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=4.19s Real=4.26s Sys=0.06s
+  User=4.28s Real=4.34s Sys=0.06s
 #
 #
 # deuteron at 200 MeV in U
@@ -429,7 +429,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.28s Real=0.28s Sys=0s
+  User=0.27s Real=0.28s Sys=0.01s
 #
 # deuteron at 200 MeV/nucleon on H 
 #
@@ -507,7 +507,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.29s Real=0.29s Sys=0s
+  User=0.29s Real=0.3s Sys=0s
 #
 #  .....end deuteron.............
 #
@@ -548,7 +548,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.79s Real=2.86s Sys=0.01s
+  User=2.8s Real=2.86s Sys=0.03s
 #
 # alpha at 1 GeV/nucleon on H 
 #
@@ -587,7 +587,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # alpha at 1 GeV/nucleon on Silicon 
 #
@@ -626,7 +626,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.73s Real=1.74s Sys=0.01s
+  User=1.74s Real=1.76s Sys=0.02s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -665,7 +665,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.09s Real=0.11s Sys=0s
+  User=0.09s Real=0.14s Sys=0.01s
 #
 # alpha at 200 MeV/nucleon on H 
 #
@@ -704,7 +704,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # alpha at 200 MeV/nucleon on Silicon 
 #
@@ -785,7 +785,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=14.02s Real=14.31s Sys=0.08s
+  User=13.31s Real=13.73s Sys=0.05s
 #
 # C(12,6)++ at 1 GeV/nucleon on H 
 #
@@ -865,7 +865,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.8s Real=3.93s Sys=0.04s
+  User=3.95s Real=3.98s Sys=0.01s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -906,7 +906,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.26s Real=0.28s Sys=0s
+  User=0.12s Real=0.17s Sys=0.01s
 #
 # C(12,6)++ at 200 MeV/nucleon on H 
 #
@@ -986,7 +986,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.43s Real=0.46s Sys=0.01s
+  User=0.28s Real=0.33s Sys=0.01s
 #
 #  .....end C(12,6)++............
 #
@@ -1126,7 +1126,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.08s Real=0.08s Sys=0s
+  User=0.13s Real=0.13s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
