@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Isotope.hh,v 1.5 2001-03-12 17:48:48 maire Exp $
+// $Id: G4Isotope.hh,v 1.6 2001-03-30 14:43:16 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -25,6 +25,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
+// 30.03.01: suppression of the warnig message in GetIsotope
 // 04.08.98: new method GetIsotope(isotopeName) (mma)
 // 17.01.97: aesthetic rearrangement (mma)
 
@@ -111,8 +112,7 @@ G4Isotope* G4Isotope::GetIsotope(G4String isotopeName)
       return theIsotopeTable[J];
    }
    
-  G4cerr << "  Warning from GetIsotope(name). The isotope: " << isotopeName
-         << "  does not exist in the IsotopeTable.  Return NULL pointer \n";
+  // the isotope does not exist in the table
   return NULL;          
 }
 

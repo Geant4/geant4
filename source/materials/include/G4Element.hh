@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Element.hh,v 1.6 2001-03-12 17:48:47 maire Exp $
+// $Id: G4Element.hh,v 1.7 2001-03-30 14:43:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,6 +44,7 @@
 // 09-07-98, Ionisation parameters removed from the class, M.Maire
 // 04-08-98, new method GetElement(elementName), M.Maire
 // 16-11-98, Subshell -> Shell, mma
+// 30-03-01, suppression of the warning message in GetElement
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -205,8 +206,7 @@ G4Element* G4Element::GetElement(G4String elementName)
       return theElementTable[J];
    }
    
-  G4cerr << "  Warning from GetElement(name). The element: " << elementName
-         << "  does not exist in the ElementTable.  Return NULL pointer \n";
+  // the element does not exist in the table 
   return NULL;   
 }
 

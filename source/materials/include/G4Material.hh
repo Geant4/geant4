@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.hh,v 1.9 2001-03-12 17:48:48 maire Exp $
+// $Id: G4Material.hh,v 1.10 2001-03-30 14:43:16 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,6 +54,7 @@
 // 18-11-98, SandiaTable interface modified.
 // 19-07-99, new data member (chemicalFormula) added by V.Ivanchenko
 // 12-03-01, G4bool fImplicitElement (mma)
+// 30-03-01, suppression of the warning message in GetMaterial
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -307,8 +308,7 @@ G4Material* G4Material::GetMaterial(G4String materialName)
       return theMaterialTable[J];
    }
    
-  G4cerr << "  Warning from GetMaterial(name). The material: " << materialName
-         << "  does not exist in the MaterialTable.  Return NULL pointer \n";
+  // the material does not exist in the table
   return NULL;          
 }
 
