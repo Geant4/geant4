@@ -1,4 +1,4 @@
-$Id: README,v 1.3 1999-06-01 17:22:18 johna Exp $
+$Id: README,v 1.4 1999-07-01 09:59:57 barrand Exp $
 
 Below are some steps for making GEANT4 with visualization run on
 rsplus.cern.ch.
@@ -41,7 +41,7 @@ Now, here are the visualization-specific actions.
      setenv G4VIS_BUILD_OPENGLXM_DRIVER     1  # Uses OpenGL and Motif 
                                                #  libraries
 
-     setenv G4VIS_BUILD_OPENINVENTOR_DRIVER 1  # Uses OpenInventor libraries
+     setenv G4VIS_BUILD_OIX_DRIVER          1  # Uses OpenInventor X11
 
      setenv G4VIS_BUILD_VRMLFILE_DRIVER     1  # Writes VRML ascii files
                                                #  to a local host
@@ -98,7 +98,7 @@ Now, here are the visualization-specific actions.
      setenv G4VIS_USE_OPACS        1
      setenv G4VIS_USE_OPENGLX      1
      setenv G4VIS_USE_OPENGLXM     1
-     setenv G4VIS_USE_OPENINVENTOR 1
+     setenv G4VIS_USE_OIX          1
      setenv G4VIS_USE_VRMLFILE     1
      setenv G4VIS_USE_VRML         1
 
@@ -179,8 +179,6 @@ export OPACS_VERSION=v3
 export OPACS_SYSTEM=Linux-gxx
 export OCONFIG=Linux
 . /export/data26/OPACS/OPACS/v3/setup.sh
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/export/data26/HEPVis/v5r0/Linux-gxx-SF/
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/export/data26/SoFree/v2r2/Linux-gxx
 OPATH="$OPATH $G4INSTALL/source/visualization/test/OPACS"
 
 ########### OpenGL
@@ -191,12 +189,14 @@ export G4VIS_USE_OPENGLXM=1
 export XKEYSYMDB=/usr/lib/X11/XKeysymDB
 export OGLHOME=/usr/X11
 
-########### OpenInventor
+########### OpenInventor (with SoFree implementation on Linux)
 export G4VIS_BUILD_OIX_DRIVER=1
 export G4VIS_USE_OIX=1
 export OIVFLAGS="-I/export/data26/HEPVis/v5r0/include -DINVENTOR2_1 -I/export/data26/SoFree/v2r2/include"
 export OIVLIBS="-L/export/data26/HEPVis/v5r0/Linux-gxx-SF -lHEPVis -L/export/data26/SoFree/v2r2/Linux-gxx -lSoFree"
 export SOFREEUSER=/export/data26/SoFree/v2r2/user/
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/export/data26/HEPVis/v5r0/Linux-gxx-SF
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/export/data26/SoFree/v2r2/Linux-gxx
 
 ############ VRML
 export G4VIS_BUILD_VRML_DRIVER=1
