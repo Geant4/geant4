@@ -23,14 +23,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALPhysicsList.hh,v 1.5 2002-12-12 19:16:32 gunter Exp $
+// $Id: FCALPhysicsList.hh,v 1.6 2003-10-20 17:21:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// $Id: FCALPhysicsList.hh,v 1.5 2002-12-12 19:16:32 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -60,10 +55,8 @@ class FCALPhysicsList: public G4VUserPhysicsList
     // Set/Get cut values 
     void      SetCutForGamma(G4double);
     void      SetCutForElectron(G4double);
-    void      SetCutForProton(G4double);           
     G4double  GetCutForGamma() const;
     G4double  GetCutForElectron() const;
-    G4double  GetCutForProton() const;
     
   protected:
     // these methods Construct particles 
@@ -80,7 +73,6 @@ class FCALPhysicsList: public G4VUserPhysicsList
   private:
     G4double cutForGamma;
     G4double cutForElectron; 
-    G4double cutForProton;
     G4double currentDefaultCut;
 };
 
