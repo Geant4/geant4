@@ -5,29 +5,26 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.cc,v 1.11 2000-05-26 07:40:09 urban Exp $
+// $Id: G4VEnergyLoss.cc,v 1.12 2000-06-22 13:29:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// --------------------------------------------------------------
-//	GEANT 4 class implementation file 
-//
-//	For information related to this code contact:
-//	CERN, CN Division, ASD Group
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
+
 // --------------------------------------------------------------
 //  bug fixed in fluct., L.Urban 26/05/00
-// ------------------------------------------------------------
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4VEnergyLoss.hh"
+#include "G4EnergyLossMessenger.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double     G4VEnergyLoss::ParticleMass ;                
 G4double     G4VEnergyLoss::taulow       ;                
 G4double     G4VEnergyLoss::tauhigh      ;                
-G4double     G4VEnergyLoss::ltaulow       ;                
-G4double     G4VEnergyLoss::ltauhigh      ;                
-
+G4double     G4VEnergyLoss::ltaulow      ;                
+G4double     G4VEnergyLoss::ltauhigh     ;                
 
 G4bool       G4VEnergyLoss::rndmStepFlag   = false;
 G4bool       G4VEnergyLoss::EnlossFlucFlag = true;
@@ -38,6 +35,7 @@ G4double     G4VEnergyLoss::c1lim = dRoverRange ;
 G4double     G4VEnergyLoss::c2lim = 2.*(1.-dRoverRange)*finalRange ;
 G4double     G4VEnergyLoss::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
+G4EnergyLossMessenger* G4VEnergyLoss::ELossMessenger  = NULL;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -58,13 +56,14 @@ G4VEnergyLoss::G4VEnergyLoss(const G4String& aName , G4ProcessType aType)
      nmaxCont1(4),
      nmaxCont2(16)
 {
+ //create (only once) EnergyLoss messenger
+ if(!ELossMessenger) ELossMessenger = new G4EnergyLossMessenger();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VEnergyLoss::~G4VEnergyLoss()
-{
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -73,8 +72,7 @@ G4VEnergyLoss::G4VEnergyLoss(G4VEnergyLoss& right)
      lastMaterial(NULL),
      nmaxCont1(4),
      nmaxCont2(16)
-{
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -315,7 +313,6 @@ G4double G4VEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
   Value *= ParticleMass*dltau;
   return Value;
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

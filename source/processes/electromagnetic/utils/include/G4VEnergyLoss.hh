@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.hh,v 1.5 2000-05-23 14:24:48 urban Exp $
+// $Id: G4VEnergyLoss.hh,v 1.6 2000-06-22 13:29:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,7 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
 
+class G4EnergyLossMessenger;
 
 class G4VEnergyLoss : public G4VContinuousDiscreteProcess 
 {
@@ -215,7 +216,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
    static G4bool   EnlossFlucFlag;  // control the energy loss fluctuation
    static G4bool       subSecFlag;  // control the generation of subcutoff secondaries
 
-
+   static G4EnergyLossMessenger* ELossMessenger;
 };
 
 #endif

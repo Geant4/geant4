@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:11:26 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2000-06-22 13:29:45 maire Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for electromagnetic sub-library.  John Allison, 25/6/98.
 # --------------------------------------------------------------------
@@ -26,6 +26,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/barions/include \
             -I$(G4BASE)/particles/hadrons/mesons/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
+	    -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/materials/include
 
 include $(G4INSTALL)/config/common.gmk
