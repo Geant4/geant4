@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: TrackingAction.cc,v 1.1 2003-10-06 10:02:34 maire Exp $
+// $Id: TrackingAction.cc,v 1.2 2003-10-20 10:43:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,11 +47,19 @@ TrackingAction::TrackingAction(RunAction* RunAct)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
+{
+  //  G4cout << "ID= " << aTrack->GetTrackID() << "  e(MeV)= " << aTrack->GetDynamicParticle()->GetKineticEnergy()/MeV 
+  //       << "  " << aTrack->GetDynamicParticle()->GetDefinition()->GetParticleName()
+  //       << G4endl;    
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
   //increase nb of processed tracks 
   //count nb of steps of this track
-  
   G4int   nbSteps = aTrack->GetCurrentStepNumber();
 
   if (aTrack->GetDefinition()->GetPDGCharge() == 0.) {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.hh,v 1.1 2003-10-06 10:02:26 maire Exp $
+// $Id: TrackingAction.hh,v 1.2 2003-10-20 10:43:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,6 +42,7 @@ class TrackingAction : public G4UserTrackingAction {
     TrackingAction(RunAction*);
    ~TrackingAction() {};
    
+    void PreUserTrackingAction(const G4Track*);
     void PostUserTrackingAction(const G4Track*);
     
   private:

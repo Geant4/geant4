@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.2 2003-10-17 17:57:51 vnivanch Exp $
+// $Id: PhysListEmStandard.cc,v 1.3 2003-10-20 10:43:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,7 @@
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlungCMS.hh"
+#include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
 #include "G4MuIonisation.hh"
@@ -64,7 +65,7 @@ PhysListEmStandard::~PhysListEmStandard()
 void PhysListEmStandard::ConstructProcess()
 {
   // Add standard EM Processes
-  bremThreshold = 1.*MeV;
+  bremThreshold = 10.*MeV;
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -84,7 +85,7 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       G4eBremsstrahlungCMS* br = new G4eBremsstrahlungCMS();
       br->SetGammaThreshold(bremThreshold);
-      pmanager->AddProcess(br,                       -1,-1,3);
+      pmanager->AddProcess(br,                       -1,-3,3);
 	    
     } else if (particleName == "e+") {
       //positron
@@ -92,7 +93,7 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       G4eBremsstrahlungCMS* br = new G4eBremsstrahlungCMS();
       br->SetGammaThreshold(bremThreshold);
-      pmanager->AddProcess(br,                       -1,-1,3);
+      pmanager->AddProcess(br,                       -1,-3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
       
     } else if( particleName == "mu+" || 

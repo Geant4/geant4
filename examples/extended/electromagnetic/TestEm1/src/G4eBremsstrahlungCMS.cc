@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungCMS.cc,v 1.1 2003-10-17 17:57:51 vnivanch Exp $
+// $Id: G4eBremsstrahlungCMS.cc,v 1.2 2003-10-20 10:43:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -69,18 +69,19 @@ void G4eBremsstrahlungCMS::SecondariesPostStep(
   G4DynamicParticle* gamma = model->SampleSecondary(couple, dp, tcut, kinEnergy);
   G4double gammaEnergy = gamma->GetKineticEnergy(); 
   kinEnergy -= gammaEnergy;
-  if(gammaEnergy > gammaThreshold) {
-    aParticleChange.SetNumberOfSecondaries(2);
+  G4int nSecond = 1;
+  if(gammaEnergy > gammaThreshold) nSecond = 2;
+  aParticleChange.SetNumberOfSecondaries(nSecond);
+  aParticleChange.AddSecondary(gamma);
+  aParticleChange.SetLocalEnergyDeposit(0.0);
+  if(2 == nSecond) {
     aParticleChange.SetStatusChange(fStopAndKill);
     if(kinEnergy <= 0.001*eV) kinEnergy = 0.001*eV;
     G4DynamicParticle* el = new G4DynamicParticle(dp->GetDefinition(),
                                                   dp->GetMomentumDirection(),
                                                   kinEnergy);
     aParticleChange.AddSecondary(el);
-  } else {
-    aParticleChange.SetNumberOfSecondaries(1);
   }
-  aParticleChange.AddSecondary(gamma);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
