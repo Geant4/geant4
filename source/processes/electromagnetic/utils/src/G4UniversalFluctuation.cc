@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.14 2004-02-06 10:03:17 vnivanch Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.15 2004-02-06 11:59:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 13-02-03 Add name (V.Ivanchenko)
 // 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
 // 07-11-03 Fix problem of rounding of double in G4UniversalFluctuations
+// 06-02-04 Add control on big sigma > 2*meanLoss (V.Ivanchenko)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -122,12 +123,13 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length 
                               * electronDensity * chargeSquare ;
     siga = sqrt(siga);
-    if(meanLoss < siga*minNumberInteractionsBohr) {
-      loss = 2.0*meanLoss*G4UniformRand(); 
+    G4double twomeanLoss = meanLoss + meanLoss;
+    if(twomeanLoss < siga) {
+      loss = twomeanLoss*G4UniformRand(); 
     } else {
       do {
        loss = G4RandGauss::shoot(meanLoss,siga);
-      } while (loss < 0. || loss > 2.*meanLoss);
+      } while (loss < 0. || loss > twomeanLoss);
     }
     //    G4cout << "de= " << meanLoss << "  fluc= " << loss-meanLoss << " sig= " << siga << G4endl; 
 
