@@ -28,6 +28,15 @@ else
   setenv DEBOPT optim
 endif
 
+# Generaal G4 build flags :
+setenv G4UI_BUILD_TERMINAL_SESSION 1
+setenv G4UI_BUILD_GAG_SESSION      1
+setenv G4VIS_BUILD_DAWN_DRIVER     1
+setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
+setenv G4VIS_BUILD_VRML_DRIVER     1
+setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
+setenv G4VIS_BUILD_RAYTRACER_DRIVER 1
+
 if ( `uname -n | grep rsplus` != "" ) then
   setenv G4USE_OSPACE 1
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
@@ -35,21 +44,13 @@ if ( `uname -n | grep rsplus` != "" ) then
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
-  # G4 build flags :
-  setenv G4UI_BUILD_TERMINAL_SESSION 1
-  setenv G4UI_BUILD_GAG_SESSION      1
+  # Other G4 build flags :
   #####setenv G4UI_BUILD_XM_SESSION       1
   #####setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
   setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
   setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
   ##### setenv G4VIS_BUILD_OIX_DRIVER      1
-  setenv G4VIS_BUILD_DAWN_DRIVER     1
-  setenv DAWN_BSD_UNIX_DOMAIN 1
-  setenv DAWN_HOME /afs/cern.ch/sw/geant4/dev/DAWN/AIX-AFS
-  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-  setenv G4VIS_BUILD_VRML_DRIVER     1
-  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 endif
 
 if ( `uname -n | grep dxplus` != "" || \
@@ -71,20 +72,12 @@ if ( `uname -n | grep dxplus` != "" || \
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
-  setenv G4UI_BUILD_TERMINAL_SESSION 1
-  setenv G4UI_BUILD_GAG_SESSION      1
   #####setenv G4UI_BUILD_XM_SESSION       1
   #####setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
   setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
   setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
   ##### setenv G4VIS_BUILD_OIX_DRIVER      1
-  setenv G4VIS_BUILD_DAWN_DRIVER     1
-  setenv DAWN_BSD_UNIX_DOMAIN 1
-  setenv DAWN_HOME /afs/cern.ch/sw/geant4/dev/DAWN/AIX-AFS
-  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-  setenv G4VIS_BUILD_VRML_DRIVER     1
-  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 endif
 
 if ( `uname -n | grep pcgeant`   != "" || \
@@ -95,20 +88,12 @@ if ( `uname -n | grep pcgeant`   != "" || \
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
-  setenv G4UI_BUILD_TERMINAL_SESSION 1
-  setenv G4UI_BUILD_GAG_SESSION      1
   #####setenv G4UI_BUILD_XM_SESSION       1
   #####setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
   setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
   setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
   ##### setenv G4VIS_BUILD_OIX_DRIVER      1
-  setenv G4VIS_BUILD_DAWN_DRIVER     1
-  setenv DAWN_BSD_UNIX_DOMAIN 1
-  setenv DAWN_HOME /afs/cern.ch/sw/geant4/dev/DAWN/AIX-AFS
-  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-  setenv G4VIS_BUILD_VRML_DRIVER     1
-  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 endif
 
 if ( `uname -n | grep sgmedia` != "" ) then
@@ -119,16 +104,10 @@ if ( `uname -n | grep sgmedia` != "" ) then
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
-  #######setenv G4UI_BUILD_TERMINAL_SESSION 1
-  #######setenv G4UI_BUILD_GAG_SESSION      1
   #######setenv G4UI_BUILD_XM_SESSION       1
   setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
   setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   setenv G4VIS_BUILD_OIX_DRIVER      1
-  setenv G4VIS_BUILD_DAWN_DRIVER     1
-  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-  setenv G4VIS_BUILD_VRML_DRIVER     1
-  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 endif
 
 if ( `uname -n | grep sun` != "" ) then
@@ -157,16 +136,10 @@ if ( `uname -n | grep sun` != "" ) then
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
-  setenv G4UI_BUILD_TERMINAL_SESSION 1
-  setenv G4UI_BUILD_GAG_SESSION      1
   #######setenv G4UI_BUILD_XM_SESSION       1
   #######setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
   #######setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   #######setenv G4VIS_BUILD_OIX_DRIVER      1
-  setenv G4VIS_BUILD_DAWN_DRIVER     1
-  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-  setenv G4VIS_BUILD_VRML_DRIVER     1
-  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 endif
 
 if ( `uname -n | grep hp` != "" ) then
@@ -177,16 +150,10 @@ if ( `uname -n | grep hp` != "" ) then
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
-  setenv G4UI_BUILD_TERMINAL_SESSION 1
-  setenv G4UI_BUILD_GAG_SESSION      1
   ######setenv G4UI_BUILD_XM_SESSION       1
   setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
   setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   setenv G4VIS_BUILD_OIX_DRIVER      1
-  setenv G4VIS_BUILD_DAWN_DRIVER     1
-  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-  setenv G4VIS_BUILD_VRML_DRIVER     1
-  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 endif
 
 if ( `uname -n` == aleph ) then
@@ -200,10 +167,6 @@ setenv G4UI_BUILD_XM_SESSION       1
 setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
 setenv G4VIS_BUILD_OPENGLX_DRIVER  1
 setenv G4VIS_BUILD_OIX_DRIVER      1
-setenv G4VIS_BUILD_DAWN_DRIVER     1
-setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-setenv G4VIS_BUILD_VRML_DRIVER     1
-setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 # G4 use flags :
 setenv G4UI_USE_XM                 1
 setenv G4VIS_USE_OPENGLXM          1
@@ -255,10 +218,6 @@ setenv G4UI_BUILD_XAW_SESSION      1
 setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
 setenv G4VIS_BUILD_OPENGLX_DRIVER  1
 setenv G4VIS_BUILD_OIX_DRIVER      1
-setenv G4VIS_BUILD_DAWN_DRIVER     1
-setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-setenv G4VIS_BUILD_VRML_DRIVER     1
-setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 # G4 use flags :
 setenv G4UI_USE_XM                 1
 setenv G4UI_USE_XAW                1
@@ -305,10 +264,6 @@ setenv G4UI_BUILD_XM_SESSION       1
 setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
 setenv G4VIS_BUILD_OPENGLX_DRIVER  1
 setenv G4VIS_BUILD_OIX_DRIVER      1
-setenv G4VIS_BUILD_DAWN_DRIVER     1
-setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-setenv G4VIS_BUILD_VRML_DRIVER     1
-setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 # G4 use flags :
 setenv G4UI_USE_XM                 1
 setenv G4VIS_USE_OPENGLXM          1
@@ -360,10 +315,6 @@ setenv G4UI_BUILD_XM_SESSION       1
 setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
 setenv G4VIS_BUILD_OPENGLX_DRIVER  1
 setenv G4VIS_BUILD_OIX_DRIVER      1
-setenv G4VIS_BUILD_DAWN_DRIVER     1
-setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-setenv G4VIS_BUILD_VRML_DRIVER     1
-setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 # G4 use flags :
 setenv G4UI_USE_XM                 1
 setenv G4VIS_USE_OPENGLXM          1
