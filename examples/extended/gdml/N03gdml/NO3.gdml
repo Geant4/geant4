@@ -4,9 +4,9 @@
       xsi:noNamespaceSchemaLocation="../schema/gdml_1.0.xsd">
  <define>
   <constant name="NbOfLayers"                      value="10"/>
-  <quantity name="AbsorberThickness" type="length" value="10.0" unit="cm"/>
+  <quantity name="AbsorberThickness" type="length" value="2.0" unit="cm"/>
   <quantity name="GapThickness"      type="length" value="5.0"  unit="cm"/>
-  <quantity name="CalorSizeYZ"       type="length" value="20.0" unit="cm"/>
+  <quantity name="CalorSizeYZ"       type="length" value="1.5" unit="m"/>
   <expression name="LayerThickness">AbsorberThickness+GapThickness</expression>
   <expression name="CalorThickness">NbOfLayers*LayerThickness</expression>
   <expression name="WorldSizeX">1.2*CalorThickness</expression>
