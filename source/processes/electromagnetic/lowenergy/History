@@ -1,4 +1,4 @@
-$Id: History,v 1.173 2003-03-19 17:18:12 pia Exp $
+$Id: History,v 1.174 2003-03-27 16:48:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27.03-2003   G.Cosmo, tag emlowen-V05-00-11
+             Fixed usage of 'abs' in G4PenelopeInterpolator.cc and
+	     G4PenelopeBremsstrahlungContinuous.cc to allow porting
+             on WIN32-VC platform. 'abs' should not be included in
+             the std namespace.
 
 19.03-2003   MGP, tag emlowen-V05-00-10
              Includes the two minor items below, on top of emlowen-V05-00-09
