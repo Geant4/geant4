@@ -1956,6 +1956,9 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
     G4bool done(false);
     std::vector<G4KineticTrack *>::iterator iter, jter;
     static G4Scatterer theScatterer;
+//G4cout << " start 1H1 for " << (*secondaries).front()->GetDefinition()->GetParticleName()
+//       << " on " << aHTarg->GetParticleName() << G4endl;  
+    G4int tryCount(0);
     while(!done)
     {
       if(secs)
@@ -1966,8 +1969,12 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
       secs = theScatterer.Scatter(*(*secondaries).front(), aTarget);
       for(size_t ss=0; secs && ss<secs->size(); ss++)
       {
+//        G4cout << "1H1 " << (*secs)[ss]->GetDefinition()->GetParticleName()
+//	       << ", shortlived? "<< (*secs)[ss]->GetDefinition()->IsShortLived()<< G4endl;
         if((*secs)[ss]->GetDefinition()->IsShortLived()) done = true;
       }
+      if ( ++tryCount > 1000 ) return products;   // @@GF need to understand shortlived
+//    G4cout << G4endl;
     }
     size_t current(0);
     for(current=0; current<secs->size(); current++)
