@@ -51,7 +51,7 @@ ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
       theMom*=toLabFrame;
       it=theMom.vect();
       G4DynamicParticle * aSec = 
-	  new G4DynamicParticle(aParticle->GetDefinition(), it.unit(), it.mag2()/(2.*m1));
+	  new G4DynamicParticle(const_cast<G4ParticleDefinition *>(aParticle->GetDefinition()), it.unit(), it.mag2()/(2.*m1));
       G4cout << "Energy conservation check "<<aParticle->GetKineticEnergy()<<" "
              << p1<<" "<<aSec->GetKineticEnergy();
       theResult.AddSecondary(aSec);
@@ -93,7 +93,7 @@ ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
       theMom1*=toLabFrame;
       it1 = theMom1.vect();
       G4DynamicParticle * bSec = 
-	  new G4DynamicParticle(aParticle->GetDefinition(), it1.unit(), it1.mag2()/(2.*m1));
+	  new G4DynamicParticle(const_cast<G4ParticleDefinition *>(aParticle->GetDefinition()), it1.unit(), it1.mag2()/(2.*m1));
       theResult.AddSecondary(bSec);
     }
   }
