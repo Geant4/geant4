@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPData.hh,v 1.6 2002-12-12 19:18:10 gunter Exp $
+// $Id: G4NeutronHPData.hh,v 1.7 2004-05-24 10:32:59 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
@@ -67,19 +67,13 @@ public:
 
   G4PhysicsVector * DoPhysicsVector(G4NeutronHPVector * theVector);
   
-  static G4NeutronHPData * Instance()
-  {
-    if(theCrossSectionData==NULL) theCrossSectionData = new G4NeutronHPData;
-    return theCrossSectionData;
-  }
+  static G4NeutronHPData * Instance();
   
 private:
 
   G4NeutronHPElementData * theData;
   G4int numEle;
   
-  static G4NeutronHPData * theCrossSectionData;
-
 };
 
 #endif
