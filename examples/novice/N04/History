@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2004-12-13 16:13:30 gcosmo Exp $
+$Id: History,v 1.41 2004-12-14 13:32:11 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 Dec 2004  Sergey Sadilov (exampleN04-V06-02-03)
+- Removed bad first string in hadronics-lists.gmk
 
 Dec.13, 2004  Gabriele Cosmo (exampleN04-V06-02-02)
 - Use new phys-lists structure.
