@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PhysicsList.hh,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
+// $Id: Tst26PhysicsList.hh,v 1.4 2003-02-14 11:28:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -31,6 +31,8 @@
 // Created: 31.01.03 V.Ivanchenko
 //
 // Modified:
+//
+// 14-02-03 Make G4ProductionCuts to be members of the class (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -46,6 +48,7 @@
 #include "globals.hh"
 
 class Tst26PhysicsListMessenger;
+class G4ProductionCuts;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,7 +72,9 @@ class Tst26PhysicsList: public G4VModularPhysicsList
 
     G4bool   emPhysicsListIsRegistered;
     
-    Tst26PhysicsListMessenger* pMessenger;         
+    Tst26PhysicsListMessenger* pMessenger;
+    G4ProductionCuts* vertexCuts;         
+    G4ProductionCuts* muonCuts;         
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

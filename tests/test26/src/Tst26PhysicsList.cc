@@ -29,6 +29,8 @@
 //
 // Modified:
 //
+// 14-02-03 Make G4ProductionCuts to be members of the class (V.Ivanchenko)
+//
 ////////////////////////////////////////////////////////////////////////
 //
 
@@ -51,7 +53,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Tst26PhysicsList::Tst26PhysicsList() : G4VModularPhysicsList(),
-  emPhysicsListIsRegistered(false)
+				       emPhysicsListIsRegistered(false),
+				       vertexCuts(0),
+				       muonCuts(0)
 {   
   cutForWorld         = 1.0*mm;
   cutForVertex        = 0.001*mm;
@@ -133,13 +137,13 @@ void Tst26PhysicsList::SetCuts()
   SetCutValue(cutForWorld, "e-");
   SetCutValue(cutForWorld, "e+");   
 
-  G4ProductionCuts* vertexCuts = new G4ProductionCuts();
+  if( !vertexCuts ) vertexCuts = new G4ProductionCuts();
   
   vertexCuts->SetProductionCut(cutForVertex, 0);  
   vertexCuts->SetProductionCut(cutForVertex, 1);  
   vertexCuts->SetProductionCut(cutForVertex, 2);  
 
-  G4ProductionCuts* muonCuts = new G4ProductionCuts();
+  if( !muonCuts ) muonCuts = new G4ProductionCuts();
   
   muonCuts->SetProductionCut(cutForMuon, 0);  
   muonCuts->SetProductionCut(cutForMuon, 1);  

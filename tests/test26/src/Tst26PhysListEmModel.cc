@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PhysListEmModel.cc,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
+// $Id: Tst26PhysListEmModel.cc,v 1.3 2003-02-14 11:28:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -31,6 +31,8 @@
 // Created: 31.01.03 V.Ivanchenko
 //
 // Modified:
+//
+// 14-02-03 Ion ionisation only for GenericIons (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -108,17 +110,18 @@ void Tst26PhysListEmModel::ConstructProcess()
       pmanager->AddProcess(new G4MuIonisationSTD,      -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlungSTD,  -1,-1,3);
       pmanager->AddProcess(new G4MuPairProductionSTD,  -1,-1,4);       
+
+    } else if (particleName ==  "GenericIon") {
+
+      pmanager->AddProcess(new G4MultipleScatteringSTD,-1,1,1);
+      pmanager->AddProcess(new G4ionIonisation,      -1,2,2);
      
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+	       (particleName != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4MultipleScatteringSTD,-1,1,1);
-      if(particle->GetPDGMass() < 1.0*GeV ) {
-        pmanager->AddProcess(new G4hIonisationSTD,     -1,2,2);
-      } else {
-        pmanager->AddProcess(new G4ionIonisation,      -1,2,2);
-      }           
+      pmanager->AddProcess(new G4hIonisationSTD,     -1,2,2);
     }
   }
 }
