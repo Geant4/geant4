@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1999-04-16 09:06:07 mora Exp $
+# $Id: GNUmakefile,v 1.3 2000-04-07 13:32:42 gcosmo Exp $
 # -------------------------------------------------------------
 # GNUmakefile for visualization library.  John Allison, 5/7/95.
 
@@ -25,6 +25,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include
 CPPFLAGS += -I$(G4BASE)/global/HEPGeometry/include
 CPPFLAGS += -I$(G4BASE)/global/HEPRandom/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include
+CPPFLAGS += -I$(G4BASE)/geometry/solids/specific/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
 CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
 CPPFLAGS += -I$(G4BASE)/geometry/magneticfield/include

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1999-04-15 15:27:55 johna Exp $
+# $Id: GNUmakefile,v 1.3 2000-04-07 13:32:40 gcosmo Exp $
 
 name := G4FR
 
@@ -17,6 +17,7 @@ CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/global/HEPGeometry/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include
+CPPFLAGS += -I$(G4BASE)/geometry/solids/specific/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
 CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
 

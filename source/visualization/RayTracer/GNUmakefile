@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2000-02-23 16:03:52 johna Exp $
+# $Id: GNUmakefile,v 1.3 2000-04-07 13:32:41 gcosmo Exp $
 
 name := G4RayTracer
 
@@ -31,6 +31,7 @@ CPPFLAGS += -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/solids/CSG/include \
+            -I$(G4BASE)/geometry/solids/specific/include \
             -I$(G4BASE)/digits+hits/detector/include \
             -I$(G4BASE)/digits+hits/hits/include \
             -I$(G4BASE)/digits+hits/digits/include \
