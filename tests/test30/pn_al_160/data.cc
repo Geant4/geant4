@@ -106,7 +106,7 @@ int main(int argc, char** argv)
   double elim0= 30.0*MeV;
   double emax = 160.0*MeV;
   int nbin = (int)((emax - elim)/MeV);
-  double e1 = 29.5*MeV;
+  double e1 = 29.25*MeV;
   for (ibin=0; ibin<nbin; ibin++) {
     e1 += 1.*MeV;
     energy->push_back(e1);
@@ -179,10 +179,17 @@ int main(int argc, char** argv)
         (*fout_c1) << "#####..Result.of.parcing..####### n= " << nbin
                    << " Angle(degree)= " << (*angle)[angle->size()-1]/degree
                    << G4endl;
+        (*fout_c1) << G4endl;
+        (*fout_c1) << "ve/create X(" << nbin << ") R ";
         for(int i=0; i<nbin; i++) {
            (*fout_c) << "e(MeV)= " << (*energy)[i]
                      << " cross(mb/MeV/sr)= " << (*cross)[i] << endl;
-           (*fout_c1) << (*cross)[i] << " ";
+           (*fout_c1) << (*energy)[i] << " ";
+        }
+        (*fout_c1) << G4endl;
+        (*fout_c1) << "ve/create Y(" << nbin << ") R ";
+        for(int ii=0; ii<nbin; ii++) {
+           (*fout_c1) << (*cross)[ii] << " ";
         }
         (*fout_c1) << G4endl;
       }
