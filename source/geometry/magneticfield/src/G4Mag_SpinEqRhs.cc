@@ -76,8 +76,10 @@ G4Mag_SpinEqRhs::EvaluateRhsGivenB( const G4double y[],
    G4double udb = anomaly*beta*gamma/(1.+gamma) * (BField * u); 
    G4double ucb = (anomaly+1./gamma)/beta;
 
-   G4ThreeVector Spin(y[9],y[10],y[11]);
+   // Initialise the values of dydx that we do not update.
+   dydx[6] = dydx[7] = dydx[8] = 0.0;
 
+   G4ThreeVector Spin(y[9],y[10],y[11]);
    G4ThreeVector dSpin;
 
    dSpin = ParticleCharge*omegac*(ucb*(Spin.cross(BField))-udb*(Spin.cross(u)));
