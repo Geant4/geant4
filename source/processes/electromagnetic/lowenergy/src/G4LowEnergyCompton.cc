@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.8 1999-06-07 09:59:13 aforti Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.9 1999-06-21 13:59:12 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,7 @@
  
 G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
   : G4VDiscreteProcess(processName),
-    LowestEnergyLimit (100*eV),              // initialization
+    LowestEnergyLimit (250*eV),              // initialization
     HighestEnergyLimit(100*GeV),
     NumbBinTable(200)
 {
@@ -115,8 +115,8 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
 // (Nuc Phys 20(1960),15).
 // GEANT4 internal units
 //
-  if(getenv("GENERAL")) aParticleChange.Initialize(aTrack);
- 
+  aParticleChange.Initialize(aTrack);
+  
   // Dynamic particle quantities  
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
   G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();
@@ -208,7 +208,12 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
     aParticleChange.SetNumberOfSecondaries(0);
     aParticleChange.SetLocalEnergyDeposit (ElecKineEnergy);
    }
-  
+#ifdef G4VERBOSE
+  if(verboseLevel > 0){
+    G4cout<<"LE Compton Effect PostStepDoIt"<<endl;
+  }
+#endif  
+
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }
 
@@ -318,10 +323,16 @@ G4Element* G4LowEnergyCompton::SelectRandomAtom(const G4DynamicParticle* aDynami
     if(rval <= PartialSumSigma) return ((*theElementVector)(i));
   }
 
-  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-	 << "' has no elements" << endl;
+  //  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
+  // << "' has no elements" << endl;
   return (*theElementVector)(0);
 }
+
+
+
+
+
+
 
 
 

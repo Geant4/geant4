@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.7 1999-06-07 09:59:14 aforti Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.8 1999-06-21 13:59:13 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,7 +104,7 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
 // pair creation in both nuclear and atomic electron fields. However triplet 
 // prodution is not generated.
 
-  if(getenv("GENERAL")) aParticleChange.Initialize(aTrack);
+  aParticleChange.Initialize(aTrack);
 
   G4Material* aMaterial = aTrack.GetMaterial();
   
@@ -253,7 +253,11 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
   aParticleChange.SetMomentumChange( 0., 0., 0. ) ;
   aParticleChange.SetEnergyChange( 0. ) ; 
   aParticleChange.SetStatusChange( fStopAndKill ) ;
-  
+#ifdef G4VERBOSE
+  if(verboseLevel > 15){
+    G4cout<<"LE Gamma Conversion PostStepDoIt"<<endl;
+  }
+#endif
   //  Reset NbOfInteractionLengthLeft and return aParticleChange
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
 }
@@ -348,8 +352,8 @@ G4Element* G4LowEnergyGammaConversion::SelectRandomAtom(const G4DynamicParticle*
     PartialSumSigma += theAtomNumDensityVector[i] * crossSection;
     if(rval <= PartialSumSigma) return ((*theElementVector)(i));
   }
-  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-       << "' has no elements" << endl;
+  //  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
+  //   << "' has no elements" << endl;
   return (*theElementVector)(0);
 }
 

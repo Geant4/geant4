@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.9 1999-06-05 14:12:05 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.10 1999-06-21 13:59:12 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,9 +45,10 @@
 G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& processName)
   : G4eEnergyLoss(processName),      // initialization
     theMeanFreePathTable(NULL),
-    LowestKineticEnergy (100.*eV),
+    LowestKineticEnergy (250.*eV),
     HighestKineticEnergy(100.*TeV),
     lowEnergyCut(0.1*eV),
+    CutForLowEnergySecondaryPhotons(0.),
     TotBin(100)
 { 
    theCrossSectionTable = 0;
@@ -96,6 +97,10 @@ void G4LowEnergyBremsstrahlung::SetPhysicsTableBining(G4double lowE, G4double hi
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+void G4LowEnergyBremsstrahlung::SetCutForLowEnSecPhotons(G4double cut){
+
+  CutForLowEnergySecondaryPhotons = cut;
+}
 
 void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 //  just call BuildLossTable+BuildLambdaTable
@@ -648,33 +653,32 @@ void G4LowEnergyBremsstrahlung::ComputePartialSumSigma(G4double KineticEnergy,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackData,
-                                                  const G4Step& stepData)
-//
-// The emitted gamma energy is sampled using a parametrized formula from L. Urban.
-// This parametrization is derived from :
-//    cross-section values of Seltzer and Berger for electron energies 1 keV - 10 GeV,
-//    screened Bethe Heilter differential cross section above 10 GeV,
-//    Migdal corrections in both case. 
-//  Seltzer & Berger: Nim B 12:95 (1985)
-//  Nelson, Hirayama & Rogers: Technical report 265 SLAC (1985)
-//  Migdal: Phys Rev 103:1811 (1956); Messel & Crawford: Pergamon Press (1970)
-//     
-// A modified version of the random number techniques of Butcher & Messel is used 
-//    (Nuc Phys 20(1960),15).
-//
-// GEANT4 internal units.
-// 
-{
-
+							   const G4Step& stepData){
+  //
+  // The emitted gamma energy is sampled using a parametrized formula from L. Urban.
+  // This parametrization is derived from :
+  //    cross-section values of Seltzer and Berger for electron energies 1 keV - 10 GeV,
+  //    screened Bethe Heilter differential cross section above 10 GeV,
+  //    Migdal corrections in both case. 
+  //  Seltzer & Berger: Nim B 12:95 (1985)
+  //  Nelson, Hirayama & Rogers: Technical report 265 SLAC (1985)
+  //  Migdal: Phys Rev 103:1811 (1956); Messel & Crawford: Pergamon Press (1970)
+  //     
+  // A modified version of the random number techniques of Butcher & Messel is used 
+  //    (Nuc Phys 20(1960),15).
+  //
+  // GEANT4 internal units.
+  // 
+  
   const G4double MigdalConstant = classic_electr_radius
-                                        *electron_Compton_length
-                                        *electron_Compton_length/pi;
-
+    *electron_Compton_length
+    *electron_Compton_length/pi;
+  
   const G4double LPMconstant = fine_structure_const*electron_mass_c2*
-                                electron_mass_c2/(8.*pi*hbarc) ;
-
-  if(getenv("GENERAL")) aParticleChange.Initialize(trackData);
-
+    electron_mass_c2/(8.*pi*hbarc) ;
+  
+  aParticleChange.Initialize(trackData);
+  
   G4Material* aMaterial=trackData.GetMaterial() ;
   
   G4double LPMEnergy = LPMconstant*(aMaterial->GetRadlen()) ;
@@ -684,10 +688,10 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   
   G4double ElectKinEn = aDynamicParticle->GetKineticEnergy();
   G4ParticleMomentum ElectDirection = aDynamicParticle->GetMomentumDirection();
-
+  
   // Gamma production cut in this material
   G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];
-
+  
   // check against insufficient energy
   if (ElectKinEn < GammaEnergyCut){
     
@@ -698,51 +702,48 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
     
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
   }
-
+  
   // select randomly one element constituing the material  
   G4Element* anElement = SelectRandomAtom(aMaterial);
-
+  
   // limits of the energy sampling
   G4double TotalEnergy = ElectKinEn + electron_mass_c2;
   G4double TotalEnergysquare = TotalEnergy*TotalEnergy ;
   G4double LPMGammaEnergyLimit = TotalEnergysquare/LPMEnergy ;
-
+  
   //
   //  sample the energy rate of the emitted gamma for electron kinetic energy
   //  sampling formula: spet(T) = A(T)*E+B(T)
   //
-
+  
   G4double p1 = 0, p2 = 0;
   G4double coeffA = 0, coeffB = 0;
   G4int AtomicNum = (G4int) anElement->GetZ();
   coeffA = ComputeA(AtomicNum, ElectKinEn);
   coeffB = ComputeB(AtomicNum, ElectKinEn);
-
+  
   p1 = coeffA*log(ElectKinEn/lowEnergyCut);
   p2 = coeffB*(ElectKinEn - lowEnergyCut); 
-
+  
   G4double IntegrProb = p1+p2;  
   G4double R1 = G4UniformRand()*IntegrProb;
-
+  
   G4double GammaEnergy;
 
   if(R1 <= p1){ 
-
+    
     G4double R2 = G4UniformRand();
     GammaEnergy = ElectKinEn*pow((lowEnergyCut/ElectKinEn),R2);   
-
   }
-
   else if(p1 < R1 <= p1+p2){
-
+    
     G4double R2 = G4UniformRand();
     GammaEnergy = ElectKinEn - R2*(ElectKinEn - lowEnergyCut);
-   
   }
   
   // now comes the supression due to the LPM effect I leave it because the way 
   // eedl cross sections are calculated is exactly the same as geant4
-
+  
   if(GammaEnergy < LPMGammaEnergyLimit){
     
     G4double S2LPM = LPMEnergy*GammaEnergy/TotalEnergysquare ;
@@ -756,9 +757,11 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
       GammaEnergy = 0. ;
   }
   
-   //protection: DO NOT PRODUCE a gamma with energy 0. !
-  if (GammaEnergy <= 0.) 
+  //protection: DO NOT PRODUCE a gamma with energy 0. !
+  if (GammaEnergy <= 0.){
+ 
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
+  }
   
   //**********************//
   // Angular distribution //
@@ -768,55 +771,66 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   //
   //  universal distribution suggested by L. Urban (Geant3 manual (1993) Phys211),
   //  derived from Tsai distribution (Rev Mod Phys 49,421(1977))
-  
-  G4double u;
-  const G4double a1 = 0.625 , a2 = 3.*a1 , d = 27. ;
-  
-  if (9./(9.+d) > G4UniformRand()) u = - log(G4UniformRand()*G4UniformRand())/a1 ;
-  else                          u = - log(G4UniformRand()*G4UniformRand())/a2 ;
-  
-  G4double Teta = u*electron_mass_c2/TotalEnergy ;
-  G4double Phi  = twopi * G4UniformRand() ;
-  G4double dirx = sin(Teta)*cos(Phi) , diry = sin(Teta)*sin(Phi) , dirz = cos(Teta) ;
-  
-  G4ThreeVector GammaDirection ( dirx, diry, dirz);
 
-  GammaDirection.rotateUz(ElectDirection);   
+  if(GammaEnergy > CutForLowEnergySecondaryPhotons){
+    
+    G4double u;
+    const G4double a1 = 0.625 , a2 = 3.*a1 , d = 27. ;
+    
+    if (9./(9.+d) > G4UniformRand()) u = - log(G4UniformRand()*G4UniformRand())/a1 ;
+    else                          u = - log(G4UniformRand()*G4UniformRand())/a2 ;
+    
+    G4double Teta = u*electron_mass_c2/TotalEnergy ;
+    G4double Phi  = twopi * G4UniformRand() ;
+    G4double dirx = sin(Teta)*cos(Phi) , diry = sin(Teta)*sin(Phi) , dirz = cos(Teta) ;
+    
+    G4ThreeVector GammaDirection ( dirx, diry, dirz);
+    
+    GammaDirection.rotateUz(ElectDirection);   
   
-  // create G4DynamicParticle object for the Gamma 
-  G4DynamicParticle* aGamma= new G4DynamicParticle (G4Gamma::Gamma(),
-						    GammaDirection, GammaEnergy);
-  
-  aParticleChange.SetNumberOfSecondaries(1);
-  aParticleChange.AddSecondary(aGamma); 
-  
-  //
-  // Update the incident particle 
-  //
-  
-  G4double NewKinEnergy = ElectKinEn - GammaEnergy;      
-
-  if (NewKinEnergy > 0.){
-
+    // create G4DynamicParticle object for the Gamma 
+    G4DynamicParticle* aGamma= new G4DynamicParticle (G4Gamma::Gamma(),
+						      GammaDirection, GammaEnergy);
+    
+    aParticleChange.SetNumberOfSecondaries(1);
+    aParticleChange.AddSecondary(aGamma); 
+    
+    //
+    // Update the incident particle 
+    //
+    
+    G4double NewKinEnergy = ElectKinEn - GammaEnergy;      
+    
+    if (NewKinEnergy > 0.){
+      
       aParticleChange.SetMomentumChange( ElectDirection );
       aParticleChange.SetEnergyChange( NewKinEnergy );
       aParticleChange.SetLocalEnergyDeposit (0.); 
-  } 
-
-  else{
- 
-    aParticleChange.SetEnergyChange( 0. );
-    aParticleChange.SetLocalEnergyDeposit (0.);
-    if (charge<0.){
-
-      aParticleChange.SetStatusChange(fStopAndKill);
-    }
+    } 
     else{
-   
-      aParticleChange.SetStatusChange(fStopButAlive);
-    }    
-  }   
+      
+      aParticleChange.SetEnergyChange( 0. );
+      aParticleChange.SetLocalEnergyDeposit (0.);
+      if (charge<0.){
+	
+	aParticleChange.SetStatusChange(fStopAndKill);
+      }
+      else{
+	
+	aParticleChange.SetStatusChange(fStopButAlive);
+      }    
+    }   
+  }
+  else{
 
+    aParticleChange.SetNumberOfSecondaries(0);
+  }
+    
+#ifdef G4VERBOSE
+  if(verboseLevel > 15){
+    G4cout<<"LE Bremsstrahlung PostStepDoIt"<<endl;
+  }
+#endif
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 }
 
@@ -833,8 +847,8 @@ G4Element* G4LowEnergyBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) co
   G4double rval = G4UniformRand()*((*PartialSumSigma(Index))(NumberOfElements-1));
   for ( G4int i=0; i < NumberOfElements; i++ )
     if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
-  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-       << "' has no elements" << endl;
+  //  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
+  //   << "' has no elements" << endl;
   return (*theElementVector)(0);
 }
 

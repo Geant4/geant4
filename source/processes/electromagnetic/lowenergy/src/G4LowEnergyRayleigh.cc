@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.7 1999-06-07 09:59:15 aforti Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.8 1999-06-21 13:59:14 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@
  
 G4LowEnergyRayleigh::G4LowEnergyRayleigh(const G4String& processName)
   : G4VDiscreteProcess(processName),
-    LowestEnergyLimit (100*eV),              // initialization
+    LowestEnergyLimit (250*eV),              // initialization
     HighestEnergyLimit(100*GeV),
     NumbBinTable(200)
 {
@@ -100,8 +100,7 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
 // The random number techniques of Butcher & Messel are used 
 // (Nuc Phys 20(1960),15). GEANT4 internal units
 //
-  if(getenv("GENERAL")) aParticleChange.Initialize(aTrack);
-
+  aParticleChange.Initialize(aTrack);
   
   // Dynamic particle quantities  
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
@@ -113,7 +112,7 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
   G4Material* aMaterial = aTrack.GetMaterial();
   const G4int numOfElem = aMaterial->GetNumberOfElements();
   G4Element* theElement = SelectRandomAtom(aDynamicGamma, aMaterial);
-
+  
   // sample the energy rate of the scattered gamma 
 
   G4double wlGamma = h_Planck*c_light/GammaEnergy0;
@@ -155,7 +154,12 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
   aParticleChange.SetMomentumChange(GammaDirection1);
   
   aParticleChange.SetNumberOfSecondaries(0);
-  
+#ifdef G4VERBOSE
+  if(verboseLevel > 15){
+    G4cout<<"LE Rayleigh PostStepDoIt"<<endl;
+  }
+#endif
+
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }
 
@@ -267,30 +271,7 @@ G4Element* G4LowEnergyRayleigh::SelectRandomAtom(const G4DynamicParticle* aDynam
     PartialSumSigma += theAtomNumDensityVector[i] * crossSection;
     if(rval <= PartialSumSigma) return ((*theElementVector)(i));
   }
-  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-       << "' has no elements" << endl;
+  //  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
+  //   << "' has no elements" << endl;
   return (*theElementVector)(0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

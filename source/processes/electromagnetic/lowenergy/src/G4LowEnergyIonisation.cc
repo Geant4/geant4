@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.15 1999-06-14 10:29:47 aforti Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.16 1999-06-21 13:59:13 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,8 +46,10 @@ G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& processName)
      theBindingEnergyTable(0),
      theFluorTransitionTable(0),
      theSamplingCoeffTable(0),
-     LowestKineticEnergy(100.*eV),
+     LowestKineticEnergy(510.*eV),
      HighestKineticEnergy(100.*GeV),
+     CutForLowEnergySecondaryPhotons(0.),
+     CutForLowEnergySecondaryElectrons(0.),
      TotBin(100)
 { }
 
@@ -78,6 +80,15 @@ G4LowEnergyIonisation::~G4LowEnergyIonisation()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+void G4LowEnergyIonisation::SetCutForLowEnSecPhotons(G4double cut){
+
+  CutForLowEnergySecondaryPhotons = cut;
+}
+
+void G4LowEnergyIonisation::SetCutForLowEnSecElectrons(G4double cut){
+
+  CutForLowEnergySecondaryElectrons = cut;
+}
 
 void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 //  just call BuildLossTable+BuildLambdaTable
@@ -106,7 +117,7 @@ void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParti
 
     BuildBindingEnergyTable();
     
-    //   BuildSamplingCoeffTable();
+    //    BuildSamplingCoeffTable();
 
 }
 
@@ -272,18 +283,17 @@ void G4LowEnergyIonisation::BuildSamplingCoeffTable(){
    if (theSamplingCoeffTable) {
 
     delete theSamplingCoeffTable;
-  }
-   theSamplingCoeffTable = new allAtomTable();
-
-   G4int dataNum = 12;
+   }
    
+   theSamplingCoeffTable = new allAtomTable();
+   
+   G4int dataNum = 12;
+
    for(G4int TableInd = 0; TableInd < 100; TableInd++){
 
-     oneAtomTable* oneAtomShellSc = new oneAtomTable();
-     oneAtomShellSc = BuildTables(TableInd, dataNum, "ioni-co-");
+     oneAtomTable* oneAtomShellSc = BuildTables(TableInd, dataNum, "ioni-co-");
      
      theSamplingCoeffTable->insert(oneAtomShellSc);
-    
    }//end for on atoms
 }
 
@@ -296,7 +306,7 @@ oneAtomTable* G4LowEnergyIonisation::BuildTables(const G4int TableInd,
 
   HepString Znum(TableInd+1);
   HepString name = prename + Znum + ".dat"; 
-  
+
   char* path = getenv("G4LEDATA");
   if(!path){ 
     
@@ -419,7 +429,7 @@ G4double G4LowEnergyIonisation::ComputeCrossSection(const G4double AtomIndex,
 G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData,   
 							const G4Step&  stepData){
 
-  if(getenv("GENERAL")) aParticleChange.Initialize(trackData) ;
+  aParticleChange.Initialize(trackData) ;
   
   G4Material*               aMaterial = trackData.GetMaterial() ;
   const G4DynamicParticle*  aParticle = trackData.GetDynamicParticle() ;
@@ -441,10 +451,15 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
   ParticleMass = aParticle->GetDefinition()->GetPDGMass();
   // Change to KineticEnergy to (KineticEnergy - BindingEnergy)
   KineticEnergy -= BindingEn;
+
 #ifdef G4VERBOSE
-  cout<<"kinetic energy before: "<<KineticEnergy+BindingEn<<endl;
-  cout<<"kinetic energy after: "<<KineticEnergy<<endl;
+  if(verboseLevel > 15){
+    G4cout<<"kinetic energy before: "<<KineticEnergy+BindingEn<<endl;
+    G4cout<<"kinetic energy after: "<<KineticEnergy<<endl;
+  }
+
 #endif
+
   G4double Psquare = KineticEnergy*(KineticEnergy+2*ParticleMass);
   G4double TotalMomentum = sqrt(Psquare);
   G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
@@ -463,10 +478,14 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 
     // pathological case (should not happen, there is no change at all)
 #ifdef G4VERBOSE
-    cout<<"DeltaThreshold: "<<DeltaThreshold<<endl;
-    cout<<"MaxKineticEnergyTransfer <= DeltaThreshold"<<endl;
-    cout<<"MaxKineticEnergyTransfer: "<<MaxKineticEnergyTransfer<<endl;
+    if(verboseLevel > 15){
+
+      G4cout<<"DeltaThreshold: "<<DeltaThreshold<<endl;
+      G4cout<<"MaxKineticEnergyTransfer <= DeltaThreshold"<<endl;
+      G4cout<<"MaxKineticEnergyTransfer: "<<MaxKineticEnergyTransfer<<endl;
+    }
 #endif
+
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
   }
 
@@ -477,88 +496,88 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
   
   // protection :do not produce a secondary with 0. kinetic energy !
   if (DeltaKineticEnergy <= 0.){
+
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
   } 
-  // 
-  // inc energy - deltaray energy = binding energy
 
+  G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy;
+    
+  // inc energy - deltaray energy = binding energy
+    
   if(thePrimShVec.length() != 0){
     
     thePrimShVec.clear();
   }
-
+  
   thePrimShVec.insert(thePrimaryShell);
-
+  
 #ifdef G4VERBOSE
-
-  cout<<"theBindingEnergyTable length: "<<theBindingEnergyTable->entries()<<endl;
-  cout<<"theBindEnVec length: "<<theBindEnVec->entries()<<endl;
-  cout<<"subShell index: "<<subShellIndex<<endl;
-  cout<<"thePrimaryShell: "<<thePrimaryShell<<endl;
-  cout<<"theBindEnergy: "<<BindingEn<<endl;
-
+  if(verboseLevel > 15){
+    
+    G4cout<<"theBindingEnergyTable length: "<<theBindingEnergyTable->entries()<<endl;
+    G4cout<<"theBindEnVec length: "<<theBindEnVec->entries()<<endl;
+    G4cout<<"subShell index: "<<subShellIndex<<endl;
+    G4cout<<"thePrimaryShell: "<<thePrimaryShell<<endl;
+    G4cout<<"theBindEnergy: "<<BindingEn<<endl;
+  }
 #endif
-
+  
   // delta ray kinematics
   G4double DeltaTotalMomentum = sqrt(DeltaKineticEnergy * (DeltaKineticEnergy +
-                                                       2. * electron_mass_c2 ));
-   
-  G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy;
-
+							   2. * electron_mass_c2 ));
+  
   if(finalKineticEnergy > 0.){
-
+    
     G4double finalMomentum=sqrt(finalKineticEnergy*
 				(finalKineticEnergy+2.*ParticleMass));
     
     G4double costheta = (Psquare-(finalMomentum*finalMomentum)+
 			 (DeltaTotalMomentum*DeltaTotalMomentum))/(2*DeltaTotalMomentum*TotalMomentum); 
-
+    
     if (costheta < -1.) costheta = -1.;
     if (costheta > +1.) costheta = +1.;
-
+    
     //  direction of the delta electron
     G4double phi = twopi * G4UniformRand(); 
     G4double sintheta = sqrt((1.+costheta)*(1.-costheta));
-
+    
     G4double dirx = sintheta * cos(phi), diry = sintheta * sin(phi), dirz = costheta;
     
     G4ThreeVector DeltaDirection(dirx,diry,dirz);
     DeltaDirection.rotateUz(ParticleDirection);
-      
+    
     // finalKineticEnergy and finalMomentum defined above 
     // because needed for costheta computation  
     
     G4double finalPx = (TotalMomentum*ParticleDirection.x()
-                        - DeltaTotalMomentum*DeltaDirection.x())/finalMomentum; 
+			- DeltaTotalMomentum*DeltaDirection.x())/finalMomentum; 
     G4double finalPy = (TotalMomentum*ParticleDirection.y()
-                        - DeltaTotalMomentum*DeltaDirection.y())/finalMomentum; 
+			- DeltaTotalMomentum*DeltaDirection.y())/finalMomentum; 
     G4double finalPz = (TotalMomentum*ParticleDirection.z()
-                        - DeltaTotalMomentum*DeltaDirection.z())/finalMomentum; 
-
+			- DeltaTotalMomentum*DeltaDirection.z())/finalMomentum; 
+    
     G4double momtot = sqrt(finalPx*finalPx + finalPy*finalPy + finalPz*finalPz);
-
+    
     if(momtot-1. > 1e-6){
-
+      
 #ifdef G4VERBOSE      
+      if(verboseLevel > 15){
 
-      cout<<"momtot-1. > 1e-6"<<endl;
-
-      cout<<"Incident particle: "<<KineticEnergy<<" "
-	  <<TotalMomentum<<" "<<ParticleDirection<<endl;
-
-      cout<<"WARNING: kinetic energy is kinetic energy - binding energy"<<endl;
-
-      cout<<"Delta particle: "<<DeltaKineticEnergy<<" "
-	  <<DeltaTotalMomentum<<" "<<DeltaDirection<<endl;
-
-      cout<<"Scattered particle: "<<finalKineticEnergy<<" "<<finalMomentum
-	  <<" "<<finalPx<<" "<<finalPy<<" "<<finalPz<<endl;
+	G4cout<<"momtot-1. > 1e-6"<<endl;
+	G4cout<<"Incident particle: "<<KineticEnergy<<" "
+	      <<TotalMomentum<<" "<<ParticleDirection<<endl;
+	G4cout<<"WARNING: kinetic energy is kinetic energy - binding energy"<<endl;
+	G4cout<<"Delta particle: "<<DeltaKineticEnergy<<" "
+	      <<DeltaTotalMomentum<<" "<<DeltaDirection<<endl;
+	G4cout<<"Scattered particle: "<<finalKineticEnergy<<" "<<finalMomentum
+	      <<" "<<finalPx<<" "<<finalPy<<" "<<finalPz<<endl;
+      }
 #endif
       return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-
+      
       //      finalPx /= momtot; finalPy /= momtot; finalPz /= momtot;
     }
-
+    
     // Create lists of pointers to DynamicParticles (photons and electrons) 
     G4ParticleVector photvec;
     G4int photInd = 0; 
@@ -596,7 +615,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 	// fluorPar[2] = Transition Probability
 	// fluorPar[3] = Transition Energy
 	// the same for augerPar
-      
+	
 	G4double fluorPar[3] = {0};
 	
 	// SelectRandomTransition argument is oneAtomTable loop on shells is inside
@@ -604,62 +623,63 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 						fluorPar, 
 						oneAtomFluorTrans);
 	
-	// Daugther dynamic particle
-	G4DynamicParticle* newPart;
-	
-	// Direction of the outcoming particle isotropic selection
-	G4double newcosTh = 1-2*G4UniformRand();
-	G4double newsinTh = sqrt(1-newcosTh*newcosTh);
-	G4double newPhi = twopi*G4UniformRand();
-	
-	G4double dirx, diry, dirz;
-	dirz = newcosTh;
-	diry = newsinTh*cos(newPhi);
-	dirx = newsinTh*sin(newPhi);
-	G4ThreeVector newPartDirection(dirx, diry, dirz);
-	newPartDirection.rotateUz(ParticleDirection);
-
-	if(ThereAreShells != FALSE){
+	if(fluorPar[2] > CutForLowEnergySecondaryPhotons){
 	  
-	  thePrimaryShell = (G4int) fluorPar[0];
-	  newPart = new G4DynamicParticle (G4Gamma::Gamma(), 
-					   newPartDirection, 
-					   fluorPar[2]);
-
-	  photvec.insert(newPart);
-	  theEnergyDeposit -= fluorPar[2]*MeV;
-	
-	}
-	else{
+	  // Daugther dynamic particle
+	  G4DynamicParticle* newPart;
 	  
-	  // last shell transition from continuum
-	  G4int k = 0;
-	  while(thePrimaryShell != (*(*theBindEnVec)[0])[k]){
-	    k++;
+	  // Direction of the outcoming particle isotropic selection
+	  G4double newcosTh = 1-2*G4UniformRand();
+	  G4double newsinTh = sqrt(1-newcosTh*newcosTh);
+	  G4double newPhi = twopi*G4UniformRand();
+	  
+	  G4double dirx, diry, dirz;
+	  dirz = newcosTh;
+	  diry = newsinTh*cos(newPhi);
+	  dirx = newsinTh*sin(newPhi);
+	  G4ThreeVector newPartDirection(dirx, diry, dirz);
+	  newPartDirection.rotateUz(ParticleDirection);
+	  
+	  if(ThereAreShells != FALSE){
+	    
+	    thePrimaryShell = (G4int) fluorPar[0];
+	    theEnergyDeposit -= fluorPar[2]*MeV;
+	    
+	    newPart = new G4DynamicParticle (G4Gamma::Gamma(), 
+					     newPartDirection, 
+					     fluorPar[2]);
+	    
+	    photvec.insert(newPart);
+	    
+	  }
+	  else{
+	    
+	    // last shell transition from continuum
+	    G4int k = 0;
+	    while(thePrimaryShell != (*(*theBindEnVec)[0])[k]){
+	      k++;
+	    }
+	    
+	    G4double lastTransEnergy = (*(*theBindEnVec)[1])[k];
+	    newPart = new G4DynamicParticle(G4Gamma::Gamma(), 
+					    newPartDirection, 
+					    lastTransEnergy);
+	    
+	    photvec.insert(newPart);
+	    thePrimaryShell = (G4int) fluorPar[0];
+	    theEnergyDeposit -= lastTransEnergy*MeV;
 	  }
 	  
-	  G4double lastTransEnergy = (*(*theBindEnVec)[1])[k];
-	  newPart = new G4DynamicParticle(G4Gamma::Gamma(), 
-					  newPartDirection, 
-					  lastTransEnergy);
-
-	  photvec.insert(newPart);
-	  thePrimaryShell = (G4int) fluorPar[0];
-	  theEnergyDeposit -= lastTransEnergy*MeV;
+	  thePrimShVec.insert(thePrimaryShell);
 	}
-
-	thePrimShVec.insert(thePrimaryShell);
       }
-
     } //END OF THE CHECK ON ATOMIC NUMBER
     
-    //controllare se il setnumberofsecondaries  si puo' cambiare
     G4int numOfElec = elecvec.entries(), numOfPhot = photvec.entries();
     G4int numOfDau = numOfElec + numOfPhot;
     
     aParticleChange.SetNumberOfSecondaries(numOfDau);
     G4int l = 0;
-
     for(l = 0; l<numOfElec; l++ ){
       
       aParticleChange.AddSecondary(elecvec[l]);
@@ -675,20 +695,29 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
     
     // fill aParticleChange 
     // changed energy and momentum of the actual particle
+    if(theEnergyDeposit < 0){
+      
+      theEnergyDeposit = 0;
+    }
     
     aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
     aParticleChange.SetEnergyChange( finalKineticEnergy );
     aParticleChange.SetLocalEnergyDeposit (theEnergyDeposit);
   }
-
+    
   else{
-
+    
     finalKineticEnergy = 0.;
-
+    
     if (charge < 0.) aParticleChange.SetStatusChange(fStopAndKill);
     else             aParticleChange.SetStatusChange(fStopButAlive);
   }
-
+    
+#ifdef G4VERBOSE
+  if(verboseLevel > 15){
+    G4cout<<"LE Bremsstrahlung PostStepDoIt"<<endl;
+  }
+#endif
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 }
 
@@ -774,9 +803,6 @@ G4LowEnergyIonisation::SelectRandomAtom(const G4DynamicParticle* aDynamicParticl
     if (rval <= PartialSumSigma) return ((*theElementVector)(i));
 
   }
-
-  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-	 << "' has no elements" << endl;
   return (*theElementVector)(0);
 }
 
@@ -798,6 +824,7 @@ G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell,
     if(ShellNum == TransitionTable->entries()-1){
       break;
     }
+
     ShellNum++;
   }
 
@@ -849,8 +876,10 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
   // 1) Load Coefficients (I need Z number and the index of the shell)
    G4int dataNum = 12;
    oneAtomTable* oneAtomCoeffTable = BuildTables(AtomicNumber-1, dataNum, "ioni-co-");
+   //(*theSamplingCoeffTable)[AtomicNumber-1];
+     
 
-    //(*theSamplingCoeffTable)[AtomicNumber-12];
+    
 
   oneShellTable* oneShellCoeffTable = (*oneAtomCoeffTable)[ShellIndex];
   G4double BindingEn = (*(*(*theBindingEnergyTable)[AtomicNumber-1])[1])[ShellIndex];
@@ -863,18 +892,19 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
   G4Data Parms;
 
 #ifdef G4VERBOSE
-
-  if(KinEn < (*energyVec)[0]){
-
-      cout<<"KinEn < (*energyVec)[0]"<<endl;
-  }
-  else if(KinEn > (*energyVec)[LastPar]){
-
-      cout<<"KinEn > (*energyVec)[LastPar]"<<endl;
-  }
-  else{
-
-      cout<<"else"<<endl;
+  if(verboseLevel > 15){
+    if(KinEn < (*energyVec)[0]){
+      
+      G4cout<<"KinEn < (*energyVec)[0]"<<endl;
+    }
+    else if(KinEn > (*energyVec)[LastPar]){
+      
+      G4cout<<"KinEn > (*energyVec)[LastPar]"<<endl;
+    }
+    else{
+      
+      G4cout<<"else"<<endl;
+    }
   }
 #endif
 

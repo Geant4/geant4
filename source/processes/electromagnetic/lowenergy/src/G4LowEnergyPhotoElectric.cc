@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.13 1999-06-11 15:44:38 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.14 1999-06-21 13:59:14 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,13 +52,14 @@ typedef RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
  
 G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
   : G4VDiscreteProcess(processName),             // initialization
-    LowestEnergyLimit (100*eV),
+    LowestEnergyLimit (250*eV),
     HighestEnergyLimit(100*GeV),
     theCrossSectionTable(0),
     theBindingEnergyTable(0),
     theMeanFreePathTable(0),
     theFluorTransitionTable(0),
     theAugerTransitionTable(0),
+    CutForLowEnergySecondaryPhotons(0.),
     NumbBinTable(200)
 {
    if (verboseLevel>0) {
@@ -102,7 +103,11 @@ G4LowEnergyPhotoElectric::~G4LowEnergyPhotoElectric()
  
  
 // methods.............................................................................
- 
+void G4LowEnergyPhotoElectric::SetCutForLowEnSecPhotons(G4double cut){
+
+  CutForLowEnergySecondaryPhotons = cut;
+}
+
 void G4LowEnergyPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& PhotonType)
 
 // Build microscopic cross section table and mean free path table
@@ -122,7 +127,7 @@ void G4LowEnergyPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& Pho
 G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
 
   // incoming particle initialization
-  if(getenv("GENERAL")) aParticleChange.Initialize(aTrack);
+  aParticleChange.Initialize(aTrack);
 
   G4Material* aMaterial = aTrack.GetMaterial();
 
@@ -170,6 +175,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
       >= min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
 
     // the electron is created in the direction of the incident photon ...  
+    
     G4DynamicParticle* aElectron = new G4DynamicParticle (G4Electron::Electron(), 
 							  PhotonDirection, ElecKineEnergy) ;
     elecvec.append(aElectron);
@@ -190,57 +196,54 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	// fluorPar[0] = SubShell 
 	// fluorPar[1] = Sec SubShell (if there is), 
 	// fluorPar[2] = Transition Probability
-	// fluorPar[3] = Transition Energy
 	// the same for augerPar
 	
-	G4double fluorPar[4] = {0};
+	G4double fluorPar[3] = {0};
 	ThereAreShells = SelectRandomTransition(thePrimaryShell, fluorPar, oneAtomFluorTrans);
-	
-	// Daugther dynamic particle
-	G4DynamicParticle* newPart;
-	
-	// Direction of the outcoming particle isotropic selection
-	G4double newcosTh = 1-2*G4UniformRand();
-	G4double newsinTh = sqrt(1-newcosTh*newcosTh);
-	G4double newPhi = twopi*G4UniformRand();
-	
-	G4double dirx, diry, dirz;
-	dirz = newcosTh;
-	diry = newsinTh*cos(newPhi);
-	dirx = newsinTh*sin(newPhi);
-	G4ThreeVector newPartDirection(dirx, diry, dirz);
-	newPartDirection.rotateUz(PhotonDirection);
 
-	if(ThereAreShells != FALSE){
+	if(fluorPar[2] > CutForLowEnergySecondaryPhotons){
+
+	  // Daugther dynamic particle
+	  G4DynamicParticle* newPart;
 	  
-	  thePrimaryShell = (G4int) fluorPar[0];
-	  newPart = new G4DynamicParticle (G4Gamma::Gamma(), newPartDirection, fluorPar[3]) ;
-	  photvec.append(newPart);
-	  theEnergyDeposit -= fluorPar[3]*MeV;
+	  // Direction of the outcoming particle isotropic selection
+	  G4double newcosTh = 1-2*G4UniformRand();
+	  G4double newsinTh = sqrt(1-newcosTh*newcosTh);
+	  G4double newPhi = twopi*G4UniformRand();
 	  
+	  G4double dirx, diry, dirz;
+	  dirz = newcosTh;
+	  diry = newsinTh*cos(newPhi);
+	  dirx = newsinTh*sin(newPhi);
+	  G4ThreeVector newPartDirection(dirx, diry, dirz);
+	  newPartDirection.rotateUz(PhotonDirection);
+	  
+	  if(ThereAreShells != FALSE){
+	    
+	    thePrimaryShell = (G4int) fluorPar[0];
+	    newPart = new G4DynamicParticle (G4Gamma::Gamma(), newPartDirection, fluorPar[2]) ;
+	    photvec.append(newPart);
+	    theEnergyDeposit -= fluorPar[2]*MeV;
+	    
+	  }
+	  else{
+	    
+	    
+	    G4int k = 0;
+	    while(thePrimaryShell != theBindEnVec->GetLowEdgeEnergy(k)) k++;
+	    
+	    G4double lastTransEnergy = (*theBindEnVec)(k);
+	    newPart = new G4DynamicParticle (G4Gamma::Gamma(), newPartDirection, lastTransEnergy) ;
+	    photvec.append(newPart);
+	    thePrimaryShell = (G4int) fluorPar[0];
+	    theEnergyDeposit -= lastTransEnergy*MeV;
+	  }
+
+	  thePrimShVec.insert(thePrimaryShell);
 	}
-	else{
-	  
-	  
-	  G4int k = 0;
-	  while(thePrimaryShell != theBindEnVec->GetLowEdgeEnergy(k)) k++;
-	  
-	  G4double lastTransEnergy = (*theBindEnVec)(k);
-	  
-	  newPart = new G4DynamicParticle (G4Gamma::Gamma(), newPartDirection, lastTransEnergy) ;
-	  photvec.append(newPart);
-	  thePrimaryShell = (G4int) fluorPar[0];
-	  theEnergyDeposit -= lastTransEnergy*MeV;
-	  
-	}
-
-	thePrimShVec.insert(thePrimaryShell);
-
       }
-     
     } //END OF THE CHECK ON ATOMIC NUMBER
     
-    //controllare se il setnumberofsecondaries  si puo' cambiare
     G4int numOfElec = elecvec.entries(), numOfPhot = photvec.entries();
     G4int numOfDau = numOfElec + numOfPhot;
 
@@ -270,16 +273,20 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   aParticleChange.SetMomentumChange( 0., 0., 0. );
   aParticleChange.SetEnergyChange( 0. );
 
-  // the energy deposit with fluorescence made like this is ZERO.
   if(theEnergyDeposit < 0){
     theEnergyDeposit = 0;
   }
 
   aParticleChange.SetLocalEnergyDeposit(theEnergyDeposit) ;  
   aParticleChange.SetStatusChange( fStopAndKill ) ; 
-  
+#ifdef G4VERBOSE
+  if(verboseLevel > 15){
+    G4cout<<"LE PhotoElectric PostStepDoIt"<<endl;
+  }
+#endif
   // Reset NbOfInteractionLengthLeft and return aParticleChange
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
+
 }
 
 void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
@@ -522,8 +529,8 @@ G4LowEnergyPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhot
 
   }
 
-  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-	 << "' has no elements" << endl;
+  //  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
+  // << "' has no elements" << endl;
   return (*theElementVector)(0);
 }
 
@@ -532,28 +539,20 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
 							G4double* TransParam,
 							const oneAtomTable* TransitionTable){
   
-  G4int SubShellCol, SecShellCol, ProbCol, EnergyCol;
+  G4int SubShellCol = 0, ProbCol = 1, EnergyCol = 2;
+  //transitionTable means  for one atom not for one shell
 
   // too check when the subshell are finished
   G4bool ColIsFull = TRUE;
-  
-  if(TransParam[0] == 0){  
-    
-    SubShellCol = 0; ProbCol = 1; EnergyCol = 2;
-  }
-  
-  if(TransParam[0] == 1){  
-    
-    G4int SubShellCol = 0; SecShellCol = 1; ProbCol = 2; EnergyCol = 3;
-  }
-  
   G4int ShellNum = 0;
   G4double TotalSum = 0; 
+
   while(thePrimShell != (*(*(*TransitionTable)[ShellNum])[0])[0]){
   
     if(ShellNum == TransitionTable->entries()-1){
       break;
     }
+
     ShellNum++;
   }
 
@@ -577,22 +576,8 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
       if(PartialProb <= PartSum){
 	
 	TransParam[0] = (*(*(*TransitionTable)[ShellNum])[SubShellCol])[TransProb];
-
-	// This if will be needed when Auger Effect will be added TransPar[i] initialized 
-	// to 0 for fluorescence and to 1 for auger effect at the moment this distinction is 
-	// tricky
-
-	if(TransParam[1] == 0){
-	  
-	  TransParam[1] = 0;
-	}
-	else{
-	  
-	  TransParam[1] = (*(*(*TransitionTable)[ShellNum])[SecShellCol])[TransProb];
-	}
-	
-	TransParam[2] = (*(*(*TransitionTable)[ShellNum])[ProbCol])[TransProb];
-	TransParam[3] = (*(*(*TransitionTable)[ShellNum])[EnergyCol])[TransProb];
+	TransParam[1] = (*(*(*TransitionTable)[ShellNum])[ProbCol])[TransProb];
+	TransParam[2] = (*(*(*TransitionTable)[ShellNum])[EnergyCol])[TransProb];
 	break;
       }
       
