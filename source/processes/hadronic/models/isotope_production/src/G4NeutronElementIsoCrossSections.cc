@@ -35,6 +35,7 @@ Init(const G4Element * anElement)
     {
       G4int A = anElement->GetIsotope(i)->GetN();
       G4double frac = anElement->GetRelativeAbundanceVector()[i]/perCent;
+      theData[i] = new G4NeutronIsoIsoCrossSections;
       theData[i]->Init(A, Z, frac);
     }
   }
@@ -45,6 +46,7 @@ Init(const G4Element * anElement)
     {
       G4int A = theStableOnes.GetIsotopeNucleonCount(first+i);
       G4double frac = theStableOnes.GetAbundance(first+i);
+      theData[i] = new G4NeutronIsoIsoCrossSections;
       theData[i]->Init(A, Z, frac);
     }
   }

@@ -3,6 +3,7 @@
 
 G4NeutronIsoIsoCrossSections::
 G4NeutronIsoIsoCrossSections()
+: theCrossSection(), theNames()
 {
   theProductionData = NULL;
   hasData = false;
@@ -31,25 +32,33 @@ Init(G4int A, G4int Z, G4double frac)
   theA = A;
   theNames.SetMaxOffSet(5);
   G4NeutronHPDataUsed dataUsed;
-  G4String rest = "/Inelastic/CrossSections/";
+  G4String rest = "/CrossSection/";
   G4String base = getenv("NeutronHPCrossSections");
+  G4String base1 = base + "/Inelastic/";
   G4bool hasInelasticData;
-  dataUsed = theNames.GetName(A, Z, base, rest, hasInelasticData);
+  dataUsed = theNames.GetName(A, Z, base1, rest, hasInelasticData);
   G4String aName = dataUsed.GetName();
   G4NeutronHPVector inelasticData;
+  G4double dummy;
   if(hasInelasticData)
   {
     ifstream aDataSet(aName, ios::in);
+    aDataSet >> dummy >> dummy;
     inelasticData.Init(aDataSet, eV);
   }
-  rest = "/Fission/CrossSections/";
-  G4bool hasFissionData;
-  dataUsed = theNames.GetName(A, Z, base, rest, hasFissionData);
-  aName = dataUsed.GetName();
+  rest = "/CrossSection/";
+  base1 = base + "/Fission/";
+  G4bool hasFissionData = false;
+  if(Z>=91)
+  {
+    dataUsed = theNames.GetName(A, Z, base1, rest, hasFissionData);
+    aName = dataUsed.GetName();
+  }
   G4NeutronHPVector fissionData;
   if(hasFissionData)
   {
     ifstream aDataSet(aName, ios::in);
+    aDataSet >> dummy >> dummy;
     fissionData.Init(aDataSet, eV);
   }
   hasData = hasFissionData||hasInelasticData;
@@ -72,9 +81,10 @@ Init(G4int A, G4int Z, G4double frac)
   
   // now isotope-production cross-sections
   theNames.SetMaxOffSet(1);
-  rest = "/IsotopeProduction/";
+  rest = "/CrossSection/";
+  base1 = base + "/IsotopeProduction/";
   G4bool hasIsotopeProductionData;
-  dataUsed = theNames.GetName(A, Z, base, rest, hasIsotopeProductionData);
+  dataUsed = theNames.GetName(A, Z, base1, rest, hasIsotopeProductionData);
   aName = dataUsed.GetName();
   if(hasIsotopeProductionData)
   {
