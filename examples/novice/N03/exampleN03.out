@@ -177,14 +177,14 @@ Idle> /run/beamOn 1
 Start closing geometry.
 Start Run processing.
 >>> Event 0
-     8 hits are stored in ExN03CalorHitsCollection.
+     10 hits are stored in ExN03CalorHitsCollection.
    Absorber: total energy: 2.8e+02 MeV       total track length:      15  cm
-        Gap: total energy:      15 MeV       total track length:     6.9  cm
-    193 trajectories stored in this event.
+        Gap: total energy:      19 MeV       total track length:     8.6  cm
+    174 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.31s Real=0.38s Sys=0.05s
+  User=0.29s Real=0.4s Sys=0.07s
 Idle> #
 Idle> # list the existing physics processes
 Idle> /process/list
@@ -199,14 +199,14 @@ Idle> /run/beamOn 1
 ### Run 1 start.
 Start Run processing.
 >>> Event 0
-     10 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 2.8e+02 MeV       total track length:      15  cm
-        Gap: total energy:      17 MeV       total track length:     7.7  cm
-    191 trajectories stored in this event.
+     9 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 2.8e+02 MeV       total track length:      16  cm
+        Gap: total energy:      23 MeV       total track length:      11  cm
+    203 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.31s Real=0.31s Sys=0s
+  User=0.36s Real=0.37s Sys=0.01s
 Idle> #
 Idle> # switch on MultipleScattering
 Idle> /process/activate msc
@@ -233,14 +233,14 @@ Idle> /run/beamOn 1
 Start closing geometry.
 Start Run processing.
 >>> Event 0
-     0 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy:       0  eV       total track length:       0  fm
-        Gap: total energy:       0  eV       total track length:       0  fm
-    1 trajectories stored in this event.
+     16 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 2.5e+02 MeV       total track length:      56  cm
+        Gap: total energy:      43 MeV       total track length:     1.2   m
+    126 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.02s Sys=0s
+  User=0.54s Real=0.56s Sys=0.02s
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.

@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999-01-28 14:43:32 johna Exp $
+$Id: History,v 1.3 1999-03-27 17:22:38 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27th March 1999  John Allison  (examples-01-00-02)
+- Updated exampleNxx.out where xx = 02, 03, 04, 05.
 
 28th January 1999  John Allison  (examples-01-00-01)
 - Changed test02.in to reduce printing slightly.
