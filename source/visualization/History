@@ -1,4 +1,4 @@
-$Id: History,v 1.205 2002-11-15 09:14:28 allison Exp $
+$Id: History,v 1.206 2002-11-15 10:02:36 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+15th November 2002  Mark Donszelmann  (vis-V04-01-06)
+- HepRep2 driver implemented.
 
 11th November 2002  John Allison  (vis-V04-01-05)
 - Corrected inclusion of G4OpenGLXViewer #ifdef X_DRIVER for Windows
