@@ -136,7 +136,7 @@ int main(int argc,char** argv)
   G4Material* material = 0; 
   G4String name[3] = {"Ionisation", "Bremsstrahlung",
                       "Ionisation+Bremsstrahlung"};
-  G4bool setBarkasOff = false;
+  G4bool setBarkasOff = true;
   G4bool setNuclearOff= true;
 
   G4cout.setf( ios::scientific, ios::floatfield );
@@ -161,7 +161,7 @@ int main(int argc,char** argv)
   // -------------------------------------------------------------------
   //--------- Materials definition ---------
  
-  G4Material* ma[15];
+  G4Material* ma[16];
   ma[0] = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
   ma[1] = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
   ma[1]->SetChemicalFormula("Graphite");
@@ -201,7 +201,9 @@ int main(int argc,char** argv)
 
   ma[14] = new G4Material("H2", 1., 1.00794*g/mole, 1.*g/cm3);
   ma[14]->SetChemicalFormula("H_2");
-  
+
+  ma[15] = new G4Material("Au", 79., 196.97*g/mole, 19.32*g/cm3);
+    
   static const G4MaterialTable* theMaterialTable = 
                G4Material::GetMaterialTable();
 
@@ -650,10 +652,11 @@ int main(int argc,char** argv)
 
     G4Timer* timer = new G4Timer();
     timer->Start();
+    G4double le = emin10 - bin;
 
-    for (G4int iter=0; iter<nbin; iter++) {
+    for (G4int iter=0; iter<=nbin; iter++) {
 
-      G4double le = emin10 + ((G4double)iter + 0.5)*bin;
+      le  += bin;
       G4double  e = pow(10.0,le) * MeV;
       gTrack->SetStep(step); 
       gTrack->SetKineticEnergy(e);
@@ -757,10 +760,10 @@ int main(int argc,char** argv)
         G4double s = de*mm/(delx*MeV); 
 
         if(verbose) {
-          G4cout  <<  "Iteration = "  <<  iter 
-	          << "  E = " << e/MeV << " MeV; StepLimit= "
-	          << x/mm << " mm; de= " 
-                  << de/eV << " eV; dE/dx= "
+          G4cout  << iter 
+	          << ".  E = " << e/MeV << " MeV; StepLimit= "
+	          << x/mm << " mm; dE/dx= " 
+                  << s << " MeV/mm; dE/dx= "
                   << st << " MeV*cm^2/g" <<  G4endl;
         }
 
