@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.3 2004-01-27 11:19:15 vnivanch Exp $
+// $Id: PhysListEmStandard.cc,v 1.4 2004-05-24 16:56:32 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,9 @@
 
 #include "G4eIonisation.hh"
 #include "G4PAIModel.hh"
+#include "G4PAIPhotonModel.hh"
+#include "G4PAIwithPhotons.hh"
+
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
@@ -74,11 +77,12 @@ void PhysListEmStandard::ConstructProcess()
   G4Region* gas = theRegionStore->GetRegion("VertexDetector");
 
   theParticleIterator->reset();
+
   while( (*theParticleIterator)() )
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    G4String particleName = particle->GetParticleName();
+    G4ProcessManager* pmanager     = particle->GetProcessManager();
+    G4String particleName          = particle->GetParticleName();
      
     if (particleName == "gamma") 
     {     
@@ -93,28 +97,34 @@ void PhysListEmStandard::ConstructProcess()
 
       G4eIonisation* eion = new G4eIonisation();
 
-      G4PAIModel*     pai = new G4PAIModel(particle);
-      eion->AddEmModel(0,pai,pai,gas);
 
-      pmanager->AddProcess(eion,        -1, 2,2);
+      // G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      // G4PAIPhotonModel*     pai = new G4PAIPhotonModel(particle,"PAIModel");
+      // G4PAIwithPhotons*     pai   = new G4PAIwithPhotons(particle,"PAIwPhotons");
+      // eion->AddEmModel(0,pai,pai,gas);
 
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+      pmanager->AddProcess(eion,-1, 2,2);
+
+      pmanager->AddProcess(new G4eBremsstrahlung,-1,1,3);
 	    
-    } else if (particleName == "e+") {
-
+    } 
+    else if (particleName == "e+") 
+    {
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
       
     } else if( particleName == "mu+" || 
-               particleName == "mu-"    ) {
-
+               particleName == "mu-"    ) 
+    {
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
 
       G4MuIonisation* muion = new G4MuIonisation();
-      G4PAIModel*     pai   = new G4PAIModel(particle);
-      muion->AddEmModel(0,pai,pai,gas);
+
+      // G4PAIModel*     pai   = new G4PAIModel(particle,"PAIModel");
+      // G4PAIwithPhotons*     pai   = new G4PAIwithPhotons(particle,"PAIwPhotons");
+      // muion->AddEmModel(0,pai,pai,gas);
 
       pmanager->AddProcess(muion,      -1, 2,-2);
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
@@ -127,6 +137,19 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4ionIonisation,      -1, 2,2);
      
     } 
+    else if ( particleName == "proton" ) 
+    {
+
+      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
+
+      G4hIonisation* pion =     new G4hIonisation();
+      // G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      // G4PAIPhotonModel*     pai = new G4PAIPhotonModel(particle,"PAIModel");
+      ///// G4PAIwithPhotons*     pai   = new G4PAIwithPhotons(particle,"PAIwPhotons");
+      // pion->AddEmModel(0,pai,pai,gas);
+
+      pmanager->AddProcess(pion,       -1,2,2);
+    }
     else if ( ( !particle->IsShortLived() )       &&
 	      ( particle->GetPDGCharge() != 0.0 ) && 
 	      ( particle->GetParticleName() != "chargedgeantino") ) 
@@ -135,8 +158,10 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
 
       G4hIonisation* hion =     new G4hIonisation();
-      G4PAIModel*     pai = new G4PAIModel(particle);
-      hion->AddEmModel(0,pai,pai,gas);
+
+      // G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      //  G4PAIwithPhotons*     pai   = new G4PAIwithPhotons(particle,"PAIwPhotons");
+      // hion->AddEmModel(0,pai,pai,gas);
 
       pmanager->AddProcess(hion,       -1,2,2);
     }
