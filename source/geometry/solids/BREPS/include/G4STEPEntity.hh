@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4STEPEntity.hh,v 1.4 2000-11-08 14:22:03 gcosmo Exp $
+// $Id: G4STEPEntity.hh,v 1.5 2001-02-05 18:45:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -21,7 +21,6 @@
 #define __G4STEPENTITY
 
 #include "globals.hh"
-#include "G4OrderedTable.hh"
 
 class G4STEPEntity
 {
