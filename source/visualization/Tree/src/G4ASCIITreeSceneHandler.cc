@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.18 2005-02-15 14:50:43 johna Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.19 2005-02-23 11:28:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -208,57 +208,59 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
   }
 
   // Print indented text...
-  for (G4int i = 0; i < fCurrentDepth; i++ ) *fpOutFile << "  ";
+  if (fpCurrentPV) {
+    for (G4int i = 0; i < fCurrentDepth; i++ ) *fpOutFile << "  ";
 
-  *fpOutFile << "\"" << fpCurrentPV->GetName()
-	     << "\":" << fpCurrentPV->GetCopyNo();
+    *fpOutFile << "\"" << fpCurrentPV->GetName()
+	       << "\":" << fpCurrentPV->GetCopyNo();
 
-  if (fpCurrentPV->IsReplicated()) {
-    if (verbosity < 10) {
-      // Add printing for replicas (when replicas are ignored)...
-      EAxis axis;
-      G4int nReplicas;
-      G4double width;
-      G4double offset;
-      G4bool consuming;
-      fpCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
-      G4VPVParameterisation* pP = fpCurrentPV->GetParameterisation();
-      if (pP) {
-	if (detail < 3) {
+    if (fpCurrentPV->IsReplicated()) {
+      if (verbosity < 10) {
+	// Add printing for replicas (when replicas are ignored)...
+	EAxis axis;
+	G4int nReplicas;
+	G4double width;
+	G4double offset;
+	G4bool consuming;
+	fpCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
+	G4VPVParameterisation* pP = fpCurrentPV->GetParameterisation();
+	if (pP) {
+	  if (detail < 3) {
+	    fReplicaSet.insert(fpCurrentPV);
+	    *fpOutFile << " (" << nReplicas << " parametrised volumes)";
+	  }
+	}
+	else {
 	  fReplicaSet.insert(fpCurrentPV);
-	  *fpOutFile << " (" << nReplicas << " parametrised volumes)";
+	  *fpOutFile << " (" << nReplicas << " replicas)";
 	}
       }
-      else {
-	fReplicaSet.insert(fpCurrentPV);
-	*fpOutFile << " (" << nReplicas << " replicas)";
+    }
+    else {
+      if (fLVSet.find(fpCurrentLV) != fLVSet.end()) {
+	if (verbosity <  10) {
+	  // Add printing for repeated placement...
+	  *fpOutFile << " (repeated placement)";
+	  // ...and curtail descent.
+	  ((G4PhysicalVolumeModel*)fpModel)->CurtailDescent();
+	}
       }
     }
-  }
-  else {
-    if (fLVSet.find(fpCurrentLV) != fLVSet.end()) {
-      if (verbosity <  10) {
-	// Add printing for repeated placement...
-	*fpOutFile << " (repeated placement)";
-	// ...and curtail descent.
-	((G4PhysicalVolumeModel*)fpModel)->CurtailDescent();
-      }
-    }
-  }
 
-  if (detail >= 1) {
-    *fpOutFile << " / \""
-	       << fpCurrentLV->GetName() << "\"";
-    G4VSensitiveDetector* sd = fpCurrentLV->GetSensitiveDetector();
-    if (sd) {
-      *fpOutFile << " (SD=\"" << sd->GetName() << "\"";
-      G4VReadOutGeometry* roGeom = sd->GetROgeometry();
-      if (roGeom) {
-	*fpOutFile << ",RO=\"" << roGeom->GetName() << "\"";
+    if (detail >= 1) {
+      *fpOutFile << " / \""
+		 << fpCurrentLV->GetName() << "\"";
+      G4VSensitiveDetector* sd = fpCurrentLV->GetSensitiveDetector();
+      if (sd) {
+	*fpOutFile << " (SD=\"" << sd->GetName() << "\"";
+	G4VReadOutGeometry* roGeom = sd->GetROgeometry();
+	if (roGeom) {
+	  *fpOutFile << ",RO=\"" << roGeom->GetName() << "\"";
+	}
+	*fpOutFile << ")";
       }
-      *fpOutFile << ")";
     }
-  }
+  }  // if (fpCurrentPV)
 
   if (detail >= 2) {
     *fpOutFile << " / \""
@@ -267,23 +269,25 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 	       << solid.GetEntityType() << ")";
   }
 
-  if (detail >= 3) {
-    *fpOutFile << ", "
-	       << G4BestUnit(((G4VSolid&)solid).GetCubicVolume(),"Volume")
-	       << ", "
-	       << G4BestUnit(fpCurrentMaterial->GetDensity(), "Volumic Mass");
-  }
+  if (fpCurrentPV) {
+    if (detail >= 3) {
+      *fpOutFile << ", "
+		 << G4BestUnit(((G4VSolid&)solid).GetCubicVolume(),"Volume")
+		 << ", "
+		 << G4BestUnit(fpCurrentMaterial->GetDensity(), "Volumic Mass");
+    }
 
-  if (detail >= 5) {
-    *fpOutFile << ", "
-	       << G4BestUnit
-      (fpCurrentLV->GetMass(fpCurrentPV->IsParameterised(),  // Force if so.
-			    fpCurrentMaterial),"Mass");
-  }
+    if (detail >= 5) {
+      *fpOutFile << ", "
+		 << G4BestUnit
+	(fpCurrentLV->GetMass(fpCurrentPV->IsParameterised(),  // Force if so.
+			      fpCurrentMaterial),"Mass");
+    }
 
-  if (fLVSet.find(fpCurrentLV) == fLVSet.end()) {
-    fLVSet.insert(fpCurrentLV);  // Record new logical volume.
-  }
+    if (fLVSet.find(fpCurrentLV) == fLVSet.end()) {
+      fLVSet.insert(fpCurrentLV);  // Record new logical volume.
+    }
+  }  // if (fpCurrentPV)
 
   if (outFileName == "G4cout") {
     G4cout << G4endl;
