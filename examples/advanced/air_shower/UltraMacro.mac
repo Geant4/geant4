@@ -1,0 +1,15 @@
+/control/verbose  1
+/run/verbose 2
+/event/verbose    0
+/tracking/verbose 0
+/run/initialize
+/gps/particle opticalphoton
+/gps/centre  0.0 0.0 100. cm
+/gps/direction 0.0 0.0 -1.0
+/gps/type  Plane
+/gps/shape Circle
+/gps/radius 25.0 cm
+/gps/energy 3.0 eV
+/mysetrun/SetRunID 9999
+/run/beamOn 100
+exit
