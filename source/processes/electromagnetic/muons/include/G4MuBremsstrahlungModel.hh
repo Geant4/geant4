@@ -32,13 +32,14 @@
 // 
 // Creation date: 18.05.2002
 //
-// Modifications: 
+// Modifications:
 //
-// 23.12.2002 Change interface in order to move to cut per region (VI)
+// 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
+// 27-01-03 Make models region aware (V.Ivanchenko)
 //
 
 //
-// Class Description: 
+// Class Description:
 //
 // Implementation of energy loss for gamma emission by muons
 
@@ -59,17 +60,19 @@ public:
 
   ~G4MuBremsstrahlungModel();
 
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
   G4double HighEnergyLimit(const G4ParticleDefinition* p);
- 
+
   G4double LowEnergyLimit(const G4ParticleDefinition* p);
 
   void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
- 
+
   void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4Material*);
- 
+                        const G4MaterialCutsCouple*);
+
   G4bool IsInCharge(const G4ParticleDefinition*);
 
   G4double ComputeDEDX(const G4Material*,
@@ -84,47 +87,47 @@ public:
                               G4double maxEnergy);
 
   G4DynamicParticle* SampleSecondary(
-                                const G4Material*,
+                                const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
-  
+
   G4std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4Material*,
+                                const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
-  
+
   virtual G4double MaxSecondaryEnergy(
-				const G4DynamicParticle* dynParticle); 
+				const G4DynamicParticle* dynParticle);
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-    				            G4double kineticEnergy); 
+    				            G4double kineticEnergy);
 
 private:
 
-  G4double ComputMuBremLoss(G4double Z, G4double A, G4double tkin, G4double cut);  
+  G4double ComputMuBremLoss(G4double Z, G4double A, G4double tkin, G4double cut);
 
   G4double ComputeMicroscopicCrossSection(G4double tkin,
                                            G4double Z,
-                                           G4double A,   
+                                           G4double A,
                                            G4double cut);
 
   G4double ComputeDMicroscopicCrossSection(G4double tkin,
                                            G4double Z,
-                                           G4double A,   
+                                           G4double A,
                                            G4double gammaEnergy);
 
-  void ComputePartialSumSigma(const G4Material* material, G4double tkin,
-                                                          G4double cut);
+  G4DataVector* ComputePartialSumSigma(const G4Material* material,
+                                             G4double tkin, G4double cut);
 
-  const G4Element* SelectRandomAtom(const G4Material* material) const;
+  const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
 
   void MakeSamplingTables();
 
 
-  // hide assignment operator 
+  // hide assignment operator
   G4MuBremsstrahlungModel & operator=(const  G4MuBremsstrahlungModel &right);
   G4MuBremsstrahlungModel(const  G4MuBremsstrahlungModel&);
 
@@ -132,13 +135,12 @@ private:
   G4double lowKinEnergy;
   G4double minThreshold;
 
-  // tables for sampling 
+  // tables for sampling
   G4int nzdat,ntdat,NBIN;
   static G4double zdat[5],adat[5],tdat[8];
   G4double ya[1001], proba[5][8][1001];
   G4double cutFixed;
 
-  const G4Material* oldMaterial;
   G4std::vector<G4DataVector*> partialSumSigma;
   G4bool  samplingTablesAreFilled;
 
@@ -146,7 +148,7 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline 
+inline
 G4double G4MuBremsstrahlungModel::MaxSecondaryEnergy(
 				 const G4DynamicParticle* dynParticle)
 {

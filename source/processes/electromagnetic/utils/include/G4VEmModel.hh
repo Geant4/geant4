@@ -29,14 +29,17 @@
 // File name:     G4VEmModel
 //
 // Author:        Vladimir Ivanchenko
-// 
+//
 // Creation date: 03.01.2002
 //
-// Modifications: 23.12.2002 V.Ivanchenko change interface in order to move 
-//                           to cut per region 
+// Modifications: 
+//
+// 23-12-02 V.Ivanchenko change interface before move to cut per region
+// 24-01-03 Cut per region (V.Ivanchenko)
+//
 
 //
-// Class Description: 
+// Class Description:
 //
 // Abstract interface to energy loss models
 
@@ -51,8 +54,10 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
+#include "G4MaterialCutsCouple.hh"
+#include "G4DataVector.hh"
 
-class G4VEmModel 
+class G4VEmModel
 {
 
 public:
@@ -61,17 +66,19 @@ public:
 
   virtual ~G4VEmModel() {};
 
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&) = 0;
+
   virtual G4double HighEnergyLimit(const G4ParticleDefinition*) = 0;
- 
+
   virtual G4double LowEnergyLimit(const G4ParticleDefinition*) = 0;
 
   virtual void SetHighEnergyLimit(G4double) = 0;
 
   virtual void SetLowEnergyLimit(G4double) = 0;
- 
+
   virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-                                const G4Material*) = 0;
- 
+                                const G4MaterialCutsCouple*) = 0;
+
   virtual G4bool IsInCharge(const G4ParticleDefinition*) = 0;
 
   virtual G4double ComputeDEDX(const G4Material*,
@@ -86,28 +93,28 @@ public:
                                       G4double maxEnergy) = 0;
 
   virtual G4DynamicParticle* SampleSecondary(
-                                const G4Material*,
+                                const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double tmax) = 0;
 
   virtual G4std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4Material*,
+                                const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double tmax) = 0;
 
   virtual G4double MaxSecondaryEnergy(
-				const G4DynamicParticle* dynParticle) = 0; 
+				const G4DynamicParticle* dynParticle) = 0;
 
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-    				            G4double kineticEnergy) = 0; 
+    				            G4double kineticEnergy) = 0;
 
 private:
 
-  //  hide assignment operator 
+  //  hide assignment operator
   G4VEmModel & operator=(const  G4VEmModel &right);
   G4VEmModel(const  G4VEmModel&);
 

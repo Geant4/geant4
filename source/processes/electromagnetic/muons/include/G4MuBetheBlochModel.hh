@@ -32,13 +32,14 @@
 // 
 // Creation date: 09.08.2002
 //
-// Modifications: 
+// Modifications:
 //
-// 23.12.2002 Change interface in order to move to cut per region (VI)
+// 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
+// 24-01-03 Make models region aware (V.Ivanchenko)
 //
 
 //
-// Class Description: 
+// Class Description:
 //
 // Implementation of Bethe-Bloch model of energy loss and
 // delta-electron production by heavy charged particles
@@ -60,16 +61,18 @@ public:
 
   ~G4MuBetheBlochModel();
 
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
   G4double HighEnergyLimit(const G4ParticleDefinition* p);
- 
+
   G4double LowEnergyLimit(const G4ParticleDefinition* p);
 
   void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
- 
+
   void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4Material*);
+                        const G4MaterialCutsCouple*);
  
   G4bool IsInCharge(const G4ParticleDefinition*);
 
@@ -85,13 +88,13 @@ public:
                               G4double maxEnergy);
 
   virtual G4DynamicParticle* SampleSecondary(
-                                const G4Material*,
+                                const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
 
   virtual G4std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4Material*,
+                                const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);

@@ -32,7 +32,7 @@
 // 
 // Creation date: 20.03.1997
 //
-// Modifications: 
+// Modifications:
 //
 // 10-02-00 modifications , new e.m. structure, L.Urban
 // 03-08-01 new methods Store/Retrieve PhysicsTable (mma)
@@ -41,13 +41,14 @@
 // 29-10-01 all static functions no more inlined (mma)
 // 07-01-02 new design of em processes (V.Ivanchenko)
 // 26-12-02 Secondary production moved to derived classes (VI)
+// 24-01-03 Make models region aware (V.Ivanchenko)
 //
 //
-// Class Description: 
+// Class Description:
 //
 // This class manages the ionisation process for e-/e+
 // it inherites from G4VContinuousDiscreteProcess via G4VEnergyLoss.
-// 
+//
 
 // -------------------------------------------------------------------
 //
@@ -70,21 +71,21 @@ public:
   G4eIonisationSTD(const G4String& name = "eIoni");
 
   ~G4eIonisationSTD();
- 
+
   G4bool IsApplicable(const G4ParticleDefinition& p);
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
                                     const G4Material*, G4double cut);
 
   virtual G4std::vector<G4Track*>* SecondariesAlongStep(
-                             const G4Step&, 
+                             const G4Step&,
 			           G4double&,
 			           G4double&,
                                    G4double&);
 
-  virtual void SecondariesPostStep(G4ParticleChange&, 
-                                   G4VEmModel*, 
-                             const G4Material*, 
+  virtual void SecondariesPostStep(G4ParticleChange&,
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
                                    G4double&,
                                    G4double&);
@@ -108,7 +109,7 @@ private:
 
   void InitialiseProcess();
 
-  // hide assignment operator 
+  // hide assignment operator
   G4eIonisationSTD & operator=(const G4eIonisationSTD &right);
   G4eIonisationSTD(const G4eIonisationSTD&);
 
@@ -116,7 +117,7 @@ private:
   G4VSubCutoffProcessor* subCutoffProcessor;
 
   G4bool subCutoff;
-  G4bool isElectron;  
+  G4bool isElectron;
 
 };
 
@@ -124,7 +125,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4eIonisationSTD::MinPrimaryEnergy(const G4ParticleDefinition*,
-                                                   const G4Material*, 
+                                                   const G4Material*,
                                                          G4double cut)
 {
   G4double x = cut;
@@ -134,14 +135,14 @@ inline G4double G4eIonisationSTD::MinPrimaryEnergy(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4bool G4eIonisationSTD::IsApplicable(const G4ParticleDefinition& p) 
+inline G4bool G4eIonisationSTD::IsApplicable(const G4ParticleDefinition& p)
 {
   return (&p == G4Electron::Electron() || &p == G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eIonisationSTD::MaxSecondaryEnergy(const G4DynamicParticle* dp) 
+inline G4double G4eIonisationSTD::MaxSecondaryEnergy(const G4DynamicParticle* dp)
 {
   G4double tmax = dp->GetKineticEnergy();
   if(isElectron) tmax *= 0.5;
@@ -153,7 +154,7 @@ inline G4double G4eIonisationSTD::MaxSecondaryEnergy(const G4DynamicParticle* dp
 #include "G4VSubCutoffProcessor.hh"
 
 inline G4std::vector<G4Track*>*  G4eIonisationSTD::SecondariesAlongStep(
-                           const G4Step&   step, 
+                           const G4Step&   step,
 	             	         G4double& tmax,
 			         G4double& eloss,
                                  G4double& kinEnergy)
@@ -166,25 +167,25 @@ inline G4std::vector<G4Track*>*  G4eIonisationSTD::SecondariesAlongStep(
   return newp;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4VEmModel.hh"
 
-inline void G4eIonisationSTD::SecondariesPostStep(G4ParticleChange& aParticleChange, 
-                                                  G4VEmModel* model, 
-                                            const G4Material* material, 
+inline void G4eIonisationSTD::SecondariesPostStep(G4ParticleChange& aParticleChange,
+                                                  G4VEmModel* model,
+                                            const G4MaterialCutsCouple* couple,
                                             const G4DynamicParticle* dp,
                                                   G4double& tcut,
                                                   G4double& kinEnergy)
 {
-  G4DynamicParticle* delta = model->SampleSecondary(material, dp, tcut, kinEnergy);
+  G4DynamicParticle* delta = model->SampleSecondary(couple, dp, tcut, kinEnergy);
   aParticleChange.SetNumberOfSecondaries(1);
   aParticleChange.AddSecondary(delta);
   G4ThreeVector finalP = dp->GetMomentum();
   kinEnergy -= delta->GetKineticEnergy();
   finalP -= delta->GetMomentum();
   finalP = finalP.unit();
-  aParticleChange.SetMomentumDirectionChange(finalP);  
+  aParticleChange.SetMomentumDirectionChange(finalP);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

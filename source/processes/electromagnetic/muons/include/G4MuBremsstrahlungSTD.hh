@@ -32,19 +32,20 @@
 // 
 // Creation date: 30.09.1997
 //
-// Modifications: 
+// Modifications:
 //
-// 10/02/00  modifications , new e.m. structure, L.Urban
-// 10-08-01: new methods Store/Retrieve PhysicsTable (mma)
-// 29-10-01 all static functions no more inlined (mma)   
+// 10/02/00 modifications , new e.m. structure, L.Urban
+// 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
+// 29-10-01 all static functions no more inlined (mma)
 // 10-05-02 V.Ivanchenko update to new design
 // 26-12-02 secondary production moved to derived classes (VI)
+// 24-01-03 Make models region aware (V.Ivanchenko)
 //
-// Class Description: 
+// Class Description:
 //
 // This class manages the Bremsstrahlung process for muons.
 // it inherites from G4VContinuousDiscreteProcess via G4VEnergyLossSTD.
-// 
+//
 
 // -------------------------------------------------------------------
 //
@@ -58,14 +59,14 @@
 #include "G4VEnergyLossSTD.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 class G4MuBremsstrahlungSTD : public G4VEnergyLossSTD
- 
-{ 
+
+{
 public:
- 
+
   G4MuBremsstrahlungSTD(const G4String& processName = "MuBrems");
- 
+
   ~G4MuBremsstrahlungSTD();
 
   G4bool IsApplicable(const G4ParticleDefinition& p)
@@ -75,14 +76,14 @@ public:
                                     const G4Material*, G4double cut);
 
   virtual G4std::vector<G4Track*>* SecondariesAlongStep(
-                             const G4Step&, 
+                             const G4Step&,
 			           G4double&,
 			           G4double&,
                                    G4double&) {return 0;};
 
-  virtual void SecondariesPostStep(G4ParticleChange&, 
-                                   G4VEmModel*, 
-                             const G4Material*, 
+  virtual void SecondariesPostStep(G4ParticleChange&,
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
                                    G4double&,
                                    G4double&);
@@ -132,17 +133,19 @@ inline G4double G4MuBremsstrahlungSTD::MaxSecondaryEnergy(const G4DynamicParticl
 
 inline void G4MuBremsstrahlungSTD::SecondariesPostStep(G4ParticleChange& aParticleChange, 
                                                        G4VEmModel* model, 
-                                                 const G4Material* material, 
+                                                 const G4MaterialCutsCouple* couple,
                                                  const G4DynamicParticle* dp,
                                                        G4double& tcut,
                                                        G4double& kinEnergy)
 {
-  G4DynamicParticle* gamma = model->SampleSecondary(material, dp, tcut, kinEnergy);
-  aParticleChange.SetNumberOfSecondaries(1);
-  aParticleChange.AddSecondary(gamma);
-  kinEnergy -= gamma->GetKineticEnergy();
+  G4DynamicParticle* gamma = model->SampleSecondary(couple, dp, tcut, kinEnergy);
+  if(gamma) {
+    aParticleChange.SetNumberOfSecondaries(1);
+    aParticleChange.AddSecondary(gamma);
+    kinEnergy -= gamma->GetKineticEnergy();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
+
 #endif

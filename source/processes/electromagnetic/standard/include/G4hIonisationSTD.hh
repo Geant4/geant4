@@ -44,12 +44,13 @@
 // 29-10-01 all static functions no more inlined  
 // 07-01-02 new design of em processes (V.Ivanchenko)
 // 26-12-02 secondary production moved to derived classes (VI)
+// 24-01-03 Make models region aware (V.Ivanchenko)
 //
-// Class Description: 
+// Class Description:
 //
 // This class manages the ionisation process for hadrons.
 // it inherites from G4VContinuousDiscreteProcess via G4VEnergyLoss.
-// 
+//
 
 // -------------------------------------------------------------------
 //
@@ -72,22 +73,22 @@ public:
   G4hIonisationSTD(const G4String& name = "hIoni");
 
   ~G4hIonisationSTD();
- 
-  G4bool IsApplicable(const G4ParticleDefinition& p) 
+
+  G4bool IsApplicable(const G4ParticleDefinition& p)
     {return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);};
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
 
   virtual G4std::vector<G4Track*>* SecondariesAlongStep(
-                             const G4Step&, 
+                             const G4Step&,
 			           G4double&,
 			           G4double&,
                                    G4double&);
 
-  virtual void SecondariesPostStep(G4ParticleChange&, 
-                                   G4VEmModel*, 
-                             const G4Material*, 
+  virtual void SecondariesPostStep(G4ParticleChange&,
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
                                    G4double&,
                                    G4double&);
@@ -129,13 +130,13 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4hIonisationSTD::MinPrimaryEnergy(const G4ParticleDefinition*,
-                                                   const G4Material*, 
+                                                   const G4Material*,
                                                          G4double cut)
 {
   G4double x = 0.5*cut/electron_mass_c2;
   G4double y = electron_mass_c2/mass;
   G4double g = x*y + sqrt((1. + x)*(1. + x*y*y));
-  return mass*(g - 1.0); 
+  return mass*(g - 1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -145,7 +146,7 @@ inline G4double G4hIonisationSTD::MaxSecondaryEnergy(const G4DynamicParticle* dy
   G4double gamma= dynParticle->GetKineticEnergy()/mass + 1.0;
   G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
                   (1. + 2.0*gamma*ratio + ratio*ratio);
-  
+
   return tmax;
 }
 
@@ -154,7 +155,7 @@ inline G4double G4hIonisationSTD::MaxSecondaryEnergy(const G4DynamicParticle* dy
 #include "G4VSubCutoffProcessor.hh"
 
 inline G4std::vector<G4Track*>*  G4hIonisationSTD::SecondariesAlongStep(
-                           const G4Step&   step, 
+                           const G4Step&   step,
 	             	         G4double& tmax,
 			         G4double& eloss,
                                  G4double& kinEnergy)
@@ -167,25 +168,25 @@ inline G4std::vector<G4Track*>*  G4hIonisationSTD::SecondariesAlongStep(
   return newp;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4VEmModel.hh"
 
-inline void G4hIonisationSTD::SecondariesPostStep(G4ParticleChange& aParticleChange, 
-                                                  G4VEmModel* model, 
-                                            const G4Material* material, 
+inline void G4hIonisationSTD::SecondariesPostStep(G4ParticleChange& aParticleChange,
+                                                  G4VEmModel* model,
+                                            const G4MaterialCutsCouple* couple,
                                             const G4DynamicParticle* dp,
                                                   G4double& tcut,
                                                   G4double& kinEnergy)
 {
-  G4DynamicParticle* delta = model->SampleSecondary(material, dp, tcut, kinEnergy);
+  G4DynamicParticle* delta = model->SampleSecondary(couple, dp, tcut, kinEnergy);
   aParticleChange.SetNumberOfSecondaries(1);
   aParticleChange.AddSecondary(delta);
   G4ThreeVector finalP = dp->GetMomentum();
   kinEnergy -= delta->GetKineticEnergy();
   finalP -= delta->GetMomentum();
   finalP  = finalP.unit();
-  aParticleChange.SetMomentumDirectionChange(finalP);  
+  aParticleChange.SetMomentumDirectionChange(finalP);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

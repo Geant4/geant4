@@ -34,8 +34,9 @@
 //
 // Modifications: 
 //
-// 04.12.2002 Fix problem of G4DynamicParticle constructor (VI)
-// 23.12.2002 Change interface in order to move to cut per region (VI)
+// 04-12-02 Fix problem of G4DynamicParticle constructor (V.Ivanchenko)
+// 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
+// 27-01-03 Make models region aware (V.Ivanchenko)
 //
 
 //
@@ -52,13 +53,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuBetheBlochModel::G4MuBetheBlochModel(const G4ParticleDefinition* p) 
+G4MuBetheBlochModel::G4MuBetheBlochModel(const G4ParticleDefinition* p)
   : G4VEmModel(),
   particle(0),
   highKinEnergy(100.*TeV),
   lowKinEnergy(2.0*MeV),
   twoln10(2.0*log(10.0)),
-  bg2lim(0.0169), 
+  bg2lim(0.0169),
   taulim(8.4146e-3)
 {
   if(p) SetParticle(p);
@@ -66,12 +67,12 @@ G4MuBetheBlochModel::G4MuBetheBlochModel(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuBetheBlochModel::~G4MuBetheBlochModel() 
+G4MuBetheBlochModel::~G4MuBetheBlochModel()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuBetheBlochModel::SetParticle(const G4ParticleDefinition* p) 
+void G4MuBetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 {
   particle = p;
   mass = particle->GetPDGMass();
@@ -84,15 +85,15 @@ void G4MuBetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuBetheBlochModel::HighEnergyLimit(const G4ParticleDefinition* p) 
+G4double G4MuBetheBlochModel::HighEnergyLimit(const G4ParticleDefinition* p)
 {
   if(!particle) SetParticle(p);
   return highKinEnergy;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuBetheBlochModel::LowEnergyLimit(const G4ParticleDefinition* p) 
+G4double G4MuBetheBlochModel::LowEnergyLimit(const G4ParticleDefinition* p)
 {
   if(!particle) SetParticle(p);
   return lowKinEnergy;
@@ -101,17 +102,25 @@ G4double G4MuBetheBlochModel::LowEnergyLimit(const G4ParticleDefinition* p)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4MuBetheBlochModel::MinEnergyCut(const G4ParticleDefinition* p,
-                                         const G4Material* material) 
+                                           const G4MaterialCutsCouple* couple)
 {
-  return material->GetIonisation()->GetMeanExcitationEnergy();
+  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4MuBetheBlochModel::IsInCharge(const G4ParticleDefinition* p) 
+G4bool G4MuBetheBlochModel::IsInCharge(const G4ParticleDefinition* p)
 {
-  return (p->GetPDGCharge() != 0.0 && p->GetPDGMass() > 10.*MeV 
+  return (p->GetPDGCharge() != 0.0 && p->GetPDGMass() > 10.*MeV
                                    && p->GetPDGSpin() == 0.5);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4MuBetheBlochModel::Initialise(const G4ParticleDefinition* p,
+                                     const G4DataVector&)
+{
+  if(!particle) SetParticle(p);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -119,14 +128,14 @@ G4bool G4MuBetheBlochModel::IsInCharge(const G4ParticleDefinition* p)
 G4double G4MuBetheBlochModel::ComputeDEDX(const G4Material* material,
                                         const G4ParticleDefinition* p,
                                               G4double kineticEnergy,
-                                              G4double cutEnergy) 
+                                              G4double cutEnergy)
 {
   if(!particle) SetParticle(p);
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tau   = kineticEnergy/mass;
   G4double x     = 1.0;
   if(cutEnergy < tmax) x = cutEnergy/tmax;
-  G4double gam   = tau + 1.0;    
+  G4double gam   = tau + 1.0;
   G4double beta2 = 1. - 1./(gam*gam);
   G4double bg2   = tau * (tau+2.0);
 
@@ -141,14 +150,14 @@ G4double G4MuBetheBlochModel::ComputeDEDX(const G4Material* material,
   G4double* shellCorrectionVector =
             material->GetIonisation()->GetShellCorrectionVector();
   G4double eDensity = material->GetElectronDensity();
-        
+
   G4double dedx = log(2.0*electron_mass_c2*bg2*tmax*x/eexc2)-(1.0 + x)*beta2;
 
   G4double totEnergy = kineticEnergy + mass;
   G4double del = 0.5*x*tmax/totEnergy;
   dedx += del*del;
-    
-  // density correction     
+
+  // density correction
   x = log(bg2)/twoln10;
   if ( x >= x0den ) {
     dedx -= twoln10*x - cden ;
@@ -229,7 +238,7 @@ G4double G4MuBetheBlochModel::CrossSectionPerAtom(
                                  G4double tmax,
                                  G4double tmaxSecondary)
 {
-     
+
   G4double cross = 0.;
     
   const G4double xgi[] = {0.06943,0.33001,0.66999,0.93057};
@@ -281,18 +290,18 @@ G4double G4MuBetheBlochModel::DifCrossSectionPerAtom(G4double kineticEnergy,
                    (beta2*knockonEnergy*knockonEnergy);
   G4double a1 = log(1.+2.*knockonEnergy/electron_mass_c2);
   G4double a3 = log(4.*totalEnergy*(totalEnergy-knockonEnergy)/(mass*mass));
-  cross  *= (1.+alphaprime*a1*(a3-a1)); 
+  cross  *= (1.+alphaprime*a1*(a3-a1));
 
   return cross;
 }
- 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4DynamicParticle* G4MuBetheBlochModel::SampleSecondary(
-                             const G4Material* material,
+                             const G4MaterialCutsCouple*,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
-                                   G4double maxEnergy) 
+                                   G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryEnergy(dp);
   G4double xmin = tmin/tmax;
@@ -306,21 +315,21 @@ G4DynamicParticle* G4MuBetheBlochModel::SampleSecondary(
   G4double beta2 = 1. - mass*mass/(totEnergy*totEnergy);
   G4double x = 0.5*tmax*tmax/(totEnergy*totEnergy);
 
-  const G4double alphaprime = fine_structure_const/twopi; 
-  G4double a0=log(2.*totEnergy/mass); 
+  const G4double alphaprime = fine_structure_const/twopi;
+  G4double a0=log(2.*totEnergy/mass);
 
   G4double grej = (1.0 - beta2*xmin + xmax*xmax*x)*(1. + alphaprime*a0*a0);
-  
+
   G4double z, f, a1, twoep;
-      
-  // sampling follows ...      
+
+  // sampling follows ...
   do {
     G4double q = G4UniformRand();
     z = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
 
     twoep = 2.0*z*tmax;
-    a1= log(1.0 + twoep/electron_mass_c2); 
-    
+    a1= log(1.0 + twoep/electron_mass_c2);
+
     f = (1.0 - beta2 * z + z*z*x)
       * (1. + alphaprime*a1*(a0 + log((2.0*totEnergy-twoep)/mass) - a1));
 
@@ -328,23 +337,23 @@ G4DynamicParticle* G4MuBetheBlochModel::SampleSecondary(
         G4cout << "G4MuBetheBlochModel::SampleSecondary Warning! "
                << "Majorant " << grej << " < "
                << f << " for x= " << z
-               << G4endl; 
+               << G4endl;
     }
 
   } while( grej*G4UniformRand() >= f );
-  
+
   G4double deltaKinEnergy = z * tmax;
-    
-  G4double deltaMomentum = 
+
+  G4double deltaMomentum =
            sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
   G4double totMomentum = sqrt(totEnergy*totEnergy - mass*mass);
   G4double cost = deltaKinEnergy * (totEnergy + electron_mass_c2) /
                                    (deltaMomentum * totMomentum);
-  
+
 
   G4double sint = sqrt(1.0 - cost*cost);
- 
-  G4double phi = twopi * G4UniformRand() ; 
+
+  G4double phi = twopi * G4UniformRand() ;
 
   G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
   deltaDirection.rotateUz(momentum);
@@ -361,13 +370,13 @@ G4DynamicParticle* G4MuBetheBlochModel::SampleSecondary(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4std::vector<G4DynamicParticle*>* G4MuBetheBlochModel::SampleSecondaries(
-                             const G4Material* material,
+                             const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
-                                   G4double maxEnergy) 
+                                   G4double maxEnergy)
 {
   G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
-  G4DynamicParticle* delta = SampleSecondary(material,dp,tmin,maxEnergy);
+  G4DynamicParticle* delta = SampleSecondary(couple,dp,tmin,maxEnergy);
   vdp->push_back(delta);
 
   return vdp;

@@ -34,13 +34,14 @@
 //
 // Modifications:
 //
-// 13-11-02 Minor fix - use normalised direction (VI)
-// 04-12-02 Minor change in PostStepDoIt (VI)
-// 23-12-02 Change interface in order to move to cut per region (VI)
-// 26-12-02 Secondary production moved to derived classes (VI)
-// 04-01-03 Fix problem of very small steps for ions (VI)
+// 13-11-02 Minor fix - use normalised direction (V.Ivanchenko)
+// 04-12-02 Minor change in PostStepDoIt (V.Ivanchenko)
+// 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
+// 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
+// 04-01-03 Fix problem of very small steps for ions (V.Ivanchenko)
 // 20-01-03 Migrade to cut per region (V.Ivanchenko)
 // 24-01-03 Temporarily close a control on usage of couples (V.Ivanchenko)
+// 24-01-03 Make models region aware (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -73,6 +74,7 @@
 #include "G4Proton.hh"
 #include "G4GenericIon.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4Region.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -453,23 +455,23 @@ void G4VEnergyLossSTD::SetParticles(const G4ParticleDefinition* p1,
   }
   if(!yes) {
     G4cout << "Warning in G4VEnergyLossSTD::SetParticle: "
-           << particle->GetParticleName() 
+           << particle->GetParticleName()
            << " losses cannot be obtained from "
            << baseParticle->GetParticleName()
-           << " losses" << G4endl; 
+           << " losses" << G4endl;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::AddEmModel(G4VEmModel* p, G4int order)
+void G4VEnergyLossSTD::AddEmModel(G4VEmModel* p, G4int order, const G4Region* r)
 {
-  modelManager->AddEmModel(p, order);
+  modelManager->AddEmModel(p, order, r);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::AddEmFluctuationModel(G4VEmFluctuationModel* p)
+void G4VEnergyLossSTD::AddEmFluctuationModel(G4VEmFluctuationModel* p, const G4Region*)
 {
   if(emFluctModel) delete emFluctModel;
   emFluctModel = p;
@@ -606,16 +608,16 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
   // The process has range table - calculate energy loss
   if(!theRangeTable) return &aParticleChange;
 
-  // Get the actual (true) Step length  
+  // Get the actual (true) Step length
   G4double length = step.GetStepLength();
   G4double eloss  = 0.0;
   G4bool b;
 
-  /*  
+  /*
   if(-1 < verboseLevel) {
-    G4cout << "AlongStepDoIt for " 
-           << GetProcessName() << " and particle " 
-           << particle->GetParticleName() 
+    G4cout << "AlongStepDoIt for "
+           << GetProcessName() << " and particle "
+           << particle->GetParticleName()
            << "  eScaled(MeV)= " << preStepKinEnergy/MeV
            << "  slim(mm)= " << fRange/mm
            << "  s(mm)= " << length/mm
@@ -755,7 +757,7 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
   }
   */
 
-  SecondariesPostStep(aParticleChange,currentModel,currentMaterial,
+  SecondariesPostStep(aParticleChange,currentModel,currentCouple,
                       dynParticle,tcut,finalT);
 
   if (finalT < minKinEnergy) {

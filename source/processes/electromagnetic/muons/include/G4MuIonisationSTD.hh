@@ -41,16 +41,17 @@
 // 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
 // 14-08-01 new function ComputeRestrictedMeandEdx() + 'cleanup' (mma)
 // 19-09-01 come back to previous process name "hIoni"
-// 29-10-01 all static functions no more inlined  
+// 29-10-01 all static functions no more inlined
 // 10-05-02 V.Ivanchenko update to new design
 // 09-12-02 V.Ivanchenko remove warning
 // 26-12-02 Secondary production moved to derived classes (VI)
+// 24-01-03 Make models region aware (V.Ivanchenko)
 //
-// Class Description: 
+// Class Description:
 //
 // This class manages the ionisation process for muons.
 // it inherites from G4VContinuousDiscreteProcess via G4VEnergyLossSTD.
-// 
+//
 
 // -------------------------------------------------------------------
 //
@@ -73,22 +74,22 @@ public:
   G4MuIonisationSTD(const G4String& name = "muIoni");
 
   ~G4MuIonisationSTD();
- 
-  G4bool IsApplicable(const G4ParticleDefinition& p) 
+
+  G4bool IsApplicable(const G4ParticleDefinition& p)
     {return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);};
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
 
   virtual G4std::vector<G4Track*>* SecondariesAlongStep(
-                             const G4Step&, 
+                             const G4Step&,
 			           G4double&,
 			           G4double&,
                                    G4double&);
 
-  virtual void SecondariesPostStep(G4ParticleChange&, 
-                                   G4VEmModel*, 
-                             const G4Material*, 
+  virtual void SecondariesPostStep(G4ParticleChange&,
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
                                    G4double&,
                                    G4double&);
@@ -168,18 +169,18 @@ inline G4std::vector<G4Track*>*  G4MuIonisationSTD::SecondariesAlongStep(
   return newp;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4VEmModel.hh"
 
-inline void G4MuIonisationSTD::SecondariesPostStep(G4ParticleChange& aParticleChange, 
-                                                   G4VEmModel* model, 
-                                             const G4Material* material, 
+inline void G4MuIonisationSTD::SecondariesPostStep(G4ParticleChange& aParticleChange,
+                                                   G4VEmModel* model,
+                                             const G4MaterialCutsCouple* couple,
                                              const G4DynamicParticle* dp,
                                                    G4double& tcut,
                                                    G4double& kinEnergy)
 {
-  G4DynamicParticle* delta = model->SampleSecondary(material, dp, tcut, kinEnergy);
+  G4DynamicParticle* delta = model->SampleSecondary(couple, dp, tcut, kinEnergy);
   aParticleChange.SetNumberOfSecondaries(1);
   aParticleChange.AddSecondary(delta);
   G4ThreeVector finalP = dp->GetMomentum();

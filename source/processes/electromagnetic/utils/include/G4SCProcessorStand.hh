@@ -29,15 +29,16 @@
 // File name:     G4SCProcessorStand
 //
 // Author:        Vladimir Ivanchenko
-// 
+//
 // Creation date: 03.01.2002
 //
-// Modifications: 
+// Modifications:
 //
-// 26-12-02 Secondary production moved to derived classes (VI)
-// 29-12-02 Change interface (VI)
+// 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
+// 29-12-02 Change interface (V.Ivanchenko)
+// 27-01-03 Make models region aware (V.Ivanchenko)
 //
-// Class Description: 
+// Class Description:
 //
 // Class for simualtion of subCutoff
 
@@ -53,7 +54,7 @@
 #include "G4DataVector.hh"
 
 class G4Navigator;
-class G4Material;
+class G4MaterialCutsCouple;
 
 class G4SCProcessorStand   :  public G4VSubCutoffProcessor
 {
@@ -69,8 +70,8 @@ public:
 						           G4double& meanLoss,
                                                            G4VEmModel*) = 0;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-                          const G4ParticleDefinition*, 
+  virtual void Initialise(const G4ParticleDefinition*,
+                          const G4ParticleDefinition*,
                           const G4DataVector*,
                           const G4DataVector*) = 0;
 
@@ -82,7 +83,7 @@ protected:
 
 private:
 
-  // hide assignment operator 
+  // hide assignment operator
   G4SCProcessorStand & operator=(const  G4SCProcessorStand &right);
   G4SCProcessorStand(const  G4SCProcessorStand&);
 
@@ -93,14 +94,8 @@ private:
   G4Navigator* navigator;
   const G4DataVector* theCuts;
   const G4DataVector* theSubCuts;
-  G4DataVector  rangeCuts;
 
   // cash
-  const G4Material* material;
-  G4int materialIndex;
-  G4double cut;
-  G4double subcut;
-  G4double rcut;
   G4double initialMass;
 };
 
@@ -115,7 +110,7 @@ inline void G4SCProcessorStand::SetLambdaSubTable(G4PhysicsTable* table)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4PhysicsTable* G4SCProcessorStand::LambdaSubTable() 
+inline G4PhysicsTable* G4SCProcessorStand::LambdaSubTable()
 {
   return theLambdaSubTable;
 }

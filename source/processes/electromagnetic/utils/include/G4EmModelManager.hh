@@ -32,14 +32,15 @@
 //
 // Creation date: 07.05.2002
 //
-// Modifications: 
+// Modifications:
 //
 // 03-12-02 V.Ivanchenko fix a bug in model selection
 // 20-01-03 Migrade to cut per region (V.Ivanchenko)
+// 27-01-03 Make models region aware (V.Ivanchenko)
 //
-// Class Description: 
+// Class Description:
 //
-// It is the unified energy loss process it calculates the continuous 
+// It is the unified energy loss process it calculates the continuous
 // energy loss for charged particles using a set of Energy Loss
 // models valid for different energy regions. There are a possibility
 // to create and access to dE/dx and range tables, or to calculate
@@ -91,9 +92,9 @@ public:
 
   void FillSubLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*);
 
-  G4VEmModel* SelectModel(G4double energy);
+  G4VEmModel* SelectModel(G4double& energy, size_t& index);
 
-  void AddEmModel(G4VEmModel*, G4int);
+  void AddEmModel(G4VEmModel*, G4int, const G4Region*);
 
 private:
 
@@ -131,7 +132,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VEmModel* G4EmModelManager::SelectModel(G4double energy)
+inline G4VEmModel* G4EmModelManager::SelectModel(G4double& energy, size_t&)
 {
   if(nEmModels == 4 && energy > upperEkin[2]) {
     currentModel = emModels[3];

@@ -29,12 +29,13 @@
 // File name:     G4ionIonisation
 //
 // Author:        Vladimir Ivanchenko
-// 
+//
 // Creation date: 07.05.2002
 //
-// Modifications: 
+// Modifications:
 //
 // 26-12-02 Secondary production moved to derived classes (VI)
+// 24-01-03 Make models region aware (V.Ivanchenko)
 //
 // Class Description: 
 //
@@ -77,9 +78,9 @@ public:
 			           G4double&,
                                    G4double&);
 
-  virtual void SecondariesPostStep(G4ParticleChange&, 
-                                   G4VEmModel*, 
-                             const G4Material*, 
+  virtual void SecondariesPostStep(G4ParticleChange&,
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
                                    G4double&,
                                    G4double&);
@@ -107,7 +108,7 @@ private:
 
   void InitialiseProcess();
 
-  // hide assignment operator 
+  // hide assignment operator
   G4ionIonisation & operator=(const G4ionIonisation &right);
   G4ionIonisation(const G4ionIonisation&);
 
@@ -128,10 +129,10 @@ inline G4double G4ionIonisation::MinPrimaryEnergy(
   //  G4double y = electron_mass_c2/mass;
   //  G4double g = x*y + sqrt((1. + x)*(1. + x*y*y));
   G4double g = sqrt(1. + x);
-  return mass*(g - 1.0); 
+  return mass*(g - 1.0);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4ionIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dynParticle)
 {
@@ -140,7 +141,7 @@ inline G4double G4ionIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dyn
   G4double ratio = electron_mass_c2/mass;
   G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
                   (1. + 2.0*gamma*ratio + ratio*ratio);
-  return tmax; 
+  return tmax;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -155,7 +156,7 @@ inline G4double G4ionIonisation::GetMeanFreePath(const G4Track& track,
   G4double q         = dp->GetCharge()/eplus;
   G4double q_2       = q*q;
   SetMassRatio(mRatio);
-  SetReduceFactor(1.0/(q_2*mRatio)); 
+  SetReduceFactor(1.0/(q_2*mRatio));
   SetChargeSquare(q_2);
   SetChargeSquareRatio(q_2);
 
@@ -167,7 +168,7 @@ inline G4double G4ionIonisation::GetMeanFreePath(const G4Track& track,
 #include "G4VSubCutoffProcessor.hh"
 
 inline G4std::vector<G4Track*>*  G4ionIonisation::SecondariesAlongStep(
-                           const G4Step&   step, 
+                           const G4Step&   step,
 	             	         G4double& tmax,
 			         G4double& eloss,
                                  G4double& kinEnergy)
@@ -180,25 +181,25 @@ inline G4std::vector<G4Track*>*  G4ionIonisation::SecondariesAlongStep(
   return newp;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4VEmModel.hh"
 
-inline void G4ionIonisation::SecondariesPostStep(G4ParticleChange& aParticleChange, 
-                                                 G4VEmModel* model, 
-                                           const G4Material* material, 
+inline void G4ionIonisation::SecondariesPostStep(G4ParticleChange& aParticleChange,
+                                                 G4VEmModel* model,
+                                           const G4MaterialCutsCouple* couple,
                                            const G4DynamicParticle* dp,
                                                  G4double& tcut,
                                                  G4double& kinEnergy)
 {
-  G4DynamicParticle* delta = model->SampleSecondary(material, dp, tcut, kinEnergy);
+  G4DynamicParticle* delta = model->SampleSecondary(couple, dp, tcut, kinEnergy);
   aParticleChange.SetNumberOfSecondaries(1);
   aParticleChange.AddSecondary(delta);
   G4ThreeVector finalP = dp->GetMomentum();
   kinEnergy -= delta->GetKineticEnergy();
   finalP -= delta->GetMomentum();
   finalP = finalP.unit();
-  aParticleChange.SetMomentumDirectionChange(finalP);  
+  aParticleChange.SetMomentumDirectionChange(finalP);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -28,8 +28,8 @@
 //
 // File name:     G4EmModelManager
 //
-// Author:        Vladimir Ivanchenko 
-// 
+// Author:        Vladimir Ivanchenko
+//
 // Creation date: 07.05.2002
 //
 // Modifications:
@@ -37,6 +37,7 @@
 // 23-12-02 V.Ivanchenko change interface in order to move
 //                           to cut per region
 // 20-01-03 Migrade to cut per region (V.Ivanchenko)
+// 24-01-03 Make models region aware (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -62,6 +63,7 @@
 #include "G4Positron.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4Region.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -242,7 +244,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
       G4VEmModel* model = emModels[j];
       if(upperEkin[j] > eLow[j]) {
 
-        G4double tcutmin = model->MinEnergyCut(particle, material);
+        G4double tcutmin = model->MinEnergyCut(particle, couple);
 
         if(1 < verboseLevel) {
             G4cout << "The model # " << j
@@ -251,12 +253,18 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
         }
 
         cut = G4std::max(cut, tcutmin);
-        subcut = G4std::max(subcut, tcutmin);
+	G4double x = G4std::max(cut*minSubRange, tcutmin);
+        subcut = G4std::max(subcut, x);
       }
     }
     theCuts.push_back(cut);
     theSubCuts.push_back(subcut);
   }
+
+  for(G4int jj=0; jj<nEmModels; jj++) {
+    emModels[jj]->Initialise(particle, theCuts);
+  }
+
   if(1 < verboseLevel) {
     G4cout << "G4EmModelManager is initialised "
            << G4endl;
@@ -267,7 +275,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmModelManager::AddEmModel(G4VEmModel* p, G4int num)
+void G4EmModelManager::AddEmModel(G4VEmModel* p, G4int num, const G4Region*)
 {
   if(nEmModels) {
     for(G4int i=0; i<nEmModels; i++) {
@@ -308,7 +316,7 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
   const G4Material* material = couple->GetMaterial();
   size_t i = couple->GetIndex();
   G4double cut = theCuts[i];
- 
+
   if(0 < verboseLevel) {
     G4cout << "G4EmModelManager::FillDEDXVector() for "
            << material->GetName()

@@ -34,8 +34,9 @@
 //
 // Modifications:
 //
-// 26-12-02 Secondary production moved to derived classes (VI)
+// 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
 // 20-01-03 Migrade to cut per region (V.Ivanchenko)
+// 24-01-03 Make models region aware (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -68,6 +69,7 @@ class G4VParticleChange;
 class G4PhysicsTable;
 class G4PhysicsVector;
 class G4VSubCutoffProcessor;
+class G4Region;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -79,7 +81,7 @@ public:
                          G4ProcessType type = fElectromagnetic);
 
  ~G4VEnergyLossSTD();
- 
+
   void Initialise();
 
   G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
@@ -87,14 +89,14 @@ public:
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
   virtual G4std::vector<G4Track*>* SecondariesAlongStep(
-                             const G4Step&, 
+                             const G4Step&,
 			           G4double& tmax,
 			           G4double& eloss,
                                    G4double& kinEnergy) = 0;
 
-  virtual void SecondariesPostStep(G4ParticleChange&, 
-                                   G4VEmModel*, 
-                             const G4Material*, 
+  virtual void SecondariesPostStep(G4ParticleChange&,
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
                                    G4double& tcut,
                                    G4double& kinEnergy) = 0;
@@ -110,13 +112,13 @@ public:
 
   G4PhysicsTable* BuildDEDXTable();
 
-  void SetParticles(const G4ParticleDefinition*, 
+  void SetParticles(const G4ParticleDefinition*,
                     const G4ParticleDefinition*,
                     const G4ParticleDefinition*);
 
-  void SetParticle(const G4ParticleDefinition* p); 
+  void SetParticle(const G4ParticleDefinition* p);
   void SetBaseParticle(const G4ParticleDefinition* p);
-  void SetSecondaryParticle(const G4ParticleDefinition* p); 
+  void SetSecondaryParticle(const G4ParticleDefinition* p);
 
   const G4ParticleDefinition* Particle() const;
   const G4ParticleDefinition* BaseParticle() const;
@@ -140,25 +142,26 @@ public:
     // Print out of the class parameters
 
   G4bool StorePhysicsTable(G4ParticleDefinition*,
-                     const G4String& directory, 
+                     const G4String& directory,
                            G4bool ascii = false);
-    // Store PhysicsTable in a file. 
+    // Store PhysicsTable in a file.
     // Return false in case of failure at I/O
- 
+
   G4bool RetrievePhysicsTable(G4ParticleDefinition*,
-                        const G4String& directory, 
+                        const G4String& directory,
                               G4bool ascii);
-    // Retrieve Physics from a file. 
+    // Retrieve Physics from a file.
     // (return true if the Physics Table can be build by using file)
     // (return false if the process has no functionality or in case of failure)
-    // File name should is constructed as processName+particleName and the 
-    // should be placed under the directory specifed by the argument. 
+    // File name should is constructed as processName+particleName and the
+    // should be placed under the directory specifed by the argument.
 
-  void AddEmModel(G4VEmModel*, G4int);
+  void AddEmModel(G4VEmModel*, G4int, const G4Region* region = 0);
 
-  void AddEmFluctuationModel(G4VEmFluctuationModel*);
+  void AddEmFluctuationModel(G4VEmFluctuationModel*, const G4Region* region = 0);
 
-  virtual void SetSubCutoffProcessor(G4VSubCutoffProcessor*) {};
+  virtual void SetSubCutoffProcessor(G4VSubCutoffProcessor*,
+                               const G4Region* region = 0) {};
 
   virtual G4VSubCutoffProcessor* SubCutoffProcessor() {return 0;};
 
@@ -186,7 +189,7 @@ public:
   G4double GetLambda(G4double kineticEnergy, const G4MaterialCutsCouple* couple);
   // It returns the MeanFreePath of the process for a (energy, material)
 
-  G4double MicroscopicCrossSection(G4double kineticEnergy, 
+  G4double MicroscopicCrossSection(G4double kineticEnergy,
                              const G4MaterialCutsCouple* couple);
   // It returns the MeanFreePath of the process for a (energy, material)
 
@@ -238,7 +241,7 @@ protected:
 
   virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dp) = 0;
 
-  G4VEmModel* SelectModel(G4double kinEnergy);
+  G4VEmModel* SelectModel(G4double& kinEnergy);
 
   void SetMassRatio(G4double val) {massRatio = val;};
 
@@ -267,8 +270,8 @@ private:
 
 private:
 
-  G4EmModelManager*      modelManager;
-  G4VEmFluctuationModel* emFluctModel;
+  G4EmModelManager*                modelManager;
+  G4VEmFluctuationModel*           emFluctModel;
 
   // tables and vectors
   G4PhysicsTable*  theDEDXTable;
@@ -421,9 +424,9 @@ inline G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VEmModel* G4VEnergyLossSTD::SelectModel(G4double kinEnergy)
+inline G4VEmModel* G4VEnergyLossSTD::SelectModel(G4double& kinEnergy)
 {
-  return modelManager->SelectModel(kinEnergy);
+  return modelManager->SelectModel(kinEnergy, currentMaterialIndex);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -555,6 +558,3 @@ inline void G4VEnergyLossSTD::SetStepLimits(G4double v1, G4double v2)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
-
-
-

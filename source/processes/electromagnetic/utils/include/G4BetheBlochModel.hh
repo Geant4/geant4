@@ -29,14 +29,16 @@
 // File name:     G4BetheBlochModel
 //
 // Author:        Vladimir Ivanchenko on base of Laszlo Urban code
-// 
+//
 // Creation date: 03.01.2002
 //
-// Modifications: 23.12.2002 V.Ivanchenko change interface in order to move 
-//                           to cut per region
+// Modifications:
+//
+// 23-12-02 V.Ivanchenko change interface in order to moveto cut per region
+// 24-01-03 Make models region aware (V.Ivanchenko)
 
 //
-// Class Description: 
+// Class Description:
 //
 // Implementation of Bethe-Bloch model of energy loss and
 // delta-electron production by heavy charged particles
@@ -58,17 +60,19 @@ public:
 
   ~G4BetheBlochModel();
 
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
   G4double HighEnergyLimit(const G4ParticleDefinition* p);
- 
+
   G4double LowEnergyLimit(const G4ParticleDefinition* p);
 
   void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
- 
+
   void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4Material*);
- 
+                        const G4MaterialCutsCouple*);
+
   G4bool IsInCharge(const G4ParticleDefinition*);
 
   G4double ComputeDEDX(const G4Material*,
@@ -83,13 +87,13 @@ public:
                               G4double maxEnergy);
 
   G4DynamicParticle* SampleSecondary(
-                                const G4Material*,
+                                const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);
 
   G4std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4Material*,
+                                const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
                                       G4double maxEnergy);

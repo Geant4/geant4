@@ -100,7 +100,7 @@ G4LossTableManager::G4LossTableManager()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4LossTableManager::Clear()
-{ 
+{
   all_tables_are_built = false;
   all_particles_are_mapped = false;
   electron_table_are_built = false;
@@ -220,7 +220,7 @@ void G4LossTableManager::BuildDEDXTable(const G4ParticleDefinition* aParticle)
 
   if(1 < verbose) {
     G4cout << "G4LossTableManager::BuildDEDXTable() for " 
-           << aParticle->GetParticleName() 
+           << aParticle->GetParticleName()
            << G4endl;
   }
 
