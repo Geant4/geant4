@@ -1,4 +1,4 @@
-$Id: History,v 1.165 2003-02-11 21:00:21 pia Exp $
+$Id: History,v 1.166 2003-02-12 11:46:45 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12.02-2003   MGP, tag emlowen-V05-00-04
+             Corrected compilation error in G4LowEnergyLoss in tags V05-00-02/3
+             Migrated Penelope processes to cuts-per-region 
+             Removed some compilation warnings
 
 11.02-2003   MGP, tag emlowen-V05-00-03
              First tag including Penelope processes for photons and related
