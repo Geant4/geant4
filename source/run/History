@@ -1,4 +1,4 @@
-$Id: History,v 1.77 2003-03-11 07:24:36 kurasige Exp $
+$Id: History,v 1.78 2003-03-14 00:52:29 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Mar 14, 2003, H.Kurashige (run-V05-00-07)
+- Revert G4VUserPhysicsList::ResetCuts
+
 Mar 11, 2003, M.Asai (run-V05-00-06)
+- Added commands for SetCuts.
 - Added commands for SetCuts.
 - Implemented store/retreive physics list.
 - Removed BuildPhysicsTable from Initialize and moved to BeamOn
