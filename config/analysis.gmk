@@ -2,20 +2,20 @@
 #
 # Analysis variables...
 #
-# ------------- OpenScientist -----------------
-ifdef G4ANALYSIS_USE_OPEN_SCIENTIST
-  CPPFLAGS += -DG4ANALYSIS_USE_OPEN_SCIENTIST
+# ------------- Lab -----------------
+ifdef G4ANALYSIS_USE_LAB
+  CPPFLAGS += -DG4ANALYSIS_USE_LAB
   CPPFLAGS += -DG4ANALYSIS_USE
-  G4ANALYSIS_BUILD_OPEN_SCIENTIST = 1
+  G4ANALYSIS_BUILD_LAB = 1
 endif
 
-ifdef G4ANALYSIS_BUILD_OPEN_SCIENTIST
+ifdef G4ANALYSIS_BUILD_LAB
   CPPFLAGS += -DG4ANALYSIS_BUILD
-  CPPFLAGS += -DG4ANALYSIS_BUILD_OPEN_SCIENTIST
+  CPPFLAGS += -DG4ANALYSIS_BUILD_LAB
   INC_ANALYSIS = 1	
   LIB_ANALYSIS = 1	
-  INC_OPEN_SCIENTIST = 1	
-  LIB_OPEN_SCIENTIST = 1	
+  INC_LAB = 1	
+  LIB_LAB = 1	
 endif
 
 # ------------- jas -----------------
@@ -71,8 +71,8 @@ ifdef G4ANALYSIS_AIDA
 endif
 endif
 #
-ifdef LIB_OPEN_SCIENTIST
-  ANALYSISLIBS += -lG4OpenScientist
+ifdef LIB_LAB
+  ANALYSISLIBS += -lG4Lab
 endif
 ifdef LIB_JAS
   ANALYSISLIBS += -lG4jas
@@ -84,20 +84,20 @@ ifdef LIB_ANALYSIS
   ANALYSISLIBS += -lG4analysis_management 
 endif
 #
-# ------------- OpenScientist -----------------
-ifdef INC_OPEN_SCIENTIST
-  CPPFLAGS += -I$(G4BASE)/analysis/OpenScientist/include
+# ------------- Lab -----------------
+ifdef INC_LAB
+  CPPFLAGS += -I$(G4BASE)/analysis/Lab/include
   CPPFLAGS += -I$(LIBROOT)/include -I$(HCLROOT)/include -I$(LABROOT)/include
   CPPFLAGS += -DHasRio
-ifdef G4ANALYSIS_OPEN_SCIENTIST_VISUALIZATION
-  CPPFLAGS += -DG4ANALYSIS_OPEN_SCIENTIST_VISUALIZATION
+ifdef G4ANALYSIS_LAB_VISUALIZATION
+  CPPFLAGS += -DG4ANALYSIS_LAB_VISUALIZATION
   CPPFLAGS += -I$(ONXROOT)/include
   INC_XM = 1
 endif
 endif
 #
-ifdef LIB_OPEN_SCIENTIST
-ifdef G4ANALYSIS_OPEN_SCIENTIST_VISUALIZATION
+ifdef LIB_LAB
+ifdef G4ANALYSIS_LAB_VISUALIZATION
   ANALYSISLIBS += $(ONXROOT)/$(ONXCONFIG)/XmUI.o
   ANALYSISLIBS += -L$(ONXROOT)/$(ONXCONFIG) -lOnXInventorXt
   ANALYSISLIBS += -L$(HEPVISROOT)/$(HEPVISCONFIG) -lHEPVisXt
