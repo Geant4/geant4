@@ -53,7 +53,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   // Make conversion between native Geant4 and Bertini cascade classes.
   // NOTE: Geant4 units are MeV = 1 and GeV = 1000. Cascade code by default use GeV = 1.
 
-  enum particleType { proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, gamma = 10 };
+  enum particleType { proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
 
   G4int bulletType = 0;
 
@@ -63,7 +63,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   if(aTrack.GetDefinition() ==  G4PionPlus::PionPlus()  ) bulletType = pionPlus;
   if(aTrack.GetDefinition() == G4PionMinus::PionMinus() ) bulletType = pionMinus;
   if(aTrack.GetDefinition() ==  G4PionZero::PionZero()  ) bulletType = pionZero;
-  if(aTrack.GetDefinition() ==     G4Gamma::Gamma()     ) bulletType = gamma;
+  if(aTrack.GetDefinition() ==     G4Gamma::Gamma()     ) bulletType = foton;
 
   // Code momentum and energy.
   G4std::vector<G4double> momentumBullet(4);
@@ -163,7 +163,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 	  new G4DynamicParticle(G4PionZero::PionZeroDefinition(), aMom, ekin);
 	break;
 
-      case gamma: 
+      case foton: 
 	cascadeParticle = 
 	  new G4DynamicParticle(G4Gamma::Gamma(), aMom, ekin);
 	break;
