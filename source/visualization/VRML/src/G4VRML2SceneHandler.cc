@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandler.cc,v 1.6 2001-09-18 07:53:16 stanaka Exp $
+// $Id: G4VRML2SceneHandler.cc,v 1.7 2002-06-17 10:13:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2SceneHandler.cc
@@ -64,8 +64,8 @@
 G4VRML2SceneHandler::G4VRML2SceneHandler(G4VRML2& system, const G4String& name) :
 	G4VSceneHandler(system, fSceneIdCount++, name),
 	fSystem(system),
-	fDest(), 
-	fPVPickable ( false ) 
+	fPVPickable ( false ), 
+        fDest()
 {
 	fSceneCount++;
 
