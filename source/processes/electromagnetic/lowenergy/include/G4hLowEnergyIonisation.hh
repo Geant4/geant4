@@ -96,14 +96,23 @@ public: // With description
   void SetAntiProtonStoppingOff();
   // This method switch on calculation of the Barkas Effect for antiproton
   
-  G4double GetParametrisedLoss(const G4Material* material,
-  			       const G4double KinEnergy,
-			       const G4double DeltaRayCutNow,
-			       const G4double PartMass,
-			       const G4double PartCharge);
+  virtual G4double GetParametrisedLoss(G4Material* aMaterial,
+  		        	       const G4double KinEnergy,
+			               const G4double DeltaRayCutNow);
   // This method returns parametrised energy loss.
+
+  G4double GetPreciseDEDX(G4Material* aMaterial,
+  			  const G4double KinEnergy,
+		          const G4ParticleDefinition* aParticleType);
+  // This method returns electron ionisation energy loss for any energy.
+
+  G4double GetNuclearDEDX(G4Material* aMaterial,
+  			  const G4double KinEnergy,
+		          const G4ParticleDefinition* aParticleType);
+  // This method returns nuclear energy loss.
   
-  G4double GetBetheBlochLoss(const G4Material* material, const G4double KinEnergy,
+  G4double GetBetheBlochLoss(const G4Material* material, 
+                             const G4double KinEnergy,
 			     const G4double DeltaRayCutNow);
   // This method returns energy loss calculated via Bethe-Bloch formula.
   
@@ -194,10 +203,16 @@ public: // With description
   // The Stopping and Range of Ions in Matter,
   // Vol.1, Pergamon Press, 1985
 
-  G4double ComputeBarkasTerm(const G4Material* material, const G4double KinEnergy,
-			     const G4double PartMass);
-  //Function to compute the Barkas term						  
+  G4double ComputeBarkasTerm(const G4Material* material, const G4double KinEnergy);
+  // Function to compute the Barkas term						  
 
+  G4double GetConstraints(const G4DynamicParticle *aParticle,
+                          G4Material *aMaterial);
+  // Function to determine StepLimit
+                                       
+  G4VParticleChange* AlongStepDoIt(const G4Track& trackData , 
+                                   const G4Step& stepData );
+  // Function to determine total energy deposition on the step
 
 private:
   
@@ -228,8 +243,9 @@ protected:
   const G4double Factor;
   const G4double bg2lim;
   const G4double taulim;          // energy to start to switch off shell corrections
-  G4double RateMass;
-  G4double MassRatio;
+  G4double RateMass;              // m_e/M
+  G4double MassRatio;             // m_p/M
+  G4ParticleDefinition* theParticle;
   
   // particles , cuts in kinetic energy ........
   const G4Electron* theElectron;

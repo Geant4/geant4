@@ -5,9 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// Class Description:
-// Inicialisation of particle gun.
-// Class Description - end
+// $Id: Em6PrimaryGeneratorAction.hh,v 1.4 2000-01-28 04:26:30 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -22,16 +22,18 @@
 class G4ParticleGun;
 class G4Event;
 class Em6DetectorConstruction;
+class Em6PrimaryGeneratorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Em6PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-  public: // Without description
-
+  public:
     Em6PrimaryGeneratorAction(Em6DetectorConstruction*);    
    ~Em6PrimaryGeneratorAction();
 
+  public:
+    void SetDefaultKinematic();   
     void GeneratePrimaries(G4Event*);
     static G4String GetPrimaryName() ;                
 
@@ -40,6 +42,8 @@ class Em6PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     Em6DetectorConstruction*      Em6Detector;
     
     static G4String thePrimaryParticleName;
+    
+    Em6PrimaryGeneratorMessenger* gunMessenger;     
 };
 
 #endif

@@ -73,9 +73,10 @@ void Em6SteppingAction::UserSteppingAction(const G4Step* aStep)
    if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber")
    {
     if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "e-") &&
-       ((aStep->GetTrack()->GetTrackID() != 1) ||
-       (aStep->GetTrack()->GetParentID() != 0)) ) 
+         GetPDGCharge()) != 0.0) )
+	 //        GetParticleName()) == "e-") &&
+	 //       ((aStep->GetTrack()->GetTrackID() != 1) ||
+	 //       (aStep->GetTrack()->GetParentID() != 0)) ) 
     {
         eventaction->AddCharged() ;
         eventaction->AddE() ;
@@ -83,7 +84,7 @@ void Em6SteppingAction::UserSteppingAction(const G4Step* aStep)
         Tsec += aStep->GetTotalEnergyDeposit() ;        // !!!!!!!!!!!!
         runaction->FillTsec(Tsec) ;
     }
-    else
+    /*    else
     if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
         GetParticleName()) == "e+") &&
        ((aStep->GetTrack()->GetTrackID() != 1) ||
@@ -94,7 +95,7 @@ void Em6SteppingAction::UserSteppingAction(const G4Step* aStep)
         Tsec = aStep->GetTrack()->GetKineticEnergy() ;  // !!!!!!!!!!!!
         Tsec += aStep->GetTotalEnergyDeposit() ;        // !!!!!!!!!!!!
         runaction->FillTsec(Tsec) ;
-    }
+    } */
     else
     if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
         GetParticleName()) == "gamma") &&
@@ -109,10 +110,11 @@ void Em6SteppingAction::UserSteppingAction(const G4Step* aStep)
   if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber")
   {
     if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "e-") 
+         GetPDGCharge()) != 0.0) )
+      /*        GetParticleName()) == "e-") 
               ||
        ((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "e+"))  
+        GetParticleName()) == "e+")) */  
           eventaction->CountStepsCharged() ;
 
     if ((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->

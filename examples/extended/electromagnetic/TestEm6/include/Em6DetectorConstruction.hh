@@ -79,7 +79,7 @@ class Em6DetectorConstruction : public G4VUserDetectorConstruction
      G4double    GetWorldSizeYZ()       {return WorldSizeYZ;};
      
      const G4VPhysicalVolume* GetphysiWorld() {return physiWorld;};           
-     const G4VPhysicalVolume* GetAbsorber()   {return physiAbsorber;};
+     const G4LogicalVolume* GetAbsorber()   {return logicAbsorber;};
                  
   private:
      

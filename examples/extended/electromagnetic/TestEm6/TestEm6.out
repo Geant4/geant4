@@ -183,19 +183,25 @@ Cut in energy
 #
 # It creates the default geometry (simple absorber box) 
 #
-#/control/verbose 2
 #control/saveHistory
+/run/verbose 2
 #/step/verbose 2
-#/tracking/verbose 2
+#/tracking/verbose 1
 #/stepping/verbose 2
 #/event/verbose 2
 #
 #/calor/setAbsMat Silicon   
-#/calor/setAbsThick 50. mum  
+#/calor/setAbsThick 8. mm  
 #/calor/setAbsYZ 10. cm
 #/calor/update
 #/calor/cutG 100.0 micrometer
 #/calor/cutE 100.0 micrometer
+/calor/cutP 100.0 micrometer
+G4VUserPhysicsList::ResetCuts()
+  cut values in energy will be calculated later
+/step/setMaxStep 1 mm
+ MaxChargedStep=1
+
 #  hist file name
 #/plots/sethistName p.plot 
 #/run/initialize
@@ -204,84 +210,294 @@ Cut in energy
 #
 # Gun with Protons 10 MeV
 #
+/gun/particle proton
+/gun/energy 10.0 MeV
 #
+/run/beamOn 1000
+Start re-initialization because 
+  Cutoff
+has been modified since last Run.
+physicsList->setCut() start.
+Em6PhysicsList::SetCuts:CutLength : 1 mm 
+Set cuts for all particles! 
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+Set cuts for gamma
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+Set cuts for e-
+
+annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+Set cuts for e+
+Set cuts for mu-
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+MuIoni:  knock-on electron cross sections .
+          Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+Set cuts for mu+
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+hLowEIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 10 eV  to 1e+02 TeV  in 150 bins.
+        Low energy losses approximation is taken from  ICRU_R49p
+        from 1 keV  to 2 MeV .
+        Parametrization of the Barkas effect is switched on.
+Set cuts for proton
+Set cuts for anti_proton
+G4VUserPhysicsList::SetCutValueForOthers   :0.1[mm]
+Set cuts for IonAr40
+Set cuts for IonC12
+Set cuts for IonFe56
+Set cuts for alpha
+Set cuts for anti_nu_e
+Set cuts for anti_nu_mu
+Set cuts for chargedgeantino
+Set cuts for deuteron
+Set cuts for geantino
+Set cuts for kaon+
+Set cuts for kaon-
+Set cuts for nu_e
+Set cuts for nu_mu
+Set cuts for pi+
+Set cuts for pi-
+Set cuts for pi0
+============= The cut Energy ==============================
+                            gamma              e-             mu-          proton         neutron    
+Cut in range                  1 mm            1 mm          100 mum         100 mum            
+Cut in energy
+          Beryllium        1.99 keV         466 keV         1.2 MeV        3.03 MeV            
+           Aluminum        6.89 keV         597 keV        1.38 MeV        3.39 MeV            
+             Carbon        3.14 keV         521 keV         1.3 MeV        3.26 MeV            
+            Silicon        6.89 keV         541 keV        1.28 MeV        3.14 MeV            
+        liquidArgon        6.18 keV         343 keV         869 keV        2.02 MeV            
+               Iron        20.8 keV        1.28 MeV         2.3 MeV        5.68 MeV            
+             Copper        24.6 keV         1.4 MeV        2.41 MeV        5.96 MeV            
+               Gold         111 keV        2.28 MeV        3.07 MeV        7.17 MeV            
+               Lead         101 keV        1.38 MeV         2.2 MeV        5.02 MeV            
+              Water         2.9 keV         347 keV         941 keV        2.28 MeV            
+            Methane         990 eV          990 eV         2.78 keV        2.07 keV            
+           Graphite        3.29 keV         568 keV        1.38 MeV        3.51 MeV            
+                Air         990 eV          990 eV         2.78 keV           1 keV            
+===================================================
 ### Run 0 start.
 Start closing geometry.
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=51s Real=61s Sys=9.8s
+  User=0.95s Real=1.1s Sys=0.17s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=0.0147529 +- 0.00406827  mm  
+    mean charged track length   in absorber=1.16739 +- 0.000398789  mm  
 
-            mean energy deposit in absorber=0.00282675 +- 0.00076118  MeV 
+            mean energy deposit in absorber=9.99635 +- 5.81739e-05  MeV 
 
- mean number of steps in absorber (charged) =278.625 +- 1.50063      
- mean number of steps in absorber (neutral) =305.527 +- 6.45728      
+ mean number of steps in absorber (charged) =4.063 +- 0.00854582      
+ mean number of steps in absorber (neutral) =0 +- 0      
 
-   mean number of charged secondaries = 4.059 +- 0.0643857
+   mean number of charged secondaries = 0 +- 0
 
-   mean number of neutral secondaries = 4.234 +- 0.0639941
+   mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =4.039  and e+s =0.02
+   mean number of e-s =0  and e+s =0
 
-(number) transmission coeff=0.084  reflection coeff=0.051
+(number) transmission coeff=0  reflection coeff=0
 
+New ion with Q = 2; MassR = 0.25
 #
 # Gun with antiProtons 10 MeV
 #
 #/plots/sethistName antip.plot 
+/run/initialize
+/gun/particle anti_proton
+/gun/energy 10.0 MeV
+/run/beamOn 1000
 ### Run 1 start.
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       1 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       2 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       3 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       4 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       5 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       6 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       7 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       8 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       9 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      10 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      11 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      12 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      13 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      14 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      15 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      16 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      17 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      18 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      19 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      20 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      21 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      22 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      23 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      24 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      25 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      26 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      27 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      28 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      29 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      30 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      31 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      32 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      33 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      34 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      35 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      36 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      37 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      38 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      39 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      40 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      41 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      42 
 Start Run processing.
 Run terminated.
 Run Summary
-  Number of events processed : 100
-  User=5s Real=6.1s Sys=1s
+  Number of events processed : 1000
+  User=0.97s Real=1.1s Sys=0.18s
  ================== run summary =====================
- end of Run TotNbofEvents = 100
-    mean charged track length   in absorber=0 +- 0  mm  
+ end of Run TotNbofEvents = 1000
+    mean charged track length   in absorber=1.33464 +- 0.000811228  mm  
 
-            mean energy deposit in absorber=0 +- 0  MeV 
+            mean energy deposit in absorber=9.9965 +- 5.58385e-05  MeV 
 
- mean number of steps in absorber (charged) =279.89 +- 3.64738      
- mean number of steps in absorber (neutral) =293.7 +- 18.7385      
+ mean number of steps in absorber (charged) =5.049 +- 0.0085205      
+ mean number of steps in absorber (neutral) =0 +- 0      
 
-   mean number of charged secondaries = 4.07 +- 0.195067
+   mean number of charged secondaries = 0 +- 0
 
-   mean number of neutral secondaries = 4.01 +- 0.197228
+   mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =4.04  and e+s =0.03
+   mean number of e-s =0  and e+s =0
 
-(number) transmission coeff=0.08  reflection coeff=0.06
+(number) transmission coeff=0  reflection coeff=0
 
+New ion with Q = 2; MassR = 0.25
 #
 # Gun with IonC12 100 MeV
 #
 #/plots/sethistName ionc12.plot 
+/run/initialize
+/gun/particle IonC12
+/gun/energy 10.0 MeV
+/run/beamOn 1000
 ### Run 2 start.
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       1 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       2 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       3 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       4 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       5 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       6 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       7 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       8 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=       9 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      10 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      11 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      12 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      13 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      14 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      15 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      16 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      17 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      18 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      19 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      20 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      21 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      22 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      23 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      24 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      25 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      26 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      27 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      28 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      29 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      30 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      31 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      32 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      33 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      34 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      35 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      36 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      37 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      38 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      39 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      40 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      41 
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=      42 
 Start Run processing.
 Run terminated.
 Run Summary
-  Number of events processed : 100
-  User=4.7s Real=5.6s Sys=0.87s
+  Number of events processed : 1000
+  User=22s Real=26s Sys=3.7s
  ================== run summary =====================
- end of Run TotNbofEvents = 100
-    mean charged track length   in absorber=0.0211493 +- 0.0148059  mm  
+ end of Run TotNbofEvents = 1000
+    mean charged track length   in absorber=0.0193173 +- 0.000109361  mm  
 
-            mean energy deposit in absorber=0.00365839 +- 0.00250438  MeV 
+            mean energy deposit in absorber=9.41215 +- 0.00208515  MeV 
 
- mean number of steps in absorber (charged) =274.36 +- 5.17406      
- mean number of steps in absorber (neutral) =247.41 +- 17.9913      
+ mean number of steps in absorber (charged) =8.973 +- 0.0459812      
+ mean number of steps in absorber (neutral) =0 +- 0      
 
-   mean number of charged secondaries = 3.99 +- 0.188942
+   mean number of charged secondaries = 0 +- 0
 
-   mean number of neutral secondaries = 3.58 +- 0.191927
+   mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =3.97  and e+s =0.02
+   mean number of e-s =0  and e+s =0
 
-(number) transmission coeff=0.09  reflection coeff=0.03
+(number) transmission coeff=0  reflection coeff=0
+
+New ion with Q = 2; MassR = 0.25
+
+
 
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
@@ -294,4 +510,3 @@ EventManager deleted.
 UImanager deleted.
 StateManager deleted.
 RunManager is deleting.
-TestEm6 is finished!!!

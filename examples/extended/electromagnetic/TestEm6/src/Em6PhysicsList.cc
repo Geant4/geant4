@@ -326,17 +326,17 @@ void Em6PhysicsList::SetCuts()
    SetCutValue(cutForElectron,"e-");
    SetCutValue(cutForElectron,"e+");
 
-   SetCutValue(defaultCutValue,"mu-");
-   SetCutValue(defaultCutValue,"mu+");
+   SetCutValue(cutForProton,"mu-");
+   SetCutValue(cutForProton,"mu+");
 
   // set cut values for proton and anti_proton before all other hadrons
   // because some processes for hadrons need cut values for proton/anti_proton 
 
-  SetCutValue(defaultCutValue, "proton");
+  SetCutValue(cutForProton, "proton");
 
-  SetCutValue(defaultCutValue, "anti_proton");
+  SetCutValue(cutForProton, "anti_proton");
 
-  SetCutValueForOthers(defaultCutValue);
+  SetCutValueForOthers(cutForProton);
 
   //  G4cout << "Dump the table!" << G4endl;
               

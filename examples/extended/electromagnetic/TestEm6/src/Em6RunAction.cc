@@ -109,7 +109,6 @@ Em6RunAction::~Em6RunAction()
   delete histo86 ;
   delete hbookManager;
 #endif
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -66,20 +66,21 @@ G4bool Em6CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
     = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
     
   G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
+  G4LogicalVolume* logVol = physVol->GetLogicalVolume();
   //theTouchable->MoveUpHistory();
   G4int Em6Number = 0 ;
 
   if (HitID[Em6Number]==-1)
     { 
       Em6CalorHit* calHit = new Em6CalorHit();
-      if (physVol == Detector->GetAbsorber()) calHit->AddAbs(edep,stepl);
+      if (logVol == Detector->GetAbsorber()) calHit->AddAbs(edep,stepl);
       HitID[Em6Number] = CalCollection->insert(calHit) - 1;
       if (verboseLevel>0)
         G4cout << " New Calorimeter Hit on Em6: " << Em6Number << G4endl;
     }
   else
     { 
-      if (physVol == Detector->GetAbsorber())
+      if (logVol == Detector->GetAbsorber())
          (*CalCollection)[HitID[Em6Number]]->AddAbs(edep,stepl);
       if (verboseLevel>0)
         G4cout << " Energy added to Em6: " << Em6Number << G4endl; 

@@ -81,11 +81,11 @@ void Em6PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue
   if(command == cutGCmd)
     { Em6List->SetGammaCut(cutGCmd->GetNewDoubleValue(newValue));}
   if(command == cutECmd)
-    { Em6List->SetElectronCut(eCmd->GetNewDoubleValue(newValue));}
+    { Em6List->SetElectronCut(cutECmd->GetNewDoubleValue(newValue));}
   if(command == cutPCmd)
-    { Em6List->SetProtonCut(eCmd->GetNewDoubleValue(newValue));}
+    { Em6List->SetProtonCut(cutPCmd->GetNewDoubleValue(newValue));}
   if(command == eCmd)
-    { Em6List->SetCutsByEnergy(cutECmd->GetNewDoubleValue(newValue));}
+    { Em6List->SetCutsByEnergy(eCmd->GetNewDoubleValue(newValue));}
   if(command == rCmd)
     { Em6List->GetRange(rCmd->GetNewDoubleValue(newValue));}
   if(command == setMaxStepCmd)

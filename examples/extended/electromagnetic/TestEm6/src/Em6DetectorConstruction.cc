@@ -219,7 +219,7 @@ G4VPhysicalVolume* Em6DetectorConstruction::ConstructCalorimeter()
 
   for (G4int j=0; j<NumberOfAbsorbers; j++)
   {
-    x = XposAbs + AbsorberThickness * double(j); 
+    x = XposAbs + AbsorberThickness * (double(j) + 0.5) ; 
     physiAbsorber = new G4PVPlacement(0,	   //no rotation
       		  G4ThreeVector(x,0.0,0.0),        //its position
                                 "Absorber",        //its name
@@ -232,6 +232,7 @@ G4VPhysicalVolume* Em6DetectorConstruction::ConstructCalorimeter()
   //                               
   // Sensitive Detectors: Absorber 
   //
+
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
 
   calorimeterSD = new Em6CalorimeterSD("CalorSD",this);

@@ -37,11 +37,11 @@ public: // Without description
   
   ~G4ionLowEnergyIonisation();
     
-  G4double GetIonParametrisedLoss(const G4Material* material, const G4double KinEnergy, 
-			       const G4double DeltaRayCutNow);
+  //  G4double GetIonParametrisedLoss(const G4Material* material, const G4double KinEnergy, 
+  //		       const G4double DeltaRayCutNow);
 
-  G4double GetIonBetheBlochLoss(const G4Material* material, const G4double KinEnergy,
-			     const G4double DeltaRayCutNow);
+  //  G4double GetIonBetheBlochLoss(const G4Material* material, const G4double KinEnergy,
+  //		     const G4double DeltaRayCutNow);
 			     
   G4double GetLowEnergyForParametrisation(const G4Material* material);
   
@@ -60,16 +60,14 @@ private:
   
   //  private data members ...............................
 
-  G4double GetConstraints(const G4DynamicParticle *aParticle,
-                          G4Material *aMaterial);
+  //  G4double GetConstraints(const G4DynamicParticle *aParticle,
+  //                      G4Material *aMaterial);
                                        
   G4double GetIonLossWithFluct(const G4DynamicParticle *aParticle,
                             G4Material *aMaterial,
                             G4double MeanLoss) ;
 
-  G4VParticleChange* AlongStepDoIt(const G4Track& track ,const G4Step& Step);
-
-  G4ParticleDefinition* theIon;
+  //  G4VParticleChange* AlongStepDoIt(const G4Track& track ,const G4Step& Step);
 
 protected:
   //  protected data members ...............................

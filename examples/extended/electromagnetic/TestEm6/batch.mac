@@ -6,10 +6,10 @@
 #/control/verbose 2
 #control/saveHistory
 /run/verbose 2
-#/step/verbose 2
-#/tracking/verbose 2
-#/stepping/verbose 2
-#/event/verbose 2
+/step/verbose 2
+/tracking/verbose 2
+/stepping/verbose 2
+/event/verbose 2
 #
 #/run/initialize
 #
@@ -25,10 +25,10 @@
 #
 #/calor/cutG 2130.0 micrometer
 #/calor/cutE 50.0 mm
-#/calor/cutG 100.0 micrometer
-#/calor/cutE 100.0 micrometer
+/calor/cutG 100.0 micrometer
+/calor/cutE 100.0 micrometer
 #  hist file name
-#/plots/sethistName p.plot 
+/plots/sethistName test.plot 
 /run/initialize
 #/run/particle/dumpCutValues
 #/event/drawTracks none
@@ -39,7 +39,7 @@
 #/gun/energy 6.56 MeV
 /gun/energy 10.0 MeV
 #
-/run/beamOn 10
+/run/beamOn 1
 #/plots/sethistName antip.plot 
 #/run/initialize
 #/gun/particle antiproton

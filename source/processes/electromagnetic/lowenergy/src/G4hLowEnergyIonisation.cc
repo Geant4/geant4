@@ -32,6 +32,7 @@
 
 #include "G4hLowEnergyIonisation.hh"
 #include "G4UnitsTable.hh"
+#include "G4EnergyLossTables.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -59,7 +60,7 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     HighestKineticEnergy = 100.*TeV ;
     TotBin = 200 ;
     MassRatio = 1.0 ;
-    DeltaCutInKineticEnergy = 0 ; 
+    DeltaCutInKineticEnergy = 0; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -152,7 +153,7 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
 {
   // Tables for different hadrons will be different because of
   // small difference in Tmax connected with RateMass
-  RateMass = electron_mass_c2 / (aParticleType.GetPDGMass()) ;
+  // RateMass = electron_mass_c2 / (aParticleType.GetPDGMass()) ;
 
   // cuts for  electron ....................
   DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
@@ -185,29 +186,20 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
       
       // get material parameters needed for the energy loss calculation
       
-      const G4Material* material= (*theMaterialTable)[J];
+      G4Material* material= (*theMaterialTable)[J];
         
       // get  electron cut in kin. energy for the material
       
       DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[J] ;
-      
-      // get particle mass
-      
-      const G4double PartMass = aParticleType.GetPDGMass()/MeV ;
-      
-      // get particle charge
-      
-      const G4double PartCharge = aParticleType.GetPDGCharge()/eplus ;
-      
+            
       // define constants A and B for this material  
       
       paramA  = GetParametrisedLoss(material, ParamLowEnergy, 
-                                   DeltaCutInKineticEnergyNow,
-				   PartMass, PartCharge)/sqrt(ParamLowEnergy) ; 
+                                   DeltaCutInKineticEnergyNow)
+				   /sqrt(ParamLowEnergy) ; 
 
       ionloss = GetParametrisedLoss(material, ParamHighEnergy, 
-                                    DeltaCutInKineticEnergyNow,
-				    PartMass, PartCharge) ; 
+                                    DeltaCutInKineticEnergyNow) ;
 
       ionlossBB = GetBetheBlochLoss(material, ParamHighEnergy, 
                                     DeltaCutInKineticEnergyNow) ; 
@@ -219,6 +211,9 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
       for (G4int i = 0 ; i < TotBin ; i++)
 	{
 	  LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
+	      ionloss = GetParametrisedLoss(material, LowEdgeEnergy, 
+                                            DeltaCutInKineticEnergyNow) ;
+
 	  
 	  if ( LowEdgeEnergy < ParamHighEnergy ) {
 	    //  low energy part , parametrised energy loss formulae
@@ -231,8 +226,7 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
 	    } else {
 	      // Parametrisation for intermediate energy range
 	      ionloss = GetParametrisedLoss(material, LowEdgeEnergy, 
-                                            DeltaCutInKineticEnergyNow,
-					    PartMass, PartCharge) ; 
+                                            DeltaCutInKineticEnergyNow) ;
 	    }
 	  } else {
 	    
@@ -250,6 +244,62 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4hLowEnergyIonisation::GetPreciseDEDX  (G4Material* aMaterial, 
+                                 const G4double KinEnergy,
+                                 const G4ParticleDefinition* aParticleType)
+{
+  // Calculation for different hadrons will be different because of
+  // small difference in Tmax connected with RateMass
+  //  RateMass = electron_mass_c2 / (aParticleType.GetPDGMass()) ;
+
+  G4double ionloss, ionlossBB ;
+  G4double paramA, paramB, dedx ;
+
+  ParticleMass = aParticleType->GetPDGMass() ;
+  Charge       = aParticleType->GetPDGCharge()/eplus ;
+  MassRatio    = proton_mass_c2/ParticleMass ;
+
+  G4double Tscaled = KinEnergy*MassRatio ; 
+  G4double ChargeSquare = GetIonEffChargeSquare(aMaterial,KinEnergy,Charge) ;
+
+  if(Tscaled > ParamHighEnergy) {
+    if(Charge>0.) {
+
+      dedx = G4EnergyLossTables::GetPreciseDEDX( theProton,Tscaled,aMaterial) 
+           * ChargeSquare ;
+
+    } else {
+
+      dedx = G4EnergyLossTables::GetPreciseDEDX( theAntiProton,Tscaled,aMaterial) 
+           * ChargeSquare ;
+    }
+  } else {
+
+              
+    DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[(aMaterial->GetIndex())] ;   
+    if ( Tscaled < ParamLowEnergy ) {
+      
+      // define constants A for this material  
+      paramA  = GetParametrisedLoss(aMaterial, ParamLowEnergy, 
+                                    DeltaCutInKineticEnergyNow)/sqrt(ParamLowEnergy) ; 
+	      
+      // The model of free electron gas
+      ionloss = GetFreeElectronGasLoss(paramA, Tscaled) ;
+	      
+    } else {
+
+      // Parametrisation for intermediate energy range
+      ionloss = GetParametrisedLoss(aMaterial, Tscaled, 
+                                    DeltaCutInKineticEnergyNow) ;
+    }
+    ionloss *= ChargeSquare ;
+
+  }
+
+  return ionloss ;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -263,6 +313,7 @@ void G4hLowEnergyIonisation::SetPhysicsTableBining(G4double lowE, G4double highE
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hLowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
+
   //  just call BuildLossTable+BuildLambdaTable
 {
   ParticleMass = aParticleType.GetPDGMass() ;
@@ -315,7 +366,10 @@ void G4hLowEnergyIonisation::BuildLambdaTable(const G4ParticleDefinition& aParti
   const G4MaterialTable* theMaterialTable=
     G4Material::GetMaterialTable();
 
-  ParticleMass = aParticleType.GetPDGMass() ;
+  //Particle properties
+
+  //ParticleMass = aParticleType.GetPDGMass() ;
+  //G4double Charge = aParticle.GetPDGCharge()/eplus ;
   
   //create table
   
@@ -363,12 +417,13 @@ void G4hLowEnergyIonisation::BuildLambdaTable(const G4ParticleDefinition& aParti
       for ( G4int i = 0 ; i < TotBin ; i++ )
         {
 	  LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
+          G4double ChargeSquare = GetIonEffChargeSquare(material,LowEdgeEnergy,Charge) ;
 	  
 	  sigma = 0.0 ;
 	  
 	  for (G4int iel=0; iel<NumberOfElements; iel++ )
 	    {
-	      sigma +=  theAtomicNumDensityVector[iel]*
+	      sigma +=  theAtomicNumDensityVector[iel]*ChargeSquare*
 		ComputeMicroscopicCrossSection(aParticleType,
 					       LowEdgeEnergy,
 					       (*theElementVector)(iel)->GetZ() ) ;
@@ -441,6 +496,204 @@ G4double G4hLowEnergyIonisation::ComputeMicroscopicCrossSection(
     TotalCrossSection= 0.0 ;
   
   return TotalCrossSection ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4hLowEnergyIonisation::GetConstraints(const G4DynamicParticle *aParticle,
+                                                  G4Material *aMaterial)
+{
+  // returns the Step limit
+  // it calculates dEdx and the range as well 
+  // based on Effective charge approach
+
+  G4double KineticEnergy,StepLimit ;
+  G4bool isOut ;
+
+  theParticle = aParticle->GetDefinition() ;
+  MassRatio = proton_mass_c2/(theParticle->GetPDGMass()) ;
+  Charge    = (theParticle->GetPDGCharge())/eplus ;
+
+  KineticEnergy = aParticle->GetKineticEnergy() ;
+
+  // Scale the kinetic energy
+
+  G4double Tscaled= KineticEnergy*MassRatio ; 
+  G4double ChargeSquare = GetIonEffChargeSquare(aMaterial,KineticEnergy,Charge) ;
+  G4double dx, s ;
+
+  if(Charge>0.) {
+
+    fdEdx = G4EnergyLossTables::GetDEDX( theProton, Tscaled, aMaterial) 
+          * ChargeSquare ;
+
+    fRangeNow = G4EnergyLossTables::GetRange( theProton, Tscaled, aMaterial) ;
+    s = fRangeNow ;
+
+    if(Tscaled < ParamHighEnergy) {
+      // For Bragg's peak the limit in range is estimated 
+      // in order to be inside linLossLimit on each step
+      fdEdx = GetPreciseDEDX (aMaterial, KineticEnergy, theParticle) ;
+
+      dx = G4EnergyLossTables::GetRange( theProton,
+                                 ParamHighEnergy, aMaterial) * linLossLimit ;
+      fRangeNow = min (fRangeNow, dx) ;
+    }
+
+    // Antiprotons and negative hadrons 
+  } else {
+
+    fdEdx = G4EnergyLossTables::GetDEDX( theAntiProton, Tscaled, aMaterial) 
+          * ChargeSquare ;
+
+    fRangeNow = G4EnergyLossTables::GetRange( theAntiProton, Tscaled, aMaterial) ;
+
+    if(Tscaled < ParamHighEnergy) {
+      // For Bragg's peak the limit in range is estimated 
+      // in order to be inside linLossLimit on each step
+      fdEdx = GetPreciseDEDX (aMaterial, KineticEnergy, theParticle) ;
+      dx = G4EnergyLossTables::GetRange( theAntiProton,
+                                 ParamHighEnergy, aMaterial) * linLossLimit ;
+      fRangeNow = min (fRangeNow, dx) ;
+    }
+  }
+
+  //
+  fRangeNow /= (ChargeSquare*MassRatio) ;
+  StepLimit  = fRangeNow ;
+
+  // compute the (random) Step limit ..............
+  if(fRangeNow > finalRange) {
+    if(Tscaled > ParamHighEnergy ) {
+      StepLimit = (c1lim*fRangeNow+c2lim+c3lim/fRangeNow) ;
+
+      //  randomise this value
+      if(rndmStepFlag) StepLimit = 
+                finalRange+(StepLimit-finalRange)*G4UniformRand() ;
+      if(StepLimit > fRangeNow) StepLimit = fRangeNow ;
+    }
+  }
+
+  return StepLimit ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt( 
+                              const G4Track& trackData, const G4Step& stepData) 
+
+{
+  // compute the energy loss after a step 
+  const G4DynamicParticle* aParticle;
+  G4Material* aMaterial;
+  G4double finalT = 0.0 ;
+
+  aParticleChange.Initialize(trackData) ;
+  aMaterial = trackData.GetMaterial() ;
+  
+  // get the actual (true) Step length from stepData 
+  const G4double Step = stepData.GetStepLength() ;
+
+  aParticle = trackData.GetDynamicParticle() ;
+
+  G4int index = aMaterial->GetIndex() ;
+  G4double E = aParticle->GetKineticEnergy() ;
+
+  if( (aParticle->GetDefinition()) != theParticle ) {
+
+    theParticle = aParticle->GetDefinition() ;
+    MassRatio = proton_mass_c2/(theParticle->GetPDGMass()) ;
+    Charge    = (theParticle->GetPDGCharge())/eplus ;
+  }
+
+  G4double Tscaled= E*MassRatio ; 
+  G4double ChargeSquare = Charge*Charge ;
+  G4double Eloss = 0.0 ;
+  G4double Nloss = 0.0 ;
+
+    if(E < MinKineticEnergy) Eloss = E ;
+  
+    else if(( E > HighestKineticEnergy)||( E <= LowestKineticEnergy))
+              Eloss = Step*fdEdx ; 
+
+    else if(Tscaled < ParamHighEnergy) {
+
+      // Nuclear Stopping Power
+      if(nStopping) {
+        Nloss = GetNuclearDEDX(aMaterial, E, theParticle) ;
+      }
+
+      G4double E1 = E - Step*(fdEdx + Nloss) ;
+
+      if(0.0 < E1) {
+        Eloss = (fdEdx + GetPreciseDEDX (aMaterial, E1, theParticle))*Step*0.5 ;
+        if(nStopping) {
+          Nloss = (Nloss + GetNuclearDEDX (aMaterial, E1, theParticle))*Step*0.5 ;
+	}
+      } else Eloss = E ;
+
+    } else if(Step >= fRangeNow ) Eloss = E ;
+    
+    else {
+
+      if(Step>linLossLimit*fRangeNow) {
+
+        G4double rscaled= fRangeNow*MassRatio*ChargeSquare ;
+        G4double sscaled=   Step   *MassRatio*ChargeSquare ;
+
+        if(Charge>0.)
+        {
+          Eloss = G4EnergyLossTables::GetPreciseEnergyFromRange(
+                                         theProton,
+                                         rscaled        ,aMaterial) -
+                     G4EnergyLossTables::GetPreciseEnergyFromRange(
+                                         theProton,
+                                         rscaled-sscaled,aMaterial) ;
+        }
+        else
+        {
+          Eloss = G4EnergyLossTables::GetPreciseEnergyFromRange(
+                                         theAntiProton,
+                                         rscaled        ,aMaterial) -
+                     G4EnergyLossTables::GetPreciseEnergyFromRange(
+                                         theAntiProton,
+                                         rscaled-sscaled,aMaterial) ;
+        }
+        Eloss /= (MassRatio*ChargeSquare) ;
+
+      } else Eloss = Step*fdEdx ;
+    }
+ 
+  finalT = E - Eloss - Nloss;
+
+  if(finalT > MinKineticEnergy) {
+
+    //  now the electron loss with fluctuation
+    if((EnlossFlucFlag) && (finalT < E) && (E > LowestKineticEnergy)) {
+ 
+      Eloss = GetLossWithFluct(aParticle,aMaterial,Eloss/ChargeSquare)
+               * ChargeSquare ;
+      //        if(nStopping) {
+      //      Nloss = GetNuclearLossWithFluct(theParticle,aMaterial,Nloss) ;
+      // }
+      finalT = E - Eloss - Nloss ;
+    }    
+  }
+
+  //  kill the particle if the kinetic energy <= 0  
+  if (finalT <= 0.0 )
+  {
+    finalT = 0.0 ;
+    if(theParticle->GetParticleName() == "proton")
+      aParticleChange.SetStatusChange(fStopAndKill);
+    else  
+      aParticleChange.SetStatusChange(fStopButAlive); 
+  } 
+
+  aParticleChange.SetEnergyChange( finalT ) ;
+  aParticleChange.SetLocalEnergyDeposit(E-finalT) ;
+
+  return &aParticleChange ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -585,11 +838,10 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(const G4Track& trackData
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material, 
+G4double G4hLowEnergyIonisation::GetParametrisedLoss(G4Material* material, 
                                                      const G4double KinEnergy,
-						     const G4double DeltaRayCutNow,
-						     const G4double PartMass,
-						     const G4double PartCharge)
+						     const G4double DeltaRayCutNow)
+
 {
 
   G4double ionloss, ion, ionloss125, ion125;
@@ -599,7 +851,7 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
   // First of all check tables for specific materials for ICRU_49 parametrisation
 
   // Ziegler parametrisation in ICRU49
-  if ( DEDXtable == "ICRU_R49p" && PartCharge > 0) {
+  if ( DEDXtable == "ICRU_R49p" ) {
 
     molecIndex = (MolecIsInICRU_R49p(material))+1; 
 
@@ -611,7 +863,7 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
   }
 
   // Powers parametrisation in ICRU49
-  if ( DEDXtable == "ICRU_R49PowersHe"&& PartCharge > 0 ) {
+  if ( DEDXtable == "ICRU_R49PowersHe" ) {
 
     molecIndex = (MolecIsInICRU_R49PowersHe(material))+1;  
     if ( molecIndex > 0 ) {
@@ -642,9 +894,7 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
   for (G4int iel=0; iel<NumberOfElements; iel++)
     {
       const G4Element* element = (*theElementVector)(iel) ;
-      G4double A1 = ProtonMassAMU ;
       G4double Z2 = element->GetZ() ;
-      G4double A2 = element->GetA()*mole/g ;
       G4int iz = int(Z2) ;
       if( iz <= 0 ) iz = 1 ;
       if( iz > 92 ) iz = 92 ; 
@@ -663,12 +913,6 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
           ion125 *= theAtomicNumDensityVector[iel]*ZieglerFactor ;
 	}
 
-	// Nuclear Stopping Power
-        if(nStopping) {
-          G4double ionn = GetStoppingPower1977n(1.0, Z2, A1, A2, KinEnergy) 
-                        * (theAtomicNumDensityVector[iel])*ZieglerFactor ;
-          ion += ionn ;
-	}
   // The "Ziegler1977He" table
       } else if(DEDXtable == "Ziegler1977He") {
 	G4double HeKinEnergy = KinEnergy*HeMassAMU/ProtonMassAMU ;
@@ -680,12 +924,6 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
         if(ExpStopPower125 > 0.0){
           ion125  = GetStoppingPower1977H(iz, 125.0*keV) ; 
           ion125 *= theAtomicNumDensityVector[iel]*ZieglerFactor ;
-	}
-
-	// Nuclear Stopping Power
-        if(nStopping) {
-          G4double ionn = GetStoppingPower1977n(1.0, Z2, A1, A2, KinEnergy) ;
-          ion += ionn*theAtomicNumDensityVector[iel]*ZieglerFactor ;
 	}
       
   // The "ICRU_R49p" table
@@ -699,12 +937,6 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
           ion125 *= theAtomicNumDensityVector[iel]*ZieglerFactor ;
 	}
 	
-	// Nuclear Stopping Power 
-        if(nStopping) {
-          G4double ionn = GetStoppingPowerMoliere(1.0, Z2, A1, A2, KinEnergy) ;
-          ion += ionn*theAtomicNumDensityVector[iel]*ZieglerFactor ;
-	}
-
   // The "ICRU_R49He" table
       } else if(DEDXtable == "ICRU_R49He") {
 	G4double HeKinEnergy = KinEnergy*HeMassAMU/ProtonMassAMU ;
@@ -717,12 +949,6 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
           ion125  = GetStoppingPowerICRU_R49p(iz, 125.0*keV, "Ele") ; 
           ion125 *= theAtomicNumDensityVector[iel]*ZieglerFactor ;
 	}
-
-	// Nuclear Stopping Power
-        if(nStopping) {
-          G4double ionn = GetStoppingPower1985n(1.0, Z2, A1, A2, KinEnergy) ;
-          ion += ionn*theAtomicNumDensityVector[iel]*ZieglerFactor ;
-	}
 		
   // The G4 beta version model
       } else if(DEDXtable == "UrbanModel") {
@@ -733,7 +959,7 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
           ion125  = theAtomicNumDensityVector[iel]*GetUrbanModel(element, 125.0*keV) ;
 	}
       }
-      
+            
       ionloss    += ion ;
       ionloss125 += ion125 ;
 
@@ -753,19 +979,64 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
     ionloss    -= GetDeltaRaysEnergy(material, KinEnergy, DeltaRayCutNow) ;
   }
   
-    // Correction term for the Barkas effect applied if pbarStop = true
-    
-    G4double BarkasTerm=0.0 ;
-    
-    if(PartCharge == -1 && pbarStop) BarkasTerm = ComputeBarkasTerm( material, KinEnergy, PartMass);
-    
-    //if(PartCharge <= -2 && pbarStop) BarkasTerm = sqrt( GetIonEffChargeSquare( material, KinEnergy, PartCharge))
-	//		            * ComputeBarkasTerm ( material, KinEnergy, PartMass);
-    
-    ionloss += BarkasTerm;   
-   
+  // Correction term for the Barkas effect applied if pbarStop = true
+  // and only for negative charged particles
+  // Barkas term is taken into account in Ziegler/ICRU tables,
+  // so for antiprotons a correction term must be multiplied by factor 2 
+  if( (-0.5 > Charge) && pbarStop) {
+
+    ionloss += ComputeBarkasTerm( material, KinEnergy ) * (Charge - 1.0) ;
+
+  }  
+ 
   if ( ionloss <= 0.0) ionloss = 0.0 ;
   
+  return ionloss;
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4hLowEnergyIonisation::GetNuclearDEDX(G4Material* material, 
+                                                const G4double KinEnergy,
+                        		        const G4ParticleDefinition* aParticleType)
+
+{
+
+  G4double ionloss = 0.0 ;
+ 
+  // Now cycle over elements - calculation based on Bragg's rule 
+
+  // get elements in the actual material,
+  const G4ElementVector* theElementVector = material->GetElementVector() ;
+  const G4double* theAtomicNumDensityVector = material->GetAtomicNumDensityVector() ;
+  const G4int NumberOfElements = material->GetNumberOfElements() ;
+
+  MassRatio = proton_mass_c2/(aParticleType->GetPDGMass()) ;
+  Charge    = (aParticleType->GetPDGCharge())/eplus ;
+
+  G4double A1 = ProtonMassAMU/MassRatio ;
+  
+  //  loop for the elements in the material
+  for (G4int iel=0; iel<NumberOfElements; iel++) {
+      const G4Element* element = (*theElementVector)(iel) ;
+      G4double Z2 = element->GetZ() ;
+      G4double A2 = element->GetA()*mole/g ;
+      G4int iz = int(Z2) ;
+      if( iz <= 0 ) iz = 1 ;
+      if( iz > 92 ) iz = 92 ; 
+  // Choose the parametrisation using the table name
+      
+  // The "Ziegler1977H" table
+      if(DEDXtable == "Ziegler1977H") { 
+	ionloss = GetStoppingPower1977n(Charge, Z2, A1, A2, KinEnergy) 
+	        * theAtomicNumDensityVector[iel]*ZieglerFactor ;
+    
+  // The "ICRU_R49p" table
+      //      } else if(DEDXtable == "ICRU_R49p") { 
+      } else { 
+	ionloss = GetStoppingPowerMoliere(Charge, Z2, A1, A2, KinEnergy)  
+	        * theAtomicNumDensityVector[iel]*ZieglerFactor ;
+      }
+    }
   return ionloss;
 }
 
@@ -777,24 +1048,24 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
 //     Physical review B Vol.5 No.7 1 April 1972 pagg. 2393-2397 
 //
 G4double G4hLowEnergyIonisation::ComputeBarkasTerm(const G4Material* material,
-  				                   const G4double KinEnergy,
-						   const G4double PartMass )
+  				                   const G4double KinEnergy)
+
 {
   static double FTable[47][2]={ 0.02,21.5,   0.03,20.0,   0.04,18.0,   0.05,15.6,
                                 0.06,15.0,   0.07,14.0,   0.08,13.5,   0.09,13,
-                     0.1,12.2,  0.2,  9.25,  0.3,  7,     0.4,  6,     0.5,  4.5,
-                                0.6,  3.5,   0.7,  3,     0.8,  2.5,   0.9,  2, 
-                     1,   1.7,  1.2,  1.2,   1.3,  1,     1.4,  0.86,  1.5,  0.7,
+                     0.1,12.2,  0.2,  9.25,  0.3,  7.0,     0.4,  6.0,   0.5,  4.5,
+                                0.6,  3.5,   0.7,  3.0,     0.8,  2.5,   0.9,  2.0, 
+                     1.0, 1.7,  1.2,  1.2,   1.3,  1.0,     1.4,  0.86,  1.5,  0.7,
 		                    1.6,  0.61,  1.7,  0.52,  1.8,  0.5,   1.9,  0.43,
-		                    2,    0.42,  2.1,  0.3,   2.4,  0.2,   
-				        3,    0.13,  3.08, 0.1,   3.1,  0.09, 3.3, 0.08,
-				        3.5,  0.07,  3.8,  0.06,				
-				        4,    0.051, 4.1,  0.04,  4.8,  0.03, 
-				        5,    0.024, 5.1,  0.02,
-                                6,    0.013, 6.5,  0.01,
-				        7,    0.009, 7.1,  0.008,
-				        8,    0.006, 9,    0.0032, 
-	              10,   0.0025};
+		                    2.0,  0.42,  2.1,  0.3,   2.4,  0.2,   
+				        3.0,    0.13,  3.08, 0.1,   3.1,  0.09, 3.3, 0.08,
+				        3.5,    0.07,  3.8,  0.06,		
+				        4.0,    0.051, 4.1,  0.04,  4.8,  0.03, 
+				        5.0,    0.024, 5.1,  0.02,
+                                        6.0,    0.013, 6.5,  0.01,
+				        7.0,    0.009, 7.1,  0.008,
+				        8.0,    0.006, 9.0,    0.0032, 
+	              10.0,   0.0025};
 
   // Internal variable for Kinetic Energy 
   // in order to keep Barkas correction to be constant below 500 keV 
@@ -810,29 +1081,39 @@ G4double G4hLowEnergyIonisation::ComputeBarkasTerm(const G4Material* material,
   G4double RoMaterial = material->GetDensity()/6.2415063631e18;
   const G4ElementVector* theElementVector = material->GetElementVector();
   G4int i=0;
-  for (i = 0; i<material->GetNumberOfElements(); ++i)
-    {
+  for (i = 0; i<material->GetNumberOfElements(); ++i) {
+
     AMaterial = (*theElementVector)(i)->GetA()*mole/g;
     ZMaterial = (*theElementVector)(i)->GetZ();
     
-    G4double Beta = sqrt( (2.0*KineticEnergy) / PartMass );
+    G4double Beta = sqrt( 2.0*KineticEnergy / proton_mass_c2 );
     G4double X = ( (137.0*Beta) * (137.0*Beta) ) / ZMaterial;
   
     // Variables to compute L_1
     G4double Eta0Chi = 0.8;
-    G4double EtaChi = Eta0Chi * ( 1 + 6.02*pow( ZMaterial,-1.19 ) );
+    G4double EtaChi = Eta0Chi * ( 1.0 + 6.02*pow( ZMaterial,-1.19 ) );
     G4double W = ( EtaChi * pow( ZMaterial,1.0/6.0 ) ) / sqrt(X); 
     G4double FunctionOfW = 0.0;
-    for(int IndexOfFTable=0;IndexOfFTable<47;IndexOfFTable++){
-     if(W<FTable[IndexOfFTable][0]){
-     		FunctionOfW =( FTable[IndexOfFTable][1] + FTable[IndexOfFTable-1][1] ) /2;
-		break;}
-       }
-    G4double BarkasCoeffLbyARB = FunctionOfW / ( sqrt(ZMaterial) * pow(X,3./2) );
-    BarkasTerm += 2 * BarkasCoeffLbyARB * ( 0.030708 * ZMaterial * RoMaterial )
+    for(int IndexOfFTable=0; IndexOfFTable<47; IndexOfFTable++) {
+      if(W<FTable[IndexOfFTable][0]) {
+        if(0 == IndexOfFTable) {
+     	  FunctionOfW = FTable[0][1] ;
+        }
+     	else if(46 == IndexOfFTable) {
+          FunctionOfW = FTable[46][1] ;
+        }
+        else {
+     	  FunctionOfW =( FTable[IndexOfFTable][1] + FTable[IndexOfFTable-1][1] ) /2.0;
+        }
+        break;
+      }
+    }
+    G4double BarkasCoeffLbyARB = FunctionOfW / ( sqrt(ZMaterial) * pow(X,1.5) );
+    BarkasTerm += BarkasCoeffLbyARB * ( 0.030708 * ZMaterial * RoMaterial )
                	          / ( AMaterial*Beta*Beta );
-     }
-  return -BarkasTerm;
+  }
+
+  return BarkasTerm;
 }
         
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1003,6 +1284,12 @@ G4double G4hLowEnergyIonisation::GetBetheBlochLoss(const G4Material* material,
     ionloss -= delta + sh ;
     ionloss *= Factor*ElectronDensity/beta2 ;
   }
+
+  // Barkas correction term is switch on 
+  if( pbarStop) {
+    ionloss += ComputeBarkasTerm( material, KinEnergy ) * Charge ;
+  }  
+
   if ( ionloss <= 0.) ionloss = 0. ;
   
   return ionloss;
