@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.15 2002-06-06 09:55:20 johna Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.16 2002-06-06 14:35:47 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,7 +97,7 @@ static const char* gouraudtriangleEPS[] =
 XVisualInfo*  G4OpenGLXViewer::vi_single_buffer = 0;
 XVisualInfo*  G4OpenGLXViewer::vi_double_buffer = 0;
 
-static Bool WaitForNotify (Display*, XEvent* e, char* arg) {
+Bool G4OpenGLXViewer::WaitForNotify (Display*, XEvent* e, char* arg) {
   return (e->type == MapNotify) && (e->xmap.window == (Window) arg);
 }
 
@@ -733,7 +733,7 @@ typedef struct _DepthIndex {
   GLfloat depth;
 } DepthIndex;
 
-static int compare(const void *a, const void *b)
+int G4OpenGLXViewer::compare(const void *a, const void *b)
 {
   const DepthIndex *p1 = (DepthIndex *) a;
   const DepthIndex *p2 = (DepthIndex *) b;
