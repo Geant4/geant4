@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RepresentationRelationshipCreator.cc,v 1.5 2000-11-20 18:17:31 gcosmo Exp $
+// $Id: G4RepresentationRelationshipCreator.cc,v 1.6 2001-04-20 19:17:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,8 +81,8 @@ void G4RepresentationRelationshipCreator::CreateG4Geometry(STEPentity& Ent)
   {
     G4cerr << "WARNING - G4RepresentationRelationshipCreator::CreateG4Geometry" << G4endl
 	   << "\tInconsistent association for representations:" << G4endl
-	   << "\t" << e1Name << " - Rep_1 entries: " << places->entries() << G4endl
-	   << "\t" << e2Name << " - Rep_2 entries: " << tmpsldV->entries() << G4endl
+	   << "\t" << e1Name << " - Rep_1 entries: " << places->size() << G4endl
+	   << "\t" << e2Name << " - Rep_2 entries: " << tmpsldV->size() << G4endl
 	   << "\tRepresentation Relationship NOT created." << G4endl;
     createdObject=0;
     return;
@@ -115,12 +115,12 @@ void G4RepresentationRelationshipCreator::CreateG4Geometry(STEPentity& Ent)
       
       subEnt = (STEPentity*)repItem1;
       itemDefPlaces = new G4PlacementVector();
-      itemDefPlaces->append( ( (G4Axis2Placement3D*)G4GeometryTable::
-			       CreateObject(*subEnt)                  ) );
+      itemDefPlaces->push_back( ( (G4Axis2Placement3D*)G4GeometryTable::
+			           CreateObject(*subEnt)                  ) );
       
       subEnt  = (STEPentity*)repItem2;
-      itemDefPlaces->append( ( (G4Axis2Placement3D*)G4GeometryTable::
-			       CreateObject(*subEnt)                  ) );
+      itemDefPlaces->push_back( ( (G4Axis2Placement3D*)G4GeometryTable::
+			           CreateObject(*subEnt)                  ) );
     }
     else
     {  
@@ -136,17 +136,17 @@ void G4RepresentationRelationshipCreator::CreateG4Geometry(STEPentity& Ent)
   // See also creator for Advanced BREP shape Representations.
   // All this needs to be reviewed ! - GC
   //
-  G4Axis2Placement3D* place = (G4Axis2Placement3D*)(places->at(0));
-  G4int entr = tmpsldV->entries();
+  G4Axis2Placement3D* place = (G4Axis2Placement3D*)((*places)[0]);
+  G4int entr = tmpsldV->size();
   for(G4int a = 0; a < entr; a++)
   {
-    if (0 < a < places->entries())
-      place = (G4Axis2Placement3D*)(places->at(a));
-    tmpsld = tmpsldV->at(a);
+    if (0 < a < places->size())
+      place = (G4Axis2Placement3D*)((*places)[a]);
+    tmpsld = (*tmpsldV)[a];
     if (tmpsld)
     {
       sld = new G4PlacedSolid((G4BREPSolid*)(tmpsld->GetSolid()), place);
-      sldV->append(sld);
+      sldV->push_back(sld);
     }
     else
     {

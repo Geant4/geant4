@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineCurveWithKnotsCreator.cc,v 1.5 2000-11-20 18:17:27 gcosmo Exp $
+// $Id: G4BSplineCurveWithKnotsCreator.cc,v 1.6 2001-04-20 19:17:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -19,11 +19,10 @@
 // ----------------------------------------------------------------------
 
 #include <instmgr.h>
+#include "g4std/vector"
 #include "G4BSplineCurveWithKnotsCreator.hh"
 #include "G4GeometryTable.hh"
 #include "G4BSplineCurve.hh"
-
-typedef G4RWTValVector<G4double> G4doubleVector;
 
 G4BSplineCurveWithKnotsCreator G4BSplineCurveWithKnotsCreator::csc;
 
@@ -43,8 +42,8 @@ void G4BSplineCurveWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
 
   G4int             degree;
   G4Point3DVector   controlPointsList;
-  G4doubleVector    knots;
-  G4doubleVector    weightsData;
+  G4std::vector<G4double>    knots;
+  G4std::vector<G4double>    weightsData;
   G4BSplineCurve*   bSpline = new G4BSplineCurve();
 
   // degree
@@ -114,8 +113,8 @@ void G4BSplineCurveWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
     G4Point3D* pt = (G4Point3D*) tmp;
     G4Point3D Pt(pt->x(), pt->y(), pt->z());
 
-    if(G4int(controlPointsList.length()) <= nbpoint+1)
-      controlPointsList.reshape(nbpoint+1);
+    if(G4int(controlPointsList.size()) <= nbpoint+1)
+      controlPointsList.resize(nbpoint+1);
 
     controlPointsList[nbpoint] = Pt;
     
@@ -159,8 +158,8 @@ void G4BSplineCurveWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
     if (weight <= 0)
       weight = 1;
 
-    if(G4int(weightsData.length()) <= nbpoint+1)
-      weightsData.reshape(nbpoint+1);
+    if(G4int(weightsData.size()) <= nbpoint+1)
+      weightsData.resize(nbpoint+1);
     
     weightsData[nbpoint] = weight;
     nbpoint++;
@@ -204,8 +203,8 @@ void G4BSplineCurveWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
     if (knot <= 0)
       knot = 1;
 
-    if(G4int(knots.length()) <= nbpoint+1)
-      knots.reshape(nbpoint+1);
+    if(G4int(knots.size()) <= nbpoint+1)
+      knots.resize(nbpoint+1);
    
     knots[nbpoint] = knot;
     nbpoint++;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GeometryCreator.hh,v 1.5 2000-11-10 17:44:45 gcosmo Exp $
+// $Id: G4GeometryCreator.hh,v 1.6 2001-04-20 19:17:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -25,14 +25,15 @@
 #define G4GEOMETRYCREATOR_HH
 
 #include <schema.h>
+#include "g4std/vector"
 #include "globals.hh"
 #include "G4PlacedSolid.hh"
 #include "G4Surface.hh"
 #include "G4BREPSolid.hh"
 
-typedef G4RWTPtrOrderedVector<G4PlacedSolid> G4PlacedSolidVector;
-typedef G4RWTPtrOrderedVector<G4Surface> G4SurfaceVector;
-typedef G4RWTPtrOrderedVector<G4BREPSolid> G4SolidVector;
+typedef G4std::vector<G4PlacedSolid*> G4PlacedSolidVector;
+typedef G4std::vector<G4Surface*> G4SurfaceVector;
+typedef G4std::vector<G4BREPSolid*> G4SolidVector;
 
 class G4GeometryCreator
 {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GeometryTable.hh,v 1.4 2000-11-09 16:35:46 gcosmo Exp $
+// $Id: G4GeometryTable.hh,v 1.5 2001-04-20 19:17:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -24,10 +24,11 @@
 #ifndef G4GEOMETRYTABLE_HH
 #define G4GEOMETRYTABLE_HH
 
+#include "g4std/vector"
 #include "globals.hh"
 #include "G4GeometryCreator.hh"
 
-typedef G4RWTPtrOrderedVector<G4GeometryCreator> G4CreatorVector;
+typedef G4std::vector<G4GeometryCreator*> G4CreatorVector;
 
 class G4GeometryTable
 {

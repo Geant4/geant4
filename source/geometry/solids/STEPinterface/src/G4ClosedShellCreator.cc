@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ClosedShellCreator.cc,v 1.5 2000-11-20 18:17:29 gcosmo Exp $
+// $Id: G4ClosedShellCreator.cc,v 1.6 2001-04-20 19:17:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -47,12 +47,12 @@ void G4ClosedShellCreator::CreateG4Geometry(STEPentity& Ent)
   {
     TmpEnt = ((EntityNode*)Node)->node;
     void *tmp = G4GeometryTable::CreateObject(*TmpEnt);
-    if (tmp) SurfaceVec.append((G4Surface*)tmp);
+    if (tmp) SurfaceVec.push_back((G4Surface*)tmp);
     Node = Node->NextNode();
   }      
 
   // create G4solid
-  G4int SurfNum = SurfaceVec.entries();
+  G4int SurfNum = SurfaceVec.size();
   G4Surface** srfVec =  new G4Surface*[SurfNum];
   if (SurfNum != FaceCount)
     G4cerr << "WARNING - G4ClosedShellCreator::CreateG4Geometry" << G4endl

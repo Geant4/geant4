@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AdvancedFaceCreator.cc,v 1.3 2000-02-25 16:36:17 gcosmo Exp $
+// $Id: G4AdvancedFaceCreator.cc,v 1.4 2001-04-20 19:17:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -56,12 +56,12 @@ void G4AdvancedFaceCreator::CreateG4Geometry(STEPentity& Ent)
     {
       G4CompositeCurve* pcc= new G4CompositeCurve;
       pcc->Init(*((G4CurveVector*)tmp));
-      boundaryVec->insert(pcc);
+      boundaryVec->push_back(pcc);
     }
     Node = Node->NextNode();
   }      
   
-  G4int boundNum = boundaryVec->entries();
+  G4int boundNum = boundaryVec->size();
   if (boundNum != boundaryCount)
     G4cerr << "WARNING - G4AdvancedFaceCreator::CreateG4Geometry" << G4endl
            << "\tTotal of " << boundNum << " G4CompositeCurve components created, out of "

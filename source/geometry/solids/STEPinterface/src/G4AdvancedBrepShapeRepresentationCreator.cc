@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AdvancedBrepShapeRepresentationCreator.cc,v 1.4 2000-11-20 18:17:26 gcosmo Exp $
+// $Id: G4AdvancedBrepShapeRepresentationCreator.cc,v 1.5 2001-04-20 19:17:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -93,7 +93,7 @@ void G4AdvancedBrepShapeRepresentationCreator::CreateG4Geometry(STEPentity& sEnt
          else
 	   placedSld = new G4PlacedSolid(sld, place0);
        
-         placedSldV->append(placedSld);
+         placedSldV->push_back(placedSld);
        }
    }
    else

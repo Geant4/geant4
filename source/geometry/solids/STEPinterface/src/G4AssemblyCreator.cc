@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AssemblyCreator.cc,v 1.7 2000-11-20 18:17:27 gcosmo Exp $
+// $Id: G4AssemblyCreator.cc,v 1.8 2001-04-20 19:17:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -140,12 +140,12 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& sEntity)
 	else
 	{
 	  G4PlacedSolidVector* tmpV = (G4PlacedSolidVector*)tmp; 
-	  G4int entr = tmpV->entries();
+	  G4int entr = tmpV->size();
 
 	  for(G4int b=0; b<entr; b++)
 	  {
-	    ps =  tmpV->at(b);
-	    psv->append(ps);
+	    ps = (*tmpV)[b];
+	    psv->push_back(ps);
 	  }
 	}
 
@@ -194,12 +194,12 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& sEntity)
 	else
 	{
 	  G4PlacedSolidVector* tmpV = (G4PlacedSolidVector*)tmp; 
-	  G4int entr = tmpV->entries();
+	  G4int entr = tmpV->size();
 
 	  for(G4int b=0; b<entr; b++)
 	  {
-	    ps =  tmpV->at(b);
-	    psv->append(ps);
+	    ps =  (*tmpV)[b];
+	    psv->push_back(ps);
 	  }
 	}
 	index = ent->STEPfile_id ;

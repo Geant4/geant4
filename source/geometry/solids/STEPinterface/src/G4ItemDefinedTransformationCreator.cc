@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ItemDefinedTransformationCreator.cc,v 1.3 2000-02-25 16:36:19 gcosmo Exp $
+// $Id: G4ItemDefinedTransformationCreator.cc,v 1.4 2001-04-20 19:17:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@ void G4ItemDefinedTransformationCreator::CreateG4Geometry(STEPentity& Ent)
   // place = (G4Placement*)tmp;
   place = (G4Axis2Placement3D*)tmp;
 
-  if (place) places->append(place);
+  if (place) places->push_back(place);
   attrName="transform_item_2";
     Attr = GetNamedAttribute(attrName, Ent);
   TmpEnt = *Attr->ptr.c;
@@ -67,7 +67,7 @@ void G4ItemDefinedTransformationCreator::CreateG4Geometry(STEPentity& Ent)
   // place = (G4Placement*)tmp;
   place = (G4Axis2Placement3D*)tmp;
 
-  if (place) places->append(place);
+  if (place) places->push_back(place);
 
   createdObject = places;
 }
