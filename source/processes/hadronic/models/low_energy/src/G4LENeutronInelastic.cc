@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LENeutronInelastic.cc,v 1.1 1999-01-07 16:12:47 gunter Exp $
+// $Id: G4LENeutronInelastic.cc,v 1.2 1999-03-29 09:55:24 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Low Energy Neutron Inelastic Process
@@ -14,6 +14,7 @@
 #include "G4LENeutronInelastic.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
+// #include "DumpFrame.hh"
 
  G4VParticleChange *
   G4LENeutronInelastic::ApplyYourself( const G4Track &aTrack,
@@ -493,6 +494,7 @@
       }
     }
     SetUpPions( np, nm, nz, vec, vecLen );
+// DEBUG -->    DumpFrames::DumpFrame(vec, vecLen);
     return;
   }
 
