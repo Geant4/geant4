@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: xvt.benchmark.cc,v 1.1 1999-01-07 16:05:04 gunter Exp $
+// $Id: xvt.benchmark.cc,v 1.2 1999-11-11 16:01:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 // Solve templates.
 #ifdef GNU_GCC
   #include "MyCalorimeterHit.hh"
-  template class RWTValVector<MyCalorimeterHit>;
+  template class G4RWTValVector<MyCalorimeterHit>;
   template class G4Allocator<MyCalorimeterHit>;
 #endif
 #include "g4templates.hh"

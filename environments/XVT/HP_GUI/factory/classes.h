@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: classes.h,v 1.1 1999-01-07 16:05:12 gunter Exp $
+// $Id: classes.h,v 1.2 1999-11-11 16:01:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /* 
@@ -28,7 +28,7 @@
 #include NScrollText_i
 #include CStatusBar_i
 #include NLineText_i
-#include "rw/regexp.h"
+#include "g4rw/regexp.h"
 
 #include G4XvtGUI_i
 #include CTaskDoc_i

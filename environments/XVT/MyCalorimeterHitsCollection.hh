@@ -5,14 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyCalorimeterHitsCollection.hh,v 1.1 1999-01-07 16:04:58 gunter Exp $
+// $Id: MyCalorimeterHitsCollection.hh,v 1.2 1999-11-11 16:01:41 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef MyCalorimeterHitsCollection_h
 #define MyCalorimeterHitsCollection_h 1
 
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
 
 #include "G4VHitsCollection.hh"
 #include "MyCalorimeterHit.hh"
@@ -29,9 +29,9 @@ class MyCalorimeterHitsCollection : public G4VHitsCollection
     void DrawAllHits();
     void PrintAllHits();
   private:
-    RWTValOrderedVector<MyCalorimeterHit> theCollection;
+    G4RWTValOrderedVector<MyCalorimeterHit> theCollection;
   public:
-    inline RWTValOrderedVector<MyCalorimeterHit>& GetVector()
+    inline G4RWTValOrderedVector<MyCalorimeterHit>& GetVector()
     { return theCollection; };
     inline int insert(MyCalorimeterHit* pHit)
     { 

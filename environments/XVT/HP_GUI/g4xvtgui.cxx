@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: g4xvtgui.cxx,v 1.1 1999-01-07 16:05:06 gunter Exp $
+// $Id: g4xvtgui.cxx,v 1.2 1999-11-11 16:01:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*********************************************************************
@@ -27,7 +27,7 @@
 #include CTaskWin_i
 #include CDocument_i
 #include CMenuBar_i
-#include "rw/ordcltn.h"
+#include "g4rw/ordcltn.h"
 
 #ifdef DSP_RELEASE
 #include CTaskWin_f
