@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm5.cc,v 1.2 1999-03-05 10:09:59 urban Exp $
+// $Id: TestEm5.cc,v 1.3 1999-03-10 11:44:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,6 +23,7 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "Randomize.hh"
 
 #include "Em5DetectorConstruction.hh"
 #include "Em5PhysicsList.hh"
@@ -41,6 +42,9 @@ template class G4Allocator <Em5CalorHit>;
 
 int main(int argc,char** argv) {
 
+  //choose the Random engine
+  HepRandom::setTheEngine(new RanecuEngine);
+  
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
@@ -68,7 +72,7 @@ int main(int argc,char** argv) {
   if (argc==1)   // Define UI terminal for interactive mode  
     { 
      G4UIsession * session = new G4UIterminal;
-     UI->ApplyCommand("/control/execute prerunEm5.mac");    
+     UI->ApplyCommand("/control/execute init.mac");    
      session->SessionStart();
      delete session;
     }
