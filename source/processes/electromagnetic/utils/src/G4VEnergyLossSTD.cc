@@ -50,6 +50,7 @@
 // 18-02-03 Add control on CutCouple usage (V.Ivanchenko)
 // 26-02-03 Simplify control on GenericIons (V.Ivanchenko)
 // 06-03-03 Control on GenericIons using SubType + update verbose (V.Ivanchenko)
+// 10-03-03 Add Ion registration (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -259,18 +260,20 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
 
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::BuildPhysicsTable() for "
-           << GetProcessName() 
+           << GetProcessName()
            << " and particle " << part.GetParticleName()
            << G4endl;
   }
 
-  if (part.GetParticleName() != "GenericIon" && 
+  if (part.GetParticleName() != "GenericIon" &&
       part.GetParticleType() == "nucleus" &&
-      part.GetParticleSubType() == "generic") 
+      part.GetParticleSubType() == "generic")
   {
-    G4cout << part.GetProcessManager() << "  " 
+    (G4LossTableManager::Instance())->RegisterIon(&part, this);
+
+    G4cout << part.GetProcessManager() << "  "
            << (G4GenericIon::GenericIon())->GetProcessManager()
-           << G4endl; 
+           << G4endl;
     return;
   }
 

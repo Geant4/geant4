@@ -37,8 +37,9 @@
 // 20-01-03 Migrade to cut per region (V.Ivanchenko)
 // 15-02-03 Lambda table can be scaled (V.Ivanchenko)
 // 17-02-03 Fix problem of store/restore tables (V.Ivanchenko)
+// 10-03-03 Add Ion registration (V.Ivanchenko)
 //
-// Class Description: 
+// Class Description:
 //
 // -------------------------------------------------------------------
 //
@@ -109,15 +110,15 @@ void G4LossTableManager::Clear()
   eIonisation = 0;
   currentLoss = 0;
   currentParticle = 0;
-  if(n_loss) 
+  if(n_loss)
     {
-      for(G4int i=0; i<n_loss; i++) 
+      for(G4int i=0; i<n_loss; i++)
         {
           if(dedx_vector[i]) dedx_vector[i]->clearAndDestroy();
           if(range_vector[i]) range_vector[i]->clearAndDestroy();
           if(inv_range_vector[i]) inv_range_vector[i]->clearAndDestroy();
 	}
-    
+
       dedx_vector.clear();
       range_vector.clear();
       inv_range_vector.clear();
@@ -147,8 +148,10 @@ void G4LossTableManager::Register(G4VEnergyLossSTD* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::RegisterIon(const G4ParticleDefinition*)
-{}
+void G4LossTableManager::RegisterIon(const G4ParticleDefinition* ion, G4VEnergyLossSTD* p)
+{
+  loss_map[ion] = p;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -169,7 +172,7 @@ void G4LossTableManager::Initialise(const G4ParticleDefinition* aParticle)
     if(!tables_are_built[j]) all_tables_are_built = false;
     if(pd != part_vector[j]) {
       part_vector[j] = pd;
-      base_part_vector[j] = loss_vector[j]->BaseParticle(); 
+      base_part_vector[j] = loss_vector[j]->BaseParticle();
     }
     if(1 < verbose) {
       G4String nm = "unknown";

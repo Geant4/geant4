@@ -38,6 +38,7 @@
 //
 // 20-01-03 Migrade to cut per region (V.Ivanchenko)
 // 17-02-03 Fix problem of store/restore tables for ions (V.Ivanchenko)
+// 10-03-03 Add Ion registration (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -96,7 +97,7 @@ public:
   // to be called only by energy loss processes
   void Register(G4VEnergyLossSTD* p);
 
-  void RegisterIon(const G4ParticleDefinition* aParticle);
+  void RegisterIon(const G4ParticleDefinition* aParticle, G4VEnergyLossSTD* p);
 
   void BuildPhysicsTable(const G4ParticleDefinition* aParticle);
 
