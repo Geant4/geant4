@@ -4,6 +4,7 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE: November 10, 1999                                            #
+#        May      20, 2000                                            # 
 #                                                                     #
 #  CONTENTS: A basic macro for demonstrating various drawing styles   #
 #                                                                     #
@@ -11,7 +12,7 @@
 #          Idle> /control/execute exN03Vis3.mac                       #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
-#                                  DAWN (version 3.80 of after)       #
+#                                  DAWN (version 3.80 or after)       #
 #                                  gv (Ghostview), Tcl/Tk             #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
@@ -35,7 +36,6 @@
 Setting to store particle trajactories for visualization
 #########################################################
 /tracking/storeTrajectory 1
-#/vis/scene/include/trajectories
 
 ######################################################
 # Visualization with OGLIX (OpenGL Immediate X) driver
@@ -51,6 +51,9 @@ Setting to store particle trajactories for visualization
 # Add detector geometry to the current scene
 /vis/scene/add/volume
 
+# Add trajectories to the current scene
+/vis/scene/add/trajectories
+
 # Bird-eye view of events with the hidden-surface 
 #  drawing style.
 /vis/camera/reset
@@ -61,10 +64,10 @@ Setting to store particle trajactories for visualization
 ##########################################################
 # Visualization with DAWNFILE driver
 #
-#  * The visualized view is saved to a file "g4.eps"  
+#  * The visualized view is saved to a file "g4_XX.eps"  
 #    with the "vectorized" PostScript format.
 #
-#  * In order to make the file "g4.eps" printable, 
+#  * In order to make the file "g4_XX.eps" printable, 
 #    append the "showpage" PostScript command to the file. 
 #    You can do it with the 4th page of the DAWN GUI panel
 #    or by hand.
@@ -73,7 +76,7 @@ Setting to store particle trajactories for visualization
 #    % setenv G4DAWNFILE_VIEWER "dawn -d"
 #
 #  * In order to save all views with a "multi-page" 
-#    EPS file "g4.eps", set the followings 
+#    EPS file "g4_XX.eps", set the followings 
 #    in the 4th page of the DAWN GUI panel at 
 #    "every" visualization.
 #
@@ -81,13 +84,13 @@ Setting to store particle trajactories for visualization
 #      Append mode  : Yes 
 #
 #    More automatically, you can also generate the 
-#    multi-page EPS file "g4.eps", using the 
+#    multi-page EPS file "g4_XX.eps", using the 
 #    batch-append mode of DAWN:
 #
 #      % setenv DAWN_BATCH  a
-#      % rm -f  g4.eps
+#      % rm -f  g4_XX.eps
 #      % $G4BINDIR/exampleN03 exN03Vis3.mac 
-#      % ghostview g4.eps
+#      % ghostview g4_XX.eps
 #      (See each page using the menu of ghostview.) 
 #  
 ##########################################################
@@ -101,6 +104,9 @@ Setting to store particle trajactories for visualization
 
 # Add detector geometry to the current scene
 /vis/scene/add/volume
+
+# Add trajectories to the current scene
+/vis/scene/add/trajectories
 
 # Set camera parameters
 #  Camera is zoomed up by 1.5 times of the standard setting
@@ -119,20 +125,11 @@ Setting to store particle trajactories for visualization
 /run/beamOn              50
 
 # Cull detector geometry and show only trajectories.
-#  * The command "/vis/camera/reset" resets the zoom 
-#    factor to one.  But it does not reset view point.
+#  Note: /vis/camera/reset resets the zoom factor to 1,
+#        and the viewpoint to (0,0). 
 /vis/camera/reset 
-/vis/camera/viewpoint    0 0
 /vis/set/culling         on 
 /vis/set/cull_by_density on 999
 /vis/set/drawing_style   0 
 /run/beamOn              10
-
-
-
-
-
-
-
-
 

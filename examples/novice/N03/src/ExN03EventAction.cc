@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03EventAction.cc,v 1.8 2000-01-24 14:46:01 stesting Exp $
+// $Id: ExN03EventAction.cc,v 1.9 2000-05-20 05:01:30 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -113,6 +113,13 @@ void ExN03EventAction::EndOfEventAction(const G4Event* evt)
       }
   }
 
+//////////////////////////////////////////////////////////
+// Note:
+//   The following commented-out lines are equivalent to 
+//   and have been replaced by the visualization command, 
+//   "/vis/add/trajectories".  
+//////////////////////////////////////////////////////////
+/***********************************
   if(G4VVisManager::GetConcreteInstance())
   {
     for(G4int i=0; i<n_trajectories; i++) 
@@ -122,6 +129,8 @@ void ExN03EventAction::EndOfEventAction(const G4Event* evt)
                                   trj->DrawTrajectory(50); 
          }
   }
+***********************************/
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

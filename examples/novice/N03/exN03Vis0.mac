@@ -4,6 +4,7 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE: November 10, 1999                                            #
+#        May      20, 2000                                            # 
 #                                                                     #
 #  CONTENTS: A simplest macro to demonstrate visualization of         #
 #            detector geometry and events                             #
@@ -12,7 +13,7 @@
 #          Idle> /control/execute exN03Vis0.mac                       #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
-#                                  DAWN (version 3.80 of after)       #
+#                                  DAWN (version 3.80 or after)       #
 #                                  gv (Ghostview), Tcl/Tk             #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
@@ -60,10 +61,10 @@
 #########################################################
 # Visualization of events with the DAWNFILE driver
 #
-#  * The visualized view is saved to a file "g4.eps"  
+#  * The visualized view is saved to a file "g4_XX.eps"  
 #    with the "vectorized" PostScript format.
 #
-#  * In order to make the file "g4.eps" printable, 
+#  * In order to make the file "g4_XX.eps" printable, 
 #    append the "showpage" PostScript command to the file. 
 #    You can do it with the 4th page of the DAWN GUI panel 
 #    or by editing the file by hand.
@@ -82,6 +83,9 @@
 # Add volume to scene-1
 /vis/scene/add/volume
 
+# Add trajectories to scene-1
+/vis/scene/add/trajectories
+
 # Set camera parameters
 /vis/camera/reset 
 /vis/camera/zoom      1.2
@@ -94,3 +98,6 @@
 #   ExN03RunAction::EndOfRunAction()
 /tracking/storeTrajectory 1
 /run/beamOn 10
+
+
+

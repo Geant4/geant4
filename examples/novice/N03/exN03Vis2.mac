@@ -4,6 +4,7 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE: November 10, 1999                                            #
+#        May      20, 2000                                            #
 #                                                                     #
 #  CONTENTS: A basic macro for visualization of events                #
 #                                                                     #
@@ -11,7 +12,7 @@
 #          Idle> /control/execute exN03Vis2.mac                       #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
-#                                  DAWN (version 3.80 of after)       #
+#                                  DAWN (version 3.80 or after)       #
 #                                  gv (Ghostview), Tcl/Tk             #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
@@ -35,7 +36,7 @@
 Setting to store particle trajactories for visualization
 #########################################################
 /tracking/storeTrajectory 1
-#/vis/scene/include/trajectories
+
 
 #####################################################
 # Visualization with OGLSX (OpenGL Stored X) driver
@@ -50,6 +51,9 @@ Setting to store particle trajactories for visualization
 
 # Add detector geometry to the current scene
 /vis/scene/add/volume
+
+# Add trajectories to the current scene
+/vis/scene/add/trajectories
 
 # Set drawing style.
 #   The drawing style is "hidden-surface removal",
@@ -87,10 +91,10 @@ Setting to store particle trajactories for visualization
 ##########################################################
 # Visualization with DAWNFILE driver
 #
-#  * The visualized view is saved to a file "g4.eps"  
+#  * The visualized view is saved to a file "g4_XX.eps"  
 #    with the "vectorized" PostScript format.
 #
-#  * In order to make the file "g4.eps" printable, 
+#  * In order to make the file "g4_XX.eps" printable, 
 #    append the "showpage" PostScript command to the file 
 #    You can do it with the 4th page of the DAWN GUI panel.
 #    or by hand.
@@ -105,6 +109,12 @@ Setting to store particle trajactories for visualization
 # Invoke the DAWNFILE driver 
 /vis/sceneHandler/create DAWNFILE
 /vis/viewer/create
+
+# Add detector geometry to the current scene
+/vis/scene/add/volume
+
+# Add trajectories to the current scene
+/vis/scene/add/trajectories
 
 # Set the drawing style to "wireframe". 
 #        0: wireframe  
