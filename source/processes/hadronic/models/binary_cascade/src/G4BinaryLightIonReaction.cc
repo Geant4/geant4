@@ -516,6 +516,7 @@
 	if(swapped)
 	{
           tmp*=toBreit.inverse();
+	  tmp.setVect(-tmp.vect());
 	}    
 	tmp *= toLab;
 	aNew->Set4Momentum(tmp);

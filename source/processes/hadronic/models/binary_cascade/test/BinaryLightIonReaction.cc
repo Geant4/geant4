@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BinaryLightIonReaction.cc,v 1.10 2004-06-01 05:33:01 hpw Exp $
+// $Id: BinaryLightIonReaction.cc,v 1.11 2004-06-03 15:39:54 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -176,7 +176,7 @@
       
    // ----------- needed to Build a Step, and a track -------------------
    
-   G4ParticleMomentum theDirection(0.,0.,1.);
+   G4ParticleMomentum theDirection(1.,0.,0.);
    G4ThreeVector aPosition(0.,0.,0.);
    G4double aTime = 0.0;
    
