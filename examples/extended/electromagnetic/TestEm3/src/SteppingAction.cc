@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.16 2005-01-11 14:15:54 maire Exp $
+// $Id: SteppingAction.cc,v 1.17 2005-01-11 16:40:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +55,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 
   G4StepPoint* prePoint = aStep->GetPreStepPoint();
   G4StepPoint* endPoint = aStep->GetPostStepPoint();
-  const G4Track* track  = aStep->GetTrack();
+  G4Track*     track    = aStep->GetTrack();
+  G4ParticleDefinition* particle = track->GetDefinition(); 
       
   //if World, returns
   //
@@ -71,12 +72,11 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     
   // collect energy deposit
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if (edep > 0.) {
-     
+  
+  if (edep > 0.) {    
     // collect step length of charged particles
     G4double stepl = 0.;
-    if (track->GetDefinition()->GetPDGCharge() != 0.)
-      stepl = aStep->GetStepLength();
+    if (particle->GetPDGCharge() != 0.) stepl = aStep->GetStepLength();
     
     // sum up per event
     eventAct->SumEnergy(absorNum,edep,stepl);
@@ -92,8 +92,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
      && (track->GetMomentumDirection().x() > 0.)) {
       G4int planNum = 1 + (detector->GetNbOfAbsor())*layerNum + absorNum;
       G4double EnLeaving = track->GetKineticEnergy();
-      if (track->GetDefinition() == G4Positron::Positron())
-          EnLeaving += 2*electron_mass_c2;
+      if (particle == G4Positron::Positron()) EnLeaving += 2*electron_mass_c2;
       G4int ih = 2*MaxAbsor + 1;
       if (track->GetTrackID() != 1) ih += 1;
       histoManager->FillHisto(ih, (G4double)planNum, EnLeaving);
