@@ -89,7 +89,6 @@ private:
   G4double cutForProton;
   G4double cutForAlpha;
   G4double cutForGenericIon;
-  G4double cutForOpticalPhoton;
 
   // these methods Construct particles 
   void ConstructMyBosons();
