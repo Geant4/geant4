@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QContent.hh,v 1.6 2000-09-21 06:51:55 mkossov Exp $
+// $Id: G4QContent.hh,v 1.7 2000-09-24 11:34:43 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -251,7 +251,7 @@ inline G4QContent G4QContent::operator-=(const G4QContent& rhs)
   G4int rAD=rhs.nAD;
   G4int rAU=rhs.nAU;
   G4int rAS=rhs.nAS;
-  if(rS==1 && rAS==1 && (nS<1 || nAS<1))  // Eta case (@@ but phi too. Now not important)
+  if(rS==1 && rAS==1 && (nS<1 || nAS<1))  // Eta case, switch quark pairs (?)
   {
     rS =0;
     rAS=0;
@@ -307,7 +307,7 @@ inline G4QContent G4QContent::operator-=(const G4QContent& rhs)
 
 // Subtract Quark Content
 inline G4QContent G4QContent::operator-=(G4QContent& rhs)
-//     =======================================================
+//     ==================================================
 {
   G4int rD=rhs.nD;
   G4int rU=rhs.nU;
@@ -315,7 +315,7 @@ inline G4QContent G4QContent::operator-=(G4QContent& rhs)
   G4int rAD=rhs.nAD;
   G4int rAU=rhs.nAU;
   G4int rAS=rhs.nAS;
-  if(rS==1 && rAS==1 && (nS<1 || nAS<1))  // Eta case (@@ but phi too. Now not important)
+  if(rS==1 && rAS==1 && (nS<1 || nAS<1))  // Eta case, switch quark pairs
   {
     rS =0;
     rAS=0;

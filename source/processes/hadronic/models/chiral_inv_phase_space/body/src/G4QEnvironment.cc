@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.15 2000-09-21 15:20:49 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.16 2000-09-24 11:34:44 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -649,50 +649,124 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
     G4cout<<"G4QEnv::HadrQEnv:Vacuum #ofQ="<<nQuasmons<<G4endl;
 #endif
     G4QNucleus vE = vacuum;
-	if (nQuasmons) for (G4int iq=0; iq<nQuasmons; iq++)
+    G4int     nlq = 0;                           // Prototype of a#of Living Quasmons
+	if(nQuasmons) for(G4int lq=0; lq<nQuasmons; lq++) if(theQuasmons[lq]->GetStatus())nlq++;
+	if(nQuasmons) for(G4int iq=0; iq<nQuasmons; iq++)
 	{
-	  G4QHadronVector* output=theQuasmons[iq]->Fragment(vE); // **!!DESTROY!!**
-      G4int nHadrons = output->entries();
+      G4int ist=theQuasmons[iq]->GetStatus();    // Status of the Quasmon before fragmentation
+      if(ist)
+	  {
+        G4QHadronVector* output=theQuasmons[iq]->Fragment(vE);
+        G4int ast=theQuasmons[iq]->GetStatus();  // Status of the Quasmon after fragmentation
+        if(!ast) nlq--;                          // Reduce nlq is Quasmon decayed
+        G4int nHadrons = output->entries();
 #ifdef pdebug
-      G4cout<<"G4QEnv::HadrQEnv:Vacuum Q#"<<iq<<", nHadr="<<nHadrons<<G4endl;
+        G4cout<<"G4QEnv::HadrQEnv:Vacuum Q#"<<iq<<", nHadr="<<nHadrons<<G4endl;
 #endif
-      if(nHadrons>0)                             // Transfer QHadrons from Quasmon to Output
-	  {
-    	for (G4int ih=0; ih<nHadrons; ih++)
-        {
-          G4QHadron* curH = new G4QHadron(output->at(ih));
-          theQHadrons.insert(curH);              // Fill in theQHadrons a new hadron-copies
-          delete output->at(ih);
-        }
-        delete output;
-	  }
-      else
-	  {
-        // @@ Temporary for heavy quasmons
-        G4QContent QQC=theQuasmons[iq]->GetQC();
-        G4int tQBN=QQC.GetBaryonNumber();        // Baryon Number of not decayed Quasmon
-        G4QNucleus tqN(QQC);                     // Define the quasmon as a nucleus
-        G4double   tqM=tqN.GetMZNS();            // GS Mass
-        G4double   ttM=theQuasmons[iq]->Get4Momentum().m(); // Real Mass
-        if(tQBN>1&&ttM>tqM)                      // => "Quasmon evaporation" case
-		{
-          G4QHadron* nuclQ = new G4QHadron(QQC,theQuasmons[iq]->Get4Momentum());
-          EvaporateResidual(nuclQ);              // Try to evaporate Quasmon
-          theQuasmons[iq]->KillQuasmon();        // Kill evaporated Quasmon
-		}
-        else if(iq+1<nQuasmons)
-		{
-          theQuasmons[iq+1]->IncreaseBy(theQuasmons[iq]); // Merge with the second Quasmon
-          theQuasmons[iq]->KillQuasmon();        // Kill the week Quasmon
-		}
-		else
-		{
-		  G4cerr<<"***G4QEnv::HadrQE: nH="<<nHadrons<<", QQC="<<theQuasmons[iq]->GetQC()
-                <<",QM="<<theQuasmons[iq]->Get4Momentum().m()<<G4endl;
-          G4Exception("G4QEnvironment::HadronizeQEnvironment: Vacuum Quasmon in NOTHING");
-		}
-	  }
-	}
+        if(nHadrons>0)                           // Transfer QHadrons from Quasmon to Output
+	    {
+    	  for (G4int ih=0; ih<nHadrons; ih++)
+          {
+            G4QHadron* curH = new G4QHadron(output->at(ih));
+            theQHadrons.insert(curH);            // Fill in theQHadrons a new hadron-copies
+            delete output->at(ih);
+          }
+	    }
+        else                                     // => "Quasmon can't decay" case
+	    {
+          G4QContent      totQC=theQuasmons[iq]->GetQC();
+          G4int     tQBN=totQC.GetBaryonNumber();// Baryon Number of not decayed Quasmon
+          G4QNucleus     tqN(totQC);             // Define the quasmon as a nucleus
+          G4double   gsM=tqN.GetMZNS();          // GS Mass
+          G4LorentzVector tot4M=theQuasmons[iq]->Get4Momentum();
+          G4double totQM=tot4M.m();              // Real Mass of Quasmon
+          if(tQBN>1&&totQM>gsM)                  // => "Try Quasmon evaporation" case
+		  {
+            G4QHadron* nuclQ = new G4QHadron(totQC,tot4M);
+            EvaporateResidual(nuclQ);            // Try to evaporate Quasmon (delete equivalent)
+            theQuasmons[iq]->KillQuasmon();      // Kill evaporated Quasmon
+            nlq--;
+		  }
+          else if(iq+1<nQuasmons&&nlq>1)         // => "Try to merge with next" case
+		  {
+            G4int s=theQuasmons[iq+1]->GetStatus();//Status of the next Quasmon
+            theQuasmons[iq+1]->IncreaseBy(theQuasmons[iq]);// Merge with the next Quasmon
+            theQuasmons[iq]->KillQuasmon();      // Kill the week Quasmon
+            if(s) nlq--;                         // Reduce a number of "living Quasmons"
+		  }
+          else if(iq+1==nQuasmons&&iq&&nlq>1)    // => "Quasmon stack is exhosted" case
+		  {
+            G4int s=theQuasmons[0]->GetStatus(); //Status of the first Quasmon
+            theQuasmons[0]->IncreaseBy(theQuasmons[iq]);// Merge with the first Quasmon
+            theQuasmons[iq]->KillQuasmon();      // Kill the week Quasmon
+            if(s) nlq--;                         // Reduce a number of "living Quasmons"
+		  }
+		  else
+		  {
+		    G4cerr<<"***G4QEnv::HadrQE:"<<iq<<",nH="<<nHadrons<<",QC="<<totQC<<",M="<<totQM<<G4endl;
+		    for (G4int kq=0; kq<nQuasmons; kq++)
+			  G4cerr<<kq<<". Stat="<<theQuasmons[kq]->GetStatus()<<",QC="<<theQuasmons[kq]->GetQC()
+                    <<",M="<<theQuasmons[kq]->Get4Momentum().m()<<G4endl;
+            //G4Exception("G4QEnvironment::HadronizeQEnvironment: Vacuum Quasmon Decay in NOTHING");
+            G4int nOfOUT = theQHadrons.entries();
+            G4double  dM = totQM-gsM;
+            while(nOfOUT)
+            {
+              G4QHadron*     theLast = theQHadrons[nOfOUT-1];
+              G4LorentzVector last4M = theLast->Get4Momentum();
+              G4QContent      lastQC = theLast->GetQC();
+              G4int           lastS  = lastQC.GetStrangeness();
+              G4int           totS   = totQC.GetStrangeness();
+			  if(lastS<0&&lastS+totS<0&&nOfOUT>1) // => "Skip K-meson" case @@ Skip a few @@
+			  {
+                G4QHadron* thePrev = theQHadrons[nOfOUT-2];
+                theQHadrons.removeLast();         // the last QHadron is excluded from OUTPUT
+                theQHadrons.removeLast();         // the prev QHadron is excluded from OUTPUT
+                theQHadrons.insert(theLast);      // the Last becomes the prev
+                theLast = thePrev;                // Update parameters (Prev instead of Last)
+                last4M = theLast->Get4Momentum();
+                lastQC = theLast->GetQC();
+			  }
+              else theQHadrons.removeLast();      // the last QHadron is excluded from OUTPUT 
+              delete          theLast;            // the last QHadron is deleated as instance
+              totQC+=lastQC;                      // Update (increase) the total QC
+              tot4M+=last4M;                      // Update (increase) the total 4-momentum
+              totQM=tot4M.m();                    // Calculate new real total mass
+              G4QNucleus nN(totQC);               // Define the quasmon as a nucleus
+              gsM=nN.GetMZNS();                   // Calculate the new GS Mass
+              dM = totQM-gsM;
+              if(dM>0)
+			  {
+                theQuasmons[iq]->InitQuasmon(totQC,tot4M);// Update the week Quasmon
+                G4QHadronVector* output=theQuasmons[iq]->Fragment(vE);
+                G4int ast=theQuasmons[iq]->GetStatus();  // Status of the Quasmon
+                if(!ast) nlq--;                   // Reduce nlq is Quasmon decayed
+                G4int nHadrons = output->entries();
+#ifdef pdebug
+                G4cout<<"G4QEnv::HadrQEnv:VacuumRecoveredQ#"<<iq<<",nH="<<nHadrons<<G4endl;
+#endif
+                if(nHadrons>0)                    // => "QHadrons from Quasmon to Output"
+	            {
+    	          for (G4int ih=0; ih<nHadrons; ih++)
+                  {
+                    G4QHadron* curH = new G4QHadron(output->at(ih));
+                    theQHadrons.insert(curH);     // Fill in theQHadrons new hadron-copies
+                    delete output->at(ih);
+                  }
+                  break;
+	            }
+			  }
+              nOfOUT  = theQHadrons.entries();    // Update the value of OUTPUT entries
+		    }
+		    if(!nOfOUT)
+		    {
+		      G4cerr<<"***G4QEnv::HadrQE: M="<<totQM<<" < gsM="<<gsM<<", dM="<<dM<<G4endl;
+              G4Exception("G4QEnvironment::HadronizeQEnvironment: Exhosted but can't decay Q");
+	        }
+		  } // End of PANIC treatment
+		} // End of trouble handling with Quasmon decay in Vacuum
+	  } // End of check for the already decayed Quasmon
+	} // End of the LOOP over Quasmons
     return theQHadrons;
   }
   else                                           // ==> "Nuclear environment" case
@@ -1351,7 +1425,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
                 G4QNucleus  newNp(totQC-KpQC);
                 G4int  PDG2=newNp.GetPDG();
                 G4double m2=newNp.GetMZNS();
-                G4QNucleus  newN0(totQC-KpQC);
+                G4QNucleus  newN0(totQC-K0QC);
                 G4double m3=newN0.GetMZNS();
                 if (m3+mK0<m2+mK)                // => "aK0+ResA is better" case
 	            {

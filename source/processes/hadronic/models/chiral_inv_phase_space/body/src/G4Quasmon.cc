@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.17 2000-09-21 15:20:50 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.18 2000-09-24 11:34:45 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -346,6 +346,9 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
     G4int envZ  =theEnvironment.GetZ();          // Z of current Nuclear Environment
     G4double envM=theEnvironment.GetMass();      // mass of the current Nuclear Environment
     G4QContent envQC=theEnvironment.GetQCZNS();  // QuarkContent of the current Nuclear Environ
+#ifdef pdebug
+	G4cout<<"G4Quasmon::HadrQ:"<<j<<",ePDG="<<envPDG<<",eM="<<envM<<",eQC="<<envQC<<G4endl;
+#endif
     G4int envBarN=envQC.GetBaryonNumber();       // Baryon Number of the current Nuclear Environ
     //theEnvironment.UpdateClusters(nBarClust);    // @@ new Clusters for reduced nucleus @@
     G4QContent totQC=valQ+envQC;                 // Total Quark Content
@@ -355,6 +358,9 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
     G4int      totNeut=totN.GetN();              // Total number of neutrons in the system
     G4int      totProt=totN.GetZ();              // Total number of protons in the system
     G4double totM  =totN.GetMZNS();              // min mass of the Total System
+#ifdef pdebug
+	G4cout<<"G4Quasmon::HadrQ:"<<j<<",tN="<<totN<<",tGSM="<<totM<<",tQC="<<totQC<<G4endl;
+#endif
     G4double protCB=CoulombBarrier(totProt,totBN,1.,1.);
     G4int    resNPDG=0;
     G4double resNM =10000000.;                   // Prototype of residual mass after n separated
@@ -368,6 +374,9 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
     G4int    totPDG=totN.GetPDG();               // Total PDG Code for the Current compound
     G4LorentzVector tot4M =q4Mom+G4LorentzVector(0.,0.,0.,envM);
     G4double totMass=tot4M.m();
+#ifdef pdebug
+	G4cout<<"G4Quasmon::HadrQ:"<<j<<",tPDG="<<totPDG<<",tM="<<totMass<<",rPDG="<<resNPDG<<G4endl;
+#endif
     G4ThreeVector totBoost = tot4M.boostVector();// Boost vector for Total System (backward)
     G4ThreeVector totRBoost= -totBoost;          // Boost vector for Total System (forward)
     G4int    iniPDG =valQ.GetSPDGCode();
@@ -376,10 +385,22 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
     G4int    iniN   =valQ.GetN();
     G4int    iniP   =valQ.GetP();
     G4int    iniS   =valQ.GetL();
+#ifdef pdebug
+	G4cout<<"G4Quasmon::HadrQ:"<<j<<",iniPDG="<<iniPDG<<",Z="<<iniP<<",N="<<iniN<<",S="<<iniS<<G4endl;
+#endif
     G4QNucleus iniRN(iniP,iniN-1,iniS);
+#ifdef pdebug
+	G4cout<<"G4Quasmon::HadrQ:"<<j<<",iniRN="<<iniRN<<G4endl;
+#endif
     G4double iniRM = iniRN.GetMZNS();            // Mass of Residual Quasmon when neutron is rad
     if(iniBarN<2||envBarN>0) iniRM=0.;
+#ifdef pdebug
+	G4cout<<"G4Quasmon::HadrQ:"<<j<<",iniRM="<<iniRM<<G4endl;
+#endif
     G4double iniQM =G4QPDGCode(iniPDG).GetMass();// Minimum mass of Quasmon
+#ifdef pdebug
+	G4cout<<"G4Quasmon::HadrQ:"<<j<<",iniQM="<<iniQM<<G4endl;
+#endif
     G4double iniQM2= iniQM*iniQM;
     G4double bndQM = totM-envM;
     if(envPDG==NUCPDG) bndQM=iniQM;
@@ -463,11 +484,14 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv)
         kMom = kLS*(1.-beta*ct)/sqrt(1.-b2);     // k* in Quasmon CMS
 	  }
 #ifdef pdebug
-	  cout<<"G4Quasmon::HadrQuasmon:j="<<j<<",k=q="<<kLS<<",kQCM="<<kMom<<endl;
+	  G4cout<<"G4Quasmon::HadrQuasmon:j="<<j<<",k=q="<<kLS<<",kQCM="<<kMom<<G4endl;
 #endif
 	}
     while(counter<maxCount&&cond)
 	{
+#ifdef pdebug
+	  G4cout<<"G4Quasmon::HadrQuasmon: START LOOP j="<<j<<G4endl;
+#endif
       cond=true;
       //if(addPhoton>0.) nOfQ=valQ.GetQ()-valQ.GetAQ();
       //if(addPhoton>0.&&quasM<1500.&&G4UniformRand()<f2all)
@@ -1590,7 +1614,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
         G4QNucleus  newNp(totQC-KpQC);
         PDG2       =newNp.GetPDG();
         m2         =newNp.GetMZNS();
-        G4QNucleus  newN0(totQC-KpQC);
+        G4QNucleus  newN0(totQC-K0QC);
         G4double m3=newN0.GetMZNS();
         if (m3+mK0<m2+mK)                      // => "aK0+ResA is better" case
         {
@@ -1615,7 +1639,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
         G4QHadron* H1 = new G4QHadron(PDG1,fq4M);
         theQHadrons.insert(H1);
         G4QHadron* H2 = new G4QHadron(PDG2,qe4M);
-        theQHadrons.insert(H2);
+        FillHadronVector(H2);
 	  }
       else if(m1+m2-totMass<0.01)              // Split the 4-momentum
 	  {
@@ -1626,7 +1650,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
         G4QHadron* H1 = new G4QHadron(PDG1,r1*t);
         theQHadrons.insert(H1);
         G4QHadron* H2 = new G4QHadron(PDG2,r2*t);
-        theQHadrons.insert(H2);
+        FillHadronVector(H2);
 	  }
       else
 	  {
@@ -1958,24 +1982,36 @@ void G4Quasmon::CalculateNumberOfQPartons(G4double qMass)
   G4int astra = abs(valQ.GetAS());
   if(astra>stran) stran=astra;
   G4int nMaxStrangeSea=static_cast<int>((qMass-stran*mK0)/(mK0+mK0));//KK is a minimum for s-sea
-  if (absb) nMaxStrangeSea=static_cast<int>((qMass-absb)/672.); //LanbdaK is a minimum for s-sea
+  if (absb) nMaxStrangeSea=static_cast<int>((qMass-absb)/672.); //LambdaK is a minimum for s-sea
 #ifdef pdebug
-  cout<<"G4Quasmon::Calc#ofQPart: #Initial="<<valc<<",#Final="<<nOfQ<<",#Sea="<<nSeaPairs<<endl;
+  G4cout<<"G4Q::Calc#ofQPart:"<<valQ<<",INtot="<<valc<<",FinTot="<<nOfQ<<",Sea="<<nSeaPairs<<G4endl;
 #endif
   if (nSeaPairs)            // Add sea to initial quark content
   {
-    valQ.IncQAQ(nSeaPairs,SSin2Gluons);
+    G4int morDec=0;
+    if(nSeaPairs>0)valQ.IncQAQ(nSeaPairs,SSin2Gluons);
+    else    morDec=valQ.DecQAQ(nSeaPairs);
+    if(morDec)
+	{
+#ifdef pdebug
+      G4cout<<"***G4Q::Calc#ofQPart: not totally reduced #pairs="<<morDec<<G4endl;
+#endif
+      nOfQ+=morDec+morDec;
+	}
     G4int sSea=valQ.GetS(); // Content of strange quarks
     G4int asSea=valQ.GetAS();
     if(asSea<sSea) sSea=asSea;
-    if(sSea>nMaxStrangeSea) // Too many strange sea
+    if(sSea>nMaxStrangeSea) // @@@@@@@ Too many strange sea ??????
 	{
       sSea-=nMaxStrangeSea; // Strange sea excess
       valQ.DecS(sSea);      // Reduce strange sea to adoptable limit
       valQ.DecAS(sSea);
-      valQ.IncQAQ(sSea,0.); // Add notstrange sea
+      valQ.IncQAQ(sSea,0.); // Add notstrange sea ????????
 	}
   }
+#ifdef pdebug
+  G4cout<<"G4Quasmon::Calc#ofQPart: FinalQC="<<valQ<<G4endl;
+#endif
 } 
 
 // Calculate a#of clusters in the nucleus
@@ -2067,39 +2103,52 @@ void G4Quasmon::PrepareCandidates(G4int j)
   G4double ze1            = theEnvironment.GetDZ() + 1;  // For bn>2
   G4double ne1            = theEnvironment.GetDN() + 1;
   G4double se1            = theEnvironment.GetDS() + 1;
-  if(hadronicProbab==0.) hadronicProbab=1.;              // If ther is no environment (vacuum)
-  G4double quasmM         = q4Mom.m();                   // Mass of quasmon
+  if(hadronicProbab==0.) hadronicProbab=1.;       // If ther is no environment (vacuum)
+  G4double quasmM         = q4Mom.m();            // Mass of quasmon
   G4double dQuasmM        = quasmM+quasmM;
   G4int    maxB           = theEnvironment.GetMaxClust();// A of maxCluster of the Environment
   G4double totZ           = theEnvironment.GetZ() + valQ.GetCharge();       // Z of the Nucleus
   G4double totA           = theEnvironment.GetA() + valQ.GetBaryonNumber(); // A of the Nucleus
   G4QContent totQC        = theEnvironment.GetQCZNS()+valQ;
-  G4QNucleus totN(totQC);                                // pseudo nucleus for the Total System
-  G4double totM           = totN.GetMZNS();              // min mass Of the Total System
+  G4QNucleus totN(totQC);                         // pseudo nucleus for the Total System
+  G4double totM           = totN.GetMZNS();       // min mass Of the Total System
+  G4int nCand=theQCandidates.entries();
 #ifdef pdebug
-  cout<<"G4Quasmon::PrepareCandidates:hP="<<hadronicProbab<<",A="<<ae<<",mB="<<maxB
-	  <<",p(1)="<<theEnvironment.GetProbability(1)<<",zE="<<ze<<",nE="<<ne<<endl;
+  G4cout<<"G4Quasmon::PrepareCandidates:hP="<<hadronicProbab<<",A="<<ae<<",mB="<<maxB<<",nC="
+	    <<nCand<<",p(1)="<<theEnvironment.GetProbability(1)<<",zE="<<ze<<",nE="<<ne<<G4endl;
 #endif
-  for (G4int index=0; index<theQCandidates.entries(); index++)
+  if(nCand) for (G4int index=0; index<nCand; index++)
   {
     G4QCandidate*  curCand=theQCandidates[index];
-    //G4double realM=curCand->GetMass();                  // Real mass (BoundMass for a Cluster)
+    //G4double realM=curCand->GetMass();          // Real mass (BoundMass for a Cluster)
     // Calculate bound mass taking into account Quasmon+Environ
     G4QContent canQC=curCand->GetQC();
     G4QContent resQC=totQC-canQC;
-    G4QNucleus resN(resQC);                               // pseudo nucleus for Resid System
-    G4double resM           = resN.GetMZNS();             // min mass Of the Residual System
-    G4double realM=totM-resM;
-    G4int cPDG = curCand->GetPDGCode();
-    G4double PDGM=G4QPDGCode(cPDG).GetMass();             // Vacuum (PDG) mass for the cluster
+#ifdef sdebug
+    G4cout<<"G4Quasmon::PrepareCandidates: #"<<index<<",QC="<<canQC<<", rQC="<<resQC<<G4endl;
+#endif
+    G4QNucleus resN(resQC);                       // pseudo nucleus for Resid System
+#ifdef sdebug
+    G4cout<<"G4Quasmon::PrepareCandidates: resN="<<resN<<G4endl;
+#endif
+    G4double resM   = resN.GetMZNS();             // min mass Of the Residual System
+    G4double realM  = totM-resM;
+#ifdef sdebug
+    G4cout<<"G4Quasmon::PrepareCandidates: realM="<<realM<<G4endl;
+#endif
+    G4int cPDG      = curCand->GetPDGCode();
+    G4double PDGM   = G4QPDGCode(cPDG).GetMass(); // Vacuum (PDG) mass for the cluster
+#ifdef sdebug
+    G4cout<<"G4Quasmon::PrepareCandidates: PDG="<<cPDG<<",PDGM="<<PDGM<<G4endl;
+#endif
     if (realM>PDGM) realM=PDGM;
-    if(cPDG>80000000&&cPDG!=90000000)                     // Nuclear case
+    if(cPDG>80000000&&cPDG!=90000000)             // Nuclear candidate case
 	{
       G4QNucleus cN(cPDG);
-      G4int zc = cN.GetZ();                               // "Z" of the cluster
-      G4int nc = cN.GetN();                               // "N" of the cluster
-      G4int sc = cN.GetS();                               // "S" of the cluster
-      G4int ac = cN.GetA();                               // "A" of the cluster
+      G4int zc = cN.GetZ();                       // "Z" of the cluster
+      G4int nc = cN.GetN();                       // "N" of the cluster
+      G4int sc = cN.GetS();                       // "S" of the cluster
+      G4int ac = cN.GetA();                       // "A" of the cluster
       //if(ac>maxB||ze<zc||ne<nc||se<sc) curCand->SetPossibility(false);
       if(ac>maxB) curCand->SetPossibility(false);
       else
@@ -2122,7 +2171,7 @@ void G4Quasmon::PrepareCandidates(G4int j)
             else if(zc==1&&nc==1) pos*=ze*ne;
             else if(zc==1&&sc==1) pos*=ze*se;
             else if(sc==1&&nc==1) pos*=se*ne;
-            else cerr<<"***G4Quasmon::PrepareCandidates:z="<<zc<<",n="<<nc<<",s="<<sc<<endl;
+            else G4cerr<<"***G4Quasmon::PrepareCandidates:z="<<zc<<",n="<<nc<<",s="<<sc<<G4endl;
 		  }
         }
         else
@@ -2136,28 +2185,29 @@ void G4Quasmon::PrepareCandidates(G4int j)
 		  }
 	    }
         curCand->SetPreProbability(pos);
-        curCand->SetMass(realM);                     // Keep real (bounded) mass for a Candidate
+        curCand->SetMass(realM);                 // Keep real (bounded) mass for a Candidate
         G4double curKMin=(PDGM*PDGM-realM*realM)/(realM+realM);
         if(totZ>zc) curKMin+=CoulombBarrier(totZ,totA,zc,ac);
         curCand->SetKMin(curKMin);
 	    curCand->SetPossibility(true);
 	  }
 	}
-	else                                           // Hadronic case     
+	else                                         // Hadronic case     
 	{
       curCand->SetPreProbability(hadronicProbab);
-      G4double curKMin=realM*realM/dQuasmM;
       G4double cz=curCand->GetCharge();
+#ifdef sdebug
+      G4cout<<"G4Quasmon::PrepareCandidates: Chg"<<cz<<", dQM="<<dQuasmM<<G4endl;
+#endif
+      G4double curKMin=realM*realM/dQuasmM;
       if(totZ>cz)curKMin+=CoulombBarrier(totZ,totA,cz,1.);
       curCand->SetKMin(curKMin);
 	  curCand->SetPossibility(true);
-      //
-      G4int cPDG = curCand->GetPDGCode();
-      //if(abs(cPDG)>1000) curCand->SetPossibility(false);//@@temporary FORBID NUCLEON RADIATION
-      //if(abs(cPDG)>1000&&ae>0) curCand->SetPossibility(false);//@@ FORBID NUCLEON RADIATION
-      //if(ae>0) curCand->SetPossibility(false);//@@temporary FORBID VACUUM DECAYS
 	}
   }
+#ifdef pdebug
+  G4cout<<"G4Quasmon::PrepareCandidates: >>>OUT<<<"<<G4endl;
+#endif
 }
 
 // Modify Candidate masses in nuclear matter and set possibilities
@@ -2258,27 +2308,15 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double kVal, G4double kLS,
     G4int dD=cD+cD;
     G4int dUD=abs(cU-cD);
     G4int cS=candQC.GetS()-candQC.GetAS();
-    //G4double cA=static_cast<double>(cU+cD+cS)/3.; //@@Short cut for the BaryNum of cluster??
     G4bool pos=curCand->GetPossibility();
-    //if(pos &&  !cS//@@ Temporary not strange fragments (aceler.)
-    //if(pos&&(cPDG<80000000||(cPDG>80000000&&dUD<2&&(cU<=cD||nofU>nofD||!envN)))) //@@=>  2 || 3
-    //if(pos&&(cPDG<80000000||(cPDG>80000000&&dUD<2&&(cU<dD||nofU>nofD||!envN)))) //@@=>  2 || 3
-    //if(pos&&(cPDG<80000000||(cPDG>80000000&&dUD<2&&(cU<=cD||nofU>=nofD||!envN)))) //@@=>  2 || 3
-	//if(pos&&(cPDG<80000000||(cPDG>80000000&&dUD<2&&(cU<dD||nofU>=nofD||!envN)))) //@@=>  2 || 3
 	if(pos&&(cPDG<80000000||(cPDG>80000000&&cPDG!=90000000&&dUD<2))) //@@=>  2 || 3
-	//if(cPDG<80000000||(cPDG>80000000&&dUD<3)) //@@=>  2 || 3
 	{
-      //Randomization of mass of each candidate
       G4QContent curQ = valQ;                   // Make a current copy of the Quasmon QuarkCont
       G4int aPDG = abs(cPDG);
       G4int baryn= candQC.GetBaryonNumber();    // Baryon number of the Candidate
       G4int cC   = candQC.GetCharge();          // Charge of the Candidate
       G4int cI   = baryn-cC-cC;
       G4int cNQ  = candQC.GetTot()-2;           // A#of quark-partons in a candidate -2
-      //G4int cNQ  = candQC.GetTot()+baryn-3;     // A#of quark-partons & diquark-partons
-      //G4int cNQ  = baryn;                       // A#of quark-partons & diquark-partons
-      //G4int cNQ  = 1;                       // A#of quark-partons & diquark-partons
-      //G4int cNQ  = 2*candQC.GetTot()-4;         // A#of q-p in Candidate -2 (StringJunction)
       G4double resM=0.;                         // Prototype for minMass of residual hadron
       if(cPDG>80000000&&cPDG!=90000000&&baryn<=maxB)// ===>Nuclear Case (QUark EXchange mechanism)
       {
@@ -2355,38 +2393,9 @@ void G4Quasmon::CalculateHadronizationProbabilities(G4double kVal, G4double kLS,
                   G4int    zZ=qChg*charge;                  // ChargeProduct for ParClust & ResQ
                   G4int    dI=qIso-isos;                    // IsotopicShiftSum for ParCl & ResQ
                   //********* ISOTOPIC  FOCUSING MATRIX *******************
-				  if(
-					//zZ<3 &&
-                    //(
-					 abs(dI)<1 ||
-					 (barot==1 && (
-                       abs(dI)<2&&abs(cC-charge)<2 ||
-					   (dI>=2&&cC<charge)   || (dI<=-2&&cC>charge)
-                       //dI==2&&cC<=charge || dI==-2&&cC>=charge ||
-                       //dI>2&&cC<charge   || dI<-2&&cC>charge
-					 )) || 
-					 (barot>1&&barot<3
-					  && (
-					   abs(dI)<2&&abs(cC-charge)<2 ||
-                       //dI>=2&&cC<charge   || dI<=-2&&cC>charge
-					   dI<=2&&cC<=charge || dI==-2&&cC>=charge ||
-					   dI>2&&cC<charge   || dI<-2&&cC>charge
-					 )) ||
-					 (barot>2&&barot<4
-					  && (
-					   abs(dI)<2&&abs(cC-charge)<2 ||
-                       //dI>=2&&cC<charge   || dI<=-2&&cC>charge
-					   dI<=2&&cC<=charge || dI==-3&&cC>=charge ||
-					   dI>2&&cC<charge   || dI<-3&&cC>charge
-					 )) ||
-					 (barot>3
-					  && (
-					   abs(dI)<2&&abs(cC-charge)<2 ||
-                       dI>=2&&cC<charge   || dI<=-2&&cC>charge
-					   //dI<=2&&cC<=charge || dI==-3&&cC>=charge ||
-					   //dI>2&&cC<charge   || dI<-3&&cC>charge
-					  )
-                     )
+				  if(abs(dI)< 1 || abs(dI)<2 && abs(cC-charge)<2  ||
+					 ((barot==1 || barot>=4) && (dI>=2&&cC<charge || dI<=-2&&cC>charge)) || 
+					 ((barot==2 || barot==3) && (dI> 2&&cC<charge || dI<=2&&cC<=charge || dI<=-barot))
 					)
                   {
                     G4double pPP=parCand->GetPreProbability();// Probability of Parent Cluster

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QPDGCode.cc,v 1.7 2000-09-21 15:20:50 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.8 2000-09-24 11:34:45 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -28,8 +28,8 @@ G4QPDGCode::G4QPDGCode(G4int PDGCode): thePDGCode(PDGCode)
   if(PDGCode) theQCode=MakeQCode(PDGCode);
   else        
   {
-#ifdef debug
-    cerr<<"***G4QPDGCode: Constructed with PDGCode=0, QCode=-2"<<endl;  
+#ifdef pdebug
+    G4cout<<"***G4QPDGCode: Constructed with PDGCode=0, QCode=-2"<<G4endl;  
 #endif
     theQCode=-2;
   }
@@ -447,10 +447,10 @@ G4double G4QPDGCode::GetMass()
   static G4int s[15]={ 0, 0, 1, 1, 1, 2, 2, 0, 0, 0, 1, 1, 2, 2, 2};
   //...........................................................................
   G4int ab=theQCode;
-  G4int szn=thePDGCode-90000000;
-  if(szn==0) return 0.;
-  if( szn>-10000000)
+  if(abs(thePDGCode)>80000000)             // Nuclear coding
   {
+    G4int szn=thePDGCode-90000000;
+    if(szn==0) return m[4];                // mPi0
     G4int ds=0;
     G4int dz=0;
     G4int dn=0;
@@ -488,10 +488,11 @@ G4double G4QPDGCode::GetMass()
     G4int s  =sz/1000-ds;
     return GetNuclMass(z,n,s);
   }
-  else if(ab<0)
+  else if(ab<0||!thePDGCode)
   {
-#ifdef pdebug
-    cerr<<"***G4QPDGCode::GetMass: m=100000., QCode="<<theQCode<<",PDGCode="<<thePDGCode<<endl;
+#ifdef debug
+    if(thePDGCode!=10)
+      G4cout<<"***G4QPDGCode::GetMass: m=100000., QCode="<<theQCode<<",PDGCode="<<thePDGCode<<G4endl;
 #endif
     return 100000.;
   }
@@ -605,7 +606,10 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
 				   {50.000,40.820,33.050,20.174,13.369, 3.125, 2.863, 2.855,10.680},
 				   {55.000,48.810,40.796,25.076,16.562, 3.020, 0.101,-4.737,1.9520},
 				   {60.000,55.000,50.100,33.660,23.664, 9.873, 5.683,-0.809,0.8730}};
-  if(!N&&!Z&&!S) 
+#ifdef debug
+  G4cout<<"G4QPDGCode::GetNuclMass called with Z="<<Z<<",N="<<N<<", S="<<S<<G4endl;
+#endif
+  if(!N&&!Z&&!S)   
   {
 #ifdef debug
     G4cout<<"G4QPDGCode::GetNuclMass(0,0,0)="<<mPi0<<"#0"<<G4endl;
@@ -648,12 +652,12 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
 	{
       if(N>=-S)                         // => "Enough neutrons in nucleus" case
 	  {
-        k=-S*mK0;
+        k-=S*mK0;
         N+=S;
 	  }
       else
 	  {
-        k=N*mK0-(S+N)*mK;
+        k+=N*mK0-(S+N)*mK;
         Z+=S+N;
         if(Z<0) return 0.;
         N=0;
@@ -681,8 +685,10 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   G4double D=N-Z;                     // Isotopic shift of the nucleus
   if(A+S<1&&k==0.||Z<0||N<0)          // @@ Can be generalized to anti-nuclei
   {
-    //G4cerr<<"***G4QPDGCode::GetNuclMass: A="<<A<<"<1 || Z="<<Z<<"<0 || N="<<N<<"<0"<<G4endl;
+#ifdef debug
+    G4cerr<<"***G4QPDGCode::GetNuclMass: A="<<A<<"<1 || Z="<<Z<<"<0 || N="<<N<<"<0"<<G4endl;
     //@@G4Exception("***G4QPDGCode::GetNuclMass: Impossible nucleus");
+#endif
     return 0.;                        // @@ Temporary
   }
   if     (!Z) return k+N*mN+S*mL+(N+S)*.001;  // @@ n+LAMBDA states are not implemented
@@ -700,7 +706,9 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
     else if(S>3)  bs=b7*exp(-b8/(A+1.));
     m+=S*(mL-bs);
   }  
-
+#ifdef debug
+  G4cout<<"G4QPDGCode::GetNuclMass: >>>OUT<<< m="<<m<<G4endl;
+#endif
   return m;
 }
 

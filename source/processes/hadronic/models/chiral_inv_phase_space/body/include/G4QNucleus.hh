@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.hh,v 1.4 2000-09-13 14:24:16 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.5 2000-09-24 11:34:43 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -68,6 +68,7 @@ public:
   void       Reduce(G4int PDG);                            // Reduce Nucleus by PDG fragment
   void       CalculateMass();                              // Recalculate (calculate) the mass
   void       SetMaxClust(G4int maxC);                      // Get Max BarNum of Clusters
+  void       SetZNSQC(G4int z, G4int n, G4int s);          // Set QC, using Z,N,S
   G4QNucleus operator+=(const G4QNucleus& rhs);            // Add a cluster to the  nucleus
   G4QNucleus operator-=(const G4QNucleus& rhs);            // Subtract a cluster from a nucleus
   G4QNucleus operator*=(const G4int& rhs);                 // Multiplication of the Nucleus
@@ -124,11 +125,7 @@ inline void G4QNucleus::InitByQC(G4QContent newQC)
   InitByPDG(PDG);
 }
 
-inline G4double G4QNucleus::GetMZNS() const
-{
-  G4QPDGCode tmp(111);
-  return tmp.GetNuclMass(GetZ(), GetN(), GetS());
-}
+inline G4double   G4QNucleus::GetMZNS()   const {return GetQPDG().GetNuclMass(Z,N,S);}
 inline G4double   G4QNucleus::GetGSMass() const {return GetQPDG().GetMass();}
 inline G4QContent G4QNucleus::GetQCZNS()  const
 {

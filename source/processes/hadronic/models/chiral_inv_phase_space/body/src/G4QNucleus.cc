@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.cc,v 1.9 2000-09-21 16:44:23 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.10 2000-09-24 11:34:45 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -29,29 +29,23 @@ G4QNucleus::G4QNucleus() : Z(0),N(0),S(0),maxClust(0) {};
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
   Z(z),N(n),S(s),maxClust(0)
 {
-  G4int zns=z+n+s;
-  G4QContent nQC(n+zns,z+zns,s,0,0,0);
-  SetQC(nQC);
-  G4QPDGCode nPDG(90000000+s*1000000+z*1000+n);
-  SetQPDG(nPDG);
-  G4LorentzVector p(nPDG.GetMass(),0.,0.,0.);
-  Set4Momentum(p);
-  SetNFragments(0);
-}
-
-G4QNucleus::G4QNucleus(G4QContent nucQC):maxClust(0)
-{
-  G4int u=nucQC.GetU()-nucQC.GetAU();
-  G4int d=nucQC.GetD()-nucQC.GetAD();
-  S = nucQC.GetS()-nucQC.GetAS();
-  G4int du= d-u;      // isotopic shift
-  G4int b =(d+u+S)/3; // baryon number
-  Z = (b-S-du)/2;     // protons
-  N = Z+du;           // neutrons
-  SetQC(nucQC);
-  G4QPDGCode nPDG(90000000+S*1000000+Z*1000+N);
-  SetQPDG(nPDG);
-  G4LorentzVector p(nPDG.GetMass(),0.,0.,0.);
+#ifdef debug
+  G4cout<<"G4QNucleus::Construction By Z="<<z<<",N="<<n<<",S="<<s<<G4endl;
+#endif
+  SetZNSQC(z,n,s);
+  G4QPDGCode nQPDG(90000000+S*1000000+Z*1000+N);
+#ifdef debug
+  G4cout<<"G4QNucleus::ConstructionByZNS: nQPDG="<<nQPDG<<G4endl;
+#endif
+  G4double mass=nQPDG.GetNuclMass(Z,N,S);
+#ifdef debug
+  G4cout<<"G4QNucleus::ConstructionByZNS: mass="<<mass<<G4endl;
+#endif
+  SetQPDG(nQPDG);
+#ifdef debug
+  G4cout<<"G4QNucleus::ConstructionByZNS: nQPDG set"<<G4endl;
+#endif
+  G4LorentzVector p(0.,0.,0.,mass);
   Set4Momentum(p);
   SetNFragments(0);
 }
@@ -73,20 +67,59 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
   G4QPDGCode nPDG(90000000+S*1000000+Z*1000+N);
   SetQPDG(nPDG);
   G4QContent nQC(N+ZNS,Z+ZNS,S,0,0,0);
-  SetQC(nQC);
+  SetZNSQC(z,n,s);
+}
+
+G4QNucleus::G4QNucleus(G4QContent nucQC):maxClust(0)
+{
+#ifdef debug
+  G4cout<<"G4QNucleus::Construction By QC="<<nucQC<<G4endl;
+#endif
+  G4int u=nucQC.GetU()-nucQC.GetAU();
+  G4int d=nucQC.GetD()-nucQC.GetAD();
+  S = nucQC.GetS()-nucQC.GetAS();     // a#of LAMBDA's in the nucleus
+  G4int du= d-u;                      // isotopic shift
+  G4int b =(d+u+S)/3;                 // baryon number
+  Z = (b-S-du)/2;                     // protons
+  N = Z+du;                           // neutrons
+  SetQC(nucQC);
+#ifdef debug
+  G4cout<<"G4QNucleus::ConstructionByQC: N="<<N<<",Z="<<Z<<",S="<<S<<G4endl;
+#endif
+  G4QPDGCode nQPDG(90000000+S*1000000+Z*1000+N);
+#ifdef debug
+  G4cout<<"G4QNucleus::ConstructionByQC: nQPDG="<<nQPDG<<G4endl;
+#endif
+  G4double mass=nQPDG.GetNuclMass(Z,N,S);
+#ifdef debug
+  G4cout<<"G4QNucleus::ConstructionByQC: mass="<<mass<<G4endl;
+#endif
+  SetQPDG(nQPDG);
+#ifdef debug
+  G4cout<<"G4QNucleus::ConstructionByQC: nQPDG set"<<G4endl;
+#endif
+  G4LorentzVector p(0.,0.,0.,mass);
+  Set4Momentum(p);
+  SetNFragments(0);
 }
 
 G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p):maxClust(0)
 {
+#ifdef debug
+  G4cout<<"G4QNucleus::(LV)Construction By QC="<<nucQC<<G4endl;
+#endif
   Set4Momentum(p);
   G4int u=nucQC.GetU()-nucQC.GetAU();
   G4int d=nucQC.GetD()-nucQC.GetAD();
-  S = nucQC.GetS()-nucQC.GetAS();
-  G4int du= d-u;      // isotopic shift
-  G4int b =(d+u+S)/3; // baryon number
-  Z = (b-S-du)/2;     // protons
-  N = Z+du;           // neutrons
+  S = nucQC.GetS()-nucQC.GetAS();     // a#of LAMBDA's in the nucleus
+  G4int du= d-u;                      // isotopic shift
+  G4int b =(d+u+S)/3;                 // baryon number
+  Z = (b-S-du)/2;                     // protons
+  N = Z+du;                           // neutrons
   SetQC(nucQC);
+#ifdef debug
+  G4cout<<"G4QNucleus::(LV)ConstructionByQC: N="<<N<<",Z="<<Z<<",S="<<S<<G4endl;
+#endif
   G4QPDGCode nPDG(90000000+S*1000000+Z*1000+N);
   SetQPDG(nPDG);
   SetNFragments(0);
@@ -105,8 +138,7 @@ G4QNucleus::G4QNucleus(const G4QNucleus& right)
   dN            = right.dN;
   dS            = right.dS;
   maxClust      = right.maxClust;
-  for(G4int i=0; i<=maxClust; i++)
-    probVect[i] = right.probVect[i];
+  for(G4int i=0; i<=maxClust; i++) probVect[i] = right.probVect[i];
 }
 
 G4QNucleus::G4QNucleus(G4QNucleus* right)
@@ -122,8 +154,7 @@ G4QNucleus::G4QNucleus(G4QNucleus* right)
   dN            = right->dN;
   dS            = right->dS;
   maxClust      = right->maxClust;
-  for(G4int i=0; i<=maxClust; i++)
-    probVect[i] = right->probVect[i];
+  for(G4int i=0; i<=maxClust; i++) probVect[i] = right->probVect[i];
 }
 
 G4QNucleus::~G4QNucleus() {}
@@ -155,8 +186,7 @@ const G4QNucleus& G4QNucleus::operator=(const G4QNucleus& right)
   dN            = right.dN;
   dS            = right.dS;
   maxClust      = right.maxClust;
-  for(G4int i=0; i<=maxClust; i++)
-    probVect[i] = right.probVect[i];
+  for(G4int i=0; i<=maxClust; i++) probVect[i] = right.probVect[i];
 
   return *this;
 }
@@ -179,7 +209,10 @@ ostream& operator<<(ostream& lhs, const G4QNucleus& rhs)
 void G4QNucleus::InitByPDG(G4int nucPDG)
 {//  ===================================
   static const G4int NUCPDG  = 90000000;
-  if(nucPDG>=80000000)
+#ifdef debug
+  G4cout<<"G4QNucleus::InitByPDG: >Called< PDG="<<nucPDG<<G4endl;
+#endif
+  if(nucPDG>80000000)                           // including 90000000 (OK)
   {
     G4int szn=nucPDG-NUCPDG;
     G4int ds=0;
@@ -219,27 +252,17 @@ void G4QNucleus::InitByPDG(G4int nucPDG)
     Z  =z;
     N  =n;
     S  =sz/1000-ds;
-    G4int ZNS=Z+N+S;
-    G4int Dq=N+ZNS;
-    G4int Uq=Z+ZNS;
-    if      (Dq<0&&Uq<0&&S<0)SetQC(G4QContent(0,0,0,-Dq,-Uq,-S));
-    else if (Uq<0&& S<0)     SetQC(G4QContent(Dq,0,0,0,-Uq,-S));
-    else if (Dq<0&& S<0)     SetQC(G4QContent(0,Uq,0,-Dq,0,-S));
-    else if (Dq<0&&Uq<0)     SetQC(G4QContent(0,0,S,-Dq,-Uq,0));
-    else if (Uq<0)           SetQC(G4QContent(Dq,0,S,0,-Uq,0));
-    else if ( S<0)           SetQC(G4QContent(Dq,Uq,0,0,0,-S));
-    else if (Dq<0)           SetQC(G4QContent(0,Uq,S,-Dq,0,0));
-    else                     SetQC(G4QContent(Dq,Uq,S,0,0,0));
+    SetZNSQC(Z,N,S);
     G4QPDGCode nPDG(nucPDG);
     SetQPDG(nPDG);
     G4LorentzVector p(0.,0.,0.,nPDG.GetMass());
     Set4Momentum(p);
     SetNFragments(0);
 #ifdef debug
-	cout<<"G4QNucleus::InitByPDG:->QPDG="<<nPDG<<": Z="<<Z<<",N="<<N<<",S="<<S<<",4M="<<p<<endl;
+	G4cout<<"G4QNucleus::InitByPDG:->QPDG="<<nPDG<<": Z="<<Z<<",N="<<N<<",S="<<S<<",4M="<<p<<G4endl;
 #endif
   }
-  else cerr<<"***G4QNucleus::InitByPDG: Initialized by not nuclear PDGCode="<<nucPDG<<endl;
+  else G4cerr<<"***G4QNucleus::InitByPDG: Initialized by not nuclear PDGCode="<<nucPDG<<G4endl;
 }
 
 void G4QNucleus::UpdateClusters(G4int maxCls)
@@ -346,7 +369,7 @@ void G4QNucleus::UpdateClusters(G4int maxCls)
 void G4QNucleus::Reduce(G4int cPDG)
 {//  ==============================
   static const G4int NUCPDG=90000000;
-  if(cPDG>80000000)
+  if(cPDG>80000000&&cPDG!=NUCPDG)
   {
     G4int curPDG=GetPDG();
     G4int newPDG=curPDG-cPDG+NUCPDG;             // PDG Code of Residual Nucleus
@@ -355,20 +378,21 @@ void G4QNucleus::Reduce(G4int cPDG)
     {
       if(abs(newPDG)<NUCPDG)
 	  {
-        cerr<<"***G4QNucleus::Reduce:iPDG="<<curPDG<<" = newPDG="<<newPDG<<"+cPDG="<<cPDG<<endl;
+        G4cerr<<"***G4QNucleus::Reduce:iPDG="<<curPDG<<" = newPDG="<<newPDG<<"+cPDG="<<cPDG<<G4endl;
         G4Exception("*E*:::G4QNucleus::Reduce: Abnormal Nuclear Reduction");
 	  }
       InitByPDG(newPDG);                         // Reinit the Nucleus
 	}
   }
-  else if(cPDG!=NUCPDG) cout<<"***G4QNucl::Reduce:Subtracting not nuclear PDGCode="<<cPDG<<endl;
+  else if(cPDG!=NUCPDG) G4cerr<<"***G4QNucl::Reduce:Subtracting not nuclear PDGCode="<<cPDG<<G4endl;
+  // in case of cPDG=90000000 - subtract nothing
 }
 
 // Increase nucleus by cluster with PDG Code cPDG (4-mom is optional)
 void G4QNucleus::Increase(G4int cPDG, G4LorentzVector c4M)
 {//  =====================================================
   static const G4int NUCPDG=90000000;
-  if(cPDG>80000000)
+  if(cPDG>80000000&&cPDG!=NUCPDG)
   {
     G4int newPDG=GetPDG()+cPDG-NUCPDG;        // PDG Code of the New Nucleus
     InitByPDG(newPDG);                        // Reinit the Nucleus
@@ -379,7 +403,7 @@ void G4QNucleus::Increase(G4int cPDG, G4LorentzVector c4M)
       Set4Momentum(t4M);
     }
   }
-  else cerr<<"***G4QNucleus::Increase: Adding not nuclear PDGCode="<<cPDG<<endl;
+  else G4cerr<<"***G4QNucleus::Increase: PDGCode="<<cPDG<<",4M="<<c4M<<G4endl;
 }
 
 // Increase nucleus by Quasmon with Quark Content qQC (4-mom is optional)
@@ -392,6 +416,23 @@ void G4QNucleus::Increase(G4QContent qQC, G4LorentzVector q4M)
     Set4Momentum(t4M);                        // 4Mom of the new nucleus
 }
 
+// Set Quark Content, using Z,N,S of nucleus
+void G4QNucleus::SetZNSQC(G4int z, G4int n, G4int s)
+{//  ===============================================
+  G4int zns=z+n+s;
+  G4int Dq=n+zns;
+  G4int Uq=z+zns;
+  G4int Sq=s;
+  if      (Dq<0&&Uq<0&&Sq<0)SetQC(G4QContent( 0, 0, 0,-Dq,-Uq,-Sq));
+  else if (Uq<0&&Sq<0)      SetQC(G4QContent(Dq, 0, 0,  0,-Uq,-Sq));
+  else if (Dq<0&&Sq<0)      SetQC(G4QContent( 0,Uq, 0,-Dq,  0,-Sq));
+  else if (Dq<0&&Uq<0)      SetQC(G4QContent( 0, 0,Sq,-Dq,-Uq,  0));
+  else if (Uq<0)            SetQC(G4QContent(Dq, 0,Sq,  0,-Uq,  0));
+  else if (Sq<0)            SetQC(G4QContent(Dq,Uq, 0,  0,  0,-Sq));
+  else if (Dq<0)            SetQC(G4QContent(0 ,Uq,Sq,-Dq,  0,  0));
+  else                      SetQC(G4QContent(Dq,Uq,Sq,  0,  0,  0));
+}
+  
 // Evaporate one Baryon (n,p,Lambda) (h1) from the Nucleus & get Residual Nucleus (h2)
 G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
 {//  ===========================================================

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QContent.cc,v 1.6 2000-09-21 06:51:57 mkossov Exp $
+// $Id: G4QContent.cc,v 1.7 2000-09-24 11:34:44 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -26,7 +26,14 @@
 
 // Constructors
 G4QContent::G4QContent(G4int d, G4int u, G4int s, G4int ad, G4int au, G4int as):
-  nD(d),nU(u),nS(s),nAD(ad),nAU(au),nAS(as){}
+  nD(d),nU(u),nS(s),nAD(ad),nAU(au),nAS(as)
+{
+  if(d<0||u<0||s<0||ad<0||au<0||as<0)
+  {
+    G4cerr<<"***G4QContent:"<<d<<","<<u<<","<<s<<","<<ad<<","<<au<<","<<as<<G4endl;
+    G4Exception("***G4QCont::IndQ: Negative Quark Content");
+  }
+}
 
 G4QContent::G4QContent(const G4QContent& right)
 {
@@ -112,7 +119,7 @@ G4QContent::~G4QContent() {}
 G4bool G4QContent::SubtractPi0()
 {//    =========================
 #ifdef debug
-  cout << "G4QC::SubtractPi0 is called: U="<<nU<<", AU="<<nAU<<", D="<<nD<<", AD="<<nAD<<endl;
+  G4cout<<"G4QC::SubtractPi0 is called: U="<<nU<<", AU="<<nAU<<", D="<<nD<<", AD="<<nAD<<G4endl;
 #endif
   G4int tot=GetTot();
   G4int ab =GetBaryonNumber();
@@ -138,7 +145,7 @@ G4bool G4QContent::SubtractPi0()
 G4bool G4QContent::SubtractPion()
 {//    ==========================
 #ifdef debug
-  cout << "G4QC::SubtractPion is called: U="<<nU<<", AU="<<nAU<<", D="<<nD<<", AD="<<nAD<<endl;
+  G4cout<<"G4QC::SubtractPion is called: U="<<nU<<", AU="<<nAU<<", D="<<nD<<", AD="<<nAD<<G4endl;
 #endif
   G4int tot=GetTot();
   G4int ab =GetBaryonNumber();
@@ -164,7 +171,7 @@ G4bool G4QContent::SubtractPion()
 G4bool G4QContent::SubtractHadron(G4QContent h)
 {//    ========================================
 #ifdef debug
-  cout << "G4QC::SubtractHadron "<<h<<" is called for QC="<<GetThis()<<endl;
+  G4cout<<"G4QC::SubtractHadron "<<h<<" is called for QC="<<GetThis()<<G4endl;
 #endif
   if(h.GetU()<=nU&&h.GetD()<=nD&&h.GetS()<=nS&&h.GetAU()<=nAU&&h.GetAD()<=nAD&&h.GetAS()<=nAS)
     return true;
@@ -175,7 +182,7 @@ G4bool G4QContent::SubtractHadron(G4QContent h)
 G4bool G4QContent::SubtractKaon(G4double mQ)
 {//    =====================================
 #ifdef debug
-  cout<<"G4QC::SubtractKaon is called:S="<<nS<<",AS="<<nAS<<",UDAUAD="<<nU<<nD<<nAU<<nAD<<endl;
+  G4cout<<"G4QC::SubtractKaon is called: QC="<<GetThis()<<G4endl;
 #endif
   if(mQ<640.) return false;
   G4int tot=GetTot();
@@ -198,7 +205,7 @@ G4bool G4QContent::SubtractKaon(G4double mQ)
     return true;
   }
 #ifdef debug
-  cout<<"QC::Can't SubtractKaon:S="<<nS<<",AS="<<nAS<<",UD,AUAD="<<nU<<nD<<","<<nAU<<nAD<<endl;
+  G4cout<<"G4QCont::SubtractKaon Can't SubtractKaon: QC="<<GetThis()<<G4endl;
 #endif
   return false;
 }
@@ -228,8 +235,7 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
   G4QContent r=Pi;     // Pion prototype of returned value
   if((tot!=4||q!=2) && (tot!=5||(q!=1&&aq!=1)) && (tot!=6||abs(b)!=2))
   {
-    cerr<<"***G4QCont::SplitChipo: QC="<<GetThis()<<endl;
-	//G4Exception("G4Quasmon::FillHadronVector: Cipolino is too fat");
+    G4cerr<<"***G4QCont::SplitChipo: QC="<<GetThis()<<G4endl;
     return Pi;
   }
   else if(tot==4)      // Mesonic (eight possibilities)
@@ -240,7 +246,7 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
     else if(r.SubtractKaon(mQ)) return r;
     else
     {
-      cerr<<"***G4QCont::SplitChipo: Mesonic tot="<<tot<<", b="<<b<<",q="<<q<<",aq="<<aq<<endl;
+      G4cerr<<"***G4QCont::SplitChipo: Mesonic tot="<<tot<<",b="<<b<<",q="<<q<<",aq="<<aq<<G4endl;
       return Pi;
     }
   }
@@ -314,7 +320,7 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
     }
     else
     {
-      cerr<<"***G4QCont::SplitChipo: Baryonic tot=5,b=1,qCont="<<GetThis()<<endl;
+      G4cerr<<"***G4QCont::SplitChipo: Baryonic tot=5,b=1,qCont="<<GetThis()<<G4endl;
       return Pi;
     }
     return r;
@@ -341,7 +347,7 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
         else if(r.SubtractHadron(dm)) return r-dm;
         else
         {
-          cerr<<"***G4QContent::SplitChipo: Dibaryon (1) tot=6, b=2, qCont="<<GetThis()<<endl;
+          G4cerr<<"***G4QCont::SplitChipo: Dibaryon (1) tot=6, b=2, qCont="<<GetThis()<<G4endl;
           return Pi;
         }
       }
@@ -354,7 +360,7 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
         else if(r.SubtractHadron(la)) return r-la;
         else
         {
-          cerr<<"***G4QContent::SplitChipo: Dibaryon (2) tot=6, b=2, qCont="<<GetThis()<<endl;
+          G4cerr<<"***G4QContent::SplitChipo: Dibaryon (2) tot=6, b=2, qCont="<<GetThis()<<G4endl;
           return Pi;
         }
       }
@@ -367,7 +373,7 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
         else if(r.SubtractHadron(nt)) return r-nt;
         else
         {
-          cerr<<"***G4QContent::SplitChipo: Dibaryon (3) tot=6, b=2, qCont="<<GetThis()<<endl;
+          G4cerr<<"***G4QContent::SplitChipo: Dibaryon (3) tot=6, b=2, qCont="<<GetThis()<<G4endl;
           return Pi;
         }
       }
@@ -391,7 +397,7 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
         else if(r.SubtractHadron(dm)) return r-dm;
         else
         {
-          cerr<<"***G4QContent::SplitChipo: ADibaryon (1) tot=6, b=2, qCont="<<GetThis()<<endl;
+          G4cerr<<"***G4QContent::SplitChipo: ADibaryon (1) tot=6, b=2, qCont="<<GetThis()<<G4endl;
           return Pi;
         }
       }
@@ -404,7 +410,7 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
         else if(r.SubtractHadron(la)) return r-la;
         else
         {
-          cerr<<"***G4QContent::SplitChipo: ADibaryon (2) tot=6, b=2, qCont="<<GetThis()<<endl;
+          G4cerr<<"***G4QContent::SplitChipo: ADibaryon (2) tot=6, b=2, qCont="<<GetThis()<<G4endl;
           return Pi;
         }
       }
@@ -417,7 +423,7 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
         else if(r.SubtractHadron(nt)) return r-nt;
         else
         {
-          cerr<<"***G4QContent::SplitChipo: ADibaryon (3) tot=6, b=2, qCont="<<GetThis()<<endl;
+          G4cerr<<"***G4QContent::SplitChipo: ADibaryon (3) tot=6, b=2, qCont="<<GetThis()<<G4endl;
           return Pi;
         }
       }
@@ -425,7 +431,7 @@ G4QContent G4QContent::SplitChipo (G4double mQ)
   }
   else                 // More than Dibaryon (@@ can use the same algorithm as for dibaryon)
   {
-    cerr<<"***G4QContent::SplitChipolino: Strange Hadron with QuarkContent="<<GetThis()<<endl;
+    G4cerr<<"***G4QContent::SplitChipolino: Strange Hadron with QuarkContent="<<GetThis()<<G4endl;
     return r;
   }
 }// End of G4QContent::SplitChipolino
@@ -439,7 +445,7 @@ G4QContent G4QContent::IndQ (G4int index)
   if(index<nD) return G4QContent(1,0,0,0,0,0);
   else if(index<nD+nU) return G4QContent(0,1,0,0,0,0);
   else if(index<nD+nU+nS) return G4QContent(0,0,1,0,0,0);
-  else cerr<<"***G4QC::IndQ:index="<<index<<" for the QuarkContent="<<GetThis()<<endl;
+  else G4cerr<<"***G4QC::IndQ:index="<<index<<" for the QuarkContent="<<GetThis()<<G4endl;
   G4Exception("***G4QC::IndQ: Index exceeds the total number of quarks");
   return G4QContent(0,0,0,0,0,0);
 }
@@ -453,7 +459,7 @@ G4QContent G4QContent::IndAQ (G4int index)
   if(index<nAD) return G4QContent(0,0,0,1,0,0);
   else if(index<nAD+nAU) return G4QContent(0,0,0,0,1,0);
   else if(index<nAD+nAU+nAS) return G4QContent(0,0,0,0,0,1);
-  else cerr<<"***G4QC::IndAQ:index="<<index<<" for the QuarkContent="<<GetThis()<<endl;
+  else G4cerr<<"***G4QC::IndAQ:index="<<index<<" for the QuarkContent="<<GetThis()<<G4endl;
   G4Exception("***G4QC::IndAQ: Index exceeds the total number of antiquarks");
   return G4QContent(0,0,0,0,0,0);
 }
@@ -462,23 +468,22 @@ G4QContent G4QContent::IndAQ (G4int index)
 G4int G4QContent::DecQAQ(const G4int& nQAQ)
 {//   =====================================
 #ifdef debug
-  cout<<"DecQC: n="<<nQAQ<<", U="<<nU<<", D="<<nD<<", S="<<nS
-      <<", AU="<<nAU<<", AD="<<nAD<<", AS="<<nAS<<endl;
+  G4cout<<"G4QContDecQC: n="<<nQAQ<<","<<GetThis()<<G4endl;
 #endif
   G4int ban = GetBaryonNumber();
   G4int tot = GetTot();    // Total number of quarks in QC
   if (tot==ban*3) return 0;// Nothing to reduce
   G4int nUP=0;             // U/AU min factor
-  if (nU>=nAU) nUP+=nAU;
-  else         nUP+= nU;
+  if (nU>=nAU) nUP=nAU;
+  else         nUP= nU;
 
   G4int nDP=0;             // D/AD min factor
-  if (nD>=nAD) nDP+=nAD;
-  else         nDP+= nD;
+  if (nD>=nAD) nDP=nAD;
+  else         nDP= nD;
 
   G4int nSP=0;             // S/AS min factor
-  if (nS>=nAS) nSP+=nAS;
-  else         nSP+= nS;
+  if (nS>=nAS) nSP=nAS;
+  else         nSP= nS;
 
   G4int nLP  =nUP+nDP;     // a#of light quark pairs
   G4int nTotP=nLP+nSP;     // total#of existing pairs
@@ -532,7 +537,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
     else if (nDP && j<nLP && (nRet>2 || nDP>1 || (nU<2 && nS<2)))// --- D-Ubar pair
 	{
 #ifdef debug
-      cout << "DecQC: decrementing DAD pair DP="<<nDP<<",nD="<<nD<<",nAD="<<nAD<<endl;
+      G4cout << "DecQC: decrementing DAD pair DP="<<nDP<<",nD="<<nD<<",nAD="<<nAD<<G4endl;
 #endif
       nD--;
       nAD--;
@@ -543,7 +548,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
     else if (nSP&& (nRet>2 || nSP>1 || (nU<2 && nD<2)))          // --- S-Sbar pair
 	{
 #ifdef debug
-      cout << "DecQC: decrementing SAS pair SP="<<nSP<<",nS="<<nS<<",nAS="<<nAS<<endl;
+      G4cout << "DecQC: decrementing SAS pair SP="<<nSP<<",nS="<<nS<<",nAS="<<nAS<<G4endl;
 #endif
       nS--;
       nAS--;
@@ -553,7 +558,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
     else if (nUP)                                  // --- U-Ubar pair cancelation (final)
 	{
 #ifdef debug
-      cout << "DecQC: decrementing UAU pair (final) UP="<<nUP<<",nU="<<nU<<",nAU="<<nAU<<endl;
+      G4cout<<"DecQC: decrementing UAU pair (final) UP="<<nUP<<",nU="<<nU<<",nAU="<<nAU<<G4endl;
 #endif
       nU--;
       nAU--;
@@ -564,7 +569,7 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
     else if (nDP)                                 // --- D-Ubar pair cancelation (final)
 	{
 #ifdef debug
-      cout << "DecQC: decrementing DAD pair (final) DP="<<nDP<<",nD="<<nD<<",nAD="<<nAD<<endl;
+      G4cout<<"DecQC: decrementing DAD pair (final) DP="<<nDP<<", QC="<<GetThis()<<G4endl;
 #endif
       nD--;
       nAD--;
@@ -575,18 +580,18 @@ G4int G4QContent::DecQAQ(const G4int& nQAQ)
     else if (nSP)                                 // --- S-Sbar pair cancelation (final)
 	{
 #ifdef debug
-      cout << "DecQC: decrementing SAS pair SP="<<nSP<<",nS="<<nS<<",nAS="<<nAS<<endl;
+      G4cout << "DecQC: decrementing SAS pair SP="<<nSP<<", QC="<<GetThis()<<G4endl;
 #endif
       nS--;
       nAS--;
       nSP--;
       nTotP--;
 	}
-    else cerr<<"***DecQC:i="<<i<<",j="<<j<<",D="<<nDP<<",U="<<nUP<<",S="<<nSP<<",T="<<nTotP
-             <<",nRet="<<nRet<<", QC="<<GetThis()<<endl;
+    else G4cout<<"***G4QC::DecQC:i="<<i<<",j="<<j<<",D="<<nDP<<",U="<<nUP<<",S="<<nSP
+               <<",T="<<nTotP<<",nRet="<<nRet<<", QC="<<GetThis()<<G4endl;
   }
 #ifdef debug
-  cout<<"DecQC:out U="<<nU<<",D="<<nD<<",S="<<nS<<",AU="<<nAU<<",AD="<<nAD<<",AS="<<nAS<<endl;
+  G4cout<<"G4QC::DecQC: >>>OUT<<< QC="<<GetThis()<<G4endl;
 #endif
   return nRet;
 }
@@ -600,7 +605,7 @@ void G4QContent::IncQAQ(const G4int& nQAQ, const G4double& sProb)
   {
     G4int j = static_cast<int>((2.+sProb)*G4UniformRand()); // 0-U, 1-D, 2-S
 #ifdef debug
-    cout<<"IncQC:out QC="<<GetThis()<<",j="<<j<<" for i="<<i<<endl;
+    G4cout<<"IncQC:out QC="<<GetThis()<<",j="<<j<<" for i="<<i<<G4endl;
 #endif
     //if      (!j)
 	if      ( !j && (nU<=nD || nU<=nS))
@@ -734,7 +739,7 @@ G4int G4QContent::GetCharge() const
   if(nAD)c+=nAD*cAD;
   if(nAS)c+=nAS*cAS;
 
-  if(c%3)cerr<<"***G4QContent:GetCharge: c="<<c<<"/3 isn't integer, QC="<<GetThis()<<endl;
+  if(c%3) G4cerr<<"***G4QContent:GetCharge: c="<<c<<"/3 isn't integer, QC="<<GetThis()<<G4endl;
 
   return c/3;
 }
@@ -744,7 +749,7 @@ G4int G4QContent::GetBaryonNumber() const
 {//   ===================================
   G4int b=nU+nD+nS-nAU-nAD-nAS;
 
-  if(b%3) cerr<<"***G4Content: BaryonNumber="<<b<<"/3 is not an integer value"<<endl;
+  if(b%3) G4cerr<<"***G4Content: BaryonNumber="<<b<<"/3 is not an integer value"<<G4endl;
 
   return b/3;
 }
@@ -808,7 +813,9 @@ G4int G4QContent::GetSPDGCode() const
 	}
     else
     {
-      cerr<<"***G4QC::SPDG: CancelationU U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<endl;
+#ifdef pdebug
+      G4cout<<"***G4QC::SPDG: CancelationU U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<G4endl;
+#endif
       return 0;
     }
   }
@@ -827,7 +834,9 @@ G4int G4QContent::GetSPDGCode() const
 	}
     else
     {
-      cerr<<"***G4QC::SPDG: CancelationD U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<endl;
+#ifdef pdebug
+      G4cout<<"***G4QC::SPDG: CancelationD U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<G4endl;
+#endif
       return 0;
     }
   }
@@ -846,7 +855,9 @@ G4int G4QContent::GetSPDGCode() const
 	}
     else
     {
-      cerr<<"***G4QC::SPDG: CancelationS U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<endl;
+#ifdef pdebug
+      G4cout<<"***G4QC::SPDG: CancelationS U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<G4endl;
+#endif
       return 0;
     }
   }
@@ -892,7 +903,9 @@ G4int G4QContent::GetSPDGCode() const
         else if (mU==0 && mD==1) p+=310;
         else
 		{
-          cerr<<"***G4QContent::SPDG: Exotic BaryonSS with U="<<mU<<",D="<<mD<<",S="<<mS<<endl;
+#ifdef debug
+          G4cout<<"***G4QC::SPDG: Exotic BaryonSS, U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<G4endl;
+#endif
           return 0;
         }
 	  }
@@ -903,15 +916,17 @@ G4int G4QContent::GetSPDGCode() const
         else if (mU==0 && mD==2) p+=110;
         else
         {
-          cerr<<"***G4QContent::GetSPDG:Exotic BaryonS with U="<<mU<<",D="<<mD<<",S="<<mS<<endl;
+#ifdef debug
+          G4cout<<"***G4QC::SPDG:Exotic BaryonS, U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<G4endl;
+#endif
           return 0;
         }
 	  }
       else                                       // Superstrange case
       {
-        //#ifdef debug
-        cerr<<"***G4QContent::GetSPDG:ExoBaryonS?U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<endl;
-        //#endif
+#ifdef debug
+        G4cout<<"***G4QContent::GetSPDG:ExoBaryonS, U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<G4endl;
+#endif
         return 0;
       }
 	}
@@ -923,14 +938,18 @@ G4int G4QContent::GetSPDGCode() const
       else if (mU==1 && mD==2) p+=110;           // There is a higher Delta S31 (PDG=1212)
       else
       {
-        cerr<<"***G4QContent::GetSPDG: Exotic BaryonU with U="<<mU<<",D="<<mD<<",S="<<mS<<endl;
+#ifdef debug
+        G4cout<<"***G4QC::SPDG: Exotic BaryonU, U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<G4endl;
+#endif
         return 0;
       }
 	}
     else if (mD==3) p=1114;                      // Decuplet
     else
     {
-      cerr<<"***G4QContent::GetSPDG: Exotic BaryonD with U="<<mU<<",D="<<mD<<",S="<<mS<<endl; 
+#ifdef debug
+      G4cout<<"***G4QC::SPDG: Exotic BaryonD, U="<<mU<<",D="<<mD<<",S="<<mS<<GetThis()<<G4endl; 
+#endif
       return 0;
 	}
     if (b<0) p=-p;
@@ -938,19 +957,21 @@ G4int G4QContent::GetSPDGCode() const
   else             // ====================>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Meson case
   {
 #ifdef debug
-    cout<<"G4QCont::SPDG: mD="<<mD<<",mU="<<mU<<",mS="<<mS<<", b="<<b<<",c="<<c<<",s="<<s<<endl;
+    G4cout<<"G4QC::SPDG: mD="<<mD<<",mU="<<mU<<",mS="<<mS<<", b="<<b<<",c="<<c<<",s="<<s<<G4endl;
 #endif
     if(n>4)                                      // Super Exotics
     {
 #ifdef debug
-      cerr<<"***G4QC::SPDG:n>4 SuperExo: U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<endl;
+      G4cout<<"***G4QC::SPDG:n>4 SuperExo: U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<G4endl;
 #endif
       return 0;
 	}
     if(n==4) return 10;                          // M+M Chipolino
     if(abs(s)>1)
 	{
-      cerr<<"***G4QC::SPDG: Strangeness="<<s<<", QC="<<GetThis()<<" - Superstrange Meson"<<endl;
+#ifdef debug
+      G4cout<<"***G4QC::SPDG: Strangeness="<<s<<", QC="<<GetThis()<<" - Superstrange Meson"<<G4endl;
+#endif
       return 0;
 	}
     // Heavy quark should come first
@@ -966,7 +987,9 @@ G4int G4QContent::GetSPDGCode() const
       else if (mU==0 && mD==1) p+=10;
       else
       {
-        cerr<<"*G4QC::SPDG:Exotic MesonS U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<endl;
+#ifdef debug
+        G4cout<<"*G4QC::SPDG:Exotic MesonS U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<G4endl;
+#endif
         return 0;
       }
 	}
@@ -983,7 +1006,9 @@ G4int G4QContent::GetSPDGCode() const
       else if (mU==1 && mD==1) p+=10;
       else
 	  {
-        cerr<<"*G4QC::SPDG:Exotic MesonU U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<endl;
+#ifdef debug
+        G4cout<<"*G4QC::SPDG:Exotic MesonU U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<G4endl;
+#endif
         return 0;
       }
 	}
@@ -997,7 +1022,7 @@ G4int G4QContent::GetSPDGCode() const
     else
     {
 #ifdef debug
-      cerr<<"***G4QC::SPDG:Exotic MesonD U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<endl;
+      G4cout<<"***G4QC::SPDG:Exotic MesonD U="<<mU<<",D="<<mD<<",S="<<mS<<",QC="<<GetThis()<<G4endl;
 #endif
       return 0;
     }

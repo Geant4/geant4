@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QHadron.hh,v 1.7 2000-09-21 06:51:57 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.8 2000-09-24 11:34:43 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -108,12 +108,17 @@ inline G4int           G4QHadron::GetBaryonNumber() const   {return valQ.GetBary
 inline void            G4QHadron::MakeAntiHadron()          {if(TestRealNeutral()) NegPDGCode();}
 inline void            G4QHadron::SetQPDG(const G4QPDGCode& newQPDG)
 {
-  theQPDG=newQPDG;
-  G4int PDG=newQPDG.GetPDGCode();
-  G4int Q  =newQPDG.GetQCode();
-  //cout<<"G4QHadron::SetQPDG is called with PDGCode="<<PDG<<", QCode="<<Q<<endl;
+  theQPDG  = newQPDG;
+  G4int PDG= newQPDG.GetPDGCode();
+  G4int Q  = newQPDG.GetQCode();
+  //G4cout<<"G4QHadron::SetQPDG is called with PDGCode="<<PDG<<", QCode="<<Q<<G4endl;
   if     (Q>-1) valQ=theQPDG.GetQuarkContent();
   else if(PDG>80000000)DefineQC(PDG);
+  else
+  {
+    G4cerr<<"***G4QHadron::SetQPDG: QPDG="<<newQPDG<<G4endl;
+    G4Exception("***G4QHadron::SetQPDG: Impossible QPDG");
+  }
 }
 inline void   G4QHadron::SetQC(const G4QContent& newQC)              {valQ=newQC;}
 inline void   G4QHadron::Set4Momentum(const G4LorentzVector& aMom)   {theMomentum=aMom;}
@@ -122,7 +127,7 @@ inline void   G4QHadron::NegPDGCode()                   {theQPDG.NegPDGCode(); v
 inline G4bool G4QHadron::TestRealNeutral()              { return theQPDG.TestRealNeutral();}
 inline void   G4QHadron::DefineQC(G4int PDGCode)
 {
-  //cout<<"G4QHadron::DefineQC is called with PDGCode="<<PDGCode<<endl;
+  //G4cout<<"G4QHadron::DefineQC is called with PDGCode="<<PDGCode<<G4endl;
   G4int szn=PDGCode-90000000;
   G4int ds=0;
   G4int dz=0;
@@ -158,9 +163,18 @@ inline void   G4QHadron::DefineQC(G4int PDGCode)
     z-=1000;
     ds--;
   }
-  G4int s  =sz/1000-ds;
-  G4int zns=z+n+s;
-  valQ=G4QContent(zns+n,zns+z,s,0,0,0);
+  G4int Sq =sz/1000-ds;
+  G4int zns=z+n+Sq;
+  G4int Dq=n+zns;
+  G4int Uq=z+zns;
+  if      (Dq<0&&Uq<0&&Sq<0)valQ=G4QContent(0 ,0 ,0 ,-Dq,-Uq,-Sq);
+  else if (Uq<0&&Sq<0)      valQ=G4QContent(Dq,0 ,0 ,0  ,-Uq,-Sq);
+  else if (Dq<0&&Sq<0)      valQ=G4QContent(0 ,Uq,0 ,-Dq,0  ,-Sq);
+  else if (Dq<0&&Uq<0)      valQ=G4QContent(0 ,0 ,Sq,-Dq,-Uq,0  );
+  else if (Uq<0)            valQ=G4QContent(Dq,0 ,Sq,0  ,-Uq,0  );
+  else if (Sq<0)            valQ=G4QContent(Dq,Uq,0 ,0  ,0  ,-Sq);
+  else if (Dq<0)            valQ=G4QContent(0 ,Uq,Sq,-Dq,0  ,0  );
+  else                      valQ=G4QContent(Dq,Uq,Sq,0  ,0  ,0  );
 }
 #endif
 
