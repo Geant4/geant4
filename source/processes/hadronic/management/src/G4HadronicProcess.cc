@@ -91,6 +91,17 @@
                                                           aMaterial, anElement );
     G4VParticleChange *result =
       theInteraction->ApplyYourself( aTrack, targetNucleus);
+    if(getenv("HadronicDoitLogging") )
+    {
+      G4cout << "HadronicDoitLogging "
+             << GetProcessName() <<" "
+             << aParticle->GetDefinition()->GetPDGEncoding()<<" "
+	     << kineticEnergy<<" "
+	     << aParticle->GetMomentum()<<" "
+	     << targetNucleus.GetN()<<" "
+	     << targetNucleus.GetZ()<<" "
+	     << G4endl;
+    }
     ResetNumberOfInteractionLengthLeft();
     if(isoIsOnAnyway!=-1)
     {

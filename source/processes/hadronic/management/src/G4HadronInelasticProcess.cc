@@ -66,6 +66,7 @@
       sigma += theAtomicNumDensityVector[i] * xSection;
     }
     sigma *= aScaleFactor;
+    theLastCrossSection = sigma;
     if( sigma > 0.0 )
       return 1.0/sigma;
     else

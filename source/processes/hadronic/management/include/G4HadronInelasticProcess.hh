@@ -43,6 +43,7 @@
 #include "G4HadronCrossSections.hh" 
 #include "G4CrossSectionDataStore.hh"
 #include "G4HadronInelasticDataSet.hh"
+#include "G4ParticleChange.hh"
  
 
  class G4HadronInelasticProcess : public G4HadronicProcess
@@ -81,6 +82,17 @@
     G4VParticleChange *PostStepDoIt(
      const G4Track &aTrack, const G4Step &aStep )
     {
+      if(0==theLastCrossSection)
+      {
+        G4cerr << "G4HadronInelasticProcess: called for final state, while cross-section was zero"<<G4endl;
+	G4cerr << "                          Returning empty particle change...."<<G4endl;
+	G4double dummy=0;
+	G4ForceCondition condition;
+	G4double it = GetMeanFreePath(aTrack, dummy, &condition);
+	G4cerr << "                          current MeanFreePath is "<<it<<G4endl;
+	theParticleChange.Initialize(aTrack);
+	return &theParticleChange;
+      }
       SetDispatch( this );
       return G4HadronicProcess::GeneralPostStepDoIt( aTrack, aStep );
     }
@@ -104,6 +116,8 @@
     
  private:
    G4double aScaleFactor;
+   G4double theLastCrossSection;
+   G4ParticleChange theParticleChange;
  };
  
 #endif
