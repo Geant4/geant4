@@ -67,6 +67,37 @@ G4BooleanSolid::~G4BooleanSolid()
   if(createdDisplacedSolid) delete fPtrSolidB ;
 }
 
+///////////////////////////////////////////////////////////////
+//
+// If Solid is made up from a Boolean operation of two solids,
+//   return the corresponding solid (for no=0 and 1)
+// If the solid is not a "Boolean", return 0
+const G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no) const
+{
+  const G4VSolid*  subSolid;
+  if( no == 0 )  
+    subSolid = fPtrSolidA;
+  else if( no == 1 ) 
+    subSolid = fPtrSolidB;
+  else
+    G4Exception("G4BooleanSolid::GetConstituentSolid()const invalid subsolid index");
+
+  return subSolid;
+}
+
+  G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no)
+{
+  G4VSolid*  subSolid;
+  if( no == 0 )  
+    subSolid = fPtrSolidA;
+  else if( no == 1 ) 
+    subSolid = fPtrSolidB;
+  else
+    G4Exception("G4BooleanSolid::GetConstituentSolid invalid subsolid index");
+
+  return subSolid;
+}
+
 
 
 

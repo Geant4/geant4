@@ -47,11 +47,12 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
   G4VSolid(pName)
 {
   fPtrSolid = pSolid ;
-  fPtrTransform = new G4AffineTransform(transform.getRotation().inverse(),
-                                        transform.getTranslation()) ;
-  fPtrTransform->Invert() ;
   fDirectTransform = new G4AffineTransform(transform.getRotation().inverse(),
-                                        transform.getTranslation()) ;
+                                           transform.getTranslation()) ;
+
+  fPtrTransform    = new G4AffineTransform(transform.getRotation().inverse(),
+                                           transform.getTranslation()) ;
+  fPtrTransform->Invert() ;
 }
 
 G4DisplacedSolid::~G4DisplacedSolid() 
@@ -63,8 +64,32 @@ G4DisplacedSolid::~G4DisplacedSolid()
   }
 }
 
+const G4DisplacedSolid* G4DisplacedSolid::GetDisplacedSolidPtr() const   
+{ return this; }
 
+      G4DisplacedSolid* G4DisplacedSolid::GetDisplacedSolidPtr() 
+{ return this; }
 
+G4VSolid* G4DisplacedSolid::GetConstituentSolid()
+{ return fPtrSolid; } 
+
+const G4AffineTransform  G4DisplacedSolid::GetTransform() const
+{
+   G4AffineTransform aTransform= *fPtrTransform;
+   return aTransform;
+}
+
+G4RotationMatrix G4DisplacedSolid::GetFrameRotation() const
+{
+   G4RotationMatrix InvRotation= fPtrTransform->NetRotation();
+   InvRotation.invert();
+   return InvRotation;
+}
+
+G4ThreeVector  G4DisplacedSolid::GetFrameTranslation() const
+{
+   return fPtrTransform->NetTranslation();
+}
 
 ///////////////////////////////////////////////////////////////
 //
@@ -215,6 +240,8 @@ G4DisplacedSolid::CreateNURBS      () const
 {
   return fPtrSolid->CreateNURBS() ;
 }
+
+
 
 
 
