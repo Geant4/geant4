@@ -1,4 +1,4 @@
-$Id: README,v 1.1 1999-01-07 16:05:16 gunter Exp $
+$Id: README,v 1.2 1999-05-31 08:14:43 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,18 +8,50 @@ $Id: README,v 1.1 1999-01-07 16:05:16 gunter Exp $
                          Examples module
                          ---------------
 
-This module collects two sets of user examples aimed to demonstrate to
+This module collects three sets of user examples aimed to demonstrate to
 the user how to make correct use of the GEANT4 toolkit by implementing
 in a correct way those user-classes which the user is supposed to
 customize in order to define his/her own simulation setup.
 One set of examples is oriented to "novice" users and covering all
 possible general use-cases typical of an "application"-oriented kind of
-development. An "advanced" set of examples (not yet available at the
-current time), will cover the use-cases typical of a "toolkit"-oriented
-kind of development.
+development. An "Extended" set of examples require some additional
+libraries besides of Geant4. This set covers some realistic use cases
+for actual detector simulation for HEP. An "advanced" set of examples 
+(not yet available at the current time), will cover the use-cases typical 
+of a "toolkit"-oriented kind of development.
 Most of the examples can be run both in interactive and batch mode, and 
 input macro files (*.in) and reference output files (*.out) are provided.
 These examples are considered part of the validation procedure for the
 official releases of the GEANT4 toolkit, as "acceptance"-testing phase
 of the validation process.
+
+Novice level examples
+ ExampleN01
+   - Mandatory user classes
+   - Demonstrates how Geant4 kernel works
+ ExampleN02
+   - Simplified tracker geometry with uniform magnetic field
+   - Electromagnetic processes
+ ExampleN03
+   - Simplified calorimeter geometry
+   - Electromagnetic processes
+   - Various materials
+ ExampleN04
+   - Simplified collider detector with a readout geometry
+   - Full "ordinary" processes
+   - PYTHIA primary events
+   - Event filtering by stack
+ ExampleN05
+   - Simplified BaBar calorimeter
+   - EM shower parametrisation
+ ExampleN06
+   - Optical photon processes
+
+Extended level examples
+ ExampleE01
+   - CLHEP histogramming
+ ExampleE02
+   - Persistency by HepODBMS (CERN RD45)
+ ExampleE03
+   - STEP geometry interface
 
