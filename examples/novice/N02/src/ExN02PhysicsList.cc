@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02PhysicsList.cc,v 1.1 1999-01-07 16:05:49 gunter Exp $
+// $Id: ExN02PhysicsList.cc,v 1.2 1999-04-16 11:19:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@ ExN02PhysicsList::ExN02PhysicsList():  G4VUserPhysicsList(),
  theeplusAnnihilation(NULL)
 {
   defaultCutValue = 2.0*mm;
-  SetVerboseLevel(1);
+   SetVerboseLevel(1);
 }
 
 ExN02PhysicsList::~ExN02PhysicsList()
@@ -69,28 +69,29 @@ void ExN02PhysicsList::ConstructBosons()
 
   // gamma
   G4Gamma::GammaDefinition();
-
-  // optical photon
-  G4OpticalPhoton::OpticalPhotonDefinition();
 }
 
 void ExN02PhysicsList::ConstructLeptons()
 {
   // leptons
+  //  e+/-
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
+  // mu+/-
   G4MuonPlus::MuonPlusDefinition();
   G4MuonMinus::MuonMinusDefinition();
-
+  // nu_e
   G4NeutrinoE::NeutrinoEDefinition();
   G4AntiNeutrinoE::AntiNeutrinoEDefinition();
+  // nu_mu
   G4NeutrinoMu::NeutrinoMuDefinition();
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 }
 
 void ExN02PhysicsList::ConstructMesons()
 {
- //  mesons
+  //  mesons
+  //    light mesons
   G4PionPlus::PionPlusDefinition();
   G4PionMinus::PionMinusDefinition();
   G4PionZero::PionZeroDefinition();
@@ -107,9 +108,10 @@ void ExN02PhysicsList::ConstructMesons()
 
 void ExN02PhysicsList::ConstructBarions()
 {
-//  barions
+  //  barions
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
+
   G4Neutron::NeutronDefinition();
   G4AntiNeutron::AntiNeutronDefinition();
 }
@@ -262,27 +264,13 @@ void ExN02PhysicsList::ConstructGeneral()
   }
 }
 
-void ExN02PhysicsList::SetCuts(G4double cut)
+void ExN02PhysicsList::SetCuts()
 {
-  if (verboseLevel >0){
+  if (verboseLevel >1){
     G4cout << "ExN02PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
   }  
+  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //   the default cut value for all particle types 
+  SetCutsWithDefault();   
 
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
-  SetCutValue(cut, "gamma");
-  SetCutValue(cut, "e-");
-  SetCutValue(cut, "e+");
- 
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-  SetCutValue(cut, "proton");
-  SetCutValue(cut, "anti_proton");
-  
-  SetCutValueForOthers(cut);
-
-  if (verboseLevel>1) {
-    DumpCutValuesTable();
-  }
 }
