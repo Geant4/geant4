@@ -1,4 +1,4 @@
-# $Id: swig.gmk,v 1.1.1.1 2003-06-12 13:08:24 dressel Exp $
+# $Id: swig.gmk,v 1.2 2003-06-13 16:05:33 dressel Exp $
 # --------------------------------------------------------------
 # swig.gmk   Michael Dressel
 # --------------------------------------------------------------
@@ -18,7 +18,6 @@ SWIGSO = $(subst include/,$(libdirWrapper)/_,$(TMPSO))
 
 moduleName = $(subst Wrapper,,$(name))
 
-SWIG = $(ANAPHESPECDIR)/PublicDomainPackages/2.0.0/bin/swig-1.3.15
 
 .PHONY: all swigClean
 
@@ -26,7 +25,9 @@ all: ${G4WORKDIR}/tmp/${G4SYSTEM}/$(name) $(SWIGD) $(SWIGCC) ${G4WORKDIR}/tmp/${
 CXXFLAGS += -w
 
 
-
+ifdef G4ANALYSIS_USE
+SWIGFLAGS += -DG4ANALYSIS_USE
+endif
 
 
 MYLIBS = $(subst -l$(name),,$(LDLIBS)) 	

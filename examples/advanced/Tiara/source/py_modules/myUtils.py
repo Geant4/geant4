@@ -1,11 +1,13 @@
 import G4Kernel
-import myLiz
+
 import string
 import os
 import time
 import shelve
 
-
+G4analysisUse = os.environ.has_key("G4ANALYSIS_USE")
+if G4analysisUse:
+    import myLiz
 
 
 def createParallelSampler(impGeo, impScorer):
@@ -33,21 +35,22 @@ def printImpTable(impScorer, istore = ""):
 
 
 
-
 def saveResults(tApp, path, shelveName, impScorer, impGeo):
     myShelve = shelve.open(path + "/" + shelveName)
-    storePath = path + "/" + myShelve["xmlStoreName"]
     printImpTable(impScorer, impGeo.getImportanceStore())
     table = G4Kernel.G4ScoreTable()
     table.Print(tApp.cellScorerStore.GetMapGeometryCellCellScorer())
-    persistantStore = myLiz.tf.create(storePath,"xml",0,1)
-    coppyTrees(tApp.tree, persistantStore)
-    persistantStore.commit()
-    persistantStore.close()
+    if G4analysisUse:
+        storePath = path + "/" + myShelve["xmlStoreName"]
+        persistantStore = myLiz.tf.create(storePath,"xml",0,1)
+        coppyTrees(tApp.tree, persistantStore)
+        persistantStore.commit()
+        persistantStore.close()
+        print "wrote to store: ", storePath
+
     tApp.fillShelve(myShelve)
     myShelve.close()
-    print "wrote to store: ", storePath
-    print "    and shelve: ", shelveName
+    print "wrote shelve: ", shelveName
 
 
 def coppyTrees(srcTree, cpTree):
@@ -174,26 +177,26 @@ def getConfigInfoFromTree(tree):
 
     return configInfo
 
-
-def addToXML(mergedXMLStore, xmlStore):
-    objNames = xmlStore.listObjectNames()
-    objTypes = xmlStore.listObjectTypes()
-    hf = myLiz.af.createHistogramFactory(mergedXMLStore)
-    for i in range(len(objNames)):
-        oName = objNames[i]
-        oType = objTypes[i]
-        if oType == "IHistogram1D":
-            h1 = mergedXMLStore.findH1D(oName)
-            h2 = xmlStore.findH1D(oName)
-            hf.add(oName,h1,h2)
+if G4analysisUse:
+    def addToXML(mergedXMLStore, xmlStore):
+        objNames = xmlStore.listObjectNames()
+        objTypes = xmlStore.listObjectTypes()
+        hf = myLiz.af.createHistogramFactory(mergedXMLStore)
+        for i in range(len(objNames)):
+            oName = objNames[i]
+            oType = objTypes[i]
+            if oType == "IHistogram1D":
+                h1 = mergedXMLStore.findH1D(oName)
+                h2 = xmlStore.findH1D(oName)
+                hf.add(oName,h1,h2)
         
-
-def comparableShelves(she, mergedXMLStore):
-    comp = 1
-    if mergedShelve["energy"] != she["energy"]:
-        comp = 0
-    if mergedShelve["shieldWidth"] != she["shieldWidth"]:
-        comp = 0
+if G4analysisUse:
+    def comparableShelves(she, mergedXMLStore):
+        comp = 1
+        if mergedShelve["energy"] != she["energy"]:
+            comp = 0
+        if mergedShelve["shieldWidth"] != she["shieldWidth"]:
+            comp = 0
     
 
 def setUpMergedShelve(she, mergedShelve, mergedXMLname, shelveNameToBeAdded):
@@ -217,38 +220,39 @@ def addToShelve(mergedShelve, she, shelveNameToBeAdded):
     mergedShelve["detector_00Tally"].addMeasures(she["detector_00Tally"])
     mergedShelve["detector_20Tally"].addMeasures(she["detector_20Tally"])
     mergedShelve["detector_40Tally"].addMeasures(she["detector_40Tally"])
-    
-def mergeData(mergedName, shelveList):
-    mergedShelveName = mergedName + ".shelve"
-    print "createing merged shelve: ", mergedShelveName
-    mergedShelve = shelve.open(mergedShelveName)
-    mergedXMLname = mergedName + ".xml"
-    print "createing merged XML store: ", mergedXMLname
-    mergedXMLStore = myLiz.tf.create(mergedXMLname, "xml", 0, 1)
+
+if G4analysisUse:
+    def mergeData(mergedName, shelveList):
+        mergedShelveName = mergedName + ".shelve"
+        print "createing merged shelve: ", mergedShelveName
+        mergedShelve = shelve.open(mergedShelveName)
+        mergedXMLname = mergedName + ".xml"
+        print "createing merged XML store: ", mergedXMLname
+        mergedXMLStore = myLiz.tf.create(mergedXMLname, "xml", 0, 1)
 
     
-    for i in range(len(shelveList)):
-        shelveName = shelveList[i]
-        print "adding data from: ", shelveName
-        she = shelve.open(shelveName,"r")
-        xmlStoreName = she["xmlStoreName"]
-        print "opening: ", xmlStoreName
-        xmlStore = myLiz.tf.create(xmlStoreName,"xml",1,0)
-        if i == 0:
-            if mergedXMLStore.listObjectNames() == ():
-                setUpMergedShelve(she, mergedShelve, mergedXMLname, shelveName)
-                coppyTrees(xmlStore, mergedXMLStore)
+        for i in range(len(shelveList)):
+            shelveName = shelveList[i]
+            print "adding data from: ", shelveName
+            she = shelve.open(shelveName,"r")
+            xmlStoreName = she["xmlStoreName"]
+            print "opening: ", xmlStoreName
+            xmlStore = myLiz.tf.create(xmlStoreName,"xml",1,0)
+            if i == 0:
+                if mergedXMLStore.listObjectNames() == ():
+                    setUpMergedShelve(she, mergedShelve, mergedXMLname, shelveName)
+                    coppyTrees(xmlStore, mergedXMLStore)
+                else:
+                    if comparableShelves(she, mergedXMLStore):
+                        addToShelve(mergedShelve, she, shelveName)
+                        addToXML(mergedXMLStore, xmlStore)
             else:
-                if comparableShelves(she, mergedXMLStore):
-                    addToShelve(mergedShelve, she, shelveName)
-                    addToXML(mergedXMLStore, xmlStore)
-        else:
-            addToShelve(mergedShelve, she, shelveName)
-            addToXML(mergedXMLStore, xmlStore)
+                addToShelve(mergedShelve, she, shelveName)
+                addToXML(mergedXMLStore, xmlStore)
 
-    mergedShelve.close()
-    mergedXMLStore.commit()
-    mergedXMLStore.close()
+        mergedShelve.close()
+        mergedXMLStore.commit()
+        mergedXMLStore.close()
 
 
 def rmPath(she):

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TiaraVisEventAction.cc,v 1.1.1.1 2003-06-12 13:08:25 dressel Exp $
+// $Id: TiaraVisEventAction.cc,v 1.2 2003-06-13 16:05:33 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,7 @@ void TiaraVisEventAction::Clear() {
 
 
 
-void TiaraVisEventAction::BeginOfEventAction(const G4Event* evt)
+void TiaraVisEventAction::BeginOfEventAction(const G4Event* )
 {
 }
 

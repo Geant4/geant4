@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TiaraCellScorer.cc,v 1.1.1.1 2003-06-12 13:08:25 dressel Exp $
+// $Id: TiaraCellScorer.cc,v 1.2 2003-06-13 16:05:33 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,6 +39,7 @@
 #include "G4CellScoreValues.hh"
 #include "Randomize.hh"
 
+#ifdef G4ANALYSIS_USE
 TiaraCellScorer::TiaraCellScorer(AIDA::IHistogramFactory *hf,
 				 const G4String &histBaseName,
 				 const G4std::vector<double> 
@@ -63,7 +64,13 @@ TiaraCellScorer::TiaraCellScorer(AIDA::IHistogramFactory *hf,
   
   fTally(tally)
 {}
-
+#else
+TiaraCellScorer::TiaraCellScorer(const G4String &histBaseName,
+				 const TiaraTally &tally) :
+  fBaseName(histBaseName),
+  fTally(tally)
+{}
+#endif
 
 
 TiaraCellScorer::~TiaraCellScorer()
@@ -98,16 +105,23 @@ void TiaraCellScorer::FillHisto(const G4Step &aStep){
 
   G4double e(p->GetKineticEnergy());
 
+#ifdef G4ANALYSIS_USE
   fEnergyHisto->fill(e, slw);
   fEnergyFluxHisto->fill(e, slw*e);
   fEnergyHistoBonner->fill(e/eV, slw);
   fEnergyFluxHistoBonner->fill(e/eV, slw*e/eV);
+#else
+  G4cout << fBaseName << ": Energy: " << e << ", sl*w: " << slw << "\n";
+#endif
 
   fTally.fill(e, slw);
 
 }
 
 void TiaraCellScorer::EndOfEventAction() {
+#ifndef G4ANALYSIS_USE
+  G4cout << fBaseName << ": end of event" << G4endl;
+#endif
   fTally.EndOfEventAction();
 }
 

@@ -1,5 +1,4 @@
 import string
-import myLiz
 
 import CLHEP
 import G4Kernel
@@ -12,7 +11,15 @@ import tallyData
 
 class TiaraApplet(object):
     tiaraSim = None
-    def __init__(self, tiaraSpecs, tSim = None):
+    def __init__(self, tiaraSpecs, tSim = None, useLizard = True):
+        if useLizard:
+            import myLiz
+            self.tree = myLiz.tf.create()
+            self.hf = myLiz.af.createHistogramFactory (self.tree)
+        else:
+            self.tree = None
+            self.hf = None
+            
         if (not TiaraApplet.tiaraSim):
             if not tSim:
                 print "Error: TiaraApplet: argument is empty, and no tiaraSim exists!"
@@ -24,8 +31,6 @@ class TiaraApplet(object):
         self.cellScorerStore = Tiara.TiaraCellScorerStore()
         self.sampler = G4Kernel.G4MassGeometrySampler("neutron")
         self.eventAction = None
-        self.tree = myLiz.tf.create()
-        self.hf = myLiz.af.createHistogramFactory (self.tree)
         self.scorer = None
         self.primGen = None
         self.scSrc = None
@@ -114,15 +119,22 @@ class TiaraApplet(object):
                           tallyBinEdges[self.tiaraSpecs.\
                                         experiment.energy])
         for det in self.scoreDets:
-            det.scorer = \
-                       Tiara.\
-                       TiaraCellScorer(self.hf,
-                                       det.name,
-                                       self.tiaraSpecs.
-                                       experiment.binEdgesScinti,
-                                       self.tiaraSpecs.
-                                       experiment.binEdgesBonner,
-                                       tally)
+            det.scorer = None
+            if self.hf:
+                det.scorer = \
+                           Tiara.\
+                           TiaraCellScorer(self.hf,
+                                           det.name,
+                                           self.tiaraSpecs.
+                                           experiment.binEdgesScinti,
+                                           self.tiaraSpecs.
+                                           experiment.binEdgesBonner,
+                                           tally)
+            else:
+                det.scorer = \
+                           Tiara.\
+                           TiaraCellScorer(det.name,
+                                           tally)
             self.cellScorer.append(det.scorer)
             
                                    
@@ -133,14 +145,21 @@ class TiaraApplet(object):
                                         experiment.energy])
 
         physSrcDet = self.tiaraHall.AddSourceDetector()
-        self.scSrc = Tiara.\
-                     TiaraCellScorer(self.hf,
-                                     "source_detector",
-                                     self.tiaraSpecs.
-                                     experiment.binEdgesScinti,
-                                     self.tiaraSpecs.
-                                     experiment.binEdgesBonner,
-                                     tally)
+        self.scSrc = None
+        if self.hf:
+            self.scSrc = Tiara.\
+                         TiaraCellScorer(self.hf,
+                                         "source_detector",
+                                         self.tiaraSpecs.
+                                         experiment.binEdgesScinti,
+                                         self.tiaraSpecs.
+                                         experiment.binEdgesBonner,
+                                         tally)
+        else:
+            self.scSrc = Tiara.\
+                         TiaraCellScorer("source_detector",
+                                         tally)
+            
 
         self.scoreDets = self.scoreDetectorCreator.\
                          createScoreDetectors(self.tiaraHall)

@@ -1,4 +1,7 @@
 #include "TiaraSampledEnergy.hh"
+
+#ifdef G4ANALYSIS_USE
+
 #include "Randomize.hh"
 #include "TiaraFileAcess.hh"
 
@@ -58,3 +61,4 @@ G4double TiaraSampledEnergy::GetEnergy() {
   return e;
 }
 
+#endif

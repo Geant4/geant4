@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TiaraCellScorer.hh,v 1.1.1.1 2003-06-12 13:08:24 dressel Exp $
+// $Id: TiaraCellScorer.hh,v 1.2 2003-06-13 16:05:33 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,18 +45,25 @@
 
 #include "g4std/vector"
 
+#ifdef G4ANALYSIS_USE
 #include "AIDA/AIDA.h"
+#endif
 
 #include "TiaraTally.hh"
 
 
 class TiaraCellScorer : public G4VCellScorer{
 public:  
+#ifdef G4ANALYSIS_USE
   TiaraCellScorer(AIDA::IHistogramFactory *hf,
 		  const G4String &histBaseName,
 		  const G4std::vector<double>  & binEdgesScinti,
 		  const G4std::vector<double>  & binEdgesBonner,
 		  const TiaraTally &tally);
+#else
+  TiaraCellScorer(const G4String &histBaseName,
+		  const TiaraTally &tally);
+#endif
 
   virtual ~TiaraCellScorer();
   virtual void ScoreAnExitingStep(const G4Step &aStep, 
@@ -78,10 +85,12 @@ private:
 
   G4CellScorer fG4CellScorer;
   G4String fBaseName;
+#ifdef G4ANALYSIS_USE
   AIDA::IHistogram1D* fEnergyHisto;
   AIDA::IHistogram1D* fEnergyFluxHisto;
   AIDA::IHistogram1D* fEnergyHistoBonner;
   AIDA::IHistogram1D* fEnergyFluxHistoBonner;
+#endif
   TiaraTally fTally;
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TiaraTimedEventAction.cc,v 1.1.1.1 2003-06-12 13:08:25 dressel Exp $
+// $Id: TiaraTimedEventAction.cc,v 1.2 2003-06-13 16:05:33 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,9 +57,9 @@ TiaraTimedEventAction::TiaraTimedEventAction(G4int time):
 TiaraTimedEventAction::~TiaraTimedEventAction() 
 {}
 
-void TiaraTimedEventAction::BeginOfEventAction(const G4Event* evt)
+void TiaraTimedEventAction::BeginOfEventAction(const G4Event*)
 {
-  struct tms time = {0};
+  struct tms time;
   times(&time);
   fEvStartTime = time.tms_utime;
 }
@@ -71,14 +71,14 @@ SetScorerStore(TiaraCellScorerStore *scorerStore){
   fScorerStore = scorerStore;
 }
 
-void TiaraTimedEventAction::EndOfEventAction(const G4Event* evt)
+void TiaraTimedEventAction::EndOfEventAction(const G4Event* )
 {
   
   if (fScorerStore) {
     fScorerStore->EndOfEventAction();
   }
 
-  struct tms time = {0};
+  struct tms time;
   times(&time);
 
 

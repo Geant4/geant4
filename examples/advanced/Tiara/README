@@ -1,43 +1,89 @@
 Simulation of the TIARA experiment using importance sampling
 ============================================================
 
-This description assumes the example will be used on a CERN RH 7.3
-system. It has been tested with the compiler gcc-3.2. Several 
+The example has been tested on CERN RH 7.3 with the
+gcc-3.2 compiler.
 
+Seting the environment
+======================
+
+You should have Geant4 compiled with:
+"G4LIB_BUILD_SHARED" set to 1.
+You need to set:
+"NeutronHPCrossSections" (e.g. to ${G4INSTALL}/data/G4NDL3.7)
+
+
+Three examples are given of how to set environment variables
+in the three cases:
+
+Anaphe via AFS:
+---------------
+   You have access to afs adn you want to use Anaphe for the
+   analysis: 
+   Set the follwing environment variables:
+   "G4ANALYSIS_USE"
+
+   "ANAPHETOP" (e.g. /afs/cern.ch/sw/lhcxx)
+   "AIDA_DIR"  (e.g. /afs/cern.ch/sw/contrib/AIDA/3.0/src/cpp)
+   "ANAPHE_SCRIPTS" (e.g. /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.4/scripts)
+
+   Finaly source the script env.Common.csh
+
+
+No afs but a local Anphe and AIDA installation:
+----------------------------------------------
+   You don't use afs but you have a local installation of Anaphe and AIDA
+   (e.g. from http://anaphe.web.cern.ch/anaphe/.
+   Set the follwing environment variables:
+   "G4ANALYSIS_USE"
+ 
+   "ANAPHETOP" (e.g. /users/dressel/Anaphe/release)
+   "AIDA_DIR"  (e.g. /users/dressel/AIDA/3.0.0/3.0.0/AIDA/3.0/src/cpp)
+   "ANAPHE_SCRIPTS" (e.g. ${ANAPHETOP}/share/LHCXX/5.0.5/scripts)
+
+   Finaly source the script env.Common.csh
+
+
+No afs and no Anaphe and no AIDA (e.g. for system testing):
+-----------------------------------------------------------
+   You don't want to use Anaphe and AIDA and you don't have no afs access.
+   Make sure "G4ANALYSIS_USE" is unset (e.g. unsetenv G4ANALYSIS_USE).
+
+   Set "PYTHONVERSION" (e.g. to  2.2)
+   Set "PYTHON_INCLUDE_DIR" (e.g. to  /usr/include/python${PYTHONVERSION})
+   Set "PYTHON_LIB_DIR" (e.g. to /usr/lib/python${PYTHONVERSION}/config)
+
+   Set "SWIG"  (e.g. to /users/dressel/local/bin/swig)
+
+   Set "CLHEP_BASE_DIR" (e.g. to  /users/dressel/CLHEP)
+
+   Finaly source the script env.Common.csh
 
 
 Building the example
 ====================
 
+
+
 Quick building:
 ---------------
-If the following conditions:
-- system = CERN RH 7.3 
-- compiler = gcc3.2 
-- access to afs exists 
-- shell = tcsh
-- Geant4 is compiled using G4LIB_BUILD_SHARED 1
-are fulfilled the example may be build as follows:
+Geant4 is compiled using G4LIB_BUILD_SHARED 1 and the one of the above 
+environment settings have to be set.
 
-1) setup the environment by typing: source simEnvironAFS.csh 
-2) type gmake
+Type "gmake".
 
 
 In more detail
 --------------
 
 Geant4 should be compiled into granular shared libraries.
-Therefore before compiling Geant4 set G4LIB_BUILD_SHARED to 1.
+Therefore before compiling Geant4 set "G4LIB_BUILD_SHARED" to "1".
 
 External packages used in this example are Anaphe, SWIG and Python.
 The Anaphe package comes with SWIG and Python versions used to build
-Anaphe itself. These Swig and Python versions should also be used with 
-this example.
+Anaphe itself. These SWIG and Python versions should also be used with 
+this example. 
 
-The file simEnvironAFS.csh provides an example for how to set the 
-environment which works under the above listed conditions. 
-The file simEnviron.csh is an example for a local installation
-of Anaphe and AIDA.
 
 Cleaning up
 -----------
@@ -50,6 +96,9 @@ To remove the files created by swig ( *_wrap.cc, the corresponding
 Running the example:
 =====================
 
+
+Using Anaphe
+------------
 Change to the sub directory "run" and execute "runSim.py".
 "runSim.py" runs an example configuration which nay be
 changed by the user. The results of the simulation are stored in 
@@ -77,8 +126,10 @@ set the print out period to 10 minutes by setting:
 "timeForOneRun = 10 * myUtils.min".
 
 
-
-
+Not using Anaphe (mainly for system testing)
+--------------------------------------------
+Change to the sub directory "run" and execute 
+runSimNoAnalysis.py.
 
 
 
@@ -87,8 +138,10 @@ set the print out period to 10 minutes by setting:
 Content of the directory:
 =========================
 
-simEnviron.csh - file to be sourced for setting up the 
-                 environment specific for this example
+
+simCommon.csh - a script to setup environment variables
+    in case the above one of the above environmetn settings have been
+    done beforehand.
 
 buildit.csh - file to be executed to build the example
 

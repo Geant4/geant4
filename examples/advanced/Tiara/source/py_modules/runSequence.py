@@ -26,8 +26,9 @@ class RunConfig(object):
       
 class RunSequence(object):
     # methods to be used public
-    def  __init__(self, runConfig):
+    def  __init__(self, runConfig, useLizard = True):
         self.rc = runConfig
+        self.useLizard = useLizard
         self.runNum = -1
         self.confInfo = self.rc.getConfInfo()
         self.storeName = myUtils.getStoreName()
@@ -68,8 +69,9 @@ class RunSequence(object):
     def report(self):
         print "\n\nRunSequence.report:"
         print self.confInfo
-        print "the xml store will be named: "
-        print " ", self.pathXMLName
+        if self.useLizard:
+            print "the xml store will be named: "
+            print " ", self.pathXMLName
         print "the shelve name: "
         print " ", self.pathShelveName
         print "\n\n"
@@ -90,8 +92,10 @@ class RunSequence(object):
         rns = string.rjust(rns, 5)
         rns = string.replace(rns,' ','0')
         rId = "_run" + rns 
-        self.xmlStore = self.storeName + rId + ".xml"
-        self.pathXMLName = self.path + "/" + self.xmlStore
+        if self.useLizard:
+            self.xmlStore = self.storeName + rId + ".xml"
+            self.pathXMLName = self.path + "/" + self.xmlStore
+
         self.shelveName = self.storeName + rId + ".shelve"
         self.pathShelveName = self.path + "/" + self.shelveName
         self.randomNumberFileName = self.path + "/randomNumberFile" + rId
@@ -99,7 +103,8 @@ class RunSequence(object):
 
     def mkShelve(self):
         myShelve = shelve.open(self.pathShelveName)
-        myShelve["xmlStoreName"] = self.xmlStore
+        if self.useLizard:
+            myShelve["xmlStoreName"] = self.xmlStore
         for info in self.confInfo:
             myShelve[info] = self.confInfo[info]
         myShelve.close()

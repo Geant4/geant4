@@ -1,6 +1,8 @@
 #ifndef TiaraDPSSampledEnergy_hh
 #define TiaraDPSSampledEnergy_hh TiaraDPSSampledEnergy_hh
 
+#ifdef G4ANALYSIS_USE
+
 #include "TiaraVSourceEnergyGenerator.hh"
 #include <memory>
 #include "g4std/map"
@@ -38,5 +40,5 @@ private:
   G4double fMaxE;
 };
 
-
+#endif
 #endif

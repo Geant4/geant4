@@ -1,4 +1,7 @@
 #include "TiaraDPSSampledEnergy.hh"
+
+#ifdef G4ANALYSIS_USE
+
 #include "Randomize.hh"
 #include "TiaraFileAcess.hh"
 
@@ -106,7 +109,7 @@ void TiaraDPSSampledEnergy::getBounds(G4int &cL, G4int &cH, G4double v) {
   cL = itL->first;
 }
 
-
+#endif
 
 
 

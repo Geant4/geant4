@@ -1,6 +1,8 @@
 #ifndef TiaraSampledEnergy_hh
 #define TiaraSampledEnergy_hh TiaraSampledEnergy_hh
 
+#ifdef G4ANALYSIS_USE
+
 #include "TiaraVSourceEnergyGenerator.hh"
 #include <memory>
 
@@ -31,5 +33,5 @@ private:
   G4double fMinEnergyCut;
 };
 
-
+#endif
 #endif
