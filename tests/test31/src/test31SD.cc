@@ -69,10 +69,13 @@ test31SD::~test31SD()
 void test31SD::Initialize(G4HCofThisEvent*)
 {
   evno++;
-  if(0 < theHisto->GetVerbose()) 
-    G4cout << "test31SD: Begin Of Event # " << evno << G4endl;
-
   numAbs = theHisto->GetNumberOfAbsorbers();
+  if(0 < theHisto->GetVerbose()) 
+    G4cout << "test31SD: Begin Of Event # " 
+           << evno
+           << "  numAbs= " << numAbs 
+           << G4endl;
+
   energy.resize(numAbs);
   for(G4int i=0; i<numAbs; i++) { energy[i] = 0.0; }
   backEnergy = 0.0;
@@ -101,7 +104,7 @@ G4bool test31SD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
       energy[j] += edep;
   }
 
-  if(1 < theHisto->GetVerbose()) {
+  if(0 < theHisto->GetVerbose()) {
       G4cout << "test31SD: energy = " << edep/MeV
              << " MeV is deposited at " << j
              << "-th absorber slice " << G4endl;
@@ -110,6 +113,11 @@ G4bool test31SD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   const G4Track* track = aStep->GetTrack();
   G4int trIDnow  = track->GetTrackID();
   G4double tkin  = track->GetKineticEnergy(); 
+  /*
+  G4cout << G4std::setw(14)
+         <<  "Next step: id= " << trIDnow 
+         << " e= " << tkin << " r= " << track->GetPosition() << G4endl;
+  */
   G4double theta = (track->GetMomentumDirection()).theta();
   G4double zend  = aStep->GetPostStepPoint()->GetPosition().z();
   //  G4double zstart= aStep->GetPreStepPoint()->GetPosition().z();
@@ -156,10 +164,19 @@ G4bool test31SD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 
   if(outAbs && part_is_out) {
     G4double e = tkin;
+    
     if(track->GetDefinition() == G4Positron::Positron()) 
       e += 2.*electron_mass_c2;
-    if(zend > zmax-delta)       leakEnergy += e;
-    else if(zend < delta)       backEnergy += e;
+
+    const G4DynamicParticle* dp = track->GetDynamicParticle();
+
+    if(zend > zmax-delta)    {
+       leakEnergy += e;
+       theHisto->AddParticleLeak(dp);       
+    } else if(zend < delta)  {
+       backEnergy += e;
+       theHisto->AddParticleBack(dp);       
+    }
     part_is_out = false;
   }
   return true;
@@ -182,6 +199,7 @@ void test31SD::EndOfEvent(G4HCofThisEvent*)
     for(i=0; i<numAbs; i++) {
       z += s; 
       etot += energy[i];
+      //      G4cout << "i= " << i << " e= " << energy[i] << G4endl;
       theHisto->AddEnergy(energy[i], z);
     }
   }

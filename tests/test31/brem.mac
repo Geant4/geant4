@@ -7,7 +7,8 @@
 /event/verbose 0
 /test31/verbose 0
 #
-/test31/physics/cutGamma    95 cm
+#/test31/physics/cutGamma    95 cm
+/test31/physics/cutGamma    0.5 mm
 /test31/physics/cutElectron 95 cm
 #/test31/physics/MaxStep     0.2 mm
 #
@@ -17,15 +18,17 @@
 /test31/AbsorberMaterial    Aluminum
 /test31/AbsorberThick       1000 cm
 /test31/NumberOfAbsorbers   1
-/test31/maxDeltaEnergy      1.0 MeV
+/test31/maxDeltaEnergy      0.01 MeV
 /test31/WorldMaterial       Vacuum
-/test31/HistoName           hbook.paw
+#/test31/HistoName           brem_st.paw
+/test31/HistoName           brem_ma.paw
 /test31/HistoNumber         0
+/test31/ntuple              false
 #/test31/NumberOfEvents      1
-/test31/gun/beamE           0.01 MeV
+/test31/gun/beamE           100 MeV
 #
-#/gun/particle e-
-/gun/particle proton
+/gun/particle e-
+#/gun/particle proton
 #/gun/particle alpha
 #/gun/particle IonC12
 #
@@ -35,7 +38,8 @@
 /process/inactivate   phot
 /process/inactivate   compt
 /process/inactivate   conv
-/process/inactivate   eBrem
+#/process/inactivate   eBrem
+/process/inactivate   eIoni
 /process/inactivate   msc
 #
 #/process/eLoss/StepFunction 0.183 170 micrometer

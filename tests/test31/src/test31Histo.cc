@@ -34,6 +34,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "test31Histo.hh"
+#include "G4Gamma.hh"
 #include "g4std/iomanip"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -79,6 +80,17 @@ void test31Histo::BeginOfHisto(G4int num)
   zend2    = 0.0;
   zEvt     = 0.0;
   etot     = 0.0;
+
+  n_evt  = 0;
+  n_elec = 0;
+  n_posit= 0;
+  n_gam  = 0;
+  n_step = 0;
+
+  n_charged_leak = 0;
+  n_gam_leak = 0;
+  n_charged_back = 0;
+  n_gam_back = 0;
   
   if(0 < nHisto) bookHisto();
 
@@ -96,7 +108,8 @@ void test31Histo::EndOfHisto()
   G4cout << "test31Histo: End of run actions are started" << G4endl;
 
   // Zend average
-  G4cout<<"========================================================"<<G4endl;
+
+  G4cout<<"===================================================================="<<G4endl;
   if(zEvt > 0.0) {
     zend  /= zEvt;
     zend2 /= zEvt;
@@ -116,13 +129,21 @@ void test31Histo::EndOfHisto()
   G4double xg = x*(G4double)n_gam;
   G4double xp = x*(G4double)n_posit;
   G4double xs = x*(G4double)n_step;
-  G4cout                    << "Number of events          " << n_evt <<G4endl; 
-  G4cout << setprecision(4) << "Average energy deposit    " << etot/MeV << " MeV" << G4endl; 
-  G4cout << setprecision(4) << "Average number of e-      " << xe << G4endl; 
-  G4cout << setprecision(4) << "Average number of gamma   " << xg << G4endl; 
-  G4cout << setprecision(4) << "Average number of e+      " << xp << G4endl; 
-  G4cout << setprecision(4) << "Average number of steps   " << xs << G4endl; 
-  G4cout<<"========================================================"<<G4endl;
+  G4double xcl = x*(G4double)n_charged_leak;
+  G4double xgl = x*(G4double)n_gam_leak;
+  G4double xcb = x*(G4double)n_charged_back;
+  G4double xgb = x*(G4double)n_gam_back;
+  G4cout                    << "Number of events               " << n_evt <<G4endl; 
+  G4cout << setprecision(4) << "Average energy deposit         " << etot/MeV << " MeV" << G4endl; 
+  G4cout << setprecision(4) << "Average number of e-           " << xe << G4endl; 
+  G4cout << setprecision(4) << "Average number of gamma        " << xg << G4endl; 
+  G4cout << setprecision(4) << "Average number of e+           " << xp << G4endl; 
+  G4cout << setprecision(4) << "Average number of steps        " << xs << G4endl; 
+  G4cout << setprecision(4) << "Average number of leak changed " << xcl << G4endl; 
+  G4cout << setprecision(4) << "Average number of leak gamma   " << xgl << G4endl; 
+  G4cout << setprecision(4) << "Average number of back changed " << xcb << G4endl; 
+  G4cout << setprecision(4) << "Average number of back gamma   " << xgb << G4endl; 
+  G4cout<<"===================================================================="<<G4endl;
 
 
    // Write histogram file
@@ -169,12 +190,6 @@ void test31Histo::bookHisto()
          << " zmax= " << zmax
          << " nHisto= " << nHisto
          << G4endl;
-
-  n_evt  = 0;
-  n_elec = 0;
-  n_posit= 0;
-  n_gam  = 0;
-  n_step = 0;
 
   // Creating the analysis factory
   G4std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
@@ -257,3 +272,24 @@ void test31Histo::AddPhoton(const G4DynamicParticle* ph)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void test31Histo::AddParticleLeak(const G4DynamicParticle* dp)
+{
+  if(dp->GetDefinition() == G4Gamma::Gamma()) {
+    n_gam_leak++;
+  } else if (dp->GetCharge() != 0.0) {
+    n_charged_leak++;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void test31Histo::AddParticleBack(const G4DynamicParticle* dp)
+{
+  if(dp->GetDefinition() == G4Gamma::Gamma()) {
+    n_gam_back++;
+  } else if (dp->GetCharge() != 0.0) {
+    n_charged_back++;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

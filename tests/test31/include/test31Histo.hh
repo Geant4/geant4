@@ -88,8 +88,10 @@ public: // Without description
     void AddTrackLength(G4double x)   {trackLength += x;};
     void AddEndPoint(G4double);
     void AddEnergy(G4double, G4double);
-    void AddDeltaElectron(const G4DynamicParticle*);
-    void AddPhoton(const G4DynamicParticle*);
+    void AddDeltaElectron(const G4DynamicParticle* dp);
+    void AddPhoton(const G4DynamicParticle* dp);
+    void AddParticleLeak(const G4DynamicParticle* dp);
+    void AddParticleBack(const G4DynamicParticle* dp);
     void AddPositron(const G4DynamicParticle*) {n_posit++;};
     void SetVerbose(G4int val) {verbose = val;};
     G4int GetVerbose() const {return verbose;};
@@ -140,6 +142,10 @@ private:
     G4int n_posit;
     G4int n_gam;
     G4int n_step;
+    G4int n_charged_leak;
+    G4int n_gam_leak;
+    G4int n_charged_back;
+    G4int n_gam_back;
     G4bool nTuple;
 };
 
