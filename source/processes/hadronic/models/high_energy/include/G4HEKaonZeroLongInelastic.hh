@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEKaonZeroLongInelastic.hh,v 1.5 2001-05-03 08:59:15 hpw Exp $
+// $Id: G4HEKaonZeroLongInelastic.hh,v 1.6 2001-05-07 19:11:51 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -26,6 +26,10 @@ class G4HEKaonZeroLongInelastic : public G4HEInelastic
  public: 
         G4HEKaonZeroLongInelastic() 
            {
+              theMinEnergy =  20*GeV;
+              theMaxEnergy = 10*TeV;
+              MAXPART      = 2048;
+              verboseLevel = 0; 
            }
 
         ~G4HEKaonZeroLongInelastic(){ };

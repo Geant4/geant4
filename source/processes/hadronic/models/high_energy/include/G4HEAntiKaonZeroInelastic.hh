@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEAntiKaonZeroInelastic.hh,v 1.5 2001-05-03 08:59:14 hpw Exp $
+// $Id: G4HEAntiKaonZeroInelastic.hh,v 1.6 2001-05-07 19:11:49 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -25,11 +25,10 @@ class G4HEAntiKaonZeroInelastic : public G4HEInelastic
  public: 
         G4HEAntiKaonZeroInelastic() : G4HEInelastic()
            {
-             G4double theMinEnergy =  1*GeV;
-             G4double theMaxEnergy = 10*TeV;
-             G4int MAXPART      = 512;
-             G4int verboseLevel = 0; 
-             G4int vecLen       = 0;
+              theMinEnergy =  20*GeV;
+              theMaxEnergy = 10*TeV;
+              MAXPART      = 2048;
+              verboseLevel = 0; 
            }
 
         ~G4HEAntiKaonZeroInelastic(){ };
