@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.cc,v 1.9 2002-04-26 16:24:36 gcosmo Exp $
+// $Id: G4PhysicalVolumeStore.cc,v 1.10 2003-05-13 18:39:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PhysicalVolumeStore
@@ -67,7 +67,7 @@ G4PhysicalVolumeStore::~G4PhysicalVolumeStore()
 // Delete all elements from the store
 // ***************************************************************************
 //
-void G4PhysicalVolumeStore::Clean()
+void G4PhysicalVolumeStore::Clean(G4bool notifyLV)
 {
   // Do nothing if geometry is closed
   //
@@ -92,6 +92,14 @@ void G4PhysicalVolumeStore::Clean()
   G4cout << "Deleting Physical Volumes ... ";
 #endif
 
+  if (notifyLV)
+  {
+    for(pos=store->begin(); pos!=store->end(); pos++)
+    {
+      if (*pos) (*pos)->GetLogicalVolume()->ClearDaughters();
+    }
+  }
+
   for(pos=store->begin(); pos!=store->end(); pos++)
   {
     if (*pos) delete *pos; i++;
@@ -109,7 +117,7 @@ void G4PhysicalVolumeStore::Clean()
 }
 
 // ***************************************************************************
-// Add Solid to container
+// Add Volume to container
 // ***************************************************************************
 //
 void G4PhysicalVolumeStore::Register(G4VPhysicalVolume* pVolume)
@@ -118,13 +126,15 @@ void G4PhysicalVolumeStore::Register(G4VPhysicalVolume* pVolume)
 }
 
 // ***************************************************************************
-// Remove Solid from container
+// Remove Volume from container and update the list of daughters
+// of the mother's logical volume
 // ***************************************************************************
 //
 void G4PhysicalVolumeStore::DeRegister(G4VPhysicalVolume* pVolume)
 {
   if (!locked)    // Do not de-register if locked !
   {
+    pVolume->GetMotherLogical()->RemoveDaughter(pVolume);
     for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
     {
       if (**i==*pVolume)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.hh,v 1.8 2002-04-19 08:20:18 gcosmo Exp $
+// $Id: G4PhysicalVolumeStore.hh,v 1.9 2003-05-13 18:39:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PhysicalVolume
@@ -66,8 +66,11 @@ class G4PhysicalVolumeStore : public G4std::vector<G4VPhysicalVolume*>
       // Remove the volume from the collection.
     static G4PhysicalVolumeStore* GetInstance();
       // Get a ptr to the unique G4PhysicalVolumeStore, creating it if necessary.
-    static void Clean();
-      // Delete all volumes from the store.
+    static void Clean(G4bool notifyLV=false);
+      // Delete all volumes from the store. The flag 'notifyLV' must be set to
+      // true when the whole geometry tree is cleared at run-time through this
+      // store; the flag will guarantee that physical volumes to be deregistered
+      // from LV's list of daughters.
 
     virtual ~G4PhysicalVolumeStore();
       // Destructor: takes care to delete allocated physical volumes.
