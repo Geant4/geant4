@@ -1,8 +1,8 @@
 #include "G4CascadSpecialFunctions.hh"
 
 G4std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale2(G4double e) {
-
   G4int verboseLevel = 2;
+
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadSpecialFunctions::getPositionInEnergyScale2" << G4endl;
   }
@@ -16,10 +16,12 @@ G4std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale2
   G4int ik = 30;
   G4double sk = 1.0;
 
-  for(G4int i = 1; i < 31; i++) {
-    if(e <= EMT2[i]) {
+  for (G4int i = 1; i < 31; i++) {
+
+    if (e <= EMT2[i]) {
       ik = i;
       sk = (e - EMT2[ik - 1]) / (EMT2[ik] - EMT2[ik - 1]);
+
       break;
     };
   };
@@ -28,8 +30,8 @@ G4std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale2
 }
 
 G4std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale1(G4double e) {
-
   G4int verboseLevel = 2;
+
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadSpecialFunctions::getPositionInEnergyScale1" << G4endl;
   }
@@ -42,20 +44,24 @@ G4std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale1
   G4int ik;
   G4double sk;
   
-  if(e < EMT1[0]) {
+  if (e < EMT1[0]) {
     ik = 1;
     sk = 0.0;
-  }
-  else if(e <= EMT1[19]) {     
-    for(G4int i = 1; i < 20; i++) {
-      if(e <= EMT1[i]) {
+
+  } else if (e <= EMT1[19]) {     
+
+    for (G4int i = 1; i < 20; i++) {
+
+      if (e <= EMT1[i]) {
         ik = i;
         sk = (e - EMT1[ik - 1]) / (EMT1[ik] - EMT1[ik - 1]);
+
         break;
       };
     };
-  }
-  else {
+
+  } else {
+
     ik = 19;
     sk = 1.0;
   };
@@ -69,8 +75,8 @@ G4std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale1
 
 G4double G4CascadSpecialFunctions::absorptionCrosSection(G4double e, 
 							 G4int type) {
-
   G4int verboseLevel = 2;
+
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadSpecialFunctions::absorptionCrosSection" << G4endl;
   }
@@ -78,13 +84,14 @@ G4double G4CascadSpecialFunctions::absorptionCrosSection(G4double e,
   const G4double corr_fac = 0.2;
   G4double csec = 0.0;
   
-  if(e < 0.3) {
+  if (e < 0.3) {
     csec = 0.1106 / sqrt(e) - 0.8 + 0.08 / ((e - 0.123) * (e - 0.123) + 0.0056);
-  }
-  else if(e < 1.0) {
+
+  } else if (e < 1.0) {
     csec = 3.6735 * (1.0 - e) * (1.0 - e);     
   };
-  if(csec < 0.0) csec = 0.0;
+
+  if (csec < 0.0) csec = 0.0;
 
   if (verboseLevel > 2) {
     G4cout << " ekin " << e << " abs. csec " << corr_fac * csec << G4endl;   
@@ -94,8 +101,8 @@ G4double G4CascadSpecialFunctions::absorptionCrosSection(G4double e,
 }
 
 G4std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScaleEMS(G4double e) {
-
   G4int verboseLevel = 2;
+
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadSpecialFunctions::getPositionInEnergyScaleEMS" << G4endl;
   }
@@ -111,20 +118,24 @@ G4std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScaleE
   G4int ik;
   G4double sk;
   
-  if(e < EMS[0]) {
+  if (e < EMS[0]) {
     ik = 1;
     sk = 0.0;
-  }
-  else if(e <= EMS[45]) {     
-    for(G4int i = 1; i < 46; i++) {
-      if(e <= EMS[i]) {
+
+  } else if (e <= EMS[45]) {     
+
+    for (G4int i = 1; i < 46; i++) {
+
+      if (e <= EMS[i]) {
         ik = i;
         sk = (e - EMS[ik - 1]) / (EMS[ik] - EMS[ik - 1]);
+
         break;
       };
     };
-  }
-  else {
+
+  } else {
+
     ik = 45;
     sk = 1.0;
   };
@@ -134,8 +145,8 @@ G4std::pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScaleE
 
 G4double G4CascadSpecialFunctions::crossSection(G4double e, 
 						G4int is) {
-
   G4int verboseLevel = 2;
+
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadSpecialFunctions::crossSection" << G4endl;
   }
@@ -254,86 +265,90 @@ G4double G4CascadSpecialFunctions::crossSection(G4double e,
   const G4double EMT2_10 = 0.5;
   G4double csec = 0.0;
   G4int l = is;
-  //  G4int k = 0; // isotropic
 
-  if(l == 4) {
+  if (l == 4) {
     l = 1;
-  } 
-  else if(l == 10) {
+
+  } else if (l == 10) {
     l = 3;
-  }
-  else if(l == 5 || l == 6) {
+
+  } else if (l == 5 || l == 6) {
     l = 4;
-  }
-  else if(l == 7 || l == 14) {
+  } else if (l == 7 || l == 14) {
     l = 5;
   };
-  if(e < EMT2_10) { 
-    if(l == 1) { // pp or nn
-      if(e >= 0.4) {
+
+  if (e < EMT2_10) { 
+
+    if (l == 1) { // pp or nn
+
+      if (e >= 0.4) {
         csec = 34.5;
-      }
-      else if(e >= 0.04) {
+
+      } else if (e >= 0.04) {
         csec = 0.23938 / (e * e) + 1.802 / e + 27.147;
-      }
-      else if(e >= 0.001) {
+
+      } else if (e >= 0.001) {
         csec = -0.0050574 / (e * e) + 9.0692 / e + 6.9466;
-      }
-      else {
+
+      } else {
         csec = 4.0 / e;
       };   	
-    }
-    else if(l == 2) { // np
-      if(e >= 0.4) {
+
+    } else if (l == 2) { // np
+
+      if (e >= 0.4) {
         csec = 0.88737 / e + 53.37 * e + 3.5475;
-      }
-      else if(e >= 0.04) {
+
+      } else if (e >= 0.04) {
         csec = 0.093074 / (e * e) - 0.011148 / e + 22.429;
-      }
-      else if(e >= 0.001) {
+
+      } else if (e >= 0.001) {
         csec = -0.0011748 / (e * e) + 3.0885 / e + 5.3107;
-      }
-      else {
+
+      } else {
         csec = 1.92 / e;
       };   	
-    }
-    else { // pi + n, p 
-      if(e <= 0.05) {
-        if(l == 3) {
+
+    } else { // pi + n, p 
+
+      if (e <= 0.05) {
+
+        if (l == 3) {
 	  csec = 3.7 + 204.35 * e;
-	}
-	else if(l == 4) {
+
+	} else if (l == 4) {
 	  csec = 6.5 + 170.71 * e;
-        }
-	else if(l == 5) {
+
+        } else if (l == 5) {
 	  csec = 5.1 + 187.53 * e;
 	}; 
-      }
-      else {
+
+      } else {
         G4std::pair<G4int, G4double> iksk = getPositionInEnergyScaleEMS(e);
         G4int ik = iksk.first;
         G4double sk = iksk.second;
 
-	if(l < 5) {
+	if (l < 5) {
 	  int j = l - 3;
 	  csec = dsig[ik - 1][j] + sk * (dsig[ik][j] - dsig[ik - 1][j]);
-	}
-	else {
+
+	} else {
 	  csec = 0.5 * (dsig[ik - 1][0] + dsig[ik - 1][1] + 
 			sk * (dsig[ik][0] - dsig[ik - 1][0] + dsig[ik][1] - dsig[ik - 1][1]));
 	}; 
       }; 
     };  
-  }
-  else {
+
+  } else {
     G4std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(e);
     G4int ik = iksk.first;
     G4double sk = iksk.second;
 
-    if(l < 5) {
+    if (l < 5) {
       csec = asig[l - 1][5][ik - 1] + sk * (asig[l - 1][5][ik] - asig[l - 1][5][ik - 1]);
-    }
-    else {
+
+    } else {
       csec = 0.5 * (asig[2][5][ik - 1] + asig[3][5][ik - 1] +
 		    sk * (asig[2][5][ik] - asig[2][5][ik - 1] +
 			  asig[3][5][ik] - asig[3][5][ik - 1]));
@@ -342,3 +357,4 @@ G4double G4CascadSpecialFunctions::crossSection(G4double e,
 
   return csec;  
 }
+
