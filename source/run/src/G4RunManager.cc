@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.3 1999-04-16 09:32:08 kurasige Exp $
+// $Id: G4RunManager.cc,v 1.4 1999-04-22 21:51:12 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@ G4RunManager::G4RunManager()
  geometryInitialized(false),physicsInitialized(false),cutoffInitialized(false),
  geometryNeedsToBeClosed(true),initializedAtLeastOnce(false),
  runAborted(false),pauseAtBeginOfEvent(false),pauseAtEndOfEvent(false),
- geometryToBeOptimized(true),verboseLevel(0),DCtable(NULL)
+ geometryToBeOptimized(true),verboseLevel(0),DCtable(NULL),runIDCounter(0)
 {
   if(fRunManager)
   { G4Exception("G4RunManager constructed twice."); }
@@ -162,6 +162,7 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
 void G4RunManager::RunInitialization()
 {
   currentRun = new G4Run();
+  currentRun->SetRunID(runIDCounter);
   currentRun->SetDCtable(DCtable);
   G4SDManager* fSDM = G4SDManager::GetSDMpointerIfExist();
   if(fSDM)
@@ -268,6 +269,7 @@ void G4RunManager::RunTermination()
   if(fPersM) fPersM->Store(currentRun);
   delete currentRun;
   currentRun = NULL;
+  runIDCounter++;
 
   stateManager->SetNewState(Idle);
 }
