@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.icc,v 1.6 2002-12-16 11:59:12 gcosmo Exp $
+// $Id: G4StepPoint.icc,v 1.7 2003-05-06 22:53:57 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -114,6 +114,10 @@
 
    inline G4VPhysicalVolume* G4StepPoint::GetPhysicalVolume() const
    { return fpTouchable->GetVolume(); }
+
+#include "G4TouchableHistory.hh"
+   inline G4int G4StepPoint::GetCopyNumber(G4int depth) const
+   { return ((const G4TouchableHistory*)fpTouchable())->GetReplicaNumber(depth); }
 
    inline const G4VTouchable* G4StepPoint::GetTouchable() const
    { return fpTouchable(); }
