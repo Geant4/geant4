@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.52 2001-08-16 17:21:10 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.53 2001-08-19 17:02:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,7 +65,8 @@
 // 24.04.01 V.Ivanchenko remove RogueWave 
 // 22.05.01 V.Ivanchenko update calculation of delta-ray kinematic + 
 //                       clean up the code 
-// 02.08.01 V.Ivanchenko fix his bag - energy conservation 
+// 02.08.01 V.Ivanchenko fix energy conservation for small steps 
+// 18.08.01 V.Ivanchenko fix energy conservation for pathalogical delta-energy
 //                                                                 
 // --------------------------------------------------------------
  
