@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.61 2001-06-21 14:02:54 gunter Exp $
+# $Id: binmake.gmk,v 1.62 2001-06-22 06:27:09 morita Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -248,12 +248,18 @@ dependencies := $(patsubst %.cc,$(G4TMPDIR)/exe/%.d,$(sources))
 LINK_DEPENDENCIES := $(G4TMPDIR)/exe/obj.last $(EXTRA_LINK_DEPENDENCIES)
 
 ifndef G4ODBMS
-.PHONY: bin bin_d clean clean_bin debug
+.PHONY: bin clean clean_bin debug
 else
-.PHONY: bin bin_d clean clean_bin debug cleandb newboot newfd
+.PHONY: bin clean clean_bin debug cleandb newboot newfd
 endif
 
+#
+# Target "bin" requires dependency files when G4ODBMS=1.
+# gmake must be recursively called with MAKE_DFILES=1.
+#
+
 # Make $(G4TARGET) executable.
+
 bin: $(G4BINDIR)/$(G4TARGET)
 
 $(G4BINDIR)/$(G4TARGET): $(LINK_DEPENDENCIES)
@@ -317,16 +323,11 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 	@if [ ! -d $(G4TMPDIR)/exe ] ; then mkdir $(G4TMPDIR)/exe ;fi
-ifdef G4SKIP_DEPEND
-	@echo Skip creation of dependency file for $< ...
-else
 	@echo Making dependency for file $<...
 	@($(ECHO) $(G4TMPDIR)/exe/\\c ; \
 	g++ $(GPPFLAGS) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
-
 ifneq ($(dependencies),)
 -include $(dependencies)
-endif
 endif
 
 clean:
