@@ -111,7 +111,7 @@ void DetectorConstruction::Initialise()
   fPhantomZ             = 300.*mm;
 
   fAirZ                 = 210.*mm;
-  fAbsorberShiftZ       = 100.*mm;
+  fAbsorberShiftZ       = 70.*mm;
   fWindowZ              = 0.05*mm;
 }
 
