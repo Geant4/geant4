@@ -1,4 +1,4 @@
-# $Id: run06.mac,v 1.1 1999-10-11 16:55:35 maire Exp $
+# $Id: run06.mac,v 1.2 2000-01-21 09:11:05 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -25,7 +25,6 @@
 /run/verbose 2
 /event/drawTracks none
 /event/printModulo 10
-#/run/save on
 #
 /gun/particle e-
 /gun/energy 6 GeV

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3RunAction.hh,v 1.2 1999-12-15 14:49:02 gunter Exp $
+// $Id: Em3RunAction.hh,v 1.3 2000-01-21 09:11:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,8 +26,10 @@
 class G4Run;
 class Em3RunActionMessenger;
 
-class HepTupleManager;
-class HepTuple;
+#ifndef G4NOHIST
+ class HepTupleManager;
+ class HepTuple;
+#endif
 
 class Em3RunAction : public G4UserRunAction
 {
@@ -41,12 +43,13 @@ class Em3RunAction : public G4UserRunAction
     
     void fillPerEvent(G4int,G4double,G4double);
     
-    HepTuple* GetnTuple() {return ntuple;}
-    
-    void  SetSaveFlag(G4String val) {saveFlag = val;}
     void  SetRndmFreq(G4int   val)  {saveRndm = val;}
     G4int GetRndmFreq()             {return saveRndm;}
-        
+    
+#ifndef G4NOHIST
+    HepTuple* GetnTuple() {return ntuple;}
+#endif
+            
   private:
     void bookHisto();
     
@@ -54,14 +57,15 @@ class Em3RunAction : public G4UserRunAction
     
     G4double sumEAbs[MaxAbsor], sum2EAbs[MaxAbsor];
     G4double sumLAbs[MaxAbsor], sum2LAbs[MaxAbsor];
-    
-    HepTupleManager* hbookManager;    
-    HepTuple* ntuple;
 
     Em3DetectorConstruction* Detector;    
     Em3RunActionMessenger*   runMessenger;        
-    G4String saveFlag;
-    G4int saveRndm;           
+    G4int saveRndm;
+    
+#ifndef G4NOHIST    
+    HepTupleManager* hbookManager;    
+    HepTuple* ntuple;
+#endif               
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

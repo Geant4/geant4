@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3EventAction.cc,v 1.3 1999-12-15 14:49:03 gunter Exp $
+// $Id: Em3EventAction.cc,v 1.4 2000-01-21 09:11:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,9 @@
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
 
-#include "CLHEP/Hist/HBookFile.h"
+#ifndef G4NOHIST
+ #include "CLHEP/Hist/HBookFile.h"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -77,10 +79,13 @@ void Em3EventAction::EndOfEventAction(const G4Event* evt)
   G4int NbHits=0;
   G4int NbOfAbsor=Detector->GetNbOfAbsor();
   G4double totEAbs, totLAbs;
-  HepTuple* ntuple=Em3Run->GetnTuple();
   char str1[6], str2[6];
   strcpy(str1,"EAbs");strcpy(str2,"LAbs");
     
+#ifndef G4NOHIST  
+  HepTuple* ntuple=Em3Run->GetnTuple();
+#endif  
+     
   if (HCE) CHC = (Em3CalorHitsCollection*)(HCE->GetHC(calorimeterCollID));
 
   if (CHC)
@@ -94,14 +99,18 @@ void Em3EventAction::EndOfEventAction(const G4Event* evt)
              totLAbs += (*CHC)[j]->GetTrakAbs(k);     
             }
          Em3Run->fillPerEvent(k,totEAbs,totLAbs);
-      
+	 
+#ifndef G4NOHIST        
          //fill ntuple
          //	 
 	 str1[4] = str2[4] = (char)((int)('0') + k);
          ntuple->column(str1,totEAbs);
          ntuple->column(str2,totLAbs);
+#endif  	 
        }
-      ntuple->dumpData();       	  
+#ifndef G4NOHIST       
+      ntuple->dumpData();
+#endif             	  
     }
     
   if (G4VVisManager::GetConcreteInstance())
