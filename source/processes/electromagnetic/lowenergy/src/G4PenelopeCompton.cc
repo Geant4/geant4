@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.10 2003-03-13 16:56:40 pandola Exp $
+// $Id: G4PenelopeCompton.cc,v 1.11 2003-03-25 15:15:41 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -33,7 +33,8 @@
 //                            from SUN
 //                            Modified some variables to lowercase initial 
 // 10 Mar 2003 V.Ivanchenko   Remove CutPerMaterial warning
-// 13 Mar 2003 L.Pandola      Code "cleaned"   
+// 13 Mar 2003 L.Pandola      Code "cleaned"  
+// 20 Mar 2003 L.Pandola      ReadData() changed (performance improved) 
 //
 // -------------------------------------------------------------------
 
@@ -84,7 +85,7 @@ G4PenelopeCompton::G4PenelopeCompton(const G4String& processName)
   occupationNumber = new G4std::vector<G4DataVector*>;
   rangeTest = new G4RangeTest;
 
-  ReadData(); //Legge i dati da file!
+  ReadData(); //Read data from file
 
   if (verboseLevel > 0)
     {
@@ -426,6 +427,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 
   // Kinematics of the scattered electron 
 
+  
   G4double diffEnergy = photonEnergy0*(1-epsilon);
   ionEnergy = (*((*ionizationEnergy)[Z-1]))[iosc];
   G4double eKineticEnergy = diffEnergy - ionEnergy;
@@ -498,7 +500,7 @@ void G4PenelopeCompton::ReadData()
       G4Exception(excep);
     }
   G4String pathString(path);
-  G4String pathFile = pathString + "/penelope/comptondata.dat";
+  G4String pathFile = pathString + "/penelope/compton-pen.dat";
   G4std::ifstream file(pathFile);
   G4std::filebuf* lsdp = file.rdbuf();
   
@@ -507,37 +509,35 @@ void G4PenelopeCompton::ReadData()
       G4String excep = "G4PenelopeCompton - data file " + pathFile + " not found!";
       G4Exception(excep);
     }
-  file.close();
-  
-  //This algorithm is slow and unelegant!
-  //It must be improved.
-  G4int k1,k2;
+
+  G4int k1,test,test1;
   G4double a1,a2;
-  G4int Z=0;
+  G4int Z=1,nLevels=0;
   G4DataVector* f;
   G4DataVector* u;
   G4DataVector* j;
-  for(Z=1;Z<93;Z++) {
+
+  do{
     f = new G4DataVector;
     u = new G4DataVector;
     j = new G4DataVector;
-    G4std::ifstream file(pathFile);
-    k1=1;
-    while (k1>0)
-      {
-	file >> k1 >> k2 >> a1 >> a2;
-	if(k1 == Z)
-	  {
-	    f->push_back((G4double) k2);
-	    u->push_back(a1);
-	    j->push_back(a2);
-	  }
-      }
-    file.close();
+    file >> Z >> nLevels;
+    for (G4int h=0;h<nLevels;h++){
+      file >> k1 >> a1 >> a2;
+      f->push_back((G4double) k1);
+      u->push_back(a1);
+      j->push_back(a2);
+    }
     ionizationEnergy->push_back(u);
     hartreeFunction->push_back(j);
     occupationNumber->push_back(f);
-  }
+    file >> test >> test1; //-1 -1 close the data for each Z
+    if (test > 0) {
+      G4String excep = "G4PenelopeCompton - data file corrupted!";
+      G4Exception(excep);
+    }
+  }while (test != -2); //the very last Z is closed with -2 instead of -1
+
   //(*((*ionizationEnergy)[Z-1]))[i] contains the ionization energy of the i-th level of
   //the element Z
 };
