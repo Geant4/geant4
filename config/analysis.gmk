@@ -71,7 +71,7 @@ ifdef LIB_JAS
   ANALYSISLIBS += -lG4jas
 endif
 ifdef LIB_LIZARD
-  ANALYSISLIBS += -lG4lizard
+  ANALYSISLIBS += -lG4Lizard
 endif
 ifdef LIB_ANALYSIS
   ANALYSISLIBS += -lG4analysis_management 
