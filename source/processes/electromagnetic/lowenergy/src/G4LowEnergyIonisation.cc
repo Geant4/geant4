@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.76 2001-11-29 19:01:36 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.77 2002-03-25 18:52:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -83,6 +83,7 @@
 // 26.10.01 V.Ivanchenko    clean up deexcitation
 // 28.10.01 V.Ivanchenko    update printout
 // 29.11.01 V.Ivanchenko    New parametrisation introduced
+// 25.03.02 V.Ivanchneko    Fix in fluorescence
 //
 // --------------------------------------------------------------
 
@@ -385,7 +386,7 @@ void G4LowEnergyIonisation::BuildLossTable(
 
 
 G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
-					                 const G4Step&  step)
+					               const G4Step&  step)
 {
   // Delta electron production mechanism on base of the model
   // J. Stepanek " A program to determine the radiation spectra due 
@@ -491,7 +492,6 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
     aParticleChange.SetMomentumChange(finalPx, finalPy, finalPz);
   }
 
-
   aParticleChange.SetEnergyChange(finalKinEnergy);
 
   // Generation of Fluorescence and Auger
@@ -586,8 +586,8 @@ G4bool G4LowEnergyIonisation::IsApplicable(const G4ParticleDefinition& particle)
 
 G4std::vector<G4DynamicParticle*>* 
 G4LowEnergyIonisation::DeexciteAtom(const G4Material* material,
-				            G4double incidentEnergy,
-				            G4double eLoss)
+			                  G4double incidentEnergy,
+			                  G4double eLoss)
 { 
   // create vector of secondary particles
   
@@ -622,8 +622,7 @@ G4LowEnergyIonisation::DeexciteAtom(const G4Material* material,
 	 
       G4double maxE = transitionManager->Shell(Z, 0)->BindingEnergy();
 	    
-      if (Z>5 && (maxE>cutForPhotons || maxE>cutForElectrons) 
-              && nVacancies > 0 ) {
+      if (nVacancies && Z > 5 && (maxE>cutForPhotons || maxE>cutForElectrons)) {
 
 	for (size_t j=0; j<nVacancies; j++) {
 		  

@@ -29,6 +29,7 @@
 // History:
 // -----------
 // 21 Sept 2001 Elena Guardincerri     Created
+// 25 Mar  2002  V.Ivanchenko          Change AverageNOfIonisations int->double 
 //
 // -------------------------------------------------------------------
 
@@ -67,17 +68,18 @@ G4std::vector<G4int> G4ShellVacancy::GenerateNumberOfIonisations(const G4Materia
 { 
   G4std::vector<G4int> numberOfIonisations; 
 
-  size_t numberOfElements = material->GetNumberOfElements();
+  G4int numberOfElements = material->GetNumberOfElements();
 
-  for (size_t i = 0; i<numberOfElements; i++)
+  for (G4int i = 0; i<numberOfElements; i++)
     {
-    const G4Element* element = material->GetElement(i);
-
-    G4int averageNumberOfIonisations = AverageNOfIonisations(material,
-							     element,
-							     incidentEnergy,
-							     eLoss);
-      G4int ionisations = (G4int) G4Poisson(averageNumberOfIonisations);
+      G4double averageNumberOfIonisations = AverageNOfIonisations(material,
+	  	   					          i,
+							          incidentEnergy,
+							          eLoss);
+      G4int ionisations = 0;
+      if(averageNumberOfIonisations > 0.0) {
+        ionisations = (G4int) G4Poisson(averageNumberOfIonisations);
+      }
 
       numberOfIonisations.push_back(ionisations);
     
@@ -86,42 +88,21 @@ G4std::vector<G4int> G4ShellVacancy::GenerateNumberOfIonisations(const G4Materia
 
 }
 
-G4int G4ShellVacancy::AverageNOfIonisations(const G4Material* material,
-					    const G4Element* element, 
-					    G4double energy,
-					    G4double eLoss) const
+G4double G4ShellVacancy::AverageNOfIonisations(const G4Material* material,
+	  				             G4int index, 
+					             G4double energy,
+					             G4double eLoss) const
 
 {
   G4int indexOfElementInMaterial= -1;
   
   G4double averageEnergy = energy - eLoss/2.;
   
-  G4String elementName = element->GetName();
-
-  size_t numberOfElements = material->GetNumberOfElements();
-
-  for (size_t i = 0; i<numberOfElements; i++)
-    {
-      const G4Element* anElement = material->GetElement(i);
-
-      G4String itsName = anElement->GetName();
-
-      if (itsName==elementName)
-	{
-	  indexOfElementInMaterial=i;
-	  break;
-	}
-      //else
-      //{break;}
-    }
   size_t indexInMaterialTable = material->GetIndex();
 
-    G4VEMDataSet* aSetOfXsi = xsis[indexInMaterialTable];
+  G4VEMDataSet* aSetOfXsi = xsis[indexInMaterialTable];
 
-    G4double aXsi = aSetOfXsi->FindValue(averageEnergy,indexOfElementInMaterial); 
-    
-    G4int averageNumberOfIonisations = (G4int)(aXsi * eLoss);
-    
-    return averageNumberOfIonisations;
-    
+  G4double aXsi = aSetOfXsi->FindValue(averageEnergy,index); 
+        
+  return aXsi * eLoss;  
 }
