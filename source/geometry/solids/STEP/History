@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2001-09-19 11:25:26 gcosmo Exp $
+$Id: History,v 1.9 2001-11-29 16:50:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 29, 2001       Gabriele Cosmo (STEP-V03-02-01)
+- Fixes for compilation on gcc-2.96.98 and gcc-3.0.2 compilers to overcome warnings
+  produced and fix std namespace problems in sdaiString.cc.
 
 September 19, 2001      Gabriele Cosmo (STEP-V03-02-00)
 - SdaiCONFIG_CONTROL_DESIGN.cc: cleaned up warnings on SUN-CC.
