@@ -1,4 +1,4 @@
-$Id: README,v 1.13 2002-06-18 18:45:39 griccard Exp $
+$Id: README,v 1.14 2002-06-18 19:55:22 griccard Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -130,7 +130,7 @@ The main features of this example are
 
 
  ATTENTION:
- If you use analysis with Lizard, you have to remove any hbook file in the 
+ If you use analysis, you have to remove any hbook file in the 
  example directory obtained in previous Geant4 sessions. This issues will be 
  solved in future releases. Note also that the following error can be reported
  during run with analysis activated

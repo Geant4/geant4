@@ -22,8 +22,6 @@ pl.plot(hYZ  ) ; pl.show() ; pl.next()
 # get the primary ntuple from the NtupleManager
 nt1 = tree.findTuple("1")
 
-# see which attributes there are:
-nt1.listAttributes()
 
 
 

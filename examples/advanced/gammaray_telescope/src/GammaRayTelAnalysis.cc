@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysis.cc,v 1.11 2002-06-18 18:47:14 griccard Exp $
+// $Id: GammaRayTelAnalysis.cc,v 1.12 2002-06-18 19:55:22 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -63,6 +63,7 @@
 #include <AIDA/IPlotter.h>
 #include <AIDA/ITupleFactory.h>
 #include <AIDA/ITuple.h>
+#include <AIDA/IManagedObject.h>
 #endif
 
 GammaRayTelAnalysis* GammaRayTelAnalysis::instance = 0;
@@ -90,9 +91,22 @@ GammaRayTelAnalysis::GammaRayTelAnalysis(int argc,char** argv)
     ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
     if(treeFactory) {
       // Tree in memory :
-      // Create a "tree" associated to a ROOT "store" (in RECREATE mode).
+      // Create a "tree" associated to an hbook
       tree = treeFactory->create("GammaRayTel.hbook", false, false,"hbook");
       if(tree) {
+	// Get a tuple factory :
+	ITupleFactory* tupleFactory = analysisFactory->createTupleFactory(*tree);
+	if(tupleFactory) {
+	  // Create a tuple :
+	    tuple = tupleFactory->create("tuple","Event info",
+					 "float energy, plane, x, y, z");
+	  
+	  assert(tuple);
+	  
+	  delete tupleFactory;
+	}
+
+
 	IHistogramFactory* histoFactory	= 
 	  analysisFactory->createHistogramFactory(*tree);  
 	if(histoFactory) {
@@ -134,17 +148,6 @@ GammaRayTelAnalysis::GammaRayTelAnalysis(int argc,char** argv)
 	  delete histoFactory;
 	}
     
-	// Get a tuple factory :
-	ITupleFactory* tupleFactory = analysisFactory->createTupleFactory(*tree);
-	if(tupleFactory) {
-	  // Create a tuple :
-	  tuple = tupleFactory->create("tuple","Event info",
-				       "energy, plane, x, y, z");
-	  
-	  assert(tuple);
-	  
-	  delete tupleFactory;
-	}
       }
       delete treeFactory; // Will not delete the ITree.
     }
@@ -181,9 +184,11 @@ void GammaRayTelAnalysis::Init()
 void GammaRayTelAnalysis::Finish()
 {
 #ifdef  G4ANALYSIS_USE
+  delete tree;
   delete plotter;
   delete analysisFactory; // Will delete tree and histos.
   delete analysisMessenger;
+  
   analysisMessenger = 0;
 #endif
 }             
@@ -234,13 +239,15 @@ void GammaRayTelAnalysis::InsertHits(int nplane)
 void GammaRayTelAnalysis::setNtuple(float E, float p, float x, float y, float z)
 {
 #ifdef  G4ANALYSIS_USE
-  if(tuple) {
-    tuple->fill(tuple->findColumn("energy"),E);
-    tuple->fill(tuple->findColumn("plane"),p);
-    tuple->fill(tuple->findColumn("x"),x);
-    tuple->fill(tuple->findColumn("y"),y);
-    tuple->fill(tuple->findColumn("z"),z);
-    tuple->addRow();
+  ITuple * ntuple = dynamic_cast<ITuple *> ( tree->find("tuple") );
+  if(ntuple) {
+    std::cout << "OOO" << std::endl;
+    ntuple->fill(tuple->findColumn("energy"),E);
+    ntuple->fill(tuple->findColumn("plane"),p);
+    ntuple->fill(tuple->findColumn("x"),x);
+    ntuple->fill(tuple->findColumn("y"),y);
+    ntuple->fill(tuple->findColumn("z"),z);
+    ntuple->addRow();
   }
 #endif
 }
@@ -260,10 +267,6 @@ void GammaRayTelAnalysis::BeginOfRun(G4int n)
   if(posXZ) posXZ->reset();
   if(posYZ) posYZ->reset();
 
-  //  Set the plotter ; set the number of regions and attach histograms
-  // to plot for each region.
-  //  It is done here, since then EndOfRun set regions
-  // for paper output.
   if(plotter) {
     if((histo2DDraw == "enable") && (histo1DDraw == "enable")) {
       plotter->createRegions(2,2);
@@ -298,6 +301,8 @@ void GammaRayTelAnalysis::BeginOfRun(G4int n)
     }
     plotter->refresh();
   }
+
+
 #endif
 }
 
@@ -310,8 +315,7 @@ void GammaRayTelAnalysis::EndOfRun(G4int n)
 {
 #ifdef  G4ANALYSIS_USE
   if(tree) tree->commit();
-  
-  tree->close();
+
 
   if(plotter) {
     // We set one single region for the plotter
@@ -356,7 +360,21 @@ void GammaRayTelAnalysis::EndOfEvent(G4int flag)
   // hits in the event
   if(!flag) return;
 #ifdef  G4ANALYSIS_USE
-  if(plotter) plotter->refresh();
+  //  Set the plotter ; set the number of regions and attach histograms
+  // to plot for each region.
+  //  It is done here, since then EndOfRun set regions
+  // for paper output.
+  if(plotter) {
+    plotter->refresh();
+  }
+
 #endif
 }
+
+
+
+
+
+
+
 
