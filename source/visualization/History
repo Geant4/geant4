@@ -1,4 +1,4 @@
-$Id: History,v 1.33 1999-10-04 15:49:45 johna Exp $
+$Id: History,v 1.34 1999-10-12 08:12:53 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,13 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+11 Oct 1999  Guy Barrand
+- G4GoSceneHandler.cc/G4GoSceneHandler::EndPrimitives : modify
+  the logic of setting the OMatrix for Go objects in order
+  to avoid the usage of the CLHEP/Rotation.getAngleAxis that
+  clearly has precision problem on some platforms (at least 
+  Linux and HP-UX).
 
 vis-V00-01-05  4th October 1999  John Allison
 - Implemented /vis/scene/add/logicalVolume.
