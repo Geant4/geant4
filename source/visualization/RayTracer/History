@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2000-02-22 13:53:24 stesting Exp $
+$Id: History,v 1.5 2000-02-24 12:23:03 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,16 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+24th February 2000  John Allison
+- Added protection for null viewer in G4RTSteppingAction.cc and
+  G4RayTrajectory.cc.
+- Corrected for zoom, etc., in G4RayTracerViewer.cc.
+
+23rd February 2000  John Allison
+- Added G4RayTracerSceneHandler and Viewer.
+- Some modifications to other RayTracer routines for vis compliance.
+- (Note: headAngle still not right - ray traced views are sometimes tipped.)
 
 22nd February 2000  John Allison (raytracer-V01-00-01a)
 - Added G4std:: in a few places to obtain ISO compliance.
