@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.cc,v 1.4 1999-08-18 09:15:26 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.5 1999-08-18 10:19:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -146,7 +146,7 @@ G4int G4ParticleDefinition::FillQuarkContents()
 
   G4int temp = checker.CheckPDGCode(thePDGEncoding, theParticleType, thePDGiSpin);
 
-  if ( temp != 0) {
+  if (( temp != 0)&&((theParticleType == "meson")||(theParticleType == "baryon"))) {
     G4int flavor;
     for (flavor= 0; flavor<NumberOfQuarkFlavor-1; flavor+=2){
       theQuarkContent[flavor]     = checker.GetQuarkContent(flavor);
