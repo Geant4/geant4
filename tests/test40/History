@@ -1,11 +1,11 @@
-$Id: History,v 1.1 2002-12-16 11:41:44 stesting Exp $
+$Id: History,v 1.2 2002-12-18 11:47:55 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    TestEm2 History file
+                    test40 History file
                     --------------------
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
@@ -15,83 +15,6 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-11-12-02 mma (testem2-V04-01-03)
-- Migration to AIDA 3.0.
+18-12-02 
+- Cloned from testem2
 
-06-12-02 G.Cosmo (testem2-V04-01-02)
-- Migration to new G4ApplicationState.
-- Added HepRep driver to visManager.
-
-05-12-02 G.Cosmo (testem2-V04-01-01)
-- Fixes to runAction for porting on gcc-3.2.
-
-29-10-02 V.Ivanchenko (testem2-V04-01-00)
-- Modular PhysicsList + model approach for energy loss processes
-     
-05-06-02 mma (testem2-V04-00-01)
-- do not delete histos in runAction destructor
-
-31-05-02 mma (testem2-V04-00-00)
-- old histograming package clhep/hist replaced by AIDA 2.2/anaphe. See README 
-
-11-12-01  gcosmo (testem2-V03-02-04)
-- SteppingAction: added check on history depth also for rings!
-
-06-12-01  gcosmo (testem2-V03-02-03)
-- SteppingAction: correctly determine replica number.
-- Set run verbosity to 1 in input script.
-     
-28-11-01  mma (testem2-V03-02-02) 
-- EventAction: DrawTrack "none"
-- small change in vis.mac and DetectorConstruction.cc
-- suppression of the rndm commands, now managed by G4RunManager: 
-  --> RunAction, EventAction. suppression of RunActionMessenger
-     
-31-10-01 mma (testem2-V03-02-01)
-- invert run/initialize and calor/update in all runXX.mac (and TestEm2.in)
-     
-25-10-01 mma (testem2-V03-02-00)
-- mods in TestEm2.cc: the initialisation and vis initialisation are
-  not done by default. --> inserted /run/initialize in all macros.
-- To get visualisation: > /control/execute vis.mac
-- 80 columns everywhere.    
-	       
-19-10-01  Steve O'Neale (examples-V03-02-00)
-- Update reference output
-
-27-03-01  mma (testem2-V03-00-05)
-- set cppflag G4NOHIST = true in gnumakefile
-     
-08-03-01  Hisaya (testem2-V03-00-04)
-- RunAction adapted for STL
-	       
-21-02-01  mma (testem2-V03-00-03)
-- hbook histograms restored
-	            
-20-02-01  mma (testem2-V03-00-02)
-- verbose stepping adapted for STL
-- save rndm at begin of event     
-	      
-07-12-00  mma (testem2-V02-00-03 & testem-noHist)
-- remove hbook histograms: GNUmakefile,runAction
-				   
-06-12-00  mma (testem2-V02-00-02 & testem-withHist)
-- update of init.mac for new vis commands.
-- G4UItcsh in the main()
-	  				 
-25th November 2000 Steve O'Neale (tagset210)
-- Update test outputs for min.delta energy cut and cut tabulation
-- Update test outputs Lateral profile changes comparable with rms (10 per cent)
--             in first layers, Radial profile stable (values to 1 percent).
-
-June 28, 2000  John Allison  (testem2-V02-00-00)
-- Updated TestEm2.out for geant4-02-00.
-
-June 24, 2000  John Allison  (testem2-V01-01-02)
-- Updated TestEm2.out for stand-V01-01-05 and utils-V01-01-03.
-
-June 20, 2000  mma          (testem2-V01-01-01)
-- Updated TestEm2.in : /gun/particle e-
-
-June 17, 2000  John Allison  (testem2-V01-00-00)
-- Updated TestEm2.out for geant4-01-01-ref-06.

@@ -1,15 +1,23 @@
-$Id: README,v 1.1 2002-12-16 11:41:44 stesting Exp $
+$Id: README,v 1.2 2002-12-18 11:47:56 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                            TestEm2
+                            test40
                             -------
-     This example allows to do the shower development of an single primary
+
+     This test is cloned from TestEm2 in order to perform benchmarking
+     TestEm2 allows to do the shower development of an single primary
      particle, and to survey the physics processes which occur,
      with printing and visualization.
+
+     test40 inteded to control the performance for the setup with
+     10 radiation length absorber. The mean trancated energy deposited
+     in the absorber is compeared with the precalculated one. If
+     the deviation is less than 3 sigma the test result "is accepted"
+     unless "is not accepted".
 	
  1- GEOMETRY DEFINITION
  
