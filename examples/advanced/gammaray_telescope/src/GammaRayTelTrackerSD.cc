@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerSD.cc,v 1.2 2001-07-11 09:56:58 gunter Exp $
+// $Id: GammaRayTelTrackerSD.cc,v 1.3 2001-11-28 10:07:02 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -77,7 +77,7 @@ void GammaRayTelTrackerSD::Initialize(G4HCofThisEvent*HCE)
 {
   TrackerCollection = new GammaRayTelTrackerHitsCollection
     (SensitiveDetectorName,collectionName[0]);
- 
+
  for (G4int i=0;i<NbOfTKRStrips;i++)
     for (G4int j=0;j<NbOfTKRLayers;j++) 
       {
@@ -90,7 +90,7 @@ void GammaRayTelTrackerSD::Initialize(G4HCofThisEvent*HCE)
 
 G4bool GammaRayTelTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
 { 
-  
+
   G4double edep = aStep->GetTotalEnergyDeposit();
   if ((edep/keV == 0.)) return false;      
   

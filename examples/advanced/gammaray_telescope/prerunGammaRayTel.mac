@@ -6,12 +6,10 @@
 #
 /control/verbose 2
 /control/saveHistory
-/run/verbose 2
+/run/verbose 1
 /gun/particle gamma
 /gun/energy 1 GeV
 /gun/vertexRadius 25. cm
 /gun/sourceType 2
-
-
 
 

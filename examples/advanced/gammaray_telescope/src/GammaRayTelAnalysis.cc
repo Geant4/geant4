@@ -43,7 +43,7 @@
 #include "GammaRayTelDetectorConstruction.hh"
 
 GammaRayTelAnalysis* GammaRayTelAnalysis::instance = 0;
-
+ 
 GammaRayTelAnalysis::GammaRayTelAnalysis() :
   histoManager(0), vectorFactory(0),plotter(0),
   histo1DDraw("enable"),histo1DSave("enable"),histo2DDraw("enable"),
@@ -54,8 +54,8 @@ GammaRayTelAnalysis::GammaRayTelAnalysis() :
   GammaRayTelDetector = (GammaRayTelDetectorConstruction*)(runManager->GetUserDetectorConstruction());
 
   analysisMessenger = new GammaRayTelAnalysisMessenger(this);
-
   histoManager = createIHistoManager();
+
   ntFactory = Lizard::createNTupleFactory();
   vectorFactory = createIVectorFactory();
   plotter = createIPlotter();
@@ -92,7 +92,7 @@ GammaRayTelAnalysis* GammaRayTelAnalysis::getInstance()
 void GammaRayTelAnalysis::InsertPositionXZ(double x, double z)
 {
   IHistogram2D* posXZ = histoManager->retrieveHisto2D("3");
-  posXZ->fill(x, z);
+  posXZ->fill(x, z);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -139,9 +139,7 @@ void GammaRayTelAnalysis::BeginOfRun()
   N = Nstrip*Ntile;      
 
   if (histoManager) {
-    histoManager->selectStore("GammaRayTel.his");
-    // 1D histogram that store the energy deposition of the
-    // particle in the last (number 0) TKR X-plane
+    histoManager->selectStore("GammaRayTel.hbook");
 
     // Check if deleteHisto is enough, maybe we need to delete the object
     histoManager->deleteHisto("1");
@@ -198,11 +196,11 @@ void GammaRayTelAnalysis::BeginOfRun()
     plotter->zone(1,1,0,0);
 
   // Book ntuples
-  ntuple = ntFactory->createC("GammaRayTel.his::1");
-  
+  ntuple = ntFactory->createC("GammaRayTel.hbook::1");
+
   //  Add and bind the attributes to the ntuple
   if ( !( ntuple->addAndBind( "energy", ntEnergy) &&
-  	  ntuple->addAndBind( "plane" , ntPlane) &&
+	  ntuple->addAndBind( "plane" , ntPlane) &&
   	  ntuple->addAndBind( "x"     , ntX   ) &&
   	  ntuple->addAndBind( "y"     , ntY   ) &&
   	  ntuple->addAndBind( "z"     , ntZ   ) ) ) {
@@ -346,4 +344,26 @@ void GammaRayTelAnalysis::plot2D(IHistogram2D* histo)
   delete v;	
 }
 
+void GammaRayTelAnalysis::setNtuple(float E, float p, float x, float y, float z)
+{
+  ntEnergy = E;
+  ntPlane = p;
+  ntX = x;
+  ntY = y;
+  ntZ = z;
+
+  ntuple->addRow();
+}
+
 #endif
+
+
+
+
+
+
+
+
+
+
+

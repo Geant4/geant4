@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerROGeometry.cc,v 1.2 2001-07-11 09:56:58 gunter Exp $
+// $Id: GammaRayTelTrackerROGeometry.cc,v 1.3 2001-11-28 10:07:02 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -326,8 +326,7 @@ G4VPhysicalVolume* GammaRayTelTrackerROGeometry::Build()
   // as a flag only to check for sensitivity.
   // (Could we make it by a simple cast of a non-NULL value ?)
   
-  
-  GammaRayTelDummySD * dummySensi = new GammaRayTelDummySD;
+  GammaRayTelDummySD * dummySensi = new GammaRayTelDummySD("Orpo");
   
   logicTKRStripX->SetSensitiveDetector(dummySensi);
   logicTKRStripY->SetSensitiveDetector(dummySensi);

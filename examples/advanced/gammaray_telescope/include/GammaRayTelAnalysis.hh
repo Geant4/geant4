@@ -103,6 +103,7 @@ public:
   void InsertEnergy(double en);
   void InsertHits(int nplane);
 
+  void setNtuple(float E, float p, float x, float y, float z);
   static GammaRayTelAnalysis* getInstance();
 
 private:
@@ -127,7 +128,7 @@ private:
 
   // Quantities for the ntuple
   Lizard::Quantity<float> ntEnergy;
-  Lizard::Quantity<int>   ntPlane;
+  Lizard::Quantity<float>   ntPlane;
   Lizard::Quantity<float> ntX;
   Lizard::Quantity<float> ntY;
   Lizard::Quantity<float> ntZ;

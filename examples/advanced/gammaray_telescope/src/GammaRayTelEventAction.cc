@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.cc,v 1.9 2001-11-23 17:39:04 santin Exp $
+// $Id: GammaRayTelEventAction.cc,v 1.10 2001-11-28 10:07:01 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -161,17 +161,27 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 #ifdef G4ANALYSIS_USE
       // Here we fill the histograms of the Analysis manager
       GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
-      if(IsX) {
-	if (analysis->GetHisto2DMode()=="position")
-	  analysis->InsertPositionXZ((*CHC)[i]->GetPos().x()/mm,(*CHC)[i]->GetPos().z()/mm);
-	else
-	  analysis->InsertPositionXZ(NStrip, NPlane);  	      
-	if (NPlane == 0) analysis->InsertEnergy(ESil/keV);
-	analysis->InsertHits(NPlane);
-      } else if (analysis->GetHisto2DMode()=="position")
-	analysis->InsertPositionYZ((*CHC)[i]->GetPos().y()/mm,(*CHC)[i]->GetPos().z()/mm);  
+      if(IsX) 
+	{
+	  if (analysis->GetHisto2DMode()=="position")
+	    analysis->InsertPositionXZ((*CHC)[i]->GetPos().x()/mm,(*CHC)[i]->GetPos().z()/mm);
+	  else
+	    analysis->InsertPositionXZ(NStrip, NPlane);  	      
+	  if (NPlane == 0) analysis->InsertEnergy(ESil/keV);
+	  analysis->InsertHits(NPlane);
+      	} 
       else 
-	analysis->InsertPositionYZ(NStrip, NPlane);  	      
+	{
+	  if (analysis->GetHisto2DMode()=="position")
+	    analysis->InsertPositionYZ((*CHC)[i]->GetPos().y()/mm,(*CHC)[i]->GetPos().z()/mm);  
+	  else 
+	    analysis->InsertPositionYZ(NStrip, NPlane);  	      
+	  if (NPlane == 0) analysis->InsertEnergy(ESil/keV);
+	  analysis->InsertHits(NPlane);
+	}
+      analysis->setNtuple( ESil/keV, NPlane, (*CHC)[i]->GetPos().x()/mm,
+			   (*CHC)[i]->GetPos().y()/mm,
+			   (*CHC)[i]->GetPos().z()/mm);
 #endif
       
     }

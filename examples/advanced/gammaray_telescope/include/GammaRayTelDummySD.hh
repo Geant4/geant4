@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: GammaRayTelDummySD.hh,v 1.3 2001-11-23 17:44:54 santin Exp $
+// $Id: GammaRayTelDummySD.hh,v 1.4 2001-11-28 10:07:01 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -42,12 +42,14 @@
 #define GammaRayTelDummySD_h 1
 
 #include "G4VSensitiveDetector.hh"
+#include "globals.hh"
+
 class G4Step;
 
 class GammaRayTelDummySD : public G4VSensitiveDetector
 {
 public:
-  GammaRayTelDummySD();
+  GammaRayTelDummySD(G4String name):G4VSensitiveDetector(name){};
   ~GammaRayTelDummySD() {};
   
   void Initialize(G4HCofThisEvent*HCE) {};

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDetectorConstruction.cc,v 1.6 2001-07-11 09:56:58 gunter Exp $
+// $Id: GammaRayTelDetectorConstruction.cc,v 1.7 2001-11-28 10:07:01 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -481,7 +481,8 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 			  physiTKR,
 			  false,	
 			  i);
-      
+
+      /*      
 
       physiPlane =
 	new G4PVPlacement(0,G4ThreeVector(0.,0.,
@@ -496,7 +497,7 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 			  false,	
 			  i);	
       
-      
+      */      
     }
   
   
@@ -679,13 +680,14 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
       trackerSD = new GammaRayTelTrackerSD("TrackerSD",this);
       SDman->AddNewDetector( trackerSD );		
     }
-  
+
   G4String ROgeometryName = "TrackerROGeom";
   G4VReadOutGeometry* trackerRO = 
     new GammaRayTelTrackerROGeometry(ROgeometryName, this);
   
   trackerRO->BuildROGeometry();
   trackerSD->SetROgeometry(trackerRO);
+
 
   if (logicTKRActiveTileX)
     logicTKRActiveTileX->SetSensitiveDetector(trackerSD); // ActiveTileX
