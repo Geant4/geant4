@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2000-06-24 07:42:40 stesting Exp $
+$Id: History,v 1.26 2000-10-19 12:22:29 stanaka Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 19, 2000  Satoshi Tanaka  (exampleN03-V02-00-01)
+- Updated exN03Vis0-4.mac, incorporating recent development 
+  of vis commands
+- Updated format of comments in exN03Vis0-4.mac.
+- Created exN03Vis7.mac: demo of the VRMLFILE driver
+- Created exN03Vis8.mac: demo of multi-page PS file generation
+
+October 19, 2000  Satoshi Tanaka  (exampleN03-V02-00-00)
+- Backup original files for convenience
 
 June 24, 2000  John Allison  (exampleN03-V01-01-09)
 - Updated exampleN03.out for stand-V01-01-05 and utils-V01-01-03.

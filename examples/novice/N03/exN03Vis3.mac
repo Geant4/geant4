@@ -6,14 +6,16 @@
 #  DATE: November 10, 1999                                            #
 #        May      20, 2000                                            # 
 #        June     06, 2000                                            # 
+#        October  17, 2000                                            # 
 #                                                                     #
 #  CONTENTS: A basic macro for demonstrating various drawing styles   #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03                                     #
+#  USAGE:  % gmake visclean                                           #
+#          % $G4BINDIR/exampleN03                                     #
 #          Idle> /control/execute exN03Vis3.mac                       #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
-#                                  DAWN (version 3.80 or after)       #
+#                                  DAWN (version 3.85 or after)       #
 #                                  gv (Ghostview), Tcl/Tk             #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
@@ -29,7 +31,7 @@
 #    % setenv G4VIS_USE_OPENGLX            1                          #
 #    % setenv G4VIS_USE_DAWNFILE           1                          #
 #                                                                     # 
-#  Addional Notes:                                                    #
+#  ADDITIONAL NOTES:                                                  #
 #    The compound command "/vis/open <graphics-system-name>"          #
 #    is equivalent to the following set of commands:                  #
 #                                                                     #
@@ -54,7 +56,7 @@ Store particle trajactories for visualization
 /vis/scene/create
 
 # Attach the current visualization driver 
-# to the current scene
+# to the current scene (omitable)
 /vis/sceneHandler/attach
 
 # Add detector geometry to the current scene
@@ -63,11 +65,11 @@ Store particle trajactories for visualization
 # Add trajectories to the current scene
 /vis/scene/add/trajectories
 
-# Bird-eye view of events with the hidden-surface 
-#  drawing style.
+# Bird-eye view of events with 
+#  the hidden-surface drawing style
 /vis/camera/reset
 /vis/camera/viewpoint    45 45 
-/vis/set/drawing_style   2 
+/vis/viewer/set/style    surface
 /run/beamOn              10
 
 ##########################################################
@@ -81,7 +83,7 @@ Store particle trajactories for visualization
 #    You can do it with the 4th page of the DAWN GUI panel
 #    or by editing the file by hand.
 #
-#  * Set as follows to skip DAWN GUI:
+#  * Set an environmental variable to skip DAWN GUI:
 #    % setenv G4DAWNFILE_VIEWER "dawn -d"
 #
 ##########################################################
@@ -93,7 +95,7 @@ Store particle trajactories for visualization
 /vis/scene/create
 
 # Attach the current visualization driver 
-# to the current scene
+# to the current scene (omitable)
 /vis/sceneHandler/attach
 
 # Add detector geometry to the current scene
@@ -108,18 +110,19 @@ Store particle trajactories for visualization
 /vis/camera/zoom 1.5
 /vis/camera/viewpoint    45 45 
 
-# Bird-eye view of events with the wireframe drawing style
-/vis/set/drawing_style   0 
+# Bird-eye view of events with the 
+#  wireframe drawing style
+/vis/viewer/set/style    wireframe
 /run/beamOn              5
 
-# Bird-eye view of events with the hidden-surface 
-#  drawing style.
-/vis/set/drawing_style   2 
+# Bird-eye view of events with the 
+#  hidden-surface drawing style
+/vis/viewer/set/style    surface
 /run/beamOn              50
 
 # Cull detector geometry and show only trajectories.
 /vis/camera/reset 
 /vis/set/culling         on 
 /vis/set/cull_by_density on 999
-/vis/set/drawing_style   0 
+/vis/viewer/set/style    wireframe
 /run/beamOn              10

@@ -23,7 +23,8 @@
 #                                                                     #
 #    % setenv G4VIS_USE_OIX                1                          #
 #                                                                     # 
-#  Addional Notes:                                                    #
+#  ADDITIONAL NOTES:                                                  #
+#                                                                     # 
 #######################################################################
 
 # Create "scene-0" 

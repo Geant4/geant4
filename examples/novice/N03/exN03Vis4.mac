@@ -4,31 +4,30 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE: June     06, 2000                                            # 
+#        October  17, 2000                                            # 
 #                                                                     #
 #  CONTENTS: An example for the compound command,                     #
 #            "/vis/specify  <logical_volume_name>"                    #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03                                     #
+#  USAGE:  % gmake visclean                                           #
+#          % $G4BINDIR/exampleN03                                     #
 #          Idle> /control/execute exN03Vis4.mac                       #
 #                                                                     #
-#  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
-#                                  DAWN (version 3.80 or after)       #
+#  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window,                    #
+#                                  DAWN (version 3.85 or after)       #
 #                                  gv (Ghostview), Tcl/Tk             #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
-#    % setenv OGLHOME     ... (e.g. /usr/local)                       #
-#    % setenv G4VIS_BUILD_OPENGLX_DRIVER   1                          # 
 #    % setenv G4VIS_BUILD_DAWNFILE_DRIVER  1                          #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
-#    % setenv G4VIS_USE_OPENGLX            1                          #
 #    % setenv G4VIS_USE_DAWNFILE           1                          #
 #                                                                     # 
-#  Addional Notes:                                                    #
+#  ADDITIONAL NOTES:                                                  #
 #    The compound command "/vis/open <graphics-system-name>"          #
 #    is equivalent to the following set of commands:                  #
 #                                                                     #
@@ -42,28 +41,15 @@
 #      /vis/scene/add/logicalVolume $1                                #
 #      /vis/sceneHandler/attach                                       #
 #      /vis/viewer/refresh                                            #
-#      /vis/viewer/update                                             #
 #      /geometry/print $1                                             #
 #                                                                     #
+#    WARNING: You need one more command "/vis/viewer/update" for      #
+#             flushing in using post-processin visualization drivers  #
+#             such as the DAWNFILE, VRMLFILE, OpenGL Motif drivers.   #
+#             You can execute, e.g. "/vis/draw/axes" before executing #
+#             "/vis/viewer/update" to visualize coordinate axes.      #
+#                                                                     #
 #######################################################################
-
-
-######################################################
-# Visualization with OGLIX (OpenGL Immediate X) driver
-######################################################
-
-# Invoke the OGLIX driver 
-/vis/open OGLIX
-
-# Set camera 
-#  Note: Camera setting should be done
-#        for each scene handler.
-/vis/camera/reset
-/vis/camera/zoom       0.9 
-/vis/camera/viewpoint  35 35
-
-# Visualize a selected logical volume 
-/vis/specify Absorber 
 
 ##########################################################
 # Visualization with DAWNFILE driver
@@ -76,7 +62,7 @@
 #    You can do it with the 4th page of the DAWN GUI panel 
 #    or by editing the file by hand.
 #
-#  * Set as follows to skip DAWN GUI:
+#  * Set an environmental variable to skip DAWN GUI:
 #    % setenv G4DAWNFILE_VIEWER "dawn -d"
 ##########################################################
 
@@ -91,5 +77,14 @@
 /vis/camera/zoom       0.9 
 /vis/camera/viewpoint  35 35
 
-# Visualize a selected logical volume 
-/vis/specify Gap
+# Visualize a selected logical volume (1)
+/vis/specify           Absorber 
+/vis/draw/axes         0 0 0 500
+/vis/draw/text         0 0 0 mm  40 -100 -200   LogVol:Absorber 
+/vis/viewer/update
+
+# Visualize a selected logical volume (2)
+/vis/specify           Gap
+/vis/draw/axes         0 0 0 500
+/vis/draw/text         0 0 0 mm  40 -100 -200   LogVol:Gap
+/vis/viewer/update

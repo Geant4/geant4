@@ -1,0 +1,83 @@
+#######################################################################
+#  MACRO FILE NAME: exN03Vis8.mac                                     #
+#                                                                     #
+#  AUTHOR(S): Satoshi Tanaka                                          #
+#                                                                     #
+#  DATE: November 10, 1999                                            #
+#        May      20, 2000                                            # 
+#        June     06, 2000                                            # 
+#        October  17, 2000                                            # 
+#                                                                     #
+#  CONTENTS: A macro to demonstrate creation of a "multi-page"        #
+#            PostScript file                                          #
+#                                                                     #
+#  USAGE:  % setenv G4DAWNFILE_MAX_FILE_NUM  1                        #
+#          % setenv DAWN_BATCH               a                        #
+#          % gmake visclean                                           #
+#          % $G4BINDIR/exampleN03                                     #
+#          Idle> /control/execute exN03Vis8.mac                       #
+#          Idle> exit                                                 #
+#          % gv g4_00.eps                                             #
+#                                                                     #
+#          Then click, "<<", ">>" etc to traverse pages               #
+#                                                                     #
+#  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window,                    #
+#                                  DAWN (version 3.85 or after)       #
+#                                  gv (Ghostview), Tcl/Tk             #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv G4VIS_BUILD_DAWNFILE_DRIVER  1                          #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv G4VIS_USE_DAWNFILE           1                          #
+#                                                                     # 
+#  ADDITIONAL NOTES:                                                  #
+#    * If you execute this macro plural times, all the views are      #
+#      sequentially appended to the file "g4_00.eps".                 #
+#      For example if you execute it two times, a 6-page (3+3 page)   #
+#      PostScript file is made.                                       #
+#                                                                     # 
+#######################################################################
+
+####################################################################
+# Creation of a multi-page PostScript file with the DAWNFILE driver
+####################################################################
+
+# Invoke the DAWNFILE driver 
+/vis/open DAWNFILE
+
+# Create a new scene 
+/vis/scene/create
+
+# Generate page 1
+/vis/camera/reset
+/vis/camera/zoom       0.9 
+/vis/camera/viewpoint  35 35
+/vis/drawVolume        Absorber 
+/vis/draw/axes         0 0 0 500
+/vis/draw/text         0 0 0 mm  50 -100 -200   Page1/3:Absorber 
+/vis/viewer/update
+
+# Generate page 2
+/vis/camera/reset
+/vis/camera/zoom       0.9 
+/vis/camera/viewpoint  35 35
+/vis/drawVolume        Gap 
+/vis/draw/axes         0 0 0 500
+/vis/draw/text         0 0 0 mm 50 -100 -200   Page2/3:Gap
+/vis/viewer/update
+
+# Generate page 3
+/vis/camera/reset
+/vis/camera/zoom       0.9 
+/vis/camera/viewpoint  35 35
+/vis/set/culling       off
+/vis/drawVolume
+/vis/draw/axes         0 0 0 500
+/vis/draw/text         0 0 0 mm 50 -100 -200   Page3/3:world
+/vis/viewer/update
+

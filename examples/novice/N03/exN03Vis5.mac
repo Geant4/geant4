@@ -7,7 +7,8 @@
 #                                                                     #
 #  CONTENTS: A basic macro for demonstrating OPACS/Xo driver          #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03  exN03Vis5.mac                      #
+#  USAGE:  % gmake visclean                                           #
+#          % $G4BINDIR/exampleN03  exN03Vis5.mac                      #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, Motif, X-window, OpenGL,     #
 #                                  OPACS (version 3.0)                #
@@ -22,7 +23,7 @@
 #                                                                     #
 #    % setenv G4VIS_USE_OPACS              1                          #
 #                                                                     # 
-#  Addional Notes:                                                    #
+#  ADDITIONAL NOTES:                                                  #
 #    Controls on a Xo window are :                                    #
 #   - Ctrl + left-button1 + move pointer :                            #
 #     move things (default is scale).                                 #

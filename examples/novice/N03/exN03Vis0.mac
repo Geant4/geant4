@@ -6,21 +6,23 @@
 #  DATE: November 10, 1999                                            #
 #        May      20, 2000                                            # 
 #        June     06, 2000                                            # 
+#        October  17, 2000                                            # 
 #                                                                     #
 #  CONTENTS: A simplest macro to demonstrate visualization of         #
 #            detector geometry and events                             #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03                                     #
+#  USAGE:  % gmake visclean                                           #
+#          % $G4BINDIR/exampleN03                                     #
 #          Idle> /control/execute exN03Vis0.mac                       #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
-#                                  DAWN (version 3.80 or after)       #
+#                                  DAWN (version 3.85 or after)       #
 #                                  gv (Ghostview), Tcl/Tk             #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
-#    % setenv OGLHOME     ... (e.g. /usr/local)                       #
+#    % setenv OGLHOME     ... (e.g. /usr/X11R6)                       #
 #    % setenv G4VIS_BUILD_OPENGLX_DRIVER   1                          # 
 #    % setenv G4VIS_BUILD_DAWNFILE_DRIVER  1                          #
 #                                                                     #
@@ -30,7 +32,7 @@
 #    % setenv G4VIS_USE_OPENGLX            1                          #
 #    % setenv G4VIS_USE_DAWNFILE           1                          #
 #                                                                     #
-#  Addional Notes:                                                    #
+#  ADDITIONAL NOTES:                                                  #
 #    The compound command "/vis/open <graphics-system-name>"          #
 #    is equivalent to the following set of commands:                  #
 #                                                                     #
@@ -44,7 +46,12 @@
 #      /vis/scene/add/volume $1                                       #
 #      /vis/sceneHandler/attach                                       #
 #      /vis/viewer/refresh                                            #
-#      /vis/viewer/update                                             #
+#                                                                     #
+#    WARNING: You need one more command "/vis/viewer/update" for      #
+#             flushing in using post-processin visualization drivers  #
+#             such as the DAWNFILE, VRMLFILE, OpenGL Motif drivers.   #
+#             You can execute, e.g. "/vis/draw/axes" before executing #
+#             "/vis/viewer/update" to visualize coordinate axes.      #
 #                                                                     #
 #######################################################################
 
@@ -56,6 +63,9 @@
 # Invoke the OGLIX driver
 /vis/open OGLIX
 
+# Create a new scene 
+/vis/scene/create
+
 # Set camera 
 #  Note: Camera setting should be done
 #        for each scene handler.
@@ -64,6 +74,7 @@
 
 # Visualize of the whole detector geometry
 /vis/drawVolume
+/vis/viewer/update
 
 #########################################################
 # Visualization of events with the DAWNFILE driver
@@ -76,7 +87,7 @@
 #    You can do it with the 4th page of the DAWN GUI panel 
 #    or by editing the file by hand.
 #
-#  * Set as follows to skip DAWN GUI:
+#  * Set an environmental variable to skip DAWN GUI:
 #    % setenv G4DAWNFILE_VIEWER "dawn -d"
 ##########################################################
 
@@ -93,7 +104,7 @@
 /vis/scene/add/volume
 
 # Attach the current scene handler 
-# to the current scene
+# to the current scene (omitable)
 /vis/sceneHandler/attach 
 
 # Set camera 
@@ -103,11 +114,7 @@
 /vis/camera/zoom      1.2
 /vis/camera/viewpoint 20 70
 
-# Visualize one event added to the current scene
-# * Command "/vis/scene/notifyHandlers" is written in 
-#   ExN03RunAction::BeginOfRunAction()
-# * Command "/vis/viewer/update" is written in 
-#   ExN03RunAction::EndOfRunAction()
+# Visualize events added to the current scene
 /vis/scene/add/trajectories
 /run/beamOn 10
 

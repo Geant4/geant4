@@ -6,20 +6,22 @@
 #  DATE: November 10, 1999                                            #
 #        May      20, 2000                                            #
 #        June     06, 2000                                            # 
+#        October  17, 2000                                            # 
 #                                                                     #
 #  CONTENTS: A basic macro for visualization of events                #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03                                     #
+#  USAGE:  % gmake visclean                                           #
+#          % $G4BINDIR/exampleN03                                     #
 #          Idle> /control/execute exN03Vis2.mac                       #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
-#                                  DAWN (version 3.80 or after)       #
+#                                  DAWN (version 3.85 or after)       #
 #                                  gv (Ghostview), Tcl/Tk             #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
-#    % setenv OGLHOME     ... (e.g. /usr/local)                       #
+#    % setenv OGLHOME     ... (e.g. /usr/X11R6)                       #
 #    % setenv G4VIS_BUILD_OPENGLX_DRIVER   1                          # 
 #    % setenv G4VIS_BUILD_DAWNFILE_DRIVER  1                          #
 #                                                                     #
@@ -29,7 +31,7 @@
 #    % setenv G4VIS_USE_OPENGLX            1                          #
 #    % setenv G4VIS_USE_DAWNFILE           1                          #
 #                                                                     # 
-#  Addional Notes:                                                    #
+#  ADDITIONAL NOTES:                                                  #
 #    The compound command "/vis/open <graphics-system-name>"          #
 #    is equivalent to the following set of commands:                  #
 #                                                                     #
@@ -43,7 +45,6 @@
 #################################################
 /tracking/storeTrajectory 1
 
-
 #####################################################
 # Visualization with OGLSX (OpenGL Stored X) driver
 #####################################################
@@ -55,7 +56,7 @@
 /vis/scene/create
 
 # Attach the current visualization driver 
-# to the current scene
+# to the current scene (omitable)
 /vis/sceneHandler/attach
 
 # Add detector geometry to the current scene
@@ -64,13 +65,8 @@
 # Add trajectories to the current scene
 /vis/scene/add/trajectories
 
-# Set drawing style
-#   The drawing style is "hidden-surface removal".
-#   The commonly-used drawing styles are:
-#        0: wireframe  
-#        1: hidden-line removal 
-#        2: hidden-surface removal 
-/vis/set/drawing_style  2
+# Set drawing style to "surface"
+/vis/viewer/set/style surface
 
 # Set camera 
 #  viewpoint  : (theta,phi) = (10*deg, 10*deg).
@@ -80,10 +76,6 @@
 /vis/camera/zoom        0.9 
 
 # Generate one event and visualize it.
-# * Command "/vis/scene/notifyHandlers" is written in 
-#   ExN03RunAction::BeginOfRunAction()
-# * Command "/vis/viewer/update" is written in 
-#   ExN03RunAction::EndOfRunAction()
 /run/beamOn 1
 
 # Slide show (spinning). 
@@ -106,7 +98,7 @@
 #    You can do it with the 4th page of the DAWN GUI panel
 #    or by editing the file by hand.
 #
-#  * Set as follows to skip DAWN GUI:
+#  * Set an environmental variable to skip DAWN GUI:
 #    % setenv G4DAWNFILE_VIEWER "dawn -d"
 ##########################################################
 
@@ -117,7 +109,7 @@
 /vis/scene/create
 
 # Attach the current visualization driver 
-# to the current scene
+# to the current scene (omitable)
 /vis/sceneHandler/attach
 
 # Add detector geometry to the current scene
@@ -127,10 +119,7 @@
 /vis/scene/add/trajectories
 
 # Set the drawing style to "wireframe". 
-#        0: wireframe  
-#        1: hidden-line removal 
-#        2: hidden-surface removal 
-/vis/set/drawing_style   0
+/vis/viewer/set/style  wireframe
 
 # Visualize many events (bird's eye view)
 #  viewpoint  : (theta,phi) = (45*deg, 45*deg) 
