@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.52 2003-06-06 14:58:58 gcosmo Exp $
+# $Id: GNUmakefile,v 1.53 2003-10-06 22:04:24 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -10,14 +10,14 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 # Symbolic links to novice examples using test101, etc...
-EXAMPLES = 01 02 03 04 05 06
+EXAMPLES = 01 02 03 04 05 06 07
 
 # Symbolic links to extended persistency examples using test401, etc...
 PERSISTENCY += 01 02
 
 # Symbolic links to extended electromagnetic examples using test501, etc...
 ELECTROMAGNETIC += 1 2 3 4 5 ## Awaiting description.
-ELECTROMAGNETIC += 6 ## G4GammaConversionToMuons process.
+ELECTROMAGNETIC += 6 7 9 ## G4GammaConversionToMuons process.
 ELECTROMAGNETIC += 8 10 ## Transistion radiation and PAI (photoabsorption
                         ## ionisation) model.
 
@@ -34,7 +34,11 @@ GDML += 01
 OLAP += 01
 
 # Symbolic links to extended BIAS examples using test801, etc...
-BIAS += 01 02 03 04 05 06 07
+BIAS += 01 
+
+BIAS_AIDA += 02 
+
+# 03 04 05 06 07
 
 # System Tests...
 SUBDIRS += test01
@@ -69,7 +73,10 @@ SUBDIRS += test25
 SUBDIRS += test26
 SUBDIRS += test32
 SUBDIRS += test33
-SUBDIRS += test50
+
+SUBDIRS_AIDA += test50
+
+ADV_EXAMPLES += 01 02  03 04 05 06 07
 
 # Tests with hadronic exercisers.
 HADEXERDIRS = test02 test11 test12 test13 test15 test16 test21 
@@ -80,10 +87,30 @@ all:
 # Making links in the source tree can be a problem if more than one
 # jobs try to do it at the same time.  So disable and always do by
 # hand with: gmake examples_links_source
+
+ifneq (,$(findstring optim_7.3_2.95.2,$(DEBOPT)))
+
+	@$(ECHO) Making Advanced examples...
+	@for nn in $(ADV_EXAMPLES); do \
+	  (cd test10$$nn && $(MAKE)); \
+	done;:
+
+	@$(ECHO) Making AIDA examples...
+	@for nn in $(SUBDIRS_AIDA); do \
+	  (cd test$$nn && $(MAKE)); \
+	done;:
+
+	@$(ECHO) Making BIAS AIDA examples...
+	@for nn in $(BIAS_AIDA); do \
+	  (cd test8$$nn && $(MAKE)); \
+	done;:
+
+endif
 	@$(ECHO) Making examples...
 	@for nn in $(EXAMPLES); do \
 	  (cd test1$$nn && $(MAKE)); \
 	done;:
+
 	@$(ECHO) Making EM Tests...
 	@for nn in $(ELECTROMAGNETIC); do \
 	  (cd test50$$nn && $(MAKE)); \
@@ -118,8 +145,10 @@ endif
 	@for nn in $(BIAS); do \
 	  (cd test8$$nn && $(MAKE)); \
 	done;:
+
 	@$(ECHO) Making libG4TestTool.a for System Tests...
 	@cd tools/lib && $(MAKE);:
+
 	@$(ECHO) Making hadronic exercisers for System Tests...
 	@for dir in $(HADEXERDIRS); \
 	  do (cd $$dir && $(MAKE) -f GNUmakefile.hadronic.exerciser); done;:
