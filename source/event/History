@@ -1,4 +1,4 @@
-$Id: History,v 1.70 2004-02-22 02:55:15 kurasige Exp $
+$Id: History,v 1.71 2004-03-16 00:04:25 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar. 15, 2004, M.Asai (event-V06-00-01)
+- LocateGlobalPointAndSetup() method of G4Navigator is now invoked at the
+  beginning of each event to reset the navigator.
 
 Feb. 22  2004, H.Kurashige (event-V06-00-00)
 - Bug Fix in the destructor of G4ParticleGunMessenger
