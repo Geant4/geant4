@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildGeom_Example1.cc,v 1.4 2001-07-11 10:09:27 gunter Exp $
+// $Id: BuildGeom_Example1.cc,v 1.5 2004-12-07 23:41:02 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 
 #include "BuildGeom_Example1.hh"
 
-#include <math.h>
+#include <cmath>
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"

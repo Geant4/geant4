@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.41 2004-09-13 20:21:23 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.42 2004-12-07 23:41:01 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -723,7 +723,7 @@ G4VisCommandSceneAddTrajectories::G4VisCommandSceneAddTrajectories () {
      "\nevent. The drawing mode is an integer that is passed to the"
      "\nDrawTrajectory method.  The default implementation in G4VTrajectory,"
      "\nif drawing-mode > 0, draws the trajectory as a polyline and, if"
-     "\ndrawing-mode != 0, draws markers of screen size abs(drawing-mode)/1000"
+     "\ndrawing-mode != 0, draws markers of screen size std::abs(drawing-mode)/1000"
      "\nin pixels at each step and auxiliary point, if any.  So drawing-mode"
      "\n== 5000 is a good choice."
      "\nEnable storing with \"/tracking/storeTrajectory 1\"."

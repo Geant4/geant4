@@ -309,7 +309,7 @@ G4OpenInventorViewer::lookedAt(SoCamera* camera,SbVec3f & dir, SbVec3f & up)
   dir = -z;
   dir.normalize();
   up = SbVec3f(0.f,1.f,0.f);  // Choose y-axis if possible.
-  if (abs(up.dot(z)) > 1.e-6) {
+  if (std::abs(up.dot(z)) > 1.e-6) {
     up = y;
     up.normalize();
   }

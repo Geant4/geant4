@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.16 2004-07-23 15:24:20 johna Exp $
+// $Id: G4ViewParameters.cc,v 1.17 2004-12-07 23:41:01 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,7 +98,7 @@ G4double G4ViewParameters::GetCameraDistance (G4double radius) const {
     cameraDistance = radius;
   }
   else {
-    cameraDistance = radius / sin (fFieldHalfAngle) - fDolly;
+    cameraDistance = radius / std::sin (fFieldHalfAngle) - fDolly;
   }
   return cameraDistance;
 }
@@ -126,7 +126,7 @@ G4double G4ViewParameters::GetFrontHalfHeight (G4double nearDistance,
     frontHalfHeight = radius / fZoomFactor;
   }
   else {
-    frontHalfHeight = nearDistance * tan (fFieldHalfAngle) / fZoomFactor;
+    frontHalfHeight = nearDistance * std::tan (fFieldHalfAngle) / fZoomFactor;
   }
   return frontHalfHeight;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandler.cc,v 1.9 2003-06-16 17:14:00 gunter Exp $
+// $Id: G4VRML2SceneHandler.cc,v 1.10 2004-12-07 23:41:01 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2SceneHandler.cc
@@ -39,7 +39,7 @@
 
 #include <unistd.h>
 #include <fstream>
-#include <math.h>
+#include <cmath>
 
 #include "globals.hh"
 #include "G4VPhysicalVolume.hh"

@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: SoCons.cc,v 1.4 2004-11-24 15:15:02 gbarrand Exp $
+// $Id: SoCons.cc,v 1.5 2004-12-07 23:40:59 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*-----------------------------HEPVis---------------------------------------*/
@@ -38,7 +38,7 @@
 #include "HEPVis/nodes/SoCons.h"
 
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 #include <Inventor/SbBox.h>
 #include <Inventor/actions/SoAction.h>
 #include <Inventor/fields/SoSFFloat.h>
@@ -133,7 +133,7 @@ void SoCons::generatePrimitives(SoAction *action) {
   ///////////////////////////////////////////////////////
 
 
-  int NPHI = (int)(2+22*fabs(fDPhi.getValue()/(2.0*M_PI)));
+  int NPHI = (int)(2+22*std::fabs(fDPhi.getValue()/(2.0*M_PI)));
   double deltaPhi = fDPhi.getValue()/NPHI;
   double phi0     = fSPhi.getValue();
   double phi1     = phi0 + fDPhi.getValue();
@@ -143,12 +143,12 @@ void SoCons::generatePrimitives(SoAction *action) {
   double rMin2    = fRmin2.getValue();
   double zMax     = fDz.getValue();
   double zMin     = -zMax;
-  double cosPhi0  = cos(phi0);
-  double sinPhi0  = sin(phi0);
-  double cosPhi1  = cos(phi1);
-  double sinPhi1  = sin(phi1);
-  double cosDeltaPhi = cos(deltaPhi);
-  double sinDeltaPhi = sin(deltaPhi);
+  double cosPhi0  = std::cos(phi0);
+  double sinPhi0  = std::sin(phi0);
+  double cosPhi1  = std::cos(phi1);
+  double sinPhi1  = std::sin(phi1);
+  double cosDeltaPhi = std::cos(deltaPhi);
+  double sinDeltaPhi = std::sin(deltaPhi);
   //
   // The outer surface!
   //
@@ -174,7 +174,7 @@ void SoCons::generatePrimitives(SoAction *action) {
     inc(sinPhi, cosPhi, sinDeltaPhi, cosDeltaPhi);    
   } 
   endShape();
-  if (fabs(deltaPhi)<2.0*M_PI) { 
+  if (std::fabs(deltaPhi)<2.0*M_PI) { 
     //
     // The end 
     //

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerViewer.cc,v 1.11 2003-06-16 17:13:44 gunter Exp $
+// $Id: G4RayTracerViewer.cc,v 1.12 2004-12-07 23:41:01 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RayTracerViewer.hh"
@@ -58,7 +58,7 @@ void G4RayTracerViewer::SetView() {
     targetPoint + cameraDistance * fVP.GetViewpointDirection().unit();
   const G4double nearDistance  = fVP.GetNearDistance(cameraDistance,radius);
   const G4double frontHalfHeight = fVP.GetFrontHalfHeight(nearDistance,radius);
-  const G4double frontHalfAngle = atan(frontHalfHeight / nearDistance);
+  const G4double frontHalfAngle = std::atan(frontHalfHeight / nearDistance);
 
   // Calculate and set ray tracer parameters.
   theTracer->

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.14 2003-06-16 17:13:30 gunter Exp $
+// $Id: G4DAWNFILEViewer.cc,v 1.15 2004-12-07 23:40:58 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -242,7 +242,7 @@ void G4DAWNFILEViewer::SendViewParameters ()
 	G4double  camera_distance ;
 	G4double  radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
 
-	G4double half_view_angle  = fabs ( fVP.GetFieldHalfAngle () ) ;
+	G4double half_view_angle  = std::fabs ( fVP.GetFieldHalfAngle () ) ;
 	if( half_view_angle > MAX_HALF_ANGLE ) { 
 	  half_view_angle = MAX_HALF_ANGLE ; 
 	} 
@@ -252,7 +252,7 @@ void G4DAWNFILEViewer::SendViewParameters ()
 		camera_distance = radius * HOW_FAR ;  
 	} else {
 			//----- Calc camera distance from half view angle
-		camera_distance = radius / sin ( half_view_angle );
+		camera_distance = radius / std::sin ( half_view_angle );
 		camera_distance -= fVP.GetDolly();
 	}
 
@@ -298,7 +298,7 @@ void G4DAWNFILEViewer::SendViewParameters ()
 	} else {
 		const G4double FR_HALF_SCREEN_SIZE = 0.5 ;
 		G4double  focal_distance \
-		  = FR_HALF_SCREEN_SIZE / tan( half_view_angle ); 
+		  = FR_HALF_SCREEN_SIZE / std::tan( half_view_angle ); 
 		focal_distance *= zoom_factor ;
 
 		gui_out << "fd" << focal_distance << G4endl;

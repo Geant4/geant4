@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: SoTrd.cc,v 1.4 2004-11-24 15:15:02 gbarrand Exp $
+// $Id: SoTrd.cc,v 1.5 2004-12-07 23:41:00 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*-----------------------------HEPVis---------------------------------------*/
@@ -34,7 +34,7 @@
 /*                                                                          */
 /*--------------------------------------------------------------------------*/
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 
 #include <Inventor/SbBox.h>
 #include <Inventor/actions/SoAction.h>

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.27 2004-09-13 20:22:11 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.28 2004-12-07 23:41:02 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -640,9 +640,9 @@ void G4VisCommandsViewerSet::SetNewValue
   else if (command == fpCommandLightsThetaPhi) {
     G4double theta, phi;
     ConvertToDoublePair(newValue, theta, phi);
-    G4double x = sin (theta) * cos (phi);
-    G4double y = sin (theta) * sin (phi);
-    G4double z = cos (theta);
+    G4double x = std::sin (theta) * std::cos (phi);
+    G4double y = std::sin (theta) * std::sin (phi);
+    G4double z = std::cos (theta);
     fLightsVector = G4ThreeVector (x, y, z);
     vp.SetLightpointDirection(fLightsVector);
     if (verbosity >= G4VisManager::confirmations) {
@@ -814,9 +814,9 @@ void G4VisCommandsViewerSet::SetNewValue
   else if (command == fpCommandUpThetaPhi) {
     G4double theta, phi;
     ConvertToDoublePair(newValue, theta, phi);
-    G4double x = sin (theta) * cos (phi);
-    G4double y = sin (theta) * sin (phi);
-    G4double z = cos (theta);
+    G4double x = std::sin (theta) * std::cos (phi);
+    G4double y = std::sin (theta) * std::sin (phi);
+    G4double z = std::cos (theta);
     fUpVector = G4ThreeVector (x, y, z);
     vp.SetUpVector(fUpVector);
     if (verbosity >= G4VisManager::confirmations) {
@@ -835,9 +835,9 @@ void G4VisCommandsViewerSet::SetNewValue
   else if (command == fpCommandViewpointThetaPhi) {
     G4double theta, phi;
     ConvertToDoublePair(newValue, theta, phi);
-    G4double x = sin (theta) * cos (phi);
-    G4double y = sin (theta) * sin (phi);
-    G4double z = cos (theta);
+    G4double x = std::sin (theta) * std::cos (phi);
+    G4double y = std::sin (theta) * std::sin (phi);
+    G4double z = std::cos (theta);
     fViewpointVector = G4ThreeVector (x, y, z);
     vp.SetViewAndLights(fViewpointVector);
     if (verbosity >= G4VisManager::confirmations) {

@@ -1,4 +1,4 @@
-$Id: History,v 1.264 2004-11-26 20:44:26 perl Exp $
+$Id: History,v 1.265 2004-12-07 23:40:57 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,14 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+7th December 2004 Joseph Perl (vis-V06-02-08)
+- Tagged right after migration to cmath
+- All occurences of include <math.h> have now become include <cmath>.
+- All math functions are now prefaced with std::
+
+7th December 2004 Joseph Perl (vis-V06-02-07)
+- Tagged right before migration to cmath
 
 26th November 2004 Joseph Perl (vis-V06-02-06)
 - Tagged for release 7.0.

@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: SoTrap.cc,v 1.4 2004-11-24 15:15:02 gbarrand Exp $
+// $Id: SoTrap.cc,v 1.5 2004-12-07 23:41:00 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*-----------------------------HEPVis----------------------------------------*/
@@ -39,7 +39,7 @@
 #include "HEPVis/nodes/SoTrap.h"
 
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 #include <Inventor/SbBox.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/actions/SoAction.h>
@@ -254,8 +254,8 @@ void SoTrap::computeBBox(SoAction *, SbBox3f &box, SbVec3f &center ){
   if (pDy2.getValue() > pDy) pDy = pDy2.getValue(); 
   float TthetaCphi = FTAN(pTheta.getValue())*FCOS(pPhi.getValue());
   float TthetaSphi = FTAN(pTheta.getValue())*FSIN(pPhi.getValue());
-  float Xalp = FFABS(tan(pAlp1.getValue())*pDy1.getValue());
-  float Xalp2 = FFABS(tan(pAlp2.getValue())*pDy2.getValue());
+  float Xalp = FFABS(std::tan(pAlp1.getValue())*pDy1.getValue());
+  float Xalp2 = FFABS(std::tan(pAlp2.getValue())*pDy2.getValue());
   if (Xalp< Xalp2) Xalp=Xalp2;
   pDx += FFABS(TthetaCphi*pDz.getValue());
   pDx += Xalp;

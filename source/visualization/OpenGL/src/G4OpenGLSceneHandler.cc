@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.27 2004-09-22 20:06:39 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.28 2004-12-07 23:40:58 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -230,8 +230,8 @@ void G4OpenGLSceneHandler::AddCircleSquare
     gluProject(p.x(), p.y(), p.z(),
                modelMatrix, projectionMatrix, viewport,
                &winDx, &winDy, &winDz);
-    G4double winWorldRatio = sqrt(pow(winx - winDx, 2) +
-				  pow(winy - winDy, 2));
+    G4double winWorldRatio = std::sqrt(std::pow(winx - winDx, 2) +
+				  std::pow(winy - winDy, 2));
     G4double winSize = scale *
       userSpecified ? marker.GetScreenSize() : def.GetScreenSize();
     worldSize = winSize / winWorldRatio;
@@ -274,9 +274,9 @@ transformations.  Some clever stuff is needed.
     gluProject(centre.x() + size, centre.y() + size, centre.z() + size,
                modelMatrix, projectionMatrix, viewport,
                &winx1, &winy1, &winz1);
-    winSize = sqrt((pow(winx - winx1, 2) +
-                    pow(winy - winy1, 2) +
-                    pow(winz - winz1, 2)) / 3.);
+    winSize = std::sqrt((std::pow(winx - winx1, 2) +
+                    std::pow(winy - winy1, 2) +
+                    std::pow(winz - winz1, 2)) / 3.);
   }
   else {
     winSize = scale *
@@ -317,8 +317,8 @@ void G4OpenGLSceneHandler::DrawScreenPolygon
   G4int i;
   for (i = 0, phi = -dPhi / 2.; i < nSides; i++, phi += dPhi) {
     G4double x, y, z;
-    x = centre.x() + r * cos(phi);
-    y = centre.y() + r * sin(phi);
+    x = centre.x() + r * std::cos(phi);
+    y = centre.y() + r * std::sin(phi);
     z = centre.z();
     glVertex3d (x, y, z);
   }

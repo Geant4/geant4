@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.77 2004-11-11 16:02:18 johna Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.78 2004-12-07 23:40:58 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -896,7 +896,7 @@ void G4HepRepSceneHandler::addAttVals(HepRepAttribute* attribute, const map<G4St
                     if (n == 0) {
                         // first coordinate
                         double factor = atof(pos.substr(s, i-s).c_str())/point->getX();
-                        m = (int)(log10(factor)+((factor < 1) ? -0.5 : 0.5));
+                        m = (int)(std::log10(factor)+((factor < 1) ? -0.5 : 0.5));
 //                        cout << factor << ", " << m << endl;
                     } else if (n == 3) {
                         // unit

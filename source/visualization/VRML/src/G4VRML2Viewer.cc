@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2Viewer.cc,v 1.9 2002-06-23 03:31:51 stanaka Exp $
+// $Id: G4VRML2Viewer.cc,v 1.10 2004-12-07 23:41:01 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2Viewer.cc
@@ -36,7 +36,7 @@
 
 //#define DEBUG_FR_VIEW
 
-#include <math.h>
+#include <cmath>
 
 #include "G4Scene.hh"
 #include "G4VRML2Viewer.hh"
@@ -50,7 +50,7 @@ G4VRML2Viewer::G4VRML2Viewer(G4VRML2SceneHandler& scene, const G4String& name) :
  fDest(scene.fDest)
 {
 	fViewHalfAngle = 0.5 * 0.785398 ; // 0.5 * 45*deg
-	fsin_VHA       = sin ( fViewHalfAngle ) ;	
+	fsin_VHA       = std::sin ( fViewHalfAngle ) ;	
 }
 
 G4VRML2Viewer::~G4VRML2Viewer()

@@ -4,7 +4,7 @@
  * GL2PS, an OpenGL to PostScript Printing Library
  * Copyright (C) 1999-2003  Christophe Geuzaine 
  *
- * $Id: gl2ps.cc,v 1.6 2004-11-24 15:15:02 gbarrand Exp $
+ * $Id: gl2ps.cc,v 1.7 2004-12-07 23:41:00 perl Exp $
  *
  * E-mail: geuz@geuz.org
  * URL: http://www.geuz.org/gl2ps/
@@ -186,7 +186,7 @@ void gl2psPvec(GLfloat *a, GLfloat *b, GLfloat *c){
 }
 
 GLfloat gl2psNorm(GLfloat *a){
-  return sqrt(a[0]*a[0] + a[1]*a[1] + a[2]*a[2]);
+  return std::sqrt(a[0]*a[0] + a[1]*a[1] + a[2]*a[2]);
 }
 
 void gl2psGetNormal(GLfloat *a, GLfloat *b, GLfloat *c){
@@ -665,7 +665,7 @@ GLint gl2psGetPlaneFromPoints(GL2PSxyz a, GL2PSxyz b, GL2PSplane plane){
 
   plane[0] = b[1] - a[1];
   plane[1] = a[0] - b[0];
-  n = sqrt(plane[0]*plane[0] + plane[1]*plane[1]);
+  n = std::sqrt(plane[0]*plane[0] + plane[1]*plane[1]);
   plane[2]=0.;
   if(n != 0.){
     plane[0] /= n;
@@ -1109,7 +1109,7 @@ void gl2psAddPolyPrimitive(GLshort type, GLshort numverts,
       (prim->verts[2].xyz[0] - prim->verts[1].xyz[0]) *
       (prim->verts[1].xyz[2] - prim->verts[0].xyz[2]) / area;
     
-    maxdZ = sqrt(dZdX*dZdX + dZdY*dZdY);
+    maxdZ = std::sqrt(dZdX*dZdX + dZdY*dZdY);
 
     dZ = factor * maxdZ + units;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRSceneFunc.icc,v 1.4 2004-09-22 20:12:27 johna Exp $
+// $Id: G4FRSceneFunc.icc,v 1.5 2004-12-07 23:40:58 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -747,28 +747,28 @@ void G4FRSCENEHANDLER::AddThis (const G4Trap& trap)
 
 		//----- parameters (half lengths of box)
 	G4double  dz      = trap.GetZHalfLength ();     
-	G4double  theta   = acos( cosTheta )      ;
+	G4double  theta   = std::acos( cosTheta )      ;
         G4double  phi;
         if ( ny==0. && nx ==0.) { 
-          phi     = 0.;   // atan2(0.,0.) gives undefined value of phi 
+          phi     = 0.;   // std::atan2(0.,0.) gives undefined value of phi 
         } else {
-          phi = atan2( ny, nx ) ;  if( phi < 0. ) { phi += twopi ; } 
-					// -PI < atan() < PI 
+          phi = std::atan2( ny, nx ) ;  if( phi < 0. ) { phi += twopi ; } 
+					// -PI < std::atan() < PI 
         }
 /////////////////////////////////////////////////
-//  	G4double  phi     = atan2( ny, nx ) ;  
+//  	G4double  phi     = std::atan2( ny, nx ) ;  
 //	if( phi < 0.0 ) { phi += twopi ; } 
-//				// -PI < atan() < PI 
+//				// -PI < std::atan() < PI 
 /////////////////////////////////////////////////
 
   	G4double  h1      = trap.GetYHalfLength1 ();     
   	G4double  bl1     = trap.GetXHalfLength1 (); 
   	G4double  tl1     = trap.GetXHalfLength2 (); 
-  	G4double  alpha1  = atan( trap.GetTanAlpha1()) ;
+  	G4double  alpha1  = std::atan( trap.GetTanAlpha1()) ;
   	G4double  h2      = trap.GetYHalfLength2 ();     
   	G4double  bl2     = trap.GetXHalfLength3 (); 
   	G4double  tl2     = trap.GetXHalfLength4 (); 
-  	G4double  alpha2  = atan( trap.GetTanAlpha2()) ;
+  	G4double  alpha2  = std::atan( trap.GetTanAlpha2()) ;
 
 		//----- send coordinates to Fukui Renderer
 	SendTransformedCoordinates();

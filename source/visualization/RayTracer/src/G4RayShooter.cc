@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayShooter.cc,v 1.2 2001-07-11 10:09:04 gunter Exp $
+// $Id: G4RayShooter.cc,v 1.3 2004-12-07 23:41:00 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -58,7 +58,7 @@ void G4RayShooter::Shoot(G4Event* evt,G4ThreeVector vtx,G4ThreeVector direc)
   // create new primaries and set them to the vertex
   G4double mass =  particle_definition->GetPDGMass();
   G4double energy = particle_energy + mass;
-  G4double pmom = sqrt(energy*energy-mass*mass);
+  G4double pmom = std::sqrt(energy*energy-mass*mass);
   G4double px = pmom*direc.x();
   G4double py = pmom*direc.y();
   G4double pz = pmom*direc.z();

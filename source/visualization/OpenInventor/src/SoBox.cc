@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: SoBox.cc,v 1.4 2004-11-24 15:15:02 gbarrand Exp $
+// $Id: SoBox.cc,v 1.5 2004-12-07 23:40:59 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*----------------------------HEPVis----------------------------------------*/
@@ -38,7 +38,7 @@
 #include "HEPVis/nodes/SoBox.h"
 
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 
 #include <Inventor/SbBox.h>
 #include <Inventor/fields/SoSFFloat.h>

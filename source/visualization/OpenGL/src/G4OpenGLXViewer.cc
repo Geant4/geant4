@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.22 2004-07-09 15:41:47 johna Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.23 2004-12-07 23:40:59 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -583,11 +583,11 @@ G4float* G4OpenGLXViewer::spewPrimitiveEPS (FILE* file, GLfloat* loc) {
     if (dr!=0 || dg!=0 || db!=0) {
       dx=vertex[1].x - vertex[0].x;
       dy=vertex[1].y - vertex[0].y;
-      distance=sqrt(dx*dx + dy*dy);
+      distance=std::sqrt(dx*dx + dy*dy);
 
-      absR=fabs(dr);
-      absG=fabs(dg);
-      absB=fabs(db);
+      absR=std::fabs(dr);
+      absG=std::fabs(dg);
+      absB=std::fabs(db);
 
       #define Max(a, b) (((a)>(b))?(a):(b))
 

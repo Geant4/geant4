@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: SoDetectorTreeKit.cc,v 1.6 2004-11-24 15:15:02 gbarrand Exp $
+// $Id: SoDetectorTreeKit.cc,v 1.7 2004-12-07 23:41:00 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*-----------------------------HEPVis----------------------------------------*/
@@ -37,7 +37,7 @@
 // this :
 #include "HEPVis/nodekits/SoDetectorTreeKit.h"
 
-#include <math.h>
+#include <cmath>
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/events/SoMouseButtonEvent.h>
 #include <Inventor/SoPickedPoint.h>

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererViewer.cc,v 1.7 2001-07-11 10:08:46 gunter Exp $
+// $Id: G4FukuiRendererViewer.cc,v 1.8 2004-12-07 23:40:58 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -207,7 +207,7 @@ void G4FukuiRendererViewer::SendViewParameters ()
 	G4double  camera_distance ;
 	G4double  radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
 
-	G4double half_view_angle  = fabs ( fVP.GetFieldHalfAngle () ) ;
+	G4double half_view_angle  = std::fabs ( fVP.GetFieldHalfAngle () ) ;
 	if( half_view_angle > MAX_HALF_ANGLE ) { 
 	  half_view_angle = MAX_HALF_ANGLE ; 
 	} 
@@ -217,7 +217,7 @@ void G4FukuiRendererViewer::SendViewParameters ()
 		camera_distance = radius * HOW_FAR ;  
 	} else {
 			//----- Calc camera distance from half view angle
-		camera_distance = radius / sin ( half_view_angle );
+		camera_distance = radius / std::sin ( half_view_angle );
 		camera_distance -= fVP.GetDolly();
 	}
 
@@ -271,7 +271,7 @@ void G4FukuiRendererViewer::SendViewParameters ()
 	} else {
 		const G4double FR_HALF_SCREEN_SIZE = 0.5 ;
 		G4double  focal_distance \
-		  = FR_HALF_SCREEN_SIZE / tan( half_view_angle ); 
+		  = FR_HALF_SCREEN_SIZE / std::tan( half_view_angle ); 
 		focal_distance *= zoom_factor ;
 		fSceneHandler.SendStrDouble ( FR_FOCAL_DISTANCE, focal_distance );
 	}

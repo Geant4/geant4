@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: SoTubs.cc,v 1.4 2004-11-24 15:15:02 gbarrand Exp $
+// $Id: SoTubs.cc,v 1.5 2004-12-07 23:41:00 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*-----------------------------HEPVis---------------------------------------*/
@@ -38,7 +38,7 @@
 #include "HEPVis/nodes/SoTubs.h"
 
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 
 #include <Inventor/SbBox.h>
 #include <Inventor/actions/SoGLRenderAction.h>
@@ -133,13 +133,13 @@ void SoTubs::generatePrimitives(SoAction *action) {
   //-----------------------------------------------------
   ///////////////////////////////////////////////////////
 
-  int NPHI = (int)(2+22*fabs(pDPhi.getValue()/(2.0*M_PI)));
+  int NPHI = (int)(2+22*std::fabs(pDPhi.getValue()/(2.0*M_PI)));
   double deltaPhi = pDPhi.getValue()/NPHI, phi0 = pSPhi.getValue(),phi1=phi0+pDPhi.getValue();
   double rMax=pRMax.getValue(),rMin=pRMin.getValue();
   double zMax=pDz.getValue(),zMin=-zMax;
-  double cosPhi0=cos(phi0), sinPhi0=sin(phi0);
-  double cosPhi1=cos(phi1), sinPhi1=sin(phi1);
-  double cosDeltaPhi=cos(deltaPhi),sinDeltaPhi=sin(deltaPhi);
+  double cosPhi0=std::cos(phi0), sinPhi0=std::sin(phi0);
+  double cosPhi1=std::cos(phi1), sinPhi1=std::sin(phi1);
+  double cosDeltaPhi=std::cos(deltaPhi),sinDeltaPhi=std::sin(deltaPhi);
   //
   // The outer surface!
   //
@@ -168,7 +168,7 @@ void SoTubs::generatePrimitives(SoAction *action) {
     } 
     endShape();
   }
-  if (fabs(deltaPhi)<2.0*M_PI) { 
+  if (std::fabs(deltaPhi)<2.0*M_PI) { 
     //
     // The end 
     //
