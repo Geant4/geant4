@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.31 2002-06-03 10:17:56 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.32 2002-06-12 09:22:02 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
@@ -348,11 +348,16 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
 
     if ( noResult )
     {
+      // Entering a daughter after ascending
+      //
       // The blocked volume is no longer valid - it was for another level
       //
       fBlockedPhysicalVolume = 0;
       fBlockedReplicaNo = -1;
-      fEntering = fEnteredDaughter = true;
+      // fEntering should be false -- else blockedVolume is assumed good.
+      // fEnteredDaughter is used for ExitNormal -- 
+      fEntering = false;
+      fEnteredDaughter = true;
     }
   } while (noResult);
 
