@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: EventAction.cc,v 1.7 2004-06-15 11:39:58 maire Exp $
+// $Id: EventAction.cc,v 1.8 2004-06-21 10:52:55 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -42,10 +39,6 @@
 
 #ifdef USE_AIDA
  #include "AIDA/IHistogram1D.h"
-#endif
-
-#ifdef USE_ROOT
-  #include "TH1F.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,17 +82,11 @@ void EventAction::EndOfEventAction(const G4Event* evt)
   for (G4int k=0; k<detector->GetNbOfAbsor(); k++) {
      runAct->fillPerEvent(k,energyDeposit[k],trackLengthCh[k],
                        energyLeaving[k]/(G4double)(detector->GetNbOfLayers()));
+		       
 #ifdef USE_AIDA
       if (histoManager->GetHisto(k)) {
 	G4double unit = histoManager->GetHistoUnit(k); 
 	histoManager->GetHisto(k)->fill(energyDeposit[k]/unit);
-      }  
-#endif
-
-#ifdef USE_ROOT
-      if (histoManager->GetHisto(k)) {
-	G4double unit = histoManager->GetHistoUnit(k); 
-	histoManager->GetHisto(k)->Fill(energyDeposit[k]/unit);
       }  
 #endif
   }

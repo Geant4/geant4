@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.4 2004-03-15 11:20:11 maire Exp $
+// $Id: RunAction.cc,v 1.5 2004-06-21 10:55:10 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -37,11 +37,6 @@
 
 #ifdef USE_AIDA
  #include "AIDA/AIDA.h"
-#endif
-
-#ifdef USE_ROOT
- #include "TFile.h"
- #include "TH1F.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,12 +55,6 @@ RunAction::~RunAction()
   tree->close();        // and closing the tree (and the file)  
   delete tree;
 #endif
-  
-#ifdef USE_ROOT
-  tree->Write();        // Writing the histograms to the file
-  tree->Close();        // and closing the file  
-  delete tree;
-#endif   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,14 +84,6 @@ void RunAction::bookHisto()
  delete tf;
  delete af;
 #endif
-
-#ifdef USE_ROOT
- // Create a ROOT file
- tree = new TFile("testem4.root","recreate");
- 
- // Create the histogram
- histo[0] = new TH1F("1","total energy deposit in C6F6(MeV)",100,0.,10.);
-#endif 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

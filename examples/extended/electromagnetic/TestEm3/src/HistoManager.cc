@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.1 2004-06-15 11:39:59 maire Exp $
+// $Id: HistoManager.cc,v 1.2 2004-06-21 10:52:55 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,11 +34,6 @@
 
 #ifdef USE_AIDA
  #include "AIDA/AIDA.h"
-#endif
-
-#ifdef USE_ROOT
- #include "TFile.h"
- #include "TH1F.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -96,18 +91,6 @@ void HistoManager::SetFactory()
  delete tf;
  delete af;
 #endif     //USE_AIDA
-
-#ifdef USE_ROOT
- // Create a ROOT file
- tree = new TFile(fileName,"recreate");
- 
- // histograms
- for (G4int k=0; k<MaxHisto; k++) {
-  if (exist[k] > 0)
-   histo[k] = new TH1F(Label[k],Title[k],Nbins[k],Vmin[k],Vmax[k]);
-  else histo[k] = 0;
- }
-#endif    //USE_ROOT
   
  factoryOn = true;  
 }
@@ -124,13 +107,6 @@ void HistoManager::SaveFactory()
     delete hf;
     delete tree;
 #endif     //USE_AIDA
-
-#ifdef USE_ROOT
-    tree->Write();        // Writing the histograms to the file
-    tree->Close();        // and closing the file
-    G4cout << "---> Histograms are saved" << G4endl;
-    delete tree;
-#endif     //USE_ROOT   
 
     factoryOn = false;
   }

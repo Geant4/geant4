@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: EventAction.cc,v 1.4 2004-03-15 11:20:11 maire Exp $
+// $Id: EventAction.cc,v 1.5 2004-06-21 10:55:10 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -42,10 +39,6 @@
 
 #ifdef USE_AIDA
   #include "AIDA/IHistogram1D.h"
-#endif
-
-#ifdef USE_ROOT
-  #include "TH1F.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,10 +80,6 @@ void EventAction::EndOfEventAction( const G4Event* evt)
 	   
 #ifdef USE_AIDA
   Run->GetHisto(0)->fill(TotalEnergyDeposit/MeV);
-#endif
-
-#ifdef USE_ROOT
-  Run->GetHisto(0)->Fill(TotalEnergyDeposit/MeV);
 #endif
 
   // draw trajectories

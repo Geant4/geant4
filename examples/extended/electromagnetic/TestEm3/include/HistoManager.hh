@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.1 2004-06-15 11:39:57 maire Exp $
+// $Id: HistoManager.hh,v 1.2 2004-06-21 10:52:55 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,11 +41,6 @@ namespace AIDA {
  class IHistogramFactory;
  class IHistogram1D;
 } 
-#endif
-
-#ifdef USE_ROOT
- class TFile;
- class TH1F;
 #endif
 
 class HistoMessenger;
@@ -73,11 +68,6 @@ class HistoManager
     AIDA::IHistogramFactory* GetHistogramFactory()  {return hf;}        
     AIDA::IHistogram1D*      GetHisto(G4int id)     {return histo[id];}
 #endif
-
-#ifdef USE_ROOT
-    TFile* GetTree()           {return tree;}     
-    TH1F*  GetHisto(G4int id)  {return histo[id];}
-#endif
     
     G4double                 GetHistoUnit(G4int id) {return Unit[id];}
     G4double                 GetBinWidth (G4int id) {return Width[id];}
@@ -90,11 +80,6 @@ class HistoManager
     AIDA::ITree*             tree;
     AIDA::IHistogramFactory* hf;    
     AIDA::IHistogram1D*      histo[MaxHisto];
-#endif
-
-#ifdef USE_ROOT    
-    TFile* tree;
-    TH1F*  histo[MaxHisto];
 #endif
     
     G4bool                   exist[MaxHisto];
