@@ -2,8 +2,8 @@
 #define _G3POS_ 1
 
 #include "G4ThreeVector.hh"
-#include "G3VolTable.hh"
-#include "VolTableEntry.hh"
+
+class VolTableEntry;
 
 class G3Pos{
 private:
@@ -16,6 +16,8 @@ private:
   G4int _Irot;
   G4String _Only;
 public:
+  G3Pos(){;}
+
   G3Pos(G4String& LV, G4int C, G4String& M, 
 	G4ThreeVector* T, G4int R, G4String& O);
 
@@ -40,15 +42,4 @@ public:
   
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
 

@@ -5,11 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3Pos.cc,v 1.2 1999-05-26 03:47:12 lockman Exp $
+// $Id: G3Pos.cc,v 1.3 1999-05-27 21:38:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
 #include "G3Pos.hh"
+#include "VolTableEntry.hh"
+#include "G3VolTable.hh"
+
+extern G3VolTable G3Vol;
 
 G3Pos::G3Pos(G4String& LV, G4int C, G4String& Mother, 
 	     G4ThreeVector* Position, G4int irot, 

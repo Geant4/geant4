@@ -4,11 +4,11 @@
 #include <rw/tphdict.h>
 #include <rw/tpordvec.h>
 #include "G4ThreeVector.hh"
+#include "G3Pos.hh"
 
 class G4LogicalVolume;
 class G4Material;
 class G4VSolid;
-class G3Pos;
 
 class VolTableEntry {
 private:
@@ -72,15 +72,4 @@ public:
   G4bool operator == ( const VolTableEntry& vte) const;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
 

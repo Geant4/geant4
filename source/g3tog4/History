@@ -1,7 +1,12 @@
-$Id: History,v 1.15 1999-05-27 16:49:51 lockman Exp $
+$Id: History,v 1.16 1999-05-27 21:38:54 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+27-May-1999 Cosmo
+- Fixed circular dependencies in G3Pos - VolTableEntry - G3VolTable.
+- Added default empty constructor to G3Vol.
+- Removed cleantest from "clean" target in GNUmakefile.
 
 g3tog4-01-00-05 Lockman
 - G3G4Interface: G4Strings passed by reference in G4gspos, G4gsposp
