@@ -13,12 +13,7 @@
 
 #include <iostream.h>
 
-#ifdef G4STREAM
   extern ostream G4cout;
   extern ostream G4cerr;
-#else
-  #define G4cout cout
-  #define G4cerr cerr
-#endif
 
 #endif
