@@ -160,7 +160,7 @@ examples                                         examples-V06-01-01
 - advanced
   o brachytheraphy (brachy-V06-01-01)
     + Implemented migration to AIDA 3.2.1 and PI 1.2.1.
-  o composite_calorimeter (ccal-V06-01-00)
+  o composite_calorimeter (ccal-V06-01-01)
     + Implemented migration to AIDA 3.2.1 and PI 1.2.1.
   o lAr_calorimeter (lAr_calorimeter-V06-01-00)
     + Implemented migration to AIDA 3.2.1 and PI 1.2.1.
