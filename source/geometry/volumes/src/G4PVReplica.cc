@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.cc,v 1.1 2003-10-01 14:58:02 gcosmo Exp $
+// $Id: G4PVReplica.cc,v 1.2 2003-10-23 14:46:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,21 +44,23 @@ G4PVReplica::G4PVReplica( const G4String& pName,
 {
   if ((!pMother) || (!pMother->GetLogicalVolume()))
   {
-    G4cout << "ERROR - NULL pointer specified as mother volume." << G4endl
+    G4cerr << "ERROR - NULL pointer specified as mother volume." << G4endl
            << "        The world volume cannot be sliced or parameterised !"
            << G4endl;
-    G4Exception("G4PVReplica::G4PVReplica() - Not a valid geometry setup !");
+    G4Exception("G4PVReplica::G4PVReplica()", "InvalidSetup", FatalException,
+                "NULL pointer to mother. World volume cannot be sliced !");
   }
   G4LogicalVolume* motherLogical = pMother->GetLogicalVolume();
   SetMotherLogical(motherLogical);
   motherLogical->AddDaughter(this);
   if (motherLogical->GetNoDaughters() != 1)
   {
-    G4cout << "ERROR - A replica or parameterised volume must be" << G4endl
+    G4cerr << "ERROR - A replica or parameterised volume must be" << G4endl
            << "        the only daughter of a given mother volume !" << G4endl
            << "           Mother physical volume: " << pMother->GetName() << G4endl
            << "           Replicated volume: " << pName << G4endl;
-    G4Exception("G4PVReplica::G4PVReplica() - Not a valid geometry setup !");
+    G4Exception("G4PVReplica::G4PVReplica()", "InvalidSetup", FatalException,
+                "Replica or parameterised volume must be the only daughter !");
   }
   CheckAndSetParameters (pAxis, nReplicas, width, offset);
 }
@@ -75,19 +77,21 @@ G4PVReplica::G4PVReplica( const G4String& pName,
 {
   if (!pMotherLogical)
   {
-    G4cout << "ERROR - NULL pointer specified as mother volume for "
+    G4cerr << "ERROR - NULL pointer specified as mother volume for "
            << pName << "." << G4endl;
-    G4Exception("G4PVReplica::G4PVReplica() - Not a valid geometry setup !");
+    G4Exception("G4PVReplica::G4PVReplica()", "NullPointer", FatalException,
+                "Invalid setup. NULL pointer specified as mother !");
   }
   pMotherLogical->AddDaughter(this);
   SetMotherLogical(pMotherLogical);
   if (pMotherLogical->GetNoDaughters() != 1)
   {
-    G4cout << "ERROR - A replica or parameterised volume must be" << G4endl
+    G4cerr << "ERROR - A replica or parameterised volume must be" << G4endl
            << "        the only daughter of a given mother volume !" << G4endl
            << "           Mother logical volume: " << pMotherLogical->GetName() << G4endl
            << "           Replicated volume: " << pName << G4endl;
-    G4Exception("G4PVReplica::G4PVReplica() - Not a valid geometry setup");
+    G4Exception("G4PVReplica::G4PVReplica()", "InvalidSetup", FatalException,
+                "Replica or parameterised volume must be the only daughter !");
   }
   CheckAndSetParameters (pAxis, nReplicas, width, offset);
 }
@@ -99,12 +103,14 @@ void G4PVReplica::CheckAndSetParameters( const EAxis pAxis,
 {    
   if (nReplicas<1)
   {
-    G4Exception("G4PVReplica::CheckAndSetParameters() - Illegal number of replicas");
+    G4Exception("G4PVReplica::CheckAndSetParameters()", "WrongArgumentValue",
+                FatalException, "Illegal number of replicas.");
   }
   fnReplicas=nReplicas;
   if (width<0)
   {
-    G4Exception("G4PVReplica::CheckAndSetParameters() - Width must be positive");
+    G4Exception("G4PVReplica::CheckAndSetParameters()", "WrongArgumentValue",
+                FatalException, "Width must be positive.");
   }
   fwidth  = width;
   foffset = offset;
@@ -119,7 +125,8 @@ void G4PVReplica::CheckAndSetParameters( const EAxis pAxis,
       pRMat=new G4RotationMatrix();
       if (!pRMat)
       {
-        G4Exception("G4PVReplica::CheckAndSetParameters() - Rotation matrix alloc failed");
+        G4Exception("G4PVReplica::CheckAndSetParameters()", "FatalError",
+                    FatalException, "Rotation matrix allocation failed.");
       }
       SetRotation(pRMat);
       break;
@@ -130,7 +137,8 @@ void G4PVReplica::CheckAndSetParameters( const EAxis pAxis,
     case kUndefined:
       break;
     default:
-      G4Exception("G4PVReplica::CheckAndSetParameters() - Unknown axis");
+      G4Exception("G4PVReplica::CheckAndSetParameters()", "WrongArgumentValue",
+                  FatalException, "Unknown axis of replication.");
       break;
   }
 }
