@@ -34,27 +34,12 @@ The following environment variables need to be set:                     |
 
 G4LEDATA: points to low energy data base - G4EMLOW2.3                   |
 
-setup for analysis with AIDA 3.2.1/PI 1.2.1 for users with afs system:
+setup for analysis: AIDA 3.2.1, PI 1.2.1                                |
 
----------- SETUP.py ------------------------                            |                                            
-setenv G4ANALYSIS_USE  1
+Users can download the analysis tools from:  
                                                                         |
-source /afs/cern.ch/sw/lcg/app/spi/tools/latest/setup/lcgspi.csh
-setenv PI_VERSION 1_2_1                                                 |
-setenv SCRAM_ARCH rh73_gcc32
-echo "setting up PI version " ${PI_VERSION}                             |
-setenv CURDIR `pwd`
-cd /afs/cern.ch/sw/lcg/app/releases/PI/PI_${PI_VERSION}                 |
-
-eval `scram runtime -csh`                                               |
-cd ${CURDIR}
-                                                                        |
-------------------------------------------
-The users not provided of afs service can download the analysis tools   |
-from the web.
-Please take a look to the web page                                      |
-        http://www.cern.ch/PI 
-for more info                                                           |
+http://aida.freehep.org/
+http://www.cern.ch/PI                                                                                                                                   |
 
 ------------------------------------------------------------------------
 ----> 3.How to run the example.                                         |
@@ -118,4 +103,4 @@ a macro is provided ad example of visualisation:  VisualisationMacro.mac|
 for comments, advices, doubts and questions: guatelli@ge.infn.it
 for more info http://www.ge.infn.it/geant4/examples/index.html
 
-last modified: Susanna Guatelli 11/3/2004
+last modified: Susanna Guatelli 14/5/2004
