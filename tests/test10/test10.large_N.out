@@ -1,0 +1,3015 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (30-Jun-2000)
+             Copyright : Geant4 Collaboration
+**********************************************
+You select Sphere detector
+#
+# Macro file of "test10.cc"
+# for Optical photons geometry test
+#
+You select Sphere detector
+Tst10PhysicsList::SetCuts:CutLength : 1 (mm)
+#/particle/list
+#/tracking/verbose 1
+You select Cone detector
+  A 10000 optical photons vertex has been generated at (-690.585,174.228,404.117)
+>>> Start Event 0
+>>> End Event 0
+  A 10000 optical photons vertex has been generated at (-478.285,522.111,596.856)
+>>> Start Event 1
+>>> End Event 1
+  A 10000 optical photons vertex has been generated at (-491.827,-279.72,-263.938)
+>>> Start Event 2
+>>> End Event 2
+  A 10000 optical photons vertex has been generated at (-527.761,-400.61,976.296)
+>>> Start Event 3
+>>> End Event 3
+  A 10000 optical photons vertex has been generated at (-839.627,103.826,366.369)
+>>> Start Event 4
+>>> End Event 4
+  A 10000 optical photons vertex has been generated at (-108.127,-934.703,-498.577)
+>>> Start Event 5
+>>> End Event 5
+  A 10000 optical photons vertex has been generated at (-263.953,968.277,-304.237)
+>>> Start Event 6
+>>> End Event 6
+  A 10000 optical photons vertex has been generated at (-134.805,932.426,-853.034)
+>>> Start Event 7
+>>> End Event 7
+  A 10000 optical photons vertex has been generated at (-371.553,105.701,-789.438)
+>>> Start Event 8
+>>> End Event 8
+  A 10000 optical photons vertex has been generated at (32.9498,277.269,-341.744)
+>>> Start Event 9
+>>> End Event 9
+  A 10000 optical photons vertex has been generated at (-495.503,439.165,302.931)
+>>> Start Event 10
+>>> End Event 10
+  A 10000 optical photons vertex has been generated at (-606.051,314.557,658.888)
+>>> Start Event 11
+>>> End Event 11
+  A 10000 optical photons vertex has been generated at (-323.823,741.589,-624.654)
+>>> Start Event 12
+>>> End Event 12
+  A 10000 optical photons vertex has been generated at (-632.815,532.666,893.883)
+>>> Start Event 13
+>>> End Event 13
+  A 10000 optical photons vertex has been generated at (446.082,671.98,-754.563)
+>>> Start Event 14
+>>> End Event 14
+  A 10000 optical photons vertex has been generated at (907.491,-33.5628,-496.943)
+>>> Start Event 15
+>>> End Event 15
+  A 10000 optical photons vertex has been generated at (669.71,647.628,-588.26)
+>>> Start Event 16
+>>> End Event 16
+  A 10000 optical photons vertex has been generated at (539.685,-736.846,594.167)
+>>> Start Event 17
+>>> End Event 17
+  A 10000 optical photons vertex has been generated at (22.2787,-219.065,-212.113)
+>>> Start Event 18
+>>> End Event 18
+  A 10000 optical photons vertex has been generated at (-808.092,-245.333,-94.8411)
+>>> Start Event 19
+>>> End Event 19
+  A 10000 optical photons vertex has been generated at (-293.346,-786.263,827.681)
+>>> Start Event 20
+>>> End Event 20
+  A 10000 optical photons vertex has been generated at (149.68,-655.496,-923.888)
+>>> Start Event 21
+>>> End Event 21
+  A 10000 optical photons vertex has been generated at (-237.11,-182.844,693.561)
+>>> Start Event 22
+>>> End Event 22
+  A 10000 optical photons vertex has been generated at (437.053,-104.178,-165.569)
+>>> Start Event 23
+>>> End Event 23
+  A 10000 optical photons vertex has been generated at (-665.796,-54.7721,331.703)
+>>> Start Event 24
+>>> End Event 24
+  A 10000 optical photons vertex has been generated at (-556.845,-402.301,-531.833)
+>>> Start Event 25
+>>> End Event 25
+  A 10000 optical photons vertex has been generated at (-233.081,-379.806,693.532)
+>>> Start Event 26
+>>> End Event 26
+  A 10000 optical photons vertex has been generated at (-168.037,818.412,760.865)
+>>> Start Event 27
+>>> End Event 27
+  A 10000 optical photons vertex has been generated at (702,-7.4536,-593.488)
+>>> Start Event 28
+>>> End Event 28
+  A 10000 optical photons vertex has been generated at (-845.597,332.408,-807.926)
+>>> Start Event 29
+>>> End Event 29
+  A 10000 optical photons vertex has been generated at (709.736,820.956,-878.981)
+>>> Start Event 30
+>>> End Event 30
+  A 10000 optical photons vertex has been generated at (-535.226,-724.353,-96.3699)
+>>> Start Event 31
+>>> End Event 31
+  A 10000 optical photons vertex has been generated at (-860.71,433.645,576.199)
+>>> Start Event 32
+>>> End Event 32
+  A 10000 optical photons vertex has been generated at (749.734,756.995,80.0715)
+>>> Start Event 33
+>>> End Event 33
+  A 10000 optical photons vertex has been generated at (925.152,-876.028,846.972)
+>>> Start Event 34
+>>> End Event 34
+  A 10000 optical photons vertex has been generated at (735.346,-51.7251,-960.906)
+>>> Start Event 35
+>>> End Event 35
+  A 10000 optical photons vertex has been generated at (703.702,177.182,-83.7942)
+>>> Start Event 36
+>>> End Event 36
+  A 10000 optical photons vertex has been generated at (318.12,-531.131,533.872)
+>>> Start Event 37
+>>> End Event 37
+  A 10000 optical photons vertex has been generated at (-985.979,-94.7717,-673.922)
+>>> Start Event 38
+>>> End Event 38
+  A 10000 optical photons vertex has been generated at (106.532,-936.889,-688.711)
+>>> Start Event 39
+>>> End Event 39
+  A 10000 optical photons vertex has been generated at (-303.954,180.156,670.722)
+>>> Start Event 40
+>>> End Event 40
+  A 10000 optical photons vertex has been generated at (-463.997,712.252,700.922)
+>>> Start Event 41
+>>> End Event 41
+  A 10000 optical photons vertex has been generated at (187.535,292.103,-67.2648)
+>>> Start Event 42
+>>> End Event 42
+  A 10000 optical photons vertex has been generated at (728.822,-452.9,57.078)
+>>> Start Event 43
+>>> End Event 43
+  A 10000 optical photons vertex has been generated at (-734.807,-607.766,204.364)
+>>> Start Event 44
+>>> End Event 44
+  A 10000 optical photons vertex has been generated at (648.702,-909.052,-853.445)
+>>> Start Event 45
+>>> End Event 45
+  A 10000 optical photons vertex has been generated at (-491.748,-805.37,-837.943)
+>>> Start Event 46
+>>> End Event 46
+  A 10000 optical photons vertex has been generated at (-625.843,802.759,543.656)
+>>> Start Event 47
+>>> End Event 47
+  A 10000 optical photons vertex has been generated at (-712.987,-993.846,-521.753)
+>>> Start Event 48
+>>> End Event 48
+  A 10000 optical photons vertex has been generated at (-80.4992,691.408,-104.556)
+>>> Start Event 49
+>>> End Event 49
+  A 10000 optical photons vertex has been generated at (131.069,-550.786,92.7996)
+>>> Start Event 50
+>>> End Event 50
+  A 10000 optical photons vertex has been generated at (471.957,-929.019,210.401)
+>>> Start Event 51
+>>> End Event 51
+  A 10000 optical photons vertex has been generated at (-847.474,137.406,317.53)
+>>> Start Event 52
+>>> End Event 52
+  A 10000 optical photons vertex has been generated at (-459.661,548.384,-887.901)
+>>> Start Event 53
+>>> End Event 53
+  A 10000 optical photons vertex has been generated at (54.0505,-40.2042,910.074)
+>>> Start Event 54
+>>> End Event 54
+  A 10000 optical photons vertex has been generated at (-370.368,-413.553,-25.489)
+>>> Start Event 55
+>>> End Event 55
+  A 10000 optical photons vertex has been generated at (817.952,-858.684,-779.262)
+>>> Start Event 56
+>>> End Event 56
+  A 10000 optical photons vertex has been generated at (-747.303,-337.03,-151.06)
+>>> Start Event 57
+>>> End Event 57
+  A 10000 optical photons vertex has been generated at (238.365,844.083,793.539)
+>>> Start Event 58
+>>> End Event 58
+  A 10000 optical photons vertex has been generated at (68.1469,910.771,-935.706)
+>>> Start Event 59
+>>> End Event 59
+  A 10000 optical photons vertex has been generated at (-364.625,-288.175,147.85)
+>>> Start Event 60
+>>> End Event 60
+  A 10000 optical photons vertex has been generated at (506.446,482.873,-214.468)
+>>> Start Event 61
+>>> End Event 61
+  A 10000 optical photons vertex has been generated at (-821.185,-234.389,560.51)
+>>> Start Event 62
+>>> End Event 62
+  A 10000 optical photons vertex has been generated at (329.946,-521.346,-205.272)
+>>> Start Event 63
+>>> End Event 63
+  A 10000 optical photons vertex has been generated at (512.611,797.658,-397.898)
+>>> Start Event 64
+>>> End Event 64
+  A 10000 optical photons vertex has been generated at (-368.871,-14.8444,383.812)
+>>> Start Event 65
+>>> End Event 65
+  A 10000 optical photons vertex has been generated at (867.583,50.7611,-407.784)
+>>> Start Event 66
+>>> End Event 66
+  A 10000 optical photons vertex has been generated at (-262.739,356.022,789.193)
+>>> Start Event 67
+>>> End Event 67
+  A 10000 optical photons vertex has been generated at (-269.023,175.072,-38.1609)
+>>> Start Event 68
+>>> End Event 68
+  A 10000 optical photons vertex has been generated at (-738.662,886.739,-976.541)
+>>> Start Event 69
+>>> End Event 69
+  A 10000 optical photons vertex has been generated at (-311.45,-815.176,912.335)
+>>> Start Event 70
+>>> End Event 70
+  A 10000 optical photons vertex has been generated at (722.164,613.898,-895.355)
+>>> Start Event 71
+>>> End Event 71
+  A 10000 optical photons vertex has been generated at (617.155,-71.6132,-727.22)
+>>> Start Event 72
+>>> End Event 72
+  A 10000 optical photons vertex has been generated at (133.164,74.4131,-536.222)
+>>> Start Event 73
+>>> End Event 73
+  A 10000 optical photons vertex has been generated at (-299.204,-96.1767,-76.6542)
+>>> Start Event 74
+>>> End Event 74
+  A 10000 optical photons vertex has been generated at (-299.664,-531.407,-248.4)
+>>> Start Event 75
+>>> End Event 75
+  A 10000 optical photons vertex has been generated at (603.648,761.578,867.21)
+>>> Start Event 76
+>>> End Event 76
+  A 10000 optical photons vertex has been generated at (196.014,-299.851,176.246)
+>>> Start Event 77
+>>> End Event 77
+  A 10000 optical photons vertex has been generated at (-634.044,-74.8092,-567.969)
+>>> Start Event 78
+>>> End Event 78
+  A 10000 optical photons vertex has been generated at (-93.5818,171.429,-915.752)
+>>> Start Event 79
+>>> End Event 79
+  A 10000 optical photons vertex has been generated at (-731.964,-252.463,410.289)
+>>> Start Event 80
+>>> End Event 80
+  A 10000 optical photons vertex has been generated at (403.359,929.763,68.1726)
+>>> Start Event 81
+>>> End Event 81
+  A 10000 optical photons vertex has been generated at (271.284,-342.647,-682.181)
+>>> Start Event 82
+>>> End Event 82
+  A 10000 optical photons vertex has been generated at (959.583,182.633,306.49)
+>>> Start Event 83
+>>> End Event 83
+  A 10000 optical photons vertex has been generated at (471.028,-5.99308,777.777)
+>>> Start Event 84
+>>> End Event 84
+  A 10000 optical photons vertex has been generated at (-302.033,-790.971,-393.561)
+>>> Start Event 85
+>>> End Event 85
+  A 10000 optical photons vertex has been generated at (378.031,915.772,853.133)
+>>> Start Event 86
+>>> End Event 86
+  A 10000 optical photons vertex has been generated at (-99.5002,-112.398,181.481)
+>>> Start Event 87
+>>> End Event 87
+  A 10000 optical photons vertex has been generated at (-249.958,232.666,-854.05)
+>>> Start Event 88
+>>> End Event 88
+  A 10000 optical photons vertex has been generated at (403.448,479.773,63.7541)
+>>> Start Event 89
+>>> End Event 89
+  A 10000 optical photons vertex has been generated at (-790.264,-780.122,991.053)
+>>> Start Event 90
+>>> End Event 90
+  A 10000 optical photons vertex has been generated at (106.933,605.924,502.981)
+>>> Start Event 91
+>>> End Event 91
+  A 10000 optical photons vertex has been generated at (-763.092,-894.515,217.629)
+>>> Start Event 92
+>>> End Event 92
+  A 10000 optical photons vertex has been generated at (-169.972,704.817,-135.059)
+>>> Start Event 93
+>>> End Event 93
+  A 10000 optical photons vertex has been generated at (660.741,887.766,-648.856)
+>>> Start Event 94
+>>> End Event 94
+  A 10000 optical photons vertex has been generated at (-342.766,833.584,161.583)
+>>> Start Event 95
+>>> End Event 95
+  A 10000 optical photons vertex has been generated at (-709.72,390.018,453.19)
+>>> Start Event 96
+>>> End Event 96
+  A 10000 optical photons vertex has been generated at (610.819,848.476,903.215)
+>>> Start Event 97
+>>> End Event 97
+  A 10000 optical photons vertex has been generated at (918.853,-426.609,-57.451)
+>>> Start Event 98
+>>> End Event 98
+  A 10000 optical photons vertex has been generated at (514.471,-971.564,541.284)
+>>> Start Event 99
+>>> End Event 99
+  A 10000 optical photons vertex has been generated at (-767.911,-594.438,-958.913)
+>>> Start Event 100
+>>> End Event 100
+  A 10000 optical photons vertex has been generated at (704.082,6.28461,-635.553)
+>>> Start Event 101
+>>> End Event 101
+  A 10000 optical photons vertex has been generated at (-991.803,271.492,214.881)
+>>> Start Event 102
+>>> End Event 102
+  A 10000 optical photons vertex has been generated at (378.057,-186.167,-276.656)
+>>> Start Event 103
+>>> End Event 103
+  A 10000 optical photons vertex has been generated at (-513.264,998.022,287.787)
+>>> Start Event 104
+>>> End Event 104
+  A 10000 optical photons vertex has been generated at (-152.448,453.706,855.181)
+>>> Start Event 105
+>>> End Event 105
+  A 10000 optical photons vertex has been generated at (-120.048,831.094,7.10541)
+>>> Start Event 106
+>>> End Event 106
+  A 10000 optical photons vertex has been generated at (383.046,-960.648,576.595)
+>>> Start Event 107
+>>> End Event 107
+  A 10000 optical photons vertex has been generated at (-470.856,-646.121,-773.117)
+>>> Start Event 108
+>>> End Event 108
+  A 10000 optical photons vertex has been generated at (-574.573,462.283,107.175)
+>>> Start Event 109
+>>> End Event 109
+  A 10000 optical photons vertex has been generated at (-561.946,-698.182,-812.336)
+>>> Start Event 110
+>>> End Event 110
+  A 10000 optical photons vertex has been generated at (714.843,-606.517,279.936)
+>>> Start Event 111
+>>> End Event 111
+  A 10000 optical photons vertex has been generated at (36.3483,29.3874,-425.445)
+>>> Start Event 112
+>>> End Event 112
+  A 10000 optical photons vertex has been generated at (275.157,56.678,-895.19)
+>>> Start Event 113
+>>> End Event 113
+  A 10000 optical photons vertex has been generated at (-314.897,-461.325,220.62)
+>>> Start Event 114
+>>> End Event 114
+  A 10000 optical photons vertex has been generated at (596.516,-42.2792,-984.174)
+>>> Start Event 115
+>>> End Event 115
+  A 10000 optical photons vertex has been generated at (-835.498,846.319,199.785)
+>>> Start Event 116
+>>> End Event 116
+  A 10000 optical photons vertex has been generated at (-852.905,-133.855,-858.252)
+>>> Start Event 117
+>>> End Event 117
+  A 10000 optical photons vertex has been generated at (-202.172,876.115,665.27)
+>>> Start Event 118
+>>> End Event 118
+  A 10000 optical photons vertex has been generated at (-940.991,664.879,368.873)
+>>> Start Event 119
+>>> End Event 119
+  A 10000 optical photons vertex has been generated at (850.106,159.475,730.983)
+>>> Start Event 120
+>>> End Event 120
+  A 10000 optical photons vertex has been generated at (273.877,-289.078,-381.001)
+>>> Start Event 121
+>>> End Event 121
+  A 10000 optical photons vertex has been generated at (-843.428,597.89,284.798)
+>>> Start Event 122
+>>> End Event 122
+  A 10000 optical photons vertex has been generated at (-920.615,872.536,416.148)
+>>> Start Event 123
+>>> End Event 123
+  A 10000 optical photons vertex has been generated at (-50.78,446.747,-85.7321)
+>>> Start Event 124
+>>> End Event 124
+  A 10000 optical photons vertex has been generated at (-240.691,-363.794,194.696)
+>>> Start Event 125
+>>> End Event 125
+  A 10000 optical photons vertex has been generated at (-740.376,383.056,79.8957)
+>>> Start Event 126
+>>> End Event 126
+  A 10000 optical photons vertex has been generated at (-483.481,724.799,853.553)
+>>> Start Event 127
+>>> End Event 127
+  A 10000 optical photons vertex has been generated at (58.2197,939.125,781.768)
+>>> Start Event 128
+>>> End Event 128
+  A 10000 optical photons vertex has been generated at (481.974,-234.434,150.275)
+>>> Start Event 129
+>>> End Event 129
+  A 10000 optical photons vertex has been generated at (658.309,-82.8421,913.794)
+>>> Start Event 130
+>>> End Event 130
+  A 10000 optical photons vertex has been generated at (138.701,-74.0016,244.602)
+>>> Start Event 131
+>>> End Event 131
+  A 10000 optical photons vertex has been generated at (632.125,319.41,-726.198)
+>>> Start Event 132
+>>> End Event 132
+  A 10000 optical photons vertex has been generated at (442.44,510.42,459.6)
+>>> Start Event 133
+>>> End Event 133
+  A 10000 optical photons vertex has been generated at (104.025,147.064,811.936)
+>>> Start Event 134
+>>> End Event 134
+  A 10000 optical photons vertex has been generated at (190.228,-401.786,-516.28)
+>>> Start Event 135
+>>> End Event 135
+  A 10000 optical photons vertex has been generated at (-626.216,-866.185,899.611)
+>>> Start Event 136
+>>> End Event 136
+  A 10000 optical photons vertex has been generated at (-724.632,617.447,631.41)
+>>> Start Event 137
+>>> End Event 137
+  A 10000 optical photons vertex has been generated at (50.6845,430.891,900.134)
+>>> Start Event 138
+>>> End Event 138
+  A 10000 optical photons vertex has been generated at (-94.6278,-52.9391,-690.34)
+>>> Start Event 139
+>>> End Event 139
+  A 10000 optical photons vertex has been generated at (469.746,372.975,911.414)
+>>> Start Event 140
+>>> End Event 140
+  A 10000 optical photons vertex has been generated at (744.244,-853.407,-478.71)
+>>> Start Event 141
+>>> End Event 141
+  A 10000 optical photons vertex has been generated at (-163.238,-340.949,-907.328)
+>>> Start Event 142
+>>> End Event 142
+  A 10000 optical photons vertex has been generated at (947.592,-295.7,600.42)
+>>> Start Event 143
+>>> End Event 143
+  A 10000 optical photons vertex has been generated at (-883.624,-583.747,-579.537)
+>>> Start Event 144
+>>> End Event 144
+  A 10000 optical photons vertex has been generated at (857.817,416.62,101.182)
+>>> Start Event 145
+>>> End Event 145
+  A 10000 optical photons vertex has been generated at (-552.278,-437.191,274.086)
+>>> Start Event 146
+>>> End Event 146
+  A 10000 optical photons vertex has been generated at (435.373,682.134,-726.244)
+>>> Start Event 147
+>>> End Event 147
+  A 10000 optical photons vertex has been generated at (605.865,916.044,434.003)
+>>> Start Event 148
+>>> End Event 148
+  A 10000 optical photons vertex has been generated at (-642.116,-137.169,609.968)
+>>> Start Event 149
+>>> End Event 149
+  A 10000 optical photons vertex has been generated at (804.874,-147.453,796.598)
+>>> Start Event 150
+>>> End Event 150
+  A 10000 optical photons vertex has been generated at (-408.133,-878.279,674.562)
+>>> Start Event 151
+>>> End Event 151
+  A 10000 optical photons vertex has been generated at (-771.782,-372.696,386.032)
+>>> Start Event 152
+>>> End Event 152
+  A 10000 optical photons vertex has been generated at (992.365,-722.908,574.562)
+>>> Start Event 153
+>>> End Event 153
+  A 10000 optical photons vertex has been generated at (-538.118,-201.651,304.589)
+>>> Start Event 154
+>>> End Event 154
+  A 10000 optical photons vertex has been generated at (-14.586,-473.26,792.884)
+>>> Start Event 155
+>>> End Event 155
+  A 10000 optical photons vertex has been generated at (-571.598,-505.186,700.109)
+>>> Start Event 156
+>>> End Event 156
+  A 10000 optical photons vertex has been generated at (358.693,847.654,290.275)
+>>> Start Event 157
+>>> End Event 157
+  A 10000 optical photons vertex has been generated at (972.152,488.232,-424.298)
+>>> Start Event 158
+>>> End Event 158
+  A 10000 optical photons vertex has been generated at (-689.087,-593.351,-297.066)
+>>> Start Event 159
+>>> End Event 159
+  A 10000 optical photons vertex has been generated at (871.432,663.661,-99.0526)
+>>> Start Event 160
+>>> End Event 160
+  A 10000 optical photons vertex has been generated at (170.757,-169.076,717.377)
+>>> Start Event 161
+>>> End Event 161
+  A 10000 optical photons vertex has been generated at (-276.694,-935.697,360.362)
+>>> Start Event 162
+>>> End Event 162
+  A 10000 optical photons vertex has been generated at (-499.025,-36.5814,415.782)
+>>> Start Event 163
+>>> End Event 163
+  A 10000 optical photons vertex has been generated at (-590.197,327.812,-3.08237)
+>>> Start Event 164
+>>> End Event 164
+  A 10000 optical photons vertex has been generated at (-225.769,-58.3957,403.242)
+>>> Start Event 165
+>>> End Event 165
+  A 10000 optical photons vertex has been generated at (617.508,-303.698,-357.621)
+>>> Start Event 166
+>>> End Event 166
+  A 10000 optical photons vertex has been generated at (-637.525,26.7685,920.92)
+>>> Start Event 167
+>>> End Event 167
+  A 10000 optical photons vertex has been generated at (-985.109,244.565,804.34)
+>>> Start Event 168
+>>> End Event 168
+  A 10000 optical photons vertex has been generated at (728.12,668.051,-466.457)
+>>> Start Event 169
+>>> End Event 169
+  A 10000 optical photons vertex has been generated at (194.981,33.7768,338.875)
+>>> Start Event 170
+>>> End Event 170
+  A 10000 optical photons vertex has been generated at (79.8521,-402.122,503.674)
+>>> Start Event 171
+>>> End Event 171
+  A 10000 optical photons vertex has been generated at (-158.627,550.151,-749.032)
+>>> Start Event 172
+>>> End Event 172
+  A 10000 optical photons vertex has been generated at (-376.805,-47.7335,-119.079)
+>>> Start Event 173
+>>> End Event 173
+  A 10000 optical photons vertex has been generated at (-944.209,-609.195,41.2447)
+>>> Start Event 174
+>>> End Event 174
+  A 10000 optical photons vertex has been generated at (-446.66,-565.355,207.265)
+>>> Start Event 175
+>>> End Event 175
+  A 10000 optical photons vertex has been generated at (735.895,-358.666,365.708)
+>>> Start Event 176
+>>> End Event 176
+  A 10000 optical photons vertex has been generated at (-644.333,-348.473,411.016)
+>>> Start Event 177
+>>> End Event 177
+  A 10000 optical photons vertex has been generated at (-360.338,-105.255,189.9)
+>>> Start Event 178
+>>> End Event 178
+  A 10000 optical photons vertex has been generated at (-66.5055,602.686,349.765)
+>>> Start Event 179
+>>> End Event 179
+  A 10000 optical photons vertex has been generated at (-803.549,331.061,-414.631)
+>>> Start Event 180
+>>> End Event 180
+  A 10000 optical photons vertex has been generated at (-852.718,976.808,973.966)
+>>> Start Event 181
+>>> End Event 181
+  A 10000 optical photons vertex has been generated at (-739.37,348.478,-979.49)
+>>> Start Event 182
+>>> End Event 182
+  A 10000 optical photons vertex has been generated at (-586.999,-874.259,364.579)
+>>> Start Event 183
+>>> End Event 183
+  A 10000 optical photons vertex has been generated at (948.534,-824.619,-592.208)
+>>> Start Event 184
+>>> End Event 184
+  A 10000 optical photons vertex has been generated at (689.816,-444.976,759.493)
+>>> Start Event 185
+>>> End Event 185
+  A 10000 optical photons vertex has been generated at (156.951,871.194,-175.501)
+>>> Start Event 186
+>>> End Event 186
+  A 10000 optical photons vertex has been generated at (635.413,274.588,-468.009)
+>>> Start Event 187
+>>> End Event 187
+  A 10000 optical photons vertex has been generated at (-58.8958,125.017,-769.112)
+>>> Start Event 188
+>>> End Event 188
+  A 10000 optical photons vertex has been generated at (-686.317,-177.689,514.312)
+>>> Start Event 189
+>>> End Event 189
+  A 10000 optical photons vertex has been generated at (-79.5567,-169.449,653.237)
+>>> Start Event 190
+>>> End Event 190
+  A 10000 optical photons vertex has been generated at (193.668,978.948,-595.195)
+>>> Start Event 191
+>>> End Event 191
+  A 10000 optical photons vertex has been generated at (-216.159,334.074,-706.358)
+>>> Start Event 192
+>>> End Event 192
+  A 10000 optical photons vertex has been generated at (-546.935,-924.681,10.864)
+>>> Start Event 193
+>>> End Event 193
+  A 10000 optical photons vertex has been generated at (485.293,-403.576,520.375)
+>>> Start Event 194
+>>> End Event 194
+  A 10000 optical photons vertex has been generated at (-673.989,-842.261,-566.178)
+>>> Start Event 195
+>>> End Event 195
+  A 10000 optical photons vertex has been generated at (-757.339,-695.363,663.452)
+>>> Start Event 196
+>>> End Event 196
+  A 10000 optical photons vertex has been generated at (184.223,-688.031,-137.954)
+>>> Start Event 197
+>>> End Event 197
+  A 10000 optical photons vertex has been generated at (-613.123,225.094,-196.931)
+>>> Start Event 198
+>>> End Event 198
+  A 10000 optical photons vertex has been generated at (292.563,624.476,-778.723)
+>>> Start Event 199
+>>> End Event 199
+  A 10000 optical photons vertex has been generated at (-977.658,634.079,151.721)
+>>> Start Event 200
+>>> End Event 200
+  A 10000 optical photons vertex has been generated at (381.384,-763.631,650.993)
+>>> Start Event 201
+>>> End Event 201
+  A 10000 optical photons vertex has been generated at (-2.71794,795.173,803.737)
+>>> Start Event 202
+>>> End Event 202
+  A 10000 optical photons vertex has been generated at (-218.833,410.217,-10.5697)
+>>> Start Event 203
+>>> End Event 203
+  A 10000 optical photons vertex has been generated at (-51.3949,904.805,-466.853)
+>>> Start Event 204
+>>> End Event 204
+  A 10000 optical photons vertex has been generated at (-209.089,468.962,-801.325)
+>>> Start Event 205
+>>> End Event 205
+  A 10000 optical photons vertex has been generated at (-607.236,-402.89,-975.158)
+>>> Start Event 206
+>>> End Event 206
+  A 10000 optical photons vertex has been generated at (131.639,741.993,-841.941)
+>>> Start Event 207
+>>> End Event 207
+  A 10000 optical photons vertex has been generated at (-385.515,249.204,125.973)
+>>> Start Event 208
+>>> End Event 208
+  A 10000 optical photons vertex has been generated at (-352.666,-157.505,193.321)
+>>> Start Event 209
+>>> End Event 209
+  A 10000 optical photons vertex has been generated at (-89.4574,-290.242,-497.575)
+>>> Start Event 210
+>>> End Event 210
+  A 10000 optical photons vertex has been generated at (386.87,-263.447,-601.986)
+>>> Start Event 211
+>>> End Event 211
+  A 10000 optical photons vertex has been generated at (-422.135,-569.541,122.651)
+>>> Start Event 212
+>>> End Event 212
+  A 10000 optical photons vertex has been generated at (420.915,-194.293,-93.7407)
+>>> Start Event 213
+>>> End Event 213
+  A 10000 optical photons vertex has been generated at (956.686,-647.393,-884.805)
+>>> Start Event 214
+>>> End Event 214
+  A 10000 optical photons vertex has been generated at (-534.647,551.756,-572.991)
+>>> Start Event 215
+>>> End Event 215
+  A 10000 optical photons vertex has been generated at (-332.814,670.669,974.996)
+>>> Start Event 216
+>>> End Event 216
+  A 10000 optical photons vertex has been generated at (-662.776,387.108,-583.278)
+>>> Start Event 217
+>>> End Event 217
+  A 10000 optical photons vertex has been generated at (771.94,849.82,82.6402)
+>>> Start Event 218
+>>> End Event 218
+  A 10000 optical photons vertex has been generated at (178.627,874.733,543.261)
+>>> Start Event 219
+>>> End Event 219
+  A 10000 optical photons vertex has been generated at (650.765,-620.377,717.621)
+>>> Start Event 220
+>>> End Event 220
+  A 10000 optical photons vertex has been generated at (-199.497,178.689,576.047)
+>>> Start Event 221
+>>> End Event 221
+  A 10000 optical photons vertex has been generated at (181.991,-135.77,205.518)
+>>> Start Event 222
+>>> End Event 222
+  A 10000 optical photons vertex has been generated at (134.55,-821.842,-260.848)
+>>> Start Event 223
+>>> End Event 223
+  A 10000 optical photons vertex has been generated at (-730.381,630.773,-468.399)
+>>> Start Event 224
+>>> End Event 224
+  A 10000 optical photons vertex has been generated at (390.816,20.1048,667.819)
+>>> Start Event 225
+>>> End Event 225
+  A 10000 optical photons vertex has been generated at (-25.1792,-624.3,247.591)
+>>> Start Event 226
+>>> End Event 226
+  A 10000 optical photons vertex has been generated at (-168.372,-557.583,329.069)
+>>> Start Event 227
+>>> End Event 227
+  A 10000 optical photons vertex has been generated at (-24.5913,-909.045,738.823)
+>>> Start Event 228
+>>> End Event 228
+  A 10000 optical photons vertex has been generated at (-850.447,-492.088,-73.8085)
+>>> Start Event 229
+>>> End Event 229
+  A 10000 optical photons vertex has been generated at (-689.426,797.651,-470.103)
+>>> Start Event 230
+>>> End Event 230
+  A 10000 optical photons vertex has been generated at (763.968,489.499,120.324)
+>>> Start Event 231
+>>> End Event 231
+  A 10000 optical photons vertex has been generated at (625.247,-958.357,98.4076)
+>>> Start Event 232
+>>> End Event 232
+  A 10000 optical photons vertex has been generated at (-641.818,-928.972,265.2)
+>>> Start Event 233
+>>> End Event 233
+  A 10000 optical photons vertex has been generated at (205.038,-737.937,-96.8543)
+>>> Start Event 234
+>>> End Event 234
+  A 10000 optical photons vertex has been generated at (-880.16,-180.482,-616.401)
+>>> Start Event 235
+>>> End Event 235
+  A 10000 optical photons vertex has been generated at (533.537,363.842,235.753)
+>>> Start Event 236
+>>> End Event 236
+  A 10000 optical photons vertex has been generated at (-938.918,-861.029,213.393)
+>>> Start Event 237
+>>> End Event 237
+  A 10000 optical photons vertex has been generated at (497.239,-940.857,-996.619)
+>>> Start Event 238
+>>> End Event 238
+  A 10000 optical photons vertex has been generated at (904.155,60.7721,-585.293)
+>>> Start Event 239
+>>> End Event 239
+  A 10000 optical photons vertex has been generated at (764.006,-421.876,105.91)
+>>> Start Event 240
+>>> End Event 240
+  A 10000 optical photons vertex has been generated at (922.682,837.558,206.063)
+>>> Start Event 241
+>>> End Event 241
+  A 10000 optical photons vertex has been generated at (702.269,229.393,405.06)
+>>> Start Event 242
+>>> End Event 242
+  A 10000 optical photons vertex has been generated at (-660.946,-777.975,661.992)
+>>> Start Event 243
+>>> End Event 243
+  A 10000 optical photons vertex has been generated at (502.053,-584.832,-402.163)
+>>> Start Event 244
+>>> End Event 244
+  A 10000 optical photons vertex has been generated at (948.298,260.629,772.257)
+>>> Start Event 245
+>>> End Event 245
+  A 10000 optical photons vertex has been generated at (779.036,-83.6782,436.72)
+>>> Start Event 246
+>>> End Event 246
+  A 10000 optical photons vertex has been generated at (127.347,-146.406,-383.513)
+>>> Start Event 247
+>>> End Event 247
+  A 10000 optical photons vertex has been generated at (-279.088,570.705,-906.686)
+>>> Start Event 248
+>>> End Event 248
+  A 10000 optical photons vertex has been generated at (442.05,920.016,-300.063)
+>>> Start Event 249
+>>> End Event 249
+  A 10000 optical photons vertex has been generated at (-378.368,-240.477,482.584)
+>>> Start Event 250
+>>> End Event 250
+  A 10000 optical photons vertex has been generated at (-23.7665,-742.563,-494.118)
+>>> Start Event 251
+>>> End Event 251
+  A 10000 optical photons vertex has been generated at (100.93,-861.641,972.212)
+>>> Start Event 252
+>>> End Event 252
+  A 10000 optical photons vertex has been generated at (418.039,-459.403,829.759)
+>>> Start Event 253
+>>> End Event 253
+  A 10000 optical photons vertex has been generated at (-269.285,903.261,259.327)
+>>> Start Event 254
+>>> End Event 254
+  A 10000 optical photons vertex has been generated at (719.566,113.339,-860.516)
+>>> Start Event 255
+>>> End Event 255
+  A 10000 optical photons vertex has been generated at (-205.642,459.921,423.488)
+>>> Start Event 256
+>>> End Event 256
+  A 10000 optical photons vertex has been generated at (-164.333,-74.1316,614.621)
+>>> Start Event 257
+>>> End Event 257
+  A 10000 optical photons vertex has been generated at (-206.257,-450.319,600.84)
+>>> Start Event 258
+>>> End Event 258
+  A 10000 optical photons vertex has been generated at (-696.915,-932.186,-99.489)
+>>> Start Event 259
+>>> End Event 259
+  A 10000 optical photons vertex has been generated at (492.677,94.3019,-28.7286)
+>>> Start Event 260
+>>> End Event 260
+  A 10000 optical photons vertex has been generated at (-565.607,-453.847,-443.472)
+>>> Start Event 261
+>>> End Event 261
+  A 10000 optical photons vertex has been generated at (-385.912,744.534,-88.4296)
+>>> Start Event 262
+>>> End Event 262
+  A 10000 optical photons vertex has been generated at (-87.5123,468.289,-194.913)
+>>> Start Event 263
+>>> End Event 263
+  A 10000 optical photons vertex has been generated at (-552.481,44.755,401.45)
+>>> Start Event 264
+>>> End Event 264
+  A 10000 optical photons vertex has been generated at (124.65,-778.41,253.8)
+>>> Start Event 265
+>>> End Event 265
+  A 10000 optical photons vertex has been generated at (-132.861,756.858,333.468)
+>>> Start Event 266
+>>> End Event 266
+  A 10000 optical photons vertex has been generated at (425.906,97.5171,798.365)
+>>> Start Event 267
+>>> End Event 267
+  A 10000 optical photons vertex has been generated at (-555.224,-580.292,-778.224)
+>>> Start Event 268
+>>> End Event 268
+  A 10000 optical photons vertex has been generated at (-887.928,-217.094,-494.616)
+>>> Start Event 269
+>>> End Event 269
+  A 10000 optical photons vertex has been generated at (-125.761,392.884,-473.755)
+>>> Start Event 270
+>>> End Event 270
+  A 10000 optical photons vertex has been generated at (677.559,752.543,-707.398)
+>>> Start Event 271
+>>> End Event 271
+  A 10000 optical photons vertex has been generated at (-941.077,504.362,-729.295)
+>>> Start Event 272
+>>> End Event 272
+  A 10000 optical photons vertex has been generated at (-994.905,-838.47,-734.505)
+>>> Start Event 273
+>>> End Event 273
+  A 10000 optical photons vertex has been generated at (-189.696,-24.1707,-564.453)
+>>> Start Event 274
+>>> End Event 274
+  A 10000 optical photons vertex has been generated at (-319.016,762.246,790.421)
+>>> Start Event 275
+>>> End Event 275
+  A 10000 optical photons vertex has been generated at (406.352,969.18,327.534)
+>>> Start Event 276
+>>> End Event 276
+  A 10000 optical photons vertex has been generated at (211.208,692.772,198.506)
+>>> Start Event 277
+>>> End Event 277
+  A 10000 optical photons vertex has been generated at (20.1209,-22.6874,890.354)
+>>> Start Event 278
+>>> End Event 278
+  A 10000 optical photons vertex has been generated at (-666.719,-590.43,959.933)
+>>> Start Event 279
+>>> End Event 279
+  A 10000 optical photons vertex has been generated at (563.815,-942.291,-835.446)
+>>> Start Event 280
+>>> End Event 280
+  A 10000 optical photons vertex has been generated at (747.652,161.32,-104.132)
+>>> Start Event 281
+>>> End Event 281
+  A 10000 optical photons vertex has been generated at (-739.329,128.319,892.82)
+>>> Start Event 282
+>>> End Event 282
+  A 10000 optical photons vertex has been generated at (450.174,569.786,48.6606)
+>>> Start Event 283
+>>> End Event 283
+  A 10000 optical photons vertex has been generated at (-105.001,296.34,-246.867)
+>>> Start Event 284
+>>> End Event 284
+  A 10000 optical photons vertex has been generated at (350.399,-374.641,544.834)
+>>> Start Event 285
+>>> End Event 285
+  A 10000 optical photons vertex has been generated at (-980.965,-370.178,-996.101)
+>>> Start Event 286
+>>> End Event 286
+  A 10000 optical photons vertex has been generated at (358.5,60.1037,133.157)
+>>> Start Event 287
+>>> End Event 287
+  A 10000 optical photons vertex has been generated at (-782.862,-830.309,840.724)
+>>> Start Event 288
+>>> End Event 288
+  A 10000 optical photons vertex has been generated at (-163.246,265.555,101.449)
+>>> Start Event 289
+>>> End Event 289
+  A 10000 optical photons vertex has been generated at (-47.0319,-78.9228,-724.075)
+>>> Start Event 290
+>>> End Event 290
+  A 10000 optical photons vertex has been generated at (948.182,-520.618,-193.279)
+>>> Start Event 291
+>>> End Event 291
+  A 10000 optical photons vertex has been generated at (655.036,21.8332,-952.798)
+>>> Start Event 292
+>>> End Event 292
+  A 10000 optical photons vertex has been generated at (890.577,842.454,-20.2549)
+>>> Start Event 293
+>>> End Event 293
+  A 10000 optical photons vertex has been generated at (528.38,302.038,-930.436)
+>>> Start Event 294
+>>> End Event 294
+  A 10000 optical photons vertex has been generated at (-738.889,434.31,877.336)
+>>> Start Event 295
+>>> End Event 295
+  A 10000 optical photons vertex has been generated at (947.706,398.636,218.605)
+>>> Start Event 296
+>>> End Event 296
+  A 10000 optical photons vertex has been generated at (-249.923,514.075,-742.322)
+>>> Start Event 297
+>>> End Event 297
+  A 10000 optical photons vertex has been generated at (-947.632,-835.7,890.003)
+>>> Start Event 298
+>>> End Event 298
+  A 10000 optical photons vertex has been generated at (-640.059,727.427,-793.857)
+>>> Start Event 299
+>>> End Event 299
+  A 10000 optical photons vertex has been generated at (-478.469,81.839,-705.139)
+>>> Start Event 300
+>>> End Event 300
+  A 10000 optical photons vertex has been generated at (522.329,-992.306,-697.904)
+>>> Start Event 301
+>>> End Event 301
+  A 10000 optical photons vertex has been generated at (817.161,-951.4,-521.872)
+>>> Start Event 302
+>>> End Event 302
+  A 10000 optical photons vertex has been generated at (478.942,835.855,746.406)
+>>> Start Event 303
+>>> End Event 303
+  A 10000 optical photons vertex has been generated at (-66.5927,-196.84,-181.468)
+>>> Start Event 304
+>>> End Event 304
+  A 10000 optical photons vertex has been generated at (-447.75,225.684,-294.257)
+>>> Start Event 305
+>>> End Event 305
+  A 10000 optical photons vertex has been generated at (53.654,-843.791,300.583)
+>>> Start Event 306
+>>> End Event 306
+  A 10000 optical photons vertex has been generated at (-903.684,814.279,-812.231)
+>>> Start Event 307
+>>> End Event 307
+  A 10000 optical photons vertex has been generated at (946.818,-394.306,249.945)
+>>> Start Event 308
+>>> End Event 308
+  A 10000 optical photons vertex has been generated at (243.681,32.5068,351.458)
+>>> Start Event 309
+>>> End Event 309
+  A 10000 optical photons vertex has been generated at (130.099,-652.769,520.671)
+>>> Start Event 310
+>>> End Event 310
+  A 10000 optical photons vertex has been generated at (-464.025,896.098,-849.205)
+>>> Start Event 311
+>>> End Event 311
+  A 10000 optical photons vertex has been generated at (431.189,-892.518,238.064)
+>>> Start Event 312
+>>> End Event 312
+  A 10000 optical photons vertex has been generated at (867.563,922.915,-6.27037)
+>>> Start Event 313
+>>> End Event 313
+  A 10000 optical photons vertex has been generated at (897.206,-660.884,-617.388)
+>>> Start Event 314
+>>> End Event 314
+  A 10000 optical photons vertex has been generated at (-181.376,-537.823,-795.207)
+>>> Start Event 315
+>>> End Event 315
+  A 10000 optical photons vertex has been generated at (-952.402,-745.715,593.284)
+>>> Start Event 316
+>>> End Event 316
+  A 10000 optical photons vertex has been generated at (850.728,652.462,-640.793)
+>>> Start Event 317
+>>> End Event 317
+  A 10000 optical photons vertex has been generated at (468.897,-631.492,185.836)
+>>> Start Event 318
+>>> End Event 318
+  A 10000 optical photons vertex has been generated at (-138.623,-223.982,316.016)
+>>> Start Event 319
+>>> End Event 319
+  A 10000 optical photons vertex has been generated at (-936.746,225.171,-782.035)
+>>> Start Event 320
+>>> End Event 320
+  A 10000 optical photons vertex has been generated at (552.448,-589.296,-520.52)
+>>> Start Event 321
+>>> End Event 321
+  A 10000 optical photons vertex has been generated at (126.292,-589.358,505.696)
+>>> Start Event 322
+>>> End Event 322
+  A 10000 optical photons vertex has been generated at (88.9143,-962.631,999.972)
+>>> Start Event 323
+>>> End Event 323
+  A 10000 optical photons vertex has been generated at (-460.39,-950.962,-824.747)
+>>> Start Event 324
+>>> End Event 324
+  A 10000 optical photons vertex has been generated at (985.754,835.082,240.874)
+>>> Start Event 325
+>>> End Event 325
+  A 10000 optical photons vertex has been generated at (719.771,257.721,15.5656)
+>>> Start Event 326
+>>> End Event 326
+  A 10000 optical photons vertex has been generated at (290.717,-315.262,592.37)
+>>> Start Event 327
+>>> End Event 327
+  A 10000 optical photons vertex has been generated at (334.547,490.963,-952.212)
+>>> Start Event 328
+>>> End Event 328
+  A 10000 optical photons vertex has been generated at (539.046,-609.547,-14.5271)
+>>> Start Event 329
+>>> End Event 329
+  A 10000 optical photons vertex has been generated at (-668.941,-730.927,555.561)
+>>> Start Event 330
+>>> End Event 330
+  A 10000 optical photons vertex has been generated at (368.421,306.03,448.804)
+>>> Start Event 331
+>>> End Event 331
+  A 10000 optical photons vertex has been generated at (-589.168,663.949,341.434)
+>>> Start Event 332
+>>> End Event 332
+  A 10000 optical photons vertex has been generated at (721.366,-419.514,860.262)
+>>> Start Event 333
+>>> End Event 333
+  A 10000 optical photons vertex has been generated at (83.5798,196.209,702.482)
+>>> Start Event 334
+>>> End Event 334
+  A 10000 optical photons vertex has been generated at (937.434,937.213,-565.864)
+>>> Start Event 335
+>>> End Event 335
+  A 10000 optical photons vertex has been generated at (-811.152,-315.903,395.036)
+>>> Start Event 336
+>>> End Event 336
+  A 10000 optical photons vertex has been generated at (455.821,-761.498,-927.809)
+>>> Start Event 337
+>>> End Event 337
+  A 10000 optical photons vertex has been generated at (-368.994,424.76,-451.211)
+>>> Start Event 338
+>>> End Event 338
+  A 10000 optical photons vertex has been generated at (152.126,-28.7171,313.626)
+>>> Start Event 339
+>>> End Event 339
+  A 10000 optical photons vertex has been generated at (617.738,-342.72,361.791)
+>>> Start Event 340
+>>> End Event 340
+  A 10000 optical photons vertex has been generated at (-504.067,-87.3439,903.671)
+>>> Start Event 341
+>>> End Event 341
+  A 10000 optical photons vertex has been generated at (82.3061,-993.506,-730.14)
+>>> Start Event 342
+>>> End Event 342
+  A 10000 optical photons vertex has been generated at (-599.961,-145.353,801.239)
+>>> Start Event 343
+>>> End Event 343
+  A 10000 optical photons vertex has been generated at (643.143,31.6334,-531.163)
+>>> Start Event 344
+>>> End Event 344
+  A 10000 optical photons vertex has been generated at (-500.183,852.372,583.574)
+>>> Start Event 345
+>>> End Event 345
+  A 10000 optical photons vertex has been generated at (-635.993,-667.565,-809.294)
+>>> Start Event 346
+>>> End Event 346
+  A 10000 optical photons vertex has been generated at (38.7757,396.784,-427.583)
+>>> Start Event 347
+>>> End Event 347
+  A 10000 optical photons vertex has been generated at (-732.527,-590.68,-59.6339)
+>>> Start Event 348
+>>> End Event 348
+  A 10000 optical photons vertex has been generated at (-595.58,36.1344,-465.247)
+>>> Start Event 349
+>>> End Event 349
+  A 10000 optical photons vertex has been generated at (685.439,-210.026,226.277)
+>>> Start Event 350
+>>> End Event 350
+  A 10000 optical photons vertex has been generated at (610.571,174.077,-242.71)
+>>> Start Event 351
+>>> End Event 351
+  A 10000 optical photons vertex has been generated at (472.273,-773.12,642.061)
+>>> Start Event 352
+>>> End Event 352
+  A 10000 optical photons vertex has been generated at (-475.801,369.795,-152.904)
+>>> Start Event 353
+>>> End Event 353
+  A 10000 optical photons vertex has been generated at (-719.748,-48.356,993.557)
+>>> Start Event 354
+>>> End Event 354
+  A 10000 optical photons vertex has been generated at (296.731,84.7689,329.151)
+>>> Start Event 355
+>>> End Event 355
+  A 10000 optical photons vertex has been generated at (-365.587,35.6939,-425.71)
+>>> Start Event 356
+>>> End Event 356
+  A 10000 optical photons vertex has been generated at (-367.355,-370.884,612.429)
+>>> Start Event 357
+>>> End Event 357
+  A 10000 optical photons vertex has been generated at (-801.047,412.08,345.3)
+>>> Start Event 358
+>>> End Event 358
+  A 10000 optical photons vertex has been generated at (406.567,952.974,-19.2082)
+>>> Start Event 359
+>>> End Event 359
+  A 10000 optical photons vertex has been generated at (-390.015,-496.523,14.2925)
+>>> Start Event 360
+>>> End Event 360
+  A 10000 optical photons vertex has been generated at (-371.491,415.267,-383.133)
+>>> Start Event 361
+>>> End Event 361
+  A 10000 optical photons vertex has been generated at (869.156,-136.287,792.721)
+>>> Start Event 362
+>>> End Event 362
+  A 10000 optical photons vertex has been generated at (467.51,-379.272,-207.335)
+>>> Start Event 363
+>>> End Event 363
+  A 10000 optical photons vertex has been generated at (-133.823,464.827,554.498)
+>>> Start Event 364
+>>> End Event 364
+  A 10000 optical photons vertex has been generated at (958.229,-332.683,-403.761)
+>>> Start Event 365
+>>> End Event 365
+  A 10000 optical photons vertex has been generated at (315.601,-644.25,-385.624)
+>>> Start Event 366
+>>> End Event 366
+  A 10000 optical photons vertex has been generated at (-854.284,-964.362,171.206)
+>>> Start Event 367
+>>> End Event 367
+  A 10000 optical photons vertex has been generated at (589.87,-467.39,84.9294)
+>>> Start Event 368
+>>> End Event 368
+  A 10000 optical photons vertex has been generated at (-22.7677,880.795,978.859)
+>>> Start Event 369
+>>> End Event 369
+  A 10000 optical photons vertex has been generated at (167.794,-818.842,-859.673)
+>>> Start Event 370
+>>> End Event 370
+  A 10000 optical photons vertex has been generated at (511.751,-504.621,-737.185)
+>>> Start Event 371
+>>> End Event 371
+  A 10000 optical photons vertex has been generated at (-456.466,324.567,-622.424)
+>>> Start Event 372
+>>> End Event 372
+  A 10000 optical photons vertex has been generated at (349.185,504.677,709.814)
+>>> Start Event 373
+>>> End Event 373
+  A 10000 optical photons vertex has been generated at (554.153,64.3431,47.3772)
+>>> Start Event 374
+>>> End Event 374
+  A 10000 optical photons vertex has been generated at (-419.813,881.856,-115.919)
+>>> Start Event 375
+>>> End Event 375
+  A 10000 optical photons vertex has been generated at (-226.396,-187.705,-977.393)
+>>> Start Event 376
+>>> End Event 376
+  A 10000 optical photons vertex has been generated at (162.192,189.821,801.503)
+>>> Start Event 377
+>>> End Event 377
+  A 10000 optical photons vertex has been generated at (663.789,-316.093,530.071)
+>>> Start Event 378
+>>> End Event 378
+  A 10000 optical photons vertex has been generated at (815.705,-130.759,-553.55)
+>>> Start Event 379
+>>> End Event 379
+  A 10000 optical photons vertex has been generated at (200.029,886.211,194.315)
+>>> Start Event 380
+>>> End Event 380
+  A 10000 optical photons vertex has been generated at (521.572,-172.229,445.504)
+>>> Start Event 381
+>>> End Event 381
+  A 10000 optical photons vertex has been generated at (210.018,50.9634,-26.4531)
+>>> Start Event 382
+>>> End Event 382
+  A 10000 optical photons vertex has been generated at (-590.665,-400.222,-882.921)
+>>> Start Event 383
+>>> End Event 383
+  A 10000 optical photons vertex has been generated at (245.449,876.321,203.534)
+>>> Start Event 384
+>>> End Event 384
+  A 10000 optical photons vertex has been generated at (397.787,596.785,-540.623)
+>>> Start Event 385
+>>> End Event 385
+  A 10000 optical photons vertex has been generated at (101.847,-618.277,171.019)
+>>> Start Event 386
+>>> End Event 386
+  A 10000 optical photons vertex has been generated at (-70.768,-516.211,617.262)
+>>> Start Event 387
+>>> End Event 387
+  A 10000 optical photons vertex has been generated at (594.981,-894.056,-27.934)
+>>> Start Event 388
+>>> End Event 388
+  A 10000 optical photons vertex has been generated at (-580.697,397.63,851.711)
+>>> Start Event 389
+>>> End Event 389
+  A 10000 optical photons vertex has been generated at (152.991,95.8256,-492.09)
+>>> Start Event 390
+>>> End Event 390
+  A 10000 optical photons vertex has been generated at (-829.651,509.226,-908.041)
+>>> Start Event 391
+>>> End Event 391
+  A 10000 optical photons vertex has been generated at (545.043,-89.607,-725.27)
+>>> Start Event 392
+>>> End Event 392
+  A 10000 optical photons vertex has been generated at (-72.7036,-344.614,939.01)
+>>> Start Event 393
+>>> End Event 393
+  A 10000 optical photons vertex has been generated at (794.302,365.872,795.096)
+>>> Start Event 394
+>>> End Event 394
+  A 10000 optical photons vertex has been generated at (811.47,-529.5,971.684)
+>>> Start Event 395
+>>> End Event 395
+  A 10000 optical photons vertex has been generated at (154.056,843.061,-38.1759)
+>>> Start Event 396
+>>> End Event 396
+  A 10000 optical photons vertex has been generated at (309.076,-813.93,51.5106)
+>>> Start Event 397
+>>> End Event 397
+  A 10000 optical photons vertex has been generated at (-325.867,165.423,959.937)
+>>> Start Event 398
+>>> End Event 398
+  A 10000 optical photons vertex has been generated at (83.3227,449.754,-580.378)
+>>> Start Event 399
+>>> End Event 399
+  A 10000 optical photons vertex has been generated at (-659.604,-462.042,664.265)
+>>> Start Event 400
+>>> End Event 400
+  A 10000 optical photons vertex has been generated at (-59.9868,-866.594,634.051)
+>>> Start Event 401
+>>> End Event 401
+  A 10000 optical photons vertex has been generated at (876.266,-491.26,192.169)
+>>> Start Event 402
+>>> End Event 402
+  A 10000 optical photons vertex has been generated at (629.242,-900.707,214.422)
+>>> Start Event 403
+>>> End Event 403
+  A 10000 optical photons vertex has been generated at (332.832,-826.402,-862.632)
+>>> Start Event 404
+>>> End Event 404
+  A 10000 optical photons vertex has been generated at (782.074,-819.857,-121.361)
+>>> Start Event 405
+>>> End Event 405
+  A 10000 optical photons vertex has been generated at (602.643,498.666,791.104)
+>>> Start Event 406
+>>> End Event 406
+  A 10000 optical photons vertex has been generated at (942.302,-319.989,688.795)
+>>> Start Event 407
+>>> End Event 407
+  A 10000 optical photons vertex has been generated at (912.672,744.377,-277.098)
+>>> Start Event 408
+>>> End Event 408
+  A 10000 optical photons vertex has been generated at (-600.421,655.739,737.732)
+>>> Start Event 409
+>>> End Event 409
+  A 10000 optical photons vertex has been generated at (-770.676,130.474,923.137)
+>>> Start Event 410
+>>> End Event 410
+  A 10000 optical photons vertex has been generated at (365.193,-467.013,319.596)
+>>> Start Event 411
+>>> End Event 411
+  A 10000 optical photons vertex has been generated at (-520.763,-450.661,598.053)
+>>> Start Event 412
+>>> End Event 412
+  A 10000 optical photons vertex has been generated at (-94.1608,-55.0942,-883.528)
+>>> Start Event 413
+>>> End Event 413
+  A 10000 optical photons vertex has been generated at (-455.971,122.097,598.775)
+>>> Start Event 414
+>>> End Event 414
+  A 10000 optical photons vertex has been generated at (958.549,590.464,-441.534)
+>>> Start Event 415
+>>> End Event 415
+  A 10000 optical photons vertex has been generated at (-89.9763,-665.713,-212.56)
+>>> Start Event 416
+>>> End Event 416
+  A 10000 optical photons vertex has been generated at (869.321,409.08,675.283)
+>>> Start Event 417
+>>> End Event 417
+  A 10000 optical photons vertex has been generated at (-916.594,677.33,-475.268)
+>>> Start Event 418
+>>> End Event 418
+  A 10000 optical photons vertex has been generated at (267.117,161.122,869.354)
+>>> Start Event 419
+>>> End Event 419
+  A 10000 optical photons vertex has been generated at (-368.564,95.3641,-687.346)
+>>> Start Event 420
+>>> End Event 420
+  A 10000 optical photons vertex has been generated at (160.843,484.971,953.703)
+>>> Start Event 421
+>>> End Event 421
+  A 10000 optical photons vertex has been generated at (-267.863,-950.314,-356.573)
+>>> Start Event 422
+>>> End Event 422
+  A 10000 optical photons vertex has been generated at (47.9107,473.998,-329.664)
+>>> Start Event 423
+>>> End Event 423
+  A 10000 optical photons vertex has been generated at (450.827,782.265,48.0221)
+>>> Start Event 424
+>>> End Event 424
+  A 10000 optical photons vertex has been generated at (-210.352,525.824,-638.417)
+>>> Start Event 425
+>>> End Event 425
+  A 10000 optical photons vertex has been generated at (-272.913,364.492,-610.197)
+>>> Start Event 426
+>>> End Event 426
+  A 10000 optical photons vertex has been generated at (-934.906,-845.188,784.561)
+>>> Start Event 427
+>>> End Event 427
+  A 10000 optical photons vertex has been generated at (995.02,-919.316,415.943)
+>>> Start Event 428
+>>> End Event 428
+  A 10000 optical photons vertex has been generated at (-907.244,477.769,-200.751)
+>>> Start Event 429
+>>> End Event 429
+  A 10000 optical photons vertex has been generated at (875.592,154.808,496.547)
+>>> Start Event 430
+>>> End Event 430
+  A 10000 optical photons vertex has been generated at (960.458,-875.2,491.75)
+>>> Start Event 431
+>>> End Event 431
+  A 10000 optical photons vertex has been generated at (-830.116,-664.939,933.365)
+>>> Start Event 432
+>>> End Event 432
+  A 10000 optical photons vertex has been generated at (562.001,154.218,-416.246)
+>>> Start Event 433
+>>> End Event 433
+  A 10000 optical photons vertex has been generated at (563.197,-141.221,978.411)
+>>> Start Event 434
+>>> End Event 434
+  A 10000 optical photons vertex has been generated at (201.542,-165.89,-650.838)
+>>> Start Event 435
+>>> End Event 435
+  A 10000 optical photons vertex has been generated at (-172.004,654.046,980.896)
+>>> Start Event 436
+>>> End Event 436
+  A 10000 optical photons vertex has been generated at (545.875,-963.145,797.412)
+>>> Start Event 437
+>>> End Event 437
+  A 10000 optical photons vertex has been generated at (140.031,-927.037,228.993)
+>>> Start Event 438
+>>> End Event 438
+  A 10000 optical photons vertex has been generated at (145.945,-593.65,-905.378)
+>>> Start Event 439
+>>> End Event 439
+  A 10000 optical photons vertex has been generated at (-399.04,-200.902,522.047)
+>>> Start Event 440
+>>> End Event 440
+  A 10000 optical photons vertex has been generated at (846.256,-696.049,-364.051)
+>>> Start Event 441
+>>> End Event 441
+  A 10000 optical photons vertex has been generated at (363.262,543.693,-502.56)
+>>> Start Event 442
+>>> End Event 442
+  A 10000 optical photons vertex has been generated at (921.863,5.16362,-327.152)
+>>> Start Event 443
+>>> End Event 443
+  A 10000 optical photons vertex has been generated at (-437.404,-374.375,-478.763)
+>>> Start Event 444
+>>> End Event 444
+  A 10000 optical photons vertex has been generated at (183.065,383.243,-122.07)
+>>> Start Event 445
+>>> End Event 445
+  A 10000 optical photons vertex has been generated at (506.588,-966.538,-791.619)
+>>> Start Event 446
+>>> End Event 446
+  A 10000 optical photons vertex has been generated at (-58.4543,436.276,699.461)
+>>> Start Event 447
+>>> End Event 447
+  A 10000 optical photons vertex has been generated at (-519.806,-445.892,574.774)
+>>> Start Event 448
+>>> End Event 448
+  A 10000 optical photons vertex has been generated at (607.524,31.1604,-19.5533)
+>>> Start Event 449
+>>> End Event 449
+  A 10000 optical photons vertex has been generated at (-56.2988,-725.932,-296.24)
+>>> Start Event 450
+>>> End Event 450
+  A 10000 optical photons vertex has been generated at (-657.585,-174.127,507.662)
+>>> Start Event 451
+>>> End Event 451
+  A 10000 optical photons vertex has been generated at (-374.861,703.489,-238.337)
+>>> Start Event 452
+>>> End Event 452
+  A 10000 optical photons vertex has been generated at (-847.999,-483.829,-203.392)
+>>> Start Event 453
+>>> End Event 453
+  A 10000 optical photons vertex has been generated at (585.657,-359.869,460.529)
+>>> Start Event 454
+>>> End Event 454
+  A 10000 optical photons vertex has been generated at (-849.764,430.286,-626.41)
+>>> Start Event 455
+>>> End Event 455
+  A 10000 optical photons vertex has been generated at (730.662,-764.123,595.296)
+>>> Start Event 456
+>>> End Event 456
+  A 10000 optical photons vertex has been generated at (24.4983,427.056,-547.64)
+>>> Start Event 457
+>>> End Event 457
+  A 10000 optical photons vertex has been generated at (727.706,466.182,-195.337)
+>>> Start Event 458
+>>> End Event 458
+  A 10000 optical photons vertex has been generated at (-52.6979,-189.34,-452.501)
+>>> Start Event 459
+>>> End Event 459
+  A 10000 optical photons vertex has been generated at (864.421,291.937,-88.5669)
+>>> Start Event 460
+>>> End Event 460
+  A 10000 optical photons vertex has been generated at (-704.34,648.451,-537.819)
+>>> Start Event 461
+>>> End Event 461
+  A 10000 optical photons vertex has been generated at (18.3568,-859.878,-352.946)
+>>> Start Event 462
+>>> End Event 462
+  A 10000 optical photons vertex has been generated at (-135.502,576.675,-376.405)
+>>> Start Event 463
+>>> End Event 463
+  A 10000 optical photons vertex has been generated at (-318.354,-615.779,-236.093)
+>>> Start Event 464
+>>> End Event 464
+  A 10000 optical photons vertex has been generated at (127.222,233.615,-730.597)
+>>> Start Event 465
+>>> End Event 465
+  A 10000 optical photons vertex has been generated at (-873.469,-12.6288,-77.5896)
+>>> Start Event 466
+>>> End Event 466
+  A 10000 optical photons vertex has been generated at (987.171,-648.392,-850.521)
+>>> Start Event 467
+>>> End Event 467
+  A 10000 optical photons vertex has been generated at (-323.218,183.76,188.122)
+>>> Start Event 468
+>>> End Event 468
+  A 10000 optical photons vertex has been generated at (-311.933,-90.9462,899.496)
+>>> Start Event 469
+>>> End Event 469
+  A 10000 optical photons vertex has been generated at (-880.538,-509.058,-384.946)
+>>> Start Event 470
+>>> End Event 470
+  A 10000 optical photons vertex has been generated at (140.279,-616.657,-896.269)
+>>> Start Event 471
+>>> End Event 471
+  A 10000 optical photons vertex has been generated at (916.615,-569.959,358.252)
+>>> Start Event 472
+>>> End Event 472
+  A 10000 optical photons vertex has been generated at (558.229,800.595,-957.853)
+>>> Start Event 473
+>>> End Event 473
+  A 10000 optical photons vertex has been generated at (809.165,-524.227,-888.548)
+>>> Start Event 474
+>>> End Event 474
+  A 10000 optical photons vertex has been generated at (-928.254,730.088,358.089)
+>>> Start Event 475
+>>> End Event 475
+  A 10000 optical photons vertex has been generated at (760.301,-103.292,592.892)
+>>> Start Event 476
+>>> End Event 476
+  A 10000 optical photons vertex has been generated at (519.22,68.2715,-514.896)
+>>> Start Event 477
+>>> End Event 477
+  A 10000 optical photons vertex has been generated at (90.0293,-27.6484,-656.739)
+>>> Start Event 478
+>>> End Event 478
+  A 10000 optical photons vertex has been generated at (-959.587,-92.1979,-746.569)
+>>> Start Event 479
+>>> End Event 479
+  A 10000 optical photons vertex has been generated at (259.922,145.467,248.772)
+>>> Start Event 480
+>>> End Event 480
+  A 10000 optical photons vertex has been generated at (-794.37,421.658,-845.372)
+>>> Start Event 481
+>>> End Event 481
+  A 10000 optical photons vertex has been generated at (842.917,-880.404,923.882)
+>>> Start Event 482
+>>> End Event 482
+  A 10000 optical photons vertex has been generated at (-699.457,863.587,-705.062)
+>>> Start Event 483
+>>> End Event 483
+  A 10000 optical photons vertex has been generated at (-162.305,763.824,855.451)
+>>> Start Event 484
+>>> End Event 484
+  A 10000 optical photons vertex has been generated at (-990.796,-776.913,915.335)
+>>> Start Event 485
+>>> End Event 485
+  A 10000 optical photons vertex has been generated at (-194.903,457.674,-293.486)
+>>> Start Event 486
+>>> End Event 486
+  A 10000 optical photons vertex has been generated at (-477.56,170.056,632.674)
+>>> Start Event 487
+>>> End Event 487
+  A 10000 optical photons vertex has been generated at (560.269,-721.7,531.336)
+>>> Start Event 488
+>>> End Event 488
+  A 10000 optical photons vertex has been generated at (-44.213,456.587,225.777)
+>>> Start Event 489
+>>> End Event 489
+  A 10000 optical photons vertex has been generated at (-956.607,688.816,850.109)
+>>> Start Event 490
+>>> End Event 490
+  A 10000 optical photons vertex has been generated at (552.578,15.4304,-961.779)
+>>> Start Event 491
+>>> End Event 491
+  A 10000 optical photons vertex has been generated at (930.763,-59.2365,233.126)
+>>> Start Event 492
+>>> End Event 492
+  A 10000 optical photons vertex has been generated at (191.08,859.394,963.58)
+>>> Start Event 493
+>>> End Event 493
+  A 10000 optical photons vertex has been generated at (748.691,-350.132,-991.518)
+>>> Start Event 494
+>>> End Event 494
+  A 10000 optical photons vertex has been generated at (458.194,-268.512,-18.4274)
+>>> Start Event 495
+>>> End Event 495
+  A 10000 optical photons vertex has been generated at (466.089,-614.937,28.1838)
+>>> Start Event 496
+>>> End Event 496
+  A 10000 optical photons vertex has been generated at (609.243,787.331,-417.102)
+>>> Start Event 497
+>>> End Event 497
+  A 10000 optical photons vertex has been generated at (-288.037,-322.994,-111.65)
+>>> Start Event 498
+>>> End Event 498
+  A 10000 optical photons vertex has been generated at (555.923,498.932,952.121)
+>>> Start Event 499
+>>> End Event 499
+  A 10000 optical photons vertex has been generated at (332.092,735.25,135.419)
+>>> Start Event 500
+>>> End Event 500
+  A 10000 optical photons vertex has been generated at (692.557,-641.129,-520.409)
+>>> Start Event 501
+>>> End Event 501
+  A 10000 optical photons vertex has been generated at (-581.899,853.654,-882.175)
+>>> Start Event 502
+>>> End Event 502
+  A 10000 optical photons vertex has been generated at (-675.016,-85.4359,605.057)
+>>> Start Event 503
+>>> End Event 503
+  A 10000 optical photons vertex has been generated at (-649.614,-39.6493,23.5389)
+>>> Start Event 504
+>>> End Event 504
+  A 10000 optical photons vertex has been generated at (181.942,-542.202,573.105)
+>>> Start Event 505
+>>> End Event 505
+  A 10000 optical photons vertex has been generated at (-64.2534,-527.338,3.0985)
+>>> Start Event 506
+>>> End Event 506
+  A 10000 optical photons vertex has been generated at (345.112,-933.796,-584.766)
+>>> Start Event 507
+>>> End Event 507
+  A 10000 optical photons vertex has been generated at (270.286,-413.597,241.779)
+>>> Start Event 508
+>>> End Event 508
+  A 10000 optical photons vertex has been generated at (-971.653,570.478,-783.484)
+>>> Start Event 509
+>>> End Event 509
+  A 10000 optical photons vertex has been generated at (843.891,665.748,-910.506)
+>>> Start Event 510
+>>> End Event 510
+  A 10000 optical photons vertex has been generated at (488.275,-577.742,678.659)
+>>> Start Event 511
+>>> End Event 511
+  A 10000 optical photons vertex has been generated at (21.7533,-472.261,280.231)
+>>> Start Event 512
+>>> End Event 512
+  A 10000 optical photons vertex has been generated at (-890.569,990.973,115.137)
+>>> Start Event 513
+>>> End Event 513
+  A 10000 optical photons vertex has been generated at (489.812,14.3924,-386.484)
+>>> Start Event 514
+>>> End Event 514
+  A 10000 optical photons vertex has been generated at (-389.001,-819.911,381.671)
+>>> Start Event 515
+>>> End Event 515
+  A 10000 optical photons vertex has been generated at (641.691,-67.7095,-456.882)
+>>> Start Event 516
+>>> End Event 516
+  A 10000 optical photons vertex has been generated at (589.486,95.2215,-667.378)
+>>> Start Event 517
+>>> End Event 517
+  A 10000 optical photons vertex has been generated at (-332.422,145.627,75.3256)
+>>> Start Event 518
+>>> End Event 518
+  A 10000 optical photons vertex has been generated at (-370.494,-79.5048,673.686)
+>>> Start Event 519
+>>> End Event 519
+  A 10000 optical photons vertex has been generated at (388.299,736.217,-139.038)
+>>> Start Event 520
+>>> End Event 520
+  A 10000 optical photons vertex has been generated at (28.8796,656.9,756.625)
+>>> Start Event 521
+>>> End Event 521
+  A 10000 optical photons vertex has been generated at (-119.534,726.677,-872.474)
+>>> Start Event 522
+>>> End Event 522
+  A 10000 optical photons vertex has been generated at (400.524,429.164,-371.451)
+>>> Start Event 523
+>>> End Event 523
+  A 10000 optical photons vertex has been generated at (916.386,50.7403,-796.842)
+>>> Start Event 524
+>>> End Event 524
+  A 10000 optical photons vertex has been generated at (657.314,316.076,-62.0568)
+>>> Start Event 525
+>>> End Event 525
+  A 10000 optical photons vertex has been generated at (734.297,-657.407,-410.777)
+>>> Start Event 526
+>>> End Event 526
+  A 10000 optical photons vertex has been generated at (-366.129,-83.8365,-931.574)
+>>> Start Event 527
+>>> End Event 527
+  A 10000 optical photons vertex has been generated at (-752.483,940.555,-224.736)
+>>> Start Event 528
+>>> End Event 528
+  A 10000 optical photons vertex has been generated at (325.389,-774.043,701.842)
+>>> Start Event 529
+>>> End Event 529
+  A 10000 optical photons vertex has been generated at (-857.145,250.598,-3.35478)
+>>> Start Event 530
+>>> End Event 530
+  A 10000 optical photons vertex has been generated at (304.951,-944.061,-959.564)
+>>> Start Event 531
+>>> End Event 531
+  A 10000 optical photons vertex has been generated at (-191.145,50.1984,840.301)
+>>> Start Event 532
+>>> End Event 532
+  A 10000 optical photons vertex has been generated at (631.548,449.647,-439.66)
+>>> Start Event 533
+>>> End Event 533
+  A 10000 optical photons vertex has been generated at (-852.193,733.761,952.766)
+>>> Start Event 534
+>>> End Event 534
+  A 10000 optical photons vertex has been generated at (-163.992,567.726,760.868)
+>>> Start Event 535
+>>> End Event 535
+  A 10000 optical photons vertex has been generated at (174.304,399.907,548.44)
+>>> Start Event 536
+>>> End Event 536
+  A 10000 optical photons vertex has been generated at (-936.679,-480.391,905.551)
+>>> Start Event 537
+>>> End Event 537
+  A 10000 optical photons vertex has been generated at (189.37,840.442,228.167)
+>>> Start Event 538
+>>> End Event 538
+  A 10000 optical photons vertex has been generated at (-457.986,234.573,705.974)
+>>> Start Event 539
+>>> End Event 539
+  A 10000 optical photons vertex has been generated at (-355.075,172.302,-677.957)
+>>> Start Event 540
+>>> End Event 540
+  A 10000 optical photons vertex has been generated at (-421.083,-156.346,-748.386)
+>>> Start Event 541
+>>> End Event 541
+  A 10000 optical photons vertex has been generated at (62.1875,176.958,6.77009)
+>>> Start Event 542
+>>> End Event 542
+  A 10000 optical photons vertex has been generated at (-746.504,-170.015,-604.517)
+>>> Start Event 543
+>>> End Event 543
+  A 10000 optical photons vertex has been generated at (-254.091,-617.074,-340.568)
+>>> Start Event 544
+>>> End Event 544
+  A 10000 optical photons vertex has been generated at (-718.122,143.005,-933.517)
+>>> Start Event 545
+>>> End Event 545
+  A 10000 optical photons vertex has been generated at (32.4466,-878.477,-955.134)
+>>> Start Event 546
+>>> End Event 546
+  A 10000 optical photons vertex has been generated at (622.523,543.51,-670.028)
+>>> Start Event 547
+>>> End Event 547
+  A 10000 optical photons vertex has been generated at (274.156,402.707,543.421)
+>>> Start Event 548
+>>> End Event 548
+  A 10000 optical photons vertex has been generated at (595.247,-764.956,274.208)
+>>> Start Event 549
+>>> End Event 549
+  A 10000 optical photons vertex has been generated at (-50.7207,455.367,722.283)
+>>> Start Event 550
+>>> End Event 550
+  A 10000 optical photons vertex has been generated at (47.2366,677.801,-797.362)
+>>> Start Event 551
+>>> End Event 551
+  A 10000 optical photons vertex has been generated at (623.672,643.013,330.535)
+>>> Start Event 552
+>>> End Event 552
+  A 10000 optical photons vertex has been generated at (-406.867,-457.912,-176.59)
+>>> Start Event 553
+>>> End Event 553
+  A 10000 optical photons vertex has been generated at (51.7979,559.056,-999.299)
+>>> Start Event 554
+>>> End Event 554
+  A 10000 optical photons vertex has been generated at (-237.692,-202.948,-495.848)
+>>> Start Event 555
+>>> End Event 555
+  A 10000 optical photons vertex has been generated at (-491.696,-712.97,651.375)
+>>> Start Event 556
+>>> End Event 556
+  A 10000 optical photons vertex has been generated at (-600.174,-929.961,300.076)
+>>> Start Event 557
+>>> End Event 557
+  A 10000 optical photons vertex has been generated at (-711.661,192.955,-663.84)
+>>> Start Event 558
+>>> End Event 558
+  A 10000 optical photons vertex has been generated at (-424.326,93.4615,-215.347)
+>>> Start Event 559
+>>> End Event 559
+  A 10000 optical photons vertex has been generated at (739.266,988.677,-792.494)
+>>> Start Event 560
+>>> End Event 560
+  A 10000 optical photons vertex has been generated at (591.12,-299.526,-433.187)
+>>> Start Event 561
+>>> End Event 561
+  A 10000 optical photons vertex has been generated at (493.74,566.546,-877.555)
+>>> Start Event 562
+>>> End Event 562
+  A 10000 optical photons vertex has been generated at (-485.726,-193.19,795.951)
+>>> Start Event 563
+>>> End Event 563
+  A 10000 optical photons vertex has been generated at (-101.264,-189.69,-731.127)
+>>> Start Event 564
+>>> End Event 564
+  A 10000 optical photons vertex has been generated at (739.777,202.125,-532.892)
+>>> Start Event 565
+>>> End Event 565
+  A 10000 optical photons vertex has been generated at (742.822,177.692,-13.6163)
+>>> Start Event 566
+>>> End Event 566
+  A 10000 optical photons vertex has been generated at (845.152,-906.719,35.7473)
+>>> Start Event 567
+>>> End Event 567
+  A 10000 optical photons vertex has been generated at (-285.955,908.551,-818.284)
+>>> Start Event 568
+>>> End Event 568
+  A 10000 optical photons vertex has been generated at (-281.189,286.578,-933.547)
+>>> Start Event 569
+>>> End Event 569
+  A 10000 optical photons vertex has been generated at (-612.455,-682.935,999.09)
+>>> Start Event 570
+>>> End Event 570
+  A 10000 optical photons vertex has been generated at (-941.229,854.848,806.48)
+>>> Start Event 571
+>>> End Event 571
+  A 10000 optical photons vertex has been generated at (-163.754,152.853,503.235)
+>>> Start Event 572
+>>> End Event 572
+  A 10000 optical photons vertex has been generated at (-990.218,987.669,-470.713)
+>>> Start Event 573
+>>> End Event 573
+  A 10000 optical photons vertex has been generated at (91.3776,-409.585,-569.227)
+>>> Start Event 574
+>>> End Event 574
+  A 10000 optical photons vertex has been generated at (-683.221,-600.451,476.814)
+>>> Start Event 575
+>>> End Event 575
+  A 10000 optical photons vertex has been generated at (357.936,-594.554,799.914)
+>>> Start Event 576
+>>> End Event 576
+  A 10000 optical photons vertex has been generated at (-16.8472,-371.904,184.523)
+>>> Start Event 577
+>>> End Event 577
+  A 10000 optical photons vertex has been generated at (-628.527,54.1583,-441.602)
+>>> Start Event 578
+>>> End Event 578
+  A 10000 optical photons vertex has been generated at (-642.726,912.278,862.605)
+>>> Start Event 579
+>>> End Event 579
+  A 10000 optical photons vertex has been generated at (54.6813,641.729,925.438)
+>>> Start Event 580
+>>> End Event 580
+  A 10000 optical photons vertex has been generated at (754.293,-470.02,130.145)
+>>> Start Event 581
+>>> End Event 581
+  A 10000 optical photons vertex has been generated at (614.622,-406.56,-91.6694)
+>>> Start Event 582
+>>> End Event 582
+  A 10000 optical photons vertex has been generated at (-640.899,-426.131,480.673)
+>>> Start Event 583
+>>> End Event 583
+  A 10000 optical photons vertex has been generated at (-834.03,634.468,354.955)
+>>> Start Event 584
+>>> End Event 584
+  A 10000 optical photons vertex has been generated at (879.257,-225.685,-53.9836)
+>>> Start Event 585
+>>> End Event 585
+  A 10000 optical photons vertex has been generated at (-979.548,-48.7287,-245.485)
+>>> Start Event 586
+>>> End Event 586
+  A 10000 optical photons vertex has been generated at (749.746,425.548,-794.178)
+>>> Start Event 587
+>>> End Event 587
+  A 10000 optical photons vertex has been generated at (869.888,-977.451,-869.372)
+>>> Start Event 588
+>>> End Event 588
+  A 10000 optical photons vertex has been generated at (-36.2052,599.963,555.771)
+>>> Start Event 589
+>>> End Event 589
+  A 10000 optical photons vertex has been generated at (-451.926,849.55,260.18)
+>>> Start Event 590
+>>> End Event 590
+  A 10000 optical photons vertex has been generated at (969.628,583.222,-480.55)
+>>> Start Event 591
+>>> End Event 591
+  A 10000 optical photons vertex has been generated at (831.659,901.902,688.771)
+>>> Start Event 592
+>>> End Event 592
+  A 10000 optical photons vertex has been generated at (4.35327,736.296,787.758)
+>>> Start Event 593
+>>> End Event 593
+  A 10000 optical photons vertex has been generated at (-719.495,-526.968,399.249)
+>>> Start Event 594
+>>> End Event 594
+  A 10000 optical photons vertex has been generated at (-550.086,-255.698,966.65)
+>>> Start Event 595
+>>> End Event 595
+  A 10000 optical photons vertex has been generated at (-970.508,501.776,-375.49)
+>>> Start Event 596
+>>> End Event 596
+  A 10000 optical photons vertex has been generated at (756.865,618.947,969.429)
+>>> Start Event 597
+>>> End Event 597
+  A 10000 optical photons vertex has been generated at (-650.29,547.391,-496.425)
+>>> Start Event 598
+>>> End Event 598
+  A 10000 optical photons vertex has been generated at (559.188,-974.796,-18.7052)
+>>> Start Event 599
+>>> End Event 599
+  A 10000 optical photons vertex has been generated at (-48.3845,-905.169,-233.812)
+>>> Start Event 600
+>>> End Event 600
+  A 10000 optical photons vertex has been generated at (-168.166,-594.184,330.826)
+>>> Start Event 601
+>>> End Event 601
+  A 10000 optical photons vertex has been generated at (-787.729,-25.9681,-219.769)
+>>> Start Event 602
+>>> End Event 602
+  A 10000 optical photons vertex has been generated at (-158.964,703.614,414.179)
+>>> Start Event 603
+>>> End Event 603
+  A 10000 optical photons vertex has been generated at (745.096,826.088,-349.489)
+>>> Start Event 604
+>>> End Event 604
+  A 10000 optical photons vertex has been generated at (-325.977,347.283,605.63)
+>>> Start Event 605
+>>> End Event 605
+  A 10000 optical photons vertex has been generated at (388.047,343.725,17.4927)
+>>> Start Event 606
+>>> End Event 606
+  A 10000 optical photons vertex has been generated at (292.496,-997.221,441.293)
+>>> Start Event 607
+>>> End Event 607
+  A 10000 optical photons vertex has been generated at (410.559,-473.916,575.398)
+>>> Start Event 608
+>>> End Event 608
+  A 10000 optical photons vertex has been generated at (381.34,-633.917,913.081)
+>>> Start Event 609
+>>> End Event 609
+  A 10000 optical photons vertex has been generated at (-301.936,-478.598,959.954)
+>>> Start Event 610
+>>> End Event 610
+  A 10000 optical photons vertex has been generated at (240.304,-350.288,-604.991)
+>>> Start Event 611
+>>> End Event 611
+  A 10000 optical photons vertex has been generated at (-108.46,309.419,795.559)
+>>> Start Event 612
+>>> End Event 612
+  A 10000 optical photons vertex has been generated at (-333.11,-407.987,272.104)
+>>> Start Event 613
+>>> End Event 613
+  A 10000 optical photons vertex has been generated at (398.862,-598.021,-531.127)
+>>> Start Event 614
+>>> End Event 614
+  A 10000 optical photons vertex has been generated at (86.2463,669.047,-278.903)
+>>> Start Event 615
+>>> End Event 615
+  A 10000 optical photons vertex has been generated at (461.242,774.959,651.951)
+>>> Start Event 616
+>>> End Event 616
+  A 10000 optical photons vertex has been generated at (961.107,716.466,-570.942)
+>>> Start Event 617
+>>> End Event 617
+  A 10000 optical photons vertex has been generated at (-378.365,531.85,-526.938)
+>>> Start Event 618
+>>> End Event 618
+  A 10000 optical photons vertex has been generated at (293.041,-850.141,880.506)
+>>> Start Event 619
+>>> End Event 619
+  A 10000 optical photons vertex has been generated at (-861.1,181.813,-344.516)
+>>> Start Event 620
+>>> End Event 620
+  A 10000 optical photons vertex has been generated at (-132.768,-930.079,-393.965)
+>>> Start Event 621
+>>> End Event 621
+  A 10000 optical photons vertex has been generated at (-133.633,422.737,829.266)
+>>> Start Event 622
+>>> End Event 622
+  A 10000 optical photons vertex has been generated at (-808.429,706.802,-64.3379)
+>>> Start Event 623
+>>> End Event 623
+  A 10000 optical photons vertex has been generated at (-190.619,-733.164,-333.577)
+>>> Start Event 624
+>>> End Event 624
+  A 10000 optical photons vertex has been generated at (-299.434,593.971,-498.702)
+>>> Start Event 625
+>>> End Event 625
+  A 10000 optical photons vertex has been generated at (901.433,196.581,-437.348)
+>>> Start Event 626
+>>> End Event 626
+  A 10000 optical photons vertex has been generated at (993.657,-536.835,-640.133)
+>>> Start Event 627
+>>> End Event 627
+  A 10000 optical photons vertex has been generated at (-716.763,653.856,-717.818)
+>>> Start Event 628
+>>> End Event 628
+  A 10000 optical photons vertex has been generated at (-504.452,-386.011,-351.664)
+>>> Start Event 629
+>>> End Event 629
+  A 10000 optical photons vertex has been generated at (-629.468,891.619,-735.451)
+>>> Start Event 630
+>>> End Event 630
+  A 10000 optical photons vertex has been generated at (-887.727,-886.966,599.136)
+>>> Start Event 631
+>>> End Event 631
+  A 10000 optical photons vertex has been generated at (-722.858,406.234,-223.638)
+>>> Start Event 632
+>>> End Event 632
+  A 10000 optical photons vertex has been generated at (285.451,-561.514,615.149)
+>>> Start Event 633
+>>> End Event 633
+  A 10000 optical photons vertex has been generated at (-111.076,-506.745,72.7718)
+>>> Start Event 634
+>>> End Event 634
+  A 10000 optical photons vertex has been generated at (870.233,728.346,450.558)
+>>> Start Event 635
+>>> End Event 635
+  A 10000 optical photons vertex has been generated at (85.7043,-989.492,556.642)
+>>> Start Event 636
+>>> End Event 636
+  A 10000 optical photons vertex has been generated at (746.431,457.024,-128.894)
+>>> Start Event 637
+>>> End Event 637
+  A 10000 optical photons vertex has been generated at (-365.59,593.026,935.02)
+>>> Start Event 638
+>>> End Event 638
+  A 10000 optical photons vertex has been generated at (714.221,493.662,14.4974)
+>>> Start Event 639
+>>> End Event 639
+  A 10000 optical photons vertex has been generated at (972.936,-24.6196,104.753)
+>>> Start Event 640
+>>> End Event 640
+  A 10000 optical photons vertex has been generated at (400.816,-694.948,777.656)
+>>> Start Event 641
+>>> End Event 641
+  A 10000 optical photons vertex has been generated at (-991.188,-29.8344,-105.556)
+>>> Start Event 642
+>>> End Event 642
+  A 10000 optical photons vertex has been generated at (-702.696,26.4272,-195.173)
+>>> Start Event 643
+>>> End Event 643
+  A 10000 optical photons vertex has been generated at (-882.805,-169.111,-8.49247)
+>>> Start Event 644
+>>> End Event 644
+  A 10000 optical photons vertex has been generated at (-173.559,-564.58,313.191)
+>>> Start Event 645
+>>> End Event 645
+  A 10000 optical photons vertex has been generated at (-269.659,925.702,824.742)
+>>> Start Event 646
+>>> End Event 646
+  A 10000 optical photons vertex has been generated at (-990.975,444.808,-751.739)
+>>> Start Event 647
+>>> End Event 647
+  A 10000 optical photons vertex has been generated at (95.5504,-356.2,724.585)
+>>> Start Event 648
+>>> End Event 648
+  A 10000 optical photons vertex has been generated at (-540.713,430.292,-109.065)
+>>> Start Event 649
+>>> End Event 649
+  A 10000 optical photons vertex has been generated at (764.944,-687.022,354.629)
+>>> Start Event 650
+>>> End Event 650
+  A 10000 optical photons vertex has been generated at (816.326,-724.52,-423.589)
+>>> Start Event 651
+>>> End Event 651
+  A 10000 optical photons vertex has been generated at (-36.657,-658.328,-689.243)
+>>> Start Event 652
+>>> End Event 652
+  A 10000 optical photons vertex has been generated at (-504.51,822.285,-185.166)
+>>> Start Event 653
+>>> End Event 653
+  A 10000 optical photons vertex has been generated at (-443.183,-305.502,280.726)
+>>> Start Event 654
+>>> End Event 654
+  A 10000 optical photons vertex has been generated at (-714.696,94.8313,873.627)
+>>> Start Event 655
+>>> End Event 655
+  A 10000 optical photons vertex has been generated at (-868.027,-791.735,-217.718)
+>>> Start Event 656
+>>> End Event 656
+  A 10000 optical photons vertex has been generated at (443.397,-239.583,568.439)
+>>> Start Event 657
+>>> End Event 657
+  A 10000 optical photons vertex has been generated at (-847.599,268.296,-802.234)
+>>> Start Event 658
+>>> End Event 658
+  A 10000 optical photons vertex has been generated at (622.483,728.89,156.508)
+>>> Start Event 659
+>>> End Event 659
+  A 10000 optical photons vertex has been generated at (-873.697,-428.386,929.673)
+>>> Start Event 660
+>>> End Event 660
+  A 10000 optical photons vertex has been generated at (-480.076,309.824,971.268)
+>>> Start Event 661
+>>> End Event 661
+  A 10000 optical photons vertex has been generated at (401.124,688.105,341.493)
+>>> Start Event 662
+>>> End Event 662
+  A 10000 optical photons vertex has been generated at (520.309,-172.327,407.015)
+>>> Start Event 663
+>>> End Event 663
+  A 10000 optical photons vertex has been generated at (-419.751,626.389,85.327)
+>>> Start Event 664
+>>> End Event 664
+  A 10000 optical photons vertex has been generated at (86.5297,540.91,991.399)
+>>> Start Event 665
+>>> End Event 665
+  A 10000 optical photons vertex has been generated at (9.49035,559.16,833.317)
+>>> Start Event 666
+>>> End Event 666
+  A 10000 optical photons vertex has been generated at (-872.155,-160.803,501.886)
+>>> Start Event 667
+>>> End Event 667
+  A 10000 optical photons vertex has been generated at (-901.134,-319.708,380.358)
+>>> Start Event 668
+>>> End Event 668
+  A 10000 optical photons vertex has been generated at (-8.47203,35.2986,-493.876)
+>>> Start Event 669
+>>> End Event 669
+  A 10000 optical photons vertex has been generated at (-505.247,-883.697,507.35)
+>>> Start Event 670
+>>> End Event 670
+  A 10000 optical photons vertex has been generated at (-244.887,57.0429,911.022)
+>>> Start Event 671
+>>> End Event 671
+  A 10000 optical photons vertex has been generated at (950.958,799.322,472.977)
+>>> Start Event 672
+>>> End Event 672
+  A 10000 optical photons vertex has been generated at (601.963,514.229,260.256)
+>>> Start Event 673
+>>> End Event 673
+  A 10000 optical photons vertex has been generated at (-629.01,740.592,149.173)
+>>> Start Event 674
+>>> End Event 674
+  A 10000 optical photons vertex has been generated at (825.652,552.767,842.204)
+>>> Start Event 675
+>>> End Event 675
+  A 10000 optical photons vertex has been generated at (573.307,789.856,-368.237)
+>>> Start Event 676
+>>> End Event 676
+  A 10000 optical photons vertex has been generated at (210.057,-287.877,-815.673)
+>>> Start Event 677
+>>> End Event 677
+  A 10000 optical photons vertex has been generated at (428.903,898.707,-400.91)
+>>> Start Event 678
+>>> End Event 678
+  A 10000 optical photons vertex has been generated at (-265.095,-368.507,-172.811)
+>>> Start Event 679
+>>> End Event 679
+  A 10000 optical photons vertex has been generated at (-357.065,-635.195,-446.353)
+>>> Start Event 680
+>>> End Event 680
+  A 10000 optical photons vertex has been generated at (-787.979,442.982,456.408)
+>>> Start Event 681
+>>> End Event 681
+  A 10000 optical photons vertex has been generated at (705.053,-34.6181,-726.02)
+>>> Start Event 682
+>>> End Event 682
+  A 10000 optical photons vertex has been generated at (-515.433,703.062,-989.303)
+>>> Start Event 683
+>>> End Event 683
+  A 10000 optical photons vertex has been generated at (284.475,-629.353,396.663)
+>>> Start Event 684
+>>> End Event 684
+  A 10000 optical photons vertex has been generated at (-970.021,323.692,-160.995)
+>>> Start Event 685
+>>> End Event 685
+  A 10000 optical photons vertex has been generated at (-961.815,-796.9,223.475)
+>>> Start Event 686
+>>> End Event 686
+  A 10000 optical photons vertex has been generated at (480.666,-319.034,257.688)
+>>> Start Event 687
+>>> End Event 687
+  A 10000 optical photons vertex has been generated at (-230.367,313.771,380.878)
+>>> Start Event 688
+>>> End Event 688
+  A 10000 optical photons vertex has been generated at (-299.907,-735.2,596.485)
+>>> Start Event 689
+>>> End Event 689
+  A 10000 optical photons vertex has been generated at (-123.254,729.328,-120.967)
+>>> Start Event 690
+>>> End Event 690
+  A 10000 optical photons vertex has been generated at (236.151,68.9861,-152.625)
+>>> Start Event 691
+>>> End Event 691
+  A 10000 optical photons vertex has been generated at (472.924,-803.797,-767.297)
+>>> Start Event 692
+>>> End Event 692
+  A 10000 optical photons vertex has been generated at (882.277,-388.457,-726.743)
+>>> Start Event 693
+>>> End Event 693
+  A 10000 optical photons vertex has been generated at (-801.263,-832.091,161.134)
+>>> Start Event 694
+>>> End Event 694
+  A 10000 optical photons vertex has been generated at (921.454,460.855,-780.464)
+>>> Start Event 695
+>>> End Event 695
+  A 10000 optical photons vertex has been generated at (-377.589,-387.312,739.752)
+>>> Start Event 696
+>>> End Event 696
+  A 10000 optical photons vertex has been generated at (-219.222,-867.726,-645.123)
+>>> Start Event 697
+>>> End Event 697
+  A 10000 optical photons vertex has been generated at (3.68418,195.413,-112.246)
+>>> Start Event 698
+>>> End Event 698
+  A 10000 optical photons vertex has been generated at (393.753,-243.161,-448.92)
+>>> Start Event 699
+>>> End Event 699
+  A 10000 optical photons vertex has been generated at (426.771,-843.694,768.392)
+>>> Start Event 700
+>>> End Event 700
+  A 10000 optical photons vertex has been generated at (350.084,-893.317,-778.545)
+>>> Start Event 701
+>>> End Event 701
+  A 10000 optical photons vertex has been generated at (-736.505,989.149,104.665)
+>>> Start Event 702
+>>> End Event 702
+  A 10000 optical photons vertex has been generated at (741.846,981.327,-655.954)
+>>> Start Event 703
+>>> End Event 703
+  A 10000 optical photons vertex has been generated at (261.886,-7.1275,-269.853)
+>>> Start Event 704
+>>> End Event 704
+  A 10000 optical photons vertex has been generated at (-288.748,241.458,-124.683)
+>>> Start Event 705
+>>> End Event 705
+  A 10000 optical photons vertex has been generated at (-939.133,-633.492,-803.067)
+>>> Start Event 706
+>>> End Event 706
+  A 10000 optical photons vertex has been generated at (591.617,517.078,-791.186)
+>>> Start Event 707
+>>> End Event 707
+  A 10000 optical photons vertex has been generated at (-507.983,-422.459,-200.259)
+>>> Start Event 708
+>>> End Event 708
+  A 10000 optical photons vertex has been generated at (-65.3775,164.874,-736.196)
+>>> Start Event 709
+>>> End Event 709
+  A 10000 optical photons vertex has been generated at (-644.681,-362.722,970.46)
+>>> Start Event 710
+>>> End Event 710
+  A 10000 optical photons vertex has been generated at (-11.8365,-32.2759,-477.782)
+>>> Start Event 711
+>>> End Event 711
+  A 10000 optical photons vertex has been generated at (-317.617,-762.58,961.403)
+>>> Start Event 712
+>>> End Event 712
+  A 10000 optical photons vertex has been generated at (281.847,-633.39,867.105)
+>>> Start Event 713
+>>> End Event 713
+  A 10000 optical photons vertex has been generated at (362.092,533.683,-299.67)
+>>> Start Event 714
+>>> End Event 714
+  A 10000 optical photons vertex has been generated at (625.413,254.434,-833.478)
+>>> Start Event 715
+>>> End Event 715
+  A 10000 optical photons vertex has been generated at (-284.721,371.971,921.596)
+>>> Start Event 716
+>>> End Event 716
+  A 10000 optical photons vertex has been generated at (-810.733,960.281,-142.661)
+>>> Start Event 717
+>>> End Event 717
+  A 10000 optical photons vertex has been generated at (-905.179,-628.419,-926.818)
+>>> Start Event 718
+>>> End Event 718
+  A 10000 optical photons vertex has been generated at (62.6395,676.742,-744.512)
+>>> Start Event 719
+>>> End Event 719
+  A 10000 optical photons vertex has been generated at (45.085,-553.343,109.629)
+>>> Start Event 720
+>>> End Event 720
+  A 10000 optical photons vertex has been generated at (-599.508,-261.261,-628.594)
+>>> Start Event 721
+>>> End Event 721
+  A 10000 optical photons vertex has been generated at (974.777,-849.622,299.093)
+>>> Start Event 722
+>>> End Event 722
+  A 10000 optical photons vertex has been generated at (-715.041,951.061,239.202)
+>>> Start Event 723
+>>> End Event 723
+  A 10000 optical photons vertex has been generated at (-816.346,-862.875,398.82)
+>>> Start Event 724
+>>> End Event 724
+  A 10000 optical photons vertex has been generated at (653.299,610.801,937.223)
+>>> Start Event 725
+>>> End Event 725
+  A 10000 optical photons vertex has been generated at (10.5703,-954.32,-869.932)
+>>> Start Event 726
+>>> End Event 726
+  A 10000 optical photons vertex has been generated at (-688.346,973.062,316.064)
+>>> Start Event 727
+>>> End Event 727
+  A 10000 optical photons vertex has been generated at (914.698,-103.617,-161.269)
+>>> Start Event 728
+>>> End Event 728
+  A 10000 optical photons vertex has been generated at (-767.938,152.521,-909.364)
+>>> Start Event 729
+>>> End Event 729
+  A 10000 optical photons vertex has been generated at (-772.725,-809.846,94.2032)
+>>> Start Event 730
+>>> End Event 730
+  A 10000 optical photons vertex has been generated at (-80.4968,76.8509,249.569)
+>>> Start Event 731
+>>> End Event 731
+  A 10000 optical photons vertex has been generated at (798.868,305.667,373.087)
+>>> Start Event 732
+>>> End Event 732
+  A 10000 optical photons vertex has been generated at (-216.737,774.989,610.063)
+>>> Start Event 733
+>>> End Event 733
+  A 10000 optical photons vertex has been generated at (733.171,-564.851,278.721)
+>>> Start Event 734
+>>> End Event 734
+  A 10000 optical photons vertex has been generated at (992.832,-246.384,686.098)
+>>> Start Event 735
+>>> End Event 735
+  A 10000 optical photons vertex has been generated at (-60.2336,-140.396,541.604)
+>>> Start Event 736
+>>> End Event 736
+  A 10000 optical photons vertex has been generated at (-588.639,326.831,234.433)
+>>> Start Event 737
+>>> End Event 737
+  A 10000 optical photons vertex has been generated at (-906.903,-958.014,-155.347)
+>>> Start Event 738
+>>> End Event 738
+  A 10000 optical photons vertex has been generated at (277.728,-576.982,144.425)
+>>> Start Event 739
+>>> End Event 739
+  A 10000 optical photons vertex has been generated at (-379.443,482.947,-809.277)
+>>> Start Event 740
+>>> End Event 740
+  A 10000 optical photons vertex has been generated at (857.448,-975.526,-702.331)
+>>> Start Event 741
+>>> End Event 741
+  A 10000 optical photons vertex has been generated at (404.311,-834.605,-174.271)
+>>> Start Event 742
+>>> End Event 742
+  A 10000 optical photons vertex has been generated at (-832.569,610.159,401.404)
+>>> Start Event 743
+>>> End Event 743
+  A 10000 optical photons vertex has been generated at (950.363,-350.562,473.905)
+>>> Start Event 744
+>>> End Event 744
+  A 10000 optical photons vertex has been generated at (-460.209,591.289,-446.394)
+>>> Start Event 745
+>>> End Event 745
+  A 10000 optical photons vertex has been generated at (967.733,361.964,-480.813)
+>>> Start Event 746
+>>> End Event 746
+  A 10000 optical photons vertex has been generated at (890.01,-921.91,815.652)
+>>> Start Event 747
+>>> End Event 747
+  A 10000 optical photons vertex has been generated at (-491.387,3.28083,-35.7476)
+>>> Start Event 748
+>>> End Event 748
+  A 10000 optical photons vertex has been generated at (-545.209,-68.9304,668.42)
+>>> Start Event 749
+>>> End Event 749
+  A 10000 optical photons vertex has been generated at (-150.838,-301.712,170.323)
+>>> Start Event 750
+>>> End Event 750
+  A 10000 optical photons vertex has been generated at (271.571,-240.06,103.824)
+>>> Start Event 751
+>>> End Event 751
+  A 10000 optical photons vertex has been generated at (-683.719,769.049,-447.342)
+>>> Start Event 752
+>>> End Event 752
+  A 10000 optical photons vertex has been generated at (-764.157,-908.097,-2.74806)
+>>> Start Event 753
+>>> End Event 753
+  A 10000 optical photons vertex has been generated at (786.665,-547.736,390.483)
+>>> Start Event 754
+>>> End Event 754
+  A 10000 optical photons vertex has been generated at (70.2277,123.599,-863.767)
+>>> Start Event 755
+>>> End Event 755
+  A 10000 optical photons vertex has been generated at (-726.2,-392.506,-228.185)
+>>> Start Event 756
+>>> End Event 756
+  A 10000 optical photons vertex has been generated at (729.799,-693.121,-621.296)
+>>> Start Event 757
+>>> End Event 757
+  A 10000 optical photons vertex has been generated at (120.813,-413.518,28.6791)
+>>> Start Event 758
+>>> End Event 758
+  A 10000 optical photons vertex has been generated at (-892.939,-668.261,145.372)
+>>> Start Event 759
+>>> End Event 759
+  A 10000 optical photons vertex has been generated at (864.359,821.373,-602.026)
+>>> Start Event 760
+>>> End Event 760
+  A 10000 optical photons vertex has been generated at (670.387,484.865,-987.396)
+>>> Start Event 761
+>>> End Event 761
+  A 10000 optical photons vertex has been generated at (801.694,-341.231,-152.862)
+>>> Start Event 762
+>>> End Event 762
+  A 10000 optical photons vertex has been generated at (-550.046,949.195,-675.022)
+>>> Start Event 763
+>>> End Event 763
+  A 10000 optical photons vertex has been generated at (-517.713,-1.4515,-708.177)
+>>> Start Event 764
+>>> End Event 764
+  A 10000 optical photons vertex has been generated at (-70.5173,759.614,487.306)
+>>> Start Event 765
+>>> End Event 765
+  A 10000 optical photons vertex has been generated at (93.9586,411.068,-316.021)
+>>> Start Event 766
+>>> End Event 766
+  A 10000 optical photons vertex has been generated at (634.221,-78.2632,69.6186)
+>>> Start Event 767
+>>> End Event 767
+  A 10000 optical photons vertex has been generated at (905.37,-485.181,-477.958)
+>>> Start Event 768
+>>> End Event 768
+  A 10000 optical photons vertex has been generated at (423.848,-220.909,-490.678)
+>>> Start Event 769
+>>> End Event 769
+  A 10000 optical photons vertex has been generated at (966.577,-834.905,-385.038)
+>>> Start Event 770
+>>> End Event 770
+  A 10000 optical photons vertex has been generated at (906.033,-244.064,582.352)
+>>> Start Event 771
+>>> End Event 771
+  A 10000 optical photons vertex has been generated at (-312.833,-489.501,-978.736)
+>>> Start Event 772
+>>> End Event 772
+  A 10000 optical photons vertex has been generated at (-433.101,-350.658,564.747)
+>>> Start Event 773
+>>> End Event 773
+  A 10000 optical photons vertex has been generated at (470.646,-954.593,57.8545)
+>>> Start Event 774
+>>> End Event 774
+  A 10000 optical photons vertex has been generated at (-99.8405,431.447,792.548)
+>>> Start Event 775
+>>> End Event 775
+  A 10000 optical photons vertex has been generated at (591.001,-382.386,973.909)
+>>> Start Event 776
+>>> End Event 776
+  A 10000 optical photons vertex has been generated at (168.146,-726.483,541.638)
+>>> Start Event 777
+>>> End Event 777
+  A 10000 optical photons vertex has been generated at (-83.8233,-299.056,449.785)
+>>> Start Event 778
+>>> End Event 778
+  A 10000 optical photons vertex has been generated at (-132.025,-29.3796,-934.928)
+>>> Start Event 779
+>>> End Event 779
+  A 10000 optical photons vertex has been generated at (-306.094,-476.91,-655.26)
+>>> Start Event 780
+>>> End Event 780
+  A 10000 optical photons vertex has been generated at (275.608,-338.656,209.356)
+>>> Start Event 781
+>>> End Event 781
+  A 10000 optical photons vertex has been generated at (-494.453,-345.183,229.188)
+>>> Start Event 782
+>>> End Event 782
+  A 10000 optical photons vertex has been generated at (-220.151,-296.749,472.782)
+>>> Start Event 783
+>>> End Event 783
+  A 10000 optical photons vertex has been generated at (765.526,-606.587,678.758)
+>>> Start Event 784
+>>> End Event 784
+  A 10000 optical photons vertex has been generated at (875.337,597.782,836.962)
+>>> Start Event 785
+>>> End Event 785
+  A 10000 optical photons vertex has been generated at (-842.416,574.088,820.858)
+>>> Start Event 786
+>>> End Event 786
+  A 10000 optical photons vertex has been generated at (563.138,245.807,468.97)
+>>> Start Event 787
+>>> End Event 787
+  A 10000 optical photons vertex has been generated at (67.6388,-407.884,-850.895)
+>>> Start Event 788
+>>> End Event 788
+  A 10000 optical photons vertex has been generated at (514.545,-437.641,804.239)
+>>> Start Event 789
+>>> End Event 789
+  A 10000 optical photons vertex has been generated at (58.3838,-544.583,891.672)
+>>> Start Event 790
+>>> End Event 790
+  A 10000 optical photons vertex has been generated at (722.514,-810.737,340.059)
+>>> Start Event 791
+>>> End Event 791
+  A 10000 optical photons vertex has been generated at (-826.6,-847.577,-211.638)
+>>> Start Event 792
+>>> End Event 792
+  A 10000 optical photons vertex has been generated at (-651.678,-342.809,-97.621)
+>>> Start Event 793
+>>> End Event 793
+  A 10000 optical photons vertex has been generated at (292.907,-648.454,326.345)
+>>> Start Event 794
+>>> End Event 794
+  A 10000 optical photons vertex has been generated at (-3.98889,466.841,-326.108)
+>>> Start Event 795
+>>> End Event 795
+  A 10000 optical photons vertex has been generated at (-481.583,914.301,957.455)
+>>> Start Event 796
+>>> End Event 796
+  A 10000 optical photons vertex has been generated at (150.096,-777.199,-379.879)
+>>> Start Event 797
+>>> End Event 797
+  A 10000 optical photons vertex has been generated at (727.461,234.745,-975.242)
+>>> Start Event 798
+>>> End Event 798
+  A 10000 optical photons vertex has been generated at (863.668,-343.442,699.88)
+>>> Start Event 799
+>>> End Event 799
+  A 10000 optical photons vertex has been generated at (68.4742,302.225,152.235)
+>>> Start Event 800
+>>> End Event 800
+  A 10000 optical photons vertex has been generated at (645.924,467.432,-316.503)
+>>> Start Event 801
+>>> End Event 801
+  A 10000 optical photons vertex has been generated at (636.212,554.106,106.725)
+>>> Start Event 802
+>>> End Event 802
+  A 10000 optical photons vertex has been generated at (791.083,-549.598,-678.15)
+>>> Start Event 803
+>>> End Event 803
+  A 10000 optical photons vertex has been generated at (-59.8022,-631.427,904.294)
+>>> Start Event 804
+>>> End Event 804
+  A 10000 optical photons vertex has been generated at (-54.6232,790.944,-272.578)
+>>> Start Event 805
+>>> End Event 805
+  A 10000 optical photons vertex has been generated at (-614.627,965.861,297.879)
+>>> Start Event 806
+>>> End Event 806
+  A 10000 optical photons vertex has been generated at (386.214,496.18,-224.827)
+>>> Start Event 807
+>>> End Event 807
+  A 10000 optical photons vertex has been generated at (992.194,438.375,-537.808)
+>>> Start Event 808
+>>> End Event 808
+  A 10000 optical photons vertex has been generated at (329.938,-103.578,159.465)
+>>> Start Event 809
+>>> End Event 809
+  A 10000 optical photons vertex has been generated at (703.407,862.468,-595.832)
+>>> Start Event 810
+>>> End Event 810
+  A 10000 optical photons vertex has been generated at (-348.911,-330.029,-852.243)
+>>> Start Event 811
+>>> End Event 811
+  A 10000 optical photons vertex has been generated at (347.495,933.187,-566.683)
+>>> Start Event 812
+>>> End Event 812
+  A 10000 optical photons vertex has been generated at (-342.468,-395.311,-301.765)
+>>> Start Event 813
+>>> End Event 813
+  A 10000 optical photons vertex has been generated at (21.8245,465.498,-803.335)
+>>> Start Event 814
+>>> End Event 814
+  A 10000 optical photons vertex has been generated at (-547.382,-38.363,126.858)
+>>> Start Event 815
+>>> End Event 815
+  A 10000 optical photons vertex has been generated at (-231.918,337.807,-868.356)
+>>> Start Event 816
+>>> End Event 816
+  A 10000 optical photons vertex has been generated at (-93.1484,-119.292,352.402)
+>>> Start Event 817
+>>> End Event 817
+  A 10000 optical photons vertex has been generated at (-813.945,515.75,603.66)
+>>> Start Event 818
+>>> End Event 818
+  A 10000 optical photons vertex has been generated at (-393.887,896.562,584.357)
+>>> Start Event 819
+>>> End Event 819
+  A 10000 optical photons vertex has been generated at (-781.328,710.828,495.805)
+>>> Start Event 820
+>>> End Event 820
+  A 10000 optical photons vertex has been generated at (-468.907,-766.472,-744.328)
+>>> Start Event 821
+>>> End Event 821
+  A 10000 optical photons vertex has been generated at (-963.841,-723.655,-722.555)
+>>> Start Event 822
+>>> End Event 822
+  A 10000 optical photons vertex has been generated at (391.768,330.146,894.484)
+>>> Start Event 823
+>>> End Event 823
+  A 10000 optical photons vertex has been generated at (166.414,170.184,-666.065)
+>>> Start Event 824
+>>> End Event 824
+  A 10000 optical photons vertex has been generated at (-336.73,610.941,980.752)
+>>> Start Event 825
+>>> End Event 825
+  A 10000 optical photons vertex has been generated at (-924.839,-152.164,751.554)
+>>> Start Event 826
+>>> End Event 826
+  A 10000 optical photons vertex has been generated at (-125.188,259.398,913.11)
+>>> Start Event 827
+>>> End Event 827
+  A 10000 optical photons vertex has been generated at (193.692,738.42,-850.962)
+>>> Start Event 828
+>>> End Event 828
+  A 10000 optical photons vertex has been generated at (-334.737,101.213,800.356)
+>>> Start Event 829
+>>> End Event 829
+  A 10000 optical photons vertex has been generated at (579.789,-601.184,177.033)
+>>> Start Event 830
+>>> End Event 830
+  A 10000 optical photons vertex has been generated at (-517.498,-706.091,-595.118)
+>>> Start Event 831
+>>> End Event 831
+  A 10000 optical photons vertex has been generated at (-964.934,101.314,306.7)
+>>> Start Event 832
+>>> End Event 832
+  A 10000 optical photons vertex has been generated at (316.196,-399.36,953.168)
+>>> Start Event 833
+>>> End Event 833
+  A 10000 optical photons vertex has been generated at (-403.003,453.795,11.3031)
+>>> Start Event 834
+>>> End Event 834
+  A 10000 optical photons vertex has been generated at (166.567,609.52,153.415)
+>>> Start Event 835
+>>> End Event 835
+  A 10000 optical photons vertex has been generated at (975.285,-321.493,81.5633)
+>>> Start Event 836
+>>> End Event 836
+  A 10000 optical photons vertex has been generated at (805.112,811.362,477.866)
+>>> Start Event 837
+>>> End Event 837
+  A 10000 optical photons vertex has been generated at (-392.819,449.125,335.361)
+>>> Start Event 838
+>>> End Event 838
+  A 10000 optical photons vertex has been generated at (-57.676,891.144,-889.045)
+>>> Start Event 839
+>>> End Event 839
+  A 10000 optical photons vertex has been generated at (33.7192,465.303,25.9579)
+>>> Start Event 840
+>>> End Event 840
+  A 10000 optical photons vertex has been generated at (175.011,-652.026,-876.245)
+>>> Start Event 841
+>>> End Event 841
+  A 10000 optical photons vertex has been generated at (493.805,-337.706,-649.2)
+>>> Start Event 842
+>>> End Event 842
+  A 10000 optical photons vertex has been generated at (-779.672,-84.9566,-694.634)
+>>> Start Event 843
+>>> End Event 843
+  A 10000 optical photons vertex has been generated at (807.88,388.983,122.269)
+>>> Start Event 844
+>>> End Event 844
+  A 10000 optical photons vertex has been generated at (-988.114,-944.623,668.278)
+>>> Start Event 845
+>>> End Event 845
+  A 10000 optical photons vertex has been generated at (-442.566,-657.329,-222.499)
+>>> Start Event 846
+>>> End Event 846
+  A 10000 optical photons vertex has been generated at (949.313,-990.916,58.9263)
+>>> Start Event 847
+>>> End Event 847
+  A 10000 optical photons vertex has been generated at (-113.357,533.916,-213.055)
+>>> Start Event 848
+>>> End Event 848
+  A 10000 optical photons vertex has been generated at (34.3472,265.402,239.633)
+>>> Start Event 849
+>>> End Event 849
+  A 10000 optical photons vertex has been generated at (427.044,872.049,-278.59)
+>>> Start Event 850
+>>> End Event 850
+  A 10000 optical photons vertex has been generated at (275.395,-596.458,188.961)
+>>> Start Event 851
+>>> End Event 851
+  A 10000 optical photons vertex has been generated at (50.6364,684.024,474.678)
+>>> Start Event 852
+>>> End Event 852
+  A 10000 optical photons vertex has been generated at (-236.91,522.321,-974.336)
+>>> Start Event 853
+>>> End Event 853
+  A 10000 optical photons vertex has been generated at (-213.776,942.009,-898.057)
+>>> Start Event 854
+>>> End Event 854
+  A 10000 optical photons vertex has been generated at (-0.928553,255.884,-211.731)
+>>> Start Event 855
+>>> End Event 855
+  A 10000 optical photons vertex has been generated at (-7.22777,473.312,-968.155)
+>>> Start Event 856
+>>> End Event 856
+  A 10000 optical photons vertex has been generated at (985.45,-698.319,-705.201)
+>>> Start Event 857
+>>> End Event 857
+  A 10000 optical photons vertex has been generated at (-124.472,653.428,225.052)
+>>> Start Event 858
+>>> End Event 858
+  A 10000 optical photons vertex has been generated at (433.237,134.235,340.238)
+>>> Start Event 859
+>>> End Event 859
+  A 10000 optical photons vertex has been generated at (942.508,819.53,-571.86)
+>>> Start Event 860
+>>> End Event 860
+  A 10000 optical photons vertex has been generated at (276.965,-208.962,-740.323)
+>>> Start Event 861
+>>> End Event 861
+  A 10000 optical photons vertex has been generated at (275.818,-590.976,516.661)
+>>> Start Event 862
+>>> End Event 862
+  A 10000 optical photons vertex has been generated at (651.055,-12.7208,-396.524)
+>>> Start Event 863
+>>> End Event 863
+  A 10000 optical photons vertex has been generated at (886.901,-752.671,415.489)
+>>> Start Event 864
+>>> End Event 864
+  A 10000 optical photons vertex has been generated at (253.072,794.138,782.941)
+>>> Start Event 865
+>>> End Event 865
+  A 10000 optical photons vertex has been generated at (-427.363,-44.7081,-989.764)
+>>> Start Event 866
+>>> End Event 866
+  A 10000 optical photons vertex has been generated at (-860.183,-153.073,383.652)
+>>> Start Event 867
+>>> End Event 867
+  A 10000 optical photons vertex has been generated at (194.27,731.969,-94.5459)
+>>> Start Event 868
+>>> End Event 868
+  A 10000 optical photons vertex has been generated at (278.307,718.47,-479.45)
+>>> Start Event 869
+>>> End Event 869
+  A 10000 optical photons vertex has been generated at (-207.241,509.92,-184.527)
+>>> Start Event 870
+>>> End Event 870
+  A 10000 optical photons vertex has been generated at (931.445,39.6141,165.584)
+>>> Start Event 871
+>>> End Event 871
+  A 10000 optical photons vertex has been generated at (164.946,780.716,713.614)
+>>> Start Event 872
+>>> End Event 872
+  A 10000 optical photons vertex has been generated at (729.19,280.714,472.899)
+>>> Start Event 873
+>>> End Event 873
+  A 10000 optical photons vertex has been generated at (33.0701,-981.401,276.108)
+>>> Start Event 874
+>>> End Event 874
+  A 10000 optical photons vertex has been generated at (848.892,-659.758,613.726)
+>>> Start Event 875
+>>> End Event 875
+  A 10000 optical photons vertex has been generated at (-101.035,-712.129,-497.908)
+>>> Start Event 876
+>>> End Event 876
+  A 10000 optical photons vertex has been generated at (879.9,-196.862,-908.904)
+>>> Start Event 877
+>>> End Event 877
+  A 10000 optical photons vertex has been generated at (-155.133,494.548,375.042)
+>>> Start Event 878
+>>> End Event 878
+  A 10000 optical photons vertex has been generated at (771.285,-983.559,445.226)
+>>> Start Event 879
+>>> End Event 879
+  A 10000 optical photons vertex has been generated at (-862.939,722.108,-382.06)
+>>> Start Event 880
+>>> End Event 880
+  A 10000 optical photons vertex has been generated at (851.929,190.318,-464.954)
+>>> Start Event 881
+>>> End Event 881
+  A 10000 optical photons vertex has been generated at (-294.282,-537.505,-803.73)
+>>> Start Event 882
+>>> End Event 882
+  A 10000 optical photons vertex has been generated at (989.427,255.759,805.6)
+>>> Start Event 883
+>>> End Event 883
+  A 10000 optical photons vertex has been generated at (950.985,-232.5,-736.827)
+>>> Start Event 884
+>>> End Event 884
+  A 10000 optical photons vertex has been generated at (-545.962,967.771,515.267)
+>>> Start Event 885
+>>> End Event 885
+  A 10000 optical photons vertex has been generated at (-82.4687,482.607,589.323)
+>>> Start Event 886
+>>> End Event 886
+  A 10000 optical photons vertex has been generated at (-799,-687.036,804.613)
+>>> Start Event 887
+>>> End Event 887
+  A 10000 optical photons vertex has been generated at (-698.679,-245.204,-857.578)
+>>> Start Event 888
+>>> End Event 888
+  A 10000 optical photons vertex has been generated at (37.1778,-821.44,-561.939)
+>>> Start Event 889
+>>> End Event 889
+  A 10000 optical photons vertex has been generated at (-397.315,-986.388,-754.586)
+>>> Start Event 890
+>>> End Event 890
+  A 10000 optical photons vertex has been generated at (584.822,190.891,679.489)
+>>> Start Event 891
+>>> End Event 891
+  A 10000 optical photons vertex has been generated at (755.181,-369.31,776.539)
+>>> Start Event 892
+>>> End Event 892
+  A 10000 optical photons vertex has been generated at (774.908,299.092,-814.95)
+>>> Start Event 893
+>>> End Event 893
+  A 10000 optical photons vertex has been generated at (-857.755,-512.39,-591.75)
+>>> Start Event 894
+>>> End Event 894
+  A 10000 optical photons vertex has been generated at (745.104,-270.648,687.288)
+>>> Start Event 895
+>>> End Event 895
+  A 10000 optical photons vertex has been generated at (694.851,-849.004,-147.84)
+>>> Start Event 896
+>>> End Event 896
+  A 10000 optical photons vertex has been generated at (-124.836,-913.084,-846.562)
+>>> Start Event 897
+>>> End Event 897
+  A 10000 optical photons vertex has been generated at (828.064,-479.746,601.998)
+>>> Start Event 898
+>>> End Event 898
+  A 10000 optical photons vertex has been generated at (345.886,-976.752,-92.8606)
+>>> Start Event 899
+>>> End Event 899
+  A 10000 optical photons vertex has been generated at (-976.132,976.413,-386.412)
+>>> Start Event 900
+>>> End Event 900
+  A 10000 optical photons vertex has been generated at (-237.899,-868.51,551.125)
+>>> Start Event 901
+>>> End Event 901
+  A 10000 optical photons vertex has been generated at (801.218,97.958,868.474)
+>>> Start Event 902
+>>> End Event 902
+  A 10000 optical photons vertex has been generated at (-764.718,837.684,281.702)
+>>> Start Event 903
+>>> End Event 903
+  A 10000 optical photons vertex has been generated at (808.931,393.808,-641.574)
+>>> Start Event 904
+>>> End Event 904
+  A 10000 optical photons vertex has been generated at (334.889,-925.542,-136.781)
+>>> Start Event 905
+>>> End Event 905
+  A 10000 optical photons vertex has been generated at (894.906,286.814,-194.053)
+>>> Start Event 906
+>>> End Event 906
+  A 10000 optical photons vertex has been generated at (614.922,143.255,955.123)
+>>> Start Event 907
+>>> End Event 907
+  A 10000 optical photons vertex has been generated at (-304.196,-538.207,-426.103)
+>>> Start Event 908
+>>> End Event 908
+  A 10000 optical photons vertex has been generated at (854.851,58.4785,-633.253)
+>>> Start Event 909
+>>> End Event 909
+  A 10000 optical photons vertex has been generated at (535.588,-34.4048,65.4418)
+>>> Start Event 910
+>>> End Event 910
+  A 10000 optical photons vertex has been generated at (865.041,311.171,-593.455)
+>>> Start Event 911
+>>> End Event 911
+  A 10000 optical photons vertex has been generated at (-471.082,-116.471,-687.291)
+>>> Start Event 912
+>>> End Event 912
+  A 10000 optical photons vertex has been generated at (-14.1859,-266.405,420.44)
+>>> Start Event 913
+>>> End Event 913
+  A 10000 optical photons vertex has been generated at (787.971,-386.317,536.133)
+>>> Start Event 914
+>>> End Event 914
+  A 10000 optical photons vertex has been generated at (-125.155,-173.6,377.893)
+>>> Start Event 915
+>>> End Event 915
+  A 10000 optical photons vertex has been generated at (-387.279,252.13,-697.807)
+>>> Start Event 916
+>>> End Event 916
+  A 10000 optical photons vertex has been generated at (-800.231,-632.322,-487.897)
+>>> Start Event 917
+>>> End Event 917
+  A 10000 optical photons vertex has been generated at (-706.522,-733.659,-889.575)
+>>> Start Event 918
+>>> End Event 918
+  A 10000 optical photons vertex has been generated at (951.482,-747.692,-594.076)
+>>> Start Event 919
+>>> End Event 919
+  A 10000 optical photons vertex has been generated at (699.608,-515.522,312.122)
+>>> Start Event 920
+>>> End Event 920
+  A 10000 optical photons vertex has been generated at (-53.533,-906.842,487.771)
+>>> Start Event 921
+>>> End Event 921
+  A 10000 optical photons vertex has been generated at (412.086,-916.795,-872.722)
+>>> Start Event 922
+>>> End Event 922
+  A 10000 optical photons vertex has been generated at (360.198,877.012,989.615)
+>>> Start Event 923
+>>> End Event 923
+  A 10000 optical photons vertex has been generated at (-280.053,215.649,161.1)
+>>> Start Event 924
+>>> End Event 924
+  A 10000 optical photons vertex has been generated at (-80.769,320.296,900.832)
+>>> Start Event 925
+>>> End Event 925
+  A 10000 optical photons vertex has been generated at (-989.889,-36.6146,-630.057)
+>>> Start Event 926
+>>> End Event 926
+  A 10000 optical photons vertex has been generated at (98.5131,135.075,798.856)
+>>> Start Event 927
+>>> End Event 927
+  A 10000 optical photons vertex has been generated at (-683.96,902.443,848.497)
+>>> Start Event 928
+>>> End Event 928
+  A 10000 optical photons vertex has been generated at (127.652,-551.706,279.45)
+>>> Start Event 929
+>>> End Event 929
+  A 10000 optical photons vertex has been generated at (-234.187,-548.515,-506.463)
+>>> Start Event 930
+>>> End Event 930
+  A 10000 optical photons vertex has been generated at (414.299,-214.845,-641.473)
+>>> Start Event 931
+>>> End Event 931
+  A 10000 optical photons vertex has been generated at (-242.829,-780.761,-366.586)
+>>> Start Event 932
+>>> End Event 932
+  A 10000 optical photons vertex has been generated at (287.719,751.273,222.439)
+>>> Start Event 933
+>>> End Event 933
+  A 10000 optical photons vertex has been generated at (-276.343,162.911,463.405)
+>>> Start Event 934
+>>> End Event 934
+  A 10000 optical photons vertex has been generated at (592.441,198.946,679.705)
+>>> Start Event 935
+>>> End Event 935
+  A 10000 optical photons vertex has been generated at (-475.585,-263.4,-211.987)
+>>> Start Event 936
+>>> End Event 936
+  A 10000 optical photons vertex has been generated at (266.624,858.539,-733.343)
+>>> Start Event 937
+>>> End Event 937
+  A 10000 optical photons vertex has been generated at (-575.502,954.058,915.517)
+>>> Start Event 938
+>>> End Event 938
+  A 10000 optical photons vertex has been generated at (-808.275,696.676,-309.84)
+>>> Start Event 939
+>>> End Event 939
+  A 10000 optical photons vertex has been generated at (263.197,-252.688,-592.554)
+>>> Start Event 940
+>>> End Event 940
+  A 10000 optical photons vertex has been generated at (-839.076,348.367,-252.609)
+>>> Start Event 941
+>>> End Event 941
+  A 10000 optical photons vertex has been generated at (-625.973,-943.164,460.873)
+>>> Start Event 942
+>>> End Event 942
+  A 10000 optical photons vertex has been generated at (472.086,-330.478,545.779)
+>>> Start Event 943
+>>> End Event 943
+  A 10000 optical photons vertex has been generated at (840.039,-111.41,124.663)
+>>> Start Event 944
+>>> End Event 944
+  A 10000 optical photons vertex has been generated at (-157.967,-125.825,-665.238)
+>>> Start Event 945
+>>> End Event 945
+  A 10000 optical photons vertex has been generated at (-856.447,223.926,893.482)
+>>> Start Event 946
+>>> End Event 946
+  A 10000 optical photons vertex has been generated at (-53.414,18.6271,0.477446)
+>>> Start Event 947
+>>> End Event 947
+  A 10000 optical photons vertex has been generated at (-89.3651,811.389,-371.529)
+>>> Start Event 948
+>>> End Event 948
+  A 10000 optical photons vertex has been generated at (735.509,-46.5802,-104.795)
+>>> Start Event 949
+>>> End Event 949
+  A 10000 optical photons vertex has been generated at (-0.931787,563.535,289.016)
+>>> Start Event 950
+>>> End Event 950
+  A 10000 optical photons vertex has been generated at (976.809,517.619,-94.393)
+>>> Start Event 951
+>>> End Event 951
+  A 10000 optical photons vertex has been generated at (908.569,862.005,694.824)
+>>> Start Event 952
+>>> End Event 952
+  A 10000 optical photons vertex has been generated at (-876.438,211.477,-427.181)
+>>> Start Event 953
+>>> End Event 953
+  A 10000 optical photons vertex has been generated at (-314.767,283.046,-954.26)
+>>> Start Event 954
+>>> End Event 954
+  A 10000 optical photons vertex has been generated at (-90.179,-162.118,-820.263)
+>>> Start Event 955
+>>> End Event 955
+  A 10000 optical photons vertex has been generated at (-985.487,588.45,-228.456)
+>>> Start Event 956
+>>> End Event 956
+  A 10000 optical photons vertex has been generated at (-311.711,341.085,422.954)
+>>> Start Event 957
+>>> End Event 957
+  A 10000 optical photons vertex has been generated at (-850.861,741.662,101.186)
+>>> Start Event 958
+>>> End Event 958
+  A 10000 optical photons vertex has been generated at (950.341,-314.091,515.489)
+>>> Start Event 959
+>>> End Event 959
+  A 10000 optical photons vertex has been generated at (872.216,-939.953,9.12717)
+>>> Start Event 960
+>>> End Event 960
+  A 10000 optical photons vertex has been generated at (-222.937,-608.096,906.549)
+>>> Start Event 961
+>>> End Event 961
+  A 10000 optical photons vertex has been generated at (-842.038,-363.191,-177.526)
+>>> Start Event 962
+>>> End Event 962
+  A 10000 optical photons vertex has been generated at (690.721,-854.955,-180.459)
+>>> Start Event 963
+>>> End Event 963
+  A 10000 optical photons vertex has been generated at (740.027,-411.405,-698.199)
+>>> Start Event 964
+>>> End Event 964
+  A 10000 optical photons vertex has been generated at (456.009,993.056,139.184)
+>>> Start Event 965
+>>> End Event 965
+  A 10000 optical photons vertex has been generated at (-912.568,118.587,-70.5677)
+>>> Start Event 966
+>>> End Event 966
+  A 10000 optical photons vertex has been generated at (125.036,-942.766,-798.445)
+>>> Start Event 967
+>>> End Event 967
+  A 10000 optical photons vertex has been generated at (-301.926,-714.232,-531.127)
+>>> Start Event 968
+>>> End Event 968
+  A 10000 optical photons vertex has been generated at (780.445,175.9,388.194)
+>>> Start Event 969
+>>> End Event 969
+  A 10000 optical photons vertex has been generated at (-414.958,813.25,786.199)
+>>> Start Event 970
+>>> End Event 970
+  A 10000 optical photons vertex has been generated at (-72.0074,67.7681,-438.698)
+>>> Start Event 971
+>>> End Event 971
+  A 10000 optical photons vertex has been generated at (890.277,-483.777,-532.291)
+>>> Start Event 972
+>>> End Event 972
+  A 10000 optical photons vertex has been generated at (853.439,450.767,297.891)
+>>> Start Event 973
+>>> End Event 973
+  A 10000 optical photons vertex has been generated at (-232.379,-674.868,-382.634)
+>>> Start Event 974
+>>> End Event 974
+  A 10000 optical photons vertex has been generated at (-879.142,-655.683,780.475)
+>>> Start Event 975
+>>> End Event 975
+  A 10000 optical photons vertex has been generated at (-445.133,-376.282,49.1881)
+>>> Start Event 976
+>>> End Event 976
+  A 10000 optical photons vertex has been generated at (75.7672,-0.370229,-402.048)
+>>> Start Event 977
+>>> End Event 977
+  A 10000 optical photons vertex has been generated at (454.016,471.142,-821.103)
+>>> Start Event 978
+>>> End Event 978
+  A 10000 optical photons vertex has been generated at (-984.915,-675.735,-773.388)
+>>> Start Event 979
+>>> End Event 979
+  A 10000 optical photons vertex has been generated at (-107.133,-700.477,-417.979)
+>>> Start Event 980
+>>> End Event 980
+  A 10000 optical photons vertex has been generated at (56.8821,887.02,-962.867)
+>>> Start Event 981
+>>> End Event 981
+  A 10000 optical photons vertex has been generated at (785.037,-429.319,-241.224)
+>>> Start Event 982
+>>> End Event 982
+  A 10000 optical photons vertex has been generated at (295.783,-560.814,-531.94)
+>>> Start Event 983
+>>> End Event 983
+  A 10000 optical photons vertex has been generated at (-802.736,807.896,-211.958)
+>>> Start Event 984
+>>> End Event 984
+  A 10000 optical photons vertex has been generated at (-976.104,663.834,-658.39)
+>>> Start Event 985
+>>> End Event 985
+  A 10000 optical photons vertex has been generated at (232.996,-492.825,-223.167)
+>>> Start Event 986
+>>> End Event 986
+  A 10000 optical photons vertex has been generated at (-290.453,-451.5,-489.293)
+>>> Start Event 987
+>>> End Event 987
+  A 10000 optical photons vertex has been generated at (-944.583,774.334,-527.36)
+>>> Start Event 988
+>>> End Event 988
+  A 10000 optical photons vertex has been generated at (-580.247,-220.833,502.492)
+>>> Start Event 989
+>>> End Event 989
+  A 10000 optical photons vertex has been generated at (-958.766,407.08,544.003)
+>>> Start Event 990
+>>> End Event 990
+  A 10000 optical photons vertex has been generated at (-460.122,415.726,105.261)
+>>> Start Event 991
+>>> End Event 991
+  A 10000 optical photons vertex has been generated at (849.517,-978.077,318.288)
+>>> Start Event 992
+>>> End Event 992
+  A 10000 optical photons vertex has been generated at (596.742,422.227,823.494)
+>>> Start Event 993
+>>> End Event 993
+  A 10000 optical photons vertex has been generated at (-284.878,-650.342,-480.978)
+>>> Start Event 994
+>>> End Event 994
+  A 10000 optical photons vertex has been generated at (469.017,48.4939,-559.219)
+>>> Start Event 995
+>>> End Event 995
+  A 10000 optical photons vertex has been generated at (-872.415,972.914,-496.508)
+>>> Start Event 996
+>>> End Event 996
+  A 10000 optical photons vertex has been generated at (49.3449,434.562,800.731)
+>>> Start Event 997
+>>> End Event 997
+  A 10000 optical photons vertex has been generated at (296.449,-54.2318,-736.325)
+>>> Start Event 998
+>>> End Event 998
+  A 10000 optical photons vertex has been generated at (133.838,-865.173,-476.552)
+>>> Start Event 999
+>>> End Event 999

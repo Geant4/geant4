@@ -1,0 +1,115 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (30-Jun-2000)
+             Copyright : Geant4 Collaboration
+**********************************************
+SimpleBox is now made of Pb
+#
+# Macro file test06.in
+# for tests of basic e.m. processes in integral approach + new p.e. effect
+#   (G4PhotoAbsorption).
+#
+/run/verbose 2
+/run/initialize
+userDetector->Construct() start.
+physicsList->Construct() start.
+physicsList->setCut() start.
+Tst06PhysicsList::SetCuts:CutLength : 1 (mm)
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+Imsc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+IeIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+IeBrems:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 10 keV to 100 TeV in 100 bins. 
+
+Iannihil:  Total cross section from Heitler formula (2 photon annihilation).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+Imsc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+IhIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 50 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:  knock-on electron cross sections .
+          Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+      PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+/gun/direction 1 0 0
+#
+# gamma 500 MeV in Al
+#
+/mydet/SelectMaterial Al
+SimpleBox is now made of Al
+/gun/particle gamma
+/gun/energy 500 MeV
+/run/beamOn 10000
+Start closing geometry.
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=3533.04s Real=3999.68s Sys=105.95s
+#
+# electron 500 MeV in Air
+#
+/mydet/SelectMaterial Air
+SimpleBox is now made of Air
+/gun/particle e-
+/gun/energy 500 MeV
+/run/beamOn 10000
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=260.12s Real=265.77s Sys=2.42s
+#
+exit
+G4 kernel has come to Quit state.
+Deletion of G4 kernel class start.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManager is deleting.
