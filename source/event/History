@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2000-10-19 15:24:33 asaim Exp $
+$Id: History,v 1.12 2000-10-31 10:34:39 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Oct 31 2000, F.Lei
+  G4GeneralParticleSource:
+  G4GeneralParticleSourceMessenger: 
+ 	G4GeneralParticleSource is an alternative primary source
+	generator to G4ParticleGun. It has all the functions of 
+	G4ParticleGun plus many options for specifing the primary 
+	event particle and vertex.
+
+ - added  -I$(G4BASE)/global/HEPNumerics/include \
+      to GNUMakefile
+
 
 Oct 19 2000, M.Asai (tag event-V02-00-01)
   G4ParticleGun :  Add Set/GetParticleCharge methods for ions.

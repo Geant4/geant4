@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1999-10-04 18:58:33 johna Exp $
+# $Id: GNUmakefile,v 1.3 2000-10-31 10:34:39 flei Exp $
 # ------------------------------------------------------------
 # GNUmakefile for events library.  Makoto Asai, 5/9/95.
 # ------------------------------------------------------------
@@ -15,6 +15,7 @@ CPPFLAGS += \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
+            -I$(G4BASE)/global/HEPNumerics/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/tracking/include \
             -I$(G4BASE)/processes/management/include \
