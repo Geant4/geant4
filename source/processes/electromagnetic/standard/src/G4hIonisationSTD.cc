@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisationSTD.cc,v 1.13 2003-08-29 07:46:38 vnivanch Exp $
+// $Id: G4hIonisationSTD.cc,v 1.14 2003-09-15 10:49:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -110,9 +110,11 @@ void G4hIonisationSTD::InitialiseProcess()
 {
   SetSecondaryParticle(G4Electron::Electron());
 
+  G4double massFactor = 1.0;
+  if(theBaseParticle) massFactor = mass/proton_mass_c2;
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);
-  em->SetHighEnergyLimit(2.0*MeV);
+  em->SetHighEnergyLimit(2.0*MeV*massFactor);
 
   if(IsIntegral()) {
     flucModel = new G4BohrFluctuations();
@@ -124,7 +126,7 @@ void G4hIonisationSTD::InitialiseProcess()
 
   AddEmModel(1, em, flucModel);
   G4VEmModel* em1 = new G4BetheBlochModel();
-  em1->SetLowEnergyLimit(2.0*MeV);
+  em1->SetLowEnergyLimit(2.0*MeV*massFactor);
   em1->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(2, em1, flucModel);
 
@@ -141,6 +143,7 @@ const G4ParticleDefinition* G4hIonisationSTD::DefineBaseParticle(
   if(!isInitialised) InitialiseProcess();
   mass  = p->GetPDGMass();
   ratio = electron_mass_c2/mass;
+  G4cout << p->GetParticleName() << ": " << p << " " << theBaseParticle << G4endl;
   return theBaseParticle;
 }
 
