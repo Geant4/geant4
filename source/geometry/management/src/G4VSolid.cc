@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.9 2002-03-13 11:08:47 grichine Exp $
+// $Id: G4VSolid.cc,v 1.10 2002-03-13 11:19:30 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -113,7 +113,7 @@ void G4VSolid::CalculateClippedPolygonExtent(G4ThreeVectorList& pPolygon,
     for (i=0;i<noLeft;i++)
     {
       component = pPolygon[i].operator()(pAxis);
-      G4cout <<component<<"\t";
+      //   G4cout <<component<<"\t";
  
       if (component < pMin)  pMin = component;      
 // else 
