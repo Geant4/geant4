@@ -20,52 +20,44 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.2 2004-08-17 18:07:28 vnivanch Exp $
+// $Id: MuNuclearBuilder.hh,v 1.1 2004-08-17 18:07:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsList_h
-#define PhysicsList_h 1
+#ifndef MuNuclearBuilder_h
+#define MuNuclearBuilder_h 1
 
-#include "G4VModularPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-
-class PhysicsListMessenger;
-class G4VPhysicsConstructor;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class MuNuclearBuilder : public G4VPhysicsConstructor
 {
-  public:
-    PhysicsList();
-   ~PhysicsList();
+  public: 
+    MuNuclearBuilder(const G4String& name = "muNucl");
+   ~MuNuclearBuilder();
 
-    void ConstructParticle();
+  public: 
+    // This method is dummy for physics
+    void ConstructParticle() {};
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
     void ConstructProcess();
-    void AddPhysicsList(const G4String& name);
-
-    void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
-
-  private:
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
-    G4double currentDefaultCut;
-    
-    G4VPhysicsConstructor*  emPhysicsList;
-    G4VPhysicsConstructor*  muNuclPhysicsList;
-    G4String emName;
-
-    PhysicsListMessenger* pMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 

@@ -20,52 +20,47 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.2 2004-08-17 18:07:28 vnivanch Exp $
+//
+// $Id: MuNuclearBuilder.cc,v 1.1 2004-08-17 18:07:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+
+#include "MuNuclearBuilder.hh"
+
+#include "G4ParticleDefinition.hh"
+#include "G4MuonPlus.hh"
+#include "G4MuonMinus.hh"
+
+#include "G4ProcessManager.hh"
+#include "G4MuNuclearInteraction.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsList_h
-#define PhysicsList_h 1
-
-#include "G4VModularPhysicsList.hh"
-#include "globals.hh"
-
-class PhysicsListMessenger;
-class G4VPhysicsConstructor;
+MuNuclearBuilder::MuNuclearBuilder(const G4String& name)
+   :  G4VPhysicsConstructor(name)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+MuNuclearBuilder::~MuNuclearBuilder()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void MuNuclearBuilder::ConstructProcess()
 {
-  public:
-    PhysicsList();
-   ~PhysicsList();
+  // Add standard EM Processes for Muon
+  G4ParticleDefinition* particle = G4MuonPlus::MuonPlus();
+  G4ProcessManager* pmanager = particle->GetProcessManager();    
+  pmanager->AddProcess(new G4MuNuclearInteraction,-1,-1,4);       
 
-    void ConstructParticle();
-    void ConstructProcess();
-    void AddPhysicsList(const G4String& name);
+  particle = G4MuonMinus::MuonMinus();
+  pmanager = particle->GetProcessManager();    
 
-    void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
-
-  private:
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
-    G4double currentDefaultCut;
-    
-    G4VPhysicsConstructor*  emPhysicsList;
-    G4VPhysicsConstructor*  muNuclPhysicsList;
-    G4String emName;
-
-    PhysicsListMessenger* pMessenger;
-};
+  pmanager->AddProcess(new G4MuNuclearInteraction,-1,-1,4);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#endif
 
