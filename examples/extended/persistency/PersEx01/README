@@ -315,7 +315,7 @@ ROOT I/O adopter classes can be generated automatically with the
 GNUmakefiles provided in the $G4PEX_DIR/config directory.
 "make clean" will cleans up your directory.
 
-If you want to generate these file manually, type:
+If you want to generate these files manually, type:
 
-% $G4PEX_DIR/config/fadsrootio.pl rootio/Pers01CalorHit.rootio
+% $G4PEX_DIR/config/g4rootio.pl rootio/Pers01CalorHit.rootio
 
