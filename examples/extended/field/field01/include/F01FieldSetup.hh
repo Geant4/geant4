@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01FieldSetup.hh,v 1.1 2003-11-25 18:06:22 japost Exp $
+// $Id: F01FieldSetup.hh,v 1.2 2003-12-01 15:47:52 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,7 +50,7 @@ class G4Mag_UsualEqRhs;
 class G4MagIntegratorStepper;
 class F01FieldMessenger;
 
-class F01FieldSetup: public G4MagneticField
+class F01FieldSetup
 {
 public:
   F01FieldSetup(G4ThreeVector) ;  //  The value of the field
@@ -58,8 +58,6 @@ public:
 
  ~F01FieldSetup() ;  
       
-  void  GetFieldValue( const  G4double*,
-			      G4double* ) const {}
   
   void SetStepperType( G4int i) { fStepperType = i ; }
 
