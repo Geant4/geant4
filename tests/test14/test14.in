@@ -4,10 +4,8 @@
 #
 /control/verbose 2
 /run/verbose 2
-#
 /run/initialize
-
-/calor/setAbsMat Aluminium
+#
 /calor/setAbsThick 10 cm  
 /calor/setAbsRad 12.0 cm
 /calor/update
@@ -18,13 +16,16 @@
 /lowenergy/cutE .01 micrometer
 /lowenergy/secphotcut 10 eV
 /run/initialize
+/process/list
+/particle/list
 /run/particle/dumpCutValues
 #
-#gun/direction 1 0 0
 /gun/direction 0 0 1
 #
+/calor/setAbsMat Aluminium
+#=========================
 /gun/particle gamma
-#
+#------------------
 /gun/energy 10 keV
 /tracking/verbose 2
 /run/beamOn 1
@@ -50,28 +51,25 @@
 /run/beamOn 1000
 #
 /gun/particle e-
-#
+#---------------
 /gun/energy 10 keV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
-#/gun/particle e-
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
-#/gun/particle e-
 /gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
-#/gun/particle e-
 /gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
@@ -79,12 +77,10 @@
 /run/beamOn 1000
 #
 /calor/setAbsMat Lead      
-#
-#
-/gun/direction 1 0 0
+#====================
 #
 /gun/particle gamma
-#
+#------------------
 /gun/energy 10 keV
 /tracking/verbose 2
 /run/beamOn 1
@@ -110,28 +106,81 @@
 /run/beamOn 1000
 #
 /gun/particle e-
-#
+#---------------
 /gun/energy 10 keV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
-#/gun/particle e-
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
-#/gun/particle e-
 /gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
-#/gun/particle e-
+/gun/energy 300 eV
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+#
+/calor/setAbsMat Water
+#======================
+#
+/gun/particle gamma
+#------------------
+/gun/energy 10 keV
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+# 
+/gun/energy 2 keV
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+/gun/energy 600 eV
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+/gun/energy 300 eV
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+/gun/particle e-
+#-----------------
+/gun/energy 10 keV
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+/gun/energy 2 keV
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+/gun/energy 600 eV
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
 /gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
