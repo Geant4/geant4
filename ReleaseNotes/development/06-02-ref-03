@@ -1,0 +1,240 @@
+
+                       geant4-06-02-ref-03
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Added ability to compute the geometrical volume of a given solid
+    or combination of boolean solids (estimation).
+  o Added automatic reflection for visualization attributes, biasing
+    weights and regions associated to the logical volume
+  o Added notification mechanism for volumes, solids, and regions
+    registration/de-registration in the stores.
+  o Changes in the angle distribution for multiple-scattering
+    (approximately step independent distribution).
+  o Extended G4BraggModel below 1 keV.
+  o Added computation of 'mass' of a geometry tree through ASCIITree.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+event                                            events-V06-02-02
+-----
+- Made G4PrimaryTransformer a base class.
+
+geometry/management                              geommng-V06-02-01
+-------------------
+- Introduced abstract class G4VStoreNotifier to be optionally associated
+  to stores by the user for the notification of the registration and
+  deregistration of objects in the stores.
+- Added notification mechanism to volume, solid, and region stores.
+- Fixed G4RegionStore::Clean() to avoid deletion of world region.
+- Introduced virtual method GetCubicVolume() to G4VSolid, returning an
+  estimation of the solid volume in internal units. This method may be
+  overloaded by derived classes to compute the exact geometrical
+  quantity for solids where this is possible, or anyway to cache the
+  computed value. By default it uses the new protected method
+  EstimateCubicVolume(stat, eps) with fixed statistics and error
+  accuracy, and does not cache the computed value.
+
+geometry/solids                                  geomsolids-V06-02-00
+---------------
+- Added specific implementation for GetCubicVolume() wherever possible
+  and implemented caching of the computed value for all solids.
+- Bug fix in G4Sphere::SurfaceNormal(p) for theta normals.
+- G4VCSGfaceted: fix for rare anomalous situation in which
+  DistanceToOut(p,v,..) will report kInfinity, make an additional check
+  for the point p on the surface, in which case will report zero.
+  Addresses problem observed in G4Polyhedra and reported in #650.
+
+geometry/navigation                              geomnav-V06-02-03
+-------------------
+- G4Navigator: corrected computation of fGrandMotherExitNormal in
+  ComputeStep() in the case where a not valid exit-normal exists.
+- G4GeomTestSegment: fix to correctly determine whether starting trajectory
+  is entering or exiting the solid when the starting point is on a surface.
+  Added additional tests on solid consistencies (from roundoff sometimes) to
+  avoid incorrect overlap warnings. Addresses problem reports #610 and #652.
+- Dump out contents from the solid when a fatal G4Exception is thrown from
+  the navigators in ComputeStep().
+
+geometry/volumes                                 geomvol-V06-02-00
+----------------
+- G4ReflectionFactory: added automatic reflection for visualization
+  attributes, biasing weights and regions associated to the logical
+  volume.
+
+materials                                        materials-V06-02-01
+---------
+- Recalculate ionisation parameters after set of new mean ionisation
+  potential; added factor 2 to shell correction term.
+
+particles                                        particles-V06-02-02
+---------
+- Removed obsolete dependency to G4Material from G4ParticleDefinition and
+  related class.
+- Issue G4Exception from G4ParticleTable to prohibit its use before
+  G4VUserPhysicsList is instantiated and set to G4RunManager.
+
+processes/decay                                  decay-V06-02-01
+---------------
+- Added a new method GetRemainderLifeTime() to G4Decay.
+
+processes/electromagnetic/lowenergy              emlowen-V06-02-00
+-----------------------------------
+- Fixed trivial compilation errors on gcc-3.4.1.
+
+processes/electromagnetic/muons                  muons-V06-02-01
+-------------------------------
+- Improved initialisation time, providing use of common tables for mu+/mu-.
+- Rename processes "Mu" to "mu".
+- Replaced obsolete interface to particles.
+
+processes/electromagnetic/standard               stand-V06-02-04
+----------------------------------
+- Bug fix for e- ionisation in PAI model for small cuts.
+- Made ComputeCrossSection() public and virtual in all discrete processes.
+- Removed obsolete process G4IonisationByLogicalVolume and obsolete
+  interfaces to particle category.
+- Removed .icc files for all classes.
+- Retrieve effective charge for G4ionIonisation from 'util' class.
+- Introduced G4eplusAnnihilation70 class.
+     
+processes/electromagnetic/utils                  utils-V06-02-04
+-------------------------------
+- Changes in the angle distribution (slightly modified Highland formula
+  for the width of the central part, changes in the numerical values of
+  some other parameters) for multiple-scattering ---> approximately step
+  independent distribution.
+- Introduced new methods for G4VEnergyLossProcess and G4VMultipleScattering
+  to perform initialisation for Build/Retrieve tables.
+- Extended G4BraggModel below 1 keV.
+- Fixed problem of integral regime for cross-sections with more than 1 peak.
+- Fixed effective charge for He4.
+- Fix for deuteron energy loss.
+- Reviewed names of private member functions to make they be more clear.
+- Optimised calculation of mean-free-path and step limit.
+- Removed random step feature from G4VEnergyLossProcess.
+- Added interfaces to G4Emcalculator, added protections and cleanup.
+  Added verbosity.
+- Cleared up interfaces in G4VEmProcess.
+- Adopting new interfaces from G4VParticleChange and removed obsolete
+  interfaces for particles.
+
+processes/hadronic/models/cascade/cascade        ghad-bert-cas-V06-02-01
+-----------------------------------------
+-  Fixed bug in G4CascadeInterface for uncorrect deletion of dynamic
+   particles. Fixes problem report #645.
+
+processes/optical                                op-V06-02-01
+-----------------
+- In G4OpBoundaryProcess, use G4StepPoint::GetMaterial() directly.
+  sample reflectivity and apply unified model reflection parameters only
+  once even for rough dielectric/metal surfaces.
+  Fixes problem report #654.
+
+processes/transportation                         transport-V06-02-01
+------------------------
+- Added pointer to sensitive detector in G4ParticleChangeForTransport
+  and updated G4Transportation to make use of it.
+
+visualization                                    vis-V06-02-04
+-------------
+- Improvements to ASCIITree:
+  o verbosity >= 3: prints volume, density of all volumes in hierarchy.
+  o verbosity >= 4: calculates the mass of the complete geometry tree taking
+    into account daughters up to the depth specified for each physical
+    volume in the current scene. Culling is ignored so that all volumes
+    are processed. Uses G4PhysicalVolumeMassScene.
+  o Added option to write to file (/vis/ASCIITree/set/outFile).
+- modeling:
+  o Added G4PhysicalVolumeMassScene and improvements to G4PhysicalVolumeModel.
+- OpenGL:
+  o Trap non-regular polyhedra and other small changes.
+- DAWN:
+  o Improved diagnostic on trapping non-regular polyhedra.
+- Rationalised vis command code (uses G4UIcommand static conversion
+  functions where possible).
+- Removed GetDrawingStyle().method. Instead, developer has to:
+  > Get vis attributes (pick up defaults if none):
+    const G4VisAttributes* pVA =
+      fpViewer -> GetApplicableVisAttributes (v.GetVisAttributes ());
+    where v is the visible object (polyline, circle, polyhedron, etc.)
+  > Get view parameters that the user can force through the vis
+    attributes, thereby over-riding the current view parameter:
+      G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
+      G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
+  Most developers do this anyway, so the removed routine was redundant
+  and resulting code is more efficient and transparent.
+  To get colour, the developer can pick up directly from the vis attrributes,
+  pVA, obtained as above:
+      const G4Colour& c = pVA -> GetColour ();
+  or use a slightly less efficient method:
+      const G4Colour& c = GetColour (v);
+  where v is the visible object.
+  Note that for text, the developer must use a different procedure,
+  since the default text colour is determined by the default text vis
+  attributes, which may be specified independent of default vis attributes
+  of other types of visible objects.  A function, GetTextColour(), is
+  provided and the recommended use is:
+      const G4Colour& c = GetTextColour (text);
+  which picks up the default if none.
+- Rationalised use of vis attributes in OpenGL and XXX.
+- Removed obsolete file G4VisToOldVisCommands.hh
+- Corrected mistake in /vis/viewer/set/*Vector commands.
+- Brought README.built_in_commands up to date for Geant4 6.2.
+  Removed all references to old commands.'
+
+examples                                         examples-V06-02-02
+--------
+- Updated reference outputs.
+- advanced
+  o cosmicray_charging (cosmicray_charging-V06-02-01)
+    + Removed call by pointer of hadronics classes.
+    + Added MuNuclear interaction.
+    + Updated input macros for obsolete gps commands.
+- extended
+  o electromagnetic/MuonProcesses (muonprocesses-V06-02-03)
+    + Fix for generation of histograms according to 'muons' tag.
+  o electromagnetic/PhotonProcesses (photonprocesses-V06-02-01)
+    + Added new input macro anni.mac.
+  o electromagnetic/TestEm1 (testem1-V06-02-03)
+    + Avoid deletion of Analysisfactory (for JAIDA).
+    + Define correctly all UI subdirectories.
+    + Modifications in HistoManager and Messenger for histograms files.
+  o electromagnetic/TestEm2 (testem2-V06-02-01)
+    + Define correctly all UI subdirectories.
+    + Modifications in RunAction for histograms files.
+    + Change USE_AIDA to G4ANALYSIS_USE in GNUmakefile.
+  o electromagnetic/TestEm4 (testem4-V06-02-00)
+    + Modifications in RunAction for histograms management (JAIDA).
+  o electromagnetic/TestEm5 (testem5-V06-02-04)
+    + Fixed a minor problem is energy deposit.
+    + Fixed a problem in PhysicsList for hadrons
+    + Avoid deletion of Analysisfactory (for JAIDA).
+    + Define correctly all UI subdirectories.
+    + Added macros neutron.mac and hadron.mac.
+  o electromagnetic/TestEm6 (testem6-V06-02-00)
+    + Define correctly all UI subdirectories.
+    + Modifications in RunAction for histograms management (JAIDA).
+  o electromagnetic/TestEm10 (testem10-V06-02-00)
+    + Remove obsolete processes from PhysicsList.
+  o field/field01 (fieldex01-V06-02-00),
+    field/field02 (fieldex02-V06-02-00),
+    field/field03 (fieldex03-V06-02-00)
+    + Minor cleanup of PhysicsLists.
+  o medical/GammaTherapy (gtherapy-V06-02-01)
+    + New example of Gamma beam irradiation therapy on a water phantom.
+  o optical/LXe (LXe-V06-02-00)
+    + Fixed compilation error in LXeSteppingVerbose.
+    + Fixed compilation warnings in LXePMTSD, LXeScintHit, LXeScintSD.
+- novice
+  o N02 (exampleN02-V06-02-01)
+    + Removed trajectory printing from ExN02EventAction, now available
+      with /vis/scene/add/trajectories, included in vis.mac.
+    + DetectorConstruction: modified a comment for placements.
+
+tests                                            tests-V06-02-02
+-----
+- Updated reference outputs.
