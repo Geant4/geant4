@@ -20,7 +20,7 @@ ACCOUNT=stesting
 echo -e PID "\t" HOSTNAME "\t" DEV/PROD "\t" DEB/OPT
 # Temporary edit
 #ps uaxww|grep "l $ACCOUNT"|grep rsh|sort -k 15|awk '{print $2,$14,$16,$17}' -|while read pid host devprod debopt
-ps -efa|grep "l $ACCOUNT"|grep rsh|sort -k 15|awk '{print $2,$11,$12}' -|while read pid host devprod debopt
+ps -efa|grep "l $ACCOUNT"|grep rsh|sort -k 15|awk '{print $2,$11,$13,$14}' -|while read pid host devprod debopt
 do
 
 #if [ X`echo $pname|cut -d "." -f3` = Xd ]

@@ -21,7 +21,8 @@ do
 	REF=prod
     fi
 
-    g4sbr=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4/tests/tools/bin/g4sbr.sh
+    g4sbr=g4sbr.sh
+#    g4sbr=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4/tests/tools/bin/g4sbr.sh
 
 # This was intended to help the g4status command.  Let's think of another way.
 #    sym_debopt=`echo $debopt|cut -c 1`
@@ -37,6 +38,7 @@ do
     then
 	echo "String is comment!"
     else
+	echo $PATH >>  $host.$devprod.$debopt.log 2>&1 
 	echo "______________________" >>  $host.$devprod.$debopt.log 2>&1 
 	echo $command >>  $host.$devprod.$debopt.log 2>&1 
 	$command >> $host.$devprod.$debopt.log 2>&1 &
