@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.23 2002-04-19 17:30:23 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.24 2002-04-29 17:21:22 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -716,13 +716,14 @@ void G4MagInt_Driver::PrintStat_Aux(
 
     static G4double oldCurveLength= 0.0;
     static G4double oldSubStepLength= 0.0;
+    static int oldSubStepNo= -1;
+
     G4double subStep_len=0.0;
     if( curveLen > oldCurveLength )
        subStep_len= curveLen - oldCurveLength;
     else if (subStepNo == oldSubStepNo)
        subStep_len= oldSubStepLength;
-    else 
-      subStepLen_NotAvail;
+    //     else  subStepLen_NotAvail;
     oldCurveLength= curveLen;
     oldSubStepLength= subStep_len;
 
