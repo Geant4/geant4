@@ -209,10 +209,14 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     man->AddDiscreteProcess(theProcess);
 		
   } else if(gen_name == "kinetic") {
-    sg = new Test30VSecondaryGenerator(new G4HadronKineticModel(),mat);
+    G4HadronKineticModel* hkm = new G4HadronKineticModel();
+    G4ExcitationHandler* excite = new G4ExcitationHandler();
+    G4VPreCompoundModel* precompound = new G4PreCompoundModel(excite);
+    hkm->SetDeExcitation(precompound);
+    sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
-    
+
   } else {
     G4cout << gen_name 
            << " generator is unkown - no hadron production" << G4endl;

@@ -97,6 +97,7 @@ int main(int argc, char** argv)
   G4double  energy   = 100.*MeV;
   G4int     nevt     = 1000;
   G4int     nbins    = 100;
+  G4int     nbinsa   = 18;
   G4String hFile     = "";
   G4double theStep   = 0.01*micrometer;
   G4double range     = 1.0*micrometer;
@@ -261,7 +262,7 @@ int main(int argc, char** argv)
 
     // -------------------------------------------------------------------
     // ---- HBOOK initialization
-    HepHistogram* h[24];
+    HepHistogram* h[26];
     G4double mass = part->GetPDGMass();
     G4double pmax = sqrt(energy*(energy + 2.0*mass));
 		
@@ -300,9 +301,11 @@ int main(int argc, char** argv)
       h[22]=hbookManager->histogram("E(MeV) neutrons",nbins,0.,energy);
 
       h[23]=hbookManager->histogram("Phi(degrees) of neutrons",90,-180.0,180.0);
+
+      h[24]=hbookManager->histogram("theta(degrees) protons",nbinsa,0.,180.);
+      h[25]=hbookManager->histogram("theta(degrees) neutrons",nbinsa,0.,180.);
       	
       G4cout << "Histograms is initialised nbins=" << nbins
-             << "  h[21]= " << h[21] 
              << G4endl;
     }		
     // Create a DynamicParticle  
@@ -312,9 +315,11 @@ int main(int argc, char** argv)
     G4double cross_sec = (G4HadronCrossSections::Instance())->
       GetInelasticCrossSection(&dParticle, material->GetElement(0));
     G4double factor = cross_sec*MeV*1000.0*(G4double)nbins/(energy*barn*(G4double)nevt);
-    G4cout << "### factor= " << factor 
-           << "  cross(b)= " << cross_sec/barn << G4endl;
-
+    G4double factora= cross_sec*MeV*1000.0*(G4double)nbinsa/(twopi*pi*barn*(G4double)nevt);
+    G4cout << "### factor  = " << factor
+           << "### factora = " << factor 
+           << "    cross(b)= " << cross_sec/barn << G4endl;
+    G4double dtet = pi/(G4int)nbinsa;
 
     G4Track* gTrack;
     gTrack = new G4Track(&dParticle,aTime,aPosition);
@@ -354,7 +359,7 @@ int main(int argc, char** argv)
     G4ParticleDefinition* pd;
     G4ThreeVector  mom;
     G4LorentzVector labv, fm;
-    G4double e, p, m, px, py, pz, pt;
+    G4double e, p, m, px, py, pz, pt, theta, sint;
     G4VParticleChange* aChange = 0;
 			
     for (G4int iter=0; iter<nevt; iter++) {
@@ -407,6 +412,10 @@ int main(int argc, char** argv)
         pz = mom.z();
         p  = sqrt(px*px +py*py + pz*pz);
         pt = sqrt(px*px +py*py);
+
+        theta = mom.theta();
+        G4int i = (G4int)(theta/dtet);
+        sint  = sin(dtet*(0.5 + (G4double)i));
 				
 	if(usepaw && e > 0.0 && pt > 0.0) {
           h[2]->accumulate(mom.phi()/degree,1.0);
@@ -436,6 +445,7 @@ int main(int argc, char** argv)
             h[11]->accumulate(e/MeV, 1.0);
 	    //    h[18]->accumulate(e/MeV, 1.0);
 	    h[21]->accumulate(e/MeV, factor);
+	    h[24]->accumulate(theta/degree, factora/sint);
 		
           } else if(pd == pin) {
     
@@ -466,6 +476,7 @@ int main(int argc, char** argv)
             h[14]->accumulate(e/MeV, 1.0);
             //h[22]->accumulate(e/MeV, 1.0);
 	    h[22]->accumulate(e/MeV, factor);
+	    h[25]->accumulate(theta/degree, factora/sint);
 
 	  } else if(pd == deu) {
 	    h[1]->accumulate(6.0, 1.0);	

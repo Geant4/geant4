@@ -73,6 +73,8 @@ void Test30Material::Initialise()
 	list.push_back(ma);
 	ma  = new G4Material("LAr",   18.,  39.95*g/mole,  1.393*g/cm3);
 	list.push_back(ma);
+	ma  = new G4Material("Zr",    40.,  91.224*g/mole, 4.0*g/cm3);  
+	list.push_back(ma);
 	ma  = new G4Material("LXe",   54., 131.29*g/mole,  3.02*g/cm3);
 	list.push_back(ma);
 	ma  = new G4Material("Fe",    26.,  55.85*g/mole,  7.87*g/cm3);
