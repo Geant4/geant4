@@ -34,6 +34,7 @@ Problems remaining
 
   DEC: debug: NON-ISO: T18: Appears to stop early - G4cout lost?
 
+  TestEm8: large memory leak.
 
 Large N Problems
 ----------------
