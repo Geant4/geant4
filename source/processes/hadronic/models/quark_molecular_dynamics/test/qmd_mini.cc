@@ -1,32 +1,34 @@
 #include "g4std/fstream"
+#include "G4ios.hh"
 #include <algo.h>
-#include "newvector.H"
-#include "Random.H"
-#include "newBinning.H"
-#include "Geometry.H"
-#include "Arguments.H"
-#include "HadronGas.H"
-#include "MathTools.H"
-#include "Error.H"
-#include "HeatBath.H"
-#include "Propagation.H"
-#include "ParticleBase.H"
-#include "reactionChannels.H"
-#include "ParticleKinematics.H"
-#include "iso.H"
-#include "array.H"
-#include "Memory.H"
-#include "Collision.H"
-#include "genericRead.H"
-#include "StreamBuffer.H"
-#include "RunningVariable.H"
-#include "InputVariable.H"
-#include "InputReader.H"
-#include "Volume.H"
-#include "Potentials.H"
-#include "Quarkbox.H"
-#include "String.H"
-#include "output.H"
+#include "newvector.hh"
+#include "Random.hh"
+#include "newBinning.hh"
+#include "Geometry.hh"
+#include "Arguments.hh"
+#include "HadronGas.hh"
+#include "MathTools.hh"
+#include "Error.hh"
+#include "HeatBath.hh"
+#include "Propagation.hh"
+#include "ParticleBase.hh"
+#include "reactionChannels.hh"
+#include "ParticleKinematics.hh"
+#include "iso.hh"
+#include "array.hh"
+#include "Memory.hh"
+#include "Collision.hh"
+#include "genericRead.hh"
+#include "StreamBuffer.hh"
+#include "RunningVariable.hh"
+#include "InputVariable.hh"
+#include "InputReader.hh"
+#include "Volume.hh"
+#include "Potentials.hh"
+#include "Quarkbox.hh"
+#include "String.hh"
+#include "output.hh"
+#include "globals.hh"
 
 
 G4std::ostream* Output::fileout = 0;
@@ -220,7 +222,7 @@ int main(int argc,char* argv[]) {
 
   FileRead<ParticleType> Groups("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Groups.dat");
   FileRead<ParticleType> Particles("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Particles_Radiation.dat");
-  Knot<ParticleType>::Root->printTree(cerr);
+  Knot<ParticleType>::Root->printTree(G4cerr);
   FileRead<CollisionType> Collisions("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Collisions.dat");
 
   double tau = 1.0;   // fm, formation time of QGP
@@ -238,7 +240,7 @@ int main(int argc,char* argv[]) {
   else
     throw "Unknown initial condition...";
 
-  Blob->whatAmI(cerr);
+  Blob->whatAmI(G4cerr);
 
   Output::fileout = new G4std::ofstream(Dir+"/output.out");
   *Output::fileout << "! Start\n";

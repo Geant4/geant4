@@ -1,4 +1,5 @@
 #include "g4std/strstream"
+#include "G4ios.hh"
 #include "genericRead.hh"
 #include <ctype.h>
 #include <stdlib.h>
@@ -39,7 +40,7 @@ void genericRead::read()
 	++N;
       }
       catch (const String& s) { 
-	G4cerr << Name << ": Read Error in Line " << noLines << ":\n";
+  G4cerr << Name << ": Read Error in Line " << noLines << ":\n";
 	G4cerr << s << G4endl;
 	exit(1);
       }

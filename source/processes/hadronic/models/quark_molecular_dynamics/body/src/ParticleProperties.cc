@@ -1,5 +1,6 @@
 #include "ParticleKinematics.hh"
 #include "ParticleProperties.hh"
+#include "G4ios.hh"
 #include "math.hh"
 #include "Random.hh"
 #include "iso.hh"

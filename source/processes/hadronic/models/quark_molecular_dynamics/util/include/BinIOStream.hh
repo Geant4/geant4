@@ -1,15 +1,18 @@
 //
 // $RCSfile: BinIOStream.hh,v $
 //
-// $Revision: 1.2 $
-// $Date: 1999-12-15 14:53:30 $
-// $Author: gunter $
+// $Revision: 1.3 $
+// $Date: 2000-08-02 09:24:33 $
+// $Author: sscherer $
 // $Locker:  $
 // $State: Exp $
 // DOSfile: biostream.h
 // UNIXfile: BinIOStream.H
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.2  1999/12/15 14:53:30  gunter
+// Modifications to have a ISO C++ compliant source code
+//
 // Revision 1.1  1999/12/09 11:50:34  sscherer
 // adding quark_molecular_dynamics
 //
@@ -27,6 +30,7 @@
 #ifndef _BinIOStream_H
 #define _BinIOStream_H
 
+#include "globals.hh"
 #include "g4std/iostream"
 
 #ifdef __MSDOS__

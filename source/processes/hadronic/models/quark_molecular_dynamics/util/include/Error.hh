@@ -1,6 +1,7 @@
 #ifndef __MATHERR__
 #define __MATHERR__
 
+#include "globals.hh"
 #include "g4std/iostream"
 
 class Error
@@ -13,7 +14,10 @@ public:
 class IndexOutOfRange : public Error
 {
 public:
-  IndexOutOfRange(int i,int max_ind) : index(i),G4std::max(max_ind) {} 
+//
+// sps-0801: use of G4std::max(max_ind) produces error "max cannot be initialized in a constructor."
+//
+  IndexOutOfRange(int i,int max_ind) : index(i),max(max_ind) {} 
   void writeMessage(G4std::ostream& o) const { o << "Index out of Range: " << index << " > " << max << " !" << G4endl; } 
 private:
   int index,max;

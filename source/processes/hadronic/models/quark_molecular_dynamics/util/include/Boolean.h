@@ -11,6 +11,7 @@ See README file for further details.
 #ifndef BOOLEANH
 #define BOOLEANH
 
+#include "globals.hh"
 #include "g4std/iostream"
 
 class Boolean {

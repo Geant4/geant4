@@ -2,6 +2,7 @@
 #define __RANDOM__
 
 #include <stdlib.h>
+#include "globals.hh"
 #include "g4std/iostream"
 
 //<etymology>

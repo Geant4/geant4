@@ -5,6 +5,7 @@
 #pragma interface
 #endif
 
+#include "globals.hh"
 #include "g4std/iostream"
 #include <math.h>
 #include "BinIOStream.hh"

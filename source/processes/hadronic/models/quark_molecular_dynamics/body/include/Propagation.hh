@@ -19,7 +19,10 @@ struct connect
   double dist,max,force;
   double t1,t2;
 public:
-  connect() : dist(1e30),pointer(0),G4std::max(0),force(0),t1(0),t2(0) {}
+//
+// sps-2000-08-01: use of G4std::max produces error "max cannot be initialized in a constructor."
+//
+  connect() : dist(1e30),pointer(0),max(0),force(0),t1(0),t2(0) {}
   void set(int i,double d) { pointer = i; dist = d;}
   void set(int i,double d,double m) { pointer = i; dist = d; max = m;}
   void reset() { dist=1e30; }

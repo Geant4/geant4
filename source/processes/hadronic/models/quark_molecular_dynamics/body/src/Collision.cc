@@ -1,4 +1,5 @@
 #include <algo.h>
+#include "G4ios.hh"
 #include "globals.hh"
 #include "Collision.hh"
 #include "Permutations.hh"
@@ -335,9 +336,9 @@ void CollisionType::perform(const vector<ParticleBase*>& p,selection which,bool 
     }
     catch ( char* s ) {
       if ( valid) {
-	G4cerr << valid << ". DECAY ERROR: " 
-	     << Name() << ": " << s << G4endl;
-	--valid;
+      	G4cerr << valid << ". DECAY ERROR: " 
+	             << Name() << ": " << s << G4endl;
+      	--valid;
       }
       else {
 	G4cerr << "FATAL DECAY ERROR! :";

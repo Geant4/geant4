@@ -1,3 +1,4 @@
+#include "G4ios.hh"
 #include "g4std/strstream"
 #include "globals.hh"
 #include "Random.hh"
@@ -253,7 +254,7 @@ void decayMode::performDecay(const vector<ParticleBase*>& p_list,double Etot,con
     MomList = Decay.getMomenta(Etot);
   }
   else {
-    G4cerr << "ATTENTION: Forcing decay. Energy not conserved!!!\n";
+	  G4cerr << "ATTENTION: Forcing decay. Energy not conserved!!!\n";
     for (int i=0; i<N(); i++)
       MomList.insert(MomList.end(),Vektor4(MassList[i],0,0,0));
   }

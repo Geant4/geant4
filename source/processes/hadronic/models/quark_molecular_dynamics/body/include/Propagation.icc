@@ -1,95 +1,95 @@
 inline double Colour::Etot() 
 {
-  double s = 0.0;
-  Vektor3 d;
-  for (int i=0; i<Npart; i++) {
-    s += List[i]->E();
-    //    G4cerr << i << "  " << List[i]->E() << G4endl;
-    if ( List[i]->Color() )
-      for (int j=i+1; j<Nquark; j++) {
-	 s += E_int(i,j);
-	 //	 G4cerr << i << "  " << j << "  " << E_int(i,j) << G4endl;
-      }
-  }
-  return s;
+	double s = 0.0;
+	Vektor3 d;
+	for (int i=0; i<Npart; i++) {
+		s += List[i]->E();
+		//	G4cerr << i << "  " << List[i]->E() << G4endl;
+		if ( List[i]->Color() )
+			for (int j=i+1; j<Nquark; j++) {
+				s += E_int(i,j);
+				//	G4cerr << i << " " << j << " " << E_int(i,j) << G4endl;
+			}
+	}
+	return s;
 }
 
 inline double Colour::E(int i,int j) 
 {
-  return List[i]->E()+List[j]->E()+E_int(i,j);
+	return List[i]->E()+List[j]->E()+E_int(i,j);
 }
 
 inline double Colour::E(int i) 
 {
-  double s = List[i]->E();
-  for (int j=0; j<Nquark; j++) 
-    s+=E_int(i,j);
-  return s;
+	double s = List[i]->E();
+	for (int j=0; j<Nquark; j++) 
+		s+=E_int(i,j);
+	return s;
 }
 
 inline double Colour::E_int(int i,int j) 
 {
-  double s = 0;
-  //  if ( List[i]->Charm() && List[j]->Charm() ) return s;
-  Vektor3 d = dr(List[i]->Coordinates(),List[j]->Coordinates());
-  double l = length(d);
-  if ( l > 0 && ( List[i]->isQuark() && List[j]->isQuark() )) {
-    s += V(l,Factor(l,i,j));
-    //      s += colors[List[i]->Color()+3][List[j]->Color()+3]*(kappa*l-alpha_s/l);
-  }
-  //    s += alpha*List[i]->Charge()*List[j]->Charge()/l;
-  return s;
+	double s = 0;
+	//	if ( List[i]->Charm() && List[j]->Charm() ) return s;
+	Vektor3 d = dr(List[i]->Coordinates(),List[j]->Coordinates());
+	double l = length(d);
+	if ( l > 0 && ( List[i]->isQuark() && List[j]->isQuark() )) {
+		s += V(l,Factor(l,i,j));
+		//	s += colors[List[i]->Color()+3][List[j]->Color()+3]*(kappa*l-alpha_s/l);
+	}
+	//	s += alpha*List[i]->Charge()*List[j]->Charge()/l;
+	return s;
 }
 
 inline Vektor3 Colour::dHdx(int i)
 {
-  Vektor3 F,d;
-  double l;
-  for ( int j=0; j<Nquark; j++ ) 
-    if ( i != j ) {
-      d = dr(List[i]->Coordinates(),List[j]->Coordinates());
-      l = length(d);
-      if ( List[i]->Color()*List[j]->Color() && l ) 
+	Vektor3 F,d;
+	double l;
+	for ( int j=0; j<Nquark; j++ ) 
+		if ( i != j ) {
+			d = dr(List[i]->Coordinates(),List[j]->Coordinates());
+			l = length(d);
+			if ( List[i]->Color()*List[j]->Color() && l ) 
 	F += d*(V_prime(l,Factor(l,i,j))/l);
-      //	F += d*((colors[List[i]->Color()+3][List[j]->Color()+3]
-      //*(kappa+alpha_s/(l*l))
-      //	  - alpha*List[i]->Charge()*List[j]->Charge()/(l*l))/l);
-    }
-  return F;
+			//	F += d*((colors[List[i]->Color()+3][List[j]->Color()+3]
+			//*(kappa+alpha_s/(l*l))
+			//		- alpha*List[i]->Charge()*List[j]->Charge()/(l*l))/l);
+		}
+	return F;
 }
 
 inline Vektor3 inTheBox::dr(const Vektor3& x1,const Vektor3& x2) const
 {
-  Vektor3 d = x1-x2;
-  for (int k=1; k<=3; k++)
-    if ( fabs(d[k]) > 0.5*G.size() ) 
-      d[k] -= sign(d[k])*G.size();
-  return d;
+	Vektor3 d = x1-x2;
+	for (int k=1; k<=3; k++)
+		if ( fabs(d[k]) > 0.5*G.size() ) 
+			d[k] -= sign(d[k])*G.size();
+	return d;
 }
 
 inline double Radiation::Etot() 
 {
-  double s = 0.0;
-  Vektor3 d;
-  for (int i=0; i<Npart; i++) {
-    s += List[i]->E();
-    if ( List[i]->Color() )
-      s += V(List[i]->Coordinates(3));
-  }
-  return s;
+	double s = 0.0;
+	Vektor3 d;
+	for (int i=0; i<Npart; i++) {
+		s += List[i]->E();
+		if ( List[i]->Color() )
+			s += V(List[i]->Coordinates(3));
+	}
+	return s;
 }
 
 inline double Radiation::V(double l) const 
 {
-  return kappa*l;
+	return kappa*l;
 }
 
 inline double Radiation::V_inv(double E) const
 {
-  return E/kappa;
+	return E/kappa;
 }
 
 inline double Radiation::V_prime(double l) const
 {
-  return kappa;
+	return kappa;
 }

@@ -1,3 +1,4 @@
+#include "G4ios.hh"
 #include "g4std/iomanip"
 #include "g4std/fstream"
 #include "g4std/strstream"

@@ -1,3 +1,4 @@
+#include "G4ios.hh"
 #include "g4std/iostream"
 #include "g4std/vector"
 #include <string.h>
@@ -205,7 +206,7 @@ ParticleType& ParticleType::selectType(int C_,const vector<ParticleBase*>& P,dou
     for (l=0; l<y.size() && r>y[l]; l++);
     if (l==y.size()) {
       G4cerr << "Not found: 1\n";
-//      printTree(cerr);
+//      printTree(G4cerr);
 //      for (int i=0; i<P.size(); i++)
 //	G4cerr << *P[i] << G4endl;
       throw "Not found";
@@ -215,7 +216,7 @@ ParticleType& ParticleType::selectType(int C_,const vector<ParticleBase*>& P,dou
   else {
     G4cerr << "Undefined Particle!!\n";
     //    return Knot<ParticleType>::FindKnot("X");
-//    printTree(cerr);
+//    printTree(G4cerr);
 //    for (int i=0; i<P.size(); i++)
 //      G4cerr << *P[i] << G4endl;
     throw undefinedParticle();  

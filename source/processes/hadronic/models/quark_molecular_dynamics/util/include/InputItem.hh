@@ -1,6 +1,7 @@
 #ifndef _InputItem_H
 #define _InputItem_H
 
+#include "globals.hh"
 #include "g4std/iostream"
 
 class String;                     

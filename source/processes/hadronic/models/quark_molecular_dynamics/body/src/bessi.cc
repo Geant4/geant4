@@ -1,5 +1,5 @@
 #include <math.h>
-#include "g4std/iostream"
+#include "G4ios.hh"
 #include "bessel.hh"
 
 #define ACC 40.0
@@ -10,9 +10,9 @@ double bessi(int n,double x)
 {
 	int j;
 	double bi,bim,bip,tox,ans;
-        double bessi0(double);
+	double bessi0(double);
 
-	if (n < 2) G4cerr << "Index n less than 2 in BESSI" << G4endl;
+	if (n < 2) { G4cerr << "Index n less than 2 in BESSI" << G4endl; }
 	if (x == 0.0)
 		return 0.0;
 	else {

@@ -1,4 +1,5 @@
 #include "MathTools.hh"
+#include "G4ios.hh"
 #include "Error.hh"
 
 REAL GaussIntegration::Integral(REAL x1)
@@ -60,14 +61,14 @@ REAL InverseFunction::Inverse(REAL y) const
 	catch (Zero_Not_Found& m) {
 	  if ( !reducePrecision ) 
 	    throw;
-	  m.writeMessage(cerr);
-	  G4cerr << "Checking for accuracy 1e-4...";
+	  m.writeMessage(G4cerr);
+    G4cerr << "Checking for accuracy 1e-4...";
 	  if (fabs(m.fa)<1e-4)
 	    z = m.a;
 	  else if (fabs(m.fb)<1e-4)
 	    z = m.b;
 	  else {
-	    G4cerr << "FAILED!\n";
+	  G4cerr << "FAILED!\n";
 	    throw;
 	  }
 	  G4cerr << "OK\n" << G4endl;
@@ -82,8 +83,6 @@ REAL InverseFunction::FindRoot(REAL x0_,REAL x1_,REAL y,double Accuracy) const
 {
   const int N = 100;
 
-//	G4cerr << "beginning FINDZERO: " << G4endl;
-//	G4cerr << "FINDZERO: x1=" << x0 << ", x2=" << x1 << G4endl;
   REAL x,f2; 
   int n=0;
   REAL f0 = ToBeInverted(x0_)-y;
@@ -92,7 +91,7 @@ REAL InverseFunction::FindRoot(REAL x0_,REAL x1_,REAL y,double Accuracy) const
   REAL f1 = ToBeInverted(x1_)-y;
   if (f1 == 0.0)
     return x1_;
-  //  G4cerr << x0_ << "  " << x1_ << "  " << f0 << "  " << f1 << G4endl;
+
   if ( double(f0*f1) < 0.0 ) {
     do
       {
@@ -111,19 +110,15 @@ REAL InverseFunction::FindRoot(REAL x0_,REAL x1_,REAL y,double Accuracy) const
 	    x0_ = x;
 	    f0 = f2;
 	  }
-	//	cout << x0_ << "," << x1_ << ":" << fabs(f2) << G4endl;
       }
     while ((fabs(x1_-x0_) >= Accuracy ) && ++n<N);
     if (n>=N)
       {
-	//	G4cerr << "FINDZERO: too much iterations" << G4endl;
-	throw TooMuchIter(x0_,x1_,f0,f1);
+    	throw TooMuchIter(x0_,x1_,f0,f1);
       }
   }
   else
     {
-      //      G4cerr << "no zero detected: y = " << y << ", " << f0 << "," << f1 << G4endl;
-      //      x1_ = (fabs(f0) < fabs(f1)) ? x0_ : x1_	   ;
       if (f0 == 0)
 	return x0_;
       else if (f1 == 0)
@@ -131,7 +126,6 @@ REAL InverseFunction::FindRoot(REAL x0_,REAL x1_,REAL y,double Accuracy) const
       else
 	throw Zero_Not_Found(x0_,x1_,f0,f1);
     }
-  //	G4cerr << "ending FINDZERO: x = " << x1_ << G4endl;
   return x1_;
 
 }
@@ -140,8 +134,7 @@ int InverseFunction::DivideInterval(IntervalRange xx,REAL y,REAL& Result,int n,d
 {
   REAL z = 0.5*(xx.a+xx.b);
   REAL fa = ToBeInverted(xx.a)-y;
-  REAL fb = ToBeInverted(xx.b)-y;
-  //  G4cerr << n << "  " << xx.a << "  " << xx.b << "  " << fa+y << "  "  << fb+y << G4endl;
+  REAL fb = ToBeInverted(xx.b)-y;  
   if (fabs(xx.b-xx.a)>=eps && double(fa*fb)>0.0 ) {
     REAL y2;
     IntervalRange x1(xx.a,z);
@@ -178,8 +171,6 @@ REAL InverseFunctionWithNewton::FindRoot(REAL x0_,REAL,REAL y,double Accuracy) c
   
   const int N = 100;
 
-  //	G4cerr << "beginning FINDZERO: " << G4endl;
-  //	G4cerr << "FINDZERO: x1=" << x << G4endl;
   int n=0;
   double f0 = 0.0;
   double f10 = 0.0;
@@ -192,13 +183,12 @@ REAL InverseFunctionWithNewton::FindRoot(REAL x0_,REAL,REAL y,double Accuracy) c
     if (f10==0.0) 
       throw Zero_Not_Found(x,x,f0,f10);
     x -= f0/f10;
-    //    G4cerr << x << "  " << x1 << "  " << f0 << "  " << f10<< G4endl;
+    G4cerr << x << "  " << x1 << "  " << f0 << "  " << f10<< endl;
   }
   while ( fabs(f0) > Accuracy  && fabs(x-x1)>Accuracy && ++n<N);
   //  cout << x << "  " << f0 << G4endl;
   if ( fabs(f0) > Accuracy )
     {
-      //	G4cerr << "FINDZERO: too much iterations" << G4endl;
       throw TooMuchIter(x0_,x0_,f0,f10);
     }
   return x;

@@ -1,10 +1,13 @@
 #include "PotentialBase.hh"
+#include "G4ios.hh"
 
 class Linear : public PotentialBase
 {
   double kappa;
 public:
-  Linear(double k_) : kappa(k_) { G4cerr << "Potential: Linear\n"; }
+  Linear(double k_) : kappa(k_) { 
+		G4cerr << "Potential: Linear\n"; 
+	}
   virtual double V(double r,double s) const { return s*kappa*r; }
   virtual double V_prime(double r,double s) const { return s*kappa; }
   virtual double V_inv(double E,double s) const { return E/kappa; }
@@ -14,7 +17,9 @@ class Cornell : public Potential
 {
   double e,C,kappa;
 public:
-  Cornell() : Potential(0.01,10),e(0.25),C(0),kappa(1) { G4cerr << "Potential: Cornell\n"; }
+  Cornell() : Potential(0.01,10),e(0.25),C(0),kappa(1) { 
+		G4cerr << "Potential: Cornell\n"; 
+	}
   virtual double V(double r,double s) const { return s*(C-e/r+kappa*r); }
   virtual double V_prime(double r,double s) const { return s*(e/(r*r)+kappa); }
   virtual double V_inv(double E,double s) const { double x=(s*E-C)/(2.0*kappa); return x+sqrt(x*x+e/kappa); }
@@ -40,6 +45,9 @@ public:
   InterQuark(double k = 0.9) : Potential(0.1,10),kappa(k),mu(sqrt(kappa/0.197)),
     alpha(0.2),A(mathConstants::hc*4.0/3.0*alpha),B(alpha*3/(2*M_PI)*(11.0/3.0)),
     C(1+alpha*3/(2*M_PI)*(-11/3*0.5772+31.0/9.0)),
-    r0(exp(1.0-C/B)/mu),V0(0) { V0 = V1(r0); G4cerr << "Potential: interquark\n"; }
+    r0(exp(1.0-C/B)/mu),V0(0) { 
+			V0 = V1(r0); 
+			G4cerr << "Potential: interquark\n"; 
+		}
   virtual double V(double r,double s) const { return ((s>0) ? s*V1(fabs(r)) : -s*V2(fabs(r)))+s*kappa*r; }
 };

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-12-09 11:50:34 sscherer Exp $
+# $Id: GNUmakefile,v 1.2 2000-08-02 09:24:33 sscherer Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -14,6 +14,7 @@ include $(G4INSTALL)/config/architecture.gmk
 G4TMPDIR = $(G4TMP)/$(G4SYSTEM)/$(name)
 
 CPPFLAGS += -I$(G4BASE)/global/management/include \
+            -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPNumerics/include \
             -I$(G4BASE)/global/HEPGeometry/include \
@@ -25,9 +26,9 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/hadronic/processes/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
-	    -I$(G4BASE)/processes/hadronic/models/generator/management/include \
-	    -I$(G4BASE)/processes/hadronic/models/generator/string_common/include \
-	    -I$(G4BASE)/processes/hadronic/models/generator/util/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/management/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/string_common/include \
+            -I$(G4BASE)/processes/hadronic/models/generator/util/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/bosons/include \

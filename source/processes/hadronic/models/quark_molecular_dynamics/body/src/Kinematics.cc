@@ -1,5 +1,6 @@
 #include "g4std/iomanip"
 #include <algo.h>
+#include "G4ios.hh"
 #include "Kinematics.hh"
 
 REAL FragmentationFunction::a = 1.0;
@@ -57,9 +58,9 @@ void Kinematics::calculate(double sigma)
 
 
   if ( l<0 || l>sigma_l ) {
-    G4cerr << "Fehler: " << z << "  " << l << "  " 
-	 << pq*eps_min-p0[0] << "  " 
-	 << sigma_l << G4endl;
+       G4cerr << "Fehler: " << z << "  " << l << "  " 
+    	 << pq*eps_min-p0[0] << "  " 
+    	 << sigma_l << G4endl;
     throw "Not possible...";
   }
 

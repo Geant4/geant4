@@ -1,4 +1,5 @@
 #include "DistributionFunction.hh"
+#include "G4ios.hh"
 #include <algo.h>
 
 REAL GaussDeviates::getValue() const

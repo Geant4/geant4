@@ -1,4 +1,5 @@
 #include "g4std/fstream"
+#include "G4ios.hh"
 #include <algo.h>
 #include "newvector.hh"
 #include "Random.hh"
@@ -345,7 +346,7 @@ int main(int argc,char* argv[]) {
 
   FileRead<ParticleType> Groups("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Groups.dat");
   FileRead<ParticleType> Particles("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Particles_Radiation.dat");
-  Knot<ParticleType>::Root->printTree(cerr);
+  Knot<ParticleType>::Root->printTree(G4cerr);
   FileRead<CollisionType> Collisions("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Collisions.dat");
 
   double tau = 1.0;   // fm, formation time of QGP
@@ -372,7 +373,7 @@ int main(int argc,char* argv[]) {
   else
     throw "Unknown initial condition...";
 
-  Blob->whatAmI(cerr);
+  Blob->whatAmI(G4cerr);
 
 
   Output::fileout = new G4std::ofstream(Dir+"/output.out");
@@ -446,8 +447,8 @@ int main(int argc,char* argv[]) {
           while ( box.Time() < t1 && ( box.Nquark>0 || Time>0 ) ) {
             box.one_step();
             G4cerr << n << " :  " << box.Time() << " : " << "  " 
-                 << box.Etot() << "  "
-                 << box.Npart << "  " << -box.Nquark+box.Npart << G4endl;
+                   << box.Etot() << "  "
+                   << box.Npart << "  " << -box.Nquark+box.Npart << G4endl;
           }
         }
         else {

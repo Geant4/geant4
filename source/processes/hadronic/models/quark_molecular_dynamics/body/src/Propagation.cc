@@ -1,3 +1,4 @@
+#include "G4ios.hh"
 #include "g4std/fstream"
 #include <algo.h>
 #include "newvector.hh"
@@ -563,7 +564,9 @@ void Colour::one_step()
             if ( sigma>=0 ) {
               massTooHigh = false;
               lambda = Inverse(-eps);
-              if ( ToBeInverted(lambda)+eps != 0.0 ) { G4cerr << "WRONG! " << ToBeInverted(lambda)+eps << "\n"; lambda = -1; }
+              if ( ToBeInverted(lambda)+eps != 0.0 ) { 
+								G4cerr << "WRONG! " << ToBeInverted(lambda)+eps << "\n"; lambda = -1; 
+							}
               if ( lambda < 0 ) 
                 throw "Wrong Mass...";
               Vektor3 x0 = r_k+(lambda/lf)*f;
@@ -781,16 +784,16 @@ id Colour::clusters(int i)
 	for (int k=0; k<=l; k++) {
 	  //	eraseList.insert(eraseList.end(),q->next[k].pointer);
 	  color = color+List[q->next[k].pointer]->Color();
-	  G4cerr << q->next[k].pointer << ",";
+	  cerr << q->next[k].pointer << ",";
 	}
-	G4cerr << " : " << q->next[l].force << "  " << q->next[l+1].dist/q->next[l].dist << G4endl;
+	cerr << " : " << q->next[l].force << "  " << q->next[l+1].dist/q->next[l].dist << G4endl;
 	eraseList.insert(eraseList.end(),i);
-	G4cerr << "DECONFINED: " << i << "," ;
+	cerr << "DECONFINED: " << i << "," ;
 	q->next[l+1].pointer = -1;
 	break;
       }
       catch ( ... ) { 
-	G4cerr << "Color-error caught!\n"; }
+	cerr << "Color-error caught!\n"; }
     }
   }
   for (int k=0; k<Nnext-1; k++) {

@@ -18,12 +18,14 @@ include $(G4INSTALL)/config/architecture.gmk
 #
 INCFLAGS := \
            -I$(G4BASE)/global/management/include \
+           -I$(G4BASE)/intercoms/include \
            -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/util/include \
            -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/body/include 
                       
 
 LDLIBS   := \
-          -lG4hadronic_quark_md_body \
-          -lG4hadronic_quark_md_util 
+         -lG4hadronic_quark_md_body \
+         -lG4hadronic_quark_md_util  \
+         -lG4globman
 
 include $(G4INSTALL)/config/binmake.gmk

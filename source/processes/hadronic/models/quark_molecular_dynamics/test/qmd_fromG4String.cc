@@ -1,4 +1,5 @@
-#include <fstream.h>
+#include "g4std/fstream"
+#include "G4ios.hh"
 #include <algo.h>
 #include "newvector.hh"
 #include "Random.hh"
@@ -345,7 +346,7 @@ int main(int argc,char* argv[]) {
 
   FileRead<ParticleType> Groups("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Groups.dat");
   FileRead<ParticleType> Particles("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Particles_Radiation.dat");
-  Knot<ParticleType>::Root->printTree(cerr);
+  Knot<ParticleType>::Root->printTree(G4cerr);
   FileRead<CollisionType> Collisions("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Collisions.dat");
 
   double tau = 1.0;   // fm, formation time of QGP
@@ -372,7 +373,7 @@ int main(int argc,char* argv[]) {
   else
     throw "Unknown initial condition...";
 
-  Blob->whatAmI(cerr);
+  Blob->whatAmI(G4cerr);
 
 
   Output::fileout = new ofstream(Dir+"/output.out");
@@ -403,7 +404,7 @@ int main(int argc,char* argv[]) {
       QuarkVolume<RelBoltzmann> QGP(*Blob,Quarks,T,mu,mus,num);
       double u_frac = (2.0*double(PtoN)+1.0)/(PtoN+1.0)/3.0;
       QGP.createParticles(u_frac);
-      cerr << " - Energy : " << QGP.Etot()/Blob->getVolume() << "  " << R << "  " << box.List.size() << endl;
+      G4cerr << " - Energy : " << QGP.Etot()/Blob->getVolume() << "  " << R << "  " << box.List.size() << endl;
   
       box.setup();
       setPhaseSpace(box.List,*Blob,T);
@@ -413,9 +414,9 @@ int main(int argc,char* argv[]) {
         run.kstart = 20000;
         Colour::allowDecay = false;
         Colour::allowClustering = false; 
-        cerr << "Thermalizing...";
+        G4cerr << "Thermalizing...";
         run.evaluate(21000);
-        cerr << "finished\n";
+        G4cerr << "finished\n";
       }
   
       if ( Initial == "bjorken" ) {
@@ -440,14 +441,14 @@ int main(int argc,char* argv[]) {
 
         double t1 = box.Time()+dt;
         if ( Time>0 ) 
-          t1 = min(t1,(double)Time);
+          t1 = G4std::min(t1,(double)Time);
 
         if ( box.Nquark ) {
           while ( box.Time() < t1 && ( box.Nquark>0 || Time>0 ) ) {
             box.one_step();
-            cerr << n << " :  " << box.Time() << " : " << "  " 
-                 << box.Etot() << "  "
-                 << box.Npart << "  " << -box.Nquark+box.Npart << endl;
+            G4cerr << n << " :  " << box.Time() << " : " << "  " 
+                   << box.Etot() << "  "
+                   << box.Npart << "  " << -box.Nquark+box.Npart << endl;
           }
         }
         else {
@@ -464,7 +465,7 @@ int main(int argc,char* argv[]) {
       Output::fileout->flush();
     }
     catch ( char *s ) {
-      cerr << "ERROR: " << s << endl;
+      G4cerr << "ERROR: " << s << endl;
     }
     int c = 1;
   }

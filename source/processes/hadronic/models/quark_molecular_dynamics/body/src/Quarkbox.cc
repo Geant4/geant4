@@ -1,4 +1,5 @@
 #include "Quarkbox.hh"
+#include "G4ios.hh"
 
 QuarkBox::QuarkBox(Geometry& G,double T,Colour& C_) 
   : Metropolis(G,C_.List.size(),T,G.size()/20,0.05),C(C_),cnt(0)
