@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.9 2004-05-17 13:30:26 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.10 2004-06-09 13:49:36 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -42,9 +42,14 @@
 //
 G4Navigator::G4Navigator()
   : fWasLimitedByGeometry(false), fTopPhysical(0),
-    fCheck(false), fVerbose(0)
+    fCheck(false),   
+    // fActionThreshold_NoZeroSteps(10), fAbandonThreshold_NoZeroSteps(25),
+    fVerbose(0)
 {
   ResetStackAndState();
+
+  fActionThreshold_NoZeroSteps = 10; 
+  fAbandonThreshold_NoZeroSteps = 25; 
 }
 
 // ********************************************************************
@@ -564,6 +569,9 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   G4VPhysicalVolume  *motherPhysical = fHistory.GetTopVolume();
   G4LogicalVolume *motherLogical = motherPhysical->GetLogicalVolume();
 
+  static G4int sNavCScalls=0;
+  sNavCScalls++;
+
 #ifdef G4VERBOSE
   G4int oldcoutPrec= G4cout.precision(8);
   G4int oldcerrPrec= G4cerr.precision(10);
@@ -773,11 +781,43 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   fPreviousSftOrigin = pGlobalpoint;
   fPreviousSafety = pNewSafety; 
 
-  // Edge if two consecutive steps are zero, because
-  // at least two candidate volumes must have been checked
+  //  Count zero steps - one can occur due to changing momentum at a boundary
+  //                   - one, two (or a few) can occur at common edges between volumes
+  //                   - several are a sign of a problem in the geometry description
+  //                       or the Navigator  
+
+  // Rule of thumb: likely at an Edge if two consecutive steps are zero, because
+  //                at least two candidate volumes must have been checked
   //
   fLocatedOnEdge = fLastStepWasZero && (Step==0);
-  fLastStepWasZero = (Step==0);
+  fLastStepWasZero = (Step==0.0);
+
+  // Handle large number of consecutive zero steps
+  if ( fLastStepWasZero ){
+     fNumberZeroSteps++;
+#ifdef G4DEBUG_NAVIGATION
+     if( fNumberZeroSteps > 1 ){
+       G4cout << "G4Nav: another zero step, no " << fNumberZeroSteps
+	      << " at " << pGlobalpoint
+	      << " in volume " << motherPhysical->GetName()
+	      << " nav-comp-step call # " << sNavCScalls
+	      << G4endl ;
+     }
+#endif
+     if( fNumberZeroSteps > fActionThreshold_NoZeroSteps ){
+        // Act to recover this stuck track   
+     }
+     if( fNumberZeroSteps > fAbandonThreshold_NoZeroSteps ){
+        // Must kill this stuck track
+        G4cerr << "G4Navigator::ComputeStep(): Track stuck, not moving for " 
+	       << fNumberZeroSteps<< " steps." << G4endl;
+        G4Exception("G4Navigator::ComputeStep()", "NotApplicableStuskTrack",
+                    FatalException, 
+		   "Stuck Track: Navigator problem, potentially due to incorrect volume description.");
+     }
+  }else{
+     fNumberZeroSteps=0;
+  }
 
   fEnteredDaughter = fEntering;   // I expect to enter a volume in this Step
   fExitedMother = fExiting;
@@ -884,6 +924,8 @@ void G4Navigator::ResetState()
 
   fPreviousSftOrigin = G4ThreeVector(0,0,0);
   fPreviousSafety = 0.0; 
+
+  fNumberZeroSteps= 0;
     
   fBlockedPhysicalVolume=0;
   fBlockedReplicaNo=-1;
