@@ -1,3 +1,11 @@
+// $Id: TiaraMeasure.hh,v 1.2 2003-06-16 17:06:46 dressel Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+//
+// Class TiaraMeasure
+//
+
 #ifndef TiaraMeasure_hh
 #define TiaraMeasure_hh TiaraMeasure_hh
 

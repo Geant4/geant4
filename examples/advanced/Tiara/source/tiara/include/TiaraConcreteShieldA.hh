@@ -1,3 +1,11 @@
+// $Id: TiaraConcreteShieldA.hh,v 1.2 2003-06-16 17:06:45 dressel Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+//
+// Class TiaraConcreteShieldA
+//
+
 #ifndef TiaraConcreteShieldA_hh
 #define TiaraConcreteShieldA_hh TiaraConcreteShieldA_hh
 

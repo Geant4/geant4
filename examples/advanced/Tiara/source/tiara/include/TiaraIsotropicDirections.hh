@@ -1,3 +1,11 @@
+// $Id: TiaraIsotropicDirections.hh,v 1.2 2003-06-16 17:06:46 dressel Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+//
+// Class TiaraIsotropicDirections
+//
+
 #ifndef TiaraIsotropicDirections_hh
 #define TiaraIsotropicDirections_hh TiaraIsotropicDirections_hh
 

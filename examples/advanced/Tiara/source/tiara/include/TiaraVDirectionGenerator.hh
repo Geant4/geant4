@@ -1,3 +1,11 @@
+// $Id: TiaraVDirectionGenerator.hh,v 1.2 2003-06-16 17:06:46 dressel Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+//
+// Class TiaraVDirectionGenerator
+//
+
 #ifndef TiaraVDirectionGenerator_hh
 #define TiaraVDirectionGenerator_hh TiaraVDirectionGenerator_hh
 

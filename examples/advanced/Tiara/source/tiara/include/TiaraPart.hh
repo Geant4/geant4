@@ -1,3 +1,11 @@
+// $Id: TiaraPart.hh,v 1.2 2003-06-16 17:06:46 dressel Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+//
+// Class TiaraPart
+//
+
 #ifndef TiaraPart_hh
 #define TiaraPart_hh TiaraPart_hh
 

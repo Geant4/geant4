@@ -1,3 +1,7 @@
+// $Id: TiaraGeometry.cc,v 1.2 2003-06-16 17:06:48 dressel Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
 #include "TiaraGeometry.hh"
 #include "TiaraDimensions.hh"
 #include "G4LogicalVolume.hh"

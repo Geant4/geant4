@@ -1,3 +1,8 @@
+# $Id: variableGeometry.py,v 1.2 2003-06-16 17:06:45 dressel Exp $
+# -------------------------------------------------------------------
+# GEANT4 tag $Name: not supported by cvs2svn $
+# -------------------------------------------------------------------
+#
 import G4Kernel
 import parallelHall
 import posLog

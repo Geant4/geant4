@@ -1,3 +1,8 @@
+# $Id: README,v 1.7 2003-06-16 17:06:43 dressel Exp $
+# -------------------------------------------------------------------
+# GEANT4 tag $Name: not supported by cvs2svn $
+# -------------------------------------------------------------------
+
 Simulation of the TIARA experiment using importance sampling
 ============================================================
 
@@ -152,6 +157,9 @@ results may be viewed e.g. using lizard and scripts:
          an unbiased simulation set the importance values to one (see  
          runSim.py)
   
+Note: the output files written after every run are incremental! Meaning 
+      the file with the highest run number contains the data from 
+      all the runs!
 
 The modules (dataAcess, extractShelve) imported in the above steps are 
 placed in source/py_modules in files named after the module ending with 

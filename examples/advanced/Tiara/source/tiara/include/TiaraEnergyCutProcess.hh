@@ -1,3 +1,11 @@
+// $Id: TiaraEnergyCutProcess.hh,v 1.2 2003-06-16 17:06:45 dressel Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+//
+// Class TiaraEnergyCutProcess
+//
+
 #ifndef TiaraEnergyCutProcess_hh 
 #define TiaraEnergyCutProcess_hh TiaraEnergyCutProcess_hh 
 

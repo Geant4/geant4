@@ -1,3 +1,8 @@
+# $Id: detector.py,v 1.2 2003-06-16 17:06:44 dressel Exp $
+# -------------------------------------------------------------------
+# GEANT4 tag $Name: not supported by cvs2svn $
+# -------------------------------------------------------------------
+#
 
 # A detector is either the of the "simple" or "ring" type.
 # the volumina of the "simple" detectors are the same at all

@@ -1,4 +1,11 @@
 #!/usr/bin/env python2.2
+#
+# $Id: runSimNoAnalysis.py,v 1.2 2003-06-16 17:06:43 dressel Exp $
+# -------------------------------------------------------------------
+# GEANT4 tag $Name: not supported by cvs2svn $
+# -------------------------------------------------------------------
+
+
 import Tiara
 import G4Kernel
 import tiaraApplication

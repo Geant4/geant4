@@ -1,3 +1,7 @@
+// $Id: TiaraSampledEnergy.cc,v 1.3 2003-06-16 17:06:48 dressel Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
 #include "TiaraSampledEnergy.hh"
 
 #ifdef G4ANALYSIS_USE

@@ -1,4 +1,11 @@
 #!/usr/bin/env python2.2
+#
+# $Id: runVisMode.py,v 1.2 2003-06-16 17:06:44 dressel Exp $
+# -------------------------------------------------------------------
+# GEANT4 tag $Name: not supported by cvs2svn $
+# -------------------------------------------------------------------
+
+
 # importing python libraries
 import os
 

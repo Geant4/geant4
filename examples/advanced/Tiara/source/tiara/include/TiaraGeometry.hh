@@ -1,3 +1,11 @@
+// $Id: TiaraGeometry.hh,v 1.2 2003-06-16 17:06:46 dressel Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+//
+// Class TiaraGeometry
+//
+
 #ifndef TiaraGeometry_hh
 #define TiaraGeometry_hh TiaraGeometry_hh
 

@@ -1,3 +1,9 @@
+# $Id: CLHEP.i,v 1.2 2003-06-16 17:06:44 dressel Exp $
+# -------------------------------------------------------------------
+# GEANT4 tag $Name: not supported by cvs2svn $
+# -------------------------------------------------------------------
+
+
 %module CLHEP
 %{
 #include <CLHEP/Vector/ThreeVector.h>

@@ -1,3 +1,9 @@
+# $Id: vis.mac,v 1.2 2003-06-16 17:06:44 dressel Exp $
+# -------------------------------------------------------------------
+# GEANT4 tag $Name: not supported by cvs2svn $
+# -------------------------------------------------------------------
+
+
 /vis/scene/create
 /vis/open OGLIX
 /vis/viewer/set/style  w

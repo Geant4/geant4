@@ -1,3 +1,8 @@
+# $Id: tiaraSpecifications.py,v 1.2 2003-06-16 17:06:44 dressel Exp $
+# -------------------------------------------------------------------
+# GEANT4 tag $Name: not supported by cvs2svn $
+# -------------------------------------------------------------------
+#
 import G4Kernel
 ColWidth = {"43":40*G4Kernel.cm,
             "68":80*G4Kernel.cm}
