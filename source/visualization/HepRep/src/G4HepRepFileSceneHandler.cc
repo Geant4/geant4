@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.6 2002-02-02 04:00:24 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.7 2002-02-03 22:22:58 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -400,7 +400,11 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
   }
 
   // Handle Type declaration for Event Data.
-  if (fReadyForTransients) {
+  // Should be able to just test on fReadyForTransients, but this seems to
+  // be falsely false if no geometry has yet been drawn.
+  // So I test on both !fpCurrentPV (means no geometry has yet been drawn)
+  // and fReadyForTransients.
+  if (!fpCurrentPV || fReadyForTransients) {
     if (strcmp("Event Data",hepRepXMLWriter->prevTypeName[0])!=0) {
       hepRepXMLWriter->addType("Event Data",0);
       hepRepXMLWriter->addInstance();

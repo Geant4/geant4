@@ -1,4 +1,4 @@
-$Id: History,v 1.176 2002-02-02 03:59:33 perl Exp $
+$Id: History,v 1.177 2002-02-03 22:24:32 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+3rd February 2002  Joseph Perl
+- HepRep: Detect transient data by testing for
+  !fpCurrentPV || fReadyForTransients
+  rather than just fReadyForTransients
 
 1st February 2002  Joseph Perl
 - Improvements to HepRep:
