@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.hh,v 1.2 2002-10-28 11:13:08 johna Exp $
+// $Id: G4AttDefStore.hh,v 1.3 2002-11-20 14:18:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTDEFSTORE_HH
@@ -37,9 +37,10 @@ public:
   static G4std::map<G4String,G4AttDef>*
   GetInstance(G4String storeName,bool& isNew);
   // Returns a pointer to the named store and isNew is true if store is new.
-private:
+protected:
   G4AttDefStore();
   ~G4AttDefStore();
+private:
   G4AttDefStore(const G4AttDefStore&);
   G4AttDefStore& operator=(const G4AttDefStore&);
   static G4std::map<G4String,G4std::map<G4String,G4AttDef>*> m_stores;

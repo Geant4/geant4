@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.hh,v 1.9 2002-10-24 14:36:29 johna Exp $
+// $Id: G4VisAttributes.hh,v 1.10 2002-11-20 14:18:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,6 +72,8 @@ public: // With description
   G4VisAttributes (G4bool visibility, const G4Colour& colour);
 
   static const G4VisAttributes Invisible;
+
+  static const G4VisAttributes& GetInvisible();
 
   G4bool operator != (const G4VisAttributes& a) const;
   G4bool operator == (const G4VisAttributes& a) const;

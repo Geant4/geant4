@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.11 2002-11-12 15:51:19 evc Exp $
+// $Id: HepPolyhedron.cc,v 1.12 2002-11-20 14:18:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -176,6 +176,19 @@ HepNormal3D HepPolyhedron::FindNodeNormal(int iFace, int iNode) const
   return normal.unit();
 }
 
+int HepPolyhedron::GetNumberOfRotationSteps()
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::GetNumberOfRotationSteps     Date:    24.06.97 *
+ * Author: J.Allison (Manchester University)         Revised:          *
+ *                                                                     *
+ * Function: Get number of steps for whole circle                      *
+ *                                                                     *
+ ***********************************************************************/
+{
+  return fNumberOfRotationSteps;
+}
+
 void HepPolyhedron::SetNumberOfRotationSteps(int n)
 /***********************************************************************
  *                                                                     *
@@ -196,6 +209,19 @@ void HepPolyhedron::SetNumberOfRotationSteps(int n)
   }else{
     fNumberOfRotationSteps = n;
   }    
+}
+
+void HepPolyhedron::ResetNumberOfRotationSteps()
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::GetNumberOfRotationSteps     Date:    24.06.97 *
+ * Author: J.Allison (Manchester University)         Revised:          *
+ *                                                                     *
+ * Function: Reset number of steps for whole circle to default value   *
+ *                                                                     *
+ ***********************************************************************/
+{
+  fNumberOfRotationSteps = DEFAULT_NUMBER_OF_STEPS;
 }
 
 void HepPolyhedron::AllocateMemory(int Nvert, int Nface)

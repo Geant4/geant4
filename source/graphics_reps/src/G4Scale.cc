@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scale.cc,v 1.4 2001-09-10 10:28:56 johna Exp $
+// $Id: G4Scale.cc,v 1.5 2002-11-20 14:18:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,3 +83,8 @@ G4String G4Scale::GuidanceString
  "\n  if direction == y then (x,y,z) to (x,y + length,z)"
  "\n  if direction == z then (x,y,z - length) to (x,y,z)"
 );
+
+const G4String& G4Scale::GetGuidanceString()
+{
+  return GuidanceString;
+}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scale.hh,v 1.3 2001-09-10 10:28:24 johna Exp $
+// $Id: G4Scale.hh,v 1.4 2002-11-20 14:18:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,9 +75,14 @@ public: // With description
   G4double        GetYmid() const;
   G4double        GetZmid() const;
 
+  static const G4String& GetGuidanceString();
+
+public:  // without description
+
   static G4String GuidanceString;
 
 private:
+
   G4double fLength;
   G4String fAnnotation;
   Direction fDirection;

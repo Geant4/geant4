@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.h,v 1.11 2002-11-12 15:50:26 evc Exp $
+// $Id: HepPolyhedron.h,v 1.12 2002-11-20 14:18:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -306,15 +306,13 @@ class HepPolyhedron {
   double GetVolume() const;
 
   // Get number of steps for whole circle
-  static int GetNumberOfRotationSteps() { return fNumberOfRotationSteps; }
+  static int GetNumberOfRotationSteps();
 
   // Set number of steps for whole circle
   static void SetNumberOfRotationSteps(int n);
 
   // Reset number of steps for whole circle to default value
-  static void ResetNumberOfRotationSteps() {
-    fNumberOfRotationSteps = DEFAULT_NUMBER_OF_STEPS;
-  }
+  static void ResetNumberOfRotationSteps();
 
   /**
    * Creates polyhedron for twisted trapezoid.

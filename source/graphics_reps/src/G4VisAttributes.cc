@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.cc,v 1.7 2002-10-24 14:40:55 johna Exp $
+// $Id: G4VisAttributes.cc,v 1.8 2002-11-20 14:18:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,6 +75,10 @@ fAttDefs            (0)
 {}
 
 const G4VisAttributes  G4VisAttributes::Invisible = G4VisAttributes (false);
+
+const G4VisAttributes& G4VisAttributes::GetInvisible() {
+  return Invisible;
+}
 
 G4std::ostream& operator << (G4std::ostream& os, const G4VisAttributes& a) {
   
