@@ -37,6 +37,7 @@
 // 18 August 2000 V.Ivanchenko Bug fixed in GetConstrain
 // 22 August 2000 V.Ivanchenko Insert paramStepLimit and
 //                reorganise access to Barkas and Bloch terms  
+// 04 Sept.  2000 V.Ivanchenko rename fluctuations
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -68,8 +69,8 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     theAntiProtonModel(NULL),
     theNuclearStoppingModel(NULL),
     theIonEffChargeModel(NULL),
-    theIonChuFlactuationModel(NULL),
-    theIonYangFlactuationModel(NULL),
+    theIonChuFluctuationModel(NULL),
+    theIonYangFluctuationModel(NULL),
     nStopping(true),
     theBarkas(true),
     theProton (G4Proton::Proton()),
@@ -95,8 +96,8 @@ G4hLowEnergyIonisation::~G4hLowEnergyIonisation()
   if(theAntiProtonModel)delete theAntiProtonModel;
   if(theNuclearStoppingModel)delete theNuclearStoppingModel;
   if(theIonEffChargeModel)delete theIonEffChargeModel;
-  if(theIonChuFlactuationModel)delete theIonChuFlactuationModel;
-  if(theIonYangFlactuationModel)delete theIonYangFlactuationModel;
+  if(theIonChuFluctuationModel)delete theIonChuFluctuationModel;
+  if(theIonYangFluctuationModel)delete theIonYangFluctuationModel;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -138,8 +139,8 @@ void G4hLowEnergyIonisation::InicialiseParametrisation()
   theAntiProtonModel = new G4QAOLowEnergyLoss(theAntiProtonTable) ;
   theNuclearStoppingModel = new G4hNuclearStoppingModel(theNuclearTable) ;
   theIonEffChargeModel = new G4hIonEffChargeSquare("Ziegler1988") ;
-  theIonChuFlactuationModel = new G4IonChuFlactuationModel("Chu") ;
-  theIonYangFlactuationModel = new G4IonYangFlactuationModel("Chu") ;
+  theIonChuFluctuationModel = new G4IonChuFluctuationModel("Chu") ;
+  theIonYangFluctuationModel = new G4IonYangFluctuationModel("Chu") ;
 
   // Energy limits for parametrisation of electronic energy losses
   protonLowEnergy = G4std::max(protonLowEnergy,
@@ -1105,8 +1106,8 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
     // Low velocity - additional ion charge fluctuations according to
     // Q.Yang et al., NIM B61(1991)149-155.
     } else {
-      G4double chu = theIonChuFlactuationModel->TheValue(particle, material);
-      G4double yang = theIonYangFlactuationModel->TheValue(particle, material);
+      G4double chu = theIonChuFluctuationModel->TheValue(particle, material);
+      G4double yang = theIonYangFluctuationModel->TheValue(particle, material);
       siga = sqrt( siga * (chargeSquare * chu + yang)) ;
     }
 

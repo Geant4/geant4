@@ -28,7 +28,7 @@
 /calor/cutG 1.0 mm
 /calor/cutE 1.0 mm
 #  hist file name
-/plots/sethistName c12st.paw 
+/plots/sethistName c12le.paw 
 /run/initialize
 #/run/particle/dumpCutValues
 #/event/drawTracks none

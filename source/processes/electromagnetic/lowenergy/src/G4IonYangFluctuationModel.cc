@@ -12,7 +12,7 @@
 // For information related to this code contact:
 // Geant4 Collaboration
 //
-// File name:     G4IonYangFlactuationModel
+// File name:     G4IonYangFluctuationModel
 //
 // Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
 // 
@@ -20,7 +20,9 @@
 //
 // Modifications: 
 // 18/08/2000  V.Ivanchenko First implementation
+// 04/09/2000  V.Ivanchenko Rename fluctuations            
 //
+// -------------------------------------------------------------------
 // Class Description: 
 //
 // The aproximation of additional ion energy loss fluctuations 
@@ -32,40 +34,40 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4IonYangFlactuationModel.hh"
+#include "G4IonYangFluctuationModel.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4IonYangFlactuationModel::G4IonYangFlactuationModel(const G4String& name)
+G4IonYangFluctuationModel::G4IonYangFluctuationModel(const G4String& name)
   : G4VLowEnergyModel(name), 
     protonMassAMU(proton_mass_c2/1.007276)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4IonYangFlactuationModel::~G4IonYangFlactuationModel() 
+G4IonYangFluctuationModel::~G4IonYangFluctuationModel() 
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonYangFlactuationModel::TheValue(const G4DynamicParticle* particle,
+G4double G4IonYangFluctuationModel::TheValue(const G4DynamicParticle* particle,
                 	                    const G4Material* material) 
 {
   G4double energy = particle->GetKineticEnergy() ;
   G4double mass = particle->GetMass() ;
   G4double charge = (particle->GetCharge())/eplus ;
 
-  G4double q = YangFlactuationModel(material,energy,mass,charge) ;
+  G4double q = YangFluctuationModel(material,energy,mass,charge) ;
 
   return q ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonYangFlactuationModel::TheValue(
+G4double G4IonYangFluctuationModel::TheValue(
                                    const G4ParticleDefinition* aParticle,
        		                   const G4Material* material,
                                          G4double kineticEnergy) 
@@ -73,14 +75,14 @@ G4double G4IonYangFlactuationModel::TheValue(
   G4double mass = aParticle->GetPDGMass() ;
   G4double charge = (aParticle->GetPDGCharge())/eplus ;
 
-  G4double q = YangFlactuationModel(material,kineticEnergy,mass,charge);
+  G4double q = YangFluctuationModel(material,kineticEnergy,mass,charge);
 
   return q ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonYangFlactuationModel::HighEnergyLimit(
+G4double G4IonYangFluctuationModel::HighEnergyLimit(
                              const G4ParticleDefinition* aParticle,
                              const G4Material* material) const
 {
@@ -89,7 +91,7 @@ G4double G4IonYangFlactuationModel::HighEnergyLimit(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonYangFlactuationModel::LowEnergyLimit(
+G4double G4IonYangFluctuationModel::LowEnergyLimit(
                               const G4ParticleDefinition* aParticle,
                               const G4Material* material) const
 {
@@ -98,7 +100,7 @@ G4double G4IonYangFlactuationModel::LowEnergyLimit(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonYangFlactuationModel::HighEnergyLimit(
+G4double G4IonYangFluctuationModel::HighEnergyLimit(
                               const G4ParticleDefinition* aParticle) const
 {
   return 1.0*TeV ;
@@ -106,7 +108,7 @@ G4double G4IonYangFlactuationModel::HighEnergyLimit(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonYangFlactuationModel::LowEnergyLimit(
+G4double G4IonYangFluctuationModel::LowEnergyLimit(
                               const G4ParticleDefinition* aParticle) const
 {
   return 0.0 ;
@@ -114,7 +116,7 @@ G4double G4IonYangFlactuationModel::LowEnergyLimit(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4bool G4IonYangFlactuationModel::IsInCharge(
+G4bool G4IonYangFluctuationModel::IsInCharge(
                                   const G4DynamicParticle* particle,
     		                  const G4Material* material) const
 {
@@ -123,7 +125,7 @@ G4bool G4IonYangFlactuationModel::IsInCharge(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4bool G4IonYangFlactuationModel::IsInCharge(
+G4bool G4IonYangFluctuationModel::IsInCharge(
                                   const G4ParticleDefinition* aParticle,
       		                  const G4Material* material) const
 {
@@ -132,7 +134,7 @@ G4bool G4IonYangFlactuationModel::IsInCharge(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonYangFlactuationModel::YangFlactuationModel(
+G4double G4IonYangFluctuationModel::YangFluctuationModel(
                                     const G4Material* material,
                                           G4double kineticEnergy,
                                           G4double particleMass,

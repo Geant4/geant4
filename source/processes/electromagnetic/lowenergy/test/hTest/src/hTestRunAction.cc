@@ -157,17 +157,15 @@ void hTestRunAction::bookHisto()
   // init hbook
   hbookManager = new HBookFile(histName, 68);
 
-  // book ntuple
-  ntup = hbookManager->ntuple("Range/Energy");
-
   // book histograms
-  histo1 = hbookManager->histogram("number of steps/event"
-                                   ,nbinStep,Steplow,Stephigh) ;
+
+  //  histo1 = hbookManager->histogram("number of steps/event"
+  //                                 ,nbinStep,Steplow,Stephigh) ;
 
   histo2 = hbookManager->histogram("energy deposit in absorber(in MeV)"
                                      ,nbinEn,Enlow,Enhigh) ;
 
-
+  /*
   histo3 = hbookManager->histogram("angle distribution at exit(deg)"
                                      ,nbinTh,Thlow,Thhigh) ;
 
@@ -192,7 +190,10 @@ void hTestRunAction::bookHisto()
   histo10= hbookManager->histogram("kinetic energy of gammas escaping the absorber (MeV)"
                        ,nbinGamma,ElowGamma,EhighGamma)  ;
 //                  ,nbinGamma,log10(ElowGamma),log10(EhighGamma))  ;
+*/
 
+  // book ntuple
+  ntup = hbookManager->ntuple("Range/Energy");
 
 
 }

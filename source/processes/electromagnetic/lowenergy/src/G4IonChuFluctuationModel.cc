@@ -12,7 +12,7 @@
 // For information related to this code contact:
 // Geant4 Collaboration
 //
-// File name:     G4IonChuFlactuationModel
+// File name:     G4IonChuFluctuationModel
 //
 // Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
 // 
@@ -20,10 +20,15 @@
 //
 // Modifications: 
 // 18/08/2000  V.Ivanchenko First implementation
+// 04/09/2000  V.Ivanchenko Rename fluctuations            
+//
+// -------------------------------------------------------------------
 //
 // Class Description: 
 //
 // The aproximation of additional ion energy loss fluctuations 
+// W.K.Chu, In: Ion Beam Handbook for Material Analysis.
+// eds. J.W. Mayer and E. Rimini (Academic Press, New York, 1977).
 // Q.Yang et al., NIM B61(1991)149-155.
 //
 // Class Description: End 
@@ -32,53 +37,53 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4IonChuFlactuationModel.hh"
+#include "G4IonChuFluctuationModel.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4IonChuFlactuationModel::G4IonChuFlactuationModel(const G4String& name)
+G4IonChuFluctuationModel::G4IonChuFluctuationModel(const G4String& name)
   : G4VLowEnergyModel(name), 
     protonMassAMU(proton_mass_c2/1.007276)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4IonChuFlactuationModel::~G4IonChuFlactuationModel() 
+G4IonChuFluctuationModel::~G4IonChuFluctuationModel() 
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonChuFlactuationModel::TheValue(const G4DynamicParticle* particle,
+G4double G4IonChuFluctuationModel::TheValue(const G4DynamicParticle* particle,
                 	                    const G4Material* material) 
 {
   G4double energy = particle->GetKineticEnergy() ;
   G4double particleMass = particle->GetMass() ;
 
-  G4double q = ChuFlactuationModel(material,energy,particleMass) ;
+  G4double q = ChuFluctuationModel(material,energy,particleMass) ;
 
   return q ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonChuFlactuationModel::TheValue(
+G4double G4IonChuFluctuationModel::TheValue(
                                    const G4ParticleDefinition* aParticle,
        		                   const G4Material* material,
                                          G4double kineticEnergy) 
 {
   G4double particleMass = aParticle->GetPDGMass() ;
 
-  G4double q = ChuFlactuationModel(material,kineticEnergy,particleMass);
+  G4double q = ChuFluctuationModel(material,kineticEnergy,particleMass);
 
   return q ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonChuFlactuationModel::HighEnergyLimit(
+G4double G4IonChuFluctuationModel::HighEnergyLimit(
                              const G4ParticleDefinition* aParticle,
                              const G4Material* material) const
 {
@@ -87,7 +92,7 @@ G4double G4IonChuFlactuationModel::HighEnergyLimit(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonChuFlactuationModel::LowEnergyLimit(
+G4double G4IonChuFluctuationModel::LowEnergyLimit(
                              const G4ParticleDefinition* aParticle,
                              const G4Material* material) const
 {
@@ -96,7 +101,7 @@ G4double G4IonChuFlactuationModel::LowEnergyLimit(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonChuFlactuationModel::HighEnergyLimit(
+G4double G4IonChuFluctuationModel::HighEnergyLimit(
                              const G4ParticleDefinition* aParticle) const
 {
   return 1.0*TeV ;
@@ -104,7 +109,7 @@ G4double G4IonChuFlactuationModel::HighEnergyLimit(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonChuFlactuationModel::LowEnergyLimit(
+G4double G4IonChuFluctuationModel::LowEnergyLimit(
                              const G4ParticleDefinition* aParticle) const
 {
   return 0.0 ;
@@ -112,7 +117,7 @@ G4double G4IonChuFlactuationModel::LowEnergyLimit(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4bool G4IonChuFlactuationModel::IsInCharge(
+G4bool G4IonChuFluctuationModel::IsInCharge(
                            const G4DynamicParticle* particle,
     	                   const G4Material* material) const
 {
@@ -121,7 +126,7 @@ G4bool G4IonChuFlactuationModel::IsInCharge(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4bool G4IonChuFlactuationModel::IsInCharge(
+G4bool G4IonChuFluctuationModel::IsInCharge(
                            const G4ParticleDefinition* aParticle,
       	                   const G4Material* material) const
 {
@@ -130,7 +135,7 @@ G4bool G4IonChuFlactuationModel::IsInCharge(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonChuFlactuationModel::ChuFlactuationModel(
+G4double G4IonChuFluctuationModel::ChuFluctuationModel(
                                    const G4Material* material,
                                          G4double kineticEnergy,
                                          G4double particleMass) const

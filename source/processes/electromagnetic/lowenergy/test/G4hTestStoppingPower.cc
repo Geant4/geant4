@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hTestStoppingPower.cc,v 1.2 2000-08-02 20:45:29 vnivanch Exp $
+// $Id: G4hTestStoppingPower.cc,v 1.3 2000-09-04 14:16:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -44,6 +44,7 @@
 #include "G4DynamicParticle.hh"
 
 #include "G4hZiegler1977p.hh"
+#include "G4hZiegler1985p.hh"
 #include "G4hZiegler1977He.hh"
 #include "G4hICRU49p.hh"
 #include "G4hICRU49He.hh"
@@ -145,13 +146,13 @@ main()
 
 
   //--------- Particle definition ---------
-  const G4Electron* theElectron = G4Electron::Electron();
+  G4Electron* theElectron = G4Electron::Electron();
   
-  const G4ParticleDefinition* electron = G4Electron::ElectronDefinition();
-  const G4ParticleDefinition* proton = G4Proton::ProtonDefinition();
-  const G4ParticleDefinition* antiproton =G4AntiProton::AntiProtonDefinition();
-  const G4ParticleDefinition* deuteron = G4Deuteron::DeuteronDefinition();
-  const G4ParticleDefinition* alpha = G4Alpha::AlphaDefinition();
+  G4ParticleDefinition* electron = G4Electron::ElectronDefinition();
+  G4ParticleDefinition* proton = G4Proton::ProtonDefinition();
+  G4ParticleDefinition* antiproton =G4AntiProton::AntiProtonDefinition();
+  G4ParticleDefinition* deuteron = G4Deuteron::DeuteronDefinition();
+  G4ParticleDefinition* alpha = G4Alpha::AlphaDefinition();
 
   G4Ions* iC12 = new G4Ions::G4Ions(
               "IonC12",    11.14945*GeV,       0.0*MeV,  +6.0*eplus, 
@@ -174,11 +175,11 @@ main()
 	    "static_nucleus",        0,            +56,           0,
 		 true,            -1.0,          NULL);
 
-  const G4ParticleDefinition* ionC12  = iC12->IonsDefinition();
-  const G4ParticleDefinition* ionAr40 = iAr40->IonsDefinition();
-  const G4ParticleDefinition* ionFe56 = iFe56->IonsDefinition();
+  G4ParticleDefinition* ionC12  = iC12->IonsDefinition();
+  G4ParticleDefinition* ionAr40 = iAr40->IonsDefinition();
+  G4ParticleDefinition* ionFe56 = iFe56->IonsDefinition();
 
-  const G4ParticleDefinition* part[7];
+  G4ParticleDefinition* part[7];
   part[0] = proton;  
   part[1] = antiproton;  
   part[2] = deuteron;  
@@ -187,8 +188,8 @@ main()
   part[5] = ionAr40;  
   part[6] = ionFe56;  
 
-  const G4double ecut = 10.0*mm;
-  const G4double pcut = 0.01*mm;
+  G4double ecut = 10.0*mm;
+  G4double pcut = 0.01*mm;
   electron->SetCuts(ecut);
   proton->SetCuts(pcut);
   antiproton->SetCuts(pcut);
@@ -240,7 +241,7 @@ main()
   G4double tkin;
   s = (log10(maxE)-log10(minE))/num;
 
- HepHistogram* h[55] ;
+ HepHistogram* h[60] ;
        
   // Test on Stopping Powers for all elements
 
@@ -266,7 +267,6 @@ main()
                                                   ,92,0.5,92.5) ;
  h[10] =  hbookManager->histogram("p 4 MeV   (keV*cm2/10^15!atoms) ICRU_49p"
                                                   ,92,0.5,92.5) ;
-
 
  h[11] =  hbookManager->histogram("p 40 keV (keV*cm2/10^15!atoms) Ziegler1977He"
                                                   ,92,0.5,92.5) ;
@@ -361,10 +361,28 @@ main()
  h[52]= hbookManager->histogram("Ar40 in Al (MeV/(mg/cm2)) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
 
- G4VhElectronicStoppingPower* Z77p = new G4hZiegler1977p();
- G4VhElectronicStoppingPower* Z77He = new G4hZiegler1977He();
- G4VhElectronicStoppingPower* I49p = new G4hICRU49p();
- G4VhElectronicStoppingPower* I49He = new G4hICRU49He();
+ // Table with the data
+ h[53] = hbookManager->histogram("Data p 40 keV (keV*cm2/10^15!atoms) Ziegler1977p"
+                                                  ,92,0.5,92.5) ;
+ h[54] =  hbookManager->histogram("Data He 40 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+                                                  ,92,0.5,92.5) ;
+
+ h[55] = hbookManager->histogram("p 40 keV (keV*cm2/10^15!atoms) Ziegler1985p"
+                                                  ,92,0.5,92.5) ;
+ h[56] =  hbookManager->histogram("p 100 keV (keV*cm2/10^15!atoms) Ziegler1985p"
+                                                  ,92,0.5,92.5) ;
+ h[57] =  hbookManager->histogram("p 400 keV (keV*cm2/10^15!atoms) Ziegler1985p"
+                                                  ,92,0.5,92.5) ;    
+ h[58] =  hbookManager->histogram("p 1 MeV   (keV*cm2/10^15!atoms) Ziegler1985p"
+                                                  ,92,0.5,92.5) ;
+ h[59] =  hbookManager->histogram("p 4 MeV   (keV*cm2/10^15!atoms) Ziegler1985p"
+                                                  ,92,0.5,92.5) ;
+
+ G4VhElectronicStoppingPower* Z77p = new G4hZiegler1977p() ;
+ G4VhElectronicStoppingPower* Z85p = new G4hZiegler1985p() ;
+ G4VhElectronicStoppingPower* Z77He = new G4hZiegler1977He() ;
+ G4VhElectronicStoppingPower* I49p = new G4hICRU49p() ;
+ G4VhElectronicStoppingPower* I49He = new G4hICRU49He() ;
 
   G4double de;
 
@@ -379,6 +397,8 @@ main()
     q2    = theIonEffChargeModel->TheValue(part[3],el[j],tkin);
     de = Z77p->ElectronicStoppingPower(z, tau) ;
     h[1]->accumulate(z,de) ;
+    de = Z85p->ElectronicStoppingPower(z, tau) ;
+    h[55]->accumulate(z,de) ;
     de = I49p->ElectronicStoppingPower(z, tau) ;
     h[6]->accumulate(z,de) ;
     de = Z77He->ElectronicStoppingPower(z, tau) ;
@@ -394,6 +414,8 @@ main()
     z = G4double(j);
     de = Z77p->ElectronicStoppingPower(z, tau) ;
     h[2]->accumulate(z,de) ;
+    de = Z85p->ElectronicStoppingPower(z, tau) ;
+    h[56]->accumulate(z,de) ;
     de = I49p->ElectronicStoppingPower(z, tau) ;
     h[7]->accumulate(z,de) ;
     de = Z77He->ElectronicStoppingPower(z, tau) ;
@@ -411,6 +433,8 @@ main()
     z = G4double(j);
     de = Z77p->ElectronicStoppingPower(z, tau) ;
     h[3]->accumulate(z,de) ;
+    de = Z85p->ElectronicStoppingPower(z, tau) ;
+    h[57]->accumulate(z,de) ;
     de = I49p->ElectronicStoppingPower(z, tau) ;
     h[8]->accumulate(z,de) ;
     de = Z77He->ElectronicStoppingPower(z, tau) ;
@@ -427,6 +451,8 @@ main()
     z = G4double(j);
     de = Z77p->ElectronicStoppingPower(z, tau) ;
     h[4]->accumulate(z,de) ;
+    de = Z85p->ElectronicStoppingPower(z, tau) ;
+    h[58]->accumulate(z,de) ;
     de = I49p->ElectronicStoppingPower(z, tau) ;
     h[9]->accumulate(z,de) ;
     de = Z77He->ElectronicStoppingPower(z, tau) ;
@@ -443,6 +469,8 @@ main()
     z = G4double(j);
     de = Z77p->ElectronicStoppingPower(z, tau) ;
     h[5]->accumulate(z,de) ;
+    de = Z85p->ElectronicStoppingPower(z, tau) ;
+    h[59]->accumulate(z,de) ;
     de = I49p->ElectronicStoppingPower(z, tau) ;
     h[10]->accumulate(z,de) ;
     de = Z77He->ElectronicStoppingPower(z, tau) ;
@@ -463,11 +491,6 @@ main()
     de = (I49He->ElectronicStoppingPower(z, tau/rateMass))*q2 ;
     h[22]->accumulate(z,de) ;
   }
-
- h[53] = hbookManager->histogram("Data p 40 keV (keV*cm2/10^15!atoms) Ziegler1977p"
-                                                  ,92,0.5,92.5) ;
- h[54] =  hbookManager->histogram("Data He 40 keV (keV*cm2/10^15!atoms) Ziegler1977He"
-                                                  ,92,0.5,92.5) ;
 
   for ( j=1; j<93; j++)
   { 

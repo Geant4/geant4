@@ -24,7 +24,7 @@
 //
 // Class Description: 
 //
-// Low energy protons/ions ionisation parametrisation
+// Low energy protons/ions electronic stopping power parametrisation
 //
 // Class Description: End 
 //

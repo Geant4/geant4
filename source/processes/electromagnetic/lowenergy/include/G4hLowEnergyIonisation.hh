@@ -189,8 +189,8 @@ private:
   G4VLowEnergyModel* theAntiProtonModel;
   G4VLowEnergyModel* theIonEffChargeModel;
   G4VLowEnergyModel* theNuclearStoppingModel;
-  G4VLowEnergyModel* theIonChuFlactuationModel;
-  G4VLowEnergyModel* theIonYangFlactuationModel;
+  G4VLowEnergyModel* theIonChuFluctuationModel;
+  G4VLowEnergyModel* theIonYangFluctuationModel;
 
   // name of parametrisation table of electron stopping power
   G4String theProtonTable;

@@ -227,9 +227,9 @@ void hTestPhysicsList::ConstructEM()
       G4cout << "Hadronic processes for " << particleName << G4endl; 
 
       // Standard ionisation
-            G4hIonisation* hIon = new G4hIonisation() ;
+      //            G4hIonisation* hIon = new G4hIonisation() ;
 
-      // G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
+       G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
       // hIon->SetNuclearStoppingOff() ;
       // hIon->SetNuclearStoppingOn() ;
 
@@ -259,10 +259,10 @@ void hTestPhysicsList::ConstructEM()
       G4cout << "Ionic processes for " << particleName << G4endl; 
 
       // Standard ionisation
-              G4hIonisation* iIon = new G4hIonisation() ;
+      //        G4hIonisation* iIon = new G4hIonisation() ;
 
       // Standard ionisation with low energy extantion
-      //  G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
+        G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
 
       // iIon->SetNuclearStoppingOff() ;
       // iIon->SetNuclearStoppingOn() ;
