@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.50 2004-06-07 08:54:20 gcosmo Exp $
+cvs log $Id: History,v 1.51 2004-06-07 08:55:29 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,7 @@ committal in the CVS repository !
 
 7th June 2004  G.Cosmo  (greps-V06-01-01)
 - Fixed compilation problem on WIN32-VC for G4AttDefStore.
+- Added definition of GLOBLIBS in GNUmakefile for DLLs build on Windows.
 
 30th March 2004  G.Cosmo  (greps-V06-01-00)
 - Implemented constructor and destructor for G4AttDefStore, to properly
