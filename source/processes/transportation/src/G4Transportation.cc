@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.26 2001-11-28 18:32:07 japost Exp $
+// $Id: G4Transportation.cc,v 1.27 2001-12-08 15:20:30 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -349,16 +349,12 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
       currentSafety     += endpointDistance ;
 
 #ifdef G4DEBUG_TRANSPORT 
-     
-      cout.precision(16) ;
-      cout << "***Transportation::AlongStepGPIL ** " << G4endl  ;
-      cout << "  Called Navigator->ComputeSafety " << G4endl
-           << "    with position = " << fTransportEndPosition << G4endl
-           << "    and it returned safety= " << endSafety << G4endl ; 
-      cout << "  I add the endpoint distance " << endpointDistance 
-           << "   to it " 
-	         << "   to obtain a pseudo-safety= " << currentSafety 
-	         << "   which I return."  << G4endl ; 
+      G4cout.precision(16) ;
+      G4cout << "***Transportation::AlongStepGPIL ** " << G4endl  ;
+      G4cout << "  Called Navigator->ComputeSafety at " << fTransportEndPosition
+	     << "    and it returned safety= " << endSafety << G4endl ; 
+      G4cout << "  Adding endpoint distance " << endpointDistance 
+	     << "   we obtain pseudo-safety= " << currentSafety << G4endl ; 
 #endif
   }				    
 
@@ -421,20 +417,23 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
   fParticleChange.SetProperTimeChange( track.GetProperTime() + deltaProperTime ) ;
   //fParticleChange. SetTrueStepLength( track.GetStepLength() ) ;
 
-#ifdef DETECT_LOOPER
-  // If the particle is caught looping in a magnetic field (doing many steps)
-  //    this kills it ...
-  // But currently a user-limit maximum Step size alleviates this problem,
-  //    so this code is no longer used.
+  // If the particle is caught looping or is stuck (in very difficult boundaries)
+  //   in a magnetic field (doing many steps) 
+  //   THEN this kills it ...
   if ( fParticleIsLooping )
   {
       // Kill the looping particle 
  
       fParticleChange.SetStatusChange( fStopAndKill )  ;
-
+#ifdef G4VERBOSE
+      G4cout << " G4Transportation is killing track that is looping or stuck " << G4endl
+	     << "   This track has " << track.GetKineticEnergy() << " MeV energy."
+	     << G4endl;
+#endif
       // ClearNumberOfInteractionLengthLeft() ;
   }
-#endif
+  // Another (sometimes better way) is to use a user-limit maximum Step size
+  //  to alleviate this problem .. 
 
   return &fParticleChange ;
 
