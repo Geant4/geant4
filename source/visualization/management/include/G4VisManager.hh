@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.26 2001-08-17 23:01:54 johna Exp $
+// $Id: G4VisManager.hh,v 1.27 2001-09-10 11:00:36 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -239,10 +239,16 @@ public: // With description
 
 private:
 
+  void BeginOfRun ();
+
+  void BeginOfEvent ();
+
   void EndOfEvent ();
   // This is called on change of state (G4ApplicationState).  It is
   // used to draw hits and trajectories if included in the current
   // scene at the end of event, as required.
+
+  void EndOfRun ();
 
 public: // With description
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.156 2001-08-30 00:16:41 johna Exp $
+$Id: History,v 1.157 2001-09-10 11:03:39 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,20 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+10th September 2001  John Allison  (not tagged but needs greps-V03-02-04)
+- Added BeginOfRun, BeginOfEvent and EndOfRun to G4VisManager, invoked via
+  G4VisStateDependent.
+- Improved handling of refresh-at-end-of-event.  All scene handlers need to
+  implement ClearTransientStore and ensure rebuilding of permanent store if
+  necessary.
+- Auto-refresh (notifyHandlers) after attaching scene.
+- Changed default colour of scale to red and fixed a couple of small bugs in
+  the implementation of AddPrimitive(G4Scale).
+- Improved verbosity guidance.
+- Improved /vis/scene/add/scale guidance (needs greps-V03-02-04).
+- Removed /vis/viewer/refresh from compound commands.
+- Capitalised 'R' in /vis/viewer/set/autoRefresh.
 
 29th August 2001  John Allison/Joseph Perl  (vis-V03-02-14)
 - Needs config-V03-02-06.

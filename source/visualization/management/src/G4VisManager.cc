@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.38 2001-08-24 20:45:53 johna Exp $
+// $Id: G4VisManager.cc,v 1.39 2001-09-10 11:01:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -933,7 +933,16 @@ void G4VisManager::PrintInvalidPointers () const {
   }
 }
 
+void G4VisManager::BeginOfRun () {
+  //G4cout << "G4VisManager::BeginOfRun" << G4endl;
+}
+
+void G4VisManager::BeginOfEvent () {
+  //G4cout << "G4VisManager::BeginOfEvent" << G4endl;
+}
+
 void G4VisManager::EndOfEvent () {
+  //G4cout << "G4VisManager::EndOfEvent" << G4endl;
   if (fpConcreteInstance && IsValidView ()) {
     ClearTransientStoreIfMarked();
     G4ModelingParameters* pMP =
@@ -948,11 +957,24 @@ void G4VisManager::EndOfEvent () {
     }
     delete pMP;
     if (fpScene->GetRefreshAtEndOfEvent()) {
+      fpViewer->ShowView();  // ...for systems needing post processing.
       fpSceneHandler->SetMarkForClearingTransientStore(true);
     }
-    else {
-      fpSceneHandler->SetMarkForClearingTransientStore(false);
-    }
+  }
+}
+
+void G4VisManager::EndOfRun () {
+  //G4cout << "G4VisManager::EndOfRun" << G4endl;
+  if (fpConcreteInstance && IsValidView ()) {
+    fpSceneHandler->SetMarkForClearingTransientStore(false);
+  }
+}
+
+void G4VisManager::ClearTransientStoreIfMarked(){
+  // Assumes valid view.
+  if (fpSceneHandler->GetMarkForClearingTransientStore()) {
+    fpSceneHandler->SetMarkForClearingTransientStore(false);
+    fpSceneHandler->ClearTransientStore();
   }
 }
 
@@ -986,8 +1008,7 @@ G4VViewer* G4VisManager::GetViewer (const G4String& viewerName) const {
 }
 
 G4String G4VisManager::VerbosityGuidanceString
-("/vis/verbose [<verbosity>]"
- "\n  default:    warnings"
+("\n  default:    warnings"
  "\nSimple graded message scheme - digit or string (1st character defines):"
  "\n  0) quiet,         // Nothing is printed."
  "\n  1) startup,       // Startup and endup messages are printed..."
@@ -1145,7 +1166,7 @@ G4bool G4VisManager::IsValidView () {
       fpConcreteInstance = 0;  // Users must not use!
     }
     else {
-      G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/camera/reset");
+      G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/viewer/reset");
       if (fVerbosity >= warnings) {
 	G4cout <<
 	  "WARNING: G4VisManager: the scene was empty, \"world\" has been"
@@ -1155,12 +1176,4 @@ G4bool G4VisManager::IsValidView () {
     }
   }
   return isValid;
-}
-
-void G4VisManager::ClearTransientStoreIfMarked(){
-  // Assumes valid view.
-  if (fpSceneHandler->GetMarkForClearingTransientStore()) {
-    fpSceneHandler->SetMarkForClearingTransientStore(false);
-    fpSceneHandler->ClearTransientStore();
-  }
 }
