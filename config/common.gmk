@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.20 2000-12-05 14:54:26 gcosmo Exp $
+# $Id: common.gmk,v 1.21 2000-12-05 17:18:44 morita Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -136,6 +136,12 @@ ifdef G4ODBMS
 endif
 endif
 
+ifdef G4ODBMS
+  GPPFLAGS := "-MM"
+else
+  GPPFLAGS := "-M"
+endif
+
 ifdef G4SKIP_DEPEND
 $(G4TMPDIR)/%.d: src/%.cc
 	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
@@ -147,7 +153,7 @@ $(G4TMPDIR)/%.d: src/%.cc
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 	@echo Making dependency for file $< ...
 	@($(ECHO) $(G4TMPDIR)/\\c ; \
-	g++ -MM $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/$*.o!& $@!' >$@
+	g++ $(GPPFLAGS) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/$*.o!& $@!' >$@
 -include $(dependencies)
 endif
 

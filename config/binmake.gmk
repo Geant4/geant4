@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.53 2000-12-05 14:54:26 gcosmo Exp $
+# $Id: binmake.gmk,v 1.54 2000-12-05 17:19:49 morita Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -308,6 +308,12 @@ else
 	 -c $(OUT_OBJ)$(G4TMPDIR)/exe/$(G4TARGET).o $(G4TARGET).cc
 endif
 
+ifdef G4ODBMS
+  GPPFLAGS := "-MM"
+else
+  GPPFLAGS := "-M"
+endif
+
 # Make the $(G4TARGET).d file and include it.
 ifdef G4SKIP_DEPEND
 $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
@@ -319,7 +325,7 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@if [ ! -d $(G4TMPDIR)/exe ] ; then mkdir $(G4TMPDIR)/exe ;fi
 	@echo Making dependency for file $<...
 	@($(ECHO) $(G4TMPDIR)/exe/\\c ; \
-	g++ -MM $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
+	g++ $(GPPFLAGS) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
 -include $(dependencies)
 endif
 
