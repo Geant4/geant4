@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserRunAction.hh,v 1.1 1999-01-07 16:14:16 gunter Exp $
+// $Id: G4UserRunAction.hh,v 1.2 1999-04-09 02:28:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -21,8 +21,8 @@ class G4UserRunAction
     virtual ~G4UserRunAction();
 
   public:
-    virtual void BeginOfRunAction(G4Run* aRun);
-    virtual void EndOfRunAction(G4Run* aRun);
+    virtual void BeginOfRunAction(const G4Run* aRun);
+    virtual void EndOfRunAction(const G4Run* aRun);
 };
 
 #endif
