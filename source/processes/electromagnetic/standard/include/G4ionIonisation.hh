@@ -44,7 +44,7 @@
 //
 // This class manages the ionisation process for ions.
 // it inherites from G4VContinuousDiscreteProcess via G4VEnergyLoss.
-// 
+//
 
 // -------------------------------------------------------------------
 //
@@ -54,11 +54,7 @@
 
 #include "G4VEnergyLossSTD.hh"
 
-class G4ParticleDefinition;
-class G4Track;
-class G4Step;
 class G4Material;
-class G4VEffectiveChargeModel;
 
 class G4ionIonisation : public G4VEnergyLossSTD
 {
@@ -68,7 +64,7 @@ public:
   G4ionIonisation(const G4String& name = "ionIoni");
 
   ~G4ionIonisation();
- 
+
   G4bool IsApplicable(const G4ParticleDefinition& p);
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,

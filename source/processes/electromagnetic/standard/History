@@ -1,4 +1,4 @@
-$Id: History,v 1.79 2003-02-15 19:26:02 vnivanch Exp $
+$Id: History,v 1.80 2003-02-18 10:41:02 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-15 feb 03: V.Ivant
+18 feb 03: V.Ivant
 - fix problems with lambda and range tables for STD hadrons/ions
 
 13 feb 03: V.Ivant

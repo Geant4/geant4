@@ -39,6 +39,7 @@
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
 // 13-02-03 SubCutoffProcessors defined for regions (V.Ivanchenko)
+// 17-02-03 Fix problem of store/restore tables (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -186,11 +187,11 @@ public:
   void SetSubLambdaTable(G4PhysicsTable* p);
   G4PhysicsTable* SubLambdaTable() {return theSubLambdaTable;};
 
-  G4double GetDEDX(G4double kineticEnergy, const G4MaterialCutsCouple* couple);
+  G4double GetDEDX(G4double& kineticEnergy, const G4MaterialCutsCouple* couple);
 
-  G4double GetRange(G4double kineticEnergy, const G4MaterialCutsCouple* couple);
+  G4double GetRange(G4double& kineticEnergy, const G4MaterialCutsCouple* couple);
 
-  G4double GetKineticEnergy(G4double range, const G4MaterialCutsCouple* couple);
+  G4double GetKineticEnergy(G4double& range, const G4MaterialCutsCouple* couple);
 
   G4double GetLambda(G4double kineticEnergy, const G4MaterialCutsCouple* couple);
   // It returns the MeanFreePath of the process for a (energy, material)
@@ -351,7 +352,7 @@ inline void G4VEnergyLossSTD::DefineMaterial(const G4MaterialCutsCouple* couple)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossSTD::GetDEDX(G4double kineticEnergy,
+inline G4double G4VEnergyLossSTD::GetDEDX(G4double& kineticEnergy,
                                     const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
@@ -362,7 +363,7 @@ inline G4double G4VEnergyLossSTD::GetDEDX(G4double kineticEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossSTD::GetRange(G4double kineticEnergy,
+inline G4double G4VEnergyLossSTD::GetRange(G4double& kineticEnergy,
                                      const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
@@ -373,7 +374,7 @@ inline G4double G4VEnergyLossSTD::GetRange(G4double kineticEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossSTD::GetKineticEnergy(G4double range,
+inline G4double G4VEnergyLossSTD::GetKineticEnergy(G4double& range,
                                              const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);

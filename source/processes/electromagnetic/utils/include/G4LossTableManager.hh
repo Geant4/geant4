@@ -37,6 +37,7 @@
 // Modifications:
 //
 // 20-01-03 Migrade to cut per region (V.Ivanchenko)
+// 17-02-03 Fix problem of store/restore tables for ions (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -95,10 +96,11 @@ public:
   // to be called only by energy loss processes
   void Register(G4VEnergyLossSTD* p);
 
-  void BuildDEDXTable(const G4ParticleDefinition* aParticle);
+  void RegisterIon(const G4ParticleDefinition* aParticle);
 
-  void RetrieveDEDXTable(const G4ParticleDefinition* aParticle,
-                               G4VEnergyLossSTD*);
+  void BuildPhysicsTable(const G4ParticleDefinition* aParticle);
+
+  void RetrievePhysicsTables(const G4ParticleDefinition* aParticle);
 
   void SetLossFluctuations(G4bool val);
 
@@ -115,12 +117,6 @@ public:
   void SetMaxEnergy(G4double val);
 
   void SetStepLimits(G4double v1, G4double v2);
-
-  G4bool StorePhysicsTable(G4VEnergyLossSTD* el,
-		     const G4String& dedx_file,
-		     const G4String& range_file,
-		     const G4String& inv_range_file,
-			   G4bool ascii);
 
 private:
 
@@ -162,6 +158,7 @@ private:
   G4bool subCutoffFlag;
   G4bool rndmStepFlag;
   G4bool integral;
+  G4bool all_tables_are_stored;
 
   G4double minSubRange;
   G4double maxRangeVariation;
@@ -187,9 +184,10 @@ inline G4double G4LossTableManager::GetDEDX(
 {
   if(aParticle != currentParticle) {
     G4std::map<PD, G4VEnergyLossSTD*,G4std::less<PD> >::const_iterator pos;
-    if((pos = loss_map.find(aParticle)) == loss_map.end()) return 0.0;
-    currentParticle = aParticle;
-    currentLoss = (*pos).second;
+    if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
+      currentParticle = aParticle;
+      currentLoss = (*pos).second;
+    }
   }
   return currentLoss->GetDEDX(kineticEnergy, couple);
 }
@@ -203,9 +201,10 @@ inline G4double G4LossTableManager::GetRange(
 {
   if(aParticle != currentParticle) {
     G4std::map<PD, G4VEnergyLossSTD*, G4std::less<PD> >::const_iterator pos;
-    if((pos = loss_map.find(aParticle)) == loss_map.end()) return 0.0;
-    currentParticle = aParticle;
-    currentLoss = (*pos).second;
+    if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
+      currentParticle = aParticle;
+      currentLoss = (*pos).second;
+    }
   }
   return currentLoss->GetRange(kineticEnergy, couple);
 }
@@ -219,9 +218,10 @@ inline G4double G4LossTableManager::GetEnergy(
 {
   if(aParticle != currentParticle) {
     G4std::map<PD,G4VEnergyLossSTD*,G4std::less<PD> >::const_iterator pos;
-    if((pos = loss_map.find(aParticle)) == loss_map.end()) return 0.0;
-    currentParticle = aParticle;
-    currentLoss = (*pos).second;
+    if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
+      currentParticle = aParticle;
+      currentLoss = (*pos).second;
+    }
   }
   return currentLoss->GetKineticEnergy(range, couple);
 }

@@ -46,6 +46,7 @@
 // 06-02-03 Add control on tmax in PostStepDoIt (V.Ivanchenko)
 // 13-02-03 SubCutoffProcessors defined for regions (V.Ivanchenko)
 // 15-02-03 Lambda table can be scaled (V.Ivanchenko)
+// 17-02-03 Fix problem of store/restore tables (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -203,11 +204,12 @@ void G4VEnergyLossSTD::Initialise()
 
   idxSCoffRegions.clear();
 
+  const G4ProductionCutsTable* theCoupleTable=
+          G4ProductionCutsTable::GetProductionCutsTable();
+  size_t numOfCouples = theCoupleTable->GetTableSize();
+
   if (nSCoffRegions) {
     const G4DataVector* theSubCuts = modelManager->SubCutoff();
-    const G4ProductionCutsTable* theCoupleTable=
-          G4ProductionCutsTable::GetProductionCutsTable();
-    size_t numOfCouples = theCoupleTable->GetTableSize();
 
     for (G4int i=0; i<nSCoffRegions; i++) {
       scoffProcessors[i]->Initialise(particle, secondaryParticle, theCuts, theSubCuts);
@@ -221,6 +223,16 @@ void G4VEnergyLossSTD::Initialise()
       idxSCoffRegions.push_back(reg);
     }
   }
+
+
+  //!!!! To be checked because finalRange is changed here !!!!
+  for (size_t i=0; i<numOfCouples; i++) {
+    G4double lengthCut = theCoupleTable->GetMaterialCutsCouple(i)
+                       ->GetProductionCuts()->GetProductionCut(1);
+
+    if (finalRange > lengthCut) finalRange = lengthCut;
+  }
+
   if (0 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::Initialise() is done "
            << " chargeSqRatio= " << chargeSqRatio
@@ -247,23 +259,17 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
   }
 
   // Are particle defined?
-  if(!particle || particle->GetParticleType() == "nucleus") {
-    particle = &part;
-  }
-  if(particle != &part) {
-    G4cout << "G4VEnergyLossSTD::BuildPhysicsTable: "
-           << particle->GetParticleName()
-           << " != " << part.GetParticleName()
-           << G4endl;
-    G4Exception("G4VEnergyLossSTD::BuildPhysicsTable with wrong G4ParticleDefinition");
-  }
+  if( !particle ) particle = &part;
 
-  if(!baseParticle) baseParticle = DefineBaseParticle(particle);
-
-  if(particle->GetParticleName() != "GenericIon" && GetProcessName() == "ionIoni")
+  if(part.GetParticleName() != "GenericIon" &&
+     part.GetParticleType() == "nucleus" &&
+     part.GetParticleSubType() == "generic")
   {
      return;
   }
+
+  if( !baseParticle ) baseParticle = DefineBaseParticle(particle);
+
   G4bool cutsWasModified = false;
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
@@ -278,43 +284,11 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
   if( !cutsWasModified ) return;
 
   // It is responsability of the G4LossTables to build DEDX and range tables
-  (G4LossTableManager::Instance())->BuildDEDXTable(particle);
-
-
-  //!!!! To be checked because finalRange is changed here !!!!
-  for (size_t i=0; i<numOfCouples; i++) {
-    G4double lengthCut = theCoupleTable->GetMaterialCutsCouple(i)
-                       ->GetProductionCuts()->GetProductionCut(1);
-
-    if (finalRange > lengthCut) finalRange = lengthCut;
-  }
-
-//  if(theLambdaTable) theLambdaTable->clearAndDestroy();
-
-//  theLambdaTable = BuildLambdaTable();
+  (G4LossTableManager::Instance())->BuildPhysicsTable(particle);
 
   tablesAreBuilt = true;
 
   if(!baseParticle) PrintInfoDefinition();
-
-  if(0 < verboseLevel) {
-    G4cout << "Tables are built for " << particle->GetParticleName()
-           << " IntegralFlag= " <<  integral
-           << G4endl;
-    if(2 < verboseLevel) {
-      G4cout << "DEDXTable address= " << theDEDXTable << G4endl;
-      if(theDEDXTable) G4cout << (*theDEDXTable) << G4endl;
-      G4cout << "RangeTable address= " << theRangeTable << G4endl;
-      if(theRangeTable) G4cout << (*theRangeTable) << G4endl;
-      G4cout << "InverseRangeTable address= " << theInverseRangeTable << G4endl;
-      if(theInverseRangeTable) G4cout << (*theInverseRangeTable) << G4endl;
-    }
-  }
-
-  if(2 < verboseLevel) {
-    G4cout << "LambdaTable address= " << theLambdaTable << G4endl;
-    if(theLambdaTable) G4cout << (*theLambdaTable) << G4endl;
-  }
 
 }
 
@@ -324,166 +298,187 @@ G4bool G4VEnergyLossSTD::StorePhysicsTable(G4ParticleDefinition* part,
 			 	     const G4String& directory,
 				           G4bool ascii)
 {
-  G4String filename;
+  G4bool res = true;
+  if ( baseParticle ) return res;
+  G4bool yes = true;
 
-  if (!baseParticle) {
-
-    G4String f1 = GetPhysicsTableFileName(part,directory,"DEDX",ascii);
-    G4String f2 = GetPhysicsTableFileName(part,directory,"Range",ascii);
-    G4String f3 = GetPhysicsTableFileName(part,directory,"InverseRange",ascii);
-
-    if(!((G4LossTableManager::Instance())->StorePhysicsTable(this,f1,f2,f3,ascii)))
-      {
-        return false;
-      }
+  if ( theDEDXTable ) {
+    const G4String name = GetPhysicsTableFileName(part,directory,"DEDX",ascii);
+    yes = theDEDXTable->StorePhysicsTable(name,ascii);
+    if( !yes ) res = false;
   }
 
-  if (theLambdaTable) {
-    filename = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
-    if ( !theLambdaTable->StorePhysicsTable(filename, ascii) ){
-      G4cout << "Fatal error theLambdaTable->StorePhysicsTable in <"
-             << filename << ">"
-             << G4endl;
-      return false;
-    }
+  if ( theRangeTable ) {
+    const G4String name = GetPhysicsTableFileName(part,directory,"Range",ascii);
+    yes = theRangeTable->StorePhysicsTable(name,ascii);
+    if( !yes ) res = false;
   }
 
-  G4PhysicsTable*  theLambdaSubTable = 0;
-  if(nSCoffRegions) {
-    for (G4int i=0; i<nSCoffRegions; i++) {
-      if(scoffProcessors[i]) {
-        theLambdaSubTable = scoffProcessors[i]->LambdaSubTable();
-
-        if (theLambdaSubTable) {
-          filename = GetPhysicsTableFileName(part,directory,
-	               "LambdaSub"+scoffProcessors[i]->GetName(),ascii);
-          if ( !theLambdaSubTable->StorePhysicsTable(filename, ascii) ){
-            G4cout << "Fatal error theLambdaSubTable->StorePhysicsTable in <"
-                   << filename << ">"
-                   << G4endl;
-            return false;
-	  }
-        }
-      }
-    }
+  if ( theInverseRangeTable ) {
+    const G4String name = GetPhysicsTableFileName(part,directory,"InverseRange",ascii);
+    yes = theInverseRangeTable->StorePhysicsTable(name,ascii);
+    if( !yes ) res = false;
   }
-  G4cout << GetProcessName() << " for " << particle->GetParticleName()
-         << ": Success to store the PhysicsTables in "
-         << directory << G4endl;
-  return true;
+
+  if ( theLambdaTable ) {
+    const G4String name = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
+    yes = theLambdaTable->StorePhysicsTable(name,ascii);
+    if( !yes ) res = false;
+  }
+
+  if ( theSubLambdaTable ) {
+    const G4String name = GetPhysicsTableFileName(part,directory,"SubLambda",ascii);
+    yes = theSubLambdaTable->StorePhysicsTable(name,ascii);
+    if( !yes ) res = false;
+  }
+  if ( res ) {
+    G4cout << "Physics tables are stored for " << particle->GetParticleName()
+           << " and process " << GetProcessName()
+	   << " in the directory <" << directory
+	   << "> " << G4endl;
+  } else {
+    G4cout << "Fail to store Physics Tables for " << particle->GetParticleName()
+           << " and process " << GetProcessName()
+	   << " in the directory <" << directory
+	   << "> " << G4endl;
+  }
+  return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
-				       const G4String& directory,
-				             G4bool ascii)
+			  	        const G4String& directory,
+			  	              G4bool ascii)
 {
-
-  // Are particle defined?
-  if(!particle) {
-    particle = part;
+  if(0 < verboseLevel) {
+    G4cout << "G4VEnergyLossSTD::RetrievePhysicsTable() for "
+           << part->GetParticleName() << " and process "
+	   << GetProcessName() << G4endl;
   }
-  if(particle != part) {
-    G4cout << "G4VEnergyLossSTD::RetrievePhysicsTable: "
-           << particle->GetParticleName()
-           << " != " << part->GetParticleName()
-           << G4endl;
-    G4Exception("G4VEnergyLossSTD::RetrievePhysicsTable with wrong G4ParticleDefinition");
-  }
+  G4bool res = true;
 
-  Initialise();
-
-  G4PhysicsTable* theTable;
-  G4String filename;
-  G4String particleName = particle->GetParticleName();
-  const G4ProductionCutsTable* theCoupleTable=
-        G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
-
-  filename = GetPhysicsTableFileName(part,directory,"DEDX",ascii);
-  theTable = new G4PhysicsTable(numOfCouples);
-  if (theTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << "DEDX table for " << particleName << " is retrieved from <"
-           << filename << ">"
-           << G4endl;
-  } else {
-    G4cout << "DEDX table for " << particleName << " in file <"
-           << filename << "> is not exist"
-           << G4endl;
-  }
-  theDEDXTable = theTable;
-
-  filename = GetPhysicsTableFileName(part,directory,"Range",ascii);
-  theTable = new G4PhysicsTable(numOfCouples);
-  if (theTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << "Range table for " << particleName << " is retrieved from <"
-           << filename << ">"
-           << G4endl;
-  } else {
-    G4cout << "Range table for " << particleName << " in file <"
-           << filename << "> is not exist"
-           << G4endl;
-  }
-  theRangeTable = theTable;
-
-  filename = GetPhysicsTableFileName(part,directory,"InverseRange",ascii);
-  theTable = new G4PhysicsTable(numOfCouples);
-  if (theTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << "Inverse table for " << particleName << " is retrieved from <"
-           << filename << ">"
-           << G4endl;
-    return false;
-  }
-  theInverseRangeTable = theTable;
-
-  filename = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
-  theLambdaTable = new G4PhysicsTable(numOfCouples);
-  if (theLambdaTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << "Lambda table for " << particleName << " is retrieved from <"
-           << filename << ">"
-           << G4endl;
-  } else {
-    G4cout << "Lambda table for " << particleName << " in file <"
-           << filename << "> is not exist"
-           << G4endl;
+  const G4String particleName = part->GetParticleName();
+  if(particleName != "GenericIon"  &&
+     part->GetParticleType() == "nucleus"  &&
+     part->GetParticleSubType() == "generic")
+  {
+     return res;
   }
 
-  G4PhysicsTable*  theLambdaSubTable = 0;
-  if (nSCoffRegions) {
-    for (G4int i=0; i<nSCoffRegions; i++) {
-      if(scoffProcessors[i]) {
+  if( !baseParticle ) baseParticle = DefineBaseParticle(particle);
 
-        filename = GetPhysicsTableFileName(part,directory,
-                    "LambdaSub"+scoffProcessors[i]->GetName(),ascii);
-        theLambdaSubTable = new G4PhysicsTable(numOfCouples);
-        if (theLambdaSubTable->RetrievePhysicsTable(filename, ascii) ){
-          G4cout << "LambdaSub table for " << particleName << " is retrieved from <"
-                 << filename << ">"
-                 << G4endl;
+  G4bool yes = true;
+  if ( !baseParticle ) {
+    G4PhysicsTable* table;
+    G4String filename;
+    const G4ProductionCutsTable* theCoupleTable=
+          G4ProductionCutsTable::GetProductionCutsTable();
+    size_t numOfCouples = theCoupleTable->GetTableSize();
 
-          scoffProcessors[i]->SetLambdaSubTable(theLambdaSubTable);
-
-        } else {
-          G4cout << "LambdaSub table for " << particleName << " in file <"
-                 << filename << "> is not exist"
-                 << G4endl;
-        }
+    filename = GetPhysicsTableFileName(part,directory,"DEDX",ascii);
+    table = new G4PhysicsTable(numOfCouples);
+    yes = table->RetrievePhysicsTable(filename,ascii);
+    if ( yes ) {
+      SetDEDXTable(table);
+      if (0 < verboseLevel) {
+        G4cout << "DEDX table for " << particleName << " is retrieved from <"
+               << filename << ">"
+               << G4endl;
+      }
+    } else {
+      table->clearAndDestroy();
+      if (0 < verboseLevel) {
+        G4cout << "DEDX table for " << particleName << " in file <"
+               << filename << "> is not exist"
+               << G4endl;
       }
     }
+
+    filename = GetPhysicsTableFileName(part,directory,"Range",ascii);
+    table = new G4PhysicsTable(numOfCouples);
+    yes = table->RetrievePhysicsTable(filename,ascii);
+    if ( yes ) {
+      SetRangeTable(table);
+      if (0 < verboseLevel) {
+        G4cout << "Range table for " << particleName << " is retrieved from <"
+               << filename << ">"
+               << G4endl;
+      }
+    } else {
+      table->clearAndDestroy();
+      if (0 < verboseLevel) {
+        G4cout << "Range table for " << particleName << " in file <"
+               << filename << "> is not exist"
+               << G4endl;
+      }
+    }
+
+    filename = GetPhysicsTableFileName(part,directory,"InverseRange",ascii);
+    table = new G4PhysicsTable(numOfCouples);
+    yes = table->RetrievePhysicsTable(filename,ascii);
+    if ( yes ) {
+      SetInverseRangeTable(table);
+      if (0 < verboseLevel) {
+        G4cout << "InverseRange table for " << particleName << " is retrieved from <"
+               << filename << ">"
+               << G4endl;
+      }
+    } else {
+      table->clearAndDestroy();
+      if (0 < verboseLevel) {
+        G4cout << "InverseRange table for " << particleName << " in file <"
+               << filename << "> is not exist"
+             << G4endl;
+      }
+    }
+
+    filename = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
+    table = new G4PhysicsTable(numOfCouples);
+    yes = table->RetrievePhysicsTable(filename,ascii);
+    if ( yes ) {
+      SetLambdaTable(table);
+      if (0 < verboseLevel) {
+        G4cout << "Lambda table for " << particleName << " is retrieved from <"
+               << filename << ">"
+               << G4endl;
+      }
+    } else {
+      table->clearAndDestroy();
+      if (0 < verboseLevel) {
+        G4cout << "Lambda table for " << particleName << " in file <"
+               << filename << "> is not exist"
+               << G4endl;
+      }
+    }
+
+    filename = GetPhysicsTableFileName(part,directory,"SubLambda",ascii);
+    table = new G4PhysicsTable(numOfCouples);
+    yes = table->RetrievePhysicsTable(filename,ascii);
+    if ( yes ) {
+      SetSubLambdaTable(table);
+      if (0 < verboseLevel) {
+        G4cout << "SubLambda table for " << particleName << " is retrieved from <"
+               << filename << ">"
+               << G4endl;
+      }
+    } else {
+      table->clearAndDestroy();
+      if (0 < verboseLevel) {
+        G4cout << "SubLambda table for " << particleName << " in file <"
+               << filename << "> is not exist"
+               << G4endl;
+      }
+    }
+    tablesAreBuilt = true;
   }
 
-  // G4LossTableManager manages DEDX and range tables
+  (G4LossTableManager::Instance())->RetrievePhysicsTables(particle);
 
-  (G4LossTableManager::Instance())->RetrieveDEDXTable(particle, this);
 
-  G4cout << GetProcessName() << " for " << particleName
-         << ": end of retrieving PhysicsTables from directory <"
-         << directory << ">" << G4endl;
-
-  return true;
+  if(!baseParticle) PrintInfoDefinition();
+  return res;
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -870,6 +865,23 @@ void G4VEnergyLossSTD::PrintInfoDefinition() const
          << G4BestUnit(MaxKinEnergy(),"Energy")
          << " in " << LambdaBinning() << " bins."
          << G4endl;
+  if(0 < verboseLevel) {
+    G4cout << "Tables are built for " << particle->GetParticleName()
+           << " IntegralFlag= " <<  integral
+           << G4endl;
+    if(2 < verboseLevel) {
+      G4cout << "DEDXTable address= " << theDEDXTable << G4endl;
+      if(theDEDXTable) G4cout << (*theDEDXTable) << G4endl;
+      G4cout << "RangeTable address= " << theRangeTable << G4endl;
+      if(theRangeTable) G4cout << (*theRangeTable) << G4endl;
+      G4cout << "InverseRangeTable address= " << theInverseRangeTable << G4endl;
+      if(theInverseRangeTable) G4cout << (*theInverseRangeTable) << G4endl;
+      G4cout << "LambdaTable address= " << theLambdaTable << G4endl;
+      if(theSubLambdaTable) G4cout << (*theSubLambdaTable) << G4endl;
+      G4cout << "SubLambdaTable address= " << theSubLambdaTable << G4endl;
+      if(theSubLambdaTable) G4cout << (*theSubLambdaTable) << G4endl;
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

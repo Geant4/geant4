@@ -45,7 +45,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4ionIonisation.hh"
-#include "G4LossTableManager.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
 #include "G4AntiProton.hh"
@@ -56,7 +55,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ionIonisation::G4ionIonisation(const G4String& name) 
+G4ionIonisation::G4ionIonisation(const G4String& name)
   : G4VEnergyLossSTD(name),
     theParticle(0),
     theBaseParticle(G4Proton::Proton()),
@@ -108,8 +107,8 @@ void G4ionIonisation::PrintInfoDefinition() const
 {
   G4VEnergyLossSTD::PrintInfoDefinition();
 
-  G4cout << "      Scaling relation is used to proton dE/dx and range" 
-         << G4endl 
+  G4cout << "      Scaling relation is used to proton dE/dx and range"
+         << G4endl
          << "      Bether-Bloch model for Escaled > 2 MeV, "
          << "parametrisation of Bragg peak below."
          << G4endl;
