@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 1999-10-30 04:33:33 kurasige Exp $
+# $Id: GNUmakefile,v 1.4 2000-10-24 13:36:51 gcosmo Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for particle management library.  G.Cosmo, 4/4/97.
 # ----------------------------------------------------------------
@@ -16,11 +16,6 @@ CPPFLAGS += \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
             -I$(G4BASE)/intercoms/include \
-            -I$(G4BASE)/particles/management/include \
-            -I$(G4BASE)/processes/management/include \
-            -I$(G4BASE)/processes/decay/include \
-            -I$(G4BASE)/processes/electromagnetic/utils/include \
-            -I$(G4BASE)/track/include \
             -I$(G4BASE)/materials/include
 
 
