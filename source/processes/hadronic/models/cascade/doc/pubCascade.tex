@@ -1,0 +1,90 @@
+% ::: Settings
+\documentstyle[palatino, epsf,twoside,fleqn,epsfig,graphics,html,url, makeidx]{article} 
+%\def \SYSTEM {/home/miheikki/public/html/system/}
+\def \SYSTEM {/afs/cern.ch/user/m/miheikki/public/html/system/}
+%\input{\SYSTEM definitions} 
+%\def \PIC {/afs/cern.ch/user/m/miheikki/public/html/inucl/doc/}
+%\def \PIC {/home/miheikki/public/html/inucl/doc/}
+%\def \PIC {/home/miheikki/public/html/geant4/geant4/source/processes/hadronic/models/cascade/doc/pictures}
+\def \PIC {pictures}
+% ::: Frontpage
+\begin{document}
+
+% ::: Title
+\vspace{-1.5truecm}
+\begin{center}
+\Large
+{\bf {\sc Geant4} homepage}
+\large
+
+Aatos Heikkinen \sf{(aatos.heikkinen@cern.ch)}, \normalsize
+Helsinki Institute of Physics
+\end{center}
+
+%\end{titlepage}
+
+\thispagestyle{empty}
+
+% ::: Start with web page 
+\input{manHTML}
+
+\begin{latexonly}
+% ::: General intro
+\tableofcontents
+\newpage
+\end{latexonly}
+
+
+\input{manStatus}
+\begin{latexonly}
+\newpage
+\end{latexonly}
+
+
+% ::: Results
+\input{manResults}
+
+\input{manAbstract}
+\input{manIntro} 
+\input{manG4Intro}
+
+% ::: Models
+\input{manHetc}
+\input{manInucl}
+
+% ::: Conclusion (current performance, project status, plans)
+\input{manConclusion}
+
+% ::: Thanks
+\input{manAcknowledgements}
+
+% ::: References
+\bibliographystyle{unsrt}  % Options plain, unsrt, alpha, abbrv
+\bibstyle{plain}
+%\begin{thebibliography}{99}
+\bibliography{\SYSTEM /references/references.bib} 
+%\end{thebibliography}
+
+% ::: Indexing
+\input{manTables}
+
+
+\begin{appendix} % ::: appendix starts
+
+% ::: Report
+\input{manReport}
+
+% ::: Manual
+\input{manManual}
+
+% ::: Data for validation and comparison
+\input{manExperiment} 
+
+% ::: practical guidance
+\input{manGuide}
+
+% ::: Notes
+\input{manNotes} 
+
+\end{appendix} % ::: appendix ends
+\end{document}
