@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 1999-04-15 07:47:37 johna Exp $
+# $Id: GNUmakefile,v 1.4 1999-04-19 21:28:43 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake glob" makes global libraries for each subdomain.
@@ -80,7 +80,7 @@ $(G4TMP)/$(G4SYSTEM)/libname.map: $(G4BINDIR)/liblist
 $(G4BINDIR)/liblist: $(G4INSTALL)/config/liblist.c
 	@echo "Compiling liblist.c..."
 	@if [ ! -d $(G4BINDIR) ] ; then mkdir $(G4BINDIR) ;fi
-	cc -g -o $(G4BINDIR)/liblist $(G4INSTALL)/config/liblist.c
+	$(CC) $(CCFLAGS) -o $(G4BINDIR)/liblist $(G4INSTALL)/config/liblist.c
 
 clean_libs:
 	@echo Removing all libraries ...
@@ -101,7 +101,7 @@ ifdef CFRONT
 	@rm -rf $(G4TREP)
 endif
 
-# Pay _extremely_ attention to perform the following target !!
+# Pay _extremely_ attention before executing the following target !!
 #
 clean_all:
 	@echo Removing all installations ...
