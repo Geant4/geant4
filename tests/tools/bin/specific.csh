@@ -53,7 +53,6 @@ if ( `uname -n | grep rsplus` != "" ) then
   setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
   setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
   ##### setenv G4VIS_BUILD_OIX_DRIVER      1
-  setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/new
 endif
 
 if ( `uname -n | grep dxplus` != "" || \
@@ -62,9 +61,10 @@ if ( `uname -n | grep dxplus` != "" || \
     setenv DEBOPT ${DEBOPT}_NONISO
     setenv G4USE_OSPACE 1
 #    setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/pro
-    setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/new
+     setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/new
   else
     setenv DEBOPT ${DEBOPT}_ISO
+#   setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/iso
     setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/newiso
   endif
   if ( `uname -n | grep dcosf01` != "" ) then
@@ -98,7 +98,7 @@ if ( `uname -n | grep pcgeant`   != "" || \
   setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
   setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
   ##### setenv G4VIS_BUILD_OIX_DRIVER      1
-  setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/new
+   setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/new
 endif
 
 if ( `uname -n | grep sgmedia` != "" ) then
@@ -124,6 +124,7 @@ if ( `uname -n | grep sun` != "" ) then
     setenv G4USE_OSPACE 1
     setenv PATH `echo $PATH | sed s/SUNWspro50/SUNWspro/`
     setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/new
+#   setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/pro
     # Persistency...
     if ( $?G4USE_HEPODBMS ) then  # Protect against double calling.
     else

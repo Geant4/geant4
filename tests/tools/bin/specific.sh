@@ -7,6 +7,8 @@
 ####################################################
 ####################################################
 #
+# Specfy CLHEP 1.5 as new, run persistance tests 401,402
+#
 
 REF=undefined
 if [ `pwd | grep /stt/dev1/` ]; then
@@ -92,11 +94,13 @@ if [ `uname -n | grep sungeant` ]; then
     export DEBOPT=${DEBOPT}_NONISO
     export G4USE_OSPACE=1
     export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/new
+#   export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/pro
     # Persistency...
-#    if [ X$G4USE_HEPODBMS = X ]; then
-#       . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
-#       export G4EXAMPLE_FDID=207
-#    fi
+    if [ X$G4USE_HEPODBMS = X ]; then
+       . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
+       export G4EXAMPLE_FDID=207
+    fi
   else
     export G4SYSTEM=SUN-CC5
     export DEBOPT=${DEBOPT}_ISO
@@ -105,6 +109,7 @@ if [ `uname -n | grep sungeant` ]; then
     export PATH=`echo $PATH | sed s/SUNWspro/SUNWspro50/`
     # No Persistency...
     unset G4USE_HEPODBMS
+#   export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC5/new 
   fi
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
@@ -126,6 +131,7 @@ if [ `uname -n | grep hp` ]; then
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
+  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/HP-aCC/new
   # G4 build flags :
   ######export G4UI_BUILD_XM_SESSION=1
 #  export G4VIS_BUILD_OPENGLXM_DRIVER=1
@@ -151,11 +157,11 @@ if [ X`uname -n | grep dxplus` != X  -o "$UNAMEN" = "dcosf01" ]; then
   if [ $G4STTNONISO ]; then
     export DEBOPT=${DEBOPT}_NONISO
     export G4USE_OSPACE=1
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/pro
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/new
   else
     export DEBOPT=${DEBOPT}_ISO
     unset G4USE_OSPACE
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/iso
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/newiso
   fi
   if [ "$UNAMEN" = "dcosf01" ]; then
     export CLHEP_LIB=CLHEP-cxx62
@@ -194,6 +200,8 @@ if [ $UNAMEN = pcgeant -o $UNAMEN = pcg4speed ]; then
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
+  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/new
+  
   # G4 build flags :
   ######export G4UI_BUILD_XM_SESSION=1
 #  export G4VIS_BUILD_OPENGLXM_DRIVER=1
@@ -236,7 +244,7 @@ export G4VIS_BUILD_OPENGLX_DRIVER=1
 export G4VIS_USE_OPENGLX=1
 export G4VIS_BUILD_OPENGLXM_DRIVER=1
 export G4VIS_USE_OPENGLXM=1
-export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/stt/$REF/Linux-g++/CLHEP
+export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/new
 #/usr/local/CLHEP1.3/CLHEP
 export CLHEP_LIB=CLHEP
 #CLHEP-c++
