@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.1 2003-10-06 10:02:32 maire Exp $
+// $Id: EventAction.cc,v 1.2 2003-10-08 17:55:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,6 @@
 #include "EventActionMessenger.hh"
 
 #include "G4Event.hh"
-#include "G4EventManager.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
 #include "G4VVisManager.hh"
@@ -71,7 +70,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::EndOfEventAction(const G4Event*)
+void EventAction::EndOfEventAction(const G4Event* evt)
 {
   if (drawFlag != "none") G4cout << " Energy deposit: "
                                  << G4BestUnit(TotalEnergyDeposit,"Energy")
@@ -79,7 +78,6 @@ void EventAction::EndOfEventAction(const G4Event*)
 
   if (G4VVisManager::GetConcreteInstance())
   {
-   const G4Event* evt = fpEventManager->GetConstCurrentEvent();
    G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
    G4int n_trajectories = 0;
    if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();  
