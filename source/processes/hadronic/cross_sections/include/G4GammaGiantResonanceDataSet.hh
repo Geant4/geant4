@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GammaGiantResonanceDataSet.hh,v 1.1 2000-09-27 07:13:20 mkossov Exp $
+// $Id: G4GammaGiantResonanceDataSet.hh,v 1.2 2000-09-27 12:23:27 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,6 +38,9 @@ public:
    {
 	 //return theHadronCrossSections->IsApplicable(aParticle, anElement);
      // Possible prototype
+     G4double targetAtomicNumber = anElement->GetN();
+     //G4double nTargetProtons = anElement->GetZ();
+     //G4double nTargetNeutrons = targetAtomicNumber-nTargetProtons;
      G4bool result = false;
      G4double AA=targetAtomicNumber+targetAtomicNumber;
 	 G4int i=6;
@@ -48,12 +51,12 @@ public:
 	 else if(AA<ANucl(4)+ANucl(5)) i=4;
 	 else if(AA<ANucl(5)+ANucl(6)) i=5;
      if( aParticle->GetDefinition()->GetPDGEncoding()==22 &&
-         aParticle->GetKineticEnergy()/MeV<ThresholdEnergy(i))
+         aParticle->GetKineticEnergy()/MeV<ThresholdEnergy(i)
        ) result = true;
    }
 
    G4double GetCrossSection(const G4DynamicParticle* aParticle,
-                            const G4Element* anElement); //Defined in .cc
+                            const G4Element* anElement);
    //{
 	 //return theHadronCrossSections->GetInelasticCrossSection(aParticle,
      //                                                         anElement);
@@ -63,12 +66,11 @@ public:
 
    void DumpPhysicsTable(const G4ParticleDefinition&) {}
 
-private
-  G4double GetCrossSection(const G4DynamicParticle* aPart, const G4Element* anEle);
+private:
   G4double AbsorbtionByNucleus(G4int i, G4double E);
   G4double HighEnergyOld(G4double E);
   G4double HighEnergyNew(G4double E);
-  G4double LinearFit(G4double X, G4int N, const G4double& XN, const G4double& YN);
+  G4double LinearFit(G4double X, G4int N, const G4double* XN, const G4double* YN);
   G4double SitSint(G4double E, G4double p1, G4double p2, G4double p3, G4double p4);
   G4double CorA(G4double E, G4int i);
   G4double ANucl(G4int i);

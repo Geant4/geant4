@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ElectronNucleusDataSet.hh,v 1.1 2000-09-27 07:13:06 mkossov Exp $
+// $Id: G4ElectronNucleusDataSet.hh,v 1.2 2000-09-27 12:23:27 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,6 +38,9 @@ public:
    {
 	 //return theHadronCrossSections->IsApplicable(aParticle, anElement);
      // Possible prototype
+     G4double targetAtomicNumber = anElement->GetN();
+     //G4double nTargetProtons = anElement->GetZ();
+     //G4double nTargetNeutrons = targetAtomicNumber-nTargetProtons;
      G4bool result = false;
      G4double AA=targetAtomicNumber+targetAtomicNumber;
 	 G4int i=6;
@@ -48,7 +51,7 @@ public:
 	 else if(AA<ANucl(4)+ANucl(5)) i=4;
 	 else if(AA<ANucl(5)+ANucl(6)) i=5;
      if( aParticle->GetDefinition()->GetPDGEncoding()==22 &&
-         aParticle->GetKineticEnergy()/GeV>ThresholdEnergy(i))
+         aParticle->GetKineticEnergy()/GeV>ThresholdEnergy(i)
        ) result = true;
    }
 
@@ -59,28 +62,60 @@ public:
      //                                                         anElement);
    //}
 
-   void BuildPhysicsTable(const G4ParticleDefinition&) {}
+  void BuildPhysicsTable(const G4ParticleDefinition&) {};
 
-   void DumpPhysicsTable(const G4ParticleDefinition&) {}
+  void DumpPhysicsTable(const G4ParticleDefinition&) {};
 
-private
-  G4double GetCrossSection(const G4DynamicParticle* aPart, const G4Element* anEle);
-  G4double AbsorbtionByNucleus(G4int i, G4double E);
-  G4double HighEnergyOld(G4double E);
-  G4double HighEnergyNew(G4double E);
-  G4double LinearFit(G4double X, G4int N, const G4double& XN, const G4double& YN);
-  G4double SitSint(G4double E, G4double p1, G4double p2, G4double p3, G4double p4);
-  G4double CorA(G4double E, G4int i);
+private:
   G4double ANucl(G4int i);
   G4int    ZNucl(G4int i);
   G4int    NNucl(G4int i);
   G4double SumQQ(G4int i);
   G4double ThresholdEnergy(G4int i);
-  G4double PbDataEnergy(G4int i);
 
 // Body
 //private:
-
-  //G4HadronCrossSections* theHadronCrossSections;
+//G4HadronCrossSections* theHadronCrossSections;
 };
 
+// "A" of measured nuclei @@ Move to header
+inline G4double G4ElectronNucleusDataSet::ANucl(G4int i)
+{
+  static const G4int n  = 7;
+  static G4double AN[n] = {1.008, 2.01, 9.0122, 12.011, 26.982, 63.546, 207.2};
+  return AN[i];
+}
+
+// "Z" of measured nuclei @@ Move to header
+inline G4int G4ElectronNucleusDataSet::ZNucl(G4int i)
+{
+  static const G4int n  = 7;
+  static G4int ZN[n] = {1, 1, 4, 6, 13, 29,  82};
+  return ZN[i];
+}
+
+// "N" of measured nuclei @@ Move to header
+inline G4int G4ElectronNucleusDataSet::NNucl(G4int i)
+{
+  static const G4int n  = 7;
+  static G4int NN[n] = {0, 1, 5, 6, 14, 35, 125};
+  return NN[i];
+}
+
+// "3*sum(q^2)" for nuclei
+inline G4double G4ElectronNucleusDataSet::SumQQ(G4int i)
+{
+  static const G4int n  = 7;
+  static G4double QQ[n] = {3., 5., 22., 30., 67., 157., 496.};
+  return QQ[i];
+}
+
+// Gives the threshold energy for different nuclei @@ Move to header
+inline G4double G4ElectronNucleusDataSet::ThresholdEnergy(G4int i)
+{
+  static const G4int n = 7;
+  static G4double T[n] = {0.200, 0.0022, 0.012, 0.018, 0.013, 0.010, 0.007};
+  return T[i];
+}
+
+#endif

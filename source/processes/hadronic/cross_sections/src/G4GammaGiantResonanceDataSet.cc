@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GammaGiantResonanceDataSet.cc,v 1.1 2000-09-27 07:13:21 mkossov Exp $
+// $Id: G4GammaGiantResonanceDataSet.cc,v 1.2 2000-09-27 12:23:27 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,7 +33,7 @@ G4double G4GammaGiantResonanceDataSet::GetCrossSection(const G4DynamicParticle* 
   else if(AA<ANucl(5)+ANucl(6)) i=5;
   G4double f = AbsorbtionByNucleus(i,kineticEnergy);
   G4double sqCharge = 2*nTargetNeutrons + 3*nTargetProtons;
-  return (f/sumQQ(i))*sqCharge*millibarn;        // Scaling
+  return (f/SumQQ(i))*sqCharge*millibarn;        // Scaling
 }
 
 // Combined member function for different nuclei
@@ -77,26 +77,26 @@ G4double G4GammaGiantResonanceDataSet::AbsorbtionByNucleus(G4int i, G4double E)
                               37.2,38.0,39.0,40.0,39.8};
   // Cross section gamma-Be (J.Ahrens Nucl.Phys. A335(1980)67-74)"Low energy part"
   static const G4int nPtB  = 19;
-  static G4double XB[nPtB] = { 4.0, 5.1, 5.5, 6.6, 7.6, 8.8, 9.7,10.5,11.3,12.2
-							   13.1,14.0,15.5,17.2,20.1,23.0,26.5,29.4,32.3}
+  static G4double XB[nPtB] = { 4.0, 5.1, 5.5, 6.6, 7.6, 8.8, 9.7,10.5,11.3,12.2,
+							   13.1,14.0,15.5,17.2,20.1,23.0,26.5,29.4,32.3};
   static G4double YB[nPtB] = { 8.9, 9.8,24.7,56.0,59.5,58.6,52.9,49.0,44.2,40.1,
-							   36.0,34.2,25.2,20.9,15.6,12.2, 9.5, 7.0, 5.2}
+							   36.0,34.2,25.2,20.9,15.6,12.2, 9.5, 7.0, 5.2};
   // gamma-C
   static const G4int nPtC  = 23;
   static G4double XC[nPtC] = {46.7, 51.2, 53.0,54.5,55.6,56.7,57.8,58.7,59.7,61.9,
                               62.9, 65.5, 67.5,69.1,71.9,75.0,84.0,87.2,89.1,93.0,
-                              98.0,107.0,113.5}
+                              98.0,107.0,113.5};
   static G4double YC[nPtC] = { 0.3,  2.1,  5.2, 9.6,15.1,23.9,36.3,47.8,56.5,53.5,
                               60.3, 54.0, 40.0,28.5,34.7,25.3,18.5,15.5,21.0,13.5,
-                              10.5, 14.5, 10.0}
+							  10.5, 14.5, 10.0};
   // gamma-AL
   static const G4int nPtA  = 25;
   static G4double XA[nPtA] = {28.2,31.1,35.3, 37.4, 39.7,43.8,45.0,47.0,50.8,52.0,
                               55.5,57.1,59.0, 63.0, 66.4,69.5,72.3,76.2,78.6,82.8,
-                              85.5,92.1,97.8,101.0,108.8}
+                              85.5,92.1,97.8,101.0,108.8};
   static G4double YA[nPtA] = { 1.0, 4.1, 7.9, 15.2, 21.6,27.1,36.9,42.7,44.0,52.5,
                               53.2,62.0,58.5, 54.5, 48.5,42.6,38.0,34.7,37.7,35.0,
-                              33.6,29.0,22.5, 22.8, 18.5}
+							  33.6,29.0,22.5, 22.8, 18.5};
   // gamma-cU
   static const G4int nPtU  = 55;
   static G4double XU[nPtU] = { 9.84375,10.15630,10.46880,10.78130,11.09380,
@@ -109,13 +109,13 @@ G4double G4GammaGiantResonanceDataSet::AbsorbtionByNucleus(G4int i, G4double E)
                               20.78130,21.09380,21.40630,21.71880,22.03130,
                               22.34380,22.65630,22.96880,23.28130,23.59380,
                               23.90630,24.21880,24.53130,25.15630,25.78130,
-                              26.40630,27.03130,27.65630,30.00001,33.00001}
+							  26.40630,27.03130,27.65630,30.00001,33.00001};
   static G4double YU[nPtU] = { 0.6, 1.3, 2.5, 3.5, 4.6, 5.3, 6.2, 7.2, 8.3,10.1,
                               10.1,12.9,13.8,15.7,18.6,22.4,23.2,24.2,26.3,27.5,
                               30.0,29.0,30.5,28.3,27.6,25.5,25.0,25.8,26.4,24.4,
                               27.3,25.0,25.0,24.9,21.7,21.2,23.8,23.2,21.9,21.9,
                               20.2,18.7,20.8,19.2,17.5,15.2,14.5,15.5,11.9,12.0,
-                               9.8, 8.8, 8.8, 5.4, 2.5}
+                               9.8, 8.8, 8.8, 5.4, 2.5};
   // gamma-Pb is made as a function
   G4double f=0.;
   //if(i>1&&E>0.3) f= ANucl(i)*HighEnergyOld(E);  // General High Energy approximation
@@ -125,16 +125,16 @@ G4double G4GammaGiantResonanceDataSet::AbsorbtionByNucleus(G4int i, G4double E)
   else if(!i)                                // Hidgogen
   {
     if(E>ThresholdEnergy(i))
-      return f=(YS[i]/YM[i])*LinearFit(log10(E/X0[i])*XM[i]/log10(XS[i]/X0[i]),nPtH,XH,YH)
+      return f=(YS[i]/YM[i])*LinearFit(log10(E/X0[i])*XM[i]/log10(XS[i]/X0[i]),nPtH,XH,YH);
     else return 0.;
   }
   else if(i==1)                                // Deuterium
   {
     if(E>ThresholdEnergy(0))
-      return f=(YS[0]/YM[0])*LinearFit(log10(E/X0[0])*XM[0]/log10(XS[0]/X0[0]),nPtH,XH,YN)
+      return f=(YS[0]/YM[0])*LinearFit(log10(E/X0[0])*XM[0]/log10(XS[0]/X0[0]),nPtH,XH,YN);
     else if(E>ThresholdEnergy(i))
-      return f=0.01*10**(LinearFit(log10(E/X0[i])*XM[i]/log10(XS[i]/X0[i]),nPtH,XD,YD)
-                         *alog10(YS[i]/0.01)/YM[i]);
+      return f=0.01*pow(10,(LinearFit(log10(E/X0[i])*XM[i]/log10(XS[i]/X0[i]),nPtH,XD,YD)
+                         *log10(YS[i]/0.01)/YM[i]));
     else return 0.;
   }
   else if(i==2)                                // Berilium
@@ -182,18 +182,18 @@ G4double G4GammaGiantResonanceDataSet::HighEnergyOld(G4double E)
   static G4double Y[nPtA] = { 2.0, 4.9, 8.9,12.9,17.6,23.6,28.0,31.3,32.8,31.0,28.3,
                              24.5,21.5,17.9,16.0,14.5,12.0,10.5, 9.5, 8.0, 7.5, 7.};
   if(E<5.)
-    return S*LinearFit(A+B*log(E*1000.), nPtA, X, Y)
+    return S*LinearFit(A+B*log(E*1000.), nPtA, X, Y);
   else
   {
     G4double s=0.880355+1.876545*E;
-    return 0.071*pow(s,0.075)+0.12*pow(s,-0.46)
+    return 0.071*pow(s,0.075)+0.12*pow(s,-0.46);
   }
 }
 
 // Gamma-A for E>0.086 GeV (from PL-127B-331-CHOLLRT-83 & PR-54-1688-BIANCHI-96) 
 G4double G4GammaGiantResonanceDataSet::HighEnergyNew(G4double E)
 {
-  static const G4int nPtA = 72; // Coveres 0.086 - 1.163 GeV range
+  static const G4int nPtA = 73; // Coveres 0.086 - 1.163 GeV range
   static G4double X[nPtA] = {0.086,0.092,0.098,0.103,0.106,0.112,0.119,0.127,0.132,.1424,
                              .1475,.1525,.1572,.1619,.1669,.1719,.1770,.1825,.1879,.1926,
                              .1978,.2025,.2076,.2128,.2177,.2229,.2282,.2328,.2373,.2423,
@@ -211,21 +211,21 @@ G4double G4GammaGiantResonanceDataSet::HighEnergyNew(G4double E)
                              .1898,.1763,.1803,.1837,.1811,.1813,.1691,.1603,.1682,.1572,
                              .1509,.1516,.1407};
   if(E<1.16)
-    return LinearFit(E, nPtA, X, Y)
+    return LinearFit(E, nPtA, X, Y);
   else
   {
     G4double s=0.880355+1.876545*E;
-    return 0.071*pow(s,0.075)+0.12*pow(s,-0.46)
+    return 0.071*pow(s,0.075)+0.12*pow(s,-0.46);
   }
 }
 
 // Correction function for Be,C @@ Move to header
-G4double G4GammaGiantResonanceDataSet::LinearFit(G4double X, G4int N, const G4double& XN, const G4double& YN)
+G4double G4GammaGiantResonanceDataSet::LinearFit(G4double X, G4int N, const G4double* XN, const G4double* YN)
 {
   G4double Xj=XN[0];
   G4double Xh=XN[N-1];
   if(X<=Xj) return Xj; //-----+
-  else if(X>=XH) return Xh;//-|
+  else if(X>=Xh) return Xh;//-|
   G4double Xp; //             |
   G4int j=0;   //             |
   while (X>Xj && j<N)//<------+
