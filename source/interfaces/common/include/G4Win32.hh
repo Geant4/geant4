@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Win32.hh,v 1.2 1999-04-13 01:26:30 yhajime Exp $
+// $Id: G4Win32.hh,v 1.3 1999-05-07 10:34:11 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  To unify Windows message treatment between 
@@ -18,6 +18,7 @@
 #if defined(G4INTY_BUILD_WIN32) || defined(G4INTY_USE_WIN32)
 
 #include <windows.h>
+#include <windowsx.h>
 
 #include "G4VInteractorManager.hh"
 

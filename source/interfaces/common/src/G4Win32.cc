@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Win32.cc,v 1.2 1999-04-13 01:26:33 yhajime Exp $
+// $Id: G4Win32.cc,v 1.3 1999-05-07 10:34:18 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -39,8 +39,8 @@ G4Win32* G4Win32::getInstance (
 }
 /***************************************************************************/
 G4Win32* G4Win32::getInstance (
- HANDLE a_hInstance
-,HANDLE a_hPrevInstance
+ HINSTANCE a_hInstance
+,HINSTANCE a_hPrevInstance
 ,LPSTR  a_lpszCmdLine
 ,int    a_nCmdShow
 )
@@ -57,8 +57,8 @@ G4Win32* G4Win32::getInstance (
 }
 /***************************************************************************/
 G4Win32::G4Win32 (
- HANDLE a_hInstance
-,HANDLE a_hPrevInstance
+ HINSTANCE a_hInstance
+,HINSTANCE a_hPrevInstance
 ,LPSTR  a_lpszCmdLine
 ,int    a_nCmdShow
 )
@@ -85,7 +85,7 @@ G4Win32::G4Win32 (
       wc.hInstance     = hInstance;
       wc.hIcon         = LoadIcon  (NULL,IDI_APPLICATION);
       wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
-      wc.hbrBackground = GetStockObject(BLACK_BRUSH);
+      wc.hbrBackground = GetStockBrush(BLACK_BRUSH);
       wc.lpszMenuName  = className;
       wc.lpszClassName = className;
       ::RegisterClass  (&wc);
@@ -144,8 +144,8 @@ void G4Win32::FlushAndWaitExecution (
 }
 /***************************************************************************/
 void G4Win32::getWinMainArguments (
- HANDLE* a_hInstance
-,HANDLE* a_hPrevInstance
+ HINSTANCE* a_hInstance
+,HINSTANCE* a_hPrevInstance
 ,LPSTR*  a_lpszCmdLine
 ,int*    a_nCmdShow
 )
