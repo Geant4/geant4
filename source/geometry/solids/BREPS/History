@@ -1,5 +1,27 @@
 History file for geometry/solids/BREPS
 
+27/05/1999 : J. Apostolakis       breps-01-00-03
+
+ - Tagged.
+
+ Cosmetic change to G4FCylindricalSurface.cc
+
+25/05/1999 : S. Giani            
+ G4BREPSolidPolyhedra.cc(1.8) 
+	Modified comparison of square distance to use the squared tolerance 
+        (rather than the tolerance).          And used <=, instead of <.
+ G4FPlane.cc(1.5): 
+        Corrected the use of the tolerance in the intersect function
+ G4SurfaceBoundary.cc(1.4): Return 1 by convention if on surface.
+
+
+25/05/1999 : S. Magni
+
+ G4BREPSolidPCone.cc v1.12: 
+	New version of Inside function, 
+      	     that uses first intersection & dot prod with normal 
+             (instead of counting the number of distinct intersections)
+
 21/05/1999 : J. Apostolakis       breps-01-00-02
 
  - Tagged.
