@@ -208,7 +208,7 @@ G4int dicomHandler::readHeader(FILE *dicom, char filename2[300])
   FILE* configuration;
 
   configuration=fopen("Data.dat","r");
-  if ( configuration != NULL )
+  if ( configuration != 0 )
     {
       fscanf(configuration,"%s",compressionbuf);
       compression=atoi(compressionbuf);
@@ -406,12 +406,12 @@ G4double dicomHandler::pixel2density(G4int pixel)
   fscanf(calibration,"%s",nbrequalibuf);
   nbrequali=atoi(nbrequalibuf);
 
-  if (calibration == NULL )
+  if (calibration == 0 )
     {
       printf("@@@ No value to transform pixels in density!\n");
       exit(1);
     }
-  else // calibration != NULL
+  else // calibration != 0
     {
       for (G4int i=1;i<=nbrequali;i++) // Loop to store all the pts in CT2Density.dat
         {
@@ -515,12 +515,12 @@ void dicomHandler::checkFileFormat()
 	  // Reading the .dcm in two steps:
 	  //      1.  reading the header
 	  //	2. reading the pixel data and store the density in Moyenne.dat
-	  if ( dicom != NULL )
+	  if ( dicom != 0 )
             {
 	      readHeader(dicom,name_in_file);
 	      readData(dicom,name_in_file);
             }
-	  else //if ( dicom == NULL )
+	  else //if ( dicom == 0 )
             {
 	      G4cout << "\nError opening file : " << name << G4endl;
 	      exit(0);

@@ -84,7 +84,7 @@ OctreeNode* Octree::operator()( G4double nodeX,
 void Octree::DeleteTree()
 {
   delete mRoot;
-  mRoot = NULL;
+  mRoot = 0;
 }
 
 void Octree::CountRecursive( OctreeNode* pNode, 
@@ -96,7 +96,7 @@ void Octree::CountRecursive( OctreeNode* pNode,
       
   for ( G4int i = 0; i < 8; i++ )
     {
-      if ( (*pNode)[i] != NULL )
+      if ( (*pNode)[i] != 0 )
 	CountRecursive( (*pNode)[i], rMiddle, rTerminal );       
     }
 }
