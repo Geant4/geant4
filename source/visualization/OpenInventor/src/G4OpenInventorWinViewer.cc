@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.18 2004-11-22 22:57:01 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.19 2004-11-23 09:34:10 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -132,8 +132,10 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer(
     ::AppendMenu(casc,MF_STRING,ID_ETC_ERASE_EVENT,"Erase event");
     ::AppendMenu(casc,MF_STRING,ID_ETC_SET_SOLID,"Set solid");
     ::AppendMenu(casc,MF_STRING,ID_ETC_SET_WIRE_FRAME,"Set (G4) wire frame");
-    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_PREVIEW,"Set preview");
-    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_PREVIEW_AND_FULL,"Set preview and full");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_PREVIEW,
+                      "Visible mothers + invisible daughters");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_SET_PREVIEW_AND_FULL,
+                      "Visible mothers + visible daughters");
     ::AppendMenu(casc,MF_STRING,ID_ETC_UPDATE_SCENE,"Update scene");
     ::AppendMenu(casc,MF_STRING,ID_ETC_STATS,"Scene graph stats");}
 

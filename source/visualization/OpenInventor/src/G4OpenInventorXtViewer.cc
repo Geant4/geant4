@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.17 2004-11-22 22:57:01 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.18 2004-11-23 09:34:10 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -116,8 +116,8 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer(
     AddButton(menu,"Erase event",EraseEventCbk);
     AddButton(menu,"Set solid",SetSolidCbk);
     AddButton(menu,"Set (G4) wire frame",SetWireFrameCbk);
-    AddButton(menu,"Set preview",SetPreviewCbk);
-    AddButton(menu,"Set preview and full",SetPreviewAndFullCbk);
+    AddButton(menu,"Visible mothers + invisible daughters",SetPreviewCbk);
+    AddButton(menu,"Visible mothers + visible daughters",SetPreviewAndFullCbk);
     AddButton(menu,"Update scene",UpdateSceneCbk);
     AddButton(menu,"Scene graph stats",SceneGraphStatisticsCbk);
    }

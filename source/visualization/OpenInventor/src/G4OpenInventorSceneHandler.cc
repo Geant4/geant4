@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.32 2004-11-22 22:57:01 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.33 2004-11-23 09:34:10 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -539,6 +539,10 @@ void G4OpenInventorSceneHandler::PreAddThis
   // scene database so that when the solid is actually 
   // added (in addthis), it is
   //  put in the right place.
+
+  //G4PhysicalVolumeModel* pModel = fpModel->GetG4PhysicalVolumeModel();
+  //G4bool thisToBeDrawn = pModel->IsThisCulled(fpCurrentLV,fpCurrentMaterial);
+  //G4bool visible = !pModel->IsThisCulled(fpCurrentLV,0);
 
   // First find the color attributes.
   //
