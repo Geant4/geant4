@@ -22,6 +22,20 @@ zmax= [zmin]+[nlbin]*[dlx0]
 create/1dhisto 4 'longit energy profile' [nlbin] [zmin] [zmax]
 put/contents 4 vect1
 
+* cumulative longitudinal profile
+*
+vector/input vect1  0.0    0.2    0.6    1.475  2.875  4.975  7.775 _
+                   11.275 15.525 20.325 25.575 31.175 36.875 42.525 _
+		   48.175 53.625 58.825 63.575 67.875 71.875 75.575 _
+		   78.825 81.775 84.425 86.775 88.825 90.572 92.125 _
+		   93.5   94.7   95.7   96.5   97.25  97.9   98.45  _
+		   98.95  99.35  99.70  100.   100.  
+		   
+zmin=0.5*[dlx0]
+zmax= [zmin]+[nlbin]*[dlx0]			   
+create/1dhisto 5 'cumul longit energy profile' [nlbin] [zmin] [zmax]
+put/contents 5 vect1
+
 * gamma flux
 *
 vector/input vect1   6.8  20.4  40.8  68.0 108.8 163.2 217.6 272.0 340.0 394.4 _
@@ -46,7 +60,7 @@ put/contents 9 vect1
 
 * save histo
 *
-h/file 1 ../results/run04.egs4dat.paw ! n
+h/file 1 ../results/run04/egs4dat.paw ! n
 hrout 0
  
 return 	     

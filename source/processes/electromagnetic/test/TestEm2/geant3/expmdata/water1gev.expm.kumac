@@ -55,7 +55,7 @@ put/contents 11 vect2
 
 * save histo
 *
-h/file 1 ../results/run03.expmdat.paw ! n
+h/file 1 ../results/run03/expmdat.paw ! n
 hrout 0
  
 return 	     

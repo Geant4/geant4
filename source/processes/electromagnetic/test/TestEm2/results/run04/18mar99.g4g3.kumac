@@ -37,6 +37,9 @@ key 15 40 1  'G4' ! l
 set dmod 2 ; set hcol 2 ; set plci 2
 h/pl //lun2/5 s
 key 15 30 2  'G3' ! l
+set dmod 3 ; set hcol 1 ; set plci 1
+h/pl //lun3/5 s
+key 15 20 3  'Egs4' ! l
 
 atitle L/Radl Ecumul/E0
 exec Redraw-Axis
