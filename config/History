@@ -1,4 +1,4 @@
-$Id: History,v 1.126 2000-12-07 13:48:17 gcosmo Exp $
+$Id: History,v 1.127 2000-12-08 09:41:39 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+8th December 2000 Gabriele Cosmo (config-V02-00-13)
+- Changed G4LIB_BUILD_ARCHIVE to G4LIB_BUILD_STATIC in architecture.gmk,
+  common.gmk and globlib.gmk.
 
 7th December 2000 Gabriele Cosmo (config-V02-00-12)
 - Added options to SUN-CC5.gmk to handle multithreading and persistency.
