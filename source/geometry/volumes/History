@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999-02-15 19:18:34 japost Exp $
+$Id: History,v 1.3 1999-02-15 19:19:28 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,8 @@ committal in the CVS repository !
 February 15, 99             J. A        geomvol-01-00-01
 
    Only fixes in G4Navigator's incorporated.
+
+   GNUmakefile corrected (for SUN-CC).
 
 January      99,            J. Apostolakis
 
