@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2003-10-06 10:09:19 maire Exp $
+$Id: History,v 1.36 2003-10-24 12:12:11 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-10-03 mma (testem3-V05-02-04)
+- PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
      
 06-10-03 mma (testem3-V05-02-03)
 - Complete migration to model EM physics

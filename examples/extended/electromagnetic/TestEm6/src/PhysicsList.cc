@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.5 2003-10-10 10:42:39 maire Exp $
+// $Id: PhysicsList.cc,v 1.6 2003-10-24 12:20:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -137,7 +137,7 @@ void PhysicsList::ConstructEM()
       //electron
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);      
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);      
 
     } else if (particleName == "e+") {
       //positron
@@ -145,7 +145,7 @@ void PhysicsList::ConstructEM()
       // do not enable the other standard processes:
       // pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       // pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      // pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
+      // pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
       // pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
       theAnnihiToMuPairProcess=new G4AnnihiToMuPair;
       pmanager->AddDiscreteProcess(theAnnihiToMuPairProcess);
@@ -155,8 +155,8 @@ void PhysicsList::ConstructEM()
       //muon  
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
-      pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       
+      pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
+      pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);       
      
     } 
   }

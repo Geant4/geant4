@@ -20,13 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
 //
-// $Id: TrackingAction.cc,v 1.3 2003-10-23 15:11:56 vnivanch Exp $
+// $Id: TrackingAction.cc,v 1.4 2003-10-24 12:06:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
-
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,9 +47,10 @@ TrackingAction::TrackingAction(RunAction* RunAct)
 
 void TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
-  //  G4cout << "ID= " << aTrack->GetTrackID() << "  e(MeV)= " << aTrack->GetDynamicParticle()->GetKineticEnergy()/MeV 
-  //       << "  " << aTrack->GetDynamicParticle()->GetDefinition()->GetParticleName()
-  //       << G4endl;    
+  //  G4cout << "ID= " << aTrack->GetTrackID() << "  e(MeV)= " 
+  //         << aTrack->GetDynamicParticle()->GetKineticEnergy()/MeV << "  "
+  //         << aTrack->GetDynamicParticle()->GetDefinition()->GetParticleName()
+  //         << G4endl;    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungCMS.hh,v 1.1 2003-10-17 17:57:51 vnivanch Exp $
+// $Id: G4eBremsstrahlungCMS.hh,v 1.2 2003-10-24 12:06:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -59,16 +59,15 @@ class G4eBremsstrahlungCMS : public G4eBremsstrahlung
 
 public:
 
-  G4eBremsstrahlungCMS(const G4String& name = "eBrem");
+  G4eBremsstrahlungCMS(const G4String& name = "eBrem", G4double thresh=DBL_MAX);
 
-  ~G4eBremsstrahlungCMS();
+ ~G4eBremsstrahlungCMS();
 
-  virtual void SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double&,
-                                   G4double&);
+  virtual void SecondariesPostStep( G4VEmModel*,
+                              const G4MaterialCutsCouple*,
+                              const G4DynamicParticle*,
+                                    G4double&,
+                                    G4double&);
 
   virtual void PrintInfoDefinition();
 

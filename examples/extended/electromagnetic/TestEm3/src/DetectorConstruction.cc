@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.1 2003-09-22 14:06:16 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2003-10-24 12:12:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -389,8 +389,8 @@ void DetectorConstruction::PrintCalorParameters()
   G4cout << "\n-------------------------------------------------------------\n";
   
   G4cout << "\n" << defaultMaterial << G4endl;    
-  for (G4int i=0; i<NbOfAbsor; i++)
-     G4cout << "\n" << AbsorMaterial[i] << G4endl;
+  for (G4int j=0; j<NbOfAbsor; j++)
+     G4cout << "\n" << AbsorMaterial[j] << G4endl;
 
   G4cout << "\n-------------------------------------------------------------\n";
 }

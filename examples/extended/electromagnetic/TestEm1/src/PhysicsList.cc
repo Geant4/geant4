@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // 
-// $Id: PhysicsList.cc,v 1.1 2003-10-06 10:02:33 maire Exp $
+// $Id: PhysicsList.cc,v 1.2 2003-10-24 12:06:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,8 +34,10 @@
 #include "PhysListGeneral.hh"
 #include "PhysListEmStandard.hh"
 #include "PhysListEmG4v52.hh"
+#include "DetectorConstruction.hh"
 
 #include "G4LossTableManager.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -167,9 +169,7 @@ void PhysicsList::SetCutForPositron(G4double cut)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "DetectorConstruction.hh"
 #include "G4Material.hh"
-#include "G4UnitsTable.hh"
 
 void PhysicsList::GetRange(G4double val)
 {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.4 2003-10-23 15:11:56 vnivanch Exp $
+// $Id: PhysListEmStandard.cc,v 1.5 2003-10-24 12:06:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,8 +38,8 @@
 #include "G4MultipleScattering.hh"
 
 #include "G4eIonisation.hh"
-#include "G4eBremsstrahlungCMS.hh"
 #include "G4eBremsstrahlung.hh"
+#include "G4eBremsstrahlungCMS.hh"
 #include "G4eplusAnnihilation.hh"
 
 #include "G4MuIonisation.hh"
@@ -52,20 +52,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandard::PhysListEmStandard(const G4String& name)
-  :  G4VPhysicsConstructor(name),bremThreshold(DBL_MAX)
-{}
+  :  G4VPhysicsConstructor(name)
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandard::~PhysListEmStandard()
-{}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysListEmStandard::ConstructProcess()
 {
   // Add standard EM Processes
-  bremThreshold = 10.*MeV;
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -83,17 +82,15 @@ void PhysListEmStandard::ConstructProcess()
       //electron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      G4eBremsstrahlungCMS* br = new G4eBremsstrahlungCMS();
-      br->SetGammaThreshold(bremThreshold);
-      pmanager->AddProcess(br,                       -1, 3,3);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
+      ///pmanager->AddProcess(new G4eBremsstrahlungCMS("brCMS", 10*MeV),-1,3,3);
 	    
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      G4eBremsstrahlungCMS* br = new G4eBremsstrahlungCMS();
-      br->SetGammaThreshold(bremThreshold);
-      pmanager->AddProcess(br,                       -1, 3,3);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
+      ///pmanager->AddProcess(new G4eBremsstrahlungCMS("brCMS", 10*MeV),-1,3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
       
     } else if( particleName == "mu+" || 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungCMS.cc,v 1.2 2003-10-20 10:43:32 vnivanch Exp $
+// $Id: G4eBremsstrahlungCMS.cc,v 1.3 2003-10-24 12:06:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,33 +40,32 @@
 //
 // -------------------------------------------------------------------
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4eBremsstrahlungCMS.hh"
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4eBremsstrahlungCMS::G4eBremsstrahlungCMS(const G4String& name) 
-  : G4eBremsstrahlung(name),gammaThreshold(DBL_MAX)
-{}
+G4eBremsstrahlungCMS::G4eBremsstrahlungCMS(const G4String& name,G4double thresh) 
+  : G4eBremsstrahlung(name), gammaThreshold(thresh)
+{ }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4eBremsstrahlungCMS::~G4eBremsstrahlungCMS()
-{}
+{ }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4eBremsstrahlungCMS::SecondariesPostStep(
-                                                      G4VEmModel* model,
-                                                const G4MaterialCutsCouple* couple,
-                                                const G4DynamicParticle* dp,
-                                                      G4double& tcut,
-                                                      G4double& kinEnergy)
+void G4eBremsstrahlungCMS::SecondariesPostStep( G4VEmModel* model,
+                                          const G4MaterialCutsCouple* couple,
+                                          const G4DynamicParticle* dp,
+                                                G4double& tcut,
+                                                G4double& kinEnergy)
 {
-  G4DynamicParticle* gamma = model->SampleSecondary(couple, dp, tcut, kinEnergy);
+ G4DynamicParticle* gamma = model->SampleSecondary(couple, dp, tcut, kinEnergy);
   G4double gammaEnergy = gamma->GetKineticEnergy(); 
   kinEnergy -= gammaEnergy;
   G4int nSecond = 1;
@@ -74,7 +73,7 @@ void G4eBremsstrahlungCMS::SecondariesPostStep(
   aParticleChange.SetNumberOfSecondaries(nSecond);
   aParticleChange.AddSecondary(gamma);
   aParticleChange.SetLocalEnergyDeposit(0.0);
-  if(2 == nSecond) {
+  if(nSecond == 2) {
     aParticleChange.SetStatusChange(fStopAndKill);
     if(kinEnergy <= 0.001*eV) kinEnergy = 0.001*eV;
     G4DynamicParticle* el = new G4DynamicParticle(dp->GetDefinition(),
@@ -84,7 +83,7 @@ void G4eBremsstrahlungCMS::SecondariesPostStep(
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4eBremsstrahlungCMS::PrintInfoDefinition()
 {
@@ -93,4 +92,4 @@ void G4eBremsstrahlungCMS::PrintInfoDefinition()
          << gammaThreshold/MeV << " MeV" << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

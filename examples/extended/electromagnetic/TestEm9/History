@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2003-10-13 16:32:38 vnivanch Exp $
+$Id: History,v 1.8 2003-10-24 12:25:06 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-10-03 mma (testem9-V05-02-03)
+- PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
 
 13-10-03 V.Ivanchenko (testem9-V05-02-02)
 - Fix a problem in interactive mode
