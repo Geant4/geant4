@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.8 2000-01-11 17:19:04 johna Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.9 2000-04-12 13:02:03 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,10 +93,10 @@ protected:
 			   const G4Transform3D&,
 			   G4VGraphicsScene&);
 
-  void DescribeSolid (const G4Transform3D& theAT,
-		      G4VSolid* pSol,
-		      const G4VisAttributes* pVisAttribs,
-		      G4VGraphicsScene& sceneHandler);
+  virtual void DescribeSolid (const G4Transform3D& theAT,
+			      G4VSolid* pSol,
+			      const G4VisAttributes* pVisAttribs,
+			      G4VGraphicsScene& sceneHandler);
 
   G4bool IsThisCulled (const G4LogicalVolume*,
 		       const G4Material*);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.8 2000-01-11 17:19:07 johna Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.9 2000-04-12 13:02:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,8 +20,6 @@
 #include "G4VPVParameterisation.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
-#include "G4BooleanSolid.hh"
-#include "G4DisplacedSolid.hh"
 #include "G4Material.hh"
 #include "G4VisAttributes.hh"
 #include "G4BoundingSphereScene.hh"
@@ -338,34 +336,9 @@ void G4PhysicalVolumeModel::DescribeSolid
  G4VSolid* pSol,
  const G4VisAttributes* pVisAttribs,
  G4VGraphicsScene& sceneHandler) {
-  // Look for "constituents".  Could be a Boolean solid.
-  G4VSolid* pSol0 = pSol -> GetConstituentSolid (0);
-  if (pSol0) {
-    // Composite solid - describe components...
-    DescribeSolid (theAT, pSol0, pVisAttribs, sceneHandler);
-    G4VSolid* pSol1 = pSol -> GetConstituentSolid (1);
-    if (!pSol1) {
-      G4Exception
-	("G4PhysicalVolumeModel::DescribeSolid:"
-	 " 2nd component solid is missing.");
-    }
-    DescribeSolid (theAT, pSol1, pVisAttribs, sceneHandler);
-  }
-  else { // Non-composite solid.
-    G4DisplacedSolid* pDisSol = pSol -> GetDisplacedSolidPtr ();
-    if (pDisSol) {
-      sceneHandler.PreAddThis
-	(theAT *
-	 G4Transform3D (pDisSol -> GetObjectRotation ().inverse (),
-			pDisSol -> GetObjectTranslation ()),
-	 *pVisAttribs);
-    }
-    else {
-      sceneHandler.PreAddThis (theAT, *pVisAttribs);
-    }
-    pSol -> DescribeYourselfTo (sceneHandler);
-    sceneHandler.PostAddThis ();
-  }
+  sceneHandler.PreAddThis (theAT, *pVisAttribs);
+  pSol -> DescribeYourselfTo (sceneHandler);
+  sceneHandler.PostAddThis ();
 }
 
 G4bool G4PhysicalVolumeModel::IsThisCulled (const G4LogicalVolume* pLV,
