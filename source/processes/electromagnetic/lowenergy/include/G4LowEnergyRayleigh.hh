@@ -21,41 +21,42 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyRayleigh.hh,v 1.11 2001-07-11 10:02:38 gunter Exp $
+// $Id: G4LowEnergyRayleigh.hh,v 1.12 2001-08-28 16:09:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// ------------------------------------------------------------
-//      GEANT 4 class header file --- Copyright CERN 1995
-//      CERN Geneva Switzerland
 //
-//      ------------ G4LowEnergyRayleigh physics process ------
-//                   by A.Forti 1999/03/02
+// Author: A. Forti
+//         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
+// History:
+// -----------
+// 02 Mar 1999   A. Forti   1st implementation
+// 11 Aug 2001   MGP        Major revision according to a design iteration
+//
+// -------------------------------------------------------------------
+
 // Class description:
 // Low Energy Electromagnetic process, Rayleigh effect
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
-// ************************************************************
+// -------------------------------------------------------------------
 
-#ifndef G4LowEnergyRayleigh_h
-#define G4LowEnergyRayleigh_h 
+#ifndef G4LOWENERGYRAYLEIGH_HH
+#define G4LOWENERGYRAYLEIGH_HH 1
 
-// Base Class Headers
+#include "globals.hh"
 #include "G4VDiscreteProcess.hh"
-
-// Contained Variables Headers
-#include "G4LowEnergyUtilities.hh"
-#include "G4Gamma.hh"
+class G4Track;
+class G4Step;
+class G4ParticleDefinition;
+class G4VParticleChange;
+class G4VEMDataSet;
+class G4CrossSectionHandler;
+class G4VDataSetAlgorithm;
 
 class G4LowEnergyRayleigh : public G4VDiscreteProcess {
 
-private: 
-
-  // hide assignment operator as private 
-  G4LowEnergyRayleigh& operator=(const G4LowEnergyRayleigh &right);
-  G4LowEnergyRayleigh(const G4LowEnergyRayleigh& );
-  
 public:
   
   G4LowEnergyRayleigh(const G4String& processName ="LowEnRayleigh");
@@ -64,46 +65,46 @@ public:
 
   G4bool IsApplicable(const G4ParticleDefinition&);
   
-  void BuildPhysicsTable(const G4ParticleDefinition& GammaType);
+  void BuildPhysicsTable(const G4ParticleDefinition& photon);
   
+  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);
+ 
+  // For testing purpose only
+  G4double DumpMeanFreePath(const G4Track& aTrack, 
+			    G4double previousStepSize, 
+			    G4ForceCondition* condition) 
+  { return GetMeanFreePath(aTrack, previousStepSize, condition); }
+
+protected:
+
   G4double GetMeanFreePath(const G4Track& aTrack, 
 			   G4double previousStepSize, 
 			   G4ForceCondition* condition);
 
-  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step& aStep);
-
-protected:
-
-  void BuildFormFactorTable();
-  void BuildCrossSectionTable();
-  void BuildMeanFreePathTable();
-  void BuildZVec();
-
 private:
+
+  // Hide copy constructor and assignment operator as private 
+  G4LowEnergyRayleigh& operator=(const G4LowEnergyRayleigh &right);
+  G4LowEnergyRayleigh(const G4LowEnergyRayleigh& );
   
-  G4Element* SelectRandomAtom(const G4DynamicParticle*, G4Material*);
+  G4double lowEnergyLimit;  // low energy limit  applied to the process
+  G4double highEnergyLimit; // high energy limit applied to the process
 
-  G4SecondLevel* theCrossSectionTable; 
-  G4SecondLevel* theFormFactorTable;
-  G4PhysicsTable* theMeanFreePathTable;  
-  G4DataVector* ZNumVec;
+  G4VDataSetAlgorithm* ffInterpolation;
 
-  G4double lowestEnergyLimit; // low  energy limit of the crosssection formula
-  G4double highestEnergyLimit; // high energy limit of the crosssection formula
-  G4int NumbBinTable; // number of bins in the crossection table
+  G4VEMDataSet* meanFreePathTable;
+  G4VEMDataSet* formFactorData;
 
-  G4LowEnergyUtilities util;
+  G4CrossSectionHandler* crossSectionHandler;
 
-  G4double MeanFreePath; // actual Mean Free Path (current medium)
+  const G4double intrinsicLowEnergyLimit; // intrinsic validity range
+  const G4double intrinsicHighEnergyLimit;
+
 };
 
-#include "G4LowEnergyRayleigh.icc"
-
 #endif
+
  
-
-
-
 
 
 

@@ -20,423 +20,242 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4LowEnergyCompton.cc,v 1.27 2001-08-20 16:37:37 pia Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.28 2001-08-28 16:05:20 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file
-//      CERN Geneva Switzerland
+// Author: A. Forti
+//         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
-//      ------------ G4LowEnergyCompton low energy modifications --------
-//                   by Alessandra Forti, October 1998
-// **************************************************************
+// History:
+// --------
 // Added Livermore data table construction methods A. Forti
 // Modified BuildMeanFreePath to read new data tables A. Forti
 // Modified PostStepDoIt to insert sampling with EPDL97 data A. Forti
 // Added SelectRandomAtom A. Forti
 // Added map of the elements A. Forti
-// 24.04.01 V.Ivanchenko remove RogueWave 
-// --------------------------------------------------------------
+// 24.04.2001 V.Ivanchenko - Remove RogueWave 
+// 06.08.2001 MGP          - Revised according to a design iteration
+//
+// -------------------------------------------------------------------
 
-// This Class Header
 #include "G4LowEnergyCompton.hh"
-
-// Collaborating Class Headers
-#include "G4EnergyLossTables.hh"
+#include "Randomize.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Track.hh"
+#include "G4Step.hh"
+#include "G4ForceCondition.hh"
+#include "G4Gamma.hh"
 #include "G4Electron.hh"
+#include "G4DynamicParticle.hh"
+#include "G4VParticleChange.hh"
+#include "G4ParticleMomentum.hh"
+#include "G4ThreeVector.hh"
+#include "G4EnergyLossTables.hh"
+#include "G4CrossSectionHandler.hh"
+#include "G4VEMDataSet.hh"
+#include "G4CompositeEMDataSet.hh"
+#include "G4VDataSetAlgorithm.hh"
+#include "G4LogLogInterpolation.hh"
 
-// constructor
- 
 G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
   : G4VDiscreteProcess(processName),
-    theCrossSectionTable(0),
-    theScatteringFunctionTable(0),
-    theMeanFreePathTable(0),
-    ZNumVec(0),
-    lowestEnergyLimit (250*eV),              // initialization
-    highestEnergyLimit(100*GeV),
-    numbBinTable(200)
+    lowEnergyLimit(250*eV),             
+    highEnergyLimit(100*GeV),
+    intrinsicLowEnergyLimit(10*eV),
+    intrinsicHighEnergyLimit(100*GeV)
 {
-   if (verboseLevel>0) {
-     G4cout << GetProcessName() << " is created "<< G4endl;
-     G4cout << "lowestEnergy: " << lowestEnergyLimit/keV << "keV ";
-     G4cout << "highestEnergy: " << highestEnergyLimit/TeV << "TeV " << G4endl;
-   }
+  if (lowEnergyLimit < intrinsicLowEnergyLimit || 
+      highEnergyLimit > intrinsicHighEnergyLimit)
+    {
+      G4Exception("G4LowEnergyCompton::G4LowEnergyCompton - energy limit outside intrinsic process validity range");
+    }
+
+  // The following pointer is owned by G4DataHandler
+  G4VDataSetAlgorithm* crossSectionInterpolation = new G4LogLogInterpolation;
+  crossSectionHandler = new G4CrossSectionHandler(crossSectionInterpolation);
+
+  // The following pointer is owned by the process
+  scatterInterpolation = new G4LogLogInterpolation;
+  G4String scatterFile = "comp/ce-sf-";
+  scatterFunctionData = new G4CompositeEMDataSet(scatterFile,scatterInterpolation,1.,1.);
+
+  meanFreePathTable = 0;
+
+   if (verboseLevel > 0) 
+     {
+       G4cout << GetProcessName() << " is created " << G4endl
+	      << "Energy range: " 
+	      << lowEnergyLimit / keV << " keV - "
+	      << highEnergyLimit / GeV << " GeV" 
+	      << G4endl;
+     }
 }
- 
-// destructor
  
 G4LowEnergyCompton::~G4LowEnergyCompton()
 {
-   if (theCrossSectionTable) {
-
-      delete theCrossSectionTable;
-   }
-
-   if (theScatteringFunctionTable) {
-
-      delete theScatteringFunctionTable;
-   }
-
-   if (theMeanFreePathTable) {
-      theMeanFreePathTable->clearAndDestroy();
-      delete theMeanFreePathTable;
-   }
-
-   if(ZNumVec){
-     ZNumVec->clear();
-     delete ZNumVec;
-   }
-}
- 
- 
-// methods.............................................................................
-
-void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& GammaType){
-
-  BuildZVec();
-
-  // Build microscopic cross section table and mean free path table
-  BuildCrossSectionTable();
-
-  // Build mean free path table for the Compton Scattering process
-  BuildMeanFreePathTable();
-
-  // build the scattering function table
-  BuildScatteringFunctionTable();
-
-}
-// BUILD THE CS TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC
-void G4LowEnergyCompton::BuildCrossSectionTable(){
- 
-  if (theCrossSectionTable) {
-    
-    delete theCrossSectionTable; 
-  }
-  
-  theCrossSectionTable = new G4SecondLevel();
-  G4int dataNum = 2;
-  
-  for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
-    
-    G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
-    
-    G4FirstLevel* oneAtomCS = util.BuildFirstLevelTables(AtomInd, dataNum, "comp/ce-cs-");
-    
-    //    theCrossSectionTable->insert(oneAtomCS);
-    theCrossSectionTable->push_back(oneAtomCS);
-    
-  }//end for on atoms
-}
-// BUILD THE SF TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC
-void G4LowEnergyCompton::BuildScatteringFunctionTable(){
-
-  if (theScatteringFunctionTable) {
-    
-    delete theScatteringFunctionTable; 
-  }
-
-  theScatteringFunctionTable = new G4SecondLevel();
-  G4int dataNum = 2;
- 
-  for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
-
-    G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
-
-    G4FirstLevel* oneAtomSF = util.BuildFirstLevelTables(AtomInd, dataNum, "comp/ce-sf-");
-     
-    //     theScatteringFunctionTable->insert(oneAtomSF);
-     theScatteringFunctionTable->push_back(oneAtomSF);
-   
-  }//end for on atoms
-}
-// vector mapping the elements in the material table
-void G4LowEnergyCompton::BuildZVec(){
-
-  const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
-
-  if(ZNumVec){
-    ZNumVec->clear();
-    delete ZNumVec;
-  }
-
-  ZNumVec = new G4DataVector(); 
-  for (G4int J=0 ; J < numOfMaterials; J++){ 
- 
-    const G4Material* material= (*theMaterialTable)[J];        
-    const G4ElementVector* theElementVector = material->GetElementVector();
-    const G4int NumberOfElements = material->GetNumberOfElements() ;
-
-    for (G4int iel=0; iel<NumberOfElements; iel++ ){
-
-      G4double Zel = (*theElementVector)(iel)->GetZ();
-
-      if(ZNumVec->contains(Zel) == FALSE){
-	ZNumVec->push_back(Zel);
-      }  else{
-	continue;
-      }
-    }
-  }
+  delete meanFreePathTable;
+  delete crossSectionHandler;
+  delete scatterFunctionData;
+  delete scatterInterpolation;
 }
 
+void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
+{
+  crossSectionHandler->Clear();
+  G4String crossSectionFile = "comp/ce-cs-";
+  crossSectionHandler->LoadData(crossSectionFile);
 
-G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
+  delete meanFreePathTable;
+  meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
+}
 
-//
-// The scattered gamma energy is sampled according to Klein - Nishina formula.
-// And then Accepted or rejected basing of the Scattering Function multiplied by factor 
-// from Klein - Nishina formula. Expression of the angular distribution as Klein Nishina 
-// angular and energy distribution and Scattering fuctions is taken from
-// D. E. Cullen "A simple model of photon transport" Nucl. Instr. Meth. 
-// Phys. Res. B 101 (1995). Method of sampling with form factors is different 
-// data are interpolated while in the article they are fitted.
-// Reference to the article is from J. Stepanek New Photon, Positron
-// and Electron Interaction Data for GEANT in Energy Range from 1 eV to 10
-// TeV (draft). 
-// The random number techniques of Butcher & Messel are used 
-// (Nuc Phys 20(1960),15).
-// GEANT4 internal units
-//
+G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, 
+						    const G4Step&  aStep)
+{
+  // The scattered gamma energy is sampled according to Klein - Nishina formula.
+  // then accepted or rejected depending on the Scattering Function multiplied 
+  // by factor from Klein - Nishina formula. 
+  // Expression of the angular distribution as Klein Nishina 
+  // angular and energy distribution and Scattering fuctions is taken from
+  // D. E. Cullen "A simple model of photon transport" Nucl. Instr. Meth. 
+  // Phys. Res. B 101 (1995). Method of sampling with form factors is different 
+  // data are interpolated while in the article they are fitted.
+  // Reference to the article is from J. Stepanek New Photon, Positron
+  // and Electron Interaction Data for GEANT in Energy Range from 1 eV to 10
+  // TeV (draft). 
+  // The random number techniques of Butcher & Messel are used 
+  // (Nucl Phys 20(1960),15).
+
   aParticleChange.Initialize(aTrack);
   
   // Dynamic particle quantities  
-  const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
-  G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();
-  if(GammaEnergy0 <= lowestEnergyLimit){
-    
-    aParticleChange.SetStatusChange(fStopAndKill);
-    aParticleChange.SetEnergyChange(0.);
-    aParticleChange.SetLocalEnergyDeposit(GammaEnergy0);
-    
-    return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
+  const G4DynamicParticle* incidentPhoton = aTrack.GetDynamicParticle();
+  G4double photonEnergy0 = incidentPhoton->GetKineticEnergy();
 
-  }
-
-
-  G4double E0_m = GammaEnergy0 / electron_mass_c2 ;
-  G4ParticleMomentum GammaDirection0 = aDynamicGamma->GetMomentumDirection();
-
-  // Select randomly one element 
-  G4Material* aMaterial = aTrack.GetMaterial();
-  //  const G4int numOfElem = aMaterial->GetNumberOfElements();
-  
-  G4Element* theElement = SelectRandomAtom(aDynamicGamma, aMaterial);
-  G4int elementZ = (G4int) theElement->GetZ();
-  G4double epsilon, epsilonsq, onecost, sint2, greject ;
-
-  G4double epsilon0 = 1./(1. + 2*E0_m) , epsilon0sq = epsilon0*epsilon0;
-  G4double alpha1   = - log(epsilon0)  , alpha2 = 0.5*(1.- epsilon0sq);
-  G4double ScatteringFunction, x;
-  G4double wlGamma = h_Planck*c_light/GammaEnergy0;
-  
-  // sample the energy rate of the scattered gamma 
-  do{
-    
-    if ( alpha1/(alpha1+alpha2) > G4UniformRand()){
-      
-      epsilon   = exp(-alpha1*G4UniformRand());  // pow(epsilon0,G4UniformRand())
-      epsilonsq = epsilon*epsilon; 
-    }
-    else{
-      
-      epsilonsq = epsilon0sq + (1.- epsilon0sq)*G4UniformRand();
-      epsilon   = sqrt(epsilonsq);
-    }
-    
-    onecost = (1.- epsilon)/(epsilon*E0_m);
-    sint2   = onecost*(2.-onecost);
-    
-    x = sqrt(onecost/2)/(wlGamma/cm);
-
-    const G4FirstLevel* oneAtomSF
-	  = (*theScatteringFunctionTable)[ZNumVec->index(elementZ)];
-
-    ScatteringFunction = util.DataLogInterpolation(x, (*(*oneAtomSF)[0]), 
-						   (*(*oneAtomSF)[1]));
-    greject = (1. - epsilon*sint2/(1.+ epsilonsq))*ScatteringFunction;
-    
-  }  while(greject < G4UniformRand()*elementZ);
-
-  G4double cosTeta = 1. - onecost , sinTeta = sqrt (sint2);
-  G4double Phi     = twopi * G4UniformRand() ;
-  G4double dirx = sinTeta*cos(Phi) , diry = sinTeta*sin(Phi) , dirz = cosTeta ;
-
-  //
-  // update G4VParticleChange for the scattered gamma 
-  //
-  
-  G4ThreeVector GammaDirection1 ( dirx,diry,dirz );
-  GammaDirection1.rotateUz(GammaDirection0);
-  aParticleChange.SetMomentumChange( GammaDirection1 ) ;
-  G4double GammaEnergy1 = epsilon*GammaEnergy0;
-  if (GammaEnergy1 > 0.)
+  if (photonEnergy0 <= lowEnergyLimit)
     {
-      aParticleChange.SetEnergyChange( GammaEnergy1 ) ;
+      aParticleChange.SetStatusChange(fStopAndKill);
+      aParticleChange.SetEnergyChange(0.);
+      aParticleChange.SetLocalEnergyDeposit(photonEnergy0);
+      return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
+    }
+
+  G4double e0m = photonEnergy0 / electron_mass_c2 ;
+  G4ParticleMomentum photonDirection0 = incidentPhoton->GetMomentumDirection();
+
+  // Select randomly one element in the current material
+  G4Material* material = aTrack.GetMaterial();
+  G4int Z = crossSectionHandler->SelectRandomAtom(material,photonEnergy0);
+
+  G4double epsilon0 = 1. / (1. + 2. * e0m);
+  G4double epsilon0Sq = epsilon0 * epsilon0;
+  G4double alpha1 = -log(epsilon0);
+  G4double alpha2 = 0.5 * (1. - epsilon0Sq);
+
+  G4double wlPhoton = h_Planck*c_light/photonEnergy0;
+  
+  // Sample the energy of the scattered photon 
+  G4double epsilon;
+  G4double epsilonSq;
+  G4double oneCosT;
+  G4double sinT2;
+  G4double gReject;
+  do
+    {
+      if ( alpha1/(alpha1+alpha2) > G4UniformRand())
+	{
+	  epsilon = exp(-alpha1 * G4UniformRand());  // pow(epsilon0,G4UniformRand())
+	  epsilonSq = epsilon * epsilon; 
+	}
+      else
+	{
+	  epsilonSq = epsilon0Sq + (1. - epsilon0Sq) * G4UniformRand();
+	  epsilon = sqrt(epsilonSq);
+	}
+      
+      oneCosT = (1. - epsilon) / ( epsilon * e0m);
+      sinT2 = oneCosT * (2. - oneCosT);      
+      G4double x = sqrt(oneCosT/2.) / (wlPhoton/cm);
+      G4double scatteringFunction = scatterFunctionData->FindValue(x,Z-1);
+      gReject = (1. - epsilon * sinT2 / (1. + epsilonSq)) * scatteringFunction;
+    
+    }  while(gReject < G4UniformRand()*Z);
+
+  G4double cosTheta = 1. - oneCosT;
+  G4double sinTheta = sqrt (sinT2);
+  G4double phi = twopi * G4UniformRand() ;
+  G4double dirx = sinTheta * cos(phi);
+  G4double diry = sinTheta * sin(phi);
+  G4double dirz = cosTheta ;
+
+  // Update G4VParticleChange for the scattered photon 
+  
+  G4ThreeVector photonDirection1(dirx,diry,dirz);
+  photonDirection1.rotateUz(photonDirection0);
+  aParticleChange.SetMomentumChange(photonDirection1) ;
+  G4double photonEnergy1 = epsilon * photonEnergy0;
+
+  if (photonEnergy1 > 0.)
+    {
+      aParticleChange.SetEnergyChange(photonEnergy1) ;
     }
   else
     {    
       aParticleChange.SetEnergyChange(0.) ;
       aParticleChange.SetStatusChange(fStopAndKill);
-      
     }
   
-  //
-  // kinematic of the scattered electron
-  //
-  
-  G4double ElecKineEnergy = GammaEnergy0 - GammaEnergy1 ;
+  // Kinematics of the scattered electron 
+  G4double eKineticEnergy = photonEnergy0 - photonEnergy1;
 
-  // MGP 
-  G4double range = G4EnergyLossTables::GetRange(G4Electron::Electron(),ElecKineEnergy,aMaterial);
+  // Generate the electron only if with large enough range w.r.t. cuts and safety
+  G4double range = G4EnergyLossTables::GetRange(G4Electron::Electron(),
+						eKineticEnergy, material);
   G4double eCut = G4Electron::GetCuts();
   G4double safety = aStep.GetPostStepPoint()->GetSafety();
   G4double rMin = G4std::min(eCut, safety);
-  // End MGP
+  if (range >= rMin)
+    {
+      G4double eMomentum = sqrt(eKineticEnergy*(eKineticEnergy+2.*electron_mass_c2));
+      G4ThreeVector eDirection((photonEnergy0 * photonDirection0 - 
+				photonEnergy1 * photonDirection1) * (1./eMomentum));  
+      G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(),
+							   eDirection,eKineticEnergy) ;
+      aParticleChange.SetNumberOfSecondaries(1);
+      aParticleChange.AddSecondary(electron);
+      aParticleChange.SetLocalEnergyDeposit(0.); 
+    }
+  else
+    {
+      aParticleChange.SetNumberOfSecondaries(0);
+      aParticleChange.SetLocalEnergyDeposit(eKineticEnergy);
+    }
 
-  if (G4EnergyLossTables::GetRange(G4Electron::Electron(), ElecKineEnergy, aMaterial)
-      >= G4std::min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety())){
-
-    G4double ElecMomentum = sqrt(ElecKineEnergy*(ElecKineEnergy+2.*electron_mass_c2));
-    G4ThreeVector ElecDirection((GammaEnergy0*GammaDirection0 - 
-				 GammaEnergy1*GammaDirection1)*(1./ElecMomentum));
-    
-    // create G4DynamicParticle object for the electron.  
-    G4DynamicParticle* aElectron= new G4DynamicParticle (G4Electron::Electron(),
-							  ElecDirection, ElecKineEnergy) ;
-    aParticleChange.SetNumberOfSecondaries(1);
-    aParticleChange.AddSecondary( aElectron );
-    aParticleChange.SetLocalEnergyDeposit (0.); 
-  }
-  else{
-    
-    aParticleChange.SetNumberOfSecondaries(0);
-    aParticleChange.SetLocalEnergyDeposit (ElecKineEnergy);
-   }
 #ifdef G4VERBOSE
-  if(verboseLevel > 0){
-    G4cout<<"LE Compton Effect PostStepDoIt"<<G4endl;
-  }
+  if(verboseLevel > 0)
+      G4cout << "LE Compton Effect PostStepDoIt" << G4endl;
 #endif  
 
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }
 
-
-// used log-log interpolation instead of linear interpolation to build the MFP 
-// as reported in the stepanek paper 
-void G4LowEnergyCompton::BuildMeanFreePathTable(){
-
-  if (theMeanFreePathTable) {
-    theMeanFreePathTable->clearAndDestroy(); delete theMeanFreePathTable; }
-
-  // material
-  G4double NumbOfMaterials = G4Material::GetNumberOfMaterials();
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
-  G4Material* material;
-
-  // MeanFreePath 
-  G4double LowEdgeEnergy, Value;
-  theMeanFreePathTable = new G4PhysicsTable(NumbOfMaterials);
-  G4PhysicsLogVector* ptrVector;
-
-  for ( G4int J = 0 ; J < NumbOfMaterials; J++ ) { // For each material 
-  
-    //create physics vector then fill it ....
-    ptrVector = new  G4PhysicsLogVector(lowestEnergyLimit, highestEnergyLimit, numbBinTable);
-    
-    material = (*theMaterialTable)(J);
-    const G4ElementVector* theElementVector = material->GetElementVector();
-    const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();   
-    
-    for ( G4int i = 0 ; i < numbBinTable ; i++ ){ 
-      //For each energy
-      
-      LowEdgeEnergy = ptrVector->GetLowEdgeEnergy(i);
-      
-      const G4double BigPath= DBL_MAX;
-      G4double SIGMA = 0 ;
-      for ( size_t k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
-
-	G4int AtomIndex = (G4int) (*theElementVector)(k)->GetZ();
-	const G4FirstLevel* oneAtomCS
-	  = (*theCrossSectionTable)[ZNumVec->index(AtomIndex)];
-	
-	G4double interCrsSec = util.DataLogInterpolation(LowEdgeEnergy, 
-							 (*(*oneAtomCS)[0]), 
-							 (*(*oneAtomCS)[1]))*barn;
-	SIGMA += theAtomNumDensityVector[k]*interCrsSec;
-      }       
-      
-      Value = SIGMA<=0.0 ? BigPath : 1./SIGMA ;
-
-      ptrVector->PutValue( i , Value ) ;
-
-    }
-    
-    theMeanFreePathTable->insertAt( J , ptrVector );
-  }
+G4bool G4LowEnergyCompton::IsApplicable(const G4ParticleDefinition& particle)
+{
+  return ( &particle == G4Gamma::Gamma() ); 
 }
 
-// METHOD BELOW  FROM STANDARD E_M PROCESSES CODE MODIFIED TO USE 
-// LIVERMORE DATA (using log-log interpolation as reported in stepanek paper)
-G4Element* G4LowEnergyCompton::SelectRandomAtom(const G4DynamicParticle* aDynamicGamma,
-                                               G4Material* aMaterial){
-  // select randomly 1 element within the material 
-  G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
-  const G4int NumberOfElements = aMaterial->GetNumberOfElements();
-  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+G4double G4LowEnergyCompton::GetMeanFreePath(const G4Track& track, 
+					     G4double previousStepSize, 
+					     G4ForceCondition*)
+{
+  const G4DynamicParticle* photon = track.GetDynamicParticle();
+  G4double energy = photon->GetKineticEnergy();
+  G4Material* material = track.GetMaterial();
+  size_t materialIndex = material->GetIndex();
 
-  if (NumberOfElements == 1) return (*theElementVector)(0);
-
-  const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
- 
-  G4double PartialSumSigma = 0.;
-
-  G4double rval = 0;
-  rval = G4UniformRand()/meanFreePath;
-
-  for ( G4int i=0 ; i < NumberOfElements ; i++ ){ 
-
-    G4double crossSection;
-    if (GammaEnergy <  lowestEnergyLimit)
-      crossSection = 0. ;
-    else {
-      if (GammaEnergy > highestEnergyLimit) GammaEnergy = 0.99*highestEnergyLimit ;
-      
-      G4int AtomIndex = (G4int) (*theElementVector)(i)->GetZ();
-      const G4FirstLevel* oneAtomCS
-	= (*theCrossSectionTable)[ZNumVec->index(AtomIndex)];
-
-      crossSection =  util.DataLogInterpolation(GammaEnergy, 
-						(*(*oneAtomCS)[0]), 
-						(*(*oneAtomCS)[1]))*barn;
-    }
-
-    PartialSumSigma += theAtomNumDensityVector[i] * crossSection;
-    if(rval <= PartialSumSigma) return ((*theElementVector)(i));
-  }
-
-  return (*theElementVector)(0);
+  G4double meanFreePath;
+  if (energy > highEnergyLimit) meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);
+  else if (energy < lowEnergyLimit) meanFreePath = DBL_MAX;
+  else meanFreePath = meanFreePathTable->FindValue(energy,materialIndex);
+  return meanFreePath;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

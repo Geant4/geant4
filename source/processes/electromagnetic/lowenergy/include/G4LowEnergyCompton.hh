@@ -1,89 +1,104 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
-//
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
-//
-// $Id: G4LowEnergyCompton.hh,v 1.13 2001-08-20 16:36:01 pia Exp $
+<<<<<<< G4LowEnergyCompton.hh
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+
+// $Id: G4LowEnergyCompton.hh,v 1.14 2001-08-28 16:09:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file --- Copyright CERN 1995
-//      CERN Geneva Switzerland
+// Author: A. Forti
+//         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
-//      For information related to this code contact:
-//      CERN, CN Division, ASD group
-//      ------------ G4LowEnergyCompton physics process ------
-//                   by A.Forti 1999/03/02
+// History:
+// -----------
+// 02 Mar 1999   A. Forti   1st implementation
+//  1 Aug 2001   MGP        Major revision according to a design iteration
 //
+// -------------------------------------------------------------------
+
 // Class description:
-// Low Energy electromagnetic process, Compton
+// Low Energy Electromagnetic Physics, Compton Scattering
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
-// ************************************************************
+// -------------------------------------------------------------------
 
-#ifndef G4LowEnergyCompton_h
-#define G4LowEnergyCompton_h 
+#ifndef G4LOWENERGYCOMPTON_HH
+#define G4LOWENERGYCOMPTON_HH 1
 
-// Base Class Headers
+#include "globals.hh"
 #include "G4VDiscreteProcess.hh"
 
-// Contained Variables Headers
-#include "G4LowEnergyUtilities.hh"
-#include "G4Gamma.hh"
+class G4Track;
+class G4Step;
+class G4ParticleDefinition;
+class G4VParticleChange;
+class G4VEMDataSet;
+class G4CrossSectionHandler;
+class G4VDataSetAlgorithm;
 
-class G4LowEnergyCompton : public G4VDiscreteProcess{
+class G4LowEnergyCompton : public G4VDiscreteProcess {
 
-private: 
-
-  // hide assignment operator as private 
-  G4LowEnergyCompton& operator=(const G4LowEnergyCompton &right);
-  G4LowEnergyCompton(const G4LowEnergyCompton& );
- 
 public:
   
   G4LowEnergyCompton(const G4String& processName ="LowEnCompton");
   
   ~G4LowEnergyCompton();
 
-  G4bool IsApplicable(const G4ParticleDefinition&);
+  G4bool IsApplicable(const G4ParticleDefinition& definition);
   
-  void BuildPhysicsTable(const G4ParticleDefinition& GammaType);
+  void BuildPhysicsTable(const G4ParticleDefinition& photon);
  
+  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);
+ 
+  // For testing purpose only
+  G4double DumpMeanFreePath(const G4Track& aTrack, 
+			    G4double previousStepSize, 
+			    G4ForceCondition* condition) 
+  { return GetMeanFreePath(aTrack, previousStepSize, condition); }
+
+protected:
+
   G4double GetMeanFreePath(const G4Track& aTrack, 
 			   G4double previousStepSize, 
 			   G4ForceCondition* condition);
 
-  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);
-  
-protected:
+private: 
 
-  void BuildScatteringFunctionTable();
-  void BuildCrossSectionTable();
-  void BuildMeanFreePathTable();
-  void BuildZVec();
+  // Hide copy constructor and assignment operator as private 
+  G4LowEnergyCompton& operator=(const G4LowEnergyCompton& right);
+  G4LowEnergyCompton(const G4LowEnergyCompton& );
 
-private:
+  G4double lowEnergyLimit;  // low energy limit  applied to the process
+  G4double highEnergyLimit; // high energy limit applied to the process
 
-  G4Element* SelectRandomAtom(const G4DynamicParticle*, G4Material*);
-  
-  G4SecondLevel* theCrossSectionTable;
-  G4SecondLevel* theScatteringFunctionTable;
-  G4PhysicsTable* theMeanFreePathTable;
-  G4DataVector* ZNumVec;
+  G4VDataSetAlgorithm* scatterInterpolation;
 
-  G4double lowestEnergyLimit; // low  energy limit of the crosssection data 
-  G4double highestEnergyLimit; // high energy limit of the crosssection data
-  G4int numbBinTable; // number of bins in the data  tables
+  G4VEMDataSet* meanFreePathTable;
+  G4VEMDataSet* scatterFunctionData;
 
-  G4LowEnergyUtilities util;
+  G4CrossSectionHandler* crossSectionHandler;
 
-  G4double meanFreePath; // actual Mean Free Path (current medium)
+  const G4double intrinsicLowEnergyLimit; // intrinsic validity range
+  const G4double intrinsicHighEnergyLimit;
+
 };
-
-#include "G4LowEnergyCompton.icc"
 
 #endif
 
