@@ -1,4 +1,4 @@
-$Id: History,v 1.86 2003-04-23 09:34:47 gcosmo Exp $
+$Id: History,v 1.87 2003-04-23 17:55:46 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 23, 2003, M.Asai (run-V05-00-14)
+- Add a data member to G4Run.
 
 Apr 23, 2003, G.Cosmo (run-V05-00-13)
 - Changed date for release 5.1 in G4RunManager.

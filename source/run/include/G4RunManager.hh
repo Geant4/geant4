@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.31 2003-03-11 06:53:06 asaim Exp $
+// $Id: G4RunManager.hh,v 1.32 2003-04-23 17:54:27 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -243,6 +243,7 @@ class G4RunManager
     G4Event* currentEvent;
     G4std::vector<G4Event*>* previousEvents;
     G4int n_perviousEventsToBeStored;
+    G4int numberOfEventToBeProcessed;
 
     G4bool storeRandomNumberStatus;
     G4String randomNumberStatusDir;

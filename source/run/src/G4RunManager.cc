@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.73 2003-04-23 09:34:17 gcosmo Exp $
+// $Id: G4RunManager.cc,v 1.74 2003-04-23 17:54:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,7 +89,7 @@ G4RunManager::G4RunManager()
  geometryNeedsToBeClosed(true),runAborted(false),initializedAtLeastOnce(false),
  geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
- storeRandomNumberStatus(false),currentWorld(0)
+ numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),currentWorld(0)
 {
   defaultExceptionHandler = new G4ExceptionHandler();
   if(fRunManager)
@@ -174,6 +174,7 @@ void G4RunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)
   G4bool cond = ConfirmBeamOnCondition();
   if(cond)
   {
+    numberOfEventToBeProcessed = n_event;
     RunInitialization();
     if(n_event>0) DoEventLoop(n_event,macroFile,n_select);
     RunTermination();
@@ -219,6 +220,7 @@ void G4RunManager::RunInitialization()
   if(userRunAction) currentRun = userRunAction->GenerateRun();
   if(!currentRun) currentRun = new G4Run();
   currentRun->SetRunID(runIDCounter);
+  currentRun->SetNumberOfEventToBeProcessed(numberOfEventToBeProcessed);
 
   BuildPhysicsTables();
 
