@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.3 2004-03-31 15:28:12 maire Exp $
+// $Id: RunAction.hh,v 1.4 2004-05-04 08:31:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,71 +50,67 @@ class PrimaryGeneratorAction;
 
 class G4Run;
 
-#ifdef USE_AIDA
 namespace AIDA {
- class ITree;
- class IHistogram1D;
-} 
-#endif
+  class ITree;
+  class IHistogram1D;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {
   public:
-  
+
     RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
    ~RunAction();
 
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
-    
+
     inline void initializePerEvent();
            void fillPerEvent();
     inline void fillPerTrack(G4double,G4double);
     inline void fillPerStep (G4double,G4int,G4int);
     inline void particleFlux(G4ParticleDefinition*,G4int);
- 
+
   private:
-  
+
     void bookHisto();
     void cleanHisto();
-    
+
   private:
-    
+
     DetectorConstruction*   Det;
     PrimaryGeneratorAction* Kin;
-    
-    G4int nLbin;    
+
+    G4int nLbin;
     MyVector dEdL;
     MyVector sumELongit;
     MyVector sumE2Longit;
     MyVector sumELongitCumul;
     MyVector sumE2LongitCumul;
-    
-    G4int nRbin;    
+
+    G4int nRbin;
     MyVector dEdR;
     MyVector sumERadial;
     MyVector sumE2Radial;
     MyVector sumERadialCumul;
     MyVector sumE2RadialCumul;
-        
+
     MyVector gammaFlux;
     MyVector electronFlux;
     MyVector positronFlux;
-    
+
     G4double ChargTrLength;
     G4double sumChargTrLength;
     G4double sum2ChargTrLength;
-    
+
     G4double NeutrTrLength;
     G4double sumNeutrTrLength;
     G4double sum2NeutrTrLength;
-                  
-#ifdef USE_AIDA
+
     AIDA::ITree* tree;             // the tree should only be deleted at the end
     AIDA::IHistogram1D* histo[12];   // (after writing the histos to file)
-#endif    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -122,7 +118,7 @@ class RunAction : public G4UserRunAction
 inline
 void RunAction::initializePerEvent()
 {
-  //initialize arrays of energy deposit per bin     
+  //initialize arrays of energy deposit per bin
   for (G4int i=0; i<nLbin; i++)
      { dEdL[i] = 0.; }
      

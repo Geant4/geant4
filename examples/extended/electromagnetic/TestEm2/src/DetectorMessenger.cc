@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.cc,v 1.2 2004-05-04 07:36:40 vnivanch Exp $
+// $Id: DetectorMessenger.cc,v 1.3 2004-05-04 08:31:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,7 +65,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   RBinCmd->SetRange("nRtot>=1 && dRradl>0");
   RBinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  accCmd = new G4UIcmdWith3Vector("/testem/det/edepRMS",this);
+  accCmd = new G4UIcmdWith3Vector("/testem/det/edepRms",this);
   accCmd->SetGuidance("set Edep and RMS");
   accCmd->SetGuidance("acceptance values");
   accCmd->SetParameterName("edep","rms"," ",true);

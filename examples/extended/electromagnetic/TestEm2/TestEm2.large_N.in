@@ -1,4 +1,4 @@
-# $Id: TestEm2.large_N.in,v 1.1 2003-11-16 19:34:24 stesting Exp $
+# $Id: TestEm2.large_N.in,v 1.2 2004-05-04 08:31:18 vnivanch Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -12,6 +12,7 @@
 ###/testem/phys/addPhysics  g4v52
 #
 /testem/phys/setCuts 1 mm
+/testem/det/edepRms 0.9488 0.0112
 #
 /run/initialize
 #
@@ -20,7 +21,7 @@
 /gun/particle e-
 /gun/energy 5 GeV
 #
-/testem/event/printModulo 10
+/testem/event/printModulo 100
 #
 /run/beamOn 500
 

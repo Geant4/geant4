@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.4 2004-05-04 07:36:41 vnivanch Exp $
+// $Id: RunAction.cc,v 1.5 2004-05-04 08:31:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,6 @@
 #include "G4UnitsTable.hh"
 
 #include <iomanip>
-//#include <assert.h>
 
 #include "Randomize.hh"
 
@@ -409,7 +408,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double de = (MeanELongitCumul[nLbin-1]/100. - etrue)*x/rtrue;
   G4double dr = ( rmsELongitCumul[nLbin-1]/100. - rtrue)*x/rtrue;
   G4String resume = "IS ACCEPTED";
-  if(abs(de) > 3.0 || abs(dr) > 3.0) resume = "IS NOT ACCEPTED";
+  if(abs(de) > 3.0 || abs(dr) > 5.0) resume = "IS NOT ACCEPTED";
 
   // show Rndm status
   HepRandom::showEngineStatus();
