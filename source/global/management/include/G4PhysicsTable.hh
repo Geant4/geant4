@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsTable.hh,v 1.9 2001-03-09 12:08:19 gcosmo Exp $
+// $Id: G4PhysicsTable.hh,v 1.10 2001-04-03 07:26:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,8 @@ class G4PhysicsVector;
 
 class G4PhysicsTable : public G4std::vector<G4PhysicsVector*> 
 {
+
+  typedef G4std::vector<G4PhysicsVector*> G4PhysCollection;
 
  public: // with description
 

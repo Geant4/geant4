@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsTable.cc,v 1.4 2001-03-09 12:08:21 gcosmo Exp $
+// $Id: G4PhysicsTable.cc,v 1.5 2001-04-03 07:26:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,12 +23,12 @@
 #include "g4std/iomanip"
 
 G4PhysicsTable::G4PhysicsTable()
-  : G4std::vector<G4PhysicsVector*>()
+  : G4PhysCollection()
 {
 }
 
 G4PhysicsTable::G4PhysicsTable(size_t capacity)
-  : G4std::vector<G4PhysicsVector*>()
+  : G4PhysCollection()
 {
   reserve(capacity);
 }
@@ -42,10 +42,10 @@ G4PhysicsTable& G4PhysicsTable::operator=(const G4PhysicsTable& right)
 {
   if (this != &right)
   {
-    G4std::vector<G4PhysicsVector*>::const_iterator itr;
+    G4PhysCollection::const_iterator itr;
     for (itr=right.begin(); itr!=right.end(); ++itr)
     {
-      G4std::vector<G4PhysicsVector*>::push_back(*itr);
+      G4PhysCollection::push_back(*itr);
     }
   }
   return *this;
