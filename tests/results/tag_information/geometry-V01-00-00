@@ -1,0 +1,10 @@
+- Syncronized HEAD versions of files after ISO-C++ migration
+  (essentially CVS headers changes).
+- CSG/G4Trap: fixed bug in DistanceToIn(p,v). (V.Grichine)
+  Modified files: G4Trap.cc and testG4Trap.cc.
+- Protection of GetSlice in G4DrawVoxels.cc. (J.Allison)
+
+  Collecting subtags: field-V01-00-00, geomsolids-V01-00-00,
+                      geommng-V01-00-00 and geomvol-V01-00-00.
+
+                Cheers, Gabriele
