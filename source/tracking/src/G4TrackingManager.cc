@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingManager.cc,v 1.6 2001-02-08 07:39:53 tsasaki Exp $
+// $Id: G4TrackingManager.cc,v 1.7 2001-02-09 01:35:06 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,7 +60,7 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   G4int itr;
   //  for(itr=GimmeSecondaries()->begin();itr=GimmeSecondaries()->end();itr++){ 
   for(itr=0;itr<GimmeSecondaries()->size();itr++){ 
-     delete GimmeSecondaries()->at(itr);
+     delete (*GimmeSecondaries())[itr];
   }
   GimmeSecondaries()->clear();  
   

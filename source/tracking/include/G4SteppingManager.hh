@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.hh,v 1.15 2001-02-08 07:48:39 tsasaki Exp $
+// $Id: G4SteppingManager.hh,v 1.16 2001-02-09 01:35:05 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //---------------------------------------------------------------
@@ -61,6 +61,7 @@ class G4VSensitiveDetector;
 #include "G4TouchableHistory.hh"      // Include from 'geometry'
 
 //  must be changed in elegant way
+static const size_t SizeOfSelectedDoItVector=100;
 // RogueWave Tools.h++
    typedef G4std::vector<G4int> 
              G4SelectedAtRestDoItVector;
@@ -68,7 +69,6 @@ class G4VSensitiveDetector;
              G4SelectedAlongStepDoItVector;
    typedef G4std::vector<G4int>
              G4SelectedPostStepDoItVector;
-
 
 ///////////////////////
 class G4SteppingManager 
@@ -195,7 +195,6 @@ public: //without description
 
 
 // Member data
-   static const size_t SizeOfSelectedDoItVector=100;
 
    G4UserSteppingAction* fUserSteppingAction;
 

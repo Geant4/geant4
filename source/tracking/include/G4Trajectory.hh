@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.hh,v 1.11 2001-02-08 07:39:52 tsasaki Exp $
+// $Id: G4Trajectory.hh,v 1.12 2001-02-09 01:35:05 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,6 +47,7 @@ class G4Trajectory;
 
 class G4Polyline;                   // Forward declaration.
 
+typedef G4std::vector<G4VTrajectoryPoint*>  TrajectoryPointContainer;
 ///////////////////
 class G4Trajectory : public G4VTrajectory
 ///////////////////
@@ -97,7 +98,7 @@ public: // with description
    private:
 //---------
 
-  G4std::vector<G4VTrajectoryPoint*>* positionRecord;
+  TrajectoryPointContainer* positionRecord;
   G4int fTrackID;
   G4int fParentID;
   G4String ParticleName;

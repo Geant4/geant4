@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.cc,v 1.9 2001-02-08 07:39:53 tsasaki Exp $
+// $Id: G4Trajectory.cc,v 1.10 2001-02-09 01:35:06 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,7 +58,8 @@ G4Trajectory::G4Trajectory(const G4Track* aTrack)
    fTrackID = aTrack->GetTrackID();
    fParentID = aTrack->GetParentID();
    //   positionRecord = new G4RWTPtrOrderedVector<G4VTrajectoryPoint>;
-   //   G4std::vector<G4VTrajectoryPoint*> *positionRecord;
+   //   G4std::vector<t*> *
+   positionRecord = new TrajectoryPointContainer();
    positionRecord->push_back(new G4TrajectoryPoint(aTrack->GetPosition()));
 }
 
@@ -73,6 +74,8 @@ G4Trajectory::G4Trajectory(G4Trajectory & right)
   fParentID = right.fParentID;
   //  positionRecord = new G4RWTPtrOrderedVector<G4VTrajectoryPoint>;
   //  G4std::vector<G4VTrajectoryPoint*> *positionRecord;
+  positionRecord = new TrajectoryPointContainer();
+
   for(int i=0;i<right.positionRecord->size();i++)
   {
     G4TrajectoryPoint* rightPoint = (G4TrajectoryPoint*)((*(right.positionRecord))[i]);
@@ -88,7 +91,7 @@ G4Trajectory::~G4Trajectory()
   //  positionRecord->clearAndDestroy();
   G4int i;
   for(i=0;i<positionRecord->size();i++){
-    delete  positionRecord->at(i);
+    delete  (*positionRecord)[i];
   }
   positionRecord->clear();
 
@@ -188,7 +191,7 @@ void G4Trajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
     positionRecord->push_back((*(seco->positionRecord))[i]);
     //    positionRecord->push_back(seco->positionRecord->removeAt(1));
   }
-  delete seco->positionRecord->at(0);
+  delete (*seco->positionRecord)[0];
   seco->positionRecord->clear();
 }
 
