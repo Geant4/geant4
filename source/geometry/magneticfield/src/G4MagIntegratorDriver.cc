@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.2 1999-06-21 14:54:38 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.3 1999-06-29 18:56:11 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,9 +89,12 @@ G4MagInt_Driver::AccurateAdvance(
 
      if(fabs(hnext) <= Hmin())
      {
-        
         // If simply a very small interval is being integrated, do not warn
-        if( (fabs(hstep) > Hmin()) ){   //   && (hnext < hstep * PerThousand ) ){ 
+        if( (x < x2 * (1-eps) ) &&     //  The last step can be small: it's OK
+            (fabs(hstep) > Hmin())     //   and if we are asked, it's OK
+            //   && (hnext < hstep * PerThousand ) 
+          )
+        { 
 	   G4cerr<< " Warning (G4MagIntergratorDriver): The stepsize for the " 
 	       " next iteration=" << hnext << " is too small - in Step number "
 		 <<nstp << "." << endl;
