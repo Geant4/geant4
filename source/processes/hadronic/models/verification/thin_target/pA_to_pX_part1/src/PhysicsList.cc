@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.1 2003-05-27 13:44:49 hpw Exp $
+// $Id: PhysicsList.cc,v 1.2 2003-05-29 16:56:33 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,11 +84,28 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::ConstructHad()
 {
-  //  G4BinaryCascade* theBinaryCascade = new G4BinaryCascade();
+  G4HadronicInteraction * theModel(0);
+  if(getenv("TestBinary"))
+  {
+    G4BinaryCascade* theBinaryCascade = new G4BinaryCascade();
+    theModel = theBinaryCascade;
+  }
   //  theBinaryCascade->SetMinEnergy(100.0*MeV);
-  //  G4CascadeInterface* theBertiniCascade = new G4CascadeInterface();
+  else if(getenv("TestBertini"))
+  {
+    G4CascadeInterface* theBertiniCascade = new G4CascadeInterface();
+    theModel = theBertiniCascade;
+  }
   //  theBertiniCascade->SetMinEnergy(100.0*MeV);
-  G4LEProtonInelastic* theLEProtonModel = new G4LEProtonInelastic();
+  else  if(getenv("TestLEP"))
+  {
+    G4LEProtonInelastic* theLEProtonModel = new G4LEProtonInelastic();
+    theModel = theLEProtonModel;
+  }
+  else
+  {
+    G4Exception("PhysicsList::ConstructHad(): ERROR - No model selected");
+  }
   //  theLEProtonModel->SetMaxEnergy(100.0*MeV);
 
 
@@ -97,7 +114,7 @@ void PhysicsList::ConstructHad()
   G4ProcessManager* pManager = G4Proton::Proton()->GetProcessManager();
   //  theProtonInelastic.RegisterMe(theBinaryCascade);
   //  theProtonInelastic.RegisterMe(theBertiniCascade);
-  theProtonInelastic.RegisterMe(theLEProtonModel);
+  theProtonInelastic.RegisterMe(theModel);
   pManager->AddDiscreteProcess(&theProtonInelastic);
 
 }

@@ -1,4 +1,4 @@
-# $Id: targtest.mac,v 1.1 2003-05-27 13:44:44 hpw Exp $
+# $Id: targtest.mac,v 1.2 2003-05-29 16:56:32 hpw Exp $
 #
 # Macro file for "ppinc.cc"
 # 
@@ -6,7 +6,6 @@
 /control/saveHistory
 /target/setTgtMat Calcium
 /target/setTgtThick 2.0 mm
-/target/setNumEvts 1000000
 # /target/setTgtRadius 5.0 cm
 /target/update 
 #
@@ -19,4 +18,4 @@
 #
 /gun/particle proton
 /gun/energy 800 MeV
-/run/beamOn 1000000
+/run/beamOn 100000000
