@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.cc,v 1.13 2000-05-11 15:01:22 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.14 2000-05-11 17:34:32 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -145,7 +145,8 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
 
   G4int     noTrials=0;
 
-  stepTrial = G4std::min( stepMax, fLastStepEstimate_Unconstrained );
+  stepTrial = G4std::min( stepMax, 
+			  (1-perThousand)*fLastStepEstimate_Unconstrained );
 
   do
   { 
@@ -181,9 +182,20 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
 #ifdef  TEST_CHORD_PRINT
      G4cout.precision(5);
      G4cout << " ChF/fnc: notrial " << G4std::setw( 3) << noTrials 
-            << " this_step= "       << G4std::setw(10) << oldStepTrial 
-	    << " dChordStep=  "     << G4std::setw(10) << dChordStep
-            << " new_step= "        << G4std::setw(10) << fLastStepEstimate_Unconstrained 
+            << " this_step= "       << G4std::setw(10) << oldStepTrial;
+     if( fabs( (dChordStep / fDeltaChord) - 1.0 ) < 0.001 ){
+       G4cout.precision(8);
+       G4cout << " dChordStep=  "     << G4std::setw(12) << dChordStep;
+     }else{
+       G4cout.precision(6);
+       G4cout << " dChordStep=  "     << G4std::setw(12) << dChordStep;
+     }
+     if( dChordStep > fDeltaChord )
+ 	G4cout << " d+";
+     else
+ 	G4cout << " d-";
+     G4cout.precision(5);
+     G4cout <<  " new_step= "        << G4std::setw(10) << fLastStepEstimate_Unconstrained
             << " new_step_constr= " << G4std::setw(10) << stepTrial << endl;
 #endif
      noTrials++; 
@@ -225,8 +237,9 @@ G4double G4ChordFinder::NewStep(
 #if 1 
   const G4double  threshold = 1.21, multiplier = 0.9;   //  0.9 < 1 / sqrt(1.21)
 
-  stepTrial = stepTrialOld * sqrt( fDeltaChord / dChordStep );
-  stepEstimate_Unconstrained = stepTrial;
+
+  stepEstimate_Unconstrained = stepTrialOld * sqrt( fDeltaChord / dChordStep );
+  stepTrial =  0.98 * stepEstimate_Unconstrained;
 
   if ( dChordStep < threshold * fDeltaChord ){
      stepTrial= stepTrialOld *  multiplier;    
