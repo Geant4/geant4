@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2001-08-29 18:47:03 asaim Exp $
+$Id: History,v 1.28 2001-09-28 19:58:07 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Sep 28, 2001, M.Asai (intercoms-V03-02-07)
+- For Batch mode, comment lines are displayed only at verbose level = 2.
 
 Aug 29, 2001, M.Asai (intercoms-V03-02-06)
 - Corrections in G4UIbatch to ignore the blank line.
