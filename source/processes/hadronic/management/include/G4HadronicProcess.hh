@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronicProcess.hh,v 1.3 1999-11-11 15:37:09 gunter Exp $
+// $Id: G4HadronicProcess.hh,v 1.4 1999-11-19 17:28:14 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // This is the top level Hadronic Process class
@@ -98,6 +98,14 @@
     void RegisterIsotopeProductionModel(G4VIsotopeProduction * aModel)
     { theProductionModels.insert(aModel); }
 
+    static G4IsoParticleChange * GetIsotopeProductionInfo() 
+    { 
+      G4IsoParticleChange * anIsoResult = theIsoResult;
+      if(theIsoResult) theOldIsoResult = theIsoResult;
+      theIsoResult = NULL;
+      return anIsoResult;
+    }
+
  protected:
     
     inline G4EnergyRangeManager *GetManagerPointer()
@@ -132,6 +140,9 @@
     
     G4IsoParticleChange theIsoPC;
     G4RWTPtrOrderedVector<G4VIsotopeProduction> theProductionModels;
+
+    static G4IsoParticleChange * theIsoResult;
+    static G4IsoParticleChange * theOldIsoResult;
     
  };
  

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronicProcess.cc,v 1.4 1999-11-16 16:55:18 hpw Exp $
+// $Id: G4HadronicProcess.cc,v 1.5 1999-11-19 17:28:15 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // HPW to implement the choosing of an element for scattering.
@@ -19,6 +19,8 @@
 #include "G4HadronicProcess.hh"
 //@@ add model name info, once typeinfo available #include <typeinfo.h>
  
+ G4IsoParticleChange * G4HadronicProcess::theIsoResult = NULL;
+ G4IsoParticleChange * G4HadronicProcess::theOldIsoResult = NULL;
  G4bool G4HadronicProcess::isoIsEnabled = true;
  void G4HadronicProcess::EnableIsotopeProductionGlobally()  {isoIsEnabled = true;}
  void G4HadronicProcess::DisableIsotopeProductionGlobally() {isoIsEnabled = false;}
@@ -94,7 +96,8 @@
                     const G4Nucleus & aNucleus)
   {
     // get the PC from iso-production
-    theIsoPC.Copy(aResult);
+    if(theOldIsoResult) delete theOldIsoResult;
+    theIsoResult = new G4IsoParticleChange;
     G4bool done = false;
     G4IsoResult * anIsoResult = NULL;
     for(G4int i=0; i<theProductionModels.length(); i++)
@@ -109,21 +112,18 @@
     // if none in charge, use default iso production
     if(!done) anIsoResult = ExtractResidualNucleus(aTrack, aNucleus, aResult); 
         
-    // Add all additional info explicitely and add typename from model called.
-    theIsoPC.SetIsotope(anIsoResult->GetIsotope());
-    theIsoPC.SetProductionPosition(aTrack.GetPosition());
-    theIsoPC.SetProductionTime(aTrack.GetGlobalTime());
-    theIsoPC.SetParentParticle(*aTrack.GetDynamicParticle());
-    theIsoPC.SetMotherNucleus(anIsoResult->GetMotherNucleus());
-//    theIsoPC.SetProducer(typeid(*theInteraction).name()); @@@@@@@
-    theIsoPC.SetProducer("WaitingForTypeidToBeAvailableInCompilers");
+    // Add all info explicitely and add typename from model called.
+    theIsoResult->SetIsotope(anIsoResult->GetIsotope());
+    theIsoResult->SetProductionPosition(aTrack.GetPosition());
+    theIsoResult->SetProductionTime(aTrack.GetGlobalTime());
+    theIsoResult->SetParentParticle(*aTrack.GetDynamicParticle());
+    theIsoResult->SetMotherNucleus(anIsoResult->GetMotherNucleus());
+//    theIsoResult->SetProducer(typeid(*theInteraction).name()); @@@@@@@
+    theIsoResult->SetProducer("WaitingForTypeidToBeAvailableInCompilers");
     
     delete anIsoResult;
 
-//--- Clear secondary list of aResult     
-    aResult->Clear();
-    
-    return &theIsoPC;
+    return aResult;
   }
   
   G4IsoResult * G4HadronicProcess::

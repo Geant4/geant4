@@ -1,14 +1,11 @@
 #ifndef G4IsoParticleChange_h
 #define G4IsoParticleChange_h
 
-#include "G4VParticleChange.hh"
 #include "G4Nucleus.hh"
 
-class G4IsoParticleChange : public G4VParticleChange
+class G4IsoParticleChange 
 {
 public:
-
-  void Copy(G4VParticleChange * aResult);
   
   void SetIsotope(const G4String & anIsotope) {theIsotope = anIsotope;}
   void SetProductionPosition(const G4ThreeVector & aPosition) {thePosition = aPosition;}
