@@ -1,11 +1,11 @@
-$Id: History,v 1.10 2001-05-30 14:52:32 maire Exp $
+$Id: History,v 1.11 2001-05-31 15:49:34 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    TestEm2 History file
+                    TestEm3 History file
                     --------------------
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+31-05-01  mma (testem3-V03-01-01)
+- VisManager
      
 30-05-01  mma
 - in RunAction: method PrintDedxTables() : binning as Geant3,
