@@ -1,37 +1,37 @@
 //#define DEBUG
 #define RUN
 
-#include "IntraNucleiCascader.h"
-#include "InuclElementaryParticle.h"
-#include "InuclNuclei.h"
-#include "LorentzConvertor.h"
-#include "ParticleLargerEkin.h"
-#include "NucleiModel.h"
-#include "CascadParticle.h"
+#include "G4IntraNucleiCascader.hh"
+#include "G4InuclElementaryParticle.hh"
+#include "G4InuclNuclei.hh"
+#include "G4LorentzConvertor.hh"
+#include "G4ParticleLargerEkin.hh"
+#include "G4NucleiModel.hh"
+#include "G4CascadParticle.hh"
 #include "algorithm"
 
 
-typedef vector<InuclElementaryParticle>::iterator particleIterator;
+typedef vector<G4InuclElementaryParticle>::iterator particleIterator;
 
-CollisionOutput IntraNucleiCascader::collide(InuclParticle* bullet,
-                                 InuclParticle* target) {
+G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
+                                 G4InuclParticle* target) {
 
-const int itry_max = 1000;
-const int reflection_cut = 500;
-const double eexs_cut = 0.0001;
+const G4int itry_max = 1000;
+const G4int reflection_cut = 500;
+const G4double eexs_cut = 0.0001;
 
 #ifdef DEBUG
 bullet->printParticle();
 target->printParticle();
 #endif
 
-CollisionOutput output;
+G4CollisionOutput output;
 
 #ifdef RUN
 
-InuclNuclei* tnuclei = dynamic_cast<InuclNuclei*>(target);
-InuclNuclei* bnuclei = dynamic_cast<InuclNuclei*>(bullet);
-InuclElementaryParticle* bparticle = dynamic_cast<InuclElementaryParticle*>
+G4InuclNuclei* tnuclei = dynamic_cast<G4InuclNuclei*>(target);
+G4InuclNuclei* bnuclei = dynamic_cast<G4InuclNuclei*>(bullet);
+G4InuclElementaryParticle* bparticle = dynamic_cast<G4InuclElementaryParticle*>
   (bullet);
 NucleiModel model(tnuclei);
 vector<double> momentum_in = bullet->getMomentum();
