@@ -1,0 +1,28 @@
+  A new tag of "particles-V01-01-00" for particles category has been committed.
+
+  In the new tag, new property of "particle sub-type" in G4ParticleDefinition is
+added for all particles. 
+                
+    - Set particle sub-type for particles
+        bosons-V01-00-00
+        leptons-V01-00-00
+        hadrons-V01-00-01
+        shortlived-V01-00-02
+
+    - Added sub-type information in G4ParticleDefinition::DumpTable
+        partman-V01-00-03
+
+
+  This "particle sub-type" can be used to know particle name without charge
+information. 
+  For example 
+        G4PionPlus, G4PionZero, and G4PionMinus have the same sub-type of "pi"
+        G4Proton, and G4Neutron (and their anti-particles) have the same sub-type of
+"nucleon"
+        G4TauPlus, and G4NeutrinoTau (and their anti-particles) have the same sub-type
+of "tau"
+        All charged states (and their anti-particles) of delta(1600) have the same
+sub-type of "delta(1700)"
+  
+  Best Regards,
+                                        Hisaya  
