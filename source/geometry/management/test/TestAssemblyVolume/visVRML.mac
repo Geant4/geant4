@@ -8,57 +8,67 @@
 /gun/direction 0      0    1
 /run/initialize
 /tracking/storeTrajectories 1
-/vis~/create_view/new_graphics_system  VRML1FILE
+#Old visualization commad!
+#/vis~/create_view/new_graphics_system  VRML1FILE
+/vis/open VRML2FILE
+/vis/drawVolume
+/vis/viewer/set/style wireframe
 /vis/scene/add/trajectories
 /run/beamOn 1
-/vis/view/update
+/vis/viewer/update
 #/vis/draw/current
-/vis/show/view
+#/vis/show/view
 /gun/position -600  600 -601 mm
 /gun/direction 0      0    1
 /run/beamOn 1
-/vis/view/update
+/vis/viewer/update
 #/vis/draw/current
-/vis/show/view
+#/vis/show/view
 /gun/position -600 -600 -601 mm
 /gun/direction 0      0    1
 /run/beamOn 1
-/vis/view/update
+/vis/viewer/update
 #/vis/draw/current
-/vis/show/view
+#/vis/show/view
 /gun/position  600 -600 -601 mm
 /gun/direction 0      0    1
 /run/beamOn 1
-/vis/view/update
+/vis/viewer/update
 #/vis/draw/current
-/vis/show/view
+#/vis/show/view
 #################################################################
 /geom/switch assembly
 /gun/position  600  600 -601 mm
 /gun/direction 0      0    1
-/vis~/create_view/new_graphics_system  VRML1FILE
+#/vis~/create_view/new_graphics_system  VRML1FILE
+/vis/open VRML2FILE
+/vis/drawVolume
+/vis/viewer/set/style wireframe
 /run/initialize
 /vis/scene/add/trajectories
 /run/beamOn 1
-/vis/view/update
+/vis/viewer/update
 #/vis/draw/current
-/vis/show/view
+#/vis/show/view
 /gun/position -600  600 -601 mm
 /gun/direction 0      0    1
 /run/beamOn 1
-/vis/view/update
+#/vis/view/update
+/vis/viewer/update
 #/vis/draw/current
-/vis/show/view
+#/vis/show/view
 /gun/position -600 -600 -601 mm
 /gun/direction 0      0    1
 /run/beamOn 1
-/vis/view/update
+#/vis/view/update
+/vis/viewer/update
 #/vis/draw/current
-/vis/show/view
+#/vis/show/view
 /gun/position  600 -600 -601 mm
 /gun/direction 0      0    1
 /run/beamOn 1
-/vis/view/update
+#/vis/view/update
+/vis/viewer/update
 #/vis/draw/current
-/vis/show/view
+#/vis/show/view
 
