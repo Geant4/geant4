@@ -34,13 +34,13 @@ G4BertiniRegionModel::G4BertiniRegionModel(const G4int numberOfLayers, const G4i
   if(numberOfLayers==1){ 
     radius.push_back(r);
 
-    G4double rho = A / (4/3*pi*pow(r,3));
+    G4double rho = G4double(A) / (4.0/3.0*pi*pow(r,3));
     density.push_back(rho);
 
     G4double protonMass = G4Proton::Proton()->GetPDGMass();
     G4double neutronMass = G4Neutron::Neutron()->GetPDGMass();
-    G4double protonDensity = Z / (4/3*pi*pow(r,3));
-    G4double neutronDensity = (A-Z) / (4/3*pi*pow(r,3));
+    G4double protonDensity = G4double(Z) / (4.0/3.0*pi*pow(r,3));
+    G4double neutronDensity = G4double(A-Z) / (4.0/3.0*pi*pow(r,3));
 
     protonFermiEnergy.push_back(GetFermiEnergy(protonDensity, protonMass));
     neutronFermiEnergy.push_back(GetFermiEnergy(neutronDensity, neutronMass));
@@ -125,7 +125,7 @@ G4double G4BertiniRegionModel::GetFermiMomentum(G4double aDensity,
 G4double G4BertiniRegionModel::GetFermiEnergy(G4double aDensity,
 					 G4double aMass){
 G4double twoThirds = 2.0/3.0;
-    return (pow(hbar_Planck,2)/(2*aMass)*pow((3*pi2*aDensity), twoThirds)); 
+    return (pow(hbar_Planck,2)/(2.0*aMass)*pow((3.0*pi2*aDensity), twoThirds)); 
 }
 
 
