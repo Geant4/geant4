@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.12 2003-11-12 16:11:56 urban Exp $
+// $Id: G4MscModel.cc,v 1.13 2003-11-26 10:01:13 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -50,7 +50,8 @@
 //
 // 10-11-03 highKinEnergy is set back to 100 TeV, some tail tuning +
 //          cleaning (L.Urban) 
-//
+// 26-11-03 correction in TrueStepLength : 
+//          trueLength <= currentRange (L.Urban) 
 
 // Class Description:
 //
@@ -88,6 +89,8 @@ G4MscModel::G4MscModel(G4double& m_dtrl, G4double& m_NuclCorrPar,
   highKinEnergy = 100.0*TeV;
   lowKinEnergy  = 0.1*keV;
   stepmin       = 1.e-6*mm;
+  currentRange  = 0. ;
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -408,6 +411,7 @@ G4double G4MscModel::GeomPathLength(
     charge = particle->GetPDGCharge()/eplus;
   }
   currentKinEnergy = T0;
+  currentRange = range ;
   currentRadLength = couple->GetMaterial()->GetRadlen();
 
   lambda0 = lambda;
@@ -441,6 +445,7 @@ G4double G4MscModel::GeomPathLength(
     } else {
       lambda1 = CrossSection(couple,particle,T1,0.0,1.0);
     }
+
     if (T0 > particle->GetPDGMass()) alam = lambda0*tPathLength/(lambda0-lambda1) ;
     G4double blam = 1.+alam/lambda0 ;
     if (tPathLength < 2.*dtrl*range) {
@@ -479,6 +484,7 @@ G4double G4MscModel::GeomPathLength(
 G4double G4MscModel::TrueStepLength(G4double geomStepLength)
 {
   G4double trueLength = geomStepLength;
+  trueLength = geomStepLength;
   if (geomStepLength > lambda0*tausmall) {
     G4double blam = 1.+alam/lambda0;
     if (lambda1 < 0.) {
@@ -511,6 +517,8 @@ G4double G4MscModel::TrueStepLength(G4double geomStepLength)
     if(trueLength < geomStepLength) trueLength = geomStepLength;
   }
 
+  if(trueLength > currentRange) trueLength = currentRange ;
+
   return trueLength;
 }
 
@@ -519,6 +527,7 @@ G4double G4MscModel::TrueStepLength(G4double geomStepLength)
 G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
 {
   G4double cth = 1. ;
+
   currentTau = trueStepLength/lambda0;
   if(trueStepLength < stepmin)
     cth = exp(-currentTau) ;
@@ -681,7 +690,7 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength)
         }
       }
     }
-  }
+  }  
 
   return cth ;
 }

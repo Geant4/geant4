@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.hh,v 1.5 2003-08-05 14:35:19 urban Exp $
+// $Id: G4MscModel.hh,v 1.6 2003-11-26 10:01:13 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,7 @@
 // 27-03-03 Rename (V.Ivanchenko)
 //
 // 05-08-03 angle distribution has been modified (L.Urban)
+// 26-11-03 new data member currentRange (L.Urban)
 //
 // Class Description:
 //
@@ -165,8 +166,9 @@ private:
 
   G4double stepmin ;
 
-  G4double currentRadLength;
   G4double currentKinEnergy;
+  G4double currentRange ; 
+  G4double currentRadLength;
 
 };
 

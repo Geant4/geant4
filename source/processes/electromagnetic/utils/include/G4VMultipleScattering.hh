@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.14 2003-11-04 09:28:07 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.15 2003-11-26 10:01:13 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,8 @@
 //
 // It is the generic process of multiple scattering it includes common
 // part of calculations for all charged particles
+//
+// 26-11-03 bugfix in AlongStepDoIt (L.Urban)
 
 // -------------------------------------------------------------------
 //
@@ -291,7 +293,7 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VMultipleScattering::ContinuousStepLimit(
-                                 const G4Track& track,
+                                       const G4Track& track,
                                        G4double previousStepSize,
                                        G4double currentMinimalStep,
                                        G4double& currentSafety)
@@ -323,10 +325,11 @@ inline G4VParticleChange* G4VMultipleScattering::AlongStepDoIt(
 {
   fParticleChange.Initialize(track);
   G4double geomStepLength = step.GetStepLength();
-  if (geomStepLength == geomPathLength) trueStepLength = truePathLength;
-  else    trueStepLength = currentModel->TrueStepLength(geomStepLength);
+  if((geomStepLength == geomPathLength) && (truePathLength <= currentRange))
+     trueStepLength = truePathLength;
+  else  
+     trueStepLength = currentModel->TrueStepLength(geomStepLength);
   fParticleChange.SetTrueStepLength(trueStepLength);
-//  G4cout << "AlongStep: trueLength= " << trueStepLength << " geomLength= "<< geomStepLength << " zlast= " << geomPathLength << G4endl;
   return &fParticleChange;
 }
 
