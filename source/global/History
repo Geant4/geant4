@@ -1,4 +1,4 @@
-$Id: History,v 1.78 2001-04-05 09:05:37 gcosmo Exp $
+$Id: History,v 1.79 2001-05-30 08:16:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 30, 2001 G.Cosmo (global-V03-01-00)
+- Defined 'str_size' as G4std::string::size_type and replaced usage of 'size_t'
+  in G4String and G4SubString. Fixes problem report #40.
 
 April 05, 2001 G.Cosmo (global-V03-00-11)
 - Added patch to management/GNUmakefile for allowing compilation of G4UnitsTable.cc
