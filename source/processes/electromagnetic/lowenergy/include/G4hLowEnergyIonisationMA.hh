@@ -275,7 +275,7 @@ inline G4double G4hLowEnergyIonisationMA::GetMeanFreePath(
   theMaterial     = track.GetMaterial();
   G4double q_2    = effCharge.EffectiveChargeSquareRatio(currentParticle,theMaterial,
                                                          track.GetKineticEnergy());
-
+  //G4cout << "q^2= " << q_2 << " mRatio= " << mRatio << G4endl;
   SetMassRatio(mRatio);
   SetReduceFactor(1.0/(q_2*mRatio));
   SetChargeSquare(q_2);
