@@ -69,7 +69,9 @@ public:
                                         G4double meanLoss) = 0;
 
   virtual G4double Dispersion(const G4Material*, 
-                              const G4DynamicParticle*) = 0;
+                              const G4DynamicParticle*,
+				        G4double& tmax, 
+                                        G4double& length) = 0;
                                            
   virtual void Initialise(const G4ParticleDefinition*) = 0;
 

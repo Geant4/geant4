@@ -65,7 +65,10 @@ public:
                                 G4double&, 
                                 G4double); 
 
-  G4double Dispersion(const G4Material*, const G4DynamicParticle*);
+  G4double Dispersion(    const G4Material*, 
+                          const G4DynamicParticle*,
+ 				G4double&, 
+                                G4double&); 
 
   void Initialise(const G4ParticleDefinition*);
 

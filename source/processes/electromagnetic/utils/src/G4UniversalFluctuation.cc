@@ -121,7 +121,7 @@ void G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     siga = sqrt(siga);
     do {
      loss = G4RandGauss::shoot(meanLoss,siga);
-    } while (loss < 0.);
+    } while (loss < 0. || loss > 2.*meanLoss);
 
     meanLoss = loss;
     return;
@@ -297,15 +297,19 @@ void G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-G4double G4UniversalFluctuation::Dispersion(const G4Material* material, 
-                                            const G4DynamicParticle* dp)
+G4double G4UniversalFluctuation::Dispersion(    
+                          const G4Material* material, 
+                          const G4DynamicParticle* dp,
+ 				G4double& tmax, 
+			        G4double& length)
 {
   electronDensity = material->GetElectronDensity();
 
   G4double gam   = (dp->GetKineticEnergy())/particleMass + 1.0; 
   G4double beta2 = 1.0 - 1.0/(gam*gam);
  
-  G4double siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * electronDensity * chargeSquare;
+  G4double siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
+                 * electronDensity * chargeSquare;
 
   return siga;
 }

@@ -38,6 +38,7 @@
 // 04.12.2002 Minor change in PostStepDoIt (VI) 
 // 23.12.2002 Change interface in order to move to cut per region (VI)
 // 26.12.2002 Secondary production moved to derived classes (VI)
+// 04.01.2003 Fix problem of very small steps for ions (VI)
 //
 // Class Description: 
 //
@@ -592,7 +593,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
   G4double eloss  = 0.0;
   G4bool b;
 
-  /*
+  /*  
   if(-1 < verboseLevel) {
     G4cout << "AlongStepDoIt for " 
            << GetProcessName() << " and particle " 
@@ -600,6 +601,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
            << "  eScaled(MeV)= " << preStepKinEnergy/MeV
            << "  slim(mm)= " << fRange/mm
            << "  s(mm)= " << length/mm
+           << "  q^2= " << chargeSqRatio
            << G4endl;
   }
   */
@@ -610,7 +612,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
   if (length >= fRange) {
     eloss = preStepKinEnergy;
 
-  } else if(preStepKinEnergy < faclow*minKinEnergy) {
+  } else if(preStepScaledEnergy < faclow*minKinEnergy) {
 
     eloss = preStepKinEnergy*sqrt(length/fRange);
 
@@ -626,7 +628,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
     G4double postStepScaledEnergy = v->GetValue(x, b);
     eloss = (preStepScaledEnergy - postStepScaledEnergy)/massRatio;
     
-    /*    
+    /*        
     if(-1 < verboseLevel) {
       G4cout << "fRange(mm)= " << fRange/mm
              << " xPost(mm)= " << x/mm
@@ -638,52 +640,48 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
              << G4endl;
     }
     */
+    if(eloss <= 0.0) eloss = preStepKinEnergy*sqrt(length/fRange);
     
   }    
 
-  // 
-  if(eloss <= 0.0) {
-    eloss = 0.0; 
-
-  } else {
-    const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
-    G4double tmax = MaxSecondaryEnergy(dynParticle);
-    tmax = G4std::min(tmax,(*theCuts)[currentMaterialIndex]);
+  const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
+  G4double tmax = MaxSecondaryEnergy(dynParticle);
+  tmax = G4std::min(tmax,(*theCuts)[currentMaterialIndex]);
   
-    G4std::vector<G4Track*>* newp = 
+  G4std::vector<G4Track*>* newp = 
            SecondariesAlongStep(step, tmax, eloss, preStepKinEnergy);
 
-    if(newp) {
+  if(newp) {
 
-      G4int n = newp->size();
-      if(n > 0) {
-        aParticleChange.SetNumberOfSecondaries(n);
-        G4Track* t; 
-        G4double e;
-        for (G4int i=0; i<n; i++) {
-          t = (*newp)[i];
-          e = t->GetKineticEnergy();
-          const G4ParticleDefinition* pd = t->GetDefinition();
-          if (pd != theGamma && pd != theElectron ) e += pd->GetPDGMass();
+    G4int n = newp->size();
+    if(n > 0) {
+      aParticleChange.SetNumberOfSecondaries(n);
+      G4Track* t; 
+      G4double e;
+      for (G4int i=0; i<n; i++) {
+        t = (*newp)[i];
+        e = t->GetKineticEnergy();
+        const G4ParticleDefinition* pd = t->GetDefinition();
+        if (pd != theGamma && pd != theElectron ) e += pd->GetPDGMass();
         
-          preStepKinEnergy -= e;
-          aParticleChange.AddSecondary(t);
-        }
+        preStepKinEnergy -= e;
+        aParticleChange.AddSecondary(t);
       }
-      delete newp;
     }
+    delete newp;
+  }
   
   
-    // Sample fluctuations
+  // Sample fluctuations
 
-    if (lossFluctuationFlag && eloss + minKinEnergy > preStepKinEnergy) {
+  if (lossFluctuationFlag && eloss + minKinEnergy > preStepKinEnergy) {
 
       emFluctModel->SampleFluctuations(currentMaterial, dynParticle, 
                                        tmax, length, eloss);
       if(eloss < 0.0) eloss = 0.0;
-    }
-    preStepKinEnergy -= eloss;
   }
+  preStepKinEnergy -= eloss;
+
   /*
   if(1 < verboseLevel) {
     G4cout << "eloss(MeV)= " << eloss/MeV 
