@@ -57,15 +57,15 @@ private:
   char name[300], name_in_file[300];
 
   // Variables used for reading the DICOM images
-  unsigned short int read_group_id;
-  unsigned short int read_element_id;
-  unsigned short int element_length;
-  unsigned short int element_length2;
+  G4int read_group_id;
+  G4int read_element_id;
+  G4int element_length;
+  G4int element_length2;
   G4int element_length3;
   char value[10000][300];
   char buffer[196];
-  unsigned int Int_Buffer[1000000];
-  unsigned int tab[1000][1000];
+  G4int Int_Buffer[1000000];
+  G4int tab[1000][1000];
 
   // Transform a pixel value to a density
   G4double pixel2density(G4int pixel);

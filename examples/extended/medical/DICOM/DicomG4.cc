@@ -45,7 +45,7 @@
 #include "DicomEventAction.hh"
 #include "DicomHandler.hh"
 
-G4int main(int argc,char** argv)
+int main(int argc,char** argv)
 {
 				
   // Treatment of DICOM images before creating the G4runManager

@@ -7,7 +7,6 @@ class Octree;
 class MiddleNode : public OctreeNode
 {
 public:
-  OctreeNode*  mChildren[8];
   MiddleNode();
   ~MiddleNode();
 
@@ -18,5 +17,8 @@ public:
   G4int MemSize();
   OctreeNode*& operator []( G4int index )   {return mChildren[index];}
   OctreeNodeType Type()                     {return MIDDLE_NODE;}
+
+private:
+ OctreeNode*  mChildren[8];
 };
 #endif
