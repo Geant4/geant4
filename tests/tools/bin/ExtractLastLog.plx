@@ -6,6 +6,7 @@
 
 $ActiveExamination="doit";
 $ShowStt=1;
+$ShowAll=1;
 
 open(CONFIG,"OnTest") || die "Failed to open OnTest configuration file $! ";
 ($DevDir,$Tag)=split(' ',<CONFIG>);
@@ -59,11 +60,19 @@ foreach $testlog (@testlogs) {
                 $Step=$1; $State=$2;
 # Build for now means build test executables after library compilation
 #        logged in gmake.log.
+
+                if ( $line =~ m/^STT:ABORT / ) {
+                     &change_table("Compile",$platform,"A");
+                }
+
                 if ( $line =~ m/^STT:BUILD Started/ ) {
-                     $nextline = <TLC>;
                      &change_table("Compile",$platform,"S");
                      &change_table("Build",$platform,"S");
-                     $lines++;
+                     $nextline = "+ maybe somebody set x in the called sh scripts";
+                     while ( "+" eq substr($nextline,0,1) ) {
+                         $lines++;
+                         $nextline = <TLC>;
+                     }
                      if ( $nextline =~ m#^(/afs/.*)\s+created# ) {
                          $ResultsDir=$1;
                          undef($syntaxerror);
@@ -106,6 +115,7 @@ foreach $testlog (@testlogs) {
         @MakingProgress=`rsh -l stesting $Machine "/afs/cern.ch/sw/geant4/stt/dev1/testtools/geant4/tests/tools/bin/FileAge.plx $ResultsDir/gmake.log"`;
         foreach $line (@MakingProgress) {
             chomp($line);
+            print "Debug --- FileAge.plx ---\"$line\"\n";
             if ( $line =~ m#(\d+)\s+(\d+)\s+/# ) {
                 &change_table("Compile",$platform,"$1 $2");
                 print "Gmake Age $line\n";
