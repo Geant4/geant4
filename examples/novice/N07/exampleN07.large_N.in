@@ -1,4 +1,5 @@
 /control/verbose 2
+/run/verbose 1
 /run/dumpRegion
 /run/beamOn 1000
 /run/dumpCouples
