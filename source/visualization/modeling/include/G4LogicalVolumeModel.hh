@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeModel.hh,v 1.5 2001-07-11 10:09:21 gunter Exp $
+// $Id: G4LogicalVolumeModel.hh,v 1.6 2005-02-15 14:51:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,6 +53,9 @@ public: // With description
   G4LogicalVolumeModel
   (G4LogicalVolume*,
    G4int soughtDepth = 1,
+   G4bool booleans = true,
+   G4bool voxels = true,
+   G4bool readout = true,
    const G4Transform3D& modelTransformation = G4Transform3D::Identity,
    const G4ModelingParameters* = 0);
 
@@ -77,6 +80,9 @@ protected:
   // Data members...
 
   G4LogicalVolume* fpLV;
+  G4bool fBooleans;  // Flag for drawing boolean components.
+  G4bool fVoxels;    // Flag for drawing voxels.
+  G4bool fReadout;   // Flag for drawing readout geometry.
 
 };
 

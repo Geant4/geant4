@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.26 2004-07-15 15:39:11 johna Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.27 2005-02-15 14:51:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -267,14 +267,33 @@ void G4VisCommandOpen::SetNewValue (G4UIcommand*, G4String newValue) {
 
 G4VisCommandSpecify::G4VisCommandSpecify() {
   G4bool omitable;
-  fpCommand = new G4UIcmdWithAString("/vis/specify", this);
-  fpCommand->SetGuidance("/vis/specify <logical-volume-name>");
+  fpCommand = new G4UIcommand("/vis/specify", this);
+  fpCommand->SetGuidance
+    ("/vis/specify <logical-volume-name> [depth-of-descent] [<booleans-flag>]"
+     "\n  [<voxels-flag>] [<readout-flag>]");
   fpCommand->SetGuidance
     ("Creates a scene consisting of this logical volume and asks the"
-     "\n  current viewer to draw it and the geometry to print the"
-     "\n  specification.");
+     "\n  current viewer to draw it to specified depth of descent (default 1)"
+     "\n  showing boolean component (if any) (default: true), voxels (if any)"
+     "\n  (default: true) and readout geometry (if any) (default: true)."
+     "\n  Note: voxels are not constructed until start of run - /run/beamOn."
+     );
   fpCommand->SetGuidance("The scene becomes current.");
-  fpCommand->SetParameterName("logical-volume-name", omitable = false);
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter("logical-volume-name", 's', omitable = false);
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("depth", 'i', omitable = true);
+  parameter->SetDefaultValue(1);
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("booleans", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("voxels", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("readout", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
+  fpCommand->SetParameter(parameter);
 }
 
 G4VisCommandSpecify::~G4VisCommandSpecify() {
@@ -289,7 +308,7 @@ void G4VisCommandSpecify::SetNewValue(G4UIcommand*, G4String newValue) {
   if (keepVerbose >= 2 || verbosity >= G4VisManager::confirmations)
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
-  UImanager->ApplyCommand(G4String("/geometry/print " + newValue));
+  // UImanager->ApplyCommand(G4String("/geometry/print " + newValue));
   UImanager->ApplyCommand("/vis/scene/create");
   UImanager->ApplyCommand(G4String("/vis/scene/add/logicalVolume " + newValue));
   UImanager->ApplyCommand("/vis/sceneHandler/attach");

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.17 2005-01-26 16:48:08 johna Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.18 2005-02-15 14:50:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,8 @@
 #include "G4Scene.hh"
 #include "G4ModelingParameters.hh"
 #include "G4PhysicalVolumeMassScene.hh"
+#include "G4VSensitiveDetector.hh"
+#include "G4VReadOutGeometry.hh"
 
 G4ASCIITreeSceneHandler::G4ASCIITreeSceneHandler
 (G4VGraphicsSystem& system,
@@ -94,7 +96,8 @@ void G4ASCIITreeSceneHandler::WriteHeader (std::ostream& os)
     "\n#  >= 10: prints all physical volumes."
     "\n#  The level of detail is given by the units (verbosity%10):"
     "\n#  >=  0: prints physical volume name."
-    "\n#  >=  1: prints logical volume name."
+    "\n#  >=  1: prints logical volume name (and names of sensitive detector"
+    "\n#         and readout geometry, if any)."
     "\n#  >=  2: prints solid name and type."
     "\n#  >=  3: prints volume and density."
     "\n#  >=  4: prints mass of each top physical volume in scene to depth specified."
@@ -115,14 +118,13 @@ void G4ASCIITreeSceneHandler::WriteHeader (std::ostream& os)
 
   os << "\n#  Now printing with verbosity " << verbosity;
   os << "\n#  Format is: PV:n";
-  if (detail >= 1) os << " / LV";
+  if (detail >= 1) os << " / LV (SD,RO)";
   if (detail >= 2) os << " / Solid(type)";
   if (detail >= 3) os << ", volume, density";
   if (detail >= 5) os << ", mass of branch";
-  os << "\n#  where PV = Physical Volume";
-  if (detail <2) os << " and"; else os << ",";
-  os << " n = copy number";
-  if (detail >= 2) os << " and LV = Logical Volume";
+  os <<
+    "\n#  Abbreviations: PV = Physical Volume,     LV = Logical Volume,"
+    "\n#                 SD = Sensitive Detector,  RO = Read Out Geometry.";
 }
 
 void G4ASCIITreeSceneHandler::EndModeling () {
@@ -247,6 +249,15 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
   if (detail >= 1) {
     *fpOutFile << " / \""
 	       << fpCurrentLV->GetName() << "\"";
+    G4VSensitiveDetector* sd = fpCurrentLV->GetSensitiveDetector();
+    if (sd) {
+      *fpOutFile << " (SD=\"" << sd->GetName() << "\"";
+      G4VReadOutGeometry* roGeom = sd->GetROgeometry();
+      if (roGeom) {
+	*fpOutFile << ",RO=\"" << roGeom->GetName() << "\"";
+      }
+      *fpOutFile << ")";
+    }
   }
 
   if (detail >= 2) {

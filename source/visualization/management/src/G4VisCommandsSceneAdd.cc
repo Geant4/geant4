@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.43 2005-02-04 16:39:08 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.44 2005-02-15 14:51:04 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -304,21 +304,38 @@ G4VisCommandSceneAddLogicalVolume::G4VisCommandSceneAddLogicalVolume () {
   fpCommand = new G4UIcommand ("/vis/scene/add/logicalVolume", this);
   fpCommand -> SetGuidance
     ("/vis/scene/add/logicalVolume <logical-volume-name>"
-     " [<depth-of-descending>]");
+     " [<depth-of-descending>] [<voxels-flag>] [<readout-flag>]");
   fpCommand -> SetGuidance ("Adds a logical volume to the current scene,");
   fpCommand -> SetGuidance
-    ("  showing voxels and boolean components (if any).");
+    ("  showing boolean components (if any) (default: true), voxels (if any)");
+  fpCommand -> SetGuidance
+    ("  (default:true) and readout geometry (if any) (default:true).");
+  fpCommand -> SetGuidance
+    ("  Note: voxels are not constructed until start of run - /run/beamOn.");
   fpCommand -> SetGuidance
     ("1st parameter: volume name.");
-  //  fpCommand -> SetGuidance  // Not implemented - should be in geom?
-  //    ("               \"list\" to list all volumes.");
   fpCommand -> SetGuidance
     ("2nd parameter: depth of descending geometry hierarchy (default 1).");
+  fpCommand -> SetGuidance
+    ("3rd parameter: flag for drawing boolean components (if any) (default: true).");
+  fpCommand -> SetGuidance
+    ("4th parameter: flag for drawing voxels (if any) (default: true).");
+  fpCommand -> SetGuidance
+    ("5th parameter: flag for readout geometry (if any) (default: true).");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("volume", 's', omitable = false);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("depth", 'i', omitable = true);
   parameter -> SetDefaultValue (1);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("booleans", 'b', omitable = true);
+  parameter -> SetDefaultValue (true);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("voxels", 'b', omitable = true);
+  parameter -> SetDefaultValue (true);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("readout", 'b', omitable = true);
+  parameter -> SetDefaultValue (true);
   fpCommand -> SetParameter (parameter);
 }
 
@@ -346,9 +363,10 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
 
   G4String name;
   G4int requestedDepthOfDescent;
+  G4bool booleans, voxels, readout;
   const char* s = newValue;
   std::istrstream is ((char*)s);
-  is >> name >> requestedDepthOfDescent;
+  is >> name >> requestedDepthOfDescent >>  booleans >> voxels >> readout;
 
   G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
   int nLV = pLVStore -> size ();
@@ -366,7 +384,8 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
     return;
   }
 
-  G4VModel* model = new G4LogicalVolumeModel (pLV, requestedDepthOfDescent);
+  G4VModel* model = new G4LogicalVolumeModel
+    (pLV, requestedDepthOfDescent, booleans, voxels, readout);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   if (successful) {
@@ -374,7 +393,14 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
       G4cout << "Logical volume \"" << pLV -> GetName ()
 	     << " with requested depth of descent "
 	     << requestedDepthOfDescent
-	     << ",\n  has been added to scene \"" << currentSceneName << "\"."
+	     << ",\n with";
+      if (!booleans) G4cout << "out";
+      G4cout << " boolean components, with";
+      if (!voxels) G4cout << "out";
+      G4cout << " voxels and with";
+      if (!readout) G4cout << "out";
+      G4cout << " readout geometry,"
+	     << "\n  has been added to scene \"" << currentSceneName << "\"."
 	     << G4endl;
     }
   }
