@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.cc,v 1.9 2003-06-06 16:17:17 gcosmo Exp $
+// $Id: G4StateManager.cc,v 1.10 2003-10-31 17:44:47 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,8 @@ G4StateManager::G4StateManager()
    thePreviousState(G4State_PreInit),
    theBottomDependent(0),
    suppressAbortion(0),
-   msgptr(0)
+   msgptr(0),
+   exceptionHandler(0)
 {
 }
 
