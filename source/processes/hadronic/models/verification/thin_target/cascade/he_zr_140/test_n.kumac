@@ -1,0 +1,7 @@
+ exe phi
+ exe n_a0
+ exe n_a1
+ exe n_a2
+ exe n_a3
+ shell rm *.old
+ shell rm *~
