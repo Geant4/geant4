@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXiZero.cc,v 1.16 2005-01-14 03:49:10 asaim Exp $
+// $Id: G4AntiXiZero.cc,v 1.17 2005-02-24 19:29:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,9 +81,6 @@ G4AntiXiZero* G4AntiXiZero::Definition()
   mode[0] = new G4PhaseSpaceDecayChannel("anti_xi0",1.000,2,"anti_lambda","pi0");
 
   for (G4int index=0; index <1; index++ ) table->Insert(mode[index]);
-  delete [] mode;
-  
-  for (G4int index=0; index <2; index++ ) table->Insert(mode[index]);
   delete [] mode;
   
    anInstance->SetDecayTable(table);
