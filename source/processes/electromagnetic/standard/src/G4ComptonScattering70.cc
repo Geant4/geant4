@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering70.cc,v 1.1 2005-03-16 12:14:25 vnivanch Exp $
+// $Id: G4ComptonScattering70.cc,v 1.2 2005-03-17 20:16:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,9 +83,10 @@ void G4ComptonScattering70::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    SetVerboseLevel(1);
+    //    SetVerboseLevel(1);
     SetKillPrimaryFlag(false);
     SetBuildTableFlag(true);
+    SetIntegral(false);
     SetSecondaryParticle(G4Electron::Electron());
     G4double emin = MinKinEnergy();
     G4double emax = MaxKinEnergy();

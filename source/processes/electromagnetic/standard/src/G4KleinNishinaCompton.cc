@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.cc,v 1.1 2005-03-16 12:14:25 vnivanch Exp $
+// $Id: G4KleinNishinaCompton.cc,v 1.2 2005-03-17 20:16:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -96,8 +96,8 @@ G4double G4KleinNishinaCompton::ComputeCrossSectionPerAtom(
   G4double p1Z = Z*(d1 + e1*Z + f1*Z*Z), p2Z = Z*(d2 + e2*Z + f2*Z*Z),
            p3Z = Z*(d3 + e3*Z + f3*Z*Z), p4Z = Z*(d4 + e4*Z + f4*Z*Z);
 
-  G4double T0  = 15*keV; 
-  if (Z < 1.5) T0 = 40*keV; 
+  G4double T0  = 15.0*keV; 
+  if (Z < 1.5) T0 = 40.0*keV; 
 
   G4double X   = max(GammaEnergy, T0) / electron_mass_c2;
   CrossSection = p1Z*std::log(1.+2.*X)/X
