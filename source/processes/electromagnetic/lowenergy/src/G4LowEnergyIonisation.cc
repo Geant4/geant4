@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.91 2003-01-22 18:47:27 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.92 2003-02-12 10:03:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -93,6 +93,7 @@
 // 30.07.02 VI              Fix in restricted energy loss
 // 20.09.02 VI              Remove ActivateFlurescence from SetCut...
 // 21.01.03 VI              Cut per region
+// 12.02.03 VI              Change signature for Deexcitation
 //
 // --------------------------------------------------------------
 
@@ -595,11 +596,12 @@ G4bool G4LowEnergyIonisation::IsApplicable(const G4ParticleDefinition& particle)
 }
 
 G4std::vector<G4DynamicParticle*>*
-G4LowEnergyIonisation::DeexciteAtom(const G4Material* material,
+G4LowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
 			                  G4double incidentEnergy,
 			                  G4double eLoss)
 {
   // create vector of secondary particles
+  const G4Material* material = couple->GetMaterial();
 
   G4std::vector<G4DynamicParticle*>* partVector =
                                  new G4std::vector<G4DynamicParticle*>;
