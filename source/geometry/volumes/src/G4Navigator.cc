@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.cc,v 1.5 1999-05-07 15:00:49 japost Exp $
+// $Id: G4Navigator.cc,v 1.6 1999-05-17 14:19:09 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,13 +71,13 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 #ifdef G4VERBOSE
   if( fVerbose > 0 ) 
     {
-      cout << "*** G4Navigator::LocateGlobalPointAndSetup: ***" << endl; 
-      cout.precision(8);
-      cout << " I was called with the following arguments: " << endl
-	   << " Globalpoint = " << globalPoint << endl
-	   << " relativeSearch   = " <<  relativeSearch  << endl;
+      G4cout << "*** G4Navigator::LocateGlobalPointAndSetup: ***" << endl; 
+      G4cout.precision(8);
+      G4cout << " I was called with the following arguments: " << endl
+	     << " Globalpoint = " << globalPoint << endl
+	     << " relativeSearch   = " <<  relativeSearch  << endl;
        //       << " = " << << endl
-      cout << " Upon entering my state is: " << endl;
+      G4cout << " Upon entering my state is: " << endl;
       PrintState();
     }
 #endif
@@ -324,11 +324,13 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
     
   if( fVerbose > 1 )
     {
-      cout.precision(6);
+      G4cout.precision(6);
 
-      cout << " Return value = new volume = "
-           <<  (targetPhysical==0 ? G4String("None") :
-		                    targetPhysical->GetName() )  << endl;
+      G4String curPhysVol_Name("None");
+      if (targetPhysical!=0)
+	 curPhysVol_Name= targetPhysical->GetName();
+      G4cout << " Return value = new volume = "
+	     << curPhysVol_Name  << endl;
     }
 #endif
 
@@ -859,22 +861,26 @@ void  G4Navigator::PrintState()
 {
   if( fVerbose >= 4 )
     {
-      cout.precision(3);
-      cout << " Upon exiting my state is: " << endl;
-      cout << "  ValidExitNormal= " << fValidExitNormal << endl
+      G4cout.precision(3);
+      G4cout << " Upon exiting my state is: " << endl;
+      G4cout << "  ValidExitNormal= " << fValidExitNormal << endl
 	   << "  ExitNormal     = " << fExitNormal      << endl
 	   << "  Exiting        = " << fExiting         << endl
 	   << "  Entering       = " << fEntering        << endl
-	   << "  BlockedPhysicalVolume= " <<  (fBlockedPhysicalVolume==0 ? G4String("None") :
-					       fBlockedPhysicalVolume->GetName() )              << endl
+	   << "  BlockedPhysicalVolume= " ;
+      if (fBlockedPhysicalVolume==0 )
+	 G4cout << "None";
+      else
+ 	 G4cout << fBlockedPhysicalVolume->GetName();
+      G4cout << endl
 	   << "  BlockedReplicaNo     = " <<  fBlockedReplicaNo       << endl
 	   << "  LastStepWasZero      = " <<   fLastStepWasZero       << endl
 	   << endl;   
     }
   if( ( 1 < fVerbose) && (fVerbose < 4) )
     {
-      cout.precision(3);
-      cout << setw(18) << " ExitNormal "  << " "     
+      G4cout.precision(3);
+      G4cout << setw(18) << " ExitNormal "  << " "     
 	   << setw( 5) << " Valid "       << " "     
 	   << setw( 9) << " Exiting "     << " "      
 	   << setw( 9) << " Entering"     << " " 
@@ -882,22 +888,24 @@ void  G4Navigator::PrintState()
 	   << setw( 9) << " ReplicaNo"        << " "  
 	   << setw( 8) << " LastStepZero  "   << " "   
 	   << endl;   
-      cout << setw(18)  << fExitNormal       << " "
+      G4cout << setw(18)  << fExitNormal       << " "
 	   << setw( 5)  << fValidExitNormal  << " "   
 	   << setw( 9)  << fExiting          << " "
-	   << setw( 9)  << fEntering         << " "
-	   << setw(15)  << (fBlockedPhysicalVolume==0 ? G4String("None") :
-				    fBlockedPhysicalVolume->GetName() )   << " "   
-	   << setw( 9)  << fBlockedReplicaNo  << " "
+	   << setw( 9)  << fEntering         << " ";
+      if (fBlockedPhysicalVolume==0 )
+	 G4cout << setw(15) << "None";
+      else
+ 	 G4cout << setw(15)<< fBlockedPhysicalVolume->GetName();
+      G4cout << setw( 9)  << fBlockedReplicaNo  << " "
 	   << setw( 8)  << fLastStepWasZero   << " "
 	   << endl;   
     }
   if( fVerbose > 2 ) 
     {
-      cout.precision(8);
-      cout << " Current Localpoint = " << fLastLocatedPointLocal << endl;
-      cout << " PreviousSftOrigin  = " << fPreviousSftOrigin << endl;
-      cout << " PreviousSafety     = " <<  fPreviousSafety << endl; 
+      G4cout.precision(8);
+      G4cout << " Current Localpoint = " << fLastLocatedPointLocal << endl;
+      G4cout << " PreviousSftOrigin  = " << fPreviousSftOrigin << endl;
+      G4cout << " PreviousSafety     = " <<  fPreviousSafety << endl; 
     }
 }
 
