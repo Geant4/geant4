@@ -29,7 +29,7 @@ G4String operator+(const G4String& str, const double i) {
   return back;
 }
 
-G4std::istream& readName(G4std::istream& is, G4String& name){
+G4std::ifstream& readName(G4std::ifstream& is, G4String& name){
   is >> name;
   if (name!="*ENDDO") {
     while (name.index("#.")==0) { //It is a comment. Skip line.
@@ -47,7 +47,7 @@ G4std::istream& readName(G4std::istream& is, G4String& name){
   return is;
 }
 
-G4std::istream& findDO(G4std::istream& is, const G4String& str){
+G4std::ifstream& findDO(G4std::ifstream& is, const G4String& str){
   // Loop until *DO str is found
   G4String firstwd, dowhat;
   dowhat = "";

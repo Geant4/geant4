@@ -14,13 +14,13 @@
 G4String operator+(const G4String&, const int);
 G4String operator+(const G4String&, const double);
 
-//readName(G4std::istream& is, G4String& name) reads a name into G4String between 
+//readName(G4std::ifstream& is, G4String& name) reads a name into G4String between 
 //                                             quotes and skips lines begining 
 //                                             with #. and if found *ENDDO returns
-G4std::istream& readName(G4std::istream&, G4String&);
+G4std::ifstream& readName(G4std::ifstream&, G4String&);
 
-//findDO(G4std::istream& is, const G4String& str) reads until a *DO str is found
-G4std::istream& findDO(G4std::istream&, const G4String&);
+//findDO(G4std::ifstream& is, const G4String& str) reads until a *DO str is found
+G4std::ifstream& findDO(G4std::ifstream&, const G4String&);
 
 //tabs
 G4std::ostream& tab(G4std::ostream&);

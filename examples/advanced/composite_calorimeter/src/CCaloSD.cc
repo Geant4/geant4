@@ -35,7 +35,7 @@ CCaloSD::CCaloSD(G4String name, CCalVOrganization* numberingScheme):
 
 CCaloSD::~CCaloSD() {
  if (theDescription) 
-   delete[] theDescription;
+   delete theDescription;
 }
 
 
