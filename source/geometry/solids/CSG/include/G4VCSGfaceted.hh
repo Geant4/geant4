@@ -18,7 +18,7 @@ class G4VCSGfaceted : public G4CSGSolid
 	virtual ~G4VCSGfaceted();
 	
 	G4VCSGfaceted( const G4VCSGfaceted &source );
-	G4VCSGfaceted* operator=( const G4VCSGfaceted &source );
+	const G4VCSGfaceted &operator=( const G4VCSGfaceted &source );
 	
 	virtual G4bool CalculateExtent(	const EAxis pAxis,
 					const G4VoxelLimits& pVoxelLimit,

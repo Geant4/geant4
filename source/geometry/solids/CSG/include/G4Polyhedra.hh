@@ -44,7 +44,7 @@ class G4Polyhedra : public G4VCSGfaceted {
 	virtual ~G4Polyhedra();
 	
 	G4Polyhedra( const G4Polyhedra &source );
-	G4Polyhedra *operator=( const G4Polyhedra &source );
+	const G4Polyhedra &operator=( const G4Polyhedra &source );
 
 	//
 	// A couple overrides to speed things up

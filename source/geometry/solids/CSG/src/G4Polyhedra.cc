@@ -287,9 +287,9 @@ G4Polyhedra::G4Polyhedra( const G4Polyhedra &source ) : G4VCSGfaceted( source )
 //
 // Assignment operator
 //
-G4Polyhedra *G4Polyhedra::operator=( const G4Polyhedra &source )
+const G4Polyhedra &G4Polyhedra::operator=( const G4Polyhedra &source )
 {
-	if (this == &source) return this;
+	if (this == &source) return *this;
 
 	G4VCSGfaceted::operator=( source );
 	
@@ -300,7 +300,7 @@ G4Polyhedra *G4Polyhedra::operator=( const G4Polyhedra &source )
 	
 	CopyStuff( source );
 	
-	return this;
+	return *this;
 }
 
 

@@ -46,14 +46,14 @@ G4VCSGfaceted::G4VCSGfaceted( const G4VCSGfaceted &source ) : G4CSGSolid( source
 //
 // Assignment operator
 //
-G4VCSGfaceted* G4VCSGfaceted::operator=( const G4VCSGfaceted &source )
+const G4VCSGfaceted &G4VCSGfaceted::operator=( const G4VCSGfaceted &source )
 {
-	if (&source == this) return this;
+	if (&source == this) return *this;
 	
 	DeleteStuff();
 	CopyStuff( source );
 	
-	return this;
+	return *this;
 }
 
 

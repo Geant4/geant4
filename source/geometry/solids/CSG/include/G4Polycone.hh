@@ -45,7 +45,7 @@ class G4Polycone : public G4VCSGfaceted
 	virtual ~G4Polycone();
 	
 	G4Polycone( const G4Polycone &source );
-	G4Polycone *operator=( const G4Polycone &source );
+	const G4Polycone &operator=( const G4Polycone &source );
 
 	//
 	// A couple overrides to speed things up

@@ -243,9 +243,9 @@ G4Polycone::G4Polycone( const G4Polycone &source ) : G4VCSGfaceted( source )
 //
 // Assignment operator
 //
-G4Polycone *G4Polycone::operator=( const G4Polycone &source )
+const G4Polycone &G4Polycone::operator=( const G4Polycone &source )
 {
-	if (this == &source) return this;
+	if (this == &source) return *this;
 	
 	G4VCSGfaceted::operator=( source );
 	
@@ -256,7 +256,7 @@ G4Polycone *G4Polycone::operator=( const G4Polycone &source )
 	
 	CopyStuff( source );
 	
-	return this;
+	return *this;
 }
 
 
