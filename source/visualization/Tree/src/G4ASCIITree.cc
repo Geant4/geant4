@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITree.cc,v 1.7 2001-08-05 19:02:12 johna Exp $
+// $Id: G4ASCIITree.cc,v 1.8 2004-09-13 20:52:54 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,8 @@ G4ASCIITree::G4ASCIITree ():
 	   "A graphics system to dump geometry hierarchy"
 	   "\n  to standard output as an ASCII stream.",
 	   G4VGraphicsSystem::nonEuclidian),
-  fVerbosity(0)
+  fVerbosity(0),
+  fOutFileName ("G4cout")
 {
   fpMessenger = new G4ASCIITreeMessenger(this);
 }

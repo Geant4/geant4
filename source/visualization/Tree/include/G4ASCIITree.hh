@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITree.hh,v 1.5 2001-07-11 10:09:06 gunter Exp $
+// $Id: G4ASCIITree.hh,v 1.6 2004-09-13 20:52:50 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,11 +42,14 @@ public:
   virtual ~G4ASCIITree ();
   G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
   G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
-  void SetVerbosity(G4int verbosity) {fVerbosity = verbosity;}
-  G4int GetVerbosity() const {return fVerbosity;}
+  G4int    GetVerbosity() const {return fVerbosity;}
+  G4String GetOutFileName () const {return fOutFileName;}
+  void SetVerbosity    (G4int verbosity) {fVerbosity = verbosity;}
+  void SetOutFileName (G4String name)  {fOutFileName = name;}
 protected:
   G4int fVerbosity;
   G4ASCIITreeMessenger* fpMessenger;
+  G4String fOutFileName;
 };
 
 #endif
