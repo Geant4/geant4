@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StepPoint.hh,v 1.5 2000-02-16 16:10:05 kurasige Exp $
+// $Id: G4StepPoint.hh,v 1.6 2000-06-01 02:28:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -109,7 +109,7 @@ class G4StepPoint
   G4double GetGamma() const;
      // Gamma factor (1/sqrt[1-beta*beta]) of the track    
 
-  const G4VPhysicalVolume* GetPhysicalVolume() const;
+  G4VPhysicalVolume* GetPhysicalVolume() const;
 
   const G4VTouchable* GetTouchable() const;
   void  SetTouchable(const G4VTouchable* apValue);
