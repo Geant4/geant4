@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.3 2004-03-08 11:25:08 maire Exp $
+// $Id: RunAction.cc,v 1.4 2004-06-10 14:04:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,6 +70,10 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   nbGamma = nbElect = nbPosit = 0;
   
   Transmit[0] = Transmit[1] = Reflect[0] = Reflect[1] = 0;
+  
+#ifdef G4ANALYSIS_USE
+  histoManager->SetFactory();
+#endif
           
   // save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
@@ -172,6 +176,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	<< ComputeMscHighland()/mrad << " mrad" << G4endl;
 					
  G4cout.precision(prec);
+ 
+#ifdef G4ANALYSIS_USE
+  histoManager->SaveFactory();
+#endif
    
   // show Rndm status
   HepRandom::showEngineStatus();

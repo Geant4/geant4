@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.cc,v 1.1 2003-08-11 10:20:44 maire Exp $
+// $Id: HistoMessenger.cc,v 1.2 2004-06-10 14:04:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,6 +36,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -73,13 +74,19 @@ HistoMessenger::HistoMessenger(HistoManager* manager)
   G4UIparameter* unit = new G4UIparameter("unit",'s',true);
   unit->SetGuidance("if omitted, vmin and vmax are assumed dimensionless");
   unit->SetDefaultValue("none");
-  histoCmd->SetParameter(unit);  
+  histoCmd->SetParameter(unit);
+  
+  rmhistoCmd = new G4UIcmdWithAnInteger("/testem/histo/removeHisto",this);
+  rmhistoCmd->SetGuidance("desactivate histo  #id");
+  rmhistoCmd->SetParameterName("id",false);
+  rmhistoCmd->SetRange("id>0");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoMessenger::~HistoMessenger()
 {
+  delete rmhistoCmd;
   delete histoCmd;
   delete factoryCmd;
   delete histoDir;  
@@ -87,10 +94,10 @@ HistoMessenger::~HistoMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
+void HistoMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
   if (command == factoryCmd)
-    histoManager->SetFactory(newValues);
+    histoManager->SetFileName(newValues);
     
   if (command == histoCmd)
    { G4int ih,nbBins; G4double vmin,vmax; char unts[30];
@@ -101,7 +108,10 @@ void HistoMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
      G4double vUnit = 1. ;
      if (unit != "none") vUnit = G4UIcommand::ValueOf(unit);
      histoManager->SetHisto (ih,nbBins,vmin*vUnit,vmax*vUnit,unit);
-   }      
+   }
+    
+  if (command == rmhistoCmd)
+   { histoManager->RemoveHisto(rmhistoCmd->GetNewIntValue(newValues));}         
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
