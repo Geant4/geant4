@@ -150,6 +150,11 @@
       }
     }
     G4LorentzVector momentum(iState-fState);
+    debug.push_back("the momentum balance");
+    debug.push_back(iState);
+    debug.push_back(fState);
+    debug.push_back(momentum);
+    debug.dump();
 
     //Make the fragment
     G4Fragment aProRes;
@@ -171,7 +176,7 @@
 
     // call precompound model
     G4ReactionProductVector * proFrag(0);
-    if(resA>1) 
+    if(resA>1.1) 
     {
       aProRes.SetParticleDefinition(resDef);
       proFrag = theProjectileFragmentation.DeExcite(aProRes);
@@ -184,9 +189,15 @@
       if(1==resZ) it = new G4ReactionProduct(G4Proton::ProtonDefinition());
       it->SetTotalEnergy(momentum.t());
       it->SetMomentum(momentum.vect());
+      it->SetNewlyAdded();
       proFrag->push_back(it);
     }
     // collect the evaporation part
+    debug.push_back("the nucleon count balance");
+    debug.push_back(resA);
+    debug.push_back(resZ);
+    if(proFrag) debug.push_back(proFrag->size());
+    debug.dump();
     G4ReactionProductVector::iterator ii;
     if(proFrag) for(ii=proFrag->begin(); ii!=proFrag->end(); ii++)
     {
