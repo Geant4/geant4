@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   ExN04PrimaryGeneratorAction.cc
-//   $Id: ExN04PrimaryGeneratorAction.cc,v 1.1 2002-04-29 20:44:05 asaim Exp $
+//   $Id: ExN04PrimaryGeneratorAction.cc,v 1.2 2002-05-28 13:58:12 murakami Exp $
 //
 // ====================================================================
 #include "ExN04PrimaryGeneratorAction.hh"
@@ -31,8 +31,8 @@
 
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
-#include "G4HepMCAsciiReader.hh"
-#include "G4HepMCPythiaInterface.hh"
+#include "HepMCG4AsciiReader.hh"
+#include "HepMCG4PythiaInterface.hh"
 
 //////////////////////////////////////////////////////////
 ExN04PrimaryGeneratorAction::ExN04PrimaryGeneratorAction()
@@ -41,8 +41,8 @@ ExN04PrimaryGeneratorAction::ExN04PrimaryGeneratorAction()
   // default generator is particle gun.
   currentGenerator= particleGun= new G4ParticleGun();
   currentGeneratorName= "particleGun";
-  hepmcAscii= new G4HepMCAsciiReader();
-  pythiaGen= new G4HepMCPythiaInterface();
+  hepmcAscii= new HepMCG4AsciiReader();
+  pythiaGen= new HepMCG4PythiaInterface();
 
   gentypeMap["particleGun"]= particleGun;
   gentypeMap["hepmcAscii"]= hepmcAscii;
