@@ -1959,7 +1959,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
 //G4cout << " start 1H1 for " << (*secondaries).front()->GetDefinition()->GetParticleName()
 //       << " on " << aHTarg->GetParticleName() << G4endl;  
     G4int tryCount(0);
-    while(!done)
+    while(!done && tryCount++ <200)
     {
       if(secs)
       {
@@ -1973,7 +1973,6 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
 //	       << ", shortlived? "<< (*secs)[ss]->GetDefinition()->IsShortLived()<< G4endl;
         if((*secs)[ss]->GetDefinition()->IsShortLived()) done = true;
       }
-      if ( ++tryCount > 1000 ) return products;   // @@GF need to understand shortlived
 //    G4cout << G4endl;
     }
     size_t current(0);
