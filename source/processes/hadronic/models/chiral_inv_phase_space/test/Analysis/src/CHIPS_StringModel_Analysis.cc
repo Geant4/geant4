@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: CHIPS_StringModel_Analysis.cc,v 1.5 2001-07-16 11:48:55 hpw Exp $
+// $Id: CHIPS_StringModel_Analysis.cc,v 1.6 2001-07-31 09:43:55 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -361,6 +361,7 @@
       else if(ifragmodel == 2)
         theFragmentation = new G4QGSMFragmentation;
       else G4Exception("G4StringModelTest: unknown fragmentation model");
+      theFragmentation->SetSigmaTransverseMomentum(.9*GeV);
       G4ExcitedStringDecay theStringDecay(theFragmentation);
       theStringModel->SetFragmentationModel(&theStringDecay);
     

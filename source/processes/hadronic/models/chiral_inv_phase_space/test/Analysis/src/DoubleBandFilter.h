@@ -46,7 +46,7 @@ class DoubleBandFilter : public TVANAFilter<G4double>
   G4double RelativeGeometricalAcceptance() 
   { 
     // Filters in cos(th)
-    G4double result = (theHigh - theLow)/2.;
+    G4double result = (theHigh - theLow);
     G4cout << "acceptance "<< result << G4endl;
     return result;
   }

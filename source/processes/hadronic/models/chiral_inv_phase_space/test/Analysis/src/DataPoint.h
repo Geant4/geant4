@@ -66,7 +66,7 @@ class ANADataPoint
 //    aOStream << "Total sum = "<<xSec<<G4endl;
 //    for(i=0; i<input.size(); i++)
 //    {
-//      aOStream << "1./(4*pi*p) = "<<input[i]<<G4endl;
+//      aOStream << "1./(2*pi*p) = "<<input[i]<<G4endl;
 //    }
   }
   G4double GetMeanKinetic(){return meanKinetic;}

@@ -53,7 +53,7 @@ class ANAParticle
     
     G4double GetWeight() 
     {
-      G4double result = 1./(4.*3.14159265*GetMomentum());
+      G4double result = 1./(2.*3.14159265*GetMomentum());
       return result;
     }
     
