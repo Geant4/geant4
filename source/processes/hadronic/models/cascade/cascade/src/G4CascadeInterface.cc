@@ -138,7 +138,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
 	  output = collider->collide(bullet, targetH); 
 	} 
-      while(output.getOutgoingParticles().size() < 2.5);
+      while(output.getOutgoingParticles().size()+output.getNucleiFragments().size() < 2.5);
 
       sumBaryon += 1;
 
@@ -155,7 +155,12 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
     } 
   else 
     {
-      output = collider->collide(bullet, target ); 
+      do
+      {
+        output = collider->collide(bullet, target ); 
+      }
+      while(   output.getOutgoingParticles().size()+output.getNucleiFragments().size() < 2.5  
+           && output.getOutgoingParticles().type()==bullet.type() );
     }
 
   if (verboseLevel > 1) 
