@@ -52,8 +52,9 @@ void G4Analyser::setWatchers(const vector<G4NuclWatcher>& watchers) {
   }
 
   ana_watchers = watchers;
-
+  if (verboseLevel > 3) {
   G4cout << " watchers set " << watchers.size() << G4endl;
+  }
 };
 
 void G4Analyser::try_watchers(G4double a, 

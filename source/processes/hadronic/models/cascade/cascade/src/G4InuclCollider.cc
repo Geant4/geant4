@@ -150,8 +150,6 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 
 	  if(output.numberOfNucleiFragments() == 1) { // there is smth. after
 	    
-	    G4cout << "::::::::::::::" << G4endl;
-	    
 	    G4InuclNuclei cascad_rec_nuclei = output.getNucleiFragments()[0];
 
 	    if(explosion(&cascad_rec_nuclei)) {
