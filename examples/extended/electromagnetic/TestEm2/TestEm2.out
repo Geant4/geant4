@@ -3,9 +3,6 @@
                                   (07-Dec-99)
              Copyright : Geant4 Collaboration
 **********************************************
-Constructing Visualization Manager....
-Initialising Visualization Manager....
-Registering graphics systems....
 
 ***** Table : Nb of materials = 8 *****
 
@@ -40,7 +37,7 @@ Registering graphics systems....
    --->  Element:     Lead Pb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
 
-Absorber is 17.848  cm of PbWO4
+Absorber is 18 cm  of PbWO4
 Em2PhysicsList::SetCuts:CutLength : 1 (mm)
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
@@ -81,7 +78,7 @@ msc:   Tables of transport mean free paths.
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 150 bins. 
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -91,15 +88,15 @@ msc:   Tables of transport mean free paths.
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 ============= The cut Energy ==============================
                             gamma              e-             mu-          proton         neutron    
 Cut in range                  1 mm            1 mm            1 mm            1 mm            1 mm 
@@ -113,7 +110,7 @@ Cut in energy
               PbWO4        84.8 keV        1.13 MeV        7.63 MeV        19.2 MeV         990 eV 
                Lead         101 keV        1.38 MeV        8.52 MeV        20.9 MeV         990 eV 
 ===================================================
-# $Id: TestEm2.out,v 1.1 2000-01-21 14:40:57 maire Exp $
+# $Id: TestEm2.out,v 1.2 2000-03-09 12:57:21 stesting Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -128,7 +125,7 @@ Cut in energy
 /calor/setLbin 9 1.11
 /calor/setRbin 6 0.111
 /calor/update
-Absorber is 3.60564   m of Water
+Absorber is 3.6 m   of Water
 #
 /run/particle/setCut 5.0 mm
 /run/initialize
@@ -172,7 +169,7 @@ msc:   Tables of transport mean free paths.
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 150 bins. 
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -182,15 +179,15 @@ msc:   Tables of transport mean free paths.
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 ============= The cut Energy ==============================
                             gamma              e-             mu-          proton         neutron    
 Cut in range                  5 mm            5 mm            5 mm            5 mm            5 mm 
@@ -228,74 +225,25 @@ Start Run processing.
 ---> Begin Of Event: 40
 
 ---> Begin Of Event: 60
-  G4ParticleChangeForMSC::CheckIt  : the Momentum Change is not unit vector !!
-  Difference:  1.5e-09
- G4ParticleChangeForMSC::CheckIt 
- pointer : 0x140618e58
-      -----------------------------------------------
-        G4ParticleChange Information                     
-      -----------------------------------------------
-        # of 2ndaries       :                    0
-      -----------------------------------------------
-        Energy Deposit (MeV):                    0
-        Track Status        :                Alive
-        True Path Length (mm) :                 6.91
-        Stepping Control     :                    0
-        Event Biasing        :  not used 
-        Position - x (mm)   :                 59.8
-        Position - y (mm)   :                -38.6
-        Position - z (mm)   :                  877
-     Momentum Direction - x :                0.414
-     Momentum Direction - y :               0.0309
-     Momentum Direction - z :                 0.91
-  G4ParticleChange::CheckIt  : the Momentum Change is not unit vector !!
-  Difference:  1.51e-09
- G4ParticleChange::CheckIt 
- pointer : 0x1405d2cc0
-      -----------------------------------------------
-        G4ParticleChange Information                     
-      -----------------------------------------------
-        # of 2ndaries       :                    0
-      -----------------------------------------------
-        Energy Deposit (MeV):                    0
-        Track Status        :                Alive
-        True Path Length (mm) :                    0
-        Stepping Control     :                    0
-        Event Biasing        :  not used 
-        Mass (GeV)   :                    0
-        Charge (eplus)   :                    0
-        Position - x (mm)   :                 62.1
-        Position - y (mm)   :                -38.4
-        Position - z (mm)   :                  882
-        Time (ns)           :                 9.01
-        Proper Time (ns)    :              0.00338
-        Momentum Direct - x :                0.414
-        Momentum Direct - y :               0.0309
-        Momentum Direct - z :                 0.91
-        Kinetic Energy (MeV):                 5.15
-        Polarization - x    :                    0
-        Polarization - y    :                    0
-        Polarization - z    :                    0
-        Touchable (pointer) :          0x1402b2bc0
 
 ---> Begin Of Event: 80
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=19.2s Real=22.9s Sys=3.42s
+  User=1.3e+02s Real=1.4e+02s Sys=11s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.11 radl:   13.46%       6.25%             0-> 1.11 radl:   13.46%     6.25% 
-    1.11-> 2.22 radl:   24.71%      10.53%             0-> 2.22 radl:   38.17%    14.12% 
-    2.22-> 3.33 radl:   23.98%      10.63%             0-> 3.33 radl:   62.15%    18.49% 
-    3.33-> 4.44 radl:   13.68%       8.06%             0-> 4.44 radl:   75.83%    17.78% 
-    4.44-> 5.55 radl:    8.09%       7.22%             0-> 5.55 radl:   83.93%    16.08% 
-    5.55-> 6.66 radl:    5.50%       6.39%             0-> 6.66 radl:   89.43%    11.95% 
-    6.66-> 7.77 radl:    3.04%       6.08%             0-> 7.77 radl:   92.46%     7.12% 
-    7.77-> 8.88 radl:    1.87%       3.88%             0-> 8.88 radl:   94.33%     4.60% 
-    8.88-> 9.99 radl:    0.90%       2.07%             0-> 9.99 radl:   95.23%     3.78% 
+    0.00-> 1.11 radl:   13.07%       4.26%             0-> 1.11 radl:   13.07%     4.26% 
+    1.11-> 2.22 radl:   24.09%      10.38%             0-> 2.22 radl:   37.16%    12.18% 
+    2.22-> 3.33 radl:   21.41%       9.69%             0-> 3.33 radl:   58.57%    16.32% 
+    3.33-> 4.44 radl:   15.55%       7.76%             0-> 4.44 radl:   74.12%    15.54% 
+    4.44-> 5.55 radl:    9.66%       7.26%             0-> 5.55 radl:   83.78%    12.29% 
+    5.55-> 6.66 radl:    4.58%       4.80%             0-> 6.66 radl:   88.36%    10.52% 
+    6.66-> 7.77 radl:    2.59%       3.76%             0-> 7.77 radl:   90.94%     8.67% 
+    7.77-> 8.88 radl:    2.15%       4.07%             0-> 8.88 radl:   93.10%     6.66% 
+    8.88-> 9.99 radl:    1.26%       2.67%             0-> 9.99 radl:   94.36%     5.62% 
 
 
 
@@ -303,26 +251,24 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.11 radl:   69.28%       9.17%             0-> 0.11 radl:   69.28%     9.17% 
-    0.11-> 0.22 radl:   15.05%       6.43%             0-> 0.22 radl:   84.33%     5.88% 
-    0.22-> 0.33 radl:    5.41%       3.14%             0-> 0.33 radl:   89.74%     4.73% 
-    0.33-> 0.44 radl:    2.67%       1.88%             0-> 0.44 radl:   92.41%     4.14% 
-    0.44-> 0.56 radl:    1.66%       1.53%             0-> 0.56 radl:   94.07%     3.85% 
-    0.56-> 0.67 radl:    1.16%       1.18%             0-> 0.67 radl:   95.23%     3.78% 
+    0.00-> 0.11 radl:   67.23%      10.81%             0-> 0.11 radl:   67.23%    10.81% 
+    0.11-> 0.22 radl:   14.98%       6.76%             0-> 0.22 radl:   82.21%     7.72% 
+    0.22-> 0.33 radl:    6.43%       4.16%             0-> 0.33 radl:   88.64%     6.39% 
+    0.33-> 0.44 radl:    2.79%       1.94%             0-> 0.44 radl:   91.43%     6.28% 
+    0.44-> 0.56 radl:    1.88%       1.68%             0-> 0.56 radl:   93.30%     5.89% 
+    0.56-> 0.67 radl:    1.05%       1.28%             0-> 0.67 radl:   94.36%     5.62% 
 
                               SUMMARY
-                         energy deposit :   95.23 % E0 +-    3.78 % E0
-                         charged traklen:   13.61 radl +-    0.55 radl
-                         neutral traklen:  192.88 radl +-   17.42 radl
+                         energy deposit :   94.36 % E0 +-    5.62 % E0
+                         charged traklen:   13.50 radl +-    0.82 radl
+                         neutral traklen:  194.28 radl +-   20.99 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2146177415, 212514321
+ Current couple of seeds = 1236826878, 1177382506
 ----------------------------------------
 
 
-Graphics systems deleted.
-VisManager deleting.
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.

@@ -3,9 +3,6 @@
                                   (07-Dec-99)
              Copyright : Geant4 Collaboration
 **********************************************
-Constructing Visualization Manager....
-Initialising Visualization Manager....
-Registering graphics systems....
 
 ***** Table : Nb of materials = 17 *****
 
@@ -68,7 +65,7 @@ Registering graphics systems....
    --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   2.28 %  Abundance  12.50 %
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.60 %  Abundance  38.89 %
 
- Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 6317232936888469300000.000 km 
+ Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 6317232936888469291008.000 km 
    --->  Element: Galactic      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
 
@@ -116,15 +113,15 @@ msc:   Tables of transport mean free paths.
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -134,7 +131,7 @@ msc:   Tables of transport mean free paths.
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 150 bins. 
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 ============= The cut Energy ==============================
                             gamma              e-             mu-          proton         neutron    
 Cut in range                  1 mm            1 mm            1 mm            1 mm             
@@ -174,7 +171,7 @@ Cut in energy
 /calor/update
 
  The  WORLD   is made of 31 mum of Galactic. The transverse size (YZ) of the world is 12 cm 
- The ABSORBER is made of 21 mum of Silicon. The transverse size (YZ) is 10 cm 
+ The ABSORBER is made of 20 mum of Silicon. The transverse size (YZ) is 10 cm 
  X position of the middle of the absorber 0 fm 
 /gun/setDefault
 #
@@ -234,15 +231,15 @@ msc:   Tables of transport mean free paths.
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -252,7 +249,7 @@ msc:   Tables of transport mean free paths.
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 150 bins. 
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 ============= The cut Energy ==============================
                             gamma              e-             mu-          proton         neutron    
 Cut in range               2.13 mm            7 mum           1 mm            1 mm             
@@ -313,104 +310,102 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=46s Real=52s Sys=5.5s
+  User=2.5e+02s Real=2.7e+02s Sys=14s
  ================== run summary =====================
  end of Run TotNbofEvents = 100000
-    mean charged track length   in absorber=0.0211353 +- 1.94106e-05  mm  
+    mean charged track length   in absorber=0.0210955 +- 1.75295e-05  mm  
 
-            mean energy deposit in absorber=0.00687 +- 2.37841e-05  MeV 
+            mean energy deposit in absorber=0.00681723 +- 2.2605e-05  MeV 
 
- mean number of steps in absorber (charged) =0.04068 +- 0.000749567      
- mean number of steps in absorber (neutral) =0 +- 0      
+ mean number of steps in absorber (charged) =0.03995 +- 0.000720236      
+ mean number of steps in absorber (neutral) =2e-05 +- 1.4142e-05      
 
-   mean number of charged secondaries = 0.03764 +- 0.000638617
+   mean number of charged secondaries = 0.03733 +- 0.000633218
 
-   mean number of neutral secondaries = 0 +- 0
+   mean number of neutral secondaries = 2e-05 +- 1.4142e-05
 
-   mean number of e-s =0.03764  and e+s =0
+   mean number of e-s =0.03733  and e+s =0
 
-(number) transmission coeff=1  reflection coeff=0.49968
+(number) transmission coeff=1  reflection coeff=0.49964
 
  energy deposit distribution 
-#entries=100000    #underflows=0    #overflows=5913
+#entries=100000    #underflows=0    #overflows=5898
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1    0.0002           0           0
     2    0.0004           0           0
     3    0.0006           0           0
-    4    0.0008           1        0.05
-    5     0.001           1        0.05
-    6    0.0012           8         0.4
-    7    0.0014          12         0.6
-    8    0.0016          53        2.65
-    9    0.0018         113        5.65
-   10     0.002         238        11.9
-   11    0.0022         415       20.75
-   12    0.0024         761       38.05
-   13    0.0026        1170        58.5
-   14    0.0028        1741       87.05
-   15     0.003        2339      116.95
-   16    0.0032        3056       152.8
-   17    0.0034        3641      182.05
-   18    0.0036        4197      209.85
-   19    0.0038        4456       222.8
-   20     0.004        4531      226.55
-   21    0.0042        4530       226.5
-   22    0.0044        4362       218.1
-   23    0.0046        4206       210.3
-   24    0.0048        4119      205.95
-   25     0.005        3752       187.6
-   26    0.0052        3718       185.9
-   27    0.0054        3478       173.9
-   28    0.0056        3218       160.9
-   29    0.0058        3080         154
-   30     0.006        2772       138.6
-   31    0.0062        2662       133.1
-   32    0.0064        2316       115.8
-   33    0.0066        2150       107.5
-   34    0.0068        1991       99.55
-   35     0.007        1850        92.5
-   36    0.0072        1727       86.35
-   37    0.0074        1519       75.95
-   38    0.0076        1411       70.55
-   39    0.0078        1258        62.9
-   40     0.008        1141       57.05
-   41    0.0082        1075       53.75
-   42    0.0084         956        47.8
-   43    0.0086         929       46.45
-   44    0.0088         800          40
-   45     0.009         762        38.1
-   46    0.0092         685       34.25
-   47    0.0094         650        32.5
-   48    0.0096         601       30.05
-   49    0.0098         576        28.8
-   50      0.01         534        26.7
-   51    0.0102         450        22.5
-   52    0.0104         422        21.1
-   53    0.0106         420          21
-   54    0.0108         383       19.15
-   55     0.011         346        17.3
-   56    0.0112         352        17.6
-   57    0.0114         292        14.6
-   58    0.0116         317       15.85
-   59    0.0118         279       13.95
-   60     0.012         287       14.35
-   61    0.0122         271       13.55
-   62    0.0124         259       12.95
-   63    0.0126         246        12.3
-   64    0.0128         202        10.1
+    4    0.0008           0           0
+    5     0.001           2         0.1
+    6    0.0012           5        0.25
+    7    0.0014          18         0.9
+    8    0.0016          48         2.4
+    9    0.0018         104         5.2
+   10     0.002         248        12.4
+   11    0.0022         431       21.55
+   12    0.0024         790        39.5
+   13    0.0026        1209       60.45
+   14    0.0028        1832        91.6
+   15     0.003        2396       119.8
+   16    0.0032        3146       157.3
+   17    0.0034        3813      190.65
+   18    0.0036        4279      213.95
+   19    0.0038        4584       229.2
+   20     0.004        4835      241.75
+   21    0.0042        4743      237.15
+   22    0.0044        4645      232.25
+   23    0.0046        4328       216.4
+   24    0.0048        4188       209.4
+   25     0.005        3648       182.4
+   26    0.0052        3550       177.5
+   27    0.0054        3173      158.65
+   28    0.0056        2936       146.8
+   29    0.0058        2688       134.4
+   30     0.006        2539      126.95
+   31    0.0062        2326       116.3
+   32    0.0064        2121      106.05
+   33    0.0066        1981       99.05
+   34    0.0068        1809       90.45
+   35     0.007        1858        92.9
+   36    0.0072        1679       83.95
+   37    0.0074        1531       76.55
+   38    0.0076        1413       70.65
+   39    0.0078        1336        66.8
+   40     0.008        1254        62.7
+   41    0.0082        1136        56.8
+   42    0.0084        1004        50.2
+   43    0.0086         956        47.8
+   44    0.0088         858        42.9
+   45     0.009         803       40.15
+   46    0.0092         741       37.05
+   47    0.0094         685       34.25
+   48    0.0096         655       32.75
+   49    0.0098         571       28.55
+   50      0.01         513       25.65
+   51    0.0102         513       25.65
+   52    0.0104         434        21.7
+   53    0.0106         429       21.45
+   54    0.0108         378        18.9
+   55     0.011         406        20.3
+   56    0.0112         369       18.45
+   57    0.0114         300          15
+   58    0.0116         313       15.65
+   59    0.0118         302        15.1
+   60     0.012         289       14.45
+   61    0.0122         261       13.05
+   62    0.0124         245       12.25
+   63    0.0126         252        12.6
+   64    0.0128         203       10.15
 
- Emp =           0.004   width=         0.0034  MeV 
+ Emp =           0.004   width=         0.0028  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 834154625, 1903261884
+ Current couple of seeds = 784113348, 1737796028
 ----------------------------------------
 #
 
-Graphics systems deleted.
-VisManager deleting.
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.

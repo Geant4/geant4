@@ -3,9 +3,6 @@
                                   (07-Dec-99)
              Copyright : Geant4 Collaboration
 **********************************************
-Constructing Visualization Manager....
-Initialising Visualization Manager....
-Registering graphics systems....
 
 ***** Table : Nb of materials = 18 *****
 
@@ -69,7 +66,7 @@ Registering graphics systems....
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
 
- Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 6317232936888469300000.000 km 
+ Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 6317232936888469291008.000 km 
    --->  Element: Galactic      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:     Beam     density:  0.010 mg/cm3  temperature: 273.15 K  pressure:   0.02 atm  RadLength:  36.786 km 
@@ -123,7 +120,7 @@ msc:   Tables of transport mean free paths.
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 150 bins. 
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -133,15 +130,15 @@ msc:   Tables of transport mean free paths.
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 ============= The cut Energy ==============================
                             gamma              e-             mu-          proton         neutron    
 Cut in range                500 mum         500 mum         500 mum         500 mum         500 mum
@@ -165,7 +162,7 @@ Cut in energy
            Galactic         990 eV          990 eV          990 eV          990 eV          990 eV 
                Beam         990 eV          990 eV          990 eV          990 eV          990 eV 
 ===================================================
-# $Id: TestEm3.out,v 1.1 2000-01-21 14:28:45 maire Exp $
+# $Id: TestEm3.out,v 1.2 2000-03-09 12:57:21 stesting Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -198,22 +195,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=39s Real=46s Sys=6.9s
+  User=2.4e+02s Real=2.7e+02s Sys=21s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 
  
- Absorber0 (        Lead) : 808.32 MeV +- 15.02 MeV       52.43 cm  +-  1.21 cm 
- Absorber1 ( liquidArgon) : 179.35 MeV +- 12.84 MeV       89.37 cm  +-  6.43 cm 
+ Absorber0 (        Lead) : 811.00 MeV +- 13.91 MeV       52.54 cm  +-  1.23 cm 
+ Absorber1 ( liquidArgon) : 178.85 MeV +- 12.31 MeV       88.90 cm  +-  6.38 cm 
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 197041347, 1893777350
+ Current couple of seeds = 1739596370, 1279250553
 ----------------------------------------
-Graphics systems deleted.
-VisManager deleting.
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.

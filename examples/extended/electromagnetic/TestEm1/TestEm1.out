@@ -3,9 +3,6 @@
                                   (07-Dec-99)
              Copyright : Geant4 Collaboration
 **********************************************
-Constructing Visualization Manager....
-Initialising Visualization Manager....
-Registering graphics systems....
 
 ***** Table : Nb of materials = 8 *****
 
@@ -78,7 +75,7 @@ msc:   Tables of transport mean free paths.
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 150 bins. 
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -88,15 +85,15 @@ msc:   Tables of transport mean free paths.
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 ============= The cut Energy ==============================
                             gamma              e-             mu-          proton         neutron    
 Cut in range                  1 mm            1 mm            1 mm            1 mm            1 mm 
@@ -110,7 +107,7 @@ Cut in energy
                Lead         101 keV        1.38 MeV        8.52 MeV        20.9 MeV         990 eV 
             Uranium         110 keV        1.92 MeV        10.5 MeV        26.1 MeV         990 eV 
 ===================================================
-# $Id: TestEm1.out,v 1.1 2000-01-21 14:58:58 maire Exp $
+# $Id: TestEm1.out,v 1.2 2000-03-09 12:57:20 stesting Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -162,7 +159,7 @@ msc:   Tables of transport mean free paths.
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 150 bins. 
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -172,15 +169,15 @@ msc:   Tables of transport mean free paths.
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 ============= The cut Energy ==============================
                             gamma              e-             mu-          proton         neutron    
 Cut in range                2.2 mm         6.05 mum           1 mm            1 mm            1 mm 
@@ -214,21 +211,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=11s Real=13s Sys=1.6s
+  User=63s Real=68s Sys=4.7s
 
- nb tracks/event   neutral:   24.64   charged:  642.10
- nb  steps/event   neutral:  135.32   charged: 1276.54
+ nb tracks/event   neutral:   25.40   charged:  642.74
+ nb  steps/event   neutral:  135.85   charged: 1277.47
 
  nb of process calls per event: 
-       eIoni    eBrem     phot    compt     conv  annihil
-     1253.39    21.62    23.11   110.68     1.53     1.53
+       eIoni    eBrem     phot     conv  annihil    compt
+     1253.51    22.49    23.93     1.47     1.47   110.45
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1096809697, 1350310764
+ Current couple of seeds = 1957444845, 1985317761
 ----------------------------------------
-Graphics systems deleted.
-VisManager deleting.
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.

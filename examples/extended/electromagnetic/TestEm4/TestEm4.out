@@ -3,9 +3,6 @@
                                   (07-Dec-99)
              Copyright : Geant4 Collaboration
 **********************************************
-Constructing Visualization Manager....
-Initialising Visualization Manager....
-Registering graphics systems....
  Material: FluorCarbonate     density:  1.610 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  22.435 cm 
    --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  38.74 %  Abundance  50.00 %
    --->  Element: Fluorine  N   Z =  9.0   N =  19.0   A =  18.99 g/mole  fractionMass:  61.26 %  Abundance  50.00 %
@@ -48,7 +45,7 @@ Cut in energy
  Cuts in energy have not calculated yet !!
  Enter /run/initialize command to calculate cuts 
 ===================================================
-# $Id: TestEm4.out,v 1.1 2000-01-21 13:53:26 maire Exp $
+# $Id: TestEm4.out,v 1.2 2000-03-09 12:57:21 stesting Exp $
 #
 # Macro file for "TestEm4.cc"
 # 
@@ -84,14 +81,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=16s Real=21s Sys=2.9s
+  User=90s Real=1e+02s Sys=9.3s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1887355663, 136449826
+ Current couple of seeds = 67926300, 325932341
 ----------------------------------------
-Graphics systems deleted.
-VisManager deleting.
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
