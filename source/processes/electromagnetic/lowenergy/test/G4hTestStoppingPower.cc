@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hTestStoppingPower.cc,v 1.14 2002-08-09 09:16:36 vnivanch Exp $
+// $Id: G4hTestStoppingPower.cc,v 1.15 2003-03-10 12:18:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -62,6 +62,8 @@
 #include "G4hZiegler1977He.hh"
 #include "G4hICRU49p.hh"
 #include "G4hICRU49He.hh"
+#include "G4hSRIM2000p.hh"
+#include "G4hSRIM2003p.hh"
 
 #include "G4hZiegler1977Nuclear.hh"
 #include "G4hZiegler1985Nuclear.hh"
@@ -83,18 +85,8 @@
 // New Histogramming (from AIDA and Anaphe):
 #include <memory> // for the auto_ptr(T>
 
-#include "AIDA/IAnalysisFactory.h"
+#include "AIDA/AIDA.h"
 
-#include "AIDA/ITreeFactory.h"
-#include "AIDA/ITree.h"
-
-#include "AIDA/IHistogramFactory.h"
-#include "AIDA/IHistogram1D.h"
-#include "AIDA/IHistogram2D.h"
-//#include "AIDA/IHistogram3D.h"
-
-#include "AIDA/ITupleFactory.h"
-#include "AIDA/ITuple.h"
 
 #include "hTest/include/G4IonC12.hh"
 #include "hTest/include/G4IonAr40.hh"
@@ -179,11 +171,12 @@ int main()
 
   //--------- Particle definition ---------
   
-  G4ParticleDefinition* electron = G4Electron::ElectronDefinition();
-  G4ParticleDefinition* proton = G4Proton::ProtonDefinition();
-  G4ParticleDefinition* antiproton =G4AntiProton::AntiProtonDefinition();
-  G4ParticleDefinition* deuteron = G4Deuteron::DeuteronDefinition();
-  G4ParticleDefinition* alpha = G4Alpha::AlphaDefinition();
+  G4ParticleDefinition* gamma = G4Gamma::Gamma();
+  G4ParticleDefinition* electron = G4Electron::Electron();
+  G4ParticleDefinition* proton = G4Proton::Proton();
+  G4ParticleDefinition* antiproton =G4AntiProton::AntiProton();
+  G4ParticleDefinition* deuteron = G4Deuteron::Deuteron();
+  G4ParticleDefinition* alpha = G4Alpha::Alpha();
 
   G4Ions* iC12 = new G4Ions::G4Ions(
               "IonC12",    11.14945*GeV,       0.0*MeV,  +6.0*eplus, 
@@ -221,9 +214,8 @@ int main()
 
   G4double ecut = 1000.0*mm;
   G4double pcut = 0.0001*mm;
+  gamma->SetCuts(ecut);
   electron->SetCuts(ecut);
-  proton->SetCuts(pcut);
-  antiproton->SetCuts(pcut);
   G4cout << "Cuts are following: cutElectron = " << ecut 
          << " mm; cutProton = " << pcut << " mm" << G4endl;  
   
@@ -251,8 +243,7 @@ int main()
   G4cout << "Define processes!" << G4endl;
 
   for( i=0; i<7; i++) {    
-    G4cout << "Ionisation process for particle " << i << G4endl;
-    part[i]->SetCuts(pcut);
+    G4cout << "Ionisation process for particle " << i << " " << part[i]->GetParticleName() << G4endl;
     theProcessManager[i] = new G4ProcessManager(part[i]);
     part[i]->SetProcessManager(theProcessManager[i]);
     hIon[i] = new G4hLowEnergyIonisation();
@@ -260,7 +251,7 @@ int main()
 
     // hIon[i]->SetBarkasOff();
     //    hIon[i]->SetNuclearStoppingOff();
-  //  hIon[i]->SetStoppingPowerTableName("ICRU_R49p"); 
+    //  hIon[i]->SetStoppingPowerTableName("ICRU_R49p"); 
   
     theProcessManager[i]->AddProcess(hIon[i]);
     hIon[i]->BuildPhysicsTable(*part[i]);
@@ -273,17 +264,17 @@ int main()
   G4cout << "Fill Hbook!" << G4endl;
 
   // Creating the analysis factory
-  G4std::auto_ptr< IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+  G4std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
 
   // Creating the tree factory
-  G4std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
+  G4std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
   // Creating a tree mapped to a new hbook file.
-  G4std::auto_ptr< ITree > tree( tf->create( hFile,false,false,"hbook" ) );
+  G4std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,"hbook", false,false) );
   G4std::cout << "Tree store : " << tree->storeName() << G4std::endl;
 
   // Creating a histogram factory, whose histograms will be handled by the tree
-  G4std::auto_ptr< IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
+  G4std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
 
   //  G4Material* material ;
  
@@ -292,171 +283,173 @@ int main()
   G4double tkin = 0.0;
   s = (log10(maxE)-log10(minE))/num;
 
-  IHistogram1D* h[71] ;
+  AIDA::IHistogram1D* h[71] ;
        
   // Test on Stopping Powers for all elements
 
- h[1] = hf->create1D("1","p 40 keV (keV*cm2/10^15!atoms) Ziegler1977p"
+ h[1] = hf->createHistogram1D("1","p 40 keV (keV*cm2/10^15!atoms) Ziegler1977p"
                                                   ,92,0.5,92.5) ;
- h[2] =  hf->create1D("2","p 100 keV (keV*cm2/10^15!atoms) Ziegler1977p"
+ h[2] =  hf->createHistogram1D("2","p 100 keV (keV*cm2/10^15!atoms) Ziegler1977p"
                                                   ,92,0.5,92.5) ;
- h[3] =  hf->create1D("3","p 400 keV (keV*cm2/10^15!atoms) Ziegler1977p"
+ h[3] =  hf->createHistogram1D("3","p 400 keV (keV*cm2/10^15!atoms) Ziegler1977p"
                                                   ,92,0.5,92.5) ;
     
- h[4] =  hf->create1D("4","p 1 MeV   (keV*cm2/10^15!atoms) Ziegler1977p"
+ h[4] =  hf->createHistogram1D("4","p 1 MeV   (keV*cm2/10^15!atoms) Ziegler1977p"
                                                   ,92,0.5,92.5) ;
- h[5] =  hf->create1D("5","p 4 MeV   (keV*cm2/10^15!atoms) Ziegler1977p"
-                                                  ,92,0.5,92.5) ;
-
- h[6] =  hf->create1D("6","p 40 keV   (keV*cm2/10^15!atoms) ICRU_49p"
-                                                  ,92,0.5,92.5) ;
- h[7] =  hf->create1D("7","p 100 keV   (keV*cm2/10^15!atoms) ICRU_49p"
-                                                  ,92,0.5,92.5) ;
- h[8] =  hf->create1D("8","p 400 keV   (keV*cm2/10^15!atoms) ICRU_49p"
-                                                  ,92,0.5,92.5) ;
- h[9] =  hf->create1D("9","p 1 MeV   (keV*cm2/10^15!atoms) ICRU_49p"
-                                                  ,92,0.5,92.5) ;
- h[10] =  hf->create1D("10","p 4 MeV   (keV*cm2/10^15!atoms) ICRU_49p"
+ h[5] =  hf->createHistogram1D("5","p 4 MeV   (keV*cm2/10^15!atoms) Ziegler1977p"
                                                   ,92,0.5,92.5) ;
 
- h[11] =  hf->create1D("11","p 40 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[6] =  hf->createHistogram1D("6","p 40 keV   (keV*cm2/10^15!atoms) ICRU_49p"
                                                   ,92,0.5,92.5) ;
- h[12] =  hf->create1D("12","p 100 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[7] =  hf->createHistogram1D("7","p 100 keV   (keV*cm2/10^15!atoms) ICRU_49p"
                                                   ,92,0.5,92.5) ;
- h[13] =  hf->create1D("13","p 400 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[8] =  hf->createHistogram1D("8","p 400 keV   (keV*cm2/10^15!atoms) ICRU_49p"
                                                   ,92,0.5,92.5) ;
- h[14] =  hf->create1D("14","p 1 MeV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[9] =  hf->createHistogram1D("9","p 1 MeV   (keV*cm2/10^15!atoms) ICRU_49p"
                                                   ,92,0.5,92.5) ;
- h[15] =  hf->create1D("15","p 4 MeV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[10] =  hf->createHistogram1D("10","p 4 MeV   (keV*cm2/10^15!atoms) ICRU_49p"
                                                   ,92,0.5,92.5) ;
 
- h[16] =  hf->create1D("16","He 10 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[11] =  hf->createHistogram1D("11","p 40 keV (keV*cm2/10^15!atoms) Ziegler1977He"
                                                   ,92,0.5,92.5) ;
- h[17] =  hf->create1D("17","He 40 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[12] =  hf->createHistogram1D("12","p 100 keV (keV*cm2/10^15!atoms) Ziegler1977He"
                                                   ,92,0.5,92.5) ;
- h[18] =  hf->create1D("18","He 100 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[13] =  hf->createHistogram1D("13","p 400 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+                                                  ,92,0.5,92.5) ;
+ h[14] =  hf->createHistogram1D("14","p 1 MeV (keV*cm2/10^15!atoms) Ziegler1977He"
+                                                  ,92,0.5,92.5) ;
+ h[15] =  hf->createHistogram1D("15","p 4 MeV (keV*cm2/10^15!atoms) Ziegler1977He"
+                                                  ,92,0.5,92.5) ;
+
+ h[16] =  hf->createHistogram1D("16","He 10 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+                                                  ,92,0.5,92.5) ;
+ h[17] =  hf->createHistogram1D("17","He 40 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+                                                  ,92,0.5,92.5) ;
+ h[18] =  hf->createHistogram1D("18","He 100 keV (keV*cm2/10^15!atoms) Ziegler1977He"
                                                   ,92,0.5,92.5) ;
  
- h[19] =  hf->create1D("19","He 400 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[19] =  hf->createHistogram1D("19","He 400 keV (keV*cm2/10^15!atoms) Ziegler1977He"
                                                   ,92,0.5,92.5) ;
- h[20] =  hf->create1D("20","He 1 MeV  (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[20] =  hf->createHistogram1D("20","He 1 MeV  (keV*cm2/10^15!atoms) Ziegler1977He"
                                                   ,92,0.5,92.5) ;
- h[21] =  hf->create1D("21","He 4 MeV   (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[21] =  hf->createHistogram1D("21","He 4 MeV   (keV*cm2/10^15!atoms) Ziegler1977He"
                                                   ,92,0.5,92.5) ;
- h[22] =  hf->create1D("22","He 10 keV   (keV*cm2/10^15!atoms) ICRU49He"
+ h[22] =  hf->createHistogram1D("22","He 10 keV   (keV*cm2/10^15!atoms) ICRU49He"
                                                   ,92,0.5,92.5) ;
- h[23] =  hf->create1D("23","He 40 keV   (keV*cm2/10^15!atoms) ICRU49He"
+ h[23] =  hf->createHistogram1D("23","He 40 keV   (keV*cm2/10^15!atoms) ICRU49He"
                                                   ,92,0.5,92.5) ;
- h[24] =  hf->create1D("24","He 100 keV   (keV*cm2/10^15!atoms) ICRU49He"
+ h[24] =  hf->createHistogram1D("24","He 100 keV   (keV*cm2/10^15!atoms) ICRU49He"
                                                   ,92,0.5,92.5) ;
- h[25] =  hf->create1D("25","He 400 keV   (keV*cm2/10^15!atoms) ICRU49He"
+ h[25] =  hf->createHistogram1D("25","He 400 keV   (keV*cm2/10^15!atoms) ICRU49He"
                                                   ,92,0.5,92.5) ;
- h[26] =  hf->create1D("26","He 1 MeV   (keV*cm2/10^15!atoms) ICRU49He"
+ h[26] =  hf->createHistogram1D("26","He 1 MeV   (keV*cm2/10^15!atoms) ICRU49He"
                                                   ,92,0.5,92.5) ;
- h[27] =  hf->create1D("27","He 4 MeV   (keV*cm2/10^15!atoms) ICRU49He"
+ h[27] =  hf->createHistogram1D("27","He 4 MeV   (keV*cm2/10^15!atoms) ICRU49He"
                                                   ,92,0.5,92.5) ;
 
- h[28]= hf->create1D("28","p   in C (MeV/mm) ICRU49p"
+ h[28]= hf->createHistogram1D("28","p   in C (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[29]= hf->create1D("29","p   in Al (MeV/mm) ICRU49p"
+ h[29]= hf->createHistogram1D("29","p   in Al (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[30]= hf->create1D("30","p   in Si (MeV/mm) ICRU49p"
+ h[30]= hf->createHistogram1D("30","p   in Si (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[31]= hf->create1D("31","p   in Cu (MeV/mm) ICRU49p"
+ h[31]= hf->createHistogram1D("31","p   in Cu (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[32]= hf->create1D("32","p   in Fe (MeV/mm) ICRU49p"
+ h[32]= hf->createHistogram1D("32","p   in Fe (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[33]= hf->create1D("33","p   in Pb (MeV/mm) ICRU49p"
+ h[33]= hf->createHistogram1D("33","p   in Pb (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[34]= hf->create1D("34","p   in C2H6 (MeV/mm) ICRU49p"
+ h[34]= hf->createHistogram1D("34","p   in C2H6 (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[35]= hf->create1D("35","p   in H2O (MeV/mm) ICRU49p"
+ h[35]= hf->createHistogram1D("35","p   in H2O (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[36]= hf->create1D("36","p   in lAr (MeV/mm) ICRU49p"
+ h[36]= hf->createHistogram1D("36","p   in lAr (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[37]= hf->create1D("37","p   in CsI (MeV/mm) ICRU49p"
-                                   ,num,log10(minE),log10(maxE)) ;
-
-
- h[38]= hf->create1D("38","p   in C (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[39]= hf->create1D("39","p   in Al (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[40]= hf->create1D("40","p   in Si (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[41]= hf->create1D("41","p   in Cu (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[42]= hf->create1D("42","p   in Fe (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[43]= hf->create1D("43","p   in Pb (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[44]= hf->create1D("44","p   in C2H6 (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[45]= hf->create1D("45","p   in H2O (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[46]= hf->create1D("46","p   in lAr (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
- h[47]= hf->create1D("47","p   in CsI (MeV/mm)Ziegler1985p"
+ h[37]= hf->createHistogram1D("37","p   in CsI (MeV/mm) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
 
 
- h[48]= hf->create1D("48","He effective charge for Cu"
+ h[38]= hf->createHistogram1D("38","p   in C (MeV/mm)Ziegler1985p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[49]= hf->create1D("49","C12 effective charge in Cu"
+ h[39]= hf->createHistogram1D("39","p   in Al (MeV/mm)Ziegler1985p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[40]= hf->createHistogram1D("40","p   in Si (MeV/mm)Ziegler1985p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[41]= hf->createHistogram1D("41","p   in Cu (MeV/mm)Ziegler1985p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[42]= hf->createHistogram1D("42","p   in Fe (MeV/mm)Ziegler1985p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[43]= hf->createHistogram1D("43","p   in Pb (MeV/mm)Ziegler1985p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[44]= hf->createHistogram1D("44","p   in C2H6 (MeV/mm)Ziegler1985p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[45]= hf->createHistogram1D("45","p   in H2O (MeV/mm)Ziegler1985p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[46]= hf->createHistogram1D("46","p   in lAr (MeV/mm)Ziegler1985p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[47]= hf->createHistogram1D("47","p   in CsI (MeV/mm)Ziegler1985p"
                                    ,num,log10(minE),log10(maxE)) ;
 
- h[50]= hf->create1D("50","He in Al (MeV/(mg/cm2)) ICRU49p"
+
+ h[48]= hf->createHistogram1D("48","He effective charge for Cu"
                                    ,num,log10(minE),log10(maxE)) ;
- h[51]= hf->create1D("51","C12 in Al (MeV/(mg/cm2)) ICRU49p"
+ h[49]= hf->createHistogram1D("49","C12 effective charge in Cu"
                                    ,num,log10(minE),log10(maxE)) ;
- h[52]= hf->create1D("52","Ar40 in Al (MeV/(mg/cm2)) ICRU49p"
+
+ h[50]= hf->createHistogram1D("50","He in Al (MeV/(mg/cm2)) ICRU49p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[51]= hf->createHistogram1D("51","C12 in Al (MeV/(mg/cm2)) ICRU49p"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[52]= hf->createHistogram1D("52","Ar40 in Al (MeV/(mg/cm2)) ICRU49p"
                                    ,num,log10(minE),log10(maxE)) ;
 
  // Table with the data
- h[53] = hf->create1D("53","Data p 40 keV (keV*cm2/10^15!atoms) Ziegler1977p"
+ h[53] = hf->createHistogram1D("53","Data p 40 keV (keV*cm2/10^15!atoms) Ziegler1977p"
                                                   ,92,0.5,92.5) ;
- h[54] =  hf->create1D("54","Data He 40 keV (keV*cm2/10^15!atoms) Ziegler1977He"
+ h[54] =  hf->createHistogram1D("54","Data He 40 keV (keV*cm2/10^15!atoms) Ziegler1977He"
                                                   ,92,0.5,92.5) ;
 
- h[55] = hf->create1D("55","p 40 keV (keV*cm2/10^15!atoms) Ziegler1985p"
+ h[55] = hf->createHistogram1D("55","p 40 keV (keV*cm2/10^15!atoms) Ziegler1985p"
                                                   ,92,0.5,92.5) ;
- h[56] =  hf->create1D("56","p 100 keV (keV*cm2/10^15!atoms) Ziegler1985p"
+ h[56] =  hf->createHistogram1D("56","p 100 keV (keV*cm2/10^15!atoms) Ziegler1985p"
                                                   ,92,0.5,92.5) ;
- h[57] =  hf->create1D("57","p 400 keV (keV*cm2/10^15!atoms) Ziegler1985p"
+ h[57] =  hf->createHistogram1D("57","p 400 keV (keV*cm2/10^15!atoms) Ziegler1985p"
                                                   ,92,0.5,92.5) ;    
- h[58] =  hf->create1D("58","p 1 MeV   (keV*cm2/10^15!atoms) Ziegler1985p"
+ h[58] =  hf->createHistogram1D("58","p 1 MeV   (keV*cm2/10^15!atoms) Ziegler1985p"
                                                   ,92,0.5,92.5) ;
- h[59] =  hf->create1D("59","p 4 MeV   (keV*cm2/10^15!atoms) Ziegler1985p"
+ h[59] =  hf->createHistogram1D("59","p 4 MeV   (keV*cm2/10^15!atoms) Ziegler1985p"
                                                   ,92,0.5,92.5) ;
 // Histo for Antiproton
  
- h[60]= hf->create1D("60","pbar   in C (MeV/mm) QAOLoss"
+ h[60]= hf->createHistogram1D("60","pbar   in C (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[61]= hf->create1D("61","pbar   in Al (MeV/mm) QAOLoss"
+ h[61]= hf->createHistogram1D("61","pbar   in Al (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[62]= hf->create1D("62","pbar   in Si (MeV/mm) QAOLoss"
+ h[62]= hf->createHistogram1D("62","pbar   in Si (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[63]= hf->create1D("63","pbar   in Cu (MeV/mm) QAOLoss"
+ h[63]= hf->createHistogram1D("63","pbar   in Cu (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[64]= hf->create1D("64","pbar   in Fe (MeV/mm) QAOLoss"
+ h[64]= hf->createHistogram1D("64","pbar   in Fe (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[65]= hf->create1D("65","pbar   in Pb (MeV/mm) QAOLoss"
+ h[65]= hf->createHistogram1D("65","pbar   in Pb (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[66]= hf->create1D("66","pbar   in C2H6 (MeV/mm) QAOLoss"
+ h[66]= hf->createHistogram1D("66","pbar   in C2H6 (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[67]= hf->create1D("67","pbar   in H2O (MeV/mm) QAOLoss"
+ h[67]= hf->createHistogram1D("67","pbar   in H2O (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[68]= hf->create1D("68","pbar   in lAr (MeV/mm) QAOLoss"
+ h[68]= hf->createHistogram1D("68","pbar   in lAr (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
- h[69]= hf->create1D("69","pbar   in CsI (MeV/mm) QAOLoss"
+ h[69]= hf->createHistogram1D("69","pbar   in CsI (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
 
- h[70] = hf->create1D("70","p 6.5 MeV (keV*cm2/10^15!atoms) Ziegler77p"
+ h[70] = hf->createHistogram1D("70","p 6.5 MeV (keV*cm2/10^15!atoms) Ziegler77p"
                                                   ,92,0.5,92.5) ;
 
  
- G4VhElectronicStoppingPower* Z77p = new G4hZiegler1977p() ;
- G4VhElectronicStoppingPower* Z85p = new G4hZiegler1985p() ;
+ // G4VhElectronicStoppingPower* Z77p = new G4hZiegler1977p() ;
+ // G4VhElectronicStoppingPower* Z85p = new G4hZiegler1985p() ;
+ G4VhElectronicStoppingPower* Z77p = new G4hSRIM2000p() ;
+ G4VhElectronicStoppingPower* Z85p = new G4hSRIM2003p() ;
  G4VhElectronicStoppingPower* Z77He = new G4hZiegler1977He() ;
  G4VhElectronicStoppingPower* I49p = new G4hICRU49p() ;
  G4VhElectronicStoppingPower* I49He = new G4hICRU49He() ;

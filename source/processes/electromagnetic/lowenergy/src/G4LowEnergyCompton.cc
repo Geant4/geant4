@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.34 2003-01-22 18:47:27 vnivanch Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.35 2003-03-10 12:18:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -36,6 +36,7 @@
 // 24.04.2001 V.Ivanchenko - Remove RogueWave
 // 06.08.2001 MGP          - Revised according to a design iteration
 // 22.01.2003 V.Ivanchenko - Cut per region
+// 10.03.2003 V.Ivanchenko   Remome CutPerMaterial warning
 //
 // -------------------------------------------------------------------
 
@@ -60,16 +61,15 @@
 #include "G4VRangeTest.hh"
 #include "G4RangeTest.hh"
 
-#include "G4CutsPerMaterialWarning.hh"
 
 G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
   : G4VDiscreteProcess(processName),
-    lowEnergyLimit(250*eV),             
+    lowEnergyLimit(250*eV),
     highEnergyLimit(100*GeV),
     intrinsicLowEnergyLimit(10*eV),
     intrinsicHighEnergyLimit(100*GeV)
 {
-  if (lowEnergyLimit < intrinsicLowEnergyLimit || 
+  if (lowEnergyLimit < intrinsicLowEnergyLimit ||
       highEnergyLimit > intrinsicHighEnergyLimit)
     {
       G4Exception("G4LowEnergyCompton::G4LowEnergyCompton - energy outside intrinsic process validity range");
@@ -105,9 +105,6 @@ G4LowEnergyCompton::~G4LowEnergyCompton()
 
 void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
 {
-
-  G4CutsPerMaterialWarning warning;
-  warning.PrintWarning(&photon);
 
   crossSectionHandler->Clear();
   G4String crossSectionFile = "comp/ce-cs-";

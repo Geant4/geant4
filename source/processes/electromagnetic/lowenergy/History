@@ -1,4 +1,4 @@
-$Id: History,v 1.171 2003-02-28 08:40:46 vnivanch Exp $
+$Id: History,v 1.172 2003-03-10 12:18:33 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10.03-2003   VI remove cut per material warning
+             VI use SutType for ions
+
 28.02-2003   VI Minor design iteration on Bremsstrahlung, to accomodate
-             variable name of file with parameters 
+             variable name of file with parameters
 
 26.02-2003   G.Cosmo, tag emlowen-V05-00-09
              Fixed usage of 'abs' in G4PenelopeCompton.cc to allow porting

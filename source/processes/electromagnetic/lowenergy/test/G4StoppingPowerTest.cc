@@ -118,7 +118,7 @@ int main(int argc,char** argv)
   G4int nstatf       = 10;
   G4double xstatf    = 1.0/(G4double)nstatf;
   G4int nbin         = 1000;
-  G4String hFile     = "";
+  G4String hFile     = "hbook.paw";
   G4double theStep   = 0.01*micrometer;
   G4double range     = 1.0*micrometer;
   G4double cutG      = 10.0*mm;
@@ -151,7 +151,7 @@ int main(int argc,char** argv)
   // -------------------------------------------------------------------
   //--------- Materials definition ---------
  
-  G4Material* ma[15];
+  G4Material* ma[16];
   ma[0] = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
   ma[1] = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
   ma[1]->SetChemicalFormula("Graphite");
@@ -191,6 +191,8 @@ int main(int argc,char** argv)
 
   ma[14] = new G4Material("H2", 1., 1.00794*g/mole, 1.*g/cm3);
   ma[14]->SetChemicalFormula("H_2");
+  ma[15] = new G4Material("Au", 79., 196.96655*g/mole, 19.32*g/cm3);
+
   
   static const G4MaterialTable* theMaterialTable = 
                G4Material::GetMaterialTable();
@@ -380,7 +382,7 @@ int main(int argc,char** argv)
 
     G4double emin10 = log10(emin/MeV);
     G4double emax10 = log10(emax/MeV);
-    G4double bin = (emax10 - emin10) / (G4double)nbin;
+    G4double bin = (emax10 - emin10) / (G4double)(nbin-1);
 
     // Creating the analysis factory
     G4std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
@@ -420,11 +422,6 @@ int main(int argc,char** argv)
       hist[3] = hf->createHistogram1D("14","Number of secondaries", 
                                      nbin,emin10,emax10);
 
-      /*
-      AIDA::IHistogram2D* hi2 = hf->create2D("10", 
-       "log10(Stopping power (MeV*cm**2/g)) versus log10Ekin(MeV)",nbin,emin10,emax10,
-       100,0.,3.);
-      */
 
       G4cout<< "Histograms is initialised" << G4endl;
     }
@@ -642,9 +639,11 @@ int main(int argc,char** argv)
     G4Timer* timer = new G4Timer();
     timer->Start();
 
+    G4double le = emin10 - bin;
+
     for (G4int iter=0; iter<nbin; iter++) {
 
-      G4double le = emin10 + ((G4double)iter + 0.5)*bin;
+      le += bin;
       G4double  e = pow(10.0,le) * MeV;
       gTrack->SetStep(step); 
       gTrack->SetKineticEnergy(e);
@@ -746,6 +745,8 @@ int main(int argc,char** argv)
         G4double st = de/(delx*(material->GetDensity()));
         st *= gram/(cm*cm*MeV); 
         G4double s = de*mm/(delx*MeV); 
+
+        G4cout << "E(MeV)= " << e/MeV << "   dE/dx(MeV/mm)= " << s << G4endl;
 
         if(verbose) {
           G4cout  <<  "Iteration = "  <<  iter 

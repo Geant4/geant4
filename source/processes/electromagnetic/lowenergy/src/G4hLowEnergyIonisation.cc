@@ -85,6 +85,7 @@
 // 28 Oct   2002 V.Ivanchenko Optimal binning for dE/dx
 // 10 Dec   2002 V.Ivanchenko antiProtonLowEnergy -> 25 keV, QEG model below
 // 21 Jan   2003 V.Ivanchenko Cut per region
+// 10 Mar   2003 V.Ivanchenko Use SubTypes for ions
 
 // -----------------------------------------------------------------------
 
@@ -244,7 +245,8 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
 
   if(aParticleType.GetParticleType() == "nucleus" &&
      aParticleType.GetParticleName() != "GenericIon" &&
-     theMeanFreePathTable) {
+     aParticleType.GetParticleSubType() == "generic")
+  {
 
      G4EnergyLossTables::Register(&aParticleType,
               theDEDXpTable,

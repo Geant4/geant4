@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.27 2003-01-22 14:03:53 vnivanch Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.28 2003-03-10 12:22:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,6 +43,7 @@
 // 06-02-02 bug fixed in MinDeltaCutInRange computation, L.Urban
 // 26-02-02 bug fixed in TouchebleHandle definition, V.Ivanchenko
 // 15-01-03 Migrade to cut per region (V.Ivanchenko)
+// 10-03-03 remove tails of old cuts (V.Ivanchenko)
 // -----------------------------------------------------------------------------
 
 
@@ -185,7 +186,7 @@ void G4VeEnergyLoss::BuildDEDXTable(
   for (size_t idxMate=0; idxMate<numOfCouples; idxMate++)
      {
       G4double rcut = theCoupleTable->GetMaterialCutsCouple(idxMate)
-                       ->GetProductionCuts()->GetProductionCut(1);
+                       ->GetProductionCuts()->GetProductionCut(idxG4ElectronCut);
 
       if (finalRange > rcut) finalRange = rcut;
      }
@@ -399,7 +400,7 @@ void G4VeEnergyLoss::BuildDEDXTable(
      for(size_t mat=0; mat<numOfCouples; mat++)
        {
        // create array for the min. delta cuts in kinetic energy
-        G4double ecut = (*(theCoupleTable->GetEnergyCutsVector(1)))[mat];
+        G4double ecut = (*(theCoupleTable->GetEnergyCutsVector(idxG4ElectronCut)))[mat];
         if(!setMinDeltaCutInRange) MinDeltaCutInRange = ecut/10.0;
         MinDeltaEnergy[mat] = G4EnergyLossTables::GetPreciseEnergyFromRange(
                                 G4Electron::Electron(),
@@ -408,22 +409,7 @@ void G4VeEnergyLoss::BuildDEDXTable(
 
         if(MinDeltaEnergy[mat]<absLowerLimit) MinDeltaEnergy[mat] = absLowerLimit;
 
-        if(MinDeltaEnergy[mat]>ecut)
-           MinDeltaEnergy[mat]=(G4Electron::Electron()->GetEnergyCuts())[mat] ;
-
-
         if(MinDeltaEnergy[mat]>ecut) MinDeltaEnergy[mat]=ecut;
-
-
-//	 if((subSecFlag) && (&aParticleType==G4Electron::Electron()))
-//         {
-//	   G4cout << G4std::setw(20) << (*theMaterialTable)[mat]->GetName()
-//	 	  << G4std::setw(15) << MinDeltaEnergy[mat]/keV ;
-//           if(LowerLimitForced[mat])
-//              G4cout << "  lower limit forced." << G4endl;
-//           else
-//              G4cout << G4endl ;
-//         }
 
        }
      }
@@ -500,7 +486,7 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
     //G4double epsil= MinKineticEnergy/2. ;
 
     G4double Tc = SecondaryEnergyThreshold(index);
-    G4double rcut=couple->GetProductionCuts()->GetProductionCut(1);
+    G4double rcut=couple->GetProductionCuts()->GetProductionCut(idxG4ElectronCut);
 
     if(Charge < 0.)
     {

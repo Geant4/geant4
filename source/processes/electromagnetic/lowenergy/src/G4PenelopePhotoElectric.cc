@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopePhotoElectric.cc,v 1.3 2003-02-12 11:44:43 pia Exp $
+// $Id: G4PenelopePhotoElectric.cc,v 1.4 2003-03-10 12:18:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola
@@ -30,6 +30,7 @@
 // --------
 // January 2003 - Created
 // 12 Feb 2003   MG Pia     Migration to "cuts per region"
+// 10 Mar 2003 V.Ivanchenko   Remome CutPerMaterial warning
 // --------------------------------------------------------------
 
 #include "G4PenelopePhotoElectric.hh"
@@ -55,8 +56,6 @@
 #include "G4AtomicShell.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4ProductionCutsTable.hh"
-
-#include "G4CutsPerMaterialWarning.hh"
 
 G4PenelopePhotoElectric::G4PenelopePhotoElectric(const G4String& processName)
   : G4VDiscreteProcess(processName), lowEnergyLimit(250*eV), highEnergyLimit(100*GeV),
@@ -97,9 +96,6 @@ G4PenelopePhotoElectric::~G4PenelopePhotoElectric()
 void G4PenelopePhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& photon)
 {
   
-  G4CutsPerMaterialWarning warning;
-  warning.PrintWarning(&photon);
-
   crossSectionHandler->Clear();
   G4String crossSectionFile = "penelope/ph-cs-pen-";
   crossSectionHandler->LoadData(crossSectionFile);
@@ -112,16 +108,16 @@ void G4PenelopePhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& phot
   meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
 }
 
-G4VParticleChange* G4PenelopePhotoElectric::PostStepDoIt(const G4Track& aTrack, 
+G4VParticleChange* G4PenelopePhotoElectric::PostStepDoIt(const G4Track& aTrack,
 							  const G4Step& aStep)
 {
   // Fluorescence generated according to:
-  // J. Stepanek ,"A program to determine the radiation spectra due to a single atomic 
-  // subshell ionisation by a particle or due to deexcitation or decay of radionuclides", 
+  // J. Stepanek ,"A program to determine the radiation spectra due to a single atomic
+  // subshell ionisation by a particle or due to deexcitation or decay of radionuclides",
   // Comp. Phys. Comm. 1206 pp 1-1-9 (1997)
- 
+
   aParticleChange.Initialize(aTrack);
-  
+
   const G4DynamicParticle* incidentPhoton = aTrack.GetDynamicParticle();
   G4double photonEnergy = incidentPhoton->GetKineticEnergy();
   if (photonEnergy <= lowEnergyLimit)

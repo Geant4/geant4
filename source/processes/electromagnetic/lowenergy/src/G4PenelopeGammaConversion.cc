@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4PenelopeGammaConversion.cc,v 1.2 2003-02-12 11:44:43 pia Exp $
+// $Id: G4PenelopeGammaConversion.cc,v 1.3 2003-03-10 12:18:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,9 +30,10 @@
 //
 // Author: L.Pandola
 // History:
-// -------- 
+// --------
 // 02/12/2002 L.Pandola 1st implementation
 // 12 Feb 2003   MG Pia     Migration to "cuts per region"
+// 10 Mar 2003 V.Ivanchenko   Remome CutPerMaterial warning
 // --------------------------------------------------------------
 
 #include "G4PenelopeGammaConversion.hh"
@@ -59,7 +60,6 @@
 #include "G4RangeTest.hh"
 #include "G4MaterialCutsCouple.hh"
 
-#include "G4CutsPerMaterialWarning.hh"
 
 G4PenelopeGammaConversion::G4PenelopeGammaConversion(const G4String& processName)
   : G4VDiscreteProcess(processName),   
@@ -102,9 +102,6 @@ G4PenelopeGammaConversion::~G4PenelopeGammaConversion()
 
 void G4PenelopeGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& photon)
 {
-  //G4cout << "Inizio del build" << G4endl;
-  G4CutsPerMaterialWarning warning;
-  warning.PrintWarning(&photon);
 
   crossSectionHandler->Clear();
   G4String crossSectionFile = "penelope/pp-cs-pen-";
@@ -113,32 +110,32 @@ void G4PenelopeGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& ph
   meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
 }
 
-G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack, 
+G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack,
 							    const G4Step& aStep)
 {
   aParticleChange.Initialize(aTrack);
 
   const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
   //  G4Material* material = aTrack.GetMaterial();
-  
+
   const G4DynamicParticle* incidentPhoton = aTrack.GetDynamicParticle();
   G4double photonEnergy = incidentPhoton->GetKineticEnergy();
   G4ParticleMomentum photonDirection = incidentPhoton->GetMomentumDirection();
-  
+
   G4double eps ;
   G4double eki = electron_mass_c2 / photonEnergy ;
 
   // Do it fast if photon energy < 1.1 MeV
-  if (photonEnergy < smallEnergy ) 
-    { 
-      eps = eki + (1-2*eki) * G4UniformRand(); 
+  if (photonEnergy < smallEnergy )
+    {
+      eps = eki + (1-2*eki) * G4UniformRand();
     }
   else
-    {  
+    {
       // Select randomly one element in the current material
       const G4Element* element = crossSectionHandler->SelectRandomElement(couple,photonEnergy);
 
-      if (element == 0) 
+      if (element == 0)
 	{
 	  G4cout << "G4PenelopeGammaConversion::PostStepDoIt - element = 0" << G4endl;
 	}

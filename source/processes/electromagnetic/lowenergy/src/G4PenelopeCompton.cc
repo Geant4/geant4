@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.8 2003-02-26 15:21:44 gcosmo Exp $
+// $Id: G4PenelopeCompton.cc,v 1.9 2003-03-10 12:18:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -32,6 +32,7 @@
 // 14 Feb 2003   MG Pia       Corrected compilation errors and warnings
 //                            from SUN
 //                            Modified some variables to lowercase initial 
+// 10 Mar 2003 V.Ivanchenko   Remome CutPerMaterial warning
 //
 // -------------------------------------------------------------------
 
@@ -59,11 +60,10 @@
 #include "G4PenelopeIntegrator.hh"
 #include "G4MaterialCutsCouple.hh"
 
-#include "G4CutsPerMaterialWarning.hh"
 
 G4PenelopeCompton::G4PenelopeCompton(const G4String& processName)
   : G4VDiscreteProcess(processName),
-    lowEnergyLimit(250*eV),             
+    lowEnergyLimit(250*eV),
     highEnergyLimit(100*GeV),
     intrinsicLowEnergyLimit(10*eV),
     intrinsicHighEnergyLimit(100*GeV),
@@ -71,7 +71,7 @@ G4PenelopeCompton::G4PenelopeCompton(const G4String& processName)
     ZForIntegration(1),
     nBins(200)
 {
-  if (lowEnergyLimit < intrinsicLowEnergyLimit || 
+  if (lowEnergyLimit < intrinsicLowEnergyLimit ||
       highEnergyLimit > intrinsicHighEnergyLimit)
     {
       G4Exception("G4PenelopeCompton::G4PenelopeCompton - energy outside intrinsic process validity range");
@@ -82,19 +82,19 @@ G4PenelopeCompton::G4PenelopeCompton(const G4String& processName)
   hartreeFunction  = new G4std::vector<G4DataVector*>;
   occupationNumber = new G4std::vector<G4DataVector*>;
   rangeTest = new G4RangeTest;
- 
+
   ReadData(); //Legge i dati da file!
- 
-  if (verboseLevel > 0) 
+
+  if (verboseLevel > 0)
     {
       G4cout << GetProcessName() << " is created " << G4endl
-	     << "Energy range: " 
+	     << "Energy range: "
 	     << lowEnergyLimit / keV << " keV - "
-	     << highEnergyLimit / GeV << " GeV" 
+	     << highEnergyLimit / GeV << " GeV"
 	     << G4endl;
     }
 }
- 
+
 G4PenelopeCompton::~G4PenelopeCompton()
 {
   delete meanFreePathTable;
@@ -107,9 +107,6 @@ G4PenelopeCompton::~G4PenelopeCompton()
 
 void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
 {
-  
-  G4CutsPerMaterialWarning warning;
-  warning.PrintWarning(&photon);
 
   G4DataVector energyVector;
   G4double dBin = log10(highEnergyLimit/lowEnergyLimit)/nBins;
