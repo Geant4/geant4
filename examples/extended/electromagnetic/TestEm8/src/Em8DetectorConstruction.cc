@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.cc,v 1.15 2004-12-03 09:45:37 vnivanch Exp $
+// $Id: Em8DetectorConstruction.cc,v 1.16 2004-12-03 10:21:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -283,7 +283,7 @@ H2O->AddElement(elO, natoms=1);
   a = 26.98*g/mole;
   density = 2.7*g/cm3;
   G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
-
+  if(Al);
   // Mylar
 
   density = 1.39*g/cm3;
@@ -452,7 +452,8 @@ H2O->AddElement(elO, natoms=1);
   
   // fWindowMat = Mylar ;
  
-  fAbsorberMaterial = Al; // Si; // Xe; // Ar7CH4; // C3H8; // XeCH4C3H8; 
+  fAbsorberMaterial = XeCH4C3H8;
+  // Al; // Si; // Xe; // Ar7CH4; // C3H8; // XeCH4C3H8; 
 
   fWorldMaterial    = Mylar; // Air ;
 }
