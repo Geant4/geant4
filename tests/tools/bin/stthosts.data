@@ -7,6 +7,7 @@
 # prod dxplus04 optim_NONISO 14 Nov  cltog4 (bin)
 # prod dxplus05               6 Nov  ??
 #
+# re-boots sheduled 
 # don't look dxplus01
 #
 prod pcgeant  Linux-g++  debug   all all all all 1
@@ -44,7 +45,15 @@ dev2 pcgeant  Linux-g++  optim          all all all all 1
 prod sungeant SUN-CC     optim_NONISO   all all all all 1
 dev1 sungeant SUN-CC     optim_NONISO   all all all all 1
 dev2 sungeant SUN-CC     optim_NONISO   all all all all 1
+% sleep 5
+prod refsol7 SUN-CC5     optim_ISO      all all all all 1
+dev1 refsol7 SUN-CC5     optim_ISO      all all all all 1
+dev2 refsol7 SUN-CC5     optim_ISO      all all all all 1
 % sleep 600
 prod sungeant SUN-CC     debug_NONISO   all all all all 1
 dev1 sungeant SUN-CC     debug_NONISO   all all all all 1
 dev2 sungeant SUN-CC     debug_NONISO   all all all all 1
+% sleep 18000
+prod refsol7 SUN-CC5     debug_ISO      all all all all 1
+dev1 refsol7 SUN-CC5     debug_ISO      all all all all 1
+dev2 refsol7 SUN-CC5     debug_ISO      all all all all 1
