@@ -3142,20 +3142,18 @@
     G4int i;
     G4double pp;
     G4double totalQ = 0;
+    G4double kinCreated = 0;
     G4double cfa = 0.025*((atomicWeight-1.0)/120.0) * exp(-(atomicWeight-1.0)/120.0);
     if( npnb > 0)  // first add protons and neutrons
     {
-//      G4ReactionProduct *p1 = new G4ReactionProduct [npnb];
-      G4double ekin = epnb/npnb;
       G4double backwardKinetic = 0.0;
-      for( i=0; i<npnb; ++i )
+      G4int local_npnb = npnb;
+      for( i=0; i<npnb; ++i ) if( G4UniformRand() < sprob ) local_npnb--;
+      G4double ekin = epnb/local_npnb;
+      
+      for( i=0; i<local_npnb; ++i )
       {
         G4ReactionProduct * p1 = new G4ReactionProduct();
-        if( G4UniformRand() < sprob )
-        {
-          delete p1;
-          continue;
-        }
         if( backwardKinetic > epnb )
         {
           delete p1;
@@ -3178,6 +3176,7 @@
         G4double phi = twopi * G4UniformRand();
         vec[vecLen]->SetNewlyAdded( true );
         vec[vecLen]->SetKineticEnergy( kinetic*GeV );
+	kinCreated+=kinetic;
         pp = vec[vecLen]->GetTotalMomentum()/MeV;
         vec[vecLen]->SetMomentum( pp*sint*sin(phi)*MeV,
                                     pp*sint*cos(phi)*MeV,
@@ -3207,17 +3206,14 @@
     }
     if( ndta > 0 )    //  now, try to add deuterons, tritons and alphas
     {
-//      G4ReactionProduct *p2 = new G4ReactionProduct [ndta];
-      G4double ekin = edta/ndta;
       G4double backwardKinetic = 0.0;
-      for( i=0; i<ndta; ++i )
+      G4int local_ndta=ndta;
+      for( i=0; i<ndta; ++i )if( G4UniformRand() < sprob )local_ndta--;
+      G4double ekin = edta/local_ndta;
+
+      for( i=0; i<local_ndta; ++i )
       {
         G4ReactionProduct *p2 = new G4ReactionProduct();
-        if( G4UniformRand() < sprob )
-        {
-          delete p2;
-          continue;
-        }
         if( backwardKinetic > edta )
         {
           delete p2;
@@ -3248,6 +3244,7 @@
         vec.SetElement( vecLen, p2 );
         vec[vecLen]->SetNewlyAdded( true );
         vec[vecLen]->SetKineticEnergy( kinetic*GeV );
+	kinCreated+=kinetic;
         pp = vec[vecLen]->GetTotalMomentum()/MeV;
         vec[vecLen++]->SetMomentum( pp*sint*sin(phi)*MeV,
                                     pp*sint*cos(phi)*MeV,
@@ -3255,6 +3252,7 @@
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       }
     }
+    G4double delta = epnb+edta - kinCreated;
   }
  
  void G4ReactionDynamics::MomentumCheck(
