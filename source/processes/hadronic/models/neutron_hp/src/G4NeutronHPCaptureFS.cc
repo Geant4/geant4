@@ -53,20 +53,20 @@
       G4Fragment nucleus(theBaseA+1, theBaseZ ,p4);
       G4PhotonEvaporation photonEvaporation;
       G4FragmentVector* products = photonEvaporation.BreakItUp(nucleus);
-      G4int i;
+      G4FragmentVector::iterator i;
       thePhotons = new G4ReactionProductVector;
-      for(i=0; i<products->entries(); i++)
+      for(i=products->begin(); i!=products->end(); i++)
       {
         G4ReactionProduct * theOne = new G4ReactionProduct;
         theOne->SetDefinition( G4Gamma::Gamma() );
         G4ParticleTable* theTable = G4ParticleTable::GetParticleTable();
-        if(products->at(i)->GetMomentum().mag() > 10*MeV) 
+        if((*i)->GetMomentum().mag() > 10*MeV) 
                  theOne->SetDefinition( 
                  theTable->FindIon(theBaseZ, theBaseA+1, 0, theBaseZ) );
-        theOne->SetMomentum( products->at(i)->GetMomentum().vect() ) ;
-        theOne->SetTotalEnergy( products->at(i)->GetMomentum().t() );
+        theOne->SetMomentum( (*i)->GetMomentum().vect() ) ;
+        theOne->SetTotalEnergy( (*i)->GetMomentum().t() );
         thePhotons->insert(theOne);
-        delete products->at(i);
+        delete *i;
       } 
       delete products;
     }
