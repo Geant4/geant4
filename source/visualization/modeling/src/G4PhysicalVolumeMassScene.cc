@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeMassScene.cc,v 1.2 2004-09-22 19:49:10 johna Exp $
+// $Id: G4PhysicalVolumeMassScene.cc,v 1.3 2004-11-11 16:06:49 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,7 +84,7 @@ void G4PhysicalVolumeMassScene::AccrueMass (const G4VSolid& solid)
 
   G4double currentVolume;
   G4double currentDensity;
-  G4Polyhedron* pPolyhedron = solid.CreatePolyhedron();
+  G4Polyhedron* pPolyhedron = solid.GetPolyhedron();
   if (pPolyhedron) {
     G4Material* pMaterial;
     G4VPVParameterisation* pP = fpCurrentPV->GetParameterisation();
@@ -95,7 +95,6 @@ void G4PhysicalVolumeMassScene::AccrueMass (const G4VSolid& solid)
     }
     currentVolume = pPolyhedron->GetVolume();
     currentDensity = pMaterial->GetDensity();
-    delete pPolyhedron;
   } else {
     G4cout << 
       "G4PhysicalVolumeMassScene::AccrueMass: WARNING:"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.15 2004-09-22 19:58:23 johna Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.16 2004-11-11 16:03:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -251,7 +251,7 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
   }
 
   if (detail >= 3) {
-    G4Polyhedron* pPolyhedron = solid.CreatePolyhedron();
+    G4Polyhedron* pPolyhedron = solid.GetPolyhedron();
     if (pPolyhedron) {
       G4Material* pMaterial;
       G4VPVParameterisation* pP = fpCurrentPV->GetParameterisation();
@@ -264,7 +264,6 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 		 << G4BestUnit(pPolyhedron->GetVolume(),"Volume")
 		 << ", "
 		 << G4BestUnit(pMaterial->GetDensity(), "Volumic Mass");
-      delete pPolyhedron;
     } else {
       *fpOutFile << " (volume not available)";
     }

@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2004-09-22 19:50:28 johna Exp $
+$Id: History,v 1.30 2004-11-11 16:07:33 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+11th November 2004  John Allison  (vis-V06-02-05)
+- Made use use of smart method GetPolyhedron for solids.  This greatly
+  speeds 2nd and subsequent drawings when kernel access is required.
 
 22nd September 2004  John Allison  (modeling-V06-02-01)
 - Changed use of deprecated G4VPhysicalVolume::GetRotation to GetRotationValue.
