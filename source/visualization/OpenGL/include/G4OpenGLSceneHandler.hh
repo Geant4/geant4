@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.8 2001-07-11 10:08:49 gunter Exp $
+// $Id: G4OpenGLSceneHandler.hh,v 1.9 2001-08-09 20:16:05 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,6 @@ public:
   void AddPrimitive (const G4Square&);
   void AddPrimitive (const G4Polyhedron&);
   void AddPrimitive (const G4NURBS&);
-  void AddPrimitive (const G4Polymarker&);
 
   void AddThis (const G4Box&);
   void AddThis (const G4Cons&);

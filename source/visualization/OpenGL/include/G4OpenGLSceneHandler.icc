@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.icc,v 1.4 2001-07-11 10:08:49 gunter Exp $
+// $Id: G4OpenGLSceneHandler.icc,v 1.5 2001-08-09 20:16:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,8 +70,3 @@ inline void G4OpenGLSceneHandler::AddThis (const G4Polyhedra& polyhedra) {
 inline void G4OpenGLSceneHandler::AddThis (const G4VSolid& vsolid) {
   G4VSceneHandler::AddThis (vsolid);
 }
-
-inline void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
-  G4VSceneHandler::AddPrimitive (polymarker);
-}
-
