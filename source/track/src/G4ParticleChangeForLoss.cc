@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.cc,v 1.6 2001-07-11 10:08:39 gunter Exp $
+// $Id: G4ParticleChangeForLoss.cc,v 1.7 2003-06-11 07:16:28 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,7 @@
 #include "G4Step.hh"
 #include "G4TrackFastVector.hh"
 #include "G4DynamicParticle.hh"
+#include "G4ExceptionSeverity.hh"
 
 G4ParticleChangeForLoss::G4ParticleChangeForLoss():G4VParticleChange()
 {
@@ -168,21 +169,30 @@ G4bool G4ParticleChangeForLoss::CheckIt(const G4Track& aTrack)
   // Energy should not be lager than initial value
   accuracy = ( theEnergyChange - aTrack.GetKineticEnergy())/MeV;
   if (accuracy > accuracyForWarning) {
+#ifdef G4VERBOSE
     G4cout << "  G4ParticleChangeForLoss::CheckIt    : ";
     G4cout << "the energy becoes larger than the initial value !!" << G4endl;
     G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
+#endif
     itsOK = false;
     if (accuracy > accuracyForException) exitWithError = true;
   }
 
   // dump out information of this particle change
+#ifdef G4VERBOSE
   if (!itsOK) { 
     G4cout << " G4ParticleChangeForLoss::CheckIt " <<G4endl;
     DumpInfo();
   }
+#endif
 
   // Exit with error
-  if (exitWithError) G4Exception("G4ParticleChangeForLoss::CheckIt");
+  if (exitWithError) {
+    G4Exception("G4ParticleChangeForLoss::CheckIt",
+		"400",
+		EventMustBeAborted,
+		"energy was  illegal");
+  }
 
   //correction
   if (!itsOK) {

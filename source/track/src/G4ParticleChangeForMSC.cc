@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForMSC.cc,v 1.8 2001-08-16 08:17:59 kurasige Exp $
+// $Id: G4ParticleChangeForMSC.cc,v 1.9 2003-06-11 07:16:28 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,7 @@
 #include "G4Step.hh"
 #include "G4TrackFastVector.hh"
 #include "G4DynamicParticle.hh"
+#include "G4ExceptionSeverity.hh"
 
 G4ParticleChangeForMSC::G4ParticleChangeForMSC():G4VParticleChange()
 {
@@ -198,22 +199,30 @@ G4bool G4ParticleChangeForMSC::CheckIt(const G4Track& aTrack)
   // MomentumDirection should be unit vector
   accuracy = abs(theMomentumDirectionChange.mag2()-1.0);
   if (accuracy > accuracyForWarning) {
+#ifdef G4VERBOSE
     G4cout << "  G4ParticleChangeForMSC::CheckIt  : ";
     G4cout << "the Momentum Change is not unit vector !!" << G4endl;
     G4cout << "  Difference:  " << accuracy << G4endl;
+#endif
     itsOK = false;
     if (accuracy > accuracyForException) exitWithError = true;
   }
 
   // dump out information of this particle change
+#ifdef G4VERBOSE
   if (!itsOK) { 
     G4cout << " G4ParticleChangeForMSC::CheckIt " <<G4endl;
     DumpInfo();
   }
+#endif
 
   // Exit with error
-  if (exitWithError) G4Exception("G4ParticleChangeForMSC::CheckIt");
-
+  if (exitWithError) {
+    G4Exception("G4ParticleChangeForMSC::CheckIt",
+		"300",
+		EventMustBeAborted,
+		"momentum direction was illegal");
+  }
   //correction
   if (!itsOK) {
     G4double vmag = theMomentumDirectionChange.mag();
