@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.5 2001-03-07 15:17:27 johna Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.6 2001-03-07 15:29:50 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -146,7 +146,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   spec_str = XmStringCreateLocalized ((char*)"Special");
 
   menubar = XmVaCreateSimpleMenuBar (main_win,
-				     "menubar",
+				     (char*)"menubar",
 				     XmVaCASCADEBUTTON, style_str, 'S',
 				     XmVaCASCADEBUTTON, actions_str, 'A',
 				     XmVaCASCADEBUTTON, misc_str, 'M',
@@ -173,7 +173,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 
   style_cascade = XmVaCreateSimplePulldownMenu
     (menubar,
-     "style",
+     (char*)"style",
      0,
      NULL,
      XmVaCASCADEBUTTON, rep_str, 'R',
@@ -198,7 +198,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 
   rep_style_pullright = XmVaCreateSimplePulldownMenu 
     (style_cascade,
-     "rep_style",
+     (char*)"rep_style",
      0,
      G4OpenGLXmViewer::rep_style_callback,
      XmVaRADIOBUTTON, polyhedron_str, 'P', NULL, NULL,
@@ -242,7 +242,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 
   drawing_style_pullright = XmVaCreateSimplePulldownMenu 
     (style_cascade,
-     "drawing_style",
+     (char*)"drawing_style",
      1,
      G4OpenGLXmViewer::drawing_style_callback,
      XmVaRADIOBUTTON, wireframe_str, 'W', NULL, NULL,
@@ -295,7 +295,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 
   background_color_pullright = XmVaCreateSimplePulldownMenu 
     (style_cascade,
-     "background_color",
+     (char*)"background_color",
      2,
      G4OpenGLXmViewer::background_color_callback,
      XmVaRADIOBUTTON, white_str, 'W', NULL, NULL,
@@ -336,7 +336,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 
   actions_cascade = XmVaCreateSimplePulldownMenu
     (menubar,
-     "actions",
+     (char*)"actions",
      1,
      G4OpenGLXmViewer::actions_callback,
      XmVaPUSHBUTTON, rot_str, 'R', NULL, NULL,
@@ -362,7 +362,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   //*********Create miscellany pulldown menu on menubar*********
   misc_cascade = XmVaCreateSimplePulldownMenu
     (menubar,
-     "miscellany",
+     (char*)"miscellany",
      2,
      G4OpenGLXmViewer::misc_callback,
      XmVaPUSHBUTTON, misc_str, 'M', NULL, NULL,
@@ -388,7 +388,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   //*********Create special pulldown menu on menubar*********
   spec_cascade = XmVaCreateSimplePulldownMenu
     (menubar,
-     "special",
+     (char*)"special",
      3,
      NULL,
      XmVaCASCADEBUTTON, trans_str, 'T',
@@ -413,7 +413,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 
   transparency_pullright = XmVaCreateSimplePulldownMenu 
     (spec_cascade,
-     "transparency",
+     (char*)"transparency",
      0,
      G4OpenGLXmViewer::transparency_callback,
      XmVaRADIOBUTTON, off_str, 'f', NULL, NULL,
@@ -445,7 +445,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   //Add antialias pullright menu to special cascade...
   antialias_pullright = XmVaCreateSimplePulldownMenu 
     (spec_cascade,
-     "antialias",
+     (char*)"antialias",
      1,
      G4OpenGLXmViewer::antialias_callback,
      XmVaRADIOBUTTON, off_str, 'f', NULL, NULL,
@@ -477,7 +477,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   //Add Haloing pullright menu to special cascade...
   haloing_pullright = XmVaCreateSimplePulldownMenu 
     (spec_cascade,
-     "haloing",
+     (char*)"haloing",
      2,
      G4OpenGLXmViewer::haloing_callback,
      XmVaRADIOBUTTON, off_str, 'f', NULL, NULL,

@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2001-01-25 12:09:44 johna Exp $
+$Id: History,v 1.4 2001-03-07 15:29:49 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+7th March 2001  John Allison
+- Changed char* to const char* in many places and that gave problems in
+  calls to Xt and Xm.  Hope all's OK.  Differences:
+    cvs diff -r vis-V03-00-06 vis-V03-00-07
 
 25th January 2001  John Allison  (opengl-V03-00-00)
 - Implemented running re-calculation of up-vector in the case of "object
