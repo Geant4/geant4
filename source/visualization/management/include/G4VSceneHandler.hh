@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.hh,v 1.3 1999-02-07 17:28:01 johna Exp $
+// $Id: G4VSceneHandler.hh,v 1.4 1999-05-12 13:57:25 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -218,6 +218,7 @@ public:
   G4int IncrementViewCount ();
 
   virtual void ClearStore ();
+  virtual void ClearTransientStore ();
   // Clears graphics database (display lists) if any.
 
   void AddViewerToList      (G4VViewer* pView);  // Add view to view List.

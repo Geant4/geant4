@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.icc,v 1.4 1999-05-10 14:04:04 johna Exp $
+// $Id: G4VSceneHandler.icc,v 1.5 1999-05-12 13:57:26 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,6 +26,7 @@ inline void G4VSceneHandler::PreAddThis (const G4Transform3D& objectTransformati
 inline void G4VSceneHandler::PostAddThis () {}
 
 inline void G4VSceneHandler::ClearStore () {}
+inline void G4VSceneHandler::ClearTransientStore () {}
 
 inline G4VGraphicsSystem* G4VSceneHandler::GetGraphicsSystem () const {
   return &fSystem;

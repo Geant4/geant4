@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.6 1999-02-07 17:35:43 johna Exp $
+// $Id: G4VisManager.cc,v 1.7 1999-05-12 13:59:23 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -434,6 +434,7 @@ G4bool G4VisManager::Notify (G4ApplicationState requestedState) {
 	fpSceneHandler -> CreateModelingParameters ();
       const RWTPtrOrderedVector <G4VModel>& EOEModelList =
 	fpScene -> GetEndOfEventModelList ();
+      fpSceneHandler->ClearTransientStore(); //GB
       for (int i = 0; i < EOEModelList.entries (); i++) {
 	G4VModel* pModel = EOEModelList [i];
 	pModel -> SetModelingParameters (pMP);
