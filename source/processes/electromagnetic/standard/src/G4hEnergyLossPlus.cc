@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLossPlus.cc,v 1.2 1999-03-15 12:11:24 urban Exp $
+// $Id: G4hEnergyLossPlus.cc,v 1.3 1999-04-15 13:05:05 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -163,7 +163,7 @@ void G4hEnergyLossPlus::BuildDEDXTable(
   G4double ElectronCutInRange = G4Electron::Electron()->GetCuts();
 
   // create/fill proton or antiproton tables depending on the charge 
-  Charge = aParticleType.GetPDGCharge();
+  Charge = aParticleType.GetPDGCharge()/eplus;
   ParticleMass = aParticleType.GetPDGMass() ;
 
   if (Charge>0.) {theDEDXTable= theDEDXpTable;}
@@ -1055,7 +1055,7 @@ G4double G4hEnergyLossPlus::GetConstraints(const G4DynamicParticle *aParticle,
   G4double KineticEnergy,StepLimit;
   G4bool isOut ;
 
-  Charge = aParticle->GetDefinition()->GetPDGCharge() ;
+  Charge = aParticle->GetDefinition()->GetPDGCharge()/eplus ;
 
   KineticEnergy = aParticle->GetKineticEnergy();
 
