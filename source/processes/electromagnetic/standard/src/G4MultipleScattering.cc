@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.2 1999-02-16 13:40:13 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.3 1999-03-02 09:15:54 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -44,9 +44,9 @@
        tLast (0.0),
        zLast (0.0),
        Tlimit(100.*keV),
-       scatteringparameter(1.0),
+       scatteringparameter(0.9),
        tuning (1.00),
-       cpar (0.0),
+       cpar (1.5),
        fLatDisplFlag(true) 
   { }
 
@@ -366,8 +366,8 @@
                                                const G4Track& trackData,
                                                const G4Step& stepData)
   {
-    const G4double  taulim = 1.e-10 , randlim = 0.25*taulim*taulim ;
-    const G4double tausmall = 5.e-5,taubig =50.,
+    static const G4double  taulim = 1.e-10 , randlim = 0.25*taulim*taulim ;
+    static const G4double tausmall = 5.e-5,taubig =50.,
           kappa = 2.5, kappapl1 = kappa+1., kappami1 = kappa-1. ;
     const G4DynamicParticle* aParticle ;
     G4Material* aMaterial ;
