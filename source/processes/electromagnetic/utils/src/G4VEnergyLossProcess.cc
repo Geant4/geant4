@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.43 2004-11-29 14:44:06 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.44 2004-12-06 12:19:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -250,7 +250,6 @@ void G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   if (&part != particle) {
     if (part.GetParticleType() == "nucleus") lManager->RegisterIon(&part, this);
     else                                     lManager->RegisterExtraParticle(&part, this);
-    tablesAreBuilt = true;
     return;
   }
 
