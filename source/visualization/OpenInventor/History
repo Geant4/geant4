@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2004-11-12 10:56:53 gbarrand Exp $
+$Id: History,v 1.25 2004-11-12 11:54:12 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+12th November 2004  Guy Barrand
+- G4OpenInventor.cc : initClass of Geant4_SoPolyhedron.
+- G4OpenInventorWinViewer.cc : WM_COMMAND : filter only messages
+  from the window viewer menu.
 
 11th November 2004  Guy Barrand
 - Add SoPolyhedron that permits to visualize directly HepPolyhedron.

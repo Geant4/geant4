@@ -1,4 +1,4 @@
-$Id: History,v 1.78 2004-11-12 11:11:54 gbarrand Exp $
+$Id: History,v 1.79 2004-11-12 11:56:25 gbarrand Exp $
 --------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+12-11-04 Guy Barrand
+- exN03Vis[5,10.mac] : correct comments "an volume" -> "a volume".
+
 11-11-04 Guy Barrand
 - ExN03DetectorConstruction.cc : add commented vis attributes
   in order that someone can test / play with the interactive  
