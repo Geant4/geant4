@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.65 2003-11-06 12:24:55 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.66 2003-11-06 12:53:04 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -56,6 +56,7 @@
 // 28.02.03 V.Ivanchenko    Filename is defined in the constructor
 // 24.03.2003 P.Rodrigues Changes to accommodate new angular generators
 // 20.05.2003 MGP  Removed memory leak related to angularDistribution
+// 06.11.2003 MGP  Improved user interface to select angular distribution model
 //
 // --------------------------------------------------------------
 
@@ -391,7 +392,6 @@ void G4LowEnergyBremsstrahlung::SetAngularGenerator(G4VBremAngularDistribution* 
 
 void G4LowEnergyBremsstrahlung::SetAngularGenerator(const G4String& name)
 {
-
   if (name == "tsai") 
     {
       delete angularDistribution;
