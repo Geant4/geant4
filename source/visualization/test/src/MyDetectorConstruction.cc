@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyDetectorConstruction.cc,v 1.2 1999-11-10 18:18:04 johna Exp $
+// $Id: MyDetectorConstruction.cc,v 1.3 1999-11-11 09:53:03 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -141,8 +141,10 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 
   G4Box* box1 = new G4Box("Box #1",20*cm,30*cm,40*cm);
   G4Tubs* Cylinder1 = new G4Tubs("Cylinder #1",20*cm,50*cm,30*cm,0,2*M_PI);
-  G4UnionSolid* b1UnionC1 = new G4UnionSolid("Box+Cylinder", box1, Cylinder1,
-					     0,G4ThreeVector(30.*cm,0.,0.));
+  G4RotationMatrix* rm = new G4RotationMatrix;
+  rm->rotateZ(40*deg);
+  G4UnionSolid* b1UnionC1 = new G4UnionSolid("Box+Cylinder", Cylinder1, box1,
+					     rm,G4ThreeVector(30.*cm,0.,0.));
   G4LogicalVolume * union_log
     = new G4LogicalVolume(b1UnionC1,Ar,"union_L",0,0,0);
   new G4PVPlacement(0,G4ThreeVector(200.*cm,-50*cm,0.*cm),
