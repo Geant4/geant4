@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Allocator.hh,v 1.10 2002-05-24 10:58:27 gcosmo Exp $
+// $Id: G4Allocator.hh,v 1.11 2002-06-21 16:59:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,13 +72,13 @@ class G4Allocator
 
     G4AllocatorPage<Type> * fPages;
     G4AllocatorUnit<Type> * fFreeList;
+
+    size_t fUnitSize, fPageSize;
 };
 
 // ------------------------------------------------------------
 // Inline implementation
 // ------------------------------------------------------------
-
-static const G4int G4AllocatorPageSize = 1024;
 
 // ************************************************************
 // G4Allocator constructor
@@ -89,6 +89,8 @@ G4Allocator<Type>::G4Allocator()
 {
   fPages = 0;
   fFreeList = 0;
+  fUnitSize = sizeof(G4AllocatorUnit<Type>);
+  fPageSize = ( (fUnitSize < 512) ? 1024 : (fUnitSize*10) );
   AddNewPage();
   return;
 }
@@ -179,11 +181,11 @@ void G4Allocator<Type>::AddNewPage()
   aPage = new G4AllocatorPage<Type>;
   aPage->fNext = fPages;
   aPage->fUnits = (G4AllocatorUnit<Type> *)
-    malloc(G4AllocatorPageSize);
+    malloc(fPageSize);
   fPages = aPage;
 
   for (unit_no = 0;
-       unit_no < (G4AllocatorPageSize / G4int(sizeof(G4AllocatorUnit<Type>))-1);
+       unit_no < G4int(fPageSize/fUnitSize - 1);
        ++unit_no)
   {
     aPage->fUnits[unit_no].fNext = &aPage->fUnits[unit_no + 1];
