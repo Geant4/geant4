@@ -1,0 +1,32 @@
+#
+# Macro file p01.mac
+# for geometry/tracking performance test from plane gun
+# 100 Gev geantino
+#
+/control/verbose 2
+# /run/verbose 2
+/gun/particle geantino
+/gun/energy 100 GeV
+/run/initialize
+#
+# SimpleBox geometry made by Al
+# Geantino in random directions from point, 10 events.
+#
+# from +/- X-axis
+#
+/mydet/SwitchDetector SimpleBox
+/mydet/SelectMaterial Al
+#
+#/mydet/SwitchCSG Box   # Box || Tubs || Cons || Sphere
+#/mydet/SwitchCSG Tubs   # Box || Tubs || Cons || Sphere
+#/mydet/SwitchCSG Cons   # Box || Tubs || Cons || Sphere
+#/mydet/SwitchCSG Sphere   # Box || Tubs || Cons || Sphere
+#
+#/mydet/SwitchBool Intersection # Intersection || Union || Subtraction
+#/mydet/SwitchBool Union # Intersection || Union || Subtraction
+/mydet/SwitchBool Subtraction # Intersection || Union || Subtraction
+/tsGun/planeGun 100.0 0.0 0.0
+/tracking/verbose 1
+/run/beamOn 10
+#
+exit

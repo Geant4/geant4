@@ -1,0 +1,64 @@
+#
+# Macro file run02.mac
+# for geometry/tracking performance test
+# 100 Gev geantino
+#
+/control/verbose 2
+# /run/verbose 2
+/gun/particle geantino
+/gun/energy 100 GeV
+/run/initialize
+#
+# SimpleBox geometry made by Al
+# Geantino in random directions, 1000 events.
+#
+#/mydet/SwitchDetector SimpleBox
+#/mydet/SelectMaterial Al
+#/tsGun/randomGun randomDirection
+#/tracking/verbose 1
+#/run/beamOn 10
+#/tracking/verbose 0
+#/run/beamOn 1000
+#
+# SimpleBox geometry made by Al
+# Geantino in random directions from point, 10 events.
+#
+/mydet/SwitchDetector SimpleBox
+/mydet/SelectMaterial Al
+/tsGun/viewerGun 100.0 100.0 50.0
+/tracking/verbose 1
+/run/beamOn 100
+#/tracking/verbose 0
+#/run/beamOn 10
+#
+# SimpleBox geometry made by Al
+# Geantino from random points on plane in parallel, 10 events.
+#
+#/mydet/SwitchDetector SimpleBox
+#/mydet/SelectMaterial Al
+#/tsGun/planeGun 100.0 100.0 100.0
+#/tracking/verbose 1
+#/run/beamOn 10
+#/tracking/verbose 0
+#/run/beamOn 10
+#
+# Honeycomb geometry
+# Geantino in random directions, 1000 events.
+#
+#/mydet/SwitchDetector Honeycomb
+#/tsGun/randomGun randomDirection
+#/tracking/verbose 1
+#/run/beamOn 10
+#/tracking/verbose 0
+#/run/beamOn 1000
+#
+# Honeycomb geometry
+# Geantino in random positions and directions, 1000 events.
+#
+#/mydet/SwitchDetector Honeycomb
+#/tsGun/randomGun randomPositionAndDirection
+#/tracking/verbose 1
+#/run/beamOn 10
+#/tracking/verbose 0
+#/run/beamOn 1000
+exit

@@ -1,0 +1,58 @@
+#
+# Macro file v01.mac
+# for geometry/tracking performance test from viewer gun
+# 100 Gev geantino
+#
+/control/verbose 2
+# /run/verbose 2
+/gun/particle geantino
+/gun/energy 100 GeV
+/run/initialize
+#
+# SimpleBox geometry made by Al
+# Geantino in random directions from point, 10 events.
+#
+# from +/- X-axis
+#
+/mydet/SwitchDetector SimpleBox
+/mydet/SelectMaterial Al
+/tsGun/viewerGun 100.0 0.0 0.0
+/tracking/verbose 0
+/run/beamOn 100000
+#
+/mydet/SwitchDetector SimpleBox
+/mydet/SelectMaterial Al
+/tsGun/viewerGun -100.0 0.0 0.0
+/tracking/verbose 0
+/run/beamOn 100000
+#
+# from +/- Y-axis
+#
+/mydet/SwitchDetector SimpleBox
+/mydet/SelectMaterial Al
+/tsGun/viewerGun 0.0 100.0 0.0
+/tracking/verbose 0
+/run/beamOn 100000
+#
+/mydet/SwitchDetector SimpleBox
+/mydet/SelectMaterial Al
+/tsGun/viewerGun 0.0 -100.0 0.0
+/tracking/verbose 0
+/run/beamOn 100000
+#
+# from +/- Z-axis
+#
+/mydet/SwitchDetector SimpleBox
+/mydet/SelectMaterial Al
+/tsGun/viewerGun 0.0 0.0 100.0
+/tracking/verbose 0
+/run/beamOn 100000
+#
+/mydet/SwitchDetector SimpleBox
+/mydet/SelectMaterial Al
+/tsGun/viewerGun 0.0 0.0 -100.0
+/tracking/verbose 0
+/run/beamOn 100000
+#
+#
+exit
