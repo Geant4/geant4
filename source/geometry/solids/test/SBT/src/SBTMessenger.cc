@@ -345,7 +345,7 @@ void SBTMessenger::SetNewValue( G4UIcommand *command, G4String newValues )
 	else if (command == pauseCmd) {
 	  char c;
 	  
-	  G4cout << "Pause" << G4endl ;
+	  G4cout << "Press ENTER to continue..." << G4std::flush ;
 	  G4cin.get(c);
 	}
 	else {
