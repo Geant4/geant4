@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIbatch.cc,v 1.4 2001-07-11 10:01:16 gunter Exp $
+// $Id: G4UIbatch.cc,v 1.5 2001-08-28 06:01:25 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -68,7 +68,28 @@ G4UIsession * G4UIbatch::SessionStart()
       if( macroFile.eof() ) break;
       commandLine[lineLength] = '\0';
       if( commandLine[0] != '#' )
-      { UImanager->ApplyCommand(commandLine); }
+      { 
+        G4int rc = UImanager->ApplyCommand(commandLine);
+        if(rc)
+        {
+          switch(rc) 
+          {
+          case fCommandNotFound:
+            G4cerr << "***** COMMAND NOT FOUND <"
+                   << commandLine << "> *****" << G4endl;
+            break;
+          case fIllegalApplicationState:
+            G4cerr << "***** Illegal application state <"
+                   << commandLine << "> *****" << G4endl;
+            break;
+          default:
+            G4int pn = rc%100;
+            G4cerr << "***** Illegal parameter (" << pn << ") <"
+                   << commandLine << "> *****" << G4endl;
+          }
+          G4cerr << "***** Command ignored *****" << G4endl;
+        }
+      }
       else
       { G4cout << commandLine << G4endl; }
     }

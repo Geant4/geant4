@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh,v 1.9 2001-07-11 10:01:14 gunter Exp $
+// $Id: G4UImanager.hh,v 1.10 2001-08-28 06:01:24 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,6 +34,7 @@
 #include "g4std/vector"
 #include "g4std/fstream"
 #include "G4VStateDependent.hh"
+#include "G4UIcommandStatus.hh"
 class G4UIcommandTree;
 class G4UIcommand;
 class G4UIsession;

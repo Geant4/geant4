@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2001-08-17 23:27:46 johna Exp $
+$Id: History,v 1.26 2001-08-28 06:01:23 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 27, 2001, M.Asai (intercoms-V03-02-05)
+- G4UIbatch now displays (G4cerr) the error message.
+  Correction according to the bug report #294.
 
 Aug 17, 2001, J.Allison (intercoms-V03-02-04)
 - Coworks with vis-V03-02-12 and greps-V03-02-02.

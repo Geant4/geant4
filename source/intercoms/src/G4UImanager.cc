@@ -21,14 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.9 2001-07-11 10:01:16 gunter Exp $
+// $Id: G4UImanager.cc,v 1.10 2001-08-28 06:01:25 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ---------------------------------------------------------------------
 
 #include "G4UImanager.hh"
-#include "G4UIcommandStatus.hh"
 #include "G4UIcommandTree.hh"
 #include "G4UIcommand.hh"
 #include "G4UIsession.hh"
