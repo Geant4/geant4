@@ -20,7 +20,7 @@
 # Edit the next line(s) to choose another graphic system
 #
 #/vis/sceneHandler/create DAWNFILE
-/vis/sceneHandler/create OGLIX
+/vis/sceneHandler/create OGLIXm
 #
 # Create a viewer
 /vis/viewer/create
