@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2001-10-11 07:11:52 grichine Exp $
+$Id: History,v 1.2 2004-07-15 15:56:33 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,3 +15,6 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15th July 2004  John Allison
+- Changed long-deprecated command /vis/viewer/viewpointThetaPhi ->
+  /vis/viewer/set/viewpointThetaPhi.

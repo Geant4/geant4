@@ -21,7 +21,7 @@
 #
 # Draw scene
 #
-/vis/viewer/viewpointThetaPhi 90 0
+/vis/viewer/set/viewpointThetaPhi 90 0
 /vis/camera/zoom 1.4
 /vis/drawVolume
 #
