@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst50AnalysisManager.cc,v 1.11 2003-02-07 13:27:49 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.12 2003-02-10 15:09:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef  G4ANALYSIS_USE
@@ -51,6 +51,7 @@
 #include "AIDA/ITree.h"
 #include "AIDA/ITuple.h"
 #include "Tst50PrimaryGeneratorAction.hh"
+#include "Tst50DetectorConstruction.hh"
 #include "G4RunManager.hh"
 Tst50AnalysisManager* Tst50AnalysisManager::instance = 0;
 
@@ -77,6 +78,7 @@ Tst50AnalysisManager::Tst50AnalysisManager() :
  
   histFact = aFact->createHistogramFactory( *theTree );
   tupFact  = aFact->createTupleFactory    ( *theTree );
+
 
 
 }
@@ -114,12 +116,19 @@ void Tst50AnalysisManager::book()
   p_Primary =
 (Tst50PrimaryGeneratorAction*)(runManager->GetUserPrimaryGeneratorAction());
 
+ 
+  p_Detector =
+(Tst50DetectorConstruction*)(runManager->GetUserDetectorConstruction());
+
+  G4double Thick= p_Detector->GetTargetThickness();
+  G4double Thick_cm=Thick/cm;
+
  G4double initial_energy= p_Primary->GetInitialEnergy();
 
  h1= histFact->createHistogram1D("10","Energy Deposit X event",100.*initial_energy ,0.,initial_energy*2.);
 
- h2=histFact->createHistogram1D("20","Primary transmitted particle energy/initial_energy",1000. ,0.,1.);
- h3=histFact->createHistogram1D("30","Primary backscattered  particle energy/initial_energy",1000. ,0.,1.);
+ h2=histFact->createHistogram1D("20","Primary transmitted particle energy/initial_energy",1000. ,0.,1.5);
+ h3=histFact->createHistogram1D("30","Primary backscattered  particle energy/initial_energy",1000. ,0.,1.5);
  
 h4=histFact->createHistogram1D("40","angle of backscattered particles",80.*2, 80.,190.);
 
@@ -129,7 +138,11 @@ h7= histFact->createHistogram1D("70","Primary  Energy Deposit X event",100.*init
 
 h8= histFact->createHistogram1D("80","Secondary Energy Deposit",100.*initial_energy ,0.,initial_energy*2.);
  // in questo istogramma  metto il deposito di energia di ogni evento nel target
+h9= histFact->createHistogram1D("90","Primary Step Length",Thick_cm*4000. ,0.,Thick_cm*2);
+ // in questo istogramma  metto il deposito di energia di ogni evento nel target
+h10= histFact->createHistogram1D("100","Number of Step in a primary track",10000.,0.,1000.);
 
+h11= histFact->createHistogram1D("110","Length of primary tracks",Thick_cm*1000.,0.,Thick_cm*5.);
  std::string columnNames = "double initial_energy; double energy; double angle";
  std::string options = "";
  if (tupFact) ntuple = tupFact->create("1","1",columnNames, options);
@@ -144,7 +157,6 @@ h8= histFact->createHistogram1D("80","Secondary Energy Deposit",100.*initial_ene
 }
 
  //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 
 void Tst50AnalysisManager::energy_deposit(G4double En)
 { 
@@ -219,7 +231,19 @@ void Tst50AnalysisManager::fill_data(G4double initial_en, G4double en, G4double 
   ntuple->addRow();
     }
 }
+void Tst50AnalysisManager::Step(G4double aStep)
+{
+h9->fill(aStep);
+}
+void Tst50AnalysisManager::Steps_Num(G4int Steps)
+{
+  h10->fill(Steps);
+}
+void Tst50AnalysisManager::track_length(G4double length)
+{
+  h11 ->fill(length);
 
+}
 void Tst50AnalysisManager::finish() 
 {  
   // write all histograms to file

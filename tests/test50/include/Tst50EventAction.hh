@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.hh,v 1.7 2003-02-06 14:42:36 guatelli Exp $
+// $Id: Tst50EventAction.hh,v 1.8 2003-02-10 15:09:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,6 +53,8 @@ class Tst50EventAction : public G4UserEventAction
   void CalculateEnergyDeposit(G4double);
   void CalculateEnergyDepositPrimary(G4double);
  void CalculateEnergyDepositSecondary(G4double);
+  void Number_Steps();
+  void Track_length(G4double);
   private:
     G4int hit_CollID;
   G4double energy;
@@ -63,7 +65,8 @@ class Tst50EventAction : public G4UserEventAction
   G4double energyDepPrimary;
  G4double energyDepSecondary;
   G4bool Foil;
-
+  G4int N_Steps;
+  G4double length;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

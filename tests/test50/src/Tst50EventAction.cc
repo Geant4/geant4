@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.cc,v 1.12 2003-02-07 13:27:49 guatelli Exp $
+// $Id: Tst50EventAction.cc,v 1.13 2003-02-10 15:09:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,11 +66,12 @@ Tst50EventAction::~Tst50EventAction()
  
 void Tst50EventAction::BeginOfEventAction(const G4Event*)
 { 
- 
+  N_Steps=0;
  energyDep=0.;
  energy=0.; 
  energyDepPrimary=0.;
- energyDepSecondary=0.;
+ energyDepSecondary=0.; 
+ length=0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,8 +93,10 @@ void Tst50EventAction::EndOfEventAction(const G4Event* evt)
 	        analysis->energy_depositPrimary(energyDepPrimary);
            
 	        analysis->energy_depositSecondary(energyDepSecondary);
-#endif
-	
+
+		analysis->Steps_Num(N_Steps);
+                analysis->track_length(length);	
+#endif	
    }
 
 /*
@@ -164,4 +167,14 @@ void Tst50EventAction::CalculateEnergyDepositSecondary(G4double deposit_secondar
   energyDepSecondary += deposit_secondary;
 
  
+}
+void Tst50EventAction::Number_Steps()
+{
+  N_Steps += 1;
+}
+void Tst50EventAction::Track_length(G4double step_dl)
+{
+
+  length += step_dl;
+
 }

@@ -25,7 +25,7 @@
 // S.Guatelli
 //
 //
-// $Id: Tst50AnalysisManager.hh,v 1.10 2003-02-05 16:23:37 guatelli Exp $
+// $Id: Tst50AnalysisManager.hh,v 1.11 2003-02-10 15:09:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -58,6 +58,7 @@ class ITreeFactory;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 class Tst50PrimaryGeneratorAction;
+class Tst50DetectorConstruction;
 class Tst50AnalysisManager
 {
 public:
@@ -80,6 +81,9 @@ void energy_depositSecondary(G4double);
  void angleT(G4double );
   void fill_dataBrem(G4double,G4double);
   void angle_energy_gamma(G4double,G4double);
+void Step(G4double );
+  void Steps_Num(G4int );
+  void track_length(G4double);
 private:
 static Tst50AnalysisManager* instance;
 
@@ -103,10 +107,12 @@ AIDA::IHistogram2D *h6;
 AIDA::IHistogram1D *h5;
 AIDA::IHistogram1D *h7;
 AIDA::IHistogram1D *h8;
-
+AIDA::IHistogram1D *h9;
+AIDA::IHistogram1D *h10;
+AIDA::IHistogram1D *h11;
 private:
   Tst50PrimaryGeneratorAction* p_Primary;
- 
+  Tst50DetectorConstruction* p_Detector;
   G4double en;
   G4double range;
 };

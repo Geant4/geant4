@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.hh,v 1.8 2003-02-06 14:42:37 guatelli Exp $
+// $Id: Tst50RunAction.hh,v 1.9 2003-02-10 15:09:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,6 +50,7 @@ class Tst50RunAction : public G4UserRunAction
   void Trans_number();
   void Back_number();
   void primary_processes(G4int );
+  void gamma_transmitted();
   G4int GetRun_ID ();
 private:
   G4double number;
@@ -62,6 +63,7 @@ private:
   G4int numberPair;
   G4int runID;
   G4bool Foil;
+  G4double fg;
 
 };
 

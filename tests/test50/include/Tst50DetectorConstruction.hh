@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.hh,v 1.5 2003-01-16 09:52:01 guatelli Exp $
+// $Id: Tst50DetectorConstruction.hh,v 1.6 2003-02-10 15:09:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,8 @@ class Tst50DetectorConstruction : public G4VUserDetectorConstruction
   public:
      
      void SetTargetMaterial (G4String);     
-     void SetTargetThickness(G4double);     
+     void SetTargetThickness(G4double);  
+    
      void SetTargetX(G4double); 
      void SetTargetY(G4double); 
   G4double GetDensity();

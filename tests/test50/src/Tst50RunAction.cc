@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.cc,v 1.9 2003-02-06 14:42:37 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.10 2003-02-10 15:09:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,7 +69,7 @@ Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
       G4UImanager* UI = G4UImanager::GetUIpointer();
       UI->ApplyCommand("/vis/scene/notifyHandlers");
     } 
- 
+  fg=0;
   numberEvents=0;
   number=0;
   numberB=0;
@@ -102,6 +102,7 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
       G4double ft=(number/numberEvents) ;
       G4double fb=(numberB/numberEvents);
       G4double fa=(((numberEvents-(numberB+number)))/numberEvents);
+      G4double trans=(fg/numberEvents); 
 G4std::ofstream pmtfile("Transmission.txt", G4std::ios::app);
 if(pmtfile.is_open()){
 			
@@ -112,6 +113,8 @@ if(pmtfile.is_open()){
 pmtfile<<"fraction Transmitted/n.events:"<<ft <<G4endl;
    pmtfile<<"fraction Backscattered/n.events: "<<fb<<G4endl;
   pmtfile<<"fraction Absorbed/n.events: "<<fa<<G4endl;
+  pmtfile<<"fraction transmitted/n.events with"<<G4endl; 
+pmtfile<<"transmission energy= initial energy && transmission angle= 0. deg(important for gamma for attenuation coefficient): "<<trans<<G4endl;
 }
     }
   /* 
@@ -130,7 +133,10 @@ G4cout<<"---------- Particelle primarie gamma -------------- "<<number<<G4endl;
  
  
 }
-
+void  Tst50RunAction::gamma_transmitted()
+{
+  fg = fg +1;
+}
 
 void  Tst50RunAction::Trans_number()
 {

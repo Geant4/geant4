@@ -1,4 +1,4 @@
-/control/verbose 0
+/control/verbose 1
 /run/verbose 0
 /event/verbose 0
 /tracking/verbose 0
@@ -16,11 +16,11 @@
 /vis/viewer/update
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
-/target/setTargetThick 15. mm
+/target/setTargetThick 5. mm
 /target/setTargetMat  Silicon
 /target/update
 #/le/cutE 0.1 micrometer
 /gun/particle gamma
-/gun/energy 0.5 MeV
-/run/beamOn 1000
+/gun/energy 10. MeV
+/run/beamOn 10000
 

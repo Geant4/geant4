@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.22 2003-02-10 11:21:04 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.23 2003-02-10 15:09:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -110,10 +110,29 @@ IDnow = run_ID+1000*evno+10000*(Step->GetTrack()->GetTrackID())+
   
     //prendo l'energia cinetica della particella  	
     KinE = Step->GetTrack()->GetKineticEnergy();
+ G4String particle_name= p_Primary->GetParticle(); 
+    // TestEm1
+if (Foil)
+  {
+ if(particle_name=="e-"|| particle_name=="e+"|| particle_name=="proton"|| particle_name=="gamma" )
+   {
+if(0 == Step->GetTrack()->GetParentID() ) 
+  {
+if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target")
+  {
+ G4double steplen = (Step->GetStepLength())/cm;
 
-    if (Foil)
-      {
-    // energy deposit
+ eventaction ->Number_Steps(); 
+#ifdef G4ANALYSIS_USE
+ analysis->Step(steplen);
+
+#endif
+
+   }
+   }
+   }
+ 
+// energy deposit
 	
     G4double EnergyDeposit = Step->GetTotalEnergyDeposit();
     eventaction->CalculateEnergyDeposit(EnergyDeposit);
@@ -147,7 +166,6 @@ G4double EnergyDepositSecondary= Step->GetTotalEnergyDeposit();
     YMoD = Step->GetTrack()->GetMomentumDirection().y();
     ZMoD = Step->GetTrack()->GetMomentumDirection().z();
     
-    G4String particle_name= p_Primary->GetParticle(); 
     // ---------- energy of primary transmitted particles-----------// 
 
     if (Foil)
@@ -203,8 +221,14 @@ if(0 == Step->GetTrack()->GetParentID() )
 
 #ifdef G4ANALYSIS_USE
     analysis ->fill_data(initial,energy,angle);
-#endif
-}  }}}}}
+#endif 
+    if( (initial_energy == KinE) &&( ZMoD==1.))
+      {
+#ifdef G4ANALYSIS_USE
+	runaction->gamma_transmitted();
+	
+#endif 
+      }}}}}}}
 
     if (Foil)
       {

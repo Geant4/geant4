@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PhysicsList.cc,v 1.7 2003-02-07 13:27:49 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.8 2003-02-10 15:09:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +48,7 @@ Tst50PhysicsList::Tst50PhysicsList(G4bool LowEn,G4bool range,G4bool SP,G4bool RY
  Stopping= SP;
   Low=LowEn;
   RadiationY=RY;
-  rangeOn = "off";
+  
   defaultCutValue = 1.*mm;
    SetVerboseLevel(1);
    Adronic=adr;
