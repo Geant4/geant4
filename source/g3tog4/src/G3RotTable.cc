@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.cc,v 1.9 1999-11-11 15:35:45 gunter Exp $
+// $Id: G3RotTable.cc,v 1.10 1999-11-23 04:27:25 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -25,11 +25,11 @@ G3RotTable::~G3RotTable(){
   // G4cout << "Deleted G3RotTable..." << endl;
 };
 
-G3toG4RotationMatrix*
+G4RotationMatrix*
 G3RotTable::get(G4int rotid){
   G4String _ShashID; // static
   HashID(rotid, _ShashID);
-  return _Rot->findValue(&_ShashID);
+  return (G4RotationMatrix*) _Rot->findValue(&_ShashID);
 };
 
 void 

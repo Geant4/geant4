@@ -1,10 +1,12 @@
-$Id: History,v 1.24 1999-11-23 03:31:46 lockman Exp $
+$Id: History,v 1.25 1999-11-23 04:27:24 lockman Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
 
 g3tog4-V00-01-02 22-Nov-1999 Lockman
 - g3test.F renamed to g3test.F.save
+- G3RotTable::get now returns a pointer to a G4RotationMatrix thru an upcast
+- G4BuildTree : now get G4RotationMatrix* rather than G3toG4Rotationmatrix*
 
 g3tog4-V00-01-01 20-Oct-99 Allison
 - G3MatTable.cc: introduced G4String matid (a(3,lngth)) to help STL Interface.

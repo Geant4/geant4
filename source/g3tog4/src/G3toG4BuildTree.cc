@@ -25,7 +25,7 @@ G3toG4BuildTree(VolTableEntry* CurVTE){
     //   << " inside mother " << MothLV->GetName() << " copy "
     //   << TheG3Pos->GetCopy() << endl;
     // Position it
-    new G4PVPlacement((G4RotationMatrix*) 
+    new G4PVPlacement(
 		      G3Rot.get(TheG3Pos->GetIrot()),   // rotation matrix
 		      *(TheG3Pos->GetPos()),            // its position
 		      CurLog,                           // its LogicalVolume 
