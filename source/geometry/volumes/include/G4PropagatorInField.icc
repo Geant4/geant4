@@ -1,0 +1,98 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4PropagatorInField.icc,v 1.2 1999-02-17 17:35:59 japost Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// ------------------------------------------------------------------------
+//	GEANT 4  include file implementation
+//
+//	For information related to this code contact:
+//	CERN, IT Division (formely CN), ASD group
+// ------------------------------------------------------------------------
+// 
+// 25.10.96 John Apostolakis, design and implementation 
+// 25.03.97 John Apostolakis, adaptation for G4Transportation and cleanup
+//
+//  To create an object, must have 
+//      an object that calculates the Curved paths 
+//      the navigator to find (linear) intersections
+//     and ?? also must know the value of the maximum displacement allowed
+//
+
+inline G4PropagatorInField::
+G4PropagatorInField( G4Navigator    *theNavigator, 
+		     G4FieldManager *detectorFieldMgr) :
+    fNavigator(theNavigator),
+    fDetectorFieldMgr(detectorFieldMgr), 
+    fmax_loop_count(1000),
+    End_PointAndTangent(G4ThreeVector(0.,0.,0.),G4ThreeVector(0.,0.,0.),0.0,0.0)
+{
+   // this->fChordFinder = new G4ChordFinder( (G4MagneticField*)0, 1e-6 );
+}
+
+inline
+G4ChordFinder* G4PropagatorInField::GetChordFinder()
+{
+      // Now only the "Chord Finder" of the global Field Mgr is used
+      //  ... 
+      return fDetectorFieldMgr->GetChordFinder(); 
+}
+
+inline void G4PropagatorInField::SetChargeMomentumMass( 
+			G4double Charge,            // in e+ units
+		        G4double Momentum,          // in GeV/c 
+		        G4double Mass)              // in ? units
+{
+   GetChordFinder()->SetChargeMomentumMass(Charge, Momentum, Mass); 
+}
+
+//  Obtain the final space-point and velocity (normal) at the end of the Step
+//
+inline
+G4ThreeVector  G4PropagatorInField::EndPosition()
+{
+      return   End_PointAndTangent.Position(); 
+}
+
+inline
+G4ThreeVector  G4PropagatorInField::EndMomentumDir()
+{
+      return   End_PointAndTangent.GetMomentumDir(); 
+}
+
+inline G4double G4PropagatorInField::GetEpsilonStep() 
+{ 
+      return fEpsilonStep; 
+}
+inline void     G4PropagatorInField::SetEpsilonStep(G4double newEps)
+{
+      fEpsilonStep=newEps;
+}
+inline G4bool   G4PropagatorInField::IsParticleLooping()
+{
+      return fParticleIsLooping;
+}
+
+inline G4int    G4PropagatorInField::GetMaxLoopCount() 
+{
+      return fmax_loop_count;
+}
+
+inline void     G4PropagatorInField::SetMaxLoopCount(G4int new_max) 
+{
+      fmax_loop_count= new_max;
+}
+
+// inline void     G4PropagatorInField::SetChordFinder(G4ChordFinder* newCF)
+
+inline G4double G4PropagatorInField::DeltaOneStep() 
+{ return delta_one_step_val; }
+
+inline G4double G4PropagatorInField::DeltaIntersection()
+{ return delta_intersection_val; } 
