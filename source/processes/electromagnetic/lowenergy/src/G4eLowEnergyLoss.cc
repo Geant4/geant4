@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.29 2002-10-28 09:43:51 vnivanch Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.30 2003-01-22 18:47:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -42,7 +42,7 @@
 // 08-09-98: cleanup
 // 24-09-98: rndmStepFlag false by default (no randomization of the step)
 // 14-10-98: messenger file added.
-// 16-10-98: public method SetStepFunction() 
+// 16-10-98: public method SetStepFunction()
 // 20-01-99: important correction in AlongStepDoIt , L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // 11/04/00: Bug fix in dE/dx fluctuation simulation, Veronique Lefebure
@@ -52,19 +52,21 @@
 // 18/10/01  Revision to improve code quality and consistency with design, MGP
 // 19/10/01  update according to new design, V.Ivanchenko
 // 24/10/01  MGP - Protection against negative energy loss in AlongStepDoIt
-// 26/10/01  VI Clean up access to deexcitation 
+// 26/10/01  VI Clean up access to deexcitation
 // 23/11/01  VI Move static member-functions from header to source
 // 28/05/02  VI Remove flag fStopAndKill
 // 03/06/02  MGP - Restore fStopAndKill
 // 28/10/02  VI Optimal binning for dE/dx
+// 21/01/03  VI cut per region
 //
 // --------------------------------------------------------------
- 
+
 #include "G4eLowEnergyLoss.hh"
 #include "G4EnergyLossMessenger.hh"
 #include "G4Poisson.hh"
+#include "G4ProductionCutsTable.hh"
 
-//    
+//
 
 // Initialisation of static data members
 // -------------------------------------
@@ -84,7 +86,7 @@ G4PhysicsTable** G4eLowEnergyLoss::RecorderOfElectronProcess =
                                            new G4PhysicsTable*[10];
 G4PhysicsTable** G4eLowEnergyLoss::RecorderOfPositronProcess =
                                            new G4PhysicsTable*[10];
-                                           
+
 
 G4PhysicsTable*  G4eLowEnergyLoss::theDEDXElectronTable         = 0;
 G4PhysicsTable*  G4eLowEnergyLoss::theDEDXPositronTable         = 0;
@@ -136,7 +138,7 @@ G4eLowEnergyLoss::G4eLowEnergyLoss(const G4String& processName)
  if(!eLossMessenger) eLossMessenger = new G4EnergyLossMessenger();
 }
 
-//    
+//
 
 G4eLowEnergyLoss::~G4eLowEnergyLoss() 
 {
@@ -170,19 +172,19 @@ G4int G4eLowEnergyLoss::GetNbOfProcesses()
 void G4eLowEnergyLoss::SetLowerBoundEloss(G4double val) 
 {
     LowerBoundEloss=val;
-} 
+}
     
 void G4eLowEnergyLoss::SetUpperBoundEloss(G4double val) 
 {
     UpperBoundEloss=val;
 } 
-    
+
 void G4eLowEnergyLoss::SetNbinEloss(G4int nb)
 {
     NbinEloss=nb;
 }
  
-G4double G4eLowEnergyLoss::GetLowerBoundEloss() 
+G4double G4eLowEnergyLoss::GetLowerBoundEloss()
 {
     return LowerBoundEloss;
 } 
@@ -191,7 +193,7 @@ G4double G4eLowEnergyLoss::GetUpperBoundEloss()
 {
     return UpperBoundEloss;
 } 
-    
+
 G4int G4eLowEnergyLoss::GetNbinEloss() 
 {
     return NbinEloss;
@@ -210,11 +212,13 @@ void G4eLowEnergyLoss::BuildDEDXTable(
   LOGRTable=lrate/NbinEloss;
   RTable   =exp(LOGRTable);
   // Build energy loss table as a sum of the energy loss due to the
-  // different processes.                                           
+  // different processes.
   //
 
-  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
-  
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+  size_t numOfCouples = theCoupleTable->GetTableSize();
+
   // create table for the total energy loss
 
   if (&aParticleType==G4Electron::Electron())
@@ -224,11 +228,11 @@ void G4eLowEnergyLoss::BuildDEDXTable(
       if (CounterOfProcess == NbOfProcesses)
         {
          if (theDEDXElectronTable)
-           { 
+           {
              theDEDXElectronTable->clearAndDestroy();
-             delete theDEDXElectronTable; 
+             delete theDEDXElectronTable;
            }
-         theDEDXElectronTable = new G4PhysicsTable(numOfMaterials);
+         theDEDXElectronTable = new G4PhysicsTable(numOfCouples);
          theDEDXTable = theDEDXElectronTable;
         }
     }
@@ -239,11 +243,11 @@ void G4eLowEnergyLoss::BuildDEDXTable(
      if (CounterOfProcess == NbOfProcesses)
        {
         if (theDEDXPositronTable)
-          { 
+          {
             theDEDXPositronTable->clearAndDestroy();
-            delete theDEDXPositronTable; 
+            delete theDEDXPositronTable;
           }
-        theDEDXPositronTable = new G4PhysicsTable(numOfMaterials);
+        theDEDXPositronTable = new G4PhysicsTable(numOfCouples);
         theDEDXTable = theDEDXPositronTable;
        }
     }
@@ -256,39 +260,39 @@ void G4eLowEnergyLoss::BuildDEDXTable(
      G4bool isOutRange;
      G4PhysicsTable* pointer;
 
-     for (G4int J=0; J<numOfMaterials; J++)
+     for (size_t J=0; J<numOfCouples; J++)
         {
          // create physics vector and fill it
 
          G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
-                    LowerBoundEloss, UpperBoundEloss, NbinEloss);   
+                    LowerBoundEloss, UpperBoundEloss, NbinEloss);
 
          // loop for the kinetic energy
-         for (G4int i=0; i<NbinEloss; i++) 
+         for (G4int i=0; i<NbinEloss; i++)
             {
-              LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;      
-              //here comes the sum of the different tables created by the  
-              //processes (ionisation,bremsstrahlung,etc...)              
-              Value = 0.;    
+              LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
+              //here comes the sum of the different tables created by the
+              //processes (ionisation,bremsstrahlung,etc...)
+              Value = 0.;
               for (G4int process=0; process < NbOfProcesses; process++)
                  {
                    pointer= RecorderOfProcess[process];
                    Value += (*pointer)[J]->GetValue(LowEdgeEnergy,isOutRange);
                  }
 
-              aVector->PutValue(i,Value) ; 
+              aVector->PutValue(i,Value) ;
             }
 
          theDEDXTable->insert(aVector) ;
 
         }
 
- 
+
      //reset counter to zero
      if (&aParticleType==G4Electron::Electron()) CounterOfElectronProcess=0;
      if (&aParticleType==G4Positron::Positron()) CounterOfPositronProcess=0;
 
-     ParticleMass = aParticleType.GetPDGMass(); 
+     ParticleMass = aParticleType.GetPDGMass();
 
      if (&aParticleType==G4Electron::Electron())
      {
@@ -370,7 +374,7 @@ void G4eLowEnergyLoss::BuildDEDXTable(
 
 
      // make the energy loss and the range table available
-     G4EnergyLossTables::Register(&aParticleType,  
+     G4EnergyLossTables::Register(&aParticleType,
        (&aParticleType==G4Electron::Electron())?
        theDEDXElectronTable: theDEDXPositronTable,
        (&aParticleType==G4Electron::Electron())?
@@ -385,83 +389,83 @@ void G4eLowEnergyLoss::BuildDEDXTable(
     }
 }
 
-//    
-      
+//
+
 G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
                                                  const G4Step&  stepData)
-{                              
+{
  // compute the energy loss after a Step
 
   static const G4double faclow = 1.5 ;
 
-  // get particle and material pointers from trackData 
+  // get particle and material pointers from trackData
   const G4DynamicParticle* aParticle = trackData.GetDynamicParticle();
-  G4double E      = aParticle->GetKineticEnergy() ;
-  
-  G4Material* aMaterial = trackData.GetMaterial();
-  
+  G4double E      = aParticle->GetKineticEnergy();
+
+  const G4MaterialCutsCouple* couple = trackData.GetMaterialCutsCouple();
+
   G4double Step = stepData.GetStepLength();
 
-  aParticleChange.Initialize(trackData);  
-  //fParticleChange.Initialize(trackData);  
-  
-  G4double MeanLoss, finalT; 
+  aParticleChange.Initialize(trackData);
+  //fParticleChange.Initialize(trackData);
 
-  if (E < MinKineticEnergy)   finalT = 0.; 
-  
-  else if ( E< faclow*LowerBoundEloss)  
+  G4double MeanLoss, finalT;
+
+  if (E < MinKineticEnergy)   finalT = 0.;
+
+  else if ( E< faclow*LowerBoundEloss)
   {
-    if (Step >= fRangeNow)  finalT = 0.; 
+    if (Step >= fRangeNow)  finalT = 0.;
    //  else finalT = E*(1.-Step/fRangeNow) ;
     else finalT = E*(1.-sqrt(Step/fRangeNow)) ;
   }
-    
+
   else if (E>=UpperBoundEloss) finalT = E - Step*fdEdx;
-     
-  else if (Step >= fRangeNow)  finalT = 0.; 
-  
+
+  else if (Step >= fRangeNow)  finalT = 0.;
+
   else
   {
     if(Step/fRangeNow < linLossLimit) finalT = E-Step*fdEdx ;
     else
     {
       if (Charge<0.) finalT = G4EnergyLossTables::GetPreciseEnergyFromRange
-                             (G4Electron::Electron(),fRangeNow-Step,aMaterial);
+                             (G4Electron::Electron(),fRangeNow-Step,couple);
       else           finalT = G4EnergyLossTables::GetPreciseEnergyFromRange
-                             (G4Positron::Positron(),fRangeNow-Step,aMaterial);
+                             (G4Positron::Positron(),fRangeNow-Step,couple);
      }
   }
 
   if(finalT < MinKineticEnergy) finalT = 0. ;
 
-  MeanLoss = E-finalT ;  
-  
+  MeanLoss = E-finalT ;
+
   //now the loss with fluctuation
   if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowerBoundEloss))
   {
-    finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss,Step);
+    finalT = E-GetLossWithFluct(aParticle,couple,MeanLoss,Step);
     if (finalT < 0.) finalT = 0.;
   }
 
-  // kill the particle if the kinetic energy <= 0  
+  // kill the particle if the kinetic energy <= 0
   if (finalT <= 0. )
   {
     finalT = 0.;
-    aParticleChange.SetStatusChange(fStopAndKill); 
-  } 
+    aParticleChange.SetStatusChange(fStopAndKill);
+  }
 
   G4double edep = E - finalT;
 
-  aParticleChange.SetEnergyChange(finalT);  
-  
+  aParticleChange.SetEnergyChange(finalT);
+
   // Deexcitation of ionised atoms
   G4std::vector<G4DynamicParticle*>* deexcitationProducts = 0;
-  if (theFluo) deexcitationProducts = DeexciteAtom(aMaterial,E,edep);
+  if (theFluo) deexcitationProducts = DeexciteAtom(couple,E,edep);
 
-  size_t nSecondaries = 0;    
+  size_t nSecondaries = 0;
   if (deexcitationProducts != 0) nSecondaries = deexcitationProducts->size();
   aParticleChange.SetNumberOfSecondaries(nSecondaries);
-  
+
   if (nSecondaries > 0) {
 
     const G4StepPoint* preStep = stepData.GetPreStepPoint();
@@ -474,14 +478,14 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
     deltaT -= t;
     G4double time, q;
     G4ThreeVector position;
- 
+
     for (size_t i=0; i<nSecondaries; i++) {
 
-      G4DynamicParticle* part = (*deexcitationProducts)[i]; 
+      G4DynamicParticle* part = (*deexcitationProducts)[i];
       if (part != 0) {
         G4double eSecondary = part->GetKineticEnergy();
         edep -= eSecondary;
-	if (edep > 0.) 
+	if (edep > 0.)
 	  {
 	    q = G4UniformRand();
 	    time = deltaT*q + t;
@@ -498,14 +502,13 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
 	  }
       }
     }
-  } 
-  delete deexcitationProducts;   
-  
+  }
+  delete deexcitationProducts;
+
   aParticleChange.SetLocalEnergyDeposit(edep);
-  
+
   return &aParticleChange;
 }
 
-//    
-
+//
 

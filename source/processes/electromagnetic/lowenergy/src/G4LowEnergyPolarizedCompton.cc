@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.13 2002-06-02 21:27:52 pia Exp $
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.14 2003-01-22 18:47:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -44,12 +44,13 @@
 // 21 February 2002 - F.Longo Revisions with A.Zoglauer and G.Depaola
 //                            - better description of parallelism
 //                            - system of ref change method improved
+// 22 January  2003 - V.Ivanchenko Cut per region
 //
 //
 // ************************************************************
 //
 // Corrections by Rui Curado da Silva (2000)
-// New Implementation by G.Depaola & F.Longo      
+// New Implementation by G.Depaola & F.Longo
 //
 // - sampling of phi
 // - polarization of scattered photon
@@ -75,8 +76,7 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4VRangeTest.hh"
 #include "G4RangeTest.hh"
-
-#include "G4CutsPerMaterialWarning.hh"
+#include "G4MaterialCutsCouple.hh"
 
 // constructor
 
@@ -87,30 +87,30 @@ G4LowEnergyPolarizedCompton::G4LowEnergyPolarizedCompton(const G4String& process
     intrinsicLowEnergyLimit(10*eV),
     intrinsicHighEnergyLimit(100*GeV)
 {
-  if (lowEnergyLimit < intrinsicLowEnergyLimit || 
+  if (lowEnergyLimit < intrinsicLowEnergyLimit ||
       highEnergyLimit > intrinsicHighEnergyLimit)
     {
       G4Exception("G4LowEnergyPolarizedCompton::G4LowEnergyPolarizedCompton - energy outside intrinsic process validity range");
     }
-  
+
   crossSectionHandler = new G4CrossSectionHandler;
-  
-  
+
+
   G4VDataSetAlgorithm* scatterInterpolation = new G4LogLogInterpolation;
   G4String scatterFile = "comp/ce-sf-";
-  scatterFunctionData = new 
+  scatterFunctionData = new
     G4CompositeEMDataSet(scatterFile,scatterInterpolation,1.,1.);
-  
+
   meanFreePathTable = 0;
-  
+
   rangeTest = new G4RangeTest;
-  
-   if (verboseLevel > 0) 
+
+   if (verboseLevel > 0)
      {
        G4cout << GetProcessName() << " is created " << G4endl
-	      << "Energy range: " 
+	      << "Energy range: "
 	      << lowEnergyLimit / keV << " keV - "
-	      << highEnergyLimit / GeV << " GeV" 
+	      << highEnergyLimit / GeV << " GeV"
 	      << G4endl;
      }
 }
@@ -124,13 +124,10 @@ G4LowEnergyPolarizedCompton::~G4LowEnergyPolarizedCompton()
   delete scatterFunctionData;
   delete rangeTest;
 }
- 
+
 
 void G4LowEnergyPolarizedCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
 {
-  
-  G4CutsPerMaterialWarning warning;
-  warning.PrintWarning(&photon);
 
   crossSectionHandler->Clear();
   G4String crossSectionFile = "comp/ce-cs-";
@@ -157,19 +154,19 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
 
   //  gammaPolarization0 = gammaPolarization0.unit(); // 
 
-  // Protection: a polarisation parallel to the 
-  // direction causes problems; 
+  // Protection: a polarisation parallel to the
+  // direction causes problems;
   // in that case find a random polarization
-  
+
   G4ThreeVector gammaDirection0 = incidentPhoton->GetMomentumDirection();
   // ---- MGP ---- Next two lines commented out to remove compilation warnings
   // G4double scalarproduct = gammaPolarization0.dot(gammaDirection0);
   // G4double angle = gammaPolarization0.angle(gammaDirection0);
 
-  // Make sure that the polarization vector is perpendicular to the 
-  // gamma direction. If not 
-  
-  if(!(gammaPolarization0.isOrthogonal(gammaDirection0, 1e-6))||(gammaPolarization0.mag()==0)) 
+  // Make sure that the polarization vector is perpendicular to the
+  // gamma direction. If not
+
+  if(!(gammaPolarization0.isOrthogonal(gammaDirection0, 1e-6))||(gammaPolarization0.mag()==0))
     { // only for testing now
       gammaPolarization0 = GetRandomPolarization(gammaDirection0);
     }
@@ -184,7 +181,7 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
   // End of Protection
 
   // Within energy limit?
-  
+
   if(gammaEnergy0 <= lowEnergyLimit)
     {
       aParticleChange.SetStatusChange(fStopAndKill);
@@ -192,18 +189,18 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
       aParticleChange.SetLocalEnergyDeposit(gammaEnergy0);
       return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
     }
-  
+
   G4double E0_m = gammaEnergy0 / electron_mass_c2 ;
 
   // Select randomly one element in the current material
-  
-  G4Material* material = aTrack.GetMaterial();
-  G4int Z = crossSectionHandler->SelectRandomAtom(material,gammaEnergy0);
 
-  // Sample the energy and the polarization of the scattered photon 
-  
+  const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
+  G4int Z = crossSectionHandler->SelectRandomAtom(couple,gammaEnergy0);
+
+  // Sample the energy and the polarization of the scattered photon
+
   G4double epsilon, epsilonSq, onecost, sinThetaSqr, greject ;
-  
+
   G4double epsilon0 = 1./(1. + 2*E0_m);
   G4double epsilon0Sq = epsilon0*epsilon0;
   G4double alpha1   = - log(epsilon0);
@@ -212,10 +209,10 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
   G4double wlGamma = h_Planck*c_light/gammaEnergy0;
   G4double gammaEnergy1;
   G4ThreeVector gammaDirection1;
-  
+
   do {
     if ( alpha1/(alpha1+alpha2) > G4UniformRand() )
-      { 
+      {
 	epsilon   = exp(-alpha1*G4UniformRand());  
 	epsilonSq = epsilon*epsilon; 
       }
@@ -288,7 +285,7 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
 	<< " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
 	<< "cosTheta = " 
 	<< cosTheta
-	<< "; set to -1" 
+	<< "; set to -1"
 	<< G4endl;
       cosTheta = -1.;
     }
@@ -328,25 +325,25 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
   //
   // update G4VParticleChange for the scattered photon 
   //
-  
+
   gammaEnergy1 = epsilon*gammaEnergy0;
-      
+
   // New polarization
-  
+
   G4ThreeVector gammaPolarization1 = SetNewPolarization(epsilon,
 							sinThetaSqr,
 							phi,
 							cosTheta);
-  
-  // Set new direction 
+
+  // Set new direction
   G4ThreeVector tmpDirection1( dirx,diry,dirz );
   gammaDirection1 = tmpDirection1;
-      
+
   // Change reference frame.
-  
+
   SystemOfRefChange(gammaDirection0,gammaDirection1,
-		    gammaPolarization0,gammaPolarization1);   
-  
+		    gammaPolarization0,gammaPolarization1);
+
   if (gammaEnergy1 > 0.)
     {
       aParticleChange.SetEnergyChange( gammaEnergy1 ) ;
@@ -354,26 +351,26 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
       aParticleChange.SetPolarizationChange( gammaPolarization1 );
     }
   else
-    {    
+    {
       aParticleChange.SetEnergyChange(0.) ;
       aParticleChange.SetStatusChange(fStopAndKill);
     }
-  
+
   //
   // kinematic of the scattered electron
   //
-  
+
   G4double ElecKineEnergy = gammaEnergy0 - gammaEnergy1 ;
-  
+
   // Generate the electron only if with large enough range w.r.t. cuts and safety
-  
+
   G4double safety = aStep.GetPostStepPoint()->GetSafety();
-  
-  if (rangeTest->Escape(G4Electron::Electron(),material,ElecKineEnergy,safety))
+
+  if (rangeTest->Escape(G4Electron::Electron(),couple,ElecKineEnergy,safety))
     {
       G4double ElecMomentum = sqrt(ElecKineEnergy*(ElecKineEnergy+2.*electron_mass_c2));
-      G4ThreeVector ElecDirection((gammaEnergy0 * gammaDirection0 - 
-				   gammaEnergy1 * gammaDirection1) * (1./ElecMomentum));  
+      G4ThreeVector ElecDirection((gammaEnergy0 * gammaDirection0 -
+				   gammaEnergy1 * gammaDirection1) * (1./ElecMomentum));
       G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(),ElecDirection.unit(),ElecKineEnergy) ;
       aParticleChange.SetNumberOfSecondaries(1);
       aParticleChange.AddSecondary(electron);

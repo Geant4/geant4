@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.33 2001-11-07 20:47:29 pia Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.34 2003-01-22 18:47:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -33,8 +33,9 @@
 // Modified PostStepDoIt to insert sampling with EPDL97 data A. Forti
 // Added SelectRandomAtom A. Forti
 // Added map of the elements A. Forti
-// 24.04.2001 V.Ivanchenko - Remove RogueWave 
+// 24.04.2001 V.Ivanchenko - Remove RogueWave
 // 06.08.2001 MGP          - Revised according to a design iteration
+// 22.01.2003 V.Ivanchenko - Cut per region
 //
 // -------------------------------------------------------------------
 
@@ -84,16 +85,16 @@ G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
 
   rangeTest = new G4RangeTest;
 
-   if (verboseLevel > 0) 
+   if (verboseLevel > 0)
      {
        G4cout << GetProcessName() << " is created " << G4endl
-	      << "Energy range: " 
+	      << "Energy range: "
 	      << lowEnergyLimit / keV << " keV - "
-	      << highEnergyLimit / GeV << " GeV" 
+	      << highEnergyLimit / GeV << " GeV"
 	      << G4endl;
      }
 }
- 
+
 G4LowEnergyCompton::~G4LowEnergyCompton()
 {
   delete meanFreePathTable;
@@ -104,7 +105,7 @@ G4LowEnergyCompton::~G4LowEnergyCompton()
 
 void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
 {
-  
+
   G4CutsPerMaterialWarning warning;
   warning.PrintWarning(&photon);
 
@@ -116,26 +117,26 @@ void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
   meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
 }
 
-G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, 
+G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
 						    const G4Step&  aStep)
 {
   // The scattered gamma energy is sampled according to Klein - Nishina formula.
-  // then accepted or rejected depending on the Scattering Function multiplied 
-  // by factor from Klein - Nishina formula. 
-  // Expression of the angular distribution as Klein Nishina 
+  // then accepted or rejected depending on the Scattering Function multiplied
+  // by factor from Klein - Nishina formula.
+  // Expression of the angular distribution as Klein Nishina
   // angular and energy distribution and Scattering fuctions is taken from
-  // D. E. Cullen "A simple model of photon transport" Nucl. Instr. Meth. 
-  // Phys. Res. B 101 (1995). Method of sampling with form factors is different 
+  // D. E. Cullen "A simple model of photon transport" Nucl. Instr. Meth.
+  // Phys. Res. B 101 (1995). Method of sampling with form factors is different
   // data are interpolated while in the article they are fitted.
   // Reference to the article is from J. Stepanek New Photon, Positron
   // and Electron Interaction Data for GEANT in Energy Range from 1 eV to 10
-  // TeV (draft). 
-  // The random number techniques of Butcher & Messel are used 
+  // TeV (draft).
+  // The random number techniques of Butcher & Messel are used
   // (Nucl Phys 20(1960),15).
 
   aParticleChange.Initialize(aTrack);
-  
-  // Dynamic particle quantities  
+
+  // Dynamic particle quantities
   const G4DynamicParticle* incidentPhoton = aTrack.GetDynamicParticle();
   G4double photonEnergy0 = incidentPhoton->GetKineticEnergy();
 
@@ -151,8 +152,8 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
   G4ParticleMomentum photonDirection0 = incidentPhoton->GetMomentumDirection();
 
   // Select randomly one element in the current material
-  G4Material* material = aTrack.GetMaterial();
-  G4int Z = crossSectionHandler->SelectRandomAtom(material,photonEnergy0);
+  const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
+  G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy0);
 
   G4double epsilon0 = 1. / (1. + 2. * e0m);
   G4double epsilon0Sq = epsilon0 * epsilon0;
@@ -160,8 +161,8 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
   G4double alpha2 = 0.5 * (1. - epsilon0Sq);
 
   G4double wlPhoton = h_Planck*c_light/photonEnergy0;
-  
-  // Sample the energy of the scattered photon 
+
+  // Sample the energy of the scattered photon
   G4double epsilon;
   G4double epsilonSq;
   G4double oneCosT;
@@ -172,20 +173,20 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
       if ( alpha1/(alpha1+alpha2) > G4UniformRand())
 	{
 	  epsilon = exp(-alpha1 * G4UniformRand());  // pow(epsilon0,G4UniformRand())
-	  epsilonSq = epsilon * epsilon; 
+	  epsilonSq = epsilon * epsilon;
 	}
       else
 	{
 	  epsilonSq = epsilon0Sq + (1. - epsilon0Sq) * G4UniformRand();
 	  epsilon = sqrt(epsilonSq);
 	}
-      
+
       oneCosT = (1. - epsilon) / ( epsilon * e0m);
-      sinT2 = oneCosT * (2. - oneCosT);      
+      sinT2 = oneCosT * (2. - oneCosT);
       G4double x = sqrt(oneCosT/2.) / (wlPhoton/cm);
       G4double scatteringFunction = scatterFunctionData->FindValue(x,Z-1);
       gReject = (1. - epsilon * sinT2 / (1. + epsilonSq)) * scatteringFunction;
-    
+
     }  while(gReject < G4UniformRand()*Z);
 
   G4double cosTheta = 1. - oneCosT;
@@ -195,8 +196,8 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
   G4double diry = sinTheta * sin(phi);
   G4double dirz = cosTheta ;
 
-  // Update G4VParticleChange for the scattered photon 
-  
+  // Update G4VParticleChange for the scattered photon
+
   G4ThreeVector photonDirection1(dirx,diry,dirz);
   photonDirection1.rotateUz(photonDirection0);
   aParticleChange.SetMomentumChange(photonDirection1) ;
@@ -207,28 +208,28 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
       aParticleChange.SetEnergyChange(photonEnergy1) ;
     }
   else
-    {    
+    {
       aParticleChange.SetEnergyChange(0.) ;
       aParticleChange.SetStatusChange(fStopAndKill);
     }
-  
-  // Kinematics of the scattered electron 
+
+  // Kinematics of the scattered electron
   G4double eKineticEnergy = photonEnergy0 - photonEnergy1;
 
   // Generate the electron only if with large enough range w.r.t. cuts and safety
 
   G4double safety = aStep.GetPostStepPoint()->GetSafety();
 
-  if (rangeTest->Escape(G4Electron::Electron(),material,eKineticEnergy,safety))
+  if (rangeTest->Escape(G4Electron::Electron(),couple,eKineticEnergy,safety))
     {
       G4double eMomentum = sqrt(eKineticEnergy*(eKineticEnergy+2.*electron_mass_c2));
-      G4ThreeVector eDirection((photonEnergy0 * photonDirection0 - 
-				photonEnergy1 * photonDirection1) * (1./eMomentum));  
+      G4ThreeVector eDirection((photonEnergy0 * photonDirection0 -
+				photonEnergy1 * photonDirection1) * (1./eMomentum));
       G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(),
 							   eDirection,eKineticEnergy) ;
       aParticleChange.SetNumberOfSecondaries(1);
       aParticleChange.AddSecondary(electron);
-      aParticleChange.SetLocalEnergyDeposit(0.); 
+      aParticleChange.SetLocalEnergyDeposit(0.);
     }
   else
     {

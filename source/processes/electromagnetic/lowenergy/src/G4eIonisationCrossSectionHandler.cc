@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationCrossSectionHandler.cc,v 1.8 2002-07-19 17:32:50 vnivanch Exp $
+// $Id: G4eIonisationCrossSectionHandler.cc,v 1.9 2003-01-22 18:47:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,8 +35,9 @@
 // Creation date: 25 Sept 2001
 //
 // Modifications: 
-// 10 Oct 2001  M.G. Pia    Revision to improve code quality and consistency with design
-// 19 Jul 2002   VI         Create composite data set for material
+// 10 Oct 2001  M.G. Pia     Revision to improve code quality and consistency with design
+// 19 Jul 2002   VI          Create composite data set for material
+// 21 Jan 2003  V.Ivanchenko Cut per region
 //
 // -------------------------------------------------------------------
 
@@ -50,11 +51,11 @@
 #include "G4VEMDataSet.hh"
 #include "G4EMDataSet.hh"
 #include "G4Material.hh"
-#include "G4MaterialTable.hh"
+#include "G4ProductionCutsTable.hh"
 
 
 G4eIonisationCrossSectionHandler::G4eIonisationCrossSectionHandler(
-    const G4VEnergySpectrum* spec, G4VDataSetAlgorithm* alg, 
+    const G4VEnergySpectrum* spec, G4VDataSetAlgorithm* alg,
     G4double emin, G4double emax, G4int nbin)
  :  G4VCrossSectionHandler(),
     theParam(spec)
@@ -64,15 +65,15 @@ G4eIonisationCrossSectionHandler::G4eIonisationCrossSectionHandler(
 }
 
 
-G4eIonisationCrossSectionHandler::~G4eIonisationCrossSectionHandler() 
+G4eIonisationCrossSectionHandler::~G4eIonisationCrossSectionHandler()
 {
   delete interp;
 }
 
 
 G4std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSectionsForMaterials(
-											       const G4DataVector& energyVector, 
-											       const G4DataVector* energyCuts)
+                        const G4DataVector& energyVector,
+                        const G4DataVector* energyCuts)
 {
   G4int verbose = 0;
   G4std::vector<G4VEMDataSet*>* set = new G4std::vector<G4VEMDataSet*>;
@@ -81,33 +82,31 @@ G4std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSectio
   G4DataVector* cs;
   G4int nOfBins = energyVector.size();
 
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  if (materialTable == 0)
-    G4Exception("G4VCrossSectionHandler::G4VCrossSectionHandler - no MaterialTable found)");
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+  size_t numOfCouples = theCoupleTable->GetTableSize();
 
-  G4int nMaterials = G4Material::GetNumberOfMaterials();
+  for (size_t m=0; m<numOfCouples; m++) {
 
-  for (G4int m=0; m<nMaterials; m++) {
-
-    const G4Material* material = (*materialTable)[m];
+    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(m);
+    const G4Material* material= couple->GetMaterial();
     const G4ElementVector* elementVector = material->GetElementVector();
-    //const G4double* nAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();
     const G4double* nAtomsPerVolume = material->GetAtomicNumDensityVector();
     G4int nElements = material->GetNumberOfElements();
 
     if(verbose > 0) {
-      G4cout << "eIonisation CS for " << m << "th material " 
-             << material->GetName() 
-             << "  eEl= " << nElements << G4endl; 
+      G4cout << "eIonisation CS for " << m << "th material "
+             << material->GetName()
+             << "  eEl= " << nElements << G4endl;
     }
 
     G4double tcut  = (*energyCuts)[m];
-    
+
     G4VDataSetAlgorithm* algo = interp->Clone();
     G4VEMDataSet* setForMat = new G4CompositeEMDataSet(algo,1.,1.);
 
     for (G4int i=0; i<nElements; i++) {
- 
+
       G4int Z = (G4int) (*elementVector)[i]->GetZ();
       G4int nShells = NumberOfComponents(Z);
       energies = new G4DataVector;
@@ -123,10 +122,10 @@ G4std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSectio
         if(e > tcut) {
           for (G4int n=0; n<nShells; n++) {
             G4double cross = FindValue(Z, e, n);
-            G4double p = theParam->Probability(Z, tcut, e, e, n);  
+            G4double p = theParam->Probability(Z, tcut, e, e, n);
             value += cross * p * density;
-	    
-            if(verbose>0 && m == 0 && e>=1. && e<=0.) {	    
+
+            if(verbose>0 && m == 0 && e>=1. && e<=0.) {
               G4cout << "G4eIonCrossSH: e(MeV)= " << e/MeV
                      << " n= " << n
                      << " cross= " << cross
@@ -137,18 +136,18 @@ G4std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSectio
                      << " Z= " << Z
                      << G4endl;
 	    }
-	    
+
 	  }
 	}
         cs->push_back(value);
-      } 
+      }
       G4VDataSetAlgorithm* algo = interp->Clone();
       G4VEMDataSet* elSet = new G4EMDataSet(i,energies,cs,algo,1.,1.);
       setForMat->AddComponent(elSet);
     }
     set->push_back(setForMat);
   }
- 
+
   return set;
 }
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.55 2002-07-30 18:14:36 vnivanch Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.56 2003-01-22 18:47:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -28,7 +28,7 @@
 // File name:     G4LowEnergyBremsstrahlung
 //
 // Author:        Alessandra Forti, Vladimir Ivanchenko
-// 
+//
 // Creation date: March 1999
 //
 // Modifications:
@@ -51,6 +51,7 @@
 // 28.10.2001 VI  Update printout
 // 29.11.2001 VI  New parametrisation
 // 30.07.2002 VI  Fix in restricted energy loss
+// 21.01.2003 VI  Cut per region
 //
 // --------------------------------------------------------------
 
@@ -64,11 +65,11 @@
 #include "G4UnitsTable.hh"
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
+#include "G4ProductionCutsTable.hh"
 
-#include "G4CutsPerMaterialWarning.hh"
 
 G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& nam)
-  : G4eLowEnergyLoss(nam), 
+  : G4eLowEnergyLoss(nam),
   crossSectionHandler(0),
   theMeanFreePath(0),
   energySpectrum(0)
@@ -92,9 +93,6 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
     G4cout << "G4LowEnergyBremsstrahlung::BuildPhysicsTable start"
            << G4endl;
       }
-  
-  G4CutsPerMaterialWarning warning;
-  warning.PrintWarning(&aParticleType);
 
   cutForSecondaryPhotons.clear();
 
@@ -161,7 +159,7 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
       }
 
   // Build common DEDX table for all ionisation processes
- 
+
   BuildDEDXTable(aParticleType);
 
   if(verboseLevel > 0) {
@@ -187,50 +185,52 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
       theLossTable->clearAndDestroy();
       delete theLossTable;
   }
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  const size_t numOfMaterials = G4Material::GetNumberOfMaterials();
-  theLossTable = new G4PhysicsTable(numOfMaterials);
-  
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+  size_t numOfCouples = theCoupleTable->GetTableSize();
+  theLossTable = new G4PhysicsTable(numOfCouples);
+
   // Clean up the vector of cuts
   cutForSecondaryPhotons.clear();
 
   // Loop for materials
-  
-  for (size_t j=0; j<numOfMaterials; j++) {
-    
+
+  for (size_t j=0; j<numOfCouples; j++) {
+
     // create physics vector and fill it
     G4PhysicsLogVector* aVector = new G4PhysicsLogVector(lowKineticEnergy,
 		        				 highKineticEnergy,
 							 totBin);
 
     // get material parameters needed for the energy loss calculation
-    const G4Material* material= (*theMaterialTable)[j];
+    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(j);
+    const G4Material* material= couple->GetMaterial();
 
     // the cut cannot be below lowest limit
-    G4double tCut = G4std::min(highKineticEnergy,
-			       ((G4Gamma::Gamma())->GetEnergyThreshold(material)));
+    G4double tCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[j];
+    tCut = G4std::min(highKineticEnergy, tCut);
     cutForSecondaryPhotons.push_back(tCut);
 
     const G4ElementVector* theElementVector = material->GetElementVector();
     size_t NumberOfElements = material->GetNumberOfElements() ;
-    const G4double* theAtomicNumDensityVector = 
+    const G4double* theAtomicNumDensityVector =
       material->GetAtomicNumDensityVector();
     if(verboseLevel > 1) {
       G4cout << "Energy loss for material # " << j
              << " tCut(keV)= " << tCut/keV
              << G4endl;
       }
-      
+
     // now comes the loop for the kinetic energy values
     for (size_t i = 0; i<totBin; i++) {
 
       G4double lowEdgeEnergy = aVector->GetLowEdgeEnergy(i);
-      G4double ionloss = 0.;    
-      
+      G4double ionloss = 0.;
+
       // loop for elements in the material
       for (size_t iel=0; iel<NumberOfElements; iel++ ) {
         G4int Z = (G4int)((*theElementVector)[iel]->GetZ());
-        G4double e = energySpectrum->AverageEnergy(Z, 0.0, tCut, lowEdgeEnergy); 
+        G4double e = energySpectrum->AverageEnergy(Z, 0.0, tCut, lowEdgeEnergy);
         G4double cs= crossSectionHandler->FindValue(Z, lowEdgeEnergy);
         ionloss   += e * cs  * theAtomicNumDensityVector[iel];
         if(verboseLevel > 1) {
@@ -242,7 +242,7 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
 		 << "; loss= " << ionloss
                  << G4endl;
         }
-      }	
+      }
       aVector->PutValue(i,ionloss);
     }
     theLossTable->insert(aVector);
@@ -255,38 +255,38 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& track,
 {
   aParticleChange.Initialize(track);
 
-  const G4Material* material = track.GetMaterial();
+  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
   G4double kineticEnergy = track.GetKineticEnergy();
-  G4int index = material->GetIndex();
+  G4int index = couple->GetIndex();
   G4double tCut = cutForSecondaryPhotons[index];
 
   // Control limits
-  if(tCut >= kineticEnergy) 
+  if(tCut >= kineticEnergy)
      return G4VContinuousDiscreteProcess::PostStepDoIt(track, step);
 
-  G4int Z = crossSectionHandler->SelectRandomAtom(material, kineticEnergy);
+  G4int Z = crossSectionHandler->SelectRandomAtom(couple, kineticEnergy);
 
   G4double tGamma = energySpectrum->SampleEnergy(Z, tCut, kineticEnergy, kineticEnergy);
 
   // Sample gamma angle (Z - axis along the parent particle).
-  // Universal distribution suggested by L. Urban (Geant3 manual (1993) 
+  // Universal distribution suggested by L. Urban (Geant3 manual (1993)
   // Phys211) derived from Tsai distribution (Rev Mod Phys 49,421(1977))
 
-  G4double totalEnergy = kineticEnergy + electron_mass_c2;   
+  G4double totalEnergy = kineticEnergy + electron_mass_c2;
 
   const G4double a1 = 0.625, a2 = 3.*a1, d = 27.;
   G4double u = - log(G4UniformRand()*G4UniformRand());
 
   if (9./(9.+d) > G4UniformRand()) u /= a1;
   else                             u /= a2;
-    
+
   G4double theta = u*electron_mass_c2/totalEnergy;
   G4double phi   = twopi * G4UniformRand();
   G4double dirZ  = cos(theta);
   G4double sinTheta  = sqrt(1. - dirZ*dirZ);
   G4double dirX  = sinTheta*cos(phi);
-  G4double dirY  = sinTheta*sin(phi); 
-    
+  G4double dirY  = sinTheta*sin(phi);
+
   G4ThreeVector gammaDirection (dirX, dirY, dirZ);
   G4ThreeVector electronDirection = track.GetMomentumDirection();
     
@@ -318,7 +318,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& track,
   // create G4DynamicParticle object for the gamma 
   G4DynamicParticle* aGamma= new G4DynamicParticle (G4Gamma::Gamma(),
 						    gammaDirection, tGamma);
-  aParticleChange.AddSecondary(aGamma); 
+  aParticleChange.AddSecondary(aGamma);
 
   return G4VContinuousDiscreteProcess::PostStepDoIt(track, step);
 }
@@ -347,11 +347,11 @@ G4double G4LowEnergyBremsstrahlung::GetMeanFreePath(const G4Track& track,
 						    G4ForceCondition* cond)
 {
   *cond = NotForced;
-  G4int index = (track.GetMaterial())->GetIndex();
+  G4int index = (track.GetMaterialCutsCouple())->GetIndex();
   const G4VEMDataSet* data = theMeanFreePath->GetComponent(index);
   G4double meanFreePath = data->FindValue(track.GetKineticEnergy());
-  return meanFreePath; 
-} 
+  return meanFreePath;
+}
 
 void G4LowEnergyBremsstrahlung::SetCutForLowEnSecPhotons(G4double cut)
 {

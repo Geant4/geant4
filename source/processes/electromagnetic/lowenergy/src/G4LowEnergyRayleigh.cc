@@ -22,24 +22,25 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.30 2002-11-08 07:59:05 flongo Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.31 2003-01-22 18:47:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
-// -------- 
+// --------
 // Added Livermore data table construction methods A. Forti
 // Added BuildMeanFreePath A. Forti
 // Added PostStepDoIt A. Forti
 // Added SelectRandomAtom A. Forti
 // Added map of the elements  A.Forti
-// 24.04.01 V.Ivanchenko remove RogueWave 
+// 24.04.01 V.Ivanchenko remove RogueWave
 // 11.08.2001 MGP - Major revision according to a design iteration
 // 06.10.2001 MGP - Added strategy to test range for secondary generation
 // 05.06.2002 F.Longo and G.Depaola  - bug fixed in angular distribution
 // 20.10.2002 G. Depaola - Change sampling method of theta
+// 22.01.2003 V.Ivanchenko Cut per region
 //
 // --------------------------------------------------------------------
 
@@ -61,21 +62,21 @@
 #include "G4VDataSetAlgorithm.hh"
 #include "G4LogLogInterpolation.hh"
 
-#include "G4CutsPerMaterialWarning.hh"
+#include "G4MaterialCutsCouple.hh"
 
 G4LowEnergyRayleigh::G4LowEnergyRayleigh(const G4String& processName)
   : G4VDiscreteProcess(processName),
-    lowEnergyLimit(250*eV),             
+    lowEnergyLimit(250*eV),
     highEnergyLimit(100*GeV),
     intrinsicLowEnergyLimit(10*eV),
     intrinsicHighEnergyLimit(100*GeV)
 {
-  if (lowEnergyLimit < intrinsicLowEnergyLimit || 
+  if (lowEnergyLimit < intrinsicLowEnergyLimit ||
       highEnergyLimit > intrinsicHighEnergyLimit)
     {
       G4Exception("G4LowEnergyRayleigh::G4LowEnergyRayleigh - energy limit outside intrinsic process validity range");
     }
-  
+
   crossSectionHandler = new G4CrossSectionHandler();
 
   G4VDataSetAlgorithm* ffInterpolation = new G4LogLogInterpolation;
@@ -84,16 +85,16 @@ G4LowEnergyRayleigh::G4LowEnergyRayleigh(const G4String& processName)
 
   meanFreePathTable = 0;
 
-   if (verboseLevel > 0) 
+   if (verboseLevel > 0)
      {
        G4cout << GetProcessName() << " is created " << G4endl
-	      << "Energy range: " 
+	      << "Energy range: "
 	      << lowEnergyLimit / keV << " keV - "
-	      << highEnergyLimit / GeV << " GeV" 
+	      << highEnergyLimit / GeV << " GeV"
 	      << G4endl;
      }
 }
- 
+
 G4LowEnergyRayleigh::~G4LowEnergyRayleigh()
 {
   delete meanFreePathTable;
@@ -103,9 +104,6 @@ G4LowEnergyRayleigh::~G4LowEnergyRayleigh()
 
 void G4LowEnergyRayleigh::BuildPhysicsTable(const G4ParticleDefinition& photon)
 {
-  
-  G4CutsPerMaterialWarning warning;
-  warning.PrintWarning(&photon);
 
   crossSectionHandler->Clear();
   G4String crossSectionFile = "rayl/re-cs-";
@@ -115,7 +113,7 @@ void G4LowEnergyRayleigh::BuildPhysicsTable(const G4ParticleDefinition& photon)
   meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
 }
 
-G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, 
+G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack,
 						     const G4Step& aStep)
 {
 
@@ -123,7 +121,7 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack,
 
   const G4DynamicParticle* incidentPhoton = aTrack.GetDynamicParticle();
   G4double photonEnergy0 = incidentPhoton->GetKineticEnergy();
-  
+
   if (photonEnergy0 <= lowEnergyLimit)
     {
       aParticleChange.SetStatusChange(fStopAndKill);
@@ -136,10 +134,10 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack,
   G4ParticleMomentum photonDirection0 = incidentPhoton->GetMomentumDirection();
 
   // Select randomly one element in the current material
-  G4Material* material = aTrack.GetMaterial();
-  G4int Z = crossSectionHandler->SelectRandomAtom(material,photonEnergy0);
-  
-  // Sample the angle of the scattered photon 
+  const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
+  G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy0);
+
+  // Sample the angle of the scattered photon
 
   G4double wlPhoton = h_Planck*c_light/photonEnergy0;
 
@@ -159,14 +157,14 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack,
 
       G4double sinThetaHalf = sqrt((1. - cosTheta) / 2.);
       x = sinThetaHalf / (wlPhoton/cm);
-      if (x > 1.e+005) 
+      if (x > 1.e+005)
          dataFormFactor = formFactorData->FindValue(x,Z-1);
       else
          dataFormFactor = formFactorData->FindValue(0.,Z-1);
       randomFormFactor = G4UniformRand() * Z * Z;
       sinTheta = sqrt(1. - cosTheta*cosTheta);
       gReject = dataFormFactor * dataFormFactor;
-      
+
     } while( gReject < randomFormFactor);
 
   // Scattered photon angles. ( Z - axis along the parent photon)
@@ -174,14 +172,14 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack,
   G4double dirX = sinTheta*cos(phi);
   G4double dirY = sinTheta*sin(phi);
   G4double dirZ = cosTheta;
-  
-  // Update G4VParticleChange for the scattered photon 
+
+  // Update G4VParticleChange for the scattered photon
   G4ThreeVector photonDirection1(dirX, dirY, dirZ);
 
   photonDirection1.rotateUz(photonDirection0);
   aParticleChange.SetEnergyChange(photonEnergy0);
   aParticleChange.SetMomentumChange(photonDirection1);
-  
+
   aParticleChange.SetNumberOfSecondaries(0);
 
   return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
