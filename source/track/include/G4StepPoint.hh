@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.hh,v 1.11 2003-05-06 22:53:57 asaim Exp $
+// $Id: G4StepPoint.hh,v 1.12 2003-05-07 20:08:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -124,10 +124,6 @@ class G4StepPoint
      // Gamma factor (1/sqrt[1-beta*beta]) of the track    
 
   G4VPhysicalVolume* GetPhysicalVolume() const;
-
-  G4int GetCopyNumber(G4int depth=0) const;
-     // Return the copy (replica) number.
-     // Depth = 0 means the current volume, depth = 1 means its mother, and so on.
 
   const G4VTouchable* GetTouchable() const;
   const G4TouchableHandle& GetTouchableHandle() const;
