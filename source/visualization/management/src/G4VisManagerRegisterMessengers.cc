@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.16 2000-05-15 11:19:08 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.17 2000-05-15 11:49:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -113,7 +113,7 @@ The G4VisManager has a list of scenes.
   Adds to current scene.
 
 /vis/scene/add/volume [<physical-volume-name>] [<copy-no>] [<depth>]
-  default:               <world-volume-name>        0         -1
+  default:                     world                0         -1
   Adds to current scene.
 
 /vis/scene/include/hits [<sensitive-volume-name>]
@@ -437,7 +437,7 @@ Compound Commands
 
 * /vis/draw <physical-volume-name> but this clashes with old /vis~/draw/, so...
 /vis/drawVolume <physical-volume-name> /vis/scene/create
-                                       /vis/scene/add/volume $1
+Default:             world             /vis/scene/add/volume $1
                                        /vis/sceneHandler/attach
                                        /vis/viewer/refresh
                                        /vis/viewer/show
