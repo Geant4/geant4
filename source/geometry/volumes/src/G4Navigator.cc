@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.22 2001-12-11 15:58:44 japost Exp $
+// $Id: G4Navigator.cc,v 1.23 2001-12-11 17:46:49 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
@@ -910,14 +910,14 @@ void G4Navigator::LocateGlobalPointWithinVolume(const  G4ThreeVector& pGlobalpoi
      //   - which would have been affected
      //      by the 'equivalent' call to LocateGlobalPointAndSetup
      //   - who's values have been invalidated by the 'move'.
-     fWasLimitedByGeometry= false;
-     fBlockedPhysicalVolume=0; 
-     fBlockedReplicaNo= -1;
+     //fWasLimitedByGeometry= false;
+     //fBlockedPhysicalVolume=0; 
+     //fBlockedReplicaNo= -1;
 
-     fEntering=false;
-     fEnteredDaughter=false;  // Boundary not encountered, did not enter
-     fExiting=false;
-     fExitedMother=false;     // Boundary not encountered, did not exit
+     //fEntering=false;
+     //fEnteredDaughter=false;  // Boundary not encountered, did not enter
+     //fExiting=false;
+     //fExitedMother=false;     // Boundary not encountered, did not exit
 #if 0
    else
      {
