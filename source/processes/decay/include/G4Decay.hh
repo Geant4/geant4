@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.hh,v 1.7 2001-07-11 10:02:27 gunter Exp $
+// $Id: G4Decay.hh,v 1.8 2002-02-12 02:14:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,6 +40,7 @@
 //   added aPhysicsTable          2  Aug. 1998 H.Kurashige
 //   PreAssignedDecayTime         18 Jan. 2001 H.Kurashige
 //   Add External Decayer         23 Feb. 2001  H.Kurashige
+//   Remove PhysicsTable          12 Feb. 2002 H.Kurashige
 //
 #ifndef G4Decay_h
 #define G4Decay_h 1
@@ -146,17 +147,8 @@ class G4Decay : public G4VRestDiscreteProcess
      //  2: More
 
   private:
-    // In G4Decay, thePhysicsTable stores values of
-    //    beta * sqrt( 1 - beta*beta) 
-    //  as a function of normalized kinetic enregy (=Ekin/mass)
-    // TotBin = number of bins in thePhysicsTable
-    // The PhysicsTable is created for the range of  
-    // from LowestBinValue to HighestBinValue.
-    const G4double LowestBinValue;
-    const G4double HighestBinValue;
-    const G4int    TotBin;
-    
-    G4PhysicsTable* aPhysicsTable;
+    // HighestValue.
+    const G4double HighestValue;
  
     // Remainder of life time at rest
     G4double                 fRemainderLifeTime;

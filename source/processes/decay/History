@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2002-02-09 04:28:24 kurasige Exp $
+$Id: History,v 1.10 2002-02-12 02:14:03 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+-  Feb 12, 02 H.Kurashige(decay-V04-00-01)
+-  Remove physics table
+
 -  Feb 9, 02 H.Kurashige(decay-V04-00-00)
 -   Modify Lowest/HighestBinEnergy for physics table
      to calculate beta for slow particle 
