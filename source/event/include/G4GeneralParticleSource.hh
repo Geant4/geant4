@@ -145,7 +145,7 @@
 //
 #include "G4GeneralParticleSourceMessenger.hh"
 
-class G4GeneralParticleSource
+class G4GeneralParticleSource : public G4VPrimaryGenerator
 {
   //
 public:

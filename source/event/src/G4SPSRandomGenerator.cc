@@ -605,7 +605,7 @@ G4double G4SPSRandomGenerator::GenRandPosTheta()
 	  // IPDF has not been created, so create it
 	  G4double bins[1024],vals[1024], sum;
 	  G4int ii;
-	  G4int maxbin = G4int(ThetaBiasH.GetVectorLength());
+	  G4int maxbin = G4int(PosThetaBiasH.GetVectorLength());
 	  bins[0] = PosThetaBiasH.GetLowEdgeEnergy(size_t(0));
 	  vals[0] = PosThetaBiasH(size_t(0));
 	  sum = vals[0];
@@ -706,7 +706,7 @@ G4double G4SPSRandomGenerator::GenRandPosPhi()
       G4double NatProb = xaxisu - xaxisl;
       bweights[7] = NatProb/bweights[7];
       if(verbosityLevel >= 1)
-	G4cout << "PosPhi bin weight " << bweights[4] << " " << rndm << G4endl;
+	G4cout << "PosPhi bin weight " << bweights[7] << " " << rndm << G4endl;
       return(IPDFPosPhiBiasH.GetEnergy(rndm));
     }
 }
