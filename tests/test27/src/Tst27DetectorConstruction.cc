@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst27DetectorConstruction.cc,v 1.2 2003-12-04 15:37:16 gunter Exp $
+// $Id: Tst27DetectorConstruction.cc,v 1.3 2003-12-05 11:42:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,7 +41,7 @@
 #include "G4ios.hh"
 
 Tst27DetectorConstruction::Tst27DetectorConstruction()
-:simpleBoxLog(NULL),theH(NULL),theSi(NULL),theCu(NULL),theU(NULL),selectedMaterial(NULL)
+:simpleBoxLog(0),theH(0),theSi(0),theCu(0),thePb(0),theU(0),selectedMaterial(0)
 {
   detectorMessenger = new Tst27DetectorMessenger(this);
   materialChoice = "Pb";
@@ -90,6 +90,13 @@ void Tst27DetectorConstruction::SelectMaterialPointer()
     theCu = new G4Material(name="Copper", z=29., a, density);
   }
 
+  if(!thePb)
+  {
+    a = 207.2*g/mole;
+    density = 11.35*g/cm3;
+    thePb = new G4Material(name="Lead", z=82., a, density);
+  }
+
   if(!theU)
   {
     a = 238.0289*g/mole;
@@ -103,6 +110,8 @@ void Tst27DetectorConstruction::SelectMaterialPointer()
   { selectedMaterial = theSi; }
   else if(materialChoice=="Cu")
   { selectedMaterial = theCu; }
+  else if(materialChoice=="Pb")
+  { selectedMaterial = thePb; }
   else
   { selectedMaterial = theU; }
 
