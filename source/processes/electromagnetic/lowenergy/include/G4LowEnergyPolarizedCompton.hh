@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.hh,v 1.7 2001-10-24 09:07:20 flongo Exp $
+// $Id: G4LowEnergyPolarizedCompton.hh,v 1.8 2002-05-31 18:11:45 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -36,6 +36,11 @@
 // 25 May 2001 - MGP      Added protections to avoid crashes
 //
 // 17 October 2001 - F.Longo  Major revision according to design iteration
+//
+// 21 February 2002 - F.Longo Revisions with A.Zoglauer and G.Depaola
+//                            - better description of parallelism
+//                            - system of ref change method improved
+//
 //
 // Class description:
 // Low Energy electromagnetic process, Polarised Compton scattering
@@ -100,18 +105,15 @@ private:
   G4VCrossSectionHandler* crossSectionHandler;
   G4VRangeTest* rangeTest;
 
-
-  
-  
   const G4double intrinsicLowEnergyLimit; // intrinsic validity range
   const G4double intrinsicHighEnergyLimit;
 
   // specific methods for polarization 
   
-  G4ThreeVector SetRandomPolarization(G4ThreeVector& direction0); // Random Polarization
+  G4ThreeVector GetRandomPolarization(G4ThreeVector& direction0); // Random Polarization
+  G4ThreeVector GetPerpendicularPolarization(const G4ThreeVector& direction0, const G4ThreeVector& polarization0) const;
   
   G4ThreeVector SetPerpendicularVector(G4ThreeVector& a); // temporary
-  
   G4ThreeVector SetNewPolarization(G4double epsilon, G4double sinSqrTheta, 
 				   G4double phi, G4double cosTheta);
   G4double SetPhi(G4double, G4double);
