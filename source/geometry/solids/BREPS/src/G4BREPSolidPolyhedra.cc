@@ -5,8 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.6 1999-01-27 16:15:11 broglia Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.7 1999-05-12 13:53:59 sgiani Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Corrections by S.Giani:
+// - Xaxis now corresponds to phi=0
+// - partial angle = phiTotal / Nsides
+// - end planes exact boundary calculation for phiTotal < 2pi 
+//   (also including case with RMIN=RMAX) 
+// - Xaxis now properly rotated to compute correct scope of vertixes
+// - corrected surface orientation for outer faces parallel to Z
+// - completed explicit setting of the orientation for all faces
+// - some comparison between doubles avoided by using tolerances. 
 //
 // 
 // The polygonal solid G4BREPSolidPolyhedra is a shape defined by an inner 
@@ -34,7 +44,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(G4String name,
 {
   const int sections= num_z_planes - 1;
   
-  if(dphi == 2*pi)
+  if(dphi >= 2*pi-perMillion)
     nb_of_surfaces = 2*(sections * sides) + 2;
   else
     nb_of_surfaces = 2*(sections * sides) + 4;
@@ -43,13 +53,13 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(G4String name,
   SurfaceVec = new G4Surface*[nb_of_surfaces];
   
   G4Vector3D Axis(0,0,1);
-  G4Vector3D YAxis(0,1,0);
+  G4Vector3D XAxis(1,0,0);
   G4Vector3D TmpAxis;
   G4Point3D  Origin(0,0,z_start);    
   G4Point3D  LocalOrigin(0,0,z_start);    
   G4double   Length;
   G4int      Count     = 0 ;
-  G4double   PartAngle = (dphi - phi1)/sides;
+  G4double   PartAngle = (dphi)/sides;
 
 
   ///////////////////////////////////////////////////
@@ -57,7 +67,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(G4String name,
 
   for(G4int a=0;a<sections;a++)
   {
-    TmpAxis= YAxis;
+    TmpAxis= XAxis;
     TmpAxis.rotateZ(phi1);
     Length = z_values[a+1] - z_values[a];
 
@@ -77,11 +87,9 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(G4String name,
       TmpAxis.rotateZ(PartAngle);
       PointList[2] = LocalOrigin + (Length*Axis) + (RMIN[a+1] * TmpAxis);
       PointList[1] = LocalOrigin + (RMIN[a] * TmpAxis);   
-	  
-      SurfaceVec[Count] = new G4FPlane( &PointList);
-      
-      // set sense of the surface
-      SurfaceVec[Count]->SetSameSense(0);
+
+      // Add to surface list and reverse sense	  
+      SurfaceVec[Count] = new G4FPlane( &PointList, 0, 0);
 
       Count++;
       
@@ -98,10 +106,8 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(G4String name,
       PointList2[2] = LocalOrigin + (Length*Axis) + (RMAX[a+1] * TmpAxis);
       PointList2[1] = LocalOrigin + (RMAX[a] * TmpAxis);	  
            
+      // Add to surface list and set sense	   
       SurfaceVec[Count] = new G4FPlane(&PointList2);
-
-      // set sense of the surface
-      SurfaceVec[b]->SetSameSense(1);
 
       Count++;
     }
@@ -111,14 +117,14 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(G4String name,
   
   // Create end planes
 
-  if(dphi == 2*pi)
+  if(dphi >= 2*pi-perMillion)
   {
     // Create only end planes
     G4Point3DVector EndPointList(sides);
     G4Point3DVector InnerPointList(sides);
     G4Point3DVector EndPointList2(sides);
     G4Point3DVector InnerPointList2(sides);	
-    TmpAxis = YAxis;
+    TmpAxis = XAxis;
     TmpAxis.rotateZ(phi1);	
     TmpAxis.rotateZ(dphi);
     
@@ -132,59 +138,44 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(G4String name,
       TmpAxis.rotateZ(-PartAngle);
     }
     
+    // Add to surface list and set sense
     SurfaceVec[nb_of_surfaces-2] =
       new G4FPlane(&EndPointList, &InnerPointList);
     
+    // Add to surface list and reverse sense
     SurfaceVec[nb_of_surfaces-1] =
-      new G4FPlane(&EndPointList2, &InnerPointList2);	
+      new G4FPlane(&EndPointList2, &InnerPointList2, 0);
   }
   else
   {
-    TmpAxis = YAxis;
+    // If phi section, create a single boundary (case with RMIN=0 included)
+    TmpAxis = XAxis;
     TmpAxis.rotateZ(phi1);	
     TmpAxis.rotateZ(dphi);
     
-    // Create end planes & two planes for the "missing" part 
-    G4Point3DVector   EndPointList(sides+2);
-    G4Point3DVector InnerPointList(sides+2);
-    G4Point3DVector EndPointList2(sides+2);
-    G4Point3DVector InnerPointList2(sides+2);	
-    TmpAxis = YAxis;      
+    // Create end planes 
+    G4Point3DVector EndPointList ((sides+1)*2);
+    G4Point3DVector EndPointList2((sides+1)*2);	      
     
     for(int c=0;c<sides+1;c++)
     {
-      // outer polyline for origin end
-      EndPointList[c] = Origin + (RMAX[0] * TmpAxis);
-      InnerPointList[c] = Origin + (RMIN[0] * TmpAxis);
+      // outer polylines for origin end and opposite side
+      EndPointList[c]  = Origin + (RMAX[0] * TmpAxis);
+      EndPointList[(sides+1)*2-1-c]  = Origin + (RMIN[0] * TmpAxis);
       EndPointList2[c] = LocalOrigin + (RMAX[sections] * TmpAxis);
-      InnerPointList2[c] = LocalOrigin + (RMIN[sections] * TmpAxis);
+      EndPointList2[(sides+1)*2-1-c] = LocalOrigin + (RMIN[sections] * TmpAxis);
       TmpAxis.rotateZ(-PartAngle);
     }
-
-    // Create the extra points on the axis
-    TmpAxis = YAxis;
-    TmpAxis.rotateZ(phi1);
-    EndPointList[sides+1] = Origin;
-    InnerPointList[sides+1] = Origin;
-    EndPointList2[sides+1] = LocalOrigin;
-    InnerPointList2[sides+1] = LocalOrigin;
-    int points = sides+2;
     
-    SurfaceVec[nb_of_surfaces-2] =
-      new G4FPlane(&EndPointList, &InnerPointList);
-    
-    SurfaceVec[nb_of_surfaces-1] =
-      new G4FPlane(&EndPointList2, &InnerPointList2);    
-    
-    // Create the planars for the "gap"
-    TmpAxis = YAxis;
-    G4ThreeVector TmpAxis2 = YAxis;
+    // Create the lateral planars
+    TmpAxis = XAxis;
+    G4ThreeVector TmpAxis2 = XAxis;
     TmpAxis.rotateZ(phi1);
     TmpAxis2.rotateZ(phi1);
     TmpAxis2.rotateZ(dphi);	
     
     LocalOrigin=Origin;
-    points = sections*2+2;
+    int points = sections*2+2;
     G4Point3DVector GapPointList(points);
     G4Point3DVector GapPointList2(points);
     Count=0;
@@ -203,8 +194,26 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(G4String name,
       LocalOrigin = LocalOrigin+(Length*Axis);
     }
     
+    // Add the lateral planars to the surfaces list and set/reverse sense
+    
     SurfaceVec[nb_of_surfaces-4] = new G4FPlane(&GapPointList);
-    SurfaceVec[nb_of_surfaces-3] = new G4FPlane(&GapPointList2);	
+    SurfaceVec[nb_of_surfaces-3] = new G4FPlane(&GapPointList2, 0, 0);
+    
+    //Add the end planes to the surfaces list and set/reverse sense
+    
+    if(RMAX[0]-RMIN[0] >= perMillion){
+      SurfaceVec[nb_of_surfaces-2] = new G4FPlane(&EndPointList);
+    }
+    else{
+      nb_of_surfaces -= 1;
+    };
+    
+    if(RMAX[sections]-RMIN[sections] >= perMillion){
+      SurfaceVec[nb_of_surfaces-1] = new G4FPlane(&EndPointList2, 0, 0);
+    }
+    else{
+      nb_of_surfaces -= 1;
+    };    	
     
   }
   

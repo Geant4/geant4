@@ -5,10 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.cc,v 1.3 1999-01-27 16:13:18 broglia Exp $
+// $Id: G4FPlane.cc,v 1.4 1999-05-12 13:54:00 sgiani Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
+// Corrections by S.Giani:
+// - The constructor using iVec now properly stores both the internal and
+//   external boundaries in the bounds vector.
+// - Proper initialization of sameSense in both the constructors. 
+// - Addition of third argument (sense) in the second constructor to ensure
+//   consistent setting of the normal in all the client code.
 
 #include "G4FPlane.hh"
 #include "G4CompositeCurve.hh"
@@ -27,13 +32,15 @@ G4FPlane::G4FPlane( const G4Vector3D& direction,
   G4Ray::CalcPlane3Pts( Pl, Pt0, Pt1, Pt2 );
 
   active   = 1;
+  sameSense = 1;
   CalcNormal();
   distance = kInfinity;
   Type     = 1;
 }
 
 
-G4FPlane::G4FPlane(const G4Point3DVector* pVec, const G4Point3DVector* iVec)
+G4FPlane::G4FPlane(const G4Point3DVector* pVec, const G4Point3DVector* iVec, int
+sense)
   : pplace( (*pVec)[0]-(*pVec)[1],                    // direction
 	    ((*pVec)[pVec->length()-1]-(*pVec)[0])
 	    .cross((*pVec)[0]-(*pVec)[1]),            // axis
@@ -47,25 +54,31 @@ G4FPlane::G4FPlane(const G4Point3DVector* pVec, const G4Point3DVector* iVec)
 
   projectedBoundary = new G4SurfaceBoundary;
 
-  // Calcul sense of the plane, for G4BREPSolidPolyhedra 
-  // rule : if direction.z > 0, sense = 1
-  if(pplace.GetRefDirection().z() < 0)
-    sameSense = 0;  
-  else 
-    sameSense = 1;
+  sameSense = sense;
+
+  // Outer boundary
 
   polygon= new G4CompositeCurve(*pVec);
-
-  if (iVec) 
-  {
-    polygon= new G4CompositeCurve(*iVec);
-    bounds.insert(polygon);
-  }
  
   for (G4int i=0; i< polygon->GetSegments().length(); i++) 
     polygon->GetSegments()[i]->SetSameSense(sameSense);
 
   bounds.insert(polygon);
+  
+  // Eventual inner boundary
+  
+  if (iVec) 
+  {
+    polygon= new G4CompositeCurve(*iVec);
+
+    for (G4int i=0; i< polygon->GetSegments().length(); i++) 
+    polygon->GetSegments()[i]->SetSameSense(sameSense);
+
+    bounds.insert(polygon);
+  }
+  
+  // Set sense for boundaries  
+  
   for (G4int j=0; j< bounds.length(); j++) 
     bounds[j]->SetSameSense(sameSense);
   
@@ -186,7 +199,7 @@ int G4FPlane::Intersect(const G4Ray& rayref)
 
   b = norm.x() * dirx + norm.y() * diry + norm.z() * dirz;
 
-  if ( fabs(b) < 0.001 )    
+  if ( fabs(b) < perThousand )    
   {
    // G4cout << "\nLine is parallel to G4Plane.No Hit.";
   }  
