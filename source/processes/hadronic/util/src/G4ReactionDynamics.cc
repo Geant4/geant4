@@ -3703,7 +3703,7 @@
       if( pp <= 0.001*MeV )
       {
         G4double phinve = twopi*G4UniformRand();
-        G4double rthnve = acos( max(-1.0,G4std::min(1.0,-1.0+2.0*G4UniformRand())) );
+        G4double rthnve = acos( G4std::max(-1.0,G4std::min(1.0,-1.0+2.0*G4UniformRand())) );
         v[0]->SetMomentum( p*sin(rthnve)*cos(phinve),
                           p*sin(rthnve)*sin(phinve),
                           p*cos(rthnve) );
@@ -3724,7 +3724,7 @@
     if( pp <= 0.001*MeV )
     {
       G4double phinve = twopi*G4UniformRand();
-      G4double rthnve = acos( G4std::max(-1.0,min(1.0,-1.0+2.0*G4UniformRand())) );
+      G4double rthnve = acos( G4std::max(-1.0,G4std::min(1.0,-1.0+2.0*G4UniformRand())) );
       v[1]->SetMomentum( p*sin(rthnve)*cos(phinve),
                         p*sin(rthnve)*sin(phinve),
                         p*cos(rthnve) );
@@ -3747,7 +3747,7 @@
       if( pp <= 0.001*MeV )
       {
         G4double phinve = twopi*G4UniformRand();
-        G4double rthnve = acos( G4std::max(-1.0,min(1.0,-1.0+2.0*G4UniformRand())) );
+        G4double rthnve = acos( G4std::max(-1.0,G4std::min(1.0,-1.0+2.0*G4UniformRand())) );
         v[2]->SetMomentum( p*sin(rthnve)*cos(phinve),
                           p*sin(rthnve)*sin(phinve),
                           p*cos(rthnve) );
