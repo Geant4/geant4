@@ -26,14 +26,14 @@ G4.
 To build these examples, especially the one involving visualization, the
 user must have one or more of the following environment variables set:
 
-setenv G4VIS_BUILD_DAWN
-setenv G4VIS_BUILD_OPACS
-setenv G4VIS_BUILD_OPENGL
-setenv G4VIS_BUILD_OPENGLX
-setenv G4VIS_BUILD_OPENGLXM
-setenv G4VIS_BUILD_OPENINVENTOR
-setenv G4VIS_BUILD_RAYX
-setenv G4VIS_BUILD_VRML1
+setenv G4VIS_BUILD_<driver>_DRIVER
+setenv G4VIS_USE_<driver>
+
+where the G4-supported drivers are listed in $(G4BASE)/visualization/README.
+
+To use the freeware Mesa API, you must have the environment variable
+OGLHOME defined to point to the directory containing the Mesa lib/ directory
+specific to your platform.
 
 Then the user must build the global Geant4 libraries by issuing the
 following command from the geant4/source directory: 
@@ -51,7 +51,11 @@ gmake
 
 from the top-level G3toG4 directory. 
 
-Notes on the implementation (April '99)
+To remove all G3toG4 libraries, executables and .d files, simply type
+
+gmake clean
+
+ the implementation (April '99)
 ----------------------------------------
 - PGON, PCON are built using the CSG classes G4Polycone and G4Polyhedra.
 - G3 MANY feature has not been tested.

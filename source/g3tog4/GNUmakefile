@@ -50,7 +50,6 @@ CPPFLAGS  += \
 ifeq ($(FC),xlf)
 	cpp_include_flag=-WF,-I
 ### -d writes out F*.f file
-#	FCFLAGS += -d $(patsubst -I%,$(cpp_include_flag)%,$(CPPFLAGS))
 	FCFLAGS += -d $(patsubst -I%,$(cpp_include_flag)%,-Iinclude)
 ### xlf prepends .f name with F
 	dotf_prepend=F
@@ -182,11 +181,16 @@ $(G4TMPDIR)/%.d: src/%.F
 
 -include $(Fdependencies)
 
+clean: cleanf cleantest
+
 cleanf:
-	$(RM) $(Flibobjects)
-	$(RM) $(Fbinobjects)
-	$(RM) $(Fdependencies)
-	$(RM) $(G4BINDIR)/$(G4TARGET)
+	@$(RM) $(Flibobjects)
+	@$(RM) $(Fbinobjects)
+	@$(RM) $(Fdependencies)
+	@$(RM) $(G4BINDIR)/$(G4TARGET)
+
+cleantest:
+	cd test; $(MAKE) clean
 
 include $(G4INSTALL)/config/common.gmk
 

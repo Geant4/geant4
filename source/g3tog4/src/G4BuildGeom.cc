@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BuildGeom.cc,v 1.1 1999-01-07 16:06:47 gunter Exp $
+// $Id: G4BuildGeom.cc,v 1.2 1999-05-01 21:42:01 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,7 +33,7 @@
 extern ofstream ofile;
 
 void G3CLRead(G4String &, char *);
-void checkLogVol(G4LogicalVolume*, G4int);
+void checkVol(G4LogicalVolume*, G4int);
 
 
 G4LogicalVolume* G4BuildGeom(G4String& inFile)
@@ -58,30 +58,32 @@ G4LogicalVolume* G4BuildGeom(G4String& inFile)
         
         // check the geometry here
 
-    G4int debug=0;
+    G4int debug=1;
         
     if (debug){
         G4int level=0;
-        checkLogVol(lG3toG4, level);
+        checkVol(lG3toG4, level);
     }
         
     return lG3toG4;
 }
 
-void checkLogVol(G4LogicalVolume* _lvol, G4int level)
+void checkVol(G4LogicalVolume* _lvol, G4int level)
 {
     G4LogicalVolume* _ldvol;
+    G4VPhysicalVolume* _pdvol;
     level++;
     
     G4int ndau = _lvol -> GetNoDaughters();
     
     for (int idau=0; idau<ndau; idau++){
-        _ldvol = _lvol-> GetDaughter(idau) -> GetLogicalVolume();
+        _pdvol = _lvol-> GetDaughter(idau);
         
         G4cout << "logical volume " << _lvol->GetName() << " at level " << level
-             << " contains daughter " << idau+1 << " name: "
-             << _ldvol -> GetName() << endl;
-        checkLogVol(_ldvol, level);
+             << " contains Physical Daughter volume "
+             << _pdvol -> GetName() << endl;
+	_ldvol = _pdvol -> GetLogicalVolume();
+        checkVol(_ldvol, level);
     }
     return;
 }

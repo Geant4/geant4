@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ggclos.cc,v 1.1 1999-01-07 16:06:48 gunter Exp $
+// $Id: G4ggclos.cc,v 1.2 1999-05-01 21:42:02 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4GeometryManager.hh"
@@ -18,10 +18,11 @@ void PG4ggclos()
 
 void G4ggclos()
 {
-        // close out the geometry
-    
-    G4cout << "Closing geometry..." << endl;
-  G4bool optimise=false;
-  G4GeometryManager::GetInstance()->CloseGeometry(optimise);
-  G4cout << "Geometry closed." << endl;
+  // close out the geometry
+  /*    
+	G4cout << "Closing geometry..." << endl;
+	G4bool optimise=true;
+	G4GeometryManager::GetInstance()->CloseGeometry(optimise);
+	G4cout << "Geometry closed." << endl; 
+  */
 }
