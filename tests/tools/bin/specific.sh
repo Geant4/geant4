@@ -160,10 +160,11 @@ if [ `uname -n | grep dxplus` ]; then
   if [ $G4STTNONISO ]; then
     export DEBOPT=${DEBOPT}_NONISO
     export G4USE_OSPACE=1
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/pro
   else
     export DEBOPT=${DEBOPT}_ISO
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/iso
   fi
-  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/iso
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=DEC-cxx
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4

@@ -51,10 +51,11 @@ if ( `uname -n | grep dxplus` != "" ) then
   if ( $?G4STTNONISO ) then
     setenv DEBOPT ${DEBOPT}_NONISO
     setenv G4USE_OSPACE 1
+    setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/pro
   else
     setenv DEBOPT ${DEBOPT}_ISO
+    setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/iso
   endif
-  setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/iso
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM DEC-cxx
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
