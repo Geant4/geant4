@@ -62,6 +62,7 @@ export G4NOHIST=1
 ####################################################################
 # Setup environment in $REFTREE
 ####################################################################
+echo "STT:SETUPEnvironment Complete"
 # cd /afs/cern.ch/sw/geant4/stt/$REFTREE/testtools/geant4/tests/tools/bin
 # so we can use pwd to determine the value of $REFTREE.
 # . ${G4STTDIR}/bin/setup.sh (but this defines G4STTDIR).
@@ -71,6 +72,7 @@ cd /afs/cern.ch/sw/geant4/stt/$REFTREE/testtools/geant4/tests/tools/bin
 env | grep G4
 echo  "CLHEP_BASE_DIR $CLHEP_BASE_DIR"
 ulimit -a
+echo "STT:SETUPEnvironment Complete"
 
 ##########################
 # Check if INPROGRESS
@@ -94,6 +96,7 @@ EOF
 ######################################################################
 # Prepare if not incremental: create new stt and link, clear bin|lib|tmp
 ######################################################################
+echo "STT:SETUPDirectories Started"
 if [ X$NONINCREMENTAL = X ]
 then
   cd ${G4WORKDIR}/stt/${G4SYSTEM}
@@ -103,7 +106,7 @@ else
   cd ${G4WORKDIR}
   if [ -d stt.${REFTAG} ]
   then
-    echo stt.${REFTAG} already exists - aborting.
+    echo "STT:ABORT stt.${REFTAG} already exists."
     exit
   fi
   echo 'REMOVE bin/* lib/* tmp/*'
@@ -113,6 +116,7 @@ else
   rm -rf stt
   ln -s stt.${REFTAG} stt
 fi
+echo "STT:SETUPDirectories Finished"
 ########################################################
 
 ################################
@@ -124,12 +128,16 @@ cd ${G4WORKDIR}
 if [ X$ACTION = Xbuild -o X$ACTION = Xall  ]
 then
   . ${G4STTDIR}/bin/tmpenv.sh
+  echo "STT:BUILD Started"
   ${G4STTDIR}/bin/build.sh $ACTARG1 $ACTARG2
+  echo "STT:BUILD Finished"
 fi
 
 if [ X$ACTION = Xrun -o X$ACTION = Xall  ]
 then
+  echo "STT:RUN Started"
   ${G4STTDIR}/bin/run.sh $ACTARG3
+  echo "STT:RUN Finished"
 fi
 ####################################################################
 
