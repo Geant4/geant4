@@ -606,6 +606,9 @@ int main(int argc,char** argv)
     if(success) G4cout  <<  "Physics tables are built"  <<  G4endl;  
     else        G4cout  <<  "Physics tables are not built!!!"  <<  G4endl;  
 
+    G4cout << "gCut(MeV)= " << gamma->GetEnergyThreshold(material)/MeV << G4endl; 
+    G4cout << "eCut(MeV)= " << electron->GetEnergyThreshold(material)/MeV << G4endl;
+
 
     // Create a DynamicParticle  
   
