@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.30 2004-07-02 15:45:39 grichine Exp $
+// $Id: G4Sphere.cc,v 1.31 2004-07-16 08:13:54 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -30,6 +30,7 @@
 //
 // History:
 //
+// 16.07.04 V.Grichine: bug fixed in DistanceToOut(p,v), Rmin go outside
 // 02.06.04 V.Grichine: bug fixed in DistanceToIn(p,v), on Rmax,Rmin go inside
 // 30.10.03 J.Apostolakis: new algorithm in Inside for SPhi-sections
 // 29.10.03 J.Apostolakis: fix in Inside for SPhi-0.5*kAngTol < phi < SPhi, SPhi<0
@@ -1913,11 +1914,13 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 
     if (fRmin)
     {
-      c=rad2-fRmin*fRmin ;
+      c  = rad2 - fRmin*fRmin;
+      d2 = pDotV3d*pDotV3d - c;
 
       if (c >- flexRadMinTolerance*fRmin) // 2.0 * (0.5*kRadTolerance) * fRmin
       {
-        if( c < flexRadMinTolerance*fRmin && pDotV3d < 0 ) // leaving from Rmin
+        if( c < flexRadMinTolerance*fRmin && 
+            d2 >= flexRadMinTolerance*fRmin && pDotV3d < 0 ) // leaving from Rmin
         {
           if(calcNorm)
           {
@@ -1927,7 +1930,6 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         }
         else
         {  
-          d2=pDotV3d*pDotV3d-c ;
           if (d2 >= 0)
           {
             s = -pDotV3d-sqrt(d2) ;
