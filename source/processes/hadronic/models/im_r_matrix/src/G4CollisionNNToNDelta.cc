@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToNDelta.cc,v 1.2 2003-12-12 12:27:23 hpw Exp $ //
+// $Id: G4CollisionNNToNDelta.cc,v 1.3 2003-12-12 12:28:08 hpw Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionNNToNDelta.hh"
@@ -34,12 +34,12 @@
 #include "G4HadParticleCodes.hh"
 
 // complete hpw
-typedef INT4(G4ConcreteNNToNDelta, NeutronPC, NeutronPC, NeutronPC, Delta0PC) theC1;
-typedef INT4(G4ConcreteNNToNDelta, NeutronPC, NeutronPC, ProtonPC, DeltamPC) theC2;
-typedef INT4(G4ConcreteNNToNDelta, NeutronPC, ProtonPC, ProtonPC, Delta0PC) theC3;
-typedef INT4(G4ConcreteNNToNDelta, NeutronPC, ProtonPC, NeutronPC, DeltapPC) theC4;
-typedef INT4(G4ConcreteNNToNDelta, ProtonPC, ProtonPC, NeutronPC, DeltappPC) theC5;
-typedef INT4(G4ConcreteNNToNDelta, ProtonPC, ProtonPC, ProtonPC, DeltapPC) theC6;
+typedef INT4(G4ConcreteNNToNDelta, NeutronPC, NeutronPC, NeutronPC, Delta0PC)  theC1;
+typedef INT4(G4ConcreteNNToNDelta, NeutronPC, NeutronPC, ProtonPC,  DeltamPC)  theC2;
+typedef INT4(G4ConcreteNNToNDelta, NeutronPC, ProtonPC,  ProtonPC,  Delta0PC)  theC3;
+typedef INT4(G4ConcreteNNToNDelta, NeutronPC, ProtonPC,  NeutronPC, DeltapPC)  theC4;
+typedef INT4(G4ConcreteNNToNDelta, ProtonPC,  ProtonPC,  NeutronPC, DeltappPC) theC5;
+typedef INT4(G4ConcreteNNToNDelta, ProtonPC,  ProtonPC,  ProtonPC,  DeltapPC)  theC6;
 
 typedef GROUP6(theC1, theC2, theC3, theC4, theC5, theC6) theChannels;
        
