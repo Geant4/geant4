@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.25 2004-07-28 15:46:25 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.26 2004-08-03 15:55:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,6 +115,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
   static G4int callCount (0);
   ++callCount;
 
+  const G4Colour& c = GetColour (text);  // Picks up default if none.
   MarkerSizeType sizeType;
   G4double size = GetMarkerSize (text, sizeType);
   G4ThreeVector position (*fpObjectTransformation * text.GetPosition ());
@@ -128,6 +129,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
 	   << ", size " << size
 	   << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
 	   << ", type " << G4int(sizeType)
+	   << ", colour " << c
 	   << G4endl;
   }
 }
@@ -350,13 +352,17 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   
   if (polyhedron.GetNoFacets() == 0) return;
 
-  // Check parameters that the user can force (thereby over-riding the
-  // view parameters).
-  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (polyhedron);
-  G4bool isAuxEdgeVisible = GetAuxEdgeVisible (polyhedron);
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+    fpViewer -> GetApplicableVisAttributes (polyhedron.GetVisAttributes ());
+
+  // Get view parameters that the user can force through the vis
+  // attributes, thereby over-riding the current view parameter.
+  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
+  G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
   
   //Get colour, etc..
-  const G4Colour& c = GetColour (polyhedron);
+  const G4Colour& c = pVA -> GetColour ();
   GLfloat materialColour [4];
   materialColour [0] = c.GetRed ();
   materialColour [1] = c.GetGreen ();
@@ -535,9 +541,19 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
   G4NURBS::CtrlPtsCoordsIterator c_p_iterator (nurb);
   while (c_p_iterator.pick (ctrl_pnt_array_ptr++));
 
-  const G4Colour& c = GetColour (nurb);
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+    fpViewer -> GetApplicableVisAttributes (nurb.GetVisAttributes ());
 
-  switch (GetDrawingStyle(nurb)) {
+  // Get view parameters that the user can force through the vis
+  // attributes, thereby over-riding the current view parameter.
+  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
+  //G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
+  
+  //Get colour, etc..
+  const G4Colour& c = pVA -> GetColour ();
+
+  switch (drawing_style) {
 
   case (G4ViewParameters::hlhsr):
     //    G4cout << "Hidden line removal not implememented in G4OpenGL.\n"

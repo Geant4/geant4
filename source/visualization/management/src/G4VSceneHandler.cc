@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.30 2004-07-28 15:46:47 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.31 2004-08-03 15:55:37 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -529,10 +529,10 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
 }
 
 const G4Colour& G4VSceneHandler::GetColour (const G4Visible& visible) {
-  // Colour is determined by the applicable (real) vis attributes.
-  const G4VisAttributes* pVA = visible.GetVisAttributes ();
-  pVA = fpViewer -> GetApplicableVisAttributes (pVA);
-  return pVA -> GetColour ();
+  // Colour is determined by the applicable vis attributes.
+  return fpViewer ->
+    GetApplicableVisAttributes (visible.GetVisAttributes ()) ->
+    GetColour ();
 }
 
 const G4Colour& G4VSceneHandler::GetTextColour (const G4Text& text) {
@@ -541,16 +541,6 @@ const G4Colour& G4VSceneHandler::GetTextColour (const G4Text& text) {
     pVA = fpViewer -> GetViewParameters (). GetDefaultTextVisAttributes ();
   }
   return pVA -> GetColour ();
-}
-
-G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
-(const G4Visible& visible) {
-  // Drawing style is determined by the applicable (real) vis
-  // attributes, except when overridden - see GetDrawingStyle (const
-  // G4VisAttributes* pVisAttribs).
-  const G4VisAttributes* pVA = visible.GetVisAttributes ();
-  pVA = fpViewer -> GetApplicableVisAttributes (pVA);
-  return GetDrawingStyle (pVA);
 }
 
 G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
@@ -593,11 +583,9 @@ G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
   return style;
 }
 
-G4bool G4VSceneHandler::GetAuxEdgeVisible (const G4Visible& visible) {
-  const G4VisAttributes* pVA = visible.GetVisAttributes ();
-  pVA = fpViewer -> GetApplicableVisAttributes (pVA);
+G4bool G4VSceneHandler::GetAuxEdgeVisible (const G4VisAttributes* pVisAttribs) {
   G4bool isAuxEdgeVisible = fpViewer->GetViewParameters().IsAuxEdgeVisible ();
-  if (pVA -> IsForceAuxEdgeVisible()) isAuxEdgeVisible = true;
+  if (pVisAttribs -> IsForceAuxEdgeVisible()) isAuxEdgeVisible = true;
   return isAuxEdgeVisible;
 }
 

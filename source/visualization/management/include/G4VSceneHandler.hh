@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.21 2004-07-28 15:46:33 johna Exp $
+// $Id: G4VSceneHandler.hh,v 1.22 2004-08-03 15:55:33 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -192,21 +192,15 @@ public: // With description
   const G4Colour& GetTextColor  (const G4Text&);
   // The above return colour of G4Text object, or default text colour.
 
-  G4ViewParameters::DrawingStyle GetDrawingStyle (const G4Visible&);
-  // Returns drawing style of G4Visible object, i.e., the global
-  // default value unless over-ridden by forced attributes.  And the
-  // attributes themselves can be specified or the global default is
-  // used - see next function.  So use this function is you have a
-  // G4Visible, or the next if all you have is a G4VisAttributes
-  // pointer.
-
   G4ViewParameters::DrawingStyle GetDrawingStyle (const G4VisAttributes*);
-  // Returns global default drawing style unless forced attributes are set.
-  // So always use this to get the applicable drawing style.
+  // Returns drawing style from current view parameters, unless the user
+  // has forced through the vis attributes, thereby over-riding the
+  // current view parameter.
 
-  G4bool GetAuxEdgeVisible (const G4Visible& visible);
-  // Returns auxiliary edge visiblility, unless over-ridden by forced
-  // attribute.
+  G4bool GetAuxEdgeVisible (const G4VisAttributes*);
+  // Returns auxiliary edge visiblility from current view parameters,
+  // unless the user has forced through the vis attributes, thereby
+  // over-riding the current view parameter.
 
   G4double GetMarkerSize (const G4VMarker&, MarkerSizeType&);
   // Returns applicable marker size (diameter) and type (in second

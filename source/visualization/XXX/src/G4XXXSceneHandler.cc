@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.15 2004-07-28 15:46:29 johna Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.16 2004-08-03 15:55:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -245,6 +245,9 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyline& polyline) {
 	 << G4endl;
   PrintThings();
 #endif
+  // Get vis attributes - pick up defaults if none.
+  //const G4VisAttributes* pVA =
+  //  fpViewer -> GetApplicableVisAttributes (polyline.GetVisAttributes ());
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4Text& text) {
@@ -255,6 +258,11 @@ void G4XXXSceneHandler::AddPrimitive(const G4Text& text) {
 	 << G4endl;
   PrintThings();
 #endif
+  // Get text colour - special method since default text colour is
+  // determined by the default text vis attributes, which may be
+  // specified independent of default vis attributes of other types of
+  // visible objects.
+  //const G4Colour& c = GetTextColour (text);  // Picks up default if none.
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) {
@@ -277,6 +285,9 @@ void G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) {
   G4cout << " size: " << size << G4endl;
   PrintThings();
 #endif
+  // Get vis attributes - pick up defaults if none.
+  //const G4VisAttributes* pVA =
+  //  fpViewer -> GetApplicableVisAttributes (circle.GetVisAttributes ());
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4Square& square) {
@@ -299,6 +310,9 @@ void G4XXXSceneHandler::AddPrimitive(const G4Square& square) {
   G4cout << " size: " << size << G4endl;
   PrintThings();
 #endif
+  // Get vis attributes - pick up defaults if none.
+  //const G4VisAttributes* pVA =
+  //  fpViewer -> GetApplicableVisAttributes (square.GetVisAttributes ());
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
@@ -309,18 +323,23 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   PrintThings();
 #endif
 
-  if (polyhedron.GetNoFacets() == 0) return;
-
-  // Check parameters that the user can force (thereby over-riding the
-  // view parameters).
-  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (polyhedron);
-  G4bool isAuxEdgeVisible = GetAuxEdgeVisible (polyhedron);
- 
   //Assume all facets are convex quadrilaterals.
   //Draw each G4Facet individually
   
   //Get colour, etc..
-  // const G4Colour& c = GetColour (polyhedron);
+  if (polyhedron.GetNoFacets() == 0) return;
+
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+    fpViewer -> GetApplicableVisAttributes (polyhedron.GetVisAttributes ());
+
+  // Get view parameters that the user can force through the vis
+  // attributes, thereby over-riding the current view parameter.
+  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
+  G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
+  
+  //Get colour, etc..
+  //const G4Colour& c = pVA -> GetColour ();
   
   // Initial action depending on drwaing style.
   switch (drawing_style) {
@@ -384,6 +403,7 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   } while (notLastFace);  
 }
 
+//void G4XXXSceneHandler::AddPrimitive(const G4NURBS& nurbs) {
 void G4XXXSceneHandler::AddPrimitive(const G4NURBS&) {
 #ifdef G4XXXDEBUG
   G4cout <<
@@ -391,6 +411,9 @@ void G4XXXSceneHandler::AddPrimitive(const G4NURBS&) {
 	 << G4endl;
   PrintThings();
 #endif
+  // Get vis attributes - pick up defaults if none.
+  //const G4VisAttributes* pVA =
+  //  fpViewer -> GetApplicableVisAttributes (nurbs.GetVisAttributes ());
 }
 
 void G4XXXSceneHandler::EstablishSpecials
