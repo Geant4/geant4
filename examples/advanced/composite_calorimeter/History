@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.14 2003-10-31 18:28:12 ribon Exp $
+$Id: History,v 1.15 2003-11-04 08:07:13 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.14 2003-10-31 18:28:12 ribon Exp $
 
                       Example History file
                       ---------------------
+
+03.11.03 - A.Ribon (ccal-V05-02-02)
+- Removed "GetCopyNo()" and replaced it with "GetReplicaNumber()"
+  using G4TouchableHistory.
 
 31.10.03 - A.Ribon (ccal-V05-02-01)
 - Enables possibility of running the simulation in HCal alone or 

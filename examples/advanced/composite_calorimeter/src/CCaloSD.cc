@@ -28,7 +28,7 @@
 #include "CCaloSD.hh"
 #include "G4VProcess.hh"
 #include "G4SDManager.hh"
-#include "G4VTouchable.hh"
+#include "G4TouchableHistory.hh"
 #include "CCalVOrganization.hh"
 #include "CCalSDList.hh"
 
@@ -190,15 +190,25 @@ void CCaloSD::StoreHit(CCalG4Hit* hit){
 void CCaloSD::createNewHit() {
 
 #ifdef debug
+  G4int currentCopyNo = -999;
+  G4int motherCopyNo  = -999;
+  G4TouchableHistory* theTouchable
+    = (G4TouchableHistory*)( theTrack->GetTouchable() );
+  if ( theTouchable ) {
+    currentCopyNo = theTouchable->GetReplicaNumber();
+    if ( theTouchable->GetHistoryDepth() > 1 ) {
+      motherCopyNo = theTouchable->GetReplicaNumber( 1 );
+    }
+  }
   G4cout << "CCaloSD createNewHit for"
-       << " PV "     << CurrentPV->GetName()
-       << " PVid = " << CurrentPV->GetCopyNo()
-       << " MVid = " << CurrentPV->GetMother()->GetCopyNo()
-       << " Unit "   << UnitID <<G4endl;
+	 << " PV "     << CurrentPV->GetName()
+         << " PVid = " << currentCopyNo
+	 << " MVid = " << motherCopyNo
+	 << " Unit "   << UnitID <<G4endl;
   G4cout << " primary "    << PrimaryID
-       << " time slice " << TSliceID 
-       << " For Track  " << theTrack->GetTrackID()
-       << " which is a " <<  theTrack->GetDefinition()->GetParticleName();
+	 << " time slice " << TSliceID 
+	 << " For Track  " << theTrack->GetTrackID()
+	 << " which is a " <<  theTrack->GetDefinition()->GetParticleName();
 	   
   if (theTrack->GetTrackID()==1) {
     G4cout << " of energy "     << theTrack->GetTotalEnergy();

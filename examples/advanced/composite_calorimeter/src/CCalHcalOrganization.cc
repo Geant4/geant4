@@ -29,6 +29,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
+#include "G4TouchableHistory.hh"
 
 CCalHcalOrganization::~CCalHcalOrganization() {
   G4cout << "CCalHcalOrganization deleted" << G4endl;
@@ -37,12 +38,10 @@ CCalHcalOrganization::~CCalHcalOrganization() {
 
 unsigned int CCalHcalOrganization::GetUnitID(const G4Step* aStep) const {
 
-  G4VPhysicalVolume* pv = aStep->GetPreStepPoint()->GetPhysicalVolume();
-  if (pv > 0) 
-    pv = pv->GetMother();
-  int idunit=0;
-  if (pv > 0)
-    idunit = pv->GetCopyNo();
+  G4TouchableHistory* theTouchable = 
+    (G4TouchableHistory*)( aStep->GetPreStepPoint()->GetTouchable() );
+  int level = theTouchable->GetHistoryDepth();  
+  G4int idunit = theTouchable->GetReplicaNumber( level - 1 );
 
   return idunit;
 }
