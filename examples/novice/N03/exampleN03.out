@@ -55,8 +55,9 @@
  The calorimeter is made of 10 layers of: [ 10mm of Lead + 5mm of liquidArgon ] 
 ExN03PhysicsList::SetCuts:CutLength : 2 mm 
 
-phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all ZSandia crossSection below 50 KeV
-        PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
         Scattered gamma energy according Klein-Nishina.
@@ -194,14 +195,14 @@ Start Run processing.
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 >>> Event 0
-     10 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 2.8e+02 MeV       total track length:      14 cm 
-        Gap: total energy:      12 MeV       total track length:     5.9 cm 
-    195 trajectories stored in this event.
+     9 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 2.8e+02 MeV       total track length:      17 cm 
+        Gap: total energy:      13 MeV       total track length:       7 cm 
+    210 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.41s Real=0.47s Sys=0.04s
+  User=0.5s Real=0.57s Sys=0.03s
 Idle> #
 Idle> # list the existing physics processes
 Idle> /process/list
@@ -220,17 +221,17 @@ Start Run processing.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2089514513, 1200712414
+ Current couple of seeds = 1364523396, 538526746
 ----------------------------------------
 >>> Event 0
-     9 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 2.8e+02 MeV       total track length:      15 cm 
-        Gap: total energy:      17 MeV       total track length:     7.6 cm 
-    195 trajectories stored in this event.
+     10 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 2.9e+02 MeV       total track length:      15 cm 
+        Gap: total energy:      14 MeV       total track length:     6.3 cm 
+    216 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.41s Real=0.42s Sys=0.01s
+  User=0.46s Real=0.48s Sys=0.02s
 Idle> #
 Idle> # switch on MultipleScattering
 Idle> /process/activate msc
@@ -260,17 +261,17 @@ Start Run processing.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 900551276, 1952365952
+ Current couple of seeds = 1243028270, 582042789
 ----------------------------------------
 >>> Event 0
-     21 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 4.2e+02 MeV       total track length:      98 cm 
-        Gap: total energy:      68 MeV       total track length:     1.9 m  
-    176 trajectories stored in this event.
+     26 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 3.7e+02 MeV       total track length:      85 cm 
+        Gap: total energy:      77 MeV       total track length:     2.1 m  
+    175 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.92s Real=1s Sys=0.1s
+  User=1.2s Real=1.3s Sys=0.04s
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
