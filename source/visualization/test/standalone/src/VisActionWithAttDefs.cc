@@ -21,10 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: VisActionWithAttDefs.cc,v 1.1 2005-03-23 17:43:25 allison Exp $
+// $Id: VisActionWithAttDefs.cc,v 1.2 2005-03-26 22:39:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "VisActionWithAttDefs.hh"
+
+#include "globals.hh"
 
 #include "G4VVisManager.hh"
 #include "G4VisAttributes.hh"
@@ -33,6 +35,7 @@
 #include "G4AttValue.hh"
 #include "G4AttCheck.hh"
 #include "G4UnitsTable.hh"
+#include "G4UIcommand.hh"
 
 VisActionWithAttDefs::VisActionWithAttDefs ()
 {
@@ -40,21 +43,49 @@ VisActionWithAttDefs::VisActionWithAttDefs ()
 
   fpAttDefs = new std::map<G4String,G4AttDef>;
   (*fpAttDefs)["name"] = G4AttDef("name","Name of box","","","G4String");
-  (*fpAttDefs)["dimX"] = G4AttDef("dimX","Half x-side","","","G4double");
-  (*fpAttDefs)["dimY"] = G4AttDef("dimY","Half y-side","","","G4double");
-  (*fpAttDefs)["dimZ"] = G4AttDef("dimZ","Half z-side","","","G4double");
+  (*fpAttDefs)["dimX"] = G4AttDef("dimX","Half x-side","","","G4BestUnit");
+  (*fpAttDefs)["dimY"] = G4AttDef("dimY","Half y-side","","","km");
+  (*fpAttDefs)["dimZ"] = G4AttDef("dimZ","Half z-side","","","G4BestUni");
+  (*fpAttDefs)["dims"] =
+    G4AttDef("dims","Half sides","","G4ThreeVector","G4BestUnit");
 
   fpAttValues = new std::vector<G4AttValue>;
   fpAttValues->push_back(G4AttValue("name","Cyan box with attributes",""));
   fpAttValues->push_back
     (G4AttValue("dimX",G4BestUnit(fpBox->GetXHalfLength(),"Length"),""));
   fpAttValues->push_back
-    (G4AttValue("dimY",G4BestUnit(fpBox->GetYHalfLength(),"Length"),""));
+    (G4AttValue("dimY",
+		G4UIcommand::ConvertToString(fpBox->GetYHalfLength()/km),
+		""));
   fpAttValues->push_back
     (G4AttValue("dimZ",G4BestUnit(fpBox->GetZHalfLength(),"Length"),""));
+  fpAttValues->push_back
+    (G4AttValue
+     ("dims",
+      G4BestUnit
+      (G4ThreeVector
+       (fpBox->GetXHalfLength(),
+	fpBox->GetYHalfLength(),
+	fpBox->GetZHalfLength()),
+       "Length"),""));
+  fpAttValues->push_back
+    (G4AttValue("ScoobyDoo","Rubbish",""));
 
-  G4cout << "\nVisActionWithAttDefs: constructor: att values check:\n"
+  G4AttCheck(fpAttValues,fpAttDefs).Check();  // Check only.
+
+  // Print...
+  G4cout << "\nVisActionWithAttDefs: constructor: att values:\n"
 	 << G4AttCheck(fpAttValues,fpAttDefs) << G4endl;
+
+  G4AttCheck standard = G4AttCheck(fpAttValues,fpAttDefs).Standard();
+  // Creates new AttValues and AttDefs on the heap...
+  G4cout << "\nVisActionWithAttDefs: constructor: standardised versions:\n"
+	 << G4AttCheck(standard.GetAttValues(),
+		       standard.GetAttDefs())
+	 << G4endl;
+  // ...so don't forget to delete them...
+  delete standard.GetAttValues();
+  delete standard.GetAttDefs();
 
   fpVisAtts = new G4VisAttributes(G4Colour(1,0,1));
   fpVisAtts->SetAttDefs(fpAttDefs);
