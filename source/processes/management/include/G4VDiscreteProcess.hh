@@ -6,7 +6,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDiscreteProcess.hh,v 1.1 1999-01-07 16:13:55 gunter Exp $
+// $Id: G4VDiscreteProcess.hh,v 1.2 1999-04-13 09:45:11 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,21 +46,21 @@ class G4VDiscreteProcess : public G4VProcess
 			 G4ProcessType   aType = fNotDefined );
       G4VDiscreteProcess(G4VDiscreteProcess &);
 
-      ~G4VDiscreteProcess();
+      virtual ~G4VDiscreteProcess();
 
-      G4double PostStepGetPhysicalInteractionLength(
+      virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
 			     G4double   previousStepSize,
 			     G4ForceCondition* condition
 			    );
 
-      G4VParticleChange* PostStepDoIt(
+      virtual G4VParticleChange* PostStepDoIt(
 			     const G4Track& ,
 			     const G4Step& 
 			    );
 
      //  no operation in  AtRestDoIt and  AlongStepDoIt
-      G4double AlongStepGetPhysicalInteractionLength(
+      virtual G4double AlongStepGetPhysicalInteractionLength(
                              const G4Track&,
 			     G4double  ,
 			     G4double  ,
@@ -68,21 +68,21 @@ class G4VDiscreteProcess : public G4VProcess
                              G4GPILSelection*
 			    ){ return -1.0; };
 
-      G4double AtRestGetPhysicalInteractionLength(
+      virtual G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& ,
 			     G4ForceCondition* 
 			    ) { return -1.0; };
 
      //  no operation in  AtRestDoIt and  AlongStepDoIt
-      G4VParticleChange* AtRestDoIt(
+      virtual G4VParticleChange* AtRestDoIt(
 			     const G4Track& ,
 			     const G4Step&
-			    ) {return NULL;};
+			    ) {return 0;};
 
-      G4VParticleChange* AlongStepDoIt(
+      virtual G4VParticleChange* AlongStepDoIt(
 			     const G4Track& ,
 			     const G4Step& 
-			    ) {return NULL;};
+			    ) {return 0;};
  
   protected:
      virtual G4double GetMeanFreePath(const G4Track& aTrack,

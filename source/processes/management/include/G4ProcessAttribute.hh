@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessAttribute.hh,v 1.1 1999-01-07 16:13:53 gunter Exp $
+// $Id: G4ProcessAttribute.hh,v 1.2 1999-04-13 09:44:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,6 +33,7 @@
 class G4ProcessAttribute
 {
   // this class is used by G4ProcessManager ONLY for booking !!!
+  friend class G4ProcessManager;
   public:
     G4ProcessAttribute();
     G4ProcessAttribute(const G4VProcess* aProcess);
@@ -49,6 +50,8 @@ class G4ProcessAttribute
     G4int operator!=(const G4ProcessAttribute &right) const;
     // equal / unequal operator
 
+  
+  protected:
     G4VProcess*           pProcess;
     // pointer to G4VProcess
 

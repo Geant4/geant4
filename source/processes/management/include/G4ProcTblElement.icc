@@ -1,6 +1,6 @@
 //////////////////////////
 inline 
- G4ProcTblElement::G4ProcMgrVector*  G4ProcTblElement::GetProcMgrVector() const
+ const G4ProcTblElement::G4ProcMgrVector*  G4ProcTblElement::GetProcMgrVector() const
 {
   return pProcMgrVector;
 }
@@ -26,7 +26,7 @@ inline
 inline 
  G4int  G4ProcTblElement::Length() const
 {
-  if (pProcMgrVector != NULL) return pProcMgrVector->length();
+  if (pProcMgrVector != 0) return pProcMgrVector->length();
   else return -1;
 } 
 
@@ -34,14 +34,14 @@ inline
 inline 
  G4ProcessManager* G4ProcTblElement::GetProcessManager(G4int index) const
 {
-  if (pProcMgrVector != NULL) {
+  if (pProcMgrVector != 0) {
     if ((index < pProcMgrVector->length()) && (index>=0)){
       return (*pProcMgrVector)(index);
     } else {
-      return NULL;
+      return 0;
     }
   } else {
-    return NULL;
+    return 0;
   }
 }
 
@@ -58,19 +58,19 @@ inline
 inline 
  void  G4ProcTblElement::Insert(G4ProcessManager* aProcMgr)
 {
-  if (pProcMgrVector != NULL) pProcMgrVector->insert(aProcMgr);
+  if (pProcMgrVector != 0) pProcMgrVector->insert(aProcMgr);
 } 
 
 //////////////////////////
 inline 
  void  G4ProcTblElement::Remove(G4ProcessManager* aProcMgr)
 {
-  if (pProcMgrVector != NULL) pProcMgrVector->remove(aProcMgr);
+  if (pProcMgrVector != 0) pProcMgrVector->remove(aProcMgr);
 } 
 
 //////////////////////////
 inline 
- G4String G4ProcTblElement::GetProcessName() const
+ const G4String& G4ProcTblElement::GetProcessName() const
 {
   return  pProcess->GetProcessName();
 }

@@ -2,7 +2,7 @@
 
 //////////////////////////
 inline 
- G4ProcessTable::G4ProcNameVector*  G4ProcessTable::GetNameList() const
+ G4ProcessTable::G4ProcNameVector*  G4ProcessTable::GetNameList()
 {
    return  fProcNameVector;
 }
@@ -21,7 +21,7 @@ inline
 			  		 const G4ParticleDefinition* particle)
 					 const
 {
-  if ( particle == NULL ) return NULL; 
+  if ( particle == 0 ) return 0; 
   else return FindProcess(processName, particle->GetProcessManager());
 }
 
@@ -42,7 +42,7 @@ inline
 				G4ParticleDefinition* particle, 
 			     	G4bool                fActive)
 {	
-  if ( particle != NULL ) { 
+  if ( particle != 0 ) { 
     SetProcessActivation(processName, particle->GetProcessManager(), fActive);	
   }	
 }	
@@ -70,7 +70,7 @@ inline
 			  	G4ParticleDefinition* particle, 
 			     	G4bool          fActive)
 {	
-  if ( particle != NULL ) { 
+  if ( particle != 0 ) { 
     SetProcessActivation( processType, particle->GetProcessManager(), fActive);	
   }	
 }	

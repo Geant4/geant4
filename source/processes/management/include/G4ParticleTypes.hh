@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTypes.hh,v 1.1 1999-02-06 10:16:19 kurasige Exp $
+// $Id: G4ParticleTypes.hh,v 1.2 1999-04-13 09:44:52 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

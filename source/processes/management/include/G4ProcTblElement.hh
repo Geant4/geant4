@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcTblElement.hh,v 1.1 1999-01-07 16:13:53 gunter Exp $
+// $Id: G4ProcTblElement.hh,v 1.2 1999-04-13 09:44:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,8 @@
 class G4ProcTblElement
 {
   // this class is used by G4ProcessTable ONLY for booking !!!
-  private:
+  friend class G4ProcessTable;
+  protected:
     G4ProcTblElement();
 
   public:
@@ -50,6 +51,7 @@ class G4ProcTblElement
     G4int operator!=(const G4ProcTblElement &right) const;
     // equal / unequal operator
 
+  protected:
     typedef RWTPtrOrderedVector<G4ProcessManager> G4ProcMgrVector;
 
     G4int Length() const ;
@@ -57,10 +59,10 @@ class G4ProcTblElement
     void  Remove(G4ProcessManager* aProcMgr);
 
     G4VProcess*       GetProcess() const;
-    G4String          GetProcessName() const;
+    const G4String&   GetProcessName() const;
  
     G4ProcessManager* GetProcessManager(G4int index) const;
-    G4ProcMgrVector*  GetProcMgrVector() const;
+    const G4ProcMgrVector*  GetProcMgrVector() const;
   
     G4int             GetIndex(const G4ProcessManager* pManager) const ;
     G4bool            Contains(const G4ProcessManager* pManager) const ;

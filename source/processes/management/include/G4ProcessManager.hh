@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.hh,v 1.1 1999-01-07 16:13:54 gunter Exp $
+// $Id: G4ProcessManager.hh,v 1.2 1999-04-13 09:44:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -222,13 +222,13 @@ class G4ProcessManager
       G4VProcess*  RemoveProcess(G4int      index);
       //  Removes a process from the process List.
       //  return value is pointer to the removed process.
-      //  (NULL value will be returned in case of errors)
+      //  (0 value will be returned in case of errors)
 
       G4VProcess* SetProcessActivation(G4VProcess *aProcess, G4bool fActive);
       G4VProcess* SetProcessActivation(G4int      index, G4bool fActive);
       //  Set activation flag. 
       //  return value is pointer to the applied process.
-      //  (NULL value will be returned in case of errors)
+      //  (0 value will be returned in case of errors)
 
       G4ParticleDefinition*  GetParticleType() const;
       // get the particle type 
@@ -362,7 +362,7 @@ inline
   if ( ivec >=0 ) {
     return theProcVector[ivec];
   } else {
-    return NULL;
+    return 0;
   }
 }
 

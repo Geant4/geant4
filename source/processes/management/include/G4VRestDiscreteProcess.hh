@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRestDiscreteProcess.hh,v 1.1 1999-01-07 16:13:56 gunter Exp $
+// $Id: G4VRestDiscreteProcess.hh,v 1.2 1999-04-13 09:45:16 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,31 +42,31 @@ class G4VRestDiscreteProcess : public G4VProcess
 			    G4ProcessType   aType = fNotDefined );
      G4VRestDiscreteProcess(G4VRestDiscreteProcess &);
 
-     ~G4VRestDiscreteProcess();
+     virtual ~G4VRestDiscreteProcess();
 
-     G4double PostStepGetPhysicalInteractionLength(
+     virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
 			     G4double   previousStepSize,
 			     G4ForceCondition* condition
 			    );
 
-     G4VParticleChange* PostStepDoIt(
+     virtual G4VParticleChange* PostStepDoIt(
 			     const G4Track& ,
 			     const G4Step& 
 			    );
 
-     G4double AtRestGetPhysicalInteractionLength(
+     virtual G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& ,
 			     G4ForceCondition* 
 			    );
       
-     G4VParticleChange* AtRestDoIt(
+     virtual G4VParticleChange* AtRestDoIt(
 			     const G4Track& ,
 			     const G4Step&
 			    );
 
      //  no operation in  AlongStepDoIt
-     G4double AlongStepGetPhysicalInteractionLength(
+     virtual G4double AlongStepGetPhysicalInteractionLength(
                              const G4Track&,
 			     G4double  ,
 			     G4double  ,
@@ -75,10 +75,10 @@ class G4VRestDiscreteProcess : public G4VProcess
 			    ){ return -1.0; };
 
      //  no operation in  AlongStepDoIt
-     G4VParticleChange* AlongStepDoIt(
+     virtual G4VParticleChange* AlongStepDoIt(
 			     const G4Track& ,
 			     const G4Step& 
-			    ) {return NULL;};
+			    ) {return 0;};
  
   protected:
      virtual G4double GetMeanFreePath(const G4Track& aTrack,

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VProcess.hh,v 1.1 1999-01-07 16:13:56 gunter Exp $
+// $Id: G4VProcess.hh,v 1.2 1999-04-13 09:45:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,7 @@ class G4VProcess
 		 G4ProcessType   aType = fNotDefined );
 
   //  copy constructor copys the name but does not copy the 
-  //  physics table (NULL pointer is assigned)
+  //  physics table (0 pointer is assigned)
       G4VProcess(G4VProcess &right);
 
       virtual ~G4VProcess();
@@ -153,7 +153,7 @@ class G4VProcess
       // private void BuildThePhysicsTable()
       // function. Not another BuildPhysicsTable, please.
 
-      G4String GetProcessName() const;
+      const G4String& GetProcessName() const;
       //  Returns the name of the process.
 
       G4ProcessType GetProcessType() const;
@@ -162,7 +162,7 @@ class G4VProcess
       void SetProcessType(G4ProcessType );
       //  Set the process type.
 
-      static G4String GetProcessTypeName(G4ProcessType );
+      static const G4String& GetProcessTypeName(G4ProcessType );
       //  Returns the process type name
 
       virtual void StartTracking();
@@ -237,7 +237,8 @@ class G4VProcess
 // -----------------------------------------
 #include "Randomize.hh"              
 
-inline G4String G4VProcess::GetProcessName() const
+inline 
+ const G4String& G4VProcess::GetProcessName() const
 {
   return theProcessName;
 }

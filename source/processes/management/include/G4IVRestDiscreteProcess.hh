@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IVRestDiscreteProcess.hh,v 1.2 1999-04-09 10:36:18 urban Exp $
+// $Id: G4IVRestDiscreteProcess.hh,v 1.3 1999-04-13 09:44:51 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -38,20 +38,20 @@ class G4IVRestDiscreteProcess : public G4VProcess
 			    G4ProcessType   aType = fNotDefined );
      G4IVRestDiscreteProcess(G4IVRestDiscreteProcess &);
 
-     ~G4IVRestDiscreteProcess();
+     virtual ~G4IVRestDiscreteProcess();
 
-     G4double PostStepGetPhysicalInteractionLength(
+     virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
 			     G4double   previousStepSize,
 			     G4ForceCondition* condition
 			    );
 
-     G4VParticleChange* PostStepDoIt(
+     virtual G4VParticleChange* PostStepDoIt(
 			     const G4Track& ,
 			     const G4Step& 
 			    );
 
-     G4double AtRestGetPhysicalInteractionLength(
+     virtual G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& ,
 			     G4ForceCondition* 
 			    );
@@ -62,19 +62,19 @@ class G4IVRestDiscreteProcess : public G4VProcess
 			    );
 
      //  no operation in  AlongStepDoIt
-     G4double AlongStepGetPhysicalInteractionLength(
+     virtual G4double AlongStepGetPhysicalInteractionLength(
                              const G4Track&,
 			     G4double  ,
 			     G4double  ,
 			     G4double& ,
                              G4GPILSelection*
-			    ){ return -1.0; };
+			    ){ return -1.0; }
 
      //  no operation in  AlongStepDoIt
-     G4VParticleChange* AlongStepDoIt(
+     virtual G4VParticleChange* AlongStepDoIt(
 			     const G4Track& ,
 			     const G4Step& 
-			    ) {return NULL;};
+			    ) {return 0;}
  
   protected:
      virtual void SubtractNumberOfInteractionLengthLeft(
@@ -97,7 +97,7 @@ class G4IVRestDiscreteProcess : public G4VProcess
       G4PhysicsTable* theNlambdaTable ;
       G4PhysicsTable* theInverseNlambdaTable ;
 
-
+      const G4double BIGSTEP;
 };
 
 // -----------------------------------------
@@ -117,100 +117,6 @@ inline
   // dummy routine
    ;
  }    
-
-
-inline G4double G4IVRestDiscreteProcess::
-                             PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition
-                            )
-{// get particle,particle type,kin.energy,material,mat.index
-  G4double nl,nlold,range,rangeold,rangenext,
-           KineticEnergyOld,KineticEnergyNext,value;
-  G4bool isOut;
-  const G4double BIGSTEP=1.e10 ;
-  const G4DynamicParticle* particle = track.GetDynamicParticle();
-  const G4ParticleDefinition* particletype = particle->GetDefinition() ;
-  G4double KineticEnergy = particle->GetKineticEnergy();
-  G4Material* material = track.GetMaterial();
-  const G4MaterialTable* theMaterialTable =
-                         G4Material::GetMaterialTable();
-  G4int materialindex = material->GetIndex();
-
-  nl = (*theNlambdaTable)[materialindex]->
-                           GetValue(KineticEnergy,isOut);
-  range = G4EnergyLossTables::GetPreciseRangeFromEnergy(particletype,
-                                       KineticEnergy,material) ;
-
-  if ( (previousStepSize <=0.0) || (theNumberOfInteractionLengthLeft<=0.0)) {
-    // beggining of tracking (or just after DoIt of this process)
-    ResetNumberOfInteractionLengthLeft();
-  } else {
-    // subtract NumberOfInteractionLengthLeft
-
-    rangeold = range + previousStepSize ;
-    KineticEnergyOld = G4EnergyLossTables::GetPreciseEnergyFromRange(
-                                             particletype,
-                                       rangeold,material);
-    nlold = (*theNlambdaTable)[materialindex]->
-                           GetValue(KineticEnergyOld,isOut);
-
-    if(nlold < nl) {
-#ifdef G4VERBOSE
-      if(verboseLevel>2) {
-	G4cout << GetProcessName() << " PostStepGPIL : Nlambda has been" <<
-	  " increased at update.Nlambda old/new :" << nlold <<
-	    "  " << nl << endl;
-	G4cout << "(theNumberOfInteractionLengthLeft has been increased!)" << endl;
-	
-	G4cout << " correction : Nlambda old=new ........." << endl;
-	
-      }
-#endif
-      //corr. of num errror
-      nlold = nl ;
-     }
-
-    theNumberOfInteractionLengthLeft -= nlold-nl ;
-
-    if(theNumberOfInteractionLengthLeft<perMillion)
-       theNumberOfInteractionLengthLeft=0.;
-  }
-
-
- // condition is set to "Not Forced"
-  *condition = NotForced;
-
-  if(nl <= theNumberOfInteractionLengthLeft){
-    value = BIGSTEP ;
-  } else {
-    KineticEnergyNext = (*theInverseNlambdaTable)[materialindex]->
-                        GetValue(nl-theNumberOfInteractionLengthLeft,isOut);
-    rangenext = G4EnergyLossTables::GetPreciseRangeFromEnergy(particletype,
-                                       KineticEnergyNext,material);
-
-    value = range - rangenext ;
-
-    if(range<rangenext) {
-#ifdef G4VERBOSE
-      if(verboseLevel>2) {
-	G4cout << GetProcessName() << " PostStepGPIL: Step < 0.!, Step=" <<
-	         value << endl;
-	G4cout << "range,rangenext:" << range << "  " << rangenext << endl ;
-	G4cout << "correction : rangenext=range ....." << endl;
-      }
-#endif 
-      //corr. of num error
-      rangenext = range ;
-      value = range - rangenext ;
-    }
-    
-  }
-
-  return value;
-}
-
 
 inline G4VParticleChange* G4IVRestDiscreteProcess::PostStepDoIt(
 			     const G4Track& ,
@@ -265,4 +171,16 @@ inline G4VParticleChange* G4IVRestDiscreteProcess::AtRestDoIt(
 
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -6,7 +6,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessTable.hh,v 1.1 1999-01-07 16:13:54 gunter Exp $
+// $Id: G4ProcessTable.hh,v 1.2 1999-04-13 09:45:02 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,9 +108,7 @@ class G4ProcessTable
   typedef RWTPtrOrderedVector<G4ProcTblElement>  G4ProcTableVector;
   typedef RWTValOrderedVector<G4String> G4ProcNameVector;
 
-  G4ProcNameVector*  GetNameList() const;
-
-
+  G4ProcNameVector*  GetNameList();
   G4ProcTableVector* GetProcTableVector();
 
  private:
@@ -124,7 +122,7 @@ class G4ProcessTable
   G4ProcessVector*   ExtractProcesses( G4ProcTableVector* procTableVector);
    
  public: 
-  void DumpInfo(G4VProcess* process, G4ParticleDefinition* particle=NULL);
+  void DumpInfo(G4VProcess* process, G4ParticleDefinition* particle=0);
 
  public:
    G4UImessenger* CreateMessenger();

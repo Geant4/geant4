@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessTableMessenger.hh,v 1.1 1999-01-07 16:13:54 gunter Exp $
+// $Id: G4ProcessTableMessenger.hh,v 1.2 1999-04-13 09:45:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,10 +48,10 @@ class G4ProcessTableMessenger: public G4UImessenger
 {
   public:
     G4ProcessTableMessenger(G4ProcessTable* pTable);
-    ~G4ProcessTableMessenger();
+    virtual ~G4ProcessTableMessenger();
 
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+    virtual void SetNewValue(G4UIcommand * command,G4String newValues);
+    virtual G4String GetCurrentValue(G4UIcommand * command);
 
   private:
     G4String GetProcessTypeName(G4ProcessType aType) const;  

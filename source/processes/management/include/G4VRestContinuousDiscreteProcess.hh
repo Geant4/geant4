@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRestContinuousDiscreteProcess.hh,v 1.1 1999-01-07 16:13:56 gunter Exp $
+// $Id: G4VRestContinuousDiscreteProcess.hh,v 1.2 1999-04-13 09:45:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,20 +42,20 @@ class G4VRestContinuousDiscreteProcess : public G4VProcess
 				       G4ProcessType   aType = fNotDefined );
       G4VRestContinuousDiscreteProcess(G4VRestContinuousDiscreteProcess &);
 
-      ~G4VRestContinuousDiscreteProcess();
+      virtual  ~G4VRestContinuousDiscreteProcess();
 
-      G4double PostStepGetPhysicalInteractionLength(
+      virtual  G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
 			     G4double   previousStepSize,
 			     G4ForceCondition* condition
 			    );
 
-      G4VParticleChange* PostStepDoIt(
+      virtual  G4VParticleChange* PostStepDoIt(
 			     const G4Track& ,
 			     const G4Step& 
 			    );
 
-      G4double AlongStepGetPhysicalInteractionLength(
+      virtual  G4double AlongStepGetPhysicalInteractionLength(
                              const G4Track& track,
 			     G4double previousStepSize,
 			     G4double currentMinimumStep,
@@ -63,17 +63,17 @@ class G4VRestContinuousDiscreteProcess : public G4VProcess
                              G4GPILSelection* selection
 			    );
 
-      G4VParticleChange* AlongStepDoIt(
+      virtual  G4VParticleChange* AlongStepDoIt(
 			     const G4Track& ,
 			     const G4Step& 
 			    );
  
-      G4double AtRestGetPhysicalInteractionLength(
+      virtual  G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& ,
 			     G4ForceCondition* 
 			    );
 
-      G4VParticleChange* AtRestDoIt(
+      virtual  G4VParticleChange* AtRestDoIt(
 			     const G4Track& ,
 			     const G4Step&
 			    );
