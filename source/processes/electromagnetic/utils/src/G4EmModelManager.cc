@@ -467,7 +467,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
   if(0 < verboseLevel) {
     G4cout << "G4EmModelManager::FillLambdaVector() for particle "
            << particle->GetParticleName()
-           << " in " << material->GetName() 
+           << " in " << material->GetName()
            << G4endl;
   }
 
@@ -538,11 +538,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
       } while (k<nmod-1 && e < upperEkin[regModels->ModelIndex(k)] );
     }
 
-    // Cross section interpolation should start from zero
-    G4double cross = 0.0;
-    if(j > 0) {
-      cross = models[regModels->ModelIndex(k)]->CrossSection(material,particle,e,cut,e)*fac;
-    }
+    G4double cross = models[regModels->ModelIndex(k)]->CrossSection(material,particle,e,cut,e)*fac;
 
     if(1 < verboseLevel) {
       G4cout << "FillLambdaVector: " << j << ".   e(MeV)= " << e/MeV
@@ -642,12 +638,7 @@ void G4EmModelManager::FillSubLambdaVector(G4PhysicsVector* aVector,
       } while (k<nmod-1 && e < upperEkin[regModels->ModelIndex(k)] );
     }
 
-    G4double cross = 0.0;
-
-    // Cross section interpolation should start from zero
-    if (j > 0) {
-      cross = models[regModels->ModelIndex(k)]->CrossSection(material,particle,e,subcut,cut)*fac;
-    }
+    G4double cross=models[regModels->ModelIndex(k)]->CrossSection(material,particle,e,subcut,cut)*fac;
 
     if(1 < verboseLevel) {
         G4cout << "BuildLambdaTable: e(MeV)= " << e/MeV

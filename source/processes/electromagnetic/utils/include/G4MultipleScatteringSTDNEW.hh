@@ -79,7 +79,7 @@ public:    // with description
 
   G4double TruePathLengthLimit(const G4Track&  track,
                                       G4double& lambda,
-                                      G4double  range);
+                                      G4double  currentMinimalStep);
 
   void PrintInfoDefinition();
      // Print few lines of informations about the process: validity range,

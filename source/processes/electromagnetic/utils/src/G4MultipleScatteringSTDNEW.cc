@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScatteringSTDNEW.cc,v 1.1 2003-03-28 12:45:15 vnivanch Exp $
+// $Id: G4MultipleScatteringSTDNEW.cc,v 1.2 2003-04-04 14:33:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -66,7 +66,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4MultipleScatteringSTDNEW.hh"
-#include "G4LossTableManager.hh"
 #include "G4LewisModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,7 +74,7 @@ G4MultipleScatteringSTDNEW::G4MultipleScatteringSTDNEW(const G4String& processNa
      : G4VMultipleScattering(processName),
        lowKineticEnergy(0.1*keV),
        highKineticEnergy(100.*TeV),
-       totBins(110),
+       totBins(100),
        facrange(0.199),
        tlimit(1.e10*mm),
        tlimitmin(1.e-7*mm),
@@ -105,6 +104,10 @@ void G4MultipleScatteringSTDNEW::InitialiseProcess(const G4ParticleDefinition& p
     SetBoundary(false);
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
+  } else {
+    SetBoundary(true);
+    SetLateralDisplasmentFlag(true);
+    SetBuildLambdaTable(true);
   }
   G4VEmModel* em = new G4LewisModel(dtrl,NuclCorrPar,FactPar,facxsi,samplez);
   em->SetLowEnergyLimit(0.1*keV);
@@ -117,33 +120,26 @@ void G4MultipleScatteringSTDNEW::InitialiseProcess(const G4ParticleDefinition& p
 
 G4double G4MultipleScatteringSTDNEW::TruePathLengthLimit(const G4Track&  track,
                                                                G4double& lambda,
-                                                               G4double  range)
+                                                               G4double  currentMinimalStep)
 {
 
-  G4double tPathLength = range;
-
-  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
-  const G4ParticleDefinition* particle = track.GetDynamicParticle()->GetDefinition();
-  G4double T0 = track.GetKineticEnergy();
-  range = G4LossTableManager::Instance()->GetRange(particle,T0,couple);
+  G4double tPathLength = currentMinimalStep;
 
   // special treatment near boundaries ?
   if (boundary) {
 
-    // step limitation at boundary ?
     G4int stepno = track.GetCurrentStepNumber() ;
-
     // first step
-    if(stepno == 1) {
+    if (stepno == 1) {
       stepnolastmsc = -1000000 ;
       tlimit = 1.e10;
-
-    } else {
+    } else if (stepno > 1) {
 
       if (track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary) {
 
         stepnolastmsc = stepno;
         //  if : diff.treatment for small/not small Z
+	G4double range = CurrentRange();
         if (range > lambda) tlimit = facrange*range;
         else                tlimit = facrange*lambda;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.cc,v 1.21 2003-03-17 09:42:56 vnivanch Exp $
+// $Id: G4EnergyLossTables.cc,v 1.22 2003-04-04 14:33:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -935,9 +935,9 @@ void G4EnergyLossTables::CPRWarning()
 //    G4cout << "##### Please, substitute G4Material by G4MaterialCutsCouple" << G4endl;
 //    G4cout << "##### Obsolete interface will be removed soon" << G4endl;
 //    G4cout << G4endl;
-    let_counter++;
+//    let_counter++;
     if ((G4RegionStore::GetInstance())->size() > 1) {
-     G4Exception("G4EnergyLossTables:: More than 1 region - table cannot be accessed");
+     G4Exception("G4EnergyLossTables:: More than 1 region - table can't be accessed with obsolete interface");
      exit(1);
    }
 

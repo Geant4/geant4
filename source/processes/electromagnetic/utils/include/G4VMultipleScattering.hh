@@ -47,6 +47,7 @@
 #define G4VMultipleScattering_h 1
 
 #include "G4VContinuousDiscreteProcess.hh"
+#include "G4LossTableManager.hh"
 #include "globals.hh"
 #include "G4Material.hh"
 #include "G4MaterialCutsCouple.hh"
@@ -82,6 +83,16 @@ public:
   G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
 
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+
+  G4double AlongStepGetPhysicalInteractionLength(
+                                            const G4Track&,
+                                                  G4double  previousStepSize,
+                                                  G4double  currentMinimumStep,
+                                                  G4double& currentSafety,
+                                                  G4GPILSelection* selection);
+     // The function overloads the corresponding function of the base
+     // class.It limits the step near to boundaries only
+     // and invokes the method GetContinuousStepLimit at every step.
 
   virtual void PrintInfoDefinition() const;
   // Print out of the class parameters
@@ -128,12 +139,13 @@ public:
   G4bool BoundaryAlgorithmFlag() const;
   void SetBoundary(G4bool val);
      // boundary algorith is/isnt active
-  
+
   void SetBuildLambdaTable(G4bool val);
 
   virtual G4double TruePathLengthLimit(const G4Track& track,
                                              G4double& lambda,
-                                             G4double  range) = 0;
+                                             G4double currentMinimumStep) = 0;
+
 
 protected:
 
@@ -161,6 +173,7 @@ protected:
   size_t CurrentMaterialCutsCoupleIndex() const {return currentMaterialIndex;};
   // Return current index
 
+  G4double CurrentRange() const {return currentRange;};
 
 private:
 
@@ -198,7 +211,9 @@ private:
   G4double                    truePathLength;
   G4double                    geomPathLength;
   G4double                    lambda0;
+  G4double                    currentRange;
 
+  G4GPILSelection             valueGPILSelectionMSC;
   G4bool                      boundary;
   G4bool                      latDisplasment;
   G4bool                      buildLambdaTable;
@@ -225,6 +240,25 @@ inline G4double G4VMultipleScattering::GetMeanFreePath(const G4Track& track,
   *cond = Forced;
   return DBL_MAX;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double previousStepSize,
+                             G4double currentMinimumStep,
+                             G4double& currentSafety,
+                             G4GPILSelection* selection)
+{
+  // get Step limit proposed by the process
+  valueGPILSelectionMSC = NotCandidateForSelection;
+  G4double steplength = GetContinuousStepLimit(track,previousStepSize,
+                                              currentMinimumStep,currentSafety);
+  // set return value for G4GPILSelection
+  *selection = valueGPILSelectionMSC;
+  return  steplength;
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VMultipleScattering::GetContinuousStepLimit(
@@ -238,10 +272,11 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
   SelectModel(e);
   const G4ParticleDefinition* p = track.GetDefinition();
   lambda0 = GetLambda(p, e);
-  G4double range = currentMinimumStep;
-  G4double truePathLength = TruePathLengthLimit(track,lambda0,range);
+  currentRange = G4LossTableManager::Instance()->GetRange(p,e,currentCouple);
+  truePathLength = TruePathLengthLimit(track,lambda0,currentMinimumStep);
+  if (truePathLength < currentMinimumStep) valueGPILSelectionMSC = CandidateForSelection;
   geomPathLength = currentModel->GeomPathLength(theLambdaTable,currentCouple,
-           p,e,lambda0,range,truePathLength);
+           p,e,lambda0,currentRange,truePathLength);
   if(geomPathLength > lambda0) geomPathLength = lambda0;
   return geomPathLength;
 }

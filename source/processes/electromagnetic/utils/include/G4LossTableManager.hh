@@ -41,6 +41,7 @@
 // 10-03-03 Add Ion registration (V.Ivanchenko)
 // 25-03-03 Add deregistration (V.Ivanchenko)
 // 26-03-03 Add GetDEDXDispersion (V.Ivanchenko)
+// 02-04-03 Change messenger (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -66,7 +67,7 @@
 
 class G4PhysicsTable;
 class G4MaterialCutsCouple;
-class G4EnergyLossMessengerSTD;
+class G4EnergyLossMessenger;
 class G4ParticleDefinition;
 class G4VMultipleScattering;
 
@@ -132,6 +133,8 @@ public:
   void SetMaxEnergy(G4double val);
 
   void SetStepLimits(G4double v1, G4double v2);
+  
+  G4EnergyLossMessenger* GetMessenger();
 
 private:
 
@@ -140,6 +143,8 @@ private:
   void Initialise(const G4ParticleDefinition*);
 
   G4VEnergyLossSTD* BuildTables(const G4ParticleDefinition* aParticle);
+
+  void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle);
 
   //  G4LossTableManager(const G4LossTableManager&);
   //  const G4LossTableManager& operator=(const G4LossTableManager& right);
@@ -158,6 +163,7 @@ private:
   G4std::vector<G4PhysicsTable*> dedx_vector;
   G4std::vector<G4PhysicsTable*> range_vector;
   G4std::vector<G4PhysicsTable*> inv_range_vector;
+  G4std::vector<G4VMultipleScattering*> msc_vector;
 
   // cash
   G4VEnergyLossSTD*    currentLoss;
@@ -183,7 +189,7 @@ private:
 
   G4VEnergyLossSTD*         eIonisation;
   G4LossTableBuilder*       tableBuilder;
-  G4EnergyLossMessengerSTD* theMessenger;
+  G4EnergyLossMessenger*    theMessenger;
   const G4ParticleDefinition* firstParticle;
   G4int verbose;
 
@@ -202,6 +208,8 @@ inline G4double G4LossTableManager::GetDEDX(
     if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
       currentParticle = aParticle;
       currentLoss = (*pos).second;
+    } else {
+      ParticleHaveNoLoss(aParticle);
     }
   }
   return currentLoss->GetDEDX(kineticEnergy, couple);
@@ -219,6 +227,8 @@ inline G4double G4LossTableManager::GetRange(
     if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
       currentParticle = aParticle;
       currentLoss = (*pos).second;
+    } else {
+      ParticleHaveNoLoss(aParticle);
     }
   }
   return currentLoss->GetRange(kineticEnergy, couple);
@@ -236,6 +246,8 @@ inline G4double G4LossTableManager::GetEnergy(
     if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
       currentParticle = aParticle;
       currentLoss = (*pos).second;
+    } else {
+      ParticleHaveNoLoss(aParticle);
     }
   }
   return currentLoss->GetKineticEnergy(range, couple);
@@ -254,6 +266,8 @@ inline  G4double G4LossTableManager::GetDEDXDispersion(
     if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
       currentParticle = aParticle;
       currentLoss = (*pos).second;
+    } else {
+      ParticleHaveNoLoss(aParticle);
     }
   }
   return currentLoss->GetDEDXDispersion(couple, dp, length);

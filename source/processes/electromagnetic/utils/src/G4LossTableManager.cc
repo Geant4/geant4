@@ -39,6 +39,7 @@
 // 17-02-03 Fix problem of store/restore tables (V.Ivanchenko)
 // 10-03-03 Add Ion registration (V.Ivanchenko)
 // 25-03-03 Add deregistration (V.Ivanchenko)
+// 02-04-03 Change messenger (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -48,7 +49,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4LossTableManager.hh"
-#include "G4EnergyLossMessengerSTD.hh"
+#include "G4EnergyLossMessenger.hh"
 #include "G4PhysicsTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
@@ -95,7 +96,7 @@ G4LossTableManager::G4LossTableManager()
   eIonisation = 0;
   minKinEnergy = 0.1*eV;
   maxKinEnergy = 100.0*GeV;
-  theMessenger = new G4EnergyLossMessengerSTD();
+  theMessenger = new G4EnergyLossMessenger();
   theElectron  = G4Electron::Electron();
   tableBuilder = new G4LossTableBuilder();
   integral = true;
@@ -167,6 +168,23 @@ void G4LossTableManager::DeRegister(G4VMultipleScattering*)
 void G4LossTableManager::RegisterIon(const G4ParticleDefinition* ion, G4VEnergyLossSTD* p)
 {
   loss_map[ion] = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4EnergyLossMessenger* G4LossTableManager::GetMessenger()
+{
+  return theMessenger;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+  
+void G4LossTableManager::ParticleHaveNoLoss(const G4ParticleDefinition* aParticle)
+{
+  G4String s = "G4LossTableManager:: dE/dx table not found for "
+             + aParticle->GetParticleName() + "!";
+  G4Exception(s);
+  exit(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

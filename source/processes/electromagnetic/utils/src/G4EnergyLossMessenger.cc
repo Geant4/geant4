@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.6 2003-03-24 17:28:07 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.7 2003-04-04 14:33:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -32,6 +32,7 @@
 #include "G4EnergyLossMessenger.hh"
 
 #include "G4VEnergyLoss.hh"
+#include "G4LossTableManager.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
@@ -94,6 +95,24 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   
   StepFuncCmd->SetParameter(unitPrm);
   StepFuncCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  
+  MinEnCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/minKinEnergy",this);
+  MinEnCmd->SetGuidance("Set the min kinetic energy");
+  MinEnCmd->SetParameterName("emin",true);
+  MinEnCmd->SetUnitCategory("Energy");
+  MinEnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  MaxEnCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/maxKinEnergy",this);
+  MaxEnCmd->SetGuidance("Set the max kinetic energy");
+  MaxEnCmd->SetParameterName("emax",true);
+  MaxEnCmd->SetUnitCategory("Energy");
+  MaxEnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  IntegCmd = new G4UIcmdWithABool("/process/eLoss/integral",this);
+  IntegCmd->SetGuidance("Switch true/false the integration of cross section over step.");
+  IntegCmd->SetParameterName("integ",true);
+  IntegCmd->SetDefaultValue(true);
+  IntegCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -106,22 +125,29 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete MinSubSecCmd;
   delete StepFuncCmd;
   delete eLossDirectory;
+  delete MinEnCmd;
+  delete MaxEnCmd;
+  delete IntegCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
+  G4LossTableManager* lossTables = G4LossTableManager::Instance();
   if (command == RndmStepCmd)
    { G4VEnergyLoss::SetRndmStep(RndmStepCmd->GetNewBoolValue(newValue));
+     lossTables->SetRandomStep(RndmStepCmd->GetNewBoolValue(newValue));
    }
    
   if (command == EnlossFlucCmd)
    { G4VEnergyLoss::SetEnlossFluc(EnlossFlucCmd->GetNewBoolValue(newValue));
+     lossTables->SetLossFluctuations(EnlossFlucCmd->GetNewBoolValue(newValue));
    }
 
   if (command == SubSecCmd)
    { G4VEnergyLoss::SetSubSec(SubSecCmd->GetNewBoolValue(newValue));
+     lossTables->SetSubCutoff(SubSecCmd->GetNewBoolValue(newValue));
    }
 
   if (command == MinSubSecCmd)
@@ -138,7 +164,20 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      G4String unt = unts;
      v2 *= G4UIcommand::ValueOf(unt);
      G4VEnergyLoss::SetStepFunction(v1,v2);
+     lossTables->SetStepLimits(v1,v2);
    }
+  
+  if (command == MinEnCmd) {
+    lossTables->SetMinEnergy(MinEnCmd->GetNewDoubleValue(newValue));
+  }
+
+  if (command == MaxEnCmd) {
+    lossTables->SetMaxEnergy(MaxEnCmd->GetNewDoubleValue(newValue));
+  }
+  if (command == IntegCmd) {
+    lossTables->SetIntegral(IntegCmd->GetNewBoolValue(newValue));
+  }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.39 2003-03-25 13:36:57 maire Exp $
+// $Id: G4VEnergyLoss.cc,v 1.40 2003-04-04 14:33:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -51,6 +51,7 @@
 #include "G4VEnergyLoss.hh"
 #include "G4EnergyLossMessenger.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -92,7 +93,8 @@ G4VEnergyLoss::G4VEnergyLoss(const G4String& aName , G4ProcessType aType)
      nmaxCont2(16)
 {
   //create (only once) EnergyLoss messenger
-  if(!ELossMessenger) ELossMessenger = new G4EnergyLossMessenger();
+//  if(!ELossMessenger) ELossMessenger = new G4EnergyLossMessenger();
+  if(!ELossMessenger) ELossMessenger = G4LossTableManager::Instance()->GetMessenger();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

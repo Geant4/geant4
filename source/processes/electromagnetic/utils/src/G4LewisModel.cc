@@ -310,7 +310,7 @@ G4double G4LewisModel::ComputeTransportCrossSection(
                exp(log(AtomicWeight/(g/mole))/3.));
   if ( x0 < -1. || KineticEnergy  <= 10.*MeV)
       {
-        x0 = -1.; 
+        x0 = -1.;
 	corrnuclsize = 1.;
       }
   else
@@ -379,7 +379,6 @@ G4double G4LewisModel::ComputeTransportCrossSection(
        sigma /= corr;
     }
 
-
   //  nucl. size correction for particles other than e+/e- only at present !!!!
   if((particle->GetParticleName() != "e-") &&
      (particle->GetParticleName() != "e+")   )
@@ -412,6 +411,7 @@ G4double G4LewisModel::GeomPathLength(
   cthm    = 1.;
   tPathLength = truePathLength;
   G4double tau   = tPathLength/lambda0 ;
+
   if (tau <= tausmall) return tPathLength;
 
   G4double zmean = tPathLength;
@@ -427,13 +427,12 @@ G4double G4LewisModel::GeomPathLength(
       G4bool b;
       lambda1 = ((*theLambdaTable)[couple->GetIndex()])->GetValue(T1,b);
     } else {
-      lambda1 = CrossSection(couple->GetMaterial(),particle,T0,0.0,1.0);
+      lambda1 = CrossSection(couple->GetMaterial(),particle,T1,0.0,1.0);
     }
 
     if (T0 > particle->GetPDGMass()) alam = lambda0*tPathLength/(lambda0-lambda1) ;
     G4double blam = 1.+alam/lambda0 ;
-
-    if (tPathLength/range < 2.*dtrl) {
+    if (tPathLength < 2.*dtrl*range) {
       zmean = alam*(1.-exp(blam*log(1.-tPathLength/alam)))/blam ;
 
     } else {
@@ -444,24 +443,22 @@ G4double G4LewisModel::GeomPathLength(
       zm = alam*(1.-exp(blam*log(w)))/blam ;
       zmean = zm + alam*(1.-exp(clam*log(w)))*cthm/clam ;
     }
-
+  }
     //  sample z
-    G4double zt = zmean/tPathLength ;
-    if (samplez && zt < ztmax && zt > 0.5) {
-      G4double cz = 0.5*(3.*zt-1.)/(1.-zt) ;
+  G4double zt = zmean/tPathLength ;
+  if (samplez && zt < ztmax && zt > 0.5) {
+    G4double cz = 0.5*(3.*zt-1.)/(1.-zt) ;
 
-      if(tPathLength < exp(log(tmax)/(2.*cz))) {
-        G4double cz1 = 1.+cz ;
-        G4double grej0 = exp(cz1*log(cz*tPathLength/cz1))/cz ;
-        G4double grej  = grej0;
-        // ??? here are problems in sampling
-	do
-        {
-          zmean = tPathLength*exp(log(G4UniformRand())/cz1) ;
-          grej  = exp(cz*log(zmean))*(tPathLength-zmean) ;
-
-        } while (grej < grej0*G4UniformRand()) ;
-      }
+    if (tPathLength < exp(log(tmax)/(2.*cz))) {
+      G4double cz1 = 1.+cz ;
+      G4double grej0 = exp(cz1*log(cz*tPathLength/cz1))/cz ;
+      G4double grej  = grej0;
+      do {
+        zmean = tPathLength*exp(log(G4UniformRand())/cz1) ;
+        grej  = exp(cz*log(zmean))*(tPathLength-zmean) ;
+        if (grej > grej0)
+	    G4cout << "G4LewisModel: Warning! majoranta " << grej0 << " < " << grej << G4endl;
+      } while (grej < grej0*G4UniformRand()) ;
     }
   }
 
@@ -474,7 +471,7 @@ G4double G4LewisModel::TrueStepLength(G4double& geomStepLength)
 {
   G4double trueLength = geomStepLength;
   if (geomStepLength > lambda0*tausmall) {
-    
+
     G4double blam = 1.+alam/lambda0;
     if (lambda1 < 0.) {
       trueLength = -lambda0*log(1.-geomStepLength/lambda0) ;
@@ -522,20 +519,20 @@ G4double G4LewisModel::SampleCosineTheta(G4double& trueStepLength)
   {
     cth = -1.+2.*G4UniformRand();
   }
-  else if (tau > tausmall)
+  else if (tau >= tausmall)
   {
-    if (lambdam < 0.)
-      tau = -alam*log(1.-trueStepLength/alam)/lambda0 ;
-    else
-      tau = -log(cthm)-alam*log(1.-(trueStepLength-0.5*tPathLength)/alam)/lambdam ;
-
-    if(tau > taubig)
+    if(lambda1 > 0.)
     {
-      cth = -1.+2.*G4UniformRand();
+      if (lambdam < 0.)
+        tau = -alam*log(1.-trueStepLength/alam)/lambda0 ;
+      else
+        tau = -log(cthm)-alam*log(1.-(trueStepLength-0.5*tPathLength)/alam)/lambdam ;
     }
+    if(tau > taubig) cth = -1.+2.*G4UniformRand();
+
     else
     {
-      const G4double amax = 25. ;
+     const G4double amax = 25. ;
       const G4double tau0 = 0.02  ;
 
       G4double a;
@@ -543,7 +540,7 @@ G4double G4LewisModel::SampleCosineTheta(G4double& trueStepLength)
       G4double w = log(tau/tau0) ;
       if (tau < tau0) a = (alfa1-alfa2*w)/tau ;
       else            a = (alfa1+alfa3*w)/tau ;
-
+      
       G4double x0 = 1.-xsi/a ;
       if(x0 < 0.) x0 = 0. ;
 
@@ -591,7 +588,7 @@ G4double G4LewisModel::SampleCosineTheta(G4double& trueStepLength)
       // sampling of costheta
       if (G4UniformRand() < qprob)
       {
-        if (G4UniformRand() < prob)
+       if (G4UniformRand() < prob)
            cth = 1.+log(ea+G4UniformRand()*eaa)/a ;
         else
            cth = b-b1*bx/exp(log(ebx-G4UniformRand()*(ebx-eb1))/(c-1.)) ;
@@ -614,7 +611,6 @@ G4double G4LewisModel::SampleDisplacement(G4double& trueStepLength)
   const G4double kappami1 = kappa-1.;
   G4double rmean = 0.0;
   G4double tau = trueStepLength/lambda0;
-
   if (tau < taulim)
   {
     rmean = kappa*tau*tau*tau*(1.-kappapl1*tau/4.)/6. ;
