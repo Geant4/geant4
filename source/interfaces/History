@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2001-12-03 08:08:08 barrand Exp $
+$Id: History,v 1.49 2001-12-06 16:27:22 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-03 December 2001 Guy Barrand
+03 December 2001 Guy Barrand (interfaces-V03-02-04)
 - G4VInteractorManager::RemoveDispatcher : change the "std::remove"
   logic in order to fix a disfunctionning with vis/OpenInventor driver.
 - G4Xt.cc : remove some g++ compilation warnings about unused 
