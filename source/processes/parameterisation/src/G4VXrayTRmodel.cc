@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VXrayTRmodel.cc,v 1.3 2000-06-15 17:38:39 gcosmo Exp $
+// $Id: G4VXrayTRmodel.cc,v 1.4 2000-07-14 16:01:18 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -98,7 +98,18 @@ G4VXrayTRmodel::G4VXrayTRmodel(G4Envelope *anEnvelope, G4double a, G4double b) :
 
 G4VXrayTRmodel::~G4VXrayTRmodel()
 {
-  ;
+   G4int i ;
+   for(i=0;i<fGasIntervalNumber;i++)
+   {
+     delete[] fGasPhotoAbsCof[i] ;
+   }
+   delete[] fGasPhotoAbsCof ;
+
+   for(i=0;i<fPlateIntervalNumber;i++)
+   {
+     delete[] fPlatePhotoAbsCof[i] ;
+   }
+   delete[] fPlatePhotoAbsCof ; 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
