@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T07EventAction.cc,v 1.1 1999-01-08 16:35:11 gunter Exp $
+// $Id: T07EventAction.cc,v 1.2 1999-04-17 07:00:41 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,7 +78,7 @@ T07EventAction::~T07EventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void T07EventAction::BeginOfEventAction()
+void T07EventAction::BeginOfEventAction(const G4Event*)
 {  if(calorimeterCollID==-1)
   {
     G4SDManager * SDman = G4SDManager::GetSDMpointer();
@@ -88,10 +88,9 @@ void T07EventAction::BeginOfEventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void T07EventAction::EndOfEventAction()
+void T07EventAction::EndOfEventAction( const G4Event* evt )
 {
-  const G4Event* evt = fpEventManager->GetConstCurrentEvent();
-
+ 
 #ifdef MAKEHBOOK
   if(evt->GetEventID()%100==0)
     G4cout << ">>> Event " << evt->GetEventID() << endl;

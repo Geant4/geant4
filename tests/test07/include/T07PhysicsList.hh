@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T07PhysicsList.hh,v 1.1 1999-01-08 16:35:09 gunter Exp $
+// $Id: T07PhysicsList.hh,v 1.2 1999-04-17 07:00:37 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,14 +43,14 @@ class T07PhysicsList: public G4VUserPhysicsList
 {
   public:
     T07PhysicsList();
-   ~T07PhysicsList();
+    virtual ~T07PhysicsList();
 
   protected:
     // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
  
-    void SetCuts(G4double);
+    virtual void SetCuts();
     
   protected:
     // these methods Construct particles 
@@ -87,6 +87,19 @@ class T07PhysicsList: public G4VUserPhysicsList
 };
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

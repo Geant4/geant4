@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T07SteppingAction.cc,v 1.1 1999-01-08 16:35:13 gunter Exp $
+// $Id: T07SteppingAction.cc,v 1.2 1999-04-17 07:00:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,7 +27,7 @@ T07SteppingAction::~T07SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void T07SteppingAction::UserSteppingAction()
+void T07SteppingAction::UserSteppingAction(const G4Step*)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

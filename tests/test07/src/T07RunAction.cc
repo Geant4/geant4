@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T07RunAction.cc,v 1.1 1999-01-08 16:35:12 gunter Exp $
+// $Id: T07RunAction.cc,v 1.2 1999-04-17 07:00:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,9 +34,9 @@ T07RunAction::~T07RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void T07RunAction::BeginOfRunAction(G4Run* aRun)
+void T07RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  aRun->SetRunID(runIDcounter++);
+  ((G4Run*)(aRun))->SetRunID(runIDcounter++);
    
   G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
 
@@ -53,7 +53,7 @@ void T07RunAction::BeginOfRunAction(G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void T07RunAction::EndOfRunAction(G4Run* aRun)
+void T07RunAction::EndOfRunAction(const G4Run* )
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   

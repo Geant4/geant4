@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T07EventAction.hh,v 1.1 1999-01-08 16:35:09 gunter Exp $
+// $Id: T07EventAction.hh,v 1.2 1999-04-17 07:00:36 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,11 +33,11 @@ class T07EventAction : public G4UserEventAction
 {
   public:
     T07EventAction();
-   ~T07EventAction();
+    virtual ~T07EventAction();
 
   public:
-    void BeginOfEventAction();
-    void EndOfEventAction();
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
     
     void SetDrawFlag(G4String val)  {drawFlag = val;};
     

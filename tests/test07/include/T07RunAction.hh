@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T07RunAction.hh,v 1.1 1999-01-08 16:35:10 gunter Exp $
+// $Id: T07RunAction.hh,v 1.2 1999-04-17 07:00:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,11 +27,11 @@ class T07RunAction : public G4UserRunAction
 {
   public:
     T07RunAction();
-   ~T07RunAction();
+    virtual ~T07RunAction();
 
   public:
-    void BeginOfRunAction(G4Run*);
-    void EndOfRunAction(G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
 
   private:
     G4int runIDcounter;
