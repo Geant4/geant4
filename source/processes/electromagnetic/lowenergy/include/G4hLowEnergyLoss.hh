@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyLoss.hh,v 1.5 2000-08-10 22:07:17 vnivanch Exp $
+// $Id: G4hLowEnergyLoss.hh,v 1.6 2000-09-05 13:03:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -101,14 +101,10 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
      static G4double Mass,taulow,tauhigh,ltaulow,ltauhigh;
 
   protected:
-    // data members to speed up the fluctuation calculation
-    G4Material *lastMaterial ;
-    G4int imat ;
-    G4double f1Fluct,f2Fluct,e1Fluct,e2Fluct,rateFluct,ipotFluct;
-    G4double e1LogFluct,e2LogFluct,ipotLogFluct;
-    const G4double MaxExcitationNumber ;
-    const G4double probLimFluct ;
-    const long nmaxDirectFluct,nmaxCont1,nmaxCont2 ;
+  G4Material *lastMaterial ;
+  const G4double MaxExcitationNumber ;
+  const G4double probLimFluct ;
+  const long nmaxDirectFluct,nmaxCont1,nmaxCont2 ;
 
 // ====================================================================
 //  static part of the class

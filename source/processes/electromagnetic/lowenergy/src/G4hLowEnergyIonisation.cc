@@ -1062,9 +1062,14 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 //  The model used to get the fluctuation is essentially the same 
 // as in Glandz in Geant3.
 {
-   static const G4double minLoss = 1.*eV ;
-   static const G4double kappa = 10. ;
-   static const G4double theBohrVelocity2 = 50.0 * keV/protonMass ;
+  // data members to speed up the fluctuation calculation
+  //  G4int imat ;
+  //  G4double f1Fluct,f2Fluct,e1Fluct,e2Fluct,rateFluct,ipotFluct;
+  //  G4double e1LogFluct,e2LogFluct,ipotLogFluct;
+
+  static const G4double minLoss = 1.*eV ;
+  static const G4double kappa = 10. ;
+  static const G4double theBohrVelocity2 = 50.0 * keV/protonMass ;
 
   G4int    imaterial   = material->GetIndex() ; 
   G4double ipotFluct   = material->GetIonisation()->GetMeanExcitationEnergy() ;
