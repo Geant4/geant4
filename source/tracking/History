@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2001-01-12 05:55:19 tsasaki Exp $
+$Id: History,v 1.15 2001-02-05 18:10:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,17 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Jan 12,01 T.Sasaki (tracking-V03-00-01)
+
+Feb 05, 01 G.Cosmo (tracking-V03-00-02)
+- STL migration for G4OrderedTable and G4DataVector.
+  Modified files: G4VSteppingVerbose.hh.
+
+Jan 12, 01 T.Sasaki (tracking-V03-00-01)
 - correction of class description 
-Nov 04,00 T.Sasaki (tracking-V02-00-02)
+
+Nov 04, 00 T.Sasaki (tracking-V02-00-02)
 - G4TrackingManager.icc has been modified for new biasing schme
 - Descriptions are added too header files
-- 
-Aug 30,00 T.Sasaki (tracking-V02-00-01)
+
+Aug 30, 00 T.Sasaki (tracking-V02-00-01)
 - Protection for no AtRestDoIt procs. 
+
 June 2, 00 M.Asai (tracking-01-01-01)
 - Add SetUserTrackInformation(G4VUserTrackInformation*) to
- G4TrackingManager
+  G4TrackingManager
 - Fix problems in deleteing Touchable in G4SteppingManager (Hisaya) 
 
 Hune 1, 00 H.Kurashige
@@ -35,19 +42,27 @@ Hune 1, 00 H.Kurashige
 Jan 23, 00 T.Sasaki 
 - GetCurrentValue() in G4TrackingMessenger.cc have a return value
 - SetUserAction in G4SteppingManager.hh protected null pointers
+
 Oct 22, 99 T.Sasaki G4SteppingMangaer.cc fixed the UserLmit problem     
+
 Oct 13, 99 T.Sasaki updated G4SteppingVerbose and G4VSteppingVerbose 
+
 Jun 29, 99 G.Folger have the ctor always assign a SteppingVerbose to fVerbose
+
 Apr 15, 99 M.Asai (tracking-01-00-03)
 - Make arguments in user action classes take const pointers.
 - Make trajectory and trajectory point as derivable classes.
+
 Mar 23, 99 T.Sasaki    (tracking-01-00-02)
 - Fix for precision problem of safety in SteppingManager by John Apostolakis
 - G4VSteppingVerbose is introduced  
+
 Feb 18, 99 T.Sasaki (tracking-01-00-01)
 - ShowStep() method was moved from G4Step to G4SteppingVerbose
+
 Nov 25, 98 T.Sasaki    (tracking-00-04-03)
 - Fix to G4SteppingManager.cc to set proper 2ndary numbers.
+
 Nov 17 ,98 H.Kurashige (tracking-00-04-01)
 - Fixed treatment of safety in case of ApplyCuts flag is ON
 

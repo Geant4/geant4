@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSteppingVerbose.hh,v 1.7 2000-11-11 06:34:11 tsasaki Exp $
+// $Id: G4VSteppingVerbose.hh,v 1.8 2001-02-05 18:10:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -31,6 +31,7 @@
 class G4SteppingManager;
 
 #include "globals.hh"                 // Include from 'global'
+#include "g4rw/tvordvec.h"  
 class G4Navigator;
 class G4VPhysicalVolume;
 class G4VSensitiveDetector;
