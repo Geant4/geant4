@@ -3,13 +3,6 @@
                                 (10-Mar-2000)
              Copyright : Geant4 Collaboration
 **********************************************
-Constructing Visualization Manager....
-Initialising Visualization Manager....
-Registering graphics systems....
-G4VisManager::RegisterGraphicsSystem: WARNING: attempt to
-  register a "no functionality" graphics system, probably an
-  unbuilt system, i.e., a system not available locally.  Please
-  consult your computer manager.  System was FukuiRendererFile (DAWNFILE)
  RDM Applies to all Volumes
          RDM Applies to Volume universe_L
          RDM Applies to Volume aSphere_L1
@@ -41,13 +34,21 @@ The cut energy is set 1.79769e+305GeV
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
+ eIoni   Minimum Delta cut in range=100  mm.
+
+           material       min.delta energy(keV) 
+
+              Vacuum           0.99
+           aluminium          75786
+       silicon oxide          72236
+
+eBrem:  Total cross sections from a parametrisation. Good description from 10 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
@@ -59,7 +60,15 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+ hIoni    Minimum Delta cut in range=100  mm.
+
+           material        min.delta energy(keV) 
+
+              Vacuum           0.99
+           aluminium          75786
+       silicon oxide          72236
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -69,20 +78,20 @@ hIoni:    Knock-on electron cross sections .
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 MuBrems:  theoretical cross section 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuPairProd:  theoretical cross sections 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 ################################################################################
 #                                                                              #
 # ESA-CERN GEANT4 RADIOACTIVE DECAY MODULE                                     #
@@ -108,7 +117,7 @@ MuPairProd:  theoretical cross sections
 # 
 G4ProcessManagerMessenger:: copy constructor 
 ### Run : 0
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /home/geant4/g4/geant4/data/Radioactivity/z12.a24
+G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/data/RadiativeDecay/z12.a24
 The nucleus is assumed to be stable 
 G4ProcessManagerMessenger:: copy constructor 
        0.001           1           0     Na24[0.0]
@@ -189,5 +198,3 @@ G4ProcessManagerMessenger:: copy constructor
     7.39e+03           1   0.0002055     alpha
          140           1   0.0002055     Pb211[0.0]
 
-Graphics systems deleted.
-VisManager deleting.
