@@ -68,12 +68,6 @@ int main(int argc, char** argv)
   ofstream* fout_b = new ofstream();
   string fname2 = "dsdedtet.out";
   fout_b->open(fname2.c_str(), std::ios::out|std::ios::trunc);
-  ofstream* fout_c = new ofstream();
-  string fname3 = "dsdedtet.dat";
-  fout_c->open(fname3.c_str(), std::ios::out|std::ios::trunc);
-
-  (*fout_c) << "#####..Result.of.parcing..#######.. "
-            << G4endl;
 
 
   //there can't be lines longer than nmax characters
@@ -108,10 +102,10 @@ int main(int argc, char** argv)
     if(fin->eof() || line[0] == 'E' && line[1] == 'N' && line[2] == 'D') {
       end = false;
     } else if(line[0] == 'M' && line[1] == 'E' && line[2] == 'V') {
-      (*fin) >> ebeam >> e;
 
       double an, a, e, s, s1, e0;
       int i, j, jj, nbin;
+      (*fin) >> ebeam >> e;
       (*fin) >> word1 >> word2 >> nbin;
       (*fin) >> word1 >> word2 >> word3 >> line1;
       (*fin) >> word1 >> word2 >> word3 >> line1;
@@ -120,6 +114,15 @@ int main(int argc, char** argv)
       energy.clear();
       cross.clear();
       err.clear();
+      angle.push_back(30.);
+      angle.push_back(60.);
+      angle.push_back(90.);
+      angle.push_back(120.);
+      angle.push_back(150.);
+      for (i=0; i<5; i++) {
+        cross.push_back(new G4DataVector());
+        err.push_back(new G4DataVector());
+      }
       an = 0.;
       e0 = 0.;
       j = 0;
@@ -128,51 +131,39 @@ int main(int argc, char** argv)
         if(1 < verbose) {
           cout << "an= " << a << "e= " << e << " cross= " << s << " +- " << s1 << endl;
         }
-	if(an != a) {
-          if(an>0.) inn.push_back(j);
-	  j = 0;
-          (*fout_c) << "#####..Ebeam(MeV)= " << ebeam/MeV << " Theta(deg)= " << a << G4endl;
-	  an = a;
- 	  angle.push_back(a);
+	if(e != e0) {
+	  e0 = e;
+	  energy.push_back(e);
 	}
-	j++;
-	energy.push_back(e);
-	cross.push_back(s);
-	err.push_back(s1);
-
-        (*fout_c) << j << ".   e(MeV)= " << e
-	          << "  cross(mb/sr/MeV)= "
-	          << s << " +- " << s1 << endl;
+        for (j=0; j<5; j++) {if(abs(a - angle[j])<1.) break;}
+	cross[j]->push_back(s);
+	err[j]->push_back(s1);
       }
-      inn.push_back(j);
-      int jbin = inn.size();
-      i = 0;
-      for(j=0; j<jbin; j++) {
-        int k = inn[j];
-        (*fout_b) << "#####..Ebeam(MeV)= " << ebeam/MeV << " Theta(deg)= " << angle[j] << G4endl;
+
+      for(i=0; i<5; i++) {
+        int k = cross[i]->size();
+	(*fout_b) << "#####..Ebeam(MeV)= " << ebeam/MeV << " Theta(deg)= " << angle[i] << G4endl;
         (*fout_b) << "ve/create X(" << k << ") R ";
         for(jj=0; jj<k; jj++) {
-          (*fout_b) << energy[i+jj] << " ";
+          (*fout_b) << energy[jj] << " ";
         }
         (*fout_b) << endl;
         (*fout_b) << "ve/create Y(" << k << ") R ";
 
         for(jj=0; jj<k; jj++) {
-          (*fout_b) << cross[i+jj] << " ";
+          (*fout_b) << (*cross[i])[jj] << " ";
 	}
         (*fout_b) << endl;
         (*fout_b) << "ve/create Z(" << k << ") R ";
         for(jj=0; jj<k; jj++) {
-          (*fout_b) << err[i+jj] << " ";
+          (*fout_b) << (*err[i])[jj] << " ";
 	}
         (*fout_b) << endl;
-	i += k;
       }
       (*fout_b) << endl;
     }
   } while (end);
   (*fout_b) << "#####..End..#####" << G4endl;
-  (*fout_c) << "#####..End..#####" << G4endl;
 }
 
 
