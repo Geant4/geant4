@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: F01FieldMessenger.cc,v 1.2 2001-03-29 10:51:00 grichine Exp $
+// $Id: F01FieldMessenger.cc,v 1.3 2001-03-29 16:29:50 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,7 +22,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 F01FieldMessenger::F01FieldMessenger(F01ElectroMagneticField* pEMfield)
-:fEMfield(pEMfield)
+  :fEMfield(pEMfield)
 { 
   F01detDir = new G4UIdirectory("/field/");
   F01detDir->SetGuidance("F01 field tracking control.");
@@ -40,13 +40,20 @@ F01FieldMessenger::F01FieldMessenger(F01ElectroMagneticField* pEMfield)
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(Idle);
       
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/field/setField",this);  
+  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);  
   MagFieldCmd->SetGuidance("Define magnetic field.");
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false,false);
   MagFieldCmd->SetDefaultUnit("tesla");
-  MagFieldCmd->AvailableForStates(Idle);  
-      
+  MagFieldCmd->AvailableForStates(Idle); 
+ 
+  MinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);  
+  MinStepCmd->SetGuidance("Define minimal step");
+  MinStepCmd->SetGuidance("Magnetic field will be in Z direction.");
+  MinStepCmd->SetParameterName("min step",false,false);
+  MinStepCmd->SetDefaultUnit("mm");
+  MinStepCmd->AvailableForStates(Idle);  
+       
   AbsMaterCmd = new G4UIcmdWithAString("/field/setAbsMat",this);
   AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
   AbsMaterCmd->SetParameterName("choice",true);
@@ -62,6 +69,7 @@ F01FieldMessenger::~F01FieldMessenger()
 {
   delete StepperCmd;
   delete MagFieldCmd;
+  delete MinStepCmd;
   delete F01detDir;
   delete UpdateCmd;
 
@@ -86,8 +94,39 @@ void F01FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
   { 
     fEMfield->SetFieldValue(MagFieldCmd->GetNewDoubleValue(newValue));
   }
+  if( command == MinStepCmd )
+  { 
+    fEMfield->SetMinStep(MinStepCmd->GetNewDoubleValue(newValue));
+  }
 }
 
 //
 //
 /////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

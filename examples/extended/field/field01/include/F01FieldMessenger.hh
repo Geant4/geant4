@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: F01FieldMessenger.hh,v 1.2 2001-03-29 10:50:48 grichine Exp $
+// $Id: F01FieldMessenger.hh,v 1.3 2001-03-29 16:29:17 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,7 @@ class F01FieldMessenger: public G4UImessenger
 
     G4UIcmdWithAnInteger*      StepperCmd;
     G4UIcmdWithADoubleAndUnit* MagFieldCmd;
+    G4UIcmdWithADoubleAndUnit* MinStepCmd;
     G4UIcmdWithoutParameter*   UpdateCmd;
 
     G4UIcmdWithAString*        AbsMaterCmd;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: F01ElectroMagneticField.cc,v 1.3 2001-03-29 10:51:00 grichine Exp $
+// $Id: F01ElectroMagneticField.cc,v 1.4 2001-03-29 16:30:00 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -40,6 +40,7 @@
 //  Constructors:
 
 F01ElectroMagneticField::F01ElectroMagneticField()
+  :  fStepper(NULL),fChordFinder(NULL)
 {
   fMagneticField = new G4UniformMagField(G4ThreeVector(0.0,0.2*tesla,0.0));
 
@@ -52,9 +53,9 @@ F01ElectroMagneticField::F01ElectroMagneticField()
  
   fEquation = new G4Mag_UsualEqRhs(fMagneticField); 
  
-  fMinStep     = 1.0*mm ;
+  fMinStep     = 1.0*mm ; // minimal step of 1 mm is default
 
-  fStepperType = 4 ;
+  fStepperType = 4 ;      // ClassicalRK4 is default stepper
 
   fFieldManager = G4TransportationManager::GetTransportationManager()
                                          ->GetFieldManager();
@@ -91,7 +92,7 @@ F01ElectroMagneticField::~F01ElectroMagneticField()
 void F01ElectroMagneticField::UpdateField()
 {
   SetStepper();
-
+  G4cout<<"The minimal step is equal to "<<fMinStep/mm<<" mm"<<G4endl;
   fFieldManager->SetDetectorField(fMagneticField );
 
   if(fChordFinder) delete fChordFinder;
@@ -113,16 +114,46 @@ void F01ElectroMagneticField::SetStepper()
 
   switch ( fStepperType ) 
   {
-    case 0:  fStepper = new G4ExplicitEuler( fEquation );      break;
-    case 1:  fStepper = new G4ImplicitEuler( fEquation );      break;
-    case 2:  fStepper = new G4SimpleRunge( fEquation );        break;
-    case 3:  fStepper = new G4SimpleHeum( fEquation );         break;
-    case 4:  fStepper = new G4ClassicalRK4( fEquation );       break;
-    case 5:  fStepper = new G4HelixExplicitEuler( fEquation ); break;
-    case 6:  fStepper = new G4HelixImplicitEuler( fEquation ); break;
-    case 7:  fStepper = new G4HelixSimpleRunge( fEquation );   break;
-    case 8:  fStepper = new G4CashKarpRKF45( fEquation );      break;
-    case 9:  fStepper = new G4RKG3_Stepper( fEquation );       break;
+    case 0:  
+      fStepper = new G4ExplicitEuler( fEquation ); 
+      G4cout<<"G4ExplicitEuler is calledS"<<G4endl;     
+      break;
+    case 1:  
+      fStepper = new G4ImplicitEuler( fEquation );      
+      G4cout<<"G4ImplicitEuler is calledS"<<G4endl;     
+      break;
+    case 2:  
+      fStepper = new G4SimpleRunge( fEquation );        
+      G4cout<<"G4SimpleRunge is calledS"<<G4endl;     
+      break;
+    case 3:  
+      fStepper = new G4SimpleHeum( fEquation );         
+      G4cout<<"G4SimpleHeum is calledS"<<G4endl;     
+      break;
+    case 4:  
+      fStepper = new G4ClassicalRK4( fEquation );       
+      G4cout<<"G4ClassicalRK4 (default) is calledS"<<G4endl;     
+      break;
+    case 5:  
+      fStepper = new G4HelixExplicitEuler( fEquation ); 
+      G4cout<<"G4HelixExplicitEuler is calledS"<<G4endl;     
+      break;
+    case 6:  
+      fStepper = new G4HelixImplicitEuler( fEquation ); 
+      G4cout<<"G4HelixImplicitEuler is calledS"<<G4endl;     
+      break;
+    case 7:  
+      fStepper = new G4HelixSimpleRunge( fEquation );   
+      G4cout<<"G4HelixSimpleRunge is calledS"<<G4endl;     
+      break;
+    case 8:  
+      fStepper = new G4CashKarpRKF45( fEquation );      
+      G4cout<<"G4CashKarpRKF45 is calledS"<<G4endl;     
+      break;
+    case 9:  
+      fStepper = new G4RKG3_Stepper( fEquation );       
+      G4cout<<"G4RKG3_Stepper is calledS"<<G4endl;     
+      break;
     default: fStepper = 0;
   }
   return; 
@@ -137,7 +168,7 @@ void F01ElectroMagneticField::SetFieldValue(G4double fieldValue)
 {
   if(fMagneticField) delete fMagneticField;
   fMagneticField = new  G4UniformMagField(G4ThreeVector(0,0,fieldValue));
-  UpdateField();
+  //  UpdateField();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -155,7 +186,7 @@ void F01ElectroMagneticField::SetFieldValue(G4ThreeVector fieldVector)
     if(fMagneticField) delete fMagneticField;
     fMagneticField = new  G4UniformMagField(fieldVector);
 
-    UpdateField();
+    // UpdateField();
    
     fieldMgr->SetDetectorField(this);
   }
