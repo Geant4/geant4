@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.4 2004-08-09 09:03:01 vnivanch Exp $
+// $Id: G4EmCalculator.hh,v 1.5 2004-08-26 10:47:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -128,16 +128,17 @@ public:
                                      G4double cut = 0.0,
 			             size_t idxRegion = 0);
 
+  const G4ParticleDefinition* FindParticle(const G4String&);
+
+  const G4Material* FindMaterial(const G4String&);
+
+  const G4MaterialCutsCouple* FindCouple(const G4Material*);
 
 private:
 
   G4bool UpdateParticle(const G4ParticleDefinition*, G4double kinEnergy);
-  const G4ParticleDefinition* FindParticle(const G4String&, G4double kinEnergy);
  
-  void FindMaterial(const G4Material*);
-  const G4Material* FindMaterial(const G4String&);
-
-  void FindCouple(const G4Material*, G4double cut);
+  G4bool UpdateCouple(const G4Material*, G4double cut);
 
   void FindLambdaTable(const G4ParticleDefinition*, const G4String& processName);
 

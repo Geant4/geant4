@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.hh,v 1.2 2004-07-22 14:44:06 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.hh,v 1.3 2004-08-26 10:47:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -81,9 +81,10 @@ private:
   G4ionEffectiveCharge(const G4ionEffectiveCharge&);
 
   G4double                    chargeCorrection;
-  G4double                    chargeLowLimit;
+  G4double                    energyHighLimit;
   G4double                    energyLowLimit;
-
+  G4double                    energyBohr;
+  G4double                    massFactor;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

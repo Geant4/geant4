@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.1 2004-07-05 13:37:06 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.cc,v 1.2 2004-08-26 10:47:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,8 +52,10 @@
 G4ionEffectiveCharge::G4ionEffectiveCharge()
 {
   chargeCorrection = 1.0;
-  energyLowLimit   = 25.*MeV;
-  chargeLowLimit   = 0.1;
+  energyHighLimit  = 25.*MeV;
+  energyLowLimit   = 3.25*keV;
+  energyBohr       = 25.*keV;
+  massFactor       = amu_c2/(proton_mass_c2*keV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -79,7 +81,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   // Vol.1, Pergamon Press, 1985
   // Fast ions or hadrons
   G4double reducedEnergy = kineticEnergy * proton_mass_c2/mass ;
-  if( reducedEnergy > energyLowLimit || Zi < 1.5 ) return charge;
+  if( reducedEnergy > energyHighLimit || Zi < 1.5 ) return charge;
 
   static G4double vFermi[92] = {
     1.0309,  0.15976, 0.59782, 1.0781,  1.0486,  1.0,     1.058,   0.93942, 0.74562, 0.3424,
@@ -143,59 +145,64 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     z  /= norm ;
     vF /= norm ;
     lF /= norm ;
-  }
+  }  
 
+  reducedEnergy = std::max(reducedEnergy,energyLowLimit);
   G4double q;
   // Helium ion case
   if( Zi < 2.5 ) {
 
-    // Normalise to He4 mass
-    G4double e = log(std::max(1.0, kineticEnergy / (keV*4.0026) ) );
-    G4double x = c[0] ;
-    G4double y = 1.0 ;
+    G4double Q = std::max(0.0,log(reducedEnergy*massFactor));
+    G4double x = c[0];
+    G4double y = 1.0;
     for (G4int i=1; i<6; i++) {
-      y *= e ;
+      y *= Q;
       x += y * c[i] ;
     }
-    q = 7.6 -  e ;
-    q = 1.0 + ( 0.007 + 0.00005 * z ) * exp( -q*q ) * sqrt(1.0 - exp(-x)) ;
-    if( q < chargeLowLimit ) q = chargeLowLimit ;
+    G4double tq = 7.6 - Q;
+    q = (1.0 + ( 0.007 + 0.00005 * z ) * exp( -tq*tq )) * sqrt(1.0 - exp(-x)) ;
 
     // Heavy ion case
   } else {
+
+    G4double z23  = pow(z, 0.666667);
+    G4double zi13 = pow(Zi, 0.33333);
+    G4double zi23 = zi13*zi13;
+    reducedEnergy = std::max(reducedEnergy,energyBohr/z23);
+    
     // v1 is ion velocity in vF unit
-    G4double v1 = sqrt( reducedEnergy / (25.0 * keV) )/ vF ;
+    G4double v1 = sqrt( reducedEnergy / energyBohr )/ vF ;
     G4double y ;
-    G4double z13 = pow(Zi, 0.3333) ;
 
     // Faster than Fermi velocity
     if ( v1 > 1.0 ) {
-      y = vF * v1 * ( 1.0 + 0.2 / (v1*v1) ) / (z13*z13) ;
+      y = vF * v1 * ( 1.0 + 0.2 / (v1*v1) ) / zi23 ;
 
       // Slower than Fermi velocity
     } else {
-      y = 0.6923 * vF * (1.0 + 2.0*v1*v1/3.0 + v1*v1*v1*v1/15.0) / (z13*z13) ;
+      y = 0.6923 * vF * (1.0 + 2.0*v1*v1/3.0 + v1*v1*v1*v1/15.0) / zi23 ;
     }
 
     G4double y3 = pow(y, 0.3) ;
     //    G4cout << "y= " << y << " y3= " << y3 << " v1= " << v1 << " vF= " << vF << G4endl; 
     q = 1.0 - exp( 0.803*y3 - 1.3167*y3*y3 - 0.38157*y - 0.008983*y*y ) ;
+    if(q < 0.0) q = 0.0;
 
-    if( q < chargeLowLimit ) q = chargeLowLimit ;
-
-    G4double s = 7.6 -  log(std::max(1.0, reducedEnergy/keV)) ;
-    s = 1.0 + ( 0.18 + 0.0015 * z ) * exp( -s*s )/ (Zi*Zi) ;
+    G4double tq = 7.6 - log(reducedEnergy/keV);
+    G4double sq = 1.0 + ( 0.18 + 0.0015 * z ) * exp( -tq*tq )/ (Zi*Zi);
 
     // Screen length according to
     // J.F.Ziegler and J.M.Manoyan, The stopping of ions in compaunds,
     // Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
 
-    G4double lambda = 10.0 * vF * pow(1.0-q, 0.6667) / (z13 * (6.0 + q)) ;
-    chargeCorrection = s * (1.0 + 0.5*(1.0/q - 1.0)*log(1.0 + lambda*lambda)/(vF*vF) );
+    G4double lambda = 10.0 * vF * pow(1.0-q, 0.6667) / (zi13 * (6.0 + q)) ;
+    chargeCorrection = sq * (q + 0.5*(1.0 - q)*log(1.0 + lambda*lambda)/(vF*vF) );
+    if(q > 0.0) sq /= q;
   }
-  //  G4cout << "G4ionEffectiveCharge: charge= " << charge << " q= " << q 
-  //       << " chargeCor= " << chargeCorrection << G4endl;
-  return charge*q;
+    G4cout << "G4ionEffectiveCharge: charge= " << charge << " q= " << q 
+           << " chargeCor= " << chargeCorrection 
+	   << " e(MeV)= " << kineticEnergy/MeV << G4endl;
+  return q*charge;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
