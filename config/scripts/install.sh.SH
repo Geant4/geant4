@@ -26,29 +26,47 @@ $spitshell >install.sh <<!GROK!THIS!
 #
 # g4system.U
 #
+#+
 G4SYSTEM="$g4system"
 
 #
 # g4dirs.U
 #
+#+
 G4INSTALL="$g4install"
+#+
 G4INCLUDE="$g4include"
 G4BASE="$g4base"
 G4WORKDIR="$g4workdir"
+#+
 G4TMP="$g4tmp"
+#+
 G4LIB="$g4lib"
+#+
 G4BIN="$g4bin"
 G4DATA="$g4data"
+#+
 G4LEVELGAMMADATA="$g4levelgammadata"
+#+
+G4RADIOACTIVEDATA="$g4radioactivedata"
+#+
+G4LEDATA="$g4ledata"
+#+
+NeutronHPCrossSections="$g4neutronhpcrosssections"
 
 #
 # g4clhep.U
 #
 CLHEP_BASE_DIR="$g4clhep_base_dir"
+#+
 CLHEP_INCLUDE_DIR="$g4clhep_include_dir"
+#+
 CLHEP_LIB_DIR="$g4clhep_lib_dir"
+#+
 CLHEP_LIB="$g4clhep_lib"
 
+
+#+
 #
 # g4ospace
 #
@@ -60,6 +78,7 @@ fi
 
 G4OSPACE_BASE_DIR="$g4ospace_base_dir"
 
+#+
 #
 # g4debug
 #
@@ -68,117 +87,147 @@ G4DEBUG="$g4debug"
 #
 # g4analysis
 #
+#+
 if [ X$g4wanalysis_build = Xy ] ; then
 G4ANALYSIS_BUILD=1
 else
 G4ANALYSIS_BUILD=""
 fi 
 
+#+
 if [ X$g4wanalysis_build_lab = Xy ] ; then
 G4ANALYSIS_BUILD_LAB=1
 else
 G4ANALYSIS_BUILD_LAB=""
 fi 
 
+#+
 if [ X$g4wanalysis_build_jas = Xy ] ; then
 G4ANALYSIS_BUILD_JAS=1
 else
 G4ANALYSIS_BUILD_JAS=""
 fi 
 
+#+
 if [ X$g4wanalysis_build_lizard = Xy ] ; then
 G4ANALYSIS_BUILD_LIZARD=1
 else
 G4ANALYSIS_BUILD_LIZARD=""
 fi 
 
+#+
 if [ X$g4wanalysis_use = Xy ] ; then
 G4ANALYSIS_USE=1
 else
 G4ANALYSIS_USE=""
 fi 
 
+#+
 if [ X$g4wanalysis_use_lab = Xy ] ; then
 G4ANALYSIS_USE_LAB=1
 else
 G4ANALYSIS_USE_LAB=""
 fi 
 
+#+
 if [ X$g4wanalysis_use_jas = Xy ] ; then
 G4ANALYSIS_USE_JAS=1
 else
 G4ANALYSIS_USE_JAS=""
 fi 
 
+#+
 if [ X$g4wanalysis_use_lizard = Xy ] ; then
 G4ANALYSIS_USE_LIZARD=1
 else
 G4ANALYSIS_USE_LIZARD=""
 fi 
 
+#+
+#
+# g4persistency
+#
+if [ X$g4use_hepodbms = Xy ] ; then
+G4USE_HEPODBMS=1
+.  \$G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
+else
+G4USE_HEPODBMS=""
+fi 
+
 #
 # g4ui
 #
+#+
 if [ X$g4ui_build_terminal_session = Xy ] ; then
 G4UI_BUILD_TERMINAL_SESSION=1
 else
 G4UI_BUILD_TERMINAL_SESSION=""
 fi 
 
+#+
 if [ X$g4ui_use_terminal = Xy ] ; then
 G4UI_USE_TERMINAL=1
 else
 G4UI_USE_TERMINAL=""
 fi 
 
+#+
 if [ X$g4ui_build_gag_session = Xy ] ; then
 G4UI_BUILD_GAG_SESSION=1
 else
 G4UI_BUILD_GAG_SESSION=""
 fi 
 
+#+
 if [ X$g4ui_use_gag = Xy ] ; then
 G4UI_USE_GAG=1
 else
 G4UI_USE_GAG=""
 fi 
 
+#+
 if [ X$g4ui_build_xaw_session = Xy ] ; then
 G4UI_BUILD_XAW_SESSION=1
 else
 G4UI_BUILD_XAW_SESSION=""
 fi 
 
+#+
 if [ X$g4ui_use_xaw = Xy ] ; then
 G4UI_USE_XAW=1
 else
 G4UI_USE_XAW=""
 fi 
 
+#+
 if [ X$g4ui_build_xm_session = Xy ] ; then
 G4UI_BUILD_XM_SESSION=1
 else
 G4UI_BUILD_XM_SESSION=""
 fi 
 
+#+
 if [ X$g4ui_use_xm = Xy ] ; then
 G4UI_USE_XM=1
 else
 G4UI_USE_XM=""
 fi 
 
+#+
 if [ X$g4ui_build_win32_session = Xy ] ; then
 G4UI_BUILD_WIN32_SESSION=1
 else
 G4UI_BUILD_WIN32_session=""
 fi 
 
+#+
 if [ X$g4ui_use_win32 = Xy ] ; then
 G4UI_USE_WIN32=1
 else
 G4UI_USE_WIN32=""
 fi 
 
+#+
 if [ X$g4ui_use_tcsh = Xy ] ; then
 G4UI_USE_TCSH=1
 else
@@ -188,126 +237,147 @@ fi
 #
 # g4vis
 #
+#+
 if [ X$g4vis_build_dawn_driver = Xy ] ; then
 G4VIS_BUILD_DAWN_DRIVER=1
 else
 G4VIS_BUILD_DAWN_DRIVER=""
 fi 
 
+#+
 if [ X$g4vis_build_dawnfile_driver = Xy ] ; then
 G4VIS_BUILD_DAWNFILE_DRIVER=1
 else
 G4VIS_BUILD_DAWN_DRIVER=""
 fi 
 
+#+
 if [ X$g4vis_build_opacs_driver = Xy ] ; then
 G4VIS_BUILD_OPACS_DRIVER=1
 else
 G4VIS_BUILD_OPACS_DRIVER=""
 fi 
 
+#?
 if [ X$g4vis_build_opengl_driver = Xy ] ; then
 G4VIS_BUILD_OPENGL_DRIVER=1
 else
 G4VIS_BUILD_OPENGL_DRIVER=""
 fi 
 
+#+
 if [ X$g4vis_build_OPENGLX_driver = Xy ] ; then
 G4VIS_BUILD_OPENGLX_DRIVER=1
 else
 G4VIS_BUILD_OPENGLX_DRIVER=""
 fi 
 
+#+
 if [ X$g4vis_build_oix_driver = Xy ] ; then
 G4VIS_BUILD_OIX_DRIVER=1
 else
 G4VIS_BUILD_OIX_DRIVER=""
 fi 
 
+#+
 if [ X$g4vis_build_raytracer_driver = Xy ] ; then
 G4VIS_BUILD_RAYTRACER_DRIVER=1
 else
 G4VIS_BUILD_RAYTRACER_DRIVER=""
 fi 
 
+#+
 if [ X$g4vis_build_vrml_driver = Xy ] ; then
 G4VIS_BUILD_VRML_DRIVER=1
 else
 G4VIS_BUILD_VRML_DRIVER=""
 fi 
 
+#+
 if [ X$g4vis_build_vrmlfile_driver = Xy ] ; then
 G4VIS_BUILD_VRMLFILE_DRIVER=1
 else
 G4VIS_BUILD_VRMLFILE_DRIVER=""
 fi 
 
+#?
 if [ X$g4vis_build_asciitree_driver = Xy ] ; then
 G4VIS_BUILD_ASCIITREE_DRIVER=1
 else
 G4VIS_BUILD_ASCIITREE_DRIVER=""
 fi 
 
+#+
 if [ X$g4vis_use_dawn = Xy ] ; then
 G4VIS_USE_DAWN=1
 else
 G4VIS_USE_DAWN=""
 fi 
 
+#+
 if [ X$g4vis_use_dawnfile = Xy ] ; then
 G4VIS_USE_DAWNFILE=1
 else
 G4VIS_USE_DAWN=""
 fi 
 
+#+
 if [ X$g4vis_use_opacs = Xy ] ; then
 G4VIS_USE_OPACS=1
 else
 G4VIS_USE_OPACS=""
 fi 
 
+#?
 if [ X$g4vis_use_opengl = Xy ] ; then
 G4VIS_USE_OPENGL=1
 else
 G4VIS_USE_OPENGL=""
 fi 
 
+#+
 if [ X$g4vis_use_OPENGLX = Xy ] ; then
 G4VIS_USE_OPENGLX=1
 else
 G4VIS_USE_OPENGLX=""
 fi 
 
+#+
 if [ X$g4vis_use_oix = Xy ] ; then
 G4VIS_USE_OIX=1
 else
 G4VIS_USE_OIX=""
 fi 
 
+#+
 if [ X$g4vis_use_raytracer = Xy ] ; then
 G4VIS_USE_RAYTRACER=1
 else
 G4VIS_USE_RAYTRACER=""
 fi 
 
+#+
 if [ X$g4vis_use_vrml = Xy ] ; then
 G4VIS_USE_VRML=1
 else
 G4VIS_USE_VRML=""
 fi 
 
+#+
 if [ X$g4vis_use_vrmlfile = Xy ] ; then
 G4VIS_USE_VRMLFILE=1
 else
 G4VIS_USE_VRMLFILE=""
 fi 
 
+#?
 if [ X$g4vis_use_asciitree = Xy ] ; then
 G4VIS_USE_ASCIITREE=1
 else
 G4VIS_USE_ASCIITREE=""
 fi 
 
+#+
 #
 # g4shared
 #
@@ -340,6 +410,7 @@ else
 G4LIB_USE_STATIC=""
 fi 
 
+#+
 #
 # g4granular
 #
@@ -382,6 +453,8 @@ export G4ANALYSIS_USE
 export G4ANALYSIS_USE_LAB
 export G4ANALYSIS_USE_JAS
 export G4ANALYSIS_USE_LIZARD
+
+export G4USE_HEPODBMS
 
 export G4UI_BUILD_TERMINAL_SESSION
 export G4UI_USE_TERMINAL
@@ -469,6 +542,8 @@ echo "On this machine the G4ANALYSIS_USE=\$G4ANALYSIS_USE"
 echo "On this machine the G4ANALYSIS_USE_LAB=\$G4ANALYSIS_USE_LAB"
 echo "On this machine the G4ANALYSIS_USE_JAS=\$G4ANALYSIS_USE_JAS"
 echo "On this machine the G4ANALYSIS_USE_LIZARD=\$G4ANALYSIS_USE_LIZARD"
+
+echo "On this machine the G4USE_HEPODBMS=\$G4USE_HEPODBMS"
 
 echo "On this machine the G4VIS_BUILD_DAWN_DRIVER=\$G4VIS_BUILD_DAWN_DRIVER"
 echo "On this machine the G4VIS_USE_DAWN=\$G4VIS_USE_DAWN"

@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.9 2001-06-28 10:30:31 sadilov Exp $
+# $Id: Configure,v 1.10 2001-06-29 11:40:29 sadilov Exp $
 #
-# Generated on Thu Jun 28 12:14:15 CEST 2001 [metaconfig 3.0 PL70]
+# Generated on Fri Jun 29 12:58:57 CEST 2001 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -246,6 +246,7 @@ g4granular=''
 g4lib_use_granular=''
 g4ospace_base_dir=''
 g4use_ospace=''
+g4use_hepodbms=''
 g4lib_build_shared=''
 g4lib_build_static=''
 g4lib_use_shared=''
@@ -941,7 +942,7 @@ echo " "
 echo " "
 fi
 
-trap 'echo " "; test -d ../UU && rm -rf X $rmlist; exit 1' 1 2 3 15
+trap 'echo " ";rm -rf ../UU; test -d ../UU && rm -rf X $rmlist; exit 1' 1 2 3 15
 
 : create .config dir to save info across Configure sessions
 test -d ../.config || mkdir ../.config
@@ -2434,13 +2435,13 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4install/../G4EMLOW0.3
+	g4ledata=$g4install/../G4EMLOW
 	;;
 esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4install/../G4NDL0.2
+	g4neutronhpcrosssections=$g4install/../G4NDL
 	;;
 esac
 
@@ -3122,6 +3123,38 @@ gans=$ans
 		;;
 	y*|Y*) 
 		g4ui_use_tcsh=y
+		;;
+	esac
+
+
+echo " "
+case "$g4use_hepodbms" in
+'')
+	g4use_hepodbms=n
+	;;
+esac
+
+g4message=`cat << EOM
+
+  G4USE_HEPODBMS
+In Geant4, object persistency is provided as an optional category, so
+that the users could be able to run Geant4 with or without a commercial 
+ODBMS package. How to store and retrieve Geant4 events, hits and geometry 
+objects is explained in documentation. 
+EOM`
+
+dflt=$g4use_hepodbms
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4use_hepodbms=n
+		;;
+	y*|Y*) 
+		g4use_hepodbms=y
 		;;
 	esac
 
@@ -3827,6 +3860,7 @@ g4ui_use_terminal='$g4ui_use_terminal'
 g4ui_use_win32='$g4ui_use_win32'
 g4ui_use_xaw='$g4ui_use_xaw'
 g4ui_use_xm='$g4ui_use_xm'
+g4use_hepodbms='$g4use_hepodbms'
 g4use_ospace='$g4use_ospace'
 g4vis_build_asciitree_driver='$g4vis_build_asciitree_driver'
 g4vis_build_dawn_driver='$g4vis_build_dawn_driver'
