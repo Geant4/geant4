@@ -8,6 +8,7 @@
 ?S:.
 
 echo " "
+
 case "$g4lib_build_shared" in
 '')
 	g4lib_build_shared=n
@@ -15,6 +16,7 @@ case "$g4lib_build_shared" in
 esac
 
 echo " "
+
 case "$g4lib_build_static" in
 '')
 	g4lib_build_static=n
@@ -22,6 +24,7 @@ case "$g4lib_build_static" in
 esac
 
 echo " "
+
 case "$g4lib_use_shared" in
 '')
 	g4lib_use_shared=n
@@ -29,6 +32,7 @@ case "$g4lib_use_shared" in
 esac
 
 echo " "
+
 case "$g4lib_use_static" in
 '')
 	g4lib_use_static=n
