@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.80 2002-05-28 15:33:09 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.81 2002-05-30 17:53:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -302,8 +302,6 @@ void G4LowEnergyIonisation::BuildLossTable(
                                                              lowEdgeEnergy, n);
           G4double cs= crossSectionHandler->FindValue(Z, lowEdgeEnergy, n);
           ionloss   += e * cs * pro * theAtomicNumDensityVector[iel];
-          G4double esp = energySpectrum->Excitation(Z, lowEdgeEnergy);
-          //ionloss   += esp * theAtomicNumDensityVector[iel];
           if(verboseLevel > 1) {
             G4cout << "Z= " << Z
                    << " shell= " << n
@@ -311,11 +309,12 @@ void G4LowEnergyIonisation::BuildLossTable(
                    << " Eav(keV)= " << e/keV
                    << " pro= " << pro
                    << " cs= " << cs
-                   << " esp= " << esp
 	           << " loss= " << ionloss
                    << G4endl;
           }
         }
+        G4double esp = energySpectrum->Excitation(Z, lowEdgeEnergy);
+        ionloss   += esp * theAtomicNumDensityVector[iel];
       }	
       aVector->PutValue(i,ionloss);
     }

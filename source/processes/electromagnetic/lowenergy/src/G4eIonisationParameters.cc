@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.18 2002-05-28 09:20:21 pia Exp $
+// $Id: G4eIonisationParameters.cc,v 1.19 2002-05-30 17:53:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -34,6 +34,8 @@
 // 25.10.01 MGP             Many bug fixes, mostly related to the 
 //                          management of pointers
 // 29.11.01 V.Ivanchenko    New parametrisation + Excitation  
+// 30.05.02 V.Ivanchenko    Format and names of the data files were
+//                          chenged to "ion-..."  
 //
 // -------------------------------------------------------------------
 
@@ -42,7 +44,10 @@
 #include "G4ShellEMDataSet.hh"
 #include "G4EMDataSet.hh"
 #include "G4CompositeEMDataSet.hh"
+#include "G4LinInterpolation.hh"
 #include "G4LogLogInterpolation.hh"
+#include "G4LinLogLogInterpolation.hh"
+#include "G4SemiLogInterpolation.hh"
 #include "G4Material.hh"
 #include "G4DataVector.hh"
 #include "g4std/fstream"
@@ -51,7 +56,7 @@
 
 G4eIonisationParameters:: G4eIonisationParameters(G4int minZ, G4int maxZ)
   : zMin(minZ), zMax(maxZ),
-  length(7)
+  length(24)
 {
   LoadData();
 }
@@ -83,7 +88,7 @@ G4double G4eIonisationParameters::Parameter(G4int Z, G4int shellIndex,
                                                      G4double e) const
 {
   G4double value = 0.;
-  G4int id = Z*20 + parameterIndex;
+  G4int id = Z*100 + parameterIndex;
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
 
   pos = param.find(id);
@@ -170,7 +175,7 @@ void G4eIonisationParameters::LoadData()
     }
     
   G4String pathString(path);
-  G4String path2("/ioni/io-sp-");
+  G4String path2("/ioni/ion-sp-");
   pathString += path2;  
   
   G4double energy, sum;
@@ -190,19 +195,25 @@ void G4eIonisationParameters::LoadData()
   
     if (! (lsdp->is_open()) ) {
       G4String excep = G4String("G4IonisationParameters - data file: ")
-                     + name + G4String(" not found");
+      + name + G4String(" not found. The version 1.# of G4LEDATA should be used");
       G4Exception(excep);
     }
 
-    // - MGP - Please add some documentation about the parameters read
-    // The file is organized into...:
-    // 1st column is the energy
-    // The file terminates with the pattern: -1   -1
+    // The file is organized into:
+    // For each shell there are two lines:
+    //    1st line:
+    // 1st column is the energy of incident e-, 
+    // 2d  column is the parameter of screan term;
+    //    2d line:
+    // 3 energy (MeV) subdividing different approximation area of the spectrum
+    // 20 point on the spectrum
+    // The shell terminates with the pattern: -1   -1
+    // The file terminates with the pattern: -2   -2
 
     G4std::vector<G4VEMDataSet*> p;
     for (size_t k=0; k<length; k++) 
       {
-	G4VDataSetAlgorithm* inter = new G4LogLogInterpolation();
+	G4VDataSetAlgorithm* inter = new G4LinLogLogInterpolation();
 	G4VEMDataSet* composite = new G4CompositeEMDataSet(inter,1.,1.);
 	p.push_back(composite);
       }
@@ -234,8 +245,10 @@ void G4eIonisationParameters::LoadData()
         // End of set for a shell, fill the map
 	for (size_t k=0; k<length; k++) {
 
-	  // 	  G4int id = Z*20 + k;
-	  G4VDataSetAlgorithm* interp  = new G4LogLogInterpolation();
+          G4VDataSetAlgorithm* interp;
+          if(0 == k) interp  = new G4LinLogLogInterpolation();
+          else       interp  = new G4LogLogInterpolation();
+
 	  G4DataVector* eVector = new G4DataVector;
 	  size_t eSize = e.size();
 	  for (size_t s=0; s<eSize; s++) {
@@ -259,17 +272,17 @@ void G4eIonisationParameters::LoadData()
 
     for (size_t kk=0; kk<length; kk++) 
       {
-	G4int id = Z*20 + kk;
+	G4int id = Z*100 + kk;
 	param[id] = p[kk];
       }
   }
 
   G4String pathString_a(path);
-  G4String name_a = pathString_a + G4String("/ioni/io-ex-av.dat");  
+  G4String name_a = pathString_a + G4String("/ioni/ion-ex-av.dat");  
   G4std::ifstream file_a(name_a);
   G4std::filebuf* lsdp_a = file_a.rdbuf();
   G4String pathString_b(path);
-  G4String name_b = pathString_b + G4String("/ioni/io-ex-sig.dat");  
+  G4String name_b = pathString_b + G4String("/ioni/ion-ex-sig.dat");  
   G4std::ifstream file_b(name_b);
   G4std::filebuf* lsdp_b = file_b.rdbuf();
   
@@ -301,12 +314,14 @@ void G4eIonisationParameters::LoadData()
   do {
     file_a >> ener >> sig;
     file_b >> ener1 >> sig1;
+    
     if(ener != ener1) {
       G4cout << "G4eIonisationParameters: problem in excitation data "
              << "ener= " << ener
              << " ener1= " << ener1
              << G4endl;
     }
+    
     // End of file
     if (ener == -2) {
       break;
@@ -320,7 +335,7 @@ void G4eIonisationParameters::LoadData()
 	// fill map if Z is used
       if (activeZ.contains(Z)) {
 
-	G4VDataSetAlgorithm* inter  = new G4LogLogInterpolation();
+	G4VDataSetAlgorithm* inter  = new G4LinInterpolation();
 	G4DataVector* eVector = new G4DataVector;
 	G4DataVector* dVector = new G4DataVector;
 	size_t eSize = e.size();
@@ -336,7 +351,7 @@ void G4eIonisationParameters::LoadData()
   
     } else {
 
-      e.push_back(ener);
+      e.push_back(ener*MeV);
       d.push_back(sig1*sig*barn*MeV);
     }
   } while (ener != -2);
@@ -360,7 +375,7 @@ void G4eIonisationParameters::PrintData() const
 
     for (size_t j=0; j<length; j++) {
     
-      G4int index = Z*20 + j;
+      G4int index = Z*100 + j;
 
       pos = param.find(index);
       if (pos!= param.end()) {

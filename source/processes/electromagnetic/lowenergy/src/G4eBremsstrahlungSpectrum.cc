@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungSpectrum.cc,v 1.6 2002-05-28 09:20:21 pia Exp $
+// $Id: G4eBremsstrahlungSpectrum.cc,v 1.7 2002-05-30 17:53:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,6 +37,8 @@
 // Modifications: 
 // 10.10.01  MGP  Revision to improve code quality and consistency with design
 // 15.11.01  VI   Update spectrum model Bethe-Haitler spectrum at high energy
+// 30.05.02  VI   Update interpolation between 2 last energy points in the
+//                parametrisation
 //
 // -------------------------------------------------------------------
 
@@ -73,10 +75,10 @@ G4eBremsstrahlungSpectrum::~G4eBremsstrahlungSpectrum()
 
 
 G4double G4eBremsstrahlungSpectrum::Probability(G4int Z, 
-                                                       G4double tmin, 
-                                                       G4double tmax, 
-                                                       G4double e,
-                                                       G4int,
+                                                G4double tmin, 
+                                                G4double tmax, 
+                                                G4double e,
+                                                G4int,
                                        const G4ParticleDefinition*) const
 {
   G4double tm = G4std::min(tmax, e);
@@ -87,31 +89,16 @@ G4double G4eBremsstrahlungSpectrum::Probability(G4int Z,
   tm /= e;
 
   G4double z = lowestE/e;
-  G4double x, y;
+  G4DataVector p;
 
-  // Below 10 MeV EEDL data base spectrum 
-  if(e < 1000000.*MeV) {
-
-    G4int iMax = 16;
-    G4DataVector p;
-
-    // Access parameters
-    for (G4int i=0; i<iMax; i++) {
-      p.push_back(theBRparam->Parameter(i, Z, e));
-    }
- 
-    x  = IntSpectrum(t0, tm, p);
-    y  = IntSpectrum(z, 1.0, p); 
-    p.clear();
-
-
-    // Above Bethe-Heitler formula
-  } else {
-    
-    x = log(tm/t0) - tm + t0 + 0.375*(tm*tm - t0*t0);
-    y = log(1./z)  - 1.0 + z + 0.375*(1. - z*z);    
-
+  // Access parameters
+  for (size_t i=0; i<=length; i++) {
+    p.push_back(theBRparam->Parameter(i, Z, e));
   }
+ 
+  G4double x  = IntSpectrum(t0, tm, p);
+  G4double y  = IntSpectrum(z, 1.0, p); 
+
 
   if(1 < verbose) {
     G4cout << "tcut(MeV)= " << tmin/MeV 
@@ -124,60 +111,47 @@ G4double G4eBremsstrahlungSpectrum::Probability(G4int Z,
            << "; nor= " << y 
            << G4endl;
   }
+  p.clear();
 
   if(y > 0.0) x /= y;
   else        x  = 0.0;
-  if(x < 0.0) x  = 0.0;
+  //  if(x < 0.0) x  = 0.0;
 
   return x; 
 }
 
 
 G4double G4eBremsstrahlungSpectrum::AverageEnergy(G4int Z,
-                                                         G4double tmin, 
-                                                         G4double tmax, 
-                                                         G4double e,
-                                                         G4int,
+                                                  G4double tmin, 
+                                                  G4double tmax, 
+                                                  G4double e,
+                                                  G4int,
                                          const G4ParticleDefinition*) const
 {
   G4double tm = G4std::min(tmax, e);
   G4double t0 = G4std::max(tmin, lowestE);
   if(t0 >= tm) return 0.0;
 
-  G4double c  = sqrt(theBRparam->ParameterC(Z));
-
   t0 /= e;
   tm /= e;
 
-  G4double z = lowestE/e;
-  G4double x, y, f;
+  G4double z0 = lowestE/e;
 
-  // Below 10 MeV EEDL data base spectrum 
-  if(e < 1000000.*MeV) {
+  G4DataVector p;
 
-    G4int iMax = 16;
-    G4DataVector p;
-
-    // Access parameters
-    for (G4int i=0; i<iMax; i++) {
+  // Access parameters
+  for (size_t i=0; i<=length; i++) {
       p.push_back(theBRparam->Parameter(i, Z, e));
-    }
-
-    x  = AverageValue(t0, tm, p);
-    y  = IntSpectrum(z, 1.0, p);
-    f  = Function(z, p);
-    p.clear();
-
-    // Above Bethe-Heitler formula
-  } else {
-    
-    x = tm - t0 - 0.5*(tm*tm - t0*t0) + 0.25*(tm*tm*tm - t0*t0*t0);
-    y = log(1./z)  - 1.0 + z + 0.375*(1. - z*z);    
-    f = 1. - x + 0.75*x*x;
-
   }
 
-  x += 0.5*f*z*(z - c*atan(z/c));
+  G4double x  = AverageValue(t0, tm, p);
+  G4double y  = IntSpectrum(z0, 1.0, p);
+
+  // Add integrant over lowest energies
+
+  G4double c  = sqrt(theBRparam->ParameterC(Z));
+  G4double f  = Function(z0, p);
+  x += 0.5*f*z0*(z0 - c*atan(z0/c));
 
   x *= e; 
 
@@ -191,21 +165,21 @@ G4double G4eBremsstrahlungSpectrum::AverageEnergy(G4int Z,
            << "; x= " << x 
            << G4endl;
   }
-
+  p.clear();
 
   if(y > 0.0) x /= y;
   else        x  = 0.0;
-  if(x < 0.0) x  = 0.0;
+  //  if(x < 0.0) x  = 0.0;
 
   return x; 
 }
 
 
 G4double G4eBremsstrahlungSpectrum::SampleEnergy(G4int Z,
-                                                        G4double tmin, 
-                                                        G4double tmax, 
-                                                        G4double e,
-                                                        G4int,
+                                                 G4double tmin, 
+                                                 G4double tmax, 
+                                                 G4double e,
+                                                 G4int,
                                         const G4ParticleDefinition*) const
 {
   G4double tm = G4std::min(tmax, e);
@@ -215,34 +189,22 @@ G4double G4eBremsstrahlungSpectrum::SampleEnergy(G4int Z,
   t0 /= e;
   tm /= e;
 
-  G4int iMax = 16;
   G4DataVector p;
 
-  G4double amaj;
-
-  // Below 10 MeV EEDL data base spectrum 
-  if(e < 10000000.*MeV) {
-    for (G4int i=0; i<iMax; i++) {
-      p.push_back(theBRparam->Parameter(i, Z, e));
-    }
-    amaj = G4std::max(p[15], 1. - (p[1] - p[0])/9.);
-
-  } else {
-    amaj = 1.0;
+  for (size_t i=0; i<=length; i++) {
+    p.push_back(theBRparam->Parameter(i, Z, e));
   }
-
+  G4double amaj = G4std::max(p[15], 1. - (p[1] - p[0])/9.);
 
   G4double amax = log(tm);
   G4double amin = log(t0);
   G4double tgam, q, fun;
+
   do {
     G4double x = amin + G4UniformRand()*(amax - amin);
     tgam = exp(x);
-    if(e < 10.*MeV) {
-      fun = Function(tgam, p);
-    } else {
-      fun = 1. - tgam + 0.75*tgam*tgam;
-    }
+    fun = Function(tgam, p);
+
     if(fun > amaj) {
           G4cout << "WARNING in G4eBremsstrahlungSpectrum::SampleEnergy:" 
                  << " Majoranta " << amaj 
@@ -261,13 +223,11 @@ G4double G4eBremsstrahlungSpectrum::SampleEnergy(G4int Z,
 }
 
 G4double G4eBremsstrahlungSpectrum::IntSpectrum(G4double xMin, 
-                                                    G4double xMax,
-                                              const G4DataVector& p) const
+                                                G4double xMax,
+                                          const G4DataVector& p) const
 {
   G4double x1 = G4std::min(xMin, xp[0]);
   G4double x2 = G4std::min(xMax, xp[0]);
-  G4double z1 = x1;
-  G4double z2 = x2;
   G4double sum = 0.0;
   
   if(x1 < x2) {
@@ -279,8 +239,8 @@ G4double G4eBremsstrahlungSpectrum::IntSpectrum(G4double xMin,
     x1 = G4std::max(xMin, xp[i]);
     x2 = G4std::min(xMax, xp[i+1]);
     if(x1 < x2) {
-      z1 = p[i];
-      z2 = p[i+1];
+      G4double z1 = p[i];
+      G4double z2 = p[i+1];
       sum += z2 - z1 + log(x2/x1)*(z1*x2 - z2*x1)/(x2 - x1);
     }
   }
@@ -289,8 +249,8 @@ G4double G4eBremsstrahlungSpectrum::IntSpectrum(G4double xMin,
 }
 
 G4double G4eBremsstrahlungSpectrum::AverageValue(G4double xMin, 
-                                                   G4double xMax,
-			                     const G4DataVector& p) const
+                                                 G4double xMax,
+			                   const G4DataVector& p) const
 {
   G4double x1 = G4std::min(xMin, xp[0]);
   G4double x2 = G4std::min(xMax, xp[0]);
@@ -303,7 +263,7 @@ G4double G4eBremsstrahlungSpectrum::AverageValue(G4double xMin,
     sum += (z2 - z1)*(1. - k*xp[0]);
     z1 *= x1;
     z2 *= x2;
-    sum += 0.5*k*(z1 - z2);
+    sum += 0.5*k*(z2 - z1);
   }
 
   for (size_t i=0; i<length-1; i++) {
@@ -320,7 +280,7 @@ G4double G4eBremsstrahlungSpectrum::AverageValue(G4double xMin,
 } 
   
 G4double G4eBremsstrahlungSpectrum::Function(G4double x, 
-                                         const G4DataVector& p) const
+                                       const G4DataVector& p) const
 {
   G4double f = 0.0;
   
@@ -331,13 +291,12 @@ G4double G4eBremsstrahlungSpectrum::Function(G4double x,
 
     for (size_t i=0; i<length-1; i++) {
 
-      if(x <= xp[i+1] && x >= xp[i]) {
+      if(x <= xp[i+1]) {
         f = p[i] + (p[i+1] - p[i])*(x - xp[i])/(xp[i+1] - xp[i]);
         break;
       }
     }
   }
-  if(f < 0.0) f = 0.0;
   return f;
 } 
 

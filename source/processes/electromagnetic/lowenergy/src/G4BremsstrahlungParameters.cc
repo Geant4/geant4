@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc,v 1.12 2002-05-28 09:20:18 pia Exp $
+// $Id: G4BremsstrahlungParameters.cc,v 1.13 2002-05-30 17:53:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -227,18 +227,6 @@ void G4BremsstrahlungParameters::LoadData()
       for (size_t j=0; j<length-1; j++) {
 	G4double qRead;
 	file_a >> qRead;
-	/*
-        if(ener == 1000.) {
-          G4double x = 0.1*((G4double)j);
-          if(j == 0) x = 0.01;
-          if(j == 10) x = 0.95;
-          if(j == 11) x = 0.97;
-          if(j == 12) x = 0.99;
-          if(j == 13) x = 0.995;
-          if(j == 14) x = 1.0;
-          qRead = 1. - x + 0.75*x*x;
-	}
-	*/
 	a[j]->push_back(qRead);
       }    
 
