@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.12 2000-03-14 08:23:42 lefebure Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.13 2000-05-04 17:54:04 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,8 +40,8 @@ G4LowEnergyGammaConversion::G4LowEnergyGammaConversion(const G4String& processNa
     theCrossSectionTable(0),
     theMeanFreePathTable(0),
     ZNumVec(0),
-    //Use lowest limit of EPDL97 which is larger than 2*electron_mass_c2 = 1.02199812
-    LowestEnergyLimit (1.022000),
+    //Use lowest limit of EPDL97 which is larger than 2*electron_mass_c2 = 1.02199812 MeV
+    LowestEnergyLimit (1.022000*MeV),
     HighestEnergyLimit(100*GeV),
     NumbBinTable(200)
 {
