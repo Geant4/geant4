@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.27 1999-06-25 17:03:27 gcosmo Exp $
+# $Id: binmake.gmk,v 1.28 1999-07-03 17:52:13 stesting Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -225,7 +225,7 @@ ifndef USER_DEFINED_LDLIBS
 	@echo "         not finding it, assumes you are using granular"
 	@echo "         libraries."
 	@echo "WARNING: If you did not intend this, interrupt now (CTRL-C),"
-	@echo "         and go back and make global libraries, i.e,"
+	@echo "         and go back and make global libraries, i.e.,"
 	@echo '           cd $$G4INSTALL/source'
 	@echo "           gmake global"
 	@if [ ! \( -f $(G4LIB)/$(G4SYSTEM)/liblist \
