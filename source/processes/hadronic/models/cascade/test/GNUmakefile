@@ -55,8 +55,9 @@ LOADLIBS +=    `cernlib packlib` $(FCLIBS)
 
 # 	  ::: Parameter list for cascade : nEvents, particleType, bulletE [MeV], A = Z + N, and Z.
 
-dd:	# ::: Make data for double differential data-analysis
-	rm -r cascade.out; cascade 10 1 90 12 6 > cascade.out; gmake dda; 
+dd:	# ::: Make data for double differential data-analysis 90 MeV p + 58Ni (Iljinof et al. 1994 p. 162)
+#	rm -r cascade.out; cascade 10 1 90 58 28 > cascade.out; gmake dda; 
+	rm -r cascade.out; cascade 10000 1 90 58 28 > cascade.out; gmake dda; 
 
 dda:	# ::: Make double differential plots
 	rm -f doubleDifferential.eps; root -b -q doubleDifferential.C; gv doubleDifferential.eps;
