@@ -22,7 +22,7 @@ CCalPrimaryGeneratorMessenger::CCalPrimaryGeneratorMessenger(CCalPrimaryGenerato
   verboseCmd->SetGuidance("set Verbosity level ");
   verboseCmd->SetParameterName("value",true);
   verboseCmd->SetDefaultValue(0);
-  verboseCmd->AvailableForStates(PreInit,Idle);
+  verboseCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   rndmCmd = new G4UIcmdWithAString("/CCal/generator/random",this);
   rndmCmd->SetGuidance("Choose randomly energy and direction of the incident particle.");
@@ -30,7 +30,7 @@ CCalPrimaryGeneratorMessenger::CCalPrimaryGeneratorMessenger(CCalPrimaryGenerato
   rndmCmd->SetParameterName("choice",true);
   rndmCmd->SetDefaultValue("off");
   rndmCmd->SetCandidates("on off ON OFF");
-  rndmCmd->AvailableForStates(PreInit,Idle);
+  rndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   scanCmd = new G4UIcmdWithAString("/CCal/generator/scan",this);
   scanCmd->SetGuidance("Scan eta and phi ranges with single incident particle");
@@ -39,21 +39,21 @@ CCalPrimaryGeneratorMessenger::CCalPrimaryGeneratorMessenger(CCalPrimaryGenerato
   scanCmd->SetParameterName("choice",true);
   scanCmd->SetDefaultValue("off");
   scanCmd->SetCandidates("on off ON OFF");
-  scanCmd->AvailableForStates(PreInit,Idle);
+  scanCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   minEnergyCmd = new G4UIcmdWithADoubleAndUnit("/CCal/generator/minEnergy",this);
   minEnergyCmd->SetGuidance("Set minimum Energy for the incident particle.");
   minEnergyCmd->SetParameterName("value",true);
   minEnergyCmd->SetDefaultValue(1.);
   minEnergyCmd->SetDefaultUnit("GeV");
-  minEnergyCmd->AvailableForStates(PreInit,Idle);
+  minEnergyCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   maxEnergyCmd = new G4UIcmdWithADoubleAndUnit("/CCal/generator/maxEnergy",this);
   maxEnergyCmd->SetGuidance("Set maximum Energy for the incident particle.");
   maxEnergyCmd->SetParameterName("value",true);
   maxEnergyCmd->SetDefaultValue(1.);
   maxEnergyCmd->SetDefaultUnit("TeV");
-  maxEnergyCmd->AvailableForStates(PreInit,Idle);
+  maxEnergyCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   minPhiCmd = new G4UIcmdWithADoubleAndUnit("/CCal/generator/minPhi",this);
   minPhiCmd->SetGuidance("Set minimum Phi angle for the incident particle direction");
@@ -61,7 +61,7 @@ CCalPrimaryGeneratorMessenger::CCalPrimaryGeneratorMessenger(CCalPrimaryGenerato
   minPhiCmd->SetParameterName("value",true);
   minPhiCmd->SetDefaultValue(0);
   minPhiCmd->SetDefaultUnit("radian");
-  minPhiCmd->AvailableForStates(PreInit,Idle);
+  minPhiCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   maxPhiCmd = new G4UIcmdWithADoubleAndUnit("/CCal/generator/maxPhi",this);
   maxPhiCmd->SetGuidance("Set maximum Phi angle for the incident particle direction");
@@ -69,39 +69,39 @@ CCalPrimaryGeneratorMessenger::CCalPrimaryGeneratorMessenger(CCalPrimaryGenerato
   maxPhiCmd->SetParameterName("value",true);
   maxPhiCmd->SetDefaultValue(2.*pi);
   maxPhiCmd->SetDefaultUnit("radian");
-  maxPhiCmd->AvailableForStates(PreInit,Idle);
+  maxPhiCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   stepsPhiCmd = new G4UIcmdWithAnInteger("/CCal/generator/stepsPhi",this);
   stepsPhiCmd->SetGuidance("number of steps along Phi for scan ");
   stepsPhiCmd->SetParameterName("value",true);
   stepsPhiCmd->SetDefaultValue(1);
-  stepsPhiCmd->AvailableForStates(PreInit,Idle);
+  stepsPhiCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   minEtaCmd = new G4UIcmdWithADouble("/CCal/generator/minEta",this);
   minEtaCmd->SetGuidance("Set minimum Eta angle for the incident particle direction");
   minEtaCmd->SetGuidance("  Choice : from 0 to infinity");
   minEtaCmd->SetParameterName("value",true);
   minEtaCmd->SetDefaultValue(0);
-  minEtaCmd->AvailableForStates(PreInit,Idle);
+  minEtaCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   maxEtaCmd = new G4UIcmdWithADouble("/CCal/generator/maxEta",this);
   maxEtaCmd->SetGuidance("Set maximum Eta angle for the incident particle direction");
   maxEtaCmd->SetGuidance("  Choice : from 0 to infinity");
   maxEtaCmd->SetParameterName("value",true);
   maxEtaCmd->SetDefaultValue(3.5);
-  maxEtaCmd->AvailableForStates(PreInit,Idle);
+  maxEtaCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   stepsEtaCmd = new G4UIcmdWithAnInteger("/CCal/generator/stepsEta",this);
   stepsEtaCmd->SetGuidance("number of steps along Eta for scan ");
   stepsEtaCmd->SetParameterName("value",true);
   stepsEtaCmd->SetDefaultValue(1);
-  stepsEtaCmd->AvailableForStates(PreInit,Idle);
+  stepsEtaCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   runNoCmd = new G4UIcmdWithAnInteger("/CCal/generator/runNo",this);
   runNoCmd->SetGuidance("set the run number ");
   runNoCmd->SetParameterName("value",true);
   runNoCmd->SetDefaultValue(0);
-  runNoCmd->AvailableForStates(PreInit,Idle);
+  runNoCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
 }
 
