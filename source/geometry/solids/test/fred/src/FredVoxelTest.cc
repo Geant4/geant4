@@ -79,6 +79,7 @@ void FredVoxelTest::Rotate( const EAxis axis, const G4double value )
 		case kXAxis: rotation = rotation.rotateX(value); break;
 		case kYAxis: rotation = rotation.rotateY(value); break;
 		case kZAxis: rotation = rotation.rotateZ(value); break;
+                default: break;
 	}
 	transform.SetNetRotation( rotation );
 	inverseTransform = transform.Inverse();
@@ -264,8 +265,8 @@ void FredVoxelTest::PlotLine( G4ThreeVector start, G4ThreeVector end,
 {
 	G4Polyline line;
 	
-	line.append( start );
-	line.append( end );
+	line.push_back( start );
+	line.push_back( end );
 	
 	G4Color color( isAtest ? 1.0 : 0.25, isAtest ? 1.0 : 0.25, 1.0 );
 	G4VisAttributes attribs( color );

@@ -64,7 +64,6 @@ int main(int argc,char *argv[])
         if (argc > 1)
           {
             G4UImanager * UI = G4UImanager::GetUIpointer();
-            G4UIsession * session = new G4UIterminal;
 	    
             for (int i=1;i<argc;i++)
               {

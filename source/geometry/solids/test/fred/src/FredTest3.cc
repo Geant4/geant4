@@ -89,9 +89,9 @@ G4ThreeVector FredTest3::GetRandomPoint() const {
 		 dz = widths.z()*GaussianRandom(10*m/widths.z());
 		 
 		 
-	if (grids.x() > 0) dx = grids.x()*rint( dx/grids.x() );
-	if (grids.y() > 0) dy = grids.y()*rint( dx/grids.y() );
-	if (grids.z() > 0) dz = grids.z()*rint( dx/grids.z() );
+	if (grids.x() > 0) dx = grids.x()*G4int( dx/grids.x()+1 );
+	if (grids.y() > 0) dy = grids.y()*G4int( dx/grids.y()+1 );
+	if (grids.z() > 0) dz = grids.z()*G4int( dx/grids.z()+1 );
 
 	G4ThreeVector randvec( dx, dy, dz );
 	
@@ -164,7 +164,7 @@ void FredTest3::RunTest( const G4VSolid *testVolume, G4std::ostream &logger )
 	//
 	// Set clock
 	//
-	clock_t start = clock();
+	clock();
 	
 	//
 	// Loop over points
@@ -297,7 +297,7 @@ G4int FredTest3::DebugInside( const G4VSolid *testVolume, G4std::istream &logger
 	//
 	// Call
 	//
-	EInside answer = testVolume->Inside( p );
+	testVolume->Inside( p );
 	return 0;
 }
 
@@ -320,7 +320,7 @@ G4int FredTest3::DebugToInP( const G4VSolid *testVolume, G4std::istream &logger,
 	//
 	// Call
 	//
-	G4double answer = testVolume->DistanceToIn( p );
+	testVolume->DistanceToIn( p );
 	return 0;
 }
 
@@ -347,7 +347,7 @@ G4int FredTest3::DebugToInPV( const G4VSolid *testVolume, G4std::istream &logger
 	
 	p += answer*v;
 	
-	EInside inside = testVolume->Inside(p);
+	testVolume->Inside(p);
 	return 0;
 }
 
@@ -370,7 +370,7 @@ G4int FredTest3::DebugToOutP( const G4VSolid *testVolume, G4std::istream &logger
 	//
 	// Call
 	//
-	G4double answer = testVolume->DistanceToOut( p );
+	testVolume->DistanceToOut( p );
 	return 0;
 }
 
@@ -397,7 +397,7 @@ G4int FredTest3::DebugToOutPV( const G4VSolid *testVolume, G4std::istream &logge
 	
 	p += answer*v;
 	
-	EInside inside = testVolume->Inside(p);
+	testVolume->Inside(p);
 	return 0;
 }
 
@@ -586,7 +586,7 @@ void FredTest3::ReportError( G4int *nError, const G4ThreeVector p,
 	//
 	// Have we encountered this error message before?
 	//
-	FredTest3ErrorList *last, *errors = errorList;
+	FredTest3ErrorList *last=0, *errors = errorList;
 	while( errors ) {
 		//
 		// Note: below is an expensive comparison. This could be replaced with something
@@ -722,7 +722,7 @@ void FredTest3PointList::AddPoint( G4ThreeVector newPoint )
 		// Our list is filled up, so replace a random
 		// entry
 		//
-		G4int	irand = G4UniformRand()*( (G4double)maxPoints );
+		G4int irand = G4int(G4UniformRand()*( (G4double)maxPoints ));
 		pointList[irand] = newPoint;
 	}
 }

@@ -10,6 +10,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jan 08, 2001 - G.Cosmo
+----------------------
+- Updated to compile on geant4 4.0. Removed warning from gcc-2.95.2.
+  Modified files: FredVoxelTest.cc, FredTest3.cc and fred.cc.
+
 Apr 20, 2001 - G.Cosmo
 ----------------------
 - Updates for migration to STL vector, modified FredTrackCheck[.hh.cc].
