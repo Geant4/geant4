@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc,v 1.22 2003-06-16 16:53:19 gunter Exp $
+// $Id: G4UnionSolid.cc,v 1.23 2003-10-09 10:44:58 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -359,7 +359,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
 G4double 
 G4UnionSolid::DistanceToOut( const G4ThreeVector& p ) const 
 {
-  G4double distout = kInfinity;
+  G4double distout = 0.0;
   if( Inside(p) == kOutside )
   {
 #ifdef G4BOOLDEBUG

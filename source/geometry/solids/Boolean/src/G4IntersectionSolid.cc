@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc,v 1.19 2003-06-16 16:53:16 gunter Exp $
+// $Id: G4IntersectionSolid.cc,v 1.20 2003-10-09 10:44:57 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -407,7 +407,7 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p) const
 #endif
   EInside sideA = fPtrSolidA->Inside(p) ;
   EInside sideB = fPtrSolidB->Inside(p) ;
-  G4double dist ;
+  G4double dist=0.0 ;
 
   if( sideA != kInside && sideB  != kOutside )
   {

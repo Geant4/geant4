@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc,v 1.18 2003-06-16 16:53:18 gunter Exp $
+// $Id: G4SubtractionSolid.cc,v 1.19 2003-10-09 10:44:57 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -294,7 +294,7 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
 G4double 
 G4SubtractionSolid::DistanceToIn( const G4ThreeVector& p ) const 
 {
-  G4double dist;
+  G4double dist=0.0;
 
 #ifdef G4BOOLDEBUG
   if( Inside(p) == kInside )
@@ -384,7 +384,7 @@ G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p,
 G4double 
 G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p ) const 
 {
-  G4double dist=kInfinity;
+  G4double dist=0.0;
 
   if( Inside(p) == kOutside )
   { 
