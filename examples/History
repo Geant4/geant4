@@ -1,4 +1,4 @@
-$Id: History,v 1.88 2004-10-29 13:35:07 gcosmo Exp $
+$Id: History,v 1.89 2004-11-26 14:02:15 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26th November 2004  Gabriele Cosmo (examples-V06-04-05)
+- Updated reference outputs according to reference tag geant4-06-02-ref-05
+- Includes tags: muonprocesses-V06-02-07, testem1-V06-02-05, testem5-V06-02-05,
+                 exgps-V06-02-00, exrdm-V06-02-00, exampleN03-V06-02-00,
+                 exampleN07-V06-02-00.
 
 29th October 2004  Gabriele Cosmo (examples-V06-02-04)
 - Updated reference outputs according to reference tag geant4-06-02-ref-04
