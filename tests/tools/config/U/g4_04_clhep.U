@@ -7,7 +7,7 @@
 ?S:	used for building G4SYSTEM.
 ?S:.
 
-clhep_dirs=`find /usr/local/include /usr/include -type d -name CLHEP`
+clhep_dirs=`find /usr/local/lib /usr/lib -name \*CLHEP\*|xargs echo`
 #echo clhep_dirs=$clhep_dirs
 
 if test "X$clhep_dirs" != "X" ; then
@@ -15,13 +15,11 @@ if test "X$clhep_dirs" != "X" ; then
 g4clhep_base_dir_found=`echo $clhep_dirs|cut -d" " -f1`
 #echo g4clhep_base_dir_found=$g4clhep_base_dir_found
 
-g4clhep_base_dir_n=`echo $g4clhep_base_dir_found |awk -F"/" '{print NF}'`
+
+#g4clhep_base_dir_n=`echo $g4clhep_base_dir_found |awk -F"/" '{print NF}'`
 #echo g4clhep_base_dir_n=$g4clhep_base_dir_n
-
-n=$[$g4clhep_base_dir_n-2]
-#echo n=$n
-
-g4clhep_base_dir_found=`echo $g4clhep_base_dir_found|cut -d"/" -f1-$n`
+g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
+g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
 
 	g4clhep_base_dir=$g4clhep_base_dir_found
 else
@@ -52,9 +50,11 @@ esac
 
 #while test 1 = 1  ; do
 
+if test "X$clhep_dirs" != "X" ; then
+
 g4message=`cat << EOM
 
-Please, specify where CLHEP is installed (it was found or set by defalt):
+Please, specify where CLHEP is installed (it was found in):
 
 CLHEP_BASE_DIR:			$g4clhep_base_dir
 
@@ -67,6 +67,24 @@ CLHEP_LIB
 You will be asked about customizing these next.
 EOM`
 
+else
+
+g4message=`cat << EOM
+
+Please, specify where CLHEP is installed (set by default):
+
+CLHEP_BASE_DIR:			$g4clhep_base_dir
+
+According to it will be set:
+
+CLHEP_INCLUDE_DIR		
+CLHEP_LIB_DIR			
+CLHEP_LIB		
+
+You will be asked about customizing these next.
+EOM`
+
+fi
 
 #dflt="Press [Enter] for default settings"
 #fn='d~'
