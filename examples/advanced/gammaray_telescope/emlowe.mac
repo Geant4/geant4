@@ -1,0 +1,16 @@
+/process/activate   LowEnRayleigh   gamma
+/process/activate   LowEnPhotoElec  gamma
+/process/activate   LowEnCompton    gamma
+/process/activate   LowEnConversion gamma
+
+/process/inactivate phot            gamma
+/process/inactivate compt           gamma
+/process/inactivate conv            gamma
+
+/process/activate   LowEnergyIoni   e-
+/process/activate   LowEnBrem       e-
+
+/process/inactivate eIoni           e-
+/process/inactivate eBrem           e-
+
+/process/list
