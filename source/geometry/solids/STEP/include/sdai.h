@@ -18,14 +18,14 @@
 * values for the EXPRESS base types.
 */
 
-/* $Id: sdai.h,v 1.3 2000-01-21 13:42:42 gcosmo Exp $ */
+/* $Id: sdai.h,v 1.4 2000-02-14 13:44:03 gcosmo Exp $ */
 
 extern const char *SCLversion;
 
 #include <ctype.h>
 //#include <stdio.h>
 //#include <strstream.h>
-#include <values.h>
+//#include <values.h>
 
 #include <string.h>
 

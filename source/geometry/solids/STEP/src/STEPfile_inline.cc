@@ -11,7 +11,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: STEPfile_inline.cc,v 1.5 2000-01-21 13:42:57 gcosmo Exp $ */ 
+/* $Id: STEPfile_inline.cc,v 1.6 2000-02-14 13:44:04 gcosmo Exp $ */ 
 
 #include <STEPfile.h>
 #include <s_HEADER_SCHEMA.h>
@@ -322,8 +322,10 @@ STEPfile::IncrementFileId (int fileid)
 void 
 STEPfile::SetFileIdIncrement()
 {
+    // Added cast to float in argument for 'ceil' function call. This avoids
+    // clashes with cmath function signatures on HP-aCC - GC
     if (instances ().MaxFileId() < 0) _fileIdIncr = 0;
-    else _fileIdIncr = (int)((ceil((instances ().MaxFileId() + 99)/1000) + 1) * 1000);
+    else _fileIdIncr = (int)((ceil(float((instances ().MaxFileId() + 99)/1000) + 1)) * 1000);
 }
 
 char *STEPfile::schemaName( char *schName )

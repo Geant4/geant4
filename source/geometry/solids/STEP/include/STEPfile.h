@@ -13,7 +13,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: STEPfile.h,v 1.4 2000-01-21 13:42:32 gcosmo Exp $ */ 
+/* $Id: STEPfile.h,v 1.5 2000-02-14 13:44:02 gcosmo Exp $ */ 
 
 #ifdef __OSTORE__
 #include <ostore/ostore.hh>    // Required to access ObjectStore Class Library
@@ -184,7 +184,9 @@ class STEPfile
     Severity HeaderVerifyInstances(InstMgr* im);
     void HeaderMergeInstances(InstMgr* im);
    
-    int HeaderId (int increment =1);
+// Commented following declaration, since NOT implemented and clashing with
+// signature of function HeaderId(const char*) having default argument - GC
+//    int HeaderId (int increment =1);
     int HeaderId (const char* nm ="\0");
     int HeaderIdOld (const char* nm ="\0");
 
