@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.cc,v 1.3 2000-02-17 09:09:04 urban Exp $
+// $Id: G4VEnergyLoss.cc,v 1.4 2000-03-01 09:08:04 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,6 @@ G4double     G4VEnergyLoss::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 G4VEnergyLoss::G4VEnergyLoss()
                    :G4VContinuousDiscreteProcess("No Name Loss Process"),
      lastMaterial(NULL),
-     MaxExcitationNumber (1.e6),
      nmaxCont1(4),
      nmaxCont2(16)
 {
@@ -54,7 +53,6 @@ G4VEnergyLoss::G4VEnergyLoss()
 G4VEnergyLoss::G4VEnergyLoss(const G4String& aName , G4ProcessType aType)
                   : G4VContinuousDiscreteProcess(aName, aType),
      lastMaterial(NULL),
-     MaxExcitationNumber (1.e6),
      nmaxCont1(4),
      nmaxCont2(16)
 {
@@ -71,7 +69,6 @@ G4VEnergyLoss::~G4VEnergyLoss()
 G4VEnergyLoss::G4VEnergyLoss(G4VEnergyLoss& right)
                   : G4VContinuousDiscreteProcess(right),
      lastMaterial(NULL),
-     MaxExcitationNumber (1.e6),
      nmaxCont1(4),
      nmaxCont2(16)
 {
@@ -853,8 +850,10 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 {
    static const G4double minLoss = 5.*eV ;
    static const G4double probLim = 0.01 ;
+   static const G4double sumaLim = -log(probLim) ;
    static const G4double alim=10.;
    static const G4double cprob = 3. ;
+   static const G4double kappa = 10. ;
 
   // check if the material has changed ( cache mechanism)
 
@@ -872,7 +871,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       ipotFluct    = aMaterial->GetIonisation()->GetMeanExcitationEnergy();
       ipotLogFluct = aMaterial->GetIonisation()->GetLogMeanExcEnergy();
     }
-  G4double threshold,w1,w2,C,prob,
+  G4double threshold,w1,w2,C,
            beta2,suma,e0,loss,lossc ,w;
   G4double a1,a2,a3;
   G4int p1,p2,p3;
@@ -896,10 +895,19 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   if (Tm <= ipotFluct) return MeanLoss ;
 
   if(Tm > threshold) Tm = threshold;
+  beta2 = tau2/(tau1*tau1);
+
+  // Gaussian fluctuation ?
+  if(MeanLoss >= kappa*Tm)
+  {
+    siga = sqrt(MeanLoss*Tm*(1.-0.5*beta2)) ;
+    loss = RandGauss::shoot(MeanLoss,siga) ;
+    if(loss < 0.) loss = 0. ;
+    return loss ;
+  }
 
   w1 = Tm/ipotFluct;
   w2 = log(2.*electron_mass_c2*tau2);
-  beta2 = tau2/(tau1*tau1);
 
   C = MeanLoss*(1.-rateFluct)/(w2-ipotLogFluct-beta2);
 
@@ -909,14 +917,10 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 
   suma = a1+a2+a3;
 
-  //no fluctuation if the loss is too big
-  if (suma > MaxExcitationNumber)  return  MeanLoss;
-
-  suma<50.? prob = exp(-suma) : prob = 0.;
-
   loss = 0. ;
 
-  if (prob > probLim)         // very small Step
+  // if (prob > probLim)         // very small Step
+  if(suma < sumaLim)             // very small Step
     {
       if( G4UniformRand() > exp(-cprob*a1) )
       {
