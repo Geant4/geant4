@@ -22,6 +22,8 @@ private:
   G4LogicalVolume* _LV;
   G4bool _Deferred;
   G4bool _NegVolPars;
+  G4bool _OKAxis[3];
+  G4int _DivisionAxis;
   RWTPtrOrderedVector <VolTableEntry> _Daughters; // VolTableEntry Daughters
   RWTPtrOrderedVector <G3Pos> _G3Pos; // associated G3Pos objects
 
@@ -29,7 +31,7 @@ public:
   VolTableEntry(G4String& v, G4String& sh, G4double* R, 
 		G4int n, G4int nmed, G4Material* m, 
 		G4VSolid* so, G4bool Deferred, 
-		G4bool NegVolPars);
+		G4bool NegVolPars, G4bool* OKAxis);
 
   virtual ~VolTableEntry();
 

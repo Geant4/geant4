@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4MakeSolid.cc,v 1.1 1999-05-22 07:30:22 lockman Exp $
+// $Id: G3toG4MakeSolid.cc,v 1.2 1999-05-28 02:19:36 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -25,21 +25,27 @@
         
 G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape, 
 			  const G4double* Rpar, const G4int npar, 
-			  G4bool& NegVolPars, G4bool& Deferred){
+			  G4bool& NegVolPars, G4bool& Deferred,
+			  G4bool* OKAxis){
     
-  // EAxis axis = kXAxis;
-  
   // Create the solid if no negative length parameters
   G4VSolid *solid = 0;
+
   NegVolPars = false;
 
   // if npar = 0 assume LV deferral
   Deferred = (npar == 0);
-  
+
+  for (int i=0;i<3;i++){
+    OKAxis[i]=false;
+  };
+
   if ( shape == "BOX" ) {
     G4double pX = Rpar[0]*cm;
     G4double pY = Rpar[1]*cm;
     G4double pZ = Rpar[2]*cm;
+
+    OKAxis[0]=OKAxis[1]=OKAxis[2]=true;
     
     NegVolPars = pX<0 || pY<0 || pZ<0;
     
@@ -53,7 +59,9 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
     G4double pdy1 = Rpar[2]*cm;
     G4double pdy2 = pdy1;
     G4double pdz  = Rpar[3]*cm;
-    
+
+    OKAxis[1]=OKAxis[2]=true;
+
     NegVolPars = pdx1<0 || pdx2<0 || pdy1<0 || pdz<0;
 
     if (!(NegVolPars || Deferred)) {
@@ -66,6 +74,8 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
     G4double pdy1 = Rpar[2]*cm;
     G4double pdy2 = Rpar[3]*cm;
     G4double pdz  = Rpar[4]*cm;
+
+    OKAxis[2]=true;
 
     NegVolPars = pdx1<0 || pdx2<0 || pdy1<0 || pdy2<0 || pdz<0;
  
@@ -86,6 +96,8 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
     G4double pDx4   = Rpar[9]*cm;
     G4double pAlp2  = Rpar[10]*deg;
 
+    OKAxis[2]=true;
+
     NegVolPars= pDz<0 || pDy1<0 || pDx1<0 || pDx2<0 || pDy2<0 || pDx3<0 || pDx4<0;
 
     if (!(NegVolPars || Deferred)) {
@@ -101,6 +113,8 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
     G4double pSPhi = 0.*deg;
     G4double pDPhi = 360.*deg;
     
+    OKAxis[0]=OKAxis[1]=OKAxis[2]=true;
+
     NegVolPars = pRMin<0 || pRMax<0 || pDz<0;
     
     if (!(NegVolPars || Deferred)) {
@@ -114,6 +128,8 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
     G4double pSPhi = Rpar[3]*deg;
     G4double pDPhi = Rpar[4]*deg - pSPhi;
     if ( Rpar[4]*deg <= pSPhi ) pDPhi = pDPhi + 360.*deg;
+
+    OKAxis[0]=OKAxis[1]=OKAxis[2]=true;
 
     NegVolPars = pRMin<0 || pRMax<0 || pDz<0;
 
@@ -129,6 +145,8 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
     G4double pRmax2 = Rpar[4]*cm;
     G4double pSPhi = 0.*deg;
     G4double pDPhi = 360.*deg;
+
+    OKAxis[0]=OKAxis[1]=OKAxis[2]=true;
 
     NegVolPars = pDz<0 || pRmin1<0 || pRmax1<0 || pRmin2<0 || pRmax2<0;
 
@@ -146,6 +164,8 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
     G4double pSPhi  = Rpar[5]*deg;
     G4double pDPhi  = Rpar[6]- pSPhi;
     if ( Rpar[6]*deg <= pSPhi ) pDPhi = pDPhi + 360.*deg;
+
+    OKAxis[0]=OKAxis[1]=OKAxis[2]=true;
 
     NegVolPars = pDz<0 || pRmin1<0 || pRmax1<0 || pRmin2<0 || pRmax2<0;
 
@@ -178,6 +198,8 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
     G4double pThet = Rpar[4]*deg;
     G4double pPhi  = Rpar[5]*deg;
 
+    OKAxis[0]=OKAxis[1]=OKAxis[2]=true;
+
     NegVolPars = pDx<0 || pDy<0 || pDz<0;
 
     if (!(NegVolPars || Deferred)){
@@ -193,7 +215,8 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
     G4double *DzArray = new G4double[nz];
     G4double *Rmax    = new G4double[nz];
     G4double *Rmin    = new G4double[nz];
-    G4double RMIN=1.e-4*cm;
+
+    OKAxis[0]=OKAxis[1]=OKAxis[2]=true;
 
     NegVolPars = 0;
 
@@ -218,6 +241,8 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
     G4double *DzArray = new G4double[nz];
     G4double *Rmax    = new G4double[nz];
     G4double *Rmin    = new G4double[nz];
+
+    OKAxis[0]=OKAxis[1]=OKAxis[2]=true;
 
     NegVolPars = 0;
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: VolTableEntry.cc,v 1.5 1999-05-26 05:15:29 lockman Exp $
+// $Id: VolTableEntry.cc,v 1.6 1999-05-28 02:19:41 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -24,22 +24,32 @@ VolTableEntry::VolTableEntry(G4String& Vname, G4String& Shape,
 			     G4double* Rpar,  G4int Npar, 
 			     G4int Nmed, 
 			     G4Material* Mat, G4VSolid* Solid,
-			     G4bool Deferred, G4bool NegVolPars)
+			     G4bool Deferred, G4bool NegVolPars, 
+			     G4bool* OKAxis)
   : _Rpar(0), _Npar(0), _Nmed(0), _Mat(0), _Solid(0), _LV(0), _Deferred(0), 
-    _NegVolPars(0), _Daughters(0), _G3Pos(0){
-      _Nmed = Nmed;
-      _Vname = Vname;
-      _Shape = Shape;
-      if (Rpar!=0 && Npar>0) {
-	_Rpar = new G4double[Npar];
-	for (int i=0; i<Npar; i++) _Rpar[i] = Rpar[i];
-      }
-      _Npar = Npar;
-      _Mat = Mat;
-      _Solid = Solid;
-      _NegVolPars = NegVolPars;
-      _Deferred = Deferred;
+    _NegVolPars(0), _Daughters(0), _G3Pos(0), _DivisionAxis(0)
+{
+  _Nmed = Nmed;
+  _Vname = Vname;
+  _Shape = Shape;
+  int i;
+  if (Rpar!=0 && Npar>0) {
+    _Rpar = new G4double[Npar];
+    for (i=0; i<Npar; i++) _Rpar[i] = Rpar[i];
+  }
+  _Npar = Npar;
+  _Mat = Mat;
+  _Solid = Solid;
+  _NegVolPars = NegVolPars;
+  _Deferred = Deferred;
+  for (i=0;i<3;i++) {
+    _OKAxis[i] = OKAxis[i];
+  }
 }
+
+VolTableEntry::~VolTableEntry(){
+  if (_Rpar!=0 && _Npar>0) delete [] _Rpar;
+};
 
 void
 VolTableEntry::SetLV(G4LogicalVolume* ll){
@@ -143,11 +153,6 @@ inline G4bool
 VolTableEntry::operator == ( const VolTableEntry& lv) const {
   return (this==&lv) ? true : false;
 };
-
-VolTableEntry::~VolTableEntry(){
-  if (_Rpar!=0 && _Npar>0) delete [] _Rpar;
-};
-
 
 
 

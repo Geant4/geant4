@@ -5,9 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTable.cc,v 1.9 1999-05-26 03:47:33 lockman Exp $
+// $Id: G3VolTable.cc,v 1.10 1999-05-28 02:19:33 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+
+#include <iomanip.h>
 #include "globals.hh"
 #include "G3VolTable.hh"
 #include "G3Pos.hh"
@@ -28,31 +30,37 @@ G3VolTable::GetVTE(G4String& Vname) {
   return _VTD->findValue(&Vname);
 };
 
+void 
+G3VolTable::ListVTE(){
+  RWTPtrHashDictionaryIterator<G4String, VolTableEntry> iter(*_VTD);
+  if (_VTD->entries()>0) {
+    for (int i=0;iter();i++){
+      _VTE = iter.value();
+      G4cout << "G3VolTable element " << setw(3) << i << " name "
+	     << _VTE->GetName() << " has " << _VTE->GetNoDaughters() 
+	     << " daughters" << endl;
+    }
+  }
+}
+
 RWTPtrHashDictionary <G4String, VolTableEntry>* 
 G3VolTable::GetVTD() {return _VTD;}
 
-void
-G3VolTable::PutVTE(G4String& Vname, G4String& Shape, 
-		   G4double* Rpar,  G4int Npar, G4int Nmed, 
-		   G4Material* Mat, G4VSolid* Solid,
-		   G4bool Deferred, G4bool NegVolPars){
-  if (GetVTE(Vname) == 0) {
-
-    _NVTE++;
-
-    // create a VolTableEntry
-    _VTE = new 
-      VolTableEntry(Vname, Shape, Rpar, Npar, Nmed, Mat, Solid, Deferred, 
-		    NegVolPars);
-
+VolTableEntry*
+G3VolTable::PutVTE(VolTableEntry* aVolTableEntry){
+  
+  if (GetVTE(aVolTableEntry->GetName()) == 0 ){
+    
     // create a hash key
-    G4String* _HashID = new G4String(Vname);
-
+    G4String* _HashID = new G4String(aVolTableEntry->GetName());
+    
     if (_FirstKey == "UnDefined") _FirstKey = *(_HashID);
-
+    
     // insert into dictionary
-    _VTD->insertKeyAndValue(_HashID, _VTE);
+    _VTD->insertKeyAndValue(_HashID, aVolTableEntry);
+    _NVTE++;
   }
+  return GetVTE(aVolTableEntry->GetName());
 };
 
 void 

@@ -18,13 +18,10 @@ private:
   G4int _NG3Pos;
 
 public:
-  void PutVTE(G4String& vname, G4String& shape, 
-	      G4double* Rpar,  G4int Npar, G4int nmed,
-	      G4Material* mat, G4VSolid* solid, 
-	      G4bool Deferred, G4bool ng);
-  
+  VolTableEntry* PutVTE(VolTableEntry* aVTE);  
   RWTPtrHashDictionary <G4String, VolTableEntry>* GetVTD() ;
   VolTableEntry* GetVTE(G4String& Vname);
+  void ListVTE();
   G3VolTable();
   virtual ~G3VolTable();
   G4LogicalVolume* GetG3toG4Mother();
