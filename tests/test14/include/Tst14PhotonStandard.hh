@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: Tst14PhotonStandard.hh,v 1.1 2003-02-23 09:18:02 pia Exp $
+// $Id: Tst14PhotonStandard.hh,v 1.2 2003-02-23 16:13:47 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
