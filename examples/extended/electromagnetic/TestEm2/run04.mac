@@ -1,4 +1,4 @@
-# $Id: run04.mac,v 1.7 2002-10-31 13:58:29 maire Exp $
+# $Id: run04.mac,v 1.8 2003-02-14 14:21:28 vnivanch Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -13,12 +13,12 @@
 #/testem/phys/addPhysics  standard
 #
 /testem/phys/setCuts 0.8 mm
-/run/initialize
 #
 /testem/det/setMat Fe
 /testem/det/setLbin 40 0.5
 /testem/det/setRbin 20 0.25
-/testem/det/update
+/run/initialize
+#/testem/det/update
 #
 /run/verbose 2
 /testem/event/printModulo 10

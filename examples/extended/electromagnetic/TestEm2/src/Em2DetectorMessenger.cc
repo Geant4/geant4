@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorMessenger.cc,v 1.10 2002-12-16 11:29:23 stesting Exp $
+// $Id: Em2DetectorMessenger.cc,v 1.11 2003-02-14 14:21:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@ Em2DetectorMessenger::Em2DetectorMessenger(Em2DetectorConstruction * Det)
   MaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
   MaterCmd->SetGuidance("Select Material.");
   MaterCmd->SetParameterName("material",false);
-  MaterCmd->AvailableForStates(G4State_Idle);
+  MaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   LBinCmd = new G4UIcmdWith3Vector("/testem/det/setLbin",this);
   LBinCmd->SetGuidance("set longitudinal bining");
@@ -70,13 +70,13 @@ Em2DetectorMessenger::Em2DetectorMessenger(Em2DetectorConstruction * Det)
   FieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   FieldCmd->SetParameterName("Bz",false);
   FieldCmd->SetUnitCategory("Magnetic flux density");
-  FieldCmd->AvailableForStates(G4State_Idle);
+  FieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   UpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
   UpdateCmd->SetGuidance("Update geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(G4State_Idle);          
+  UpdateCmd->AvailableForStates(G4State_PreInit,G4State_Idle);          
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

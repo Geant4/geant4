@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2003-02-12 14:57:28 maire Exp $
+$Id: History,v 1.26 2003-02-14 14:21:27 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-02-03 V.Ivanchenko (testem2-V05-00-01)
+- Migration to cut per region
 
 12-02-03 mma (testem2-V05-00-00)
 - add a blank in SteppingVerbose

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PhysListEmModel.cc,v 1.2 2002-12-16 11:29:23 stesting Exp $
+// $Id: Em2PhysListEmModel.cc,v 1.3 2003-02-14 14:21:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,16 +98,17 @@ void Em2PhysListEmModel::ConstructProcess()
       pmanager->AddProcess(new G4MuBremsstrahlungSTD,  -1,-1,3);
       pmanager->AddProcess(new G4MuPairProductionSTD,  -1,-1,4);       
      
+    } else if( particleName == "GenericIon" ) {
+ 
+      pmanager->AddProcess(new G4MultipleScatteringSTD,-1,1,1);
+      pmanager->AddProcess(new G4ionIonisation,      -1,2,2);
+
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4MultipleScatteringSTD,-1,1,1);
-      if(particle->GetPDGMass() < 1.0*GeV ) {
-        pmanager->AddProcess(new G4hIonisationSTD,     -1,2,2);
-      } else {
-        pmanager->AddProcess(new G4ionIonisation,      -1,2,2);
-      }           
+      pmanager->AddProcess(new G4hIonisationSTD,     -1,2,2);
     }
   }
 }

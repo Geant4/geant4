@@ -3,6 +3,43 @@
                                 (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
+
+***** Table : Nb of materials = 9 *****
+
+ Material: Air            density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m
+   --->  Element: NitrogenN   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material: Water            density:  1.000 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm
+   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material: lAr            density:  1.390 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm
+   --->  Element: lAr    Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Al            density:  2.700 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm
+   --->  Element: Al    Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Fe            density:  7.870 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm
+   --->  Element: Fe    Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: BGO            density:  7.100 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.123 cm
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  15.41 %  Abundance  63.16 %
+   --->  Element: GermaniumGe   Z = 32.0   N =  72.6   A =  72.59 g/mole  fractionMass:  17.48 %  Abundance  15.79 %
+   --->  Element: BismuthBi   Z = 83.0   N = 209.0   A = 208.98 g/mole  fractionMass:  67.10 %  Abundance  21.05 %
+
+ Material: PbWO4            density:  8.280 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.924 mm
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  14.07 %  Abundance  66.67 %
+   --->  Element: LeadPb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass:  45.53 %  Abundance  16.67 %
+   --->  Element: TungstenW   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass:  40.40 %  Abundance  16.67 %
+
+ Material: Tungsten            density: 19.300 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm
+   --->  Element: TungstenW   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Lead            density: 11.350 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm
+   --->  Element: LeadPb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -25,48 +62,67 @@ Current available graphics systems are:
 /testem/phys/addPhysics  standard
 #
 /testem/phys/setCuts 5.0 mm
+#
+/testem/det/setMat Water
+/testem/det/setLbin 9 1.11
+/testem/det/setRbin 6 0.111
 /run/initialize
-
-***** Table : Nb of materials = 9 *****
-
- Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
-   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
-
- Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
-
- Material:      lAr     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
-   --->  Element:      lAr      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:       Al     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
-   --->  Element:       Al      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:       Fe     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
-   --->  Element:       Fe      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:      BGO     density:  7.100 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.123 cm 
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  15.41 %  Abundance  63.16 %
-   --->  Element: Germanium Ge   Z = 32.0   N =  72.6   A =  72.59 g/mole  fractionMass:  17.48 %  Abundance  15.79 %
-   --->  Element:  Bismuth Bi   Z = 83.0   N = 209.0   A = 208.98 g/mole  fractionMass:  67.10 %  Abundance  21.05 %
-
- Material:    PbWO4     density:  8.280 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.924 mm 
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  14.07 %  Abundance  66.67 %
-   --->  Element:     Lead Pb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass:  45.53 %  Abundance  16.67 %
-   --->  Element: Tungsten  W   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass:  40.40 %  Abundance  16.67 %
-
- Material: Tungsten     density: 19.300 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm 
-   --->  Element: Tungsten  W   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
-   --->  Element:     Lead Pb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
-
-Absorber is 17.848 cm  of PbWO4
+Absorber is 3.60564 m of Water
 
 phot:  Total cross sections from Sandia parametrisation. 
-Em2PhysicsList::SetCuts:CutLength : 1 mm 
+Em2PhysicsList::SetCuts:CutLength : 1 mm
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : Yes
+ Material : Air
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  is not ready to print
+
+Index : 1     used in the geometry : Yes     recalculation needed : Yes
+ Material : Water
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : Yes
+ Material : lAr
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  is not ready to print
+
+Index : 3     used in the geometry : No      recalculation needed : Yes
+ Material : Al
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  is not ready to print
+
+Index : 4     used in the geometry : No      recalculation needed : Yes
+ Material : Fe
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  is not ready to print
+
+Index : 5     used in the geometry : No      recalculation needed : Yes
+ Material : BGO
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  is not ready to print
+
+Index : 6     used in the geometry : No      recalculation needed : Yes
+ Material : PbWO4
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  is not ready to print
+
+Index : 7     used in the geometry : No      recalculation needed : Yes
+ Material : Tungsten
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  is not ready to print
+
+Index : 8     used in the geometry : No      recalculation needed : Yes
+ Material : Lead
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  is not ready to print
+
+====================================================================
+
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -79,7 +135,7 @@ conv:  Total cross sections from a parametrisation. Good description from 1.5 Me
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
@@ -98,7 +154,7 @@ annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -108,7 +164,7 @@ hIoni:    Knock-on electron cross sections .
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
 MuIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -122,41 +178,87 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-============= The cut Energy ==============================
-                            gamma              e-    
-Cut in range       
-                Air           5 mm            5 mm 
-              Water           5 mm            5 mm 
-                lAr           5 mm            5 mm 
-                 Al           5 mm            5 mm 
-                 Fe           5 mm            5 mm 
-                BGO           5 mm            5 mm 
-              PbWO4           5 mm            5 mm 
-           Tungsten           5 mm            5 mm 
-               Lead           5 mm            5 mm 
-Cut in energy
-                Air         990 eV         3.24 keV
-              Water        5.78 keV        1.16 MeV
-                lAr        13.6 keV        1.16 MeV
-                 Al        14.6 keV        2.31 MeV
-                 Fe        46.4 keV        6.11 MeV
-                BGO         126 keV        4.72 MeV
-              PbWO4         137 keV        5.34 MeV
-           Tungsten         241 keV          13 MeV
-               Lead         204 keV        6.83 MeV
-===================================================
-#
-/testem/det/setMat Water
-/testem/det/setLbin 9 1.11
-/testem/det/setRbin 6 0.111
-/testem/det/update
-Absorber is 3.60564 m   of Water
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                              gamma            e-            e+           
+Threshold in range            5 mm             5 mm             5 mm
+   Water                          5.78 keV          1.16 MeV           1.1 MeV
+=======================================================================
+
+#/testem/det/update
 #
 /testem/event/printModulo 20
 #
 /gun/particle e-
 /gun/energy 1 GeV
 /run/beamOn 100
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  gamma 990 eV    e- 3.2397 keV    e+ 3.20006 keV
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  gamma 5.78478 keV    e- 1.15997 MeV    e+ 1.10423 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : lAr
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  gamma 13.5776 keV    e- 1.15997 MeV    e+ 1.10423 MeV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Al
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  gamma 14.6203 keV    e- 2.31122 MeV    e+ 2.14666 MeV
+
+Index : 4     used in the geometry : No      recalculation needed : No 
+ Material : Fe
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  gamma 46.4433 keV    e- 6.11229 MeV    e+ 5.74741 MeV
+
+Index : 5     used in the geometry : No      recalculation needed : No 
+ Material : BGO
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  gamma 125.956 keV    e- 4.71987 MeV    e+ 4.38381 MeV
+
+Index : 6     used in the geometry : No      recalculation needed : No 
+ Material : PbWO4
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  gamma 137.419 keV    e- 5.33819 MeV    e+ 4.9581 MeV
+
+Index : 7     used in the geometry : No      recalculation needed : No 
+ Material : Tungsten
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  gamma 241.105 keV    e- 12.9518 MeV    e+ 12.0297 MeV
+
+Index : 8     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 5 mm    e- 5 mm    e+ 5 mm
+ Energy thresholds :  gamma 204.169 keV    e- 6.82843 MeV    e+ 6.34224 MeV
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                              gamma            e-            e+           
+Threshold in range            5 mm             5 mm             5 mm
+   Water                          5.78 keV          1.16 MeV           1.1 MeV
+=======================================================================
+
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -177,20 +279,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=23.55s Real=29.75s Sys=3.06s
+  User=6.71s Real=6.79s Sys=0.02s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.11 radl:   14.75%       6.29%             0-> 1.11 radl:   14.75%     6.29% 
-    1.11-> 2.22 radl:   22.10%       9.69%             0-> 2.22 radl:   36.84%    12.22% 
-    2.22-> 3.33 radl:   20.44%       8.15%             0-> 3.33 radl:   57.28%    13.93% 
-    3.33-> 4.44 radl:   14.74%       8.52%             0-> 4.44 radl:   72.02%    13.31% 
-    4.44-> 5.55 radl:    9.78%       6.96%             0-> 5.55 radl:   81.79%    11.49% 
-    5.55-> 6.66 radl:    6.76%       5.80%             0-> 6.66 radl:   88.55%     8.07% 
-    6.66-> 7.77 radl:    2.97%       4.08%             0-> 7.77 radl:   91.52%     5.98% 
-    7.77-> 8.88 radl:    1.92%       3.10%             0-> 8.88 radl:   93.44%     4.74% 
-    8.88-> 9.99 radl:    0.81%       1.68%             0-> 9.99 radl:   94.25%     4.23% 
+    0.00-> 1.11 radl:   14.58%       6.03%             0-> 1.11 radl:   14.58%     6.03% 
+    1.11-> 2.22 radl:   24.77%      10.40%             0-> 2.22 radl:   39.35%    13.96% 
+    2.22-> 3.33 radl:   21.07%       9.52%             0-> 3.33 radl:   60.43%    16.56% 
+    3.33-> 4.44 radl:   12.62%       8.34%             0-> 4.44 radl:   73.05%    17.47% 
+    4.44-> 5.55 radl:    7.75%       6.17%             0-> 5.55 radl:   80.80%    16.33% 
+    5.55-> 6.66 radl:    5.50%       6.63%             0-> 6.66 radl:   86.30%    12.05% 
+    6.66-> 7.77 radl:    3.78%       5.22%             0-> 7.77 radl:   90.08%     9.47% 
+    7.77-> 8.88 radl:    1.98%       3.11%             0-> 8.88 radl:   92.06%     7.94% 
+    8.88-> 9.99 radl:    1.57%       3.40%             0-> 9.99 radl:   93.64%     6.07% 
 
 
 
@@ -198,21 +300,21 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.11 radl:   66.75%       9.25%             0-> 0.11 radl:   66.75%     9.25% 
-    0.11-> 0.22 radl:   15.01%       5.71%             0-> 0.22 radl:   81.76%     6.91% 
-    0.22-> 0.33 radl:    5.87%       3.76%             0-> 0.33 radl:   87.63%     5.52% 
-    0.33-> 0.44 radl:    3.22%       2.53%             0-> 0.44 radl:   90.85%     4.86% 
-    0.44-> 0.56 radl:    2.09%       1.82%             0-> 0.56 radl:   92.94%     4.39% 
-    0.56-> 0.67 radl:    1.32%       1.29%             0-> 0.67 radl:   94.25%     4.23% 
+    0.00-> 0.11 radl:   68.18%       9.17%             0-> 0.11 radl:   68.18%     9.17% 
+    0.11-> 0.22 radl:   14.46%       6.06%             0-> 0.22 radl:   82.64%     7.20% 
+    0.22-> 0.33 radl:    5.00%       2.56%             0-> 0.33 radl:   87.64%     6.58% 
+    0.33-> 0.44 radl:    3.09%       2.52%             0-> 0.44 radl:   90.73%     6.28% 
+    0.44-> 0.56 radl:    1.81%       1.64%             0-> 0.56 radl:   92.54%     6.11% 
+    0.56-> 0.67 radl:    1.10%       0.98%             0-> 0.67 radl:   93.64%     6.07% 
 
                               SUMMARY
-                         energy deposit :   94.25 % E0 +-    4.23 % E0
-                         charged traklen:   13.70 radl +-    0.61 radl
-                         neutral traklen:  200.64 radl +-   19.55 radl
+                         energy deposit :   93.64 % E0 +-    6.07 % E0
+                         charged traklen:   13.63 radl +-    0.88 radl
+                         neutral traklen:  197.47 radl +-   21.49 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1371468372, 1731317846
+ Current couple of seeds = 1116321069, 1035095427
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

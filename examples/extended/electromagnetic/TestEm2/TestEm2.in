@@ -1,4 +1,4 @@
-# $Id: TestEm2.in,v 1.7 2002-10-31 13:58:29 maire Exp $
+# $Id: TestEm2.in,v 1.8 2003-02-14 14:21:27 vnivanch Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -17,12 +17,12 @@
 /testem/phys/addPhysics  standard
 #
 /testem/phys/setCuts 5.0 mm
-/run/initialize
 #
 /testem/det/setMat Water
 /testem/det/setLbin 9 1.11
 /testem/det/setRbin 6 0.111
-/testem/det/update
+/run/initialize
+#/testem/det/update
 #
 /testem/event/printModulo 20
 #

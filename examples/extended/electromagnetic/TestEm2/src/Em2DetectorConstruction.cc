@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorConstruction.cc,v 1.10 2002-12-16 11:29:23 stesting Exp $
+// $Id: Em2DetectorConstruction.cc,v 1.11 2003-02-14 14:21:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,6 +60,7 @@ Em2DetectorConstruction::Em2DetectorConstruction()
  solidRing(0) ,logicRing(0) ,physiRing(0) 
 {
   detectorMessenger = new Em2DetectorMessenger(this);
+  DefineMaterials();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,7 +72,6 @@ Em2DetectorConstruction::~Em2DetectorConstruction()
 
 G4VPhysicalVolume* Em2DetectorConstruction::Construct()
 {
-  DefineMaterials();
   return ConstructVolumes();
 }
 
@@ -186,6 +186,9 @@ G4VPhysicalVolume* Em2DetectorConstruction::ConstructVolumes()
   //   
   // Ecal
   //
+  if(solidEcal) delete solidEcal;
+  if(logicEcal) delete logicEcal;
+  if(physiEcal) delete physiEcal;
   solidEcal = new G4Tubs("Ecal",0.,EcalRadius,0.5*EcalLength,0.,360*deg);
   logicEcal = new G4LogicalVolume( solidEcal,myMaterial,"Ecal",0,0,0);
   physiEcal = new G4PVPlacement(0,G4ThreeVector(),
@@ -229,13 +232,14 @@ G4VPhysicalVolume* Em2DetectorConstruction::ConstructVolumes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2DetectorConstruction::SetMaterial(G4String materialChoice)
+void Em2DetectorConstruction::SetMaterial(const G4String& materialChoice)
 {
   // search the material by its name   
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
   if (pttoMaterial)
-     {myMaterial = pttoMaterial;
-      logicEcal->SetMaterial(myMaterial); 
+     {
+       myMaterial = pttoMaterial;
+       if(logicEcal) logicEcal->SetMaterial(myMaterial); 
      }             
 }
 
@@ -277,7 +281,13 @@ void Em2DetectorConstruction::SetMagField(G4double fieldValue)
   
 void Em2DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
+  G4bool first = true;
+  if (physiEcal) first = false;
+  G4VPhysicalVolume* v = ConstructVolumes();
+  G4RunManager* rm = G4RunManager::GetRunManager();
+  rm->GeometryHasBeenModified();
+  rm->DefineWorldVolume(v);
+  if (!first) rm->ResetNavigator();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorConstruction.hh,v 1.5 2002-12-16 11:29:21 stesting Exp $
+// $Id: Em2DetectorConstruction.hh,v 1.6 2003-02-14 14:21:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,7 +54,7 @@ class Em2DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
      
-     void SetMaterial(G4String);
+     void SetMaterial(const G4String&);
      void SetLBining (G4ThreeVector);
      void SetRBining (G4ThreeVector);      
      void SetMagField(G4double);

@@ -9,6 +9,7 @@
 #
 /control/verbose 2
 /run/verbose 1
+/tracking/verbose 0
 #
 #  select EM PhysicsList
 #
@@ -16,12 +17,12 @@
 #/testem/phys/addPhysics  standard
 #
 /testem/phys/setCuts 5.0 mm
-/run/initialize
 #
 /testem/det/setMat Water
 /testem/det/setLbin 9 1.11
 /testem/det/setRbin 6 0.111
-/testem/det/update
+/run/initialize
+#/testem/det/update
 #
 /testem/event/printModulo 20
 #
