@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EmAcceptance.cc,v 1.1 2004-05-27 13:43:57 vnivanch Exp $
+// $Id: EmAcceptance.cc,v 1.2 2004-06-20 01:38:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,7 +72,7 @@ void EmAcceptance::EmAcceptanceGauss(const G4String& title, G4int stat,
   G4double de = dde*x/rms;
 
   G4cout << title << ": " << avr << "  del"<< title << "= " << dde << " nrms= " << de << G4endl;
-  if(de > limit) isAccepted = false;
+  if(abs(de) > limit) isAccepted = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
