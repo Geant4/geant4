@@ -1,0 +1,77 @@
+Dear the test team,
+I've made the changes as below:
+
+1) Chagned files:G4SteppingManager.cc
+Fix for precision problem of safety in SteppingManager by John
+Apostolakis: See below for the detail 
+
+2) New Files:G4VSteppingVerbose.hh G4VStepingVerbose.hh 
+   Changed files:G4SteppingVerbose.hh G4S4SteppingManager.cc
+G4VSteppingVerbose has introduced to allow users their own version
+of Verbose class. 
+
+
+Regards,
+Takashi Sasaki/KEK
+
+------John Apostolakis's comments on the precision problem-----------
+
+
+    The Transportation (or other process) returns a value of the safety
+(calculated from the startpoint). 
+
+    The SteppingManager's Stepping() method then calculates the safety for
+the endpoint by trying to subtract the step length.  To do this it 
+uses the magnitude of the difference of the position vectors of the Pre
+and Post Step points. 
+
+     endpointSafety=  max( proposedSafety -
+                           (fPostStepPoint->GetPosition() -
+                            fPreStepPoint->GetPosition()
+                            ).mag(),
+                           0.);
+
+   However this calculation of the step length result in significant
+imprecision.  In particular when the Transportation returned
+  safety = stepLength
+the calculation above can result in values ranging up to 5.13e-08 in 
+one example program (run on a Sun). 
+
+  This is much too large, and the Navigator rightfully complained when the 
+Multiple scattering moved the point by that much!
+
+
+
+*** G4SteppingManager.cc.~1.1~  Tue Mar  9 17:16:30 1999
+--- /afs/cern.ch/user/j/japost/public/G4SteppingManager.cc-fix1send
+Wed Mar 10 20:19:16 1999
+***************
+*** 141,146 ****
+--- 141,147 ----
+       // Store the Step length (geometrical length) to G4Step and G4Track
+       fStep->SetStepLength( PhysicalStep );
+       fTrack->SetStepLength( PhysicalStep );
++      G4double GeomStepLength = PhysicalStep;
+  
+       // Store StepStatus to PostStepPoint
+       fStep->GetPostStepPoint()->SetStepStatus( fStepStatus );
+***************
+*** 153,163 ****
+  
+       // Update safety after invocation of all AlongStepDoIts
+       endpointSafOrigin= fPostStepPoint->GetPosition();
+!      endpointSafety=  max( proposedSafety -
+!                          (fPostStepPoint->GetPosition() -
+!                           fPreStepPoint->GetPosition()
+!                           ).mag(),
+!                          0.);
+  
+       fStep->GetPostStepPoint()->SetSafety( endpointSafety );
+  
+--- 154,160 ----
+  
+       // Update safety after invocation of all AlongStepDoIts
+       endpointSafOrigin= fPostStepPoint->GetPosition();
+!      endpointSafety=  max( proposedSafety - GeomStepLength, 0.);
+  
+       fStep->GetPostStepPoint()->SetSafety( endpointSafety );
