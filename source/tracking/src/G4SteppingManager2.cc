@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.18 2004-11-10 11:23:27 tsasaki Exp $
+// $Id: G4SteppingManager2.cc,v 1.19 2004-11-10 18:40:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -402,15 +402,21 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
      
      // Set the track status according to what the process defined
      // if kinetic energy >0, otherwise set  fStopButAlive
-     if  ( fTrack->GetKineticEnergy() < DBL_MIN) {
-       fTrack->SetTrackStatus( fStopButAlive );
-     } else {
-       fTrack->SetTrackStatus( fParticleChange->GetStatusChange() );
-     }
-
+     //     fTrack->SetTrackStatus( fParticleChange->GetTrackStatus() );
+     
      // clear ParticleChange
      fParticleChange->Clear();
+     if(fTrack->GetTrackStatus() != fAlive) break;
    }
+   fStep->UpdateTrack();
+   G4TrackStatus fNewStatus = fTrack->GetTrackStatus();
+
+   if ( fNewStatus == fAlive && fTrack->GetKineticEnergy() <= DBL_MIN ) {
+     if(MAXofAtRestLoops>0) fNewStatus = fStopButAlive;
+     else                   fNewStatus = fStopAndKill;
+     fTrack->SetTrackStatus( fNewStatus );
+   }
+
 }
 
 ////////////////////////////////////////////////////////
