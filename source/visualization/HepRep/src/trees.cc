@@ -29,7 +29,7 @@
  *          Addison-Wesley, 1983. ISBN 0-201-06672-6.
  */
 
-/* @(#) $Id: trees.cc,v 1.1 2003-07-11 06:01:45 duns Exp $ */
+/* @(#) $Id: trees.cc,v 1.2 2003-07-11 07:45:14 duns Exp $ */
 
 /* #define GEN_TREES_H */
 
@@ -1107,7 +1107,7 @@ local void compress_block(deflate_state *s, ct_data *ltree, ct_data *dtree)
         } /* literal or match pair ? */
 
         /* Check that the overlay between pending_buf and d_buf+l_buf is ok: */
-        Assert(s->pending < s->lit_bufsize + 2*lx, "pendingBuf overflow");
+        Assert(((unsigned int)s->pending) < s->lit_bufsize + 2*lx, "pendingBuf overflow");
 
     } while (lx < s->last_lit);
 
