@@ -73,7 +73,7 @@ DicomPatientParameterisation::DicomPatientParameterisation(G4int NoVoxels, doubl
   for (int i=0;i<totalNumberOfFile;i++)
     {
       ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[i] );
-      MiddleLocationValue=MiddleLocationValue+ReadConfiguration->SliceLocation;
+      MiddleLocationValue=MiddleLocationValue+ReadConfiguration->GetSliceLocation();
     }
   MiddleLocationValue=MiddleLocationValue/totalNumberOfFile;
  
@@ -272,7 +272,7 @@ void DicomPatientParameterisation::GetDensity(double maxdensity , double mindens
 		      copy_counter++;
 		      PatientPlacementX.push_back( (ReadConfiguration->CompressionUsed*( ((lenc*ReadConfiguration->GetXPixelSpacing())/2)-(ReadConfiguration->GetYPixelSpacing()/2+(w-1)*ReadConfiguration->GetYPixelSpacing()) ) )*mm );
 		      PatientPlacementY.push_back( (ReadConfiguration->CompressionUsed*( ((lenr*ReadConfiguration->GetXPixelSpacing())/2)-(ReadConfiguration->GetYPixelSpacing()/2+(j-1)*ReadConfiguration->GetYPixelSpacing()) ) )*mm );
-		      PatientPlacementZ.push_back( (ReadConfiguration->SliceLocation + ReadConfiguration->GetSliceThickness()/2)*mm );
+		      PatientPlacementZ.push_back( (ReadConfiguration->GetSliceLocation() + ReadConfiguration->GetSliceThickness()/2)*mm );
                     }
                 }
             }

@@ -77,7 +77,7 @@ void DicomGeometry::patientConstruction()
   for (int i=0;i< totalNumberOfFile;i++)
     {
       ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[i] );
-      MiddleLocationValue=MiddleLocationValue+ReadConfiguration->SliceLocation;
+      MiddleLocationValue=MiddleLocationValue+ReadConfiguration->GetSliceLocation();
     }
   MiddleLocationValue=MiddleLocationValue/totalNumberOfFile;
     
