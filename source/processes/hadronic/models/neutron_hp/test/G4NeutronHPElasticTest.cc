@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPElasticTest.cc,v 1.2 1999-12-15 14:53:21 gunter Exp $
+// $Id: G4NeutronHPElasticTest.cc,v 1.3 2001-02-17 16:51:26 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -13,7 +13,6 @@
 #include "g4std/fstream"
 #include "g4std/iomanip"
  
-#include "../src/G4NeutronHPIsoData.cc"
 #include "G4Material.hh"
  
 #include "G4GRSVolume.hh"
@@ -30,8 +29,11 @@
 #include "G4PVPlacement.hh"
 
 #include "G4Step.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4IonConstructor.hh"
 
-#include "g4templates.hh"
 #include "G4NeutronHPChannel.hh"
  // forward declarations
  
@@ -59,16 +61,20 @@
  
  int main()
   {
-    G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
-    G4std::ofstream outFile( "InelasticAlpha.listing.GetMeanFreePath", G4std::ios::out);
-    outFile.setf( G4std::ios::scientific, G4std::ios::floatfield );
-    G4std::ofstream outFile1( "InelasticAlpha.listing.DoIt", G4std::ios::out);
-    outFile1.setf( G4std::ios::scientific, G4std::ios::floatfield );
-
     G4String name, symbol;
     G4double a, iz, z, density;
     G4int nEl;
     
+ G4LeptonConstructor aC1;
+ G4BaryonConstructor aC2;
+ G4MesonConstructor aC3;
+ G4IonConstructor aC4;
+ 
+ aC1.ConstructParticle();
+ aC2.ConstructParticle();
+ aC3.ConstructParticle();
+ aC4.ConstructParticle();
+
     G4int numberOfMaterials=1;
     G4Material* theMaterials[23];
     
@@ -303,7 +309,9 @@
    
    // --------- Test the GetMeanFreePath
    
+   G4StepPoint aStepPoint;
    G4Step aStep;
+   aStep.SetPreStepPoint(&aStepPoint);
    G4double meanFreePath;
    G4double incomingEnergy;
    G4int k, i, l, hpw = 0;   
@@ -320,13 +328,8 @@
    G4cin >> incomingEnergy;
    for (i=0; i<numberOfParticles; i++)
    {
-     outFile << G4endl
-             << "New particle type: " << theParticles[i]->GetParticleName()
-             << " " << i << G4endl;
      for ( G4int k=0; k<numberOfMaterials; k++)
      {
-       outFile << G4endl << "Entering Material " << theMaterials[k]->GetName()
-               << " for particle " << theParticles[i]->GetParticleName() << G4endl;
        LogicalFrame->SetMaterial(theMaterials[k]); 
 //       for( G4int j=0; j<numberOfEnergies; ++j )
 int j = 0;
@@ -339,6 +342,11 @@ int j = 0;
            G4Track* aTrack = new G4Track( aParticle, aTime, aPosition );
            aTrack->SetTouchable(theTouchable);
            aStep.SetTrack( aTrack );
+           aStepPoint.SetTouchable(theTouchable);
+	   aStepPoint.SetMaterial(theMaterials[0]);
+           aStep.SetPreStepPoint(&aStepPoint);
+	   aStep.SetPostStepPoint(&aStepPoint);
+	   aTrack->SetStep(&aStep);
            ++hpw;
            if(hpw == 1000*(hpw/1000))
            G4cerr << "FINAL EVENTCOUNTER=" << hpw

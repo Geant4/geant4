@@ -3,7 +3,7 @@
 // A prototype of the low energy neutron transport model.
 //
 #include "G4NeutronHPGamma.hh"
-
+int G4NeutronHPGamma::instancecount = 0;
 G4bool G4NeutronHPGamma::Init(G4std::ifstream & aDataFile)
 {
   G4bool theResult = true;

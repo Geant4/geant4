@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelasticTest.cc,v 1.5 2000-09-15 13:56:30 hpw Exp $
+// $Id: G4NeutronHPInelasticTest.cc,v 1.6 2001-02-17 16:51:26 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -150,18 +150,18 @@
 //      // *** G4Exception: Aborting execution ***
 // // combined bug in G4LegendreTable and G4PhotonDist fixed
 //      // Init runs
-      G4Material *theAl = new G4Material(name="Aluminium", density=2.70*g/cm3, nEl=1);
-      G4Element *elAl  = new G4Element(name="Aluminium", symbol="Al", iz=13., a=26.98*g/mole);
-      theAl->AddElement( elAl, 1 );
-      theMaterials[8] = theAl;
+//      G4Material *theAl = new G4Material(name="Aluminium", density=2.70*g/cm3, nEl=1);
+//      G4Element *elAl  = new G4Element(name="Aluminium", symbol="Al", iz=13., a=26.98*g/mole);
+//      theAl->AddElement( elAl, 1 );
+//      theMaterials[8] = theAl;
 //      
 // // natural silicon only; swiches to aluminium
 // // copied to 14_28_Silicon
 //   //Init runs 
-      G4Material *theSi = new G4Material(name="Silicon", density=2.33*g/cm3, nEl=1);
-      G4Element *elSi  = new G4Element(name="Silicon", symbol="Al", iz=14., a=28.0855*g/mole);
-      theSi->AddElement( elSi, 1 );
-      theMaterials[9] = theSi;
+//      G4Material *theSi = new G4Material(name="Silicon", density=2.33*g/cm3, nEl=1);
+//      G4Element *elSi  = new G4Element(name="Silicon", symbol="Al", iz=14., a=28.0855*g/mole);
+//      theSi->AddElement( elSi, 1 );
+//      theMaterials[9] = theSi;
 //      
 //      // Init runs
 //      G4Material *theCl = new G4Material(name="Chloron", density=3*g/cm3, nEl=1);
@@ -266,6 +266,12 @@
 //      elHe3->AddIsotope(isoHe3, 1);
 //      theHe3->AddElement(elHe3 , 1 );
 //      theMaterials[24] = theHe3;
+    
+     G4Material *theC = new G4Material(name="Carbon", density=18.95*g/cm3, nEl=1);
+     G4Element *elC = new G4Element(name="Carbon", symbol="C", iz=6., a=12.01*g/mole);
+     theC->AddElement( elC, 1 );
+     theMaterials[25] = theC;
+
     G4cout << "Please enter material number"<<G4endl;
     G4int inputNumber;
     G4cin >> inputNumber;
@@ -401,6 +407,7 @@ int j = 0;
            G4Track * second;
            G4DynamicParticle * aSec;
            G4int isec;
+	   G4double QValue = 0;
            for(isec=0;isec<aFinalState->GetNumberOfSecondaries();isec++)
            {
              second = aFinalState->GetSecondary(isec);
@@ -410,8 +417,10 @@ int j = 0;
              G4cout << aSec->GetMomentum();
 	     G4cout << (1-isec)*aFinalState->GetNumberOfSecondaries();
 	     G4cout << G4endl;
-             delete second;
+             QValue += aSec->GetKineticEnergy();
+	     delete second;
            }
+	   G4cout << "QVALUE = "<<QValue<<G4endl;
            delete aParticle;
            delete aTrack;
            aFinalState->Clear();

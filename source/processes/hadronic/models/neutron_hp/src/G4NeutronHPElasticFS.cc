@@ -208,7 +208,7 @@
     // now all in Lab
 // nun den recoil generieren...und energy change, momentum change angeben.
     theResult.SetEnergyChange(theNeutron.GetKineticEnergy());
-    theResult.SetMomentumChange(theNeutron.GetMomentum().unit());
+    theResult.SetMomentumChange(theNeutron.GetMomentum());
     G4DynamicParticle* theRecoil = new G4DynamicParticle;
     if(targetMass<4.5)
     {

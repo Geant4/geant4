@@ -238,9 +238,13 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
       {
         G4double eExcitation = 0;
         if(iLevel>=0) eExcitation = theGammas.GetLevel(iLevel)->GetLevelEnergy();    
-        
-	aHadron.SetKineticEnergy(aHadron.GetKineticEnergy() - eExcitation);
-	// consistency of data assumed....@@@@@
+        while (eKinetic-eExcitation < 0 && iLevel>0)
+	{
+	  iLevel--;
+	  eExcitation = theGammas.GetLevel(iLevel)->GetLevelEnergy();    
+	}
+	if(eKinetic-eExcitation < 0) G4Exception("SEVERE: InelasticCompFS: Consistency of data not good enough, please file report");
+	aHadron.SetKineticEnergy(eKinetic - eExcitation);
 	
       }
       theAngularDistribution[it]->SampleAndUpdate(aHadron);

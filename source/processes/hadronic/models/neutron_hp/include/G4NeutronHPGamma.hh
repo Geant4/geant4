@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPGamma.hh,v 1.4 1999-12-15 14:53:12 gunter Exp $
+// $Id: G4NeutronHPGamma.hh,v 1.5 2001-02-17 16:51:25 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPGamma_h
@@ -28,8 +28,9 @@ class G4NeutronHPGamma
   G4NeutronHPGamma() 
   {
     next = NULL;
+    instancecount ++;
   }
-  ~G4NeutronHPGamma() {}
+  ~G4NeutronHPGamma() {instancecount--;}
   
   G4bool Init(G4std::ifstream & aDataFile);
   
@@ -78,6 +79,7 @@ class G4NeutronHPGamma
   G4double probability;
   
   G4NeutronHPLevel * next;
+  static int instancecount;
 };
 
 #endif
