@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2000-11-10 17:46:32 gcosmo Exp $
+$Id: History,v 1.30 2000-11-16 16:31:54 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 16,   00   V. Grichine               geom-solids-csg-V02-00-10
+- G4Box.cc: introduced fixes to algorithm for computation of rotated vertices
+  in CalculateExtent(). (D.Williams)
 
 Nov 10,   00   G. Cosmo                  geom-solids-csg-V02-00-09
 - G4Torus.cc: removed debug print-out which was still included by mistake
