@@ -1,4 +1,4 @@
-$Id: History,v 1.85 2003-11-08 01:19:25 japost Exp $
+$Id: History,v 1.86 2003-11-08 02:20:43 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov 7th, 2003  J.Apostolakis - field-V05-02-06
+----------------------------
+- G4ChordFinder
+   Created new class members for parameters used in heuristics:
+       fFirstFraction            for first step
+       fFractionLast             fraction of last step, if redoing
+       fFractionNextEstimate     confidence in step est from chord
+       fMultipleRadius           for small radii of curve
+   New method to Print Statistics.
+   Verbosity to enable optional printing of stats in destructor.
+
 Nov 7th, 2003  J.Apostolakis - field-V05-02-05
 ----------------------------
 - G4ChordFinder
