@@ -1,5 +1,5 @@
 
-$Id: History,v 1.47 2004-09-22 09:28:01 gcosmo Exp $
+$Id: History,v 1.48 2004-10-10 10:50:44 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Oct 10, 2004  J.Allison                  geom-bool-V06-02-01
+  - Added GetPolyhedron, a smart access function that creates a G4Polyhedron
+    on request and stores for future access.  A null pointer means "not
+    available".
 
  Sep 22, 2004   V.Grichine                geom-bool-V06-02-00
   - Added specific implementation for G4BooleanSolid::GetCubicVolume()

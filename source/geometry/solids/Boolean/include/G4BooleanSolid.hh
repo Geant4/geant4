@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.hh,v 1.10 2004-09-22 09:27:47 gcosmo Exp $
+// $Id: G4BooleanSolid.hh,v 1.11 2004-10-10 10:50:46 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -77,6 +77,7 @@ class G4BooleanSolid : public G4VSolid
 
     virtual G4GeometryType  GetEntityType() const;
     inline G4double GetCubicVolume();
+    virtual G4Polyhedron* GetPolyhedron () const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
 
@@ -101,6 +102,7 @@ class G4BooleanSolid : public G4VSolid
     G4int    fCubVolStatistics;
     G4double fCubVolEpsilon;
     G4double fCubicVolume;
+    mutable G4Polyhedron* fpPolyhedron;
 
     G4bool  createdDisplacedSolid;
       // If & only if this object created it, it must delete it

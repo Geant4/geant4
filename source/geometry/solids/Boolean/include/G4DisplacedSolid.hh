@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.hh,v 1.15 2003-11-03 17:48:45 gcosmo Exp $
+// $Id: G4DisplacedSolid.hh,v 1.16 2004-10-10 10:50:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -140,6 +140,7 @@ class G4DisplacedSolid : public G4VSolid
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4Polyhedron* CreatePolyhedron () const ;
     G4NURBS*      CreateNURBS      () const ;
+    virtual G4Polyhedron* GetPolyhedron () const;
       // For creating graphical representations (ie for visualisation).
 
   protected:
@@ -147,6 +148,7 @@ class G4DisplacedSolid : public G4VSolid
     G4VSolid* fPtrSolid ;
     G4AffineTransform* fPtrTransform ;
     G4AffineTransform* fDirectTransform ;
+    mutable G4Polyhedron* fpPolyhedron;
 
   private:
 

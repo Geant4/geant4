@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.12 2004-09-15 09:53:18 grichine Exp $
+// $Id: G4BooleanSolid.cc,v 1.13 2004-10-10 10:50:51 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for the abstract base class for solids created by boolean 
@@ -44,7 +44,7 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                 G4VSolid* pSolidA ,
                                 G4VSolid* pSolidB   ) :
   G4VSolid(pName),fCubVolStatistics(1000000),fCubVolEpsilon(0.001),fCubicVolume(0.),
-  createdDisplacedSolid(false)
+  fpPolyhedron (0), createdDisplacedSolid(false)
 {
   fPtrSolidA = pSolidA ;
   fPtrSolidB = pSolidB ;
@@ -60,7 +60,7 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                       G4RotationMatrix* rotMatrix,
                                 const G4ThreeVector& transVector    ) :
   G4VSolid(pName),fCubVolStatistics(1000000),fCubVolEpsilon(0.001),fCubicVolume(0.),
-  createdDisplacedSolid(true)
+  fpPolyhedron (0), createdDisplacedSolid(true)
 {
   fPtrSolidA = pSolidA ;
   fPtrSolidB = new G4DisplacedSolid("placedB",pSolidB,rotMatrix,transVector) ;
@@ -75,7 +75,7 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                       G4VSolid* pSolidB ,
                                 const G4Transform3D& transform    ) :
   G4VSolid(pName),fCubVolStatistics(1000000),fCubVolEpsilon(0.001),fCubicVolume(0.),
-  createdDisplacedSolid(true)
+  fpPolyhedron (0), createdDisplacedSolid(true)
 {
   fPtrSolidA = pSolidA ;
   fPtrSolidB = new G4DisplacedSolid("placedB",pSolidB,transform) ;
@@ -167,4 +167,13 @@ std::ostream& G4BooleanSolid::StreamInfo(std::ostream& os) const
   os << "===========================================================\n";
 
   return os;
+}
+
+G4Polyhedron* G4BooleanSolid::GetPolyhedron () const
+{
+  if (!fpPolyhedron)
+    {
+      fpPolyhedron = CreatePolyhedron ();
+    }
+  return fpPolyhedron;
 }
