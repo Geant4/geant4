@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyIonisation.hh,v 1.38 2002-07-19 17:44:43 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.39 2003-02-07 15:39:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -36,6 +36,7 @@
 //                              consistency with design
 // 29 Nov 2001  V.Ivanchenko    New parametrisation of EEDL data
 // 31 May 2002  V.Ivanchenko    Add Auger flag
+// 06 Feb 2003  V.Ivanchenko    Change signature of deexcitation for cut per region
 //
 // -------------------------------------------------------------------
 
@@ -95,7 +96,7 @@ protected:
 
 protected:
 
-  virtual G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4Material* material,
+  virtual G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4MaterialCutsCouple* couple,
 							  G4double incidentEnergy,
 							  G4double eLoss);
 
