@@ -34,6 +34,8 @@
 //
 // Modifications: 
 //
+// 28-12-02 add method Dispersion (VI)
+//
 // Class Description: 
 //
 // Abstract class for interface to simualtion of energy loss fluctuations
@@ -60,8 +62,14 @@ public:
 
   virtual ~G4VEmFluctuationModel() {};
 
-  virtual void SampleFluctuations(const G4Material*, const G4DynamicParticle*,
-				 G4double& tmax, G4double& length, G4double meanLoss) = 0;
+  virtual void SampleFluctuations(const G4Material*, 
+                                  const G4DynamicParticle*,
+				        G4double& tmax, 
+                                        G4double& length, 
+                                        G4double meanLoss) = 0;
+
+  virtual G4double Dispersion(const G4Material*, 
+                              const G4DynamicParticle*) = 0;
                                            
   virtual void Initialise(const G4ParticleDefinition*) = 0;
 
