@@ -1754,6 +1754,18 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
 
    successful = true;
    delete [] pvmx;
+   G4int testCurr=0;
+   G4double totKin=0;
+   for(testCurr=0; testCurr<vecLen; testCurr++)
+   {
+      totKin+=pv[testCurr].getKineticEnergy();
+      if(totKin>incidentKineticEnergy*1.05)
+      {
+        vecLen = testCurr;
+        break;
+      }
+   }
+   
    return;
  }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEPionPlusInelastic.cc,v 1.4 2001-05-03 08:59:20 hpw Exp $
+// $Id: G4HEPionPlusInelastic.cc,v 1.5 2001-06-13 19:24:36 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -167,6 +167,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
       { 
         G4cout << "GHEInelasticInteraction::ApplyYourself fails to produce final state particles" << G4endl;
       }
+
       FillParticleChange(pv,  vecLength);
       delete [] pv;
       theParticleChange.SetStatusChange(fStopAndKill);
