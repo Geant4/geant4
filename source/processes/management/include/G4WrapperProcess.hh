@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WrapperProcess.hh,v 1.1 2001-11-07 11:53:12 kurasige Exp $
+// $Id: G4WrapperProcess.hh,v 1.2 2003-11-03 03:27:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -325,7 +325,8 @@ inline
 inline
  G4WrapperProcess & G4WrapperProcess::operator=(const G4WrapperProcess &)
 {
-  G4Exception("G4WrapperProcess::assignment operator is called");
+  G4Exception("G4WrapperProcess::operator=","Illegal operation",
+	      JustWarning,"Assignment operator is called");
   return *this;
 }
 

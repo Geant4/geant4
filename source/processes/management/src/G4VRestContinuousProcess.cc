@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRestContinuousProcess.cc,v 1.3 2001-07-11 10:08:21 gunter Exp $
+// $Id: G4VRestContinuousProcess.cc,v 1.4 2003-11-03 03:27:28 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,8 @@
 G4VRestContinuousProcess::G4VRestContinuousProcess()
                    :G4VProcess("No Name Discrete Process") 
 {
-  G4Exception("G4VRestContinuousProcess:: default constructor is called");
+  G4Exception("G4VRestContinuousProcess::G4VRestContinuousProcess()","Illegal operation",
+	      JustWarning,"default constructor is called");
 }
 
 G4VRestContinuousProcess::G4VRestContinuousProcess(const G4String& aName , G4ProcessType aType)

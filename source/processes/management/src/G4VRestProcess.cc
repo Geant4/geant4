@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRestProcess.cc,v 1.3 2001-07-11 10:08:21 gunter Exp $
+// $Id: G4VRestProcess.cc,v 1.4 2003-11-03 03:27:28 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,7 +38,8 @@
 G4VRestProcess::G4VRestProcess()
                    :G4VProcess("No Name Rest Process") 
 {
-  G4Exception("G4VRestProcess:: default constructor is called");
+  G4Exception("G4VRestProcess::G4VRestProcess()","Illegal operation",
+	      JustWarning,"default constructor is called");
 }
 
 G4VRestProcess::G4VRestProcess(const G4String& aName , G4ProcessType aType)
