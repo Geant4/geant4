@@ -1,0 +1,35 @@
+#
+# Macro file for the initialization phase of "TestEm5.cc"
+#
+# It creates the default geometry (simple absorber box )        
+#
+/control/verbose 2
+/run/verbose 2
+#
+/calor/setAbsMat NewArgonCO2   
+/calor/setAbsThick 15 mm  
+/calor/setAbsYZ    60 mm
+/calor/update
+/gun/setDefault
+#
+#
+#  hist file name
+/plots/sethistName run17e.10cm.paw
+#  PLOT: energy deposit distribution in XenonGas
+/plots/setnbinEn 60
+/plots/setEnlow   0. keV
+/plots/setEnhigh  6. keV  
+#
+/calor/cutG 100. mm    
+/calor/cutE 100. mm
+/run/initialize
+#
+#/gun/particle proton 
+#/gun/energy 24 GeV
+/gun/particle e- 
+/gun/energy 25 GeV
+/event/printModulo 1000
+#
+/run/beamOn 100000
+#
+

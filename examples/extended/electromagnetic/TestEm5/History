@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-10-12 12:23:17 maire Exp $
+$Id: History,v 1.2 2000-01-20 15:34:38 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-01-00 cppflag G4NOHIST to protect hbook histograms.
+         new histo: normalizsed distribution of energy deposit.
+	 new materials (mainly gas)
      
 12-10-99 moved to examples/extended/electromagnetic/TestEm5
 
