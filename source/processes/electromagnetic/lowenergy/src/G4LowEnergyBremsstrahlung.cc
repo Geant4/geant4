@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.38 2001-09-10 18:07:35 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.39 2001-09-23 23:08:56 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -205,7 +205,7 @@ void G4LowEnergyBremsstrahlung::BuildBTable(){
 void G4LowEnergyBremsstrahlung::BuildZVec(){
 
   const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if(ZNumVec){
 
@@ -222,7 +222,7 @@ void G4LowEnergyBremsstrahlung::BuildZVec(){
 
     for (G4int iel=0; iel<NumberOfElements; iel++ ){
 
-      G4double Zel = (*theElementVector)(iel)->GetZ();
+      G4double Zel = (*theElementVector)[iel]->GetZ();
 
       if( !(ZNumVec->contains(Zel)) ) {
 	ZNumVec->push_back(Zel);
@@ -246,7 +246,7 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
       delete theLossTable;
   }
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  const G4int numOfMaterials = theMaterialTable->length();
+  const G4int numOfMaterials = G4Material::GetNumberOfMaterials();
   theLossTable = new G4PhysicsTable(numOfMaterials);
   
   //  loop for materials
@@ -275,7 +275,7 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
            G4double ionloss = 0.;          
 	   // loop for elements in the material
            for (G4int iel=0; iel<NumberOfElements; iel++ ){
-                const G4double Z = (*theElementVector)(iel)->GetZ();
+                const G4double Z = (*theElementVector)[iel]->GetZ();
                 ionloss += GetEnergyLossWithCut(Z,LowEdgeEnergy,Tcut)*
                            theAtomicNumDensityVector[iel] ;
 	   }	
@@ -324,7 +324,7 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
      ptrVector = new G4PhysicsLogVector(lowestKineticEnergy, highestKineticEnergy,
 					totBin ) ;
      
-     material= (*theMaterialTable)(J);
+     material= (*theMaterialTable)[J];
      const G4ElementVector* theElementVector = material->GetElementVector();
      const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();   
      const G4double Threshold = CutInKineticEnergy[J] ;
@@ -337,7 +337,7 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
        
        for (  size_t k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 	 
-	 G4int AtomIndex = (G4int) (*theElementVector)(k)->GetZ();
+	 G4int AtomIndex = (G4int) (*theElementVector)[k]->GetZ();
          G4double interCrsSec = GetCrossSectionWithCut(AtomIndex, LowEdgeEnergy,Threshold);
 	 SIGMA += theAtomNumDensityVector[k]*interCrsSec;
        }       
@@ -379,7 +379,7 @@ void G4LowEnergyBremsstrahlung::ComputepartialSumSigma(const G4double KineticEne
 
    for ( G4int Ielem=0 ; Ielem < NbOfElements ; Ielem++ ){
 
-     G4int AtomIndex = (G4int) (*theElementVector)(Ielem)->GetZ();
+     G4int AtomIndex = (G4int) (*theElementVector)[Ielem]->GetZ();
      
      G4double interCrsSec = GetCrossSectionWithCut(AtomIndex,KineticEnergy,Threshold);
      
@@ -674,8 +674,8 @@ G4Element* G4LowEnergyBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) co
 
   G4double rval = G4UniformRand()*((*partialSumSigma[Index])[NumberOfElements-1]);
   for ( G4int i=0; i < NumberOfElements; i++ )
-    if (rval <= (*partialSumSigma[Index])[i]) return ((*theElementVector)(i));
-  return (*theElementVector)(0);
+    if (rval <= (*partialSumSigma[Index])[i]) return ((*theElementVector)[i]);
+  return (*theElementVector)[0];
 }
 
 //    

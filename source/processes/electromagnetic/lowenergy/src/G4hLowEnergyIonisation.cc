@@ -277,7 +277,7 @@ void G4hLowEnergyIonisation::BuildLossTable(
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   
   //  create table
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
   
   if ( theLossTable) {
     theLossTable->clearAndDestroy();
@@ -373,7 +373,7 @@ void G4hLowEnergyIonisation::BuildLambdaTable(
   chargeSquare = charge*charge ;
     
   //create table
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
   
   if (theMeanFreePathTable) {
     theMeanFreePathTable->clearAndDestroy();
@@ -425,7 +425,7 @@ void G4hLowEnergyIonisation::BuildLambdaTable(
 		 ComputeMicroscopicCrossSection(
                         aParticleType,
 			lowEdgeEnergy,
-                        (*theElementVector)(iel)->GetZ(),
+                        (*theElementVector)[iel]->GetZ(),
                         deltaCut ) ;
       }
 	  
@@ -1127,8 +1127,8 @@ G4double G4hLowEnergyIonisation::BarkasTerm(const G4Material* material,
   
   for (G4int i = 0; i<numberOfElements; i++) {
 
-    AMaterial = (*theElementVector)(i)->GetA()*mole/g;
-    ZMaterial = (*theElementVector)(i)->GetZ();
+    AMaterial = (*theElementVector)[i]->GetA()*mole/g;
+    ZMaterial = (*theElementVector)[i]->GetZ();
     
     G4double X = 137.0 * 137.0 * beta2 / ZMaterial;
   
@@ -1475,7 +1475,7 @@ void G4hLowEnergyIonisation::PrintInfoDefinition() const
   G4bool printHead = true;
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
   
   // loop for materials 
   

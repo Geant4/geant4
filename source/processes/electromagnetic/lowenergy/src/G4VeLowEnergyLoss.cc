@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.14 2001-09-10 18:07:35 pia Exp $
+// $Id: G4VeLowEnergyLoss.cc,v 1.15 2001-09-23 23:08:58 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,9 +102,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeTable(
         G4double lowestKineticEnergy,G4double highestKineticEnergy,G4int TotBin)
 // Build range table from the energy loss table
 {
-   const G4MaterialTable* theMaterialTable=
-                                 G4Material::GetMaterialTable();
-   G4int numOfMaterials = theMaterialTable->length();
+   
+   G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
    if(theRangeTable)
    { theRangeTable->clearAndDestroy();
@@ -236,9 +235,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildLabTimeTable(G4PhysicsTable* theDEDXTabl
                                      G4double highestKineticEnergy,G4int TotBin)
                             
 {
-  const G4MaterialTable* theMaterialTable=
-                                 G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
  
   if(theLabTimeTable)
   { theLabTimeTable->clearAndDestroy();
@@ -270,9 +268,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildProperTimeTable(G4PhysicsTable* theDEDXT
                                      G4double highestKineticEnergy,G4int TotBin)
                             
 {
-  const G4MaterialTable* theMaterialTable=
-                                 G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
  
   if(theProperTimeTable)
   { theProperTimeTable->clearAndDestroy();
@@ -312,7 +309,6 @@ void G4VeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
            LowEdgeEnergy,tau,Value ;
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
-  //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
   // low energy part first...
   losslim = physicsVector->GetValue(tlim,isOut);
@@ -498,9 +494,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildInverseRangeTable(G4PhysicsTable* theRan
 {
   G4double SmallestRange,BiggestRange ;
   G4bool isOut ;
-  const G4MaterialTable* theMaterialTable=
-                                G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
     if(theInverseRangeTable)
     { theInverseRangeTable->clearAndDestroy();
@@ -594,9 +589,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffATable(G4PhysicsTable* theRang
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "A"
 {
-  const G4MaterialTable* theMaterialTable=
-                                G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if(theRangeCoeffATable)
   { theRangeCoeffATable->clearAndDestroy();
@@ -657,9 +651,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffBTable(G4PhysicsTable* theRang
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "B"
 {
-  const G4MaterialTable* theMaterialTable=
-                               G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if(theRangeCoeffBTable)
   { theRangeCoeffBTable->clearAndDestroy();
@@ -719,9 +712,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRang
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "C"
 {
-  const G4MaterialTable* theMaterialTable=
-                                G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if(theRangeCoeffCTable)
   { theRangeCoeffCTable->clearAndDestroy();

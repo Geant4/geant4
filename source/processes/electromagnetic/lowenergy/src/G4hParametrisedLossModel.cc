@@ -251,7 +251,7 @@ G4double G4hParametrisedLossModel::StoppingPower(
   
     //  loop for the elements in the material
     for (G4int i=0; i<numberOfElements; i++) {
-      const G4Element* element = (*theElementVector)(i) ;
+      const G4Element* element = (*theElementVector)[i] ;
       G4double z = element->GetZ() ;
       eloss    +=(eStopingPowerTable->ElectronicStoppingPower(z,kineticEnergy))
                                     * theAtomicNumDensityVector[i] ;
@@ -270,7 +270,7 @@ G4double G4hParametrisedLossModel::StoppingPower(
     //  loop for the elements in the material
     for (G4int i=0; i<numberOfElements; i++)
     {
-      const G4Element* element = (*theElementVector)(i) ;
+      const G4Element* element = (*theElementVector)[i] ;
       G4double z = element->GetZ() ;
       eloss   += (eStopingPowerTable->ElectronicStoppingPower(z,kineticEnergy))
                                    * theAtomicNumDensityVector[i];

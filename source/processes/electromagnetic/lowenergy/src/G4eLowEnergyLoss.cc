@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.11 2001-09-10 18:07:35 pia Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.12 2001-09-23 23:08:58 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -154,8 +154,7 @@ void G4eLowEnergyLoss::BuildDEDXTable(
   // different processes.                                           
   //
 
-  const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
   
   // create table for the total energy loss
 

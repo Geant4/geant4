@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.cc,v 1.8 2001-09-14 16:11:05 pia Exp $
+// $Id: G4CrossSectionHandler.cc,v 1.9 2001-09-23 23:08:56 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -318,7 +318,7 @@ void G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& e
   if (materialTable == 0)
     G4Exception("G4CrossSectionHandler::G4CrossSectionHandler - no MaterialTable found)");
 
-  G4int nMaterials = materialTable->length();
+  G4int nMaterials = G4Material::GetNumberOfMaterials();
 
   for (G4int m=0; m<nMaterials; m++)
     {
@@ -385,7 +385,7 @@ G4VEMDataSet* G4CrossSectionHandler::BuildMeanFreePathForMaterials(G4double ener
   if (materialTable == 0)
     G4Exception("G4CrossSectionHandler::G4CrossSectionHandler - no MaterialTable found)");
 
-  size_t nMaterials = materialTable->length();
+  size_t nMaterials = G4Material::GetNumberOfMaterials();
 
   for (size_t m=0; m<nMaterials; m++)
     {
@@ -540,7 +540,7 @@ void G4CrossSectionHandler::ActiveElements()
   if (materialTable == 0)
     G4Exception("G4CrossSectionHandler::ActiveElements - no MaterialTable found)");
   
-  G4int nMaterials = materialTable->length();
+  G4int nMaterials = G4Material::GetNumberOfMaterials();
   
   for (G4int m=0; m<nMaterials; m++)
     {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyBremsstrahlung.icc,v 1.19 2001-07-11 10:02:36 gunter Exp $
+// $Id: G4LowEnergyBremsstrahlung.icc,v 1.20 2001-09-23 23:09:10 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,7 +82,7 @@ inline G4double G4LowEnergyBremsstrahlung::GetMeanFreePath(const G4Track& track,
         G4int iel;           
         for (iel=0; iel<NumberOfElements; iel++ ){
              SIGMA += theAtomicNumDensityVector[iel]*
-                      GetCrossSectionWithCut( (*theElementVector)(iel)->GetZ(),
+                      GetCrossSectionWithCut( (*theElementVector)[iel]->GetZ(),
                                                    KineticEnergy,
                                                    Threshold);
         }

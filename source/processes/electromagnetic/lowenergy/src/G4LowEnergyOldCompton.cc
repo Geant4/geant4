@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyOldCompton.cc,v 1.2 2001-09-23 19:56:42 pia Exp $
+// $Id: G4LowEnergyOldCompton.cc,v 1.3 2001-09-23 23:08:57 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -156,7 +156,7 @@ void G4LowEnergyOldCompton::BuildScatteringFunctionTable(){
 void G4LowEnergyOldCompton::BuildZVec(){
 
   const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if(ZNumVec){
     ZNumVec->clear();
@@ -172,7 +172,7 @@ void G4LowEnergyOldCompton::BuildZVec(){
 
     for (G4int iel=0; iel<NumberOfElements; iel++ ){
 
-      G4double Zel = (*theElementVector)(iel)->GetZ();
+      G4double Zel = (*theElementVector)[iel]->GetZ();
 
       if(ZNumVec->contains(Zel) == FALSE){
 	ZNumVec->push_back(Zel);
@@ -341,7 +341,7 @@ void G4LowEnergyOldCompton::BuildMeanFreePathTable(){
     //create physics vector then fill it ....
     ptrVector = new  G4PhysicsLogVector(lowestEnergyLimit, highestEnergyLimit, numbBinTable);
     
-    material = (*theMaterialTable)(J);
+    material = (*theMaterialTable)[J];
     const G4ElementVector* theElementVector = material->GetElementVector();
     const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();   
     
@@ -354,7 +354,7 @@ void G4LowEnergyOldCompton::BuildMeanFreePathTable(){
       G4double SIGMA = 0 ;
       for ( size_t k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 
-	G4int AtomIndex = (G4int) (*theElementVector)(k)->GetZ();
+	G4int AtomIndex = (G4int) (*theElementVector)[k]->GetZ();
 	const G4FirstLevel* oneAtomCS
 	  = (*theCrossSectionTable)[ZNumVec->index(AtomIndex)];
 	
@@ -383,7 +383,7 @@ G4Element* G4LowEnergyOldCompton::SelectRandomAtom(const G4DynamicParticle* aDyn
   const G4int NumberOfElements = aMaterial->GetNumberOfElements();
   const G4ElementVector* theElementVector = aMaterial->GetElementVector();
 
-  if (NumberOfElements == 1) return (*theElementVector)(0);
+  if (NumberOfElements == 1) return (*theElementVector)[0];
 
   const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
  
@@ -400,7 +400,7 @@ G4Element* G4LowEnergyOldCompton::SelectRandomAtom(const G4DynamicParticle* aDyn
     else {
       if (GammaEnergy > highestEnergyLimit) GammaEnergy = 0.99*highestEnergyLimit ;
       
-      G4int AtomIndex = (G4int) (*theElementVector)(i)->GetZ();
+      G4int AtomIndex = (G4int) (*theElementVector)[i]->GetZ();
       const G4FirstLevel* oneAtomCS
 	= (*theCrossSectionTable)[ZNumVec->index(AtomIndex)];
 
@@ -410,10 +410,10 @@ G4Element* G4LowEnergyOldCompton::SelectRandomAtom(const G4DynamicParticle* aDyn
     }
 
     PartialSumSigma += theAtomNumDensityVector[i] * crossSection;
-    if(rval <= PartialSumSigma) return ((*theElementVector)(i));
+    if(rval <= PartialSumSigma) return ((*theElementVector)[i]);
   }
 
-  return (*theElementVector)(0);
+  return (*theElementVector)[0];
 }
 
 

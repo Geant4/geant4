@@ -211,7 +211,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
   } else {
     for (G4int iel=0; iel<NumberOfElements; iel++)
       {
-        const G4Element* element = (*theElementVector)(iel) ;
+        const G4Element* element = (*theElementVector)[iel] ;
         G4double z2 = element->GetZ() ;
         const G4double weight = theAtomicNumDensityVector[iel] ;
         norm += weight ;

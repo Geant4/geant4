@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.11 2001-09-10 18:07:35 pia Exp $
+// $Id: G4hLowEnergyLoss.cc,v 1.12 2001-09-23 23:08:58 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -196,9 +196,8 @@ void G4hLowEnergyLoss::BuildDEDXTable(
     )
       MakeTable = true ;
   
-  const G4MaterialTable* theMaterialTable=
-                                   G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if( MakeTable )
   {
@@ -316,9 +315,8 @@ void G4hLowEnergyLoss::BuildRangeTable(
 // Build range table from the energy loss table
 {
    Mass = proton_mass_c2; 
-   const G4MaterialTable* theMaterialTable=
-                                 G4Material::GetMaterialTable();
-   G4int numOfMaterials = theMaterialTable->length();
+
+   G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
    if( Charge >0.)
    {    
@@ -355,9 +353,8 @@ void G4hLowEnergyLoss::BuildRangeTable(
 void G4hLowEnergyLoss::BuildTimeTables(
                              const G4ParticleDefinition& aParticleType)
 {
-  const G4MaterialTable* theMaterialTable=
-                                 G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
   
   if(&aParticleType == G4Proton::Proton())
   {
@@ -455,7 +452,6 @@ void G4hLowEnergyLoss::BuildLabTimeVector(G4int materialIndex,
            LowEdgeEnergy,tau,Value ;
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
-  //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
 
   // low energy part first...
   losslim = physicsVector->GetValue(tlim,isOut);
@@ -515,8 +511,7 @@ void G4hLowEnergyLoss::BuildProperTimeVector(G4int materialIndex,
            LowEdgeEnergy,tau,Value ;
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
-  //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
-
+ 
   // low energy part first...
   losslim = physicsVector->GetValue(tlim,isOut);
   taulim=tlim/ParticleMass ;
@@ -699,9 +694,8 @@ void G4hLowEnergyLoss::BuildRangeCoeffATable(
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "A"
 {
-  const G4MaterialTable* theMaterialTable=
-                                G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if(Charge>0.)
   {
@@ -772,9 +766,8 @@ void G4hLowEnergyLoss::BuildRangeCoeffBTable(
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "B"
 {
-  const G4MaterialTable* theMaterialTable=
-                               G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if(Charge>0.)
   {
@@ -844,9 +837,8 @@ void G4hLowEnergyLoss::BuildRangeCoeffCTable(
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "C"
 {
-  const G4MaterialTable* theMaterialTable=
-                                G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if(Charge>0.)
   {
@@ -917,9 +909,8 @@ void G4hLowEnergyLoss::BuildInverseRangeTable(
 {
   G4double SmallestRange,BiggestRange ;
   G4bool isOut ;
-  const G4MaterialTable* theMaterialTable=
-                                G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
   if(&aParticleType == G4Proton::Proton())
   {
     if(theInverseRangepTable)

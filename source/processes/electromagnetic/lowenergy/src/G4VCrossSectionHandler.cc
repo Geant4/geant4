@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc,v 1.1 2001-09-16 22:41:45 pia Exp $
+// $Id: G4VCrossSectionHandler.cc,v 1.2 2001-09-23 23:08:58 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -342,7 +342,7 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
   if (materialTable == 0)
     G4Exception("G4VCrossSectionHandler::G4VCrossSectionHandler - no MaterialTable found)");
 
-  size_t nMaterials = materialTable->length();
+  size_t nMaterials = G4Material::GetNumberOfMaterials();
 
   for (size_t m=0; m<nMaterials; m++)
     {
@@ -497,7 +497,7 @@ void G4VCrossSectionHandler::ActiveElements()
   if (materialTable == 0)
     G4Exception("G4VCrossSectionHandler::ActiveElements - no MaterialTable found)");
   
-  G4int nMaterials = materialTable->length();
+  G4int nMaterials = G4Material::GetNumberOfMaterials();
   
   for (G4int m=0; m<nMaterials; m++)
     {
