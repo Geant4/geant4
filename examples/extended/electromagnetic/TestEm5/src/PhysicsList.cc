@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.3 2003-09-15 17:10:35 maire Exp $
+// $Id: PhysicsList.cc,v 1.4 2003-10-07 11:58:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -29,17 +29,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
-#include "DetectorConstruction.hh"
 #include "PhysicsListMessenger.hh"
 
 #include "PhysListParticles.hh"
 #include "PhysListGeneral.hh"
 #include "PhysListEmStandard.hh"
-#include "PhysListEmModel.hh"
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
+#include "PhysListEmG4v52.hh"
+#include "DetectorConstruction.hh"
 
 #include "G4UnitsTable.hh"
 
@@ -112,11 +108,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
 
-  } else if (name == "model") {
+  } else if (name == "g4v52") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmModel(name);
+    emPhysicsList = new PhysListEmG4v52(name);
 
   } else {
 
@@ -154,6 +150,10 @@ void PhysicsList::AddStepMax()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 void PhysicsList::SetCuts()
 {    

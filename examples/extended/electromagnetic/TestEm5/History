@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2003-09-12 18:09:03 vnivanch Exp $
+$Id: History,v 1.33 2003-10-07 11:58:26 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+07-10-03 mma (testem5-V05-02-03)
+- migration em STD -> em standard
+ 
 12-09-03 V.Ivant (testem5-V05-02-02)
 - No AIDA histograms by default 
 

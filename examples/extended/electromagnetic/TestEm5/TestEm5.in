@@ -1,4 +1,4 @@
-# $Id: TestEm5.in,v 1.8 2003-08-11 10:02:53 maire Exp $
+# $Id: TestEm5.in,v 1.9 2003-10-07 11:58:26 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -9,8 +9,8 @@
 /testem/det/setAbsThick 20.5 mum  
 /testem/det/setAbsYZ     1 mm
 #
-#/testem/phys/addPhysics  model
 /testem/phys/addPhysics  standard
+###/testem/phys/addPhysics  g4v52
 #
 /testem/phys/setGCut 2.13 mm    
 /testem/phys/setECut 7.0  mum

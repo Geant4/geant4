@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMaxMessenger.hh,v 1.1 2003-08-11 10:15:38 maire Exp $
+// $Id: StepMaxMessenger.hh,v 1.2 2003-10-07 11:58:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,8 +29,8 @@
 #ifndef StepMaxMessenger_h
 #define StepMaxMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class StepMax;
 class G4UIcmdWithADoubleAndUnit;

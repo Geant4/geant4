@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListGeneral.cc,v 1.1 2003-08-11 10:21:06 maire Exp $
+// $Id: PhysListGeneral.cc,v 1.2 2003-10-07 11:58:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -30,6 +30,7 @@
 #include "PhysListGeneral.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
+#include "G4Decay.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: StackingMessenger.hh,v 1.1 2003-08-11 10:15:17 maire Exp $
+// $Id: StackingMessenger.hh,v 1.2 2003-10-07 11:58:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,8 +32,8 @@
 #ifndef StackingMessenger_h
 #define StackingMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class StackingAction;
 class G4UIcmdWithABool;

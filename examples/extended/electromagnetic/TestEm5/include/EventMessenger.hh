@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventMessenger.hh,v 1.1 2003-08-11 10:13:13 maire Exp $
+// $Id: EventMessenger.hh,v 1.2 2003-10-07 11:58:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,8 +32,8 @@
 #ifndef EventMessenger_h
 #define EventMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class EventAction;
 class G4UIcmdWithAString;
