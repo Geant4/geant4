@@ -1,4 +1,4 @@
-$Id: History,v 1.94 2000-01-03 11:48:17 gcosmo Exp $
+$Id: History,v 1.95 2000-01-31 09:41:10 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31st January 2000  Gabriele Cosmo (config-V01-00-01)
+- Added control for the Ray-tracer driver. Introduced G4VIS_USE_RAYTRACER
+  in G4VIS_USE.gmk and G4VIS_BUILD_RAYTRACER_DRIVER in G4VIS_BUILD.gmk (M.Asai).
+- binmake.gmk: fixed dependency order for compound libraries.
+  Moved -lG4particles and -lG4materials downstream in the list.
 
 3rd January 2000  Gabriele Cosmo (config-V01-00-00)
 - Syncronized with HEAD.
