@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh,v 1.20 2005-03-01 09:56:12 santin Exp $
+// $Id: G4LogicalVolume.hh,v 1.21 2005-03-02 08:25:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,7 @@
 // Logical volumes are named, and may have daughters ascribed to them.
 // They are responsible for retrieval of the physical and tracking attributes
 // of the physical volume that it represents: solid, material, magnetic field,
-// and optionally, user limits, sensitive detectors.
+// and optionally, user limits, sensitive detectors, regions, biasing weights.
 //
 // Get and Set functionality is provided for all attributes, but note that
 // most set functions should not be used  when the geometry is `closed'.
@@ -43,7 +43,7 @@
 // On construction, solid, material and name must be specified.
 //
 // Daughters are ascribed and managed by means of a simple
-// GetNoDaughters,Get&SetDaughter(n),AddDaughter interface.
+// GetNoDaughters,Get/SetDaughter(n),AddDaughter interface.
 //
 // Smart voxels as used for tracking optimisation. They're also an attribute.
 //
@@ -92,6 +92,7 @@
 //    - Weight used in the event biasing technique.
 
 // History:
+// 12.11.04 G.Cosmo: Added GetMass() method for computing mass of the tree
 // 24.09.02 G.Cosmo: Added flags and accessors for region cuts handling
 // 17.05.02 G.Cosmo: Added IsToOptimise() method and related flag
 // 18.04.01 G.Cosmo: Migrated to STL vector
@@ -189,10 +190,11 @@ class G4LogicalVolume
       // Sets material and corresponding MaterialCutsCouple.
       // This method is invoked by G4Navigator while it is navigating through 
       // material parameterization.
-    G4double GetMass(G4bool forced=false, G4bool propagate=true, G4Material* parMaterial=0);
+    G4double GetMass(G4bool forced=false, G4bool propagate=true,
+                     G4Material* parMaterial=0);
       // Returns the mass of the logical volume tree computed from the
       // estimated geometrical volume of each solid and material associated
-      // to the logical volume and (if requested) its daughters.
+      // to the logical volume and (by default) to its daughters.
       // NOTE: the computation may require a considerable amount of time,
       //       depending from the complexity of the geometry tree.
       //       The returned value is cached and can be used for successive
@@ -202,7 +204,7 @@ class G4LogicalVolume
       //       call. By setting the 'propagate' boolean flag to 'false' the 
       //       method returns the mass of the present logical volume only 
       //       (subtracted for the volume occupied by the daughter volumes).
-      //       An optional argument to specify a material is provided.
+      //       An optional argument to specify a material is also provided.
 
     inline G4FieldManager* GetFieldManager() const;
       // Gets current FieldManager.
