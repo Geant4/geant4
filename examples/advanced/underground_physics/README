@@ -17,6 +17,9 @@ Additional file handling and time/energy cut messengers have been implemented.
 
 (1) and (2) are discussed more fully below
 
+Note: Due to the importation of data files during the initialisation stage of
+Geant4, load-time may be in excess of 5 minutes.
+
 UNDERGROUND PHYSICS
 
 An example of a underground dark matter experiment.
