@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4EventActionMessenger.cc,v 1.2 2001-07-11 09:58:10 gunter Exp $
+// $Id: G3toG4EventActionMessenger.cc,v 1.3 2002-12-05 01:06:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@ G3toG4EventActionMessenger::G3toG4EventActionMessenger(G3toG4EventAction* EvAct)
   DrawCmd->SetParameterName("choice",true);
   DrawCmd->SetDefaultValue("all");
   DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(Idle);
+  DrawCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

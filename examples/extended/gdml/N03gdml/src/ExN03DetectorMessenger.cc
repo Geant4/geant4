@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorMessenger.cc,v 1.1.1.1 2002-05-31 00:34:44 radoone Exp $
+// $Id: ExN03DetectorMessenger.cc,v 1.2 2002-12-05 01:06:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,21 +50,21 @@ ExN03DetectorMessenger::ExN03DetectorMessenger(
   GDMLFile = new G4UIcmdWithAString("/gdml/input",this);
   GDMLFile->SetGuidance("Select GDML input");
   GDMLFile->SetParameterName("file",false);
-  GDMLFile->AvailableForStates(Idle);
+  GDMLFile->AvailableForStates(G4State_Idle);
 
   GDMLSetup = new G4UIcmdWithAString("/gdml/setup",this);
   GDMLSetup->SetGuidance("Select geometry setup in GDML input");
   GDMLSetup->SetGuidance("If none is specified the GDML processor will choose the first found");
   GDMLSetup->SetParameterName("id",true);
   GDMLSetup->SetDefaultValue( "default" );
-  GDMLSetup->AvailableForStates(Idle);
+  GDMLSetup->AvailableForStates(G4State_Idle);
 
   GDMLVersion = new G4UIcmdWithAString("/gdml/version",this);
   GDMLVersion->SetGuidance("Select a particular version of a given geometry setup in GDML input");
   GDMLVersion->SetGuidance("If none is specified the GDML processor will choose the first found");
   GDMLVersion->SetParameterName("id",false);
   GDMLVersion->SetDefaultValue( "default" );
-  GDMLVersion->AvailableForStates(Idle);
+  GDMLVersion->AvailableForStates(G4State_Idle);
   
   ExN03detDir = new G4UIdirectory("/calor/");
   ExN03detDir->SetGuidance("ExN03 detector control.");
@@ -72,52 +72,52 @@ ExN03DetectorMessenger::ExN03DetectorMessenger(
   AbsMaterCmd = new G4UIcmdWithAString("/calor/setAbsMat",this);
   AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
   AbsMaterCmd->SetParameterName("choice",false);
-  AbsMaterCmd->AvailableForStates(Idle);
+  AbsMaterCmd->AvailableForStates(G4State_Idle);
   
   GapMaterCmd = new G4UIcmdWithAString("/calor/setGapMat",this);
   GapMaterCmd->SetGuidance("Select Material of the Gap.");
   GapMaterCmd->SetParameterName("choice",false);
-  GapMaterCmd->AvailableForStates(Idle);
+  GapMaterCmd->AvailableForStates(G4State_Idle);
     
   AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsThick",this);
   AbsThickCmd->SetGuidance("Set Thickness of the Absorber");
   AbsThickCmd->SetParameterName("Size",false);
   AbsThickCmd->SetRange("Size>=0.");
   AbsThickCmd->SetUnitCategory("Length");
-  AbsThickCmd->AvailableForStates(Idle);
+  AbsThickCmd->AvailableForStates(G4State_Idle);
   
   GapThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setGapThick",this);
   GapThickCmd->SetGuidance("Set Thickness of the Gap");
   GapThickCmd->SetParameterName("Size",false);
   GapThickCmd->SetRange("Size>=0.");
   GapThickCmd->SetUnitCategory("Length");  
-  GapThickCmd->AvailableForStates(Idle);
+  GapThickCmd->AvailableForStates(G4State_Idle);
   
   SizeYZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setSizeYZ",this);
   SizeYZCmd->SetGuidance("Set tranverse size of the calorimeter");
   SizeYZCmd->SetParameterName("Size",false);
   SizeYZCmd->SetRange("Size>0.");
   SizeYZCmd->SetUnitCategory("Length");    
-  SizeYZCmd->AvailableForStates(Idle);
+  SizeYZCmd->AvailableForStates(G4State_Idle);
   
   NbLayersCmd = new G4UIcmdWithAnInteger("/calor/setNbOfLayers",this);
   NbLayersCmd->SetGuidance("Set number of layers.");
   NbLayersCmd->SetParameterName("NbLayers",false);
   NbLayersCmd->SetRange("NbLayers>0 && NbLayers<500");
-  NbLayersCmd->AvailableForStates(Idle);
+  NbLayersCmd->AvailableForStates(G4State_Idle);
 
   UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(Idle);
+  UpdateCmd->AvailableForStates(G4State_Idle);
       
   MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
   MagFieldCmd->SetGuidance("Define magnetic field.");
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false);
   MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(Idle);  
+  MagFieldCmd->AvailableForStates(G4State_Idle);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03DetectorMessenger.cc,v 1.3 2001-10-25 10:03:54 grichine Exp $
+// $Id: F03DetectorMessenger.cc,v 1.4 2002-12-05 01:06:58 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,53 +50,53 @@ F03DetectorMessenger::F03DetectorMessenger(F03DetectorConstruction * F03Det)
   AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
   AbsMaterCmd->SetParameterName("choice",true);
   AbsMaterCmd->SetDefaultValue("Lead");
-  AbsMaterCmd->AvailableForStates(Idle);
+  AbsMaterCmd->AvailableForStates(G4State_Idle);
   
   WorldMaterCmd = new G4UIcmdWithAString("/calor/setWorldMat",this);
   WorldMaterCmd->SetGuidance("Select Material of the World.");
   WorldMaterCmd->SetParameterName("wchoice",true);
   WorldMaterCmd->SetDefaultValue("Air");
-  WorldMaterCmd->AvailableForStates(Idle);
+  WorldMaterCmd->AvailableForStates(G4State_Idle);
   
   AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsThick",this);
   AbsThickCmd->SetGuidance("Set Thickness of the Absorber");
   AbsThickCmd->SetParameterName("SizeZ",false,false);
   AbsThickCmd->SetDefaultUnit("mm");
   AbsThickCmd->SetRange("SizeZ>0.");
-  AbsThickCmd->AvailableForStates(Idle);
+  AbsThickCmd->AvailableForStates(G4State_Idle);
   
   AbsRadCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsRad",this);
   AbsRadCmd->SetGuidance("Set radius of the Absorber");
   AbsRadCmd->SetParameterName("SizeR",false,false);
   AbsRadCmd->SetDefaultUnit("mm");
   AbsRadCmd->SetRange("SizeR>0.");
-  AbsRadCmd->AvailableForStates(Idle);
+  AbsRadCmd->AvailableForStates(G4State_Idle);
   
   AbsZposCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsZpos",this);
   AbsZposCmd->SetGuidance("Set Z pos. of the Absorber");
   AbsZposCmd->SetParameterName("Zpos",false,false);
   AbsZposCmd->SetDefaultUnit("mm");
-  AbsZposCmd->AvailableForStates(Idle);
+  AbsZposCmd->AvailableForStates(G4State_Idle);
   
   WorldZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldZ",this);
   WorldZCmd->SetGuidance("Set Z size of the World");
   WorldZCmd->SetParameterName("WSizeZ",false,false);
   WorldZCmd->SetDefaultUnit("mm");
   WorldZCmd->SetRange("WSizeZ>0.");
-  WorldZCmd->AvailableForStates(Idle);
+  WorldZCmd->AvailableForStates(G4State_Idle);
   
   WorldRCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldR",this);
   WorldRCmd->SetGuidance("Set R size of the World");
   WorldRCmd->SetParameterName("WSizeR",false,false);
   WorldRCmd->SetDefaultUnit("mm");
   WorldRCmd->SetRange("WSizeR>0.");
-  WorldRCmd->AvailableForStates(Idle);
+  WorldRCmd->AvailableForStates(G4State_Idle);
   
   UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(Idle);
+  UpdateCmd->AvailableForStates(G4State_Idle);
 
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03FieldMessenger.cc,v 1.3 2001-10-15 17:20:50 gcosmo Exp $
+// $Id: F03FieldMessenger.cc,v 1.4 2002-12-05 01:06:58 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,34 +47,34 @@ F03FieldMessenger::F03FieldMessenger(F03ElectroMagneticField* pEMfield)
   StepperCmd->SetGuidance("Select stepper type for magnetic field");
   StepperCmd->SetParameterName("choice",true);
   StepperCmd->SetDefaultValue(4);
-  StepperCmd->AvailableForStates(PreInit,Idle);
+  StepperCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
  
   UpdateCmd = new G4UIcmdWithoutParameter("/field/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(Idle);
+  UpdateCmd->AvailableForStates(G4State_Idle);
       
   MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);  
   MagFieldCmd->SetGuidance("Define magnetic field.");
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false,false);
   MagFieldCmd->SetDefaultUnit("tesla");
-  MagFieldCmd->AvailableForStates(Idle); 
+  MagFieldCmd->AvailableForStates(G4State_Idle); 
  
   MinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);  
   MinStepCmd->SetGuidance("Define minimal step");
   MinStepCmd->SetGuidance("Magnetic field will be in Z direction.");
   MinStepCmd->SetParameterName("min step",false,false);
   MinStepCmd->SetDefaultUnit("mm");
-  MinStepCmd->AvailableForStates(Idle);  
+  MinStepCmd->AvailableForStates(G4State_Idle);  
        
   AbsMaterCmd = new G4UIcmdWithAString("/field/setAbsMat",this);
   AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
   AbsMaterCmd->SetParameterName("choice",true);
   AbsMaterCmd->SetDefaultValue("Xe");
-  AbsMaterCmd->AvailableForStates(Idle);
+  AbsMaterCmd->AvailableForStates(G4State_Idle);
 
 
 }

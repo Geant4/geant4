@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorMessenger.cc,v 1.7 2002-01-09 17:24:10 ranjard Exp $
+// $Id: ExN02DetectorMessenger.cc,v 1.8 2002-12-05 01:07:01 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,12 +47,12 @@ ExN02DetectorMessenger::ExN02DetectorMessenger(ExN02DetectorConstruction* myDet)
   TargMatCmd = new G4UIcmdWithAString("/mydet/setTargetMate",this);
   TargMatCmd->SetGuidance("Select Material of the Target.");
   TargMatCmd->SetParameterName("choice",false);
-  TargMatCmd->AvailableForStates(PreInit,Idle);
+  TargMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   ChamMatCmd = new G4UIcmdWithAString("/mydet/setChamberMate",this);
   ChamMatCmd->SetGuidance("Select Material of the Target.");
   ChamMatCmd->SetParameterName("choice",false);
-  ChamMatCmd->AvailableForStates(PreInit,Idle);  
+  ChamMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
   
   FieldCmd = new G4UIcmdWithADoubleAndUnit("/mydet/setField",this);  
   FieldCmd->SetGuidance("Define magnetic field.");
@@ -60,7 +60,7 @@ ExN02DetectorMessenger::ExN02DetectorMessenger(ExN02DetectorConstruction* myDet)
   FieldCmd->SetParameterName("Bx",false);
   FieldCmd->SetDefaultUnit("tesla");
   FieldCmd->SetUnitCategory("Magnetic flux density");
-  FieldCmd->AvailableForStates(PreInit,Idle);  
+  FieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

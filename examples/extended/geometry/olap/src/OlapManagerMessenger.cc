@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: OlapManagerMessenger.cc,v 1.1 2002-06-04 07:40:21 gcosmo Exp $
+// $Id: OlapManagerMessenger.cc,v 1.2 2002-12-05 01:07:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,13 +56,13 @@ OlapManagerMessenger::OlapManagerMessenger(OlapManager* aManager)
   
   theRotationCmd = new G4UIcmdWith3VectorAndUnit("/olap/rotate",this);
   theRotationCmd->SetGuidance("rotate the new-world");
-  theRotationCmd->AvailableForStates(Idle);
+  theRotationCmd->AvailableForStates(G4State_Idle);
   theRotationCmd->SetUnitCategory("Angle");
   theRotationCmd->SetParameterName("rotAxisTheta", "rotAxisPhi", "rotAngle",true,true);
 
   theTriggerCmd = new G4UIcmdWithoutParameter("/olap/trigger",this);
   theTriggerCmd->SetGuidance("starts a single mother-daughters overlap detection.");
-  theTriggerCmd->AvailableForStates(Idle);
+  theTriggerCmd->AvailableForStates(G4State_Idle);
 
   theTriggerFullCmd = new G4UIcmdWithAnInteger("/olap/triggerFull",this);
   theTriggerFullCmd->SetGuidance("starts a series of scans (only where mothers have");
@@ -70,7 +70,7 @@ OlapManagerMessenger::OlapManagerMessenger(OlapManager* aManager)
   theTriggerFullCmd->SetDefaultValue(1);
   theTriggerFullCmd->SetParameterName("nr",true);
   theTriggerFullCmd->SetRange("nr>=-1");
-  theTriggerFullCmd->AvailableForStates(Idle);
+  theTriggerFullCmd->AvailableForStates(G4State_Idle);
   
   theDeltaCmd = new G4UIcmdWithADoubleAndUnit("/olap/delta",this);
   theDeltaCmd->SetGuidance("set boundary tolerance for overlaps in units of length");
@@ -78,46 +78,46 @@ OlapManagerMessenger::OlapManagerMessenger(OlapManager* aManager)
   theDeltaCmd->SetParameterName("delta",true);
   theDeltaCmd->SetRange("delta>=1.e-9"); // current G4-accuracy
   theDeltaCmd->SetUnitCategory("Length");
-  theDeltaCmd->AvailableForStates(Idle);
+  theDeltaCmd->AvailableForStates(G4State_Idle);
   
   theSetGridCmd = new G4UIcmdWith3Vector("/olap/grid",this);
   theSetGridCmd->SetGuidance("set the grid for the generator (x-, y-, z- grid)");
   theSetGridCmd->SetDefaultValue(G4ThreeVector(3.,3.,3.));
   theSetGridCmd->SetParameterName("xGrid", "yGrid", "zGrid", true);
   theSetGridCmd->SetRange("xGrid>2. && yGrid >2. && zGrid >2.");
-  theSetGridCmd->AvailableForStates(Idle);
+  theSetGridCmd->AvailableForStates(G4State_Idle);
     
   thePwdCmd = new G4UIcmdWithoutParameter("/olap/pwd",this);
   thePwdCmd->SetGuidance("show the position in the logical volume hierachy of the new world");
-  thePwdCmd->AvailableForStates(Idle);
+  thePwdCmd->AvailableForStates(G4State_Idle);
   
   theLsCmd = new G4UIcmdWithoutParameter("/olap/ls",this);
   theLsCmd->SetGuidance("lists the logical daughters of the current NewWorld");
-  theLsCmd->AvailableForStates(Idle);
+  theLsCmd->AvailableForStates(G4State_Idle);
   
   theListCmd = new G4UIcmdWithAString("/olap/list",this);
   theListCmd->SetGuidance("lists all logical volumes which name matches regexp");
-  theListCmd->AvailableForStates(Idle);
+  theListCmd->AvailableForStates(G4State_Idle);
   
   theCdCmd = new G4UIcmdWithAString("/olap/cd",this);
   theCdCmd->SetGuidance("change to NewWorld like unix-cd");
-  theCdCmd->AvailableForStates(Idle);
+  theCdCmd->AvailableForStates(G4State_Idle);
   
   theGotoWorldCmd = new G4UIcmdWithAString("/olap/goto",this);
   theGotoWorldCmd->SetGuidance("setting first logical vol matching regexp as NewWorld");
-  theGotoWorldCmd->AvailableForStates(Idle);
+  theGotoWorldCmd->AvailableForStates(G4State_Idle);
 
   theLogCmd = new G4UIcmdWithAString("/olap/log", this);
   theLogCmd->SetGuidance("puts output into a single logfile");
   theLogCmd->SetDefaultValue("olap.log");
   theLogCmd->SetParameterName("name of logfile",true);
-  theLogCmd->AvailableForStates(Idle);
+  theLogCmd->AvailableForStates(G4State_Idle);
 
   theLogByVolumeCmd = new G4UIcmdWithAString("/olap/logByVolume", this);
   theLogByVolumeCmd->SetGuidance("puts output into a logfile for each volume");
   theLogByVolumeCmd->SetDefaultValue("");
   theLogByVolumeCmd->SetParameterName("path of logfile(s)",true);
-  theLogByVolumeCmd->AvailableForStates(Idle);
+  theLogByVolumeCmd->AvailableForStates(G4State_Idle);
 
 }
 

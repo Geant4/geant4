@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PrimaryGeneratorMessenger.cc,v 1.1.1.1 2002-05-31 00:34:44 radoone Exp $
+// $Id: ExN03PrimaryGeneratorMessenger.cc,v 1.2 2002-12-05 01:06:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@ ExN03PrimaryGeneratorMessenger::ExN03PrimaryGeneratorMessenger(
   RndmCmd->SetParameterName("choice",true);
   RndmCmd->SetDefaultValue("on");
   RndmCmd->SetCandidates("on off");
-  RndmCmd->AvailableForStates(PreInit,Idle);
+  RndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

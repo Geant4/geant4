@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: ParRunManager.cc,v 1.3 2002-06-06 17:04:40 cooperma Exp $
+// $Id: ParRunManager.cc,v 1.4 2002-12-05 01:07:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -168,7 +168,7 @@ TOPC_BUF ParRunManager::DoEvent( void *input_buf )
   ParMarshaledRandomState buf = ParMarshaledRandomState( input_buf );
   buf.unmarshalEventIDandSetState( i_event );
 
-    stateManager->SetNewState(EventProc);
+    stateManager->SetNewState(G4State_EventProc);
 
     currentEvent = GenerateEvent(i_event);
 
@@ -184,7 +184,7 @@ TOPC_ACTION ParRunManager::CheckEventResult( void * input_buf, void *output_buf 
   MarshaledObj buf = MarshaledObj(input_buf);
   buf.Unmarshal(i_event);
 
-  stateManager->SetNewState(EventProc);
+  stateManager->SetNewState(G4State_EventProc);
   if(!userPrimaryGeneratorAction)
   {
     G4Exception
@@ -215,7 +215,7 @@ TOPC_ACTION ParRunManager::CheckEventResult( void * input_buf, void *output_buf 
   AnalyzeEvent(currentEvent);
 
     if(i_event<n_select) G4UImanager::GetUIpointer()->ApplyCommand(msg);
-    stateManager->SetNewState(GeomClosed);
+    stateManager->SetNewState(G4State_GeomClosed);
     StackPreviousEvent(currentEvent);
     currentEvent = NULL;
     // Move this to GenerateEventInput:

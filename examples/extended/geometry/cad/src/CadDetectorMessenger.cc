@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: CadDetectorMessenger.cc,v 1.1 2002-06-20 10:00:55 gcosmo Exp $
+// $Id: CadDetectorMessenger.cc,v 1.2 2002-12-05 01:07:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 
@@ -43,7 +43,7 @@ CadDetectorMessenger::CadDetectorMessenger(CadDetectorConstruction * myDC)
   selDetCmd->SetParameterName("choice",true);
   selDetCmd->SetDefaultValue("rod_place_asm");
   selDetCmd->SetCandidates("rod_place_asm rod_solid");
-  selDetCmd->AvailableForStates(PreInit,Idle);
+  selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   switchCmd = new G4UIcmdWithAString("/mydet/SwitchDetector",this);
   switchCmd->SetGuidance("Assign the selected geometry to G4RunManager.");
@@ -52,7 +52,7 @@ CadDetectorMessenger::CadDetectorMessenger(CadDetectorConstruction * myDC)
   switchCmd->SetParameterName("choice",true);
   switchCmd->SetDefaultValue(" ");
   switchCmd->SetCandidates("rod_place_asm rod_solid \" \"");
-  switchCmd->AvailableForStates(PreInit,Idle);
+  switchCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   myDetector->SelectDetector(defParam="rod_place_asm");
 }

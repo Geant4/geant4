@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05DetectorMessenger.cc,v 1.4 2002-01-09 17:24:19 ranjard Exp $
+// $Id: ExN05DetectorMessenger.cc,v 1.5 2002-12-05 01:07:02 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,28 +48,28 @@ ExN05DetectorMessenger::ExN05DetectorMessenger(ExN05DetectorConstruction * myDet
   SwitchCmd->SetParameterName("choice",true);
   SwitchCmd->SetDefaultValue("on");
   SwitchCmd->SetCandidates("on ON off OFF");
-  SwitchCmd->AvailableForStates(PreInit,Idle);
+  SwitchCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   TmaxCmd = new G4UIcmdWithADoubleAndUnit("/exN05/detector/maxTime",this);
   TmaxCmd->SetGuidance("Set maximum time in crystal");
   TmaxCmd->SetParameterName("Tmax",false,false);
   TmaxCmd->SetDefaultUnit("ns");
   TmaxCmd->SetUnitCategory("Time");
-  TmaxCmd->AvailableForStates(PreInit,Idle);
+  TmaxCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   EminCmd = new G4UIcmdWithADoubleAndUnit("/exN05/detector/minEkine",this);
   EminCmd->SetGuidance("Set minimum kinetic energy in crystal");
   EminCmd->SetParameterName("Emin",false,false);
   EminCmd->SetDefaultUnit("MeV");
   EminCmd->SetUnitCategory("Energy");
-  EminCmd->AvailableForStates(PreInit,Idle);
+  EminCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   RminCmd = new G4UIcmdWithADoubleAndUnit("/exN05/detector/minRange",this);
   RminCmd->SetGuidance("Set minimum range in crystal");
   RminCmd->SetParameterName("Rmin",false,false);
   RminCmd->SetDefaultUnit("mm");
   RminCmd->SetUnitCategory("Length");
-  RminCmd->AvailableForStates(PreInit,Idle);
+  RminCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 ExN05DetectorMessenger::~ExN05DetectorMessenger()
