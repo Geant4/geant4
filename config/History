@@ -1,4 +1,4 @@
-$Id: History,v 1.31 1999-05-19 16:36:29 stesting Exp $
+$Id: History,v 1.32 1999-05-27 20:06:16 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27th May 1999  Gabriele Cosmo (config-01-00-06)
+- architecture.gmk: set default $G4INSTALL path to $HOME/geant4 (was still referring
+  to geant4beta...).
+- Restored default CLHEP_BASE_DIR to /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/pro.
+- architecture.gmk: added -DG4NOT_ISO_DELETES for NT setup (G.Folger).
+
+25th May 1999  Gabriele Cosmo
+- architecture.gmk: fixed bug in SUN-CC setup. Replaced VISLIBS with LOADLIBS to
+  specify inclusion of socket libraries -lsocket -lnsl.
+- binmake.gmk: fixed path to libname.map in the definition of LDLIBS2 for the
+  granular libs setup.
 
 19th May 1999  John Allison
 - Force linking of static library, libCLHEP.a.
