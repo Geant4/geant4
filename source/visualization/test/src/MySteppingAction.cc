@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MySteppingAction.cc,v 1.13 2003-02-18 16:07:30 johna Exp $
+// $Id: MySteppingAction.cc,v 1.14 2003-09-02 14:18:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@
 #include "G4Circle.hh"
 #include "G4Square.hh"
 
-void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
+void MySteppingAction::UserSteppingAction(const G4Step*) {
 #ifdef G4VIS_USE_OPACS
   OHistogram h1 = MyRunAction::get_1d();
   OHistogram h2 = MyRunAction::Get2d();
@@ -57,13 +57,13 @@ void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
 #endif
 
   // User Action Example - begin snippet.
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   static int coutCount = 0;
   if (coutCount < 10) {
     coutCount++;
     G4cout << "MySteppingAction::UserSteppingAction called." << G4endl;
   }
   /*
+  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager) {
     G4Polyline pl;
     G4Colour c;

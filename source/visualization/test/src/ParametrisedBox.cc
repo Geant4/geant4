@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ParametrisedBox.cc,v 1.3 2001-07-11 10:09:28 gunter Exp $
+// $Id: ParametrisedBox.cc,v 1.4 2003-09-02 14:18:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@ void ParametrisedBox::ComputeTransformation
 void ParametrisedBox::ComputeDimensions
 (G4Box& box,
  const G4int n,
- const G4VPhysicalVolume* pRep) const
+ const G4VPhysicalVolume*) const
 {
   box.SetXHalfLength ( 0.5 * m * (n + 1));
   box.SetYHalfLength ( 1 * m * (n + 1));
