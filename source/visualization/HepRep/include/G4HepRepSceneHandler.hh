@@ -108,6 +108,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         // Methods
         void setColor (HEPREP::HepRepInstance *instance, const G4Color& color,
 			            const G4String& key = G4String("Color"));
+        G4Color getColor (G4double charge);
         void setLine   (HEPREP::HepRepInstance *instance, const G4Visible& visible);
         void setMarker (HEPREP::HepRepInstance *instance, const G4VMarker& marker);
 
@@ -123,7 +124,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void close();
 
         void addAttDefs(HEPREP::HepRepDefinition* definition, const std::map<G4String,G4AttDef>* attDefs);
-        void addAttVals(HEPREP::HepRepInstance* instance, std::vector<G4AttValue>* attValues);
+        void addAttVals(HEPREP::HepRepInstance* instance, const std::map<G4String,G4AttDef>* attDefs, std::vector<G4AttValue>* attValues);
 
 
         // Returns the particular instance/type or if not created, creates them and adds them to the HepRep
@@ -139,10 +140,10 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         HEPREP::HepRepInstance*     getEventInstance();
         HEPREP::HepRepTypeTree*     getEventTypeTree();
         HEPREP::HepRepType*         getEventType();
-        HEPREP::HepRepType*         getTrajectoryType       (const std::map<G4String,G4AttDef>* attDefs = NULL);
-        HEPREP::HepRepType*         getTrajectoryPointType  (const std::map<G4String,G4AttDef>* attDefs = NULL);
-        HEPREP::HepRepType*         getHitType              (const std::map<G4String,G4AttDef>* attDefs = NULL);
-        HEPREP::HepRepType*         getCalHitType           (const std::map<G4String,G4AttDef>* attDefs = NULL);
+        HEPREP::HepRepType*         getTrajectoryType       ();
+        HEPREP::HepRepType*         getTrajectoryPointType  ();
+        HEPREP::HepRepType*         getHitType              ();
+        HEPREP::HepRepType*         getCalHitType           ();
 
         G4String getFullTypeName(G4String volumeName, int depth);
         G4String getParentTypeName(int currentDepth);

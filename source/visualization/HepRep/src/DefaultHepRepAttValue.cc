@@ -102,39 +102,39 @@ int DefaultHepRepAttValue::showLabel() {
 }
 
 string DefaultHepRepAttValue::getString() {
-    if (type != HepRepConstants::TYPE_STRING) cerr << "Trying to access AttValue as 'string'" << endl;
+    if (type != HepRepConstants::TYPE_STRING) cerr << "Trying to access AttValue '" << getName() << "' as 'string'" << endl;
     return stringValue;
 }
 
 string DefaultHepRepAttValue::getLowerCaseString() {
-    if (type != HepRepConstants::TYPE_STRING) cerr << "Trying to access AttValue as 'string'" << endl;
+    if (type != HepRepConstants::TYPE_STRING) cerr << "Trying to access AttValue '" << getName() << "' as 'string'" << endl;
     string s = stringValue;
     transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolower);
     return s;
 }
 
 long DefaultHepRepAttValue::getLong() {
-    if (type != HepRepConstants::TYPE_LONG) cerr << "Trying to access AttValue as 'long'" << endl;
+    if (type != HepRepConstants::TYPE_LONG) cerr << "Trying to access AttValue '" << getName() << "' as 'long'" << endl;
     return longValue;
 }
 
 int DefaultHepRepAttValue::getInteger() {
-    if (type != HepRepConstants::TYPE_INT) cerr << "Trying to access AttValue as 'int'" << endl;
+    if (type != HepRepConstants::TYPE_INT) cerr << "Trying to access AttValue '" << getName() << "' as 'int'" << endl;
     return (int)longValue;
 }
 
 double DefaultHepRepAttValue::getDouble() {
-    if (type != HepRepConstants::TYPE_DOUBLE) cerr << "Trying to access AttValue as 'double'" << endl;
+    if (type != HepRepConstants::TYPE_DOUBLE) cerr << "Trying to access AttValue '" << getName() << "' as 'double'" << endl;
     return doubleValue;
 }
 
 bool DefaultHepRepAttValue::getBoolean() {
-    if (type != HepRepConstants::TYPE_BOOLEAN) cerr << "Trying to access AttValue as 'boolean'" << endl;
+    if (type != HepRepConstants::TYPE_BOOLEAN) cerr << "Trying to access AttValue '" << getName() << "' as 'boolean'" << endl;
     return booleanValue;
 }
 
 vector<double> DefaultHepRepAttValue::getColor() {
-    if (type != HepRepConstants::TYPE_COLOR) cerr << "Trying to access AttValue as 'color'" << endl;
+    if (type != HepRepConstants::TYPE_COLOR) cerr << "Trying to access AttValue '" << getName() << "' as 'color'" << endl;
     return colorValue;
 }
 

@@ -396,7 +396,6 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
 #ifdef PDEBUG
     cout << "G4HepRepSceneHandler::AddPrimitive(G4Square&) " << endl;
 #endif
-
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getHitType());
 
     G4Point3D center = transform * square.GetPosition();
@@ -427,23 +426,16 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& trajectory) {
     vector<G4AttValue>* trajectoryAttValues = trajectory.CreateAttValues();
     const map<G4String,G4AttDef>* trajectoryAttDefs = trajectory.GetAttDefs();
 
-    HepRepInstance* trajectoryInstance = factory->createHepRepInstance(getEventInstance(), 
-                                                        getTrajectoryType(trajectoryAttDefs));
-    addAttVals(trajectoryInstance, trajectoryAttValues);
+    HepRepType* trajectoryType = getTrajectoryType();
+    addAttDefs(trajectoryType, trajectoryAttDefs);
+    
+    HepRepInstance* trajectoryInstance = factory->createHepRepInstance(getEventInstance(), trajectoryType);
+    addAttVals(trajectoryInstance, trajectoryAttDefs, trajectoryAttValues);
+    
     delete trajectoryAttValues;
 
-    // Set the LineColor attribute according to the particle charge. GEANT-11
-    // FIXME move this to converter method, should the user put this color?    
-    float red = 0.;
-    float green = 0.;
-    float blue = 0.;
-    const G4double charge = trajectory.GetCharge();
-    if(charge>0.0)      blue =  1.0; // Blue = positive.
-    else if(charge<0.0) red  =  1.0; // Red = negative.
-    else                green = 1.0; // Green = neutral.
-    setColor(trajectoryInstance, G4Color(red, green, blue));
-    
-    setAttribute(trajectoryInstance, "LineWidth", 2.0); // change to 1.0 for GEANT-13
+    setColor(trajectoryInstance, getColor(trajectory.GetCharge()));    
+    setAttribute(trajectoryInstance, "LineWidth", 1.0);
 
     // Specify the polyline by using the trajectory points.
     G4int i;
@@ -463,9 +455,10 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& trajectory) {
         factory->createHepRepPoint(pointInstance, vertex.x(), vertex.y(), vertex.z());
 */
 
+// FIXME
 // We cannot call addAttVals since it will only accept an instance and not a point.
 // For now we just copy the attvals on a point and do not search the instance or type.
-//        addAttVals(point, pointAttValues);
+//        addAttVals(point, pointAttDefs, pointAttValues);
         if (pointAttValues != NULL) {
             // Copy the point's G4AttValues to HepRepAttValues.
             vector<G4AttValue>::iterator attValIterator;
@@ -534,6 +527,15 @@ void G4HepRepSceneHandler::setColor (HepRepInstance *instance,
     setAttribute(instance, key, color.GetRed(), color.GetGreen(), color.GetBlue(),color.GetAlpha());
 }
 
+G4Color G4HepRepSceneHandler::getColor (G4double charge) {
+    float red = 0.;
+    float green = 0.;
+    float blue = 0.;
+    if(charge>0.0)      blue =  1.0; // Blue = positive.
+    else if(charge<0.0) red  =  1.0; // Red = negative.
+    else                green = 1.0; // Green = neutral.
+    return G4Color(red, green, blue);
+}
 
 void G4HepRepSceneHandler::setLine (HepRepInstance *instance, const G4Visible& visible) {
     G4VisAttributes atts = visible.GetVisAttributes();
@@ -553,12 +555,11 @@ void G4HepRepSceneHandler::setLine (HepRepInstance *instance, const G4Visible& v
     }
 }
 
-
 void G4HepRepSceneHandler::setMarker (HepRepInstance *instance, const G4VMarker& marker) {
     MarkerSizeType markerType;
     G4double size = GetMarkerRadius( marker , markerType );
-// FIXME make things visible by default, multiply by 4, remove for GEANT-13
-    setAttribute(instance, "MarkSize", size*4);
+
+    setAttribute(instance, "MarkSize", size);
 
     if (markerType == screen) setAttribute(instance, "MarkType", G4String("Symbol"));
     if (marker.GetFillStyle() == G4VMarker::noFill) {
@@ -663,7 +664,7 @@ void G4HepRepSceneHandler::addAttDefs(HepRepDefinition* definition, const map<G4
     }
 }
 
-void G4HepRepSceneHandler::addAttVals(HepRepInstance* instance, vector<G4AttValue>* attValues) {
+void G4HepRepSceneHandler::addAttVals(HepRepInstance* instance, const map<G4String,G4AttDef>* attDefs, vector<G4AttValue>* attValues) {
     if (attValues == NULL) return;
 
     // Copy the instance's G4AttValues to HepRepAttValues.
@@ -674,22 +675,24 @@ void G4HepRepSceneHandler::addAttVals(HepRepInstance* instance, vector<G4AttValu
         
         G4String name = attValIterator->GetName();
 
+        const map<G4String,G4AttDef>::const_iterator attDefIterator = attDefs->find(name);
+        G4String type = attDefIterator->second.GetValueType();
+        
+        G4String value = attValIterator->GetValue();
+        
+//        cout << name << ":'" << type << "':'" << value << "'" << endl;
+
         // Pos already in points being written
         if (name == "Pos") continue;
         
         // NTP already in points being written
         if (name == "NTP") continue;
         
-        // FIXME get type from attDef GEANT-12
-        if ((name == "Ch") ||
-            (name == "ID") ||
-            (name == "NTP") ||
-            (name == "PDG") ||
-            (name == "PID")) {
-            // Ch, ID, NTP, PDG and PID are of type int
+        if ((type == "G4double") || (type == "double")) {   
+            setAttribute(instance, attValIterator->GetName(), atof(attValIterator->GetValue()));           
+        } else if ((type == "G4int") || (type == "int")) {  
             setAttribute(instance, attValIterator->GetName(), atoi(attValIterator->GetValue()));           
-        } else {
-            // rest is String           
+        } else { // G4String, string and others
             setAttribute(instance, attValIterator->GetName(), attValIterator->GetValue());
         }
     }
@@ -800,11 +803,7 @@ HepRepType* G4HepRepSceneHandler::getGeometryRootType() {
         _geometryRootType->addAttValue("LineWidth", 1.0);
         _geometryRootType->addAttValue("DrawAs", G4String("Polygon"));
         
-        // remove definition for GEANT-13
-        _geometryRootType->addAttDef  ("MarkSizeMultiplier",  "Multiplier for Marker Size", "Draw","");
-        _geometryRootType->addAttValue("MarkSizeMultiplier", 1.0);  // Should be 4.0 for GEANT-13
-        // remove definition for GEANT-13
-        _geometryRootType->addAttDef  ("LineWidthMultiplier", "Multiplier for Line Width", "Draw","");
+        _geometryRootType->addAttValue("MarkSizeMultiplier", 4.0);
         _geometryRootType->addAttValue("LineWidthMultiplier", 1.0);
         
         getGeometryTypeTree()->addType(_geometryRootType);
@@ -839,7 +838,7 @@ G4String G4HepRepSceneHandler::getFullTypeName(G4String volumeName, int depth) {
         // there is a problem, book this type under problems
         G4String problem = "HierarchyProblem";
         if (_geometryType["/"+problem] == NULL) {
-            // FIXME should have short path element name...
+            // FIXME should have short path element name... GEANT-10
             HepRepType* type = factory->createHepRepType(getGeometryRootType(), "/"+problem);
             _geometryType["/"+problem] = type;
         }
@@ -901,11 +900,7 @@ HepRepType* G4HepRepSceneHandler::getEventType() {
         _eventType->addAttValue("LineWidth", 1.0);
         _eventType->addAttValue("HasFrame", true);
 
-        // remove definition for GEANT-13
-        _eventType->addAttDef  ("MarkSizeMultiplier",  "Multiplier for Marker Size", "Draw","");
-        _eventType->addAttValue("MarkSizeMultiplier", 1.0);  // Should be 4.0 for GEANT-13
-        // remove definition for GEANT-13
-        _eventType->addAttDef  ("LineWidthMultiplier", "Multiplier for Line Width", "Draw","");
+        _eventType->addAttValue("MarkSizeMultiplier", 4.0);
         _eventType->addAttValue("LineWidthMultiplier", 1.0);
             
         getEventTypeTree()->addType(_eventType);
@@ -913,13 +908,14 @@ HepRepType* G4HepRepSceneHandler::getEventType() {
     return _eventType;
 }
 
-HepRepType* G4HepRepSceneHandler::getTrajectoryType(const map<G4String,G4AttDef>* attDefs) {
+HepRepType* G4HepRepSceneHandler::getTrajectoryType() {
     if (_trajectoryType == NULL) {
         _trajectoryType = factory->createHepRepType(getEventType(), "Trajectory");
         
-        _trajectoryType->addAttValue("Ch", 0);
-        // FIXME should call color converter
-        _trajectoryType->addAttValue("Color", 0.0, 1.0, 0.0, 1.0);  // green
+        double charge = 0;
+        _trajectoryType->addAttValue("Ch", charge);
+        G4Color color = getColor(charge);
+        _trajectoryType->addAttValue("Color", color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
         _trajectoryType->addAttValue("ID", -1);
         _trajectoryType->addAttValue("IMom", "");
         _trajectoryType->addAttValue("PDG", -1);
@@ -929,14 +925,12 @@ HepRepType* G4HepRepSceneHandler::getTrajectoryType(const map<G4String,G4AttDef>
         _trajectoryType->addAttValue("Layer", trajectoryLayer);
         _trajectoryType->addAttValue("DrawAs", G4String("Line"));
 
-        _trajectoryType->addAttValue("LineWidthMultiplier", 1.0);   // Change to 2.0 for GEANT-13
-
-        addAttDefs(_trajectoryType, attDefs);
+        _trajectoryType->addAttValue("LineWidthMultiplier", 2.0);
     }
     return _trajectoryType;
 }
 
-HepRepType* G4HepRepSceneHandler::getTrajectoryPointType(const map<G4String,G4AttDef>* attDefs) {
+HepRepType* G4HepRepSceneHandler::getTrajectoryPointType() {
     if (_trajectoryPointType == NULL) {
         _trajectoryPointType = factory->createHepRepType(getTrajectoryType(), "Trajectory/Point");
         _trajectoryPointType->addAttValue("Layer", trajectoryPointLayer);
@@ -946,13 +940,11 @@ HepRepType* G4HepRepSceneHandler::getTrajectoryPointType(const map<G4String,G4At
         _trajectoryPointType->addAttValue("MarkType", G4String("Symbol"));
         _trajectoryPointType->addAttValue("Fill", true);
         _trajectoryPointType->addAttValue("Visibility", true);
-
-        addAttDefs(_trajectoryPointType, attDefs);
     }
     return _trajectoryPointType;
 }
 
-HepRepType* G4HepRepSceneHandler::getHitType(const map<G4String,G4AttDef>* attDefs) {
+HepRepType* G4HepRepSceneHandler::getHitType() {
     if (_hitType == NULL) {
         _hitType = factory->createHepRepType(getEventType(), "Hit");
         _hitType->addAttValue("Layer", hitLayer);
@@ -961,20 +953,16 @@ HepRepType* G4HepRepSceneHandler::getHitType(const map<G4String,G4AttDef>* attDe
         _hitType->addAttValue("MarkSize", 4.0);
         _hitType->addAttValue("MarkType", G4String("Symbol"));
         _hitType->addAttValue("Fill", true);
-
-        addAttDefs(_hitType, attDefs);
     }
     return _hitType;
 }
 
-HepRepType* G4HepRepSceneHandler::getCalHitType(const map<G4String,G4AttDef>* attDefs) {
+HepRepType* G4HepRepSceneHandler::getCalHitType() {
     if (_calHitType == NULL) {
         _calHitType = factory->createHepRepType(getEventType(), "CalHit");
         _calHitType->addAttValue("Layer", calHitLayer);
         _calHitType->addAttValue("Fill", true);
         _calHitType->addAttValue("DrawAs", "Polygon");
-
-        addAttDefs(_calHitType, attDefs);
     }
     return _calHitType;
 }

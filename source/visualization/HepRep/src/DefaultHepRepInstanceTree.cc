@@ -9,7 +9,6 @@ DefaultHepRepInstanceTree::DefaultHepRepInstanceTree(string name, string version
 }
 
 DefaultHepRepInstanceTree::~DefaultHepRepInstanceTree() {
-cout << "Delete Tree " << getName() << endl;
     for (vector<HepRepInstance*>::iterator i1 = instances.begin(); i1 != instances.end(); i1++) {
         delete (*i1);
     }
