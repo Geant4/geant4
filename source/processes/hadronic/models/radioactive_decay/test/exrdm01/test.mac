@@ -1,0 +1,31 @@
+test.log
+
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+
+grdm/ion 24 11 0
+gun/energy 0
+grdm/verbose 0
+
+grdm/analogueMC 1
+run/beamOn 
+
+grdm/analogueMC 0
+run/beamOn 
+
+grdm/analogueMC true
+run/beamOn 
+
+grdm/analogueMC 1
+run/beamOn 
+
+grdm/analogueMC false
+run/beamOn 
+
+
+
+
+
+
+
