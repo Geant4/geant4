@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Transportation.cc,v 1.13 2000-10-04 10:05:10 gcosmo Exp $
+// $Id: G4Transportation.cc,v 1.14 2001-02-20 14:41:35 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -22,12 +22,15 @@
 // It is also tasked with part of updating the "safety".
 //
 // =======================================================================
-// Created:   19 March 1997, J. Apostolakis
-// Modified:   9 June  1999, J. Apostolakis & S.Giani: protect full relocation used in DEBUG 
-//                 		 for track that started on surface and went step < tolerance
+// Modified:   
+//            20 Febr 2001, J. Apostolakis:  update for new FieldTrack
+//            22 Sept 2000, V. Grichine:     update of Kinetic Energy
+//             9 June 1999, J. Apostolakis & S.Giani: protect full relocation
+//                               used in DEBUG for track that started on surface
+//                               and went step < tolerance
 //    				Also forced fast relocation in all DEBUG cases
 //    				 & changed #if to use DEBUG instead of VERBOSE
-// 22.09.00 V. Grichine, update of Tkin and cosmetics
+// Created:  19 March 1997, J. Apostolakis
 // =======================================================================
 
 #include "G4Transportation.hh"
@@ -222,16 +225,18 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
 		                              momentumMagnitude, // Momentum in Mev/c 
 		                              restMass           ) ;  
 
-     G4ThreeVector spin           = track.GetPolarization() ; // Does it have it ?
-     G4ThreeVector velocityVector = track.GetVelocity()*
-                                    track.GetMomentumDirection() ; 
-     G4FieldTrack  aFieldTrack = G4FieldTrack( startPosition, 
-		                               velocityVector,
-		                               0.0, 
-		                               track.GetKineticEnergy(),
-		                               track.GetLocalTime(),    // tof lab ?
-		                               track.GetProperTime(),   // tof proper
-		                               &spin                   ) ;
+     G4ThreeVector spin           = track.GetPolarization() ;
+     G4FieldTrack  aFieldTrack =
+                    G4FieldTrack( startPosition, 
+				  track.GetMomentumDirection(),
+				  0.0, 
+				  track.GetKineticEnergy(),
+				  restMass,
+				  track.GetVelocity(),
+				  track.GetLocalTime(),    // tof lab ?
+				  track.GetProperTime(),   // tof proper
+				  &spin                   ) ;
+
      if( currentMinimumStep > 0 ) 
      {
         //  Do the Transport in the field (non recti-linear)
@@ -270,12 +275,18 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
      fMomentumChanged         = true ; 
      fTransportEndMomentumDir = aFieldTrack.GetMomentumDir() ;
 
-     // fTransportEndKineticEnergy= aFieldTrack.GetEnergy() ; // Energy is wrong
-
+#if VELOCITY_RETURNED
      G4ThreeVector endVelocity   = aFieldTrack.GetVelocity() ;
      G4double  veloc_sq          = endVelocity.mag2() ;
-     G4double gamma              = 1.0/sqrt( 1 - veloc_sq/c_squared ) ;
-     fTransportEndKineticEnergy  = restMass*( gamma - 1.0 ) ;   // Lorentz correction
+     G4double inverse_gamma      = sqrt( 1 - veloc_sq/c_squared ) ;
+     G4double  gamma = 1.0 / inverse_gamma;
+     G4double  kineticEnergy     = restMass*( gamma - 1.0 ) ; // Lorentz correction
+     // The equation below is more stable for small velocities.
+     G4double  kineticEnergy_agn = restMass* veloc_sq  / 
+                                    (inverse_gamma * (1.0 + inverse_gamma) ) ; 
+#endif
+
+     fTransportEndKineticEnergy  = aFieldTrack.GetKineticEnergy() ; 
 
      //   fTransportEndKineticEnergy = track.GetKineticEnergy() ;
      // fTransportEndPolarization= aFieldTrack.GetSpin() ; // Not yet possible
