@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VXTRdEdx.cc,v 1.1 2001-02-27 07:38:47 grichine Exp $
+// $Id: G4VXTRdEdx.cc,v 1.2 2001-02-27 09:34:16 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -240,19 +240,19 @@ void G4VXTRdEdx::BuildTable()
 
      G4double energySum = 0.0 ;
      G4double angleSum  = 0.0 ;
-     G4Integrator<G4VXrayTRmodel,G4double(G4VXrayTRmodel::*)(G4double)> integral ;
+     G4Integrator<G4VXTRdEdx,G4double(G4VXTRdEdx::*)(G4double)> integral ;
      energyVector->PutValue(fBinTR-1,energySum) ;
      angleVector->PutValue(fBinTR-1,angleSum)   ;
 
      for( iTR = fBinTR - 2 ; iTR >= 0 ; iTR-- )
      {
         energySum += radiatorCof*fCofTR*integral.Legendre10(
-	             this,&G4VXrayTRmodel::XTRNSpectralDensity, 
+		     this,&G4VXTRdEdx::SpectralXTRdEdx,
                      energyVector->GetLowEdgeEnergy(iTR),
                      energyVector->GetLowEdgeEnergy(iTR+1) ) ; 
 
 	//    angleSum  += fCofTR*integral.Legendre96(
-	//       this,&G4VXrayTRmodel::XTRNSpectralDensity,
+	//       this,&G4VXTRdEdx::AngleXTRdEdx,
 	//       angleVector->GetLowEdgeEnergy(iTR),
 	//       angleVector->GetLowEdgeEnergy(iTR+1) ) ;
 
@@ -293,6 +293,75 @@ void G4VXTRdEdx::BuildAngleTable()
   return ;
 } 
 
+///////////////////////////////////////////////////////////////////////
+//
+// This function returns the spectral and angle density of TR quanta
+// in X-ray energy region generated forward when a relativistic
+// charged particle crosses interface between two materials.
+// The high energy small theta approximation is applied.
+// (matter1 -> matter2, or 2->1)
+// varAngle =2* (1 - cos(theta)) or approximately = theta*theta
+//
+
+G4complex G4VXTRdEdx::OneInterfaceXTRdEdx( G4double energy,
+                                           G4double gamma,
+                                           G4double varAngle ) 
+{
+  G4complex Z1    = GetPlateComplexFZ(energy,gamma,varAngle) ;
+  G4complex Z2    = GetGasComplexFZ(energy,gamma,varAngle) ;
+
+  G4complex zOut  = (Z1 - Z2)*(Z1 - Z2) ;
+            zOut *= varAngle*energy/hbarc/hbarc ;  
+  return    zOut  ;
+
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// For photon energy distribution tables. Integrate first over angle
+//
+
+G4double G4VXTRdEdx::SpectralAngleXTRdEdx(G4double varAngle)
+{
+  return GetStackFactor(fEnergy,fGamma,varAngle)             ;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+// For second integration over energy
+ 
+G4double G4VXTRdEdx::SpectralXTRdEdx(G4double energy)
+{
+  fEnergy = energy ;
+  G4Integrator<G4VXTRdEdx,G4double(G4VXTRdEdx::*)(G4double)> integral ;
+  return integral.Legendre96(this,&G4VXTRdEdx::SpectralAngleXTRdEdx,
+                             0.0,0.2*fMaxThetaTR) +
+         integral.Legendre10(this,&G4VXTRdEdx::SpectralAngleXTRdEdx,
+	                     0.2*fMaxThetaTR,fMaxThetaTR) ;
+} 
+ 
+//////////////////////////////////////////////////////////////////////////
+// 
+// for photon angle distribution tables
+//
+
+G4double G4VXTRdEdx::AngleSpectralXTRdEdx(G4double energy)
+{
+  return GetStackFactor(energy,fGamma,fVarAngle) ;
+} 
+
+///////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4double G4VXTRdEdx::AngleXTRdEdx(G4double varAngle) 
+{
+  fVarAngle = varAngle ;
+  G4Integrator<G4VXTRdEdx,G4double(G4VXTRdEdx::*)(G4double)> integral ;
+  return integral.Legendre96(this,&G4VXTRdEdx::AngleSpectralXTRdEdx,
+			     fMinEnergyTR,fMaxEnergyTR) ;
+}
 
 
 //

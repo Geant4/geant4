@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VXTRdEdx.hh,v 1.1 2001-02-27 07:36:20 grichine Exp $
+// $Id: G4VXTRdEdx.hh,v 1.2 2001-02-27 09:34:02 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,11 +52,23 @@ public:
   virtual  G4double GetStackFactor( G4double energy, G4double gamma,
                                                      G4double varAngle ) = 0  ;
 
+protected:
 
   void BuildTable() ;
   void BuildEnergyTable() ;
   void BuildAngleTable() ;
 
+  G4complex OneInterfaceXTRdEdx( G4double energy, 
+                                G4double gamma,
+                                G4double varAngle ) ;
+
+  G4double SpectralAngleXTRdEdx(G4double varAngle) ;
+
+  G4double SpectralXTRdEdx(G4double energy) ;
+
+  G4double AngleSpectralXTRdEdx(G4double energy) ;
+
+  G4double G4VXTRdEdx::AngleXTRdEdx(G4double varAngle) ;
 };
 
 #endif
