@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10PrimaryGeneratorAction.cc,v 1.7 2004-01-25 14:06:12 grichine Exp $
+// $Id: Tst10PrimaryGeneratorAction.cc,v 1.8 2004-01-26 16:17:24 gcosmo Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -44,8 +44,7 @@
 
 Tst10PrimaryGeneratorAction::
 Tst10PrimaryGeneratorAction(Tst10DetectorConstruction*det)
-  :
-  fDetector(det)
+  : fDetector(det)
 {
   particleGun = new G4ParticleGun();
 }
@@ -57,7 +56,6 @@ Tst10PrimaryGeneratorAction::~Tst10PrimaryGeneratorAction()
 
 void Tst10PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
   G4ParticleDefinition* aParticleDefinition 
@@ -66,20 +64,22 @@ void Tst10PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // create a new vertex in a random position 
 
   G4ThreeVector VertexPosition (GetRandomPosition());
-//  G4ThreeVector VertexPosition (G4ThreeVector(0,0,0));
+  //  G4ThreeVector VertexPosition (G4ThreeVector(0,0,0));
   G4PrimaryVertex* aVertex = 
     new G4PrimaryVertex( VertexPosition, 0);
 
-  //  G4int NumberOfParticlesToBeGenerated = 10000;
-  G4int NumberOfParticlesToBeGenerated = 1;
-  // G4cout << "  A " << NumberOfParticlesToBeGenerated 
-  //          << " optical photons vertex has been generated at " 
-  //          << VertexPosition << G4endl;
+  if (!anEvent->GetEventID())
+    G4cout << "\n---> Begin of Event: 0" << G4endl;
+
+  G4int NumberOfParticlesToBeGenerated = 10000;
+  G4cout << "  A " << NumberOfParticlesToBeGenerated 
+         << " optical photons vertex has been generated at " 
+         << VertexPosition << G4endl;
   // create new primaries and set them to the vertex
-  for( int i=0; i<NumberOfParticlesToBeGenerated; i++ )
+  for( G4int i=0; i<NumberOfParticlesToBeGenerated; i++ )
   {
-		G4ThreeVector m = GetRandomDirection();
-//		G4ThreeVector m(1,0,0);
+    G4ThreeVector m = GetRandomDirection();
+    //  G4ThreeVector m(1,0,0);
     G4PrimaryParticle* aPrimaryParticle =
       new G4PrimaryParticle(aParticleDefinition, m.x(), m.y(), m.z());
     aPrimaryParticle->SetMass (0);
@@ -90,8 +90,8 @@ void Tst10PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   anEvent->AddPrimaryVertex( aVertex );
 }
 
-G4ThreeVector Tst10PrimaryGeneratorAction::GetRandomDirection() {
-
+G4ThreeVector Tst10PrimaryGeneratorAction::GetRandomDirection()
+{
   G4ThreeVector retval;
 
   G4double CosTheta;
@@ -131,14 +131,10 @@ G4ThreeVector Tst10PrimaryGeneratorAction::GetRandomPosition()
   return retval;
 }
 
-G4ThreeVector Tst10PrimaryGeneratorAction::GetRandomPolarization(G4ThreeVector Direction) {
+G4ThreeVector
+Tst10PrimaryGeneratorAction::GetRandomPolarization(G4ThreeVector Direction)
+{
   G4ThreeVector Polarization = Direction.orthogonal();
   G4ThreeVector retval = Polarization.unit();
   return retval;
 }
-
-
-
-
-
-

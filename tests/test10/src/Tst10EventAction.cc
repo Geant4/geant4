@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10EventAction.cc,v 1.7 2004-01-25 14:06:12 grichine Exp $
+// $Id: Tst10EventAction.cc,v 1.8 2004-01-26 16:17:24 gcosmo Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -31,7 +31,6 @@
 
 #include "Tst10EventAction.hh"
 #include "Tst10EventActionMessenger.hh"
-
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -45,6 +44,7 @@
 #include <iostream>
 
 Tst10EventAction::Tst10EventAction()
+  : printModulo(10)
 {
   eventMessenger = new Tst10EventActionMessenger(this);
 }
@@ -56,32 +56,26 @@ Tst10EventAction::~Tst10EventAction()
 
 void Tst10EventAction::BeginOfEventAction(const G4Event* evt)
 {
- G4int evtNb = evt->GetEventID();
- 
- if ( evtNb % printModulo == 0 )
- { 
+  G4int evtNb = evt->GetEventID();
+  if ( (evtNb % printModulo == 0) && (evtNb != 0) )
+  { 
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
- }
-   //  G4cout << ">>> Start Event " << evt->GetEventID() << G4endl;
+  }
 }
 
 void Tst10EventAction::EndOfEventAction(const G4Event* evt)
 {
-  // G4cout << ">>> End Event " << evt->GetEventID() << G4endl;
-
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;
   if(trajectoryContainer)
   { n_trajectories = trajectoryContainer->entries(); }
 
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager) {
+  if(pVVisManager)
+  {
     for(G4int i=0; i<n_trajectories; i++)
-    { (*(evt->GetTrajectoryContainer()))[i]->DrawTrajectory(50); }
-	}		 
+    {
+      (*(evt->GetTrajectoryContainer()))[i]->DrawTrajectory(50);
+    }
+  }		 
 }
-
-
-
-
-

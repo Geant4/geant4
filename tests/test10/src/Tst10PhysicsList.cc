@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10PhysicsList.cc,v 1.6 2004-01-25 14:06:12 grichine Exp $
+// $Id: Tst10PhysicsList.cc,v 1.7 2004-01-26 16:17:24 gcosmo Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -95,10 +95,9 @@ void Tst10PhysicsList::ConstructEM()
      
     if (particleName == "opticalphoton") 
     {
-    //opticalphoton
-    // Construct processes for opticalphoton
-    //  pmanager->AddDiscreteProcess(new G4OpBoundaryProcess());
- 
+      // Construct processes for opticalphoton
+      //
+      pmanager->AddDiscreteProcess(new G4OpBoundaryProcess());
     } 
   }
 }
@@ -132,5 +131,3 @@ void Tst10PhysicsList::SetCuts()
   // retrieve verbose level
   SetVerboseLevel(temp);
 }
-
-

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst10EventActionMessenger.cc,v 1.1 2004-01-25 14:06:12 grichine Exp $
+// $Id: Tst10EventActionMessenger.cc,v 1.2 2004-01-26 16:17:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,14 +40,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst10EventActionMessenger::Tst10EventActionMessenger(Tst10EventAction* EvAct)
-:
-eventAction(EvAct)
+  : eventAction(EvAct)
 { 
   
   PrintCmd = new G4UIcmdWithAnInteger("/event/printModulo",this);
   PrintCmd->SetGuidance("Print events modulo n");
   PrintCmd->SetParameterName("EventNb",false);
   PrintCmd->SetRange("EventNb>0");
+  PrintCmd->SetDefaultValue(10);
   PrintCmd->AvailableForStates(G4State_Idle);     
 }
 

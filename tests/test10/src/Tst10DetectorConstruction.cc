@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10DetectorConstruction.cc,v 1.8 2004-01-25 14:05:33 grichine Exp $
+// $Id: Tst10DetectorConstruction.cc,v 1.9 2004-01-26 16:17:24 gcosmo Exp $
 // ------------------------------------------------------------
 //  GEANT 4 class header file 
 //
@@ -45,6 +45,8 @@
 #include "G4Para.hh"
 #include "G4Torus.hh"
 #include "G4Trd.hh"
+#include "G4Polyhedra.hh"
+#include "G4Polycone.hh"
 #include "G4LogicalBorderSurface.hh"
 #include "G4OpticalSurface.hh"
 #include "G4LogicalVolume.hh"
@@ -54,6 +56,9 @@
 #include "G4VVisManager.hh"
 #include "G4Colour.hh"
 #include "G4TransportationManager.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 #include "G4GeometryManager.hh"
 #include "G4StateManager.hh"
 #include "G4UImanager.hh"
@@ -61,13 +66,31 @@
 #include "G4ios.hh"
 
 Tst10DetectorConstruction::Tst10DetectorConstruction()
-  : aVolume(0), PhysicalVolume(0), Water(0), Water1(0), aSurface(0)
+  : aVolume(0), PhysicalVolume(0), Water(0),
+    Water1(0), aSurface(0), fHallSize(1*m)
 {
   detectorMessenger = new Tst10DetectorMessenger (this);
 }
 
 Tst10DetectorConstruction::~Tst10DetectorConstruction()
 {
+}
+
+G4bool Tst10DetectorConstruction::CleanGeometry()
+{
+  if (PhysicalVolume)
+  {
+    G4GeometryManager::GetInstance()->OpenGeometry();
+    G4PhysicalVolumeStore::Clean();
+    G4LogicalVolumeStore::Clean();
+    G4SolidStore::Clean();
+
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 
 void Tst10DetectorConstruction::SwitchDetector()
@@ -81,15 +104,8 @@ Tst10DetectorConstruction::SelectDetector( const G4String& val )
   //------------------- A Volume ----------------------
 
   if (val == "Sphere")
-    //   aVolume = new G4Sphere ( "aSphere", 8.0*cm, 10.0*cm, 
-    //                       0.0*deg, 360.0*deg,0.0*deg, 130.0*deg);
-
-    aVolume = new G4Sphere("aSphere", 2400*mm, 2404*mm,
- -7.349220986995449*deg,
- 14.6984419739909*deg,
- 80.16372565937344*deg,
- 19.67254868125311*deg);
-
+    aVolume = new G4Sphere ( "aSphere", 8.0*cm, 10.0*cm, 
+                             0.0*deg, 360.0*deg,0.0*deg, 130.0*deg);
   else if (val == "Orb")
    aVolume = new G4Orb ( "aOrb", 10.0*cm );
   else if (val == "Box")          
@@ -97,13 +113,8 @@ Tst10DetectorConstruction::SelectDetector( const G4String& val )
   else if (val == "Cone")        
     aVolume = new G4Cons ( "aCone", 2*cm, 6*cm, 8*cm, 14*cm,
                            10*cm, 10*deg, 300*deg ); 
-  //  10*cm, 10*deg, 300*deg ); 
-			   //  0., pi); 
   else if (val == "Tube")
-    //  aVolume = new G4Tubs ( "aTube", 5*cm, 10*cm, 7*cm, 70*deg, 100*deg);
-    //    aVolume = new G4Tubs ( "aTube", 5*cm, 10*cm, 7*cm, 10*deg, 300*deg);
-    aVolume = new G4Tubs ( "aTube", 0.*mm, 1300*mm, 2700*mm,
-		                    0.*deg, 360*deg );
+    aVolume = new G4Tubs ( "aTube", 5*cm, 10*cm, 7*cm, 70*deg, 100*deg);
   else if (val == "Hype")
     aVolume = new G4Hype ("aHype", 10*cm, 20*cm, 0*deg, 360*deg, 10*cm );
   else if (val == "Torus")
@@ -112,15 +123,27 @@ Tst10DetectorConstruction::SelectDetector( const G4String& val )
     aVolume = new G4Para ("aPara", 8*cm, 10*cm, 12*cm, 30*deg, 45*deg, 60*deg);
   else if (val == "Trd")
     aVolume = new G4Trd ("aTrd", 8*cm, 10*cm, 7*cm, 9*cm, 10*cm);
+  else if (val == "Polyhedra")
+  {
+    G4double zPlane[2] = {-10.*cm, 10.*cm };
+    G4double rInner[2] = { 0.*cm,  0.*cm };
+    G4double rOuter[2] = { 10.*cm, 10.*cm };
+    aVolume = new G4Polyhedra("aPhedra",0*deg,360*deg,6,2,zPlane,rInner,rOuter);
+  }
+  else if (val == "Polycone")
+  {
+    G4double zPlane[2] = {-10.*cm, 10.*cm };
+    G4double rInner[2] = { 2.*cm,  6.*cm };
+    G4double rOuter[2] = { 10.*cm, 12.*cm };
+    aVolume = new G4Polycone("aPcone",0*deg,360*deg,2,zPlane,rInner,rOuter);
+  }
   else
   {
     G4Exception("Tst10DetectorConstruction::SelectDetector() - Invalid shape!");
   }
 
-  fHallSize = 2.8*m;
-
   G4Box * Hall
-          = new G4Box("Hall", fHallSize,fHallSize,fHallSize );
+          = new G4Box("Hall", fHallSize, fHallSize, fHallSize );
   G4LogicalVolume * Hall_log
           = new G4LogicalVolume (Hall, Water, "Hall_L", 0,0,0);
   PhysicalVolume
@@ -130,10 +153,6 @@ Tst10DetectorConstruction::SelectDetector( const G4String& val )
   G4LogicalVolume * aVolume_log 
     = new G4LogicalVolume(aVolume, Water1, "aVolume_L", 0,0,0);
 
-  G4VPhysicalVolume * aVolume_phys1
-    = new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 0*cm),val, 
-                        aVolume_log, PhysicalVolume, false, 0);
-  /*
   G4VPhysicalVolume * aVolume_phys1
     = new G4PVPlacement(0,G4ThreeVector(50*cm, 0*cm, 0*cm),val, 
                         aVolume_log, PhysicalVolume, false, 0);
@@ -152,23 +171,14 @@ Tst10DetectorConstruction::SelectDetector( const G4String& val )
   G4VPhysicalVolume * aVolume_phys6
     = new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, -50*cm),val, 
                     aVolume_log, PhysicalVolume, false, 0);
-  */
 
   // ------------ Surfaces definition ------------------
 
-//  G4LogicalBorderSurface* BorderSurfaces[12];   
-  G4LogicalBorderSurface* BorderSurfaces[2];   
-  
-BorderSurfaces[0] = new G4LogicalBorderSurface("VolumeSurface",
+  G4LogicalBorderSurface* BorderSurfaces[12];   
+  BorderSurfaces[0] = new G4LogicalBorderSurface("VolumeSurface",
                                PhysicalVolume,
                                aVolume_phys1,
                                aSurface);
-
-  BorderSurfaces[6] = new G4LogicalBorderSurface("VolumeSurface",
-                               aVolume_phys1,
-                               PhysicalVolume,
-                               aSurface);
-/*
   BorderSurfaces[1] = new G4LogicalBorderSurface("VolumeSurface",
                                PhysicalVolume,
                                aVolume_phys2,
@@ -213,8 +223,8 @@ BorderSurfaces[0] = new G4LogicalBorderSurface("VolumeSurface",
                                aVolume_phys6,
                                PhysicalVolume,
                                aSurface);
-*/
-  G4cout << "You select " << val << " detector" << G4endl;
+
+  G4cout << "\n You selected a " << val << " detector" << G4endl;
 
   return PhysicalVolume;
 }
@@ -275,5 +285,3 @@ G4VPhysicalVolume* Tst10DetectorConstruction::Construct()
   
   return SelectDetector ("Sphere");
 }
-
-

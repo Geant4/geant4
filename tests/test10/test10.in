@@ -1,10 +1,50 @@
 #
-# Macro file of "test10.cc"
+# Macro file of "test10"
 # for Optical photons geometry test
 #
 /run/initialize
-/particle/list
-#/tracking/verbose 1
-
+# /particle/list
+#
+# Sphere
+/run/beamOn 10
+#
+# Orb
+/mydet/SelectDetector Orb
+/run/beamOn 10
+#
+# Cone
 /mydet/SelectDetector Cone
-/run/beamOn 1
+/run/beamOn 10
+#
+# Box
+/mydet/SelectDetector Box
+/run/beamOn 10
+#
+# Tube
+/mydet/SelectDetector Tube
+/run/beamOn 10
+#
+# Hype
+/mydet/SelectDetector Hype
+/run/beamOn 10
+#
+# Para
+/mydet/SelectDetector Para
+/run/beamOn 10
+#
+# Trd
+/mydet/SelectDetector Trd
+/run/beamOn 10
+#
+# Torus
+/mydet/SelectDetector Torus
+/run/beamOn 10
+#
+# Polyhedra
+/mydet/SelectDetector Polyhedra
+/run/beamOn 10
+#
+# Polycone
+/mydet/SelectDetector Polycone
+/run/beamOn 10
+

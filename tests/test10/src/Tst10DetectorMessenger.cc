@@ -43,7 +43,7 @@ Tst10DetectorMessenger::Tst10DetectorMessenger(Tst10DetectorConstruction * myDC)
   selDetCmd->SetGuidance("  Choice : Detector type ");
   selDetCmd->SetParameterName("choice",true);
   selDetCmd->SetDefaultValue("Sphere");
-  selDetCmd->SetCandidates("Sphere Orb Box Cone Tube Hype Torus Para Trd");
+  selDetCmd->SetCandidates("Sphere Orb Box Cone Tube Hype Torus Para Trd Polyhedra Polycone");
   selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   myDetector->SelectDetector(defParam="Sphere");
@@ -54,17 +54,9 @@ void Tst10DetectorMessenger::SetNewValue(G4UIcommand * command,
 {
   if( command == selDetCmd )
   {
+    myDetector->CleanGeometry();
     myDetector->SelectDetector(newValues);
     myDetector->SwitchDetector();
   }
   return;
 }
-
-
-
-
-
-
-
-
-
