@@ -68,9 +68,9 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv,const G4SmartVoxelHeader
  if (fLogicalVolumes.contains(lv)){
    G4VSolid* solid=lv->GetSolid();
    //G4SmartVoxelHeader* header=lv->GetVoxelHeader();
-   G4Translate3D t_centeroflimits((limit.GetMaxXExtent()+limit.GetMinXExtent())*0.5,
+   /*G4Translate3D t_centeroflimits((limit.GetMaxXExtent()+limit.GetMinXExtent())*0.5,
    				  (limit.GetMaxYExtent()+limit.GetMinYExtent())*0.5,
-   				  (limit.GetMaxZExtent()+limit.GetMinZExtent())*0.5);
+   				  (limit.GetMaxZExtent()+limit.GetMinZExtent())*0.5);*/
    
    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
    
@@ -104,6 +104,8 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv,const G4SmartVoxelHeader
    //Preparing the colored bounding polyhedronBox for the pVolume
    G4PolyhedronBox bounding_polyhedronBox(dx*0.5,dy*0.5,dz*0.5);
    bounding_polyhedronBox.SetVisAttributes(G4VisAttributes(fboundingboxcolour));
+   G4Vector3D t_centerofBoundingBox((xmin+xmax)*0.5,(ymin+ymax)*0.5,(zmin+zmax)*0.5);
+   G4Vector3D t_FirstCenterofVoxelPlane;
    G4Colour voxelcolour;
 
    G4Vector3D unit_translation_vector;
@@ -114,15 +116,18 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv,const G4SmartVoxelHeader
 		case kXAxis:
 		    dx=voxel_width;
 		    unit_translation_vector=transf3D*G4Vector3D(1,0,0);
+		    t_FirstCenterofVoxelPlane=G4Vector3D(xmin,(ymin+ymax)*0.5,(zmin+zmax)*0.5);
 		    voxelcolour=fvoxelcolours[0];
 		    break;
 		case kYAxis:
 		    dy=voxel_width;
+		    t_FirstCenterofVoxelPlane=G4Vector3D((xmin+xmax)*0.5,ymin,(zmin+zmax)*0.5);
 		    unit_translation_vector=transf3D*G4Vector3D(0,1,0);
 		    voxelcolour=fvoxelcolours[1];
 		    break;
 		case kZAxis:
 		    dz=voxel_width;
+		    t_FirstCenterofVoxelPlane=G4Vector3D((xmin+xmax)*0.5,(ymin+ymax)*0.5,zmin);
 		    unit_translation_vector=transf3D*G4Vector3D(0,0,1);
 		    voxelcolour=fvoxelcolours[2];
 		    break;
@@ -146,7 +151,7 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv,const G4SmartVoxelHeader
 	G4cout << "	Colour of the slices:" << voxelcolour <<endl;	
   #endif
 		//Drawing the green bounding polyhedronBox for the pVolume
-		pVVisManager->Draw(bounding_polyhedronBox,t_centeroflimits*transf3D);  //modified
+		pVVisManager->Draw(bounding_polyhedronBox,G4Transform3D(transf3D.getRotation(),t_centerofBoundingBox));  //modified
 		
 		G4SmartVoxelProxy* slice=header->GetSlice(0);
 		G4int slice_no=0,no_slices=header->GetNoSlices();
@@ -155,18 +160,22 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv,const G4SmartVoxelHeader
 		current_translation_vector=unit_translation_vector;
 		
 		while (slice_no<no_slices){
-		  if (slice->IsHeader()){
+		  #ifdef G4DrawVoxelsDebug
+			G4cout << "		slice_no:" << slice_no;
+			G4cout << "				header/node:" << slice->IsHeader() <<endl;					
+  		  #endif
+  		if (slice->IsHeader()){
 		     G4VoxelLimits newlimit(limit);
 		     newlimit.AddLimit(header->GetAxis(),beginning+step*slice_no,
-		     	beginning+step*slice->GetHeader()->GetMaxEquivalentSliceNo());
+		     	beginning+step*(slice->GetHeader()->GetMaxEquivalentSliceNo()+1));
 		     DrawVoxels(lv,slice->GetHeader(),newlimit);
 		     }
-		  current_translation_vector*=(beginning+step*slice_no);
-		  pVVisManager->Draw(voxel_plane,G4Translate3D(current_translation_vector)*t_centeroflimits*transf3D);
+		  current_translation_vector*=step*slice_no;
+		  pVVisManager->Draw(voxel_plane,G4Transform3D(transf3D.getRotation(),current_translation_vector+t_FirstCenterofVoxelPlane));
 		  current_translation_vector=unit_translation_vector;
-		  slice=header->GetSlice(slice_no);
 		  slice_no=(slice->IsHeader()?slice->GetHeader()->GetMaxEquivalentSliceNo()+1
 		  			     :slice->GetNode()->GetMaxEquivalentSliceNo()+1);
+		  slice=header->GetSlice(slice_no);	
 		}
 	}
    else G4cout << "@@@@ G4DrawVoxels::DrawVoxels(const G4LogicalVolume*,...) pVVisManager is null! @@@@"; 
@@ -179,10 +188,10 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv,const G4SmartVoxelHeader
 G4DrawVoxels::G4DrawVoxels(){
 	fgInstance=0;
 	fLogicalVolumes(0);
-	fvoxelcolours[0]=G4Colour(0.,0.,0.);
+	fvoxelcolours[0]=G4Colour(1.,0.,0.);
 	fvoxelcolours[1]=G4Colour(0.,1.,0.);
-	fvoxelcolours[2]=G4Colour(0.,0.,0.);
-	fboundingboxcolour=G4Colour(0.3,0.5,0.);
+	fvoxelcolours[2]=G4Colour(0.,0.,1.);
+	fboundingboxcolour=G4Colour(.3,0.,.3);
 }
 
 
