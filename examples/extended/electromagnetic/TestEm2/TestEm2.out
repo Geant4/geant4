@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (23-Feb-2001)
+                                (15-Dec-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -143,7 +143,7 @@ Cut in energy
            Tungsten         105 keV        2.31 MeV
                Lead         101 keV        1.38 MeV
 ===================================================
-# $Id: TestEm2.out,v 1.12 2001-02-22 20:38:15 stesting Exp $
+# $Id: TestEm2.out,v 1.13 2001-03-30 09:03:08 stesting Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -293,20 +293,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=97.82s Real=103.25s Sys=5.39s
+  User=118.39s Real=124.16s Sys=5.71s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.11 radl:   13.39%       5.40%             0-> 1.11 radl:   13.39%     5.40% 
-    1.11-> 2.22 radl:   25.24%      13.09%             0-> 2.22 radl:   38.64%    15.64% 
-    2.22-> 3.33 radl:   21.62%       9.97%             0-> 3.33 radl:   60.25%    19.39% 
-    3.33-> 4.44 radl:   13.43%       8.80%             0-> 4.44 radl:   73.68%    17.08% 
-    4.44-> 5.55 radl:    8.67%       7.15%             0-> 5.55 radl:   82.35%    13.98% 
-    5.55-> 6.66 radl:    5.16%       5.12%             0-> 6.66 radl:   87.52%    11.96% 
-    6.66-> 7.77 radl:    3.45%       4.93%             0-> 7.77 radl:   90.96%     8.94% 
-    7.77-> 8.88 radl:    1.87%       4.40%             0-> 8.88 radl:   92.84%     5.88% 
-    8.88-> 9.99 radl:    1.29%       3.03%             0-> 9.99 radl:   94.13%     3.64% 
+    0.00-> 1.11 radl:   13.95%       5.86%             0-> 1.11 radl:   13.95%     5.86% 
+    1.11-> 2.22 radl:   24.45%      11.26%             0-> 2.22 radl:   38.40%    14.27% 
+    2.22-> 3.33 radl:   21.91%       9.16%             0-> 3.33 radl:   60.31%    16.74% 
+    3.33-> 4.44 radl:   13.94%       8.39%             0-> 4.44 radl:   74.25%    15.37% 
+    4.44-> 5.55 radl:    9.45%       7.28%             0-> 5.55 radl:   83.71%    11.88% 
+    5.55-> 6.66 radl:    5.33%       6.03%             0-> 6.66 radl:   89.04%     8.36% 
+    6.66-> 7.77 radl:    3.38%       4.46%             0-> 7.77 radl:   92.41%     5.90% 
+    7.77-> 8.88 radl:    1.43%       2.94%             0-> 8.88 radl:   93.84%     3.90% 
+    8.88-> 9.99 radl:    0.98%       2.37%             0-> 9.99 radl:   94.82%     3.19% 
 
 
 
@@ -314,21 +314,21 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.11 radl:   66.12%       9.34%             0-> 0.11 radl:   66.12%     9.34% 
-    0.11-> 0.22 radl:   16.85%       6.91%             0-> 0.22 radl:   82.97%     6.33% 
-    0.22-> 0.33 radl:    5.19%       2.68%             0-> 0.33 radl:   88.16%     4.89% 
-    0.33-> 0.44 radl:    3.23%       2.47%             0-> 0.44 radl:   91.38%     4.05% 
-    0.44-> 0.56 radl:    1.78%       1.38%             0-> 0.56 radl:   93.16%     3.79% 
-    0.56-> 0.67 radl:    0.97%       0.96%             0-> 0.67 radl:   94.13%     3.64% 
+    0.00-> 0.11 radl:   65.09%       8.82%             0-> 0.11 radl:   65.09%     8.82% 
+    0.11-> 0.22 radl:   17.01%       6.52%             0-> 0.22 radl:   82.10%     7.04% 
+    0.22-> 0.33 radl:    6.93%       4.24%             0-> 0.33 radl:   89.02%     5.40% 
+    0.33-> 0.44 radl:    3.06%       3.03%             0-> 0.44 radl:   92.08%     3.54% 
+    0.44-> 0.56 radl:    1.71%       1.25%             0-> 0.56 radl:   93.79%     3.27% 
+    0.56-> 0.67 radl:    1.03%       0.93%             0-> 0.67 radl:   94.82%     3.19% 
 
                               SUMMARY
-                         energy deposit :   94.13 % E0 +-    3.64 % E0
-                         charged traklen:   13.45 radl +-    0.53 radl
-                         neutral traklen:  195.47 radl +-   17.34 radl
+                         energy deposit :   94.82 % E0 +-    3.19 % E0
+                         charged traklen:   13.56 radl +-    0.46 radl
+                         neutral traklen:  200.51 radl +-   16.58 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 674419059, 371489274
+ Current couple of seeds = 576966569, 1968644705
 ----------------------------------------
 
 

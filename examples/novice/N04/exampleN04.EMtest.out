@@ -1,8 +1,9 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (23-Feb-2001)
+                                (15-Dec-2000)
              Copyright : Geant4 Collaboration
 **********************************************
+MuonMinusCaptureAtRest is created 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
         Sandia crossSection below 50 KeV
@@ -91,21 +92,21 @@ msc:   Tables of transport mean free paths.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     35 hits are stored in ExN04TrackerHitsCollection.
-     4 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.29811 (GeV)
+     36 hits are stored in ExN04TrackerHitsCollection.
+     5 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.26878 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     18 hits are stored in ExN04TrackerHitsCollection.
-     17 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.9242 (GeV)
+     5 hits are stored in ExN04TrackerHitsCollection.
+     22 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 23.425 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 1
-     11 hits are stored in ExN04TrackerHitsCollection.
-     11 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.8511 (GeV)
+     12 hits are stored in ExN04TrackerHitsCollection.
+     21 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 10.138 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.

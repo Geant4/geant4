@@ -1,9 +1,10 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (23-Feb-2001)
+                                (15-Dec-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
+MuonMinusCaptureAtRest is created 
 #
 # Macro file test02.in
 # for tests of basic e.m. processes

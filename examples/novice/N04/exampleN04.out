@@ -1,8 +1,9 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (23-Feb-2001)
+                                (15-Dec-2000)
              Copyright : Geant4 Collaboration
 **********************************************
+MuonMinusCaptureAtRest is created 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
         Sandia crossSection below 50 KeV
@@ -92,9 +93,9 @@ msc:   Tables of transport mean free paths.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     146 hits are stored in ExN04TrackerHitsCollection.
-     56 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.69942 (GeV)
+     117 hits are stored in ExN04TrackerHitsCollection.
+     58 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.77854 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 0 hits found in the muon chamber.
 ++++++++ event aborted
@@ -107,8 +108,8 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 2
-     98 hits are stored in ExN04TrackerHitsCollection.
+     99 hits are stored in ExN04TrackerHitsCollection.
      13 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.34315 (GeV)
+     Total energy deposition in calorimeter : 0.34399 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 #
