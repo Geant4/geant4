@@ -456,8 +456,7 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
 # Core :
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /geant4/geant4-03-02-ref-07
-#  setenv G4WORKDIR $G4INSTALL
-  setenv G4WORKDIR /archos/geant4/geant4-03-02-ref-07
+  setenv G4WORKDIR $G4INSTALL
   setenv G4STTDIR $G4WORKDIR/stt
   setenv G4LIB $G4WORKDIR/lib
   setenv G4SYSTEM Linux-g++
