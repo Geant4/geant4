@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Colour.hh,v 1.1 1999-01-07 16:09:10 gunter Exp $
+// $Id: G4Colour.hh,v 1.2 1999-05-25 09:10:07 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,10 +19,10 @@ class ostream;
 
 class G4Colour {
   friend ostream& operator << (ostream& os, const G4Colour& c);
-  friend G4bool   operator != (const G4Colour& c1, const G4Colour& c2);
 public:
   G4Colour (G4double r = 1., G4double g = 1., G4double b = 1.,
 	    G4double a = 1.);
+  G4bool operator != (const G4Colour& c) const;
   G4double GetRed   () const;
   G4double GetGreen () const;
   G4double GetBlue  () const;

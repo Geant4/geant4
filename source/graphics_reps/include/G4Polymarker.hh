@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polymarker.hh,v 1.2 1999-05-19 08:33:42 stesting Exp $
+// $Id: G4Polymarker.hh,v 1.3 1999-05-25 09:10:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,9 +22,10 @@ public:
   friend ostream& operator << (ostream& os, const G4Polymarker& marker);
   enum MarkerType {line, dots, circles, squares};
   G4Polymarker ();
-  virtual G4Visible&  operator = (const G4Visible& right);
-  virtual G4VVisPrim& operator = (const G4VVisPrim& right);
-  virtual G4VMarker&  operator = (const G4VMarker& right);
+  virtual G4Visible&    operator = (const G4Visible& right);
+  virtual G4VVisPrim&   operator = (const G4VVisPrim& right);
+  virtual G4VMarker&    operator = (const G4VMarker& right);
+  virtual G4Polymarker& operator = (const G4Polymarker& right);
   MarkerType GetMarkerType () const;
   void SetMarkerType (MarkerType type);
 private:

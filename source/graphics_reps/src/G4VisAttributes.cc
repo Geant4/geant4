@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisAttributes.cc,v 1.3 1999-05-19 08:33:54 stesting Exp $
+// $Id: G4VisAttributes.cc,v 1.4 1999-05-25 09:10:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,27 +90,25 @@ ostream& operator << (ostream& os, const G4VisAttributes& a) {
 
 }
 
-G4bool operator != (const G4VisAttributes& a1,
-		    const G4VisAttributes& a2) {
+G4bool G4VisAttributes::operator != (const G4VisAttributes& a) const {
 
   if (
-      (a1.fVisible            != a2.fVisible)            ||
-      (a1.fDaughtersInvisible != a2.fDaughtersInvisible) ||
-      (a1.fColour             != a2.fColour)             ||
-      (a1.fLineStyle          != a2.fLineStyle)          ||
-      (a1.fLineWidth          != a2.fLineWidth)          ||
-      (a1.fForceDrawingStyle  != a2.fForceDrawingStyle)
+      (fVisible            != a.fVisible)            ||
+      (fDaughtersInvisible != a.fDaughtersInvisible) ||
+      (fColour             != a.fColour)             ||
+      (fLineStyle          != a.fLineStyle)          ||
+      (fLineWidth          != a.fLineWidth)          ||
+      (fForceDrawingStyle  != a.fForceDrawingStyle)
       )
     return true;
 
-  if (a1.fForceDrawingStyle) {
-    if (a1.fForcedStyle != a2.fForcedStyle) return true;
+  if (fForceDrawingStyle) {
+    if (fForcedStyle != a.fForcedStyle) return true;
   }
 
   return false;
 }
 
-G4bool operator == (const G4VisAttributes& a1,
-		    const G4VisAttributes& a2) {
-  return !(a1 != a2);
+G4bool G4VisAttributes::operator == (const G4VisAttributes& a) const {
+  return !(G4VisAttributes::operator != (a));
 }

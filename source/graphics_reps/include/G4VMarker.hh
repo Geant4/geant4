@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMarker.hh,v 1.3 1999-05-19 08:33:43 stesting Exp $
+// $Id: G4VMarker.hh,v 1.4 1999-05-25 09:10:13 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,8 +68,7 @@
 class G4VMarker: public G4VVisPrim {
 
   friend ostream& operator << (ostream& os, const G4VMarker& marker);
-  friend G4bool   operator != (const G4VMarker& m1,
-			       const G4VMarker& m2);
+
 public:
 
   enum FillStyle {noFill, hashed, filled};
@@ -89,6 +88,10 @@ public:
   virtual G4Visible&  operator = (const G4Visible& right);
   virtual G4VVisPrim& operator = (const G4VVisPrim& right);
   virtual G4VMarker&  operator = (const G4VMarker& right);
+
+  //////////////////////////////////////////////////////
+  // Logical...
+  G4bool operator != (const G4VMarker&) const;
 
   /////////////////////////////////////////////////////
   // Get functions...

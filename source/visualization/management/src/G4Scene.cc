@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scene.cc,v 1.2 1999-02-07 17:30:25 johna Exp $
+// $Id: G4Scene.cc,v 1.3 1999-05-25 09:14:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,17 +100,16 @@ ostream& operator << (ostream& os, const G4Scene& d) {
   return os;
 }
 
-G4bool operator != (const G4Scene& d1,
-		    const G4Scene& d2) {
+G4bool G4Scene::operator != (const G4Scene& s) const {
   if (
-      (d1.fRunDurationModelList.entries () !=
-       d2.fRunDurationModelList.entries ())                 ||
-      (d1.fExtent               != d2.fExtent)              ||
-      !(d1.fStandardTargetPoint == d2.fStandardTargetPoint)
+      (fRunDurationModelList.entries () !=
+       s.fRunDurationModelList.entries ())              ||
+      (fExtent               != s.fExtent)              ||
+      !(fStandardTargetPoint == s.fStandardTargetPoint)
       ) return true;
 
-  for (int i = 0; i < d1.fRunDurationModelList.entries (); i++) {
-    if (d1.fRunDurationModelList[i] != d2.fRunDurationModelList[i])
+  for (int i = 0; i < fRunDurationModelList.entries (); i++) {
+    if (fRunDurationModelList[i] != s.fRunDurationModelList[i])
       return true;
   }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.cc,v 1.3 1999-01-10 13:25:46 allison Exp $
+// $Id: G4ViewParameters.cc,v 1.4 1999-05-25 09:14:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -376,62 +376,61 @@ ostream& operator << (ostream& os, const G4ViewParameters& v) {
   return os;
 }
 
-G4bool operator != (const G4ViewParameters& v1,
-		    const G4ViewParameters& v2) {
+G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
 
   // Put performance-sensitive parameters first.
   if (
       // This first to optimise spin, etc.
-      (v1.fViewpointDirection   != v2.fViewpointDirection)   ||
+      (fViewpointDirection   != v.fViewpointDirection)   ||
 
       // No particular order from here on.
-      (v1.fDrawingStyle         != v2.fDrawingStyle)         ||
-      (v1.fRepStyle             != v2.fRepStyle)             ||
-      (v1.fCulling              != v2.fCulling)              ||
-      (v1.fCullInvisible        != v2.fCullInvisible)        ||
-      (v1.fDensityCulling       != v2.fDensityCulling)       ||
-      (v1.fCullCovered          != v2.fCullCovered)          ||
-      (v1.fSection              != v2.fSection)              ||
-      (v1.fCutaway              != v2.fCutaway)              || 
-      (v1.fExplode              != v2.fExplode)              ||
-      (v1.fNoOfSides            != v2.fNoOfSides)            ||
-      (v1.fUpVector             != v2.fUpVector)             ||
-      (v1.fFieldHalfAngle       != v2.fFieldHalfAngle)       ||
-      (v1.fZoomFactor           != v2.fZoomFactor)           ||
-      (v1.fCurrentTargetPoint   != v2.fCurrentTargetPoint)   ||
-      (v1.fDolly                != v2.fDolly)                ||
-      (v1.fRelativeLightpointDirection != v2.fRelativeLightpointDirection)  ||
-      (v1.fLightsMoveWithCamera != v2.fLightsMoveWithCamera) ||
-      (v1.fViewGeom             != v2.fViewGeom)             ||
-      (v1.fViewHits             != v2.fViewHits)             ||
-      (v1.fViewDigis            != v2.fViewDigis)            ||
-      (v1.fDefaultVisAttributes != v2.fDefaultVisAttributes) ||
-      (v1.fDefaultTextVisAttributes != v2.fDefaultTextVisAttributes) ||
-      (v1.fDefaultMarker        != v2.fDefaultMarker)        ||
-      (v1.fGlobalMarkerScale    != v2.fGlobalMarkerScale)    ||
-      (v1.fMarkerNotHidden      != v2.fMarkerNotHidden)      ||
-      (v1.fWindowSizeHintX      != v2.fWindowSizeHintX)      ||
-      (v1.fWindowSizeHintY      != v2.fWindowSizeHintY))
+      (fDrawingStyle         != v.fDrawingStyle)         ||
+      (fRepStyle             != v.fRepStyle)             ||
+      (fCulling              != v.fCulling)              ||
+      (fCullInvisible        != v.fCullInvisible)        ||
+      (fDensityCulling       != v.fDensityCulling)       ||
+      (fCullCovered          != v.fCullCovered)          ||
+      (fSection              != v.fSection)              ||
+      (fCutaway              != v.fCutaway)              || 
+      (fExplode              != v.fExplode)              ||
+      (fNoOfSides            != v.fNoOfSides)            ||
+      (fUpVector             != v.fUpVector)             ||
+      (fFieldHalfAngle       != v.fFieldHalfAngle)       ||
+      (fZoomFactor           != v.fZoomFactor)           ||
+      (fCurrentTargetPoint   != v.fCurrentTargetPoint)   ||
+      (fDolly                != v.fDolly)                ||
+      (fRelativeLightpointDirection != v.fRelativeLightpointDirection)  ||
+      (fLightsMoveWithCamera != v.fLightsMoveWithCamera) ||
+      (fViewGeom             != v.fViewGeom)             ||
+      (fViewHits             != v.fViewHits)             ||
+      (fViewDigis            != v.fViewDigis)            ||
+      (fDefaultVisAttributes != v.fDefaultVisAttributes) ||
+      (fDefaultTextVisAttributes != v.fDefaultTextVisAttributes) ||
+      (fDefaultMarker        != v.fDefaultMarker)        ||
+      (fGlobalMarkerScale    != v.fGlobalMarkerScale)    ||
+      (fMarkerNotHidden      != v.fMarkerNotHidden)      ||
+      (fWindowSizeHintX      != v.fWindowSizeHintX)      ||
+      (fWindowSizeHintY      != v.fWindowSizeHintY))
     return true;
 
-  if (v1.fDensityCulling &&
-      (v1.fVisibleDensity != v2.fVisibleDensity)) return true;
+  if (fDensityCulling &&
+      (fVisibleDensity != v.fVisibleDensity)) return true;
 
-  if (v1.fSection &&
-      (!(v1.fSectionPlane == v2.fSectionPlane))) return true;
+  if (fSection &&
+      (!(fSectionPlane == v.fSectionPlane))) return true;
 
-  if (v1.fCutaway) {
-    if (v1.fCutawayPlanes.entries () != v2.fCutawayPlanes.entries ())
+  if (fCutaway) {
+    if (fCutawayPlanes.entries () != v.fCutawayPlanes.entries ())
       return true;
     else {
-      for (int i = 0; i < v1.fCutawayPlanes.entries (); i++) {
-	if (!(v1.fCutawayPlanes (i) == v2.fCutawayPlanes (i))) return true;
+      for (int i = 0; i < fCutawayPlanes.entries (); i++) {
+	if (!(fCutawayPlanes (i) == v.fCutawayPlanes (i))) return true;
       }
     }
   }
 
-  if (v1.fExplode &&
-      (v1.fExplodeFactor != v2.fExplodeFactor)) return true;
+  if (fExplode &&
+      (fExplodeFactor != v.fExplodeFactor)) return true;
 
   return false;
 }

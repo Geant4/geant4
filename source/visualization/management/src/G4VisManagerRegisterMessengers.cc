@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.5 1999-02-07 17:31:29 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.6 1999-05-25 09:14:21 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,20 +48,6 @@ Introduction
 ============
 
 This note defines the concepts of scene, scene handler and viewers.
-For reasons which are lost in history they correspond to confusingly
-differently named objects in Geant4.  What we would like to call a
-scene is a G4Scene object and a G4VSceneHandler object is a scene
-handler.  Similarly a viewer is represented by a G4VViewer object.
-However, this is historical, and changing C++ names is a pain.  I dont
-plan to change names right now!!
-
-The situation ca be summarised as follows:
-
-   Working Concept (Terms Used Below)     Geant4 C++ Object
-   ----------------------------------     -----------------
-       scene                              G4Scene
-       scene handler                      Sub-class of G4VSceneHandler
-       viewer                             Sub-class of G4VViewer
 
 Scenes
 ======

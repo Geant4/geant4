@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyline.cc,v 1.2 1999-05-19 08:33:50 stesting Exp $
+// $Id: G4Polyline.cc,v 1.3 1999-05-25 09:10:21 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,6 +23,12 @@ G4Visible & G4Polyline::operator = (const G4Visible &right) {
 
 G4VVisPrim & G4Polyline::operator = (const G4VVisPrim &right) {
   return G4VVisPrim::operator = (right);
+}
+
+G4Polyline & G4Polyline::operator = (const G4Polyline &right) {
+  if (&right == this) return *this;
+  G4VVisPrim::operator = (right);
+  return *this;
 }
 
 ostream& operator << (ostream& os, const G4Polyline& line) {

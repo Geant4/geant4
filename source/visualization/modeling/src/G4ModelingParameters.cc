@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ModelingParameters.cc,v 1.2 1999-01-10 13:25:50 allison Exp $
+// $Id: G4ModelingParameters.cc,v 1.3 1999-05-25 09:14:26 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -181,24 +181,24 @@ ostream& operator << (ostream& os, const G4ModelingParameters& mp) {
   return os;
 }
 
-G4bool operator != (const G4ModelingParameters& mp1,
-		    const G4ModelingParameters& mp2) {
+G4bool G4ModelingParameters::operator !=
+(const G4ModelingParameters& mp) const {
 
   if (
-      (*mp1.fpDefaultVisAttributes != *mp2.fpDefaultVisAttributes) ||
-      (mp1.fRepStyle               != mp2.fRepStyle)               ||
-      (mp1.fCulling                != mp2.fCulling)                ||
-      (mp1.fCullInvisible          != mp2.fCullInvisible)          ||
-      (mp1.fDensityCulling         != mp2.fDensityCulling)         ||
-      (mp1.fCullCovered            != mp2.fCullCovered)            ||
-      (mp1.fNoOfSides              != mp2.fNoOfSides)              ||
-      (mp1.fViewGeom               != mp2.fViewGeom)               ||
-      (mp1.fViewHits               != mp2.fViewHits)               ||
-      (mp1.fViewDigis              != mp2.fViewDigis))
+      (*fpDefaultVisAttributes != *mp.fpDefaultVisAttributes) ||
+      (fRepStyle               != mp.fRepStyle)               ||
+      (fCulling                != mp.fCulling)                ||
+      (fCullInvisible          != mp.fCullInvisible)          ||
+      (fDensityCulling         != mp.fDensityCulling)         ||
+      (fCullCovered            != mp.fCullCovered)            ||
+      (fNoOfSides              != mp.fNoOfSides)              ||
+      (fViewGeom               != mp.fViewGeom)               ||
+      (fViewHits               != mp.fViewHits)               ||
+      (fViewDigis              != mp.fViewDigis))
     return true;
 
-  if (mp1.fDensityCulling &&
-      (mp1.fVisibleDensity != mp2.fVisibleDensity)) return true;
+  if (fDensityCulling &&
+      (fVisibleDensity != mp.fVisibleDensity)) return true;
 
   return false;
 }

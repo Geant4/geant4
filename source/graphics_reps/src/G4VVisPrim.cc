@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisPrim.cc,v 1.3 1999-05-19 08:33:52 stesting Exp $
+// $Id: G4VVisPrim.cc,v 1.4 1999-05-25 09:10:26 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,7 +23,8 @@ G4Visible& G4VVisPrim::operator = (const G4Visible& right) {
 
 G4VVisPrim& G4VVisPrim::operator = (const G4VVisPrim& right) {
   if (&right == this) return *this;
-  return G4VVisPrim::operator = (right);
+  G4Visible::operator = (right);
+  return *this;
 }
 
 G4bool G4VVisPrim::operator == (const G4Visible& right) const{

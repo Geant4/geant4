@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ModelingParameters.hh,v 1.2 1999-01-10 13:25:48 allison Exp $
+// $Id: G4ModelingParameters.hh,v 1.3 1999-05-25 09:14:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,8 +25,6 @@ class G4VisAttributes;
 class G4ModelingParameters {
 
 friend ostream& operator << (ostream& os, const G4ModelingParameters&);
-friend G4bool operator != (const G4ModelingParameters&,
-			   const G4ModelingParameters&);
 
 public:
 
@@ -71,6 +69,8 @@ public:
   ~G4ModelingParameters ();
 
   // Note: uses default assignment operator and copy constructor.
+
+  G4bool operator != (const G4ModelingParameters&) const;
 
   // Get and Is functions...
   const G4VisAttributes* GetDefaultVisAttributes () const;

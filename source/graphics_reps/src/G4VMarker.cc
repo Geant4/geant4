@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMarker.cc,v 1.3 1999-05-19 08:33:52 stesting Exp $
+// $Id: G4VMarker.cc,v 1.4 1999-05-25 09:10:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,13 +57,13 @@ ostream& operator << (ostream& os, const G4VMarker& marker) {
   return os;
 }
 
-G4bool operator != (const G4VMarker& m1, const G4VMarker& m2) {
+G4bool G4VMarker::operator != (const G4VMarker& m) const {
   if (
-      !((G4VVisPrim) m1 == (G4VVisPrim) m2)  ||
-      (m1.fWorldSize != m2.fWorldSize)       ||
-      (m1.fScreenSize != m2.fScreenSize)     ||
-      (m1.fFillStyle != m2.fFillStyle)       ||
-      !(m1.fPosition == m2.fPosition)
+      !(G4VVisPrim::operator == (m))  ||
+      (fWorldSize  != m.fWorldSize)   ||
+      (fScreenSize != m.fScreenSize)  ||
+      (fFillStyle  != m.fFillStyle)   ||
+      !(fPosition  == m.fPosition)
       )
     return true;
   return false;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisExtent.hh,v 1.1 1999-01-07 16:09:15 gunter Exp $
+// $Id: G4VisExtent.hh,v 1.2 1999-05-25 09:10:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,6 +28,7 @@ public:
                G4double zmin = 0., G4double zmax = 0.);
   G4VisExtent (const G4Point3D& centre, G4double radius);
   ~G4VisExtent ();
+  G4bool operator != (const G4VisExtent& e) const;
   G4double  GetXmin         () const;
   G4double  GetXmax         () const;
   G4double  GetYmin         () const;
@@ -44,7 +45,6 @@ public:
   void SetZmin (G4double zmin);
   void SetZmax (G4double zmax);
   friend ostream& operator << (ostream& os, const G4VisExtent& e);
-  friend G4bool operator != (const G4VisExtent& e1, const G4VisExtent& e2);
 
 private:
   G4double fXmin, fXmax, fYmin, fYmax, fZmin, fZmax;

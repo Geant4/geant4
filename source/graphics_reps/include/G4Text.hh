@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Text.hh,v 1.2 1999-05-19 08:33:43 stesting Exp $
+// $Id: G4Text.hh,v 1.3 1999-05-25 09:10:12 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,6 +27,7 @@ public:
   virtual G4Visible&  operator = (const G4Visible& from);
   virtual G4VVisPrim& operator = (const G4VVisPrim& from);
   virtual G4VMarker&  operator = (const G4VMarker& from);
+  virtual G4Text&     operator = (const G4Text& from);
 
   G4String GetText   () const;
   Layout   GetLayout () const;
@@ -42,7 +43,7 @@ public:
 private:
   G4String fText;
   Layout   fLayout;
-  G4double fXOffset, fYOffset ;
+  G4double fXOffset, fYOffset;
 };
 
 #include "G4Text.icc"
