@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FPlane.cc,v 1.13 2001-07-11 09:59:45 gunter Exp $
+// $Id: G4FPlane.cc,v 1.14 2002-01-28 16:29:42 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,7 +45,7 @@
 
 G4FPlane::G4FPlane( const G4Vector3D& direction,
 		    const G4Vector3D& axis     , 
-		    const G4Point3D&  Pt0        )
+		    const G4Point3D&  Pt0, G4int sense )
   : pplace(direction, axis, Pt0)
 {
   G4Point3D Pt1 = G4Point3D( Pt0 + direction );
@@ -57,7 +57,7 @@ G4FPlane::G4FPlane( const G4Vector3D& direction,
   G4Ray::CalcPlane3Pts( Pl, Pt0, Pt1, Pt2 );
 
   active   = 1;
-  sameSense = 1;
+  sameSense = sense;
   CalcNormal();
   distance = kInfinity;
   Type     = 1;
@@ -264,10 +264,13 @@ G4int G4FPlane::Intersect(const G4Ray& rayref)
     if( (t*dirz >= -kCarTolerance/2) && (t*dirz <= kCarTolerance/2) )
       solz = startz;
     
-    if( ( (dirx < 0 && solx < startx)||(dirx >= 0 && solx >= startx) ) &&
-	( (diry < 0 && soly < starty)||(diry >= 0 && soly >= starty) ) &&
-	( (dirz < 0 && solz < startz)||(dirz >= 0 && solz >= startz) )    )
+    G4bool xhit = (dirx < 0 && solx <= startx) || (dirx >= 0 && solx >= startx);
+    G4bool yhit = (diry < 0 && soly <= starty) || (diry >= 0 && soly >= starty);
+    G4bool zhit = (dirz < 0 && solz <= startz) || (dirz >= 0 && solz >= startz);
+    
+    if( xhit && yhit && zhit ) {
       hitpoint= G4Point3D(solx, soly, solz);
+    }
   }
    
   // closest_hit is a public Point3D in G4Surface
