@@ -23,23 +23,28 @@ public:
   
   Octree( G4int noLevels, G4double size );
   ~Octree();
-  void DeleteTree();
+ 
+public:
 
   OctreeNode* CreateNode( G4double i, G4double j, G4double k, G4int level );
   OctreeNode* operator()( G4double nodeX, G4double nodeY, 
                           G4double nodeZ, G4int level );
-    
-  OctreeNode* Root(){return mRoot;} 
-  G4double Size() {return mSize;}
-  G4int CountMemory( G4int rMiddle, G4int rTerminal );
-  
-  G4int NoLevels(){return mNoLevels;}
-  G4int Resolution(){return ( 1 << mNoLevels );}
-  
+  void DeleteTree(); 
+
 private:
 
+  void CountRecursive( OctreeNode* pNode, G4int rMiddle, G4int rTerminal );
 
-  void CountRecursive(OctreeNode* pNode, G4int rMiddle, G4int rTerminal );
+public:
+  
+  G4int CountMemory( G4int rMiddle, G4int rTerminal );
+  
+  OctreeNode* Root()   { return mRoot; } 
+  G4double Size()      { return mSize; }
+  G4int NoLevels()     { return mNoLevels; }
+  G4int Resolution()   { return ( 1 << mNoLevels ); }
+  
+private:
 
   // Root node of the tree
   MiddleNode* mRoot;
@@ -51,7 +56,6 @@ private:
   // Number of levels denotes the maximal number of
   // nodes in a single branch, starting from the root node.
   G4int mNoLevels;
-
 };
 #endif 
 

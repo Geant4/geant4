@@ -107,5 +107,5 @@ G4int Octree::CountMemory( G4int rMiddle, G4int rTerminal )
   G4int total = rMiddle*sizeof(MiddleNode) + rTerminal*sizeof(TerminalNode);
   return total;
 }
-//---------------------------------------------------------------------------
+
 
