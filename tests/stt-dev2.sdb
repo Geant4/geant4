@@ -1,4 +1,4 @@
-# $Id: stt-dev2.sdb,v 1.12 2000-04-06 14:37:39 stesting Exp $
+# $Id: stt-dev2.sdb,v 1.13 2000-04-06 15:14:47 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -9,7 +9,7 @@ geant4/data                                       geant4-01-01-ref-01
 #       geant4/documents - not currently part of reference versions
 geant4/environments                               geant4-01-01-ref-01
 geant4/examples                                   geant4-01-01-ref-01
-geant4/examples/extended/electromagnetic/TestEm6  testem6-V01-00-01
+geant4/examples/extended/electromagnetic/TestEm6  testem6-V01-00-02
 #       geant4/source - split into categories - see below.
 #       geant4/tests - checkout HEAD by hand and use this script.
 # Source categories
