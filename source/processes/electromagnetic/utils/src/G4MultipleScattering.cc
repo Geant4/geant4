@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.4 2000-06-20 08:47:22 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.5 2000-08-10 13:15:13 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -26,6 +26,7 @@
 // 30/09/99: nuclear size effect correction,  L.Urban
 // 22/03/00: value of member cpar has changed! , L.Urban
 // 20/06/00: nuclear size correction for particles other than e+/e- only ,  L.Urban
+// 10/08/00 values of some data members has been changed, L.Urban
 // --------------------------------------------------------------
 
 #include "G4MultipleScattering.hh"
@@ -50,10 +51,10 @@
        thePositron(G4Positron::Positron()),
        tLast (0.0),
        zLast (0.0),
-       Tlimit(0.*keV),
+       Tlimit(1.*keV),
        scatteringparameter(0.9),
        tuning (1.00),
-       cpar (-0.35),
+       cpar (0.0),
        NuclCorrPar (0.0615),FactPar(0.40),
        fLatDisplFlag(true) 
   { }
@@ -74,12 +75,6 @@
 
   //   tables are built for MATERIALS
   {
-    // parameter for "low energy" msc (not for ions)
-    if((&aParticleType == G4Electron::Electron()) ||
-       (&aParticleType == G4Positron::Positron())   )
-    //   Tlimit = 100.*keV ;
-               ;
-    
     const G4double sigmafactor = twopi*classic_electr_radius*
                                        classic_electr_radius ;
     G4double KineticEnergy,AtomicNumber,AtomicWeight,
@@ -219,8 +214,8 @@
            {65.87,59.06,15.87,7.570,5.567,3.650,2.682,2.182,
             1.939,1.579,1.325,1.178,1.108,1.014,0.965,0.947,
             0.941,0.938,0.940,0.944,0.946,0.954            },
-          // {45.60,47.34,15.92,7.810,5.755,3.767,2.760,2.239, misprint?
-           {55.60,47.34,15.92,7.810,5.755,3.767,2.760,2.239,
+          // {45.60,47.34,15.92,7.810,5.755,3.767,2.760,2.239, // paper.....
+           {55.60,47.34,15.92,7.810,5.755,3.767,2.760,2.239, 
             1.985,1.609,1.343,1.188,1.113,1.013,0.960,0.939,
             0.933,0.930,0.933,0.936,0.939,0.949            }};
 
