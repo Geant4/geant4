@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testPropagateMagField.cc,v 1.4 2001-02-20 18:13:52 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.5 2001-03-27 16:33:14 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -217,7 +217,7 @@ G4FieldManager* SetupField(G4int type)
       case 5: pStepper = new G4HelixExplicitEuler( fEquation ); break;
       case 6: pStepper = new G4HelixImplicitEuler( fEquation ); break;
       case 7: pStepper = new G4HelixSimpleRunge( fEquation ); break;
-      // case 8: pStepper = new G4CashKarpRKF45( fEquation );    break;
+      case 8: pStepper = new G4CashKarpRKF45( fEquation );    break;
       case 9: pStepper = new G4RKG3_Stepper( fEquation );    break;
       default: pStepper = 0;
     }
