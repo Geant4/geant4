@@ -1,4 +1,4 @@
-?RCS: $Id: Oldconfig.U,v 1.14 2003-02-20 17:01:04 sadilov Exp $
+?RCS: $Id: Oldconfig.U,v 1.15 2003-02-21 15:15:35 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.14  2003/02/20 17:01:04  sadilov
+?RCS: Last version.
+?RCS:
 ?RCS: Revision 1.13  2002/12/13 13:40:34  sadilov
 ?RCS: Add -libs -cppflags -cxxflags -incflags
 ?RCS:
@@ -812,7 +815,7 @@ fi
 
 	. $src/.config/bin/$g4system/env.sh
 
-	CXXFLAGS=`grep 'CXXFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+	CXXFLAGS=`grep 'CXXFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
 
 #	echo CXXFLAGS=$CXXFLAGS
 	echo $CXXFLAGS
@@ -826,7 +829,7 @@ fi
 
 	. $src/.config/bin/$g4system/env.sh
 
-	INCFLAGS=`grep 'INCFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+	INCFLAGS=`grep 'INCFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
 
 #	echo INCFLAGS=$INCFLAGS
 	echo $INCFLAGS
@@ -840,7 +843,7 @@ fi
 
 	. $src/.config/bin/$g4system/env.sh
 
-	LDFLAGS=`grep 'LDFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+	LDFLAGS=`grep 'LDFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
 
 #	echo LDFLAGS=$LDFLAGS
 	echo $LDFLAGS
@@ -875,8 +878,8 @@ fi
 	
 # Global libs
 
-	LDLIBS_1=`grep 'LDLIBS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
-	LDLIBS_2=`echo $LDLIBS_1 | awk -F -lMarker '{print $2}'`
+	LDLIBS_1=`grep 'LDLIBS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+	LDLIBS_2=`echo $LDLIBS_1 | $sed  -e 's/^\(.*\)-lMarker//'`
 
 	echo "$LDLIBS_2 $c"
 
@@ -895,8 +898,8 @@ fi
 
 	LIBLIST_LIST=`$G4LIB/$G4SYSTEM/liblist -m $G4LIB/$G4SYSTEM < $G4LIB/$G4SYSTEM/libname.map`
 
-	LDLIBS3=`grep 'LDLIBS3 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
-	LDLIBS4=`grep 'LDLIBS4 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+	LDLIBS3=`grep 'LDLIBS3 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
+	LDLIBS4=`grep 'LDLIBS4 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | $sed  -e 's/^\(.*\):=//'`
 
 	LDLIBS=$LIBLIST_LIST $LDLIBS3 $LDLIBS4	
 
