@@ -32,6 +32,7 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
 {
   area = 0;
   // initialize the particle change
+  theResult.Clear();
   theResult.SetStatusChange( stopAndKill );
   theResult.SetEnergyChange( 0.0 );
 
