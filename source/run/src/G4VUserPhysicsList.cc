@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.50 2004-10-25 13:13:18 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.51 2004-11-01 16:47:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -169,7 +169,10 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
     newManager->DumpInfo();
   }
 #endif
-  if (newParticle->GetParticleType() == "nucleus") BuildPhysicsTable(newParticle);
+  if (newParticle->GetParticleType() == "nucleus") {
+    PreparePhysicsTable(newParticle);
+    BuildPhysicsTable(newParticle);
+  }
 }
 
 

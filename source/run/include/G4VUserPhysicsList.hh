@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.27 2004-10-25 13:13:17 kurasige Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.28 2004-11-01 16:47:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -134,6 +134,9 @@ class G4VUserPhysicsList
     // retrieved from files
     void BuildPhysicsTable();    
   
+   // do PreparePhysicsTable for specified particle type
+    void PreparePhysicsTable(G4ParticleDefinition* );    
+
    // do BuildPhysicsTable for specified particle type
     void BuildPhysicsTable(G4ParticleDefinition* );    
 
@@ -224,8 +227,6 @@ class G4VUserPhysicsList
     // do BuildPhysicsTable for make the integral schema
     void BuildIntegralPhysicsTable(G4VProcess* ,G4ParticleDefinition*  );   
 
-   // do PreparePhysicsTable for the specified particle 
-   void PreparePhysicsTable(G4ParticleDefinition* );
 
   protected: 
     // Retrieve PhysicsTable from files for proccess belongng the particle.
