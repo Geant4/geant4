@@ -12,35 +12,46 @@ class G4EquilibriumEvaporator : public G4Collider {
 
 public:
 
-G4EquilibriumEvaporator() {};
+  G4EquilibriumEvaporator() {};
 
-void setFissioner(G4Fissioner* fissioner) {
+  void setFissioner(G4Fissioner* fissioner) {
     theFissioner = fissioner;
-};
+  };
 
-void setBigBanger(G4BigBanger* banger) {
+  void setBigBanger(G4BigBanger* banger) {
     theBigBanger = banger;
-};
+  };
 
-virtual G4CollisionOutput collide(G4InuclParticle* bullet,
-                                   G4InuclParticle* target);
+  virtual G4CollisionOutput collide(G4InuclParticle* bullet,
+				    G4InuclParticle* target);
 
 private: 
 
-G4double getE0(G4double A) const; 
+  G4double getE0(G4double A) const; 
 
-G4double getPARLEVDEN(G4double A, G4double Z) const; 
+  G4double getPARLEVDEN(G4double A, 
+			G4double Z) const; 
 
-G4bool timeToBigBang(G4double a, G4double z, G4double e) const;
+  G4bool timeToBigBang(G4double a, 
+		       G4double z, 
+		       G4double e) const;
 
-G4bool goodRemnant(G4double a, G4double z) const; 
+  G4bool goodRemnant(G4double a, 
+		     G4double z) const; 
 
-G4double getQF(G4double x, G4double x2, G4double a, G4double z, G4double e) const;
+  G4double getQF(G4double x, 
+		 G4double x2, 
+		 G4double a, 
+		 G4double z, 
+		 G4double e) const;
 
-G4double getAF(G4double x, G4double a, G4double z, G4double e) const; 
+  G4double getAF(G4double x, 
+		 G4double a, 
+		 G4double z, 
+		 G4double e) const; 
 
-G4Fissioner* theFissioner;
-G4BigBanger* theBigBanger;
+  G4Fissioner* theFissioner;
+  G4BigBanger* theBigBanger;
 
 };        
 

@@ -9,15 +9,20 @@ class G4WatcherGun {
 
 public:
 
-G4WatcherGun() {};
+  G4WatcherGun() {
 
-void setWatchers();
+  };
 
-vector<G4NuclWatcher> getWatchers() const { return watchers; };
+  void setWatchers();
+
+  vector<G4NuclWatcher> getWatchers() const { 
+
+    return watchers; 
+  };
 
 private: 
 
-vector<G4NuclWatcher> watchers;
+  vector<G4NuclWatcher> watchers;
 
 };        
 

@@ -7,80 +7,109 @@ class G4CascadParticle {
 
 public:
 
-G4CascadParticle() {};
+  G4CascadParticle() {};
 
-G4CascadParticle(const G4InuclElementaryParticle& particle, 
-   const vector<G4double>& pos,
-   G4int izone, G4double cpath) :  theParticle(particle), position(pos), 
-    current_zone(izone), current_path(cpath) {
-  current_path = cpath; 
-  movingIn = true;
-  reflectionCounter = 0;   
-};
+  G4CascadParticle(const G4InuclElementaryParticle& particle, 
+		   const vector<G4double>& pos,
+		   G4int izone, 
+		   G4double cpath) 
 
-void updateParticleMomentum(const vector<G4double>& mom) {
-  theParticle.setMomentum(mom);
-};
+    : theParticle(particle), 
+    position(pos), 
+    current_zone(izone), 
+    current_path(cpath) {
+    current_path = cpath; 
+    movingIn = true;
+    reflectionCounter = 0;   
+  };
 
-void updatePosition(const vector<G4double>& pos) {
-  position = pos;
-};
+  void updateParticleMomentum(const vector<G4double>& mom) {
+    theParticle.setMomentum(mom);
+  };
 
-void incrementReflectionCounter() { reflectionCounter++; reflected = true; };
+  void updatePosition(const vector<G4double>& pos) {
+    position = pos;
+  };
 
-void resetReflection() { reflected = false; };
+  void incrementReflectionCounter() {
+    reflectionCounter++; 
+    reflected = true; 
+  };
 
-void incrementCurrentPath(G4double npath) { current_path += npath; };
+  void resetReflection() { 
+    reflected = false; 
+  };
 
-void updateZone(G4int izone) { current_zone = izone; };
+  void incrementCurrentPath(G4double npath) { 
+    current_path += npath; 
+  };
 
-G4bool movingInsideNuclei() const { return movingIn; };
+  void updateZone(G4int izone) {
+    current_zone = izone; 
+  };
 
-G4double getPathToTheNextZone(G4double rz_in, G4double rz_out);
+  G4bool movingInsideNuclei() const { 
+    return movingIn; 
+  };
 
-vector<G4double> getMomentum() const { return theParticle.getMomentum(); };
+  G4double getPathToTheNextZone(G4double rz_in, 
+				G4double rz_out);
 
-G4InuclElementaryParticle getParticle() const { return theParticle; };
+  vector<G4double> getMomentum() const { 
+    return theParticle.getMomentum(); 
+  };
 
-vector<G4double> getPosition() const { return position; };
+  G4InuclElementaryParticle getParticle() const { 
+    return theParticle; 
+  };
 
-G4int getCurrentZone() const { return current_zone; };
+  vector<G4double> getPosition() const { 
+    return position; 
+  };
 
-G4int getNumberOfReflections() const { return reflectionCounter; };
+  G4int getCurrentZone() const { 
+    return current_zone; 
+  };
 
-G4bool young(G4double young_path_cut, G4double cpath) const { 
-//
- if(current_path < 1000.0) {
-   return cpath < young_path_cut;
- }
-  else {
-   return false;
- };    
-//
-// return current_path + cpath < young_path_cut; 
-};
+  G4int getNumberOfReflections() const { 
+    return reflectionCounter; 
+  };
 
-G4bool reflectedNow() const { return reflected; };
+  G4bool young(G4double young_path_cut, 
+	       G4double cpath) const { 
+   
+    if(current_path < 1000.0) {
+      return cpath < young_path_cut;
+    }
+    else {
+      return false;
+    };    
+    // return current_path + cpath < young_path_cut; 
+  };
 
-void propagateAlongThePath(G4double path); 
+  G4bool reflectedNow() const { 
+    return reflected; 
+  };
 
-void print() const {
-  theParticle.printParticle();
-  G4cout << " zone " << current_zone << " current_path " << current_path
-    << " reflectionCounter " << reflectionCounter << endl
-    << " x " <<  position[0] << " y " << position[1]
-    << " z " << position[2] << G4endl;
-};
+  void propagateAlongThePath(G4double path); 
+
+  void print() const {
+    theParticle.printParticle();
+    G4cout << " zone " << current_zone << " current_path " << current_path
+	   << " reflectionCounter " << reflectionCounter << endl
+	   << " x " << position[0] << " y " << position[1]
+	   << " z " << position[2] << G4endl;
+  };
    
 private: 
 
-G4InuclElementaryParticle theParticle;
-vector<G4double> position;
-G4int current_zone;
-G4double current_path;
-G4bool movingIn;
-G4int reflectionCounter;   
-G4bool reflected;
+  G4InuclElementaryParticle theParticle;
+  vector<G4double> position;
+  G4int current_zone;
+  G4double current_path;
+  G4bool movingIn;
+  G4int reflectionCounter;   
+  G4bool reflected;
  
 };        
 

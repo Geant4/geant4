@@ -8,10 +8,10 @@ class G4Collider {
 
 public:
 
-G4Collider() {};
+  G4Collider() {};
 
-virtual G4CollisionOutput collide(G4InuclParticle* bullet,
-                                       G4InuclParticle* target) = 0;
+  virtual G4CollisionOutput collide(G4InuclParticle* bullet,
+				    G4InuclParticle* target) = 0;
 
 };        
 

@@ -14,24 +14,26 @@ class G4IntraNucleiCascader : public G4Collider {
 
 public:
 
-G4IntraNucleiCascader() {};
+  G4IntraNucleiCascader() {};
 
-void setElementaryParticleCollider(G4ElementaryParticleCollider* ecollider) {
-  theElementaryParticleCollider = ecollider;   
-};
+  void setElementaryParticleCollider(G4ElementaryParticleCollider* ecollider) {
+    theElementaryParticleCollider = ecollider;   
+  };
   
-virtual CollisionOutput collide(G4InuclParticle* bullet,
-                     G4InuclParticle* target);
+  virtual G4CollisionOutput collide(G4InuclParticle* bullet,
+				  G4InuclParticle* target);
 
-void setInteractionCase(G4int intcase) { inter_case = intcase; };
+  void setInteractionCase(G4int intcase) { 
+    inter_case = intcase; 
+  };
 
 private: 
 
-G4ElementaryParticleCollider* theElementaryParticleCollider;
+  G4ElementaryParticleCollider* theElementaryParticleCollider;
 
-G4int inter_case;
+  G4int inter_case;
 
-G4bool goodCase(G4double a, G4double z, G4double eexs, G4double ein) const; 
+  G4bool goodCase(G4double a, G4double z, G4double eexs, G4double ein) const; 
 
 };        
 

@@ -21,110 +21,151 @@ class G4NucleiModel {
 
 public:
 
-G4NucleiModel() {};
+  G4NucleiModel() {
 
-G4NucleiModel(G4InuclNuclei* nuclei) {
-  generateModel(nuclei->getA(), nuclei->getZ());
-};
+  };
 
-void generateModel(G4double a, G4double z);
+  G4NucleiModel(G4InuclNuclei* nuclei) {
 
-void reset() {
-  neutronNumberCurrent = neutronNumber;
-  protonNumberCurrent = protonNumber;
-};
+    generateModel(nuclei->getA(), nuclei->getZ());
+  };
 
-void printModel() const; 
+  void generateModel(G4double a, 
+		     G4double z);
 
-G4double getDensity(G4int ip, G4int izone) const {
-  return nucleon_densities[ip - 1][izone];
-};
+  void reset() {
 
-G4double getFermiMomentum(G4int ip, G4int izone) const {
-  return fermi_momenta[ip - 1][izone];
-};
+    neutronNumberCurrent = neutronNumber;
+    protonNumberCurrent = protonNumber;
+  };
 
-G4double getFermiKinetic(G4int ip, G4int izone) const {
-  G4double ekin = 0.;
-  if(ip < 3 && izone < number_of_zones) {
-    G4double pf = fermi_momenta[ip - 1][izone]; 
-    G4double mass = ip == 1 ? 0.93827 : 0.93957;
-    ekin = sqrt(pf*pf + mass*mass) - mass;
-  };  
-  return ekin;
-};
+  void printModel() const; 
 
-G4double getPotential(G4int ip, G4int izone) const {
-  G4int ip0 = ip < 3 ? ip - 1 : 2;
-  return izone < number_of_zones ? zone_potentials[ip0][izone] : 0.0;
-};
+  G4double getDensity(G4int ip, 
+		      G4int izone) const {
 
-vector<G4CascadParticle> generateParticleFate(G4CascadParticle& cparticle,
-     G4ElementaryParticleCollider* theElementaryParticleCollider); 
+    return nucleon_densities[ip - 1][izone];
+  };
 
-G4double getNumberOfNeutrons() const { return neutronNumberCurrent; };
+  G4double getFermiMomentum(G4int ip, 
+			    G4int izone) const {
 
-G4double getNumberOfProtons() const { return protonNumberCurrent; };
+    return fermi_momenta[ip - 1][izone];
+  };
 
-G4bool empty() const { return neutronNumberCurrent < 1.0 && 
-     protonNumberCurrent < 1.0; };
+  G4double getFermiKinetic(G4int ip, 
+			   G4int izone) const {
 
-G4bool stillInside(const G4CascadParticle& cparticle) {
-  return cparticle.getCurrentZone() < number_of_zones;
-};
+    G4double ekin = 0.0;
 
-G4CascadParticle initializeCascad(G4InuclElementaryParticle* particle);
+    if(ip < 3 && izone < number_of_zones) {
+      G4double pf = fermi_momenta[ip - 1][izone]; 
+      G4double mass = ip == 1 ? 0.93827 : 0.93957;
 
-pair<vector<G4CascadParticle>, vector<G4InuclElementaryParticle> >
-   G4NucleiModel::initializeCascad(G4InuclNuclei* bullet, G4InuclNuclei* target);
+      ekin = sqrt(pf * pf + mass * mass) - mass;
+    };  
 
-pair<G4int, G4int> getTypesOfNucleonsInvolved() const {
-  return pair<G4int, G4int>(current_nucl1, current_nucl2);
-};
-G4bool worthToPropagate(const G4CascadParticle& cparticle) const; 
+    return ekin;
+  };
+
+  G4double getPotential(G4int ip, 
+			G4int izone) const {
+
+    G4int ip0 = ip < 3 ? ip - 1 : 2;
+
+    return izone < number_of_zones ? zone_potentials[ip0][izone] : 0.0;
+  };
+
+  vector<G4CascadParticle> 
+  generateParticleFate(G4CascadParticle& cparticle,
+		       G4ElementaryParticleCollider* theElementaryParticleCollider); 
+
+  G4double getNumberOfNeutrons() const { 
+
+    return neutronNumberCurrent; 
+  };
+
+  G4double getNumberOfProtons() const { 
+
+    return protonNumberCurrent; 
+  };
+
+  G4bool empty() const { 
+
+    return neutronNumberCurrent < 1.0 && protonNumberCurrent < 1.0; 
+  };
+
+  G4bool stillInside(const G4CascadParticle& cparticle) {
+
+    return cparticle.getCurrentZone() < number_of_zones;
+  };
+
+  G4CascadParticle initializeCascad(G4InuclElementaryParticle* particle);
+
+  pair<vector<G4CascadParticle>, vector<G4InuclElementaryParticle> >
+  G4NucleiModel::initializeCascad(G4InuclNuclei* bullet, G4InuclNuclei* target);
+
+  pair<G4int, G4int> getTypesOfNucleonsInvolved() const {
+    return pair<G4int, G4int>(current_nucl1, current_nucl2);
+  };
+  G4bool worthToPropagate(const G4CascadParticle& cparticle) const; 
     
 private: 
 
-G4bool passFermi(const vector<G4InuclElementaryParticle>& particles, G4int zone);
+  G4bool passFermi(const vector<G4InuclElementaryParticle>& particles, 
+		   G4int zone);
 
-void boundaryTransition(G4CascadParticle& cparticle);
+  void boundaryTransition(G4CascadParticle& cparticle);
 
-G4InuclElementaryParticle generateNucleon(G4int type, G4int zone) const;
+  G4InuclElementaryParticle generateNucleon(G4int type, 
+					    G4int zone) const;
 
-G4InuclElementaryParticle generateQuasiDeutron(G4int type1, G4int type2,
-                   G4int zone) const;
+  G4InuclElementaryParticle generateQuasiDeutron(G4int type1, 
+						 G4int type2,
+						 G4int zone) const;
 
-partners generateInteractionPartners(G4CascadParticle& cparticle) const;
+  partners generateInteractionPartners(G4CascadParticle& cparticle) const;
 
-G4double volNumInt(G4double r1, G4double r2, G4double cu, G4double d1) const; 
+  G4double volNumInt(G4double r1, 
+		     G4double r2, 
+		     G4double cu, 
+		     G4double d1) const; 
 
-G4double volNumInt1(G4double r1, G4double r2, G4double cu2) const; 
+  G4double volNumInt1(G4double r1, 
+		      G4double r2, 
+		      G4double cu2) const; 
 
-G4double getRatio(G4int ip) const;
+  G4double getRatio(G4int ip) const;
 
-vector<vector<G4double> > nucleon_densities;
+  vector<vector<G4double> > nucleon_densities;
 
-vector<vector<G4double> > zone_potentials;
+  vector<vector<G4double> > zone_potentials;
 
-vector<vector<G4double> > fermi_momenta;
+  vector<vector<G4double> > fermi_momenta;
 
-vector<G4double> zone_radii;
+  vector<G4double> zone_radii;
 
-vector<G4double> binding_energies;
+  vector<G4double> binding_energies;
 
-G4double nuclei_radius;
+  G4double nuclei_radius;
 
-G4int number_of_zones;
+  G4int number_of_zones;
 
-G4double A;
-G4double Z;
-G4double neutronNumber;
-G4double protonNumber;
-G4double neutronNumberCurrent;
-G4double protonNumberCurrent;
+  G4double A;
 
-G4int current_nucl1;
-G4int current_nucl2;
+  G4double Z;
+
+  G4double neutronNumber;
+
+  G4double protonNumber;
+
+  G4double neutronNumberCurrent;
+
+  G4double protonNumberCurrent;
+
+  G4int current_nucl1;
+
+  G4int current_nucl2;
  
 };        
 

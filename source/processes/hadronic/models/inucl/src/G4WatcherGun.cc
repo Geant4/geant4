@@ -3,6 +3,7 @@
 #include "G4WatcherGun.hh"
 
 void G4WatcherGun::setWatchers() {
+
   vector<G4double> as;
   vector<G4double> cs;
   vector<G4double> errs;
