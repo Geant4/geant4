@@ -21,20 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: DicomPrimaryGeneratorAction.hh,v 1.1 2003-05-26 16:05:48 guatelli Exp $
+// $Id: DicomPrimaryGeneratorAction.hh,v 1.2 2003-06-03 21:37:04 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef DicomPrimaryGeneratorAction_h
 #define DicomPrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
-#include "G4ThreeVector.hh"
+//#include "G4ThreeVector.hh"
 
 class G4ParticleGun;
 class G4Event;
@@ -42,14 +39,13 @@ class G4Event;
 class DicomPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
-    DicomPrimaryGeneratorAction();
-    ~DicomPrimaryGeneratorAction();
-
-public:
-    void GeneratePrimaries(G4Event*);
-
+  DicomPrimaryGeneratorAction();
+  ~DicomPrimaryGeneratorAction();
+  
+  void GeneratePrimaries(G4Event*);
+  
 private:
-    G4ParticleGun*                particleGun;
+  G4ParticleGun* particleGun;
 };
 
 #endif

@@ -28,8 +28,6 @@
 
 #include "G4VisManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 class DicomVisManager: public G4VisManager
 {
 

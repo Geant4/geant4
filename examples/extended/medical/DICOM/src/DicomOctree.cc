@@ -103,7 +103,7 @@ void Octree::DeleteTree()
     mRoot = NULL;
 }
 //---------------------------------------------------------------------------
-void Octree::CountRecursive( OctreeNode* pNode, G4int &rMiddle, G4int &rTerminal )
+void Octree::CountRecursive( OctreeNode* pNode, G4int rMiddle, G4int rTerminal )
 {
     if ( pNode->Type() == MIDDLE_NODE )
     {
@@ -121,7 +121,7 @@ void Octree::CountRecursive( OctreeNode* pNode, G4int &rMiddle, G4int &rTerminal
     }
 }
 //---------------------------------------------------------------------------
-G4int Octree::CountMemory( G4int &rMiddle, G4int &rTerminal )
+G4int Octree::CountMemory( G4int rMiddle, G4int rTerminal )
 {
     CountRecursive( mRoot, rMiddle, rTerminal );
     G4int total = rMiddle*sizeof(MiddleNode) + rTerminal*sizeof(TerminalNode);

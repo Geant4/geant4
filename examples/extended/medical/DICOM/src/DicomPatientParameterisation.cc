@@ -38,9 +38,6 @@
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"
 
-#include <string>
-
-using namespace std;
 
 DicomPatientParameterisation::~DicomPatientParameterisation()
 {
@@ -56,7 +53,9 @@ DicomPatientParameterisation::~DicomPatientParameterisation()
   delete Attributes_air;
 }
 
-DicomPatientParameterisation::DicomPatientParameterisation(G4int NoVoxels, double max_density, double min_density ,
+DicomPatientParameterisation::DicomPatientParameterisation(G4int NoVoxels, 
+							   double max_density, 
+							   double min_density ,
 							   G4Material* lunginhale,
 							   G4Material* lungexhale,
 							   G4Material* adipose_tissue,
@@ -70,7 +69,7 @@ DicomPatientParameterisation::DicomPatientParameterisation(G4int NoVoxels, doubl
   DicomConfiguration* ReadConfiguration = new DicomConfiguration;
   ReadConfiguration->ReadDataFile();					// images must have the same dimension
   G4int totalNumberOfFile = ReadConfiguration -> GetTotalNumberOfFile();
-  for (int i=0;i<totalNumberOfFile;i++)
+  for (G4int i=0;i<totalNumberOfFile;i++)
     {
       ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[i] );
       MiddleLocationValue=MiddleLocationValue+ReadConfiguration->GetSliceLocation();
@@ -161,7 +160,7 @@ DicomPatientParameterisation::DicomPatientParameterisation(G4int NoVoxels, doubl
 void DicomPatientParameterisation::ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const
 {
 
-  G4ThreeVector origin(PatientPlacementX[copyNo]*mm ,PatientPlacementY[copyNo]*mm ,PatientPlacementZ[copyNo]*mm-MiddleLocationValue*mm-SliceTickness/2*mm );
+  G4ThreeVector origin(PatientPlacementX[copyNo]*mm, PatientPlacementY[copyNo]*mm, PatientPlacementZ[copyNo]*mm-MiddleLocationValue*mm-SliceTickness/2*mm );
   physVol->SetTranslation(origin);
 }
 
@@ -173,9 +172,9 @@ void DicomPatientParameterisation::ComputeDimensions(G4Box& Voxels, const G4int 
   Voxels.SetZHalfLength((SliceTickness/2.0)*mm);
 }
 
-G4Material*  DicomPatientParameterisation::ComputeMaterial(const G4int copyNo, G4VPhysicalVolume* physVol)
+G4Material*  DicomPatientParameterisation::ComputeMaterial(const G4int copyNo,G4VPhysicalVolume* physVol)
 {
-  bool detecting = true;
+  G4bool detecting = true;
   if (detecting == false )
     {
       // OutOfBoundaries
@@ -241,12 +240,12 @@ G4Material*  DicomPatientParameterisation::ComputeMaterial(const G4int copyNo, G
   return physVol->GetLogicalVolume()->GetMaterial();
 }
 
-void DicomPatientParameterisation::GetDensity(double maxdensity , double mindensity)
+void DicomPatientParameterisation::GetDensity(G4double maxdensity, G4double mindensity)
 {
   DicomConfiguration* ReadConfiguration = new DicomConfiguration;
   ReadConfiguration->ReadDataFile();
 
-  int copy_counter = 0;
+  G4int copy_counter = 0;
   G4int totalNumberOfFile = ReadConfiguration->GetTotalNumberOfFile();
   for (int z=0;z<totalNumberOfFile;z++)
     {

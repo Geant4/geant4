@@ -31,6 +31,7 @@
 // tel (418) 525-4444 #6720
 // fax (418) 691 5268
 //*******************************************************
+
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4RunManager.hh"
@@ -44,9 +45,9 @@
 #include "DicomEventAction.hh"
 #include "DicomHandler.hh"
 
-#include <stdio.h>
-#include <fstream>
-#include <vector.h>
+//#include <stdio.h>
+//#include "g4std/fstream"
+//#include "g4std/vector"
 
 using namespace std;
 
@@ -54,12 +55,12 @@ int main(int argc,char** argv)
 {
 				
   // Treatment of DICOM images before creating the G4runManager
-  dicomHandler *dcmHandler = new dicomHandler;
+  dicomHandler* dcmHandler = new dicomHandler;
   dcmHandler->checkFileFormat();
 
   // Initialisation of physics, geometry, primary particles ... 
-  G4RunManager *runManager = new G4RunManager;
-  DicomGeometry *theGeometry = new DicomGeometry();
+  G4RunManager* runManager = new G4RunManager;
+  DicomGeometry* theGeometry = new DicomGeometry();
   runManager->SetUserInitialization(new DicomPhysicsList);
   runManager->SetUserInitialization(theGeometry);
   runManager->SetUserAction(new DicomPrimaryGeneratorAction());
@@ -73,11 +74,11 @@ int main(int argc,char** argv)
 
   HepRandom::setTheEngine(new RanecuEngine);
 
-  G4UImanager * UI = G4UImanager::GetUIpointer();
+  G4UImanager* UI = G4UImanager::GetUIpointer();
  
   if(argc==1)
     {
-      G4UIsession * session = new G4UIterminal(new G4UItcsh);
+      G4UIsession* session = new G4UIterminal(new G4UItcsh);
       UI->ApplyCommand("/control/execute default.mac");
       session->SessionStart();
       delete session;

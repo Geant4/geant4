@@ -30,32 +30,39 @@
 #ifndef DicomConfiguration_h
 #define DicomConfiguration_h 1
 
-#include <iostream>
-#include <fstream>
-#include <stdio.h>
 #include "globals.hh"
 #include "g4std/vector"
-using namespace std;
 
 class DicomConfiguration
 {
 public:
-  DicomConfiguration(){;}
-  ~DicomConfiguration(){;}
-public:
+  DicomConfiguration() { }
+  ~DicomConfiguration() { }
+
   // This function reads <Data.dat>, return 0/1 if successfull or not
   G4int ReadDataFile();
-  G4int ReadG4File(string g4File);
-  G4int GetCompressionValue(){return CompressionValue;}
-  G4int GetTotalNumberOfFile(){return TotalNumberOfFile;}
-  G4std::vector<G4String> GetListOfFile(){return ListOfFile;}
-  G4int GetTotalRows(){return TotalRows;}
-  G4int GetTotalColumns(){return TotalColumns;}  
-  G4double GetXPixelSpacing(){return  X_PixelSpacing;}
-  G4double GetYPixelSpacing(){return  Y_PixelSpacing;}
-  G4double GetSliceThickness(){return SliceTickness;} 
-  G4double GetSliceLocation(){return  SliceLocation;} 
-  G4int IsCompressionUsed(){return CompressionUsed;}
+
+  G4int ReadG4File(G4String g4File);
+
+  G4int GetCompressionValue() {return CompressionValue;}
+
+  G4int GetTotalNumberOfFile() {return TotalNumberOfFile;}
+
+  G4std::vector<G4String> GetListOfFile() {return ListOfFile;}
+
+  G4int GetTotalRows() {return TotalRows;}
+
+  G4int GetTotalColumns() {return TotalColumns;}  
+
+  G4double GetXPixelSpacing() {return  X_PixelSpacing;}
+
+  G4double GetYPixelSpacing() {return  Y_PixelSpacing;}
+
+  G4double GetSliceThickness() {return SliceTickness;} 
+
+  G4double GetSliceLocation() {return  SliceLocation;} 
+
+  G4int IsCompressionUsed() {return CompressionUsed;}
  
 private:
 	

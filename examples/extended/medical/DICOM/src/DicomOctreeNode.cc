@@ -3,7 +3,7 @@
 #include "DicomOctreeNode.hh"
 using namespace std;
 
-int OctreeNode::mInstanceCounter = 0;
+G4int OctreeNode::mInstanceCounter = 0;
 
 OctreeNode::OctreeNode()
 {
@@ -27,19 +27,19 @@ float& OctreeNode::Density()
   return mDensity;
 }
 
-OctreeNode* OctreeNode::Parent()
+const OctreeNode* OctreeNode::Parent()
 {
   return mParent;
 }
 
-int OctreeNode::InstanceCounter()
+G4int OctreeNode::InstanceCounter()
 {
   return mInstanceCounter;
 }
 
 OctreeNode* TerminalNode::mNull = NULL;
 
-OctreeNode*& TerminalNode::operator []( int )
+OctreeNode*& TerminalNode::operator []( G4int )
 {
   return mNull;
 }
@@ -49,7 +49,7 @@ OctreeNodeType TerminalNode::Type()
   return TERMINAL_NODE;
 }
 
-int TerminalNode::FindChild( OctreeNode* pNode )
+G4int TerminalNode::FindChild( const OctreeNode*  )
 {
   return -1;
 }
@@ -59,12 +59,12 @@ TerminalNode::~TerminalNode()
 
 }
 
-TerminalNode::TerminalNode( OctreeNode* pParent ) : OctreeNode( pParent )
+TerminalNode::TerminalNode( OctreeNode* pParent) : OctreeNode( pParent )
 {
 
 }
 
-int TerminalNode::MemSize()
+G4int TerminalNode::MemSize()
 {
   return sizeof(TerminalNode);
 }
@@ -116,7 +116,7 @@ MiddleNode::MiddleNode( OctreeNode* pParent ) : OctreeNode( pParent )
     ResetFamily();
 }
 //---------------------------------------------------------------------------
-OctreeNode*& MiddleNode::operator []( int index )
+OctreeNode*& MiddleNode::operator []( G4int index )
 {
 //    if ( index > 7 ) throw runtime_error("Index out of bounds.");
     return mChildren[index];
@@ -127,7 +127,7 @@ OctreeNodeType MiddleNode::Type()
     return MIDDLE_NODE;
 }
 //---------------------------------------------------------------------------
-int MiddleNode::FindChild( OctreeNode* pNode )
+G4int MiddleNode::FindChild( const OctreeNode* pNode )
 {
     for ( unsigned int i = 0; i < 8; i++ )
     {
@@ -136,7 +136,7 @@ int MiddleNode::FindChild( OctreeNode* pNode )
     return -1;
 }
 //---------------------------------------------------------------------------
-int MiddleNode::MemSize()
+G4int MiddleNode::MemSize()
 {
     return sizeof(MiddleNode);
 }

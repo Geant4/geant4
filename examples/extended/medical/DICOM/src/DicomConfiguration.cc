@@ -24,13 +24,13 @@
 
 // Definitions
 #include "DicomConfiguration.hh"
-
-
-using namespace::std;
+#include "g4std/iostream"
+#include "g4std/fstream"
+//#include <stdio.h>
 
 G4int DicomConfiguration::ReadDataFile()
 {
-	ifstream DataFile( "Data.dat" );
+	G4std::ifstream DataFile( "Data.dat" );
 
 	if ( DataFile.good() != 1 )
 		return 1;
@@ -38,7 +38,7 @@ G4int DicomConfiguration::ReadDataFile()
 	DataFile >> CompressionValue;
 	DataFile >> TotalNumberOfFile;
 
-	for(int i=1;i<=TotalNumberOfFile;i++)
+	for(G4int i=1;i<=TotalNumberOfFile;i++)
 	{
 		DataFile >> NameOfFileBuffer;
 		ListOfFile.push_back( NameOfFileBuffer );
@@ -48,13 +48,13 @@ G4int DicomConfiguration::ReadDataFile()
 	return 0;
 }
 
-G4int DicomConfiguration::ReadG4File( string g4File )
+G4int DicomConfiguration::ReadG4File( G4String g4File )
 {
 
 	DensityValue.clear();
 	
 	g4File=g4File + ".g4";
-	ifstream Reading_g4FileHeader( g4File.c_str() );
+	G4std::ifstream Reading_g4FileHeader( g4File.c_str() );
 
 	if ( Reading_g4FileHeader.good() != 1 )
 		return 1;

@@ -35,14 +35,10 @@ public:
   DicomEventAction();
   ~DicomEventAction();
 
-public: 
   void BeginOfEventAction(const G4Event*);
   void EndOfEventAction(const G4Event* anEvent);
 
-  void SetDrawFlag (G4String val)
-  {
-    drawFlag = val;
-  };
+  void SetDrawFlag (G4String val) { drawFlag = val; }
     
 private:
   G4String drawFlag;

@@ -27,12 +27,10 @@
 #include "G4ios.hh"
 #include "G4VPVParameterisation.hh"
 
-#include <fstream>
+#include "g4std/fstream"
 #include <stdio.h>
 #include <math.h>
-#include <vector>
-
-using namespace std;
+#include "g4std/vector"
 
 class G4VPhysicalVolume;
 class G4Box;
@@ -40,11 +38,31 @@ class G4Box;
 class DicomPatientParameterisation : public G4VPVParameterisation
 {
 public:
-  void ComputeTransformation (const G4int copyNo, G4VPhysicalVolume* physVol) const;
-  void ComputeDimensions (G4Box & Voxels, const G4int copyNo, const G4VPhysicalVolume* physVol) const;
+
+  DicomPatientParameterisation(G4int NoVoxels, 
+			       G4double max_density, 
+			       G4double min_density ,
+			       G4Material* lunginhale,
+			       G4Material* lungexhale,
+			       G4Material* adipose_tissue,
+			       G4Material* breast,
+			       G4Material* phantom,
+			       G4Material* muscle,
+			       G4Material* liver,
+			       G4Material* dense_bone,
+			       G4Material* trabecular_bone);
+
+  virtual ~DicomPatientParameterisation();
+
+  virtual void ComputeTransformation (const G4int copyNo, G4VPhysicalVolume* physVol) const;
+
+  virtual void ComputeDimensions (G4Box & Voxels, const G4int copyNo, const G4VPhysicalVolume* physVol) const;
+
+  virtual G4Material* ComputeMaterial(const G4int copyNo, G4VPhysicalVolume* physVol);
+
+  void GetDensity( double maxdensity , double mindensity );
 
 private:
-  G4Material* ComputeMaterial(const G4int copyNo, G4VPhysicalVolume* physVol);
   G4Material* P_lung_exhale;
   G4Material* P_lung_inhale;
   G4Material* P_adipose;
@@ -60,45 +78,29 @@ private:
   G4double blue;
   G4double alpha;
 
-  G4VisAttributes *Attributes_air;
-  G4VisAttributes *Attributes_LungINhale;
-  G4VisAttributes *Attributes_LungEXhale;
-  G4VisAttributes *Attributes_Adipose;
-  G4VisAttributes *Attributes_Breast;
-  G4VisAttributes *Attributes_Phantom;
-  G4VisAttributes *Attributes_Muscle;
-  G4VisAttributes *Attributes_Liver;
-  G4VisAttributes *Attributes_TrabecularBone;
-  G4VisAttributes *Attributes_DenseBone;
+  G4VisAttributes* Attributes_air;
+  G4VisAttributes* Attributes_LungINhale;
+  G4VisAttributes* Attributes_LungEXhale;
+  G4VisAttributes* Attributes_Adipose;
+  G4VisAttributes* Attributes_Breast;
+  G4VisAttributes* Attributes_Phantom;
+  G4VisAttributes* Attributes_Muscle;
+  G4VisAttributes* Attributes_Liver;
+  G4VisAttributes* Attributes_TrabecularBone;
+  G4VisAttributes* Attributes_DenseBone;
 
-public:
-  DicomPatientParameterisation(G4int  NoVoxels , double max_density , double min_density ,
-			       G4Material* lunginhale,
-			       G4Material* lungexhale,
-			       G4Material* adipose_tissue,
-			       G4Material* breast,
-			       G4Material* phantom,
-			       G4Material* muscle,
-			       G4Material* liver,
-			       G4Material* dense_bone,
-			       G4Material* trabecular_bone);
-
-  virtual ~DicomPatientParameterisation();
-
-  void GetDensity( double maxdensity , double mindensity );
-private: 
- char Densitybuf[300];
+  char Densitybuf[300];
   FILE* readConfiguration; //lecturepref;
-  int max;
+  G4int max;
   char name[300];
-  int compression;
+  G4int compression;
   char maxbuf[300];
 
   FILE* readData; //lectureDon;
-  int columns,rows;
-  double pixel_spacing_X,pixel_spacing_Y;
-  double SliceTickness;
-  double SliceLocation;
+  G4int columns,rows;
+  G4double pixel_spacing_X,pixel_spacing_Y;
+  G4double SliceTickness;
+  G4double SliceLocation;
   char rowsbuf[300],columnsbuf[300];
   char pixel_spacing_Xbuf[300],pixel_spacing_Ybuf[300];
   char SliceTicknessbuf[300];
@@ -110,18 +112,17 @@ private:
   G4double PatientY;
   G4double PatientZ;
 
-  vector<double> Density;
-  vector<double> PatientPlacementX;
-  vector<double> PatientPlacementY;
-  vector<double> PatientPlacementZ;
+  G4std::vector<double> Density;
+  G4std::vector<double> PatientPlacementX;
+  G4std::vector<double> PatientPlacementY;
+  G4std::vector<double> PatientPlacementZ;
 
 
-  G4LogicalVolume *LogicalVolumeParam;
+  G4LogicalVolume* LogicalVolumeParam;
 
-  double MiddleLocationValue;
+  G4double MiddleLocationValue;
 
-private:
-  int lenc,lenr;
+  G4int lenc,lenr;
 };
 #endif
 

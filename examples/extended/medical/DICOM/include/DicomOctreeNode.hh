@@ -1,5 +1,7 @@
-#ifndef __OCTREE_NODE_H__
-#define __OCTREE_NODE_H__
+#ifndef OCTREE_NODE_H
+#define OCTREE_NODE_H
+#include "globals.hh"
+
 //---------------------------------------------------------------------------
 class Octree;
 //---------------------------------------------------------------------------
@@ -11,33 +13,36 @@ enum OctreeNodeType { MIDDLE_NODE, TERMINAL_NODE };
 class OctreeNode
 {
     friend class Octree;
-private:
-    static int       mInstanceCounter;
-    OctreeNode*      mParent;
-    float            mDensity;
+
 public:
     OctreeNode();
     OctreeNode( OctreeNode* pParent );
     virtual ~OctreeNode();
 
-    float&        Density();
+    float& Density();
 
-    virtual OctreeNode*& operator []( int index ) = 0;
+    virtual OctreeNode*& operator []( G4int index ) = 0;
+
     virtual OctreeNodeType Type() = 0;
-    OctreeNode* Parent();
-    virtual int FindChild( OctreeNode* pNode ) = 0;
 
-    static int InstanceCounter();
+    const OctreeNode* Parent();
 
-    virtual int MemSize() = 0;
+    virtual G4int FindChild( const OctreeNode* pNode ) = 0;
 
+    static G4int InstanceCounter();
+
+    virtual G4int MemSize() = 0;
+
+private:
+    static G4int mInstanceCounter;
+    OctreeNode* mParent;
+    float mDensity;
 };
 
 //---------------------------------------------------------------------------
 class MiddleNode : public OctreeNode
 {
     friend class Octree;
-private:
 
 public:
     OctreeNode*  mChildren[8];
@@ -47,24 +52,31 @@ public:
     MiddleNode( OctreeNode* pParent );
     ~MiddleNode();
 
-    OctreeNode*& operator []( int index );
+    OctreeNode*& operator []( G4int index );
     OctreeNodeType Type();
-    int FindChild( OctreeNode* pNode );
-    int MemSize();
+    G4int FindChild( const OctreeNode* pNode );
+    G4int MemSize();
 };
 //---------------------------------------------------------------------------
 class TerminalNode : public OctreeNode
 {
     friend class Octree;
+
+public:
+    OctreeNode*& operator []( G4int index );
+
+    OctreeNodeType Type();
+
+    TerminalNode(OctreeNode* pParent );
+
+    ~TerminalNode();
+
+    G4int FindChild( const OctreeNode* pNode );
+
+    G4int MemSize();
+
 private:
     static OctreeNode* mNull;
-public:
-    OctreeNode*& operator []( int index );
-    OctreeNodeType Type();
-    TerminalNode( OctreeNode* pParent );
-    ~TerminalNode();
-    int FindChild( OctreeNode* pNode );
-    int MemSize();
 };
 //---------------------------------------------------------------------------
 

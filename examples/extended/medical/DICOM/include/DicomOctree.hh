@@ -1,5 +1,5 @@
-#ifndef __OCTREE_H__
-#define __OCTREE_H__
+#ifndef OCTREE_HH
+#define OCTREE_HH
 
 #include "globals.hh"
 #include "DicomOctreeNode.hh"
@@ -18,22 +18,10 @@
 
 class Octree
 {
-private:
-  /// Root node of the tree
-  MiddleNode* mRoot;
-  
-  /// In an octree, size denotes physical size of the cube,
-  /// ie length of its sides (which are assumed equal).
-  float      mSize;
-  
-  /// Number of levels denotes the maximal number of
-  /// nodes in a single branch, starting from the root node.
-  G4int        mNoLevels;
-
-  void CountRecursive( OctreeNode* pNode, G4int &rMiddle, G4int &rTerminal );
 
 public:
   
+  // MGP: why float? To be converted to G4double?
   Octree( G4int noLevels, float size );
   ~Octree();
   void DeleteTree();
@@ -43,11 +31,27 @@ public:
     
   OctreeNode* Root(); 
   float Size();
-  G4int CountMemory( G4int &rMiddle, G4int &rTerminal );
+  G4int CountMemory( G4int rMiddle, G4int rTerminal );
   
   G4int NoLevels();
   G4int Resolution();
   
+private:
+
+
+  void CountRecursive(OctreeNode* pNode, G4int rMiddle, G4int rTerminal );
+
+  // Root node of the tree
+  MiddleNode* mRoot;
+  
+  // In an octree, size denotes physical size of the cube,
+  // ie length of its sides (which are assumed equal).
+  float mSize;
+  
+  // Number of levels denotes the maximal number of
+  // nodes in a single branch, starting from the root node.
+  G4int mNoLevels;
+
 };
 #endif 
 

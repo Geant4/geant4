@@ -34,13 +34,12 @@
 /*
 //#include "G4OpenInventorX.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 */
 
 DicomVisManager::DicomVisManager ()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DicomVisManager::RegisterGraphicsSystems ()
 {
@@ -59,7 +58,6 @@ void DicomVisManager::RegisterGraphicsSystems ()
 
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 
@@ -89,15 +87,13 @@ void DicomVisManager::RegisterGraphicsSystems ()
 // ********************************************************************
 //
 //
-// $Id: DicomVisManager.cc,v 1.1 2003-05-26 16:05:49 guatelli Exp $
+// $Id: DicomVisManager.cc,v 1.2 2003-06-03 21:37:04 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison 24th January 1998.
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 #ifdef G4VIS_USE
  
 #include "DicomVisManager.hh"

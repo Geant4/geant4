@@ -38,14 +38,6 @@ public:
     DicomPhysicsList();
     ~DicomPhysicsList();
 
-protected:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
-
-    void SetCuts();
-
-public:
     // Set Cuts
     void SetGammaCut(G4double);
     void SetElectronCut(G4double);
@@ -57,23 +49,27 @@ public:
     void SetLowEnSecPhotCut(G4double);
     void SetLowEnSecElecCut(G4double);
 
+protected:
+    // Construct particle and physics
+    void ConstructParticle();
+    void ConstructProcess();
+
+    void SetCuts();
+
+    // these methods Construct particles
+    void ConstructBosons();
+    void ConstructLeptons();
+
+    // these methods Construct physics processes and register them
+    void ConstructGeneral();
+    void ConstructEM();
+
 private:
 
     G4double cutForGamma;
     G4double cutForElectron;
     G4double cutForPositron;
 
-protected:
-    // these methods Construct particles
-    void ConstructBosons();
-    void ConstructLeptons();
-
-protected:
-    // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
-
-private:
     G4LowEnergyIonisation*  loweIon;
     G4LowEnergyPhotoElectric* lowePhot;
     G4LowEnergyBremsstrahlung* loweBrem;

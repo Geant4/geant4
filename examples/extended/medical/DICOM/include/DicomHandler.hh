@@ -31,13 +31,32 @@
 
 #ifndef DicomHandler_h
 #define DicomHandler_h 1
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "globals.hh"
+
 class dicomHandler
 {
+public:
+
+  dicomHandler()
+  {
+    compression=0;
+    max=0;
+  };
+
+  G4int readHeader(FILE *,char[300]);
+
+  G4int readData(FILE *,char[300]); // note: always use readHeader 
+                                    // before readData
+
+  // use ImageMagick to display the image
+  G4int displayImage(char[500]);
+  void checkFileFormat();
+
 private:
-  int compression, max;
+  G4int compression, max;
   char name[300], name_in_file[300];
 
   // Variables used for reading the DICOM images
@@ -45,26 +64,18 @@ private:
   unsigned short int read_element_id;
   unsigned short int element_length;
   unsigned short int element_length2;
-  int element_length3;
+  G4int element_length3;
   char value[10000][300];
   char buffer[196];
   unsigned int Int_Buffer[1000000];
   unsigned int tab[1000][1000];
 
   // Transform a pixel value to a density
-  double pixel2density(unsigned int pixel);
+  G4double pixel2density(unsigned int pixel);
 
   FILE* data;
   FILE* fdensity;
 
-public:
-  dicomHandler()
-  {
-    compression=0;
-    max=0;
-  };
-  
-private:
   G4int tag_dictionnary;
   G4int rows;
   G4int columns;
@@ -78,15 +89,6 @@ private:
   G4int rescale_intercept;
   G4double slice_location;
 
-public:
-
-  G4int readHeader(FILE *,char[300]);
-  G4int readData(FILE *,char[300]); // note: always use readHeader 
-                                    //before readData
-
-  // use ImageMagick to display the image
-  G4int displayImage(char[500]);
-  void checkFileFormat();
 };
 #endif
 
