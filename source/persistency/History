@@ -16,6 +16,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 November 12, 99  Y.Morita (persistency-V00-01-05)
+- Fix for RW->G4RW changes
 - Bug fixes:
   +Container of PrimaryVertex in G4PEvent
   +Association of Boolean Solids
