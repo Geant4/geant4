@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE:g4ui_build_terminal_session g4ui_use_terminal g4ui_build_gag_session g4ui_use_gag g4ui_build_xm_session g4ui_use_xm g4ui_build_xaw_session g4ui_use_xaw g4ui_build_win32_session g4ui_use_win32 g4ui_use_tcsh:\
+?MAKE:g4ui_build_terminal_session g4ui_use_terminal g4ui_build_gag_session g4ui_use_gag g4ui_build_xm_session g4ui_use_xm g4ui_build_xaw_session g4ui_use_xaw g4ui_build_win32_session g4ui_use_win32 g4ui_use_tcsh g4_build_wo_session g4ui_use_wo:\
 	Myread Getfile cat rm test
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
