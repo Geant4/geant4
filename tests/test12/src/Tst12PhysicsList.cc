@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst12PhysicsList.cc,v 1.7 2000-08-17 21:38:31 maire Exp $
+// $Id: Tst12PhysicsList.cc,v 1.8 2000-11-10 08:03:01 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -251,7 +251,8 @@ void Tst12PhysicsList::ConstructEM()
 #include "G4StringModel.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4FTFModel.hh"
-#include "G4LundStringFragmentation.hh"
+#include "G4QGSMFragmentation.hh"
+#include "G4ExcitedStringDecay.hh"
 
 
 //
@@ -301,8 +302,9 @@ void Tst12PhysicsList::ConstructHad()
     theTheoModel->SetMinEnergy(19*GeV);
     theTheoModel->SetMaxEnergy(100*TeV);
 
-      G4VStringFragmentation * theFragmentation = new G4LundStringFragmentation;
-      theStringModel->SetFragmentationModel(theFragmentation);
+      G4VLongitudinalStringDecay * theFragmentation = new G4QGSMFragmentation;
+      G4ExcitedStringDecay * theStringDecay = new G4ExcitedStringDecay(theFragmentation);
+      theStringModel->SetFragmentationModel(theStringDecay);
 
 // done with the generator model (most of the above is also available as default)
    G4HadronElasticProcess* theElasticProcess = 
