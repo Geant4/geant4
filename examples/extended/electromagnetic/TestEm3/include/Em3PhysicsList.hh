@@ -21,63 +21,51 @@
 // ********************************************************************
 //
 //
-// $Id: Em3PhysicsList.hh,v 1.6 2002-02-14 14:20:46 maire Exp $
+// $Id: Em3PhysicsList.hh,v 1.7 2003-02-20 15:52:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// 14.10.02 (V.Ivanchenko) provide modular list on base of old Em3PhysicsList
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em3PhysicsList_h
 #define Em3PhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
 class Em3PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em3PhysicsList: public G4VUserPhysicsList
+class Em3PhysicsList: public G4VModularPhysicsList
 {
   public:
     Em3PhysicsList();
    ~Em3PhysicsList();
 
-  protected:
-    // Construct particle
-    void ConstructParticle();
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBarions();
-    void ConstructIons();   
+    void AddPhysicsList(const G4String& name);
     
-  public: 
     void SetCuts();
     void SetCutForGamma(G4double);
     void SetCutForElectron(G4double);
-    void SetCutForProton(G4double);
-        
-  protected:
-  // Construct physics processes and register them
-    void ConstructProcess();  
-    void ConstructGeneral();
-    void ConstructEM();
-    
+    void SetCutForPositron(G4double);
+       
   private:
     G4double cutForGamma;
     G4double cutForElectron; 
-    G4double cutForProton;
+    G4double cutForPositron;
     G4double currentDefaultCut;
+
+    G4bool   emPhysicsListIsRegistered;
     
-    Em3PhysicsListMessenger* pMessenger;             
+    Em3PhysicsListMessenger* pMessenger;         
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
 

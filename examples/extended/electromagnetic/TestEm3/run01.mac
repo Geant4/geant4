@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.5 2001-11-05 15:28:39 maire Exp $
+# $Id: run01.mac,v 1.6 2003-02-20 15:52:01 vnivanch Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -6,6 +6,11 @@
 # Lead-liquidArgon 50 layers; electron 1 GeV
 #
 /control/verbose 2
+#
+#  select EM PhysicsList
+#
+#/testem/phys/addPhysics  model
+/testem/phys/addPhysics  standard
 #
 #/run/particle/setCut 0.5 mm
 /run/initialize

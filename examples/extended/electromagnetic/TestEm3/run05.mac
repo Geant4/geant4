@@ -1,4 +1,4 @@
-# $Id: run05.mac,v 1.5 2002-12-12 11:19:33 maire Exp $
+# $Id: run05.mac,v 1.6 2003-02-20 15:52:01 vnivanch Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -8,6 +8,11 @@
 # SICAPO Collaboration. NIM A345 (244-249) Oct.93
 #
 /control/verbose 2
+#
+#  select EM PhysicsList
+#
+#/testem/phys/addPhysics  model
+/testem/phys/addPhysics  standard
 #
 /run/particle/setCut 1 mm
 /run/initialize

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorConstruction.cc,v 1.7 2003-02-10 16:51:48 maire Exp $
+// $Id: Em3DetectorConstruction.cc,v 1.8 2003-02-20 15:52:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,16 +55,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3DetectorConstruction::Em3DetectorConstruction()
-:solidWorld(NULL),logicWorld(NULL),physiWorld(NULL),
- solidCalor(NULL),logicCalor(NULL),physiCalor(NULL),
- solidLayer(NULL),logicLayer(NULL),physiLayer(NULL),
- defaultMaterial(NULL),
- magField(NULL),calorimeterSD(NULL)
+:defaultMaterial(0),solidWorld(0),logicWorld(0),physiWorld(0),
+ solidCalor(0),logicCalor(0),physiCalor(0),
+ solidLayer(0),logicLayer(0),physiLayer(0),
+ magField(0),calorimeterSD(0)
 {
   for (G4int i=0; i<MaxAbsor; i++)
      {
-      AbsorMaterial[i]=NULL; AbsorThickness[i]=0.;
-      solidAbsor[i]=NULL;logicAbsor[i]=NULL;physiAbsor[i]=NULL;
+      AbsorMaterial[i]=0; AbsorThickness[i]=0.;
+      solidAbsor[i]=0;logicAbsor[i]=0;physiAbsor[i]=0;
      }
   //    
   // default parameter values of the calorimeter
@@ -303,14 +302,14 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   				 G4ThreeVector(),	//at (0,0,0)
                                  "World",		//its name
                                  logicWorld,		//its logical volume
-                                 NULL,			//its mother  volume
+                                 0,			//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
   
   //                               
   // Calorimeter
   //  
-  solidCalor=NULL; logicCalor=NULL; physiCalor=NULL;
+  solidCalor=0; logicCalor=0; physiCalor=0;
   
   solidCalor = new G4Box("Calorimeter",				     //its name
     		       CalorThickness/2,CalorSizeYZ/2,CalorSizeYZ/2);//size
@@ -330,7 +329,7 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   //                                 
   // Layers
   //
-  solidLayer=NULL; logicLayer=NULL; physiLayer=NULL;
+  solidLayer=0; logicLayer=0; physiLayer=0;
     
   solidLayer = new G4Box("Layer",		                      //its name
                        LayerThickness/2,CalorSizeYZ/2,CalorSizeYZ/2); //size
@@ -358,7 +357,7 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   // Absorbers
   //
   for (G4int j=0; j<MaxAbsor; j++)  
-     { solidAbsor[j]=NULL; logicAbsor[j]=NULL; physiAbsor[j]=NULL;}
+     { solidAbsor[j]=0; logicAbsor[j]=0; physiAbsor[j]=0;}
 
   G4double xfront = -0.5*LayerThickness;  
   for (G4int k=0; k<NbOfAbsor; k++)
@@ -518,7 +517,7 @@ void Em3DetectorConstruction::SetMagField(G4double fieldValue)
     fieldMgr->SetDetectorField(magField);
     fieldMgr->CreateChordFinder(magField);
   } else {
-    magField = NULL;
+    magField = 0;
     fieldMgr->SetDetectorField(magField);
   }
 }

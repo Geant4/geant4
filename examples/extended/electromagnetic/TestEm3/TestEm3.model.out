@@ -21,8 +21,8 @@ Current available graphics systems are:
 #
 #  select EM PhysicsList
 #
-#/testem/phys/addPhysics  model
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  model
+#/testem/phys/addPhysics  standard
 #
 /run/initialize
 userDetector->Construct() start.
@@ -248,15 +248,27 @@ msc:   Tables of transport mean free paths.
           displacement of the particle , too.
         PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
-eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
-        delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+eIoni:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
-eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
- Good description from 1 KeV to 100 GeV.
-        log scale extrapolation above 100 GeV 
-        Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+eBrem:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
@@ -267,28 +279,45 @@ msc:   Tables of transport mean free paths.
           displacement of the particle , too.
         PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
-hIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+hIoni:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
         PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
-MuIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+muIoni:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-MuBrems:  theoretical cross section 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+MuBrems:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
-MuPairProd:  theoretical cross sections 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+MuPairProd:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muIoni:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+
+MuBrems:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+MuPairProd:  
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
 ======== Table of production thresholds in range and energy ===========
 
@@ -468,19 +497,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=14.85s Real=15.15s Sys=0.03s
+  User=13.89s Real=14.16s Sys=0.02s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 
  
- Absorber0 (Lead         ) : 814.32 MeV +- 15.62 MeV       56.47 cm +-  1.28 cm
- Absorber1 (liquidArgon         ) : 173.43 MeV +- 14.87 MeV       85.80 cm +-  7.48 cm
+ Absorber0 (Lead         ) : 810.89 MeV +- 14.27 MeV       56.33 cm +-  1.22 cm
+ Absorber1 (liquidArgon         ) : 178.22 MeV +- 12.57 MeV       88.37 cm +-  6.58 cm
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 847407205, 956355892
+ Current couple of seeds = 1246911469, 1206300897
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
