@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst32DetectorConstruction.cc,v 1.1 2002-06-13 12:16:35 jwellisc Exp $
+// $Id: Tst32DetectorConstruction.cc,v 1.2 2004-03-16 16:20:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -127,8 +127,8 @@ G4VPhysicalVolume* Tst32DetectorConstruction::Construct()
     G4double zpos = 80*ilog-360.;
     simpleBoxLog[ilog] = 
       new G4LogicalVolume( mySimpleBox,selectedMaterial[ilog],"SLog0",0,0,0);
-    G4VPhysicalVolume* simpleBoxDetector0 
-      = new G4PVPlacement(0,
+//    G4VPhysicalVolume* simpleBoxDetector0 =
+        new G4PVPlacement(0,
 			  G4ThreeVector(0.,0.,zpos*cm),
 			  "SPhys",
 			  simpleBoxLog[ilog],

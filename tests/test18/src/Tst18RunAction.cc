@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst18RunAction.cc,v 1.8 2003-06-16 17:15:22 gunter Exp $
+// $Id: Tst18RunAction.cc,v 1.9 2004-03-16 16:19:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,7 +97,7 @@ void Tst18RunAction::EndOfRunAction(const G4Run* )
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
   //  ofstream outscat(fileName, ios::app);
 
-  for (G4int i=0; i<Particles.size();i++) {
+  for (size_t i=0; i<Particles.size();i++) {
 
     //    outscat 
     G4cout

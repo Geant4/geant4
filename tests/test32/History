@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2002-06-13 12:16:34 jwellisc Exp $
+$Id: History,v 1.2 2004-03-16 16:20:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-13 Dec. 2001 H.Kurashige
-- first implementation (Naoko)
 
+16th March 2004  Gabriele Cosmo
+- Fixed compilation warnings.
+- Replaced usage of NULL with 0.
+
+13th December 2001  Hisaya Kurashige
+- First implementation (by Naoko Kanaya).

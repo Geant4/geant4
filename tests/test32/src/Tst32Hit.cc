@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst32Hit.cc,v 1.1 2002-06-13 12:16:36 jwellisc Exp $
+// $Id: Tst32Hit.cc,v 1.2 2004-03-16 16:20:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,6 +46,7 @@ Tst32Hit::~Tst32Hit()
 {;}
 
 Tst32Hit::Tst32Hit(const Tst32Hit &right)
+  : G4VHit()
 {
   *this = right;
 }
@@ -59,9 +60,9 @@ const Tst32Hit& Tst32Hit::operator=(const Tst32Hit &right)
   return *this;
 }
 
-int Tst32Hit::operator==(const Tst32Hit &right) const
+int Tst32Hit::operator==(const Tst32Hit & right) const
 {
-  return 0;
+  return (this==&right) ? 1 : 0;
 }
 
 void Tst32Hit::Draw()

@@ -50,7 +50,7 @@ extern G4bool drawEvent;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst18EventAction::Tst18EventAction()
-  : drawFlag("all"),eventMessenger(NULL)
+  : drawFlag("all"),eventMessenger(0)
 {
   eventMessenger = new Tst18EventActionMessenger(this);
 }
@@ -64,15 +64,14 @@ Tst18EventAction::~Tst18EventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Tst18EventAction::BeginOfEventAction(const G4Event* Ev)
+void Tst18EventAction::BeginOfEventAction(const G4Event*)
 {drawEvent=false;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Tst18EventAction::EndOfEventAction(const G4Event* Ev)
+void Tst18EventAction::EndOfEventAction(const G4Event* evt)
 {
   if (drawEvent){
-    const G4Event* evt = fpEventManager->GetConstCurrentEvent();
 
     //  G4cout << ">>> Event " << evt->GetEventID() << endl;
     

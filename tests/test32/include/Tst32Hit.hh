@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst32Hit.hh,v 1.1 2002-06-13 12:16:35 jwellisc Exp $
+// $Id: Tst32Hit.hh,v 1.2 2004-03-16 16:20:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -51,7 +51,7 @@ public:
   inline void operator delete(void *aHit);
   void *operator new(size_t,void*p){return p;}
 #ifndef G4NOT_ISO_DELETES
-  void operator delete(void *aHit,void*){}
+  void operator delete(void *,void*){}
 #endif
   
   void Draw();

@@ -31,7 +31,7 @@
 class Tst25StackingAction : public G4UserStackingAction
 {
       virtual G4ClassificationOfNewTrack
-        ClassifyNewTrack(const G4Track* aTrack)
+        ClassifyNewTrack(const G4Track*)
 	{
 	  G4ClassificationOfNewTrack result(fUrgent);
 // 	  if(aTrack->GetDefinition()->GetPDGCharge() == 0 && 

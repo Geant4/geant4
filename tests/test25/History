@@ -12,4 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-07 11 2002, J.P. Wellisch - created the test
+16th March 2004  Gabriele Cosmo
+- Fixed compilation warnings.
+- Replaced usage of NULL with 0.
+
+7th November 2002  Hans-Peter Wellisch
+- Created the test.

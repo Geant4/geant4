@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst32SensitiveDetector.cc,v 1.2 2003-05-30 18:25:24 hpw Exp $
+// $Id: Tst32SensitiveDetector.cc,v 1.3 2004-03-16 16:20:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,7 +46,7 @@ Tst32SensitiveDetector::~Tst32SensitiveDetector()
 {
 }
 
-void Tst32SensitiveDetector::Initialize(G4HCofThisEvent*HCE)
+void Tst32SensitiveDetector::Initialize(G4HCofThisEvent*)
 {
   HitCollection = new Tst32HitsCollection
                       (SensitiveDetectorName,collectionName[0]);
@@ -58,7 +58,7 @@ void Tst32SensitiveDetector::Initialize(G4HCofThisEvent*HCE)
 }
 
 G4bool Tst32SensitiveDetector::ProcessHits(G4Step*aStep,
-					    G4TouchableHistory*ROhist)
+					   G4TouchableHistory*)
 {
 
   G4double edep = aStep->GetTotalEnergyDeposit();

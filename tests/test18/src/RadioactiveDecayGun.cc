@@ -39,7 +39,7 @@ RadioactiveDecayGun::RadioactiveDecayGun ()
   theRadioactiveDecayGunMessenger = new RadioactiveDecayGunmessenger(this);
 
   // G4IonTable *theIonTable = G4ParticleTable::GetParticleTable()->GetIonTable();
-  //G4ParticleDefinition *aIon = NULL;
+  //G4ParticleDefinition *aIon = 0;
 
   //aIon = theIonTable->GetIon (52, 109, 0.0);
 
@@ -67,7 +67,7 @@ void RadioactiveDecayGun::SetNucleus (Nucleus theIon1)
   G4IonTable *theIonTable =
     (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
 
-  G4ParticleDefinition *aIon = NULL;
+  G4ParticleDefinition *aIon = 0;
 
   G4int A = theIon.GetA();
   G4int Z = theIon.GetZ();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst21DetectorConstruction.hh,v 1.1 2001-11-01 15:38:40 hpw Exp $
+// $Id: Tst21DetectorConstruction.hh,v 1.2 2004-03-16 16:19:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,10 +50,10 @@ class Tst21DetectorConstruction : public G4VUserDetectorConstruction
      void SelectMaterialPointer();
 
      G4LogicalVolume*   simpleBoxLog;
+     G4Material* selectedMaterial;
      G4Material* Air;
      G4Material* Al;
      G4Material* Pb;
-     G4Material* selectedMaterial;
      G4String materialChoice;
      Tst21DetectorMessenger * detectorMessenger;
 };

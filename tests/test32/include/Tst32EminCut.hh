@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst32EminCut.hh,v 1.1 2002-06-13 12:16:35 jwellisc Exp $
+// $Id: Tst32EminCut.hh,v 1.2 2004-03-16 16:20:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,7 +90,7 @@ class Tst32EminCut : public G4VProcess
   private:
   
   // hide assignment operator as private 
-     Tst32EminCut& operator=(const Tst32EminCut& right){return *this;};
+     Tst32EminCut& operator=(const Tst32EminCut&){return *this;};
 
   G4double theEminThreshold;
 
@@ -111,7 +111,7 @@ inline
 inline 
   G4double Tst32EminCut::PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
-                             G4double   previousStepSize,
+                             G4double, //   previousStepSize,
                              G4ForceCondition* condition
                             )
 {

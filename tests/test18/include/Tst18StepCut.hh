@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst18StepCut.hh,v 1.6 2001-07-11 10:10:12 gunter Exp $
+// $Id: Tst18StepCut.hh,v 1.7 2004-03-16 16:19:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,7 +91,7 @@ class Tst18StepCut : public G4VDiscreteProcess
 
 inline G4double Tst18StepCut::PostStepGetPhysicalInteractionLength(
                              const G4Track& aTrack,
-                             G4double   previousStepSize,
+                             G4double, //   previousStepSize,
                              G4ForceCondition* condition
                             )
 {
@@ -101,7 +101,7 @@ inline G4double Tst18StepCut::PostStepGetPhysicalInteractionLength(
    G4double ProposedStep = DBL_MAX;
 
    if((MaxChargedStep > 0.) &&
-      (aTrack.GetVolume() != NULL) &&
+      (aTrack.GetVolume() != 0) &&
       (aTrack.GetVolume()->GetName() == "Absorber") &&
       (aTrack.GetDynamicParticle()->GetDefinition()->GetPDGCharge() != 0.))
         ProposedStep = MaxChargedStep ;
@@ -119,10 +119,9 @@ inline G4VParticleChange* Tst18StepCut::PostStepDoIt(
    return &aParticleChange;
 }
 
-inline G4double Tst18StepCut::GetMeanFreePath(const G4Track& aTrack,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition
-                            )
+inline G4double Tst18StepCut::GetMeanFreePath(const G4Track&,
+                                                    G4double,
+                                                    G4ForceCondition* )
 {
   return 0.;
 }

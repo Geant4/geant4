@@ -125,8 +125,8 @@ G4VPhysicalVolume* Tst18GeometryConstruction::Construct ()
     = new G4Sphere("aSphere1",0,aSphere_r1,0.*deg,360.*deg,0.*deg,180.*deg);
   G4LogicalVolume * aSphere_log1
     = new G4LogicalVolume(aSphere_sph1,Aluminium,"aSphere_L1",0,0,0);
-  G4VPhysicalVolume * aSphere_phys1
-    = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),"aSphere_P1",
+//  G4VPhysicalVolume * aSphere_phys1 =
+      new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),"aSphere_P1",
     aSphere_log1,universe_phys,false,0);
 
   //
@@ -137,8 +137,8 @@ G4VPhysicalVolume* Tst18GeometryConstruction::Construct ()
     = new G4Sphere("aSphere2",0,aSphere_r2,0.*deg,360.*deg,0.*deg,180.*deg);
   G4LogicalVolume * aSphere_log2
     = new G4LogicalVolume(aSphere_sph2,SiliconDioxide,"aSphere_L2",0,0,0);
-  G4VPhysicalVolume * aSphere_phys2
-    = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),"aSphere_P2",aSphere_log2,
+//  G4VPhysicalVolume * aSphere_phys2 =
+      new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),"aSphere_P2",aSphere_log2,
                       universe_phys,false,0);
 
   return universe_phys;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst16RunAction.cc,v 1.3 2001-07-11 10:10:03 gunter Exp $
+// $Id: Tst16RunAction.cc,v 1.4 2004-03-16 16:19:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,11 +39,10 @@ Tst16RunAction::~Tst16RunAction()
 {
 }
 
-void Tst16RunAction::BeginOfRunAction(const G4Run* aRun)
+void Tst16RunAction::BeginOfRunAction(const G4Run*)
 {
 }
 
-void Tst16RunAction::EndOfRunAction(const G4Run* aRun)
+void Tst16RunAction::EndOfRunAction(const G4Run*)
 {
 }
-
