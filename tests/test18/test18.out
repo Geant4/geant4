@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jan-2002)
+                                (28-Feb-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -94,9 +94,6 @@ MuPairProd:  theoretical cross sections
 ### Run : 0
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Na24[0.0]
-        46.4           1   3.284e+04     e-
-    1.34e+03           1   3.284e+04     anti_nu_e
-      0.0429           1   3.284e+04     Mg24[0.0]
 
 #
 #
@@ -109,10 +106,6 @@ MuPairProd:  theoretical cross sections
 /run/beamOn
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Ne24[0.0]
-         576           1       16.67     e-
-         547           1       16.67     anti_nu_e
-         874           1       16.67     gamma
-     0.00652           1       16.67     Na24[0.0]
 
 #
 #
@@ -125,9 +118,6 @@ MuPairProd:  theoretical cross sections
 /run/beamOn 
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     F24[0.0]
-    4.54e+03           1       1.692     e-
-    8.17e+03           1       1.692     anti_nu_e
-        2.69           1       1.692     Ne24[0.0]
 
 #
 #
@@ -140,11 +130,6 @@ MuPairProd:  theoretical cross sections
 /run/beamOn 
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Al24[0.0]
-    3.95e+03           1       5.005     e+
-    3.43e+03           1       5.005     gamma
-    1.09e+03           1       5.005     gamma
-    4.78e+03           1       5.005     nu_e
-        1.73           1       5.005     Mg24[0.0]
 
 #
 #
@@ -157,13 +142,6 @@ MuPairProd:  theoretical cross sections
 /run/beamOn
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Na24[472.0]
-         472           1     0.02264     gamma
-           0           1     0.02264     Na24[0.0]
-         621           1   4.309e+04     e-
-         769           1   4.309e+04     anti_nu_e
-    2.75e+03           1   4.309e+04     gamma
-    1.37e+03           1   4.309e+04     gamma
-       0.067           1   4.309e+04     Mg24[0.0]
 
 #
 #
@@ -176,11 +154,6 @@ MuPairProd:  theoretical cross sections
 /run/beamOn
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Cr46[0.0]
-    1.71e+03           1       2.006     e+
-         511           1       2.006     gamma
-         511           1       2.006     gamma
-    4.87e+03           1       2.006     nu_e
-       0.301           1       2.006     V46[0.0]
 
 #
 #
@@ -193,8 +166,6 @@ MuPairProd:  theoretical cross sections
 /run/beamOn
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     Po215[0.0]
-    7.39e+03           1    0.005099     alpha
-         140           1    0.005099     Pb211[0.0]
 
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (14-Dec-2001)
+                                (31-Jan-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Now Detector is rod_place_asm
@@ -109,8 +109,3 @@ MuPairProd:  theoretical cross sections
 /run/beamOn 3
 /event/Verbose 1
 /tracking/Verbose 1
-#
-# Termination
-#
-Graphics systems deleted.
-Visualization Manager deleting...
