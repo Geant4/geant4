@@ -89,7 +89,6 @@ void test31SD::Initialize(G4HCofThisEvent*)
 G4bool test31SD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  //  if(0.0 == edep) return true;
 
   theHisto->AddStep();
   theHisto->AddTrackLength(aStep->GetStepLength());
@@ -104,23 +103,20 @@ G4bool test31SD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
       energy[j] += edep;
   }
 
-  if(0 < theHisto->GetVerbose()) {
-      G4cout << "test31SD: energy = " << edep/MeV
-             << " MeV is deposited at " << j
-             << "-th absorber slice " << G4endl;
-  }
-
   const G4Track* track = aStep->GetTrack();
   G4int trIDnow  = track->GetTrackID();
+
+  if(1 < theHisto->GetVerbose() && edep > 0.0) {
+      G4cout << "test31SD: energy = " << edep/MeV
+             << " MeV is deposited at " << j
+             << "-th absorber slice "
+             << " TrackID= " << trIDnow 
+             << G4endl;
+  }
+
   G4double tkin  = track->GetKineticEnergy(); 
-  /*
-  G4cout << std::setw(14)
-         <<  "Next step: id= " << trIDnow 
-         << " e= " << tkin << " r= " << track->GetPosition() << G4endl;
-  */
   G4double theta = (track->GetMomentumDirection()).theta();
   G4double zend  = aStep->GetPostStepPoint()->GetPosition().z();
-  //  G4double zstart= aStep->GetPreStepPoint()->GetPosition().z();
 
   G4bool stop = false;
   G4bool primary = false;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.6 2004-08-19 16:29:25 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.7 2004-08-26 11:51:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -105,7 +105,7 @@ void PhysicsList::ConstructProcess()
   emOptions.SetDEDXBinning(90);
   emOptions.SetLambdaBinning(90);
   emOptions.SetBuildPreciseRange(false);
-  emOptions.SetVerbose(1);
+  emOptions.SetVerbose(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

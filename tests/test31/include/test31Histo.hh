@@ -42,18 +42,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "globals.hh"
-#include <vector>
 #include "G4DynamicParticle.hh"
-#include <memory> // for the auto_ptr(T>
-#include "AIDA/AIDA.h"
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-//class IHistogram1D;
-//class ITuple;
-//class ITree;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+class Histo;
+class EmAnalysis;
 
 class test31Histo
 {
@@ -77,7 +73,6 @@ public: // Without description
 
     void SetHistoName(const G4String& name) {histName = name;};
     void bookHisto();
-  //   AIDA::ITuple* GetNtuple() const {return ntup;};
     void SaveToTuple(const G4String&, G4double);
     void SaveToTuple(const G4String&, G4double, G4double);
     void SaveEvent();
@@ -114,6 +109,7 @@ public: // Without description
 private:
 
     void TableControl();
+    void CrossSections();
 
     test31Histo(const test31Histo&);
     const test31Histo& operator=(const test31Histo& right);
@@ -121,12 +117,13 @@ private:
   // MEMBERS
     static test31Histo* fManager;
 
+    EmAnalysis* ema;
+
     G4String histName;
     G4String theName;
-    std::vector<AIDA::IHistogram1D*> histo;
-    AIDA::ITuple* ntup;
-    AIDA::ITree* tree;
+    Histo* histo;
     G4int nHisto;
+    std::vector<G4int> histoID;
     G4int verbose; 
     G4double zend;
     G4double zend2;
