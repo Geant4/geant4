@@ -5,6 +5,7 @@
 #include "G4HadronicInteraction.hh"
 #include "G4ParticleTable.hh"
 #include "G4Quasmon.hh"
+#include "G4QNucleus.hh"
 #include "G4QHadronVector.hh"
 #include "G4ParticleChange.hh"
 #include "G4LorentzVector.hh"
@@ -42,8 +43,20 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   G4LorentzVector targ4Mom(0.,0.,0.,targetMass);  
   
   G4int nop = 223; // ??????
+  G4double fractionOfSingleQuasiFreeNucleons = 0.15;
+  G4double fractionOfPairedQuasiFreeNucleons = 0.01;
+  G4double clusteringCoefficient = 5.;
+  G4double temperature = 180.;
+  G4double halfTheStrangenessOfSee = 0.1; // = s/d = s/u
+  G4double etaToEtaPrime = 0.3;
   
   // construct and fragment the quasmon
+  G4QNucleus::SetParameters(fractionOfSingleQuasiFreeNucleons,
+                            fractionOfPairedQuasiFreeNucleons,
+			    clusteringCoefficient);
+  G4Quasmon::SetParameters(temperature,
+                           halfTheStrangenessOfSee,
+			   etaToEtaPrime);
   G4Quasmon* pan= new G4Quasmon(projectilePDGCode, targetPDGCode, 1./MeV*proj4Mom, 1./MeV*targ4Mom, nop);
   G4QHadronVector output = pan->HadronizeQuasmon();
   
@@ -63,6 +76,11 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
     theSec = new G4DynamicParticle;  
     G4int pdgCode = output[particle]->GetPDGCode();
     G4ParticleDefinition * theDefinition;
+    // Note that I still have to take care of strange nuclei
+    // For this I need the mass calculation, and a changed interface
+    // for ion-tablel ==> work for Hisaya @@@@@@@
+    // Then I can sort out the pdgCode. I also need a decau process 
+    // for strange nuclei; may be another chips interface
     if(pdgCode>90000000) 
     {
       G4int aZ = (pdgCode-90000000)/1000;

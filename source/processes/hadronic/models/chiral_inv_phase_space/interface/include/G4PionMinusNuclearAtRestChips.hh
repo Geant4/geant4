@@ -3,29 +3,23 @@
 
 #include "globals.hh"
 #include "G4VRestProcess.hh"
-#include "G4ParticleTable.hh"
-#include "G4Quasmon.hh"
-#include "G4QHadronVector.hh"
-#include "G4ParticleChange.hh"
-#include "G4LorentzVector.hh"
-#include "G4DynamicParticle.hh"
-#include "G4IonTable.hh"
-#include "G4Neutron.hh"
 #include "G4StopElementSelector.hh"
+#include "G4PionMinus.hh"
+#include "G4ChiralInvariantPhaseSpace.hh"
 
 class G4PionMinusNuclearAtRestChips : public G4VRestProcess
 {
   private:
   // hide assignment operator as private 
-      G4PionMinusAnnihilationAtRest& operator=(const G4PionMinusAnnihilationAtRest &right);
-      G4PionMinusAnnihilationAtRest(const G4PionMinusAnnihilationAtRest& );
+      G4PionMinusNuclearAtRestChips& operator=(const G4PionMinusNuclearAtRestChips &right);
+      G4PionMinusNuclearAtRestChips(const G4PionMinusNuclearAtRestChips& );
    
   public:
  
-     G4PionMinusAnnihilationAtRest(const G4String& processName ="PionMinusAnnihilationAtRest")
+     G4PionMinusNuclearAtRestChips(const G4String& processName ="PionMinusAnnihilationAtRest")
       : G4VRestProcess (processName) {}
  
-    ~G4PionMinusAnnihilationAtRest() {}
+    ~G4PionMinusNuclearAtRestChips() {}
 
      G4bool IsApplicable(const G4ParticleDefinition& aParticle)
      {
@@ -60,7 +54,7 @@ AtRestDoIt(const G4Track& aTrack, const G4Step&aStep)
   
   // Create target
   G4Element * theTarget = theSelector.GetElement(aTrack.GetMaterial());
-  G4Nucleus aTargetNucleus(theTarget.GetN() ,theTarget.GetZ());
+  G4Nucleus aTargetNucleus(theTarget->GetN() ,theTarget->GetZ());
   
   // Call chips
   return theModel.ApplyYourself(aTrack, aTargetNucleus);

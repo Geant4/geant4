@@ -12,20 +12,21 @@
 #include "G4IonTable.hh"
 #include "G4Neutron.hh"
 #include "G4StopElementSelector.hh"
+#include "G4ChiralInvariantPhaseSpace.hh"
 
 class G4ProtonAntiProtonAtRestChips : public G4VRestProcess
 {
   private:
   // hide assignment operator as private 
-      G4AntiProtonAnnihilationAtRest& operator=(const G4AntiProtonAnnihilationAtRest &right);
-      G4AntiProtonAnnihilationAtRest(const G4AntiProtonAnnihilationAtRest& );
+      G4ProtonAntiProtonAtRestChips& operator=(const G4ProtonAntiProtonAtRestChips &right);
+      G4ProtonAntiProtonAtRestChips(const G4ProtonAntiProtonAtRestChips& );
    
   public:
  
-     G4AntiProtonAnnihilationAtRest(const G4String& processName ="AntiProtonAnnihilationAtRest")
+     G4ProtonAntiProtonAtRestChips(const G4String& processName ="AntiProtonAnnihilationAtRest")
       : G4VRestProcess (processName) {}
  
-    ~G4AntiProtonAnnihilationAtRest() {}
+    ~G4ProtonAntiProtonAtRestChips() {}
 
      G4bool IsApplicable(const G4ParticleDefinition& aParticle)
      {
@@ -53,6 +54,12 @@ inline
 G4VParticleChange * G4ProtonAntiProtonAtRestChips::
 AtRestDoIt(const G4Track& aTrack, const G4Step&aStep)
 {
+  // Create target
+  G4Element * theTarget = theSelector.GetElement(aTrack.GetMaterial());
+  G4Nucleus aTargetNucleus(theTarget->GetN() ,theTarget->GetZ());
+
+  // Check model validity - note this will be a sub-branch in the ordinary stopping @@@@@@
+  // in the long haul. @@@@@@
   if(aTrack.GetDynamicParticle()->GetDefinition() != G4AntiProton::AntiProton())
   {
     G4Exception("Calling G4ProtonAntiProtonAtRestChips with particle other than p-bar!!!");
@@ -61,10 +68,6 @@ AtRestDoIt(const G4Track& aTrack, const G4Step&aStep)
   {
     G4Exception("Calling G4ProtonAntiProtonAtRestChips for target other than Hydrogen!!!");
   }
-    
-  // Create target
-  G4Element * theTarget = theSelector.GetElement(aTrack.GetMaterial());
-  G4Nucleus aTargetNucleus(theTarget.GetN() ,theTarget.GetZ());
   
   // Call chips
   return theModel.ApplyYourself(aTrack, aTargetNucleus);
