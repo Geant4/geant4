@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Decay.cc,v 1.7 2000-10-25 00:01:04 kurasige Exp $
+// $Id: G4Decay.cc,v 1.8 2001-02-22 13:29:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,13 +27,16 @@
 //   to resonances    12 Dec. 1998   H.Kurashige 
 //   remove G4ParticleMomentum  6 Feb. 99 H.Kurashige
 //   modified  IsApplicable to activate G4Decay for resonances  1 Mar. 00 H.Kurashige 
+//   Add External Decayer         23 Feb. 2001  H.Kurashige
 //
+
 #include "G4Decay.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
 #include "G4DecayTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ParticleChangeForDecay.hh"
+#include "G4VExtDecayer.hh"
 
 // constructor
 G4Decay::G4Decay(const G4String& processName)
@@ -41,22 +44,26 @@ G4Decay::G4Decay(const G4String& processName)
                                 HighestBinValue(10.0),
                                 LowestBinValue(1.0e-3),
                                 TotBin(200),
-				verboseLevel(1)
+				verboseLevel(1),
+				pExtDecayer(0),
+				aPhysicsTable(0)
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
     G4cerr << "G4Decay  constructor " << "  Name:" << processName << G4endl;
   }
 #endif
-  aPhysicsTable = NULL;
   pParticleChange = &fParticleChangeForDecay;
 }
 
 G4Decay::~G4Decay()
 {
-  if (aPhysicsTable != NULL) {
+  if (aPhysicsTable != 0) {
     aPhysicsTable->clearAndDestroy();
     delete aPhysicsTable;
+  }
+  if (pExtDecayer) {
+    delete pExtDecayer;
   }
 }
 
@@ -236,62 +243,65 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 
   //check if thePreAssignedDecayProducts exists
   const G4DecayProducts* o_products = (aParticle->GetPreAssignedDecayProducts());
-  G4bool isPreAssigned = (o_products != NULL);   
-  G4DecayProducts* products = NULL;
+  G4bool isPreAssigned = (o_products != 0);   
+  G4DecayProducts* products = 0;
+
+  // decay table
+  G4DecayTable   *decaytable = aParticleDef->GetDecayTable();
+ 
+  // check if external decayer exists
+  G4bool isExtDecayer = (decaytable == 0) && (pExtDecayer !=0);
+
+  // Error due to NO Decay Table 
+  if ( (decaytable == 0) && !isExtDecayer &&!isPreAssigned ){
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cerr <<  "G4Decay::DoIt  : decay table not defined  for ";
+      G4cerr << aParticle->GetDefinition()->GetParticleName()<< G4endl;
+    }
+#endif
+    fParticleChangeForDecay.SetNumberOfSecondaries(0);
+    // Kill the parent particle
+    fParticleChangeForDecay.SetStatusChange( fStopAndKill ) ;
+    fParticleChangeForDecay.SetLocalEnergyDeposit(0.0); 
+    
+    ClearNumberOfInteractionLengthLeft();
+    return &fParticleChangeForDecay ;
+  }
 
   if (isPreAssigned) {
     // copy decay products 
     products = new G4DecayProducts(*o_products); 
+  } else if ( isExtDecayer ) {
+    // decay according to external decayer
+    products = pExtDecayer->ImportDecayProducts(aTrack);
   } else {
     // decay acoording to decay table
-    G4DecayTable   *decaytable = aParticleDef->GetDecayTable();
- 
-    if (decaytable == NULL){
+    // choose a decay channel
+    G4VDecayChannel *decaychannel = decaytable->SelectADecayChannel();
+    if (decaychannel == 0 ){
+      // decay channel not found
+      G4Exception("G4Decay::DoIt  : can not determine decay channel ");
+    } else {
+      G4int temp;
+      // execute DecayIt() 
 #ifdef G4VERBOSE
-      if (GetVerboseLevel()>0) {
-	G4cerr <<  "G4Decay::DoIt  : decay table not defined  for ";
-        G4cerr << aParticle->GetDefinition()->GetParticleName()<< G4endl;
+      if (GetVerboseLevel()>1) {
+	G4cerr << "G4Decay::DoIt  : selected decay channel  addr:" << decaychannel <<G4endl;
+	temp = decaychannel->GetVerboseLevel();
+	decaychannel->SetVerboseLevel(GetVerboseLevel());
       }
 #endif
-      fParticleChangeForDecay.SetNumberOfSecondaries(0);
-      // Kill the parent particle
-      fParticleChangeForDecay.SetStatusChange( fStopAndKill ) ;
-      fParticleChangeForDecay.SetLocalEnergyDeposit(0.0); 
-
-      ClearNumberOfInteractionLengthLeft();
-      return &fParticleChangeForDecay ;
-    } else {
-      // choose a decay channel
-      G4VDecayChannel *decaychannel = decaytable->SelectADecayChannel();
-      if (decaychannel == NULL){
-	// decay channel not found
+      products = decaychannel->DecayIt(aParticle->GetMass());
 #ifdef G4VERBOSE
-	if (GetVerboseLevel()>0) {
-	  G4cerr <<  "G4Decay::DoIt  : can not determine decay channel " <<G4endl;
-	  decaytable ->DumpInfo();
-	}
-#endif
-      } else {
-	G4int temp;
-	// execute DecayIt() 
-#ifdef G4VERBOSE
-	if (GetVerboseLevel()>1) {
-	  G4cerr << "G4Decay::DoIt  : selected decay channel  addr:" << decaychannel <<G4endl;
-	  temp = decaychannel->GetVerboseLevel();
-	  decaychannel->SetVerboseLevel(GetVerboseLevel());
-	}
-#endif
-	products = decaychannel->DecayIt(aParticle->GetMass());
-#ifdef G4VERBOSE
-        if (GetVerboseLevel()>1) {
-	  decaychannel->SetVerboseLevel(temp);
-	}
+      if (GetVerboseLevel()>1) {
+	decaychannel->SetVerboseLevel(temp);
+      }
 #endif
 #ifdef G4VERBOSE
       // for debug
       //if (! products->IsChecked() ) products->DumpInfo();
 #endif
-     } 
     }
   }
   
@@ -306,9 +316,10 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
     // AtRest case
     finalGlobalTime += fRemainderLifeTime;
     energyDeposit += aParticle->GetKineticEnergy();
+    if (isPreAssigned) products->Boost( ParentEnergy, ParentDirection); 
   } else {
     // PostStep case
-    products->Boost( ParentEnergy, ParentDirection); 
+    if (!isExtDecayer) products->Boost( ParentEnergy, ParentDirection); 
   }
 
   //add products in fParticleChangeForDecay
@@ -341,7 +352,7 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
      // add the secondary track in the List
      fParticleChangeForDecay.AddSecondary(secondary);
   }
-  if (!isPreAssigned) delete products;
+  delete products;
 
   // Kill the parent particle
   fParticleChangeForDecay.SetStatusChange( fStopAndKill ) ;
