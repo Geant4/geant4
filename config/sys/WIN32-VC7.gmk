@@ -62,7 +62,7 @@ ifeq ($(G4SYSTEM),WIN32-VC7)
     dumpbin /symbols $(G4LIBDIR)/lib$(name).a > $(name).dumpbin;\
     echo "Building $(name).def file ...";\
     $(RM) $(name).def;\
-    $(G4LIBDIR)/win32def.exe $(name) < $(name).dumpbin > $(name).def;\
+    $(G4LIB)/$(G4SYSTEM)/win32def.exe $(name) < $(name).dumpbin > $(name).def;\
     $(RM) $(name).dumpbin;\
     echo "Building lib$(name).exp and lib$(name).lib file ...";\
     $(RM) $(G4LIBDIR)/lib$(name).exp;\
@@ -75,7 +75,7 @@ ifeq ($(G4SYSTEM),WIN32-VC7)
              $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a \
              /libpath:$(G4LIBDIR) $(GLOBLIBS) \
              $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB) \
-             $(INTYLIBS) $(ANALYSISLIBS)
+             $(INTYLIBS) $(ANALYSISLIBS) $(UI32LIBS)
   endef
   define build-global-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`;\
@@ -85,7 +85,7 @@ ifeq ($(G4SYSTEM),WIN32-VC7)
     dumpbin /symbols $(G4LIBDIR)/lib$(name).a > $(name).dumpbin;\
     echo "Building $(name).def file ...";\
     $(RM) $(name).def;\
-    $(G4LIBDIR)/win32def.exe $(name) < $(name).dumpbin > $(name).def;\
+    $(G4LIB)/$(G4SYSTEM)/win32def.exe $(name) < $(name).dumpbin > $(name).def;\
     $(RM) $(name).dumpbin;\
     echo "Building lib$(name).exp and lib$(name).lib ...";\
     $(RM) $(G4LIBDIR)/lib$(name).exp;\
@@ -98,6 +98,6 @@ ifeq ($(G4SYSTEM),WIN32-VC7)
              $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a \
              /libpath:$(G4LIBDIR) $(GLOBLIBS) \
              $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB) \
-             $(INTYLIBS) $(ANALYSISLIBS)
+             $(INTYLIBS) $(ANALYSISLIBS) $(UI32LIBS)
   endef
 endif
