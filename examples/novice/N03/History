@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-01-07 16:05:51 gunter Exp $
+$Id: History,v 1.2 1999-03-10 16:15:35 maire Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+10-03-99 Michel Maire
+- Choose RaneCu as the default random number generator.
+- print the seed event%n
      
  9-10-98 John Apostolakis
 - This used to be example N02.  It is now N03.

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03EventActionMessenger.hh,v 1.1 1999-01-07 16:05:54 gunter Exp $
+// $Id: ExN03EventActionMessenger.hh,v 1.2 1999-03-10 16:15:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,6 +21,7 @@
 
 class ExN03EventAction;
 class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -35,6 +36,7 @@ class ExN03EventActionMessenger: public G4UImessenger
   private:
     ExN03EventAction*   eventAction;   
     G4UIcmdWithAString* DrawCmd;
+    G4UIcmdWithAnInteger* PrintCmd;    
 };
 
 #endif

@@ -1,4 +1,4 @@
-# $Id: run2.mac,v 1.1 1999-01-07 16:05:53 gunter Exp $
+# $Id: run2.mac,v 1.2 1999-03-10 16:15:36 maire Exp $
 #
 # Macro file of "exampleN03.cc"
 #
@@ -14,6 +14,7 @@
 #
 # shoot randomly 20 events
 #
+/event/printModulo 5
 /gun/random on
 /run/beamOn 20
 #

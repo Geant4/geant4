@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03EventAction.hh,v 1.1 1999-01-07 16:05:54 gunter Exp $
+// $Id: ExN03EventAction.hh,v 1.2 1999-03-10 16:15:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,13 +31,15 @@ class ExN03EventAction : public G4UserEventAction
 
   public:
     void BeginOfEventAction();
-    void EndOfEventAction();
+    void   EndOfEventAction();
     
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
+    void SetDrawFlag   (G4String val)  {drawFlag = val;};
+    void SetPrintModulo(G4int    val)  {printModulo = val;};
     
   private:
-    G4int    calorimeterCollID;                // Hits collection ID
-    G4String drawFlag;                         // control the drawing of event
+    G4int                       calorimeterCollID;                
+    G4String                    drawFlag;
+    G4int                       printModulo;                         
     ExN03EventActionMessenger*  eventMessenger;
 };
 

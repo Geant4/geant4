@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03EventAction.cc,v 1.1 1999-01-07 16:05:57 gunter Exp $
+// $Id: ExN03EventAction.cc,v 1.2 1999-03-10 16:15:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,11 +31,13 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 ExN03EventAction::ExN03EventAction()
-:calorimeterCollID(-1),drawFlag("all"),eventMessenger(NULL)
+:calorimeterCollID(-1),drawFlag("all"),eventMessenger(NULL),
+ printModulo(10000)
 {
   eventMessenger = new ExN03EventActionMessenger(this);
 }
@@ -50,11 +52,21 @@ ExN03EventAction::~ExN03EventAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void ExN03EventAction::BeginOfEventAction()
-{  if(calorimeterCollID==-1)
-  {
+{
+ const G4Event* evt = fpEventManager->GetConstCurrentEvent();
+ 
+ G4int evtNb = evt->GetEventID();
+ if (evtNb%printModulo == 0)
+   { 
+    G4cout << "\n---> Event: " << evtNb << endl;
+    HepRandom::showEngineStatus();
+   }
+    
+ if (calorimeterCollID==-1)
+   {
     G4SDManager * SDman = G4SDManager::GetSDMpointer();
     calorimeterCollID = SDman->GetCollectionID("CalCollection");
-  } 
+   } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
