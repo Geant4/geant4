@@ -123,6 +123,7 @@ class G4ParticleChange;
     {
       G4VProcess::theNumberOfInteractionLengthLeft =  -log( G4UniformRand() );
       theInitialNumberOfInteractionLength = G4VProcess::theNumberOfInteractionLengthLeft;
+      // hpw ReStarted = true;
     }
 
     G4VParticleChange *GeneralPostStepDoIt( const G4Track &aTrack, 

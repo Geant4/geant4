@@ -47,6 +47,7 @@
 #include "G4HadLeadBias.hh"
 #include "G4HadronicException.hh"
 #include "G4HadReentrentException.hh"
+#include "G4HadronicInteractionWrapper.hh"
 
 //@@ add model name info, once typeinfo available #include <typeinfo.h>
  
@@ -99,6 +100,22 @@
 G4double G4HadronicProcess::
 GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
 { 
+/*
+  if(ReStarted)
+  {
+    if(trackIdCache == aTrack.GetTrackId())
+    {
+      theInitialNumberOfInteractionLength += G4VProcess::theNumberOfInteractionLengthLeft;
+      
+    }
+    else
+    {
+      theInitialNumberOfInteractionLength = G4VProcess::theNumberOfInteractionLengthLeft;
+    }
+    trackIdCache = aTrack.GetTrackId();
+    ReStarted = false;
+  }
+*/ 
   G4double sigma = 0.0;
   try
   {
@@ -333,7 +350,8 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     {
       try
       {
-         result = theInteraction->ApplyYourself( thePro, targetNucleus);
+	 G4HadronicInteractionWrapper aW;
+	 result = aW.ApplyInteraction(thePro, targetNucleus, theInteraction);
       }
       catch(G4HadReentrentException aR)
       {
