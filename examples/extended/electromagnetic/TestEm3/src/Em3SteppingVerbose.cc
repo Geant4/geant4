@@ -5,39 +5,30 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3SteppingVerbose.cc,v 1.3 2000-02-29 12:19:50 maire Exp $
+// $Id: Em3SteppingVerbose.cc,v 1.4 2000-12-06 16:43:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-//---------------------------------------------------------------
-//
-// Em3SteppingVerbose.cc
-//
-// Description:
-//    Implementation of  the Em3SteppingVerbose class
-//
-//---------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #include "Em3SteppingVerbose.hh"
-#include "G4SteppingManager.hh"
 
+#include "G4SteppingManager.hh"
 #include "G4UnitsTable.hh"
 
-////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 Em3SteppingVerbose::Em3SteppingVerbose()
-////////////////////////////////////////////////
-{
-}
+{}
 
-//////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 Em3SteppingVerbose::~Em3SteppingVerbose()
-//////////////////////////////////////////////////
-{
-}
+{} 
 
-/////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 void Em3SteppingVerbose::StepInfo()
-/////////////////////////////////////////
 {
   CopyState();
   
@@ -124,11 +115,11 @@ void Em3SteppingVerbose::StepInfo()
     
   }
   G4cout.precision(prec);
+  
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-////////////////////////////////////////////////
 void Em3SteppingVerbose::TrackingStarted()
-////////////////////////////////////////////////
 {
 
   CopyState();
@@ -163,4 +154,6 @@ G4int prec = G4cout.precision(3);
     G4cout << G4std::setw(10) << "initStep" << G4endl;
   }
   G4cout.precision(prec);
+  
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

@@ -5,19 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3SteppingVerbose.hh,v 1.3 2000-02-29 12:18:58 maire Exp $
+// $Id: Em3SteppingVerbose.hh,v 1.4 2000-12-06 16:43:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//  
-//---------------------------------------------------------------
+//   This class manages the verbose outputs in G4SteppingManager. 
+//   It inherits from G4SteppingVerbose.
+//   It shows how to extract informations during the tracking of a particle.
 //
-// Em3SteppingVerbose.hh
-//
-// Description:
-//   This class manages the vervose outputs in G4SteppingManager. 
-//   
-//
-//---------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 class Em3SteppingVerbose;
 
@@ -26,16 +22,17 @@ class Em3SteppingVerbose;
 
 #include "G4SteppingVerbose.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 class Em3SteppingVerbose : public G4SteppingVerbose {
+
 public:   
-// Constructor/Destructor
+
   Em3SteppingVerbose();
  ~Em3SteppingVerbose();
-//
+
   void StepInfo();
   void TrackingStarted();
-//
-
 
 };
 
