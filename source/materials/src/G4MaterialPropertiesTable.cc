@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.cc,v 1.13 2002-11-07 02:30:29 gum Exp $
+// $Id: G4MaterialPropertiesTable.cc,v 1.14 2004-05-13 21:27:32 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,6 +125,19 @@ G4double G4MaterialPropertiesTable::GetConstProperty(const char *key)
            G4Exception("G4MaterialPropertiesTable::GetConstProperty ==> "
                        "Constant Material Property not found.");
            return G4double(0.0);
+        }
+}
+
+G4bool G4MaterialPropertiesTable::ConstPropertyExists(const char *key)
+{
+//      Return true if a const property 'key' exists
+        MPTCiterator j;
+        j = MPTC.find(G4String(key));
+        if ( j != MPTC.end() ) {
+           return true;
+        } 
+        else {
+           return false;
         }
 }
 
