@@ -113,7 +113,7 @@ int main(int argc, char** argv)
   G4double  energy   = 100.*MeV;
   G4double  sigmae   = 0.0;
   G4double  elim     = 30.*MeV;
-  G4double  dangl    = 5.0*degree;
+  G4double  dangl    = 5.0;
   G4int     nevt     = 1000;
   G4int     nbins    = 100;
   G4int     nbinsa   = 40;
