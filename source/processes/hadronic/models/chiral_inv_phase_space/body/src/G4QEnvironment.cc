@@ -24,7 +24,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.100 2005-03-24 16:06:06 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.101 2005-04-04 16:55:45 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -765,13 +765,14 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 		      G4cout<<"G4QE::CrQ:"<<ind<<","<<shDFL<<",PDG="<<curHadr->GetPDGCode() //        ^ ^
               <<",4M="<<curHadr->Get4Momentum()<<G4endl;//                              ^ ^
 #endif
-        G4double solAnCut=SolidAngle+20*shCHG*sqrt(1.*envZ)/shMOM; // ChargeDepSolAngle ^ ^
+        G4double solAnCut=SolidAngle+250*shCHG/shMOM;   // ChargeDepSolAngle            ^ ^
+        //G4double solAnCut=SolidAngle+20*shCHG*sqrt(1.*envZ)/shMOM;//ChargeDepSolAngle ^ ^
         if(!shDFL)                                      // Final(notDecayed) hadrons    ^ ^
 		      {
 #ifdef pdebug
 		        G4cout<<"G4QE::CQ:>H="<<shPDG<<":"<<dir.dot(shDIR)<<">"<<solAnCut<<G4endl; // ^ ^
 #endif
-		        if(dir.dot(shDIR)>solAnCut&&abs(shPDG)>99)   // Sum Hadrons & make EnergyFlow ^ ^
+		        if((dir.dot(shDIR)>solAnCut || shMOM<120.) && abs(shPDG)>99) // Absorb mesons ^ ^
 		        {
             if(efFlag)                           // => Case of "Energy Flux approach"   ^ ^
 		          {
@@ -854,30 +855,50 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 	       G4cout<<"G4QE::CrQ:befCl&Dest tC="<<totCharge<<", tB="<<totBaryoN<<G4endl; //^  ^
 #endif
         for_each(input.begin(), input.end(), DeleteQHadron());     //DESTROING inp >-^--^
-        input.clear();                             // ========>============>=========^==^
+        input.clear();                             // =Clearing=>==========>=========^==+
         theEnvironment = muq->GetEnvironment();    // RestoreResidEnv after interact.^  
-        G4QuasmonVector* outQ = muq->GetQuasmons();// Copy of quasmons *DESTROY* <---^---+
-        delete muq;                                //=====>===========>==============^   ^
-	       G4int nMQ = outQ->size();                  // A#of Quasmons in MultyQuasmonOutput^
+        G4QHadronVector* outH = muq->GetQHadrons();// Copy of QHadrons *DESTROY* <---^-<--+
+        G4QuasmonVector* outQ = muq->GetQuasmons();// Copy of Quasmons *DESTROY* <---^--+ ^
+        delete muq;                                //=====>===========>==============^  ^ ^
+        noh = outH->size();                        // a#of Not Interacting(Q) Hadrons   ^ ^
 #ifdef pdebug
-        G4LorentzVector eLorV=theEnvironment.Get4Momentum(); //                          ^
-	       G4cout<<"G4QE::CrQ:nMQ="<<nMQ<<",tC="<<totCharge<<", tB="<<totBaryoN<<G4endl; // ^
-	       G4cout<<"G4QE::CrQ:Env4M="<<eLorV<<G4endl; //                                    ^
-        G4LorentzVector contr4M=eLorV; //                                                ^
+        G4cout<<"G4QEnv::CreateQ:*** #ofNotInterQH="<<noh<<" is found ***"<<G4endl; //  ^ ^
 #endif
-        if(nMQ) for(G4int mh=0; mh<nMQ; mh++)      // Can escape creation/distruct but...^
-        {
-          G4Quasmon* curQ = new G4Quasmon((*outQ)[mh]);// Copy to destroy TMP(?)         ^
+        if(noh) for(G4int nh=0; nh<noh; nh++)      // One can escape it but...          ^ ^
+								{                                          //                                   ^ ^
 #ifdef pdebug
-          G4LorentzVector qLorV=curQ->Get4Momentum(); //                                 ^
-	         G4cout<<"G4QE::CrQ:Q#"<<mh<<",4M="<<qLorV<<curQ->GetQC()<<G4endl; //           ^
-          contr4M+=qLorV; //                                                             ^
+          G4cout<<"G4QE::CreateQ: NotIntQH#"<<nh<<", QC="<<(*outH)[nh]->GetQC()  //     ^ ^
+                <<", 4M="<<(*outH)[nh]->Get4Momentum()<<G4endl;                  //     ^ ^
 #endif
-          theQuasmons.push_back(curQ);             // Fill Quasmon-copies in theQuasmons ^
-	       }                                          //                                    ^
-        for_each(outQ->begin(), outQ->end(), DeleteQuasmon()); // >----------------------^
-        outQ->clear();                             //                                    ^
-        delete outQ;                               // >==================================^
+          G4QHadronVector* tmpQHadVec=G4Quasmon().DecayQHadron((*outH)[nh]);//del.eq<-+ ^ ^
+          G4int tmpS=tmpQHadVec->size();           //                                 ^ ^ ^
+          intQHadrons.resize(tmpS+intQHadrons.size()); // Resize theQHadrons length   ^ ^ ^
+          copy(tmpQHadVec->begin(), tmpQHadVec->end(), intQHadrons.end()-tmpS); //    ^ ^ ^
+          tmpQHadVec->clear();                     //                                 ^ ^ ^
+          delete tmpQHadVec;           // who calls DecayQHadron must clear & delete->+ ^ ^
+		      }                                          //                                   ^ ^
+        outH->clear();                             //                                   ^ ^
+        delete outH;                               // >---->---->---->---->---->---->---^-+
+	       G4int nMQ = outQ->size();                  // A#ofQuasmons in MultyQuasmonOutput^
+#ifdef pdebug
+        G4LorentzVector eLorV=theEnvironment.Get4Momentum(); //                         ^
+	       G4cout<<"G4QE::CrQ:nMQ="<<nMQ<<",tC="<<totCharge<<", tB="<<totBaryoN<<G4endl;// ^
+	       G4cout<<"G4QE::CrQ:Env4M="<<eLorV<<G4endl; //                                   ^
+        G4LorentzVector contr4M=eLorV; //                                               ^
+#endif
+        if(nMQ) for(G4int mh=0; mh<nMQ; mh++)      // Can escape CreationDistruct but...^
+								{                                          //                                   ^
+          G4Quasmon* curQ = new G4Quasmon((*outQ)[mh]);// Copy to destroy TMP(?)        ^
+#ifdef pdebug
+          G4LorentzVector qLorV=curQ->Get4Momentum(); //                                ^
+	         G4cout<<"G4QE::CrQ:Q#"<<mh<<",4M="<<qLorV<<curQ->GetQC()<<G4endl; //          ^
+          contr4M+=qLorV; //                                                            ^
+#endif
+          theQuasmons.push_back(curQ);             // Fill QuasmonCopies in theQuasmons ^
+	       }                                          //                                   ^
+        for_each(outQ->begin(), outQ->end(), DeleteQuasmon()); // >---------------------^
+        outQ->clear();                             //                                   ^
+        delete outQ;                               // >=================================+
 #ifdef pdebug
         G4int nsHadr  = theQHadrons.size();      // Update the value of OUTPUT entries
 	       G4cout<<"G4QEnvironment::CreateQ: before return nH="<<nsHadr<<G4endl;
@@ -1036,7 +1057,6 @@ void G4QEnvironment::PrepareInteractionProbabilities(const G4QContent& projQC, G
 	   {
       G4int zc = cCH;                              // "Z" of the cluster
       G4int nc = cBN-cCH;                          // "N" of the cluster
-      G4int ac = cBN;                              // "A" of the cluster
       G4double nOfCl=curCand->GetPreProbability(); // A number of clusters of the type
       G4double dOfCl=curCand->GetDenseProbability();// A number of clusters in dense region
 #ifdef sdebug
@@ -1055,23 +1075,23 @@ void G4QEnvironment::PrepareInteractionProbabilities(const G4QContent& projQC, G
       G4double d = abs(zc-nc);
       G4double fact=1./pow(2.,d);
       if (qC<-1) probab=0.;     
-      //else if((pPDG==-211&&AP<10.||pPDG==22&&AP<150.)&&ac<2)probab=0.;//PiAtRest/GamUndPi
-      //else if(pPDG==22&&AP<152.&&ac<2) probab=nOfCl*ac*fact*.5;//GamUnderPi(QuarkCapture)
-      ////////////////////////else if((pPDG==-211&&AP<10.)&&ac<2) probab=0;//PiCapAtRest(D)
+      //else if((pPDG==-211&&AP<10.||pPDG==22&&AP<150.)&&cBN<2)probab=0.;//PiAtRest/GamBlPi
+      //else if(pPDG==22&&AP<152.&&cBN<2)probab=nOfCl*cBN*fact/2;//GamUnderPi(QuarkCapture)
+      ////////////////////////else if((pPDG==-211&&AP<10.)&&cBN<2) probab=0;//PiCapAtRst(D)
       //else if(pPDG==-211&&AP<10.)            probab=nOfCl*fact;// special PiCaptureAtRest
-      //else if(pPDG==-211&&AP<10.)            probab=nOfCl*ac*(ac-1)*fact;
+      //else if(pPDG==-211&&AP<10.)            probab=nOfCl*cBN*(cBN-1)*fact;
       //else                                   probab=nOfCl*fact;
-      else                                   probab=nOfCl*ac*fact;
-      //else                                      probab=dOfCl*ac*fact;
-      //if(ac>1) probab=0.;                       // Suppress clusters
-      //if(ac>2) probab=0.;                       // Suppress heavy clusters
+      else                                   probab=nOfCl*cBN*fact;
+      //else                                      probab=dOfCl*cBN*fact;
+      //if(cBN>1) probab=0.;                       // Suppress clusters
+      //if(cBN>2) probab=0.;                       // Suppress heavy clusters
 #ifdef sdebug
       G4int pPDG      = projQC.GetSPDGCode();      // PDG code of the projectile particle
       G4int rPDG = qQC.GetSPDGCode();
       G4double baryn = qQC.GetBaryonNumber();
       G4double charge= qQC.GetCharge();
       G4double dq= abs(baryn-charge-charge);
-	     G4cout<<"G4QE::PIP:P="<<probab<<",ac="<<ac<<",dq="<<dq<<",f="<<fact<<",qC="
+	     G4cout<<"G4QE::PIP:P="<<probab<<",ac="<<cBN<<",dq="<<dq<<",f="<<fact<<",qC="
             <<qC<<",rPDG="<<rPDG<<",pPDG="<<pPDG<<",nCP="<<nOfCl<<",dCP="<<dOfCl<<G4endl;
 #endif
 	   }
@@ -1475,27 +1495,29 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
 #endif
     //G4int   c3Max = 27;
     //G4int   c3Max = 9;                    // Max # for the no hadrons steps
+    //G4int   c3Max = 3;
     G4int   c3Max = 1;
     //G4int   premC = 27;
     //G4int   premC = 3;
     G4int   premC = 1;
     G4int   envA=theEnvironment.GetA();
     //if(envA>1&&envA<13) premC = 24/envA;
-    if(envA>1&&envA<19) premC = 36/envA;   // *** The best
+    //if(envA>1&&envA<19) premC = 36/envA;
     //if(envA>1&&envA<25) premC = 48/envA;
-    //if(envA>1&&envA<31) premC = 60/envA;
+    if(envA>1&&envA<31) premC = 60/envA;
     G4int  sumstat= 2;                     // Sum of statuses of all Quasmons
     G4bool force  = false;                 // Prototype of the Force Major Flag
     G4int cbR     =0;                      // Counter of the "Stoped by Coulomb Barrier"
     //
-    //G4int cbRM    =1;                      // MaxCounter of the "StopedByCoulombBarrier"
-    G4int cbRM    =3;                      // MaxCounter of the "StopedByCoulombBarrier"
+    G4int cbRM    =1;                      // MaxCounter of the "StopedByCoulombBarrier"
+    //G4int cbRM    =3;                      // MaxCounter of the "StopedByCoulombBarrier"
     //G4int cbRM    =9;                      // MaxCounter of the "Stoped byCoulombBarrier"
     G4int totC    = 0;                     // Counter to break the "infinit" loop
     G4int totCM   = 227;                   // Limit for the "infinit" loop counter
     //G4int totCM   = 27;                    // Limit for this counter
-    G4int nCnMax = 3;                      // MaxCounterOfHadrFolts for shortCutSolutions
-    //G4int nCnMax = 9;                      // MaxCounterOfHadrFolts for shortCutSolutions
+    //G4int nCnMax = 1;                      // MaxCounterOfHadrFolts for shortCutSolutions
+    //G4int nCnMax = 3;                      // MaxCounterOfHadrFolts for shortCutSolutions
+    G4int nCnMax = 9;                      // MaxCounterOfHadrFolts for shortCutSolutions
     while (sumstat||totC<totCM)            // ===***=== The MAIN "FOREVER" LOOP ===***===
 	   {
 #ifdef chdebug
@@ -10309,7 +10331,7 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
             else theQHadrons.push_back(nucH);             // Fill ResidNuclHadron (del.eq.)
 	         }
 		      }
-        else                                  // --> Try to use any hadron from the output
+        else                                  // ===> Try to use any hadron from the output
         {
 #ifdef cdebug
 		        G4cout<<"G4QE::CGS:Prev&Last didn't help,nH="<<nOfOUT<<">2, MQ="<<resQMa<<G4endl;
@@ -10323,8 +10345,8 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
   			     {
             G4QHadron* curHadr = theQHadrons[id];
             G4int hPDG=curHadr->GetPDGCode();
-            if(hPDG==  22) nphot=id;
-            else if(hPDG==211 && !npip) npip=id; // Get the latest Pi+
+            if(hPDG == 22) nphot=id;              // Get the earliest gamma
+            else if(hPDG==211 && npip<1) npip=id; // Get the latest Pi+
             else if(hPDG==111)
             {
 				          G4double piE=curHadr->Get4Momentum().e();
@@ -10337,7 +10359,7 @@ G4bool G4QEnvironment::CheckGroundState(G4Quasmon* quasm, G4bool corFlag)
                 emaz=piE;
               }
             }
-            else if(hPDG==-211 && !npim) npim=id; // Get the latest Pi-
+            else if(hPDG==-211 && npim<1) npim=id; // Get the latest Pi-
           }
           if(nphot>=0)                 // Photon is found, try to use it to resolve PANIC
 			       {

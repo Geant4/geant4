@@ -20,7 +20,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.78 2005-03-24 16:06:06 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.79 2005-04-04 16:55:45 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -399,8 +399,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     G4int envZ  =theEnvironment.GetZ();    // Z of the current Nuclear Environment
     G4int envS  =theEnvironment.GetS();    // S of the current Nuclear Environment
     G4int envA  =theEnvironment.GetA();    // A of the current Nuclear Environment
-    G4int maxActEnv=256; // n-Dod + p-Dod  // maxEnv.(in d) to compensate the Q recoilMom
-    //G4int maxActEnv=0; // n-Dod + p-Dod  // maxEnv.(in d) to compensate the Q recoilMom
+    //G4int maxActEnv=256; // n-Dod + p-Dod  // maxEnv.(in d) to compensate the Q recoilMom
+    G4int maxActEnv=256;  // n-Dod + p-Dod  // maxEnv.(in d) to compensate the Q recoilMom
     G4int dmaxActEnv=maxActEnv+maxActEnv;  // 2maxEnv.(in d) to compensate the Q recoilMom
     //G4double fAE=static_cast<double>(maxActEnv);
 	   if(envA>dmaxActEnv&&envA<256)
@@ -517,20 +517,25 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     G4int kCount =0;                       // Counter of attempts of k for hadronization
     //G4int kCountMax=27;
     //G4int kCountMax=9;
-    G4int kCountMax=3;                    // Try different k if they are below minK
-    //G4int kCountMax=1;                   //@@ No reson to increase it (@@ change text)
+    //G4int kCountMax=3;                     // Try different k if they are below minK
+    G4int kCountMax=1;                     // "No reson to increase it"
     //G4int kCountMax=0;                   //@@ *** Close search for the minimum k ***
     //
     //G4int qCountMax=27;                   // Try different q to come over CoulBar or SepE
     //G4int qCountMax=7;                    // Try different q to come over CoulBar or SepE
-    G4int qCountMax=3;                    // Try different q to come over CoulBar or SepE
-    //G4int qCountMax=1;                    // Try different q to come over CoulBar or SepE
+    //G4int qCountMax=3;                    // Try different q to come over CoulBar or SepE
+    G4int qCountMax=1;                    // Try different q to come over CoulBar or SepE
     //
     //G4int pCountMax=27;                   //Try differentHadrons(Parents) forBetterRecoil
     //G4int pCountMax=9;                    //Try differentHadrons(Parents) forBetterRecoil
     //G4int pCountMax=3;                    //Try differentHadrons(Parents) forBetterRecoil
     G4int pCountMax=1;                    //Try differentHadrons(Parents) forBetterRecoil
-    if(envA>0) pCountMax=3;
+    //if(envA>0) pCountMax=3;
+    if(envA>0&&envA<31)
+    {
+      pCountMax=60/envA;
+      kCountMax=pCountMax;
+    }
 	   G4bool gintFlag=false;                // Flag of gamma interaction with one quark
 	   while(kCount<kCountMax&&kCond)
 	   {
@@ -3613,9 +3618,10 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
 	     }
       else
 	     {
-        G4cerr<<"***G4Q::FillHVec:PDG="<<thePDG<<"("<<t.m()<<","<<fragMas<<") < Mes="<<PDG1
-              <<"("<<m1<<") + ResA="<<PDG2<<"("<<m2<<"), d="<<fragMas-m1-m2<<G4endl;
-	       throw G4QException("G4Quasm::FillHadrVec: mass of decaying hadron is too small");
+        G4cerr<<"-Warning-G4Q::FillHVec:PDG="<<thePDG<<"("<<t.m()<<","<<fragMas<<") < Mes="
+              <<PDG1<<"("<<m1<<") + ResA="<<PDG2<<"("<<m2<<"), d="<<fragMas-m1-m2<<G4endl;
+	       //throw G4QException("G4Quasm::FillHadrVec: mass of decaying hadron is too small");
+        theQHadrons.push_back(qH); // FillAsIs to correct later in G4QEnvironment (Warning)
 	     }
 	   }
     else if(abs(fragMas-GSMass)<.1)            // the Nucleus is too close the Ground State
@@ -4057,6 +4063,11 @@ G4int G4Quasmon::CalculateNumberOfQPartons(G4double qMass)
       valQ.IncQAQ(sSea,0.); // Add notstrange sea ????????
 	   }
   }
+  // @@ Chocolate rule --- Temporary (?)
+  //G4int nmin = valc+valc-2; // Chocolate
+  //G4int nmin = valc+absb;   // String Junction
+  //if(nOfQ<nmin) nOfQ=nmin;
+  // --- End of Temporary
 #ifdef pdebug
   G4cout<<"G4Quasmon::Calc#ofQP: *** RESULT IN*** nQ="<<nOfQ<<", FinalQC="<<valQ<<G4endl;
 #endif
@@ -4238,9 +4249,9 @@ void G4Quasmon::CalculateHadronizationProbabilities
         if(envA) CB=theEnvironment.CoulombBarrier(cC,baryn);
         /////////////G4int cI   = baryn-cC-cC;
         //G4int cNQ= candQC.GetTot()-1-baryn;     // A#of quarks/diquarksInTheCandidate - 2
-        //G4int cNQ= candQC.GetTot()-2;           // #of quark-partonsInTheCandidate - 2 (OK)
-        G4int cNQ= candQC.GetTot()+baryn-2;   // A#of q-partons+b_Sj-2 (separate q-link)
-        //G4int cNQ= candQC.GetTot()+3*baryn-4; // A#of q-partons+b+2*(b-1)-2 (bag q-link)
+        G4int cNQ= candQC.GetTot()-2;           // #of quark-partonsInTheCandidate - 2 (OK)
+        //G4int cNQ= candQC.GetTot()+baryn-2;   // A#of q-partons+b_Sj-2 (string junction)
+        //G4int cNQ= candQC.GetTot()+3*baryn-4; // A#of q-partons+b+2*(b-1)-2 (choc q-link)
         G4double resM=0.;                       // Prototype for minMass of residual hadron
 #ifdef pdebug
         if(pPrint)G4cout<<"G4Q::CHP:B="<<baryn<<",C="<<cC<<",CB="<<CB<<",#q="<<cNQ<<G4endl;
@@ -4435,10 +4446,10 @@ void G4Quasmon::CalculateHadronizationProbabilities
                         G4double dked=ked+ked;
                         //////G4double dkedC=dked-CB-CB;
                         //////G4double kd =kLS-nDelta;//For TotalNucleus (includingQuasmon)
-                        //////G4double dkd=kd+kd;
+                        //G4double dkd=kd+kd;
                         //////////G4double dkdC=dkd-CB-CB;
                         G4double dkLS=kLS+kLS;
-                        //////////G4double Em=(E-eDelta)*(1.-frM/totMass);
+                        //G4double Em=(E-eDelta)*(1.-frM/totMass);
                         //G4double Em=(E-nDelta)*(1.-frM/totMass);
                         //G4double Em=(E-nDelta-CB)*(1.-frM/totMass);
                         // *** START LIMITS ***
@@ -4495,19 +4506,19 @@ void G4Quasmon::CalculateHadronizationProbabilities
 					                   G4double newh=1.;
                         // == (@@) Historical additional cuts for q_min ===
                         //G4double nc=1.-(dkLS-E-E)/boundM;   // q_min=k-E
-                        ////G4double nc=1.-(dkLS-E-E+CB+CB)/boundM;   // q_min=k-E+CB
+                        G4double nc=1.-(dkLS-E-E+CB+CB)/boundM;   // q_min=k-E+CB
 					                   G4double newl=0.;
 #ifdef pdebug
-                        //if(pPrint) G4cout<<"G4Q::CHP:qi_k-E="<<nc<<",k="<<kLS<<",E="<<E
-                        //                 <<",M="<<boundM<<G4endl;
+                        if(pPrint) G4cout<<"G4Q::CHP:qi_k-E="<<nc<<",k="<<kLS<<",E="<<E
+                                         <<",M="<<boundM<<G4endl;
 #endif
-                        //if(nc>0.&&nc<1.&&nc<ne)
-                        //{
-                        //  ne=nc;
-                        //  newh=pow(nc,cNQ);
-                        //  if(newh<kf) kf=newh;
-                        //}
-                        //else if(nc<=0.)kf=0.;
+                        if(nc>0.&&nc<1.&&nc<ne)
+                        {
+                          ne=nc;
+                          newh=pow(nc,cNQ);
+                          if(newh<kf) kf=newh;
+                        }
+                        else if(nc<=0.)kf=0.;
 
                         //G4double nk=1.-(dkd-Em-Em)/boundM;  // q_min=(k-delta)-E*(M-m)/M
 #ifdef pdebug
@@ -4537,23 +4548,23 @@ void G4Quasmon::CalculateHadronizationProbabilities
                         //}
                         //else if(np<=0.)kf=0.;
 
-                        ////G4double mix=boundM+E;             // The same don't change ***
+                        //G4double mix=boundM+E;
                         //G4double mix=nucBM+E;
-                        ////G4double mix=boundM+E-CB;
+                        G4double mix=boundM+E-CB;
                         ////G4double mix=nucBM+E-CB;
-                        //G4double st=sqrt(mix*mix-frM2);
-                        //G4double nq=1.-(dkLS-st-st)/boundM;//qi=k-sq((m+E*(M-m)/M)^2-m^2)
+                        G4double st=sqrt(mix*mix-frM2);
+                        G4double nq=1.-(dkLS-st-st)/boundM;//qi=k-sq((m+E*(M-m)/M)^2-m^2)
 #ifdef pdebug
-                        //if(pPrint) G4cout<<"G4Q::CHP:qi_k-st="<<nq<<",st="<<st<<",m="
-                        //                 <<mix<<",M="<<frM<<G4endl;
+                        if(pPrint) G4cout<<"G4Q::CHP:qi_k-st="<<nq<<",st="<<st<<",m="
+                                         <<mix<<",M="<<frM<<G4endl;
 #endif
-                        //if(nq>0.&&nq<1.&&nq<ne)
-                        //{
-                        //  ne=nq;
-                        //  newh=pow(nq,cNQ);
-                        //  if(newh<kf) kf=newh;
-                        //}
-                        //else if(nq<=0.)kf=0.;
+                        if(nq>0.&&nq<1.&&nq<ne)
+                        {
+                          ne=nq;
+                          newh=pow(nq,cNQ);
+                          if(newh<kf) kf=newh;
+                        }
+                        else if(nq<=0.)kf=0.;
                         // == This is the Best for ResidualNucleus Cut (@@ can be improved)
                         G4LorentzVector rq4M=q4Mom-k4M;
                         G4ThreeVector k3V=k4M.vect().unit();
@@ -4673,7 +4684,7 @@ void G4Quasmon::CalculateHadronizationProbabilities
 #endif
                         // == (@@) Historical additional cuts for q_max ===
                         //G4double tms=kLS+nDelta+Em;
-                        //G4double tms=kLS+eDelta+Em;          // The same don't change ***
+                        ////G4double tms=kLS+eDelta+Em;        // The same don't change ***
                         //G4double le=1.-(tms+tms)/boundM;     // q_max=k+delta+E*(M-m)/M
 #ifdef pdebug
                         //if(pPrint) G4cout<<"G4Q::CHP:qa_t="<<le<<",k="<<kLS<<",E="<<Em
@@ -4689,18 +4700,18 @@ void G4Quasmon::CalculateHadronizationProbabilities
                         // === End of historical cuts
 
                         //G4double lk=1.-(dkLS+E+E)/boundM;    // q_max=k+E
-                        //G4double lk=1.-(dkLS+E+E-CB-CB)/boundM;//qmax=k+E-CB(surfaceCond)
+                        G4double lk=1.-(dkLS+E+E-CB-CB)/boundM;//qmax=k+E-CB(surfaceCond)
 #ifdef pdebug
-                        //if(pPrint) G4cout<<"G4Q::CHP:qa_k+E="<<lk<<",k="<<kLS<<",E="<<E
-                        //                 <<",M="<<boundM<<G4endl;
+                        if(pPrint) G4cout<<"G4Q::CHP:qa_k+E="<<lk<<",k="<<kLS<<",E="<<E
+                                         <<",M="<<boundM<<G4endl;
 #endif
-                        //if(lk>0.&&lk<1.&&lk>lz)
-                        //{
-                        //  lz=lk;
-                        //  newl=pow(lk,cNQ);
-                        //  if(newl>low) low=newl;
-                        //}
-                        //else if(lk>=1.)low=1.;
+                        if(lk>0.&&lk<1.&&lk>lz)
+                        {
+                          lz=lk;
+                          newl=pow(lk,cNQ);
+                          if(newl>low) low=newl;
+                        }
+                        else if(lk>=1.)low=1.;
                         // === End of the k+E cut
 
                         // === Instead one can try this ===
@@ -4717,7 +4728,7 @@ void G4Quasmon::CalculateHadronizationProbabilities
                         //}
                         //else if(lq>=1.)low=1.;
 
-                        // === The same as previous but sr instead of st ===
+                        // === The same as previous but "sr" instead of "st" ===
                         //G4double lp=1.-(dkLS+sr+sr)/boundM;//qm=k+sqrt((E*(M-m)/M)^2-m^2)
 #ifdef pdebug
                         //if(pPrint) G4cout<<"G4Q::CHP:qa_k+sr="<<lp<<",sr="<<sr<<",m="
@@ -4760,8 +4771,9 @@ void G4Quasmon::CalculateHadronizationProbabilities
                         {
                           kf*=boundM/kLS/cNQ;    // Final value of kinematical (i,o) factor
                           G4int noc=cQPDG.GetNumOfComb(iq, oq);
-                          //probab=qFact*kf*nqInQ*pPP*noc; // Main without wing suppresion
-                          probab=qFact*kf*nqInQ*pPP*noc/pUD;//The main with wing suppresion
+                          //probab=qFact*kf*nqInQ*pPP*noc; // Without wing suppresion
+                          //probab=qFact*kf*nqInQ*pPP*noc/pUD;//With wing suppresion
+                          probab=baryn*qFact*kf*nqInQ*pPP*noc/pUD;//WingSuppresion & *BaryN
                           // qFact - squared charge for photons & u-quark, for others =1
                           // kf    - the phase space integral
                           // nqInQ - a#of i-quarks in the Quasmon
@@ -5364,7 +5376,7 @@ G4QHadronVector* G4Quasmon::DecayQHadron(G4QHadron* qH) // Don't fill Internal Q
           delete fHadr;                                  // Delete "new fHadr"
           delete sHadr;                                  // Delete "new sHadr"
           G4cerr<<"---Warning---G4Q::DecayQHadron:in2,PDGC="<<thePDG<<", ch#"<<i<<G4endl;
-          throw G4QException("***Exception***G4Q::DecayQHadron: Failed to decay in 2");
+          //throw G4QException("***Exception***G4Q::DecayQHadron: Failed to decay in 2");
           theFragments->push_back(qH);                   // Fill as it is (del.equiv.)
           return theFragments;
 	       }

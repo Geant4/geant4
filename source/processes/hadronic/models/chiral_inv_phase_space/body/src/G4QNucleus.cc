@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.49 2005-03-24 16:06:06 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.50 2005-04-04 16:55:45 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -2988,7 +2988,7 @@ G4double G4QNucleus::CoulombBarrier(const G4double& cZ, const G4double& cA, G4do
 {//                  =====================================================================
   static const G4double third=1./3.;
   //return 0.;                                       //@@ Temporary for test
-  if(cZ==0.) return 0.;
+  if(cZ<=0.) return 0.;
   //G4double rA=GetA();
   G4double rA=GetA()-cA;
   if(dA) rA-=dA;
@@ -2999,10 +2999,14 @@ G4double G4QNucleus::CoulombBarrier(const G4double& cZ, const G4double& cA, G4do
   // Complicated GEANT4 radius
   //G4double r=(pow(rA,third)+pow(cA,third))*(1.51+.00921*zz)/(1.+.009443*zz);
   // Naitive CHIPS radius: CB={1.44=200(MeV)/137}*z*Z/{R=1.13}*(a**1/3+A**1/3) (?)
-  //G4double r=1.27*(pow(rA,third)+pow(cA,third));
-  G4double r=1.*(pow(rA,third)+pow(cA,third));
-  //return   zz/r;
-  return   exp(-cA*rA/2000.)*zz/r;
+  G4double r=1.27*(pow(rA,third)+pow(cA,third));
+  //G4double r=(pow(rA,third)+pow(cA,third));
+  G4double cb=zz/r;
+  //G4double cb=exp(-cA*rA/2000.)*zz/r;
+  // @@ --- Temporary "Lambda/Delta barrier for mesons"
+  if(!cA) cb+=40.;
+		// --- End of Temporary ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  return cb;
 } // End of "CoulombBarier"
 
 //Coulomb Binding Energy for the cluster
@@ -3030,18 +3034,26 @@ G4double G4QNucleus::CoulBarPenProb(const G4double& CB, const G4double& E,
                                     const G4int& C, const G4int& B)
 {//                 = A.Lepretre et al, Nucl.Phys., A390 (1982) 221-239 =
   static const G4double mNeut= G4QPDGCode(2112).GetMass();          // Mass of neutron
+  static const G4double dNeut= mNeut+mNeut;                         // DiMass of neutron
   static const G4double mProt= G4QPDGCode(2212).GetMass();          // Mass of proton
+  static const G4double dProt= mProt+mProt;                         // DiMass of proton
   static const G4double mDeut= G4QPDGCode(2112).GetNuclMass(1,1,0); // Mass of deuteron
-  static const G4double mTrit= G4QPDGCode(2112).GetNuclMass(1,2,0); // Mass of tritium
-  static const G4double mHel3= G4QPDGCode(2112).GetNuclMass(2,1,0); // Mass of Helium 3
-  static const G4double mAlph= G4QPDGCode(2112).GetNuclMass(2,2,0); // Mass of alpha
+  //static const G4double mTrit= G4QPDGCode(2112).GetNuclMass(1,2,0); // Mass of tritium
+  //static const G4double mHel3= G4QPDGCode(2112).GetNuclMass(2,1,0); // Mass of Helium 3
+  //static const G4double mAlph= G4QPDGCode(2112).GetNuclMass(2,2,0); // Mass of alpha
   static const G4double wellDebth=40.;          //@@ Should be jus binding energy @@ done
+  // @@ --- Temporary 1 ---> close the OverBarrierReflection for all
+  //return 1.;
+  // ^^^^^^^---> End of Themporary 1
   if(C>B+1)G4cout<<"G4QN::CBPP:SubtractedCharge="<<C<<" >SubtractedBaryonNumber="<<B<<G4endl;
-  //if(B>1) return 1.;
+  // @@ --- Temporary 2 ---> close the OverBarrierReflection for fragments and mesons
+  if(E<CB) return 0.;
+  if(B!=1) return 1.;
+  if(B<1 || B>2) return 1.;
+  // ^^^^^^^---> End of Themporary 2
   //G4double nA=GetA();
   //G4double nA=GetA()-B;
   //if(nA==40) G4cout<<"G4QN::CBPP:Z="<<GetZ()<<",C="<<C<<",B="<<B<<G4endl;
-  if(E<CB) return 0.;
   //else     return 1.;           // @@@@@ Over barrier reflection is closed @@@ !!! @@@
   //      Li6      C12           Al27
   //else if(nA<7||nA>8&&nA<12||nA>16&&nA<40) return 1.;// "OverBarrierReflection is closed"
@@ -3053,39 +3065,51 @@ G4double G4QNucleus::CoulBarPenProb(const G4double& CB, const G4double& E,
   //G4double wD=wellDebth*B;
   G4double wD=wellDebth;
   //G4double wD=0.;
-  G4double GSM=GetGSMass();
+  // @@ --- Temporary 3 ---> close the OverBarrierReflection for mesons
   //if(!B) wD=0.;
+  // ^^^^^^^---> End of Themporary 3
+  G4double GSM=GetGSMass();
   if(2>3);
-  //else if(nA<7&&B>0)  wD=0.;    // Only Coulomb Barrier can reflect !!!
-  //else if((nA<12||nA>16)&&B>0) wD=0.;// Only CoulombB can reflect !!! O16 E-dep of gamA
-  //else if((nA<12||nA>27)&&B>0) wD=0.;// Only CoulombB can reflect !!! O16 E-dep of gamA
-  //else if(nA<9&&B>0) return 1.;// Only CoulombBarrier can reflect !!! O16 E-dep of gamA
-  //else if(B>0)  wD=0.;    // Only Coulomb Barrier can reflect !!!
-  //else if(B==1)  wD=0.;
+  // @@ Temporary "Mass Barrier for mesons" @@ __________________
+  //else if(!B) wD=40.;
+		// @@ End of Temporary^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ////else if(nA<7&&B>0)  wD=0.;    // Only Coulomb Barrier can reflect !!!
+  ////else if((nA<12||nA>16)&&B>0) wD=0.;// Only CoulombB can reflect !!! O16 E-dep of gamA
+  ////else if((nA<12||nA>27)&&B>0) wD=0.;// Only CoulombB can reflect !!! O16 E-dep of gamA
+  ////else if(nA<9&&B>0) return 1.;// Only CoulombBarrier can reflect !!! O16 E-dep of gamA
+  ////else if(B>0)  wD=0.;    // Only Coulomb Barrier can reflect !!!
+  ////else if(B==1)  wD=0.;
   else if(B==1&&C==1) wD=G4QNucleus(Z-1,N,S).GetGSMass()+mProt-GSM;
   else if(B==1&&C==0) wD=G4QNucleus(Z,N-1,S).GetGSMass()+mNeut-GSM;
-  //else if(B==1&&C==0) wD=0.;
-  //else if(B>1)  return 1.;
-  else if(B>1)  wD=0.;
-  //else if(B==2)  wD=0.;
-  else if(B==2&&C==0) wD=G4QNucleus(Z,N-2,S).GetGSMass()+mNeut+mNeut-GSM;
-  else if(B==2&&C==1) wD=G4QNucleus(Z-1,N-1,S).GetGSMass()+mDeut-GSM;
-  else if(B==2&&C==2) wD=G4QNucleus(Z-2,N,S).GetGSMass()+mProt+mProt-GSM;
-  //else if(B>2)  wD=0.;
-  //else if(B>2)  return 1.;
-  //else if(B==3)  wD=0.;
-  else if(B==3&&C==1) wD=G4QNucleus(Z-1,N-2,S).GetGSMass()+mTrit-GSM;
-  //else if(B==3&&C==1) wD=0.;
-  else if(B==3&&C==2) wD=G4QNucleus(Z-2,N-1,S).GetGSMass()+mHel3-GSM;
-  //else if(B>3)  wD=0.;
-  //else if(B==4)  wD=0.;
-  else if(B==4&&C==2) wD=G4QNucleus(Z-2,N-2,S).GetGSMass()+mAlph-GSM;
-  //else if(B>4)  wD=0.;
-  //else if(B>4)  return 1.;
-  else if(B>4)wD=G4QNucleus(Z-C,N-B+C,S).GetGSMass()+G4QNucleus(C,B-C,S).GetGSMass()-GSM;
+  ////else if(B==1&&C==0) wD=0.;
+  ////else if(B>1)  return 1.;
+  ////else if(B>1)  wD=0.;
+  ////else if(B==2)  wD=0.;
+  else if(B==2)
+  {
+    if       (!C) wD=G4QNucleus(Z,N-2,S).GetGSMass()+dNeut-GSM;
+    else if(C==1) wD=G4QNucleus(Z-1,N-1,S).GetGSMass()+mDeut-GSM;
+    else if(C==2) wD=G4QNucleus(Z-2,N,S).GetGSMass()+dProt-GSM;
+    // @@ Temporary "Local B=2 Anti Virial factor" @@ __________________
+    wD=80.; // 40 MeV per each nucleon
+    //wD=wD/2;
+			 // @@ End of Temporary^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  }
+  ////else if(B>2)  wD=0.;
+  ////else if(B>2)  return 1.;
+  ////else if(B==3)  wD=0.;
+  //else if(B==3&&C==1) wD=G4QNucleus(Z-1,N-2,S).GetGSMass()+mTrit-GSM;
+  ////else if(B==3&&C==1) wD=0.;
+  //else if(B==3&&C==2) wD=G4QNucleus(Z-2,N-1,S).GetGSMass()+mHel3-GSM;
+  ////else if(B>3)  wD=0.;
+  ////else if(B==4)  wD=0.;
+  //else if(B==4&&C==2) wD=G4QNucleus(Z-2,N-2,S).GetGSMass()+mAlph-GSM;
+  ////else if(B>4)  wD=0.;
+  ////else if(B>4)  return 1.;
+  //else if(B>4)wD=G4QNucleus(Z-C,N-B+C,S).GetGSMass()+G4QNucleus(C,B-C,S).GetGSMass()-GSM;
   if(wD<0.) wD=0.;
   // @@ Temporary "Virial factor" @@ __________________
-  //wD=wD+wD;
+  wD=wD+wD;
 		// @@ End of Temporary^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   G4double sR=0.;
   //if(nA<27) sR=sqrt(wD/(E+wD));
