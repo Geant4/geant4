@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN01DetectorConstruction.cc,v 1.5 2002-01-09 17:23:48 ranjard Exp $
+// $Id: ExN01DetectorConstruction.cc,v 1.6 2002-04-26 13:49:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,14 +44,6 @@ ExN01DetectorConstruction::ExN01DetectorConstruction()
 
 ExN01DetectorConstruction::~ExN01DetectorConstruction()
 {
-  delete calorimeterLayer_log;
-  delete calorimeterBlock_log;
-  delete tracker_log;
-  delete experimentalHall_log;
-  delete tracker_phys;
-  delete calorimeterBlock_phys;
-  delete calorimeterLayer_phys;
-  delete experimentalHall_phys;
 }
 
 G4VPhysicalVolume* ExN01DetectorConstruction::Construct()
