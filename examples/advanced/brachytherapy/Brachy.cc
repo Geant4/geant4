@@ -11,16 +11,7 @@
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// Source axis is oriented along Z axis. 
-// Voxel data on the X-Z plan
-//e is output to ASCII file
-// "Brachy.out".
-//
-// For information related to this code contact the developers.
-//
-// --------------------------------------------------------------  
-
-//                                  *
+// * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
 // * GEANT4 collaboration.                                            *
@@ -42,9 +33,13 @@
 // brachytherapy source.
 //
 // Simplified gamma generation is used.
+// Source axis is oriented along Z axis. 
+// Voxel data on the X-Z plan
+//e is output to ASCII file
+// "Brachy.out".
  
 // 
-// $Id: Brachy.cc,v 1.7 2001-11-29 14:07:47 tropeano Exp $
+// $Id: Brachy.cc,v 1.8 2001-12-13 13:44:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "BrachyEventAction.hh"

@@ -2,7 +2,6 @@
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
-// *                                                                  *
 // * The following disclaimer summarizes all the specific disclaimers *
 // * of contributors to this software. The specific disclaimers,which *
 // * govern, are listed with their locations in:                      *
