@@ -337,8 +337,14 @@ G4int printData(G4int i) {
     cout << "ERROR: no baryon number conservation, sum of baryons = " << sumBaryon << G4endl;
   }
 
-  if (abs(sumEnergy) > 0.1 ) {
+  if (verboseLevel > 2) {
+  if (sumEnergy > 0.01 ) {
     cout << "ERROR: energy conservation violated by " << sumEnergy << " GeV" << G4endl;
+  }
+  }
+
+  if (sumEnergy < -5.0e-5 ) { // 0.05 MeV
+    cout << "FATAL ERROR: energy created  " << sumEnergy * GeV << " MeV" << G4endl;
   }
 
   if (verboseLevel > 2) {
