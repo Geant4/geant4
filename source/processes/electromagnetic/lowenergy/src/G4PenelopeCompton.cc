@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.16 2003-06-16 17:00:19 gunter Exp $
+// $Id: G4PenelopeCompton.cc,v 1.17 2004-03-09 11:49:13 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -37,6 +37,8 @@
 // 20 Mar 2003 L.Pandola      ReadData() changed (performance improved) 
 // 26 Mar 2003 L.Pandola      Added fluorescence
 // 24 May 2003 MGP            Removed memory leak
+// 09 Mar 2004 L.Pandola      Bug fixed in the generation of final state 
+//                            (bug report # 585)
 //
 // -------------------------------------------------------------------
 
@@ -108,6 +110,11 @@ G4PenelopeCompton::~G4PenelopeCompton()
 {
   delete meanFreePathTable;
   delete rangeTest;
+
+  for (size_t i=0;i<matCrossSections->size();i++){
+    delete (*matCrossSections)[i];
+  }
+
   delete matCrossSections;
 
    for (size_t i=0; i<ionizationEnergy->size(); i++)
@@ -186,6 +193,8 @@ void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& )
       matCrossSections->push_back(setForMat);
     }
 
+
+  //Build the mean free path table! 
   G4double matCS = 0.0;
   G4VEMDataSet* matCrossSet = new G4CompositeEMDataSet(algo,1.,1.);
   G4VEMDataSet* materialSet = new G4CompositeEMDataSet(algo,1.,1.);
@@ -527,7 +536,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
       G4double yEl = sinThetaE * sin(phi+pi);
       G4double zEl = cosThetaE;
       G4ThreeVector eDirection(xEl,yEl,zEl); //electron direction
-   
+      eDirection.rotateUz(photonDirection0);
       electron = new G4DynamicParticle (G4Electron::Electron(),
 					eDirection,eKineticEnergy) ;
       nbOfSecondaries++;
