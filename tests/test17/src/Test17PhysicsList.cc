@@ -221,12 +221,12 @@ void Test17PhysicsList::ConstructEM()
 
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
-     //muon  
+     //muon
      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
      pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
      pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
      pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       	       
-     pmanager->AddProcess(new G4MuonMinusCaptureAtRest,0,-1,-1);       	       
+     pmanager->AddProcess(new G4MuonMinusCaptureAtRest,0,-1,-1);
 
     } else if (
                 particleName == "proton"  
@@ -264,7 +264,7 @@ void Test17PhysicsList::ConstructEM()
       hionVector.push_back(hIon);
       
       pmanager->AddProcess( theStepCut,       -1,-1,3);
-   
+
     } else if (   particleName == "alpha"  
                || particleName == "deuteron"  
                || particleName == "IonC12"  
@@ -356,7 +356,6 @@ void Test17PhysicsList::SetCuts()
 
 void Test17PhysicsList::SetGammaCut(G4double val)
 {
-  ResetCuts();
   cutForGamma = val;
 }
 
@@ -364,58 +363,7 @@ void Test17PhysicsList::SetGammaCut(G4double val)
 
 void Test17PhysicsList::SetElectronCut(G4double val)
 {
-  ResetCuts();
   cutForElectron = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Test17PhysicsList::SetCutsByEnergy(G4double val)
-{
-  G4ParticleTable* theTest17ParticleTable =  G4ParticleTable::GetParticleTable();
-  G4Material* currMat = pDet->GetAbsorberMaterial();
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-  G4ParticleDefinition* part;
-  G4double cut;
-
-  part = theTest17ParticleTable->FindParticle("e-");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "e-");
-
-  part = theTest17ParticleTable->FindParticle("e+");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "e+");
-
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton
-  part = theTest17ParticleTable->FindParticle("proton");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "proton");
-
-  part = theTest17ParticleTable->FindParticle("anti_proton");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "anti_proton");
-
-  SetCutValueForOthers(cut);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Test17PhysicsList::GetRange(G4double val)
-{
-  G4ParticleTable* theTest17ParticleTable =  G4ParticleTable::GetParticleTable();
-  G4Material* currMat = pDet->GetAbsorberMaterial();
-
-  G4ParticleDefinition* part;
-  G4double cut;
-  part = theTest17ParticleTable->FindParticle("e-");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  G4cout << "material : " << currMat->GetName() << G4endl;
-  G4cout << "particle : " << part->GetParticleName() << G4endl;
-  G4cout << "energy   : " << val / keV << " (keV)" << G4endl;
-  G4cout << "range    : " << cut / mm << " (mm)" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -434,7 +382,7 @@ void Test17PhysicsList::SetCutForSecondaryPhotons(G4double cut)
   size_t n = hionVector.size();
   G4cout << " Cut for secondary gamma = " << cut/keV << " keV" << G4endl;
 
-  for (size_t i=0; i<n; i++) {    
+  for (size_t i=0; i<n; i++) {
     hionVector[i]->SetCutForSecondaryPhotons(cut);
     hionVector[i]->SetFluorescence(true);
   }
@@ -447,7 +395,7 @@ void Test17PhysicsList::SetCutForAugerElectrons(G4double cut)
   size_t n = hionVector.size();
   G4cout << " Cut for Auger electrons = " << cut/keV << " keV" << G4endl;
 
-  for (size_t i=0; i<n; i++) {    
+  for (size_t i=0; i<n; i++) {
     hionVector[i]->SetCutForAugerElectrons(cut);
     hionVector[i]->SetFluorescence(true);
     hionVector[i]->ActivateAugerElectronProduction(true);

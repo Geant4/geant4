@@ -54,22 +54,15 @@ Test17PhysicsListMessenger::Test17PhysicsListMessenger(Test17PhysicsList * List)
   eCmd->SetGuidance("Set cut values by ENERGY for secondary gamma.");
   eCmd->SetParameterName("cutenergy",false);
   eCmd->SetRange("cutenergy>0.");
-  eCmd->SetUnitCategory("Energy");   
+  eCmd->SetUnitCategory("Energy");
   eCmd->AvailableForStates(G4State_Idle);
 
   eaCmd = new G4UIcmdWithADoubleAndUnit("/test17/cutAugerEnergy",this);
   eaCmd->SetGuidance("Set cut values by ENERGY for Auger electrons.");
   eaCmd->SetParameterName("cutAenergy",false);
   eaCmd->SetRange("cutAenergy>0.");
-  eaCmd->SetUnitCategory("Energy");   
+  eaCmd->SetUnitCategory("Energy");
   eaCmd->AvailableForStates(G4State_Idle);
-
-  rCmd = new G4UIcmdWithADoubleAndUnit("/test17/range",this);
-  rCmd->SetGuidance("Display the RANGE of Electron for the current material.");
-  rCmd->SetParameterName("range",false);
-  rCmd->SetRange("range>0.");
-  rCmd->SetUnitCategory("Length");     
-  rCmd->AvailableForStates(G4State_Idle);
 
   setMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/step/setMaxStep",this);
   setMaxStepCmd->SetGuidance("Set max. step length in the detector");
@@ -84,7 +77,6 @@ Test17PhysicsListMessenger::~Test17PhysicsListMessenger()
 {
   delete cutGCmd;
   delete cutECmd;
-  delete rCmd;
   delete eCmd;
   delete eaCmd;
   delete setMaxStepCmd;
@@ -102,8 +94,6 @@ void Test17PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newVa
     {Test17List->SetCutForSecondaryPhotons(eCmd->GetNewDoubleValue(newValue));}
   if(command == eaCmd)
     {Test17List->SetCutForAugerElectrons(eaCmd->GetNewDoubleValue(newValue));}
-  if(command == rCmd)
-    { Test17List->GetRange(rCmd->GetNewDoubleValue(newValue));}
   if(command == setMaxStepCmd)
     { Test17List->SetMaxStep(setMaxStepCmd->GetNewDoubleValue(newValue));}
 }

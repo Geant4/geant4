@@ -55,7 +55,6 @@ class Test17PhysicsListMessenger: public G4UImessenger
 
     G4UIcmdWithADoubleAndUnit* cutGCmd;
     G4UIcmdWithADoubleAndUnit* cutECmd;
-    G4UIcmdWithADoubleAndUnit* rCmd;
     G4UIcmdWithADoubleAndUnit* eCmd;
     G4UIcmdWithADoubleAndUnit* eaCmd;
     G4UIcmdWithADoubleAndUnit* setMaxStepCmd;     
