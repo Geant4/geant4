@@ -92,3 +92,6 @@ t:	# ::: make test cascade
 
 eps: 	# ::: generate eps-files for documentation
 	cp *.eps $(RELD)/pictures/
+
+clean:  # ::: clean
+	rm -f \#*.*\# \#*\# \#* .*~ .#* *.*~ *~ *.o; rm -f core cascade ; rm benchmarks; rm *.eps *.root
