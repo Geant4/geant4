@@ -92,7 +92,8 @@ G4Nucleus& aTargetNucleus, G4HadFinalState * aChange)
   G4double etaToEtaPrime = 0.3;
   
   // construct and fragment the quasmon
-  G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
+  //G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
+  G4QCHIPSWorld::Get()->GetParticles(nop);  // Create CHIPS World of nop particles
   G4QNucleus::SetParameters(fractionOfSingleQuasiFreeNucleons,
                             fractionOfPairedQuasiFreeNucleons,
 			                clusteringCoefficient);

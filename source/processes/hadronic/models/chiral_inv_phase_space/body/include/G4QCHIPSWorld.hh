@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.hh,v 1.16 2003-11-28 08:45:37 mkossov Exp $
+// $Id: G4QCHIPSWorld.hh,v 1.17 2003-11-28 10:22:14 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCHIPSWorld ----------------
@@ -40,7 +40,7 @@ class G4QCHIPSWorld
 {
 protected:
   // Constructor/Destructor
-  G4QCHIPSWorld(G4int nOfParts = 0);               // Construction with N particles
+  G4QCHIPSWorld();               // default construction
   ~G4QCHIPSWorld();                                // Destructor is protected - Singeltone
 
 private:
@@ -62,8 +62,8 @@ public:
 
 // Body
 private:
-  static G4QCHIPSWorld* aWorld;             // Pointer to the CHIPS World
-  static G4QParticleVector qWorld;          // Particles of the CHIPS World
+ // static G4QCHIPSWorld* aWorld;             // Pointer to the CHIPS World
+  static G4QParticleVector & GetQWorld();
 };
 
  
@@ -71,20 +71,20 @@ inline G4QParticle* G4QCHIPSWorld::GetQParticle(G4int       PDG) const
 {
   G4int qCode=G4QPDGCode(PDG).GetQCode();
   //G4cout<<"G4QCHIPSWorld::GetQPart:Q="<<qCode<<",Max="<<qWorld.size()<<G4endl;
-  return qWorld[qCode];
+  return GetQWorld()[qCode];
 }
 
 inline G4QParticle* G4QCHIPSWorld::GetQParticle(G4QPDGCode QPDG) const
 {
-  return qWorld[QPDG.GetQCode()];
+  return GetQWorld()[QPDG.GetQCode()];
 }
 
 inline G4QParticle* G4QCHIPSWorld::GetQParticle(G4QPDGCode* pQP) const
 {
-  return qWorld[pQP->GetQCode()];
+  return GetQWorld()[pQP->GetQCode()];
 }
 
-inline G4int        G4QCHIPSWorld::GetQPEntries() const {return qWorld.size();}
+inline G4int        G4QCHIPSWorld::GetQPEntries() const {return GetQWorld().size();}
 
 #endif
 

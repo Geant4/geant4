@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.cc,v 1.25 2003-11-28 08:45:37 mkossov Exp $
+// $Id: G4QCHIPSWorld.cc,v 1.26 2003-11-28 10:22:14 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCHIPSWorld ----------------
@@ -35,19 +35,18 @@
 #include "G4QCHIPSWorld.hh"
 
 // Initialization of the CHIPSWorld Pointer
-G4QCHIPSWorld* G4QCHIPSWorld::aWorld =0;
-G4QParticleVector G4QCHIPSWorld::qWorld;
+// G4QCHIPSWorld* G4QCHIPSWorld::aWorld =0;
+// G4QParticleVector G4QCHIPSWorld::qWorld;
 
 // Constructor
-G4QCHIPSWorld::G4QCHIPSWorld(G4int nParticles)
+G4QCHIPSWorld::G4QCHIPSWorld()
 {
-  GetParticles(nParticles);          // Possible NotEmptyCreation of theCHIPSWorld
 }
 
 G4QCHIPSWorld::~G4QCHIPSWorld()      // The CHIPS World is destructed only in the EndOfJob
 {
-  std::for_each(qWorld.begin(), qWorld.end(), DeleteQParticle());
-  qWorld.clear();
+  std::for_each(GetQWorld().begin(), GetQWorld().end(), DeleteQParticle());
+  GetQWorld().clear();
 }
 
 // Standard output for CHIPS World
@@ -65,8 +64,15 @@ G4QCHIPSWorld* G4QCHIPSWorld::Get()
 {
   static G4QCHIPSWorld theWorld;                // *** Static body of the CHIPS World *** 
 // Returns Pointer to the CHIPS World
-  if(!aWorld) aWorld=&theWorld;                 // Init the static pointer to CHIPS World
-  return aWorld;
+//  if(!aWorld) aWorld=&theWorld;                 // Init the static pointer to CHIPS World
+//  return aWorld;
+  return &theWorld;
+}
+
+G4QParticleVector & G4QCHIPSWorld::GetQWorld()
+{
+  static G4QParticleVector theWorld;
+  return theWorld;
 }
 
 // Return pointer to Particles of the CHIPS World
@@ -82,7 +88,7 @@ G4QParticleVector* G4QCHIPSWorld::GetParticles(G4int nOfParts)
 #ifdef debug
     G4cout<<"G4QCHIPSWorld::Get: Creating CHIPS World of nP="<<nOfParts<<G4endl;
 #endif
-    G4int curNP=qWorld.size();
+    G4int curNP=GetQWorld().size();
     if(nOfParts>curNP)                         // Initialization for increasing CHIPS World
     {
       if (nOfParts>mnofParts)
@@ -98,7 +104,7 @@ G4QParticleVector* G4QCHIPSWorld::GetParticles(G4int nOfParts)
       {
         G4QParticle* curPart = new G4QParticle;// Created
         curPart->InitQParticle(i);             //   ||
-        qWorld.push_back(curPart);           // Filled (forever but only once)
+        GetQWorld().push_back(curPart);           // Filled (forever but only once)
 #ifdef debug
         G4cout<<"G4QCHIPSWorld::Get: Pt#"<<i<<"("<<nOfParts<<") is done"<<G4endl;
 #endif
@@ -107,9 +113,9 @@ G4QParticleVector* G4QCHIPSWorld::GetParticles(G4int nOfParts)
     //else init--;//Recover theReInitializationCounter, if nothingWasAdded to theCHIPSWorld
   }
 #ifdef debug
-  G4cout<<"G4QCHIPSWorld::Get: TotalPt#"<<qWorld.size()<<G4endl;
+  G4cout<<"G4QCHIPSWorld::Get: TotalPt#"<<GetQWorld().size()<<G4endl;
 #endif
-  return &qWorld;
+  return &GetQWorld();
 }
 
 

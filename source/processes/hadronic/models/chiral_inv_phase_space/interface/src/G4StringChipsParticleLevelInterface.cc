@@ -348,7 +348,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4QHadronVector * output = 0;
   if (particleCount!=0 && resA!=0)
   {
-    G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
+   //  G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
+    G4QCHIPSWorld::Get()->GetParticles(nop);
     G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
     try
     {

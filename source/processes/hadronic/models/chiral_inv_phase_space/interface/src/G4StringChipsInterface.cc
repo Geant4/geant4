@@ -260,7 +260,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 
   
   // Chips expects all in target rest frame, along z.
-  G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
+  // G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
+  G4QCHIPSWorld::Get()->GetParticles(nop);
   G4QHadronVector projHV;
   // target rest frame
   proj4Mom.boost(-1.*targ4Mom.boostVector());
