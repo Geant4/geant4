@@ -46,7 +46,7 @@
 #include "G4Material.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"                
+#include "g4std/iomanip"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -58,8 +58,7 @@ Test17PhysicsList::Test17PhysicsList(Test17DetectorConstruction* p)
   defaultCutValue = 0.1*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
-  cutForProton    = defaultCutValue;
-  
+
   //  MaxChargedStep = DBL_MAX; 
   MaxChargedStep = 0.1*mm; 
   
@@ -219,7 +218,7 @@ void Test17PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
                   
       pmanager->AddProcess(theStepCut,          -1,-1,5);
-  
+
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
      //muon  
@@ -327,50 +326,29 @@ void Test17PhysicsList::ConstructGeneral()
 
 void Test17PhysicsList::SetCuts()
 {
-  // G4Timer theTimer ;
-  // theTimer.Start() ;
 
   //special for low energy physics
   //
-  G4double lowlimit=1*eV;  
+  G4double lowlimit=1*eV;
   G4Gamma   ::SetEnergyRange(lowlimit,100*GeV);
   G4Electron::SetEnergyRange(lowlimit,100*GeV);
   G4Positron::SetEnergyRange(lowlimit,100*GeV);
-   
+
   if (verboseLevel >0){
     G4cout << "Test17PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(MaxChargedStep,"Length") << G4endl;
-  }  
+  }
   // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
+  // because some processes for e+/e- need cut values for gamma
 
-      G4cout << "Set cuts for all particles! " << G4endl; 
+      G4cout << "Set cuts for all particles! " << G4endl;
 
    SetCutValue(cutForGamma,"gamma");
 
    SetCutValue(cutForElectron,"e-");
    SetCutValue(cutForElectron,"e+");
 
-   SetCutValue(cutForProton,"mu-");
-   SetCutValue(cutForProton,"mu+");
-
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-
-     SetCutValue(cutForProton, "proton");
-
-     SetCutValue(cutForProton, "anti_proton");
-
-     SetCutValueForOthers(cutForProton);
-
-  //  G4cout << "Dump the table!" << G4endl;
-              
   if (verboseLevel>0) DumpCutValuesTable();
-
-  //  theTimer.Stop();
-  //  G4cout.precision(6);
-  //  G4cout << G4endl ;
-  //  G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<G4endl;
 
 }
 
@@ -388,14 +366,6 @@ void Test17PhysicsList::SetElectronCut(G4double val)
 {
   ResetCuts();
   cutForElectron = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Test17PhysicsList::SetProtonCut(G4double val)
-{
-  //  ResetCuts();
-  cutForProton = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -74,7 +74,6 @@ public: // Without description
 
     void SetGammaCut(G4double);
     void SetElectronCut(G4double);
-    void SetProtonCut(G4double);
     void SetCutsByEnergy(G4double);
     void GetRange(G4double);
     void SetMaxStep(G4double);
@@ -85,9 +84,8 @@ public: // Without description
 
     G4double cutForGamma;
     G4double cutForElectron;
-    G4double cutForProton;
-    
-    G4double MaxChargedStep;    
+
+    G4double MaxChargedStep;
 
     G4std::vector<G4hLowEnergyIonisation*> hionVector;
 

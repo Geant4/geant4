@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jul-2002)
+                                (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
@@ -89,7 +89,85 @@ Hadronic processes for pi-
 Hadronic processes for proton
 Test17PhysicsList::SetCuts:CutLength : 100 mum
 Set cuts for all particles! 
-G4VUserPhysicsList::SetCutValue       :Set cuts for gamma
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : Yes
+ Material : Beryllium
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  is not ready to print
+
+Index : 1     used in the geometry : No      recalculation needed : Yes
+ Material : Aluminum
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  is not ready to print
+
+Index : 2     used in the geometry : No      recalculation needed : Yes
+ Material : Carbon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  is not ready to print
+
+Index : 3     used in the geometry : No      recalculation needed : Yes
+ Material : Silicon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  is not ready to print
+
+Index : 4     used in the geometry : No      recalculation needed : Yes
+ Material : liquidArgon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  is not ready to print
+
+Index : 5     used in the geometry : No      recalculation needed : Yes
+ Material : liquidXenon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  is not ready to print
+
+Index : 6     used in the geometry : No      recalculation needed : Yes
+ Material : Iron
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  is not ready to print
+
+Index : 7     used in the geometry : No      recalculation needed : Yes
+ Material : Copper
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  is not ready to print
+
+Index : 8     used in the geometry : No      recalculation needed : Yes
+ Material : Gold
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  is not ready to print
+
+Index : 9     used in the geometry : No      recalculation needed : Yes
+ Material : Lead
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  is not ready to print
+
+Index : 10     used in the geometry : Yes     recalculation needed : Yes
+ Material : Water
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 11     used in the geometry : No      recalculation needed : Yes
+ Material : Methane
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  is not ready to print
+
+Index : 12     used in the geometry : No      recalculation needed : Yes
+ Material : Graphite
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  is not ready to print
+
+Index : 13     used in the geometry : Yes     recalculation needed : Yes
+ Material : Air
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -98,7 +176,6 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
-G4VUserPhysicsList::SetCutValue       :Set cuts for e-
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -114,32 +191,10 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-G4VUserPhysicsList::SetCutValue       :Set cuts for e+
 
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
-G4VUserPhysicsList::SetCutValue       :Set cuts for mu-
-G4VUserPhysicsList::SetCutValue       :Set cuts for mu+
-
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
-
-MuIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-
-MuBrems:  theoretical cross section 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-
-MuPairProd:  theoretical cross sections 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-G4VUserPhysicsList::SetCutValue       :Set cuts for proton
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -161,87 +216,64 @@ AugerTransitionTable complete
 hLowEIoni:    Knock-on electron cross sections . 
         Good description above the mean excitation energy.
         Delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 10 eV  to 100 TeV  in 200 bins.
+        PhysicsTables from 10 eV  to 0.1 TeV  in 360 bins.
         Electronic stopping power model is  ICRU_R49p
         from 1 keV  to 2 MeV .
 
         Parametrisation model for antiprotons is  ICRU_R49p
-        from 5 keV  to 2 MeV .
+        from 25 keV  to 2 MeV .
         Parametrization of the Barkas effect is switched on.
         Nuclear stopping power model is ICRU_R49
-G4VUserPhysicsList::SetCutValue       :Set cuts for anti_proton
-G4VUserPhysicsList::SetCutValueForOthers   :0.1[mm]
 G4hLowEnergyIonisation::BuildPhysicsTable for GenericIon mass(MeV)= 938.272 charge= 1 type= nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
 G4hLowEnergyIonisation::BuildPhysicsTable: end for GenericIon
-Set cuts for GenericIon
-Set cuts for He3
 G4hLowEnergyIonisation::BuildPhysicsTable for IonC12 mass(MeV)= 11149.5 charge= 6 type= static_nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
 G4hLowEnergyIonisation::BuildPhysicsTable: end for IonC12
-Set cuts for IonC12
 G4hLowEnergyIonisation::BuildPhysicsTable for alpha mass(MeV)= 3727.42 charge= 2 type= nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
 G4hLowEnergyIonisation::BuildPhysicsTable: end for alpha
-Set cuts for alpha
-Set cuts for anti_nu_e
-Set cuts for anti_nu_mu
-Set cuts for chargedgeantino
 G4hLowEnergyIonisation::BuildPhysicsTable for deuteron mass(MeV)= 1875.61 charge= 1 type= nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
 G4hLowEnergyIonisation::BuildPhysicsTable: end for deuteron
-Set cuts for deuteron
-Set cuts for geantino
-Set cuts for kaon+
-Set cuts for kaon-
-Set cuts for neutron
-Set cuts for nu_e
-Set cuts for nu_mu
-Set cuts for pi+
-Set cuts for pi-
-Set cuts for pi0
-Set cuts for triton
-============= The cut Energy ==============================
-                      gamma            e-           
-Cut in range       
- Beryllium                          100 mum           100 mum
-   Aluminum                          100 mum           100 mum
-   Carbon                          100 mum           100 mum
-   Silicon                          100 mum           100 mum
-   liquidArgon                          100 mum           100 mum
-   liquidXenon                          100 mum           100 mum
-   Iron                          100 mum           100 mum
-   Copper                          100 mum           100 mum
-   Gold                          100 mum           100 mum
-   Lead                          100 mum           100 mum
-   Water                          100 mum           100 mum
-   Methane                          100 mum           100 mum
-   Graphite                          100 mum           100 mum
-   Air                          100 mum           100 mum
-Cut in energy
- Beryllium                          984 eV           108 keV
-   Aluminum                         2.33 keV           130 keV
-   Carbon                         1.32 keV           118 keV
-   Silicon                         2.29 keV           121 keV
-   liquidArgon                         1.99 keV          82.5 keV
-   liquidXenon                         7.15 keV           112 keV
-   Iron                         6.26 keV           235 keV
-   Copper                         7.32 keV           250 keV
-   Gold                         40.5 keV           348 keV
-   Lead                         29.4 keV           241 keV
-   Water                         1.08 keV          84.6 keV
-   Methane                            1 eV          2.62 eV
-   Graphite                         1.38 keV           128 keV
-   Air                            1 eV          4.02 eV
-===================================================
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                              gamma            e-            e+           
+Threshold in range          100 mum           100 mum           100 mum
+   Air                             1 eV          4.02 eV          4.02 eV
+   Water                          1.08 keV          84.6 keV          83.6 keV
+=======================================================================
+
 /run/verbose 1
 #
 #/run/initialize
@@ -250,25 +282,119 @@ Cut in energy
 /gun/energy 500 keV
 /tracking/verbose 0
 /run/beamOn 10000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Beryllium
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 984.471 eV    e- 108.211 keV    e+ 106.888 keV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminum
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.33172 keV    e- 130.148 keV    e+ 128.556 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Carbon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.3201 keV    e- 117.946 keV    e+ 116.503 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.29396 keV    e- 120.884 keV    e+ 119.406 keV
+
+Index : 4     used in the geometry : No      recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.99156 keV    e- 82.5466 keV    e+ 81.537 keV
+
+Index : 5     used in the geometry : No      recalculation needed : No 
+ Material : liquidXenon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 7.14985 keV    e- 112.281 keV    e+ 109.551 keV
+
+Index : 6     used in the geometry : No      recalculation needed : No 
+ Material : Iron
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 6.26053 keV    e- 234.941 keV    e+ 229.23 keV
+
+Index : 7     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 7.31623 keV    e- 249.851 keV    e+ 243.777 keV
+
+Index : 8     used in the geometry : No      recalculation needed : No 
+ Material : Gold
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 40.5179 keV    e- 348.317 keV    e+ 335.693 keV
+
+Index : 9     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 29.3909 keV    e- 240.795 keV    e+ 232.068 keV
+
+Index : 10     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.07536 keV    e- 84.6034 keV    e+ 83.5687 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 11     used in the geometry : No      recalculation needed : No 
+ Material : Methane
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV    e- 2.61758 eV    e+ 2.61758 eV
+
+Index : 12     used in the geometry : No      recalculation needed : No 
+ Material : Graphite
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.38447 keV    e- 127.767 keV    e+ 125.431 keV
+
+Index : 13     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV    e- 4.01595 eV    e+ 4.01595 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                              gamma            e-            e+           
+Threshold in range          100 mum           100 mum           100 mum
+   Air                             1 eV          4.02 eV          4.02 eV
+   Water                          1.08 keV          84.6 keV          83.6 keV
+=======================================================================
+
 ### Run 0 start.
 Start Run processing.
-EvtNo= 485  length= 0.00934112  xend= 0.00301327
-EvtNo= 3954  length= 0.00948489  xend= 0.00183036
+EvtNo= 727  length= 0.00913492  xend= 0.00199605
+EvtNo= 5622  length= 0.0044638  xend= -2.15397e-15
+EvtNo= 6071  length= 0.0092772  xend= 0.00270113
+EvtNo= 8381  length= 0.00941947  xend= 0.00354049
+EvtNo= 9834  length= 0.00969224  xend= 0.00414459
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.88s Real=8.88s Sys=0s
+  User=9.71s Real=9.87s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 9998 for proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.17578 +- 0.00166573  microns 
-    CSDA  Range  in absorber = 9.01407 +- 0.00195348  microns 
+ end of Run TotNbofEvents = 9995 for proton with Ekin = 0.5 MeV
+    Track Length in absorber = 9.17901 +- 0.00166885  microns 
+    CSDA  Range  in absorber = 9.05598 +- 0.00171597  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.11678 +- 0.00166573 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.145074 +- 0.00195348 microns 
+    Track Length (G4 - ICRU49) = 0.120009 +- 0.00166885 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.186979 +- 0.00171597 microns 
 
 Average Number electrons per event = 0
 Average Number photons per event   = 0
@@ -276,23 +402,110 @@ Average Number photons per event   = 0
 #
 /gun/particle anti_proton
 /run/beamOn 10000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Beryllium
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 984.471 eV    e- 108.211 keV    e+ 106.888 keV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminum
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.33172 keV    e- 130.148 keV    e+ 128.556 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Carbon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.3201 keV    e- 117.946 keV    e+ 116.503 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.29396 keV    e- 120.884 keV    e+ 119.406 keV
+
+Index : 4     used in the geometry : No      recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.99156 keV    e- 82.5466 keV    e+ 81.537 keV
+
+Index : 5     used in the geometry : No      recalculation needed : No 
+ Material : liquidXenon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 7.14985 keV    e- 112.281 keV    e+ 109.551 keV
+
+Index : 6     used in the geometry : No      recalculation needed : No 
+ Material : Iron
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 6.26053 keV    e- 234.941 keV    e+ 229.23 keV
+
+Index : 7     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 7.31623 keV    e- 249.851 keV    e+ 243.777 keV
+
+Index : 8     used in the geometry : No      recalculation needed : No 
+ Material : Gold
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 40.5179 keV    e- 348.317 keV    e+ 335.693 keV
+
+Index : 9     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 29.3909 keV    e- 240.795 keV    e+ 232.068 keV
+
+Index : 10     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.07536 keV    e- 84.6034 keV    e+ 83.5687 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 11     used in the geometry : No      recalculation needed : No 
+ Material : Methane
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV    e- 2.61758 eV    e+ 2.61758 eV
+
+Index : 12     used in the geometry : No      recalculation needed : No 
+ Material : Graphite
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.38447 keV    e- 127.767 keV    e+ 125.431 keV
+
+Index : 13     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV    e- 4.01595 eV    e+ 4.01595 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                              gamma            e-            e+           
+Threshold in range          100 mum           100 mum           100 mum
+   Air                             1 eV          4.02 eV          4.02 eV
+   Water                          1.08 keV          84.6 keV          83.6 keV
+=======================================================================
+
 ### Run 1 start.
 Start Run processing.
-EvtNo= 11  length= 0.0253785  xend= -0.0101018
-EvtNo= 1221  length= 0.00971188  xend= 0.00459769
-EvtNo= 1376  length= 0.00247651  xend= -3.07713e-15
-EvtNo= 2693  length= 0.00932615  xend= 0.00433814
-EvtNo= 4209  length= 0.00631962  xend= -4.19844e-16
-EvtNo= 5675  length= 0.0097278  xend= 0.00405861
+EvtNo= 6147  length= 0.00936673  xend= 0.00210491
+EvtNo= 7139  length= 0.0100801  xend= 0.000408606
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=9.25s Real=9.25s Sys=0s
+  User=9.41s Real=9.56s Sys=0.01s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 9994 for anti_proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.47233 +- 0.00185043  microns 
-    CSDA  Range  in absorber = 9.3296 +- 0.00238132  microns 
+ end of Run TotNbofEvents = 9998 for anti_proton with Ekin = 0.5 MeV
+    Track Length in absorber = 9.58481 +- 0.00197918  microns 
+    CSDA  Range  in absorber = 9.45938 +- 0.00207801  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
@@ -305,18 +518,110 @@ Test17PhysicsList:MaxChargedStep=0.001
 /gun/particle IonC12
 /gun/energy 6000 keV
 /run/beamOn 10000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Beryllium
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 984.471 eV    e- 108.211 keV    e+ 106.888 keV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminum
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.33172 keV    e- 130.148 keV    e+ 128.556 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Carbon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.3201 keV    e- 117.946 keV    e+ 116.503 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.29396 keV    e- 120.884 keV    e+ 119.406 keV
+
+Index : 4     used in the geometry : No      recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.99156 keV    e- 82.5466 keV    e+ 81.537 keV
+
+Index : 5     used in the geometry : No      recalculation needed : No 
+ Material : liquidXenon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 7.14985 keV    e- 112.281 keV    e+ 109.551 keV
+
+Index : 6     used in the geometry : No      recalculation needed : No 
+ Material : Iron
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 6.26053 keV    e- 234.941 keV    e+ 229.23 keV
+
+Index : 7     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 7.31623 keV    e- 249.851 keV    e+ 243.777 keV
+
+Index : 8     used in the geometry : No      recalculation needed : No 
+ Material : Gold
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 40.5179 keV    e- 348.317 keV    e+ 335.693 keV
+
+Index : 9     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 29.3909 keV    e- 240.795 keV    e+ 232.068 keV
+
+Index : 10     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.07536 keV    e- 84.6034 keV    e+ 83.5687 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 11     used in the geometry : No      recalculation needed : No 
+ Material : Methane
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV    e- 2.61758 eV    e+ 2.61758 eV
+
+Index : 12     used in the geometry : No      recalculation needed : No 
+ Material : Graphite
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.38447 keV    e- 127.767 keV    e+ 125.431 keV
+
+Index : 13     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV    e- 4.01595 eV    e+ 4.01595 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                              gamma            e-            e+           
+Threshold in range          100 mum           100 mum           100 mum
+   Air                             1 eV          4.02 eV          4.02 eV
+   Water                          1.08 keV          84.6 keV          83.6 keV
+=======================================================================
+
 ### Run 2 start.
 Start Run processing.
-EvtNo= 3890  length= 0.00874838  xend= 0.000429879
+EvtNo= 8459  length= 0.00100068  xend= -1.60719e-16
+EvtNo= 9806  length= 0.00865961  xend= 0.000993273
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=11.63s Real=11.64s Sys=0.01s
+  User=17.63s Real=17.92s Sys=0.01s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 9999 for IonC12 with Ekin = 6 MeV
-    Track Length in absorber = 8.65589 +- 0.000849867  microns 
-    CSDA  Range  in absorber = 8.38578 +- 0.00387407  microns 
+ end of Run TotNbofEvents = 9998 for IonC12 with Ekin = 6 MeV
+    Track Length in absorber = 8.61861 +- 0.000883196  microns 
+    CSDA  Range  in absorber = 7.71187 +- 0.00521016  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -329,19 +634,112 @@ Average Number photons per event   = 0
 /gun/ion 6 12 6
 G4hLowEnergyIonisation::BuildPhysicsTable for C12[0.0] mass(MeV)= 11174.9 charge= 6 type= nucleus
 /run/beamOn 10000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Beryllium
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 984.471 eV    e- 108.211 keV    e+ 106.888 keV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminum
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.33172 keV    e- 130.148 keV    e+ 128.556 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Carbon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.3201 keV    e- 117.946 keV    e+ 116.503 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.29396 keV    e- 120.884 keV    e+ 119.406 keV
+
+Index : 4     used in the geometry : No      recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.99156 keV    e- 82.5466 keV    e+ 81.537 keV
+
+Index : 5     used in the geometry : No      recalculation needed : No 
+ Material : liquidXenon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 7.14985 keV    e- 112.281 keV    e+ 109.551 keV
+
+Index : 6     used in the geometry : No      recalculation needed : No 
+ Material : Iron
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 6.26053 keV    e- 234.941 keV    e+ 229.23 keV
+
+Index : 7     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 7.31623 keV    e- 249.851 keV    e+ 243.777 keV
+
+Index : 8     used in the geometry : No      recalculation needed : No 
+ Material : Gold
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 40.5179 keV    e- 348.317 keV    e+ 335.693 keV
+
+Index : 9     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 29.3909 keV    e- 240.795 keV    e+ 232.068 keV
+
+Index : 10     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.07536 keV    e- 84.6034 keV    e+ 83.5687 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 11     used in the geometry : No      recalculation needed : No 
+ Material : Methane
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV    e- 2.61758 eV    e+ 2.61758 eV
+
+Index : 12     used in the geometry : No      recalculation needed : No 
+ Material : Graphite
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.38447 keV    e- 127.767 keV    e+ 125.431 keV
+
+Index : 13     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV    e- 4.01595 eV    e+ 4.01595 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                              gamma            e-            e+           
+Threshold in range          100 mum           100 mum           100 mum
+   Air                             1 eV          4.02 eV          4.02 eV
+   Water                          1.08 keV          84.6 keV          83.6 keV
+=======================================================================
+
 ### Run 3 start.
 Start Run processing.
-EvtNo= 3868  length= 0.00868933  xend= 0.00278865
-EvtNo= 5701  length= 0.0087012  xend= 0.0032452
+EvtNo= 1468  length= 0.0088359  xend= 0.00403303
+EvtNo= 2317  length= 0.00414636  xend= -0.000188925
+EvtNo= 2807  length= 0.0086978  xend= 0.00371738
+EvtNo= 6779  length= 0.00346871  xend= -0.000627421
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=11.66s Real=11.66s Sys=0s
+  User=17.89s Real=18.08s Sys=0.01s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 9998 for C12[0.0] with Ekin = 6 MeV
-    Track Length in absorber = 8.72471 +- 0.000815822  microns 
-    CSDA  Range  in absorber = 8.36766 +- 0.00471496  microns 
+ end of Run TotNbofEvents = 9996 for C12[0.0] with Ekin = 6 MeV
+    Track Length in absorber = 8.68102 +- 0.000849864  microns 
+    CSDA  Range  in absorber = 7.75995 +- 0.00522595  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -353,19 +751,1043 @@ Average Number photons per event   = 0
 /gun/ion 26 56 26
 G4hLowEnergyIonisation::BuildPhysicsTable for Fe56[0.0] mass(MeV)= 52089.8 charge= 26 type= nucleus
 /run/beamOn 1000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Beryllium
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 984.471 eV    e- 108.211 keV    e+ 106.888 keV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminum
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.33172 keV    e- 130.148 keV    e+ 128.556 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Carbon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.3201 keV    e- 117.946 keV    e+ 116.503 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.29396 keV    e- 120.884 keV    e+ 119.406 keV
+
+Index : 4     used in the geometry : No      recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.99156 keV    e- 82.5466 keV    e+ 81.537 keV
+
+Index : 5     used in the geometry : No      recalculation needed : No 
+ Material : liquidXenon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 7.14985 keV    e- 112.281 keV    e+ 109.551 keV
+
+Index : 6     used in the geometry : No      recalculation needed : No 
+ Material : Iron
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 6.26053 keV    e- 234.941 keV    e+ 229.23 keV
+
+Index : 7     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 7.31623 keV    e- 249.851 keV    e+ 243.777 keV
+
+Index : 8     used in the geometry : No      recalculation needed : No 
+ Material : Gold
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 40.5179 keV    e- 348.317 keV    e+ 335.693 keV
+
+Index : 9     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 29.3909 keV    e- 240.795 keV    e+ 232.068 keV
+
+Index : 10     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.07536 keV    e- 84.6034 keV    e+ 83.5687 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 11     used in the geometry : No      recalculation needed : No 
+ Material : Methane
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV    e- 2.61758 eV    e+ 2.61758 eV
+
+Index : 12     used in the geometry : No      recalculation needed : No 
+ Material : Graphite
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.38447 keV    e- 127.767 keV    e+ 125.431 keV
+
+Index : 13     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV    e- 4.01595 eV    e+ 4.01595 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                              gamma            e-            e+           
+Threshold in range          100 mum           100 mum           100 mum
+   Air                             1 eV          4.02 eV          4.02 eV
+   Water                          1.08 keV          84.6 keV          83.6 keV
+=======================================================================
+
 ### Run 4 start.
 Start Run processing.
-EvtNo= 24  length= 0.00419263  xend= 0.00121564
-EvtNo= 948  length= 0.00422049  xend= 0.00199816
+EvtNo= 0  length= 0.0012743  xend= -1.37726e-15
+EvtNo= 2  length= 0.00225389  xend= -3.34639e-15
+EvtNo= 4  length= 0.00413487  xend= 0.000351631
+EvtNo= 5  length= 0.00225892  xend= -2.68833e-15
+EvtNo= 6  length= 0.0042561  xend= 0.000618845
+EvtNo= 7  length= 0.00413146  xend= 0.0013375
+EvtNo= 9  length= 0.00225395  xend= -3.27375e-15
+EvtNo= 10  length= 0.00127449  xend= -1.37726e-15
+EvtNo= 11  length= 0.00425924  xend= 0.00210581
+EvtNo= 12  length= 0.00127396  xend= -1.37726e-15
+EvtNo= 13  length= 0.00425449  xend= 0.000990215
+EvtNo= 14  length= 0.00347086  xend= 0.00117652
+EvtNo= 15  length= 0.00423229  xend= 7.38924e-16
+EvtNo= 16  length= 0.00424318  xend= 0.000954858
+EvtNo= 17  length= 0.00423185  xend= 0.00104329
+EvtNo= 18  length= 0.00419571  xend= 0.00142812
+EvtNo= 19  length= 0.00423632  xend= 0.000989018
+EvtNo= 20  length= 0.00425416  xend= 0.000779719
+EvtNo= 21  length= 0.00326077  xend= -2.28398e-15
+EvtNo= 22  length= 0.0012728  xend= -1.37726e-15
+EvtNo= 23  length= 0.00420374  xend= 0.000586406
+EvtNo= 24  length= 0.00225803  xend= -8.12881e-16
+EvtNo= 25  length= 0.112917  xend= -0.144328
+EvtNo= 26  length= 0.00425506  xend= 0.00159863
+EvtNo= 28  length= 0.00423476  xend= 0.0010473
+EvtNo= 29  length= 0.00326091  xend= -1.92917e-15
+EvtNo= 30  length= 0.0042499  xend= 0.000944351
+EvtNo= 31  length= 0.00225626  xend= -4.61057e-16
+EvtNo= 32  length= 0.00423408  xend= 0.00086768
+EvtNo= 33  length= 0.00346259  xend= 0.000194433
+EvtNo= 34  length= 0.00420875  xend= 6.44531e-16
+EvtNo= 35  length= 0.00325855  xend= -3.22973e-15
+EvtNo= 36  length= 0.0952444  xend= -0.44995
+EvtNo= 37  length= 0.0042591  xend= 0.000586404
+EvtNo= 38  length= 0.00423775  xend= 0.000157103
+EvtNo= 39  length= 0.00425786  xend= 2.28555e-15
+EvtNo= 41  length= 0.00127361  xend= -1.37726e-15
+EvtNo= 42  length= 0.00425195  xend= 0.00210904
+EvtNo= 43  length= 0.0012722  xend= -1.37726e-15
+EvtNo= 44  length= 0.00127322  xend= -1.37726e-15
+EvtNo= 45  length= 0.0012734  xend= -1.37726e-15
+EvtNo= 47  length= 0.00425798  xend= 0.00147469
+EvtNo= 48  length= 0.00423151  xend= 0.00108507
+EvtNo= 49  length= 0.00418616  xend= 0.000827768
+EvtNo= 50  length= 0.00424832  xend= 0.000335065
+EvtNo= 51  length= 0.00425778  xend= 0.00185097
+EvtNo= 52  length= 0.00424797  xend= 0.000757084
+EvtNo= 53  length= 0.00326261  xend= -1.88944e-15
+EvtNo= 54  length= 0.00424967  xend= 0.00189194
+EvtNo= 55  length= 0.00423519  xend= 7.67266e-05
+EvtNo= 56  length= 0.00425551  xend= 0.000994214
+EvtNo= 57  length= 0.118045  xend= -1.03547
+EvtNo= 58  length= 0.00419413  xend= 5.90565e-16
+EvtNo= 59  length= 0.00422443  xend= 0.000706453
+EvtNo= 60  length= 0.00225724  xend= -1.83631e-15
+EvtNo= 61  length= 0.00420393  xend= 0.00161611
+EvtNo= 62  length= 3.21204  xend= -0.55877
+EvtNo= 64  length= 0.00342349  xend= 2.08492e-16
+EvtNo= 66  length= 0.121  xend= -0.558393
+EvtNo= 67  length= 0.00127395  xend= -1.37726e-15
+EvtNo= 68  length= 0.0042475  xend= 0.000477196
+EvtNo= 69  length= 0.00226288  xend= -1.231e-15
+EvtNo= 70  length= 0.00420432  xend= 0.000575535
+EvtNo= 71  length= 0.00423211  xend= 3.90421e-16
+EvtNo= 72  length= 0.0042583  xend= 0.000400522
+EvtNo= 73  length= 0.0042565  xend= 0.000573027
+EvtNo= 74  length= 0.00127354  xend= -1.37726e-15
+EvtNo= 75  length= 0.00225602  xend= -2.49258e-15
+EvtNo= 76  length= 0.00424973  xend= 0.00207022
+EvtNo= 77  length= 0.00226657  xend= -3.48571e-16
+EvtNo= 78  length= 0.00425565  xend= 0.000146154
+EvtNo= 79  length= 0.00423607  xend= 0.00117108
+EvtNo= 80  length= 0.00325032  xend= -1.35287e-15
+EvtNo= 81  length= 0.00226128  xend= -2.71755e-16
+EvtNo= 82  length= 0.00127344  xend= -1.37726e-15
+EvtNo= 83  length= 3.2169  xend= -2.27357
+EvtNo= 84  length= 0.00423333  xend= 0.000647547
+EvtNo= 87  length= 0.0042518  xend= 0.000326224
+EvtNo= 88  length= 0.0022542  xend= -3.1501e-15
+EvtNo= 89  length= 0.00226003  xend= -1.30158e-15
+EvtNo= 90  length= 0.00423003  xend= 0.0018155
+EvtNo= 91  length= 0.00425209  xend= 0.00129753
+EvtNo= 92  length= 0.00422536  xend= 0.00120275
+EvtNo= 93  length= 0.0032594  xend= -1.33856e-15
+EvtNo= 94  length= 0.00425383  xend= 0.00188285
+EvtNo= 95  length= 0.00425338  xend= 0.00140654
+EvtNo= 96  length= 0.00127284  xend= -1.37726e-15
+EvtNo= 97  length= 0.00425471  xend= 0.00191015
+EvtNo= 98  length= 0.00225752  xend= -3.82723e-16
+EvtNo= 99  length= 0.00421063  xend= 9.1595e-05
+EvtNo= 100  length= 0.00424617  xend= -1.07759e-15
+EvtNo= 101  length= 0.00417436  xend= 2.22131e-15
+EvtNo= 102  length= 0.0042489  xend= 0.00156374
+EvtNo= 103  length= 0.00423737  xend= 0.00068719
+EvtNo= 104  length= 0.00420099  xend= 0.000881687
+EvtNo= 105  length= 0.0042463  xend= 1.99233e-15
+EvtNo= 106  length= 3.21046  xend= -2.91363
+EvtNo= 107  length= 0.004252  xend= 0.00131713
+EvtNo= 109  length= 0.00327254  xend= -1.83696e-15
+EvtNo= 110  length= 0.00423215  xend= 0.000424022
+EvtNo= 111  length= 0.00417661  xend= 0.00206625
+EvtNo= 112  length= 0.00326094  xend= -3.85983e-16
+EvtNo= 113  length= 0.00423204  xend= 0.00105067
+EvtNo= 114  length= 0.00423368  xend= -1.10426e-15
+EvtNo= 115  length= 0.00425006  xend= 0.000935239
+EvtNo= 116  length= 0.00127328  xend= -1.37726e-15
+EvtNo= 117  length= 0.00425555  xend= 0.000314174
+EvtNo= 118  length= 0.0041395  xend= 0.00098883
+EvtNo= 119  length= 0.00425201  xend= 0.000191175
+EvtNo= 120  length= 0.00412488  xend= 0.00131397
+EvtNo= 121  length= 0.00325345  xend= -9.35992e-16
+EvtNo= 122  length= 0.00134615  xend= -6.42065e-16
+EvtNo= 123  length= 0.00424742  xend= 0.00138027
+EvtNo= 124  length= 0.00422678  xend= 0.000452038
+EvtNo= 125  length= 0.00425756  xend= -1.77733e-15
+EvtNo= 126  length= 0.00347285  xend= 0.000609167
+EvtNo= 128  length= 0.00412329  xend= 0.000972904
+EvtNo= 129  length= 0.00418706  xend= 0.000707659
+EvtNo= 130  length= 0.00127333  xend= -1.37726e-15
+EvtNo= 131  length= 0.00420437  xend= 0.00174963
+EvtNo= 132  length= 3.18004  xend= -1.38811
+EvtNo= 133  length= 0.00423996  xend= 1.77191e-15
+EvtNo= 134  length= 0.00424268  xend= 0.00157746
+EvtNo= 135  length= 0.00422594  xend= 0.00162808
+EvtNo= 136  length= 0.00425135  xend= 2.22335e-15
+EvtNo= 137  length= 0.00423546  xend= 0.00128348
+EvtNo= 138  length= 0.00225585  xend= -6.71175e-16
+EvtNo= 139  length= 0.00127348  xend= -1.37726e-15
+EvtNo= 140  length= 0.00425583  xend= 0.00102099
+EvtNo= 141  length= 0.00413028  xend= 1.72692e-15
+EvtNo= 142  length= 0.00425592  xend= 0.000110805
+EvtNo= 143  length= 0.004181  xend= 0.00107787
+EvtNo= 144  length= 0.00425598  xend= 0.00183764
+EvtNo= 145  length= 0.00425688  xend= -3.51986e-15
+EvtNo= 146  length= 0.00418017  xend= 0.000296229
+EvtNo= 147  length= 0.00127283  xend= -1.37726e-15
+EvtNo= 148  length= 0.00422485  xend= 0.00191208
+EvtNo= 150  length= 0.00425309  xend= 0.00169433
+EvtNo= 151  length= 0.00424587  xend= 6.50655e-05
+EvtNo= 152  length= 0.00422616  xend= 0.00151403
+EvtNo= 153  length= 0.00425324  xend= -4.41487e-16
+EvtNo= 154  length= 0.115875  xend= -0.357993
+EvtNo= 155  length= 0.00418277  xend= 0.00104084
+EvtNo= 156  length= 0.00325752  xend= -2.03318e-15
+EvtNo= 157  length= 0.00424962  xend= 0.000473665
+EvtNo= 158  length= 0.00172221  xend= -0.000335878
+EvtNo= 159  length= 0.00425364  xend= 0.00159015
+EvtNo= 160  length= 0.00325674  xend= -3.0362e-15
+EvtNo= 161  length= 0.00421302  xend= 0.00189323
+EvtNo= 162  length= 0.00425437  xend= 0.000572748
+EvtNo= 163  length= 0.144469  xend= -0.836989
+EvtNo= 164  length= 0.00421576  xend= 0.000609786
+EvtNo= 165  length= 0.00424503  xend= 0.000550671
+EvtNo= 166  length= 0.00421173  xend= 0.00105519
+EvtNo= 167  length= 0.00355497  xend= 0.000532068
+EvtNo= 168  length= 0.00419013  xend= 0.00106456
+EvtNo= 169  length= 0.00225516  xend= -4.39536e-16
+EvtNo= 170  length= 0.00419865  xend= 0.00184493
+EvtNo= 171  length= 0.00420064  xend= 0.00040136
+EvtNo= 172  length= 0.00425523  xend= 0.00203545
+EvtNo= 173  length= 0.00419345  xend= 0.00181494
+EvtNo= 174  length= 0.00127395  xend= -1.37726e-15
+EvtNo= 175  length= 0.00425535  xend= 0.00158443
+EvtNo= 176  length= 0.00424907  xend= 0.00181991
+EvtNo= 177  length= 0.00225825  xend= -4.24411e-16
+EvtNo= 178  length= 0.00424579  xend= 0.00129868
+EvtNo= 179  length= 0.00127269  xend= -1.37726e-15
+EvtNo= 180  length= 3.17344  xend= -2.49526
+EvtNo= 181  length= 0.00325421  xend= -1.33883e-15
+EvtNo= 182  length= 0.00226258  xend= -2.76613e-15
+EvtNo= 183  length= 0.00417402  xend= 0.000931959
+EvtNo= 184  length= 0.00421406  xend= 0.00153802
+EvtNo= 185  length= 0.00409396  xend= 0.000722905
+EvtNo= 186  length= 0.00127316  xend= -1.37726e-15
+EvtNo= 187  length= 0.00417539  xend= -1.20346e-16
+EvtNo= 188  length= 0.00423396  xend= 0.000620063
+EvtNo= 189  length= 0.00325224  xend= -1.56776e-15
+EvtNo= 190  length= 0.0023024  xend= -4.3921e-16
+EvtNo= 191  length= 0.00418393  xend= -3.34406e-15
+EvtNo= 192  length= 0.00128459  xend= -2.64654e-15
+EvtNo= 193  length= 0.00419569  xend= 0.00124347
+EvtNo= 195  length= 0.00425062  xend= 2.62399e-15
+EvtNo= 196  length= 0.00418643  xend= 0.00142383
+EvtNo= 197  length= 0.00425088  xend= 0.000409689
+EvtNo= 199  length= 0.00422546  xend= 0.00120263
+EvtNo= 200  length= 0.00420033  xend= 2.41425e-15
+EvtNo= 201  length= 0.00418841  xend= 0.00142398
+EvtNo= 202  length= 0.00423903  xend= 0.000833924
+EvtNo= 203  length= 0.00325247  xend= -6.01299e-16
+EvtNo= 204  length= 0.0042358  xend= 0.000780833
+EvtNo= 205  length= 0.00410348  xend= 0.00130947
+EvtNo= 206  length= 0.00127496  xend= -1.37726e-15
+EvtNo= 207  length= 0.00226959  xend= -5.02745e-16
+EvtNo= 208  length= 0.00422941  xend= 0.000839109
+EvtNo= 209  length= 0.00423565  xend= 0.000435401
+EvtNo= 210  length= 0.00418463  xend= 0.000879678
+EvtNo= 211  length= 0.0042553  xend= -3.40505e-15
+EvtNo= 212  length= 0.00420369  xend= 0.00119351
+EvtNo= 213  length= 0.00421184  xend= -2.13772e-15
+EvtNo= 214  length= 0.00226283  xend= -1.57101e-16
+EvtNo= 215  length= 0.00417533  xend= 0.000948291
+EvtNo= 216  length= 0.00422206  xend= 0.00206782
+EvtNo= 217  length= 0.00420821  xend= 0.00120757
+EvtNo= 218  length= 0.0042246  xend= 0.000428905
+EvtNo= 219  length= 0.00425361  xend= 0.000715973
+EvtNo= 220  length= 0.00424008  xend= 0.00143356
+EvtNo= 221  length= 0.00423245  xend= 0.00145558
+EvtNo= 222  length= 0.00424508  xend= 0.00130182
+EvtNo= 223  length= 0.00225526  xend= -2.91824e-15
+EvtNo= 224  length= 0.00225666  xend= -1.81062e-15
+EvtNo= 225  length= 0.00417314  xend= 0.00208394
+EvtNo= 226  length= 0.00418668  xend= 0.00136567
+EvtNo= 227  length= 0.00419692  xend= -2.17675e-15
+EvtNo= 228  length= 0.0041937  xend= 0.0019471
+EvtNo= 229  length= 0.00422794  xend= 0.000710531
+EvtNo= 230  length= 0.00345664  xend= 0.000175359
+EvtNo= 231  length= 0.00417956  xend= 0.000380604
+EvtNo= 232  length= 0.00424118  xend= 0.00106949
+EvtNo= 233  length= 0.00127428  xend= -1.37726e-15
+EvtNo= 234  length= 0.00424773  xend= 0.00206347
+EvtNo= 235  length= 0.00425258  xend= 0.00133801
+EvtNo= 236  length= 0.00325536  xend= -3.22756e-15
+EvtNo= 237  length= 0.00133852  xend= -3.85325e-16
+EvtNo= 238  length= 0.00422541  xend= -9.07369e-16
+EvtNo= 239  length= 0.0042487  xend= 0.00130957
+EvtNo= 240  length= 0.00425477  xend= -1.55664e-15
+EvtNo= 241  length= 0.00425072  xend= 0.000686713
+EvtNo= 242  length= 0.00418707  xend= 0.000679942
+EvtNo= 243  length= 0.00325988  xend= -2.25839e-15
+EvtNo= 244  length= 0.103731  xend= -0.447487
+EvtNo= 245  length= 0.00127333  xend= -1.37726e-15
+EvtNo= 246  length= 0.00225532  xend= -6.34041e-16
+EvtNo= 247  length= 0.00417533  xend= 0.000211663
+EvtNo= 248  length= 0.00325573  xend= -2.17952e-15
+EvtNo= 249  length= 0.00127142  xend= -1.37726e-15
+EvtNo= 250  length= 0.00413995  xend= 0.000479837
+EvtNo= 251  length= 0.00225478  xend= -1.50083e-15
+EvtNo= 252  length= 0.00416296  xend= 0.000524194
+EvtNo= 253  length= 0.00423368  xend= 0.000674781
+EvtNo= 254  length= 0.00416884  xend= 0.00066779
+EvtNo= 255  length= 0.0042033  xend= 0.000515614
+EvtNo= 256  length= 0.00421211  xend= 0.00155216
+EvtNo= 257  length= 0.00425471  xend= 0.000904414
+EvtNo= 258  length= 0.00425569  xend= 0.00122843
+EvtNo= 259  length= 0.00127454  xend= -1.37726e-15
+EvtNo= 260  length= 0.0042136  xend= 3.51276e-15
+EvtNo= 261  length= 0.00423471  xend= 0.00200659
+EvtNo= 262  length= 0.00423754  xend= 0.000860765
+EvtNo= 263  length= 0.00226667  xend= -1.90418e-15
+EvtNo= 264  length= 0.00225626  xend= -3.01733e-16
+EvtNo= 265  length= 0.00424831  xend= 0.00193103
+EvtNo= 266  length= 0.00423256  xend= 2.82153e-15
+EvtNo= 267  length= 0.00425708  xend= 0.00208914
+EvtNo= 268  length= 0.00225189  xend= -1.60004e-15
+EvtNo= 269  length= 0.00128419  xend= -3.27917e-15
+EvtNo= 270  length= 0.00424889  xend= -1.45381e-15
+EvtNo= 272  length= 0.00420154  xend= 0.001248
+EvtNo= 273  length= 0.00418462  xend= 0.000682866
+EvtNo= 274  length= 0.00225626  xend= -1.77026e-15
+EvtNo= 275  length= 0.00425682  xend= 0.000558864
+EvtNo= 276  length= 0.00425412  xend= 0.00108468
+EvtNo= 277  length= 0.00423704  xend= 0.00168377
+EvtNo= 278  length= 0.0015709  xend= -0.000199871
+EvtNo= 279  length= 0.0032654  xend= -2.22608e-15
+EvtNo= 280  length= 0.00417298  xend= 0.000839138
+EvtNo= 281  length= 0.00424773  xend= 0.000764697
+EvtNo= 282  length= 0.00425245  xend= 0.00158274
+EvtNo= 283  length= 0.00423616  xend= 0.000733968
+EvtNo= 284  length= 0.00424984  xend= 0.000434399
+EvtNo= 285  length= 0.115454  xend= -0.465972
+EvtNo= 287  length= 0.00325108  xend= -2.29135e-15
+EvtNo= 288  length= 0.00416663  xend= 0.00110688
+EvtNo= 290  length= 0.00425671  xend= 0.000781225
+EvtNo= 291  length= 0.00325603  xend= -2.60425e-15
+EvtNo= 292  length= 0.00422243  xend= 0.000778619
+EvtNo= 293  length= 0.00410532  xend= 0.000918425
+EvtNo= 294  length= 0.00225527  xend= -3.13302e-15
+EvtNo= 295  length= 0.00417748  xend= 0.000727799
+EvtNo= 296  length= 0.00424254  xend= 0.0018279
+EvtNo= 297  length= 0.00421572  xend= 0.0012909
+EvtNo= 298  length= 0.115679  xend= -0.954377
+EvtNo= 299  length= 0.00127526  xend= -1.37726e-15
+EvtNo= 300  length= 0.00424947  xend= 0.00125546
+EvtNo= 302  length= 0.00127239  xend= -1.37726e-15
+EvtNo= 303  length= 0.00419623  xend= 0.000560383
+EvtNo= 304  length= 0.00424763  xend= 0.00087424
+EvtNo= 305  length= 0.00421582  xend= 0.000420783
+EvtNo= 306  length= 0.0041219  xend= 0.000568863
+EvtNo= 307  length= 0.00423691  xend= 0.00106836
+EvtNo= 308  length= 0.0042268  xend= -1.34821e-15
+EvtNo= 309  length= 0.00130753  xend= -2.10097e-15
+EvtNo= 310  length= 0.131042  xend= -0.455033
+EvtNo= 311  length= 0.00348697  xend= 0.000575251
+EvtNo= 312  length= 0.00127491  xend= -1.37726e-15
+EvtNo= 313  length= 3.19978  xend= -0.243046
+EvtNo= 314  length= 0.00423746  xend= 0.00123873
+EvtNo= 315  length= 0.00425635  xend= 0.00100326
+EvtNo= 316  length= 0.00425495  xend= 0.00108733
+EvtNo= 317  length= 0.00425497  xend= 0.000600328
+EvtNo= 318  length= 0.00425444  xend= 0.00148069
+EvtNo= 320  length= 0.00127356  xend= -1.37726e-15
+EvtNo= 322  length= 0.00127552  xend= -1.37726e-15
+EvtNo= 323  length= 3.23128  xend= -2.2944
+EvtNo= 324  length= 0.00324845  xend= -2.36291e-15
+EvtNo= 325  length= 0.00421599  xend= 0.00199636
+EvtNo= 326  length= 0.00127224  xend= -1.37726e-15
+EvtNo= 327  length= 0.00422367  xend= 0.00194461
+EvtNo= 328  length= 0.00424997  xend= 0.00081671
+EvtNo= 329  length= 0.00225202  xend= -8.24969e-16
+EvtNo= 330  length= 0.00424933  xend= 0.00177392
+EvtNo= 331  length= 0.00325751  xend= -1.87068e-15
+EvtNo= 332  length= 0.00351228  xend= 0.000682122
+EvtNo= 333  length= 0.00423627  xend= -1.35205e-15
+EvtNo= 334  length= 0.00425547  xend= 7.62386e-05
+EvtNo= 335  length= 0.00325976  xend= -3.26171e-15
+EvtNo= 336  length= 0.00424773  xend= 0.000590398
+EvtNo= 337  length= 0.100507  xend= -0.222392
+EvtNo= 338  length= 0.00225851  xend= -1.07509e-15
+EvtNo= 339  length= 0.00425288  xend= 0.00176727
+EvtNo= 340  length= 0.00225368  xend= -2.70725e-16
+EvtNo= 341  length= 0.00422449  xend= -2.13322e-15
+EvtNo= 342  length= 0.00423763  xend= 1.66327e-15
+EvtNo= 343  length= 0.119937  xend= -0.723339
+EvtNo= 344  length= 0.00425578  xend= 0.000733203
+EvtNo= 345  length= 0.00413301  xend= 0.00192329
+EvtNo= 346  length= 0.00424111  xend= 0.00101247
+EvtNo= 347  length= 0.00417433  xend= 0.000784357
+EvtNo= 348  length= 0.00127447  xend= -1.37726e-15
+EvtNo= 349  length= 3.23303  xend= -3.19825
+EvtNo= 350  length= 0.00127089  xend= -1.37726e-15
+EvtNo= 351  length= 0.00417667  xend= 4.82253e-16
+EvtNo= 352  length= 0.00417813  xend= 0.00205155
+EvtNo= 353  length= 0.00127406  xend= -1.37726e-15
+EvtNo= 354  length= 0.00418169  xend= 0.000898582
+EvtNo= 355  length= 0.00342097  xend= 0.00120428
+EvtNo= 356  length= 0.00425201  xend= 0.00153272
+EvtNo= 358  length= 0.0041185  xend= 0.000709537
+EvtNo= 359  length= 3.19551  xend= -0.840529
+EvtNo= 360  length= 0.00425936  xend= 1.16779e-15
+EvtNo= 361  length= 0.120217  xend= -0.673285
+EvtNo= 362  length= 0.00225475  xend= -2.31054e-15
+EvtNo= 363  length= 0.00422041  xend= 0.00157226
+EvtNo= 364  length= 0.00422499  xend= 0.0017166
+EvtNo= 365  length= 0.0042493  xend= 0.00104405
+EvtNo= 366  length= 0.00423764  xend= 0.000616757
+EvtNo= 367  length= 0.00347079  xend= 0.000168375
+EvtNo= 368  length= 0.00419752  xend= 0.00179566
+EvtNo= 369  length= 0.00325268  xend= -3.27928e-15
+EvtNo= 370  length= 0.00422213  xend= 0.00107538
+EvtNo= 371  length= 3.14447  xend= -1.24805
+EvtNo= 372  length= 0.00414525  xend= 0.000909449
+EvtNo= 373  length= 0.00425688  xend= 0.00119686
+EvtNo= 374  length= 0.00426  xend= 7.91795e-05
+EvtNo= 376  length= 0.00424418  xend= 0.000768933
+EvtNo= 378  length= 0.00127349  xend= -1.37726e-15
+EvtNo= 379  length= 0.00421989  xend= 0.0015792
+EvtNo= 380  length= 0.00425025  xend= 0.0015671
+EvtNo= 381  length= 0.00127509  xend= -1.37726e-15
+EvtNo= 382  length= 0.00425196  xend= 0.00075452
+EvtNo= 383  length= 0.00424805  xend= 0.0020434
+EvtNo= 384  length= 0.00425382  xend= 0.000864198
+EvtNo= 385  length= 0.00127312  xend= -1.37726e-15
+EvtNo= 386  length= 0.00420475  xend= 0.000763335
+EvtNo= 387  length= 0.00355013  xend= 0.000158416
+EvtNo= 388  length= 0.00425598  xend= 0.00031847
+EvtNo= 389  length= 0.00425004  xend= 9.80092e-05
+EvtNo= 390  length= 0.00347044  xend= 3.44603e-05
+EvtNo= 391  length= 0.00425081  xend= 2.71875e-15
+EvtNo= 393  length= 0.0042542  xend= 0.00050277
+EvtNo= 394  length= 0.00127316  xend= -1.37726e-15
+EvtNo= 395  length= 0.00415792  xend= 0.000526374
+EvtNo= 396  length= 0.00243712  xend= -0.00113118
+EvtNo= 397  length= 0.00425776  xend= 0.000671681
+EvtNo= 399  length= 0.00425584  xend= 0.00175313
+EvtNo= 400  length= 0.00425315  xend= 0.000683582
+EvtNo= 401  length= 0.00414566  xend= 0.00139937
+EvtNo= 402  length= 0.00127393  xend= -1.37726e-15
+EvtNo= 403  length= 0.00326158  xend= -1.18614e-15
+EvtNo= 404  length= 0.0041833  xend= 0.000178025
+EvtNo= 405  length= 0.00425286  xend= 0.00128556
+EvtNo= 406  length= 0.00423636  xend= 0.000149786
+EvtNo= 407  length= 0.003249  xend= -5.70832e-17
+EvtNo= 408  length= 0.00425482  xend= 3.02438e-15
+EvtNo= 409  length= 0.00419484  xend= 0.00086645
+EvtNo= 410  length= 0.00419283  xend= 0.0014147
+EvtNo= 411  length= 0.00425472  xend= 0.00108464
+EvtNo= 412  length= 0.00413917  xend= 0.000461801
+EvtNo= 413  length= 0.00422621  xend= 0.000817977
+EvtNo= 414  length= 0.00225211  xend= -2.24115e-15
+EvtNo= 415  length= 3.1541  xend= -1.22463
+EvtNo= 416  length= 0.00425159  xend= -1.65666e-15
+EvtNo= 417  length= 0.00418088  xend= 0.0011619
+EvtNo= 418  length= 0.00425698  xend= 0.000193774
+EvtNo= 419  length= 0.00425231  xend= 0.00199661
+EvtNo= 420  length= 0.00423472  xend= 0.00118833
+EvtNo= 421  length= 0.00157811  xend= -0.000183378
+EvtNo= 422  length= 0.00415177  xend= 0.00171046
+EvtNo= 424  length= 0.00127417  xend= -1.37726e-15
+EvtNo= 425  length= 0.00425146  xend= 0.000962935
+EvtNo= 426  length= 0.00424956  xend= 0.000972083
+EvtNo= 427  length= 3.21182  xend= -1.74496
+EvtNo= 429  length= 0.00127358  xend= -1.37726e-15
+EvtNo= 430  length= 0.00420318  xend= 0.00123604
+EvtNo= 431  length= 3.18986  xend= -2.99372
+EvtNo= 432  length= 0.00424523  xend= 0.000716608
+EvtNo= 433  length= 0.00423289  xend= 0.000353426
+EvtNo= 434  length= 0.00325781  xend= -2.33776e-15
+EvtNo= 435  length= 3.18014  xend= -0.883587
+EvtNo= 436  length= 0.00424756  xend= 0.00160183
+EvtNo= 437  length= 0.00424704  xend= 0.000977703
+EvtNo= 438  length= 0.00425057  xend= 0.000384377
+EvtNo= 440  length= 0.00422922  xend= 0.00155495
+EvtNo= 442  length= 0.00422571  xend= 0.000791842
+EvtNo= 443  length= 0.00424234  xend= 0.00120504
+EvtNo= 444  length= 0.00225567  xend= -1.61362e-15
+EvtNo= 445  length= 0.00127479  xend= -1.37726e-15
+EvtNo= 446  length= 0.00422236  xend= 0.000856936
+EvtNo= 447  length= 0.00425045  xend= 0.00108299
+EvtNo= 448  length= 0.00419082  xend= 0.00149144
+EvtNo= 449  length= 0.00127329  xend= -1.37726e-15
+EvtNo= 450  length= 0.00423897  xend= 0.000462983
+EvtNo= 451  length= 0.00423638  xend= -3.54426e-16
+EvtNo= 452  length= 0.00424669  xend= 0.00116403
+EvtNo= 453  length= 0.00421013  xend= 0.000794562
+EvtNo= 454  length= 0.00127297  xend= -1.37726e-15
+EvtNo= 455  length= 0.00425688  xend= 0.0015224
+EvtNo= 456  length= 0.00423402  xend= 0.0017494
+EvtNo= 457  length= 0.00421138  xend= 0.00123246
+EvtNo= 458  length= 0.00414424  xend= 0.000259296
+EvtNo= 459  length= 0.00417695  xend= 0.00074846
+EvtNo= 460  length= 0.00425796  xend= 0.00037454
+EvtNo= 461  length= 0.00226385  xend= -4.69568e-16
+EvtNo= 462  length= 0.00416617  xend= 0.000760431
+EvtNo= 463  length= 0.0012714  xend= -1.37726e-15
+EvtNo= 464  length= 0.00425893  xend= 0.00128545
+EvtNo= 465  length= 0.0012724  xend= -1.37726e-15
+EvtNo= 466  length= 0.110499  xend= -0.314771
+EvtNo= 467  length= 0.00425322  xend= 0.00137102
+EvtNo= 468  length= 0.00418166  xend= 2.05294e-15
+EvtNo= 469  length= 0.00425626  xend= 0.00167389
+EvtNo= 470  length= 0.0042338  xend= 0.000804068
+EvtNo= 471  length= 0.00416832  xend= 0.000544389
+EvtNo= 472  length= 0.00425204  xend= 0.00116538
+EvtNo= 473  length= 0.0022593  xend= -5.69044e-16
+EvtNo= 474  length= 0.00425205  xend= 0.00079098
+EvtNo= 475  length= 0.00325821  xend= -3.34709e-15
+EvtNo= 476  length= 0.00419782  xend= 0.000887721
+EvtNo= 477  length= 0.00325274  xend= -3.12472e-15
+EvtNo= 480  length= 3.20268  xend= -0.729772
+EvtNo= 481  length= 0.00128725  xend= -1.294e-15
+EvtNo= 482  length= 0.00425241  xend= 0.00114268
+EvtNo= 483  length= 0.00225793  xend= -8.46572e-16
+EvtNo= 484  length= 0.00425771  xend= -4.99275e-16
+EvtNo= 485  length= 0.00422372  xend= 0.00132564
+EvtNo= 486  length= 0.00417456  xend= 0.000416432
+EvtNo= 487  length= 0.00422329  xend= -4.3818e-16
+EvtNo= 488  length= 0.00421761  xend= 3.57787e-16
+EvtNo= 489  length= 0.00127301  xend= -1.37726e-15
+EvtNo= 490  length= 0.00421175  xend= 5.37935e-07
+EvtNo= 492  length= 0.00420349  xend= 0.000247989
+EvtNo= 493  length= 0.00420656  xend= 0.000379947
+EvtNo= 494  length= 0.00423038  xend= 0.0012388
+EvtNo= 495  length= 0.0042223  xend= 0.000316877
+EvtNo= 496  length= 3.25825  xend= -1.81566
+EvtNo= 497  length= 0.00422116  xend= 0.000312114
+EvtNo= 498  length= 0.00418409  xend= -1.68062e-15
+EvtNo= 499  length= 0.00225471  xend= -9.84347e-16
+EvtNo= 500  length= 0.00423108  xend= 3.08456e-16
+EvtNo= 502  length= 0.00420908  xend= 0.000948682
+EvtNo= 503  length= 0.00416017  xend= 0.00152269
+EvtNo= 504  length= 0.00425439  xend= 0.000196135
+EvtNo= 505  length= 3.22002  xend= -0.419833
+EvtNo= 506  length= 0.0041517  xend= 0.00191195
+EvtNo= 507  length= 0.00418667  xend= 0.000706163
+EvtNo= 508  length= 0.00419586  xend= 3.92835e-05
+EvtNo= 509  length= 0.0041618  xend= 0.00155658
+EvtNo= 510  length= 0.00424292  xend= 0.00053476
+EvtNo= 511  length= 0.00423288  xend= 0.000976695
+EvtNo= 512  length= 0.00425014  xend= 0.00122969
+EvtNo= 513  length= 0.00417962  xend= 0.0013525
+EvtNo= 514  length= 0.00423482  xend= 0.000150787
+EvtNo= 515  length= 0.00127371  xend= -1.37726e-15
+EvtNo= 516  length= 0.00425167  xend= -6.07153e-16
+EvtNo= 517  length= 0.00423212  xend= 0.00050528
+EvtNo= 518  length= 0.00127449  xend= -3.37317e-15
+EvtNo= 519  length= 0.00418764  xend= 0.000404172
+EvtNo= 520  length= 0.00425311  xend= 0.000448346
+EvtNo= 521  length= 0.00425243  xend= 0.00138189
+EvtNo= 522  length= 0.00420761  xend= 0.00167374
+EvtNo= 523  length= 0.00422548  xend= 2.35535e-05
+EvtNo= 524  length= 0.00425802  xend= 0.000736142
+EvtNo= 525  length= 3.18633  xend= -1.70568
+EvtNo= 526  length= 0.00425384  xend= 0.000105197
+EvtNo= 527  length= 0.00425804  xend= 0.00208156
+EvtNo= 528  length= 0.0891758  xend= -0.128435
+EvtNo= 529  length= 0.00127561  xend= -1.37726e-15
+EvtNo= 530  length= 0.00127414  xend= -1.37726e-15
+EvtNo= 531  length= 0.00426073  xend= 0.000813316
+EvtNo= 532  length= 0.00327559  xend= -2.05023e-16
+EvtNo= 533  length= 0.00425026  xend= 1.29074e-16
+EvtNo= 534  length= 0.00226671  xend= -3.2371e-15
+EvtNo= 535  length= 0.00225762  xend= -1.97891e-15
+EvtNo= 536  length= 0.00423638  xend= -2.92268e-15
+EvtNo= 537  length= 0.00424277  xend= 3.66894e-16
+EvtNo= 539  length= 0.00416963  xend= 2.84234e-15
+EvtNo= 540  length= 3.17657  xend= -2.41318
+EvtNo= 541  length= 0.00421625  xend= 0.00108428
+EvtNo= 542  length= 0.00127383  xend= -1.37726e-15
+EvtNo= 543  length= 0.00425529  xend= 0.000910233
+EvtNo= 544  length= 0.00424943  xend= 0.000499881
+EvtNo= 545  length= 0.00424149  xend= 0.00151015
+EvtNo= 546  length= 0.00425718  xend= 0.00153256
+EvtNo= 547  length= 0.00425064  xend= 0.00156627
+EvtNo= 548  length= 0.00346421  xend= 0.000412901
+EvtNo= 549  length= 0.00424896  xend= 0.00150762
+EvtNo= 550  length= 0.00127316  xend= -1.37726e-15
+EvtNo= 551  length= 0.00423366  xend= 0.00122036
+EvtNo= 552  length= 0.00225346  xend= -3.4444e-15
+EvtNo= 553  length= 0.00424107  xend= 0.00146445
+EvtNo= 554  length= 0.00127363  xend= -1.37726e-15
+EvtNo= 556  length= 0.00225195  xend= -4.70652e-16
+EvtNo= 557  length= 0.00421725  xend= 0.000227947
+EvtNo= 559  length= 0.00420918  xend= 0.00199343
+EvtNo= 560  length= 0.00422638  xend= 3.47357e-15
+EvtNo= 561  length= 0.00325564  xend= -1.07607e-15
+EvtNo= 562  length= 0.00425905  xend= 0.00148125
+EvtNo= 563  length= 0.0034279  xend= 0.000341112
+EvtNo= 564  length= 0.00127145  xend= -1.37726e-15
+EvtNo= 565  length= 0.00424773  xend= 0.00190717
+EvtNo= 566  length= 0.00422547  xend= 2.86392e-16
+EvtNo= 568  length= 0.00425423  xend= 0.000141331
+EvtNo= 569  length= 0.00424931  xend= 0.000841865
+EvtNo= 570  length= 0.00425093  xend= 0.000561999
+EvtNo= 571  length= 0.00127319  xend= -1.37726e-15
+EvtNo= 572  length= 0.00422162  xend= 0.000853823
+EvtNo= 573  length= 0.00425464  xend= 0.00150762
+EvtNo= 574  length= 0.00424995  xend= 0.00160265
+EvtNo= 575  length= 0.00421931  xend= -2.82229e-15
+EvtNo= 576  length= 0.0041657  xend= 0.000810463
+EvtNo= 577  length= 0.00424591  xend= 0.00118357
+EvtNo= 578  length= 0.00425323  xend= 0.00125847
+EvtNo= 579  length= 0.00127393  xend= -1.37726e-15
+EvtNo= 580  length= 0.00415045  xend= 0.000332644
+EvtNo= 581  length= 0.00411991  xend= 0.00144146
+EvtNo= 582  length= 0.00425446  xend= 0.00193596
+EvtNo= 583  length= 0.00421879  xend= 0.00128581
+EvtNo= 584  length= 0.00425883  xend= 0.000150911
+EvtNo= 585  length= 0.00425426  xend= 0.000216795
+EvtNo= 586  length= 0.00422244  xend= 0.00172296
+EvtNo= 587  length= 0.00425646  xend= 8.74993e-05
+EvtNo= 588  length= 0.00413631  xend= 0.00087897
+EvtNo= 589  length= 0.00417572  xend= 0.00063162
+EvtNo= 591  length= 0.00420754  xend= 0.00206306
+EvtNo= 592  length= 0.00416836  xend= 0.000686353
+EvtNo= 593  length= 0.00225434  xend= -3.53688e-15
+EvtNo= 594  length= 0.00425236  xend= 0.000709093
+EvtNo= 595  length= 0.00426091  xend= -1.5889e-16
+EvtNo= 596  length= 0.122063  xend= -0.0102387
+EvtNo= 597  length= 0.00422994  xend= 0.0002478
+EvtNo= 598  length= 0.00424993  xend= 0.00204573
+EvtNo= 599  length= 0.00421914  xend= 0.00162513
+EvtNo= 600  length= 0.00425631  xend= 0.00194263
+EvtNo= 601  length= 0.123317  xend= -0.911014
+EvtNo= 602  length= 0.00225472  xend= -4.41541e-16
+EvtNo= 603  length= 0.00425553  xend= 0.000943486
+EvtNo= 604  length= 0.00422457  xend= 0.000386025
+EvtNo= 605  length= 0.00345771  xend= 0.000504882
+EvtNo= 606  length= 0.00424806  xend= 0.00169377
+EvtNo= 608  length= 0.00127198  xend= -1.37726e-15
+EvtNo= 609  length= 0.00425247  xend= 0.000859592
+EvtNo= 610  length= 0.00425328  xend= 0.00164507
+EvtNo= 611  length= 0.00421946  xend= 0.000818116
+EvtNo= 612  length= 0.00425497  xend= 0.00159498
+EvtNo= 613  length= 0.00422577  xend= -2.86923e-15
+EvtNo= 614  length= 0.00421949  xend= 0.000548265
+EvtNo= 615  length= 0.00418175  xend= 0.00140321
+EvtNo= 616  length= 0.00424506  xend= 0.00125271
+EvtNo= 617  length= 0.00418507  xend= -5.33861e-16
+EvtNo= 618  length= 0.00422804  xend= 0.00105466
+EvtNo= 619  length= 0.00425649  xend= 0.00156715
+EvtNo= 620  length= 0.00424411  xend= 0.000660609
+EvtNo= 621  length= 0.00127295  xend= -1.37726e-15
+EvtNo= 622  length= 0.00425011  xend= 0.000597599
+EvtNo= 623  length= 0.00425205  xend= 0.000171684
+EvtNo= 624  length= 0.00422079  xend= 3.43242e-15
+EvtNo= 625  length= 0.0032621  xend= -7.7553e-16
+EvtNo= 626  length= 0.00351369  xend= 0.000655215
+EvtNo= 627  length= 0.0041425  xend= 0.00173428
+EvtNo= 628  length= 0.00225359  xend= -7.54496e-16
+EvtNo= 630  length= 0.00127401  xend= -1.37726e-15
+EvtNo= 631  length= 0.00425445  xend= 0.0014134
+EvtNo= 632  length= 0.00416179  xend= 0.000399425
+EvtNo= 633  length= 0.00225887  xend= -1.53935e-15
+EvtNo= 634  length= 0.00415127  xend= 0.000431083
+EvtNo= 635  length= 0.00423123  xend= 0.00102831
+EvtNo= 636  length= 0.00419323  xend= 0.00125369
+EvtNo= 637  length= 0.00127173  xend= -1.37726e-15
+EvtNo= 638  length= 0.00425478  xend= -1.30581e-15
+EvtNo= 639  length= 0.00325426  xend= -8.40745e-16
+EvtNo= 640  length= 0.00425381  xend= 2.46795e-05
+EvtNo= 641  length= 0.00425077  xend= 0.000822644
+EvtNo= 642  length= 0.00354883  xend= 0.00034039
+EvtNo= 643  length= 0.00413363  xend= 0.000925719
+EvtNo= 644  length= 0.00424609  xend= -1.56374e-15
+EvtNo= 645  length= 0.004195  xend= 0.00057644
+EvtNo= 646  length= 0.00127237  xend= -1.37726e-15
+EvtNo= 647  length= 0.00127391  xend= -1.37726e-15
+EvtNo= 648  length= 0.00425288  xend= 0.000924104
+EvtNo= 649  length= 0.00425256  xend= 0.00048312
+EvtNo= 650  length= 0.00423357  xend= 0.000961298
+EvtNo= 651  length= 0.00127667  xend= -1.37726e-15
+EvtNo= 652  length= 0.00225871  xend= -2.56631e-15
+EvtNo= 653  length= 0.00326475  xend= -1.39092e-15
+EvtNo= 654  length= 0.0012726  xend= -1.37726e-15
+EvtNo= 655  length= 0.00415006  xend= 0.000571389
+EvtNo= 656  length= 0.141235  xend= -1.05712
+EvtNo= 657  length= 0.00415144  xend= 0.000292944
+EvtNo= 658  length= 0.00225916  xend= -1.63227e-15
+EvtNo= 659  length= 0.00425601  xend= 0.00164158
+EvtNo= 660  length= 0.00225862  xend= -1.9494e-16
+EvtNo= 661  length= 0.0041975  xend= -3.5538e-15
+EvtNo= 662  length= 0.00420864  xend= 0.00205823
+EvtNo= 663  length= 3.20497  xend= -0.708055
+EvtNo= 664  length= 0.00424426  xend= 0.000558173
+EvtNo= 665  length= 0.00421701  xend= 0.000162705
+EvtNo= 666  length= 0.00225258  xend= -2.38237e-15
+EvtNo= 667  length= 0.00424852  xend= 0.000572054
+EvtNo= 668  length= 0.00412683  xend= 0.00134122
+EvtNo= 670  length= 0.00225577  xend= -1.13885e-15
+EvtNo= 671  length= 0.00425231  xend= 0.00126868
+EvtNo= 672  length= 0.00424441  xend= 0.00142249
+EvtNo= 673  length= 0.00413748  xend= -1.37667e-15
+EvtNo= 674  length= 0.00353817  xend= 0.000312224
+EvtNo= 675  length= 0.00421544  xend= 8.42615e-16
+EvtNo= 676  length= 0.00325415  xend= -1.60012e-15
+EvtNo= 677  length= 0.00127451  xend= -1.37726e-15
+EvtNo= 678  length= 0.00226039  xend= -1.85084e-15
+EvtNo= 679  length= 0.00418542  xend= 0.000263821
+EvtNo= 681  length= 0.127102  xend= -0.210507
+EvtNo= 682  length= 0.00224944  xend= -3.08347e-15
+EvtNo= 683  length= 0.00418516  xend= 0.00147493
+EvtNo= 684  length= 0.00417407  xend= 0.000971238
+EvtNo= 685  length= 0.00418181  xend= 0.000409531
+EvtNo= 686  length= 0.00423208  xend= -3.38434e-15
+EvtNo= 687  length= 0.0042529  xend= 0.00180676
+EvtNo= 688  length= 0.00424913  xend= 0.00104192
+EvtNo= 689  length= 0.00225722  xend= -7.33463e-17
+EvtNo= 690  length= 0.0012751  xend= -1.37726e-15
+EvtNo= 691  length= 0.00127236  xend= -1.37726e-15
+EvtNo= 692  length= 0.00347241  xend= 0.000269771
+EvtNo= 693  length= 0.00225779  xend= -1.16172e-15
+EvtNo= 694  length= 0.00422729  xend= 0.00031282
+EvtNo= 695  length= 0.00425031  xend= 0.0013948
+EvtNo= 696  length= 0.00418279  xend= 0.000710406
+EvtNo= 697  length= 0.00418955  xend= 0.00140129
+EvtNo= 698  length= 0.00140712  xend= -8.24405e-05
+EvtNo= 699  length= 0.00425016  xend= 0.000395785
+EvtNo= 700  length= 0.00225964  xend= -2.01065e-16
+EvtNo= 701  length= 0.00416652  xend= 0.00100347
+EvtNo= 702  length= 0.00419781  xend= 0.00151239
+EvtNo= 703  length= 0.00127374  xend= -1.37726e-15
+EvtNo= 704  length= 0.00425502  xend= 0.00164062
+EvtNo= 705  length= 0.00127357  xend= -1.37726e-15
+EvtNo= 706  length= 0.00422984  xend= 0.00103944
+EvtNo= 707  length= 0.00425404  xend= 0.00136046
+EvtNo= 708  length= 0.00425822  xend= 0.00086395
+EvtNo= 709  length= 0.00225597  xend= -1.10572e-15
+EvtNo= 710  length= 0.00425845  xend= 0.00157981
+EvtNo= 711  length= 0.00419252  xend= 0.000760592
+EvtNo= 712  length= 0.0042326  xend= 0.00119912
+EvtNo= 713  length= 0.139199  xend= -1.06784
+EvtNo= 714  length= 0.0012742  xend= -1.37726e-15
+EvtNo= 715  length= 0.0968701  xend= -0.226163
+EvtNo= 716  length= 0.00127492  xend= -1.37726e-15
+EvtNo= 717  length= 0.00424258  xend= 0.000383083
+EvtNo= 718  length= 0.00418403  xend= 0.00103698
+EvtNo= 719  length= 0.00167763  xend= -0.000286873
+EvtNo= 720  length= 0.0042509  xend= 0.000528336
+EvtNo= 721  length= 0.00417202  xend= 0.000338851
+EvtNo= 722  length= 0.00425328  xend= 0.00100194
+EvtNo= 724  length= 0.00419039  xend= 0.000605054
+EvtNo= 725  length= 0.00417297  xend= 0.00125651
+EvtNo= 727  length= 0.00422704  xend= 4.41382e-16
+EvtNo= 728  length= 0.00225673  xend= -3.50094e-15
+EvtNo= 729  length= 0.00421206  xend= 0.0011024
+EvtNo= 730  length= 0.00127378  xend= -1.37726e-15
+EvtNo= 731  length= 0.00419942  xend= 0.00207956
+EvtNo= 732  length= 0.0041793  xend= 0.00169379
+EvtNo= 733  length= 0.00127072  xend= -1.37726e-15
+EvtNo= 734  length= 0.00226398  xend= -4.40023e-16
+EvtNo= 735  length= 0.00127126  xend= -1.37726e-15
+EvtNo= 736  length= 0.00127336  xend= -1.37726e-15
+EvtNo= 737  length= 0.00325708  xend= -2.94393e-15
+EvtNo= 738  length= 0.00421779  xend= 0.00158929
+EvtNo= 739  length= 0.0835846  xend= -0.201127
+EvtNo= 740  length= 0.00325763  xend= -1.69027e-15
+EvtNo= 741  length= 0.00419685  xend= 0.00189092
+EvtNo= 742  length= 0.00420607  xend= 0.000263635
+EvtNo= 743  length= 0.00420969  xend= 3.50539e-15
+EvtNo= 744  length= 0.00424273  xend= 0.00141117
+EvtNo= 746  length= 0.00127471  xend= -1.37726e-15
+EvtNo= 747  length= 0.00425044  xend= 0.00127294
+EvtNo= 748  length= 0.00225149  xend= -1.47397e-16
+EvtNo= 749  length= 0.00127272  xend= -1.37726e-15
+EvtNo= 750  length= 0.00144115  xend= -9.20557e-05
+EvtNo= 751  length= 0.00127375  xend= -1.37726e-15
+EvtNo= 752  length= 0.00421897  xend= 0.00010555
+EvtNo= 753  length= 0.00186855  xend= -0.00020738
+EvtNo= 754  length= 0.00127491  xend= -1.37726e-15
+EvtNo= 755  length= 0.00225251  xend= -3.46441e-15
+EvtNo= 756  length= 0.00421707  xend= 0.00145273
+EvtNo= 757  length= 0.0990188  xend= -0.172816
+EvtNo= 760  length= 0.0042543  xend= 0.000992624
+EvtNo= 761  length= 0.00424965  xend= 0.00116492
+EvtNo= 762  length= 0.00127383  xend= -1.37726e-15
+EvtNo= 763  length= 0.00425076  xend= 1.07863e-05
+EvtNo= 764  length= 0.00425601  xend= 0.000335768
+EvtNo= 765  length= 0.00420824  xend= 0.00076232
+EvtNo= 766  length= 0.00425414  xend= -1.86765e-15
+EvtNo= 768  length= 0.00425147  xend= 0.00076077
+EvtNo= 769  length= 0.00127584  xend= -1.37726e-15
+EvtNo= 771  length= 0.00425409  xend= 0.000949968
+EvtNo= 772  length= 0.115462  xend= -0.680872
+EvtNo= 773  length= 3.19771  xend= -0.238942
+EvtNo= 774  length= 0.00417487  xend= 0.00077678
+EvtNo= 775  length= 0.00424108  xend= 0.00088855
+EvtNo= 776  length= 0.00425346  xend= 0.000407414
+EvtNo= 778  length= 0.00424906  xend= 0.00145403
+EvtNo= 779  length= 0.00225474  xend= -6.6917e-16
+EvtNo= 780  length= 0.00424955  xend= 0.000885828
+EvtNo= 781  length= 0.00134146  xend= -3.07154e-15
+EvtNo= 782  length= 0.00419835  xend= 1.48124e-15
+EvtNo= 783  length= 0.0042229  xend= 0.00210671
+EvtNo= 784  length= 0.0022604  xend= -4.9998e-16
+EvtNo= 786  length= 0.00414886  xend= 0.00161635
+EvtNo= 787  length= 0.00350935  xend= 0.000325921
+EvtNo= 788  length= 0.00425083  xend= 0.000344195
+EvtNo= 789  length= 0.00425067  xend= 0.00066727
+EvtNo= 790  length= 0.00425265  xend= 0.000514634
+EvtNo= 791  length= 0.00419883  xend= 0.00194437
+EvtNo= 792  length= 0.00419204  xend= 0.00117799
+EvtNo= 793  length= 0.00325693  xend= -3.22127e-15
+EvtNo= 794  length= 0.0042303  xend= 0.001555
+EvtNo= 795  length= 0.00226015  xend= -1.99894e-15
+EvtNo= 796  length= 0.00425373  xend= 0.000884139
+EvtNo= 797  length= 0.00425332  xend= 0.000471523
+EvtNo= 798  length= 0.00425093  xend= 0.00150796
+EvtNo= 799  length= 0.00425818  xend= 0.00199507
+EvtNo= 800  length= 0.00425115  xend= -1.37759e-15
+EvtNo= 801  length= 0.00425241  xend= 0.000766189
+EvtNo= 802  length= 0.00425062  xend= 0.00186796
+EvtNo= 803  length= 0.00225915  xend= -5.7582e-16
+EvtNo= 804  length= 0.00424845  xend= 0.00106293
+EvtNo= 805  length= 0.00425084  xend= 0.00206057
+EvtNo= 806  length= 0.00416495  xend= 0.000871074
+EvtNo= 807  length= 0.00417437  xend= 0.00113868
+EvtNo= 808  length= 0.00225473  xend= -1.72621e-15
+EvtNo= 809  length= 0.00425523  xend= 0.00151622
+EvtNo= 810  length= 0.0042171  xend= 0.00152924
+EvtNo= 811  length= 0.00423106  xend= 0.000330721
+EvtNo= 812  length= 0.00326132  xend= -1.03791e-15
+EvtNo= 813  length= 3.20781  xend= -1.98175
+EvtNo= 814  length= 0.00425399  xend= 0.000215228
+EvtNo= 815  length= 0.00420122  xend= 0.00121003
+EvtNo= 816  length= 0.00226181  xend= -5.61291e-16
+EvtNo= 817  length= 0.00425029  xend= 0.000496082
+EvtNo= 819  length= 0.00421827  xend= 0.00113786
+EvtNo= 820  length= 0.00127419  xend= -1.37726e-15
+EvtNo= 821  length= 0.00224929  xend= -2.15843e-15
+EvtNo= 822  length= 0.0909819  xend= -0.203805
+EvtNo= 823  length= 0.00425177  xend= 0.000782031
+EvtNo= 824  length= 0.00425418  xend= 0.00185602
+EvtNo= 825  length= 0.00350986  xend= 0.000197398
+EvtNo= 826  length= 0.00425136  xend= 0.0019102
+EvtNo= 827  length= 0.00226386  xend= -2.19085e-15
+EvtNo= 828  length= 3.18303  xend= -1.74193
+EvtNo= 829  length= 0.00127214  xend= -1.37726e-15
+EvtNo= 830  length= 0.00348083  xend= 0.000395734
+EvtNo= 831  length= 0.00425268  xend= 0.00106144
+EvtNo= 832  length= 0.00423911  xend= 6.90373e-16
+EvtNo= 833  length= 0.00423328  xend= 0.000665529
+EvtNo= 834  length= 0.00419482  xend= 0.000640971
+EvtNo= 835  length= 0.00422142  xend= 0.000634029
+EvtNo= 836  length= 0.00420961  xend= 0.00152229
+EvtNo= 837  length= 0.00326056  xend= -1.96327e-15
+EvtNo= 838  length= 0.00421685  xend= 0.00104252
+EvtNo= 839  length= 0.00127548  xend= -1.37726e-15
+EvtNo= 841  length= 0.00421069  xend= 0.000351109
+EvtNo= 842  length= 0.00225395  xend= -3.20837e-15
+EvtNo= 843  length= 0.00227238  xend= -3.00649e-16
+EvtNo= 844  length= 0.0042583  xend= 0.00168018
+EvtNo= 847  length= 0.00127394  xend= -1.37726e-15
+EvtNo= 848  length= 0.00127398  xend= -1.37726e-15
+EvtNo= 849  length= 0.00422617  xend= 0.00142145
+EvtNo= 850  length= 0.00225737  xend= -3.34037e-15
+EvtNo= 851  length= 0.00423174  xend= 0.00155808
+EvtNo= 852  length= 0.0994257  xend= -1.00062
+EvtNo= 853  length= 0.0042277  xend= 0.000492781
+EvtNo= 854  length= 0.00425817  xend= 0.000854776
+EvtNo= 855  length= 3.19731  xend= -0.135268
+EvtNo= 856  length= 0.133862  xend= -0.163926
+EvtNo= 857  length= 0.00424889  xend= 0.000759675
+EvtNo= 858  length= 0.00423185  xend= 1.12075e-15
+EvtNo= 859  length= 0.00419081  xend= 0.0018952
+EvtNo= 860  length= 0.0032631  xend= -5.06214e-16
+EvtNo= 861  length= 0.00424975  xend= 0.00117769
+EvtNo= 862  length= 0.00225977  xend= -3.23244e-15
+EvtNo= 864  length= 0.0042006  xend= 0.000403031
+EvtNo= 865  length= 0.00127369  xend= -1.37726e-15
+EvtNo= 866  length= 0.00424529  xend= 0.00176792
+EvtNo= 867  length= 0.0042143  xend= 3.46911e-05
+EvtNo= 868  length= 0.00422109  xend= 0.00122796
+EvtNo= 869  length= 0.00421072  xend= 0.00110555
+EvtNo= 870  length= 0.00325962  xend= -3.52545e-15
+EvtNo= 871  length= 0.00127401  xend= -1.37726e-15
+EvtNo= 872  length= 0.0042478  xend= 0.00168536
+EvtNo= 873  length= 0.00425214  xend= -1.77213e-15
+EvtNo= 874  length= 0.00127497  xend= -1.37726e-15
+EvtNo= 875  length= 0.00424676  xend= -2.10314e-15
+EvtNo= 876  length= 0.00424754  xend= 0.000849528
+EvtNo= 877  length= 0.00425167  xend= 0.00194112
+EvtNo= 878  length= 0.00226253  xend= -2.18792e-15
+EvtNo= 879  length= 0.00421712  xend= 0.00210447
+EvtNo= 880  length= 0.00425288  xend= 0.00181818
+EvtNo= 881  length= 0.00419153  xend= 8.08215e-05
+EvtNo= 882  length= 0.00416559  xend= 0.00156006
+EvtNo= 883  length= 0.00135298  xend= -8.20958e-16
+EvtNo= 884  length= 3.2065  xend= -2.19456
+EvtNo= 885  length= 0.138551  xend= -0.935062
+EvtNo= 886  length= 0.00325579  xend= -2.88365e-15
+EvtNo= 887  length= 0.00422476  xend= 0.00188115
+EvtNo= 888  length= 0.00225494  xend= -9.92804e-16
+EvtNo= 889  length= 0.00425152  xend= 0.00078968
+EvtNo= 890  length= 0.00422037  xend= 0.00109124
+EvtNo= 891  length= 0.00127394  xend= -1.37726e-15
+EvtNo= 892  length= 0.00423991  xend= -1.81224e-15
+EvtNo= 893  length= 0.00424098  xend= 0.000849715
+EvtNo= 894  length= 0.00425812  xend= 0.000897997
+EvtNo= 895  length= 0.00421447  xend= -2.43159e-15
+EvtNo= 896  length= 0.00425102  xend= 0.00140823
+EvtNo= 897  length= 0.00421883  xend= 0.00190503
+EvtNo= 898  length= 0.00413932  xend= 0.000428517
+EvtNo= 899  length= 0.00127272  xend= -4.18177e-16
+EvtNo= 900  length= 0.00425751  xend= 0.000238632
+EvtNo= 901  length= 0.00425707  xend= 0.000114391
+EvtNo= 902  length= 0.00225843  xend= -2.04546e-15
+EvtNo= 903  length= 3.23092  xend= -2.82638
+EvtNo= 904  length= 0.00424429  xend= 0.000427454
+EvtNo= 905  length= 0.00344674  xend= 0.00126178
+EvtNo= 906  length= 0.00424616  xend= 0.00124288
+EvtNo= 907  length= 0.00425044  xend= 0.00152457
+EvtNo= 908  length= 0.00425063  xend= 0.000621736
+EvtNo= 909  length= 0.00419888  xend= 0.00148826
+EvtNo= 910  length= 0.0042468  xend= -6.82668e-16
+EvtNo= 911  length= 0.00419694  xend= 0.000897066
+EvtNo= 912  length= 0.00420517  xend= -2.34621e-16
+EvtNo= 913  length= 0.00425401  xend= 0.000952652
+EvtNo= 914  length= 0.00421982  xend= 0.00113987
+EvtNo= 915  length= 0.00417794  xend= 0.000747951
+EvtNo= 916  length= 0.00416888  xend= 0.00070139
+EvtNo= 917  length= 0.00425393  xend= 0.00164433
+EvtNo= 919  length= 0.00127419  xend= -1.37726e-15
+EvtNo= 920  length= 0.00418823  xend= 0.00027917
+EvtNo= 921  length= 0.00425445  xend= -3.73562e-16
+EvtNo= 922  length= 0.00419376  xend= -2.86847e-15
+EvtNo= 924  length= 0.00127386  xend= -1.37726e-15
+EvtNo= 925  length= 0.00325957  xend= -3.04894e-15
+EvtNo= 926  length= 0.00425662  xend= 0.000471129
+EvtNo= 927  length= 0.00415641  xend= 0.00144571
+EvtNo= 928  length= 0.00418564  xend= 0.00129892
+EvtNo= 929  length= 0.00420135  xend= 0.000739961
+EvtNo= 930  length= 0.00424796  xend= 0.00155773
+EvtNo= 931  length= 0.00128322  xend= -1.50769e-15
+EvtNo= 932  length= 0.00419842  xend= 0.00166748
+EvtNo= 933  length= 0.00425092  xend= 0.000285826
+EvtNo= 934  length= 0.00419033  xend= 0.000432038
+EvtNo= 935  length= 0.0042526  xend= 0.00117493
+EvtNo= 936  length= 0.00425397  xend= 0.00131792
+EvtNo= 937  length= 0.00226009  xend= -1.36891e-15
+EvtNo= 938  length= 0.00134752  xend= -3.72315e-16
+EvtNo= 939  length= 0.00421353  xend= 0.000270977
+EvtNo= 940  length= 3.18918  xend= -2.11803
+EvtNo= 941  length= 0.00422493  xend= 0.000911821
+EvtNo= 942  length= 3.23379  xend= -2.55216
+EvtNo= 943  length= 0.00424568  xend= 1.60218e-15
+EvtNo= 944  length= 0.00414448  xend= 2.36456e-15
+EvtNo= 945  length= 0.00424963  xend= 0.00150415
+EvtNo= 946  length= 0.00127023  xend= -1.37726e-15
+EvtNo= 947  length= 0.00419686  xend= 0.000320084
+EvtNo= 948  length= 0.0042582  xend= 0.000581089
+EvtNo= 949  length= 0.00226478  xend= -3.53656e-15
+EvtNo= 950  length= 0.00425615  xend= 0.00169301
+EvtNo= 951  length= 0.120139  xend= -0.984914
+EvtNo= 952  length= 0.00418554  xend= 0.000380764
+EvtNo= 954  length= 0.00425873  xend= 0.00137677
+EvtNo= 955  length= 0.00325693  xend= -5.75061e-16
+EvtNo= 956  length= 0.00420917  xend= 0.00114091
+EvtNo= 957  length= 0.00420182  xend= 0.000921903
+EvtNo= 958  length= 3.19201  xend= -2.77968
+EvtNo= 959  length= 0.00425523  xend= 0.000790953
+EvtNo= 960  length= 0.00226208  xend= -1.8935e-15
+EvtNo= 961  length= 0.00425626  xend= 0.00172393
+EvtNo= 962  length= 0.0042517  xend= 0.00171044
+EvtNo= 963  length= 3.21526  xend= -1.99148
+EvtNo= 964  length= 0.00423197  xend= 0.000591196
+EvtNo= 965  length= 0.00184614  xend= -0.000273732
+EvtNo= 966  length= 0.00424139  xend= 0.000954701
+EvtNo= 967  length= 0.00127165  xend= -1.37726e-15
+EvtNo= 968  length= 0.00127182  xend= -1.37726e-15
+EvtNo= 969  length= 3.17514  xend= -1.22355
+EvtNo= 970  length= 0.00425272  xend= 0.000123576
+EvtNo= 971  length= 0.00421751  xend= 0.000961254
+EvtNo= 972  length= 0.0042189  xend= 0.000737077
+EvtNo= 973  length= 0.00127517  xend= -1.37726e-15
+EvtNo= 974  length= 0.00425188  xend= 0.000493114
+EvtNo= 975  length= 0.00417943  xend= 0.000911944
+EvtNo= 976  length= 0.00425105  xend= 0.000333024
+EvtNo= 977  length= 0.00325224  xend= -3.4682e-15
+EvtNo= 978  length= 0.0042348  xend= 0.000937065
+EvtNo= 979  length= 0.00415091  xend= 0.00168004
+EvtNo= 980  length= 0.00425426  xend= 0.000771095
+EvtNo= 981  length= 0.00425522  xend= 0.00203548
+EvtNo= 982  length= 0.0042274  xend= 0.000692879
+EvtNo= 983  length= 0.00420052  xend= 0.00129429
+EvtNo= 985  length= 0.001788  xend= -0.000401147
+EvtNo= 986  length= 0.00422049  xend= 0.000572054
+EvtNo= 988  length= 0.00127312  xend= -1.37726e-15
+EvtNo= 989  length= 0.00420907  xend= 1.33183e-15
+EvtNo= 990  length= 0.0022517  xend= -2.55351e-15
+EvtNo= 991  length= 0.00225958  xend= -6.18673e-16
+EvtNo= 992  length= 0.00422802  xend= 0.00141292
+EvtNo= 995  length= 0.00130678  xend= -3.09876e-15
+EvtNo= 996  length= 0.00422665  xend= 0.000354305
+EvtNo= 997  length= 0.00420544  xend= 0.000989315
+EvtNo= 999  length= 0.0042294  xend= 0.00169873
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.25s Real=0.25s Sys=0s
+  User=3.17s Real=3.21s Sys=0.02s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 998 for Fe56[0.0] with Ekin = 6 MeV
-    Track Length in absorber = 4.23241 +- 0.000924985  microns 
-    CSDA  Range  in absorber = 3.6093 +- 0.00984899  microns 
+ end of Run TotNbofEvents = 65 for Fe56[0.0] with Ekin = 6 MeV
+    Track Length in absorber = 4.23001 +- 0.00387849  microns 
+    CSDA  Range  in absorber = 2.59962 +- 0.0488051  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -376,23 +1798,225 @@ Average Number photons per event   = 0
 /gun/particle ion
 /gun/ion 6 12 6
 /run/beamOn 1000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Beryllium
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 984.471 eV    e- 108.211 keV    e+ 106.888 keV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminum
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.33172 keV    e- 130.148 keV    e+ 128.556 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Carbon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.3201 keV    e- 117.946 keV    e+ 116.503 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.29396 keV    e- 120.884 keV    e+ 119.406 keV
+
+Index : 4     used in the geometry : No      recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.99156 keV    e- 82.5466 keV    e+ 81.537 keV
+
+Index : 5     used in the geometry : No      recalculation needed : No 
+ Material : liquidXenon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 7.14985 keV    e- 112.281 keV    e+ 109.551 keV
+
+Index : 6     used in the geometry : No      recalculation needed : No 
+ Material : Iron
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 6.26053 keV    e- 234.941 keV    e+ 229.23 keV
+
+Index : 7     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 7.31623 keV    e- 249.851 keV    e+ 243.777 keV
+
+Index : 8     used in the geometry : No      recalculation needed : No 
+ Material : Gold
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 40.5179 keV    e- 348.317 keV    e+ 335.693 keV
+
+Index : 9     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 29.3909 keV    e- 240.795 keV    e+ 232.068 keV
+
+Index : 10     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.07536 keV    e- 84.6034 keV    e+ 83.5687 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 11     used in the geometry : No      recalculation needed : No 
+ Material : Methane
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV    e- 2.61758 eV    e+ 2.61758 eV
+
+Index : 12     used in the geometry : No      recalculation needed : No 
+ Material : Graphite
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.38447 keV    e- 127.767 keV    e+ 125.431 keV
+
+Index : 13     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV    e- 4.01595 eV    e+ 4.01595 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                              gamma            e-            e+           
+Threshold in range          100 mum           100 mum           100 mum
+   Air                             1 eV          4.02 eV          4.02 eV
+   Water                          1.08 keV          84.6 keV          83.6 keV
+=======================================================================
+
 ### Run 5 start.
 Start Run processing.
-EvtNo= 302  length= 0.00863999  xend= 0.0035871
-EvtNo= 768  length= 0.00301991  xend= -0.00073181
+EvtNo= 908  length= 0.00862749  xend= 0.000300503
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.57s Real=4.62s Sys=0.05s
+  User=1.27s Real=1.27s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 998 for C12[0.0] with Ekin = 6 MeV
-    Track Length in absorber = 8.7261 +- 0.00256927  microns 
-    CSDA  Range  in absorber = 6.96426 +- 0.0206167  microns 
+ end of Run TotNbofEvents = 999 for C12[0.0] with Ekin = 6 MeV
+    Track Length in absorber = 8.68235 +- 0.002687  microns 
+    CSDA  Range  in absorber = 7.38695 +- 0.0191975  microns 
 
     Energy deposit in absorber = 6  MeV 
 
 Average Number electrons per event = 0
 Average Number photons per event   = 0
+
+#scaled energy
+/gun/particle mu+
+/gun/energy   3.5 MeV
+/run/beamOn 1000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Beryllium
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 984.471 eV    e- 108.211 keV    e+ 106.888 keV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminum
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.33172 keV    e- 130.148 keV    e+ 128.556 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Carbon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.3201 keV    e- 117.946 keV    e+ 116.503 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.29396 keV    e- 120.884 keV    e+ 119.406 keV
+
+Index : 4     used in the geometry : No      recalculation needed : No 
+ Material : liquidArgon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.99156 keV    e- 82.5466 keV    e+ 81.537 keV
+
+Index : 5     used in the geometry : No      recalculation needed : No 
+ Material : liquidXenon
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 7.14985 keV    e- 112.281 keV    e+ 109.551 keV
+
+Index : 6     used in the geometry : No      recalculation needed : No 
+ Material : Iron
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 6.26053 keV    e- 234.941 keV    e+ 229.23 keV
+
+Index : 7     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 7.31623 keV    e- 249.851 keV    e+ 243.777 keV
+
+Index : 8     used in the geometry : No      recalculation needed : No 
+ Material : Gold
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 40.5179 keV    e- 348.317 keV    e+ 335.693 keV
+
+Index : 9     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 29.3909 keV    e- 240.795 keV    e+ 232.068 keV
+
+Index : 10     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.07536 keV    e- 84.6034 keV    e+ 83.5687 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 11     used in the geometry : No      recalculation needed : No 
+ Material : Methane
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV    e- 2.61758 eV    e+ 2.61758 eV
+
+Index : 12     used in the geometry : No      recalculation needed : No 
+ Material : Graphite
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.38447 keV    e- 127.767 keV    e+ 125.431 keV
+
+Index : 13     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1 eV    e- 4.01595 eV    e+ 4.01595 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                              gamma            e-            e+           
+Threshold in range          100 mum           100 mum           100 mum
+   Air                             1 eV          4.02 eV          4.02 eV
+   Water                          1.08 keV          84.6 keV          83.6 keV
+=======================================================================
+
+### Run 6 start.
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=1203.34s Real=1230.01s Sys=0.38s
+ ================== run summary =====================
+
+ end of Run TotNbofEvents = 1000 for mu+ with Ekin = 3.5 MeV
+    Track Length in absorber = 1046.77 +- 1.00921  microns 
+    CSDA  Range  in absorber = 1039.07 +- 1.04491  microns 
+
+    Energy deposit in absorber = 10.9441  MeV 
+
+Average Number electrons per event = 224.658
+Average Number photons per event   = 1.66
 
 G4 kernel has come to Quit state.

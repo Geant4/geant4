@@ -47,15 +47,8 @@ Test17PhysicsListMessenger::Test17PhysicsListMessenger(Test17PhysicsList * List)
   cutECmd->SetGuidance("Set cut values by RANGE for e- e+.");
   cutECmd->SetParameterName("cutE",false);
   cutECmd->SetRange("cutE>0.");
-  cutECmd->SetUnitCategory("Length");  
+  cutECmd->SetUnitCategory("Length");
   cutECmd->AvailableForStates(G4State_Idle);
-
-  cutPCmd = new G4UIcmdWithADoubleAndUnit("/test17/cutP",this);
-  cutPCmd->SetGuidance("Set cut values by RANGE for proton and others.");
-  cutPCmd->SetParameterName("cutP",false);
-  cutPCmd->SetRange("cutP>0.");
-  cutPCmd->SetUnitCategory("Length");    
-  cutPCmd->AvailableForStates(G4State_Idle);
 
   eCmd = new G4UIcmdWithADoubleAndUnit("/test17/cutGammaEnergy",this);
   eCmd->SetGuidance("Set cut values by ENERGY for secondary gamma.");
@@ -91,7 +84,6 @@ Test17PhysicsListMessenger::~Test17PhysicsListMessenger()
 {
   delete cutGCmd;
   delete cutECmd;
-  delete cutPCmd;
   delete rCmd;
   delete eCmd;
   delete eaCmd;
@@ -99,15 +91,13 @@ Test17PhysicsListMessenger::~Test17PhysicsListMessenger()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
+
 void Test17PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
   if(command == cutGCmd)
     { Test17List->SetGammaCut(cutGCmd->GetNewDoubleValue(newValue));}
   if(command == cutECmd)
     { Test17List->SetElectronCut(cutECmd->GetNewDoubleValue(newValue));}
-  if(command == cutPCmd)
-    { Test17List->SetProtonCut(cutPCmd->GetNewDoubleValue(newValue));}
   if(command == eCmd)
     {Test17List->SetCutForSecondaryPhotons(eCmd->GetNewDoubleValue(newValue));}
   if(command == eaCmd)

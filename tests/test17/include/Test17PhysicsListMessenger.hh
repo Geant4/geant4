@@ -43,19 +43,18 @@ class G4UIcmdWithADoubleAndUnit;
 class Test17PhysicsListMessenger: public G4UImessenger
 {
   public: // Without description
-  
+
     Test17PhysicsListMessenger(Test17PhysicsList*);
    ~Test17PhysicsListMessenger();
-    
+
     void SetNewValue(G4UIcommand*, G4String);
-    
+
   private:
-  
+
     Test17PhysicsList*            Test17List;
 
     G4UIcmdWithADoubleAndUnit* cutGCmd;
     G4UIcmdWithADoubleAndUnit* cutECmd;
-    G4UIcmdWithADoubleAndUnit* cutPCmd;
     G4UIcmdWithADoubleAndUnit* rCmd;
     G4UIcmdWithADoubleAndUnit* eCmd;
     G4UIcmdWithADoubleAndUnit* eaCmd;
