@@ -21,7 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.9 2001-11-05 22:13:12 radoone Exp $
+// $Id: G4Navigator.hh,v 1.10 2001-11-05 22:19:28 radoone Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 // class G4Navigator
 //
