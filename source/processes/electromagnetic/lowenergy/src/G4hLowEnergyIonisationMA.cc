@@ -195,8 +195,9 @@ void G4hLowEnergyIonisationMA::InitialiseProcess()
 {
   if(theParticle->GetPDGCharge()/eplus > 1.5 ||
      theParticle->GetParticleName() == "GenericIon")
-                  flucModel = new G4IonFluctuations();
-  else            flucModel = new G4UniversalFluctuation();
+                 flucModel = new G4IonFluctuations();
+//                 flucModel = new G4UniversalFluctuation();
+ else            flucModel = new G4UniversalFluctuation();
   //else            flucModel = new G4BohrFluctuations();
 
   SetSecondaryParticle(G4Electron::Electron());
@@ -218,7 +219,7 @@ void G4hLowEnergyIonisationMA::InitialiseProcess()
 
   SetIntegral(true);
   SetLinearLossLimit(0.15);
-  SetStepLimits(0.1, 1.0*mm);
+  SetStepLimits(0.05, 0.001*mm);
 
   isInitialised = true;
 
