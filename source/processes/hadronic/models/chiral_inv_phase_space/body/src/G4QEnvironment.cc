@@ -23,7 +23,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.74 2003-12-01 10:41:27 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.75 2003-12-02 19:51:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -3531,9 +3531,10 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
   static const G4QPDGCode aQPDG(90002002);
   static const G4QPDGCode a6QPDG(90002004);
   static const G4QPDGCode be6QPDG(90004002);
-  static const G4QPDGCode b7QPDG(90005002);
-  static const G4QPDGCode he7QPDG(90002005);
-  //static const G4QPDGCode a8QPDG(90002006);
+  //static const G4QPDGCode b7QPDG(90005002);
+  //static const G4QPDGCode he7QPDG(90002005);
+  static const G4QPDGCode c8QPDG(90006002);
+  static const G4QPDGCode a8QPDG(90002006);
   static const G4QPDGCode c10QPDG(90006004);
   static const G4QPDGCode o14QPDG(90008006);
   static const G4QPDGCode o15QPDG(90008007);
@@ -3552,9 +3553,10 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
   static const G4double mAlph= G4QPDGCode(2112).GetNuclMass(2,2,0);
   static const G4double mHe6 = G4QPDGCode(2112).GetNuclMass(2,4,0);
   static const G4double mBe6 = G4QPDGCode(2112).GetNuclMass(4,2,0);
-  static const G4double mHe7 = G4QPDGCode(2112).GetNuclMass(2,5,0);
-  static const G4double mB7  = G4QPDGCode(2112).GetNuclMass(5,2,0);
-  //static const G4double mHe8 = G4QPDGCode(2112).GetNuclMass(2,6,0);
+  //static const G4double mHe7 = G4QPDGCode(2112).GetNuclMass(2,5,0);
+  //static const G4double mB7  = G4QPDGCode(2112).GetNuclMass(5,2,0);
+  static const G4double mHe8 = G4QPDGCode(2112).GetNuclMass(2,6,0);
+  static const G4double mC8  = G4QPDGCode(2112).GetNuclMass(6,2,0);
   static const G4double mC10 = G4QPDGCode(2112).GetNuclMass(6,4,0);
   static const G4double mO14 = G4QPDGCode(2112).GetNuclMass(8,6,0);
   static const G4double mO15 = G4QPDGCode(2112).GetNuclMass(8,7,0);
@@ -4142,6 +4144,8 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
     {
       G4QHadron* curHadr = theQHadrons[hadron]; // Get a pointer to the current Hadron
       G4int         hPDG = curHadr->GetPDGCode();
+      G4QPDGCode    hQPDG(hPDG);
+      G4double      hGSM = hQPDG.GetMass();     // Ground State Mass of the first fragment
 #ifdef pdebug
       G4cout<<"G4QE::FSI:LOOP START,h#"<<hadron<<curHadr->Get4Momentum()<<hPDG<<G4endl;
 #endif
@@ -4151,17 +4155,17 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       G4int           hS = curHadr->GetStrangeness();
       G4int           hF = curHadr->GetNFragments();
       G4LorentzVector h4m= curHadr->Get4Momentum();
-      G4double hM        = h4m.m();             // Mass of the first fragment
+      G4double hM        = h4m.m();             // Real Mass of the first fragment
       G4int hB           = curHadr->GetBaryonNumber();
       //////////////////////G4int hC           = curHadr->GetCharge();
 #ifdef pdebug
       if(!hF&&(hPDG>80000000&&hPDG<90000000||hPDG==90000000||
                hPDG>90000000&&(hPDG%1000000>200000||hPDG%1000>300)))
         G4cerr<<"**G4QEnv::FSInteraction: PDG("<<hadron<<")="<<hPDG<<", M="<<hM<<G4endl;
-      G4cout<<"G4QE::FSI:>>>h="<<hPDG<<",hS="<<hS<<",hB="<<hB<<",h#"<<hadron<<"<nH="<<nHadr<<G4endl;
+      G4cout<<"G4QE::FSI:h="<<hPDG<<",S="<<hS<<",B="<<hB<<",#"<<hadron<<"<"<<nHadr<<G4endl;
 #endif
-	  //if(hadron&&!hF&&hB>0&&!hS&&(nHadr>3||hB<2)) // ThermoBackFusion cond. (VIMP for gamA TotCS)
-	  //if(hadron&&!hF&&hB>0&&!hS&&(nHadr>2||hB<4)) // ThermoBackFusion cond. (VIMP for gamA TotCS)
+	  //if(hadron&&!hF&&hB>0&&!hS&&(nHadr>3||hB<2)) // ThermoBackFus (VIMP for gamA TotCS)
+	  //if(hadron&&!hF&&hB>0&&!hS&&(nHadr>2||hB<4)) // ThermoBackFus (VIMP for gamA TotCS)
 	  if(hadron&&!hF&&hB>0&&!hS) // ThermoBackFusion cond. (VIMP for gamA TotCS)
 	  //if(hadron&&!hF&&hB>0&&hB<4&&!hS) // ThermoBackFusion cond. (VIMP for gamA TotCS)
 	  //if(hadron&&!hF&&hB>0&&!hS&&nHadr>2)//ThermoBackFusion MAX condition (VIMP for gamA)
@@ -4177,8 +4181,11 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           G4QHadron* backH = theQHadrons[pt];   // Get pointer to one of thePreviousHadrons
           G4int   bF = backH->GetNFragments();
           G4LorentzVector b4m= backH->Get4Momentum();
-          G4double bM= b4m.m();                 // Mass of the second fragment
+          G4double bM= b4m.m();                 // Real Mass of the second fragment
           G4QContent bQC = backH->GetQC();
+          G4int bPDG=bQC.GetZNSPDGCode();
+          G4QPDGCode bQPDG(bPDG);
+          G4double bGSM=bQPDG.GetMass();        // Ground State Mass of the second fragment
           G4int   bB = backH->GetBaryonNumber();
 
           //////////////////G4int   bC = backH->GetCharge();
@@ -4365,35 +4372,32 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
               f4Mom=G4LorentzVector(0.,0.,0.,mAlph);
               g4Mom=f4Mom;
 		    }
-            else if(sPDG==90006002)
-		    {
-              hQPDG=pQPDG;
-              rQPDG=pQPDG;
-              fQPDG=be6QPDG;
-              t4Mom=G4LorentzVector(0.,0.,0.,mProt);
-              g4Mom=G4LorentzVector(0.,0.,0.,mProt);
-              f4Mom=G4LorentzVector(0.,0.,0.,mBe6);
-              three=true;
-		    }
-            else if(sPDG==90002006)
-		    {
-              hQPDG=nQPDG;
-              rQPDG=nQPDG;
-              fQPDG=a6QPDG;
-              t4Mom=G4LorentzVector(0.,0.,0.,mNeut);
-              g4Mom=G4LorentzVector(0.,0.,0.,mNeut);
-              f4Mom=G4LorentzVector(0.,0.,0.,mHe6);
-              three=true;
-		    }
+            //else if(sPDG==90006002)
+		    //{
+            //  hQPDG=pQPDG;
+            //  rQPDG=pQPDG;
+            //  fQPDG=be6QPDG;
+            //  t4Mom=G4LorentzVector(0.,0.,0.,mProt);
+            //  g4Mom=G4LorentzVector(0.,0.,0.,mProt);
+            //  f4Mom=G4LorentzVector(0.,0.,0.,mBe6);
+            //  three=true;
+		    //}
+            //else if(sPDG==90002006)
+		    //{
+            //  hQPDG=nQPDG;
+            //  rQPDG=nQPDG;
+            //  fQPDG=a6QPDG;
+            //  t4Mom=G4LorentzVector(0.,0.,0.,mNeut);
+            //  g4Mom=G4LorentzVector(0.,0.,0.,mNeut);
+            //  f4Mom=G4LorentzVector(0.,0.,0.,mHe6);
+            //  three=true;
+		    //}
             else if(sPDG==90002007)                      // A=9
 		    {
-              hQPDG=nQPDG;
               rQPDG=nQPDG;
-              fQPDG=he7QPDG;
-              t4Mom=G4LorentzVector(0.,0.,0.,mNeut);
+              fQPDG=a8QPDG;
               g4Mom=G4LorentzVector(0.,0.,0.,mNeut);
-              f4Mom=G4LorentzVector(0.,0.,0.,mHe7);
-              three=true;
+              f4Mom=G4LorentzVector(0.,0.,0.,mHe8);
 		    }
             else if(sPDG==90005004)                      // A=9
 		    {
@@ -4407,13 +4411,10 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 		    }
             else if(sPDG==90007002)                      // A=9
 		    {
-              hQPDG=pQPDG;
               rQPDG=pQPDG;
-              fQPDG=b7QPDG;
-              t4Mom=G4LorentzVector(0.,0.,0.,mProt);
+              fQPDG=c8QPDG;
               g4Mom=G4LorentzVector(0.,0.,0.,mProt);
-              f4Mom=G4LorentzVector(0.,0.,0.,mB7);
-              three=true;
+              f4Mom=G4LorentzVector(0.,0.,0.,mC8);
 		    }
             else if(sPDG==90008004)                      // A=12
 		    {
@@ -4456,7 +4457,8 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
             {
               if(!G4QHadron(s4M).DecayIn2(f4Mom,g4Mom))
               {
-                G4cerr<<"***G4QE::FSI:(2)*FUSION*,tM["<<sPDG<<"]="<<tM<<">sM="<<sM<<G4endl;
+                G4cerr<<"***G4QE::FSI:(2)*FUSION*,tM["<<sPDG<<"]="<<tM<<">sM="<<sM<<" of "
+                      <<h4m<<hM<<hQC<<hGSM<<" & "<<b4m<<bM<<bQC<<bGSM<<G4endl;
                 throw G4QException("***G4QEnvironment::FSInter:Fusion (1) DecIn2 error");
               }
               else
@@ -4479,7 +4481,8 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
             {
               if(!G4QHadron(s4M).DecayIn3(f4Mom,g4Mom,t4Mom))
               {
-                G4cerr<<"***G4QE::FSI:(3)*FUSION*,tM["<<sPDG<<"]="<<tM<<">sM="<<sM<<G4endl;
+                G4cerr<<"***G4QE::FSI:(3)*FUSION*,tM["<<sPDG<<"]="<<tM<<">sM="<<sM<<" of "
+                      <<h4m<<hM<<hQC<<hGSM<<" & "<<b4m<<bM<<bQC<<bGSM<<G4endl;
                 throw G4QException("G4QEnvironment::FSInteract:Fusion(2) DecayIn3 error");
               }
               else
@@ -4508,8 +4511,14 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
             tot4Mom-=g4Mom;                     // subtract from the total the new hadron
             /////////////////////////////break; // Make fusion only for one (?)
             // Instead the curHadr parameters should be updated ______
+            hQPDG=fQPDG;
+            hPDG=hQPDG.GetPDGCode();
             hQC=fQPDG.GetQuarkContent();
+            hS=hQC.GetStrangeness();
+            hB=hQC.GetBaryonNumber();
+            hGSM = hQPDG.GetMass();
 		    h4m=f4Mom;
+            hM=h4m.m();
             // End of Instead ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #ifdef pdebug
             G4cout<<"G4QE::FSI:cH4M="<<curHadr->Get4Momentum()<<G4endl;
