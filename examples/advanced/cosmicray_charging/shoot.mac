@@ -23,10 +23,10 @@
 /gps/energy 1 GeV
 #
 # Isotropic distribution
-/gps/type Surface
-/gps/shape Sphere
-/gps/radius 1499. mm
-/gps/centre 0. 0. 0. mm
-/gps/angtype cos
+/gps/pos/type Surface
+/gps/pos/shape Sphere
+/gps/pos/radius 1499. mm
+/gps/pos/centre 0. 0. 0. mm
+/gps/ang/type cos
 #
-/run/beamOn 100
+/run/beamOn 10

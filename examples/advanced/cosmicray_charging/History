@@ -16,9 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-07.05.2004 - Henrique Araujo, tag cosmicray_charging-V06-01-00
-             First submission of cosmicray_charging example.
+10.08.2004 - Henrique Araujo, tag cosmicray_charging-V06-02-00
+             Removed call by pointer of hadronics classes
+             Added MuNuclear interaction
+             Updated input macros for obsolete gps commands
 
 28.05.2004 - Henrique Araujo, tag cosmicray_charging-V06-01-01
              Minor changes to GNUMakeFile
              Ported to PI Light (no changes in code required)
+
+07.05.2004 - Henrique Araujo, tag cosmicray_charging-V06-01-00
+             First submission of cosmicray_charging example.

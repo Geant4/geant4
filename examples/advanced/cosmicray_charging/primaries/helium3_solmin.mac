@@ -22,45 +22,45 @@
 /gps/particle He3
 #
 # Isotropic distribution
-/gps/type Surface
-/gps/shape Sphere
-/gps/radius 1499. mm
-/gps/centre 0. 0. 0. mm
-/gps/angtype cos
+/gps/pos/type Surface
+/gps/pos/shape Sphere
+/gps/pos/radius 1499. mm
+/gps/pos/centre 0. 0. 0. mm
+/gps/ang/type cos
 #
 # Differential energy spectrum for solar minimum
 # Helium flux (/m2/s/sr/MeV) from Vannuccini 2001
 # He-3/He-4 compiled by C. Grimani
 # EPN TAKEN FOR A=4!!!
 # INTEGRAL FLUX = 0.0591 He/cm2/s
-/gps/energytype Arb
-/gps/histname arb
+/gps/ene/type Arb
+/gps/hist/type arb
 #
-/gps/histpoint 4.000E+02 2.409E+01
-/gps/histpoint 5.970E+02 2.972E+01
-/gps/histpoint 8.910E+02 3.448E+01
-/gps/histpoint 1.330E+03 3.691E+01
-/gps/histpoint 1.985E+03 3.068E+01
-/gps/histpoint 2.962E+03 2.202E+01
-/gps/histpoint 4.421E+03 1.459E+01
-/gps/histpoint 6.599E+03 9.011E+00
-/gps/histpoint 9.848E+03 4.512E+00
-/gps/histpoint 1.470E+04 2.042E+00
-/gps/histpoint 2.194E+04 8.501E-01
-/gps/histpoint 3.274E+04 3.318E-01
-/gps/histpoint 4.887E+04 1.234E-01
-/gps/histpoint 7.293E+04 4.435E-02
-/gps/histpoint 1.089E+05 1.555E-02
-/gps/histpoint 1.625E+05 5.360E-03
-/gps/histpoint 2.425E+05 1.826E-03
-#/gps/histpoint 3.619E+05 6.172E-04
-#/gps/histpoint 5.401E+05 2.075E-04
-#/gps/histpoint 8.061E+05 6.949E-05
-#/gps/histpoint 1.203E+06 2.322E-05
-#/gps/histpoint 1.796E+06 7.745E-06
-#/gps/histpoint 2.680E+06 2.581E-06
-#/gps/histpoint 4.000E+06 8.593E-07
+/gps/hist/point 4.000E+02 2.409E+01
+/gps/hist/point 5.970E+02 2.972E+01
+/gps/hist/point 8.910E+02 3.448E+01
+/gps/hist/point 1.330E+03 3.691E+01
+/gps/hist/point 1.985E+03 3.068E+01
+/gps/hist/point 2.962E+03 2.202E+01
+/gps/hist/point 4.421E+03 1.459E+01
+/gps/hist/point 6.599E+03 9.011E+00
+/gps/hist/point 9.848E+03 4.512E+00
+/gps/hist/point 1.470E+04 2.042E+00
+/gps/hist/point 2.194E+04 8.501E-01
+#/gps/hist/point 3.274E+04 3.318E-01
+#/gps/hist/point 4.887E+04 1.234E-01
+#/gps/hist/point 7.293E+04 4.435E-02
+#/gps/hist/point 1.089E+05 1.555E-02
+#/gps/hist/point 1.625E+05 5.360E-03
+#/gps/hist/point 2.425E+05 1.826E-03
+#/gps/hist/point 3.619E+05 6.172E-04
+#/gps/hist/point 5.401E+05 2.075E-04
+#/gps/hist/point 8.061E+05 6.949E-05
+#/gps/hist/point 1.203E+06 2.322E-05
+#/gps/hist/point 1.796E+06 7.745E-06
+#/gps/hist/point 2.680E+06 2.581E-06
+#/gps/hist/point 4.000E+06 8.593E-07
 #
-/gps/arbint Lin
+/gps/hist/inter Lin
 #
-/run/beamOn 1000000
+/run/beamOn 10000
