@@ -1,9 +1,11 @@
-# $Id: GNUmakefile,v 1.5 2003-05-28 07:54:30 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2003-06-02 17:19:25 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for geometry.  Gabriele Cosmo, 16/11/96.
 # --------------------------------------------------------------
 
 name := G4geometry
+
+include $(G4INSTALL)/config/architecture.gmk
 
 SUBDIRS  = management volumes magneticfield verification biasing
 SUBDIRS += solids/CSG solids/specific solids/Boolean solids/BREPS
