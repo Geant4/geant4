@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.27 2002-05-15 10:23:01 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.28 2002-06-01 00:59:34 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
@@ -45,9 +45,17 @@ G4Navigator::~G4Navigator()
 
 // Locate the point in the hierarchy return 0 if outside
 //
-//  ( The direction is required only if we are on an edge shared by
-//     two or more surfaces. )
+//  The direction is required 
+//    - if on an edge shared by more than two surfaces 
+//                     (to resolve likely looping in tracking)
+//    - at initial location of a particle
+//                     (to resolve potential ambiguity at boundary)
 // 
+// Flags on exit: (incomplete)
+// fEntering         - True if entering `daughter' volume (or replica)
+//                        whether daughter of last mother directly 
+//                             or daughter of that volume's ancestor.
+
 G4VPhysicalVolume* 
 G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 				       const G4ThreeVector* pGlobalDirection,
@@ -342,6 +350,7 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 	  // The blocked volume is no longer valid - it was for another level
 	  fBlockedPhysicalVolume= 0;
           fBlockedReplicaNo= -1;
+          fEntering= fEnteredDaughter= true;
 	}
     } while (noResult);
 
@@ -599,6 +608,9 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
       fExiting= exitingReplica;
      }
 
+  
+  G4cout << "G4Navigator ComputeStep: fExitNormal = " <<  fExitNormal << endl;
+
   if( (Step == pCurrentProposedStepLength) && (!fExiting) && (!fEntering) )
     {
       // This is Step is not really limited by the geometry.
@@ -618,13 +630,48 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
   fEnteredDaughter=fEntering;   // I expect to enter a volume in this Step
   fExitedMother=fExiting;
 
-  if(fExiting && !fValidExitNormal)
+  if( fExiting )
+  {
+     G4cout << " At G4Nav CompStep End - if(exiting) - fExiting= " << fExiting 
+	    << " fValidExitNormal = " << fValidExitNormal 
+	    << endl;
+     if(fValidExitNormal)
      {
-       // We must calculate the normal anyway (in order to have it if requested)
-       G4ThreeVector FinalPoint=  fLastLocatedPointLocal + localDirection*Step;
-       fExitNormal= motherLogical->GetSolid()->SurfaceNormal(FinalPoint);
+        G4cout << " fExitNormal= " << fExitNormal << endl;
+        // Convention: fExitNormal is in the 'grand-mother' coordinate system
+        fMotherExitNormal= fExitNormal;
 
+        // If no relocation were made, we would need to rotate it back to 
+	//   this (the mother) coordinate system
+        // const G4RotationMatrix* motherRotation= motherPhysical->GetRotation();
+	// fMotherExitNormal *= (*motherRotation);  // Un-rotate gran->mother
+   
+        // However, relocation will put us either in
+	//   - the grand-mother (OK)
+	//   - in the grand-grand mother (must be dealt with)
+ 
+        G4cout << " fMotherExitNormal= " << fMotherExitNormal << endl;
+     }else{
+       G4cout << " fExitNormal= " << fExitNormal << endl;
+       // We must calculate the normal anyway (in order to have it if requested)
+       G4ThreeVector finalGlobalPoint, finalLocalPoint, localExitNormal;
+       finalGlobalPoint= fLastLocatedPointLocal + localDirection*Step;
+       finalLocalPoint = ComputeLocalPoint(finalGlobalPoint);
+       localExitNormal = motherLogical->GetSolid()->SurfaceNormal(finalLocalPoint);
+       fMotherExitNormal = localExitNormal;
+       G4cout << " fMotherExitNormal= " << fMotherExitNormal << endl;
+ 
+       const G4RotationMatrix* mRot= motherPhysical->GetRotation();
+       if( mRot ) { 
+	  G4ThreeVector grandMotherExitNormal = localExitNormal;
+                        grandMotherExitNormal *= (*mRot); 
+	  G4ThreeVector globalExitNormal= 
+	      GetLocalToGlobalTransform().TransformAxis(localExitNormal);
+	  G4cout << "GlobalNormal = " << globalExitNormal << endl
+		 << "GrandMotherN = " << grandMotherExitNormal << endl; 
+       }
      }
+   }
 
 #ifdef G4VERBOSE
   if( fVerbose > 1 ) 
@@ -697,13 +744,12 @@ G4ThreeVector  G4Navigator::GetLocalExitNormal(G4bool* valid)
 {
   G4ThreeVector ExitNormal(0.,0.,0.);
 
-  if( fExitedMother ){
-     ExitNormal=fExitNormal;
-     *valid = true;
-     
-  }else if (EnteredDaughterVolume()) {
+  if (EnteredDaughterVolume()) {
      ExitNormal= -(fHistory.GetTopVolume()->GetLogicalVolume()
 			 ->GetSolid()->SurfaceNormal(fLastLocatedPointLocal));
+     *valid = true;
+  }else if( fExitedMother ){
+     ExitNormal=fMotherExitNormal;
      *valid = true;
   }else{
      // We are not at a boundary.
