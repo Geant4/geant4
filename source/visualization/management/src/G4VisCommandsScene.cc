@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsScene.cc,v 1.3 1999-01-11 00:48:31 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.4 1999-02-07 17:31:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -206,7 +206,9 @@ G4VisCommandSceneNotifyHandlers::G4VisCommandSceneNotifyHandlers () {
   fpCommand -> SetGuidance ("/vis/scene/notifyHandlers [<scene-name>]");
   fpCommand -> SetGuidance
     ("Notifies scene handlers of possible changes of scene.");
-  fpCommand -> SetGuidance ("<scene-name> default is current scene.");
+  fpCommand -> SetGuidance ("<scene-name> default is current scene name.");
+  fpCommand -> SetGuidance
+    ("This command does not change current scene, scene handler or viewer.");
   fpCommand -> SetParameterName ("scene-name",
 				 omitable = true,
 				 currentAsDefault = true);
@@ -225,13 +227,28 @@ G4String G4VisCommandSceneNotifyHandlers::GetCurrentValue
 void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
 						   G4String newValue) {
   G4String& sceneName = newValue;
-  const G4SceneList& sceneList =
-    fpVisManager -> GetSceneList ();
+  const G4SceneList& sceneList = fpVisManager -> GetSceneList ();
   G4SceneHandlerList& sceneHandlerList =
     fpVisManager -> SetAvailableSceneHandlers ();
 
+  // Check scene name.
+  const G4int nScenes = sceneList.entries ();
+  for (G4int iScene = 0; iScene < nScenes; iScene++) {
+    G4Scene* scene = sceneList [iScene];
+    if (sceneName == scene -> GetName ()) {
+      scene -> AddWorldIfEmpty ();
+      break;
+    }
+  }
+  if (iScene >= nScenes ) {
+    G4cout << "Scene \"" << sceneName << "\" not found."
+      "\n  /vis/scene/list to see scenes."
+	   << endl;
+    return;
+  }
+
   // For each scene handler, if it contains the scene, for each viewer
-  // clear, (re)draw, and show.
+  // set (make current), clear, (re)draw, and show.
   const G4int nSceneHandlers = sceneHandlerList.entries ();
   for (G4int iSH = 0; iSH < nSceneHandlers; iSH++) {
     G4VSceneHandler* aSceneHandler = sceneHandlerList [iSH];
@@ -242,6 +259,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
       const G4int nViewers = viewerList.entries ();
       for (G4int iV = 0; iV < nViewers; iV++) {
 	G4VViewer* aViewer = viewerList [iV];
+	aViewer -> SetView ();
 	aViewer -> ClearView ();
 	aViewer -> DrawView ();
 	aViewer -> ShowView ();

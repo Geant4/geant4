@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.4 1999-01-11 00:48:40 allison Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.5 1999-02-07 17:31:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -88,7 +88,7 @@ manages a list of scenes.
 * /vis/scene/set/hitOption accumulate|byEvent
 * /vis/scene/set/notifyOption immediate|delayed
 * /vis/scene/set/modelingStyle [<modeling-style>]
-* /vis/scene/notifyHandlers
+/vis/scene/notifyHandlers
 
 
 Scene Handlers
@@ -194,7 +194,7 @@ or some such.
   command -> SetGuidance ("Operations on Geant4 scenes.");
   fMessengerList.append (new G4VisCommandSceneCreate);
   fMessengerList.append (new G4VisCommandSceneList);
-  // fMessengerList.append (new G4VisCommandSceneNotifyHandlers); (Not ready!)
+  fMessengerList.append (new G4VisCommandSceneNotifyHandlers);
   fMessengerList.append (new G4VisCommandSceneSelect);
   fMessengerList.append (new G4VisCommandSceneRemove);
   command = new G4UIdirectory ("/vis/scene/add/");
