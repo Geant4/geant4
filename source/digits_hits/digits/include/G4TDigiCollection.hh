@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TDigiCollection.hh,v 1.1 2003-10-03 10:14:17 gcosmo Exp $
+// $Id: G4TDigiCollection.hh,v 1.2 2004-06-07 12:03:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,7 +55,7 @@ class G4DigiCollection : public G4VDigiCollection
       void* theCollection;
 };
 
-extern G4Allocator<G4DigiCollection> aDCAllocator;
+G4extern G4Allocator<G4DigiCollection> aDCAllocator;
 
 template <class T> class G4TDigiCollection : public G4DigiCollection 
 {
