@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh,v 1.9 2002-05-17 17:59:47 gcosmo Exp $
+// $Id: G4LogicalVolume.hh,v 1.10 2002-12-16 09:24:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,8 +71,10 @@
 //    - Pointer (possibly 0) to user Step limit object for this node.
 //    G4SmartVoxelHeader* fVoxel
 //    - Pointer (possibly 0) to optimisation info objects.
-//    G4bool fOptimise;
+//    G4bool fOptimise
 //    - Flag to identify if optimisation should be applied or not.
+//    G4bool fRootRegion
+//    - Flag to identify if the logical volume is a root region.
 //    G4double fSmartless
 //    - Quality for optimisation, average number of voxels to be spent
 //      per content.
@@ -80,12 +82,17 @@
 //    - Pointer (possibly 0) to visualization attributes.
 //    G4FastSimulationManager* fFastSimulationManager
 //    - Pointer (possibly 0) to G4FastSimulationManager object.
+//    G4Region* fRegion
+//    - Pointer to the cuts region (if any)
+//    G4MaterialCutsCouple* fCutsCouple
+//    - Pointer (possibly 0) to associated production cuts.
 //    G4bool fIsEnvelope
 //    - Flags if the Logical Volume is an envelope for a FastSimulationManager.
 //    G4double fBiasWeight
 //    - Weight used in the event biasing technique.
 
 // History:
+// 24.09.02 G.Cosmo: Added flags and accessors for region cuts handling
 // 17.05.02 G.Cosmo: Added IsToOptimise() method and related flag
 // 18.04.01 G.Cosmo: Migrated to STL vector
 // 12.02.99 S.Giani: Added user defined optimisation quality
@@ -101,6 +108,7 @@
 #define G4LOGICALVOLUME_HH
 
 #include "globals.hh"
+#include "G4Region.hh"
 #include "G4VPhysicalVolume.hh"  // Need operator == for vector fdaughters
 #include "g4std/vector"
 #include <assert.h>
@@ -115,6 +123,7 @@ class G4UserLimits;
 class G4SmartVoxelHeader;
 class G4VisAttributes;
 class G4FastSimulationManager;
+class G4MaterialCutsCouple;
 
 class G4LogicalVolume
 {
@@ -200,7 +209,24 @@ class G4LogicalVolume
       // volume hierarchy. Note that for parameterised volumes in the
       // hierarchy, optimisation is always applied. 
 
-    G4bool operator == ( const G4LogicalVolume& lv) const;
+    inline G4bool IsRootRegion() const;
+      // Replies if the logical volume represents a root region or not.
+    inline void SetRegionRootFlag(G4bool rreg);
+      // Sets/unsets the volume as a root region for cuts.
+    inline G4bool IsRegion() const;
+      // Replies if the logical volume is part of a cuts region or not.
+    inline void SetRegion(G4Region* reg);
+      // Sets/unsets the volume as cuts region.
+    inline const G4Region* GetRegion() const;
+      // Return the region to which the volume belongs, if any.
+    inline void PropagateRegion();
+      // Propagates region pointer to daughters.
+
+    inline const G4MaterialCutsCouple* GetMaterialCutsCouple() const;
+    inline void SetMaterialCutsCouple(G4MaterialCutsCouple* cuts);
+      // Accessors for production cuts.
+
+    G4bool operator == (const G4LogicalVolume& lv) const;
       // Equality defined by address only.
       // Returns true if objects are at same address, else false.
 
@@ -260,6 +286,8 @@ class G4LogicalVolume
       // Pointer (possibly 0) to optimisation info objects.
     G4bool fOptimise;
       // Flag to identify if optimisation should be applied or not.
+    G4bool fRootRegion;
+      // Flag to identify if the logical volume is a root region.
     G4double fSmartless;
       // Quality for optimisation, average number of voxels to be spent
       // per content.
@@ -267,6 +295,10 @@ class G4LogicalVolume
       // Pointer (possibly 0) to visualization attributes.
     G4FastSimulationManager* fFastSimulationManager;
       // Pointer (possibly 0) to G4FastSimulationManager object.
+    G4Region* fRegion;
+      // Pointer to the cuts region (if any)
+    G4MaterialCutsCouple* fCutsCouple;
+      // Pointer (possibly 0) to associated production cuts.
     G4bool fIsEnvelope;
       // Flags if the Logical Volume is an envelope for a
       // FastSimulationManager.

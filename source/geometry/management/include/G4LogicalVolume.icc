@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc,v 1.8 2002-05-17 17:59:47 gcosmo Exp $
+// $Id: G4LogicalVolume.icc,v 1.9 2002-12-16 09:24:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -137,6 +137,11 @@ void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
   {
     pDaughterLogical->SetFieldManager(fFieldManager, true);
   }
+  if (fRegion)
+  {
+    PropagateRegion();
+    fRegion->RegionModified(true);
+  }
 }
 
 // ********************************************************************
@@ -169,6 +174,10 @@ void G4LogicalVolume::RemoveDaughter(const G4VPhysicalVolume* p)
       fDaughters.erase(i);
       break;
     }
+  }
+  if (fRegion)
+  {
+    fRegion->RegionModified(true);
   }
 }
 
@@ -311,6 +320,88 @@ inline
 void G4LogicalVolume::SetOptimisation(G4bool optim)
 {
   fOptimise = optim;
+}
+
+// ********************************************************************
+// IsRootRegion
+// ********************************************************************
+//
+inline
+G4bool G4LogicalVolume::IsRootRegion() const
+{
+  return fRootRegion;
+}
+
+// ********************************************************************
+// SetRegionRootFlag
+// ********************************************************************
+//
+inline
+void G4LogicalVolume::SetRegionRootFlag(G4bool rreg)
+{
+  fRootRegion = rreg;
+}
+
+// ********************************************************************
+// IsRegion
+// ********************************************************************
+//
+inline
+G4bool G4LogicalVolume::IsRegion() const
+{
+  G4bool reg = false;
+  if (fRegion) reg = true;
+  return reg;
+}
+
+// ********************************************************************
+// SetRegion
+// ********************************************************************
+//
+inline
+void G4LogicalVolume::SetRegion(G4Region* reg)
+{
+  fRegion = reg;
+}
+
+// ********************************************************************
+// GetRegion
+// ********************************************************************
+//
+inline
+const G4Region* G4LogicalVolume::GetRegion() const
+{
+  return fRegion;
+}
+
+// ********************************************************************
+// PropagateRegion
+// ********************************************************************
+//
+inline
+void G4LogicalVolume::PropagateRegion()
+{
+  fRegion->ScanVolumeTree(this, true);
+}
+
+// ********************************************************************
+// GetMaterialCutsCouple
+// ********************************************************************
+//
+inline
+const G4MaterialCutsCouple* G4LogicalVolume::GetMaterialCutsCouple() const
+{
+  return fCutsCouple;
+}
+
+// ********************************************************************
+// SetMaterialCutsCouple
+// ********************************************************************
+//
+inline
+void G4LogicalVolume::SetMaterialCutsCouple(G4MaterialCutsCouple* cuts)
+{
+  fCutsCouple = cuts;
 }
 
 // ********************************************************************

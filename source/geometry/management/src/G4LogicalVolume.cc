@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.11 2002-11-08 22:45:25 japost Exp $
+// $Id: G4LogicalVolume.cc,v 1.12 2002-12-16 09:24:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,8 +52,9 @@ G4LogicalVolume::G4LogicalVolume( G4VSolid* pSolid,
                                   G4UserLimits* pULimits,
                                   G4bool optimise )
  : fDaughters(0,(G4VPhysicalVolume*)0), fFieldManager(pFieldMgr),
-   fVoxel(0), fOptimise(optimise), fSmartless(2.), fVisAttributes (0),
-   fFastSimulationManager (0), fIsEnvelope(false)
+   fVoxel(0), fOptimise(optimise), fRootRegion(false), fSmartless(2.),
+   fVisAttributes(0), fFastSimulationManager(0), fRegion(0),
+   fCutsCouple(0), fIsEnvelope(false)
 {
   SetSolid(pSolid);
   SetMaterial(pMaterial);
