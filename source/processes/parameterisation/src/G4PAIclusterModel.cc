@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIclusterModel.cc,v 1.1 2000-07-14 16:02:26 grichine Exp $
+// $Id: G4PAIclusterModel.cc,v 1.2 2000-07-20 12:03:04 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -105,9 +105,10 @@ void G4PAIclusterModel::DoIt( const G4FastTrack& fastTrack ,
 
   lambda = fPAIonisation->GetFreePath( scaledTkin, charge2 ) ;
   step   = RandExponential::shoot(lambda) ;
+  //  if (step < 0.0) step = 0.0 ;
   stepSum += step ;
-
-  if(stepSum > distance) // no change, return 
+  distance -= stepSum ;
+  if(distance < 0.0) // no change, return 
   {
     return ;  
   }
@@ -118,7 +119,7 @@ void G4PAIclusterModel::DoIt( const G4FastTrack& fastTrack ,
     G4ParticleMomentum globalDirection = fastTrack.GetPrimaryTrack()->
                                          GetMomentumDirection() ; 
 
-    while(distance)  // global (or local ?) cluster coordinates
+    while(distance >= 0.0)  // global (or local ?) cluster coordinates
     {
       //  clusterPosition = fastTrack.GetPrimaryTrackLocalPosition() + 
       //                  stepSum*direction ;  
@@ -129,12 +130,14 @@ void G4PAIclusterModel::DoIt( const G4FastTrack& fastTrack ,
       fClusterPositionVector.insert(clusterPosition) ;      
       fClusterEnergyVector.insert(energyTransfer) ;
       step = RandExponential::shoot(lambda) ;
+      // if (step < 0.0) step = 0.0 ;
       stepSum    += step ;
       distance   -= step ;
       energyLoss += energyTransfer ;     
     } 
     kinEnergy -= energyLoss ;
     fastStep.SetPrimaryTrackFinalKineticEnergy(kinEnergy) ;  
+    // fastStep.SetTotalEnergyDeposited(energyLoss);
 
     BuildDetectorResponse() ; 
   }

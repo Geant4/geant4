@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VClusterModel.cc,v 1.1 2000-07-14 16:03:22 grichine Exp $
+// $Id: G4VClusterModel.cc,v 1.2 2000-07-20 12:02:38 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -58,10 +58,12 @@ G4VClusterModel::~G4VClusterModel()
 
 void G4VClusterModel::BuildDetectorResponse()
 {
-  for( G4int i = 0 ; fClusterEnergyVector.entries() ; i++ )
+  for( G4int i = 0 ; i < fClusterEnergyVector.entries() ; i++ )
   {
     AssignClusterHit(fClusterPositionVector[i],fClusterEnergyVector[i]) ;
   }
+  fClusterPositionVector.clear() ;
+  fClusterEnergyVector.clear() ;
 }
 
 //////////////////////////////////////////////////////////////////////////////
