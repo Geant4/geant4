@@ -37,7 +37,7 @@ G4CascadeProtonBuilder::
 ~G4CascadeProtonBuilder() {}
 
 void G4CascadeProtonBuilder::
-Build(G4HadronElasticProcess & aP)
+Build(G4HadronElasticProcess &)
 {
 }
 

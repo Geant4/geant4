@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2003-12-04 10:22:47 hpw Exp $
+# $Id: GNUmakefile,v 1.4 2003-12-04 11:08:48 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -11,6 +11,7 @@ ifndef G4INSTALL
   G4INSTALL = ../..
 endif
 include $(G4INSTALL)/config/architecture.gmk
+include $(TIARA_BASE)/source/hadronic_lists.gmk
 
 .PHONY: all tiaraClean
 

@@ -1,4 +1,4 @@
-#  $Id: GNUmakefile,v 1.3 2003-12-02 13:30:50 gcosmo Exp $
+#  $Id: GNUmakefile,v 1.4 2003-12-04 11:08:47 gcosmo Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # --------------------------------------------------------------
@@ -11,7 +11,7 @@ TIARA_SRC_SWIG_DIRS = CLHEPWrapper G4KernelWrapper TiaraWrapper
 include $(G4INSTALL)/config/architecture.gmk
 
 .PHONY: Tiara tiaraClean swigClean all
-all: lib bin
+all: Tiara
 
 Tiara:
 	@for dir in $(TIARA_SRC_DIRS); do ( cd source/$$dir && $(MAKE)); done;:

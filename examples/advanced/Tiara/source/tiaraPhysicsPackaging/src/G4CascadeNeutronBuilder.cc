@@ -39,17 +39,17 @@ G4CascadeNeutronBuilder::
 ~G4CascadeNeutronBuilder() {}
 
 void G4CascadeNeutronBuilder::
-Build(G4HadronElasticProcess & aP)
+Build(G4HadronElasticProcess &)
 {
 }
 
 void G4CascadeNeutronBuilder::
-Build(G4HadronFissionProcess & aP)
+Build(G4HadronFissionProcess &)
 {
 }
 
 void G4CascadeNeutronBuilder::
-Build(G4HadronCaptureProcess & aP)
+Build(G4HadronCaptureProcess &)
 {
 }
 
