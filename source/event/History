@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2001-04-20 20:40:26 gcosmo Exp $
+$Id: History,v 1.23 2001-06-28 15:07:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 28 2001, G.Cosmo (event-V03-01-01)
+- Added CVS headers to G4GeneralParticleSource[.hh.cc] and
+  G4GeneralParticleSourceMessenger[.hh.cc].
+  Removed <CR> characters and corrected format for comments to
+  appear in the Software Reference Manual.
 
 Apr 20 2001, G.Cosmo (event-V03-01-00)
 - Modified G4GeneralParticleSource.cc according to recent migration to
