@@ -348,24 +348,20 @@ void hTestPhysicsList::SetEMPhysicsList(const G4String& name)
   if(name == emPhysics) return;
 
   // Define hadronic process class
-  G4String stand = G4String("Standard");
-  G4String standn= G4String("StandardNew");
-  G4String lowe  = G4String("LowEnergy");
-  G4String none  = G4String("none");
 
-  if(name == stand) {
+  if(name == "Standard") {
     theEMList = new hTestStanPhysicsList();
     theEMList->SetVerbose(verbose);
 
-  } else if (name == standn) {
+  } else if (name == "MAstandard") {
     theEMList = new hTestStanMAPhysicsList();
     theEMList->SetVerbose(verbose);
 
-  } else if (name == lowe) {
+  } else if (name == "LowEnergy") {
     theEMList = new hTestLowEPhysicsList();
     theEMList->SetVerbose(verbose);
 
-  } else if (name == none) {
+  } else if (name == "none") {
     theEMList = 0;
 
   } else {
@@ -394,19 +390,15 @@ void hTestPhysicsList::SetHadronPhysicsList(const G4String& name)
   G4String frag  = G4String("IonFragmentation");
   G4String none  = G4String("none");
 
-  if(name == stand) {
+  if(name == "LEparametrised") {
     theHadList = new hTestHadronPhysicsList();
     theHadList->SetVerbose(verbose);
 
-  } else if (name == hado) {
+  } else if (name == "CHIPS") {
     theHadList = new hTestHadronPhysicsList1();
     theHadList->SetVerbose(verbose);
 
-    //not implemented yet
-  } else if (name == frag) {
-    theHadList = 0;
-
-  } else if (name == none) {
+  } else if (name == "none") {
     theHadList = 0;
 
   } else {

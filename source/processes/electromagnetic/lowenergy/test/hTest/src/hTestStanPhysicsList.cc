@@ -131,6 +131,7 @@ void hTestStanPhysicsList::ConstructProcess()
       }
 
       G4hIonisation* hIon = new G4hIonisation() ;
+      hIon->SetVerboseLevel(0);
       pmanager->AddProcess(hIon,-1,2,2);
    
     } else if (   particleName == "alpha"  
