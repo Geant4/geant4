@@ -384,7 +384,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=18.68s Real=20.65s Sys=0.05s
+  User=18.53s Real=18.66s Sys=0.02s
 
 ============   SUMMARY   ============
 
@@ -661,60 +661,35 @@ Index : 9     used in the geometry : No      recalculation needed : Yes
  Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
  Energy thresholds :  is not ready to print
 
-Index : 10     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
- Energy thresholds :  gamma 990.00000 eV    e- 990.00000 eV    e+ 990.00000 eV
-
-Index : 11     used in the geometry : No      recalculation needed : No 
- Material : Al
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
- Energy thresholds :  gamma 990.00000 eV    e- 33.88755 keV    e+ 33.47294 keV
-
-Index : 12     used in the geometry : No      recalculation needed : No 
- Material : Si
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
- Energy thresholds :  gamma 990.00000 eV    e- 31.47473 keV    e+ 31.08964 keV
-
-Index : 13     used in the geometry : No      recalculation needed : No 
- Material : Fe
- Range cuts        :  gamma 1.00000 cm    e- 1.00000 cm    e+ 1.00000 cm
- Energy thresholds :  gamma 60.40187 keV    e- 12.95184 MeV    e+ 12.02966 MeV
-
-Index : 14     used in the geometry : No      recalculation needed : No 
- Material : Al
- Range cuts        :  gamma 1.00000 cm    e- 1.00000 cm    e+ 1.00000 cm
- Energy thresholds :  gamma 20.49488 keV    e- 4.54874 MeV    e+ 4.27720 MeV
-
-Index : 15     used in the geometry : Yes     recalculation needed : Yes
+Index : 10     used in the geometry : Yes     recalculation needed : Yes
  Material : Air
  Range cuts        :  gamma 1.00000 mm    e- 1.00000 mm    e+ 1.00000 mm
  Energy thresholds :  is not ready to print
  Region(s) which use this couple : 
     VertexDetector
 
-Index : 16     used in the geometry : Yes     recalculation needed : Yes
+Index : 11     used in the geometry : Yes     recalculation needed : Yes
  Material : Al
  Range cuts        :  gamma 1.00000 mm    e- 1.00000 mm    e+ 1.00000 mm
  Energy thresholds :  is not ready to print
  Region(s) which use this couple : 
     VertexDetector
 
-Index : 17     used in the geometry : Yes     recalculation needed : Yes
+Index : 12     used in the geometry : Yes     recalculation needed : Yes
  Material : Si
  Range cuts        :  gamma 1.00000 mm    e- 1.00000 mm    e+ 1.00000 mm
  Energy thresholds :  is not ready to print
  Region(s) which use this couple : 
     VertexDetector
 
-Index : 18     used in the geometry : Yes     recalculation needed : Yes
+Index : 13     used in the geometry : Yes     recalculation needed : Yes
  Material : Fe
  Range cuts        :  gamma 1.00000 cm    e- 1.00000 cm    e+ 1.00000 cm
  Energy thresholds :  is not ready to print
  Region(s) which use this couple : 
     MuonDetector
 
-Index : 19     used in the geometry : Yes     recalculation needed : Yes
+Index : 14     used in the geometry : Yes     recalculation needed : Yes
  Material : Al
  Range cuts        :  gamma 1.00000 cm    e- 1.00000 cm    e+ 1.00000 cm
  Energy thresholds :  is not ready to print
@@ -820,7 +795,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.61000s Real=0.71000s Sys=0.03000s
+  User=0.68000s Real=0.68000s Sys=0.00000s
 
 ============   SUMMARY   ============
 
@@ -918,60 +893,35 @@ Index : 9     used in the geometry : No      recalculation needed : No
  Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
  Energy thresholds :  gamma 204.16941 keV    e- 6.82843 MeV    e+ 6.34224 MeV
 
-Index : 10     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
- Energy thresholds :  gamma 990.00000 eV    e- 990.00000 eV    e+ 990.00000 eV
-
-Index : 11     used in the geometry : No      recalculation needed : No 
- Material : Al
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
- Energy thresholds :  gamma 990.00000 eV    e- 33.88755 keV    e+ 33.47294 keV
-
-Index : 12     used in the geometry : No      recalculation needed : No 
- Material : Si
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
- Energy thresholds :  gamma 990.00000 eV    e- 31.47473 keV    e+ 31.08964 keV
-
-Index : 13     used in the geometry : No      recalculation needed : No 
- Material : Fe
- Range cuts        :  gamma 1.00000 cm    e- 1.00000 cm    e+ 1.00000 cm
- Energy thresholds :  gamma 60.40187 keV    e- 12.95184 MeV    e+ 12.02966 MeV
-
-Index : 14     used in the geometry : No      recalculation needed : No 
- Material : Al
- Range cuts        :  gamma 1.00000 cm    e- 1.00000 cm    e+ 1.00000 cm
- Energy thresholds :  gamma 20.49488 keV    e- 4.54874 MeV    e+ 4.27720 MeV
-
-Index : 15     used in the geometry : Yes     recalculation needed : No 
+Index : 10     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma 1.00000 mm    e- 1.00000 mm    e+ 1.00000 mm
  Energy thresholds :  gamma 990.00000 eV    e- 990.00000 eV    e+ 990.00000 eV
  Region(s) which use this couple : 
     VertexDetector
 
-Index : 16     used in the geometry : Yes     recalculation needed : No 
+Index : 11     used in the geometry : Yes     recalculation needed : No 
  Material : Al
  Range cuts        :  gamma 1.00000 mm    e- 1.00000 mm    e+ 1.00000 mm
  Energy thresholds :  gamma 6.88731 keV    e- 596.68045 keV    e+ 568.01052 keV
  Region(s) which use this couple : 
     VertexDetector
 
-Index : 17     used in the geometry : Yes     recalculation needed : No 
+Index : 12     used in the geometry : Yes     recalculation needed : No 
  Material : Si
  Range cuts        :  gamma 1.00000 mm    e- 1.00000 mm    e+ 1.00000 mm
  Energy thresholds :  gamma 6.88731 keV    e- 540.71814 keV    e+ 521.11295 keV
  Region(s) which use this couple : 
     VertexDetector
 
-Index : 18     used in the geometry : Yes     recalculation needed : No 
+Index : 13     used in the geometry : Yes     recalculation needed : No 
  Material : Fe
  Range cuts        :  gamma 1.00000 cm    e- 1.00000 cm    e+ 1.00000 cm
  Energy thresholds :  gamma 60.40187 keV    e- 12.95184 MeV    e+ 12.02966 MeV
  Region(s) which use this couple : 
     MuonDetector
 
-Index : 19     used in the geometry : Yes     recalculation needed : No 
+Index : 14     used in the geometry : Yes     recalculation needed : No 
  Material : Al
  Range cuts        :  gamma 1.00000 cm    e- 1.00000 cm    e+ 1.00000 cm
  Energy thresholds :  gamma 20.49488 keV    e- 4.54874 MeV    e+ 4.27720 MeV
@@ -1022,7 +972,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=18.53000s Real=18.60000s Sys=0.02000s
+  User=18.41000s Real=18.41000s Sys=0.00000s
 
 ============   SUMMARY   ============
 

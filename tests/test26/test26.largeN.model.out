@@ -431,7 +431,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=49.05s Real=49.52s Sys=0.15s
+  User=49.42s Real=49.58s Sys=0.08s
 
 ============   SUMMARY   ============
 
@@ -627,7 +627,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.18000s Real=2.23000s Sys=0.05000s
+  User=1.78000s Real=1.80000s Sys=0.02000s
 
 ============   SUMMARY   ============
 
@@ -638,30 +638,30 @@ Run Summary
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    7.71400        0.00800        2.23900
-  Electrons: 15.26400        0.01900        7.87000
-  Positrons:  0.39400        0.00000        7.87000
+  Gammas:    5.25000        0.00300        1.34600
+  Electrons: 10.56700        0.01500        5.02300
+  Positrons:  0.30100        0.00000        5.02300
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.22465 +- 0.00055 RMS(E1) = 0.01731 +- 0.00055
-  E9 = 0.22607 +- 0.00059 RMS(E9) = 0.01871 +- 0.00059
-  E25= 0.22627 +- 0.00060 RMS(E25)= 0.01892 +- 0.00060
+  E1 = 0.21970 +- 0.00046 RMS(E1) = 0.01448 +- 0.00046
+  E9 = 0.22069 +- 0.00049 RMS(E9) = 0.01560 +- 0.00049
+  E25= 0.22082 +- 0.00050 RMS(E25)= 0.01576 +- 0.00050
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.83287 +- 0.01008 RMS(Eabs1)= 0.31866 +- 0.01008
-  Eabs2(MeV)= 0.84825 +- 0.01036 RMS(Eabs2)= 0.32767 +- 0.01036
-  Eabs3(MeV)= 0.85314 +- 0.01239 RMS(Eabs3)= 0.39176 +- 0.01239
-  Eabs4(MeV)= 0.85387 +- 0.01167 RMS(Eabs4)= 0.36914 +- 0.01167
+  Eabs1(MeV)= 0.81688 +- 0.00924 RMS(Eabs1)= 0.29223 +- 0.00924
+  Eabs2(MeV)= 0.83474 +- 0.01101 RMS(Eabs2)= 0.34832 +- 0.01101
+  Eabs3(MeV)= 0.83109 +- 0.01057 RMS(Eabs3)= 0.33438 +- 0.01057
+  Eabs4(MeV)= 0.86073 +- 0.01206 RMS(Eabs4)= 0.38128 +- 0.01206
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.02300 +- 0.00897
+  Nhit= 3.04900 +- 0.03362
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1698811653, 1515937045
+ Current couple of seeds = 1679747200, 942283487
 ----------------------------------------
 #
 G4 kernel has come to Quit state.

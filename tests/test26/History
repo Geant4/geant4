@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2003-02-07 15:33:02 vnivanch Exp $
+$Id: History,v 1.3 2003-02-14 11:54:33 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-February 07, 2003  Vladimit Ivanchenko (test26-V05-00-01)
+February 14, 2003  Vladimir Ivanchenko (test26-V05-00-02)
+- Update PhysList for ions
+- Make G4ProductionCuts be member of the G4PhysicsList 
+- Fix problem of many runs
+
+February 07, 2003  Vladimir Ivanchenko (test26-V05-00-01)
 - Remove warnings, add largeN test
 
-February 06, 2003  Vladimit Ivanchenko (test26-V05-00-00)
+February 06, 2003  Vladimir Ivanchenko (test26-V05-00-00)
 - Created
