@@ -30,21 +30,20 @@ set NDVY 010205
  itx 115 15 'KIN'
  close 1
  
-ve/create X(31) R 15 17 19 25 35 45 55 65 75 85 95 105 115 125 135 145 155 165 175 185 195 205 215 225 235 245 255 265 275 285 295
-ve/create Y(31) R 17.1 6.22 4.07 2.33 1.37 0.76 0.41 0.24 0.14 0.087 0.051 0.029 0.016 0.0085 0.005 0.0025 0.0011 0.00036 0.0000001 0.00026 0.000013 0.000001 0.000007 0.000087 0.000083 0.000001 0.000001 0.000043 0.0000001 0.000028 0.00057
+ve/create X(17) R 17 19 25 35 45 55 65 75 85 95 105 115 125 135 145 155 165 
+ve/create Y(17) R 17.14 6.22 4.07 2.33 1.37 0.76 0.41 0.24 0.14 0.087 0.051 0.029 0.016 0.0085 0.005 0.0025 0.0011 0.00036
  
-gr/h/symb X Y 31 21 0.2
+gr/h/symb X Y 17 21 0.2
  
 exe ../prf n_a3 eps
  
  null 0 250 0.0001 100
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dE/do (mb/MeV/sr)'
- 
-   gr/h/symb X Y 31 21 0.2
 
  hi/file 1 par.paw
  set dmod 3
  hi/pl 31 shist
+* itx 20 200 'proton 256 MeV on Al secondary neutrons at theta=120 degree'
  line 100 1.8 110 1.8
  itx 115 60 'LEPAR'
  close 1
@@ -56,6 +55,8 @@ exe ../prf n_a3 eps
  itx 115 22 'CHIPS'
  close 1
  
+  gr/h/symb X Y 30 21 0.2
+
  exe ../prf nk_a3 eps
 
  opt liny

@@ -153,19 +153,13 @@ int main(int argc, char** argv)
           end = false;
 	}
 
-        if((xs == 0.0 && an/degree > 10.) || !enddata) {
+        if((x == 0.0 && an/degree > 10.) || !enddata) {
 
           // fill the rest by zero cross section
           for(int j=ibin; j<nbin; j++) {
             cross->push_back(0.0);
           }
           cs.push_back(cross);
-          if(1 < verbose) {
-            cout << "### Start filling data for the angle " 
-                 << (*angle)[angle->size()-1]/degree
-                 << G4endl;
-	  }
-
           if(0 < verbose) {
             (*fout_c) << "#####..Result.of.parcing..####### "
                       << " Angle(degree)= " << (*angle)[angle->size()-1]/degree
@@ -180,12 +174,7 @@ int main(int argc, char** argv)
 	}
 
 	// new data
-        if(xs == 0.0) {
-          if(1 < verbose) {
-            cout << "### Start new data set for the angle " 
-                 << an/degree
-                 << G4endl;
-	  }
+        if(x == 0.0) {
           angle->push_back(an);
           cross = new G4DataVector();
           cross->push_back(0.0);
