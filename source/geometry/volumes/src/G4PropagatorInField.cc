@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.31 2002-06-14 10:21:20 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.32 2002-06-18 12:54:01 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -118,7 +118,7 @@ G4double G4PropagatorInField::
      if ( newFieldMgr ) 
         fCurrentFieldMgr = newFieldMgr;
   }
-  GetChordFinder()->SetChargeMomentumMass(fCharge, fMomentum, fMass);  
+  GetChordFinder()->SetChargeMomentumMass(fCharge, fInitialMomentumModulus, fMass);  
 
   G4FieldTrack  CurrentState(pFieldTrack);
 
