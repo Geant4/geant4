@@ -32,6 +32,7 @@ Current available graphics systems are:
 #
 /testem/phys/setCuts 5.0 mm
 #
+/process/eLoss/preciseRange  true
 /run/initialize
 Absorber is 3.60564 m   of Water
  Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
@@ -64,6 +65,7 @@ eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Precise range table up to 1 GeV in 70 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
 eBrem:   tables are built for  e-
@@ -76,6 +78,7 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Precise range table up to 1 GeV in 70 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
 eBrem:   tables are built for  e+
@@ -96,6 +99,7 @@ hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Precise range table up to 1 GeV in 70 bins.
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
 msc:  Model variant of multiple scattering for mu+
@@ -106,6 +110,7 @@ MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Precise range table up to 1 GeV in 70 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -124,6 +129,7 @@ MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Precise range table up to 1 GeV in 70 bins.
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -162,20 +168,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=19.4s Real=26.61s Sys=0.78s
+  User=20.46s Real=27.85s Sys=0.8s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.11 radl:   14.52%       5.41%             0-> 1.11 radl:   14.52%     5.41% 
-    1.11-> 2.22 radl:   25.45%      11.59%             0-> 2.22 radl:   39.97%    13.86% 
-    2.22-> 3.33 radl:   21.58%       9.64%             0-> 3.33 radl:   61.55%    17.65% 
-    3.33-> 4.44 radl:   13.27%       8.00%             0-> 4.44 radl:   74.82%    17.01% 
-    4.44-> 5.55 radl:    8.31%       7.17%             0-> 5.55 radl:   83.13%    14.68% 
-    5.55-> 6.66 radl:    4.79%       5.50%             0-> 6.66 radl:   87.92%    12.26% 
-    6.66-> 7.77 radl:    3.09%       4.98%             0-> 7.77 radl:   91.01%     9.43% 
-    7.77-> 8.88 radl:    1.84%       4.08%             0-> 8.88 radl:   92.85%     7.00% 
-    8.88-> 9.99 radl:    1.10%       2.97%             0-> 9.99 radl:   93.95%     5.01% 
+    0.00-> 1.11 radl:   14.21%       5.99%             0-> 1.11 radl:   14.21%     5.99% 
+    1.11-> 2.22 radl:   25.28%      10.88%             0-> 2.22 radl:   39.49%    13.44% 
+    2.22-> 3.33 radl:   22.82%       9.61%             0-> 3.33 radl:   62.31%    16.13% 
+    3.33-> 4.44 radl:   13.65%       7.81%             0-> 4.44 radl:   75.95%    14.90% 
+    4.44-> 5.55 radl:    7.87%       6.65%             0-> 5.55 radl:   83.82%    11.58% 
+    5.55-> 6.66 radl:    4.52%       5.72%             0-> 6.66 radl:   88.34%     8.51% 
+    6.66-> 7.77 radl:    3.20%       4.39%             0-> 7.77 radl:   91.54%     6.03% 
+    7.77-> 8.88 radl:    1.42%       2.69%             0-> 8.88 radl:   92.96%     5.14% 
+    8.88-> 9.99 radl:    0.77%       2.04%             0-> 9.99 radl:   93.73%     4.46% 
 
 
 
@@ -183,21 +189,21 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.11 radl:   64.91%      10.71%             0-> 0.11 radl:   64.91%    10.71% 
-    0.11-> 0.22 radl:   16.59%       7.15%             0-> 0.22 radl:   81.50%     8.63% 
-    0.22-> 0.33 radl:    6.13%       3.78%             0-> 0.33 radl:   87.63%     6.99% 
-    0.33-> 0.44 radl:    3.10%       2.67%             0-> 0.44 radl:   90.72%     5.70% 
-    0.44-> 0.56 radl:    1.97%       1.86%             0-> 0.56 radl:   92.69%     5.18% 
-    0.56-> 0.67 radl:    1.26%       1.29%             0-> 0.67 radl:   93.95%     5.01% 
+    0.00-> 0.11 radl:   61.33%      10.59%             0-> 0.11 radl:   61.33%    10.59% 
+    0.11-> 0.22 radl:   16.92%       5.72%             0-> 0.22 radl:   78.26%     8.11% 
+    0.22-> 0.33 radl:    8.18%       4.93%             0-> 0.33 radl:   86.43%     6.08% 
+    0.33-> 0.44 radl:    3.84%       2.63%             0-> 0.44 radl:   90.28%     5.33% 
+    0.44-> 0.56 radl:    1.97%       1.59%             0-> 0.56 radl:   92.25%     4.90% 
+    0.56-> 0.67 radl:    1.48%       1.53%             0-> 0.67 radl:   93.73%     4.46% 
 
                               SUMMARY
-                         energy deposit :   93.95 % E0 +-    5.01 % E0
-                         charged traklen:   13.68 radl +-    0.73 radl
-                         neutral traklen:  197.09 radl +-   22.60 radl
+                         energy deposit :   93.73 % E0 +-    4.46 % E0
+                         charged traklen:   13.51 radl +-    0.65 radl
+                         neutral traklen:  197.53 radl +-   19.05 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 542151701, 1817008196
+ Current couple of seeds = 359424870, 1646144986
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

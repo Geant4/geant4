@@ -200,21 +200,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=46.49s Real=1044.02s Sys=104.53s
+  User=46.55s Real=1151.09s Sys=105.69s
 
  ======================== run summary ======================
 
  Number of Events = 100000
 
- Total energy deposit in absorber per event = 6.698 keV +- 21.79 eV 
+ Total energy deposit in absorber per event = 6.717 keV +- 22.11 eV 
 
- Total track length (charged) in absorber per event = 20.97 mum +- 15.28 nm 
- Total track length (neutral) in absorber per event = 3.612 nm  +- 3.107 nm 
+ Total track length (charged) in absorber per event = 20.98 mum +- 15.8 nm 
+ Total track length (neutral) in absorber per event = 2.724 nm  +- 2.698 nm 
 
- Number of steps (charged) in absorber per event = 1.079 +- 1.236e-05
- Number of steps (neutral) in absorber per event = 3e-05 +- 1.236e-05
+ Number of steps (charged) in absorber per event = 1.08 +- 1.257e-05
+ Number of steps (neutral) in absorber per event = 2e-05 +- 1.257e-05
 
- Number of secondaries per event : Gammas = 3e-05;   electrons = 0.03757;   positrons = 0
+ Number of secondaries per event : Gammas = 2e-05;   electrons = 0.03794;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -226,7 +226,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1147184665, 872245730
+ Current couple of seeds = 411855880, 393850750
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

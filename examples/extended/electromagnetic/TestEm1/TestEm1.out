@@ -104,11 +104,12 @@ eIoni:   tables are built for  e-
       Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
-eBrem:   tables are built for  e-
+brCMS:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Gamma high energy threshold 10 MeV
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -116,11 +117,12 @@ eIoni:   tables are built for  e+
       Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
-eBrem:   tables are built for  e+
+brCMS:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Gamma high energy threshold 10 MeV
 
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
@@ -201,20 +203,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=26s Real=41s Sys=10s
+  User=26s Real=41s Sys=11s
 
- nb tracks/event   neutral:    27.2700   charged:   695.2400
- nb  steps/event   neutral:   149.2500   charged:  3410.4800
+ nb tracks/event   neutral:    28.0500   charged:   695.5500
+ nb  steps/event   neutral:   152.7300   charged:  3382.4100
 
  total energy deposit: 100.0000 MeV
 
  nb of process calls per event: 
-          eIoni       eBrem       compt        phot        conv     annihil
-      3383.5800     25.3200    121.9800     25.6900      1.5800      1.5800
+          eIoni       brCMS       compt        phot        conv     annihil
+      3354.7000     26.1800    124.6800     26.5200      1.5300      1.5300
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1351988378, 1579045124
+ Current couple of seeds = 806652178, 237392496
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

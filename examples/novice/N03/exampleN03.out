@@ -201,8 +201,8 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 280.51911 MeV       total track length: 19.264691 cm 
-        Gap: total energy: 11.548292 MeV       total track length: 5.5307824 cm 
+   Absorber: total energy: 262.11291 MeV       total track length: 18.054157 cm 
+        Gap: total energy: 7.119194 MeV       total track length: 3.1139096 cm 
      Transportation,              hIoni,                msc,              eIoni
               eBrem,            annihil,               conv,              compt
                phot,             MuIoni,            MuBrems,         MuPairProd
@@ -213,11 +213,11 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 582988679, 2123498096
+ Current couple of seeds = 977069010, 720029362
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 266.10483 MeV       total track length: 19.130814 cm 
-        Gap: total energy: 25.780135 MeV       total track length: 13.01794 cm 
+   Absorber: total energy: 286.12027 MeV       total track length: 19.333389 cm 
+        Gap: total energy: 13.035624 MeV       total track length: 6.0435656 cm 
 
 ------------------------------------------------------------
 ---> The calorimeter is 30 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
@@ -311,10 +311,10 @@ msc:  Model variant of multiple scattering for pi-
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 627474132, 1958347498
+ Current couple of seeds = 2081483369, 416920707
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 413.90611 MeV       total track length: 98.024553 cm 
-        Gap: total energy: 84.19009 MeV       total track length: 2.3895934 m  
+   Absorber: total energy: 362.01305 MeV       total track length: 86.365046 cm 
+        Gap: total energy: 79.137034 MeV       total track length: 2.3265193 m  
 Graphics systems deleted.
 Visualization Manager deleting...

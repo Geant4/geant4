@@ -245,15 +245,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=30.84s Real=34.11s Sys=3.27s
+  User=31.42s Real=34.91s Sys=3.45s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events                     100
-Average number of e-                 1295
-Average number of gamma              681.2
-Average number of e+                 48.45
-Average number of steps              3796
+Average number of e-                 1292
+Average number of gamma              681
+Average number of e+                 48.33
+Average number of steps              3807
 ========================================================
 
 #

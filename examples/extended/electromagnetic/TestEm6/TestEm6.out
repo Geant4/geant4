@@ -167,8 +167,8 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   31.9 m       0 fm      0 fm   29.8 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    189 m   -4.12 mm  -4.49 cm   11.9 TeV  17.9 TeV   158 m     158 m          Iron      MuIoni
-    2    250 m     589 mum -4.69 cm   8.46 TeV  3.46 TeV  60.5 m     218 m    OutOfWorld  Transportation
+    1    189 m   -2.05 mm  -2.21 cm   8.97 TeV  20.8 TeV   158 m     158 m          Iron      MuIoni
+    2    250 m    2.24 mm   -2.4 cm   6.21 TeV  2.77 TeV  60.5 m     218 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
@@ -176,8 +176,8 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   31.9 m       0 fm      0 fm   70.2 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    217 m    2.91 cm   4.76 cm   20.6 TeV  49.6 TeV   185 m     185 m          Iron      MuIoni
-    2    250 m    2.96 cm   4.72 cm   13.3 TeV   7.3 TeV  33.1 m     218 m    OutOfWorld  Transportation
+    1    217 m     7.6 mm   1.24 cm   17.4 TeV  52.8 TeV   185 m     185 m          Iron      MuIoni
+    2    250 m    7.95 mm    1.2 cm   11.2 TeV  6.17 TeV  33.1 m     218 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -193,7 +193,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0    120 m       0 fm      0 fm     20 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m    1.11 mm   1.17 mm   9.94 TeV  10.1 TeV   130 m     130 m    OutOfWorld  Transportation
+    1    250 m    1.11 mm   1.17 mm    8.6 TeV  11.4 TeV   130 m     130 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
@@ -201,7 +201,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0    120 m       0 fm      0 fm     80 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m    -277 mum  -292 mum  44.2 TeV  35.8 TeV   130 m     130 m    OutOfWorld  Transportation
+    1    250 m    -277 mum  -292 mum  44.7 TeV  35.3 TeV   130 m     130 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -217,15 +217,15 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   91.5 m       0 fm      0 fm    567 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    130 m    -5.6 cm  -29.2 cm    416 GeV   151 GeV  38.9 m    38.9 m          Iron      MuIoni
-    2    163 m   -11.3 cm  -37.6 cm    234 GeV   182 GeV  32.1 m    71.1 m          Iron      MuIoni
-    3    184 m   -15.1 cm  -50.6 cm    180 GeV  53.6 GeV  21.6 m    92.6 m          Iron      MuIoni
-    4    202 m   -12.6 cm  -56.7 cm    142 GeV  38.3 GeV  17.7 m     110 m          Iron      MuIoni
-    5    217 m   -19.3 cm  -69.2 cm    112 GeV  30.4 GeV  14.7 m     125 m          Iron      MuIoni
-    6    229 m   -12.3 cm  -69.9 cm   87.3 GeV  24.3 GeV    12 m     137 m          Iron      MuIoni
-    7    238 m   -10.8 cm  -71.5 cm   65.9 GeV  21.4 GeV   9.8 m     147 m          Iron      MuIoni
-    8    246 m   -3.62 cm  -67.1 cm   52.8 GeV  13.1 GeV   7.7 m     155 m          Iron      MuIoni
-    9    250 m   -9.93 mm  -70.1 cm   45.7 GeV  7.14 GeV  3.91 m     158 m    OutOfWorld  Transportation
+    1    130 m   -3.16 cm  -16.8 cm    413 GeV   154 GeV  38.9 m    38.9 m          Iron      MuIoni
+    2    162 m   -8.77 cm  -25.1 cm    229 GeV   183 GeV    32 m    70.9 m          Iron      MuIoni
+    3    184 m   -13.9 cm  -39.1 cm    177 GeV  52.4 GeV  21.3 m    92.2 m          Iron      MuIoni
+    4    201 m   -11.5 cm  -44.6 cm    140 GeV  37.4 GeV  17.5 m     110 m          Iron      MuIoni
+    5    216 m   -18.7 cm  -57.1 cm    110 GeV  29.9 GeV  14.5 m     124 m          Iron      MuIoni
+    6    228 m   -12.1 cm  -57.5 cm   85.9 GeV  23.9 GeV  11.9 m     136 m          Iron      MuIoni
+    7    237 m   -11.1 cm  -58.6 cm   64.9 GeV    21 GeV  9.67 m     146 m          Iron      MuIoni
+    8    245 m   -4.27 cm  -54.1 cm     52 GeV  12.9 GeV   7.6 m     153 m          Iron      MuIoni
+    9    250 m   -9.47 mm    -58 cm   42.5 GeV   9.5 GeV  5.21 m     158 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
@@ -233,7 +233,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   91.5 m       0 fm      0 fm   99.4 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m   -40.5 mum -4.92 mum    36 TeV  63.4 TeV   158 m     158 m    OutOfWorld  Transportation
+    1    250 m   -40.5 mum -4.92 mum  55.3 TeV  44.2 TeV   158 m     158 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -249,9 +249,9 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -190 m       0 fm      0 fm   82.5 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1  -61.8 cm  -5.73 cm   2.49 cm   21.6 TeV  60.9 TeV   189 m     189 m          Iron      MuIoni
-    2    147 m    6.31 mm    1.5 cm    8.1 TeV  13.5 TeV   147 m     336 m          Iron      MuIoni
-    3    250 m    8.78 mm   3.44 cm   4.57 TeV  3.53 TeV   103 m     440 m    OutOfWorld  Transportation
+    1  -61.8 cm  -1.31 cm   5.58 mm   24.8 TeV  57.7 TeV   189 m     189 m          Iron      MuIoni
+    2    151 m    1.04 cm    3.5 mm   8.58 TeV  16.2 TeV   152 m     341 m          Iron      MuIoni
+    3    250 m    1.21 cm   1.82 cm   4.59 TeV  3.99 TeV  98.8 m     440 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
@@ -259,15 +259,15 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -190 m       0 fm      0 fm   17.5 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1  -49.3 m    1.44 cm   4.56 cm   7.95 TeV   9.6 TeV   141 m     141 m          Iron      MuIoni
-    2   66.3 m   -1.14 cm   10.4 cm   4.21 TeV  3.74 TeV   116 m     256 m          Iron      MuIoni
-    3    162 m    2.45 cm   19.7 cm   2.45 TeV  1.76 TeV  95.4 m     351 m          Iron      MuIoni
-    4    240 m   -9.84 mm   24.6 cm    1.4 TeV  1.05 TeV  78.9 m     430 m          Iron      MuIoni
-    5    250 m   -1.15 cm   25.1 cm    1.3 TeV  93.7 GeV  9.53 m     440 m    OutOfWorld  Transportation
+    1  -49.3 m    8.74 mm   2.67 cm   6.36 TeV  11.2 TeV   141 m     141 m          Iron      MuIoni
+    2   59.2 m    -1.1 cm   7.49 cm   3.07 TeV  3.28 TeV   108 m     249 m          Iron      MuIoni
+    3    145 m    2.07 cm     16 cm   1.77 TeV   1.3 TeV  85.8 m     335 m          Iron      MuIoni
+    4    214 m    3.99 mm   19.6 cm   1.03 TeV   743 GeV  69.1 m     404 m          Iron      MuIoni
+    5    250 m   -5.63 mm   21.4 cm    774 GeV   253 GeV    36 m     440 m    OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.01s Real=2.04s Sys=0.02s
+  User=0.02s Real=0.15s Sys=0.02s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

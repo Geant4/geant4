@@ -52,7 +52,7 @@ Current available graphics systems are:
 /testem/phys/addPhysics  standard	# em physics     
 PhysicsList::AddPhysicsList: <standard>
 ###/testem/phys/addPhysics  g4v52	# em physics
-#/testem/phys/addPhysics  binary		# hadronic physics
+###/testem/phys/addPhysics  binary	# hadronic physics
 #
 /run/initialize
 userDetector->Construct() start.
@@ -235,20 +235,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=157.8s Real=351.83s Sys=76.83s
+  User=157.51s Real=368.97s Sys=75.68s
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
-tally 0: 	 	10.392776 GeV	0.64954851 % 	0.00020813838 Gy
-tally 1: 	 	7.8411972 GeV	0.49007483 % 	0.00015703736 Gy
-tally 2: 	 	3.5135969 GeV	0.2195998 % 	7.0367565e-05 Gy
-tally 3: 	 	1.7251868 GeV	0.10782418 % 	3.4550691e-05 Gy
+tally 0: 	 	10.365691 GeV	0.64785572 % 	0.00020759595 Gy
+tally 1: 	 	7.9451868 GeV	0.49657418 % 	0.00015911998 Gy
+tally 2: 	 	3.5888396 GeV	0.22430247 % 	7.1874468e-05 Gy
+tally 3: 	 	1.8385611 GeV	0.11491007 % 	3.6821262e-05 Gy
 
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1526069608, 646338923
+ Current couple of seeds = 1661529763, 1885629357
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
