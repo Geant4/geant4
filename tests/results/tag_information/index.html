@@ -1,7 +1,8 @@
 <html>
 <head>
 <title>System Testing report on large-N tests</title>
-<!-- Changed by: Serguei SADILOV, 22-Oct-2003 -->
+<!--Changed by: Serguei SADILOV,  3-Feb-2004  -->
+<!--Changed by: Serguei SADILOV,  3-Feb-2004  -->
 <!--Changed by: Serguei SADILOV,  9-Jul-2003  -->
 <!--Changed by: Serguei SADILOV,  8-Jul-2003  -->
 </head>
@@ -17,49 +18,52 @@ Report on Errors and Warnings arising from system testing on the
 <p>
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
       for all platforms. 
-<pre>																				  not
-                                                                                                                                 				 tested
-               1        2        3         4           5         6          7  	        8         9             10      11         12       13          14         15        16
------------+---------+---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+----------+----------+---------+---------+
-           | SUN-CC  | SUN-CC  | SUN-CC  | SUN-CC  |Linux-egcs|Linux-egcs|Linux-g++ |Linux-g++ | Linux-g++| Linux-g++|Linux-g++|Linux-g++| Linux-g++| Linux-g++| WIN32-VC| WIN32-VC|
-           |optim_ISO|debug_ISO|optim_54 |debug_54 |egcs.optim|egcs.debug|opt.61_295|deb.61.295|opt.73_295|deb.73_295|opt.73_32|deb.73_32|opt.IA64  |deb.IA64  | optim   |   debug |
-  	   | sungeant| sungeant| refsol8 | refsol8 | pcgeant  |  pcgeant | pcg4speed| pcg4speed| pcgeant2 | pcgeant2 |pcgeant3 | pcgeant3| opladev01| opladev01|pcg4zeta | pcg4zeta|
------------+---------+---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+----------+----------+---------+---------+
-test01     |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
-test02     |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
-test02.h   |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
-test05     |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
------------+---------+---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+----------+----------+---------+---------+
-test06     |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
-test07     |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
-test09     |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
-test10     |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
------------+---------+---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+----------+----------+---------+---------+
-test11     |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         | data    |
-test12     |         |         |         |         | WLC      |          |          |          |          |          |         |         |          |          |         | WLD     |
-test13     | WL1     | WL1     | WL1   	 | WL1 	   | WL1A     | WL1      |  WL1     | WL1      |  WL1     | WL1      |  WL1    | WL1     | WL1      | WL1      |         | WLD     |
-test14     |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
-test15     |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         | data    |
------------+---------+---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+----------+----------+---------+---------+
-test16     |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
-test17     |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         | data    |
-test18     |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
-test20     |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         | data    |
-test21     | WL28    | WL28    |WL238 	 |WL238    | WLC      | WLC      |  WL2     |  WL2     | WL2   	  | WL2	     |  WL28   | WL2     | WL28     | WL2      |         |         |
-test22     |         |         |         |         |WLC       | WLC      |          |          |          |          |  WL9G   |         |          |          |         | crash   |
-test24     |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         | WLD 	   |
-test25     |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         | WLD 	   |
------------+---------+---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+----------+----------+---------+---------+
-test103    |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
-test104    |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
-test104.Em |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
-test502    |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
-test505    |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         | crash   |
-test506    |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
-test508    |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
-test5010   |         |         |         |         |          |          |          |          |          |          |         |         |          |          |         |         |
------------+---------+---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+----------+----------+---------+---------+
-                                                                                                                                                                                     
+<pre>					
+
+
+                                  license expired                                               compilation problems
+                                    |         |                                                   |          |
+               1        2           3         4        9             10      11         12       13          14         15        16
+-----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
+           | SUN-CC  | SUN-CC  | SUN-CC  | SUN-CC  | Linux-g++| Linux-g++|Linux-g++|Linux-g++| Linux-g++| Linux-g++|WIN32-VC7|WIN32-VC7|
+           |optim_ISO|debug_ISO|optim_54 |debug_54 |opt.73_295|deb.73_295|opt.73_32|deb.73_32|opt.IA64  |deb.IA64  | optim   |   debug |
+  	   | sungeant| sungeant| refsol8 | refsol8 | pcgeant2 | pcgeant2 |pcgeant3 | pcgeant3| opladev01| opladev01|pcepsft16|pcepsft16|
+-----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
+test01     |         |         |         |         |          |          |         |         |          |          |         |         |
+test02     |         |         |         |         |          |          |         |         |          |          |         |         |
+test02.h   |         |         |         |         |          |          |         |         |          |          |         |         |
+test05     |         |         |         |         |          |          |         |         |          |          |         |         |
+-----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
+test06     |         |         |         |         |          |          |         |         |          |          |         |         |
+test07     |         |         |         |         |          |          |         |         |          |          |         |         |
+test09     |         |         |         |         |          |          |         |         |          |          |         |         |
+test10     |         |         |         |         |          |          |         |         |          |          |         |         |
+-----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
+test11     |         |         |         |         |          |          |         |         |          |          |         |         |
+test12     |         |         |         |         |          |          |         |         |          |          |         | WLD     |
+test13     | WL1     | WL1     |    	 | WL1 	   |  WL1     | WL1      |  WL1    | WL1     |          |          |         | WLD     |
+test14     |         |         |         |         |          |          |         |         |          |          |         |         |
+test15     |         |         |         |         |          |          |         |         |          |          |         |         |
+-----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
+test16     |         |         |         |         |          |          |         |         |          |          |         |         |
+test17     |         |         |         |         |          |          |         |         |          |          |         |         |
+test18     |         |         |         |         |          |          |         |         |          |          |         |         |
+test20     |         |         |         |         |          |          |         |         |          |          |         |         |
+test21     |         |         | 	 |         |          | WL1      |         |         |          |          |         |         |
+test22     |         |         |         |         |          |          |  EL1    |         |          |          |         | crash   |
+test24     |         |         |         |         |          |          |         |         |          |          |         | WLD     |
+test25     |         |         |         |         |          |          |         |         |          |          |         | WLD     |
+-----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
+test103    |         |         |         |         |          |          |         |         |          |          |         |         |
+test104    |         |         |         |         |          |          |         |         |          |          |         |         |
+test104.Em |         |         |         |         |          |          |         |         |          |          |         |         |
+test502    |         |         |         |         |          |          |         |         |          |          |         |         |
+test505    |         |         |         |         |          |          |         |         |          |          |         | crash   |
+test506    |         |         |         |         |          |          |         |         |          |          |         |         |
+test508    |         |         |         |         |          |          |         |         |          |          |         |         |
+test5010   |  EL2    |         |         |         |          |          |         |         |          |          |         |         |
+-----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
+       
  abend  - crash without clue				
  Labend - crash in large_N test				
  testing - under testing now				
@@ -76,65 +80,14 @@ WL1
     total mass (4.69395) >= total energy (4.51751)
 
 
-WL2
--------
-
-*!*G4QE::Fr: Cann't correct 3727.38+1875.61=5602.99>5599.7
-*!*G4QE::Fr: Cann't correct 3727.38+939.566=4666.95>4648.42
-*!*G4QE::Fr: Cann't correct 57675.1+1875.61=59550.7>59520.7
-*!*G4QE::Fr: Cann't correct 56744.4+939.566=57684>57658
-*!*G4QE::Fr: Cann't correct 56744.4+-1.19209e-07=56744.4>56719.8
-*!*G4QE::Fr: Cann't correct 22335.8+938.272=23274.1>23267.2
-*!*G4QE::Fr: Cann't correct 21409.2+493.68=21902.9>21855.4
+EL1
+----
 
 
-WL3
+
+
+EL2
 ---
-boostVector computed for a non-timelike LorentzVector 
-at line 185 in file LorentzVector.cc
-
-
-WL8
----
-*G4Quasmon::FillHadronVector:PDG=90004999,M=3896.66
-
-WL9
----
-***G4ElectroNuclearCrossSection::GetEquPhotE:27.4547>11.2467,S=2.55752,ris=2.55144,B=46,E=335,Y=2.53088
-
-
-WLB
----
-             Boost Vector supplied to set HepLorentzRotation represents speed >= c.
-             at line 33 in file LorentzRotation.cc
-
-WLC
----
-
-           G4HadronBuilder::Build()
-              Invalid total charge found for on input: 1
-              PGDcode input quark1/quark2 : -1 / 2
-
-WLD
----
-G4PreCompoundModel::DeExcite: Excitation energy less than 0!
-
-*** G4Exception: Aborting execution ***
-
-abnormal program termination
-Command exited with non-zero status 3
-
-
-WLF
----
-G4ParticleChange::CheckIt
-
-WLG
----
-*** G4Exception : 200
-      issued by : G4ParticleChange::CheckIt
-momentum, energy, and/or time was illegal
-*** Event Must Be Aborted 
 
 -------------------------------------------------------------------------------------------------------------------------
 
