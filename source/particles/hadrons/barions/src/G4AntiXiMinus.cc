@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiXiMinus.cc,v 1.2 1999-06-09 16:08:33 kurasige Exp $
+// $Id: G4AntiXiMinus.cc,v 1.3 1999-10-03 09:13:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@ G4AntiXiMinus::G4AntiXiMinus(
        G4int               baryon,       G4int               encoding,
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable )
- : G4VBarion( aName,mass,width,charge,iSpin,iParity,
+ : G4VBaryon( aName,mass,width,charge,iSpin,iParity,
               iConjugation,iIsospin,iIsospin3,gParity,pType,
               lepton,baryon,encoding,stable,lifetime,decaytable )
 {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BarionConstructor.cc,v 1.1 1999-01-07 16:10:00 gunter Exp $
+// $Id: G4BaryonConstructor.cc,v 1.1 1999-10-03 09:13:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,11 +13,11 @@
 //	GEANT 4 class implementation file 
 //
 
-#include "G4BarionConstructor.hh"
+#include "G4BaryonConstructor.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-// Barions
+// Baryons
 #include "G4Proton.hh"
 #include "G4AntiProton.hh"
 #include "G4Neutron.hh"
@@ -55,31 +55,31 @@
 #include "G4AntiXicZero.hh"
 #include "G4AntiOmegacZero.hh"
 
-G4BarionConstructor::G4BarionConstructor()
+G4BaryonConstructor::G4BaryonConstructor()
 {
 }
 
-G4BarionConstructor::~G4BarionConstructor()
+G4BaryonConstructor::~G4BaryonConstructor()
 {
 }
 
 
-void G4BarionConstructor::ConstructParticle()
+void G4BaryonConstructor::ConstructParticle()
 {
   ConstructNucleons();
-  ConstructStrangeBarions();
-  ConstructCharmBarions();
-  ConstructBottomBarions();
+  ConstructStrangeBaryons();
+  ConstructCharmBaryons();
+  ConstructBottomBaryons();
 }
 
-void G4BarionConstructor::ConstructNucleons()
+void G4BaryonConstructor::ConstructNucleons()
 {
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
   G4Neutron::NeutronDefinition();
   G4AntiNeutron::AntiNeutronDefinition();
 }
-void G4BarionConstructor::ConstructStrangeBarions()
+void G4BaryonConstructor::ConstructStrangeBaryons()
 {
   G4Lambda::LambdaDefinition();
   G4AntiLambda::AntiLambdaDefinition();
@@ -96,7 +96,7 @@ void G4BarionConstructor::ConstructStrangeBarions()
   G4OmegaMinus::OmegaMinusDefinition();
   G4AntiOmegaMinus::AntiOmegaMinusDefinition();
 }
-void G4BarionConstructor::ConstructCharmBarions()
+void G4BaryonConstructor::ConstructCharmBaryons()
 {
   G4LambdacPlus::LambdacPlusDefinition();
   G4SigmacPlusPlus::SigmacPlusPlusDefinition();
@@ -114,6 +114,6 @@ void G4BarionConstructor::ConstructCharmBarions()
   G4AntiOmegacZero::AntiOmegacZeroDefinition();
 }
 
-void G4BarionConstructor::ConstructBottomBarions()
+void G4BaryonConstructor::ConstructBottomBaryons()
 {
 }

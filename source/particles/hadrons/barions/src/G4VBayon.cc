@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VBarion.cc,v 1.1 1999-01-07 16:10:03 gunter Exp $
+// $Id: G4VBayon.cc,v 1.1 1999-10-03 09:13:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,9 +18,9 @@
 //      2nd December 1995, G.Cosmo
 // --------------------------------------------------------------
 
-#include "G4VBarion.hh"
+#include "G4VBaryon.hh"
 
-const G4VBarion & G4VBarion::operator=(const G4VBarion &right)
+const G4VBaryon & G4VBaryon::operator=(const G4VBaryon &right)
 {
   if (this != &right) {
   } return right;
