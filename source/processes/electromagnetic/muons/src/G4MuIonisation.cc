@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.cc,v 1.21 2001-11-05 15:22:28 urban Exp $
+// $Id: G4MuIonisation.cc,v 1.22 2001-11-07 06:08:31 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------- G4MuIonisation physics process ------------------------------
@@ -38,7 +38,7 @@
 // 17-09-01 migration of Materials to pure STL (mma)
 // 26-09-01 completion of RetrievePhysicsTable (mma)
 // 29-10-01 all static functions no more inlined (mma)  
-//
+// 07-11-01 correction(Tmax+xsection computation) L.Urban
 // -----------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -471,17 +471,15 @@ G4VParticleChange* G4MuIonisation::PostStepDoIt(const G4Track& trackData,
  G4double te2 = 0.5*rate*rate;
  
  // sampling follows ...
- G4double x,twoep,grej;
+ G4double x,twoep,a1,grej;
  const G4double alphaprime = fine_structure_const/twopi; 
  G4double a0=log(2.*TotalEnergy/ParticleMass); 
- G4double grejc=(1.-betasquare*xc+te2*xc*xc)*(1.+ alphaprime*a0*a0);
+ G4double grejc=(1.-xc*(betasquare*xc-xc*te2))*(1.+ alphaprime*a0*a0);
  do { x=xc/(1.-(1.-xc)*G4UniformRand());
       twoep = 2.*x*MaxKineticEnergyTransfer;
-      grej=(1.-x*(betasquare-x*te2))*
-           (1.+alphaprime*log(1.+twoep/electron_mass_c2)*
-           (a0+log((2.*TotalEnergy-twoep)/ParticleMass)-
-            log(1.+twoep/electron_mass_c2)))      
-           /grejc;
+      a1    = log(1.+twoep/electron_mass_c2);
+      grej  = (1.-x*(betasquare-x*te2))*(1.+alphaprime*a1*
+           (a0+log((2.*TotalEnergy-twoep)/ParticleMass)-a1))/grejc ;
     } while(G4UniformRand() > grej);
     
  G4double  DeltaKineticEnergy = x * MaxKineticEnergyTransfer;
