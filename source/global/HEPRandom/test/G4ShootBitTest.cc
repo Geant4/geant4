@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShootBitTest.cc,v 1.5 2001-07-11 10:00:45 gunter Exp $
+// $Id: G4ShootBitTest.cc,v 1.6 2003-06-06 16:17:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 // Peter Urban, 5th Sep 1996
 
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 #include "Randomize.hh"
 #include "G4Timer.hh"
 

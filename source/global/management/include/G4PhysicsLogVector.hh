@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.hh,v 1.7 2001-07-11 10:00:50 gunter Exp $
+// $Id: G4PhysicsLogVector.hh,v 1.8 2003-06-06 16:17:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ class G4PhysicsLogVector : public G4PhysicsVector
     ~G4PhysicsLogVector();
       // Destructor
 
-    G4bool Retrieve(G4std::ifstream& fIn, G4bool ascii);
+    G4bool Retrieve(std::ifstream& fIn, G4bool ascii);
       // To retrieve persistent data from file stream.
 
   protected:

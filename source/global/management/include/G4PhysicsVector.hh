@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.11 2003-05-21 12:48:28 gcosmo Exp $
+// $Id: G4PhysicsVector.hh,v 1.12 2003-06-06 16:17:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,11 +53,11 @@
 #ifndef G4PhysicsVector_h
 #define G4PhysicsVector_h 1
 
-#include "g4std/vector"
+#include <vector>
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/iostream"
-#include "g4std/fstream"
+#include <iostream>
+#include <fstream>
 
 #include  "G4PhysicsVectorType.hh"
 
@@ -126,15 +126,15 @@ class G4PhysicsVector
     inline G4PhysicsVectorType GetType() const;
          // Get physics vector type
 
-    virtual G4bool Store(G4std::ofstream& fOut, G4bool ascii=false);
-    virtual G4bool Retrieve(G4std::ifstream& fIn, G4bool ascii=false);
+    virtual G4bool Store(std::ofstream& fOut, G4bool ascii=false);
+    virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii=false);
          // To store/retrieve persistent data to/from file streams.
 
-    friend G4std::ostream& operator<<(G4std::ostream&, const G4PhysicsVector&);
+    friend std::ostream& operator<<(std::ostream&, const G4PhysicsVector&);
 
   protected:
 
-    typedef G4std::vector<G4double> G4PVDataVector;
+    typedef std::vector<G4double> G4PVDataVector;
 
     G4PhysicsVectorType type;   // The type of PhysicsVector (enumerator)
 

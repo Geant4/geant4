@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ios.cc,v 1.5 2001-07-11 10:00:59 gunter Exp $
+// $Id: G4ios.cc,v 1.6 2003-06-06 16:17:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,14 +33,12 @@
 // History 1998 Nov. 3 Masayasu Nagamatu
 
 #include "G4ios.hh"
-
-
 #include "G4strstreambuf.hh"
 
 G4strstreambuf G4coutbuf;
 G4strstreambuf G4cerrbuf;
-G4std::ostream G4cout(&G4coutbuf);
-G4std::ostream G4cerr(&G4cerrbuf);
+std::ostream G4cout(&G4coutbuf);
+std::ostream G4cerr(&G4cerrbuf);
 
 
 

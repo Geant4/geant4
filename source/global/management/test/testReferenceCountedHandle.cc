@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testReferenceCountedHandle.cc,v 1.8 2001-11-07 14:13:58 radoone Exp $
+// $Id: testReferenceCountedHandle.cc,v 1.9 2003-06-06 16:17:18 gcosmo Exp $
 // 
 //
 // The program testing features and behaviour of the
@@ -65,17 +65,17 @@ public:
     fData = str;
   }
   
-  TesterString( G4std::string& str ) : fData(str) {}
+  TesterString( std::string& str ) : fData(str) {}
   
   ~TesterString(){
     G4cout << "Tester " << fData << " being destroyed..." << G4endl;    
   }
   
-  inline const G4std::string& Data() const {
+  inline const std::string& Data() const {
     return fData;
   }
   
-  inline void  SetData( const G4std::string& data ) {
+  inline void  SetData( const std::string& data ) {
     fData = data;
   }
   
@@ -88,7 +88,7 @@ public:
   }
   
 private:
-  G4std::string fData;
+  std::string fData;
 };
 
 
@@ -125,7 +125,7 @@ typedef G4ReferenceCountedHandle<TesterInt>    CountedInt;
 // Beta prototype of the class monitoring run-time activity of the RC handles
 class HandleWatcher {
 public:
-  typedef G4std::vector<G4ReferenceCountedHandle<TesterBase> >       Handles;
+  typedef std::vector<G4ReferenceCountedHandle<TesterBase> >       Handles;
   typedef Handles::iterator          HandlesIt;
   typedef Handles::const_iterator    HandlesCIt;
   
@@ -258,7 +258,7 @@ int main( int argc, char* argv[] )
   
   //watcher.AddHandle( t4 ); 
   
-  G4std::string str = "New";
+  std::string str = "New";
   t1 = new TesterString( str );
   assert( 1 == t1.Count() );    
   G4cout << "\nAfter assignment of a counted object pointer to t1:\n" << G4endl;

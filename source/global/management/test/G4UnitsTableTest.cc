@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTableTest.cc,v 1.6 2001-07-11 10:01:00 gunter Exp $
+// $Id: G4UnitsTableTest.cc,v 1.7 2003-06-06 16:17:18 gcosmo Exp $
 // 
 // ----------------------------------------------------------------------
 #include "G4ios.hh"
@@ -29,7 +29,7 @@
 #include "G4ThreeVector.hh"
 #include "G4UnitsTable.hh"
 
-#include "g4std/iomanip"
+#include <iomanip>
  
 int main()
 {
@@ -63,9 +63,9 @@ int main()
    G4cout << "\n \t G4BestUnit \n";
    G4cout.precision(3);   
 
-   G4cout << " a = " << G4std::setw(4) << G4BestUnit (0.5*GeV ,"Energy") << G4endl;    
-   G4cout << " b = " << G4std::setw(4) << G4BestUnit (0.15*MeV,"Energy") << G4endl;
-   G4cout << " c = " << G4std::setw(4) << G4BestUnit (4000*MeV,"Energy") << G4endl;
+   G4cout << " a = " << std::setw(4) << G4BestUnit (0.5*GeV ,"Energy") << G4endl;    
+   G4cout << " b = " << std::setw(4) << G4BestUnit (0.15*MeV,"Energy") << G4endl;
+   G4cout << " c = " << std::setw(4) << G4BestUnit (4000*MeV,"Energy") << G4endl;
 
    G4double x = -1000.*cm;   
    G4BestUnit d(x,"Length");         G4cout << " x = " << d << G4endl;
@@ -75,8 +75,8 @@ int main()
    
    G4ThreeVector point(2*mm, 3*cm, 1*m);
    G4ThreeVector momen(3*MeV, 2*keV, 0.);
-   G4cout << G4std::setw(6) << G4BestUnit (point, "Length") << G4endl;
-   G4cout << G4std::setw(6) << G4BestUnit (momen, "Energy") << G4endl;
+   G4cout << std::setw(6) << G4BestUnit (point, "Length") << G4endl;
+   G4cout << std::setw(6) << G4BestUnit (momen, "Energy") << G4endl;
    
 // Define new units
 //
