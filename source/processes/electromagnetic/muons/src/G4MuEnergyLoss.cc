@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuEnergyLoss.cc,v 1.10 2000-02-10 08:24:39 urban Exp $
+// $Id: G4MuEnergyLoss.cc,v 1.11 2000-02-17 09:08:07 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -381,6 +381,8 @@ G4VParticleChange* G4MuEnergyLoss::AlongStepDoIt(
 {
  // compute the energy loss after a Step
 
+  static const G4double faclow = 1.5 ;
+
   // get particle and material pointers from trackData
   const G4DynamicParticle* aParticle = trackData.GetDynamicParticle();
   G4double E      = aParticle->GetKineticEnergy() ;
@@ -400,10 +402,10 @@ G4VParticleChange* G4MuEnergyLoss::AlongStepDoIt(
   G4double MeanLoss, finalT;
  
   if (E < MinKineticEnergy)    finalT = 0.; 
-  else if ( E<= LowerBoundEloss)
+  else if ( E< faclow*LowerBoundEloss)
   {
     if (Step >= fRangeNow)  finalT = 0.;
-    else finalT = E - Step*fdEdx ;
+    else finalT = E*(1.-Step/fRangeNow) ;
   }
    
   else if (E>=UpperBoundEloss) finalT = E - Step*fdEdx;
