@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03ElectroMagneticField.hh,v 1.4 2003-06-25 16:42:33 japost Exp $
+// $Id: F03ElectroMagneticField.hh,v 1.5 2003-12-01 17:01:22 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,7 +41,7 @@ class G4Mag_UsualEqRhs;
 class G4MagIntegratorStepper;
 class F03FieldMessenger;
 
-class F03ElectroMagneticField : public G4MagneticField
+class F03ElectroMagneticField 
 {
 
 public:
@@ -50,9 +50,6 @@ public:
   F03ElectroMagneticField(G4ThreeVector) ;  //  The value of the field
  ~F03ElectroMagneticField() ;
       
-  void  GetFieldValue( const  G4double Point[3],
-		       G4double *Bfield ) const;
-  
   void SetStepperType( G4int i) { fStepperType = i ; }
 
   void SetStepper();
