@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.72 2001-08-03 09:46:31 gcosmo Exp $
+# $Id: architecture.gmk,v 1.73 2001-08-06 07:22:25 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -13,7 +13,9 @@
 # List of the supported architectures/compilers and related flavors for
 # the environment variable G4SYSTEM:
 #
-#          Linux-g++   Linux (Red Hat 6.1), gcc 2.95.2 (default)
+#          Linux-g++   Linux (Red Hat 6.1), gcc-2.95.2 (default)
+#
+#          Linux-egcs  Linux (Red Hat 6.1), egcs-1.1.2
 #
 #          SUN-CC      SunOS 5.7, CC 5.2
 #
@@ -342,7 +344,7 @@ endif
 # coherent we set in Geant4 the default toolkit to lesstif 
 # on Linux in order to link with -lXaw, etc...
 ifndef G4_OPACS_WIDGET_SET
-  ifeq ($(G4SYSTEM),Linux-g++)
+  ifeq ($(findstring Linux,$(G4SYSTEM)),Linux)
     G4_OPACS_WIDGET_SET := lesstif
   else
     G4_OPACS_WIDGET_SET := Xm
