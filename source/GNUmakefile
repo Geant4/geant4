@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.29 2001-10-12 07:52:32 gcosmo Exp $
+# $Id: GNUmakefile,v 1.30 2001-11-16 14:48:13 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -130,6 +130,7 @@ clean:
 	@rm -rf $(G4TMPDIR)
 	@rm -rf $(G4LIBDIR)
 	@rm -rf $(G4BINDIR)
+	@rm -rf ../.config/bin/$(G4SYSTEM)
 ifdef CFRONT
 	@rm -rf $(G4TREP)
 endif
@@ -146,3 +147,5 @@ clean_all:
 	@rm -rf $(G4BIN)
 	@echo Removing $(G4INCLUDE) ...
 	@rm -rf $(G4INCLUDE)
+	@echo Removing installation configurations ...
+	@rm -rf ../.config
