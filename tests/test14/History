@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999-06-14 15:18:47 aforti Exp $
+$Id: History,v 1.3 2000-04-25 12:16:32 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26th April 2000  John Allison  (test14-V01-01-00)
+- Tagged HEAD for convenience of test team.
 
 17 Apr., 1999 H.Kurashige 
 - Modify SetCuts() and ConstructParticle() in Tst09PhysicsList
