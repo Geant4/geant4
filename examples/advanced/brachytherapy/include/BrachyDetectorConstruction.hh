@@ -46,10 +46,6 @@ class BrachyDetectorConstruction : public G4VUserDetectorConstruction
   G4double GetBoxDim_X() {return  m_BoxDimX;}; 
   G4double GetBoxDim_Z() {return  m_BoxDimZ;};
   
-
-
-	G4String m_SDName;
-
  public:
 	G4VPhysicalVolume* Construct();
 
@@ -59,6 +55,7 @@ private:
   G4double        m_BoxDimX;
   G4double        m_BoxDimY;
   G4double        m_BoxDimZ;
+  G4String m_SDName;
  };
 #endif
 
