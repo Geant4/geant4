@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.13 2004-09-08 15:13:53 grichine Exp $
+// $Id: testG4Sphere.cc,v 1.14 2004-11-11 14:24:25 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -147,6 +147,8 @@ int main(void)
                   1.578117755366325,
                   0.014642857142867141);
 
+
+
     G4Sphere s9("s9",0*mm,410*mm,0*degree,360*degree,90*degree,90*degree);
 
     G4Sphere b402("b402", 475*mm, 480*mm, 
@@ -201,6 +203,15 @@ G4ThreeVector s9v(-0.6542770611918751,
   G4ThreeVector pLHCB(8600.242072535835,-255.1193517702246,-69.0010277128286);
 
 
+
+  G4Sphere b658("b658", 209.6*mm, 211.2658*mm, 
+                           0.0*degree, 360*degree, 0.0*degree, 90*degree); 
+
+
+  G4ThreeVector p658(-35.69953348982516*mm, 198.3183279249958, 56.30959457033987 ); 
+  G4ThreeVector v658(-.2346058124516908,-0.9450502890785083,0.2276841318065671); 
+
+
   G4Sphere spAroundX("SpAroundX",  10.*mm, 1000.*mm, -1.0*degree, 
                                                      2.0*degree, 
                                         0.*degree, 180.0*degree );
@@ -236,14 +247,14 @@ G4ThreeVector s9v(-0.6542770611918751,
     // Some user application cases
 
     Dist = s4.DistanceToOut(ponrmin3,vmz,calcNorm,pgoodNorm,pNorm) ;
-    G4cout<<"s4.DistanceToOut(ponrmin3,vmz,calcNorm,pgoodNorm,pNorm) = "<<Dist
-        <<G4endl ;
+    // G4cout<<"s4.DistanceToOut(ponrmin3,vmz,calcNorm,pgoodNorm,pNorm) = "<<Dist
+    //    <<G4endl ;
     Dist = s6.DistanceToOut(ponrminJ,vmz,calcNorm,pgoodNorm,pNorm) ;
-    G4cout<<"s6.DistanceToOut(ponrminJ,vmz,calcNorm,pgoodNorm,pNorm) = "<<Dist
-        <<G4endl ;
+    // G4cout<<"s6.DistanceToOut(ponrminJ,vmz,calcNorm,pgoodNorm,pNorm) = "<<Dist
+    //    <<G4endl ;
     Dist = s6.DistanceToOut(ponrmaxJ,vmz,calcNorm,pgoodNorm,pNorm) ;
-    G4cout<<"s6.DistanceToOut(ponrmaxJ,vmz,calcNorm,pgoodNorm,pNorm) = "<<Dist
-        <<G4endl ;
+    // G4cout<<"s6.DistanceToOut(ponrmaxJ,vmz,calcNorm,pgoodNorm,pNorm) = "<<Dist
+    //  <<G4endl ;
 
     Dist = s7.DistanceToOut(G4ThreeVector(1399.984667238032,
                                              5.9396696802500299,
@@ -252,8 +263,8 @@ G4ThreeVector s9v(-0.6542770611918751,
                                          -0.80958849145715217,
                                           0.29123565499656401),
                                         calcNorm,pgoodNorm,pNorm) ;
-    G4cout<<"s7.DistanceToOut(shereP,sphereV,calcNorm,pgoodNorm,pNorm) = "<<Dist
-        <<G4endl ;
+    // G4cout<<"s7.DistanceToOut(shereP,sphereV,calcNorm,pgoodNorm,pNorm) = "<<Dist
+    //   <<G4endl ;
 
     Dist = s7.DistanceToIn(G4ThreeVector(1399.984667238032,
                                              5.9396696802500299,
@@ -261,8 +272,8 @@ G4ThreeVector s9v(-0.6542770611918751,
                             G4ThreeVector(0.50965504781062942,
                                          -0.80958849145715217,
                                           0.29123565499656401)) ;
-    G4cout<<"s7.DistanceToIn(shereP,sphereV,calcNorm,pgoodNorm,pNorm) = "<<Dist
-        <<G4endl ;
+    // G4cout<<"s7.DistanceToIn(shereP,sphereV,calcNorm,pgoodNorm,pNorm) = "<<Dist
+    //    <<G4endl ;
 
 
     
@@ -271,51 +282,41 @@ G4ThreeVector s9v(-0.6542770611918751,
     EInside inside = s7.Inside(G4ThreeVector(1399.984667238032,
                                              5.9396696802500299,
                                             -2.7661927818688308)  ) ;
-    G4cout<<"s7.Inside(G4ThreeVector(1399.98466 ... = "
-          <<OutputInside(inside)<<G4endl ;
+    // G4cout<<"s7.Inside(G4ThreeVector(1399.98466 ... = "
+    //       <<OutputInside(inside)<<G4endl ;
 
     inside = s8.Inside(G4ThreeVector(-249.5020724528353*mm,
 					       26.81253142743162*mm,
                                               114.8988524453591*mm  )  ) ;
-    G4cout<<"s8.Inside(G4ThreeVector(-249.5020 ... = "
-          <<OutputInside(inside)<<G4endl ;
+    // G4cout<<"s8.Inside(G4ThreeVector(-249.5020 ... = "<<OutputInside(inside)<<G4endl ;
     inside = b216.Inside(p216);
-    G4cout<<"b216.Inside(p216) = "
-          <<OutputInside(inside)<<G4endl ;
+    // G4cout<<"b216.Inside(p216) = "<<OutputInside(inside)<<G4endl ;
     inside = s1.Inside(pz);
-    G4cout<<"s1.Inside(pz) = "
-          <<OutputInside(inside)<<G4endl ;
+    // G4cout<<"s1.Inside(pz) = "<<OutputInside(inside)<<G4endl ;
 
     inside = s9.Inside(s9p);
-    G4cout<<"s9.Inside(s9p) = "
-          <<OutputInside(inside)<<G4endl ;
+    // G4cout<<"s9.Inside(s9p) = "<<OutputInside(inside)<<G4endl ;
 
     inside = b402.Inside(p402);
-    G4cout<<"p402.Inside(p402) = "
-          <<OutputInside(inside)<<G4endl ;
+    // G4cout<<"p402.Inside(p402) = "<<OutputInside(inside)<<G4endl ;
 
     inside = s10.Inside(s10p);
-    G4cout<<"s10.Inside(s10p) = "
-          <<OutputInside(inside)<<G4endl ;
-    G4cout<<"p radius = "
-          <<s10p.mag()<<G4endl ;
+    // G4cout<<"s10.Inside(s10p) = "<<OutputInside(inside)<<G4endl ;
+    // G4cout<<"p radius = "<<s10p.mag()<<G4endl ;
     
     inside = s11.Inside(ps11);
-    G4cout<<"s11.Inside(ps11) = "
-          <<OutputInside(inside)<<G4endl ;
-    G4cout<<"ps11.mag() = "
-          <<ps11.mag()<<G4endl ;
+    // G4cout<<"s11.Inside(ps11) = "<<OutputInside(inside)<<G4endl ;
+    // G4cout<<"ps11.mag() = "<<ps11.mag()<<G4endl ;
     
     inside = sLHCB.Inside(pLHCB);
-    G4cout<<"sLHCB.Inside(pLHCB) = "
-          <<OutputInside(inside)<<G4endl ;
-    G4cout<<"pLHCB.mag() = "
-          <<pLHCB.mag()<<G4endl ;
+    // G4cout<<"sLHCB.Inside(pLHCB) = "<<OutputInside(inside)<<G4endl ;
+    // G4cout<<"pLHCB.mag() = "<<pLHCB.mag()<<G4endl ;
     
     inside = spAroundX.Inside(ptPhiMinus);
-    G4cout<<"spAroundX.Inside(ptPhiMinus) = "
-          <<OutputInside(inside)<<G4endl ;
- 
+    // G4cout<<"spAroundX.Inside(ptPhiMinus) = "<<OutputInside(inside)<<G4endl ;
+     inside = b658.Inside(p658);
+    G4cout<<"b658.Inside(p658) = "<<OutputInside(inside)<<G4endl ;
+
     assert(s1.Inside(pzero)==kInside);
     // assert(s1.Inside(pz)==kInside);
     assert(s2.Inside(pzero)==kOutside);
@@ -408,7 +409,7 @@ G4ThreeVector s9v(-0.6542770611918751,
     //    G4cout<<"Dist=s2.DistanceToOut(pbigx,vz) = "<<Dist<<G4endl;
 
     Dist=b216.DistanceToOut(p216,v216,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"b216.DistanceToOut(p216,v216,... = "<<Dist<<G4endl;
+    // G4cout<<"b216.DistanceToOut(p216,v216,... = "<<Dist<<G4endl;
 
     // call from outside
     //    Dist=sAlex.DistanceToOut(psAlex,vsAlex,calcNorm,pgoodNorm,pNorm);
@@ -505,7 +506,10 @@ G4ThreeVector s9v(-0.6542770611918751,
      Dist=s3.DistanceToIn(ptesttheta1,vmz);
      assert(ApproxEqual(Dist,100-48/sqrt(2.)));
      Dist=b216.DistanceToIn(p216,v216);
-     G4cout<<"b216.DistanceToIn(p216,v216) = "<<Dist<<G4endl;
+     // G4cout<<"b216.DistanceToIn(p216,v216) = "<<Dist<<G4endl;
+
+     Dist=b658.DistanceToIn(pzero,vz);
+     G4cout<<"b658.DistanceToIn(pzero,vz) = "<<Dist<<G4endl;
 
      ///////////////////////////////////////////////////////////////////////////
 
