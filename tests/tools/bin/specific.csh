@@ -11,6 +11,7 @@
 # Guy Barrand barrand@lal.in2p3.fr
 # Steve O'Neale Birmingham/Cern ( CLHEP dev )
 # Steve O'Neale Birmingham/Cern ( Reactivate persistancy)
+# Steve O'Neale Birmingham/Cern ( Forgot to commit changes)
 ####################################################
 
 setenv REF undefined
@@ -139,6 +140,43 @@ if ( `uname -n | grep sun` != "" ) then
     unsetenv G4USE_OSPACE
     setenv PATH `echo $PATH | sed s/SUNWspro50/SUNWspro/`
     setenv PATH `echo $PATH | sed s/SUNWspro/SUNWspro50/`
+    # Persistency...
+    unsetenv G4USE_HEPODBMS
+    setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/pro
+  endif
+  setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
+  setenv G4LIB $G4WORKDIR/lib
+  # G4 build flags :
+  #######setenv G4UI_BUILD_XM_SESSION       1
+  #######setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
+  #######setenv G4VIS_BUILD_OPENGLX_DRIVER  1
+  #######setenv G4VIS_BUILD_OIX_DRIVER      1
+endif
+
+if ( `uname -n | grep refsol7` != "" ) then
+  setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
+  setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  setenv G4STTDIR  /afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+  if ( $?G4STTNONISO ) then
+    echo "refsol7 only supports the ISO compiler"
+    setenv G4SYSTEM SUN-CC
+    setenv DEBOPT ${DEBOPT}_NONISO
+    setenv G4USE_OSPACE 1
+    setenv PATH `echo $PATH | sed s/SUNWspro50/SUNWspro/`
+    setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/pro
+    # Persistency...
+    if ( $?G4USE_HEPODBMS ) then  # Protect against double calling.
+    else
+      source $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.csh
+      setenv G4EXAMPLE_FDID 207
+    endif
+  else
+    setenv G4SYSTEM SUN-CC5
+    setenv DEBOPT ${DEBOPT}_ISO
+    unsetenv G4USE_OSPACE
+    unsetenv G4STTNONISO
+#   setenv PATH `echo $PATH | sed s/SUNWspro50/SUNWspro/`
+#   setenv PATH `echo $PATH | sed s/SUNWspro/SUNWspro50/`
     # Persistency...
     unsetenv G4USE_HEPODBMS
     setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/pro
