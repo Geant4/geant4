@@ -68,21 +68,21 @@ msc:   Tables of transport mean free paths.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     17 hits are stored in ExN04TrackerHitsCollection.
-     4 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.216708 (GeV)
+     11 hits are stored in ExN04TrackerHitsCollection.
+     6 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.360266 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     16 hits are stored in ExN04TrackerHitsCollection.
-     24 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 7.74678 (GeV)
+     5 hits are stored in ExN04TrackerHitsCollection.
+     15 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 2.24056 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 1
-     5 hits are stored in ExN04TrackerHitsCollection.
-     24 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 8.27967 (GeV)
+     18 hits are stored in ExN04TrackerHitsCollection.
+     16 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 5.24496 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.

@@ -22,7 +22,7 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
@@ -41,7 +41,7 @@ annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -51,7 +51,7 @@ hIoni:    Knock-on electron cross sections .
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 MuIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -68,23 +68,21 @@ MuPairProd:  theoretical cross sections
 +++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
 === G4ProcessPlacer::AddProcessAsSecondDoIt ===
   ProcessName: MassImportanceProcess
-The initial Vectors: 
-GPIL Vector: 
+The initial GPILVec: 
    Decay
    LCapture
    LFission
    inelastic
    LElastic
    Transportation
-DoIt Vector: 
+The initial DoItVec: 
    Transportation
    LElastic
    inelastic
    LFission
    LCapture
    Decay
-The final Vectors: 
-GPIL Vector: 
+The final GPIL Vec: 
    Decay
    LCapture
    LFission
@@ -92,7 +90,7 @@ GPIL Vector:
    LElastic
    MassImportanceProcess
    Transportation
-DoIt Vector: 
+The final DoIt Vec: 
    Transportation
    MassImportanceProcess
    LElastic
@@ -102,40 +100,9 @@ DoIt Vector:
    Decay
 ================================================
 WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 8
-+++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
-  ProcessName: MassImportanceProcess, will be removed!
-The initial Vectors: 
-GPIL Vector: 
-   Decay
-   LCapture
-   LFission
-   inelastic
-   LElastic
-   MassImportanceProcess
-   Transportation
-DoIt Vector: 
-   Transportation
-   MassImportanceProcess
-   LElastic
-   inelastic
-   LFission
-   LCapture
-   Decay
-The final Vectors: 
-GPIL Vector: 
-   Decay
-   LCapture
-   LFission
-   inelastic
-   LElastic
-   Transportation
-DoIt Vector: 
-   Transportation
-   LElastic
-   inelastic
-   LFission
-   LCapture
-   Decay
 
 WARNING - G4ImportanceAlgorithm::~G4ImportanceAlgorithm: ipre_over_ipost ! in [0.25, 4] seen
 
+WARNING - Attempt to delete the physical volume store while geometry closed !
+WARNING - Attempt to delete the logical volume store while geometry closed !
+WARNING - Attempt to delete the solid store while geometry closed !

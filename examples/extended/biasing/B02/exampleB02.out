@@ -18,7 +18,7 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
@@ -37,7 +37,7 @@ annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -47,7 +47,7 @@ hIoni:    Knock-on electron cross sections .
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 MuIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -64,23 +64,21 @@ MuPairProd:  theoretical cross sections
 +++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
 === G4ProcessPlacer::AddProcessAsSecondDoIt ===
   ProcessName: PScoreProcess
-The initial Vectors: 
-GPIL Vector: 
+The initial GPILVec: 
    Decay
    LCapture
    LFission
    inelastic
    LElastic
    Transportation
-DoIt Vector: 
+The initial DoItVec: 
    Transportation
    LElastic
    inelastic
    LFission
    LCapture
    Decay
-The final Vectors: 
-GPIL Vector: 
+The final GPIL Vec: 
    Decay
    LCapture
    LFission
@@ -88,7 +86,7 @@ GPIL Vector:
    LElastic
    PScoreProcess
    Transportation
-DoIt Vector: 
+The final DoIt Vec: 
    Transportation
    PScoreProcess
    LElastic
@@ -100,8 +98,7 @@ DoIt Vector:
 +++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
 === G4ProcessPlacer::AddProcessAsSecondDoIt ===
   ProcessName: ParallelTransport
-The initial Vectors: 
-GPIL Vector: 
+The initial GPILVec: 
    Decay
    LCapture
    LFission
@@ -109,7 +106,7 @@ GPIL Vector:
    LElastic
    PScoreProcess
    Transportation
-DoIt Vector: 
+The initial DoItVec: 
    Transportation
    PScoreProcess
    LElastic
@@ -117,8 +114,7 @@ DoIt Vector:
    LFission
    LCapture
    Decay
-The final Vectors: 
-GPIL Vector: 
+The final GPIL Vec: 
    Decay
    LCapture
    LFission
@@ -127,7 +123,7 @@ GPIL Vector:
    PScoreProcess
    ParallelTransport
    Transportation
-DoIt Vector: 
+The final DoIt Vec: 
    Transportation
    ParallelTransport
    PScoreProcess
@@ -140,23 +136,23 @@ DoIt Vector:
 output pScorer, scoring detector, neutron
 Volume name = score_worldCylinder_phys, Replica number = -1
 HistorysEntering
-entries                             : 327
-Sum(w)                              : 327
-Sum(w*x)                            : 327
-Sum(w*x*x)                          : 327
+entries                             : 325
+Sum(w)                              : 325
+Sum(w*x)                            : 325
+Sum(w*x*x)                          : 325
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 327
-Sum(x^2)                            : 327
+Sum(x)                              : 325
+Sum(x^2)                            : 325
 EnergyEnteringHistory
-entries                             : 327
-Sum(w)                              : 327
-Sum(w*x)                            : 2758.31
-Sum(w*x*x)                          : 24999.1
-mean=Sum(w*x) / Sum(w)              : 8.43521
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 2.30157
-Sum(x)                              : 2758.31
-Sum(x^2)                            : 24999.1
+entries                             : 325
+Sum(w)                              : 325
+Sum(w*x)                            : 2719.89
+Sum(w*x*x)                          : 24478.3
+mean=Sum(w*x) / Sum(w)              : 8.36889
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 2.29775
+Sum(x)                              : 2719.89
+Sum(x^2)                            : 24478.3
 Volume name = scorecell: M1, Replica number = 0
 HistorysEntering
 entries                             : 1816
@@ -170,49 +166,49 @@ Sum(x^2)                            : 1816
 EnergyEnteringHistory
 entries                             : 1816
 Sum(w)                              : 1816
-Sum(w*x)                            : 17580.9
-Sum(w*x*x)                          : 172729
-mean=Sum(w*x) / Sum(w)              : 9.68112
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.1794
-Sum(x)                              : 17580.9
-Sum(x^2)                            : 172729
+Sum(w*x)                            : 17571.6
+Sum(w*x*x)                          : 172756
+mean=Sum(w*x) / Sum(w)              : 9.67599
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.22693
+Sum(x)                              : 17571.6
+Sum(x^2)                            : 172756
 Collisions
-entries                             : 1383
-Sum(w)                              : 1383
-Sum(w*x)                            : 1383
-Sum(w*x*x)                          : 1383
+entries                             : 1410
+Sum(w)                              : 1410
+Sum(w*x)                            : 1410
+Sum(w*x*x)                          : 1410
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 1383
-Sum(x^2)                            : 1383
+Sum(x)                              : 1410
+Sum(x^2)                            : 1410
 Volume name = scorecell: D1, Replica number = 0
 HistorysEntering
-entries                             : 879
-Sum(w)                              : 879
-Sum(w*x)                            : 879
-Sum(w*x*x)                          : 879
+entries                             : 886
+Sum(w)                              : 886
+Sum(w*x)                            : 886
+Sum(w*x*x)                          : 886
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 879
-Sum(x^2)                            : 879
+Sum(x)                              : 886
+Sum(x^2)                            : 886
 EnergyEnteringHistory
-entries                             : 879
-Sum(w)                              : 879
-Sum(w*x)                            : 8411.06
-Sum(w*x*x)                          : 82210
-mean=Sum(w*x) / Sum(w)              : 9.5689
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.40104
-Sum(x)                              : 8411.06
-Sum(x^2)                            : 82210
+entries                             : 886
+Sum(w)                              : 886
+Sum(w*x)                            : 8473.2
+Sum(w*x*x)                          : 82825.6
+mean=Sum(w*x) / Sum(w)              : 9.56343
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.42247
+Sum(x)                              : 8473.2
+Sum(x^2)                            : 82825.6
 Collisions
-entries                             : 479
-Sum(w)                              : 479
-Sum(w*x)                            : 479
-Sum(w*x*x)                          : 479
+entries                             : 477
+Sum(w)                              : 477
+Sum(w*x)                            : 477
+Sum(w*x*x)                          : 477
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 479
-Sum(x^2)                            : 479
+Sum(x)                              : 477
+Sum(x^2)                            : 477
 Volume name = scorecell: M2, Replica number = 0
 HistorysEntering
 entries                             : 821
@@ -226,92 +222,57 @@ Sum(x^2)                            : 821
 EnergyEnteringHistory
 entries                             : 821
 Sum(w)                              : 821
-Sum(w*x)                            : 7751.12
-Sum(w*x*x)                          : 75044.5
-mean=Sum(w*x) / Sum(w)              : 9.44107
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.50749
-Sum(x)                              : 7751.12
-Sum(x^2)                            : 75044.5
+Sum(w*x)                            : 7736.87
+Sum(w*x*x)                          : 75055
+mean=Sum(w*x) / Sum(w)              : 9.42371
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.61637
+Sum(x)                              : 7736.87
+Sum(x^2)                            : 75055
 Collisions
-entries                             : 692
-Sum(w)                              : 692
-Sum(w*x)                            : 692
-Sum(w*x*x)                          : 692
+entries                             : 737
+Sum(w)                              : 737
+Sum(w*x)                            : 737
+Sum(w*x*x)                          : 737
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 692
-Sum(x^2)                            : 692
+Sum(x)                              : 737
+Sum(x^2)                            : 737
 Volume name = scorecell: D2, Replica number = 0
 HistorysEntering
-entries                             : 387
-Sum(w)                              : 387
-Sum(w*x)                            : 387
-Sum(w*x*x)                          : 387
+entries                             : 389
+Sum(w)                              : 389
+Sum(w*x)                            : 389
+Sum(w*x*x)                          : 389
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 387
-Sum(x^2)                            : 387
+Sum(x)                              : 389
+Sum(x^2)                            : 389
 EnergyEnteringHistory
-entries                             : 387
-Sum(w)                              : 387
-Sum(w*x)                            : 3646.1
-Sum(w*x*x)                          : 35124
-mean=Sum(w*x) / Sum(w)              : 9.42146
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.41271
-Sum(x)                              : 3646.1
-Sum(x^2)                            : 35124
+entries                             : 389
+Sum(w)                              : 389
+Sum(w*x)                            : 3667
+Sum(w*x*x)                          : 35465.1
+mean=Sum(w*x) / Sum(w)              : 9.42674
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.51866
+Sum(x)                              : 3667
+Sum(x^2)                            : 35465.1
 Collisions
-entries                             : 232
-Sum(w)                              : 232
-Sum(w*x)                            : 232
-Sum(w*x*x)                          : 232
+entries                             : 257
+Sum(w)                              : 257
+Sum(w*x)                            : 257
+Sum(w*x*x)                          : 257
 mean=Sum(w*x) / Sum(w)              : 1
 sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 232
-Sum(x^2)                            : 232
+Sum(x)                              : 257
+Sum(x^2)                            : 257
 
 ----------------------------------------------
 Volume name               |  AV E/Track | sigma       |  Coll_Ent.Tr|
-score_worldCylinder_phys. |     8.43521 |     2.30157 |           0 |
-scorecell: M1............ |     9.68112 |      1.1794 |    0.761564 |
-scorecell: D1............ |      9.5689 |     1.40104 |    0.544937 |
-scorecell: M2............ |     9.44107 |     1.50749 |    0.842875 |
-scorecell: D2............ |     9.42146 |     1.41271 |    0.599483 |
-+++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
-  ProcessName: PScoreProcess, will be removed!
-The initial Vectors: 
-GPIL Vector: 
-   Decay
-   LCapture
-   LFission
-   inelastic
-   LElastic
-   PScoreProcess
-   ParallelTransport
-   Transportation
-DoIt Vector: 
-   Transportation
-   ParallelTransport
-   PScoreProcess
-   LElastic
-   inelastic
-   LFission
-   LCapture
-   Decay
-The final Vectors: 
-GPIL Vector: 
-   Decay
-   LCapture
-   LFission
-   inelastic
-   LElastic
-   ParallelTransport
-   Transportation
-DoIt Vector: 
-   Transportation
-   ParallelTransport
-   LElastic
-   inelastic
-   LFission
-   LCapture
-   Decay
+score_worldCylinder_phys. |     8.36889 |     2.29775 |           0 |
+scorecell: M1............ |     9.67599 |     1.22693 |    0.776432 |
+scorecell: D1............ |     9.56343 |     1.42247 |    0.538375 |
+scorecell: M2............ |     9.42371 |     1.61637 |    0.897686 |
+scorecell: D2............ |     9.42674 |     1.51866 |    0.660668 |
+WARNING - Attempt to delete the physical volume store while geometry closed !
+WARNING - Attempt to delete the logical volume store while geometry closed !
+WARNING - Attempt to delete the solid store while geometry closed !

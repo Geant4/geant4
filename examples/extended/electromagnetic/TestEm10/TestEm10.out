@@ -173,7 +173,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=13.92 s 
+total time(SetCuts)=14.67 s 
 ============= The cut Energy ==============================
                             gamma              e-    
 Cut in range       
@@ -294,7 +294,7 @@ Foam X-ray TR radiator model is called
 48	fGamma = 8.085e+04	sumE = 1.493
 49	fGamma = 9.283e+04	sumE = 1.495
 
-total time for build X-ray TR tables = 26.26 s
+total time for build X-ray TR tables = 28.7 s
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -384,7 +384,7 @@ Foam XTR dE/dx model is called
 48	fGamma = 8.085e+04	sumE = 1.897
 49	fGamma = 9.283e+04	sumE = 1.899
 
-total time for build X-ray TR dE/dx tables = 53.31 s
+total time for build X-ray TR dE/dx tables = 58.07 s
 ### Run 1 start.
 
 --------- Ranecu engine status ---------
@@ -475,7 +475,7 @@ fAlphaPlate = 160 ; fAlphaGas = 160
 48	fGamma = 8.085e+04	sumE = 1.293
 49	fGamma = 9.283e+04	sumE = 1.294
 
-total time for build X-ray TR tables = 45.78 s
+total time for build X-ray TR tables = 49.36 s
 ### Run 2 start.
 
 --------- Ranecu engine status ---------
@@ -566,7 +566,7 @@ fAlphaPlate = 160 ; fAlphaGas = 160
 48	fGamma = 8.085e+04	sumE = 1.746
 49	fGamma = 9.283e+04	sumE = 1.748
 
-total time for build X-ray TR dE/dx tables = 81.59 s
+total time for build X-ray TR dE/dx tables = 84.31 s
 ### Run 3 start.
 
 --------- Ranecu engine status ---------
@@ -656,7 +656,7 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 19.9
 49	fGamma = 9.283e+04	sumE = 20.41
 
-total time for build X-ray TR tables = 5.62 s
+total time for build X-ray TR tables = 5.91 s
 ### Run 4 start.
 
 --------- Ranecu engine status ---------
@@ -746,7 +746,7 @@ Irregular X-ray TR dE/dx model is called
 48	fGamma = 8.085e+04	sumE = 26.03
 49	fGamma = 9.283e+04	sumE = 26.55
 
-total time for build X-ray TR dE/dx tables = 11.2 s
+total time for build X-ray TR dE/dx tables = 11.68 s
 ### Run 5 start.
 
 --------- Ranecu engine status ---------
@@ -836,7 +836,7 @@ PlateIrrGas X-ray TR radiator model is called
 48	fGamma = 8.085e+04	sumE = 15.86
 49	fGamma = 9.283e+04	sumE = 16
 
-total time for build X-ray TR tables = 9.26 s
+total time for build X-ray TR tables = 9.44 s
 ### Run 6 start.
 
 --------- Ranecu engine status ---------
@@ -926,7 +926,7 @@ PlateIrrGas X-ray TR radiator model is called
 48	fGamma = 8.085e+04	sumE = 21.91
 49	fGamma = 9.283e+04	sumE = 22.07
 
-total time for build X-ray TR dE/dx tables = 23.36 s
+total time for build X-ray TR dE/dx tables = 23.71 s
 ### Run 7 start.
 
 --------- Ranecu engine status ---------
@@ -1016,7 +1016,7 @@ Regular X-ray TR radiator model is called
 48	fGamma = 8.085e+04	sumE = 1.231
 49	fGamma = 9.283e+04	sumE = 1.235
 
-total time for build X-ray TR tables = 43.18 s
+total time for build X-ray TR tables = 46.62 s
 ### Run 8 start.
 
 --------- Ranecu engine status ---------
@@ -1106,7 +1106,7 @@ Regular X-ray TR dE/dx radiator model is called
 48	fGamma = 8.085e+04	sumE = 1.633
 49	fGamma = 9.283e+04	sumE = 1.634
 
-total time for build X-ray TR dE/dx tables = 67.41 s
+total time for build X-ray TR dE/dx tables = 71.37 s
 ### Run 9 start.
 
 --------- Ranecu engine status ---------

@@ -166,10 +166,10 @@ Cut in energy
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 277.513 MeV       total track length: 19.3452 cm 
-        Gap: total energy: 1.60499 MeV       total track length: 7.59219 mm 
+   Absorber: total energy: 274.275 MeV       total track length: 19.4399 cm 
+        Gap: total energy: 8.61931 MeV       total track length: 4.30127 cm 
 
-     10 hits are stored in ExN03CalorHitsCollection.
+     9 hits are stored in ExN03CalorHitsCollection.
      Transportation,              hIoni,                msc,              eIoni
               eBrem,            annihil,               conv,              compt
                phot,             MuIoni,            MuBrems,         MuPairProd
@@ -180,11 +180,11 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1847436775, 718970848
+ Current couple of seeds = 442384106, 780733352
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  281.01 MeV       total track length: 19.6486 cm 
-        Gap: total energy: 17.4265 MeV       total track length: 9.00745 cm 
+   Absorber: total energy: 284.628 MeV       total track length: 19.4163 cm 
+        Gap: total energy: 14.1926 MeV       total track length: 6.41698 cm 
 
      9 hits are stored in ExN03CalorHitsCollection.
 
@@ -205,12 +205,12 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 36791840, 1931960063
+ Current couple of seeds = 1669255801, 815858139
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  406.98 MeV       total track length: 98.2884 cm 
-        Gap: total energy: 86.2644 MeV       total track length: 2.39964 m  
+   Absorber: total energy: 395.648 MeV       total track length: 92.8822 cm 
+        Gap: total energy: 87.7787 MeV       total track length: 2.48499 m  
 
-     24 hits are stored in ExN03CalorHitsCollection.
+     26 hits are stored in ExN03CalorHitsCollection.
 Graphics systems deleted.
 Visualization Manager deleting...

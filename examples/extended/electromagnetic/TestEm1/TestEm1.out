@@ -167,18 +167,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=11s Real=38s Sys=2.4s
+  User=12s Real=27s Sys=2.7s
 
- nb tracks/event   neutral:    27.7500   charged:   694.1700
- nb  steps/event   neutral:   146.0800   charged:  1332.9500
+ nb tracks/event   neutral:    26.7900   charged:   687.1000
+ nb  steps/event   neutral:   141.5300   charged:  1321.3700
 
  nb of process calls per event: 
-          eIoni       eBrem       compt        phot        conv     annihil
-      1306.7500     24.6400    118.3300     26.1900      1.5600      1.5600
+          eIoni       eBrem        phot       compt        conv     annihil
+      1295.7300     24.4000     25.5500    114.7400      1.2400      1.2400
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 227745057, 30502287
+ Current couple of seeds = 1685078950, 499665807
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
