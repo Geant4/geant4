@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.9 1999-06-28 15:47:04 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.10 1999-10-07 14:19:00 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,23 +39,23 @@
 #include "G4LowEnergyUtilities.hh"
 #include "G4Gamma.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 typedef G4FirstLevel oneShellTable;
 typedef G4SecondLevel oneAtomTable;
 typedef G4ThirdLevel allAtomTable;
 
-class G4LowEnergyPhotoElectric : public G4VDiscreteProcess{
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-private:
-  
-  // hide assignment operator as private 
-  G4LowEnergyPhotoElectric& operator=(const G4LowEnergyPhotoElectric &right);
-  G4LowEnergyPhotoElectric(const G4LowEnergyPhotoElectric& ); 
+class G4LowEnergyPhotoElectric : public G4VDiscreteProcess
+
+{
   
 public:
   
   G4LowEnergyPhotoElectric(const G4String& processName ="LowEnPhotoElec");
   
-  ~G4LowEnergyPhotoElectric();
+ ~G4LowEnergyPhotoElectric();
 
   G4bool IsApplicable(const G4ParticleDefinition&);
   
@@ -79,8 +79,7 @@ public:
 protected:  
 
   virtual G4double ComputeCrossSection(const G4double AtomicNumber,
-				       const G4double IncEnergy);
-  
+				       const G4double IncEnergy);  
   void BuildCrossSectionTable();
   void BuildShellCrossSectionTable();
   void BuildBindingEnergyTable();
@@ -96,6 +95,14 @@ private:
 			      G4Material* aMaterial);
 
   G4bool SelectRandomTransition(G4int, G4double*, const oneAtomTable*);
+
+private:
+  
+  // hide assignment operator as private 
+  G4LowEnergyPhotoElectric& operator=(const G4LowEnergyPhotoElectric &right);
+  G4LowEnergyPhotoElectric(const G4LowEnergyPhotoElectric& );
+     
+private:
 
   G4SecondLevel* theCrossSectionTable;    
   G4PhysicsTable* theMeanFreePathTable;
@@ -114,11 +121,12 @@ private:
   G4int NumbBinTable;              
   G4double CutForLowEnergySecondaryPhotons;
   G4double MeanFreePath;           
-
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4LowEnergyPhotoElectric.icc"
+
 #endif
 
 

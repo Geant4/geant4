@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.18 1999-09-28 13:15:44 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.19 1999-10-07 14:19:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,7 @@
 // Modified PostStepDoIt to insert sampling with EPDL97 data A. Forti
 // Added SelectRandomAtom A. Forti
 // Added map of the elements A. Forti
+// 07-09-99, if no e- emitted: edep=photon energy, mma
 //                                  
 // --------------------------------------------------------------
 
@@ -47,6 +48,9 @@
 #include "G4Electron.hh"
 
 typedef RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 // constructor
  
 G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
@@ -69,6 +73,8 @@ G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
      G4cout << "HighestEnergy: " << HighestEnergyLimit/MeV << "MeV " << endl;
    }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 // destructor
  
@@ -113,12 +119,14 @@ G4LowEnergyPhotoElectric::~G4LowEnergyPhotoElectric()
 
 }
  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-// methods.............................................................................
 void G4LowEnergyPhotoElectric::SetCutForLowEnSecPhotons(G4double cut){
 
   CutForLowEnergySecondaryPhotons = cut;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4LowEnergyPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& PhotonType)
 
@@ -136,10 +144,11 @@ void G4LowEnergyPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& Pho
   BuildBindingEnergyTable();
 
   BuildFluorTransitionTable();
-
    
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 // CONSTRUCT THE CROSS SECTION TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EPDL DATA
 void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
 
@@ -161,6 +170,9 @@ void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
    
   }//end for on atoms
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 // CONSTRUCT THE SUBSHELL CS TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EPDL DATA
 void G4LowEnergyPhotoElectric::BuildShellCrossSectionTable(){
 
@@ -182,7 +194,9 @@ void G4LowEnergyPhotoElectric::BuildShellCrossSectionTable(){
    
    }//end for on atoms
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 // CONSTRUCT THE BE TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EADL DATA
 void G4LowEnergyPhotoElectric::BuildBindingEnergyTable(){
 
@@ -194,7 +208,9 @@ void G4LowEnergyPhotoElectric::BuildBindingEnergyTable(){
   G4int dataNum = 2;
   theBindingEnergyTable = util.BuildSecondLevelTables(0,dataNum,"fluor/binding");
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 // CONSTRUCT THE FTP TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EADL DATA
 void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(){
 
@@ -220,7 +236,8 @@ void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(){
   }//end for on atoms
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 //
 // vector mapping the elements of the material table 
 // 
@@ -257,6 +274,9 @@ void G4LowEnergyPhotoElectric::BuildZVec(){
     }
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 // Compute total cross section from subshell integrated cross section: needed for 
 // selection of the first subshell ionized.
 
@@ -293,6 +313,8 @@ G4double G4LowEnergyPhotoElectric::ComputeCrossSection(const G4double AtomIndex,
   return TotalCrossSection ;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
 
   if (theMeanFreePathTable) {
@@ -327,8 +349,7 @@ void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
       
       LowEdgeEnergy = ptrVector->GetLowEdgeEnergy(i);
       
-      const G4double BigPath= DBL_MAX;
-      G4double SIGMA = 0 ;
+      G4double SIGMA = 0;
       
       for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 	// For each element            
@@ -341,7 +362,7 @@ void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
 	SIGMA += theAtomNumDensityVector[k]*interCrsSec;
       }       
       
-      Value = SIGMA<=0.0 ? BigPath : 1./SIGMA ;
+      Value = SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX ;
       
       ptrVector->PutValue( i , Value ) ;
     }
@@ -350,7 +371,7 @@ void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
 
@@ -392,7 +413,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 
   G4FirstLevel* theBindEnVec = (*theBindingEnergyTable)[AtomNum-1];
   G4int thePrimaryShell = (G4int) (*(*theBindEnVec)[0])[subShellIndex];
-  G4double BindingEn = (*(*theBindEnVec)[1])[subShellIndex];
+  G4double BindingEn = ((*(*theBindEnVec)[1])[subShellIndex])*MeV;
   
   if(thePrimShVec.length() != 0){
     
@@ -408,12 +429,12 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4int elecInd = 0; 
 
   // primary outcoming electron
-  G4double ElecKineEnergy = (PhotonEnergy - BindingEn)*MeV;
+  G4double ElecKineEnergy = (PhotonEnergy - BindingEn);
 
-  G4double theEnergyDeposit = (PhotonEnergy - ElecKineEnergy)*MeV;
+  G4double theEnergyDeposit = BindingEn;
 
   if (G4EnergyLossTables::GetRange(G4Electron::Electron(),ElecKineEnergy,aMaterial)
-      >= min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
+      >= min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety())){
 
     // the electron is created in the direction of the incident photon ...  
     
@@ -464,28 +485,27 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	  
 	  thePrimaryShell = (G4int) fluorPar[0];
 
-	  if(fluorPar[2] >= CutForLowEnergySecondaryPhotons){
+	  if(fluorPar[2]*MeV >= CutForLowEnergySecondaryPhotons){
 
 	    theEnergyDeposit -= fluorPar[2]*MeV;
 	    
 	    newPart = new G4DynamicParticle (G4Gamma::Gamma(), 
 					     newPartDirection, 
-					     fluorPar[2]) ;
+					     fluorPar[2]*MeV);
 	    photvec.append(newPart);
 	  }
 	}
 	else{
-	  
-	  
+	  	  
 	  G4int k = 0;
 	  while(thePrimaryShell != (*(*theBindEnVec)[0])[k]) k++;
 	  
-	  G4double lastTransEnergy = (*(*theBindEnVec)[1])[k];
+	  G4double lastTransEnergy = ((*(*theBindEnVec)[1])[k])*MeV;
 	  thePrimaryShell = (G4int) fluorPar[0];
 
-	  if(fluorPar[2] >= CutForLowEnergySecondaryPhotons){
+	  if(fluorPar[2]*MeV >= CutForLowEnergySecondaryPhotons){
 
-	    theEnergyDeposit -= lastTransEnergy*MeV;
+	    theEnergyDeposit -= lastTransEnergy;
 	
 	    newPart = new G4DynamicParticle (G4Gamma::Gamma(), 
 					     newPartDirection, 
@@ -525,8 +545,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   } // END OF CUTS
   
   else{
-    
-    ElecKineEnergy = 0. ;
+    theEnergyDeposit = PhotonEnergy;    
     aParticleChange.SetNumberOfSecondaries(0) ;
   }
 
@@ -534,24 +553,20 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   aParticleChange.SetMomentumChange( 0., 0., 0. );
   aParticleChange.SetEnergyChange( 0. );
 
-  if(theEnergyDeposit < 0){
-    theEnergyDeposit = 0;
-  }
+  if (theEnergyDeposit < 0) theEnergyDeposit = 0;
+  aParticleChange.SetLocalEnergyDeposit(theEnergyDeposit);  
+  aParticleChange.SetStatusChange( fStopAndKill ); 
 
-  aParticleChange.SetLocalEnergyDeposit(theEnergyDeposit) ;  
-  aParticleChange.SetStatusChange( fStopAndKill ) ; 
-#ifdef G4VERBOSE
-  if(verboseLevel > 15){
-    G4cout<<"LE PhotoElectric PostStepDoIt"<<endl;
-  }
-#endif
   // Reset NbOfInteractionLengthLeft and return aParticleChange
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
 
 }
 
-G4int G4LowEnergyPhotoElectric::SelectRandomShell(const G4int AtomIndex, const G4double IncEnergy){
-  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4int G4LowEnergyPhotoElectric::SelectRandomShell(const G4int AtomIndex,
+                                                  const G4double IncEnergy)
+{  
   G4double partialSum = 0;
   G4double totalSum = ComputeCrossSection(AtomIndex,IncEnergy);
 
@@ -584,9 +599,12 @@ G4int G4LowEnergyPhotoElectric::SelectRandomShell(const G4int AtomIndex, const G
   return 0;
 }
 
-G4Element*
-G4LowEnergyPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton, G4Material* aMaterial){
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4Element*
+G4LowEnergyPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton,
+                                           G4Material* aMaterial)
+{
   // select randomly 1 element within the material
   G4double GammaEnergy = aDynamicPhoton->GetKineticEnergy();
   const G4int NumberOfElements = aMaterial->GetNumberOfElements();
@@ -624,6 +642,8 @@ G4LowEnergyPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhot
   }
   return (*theElementVector)(0);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 //
 // Select a random transition with the transition probabilities and the partial sum 
@@ -692,6 +712,7 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
   return ColIsFull;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 
