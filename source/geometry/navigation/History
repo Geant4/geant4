@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2003-10-01 14:51:38 gcosmo Exp $
+$Id: History,v 1.2 2003-10-24 12:53:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 24th, 2003 - G.Cosmo  (geomnav-V05-02-01)
+------------------------
+- Migrated calls to G4Exception to new scheme.
+- Fixed compilation warning in G4PropagationInField.
 
 Sep 29th, 2003 - G.Cosmo  (geomnav-V05-02-00)
 ------------------------
