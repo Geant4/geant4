@@ -14,8 +14,8 @@ class Tst01RunAction : public G4UserRunAction
     ~Tst01RunAction();
 
   public:
-    void BeginOfRunAction(G4Run* aRun);
-    void EndOfRunAction(G4Run* aRun);
+    void BeginOfRunAction(const G4Run* aRun);
+    void EndOfRunAction(const G4Run* aRun);
 
   private:
     G4int runIDcounter;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst01SteppingAction.hh,v 1.4 1999-12-15 14:54:35 gunter Exp $
+// $Id: Tst01SteppingAction.hh,v 1.5 1999-12-16 13:55:47 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@ class Tst01SteppingAction : public G4UserSteppingAction
     Tst01SteppingAction();
    ~Tst01SteppingAction();
 
-    void UserSteppingAction();
+    void UserSteppingAction(const G4Step*);
 private:
   odHisto Steplength;
   odHisto SteplengthProfile;

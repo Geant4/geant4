@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst01SteppingAction.cc,v 1.4 1999-12-15 14:54:36 gunter Exp $
+// $Id: Tst01SteppingAction.cc,v 1.5 1999-12-16 13:55:48 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,9 +53,8 @@ Tst01SteppingAction::~Tst01SteppingAction()
 //
 //
 
-void Tst01SteppingAction::UserSteppingAction()
+void Tst01SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  G4Step* aStep = fpSteppingManager->GetStep() ;
 
   //  const G4Track* aTrack = GetSteppingManager()->GetTrack() ;
 
