@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.49 2004-10-19 00:59:40 kurasige Exp $
+// $Id: G4Transportation.cc,v 1.50 2004-11-23 17:45:49 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -47,9 +47,8 @@
 //            20 Febr 2001, J.Apostolakis:  update for new FieldTrack
 //            22 Sept 2000, V.Grichine:     update of Kinetic Energy
 //             9 June 1999, J.Apostolakis & S.Giani: protect full relocation
-//                          used in DEBUG for track that started on surface
-//                          and went step < tolerance. Also forced fast
-//                          relocation in all DEBUG cases
+//                          in DEBUG for track  starting on surface that
+//                          goes step < tolerance.
 // Created:  19 March 1997, J. Apostolakis
 // =======================================================================
 
@@ -68,6 +67,13 @@ G4Transportation::G4Transportation( G4int verboseLevel )
     fParticleIsLooping( false ),
     fPreviousSftOrigin (0.,0.,0.),
     fPreviousSafety    ( 0.0 ),
+    fThreshold_Warning_Energy( 100 * MeV ),  
+    fThreshold_Important_Energy( 250 * MeV ), 
+    fThresholdTrials( 10 ), 
+    fUnimportant_Energy( 1 * MeV ), 
+    fNoLooperTrials(0),
+    fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
+  
     fVerboseLevel( verboseLevel )
 {
   G4TransportationManager* transportMgr ; 
@@ -96,6 +102,11 @@ G4Transportation::G4Transportation( G4int verboseLevel )
 
 G4Transportation::~G4Transportation()
 {
+  if( (fVerboseLevel > 0) && (fSumEnergyKilled > 0.0 ) ){ 
+    G4cout << " G4Transportation: Statistics for looping particles " << G4endl;
+    G4cout << "   Sum of energy of loopers killed: " <<  fSumEnergyKilled << G4endl;
+    G4cout << "   Max energy of loopers killed: " <<  fMaxEnergyKilled << G4endl;
+  } 
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -121,6 +132,9 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      //
      fPreviousSafety    = 0.0 ; 
      fPreviousSftOrigin = G4ThreeVector(0.,0.,0.) ;
+ 
+     // reset counter for looping particles in field
+     fNoLooperTrials= 0; 
 
      // ChordFinder reset internal state
      //
@@ -149,9 +163,9 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
   // G4double   theTime        = track.GetGlobalTime() ;
 
-  // The Step Point safety is now generalised to mean the limit of assumption
-  // of all processes, so it is not the previous Step's geometrical safety.
-  // We calculate the starting point's safety here.
+  // The Step Point safety can be limited by other geometries and/or the 
+  // assumptions of any process - it's not always the geometrical safety.
+  // We calculate the starting point's isotropic safety here.
   //
   G4ThreeVector OriginShift = startPosition - fPreviousSftOrigin ;
   G4double      MagSqShift  = OriginShift.mag2() ;
@@ -352,24 +366,17 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
             if( (no_large_ediff% warnModulo) == 0 )
             {
                no_warnings++;
-               G4cout << "WARNING - G4Transportation::AlongStepGetPIL()"
-                      << G4endl
-	              << "          Energy changed in Step, more than 1/1000: "
-                      << G4endl
-                      << "          Start= " << startEnergy
-                      << G4endl
-                      << "          End= "   << endEnergy
-                      << G4endl
+               G4cout << "WARNING - G4Transportation::AlongStepGetPIL()" << G4endl
+	              << "   Energy changed in Step, more than 1/1000: " << G4endl
+                      << "          Start= " << startEnergy   << G4endl
+                      << "          End= "   << endEnergy     << G4endl
                       << "          Relative change= "
                       << (startEnergy-endEnergy)/startEnergy << G4endl;
                G4cout << " Energy has been corrected -- however, review"
-                      << " field propagation parameters for accuracy."
-                      << G4endl;
-               G4cerr << "ERROR - G4Transportation::AlongStepGetPIL()"
-                      << G4endl
+                      << " field propagation parameters for accuracy." << G4endl;
+               G4cerr << "ERROR - G4Transportation::AlongStepGetPIL()" << G4endl
 	              << "        Bad 'endpoint'. Energy change detected"
-                      << " and corrected,"
-                      << G4endl
+                      << " and corrected,"                      << G4endl
                       << "        occurred already "
                       << no_large_ediff << " times." << G4endl;
                if( no_large_ediff == warnModulo * moduloFactor )
@@ -510,16 +517,34 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
   //
   if ( fParticleIsLooping )
   {
-      // Kill the looping particle 
-      //
-      fParticleChange.ProposeTrackStatus( fStopAndKill )  ;
+      G4double endEnergy= fTransportEndKineticEnergy;
+
+      if( (endEnergy < fThreshold_Important_Energy) 
+	  || (fNoLooperTrials >= fThresholdTrials ) ){
+	// Kill the looping particle 
+	//
+	fParticleChange.ProposeTrackStatus( fStopAndKill )  ;
+
+        // 'Bare' statistics
+        fSumEnergyKilled += endEnergy; 
+	if( endEnergy > fMaxEnergyKilled) { fMaxEnergyKilled= endEnergy; }
+
 #ifdef G4VERBOSE
-      G4cout << " G4Transportation is killing track that is looping or stuck "
-             << G4endl
-             << "   This track has " << track.GetKineticEnergy()
-             << " MeV energy." << G4endl;
+	if( (fVerboseLevel > 1) || 
+	    ( endEnergy > fThreshold_Warning_Energy )  ) { 
+	  G4cout << " G4Transportation is killing track that is looping or stuck "
+		 << G4endl
+		 << "   This track has " << track.GetKineticEnergy() / MeV
+		 << " MeV energy." << G4endl;
+	}
 #endif
-      // ClearNumberOfInteractionLengthLeft() ;
+	fNoLooperTrials=0; 
+      }
+      else{
+	fNoLooperTrials ++; 
+      }
+  }else{
+      fNoLooperTrials=0; 
   }
 
   // Another (sometimes better way) is to use a user-limit maximum Step size
