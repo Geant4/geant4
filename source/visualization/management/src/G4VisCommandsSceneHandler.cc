@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.4 1999-01-11 00:48:33 allison Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.5 1999-02-07 17:34:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -29,7 +29,8 @@ G4VVisCommandSceneHandler::G4VVisCommandSceneHandler () {}
 
 void G4VVisCommandSceneHandler::UpdateCandidateLists () {
 
-  const G4SceneHandlerList& list = fpVisManager -> GetAvailableSceneHandlers ();
+  const G4SceneHandlerList& list =
+    fpVisManager -> GetAvailableSceneHandlers ();
 
   fSceneHandlerNameList = G4String ();
   for (int iScene = 0; iScene < list.entries (); iScene++) {
