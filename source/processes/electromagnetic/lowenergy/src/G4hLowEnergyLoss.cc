@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.16 2002-09-09 08:54:08 vnivanch Exp $
+// $Id: G4hLowEnergyLoss.cc,v 1.17 2002-10-28 09:43:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -45,6 +45,7 @@
 // 05/11/00   new method to calculate particle ranges
 // 10/05/01   V.Ivanchenko Clean up againist Linux compilation with -Wall
 // 23/11/01   V.Ivanchenko Move static member-functions from header to source
+// 28/10/02   V.Ivanchenko Optimal binning for dE/dx
 // --------------------------------------------------------------
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -131,8 +132,9 @@ G4double         G4hLowEnergyLoss::Charge ;
 G4bool   G4hLowEnergyLoss::rndmStepFlag   = false ;
 G4bool   G4hLowEnergyLoss::EnlossFlucFlag = true ;
 
-G4double G4hLowEnergyLoss::LowestKineticEnergy,G4hLowEnergyLoss::HighestKineticEnergy;	
-G4int    G4hLowEnergyLoss::TotBin ;
+G4double G4hLowEnergyLoss::LowestKineticEnergy = 10.*eV;
+G4double G4hLowEnergyLoss::HighestKineticEnergy= 100.*GeV;	
+G4int    G4hLowEnergyLoss::TotBin = 360;
 G4double G4hLowEnergyLoss::RTable,G4hLowEnergyLoss::LOGRTable;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -228,14 +230,14 @@ void G4hLowEnergyLoss::BuildDEDXTable(
                          const G4ParticleDefinition& aParticleType)
 {
   //  calculate data members TotBin,LOGRTable,RTable first
- 
+  /* 
   G4double binning = dRoverRange;
   G4double lrate = log(HighestKineticEnergy/LowestKineticEnergy);
   G4int    nbin =  G4int(lrate/log(1.+binning) + 0.5 );
   nbin = (nbin+25)/50;
   LOGRTable=lrate/TotBin;
   RTable   =exp(LOGRTable);
- 
+  */
   // create table if there is no table or there is a new cut value
   G4bool MakeTable = false ;
      

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.28 2002-06-03 00:07:18 pia Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.29 2002-10-28 09:43:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -56,6 +56,7 @@
 // 23/11/01  VI Move static member-functions from header to source
 // 28/05/02  VI Remove flag fStopAndKill
 // 03/06/02  MGP - Restore fStopAndKill
+// 28/10/02  VI Optimal binning for dE/dx
 //
 // --------------------------------------------------------------
  
@@ -103,9 +104,9 @@ G4PhysicsTable*  G4eLowEnergyLoss::thepRangeCoeffATable         = 0;
 G4PhysicsTable*  G4eLowEnergyLoss::thepRangeCoeffBTable         = 0;
 G4PhysicsTable*  G4eLowEnergyLoss::thepRangeCoeffCTable         = 0;
 
-G4double         G4eLowEnergyLoss::LowerBoundEloss = 250.*eV ;
+G4double         G4eLowEnergyLoss::LowerBoundEloss = 10.*eV ;
 G4double         G4eLowEnergyLoss::UpperBoundEloss = 100.*GeV ;
-G4int            G4eLowEnergyLoss::NbinEloss = 1000 ;
+G4int            G4eLowEnergyLoss::NbinEloss = 360 ;
 G4double         G4eLowEnergyLoss::RTable ;
 G4double         G4eLowEnergyLoss::LOGRTable ;
 
@@ -120,9 +121,9 @@ G4eLowEnergyLoss::G4eLowEnergyLoss(const G4String& processName)
    : G4VeLowEnergyLoss (processName),
      theLossTable(0),
      MinKineticEnergy(1.*eV),
-     Charge(-1.),lastCharge(0.),
+     Charge(-1.),
+     lastCharge(0.),
      theDEDXTable(0),
-     //linLossLimit(0.02)
      CounterOfProcess(0),
      RecorderOfProcess(0),
      fdEdx(0),
@@ -362,6 +363,11 @@ void G4eLowEnergyLoss::BuildDEDXTable(
                               theInverseRangePositronTable,
                               LowerBoundEloss,UpperBoundEloss,NbinEloss);
      }
+
+     if(verboseLevel > 1) {
+       G4cout << (*theDEDXElectronTable) << G4endl;
+     }
+
 
      // make the energy loss and the range table available
      G4EnergyLossTables::Register(&aParticleType,  

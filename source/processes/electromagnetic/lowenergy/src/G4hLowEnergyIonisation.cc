@@ -82,6 +82,7 @@
 //                            fluctuations enables
 // 20 Sept  2002 V.Ivanchenko Clean up energy ranges for models
 // 07 Oct   2002 V.Ivanchenko Clean up initialisation of fluorescence
+// 28 Oct   2002 V.Ivanchenko Optimal binning for dE/dx
 
 // -----------------------------------------------------------------------
 
@@ -140,9 +141,9 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
 void G4hLowEnergyIonisation::InitializeMe()
 {
   LowestKineticEnergy  = 10.0*eV ;
-  HighestKineticEnergy = 100.0*TeV ;
+  HighestKineticEnergy = 100.0*GeV ;
   MinKineticEnergy     = 10.0*eV ; 
-  TotBin               = 200 ;
+  TotBin               = 360 ;
   protonLowEnergy      = 1.*keV ; 
   protonHighEnergy     = 2.*MeV ;
   antiProtonLowEnergy  = 5.*keV ;
@@ -332,6 +333,9 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
   
   BuildLambdaTable(aParticleType) ;
   BuildDataForFluorescence(aParticleType);
+  if(verboseLevel > 1) {
+    G4cout << (*theMeanFreePathTable) << G4endl;
+  }
 
   if(verboseLevel > 0) {
     G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable: "
@@ -339,6 +343,9 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
   }
 
   BuildDEDXTable(aParticleType) ;
+  if(verboseLevel > 1) {
+    G4cout << (*theDEDXpTable) << G4endl;
+  }
 
   if((&aParticleType == theProton) ) PrintInfoDefinition() ;
 

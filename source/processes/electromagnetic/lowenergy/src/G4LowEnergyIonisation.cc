@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.89 2002-09-20 16:26:34 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.90 2002-10-28 09:43:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -212,7 +212,7 @@ void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParti
     G4cout << "The MeanFreePath table is built"
            << G4endl;
     if(verboseLevel > 1) theMeanFreePath->PrintData();
-      }
+  }
 
   // Build common DEDX table for all ionisation processes
  
@@ -221,7 +221,7 @@ void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParti
   if (verboseLevel > 0) {
     G4cout << "G4LowEnergyIonisation::BuildPhysicsTable end"
            << G4endl;
-      }
+  }
 }
 
 

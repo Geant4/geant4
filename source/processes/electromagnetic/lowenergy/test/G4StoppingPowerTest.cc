@@ -407,7 +407,7 @@ int main(int argc,char** argv)
     // Creating a tuple factory, whose tuples will be handled by the tree
     G4std::auto_ptr< ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
-    IHistogram1D* hist[4];
+    IHistogram1D* hist[5];
     //    ITuple* ntuple1 = 0;
 
     if(usepaw) {
@@ -431,6 +431,10 @@ int main(int argc,char** argv)
                                      nbin,emin10,emax10);
       hist[3] = hf->create1D("14","Number of secondaries", 
                                      nbin,emin10,emax10);
+      hist[4] = hf->create1D("17","Range (mm)", 
+                                     nbin,emin10,emax10);
+
+
       /*
       IHistogram2D* hi2 = hf->create2D("10", 
        "log10(Stopping power (MeV*cm**2/g)) versus log10Ekin(MeV)",nbin,emin10,emax10,
@@ -744,6 +748,7 @@ int main(int argc,char** argv)
 	  }
         }
         G4double dedx0 = G4EnergyLossTables::GetPreciseDEDX(part,e,material);
+        G4double r = G4EnergyLossTables::GetPreciseRangeFromEnergy(part, e, material);
 
 	//       G4double delx = theStep;
         G4double de = aChange->GetLocalEnergyDeposit();
@@ -767,6 +772,7 @@ int main(int argc,char** argv)
         st *= gram/(cm*cm*MeV); 
 	//        G4double s = de*mm/(delx*MeV); 
         G4double s = dedx0*mm/MeV; 
+        r  *= (material->GetDensity())*cm*cm/gram;
 
         if(verbose) {
           G4cout  << iter 
@@ -800,6 +806,7 @@ int main(int argc,char** argv)
           hist[1]->fill(le,s*xstatf);
           hist[2]->fill(le,x*xstatf/mm);
           hist[3]->fill(le,xstatf*(G4double)n);
+          hist[4]->fill(le,r*xstatf);
 	}
       }
     }
