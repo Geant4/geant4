@@ -62,10 +62,10 @@ if ( `uname -n | grep dxplus` != "" || \
   if ( $?G4STTNONISO ) then
     setenv DEBOPT ${DEBOPT}_NONISO
     setenv G4USE_OSPACE 1
-    setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/pro
+    setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/noiso
   else
     setenv DEBOPT ${DEBOPT}_ISO
-    setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/iso
+    setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/pro
   endif
   if ( `uname -n | grep dcosf01` != "" ) then
     setenv CLHEP_LIB CLHEP-cxx62
@@ -85,8 +85,8 @@ if ( `uname -n | grep dxplus` != "" || \
   ##### setenv G4VIS_BUILD_OIX_DRIVER      1
 endif
 
-if ( `uname -n | grep pcgeant`   != "" || \
-     `uname -n | grep pcg4speed` != "" ) then
+if ( `uname -n | grep pcg4speed` != "" ) then
+  setenv DEBOPT ${DEBOPT}_NEWGCC
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM Linux-g++
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -94,13 +94,45 @@ if ( `uname -n | grep pcgeant`   != "" || \
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
-  #####setenv G4UI_BUILD_XM_SESSION       1
-  #####setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
   setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
   setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
-  ##### setenv G4VIS_BUILD_OIX_DRIVER      1
-   setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/pro
+  setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/pro
+  # Shareable library
+  setenv G4LIB_BUILD_SHARED 1
+  setenv LD_LIBRARY_PATH $G4LIB/$G4SYSTEM
+endif
+
+if ( `uname -n | grep pcgeant$`   != "" ) then
+  setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
+  setenv G4SYSTEM Linux-egcs
+  setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  setenv G4STTDIR  /afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+  setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
+  setenv G4LIB $G4WORKDIR/lib
+  # G4 build flags :
+  setenv G4VIS_BUILD_OPENGLX_DRIVER  1
+  setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
+  setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
+  setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/pro
+endif
+
+if ( `uname -n | grep pcgeant4` != "" ) then
+  setenv DEBOPT ${DEBOPT}_NEWGCC
+  setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
+  setenv G4SYSTEM Linux-g++
+  setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  setenv G4STTDIR  /afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+  setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
+  setenv G4LIB $G4WORKDIR/lib
+  # G4 build flags :
+  setenv G4VIS_BUILD_OPENGLX_DRIVER  1
+  setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
+  setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
+  setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/pro
+  # Shareable library
+  setenv G4LIB_BUILD_SHARED 1
+  setenv LD_LIBRARY_PATH $G4LIB/$G4SYSTEM
 endif
 
 if ( `uname -n | grep sgmedia` != "" ) then
@@ -123,7 +155,7 @@ if ( `uname -n | grep sun` != "" ) then
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   setenv G4STTDIR  /afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   if ( $?G4STTNONISO ) then
-    setenv G4SYSTEM SUN-CC
+    setenv G4SYSTEM SUN-CC4
     setenv DEBOPT ${DEBOPT}_NONISO
     setenv G4USE_OSPACE 1
     setenv PATH `echo $PATH | sed s/SUNWspro50/SUNWspro/`
@@ -141,11 +173,11 @@ if ( `uname -n | grep sun` != "" ) then
       endif
     endif
   else
-    setenv G4SYSTEM SUN-CC5
+    setenv G4SYSTEM SUN-CC
     setenv DEBOPT ${DEBOPT}_ISO
     unsetenv G4USE_OSPACE
-    setenv PATH `echo $PATH | sed s/SUNWspro50/SUNWspro/`
     setenv PATH `echo $PATH | sed s/SUNWspro/SUNWspro50/`
+    setenv PATH `echo $PATH | sed s/SUNWspro50/SUNWspro/`
     # Persistency...
     unsetenv G4USE_HEPODBMS
     setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/pro
@@ -165,7 +197,7 @@ if ( `uname -n | grep refsol7` != "" ) then
   setenv G4STTDIR  /afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   if ( $?G4STTNONISO ) then
     echo "refsol7 only supports the ISO compiler"
-    setenv G4SYSTEM SUN-CC
+    setenv G4SYSTEM SUN-CC4
     setenv DEBOPT ${DEBOPT}_NONISO
     setenv G4USE_OSPACE 1
     setenv PATH `echo $PATH | sed s/SUNWspro50/SUNWspro/`
@@ -177,7 +209,7 @@ if ( `uname -n | grep refsol7` != "" ) then
       setenv G4EXAMPLE_FDID 207
     endif
   else
-    setenv G4SYSTEM SUN-CC5
+    setenv G4SYSTEM SUN-CC
     setenv DEBOPT ${DEBOPT}_ISO
     unsetenv G4USE_OSPACE
     unsetenv G4STTNONISO
