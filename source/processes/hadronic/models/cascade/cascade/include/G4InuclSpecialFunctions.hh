@@ -19,6 +19,12 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef G4INUCL_SPECIAL_FUNC_HH
+#define G4INUCL_SPECIAL_FUNC_HH
+
+#include "globals.hh"
+#include <math.h>
+#include "g4std/algorithm"
 #include "g4std/vector"
 
 
@@ -63,3 +69,4 @@ namespace G4InuclSpecialFunctions {
   G4std::vector<G4double> generateWithFixedTheta(G4double ct, 
 					  G4double p);
 }
+#endif

@@ -19,6 +19,12 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef G4CASCAD_SPECIAL_FUNC_HH
+#define G4CASCAD_SPECIAL_FUNC_HH
+
+#include "globals.hh"
+
+#include <math.h>
 #include "g4std/algorithm"
 #include "g4std/vector"
 
@@ -37,4 +43,4 @@ namespace G4CascadSpecialFunctions {
   G4std::pair<G4int, G4double> getPositionInEnergyScaleEMS(G4double e); 
 
 }
-
+#endif
