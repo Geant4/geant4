@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.46 2002-10-31 14:52:56 gcosmo Exp $
+# $Id: GNUmakefile,v 1.47 2002-11-12 17:56:24 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -207,6 +207,18 @@ examples_links_source:
 	exdir=$(G4INSTALL)/examples/extended/geometry/olap; \
          ln -s $$exdir $$testdir; :
 
+################################################################
+# Some "truc" to use two input files at the same test directory
+#
+	@testdir=test34; \
+	exdir=$(G4INSTALL)/tests/test33; \
+         ln -s $$exdir $$testdir; \
+         ln -s MassGeo_TimedApp.mac  $$testdir/test33.in;  \
+         ln -s ParallelGeo_TimedApp.mac $$testdir/test34.in; \
+         ln -s MassGeo_TimedApp.out  $$testdir/test33.out;  \
+         ln -s ParallelGeo_TimedApp.out $$testdir/test34.out; :
+
+################################################################
 	@for nn in $(FIELD); do \
 	  testdir=test7$$nn; \
 	  exdir=$(G4INSTALL)/examples/extended/field/field$$nn; \
@@ -256,6 +268,7 @@ examples_links_binaries:
 	ln -s cltog4    $(G4WORKDIR)/bin/$(G4SYSTEM)/test602; \
 	ln -s olapex    $(G4WORKDIR)/bin/$(G4SYSTEM)/test1001; \
 	ln -s gogdml    $(G4WORKDIR)/bin/$(G4SYSTEM)/test901; \
+	ln -s test33    $(G4WORKDIR)/bin/$(G4SYSTEM)/test34; \
         true
 
 clean_examples_links_source:
