@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.15 2002-12-12 19:16:50 gunter Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.16 2003-02-13 08:37:49 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -2387,7 +2387,7 @@ G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
     G4double fx=Fun(x);
     G4double df=DFun(x);
     G4double d=(fx-f)/df;
-    x=x-d;
+    x=x+d;
 #ifdef pdebug
     G4cout<<"SolveTheEq: i="<<i<<",d="<<d<<",x="<<x<<",fx="<<fx<<",df="<<df<<G4endl;
 #endif
