@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.1 2004-06-18 11:12:38 vnivanch Exp $
+// $Id: RunAction.cc,v 1.2 2004-07-01 09:26:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -146,22 +146,22 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   nLbin = Det->GetnLtot();
   G4cout << "### Run " << aRun->GetRunID() << " start. nLbin= " << nLbin << G4endl;
-  dEdL.resize(nLbin, 0.0);
-  sumELongit.resize(nLbin, 0.0);
-  sumELongitCumul.resize(nLbin, 0.0);
-  sumE2Longit.resize(nLbin, 0.0);
-  sumE2LongitCumul.resize(nLbin, 0.0);
+  dEdL.resize(nLbin);
+  sumELongit.resize(nLbin);
+  sumELongitCumul.resize(nLbin);
+  sumE2Longit.resize(nLbin);
+  sumE2LongitCumul.resize(nLbin);
 
-  gammaFlux.resize(nLbin, 0.0);
-  electronFlux.resize(nLbin, 0.0);
-  positronFlux.resize(nLbin, 0.0);
+  gammaFlux.resize(nLbin);
+  electronFlux.resize(nLbin);
+  positronFlux.resize(nLbin);
 
   nRbin = Det->GetnRtot();
-  dEdR.resize(nRbin, 0.0);
-  sumERadial.resize(nRbin, 0.0);
-  sumERadialCumul.resize(nRbin, 0.0);
-  sumE2Radial.resize(nRbin, 0.0);
-  sumE2RadialCumul.resize(nRbin, 0.0);
+  dEdR.resize(nRbin);
+  sumERadial.resize(nRbin);
+  sumERadialCumul.resize(nRbin);
+  sumE2Radial.resize(nRbin);
+  sumE2RadialCumul.resize(nRbin);
 
   // save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
@@ -169,11 +169,13 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   //initialize arrays of cumulative energy deposition
   //
-  for (G4int i=0; i<nLbin; i++)
-     sumELongit[i]=sumE2Longit[i]=sumELongitCumul[i]=sumE2LongitCumul[i]=0.;
+  for (G4int i=0; i<nLbin; i++) {
+    sumELongit[i]=sumE2Longit[i]=sumELongitCumul[i]=sumE2LongitCumul[i]=0.;
+    gammaFlux[i]=electronFlux[i]=positronFlux[i]=0.;
+  }
 
   for (G4int j=0; j<nRbin; j++)
-     sumELongit[j]=sumE2Longit[j]=sumELongitCumul[j]=sumE2LongitCumul[j]=0.;
+     sumERadial[j]=sumE2Radial[j]=sumERadialCumul[j]=sumE2RadialCumul[j]=0.;
 
   //initialize track length
   sumChargTrLength=sum2ChargTrLength=sumNeutrTrLength=sum2NeutrTrLength=0.;
@@ -244,8 +246,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //
   G4double dLradl = Det->GetdLradl();
 
-  G4DataVector MeanELongit(nLbin),      rmsELongit(nLbin);
-  G4DataVector MeanELongitCumul(nLbin), rmsELongitCumul(nLbin);
+  G4DataVector MeanELongit, rmsELongit, MeanELongitCumul, rmsELongitCumul;
+  MeanELongit.resize(nLbin);
+  rmsELongit.resize(nLbin);
+  MeanELongitCumul.resize(nLbin);
+  rmsELongitCumul.resize(nLbin);
 
   G4int i;
   for (i=0; i<nLbin; i++)
@@ -279,8 +284,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //
   G4double dRradl = Det->GetdRradl();
 
-  G4DataVector MeanERadial(nRbin),      rmsERadial(nRbin);
-  G4DataVector MeanERadialCumul(nRbin), rmsERadialCumul(nRbin);
+  G4DataVector MeanERadial, rmsERadial, MeanERadialCumul, rmsERadialCumul;
+  MeanERadial.resize(nRbin);
+  rmsERadial.resize(nRbin);
+  MeanERadialCumul.resize(nRbin);
+  rmsERadialCumul.resize(nRbin);
 
   for (i=0; i<nRbin; i++)
    {
