@@ -1,4 +1,4 @@
-$Id: README,v 1.6 2003-11-28 16:08:08 gcosmo Exp $
+$Id: README,v 1.7 2004-01-29 16:10:12 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -50,6 +50,7 @@ test26 ## Cuts by region modelling.
 test27 ## Binary cascade for light ions (G4BinaryLightIonReaction).
 test32 ## Leading_particle biasing model of G4Mars5Ge on MARS13.
 test33 ## Importance biasing and scoring.
+test40 ## Benchmark test for EM shower development from single primary
 test50 ## Statistical test suite for EM processes:
        ## 1) CSDA range and Stopping Power test for e-,p;
        ## 2) gamma attenuation coefficient;
