@@ -1,4 +1,4 @@
-// $Id: G4PersistencyCenter.cc,v 1.3 2002-12-04 10:37:20 gcosmo Exp $
+// $Id: G4PersistencyCenter.cc,v 1.4 2002-12-04 12:23:53 morita Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyCenter.cc
@@ -88,11 +88,9 @@ void G4PersistencyCenter::SelectSystem(G4std::string systemName)
   {
     G4cout<<" G4PersistencyCenter: \"ROOT\" Persistency Package is selected."
           <<G4endl;
-    G4UImanager *man=G4UImanager::GetUIpointer();
-    // G4std::string libs="Cint:Core:Hist:Graf:Graf3d:Gpad:Tree:Rint:Postscript:Matrix:Physics:fadsROOT";
-    G4std::string libs="Cint:Core:Tree:Rint:Matrix:Physics:fadsROOT";
-
-    st = man->ApplyCommand("/load "+libs);
+    // G4UImanager *man=G4UImanager::GetUIpointer();
+    // G4std::string libs="Cint:Core:Tree:Rint:Matrix:Physics:fadsROOT";
+    // st = man->ApplyCommand("/load "+libs);
     if ( st == 0 ) {
       pm = GetG4PersistencyManager("ROOT");
     }
@@ -100,9 +98,9 @@ void G4PersistencyCenter::SelectSystem(G4std::string systemName)
   else if (systemName=="ODBMS")
   {
     G4cout<<" G4PersistencyCenter: \"ODBMS\" package is selected."<<G4endl;
-    G4UImanager *man=G4UImanager::GetUIpointer();
-    G4std::string libs="fadsODBMS";
-    st = man->ApplyCommand("/load "+libs);
+    // G4UImanager *man=G4UImanager::GetUIpointer();
+    // G4std::string libs="fadsODBMS";
+    // st = man->ApplyCommand("/load "+libs);
     if ( st == 0 ) {
       pm = GetG4PersistencyManager("ODBMS");
     }
@@ -246,7 +244,12 @@ void G4PersistencyCenter::AddHCIOmanager(G4std::string detName, G4std::string co
   G4HCIOcatalog* ioc = G4HCIOcatalog::GetG4HCIOcatalog();
 
   G4VHCIOentry* ioe = ioc->GetEntry(detName);
-  ioe->CreateHCIOmanager(detName, colName);
+  if ( ioe != 0 ) {
+    ioe->CreateHCIOmanager(detName, colName);
+  } else {
+    G4cerr << "Error! -- HCIO assignment failed for detector " << detName
+              << ", collection " << colName << G4endl;
+  }
 }
 
 // Implementation of CurrentHCIOmanager
@@ -263,7 +266,12 @@ void G4PersistencyCenter::AddDCIOmanager(G4std::string detName)
 
   G4std::string colName = "";
   G4VDCIOentry* ioe = ioc->GetEntry(detName);
-  ioe->CreateDCIOmanager(detName, colName);
+  if ( ioe != 0 ) {
+    ioe->CreateDCIOmanager(detName, colName);
+  } else {
+    G4cerr << "Error! -- DCIO assignment failed for detector " << detName
+              << ", collection " << colName << G4endl;
+  }
 }
 
 // Implementation of CurrentDCIOmanager
@@ -287,33 +295,39 @@ void G4PersistencyCenter::PrintAll()
   G4cout << "Output object types and file names:" << G4endl;
   for ( itr = f_wrObj.begin(); itr != f_wrObj.end(); itr++ ) {
     name = (*itr).second;
-    G4cout << "  Object: " << PadString(name, 9);
-    mode = CurrentStoreMode(name);
-    if ( mode == kOn ) {
-      G4cout << " <on>    ";
-    } else if ( mode == kOff ) {
-      G4cout << " <off>   ";
-    } else if ( mode == kRecycle ) {
-      G4cout << "<recycle>";
+    // disabled HepMC and MCTruth for now
+    if ( name != "HepMC" && name != "MCTruth" ) {
+      G4cout << "  Object: " << PadString(name, 9);
+      mode = CurrentStoreMode(name);
+      if ( mode == kOn ) {
+        G4cout << " <on>    ";
+      } else if ( mode == kOff ) {
+        G4cout << " <off>   ";
+      } else if ( mode == kRecycle ) {
+        G4cout << "<recycle>";
+      }
+      file = CurrentWriteFile(name);
+      if ( file == "" ) file = "   <N/A>";
+      G4cout << " File: " << file << G4endl;
     }
-    file = CurrentWriteFile(name);
-    if ( file == "" ) file = "   <N/A>";
-    G4cout << " File: " << file << G4endl;
   }
   G4cout << G4endl;
 
   G4cout << "Input object types and file names:" << G4endl;
   for ( itr = f_rdObj.begin(); itr != f_rdObj.end(); itr++ ) {
     name = (*itr).second;
-    G4cout << "  Object: " << PadString(name, 9);
-    if ( CurrentRetrieveMode(name) ) {
-      G4cout << " <on>    ";
-    } else {
-      G4cout << " <off>   ";
+    // disabled HepMC and MCTruth for now
+    if ( name != "HepMC" && name != "MCTruth" ) {
+      G4cout << "  Object: " << PadString(name, 9);
+      if ( CurrentRetrieveMode(name) ) {
+        G4cout << " <on>    ";
+      } else {
+        G4cout << " <off>   ";
+      }
+      file = CurrentReadFile(name);
+      if ( file == "" ) file = "   <N/A>";
+      G4cout << " File: " << CurrentReadFile(name) << G4endl;
     }
-    file = CurrentReadFile(name);
-    if ( file == "" ) file = "   <N/A>";
-    G4cout << " File: " << CurrentReadFile(name) << G4endl;
   }
   G4cout << G4endl;
 
