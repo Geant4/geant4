@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05EnergySpot.cc,v 1.2 1999-12-15 14:49:30 gunter Exp $
+// $Id: ExN05EnergySpot.cc,v 1.3 2001-05-17 23:10:27 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05EnergySpot.hh"
@@ -44,21 +44,21 @@ void ExN05EnergySpot::Draw(G4Colour *color)
       // Draw a "home made" marker:
       // Will be better by using a real Marker:
       pp.setZ(pp.z()+1*cm);
-      polyline.append(pp);
+      polyline.push_back(pp);
       pp.setZ(pp.z()-2*cm);
-      polyline.append(pp);
+      polyline.push_back(pp);
       pp = Point;
-      polyline.append(pp);
+      polyline.push_back(pp);
       pp.setX(pp.x()+1*cm);
-      polyline.append(pp);
+      polyline.push_back(pp);
       pp.setX(pp.x()-2*cm);
-      polyline.append(pp);
+      polyline.push_back(pp);
       pp = Point;
-      polyline.append(pp);
+      polyline.push_back(pp);
       pp.setY(pp.y()+1*cm);
-      polyline.append(pp);
+      polyline.push_back(pp);
       pp.setY(pp.y()-2*cm);
-      polyline.append(pp);
+      polyline.push_back(pp);
       pVVisManager -> Draw(polyline);
     }
 }

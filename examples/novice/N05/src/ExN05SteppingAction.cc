@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05SteppingAction.cc,v 1.3 1999-12-15 14:49:31 gunter Exp $
+// $Id: ExN05SteppingAction.cc,v 1.4 2001-05-17 23:10:38 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,8 +41,8 @@ void ExN05SteppingAction::UserSteppingAction(const G4Step*)
       else                  colour = G4Colour(0., 1., 0.);
       G4VisAttributes attribs(colour);
       polyline.SetVisAttributes(attribs);
-      polyline.append(pSM->GetStep()->GetPreStepPoint()->GetPosition());
-      polyline.append(pSM->GetStep()->GetPostStepPoint()->GetPosition());
+      polyline.push_back(pSM->GetStep()->GetPreStepPoint()->GetPosition());
+      polyline.push_back(pSM->GetStep()->GetPostStepPoint()->GetPosition());
       pVVisManager -> Draw(polyline);
     }
   }
