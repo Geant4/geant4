@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10.12.2004 - Gabriele Cosmo, tag cosmicray_charging-V06-02-03
+             Replaced usage of M_PI with CLHEP's pi.
+
 01.12.2004 - Henrique Araujo, tag cosmicray_charging-V06-02-02
              Migrated to cmath
              Solved some solid conficts
