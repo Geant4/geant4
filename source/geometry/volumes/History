@@ -1,4 +1,4 @@
-$Id: History,v 1.87 2002-10-29 18:40:25 japost Exp $
+$Id: History,v 1.88 2002-11-09 00:25:07 jacek Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 8th, 2002       J. Generowicz
+- Introduced G4VCurvedTrajectoryFilter, and gave PIF means of
+  manipulating and communicating with it.
 
 Oct 29th, 2002       J. Apostolakis - geomvol-V04-01-05
 - G4PropagatorInField

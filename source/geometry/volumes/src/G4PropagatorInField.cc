@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.38 2002-10-29 18:37:01 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.39 2002-11-09 00:25:09 jacek Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -39,6 +39,8 @@
 #include "G4PropagatorInField.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"
+#include "G4ThreeVector.hh"
+#include "G4VCurvedTrajectoryFilter.hh"
  
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -57,7 +59,8 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
     fEpsilonMaxDefault(0.05),
     fmax_loop_count(10000),
     fNoZeroStep(0), 
-    fCharge(0.0), fInitialMomentumModulus(0.0), fMass(0.0)
+  fCharge(0.0), fInitialMomentumModulus(0.0), fMass(0.0),
+  fpTrajectoryFilter( 0 )
 {
   fEpsilonMin = fEpsilonMinDefault;
   fEpsilonMax = fEpsilonMaxDefault;
@@ -85,6 +88,11 @@ G4PropagatorInField::ComputeStep(
                 G4double&          currentSafety,                // IN/OUT
                 G4VPhysicalVolume* pPhysVol)
 {
+  // Introducing smooth trajectory display (jacek 01/11/2002)
+  if (fpTrajectoryFilter) {
+    fpTrajectoryFilter->CreateNewTrajectorySegment();
+  }
+
   // Parameters for adaptive Runge-Kutta integration
   
   G4double      h_TrialStepSize;        // 1st Step Size 
@@ -283,6 +291,12 @@ G4PropagatorInField::ComputeStep(
     if( !intersects )
     {
       StepTaken += s_length_taken; 
+      // Introducing smooth trajectory display (jacek 01/11/2002)
+      // The filter pointer holds a valid filter if and only if
+      // intermediate points should be stored.
+      if (fpTrajectoryFilter) {
+        fpTrajectoryFilter->TakeIntermediatePoint(CurrentState.GetPosition());
+      }
     }
     first_substep = false;
 
@@ -740,4 +754,22 @@ G4PropagatorInField::PrintStepLengthDiagnostic(
          << " decreate factor = " << decreaseFactor
          << " step trial = " << stepTrial
          << G4endl;
+}
+
+
+G4std::vector<G4ThreeVector>*
+G4PropagatorInField::GimmeTrajectoryVectorAndForgetIt() const {
+  // NB, GimmeThePointsAndForgetThem really forgets them, so it can
+  // only be called (exactly) once for each step.
+  if (fpTrajectoryFilter) {
+    return fpTrajectoryFilter->GimmeThePointsAndForgetThem();
+  } else {
+    return NULL;
+  }
+}
+
+
+void 
+G4PropagatorInField::SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter) {
+  fpTrajectoryFilter = filter;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.27 2002-10-29 18:36:57 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.28 2002-11-09 00:25:08 jacek Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,8 @@
 #include "G4Navigator.hh"
 #include "G4ChordFinder.hh"
 #include "G4FieldManager.hh"
+
+class G4VCurvedTrajectoryFilter;
 
 class G4PropagatorInField
 {
@@ -207,6 +209,29 @@ class G4PropagatorInField
    G4double  fLargestAcceptableStep;
 
    G4double  fCharge, fInitialMomentumModulus, fMass;
+
+  // Introducing smooth curved trajectory display (jacek 30/10/2002)
+public:
+  // 
+  void SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter);
+
+  // Access the points which have passed through the filter. The
+  // points are stored as ThreeVectors for the initial impelmentation
+  // only (jacek 30/10/2002)
+  // Responsibility for deleting the points lies with
+  // SmoothTrajectoryPoint, which is the points' final
+  // destination. The points pointer is set to NULL, to ensure that
+  // the points are not re-used in subsequent steps, therefore THIS
+  // METHOD MUST BE CALLED EXACTLY ONCE PER STEP. (jacek 08/11/2002)
+  G4std::vector<G4ThreeVector>* GimmeTrajectoryVectorAndForgetIt() const;
+private:
+  // The filter encapsulates the algorithm which selects which
+  // intermediate points should be stored in a trajectory. If the
+  // pointer is not NULL, then PIF should submit all the intermediate
+  // points it calculates, to the filter. The pointer should be set to
+  // NULL when no intermediate points need to be stored. This
+  // (jacek 04/11/2002)
+  G4VCurvedTrajectoryFilter* fpTrajectoryFilter;
 };
 
 // ********************************************************************
