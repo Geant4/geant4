@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.11 2001-09-13 11:00:20 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.12 2001-09-14 10:36:17 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -36,7 +36,8 @@
 // 10-09-01 small change in GetContinuousStepLimit, L.Urban
 // 11-09-01 G4MultipleScatteringx put as default G4MultipleScattering
 //          store/retrieve physics table reactivated (mma)
-// 13-09-10 corr. in ComputeTransportCrossSection, L.Urban
+// 13-09-01 corr. in ComputeTransportCrossSection, L.Urban
+// 14-09-01 protection in GetContinuousStepLimit, L.Urban
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -462,7 +463,7 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
     }
     
     //  sample z
-    if ((pcz > 0.) && (tau < 1.5))
+    if ((pcz > 0.) && (2.*zmean > tPathLength))
     {
       z0 = zmean+pcz*(tPathLength-zmean);
       kz = (2.*zmean-tPathLength)/(z0-zmean);
