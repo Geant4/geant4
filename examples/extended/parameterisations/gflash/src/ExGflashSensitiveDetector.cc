@@ -1,3 +1,4 @@
+// Created by Joanna Weng 26.11.2004
 #include "ExGflashSensitiveDetector.hh"
 #include "ExGflashHitsCollection.hh"
 #include "ExGflashHit.hh"
@@ -8,6 +9,7 @@
 #include "G4SDManager.hh"
 #include <iostream>
 
+//WARNING :  You have to use also  G4VGFlashSensitiveDetector() as base class
 ExGflashSensitiveDetector::ExGflashSensitiveDetector(G4String name, ExGflashDetectorConstruction* det):
 G4VSensitiveDetector(name), G4VGFlashSensitiveDetector(), Detector(det)
 {
@@ -62,7 +64,7 @@ G4bool ExGflashSensitiveDetector::ProcessHits(G4Step* aStep,G4TouchableHistory* 
 	return true;
 }
 
-
+// Separate GFLASH interface
 G4bool ExGflashSensitiveDetector::ProcessHits(G4GFlashSpot*aSpot ,G4TouchableHistory* ROhist)
 {	//cout<<"This is ProcessHits GFLASH"<<endl;
 	G4double e=aSpot->GetEnergySpot()->GetEnergy();
