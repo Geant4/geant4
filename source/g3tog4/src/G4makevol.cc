@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4makevol.cc,v 1.6 1999-05-12 08:10:24 lockman Exp $
+// $Id: G4makevol.cc,v 1.7 1999-05-13 03:56:02 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4LogicalVolume.hh"
-#include "G4MagneticField.hh"
+//#include "G4MagneticField.hh"
 //#include "G4FieldManager.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
@@ -25,6 +25,7 @@
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
 #include "G4Para.hh"
+#include "G4Hype.hh"
         
 G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
                            G4double Rpar[], G4int npar){
@@ -192,8 +193,12 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
     G4cerr << "ELTU not supported" << endl;
 
   } else if ( shape == "HYPE" ) {
-    // $$$ not implemented.
-    G4cerr << "HYPE not supported" << endl;
+    G4double pRmin = Rpar[0] = Rpar[0]*cm;
+    G4double pRmax = Rpar[1] = Rpar[1]*cm;
+    G4double pDz   = Rpar[2] = Rpar[2]*cm;
+    G4double pThet = Rpar[3] = Rpar[3]*deg;
+    solid = new
+      G4Hype(vname, pRmin, pRmax, pThet, pThet, pDz);
 
   } else if ( shape == "GTRA" ) {
     // $$$ not implemented.
