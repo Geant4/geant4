@@ -135,7 +135,7 @@ void Test30Material::Initialise()
 G4Material* Test30Material::GetMaterial(const G4String& name)
 { 
 
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  //  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
 	G4Material* ma = G4Material::GetMaterial(name);
 	

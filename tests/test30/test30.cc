@@ -87,7 +87,7 @@
 
 int main(int argc, char** argv)
 {
-  HepTupleManager* hbookManager;
+  HepTupleManager* hbookManager = 0;
 
   // -------------------------------------------------------------------
   // Setup
@@ -110,7 +110,7 @@ int main(int argc, char** argv)
   G4double  emax     = 160.*MeV;
   G4Material* material = 0; 
 
-  G4double ang[13] = {0.,11.,24.,35.,45.,56.,69.,82.,95.,106.,121.,134.,145.};
+  //  G4double ang[13] = {0.,11.,24.,35.,45.,56.,69.,82.,95.,106.,121.,134.,145.};
   G4double bng[14] = {0.,6.,18.,30.,40.,50.,62.,75.,88.,100.,114.,127.,140.,180.};
   G4double cng[13];
 
@@ -157,6 +157,8 @@ int main(int argc, char** argv)
   G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
   G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box",
                                             lFrame,0,false,0);
+
+  assert(pFrame);
 
   // -------------------------------------------------------------------
   // ---- Read input file
@@ -286,7 +288,7 @@ int main(int argc, char** argv)
 
     // -------------------------------------------------------------------
     // ---- HBOOK initialization
-    G4int nhisto = 40; 
+    const G4int nhisto = 40; 
     HepHistogram* h[nhisto];
     G4double mass = part->GetPDGMass();
     G4double pmax = sqrt(energy*(energy + 2.0*mass));
@@ -425,7 +427,7 @@ int main(int argc, char** argv)
 
       gTrack->SetStep(step); 
       gTrack->SetKineticEnergy(energy); 
-      G4double x = 0.0;
+      //G4double x = 0.0;
 
       labv = G4LorentzVector(0.0, 0.0, pmax, energy + mass + amass);
       aChange = proc->PostStepDoIt(*gTrack,*step);
@@ -481,7 +483,7 @@ int main(int argc, char** argv)
           if(pd == neutron) h[23]->accumulate(mom.phi()/degree,1.0);
 	}				
 	de += e;
-        if(verbose || abs(mom.phi()/degree - 90.) < 0.01) {
+        if(verbose>0 && abs(mom.phi()/degree - 90.) < 0.01) {
           G4cout << i << "-th secondary  " 
 		 << pd->GetParticleName() << "   Ekin(MeV)= "
                  << e/MeV
