@@ -1,0 +1,16 @@
+The following tag: g3tog4-01-00-03 has been tested on HP-aCC and Sun-CC:
+
+1. rztog4 has been updated to generate G4gsmixt call list instruction
+when a G3 mixture is encountered.
+
+2. When a G4gsmixt instruction is encountered, a G4 material will be
+built from the component elements.
+
+3. References to RWGDlist class  have been replaced with
+RWTPtrOrderedVector in most (but not yet all) methods.
+
+4. The code to handle G3 divisions has been temporarily disabled until
+the algorithms can be updated.
+
+There will be another tag available shortly in which all RWGDlist
+occuarances are removed.
