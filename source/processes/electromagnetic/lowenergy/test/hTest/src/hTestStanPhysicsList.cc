@@ -54,6 +54,7 @@ hTestStanPhysicsList::hTestStanPhysicsList()
 
 void hTestStanPhysicsList::ConstructProcess()
 {
+  G4cout << "Standard Electromagnetic PhysicsList is initilized" << G4endl;
   hTestStepCut* theStepCut = new hTestStepCut();
   theStepCut->SetMaxStep(maxChargedStep);          
 

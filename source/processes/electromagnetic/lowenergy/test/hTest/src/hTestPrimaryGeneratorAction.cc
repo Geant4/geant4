@@ -130,6 +130,7 @@ void hTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     }
 
   particleGun->GeneratePrimaryVertex(anEvent);
+  if(verbose > 1) G4cout << "hTestPrimaryGeneratorAction: BeamOn" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

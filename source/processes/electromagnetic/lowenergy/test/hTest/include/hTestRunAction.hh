@@ -40,7 +40,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class hTestRunMessenger;
 class HepTupleManager;
 class HepTuple;
 class HepHistogram;
@@ -71,6 +70,7 @@ public: // Without description
     void SaveToTuple(G4String, G4double, G4double);
     void SaveEvent();
     void AddEnergy(G4double, G4double);
+    void AddEndPoint(G4double);
     inline void SetVerbose(G4int val) {verbose = val;};
     inline G4int GetVerbose() const {return verbose;};
     inline void SetHistoNumber(G4int val) {nHisto = val;};
@@ -85,6 +85,9 @@ public: // Without description
     HepTuple* ntup;
     G4int nHisto;
     G4int verbose; 
+    G4double zend;
+    G4double zend2;
+    G4double zEvt;
 };
 
 #endif

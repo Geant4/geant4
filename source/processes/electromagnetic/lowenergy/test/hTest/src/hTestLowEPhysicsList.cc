@@ -58,6 +58,7 @@ hTestLowEPhysicsList::hTestLowEPhysicsList()
 
 void hTestLowEPhysicsList::ConstructProcess()
 {
+  G4cout << "LowEnergy Electromagnetic PhysicsList is initilized" << G4endl;
   hTestStepCut* theStepCut = new hTestStepCut();
   theStepCut->SetMaxStep(maxChargedStep);
   G4ParticleDefinition* proton = G4Proton::ProtonDefinition();     
@@ -109,7 +110,7 @@ void hTestLowEPhysicsList::ConstructProcess()
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
 
       if(0 < verbose) {
-        G4cout << "Hadronic processes for " << particleName << G4endl; 
+        G4cout << "Hadronic EM processes for " << particleName << G4endl; 
       }
 
       G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
@@ -146,7 +147,7 @@ void hTestLowEPhysicsList::ConstructProcess()
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
 
       if(0 < verbose) {
-        G4cout << "Ionic processes for " << particleName << G4endl; 
+        G4cout << "Ionic EM processes for " << particleName << G4endl; 
       }
 
       G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;

@@ -57,24 +57,21 @@ hTestDetectorConstruction::hTestDetectorConstruction():
   calorimeterSD(0),
   theEvent(0),
   myVerbose(0),
-  nEvents(1)
+  nEvents(1),
+  detIsConstructed(false),
+  nAbsSaved(0),
+  nHisto(1)
 {
   // Default parameter values of the calorimeter
   // corresponds to water test
+  nameMatAbsorber   = G4String("Water");
   AbsorberThickness = 1.0*mm;    
   SizeXY            = 100.0*mm;
   NumberOfAbsorbers = 300;
-  WorldSizeZ        = 0.0;
+  nameMatWorld      = G4String("Air");
+  WorldSizeZ        = 400.0*mm;
   histoName         = G4String("histo.paw");
 
-  // Water test
-  // Mylar test
-  // NumberOfAbsorbers = 50;
-  // AbsorberThickness = 0.001*mm;
-  // Silicon test
-  //  NumberOfAbsorbers = 1;
-  //  AbsorberThickness = 1.0*mm;
-  //  NumberOfAbsorbers = 2000;
   ComputeGeomParameters();
 
   // create commands for interactive definition of the calorimeter  
@@ -92,9 +89,9 @@ hTestDetectorConstruction::~hTestDetectorConstruction()
 
 G4VPhysicalVolume* hTestDetectorConstruction::Construct()
 {
-  DefineMaterials();
-  SetWorldMaterial(G4String("Air"));
-  SetAbsorberMaterial(G4String("Water"));
+  if(!detIsConstructed) DefineMaterials();
+  WorldMaterial = GetMaterial(nameMatWorld);
+  AbsorberMaterial = GetMaterial(nameMatAbsorber);
   return ConstructGeometry();
 }
 
@@ -255,7 +252,7 @@ G4VPhysicalVolume* hTestDetectorConstruction::ConstructGeometry()
   //     
   // World
   //
-  solidWorld = new G4Box("World",SizeXY,SizeXY,WorldSizeZ);   
+  solidWorld = new G4Box("World",SizeXY+1.0*mm,SizeXY+1.0*mm,WorldSizeZ);   
                          
   logicWorld = new G4LogicalVolume(solidWorld,WorldMaterial,"World");
                                    
@@ -282,12 +279,10 @@ G4VPhysicalVolume* hTestDetectorConstruction::ConstructGeometry()
   // Sensitive Detectors: Absorber 
   //
 
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
-
-  calorimeterSD = new hTestCalorimeterSD("CalorSD",this);
-  SDman->AddNewDetector( calorimeterSD );
+  calorimeterSD = new hTestCalorimeterSD("hTest",this);
+  (G4SDManager::GetSDMpointer())->AddNewDetector( calorimeterSD );
   logicAbs->SetSensitiveDetector(calorimeterSD);
-      
+
   //                                        
   // Visualization attributes
   //
@@ -298,7 +293,9 @@ G4VPhysicalVolume* hTestDetectorConstruction::ConstructGeometry()
   logicAbs->SetVisAttributes(VisAtt);
 #endif
 
-  if(myVerbose > 0) PrintGeomParameters();  
+  PrintGeomParameters();  
+
+  detIsConstructed = true;
 
   //
   //always return the physical World
@@ -318,42 +315,18 @@ void hTestDetectorConstruction::PrintGeomParameters()
   G4cout << "The ABSORBER is made of " << NumberOfAbsorbers << " items of "
          << AbsorberThickness/mm  
          << " mm of " << AbsorberMaterial->GetName();
-  G4cout << ". The transverse size (YZ) is " 
+  G4cout << ". The transverse size (XY) is " 
          << SizeXY/mm << " mm" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void hTestDetectorConstruction::SetAbsorberMaterial(const G4String& mat)
+G4Material* hTestDetectorConstruction::GetMaterial(const G4String& mat)
 {
   // search the material by its name
   G4Material* pttoMaterial = G4Material::GetMaterial(mat);     
-
-  if (pttoMaterial) {     
-    AbsorberMaterial = pttoMaterial;
-
-    if(logicAbs) {
-      logicAbs->SetMaterial(pttoMaterial); 
-      MaterialIsChanged();
-    }
-  }                  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void hTestDetectorConstruction::SetWorldMaterial(const G4String& mat)
-{
-  // search the material by its name
-  G4cout << "seach for world mat" << G4endl;  
-  G4Material* pttoMaterial = G4Material::GetMaterial(mat);     
-
-  if (pttoMaterial) {
-    WorldMaterial = pttoMaterial;
-    if(logicWorld) {
-      logicWorld->SetMaterial(pttoMaterial); 
-      MaterialIsChanged();
-    }
-  }
+  if(detIsConstructed) MaterialIsChanged();
+  return pttoMaterial;
 }
     
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -362,7 +335,7 @@ void hTestDetectorConstruction::SetNumberOfAbsorbers(G4int val)
 {
   // change Absorber thickness and recompute the calorimeter parameters
   NumberOfAbsorbers = val;
-  GeometryIsChanged();
+  if(detIsConstructed) GeometryIsChanged();
 }  
     
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -371,7 +344,7 @@ void hTestDetectorConstruction::SetAbsorberThickness(G4double val)
 {
   // change Absorber thickness and recompute the calorimeter parameters
   AbsorberThickness = val;
-  GeometryIsChanged();
+  if(detIsConstructed) GeometryIsChanged();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -380,7 +353,7 @@ void hTestDetectorConstruction::SetAbsorberSizeXY(G4double val)
 {
   // change the transverse size and recompute the calorimeter parameters
   SizeXY = val;
-  GeometryIsChanged();
+  if(detIsConstructed) GeometryIsChanged();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -388,7 +361,7 @@ void hTestDetectorConstruction::SetAbsorberSizeXY(G4double val)
 void hTestDetectorConstruction::SetWorldSizeZ(G4double val)
 {
   WorldSizeZ = val;
-  GeometryIsChanged();
+  if(detIsConstructed) GeometryIsChanged();
 }  
 
 
@@ -455,6 +428,7 @@ void hTestDetectorConstruction::GeometryIsChanged()
 void hTestDetectorConstruction::MaterialIsChanged()
 {
   (G4RunManager::GetRunManager())->CutOffHasBeenModified();
+  (G4RunManager::GetRunManager())->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

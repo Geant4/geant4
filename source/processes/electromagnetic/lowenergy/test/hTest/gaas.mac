@@ -1,0 +1,29 @@
+#=======================================================
+# Macro file "gaas.mac" for the GaAs test by hTest.cc
+# 10.04.01 V.Ivanchenko
+#======================================================= 
+/control/verbose           2
+/run/verbose               2
+/step/verbose              0
+/tracking/verbose          0
+/stepping/verbose          0
+/event/verbose             0
+/hTest/verbose             0
+#
+/hTest/physics/cutGamma    0.001 mm
+/hTest/physics/cutElectron 0.001 mm
+/hTest/physics/MaxStep     0.1 mm
+/hTest/physics/EMList      LowEnergy
+/hTest/physics/HadronList  none
+/hTest/AbsorberMaterial    GaAs
+/hTest/AbsorberThick       0.001 mm
+/hTest/NumberOfAbsorbers   60
+/hTest/WorldMaterial       Vacuum
+/hTest/numberAbsToSave     0
+/hTest/HistoName           gaas.paw 
+/hTest/NumberOfEvents      1000
+/hTest/HistoNumber         0
+#
+/gun/particle              proton
+/gun/energy                1.0 MeV
+

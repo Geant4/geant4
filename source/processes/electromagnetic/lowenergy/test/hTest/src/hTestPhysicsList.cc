@@ -49,7 +49,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 hTestPhysicsList::hTestPhysicsList(hTestDetectorConstruction* p):
-  pDet(p)
+  pDet(p),
+  physicsIsDefined(false)
 {
   InitializeMe(); 
 }
@@ -183,6 +184,7 @@ void hTestPhysicsList::ConstructProcess()
   if(theEMList)  theEMList->ConstructEM();
   if(theHadList) theHadList->ConstructHad();
   ConstructDecay();
+  physicsIsDefined = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -253,7 +255,7 @@ void hTestPhysicsList::SetCuts()
 
 void hTestPhysicsList::SetGammaCut(G4double val)
 {
-  ResetCuts();
+  if(physicsIsDefined) ResetCuts();
   cutForGamma = val;
 }
 
@@ -261,7 +263,7 @@ void hTestPhysicsList::SetGammaCut(G4double val)
 
 void hTestPhysicsList::SetElectronCut(G4double val)
 {
-  ResetCuts();
+  if(physicsIsDefined) ResetCuts();
   cutForElectron = val;
 }
 
@@ -269,7 +271,7 @@ void hTestPhysicsList::SetElectronCut(G4double val)
 
 void hTestPhysicsList::SetProtonCut(G4double val)
 {
-  ResetCuts();
+  if(physicsIsDefined) ResetCuts();
   cutForProton = val;
 }
 
@@ -289,7 +291,7 @@ void hTestPhysicsList::SetElectronCutByEnergy(G4double energy)
 
 void hTestPhysicsList::SetLowEnergyLimit(G4double energy)
 {
-  ResetCuts();
+  if(physicsIsDefined) ResetCuts();
   lowEnergyLimit = energy;
   G4cout << "hTestPhysicsList: lowEnergyLimit = " 
          << lowEnergyLimit/eV << " eV" << G4endl;
@@ -299,7 +301,7 @@ void hTestPhysicsList::SetLowEnergyLimit(G4double energy)
 
 void hTestPhysicsList::SetHighEnergyLimit(G4double energy)
 {
-  ResetCuts();
+  if(physicsIsDefined) ResetCuts();
   highEnergyLimit = energy;
   G4cout << "hTestPhysicsList: highEnergyLimit = " 
          << highEnergyLimit/GeV << " GeV" << G4endl;
@@ -347,7 +349,7 @@ void hTestPhysicsList::SetEMPhysicsList(const G4String& name)
   emPhysics = name;   
   G4cout << "HsPhysicsList: <" << name 
          << "> EMPhysicsList is set" << G4endl;
-  ResetCuts(); 
+  if(physicsIsDefined) ResetCuts(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -388,7 +390,7 @@ void hTestPhysicsList::SetHadronPhysicsList(const G4String& name)
   hadronPhysics = name;   
   G4cout << "HsPhysicsList: <" << name 
          << "> HadronicPhysicsList is set" << G4endl;
-  ResetCuts(); 
+  if(physicsIsDefined) ResetCuts(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

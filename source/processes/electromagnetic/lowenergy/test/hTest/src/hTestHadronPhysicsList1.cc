@@ -94,6 +94,7 @@
 
 void hTestHadronPhysicsList1::ConstructProcess()
 {
+   G4cout << "LowEnergy Hadronic PhysicsList is initilized" << G4endl;
    G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess();
    G4LElastic* theElasticModel = new G4LElastic;
    theElasticProcess->RegisterMe(theElasticModel);
@@ -260,6 +261,33 @@ void hTestHadronPhysicsList1::ConstructProcess()
          theInelasticProcess->RegisterMe(theHEInelasticModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);  
       }   
+      else if (particleName == "deuteron") {
+         pmanager->AddDiscreteProcess(theElasticProcess);
+         G4DeuteronInelasticProcess* theInelasticProcess = 
+                            new G4DeuteronInelasticProcess("inelastic");
+         G4LEDeuteronInelastic* theLEInelasticModel = 
+                                 new G4LEDeuteronInelastic;
+         theInelasticProcess->RegisterMe(theLEInelasticModel);
+         pmanager->AddDiscreteProcess(theInelasticProcess);
+      }
+      else if (particleName == "triton") {
+         pmanager->AddDiscreteProcess(theElasticProcess);
+         G4TritonInelasticProcess* theInelasticProcess = 
+                            new G4TritonInelasticProcess("inelastic");
+         G4LETritonInelastic* theLEInelasticModel = 
+                                 new G4LETritonInelastic;
+         theInelasticProcess->RegisterMe(theLEInelasticModel);
+         pmanager->AddDiscreteProcess(theInelasticProcess);
+      }
+      else if (particleName == "alpha") {
+         pmanager->AddDiscreteProcess(theElasticProcess);
+         G4AlphaInelasticProcess* theInelasticProcess = 
+                            new G4AlphaInelasticProcess("inelastic");
+         G4LEAlphaInelastic* theLEInelasticModel = 
+                                 new G4LEAlphaInelastic;
+         theInelasticProcess->RegisterMe(theLEInelasticModel);
+         pmanager->AddDiscreteProcess(theInelasticProcess);
+      }
     }  
  }
 

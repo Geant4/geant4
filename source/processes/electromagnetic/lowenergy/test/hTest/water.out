@@ -1,0 +1,681 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (15-Dec-2000)
+             Copyright : Geant4 Collaboration
+**********************************************
+Detector Construction is defined
+HsPhysicsList: <LowEnergy> EMPhysicsList is set
+HsPhysicsList: <none> HadronicPhysicsList is set
+Physics List is defined
+User actions will be initialized
+hTestPrimaryGeneratorMessenger: Construct 
+RunAction is defined
+EventAction is defined
+TrackingAction is defined
+SteppingAction is defined
+UI interface is started
+#=======================================================
+# Macro file "water.mac" for the Water test by hTest.cc
+# 10.04.01 V.Ivanchenko
+#======================================================= 
+/run/verbose               2
+/step/verbose              0
+/tracking/verbose          0
+/stepping/verbose          0
+/event/verbose             0
+/hTest/verbose             1
+#
+/hTest/physics/cutGamma    1.0 cm
+/hTest/physics/cutElectron 1.0 mm
+/hTest/physics/MaxStep     1.0 mm
+hTestPhysicsList: MaxChargedStep = 1 mm
+/hTest/physics/EMList      LowEnergy
+/hTest/physics/HadronList  LowEnergy
+HsPhysicsList: <LowEnergy> HadronicPhysicsList is set
+/hTest/AbsorberMaterial    Water
+/hTest/AbsorberThick       1.0 mm
+/hTest/AbsorberXY          20.0 cm
+/hTest/NumberOfAbsorbers   300
+/hTest/WorldMaterial       Vacuum
+/hTest/numberAbsToSave     0
+/hTest/HistoName           water.paw 
+/hTest/NumberOfEvents      100
+/hTest/gun/sigmaE          0.9 MeV
+hTestPrimaryGeneratorMessenger: O'K 
+#
+/gun/particle              proton
+/gun/energy                175 MeV
+
+Start initialisation
+userDetector->Construct() start.
+hTestDetectorConstruction: DefineMaterials starts
+
+***** Table : Nb of materials = 18 *****
+
+ Material: Beryllium            density:  1.848 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  35.267 cm
+   --->  Element: Beryllium    Z =  4.0   N =   9.0   A =   9.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Aluminum            density:  2.700 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm
+   --->  Element: Aluminum    Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Carbon            density:  2.000 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  21.348 cm
+   --->  Element: Carbon    Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Silicon            density:  2.330 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm
+   --->  Element: Silicon    Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: liquidArgon            density:  1.390 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm
+   --->  Element: liquidArgon    Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Iron            density:  7.870 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm
+   --->  Element: Iron    Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Copper            density:  8.960 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.436 cm
+   --->  Element: Copper    Z = 29.0   N =  63.5   A =  63.55 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Gold            density: 19.320 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.344 mm
+   --->  Element: Gold    Z = 79.0   N = 197.0   A = 196.97 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Lead            density: 11.350 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm
+   --->  Element: Lead    Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Water        H_2O   density:  1.000 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm
+   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material: Methane        CH_4   density:  0.667 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 696.375 m
+   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.19 %  Abundance  80.00 %
+   --->  Element: CarbonC   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass:  74.81 %  Abundance  20.00 %
+
+ Material: Graphite        Graphite   density:  2.265 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.834 cm
+   --->  Element: CarbonC   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: GaAs        GaAs   density:  5.318 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.293 cm
+   --->  Element: GalliumGa   Z = 31.0   N =  69.7   A =  69.72 g/mole  fractionMass:  48.20 %  Abundance  50.00 %
+   --->  Element: ArsenicumAs   Z = 33.0   N =  74.9   A =  74.92 g/mole  fractionMass:  51.80 %  Abundance  50.00 %
+
+ Material: Ethane        C_2H_6   density: 424.100 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.076 m
+   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  20.16 %  Abundance  75.00 %
+   --->  Element: CarbonC   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass:  79.84 %  Abundance  25.00 %
+
+ Material: CsI        CsI   density:  4.530 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.852 cm
+   --->  Element: CesiumCs   Z = 55.0   N = 132.9   A = 132.91 g/mole  fractionMass:  51.15 %  Abundance  50.00 %
+   --->  Element: IodideI   Z = 53.0   N = 126.9   A = 126.90 g/mole  fractionMass:  48.85 %  Abundance  50.00 %
+
+ Material: Air            density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m
+   --->  Element: NitrogenN   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material: Mylar            density:  1.390 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.868 cm
+   --->  Element: CarbonC   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass:  55.00 %  Abundance  30.30 %
+   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   8.33 %  Abundance  54.55 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  36.67 %  Abundance  15.15 %
+
+ Material: Vacuum            density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc
+   --->  Element: Vacuum    Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+
+hTestDetectorConstruction: ConstructGeometry starts
+The  WORLD   is made of  of Vacuum. The transverse size (XY) of the world is 2e+02 mm
+The ABSORBER is made of 300 items of 1 mm of Water. The transverse size (XY) is 2e+02 mm
+physicsList->Construct() start.
+LowEnergy Electromagnetic PhysicsList is initilized
+Ionic EM processes for IonAr40
+Ionic EM processes for IonC12
+Ionic EM processes for IonFe56
+Ionic EM processes for alpha
+Hadronic EM processes for anti_proton
+Ionic EM processes for deuteron
+Hadronic EM processes for kaon+
+Hadronic EM processes for kaon-
+MuonMinusCaptureAtRest is created 
+MuonMinusCaptureAtRest is created 
+Hadronic EM processes for pi+
+Hadronic EM processes for pi-
+Hadronic EM processes for proton
+Ionic EM processes for triton
+LowEnergy Hadronic PhysicsList is initilized
+physicsList->setCut() start.
+hTestPhysicsList::SetCuts: CutLength = 1 mm
+hTestPhysicsList: Set cuts for all particles 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV to 1e+02 TeV in 100 bins. 
+*** LEion using Tcut =0.47
+*** LEion using Tcut =0.59
+*** LEion using Tcut =0.52
+*** LEion using Tcut =0.55
+*** LEion using Tcut =0.34
+*** LEion using Tcut =1.3
+*** LEion using Tcut =1.4
+*** LEion using Tcut =2.3
+*** LEion using Tcut =1.4
+*** LEion using Tcut =0.35
+*** LEion using Tcut =0.00025
+*** LEion using Tcut =0.57
+*** LEion using Tcut =0.87
+*** LEion using Tcut =0.22
+*** LEion using Tcut =0.69
+*** LEion using Tcut =0.00028
+*** LEion using Tcut =0.43
+*** LEion using Tcut =0.00025
+
+LowEnergyIoni:  Low energy ionisation code with implementation of the continuous dE/dx part.
+ At present it can be used for electrons  in the energy range [250eV,100GeV]
+ the process must work with G4LowEnergyBremsstrahlung
+*** LE Bremsstrahlung using Gamma Tcut = 0.0038 for material Beryllium
+*** LE Bremsstrahlung using Gamma Tcut = 0.02 for material Aluminum
+*** LE Bremsstrahlung using Gamma Tcut = 0.0075 for material Carbon
+*** LE Bremsstrahlung using Gamma Tcut = 0.021 for material Silicon
+*** LE Bremsstrahlung using Gamma Tcut = 0.019 for material liquidArgon
+*** LE Bremsstrahlung using Gamma Tcut = 0.06 for material Iron
+*** LE Bremsstrahlung using Gamma Tcut = 0.07 for material Copper
+*** LE Bremsstrahlung using Gamma Tcut = 0.37 for material Gold
+*** LE Bremsstrahlung using Gamma Tcut = 0.28 for material Lead
+*** LE Bremsstrahlung using Gamma Tcut = 0.0077 for material Water
+*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material Methane
+*** LE Bremsstrahlung using Gamma Tcut = 0.0079 for material Graphite
+*** LE Bremsstrahlung using Gamma Tcut = 0.064 for material GaAs
+*** LE Bremsstrahlung using Gamma Tcut = 0.0039 for material Ethane
+*** LE Bremsstrahlung using Gamma Tcut = 0.1 for material CsI
+*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material Air
+*** LE Bremsstrahlung using Gamma Tcut = 0.0075 for material Mylar
+*** LE Bremsstrahlung using Gamma Tcut = 0.00025 for material Vacuum
+
+LowEnBrem:  Total cross sections from EEDL database,Gamma energy sampled from a parametrised formula.Implementation of the continuous dE/dx part.
+ At present it can be used for electrons  in the energy range [250eV,100GeV]
+ the process must work with G4LowEnergyIonisation
+
+annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV to 1e+02 TeV in 100 bins. 
+
+MuIoni:  knock-on electron cross sections .
+          Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+      PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV to 1e+02 TeV in 100 bins. 
+
+hLowEIoni:    Knock-on electron cross sections . 
+        Good description above the mean excitation energy.
+        Delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 10 eV  to 1e+02 TeV  in 200 bins.
+        Electronic stopping power model is  ICRU_R49p
+        from 1 keV  to 2 MeV .
+
+        Parametrisation model for antiprotons is  ICRU_R49p
+        from 50 keV  to 2 MeV .
+        Parametrization of the Barkas effect is switched on.
+        Nuclear stopping power model is ICRU_R49
+============= The cut Energy ==============================
+                      gamma            e-           
+Cut in range                  1 cm             1 mm
+Cut in energy
+ Beryllium                         3.82 keV           468 keV
+   Aluminum                         20.3 keV           594 keV
+   Carbon                         7.52 keV           523 keV
+   Silicon                         20.7 keV           545 keV
+   liquidArgon                         19.1 keV           345 keV
+   Iron                         60.4 keV          1.28 MeV
+   Copper                         70.2 keV          1.39 MeV
+   Gold                          374 keV          2.28 MeV
+   Lead                          284 keV          1.37 MeV
+   Water                         7.71 keV           351 keV
+   Methane                          250 eV           250 eV
+   Graphite                         7.89 keV           574 keV
+   GaAs                         63.8 keV           871 keV
+   Ethane                         3.87 keV           218 keV
+   CsI                          103 keV           692 keV
+   Air                          250 eV           276 eV
+   Mylar                         7.51 keV           434 keV
+   Vacuum                          250 eV           250 eV
+===================================================
+Start event loop for 100 events
+### Run 0 start
+hTestRunAction: Histograms will be saved to the file <water.paw>
+hTestRunAction: Histograms are booked and run has been started
+Start closing geometry.
+Start Run processing.
+Event#  1  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17449   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #0 started; nEvt = 1
+hTestEventAction: Event #0 ended
+Event#  2  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17427   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #1 started; nEvt = 2
+hTestEventAction: Event #1 ended
+Event#  3  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17503   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #2 started; nEvt = 3
+hTestEventAction: Event #2 ended
+Event#  4  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.1755   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #3 started; nEvt = 4
+hTestEventAction: Event #3 ended
+Event#  5  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17517   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #4 started; nEvt = 5
+hTestEventAction: Event #4 ended
+Event#  6  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17452   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #5 started; nEvt = 6
+hTestEventAction: Event #5 ended
+Event#  7  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17646   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #6 started; nEvt = 7
+hTestEventAction: Event #6 ended
+Event#  8  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17517   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #7 started; nEvt = 8
+hTestEventAction: Event #7 ended
+Event#  9  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17597   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #8 started; nEvt = 9
+hTestEventAction: Event #8 ended
+Event#  10  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17609   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #9 started; nEvt = 10
+hTestEventAction: Event #9 ended
+Event#  11  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17558   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #10 started; nEvt = 11
+hTestEventAction: Event #10 ended
+Event#  12  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17445   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #11 started; nEvt = 12
+hTestEventAction: Event #11 ended
+Event#  13  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17451   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #12 started; nEvt = 13
+hTestEventAction: Event #12 ended
+Event#  14  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.1737   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #13 started; nEvt = 14
+hTestEventAction: Event #13 ended
+Event#  15  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17474   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #14 started; nEvt = 15
+hTestEventAction: Event #14 ended
+Event#  16  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17558   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #15 started; nEvt = 16
+hTestEventAction: Event #15 ended
+Event#  17  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17573   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #16 started; nEvt = 17
+hTestEventAction: Event #16 ended
+Event#  18  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17576   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #17 started; nEvt = 18
+hTestEventAction: Event #17 ended
+Event#  19  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17634   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #18 started; nEvt = 19
+hTestEventAction: Event #18 ended
+Event#  20  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17658   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #19 started; nEvt = 20
+hTestEventAction: Event #19 ended
+Event#  21  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17589   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #20 started; nEvt = 21
+hTestEventAction: Event #20 ended
+Event#  22  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.1757   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #21 started; nEvt = 22
+hTestEventAction: Event #21 ended
+Event#  23  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17511   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #22 started; nEvt = 23
+hTestEventAction: Event #22 ended
+Event#  24  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17603   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #23 started; nEvt = 24
+hTestEventAction: Event #23 ended
+Event#  25  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17603   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #24 started; nEvt = 25
+hTestEventAction: Event #24 ended
+Event#  26  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17676   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #25 started; nEvt = 26
+hTestEventAction: Event #25 ended
+Event#  27  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17469   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #26 started; nEvt = 27
+hTestEventAction: Event #26 ended
+Event#  28  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17437   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #27 started; nEvt = 28
+hTestEventAction: Event #27 ended
+Event#  29  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17553   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #28 started; nEvt = 29
+hTestEventAction: Event #28 ended
+Event#  30  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17747   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #29 started; nEvt = 30
+hTestEventAction: Event #29 ended
+Event#  31  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17687   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #30 started; nEvt = 31
+hTestEventAction: Event #30 ended
+Event#  32  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17797   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #31 started; nEvt = 32
+hTestEventAction: Event #31 ended
+Event#  33  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17843   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #32 started; nEvt = 33
+hTestEventAction: Event #32 ended
+Event#  34  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17801   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #33 started; nEvt = 34
+hTestEventAction: Event #33 ended
+Event#  35  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17845   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #34 started; nEvt = 35
+hTestEventAction: Event #34 ended
+Event#  36  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17806   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #35 started; nEvt = 36
+hTestEventAction: Event #35 ended
+Event#  37  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17728   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #36 started; nEvt = 37
+hTestEventAction: Event #36 ended
+Event#  38  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17752   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #37 started; nEvt = 38
+hTestEventAction: Event #37 ended
+Event#  39  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17768   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #38 started; nEvt = 39
+hTestEventAction: Event #38 ended
+Event#  40  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17911   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #39 started; nEvt = 40
+hTestEventAction: Event #39 ended
+Event#  41  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17838   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #40 started; nEvt = 41
+hTestEventAction: Event #40 ended
+Event#  42  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17847   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #41 started; nEvt = 42
+hTestEventAction: Event #41 ended
+Event#  43  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17873   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #42 started; nEvt = 43
+hTestEventAction: Event #42 ended
+Event#  44  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17915   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #43 started; nEvt = 44
+hTestEventAction: Event #43 ended
+Event#  45  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18011   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #44 started; nEvt = 45
+hTestEventAction: Event #44 ended
+Event#  46  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17985   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #45 started; nEvt = 46
+hTestEventAction: Event #45 ended
+Event#  47  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17864   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #46 started; nEvt = 47
+hTestEventAction: Event #46 ended
+Event#  48  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17996   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #47 started; nEvt = 48
+hTestEventAction: Event #47 ended
+Event#  49  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17964   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #48 started; nEvt = 49
+hTestEventAction: Event #48 ended
+Event#  50  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18091   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #49 started; nEvt = 50
+hTestEventAction: Event #49 ended
+Event#  51  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.1802   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #50 started; nEvt = 51
+hTestEventAction: Event #50 ended
+Event#  52  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17956   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #51 started; nEvt = 52
+hTestEventAction: Event #51 ended
+Event#  53  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18052   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #52 started; nEvt = 53
+hTestEventAction: Event #52 ended
+Event#  54  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.1802   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #53 started; nEvt = 54
+hTestEventAction: Event #53 ended
+Event#  55  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18018   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #54 started; nEvt = 55
+hTestEventAction: Event #54 ended
+Event#  56  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17903   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #55 started; nEvt = 56
+hTestEventAction: Event #55 ended
+Event#  57  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17761   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #56 started; nEvt = 57
+hTestEventAction: Event #56 ended
+Event#  58  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17832   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #57 started; nEvt = 58
+hTestEventAction: Event #57 ended
+Event#  59  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17928   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #58 started; nEvt = 59
+hTestEventAction: Event #58 ended
+Event#  60  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17924   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #59 started; nEvt = 60
+hTestEventAction: Event #59 ended
+Event#  61  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18036   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #60 started; nEvt = 61
+hTestEventAction: Event #60 ended
+Event#  62  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17967   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #61 started; nEvt = 62
+hTestEventAction: Event #61 ended
+Event#  63  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.1805   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #62 started; nEvt = 63
+hTestEventAction: Event #62 ended
+Event#  64  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18208   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #63 started; nEvt = 64
+hTestEventAction: Event #63 ended
+Event#  65  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.1813   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #64 started; nEvt = 65
+hTestEventAction: Event #64 ended
+Event#  66  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18181   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #65 started; nEvt = 66
+hTestEventAction: Event #65 ended
+Event#  67  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18216   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #66 started; nEvt = 67
+hTestEventAction: Event #66 ended
+Event#  68  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.1821   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #67 started; nEvt = 68
+hTestEventAction: Event #67 ended
+Event#  69  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18275   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #68 started; nEvt = 69
+hTestEventAction: Event #68 ended
+Event#  70  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18545   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #69 started; nEvt = 70
+hTestEventAction: Event #69 ended
+Event#  71  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18669   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #70 started; nEvt = 71
+hTestEventAction: Event #70 ended
+Event#  72  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18678   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #71 started; nEvt = 72
+hTestEventAction: Event #71 ended
+Event#  73  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18568   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #72 started; nEvt = 73
+hTestEventAction: Event #72 ended
+Event#  74  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18536   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #73 started; nEvt = 74
+hTestEventAction: Event #73 ended
+Event#  75  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18511   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #74 started; nEvt = 75
+hTestEventAction: Event #74 ended
+Event#  76  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18541   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #75 started; nEvt = 76
+hTestEventAction: Event #75 ended
+Event#  77  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18427   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #76 started; nEvt = 77
+hTestEventAction: Event #76 ended
+Event#  78  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18301   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #77 started; nEvt = 78
+hTestEventAction: Event #77 ended
+Event#  79  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18276   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #78 started; nEvt = 79
+hTestEventAction: Event #78 ended
+Event#  80  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18253   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #79 started; nEvt = 80
+hTestEventAction: Event #79 ended
+Event#  81  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18253   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #80 started; nEvt = 81
+hTestEventAction: Event #80 ended
+Event#  82  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18283   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #81 started; nEvt = 82
+hTestEventAction: Event #81 ended
+Event#  83  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18385   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #82 started; nEvt = 83
+hTestEventAction: Event #82 ended
+Event#  84  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18353   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #83 started; nEvt = 84
+hTestEventAction: Event #83 ended
+Event#  85  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18208   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #84 started; nEvt = 85
+hTestEventAction: Event #84 ended
+Event#  86  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18271   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #85 started; nEvt = 86
+hTestEventAction: Event #85 ended
+Event#  87  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.1808   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #86 started; nEvt = 87
+hTestEventAction: Event #86 ended
+Event#  88  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18035   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #87 started; nEvt = 88
+hTestEventAction: Event #87 ended
+Event#  89  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18015   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #88 started; nEvt = 89
+hTestEventAction: Event #88 ended
+Event#  90  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18012   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #89 started; nEvt = 90
+hTestEventAction: Event #89 ended
+Event#  91  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.1794   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #90 started; nEvt = 91
+hTestEventAction: Event #90 ended
+Event#  92  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17916   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #91 started; nEvt = 92
+hTestEventAction: Event #91 ended
+Event#  93  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.17919   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #92 started; nEvt = 93
+hTestEventAction: Event #92 ended
+Event#  94  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18011   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #93 started; nEvt = 94
+hTestEventAction: Event #93 ended
+Event#  95  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18228   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #94 started; nEvt = 95
+hTestEventAction: Event #94 ended
+Event#  96  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18187   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #95 started; nEvt = 96
+hTestEventAction: Event #95 ended
+Event#  97  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18233   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #96 started; nEvt = 97
+hTestEventAction: Event #96 ended
+Event#  98  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18296   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #97 started; nEvt = 98
+hTestEventAction: Event #97 ended
+Event#  99  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.1832   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #98 started; nEvt = 99
+hTestEventAction: Event #98 ended
+Event#  100  Beam particle is generated by hTestPrimaryGeneratorAction 
+ParticleName= proton  PDGcode= 2212   KinEnergy(GeV)= 0.18242   x(mm)= 0 y(mm)= 0 z(mm)= 0   ux= 0 uy= 0 uz= 1
+hTestEventAction: Event #99 started; nEvt = 100
+hTestEventAction: Event #99 ended
+Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=3.52s Real=3.55s Sys=0.03s
+hTestRunAction: End of run actions are started
+=========================================================
+Range(mm)= 197.9; Stragling(mm)= 34.94 +- 3.5
+=========================================================
+Histograms and Ntuples are saved
+Second mac file is applied
+runManager will be deleted
+G4 kernel has come to Quit state.
+Deletion of G4 kernel class start.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+runMessenger and histograms are deleted
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+G4SDManager deleted.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManager is deleting.
+runManager is deleted

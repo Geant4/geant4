@@ -94,6 +94,7 @@ void hTestSteppingAction::UserSteppingAction(const G4Step* aStep)
     runaction->SaveToTuple("XEND",xend/mm);      
     runaction->SaveToTuple("YEND",yend/mm);      
     runaction->SaveToTuple("ZEND",zend/mm);      
+    runaction->AddEndPoint(zend);      
   }
 }
 

@@ -34,63 +34,64 @@
 hTestPhysicsListMessenger::hTestPhysicsListMessenger(hTestPhysicsList* list)
  :hTestList(list)
 {
-  cutGCmd = new G4UIcmdWithADoubleAndUnit("/hTest/cutGamma",this);
-  cutGCmd->SetGuidance("Set cut values by RANGE for Gamma.");
+  cutGCmd = new G4UIcmdWithADoubleAndUnit("/hTest/physics/cutGamma",this);
+  cutGCmd->SetGuidance("Set cut values by RANGE for Gamma");
   cutGCmd->SetParameterName("cutGamma",false);
   cutGCmd->SetRange("cutGamma>0.");
   cutGCmd->SetUnitCategory("Length");
-  cutGCmd->AvailableForStates(Idle);
+  cutGCmd->AvailableForStates(PreInit,Idle);
 
-  cutECmd = new G4UIcmdWithADoubleAndUnit("/hTest/cutElectron",this);
-  cutECmd->SetGuidance("Set cut values by RANGE for e- e+.");
+  cutECmd = new G4UIcmdWithADoubleAndUnit("/hTest/physics/cutElectron",this);
+  cutECmd->SetGuidance("Set cut values by RANGE for e- & e+");
   cutECmd->SetParameterName("cutElectron",false);
   cutECmd->SetRange("cutElectron>0.");
   cutECmd->SetUnitCategory("Length");  
-  cutECmd->AvailableForStates(Idle);
+  cutECmd->AvailableForStates(PreInit,Idle);
 
-  cutPCmd = new G4UIcmdWithADoubleAndUnit("/hTest/cutHadron",this);
-  cutPCmd->SetGuidance("Set cut values by RANGE for proton and others.");
+  cutPCmd = new G4UIcmdWithADoubleAndUnit("/hTest/physics/cutHadron",this);
+  cutPCmd->SetGuidance("Set cut values by RANGE for proton and others");
   cutPCmd->SetParameterName("cutHadron",false);
   cutPCmd->SetRange("cutHadron>0.");
   cutPCmd->SetUnitCategory("Length");    
-  cutPCmd->AvailableForStates(Idle);
+  cutPCmd->AvailableForStates(PreInit,Idle);
 
-  eCmd = new G4UIcmdWithADoubleAndUnit("/hTest/cutElectronEnergy",this);
+  eCmd = new G4UIcmdWithADoubleAndUnit("/hTest/physics/cutElectronEnergy",this);
   eCmd->SetGuidance("Set cut values by ENERGY for charged particles.");
   eCmd->SetParameterName("cutElectronEnergy",false);
   eCmd->SetRange("cutElectronEnergy>0.");
   eCmd->SetUnitCategory("Energy");   
-  eCmd->AvailableForStates(Idle);
+  eCmd->AvailableForStates(PreInit,Idle);
 
-  lowLimCmd = new G4UIcmdWithADoubleAndUnit("/hTest/setLowEnergyLimit",this);
-  lowLimCmd->SetGuidance("Set cut values by ENERGY for charged particles.");
-  lowLimCmd->SetParameterName("setLowEnergyLimit",false);
-  lowLimCmd->SetRange("setLowEnergyLimit>0.");
+  lowLimCmd = new G4UIcmdWithADoubleAndUnit("/hTest/physics/LowLimit",this);
+  lowLimCmd->SetGuidance("Set low enery limit for charged particles");
+  lowLimCmd->SetParameterName("LowLimit",false);
+  lowLimCmd->SetRange("LowLimit>0.");
   lowLimCmd->SetUnitCategory("Energy");   
-  lowLimCmd->AvailableForStates(Idle);
+  lowLimCmd->AvailableForStates(PreInit,Idle);
 
-  highLimCmd = new G4UIcmdWithADoubleAndUnit("/hTest/setHighEnergyLimit",this);
-  highLimCmd->SetGuidance("Set cut values by ENERGY for charged particles.");
-  highLimCmd->SetParameterName("setHighEnergyLimit",false);
-  highLimCmd->SetRange("setHighEnergyLimit>0.");
+  highLimCmd = new G4UIcmdWithADoubleAndUnit("/hTest/physics/HighLimit",this);
+  highLimCmd->SetGuidance("Set high energy limit for charged particles");
+  highLimCmd->SetParameterName("HighLimit",false);
+  highLimCmd->SetRange("HighLimit>0.");
   highLimCmd->SetUnitCategory("Energy");   
-  highLimCmd->AvailableForStates(Idle);
+  highLimCmd->AvailableForStates(PreInit,Idle);
 
-  setMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/hTest/setMaxChargedStep",this);
+  setMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/hTest/physics/MaxStep",this);
   setMaxStepCmd->SetGuidance("Set max charged particle step length");
-  setMaxStepCmd->SetParameterName("mxStep",false);
-  setMaxStepCmd->SetRange("mxStep>0.");
+  setMaxStepCmd->SetParameterName("MaxStep",false);
+  setMaxStepCmd->SetRange("MaxStep>0.");
   setMaxStepCmd->SetUnitCategory("Length");
+  setMaxStepCmd->AvailableForStates(PreInit,Idle);
 
-  EMPhysicsCmd = new G4UIcmdWithAString("/hTest/setEMPhysics",this);
+  EMPhysicsCmd = new G4UIcmdWithAString("/hTest/physics/EMList",this);
   EMPhysicsCmd->SetGuidance("Set the name of the EMPhysicsList");
-  EMPhysicsCmd->SetParameterName("EMPhysics",false);
-  EMPhysicsCmd->AvailableForStates(Idle);
+  EMPhysicsCmd->SetParameterName("EMList",false);
+  EMPhysicsCmd->AvailableForStates(PreInit,Idle);
 
-  HadPhysicsCmd = new G4UIcmdWithAString("/hTest/setHadPhysics",this);
+  HadPhysicsCmd = new G4UIcmdWithAString("/hTest/physics/HadronList",this);
   HadPhysicsCmd->SetGuidance("Set the name of the HadPhysicsList");
-  HadPhysicsCmd->SetParameterName("HadPhysics",false);
-  HadPhysicsCmd->AvailableForStates(Idle);
+  HadPhysicsCmd->SetParameterName("HadronList",false);
+  HadPhysicsCmd->AvailableForStates(PreInit,Idle);
 
 }
 
@@ -113,6 +114,10 @@ hTestPhysicsListMessenger::~hTestPhysicsListMessenger()
   
 void hTestPhysicsListMessenger::SetNewValue(G4UIcommand* com, G4String newValue)
 {
+  if(hTestList->GetVerbose() > 1) {
+    G4cout << "hTestPhysicsListMessenger: new value = " << newValue << G4endl;
+  }
+
   if(com == cutGCmd)
     { hTestList->SetGammaCut(cutGCmd->GetNewDoubleValue(newValue));}
   if(com == cutECmd)
@@ -123,7 +128,7 @@ void hTestPhysicsListMessenger::SetNewValue(G4UIcommand* com, G4String newValue)
     { hTestList->SetElectronCutByEnergy(eCmd->GetNewDoubleValue(newValue));}
   if(com == lowLimCmd)
     { hTestList->SetLowEnergyLimit(lowLimCmd->GetNewDoubleValue(newValue));}
-  if(com == lowLimCmd)
+  if(com == highLimCmd)
     { hTestList->SetHighEnergyLimit(highLimCmd->GetNewDoubleValue(newValue));}
   if(com == setMaxStepCmd)
     { hTestList->SetMaxStep(setMaxStepCmd->GetNewDoubleValue(newValue));}

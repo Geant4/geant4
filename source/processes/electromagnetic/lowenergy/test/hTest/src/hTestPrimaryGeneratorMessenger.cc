@@ -25,58 +25,53 @@ hTestPrimaryGeneratorMessenger::hTestPrimaryGeneratorMessenger(
 {
   G4cout << "hTestPrimaryGeneratorMessenger: Construct " << G4endl;
 
-  beamXCmd = new G4UIcmdWithADoubleAndUnit("/hTest/generator/beamX",this);
+  beamXCmd = new G4UIcmdWithADoubleAndUnit("/hTest/gun/beamX",this);
   beamXCmd->SetGuidance("Set X position of the center of the beam.");
-  beamXCmd->SetParameterName("range",true);
+  beamXCmd->SetParameterName("beamX",true);
   beamXCmd->SetUnitCategory("Length");
-  beamXCmd->AvailableForStates(Idle);
+  beamXCmd->AvailableForStates(PreInit,Idle);
 
-  beamYCmd = new G4UIcmdWithADoubleAndUnit("/hTest/generator/beamY",this);
+  beamYCmd = new G4UIcmdWithADoubleAndUnit("/hTest/gun/beamY",this);
   beamYCmd->SetGuidance("Set Y position of the center of the beam.");
-  beamYCmd->SetParameterName("range",true);
+  beamYCmd->SetParameterName("beamY",true);
   beamYCmd->SetUnitCategory("Length");
-  beamYCmd->AvailableForStates(Idle);
+  beamYCmd->AvailableForStates(PreInit,Idle);
 
-  beamZCmd = new G4UIcmdWithADoubleAndUnit("/hTest/generator/beamZ",this);
+  beamZCmd = new G4UIcmdWithADoubleAndUnit("/hTest/gun/beamZ",this);
   beamZCmd->SetGuidance("Set Z of the entry point of the beam.");
-  beamZCmd->SetParameterName("range",true);
+  beamZCmd->SetParameterName("beamZ",true);
   beamZCmd->SetUnitCategory("Length");
-  beamZCmd->AvailableForStates(Idle);
+  beamZCmd->AvailableForStates(PreInit,Idle);
 
-  sigmaXCmd = new G4UIcmdWithADoubleAndUnit("/hTest/generator/sigmaX",this);
-  sigmaXCmd->SetGuidance("Set the beam Gussian width for X.");
-  sigmaXCmd->SetParameterName("range",false);
-  sigmaXCmd->SetRange("range>=0.");
+  sigmaXCmd = new G4UIcmdWithADoubleAndUnit("/hTest/gun/sigmaX",this);
+  sigmaXCmd->SetGuidance("Set the beam Gussian width for X");
+  sigmaXCmd->SetParameterName("sigmaX",false);
   sigmaXCmd->SetUnitCategory("Length");
-  sigmaXCmd->AvailableForStates(Idle);
+  sigmaXCmd->AvailableForStates(PreInit,Idle);
 
-  sigmaYCmd = new G4UIcmdWithADoubleAndUnit("/hTest/generator/sigmaY",this);
-  sigmaYCmd->SetGuidance("Set the beam Gussian width for Y.");
-  sigmaYCmd->SetParameterName("range",false);
-  sigmaYCmd->SetRange("range>=0.");
+  sigmaYCmd = new G4UIcmdWithADoubleAndUnit("/hTest/gun/sigmaY",this);
+  sigmaYCmd->SetGuidance("Set the beam Gussian width for Y");
+  sigmaYCmd->SetParameterName("sigmaY",false);
   sigmaYCmd->SetUnitCategory("Length");
-  sigmaYCmd->AvailableForStates(Idle);
+  sigmaYCmd->AvailableForStates(PreInit,Idle);
 
-  sigmaZCmd = new G4UIcmdWithADoubleAndUnit("/hTest/generator/sigmaZ",this);
-  sigmaZCmd->SetGuidance("Set the beam Gussian width for Y.");
-  sigmaZCmd->SetParameterName("range",false);
-  sigmaZCmd->SetRange("range>=0.");
+  sigmaZCmd = new G4UIcmdWithADoubleAndUnit("/hTest/gun/sigmaZ",this);
+  sigmaZCmd->SetGuidance("Set the beam Gussian width for Y");
+  sigmaZCmd->SetParameterName("sigmaZ",false);
   sigmaZCmd->SetUnitCategory("Length");
-  sigmaZCmd->AvailableForStates(Idle);
+  sigmaZCmd->AvailableForStates(PreInit,Idle);
 
-  sigmaECmd = new G4UIcmdWithADoubleAndUnit("/hTest/generator/sigmaE",this);
-  sigmaECmd->SetGuidance("Set the beam Gussian width for Y.");
-  sigmaECmd->SetParameterName("range",false);
-  sigmaECmd->SetRange("range>=0.");
-  sigmaECmd->SetUnitCategory("Length");
-  sigmaECmd->AvailableForStates(Idle);
+  sigmaECmd = new G4UIcmdWithADoubleAndUnit("/hTest/gun/sigmaE",this);
+  sigmaECmd->SetGuidance("Set the beam Gussian width for energy");
+  sigmaECmd->SetParameterName("sigmaE",false);
+  sigmaECmd->SetUnitCategory("Energy");
+  sigmaECmd->AvailableForStates(PreInit,Idle);
 
-  maxThetaCmd = new G4UIcmdWithADoubleAndUnit("/hTest/generator/maxTheta",this);
+  maxThetaCmd = new G4UIcmdWithADoubleAndUnit("/hTest/gun/maxTheta",this);
   maxThetaCmd->SetGuidance("Set the beam maxTheta in degrees.");
-  maxThetaCmd->SetParameterName("range",false);
-  maxThetaCmd->SetRange("range<=90.0");
+  maxThetaCmd->SetParameterName("maxTheta",false);
   maxThetaCmd->SetUnitCategory("Angle");
-  maxThetaCmd->AvailableForStates(Idle);
+  maxThetaCmd->AvailableForStates(PreInit,Idle);
 
 }
 
@@ -101,7 +96,7 @@ void hTestPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
 {
  
   if(1 < theGen->GetVerbose()) {
-    G4cout << "hTestPrimaryGeneratorMessenger: Next command value " 
+    G4cout << "hTestPrimaryGeneratorMessenger: Next command value = " 
            << newValue << G4endl;
   }
 
@@ -121,7 +116,7 @@ void hTestPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
     {theGen->SetBeamSigmaE(sigmaECmd->GetNewDoubleValue(newValue));}
   if(command == maxThetaCmd)
     {theGen->SetBeamMinCosTheta(cos(maxThetaCmd->GetNewDoubleValue(newValue)));}
-  if(1 < theGen->GetVerbose())
+  if(0 < theGen->GetVerbose())
     {G4cout << "hTestPrimaryGeneratorMessenger: O'K " << G4endl;}
   }
 

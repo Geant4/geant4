@@ -41,9 +41,10 @@ public: // Without description
     void SetLowEnergyLimit(G4double);
     void SetHighEnergyLimit(G4double);
     void SetMaxStep(G4double);
-    void SetVerbose(G4int val) {verbose = val;};    
     void SetEMPhysicsList(const G4String&);  
     void SetHadronPhysicsList(const G4String&);  
+    inline void SetVerbose(G4int val) {verbose = val;};    
+    inline G4int GetVerbose() const {return verbose;};    
 
 protected:
     // Construct particle and physics
@@ -81,7 +82,8 @@ private:
     G4String emPhysics;
     G4String hadronPhysics;
 
-    G4int verbose;
+    G4int    verbose;
+    G4bool   physicsIsDefined;
 };
 
 #endif

@@ -51,6 +51,8 @@ public: // Without description
     hTestDetectorConstruction* hDet;
     
     G4UIdirectory*             hTestdetDir;
+    G4UIdirectory*             hTestdetDir1;
+    G4UIdirectory*             hTestdetDir2;
 
     G4UIcmdWithAnInteger*      NumOfAbsCmd;
     G4UIcmdWithAString*        AbsMaterCmd;
@@ -65,6 +67,8 @@ public: // Without description
     G4UIcmdWithAString*        HistoCmd;
     G4UIcmdWithAnInteger*      NumOfEvt;
     G4UIcmdWithAnInteger*      verbCmd;
+    G4UIcmdWithAnInteger*      intCmd;
+    G4UIcmdWithAnInteger*      nhistCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -126,6 +126,7 @@
 
 void hTestHadronPhysicsList::ConstructProcess()
 {
+   G4cout << "Standard Hadronic PhysicsList is initilized" << G4endl;
    G4HadronElasticProcess* theElasticProcess = 
                                     new G4HadronElasticProcess;
    G4LElastic* theElasticModel = new G4LElastic;

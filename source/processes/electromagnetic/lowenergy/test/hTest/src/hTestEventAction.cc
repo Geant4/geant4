@@ -55,6 +55,7 @@ hTestEventAction::~hTestEventAction()
 
 void hTestEventAction::BeginOfEventAction(const G4Event* evt)
 {  
+  if(verbose > 1) G4cout << "hTestEventAction: BeginOfEventAction" << G4endl;
   verbose = theRun->GetVerbose();
   nEvt++;
   if(verbose > 0) {
@@ -110,7 +111,8 @@ void hTestEventAction::EndOfEventAction(const G4Event* evt)
       "E40", "E41", "E42", "E43", "E44", "E45", "E46", "E47", "E48", "E49", 
       "E50", "E51", "E52", "E53", "E54", "E55", "E56", "E57", "E58", "E59"};
 
-  if (nMax > numAbs) nMax = numAbs;
+  G4int k = theDet->GetNumAbsorbersSaved();
+  if (nMax > k) nMax = k;
 
   if(nMax > 1) {
     for(i=0; i<nMax; i++){
@@ -122,6 +124,9 @@ void hTestEventAction::EndOfEventAction(const G4Event* evt)
       theRun->SaveToTuple(eInteg[i],EE[i]);      
     }
   }
+
+  // Dump information about this event 
+  theRun->SaveEvent();
 
 #ifdef G4VIS_USE  
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();

@@ -50,42 +50,46 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
 
   public:
      
-    void SetAbsorberMaterial (const G4String&);     
+    inline void SetAbsorberMaterial(const G4String& v) {nameMatAbsorber = v;};
+    inline G4Material* GetAbsorberMaterial()  const {return AbsorberMaterial;};
     void SetNumberOfAbsorbers(G4int);     
+    inline G4int GetNumberOfAbsorbers() const {return NumberOfAbsorbers;};
     void SetAbsorberThickness(G4double);     
+    inline G4double  GetAbsorberThickness() const {return AbsorberThickness;};
     void SetAbsorberSizeXY   (G4double);            
-    void SetWorldMaterial(const G4String&);
+    inline G4double    GetAbsorberSizeXY() const {return SizeXY;};
+    inline void SetWorldMaterial(const G4String& v) {nameMatWorld = v;};
+    inline G4Material* GetWorldMaterial() const {return WorldMaterial;};
     void SetWorldSizeZ   (G4double);
-    void SetMagField(G4double,G4int);
-
-    inline void SetVerbose(G4int val) {myVerbose = val;};
+    inline G4double    GetWorldSizeZ() const {return WorldSizeZ;}; 
     inline void SetHistoName(G4String name) {histoName = name;};
+    inline G4String GetHistoName() const {return histoName;};
     inline void SetNumberOfEvents(G4int val) {nEvents = val;};
+    inline G4int GetNumberOfEvents() const {return nEvents;};
     inline void SetEventAction(hTestEventAction* p) {theEvent = p;};
+    inline hTestEventAction* GetEventAction() const {return theEvent;};
+    inline void SetVerbose(G4int val) {myVerbose = val;};
+    inline G4int GetVerbose() const {return myVerbose;};
+    inline void SetNumAbsorbersSaved(G4int val) {nAbsSaved = val;};
+    inline G4int GetNumAbsorbersSaved() const {return nAbsSaved;};
+    inline void SetHistoNumber(G4int val) {nHisto = val;};
+    inline G4int GetHistoNumber() const {return nHisto;};
+
+    inline const G4VPhysicalVolume* GetPhysWorld() const {return physWorld;};
+    inline const G4LogicalVolume*   GetAbsorber()  const {return logicAbs;};
+
+    void SetMagField(G4double,G4int);
      
     G4VPhysicalVolume* Construct();
     void UpdateGeometry();
     void PrintGeomParameters(); 
-                    
-    inline G4int       GetNumberOfAbsorbers() const {return NumberOfAbsorbers;};
-    inline G4Material* GetAbsorberMaterial()  const {return AbsorberMaterial;};
-    inline G4double  GetAbsorberThickness()   const {return AbsorberThickness;};
-    inline G4double    GetAbsorberSizeXY()    const {return SizeXY;};
-    inline G4Material* GetWorldMaterial()     const {return WorldMaterial;};
-    inline G4double    GetWorldSizeZ()        const {return WorldSizeZ;}; 
-    inline G4double    GetWorldSizeXY()       const {return SizeXY;};
-    inline const G4VPhysicalVolume* GetPhysWorld() const {return physWorld;};
-    inline const G4LogicalVolume*   GetAbsorber()  const {return logicAbs;};
-    inline G4String GetHistoName() const {return histoName;};
-    inline G4int GetNumberOfEvents() const {return nEvents;};
-    inline hTestEventAction* GetEventAction() const {return theEvent;};
-    inline G4int       GetVerbose() const {return myVerbose;};
-                 
+                                     
   private:
 
     // Methods
 
      void DefineMaterials();
+     G4Material* GetMaterial(const G4String&);
      void ComputeGeomParameters();
      G4VPhysicalVolume* ConstructGeometry();     
      void GeometryIsChanged();     
@@ -93,6 +97,7 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
 
     // Members
      
+     G4String           nameMatAbsorber;
      G4Material*        AbsorberMaterial;
      G4double           AbsorberThickness;  // 
      G4double           SizeXY;
@@ -101,6 +106,7 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
 
      G4double           ZposAbs;
      
+     G4String           nameMatWorld;
      G4Material*        WorldMaterial;
      G4double           WorldSizeZ;     
                 
@@ -121,6 +127,9 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
      G4int myVerbose;      
      G4String histoName;
      G4int nEvents;
+     G4bool detIsConstructed;
+     G4int nAbsSaved;
+     G4int nHisto;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

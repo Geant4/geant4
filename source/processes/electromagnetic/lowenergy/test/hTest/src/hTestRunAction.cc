@@ -45,17 +45,7 @@ hTestRunAction::hTestRunAction(hTestDetectorConstruction* det):
   ntup(0),
   nHisto(1),
   verbose(0)
-{
-  // Water test
-  // nbinEn = 600;
-  // Enlow  = 0.0;
-  //Enhigh = 60.0;
-  // Mylar/GaAs test
-  //  nbinEn = 60;
-  //Enlow  = 0.0;
-  //Enhigh = 0.06;
-
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -70,9 +60,13 @@ hTestRunAction::~hTestRunAction()
 
 void hTestRunAction::BeginOfRunAction(const G4Run* aRun)
 {  
-  verbose = theDet->GetVerbose(); 
-  histName = theDet->GetHistoName();
   G4cout << "### Run " << aRun->GetRunID() << " start" << G4endl;
+  zend     = 0.0;
+  zend2    = 0.0;
+  zEvt     = 0.0;
+  verbose  = theDet->GetVerbose(); 
+  nHisto   = theDet->GetHistoNumber(); 
+  histName = theDet->GetHistoName();
   
 #ifdef G4VIS_USE
   G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -85,7 +79,7 @@ void hTestRunAction::BeginOfRunAction(const G4Run* aRun)
   }
 #endif
 
-  bookHisto();
+  if(0 < nHisto) bookHisto();
 
   if(verbose > 0) {
     G4cout << "hTestRunAction: Histograms are booked and run has been started" 
@@ -100,36 +94,50 @@ void hTestRunAction::EndOfRunAction(const G4Run* aRun)
 
   G4cout << "hTestRunAction: End of run actions are started" << G4endl;
 
+  // Zend average
+  if(zEvt > 0.0) {
+    zend  /= zEvt;
+    zend2 /= zEvt;
+    G4double sig = sqrt(zend2 - zend*zend);
+    zend2 = sig / sqrt(zEvt);
+    G4cout<<"========================================================="<<G4endl;
+    G4cout << setprecision(4) << "Range(mm)= " << zend/mm 
+           << "; Stragling(mm)= " << sig/mm 
+           << setprecision(2) << " +- " << zend2/mm << G4endl;
+    G4cout<<"========================================================="<<G4endl;
+  }  
+
 #ifdef G4VIS_USE
   if (G4VVisManager::GetConcreteInstance())
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
 #endif
 
    // Write histogram file
-  hbookManager->write();
-  G4cout << "Histograms and Ntuples are saved" << G4endl;
-
+  if(0 < nHisto) {
+    hbookManager->write();
+    G4cout << "Histograms and Ntuples are saved" << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void hTestRunAction::SaveEvent()
 {
-  ntup->dumpData();
+  if(0 < nHisto) ntup->dumpData();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void hTestRunAction::SaveToTuple(G4String parname, G4double val)
 {
-  ntup->column(parname,val);
+  if(0 < nHisto) ntup->column(parname,val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void hTestRunAction::SaveToTuple(G4String parname,G4double val,G4double defval)
 {
-  ntup->column(parname,val,defval);
+  if(0 < nHisto) ntup->column(parname,val,defval);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -149,10 +157,8 @@ void hTestRunAction::bookHisto()
   G4int nbin = theDet->GetNumberOfAbsorbers();
   G4double zmax = (theDet->GetAbsorberThickness()) * G4double(nbin) / mm;
 
-  if(0 < nHisto) {
-    histo[0] = hbookManager->histogram("Energy deposit (MeV) in absorber (mm)"
-                                       ,nbin,0.0,zmax);
-  }
+  if(0 < nHisto) histo[0] = hbookManager->histogram(
+                "Energy deposit (MeV) in absorber (mm)",nbin,0.0,zmax);
 
   // book ntuple
   ntup = hbookManager->ntuple("Range/Energy");
@@ -163,9 +169,16 @@ void hTestRunAction::bookHisto()
 
 void hTestRunAction::AddEnergy(G4double edep, G4double z)
 {
-  if(0 < nHisto) {
-    histo[0]->accumulate(z/mm, edep/MeV);
-  }
+  if(0 < nHisto) histo[0]->accumulate(z/mm, edep/MeV);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void hTestRunAction::AddEndPoint(G4double z)
+{
+  zend  += z;
+  zend2 += z*z;
+  zEvt  += 1.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
