@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpRayleigh.cc,v 1.2 1999-12-15 14:53:45 gunter Exp $
+// $Id: G4OpRayleigh.cc,v 1.3 2001-01-23 20:11:01 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -215,14 +215,36 @@ G4double G4OpRayleigh::GetMeanFreePath(const G4Track& aTrack,
         G4double thePhotonMomentum = aParticle->GetTotalMomentum();
 
         G4double AttenuationLength = DBL_MAX;
-        G4bool isOutRange;
 
-        if (aMaterial->GetName() == "Water")
-        {
-                AttenuationLength =
+        if (aMaterial->GetName() == "Water") {
+
+           G4bool isOutRange;
+
+           AttenuationLength =
                 (*thePhysicsTable)(aMaterial->GetIndex())->
-                                GetValue(thePhotonMomentum, isOutRange);
+                           GetValue(thePhotonMomentum, isOutRange);
         }
+        else {
+
+           G4MaterialPropertiesTable* aMaterialPropertyTable =
+                           aMaterial->GetMaterialPropertiesTable();
+
+           if(aMaterialPropertyTable){
+             G4MaterialPropertyVector* AttenuationLengthVector =
+                   aMaterialPropertyTable->GetProperty("RAYLEIGH");
+             if(AttenuationLengthVector){
+               AttenuationLength = AttenuationLengthVector ->
+                                    GetProperty(thePhotonMomentum);
+             }
+             else{
+//               G4cout << "No Rayleigh scattering length specified" << G4endl;
+             }
+           }
+           else{
+//             G4cout << "No Rayleigh scattering length specified" << G4endl; 
+           }
+        }
+
         return AttenuationLength;
 }
 
