@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mars5GeV.cc,v 1.1 2001-12-13 14:59:49 kurasige Exp $
+// $Id: G4Mars5GeV.cc,v 1.2 2001-12-15 06:58:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,16 +78,20 @@ G4VParticleChange* G4Mars5GeV::ApplyYourself(const G4Track& aTrack,
                                              G4Nucleus& targetNucleus
                                             )
 {
-  
-  theParticleChange.Initialize(aTrack);
-  incidentParticle = aTrack.GetDynamicParticle();
-  
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 2) {
     G4cout << " G4Mars5GeV:ApplyYourself" << G4endl;
   }
 #endif
 
+  theParticleChange.Initialize(aTrack);
+
+ // get the incident particle type
+  incidentMarsEncoding = GetMarsEncoding(incidentParticle->GetDefinition());
+
+ // get the incident particle energy/momentum
+  incidentParticle = aTrack.GetDynamicParticle();
+  
   // get weight of the parent track
   incidentWeight = aTrack.GetWeight();
 
