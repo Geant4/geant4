@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.3 2002-12-04 14:12:25 morita Exp $
+# $Id: binmake.gmk,v 1.4 2002-12-04 17:54:25 morita Exp $
 # =====================================================================
 # binmake.gmk: GNUmakefile variables for creating the binary executable
 #
@@ -58,6 +58,11 @@ LDFLAGS := -L$(G4PEX_LIB) \
            -L$(CLHEP_BASE_DIR)/lib \
            -L$(ROOTSYS)/lib
 
+# extra LDFLAGS
+ifneq ($(EXTLDFLAGS),)
+  LDFLAGS += $(EXTLDFLAGS)
+endif
+
 # libraries
 LDLIBS := $(libraries_to_build) \
           -lG4ROOTIO
@@ -107,12 +112,13 @@ rootio_d  := $(patsubst rootio/%.rootio, $(G4PEX_TMP)/%Root.d, $(rootio_file))
 rootio_d  += $(patsubst rootio/%.rootio, $(G4PEX_TMP)/%sRoot.d, $(rootio_file))
 rootio_d  += $(patsubst rootio/%.rootio, $(G4PEX_TMP)/%RootIO.d, $(rootio_file))
 
-ifneq ($(headers),)
-  root_hh   := $(shell grep 'public.*TObject' include/*.hh|awk -F: '{print $$1}'|sort|uniq)
-endif
 ifneq ($(rootio_file),)
-root_hh   += $(patsubst rootio/%.rootio, include/%Root.hh, $(rootio_file))
-root_hh   += $(patsubst rootio/%.rootio, include/%sRoot.hh, $(rootio_file))
+  root_hh := $(patsubst rootio/%.rootio, include/%Root.hh, $(rootio_file))
+  root_hh += $(patsubst rootio/%.rootio, include/%sRoot.hh, $(rootio_file))
+else
+ifneq ($(headers),)
+  root_hh := $(shell grep 'public.*TObject' include/*.hh|awk -F: '{print $$1}'|sort|uniq)
+endif
 endif
 root_tmp  := $(patsubst include/%,%,$(root_hh))
 root_tmp  += $(patsubst include/%,%,$(root_def))
@@ -219,7 +225,9 @@ ifneq ($(cleanup_target),)
 	@rm -f $(cleanup_target)
 endif
 	@rm -f $(G4PEX_DIR)/bin/$(G4SYSTEM)/$(TARGET)
+ifneq ($(libraries_to_build),)
 	@rm -f -r $(G4PEX_DIR)/lib/$(G4SYSTEM)/$(libraries_to_build)
+endif
 	@rm -f -r $(G4PEX_DIR)/tmp/$(G4SYSTEM)/$(TARGET)
 
 distclean: clean
