@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2001-01-08 16:13:39 gcosmo Exp $
+$Id: History,v 1.17 2001-04-03 08:28:31 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-Apr-2001, D.Williams  (geom-solids-specific-V03-00-01)
+-----------------------
+- G4IntersectingCone.cc: make small adjustment to help with roundoff error
+  in LineHitsCone1() and LineHitsCone2().
 
 08-Jan-2001, D.Williams  (geom-solids-specific-V03-00-00)
 -----------------------
