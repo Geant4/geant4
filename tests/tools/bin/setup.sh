@@ -60,6 +60,7 @@ fi
 #
 export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.2
 export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
+export G4RADIOACTIVEDATA=$G4INSTALL/data/RadiativeDecay
 export G4LEDATA=$G4INSTALL/../G4EMLOW0.3
 #
 # Some alias -kes :
