@@ -23,7 +23,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALVisManager.cc,v 1.4 2002-12-12 19:16:34 gunter Exp $
+// $Id: FCALVisManager.cc,v 1.5 2002-12-17 15:53:30 pmendez Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,7 +41,7 @@
 #include "G4DAWNFILE.hh"
 #include "G4GAGTree.hh"
 #include "G4HepRepFile.hh"
-#include "G4HepRep.hh"
+//#include "G4HepRep.hh"
 #include "G4RayTracer.hh"
 #include "G4VRML1File.hh"
 #include "G4VRML2File.hh"
@@ -116,8 +116,8 @@ void FCALVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4ASCIITree);
   RegisterGraphicsSystem (new G4DAWNFILE);
   RegisterGraphicsSystem (new G4GAGTree);
-  RegisterGraphicsSystem (new G4HepRepFile);
-  RegisterGraphicsSystem (new G4HepRep);
+  // RegisterGraphicsSystem (new G4HepRepFile);
+  //  RegisterGraphicsSystem (new G4HepRep);
   RegisterGraphicsSystem (new G4RayTracer);
   RegisterGraphicsSystem (new G4VRML1File);
   RegisterGraphicsSystem (new G4VRML2File);

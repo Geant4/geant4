@@ -73,7 +73,7 @@ FCALEMModule::~FCALEMModule(){
 
 
 void FCALEMModule::InitializeGeometry() {
-#include "FCALEMModuleParameters.icc"  
+#include "FCALEMModuleParameters.input"  
   ifstream File
     ("geom_data/FCal1Electrodes.dat");
   
@@ -86,7 +86,7 @@ void FCALEMModule::InitializeGeometry() {
     File >> F1LArGapID[NF1LarGap] >> F1LArGapPosX[NF1LarGap] >> F1LArGapPosY[NF1LarGap]
 	 >> F1LArIX[NF1LarGap] >>  F1LArJY[NF1LarGap] >> F1LArITile[NF1LarGap];
   };   
-  G4cout << "********" << " Number of Rods in FCAL1 : " << NF1LarGap-1 << endl;;
+  G4cout << "********" << " Number of Rods in FCAL1 : " << NF1LarGap-1 << G4endl;;
 };
 
 
@@ -111,7 +111,7 @@ G4LogicalVolume * FCALEMModule::Construct()
 // Logical to be returned (FCAL EM module)
 //-----------------------------------------
   G4Tubs * SolidEmModule =
-    new G4Tubs("EmModuleSold", EmModuleRMin, EmModuleRMax, EmModuleLength,
+    new G4Tubs("EmModuleSold", EmModuleRMin, EmModuleRMax, EmModuleLenght,
 	       EmModuleStartPhi,EmModuleDPhi);
   G4LogicalVolume * LogicalEmModule = 
     new G4LogicalVolume(SolidEmModule, FCALMaterials->Material("Copper"),
@@ -128,7 +128,7 @@ G4LogicalVolume * FCALEMModule::Construct()
 //---------------------
   G4Tubs * SolidF1CableTroff =
     new G4Tubs("F1CableTroffSolid", F1CableTroffRMin, F1CableTroffRMax,
-	       F1CableTroffLength, F1CableTroffStartPhi, F1CableTroffDPhi);
+	       F1CableTroffLenght, F1CableTroffStartPhi, F1CableTroffDPhi);
   G4LogicalVolume * LogicalF1CableTroff =
     new G4LogicalVolume(SolidF1CableTroff, FCALMaterials->Material("FCAL1CuArKap"),
 			"F1CableTroffLogical");
@@ -155,7 +155,7 @@ G4LogicalVolume * FCALEMModule::Construct()
    //----------------------
 
   G4Tubs * SolidF1LArGap = 
-    new G4Tubs("F1LArGapSolid",F1LArGapRmin, F1LArGapRmax, F1LArGapLength, 
+    new G4Tubs("F1LArGapSolid",F1LArGapRmin, F1LArGapRmax, F1LArGapLenght, 
 	       F1LArGapStartPhi,F1LArGapDPhi);
 	
    G4LogicalVolume * LogicalF1LArGap = 

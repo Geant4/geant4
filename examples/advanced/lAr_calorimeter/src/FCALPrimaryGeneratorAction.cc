@@ -22,7 +22,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALPrimaryGeneratorAction.cc,v 1.2 2002-12-12 19:16:33 gunter Exp $
+// $Id: FCALPrimaryGeneratorAction.cc,v 1.3 2002-12-17 15:53:30 pmendez Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -111,10 +111,10 @@ void FCALPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   particleGun->GeneratePrimaryVertex(anEvent);
 
-  G4cout << "--------------------------------------------" << endl;
+  G4cout << "--------------------------------------------" << G4endl;
     G4cout << " Event,  X,Y,Z Generated Vertex : " << endl;
-  G4cout << Nevent << " " << X[Nevent] << " " << Y[Nevent] << " " << Z[Nevent]<< endl;
-  G4cout << "--------------------------------------------" << endl;
+  G4cout << Nevent << " " << X[Nevent] << " " << Y[Nevent] << " " << Z[Nevent]<< G4endl;
+  G4cout << "--------------------------------------------" << G4endl;
  
 
 }

@@ -23,7 +23,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALEMModuleSD.cc,v 1.4 2002-12-12 19:16:33 gunter Exp $
+// $Id: FCALEMModuleSD.cc,v 1.5 2002-12-17 15:53:30 pmendez Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -114,7 +114,7 @@ void FCALEMModuleSD::EndOfEvent(G4HCofThisEvent* HCE)
       EvisTileP[NF1Tile] = EvisF1Tile[i];
     };};
 
-  G4cout << "Number of F1 Tiles with Positive energy : " << NF1Tile <<  endl;
+  G4cout << "Number of F1 Tiles with Positive energy : " << NF1Tile <<  G4endl;
 
   // Write in File
   //--------------

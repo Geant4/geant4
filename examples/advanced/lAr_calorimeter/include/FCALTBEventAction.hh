@@ -23,13 +23,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALTBEventAction.hh,v 1.5 2002-12-12 19:16:32 gunter Exp $
+// $Id: FCALTBEventAction.hh,v 1.6 2002-12-17 15:53:22 pmendez Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#ifdef G4ANALYSIS_USE
 
 #ifndef FCALTBEventAction_h
 #define FCALTBEventAction_h 1
@@ -39,14 +41,15 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 
-class FCALAnalysisManager;
+class FCALRunAction;
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class FCALTBEventAction : public G4UserEventAction
 {
   public:
-    FCALTBEventAction(FCALSteppingAction* );
+    FCALTBEventAction(FCALSteppingAction*,FCALRunAction* );
     virtual ~FCALTBEventAction();
 
   public:
@@ -62,13 +65,12 @@ class FCALTBEventAction : public G4UserEventAction
     G4int                       printModulo;   
      
     FCALSteppingAction* StepAction;
+    FCALRunAction* RunAction;
 
   private:
-  G4int NTracksOutOfWorld, NSecondaries, Init1, Init2, Init3;
-  // G4double OutOfWorldTracks[1000][11], Secondaries[1000][11];  
-
-};
+  G4double NTracksOutOfWorld, NSecondaries, Init1, Init2, Init3;
+  };
 
 #endif
 
-    
+#endif    

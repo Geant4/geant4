@@ -23,7 +23,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALSteppingAction.cc,v 1.2 2002-12-12 19:16:34 gunter Exp $
+// $Id: FCALSteppingAction.cc,v 1.3 2002-12-17 15:53:30 pmendez Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-FCALSteppingAction::FCALSteppingAction() : IDold(-1), IDout(-1)
+FCALSteppingAction::FCALSteppingAction():IDold(-1),IDout(-1)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -128,8 +128,8 @@ void FCALSteppingAction::UserSteppingAction(const G4Step* astep)
 	  Secondaries[NSecondaries][9] = aDynamicParticle->GetTotalEnergy();
 	  Secondaries[NSecondaries][10] = aDynamicParticle->GetKineticEnergy();
 	  
-	  G4cout << " ****  Primary : " << EventNo << endl;
-	  G4cout << " Vertex : " << PrimaryVertex << endl;
+	  G4cout << " ****  Primary : " << EventNo << G4endl;
+	  G4cout << " Vertex : " << PrimaryVertex << G4endl;
 	}
       
       

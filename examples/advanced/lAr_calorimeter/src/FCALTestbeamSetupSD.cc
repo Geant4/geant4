@@ -23,7 +23,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALTestbeamSetupSD.cc,v 1.4 2002-12-12 19:16:34 gunter Exp $
+// $Id: FCALTestbeamSetupSD.cc,v 1.5 2002-12-17 15:53:30 pmendez Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -127,20 +127,20 @@ G4bool FCALTestbeamSetupSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist
 
 void FCALTestbeamSetupSD::EndOfEvent(G4HCofThisEvent* HCE)
 {
-  G4cout << " Visisble Energy in S1 , S2 , S3 in (MeV)" << endl;
-  G4cout << EBeamS1/MeV << " " << EBeamS2/MeV << " " << EBeamS3/MeV << " " << endl;
+  G4cout << " Visisble Energy in S1 , S2 , S3 in (MeV)" << G4endl;
+  G4cout << EBeamS1/MeV << " " << EBeamS2/MeV << " " << EBeamS3/MeV << " " << G4endl;
 
-  G4cout << " Visible Energy in Hole Counter  (MeV) " << endl;
-  G4cout << EHoleScint/MeV << " " << EBeamHole/MeV << endl;
+  G4cout << " Visible Energy in Hole Counter  (MeV) " << G4endl;
+  G4cout << EHoleScint/MeV << " " << EBeamHole/MeV << G4endl;
 
-  G4cout << " Visible Energy in Upstream Dead Materials " << endl;
-  G4cout << EBeamDead/MeV << endl;
+  G4cout << " Visible Energy in Upstream Dead Materials " << G4endl;
+  G4cout << EBeamDead/MeV << G4endl;
 
-  G4cout << " Visible Energy in Tail Catcher Scintillator" << endl;
-  for (G4int j=1; j<8 ; j++) {G4cout <<  ETailVis[j]/MeV << " " ;};  G4cout << endl;
+  G4cout << " Visible Energy in Tail Catcher Scintillator" << G4endl;
+  for (G4int j=1; j<8 ; j++) {G4cout <<  ETailVis[j]/MeV << " " ;};  G4cout << G4endl;
  
-  G4cout << " Visible Energy in Tail Catcher Absorber" << endl;
-  for (j=1; j<7 ; j++) {G4cout <<  ETailDep[j]/MeV << " " ;};  G4cout << endl;
+  G4cout << " Visible Energy in Tail Catcher Absorber" << G4endl;
+  for (j=1; j<7 ; j++) {G4cout <<  ETailDep[j]/MeV << " " ;};  G4cout << G4endl;
 
 // Write data in File
   //-------------------
@@ -156,11 +156,11 @@ void FCALTestbeamSetupSD::EndOfEvent(G4HCofThisEvent* HCE)
   ofstream BeamDatafile(FileName, iostemp);
   // BeamDatafile.precision(5);
 
-  BeamDatafile << EBeamS1/MeV << " " << EBeamS2/MeV << " " << EBeamS3/MeV << endl;
-  BeamDatafile << EBeamHole/MeV << endl;
-  BeamDatafile << EBeamDead/MeV << endl;
-  for (j=1; j<8 ; j++) { BeamDatafile << ETailVis[j]/MeV << " " ;} ; BeamDatafile << endl;
-  for (j=1; j<7 ; j++) { BeamDatafile << ETailDep[j]/MeV << " " ;} ; BeamDatafile << endl;
+  BeamDatafile << EBeamS1/MeV << " " << EBeamS2/MeV << " " << EBeamS3/MeV << G4endl;
+  BeamDatafile << EBeamHole/MeV << G4endl;
+  BeamDatafile << EBeamDead/MeV << G4endl;
+  for (j=1; j<8 ; j++) { BeamDatafile << ETailVis[j]/MeV << " " ;} ; BeamDatafile << G4endl;
+  for (j=1; j<7 ; j++) { BeamDatafile << ETailDep[j]/MeV << " " ;} ; BeamDatafile << G4endl;
  
   BeamDatafile.close();
 

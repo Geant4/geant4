@@ -23,7 +23,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALTestbeamSetupSD.hh,v 1.3 2002-12-12 19:16:32 gunter Exp $
+// $Id: FCALTestbeamSetupSD.hh,v 1.4 2002-12-17 15:53:22 pmendez Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,11 +36,11 @@
 
 #include "G4VSensitiveDetector.hh"
 #include "globals.hh"
-
+#include "FCALCalorHit.hh"
 class FCALTestbeamSetup;
 class G4HCofThisEvent;
 class G4Step;
-#include "FCALCalorHit.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

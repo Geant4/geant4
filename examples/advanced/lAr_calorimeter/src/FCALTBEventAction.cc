@@ -23,7 +23,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALTBEventAction.cc,v 1.3 2002-12-12 19:16:34 gunter Exp $
+// $Id: FCALTBEventAction.cc,v 1.4 2002-12-17 15:53:30 pmendez Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,15 +31,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#ifdef G4ANALYSIS_USE
+
 #include "FCALTBEventAction.hh"
+
+#include "FCALRunAction.hh"
 
 #include "FCALCalorHit.hh"
 
-#ifdef G4ANALYSIS_USE
-#include "FCALAnalysisManager.hh"
-#endif
-
-//#include "g4rw/tvordvec.h"
 #include "g4std/vector"
 
 #include "G4Event.hh"
@@ -60,10 +59,13 @@
 #include "iostream.h"
 #include "fstream.h"
 
+#include <AIDA/AIDA.h>
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-FCALTBEventAction::FCALTBEventAction(FCALSteppingAction* SA)
-:calorimeterCollID(-1),drawFlag("all"),printModulo(10), StepAction(SA)
+FCALTBEventAction::FCALTBEventAction(FCALSteppingAction* SA, FCALRunAction* RA)
+  :calorimeterCollID(-1),drawFlag("all"),printModulo(10), StepAction(SA), RunAction(RA)
 {;}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -92,8 +94,9 @@ void FCALTBEventAction::BeginOfEventAction(const G4Event* evt)
 
 void FCALTBEventAction::EndOfEventAction(const G4Event* evt)
 {
+
   NTracksOutOfWorld = StepAction->GetOutOfWorldTracks(0, 0); 
-  G4cout << "N Tracks out of world " << NTracksOutOfWorld << endl;
+  G4cout << "N Tracks out of world " << NTracksOutOfWorld << G4endl;
 
   // Write Leaving Particles in File
   //--------------------------------
@@ -107,26 +110,35 @@ void FCALTBEventAction::EndOfEventAction(const G4Event* evt)
   };
   ofstream OutTracks(FileName1, iostemp1);
 
-  OutTracks << NTracksOutOfWorld << endl;
+  G4double OutOfWorld;
+
+  OutTracks << NTracksOutOfWorld << G4endl;
   for(G4int i=1; i<= NTracksOutOfWorld ; i++){
     for(G4int j=1; j<11 ; j++) {
-      G4double OutOfWorld = StepAction->GetOutOfWorldTracks(i,j);
-      OutTracks << OutOfWorld << " " ; }
-    OutTracks << endl;
-#ifdef G4ANALYSIS_USE
-	// pass first event for histogram record:
-      G4double OutOfWorld2 = StepAction->GetOutOfWorldTracks(i,j);
-	FCALAnalysisManager* analysis = FCALAnalysisManager::getInstance();
-	analysis->NumOutOfWorld(OutOfWorld2,i,j);
-#endif
-  }
+      //      G4double OutOfWorld = StepAction->GetOutOfWorldTracks(i,j);
+      OutOfWorld = StepAction->GetOutOfWorldTracks(i,j);
+      OutTracks << OutOfWorld << " " ; 
+    }
+    OutTracks << G4endl;
+
+    G4double OutOfWorld2 = StepAction->GetOutOfWorldTracks(i,j);
+
+    RunAction->GetHisto(1)->fill(OutOfWorld);
+
+
+    RunAction->GetTuple(1)->fill(0,OutOfWorld);
+    RunAction->GetTuple(1)->fill(1,i);
+    RunAction->GetTuple(1)->fill(2,j);
+
+    
+    RunAction->GetTuple(1)->addRow();
+
+  } 
+
   OutTracks.close();
 
   NSecondaries = StepAction->GetSecondaries(0,0);
-  G4cout << "N Scondaries " << NSecondaries << endl;   
-
-
-
+  G4cout << "N Scondaries " << NSecondaries << G4endl;   
   
   // Write Secondary Particles in File
   //--------------------------------
@@ -138,24 +150,32 @@ void FCALTBEventAction::EndOfEventAction(const G4Event* evt)
   } else {
     iostemp2 = ios::out|ios::app; // ios::app;  
   };
-
+  
   ofstream SecndTracks(FileName2, iostemp2);
-
-  SecndTracks << NSecondaries << endl;
+  
+  G4double Secondary;
+  
+  SecndTracks << NSecondaries << G4endl;
   for(i=1; i<= NSecondaries ; i++){
     for(G4int j=1; j<11 ; j++) {
-      G4double Secondary = StepAction->GetSecondaries(i,j);
+      Secondary = StepAction->GetSecondaries(i,j);
       SecndTracks << Secondary  << " " ; }
-    SecndTracks << endl;
-#ifdef G4ANALYSIS_USE
-	// pass first event for histogram record:
-      G4double Secondary2 = StepAction->GetSecondaries(i,j);
-	FCALAnalysisManager* analysis = FCALAnalysisManager::getInstance();
-	analysis->Secondaries(Secondary2,i,j);
-#endif
+    SecndTracks << G4endl;
+    G4double Secondary2 = StepAction->GetSecondaries(i,j);
+
+    RunAction->GetHisto(2)->fill(Secondary);
+
+    RunAction->GetTuple(2)->fill(0,Secondary);
+    RunAction->GetTuple(2)->fill(1,i);
+    RunAction->GetTuple(2)->fill(2,j);
+    
+    
+    RunAction->GetTuple(2)->addRow();
+    
+
   }
   SecndTracks.close();
-
+  
 
   // Write Edep in FCAL1 and FCAL2 
   G4String FileName3 = "EdepFCAL_802_1mm.dat";
@@ -166,29 +186,36 @@ void FCALTBEventAction::EndOfEventAction(const G4Event* evt)
   } else {
     iostemp3 = ios::out|ios::app; // ios::app;  
   };
-
+  
   ofstream EdepFCAL(FileName3, iostemp3);
   
   G4double EmEdep  = StepAction->GetEdepFCAL("FCALEm");
   G4double HadEdep = StepAction->GetEdepFCAL("FCALHad");
 
+  
   EdepFCAL << EmEdep << " ";
   EdepFCAL << HadEdep; 
-  EdepFCAL << endl;
+  EdepFCAL << G4endl;
   EdepFCAL.close();
 
-#ifdef G4ANALYSIS_USE
-	// pass first event for histogram record:
-	FCALAnalysisManager* analysis = FCALAnalysisManager::getInstance();
-	analysis->Edep(EmEdep,HadEdep);
-#endif
 
+  RunAction->GetHisto(3)->fill(EmEdep);
+  RunAction->GetHisto(4)->fill(HadEdep);
+
+
+  RunAction->GetTuple(3)->fill(0,EmEdep);
+  RunAction->GetTuple(3)->fill(1,HadEdep);
+  
+    
+    
+  RunAction->GetTuple(3)->addRow();
+    
 
 
   G4cout << "Edep in FCAL1 FCAl2 : " << StepAction->GetEdepFCAL("FCALEm") << " ";
-  G4cout << StepAction->GetEdepFCAL("FCALHad") << endl;
+  G4cout << StepAction->GetEdepFCAL("FCALHad") << G4endl;
 }
 
-
+#endif
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

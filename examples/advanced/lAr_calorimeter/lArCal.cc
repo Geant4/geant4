@@ -23,7 +23,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: lArCal.cc,v 1.3 2002-12-12 19:16:31 gunter Exp $
+// $Id: lArCal.cc,v 1.4 2002-12-17 15:53:08 pmendez Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,11 +53,19 @@
 
 #include "FCALTestbeamSetup.hh"
 #include "FCALPhysicsList.hh"
+#include "FCALSteppingVerbose.hh"
 #include "FCALPrimaryGeneratorAction.hh"
+
+
+#ifdef G4ANALYSIS_USE
+
+
 #include "FCALRunAction.hh"
 #include "FCALTBEventAction.hh"
 #include "FCALSteppingAction.hh"
-#include "FCALSteppingVerbose.hh"
+
+#endif
+
 
 int main(int argc,char** argv) {
 
@@ -95,11 +103,22 @@ int main(int argc,char** argv) {
     
   // set user action classes
   runManager->SetUserAction(new FCALPrimaryGeneratorAction());
-  runManager->SetUserAction(new FCALRunAction);
+
+#ifdef G4ANALYSIS_USE
+
+  FCALRunAction* RunAction = new FCALRunAction;
+  runManager ->SetUserAction(RunAction);
+
   FCALSteppingAction* StepAction = new FCALSteppingAction;
-  runManager->SetUserAction(new FCALTBEventAction(StepAction));
   runManager->SetUserAction(StepAction);
+
+  //  runManager->SetUserAction(new FCALRunAction);
   
+  runManager->SetUserAction(new FCALTBEventAction(StepAction,RunAction));
+  
+  
+#endif
+
   //Initialize G4 kernel
   runManager->Initialize();
     

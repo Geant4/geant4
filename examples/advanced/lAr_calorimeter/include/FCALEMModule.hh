@@ -64,16 +64,16 @@ private:
 
 private:
 
-  G4double EmModuleRMin, EmModuleRMax, EmModuleLength, CableTroffLength,
+  G4double EmModuleRMin, EmModuleRMax, EmModuleLenght, CableTroffLenght,
            EmModuleStartPhi, EmModuleDPhi;
   G4double FCALEmSmart;
 
   G4int NCableTroff;
-  G4double F1CableTroffRMin, F1CableTroffRMax, F1CableTroffLength, F1CableTroffStartPhi, 
+  G4double F1CableTroffRMin, F1CableTroffRMax, F1CableTroffLenght, F1CableTroffStartPhi, 
            F1CableTroffDPhi;
   G4double F1CableTroffRotZ;
 
-  G4double F1LArGapRmin, F1LArGapRmax, F1LArGapLength, F1LArGapStartPhi, F1LArGapDPhi;
+  G4double F1LArGapRmin, F1LArGapRmax, F1LArGapLenght, F1LArGapStartPhi, F1LArGapDPhi;
 
   FCALEMModuleSD* FcalEmModuleSD;
 

@@ -60,7 +60,7 @@
 
 
 FCALTestbeamSetup::FCALTestbeamSetup() {
-#include "FCALTestbeamSetupParameters.icc"
+#include "FCALTestbeamSetupParameters.input"
 };
 
 FCALTestbeamSetup::~FCALTestbeamSetup() {};
@@ -142,7 +142,7 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
 			"HoleCntrScintLogical");
   // Hole in scintillator Counter
   G4Tubs * SolidHole = 
-    new G4Tubs("HoleSolid", ScintHoleRmin, ScintHoleRmax, ScintHoleLength,  
+    new G4Tubs("HoleSolid", ScintHoleRmin, ScintHoleRmax, ScintHoleLenght,  
 	       HoleStartPhi, HoleDPhi);
   G4LogicalVolume * LogicalHole = 
     new G4LogicalVolume(SolidHole, FCALMaterials->Material("Air"), "HoleLogical");
@@ -163,7 +163,7 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
 
   //hole in ABsorber, both Lead and Al.
   G4Tubs * SolidHoleAbs = 
-    new G4Tubs("HoleSolidAbs", AbsrbHoleRmin, AbsrbHoleRmax, AbsrbHoleLength, 
+    new G4Tubs("HoleSolidAbs", AbsrbHoleRmin, AbsrbHoleRmax, AbsrbHoleLenght, 
 	       HoleStartPhi, HoleDPhi);
   G4LogicalVolume * LogicalHoleAbs = 
     new G4LogicalVolume(SolidHoleAbs, FCALMaterials->Material("Air"),"HoleAbsLogical");

@@ -75,7 +75,7 @@ FCALHadModule::~FCALHadModule() {
 
 void FCALHadModule::InitializeGeometry() {
 
-#include "FCALHadModuleParameters.icc"
+#include "FCALHadModuleParameters.input"
 
   ifstream File
    ("geom_data/FCal2Electrodes.dat");
@@ -119,7 +119,7 @@ G4LogicalVolume * FCALHadModule::Construct()
   //-----------------------------------------
 
   G4Tubs * SolidHadModule =
-    new G4Tubs("HadModuleSolid", HadModuleRMin, HadModuleRMax, HadModuleLength,
+    new G4Tubs("HadModuleSolid", HadModuleRMin, HadModuleRMax, HadModuleLenght,
 	       HadModuleStartPhi,HadModuleDPhi);
   G4LogicalVolume * LogicalHadModule = 
     new G4LogicalVolume(SolidHadModule, FCALMaterials->Material("Copper"),
@@ -135,7 +135,7 @@ G4LogicalVolume * FCALHadModule::Construct()
   //  Tungsten Absorber
   //-----------------------------------------
   G4Tubs * SolidWAbsorber = 
-    new G4Tubs("WAbsorberSolid", WAbsorberRMin, WAbsorberRMax, WAbsorberLength,
+    new G4Tubs("WAbsorberSolid", WAbsorberRMin, WAbsorberRMax, WAbsorberLenght,
 	       WAbsorberStartPhi, WAbsorberDPhi);      
   G4LogicalVolume * LogicalWAbsorber = 
     new G4LogicalVolume(SolidWAbsorber, FCALMaterials->Material("FCAL2WFeNi"),
@@ -152,7 +152,7 @@ G4LogicalVolume * FCALHadModule::Construct()
   //  Copper Plates
   //------------------
   G4Tubs * SolidCuPlate = 
-    new G4Tubs("CuPlateSolid",HadModuleRMin, HadModuleRMax, CuPlateLength, 
+    new G4Tubs("CuPlateSolid",HadModuleRMin, HadModuleRMax, CuPlateLenght, 
 	       HadModuleStartPhi, HadModuleDPhi);
   G4LogicalVolume * LogicalCuPlate =
     new G4LogicalVolume(SolidCuPlate, FCALMaterials->Material("Copper"), "CuPlateLogical");
@@ -171,14 +171,14 @@ G4LogicalVolume * FCALHadModule::Construct()
   // Had Module (F2)  Main and A/B Cable Troff 
   //------------------------------------------
   G4Tubs * SolidF2TroffMain = 
-    new G4Tubs("F2TroffMainSolid", F2TroffRmin, F2TroffRmax, F2TroffMainLength, 
+    new G4Tubs("F2TroffMainSolid", F2TroffRmin, F2TroffRmax, F2TroffMainLenght, 
 	       F2TroffStartPhi, F2TroffDphi);
   G4LogicalVolume * LogicalF2TroffMain =
     new G4LogicalVolume(SolidF2TroffMain, FCALMaterials->Material("FCAL2CuArKap"),
 			"F2TroffMainLogical");
   
   G4Tubs * SolidF2TroffAB = 
-    new G4Tubs("F2TroffABSolid", F2TroffRmin, F2TroffRmax, F2TroffABLength, 
+    new G4Tubs("F2TroffABSolid", F2TroffRmin, F2TroffRmax, F2TroffABLenght, 
 	       F2TroffStartPhi, F2TroffDphi);
   G4LogicalVolume * LogicalF2TroffAB =
     new G4LogicalVolume(SolidF2TroffAB, FCALMaterials->Material("FCAL2CuArKap"),
@@ -210,7 +210,7 @@ G4LogicalVolume * FCALHadModule::Construct()
    //  LArg Gaps  + F2 Rod
    //----------------------
    G4Tubs * SolidF2LArGap = 
-     new G4Tubs("F2LArGapSolid", F2LArGapRmin, F2LArGapRmax, F2LArGapLength, 
+     new G4Tubs("F2LArGapSolid", F2LArGapRmin, F2LArGapRmax, F2LArGapLenght, 
                  F2LArGapStartPhi, F2LArGapDphi);
    G4LogicalVolume * LogicalF2LArGap = 
       new G4LogicalVolume(SolidF2LArGap, FCALMaterials->Material("LiquidArgon"),
@@ -220,7 +220,7 @@ G4LogicalVolume * FCALHadModule::Construct()
    // LogicalF2LArGap->SetVisAttributes(G4VisAttributes::Invisible);
 
     G4Tubs * SolidF2Rod =
-      new G4Tubs("F2RodSolid", F2RodRmin, F2RodRmax, F2RodLength, F2RodStartPhi, F2RodDphi);
+      new G4Tubs("F2RodSolid", F2RodRmin, F2RodRmax, F2RodLenght, F2RodStartPhi, F2RodDphi);
    G4LogicalVolume * LogicalF2Rod = 
       new G4LogicalVolume(SolidF2Rod, FCALMaterials->Material("Tungsten"),"F2RodLogical");
     G4VPhysicalVolume * PhysicalF2Rod = 

@@ -23,7 +23,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALSteppingAction.hh,v 1.3 2002-12-12 19:16:32 gunter Exp $
+// $Id: FCALSteppingAction.hh,v 1.4 2002-12-17 15:53:22 pmendez Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,7 @@ class FCALSteppingAction : public G4UserSteppingAction
 
   private:
   G4int EventNo;
-  G4int IDnow, IDout, IDold;
+  G4int IDnow, IDold, IDout;
   G4int NTracks, NSecondaries;
   G4double OutOfWorldTracksData[6000][11], Secondaries[6000][11];
   G4double EdepFCALEm, EdepFCALHad;
