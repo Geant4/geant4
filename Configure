@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.7 2000-12-19 07:24:45 sadilov Exp $
+# $Id: Configure,v 1.8 2001-05-30 16:33:59 stesting Exp $
 #
-# Generated on Tue Dec 19 10:17:35 MSK 2000 [metaconfig 3.0 PL70]
+# Generated on Mon May 21 14:45:59 CEST 2001 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -269,6 +269,26 @@ g4ui_use_terminal=''
 g4ui_use_win32=''
 g4ui_use_xaw=''
 g4ui_use_xm=''
+g4vis_build_asciitree_driver=''
+g4vis_build_dawn_driver=''
+g4vis_build_dawnfile_driver=''
+g4vis_build_oix_driver=''
+g4vis_build_opacs_driver=''
+g4vis_build_openglx_driver=''
+g4vis_build_openglxm_driver=''
+g4vis_build_raytracer_driver=''
+g4vis_build_vrml_driver=''
+g4vis_build_vrmlfile_driver=''
+g4vis_use_asciitree=''
+g4vis_use_dawn=''
+g4vis_use_dawnfile=''
+g4vis_use_oix=''
+g4vis_use_opacs=''
+g4vis_use_openglx=''
+g4vis_use_openglxm=''
+g4vis_use_raytracer=''
+g4vis_use_vrml=''
+g4vis_use_vrmlfile=''
 lns=''
 c=''
 n=''
@@ -1764,7 +1784,7 @@ else
 	echo " "
 	echo "WARNING: Geant4 is NOT installed yet!"
 	echo "You (or the administrator if you have not enough privileges)"
-	echo "should start with \$G4INSTALL/config/Configure -install."
+	echo "should start with \$G4INSTALL/Configure -install."
 	echo "(where \$G4INSTALL is Geant4 install directory)."
 	echo " "
 	$rm -rf UU
@@ -2989,7 +3009,7 @@ fi
 echo " "
 case "$g4use_ospace" in
 '')
-	g4use_ospace="[NOT DEFINED]"
+	g4use_ospace=n
 	;;
 esac
 
@@ -3004,55 +3024,33 @@ esac
 #
 echo ""
 
-while test 1 = 1  ; do
-
 g4message=`cat << EOM
 
 In case your compiler do not provide 'native' STL and choose for a non
 ISO/ANSI installation, ObjectSpace STL (if available in your system) may
 be used and its installation path specified.
 
-1) G4USE_OSPACE:	$g4use_ospace	(toggle by selection!)
-
-2) OSPACE_BASE_DIR: 	$g4ospace_base_dir
-
-Select from list above (e.g. 2) 
+Do you want to use ObjectSpace STL?
 EOM`
 
-dflt="Press [Enter] for default settings"
+dflt=$g4use_ospace
 rp=$g4message
 . ./myread
-gans=$ans
+g4use_ospace=$ans
 
-	case $gans in
-	
-	1) 
-		if test "X$g4use_ospace" = "X[NOT DEFINED]" ; then
-		g4use_ospace="1"
-		else
-		g4use_ospace="[NOT DEFINED]"
-		fi
-		;;
-	2) 
-		dflt=$g4ospace_base_dir
-		fn='d~'
-		rp="Where is OSPACE installed?"
-		. ./getfile
-		g4ospace_base_dir=$ans
-		;;
-#	[eE]) 
-#		break
-#		;;
-	*) 
-#		echo " "
-		break
-		;;
-	esac
-done
+if [ X$g4use_ospace = Xy ] ; then
+		
+dflt=$g4ospace_base_dir
+fn='d~'
+rp="Where is OSPACE installed?"
+. ./getfile
+g4ospace_base_dir=$ans
 
-if test "X$g4use_ospace" = "X[NOT DEFINED]" ; then
-g4use_ospace=""
 fi
+
+#if test "X$g4use_ospace" = "X[NOT DEFINED]" ; then
+#g4use_ospace=""
+#fi
 
 echo " "
 case "$g4ui_build_terminal_session" in
@@ -3286,6 +3284,417 @@ gans=$ans
 		;;
 	esac
 
+
+echo " "
+case "$g4vis_build_dawn_driver" in
+'')
+	g4vis_build_dawn_driver=n
+	;;
+esac
+
+case "$g4vis_build_dawnfile_driver" in
+'')
+	g4vis_build_dawnfile_driver=n
+	;;
+esac
+
+case "$g4vis_build_opacs_driver" in
+'')
+	g4vis_build_opacs_driver=n
+	;;
+esac
+
+case "$g4vis_build_openglx_driver" in
+'')
+	g4vis_build_openglx_driver=n
+	;;
+esac
+
+case "$g4vis_build_openglxm_driver" in
+'')
+	g4vis_build_openglxm_driver=n
+	;;
+esac
+
+case "$g4vis_build_oix_driver" in
+'')
+	g4vis_build_oix_driver=n
+	;;
+esac
+
+case "$g4vis_build_raytracer_driver" in
+'')
+	g4vis_build_raytracer_driver=n
+	;;
+esac
+
+case "$g4vis_build_vrml_driver" in
+'')
+	g4vis_build_vrml_driver=n
+	;;
+esac
+
+case "$g4vis_build_vrmlfile_driver" in
+'')
+	g4vis_build_vrmlfile_driver=n
+	;;
+esac
+
+# Set by default!
+case "$g4vis_build_asciitree_driver" in
+'')
+	g4vis_build_asciitree_driver=y
+	;;
+esac
+
+case "$g4vis_use_dawn" in
+'')
+	g4vis_use_dawn=n
+	;;
+esac
+
+case "$g4vis_use_dawnfile" in
+'')
+	g4vis_use_dawnfile=n
+	;;
+esac
+
+case "$g4vis_use_opacs" in
+'')
+	g4vis_use_opacs=n
+	;;
+esac
+
+case "$g4vis_use_openglx" in
+'')
+	g4vis_use_openglx=n
+	;;
+esac
+
+case "$g4vis_use_openglxm" in
+'')
+	g4vis_use_openglxm=n
+	;;
+esac
+
+case "$g4vis_use_oix" in
+'')
+	g4vis_use_oix=n
+	;;
+esac
+
+case "$g4vis_use_raytracer" in
+'')
+	g4vis_use_raytracer=n
+	;;
+esac
+
+case "$g4vis_use_vrml" in
+'')
+	g4vis_use_vrml=n
+	;;
+esac
+
+case "$g4vis_use_vrmlfile" in
+'')
+	g4vis_use_vrmlfile=n
+	;;
+esac
+
+# Set by default!
+case "$g4vis_use_asciitree" in
+'')
+	g4vis_use_asciitree=y
+	;;
+esac
+
+echo ""
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_DAWN_DRIVER
+  G4VIS_USE_DAWN
+
+DAWN drivers are interfaces to Fukui Renderer DAWN. It is a vectorized 3D 
+PostScript processor, and so well suited to prepare technical high
+quality outputs for presentation and/or documentation. 
+When Geant4 Visualization is performed with the DAWN driver, 
+the visualized view is automatically saved to a file
+named g4.eps in the current directory, which describes a vectorized 
+(Encapsulated) PostScript data of the view. 
+EOM`
+
+dflt=$g4vis_use_dawn
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_dawn_driver=n
+		g4vis_use_dawn=n
+		;;
+	y*|Y*) 
+		g4vis_build_dawn_driver=y
+		g4vis_use_dawn=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_DAWNFILE_DRIVER
+  G4VIS_USE_DAWNFILE
+
+DAWN drivers are interfaces to Fukui Renderer DAWN. It is a vectorized 3D 
+PostScript processor, and so well suited to prepare technical high
+quality outputs for presentation and/or documentation. 
+The DAWNFILE driver sends 3D data to DAWN via an intermediate file, 
+named g4.prim in the current directory. The file g4.prim is able to 
+be re-visualized later without the help of Geant4. 
+EOM`
+
+dflt=$g4vis_use_dawnfile
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_dawnfile_driver=n
+		g4vis_use_dawnfile=n
+		;;
+	y*|Y*) 
+		g4vis_build_dawnfile_driver=y
+		g4vis_use_dawnfile=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_OPACS_DRIVER
+  G4VIS_USE_OPACS
+
+OPACS is a visualization environment based on X windows and OpenGL. 
+It is written in ANSI C and is highly portable (UNIX, NT/X11, VMS). 
+EOM`
+
+dflt=$g4vis_use_opacs
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_opacs_driver=n
+		g4vis_use_opacs=n
+		;;
+	y*|Y*) 
+		g4vis_build_opacs_driver=y
+		g4vis_use_opacs=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_OPENGLX_DRIVER
+  G4VIS_USE_OPENGLX
+
+It is an interface to the de facto standard 3D graphics library, OpenGL. 
+It is well suited for real-time fast visualization
+and demonstration. Fast visualization is realized with hardware 
+acceleration, reuse of shapes stored in a display list, etc. 
+NURBS visualization is also supported. This is version for Xlib.
+EOM`
+
+dflt=$g4vis_use_openglx
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_openglx_driver=n
+		g4vis_use_openglx=n
+		;;
+	y*|Y*) 
+		g4vis_build_openglx_driver=y
+		g4vis_use_openglx=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_OPENGLXM_DRIVER
+  G4VIS_USE_OPENGLXM
+
+It is an interface to the de facto standard 3D graphics library, OpenGL. 
+It is well suited for real-time fast visualization
+and demonstration. Fast visualization is realized with hardware 
+acceleration, reuse of shapes stored in a display list, etc. 
+NURBS visualization is also supported. This is version for Motif.
+EOM`
+
+dflt=$g4vis_use_openglxm
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_openglxm_driver=n
+		g4vis_use_openglxm=n
+		;;
+	y*|Y*) 
+		g4vis_build_openglxm_driver=y
+		g4vis_use_openglxm=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_OIX_DRIVER
+  G4VIS_USE_OIX
+
+These drivers are based on the "Hepvis class library". 
+The OpenInventor drivers and the Hepvis class library are based on the
+well-established OpenInventor technology for scientific visualization. 
+They have high extendibility. 
+EOM`
+
+dflt=$g4vis_use_oix
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_oix_driver=n
+		g4vis_use_oix=n
+		;;
+	y*|Y*) 
+		g4vis_build_oix_driver=y
+		g4vis_use_oix=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_RAYTRACER_DRIVER
+  G4VIS_USE_RAYTRACER
+
+It performs ray-tracing visualization using the tracking routines of Geant4. 
+It is, therefore, available for debugging tracking routines. 
+It is well suited for photo-realistic high quality output for 
+presentation, and for intuitive debugging of detector geometry. 
+EOM`
+
+dflt=$g4vis_use_raytracer
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_raytracer_driver=n
+		g4vis_use_raytracer=n
+		;;
+	y*|Y*) 
+		g4vis_build_raytracer_driver=y
+		g4vis_use_raytracer=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_VRML_DRIVER
+  G4VIS_USE_VRML
+
+This driver generates VRML files, which describe 3D scenes to be 
+visualized with a proper VRML viewer, at either a local or a remote host. 
+EOM`
+
+dflt=$g4vis_use_vrml
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_vrml_driver=n
+		g4vis_use_vrml=n
+		;;
+	y*|Y*) 
+		g4vis_build_vrml_driver=y
+		g4vis_use_vrml=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_VRMLFILE_DRIVER
+  G4VIS_USE_VRMLFILE
+
+This driver generates VRML files, which describe 3D scenes to be 
+visualized with a proper VRML viewer, at either a local or a remote host. 
+The VRMLFILE driver sends 3D data to your VRML viewer, which is running 
+in the same host machine as Geant4, via an intermediate file named 
+g4.wrl created in the current directory. This file is available for 
+re-visualization afterwards. In visualization, you should specify a 
+name of the VRML viewer by setting the environment variable G4VRML_VIEWER 
+beforehand.
+EOM`
+
+dflt=$g4vis_use_vrmlfile
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_vrmlfile_driver=n
+		g4vis_use_vrmlfile=n
+		;;
+	y*|Y*) 
+		g4vis_build_vrmlfile_driver=y
+		g4vis_use_vrmlfile=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_ASCIITREE_DRIVER
+  G4VIS_USE_ASCIITREE
+
+Description????????????????????????
+EOM`
+
+dflt=$g4vis_use_asciitree
+rp=$g4message
+# Don't ask by default and set to 'y'!
+#. ./myread
+gans=y
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_asciitree_driver=n
+		g4vis_use_asciitree=n
+		;;
+	y*|Y*) 
+		g4vis_build_asciitree_driver=y
+		g4vis_use_asciitree=y
+		;;
+	esac
+
 : end of configuration questions
 echo " "
 echo "End of configuration phase."
@@ -3427,6 +3836,26 @@ g4ui_use_win32='$g4ui_use_win32'
 g4ui_use_xaw='$g4ui_use_xaw'
 g4ui_use_xm='$g4ui_use_xm'
 g4use_ospace='$g4use_ospace'
+g4vis_build_asciitree_driver='$g4vis_build_asciitree_driver'
+g4vis_build_dawn_driver='$g4vis_build_dawn_driver'
+g4vis_build_dawnfile_driver='$g4vis_build_dawnfile_driver'
+g4vis_build_oix_driver='$g4vis_build_oix_driver'
+g4vis_build_opacs_driver='$g4vis_build_opacs_driver'
+g4vis_build_openglx_driver='$g4vis_build_openglx_driver'
+g4vis_build_openglxm_driver='$g4vis_build_openglxm_driver'
+g4vis_build_raytracer_driver='$g4vis_build_raytracer_driver'
+g4vis_build_vrml_driver='$g4vis_build_vrml_driver'
+g4vis_build_vrmlfile_driver='$g4vis_build_vrmlfile_driver'
+g4vis_use_asciitree='$g4vis_use_asciitree'
+g4vis_use_dawn='$g4vis_use_dawn'
+g4vis_use_dawnfile='$g4vis_use_dawnfile'
+g4vis_use_oix='$g4vis_use_oix'
+g4vis_use_opacs='$g4vis_use_opacs'
+g4vis_use_openglx='$g4vis_use_openglx'
+g4vis_use_openglxm='$g4vis_use_openglxm'
+g4vis_use_raytracer='$g4vis_use_raytracer'
+g4vis_use_vrml='$g4vis_use_vrml'
+g4vis_use_vrmlfile='$g4vis_use_vrmlfile'
 g4workdir='$g4workdir'
 gcc='$gcc'
 grep='$grep'
@@ -3598,7 +4027,7 @@ else
 	echo " "
 	echo "WARNING: Geant4 is NOT installed yet!"
 	echo "You (or the administrator if you have not enough privileges)"
-	echo "should start with \$G4INSTALL/config/Configure -install"
+	echo "should start with \$G4INSTALL/Configure -install"
 	echo "(where \$G4INSTALL is Geant4 install directory)."
 	echo " "
 fi
