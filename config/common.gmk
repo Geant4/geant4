@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.33 2002-12-02 18:26:47 johna Exp $
+# $Id: common.gmk,v 1.34 2002-12-04 08:36:14 gcosmo Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -73,7 +73,7 @@ endif
 obj: $(G4TMPDIR)/obj.last
 
 # Touch the versioning file
-$(G4TMPDIR)/obj.last: $(objects) $(schema_o)
+$(G4TMPDIR)/obj.last: $(objects)
 	@touch $@
 
 # Make the .d file(s) and include it(them).
@@ -96,9 +96,7 @@ $(G4TMPDIR)/obj.last: $(objects) $(schema_o)
 # exists and has a size greater than zero).  This avoids making
 # corrupt .d files which would play havoc with your next build.
 
-# schema_hh and schema_ref_hh are defined in common_objy.gmk.
-
-$(G4TMPDIR)/%.d: src/%.cc $(schema_hh) $(schema_ref_hh)
+$(G4TMPDIR)/%.d: src/%.cc
 	@echo Making dependency for file $< ...
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir -p $(G4TMPDIR)  ;fi
 	@set -e;\
@@ -143,4 +141,3 @@ clean_libs:
 	@if [ -f $(G4LIBDIR)/lib$(name).$(SHEXT) ] ; then \
 	$(ECHO) Removing library lib$(name).$(SHEXT) ... ; \
 	$(RM) -f $(G4LIBDIR)/lib$(name).$(SHEXT) ; fi
-
