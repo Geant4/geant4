@@ -1,0 +1,1794 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.7 [en] (X11; I; Linux 2.2.12-20 i686) [Netscape]">
+</head>
+<body>
+
+<h1>
+Taking a Tag or Set of Tags for Testing</h1>
+The name of <i>this</i> file in your checked out code is <b><tt><font size=+1>geant4/tests/results/tags_database.html</font></tt></b>.
+<blockquote>
+<li>
+Make sure <i>this</i> html file is the <i>head </i>version (<b><tt><font size=+1>cvs
+update -d -P -A geant4/tests/results)</font></tt></b>.</li>
+
+<li>
+Inspect the <a href="#TagsDatabaseTable"><b>Tags Database Table</b> </a>below.&nbsp;
+You will need to edit it, i.e., you will need to edit <i>this </i>html
+page, either with a plain text editor or with Netscape Composer, or similar
+tool, and then commit it back to the repository (the AFS web page is then
+automatically updated).&nbsp; If CVS informs you that there is a conflict,
+it means that someone else has taken some action.&nbsp; You will need to
+resolve the conflict somehow - perhaps by moving your copy of this file,
+updating again, and starting again.</li>
+
+<li>
+There are 4 possible statuses for a tag or set of tags:</li>
+
+<blockquote>
+<li>
+<b>accepted </b>- these have been dealt with and need no further action.</li>
+
+<li>
+<b>rejected </b>- again, no need to take any further action.</li>
+
+<li>
+<b>testing </b>in progress.</li>
+
+<li>
+<b>awaiting </b>testing (signified by a blank entry in the <b>Status</b>
+column)</li>
+</blockquote>
+
+<li>
+If no <b>testing </b>is in progress, take the lowest order number (<b>#</b>)
+(take tags of the same order number together) and mark the status as <b>testing</b>.&nbsp;
+Commit this file back to the repository and proceed with testing (go back
+to <a href="procedures.html">procedures </a>page).</li>
+
+<li>
+When <b>testing </b>is finished, mark as <b>accepted </b>or <b>rejected
+</b>and
+commit this file back to the repository</li>
+</blockquote>
+
+<h1>
+<a NAME="TagsDatabaseTable"></a>Tags Database</h1>
+Note that a later global tag <i>includes</i> all earlier global tags, unless
+otherwise mentioned.
+<br>Tags up to and including geant4-01-00-ref-00 are <a href="tags_database_geant4-01-00-ref-00.html">archived</a>.
+<br>geant4-01-00-ref-01 is the ISO-migrated version of geant4-01-00-ref-00.
+<table BORDER WIDTH="100%" NOSAVE >
+<caption>&nbsp;
+<br><b><font size=+2>Tags for Geant4 1.1 (on geant4-01-00-ISO_branch)</font></b>
+<br><b><font size=+2>(Note: Later tags include earlier tags)</font></b>
+<br><b><font size=+2>Testing with geant4/tests tag geant4-01-00-ref-06</font></b></caption>
+
+<tr>
+<td><b>Tag</b></td>
+
+<td><b>Global Tag</b></td>
+
+<td><b>Depends on/ Coworks with</b></td>
+
+<td><b>Features</b></td>
+
+<td><b>Notified by</b></td>
+
+<td><b>Date</b></td>
+
+<td><b><font size=+1>#</font></b></td>
+
+<td><b>Status.........</b></td>
+</tr>
+
+<tr>
+<td>greps-V01-00-01</td>
+
+<td>geant4-01-01-cand-00</td>
+
+<td></td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td>1</td>
+
+<td>accepted in prod</td>
+</tr>
+
+<tr>
+<td>neu-V01-00-01a</td>
+
+<td>geant4-01-01-cand-00</td>
+
+<td></td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td>1</td>
+
+<td>accepted in prod</td>
+</tr>
+
+<tr>
+<td>geometry-V01-00-00</td>
+
+<td>geant4-01-01-cand-00</td>
+
+<td></td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td>1</td>
+
+<td>accepted in prod</td>
+</tr>
+
+<tr>
+<td>tracking-V01-00-00</td>
+
+<td>geant4-01-01-cand-00</td>
+
+<td></td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td>1</td>
+
+<td>accepted in prod</td>
+</tr>
+
+<tr>
+<td>event-V01-00-01</td>
+
+<td>geant4-01-01-cand-00</td>
+
+<td>tracking-V01-00-01</td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td>1</td>
+
+<td>accepted in prod</td>
+</tr>
+
+<tr>
+<td>track-V01-00-00</td>
+
+<td>geant4-01-01-cand-00</td>
+
+<td></td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td>1</td>
+
+<td>accepted in prod</td>
+</tr>
+
+<tr>
+<td>global-V01-00-03</td>
+
+<td>geant4-01-01-cand-00</td>
+
+<td></td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td>1</td>
+
+<td>accepted in prod</td>
+</tr>
+
+<tr>
+<td>config-V01-00-02</td>
+
+<td>geant4-01-01-cand-00</td>
+
+<td></td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td>1</td>
+
+<td>accepted in prod</td>
+</tr>
+
+<tr>
+<td>intercoms-V01-00-00</td>
+
+<td>geant4-01-01-cand-00</td>
+
+<td></td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td>1</td>
+
+<td>accepted in prod</td>
+</tr>
+
+<tr>
+<td>examples-V01-00-01a</td>
+
+<td>geant4-01-01-cand-00</td>
+
+<td></td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td>1</td>
+
+<td>accepted in prod</td>
+</tr>
+
+<tr>
+<td>emlowen-V01-00-11</td>
+
+<td>geant4-01-01-cand-00</td>
+
+<td></td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td>1</td>
+
+<td>accepted in prod</td>
+</tr>
+
+<tr>
+<td>persistency-V01-00-00</td>
+
+<td>geant4-01-01-cand-00</td>
+
+<td></td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td>1</td>
+
+<td>accepted in prod</td>
+</tr>
+
+<tr>
+<td>source-gmk-V01-00-00</td>
+
+<td>geant4-01-01-cand-00</td>
+
+<td></td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td>2</td>
+
+<td>accepted in prod</td>
+</tr>
+
+<tr>
+<td>vis-V01-00-03</td>
+
+<td>geant4-01-01-cand-00</td>
+
+<td></td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td>2</td>
+
+<td>accepted in prod</td>
+</tr>
+
+<tr>
+<td>tracking-V01-00-01</td>
+
+<td>geant4-01-01-cand-00</td>
+
+<td></td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td>2</td>
+
+<td>accepted in prod</td>
+</tr>
+
+<tr>
+<td>geometry-V01-00-00a</td>
+
+<td></td>
+
+<td></td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td>geom-solids-csg-V01-00-05</td>
+
+<td></td>
+
+<td></td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td>g3tog4-V01-00-00a</td>
+
+<td></td>
+
+<td></td>
+
+<td>See below.</td>
+
+<td></td>
+
+<td></td>
+
+<td></td>
+
+<td></td>
+</tr>
+</table>
+
+<table BORDER WIDTH="100%" NOSAVE >
+<caption>&nbsp;
+<br><b><font size=+2>Development Tags after geant4-01-00-ref-01</font></b></caption>
+
+<tr>
+<td><b>Tag</b></td>
+
+<td><b>Global Tag</b></td>
+
+<td><b>Depends on/ Coworks with</b></td>
+
+<td><b>Features</b></td>
+
+<td><b>Notified by</b></td>
+
+<td><b>Date</b></td>
+
+<td><b><font size=+1>#</font></b></td>
+
+<td><b>Status</b></td>
+</tr>
+
+<tr>
+<td>greps-V01-00-00</td>
+
+<td>geant4-01-00-ref-02</td>
+
+<td></td>
+
+<td>Added G4Polyhedron::Transform and InvertFacets.</td>
+
+<td>Evgeni Chernaev</td>
+
+<td>991216</td>
+
+<td>1</td>
+
+<td>accepted</td>
+</tr>
+
+<tr>
+<td>source-gmk-&nbsp;
+<br>V01-00-00</td>
+
+<td>geant4-01-00-ref-02</td>
+
+<td></td>
+
+<td>Added null operator (:) to each line so that exit status is always
+OK.</td>
+
+<td>John Allison</td>
+
+<td>991216</td>
+
+<td>1</td>
+
+<td>accepted</td>
+</tr>
+
+<tr>
+<td>global-V01-00-00</td>
+
+<td>geant4-01-00-ref-02</td>
+
+<td></td>
+
+<td>Synchronized with HEAD, <a href="tag_information/global-V01-00-00">etc.</a></td>
+
+<td>Gabriele Cosmo</td>
+
+<td>000106</td>
+
+<td>1</td>
+
+<td>accepted</td>
+</tr>
+
+<tr>
+<td>config-V01-00-00</td>
+
+<td>geant4-01-00-ref-02</td>
+
+<td></td>
+
+<td>Synchronized with HEAD, <a href="tag_information/config-V01-00-00">etc.</a></td>
+
+<td>Gabriele Cosmo</td>
+
+<td>000106</td>
+
+<td>1</td>
+
+<td>accepted</td>
+</tr>
+
+<tr>
+<td>vis-V01-00-00/1/2</td>
+
+<td>geant4-01-00-cand-03
+<br>geant4-01-00-ref-04</td>
+
+<td></td>
+
+<td>0) Added /vis/viewer/refresh.&nbsp;
+<br>1) Fix for ISO in VRML.&nbsp;
+<br>2) General handling of displaced solid, introduced /vis/viewer/show</td>
+
+<td>Satoshi Tanaka, John Allison</td>
+
+<td>000111</td>
+
+<td>2</td>
+
+<td>accepted</td>
+</tr>
+
+<tr>
+<td>greps-V01-00-01</td>
+
+<td>geant4-01-00-cand-03
+<br>geant4-01-00-ref-04</td>
+
+<td></td>
+
+<td>Fix for spheres with small dtheta.</td>
+
+<td>John Allison</td>
+
+<td>000111</td>
+
+<td>2</td>
+
+<td>accepted</td>
+</tr>
+
+<tr>
+<td>event-V01-00-00</td>
+
+<td>geant4-01-00-cand-03
+<br>geant4-01-00-ref-04</td>
+
+<td></td>
+
+<td><a href="tag_information/event-V01-00-00">G4EventManager becomes a
+singleton.</a></td>
+
+<td>Makoto Asai</td>
+
+<td>000112</td>
+
+<td>2</td>
+
+<td>accepted</td>
+</tr>
+
+<tr>
+<td>examples-V01-00-00</td>
+
+<td>geant4-01-00-ref-02</td>
+
+<td></td>
+
+<td>- N02, N03: Introduced ExN0nSteppingVerbose (Michel Maire).&nbsp;
+<br>- N04: Introduced 10 TeV mu- in exampleN04.EMtest.in (John Apostolakis).&nbsp;
+<br>- All reference files updated.</td>
+
+<td>John Allison</td>
+
+<td>000114</td>
+
+<td>1</td>
+
+<td>accepted</td>
+</tr>
+
+<tr>
+<td>vis-V01-00-03</td>
+
+<td>geant4-01-00-cand-03
+<br>geant4-01-00-ref-04</td>
+
+<td></td>
+
+<td>- Added some protections for no viewer, no voxelisation.&nbsp;
+<br>- Corrected endl -> G4endl</td>
+
+<td>John Allison</td>
+
+<td>000117</td>
+
+<td>2</td>
+
+<td>accepted</td>
+</tr>
+
+<tr>
+<td>global-V01-00-01</td>
+
+<td>geant4-01-00-ref-04</td>
+
+<td></td>
+
+<td>- G4UnitsTable[.hh.cc]: added constructor to G4BestUnit for 3vectors
+(M.Maire).&nbsp;
+<br>- globals.hh: added check on definition of CLHEP_MAX_MIN_DEFINED.</td>
+
+<td>Gabriele Cosmo</td>
+
+<td>000119</td>
+
+<td>3</td>
+
+<td>accepted</td>
+</tr>
+
+<tr>
+<td>geometry-V01-00-00</td>
+
+<td>geant4-01-00-ref-04</td>
+
+<td></td>
+
+<td><a href="tag_information/geometry-V01-00-00">- CSG/G4Trap: fixed bug
+in DistanceToIn(p,v). (V.Grichine).</a>
+<br><a href="tag_information/geometry-V01-00-00">- Protection of GetSlice
+in G4DrawVoxels.cc. (J.Allison)</a></td>
+
+<td>Gabriele Cosmo</td>
+
+<td>000120</td>
+
+<td>3</td>
+
+<td>accepted</td>
+</tr>
+
+<tr>
+<td>testem-V01-00-00</td>
+
+<td>geant4-01-00-ref-04</td>
+
+<td></td>
+
+<td>examples/extended/electromagnetic:&nbsp;
+<br>- implemented G4NOHIST .&nbsp;
+<br>- new TestEm6 (low energy) (Vladimir Ivanchenko); TestEm6.in contains
+protons, anti_protons, ionC12.</td>
+
+<td>Michel Maire</td>
+
+<td>000121</td>
+
+<td>3</td>
+
+<td>accepted</td>
+</tr>
+
+<tr>
+<td>emlowen-V01-00-00</td>
+
+<td>geant4-01-00-ref-04</td>
+
+<td></td>
+
+<td><a href="tag_information/emlowen-V01-00-00">- Anti-proton energy loss
+down to 1 keV.</a>
+<br><a href="tag_information/emlowen-V01-00-00">- Small bug fixes.</a></td>
+
+<td>Vladimr Ivanchenko</td>
+
+<td>000121</td>
+
+<td>3</td>
+
+<td>accepted</td>
+</tr>
+
+<tr>
+<td HEIGHT="79">tracking-V01-00-00</td>
+
+<td HEIGHT="79">geant4-01-00-ref-05</td>
+
+<td HEIGHT="79"></td>
+
+<td HEIGHT="79">- GetCurrentValue() in G4TrackingMessenger.cc have a return
+value.&nbsp;
+<br>- SetUserAction in G4SteppingManager.hh: protected null pointers.</td>
+
+<td HEIGHT="79">Takashi Sasaki</td>
+
+<td HEIGHT="79">000124</td>
+
+<td HEIGHT="79">4</td>
+
+<td HEIGHT="79">accepted in dev2</td>
+</tr>
+
+<tr>
+<td>neu-V01-00-01</td>
+
+<td>geant4-01-00-ref-05</td>
+
+<td></td>
+
+<td>Fix the 'no data' problem seen in the neutron transport tests.</td>
+
+<td>Hans-Peter Wellisch</td>
+
+<td>000125</td>
+
+<td>4</td>
+
+<td>accepted in dev2</td>
+</tr>
+
+<tr>
+<td>event-V01-00-01</td>
+
+<td>geant4-01-00-ref-05</td>
+
+<td>tracking-V01-00-01</td>
+
+<td>corrections for trajectories of suspended tracks</td>
+
+<td>Makoto Asai</td>
+
+<td>000126</td>
+
+<td>6</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>tracking-V01-00-01</td>
+
+<td>geant4-01-00-ref-05</td>
+
+<td></td>
+
+<td>SetUserAction methods in G4SteppingManager.hh and G4TrackingManger.hh
+is changed for the ray tracer by Makoto</td>
+
+<td>Takashi Sasaki</td>
+
+<td>000126</td>
+
+<td>6</td>
+
+<td>accepted in dev1&nbsp;</td>
+</tr>
+
+<tr>
+<td>track-V01-00-00</td>
+
+<td>geant4-01-00-ref-05</td>
+
+<td></td>
+
+<td>Bugs related track weight in G4VParticleChange have been fixed</td>
+
+<td>Hisaya Kurashige</td>
+
+<td>000126</td>
+
+<td>7</td>
+
+<td>accepted in dev2</td>
+</tr>
+
+<tr>
+<td>partman-V01-00-00</td>
+
+<td>geant4-01-00-ref-05</td>
+
+<td></td>
+
+<td>Some modification and bug fixes for implementation of IsotopeTable
+classes.</td>
+
+<td>Hisaya Kurisge</td>
+
+<td>000126</td>
+
+<td>7</td>
+
+<td>accepted in dev2</td>
+</tr>
+
+<tr>
+<td>global-V01-00-02</td>
+
+<td></td>
+
+<td></td>
+
+<td><a href="tag_information/global-V01-00-02">Fixes to STLInterface.</a></td>
+
+<td>Gabriele</td>
+
+<td>000201</td>
+
+<td>5</td>
+
+<td>rejected in dev1</td>
+</tr>
+
+<tr>
+<td>config-V01-00-01</td>
+
+<td>geant4-01-00-ref-05</td>
+
+<td></td>
+
+<td><a href="tag_information/config-V01-00-01">- Introduces G4NO_OPTIMISE.</a>
+<br><a href="tag_information/config-V01-00-01">- G4DEBUG and G4OPTIMISE
+have been added to CPPFLAGS.</a></td>
+
+<td>Gabriele Cosmo</td>
+
+<td>000201</td>
+
+<td>5</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>global-V01-00-03</td>
+
+<td>geant4-01-00-ref-05</td>
+
+<td></td>
+
+<td>- Correct bounds overflow in G4String::toLower() and toUpper().
+<br>- Added resize(size_t) to G4RWTPtrVector.</td>
+
+<td>Gabriele Cosmo</td>
+
+<td>000211</td>
+
+<td>6</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>examples-V01-00-01</td>
+
+<td>geant4-01-00-ref-05</td>
+
+<td></td>
+
+<td>- Includes testem-V01-00-00 above.
+<br>- Introduced large_N files.
+<br>- Updated N03 and N04.EMtest.out.</td>
+
+<td>John Allison</td>
+
+<td>000213</td>
+
+<td>7</td>
+
+<td>accepted in dev2</td>
+</tr>
+
+<tr>
+<td>config-V01-00-02</td>
+
+<td>geant4-01-00-ref-05</td>
+
+<td></td>
+
+<td>- architecture.gmk: added option '+W823' to HP-aCC.
+<br>- binmake.gmk: moved $EXTRALIBS.</td>
+
+<td>Gabriele Cosmo</td>
+
+<td>000214</td>
+
+<td>7</td>
+
+<td>accepted in dev2</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<table BORDER WIDTH="100%" NOSAVE >
+<caption><b><font size=+2>Tags after geant4-01-00-ref-05</font></b></caption>
+
+<tr>
+<td><b>Tag</b></td>
+
+<td><b>Global Tag</b></td>
+
+<td><b>Depends on/ Coworks with</b></td>
+
+<td><b>Features</b></td>
+
+<td><b>Notified by</b></td>
+
+<td><b>Date</b></td>
+
+<td><b><font size=+1>#</font></b></td>
+
+<td><b>Status</b></td>
+</tr>
+
+<tr>
+<td>global-V01-00-04</td>
+
+<td>geant4-01-00-cand-06
+<br>geant4-01-00-ref-06</td>
+
+<td></td>
+
+<td>G4UserLimits[.hh.icc]: added string identifier - new member fType,
+SetType/GetType methods and new constructor. (H.Kurasige).</td>
+
+<td>Gabriele Cosmo</td>
+
+<td>000217</td>
+
+<td>8</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>vis-V01-00-04a</td>
+
+<td>geant4-01-00-cand-06
+<br>geant4-01-00-ref-06</td>
+
+<td></td>
+
+<td>Introduced G4RayTracer (Makoto Asai).
+<br>(raytracer-V01-00-01a fixes - see below.)</td>
+
+<td>Satoshi Tanaka</td>
+
+<td>000215</td>
+
+<td>8</td>
+
+<td>rejected in dev1</td>
+</tr>
+
+<tr>
+<td>intercoms-V01-00-00</td>
+
+<td>geant4-01-00-cand-06
+<br>geant4-01-00-ref-06</td>
+
+<td></td>
+
+<td>Fixed const char* problem.</td>
+
+<td>Makoto Asai</td>
+
+<td>000217</td>
+
+<td>8</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>examples-V01-00-01a</td>
+
+<td>geant4-01-00-cand-06
+<br>geant4-01-00-ref-06</td>
+
+<td></td>
+
+<td>Changed cout to G4cout in TestEm2/src/Em2DetectorConstruction.cc (Michel
+Maire).</td>
+
+<td>John Allison</td>
+
+<td>000218</td>
+
+<td>8</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>emlowen-V01-00-10</td>
+
+<td></td>
+
+<td></td>
+
+<td>Various bug fixes to electron and photon low energy processes.</td>
+
+<td>Maria Grazia Pia</td>
+
+<td>000221</td>
+
+<td>9</td>
+
+<td>rejected in dev1</td>
+</tr>
+
+<tr>
+<td>raytracer-V01-00-01a</td>
+
+<td>geant4-01-00-cand-06
+<br>geant4-01-00-ref-06</td>
+
+<td></td>
+
+<td>const char* fixes to vis-V01-00-04a.
+<br>Added G4std:: in places to make ISO compliant.</td>
+
+<td>Makoto Asai</td>
+
+<td>000222</td>
+
+<td>10</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>greps-V01-00-02
+<p>greps-V01-00-03</td>
+
+<td>geant4-01-00-cand-06
+<br>geant4-01-00-ref-06</td>
+
+<td></td>
+
+<td>02: Added HepPolyhedron (Evgeni Chernaev).&nbsp; Re-implemented G4Polyhedron.
+<br>03: Re-instated edge flags for "invisible" edges.</td>
+
+<td>John Allison</td>
+
+<td>000222</td>
+
+<td>10</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>emlowen-V01-00-11</td>
+
+<td>geant4-01-00-cand-06
+<br>geant4-01-00-ref-06</td>
+
+<td></td>
+
+<td>Fix to emlowen-V01-00-10 for ISO compliance.</td>
+
+<td>Maria Grazia Pia</td>
+
+<td>000222</td>
+
+<td>10</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>persistency-V01-00-00</td>
+
+<td>geant4-01-00-ref-06</td>
+
+<td></td>
+
+<td>Fixed a minor typo in G4PersistentGeomMan.cc.</td>
+
+<td>Youhei Morita</td>
+
+<td>000223</td>
+
+<td>10</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>neu-V01-00-01a</td>
+
+<td>geant4-01-00-ref-06</td>
+
+<td></td>
+
+<td>Small fix for NT (Gonzalo Gracia)</td>
+
+<td>John Allison</td>
+
+<td>000225</td>
+
+<td>10</td>
+
+<td>accepted in dev1</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<table BORDER WIDTH="100%" NOSAVE >
+<caption><b><font size=+2>Tags after geant4-01-00-ref-06</font></b></caption>
+
+<tr>
+<td><b>Tag</b></td>
+
+<td><b>Global Tag</b></td>
+
+<td><b>Depends on/ Coworks with</b></td>
+
+<td><b>Features</b></td>
+
+<td><b>Notified by</b></td>
+
+<td><b>Date</b></td>
+
+<td><b><font size=+1>#</font></b></td>
+
+<td><b>Status</b></td>
+</tr>
+
+<tr>
+<td>particles-V01-00-00</td>
+
+<td>geant4-01-00-ref-07</td>
+
+<td>procman-V01-00-00
+<br>examples-V01-00-02
+<br>New Physics Lists in&nbsp; T06, T07, T09.</td>
+
+<td>------ partman-V01-00-02
+<br>&nbsp;&nbsp;&nbsp; - Remove all RW vectors and use STL&nbsp;
+<br>&nbsp;&nbsp;&nbsp; - Added ParticleSubType in ParticleDefinition
+<br>------ partman-V01-00-01
+<br>&nbsp;&nbsp;&nbsp; - Bug fix in G4NucleiProperties&nbsp;
+<br>------ shortlived-V01-00-00
+<br>&nbsp;&nbsp; - Added "rho0" in G4ShortLivedConstructor
+<br>------ hadrons-V01-00-00
+<br>&nbsp;&nbsp; - Removed G4RhoPlus, G4RhoZero, and F4RhoMinus class
+<br>&nbsp;&nbsp; - Removed G4RhoZero from G4MesonConstructor.cc
+<br>&nbsp;&nbsp; - Added GetAtomicNumber() and GetAtomicMass() to G4VIon,
+G4Proton, and G4Neutron.
+<br>------ <a href="tag_information/particles-V01-00-00">Link to further
+notes</a>.</td>
+
+<td>Hisaya Kurisige</td>
+
+<td>000225</td>
+
+<td>11</td>
+
+<td>accepted in dev2</td>
+</tr>
+
+<tr>
+<td>procman-V01-00-00</td>
+
+<td>geant4-01-00-ref-07</td>
+
+<td>particles-V01-00-00</td>
+
+<td>Remove G4RhoZero from G4ParticleTypes.hh.</td>
+
+<td>Hisaya</td>
+
+<td>000225</td>
+
+<td>11</td>
+
+<td>accepted in dev2</td>
+</tr>
+
+<tr>
+<td>examples-V01-00-02</td>
+
+<td>geant4-01-00-ref-07</td>
+
+<td>particles-V01-00-00
+<br>procman-V01-00-00</td>
+
+<td>New Physics Lists for particles-V01-00-00.</td>
+
+<td>Hisaya Kurisige</td>
+
+<td>000225</td>
+
+<td>11</td>
+
+<td>accepted in dev2</td>
+</tr>
+
+<tr>
+<td>HEAD of test06/7/9</td>
+
+<td>geant4-01-00-ref-07</td>
+
+<td>particles-V01-00-00
+<br>procman-V01-00-00</td>
+
+<td>New Physics Lists in T06, T07, T09</td>
+
+<td>Hisaya Kurisige</td>
+
+<td>000225</td>
+
+<td>11</td>
+
+<td>accepted in dev2</td>
+</tr>
+
+<tr>
+<td>neu-V01-00-03</td>
+
+<td>geant4-01-00-ref-07</td>
+
+<td></td>
+
+<td>Units fix for energy non-conservation.</td>
+
+<td>Hans-Peter</td>
+
+<td>000225</td>
+
+<td>12</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>breps-V01-00-02</td>
+
+<td>geant4-01-00-ref-07</td>
+
+<td>* Co-works.</td>
+
+<td><a href="tag_information/breps-V01-00-02">Decoupled from STEP reader
+and other fixes.</a></td>
+
+<td>Gabriele</td>
+
+<td>000225</td>
+
+<td>12</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>STEP-V01-00-01</td>
+
+<td>geant4-01-00-ref-07</td>
+
+<td>* Co-works.</td>
+
+<td><a href="tag_information/STEP-V01-00-01">Upgraded STEP reader from
+SCL 3.2.</a></td>
+
+<td>Gabriele</td>
+
+<td>000225</td>
+
+<td>12</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>stepinterface-V01-00-01</td>
+
+<td>geant4-01-00-ref-07</td>
+
+<td>* Co-works.</td>
+
+<td><a href="tag_information/stepinterface-V01-00-01">Supports the new
+upgraded STEP reader; also several fixes and improved diagnostics.</a></td>
+
+<td>Gabriele Cosmo</td>
+
+<td>000225</td>
+
+<td>12</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>vis-V01-00-06</td>
+
+<td>geant4-01-00-ref-07</td>
+
+<td></td>
+
+<td><a href="tag_information/vis-V01-00-06">Standard interface to Ray Tracer
+and minor fixes.</a></td>
+
+<td>John Allison</td>
+
+<td>000229</td>
+
+<td>12</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>geometry-V01-00-00a</td>
+
+<td>geant4-01-00-ref-07</td>
+
+<td>Does <i>not</i> include the above tags, breps... etc.</td>
+
+<td><a href="tag_information/geometry-V01-00-00a">Some minor fixes to the
+unit tests that were not included in "geometry-V01-00-00".</a></td>
+
+<td>Gabriele Cosmo</td>
+
+<td>000229</td>
+
+<td>12</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>decay-V01-00-00</td>
+
+<td>geant4-01-00-ref-07</td>
+
+<td>Co-works with tags set 11.</td>
+
+<td>G4Decay cannot be registered to "shortlived" particles.&nbsp; Fixed
+to cowork with tags set 11.</td>
+
+<td>Hisaya Kurisige</td>
+
+<td>000301</td>
+
+<td>13</td>
+
+<td>accepted in dev2</td>
+</tr>
+
+<tr>
+<td>examples-V01-00-03</td>
+
+<td>geant4-01-00-ref-07</td>
+
+<td></td>
+
+<td>Updated exampleN04.out to ref-07.</td>
+
+<td>John Allison</td>
+
+<td>000302</td>
+
+<td>13</td>
+
+<td>accepted in dev2</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<table BORDER WIDTH="100%" NOSAVE >
+<caption><b><font size=+2>Tags after geant4-01-00-ref-07</font></b></caption>
+
+<tr>
+<td><b>Tag</b></td>
+
+<td><b>Global Tag</b></td>
+
+<td><b>Depends on/ Coworks with</b></td>
+
+<td><b>Features</b></td>
+
+<td><b>Notified by</b></td>
+
+<td><b>Date</b></td>
+
+<td><b><font size=+1>#</font></b></td>
+
+<td><b>Status</b></td>
+</tr>
+
+<tr>
+<td>testem-V01-00-02</td>
+
+<td>In em-V01-00-01</td>
+
+<td>Included in examples-V01-00-04.</td>
+
+<td></td>
+
+<td>Michel Maire</td>
+
+<td>000301</td>
+
+<td>14</td>
+
+<td>rejected in dev1</td>
+</tr>
+
+<tr>
+<td>em-V01-00-00</td>
+
+<td>In em-V01-00-01</td>
+
+<td>emlowen-V01-00-11
+<br>geant4-01-00-ref-06</td>
+
+<td>GNUmakefile, History, standard/, muon/, xrays/, utils/, test/.</td>
+
+<td>Michel Maire</td>
+
+<td>000302</td>
+
+<td>14</td>
+
+<td>rejected in dev1</td>
+</tr>
+
+<tr>
+<td>g3tog4-V01-00-00</td>
+
+<td>In g3tog4-V01-00-00a</td>
+
+<td></td>
+
+<td><a href="tag_information/g3tog4-V01-00-00">Improvements and fixes by
+Bill, Ivana and Gabriele.</a></td>
+
+<td>Gabriele</td>
+
+<td>000302</td>
+
+<td>14</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>testem-V01-00-03</td>
+
+<td>In em-V01-00-01</td>
+
+<td>Included in examples-V01-00-04.</td>
+
+<td>Warning in TestEm6 is fixed.</td>
+
+<td>Vladimir Ivanchenko</td>
+
+<td>000303</td>
+
+<td>14</td>
+
+<td>rejected in dev1</td>
+</tr>
+
+<tr>
+<td>materials-V01-00-00</td>
+
+<td>geant4-01-00-ref-08</td>
+
+<td>geant4-01-00-ref-06</td>
+
+<td>const char* everywhere in G4MaterialPropertiesTable.</td>
+
+<td>Michel Maire</td>
+
+<td>000303</td>
+
+<td>14</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>geom-solids-csg-V01-00-05</td>
+
+<td>geant4-01-00-ref-08</td>
+
+<td>geometry-V01-00-00a</td>
+
+<td>Trivial fixes (e.g., added explicit casts).</td>
+
+<td>Gabriele Cosmo</td>
+
+<td>000303</td>
+
+<td>14</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>examples-V01-00-04</td>
+
+<td>In examples-V01-00-05</td>
+
+<td>testem-V01-00-02 for TestEm1-5, testem-V01-00-03 for TestEm6,
+<br>geant4-01-00-ref-07 for TestEm8.</td>
+
+<td>...plus changes to TestEm1/2/3 physics lists for ref-07 (Hisaya).</td>
+
+<td>John Allison</td>
+
+<td>000306</td>
+
+<td>14</td>
+
+<td>rejected in dev1</td>
+</tr>
+
+<tr>
+<td>g3tog4-V01-00-00a</td>
+
+<td>geant4-01-00-ref-08</td>
+
+<td></td>
+
+<td>char* changed to const char* for ISO.</td>
+
+<td>John Allison</td>
+
+<td>000307</td>
+
+<td>15</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>em-V01-00-01</td>
+
+<td>geant4-01-00-ref-08</td>
+
+<td></td>
+
+<td>Fix for ISO.&nbsp; Includes above em tags.
+<br>Internal reorganisation of all the Eloss classes.
+<br>Bug fixes in Muon Pair Production</td>
+
+<td>Michel Maire</td>
+
+<td>000308</td>
+
+<td>15</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>examples-V01-00-05</td>
+
+<td>geant4-01-00-ref-08</td>
+
+<td></td>
+
+<td>- Updated all .out files, novice and extended, from Sun debug NON-ISO.
+<br>- Small fix for NT in TestEm4.cc.</td>
+
+<td>John Allison</td>
+
+<td>000309</td>
+
+<td>15</td>
+
+<td>accepted in dev1</td>
+</tr>
+</table>
+
+<table BORDER WIDTH="100%" NOSAVE >
+<caption>&nbsp;
+<br><b><font size=+2>Tags after geant4-01-00-ref-08</font></b></caption>
+
+<tr>
+<td><b>Tag</b></td>
+
+<td><b>Global Tag</b></td>
+
+<td><b>Depends on/ Coworks with</b></td>
+
+<td><b>Features</b></td>
+
+<td><b>Notified by</b></td>
+
+<td><b>Date</b></td>
+
+<td><b><font size=+1>#</font></b></td>
+
+<td><b>Status</b></td>
+</tr>
+
+<tr>
+<td>procman-V01-00-01</td>
+
+<td></td>
+
+<td>geant4-01-01-ref-01</td>
+
+<td><a href="tag_information/procman-V01-00-01">- Use STL vector instead
+of RW vectors (except for G4ProcessVector).</a>
+<br><a href="tag_information/procman-V01-00-01">- Add registration of process
+into ProcessTable in copy constructor.</a></td>
+
+<td>Hisaya Kurisige</td>
+
+<td>000309</td>
+
+<td>16</td>
+
+<td>accepted in dev2</td>
+</tr>
+
+<tr>
+<td>global-V01-01-00</td>
+
+<td></td>
+
+<td></td>
+
+<td><a href="tag_information/global-V01-01-00">- Bug fixes and improvements
+in STL Interface.</a>
+<br><a href="tag_information/global-V01-01-00">- Added "g4std/complex"
+wrapper file (V.Grichine).</a></td>
+
+<td>Gabriele Cosmo</td>
+
+<td>000313</td>
+
+<td>17</td>
+
+<td>rejected in dev2</td>
+</tr>
+
+<tr>
+<td>config-V01-01-00</td>
+
+<td></td>
+
+<td>geant4-01-01-ref-01</td>
+
+<td>- architecture.gmk: corrected FCLIBS for Linux-g++, added -lg2c -lnsl
+and removed -lf2c.</td>
+
+<td>Gabriele Cosmo</td>
+
+<td>000313</td>
+
+<td>17</td>
+
+<td>accepted in dev2</td>
+</tr>
+
+<tr>
+<td>particles-V01-01-00</td>
+
+<td></td>
+
+<td>geant4-01-01-ref-01</td>
+
+<td>New property of "particle sub-type" in G4ParticleDefinition is added
+for all particles.</td>
+
+<td>Hisaya Kurisige</td>
+
+<td>000317</td>
+
+<td>18</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>global-V01-01-01</td>
+
+<td></td>
+
+<td>geant4-01-01-ref-01</td>
+
+<td><a href="tag_information/global-V01-01-01">- Bug fixes and improvements
+in STL Interface.</a></td>
+
+<td>Gabriele Cosmo</td>
+
+<td>000322</td>
+
+<td>19</td>
+
+<td>accepted in dev2</td>
+</tr>
+
+<tr>
+<td>geom-solids-csg-V01-01-00</td>
+
+<td></td>
+
+<td>geant4-01-01-ref-01</td>
+
+<td><a href="tag_information/geom-solids-csg-V01-01-00">- Fixed bug in
+G4PolyhedraSide::Normal(...).</a>
+<br><a href="tag_information/geom-solids-csg-V01-01-00">- Added diagnostics
+in G4Cons, G4Sphere and G4Torus.</a></td>
+
+<td>Gabriele Cosmo</td>
+
+<td>000323</td>
+
+<td>20</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>global-V01-01-02</td>
+
+<td></td>
+
+<td>geant4-01-01-ref-01</td>
+
+<td>- Added class G4PhysicsLnVector[.hh.cc] implementing a physics vector
+with natural logarithmic scale for energy/momentum bins (M.G.Pia).</td>
+
+<td>Gabriele Cosmo</td>
+
+<td>000323</td>
+
+<td>20</td>
+
+<td>accepted in dev1</td>
+</tr>
+
+<tr>
+<td>config-V01-01-01</td>
+
+<td></td>
+
+<td>geant4-01-01-ref-01</td>
+
+<td><a href="tag_information/config-V01-01-01">- Improvements/fixes for shared libraries.</td>
+
+<td>Gabriele</td>
+
+<td>000330</td>
+
+<td></td>
+
+<td>accepted</td>
+</tr>
+</table>
+
+<table BORDER WIDTH="100%" NOSAVE >
+<caption>&nbsp;
+<br><b><font size=+2>Blank for future tags</font></b></caption>
+
+<tr>
+<td><b>Tag</b></td>
+
+<td><b>Global Tag</b></td>
+
+<td><b>Depends on/ Coworks with</b></td>
+
+<td><b>Features</b></td>
+
+<td><b>Notified by</b></td>
+
+<td><b>Date</b></td>
+
+<td><b><font size=+1>#</font></b></td>
+
+<td><b>Status</b></td>
+</tr>
+</table>
+
+<p>
+<hr WIDTH="100%">
+<br><i><a href="mailto:John.Allison@man.ac.uk">John Allison&nbsp;</a> 8th
+Decemeber 1999</i>
+</body>
+</html>

@@ -1,0 +1,14 @@
+30th March 2000
+- makeshlib.sh:
+  o added few corrections to the script in order to allow
+    creation of shared libraries without need of the static
+    archive on platforms which allow this.
+  o added section for SunOS systems.
+  (courtesy of I.G.Caballero)
+- architecture.gmk:
+  o on SUN-CC and SUN-CC5, added -pic to CXXFLAGS for building shared
+    libraries.
+
+21st March 2000
+- makeshlib.sh: corrected invokation of compiler for HP-aCC setup.
+  Changed CC to aCC (fixes bug-report #68).
