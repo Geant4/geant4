@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.15 2002-11-26 00:39:11 gum Exp $
+// $Id: G4Scintillation.cc,v 1.16 2002-11-26 00:52:13 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -258,11 +258,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
  
 	    G4double CIImax = ScintillationIntegral->GetMaxValue();
 		
-            G4cout << " Component: " << scnt << " NUM: " << Num << endl;
-
 	    for (G4int i = 0; i < Num; i++) {
-
-                G4cout << " Component: " << scnt << endl; 
 
 		// Determine photon momentum
 
