@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ionIonisation.hh,v 1.3 1999-12-15 14:51:49 gunter Exp $
+// $Id: G4ionIonisation.hh,v 1.4 2000-07-18 11:01:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,8 @@
 #include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Electron.hh"
+#include "G4Proton.hh"
+#include "G4AntiProton.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
  
@@ -79,6 +81,9 @@ class G4ionIonisation : public G4VContinuousDiscreteProcess
 
     G4double ComputedEdx(const G4DynamicParticle *aParticle,
                             G4Material *aMaterial);
+
+    const G4Proton* theProton;
+    const G4AntiProton* theAntiProton;
 
   private:
 
