@@ -51,14 +51,14 @@ public:
   }
   
   static std::multimap<const std::pair<G4int,G4int>, const G4VFermiFragment*,
-		       std::less<std::pair<G4int,G4int> > >::iterator 
+		       std::less<const std::pair<G4int,G4int> > >::iterator 
   LowerBound(const std::pair<G4int,G4int> & az) 
   {
     return theMapOfFragments.lower_bound(az);
   }
 
   static std::multimap<const std::pair<G4int,G4int>, const G4VFermiFragment*,
-			 std::less<std::pair<G4int,G4int> > >::iterator 
+			 std::less<const std::pair<G4int,G4int> > >::iterator 
   UpperBound(const std::pair<G4int,G4int> & az) 
   {
     return theMapOfFragments.upper_bound(az);
