@@ -451,12 +451,12 @@ if ( `uname -n` == "papou1" ) then
   set prompt='g4-papou1> ' 
 endif
 
-if ( `uname -n` == "VMhost.lal.in2p3.fr" ) then
+if ( `uname -n` == "pc-88172" ) then
   set prompt='g4-pc-gbp> ' 
 # Core :
   setenv CVSROOT :ext:gbarrand@sungeant.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv CVS_RSH ssh
-  setenv G4INSTALL /geant4/geant4-05-00-ref-01
+  setenv G4INSTALL /geant4/geant4-05-02-ref-04
   setenv G4SYSTEM Linux-g++
   setenv G4WORKDIR $G4INSTALL
   setenv G4STTDIR $G4WORKDIR/stt
@@ -501,18 +501,11 @@ if ( `uname -n` == "VMhost.lal.in2p3.fr" ) then
 #  source /projects/Lab/v9r0/cmt/setup.csh
 #  setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
 #  setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
-#  setenv PYTHONPATH ${PYTHONPATH}:.
 # Else :
 #  setenv G4VIS_USE_DAWN              1
 #  setenv G4VIS_USE_DAWNFILE          1
 #  setenv G4VIS_USE_VRML              1
 #  setenv G4VIS_USE_VRMLFILE          1
-# OPACS :
-#  setenv G4UI_BUILD_WO_SESSION       1
-#  setenv G4VIS_BUILD_OPACS_DRIVER    1
-#  setenv G4UI_USE_WO                 1
-#  setenv G4VIS_USE_OPACS             1
-#  source /lal/OPACS/v3/setup.csh
 # jas :
 #  setenv JDKHOME /lal/JDK/1.2.2/Linux
 #  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$JDKHOME/jre/lib/i386:$JDKHOME/jre/lib/i386/classic:$JDKHOME/jre/lib/i386/native_threads
