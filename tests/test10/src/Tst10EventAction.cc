@@ -1,4 +1,4 @@
-// $Id: Tst10EventAction.cc,v 1.3 1999-12-15 14:54:43 gunter Exp $
+// $Id: Tst10EventAction.cc,v 1.4 2000-01-12 15:58:28 stesting Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -29,12 +29,12 @@ Tst10EventAction::~Tst10EventAction()
 
 void Tst10EventAction::BeginOfEventAction(const G4Event* evt)
 {
-  cout << ">>> Start Event " << evt->GetEventID() << G4endl;
+  G4cout << ">>> Start Event " << evt->GetEventID() << G4endl;
 }
 
 void Tst10EventAction::EndOfEventAction(const G4Event* evt)
 {
-  cout << ">>> End Event " << evt->GetEventID() << G4endl;
+  G4cout << ">>> End Event " << evt->GetEventID() << G4endl;
 
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;

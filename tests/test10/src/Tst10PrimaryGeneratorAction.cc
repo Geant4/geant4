@@ -1,4 +1,4 @@
-// $Id: Tst10PrimaryGeneratorAction.cc,v 1.3 1999-12-15 14:54:43 gunter Exp $
+// $Id: Tst10PrimaryGeneratorAction.cc,v 1.4 2000-01-12 15:58:28 stesting Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -44,7 +44,7 @@ void Tst10PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     new G4PrimaryVertex( VertexPosition, 0);
 
   G4int NumberOfParticlesToBeGenerated = 10000;
-	cout << "  A " << NumberOfParticlesToBeGenerated << 
+	G4cout << "  A " << NumberOfParticlesToBeGenerated << 
 	    " optical photons vertex has been generated at " << VertexPosition << G4endl;
   // create new primaries and set them to the vertex
   for( int i=0; i<NumberOfParticlesToBeGenerated; i++ )

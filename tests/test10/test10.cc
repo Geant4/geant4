@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test10.cc,v 1.2 1999-12-15 14:54:42 gunter Exp $
+// $Id: test10.cc,v 1.3 2000-01-12 15:58:27 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,7 +51,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new Tst10PrimaryGeneratorAction);
 
 #ifdef G4VIS_USE
-  cout << "Visualization init\n";
+  G4cout << "Visualization init\n";
   G4VisManager* visManager = new Tst10VisManager();
   visManager -> Initialize ();
 #endif

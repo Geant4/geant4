@@ -1,4 +1,4 @@
-// $Id: Tst10DetectorConstruction.cc,v 1.2 1999-12-15 14:54:42 gunter Exp $
+// $Id: Tst10DetectorConstruction.cc,v 1.3 2000-01-12 15:58:28 stesting Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -72,7 +72,7 @@ else if (val == "Para")
 else if (val == "Trd")
 	aVolume = new G4Trd ("aTrd", 8*cm, 10*cm, 7*cm, 9*cm, 10*cm);
 else {
-  cout << "You don't select valid shape " << G4endl;
+  G4cout << "You don't select valid shape " << G4endl;
 	exit (1);
 }
 
@@ -163,7 +163,7 @@ G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()
 //if (G4VVisManager::GetConcreteInstance()!=NULL)
 //  G4VVisManager::GetConcreteInstance()->SetWorldVolume(PhysicalVolume);
 
-cout << "You select " << val << " detector" << G4endl;
+G4cout << "You select " << val << " detector" << G4endl;
 
 return PhysicalVolume;
 }
