@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuIonisation.cc,v 1.12 2001-03-23 07:27:29 urban Exp $
+// $Id: G4MuIonisation.cc,v 1.13 2001-05-30 14:33:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,6 +26,7 @@
 // 26/10/98: new stuff from R.Kokoulin + cleanup , L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // 23/03/01: R.Kokoulin's correction is commented out, L.Urban
+// 29.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // --------------------------------------------------------------
  
 
@@ -95,7 +96,7 @@ void G4MuIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
   G4double LowEdgeEnergy , ionloss ;
   G4double deltaloss ;
   G4double RateMass ;
-  G4bool isOutRange ;
+  //G4bool isOutRange ;
   static const G4MaterialTable* theMaterialTable=
                                    G4Material::GetMaterialTable();
   const G4double twoln10 = 2.*log(10.) ;
@@ -143,7 +144,7 @@ void G4MuIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
                    material->GetNumberOfElements() ;
     DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[J] ;
 
-    G4double tau,tau0,Tmax,gamma,bg2,beta2,rcut,delta,x,sh ;
+    G4double tau,Tmax,gamma,bg2,beta2,rcut,delta,x,sh ;
     for (G4int i = 0 ; i < TotBin ; i++)
     {
       LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
@@ -249,8 +250,8 @@ void G4MuIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 void G4MuIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 {
   // Build mean free path tables for the delta ray production process
-  G4double LowEdgeEnergy,Tmax , Value ,sigma ;
-  G4bool isOutRange ;
+  G4double LowEdgeEnergy, Value ,sigma ;
+  //G4bool isOutRange ;
   const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
 
   G4int numOfMaterials = theMaterialTable->length();

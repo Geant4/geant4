@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuPairProduction.cc,v 1.16 2001-02-05 17:50:29 gcosmo Exp $
+// $Id: G4MuPairProduction.cc,v 1.17 2001-05-30 14:33:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -22,6 +22,7 @@
 // 26/10/98, new stuff from R. Kokoulin + cleanup , L.Urban
 // 06/05/99 , bug fixed , L.Urban
 // 10/02/00  modifications+bug fix , new e.m. structure, L.Urban
+// 29/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // --------------------------------------------------------------
 
 #include "G4MuPairProduction.hh"
@@ -35,8 +36,10 @@ G4double G4MuPairProduction::zdat[]={1.,4.,13.,26.,92.};
 G4int G4MuPairProduction::ntdat = 8 ;
 G4double G4MuPairProduction::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e10};
 G4int G4MuPairProduction::NBIN = 1000 ; //100 ;
-G4double G4MuPairProduction::ya[1001]={0.};
-G4double G4MuPairProduction::proba[5][8][1001]={0.};
+//G4double G4MuPairProduction::ya[1001]={0.};
+//G4double G4MuPairProduction::proba[5][8][1001]={0.};
+G4double G4MuPairProduction::ya[1001];
+G4double G4MuPairProduction::proba[5][8][1001];
 G4double G4MuPairProduction::MinPairEnergy = 4.*electron_mass_c2 ;
 
 G4double G4MuPairProduction::LowerBoundLambda = 1.*keV ;
@@ -242,7 +245,7 @@ void G4MuPairProduction::BuildLambdaTable(
   PartialSumSigma.resize(G4Material::GetNumberOfMaterials());
 
    G4PhysicsLogVector* ptrVector;
-   for ( G4int J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )  
+   for ( size_t J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )  
    { 
       ptrVector = new G4PhysicsLogVector(
                LowerBoundLambda,UpperBoundLambda,NbinLambda);
@@ -374,7 +377,7 @@ void G4MuPairProduction::MakeSamplingTables(
 
       G4double CrossSection = 0.0 ;
 
-      G4int NbofIntervals ;
+      //G4int NbofIntervals ;
       c = log(MaxPairEnergy/MinPairEnergy) ;
 
       ymin = -5. ;
@@ -627,7 +630,7 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
 
    // limits of the energy sampling
    G4double TotalEnergy = KineticEnergy + ParticleMass ;
-   G4double TotalMomentum = sqrt(KineticEnergy*(TotalEnergy+ParticleMass)) ;
+   //G4double TotalMomentum = sqrt(KineticEnergy*(TotalEnergy+ParticleMass)) ;
    G4double Z3 = anElement->GetIonisation()->GetZ3() ;
    G4double MaxPairEnergy = TotalEnergy-0.75*esq*ParticleMass*Z3 ;
 
@@ -636,14 +639,16 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
 
    // sample e-e+ energy, pair energy first
    G4double PairEnergy,xc,x,yc,y ;
-   G4int iZ,iT,iy ;
+   // G4int iZ,iT;
+   G4int iy ;
 
    // select sampling table ;
    G4double lnZ = log(anElement->GetZ()) ;
    G4double delmin = 1.e10 ;
    G4double del ;
-   G4int izz,itt,NBINminus1 ;
-   NBINminus1 = NBIN-1 ;
+   G4int izz = 0;
+   G4int itt = 0;
+   G4int NBINminus1 = NBIN-1;
    for (G4int iz=0; iz<nzdat; iz++)
    {
      del = abs(lnZ-log(zdat[iz])) ;
@@ -718,9 +723,10 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
    G4int numberofsecondaries = 1 ;
    G4int flagelectron = 0 ;
    G4int flagpositron = 1 ; 
-   G4DynamicParticle *aParticle1,*aParticle2 ;
+   G4DynamicParticle* aParticle1 = 0;
+   G4DynamicParticle* aParticle2 = 0;
    G4double ElectronMomentum , PositronMomentum ;
-   G4double finalPx,finalPy,finalPz ;
+   //G4double finalPx,finalPy,finalPz ;
 
    G4double ElectKineEnergy = ElectronEnergy - electron_mass_c2 ;
 
@@ -771,8 +777,7 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
         aParticleChange.AddSecondary( aParticle2 ) ; 
 
    G4double NewKinEnergy = KineticEnergy - ElectronEnergy - PositronEnergy ;
-   G4double finalMomentum=sqrt(NewKinEnergy*
-                         (NewKinEnergy+2.*ParticleMass)) ;
+   //G4double finalMomentum=sqrt(NewKinEnergy*(NewKinEnergy+2.*ParticleMass));
 
    aParticleChange.SetMomentumChange( ParticleDirection );
 

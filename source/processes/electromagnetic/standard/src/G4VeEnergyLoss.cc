@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeEnergyLoss.cc,v 1.11 2001-03-27 15:10:52 maire Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.12 2001-05-30 14:32:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 
@@ -18,6 +18,7 @@
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // 23/01/01  bug fixed in AlongStepDoIt , L.Urban
 // 27/03/01 : commented out the printing of subcutoff energies
+// 28/05/01  V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // --------------------------------------------------------------
 
  
@@ -39,23 +40,23 @@ G4PhysicsTable** G4VeEnergyLoss::RecorderOfElectronProcess =
 G4PhysicsTable** G4VeEnergyLoss::RecorderOfPositronProcess =
                                            new G4PhysicsTable*[10];
                                            
-G4PhysicsTable*  G4VeEnergyLoss::theDEDXElectronTable         = NULL;
-G4PhysicsTable*  G4VeEnergyLoss::theDEDXPositronTable         = NULL;
-G4PhysicsTable*  G4VeEnergyLoss::theRangeElectronTable        = NULL;
-G4PhysicsTable*  G4VeEnergyLoss::theRangePositronTable        = NULL;
-G4PhysicsTable*  G4VeEnergyLoss::theInverseRangeElectronTable = NULL;
-G4PhysicsTable*  G4VeEnergyLoss::theInverseRangePositronTable = NULL;
-G4PhysicsTable*  G4VeEnergyLoss::theLabTimeElectronTable      = NULL;
-G4PhysicsTable*  G4VeEnergyLoss::theLabTimePositronTable      = NULL;
-G4PhysicsTable*  G4VeEnergyLoss::theProperTimeElectronTable   = NULL;
-G4PhysicsTable*  G4VeEnergyLoss::theProperTimePositronTable   = NULL;
+G4PhysicsTable*  G4VeEnergyLoss::theDEDXElectronTable         = 0;
+G4PhysicsTable*  G4VeEnergyLoss::theDEDXPositronTable         = 0;
+G4PhysicsTable*  G4VeEnergyLoss::theRangeElectronTable        = 0;
+G4PhysicsTable*  G4VeEnergyLoss::theRangePositronTable        = 0;
+G4PhysicsTable*  G4VeEnergyLoss::theInverseRangeElectronTable = 0;
+G4PhysicsTable*  G4VeEnergyLoss::theInverseRangePositronTable = 0;
+G4PhysicsTable*  G4VeEnergyLoss::theLabTimeElectronTable      = 0;
+G4PhysicsTable*  G4VeEnergyLoss::theLabTimePositronTable      = 0;
+G4PhysicsTable*  G4VeEnergyLoss::theProperTimeElectronTable   = 0;
+G4PhysicsTable*  G4VeEnergyLoss::theProperTimePositronTable   = 0;
 
-G4PhysicsTable*  G4VeEnergyLoss::theeRangeCoeffATable         = NULL;
-G4PhysicsTable*  G4VeEnergyLoss::theeRangeCoeffBTable         = NULL;
-G4PhysicsTable*  G4VeEnergyLoss::theeRangeCoeffCTable         = NULL;
-G4PhysicsTable*  G4VeEnergyLoss::thepRangeCoeffATable         = NULL;
-G4PhysicsTable*  G4VeEnergyLoss::thepRangeCoeffBTable         = NULL;
-G4PhysicsTable*  G4VeEnergyLoss::thepRangeCoeffCTable         = NULL;
+G4PhysicsTable*  G4VeEnergyLoss::theeRangeCoeffATable         = 0;
+G4PhysicsTable*  G4VeEnergyLoss::theeRangeCoeffBTable         = 0;
+G4PhysicsTable*  G4VeEnergyLoss::theeRangeCoeffCTable         = 0;
+G4PhysicsTable*  G4VeEnergyLoss::thepRangeCoeffATable         = 0;
+G4PhysicsTable*  G4VeEnergyLoss::thepRangeCoeffBTable         = 0;
+G4PhysicsTable*  G4VeEnergyLoss::thepRangeCoeffCTable         = 0;
 
 G4double G4VeEnergyLoss::LowerBoundEloss =0.1*keV ;
 G4double G4VeEnergyLoss::UpperBoundEloss = 100.*TeV ;
@@ -68,10 +69,11 @@ G4double G4VeEnergyLoss::RTable,G4VeEnergyLoss::LOGRTable;
  
 G4VeEnergyLoss::G4VeEnergyLoss(const G4String& processName)
    : G4VEnergyLoss (processName),
-     theLossTable(NULL),
-     theDEDXTable(NULL),
-     Charge(-1.),lastCharge(0.),
+     theLossTable(0),
      MinKineticEnergy(1.*eV),
+     Charge(-1.),
+     lastCharge(0.),
+     theDEDXTable(0),
      linLossLimit(0.05),
      c1N(2.86e-23*MeV*mm*mm),
      c2N(c1N*MeV/10.),
@@ -85,7 +87,7 @@ G4VeEnergyLoss::~G4VeEnergyLoss()
      if (theLossTable) 
        {
          theLossTable->clearAndDestroy();
-         delete theLossTable; theLossTable = NULL;
+         delete theLossTable; theLossTable = 0;
        }
 }
 
@@ -391,10 +393,11 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   if((E > TmintoProduceDelta) && (MeanLoss > MinDeltaEnergyNow)
                                    && (finalT > MinKineticEnergy)) 
   {
-    G4double rcut,Tc,T0,presafety,postsafety,safety,
-             delta,fragment ;
-    G4double frperstep,x1,y1,z1,dx,dy,dz,dTime,time0,DeltaTime;
-    G4double epsil= MinKineticEnergy/2. ;
+    G4double rcut,Tc,T0,presafety,postsafety,safety,delta;
+    G4double fragment = Step;
+    G4double frperstep= 1.0;
+    G4double x1,y1,z1,dx,dy,dz,dTime,time0,DeltaTime;
+    //G4double epsil= MinKineticEnergy/2. ;
 
     if(Charge < 0.)
     {
@@ -487,10 +490,9 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
         if(N > 0)
         {
           G4double Tkin,Etot,P,T,p,costheta,sintheta,phi,dirx,diry,dirz,
-                   Pnew,delToverTc,
-                   sumT,delTkin,delLoss,rate,
-                   urandom ;
-          G4StepPoint *point ;
+                   Pnew,delToverTc,sumT,urandom ;
+          //delTkin,delLoss,rate,
+          //G4StepPoint *point ;
    
           sumT=0.;
 

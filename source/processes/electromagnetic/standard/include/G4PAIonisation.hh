@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.hh,v 1.7 2000-09-22 14:44:07 grichine Exp $
+// $Id: G4PAIonisation.hh,v 1.8 2001-05-30 14:32:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,6 +27,7 @@
 // corrected by V. Grichine on 24/11/97
 // 12.07.00 V.Grichine GetFreePath and GetdEdx were added
 // 22.09.00 V.Grichine and K.Assamagan new function GetEnergyTransfer(G4d,G4i)
+// 28.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
 
  
 #ifndef G4PAIonisation_h
@@ -135,7 +136,7 @@ class G4PAIonisation : public G4VPAIenergyLoss
 
     //  private data members 
 
-    G4int fMatIndex ;  // index of material, where dE/dx is calculated
+    size_t fMatIndex ;  // index of material, where dE/dx is calculated
 
     G4PhysicsTable* theMeanFreePathTable;
 

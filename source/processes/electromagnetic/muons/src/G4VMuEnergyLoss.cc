@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.8 2001-01-11 10:42:52 urban Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.9 2001-05-30 14:33:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -25,6 +25,7 @@
 // cleanup  L.Urban on 23/10/98
 // corrections due to new e.m. structure L.Urban 10/02/00
 // signature in GetLossWithFluct changed L.Urban 30/10/00
+// 29/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // --------------------------------------------------------------
  
 
@@ -43,46 +44,46 @@ G4int       G4VMuEnergyLoss::CounterOfmuplusProcess  = 0 ;
 G4int       G4VMuEnergyLoss::CounterOfmuminusProcess = 0 ;
 
 
-G4PhysicsTable* G4VMuEnergyLoss::theDEDXmuplusTable = NULL ;
-G4PhysicsTable* G4VMuEnergyLoss::theRangemuplusTable = NULL ;
-G4PhysicsTable* G4VMuEnergyLoss::theInverseRangemuplusTable = NULL ;
-G4PhysicsTable* G4VMuEnergyLoss::theLabTimemuplusTable = NULL ;
-G4PhysicsTable* G4VMuEnergyLoss::theProperTimemuplusTable = NULL ;
+G4PhysicsTable* G4VMuEnergyLoss::theDEDXmuplusTable = 0 ;
+G4PhysicsTable* G4VMuEnergyLoss::theRangemuplusTable = 0 ;
+G4PhysicsTable* G4VMuEnergyLoss::theInverseRangemuplusTable = 0 ;
+G4PhysicsTable* G4VMuEnergyLoss::theLabTimemuplusTable = 0 ;
+G4PhysicsTable* G4VMuEnergyLoss::theProperTimemuplusTable = 0 ;
 
-G4PhysicsTable* G4VMuEnergyLoss::theDEDXmuminusTable = NULL ;
-G4PhysicsTable* G4VMuEnergyLoss::theRangemuminusTable = NULL ;
-G4PhysicsTable* G4VMuEnergyLoss::theInverseRangemuminusTable = NULL ;
-G4PhysicsTable* G4VMuEnergyLoss::theLabTimemuminusTable = NULL ;
-G4PhysicsTable* G4VMuEnergyLoss::theProperTimemuminusTable = NULL ;
+G4PhysicsTable* G4VMuEnergyLoss::theDEDXmuminusTable = 0 ;
+G4PhysicsTable* G4VMuEnergyLoss::theRangemuminusTable = 0 ;
+G4PhysicsTable* G4VMuEnergyLoss::theInverseRangemuminusTable = 0 ;
+G4PhysicsTable* G4VMuEnergyLoss::theLabTimemuminusTable = 0 ;
+G4PhysicsTable* G4VMuEnergyLoss::theProperTimemuminusTable = 0 ;
 
-G4PhysicsTable* G4VMuEnergyLoss::themuplusRangeCoeffATable = NULL ;
-G4PhysicsTable* G4VMuEnergyLoss::themuplusRangeCoeffBTable = NULL ;
-G4PhysicsTable* G4VMuEnergyLoss::themuplusRangeCoeffCTable = NULL ;
-G4PhysicsTable* G4VMuEnergyLoss::themuminusRangeCoeffATable = NULL ;
-G4PhysicsTable* G4VMuEnergyLoss::themuminusRangeCoeffBTable = NULL ;
-G4PhysicsTable* G4VMuEnergyLoss::themuminusRangeCoeffCTable = NULL ;
+G4PhysicsTable* G4VMuEnergyLoss::themuplusRangeCoeffATable = 0 ;
+G4PhysicsTable* G4VMuEnergyLoss::themuplusRangeCoeffBTable = 0 ;
+G4PhysicsTable* G4VMuEnergyLoss::themuplusRangeCoeffCTable = 0 ;
+G4PhysicsTable* G4VMuEnergyLoss::themuminusRangeCoeffATable = 0 ;
+G4PhysicsTable* G4VMuEnergyLoss::themuminusRangeCoeffBTable = 0 ;
+G4PhysicsTable* G4VMuEnergyLoss::themuminusRangeCoeffCTable = 0 ;
  
 G4double G4VMuEnergyLoss::LowerBoundEloss = 1.*keV ;
 G4double G4VMuEnergyLoss::UpperBoundEloss = 1000000.*TeV ;
 G4int    G4VMuEnergyLoss::NbinEloss = 150 ;
 G4double G4VMuEnergyLoss::RTable,G4VMuEnergyLoss::LOGRTable;
 
-G4EnergyLossMessenger* G4VMuEnergyLoss::eLossMessenger = NULL ;
+G4EnergyLossMessenger* G4VMuEnergyLoss::eLossMessenger = 0 ;
 
 // constructor and destructor
  
 G4VMuEnergyLoss::G4VMuEnergyLoss(const G4String& processName)
    : G4VEnergyLoss (processName),
-     theLossTable(NULL),
-     theRangeCoeffATable(NULL),
-     theRangeCoeffBTable(NULL),
-     theRangeCoeffCTable(NULL),
+     theLossTable(0),
      lastgammaCutInRange(0.),
      lastelectronCutInRange(0.),
      theElectron ( G4Electron::Electron() ),
      thePositron ( G4Positron::Positron() ),
      theMuonPlus ( G4MuonPlus::MuonPlus() ),
-     theMuonMinus ( G4MuonMinus::MuonMinus() )
+     theMuonMinus ( G4MuonMinus::MuonMinus() ),
+     theRangeCoeffATable(0),
+     theRangeCoeffBTable(0),
+     theRangeCoeffCTable(0)
 { 
 }
 
@@ -90,7 +91,7 @@ G4VMuEnergyLoss::~G4VMuEnergyLoss()
 {
      if(theLossTable) {
         theLossTable->clearAndDestroy();
-        delete theLossTable; theLossTable = NULL; 
+        delete theLossTable; theLossTable = 0; 
      }
 
 }
@@ -398,7 +399,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
   G4double charge = aParticle->GetDefinition()->GetPDGCharge();
  
   G4Material* aMaterial = trackData.GetMaterial();
-  G4int index = aMaterial->GetIndex();
+  //G4int index = aMaterial->GetIndex();
  
   G4double Step = stepData.GetStepLength();
  

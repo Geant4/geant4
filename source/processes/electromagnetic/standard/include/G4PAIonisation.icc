@@ -32,7 +32,7 @@ inline G4double
  G4PAIonisation::GetConstraints(const G4DynamicParticle *aParticle,
                                               G4Material *aMaterial    ) 
 {  
-  G4int index = aMaterial->GetIndex() ;
+  size_t index = aMaterial->GetIndex() ;
 
 //  G4cout<<"G4PAIonisation::GetConstraints is called"<<G4endl ;
 

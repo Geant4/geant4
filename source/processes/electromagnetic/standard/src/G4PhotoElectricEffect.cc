@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.12 2001-02-22 16:05:43 maire Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.13 2001-05-30 14:32:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -26,6 +26,8 @@
 // 21-06-00, in DoIt, killing photon: aParticleChange.SetEnergyChange(0.); mma
 // 22-06-00, in DoIt, absorbe very low energy photon (back to 20-05-99); mma
 // 22-02-01, back to 08-06-99 after correc in SandiaTable (materials-V03-00-05)  
+// 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation 
+
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -88,7 +90,7 @@ void G4PhotoElectricEffect::BuildPhysicsTable(const G4ParticleDefinition& Photon
    theCrossSectionTable = new G4PhysicsTable( G4Element::GetNumberOfElements()) ;
    const G4ElementTable* theElementTable = G4Element::GetElementTable() ;
    G4double AtomicNumber;
-   G4int J;
+   size_t J;
 
    for ( J=0 ; J < G4Element::GetNumberOfElements(); J++ )  
       { 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ComptonScattering.cc,v 1.4 2000-11-17 15:03:17 maire Exp $
+// $Id: G4ComptonScattering.cc,v 1.5 2001-05-30 14:32:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,6 +24,7 @@
 // 04-06-98, in DoIt, secondary production condition: range>G4std::min(threshold,safety)
 // 13-08-98, new methods SetBining()  PrintInfo()
 // 15-12-98, cross section=0 below 10 keV
+// 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // --------------------------------------------------------------
 
 #include "G4ComptonScattering.hh"
@@ -84,7 +85,7 @@ void G4ComptonScattering::BuildPhysicsTable(const G4ParticleDefinition& GammaTyp
    theCrossSectionTable = new G4PhysicsTable(G4Element::GetNumberOfElements()) ;
    const G4ElementTable* theElementTable = G4Element::GetElementTable() ;
    G4double AtomicNumber;
-   G4int J;
+   size_t J;
 
    for ( J=0 ; J < G4Element::GetNumberOfElements(); J++ )  
        { 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIxSection.cc,v 1.5 2001-05-25 08:34:40 grichine Exp $
+// $Id: G4PAIxSection.cc,v 1.6 2001-05-30 14:32:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,6 +21,7 @@
 // 1st version 11.06.97 V. Grichine
 // 20.11.98 adapted to a new Material/SandiaTable interface, mma 
 // 17.05.01 V. Grichine, low energy extension down to 10*keV of proton
+// 28.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
 
 
 
@@ -767,7 +768,8 @@ G4double G4PAIxSection::DifPAIxSection( G4int              i ,
                                         G4double betaGammaSq  )
 {        
    G4double be2,cof,x1,x2,x3,x4,x5,x6,x7,x8,result ;
-   G4double beta, be4 ;
+   //G4double beta, be4 ;
+   G4double be4 ;
    G4double betaBohr2 = fine_structure_const*fine_structure_const ;
    G4double betaBohr4 = betaBohr2*betaBohr2*4.0 ;
    be2 = betaGammaSq/(1 + betaGammaSq) ;

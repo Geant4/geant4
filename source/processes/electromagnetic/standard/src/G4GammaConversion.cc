@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GammaConversion.cc,v 1.4 2000-08-03 08:36:52 gcosmo Exp $
+// $Id: G4GammaConversion.cc,v 1.5 2001-05-30 14:32:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 // 19-06-97, correction in ComputeMicroscopicCrossSection, L.Urban
 // 04-06-98, in DoIt, secondary production condition: range>G4std::min(threshold,safety)
 // 13-08-98, new methods SetBining() PrintInfo()
+// 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // --------------------------------------------------------------
 
 #include "G4GammaConversion.hh"
@@ -97,7 +98,7 @@ void G4GammaConversion::BuildPhysicsTable(const G4ParticleDefinition& GammaType)
    theCrossSectionTable = new G4PhysicsTable(G4Element::GetNumberOfElements()) ;
    const G4ElementTable* theElementTable = G4Element::GetElementTable() ;
    G4double AtomicNumber;
-   G4int J;
+   size_t J;
 
    for ( J=0 ; J < G4Element::GetNumberOfElements(); J++ )  
        { 

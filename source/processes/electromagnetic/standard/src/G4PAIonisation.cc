@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.cc,v 1.16 2001-05-28 09:45:45 grichine Exp $
+// $Id: G4PAIonisation.cc,v 1.17 2001-05-30 14:32:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -18,6 +18,7 @@
 // 03.07.00, V.Grichine - modifications in AlongStepDoIt
 // 08-04-98: remove 'traking cut' of the ionizing particle, MMa
 // 30-11-97: V. Grichine
+// 28-05-01: V.Ivanchenko minor changes to provide ANSI -wall compilation 
 //
 // **************************************************************
 
@@ -163,7 +164,7 @@ G4PAIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 
 {
     G4double Charge = aParticleType.GetPDGCharge();
-    G4double Chargesquare = Charge*Charge ;     
+    //G4double Chargesquare = Charge*Charge ;     
     CutInRange = aParticleType.GetLengthCuts(); 
 
     //  BuildLossTable(aParticleType) ;
@@ -301,7 +302,7 @@ void
 G4PAIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 {
     G4double LowEdgeEnergy , Value ,sigma ;
-    G4bool isOutRange ;
+    //G4bool isOutRange ;
     const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
     const G4double BigValue = DBL_MAX ;
 
@@ -478,16 +479,17 @@ G4VParticleChange* G4PAIonisation::AlongStepDoIt( const G4Track& trackData,
   
   const G4DynamicParticle* aParticle;
   G4Material* aMaterial;
-  G4bool isOut;
-  G4double E,ScaledE,finalT,Step,Tbin,rangebin, delta ;
-  const G4double smallLoss=DBL_MIN;
+  //G4bool isOut;
+  //G4double E,ScaledE,finalT,Step,Tbin,rangebin, delta ;
+  G4double E,ScaledE,finalT,Step,delta;
+  //const G4double smallLoss=DBL_MIN;
   const G4double BigRange = DBL_MAX ;
-  G4int index ;
-  G4double cc,discr ; 
+  //G4int index ;
+  //G4double cc,discr ; 
 
   aParticleChange.Initialize(trackData) ;
   aMaterial = trackData.GetMaterial() ;
-  index = aMaterial->GetIndex() ;
+  size_t index = aMaterial->GetIndex() ;
 
   // get the actual (true) Step length from stepData 
   // there is no loss for Step=0. !
@@ -567,14 +569,16 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
                                    G4Material* aMaterial               )
 {  
   G4int iTkin, iTransfer  ;
-  G4long iCollision, numOfCollisions ;
-  G4int       index = aMaterial->GetIndex() ;
-  G4bool isOutRange ;
+  G4long numOfCollisions;
+  //  G4long iCollision, numOfCollisions ;
+  //G4int       index = aMaterial->GetIndex() ;
+  //G4bool isOutRange ;
 
   // G4cout<<"G4VPAIenergyLoss::GetLossWithFluct"<<G4endl ;
 
   G4double loss = 0.0, charge2 ;
-  G4double transfer, position, E1, E2, W1, W2, W, firstMu, secondMu ;
+  //G4double transfer, position, E1, E2, W1, W2, W, firstMu, secondMu ;
+  G4double position, E1, E2, W1, W2, W;
   G4double      Tkin = aParticle->GetKineticEnergy() ;
   G4double MassRatio = proton_mass_c2/aParticle->GetDefinition()->GetPDGMass() ;
   G4double charge = aParticle->GetDefinition()->GetPDGCharge() ;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.14 2001-02-05 17:50:29 gcosmo Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.15 2001-05-30 14:33:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    
@@ -22,7 +22,9 @@
 // 08-04-98: remove 'tracking cut' of muon in oIt, MMa
 // 26/10/98: new cross section of R.Kokoulin,cleanup , L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
+// 29/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // --------------------------------------------------------------
+
 #include "G4MuBremsstrahlung.hh"
 #include "G4UnitsTable.hh"
  
@@ -33,8 +35,10 @@ G4double G4MuBremsstrahlung::adat[]={1.01,9.01,26.98,63.55,238.03};
 G4int G4MuBremsstrahlung::ntdat = 8 ;
 G4double G4MuBremsstrahlung::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e10};
 G4int G4MuBremsstrahlung::NBIN = 1000;    // 100 ;
-G4double G4MuBremsstrahlung::ya[1001]={0.};
-G4double G4MuBremsstrahlung::proba[5][8][1001]={0.};
+//G4double G4MuBremsstrahlung::ya[1001]={0.};
+//G4double G4MuBremsstrahlung::proba[5][8][1001]={0.};
+G4double G4MuBremsstrahlung::ya[1001];
+G4double G4MuBremsstrahlung::proba[5][8][1001];
 G4double G4MuBremsstrahlung::CutFixed=0.98*keV ;
 
 
@@ -214,7 +218,7 @@ void G4MuBremsstrahlung::BuildLambdaTable(
   PartialSumSigma.resize(G4Material::GetNumberOfMaterials());
 
   G4PhysicsLogVector* ptrVector;
-  for ( G4int J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )  
+  for ( size_t J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )  
   { 
     ptrVector = new G4PhysicsLogVector(
               LowerBoundLambda,UpperBoundLambda,NbinLambda);
@@ -408,9 +412,9 @@ void G4MuBremsstrahlung::MakeSamplingTables(
 
        G4double CrossSection = 0.0 ;
 
-       G4double c,y,ymin,ymax,dy,yy,dx,x,ep,ybin ;
+       G4double c,y,ymin,ymax,dy,yy,dx,x,ep;
 
-       G4int NbofIntervals ;
+       //G4int NbofIntervals ;
        // calculate the differential cross section
        // numerical integration in
        //  log ...............
@@ -495,13 +499,17 @@ G4VParticleChange* G4MuBremsstrahlung::PostStepDoIt(const G4Track& trackData,
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 
   //  sampling using tables 
-  G4double v,xc,x,yc,y ;
-  G4int iZ,iT,iy ;
+  //G4double v,xc,x,yc,y ;
+  //G4int iZ,iT,iy ;
+  G4double v,x,y ;
+  G4int iy;
   // select sampling table ;
   G4double lnZ = log(anElement->GetZ()) ;
   G4double delmin = 1.e10 ;
   G4double del ;
-  G4int izz,itt,NBINminus1 ;
+  G4int izz = 0;
+  G4int itt = 0;
+  G4int NBINminus1;
   NBINminus1 = NBIN-1 ;
   for (G4int iz=0; iz<nzdat; iz++)
   {

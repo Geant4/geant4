@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GammaConversion.icc,v 1.2 1999-12-15 14:51:45 gunter Exp $
+// $Id: G4GammaConversion.icc,v 1.3 2001-05-30 14:32:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,6 +25,7 @@
 // 14-01-97, crossection table + meanfreepath table.
 //           PartialSumSigma removed, by M.Maire
 // 14-01-97, new physics scheme for geant4alpha, M.Maire
+// 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // ---------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -98,7 +99,7 @@ inline G4double G4GammaConversion::ComputeMeanFreePath(G4double GammaEnergy,
 
   G4double SIGMA = 0 ;
 
-  for ( G4int i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
+  for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
       {             
             SIGMA += theAtomNumDensityVector[i] * 
                      ComputeMicroscopicCrossSection(GammaEnergy,

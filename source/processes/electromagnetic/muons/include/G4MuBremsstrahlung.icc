@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.icc,v 1.3 1999-12-15 14:51:42 gunter Exp $
+// $Id: G4MuBremsstrahlung.icc,v 1.4 2001-05-30 14:33:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -18,6 +18,13 @@
 //      -------- G4MuBremsstrahlung physics process ---------
 //                by Laszlo Urban, September 1997
 // ***************************************************************
+//
+// Modified:
+//
+// 29.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
+//
+// ---------------------------------------------------------------
+//
 
 inline G4double G4MuBremsstrahlung::GetMeanFreePath(const G4Track& trackData,
                                                     G4double previousStepSize,
@@ -56,7 +63,7 @@ inline G4double G4MuBremsstrahlung::ComputeMeanFreePath(
                                      aMaterial->GetAtomicNumDensityVector();
   G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];   
   G4double SIGMA = 0 ;
-  for ( G4int i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
+  for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
       {             
             SIGMA += theAtomNumDensityVector[i] * 
                      ComputeMicroscopicCrossSection(

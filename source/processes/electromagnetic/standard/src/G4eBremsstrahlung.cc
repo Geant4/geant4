@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlung.cc,v 1.15 2001-02-05 17:53:52 gcosmo Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.16 2001-05-30 14:32:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,7 @@
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // 07/08/00  new cross section/en.loss parametrisation, LPM flag , L.Urban
 // 21/09/00 : corrections in the LPM implementation, L.Urban
+// 28/05/01 : V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // --------------------------------------------------------------
 
 #include "G4eBremsstrahlung.hh"
@@ -288,43 +289,43 @@ G4double G4eBremsstrahlung::ComputeBremLoss(G4double Z,G4double natom,
         {2.,4.,6.,14.,26.,50.,82.,92.};
   static const G4double coefloss[NZ][Nloss] = {
   // Z=2
-        0.98916,        0.47564,        -0.2505,       -0.45186,        0.14462,
-        0.21307,      -0.013738,      -0.045689,     -0.0042914,      0.0034429,
-     0.00064189,
+ { 0.98916,        0.47564,        -0.2505,       -0.45186,        0.14462,
+   0.21307,      -0.013738,      -0.045689,     -0.0042914,      0.0034429,
+   0.00064189},
 
   // Z=4
-         1.0626,        0.37662,       -0.23646,       -0.45188,        0.14295,
-        0.22906,      -0.011041,      -0.051398,     -0.0055123,      0.0039919,
-     0.00078003,
+ { 1.0626,        0.37662,       -0.23646,       -0.45188,        0.14295,
+   0.22906,      -0.011041,      -0.051398,     -0.0055123,      0.0039919,
+   0.00078003},
   // Z=6
-         1.0954,          0.315,       -0.24011,       -0.43849,        0.15017,
-        0.23001,      -0.012846,      -0.052555,     -0.0055114,      0.0041283,
-     0.00080318,
+ { 1.0954,          0.315,       -0.24011,       -0.43849,        0.15017,
+   0.23001,      -0.012846,      -0.052555,     -0.0055114,      0.0041283,
+   0.00080318},
 
   // Z=14
-         1.1649,        0.18976,       -0.24972,       -0.30124,         0.1555,
-        0.13565,      -0.024765,      -0.027047,    -0.00059821,      0.0019373,
-     0.00027647,
+ { 1.1649,        0.18976,       -0.24972,       -0.30124,         0.1555,
+   0.13565,      -0.024765,      -0.027047,    -0.00059821,      0.0019373,
+   0.00027647},
 
   // Z=26
-         1.2261,        0.14272,       -0.25672,       -0.28407,        0.13874,
-        0.13586,      -0.020562,      -0.026722,    -0.00089557,      0.0018665,
-     0.00026981,
+ { 1.2261,        0.14272,       -0.25672,       -0.28407,        0.13874,
+   0.13586,      -0.020562,      -0.026722,    -0.00089557,      0.0018665,
+   0.00026981},
 
   // Z=50
-         1.3147,       0.020049,       -0.35543,       -0.13927,        0.17666,
-       0.073746,      -0.036076,      -0.013407,      0.0025727,     0.00084005,
-    -1.4082e-05,
+ { 1.3147,       0.020049,       -0.35543,       -0.13927,        0.17666,
+   0.073746,      -0.036076,      -0.013407,      0.0025727,     0.00084005,
+  -1.4082e-05},
 
   // Z=82
-         1.3986,       -0.10586,       -0.49187,     -0.0048846,        0.23621,
-       0.031652,      -0.052938,     -0.0076639,      0.0048181,     0.00056486,
-    -0.00011995,
+ { 1.3986,       -0.10586,       -0.49187,     -0.0048846,        0.23621,
+   0.031652,      -0.052938,     -0.0076639,      0.0048181,     0.00056486,
+  -0.00011995},
 
   // Z=92
-         1.4217,         -0.116,       -0.55497,      -0.044075,        0.27506,
-       0.081364,      -0.058143,      -0.023402,      0.0031322,      0.0020201,
-     0.00017519
+ { 1.4217,         -0.116,       -0.55497,      -0.044075,        0.27506,
+   0.081364,      -0.058143,      -0.023402,      0.0031322,      0.0020201,
+   0.00017519}
 
     } ;
  static G4double aaa=0.414 ;
@@ -421,7 +422,7 @@ void G4eBremsstrahlung::BuildLambdaTable(const G4ParticleDefinition& ParticleTyp
    PartialSumSigma.resize(G4Material::GetNumberOfMaterials());
  
    G4PhysicsLogVector* ptrVector;
-   for ( G4int J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )  
+   for ( size_t J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )  
        { 
         //create physics vector then fill it ....
         ptrVector = new G4PhysicsLogVector(LowerBoundLambda, UpperBoundLambda,
@@ -459,7 +460,7 @@ G4double G4eBremsstrahlung::ComputeMeanFreePath(
      
   G4double SIGMA = 0 ;
 
-  for ( G4int i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
+  for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
       {             
             SIGMA += theAtomNumDensityVector[i] * 
                      ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
@@ -556,44 +557,44 @@ G4double G4eBremsstrahlung::ComputeMicroscopicCrossSection(
         {2.,4.,6.,14.,26.,50.,82.,92.} ;
   static const G4double coefsig[NZ][Nsig] = {
   // Z=2
-         0.4638,        0.37748,        0.32249,      -0.060362,      -0.065004,
-      -0.033457,      -0.004583,       0.011954,      0.0030404,     -0.0010077,
-    -0.00028131,
+  { 0.4638,        0.37748,        0.32249,      -0.060362,      -0.065004,
+   -0.033457,      -0.004583,       0.011954,      0.0030404,     -0.0010077,
+   -0.00028131},
 
   // Z=4
-        0.50008,        0.33483,        0.34364,      -0.086262,      -0.055361,
-      -0.028168,     -0.0056172,       0.011129,      0.0027528,    -0.00092265,
-    -0.00024348,
+  { 0.50008,        0.33483,        0.34364,      -0.086262,      -0.055361,
+   -0.028168,     -0.0056172,       0.011129,      0.0027528,    -0.00092265,
+   -0.00024348},
 
   // Z=6
-        0.51587,        0.31095,        0.34996,       -0.11623,      -0.056167,
-     -0.0087154,     0.00053943,      0.0054092,     0.00077685,    -0.00039635,
-    -6.7818e-05,
+  { 0.51587,        0.31095,        0.34996,       -0.11623,      -0.056167,
+   -0.0087154,     0.00053943,      0.0054092,     0.00077685,    -0.00039635,
+   -6.7818e-05},
 
   // Z=14
-        0.55058,        0.25629,        0.35854,      -0.080656,      -0.054308,
-      -0.049933,    -0.00064246,       0.016597,      0.0021789,      -0.001327,
-    -0.00025983,
+  { 0.55058,        0.25629,        0.35854,      -0.080656,      -0.054308,
+   -0.049933,    -0.00064246,       0.016597,      0.0021789,      -0.001327,
+   -0.00025983},
 
   // Z=26
-         0.5791,        0.26152,        0.38953,       -0.17104,      -0.099172,
-       0.024596,       0.023718,     -0.0039205,     -0.0036658,     0.00041749,
-     0.00023408,
+  { 0.5791,        0.26152,        0.38953,       -0.17104,      -0.099172,
+    0.024596,       0.023718,     -0.0039205,     -0.0036658,     0.00041749,
+    0.00023408},
 
   // Z=50
-        0.62085,        0.27045,        0.39073,       -0.37916,       -0.18878,
-        0.23905,       0.095028,      -0.068744,      -0.023809,      0.0062408,
-      0.0020407,
+  { 0.62085,        0.27045,        0.39073,       -0.37916,       -0.18878,
+    0.23905,       0.095028,      -0.068744,      -0.023809,      0.0062408,
+    0.0020407},
 
   // Z=82
-        0.66053,        0.24513,        0.35404,       -0.47275,       -0.22837,
-        0.35647,        0.13203,        -0.1049,      -0.034851,      0.0095046,
-      0.0030535,
+  { 0.66053,        0.24513,        0.35404,       -0.47275,       -0.22837,
+    0.35647,        0.13203,        -0.1049,      -0.034851,      0.0095046,
+    0.0030535},
 
   // Z=92
-        0.67143,        0.23079,        0.32256,       -0.46248,       -0.20013,
-         0.3506,        0.11779,        -0.1024,      -0.032013,      0.0092279,
-      0.0028592
+  { 0.67143,        0.23079,        0.32256,       -0.46248,       -0.20013,
+    0.3506,        0.11779,        -0.1024,      -0.032013,      0.0092279,
+    0.0028592}
 
     } ;
 
@@ -733,15 +734,15 @@ G4VParticleChange* G4eBremsstrahlung::PostStepDoIt(const G4Track& trackData,
   static const G4double MigdalConstant = classic_electr_radius
                                         *electron_Compton_length
                                         *electron_Compton_length/pi;
-  const G4double LPMconstant = fine_structure_const*electron_mass_c2*
-                                electron_mass_c2/(8.*pi*hbarc) ;
+  // const G4double LPMconstant = fine_structure_const*electron_mass_c2*
+  //                              electron_mass_c2/(8.*pi*hbarc) ;
    G4double GammaEnergy ;
    G4bool LPMOK = false ;
 
    aParticleChange.Initialize(trackData);
    G4Material* aMaterial=trackData.GetMaterial() ;
 
-   G4double LPMEnergy = LPMconstant*(aMaterial->GetRadlen()) ;
+   //G4double LPMEnergy = LPMconstant*(aMaterial->GetRadlen()) ;
 
    const G4DynamicParticle* aDynamicParticle=trackData.GetDynamicParticle();
    G4double charge = aDynamicParticle->GetDefinition()->GetPDGCharge();   
@@ -773,8 +774,8 @@ G4VParticleChange* G4eBremsstrahlung::PostStepDoIt(const G4Track& trackData,
 
    // limits of the energy sampling
    G4double TotalEnergy = KineticEnergy + electron_mass_c2;
-   G4double TotalEnergysquare = TotalEnergy*TotalEnergy ;
-   G4double LPMGammaEnergyLimit = TotalEnergysquare/LPMEnergy ;
+   //G4double TotalEnergysquare = TotalEnergy*TotalEnergy ;
+   //G4double LPMGammaEnergyLimit = TotalEnergysquare/LPMEnergy ;
    G4double xmin = GammaEnergyCut/KineticEnergy, epsilmin = GammaEnergyCut/TotalEnergy;
    G4double epsilmax = KineticEnergy/TotalEnergy;
 

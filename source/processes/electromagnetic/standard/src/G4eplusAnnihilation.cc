@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eplusAnnihilation.cc,v 1.3 2001-02-22 18:26:09 maire Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.4 2001-05-30 14:32:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -15,6 +15,7 @@
 // 23-03-97, protection in BuildPhysicsTable, M.Maire
 // 31-08-98, new methods SetBining() and PrintInfo()
 // 22-02-01, postStepDoIt: fStopButAlive instead of kineEnergy == 0.  
+// 28-05-01  V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -77,7 +78,7 @@ void G4eplusAnnihilation::BuildPhysicsTable(const G4ParticleDefinition& Positron
    theCrossSectionTable = new G4PhysicsTable( G4Element::GetNumberOfElements()) ;
    const G4ElementTable* theElementTable = G4Element::GetElementTable() ;
    G4double AtomicNumber;
-   G4int J;
+   size_t J;
 
    for ( J=0 ; J < G4Element::GetNumberOfElements(); J++ )  
        { 

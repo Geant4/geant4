@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2001-03-23 15:09:37 maire Exp $
+$Id: History,v 1.12 2001-05-30 14:33:44 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 may 01: V.Ivanchenko 
+- clean up againist Linux ANSI strict compilation mode.
 
 23 mar 01 L.Urban (muons-V03-00-05)
 - R.Kokoulin's correction to energy loss has been commented out

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SynchrotronRadiation.hh,v 1.4 2001-02-05 17:53:51 gcosmo Exp $
+// $Id: G4SynchrotronRadiation.hh,v 1.5 2001-05-30 14:32:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -17,7 +17,7 @@
 //      
 //      History: 
 //      21-5-98  1 version , V. Grichine
-//                   
+//      28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // 
 //
 // ------------------------------------------------------------
@@ -130,7 +130,7 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
    const G4DynamicParticle* aDynamicParticle;
    G4Material* aMaterial;
    G4double MeanFreePath;
-   G4bool isOutRange ;
+   //G4bool isOutRange ;
  
    *condition = NotForced ;
 

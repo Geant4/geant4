@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisation.cc,v 1.12 2000-08-10 22:13:01 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.13 2001-05-30 14:32:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -32,6 +32,7 @@
 //            simulate energy losses of ions; correction to
 //            cross section for particles with spin 1 is inserted
 //            as well
+// 28/05/01  V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // --------------------------------------------------------------
  
 
@@ -48,10 +49,10 @@ G4double G4hIonisation::Tmincut = 1.*keV  ;
  
 G4hIonisation::G4hIonisation(const G4String& processName)
    : G4VhEnergyLoss(processName),
-     theMeanFreePathTable(NULL),
+     theMeanFreePathTable(0),
+     theElectron ( G4Electron::Electron()),
      theProton (G4Proton::Proton()),
-     theAntiProton (G4AntiProton::AntiProton()),
-     theElectron ( G4Electron::Electron() )
+     theAntiProton (G4AntiProton::AntiProton())
 { }
      
 G4hIonisation::~G4hIonisation() 
@@ -119,7 +120,7 @@ void G4hIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
   G4double LowEdgeEnergy , ionloss ;
   G4double deltaloss ;
   G4double  RateMass ;
-  G4bool isOutRange ;
+  //G4bool isOutRange ;
   static const G4MaterialTable* theMaterialTable=
                                    G4Material::GetMaterialTable();
   const G4double twoln10 = 2.*log(10.) ;
@@ -182,7 +183,7 @@ void G4hIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
     DeltaCutInKineticEnergyNow = G4std::max(DeltaCutInKineticEnergy[J],Tmincut) ;
 
     // some local variables -------------------
-    G4double tau,tau0,Tmax,gamma,bg2,beta2,rcut,delta,x,sh ;
+    G4double tau,Tmax,gamma,bg2,beta2,rcut,delta,x,sh ;
 
     // now comes the loop for the kinetic energy values*****************
 
@@ -295,7 +296,7 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 
       G4double chargeSquare = Charge*Charge ;
       G4double LowEdgeEnergy , Value ,sigma ;
-      G4bool isOutRange ;
+      //G4bool isOutRange ;
       const G4MaterialTable* theMaterialTable=
                                          G4Material::GetMaterialTable();
 

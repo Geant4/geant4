@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisation.cc,v 1.10 2000-05-23 14:42:21 urban Exp $
+// $Id: G4eIonisation.cc,v 1.11 2001-05-30 14:32:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,6 +28,7 @@
 // 07-09-98: Cleanup
 // 02/02/99: correction inDoIt , L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
+// 28/05/01  V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // --------------------------------------------------------------
  
 #include "G4eIonisation.hh"
@@ -356,7 +357,7 @@ G4VParticleChange* G4eIonisation::PostStepDoIt( const G4Track& trackData,
   G4double TotalEnergy = KineticEnergy + ParticleMass;
   G4double Psquare = KineticEnergy*(TotalEnergy+ParticleMass);
   G4double TotalMomentum = sqrt(Psquare);
-  G4double Esquare=TotalEnergy*TotalEnergy;
+  //G4double Esquare=TotalEnergy*TotalEnergy;
   G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
 
   //  get kinetic energy cut for the electron
