@@ -17,7 +17,7 @@ opendir(TL,"$TestLogDir") || die "Failed to opendir TestLog  $TestLogDir $!";
 closedir(TL);
 foreach $testlog (@testlogs) {
     next unless ((-M "$TestLogDir/$testlog") < 60 );
-    print "Test Run Log \"$testlog\"\n";
+#   print "Test Run Log \"$testlog\"\n";
     $Machine="Machine";
     $Option="CompilerOpts";
 #  dxplus04.dev1.opt_NONISO.log
