@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.3 2002-12-12 12:48:17 maire Exp $
+// $Id: RunAction.cc,v 1.4 2003-06-10 11:49:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -120,7 +120,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run* aRun)
+void RunAction::EndOfRunAction(const G4Run*)
 {
    //draw the events
   if (G4VVisManager::GetConcreteInstance()) 
