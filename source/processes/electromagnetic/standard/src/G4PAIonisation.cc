@@ -22,6 +22,7 @@
 //
 // R&D since 1996: Vladimir.Grichine@cern.ch
 //
+// 05.05.03 V.Grichine, move cuts per region members to BuildPhysicsTable
 // 29.04.03 V.Grichine, corrections for cuts per region
 // 10.03.03 V.Ivanchenko remove old interfaces to cuts
 // 10.01.03 CutInRange for e- instead of particle (VI)
@@ -235,8 +236,6 @@ G4PAIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
   ComputeSandiaPhotoAbsCof() ;
   BuildPAIonisationTable() ;
   /*
-=======
->>>>>>> 1.36
     if(Charge>0.)
     {
        RecorderOfpProcess[CounterOfpProcess] = (*this).theLossTable ;
