@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisation.cc,v 1.2 1999-02-16 13:40:19 urban Exp $
+// $Id: G4hIonisation.cc,v 1.3 1999-04-13 09:05:42 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -509,18 +509,19 @@ G4VParticleChange* G4hIonisation::PostStepDoIt(
 
    if (finalKineticEnergy > MinKineticEnergy)
      {
-       // changed energy and momentum of the actual particle
-       finalMomentum=sqrt(finalKineticEnergy*
-                         (finalKineticEnergy+2.*ParticleMass)) ;
+      finalPx = TotalMomentum*ParticleDirection.x()
+                        - DeltaTotalMomentum*DeltaDirection.x();
+      finalPy = TotalMomentum*ParticleDirection.y()
+                        - DeltaTotalMomentum*DeltaDirection.y();
+      finalPz = TotalMomentum*ParticleDirection.z()
+                        - DeltaTotalMomentum*DeltaDirection.z();
+      finalMomentum =
+                sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz) ;
+      finalPx /= finalMomentum ;
+      finalPy /= finalMomentum ;
+      finalPz /= finalMomentum ;
 
-       finalPx = (TotalMomentum*ParticleDirection.x()
-                 -DeltaTotalMomentum*DeltaDirection.x())/finalMomentum ; 
-       finalPy = (TotalMomentum*ParticleDirection.y()
-                 -DeltaTotalMomentum*DeltaDirection.y())/finalMomentum ; 
-       finalPz = (TotalMomentum*ParticleDirection.z()
-                 -DeltaTotalMomentum*DeltaDirection.z())/finalMomentum ; 
-
-       aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
+      aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
      }
    else
      {

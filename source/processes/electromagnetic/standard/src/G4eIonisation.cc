@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisation.cc,v 1.2 1999-02-16 13:40:16 urban Exp $
+// $Id: G4eIonisation.cc,v 1.3 1999-04-13 09:05:39 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -411,15 +411,17 @@ G4VParticleChange* G4eIonisation::PostStepDoIt( const G4Track& trackData,
 
   if (finalKineticEnergy > MinKineticEnergy)
     {
-      G4double finalMomentum=sqrt(finalKineticEnergy*
-                         (finalKineticEnergy+2.*ParticleMass));
-
-      G4double finalPx = (TotalMomentum*ParticleDirection.x()
-                        - DeltaTotalMomentum*DeltaDirection.x())/finalMomentum; 
-      G4double finalPy = (TotalMomentum*ParticleDirection.y()
-                        - DeltaTotalMomentum*DeltaDirection.y())/finalMomentum; 
-      G4double finalPz = (TotalMomentum*ParticleDirection.z()
-                        - DeltaTotalMomentum*DeltaDirection.z())/finalMomentum; 
+      G4double finalPx = TotalMomentum*ParticleDirection.x()
+                        - DeltaTotalMomentum*DeltaDirection.x(); 
+      G4double finalPy = TotalMomentum*ParticleDirection.y()
+                        - DeltaTotalMomentum*DeltaDirection.y(); 
+      G4double finalPz = TotalMomentum*ParticleDirection.z()
+                        - DeltaTotalMomentum*DeltaDirection.z(); 
+      G4double finalMomentum =
+                sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz) ;
+      finalPx /= finalMomentum ;
+      finalPy /= finalMomentum ;
+      finalPz /= finalMomentum ;
 
       aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
     }

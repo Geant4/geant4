@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlungPlus.cc,v 1.5 1999-03-04 16:31:28 maire Exp $
+// $Id: G4eBremsstrahlungPlus.cc,v 1.6 1999-04-13 09:05:45 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,7 +107,7 @@ void G4eBremsstrahlungPlus::BuildLossTable(const G4ParticleDefinition& aParticle
   G4double KineticEnergy,TotalEnergy,bremloss,Z,x,
            losslim,loss,rate,natom,Cut;
 
-  const G4double MinKineticEnergy = 1.*keV;
+  const G4double MinKinEnergy = 1.*keV;
   const G4double MinCut = 1.*keV;
   const G4double Thigh = 100.*GeV;
   const G4double Cuthigh = 50.*GeV;
@@ -156,7 +156,7 @@ void G4eBremsstrahlungPlus::BuildLossTable(const G4ParticleDefinition& aParticle
 
           bremloss = 0.;
 
-          if (KineticEnergy>MinKineticEnergy)
+          if (KineticEnergy>MinKinEnergy)
             {
              if (Cut > KineticEnergy) Cut = KineticEnergy ;
 
@@ -167,7 +167,7 @@ void G4eBremsstrahlungPlus::BuildLossTable(const G4ParticleDefinition& aParticle
                 natom = theAtomicNumDensityVector[iel] ;
                 if (KineticEnergy <= Thigh)
                   {
-                   //loss for MinKineticEnergy<KineticEnergy<=100 GeV
+                   //loss for MinKinEnergy<KineticEnergy<=100 GeV
                    x=log(TotalEnergy/ParticleMass);
                    loss = ComputeBremLoss(Z,natom,KineticEnergy,Cut,x) ;
                    if (&aParticleType==G4Positron::Positron())

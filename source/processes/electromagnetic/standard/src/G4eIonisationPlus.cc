@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisationPlus.cc,v 1.2 1999-02-16 13:40:17 urban Exp $
+// $Id: G4eIonisationPlus.cc,v 1.3 1999-04-13 09:05:41 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,7 +60,7 @@ G4eIonisationPlus::~G4eIonisationPlus()
 
 void G4eIonisationPlus::SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins)
 {
-  LowestKineticEnergy = lowE; G4double HighestKineticEnergy = highE; TotBin = nBins;
+  LowestKineticEnergy = lowE;  HighestKineticEnergy = highE; TotBin = nBins;
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -107,7 +107,7 @@ void G4eIonisationPlus::BuildLossTable(const G4ParticleDefinition& aParticleType
     // some local variables
     G4double tau,Tmax,gamma,gamma2,bg2,beta2,d,d2,d3,d4,delta,x,y ;
 
-    G4double  ParticleMass = aParticleType.GetPDGMass();
+    ParticleMass = aParticleType.GetPDGMass();
     G4double* ParticleCutInKineticEnergy = aParticleType.GetEnergyCuts() ;
 
     //  create table
@@ -273,7 +273,7 @@ G4double G4eIonisationPlus::ComputeMicroscopicCrossSection(
  
   G4double MaxKineticEnergyTransfer, TotalCrossSection(0.);
   
-  G4double ParticleMass = aParticleType.GetPDGMass();
+  ParticleMass = aParticleType.GetPDGMass();
   G4double TotalEnergy = KineticEnergy + ParticleMass;
 
   G4double betasquare = KineticEnergy*(TotalEnergy+ParticleMass)
@@ -317,7 +317,7 @@ G4VParticleChange* G4eIonisationPlus::PostStepDoIt( const G4Track& trackData,
   G4Material*               aMaterial = trackData.GetMaterial() ;
   const G4DynamicParticle*  aParticle = trackData.GetDynamicParticle() ;
 
-  G4double ParticleMass = aParticle->GetDefinition()->GetPDGMass();
+  ParticleMass = aParticle->GetDefinition()->GetPDGMass();
   G4double KineticEnergy = aParticle->GetKineticEnergy();
   G4double TotalEnergy = KineticEnergy + ParticleMass;
   G4double Psquare = KineticEnergy*(TotalEnergy+ParticleMass);
@@ -411,15 +411,17 @@ G4VParticleChange* G4eIonisationPlus::PostStepDoIt( const G4Track& trackData,
 
   if (finalKineticEnergy > MinKineticEnergy)
     {
-      G4double finalMomentum=sqrt(finalKineticEnergy*
-                         (finalKineticEnergy+2.*ParticleMass));
-
-      G4double finalPx = (TotalMomentum*ParticleDirection.x()
-                        - DeltaTotalMomentum*DeltaDirection.x())/finalMomentum; 
-      G4double finalPy = (TotalMomentum*ParticleDirection.y()
-                        - DeltaTotalMomentum*DeltaDirection.y())/finalMomentum; 
-      G4double finalPz = (TotalMomentum*ParticleDirection.z()
-                        - DeltaTotalMomentum*DeltaDirection.z())/finalMomentum; 
+      G4double finalPx = TotalMomentum*ParticleDirection.x()
+                        - DeltaTotalMomentum*DeltaDirection.x();
+      G4double finalPy = TotalMomentum*ParticleDirection.y()
+                        - DeltaTotalMomentum*DeltaDirection.y();
+      G4double finalPz = TotalMomentum*ParticleDirection.z()
+                        - DeltaTotalMomentum*DeltaDirection.z();
+      G4double finalMomentum =
+                sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz) ;
+      finalPx /= finalMomentum ;
+      finalPy /= finalMomentum ;
+      finalPz /= finalMomentum ;
 
       aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
     }
