@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Tubs.cc,v 1.5 2000-11-09 09:28:45 grichine Exp $
+// $Id: testG4Tubs.cc,v 1.6 2000-12-07 15:13:02 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -117,7 +117,7 @@ G4bool testG4Tubs()
 	G4ThreeVector pt1( 1.05*m*cos(-15*deg),
 	                   1.05*m*sin(-15*deg),
 			      0*m );
-			  
+ 			  
         G4ThreeVector pt2 = pt1 + G4ThreeVector(0,0.001*kCarTolerance,0) ;
         G4ThreeVector pt3 = pt1 - G4ThreeVector(0,0.001*kCarTolerance,0) ;
 	
@@ -126,6 +126,7 @@ G4bool testG4Tubs()
 	EInside a3 = arc->Inside(pt3);
 	
 	// G4cout << "Point pt1 is " << OutputInside(a1) << G4endl;
+
         assert(a1==kSurface);
 	// G4cout << "Point pt2 is " << OutputInside(a2) << G4endl;
         assert(a2==kSurface);
