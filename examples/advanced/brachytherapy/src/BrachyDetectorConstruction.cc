@@ -36,7 +36,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstruction.cc,v 1.17 2003-05-09 16:52:07 gcosmo Exp $
+// $Id: BrachyDetectorConstruction.cc,v 1.18 2003-05-09 17:15:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomROGeometry.hh"
@@ -190,7 +190,6 @@ void BrachyDetectorConstruction::ConstructPhantom()
   // Water Box
   Phantom = new G4Box("Phantom",m_BoxDimX/2,m_BoxDimY/2,m_BoxDimZ/2);
   PhantomLog = new G4LogicalVolume(Phantom,soft,"PhantomLog",0,0,0);
-
   PhantomPhys = new G4PVPlacement(0,G4ThreeVector(),"PhantomPhys",PhantomLog,ExpHallPhys,false,0); 
 
   ExpHallLog->SetVisAttributes (G4VisAttributes::Invisible);

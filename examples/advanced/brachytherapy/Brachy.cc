@@ -66,7 +66,7 @@
 #include "BrachyPhantomSD.hh"
 #include "BrachyPrimaryGeneratorActionIr.hh"
 #include "G4SDManager.hh"
-#include"BrachyRunAction.hh"
+#include "BrachyRunAction.hh"
 #include "Randomize.hh"  
 #include "G4RunManager.hh"
 #include "G4SDManager.hh"
@@ -77,37 +77,30 @@
 
 int main(int argc ,char ** argv)
 
-{ 
-
-
+{
   // fix the seed 
   // HepRandom::setTheSeed(16520);
 
   HepRandom::setTheEngine(new RanecuEngine);
-  G4int seed=time(NULL);
+  G4int seed=time(0);
   HepRandom ::setTheSeed(seed);
 
-
   // Construct the default run manager
- G4RunManager* pRunManager = new G4RunManager;
+  G4RunManager* pRunManager = new G4RunManager;
 
+  // Set mandatory initialization classes
+  G4String SDName = "Phantom";
 
- // Set mandatory initialization classes
- G4String SDName = "Phantom";
+  BrachyDetectorConstruction  *pDetectorConstruction=new  BrachyDetectorConstruction(SDName);
 
-   BrachyDetectorConstruction  *pDetectorConstruction=new  BrachyDetectorConstruction(SDName);
+  pRunManager->SetUserInitialization(pDetectorConstruction);
+  pRunManager->SetUserInitialization(new BrachyPhysicsList);
 
-  pRunManager->SetUserInitialization(pDetectorConstruction) ;
-
-     pRunManager->SetUserInitialization(new BrachyPhysicsList);
-
-     /*
 #ifdef G4VIS_USE
   // visualization manager
- G4VisManager* visManager = new BrachyVisManager;
- visManager->Initialize();
+  G4VisManager* visManager = new BrachyVisManager;
+  visManager->Initialize();
 #endif
-     */
   
 // output environment variables:
 #ifdef G4ANALYSIS_USE
@@ -121,80 +114,58 @@ int main(int argc ,char ** argv)
 	  << G4endl;
 #endif
   
-G4UIsession* session=0;
+  G4UIsession* session=0;
 
 
   if (argc==1)   // Define UI session for interactive mode.
-    {
-      // G4UIterminal is a (dumb) terminal.
+  {
+    // G4UIterminal is a (dumb) terminal.
 #ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
+    session = new G4UIterminal(new G4UItcsh);      
 #else
-      session = new G4UIterminal();
+    session = new G4UIterminal();
 #endif
-    }
+  }
 
- 
- BrachyEventAction *pEventAction=new BrachyEventAction(SDName);
-    pRunManager->SetUserAction(pEventAction );
+  BrachyEventAction *pEventAction=new BrachyEventAction(SDName);
+  pRunManager->SetUserAction(pEventAction );
 
-
-
-BrachyRunAction *pRunAction=new BrachyRunAction(SDName);
+  BrachyRunAction *pRunAction=new BrachyRunAction(SDName);
   pRunManager->SetUserAction(pRunAction);
 
-
-
-//Initialize G4 kernel
+  //Initialize G4 kernel
   pRunManager->Initialize();
 
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
-  UI->ApplyCommand("/run/verbose 0");
-  UI->ApplyCommand("/event/verbose 0");
-  UI->ApplyCommand("/tracking/verbose 0");
 
 
- if (session)   // Define UI session for interactive mode.
-    {
-      // G4UIterminal is a (dumb) terminal.
-      UI->ApplyCommand("/control/execute initInter.mac");    
+  if (session)   // Define UI session for interactive mode.
+  {
+    // G4UIterminal is a (dumb) terminal.
+    UI->ApplyCommand("/control/execute initInter.mac");    
 #ifdef G4UI_USE_XM
-      // Customize the G4UIXm menubar with a macro file :
-      UI->ApplyCommand("/control/execute gui.mac");
+    // Customize the G4UIXm menubar with a macro file :
+    UI->ApplyCommand("/control/execute gui.mac");
 #endif
-      session->SessionStart();
-      delete session;
-    }
+    session->SessionStart();
+    delete session;
+  }
   else           // Batch mode
-    { 
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
-    }  
-//   int numberOfEvent = 1000;
-//   pRunManager->BeamOn(numberOfEvent);
+  { 
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UI->ApplyCommand(command+fileName);
+  }  
+
+  // Job termination
 
 
-
-// Job termination
-
-   /*
 #ifdef G4VIS_USE
   delete visManager;
 #endif
-   */
 
+  delete pRunManager;
 
- delete pRunManager;
-
- return 0;
+  return 0;
 }
-
-
-
-
-
-
-
-
