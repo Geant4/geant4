@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.10 1999-07-20 16:45:18 maire Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.11 1999-09-28 13:26:56 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,6 @@
 #include "G4LowEnergyUtilities.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-#include <fstream.h>
 
 typedef G4FirstLevel oneShellTable;
 typedef G4SecondLevel oneAtomTable;
