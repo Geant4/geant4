@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trap.cc,v 1.2 1999-04-16 09:29:56 grichine Exp $
+// $Id: G4Trap.cc,v 1.3 1999-06-04 17:19:16 sgiani Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -17,6 +17,7 @@
 // 9.9.96   V. Grichine: Final modifications before to commit
 // 1.11.96 V.Grichine Costructors for Right Angular Wedge from STEP & G4Trd/Para
 // 8.12.97 J.Allison Added "nominal" constructor and method SetAllParameters.
+// 4.6.99  S.Giani: Fixed CalculateExtent in rotated case. 
 
 #include <math.h>
 #include "G4Trap.hh"
@@ -490,19 +491,19 @@ G4bool G4Trap::MakePlane( const G4ThreeVector& p1,
     
 // a,b,c correspond to the x/y/z components of the normal vector to the plane
 	   
-           // a=(p2.y()-p1.y())*(p1.z()+p2.z())+(p3.y()-p2.y())*(p2.z()+p3.z());
-	   // a+=(p4.y()-p3.y())*(p3.z()+p4.z())+(p1.y()-p4.y())*(p4.z()+p1.z()); // may be delete ?
+            a=(p2.y()-p1.y())*(p1.z()+p2.z())+(p3.y()-p2.y())*(p2.z()+p3.z());
+	    a+=(p4.y()-p3.y())*(p3.z()+p4.z())+(p1.y()-p4.y())*(p4.z()+p1.z()); // may be delete ?
     
-	   // b=(p2.z()-p1.z())*(p1.x()+p2.x())+(p3.z()-p2.z())*(p2.x()+p3.x());
-	   //  b+=(p4.z()-p3.z())*(p3.x()+p4.x())+(p1.z()-p4.z())*(p4.x()+p1.x()); // ?
+	    b=(p2.z()-p1.z())*(p1.x()+p2.x())+(p3.z()-p2.z())*(p2.x()+p3.x());
+	    b+=(p4.z()-p3.z())*(p3.x()+p4.x())+(p1.z()-p4.z())*(p4.x()+p1.x()); // ?
 	    
-	   // c=(p2.x()-p1.x())*(p1.y()+p2.y())+(p3.x()-p2.x())*(p2.y()+p3.y());
-	   // c+=(p4.x()-p3.x())*(p3.y()+p4.y())+(p1.x()-p4.x())*(p4.y()+p1.y());  // ?
+	    c=(p2.x()-p1.x())*(p1.y()+p2.y())+(p3.x()-p2.x())*(p2.y()+p3.y());
+	    c+=(p4.x()-p3.x())*(p3.y()+p4.y())+(p1.x()-p4.x())*(p4.y()+p1.y());  // ?
 // Let create diagonals 4-2 and 3-1 than (4-2)x(3-1) provides vector perpendicular to the
 // plane directed to outside !!! and a,b,c, = f(1,2,3,4)	   
-	   a = +(p4.y() - p2.y())*(p3.z() - p1.z()) - (p3.y() - p1.y())*(p4.z() - p2.z()) ;
-	   b = -(p4.x() - p2.x())*(p3.z() - p1.z()) + (p3.x() - p1.x())*(p4.z() - p2.z()) ; 
-	   c = +(p4.x() - p2.x())*(p3.y() - p1.y()) - (p3.x() - p1.x())*(p4.y() - p2.y()) ;
+	   //a = +(p4.y() - p2.y())*(p3.z() - p1.z()) - (p3.y() - p1.y())*(p4.z() - p2.z()) ;
+	   //b = -(p4.x() - p2.x())*(p3.z() - p1.z()) + (p3.x() - p1.x())*(p4.z() - p2.z()) ; 
+	   //c = +(p4.x() - p2.x())*(p3.y() - p1.y()) - (p3.x() - p1.x())*(p4.y() - p2.y()) ;
 	   s=sqrt(a*a+b*b+c*c);   // so now vector plane.(a,b,c) is unit 
 	   plane.a=a/s;
 	   plane.b=b/s;
@@ -538,6 +539,8 @@ G4bool G4Trap::CalculateExtent(const EAxis pAxis,
                                const G4AffineTransform& pTransform,
                                G4double& pMin, G4double& pMax) const
 {
+
+    G4double xMin, xMax, yMin, yMax, zMin, zMax;
     G4bool flag;
 
     if (!pTransform.IsRotated())
@@ -546,9 +549,9 @@ G4bool G4Trap::CalculateExtent(const EAxis pAxis,
                       // Compute z/x/y/ mins and maxs respecting limits, with early returns
                       // if outside limits. Then switch() on pAxis
 	  G4int i ; 
-          G4double xoffset,xMin,xMax;
-          G4double yoffset,yMin,yMax;
-          G4double zoffset,zMin,zMax;
+          G4double xoffset;
+          G4double yoffset;
+          G4double zoffset;
 	  G4double temp[8] ;          // some points for intersection with zMin/zMax
 	  
           xoffset=pTransform.NetTranslation().x();	    
@@ -686,48 +689,119 @@ G4bool G4Trap::CalculateExtent(const EAxis pAxis,
    }
     else
    {
-// General rotated case - create and clip mesh to boundaries
+// General rotated case - 
 
 	    G4bool existsAfterClip=false;
 	    G4ThreeVectorList *vertices;
 
 	    pMin=+kInfinity;
 	    pMax=-kInfinity;
+	    
 // Calculate rotated vertex coordinates
-
 	    vertices=CreateRotatedVertices(pTransform);
-	    ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
-	    ClipCrossSection(vertices,4,pVoxelLimit,pAxis,pMin,pMax);
-	    ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
+	    
+	    xMin = +kInfinity; yMin = +kInfinity; zMin = +kInfinity;
+	    xMax = -kInfinity; yMax = -kInfinity; zMax = -kInfinity;
+	    
+	    for(G4int nv=0; nv<8; nv++){
+	    
+	       if((*vertices)[nv].x() > xMax){xMax = (*vertices)[nv].x();};
+	       if((*vertices)[nv].y() > yMax){yMax = (*vertices)[nv].y();};
+	       if((*vertices)[nv].z() > zMax){zMax = (*vertices)[nv].z();};
+	    
+	       if((*vertices)[nv].x() < xMin){xMin = (*vertices)[nv].x();};
+	       if((*vertices)[nv].y() < yMin){yMin = (*vertices)[nv].y();};
+	       if((*vertices)[nv].z() < zMin){zMin = (*vertices)[nv].z();};
+	       
+	    };
+	    
+	    if (pVoxelLimit.IsZLimited())
+		{
+		    if (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance
+			||zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance)
+			{
+			    return false;
+			}
+		    else
+			{
+			    if (zMin<pVoxelLimit.GetMinZExtent())
+				{
+				    zMin=pVoxelLimit.GetMinZExtent();
+				}
+			    if (zMax>pVoxelLimit.GetMaxZExtent())
+				{
+				    zMax=pVoxelLimit.GetMaxZExtent();
+				}
+			}
+		}
+	    
+            if (pVoxelLimit.IsYLimited())
+		{
+		    if (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance
+			||yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance)
+			{
+			    return false;
+			}
+		    else
+			{
+			    if (yMin<pVoxelLimit.GetMinYExtent())
+				{
+				    yMin=pVoxelLimit.GetMinYExtent();
+				}
+			    if (yMax>pVoxelLimit.GetMaxYExtent())
+				{
+				    yMax=pVoxelLimit.GetMaxYExtent();
+				}
+			}
+		}
+
+             if (pVoxelLimit.IsXLimited())
+		{
+		    if (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance
+			||xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance)
+			{
+			    return false;
+			}
+		    else
+			{
+			    if (xMin<pVoxelLimit.GetMinXExtent())
+				{
+				    xMin=pVoxelLimit.GetMinXExtent();
+				}
+			    if (xMax>pVoxelLimit.GetMaxXExtent())
+				{
+				    xMax=pVoxelLimit.GetMaxXExtent();
+				}
+			}
+		}
+
+	    switch (pAxis)
+		{
+		case kXAxis:
+		    pMin=xMin;
+		    pMax=xMax;
+		    break;
+		case kYAxis:
+		    pMin=yMin;
+		    pMax=yMax;
+		    break;
+		case kZAxis:
+		    pMin=zMin;
+		    pMax=zMax;
+		    break;
+		}
+
 	    
 	    if (pMin!=kInfinity||pMax!=-kInfinity)
 		{
 		    existsAfterClip=true;
 		    
-// Add 2*tolerance to avoid precision troubles
+// Add tolerance to avoid precision troubles
 		    pMin-=kCarTolerance;
 		    pMax+=kCarTolerance;
 		    
-		}
-	    else
-		{
-// Check for case where completely enveloping clipping volume
-// If point inside then we are confident that the solid completely
-// envelopes the clipping volume. Hence set min/max extents according
-// to clipping volume extents along the specified axis.
-		   
-           G4ThreeVector clipCentre(
-			(pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-			(pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-			(pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
-		    
-		    if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
-			{
-			    existsAfterClip=true;
-			    pMin=pVoxelLimit.GetMinExtent(pAxis);
-			    pMax=pVoxelLimit.GetMaxExtent(pAxis);
-			}
-		}
+		};
+
 	    delete vertices ;          //  'new' in the function called
 	    flag = existsAfterClip ;
    }
