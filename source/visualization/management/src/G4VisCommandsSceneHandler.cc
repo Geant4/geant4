@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.11 2000-02-21 16:51:24 johna Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.12 2000-05-15 11:18:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -130,24 +130,22 @@ G4VisCommandSceneHandlerCreate::G4VisCommandSceneHandlerCreate (): fId (0) {
   fpCommand -> SetGuidance
     ("/vis/sceneHandler/create");
   fpCommand -> SetGuidance
-    ("     <graphics-system> [<scene-handler-name>] [<scene-name>]");
+    ("     <graphics-system-name> [<scene-handler-name>]");
   fpCommand -> SetGuidance
     ("Creates an scene handler for a specific graphics system.");
   fpCommand -> SetGuidance
-    ("Attaches specified scene.");
-  fpCommand -> SetGuidance
-    ("Default graphics system is current graphics system.");
-  fpCommand -> SetGuidance
-    ("Invents a name if not supplied.");
-  fpCommand -> SetGuidance
-    ("Default scene is current scene.  You can change attached scenes with");
+    ("Attaches current scene, if any.  You can change attached scenes with");
   fpCommand -> SetGuidance
     ("  /vis/sceneHandler/attach [<scene-name>].");
   fpCommand -> SetGuidance
-    ("This graphics system, scene handler and scene become current.");
+    ("Default graphics system is current graphics system.");
+  fpCommand -> SetGuidance
+    ("Invents a scene handler name if not supplied.");
+  fpCommand -> SetGuidance
+    ("This scene handler becomes current.");
   G4UIparameter* parameter;
-  parameter = new G4UIparameter ("graphics-system", 's', omitable = false);
-  //parameter -> SetCurrentAsDefault (true);
+  parameter = new G4UIparameter ("graphics-system-name",
+				 's', omitable = false);
   const G4GraphicsSystemList& gslist =
     fpVisManager -> GetAvailableGraphicsSystems ();
   G4String candidates;

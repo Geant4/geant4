@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsScene.cc,v 1.11 1999-12-16 17:19:32 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.12 2000-05-15 11:18:39 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -196,6 +196,7 @@ G4VisCommandSceneList::G4VisCommandSceneList () {
 				 omitable = true);
   parameter -> SetCurrentAsDefault (false);
   parameter -> SetDefaultValue (0);
+  fpCommand -> SetParameter (parameter);
   sceneNameCommands.push_back (fpCommand);
 }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.15 2000-05-13 11:00:28 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.16 2000-05-15 11:19:08 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,6 +13,7 @@
 
 #include "G4VisManager.hh"
 #include "G4VVisCommand.hh"
+#include "G4VisCommandsCompound.hh"
 #include "G4VisCommandsScene.hh"
 #include "G4VisCommandsSceneAdd.hh"
 #include "G4VisCommandsSceneInclude.hh"
@@ -159,10 +160,10 @@ viewers.
 
 The G4VisManager has a list of scene handlers.
 
-/vis/sceneHandler/create
-       <graphics-system> [<scene-handler-name>]   [<scene-name>]
-  default:                auto-generated name   current scene name
+/vis/sceneHandler/create <graphics-system-name> [<scene-handler-name>]
+  default:                                      auto-generated name
   This scene handler becomes current.
+  The current scene, if any, is attached.
 
 /vis/sceneHandler/attach [<scene-name>]
   default:             current scene name
@@ -431,41 +432,27 @@ General Commands
 Compound Commands
 =================
 
-* /vis/open  OGLSXM                   /vis/sceneHandler/create $1
-                                      /vis/viewer/create
+/vis/open <graphics-system-name>       /vis/sceneHandler/create $1
+                                       /vis/viewer/create
 
-* /vis/draw Calorimiter               /vis/scene/create
-                                      /vis/scene/add/volume $1
-                                      /vis/sceneHandler/attach
-                                      /vis/viewer/refresh
-                                      /vis/viewer/show
+* /vis/draw <physical-volume-name> but this clashes with old /vis~/draw/, so...
+/vis/drawVolume <physical-volume-name> /vis/scene/create
+                                       /vis/scene/add/volume $1
+                                       /vis/sceneHandler/attach
+                                       /vis/viewer/refresh
+                                       /vis/viewer/show
 
-* /vis/specify <logical-volume-name>  /vis/scene/create
-                                      /vis/scene/add/logicalVolume $1
-                                      /vis/sceneHandler/attach
-                                      /vis/viewer/refresh
-                                      /vis/viewer/show
-                                      /geometry/print $1
+/vis/specify <logical-volume-name>     /vis/scene/create
+                                       /vis/scene/add/logicalVolume $1
+                                       /vis/sceneHandler/attach
+                                       /vis/viewer/refresh
+                                       /vis/viewer/show
+                                       /geometry/print $1
 
   ******************************************************************/
 
   // Instantiate individual messengers/commands (usually one command
   // per messenger).
-
-  //A The GEANT4 commands available with the GEANT4 Visualization
-  //A System.
-
-  // Introduction
-
-  //I The GEANT4 Visualization System consists of a Visualization
-  //I Manager and a Visualization Interface.  The problem is to design
-  //I a set of commands which offer the GEANT4 user good functionality
-  //I and, at the same time, maximally exploit the power of modern
-  //I graphics systems.  The chief concept is the scene, a
-  //I graphics-system-independent list of visualizable GEANT4 objects,
-  //I which can be rendered to any graphics system in a variety of
-  //I ways.  If the graphics system has its own graphical database,
-  //I this is used.
 
   G4VVisCommand::SetVisManager (this);
 
@@ -473,28 +460,25 @@ Compound Commands
   command = new G4UIdirectory ("/vis/");
   command -> SetGuidance ("Visualization commands.");
 
-  //S \subsection {Scenes}
-  //S 
-  //S A GEANT4 scene is a set of visualizable objects which can be created,
-  //S edited and copied independent of any graphics system.
-
   command = new G4UIdirectory ("/vis/scene/");
   command -> SetGuidance ("Operations on Geant4 scenes.");
   fMessengerList.append (new G4VisCommandSceneCreate);
-  // fMessengerList.append (new G4VisCommandSceneEdit);
   fMessengerList.append (new G4VisCommandSceneList);
   fMessengerList.append (new G4VisCommandSceneNotifyHandlers);
   fMessengerList.append (new G4VisCommandSceneSelect);
   fMessengerList.append (new G4VisCommandSceneRemove);
+
   command = new G4UIdirectory ("/vis/scene/add/");
   command -> SetGuidance ("Add model to current scene.");
   fMessengerList.append (new G4VisCommandSceneAddVolume);
   fMessengerList.append (new G4VisCommandSceneAddGhosts);
   fMessengerList.append (new G4VisCommandSceneAddLogicalVolume);
+
   command = new G4UIdirectory ("/vis/scene/include/");
   command -> SetGuidance ("Include drawing option in current scene.");
   fMessengerList.append (new G4VisCommandSceneIncludeHits);
   fMessengerList.append (new G4VisCommandSceneIncludeTrajectories);
+
   command = new G4UIdirectory ("/vis/sceneHandler/");
   command -> SetGuidance ("Operations on Geant4 scene handlers.");
   fMessengerList.append (new G4VisCommandSceneHandlerAttach);
@@ -502,6 +486,7 @@ Compound Commands
   fMessengerList.append (new G4VisCommandSceneHandlerList);
   fMessengerList.append (new G4VisCommandSceneHandlerSelect);
   fMessengerList.append (new G4VisCommandSceneHandlerRemove);
+
   command = new G4UIdirectory ("/vis/viewer/");
   command -> SetGuidance ("Operations on Geant4 viewers.");
   fMessengerList.append (new G4VisCommandViewerCreate);
@@ -511,6 +496,11 @@ Compound Commands
   fMessengerList.append (new G4VisCommandViewerReset);
   fMessengerList.append (new G4VisCommandViewerSelect);
   fMessengerList.append (new G4VisCommandViewerShow);
+
+  // Compound commands...
+  fMessengerList.append (new G4VisCommandOpen);
+  fMessengerList.append (new G4VisCommandDrawVolume);
+  fMessengerList.append (new G4VisCommandSpecify);
 
   // Camera - OLD STYLE!!
   fMessengerList.append
