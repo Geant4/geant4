@@ -3,8 +3,6 @@
 
 #include "XMLWriter.h"
 
-#include "globals.hh"
-
 using namespace std;
 
 XMLWriter::XMLWriter(ostream* out, string indentString, string defaultNameSpace)

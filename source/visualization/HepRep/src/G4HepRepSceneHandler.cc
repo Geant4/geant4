@@ -33,14 +33,6 @@
 
 //HepRep
 #include "HEPREP/HepRep.h"
-#include "HEPREP/HepRepAttribute.h"
-#include "HEPREP/HepRepFactory.h"
-#include "HEPREP/HepRepInstance.h"
-#include "HEPREP/HepRepInstanceTree.h"
-#include "HEPREP/HepRepPoint.h"
-#include "HEPREP/HepRepTreeID.h"
-#include "HEPREP/HepRepType.h"
-#include "HEPREP/HepRepTypeTree.h"
 
 //G4
 #include "G4Types.hh"
@@ -61,10 +53,12 @@
 #include "G4Scene.hh"
 #include "G4Material.hh"
 
-//This
+// Streamer
+#include "XMLHepRepStreamerFactory.h"
+
+// This
 #include "G4HepRep.hh"
 #include "G4HepRepSceneHandler.hh"
-#include "XMLHepRepStreamerFactory.h"
 
 
 using namespace HEPREP;
@@ -531,12 +525,7 @@ void G4HepRepSceneHandler::SetColour (HepRepAttribute *attribute, const G4Colour
                                   " green : " << color.GetGreen () <<
                                   " blue : " << color.GetBlue ()   << G4endl;
 #endif
-    G4std::vector<double> c;
-    c.push_back(color.GetRed());
-    c.push_back(color.GetGreen());
-    c.push_back(color.GetBlue());
-    c.push_back(color.GetAlpha());
-    attribute->addAttValue(key, c);
+    attribute->addAttValue(key, color.GetRed(), color.GetGreen(), color.GetBlue(),color.GetAlpha());
 }
 
 void G4HepRepSceneHandler::SetLine (HepRepInstance *instance, const G4Visible& visible) {

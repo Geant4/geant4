@@ -12,6 +12,25 @@
 #include <string>
 #include <vector>
 
+// Include all other HepRep header files here for convenience
+#include "HEPREP/HepRepAction.h"
+#include "HEPREP/HepRepAttDef.h"
+#include "HEPREP/HepRepAttribute.h"
+#include "HEPREP/HepRepAttValue.h"
+#include "HEPREP/HepRepConstants.h"
+#include "HEPREP/HepRepDefinition.h"
+#include "HEPREP/HepRepFactory.h"
+#include "HEPREP/HepRepInstance.h"
+#include "HEPREP/HepRepInstanceTree.h"
+#include "HEPREP/HepRepIterator.h"
+#include "HEPREP/HepRepIteratorListener.h"
+#include "HEPREP/HepRepPoint.h"
+#include "HEPREP/HepRepSelectFilter.h"
+#include "HEPREP/HepRepTreeID.h"
+#include "HEPREP/HepRepType.h"
+#include "HEPREP/HepRepTypeTree.h"
+#include "HEPREP/HepRepWriter.h"
+
 namespace HEPREP {
 
 class HepRepAction;

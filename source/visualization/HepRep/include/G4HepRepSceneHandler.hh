@@ -34,14 +34,6 @@
 
 // HepRep
 #include "HEPREP/HepRep.h"
-#include "HEPREP/HepRepAttribute.h"
-#include "HEPREP/HepRepFactory.h"
-#include "HEPREP/HepRepInstance.h"
-#include "HEPREP/HepRepInstanceTree.h"
-#include "HEPREP/HepRepPoint.h"
-#include "HEPREP/HepRepTreeID.h"
-#include "HEPREP/HepRepType.h"
-#include "HEPREP/HepRepTypeTree.h"
 
 //G4
 #include "G4VGraphicsSystem.hh"

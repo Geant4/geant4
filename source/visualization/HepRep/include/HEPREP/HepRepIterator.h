@@ -40,7 +40,7 @@ public:
      *
      * @return next HepRepInstance.
      */
-    virtual HepRepInstance * next() = 0;
+    virtual HepRepInstance * nextInstance() = 0;
 
     /**
      * Adds a listener to be informed about attribute changes while iterating.

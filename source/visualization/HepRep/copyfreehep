@@ -1,8 +1,10 @@
 export HEPREP=$FREEHEP/hep/graphics/heprep
 cp $FREEHEP/org/freehep/jni/FreeHepTypes.h include
 cp $HEPREP/geant4/*.hh include
-cp $HEPREP/streamer-c++/*.h include
+cp $HEPREP/streamer-c++/include/*.h include
 cp $HEPREP/include/HEPREP/*.h include/HEPREP
 cp $HEPREP/geant4/*.cc src
 cp $HEPREP/streamer-c++/*.cc src
+rm src/HepRepStreamerExample.cc
+rm src/HepRepStreamerTest.cc
 

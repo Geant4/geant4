@@ -31,7 +31,6 @@
 
 // HepRep
 #include "HEPREP/HepRep.h"
-#include "HEPREP/HepRepWriter.h"
 
 // Geant4
 #include "G4VViewer.hh"

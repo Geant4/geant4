@@ -31,48 +31,54 @@ public:
      *
      * @param key name of the changed attribute.
      * @param value value of the changed attribute.
+     * @param showLabel value of showLabel.
      */
-    virtual void setAttribute(std::string key, std::string value) = 0;
+    virtual void setAttribute(std::string key, std::string value, int showLabel) = 0;
 
     /**
      * Called if attribute key changes its value.
      *
      * @param key name of the changed attribute.
      * @param value value of the changed attribute.
+     * @param showLabel value of showLabel.
      */
-    virtual void setAttribute(std::string key, std::vector<double> value) = 0;
+    virtual void setAttribute(std::string key, std::vector<double> value, int showLabel) = 0;
 
     /**
      * Called if attribute key changes its value.
      *
      * @param key name of the changed attribute.
      * @param value value of the changed attribute.
+     * @param showLabel value of showLabel.
      */
-    virtual void setAttribute(std::string key, long value) = 0;
+    virtual void setAttribute(std::string key, long value, int showLabel) = 0;
 
     /**
      * Called if attribute key changes its value.
      *
      * @param key name of the changed attribute.
      * @param value value of the changed attribute.
+     * @param showLabel value of showLabel.
      */
-    virtual void setAttribute(std::string key, int value) = 0;
+    virtual void setAttribute(std::string key, int value, int showLabel) = 0;
 
     /**
      * Called if attribute key changes its value.
      *
      * @param key name of the changed attribute.
      * @param value value of the changed attribute.
+     * @param showLabel value of showLabel.
      */
-    virtual void setAttribute(std::string key, double value) = 0;
+    virtual void setAttribute(std::string key, double value, int showLabel) = 0;
 
     /**
      * Called if attribute key changes its value.
      *
      * @param key name of the changed attribute.
      * @param value value of the changed attribute.
+     * @param showLabel value of showLabel.
      */
-    virtual void setAttribute(std::string key, bool value) = 0;
+    virtual void setAttribute(std::string key, bool value, int showLabel) = 0;
 
     /**
      * Called if attribute key is removed from the attribute set.

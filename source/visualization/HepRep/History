@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2002-12-03 18:01:29 duns Exp $
+$Id: History,v 1.23 2002-12-09 17:14:36 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+9th December 2002 Mark Donszelmann
+- Fixed bug that files were left open. Will close now, apart from stdin/stderr
+- Fixed color call not to use array creation.
+- Fixed HepRep standard (reader related), G4 is a writer.
+- Fixed include file now to only include HepRep.h (which includes all others)
+
 3rd December 2002 Mark Donszelmann
 - Fixed bug that XML Output can be routed to stdout or stderr.
 

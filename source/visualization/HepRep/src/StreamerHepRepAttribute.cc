@@ -45,6 +45,15 @@ bool StreamerHepRepAttribute::addAttValue(string key, vector<double> value, int 
     return addAttValue(new DefaultHepRepAttValue(key, value, showLabel));
 }
 
+bool StreamerHepRepAttribute::addAttValue(string key, double red, double green, double blue, double alpha, int showLabel) {
+    vector<double> color;
+    color.push_back(red);
+    color.push_back(green);
+    color.push_back(blue);
+    color.push_back(alpha);
+    return addAttValue(new DefaultHepRepAttValue(key, color, showLabel));
+}
+
 HepRepAttValue* StreamerHepRepAttribute::getAttValueFromNode(string lowerCaseName) {
     return NULL;
 }

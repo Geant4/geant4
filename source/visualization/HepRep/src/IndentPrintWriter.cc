@@ -1,4 +1,6 @@
 
+#include <fstream>
+
 #include "IndentPrintWriter.h"
 
 using namespace std;
@@ -15,6 +17,10 @@ IndentPrintWriter::~IndentPrintWriter() {
 
 void IndentPrintWriter::close() {
     out->flush();
+    ofstream* fout = dynamic_cast<ofstream *>(out);
+    if (fout != NULL) {
+        fout->close();
+    }
 }
 
 IndentPrintWriter& IndentPrintWriter::operator<< (const char* s) {

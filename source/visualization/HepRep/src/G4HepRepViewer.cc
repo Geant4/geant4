@@ -28,7 +28,6 @@
 
 //HepRep
 #include "HEPREP/HepRep.h"
-#include "HEPREP/HepRepFactory.h"
 
 //G4
 #include "G4Types.hh"

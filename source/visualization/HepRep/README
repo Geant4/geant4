@@ -41,8 +41,10 @@ To select the driver
 
 Any call to draw part of an event will open the file and start writing.
 
-Each file is closed by:
+Each file, apart from stdin/stderr, is closed by:
 /vis/viewer/flush
+(WARNING: files will not contain geometry if not flushed. G4 exit will only
+close file)
 
 Multiple events can be written by:
 /vis/scene/endOfSceneAction accumulate
@@ -54,5 +56,5 @@ or in future
 
 http://wired.freehep.org
 
-27 Nov 2002
+9 Dec 2002
 Mark Donszelmann

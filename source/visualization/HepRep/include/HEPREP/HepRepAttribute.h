@@ -104,6 +104,19 @@ public:
     virtual bool addAttValue(std::string key, std::vector<double> value, int showLabel = HepRepConstants::SHOW_NONE) = 0;
 
     /**
+     * Adds a Color attValue.
+     *
+     * @param key name of attValue
+     * @param red color
+     * @param green color
+     * @param blue color
+     * @param alpha value
+     * @param showLabel show this as label
+     * @return false only if the value is immediately written to a stream.
+     */
+    virtual bool addAttValue(std::string key, double red, double green, double blue, double alpha = 1.0, int showLabel = HepRepConstants::SHOW_NONE) = 0;
+
+    /**
      * Remove the attvalue named by key.
      *
      * @param key name of the attValue to be removed.
