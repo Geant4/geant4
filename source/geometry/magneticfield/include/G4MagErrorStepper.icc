@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagErrorStepper.icc,v 1.8 2001-07-11 09:59:08 gunter Exp $
+// $Id: G4MagErrorStepper.icc,v 1.9 2002-11-09 03:06:15 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,7 +30,7 @@ G4MagErrorStepper::G4MagErrorStepper(G4Mag_EqRhs *EqRhs,
 				     G4int numberOfVariables)
      : G4MagIntegratorStepper(EqRhs,numberOfVariables)
   {
-      G4int nvar = this->GetNumberOfVariables() ;
+      G4int nvar = G4std::max(this->GetNumberOfVariables(), 8);
       yMiddle=     new G4double[nvar]; 
       dydxMid=     new G4double[nvar];
       yInitial=    new G4double[nvar];
