@@ -1,0 +1,63 @@
+#######################################################################
+#  MACRO FILE NAME: exN03Tree0.mac                                    #
+#                                                                     #
+#  AUTHOR(S): Satoshi Tanaka                                          #
+#                                                                     #
+#  DATE:                                                              #
+#        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
+#        June     20, 2001                                            #
+#                                                                     #
+#  CONTENTS: A macro to demonstrate GAG DTREE                         #
+#                                                                     #
+#  USAGE:                                                             #
+#          * Edit exampleN03.cc to use the GAG interface              #
+#          % $G4BINDIR/exampleN03                                     #
+#          Idle> /control/execute visTutor/exN03Tree1.mac             #
+#                                                                     #
+#  REQUIRED PLATFORMS & SOFTWARES: Unix/Windows, GAG (Java version)   #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
+#                                                                     #
+#    * Unnecessary                                                    #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    * Unnecessary                                                    #
+#                                                                     # 
+#  VERBOSE LEVEL:                                                     #
+#                                                                     # 
+#    <  10: - does not print daughters of repeated logical volumes.   #
+#           - does not repeat replicas.                               #
+#    >= 10: prints all physical volumes.                              #
+#    For level of detail add:                                         #
+#    >=  0: prints physical volume name.                              #
+#    >=  1: prints logical volume name.                               #
+#    >=  2: prints solid name and type.                               #
+#                                                                     #
+#  ADDITIONAL NOTES:                                                  #
+#    * The geometry tree is displayed in GAG windows stdout.          #
+#      (If you are using the G4 character terminals, the tree is      #
+#       displayed in stdout.)                                         # 
+#    * The compound command to visualize geometry tree:               # 
+#      /vis/drawTree [<physical-volume-name>] [<system>]              #
+#######################################################################
+
+# Draw the whole geometry tree
+#  Note: "!" means the default argument, i.e., "world"
+/vis/drawTree ! GAGTree
+
+# Draw a part of tree
+/vis/drawTree Gap GAGTree
+
+# Change the level to display details 
+/vis/GAGTree/verbose 1
+/vis/drawTree ! GAGTree
+
+# Change the level to display details
+/vis/GAGTree/verbose 2
+/vis/drawTree ! GAGTree
+
+# Change the level to display details
+/vis/GAGTree/verbose 10
+/vis/drawTree ! GAGTree

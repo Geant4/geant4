@@ -1,0 +1,218 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (28-Feb-2002)
+             Copyright : Geant4 Collaboration
+**********************************************
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+
+***** Table : Nb of materials = 12 *****
+
+ Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
+   --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
+   --->  Element: liquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
+   --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material: Scintillator     density:  1.032 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  42.549 cm 
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  91.45 %  Abundance  47.37 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   8.55 %  Abundance  52.63 %
+
+ Material:   quartz     density:  2.200 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  12.295 cm 
+   --->  Element:  Silicon Si   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass:  46.75 %  Abundance  33.33 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  53.25 %  Abundance  66.67 %
+
+ Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material:  Aerogel     density: 200.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.493 m  
+   --->  Element:  Silicon Si   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass:  29.22 %  Abundance  11.12 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  66.49 %  Abundance  44.42 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   4.19 %  Abundance  44.37 %
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   0.10 %  Abundance   0.09 %
+
+ Material: CarbonicGas     density: 27.000 mg/cm3  temperature: 325.00 K  pressure:  50.00 atm  RadLength:  13.406 m  
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  27.29 %  Abundance  33.33 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  72.71 %  Abundance  66.67 %
+
+ Material: WaterSteam     density:  0.300 mg/cm3  temperature: 500.00 K  pressure:   2.00 atm  RadLength:   1.203 km 
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc 
+   --->  Element: Galactic      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Beam     density:  0.010 mg/cm3  temperature: 273.15 K  pressure:   0.02 atm  RadLength:  36.786 km 
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+
+
+------------------------------------------------------------
+---> The calorimeter is 10 layers of: [ 10mm of Lead + 5mm of liquidArgon ] 
+------------------------------------------------------------
+ExN03PhysicsList::SetCuts:CutLength : 1 mm 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+============= The cut Energy ==============================
+                            gamma              e-    
+Cut in range       
+          Aluminium           1 mm            1 mm 
+        liquidArgon           1 mm            1 mm 
+               Lead           1 mm            1 mm 
+              Water           1 mm            1 mm 
+       Scintillator           1 mm            1 mm 
+             quartz           1 mm            1 mm 
+                Air           1 mm            1 mm 
+            Aerogel           1 mm            1 mm 
+        CarbonicGas           1 mm            1 mm 
+         WaterSteam           1 mm            1 mm 
+           Galactic           1 mm            1 mm 
+               Beam           1 mm            1 mm 
+Cut in energy
+          Aluminium        6.89 keV         597 keV
+        liquidArgon        6.18 keV         343 keV
+               Lead         101 keV        1.38 MeV
+              Water         2.9 keV         347 keV
+       Scintillator        2.37 keV         356 keV
+             quartz        5.52 keV         534 keV
+                Air         990 eV          990 eV 
+            Aerogel        1.71 keV         119 keV
+        CarbonicGas         990 eV         36.5 keV
+         WaterSteam         990 eV          990 eV 
+           Galactic         990 eV          990 eV 
+               Beam         990 eV          990 eV 
+===================================================
+### Run 0 start.
+
+---> Begin of event: 0
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
+---> End of event: 0
+   Absorber: total energy: 283.131 MeV       total track length: 19.9534 cm 
+        Gap: total energy: 12.4027 MeV       total track length: 6.03802 cm 
+
+     10 hits are stored in ExN03CalorHitsCollection.
+     Transportation,              hIoni,                msc,              eIoni
+              eBrem,            annihil,               conv,              compt
+               phot,             MuIoni,            MuBrems,         MuPairProd
+              Decay
+### Run 1 start.
+
+---> Begin of event: 0
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 1291960900, 759167195
+----------------------------------------
+---> End of event: 0
+   Absorber: total energy: 281.881 MeV       total track length: 19.6742 cm 
+        Gap: total energy: 15.4463 MeV       total track length: 8.07961 cm 
+
+     10 hits are stored in ExN03CalorHitsCollection.
+
+------------------------------------------------------------
+---> The calorimeter is 10 layers of: [ 10mm of Aluminium + 5mm of liquidArgon ] 
+------------------------------------------------------------
+
+------------------------------------------------------------
+---> The calorimeter is 10 layers of: [ 10mm of Aluminium + 5mm of Aerogel ] 
+------------------------------------------------------------
+
+------------------------------------------------------------
+---> The calorimeter is 30 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
+------------------------------------------------------------
+### Run 2 start.
+
+---> Begin of event: 0
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 796806890, 2027378855
+----------------------------------------
+---> End of event: 0
+   Absorber: total energy: 374.373 MeV       total track length: 90.1156 cm 
+        Gap: total energy: 92.9847 MeV       total track length: 2.59813 m  
+
+     18 hits are stored in ExN03CalorHitsCollection.
+Graphics systems deleted.
+Visualization Manager deleting...

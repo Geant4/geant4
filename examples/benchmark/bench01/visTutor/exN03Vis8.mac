@@ -1,0 +1,61 @@
+#######################################################################
+#  MACRO FILE NAME: exN03Vis8.mac                                     #
+#                                                                     #
+#  AUTHOR(S): Satoshi Tanaka                                          #
+#                                                                     #
+#  DATE:                                                              #
+#        Nov      14, 2001                                            #
+#                                                                     #
+#  CONTENTS: A macro to demonstrate batch visualization to generate   #
+#            PostScript file with the DAWNFILE driver                 #
+#                                                                     #
+#          % setenv DAWN_BATCH               1                        #
+#          % make visclean                                            #
+#          % $G4BINDIR/exampleN03                                     #
+#          Idle> /control/execute visTutor/exN03Vis8.mac              #
+#          Idle> exit                                                 #
+#          % gv g4_00.eps &                                           #
+#          % gv g4_01.eps &                                           #
+#          % gv g4_02.eps &                                           #
+#                                                                     #
+#  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window,                    #
+#                                  DAWN (version 3.85 or after)       #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    * Unnecessary                                                    #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    * Unnecessary                                                    #
+#                                                                     # 
+#  ADDITIONAL NOTES:                                                  #
+#                                                                     # 
+#######################################################################
+
+####################################################################
+# Creation of a multi-page PostScript file with the DAWNFILE driver
+####################################################################
+
+# Invoke the DAWNFILE driver
+/vis/open DAWNFILE
+
+# Add the world volume to the current scene
+/vis/drawVolume
+
+# Add trajectories to the current scene
+#  Note: This command is not necessary in exampleN03,
+#        since the C++ method DrawTrajectory() is 
+#        described in the event action.
+#/vis/scene/add/trajectories
+
+# Set camera 
+/vis/viewer/reset 
+/vis/viewer/zoom              1.5
+/vis/viewer/set/viewpointThetaPhi 70 20
+
+# Visualize events added to the current scene
+/tracking/storeTrajectory 1
+/run/beamOn 3

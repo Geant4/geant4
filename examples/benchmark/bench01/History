@@ -1,0 +1,266 @@
+$Id: History,v 1.1 2002-05-21 11:38:06 stesting Exp $
+--------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example N03 History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+07-03-02 mma (exampleN03-V04-00-01)
+- remove cutForGamma, cutForElectron ..etc..
+     
+14-02-02 mma (exampleN03-V04-00-00)
+- macros for em exercices
+     
+27-11-01 mma (exampleN03-V03-02-07)
+- DetectorConstruction: Vacuum is the default material.
+- newgeom.mac: a box of 40 cm of water.
+
+19-11-01 John (exampleN03-V03-02-06)
+- Updated ExN03VisManager.cc for new graphics systems and defaults.
+
+14-11-01 Satoshi Tanaka (exampleN03-V03-02-05)
+- exN03Vis8.mac : Batch visualization with the DAWNFILE driver
+- exN03Vis9.mac : Multi-page PostScript file generation (old exN03Vis8.mac)
+
+07-11-01 Satoshi (exampleN03-V03-02-04a)
+- /vis/viewer/viewpointThetaPhi ==> /vis/viewer/set/viewpointThetaPhi
+
+07-11-01 Satoshi (exampleN03-V03-02-04)
+- visTutor/exN03VisXX.mac's are rewritten with /vis/viewer/flush.
+- Some refinements of command sequences and comments.
+- Note that /vis/flushAll's are described but commented out. 
+
+07-11-01 Satoshi (exampleN03-V03-02-03)
+- vis.mac: /vis/viewer/refresh + /vis/viewer/update is replaced 
+  with their equivalent command /vis/viewer/flush.
+     
+24-10-01 mma (exampleN03-V03-02-02)
+- initInter.mac renamed vis.mac : OpenGL and DAWNFILE opened simultaneously. 
+     
+19-10-01 Steve O'Neale (examples-V03-02-00)
+- Update reference output
+
+10-10-01 mma (exampleN03-V03-02-01)
+- /vis/scene/endOfEventAction accumulate
+  /vis/viewer/zoom (in newgeom.mac)
+- 80 columns everywhere
+
+18-09-01 Satoshi Tanaka (exampleN03-V03-02-00)
+- Updation for automatic visualization at Hebden Bridge mini-workshop.
+- /vis/viewer/flush and /vis/flushAll are not included yet.
+  (To be included in the next tag.) 
+- /vis/drawTree may still require /vis/scene/notifyHandlers.
+  (John Allison will revise the /vis/drawTree command soon.)
+
+21-06-01 Satoshi Tanaka (exampleN03-V03-00-02)
+- visTutor/*.mac updated
+- Commands /vis/set/XXX's are replaced with /vis/viewer/set/XXX
+- Commands /vis/camera/XXX's are replaced with /vis/viewer/XXX
+  except for /vis/camera/spin.
+- exN03Tree0.mac for ASCII DTREE and exN03Tree1.mac for GAG DTREE
+  are created.
+ 
+
+06-02-01 M.Asai (exampleN03-V03-00-01)
+- Migration to STL vector classes
+ affected : ExN03SteppingVerbose.cc
+
+4th February 2001 Steve O'Neale (tagset254)
+
+21-11-27, Satoshi Tanake (exampleN03-V02-00-04)
+- The macro initInter.mac (by Michel) is revised.
+  1) The command "/vis/scene/create" is removed, 
+     since it is already included in "/vis/drawVolume".
+  2) /vis/viewer/update is added, since it becomes necessary 
+     when the OpenGL driver is switched to another driver.
+- In visTutor/exN03Vis5,6.mac (by Guy) 
+   "/vis/include/trajectories" is renamed into 
+   "/vis/scene/add/trajectories" and also commented out. 
+  (All other "/vis/scene/add/trajectories"'s are already commented out 
+   by Michel, since the C++ method DrawTrajectory() is now described 
+   in the event action.
+- Unnecessary "/vis/scene/create" are removed from 
+  visTutor/exN03VisX.mac when it is already included in 
+  "/vis/drawVolume" or "/vis/specify". 
+- The command /vis/camera/viewpoint is removed from visTutor/exN03Vis0.mac
+  in order to avoid crushing in reading it in execution of 
+  the G4 executable: $(G4BINDIR)/exampleN03 exN03Vis0.mac .
+- Comments updated in visTutor/exN03VisX.mac.
+
+
+25th November 2000 Steve O'Neale (tagset210)
+- Update test outputs for min.delta energy cut
+- Update test outputs for energy cut table only for e- and gamma
+- Update test outputs for new tags in em processes.
+  Note we skip round work in progress
+     
+21-11-00, mma (exampleN03-V02-00-02)
+- introduce G4UItcsh in exampleN03.cc
+- put all vis macros in a new subdirectory visTutor
+- prerunN03 simplified (compound vis commands) and renamed initInter.mac
+- code to control the drawing of tracks reinstalled in eventAction
+- bug corrected in PhysicsList::GetCutForProton()
+- PrimaryGenerator : default particle e- 50 MeV 
+
+October 19, 2000  Satoshi Tanaka  (exampleN03-V02-00-01)
+- Updated exN03Vis0-4.mac, incorporating recent development 
+  of vis commands
+- Updated format of comments in exN03Vis0-4.mac.
+- Created exN03Vis7.mac: demo of the VRMLFILE driver
+- Created exN03Vis8.mac: demo of multi-page PS file generation
+
+June 24, 2000  John Allison  (exampleN03-V01-01-09)
+- Updated exampleN03.out for stand-V01-01-05 and utils-V01-01-03.
+
+June 17, 2000  John Allison  (exampleN03-V01-01-08)
+- Updated exampleN03.out for geant4-01-01-ref-06.
+
+14 June 2000 John Allison (exampleN03-V01-01-07)
+- Added #ifdef G4UI_USE_XM to protect #include "G4UIXm.hh" in exampleN03.cc.
+- Limit output in gui.mac (Guy Barrand).
+
+13 June 2000 Guy Barrand (exampleN03-V01-01-06)
+- exampleN03.cc, prerunN03.mac : 
+  put execution of the gui.mac in exampleN03.cc
+  with an #ifdef G4UI_USE_XM protection and
+  remove it from preunN03.mac. This will gurantee
+  no effect of the gui.mac on other G4UI sessions.
+- g4Xt.xrm : add a resource to limit contant
+  of XmText widgets (in particular the one used
+  to dump G4cout things).
+- exaN03Vis5.6.mac : remove commands that are
+  in fact not supported by Xo and Invnetor
+  drivers.
+
+09 June 2000 Satoshi Tanaka (exampleN03-V01-01-05) :
+- In  prerunN03, 
+  < /vis/scene/include/trajectories
+  ---
+  > /vis/scene/add/trajectories                                                  
+09 June 2000 Guy Barrand (exampleN03-V01-01-04) :
+- correct some comments in exN03Vis5,6.mac.
+- add gui.mac.
+- trigger execution of gui.mac at end of prerunN03.mac.
+
+09 June 2000 Guy Barrand (exampleN03-V01-01-02) :
+- add exN03Vis4,5.mac for a simple example
+  of OPACS/Xo and Inventor driver.
+
+09th June 2000 Satoshi Tanaka  (exampleN03-V01-01-01)
+- exNO3VisX.mac's are updated corresponding to recent 
+  development of the new vis commands:  
+  (1) Compound commands are used wherever possible.
+  (2) Ordering of commands and comments are rewritten 
+      to improve readability.
+  (3) exN03Vis4.mac is created to demonstrate 
+      the compound command  "/vis/specify". 
+
+05-06-00 M.Maire
+- cleanup of ExN03EventAction to limit the amount of output with
+  exampleN03.large_N.in
+  
+20th May 2000 Satoshi Tanaka 
+- exNO3VisX.mac's are updated corresponding to development 
+  of the new vis commands.
+- The command /vis/add/trajectories is added to exNO3VisX.mac's.
+  Instead the C++ method "DrawTrajectory()" is removed from 
+  ExN03EventAction::EndOfEventAction(). 
+
+19th May 2000 Satoshi Tanaka 
+- g4.xrm (Xt resource file for UI) is renamed to g4Xt.xrm
+
+11th May 2000 Satoshi Tanaka (examples-V01-01-03)
+- Comments  in examples/novice/N03/exN03VisX.mac 's are
+  updated for DAWN Version 3.85a
+- Small changes to comments in SteppingVerbose.
+
+25-02-00 H.Kurashige
+- removed RhoZeroDefinition from PhysicsList 
+
+10th November 1999  Satoshi Tanaka (examples-V00-01-12)
+- novice/N03 is updated
+- Vis macros for N03 are updated for the latest updation of vis commands
+  (Introduction of /vis/viewer/update etc)                                     
+
+09-11-99 Satoshi Tanaka (examples-V00-01-11)
+  prerunN03.mac        : /vis/viewer/update  is appended
+  src/ExN03RunAction.cc: /vis/scene/notifyHandlers  is in BeginOfRunAction()
+                         /vis/viewer/update  is in EndOfRunAction()
+
+14-08-99 Satoshi Tanaka
+  TAG: examples-V00-01-02
+  Visualization tutorial macros are committed.
+  (exN03Vis0.mac,..., exN03Vis3.mac)
+     
+19-08-99 Michel Maire
+- modify ExN03PhysicsList to keep the command setCut compatible
+  with cutForGamma ..etc ..
+       
+31-05-99 Guy Barrand, Michel Maire
+- introduce a command interface based on Motif: G4UIXm   
+     
+16th April 1999 H.Kurashige
+- modify ExN03SteppingAction::UserSteppingAction
+- modify ExN03EventAction
+- modify ExN03RunAction::BeginOfRunAction/EndOfRunAction
+- Add  cutForGamma/cutForElectron/cutForProton in ExN03PhysicsList
+- modify ExN03PhysicsList::SetCuts
+     
+10-03-99 Michel Maire
+- Choose RaneCu as the default random number generator.
+- print the seed event%n
+     
+ 9-10-98 John Apostolakis
+- This used to be example N02.  It is now N03.
+
+25-02-98 Michel Maire
+- add a macro 'newgeom.mac' which gives an example of
+  interactive redefinition of the geometry
+       
+11-09-98 Michel Maire
+- removed the function SetEmProcess() ( contained cin) 
+  and the class ExN02PhysicsListMessenger
+  
+27-08-98  John Allison
+- Removed /vis~/camera/zoom 3 - coworks with vis-00-02-05.
+
+12-08-98  Michel Maire
+- Changed all the class name:N02 -> ExN02. 
+    
+ 9-08-98  John Allison
+- Changed G4UIterminal to G4UIGAG.
+
+20-07-98  Michel Maire
+storeTrajectory command move to prerun.mac     
+
+16-07-98  John Allison
+- Changed /vis~/Draw... to /vis~/draw.
+
+ 9-07-98  John Allison
+- Added G4VIS_USE_DAWNFILE and G4VIS_USE_OPENGLWIN32 to N02VisManager.cc.
+
+8th July 1998  G.Cosmo
+- Protected visualization code with G4VIS_USE.
+
+6th July 1998  John Allison
+- Simplified N02VisManager.
+
+16th June 1998  Michel Maire
+- Added G4_SOLVE_VIS_TEMPLATES to exampleN02.cc
+
+10th June 1998  John Allison
+- Added template instantiation requests to exampleN02.cc for GNU_GCC.
+
+April 09, 98 G. Cosmo
+
+- Created.

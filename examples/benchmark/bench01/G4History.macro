@@ -1,0 +1,12 @@
+/run/verbose 2
+/vis/scene/create
+/vis/open DAWNFILE
+/vis/sceneHandler/create DAWNFILE
+/vis/sceneHandler/attach
+/vis/viewer/create ! ! 600
+/vis/open OGLIX
+/vis/viewer/flush
+/vis/viewer/refresh viewer-0
+/vis/viewer/update viewer-0
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate

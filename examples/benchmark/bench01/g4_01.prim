@@ -1,0 +1,1522 @@
+##G4.PRIM-FORMAT-2.4
+/BoundingBox  -103.078  -103.078  -103.078  103.078  103.078  103.078
+!SetCamera
+!OpenDevice
+!BeginModeling
+#--------------------
+#/PVName          Calorimeter.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  75  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -67.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -70  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -62.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -52.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -55  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -47.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -37.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -40  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -32.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -22.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -25  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -17.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -7.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -10  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -2.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  7.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  12.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  22.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  20  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  27.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  37.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  35  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  42.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  52.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  50  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  57.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  67.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  65  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  72.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -90  0  0
+/PLVertex  -75  0  0
+/PLVertex  -73.724  -0.123362  0.0933513
+/PLVertex  -72.9112  -0.500844  -0.0944768
+/PLVertex  -71.3851  -1.08291  -0.705293
+/PLVertex  -71.3388  -1.37912  -0.873471
+/PLVertex  -70.8386  -2.80873  -1.81002
+/PLVertex  -71.4476  -3.61357  -2.23267
+/PLVertex  -72.1965  -4.14509  -3.0123
+/PLVertex  -71.3854  -5.158  -4.17798
+/PLVertex  -71.4278  -5.18295  -4.24834
+/PLVertex  -71.4357  -5.19507  -4.26438
+/PLVertex  -71.4924  -5.27323  -4.34797
+/PLVertex  -71.2211  -5.6309  -4.78188
+/PLVertex  -71.4135  -5.73366  -5.17007
+/PLVertex  -71.4311  -5.52918  -5.2399
+/PLVertex  -71.4495  -5.10818  -5.4564
+/PLVertex  -71.5529  -5.19495  -5.79548
+/PLVertex  -71.5886  -5.25723  -5.77788
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -90  0  0  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -75  0  0  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.724  -0.123362  0.0933513  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -72.9112  -0.500844  -0.0944768  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.3851  -1.08291  -0.705293  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.3388  -1.37912  -0.873471  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.8386  -2.80873  -1.81002  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4476  -3.61357  -2.23267  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -72.1965  -4.14509  -3.0123  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.3854  -5.158  -4.17798  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4278  -5.18295  -4.24834  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4357  -5.19507  -4.26438  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4924  -5.27323  -4.34797  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.2211  -5.6309  -4.78188  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4135  -5.73366  -5.17007  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4311  -5.52918  -5.2399  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4495  -5.10818  -5.4564  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.5529  -5.19495  -5.79548  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.5886  -5.25723  -5.77788  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.5529  -5.19495  -5.79548
+/PLVertex  -74.528  -10.2344  -4.82098
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.5529  -5.19495  -5.79548  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -74.528  -10.2344  -4.82098  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -74.528  -10.2344  -4.82098
+/PLVertex  -74.5316  -10.2404  -4.81983
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -74.528  -10.2344  -4.82098  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -74.5316  -10.2404  -4.81983  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.4495  -5.10818  -5.4564
+/PLVertex  -71.1564  -5.70829  -6.24654
+/PLVertex  -71.3474  -5.57784  -6.21644
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4495  -5.10818  -5.4564  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.1564  -5.70829  -6.24654  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.3474  -5.57784  -6.21644  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.3474  -5.57784  -6.21644
+/PLVertex  -71.3476  -5.57771  -6.2164
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.3474  -5.57784  -6.21644  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.3476  -5.57771  -6.2164  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.1564  -5.70829  -6.24654
+/PLVertex  -71.1559  -5.7089  -6.2471
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.1564  -5.70829  -6.24654  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.1559  -5.7089  -6.2471  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.4311  -5.52918  -5.2399
+/PLVertex  -70.8374  -5.21436  -5.59464
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4311  -5.52918  -5.2399  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.8374  -5.21436  -5.59464  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -70.8374  -5.21436  -5.59464
+/PLVertex  -70.836  -5.21362  -5.59546
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.8374  -5.21436  -5.59464  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.836  -5.21362  -5.59546  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.4135  -5.73366  -5.17007
+/PLVertex  -71.4513  -5.51228  -5.09917
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4135  -5.73366  -5.17007  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4513  -5.51228  -5.09917  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.4513  -5.51228  -5.09917
+/PLVertex  -71.4514  -5.51209  -5.09911
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4513  -5.51228  -5.09917  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4514  -5.51209  -5.09911  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.2211  -5.6309  -4.78188
+/PLVertex  -71.145  -5.64266  -4.85352
+/PLVertex  -71.1451  -5.64269  -4.85352
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.2211  -5.6309  -4.78188  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.145  -5.64266  -4.85352  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.1451  -5.64269  -4.85352  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.4924  -5.27323  -4.34797
+/PLVertex  -71.5612  -6.2784  -5.26036
+/PLVertex  -71.4791  -7.07357  -5.36129
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4924  -5.27323  -4.34797  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.5612  -6.2784  -5.26036  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4791  -7.07357  -5.36129  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.4791  -7.07357  -5.36129
+/PLVertex  -71.479  -7.07487  -5.36146
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4791  -7.07357  -5.36129  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.479  -7.07487  -5.36146  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.5612  -6.2784  -5.26036
+/PLVertex  -71.5612  -6.27838  -5.26041
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.5612  -6.2784  -5.26036  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.5612  -6.27838  -5.26041  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.4357  -5.19507  -4.26438
+/PLVertex  -71.8803  -10.3465  -8.00312
+/PLVertex  -68.0757  -16.403  -11.1249
+/PLVertex  -66.6827  -16.8203  -13.0361
+/PLVertex  -66.6623  -17.1754  -12.242
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4357  -5.19507  -4.26438  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.8803  -10.3465  -8.00312  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -68.0757  -16.403  -11.1249  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -66.6827  -16.8203  -13.0361  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -66.6623  -17.1754  -12.242  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -66.6623  -17.1754  -12.242
+/PLVertex  -66.6623  -17.1757  -12.2414
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -66.6623  -17.1754  -12.242  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -66.6623  -17.1757  -12.2414  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -66.6827  -16.8203  -13.0361
+/PLVertex  -66.6815  -16.8202  -13.0386
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -66.6827  -16.8203  -13.0361  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -66.6815  -16.8202  -13.0386  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -68.0757  -16.403  -11.1249
+/PLVertex  -68.0757  -16.4035  -11.1246
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -68.0757  -16.403  -11.1249  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -68.0757  -16.4035  -11.1246  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.8803  -10.3465  -8.00312
+/PLVertex  -71.8807  -10.3466  -8.00332
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.8803  -10.3465  -8.00312  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.8807  -10.3466  -8.00332  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.4278  -5.18295  -4.24834
+/PLVertex  -73.1613  -8.76144  -8.95956
+/PLVertex  -72.9067  -9.04256  -9.62605
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4278  -5.18295  -4.24834  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.1613  -8.76144  -8.95956  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -72.9067  -9.04256  -9.62605  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -72.9067  -9.04256  -9.62605
+/PLVertex  -72.9033  -9.04637  -9.63508
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -72.9067  -9.04256  -9.62605  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -72.9033  -9.04637  -9.63508  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -73.1613  -8.76144  -8.95956
+/PLVertex  -73.1623  -8.76196  -8.95966
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.1613  -8.76144  -8.95956  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.1623  -8.76196  -8.95966  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.3854  -5.158  -4.17798
+/PLVertex  -75  -8.74248  -11.7246
+/PLVertex  -90  -23.6174  -43.0416
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.3854  -5.158  -4.17798  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -75  -8.74248  -11.7246  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -90  -23.6174  -43.0416  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -72.1965  -4.14509  -3.0123
+/PLVertex  -71.6751  -12.2394  -10.7361
+/PLVertex  -68.9823  -11.6242  -14.6307
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -72.1965  -4.14509  -3.0123  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.6751  -12.2394  -10.7361  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -68.9823  -11.6242  -14.6307  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -68.9823  -11.6242  -14.6307
+/PLVertex  -68.98  -11.6237  -14.6341
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -68.9823  -11.6242  -14.6307  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -68.98  -11.6237  -14.6341  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.6751  -12.2394  -10.7361
+/PLVertex  -71.6757  -12.2409  -10.7362
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.6751  -12.2394  -10.7361  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.6757  -12.2409  -10.7362  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.4476  -3.61357  -2.23267
+/PLVertex  -75  -9.1521  -8.19827
+/PLVertex  -90  -32.5386  -33.3881
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.4476  -3.61357  -2.23267  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -75  -9.1521  -8.19827  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -90  -32.5386  -33.3881  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -70.8386  -2.80873  -1.81002
+/PLVertex  -73.3132  -8.33188  -4.26914
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.8386  -2.80873  -1.81002  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.3132  -8.33188  -4.26914  0.025
+/ColorRGB  0  0  1
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -73.3132  -8.33188  -4.26914
+/PLVertex  -73.3283  -8.312  -4.33379
+/PLVertex  -73.3283  -8.312  -4.33379
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.3132  -8.33188  -4.26914  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.3283  -8.312  -4.33379  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.3283  -8.312  -4.33379  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -73.3283  -8.312  -4.33379
+/PLVertex  -72.0996  -9.45927  -5.24403
+/PLVertex  -72.3211  -9.37874  -5.08419
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.3283  -8.312  -4.33379  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -72.0996  -9.45927  -5.24403  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -72.3211  -9.37874  -5.08419  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -72.3211  -9.37874  -5.08419
+/PLVertex  -72.3218  -9.37848  -5.08368
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -72.3211  -9.37874  -5.08419  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -72.3218  -9.37848  -5.08368  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -72.0996  -9.45927  -5.24403
+/PLVertex  -72.0929  -9.46446  -5.249
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -72.0996  -9.45927  -5.24403  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -72.0929  -9.46446  -5.249  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -73.3283  -8.312  -4.33379
+/PLVertex  -74.933  -6.81369  -3.14504
+/PLVertex  -74.9704  -6.59424  -2.72913
+/PLVertex  -75  -6.56109  -2.69393
+/PLVertex  -90  10.2363  15.1453
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.3283  -8.312  -4.33379  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -74.933  -6.81369  -3.14504  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -74.9704  -6.59424  -2.72913  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -75  -6.56109  -2.69393  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -90  10.2363  15.1453  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -74.9704  -6.59424  -2.72913
+/PLVertex  -74.9702  -6.59427  -2.72897
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -74.9704  -6.59424  -2.72913  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -74.9702  -6.59427  -2.72897  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -74.933  -6.81369  -3.14504
+/PLVertex  -74.9341  -6.81327  -3.14547
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -74.933  -6.81369  -3.14504  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -74.9341  -6.81327  -3.14547  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -73.3132  -8.33188  -4.26914
+/PLVertex  -73.2617  -8.52127  -4.33766
+/PLVertex  -73.1568  -8.52291  -4.41722
+/PLVertex  -73.1534  -8.59006  -4.5142
+/PLVertex  -73.1544  -8.58919  -4.51453
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.3132  -8.33188  -4.26914  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.2617  -8.52127  -4.33766  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.1568  -8.52291  -4.41722  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.1534  -8.59006  -4.5142  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.1544  -8.58919  -4.51453  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -73.1568  -8.52291  -4.41722
+/PLVertex  -72.1402  -10.2956  -6.22733
+/PLVertex  -65.9168  -16.4242  -10.1561
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.1568  -8.52291  -4.41722  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -72.1402  -10.2956  -6.22733  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -65.9168  -16.4242  -10.1561  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -65.9168  -16.4242  -10.1561
+/PLVertex  -65.9123  -16.4286  -10.1589
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -65.9168  -16.4242  -10.1561  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -65.9123  -16.4286  -10.1589  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -72.1402  -10.2956  -6.22733
+/PLVertex  -72.1403  -10.2956  -6.22739
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -72.1402  -10.2956  -6.22733  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -72.1403  -10.2956  -6.22739  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -73.2617  -8.52127  -4.33766
+/PLVertex  -73.2392  -8.50398  -4.39971
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.2617  -8.52127  -4.33766  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.2392  -8.50398  -4.39971  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -73.2392  -8.50398  -4.39971
+/PLVertex  -73.2389  -8.50371  -4.40066
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.2392  -8.50398  -4.39971  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.2389  -8.50371  -4.40066  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.3388  -1.37912  -0.873471
+/PLVertex  -71.3292  -1.47919  -0.917413
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.3388  -1.37912  -0.873471  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.3292  -1.47919  -0.917413  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.3292  -1.47919  -0.917413
+/PLVertex  -71.3292  -1.4794  -0.917503
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.3292  -1.47919  -0.917413  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.3292  -1.4794  -0.917503  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.3851  -1.08291  -0.705293
+/PLVertex  -68.7004  -22.0545  -12.1909
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.3851  -1.08291  -0.705293  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -68.7004  -22.0545  -12.1909  0.025
+/ColorRGB  0  0  1
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -68.7004  -22.0545  -12.1909
+/PLVertex  -68.4961  -22.5779  -12.5998
+/PLVertex  -70.1473  -23.2031  -14.3228
+/PLVertex  -70.566  -22.8431  -14.6146
+/PLVertex  -71.5752  -22.389  -14.6182
+/PLVertex  -71.1513  -21.869  -14.0284
+/PLVertex  -71.1472  -22.0493  -14.1699
+/PLVertex  -71.1403  -22.0485  -14.1631
+/PLVertex  -71.1403  -22.0485  -14.1631
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -68.7004  -22.0545  -12.1909  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -68.4961  -22.5779  -12.5998  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.1473  -23.2031  -14.3228  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.566  -22.8431  -14.6146  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.5752  -22.389  -14.6182  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.1513  -21.869  -14.0284  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.1472  -22.0493  -14.1699  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.1403  -22.0485  -14.1631  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.1403  -22.0485  -14.1631  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.1403  -22.0485  -14.1631
+/PLVertex  -70.6152  -21.2897  -14.4059
+/PLVertex  -69.2026  -21.9245  -14.2477
+/PLVertex  -69.0251  -21.8906  -14.5528
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.1403  -22.0485  -14.1631  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.6152  -21.2897  -14.4059  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -69.2026  -21.9245  -14.2477  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -69.0251  -21.8906  -14.5528  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -69.0251  -21.8906  -14.5528
+/PLVertex  -69.0243  -21.8904  -14.5541
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -69.0251  -21.8906  -14.5528  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -69.0243  -21.8904  -14.5541  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -69.2026  -21.9245  -14.2477
+/PLVertex  -69.2022  -21.9249  -14.2472
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -69.2026  -21.9245  -14.2477  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -69.2022  -21.9249  -14.2472  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -70.6152  -21.2897  -14.4059
+/PLVertex  -70.6149  -21.2847  -14.4074
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.6152  -21.2897  -14.4059  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.6149  -21.2847  -14.4074  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.1403  -22.0485  -14.1631
+/PLVertex  -73.0817  -24.8534  -13.2654
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.1403  -22.0485  -14.1631  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.0817  -24.8534  -13.2654  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -73.0817  -24.8534  -13.2654
+/PLVertex  -73.0896  -24.8648  -13.2617
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.0817  -24.8534  -13.2654  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.0896  -24.8648  -13.2617  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.1513  -21.869  -14.0284
+/PLVertex  -71.6538  -22.492  -14.1921
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.1513  -21.869  -14.0284  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.6538  -22.492  -14.1921  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.6538  -22.492  -14.1921
+/PLVertex  -71.6591  -22.4985  -14.1938
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.6538  -22.492  -14.1921  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.6591  -22.4985  -14.1938  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -70.566  -22.8431  -14.6146
+/PLVertex  -71.6401  -22.766  -14.079
+/PLVertex  -71.8336  -22.7793  -13.9515
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.566  -22.8431  -14.6146  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.6401  -22.766  -14.079  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.8336  -22.7793  -13.9515  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.8336  -22.7793  -13.9515
+/PLVertex  -71.8411  -22.7799  -13.9465
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.8336  -22.7793  -13.9515  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.8411  -22.7799  -13.9465  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.6401  -22.766  -14.079
+/PLVertex  -71.6401  -22.766  -14.079
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.6401  -22.766  -14.079  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.6401  -22.766  -14.079  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -68.4961  -22.5779  -12.5998
+/PLVertex  -70.5936  -23.1063  -13.9405
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -68.4961  -22.5779  -12.5998  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.5936  -23.1063  -13.9405  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -70.5936  -23.1063  -13.9405
+/PLVertex  -70.5949  -23.1067  -13.9413
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.5936  -23.1063  -13.9405  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.5949  -23.1067  -13.9413  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -68.7004  -22.0545  -12.1909
+/PLVertex  -68.6681  -22.0962  -12.2146
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -68.7004  -22.0545  -12.1909  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -68.6681  -22.0962  -12.2146  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -72.9112  -0.500844  -0.0944768
+/PLVertex  -71.7488  -0.890247  -0.375109
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -72.9112  -0.500844  -0.0944768  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.7488  -0.890247  -0.375109  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -71.7488  -0.890247  -0.375109
+/PLVertex  -71.7462  -0.891097  -0.375721
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.7488  -0.890247  -0.375109  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -71.7462  -0.891097  -0.375721  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -73.724  -0.123362  0.0933513
+/PLVertex  -70.5018  -1.26958  -0.479853
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -73.724  -0.123362  0.0933513  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.5018  -1.26958  -0.479853  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -70.5018  -1.26958  -0.479853
+/PLVertex  -70.4726  -1.31827  -0.588092
+/PLVertex  -70.4746  -1.31547  -0.588848
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.5018  -1.26958  -0.479853  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.4726  -1.31827  -0.588092  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.4746  -1.31547  -0.588848  0.025
+/ColorRGB  0  1  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -70.4726  -1.31827  -0.588092
+/PLVertex  -70.4268  -1.29725  -1.6301
+/PLVertex  -70.8595  -1.77105  -1.55627
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.4726  -1.31827  -0.588092  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.4268  -1.29725  -1.6301  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.8595  -1.77105  -1.55627  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -70.8595  -1.77105  -1.55627
+/PLVertex  -70.8599  -1.77148  -1.5562
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.8595  -1.77105  -1.55627  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.8599  -1.77148  -1.5562  0.025
+/ColorRGB  1  0  0
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Polyline
+/PLVertex  -70.4268  -1.29725  -1.6301
+/PLVertex  -70.4264  -1.29691  -1.63083
+/EndPolyline
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.4268  -1.29725  -1.6301  0.025
+/ColorRGB  0  0  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/MarkCircle2DS  -70.4264  -1.29691  -1.63083  0.025
+#--------------------
+!EndModeling
+!DrawAll
+!CloseDevice

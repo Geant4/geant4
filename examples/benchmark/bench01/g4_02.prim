@@ -1,0 +1,226 @@
+##G4.PRIM-FORMAT-2.4
+/BoundingBox  -103.078  -103.078  -103.078  103.078  103.078  103.078
+!SetCamera
+!OpenDevice
+!BeginModeling
+#--------------------
+#/PVName          Calorimeter.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  0  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  75  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -67.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -70  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -62.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -52.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -55  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -47.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -37.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -40  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -32.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -22.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -25  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -17.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -7.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -10  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  -2.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  7.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  12.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  22.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  20  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  27.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  37.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  35  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  42.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  52.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  50  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  57.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+#/PVName               Layer.-1
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  67.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  7.5  50  50
+#--------------------
+#/PVName                    Absorber.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  65  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  5  50  50
+#--------------------
+#/PVName                    Gap.0
+/ColorRGB  1  1  1
+/ForceWireframe  0
+/Origin  72.5  0  0
+/BaseVector  1  0  0  0  1  0
+/Box  2.5  50  50
+#--------------------
+!EndModeling
+!DrawAll
+!CloseDevice
