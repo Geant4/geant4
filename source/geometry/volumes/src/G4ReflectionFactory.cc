@@ -21,11 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.11 2003-11-03 17:48:46 gcosmo Exp $
+// $Id: G4ReflectionFactory.cc,v 1.1 2004-05-13 14:51:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Ivana Hrivnacova, 16.10.2001  (Ivana.Hrivnacova@cern.ch)
-
 // 
 // Class G4ReflectionFactory Implementation
 //
@@ -49,6 +47,8 @@
 //        = TV * R * TD * x(inD)
 //        = TV * R*TD*R-1 * R*x(inD)
 //        = TV * ReflTD * x(inReflD)
+
+// Author: Ivana Hrivnacova, 16.10.2001  (Ivana.Hrivnacova@cern.ch)
 // --------------------------------------------------------------------
 
 #include "G4ReflectionFactory.hh"
@@ -56,6 +56,7 @@
 #include "G4LogicalVolume.hh"  
 #include "G4PVPlacement.hh"  
 #include "G4PVReplica.hh"  
+#include "G4VPVDivisionFactory.hh"  
 
 G4ReflectionFactory* G4ReflectionFactory::fInstance = 0;
 const G4String  G4ReflectionFactory::fDefaultNameExtension = "_refl";
@@ -205,7 +206,8 @@ G4ReflectionFactory::Replicate(const G4String& name,
   // - or 0 if mother LV was not reflected.
   // ---
 
-  if (fVerboseLevel>0) {
+  if (fVerboseLevel>0)
+  {
     G4cout << "Replicate " << name << " lv " << LV << " " 
            << LV->GetName() << G4endl;
   }  
@@ -221,6 +223,129 @@ G4ReflectionFactory::Replicate(const G4String& name,
     
     pv2 = new G4PVReplica(name, ReflectLV(LV), reflMotherLV, 
                           axis, nofReplicas, width, offset); 
+  }
+    
+  return G4PhysicalVolumesPair(pv1, pv2);            
+}         
+        
+//_____________________________________________________________________________
+
+G4PhysicalVolumesPair
+G4ReflectionFactory::Divide(const G4String& name, 
+                                  G4LogicalVolume* LV,
+                                  G4LogicalVolume* motherLV,
+                                  EAxis axis, 
+                                  G4int nofDivisions, 
+                                  G4double width,
+                                  G4double offset)
+{
+  // Creates division in the given mother.
+  // The result is a pair of physical volumes;
+  // the second physical volume is a division in a reflected mother
+  // or 0 if mother LV was not reflected.
+  // ---
+
+  if (fVerboseLevel>0)
+  {
+    G4cout << "Divide " << name << " lv " << LV << " " 
+           << LV->GetName() << G4endl;
+  }  
+
+  G4VPVDivisionFactory* divisionFactory = GetPVDivisionFactory();
+
+  G4VPhysicalVolume* pv1 = divisionFactory
+      ->CreatePVDivision(name, LV, motherLV, axis, nofDivisions, width, offset);
+ 
+  G4VPhysicalVolume* pv2 = 0;
+  if (G4LogicalVolume* reflMotherLV = GetReflectedLV(motherLV))
+  {
+    // if mother was reflected
+    // reflect the LV and replicate it in reflected mother
+    
+    pv2 = divisionFactory->CreatePVDivision(name, ReflectLV(LV), reflMotherLV, 
+                                            axis, nofDivisions, width, offset); 
+  }
+    
+  return G4PhysicalVolumesPair(pv1, pv2);            
+}         
+        
+             
+//_____________________________________________________________________________
+
+G4PhysicalVolumesPair
+G4ReflectionFactory::Divide(const G4String& name, 
+                                  G4LogicalVolume* LV,
+                                  G4LogicalVolume* motherLV,
+                                  EAxis axis, 
+                                  G4int nofDivisions, 
+                                  G4double offset)
+{
+  // Creates division in the given mother.
+  // The result is a pair of physical volumes;
+  // the second physical volume is a division in a reflected mother
+  // or 0 if mother LV was not reflected.
+  // ---
+
+  if (fVerboseLevel>0)
+  {
+    G4cout << "Divide " << name << " lv " << LV << " " 
+           << LV->GetName() << G4endl;
+  }  
+
+  G4VPVDivisionFactory* divisionFactory = GetPVDivisionFactory();
+
+  G4VPhysicalVolume* pv1 = divisionFactory
+      ->CreatePVDivision(name, LV, motherLV, axis, nofDivisions, offset);
+ 
+  G4VPhysicalVolume* pv2 = 0;
+  if (G4LogicalVolume* reflMotherLV = GetReflectedLV(motherLV))
+  {
+    // if mother was reflected
+    // reflect the LV and replicate it in reflected mother
+    
+    pv2 = divisionFactory->CreatePVDivision(name, ReflectLV(LV), reflMotherLV, 
+                                            axis, nofDivisions, offset); 
+  }
+    
+  return G4PhysicalVolumesPair(pv1, pv2);            
+}         
+        
+             
+//_____________________________________________________________________________
+
+G4PhysicalVolumesPair
+G4ReflectionFactory::Divide(const G4String& name, 
+                                  G4LogicalVolume* LV,
+                                  G4LogicalVolume* motherLV,
+                                  EAxis axis, 
+                                  G4double width,
+                                  G4double offset)
+{
+  // Creates division in the given mother.
+  // The result is a pair of physical volumes;
+  // the second physical volume is a division in a reflected mother
+  // or 0 if mother LV was not reflected.
+  // ---
+
+  if (fVerboseLevel>0)
+  {
+    G4cout << "Divide " << name << " lv " << LV << " " 
+           << LV->GetName() << G4endl;
+  }  
+
+  G4VPVDivisionFactory* divisionFactory = GetPVDivisionFactory();
+
+  G4VPhysicalVolume* pv1 = divisionFactory
+    -> CreatePVDivision(name, LV, motherLV, axis, width, offset);
+ 
+  G4VPhysicalVolume* pv2 = 0;
+  if (G4LogicalVolume* reflMotherLV = GetReflectedLV(motherLV))
+  {
+    // if mother was reflected
+    // reflect the LV and replicate it in reflected mother
+    
+    pv2 = divisionFactory->CreatePVDivision(name, ReflectLV(LV), reflMotherLV, 
+                                            axis, width, offset); 
   }
     
   return G4PhysicalVolumesPair(pv1, pv2);            
@@ -268,11 +393,11 @@ G4LogicalVolume* G4ReflectionFactory::CreateReflectedLV(G4LogicalVolume* LV)
   //
   if (fReflectedLVMap.find(LV) != fReflectedLVMap.end())
   {
-    G4cerr << "ERROR - G4ReflectionFactory::CreateReflectedLV(): "
+    G4cerr << "ERROR - G4ReflectionFactory::CreateReflectedLV(..): "
            << LV->GetName() << G4endl
            << "        Cannot be applied to an already reflected volume !"
            << G4endl;
-    G4Exception("G4ReflectionFactory::CreateReflectedLV()",
+    G4Exception("G4ReflectionFactory::CreateReflectedLV(..)",
                 "NotApplicable", FatalException,
                 "Cannot be applied to a volume already reflected.");
   }        
@@ -321,6 +446,11 @@ void G4ReflectionFactory::ReflectDaughters(G4LogicalVolume* LV,
     {
       ReflectPVReplica(dPV, refLV); 
     }  
+    else if (G4VPVDivisionFactory::Instance() &&
+             G4VPVDivisionFactory::Instance()->IsPVDivision(dPV))
+    {
+      ReflectPVDivision(dPV, refLV); 
+    }  
     else
     {
       ReflectPVParameterised(dPV, refLV); 
@@ -355,8 +485,7 @@ void G4ReflectionFactory::ReflectPVPlacement(G4VPhysicalVolume* dPV,
     if (fVerboseLevel>0) 
       G4cout << " will be reflected." << G4endl;
 
-    // get reflected volume if already created
-    //
+    // get reflected volume if already created    //
     refDLV = GetReflectedLV(dLV); 
 
     if (!refDLV)
@@ -433,7 +562,7 @@ void G4ReflectionFactory::ReflectPVReplica(G4VPhysicalVolume* dPV,
       // recursive call
       //
       ReflectDaughters(dLV, refDLV); 
-   }     
+    }     
         
     // create new daughter replica
     //
@@ -454,6 +583,63 @@ void G4ReflectionFactory::ReflectPVReplica(G4VPhysicalVolume* dPV,
 
 //_____________________________________________________________________________
 
+void G4ReflectionFactory::ReflectPVDivision(G4VPhysicalVolume* dPV, 
+                                            G4LogicalVolume* refLV)
+{
+  // Copies and transforms daughter of PVDivision type of
+  // a constituent volume into a reflected volume. 
+  // ---
+
+  G4VPVDivisionFactory* divisionFactory = GetPVDivisionFactory();
+
+  G4LogicalVolume* dLV = dPV->GetLogicalVolume();
+
+  // get parameterisation data
+  //
+  G4VPVParameterisation* param = dPV->GetParameterisation();
+
+  G4LogicalVolume* refDLV;
+  
+  if (fVerboseLevel>0) 
+    G4cout << "Daughter: " << dPV << "  " << dLV->GetName();
+  
+  if (!IsReflected(dLV))
+  {
+    if (fVerboseLevel>0) 
+      G4cout << " will be reflected." << G4endl;
+
+    // get reflected volume if already created
+    //
+    refDLV = GetReflectedLV(dLV); 
+
+    if (!refDLV)
+    {
+      // create new daughter solid and logical volume
+      //
+      refDLV = CreateReflectedLV(dLV); 
+  
+      // recursive call
+      //
+      ReflectDaughters(dLV, refDLV); 
+    }     
+        
+    // create new daughter replica
+    //
+    divisionFactory->CreatePVDivision(dPV->GetName(), refDLV, refLV, param);
+  }
+  else
+  {
+    if (fVerboseLevel>0) 
+      G4cout << " will be reconstitued." << G4endl;
+
+    refDLV = GetConstituentLV(dLV); 
+
+    divisionFactory->CreatePVDivision(dPV->GetName(), refDLV, refLV, param); 
+  }       
+}
+
+//_____________________________________________________________________________
+
 void G4ReflectionFactory::ReflectPVParameterised(G4VPhysicalVolume* dPV, 
                                                  G4LogicalVolume*)
 {
@@ -462,11 +648,11 @@ void G4ReflectionFactory::ReflectPVParameterised(G4VPhysicalVolume* dPV,
   // a constituent volume into a reflected volume. 
   // ---
 
-  G4cerr << "ERROR - G4ReflectionFactory::ReflectPVParameterised(): "
+  G4cerr << "ERROR - G4ReflectionFactory::ReflectPVParameterised(...): "
          << dPV->GetName() << G4endl
          << "        Reflection of parameterised volumes "
          << "is not yet implemented." << G4endl;
-  G4Exception("G4ReflectionFactory::ReflectPVParameterised()",
+  G4Exception("G4ReflectionFactory::ReflectPVParameterised(...)",
               "NotImplemented", FatalException,
               "Sorry, not yet implemented.");
 }
@@ -578,13 +764,40 @@ void G4ReflectionFactory::CheckScale(const G4Scale3D& scale) const
 
   if (diff > fScalePrecision)
   {
-    G4cerr << "ERROR - G4ReflectionFactory::CheckScale()" << G4endl
+    G4cerr << "ERROR - G4ReflectionFactory::CheckScale(..)" << G4endl
            << "        Unexpected scale. Difference: " << diff << G4endl;
-    G4Exception("G4ReflectionFactory::CheckScale()",
+    G4Exception("G4ReflectionFactory::CheckScale(..)",
                 "WrongArgumentValue", FatalException,
                 "Unexpected scale in input !");
   }
 }    
+
+//_____________________________________________________________________________
+
+G4VPVDivisionFactory* G4ReflectionFactory::GetPVDivisionFactory() const
+{
+  // Returns the G4PVDivisionFactory instance if it exists,
+  // otherwise gives exception 
+  // ---
+
+  G4VPVDivisionFactory* divisionFactory = G4VPVDivisionFactory::Instance();
+  if (!divisionFactory)
+  {
+     G4cerr << "ERROR - G4ReflectionFactory::GetPVDivisionFactory()" << G4endl
+            << "        It has been requested to reflect divided volumes."
+            << G4endl
+            << "        In this case, it is required to instantiate a concrete"
+            << G4endl
+            << "        factory G4PVDivisionFactory in your program -before-"
+            << G4endl
+            << "        executing the reflection !" << G4endl;
+     G4Exception("G4ReflectionFactory::GetPVDivisionFactory()",
+                 "WrongSetup", FatalException,
+                 "A concrete G4PVDivisionFactory instantiated is required !");
+  }
+  
+  return divisionFactory;
+}  
 
 //_____________________________________________________________________________
 

@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.hh,v 1.6 2003-11-03 17:48:45 gcosmo Exp $
+// $Id: G4ReflectionFactory.hh,v 1.1 2004-05-13 14:50:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// class G4Reflection
+// class G4ReflectionFactory
 //
 // Class description:
 //
@@ -72,6 +72,7 @@
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4VSolid;
+class G4VPVDivisionFactory;
 
 typedef std::pair<G4VPhysicalVolume*,
                   G4VPhysicalVolume*> G4PhysicalVolumesPair;  
@@ -115,6 +116,30 @@ class G4ReflectionFactory
       // Creates replica in the given mother.
       // The result is a pair of physical volumes;
       // the second physical volume is a replica in a reflected mother
+      // or 0 if mother LV was not reflected.
+
+    G4PhysicalVolumesPair Divide(const G4String& name, 
+                                       G4LogicalVolume* LV,
+                                       G4LogicalVolume* motherLV,
+                                       EAxis axis, 
+                                       G4int nofDivisions, 
+                                       G4double width,
+                                       G4double offset);
+    G4PhysicalVolumesPair Divide(const G4String& name, 
+                                       G4LogicalVolume* LV,
+                                       G4LogicalVolume* motherLV,
+                                       EAxis axis, 
+                                       G4int nofDivisions, 
+                                       G4double offset);
+    G4PhysicalVolumesPair Divide(const G4String& name, 
+                                       G4LogicalVolume* LV,
+                                       G4LogicalVolume* motherLV,
+                                       EAxis axis, 
+                                       G4double width,
+                                       G4double offset);
+      // Creates division in the given mother.
+      // The result is a pair of physical volumes;
+      // the second physical volume is a division in a reflected mother
       // or 0 if mother LV was not reflected.
 
     void  SetVerboseLevel(G4int verboseLevel);
@@ -181,6 +206,10 @@ class G4ReflectionFactory
       // Copies and transforms daughter of PVReplica type of
       // a constituent volume into a reflected volume. 
 
+    void ReflectPVDivision(G4VPhysicalVolume* PV, G4LogicalVolume* refLV);
+      // Copies and transforms daughter of PVDivision type of
+      // a constituent volume into a reflected volume. 
+
     void ReflectPVParameterised(G4VPhysicalVolume* PV, G4LogicalVolume* refLV);
       // Not implemented yet.
       // Should copy and transform daughter of PVReplica type of
@@ -191,6 +220,10 @@ class G4ReflectionFactory
 
     void CheckScale(const G4Scale3D& scale) const;
       // Checks if scale correspond to fScale, if not gives exception.
+
+    G4VPVDivisionFactory* GetPVDivisionFactory() const;
+      // Checks if the division factory is instanciated,
+      // if not gives exception.
 
     void PrintConstituentLVMap();  
       // Temporary - for debugging purpose.
