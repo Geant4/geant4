@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.13 2004-05-04 16:42:13 asaim Exp $
+// $Id: G4EventManager.hh,v 1.14 2004-05-26 17:08:33 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -126,6 +126,7 @@ class G4EventManager
       G4SDManager* sdManager;
       G4PrimaryTransformer* transformer;
       G4bool tracking;
+      G4bool abortRequested;
 
       G4EvManMessenger* theMessenger;
 
@@ -146,6 +147,7 @@ class G4EventManager
   public: // with description
       inline void AbortCurrentEvent()
       { 
+        abortRequested = true;
         trackContainer->clear();
         if(tracking) trackManager->EventAborted();
       }
