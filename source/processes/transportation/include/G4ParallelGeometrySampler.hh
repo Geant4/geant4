@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelGeometrySampler.hh,v 1.3 2002-10-22 13:25:56 dressel Exp $
+// $Id: G4ParallelGeometrySampler.hh,v 1.4 2003-06-13 09:55:16 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
