@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4RunAction.cc,v 1.2 2001-07-11 09:58:10 gunter Exp $
+// $Id: G3toG4RunAction.cc,v 1.3 2003-07-04 15:55:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,5 +50,5 @@ void G3toG4RunAction::BeginOfRunAction(const G4Run* aRun){
   } 
 }
 
-void G3toG4RunAction::EndOfRunAction(const G4Run* aRun){;}
+void G3toG4RunAction::EndOfRunAction(const G4Run*){;}
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: clGeometry.cc,v 1.3 2003-06-16 16:49:10 gunter Exp $
+// $Id: clGeometry.cc,v 1.4 2003-07-04 15:55:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@
 #include "G3toG4VisManager.hh"
 #endif
 
-G4int main(int argc, char** argv)
+int main(int argc, char** argv)
 {
   G4String inFile;
   G4String macroFile = "";
