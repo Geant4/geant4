@@ -1,0 +1,18 @@
+### Set the verbosity off/on
+# get lots of info about the tracking of each particle through detector
+# (one line for each step of each track, including secondaries...)
+/process/verbose  0
+/tracking/verbose 0
+/run/verbose      2
+/event/verbose    0
+
+### Initialise the detector and the physics
+/run/initialize
+
+### Select the incident particle and its energy
+/gun/particle pi-
+/gun/energy 10 GeV
+
+### Simulate ten events
+/run/beamOn 10
+

@@ -13,8 +13,6 @@
 
 #include "CMSPrimaryGeneratorAction.hh"
 #include "HcalTestBeam99PhysicsList.hh"
-#include "LHEP/include/PhysicsList.hh"
-#include "ExN04PhysicsList.hh"
 
 #include "G4RunManager.hh"
 #include "G4UIterminal.hh"
@@ -32,9 +30,7 @@ int main(int argc,char** argv) {
 
   G4RunManager * runManager = new G4RunManager;
   runManager->SetUserInitialization(new HcalTestBeam96DetectorConstruction);
-  //  runManager->SetUserInitialization(new HcalTestBeam99PhysicsList);     
-  //  runManager->SetUserInitialization(new PhysicsList );
-  runManager->SetUserInitialization(new ExN04PhysicsList );
+  runManager->SetUserInitialization(new HcalTestBeam99PhysicsList);     
 
   ////////////////////////////
   //  User action classes.  //
