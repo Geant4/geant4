@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.16 2004-11-22 11:17:52 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.17 2004-11-22 15:00:47 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -264,7 +264,7 @@ LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc (
           This->SceneGraphStatistics();
         // Help :
         } else if(aWParam==ID_HELP_CONTROLS) {
-          This->Help();
+          G4cout << This->Help() << G4endl;
         }
       }
     }

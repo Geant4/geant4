@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.15 2004-11-22 11:09:59 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.16 2004-11-22 15:00:48 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -54,6 +54,7 @@
 #include <Xm/Form.h>
 #include <Xm/CascadeB.h>
 #include <Xm/RowColumn.h>
+#include <Xm/Text.h>
 
 #include "HEPVis/actions/SoGL2PSAction.h"
 
@@ -67,6 +68,8 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer(
 :G4OpenInventorViewer (sceneHandler, name)
 ,fShell(0)
 ,fViewer(0)
+,fHelpForm(0)
+,fHelpText(0)
 {
   G4cout << "Window name: " << fName << G4endl;
 
@@ -128,6 +131,21 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer(
     XtSetArg(args[3],XmNrightAttachment ,XmATTACH_FORM);
     XtSetArg(args[4],XmNbottomAttachment,XmATTACH_FORM);
     XtSetValues(fViewer->getWidget(),args,5);
+
+    fHelpForm = XmCreateFormDialog(fShell,"help",NULL,0);
+    XtSetArg(args[0],XmNleftAttachment  ,XmATTACH_FORM);
+    XtSetArg(args[1],XmNrightAttachment ,XmATTACH_FORM);
+    XtSetArg(args[2],XmNbottomAttachment,XmATTACH_FORM);
+    Widget cancel = XmCreatePushButton(fHelpForm,"helpCancel",args,3);
+    XtAddCallback(cancel,XmNactivateCallback,HelpCancelCbk,(XtPointer)this);
+    XtManageChild(cancel);
+    XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_FORM);
+    XtSetArg(args[1],XmNleftAttachment  ,XmATTACH_FORM);
+    XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
+    XtSetArg(args[3],XmNbottomAttachment,XmATTACH_WIDGET);
+    XtSetArg(args[4],XmNbottomWidget    ,cancel);
+    fHelpText = XmCreateScrolledText(fHelpForm,"helpText",args,5);
+    XtManageChild(fHelpText);
 
     fInteractorManager->AddShell(fShell);
 
@@ -209,6 +227,17 @@ void G4OpenInventorXtViewer::AddButton (
   XtAddCallback(widget,XmNactivateCallback,aCallback,(XtPointer)this);
 }
 
+void G4OpenInventorXtViewer::HelpCancelCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  XtUnmanageChild(This->fHelpForm);
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
 void G4OpenInventorXtViewer::EscapeCbk(
   Widget,XtPointer aData,XtPointer) {
   G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
@@ -272,7 +301,8 @@ void G4OpenInventorXtViewer::UpdateSceneCbk(
 void G4OpenInventorXtViewer::HelpCbk(
   Widget,XtPointer aData,XtPointer) {
   G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
-  This->Help();
+  XtManageChild(This->fHelpForm);
+  XmTextSetString(This->fHelpText,(char*)This->Help().c_str());
 }
 
 

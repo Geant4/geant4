@@ -449,6 +449,8 @@ Controls on an Inventor examiner viewer are :\n\
   Ctrl+Shift+Left-button + pointer move : scale.\n\
   Middle-button + pointer move : pane.\n\
   Right-button : popup menu.\n");
+  } else {
+    return "";
   }
 }
 
