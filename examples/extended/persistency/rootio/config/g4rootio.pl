@@ -1420,6 +1420,11 @@ sub fads_create_header_file {
   }
 
   print(OUT "    public:\n");
+  if ( $template ne "" ) {
+    print(OUT "      ${class_root}() {};\n");
+  } else {
+    print(OUT "      ${class_root}();\n");
+  }
   if ( $constructors[0] ne "" ) {
     $i = 0;
     foreach $constructor (@constructors) {
@@ -1438,12 +1443,6 @@ sub fads_create_header_file {
         }
       }
       $i++;
-    }
-  } else {
-    if ( $template ne "" ) {
-      print(OUT "      ${class_root}() {};\n");
-    } else {
-      print(OUT "      ${class_root}();\n");
     }
   }
 ##  &fads_create_description($constructor_desc[$i], "Constructor");
@@ -1645,6 +1644,8 @@ sub fads_create_source_file {
     $nspace = "";
   }
 
+  &fads_create_constructor(-1);
+
   if ( $constructors[0] ne "" ) {
     $i=0;
     foreach $constructor (@constructors) {
@@ -1652,8 +1653,6 @@ sub fads_create_source_file {
         &fads_create_constructor($i++);
       }
     }
-  } else {
-    &fads_create_constructor(-1);
   }
 
   if ( $destructors[0] ne "" ) {
