@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGAG.cc,v 1.14 2002-04-26 21:28:25 asaim Exp $
+// $Id: G4UIGAG.cc,v 1.15 2002-12-05 16:33:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UIGAG.cc
@@ -814,7 +814,7 @@ void G4UIGAG::NotifyParameterUpdate(G4UIcommand* com)
 //####### update check routines ####################################
 void G4UIGAG::UpdateState(void)
 {
-   static G4ApplicationState previousState= PreInit;
+   static G4ApplicationState previousState= G4State_PreInit;
    G4ApplicationState  newState;
    G4StateManager *statM = G4StateManager::GetStateManager();
    newState = statM->GetCurrentState();

@@ -22,7 +22,7 @@
 //
 //
 // 12/06/2002 G4UIGainServer H. MInamimoto and H. Yoshida created
-// $Id: G4UIGainServer.cc,v 1.4 2002-11-08 09:52:32 yhajime Exp $
+// $Id: G4UIGainServer.cc,v 1.5 2002-12-05 16:33:42 asaim Exp $
 // $Name: not supported by cvs2svn $
 //
 #ifndef WIN32
@@ -779,7 +779,7 @@ void G4UIGainServer::SendDisableList(G4UIcommandTree* tree,int level){
 ///////////////////////////////
 void G4UIGainServer::UpdateState(void){
 ///////////////////////////////
-   static G4ApplicationState previousState= PreInit;
+   static G4ApplicationState previousState= G4State_PreInit;
    G4ApplicationState  newState;
    G4StateManager *statM = G4StateManager::GetStateManager();
    newState = statM->GetCurrentState();
