@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2001-11-06 11:32:34 johna Exp $
+$Id: History,v 1.6 2001-11-06 11:49:51 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,16 @@ committal in the CVS repository !
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
 
+6th November 2001  John Allison  (HepRep-pure-C++-1st-version)
+- Removed HepRep files G4HepRep.hh, G4HepRepSceneHandler.hh,
+  G4HepRepViewer.hh, G4HepRep.cc, G4HepRepSceneHandler.cc and
+  G4HepRepViewer.cc (recoverable with tag HepRep-Java-version).
+- Added HepRepFile from version of 27th September 2001  Joseph Perl.
+  First pure C++ version (eliminates need for Java jni or freehep).
+  Named as HepRepFile rather than HepRep.
+- GNUmakefile: removed CPPFLAGS += -DHEPREP and CPPFLAGS += -DDEBUG.
+- README: completely re-written for HepRepFile.
+
 6th November 2001  John Allison  (HepRep-Java-version)
 - Tagged before major revision.
 
@@ -31,4 +41,3 @@ History file for visualization/HepRep sub-category
 
 24th August 2001  Joseph Perl  (vis-V03-02-13-00)
 - First version of HepRep Graphics Driver
-
