@@ -19,7 +19,7 @@ clGeometry.in is a macro to be executed either interactively or in batch.
 
 For example:
 > cd $G4INSTALL/examples/extended/g3tog4
-> clGeometry data/testmodel.dat < clGeometry.in
+> clGeometry data/testmodel.dat clGeometry.in
 
 cltog4
 ------
