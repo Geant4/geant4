@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.33 2001-05-25 17:26:16 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.34 2001-05-28 18:37:55 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,7 +99,7 @@ G4LowEnergyBremsstrahlung::~G4LowEnergyBremsstrahlung()
 
 //    
 // SET CUT FOR LOW ENERGY SECONDARY PHOTONS A. FORTI
-void G4LowEnergyBremsstrahlung::SetcutForLowEnSecPhotons(G4double cut){
+void G4LowEnergyBremsstrahlung::SetCutForLowEnSecPhotons(G4double cut){
 
   cutForLowEnergySecondaryPhotons = cut;
 }

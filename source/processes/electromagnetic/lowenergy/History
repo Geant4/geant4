@@ -1,4 +1,4 @@
-$Id: History,v 1.72 2001-05-25 17:34:40 pia Exp $
+$Id: History,v 1.73 2001-05-28 18:37:54 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28.05.2001 - MGP, tag emlowen-V03-01-16
+             Corrected typo involuntarily introduced into a public m.f.
+ 
 25.05.2001 - MGP, tag emlowen-V03-01-15
              Added protections in G4LowEnergyPolarizedCompton (MGP)
              Improved comments in hadron/ion classes (V.I.)

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.15 2001-05-25 17:08:29 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.16 2001-05-28 18:37:55 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@ public:
   
   G4bool IsApplicable(const G4ParticleDefinition&);
 
-  void SetcutForLowEnSecPhotons(G4double);
+  void SetCutForLowEnSecPhotons(G4double);
   
   void PrintInfoDefinition();
   
