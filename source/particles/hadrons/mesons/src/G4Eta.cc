@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Eta.cc,v 1.3 1999-12-15 14:51:06 gunter Exp $
+// $Id: G4Eta.cc,v 1.4 2000-02-27 05:57:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@ G4Eta::G4Eta(
              iConjugation,iIsospin,iIsospin3,gParity,pType,
              lepton,baryon,encoding,stable,lifetime,decaytable )
 {
+   SetParticleSubType("eta");
   // Anti-particle of Eta is Eta itself  
   SetAntiPDGEncoding(encoding);
 
