@@ -1,0 +1,36 @@
+#
+# Macro file for the initialization phase of "field01.cc"
+#
+# It creates the default geometry (simple absorber cylinder )        
+#
+/control/verbose 2
+#control/saveHistory
+/run/verbose 2
+#
+#
+#
+/field/setStepperType 4
+/field/setMinStep 10 mm
+#
+/field/update
+#
+/run/initialize
+#
+#  PLOT: lateral displacement for transmitted particles at exit
+#
+/plots/setnbinR 50
+/plots/setRlow 1000 mm
+/plots/setRhigh 1020 mm
+#
+/run/initialize
+/run/particle/dumpCutValues
+#
+/gun/particle e-
+/gun/energy 500.0 MeV
+#
+/event/printModulo 50
+/run/beamOn 100
+#
+#
+
+
