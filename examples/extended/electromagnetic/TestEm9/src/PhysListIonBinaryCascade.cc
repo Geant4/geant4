@@ -20,67 +20,93 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListBinaryCascade.cc,v 1.3 2003-11-19 20:23:12 vnivanch Exp $
+// $Id: PhysListIonBinaryCascade.cc,v 1.1 2003-11-19 20:23:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
-#include "PhysListBinaryCascade.hh"
+#include "PhysListIonBinaryCascade.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4LFission.hh"
 #include "G4LCapture.hh"
-#include "G4Proton.hh"
-#include "G4Neutron.hh"
+#include "G4Deuteron.hh"
+#include "G4Triton.hh"
+#include "G4He3.hh"
+#include "G4Alpha.hh"
+#include "IonC12.hh"
+#include "G4GenericIon.hh"
 
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
-
-#include "G4BinaryCascade.hh"
+#include "G4HadronInelasticProcess.hh"
+#include "G4BinaryLightIonReaction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListBinaryCascade::PhysListBinaryCascade(const G4String& name)
+PhysListIonBinaryCascade::PhysListIonBinaryCascade(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListBinaryCascade::~PhysListBinaryCascade()
+PhysListIonBinaryCascade::~PhysListIonBinaryCascade()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysListBinaryCascade::ConstructProcess()
+void PhysListIonBinaryCascade::ConstructProcess()
 {
 
   // Binary Cascade
   G4ParticleDefinition* particle = 0;
   G4ProcessManager* pmanager = 0;
+  G4BinaryLightIonReaction* theBC = 0;
 
-  G4BinaryCascade* theBC = 0;
-
-  // proton
-  particle = G4Proton::Proton();
+  // deuteron
+  particle = G4Deuteron::Deuteron();
   pmanager = particle->GetProcessManager();
-  theBC = new G4BinaryCascade();
-  theIPproton.RegisterMe(theBC);
-  pmanager->AddDiscreteProcess(&theIPproton);
+  theBC = new G4BinaryLightIonReaction();
+  theIPdeuteron.RegisterMe(theBC);
+  pmanager->AddDiscreteProcess(&theIPdeuteron);
 
-  // neutron
-  particle = G4Neutron::Neutron();
+  // triton
+  particle = G4Triton::Triton();
   pmanager = particle->GetProcessManager();
-  theBC = new G4BinaryCascade();
-  theIPneutron.RegisterMe(theBC);
-  pmanager->AddDiscreteProcess(&theIPneutron);
-  // fission
-  G4HadronFissionProcess* theFissionProcess = new G4HadronFissionProcess;
-  G4LFission* theFissionModel = new G4LFission;
-  theFissionProcess->RegisterMe(theFissionModel);
-  pmanager->AddDiscreteProcess(theFissionProcess);
-  // capture
-  G4HadronCaptureProcess* theCaptureProcess = new G4HadronCaptureProcess;
-  G4LCapture* theCaptureModel = new G4LCapture;
-  theCaptureProcess->RegisterMe(theCaptureModel);
-  pmanager->AddDiscreteProcess(theCaptureProcess);
+  theBC = new G4BinaryLightIonReaction();
+  theIPtriton.RegisterMe(theBC);
+  pmanager->AddDiscreteProcess(&theIPtriton);
+
+  // alpha
+  particle = G4Alpha::Alpha();
+  pmanager = particle->GetProcessManager();
+  theBC = new G4BinaryLightIonReaction();
+  theIPalpha.RegisterMe(theBC);
+  pmanager->AddDiscreteProcess(&theIPalpha);
+
+  // He3
+  particle = G4He3::He3();
+  pmanager = particle->GetProcessManager();
+  G4HadronInelasticProcess* theIPHe3 =
+      new G4HadronInelasticProcess("He3Inelastic",particle);
+  theBC = new G4BinaryLightIonReaction();
+  theIPHe3->RegisterMe(theBC);
+  pmanager->AddDiscreteProcess(theIPHe3);
+
+  // C12
+  particle = IonC12::Ion();
+  pmanager = particle->GetProcessManager();
+  G4HadronInelasticProcess* theIPIonC12 =
+      new G4HadronInelasticProcess("IonC12Inelastic",particle);
+  theBC = new G4BinaryLightIonReaction();
+  theIPIonC12->RegisterMe(theBC);
+  pmanager->AddDiscreteProcess(theIPIonC12);
+
+  // GenericIon
+  particle = G4GenericIon::GenericIon();
+  pmanager = particle->GetProcessManager();
+  G4HadronInelasticProcess* theIPGenericIon =
+      new G4HadronInelasticProcess("IonInelastic",particle);
+  theBC = new G4BinaryLightIonReaction();
+  theIPGenericIon->RegisterMe(theBC);
+  pmanager->AddDiscreteProcess(theIPGenericIon);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

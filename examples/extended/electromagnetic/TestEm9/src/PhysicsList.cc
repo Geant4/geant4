@@ -34,6 +34,7 @@
 #include "PhysListEmG4v52.hh"
 #include "PhysListHadronElastic.hh"
 #include "PhysListBinaryCascade.hh"
+#include "PhysListIonBinaryCascade.hh"
 #include "G4RegionStore.hh"
 #include "G4Region.hh"
 #include "G4ProductionCuts.hh"
@@ -143,6 +144,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "binary") {
 
     hadronPhys.push_back( new PhysListBinaryCascade(name));
+
+  } else if (name == "binary_ion") {
+
+    hadronPhys.push_back( new PhysListIonBinaryCascade(name));
 
   } else {
 

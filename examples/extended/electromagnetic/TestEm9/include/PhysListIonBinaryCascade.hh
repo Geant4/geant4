@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListBinaryCascade.hh,v 1.4 2003-11-19 20:23:12 vnivanch Exp $
+// $Id: PhysListIonBinaryCascade.hh,v 1.1 2003-11-19 20:23:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -32,25 +32,28 @@
 //
 // ------------------------------------------------------------
 //	History
-//        Created:       14.10.02  V.Ivanchenko
+//        Created:       18.11.03  V.Ivanchenko
 //
 //        Modified:
 //
 // ------------------------------------------------------------
 //
-#ifndef PhysListBinaryCascade_h
-#define PhysListBinaryCascade_h 1
+#ifndef PhysListIonBinaryCascade_h
+#define PhysListIonBinaryCascade_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include "G4ProtonInelasticProcess.hh"
-#include "G4NeutronInelasticProcess.hh"
+#include "G4DeuteronInelasticProcess.hh"
+#include "G4TritonInelasticProcess.hh"
+#include "G4AlphaInelasticProcess.hh"
 
-class PhysListBinaryCascade : public G4VPhysicsConstructor
+class G4HadronInelasticProcess;
+
+class PhysListIonBinaryCascade : public G4VPhysicsConstructor
 {
   public:
-    PhysListBinaryCascade(const G4String& name = "binary");
-    virtual ~PhysListBinaryCascade();
+    PhysListIonBinaryCascade(const G4String& name = "binary_ion");
+    virtual ~PhysListIonBinaryCascade();
 
   public:
     // This method will be invoked in the Construct() method.
@@ -64,8 +67,12 @@ class PhysListBinaryCascade : public G4VPhysicsConstructor
 
   private:
 
-    G4ProtonInelasticProcess      theIPproton;
-    G4NeutronInelasticProcess     theIPneutron;
+    G4DeuteronInelasticProcess      theIPdeuteron;
+    G4TritonInelasticProcess        theIPtriton;
+    G4AlphaInelasticProcess         theIPalpha;
+    G4HadronInelasticProcess*       theIPHe3;
+    G4HadronInelasticProcess*       theIPIonC12;
+    G4HadronInelasticProcess*       theIPGenericIon;
 
 };
 
