@@ -27,7 +27,6 @@ persistency                 Youhei.Morita@cern.ch           Youhei Morita
 processes                   Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/electromagnetic           Michel.Maire@lapp.in2p3.fr      Michel Maire
 "/"/lowenergy               MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
-                            pniemine@estec.esa.nl           Petteri Nieminen
 "/decay                     kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 "/hadronic                  Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/"/cross_sections          fwj@triumf.ca                   Fred Jones
@@ -83,12 +82,17 @@ examples/advanced           asai@slac.stanford.edu	    Makoto Asai
   xray_telescope            rnartall@estec.esa.nl           Ramon Nartallo
 examples/extended/analysis  barrand@lal.in2p3.fr	    Guy Barrand
 examples/extended/biasing   Michael.Dressel@cern.ch         Michael Dressel
-examples/extended/electromagnetic/:
+examples/extended/electromagnetic:
   TestEm1,2,3,4,5           Michel.Maire@lapp.in2p3.fr      Michel Maire
   TestEm6                   Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
   TestEm8,10                Vladimir.Grichine@cern.ch       Vladimir Grichine
+examples/extended/eventgenerator:
+  HepMCEx01,02              Koichi.Murakami@kek.jp          Koichi Murakami
 examples/extended/field     John.Apostolakis@cern.ch        John Apostolakis
 examples/extended/g3tog4    Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+examples/extended/gdml      Radovan.Chytracek@cern.ch       Radovan Chytracek
+examples/extended/geometry  Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+  olap                      Martin.Liendl@cern.ch           Martin Liendl
 examples/extended/persistency  Youhei.Morita@cern.ch        Youhei Morita
 tests                       Serguei.Sadilov@cern.ch         Serguei Sadilov
 tests                       fwj@triumf.ca                   Fred Jones
