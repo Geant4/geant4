@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.icc,v 1.7 1999-12-15 14:51:30 gunter Exp $
+// $Id: G4LowEnergyGammaConversion.icc,v 1.8 2000-01-26 09:43:16 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,18 +14,9 @@
 //
 //      For information related to this code contact:
 //      CERN, CN Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
 //      ------------ G4LowEnergyGammaConversion physics process ---------
-//                   by Michel Maire, 24 May 1996
+//                   by A.Forti 1999/03/02
 // ***************************************************************
-// 11-06-96, in GetMeanFreePath() the partial sum is stored, by M.Maire
-// 16-09-96, dynamical array PartialSumSigma, by M.Maire
-// 13-12-96, Sign corrected in the ScreenFunctions, by L.Urban
-// 14-01-97, crossection table + meanfreepath table.
-//           PartialSumSigma removed, by M.Maire
-// 14-01-97, new physics scheme for geant4alpha, M.Maire
-// ---------------------------------------------------------------
 
 inline G4bool G4LowEnergyGammaConversion::IsApplicable(const G4ParticleDefinition& particle)
 {

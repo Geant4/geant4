@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyUtilities.hh,v 1.3 1999-12-15 18:23:07 gcosmo Exp $
+// $Id: G4LowEnergyUtilities.hh,v 1.4 2000-01-26 09:43:17 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,19 +15,9 @@
 //
 //      For information related to this code contact:
 //      CERN, CN Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
 //      ------------ G4LowEnergyPhotoElectric physics process ------
-//                   by Michel Maire, April 1996
+//                   by A.Forti 1999/06/28
 // ************************************************************
-// 12-06-96, Added SelectRandomAtom() method and new data member
-//           for cumulative total cross section, by M.Maire
-// 21-06-96, SetCuts implementation, M.Maire
-// 17-09-96, Dynamic array PartialSumSigma
-//           split ComputeBindingEnergy(), M.Maire
-// 08-01-97, crossection table + meanfreepath table, M.Maire
-// 13-03-97, adapted for the new physics scheme, M.Maire
-// ------------------------------------------------------------
 
 #ifndef G4LowEnergyUtilities_h
 #define G4LowEnergyUtilities_h 1
