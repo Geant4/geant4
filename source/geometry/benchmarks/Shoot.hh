@@ -5,16 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Shoot.hh,v 1.2 1999-12-15 14:49:45 gunter Exp $
+// $Id: Shoot.hh,v 1.3 2000-02-29 09:45:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef SHOOT_HH
 #define SHOOT_HH
 
+#include "G4Timer.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Navigator.hh"
 #include "G4ThreeVector.hh"
-#include "G4Timer.hh"
 #include "G4ios.hh"
 
 void Shoot(const G4int numShoot,
@@ -59,13 +59,12 @@ void ShootVerbose(G4VPhysicalVolume *pTopNode,
     G4double safety,Step;
     G4Navigator myNav;
     G4ThreeVector partLoc;
-    G4VPhysicalVolume *located;
+    G4VPhysicalVolume *located=0;
 
     myNav.SetWorldVolume(pTopNode);
 
     partLoc=pSource;
-    //    located=myNav.LocateGlobalPointAndSetup(partLoc,false);
-    located=myNav.LocateGlobalPointAndSetup(partLoc,true);
+    located=myNav.LocateGlobalPointAndSetup(partLoc);
     while (located)
 	{
 	    Step=myNav.ComputeStep(partLoc,pVec,physStep,safety);
