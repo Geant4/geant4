@@ -44,7 +44,7 @@ Sc01DetectorMessenger::Sc01DetectorMessenger(Sc01DetectorConstruction * myDC)
   selDetCmd->SetParameterName("choice",true);
   selDetCmd->SetDefaultValue("Sphere");
 
- selDetCmd->SetCandidates("Sphere Orb Box Cone manyCons Tube Hype Torus Para Trd b1Ib2 b1Ub2 b1Sb2 b1Ub1 b1Ib1 b1Sb1 TwistedBox TwistedTrap TwistedTrap2");
+ selDetCmd->SetCandidates("Sphere Orb Box Cone manyCons Tube Hype Torus Para Trd b1Ib2 b1Ub2 b1Sb2 b1Ub1 b1Ib1 b1Sb1 TwistedBox TwistedTrd TwistedTrap TwistedTrap2");
   selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
     myDetector->SelectDetector(defParam="Sphere");

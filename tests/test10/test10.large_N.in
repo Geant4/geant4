@@ -55,3 +55,7 @@
 # TwistedTrap
 /mydet/SelectDetector TwistedTrap
 /run/beamOn 100
+#
+# TwistedGenTrap
+/mydet/SelectDetector TwistedGenTrap
+/run/beamOn 100

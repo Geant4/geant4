@@ -25,6 +25,8 @@
 #
 #/mydet/SelectDetector TwistedBox
 #
+#/mydet/SelectDetector TwistedTrd
+#
 #/mydet/SelectDetector TwistedTrap
 #
 /mydet/SelectDetector TwistedTrap2

@@ -52,7 +52,15 @@
 /mydet/SelectDetector TwistedBox
 /run/beamOn 10
 #
+# TwistedTrd
+/mydet/SelectDetector TwistedTrd
+/run/beamOn 10
+#
 # TwistedTrap
 /mydet/SelectDetector TwistedTrap
+/run/beamOn 10
+#
+# TwistedTrap2
+/mydet/SelectDetector TwistedTrap2
 /run/beamOn 10
 

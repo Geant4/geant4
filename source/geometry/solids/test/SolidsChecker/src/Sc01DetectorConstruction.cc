@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Sc01DetectorConstruction.cc,v 1.7 2005-03-18 15:42:43 link Exp $
+// $Id: Sc01DetectorConstruction.cc,v 1.8 2005-03-18 15:53:29 link Exp $
 // 
 //  GEANT 4 class header file 
 //
@@ -51,6 +51,7 @@
 #include "G4Polycone.hh"
 
 #include "G4TwistedBox.hh"
+#include "G4TwistedTrd.hh"
 #include "G4TwistedTrap.hh"
 
 #include "G4BooleanSolid.hh"
@@ -207,6 +208,10 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
   else if (val == "TwistedBox")
   {
     aVolume = new G4TwistedBox("aTwistedBox",40*deg,5*cm,8*cm,15*cm) ;
+  }
+  else if (val == "TwistedTrd")
+  {
+    aVolume = new G4TwistedTrd("aTwistedTrd",5*cm,10*cm,8*cm,15*cm,18*cm,20*deg);
   }
   else if (val == "TwistedTrap")
   {
