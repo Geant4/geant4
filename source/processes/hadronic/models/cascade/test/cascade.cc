@@ -203,7 +203,7 @@ G4int printData(G4int i) {
 
   if(!nucleiFragments.empty()) { 
     nucleiIterator ifrag;
-    G4std::vector<G4double> mom(4);
+    G4std::vector<G4double> mom(3);
 
     for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) {
       mom = ifrag->getMomentum();
