@@ -242,37 +242,41 @@ int main(int argc, char** argv)
  
     // -------------------------------------------------------------------
     // ---- HBOOK initialization
-
-    hbookManager = new HBookFile(hFile, 58);
-    assert (hbookManager != 0);
-  
-    // ---- Book a histogram and ntuples
-    G4cout << "Hbook file name: <" 
-           << ((HBookFile*) hbookManager)->filename() << ">" << G4endl;
-    G4double mass = part->GetPDGMass();
+    HepHistogram* h[21];
+		G4double mass = part->GetPDGMass();
     G4double pmax = sqrt(energy*(energy + 2.0*mass));
+		
+    if(usepaw) {
+		  hbookManager = new HBookFile(hFile, 58);
+      assert (hbookManager != 0);
+  
+      // ---- Book a histogram and ntuples
+      G4cout << "Hbook file name: <" 
+             << ((HBookFile*) hbookManager)->filename() << ">" << G4endl;
 
-    HepHistogram* h[22];
-
-    h[0]=hbookManager->histogram("Number of Secondaries",50,-0.5,49.5);
-    h[1]=hbookManager->histogram("Type of Secondaries",10,-0.5,9.5);
-    h[2]=hbookManager->histogram("Phi(degrees) of Secondaries",90,-180.0,180.0);
-    h[3]=hbookManager->histogram("Pz (MeV) for protons",100,-pmax,pmax);
-    h[4]=hbookManager->histogram("Pz (MeV) for pi-",100,-pmax,pmax);
-    h[5]=hbookManager->histogram("Pz (MeV) for pi+",100,-pmax,pmax);
-    h[6]=hbookManager->histogram("Pz (MeV) for neutrons",100,-pmax,pmax);
-    h[7]=hbookManager->histogram("Pt (MeV) for protons",100,0.,pmax);
-    h[8]=hbookManager->histogram("Pt (MeV) for pi-",100,0.,pmax);
-    h[9]=hbookManager->histogram("Pt (MeV) for pi+",100,0.,pmax);
-    h[10]=hbookManager->histogram("Pt (MeV) for neutrons",100,0.,pmax);
-    h[11]=hbookManager->histogram("E (MeV) for protons",100,0.,energy);
-    h[12]=hbookManager->histogram("E (MeV) for pi-",100,0.,energy);
-    h[13]=hbookManager->histogram("E (MeV) for pi+",100,0.,energy);
-    h[14]=hbookManager->histogram("E (MeV) for neutrons",100,0.,energy);
-    h[15]=hbookManager->histogram("delta E (MeV)",20,-1.,1.);
-    h[16]=hbookManager->histogram("delta Pz (GeV)",20,-1.,1.);
-    h[17]=hbookManager->histogram("delta Pt (GeV)",20,-1.,1.);
-		/*
+      h[0]=hbookManager->histogram("Number of Secondaries",50,-0.5,49.5);
+      h[1]=hbookManager->histogram("Type of Secondaries",10,-0.5,9.5);
+      h[2]=hbookManager->histogram("Phi(degrees) of Secondaries",90,-180.0,180.0);
+      h[3]=hbookManager->histogram("Pz (MeV) for protons",100,-pmax,pmax);
+      h[4]=hbookManager->histogram("Pz (MeV) for pi-",100,-pmax,pmax);
+      h[5]=hbookManager->histogram("Pz (MeV) for pi+",100,-pmax,pmax);
+      h[6]=hbookManager->histogram("Pz (MeV) for neutrons",100,-pmax,pmax);
+      h[7]=hbookManager->histogram("Pt (MeV) for protons",100,0.,pmax);
+      h[8]=hbookManager->histogram("Pt (MeV) for pi-",100,0.,pmax);
+      h[9]=hbookManager->histogram("Pt (MeV) for pi+",100,0.,pmax);
+      h[10]=hbookManager->histogram("Pt (MeV) for neutrons",100,0.,pmax);
+      h[11]=hbookManager->histogram("E (MeV) for protons",100,0.,energy);
+      h[12]=hbookManager->histogram("E (MeV) for pi-",100,0.,energy);
+      h[13]=hbookManager->histogram("E (MeV) for pi+",100,0.,energy);
+      h[14]=hbookManager->histogram("E (MeV) for neutrons",100,0.,energy);
+      h[15]=hbookManager->histogram("delta E (MeV)",20,-1.,1.);
+      h[16]=hbookManager->histogram("delta Pz (GeV)",20,-1.,1.);
+      h[17]=hbookManager->histogram("delta Pt (GeV)",20,-1.,1.);
+      h[18]=hbookManager->histogram("Pz (MeV) for pi0",100,-pmax,pmax);
+      h[19]=hbookManager->histogram("Pt (MeV) for pi0",100,0.,pmax);
+      h[20]=hbookManager->histogram("E (MeV) for pi0",100,0.,energy);
+		
+						/*
     h[18]=hbookManager->histogram("pi+pi- inv mass (GeV)",100,0.,2.);
     h[19]=hbookManager->histogram("pi+ p inv mass (GeV)",150,0.,3.);
     h[20]=hbookManager->histogram("pi0 p inv mass (GeV)",150,0.,3.);
@@ -280,8 +284,8 @@ int main(int argc, char** argv)
 */
 		
 		    //    assert (hDebug != 0);  
-    G4cout<< "Histograms is initialised" << G4endl;
-
+      G4cout<< "Histograms is initialised" << G4endl;
+    }		
     // Create a DynamicParticle  
   
     G4ParticleMomentum gDir(0.0,0.0,1.0);
@@ -334,10 +338,10 @@ int main(int argc, char** argv)
 
       G4double de = aChange->GetLocalEnergyDeposit();
       G4int n = aChange->GetNumberOfSecondaries();
-      h[0]->accumulate((float)n,1.0);
+      if(usepaw) h[0]->accumulate((float)n,1.0);
 			
-			if(verbose && de > 0.0) {
-        G4cout << " de(MeV) = " << de/MeV << " n= " << n << G4endl;
+			if(verbose) {
+        G4cout << "### " << iter << "-th event de(MeV) = " << de/MeV << " n= " << n << G4endl;
       }
 			 					
       for(G4int i=0; i<n+1; i++) {
@@ -361,7 +365,7 @@ int main(int argc, char** argv)
 				m = pd->GetPDGMass();
 				p = sqrt(e*(e + 2.0*m));
 			  mom *= p;
-				h[2]->accumulate(mom.phi()/degree,1.0);
+				if(usepaw) h[2]->accumulate(mom.phi()/degree,1.0);
 					
 				de += e;
         if(verbose) {
@@ -383,12 +387,13 @@ int main(int argc, char** argv)
         p  = sqrt(px*px +py*py + pz*pz);
         pt = sqrt(px*px +py*py);
 
-				if(pd == proton) { 
+				if(usepaw) {
+ 	  			if(pd == proton) { 
 						
-          h[1]->accumulate(1.0, 1.0);						
-          h[3]->accumulate(pz/MeV, 1.0); 
-          h[7]->accumulate(pt/MeV, 1.0);
-          h[11]->accumulate(e/MeV, 1.0);
+            h[1]->accumulate(1.0, 1.0);						
+            h[3]->accumulate(pz/MeV, 1.0); 
+            h[7]->accumulate(pt/MeV, 1.0);
+            h[11]->accumulate(e/MeV, 1.0);
 		
 						/*				
             for( j = i+1; j != mcp->end(); j++ ) {
@@ -410,12 +415,12 @@ int main(int argc, char** argv)
 					*/
 
 
-        } else if(pd == pin) {
+          } else if(pd == pin) {
     
-			  	h[1]->accumulate(4.0, 1.0);						
-          h[4]->accumulate(pz/MeV, 1.0); 
-          h[8]->accumulate(pt/MeV, 1.0);
-          h[12]->accumulate(e/MeV, 1.0);
+			  	  h[1]->accumulate(4.0, 1.0);						
+            h[4]->accumulate(pz/MeV, 1.0); 
+            h[8]->accumulate(pt/MeV, 1.0);
+            h[12]->accumulate(e/MeV, 1.0);
 		
 /*
         for( j = i+1; j != mcp->end(); j++ ) {
@@ -435,34 +440,45 @@ int main(int argc, char** argv)
         }
 */			
 				
-        } else if(pd == pip) {
+          } else if(pd == pip) {
     
-					h[1]->accumulate(3.0, 1.0);						
-          h[5]->accumulate(pz/MeV, 1.0); 
-          h[9]->accumulate(pt/MeV, 1.0);
-          h[13]->accumulate(e/MeV, 1.0);
-		
-        } else if(pd == neutron) {
+					  h[1]->accumulate(3.0, 1.0);						
+            h[5]->accumulate(pz/MeV, 1.0); 
+            h[9]->accumulate(pt/MeV, 1.0);
+            h[13]->accumulate(e/MeV, 1.0);
+
+				  } else if(pd == pi0) {
     
-					h[1]->accumulate(2.0, 1.0);						
-          h[6]->accumulate(pz/MeV, 1.0); 
-          h[10]->accumulate(pt/MeV, 1.0);
-          h[14]->accumulate(e/MeV, 1.0);
-				}
-			}
-				
+					  h[1]->accumulate(4.0, 1.0);						
+            h[18]->accumulate(pz/MeV, 1.0); 
+            h[19]->accumulate(pt/MeV, 1.0);
+            h[20]->accumulate(e/MeV, 1.0);		
+
+					} else if(pd == neutron) {
+    
+					  h[1]->accumulate(2.0, 1.0);						
+            h[6]->accumulate(pz/MeV, 1.0); 
+            h[10]->accumulate(pt/MeV, 1.0);
+            h[14]->accumulate(e/MeV, 1.0);
+				  }
+			  }
+      }			
+								
 		  if(verbose > 0) {
         G4cout << "Energy/Momentum balance= " << labv << G4endl;
       }	
 
-		  h[15]->accumulate(labv.e()/MeV, 1.0);
+
 			px = labv.px();	
 			py = labv.py();
 			pz = labv.pz();							
       p  = sqrt(px*px +py*py + pz*pz);
       pt = sqrt(px*px +py*py);
-			h[16]->accumulate(pz/GeV, 1.0);
-			h[17]->accumulate(pt/GeV, 1.0);
+		  if(usepaw) {
+				h[15]->accumulate(labv.e()/MeV, 1.0);
+				h[16]->accumulate(pz/GeV, 1.0);
+			  h[17]->accumulate(pt/GeV, 1.0);
+			}	
 			aChange->Clear();
 	
     }
@@ -471,10 +487,12 @@ int main(int argc, char** argv)
     G4cout << "  "  << *timer << G4endl;
     delete timer;
 
-    if(usepaw)hbookManager->write();
-    G4cout << "# hbook is writed" << G4endl;
-    delete hbookManager;    
-    G4cout << "# hbook is deleted" << G4endl;
+    if(usepaw) {
+			hbookManager->write();
+      G4cout << "# hbook is writed" << G4endl;
+      delete hbookManager;    
+      G4cout << "# hbook is deleted" << G4endl;
+		}
     G4cout << "###### End of run # " << run << "     ######" << G4endl;
 
   } while(end);
