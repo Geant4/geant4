@@ -1,4 +1,4 @@
-# $Id: stt-dev2.sdb,v 1.17 2000-04-25 13:47:36 stesting Exp $
+# $Id: stt-dev2.sdb,v 1.18 2000-04-25 15:25:50 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -44,7 +44,7 @@ geant4/source/processes/parameterisation          geant4-01-01-ref-02
 geant4/source/processes/photolepton_hadron        geant4-01-01-ref-02
 geant4/source/processes/transportation            geant4-01-01-ref-02
 geant4/source/readout                             geant4-01-01-ref-02
-geant4/source/run                                 run-V01-01-00
+geant4/source/run                                 geant4-01-01-ref-02
 geant4/source/track                               geant4-01-01-ref-02
 geant4/source/tracking                            geant4-01-01-ref-02
 geant4/source/visualization                       geant4-01-01-ref-02
