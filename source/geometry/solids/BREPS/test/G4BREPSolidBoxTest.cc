@@ -60,7 +60,7 @@ cout << "\n ============   Box test   ================";
   Dir[3] = G4Vector3D(    1,    1,   -1);
 
   EInside in[4];
-  G4double dist[4][2];
+  G4double dist[4][3];
 
   G4cout<<"\n\n";
 
