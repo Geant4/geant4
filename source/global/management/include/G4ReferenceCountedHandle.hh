@@ -21,14 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReferenceCountedHandle.hh,v 1.9 2001-10-22 14:39:35 gcosmo Exp $
+// $Id: G4ReferenceCountedHandle.hh,v 1.10 2001-11-03 00:27:28 rado Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Class G4RereferenceCountedHandle
-//
 // Class description:
-//
 // A class to provide reference counting mechanism for a class which
 // is designed without this support. It is a templated class, a smart pointer,
 // wrapping the class to be counted and performs the reference counting
@@ -44,181 +42,176 @@
 //  else               { ... } // OK!
 // The code which tries to delete this object won't compile, because it is
 // not a pointer it is an object.
-
 // Author:      Radovan Chytracek
-// Version:     1.0
-// Date:        February 2001
+// Version:     2.0
+// Date:        November 2001
 // ----------------------------------------------------------------------
 #ifndef _G4REFERENCECOUNTEDHANDLE_H_
 #define _G4REFERENCECOUNTEDHANDLE_H_ 1
 
-template <class X>
-class G4ReferenceCountedHandle
+#include "G4Allocator.hh"
+#define RCH_USING_G4ALLOCATOR 1
+
+template <class X> class G4ReferenceCountedHandle
 {
 public:
+
   typedef G4ReferenceCountedHandle RCH;
-
+  
 private: // with description
-    
-  class CountedObject {
-  public:
-    inline CountedObject( X* pObj = 0 )
-    : fCount(1), fRep( pObj ) {
-    } // Constructor
 
-    inline ~CountedObject() {
+  class CountedObject
+  {
+    
+    friend G4ReferenceCountedHandle<X>;
+    
+  public:
+
+    CountedObject( X* pObj = 0 ) : fCount(0), fRep( pObj ) {
+      if( pObj != 0 ) {
+        fCount = 1;
+      }
+    } // Constructor
+    
+    ~CountedObject() {
       delete fRep;
-      fRep = 0;
     } // Destructor
     
-    inline X* GetObject() const {
-      return fRep;
-    }
+    inline void AddRef() {
+      ++fCount;
+    } // Forward to Counter class
     
-    inline void SetObject( const X* object ) {
-      fRep = object;
-    }
+    inline void Release() {
+      if( --fCount == 0 ) delete this;
+    } // Forward to Counter class
     
-    inline unsigned int AddRef() {
-       return( ++fCount );
-    } // Forward to Counter class
-
-    inline unsigned int Release() {
-       return( ( fCount > 0 ) ? --fCount : 0 );
-    } // Forward to Counter class
-
-    inline unsigned int Count() const {
-       return( fCount );
-    } // Forward to Counter class
+    typedef G4Allocator<CountedObject> COUNTEDOBJALLOCATOR;
+    
+    // There is no provision that this class is subclassed.
+    // If it is subclassed & new data members are added then the
+    // following "new" & "delete" will fail and give errors. 
+    inline void* operator new( size_t )	{
+      return( (void *)CountedObject::GetAllocator().MallocSingle() );
+    } // operator new defined for G4Allocator
+    
+    inline void operator delete( void *pObj )	{
+      CountedObject::GetAllocator().FreeSingle( (CountedObject*)pObj );
+    } // operator delete defined for G4Allocator
     
   private:
+
     unsigned int fCount;
     // Reference counter
     X*           fRep;
     // The counted object
+    
+  private:
+
+    static COUNTEDOBJALLOCATOR& GetAllocator() {
+      return( aCountedObjectAllocator );
+    }
+    
+  private:
+
+    static G4Allocator<CountedObject> aCountedObjectAllocator;
   };
-
+  
 public: // with description
-  G4ReferenceCountedHandle( X* rep = 0 )
-  : fObj( 0 )        {
+
+  G4ReferenceCountedHandle( X* rep = 0 )	: fObj( 0 ) {
     if( rep != 0 ) {
-	    fObj = new RCH::CountedObject( rep );
-	  }
+      fObj = new CountedObject( rep );
+    }
   } // Constructor
-
+  
+  G4ReferenceCountedHandle( const G4ReferenceCountedHandle& right ) : fObj( right.fObj ) {
+    fObj->AddRef();
+  } // Copy constructor
+  
   ~G4ReferenceCountedHandle()  {
-    if( fObj != 0 )          {
-      if( 0 == Release() ) {
-          delete fObj;
-	        fObj = 0;
-      }
-    }
+    if( fObj ) fObj->Release();
   } // Destructor
-
-  G4ReferenceCountedHandle( const G4ReferenceCountedHandle& right )
-  : fObj( 0 ) {
-    fObj = right.GetCountedObject();
-    AddRef();
-  } // Copy constructor
   
-  template <class T>
-  G4ReferenceCountedHandle( const G4ReferenceCountedHandle<T>& right )
-  : fObj( 0 ) {
-    fObj = right.GetCountedObject();
-    AddRef();
-  } // Copy constructor
-
   inline G4ReferenceCountedHandle& operator =( const G4ReferenceCountedHandle& right ) {
-    if( this->fObj != right.GetCountedObject() ) {
-      if( this->fObj != 0 ) {
-        if( 0 == this->Release() ) {
-            delete this->fObj;
-        }
-      }
-      this->fObj = right.GetCountedObject();
-      this->AddRef();
+    if( fObj != right.fObj ) {
+      if( fObj )
+        fObj->Release();
+      this->fObj = right.fObj;
+      fObj->AddRef();
     }
     return *this;
   } // Assignment operator by reference
   
-  template <class T>
-  G4ReferenceCountedHandle& operator=( const G4ReferenceCountedHandle<T>& right ) {
-    if( this->fObj != right.GetCountedObject() )              {
-      if( this->fObj != 0 ) {
-        if( 0 == this->Release() ) {
-            delete this->fObj;
-        }
-      }
-      this->fObj = right.GetCountedObject();
-      this->AddRef();
-    }
+  inline G4ReferenceCountedHandle& operator =( X* objPtr ) {
+    if( fObj )
+      fObj->Release();
+    this->fObj = new  CountedObject( objPtr );
     return *this;
   } // Assignment operator by reference
-
-  inline G4ReferenceCountedHandle& operator =( const G4ReferenceCountedHandle* right ) {
-    if( this->fObj != right->GetCountedObject() )               {
-      if( this->fObj != 0 ) {
-        if( 0 == this->Release() ) {
-            delete this->fObj;
-        }
-      }
-      this->fObj = right->GetCountedObject();
-      this->AddRef();
-    }
-    return *this;
-  } // Assignment operator by pointer, should not be ever called 
-
-  inline G4ReferenceCountedHandle& operator =( X* pRefObj ) {
-    if( this->fObj == 0 || pRefObj != this->fObj->GetObject() ) {
-      if( 0 == Release() )          {
-        if( fObj != 0 )           {
-          delete fObj;
-        }
-      }
-      fObj = new RCH::CountedObject( pRefObj );
-    }
-    return *this;
-  } // Assignment operator by pointer to the counted class object
   
-  inline RCH::CountedObject* GetCountedObject() const {
-    return fObj;
-  }
-
-  inline unsigned int AddRef() {
-     return( ( fObj != 0 ) ? fObj->AddRef() : 0  );
-  } // Forward to Counter class
-
-  inline unsigned int Release() {
-     return( (fObj != 0 ) ? fObj->Release() : 0 );
-  } // Forward to Counter class
-
   inline unsigned int Count() const {
-     return( ( fObj != 0 ) ? fObj->Count() : 0 );
+    return( fObj ? fObj->fCount : 0 );
   } // Forward to Counter class
-
+  
   inline X* operator ->() const {
-     return( ( fObj != 0 ) ? fObj->GetObject() : 0 );
+    return( fObj ? fObj->fRep : 0 );
   } // Operator -> allowing the access to counted object
     // The check for 0-ness is left out for performance reasons, see operator () bellow
     // May be called on initialized smart-pointer only!
-
+  
   inline bool operator !() const {
-     return( ( fObj == 0 || fObj->GetObject() == 0 ) ? true : false );
+    return( ( !fObj ) ? true : false );
   } // Validity test operator
   
   inline operator bool() const {
-    return( ( fObj != 0 && fObj->GetObject() != 0 ) ? true : false );
+    return( ( fObj ) ? true : false );
   }
-
+  
   inline X* operator ()() const {
-     return( ( fObj != 0 ) ? fObj->GetObject() : 0 );
+    return( fObj ? fObj->fRep : 0 );
   } // Functor operator (for covinience)
+  
+  typedef  G4Allocator< G4ReferenceCountedHandle<X> > RCHALLOCATOR;
+  
+  // There is no provision that this class is subclassed.
+  // If it is subclassed & new data members are added then the
+  // following "new" & "delete" will fail and give errors. 
+  inline void* operator new( size_t ) {
+    return( (void *)G4ReferenceCountedHandle<X>::GetAllocator().MallocSingle() );
+  } // operator new defined for G4Allocator
+  
+  inline void operator delete( void *pObj )	{
+    G4ReferenceCountedHandle<X>::GetAllocator().FreeSingle( (G4ReferenceCountedHandle<X>*)pObj );
+  } // operator delete defined for G4Allocator
+  
+  inline void* operator new( size_t, void *pObj ) {
+    return pObj;
+  } // This is required by VC++ in order to compile but produces warning about missing operator delete(...)
+  // Normally this variant is not needed but when this class is used in the context of STL container
+  
+private:
 
+  static RCHALLOCATOR& GetAllocator() {
+    return aRCHAllocator;
+  }
+  
+private:
+
+  CountedObject*     fObj;
+  // Object being the subject to reference counting
 
 private:
-  RCH::CountedObject*     fObj;
- // Object being the subject to reference counting
+
+  static G4Allocator< G4ReferenceCountedHandle<X> > aRCHAllocator;
 };
 
+// In order to save the human's typing and brain the macro is provided for definition of the allocators
+#define DEFINE_RCH_ALLOCATOR(CountedType) \
+  \
+  G4Allocator<G4ReferenceCountedHandle<##CountedType##>::CountedObject> \
+  G4ReferenceCountedHandle<##CountedType##>::CountedObject::aCountedObjectAllocator;\
+  G4Allocator<G4ReferenceCountedHandle<##CountedType##> > \
+  G4ReferenceCountedHandle<##CountedType##>::aRCHAllocator;\
+  
 #endif // _G4REFERENCECOUNTEDHANDLE_H_
 
