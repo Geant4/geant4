@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.cc,v 1.15 2004-12-07 13:48:35 gunter Exp $
+// $Id: G4HEVector.cc,v 1.16 2004-12-08 16:05:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -248,7 +248,7 @@ G4HEVector::setEnergyAndUpdate( G4double e )
            {
              G4double cost = 1.0- 2.0*G4UniformRand();
              G4double sint = std::sqrt(1. - cost*cost);
-             G4double phi  = M_2PI* G4UniformRand();
+             G4double phi  = twopi* G4UniformRand();
              px            = momnew * sint * std::cos(phi);
              py            = momnew * sint * std::sin(phi);
              pz            = momnew * cost;
@@ -292,7 +292,7 @@ G4HEVector::setKineticEnergyAndUpdate(G4double ekin)
            {
              G4double cost = 1.0-2.0*G4UniformRand();
              G4double sint = std::sqrt(1. - cost*cost);
-             G4double phi  = M_2PI* G4UniformRand();
+             G4double phi  = twopi* G4UniformRand();
              px            = momnew * sint * std::cos(phi);
              py            = momnew * sint * std::sin(phi);
              pz            = momnew * cost;
@@ -347,7 +347,7 @@ G4HEVector::setMassAndUpdate( G4double m )
             { 
               G4double cost = 1.-2.*G4UniformRand();
               G4double sint = std::sqrt(1.-cost*cost);
-              G4double phi  = M_2PI*G4UniformRand();
+              G4double phi  = twopi*G4UniformRand();
               px            = momnew*sint*std::cos(phi);
               py            = momnew*sint*std::sin(phi);
               pz            = momnew*cost;
