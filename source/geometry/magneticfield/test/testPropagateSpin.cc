@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateSpin.cc,v 1.11 2003-06-16 16:51:25 gunter Exp $
+// $Id: testPropagateSpin.cc,v 1.12 2003-10-31 14:36:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -66,7 +66,7 @@ class G4LinScale : public G4VPVParameterisation
   
   virtual void ComputeDimensions(G4Box &pBox,
 				 const G4int n,
-				 const G4VPhysicalVolume* pRep) const
+				 const G4VPhysicalVolume*) const
   {
     pBox.SetXHalfLength(10);
     pBox.SetYHalfLength(5+n);
@@ -86,6 +86,9 @@ class G4LinScale : public G4VPVParameterisation
 				 const G4int ,
 				 const G4VPhysicalVolume*) const {}
   virtual void ComputeDimensions(G4Hype &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Orb &,
 				 const G4int ,
 				 const G4VPhysicalVolume*) const {}
   virtual void ComputeDimensions(G4Sphere &,
@@ -487,8 +490,8 @@ int main(int argc, char **argv)
 
 
 void report_endPV(G4ThreeVector    Position, 
-                  G4ThreeVector UnitVelocity,
-                  G4ThreeVector Spin,
+                  G4ThreeVector, // UnitVelocity,
+                  G4ThreeVector, // Spin,
 		  G4double step_len, 
                   G4double physStep, 
                   G4double safety,

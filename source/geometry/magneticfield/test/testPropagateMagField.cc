@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.22 2003-10-29 09:59:31 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.23 2003-10-31 14:36:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -87,6 +87,9 @@ class G4LinScale : public G4VPVParameterisation
 				 const G4VPhysicalVolume*) const {}
   virtual void ComputeDimensions(G4Hype &,
 				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Orb &,
+		                 const G4int ,
 				 const G4VPhysicalVolume*) const {}
   virtual void ComputeDimensions(G4Sphere &,
 				 const G4int ,

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testProElectroMagField.cc,v 1.10 2003-06-16 16:51:21 gunter Exp $
+// $Id: testProElectroMagField.cc,v 1.11 2003-10-31 14:36:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -67,7 +67,7 @@ class G4LinScale : public G4VPVParameterisation
   
   virtual void ComputeDimensions(G4Box &pBox,
 				 const G4int n,
-				 const G4VPhysicalVolume* pRep) const
+				 const G4VPhysicalVolume*) const
   {
     pBox.SetXHalfLength(10);
     pBox.SetYHalfLength(5+n);
@@ -87,6 +87,9 @@ class G4LinScale : public G4VPVParameterisation
 				 const G4int ,
 				 const G4VPhysicalVolume*) const {}
   virtual void ComputeDimensions(G4Hype &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Orb &,
 				 const G4int ,
 				 const G4VPhysicalVolume*) const {}
   virtual void ComputeDimensions(G4Sphere &,
@@ -111,7 +114,7 @@ G4VPhysicalVolume* BuildGeometry()
     G4Box *mySmallBox= new G4Box("smaller cube",2.5*m,2.5*m,2.5*m);
     G4Box *myTinyBox=  new G4Box("tiny  cube",.25*m,.25*m,.25*m);
 
-    G4Box *myVariableBox=new G4Box("Variable Box",10,5,5);
+    // G4Box *myVariableBox=new G4Box("Variable Box",10,5,5);
 
     //  World Volume
     //
@@ -152,17 +155,16 @@ G4VPhysicalVolume* BuildGeometry()
 
 //  2) Four (medium) boxes in X & Y near the origin of the world volume
 //
-    // G4PVPlacement *MedTg3a_Phys=
-                                 new G4PVPlacement(0,G4ThreeVector(0, 7.5*m,0),
+    new G4PVPlacement(0,G4ThreeVector(0, 7.5*m,0),
 					      "Target 3a",smallBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *MedTg3b_Phys=new G4PVPlacement(0,G4ThreeVector(0,-7.5*m,0),
+    new G4PVPlacement(0,G4ThreeVector(0,-7.5*m,0),
 					      "Target 3b",smallBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *MedTg3c_Phys=new G4PVPlacement(0,G4ThreeVector(-7.5*m,0,0),
+    new G4PVPlacement(0,G4ThreeVector(-7.5*m,0,0),
 					      "Target 3c",smallBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *MedTg3d_Phys=new G4PVPlacement(0,G4ThreeVector( 7.5*m,0,0),
+    new G4PVPlacement(0,G4ThreeVector( 7.5*m,0,0),
 					      "Target 3d",smallBoxLog,
 					      worldPhys,false,0);
 
@@ -170,29 +172,29 @@ G4VPhysicalVolume* BuildGeometry()
 //  3) Eight small boxes around the origin of the world volume 
 //        (in +-X, +-Y & +-Z)
 //
-    G4PVPlacement *SmTg4a_Phys=new G4PVPlacement
+    new G4PVPlacement
           (0,G4ThreeVector( 0.3*m, 0.3*m,0.3*m), "Target 4a",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4b_Phys=new G4PVPlacement
+    new G4PVPlacement
           (0,G4ThreeVector( 0.3*m,-0.3*m,0.3*m), "Target 4b",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4c_Phys=new G4PVPlacement
+    new G4PVPlacement
           (0,G4ThreeVector(-0.3*m,-0.3*m,0.3*m), "Target 4c",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4d_Phys=new G4PVPlacement
+    new G4PVPlacement
           (0,G4ThreeVector(-0.3*m, 0.3*m,0.3*m), "Target 4d",tinyBoxLog,
 					      worldPhys,false,0);
 
-    G4PVPlacement *SmTg4e_Phys=new G4PVPlacement
+    new G4PVPlacement
           (0,G4ThreeVector( 0.3*m, 0.3*m,-0.3*m), "Target 4e",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4f_Phys=new G4PVPlacement
+    new G4PVPlacement
           (0,G4ThreeVector( 0.3*m,-0.3*m,-0.3*m), "Target 4f",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4g_Phys=new G4PVPlacement
+    new G4PVPlacement
           (0,G4ThreeVector(-0.3*m,-0.3*m,-0.3*m), "Target 4g",tinyBoxLog,
 					      worldPhys,false,0);
-    G4PVPlacement *SmTg4h_Phys=new G4PVPlacement
+    new G4PVPlacement
           (0,G4ThreeVector(-0.3*m, 0.3*m,-0.3*m), "Target 4h",tinyBoxLog,
 					      worldPhys,false,0);
 
@@ -456,7 +458,7 @@ int main(int argc, char **argv)
 
 
 void report_endPV(G4ThreeVector    Position, 
-                  G4ThreeVector UnitVelocity,
+                  G4ThreeVector, // UnitVelocity,
 		  G4double step_len, 
                   G4double physStep, 
                   G4double safety,
