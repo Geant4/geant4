@@ -3,7 +3,6 @@
 //    *    BrachyDetectorConstruction.cc     *
 //    *                                      *
 //    ****************************************
-
 #include "BrachyWaterBoxROGeometry.hh"
 #include "BrachyWaterBoxSD.hh"
 #include "BrachyDetectorConstruction.hh"

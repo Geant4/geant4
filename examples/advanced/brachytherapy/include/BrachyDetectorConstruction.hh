@@ -92,10 +92,3 @@ inline void BrachyDetectorConstruction::ComputeDimVoxel()
 
 
 
-
-
-
-
-
-
-
