@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateSpin.cc,v 1.14 2003-11-17 14:48:42 japost Exp $
+// $Id: testPropagateSpin.cc,v 1.15 2003-11-17 17:26:45 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -326,10 +326,29 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume*,     // *pTopNode,
                   G4VPhysicalVolume* startVolume);
 
     G4UniformMagField MagField(10.*tesla, 0., 0.);  // Tesla Defined ? 
-    G4Navigator   *pNavig= G4TransportationManager::
-                    GetTransportationManager()-> GetNavigatorForTracking();
+    G4TransportationManager* transpMgr = G4TransportationManager::
+      GetTransportationManager();
+    G4Navigator* pNavig= transpMgr-> GetNavigatorForTracking();
 
     // pMagFieldPropagator= SetupPropagator(type);
+
+    G4cout << "Test G4PropInFld with "
+	   << "optimise = " 
+	   << ( pMagFieldPropagator->GetUseSafetyForOptimization() ?  "on" : "off" )
+      //   << " Eps min= " << pMagFieldPropagator->GetMinimumEpsilonStep()
+      //   <<  " &  max= " << pMagFieldPropagator->GetMaximumEpsilonStep()
+	   << G4endl;
+
+    const G4FieldManager* pFieldMgr= transpMgr->GetFieldManager();
+    G4cout << " The global field manager has the following parameters " 
+	   << G4endl;
+    G4cout <<  " Eps min= " << pFieldMgr->GetMinimumEpsilonStep()
+	   <<   " &  max= " << pFieldMgr->GetMaximumEpsilonStep()
+	   << G4endl;
+    G4cout << " Delta Intersection=  " << pFieldMgr->GetDeltaIntersection()
+	   << " Delta One step    =  " << pFieldMgr->GetDeltaOneStep()
+	   << G4endl;
+
 
     pMagFieldPropagator->SetChargeMomentumMass(  
 			    +1.,                    // charge in e+ units
@@ -491,9 +510,9 @@ void report_endPV(G4ThreeVector    Position,
        // G4cout.precision(6);
        // G4cout.setf(ios_base::fixed,ios_base::floatfield);
        G4cout << std::setw( 3) << "Stp#" << " "
-            << std::setw( 8) << "X(mm)" << " "
-            << std::setw( 8) << "Y(mm)" << " "  
-            << std::setw( 8) << "Z(mm)" << " "
+            << std::setw( 7) << "X(mm)" << " "
+            << std::setw( 7) << "Y(mm)" << " "  
+            << std::setw( 7) << "Z(mm)" << " "
             << std::setw( 7) << " N_x " << " "
             << std::setw( 7) << " N_y " << " "
             << std::setw( 7) << " N_z " << " "
@@ -606,11 +625,11 @@ int main(int argc, char **argv)
 	   << " MaxEps = " <<  pMagFieldPropagator->GetMaximumEpsilonStep()
 	   << G4endl; 
 
+    pMagFieldPropagator->SetUseSafetyForOptimization(optimise); 
+
 // Do the tests without voxels
     G4cout << " Test with no voxels" << G4endl; 
     testG4PropagatorInField(myTopNode, type);
-
-    pMagFieldPropagator->SetUseSafetyForOptimization(optimise); 
 
 // Repeat tests but with full voxels
     G4cout << " Test with full voxels" << G4endl; 
