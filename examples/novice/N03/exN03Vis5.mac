@@ -1,0 +1,70 @@
+#######################################################################
+#  MACRO FILE NAME: exN03Vis4.mac                                     #
+#                                                                     #
+#  AUTHOR(S): Guy Barrand                                             #
+#                                                                     #
+#  DATE: June 09, 2000                                                #
+#                                                                     #
+#  CONTENTS: A basic macro for demonstrating OPACS/Xo driver          #
+#                                                                     #
+#  USAGE:  % $G4BINDIR/exampleN03  exN03Vis4.mac                      #
+#                                                                     #
+#  REQUIRED PLATFORMS & SOFTWARES: Unix, Motif, X-window, OpenGL,     #
+#                                  OPACS (version 3.0)                #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv G4VIS_BUILD_OPACS_DRIVER     1                          # 
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv G4VIS_USE_OPACS              1                          #
+#                                                                     # 
+#  Addional Notes:                                                    #
+#    Controls on a Xo window are :                                    #
+#   - Ctrl + left-button1 + move pointer :                            #
+#     move things (default is scale).                                 #
+#   - right-button : popup menu to change, for example, the           #  
+#     upper behaviour.                                                #
+#   - left-button : pick an object. After your can center on it       #
+#     through the popup-menu.                                         #
+#   - left-button + move pointer : collect objects.                   #
+#   - Ctrl + Shift + left-button + move pointer :                     #
+#     rubber band zoom.                                               #
+#                                                                     #
+#######################################################################
+
+# Create "scene-0" 
+/vis/scene/create
+
+# Invoke the Xo driver 
+/vis/sceneHandler/create Xo
+/vis/viewer/create
+
+# Add detector geometry to the current scene
+/vis/scene/add/volume
+/tracking/storeTrajectory 1
+/vis/scene/include/trajectories
+
+# Bird-eye view of events with the hidden-surface 
+#  drawing style.
+/vis/camera/reset
+/vis/camera/viewpoint    45 45 
+/vis/set/drawing_style   2 
+
+/run/beamOn 1
+
+#######################################################################
+#    Controls on a Xo window are :                                    #
+#   - Ctrl + left-button1 + move pointer :                            #
+#     move things (default is scale).                                 #
+#   - right-button : popup menu to change, for example, the           #  
+#     upper behaviour.                                                #
+#   - left-button : pick an object. After your can center on it       #
+#     through the popup-menu.                                         #
+#   - left-button + move pointer : collect objects.                   #
+#   - Ctrl + Shift + left-button + move pointer :                     #
+#     rubber band zoom.                                               #
+#######################################################################
