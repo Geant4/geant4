@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.2 2003-10-28 10:27:25 vnivanch Exp $
+// $Id: RunAction.hh,v 1.3 2004-03-15 11:09:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,12 +40,19 @@
 
 class G4Run;
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
 namespace AIDA {
  class ITree;
  class IHistogram1D;
 } 
 #endif
+
+#ifdef USE_ROOT
+  class TFile;
+  class TH1F;  
+#endif
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {
@@ -64,10 +71,14 @@ class RunAction : public G4UserRunAction
     void CountSteps1(G4int ns) { NbOfSteps1 += ns;}
     void CountProcesses(G4String);
 
-#ifdef G4ANALYSIS_USE   
+#ifdef USE_AIDA   
     AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
 #endif
-           
+
+#ifdef USE_ROOT    
+    TH1F* GetHisto(G4int id) {return histo[id];}
+#endif
+            
   private:  
     void bookHisto();
     void cleanHisto();
@@ -78,9 +89,14 @@ class RunAction : public G4UserRunAction
     G4double edep;
     ProcessesCount*   ProcCounter;   
 
-#ifdef G4ANALYSIS_USE       
+#ifdef USE_AIDA       
     AIDA::ITree*        tree;
     AIDA::IHistogram1D* histo[3];
+#endif
+
+#ifdef USE_ROOT         
+    TFile* tree;
+    TH1F*  histo[3];
 #endif                     
 };
 
