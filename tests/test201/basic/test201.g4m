@@ -5,7 +5,7 @@
 /gui/addButton file Exit exit
 /gui/addMenu test Test
 /gui/addButton test "Detector 4" "/test201/detector 4"
-/gui/addButton test "ATLAS" "/test201/detector 5"
+#/gui/addButton test "ATLAS" "/test201/detector 5"
 /gui/addButton test Init /run/initialize
 /gui/addButton test "Set gun" "/control/execute gun.g4m"
 /gui/addButton test "Run one event" "/run/beamOn 1"
@@ -21,19 +21,19 @@
 /gui/addButton vis "Notify" "/vis/scene/notifyHandlers"
 #/gui/addButton vis "Inventor ~WIN32" "/vis~/create_view/new_graphics_system OIWIN32"
 #/gui/addButton vis "Represent" "/vis~/draw/current"
-/gui/addMenu atlas ATLAS
-/gui/addButton atlas "inner/all" "/atlas/innerDetector/all 1"
-/gui/addButton atlas "pixel" "/atlas/innerDetector/pixel 1"
-/gui/addButton atlas "barrelSilicon" "/atlas/innerDetector/barrelSilicon 1"
-/gui/addButton atlas "forwardSilicon" "/atlas/innerDetector/forwardSilicon 1"
-/gui/addButton atlas "trt" "/atlas/innerDetector/trt 1"
-/gui/addButton atlas "calorimeter/all" "/atlas/calorimeter/all 1"
-/gui/addButton atlas "barrelEM" "/atlas/calorimeter/barrelEM 1"
-/gui/addButton atlas "endcap" "/atlas/calorimeter/endcap 1"
-/gui/addButton atlas "muon/all" "/atlas/muonDetector/all 1"
-/gui/addButton atlas "mdt" "/atlas/muonDetector/mdt 1"
-/gui/addButton atlas "rpc" "/atlas/muonDetector/rpc 1"
-/gui/addButton atlas "tgc" "/atlas/muonDetector/tgc 1"
+#/gui/addMenu atlas ATLAS
+#/gui/addButton atlas "inner/all" "/atlas/innerDetector/all 1"
+#/gui/addButton atlas "pixel" "/atlas/innerDetector/pixel 1"
+#/gui/addButton atlas "barrelSilicon" "/atlas/innerDetector/barrelSilicon 1"
+#/gui/addButton atlas "forwardSilicon" "/atlas/innerDetector/forwardSilicon 1"
+#/gui/addButton atlas "trt" "/atlas/innerDetector/trt 1"
+#/gui/addButton atlas "calorimeter/all" "/atlas/calorimeter/all 1"
+#/gui/addButton atlas "barrelEM" "/atlas/calorimeter/barrelEM 1"
+#/gui/addButton atlas "endcap" "/atlas/calorimeter/endcap 1"
+#/gui/addButton atlas "muon/all" "/atlas/muonDetector/all 1"
+#/gui/addButton atlas "mdt" "/atlas/muonDetector/mdt 1"
+#/gui/addButton atlas "rpc" "/atlas/muonDetector/rpc 1"
+#/gui/addButton atlas "tgc" "/atlas/muonDetector/tgc 1"
 #
 /vis~/set/culling off
 /vis~/set/drawing_style 2

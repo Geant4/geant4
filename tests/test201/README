@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2000-05-26 13:21:20 barrand Exp $
+$Id: README,v 1.3 2000-05-26 14:16:01 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,9 @@ $Id: README,v 1.2 2000-05-26 13:21:20 barrand Exp $
   The purpose of this test is to test the visualization and 
  graphical user interfaces.
 
+
+ Executing test201 :
+ -----------------
   In order to get correct test201.g4m, etc... files,
  the test should be started in the subdirectory corresponding 
  to the GUI choosed. For example :
@@ -46,4 +49,35 @@ $Id: README,v 1.2 2000-05-26 13:21:20 barrand Exp $
      G4UI_USE_<session>
      G4VIS_USE_<driver>
  CPP flags.
+
+ Example of a session with Inventor :
+ ----------------------------------
+  If executed from basic, test201 offer a menu bar
+ (described in test201.g4m), then :
+  - Click 'Test/Detector 4' to define a simple geometry.
+  - Click 'Test/init' to initialize Geant4.
+  - 'Vis/Create scene' to create a scene that have
+    the geometry, trajectories and hits (see scene.g4m).
+  - 'Vis/OIWIN32' to create an Inventor viewer.
+  - 'Vis/notify' to update the viewer. The
+    detector must appears (a cube representing the mother
+    volume).
+    . In picking mode (click in the up arrow icon) :
+      * Ctrl/pick (the cube) goes down the next level of geometry :
+        you should be able to see some cubes and a cylinder.
+      * Shift/pick display the mother volume.
+    . In viewing mode (click in the hand icon) 
+      * Move left button : rotate.
+      * Ctrl move left button : pane.
+      * Ctrl+Shift+move left button : zoom in/out.
+      * Right button : popup menu. 
+  - 'Test/Set gun' to setup the gun particle, energy (it executes
+    the gun.g4m file).
+  - 'Test/Run beom one' to shoot an event. Some tracks
+    should be visible under the cube near the cylinder.
+    Use the zoom out to see them. With the popup menu
+    setup the wire-frame drawing to see an electromagnetic
+    shower inside the cube.
+  - Click again in the 'Test/Run beam on' to see more events.
+
 
