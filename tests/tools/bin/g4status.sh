@@ -17,18 +17,18 @@ fi
 
 ACCOUNT=stesting
 
-echo -e PID "\t" HOSTNAME "\t" FLAVOUR "\n"
-ps uaxww|grep "l $ACCOUNT"|grep rsh|sort -k 15|awk '{print $2,$14,$15}' -|while read pid host pname
+echo -e PID "\t" HOSTNAME "\t" DEV/PROD "\t" DEB/OPT
+ps uaxww|grep "l $ACCOUNT"|grep rsh|sort -k 15|awk '{print $2,$14,$16,$17}' -|while read pid host devprod debopt
 do
 
-if [ X`echo $pname|cut -d "." -f3` = Xd ]
- then
-    flavour=DEBUG
- else
-    flavour=OPTIM
-fi
+#if [ X`echo $pname|cut -d "." -f3` = Xd ]
+# then
+#    flavour=DEBUG
+# else
+#    flavour=OPTIM
+#fi
 
-echo -e $pid "\t" $host "\t" $flavour 
+echo -e $pid "\t" $host "\t" $devprod "\t\t" $debopt
 
 #if [ X$PLATFORM = X$host -a X$MODE = X$flavour ]
 #then
