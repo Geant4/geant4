@@ -6,9 +6,13 @@
 
 #include <strstream>
 
+unsigned int G4AssemblyVolume::fsInstanceCounter = 0;
+
 // Default constructor
 G4AssemblyVolume::G4AssemblyVolume()
 {
+  InstanceCountPlus();
+  SetImprintsCount( 0 );
 }
 
 // Destructor
@@ -28,6 +32,7 @@ G4AssemblyVolume::~G4AssemblyVolume()
   }
   
   fPVStore.clear();
+  InstanceCountMinus();
 }
 
 /**
@@ -58,7 +63,7 @@ void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume
 
 /**
  * Create an instance of an assembly volume inside of the specified
- * mother volume. This works analogically to making stamp inprints.
+ * mother volume. This works analogically to making stamp imprints.
  * This method makes use of the Geant4 affine transformation class.
  * The algorithm is defined as follows:
  * 
@@ -92,6 +97,8 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV
   // We start from the first available index
   numberOfDaughters++;
 
+  ImprintsCountPlus();
+
   for( unsigned int   i = 0; i < fTriplets.size(); i++ )
   {
     // Generate the unique name for the next PV instance
@@ -103,10 +110,14 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV
     // YYYY - the name of a log. volume we want to make a placement of
     // ZZZZ - the physical volume index inside a mother
     std::strstream pvName;
-    pvName << "pv"
-           << numberOfDaughters
+    pvName << "av_"
+           << GetInstanceCount()
+           << "_impr_"
+           << GetImprintsCount()
+           << "_"
            << fTriplets[i].GetVolume()->GetName().c_str()
-           << numberOfDaughters + i
+           << "_pv_"
+           << i
            << std::ends;
 
     // Create the transformation in this assembly volume
@@ -161,11 +172,22 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV
     // YYYY - the name of a log. volume we want to make a placement of
     // ZZZZ - the physical volume index inside a mother
     std::strstream pvName;
-    pvName << "pv"
+    pvName << "av_"
+           << GetInstanceCount()
+           << "_impr_"
+           << GetImprintsCount()
+           << "_"
+           << fTriplets[i].GetVolume()->GetName().c_str()
+           << "_pv_"
+           << i
+           << std::ends;
+/*
+   pvName << "pv"
            << numberOfDaughters
            << fTriplets[i].GetVolume()->GetName().c_str()
            << numberOfDaughters + i
            << std::ends;
+*/
 
     G4Transform3D Ta( *(fTriplets[i].GetRotation()),
                       fTriplets[i].GetTranslation()
@@ -193,4 +215,23 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV
   }
 }
 
+unsigned int G4AssemblyVolume::GetInstanceCount() const
+{
+  return G4AssemblyVolume::fsInstanceCounter;
+}
+
+void         G4AssemblyVolume::SetInstanceCount( unsigned int value )
+{
+  G4AssemblyVolume::fsInstanceCounter = value;
+}
+
+void         G4AssemblyVolume::InstanceCountPlus()
+{
+  G4AssemblyVolume::fsInstanceCounter++;
+}
+
+void         G4AssemblyVolume::InstanceCountMinus()
+{
+  G4AssemblyVolume::fsInstanceCounter--;
+}
 
