@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScaleModel.cc,v 1.1 2001-07-22 01:01:05 johna Exp $
+// $Id: G4ScaleModel.cc,v 1.2 2001-07-24 21:50:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,17 @@ G4ScaleModel::~G4ScaleModel () {}
 
 G4ScaleModel::G4ScaleModel (const G4Scale& scale): fScale(scale) {
   fGlobalTag = "G4ScaleModel: " + fScale.GetAnnotation();
+  switch (fScale.GetDirection()) {
+  case G4Scale::x:
+    fGlobalTag += " x";
+    break;
+  case G4Scale::y:
+    fGlobalTag += " y";
+    break;
+  case G4Scale::z:
+    fGlobalTag += " z";
+    break;
+  }
   fGlobalDescription = fGlobalTag;
 }
 
