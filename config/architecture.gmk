@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.71 2001-05-30 15:04:13 gunter Exp $
+# $Id: architecture.gmk,v 1.72 2001-08-03 09:46:31 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -13,15 +13,15 @@
 # List of the supported architectures/compilers and related flavors for
 # the environment variable G4SYSTEM:
 #
-#          SUN-CC      SunOS 5.6, CC 4.2 compiler (default)
+#          Linux-g++   Linux (Red Hat 6.1), gcc 2.95.2 (default)
 #
-#          HP-aCC      HP-UX 10.20, aCC A.01.23 compiler
+#          SUN-CC      SunOS 5.7, CC 5.2
+#
+#          HP-aCC      HP-UX 10.20, aCC A.01.23
 #
 #          DEC-cxx     DEC-OSF/1 4.0, DEC C++ 6.1
 #
-#          Linux-g++   Linux (Red Hat 6.1), egcs 1.1.2
-#
-#          WIN32-VC    Windows/NT and Microsoft Visual C++ 6.0
+#          WIN32-VC    Windows/NT and Microsoft Visual C++ 6.0 - SP4
 #                      Adding CYGWIN32 tools (make, g++ as "makedepend", sh...)
 #                      Note: you will need to set your environment, see the
 #                            installation guide.
@@ -39,13 +39,10 @@ endif
 
 MAKEFLAGS= --no-print-directory
 
-# If not specified, the default platform for G4SYSTEM is SUN-CC ...
+# If not specified, the default platform for G4SYSTEM is Linux-g++ ...
 #
 ifndef G4SYSTEM
-  G4SYSTEM := SUN-CC
-endif
-ifeq ($(G4SYSTEM),WIN32-VC-NICE)
-  G4SYSTEM := WIN32-VC
+  G4SYSTEM := Linux-g++
 endif
 
 # If not specified, the default path for G4 installation G4INSTALL is

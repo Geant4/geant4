@@ -1,4 +1,4 @@
-$Id: History,v 1.152 2001-08-01 17:37:58 gcosmo Exp $
+$Id: History,v 1.153 2001-08-03 09:46:31 gcosmo Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd August 2001 Gabriele Cosmo (config-V03-02-03)
+- architecture.gmk:
+  o updated list of supported systems/compilers.
+  o made Linux-g++ architecture the default G4SYSTEM. Replaced SUN-CC.
+- Added SUN-CC4.gmk for old SUN architectures based on CC-4.2 compiler.
+- Added Linux-egcs for old Linux architectures based on egcs-1.1.2 compiler.
+- Made SUN-CC.gmk a copy of SUN-CC5.gmk (kept for backward compatibility,
+  will be removed soon). CC-5.2 compiler is now the default on SUN systems.
+- Made Linux-g++.gmk specific to gcc-2.95.2 compiler, from now on the default
+  compiler on Linux systems.
 
 1st August 2001 Gabriele Cosmo (config-V03-02-02)
 - Included recent updates to scripts sources for 'Configure'.

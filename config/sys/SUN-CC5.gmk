@@ -1,6 +1,6 @@
 #
-# -------- SUN ---------
-#
+# -------- SUN ---------    !!! Temporary !!!
+#                          copy of SUN-CC.gmk
 ifeq ($(G4SYSTEM),SUN-CC5)
   CXX       := CC
   ifdef G4OPTIMISE
