@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.cc,v 1.2 1999-04-13 08:00:29 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.3 1999-04-14 10:28:28 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,8 +28,7 @@
 //      added  Resonance flag and ApplyCuts flag  H.Kurashige 27  June 1998
 //      modify FillQuarkContents() for quarks/diquarks H.Kurashige 30 June 1998
 //      modify encoding rule H.Kurashige 23 Oct. 98
-//      commented out G4cout/G4cerr in the constructor 10 Nov.,98 H.Kurashige
-//       modify FillQuarkContents() for deltas         25 Nov.,98 H.Kurashige
+//      modify FillQuarkContents() for deltas         25 Nov.,98 H.Kurashige
 // --------------------------------------------------------------
 
 
@@ -85,32 +84,15 @@ G4ParticleDefinition::G4ParticleDefinition(
    // check name and register this particle into ParticleTable
    theParticleTable = G4ParticleTable::GetParticleTable();
    G4ParticleDefinition *ptr = theParticleTable->Insert(this);
-   //#ifdef G4VERBOSE
-   //if (ptr != this) {
-   //  // Fail to register to ParticleTable
-   //  if (ptr != 0) {
-   //    // particle with same name already exists in ParticleTable 
-   //    if (verboseLevel>0) {
-   //      G4cerr << "Particle name of " << aName << " has already defined " <<endl;
-   //      G4cerr << "This particle is not registered in ParticleTable " << endl;
-   //    } else {
-   //	   if (verboseLevel>0) {
-   //  	     G4cerr << "Particle name of " << aName; 
-   //	     G4cerr << " is not registered in ParticleTable" <<endl; 
-   //	     if (verboseLevel>1) this->DumpTable();
-   //	   }
-   //    }
-   //  }
-   //}
-   //#endif
 
    // check quark contents
 #ifdef G4VERBOSE
    if (this->FillQuarkContents() != thePDGEncoding) {
      if (verboseLevel>0) {
-   //    G4cerr << "Particle " << aName << " has a strange PDGEncoding " <<endl;
+       // cerr bnot G4cerr is used intentionally  
+       // because G4ParticleDefinition constructor may be called 
+       // before G4cerr object is instantiated !!
        cerr << "Particle " << aName << " has a strange PDGEncoding " <<endl;
-   //    if (verboseLevel>1) this->DumpTable();
      }
    }
 #endif
@@ -119,16 +101,11 @@ G4ParticleDefinition::G4ParticleDefinition(
 G4ParticleDefinition::G4ParticleDefinition(const G4ParticleDefinition &right)
 {
   G4Exception("You call Copy Constructor of G4ParticleDefinition ");
-  //G4cerr << "You call Copy Constructor of G4ParticleDefinition " << endl;
-  //#ifdef G4VERBOSE
-  //  if (verboseLevel>0) right.DumpTable();
-  //#endif
 }
 
 G4ParticleDefinition::G4ParticleDefinition()
 {
   G4Exception("You call Default Constructor of G4ParticleDefinition ");
-  //G4cerr << "You call Default Constructor of G4ParticleDefinition " << endl;
 }
 
 
@@ -194,23 +171,23 @@ G4int G4ParticleDefinition::FillQuarkContents()
   
   if (theParticleType =="quarks") {
     if ((quark1 !=0) || (quark2 !=0) || (quark3 !=0)) { 
-      //#ifdef G4VERBOSE
-      //if (verboseLevel>0) {
-      //  G4cerr << " ??? unknown quark ";
-      //  G4cerr << " PDG code=" << thePDGEncoding <<endl;
-      //}
-      //#endif
+#ifdef G4VERBOSE
+      if (verboseLevel>1) {
+        G4cout << " ??? unknown quark ";
+        G4cout << " PDG code=" << thePDGEncoding <<endl;
+      }
+#endif
 	//  --- thePDGEncoding is wrong 
 	tempPDGcode = 0;
     } else {
       quark1 = abs(tempPDGcode);
       if (quark1>NumberOfQuarkFlavor){
-	//#ifdef G4VERBOSE
-	//if (verboseLevel>0) {
-	//  G4cerr << " ??? unknown quark ";
-	//  G4cerr << " PDG code=" << thePDGEncoding <<endl;
-	//}
-	//#endif
+#ifdef G4VERBOSE
+	if (verboseLevel>1) {
+	  cout << " ??? unknown quark ";
+	  cout << " PDG code=" << thePDGEncoding <<endl;
+	}
+#endif
 	//  --- thePDGEncoding is wrong 
 	tempPDGcode = 0;
       } else {
@@ -231,12 +208,12 @@ G4int G4ParticleDefinition::FillQuarkContents()
       //  --- thePDGEncoding is wrong 
       tempPDGcode = 0;
     } else if (quark2>NumberOfQuarkFlavor){
-      //#ifdef G4VERBOSE
-      //if (verboseLevel>0) {
-      //  G4cerr << " ??? unknown quark ";
-      //  G4cerr << " PDG code=" << thePDGEncoding <<endl;
-      //}
-      //#endif
+#ifdef G4VERBOSE
+      if (verboseLevel>1) {
+        G4cout << " ??? unknown quark ";
+        G4cout << " PDG code=" << thePDGEncoding <<endl;
+      }
+#endif
       tempPDGcode = 0;
     } else {
       if (tempPDGcode>0){
@@ -264,50 +241,50 @@ G4int G4ParticleDefinition::FillQuarkContents()
     }
 
     if (quark1 !=0) {
-      //#ifdef G4VERBOSE
-      //if (verboseLevel>0) {
-      //  G4cerr << " meson has only quark and anti-quark pair";
-      //  G4cerr << " PDG code=" << thePDGEncoding <<endl;
-      //}
-      //#endif
+#ifdef G4VERBOSE
+      if (verboseLevel>1) {
+        G4cout << " meson has only quark and anti-quark pair";
+        G4cout << " PDG code=" << thePDGEncoding <<endl;
+      }
+#endif
       tempPDGcode = 0;
     } 
      if ((quark2==0)||(quark3==0)){ 
-       //#ifdef G4VERBOSE
-       //if (verboseLevel>0) {
-       // G4cerr << " meson has quark and anti-quark pair";
-       // G4cerr << " PDG code=" << thePDGEncoding <<endl;
-       //}
-       //#endif
+#ifdef G4VERBOSE
+       if (verboseLevel>1) {
+         G4cout << " meson has quark and anti-quark pair";
+         G4cout << " PDG code=" << thePDGEncoding <<endl;
+       }
+#endif
       tempPDGcode = 0;
      }
     // check spin 
     if ( spin != thePDGiSpin) {
-      //#ifdef G4VERBOSE
-      //if (verboseLevel>0) {
-      //  G4cerr << " illegal SPIN (" << thePDGiSpin << "/2)";
-      //  G4cerr << " PDG code=" << thePDGEncoding <<endl;
-      //}
-      //#endif
+#ifdef G4VERBOSE
+      if (verboseLevel>1) {
+        G4cout << " illegal SPIN (" << thePDGiSpin << "/2)";
+        G4cout << " PDG code=" << thePDGEncoding <<endl;
+      }
+#endif
       tempPDGcode = 0;
     }
     if (quark2<quark3) { 
-      //#ifdef G4VERBOSE
-      //if (verboseLevel>0) {
-      //  G4cerr << " illegal code for meson ";
-      //  G4cerr << " PDG code=" << thePDGEncoding <<endl;
-      //}
-      //#endif
+#ifdef G4VERBOSE
+      if (verboseLevel>1) {
+        G4cout << " illegal code for meson ";
+        G4cout << " PDG code=" << thePDGEncoding <<endl;
+      }
+#endif
       tempPDGcode = 0;
     }
     // check quark flavor
     if (quark2> NumberOfQuarkFlavor){
-      //#ifdef G4VERBOSE
-      //if (verboseLevel>0) {
-      //  G4cerr << " ??? unknown quark ";
-      //  G4cerr << " PDG code=" << thePDGEncoding <<endl;
-      //}
-      //#endif
+#ifdef G4VERBOSE
+      if (verboseLevel>1) {
+        G4cout << " ??? unknown quark ";
+        G4cout << " PDG code=" << thePDGEncoding <<endl;
+      }
+#endif
       tempPDGcode = 0;
     }
     // check heavier quark type
@@ -339,23 +316,23 @@ G4int G4ParticleDefinition::FillQuarkContents()
       totalCharge += (-2./3.)*eplus*theAntiQuarkContent[flavor+1];
     }
     if (abs(totalCharge-thePDGCharge)>0.1*eplus) { 
-      //#ifdef G4VERBOSE
-      //if (verboseLevel>0) {
-      //  G4cerr << " illegal charge for meson " << thePDGCharge/eplus;
-      //  G4cerr << " PDG code=" << thePDGEncoding <<endl;
-      //}
-      //#endif
+#ifdef G4VERBOSE
+      if (verboseLevel>1) {
+        G4cout << " illegal charge for meson " << thePDGCharge/eplus;
+        G4cout << " PDG code=" << thePDGEncoding <<endl;
+      }
+#endif
       tempPDGcode = 0;
     }
   } else if (theParticleType == "baryon"){
     // check meson or not
     if ((quark1==0)||(quark2==0)||(quark3==0)){ 
-      //#ifdef G4VERBOSE
-      //if (verboseLevel>0) {
-      //  G4cerr << " meson has three quark ";
-      //  G4cerr << " PDG code=" << thePDGEncoding <<endl;
-      //}
-      //#endif
+#ifdef G4VERBOSE
+      if (verboseLevel>1) {
+        G4cout << " meson has three quark ";
+        G4cout << " PDG code=" << thePDGEncoding <<endl;
+      }
+#endif
       tempPDGcode = 0;
     }
     //exceptions
@@ -399,31 +376,31 @@ G4int G4ParticleDefinition::FillQuarkContents()
 
     // check spin 
     if (spin != thePDGiSpin) {
-      //#ifdef G4VERBOSE
-      //if (verboseLevel>0) {
-      //  G4cerr << " illegal SPIN (" << thePDGiSpin << "/2";
-      //  G4cerr << " PDG code=" << thePDGEncoding <<endl;
-      //}
-      //#endif
+#ifdef G4VERBOSE
+      if (verboseLevel>1) {
+        G4cout << " illegal SPIN (" << thePDGiSpin << "/2";
+        G4cout << " PDG code=" << thePDGEncoding <<endl;
+      }
+      #endif
       tempPDGcode = 0;
     }
     // check quark flavor
     if ((quark1<quark2)||(quark2<quark3)||(quark1<quark3)) { 
-      //#ifdef G4VERBOSE
-      //if (verboseLevel>0) {
-      // G4cerr << " illegal code for baryon ";
-      //  G4cerr << " PDG code=" << thePDGEncoding <<endl;
-      //}
-      //#endif
+#ifdef G4VERBOSE
+      if (verboseLevel>1) {
+        G4cout << " illegal code for baryon ";
+        G4cout << " PDG code=" << thePDGEncoding <<endl;
+      }
+#endif
       tempPDGcode = 0;
     }
     if (quark1> NumberOfQuarkFlavor) {
-      //#ifdef G4VERBOSE
-      //if (verboseLevel>0) {
-      //  G4cerr << " ??? unknown quark ";
-      // G4cerr << " PDG code=" << thePDGEncoding <<endl;
-      //}
-      //#endif
+#ifdef G4VERBOSE
+      if (verboseLevel>1) {
+        G4cout << " ??? unknown quark ";
+       G4cout << " PDG code=" << thePDGEncoding <<endl;
+      }
+#endif
       tempPDGcode = 0;
     }
     if (tempPDGcode >0) {
@@ -444,12 +421,12 @@ G4int G4ParticleDefinition::FillQuarkContents()
       totalCharge += (-2./3.)*eplus*theAntiQuarkContent[flavor+1];
     }
     if (abs(totalCharge-thePDGCharge)>0.1*eplus) { 
-      //#ifdef G4VERBOSE
-      //if (verboseLevel>0) {
-      //  G4cerr << " illegal charge for baryon " << thePDGCharge/eplus;
-      //  G4cerr << " PDG code=" << thePDGEncoding <<endl;
-      //}
-      //#endif
+#ifdef G4VERBOSE
+      if (verboseLevel>1) {
+        G4cout << " illegal charge for baryon " << thePDGCharge/eplus;
+        G4cout << " PDG code=" << thePDGEncoding <<endl;
+      }
+#endif
       tempPDGcode = 0;
     }
   } else {

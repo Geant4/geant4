@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonDecayChannel.cc,v 1.3 1999-04-13 08:00:21 kurasige Exp $
+// $Id: G4MuonDecayChannel.cc,v 1.4 1999-04-14 10:28:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -161,26 +161,9 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
  // output message
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
-    G4cout << "     daughter 0:" << daughtermomentum[0]/GeV << "[GeV/c]" <<endl;
-    G4cout << "     daughter 1:" << daughtermomentum[1]/GeV << "[GeV/c]" <<endl;
-    G4cout << "     daughter 2:" << daughtermomentum[2]/GeV << "[GeV/c]" <<endl;
-  }
-#endif
-//  if (!products->IsChecked()) {
-//    G4cout << " daughter 0:" << daughtermomentum[0]/GeV << "[GeV/c]" <<endl;
-//    G4cout << " daughter 1:" << daughtermomentum[1]/GeV << "[GeV/c]" <<endl;
-//    G4cout << " daughter 2:" << daughtermomentum[2]/GeV << "[GeV/c]" <<endl;
-//    G4cout << " costheta = " << costheta << " sinphi = " << sinphi  <<endl;
-//    G4cout << " costhetan = " << costhetan << " sinphin = " << sinphin  <<endl;
-//    products->DumpInfo();
-//    G4Exception(" ");
-//  }  
-
-#ifdef G4VERBOSE
-  if (GetVerboseLevel()>1) {
-     G4cout << "G4MuonDecayChannel::DecayIt ";
-     G4cout << "  create decay products in rest frame " <<endl;
-     products->DumpInfo();
+    G4cout << "G4MuonDecayChannel::DecayIt ";
+    G4cout << "  create decay products in rest frame " <<endl;
+    products->DumpInfo();
   }
 #endif
   return products;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShortLivedTable.cc,v 1.1 1999-01-07 16:10:36 gunter Exp $
+// $Id: G4ShortLivedTable.cc,v 1.2 1999-04-14 10:28:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,8 +61,8 @@ void G4ShortLivedTable::Insert(G4ParticleDefinition* particle)
   } else {
     //#ifdef G4VERBOSE
     //if (GetVerboseLevel()>0) {
-    //  G4cerr << "G4ShortLivedTable::Insert :" << particle->GetParticleName() ;
-    //  G4cerr << " is not short lived" << endl; 
+    //  G4cout << "G4ShortLivedTable::Insert :" << particle->GetParticleName() ;
+    //  G4cout << " is not short lived" << endl; 
     //}
     //#endif
   }
@@ -75,8 +75,8 @@ void G4ShortLivedTable::Remove(G4ParticleDefinition* particle)
   } else {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cerr << "G4ShortLivedTable::Remove :" << particle->GetParticleName() ;
-      G4cerr << " is not short lived" << endl; 
+      G4cout << "G4ShortLivedTable::Remove :" << particle->GetParticleName() ;
+      G4cout << " is not short lived" << endl; 
     }
 #endif
   }

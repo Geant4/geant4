@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiProperties.hh,v 1.1 1999-01-07 16:10:29 gunter Exp $
+// $Id: G4NucleiProperties.hh,v 1.2 1999-04-14 10:28:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,7 +60,7 @@ public:
   static G4double GetMassExcess(const G4int A, const G4int Z)
     {
       if (A < 1 || Z < 0 || Z > A) {
-	G4cerr << "G4NucleiProperties::GetMassExccess: Wrong values for A = " << A 
+	G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " << A 
 	       << " and Z = " << Z << endl;
 	return 0.0;
       } else {
@@ -74,7 +74,7 @@ public:
   static G4double GetAtomicMass(const G4double A, const G4double Z)
     {
       if (Z < 0 || Z > A) {
-	G4cerr << "G4NucleiProperties::GetAtomicMass: Wrong values for A = " << A 
+	G4cout << "G4NucleiProperties::GetAtomicMass: Wrong values for A = " << A 
 	       << " and Z = " << Z << endl;	return 0.0;
       } else if (abs(A - G4int(A)) > 1.e-10) {
 	return AtomicMass(Z,A);

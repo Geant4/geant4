@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleWithCuts.hh,v 1.2 1999-04-13 07:58:34 kurasige Exp $
+// $Id: G4ParticleWithCuts.hh,v 1.3 1999-04-14 10:28:18 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -189,8 +189,8 @@ inline void G4ParticleWithCuts::ReCalcCuts()
     CalcEnergyCuts(theCutInMaxInteractionLength);
   } else {
     if (GetVerboseLevel()>0) {
-      G4cerr << "G4ParticleWithCuts::ReCalcCuts() :";
-      G4cerr << "theCutInMaxInteractionLength is not defined " << endl; 
+      G4cout << "G4ParticleWithCuts::ReCalcCuts() :";
+      G4cout << "theCutInMaxInteractionLength is not defined " << endl; 
     }
   }
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayTable.cc,v 1.2 1999-04-13 08:00:16 kurasige Exp $
+// $Id: G4DecayTable.cc,v 1.3 1999-04-14 10:28:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,9 +37,9 @@ void G4DecayTable::Insert( G4VDecayChannel * aChannel){
   if (parent == 0) { parent = (G4ParticleDefinition*)(aChannel->GetParent()); }
   if (parent != aChannel->GetParent()) {
 #ifdef G4VERBOSE
-    G4cerr << " G4DecayTable::Insert :: bad   G4VDecayChannel (mismatch parent) ";
-    G4cerr << "       " << parent->GetParticleName();
-    G4cerr << " input:" << aChannel->GetParent()->GetParticleName() << endl;
+    G4cout << " G4DecayTable::Insert :: bad   G4VDecayChannel (mismatch parent) ";
+    G4cout << "       " << parent->GetParticleName();
+    G4cout << " input:" << aChannel->GetParent()->GetParticleName() << endl;
 #endif
   } else {
     channels->insert(aChannel);

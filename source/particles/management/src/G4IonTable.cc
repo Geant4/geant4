@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.5 1999-04-13 08:00:19 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.6 1999-04-14 10:28:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@ G4IonTable::~G4IonTable()
       // delete if not static objects
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>1) {
-	G4cerr << "G4IonTable:~IonTable() : delete ion of  " << name << endl;
+	G4cout << "G4IonTable:~IonTable() : delete ion of  " << name << endl;
       }
 #endif
       delete particle;
@@ -127,8 +127,8 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J, G4int Q)
     if ( name(0) == '?') {
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>0) {
-	G4cerr << "G4IonTable::GetIon() : can not create ions " << endl;
-	G4cerr << " Z =" << Z << "  A = " << A <<  endl;
+	G4cout << "G4IonTable::GetIon() : can not create ions " << endl;
+	G4cout << " Z =" << Z << "  A = " << A <<  endl;
       }
 #endif
       return 0;
@@ -146,17 +146,26 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J, G4int Q)
 
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>1) {
-      G4cerr << "G4IonTable::GetIon() : create ion of " << name << endl;
+      G4cout << "G4IonTable::GetIon() : create ion of " << name << endl;
     } 
 #endif
-    char cmd[60];
-    ostrstream os(cmd,60);
-    os << "/run/particle/addProcManager "<< name << '\0';
-    G4UImanager::GetUIpointer()->ApplyCommand(cmd);
+    char cmdAdd[60];
+    ostrstream osAdd(cmdAdd,60);
+    osAdd << "/run/particle/addProcManager "<< name << '\0';
+    G4UImanager::GetUIpointer()->ApplyCommand(cmdAdd);
     
     G4ParticleDefinition* alpha=G4ParticleTable::GetParticleTable()->FindParticle("GenericIon");
     if (alpha->GetEnergyCuts() != 0) {
       ion->SetCuts( alpha->GetLengthCuts());
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()> 1) {
+      G4cout << "G4IonTable::GetIon() : cut value =" << alpha->GetLengthCuts()/mm << "[mm]" <<endl;
+    } 
+#endif      
+      char cmdBld[60];
+      ostrstream osBld(cmdBld,60);
+      osBld << "/run/particle/buildPhysicsTable "<< name << '\0';
+      G4UImanager::GetUIpointer()->ApplyCommand(cmdBld);
     }
   }
   return ion;  
@@ -218,8 +227,8 @@ void G4IonTable::Insert(G4ParticleDefinition* particle)
   } else {
     //#ifdef G4VERBOSE
     //if (GetVerboseLevel()>0) {
-    //  G4cerr << "G4IonTable::Insert :" << particle->GetParticleName() ;
-    //  G4cerr << " is not ions" << endl; 
+    //  G4cout << "G4IonTable::Insert :" << particle->GetParticleName() ;
+    //  G4cout << " is not ions" << endl; 
     //}
     //#endif
   }
@@ -232,8 +241,8 @@ void G4IonTable::Remove(G4ParticleDefinition* particle)
   } else {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cerr << "G4IonTable::Remove :" << particle->GetParticleName() ;
-      G4cerr << " is not ions" << endl; 
+      G4cout << "G4IonTable::Remove :" << particle->GetParticleName() ;
+      G4cout << " is not ions" << endl; 
     }
 #endif
   }

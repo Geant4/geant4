@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayProducts.cc,v 1.3 1999-04-13 08:00:15 kurasige Exp $
+// $Id: G4DecayProducts.cc,v 1.4 1999-04-14 10:28:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -111,9 +111,9 @@ G4int G4DecayProducts::PushProducts(G4DynamicParticle *aParticle)
      numberOfProducts += 1; 
    } else {
 #ifdef G4VERBOSE
-     G4cerr << "G4DecayProducts::PushProducts ";
-     G4cerr << " exceeds MaxNumberOfProducts(=" <<MaxNumberOfProducts << ")";
-     G4cerr << endl;
+     G4cout << "G4DecayProducts::PushProducts ";
+     G4cout << " exceeds MaxNumberOfProducts(=" <<MaxNumberOfProducts << ")";
+     G4cout << endl;
 #endif
    }
    return numberOfProducts;
