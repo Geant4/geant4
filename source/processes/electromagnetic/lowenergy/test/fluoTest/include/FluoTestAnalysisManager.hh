@@ -47,11 +47,9 @@ public:
   void SetHisto1DDraw(G4String str) {histo1DDraw = str;};
   void SetHisto1DSave(G4String str) {histo1DSave = str;};
  
-private:
-  G4VAnalysisSystem* analysisSystem;
-  IPlotter* pl;
-  IVectorFactory* fVectorFactory;
-  IHistogramFactory* histoFactory;
+private: 
+  
+  FluoTestDetectorConstruction*    Detector;
 
   //IHistogram1D*  histoGamDetPre;
   // IHistogram1D* histoGamDetPost;
@@ -63,8 +61,10 @@ private:
   //IHistogram1D*  histoOtherPartDet;
   //IHistogram1D*  histoDetETot;
   //IHistogram1D* histoGamDet;
-
-  FluoTestDetectorConstruction*    Detector;
+   IHistogramFactory* histoFactory;
+  IPlotter* pl;
+  G4VAnalysisSystem* analysisSystem;
+  IVectorFactory* fVectorFactory;
 
   G4String histo1DDraw;
   G4String histo1DSave;
