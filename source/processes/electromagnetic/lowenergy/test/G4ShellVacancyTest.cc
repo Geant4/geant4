@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellVacancyTest.cc,v 1.2 2001-10-12 13:10:56 pia Exp $
+// $Id: G4ShellVacancyTest.cc,v 1.3 2001-10-24 20:23:43 elena Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -94,41 +94,46 @@ int main()
 
   G4cout.setf( ios::scientific, ios::floatfield );
 
-  G4VDataSetAlgorithm* interpolation = new G4LogLogInterpolation();
+  G4VDataSetAlgorithm* interpolation1 = new G4LogLogInterpolation();
+  G4VDataSetAlgorithm* interpolation2 = new G4LogLogInterpolation();
+  G4VDataSetAlgorithm* interpolation3 = new G4LogLogInterpolation();
+  G4VDataSetAlgorithm* interpolation4 = new G4LogLogInterpolation();
+  G4VDataSetAlgorithm* interpolation5 = new G4LogLogInterpolation();
+  G4VDataSetAlgorithm* interpolation6 = new G4LogLogInterpolation();
 
   G4cout << "Interpolation created" << G4endl; 
     G4String  fileName = "brem/br-cs-";
 
     G4VEMDataSet* dataSet1;
 
-      dataSet1 = new G4CompositeEMDataSet(fileName,interpolation,MeV,10000);
+      dataSet1 = new G4CompositeEMDataSet(fileName,interpolation1,MeV,10000);
     
       fileName = "comp/ce-cs-";
 	
       G4VEMDataSet* dataSet2;
-      dataSet2 = new G4CompositeEMDataSet(fileName,interpolation,MeV,10000);
+      dataSet2 = new G4CompositeEMDataSet(fileName,interpolation2,MeV,10000);
      
       fileName = "comp/ce-sf-";
       G4VEMDataSet* dataSet3;
 
-      dataSet3 = new G4CompositeEMDataSet(fileName,interpolation,MeV,10000);
+      dataSet3 = new G4CompositeEMDataSet(fileName,interpolation3,MeV,10000);
 
 
       fileName = "pair/pp-cs-";
       G4VEMDataSet* dataSet4;
 
-      dataSet4 = new G4CompositeEMDataSet(fileName,interpolation,MeV,10000);
+      dataSet4 = new G4CompositeEMDataSet(fileName,interpolation4,MeV,10000);
       static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
       fileName = "phot/pe-cs-";
       G4VEMDataSet* dataSet5;
 
-      dataSet5 = new G4CompositeEMDataSet(fileName,interpolation,MeV,10000);
+      dataSet5 = new G4CompositeEMDataSet(fileName,interpolation5,MeV,10000);
 
       fileName = "phot/pe-ss-cs-";
       G4VEMDataSet* dataSet6;
 
-      dataSet6 = new G4CompositeEMDataSet(fileName,interpolation,MeV,10000);
+      dataSet6 = new G4CompositeEMDataSet(fileName,interpolation6,MeV,10000);
 
       G4int nMaterials = G4Material::GetNumberOfMaterials();
       
@@ -175,10 +180,10 @@ int main()
       G4cout<<"The number of transition for the "<<p<<"th element in the material "<<
 	material->GetName()<<" is : "<<n<<G4endl;
     }
-
+ 
   delete manager;
 
-  cout << "END OF THE MAIN PROGRAM" << G4endl;
+  G4cout << "END OF THE MAIN PROGRAM" << G4endl;
 }
 
 
