@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.24 2001-11-28 16:51:09 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.25 2001-12-05 08:23:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -107,7 +107,7 @@ G4double G4PropagatorInField::
      G4double trialProposedStep= 1.e2 *  ( 10.0 * cm + 
 		  fNavigator->GetWorldVolume()->GetLogicalVolume()->
                   GetSolid()->DistanceToOut(StartPointA, VelocityUnit) ) ;
-     CurrentProposedStepLength= min( trialProposedStep, fLargestAcceptableStep); 
+     CurrentProposedStepLength= G4std::min( trialProposedStep, fLargestAcceptableStep); 
   }
   epsilon = GetDeltaOneStep() / CurrentProposedStepLength ;
 
@@ -565,7 +565,7 @@ G4PropagatorInField::LocateIntersectionPoint(
        }
        if( curveDist < 0.0 ) {
 	     G4cerr << "G4PropagatorInField::LocateIntersectionPoint: "
-		    << "Error in advancing " << endl;
+		    << "Error in advancing " << G4endl;
           printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
                  -1.0, NewSafety,  substep_no, 0); //  startVolume);
 	  G4Exception("G4PropagatorInField::LocateIntersectionPoint : the final curve point is not further along than the original.");
