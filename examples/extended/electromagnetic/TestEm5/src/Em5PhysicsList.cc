@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em5PhysicsList.cc,v 1.5 2000-01-20 15:34:40 maire Exp $
+// $Id: Em5PhysicsList.cc,v 1.6 2000-05-24 16:13:21 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -250,7 +250,15 @@ void Em5PhysicsList::SetCuts()
   if (verboseLevel >0){
     G4cout << "Em5PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
+  }
+  
+  //special for low energy physics
+  //
+  G4double lowlimit=250*eV;  
+  G4Gamma   ::SetEnergyRange(lowlimit,100*GeV);
+  G4Electron::SetEnergyRange(lowlimit,100*GeV);
+  G4Positron::SetEnergyRange(lowlimit,100*GeV);
+      
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
    SetCutValue(cutForGamma,"gamma");
