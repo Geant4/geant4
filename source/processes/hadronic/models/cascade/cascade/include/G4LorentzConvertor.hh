@@ -12,10 +12,7 @@ class G4LorentzConvertor {
 
 public:
 
-  G4LorentzConvertor() 
-    : degenerated(false) {
-
-  };
+  G4LorentzConvertor();
 
   G4LorentzConvertor(const vector<G4double>& bmom, 
 		     G4double bmass, 
@@ -86,7 +83,7 @@ public:
   }; 
 
 private: 
-
+G4int verboseLevel;
   vector<G4double> bullet_mom;
   G4double bullet_mass;
 

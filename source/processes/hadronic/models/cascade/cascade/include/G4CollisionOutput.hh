@@ -13,7 +13,7 @@ class G4CollisionOutput {
 
 public:
 
-  G4CollisionOutput() {};
+  G4CollisionOutput();
 
   void reset() {
     nucleiFragments.resize(0);
@@ -118,6 +118,7 @@ public:
 
 private: 
 
+G4int verboseLevel;
   vector<G4InuclElementaryParticle> outgoingParticles;
 
   vector<G4InuclNuclei> nucleiFragments;

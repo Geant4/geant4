@@ -10,13 +10,13 @@ class G4Fissioner : public G4Collider {
 
 public:
 
-  G4Fissioner() {};
+  G4Fissioner();
 
   virtual G4CollisionOutput collide(G4InuclParticle* bullet,
 				    G4InuclParticle* target);
 
 private: 
-
+G4int verboseLevel;
   G4double getC2(G4double A1, 
 		 G4double A2, 
 		 G4double X3, 

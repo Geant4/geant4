@@ -14,7 +14,7 @@ class G4IntraNucleiCascader : public G4Collider {
 
 public:
 
-  G4IntraNucleiCascader() {};
+  G4IntraNucleiCascader();
 
   void setElementaryParticleCollider(G4ElementaryParticleCollider* ecollider) {
     theElementaryParticleCollider = ecollider;   
@@ -28,7 +28,7 @@ public:
   };
 
 private: 
-
+G4int verboseLevel;
   G4ElementaryParticleCollider* theElementaryParticleCollider;
 
   G4int inter_case;

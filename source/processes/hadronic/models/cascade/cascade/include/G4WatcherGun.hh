@@ -8,9 +8,7 @@ class G4WatcherGun {
 
 public:
 
-  G4WatcherGun() {
-
-  };
+  G4WatcherGun();
 
   void setWatchers();
 
@@ -20,6 +18,7 @@ public:
   };
 
 private: 
+  G4int verboseLevel;
 
   vector<G4NuclWatcher> watchers;
 

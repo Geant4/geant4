@@ -1,9 +1,21 @@
 #include "G4LorentzConvertor.hh"
 
-G4int verboseLevel = 1;
+
+
+  G4LorentzConvertor::G4LorentzConvertor() 
+    : verboseLevel(2), degenerated(false) {
+
+if (verboseLevel > 3) {
+    G4cout << " >>> G4LorentzConvertor::G4LorentzConvertor" << G4endl;
+  }
+  };
 
 void G4LorentzConvertor::toTheCenterOfMass() {
    
+if (verboseLevel > 3) {
+    G4cout << " >>> G4LorentzConvertor::toTheCenterOfMass" << G4endl;
+  }
+
   const G4double small = 1.0e-10;
 
   v2 = 0.0;
@@ -66,6 +78,10 @@ void G4LorentzConvertor::toTheCenterOfMass() {
 
 vector<G4double> G4LorentzConvertor::rotate(const vector<G4double> mom) const {
 
+if (verboseLevel > 3) {
+    G4cout << " >>> G4LorentzConvertor::rotate(vector<G4double>)" << G4endl;
+  }
+
   vector<G4double> mom_rot(4);
 
   if (verboseLevel > 1) {
@@ -99,6 +115,10 @@ vector<G4double> G4LorentzConvertor::rotate(const vector<G4double> mom) const {
 
 vector<G4double> G4LorentzConvertor::rotate(const vector<G4double> mom1, 
 					    const vector<G4double> mom) const {
+
+if (verboseLevel > 3) {
+    G4cout << " >>> G4LorentzConvertor::rotate(vector<G4double>,vector<G4double>)" << G4endl;
+  }
 
   const G4double small = 1.0e-10;
 
@@ -142,6 +162,10 @@ vector<G4double> G4LorentzConvertor::rotate(const vector<G4double> mom1,
 
 void G4LorentzConvertor::toTheTargetRestFrame() {
    
+if (verboseLevel > 3) {
+    G4cout << " >>> G4LorentzConvertor::toTheTargetRestFrame" << G4endl;
+  }
+
   const G4double small = 1.0e-10;
 
   gamma = target_mom[0] / target_mass;
@@ -173,7 +197,6 @@ void G4LorentzConvertor::toTheTargetRestFrame() {
     if (verboseLevel > 1) {
       G4cout << " rf: i " << i << " pscm(i) " << scm_momentum[i] << G4endl;
     }
-
     pa += scm_momentum[i] * scm_momentum[i];
     pb += scm_momentum[i] * velocity[i];
   };
@@ -193,6 +216,10 @@ void G4LorentzConvertor::toTheTargetRestFrame() {
 }
 
 vector<G4double> G4LorentzConvertor::backToTheLab(const vector<G4double>& mom) const {
+
+if (verboseLevel > 3) {
+    G4cout << " >>> G4LorentzConvertor::backToTheLab" << G4endl;
+  }
 
   const G4double small = 1.0e-10;
 
@@ -224,6 +251,10 @@ vector<G4double> G4LorentzConvertor::backToTheLab(const vector<G4double>& mom) c
 }
 
 G4bool G4LorentzConvertor::reflectionNeeded() const {
+
+if (verboseLevel > 3) {
+    G4cout << " >>> G4LorentzConvertor::reflectionNeeded" << G4endl;
+  }
 
   const G4double small = 1.0e-10;
 

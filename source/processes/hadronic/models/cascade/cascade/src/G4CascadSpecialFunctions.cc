@@ -1,8 +1,11 @@
 #include "G4CascadSpecialFunctions.hh"
 
-G4int verboseLevel = 1;
-
 pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale2(G4double e) {
+
+  G4int verboseLevel = 2;
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4CascadSpecialFunctions::getPositionInEnergyScale2" << G4endl;
+  }
 
   const G4double EMT2[31] = {
     0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45,
@@ -25,6 +28,11 @@ pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale2(G4doub
 }
 
 pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale1(G4double e) {
+
+  G4int verboseLevel = 2;
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4CascadSpecialFunctions::getPositionInEnergyScale1" << G4endl;
+  }
 
   const G4double EMT1[20] = {
     0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0,
@@ -51,6 +59,7 @@ pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale1(G4doub
     ik = 19;
     sk = 1.0;
   };
+
   if (verboseLevel > 2) {
     G4cout << " e " << e << " ik " << ik << " sk " << sk << G4endl;
   }
@@ -60,6 +69,11 @@ pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScale1(G4doub
 
 G4double G4CascadSpecialFunctions::absorptionCrosSection(G4double e, 
 							 G4int type) {
+
+  G4int verboseLevel = 2;
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4CascadSpecialFunctions::absorptionCrosSection" << G4endl;
+  }
 
   const G4double corr_fac = 0.2;
   G4double csec = 0.0;
@@ -71,6 +85,7 @@ G4double G4CascadSpecialFunctions::absorptionCrosSection(G4double e,
     csec = 3.6735 * (1.0 - e) * (1.0 - e);     
   };
   if(csec < 0.0) csec = 0.0;
+
   if (verboseLevel > 2) {
     G4cout << " ekin " << e << " abs. csec " << corr_fac * csec << G4endl;   
   }
@@ -79,6 +94,11 @@ G4double G4CascadSpecialFunctions::absorptionCrosSection(G4double e,
 }
 
 pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScaleEMS(G4double e) {
+
+  G4int verboseLevel = 2;
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4CascadSpecialFunctions::getPositionInEnergyScaleEMS" << G4endl;
+  }
 
   const G4double EMS[46] = {
     0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.11, 0.12, 0.13, 0.14,
@@ -114,6 +134,11 @@ pair<G4int, G4double> G4CascadSpecialFunctions::getPositionInEnergyScaleEMS(G4do
 
 G4double G4CascadSpecialFunctions::crossSection(G4double e, 
 						G4int is) {
+
+  G4int verboseLevel = 2;
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4CascadSpecialFunctions::crossSection" << G4endl;
+  }
 
   const G4double dsig[46][2] = {
     13.7,  15.0, 15.8,  17.6, 19.0,  15.0, 46.0,  15.8, 52.0,  21.0,

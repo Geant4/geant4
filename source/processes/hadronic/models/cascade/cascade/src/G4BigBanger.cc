@@ -4,12 +4,23 @@
 #include "G4LorentzConvertor.hh"
 #include "algorithm"
 
-G4int verboseLevel = 1;
+
 
 typedef vector<G4InuclElementaryParticle>::iterator particleIterator;
 
+G4BigBanger::G4BigBanger()
+  : verboseLevel(2) {
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4BigBanger::G4BigBanger" << G4endl;
+  }
+}
+
 G4CollisionOutput G4BigBanger::collide(G4InuclParticle* bullet,
 				       G4InuclParticle* target) {
+
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4BigBanger::collide" << G4endl;
+  }
 
   // primitive explosion model A -> nucleons to prevent too exotic evaporation
 
@@ -99,11 +110,15 @@ G4BigBanger::generateBangInSCM(G4double etot,
 			       G4double mp,
 			       G4double mn) const {
 
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4BigBanger::generateBangInSCM" << G4endl;
+  }
+
   const G4double ang_cut = 0.9999;
   const G4int itry_max = 1000;
   
-  G4int ia = G4int(a + 0.1);
-  G4int iz = G4int(z + 0.1);
+  G4int ia = int(a + 0.1);
+  G4int iz = int(z + 0.1);
 
   if (verboseLevel > 2) {
     G4cout << " ia " << ia << " iz " << iz << G4endl;
@@ -227,8 +242,13 @@ vector<G4double> G4BigBanger::generateMomentumModules(G4double etot,
 						      G4double mp, 
 						      G4double mn) const {
 
-  G4int ia = G4int(a + 0.1);
-  G4int iz = G4int(z + 0.1);
+
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4BigBanger::generateMomentumModules" << G4endl;
+  }
+
+  G4int ia = int(a + 0.1);
+  G4int iz = int(z + 0.1);
   vector<G4double> pmod;
   G4double xtot = 0.0;
   G4double promax = maxProbability(a);
@@ -259,6 +279,11 @@ vector<G4double> G4BigBanger::generateMomentumModules(G4double etot,
 G4double G4BigBanger::xProbability(G4double x, 
 				   G4int ia) const {
 
+
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4BigBanger::xProbability" << G4endl;
+  }
+
   G4int ihalf = ia / 2;
   G4double ekpr = 0.0;
 
@@ -266,10 +291,10 @@ G4double G4BigBanger::xProbability(G4double x,
     ekpr = x * x;
 
     if(2 * ihalf == ia) { // even A
-      ekpr *= sqrt(1.0 - x) * pow((1.0 - x), G4int((3 * ia - 6) / 2)); 
+      ekpr *= sqrt(1.0 - x) * pow((1.0 - x), int((3 * ia - 6) / 2)); 
     }
     else {
-      ekpr *= pow((1.0 - x), G4int((3 * ia - 5) / 2));
+      ekpr *= pow((1.0 - x), int((3 * ia - 5) / 2));
     };
   }; 
   
@@ -277,12 +302,21 @@ G4double G4BigBanger::xProbability(G4double x,
 }
 
 G4double G4BigBanger::maxProbability(G4double a) const {
-  return xProbability(1.0 / (a - 1.0) / 1.5, G4int(a + 0.1));
+
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4BigBanger::maxProbability" << G4endl;
+  }
+
+  return xProbability(1.0 / (a - 1.0) / 1.5, int(a + 0.1));
 }
 
 G4double G4BigBanger::generateX(G4int ia, 
 				G4double a, 
 				G4double promax) const {
+
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4BigBanger::generateX" << G4endl;
+  }
 
   const G4int itry_max = 1000;
   G4int itry = 0;

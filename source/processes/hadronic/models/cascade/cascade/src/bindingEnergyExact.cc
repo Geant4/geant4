@@ -5,6 +5,11 @@
 G4double G4InuclSpecialFunctions::bindingEnergyExact(G4double A, 
 						     G4double Z) {
 
+  G4int verboseLevel = 2;
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclSpecialFunctions::bindingEnergyExact" << G4endl;
+  }
+
   // calculates the nuclei binding energy using experimental data or
   // asymptotic mass formula if it's impossible to use exact
 
@@ -75,9 +80,9 @@ G4double G4InuclSpecialFunctions::bindingEnergyExact(G4double A,
 
   G4double AN = A - Z;
 
-  G4int IZ = G4int(Z + 0.1); //:::
+  G4int IZ = int(Z + 0.1); 
 
-  G4int IN = G4int(AN + 0.1); //:::
+  G4int IN = int(AN + 0.1); 
 	 
   switch (IZ) {
   case 1: // H

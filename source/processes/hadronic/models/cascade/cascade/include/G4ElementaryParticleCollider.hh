@@ -14,13 +14,13 @@ class G4ElementaryParticleCollider : public G4Collider {
 
 public:
 
-  G4ElementaryParticleCollider() {};
+  G4ElementaryParticleCollider();
 
   virtual G4CollisionOutput collide(G4InuclParticle* bullet,
 				    G4InuclParticle* target);
 
 private: 
-
+  G4int verboseLevel;
   G4int generateMultiplicity(G4int is, 
 			     G4double ekin) const;
       

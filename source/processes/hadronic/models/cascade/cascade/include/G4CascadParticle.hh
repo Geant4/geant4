@@ -7,7 +7,7 @@ class G4CascadParticle {
 
 public:
 
-  G4CascadParticle() {};
+  G4CascadParticle();
 
   G4CascadParticle(const G4InuclElementaryParticle& particle, 
 		   const vector<G4double>& pos,
@@ -103,6 +103,7 @@ public:
    
 private: 
 
+  G4int verboseLevel;
   G4InuclElementaryParticle theParticle;
   vector<G4double> position;
   G4int current_zone;

@@ -43,5 +43,4 @@ namespace G4InuclSpecialFunctions {
 
   vector<G4double> generateWithFixedTheta(G4double ct, 
 					  G4double p);
-
 }

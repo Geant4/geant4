@@ -2,12 +2,22 @@
 #include "G4ParticleLargerEkin.hh"
 #include "algorithm"
 
-G4int verboseLevel = 1;
-
 typedef vector<G4InuclElementaryParticle>::iterator particleIterator;
+
+G4CollisionOutput::G4CollisionOutput()
+  : verboseLevel(2) {
+  
+if (verboseLevel > 3) {
+    G4cout << " >>> G4CollisionOutput::G4CollisionOutput" << G4endl;
+  }
+}
 
 void G4CollisionOutput::setOnShell(G4InuclParticle* bullet, 
 				   G4InuclParticle* target) {
+
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4CollisionOutput::setOnShell" << G4endl;
+  }
 
   const G4double accuracy = 0.00001; // momentum concerves at the level of 1 eV
 
@@ -194,6 +204,10 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
 }
 
 pair<pair<G4int, G4int>, G4int> G4CollisionOutput::selectPairToTune(G4double de) const {
+
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4CollisionOutput::selectPairToTune" << G4endl;
+  }
 
   pair<G4int, G4int> tup(-1, -1);
   G4int i3 = -1; 

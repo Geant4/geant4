@@ -9,7 +9,7 @@ class G4FissionStore {
 
 public:
 
-  G4FissionStore() {};
+  G4FissionStore();
 
   void addConfig(G4double a, 
 		 G4double z, 
@@ -29,7 +29,8 @@ public:
 					       G4double rand) const;
 
 private:
- 
+  G4int verboseLevel;
+
   vector<G4FissionConfiguration> configurations;
 
 };

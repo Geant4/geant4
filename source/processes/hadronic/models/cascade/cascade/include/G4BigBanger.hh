@@ -12,13 +12,14 @@ class G4BigBanger : public G4Collider {
 
 public:
 
-  G4BigBanger() {};
+  G4BigBanger();
 
   virtual G4CollisionOutput collide(G4InuclParticle* bullet,
 				    G4InuclParticle* target);
 
 private: 
 
+G4int verboseLevel;
   vector<G4InuclElementaryParticle> generateBangInSCM(G4double etot, 
 						      G4double a, 
 						      G4double z, 

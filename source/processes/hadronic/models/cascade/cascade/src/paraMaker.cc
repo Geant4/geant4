@@ -2,6 +2,11 @@
 
 pair<vector<G4double>, vector<G4double> > G4InuclSpecialFunctions::paraMaker(G4double Z) {
 
+  G4int verboseLevel = 4;
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclSpecialFunctions::paraMaker" << G4endl;
+  }
+
   // calculates the coefficients for the phenomenological formulas for
   // coulumb barier, c.s. etc needed for evaporators
 
@@ -74,6 +79,11 @@ pair<vector<G4double>, vector<G4double> > G4InuclSpecialFunctions::paraMaker(G4d
 }
 
 pair<G4double, G4double> G4InuclSpecialFunctions::paraMakerTruncated(G4double Z) {
+
+  G4int verboseLevel = 4;
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclSpecialFunctions::paraMakerTruncated" << G4endl;
+  }
 
   // truncated version of the previous one
 

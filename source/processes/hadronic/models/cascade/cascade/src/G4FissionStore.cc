@@ -1,9 +1,21 @@
 #include "G4FissionStore.hh"
 #include <math.h>
 
+G4FissionStore::G4FissionStore()
+  : verboseLevel(2){
+
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4FissionStore::G4FissionStore" << G4endl;
+  }
+}
+
 G4FissionConfiguration G4FissionStore::generateConfiguration(G4double amax, 
 							     G4double rand) const {
 
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4FissionStore::generateConfiguration" << G4endl;
+  }
+  
   const G4double small = -30.0;
 
   G4double totProb = 0.0;

@@ -2,10 +2,14 @@
 
 #include "G4InuclSpecialFunctions.hh"
 
-G4int verboseLevel = 1;
+
 
 G4double G4InuclSpecialFunctions::bindingEnergyKummel(G4double A, 
 						      G4double Z) {
+  G4int verboseLevel = 2;
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclSpecialFunctions::bindingEnergyKummel" << G4endl;
+  }
 
   // calculates the nuclei binding energy using Kummel mass formula
 
@@ -257,10 +261,10 @@ G4double G4InuclSpecialFunctions::bindingEnergyKummel(G4double A,
 
   G4double DZ0 = 0.0;
 
-  G4double AV = 2.0 * G4int(0.5 * AN + 0.1); // :::	
+  G4double AV = 2.0 * int(0.5 * AN + 0.1); 	
 
   if(AN > AV) DN0 = 1.0;
-  AV = 2.0 * G4int(0.5 * Z + 0.1); // :::
+  AV = 2.0 * int(0.5 * Z + 0.1); 
   if(Z > AV) DZ0 = 1.0;
   if(DN0 * DZ0 > 0.0) TPE = DMU / A;
   if(DN0 + DZ0 > 0.0) {

@@ -12,7 +12,7 @@ class G4EquilibriumEvaporator : public G4Collider {
 
 public:
 
-  G4EquilibriumEvaporator() {};
+  G4EquilibriumEvaporator();
 
   void setFissioner(G4Fissioner* fissioner) {
     theFissioner = fissioner;
@@ -26,7 +26,7 @@ public:
 				    G4InuclParticle* target);
 
 private: 
-
+G4int verboseLevel;
   G4double getE0(G4double A) const; 
 
   G4double getPARLEVDEN(G4double A, 

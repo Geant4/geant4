@@ -2,6 +2,11 @@
 
 G4double G4InuclSpecialFunctions::nucleiLevelDensity(G4double a) {
 
+  G4int verboseLevel = 2;
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclSpecialFunctions::nucleiLevelDensity" << G4endl;
+  }
+
   const G4double NLD[226] = {
     // 20 - 29
     3.94, 3.84, 3.74, 3.64, 3.55, 4.35, 4.26, 4.09, 3.96, 4.18,
@@ -50,7 +55,7 @@ G4double G4InuclSpecialFunctions::nucleiLevelDensity(G4double a) {
     // 240 - 245
     29.87, 30.25, 30.5, 29.8, 29.17, 28.67};
 
-  G4int ia = G4int(a + 0.1) - 20; 
+  G4int ia = int(a + 0.1) - 20; 
 
   if(ia > 0) {
 

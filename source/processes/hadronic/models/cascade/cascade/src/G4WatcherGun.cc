@@ -2,7 +2,19 @@
 
 #include "G4WatcherGun.hh"
 
+G4WatcherGun::G4WatcherGun()
+  : verboseLevel(2) {
+
+if (verboseLevel > 3) {
+    G4cout << " >>> G4WatcherGun::G4WatcherGun" << G4endl;
+  }
+}
+
 void G4WatcherGun::setWatchers() {
+
+if (verboseLevel > 3) {
+    G4cout << " >>> G4WatcherGun::setWatchers" << G4endl;
+  }
 
   vector<G4double> as;
   vector<G4double> cs;

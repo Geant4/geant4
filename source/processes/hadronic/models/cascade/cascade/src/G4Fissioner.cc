@@ -3,10 +3,20 @@
 #include "G4FissionStore.hh"
 #include "G4FissionConfiguration.hh"
 
-G4int verboseLevel = 1;
+G4Fissioner::G4Fissioner()
+  : verboseLevel(2) {
+  
+if (verboseLevel > 3) {
+    G4cout << " >>> G4Fissioner::G4Fissioner" << G4endl;
+  }
+}
 
 G4CollisionOutput G4Fissioner::collide(G4InuclParticle* bullet,
 				       G4InuclParticle* target) {
+
+if (verboseLevel > 3) {
+    G4cout << " >>> G4Fissioner::collide" << G4endl;
+  }
 
   const G4double one_third = 1.0/3.0;
   const G4double two_thirds = 2.0/3.0;
@@ -35,7 +45,7 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* bullet,
 
     if(A < 246.0) PARA += (nucleiLevelDensity(A) - PARA) * TETA;
 
-    G4double A1 = G4int(A / 2.0 + 1.1);
+    G4double A1 = int(A / 2.0 + 1.1);
     G4double Z1;
     G4double A2 = A - A1;
     G4double ALMA = -1000.0;
@@ -58,7 +68,7 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* bullet,
       G4double X3 = 1.0 / pow(A1, one_third);
       G4double X4 = 1.0 / pow(A2, one_third);
 
-      Z1 = G4int(getZopt(A1, A2, Z, X3, X4, R12)) - 1.0;
+      Z1 = int(getZopt(A1, A2, Z, X3, X4, R12)) - 1.0;
 
       vector<G4double> EDEF1(2);
       G4double Z2 = Z - Z1;
@@ -80,7 +90,7 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* bullet,
 	G4double C1 = sqrt(getC2(A1, A2, X3, X4, R12) / TEM);
 	G4double DZ = randomGauss(C1);
 
-	DZ = DZ > 0.0 ? G4int(DZ + 0.5) : -G4int(fabs(DZ - 0.5));
+	DZ = DZ > 0.0 ? int(DZ + 0.5) : -int(fabs(DZ - 0.5));
 	Z1 += DZ;
 	Z2 -= DZ;
 
@@ -168,6 +178,10 @@ G4double G4Fissioner::getC2(G4double A1,
 			  G4double X4, 
 			  G4double R12) const {
 
+if (verboseLevel > 3) {
+    G4cout << " >>> G4Fissioner::getC2" << G4endl;
+  }
+
   G4double C2 = 124.57 * (1.0 / A1 + 1.0 / A2) + 0.78 * (X3 + X4) - 176.9 *
     (pow(X3, 4) + pow(X4, 4)) + 219.36 * (1.0 / (A1 * A1) + 1.0 / (A2 * A2)) - 1.108 / R12;
 
@@ -180,6 +194,10 @@ G4double G4Fissioner::getZopt(G4double A1,
 			    G4double X3, 
 			    G4double X4, 
 			    G4double R12) const {
+
+if (verboseLevel > 3) {
+    G4cout << " >>> G4Fissioner::getZopt" << G4endl;
+  }
 
   G4double Zopt = (87.7 * (X4 - X3) * (1.0 - 1.25 * (X4 + X3)) +
 		   ZT * ((124.57 / A2 + 0.78 * X4 - 176.9 * pow(X4, 4) + 219.36 / (A2 * A2)) - 0.554 / R12)) /
@@ -199,13 +217,17 @@ void G4Fissioner::potentialMinimization(G4double& VP,
 					vector<G4double>& BET1, 
 					G4double& R12) const {
 
+if (verboseLevel > 3) {
+    G4cout << " >>> G4Fissioner::potentialMinimization" << G4endl;
+  }
+
   const G4double huge = 2.0e35;
   const G4double one_third = 1.0 / 3.0;
   const G4double two_thirds = 2.0 / 3.0;
   const G4int itry_max = 2000;
   const G4double DSOL1 = 1.0e-6;
   const G4double DS1 = 0.3;
-  const G4double DS2 = 1.0 / DS1 / DS1; // ::: is this ok?
+  const G4double DS2 = 1.0 / DS1 / DS1; 
 
   G4double A1[2];
 

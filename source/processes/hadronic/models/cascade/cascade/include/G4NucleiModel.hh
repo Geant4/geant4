@@ -25,9 +25,7 @@ class G4NucleiModel {
 
 public:
 
-  G4NucleiModel() {
-
-  };
+  G4NucleiModel();
 
   G4NucleiModel(G4InuclNuclei* nuclei) {
 
@@ -115,7 +113,7 @@ public:
   G4bool worthToPropagate(const G4CascadParticle& cparticle) const; 
     
 private: 
-
+G4int verboseLevel;
   G4bool passFermi(const vector<G4InuclElementaryParticle>& particles, 
 		   G4int zone);
 

@@ -7,10 +7,20 @@
 #include "G4InuclNuclei.hh"
 #include "G4LorentzConvertor.hh"
 
-G4int verboseLevel = 1;
+G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator()
+: verboseLevel(2) {
+
+if (verboseLevel > 3) {
+    G4cout << " >>> G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator" << G4endl;
+  }
+};
 
 G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* bullet,
 						      G4InuclParticle* target) {
+
+if (verboseLevel > 3) {
+    G4cout << " >>> G4NonEquilibriumEvaporator::collide" << G4endl;
+  }
 
   const G4double one_third = 1.0/3.0;
 
@@ -18,7 +28,7 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* bullet,
 
   const G4double z_cut = 3.0;
 
-#ifdef RUN
+#ifdef RUN           // :::
   const G4double eexs_cut = 0.1;
 #else
   const G4double eexs_cut = 100000.0;
@@ -90,7 +100,7 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* bullet,
 
     G4double ZR = Z - QPP;  
 
-    G4int NEX = G4int(QEX + 0.5);
+    G4int NEX = int(QEX + 0.5);
 
     vector<G4double> ppout(4, 0.0);
   
@@ -472,6 +482,10 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* bullet,
 
 G4double G4NonEquilibriumEvaporator::getMatrixElement(G4double A) const {
 
+if (verboseLevel > 3) {
+    G4cout << " >>> G4NonEquilibriumEvaporator::getMatrixElement" << G4endl;
+  }
+
   G4double me;
 
   if(A > 150.0) {
@@ -487,6 +501,10 @@ G4double G4NonEquilibriumEvaporator::getMatrixElement(G4double A) const {
 
 G4double G4NonEquilibriumEvaporator::getE0(G4double A) const {
 
+if (verboseLevel > 3) {
+    G4cout << " >>> G4NonEquilibriumEvaporator::getEO" << G4endl;
+  }
+
   const G4double e0 = 200.0;
 
   return e0;   
@@ -494,6 +512,10 @@ G4double G4NonEquilibriumEvaporator::getE0(G4double A) const {
 
 G4double G4NonEquilibriumEvaporator::getParLev(G4double A, 
 					       G4double Z) const {
+
+if (verboseLevel > 3) {
+    G4cout << " >>> G4NonEquilibriumEvaporator::getParLev" << G4endl;
+  }
 
   const G4double par = 0.125;
 

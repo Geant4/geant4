@@ -19,7 +19,7 @@ class G4InuclCollider : public G4Collider {
 
 public:
 
-  G4InuclCollider() {};
+  G4InuclCollider();
 
   G4InuclCollider(G4ElementaryParticleCollider* ecollider,
 		  G4IntraNucleiCascader* incascader, 
@@ -71,6 +71,8 @@ public:
 				    G4InuclParticle* target);
 
 private: 
+
+  G4int verboseLevel;
 
   G4bool inelasticInteractionPossible(G4InuclParticle* bullet,
 				      G4InuclParticle* target, 

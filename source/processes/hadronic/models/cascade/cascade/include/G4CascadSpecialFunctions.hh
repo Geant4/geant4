@@ -17,6 +17,6 @@ namespace G4CascadSpecialFunctions {
 			G4int is);
 
   pair<G4int, G4double> getPositionInEnergyScaleEMS(G4double e); 
- 
+
 }
 

@@ -3,6 +3,11 @@
 G4double G4InuclSpecialFunctions::bindingEnergyAsymptotic(G4double A, 
 							  G4double Z) {
 
+  G4int verboseLevel = 2;
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclSpecialFunctions::bindingEnergyAsymptotic" << G4endl;
+  }
+
   // calculates the nuclei binding energy 
   // using smooth liquid high energy formula
   

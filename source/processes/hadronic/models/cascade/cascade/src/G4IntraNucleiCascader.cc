@@ -9,12 +9,23 @@
 #include "G4CascadParticle.hh"
 #include "algorithm"
 
-G4int verboseLevel = 1;
-
 typedef vector<G4InuclElementaryParticle>::iterator particleIterator;
+
+G4IntraNucleiCascader::G4IntraNucleiCascader()
+  : verboseLevel(2) {
+
+if (verboseLevel > 3) {
+    G4cout << " >>> G4IntraNucleiCascader::G4IntraNucleiCascader" << G4endl;
+  }
+}
 
 G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 						 G4InuclParticle* target) {
+
+
+if (verboseLevel > 3) {
+    G4cout << " >>> G4IntraNucleiCascader::collide" << G4endl;
+  }
 
   const G4int itry_max = 1000;
   const G4int reflection_cut = 500;
@@ -39,7 +50,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
   G4double ekin_in; 
 
-  if (verboseLevel > 2) {
+  if (verboseLevel > 1) {
     model.printModel();
     G4cout << " intitial momentum  E " << momentum_in[0] << " Px " << momentum_in[1] 
 	   << " Py " << momentum_in[2] << " Pz " << momentum_in[3] << G4endl;
@@ -80,8 +91,8 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	output_particles.push_back(all_particles.second[ip]);
       if(cascad_particles.size() == 0) { // compound nuclei
 
-	G4int ia = G4int(ab + 0.5);
-	G4int iz = G4int(zb + 0.5);
+	G4int ia = int(ab + 0.5);
+	G4int iz = int(zb + 0.5);
 
 	for(G4int i = 0; i < ia; i++) {
 
@@ -90,8 +101,8 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	  theExitonConfiguration.incrementQP(knd);
 	};
 
-	G4int ihn = G4int(2.0 * (ab - zb) * inuclRndm() + 0.5);
-	G4int ihz = G4int(2.0 * zb * inuclRndm() + 0.5);
+	G4int ihn = int(2.0 * (ab - zb) * inuclRndm() + 0.5);
+	G4int ihz = int(2.0 * zb * inuclRndm() + 0.5);
 
 	for(i = 0; i < ihn; i++) theExitonConfiguration.incrementHoles(2);
 	for(i = 0; i < ihz; i++) theExitonConfiguration.incrementHoles(1);
@@ -286,6 +297,10 @@ G4bool G4IntraNucleiCascader::goodCase(G4double a,
 				       G4double z, 
 				       G4double eexs, 
 				       G4double ein) const {
+
+if (verboseLevel > 3) {
+    G4cout << " >>> G4IntraNucleiCascader::goodCase" << G4endl;
+  }
 
   const G4double eexs_cut = 0.0001;
   const G4double reason_cut = 7.0;

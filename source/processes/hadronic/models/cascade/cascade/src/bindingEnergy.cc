@@ -2,6 +2,12 @@
 
 G4double G4InuclSpecialFunctions::bindingEnergy(G4double A, G4double Z) {
 
+
+  G4int verboseLevel = 2;
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclSpecialFunctions::bindingEnergy" << G4endl;
+  }
+
   // calculates the nuclei binding energy using Kummel or exact or asymptotic
   // high temperature 
 

@@ -2,10 +2,20 @@
 
 G4double G4InuclSpecialFunctions::getAL(G4double A) {
 
+  G4int verboseLevel = 2;
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclSpecialFunctions::getAL" << G4endl;
+  }
+
   return 0.76 + 2.2 / pow(A, 0.333333);
 }
 
 G4double G4InuclSpecialFunctions::csNN(G4double e) {
+ 
+  G4int verboseLevel = 2;
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclSpecialFunctions::csNN" << G4endl;
+  }
 
   G4double snn;
 
@@ -21,6 +31,11 @@ G4double G4InuclSpecialFunctions::csNN(G4double e) {
 
 G4double G4InuclSpecialFunctions::csPN(G4double e) {
 
+ G4int verboseLevel = 2;
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclSpecialFunctions::csPN" << G4endl;
+  }
+
   G4double spn;
 
   if(e < 40.0) {
@@ -34,6 +49,11 @@ G4double G4InuclSpecialFunctions::csPN(G4double e) {
 
 G4double G4InuclSpecialFunctions::FermiEnergy(G4double A, G4double Z, G4int ntype) {
   // calculates the nuclei Fermi energy for 0 - neutron and 1 - proton
+
+ G4int verboseLevel = 2;
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclSpecialFunctions::FermiEnergy" << G4endl;
+  }
 
   const G4double C = 55.4;
 
@@ -51,10 +71,20 @@ G4double G4InuclSpecialFunctions::FermiEnergy(G4double A, G4double Z, G4int ntyp
 G4double G4InuclSpecialFunctions::inuclRndm() { 
   // ::: PUT PROPER RNDM HERE
 
+ G4int verboseLevel = 2;
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclSpecialFunctions::inuclRndm" << G4endl;
+  }
+
   return drand48(); 
 } 
 
 G4double G4InuclSpecialFunctions::randomGauss(G4double sigma) {
+
+ G4int verboseLevel = 2;
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclSpecialFunctions::randomGauss" << G4endl;
+  }
 
   const G4double eps = 1.0e-6;
 
@@ -74,12 +104,22 @@ G4double G4InuclSpecialFunctions::randomGauss(G4double sigma) {
 
 G4double G4InuclSpecialFunctions::randomPHI() { 
 
+ G4int verboseLevel = 2;
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclSpecialFunctions::randomPHI" << G4endl;
+  }
+
   const G4double twopi = 6.2831853;
 
   return twopi * inuclRndm();
 } 
 
 pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
+
+ G4int verboseLevel = 2;
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclSpecialFunctions::randomCOS_SIN" << G4endl;
+  }
 
   G4double CT = 1.0 - 2.0 * inuclRndm();
 
@@ -88,6 +128,11 @@ pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
 
 vector<G4double> G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct,
 								 G4double p) {
+
+ G4int verboseLevel = 2;
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclSpecialFunctions::generateWithFixedTheta" << G4endl;
+  }
 
   vector<G4double> momr(4);
 

@@ -241,7 +241,7 @@ public:
 
     G4InuclParticle::printParticle();
 
-    G4cout << " type " << particleType << " mass " << particleMass << 
+    G4cout << " Particle: type " << particleType << " mass " << particleMass << 
       " ekin " << getKineticEnergy() << G4endl; 
   };
 

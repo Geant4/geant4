@@ -4,13 +4,24 @@
 #include "G4ParticleLargerEkin.hh"
 #include "algorithm"
 
-G4int verboseLevel = 1;
-
 typedef vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef vector<G4InuclNuclei>::iterator nucleiIterator;
 	 
+G4InuclCollider::G4InuclCollider()
+  : verboseLevel(2) {
+
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclCollider::G4InuclCollider" << G4endl;
+  }
+}
+
 G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 					   G4InuclParticle* target) {
+
+  verboseLevel = 2;
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclCollider::collide" << G4endl;
+  }
 
   const G4int itry_max = 1000;
   		     
@@ -258,6 +269,10 @@ G4bool G4InuclCollider::inelasticInteractionPossible(G4InuclParticle* bullet,
 						     G4InuclParticle* target, 
 						     G4double ekin) const {
 
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclCollider::inelasticInteractionPossible" << G4endl;
+  }
+
   const G4double coeff = 0.001 * 1.2;
   const G4double one_third = 1.0 / 3.0;
 
@@ -311,6 +326,10 @@ G4bool G4InuclCollider::inelasticInteractionPossible(G4InuclParticle* bullet,
 G4InteractionCase G4InuclCollider::bulletTargetSetter(G4InuclParticle* bullet,
 						      G4InuclParticle* target) const {
 
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclCollider::bulletTargetSetter" << G4endl;
+  }
+
   G4InteractionCase interCase;
 
   if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {     
@@ -342,6 +361,10 @@ G4InteractionCase G4InuclCollider::bulletTargetSetter(G4InuclParticle* bullet,
 }       
 
 G4bool G4InuclCollider::explosion(G4InuclNuclei* target) const {
+
+if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclCollider::explosion" << G4endl;
+  }
 
   const G4double a_cut = 20.0;
   const G4double be_cut = 3.0;

@@ -4,10 +4,20 @@
 #include "G4InuclNuclei.hh"
 #include "G4LorentzConvertor.hh"
 
-G4int verboseLevel = 1;
+G4EquilibriumEvaporator::G4EquilibriumEvaporator()
+  : verboseLevel(2) {
+  
+if (verboseLevel > 3) {
+    G4cout << " >>> G4EquilibriumEvaporator::G4EquilibriumEvaporator" << G4endl;
+  }
+}
 
 G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
 						   G4InuclParticle* target) {
+
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4EquilibriumEvaporator::collide" << G4endl;
+  }
 
   // simple implementation of the equilibium evaporation a la Dostrowski
 
@@ -550,6 +560,10 @@ G4bool G4EquilibriumEvaporator::timeToBigBang(G4double a,
 					      G4double z, 
 					      G4double e) const {
 
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4EquilibriumEvaporator::timeToBigBang" << G4endl;
+  }
+
   const G4double be_cut = 3.0;
 
   G4bool bigb = true;
@@ -566,6 +580,10 @@ G4bool G4EquilibriumEvaporator::timeToBigBang(G4double a,
 
 G4bool G4EquilibriumEvaporator::goodRemnant(G4double a, 
 					    G4double z) const {
+  
+if (verboseLevel > 3) {
+    G4cout << " >>> G4EquilibriumEvaporator::goodRemnant" << G4endl;
+  }
 
   return a > 1.0 && z > 0.0 && a > z;
 }
@@ -575,7 +593,10 @@ G4double G4EquilibriumEvaporator::getQF(G4double x,
 					G4double a,
 					G4double z, 
 					G4double e) const {
-
+if (verboseLevel > 3) {
+    G4cout << " >>> G4EquilibriumEvaporator::getQF" << G4endl;
+  }
+  
   const G4double QFREP[72] = {  
     //     TL201 *     *   *    *
     //      1    2     3   4    5
@@ -659,6 +680,10 @@ G4double G4EquilibriumEvaporator::getAF(G4double x,
 					G4double z, 
 					G4double e) const {
 
+if (verboseLevel > 3) {
+    G4cout << " >>> G4EquilibriumEvaporator::getAF" << G4endl;
+  }
+
   // ugly parameterisation to fit the experimental fission cs for Hg - Bi nuclei
   G4double AF = 1.285 * (1.0 - e / 1100.0);
 
@@ -671,12 +696,20 @@ G4double G4EquilibriumEvaporator::getAF(G4double x,
 G4double G4EquilibriumEvaporator::getPARLEVDEN(G4double A, 
 					       G4double Z) const {
 
+if (verboseLevel > 3) {
+    G4cout << " >>> G4EquilibriumEvaporator::getPARLEVDEN" << G4endl;
+  }
+
   const G4double par = 0.125;
 
   return par;
 }
 
 G4double G4EquilibriumEvaporator::getE0(G4double A) const {
+
+if (verboseLevel > 3) {
+    G4cout << " >>> G4EquilibriumEvaporator::getE0" << G4endl;
+  }
 
   const G4double e0 = 200.0;   
 
