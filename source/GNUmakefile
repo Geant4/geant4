@@ -1,10 +1,14 @@
-# $Id: GNUmakefile,v 1.23 2000-11-21 15:10:41 gcosmo Exp $
+# $Id: GNUmakefile,v 1.24 2000-12-11 08:34:43 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
-# "gmake glob" makes global libraries for each subdomain.
-#         Composite libraries are built.
-# "gmake vis" makes global libraries and default (separate) visualization.
-# "gmake total" makes everything, including the BREPS and the STEP code.
+# "gmake global" makes global libraries for each subdomain.
+#                Composite libraries are built.
+# "gmake includes" places header files .h/.hh in $G4INCLUDE
+# "gmake libmap" forces rebuilding of map-file for granular libraries.
+# "gmake clean_libs" removes just archive (.a) and shared (.so) libraries
+#                    of current platform installation.
+# "gmake clean" removes installation of current platform.
+# "gmake clean_all" removes all platforms installations.
 #
 # (The .o files(s) are made by implicit rules.)
 
@@ -25,7 +29,7 @@ G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)
 unique := $(shell echo $$$$)
 
-.PHONY: all glob global libmap clean_libs clean clean_all
+.PHONY: all glob global libmap includes clean_libs clean clean_all
 
 all:
 ifdef G4USE_HEPODBMS
