@@ -1,4 +1,4 @@
-$Id: History,v 1.83 1999-11-29 18:33:49 johna Exp $
+$Id: History,v 1.84 1999-11-30 19:39:56 morita Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29th November 1999  Youhei Morita
+- architecture.gmk: added G4SYSTEM to G4SCHEMA_DIR, G4TMPSCHEMA_DIR
+- common.gmk: changed G4SCHEMA_HEADER_DIR from G4TMPSCHEMA_INCLUDE to G4TMPDIR
+              added target install_schema for schema copying
+- globlib.gmk: create schema header files at G4TMPDIR, then install
 
 29th November 1999  John Allison
 - Introduced LDLIBS2EXTRA so that granular libraries are not
