@@ -176,6 +176,7 @@ AtRestDoIt(const G4Track& track,const G4Step&)
 
   // fill the final state
   if(captureResult) nSecondaries += captureResult->size();
+  else nSecondaries = nEmSecondaries;
   aParticleChange.SetNumberOfSecondaries( nSecondaries );
 
   G4double globalTime = track.GetGlobalTime();
@@ -278,9 +279,9 @@ G4ReactionProductVector * G4MuonMinusCaptureAtRest::DoMuCapture(G4double aMuKine
   G4double eEx=0;
   G4double eRest = 0;
   G4ReactionProduct* aNu=0;
-  theN.Init(targetAtomicMass, targetCharge); 
   do
   {
+    theN.Init(targetAtomicMass, targetCharge); 
     G4ThreeVector fermiMom;
     G4Nucleon * aNucleon(0);
     G4int theProtonCounter = G4lrint( 0.5 + targetCharge * G4UniformRand() );
@@ -300,7 +301,7 @@ G4ReactionProductVector * G4MuonMinusCaptureAtRest::DoMuCapture(G4double aMuKine
     }
 
     // Gett the nu momentum in the CMS
-    G4double aNMass = G4PionPlus::PionPlusDefinition()->GetPDGMass();
+    G4double aNMass = G4Proton::ProtonDefinition()->GetPDGMass();
     G4LorentzVector theNeutronMom(sqrt(aNMass*aNMass+fermiMom.mag2()), fermiMom);
     G4LorentzVector theCMS = theNeutronMom+aMuMom;
     G4double p1 = (theCMS.mag()*theCMS.mag()-aNMass*aNMass)/(2.*theCMS.mag());
