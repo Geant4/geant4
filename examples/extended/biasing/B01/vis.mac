@@ -1,0 +1,22 @@
+#
+# Macro file for the initialization phase of "exampleN03.cc"
+# when running in interactive mode
+#
+# Sets some default verbose
+#
+/control/verbose 2
+/control/saveHistory
+#/run/verbose 2
+/vis/scene/create
+/vis/open OGLIX
+#/vis/viewer/flush
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+/vis/viewer/set/viewpointThetaPhi -90 -89 deg
+/vis/viewer/zoom              1.5
+
+
+# Visualize events added to the current scene
+/tracking/storeTrajectory 1
+
+
