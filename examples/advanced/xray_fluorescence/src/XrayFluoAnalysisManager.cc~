@@ -38,7 +38,6 @@
 #include <stdlib.h>
 #include "G4VProcess.hh"
 #include <fstream>
-#include <strstream>
 #include "G4ios.hh"
 #include "XrayFluoAnalysisManager.hh"
 #include "G4Step.hh"
@@ -49,7 +48,7 @@ XrayFluoAnalysisManager* XrayFluoAnalysisManager::instance = 0;
 
 XrayFluoAnalysisManager::XrayFluoAnalysisManager()
   :outputFileName("xrayfluo.hbk"), visPlotter(false), persistencyType("hbook"), 
-   deletePersistencyFile(true), analysisFactory(0), tree(0),histogramFactory(0)
+   analysisFactory(0), tree(0),histogramFactory(0)
 {
   //creating the messenger
   analisysMessenger = new XrayFluoAnalysisMessenger(this);
@@ -57,23 +56,37 @@ XrayFluoAnalysisManager::XrayFluoAnalysisManager()
   // Hooking an AIDA compliant analysis system.
   // creating Analysis factroy, necessary to create/manage analysis
   analysisFactory = AIDA_createAnalysisFactory();
-
-
-  CreatePersistency(outputFileName,persistencyType);
-
   if(analysisFactory) {
 
     // creating the tree, for persistency
 
+    AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
+    if(treeFactory) {
+      G4bool readOnly = false;
+      G4bool createNew = true;
+      if (persistencyType == "hbook") {
+	outputFileName = "xrayfluo.hbk";
+      }
+      else if (persistencyType == "xml"){
+	outputFileName = "xrayfluo.xml";
+      }
+      tree = treeFactory->create(outputFileName,persistencyType,readOnly,createNew); // output file
+      
+      delete treeFactory; // Will not delete the ITree.
+      histogramFactory = analysisFactory->createHistogramFactory(*tree);  
+      // tupleFactory = analysisFactory->createTupleFactory(*tree);
+    }
 
-    histogramFactory = analysisFactory->createHistogramFactory(*tree);  
-    // tupleFactory = analysisFactory->createTupleFactory(*tree);
-    
+
+
     // Creating the plotter factory
     plotterFactory = analysisFactory->createPlotterFactory();
+
+
   }
 
   G4cout << "XrayFluoAnalysisManager created" << G4endl;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -88,8 +101,6 @@ XrayFluoAnalysisManager::~XrayFluoAnalysisManager()
 
   delete plotterFactory;
   plotterFactory=0;
-
-  delete tree;
 
   delete instance;
 
@@ -107,27 +118,6 @@ XrayFluoAnalysisManager* XrayFluoAnalysisManager::getInstance()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void XrayFluoAnalysisManager::CreatePersistency(G4String fileName,G4String persistencyType,
-						G4bool readOnly, G4bool createNew)
-{
-
-  //if (tree) tree delete tree;
-
-    AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
-    if(treeFactory) {
-      if (persistencyType == "hbook") {
-	fileName = fileName + ".hbk";
-      }
-      else if (persistencyType == "xml"){
-	fileName = fileName + ".xml";
-      }
-      tree = treeFactory->create(fileName,persistencyType,readOnly,createNew); // output file
-      
-      delete treeFactory; // Will not delete the ITree.
-    }
-}
-
 
 void XrayFluoAnalysisManager::book()
 {
@@ -158,59 +148,36 @@ void XrayFluoAnalysisManager::book()
 
 void XrayFluoAnalysisManager::finish()
 {
-  if(plotter)  {
-    // Wait for the keyboard return to avoid destroying the plotter window too quickly.
-    G4cout << "Press <ENTER> to exit" << G4endl;
-    G4cin.get();
-    plotter->hide(); //hide plotter windows, but doesn't delete plotter
+
+  // At the end of simulation, if speciefied (visPlotter=true),
+  // energy deposition in the detector is shown.
+  if(plotterFactory && visPlotter) {
+    AIDA::IPlotter* plotter = plotterFactory->create();
+    if(plotter) {
+      plotter->show(); // shows plotter window
+      // Set the page title :
+      plotter->setParameter("pageTitle","XrayFluo");
+      // Plotting the Detector Energy Deposit - histo_1
+      AIDA::IHistogram1D& histo1p = *histo_1;
+      plotter->currentRegion().plot( histo1p, "Detector Energy Deposition" );
+      plotter->refresh();
+      // Wait for the keyboard return to avoid destroying the plotter window too quickly.
+      G4cout << "Press <ENTER> to exit" << G4endl;
+      G4cin.get();
+    }
+    delete plotter;
   }
 
+
+  
   if(tree) {
     tree->commit(); // Write histos in file. 
     tree->close();
   }
 
-  deletePersistencyFile = false;
-
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void XrayFluoAnalysisManager::InitializePlotter()
-{
-
-  // If speciefied (visPlotter=true),
-  // a window for the visulizaton of partial results is created
-  if(plotterFactory && visPlotter && deletePersistencyFile) 
-    {
-      plotter = plotterFactory->create();
-      // Set the page title :
-      plotter->setParameter("pageTitle","XrayFluo");
-    }
-
-  if(plotter) {
-    plotter->show(); // shows plotter window
-  }
+  delete tree;
   
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void XrayFluoAnalysisManager::PlotCurrentResults()
-{
-  if(plotter) {
-      // Plotting the Detector Energy Deposit - histo_1
-      AIDA::IHistogram1D& histo1p = *histo_1;
-      plotter->currentRegion().plot( histo1p, "Detector Energy Deposition" );
-      plotter->refresh();
-    }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-G4bool XrayFluoAnalysisManager::GetDeletePersistencyFileFlag()
-{
-  return deletePersistencyFile;
-}
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -472,13 +439,10 @@ void XrayFluoAnalysisManager::SetOutputFileName(G4String newName)
 {
 
   outputFileName = newName;
+
 }
 
-void XrayFluoAnalysisManager::SetOutputFileType(G4String newType)
-{
 
-  persistencyType = newType;
-}
 
 
 

@@ -126,7 +126,6 @@ void XrayFluoRunAction::BeginOfRunAction(const G4Run* aRun)
 {
   
   G4cout << "### Run " << aRun << " start." << G4endl;
-  
   if (G4VVisManager::GetConcreteInstance())
     {
       G4UImanager* UI = G4UImanager::GetUIpointer(); 
@@ -137,6 +136,7 @@ void XrayFluoRunAction::BeginOfRunAction(const G4Run* aRun)
   // Book histograms and ntuples
   XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
   analysis->book();
+  analysis->InitializePlotter();
 #endif
 }
 
@@ -145,9 +145,7 @@ void XrayFluoRunAction::BeginOfRunAction(const G4Run* aRun)
 void XrayFluoRunAction::EndOfRunAction(const G4Run*)
 {
 
-
   XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
-
 
   // Run ended, update the visualization
   if (G4VVisManager::GetConcreteInstance()) {
@@ -155,7 +153,6 @@ void XrayFluoRunAction::EndOfRunAction(const G4Run*)
   }
 
    analysis->finish();
- 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -395,7 +395,11 @@ void XrayFluoSiLiDetectorType::LoadEfficiencyData(G4String fileName)
     G4String pathString(path);
     dirFile = pathString + "/" + fileName;
   }
-  else{ dirFile = fileName;}
+  else{ 
+    path = getenv("PWD");
+    G4String pathString(path);
+    dirFile = pathString + "/" + fileName;
+  }
 
   G4VDataSetAlgorithm* interpolation4 = new G4LogLogInterpolation();
   efficiencySet = new XrayFluoDataSet(1,fileName,interpolation4,keV,1);

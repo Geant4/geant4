@@ -53,7 +53,7 @@
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
-
+#include <fstream>
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoEventAction::XrayFluoEventAction()
@@ -88,18 +88,30 @@ void XrayFluoEventAction::BeginOfEventAction(const G4Event* evt)
 {
 
   G4int eventNumber = (evt->GetEventID())+1;
-  if ( ((eventNumber) % 1000000) == 0){
-    G4cout << "Event n. " << eventNumber << " processed" << G4endl;
-    }
-  if (HPGeCollID==-1)
+  if ( eventNumber == 1){
 
+  G4cout << "# = 1000 events" << G4endl;
+  G4cout << "1--------+---------+---------+---------+---------50"<<G4endl;
+  }
+
+  if ( ((eventNumber) % 1000) == 0 )  {
+
+    if ( eventNumber != 50000 ) G4cout << "#" << std::flush;
+    if ( eventNumber == 50000 ) G4cout << "#"<< G4endl;
+
+    XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
+    analysis->PlotCurrentResults();
+  }
+
+  if (HPGeCollID==-1)
+    
     {
       G4SDManager * SDman = G4SDManager::GetSDMpointer();
       HPGeCollID = SDman->GetCollectionID("HPGeCollection");
       //the pointer points to the ID number of the sensitive detector
     }
 }
-
+  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoEventAction::EndOfEventAction(const G4Event* evt)
