@@ -1,4 +1,5 @@
 #!/bin/sh -f
+#!/usr/local/bin/bash 
 #
 #  Usage :
 #     UNIX> cd <g4sttdir>/bin
@@ -33,6 +34,12 @@ if [ -z "${G4STTDIR}" ] ; then
   exit
 fi
 
+##if [ -z "${LD_LIBRARY_PATH}" ] ; then
+#    LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM
+#    export LD_LIBARY_PATH
+#    echo $LD_LIBRARY_PATH
+##fi
+
 
 # Make $G4WORKDIR/stt directory :
 dir=$G4WORKDIR/stt
@@ -66,62 +73,186 @@ fi
 #-- ##  cd $G4INSTALL/tests/tools/bin; gmake
 #-- ##fi
 
+
 if [ $1 = "all" ] ; then 
 
-  nice $G4STTDIR/bin/run.sh test01
-  nice $G4STTDIR/bin/run.sh test02
+#
+# Re-write it by looping against list
+#
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test01 1
+    nice $G4STTDIR/bin/run.sh test01
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test01 1
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test02 2
+    nice $G4STTDIR/bin/run.sh test02
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test02 2
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test02.hadron 3
   nice $G4STTDIR/bin/run.sh test02.hadron
-  nice $G4STTDIR/bin/run.sh test05
-  nice $G4STTDIR/bin/run.sh test06
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test02.hadron 3
+
+###
+###   Loop...
+###
+###    nice $G4STTDIR/bin/run.sh test05
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test06 4
+    nice $G4STTDIR/bin/run.sh test06
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test06 4
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test07 5
   nice $G4STTDIR/bin/run.sh test07
-  nice $G4STTDIR/bin/run.sh test09
-  nice $G4STTDIR/bin/run.sh test10
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test07 5
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test09 6
+    nice $G4STTDIR/bin/run.sh test09
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test09 6
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test10 7
+    nice $G4STTDIR/bin/run.sh test10
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test10 7
 #
 # NDL # Following tag 'neu-V03-02-02'
 # On Thu, 26 Jul 2001, Hans-Peter Wellisch wrote:
 # Please use G4NDL3.4 for test11, and G4NDL0.2 for the other tests.
 # set default to G4NDL0.2 in setup scripts
 
-  NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.4;export NeutronHPCrossSections
-  echo "STT:NeutronHPCrossSections G4NDL3.4";
+  NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.5;export NeutronHPCrossSections
+  echo "STT:NeutronHPCrossSections G4NDL3.5";
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test11 8
   nice $G4STTDIR/bin/run.sh test11
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test11 8
 
-  NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL0.2;export NeutronHPCrossSections
-  echo "STT:NeutronHPCrossSections G4NDL0.2";
-  nice $G4STTDIR/bin/run.sh test12
+#  NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL0.2;export NeutronHPCrossSections
+#  echo "STT:NeutronHPCrossSections G4NDL0.2";
 
-  nice $G4STTDIR/bin/run.sh test13
-  nice $G4STTDIR/bin/run.sh test14
-  nice $G4STTDIR/bin/run.sh test15
-  nice $G4STTDIR/bin/run.sh test16
-  nice $G4STTDIR/bin/run.sh test17
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test12 9
+    nice $G4STTDIR/bin/run.sh test12
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test12 9
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test13 10
+    nice $G4STTDIR/bin/run.sh test13
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test13 10
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test14 11
+    nice $G4STTDIR/bin/run.sh test14
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test14 11
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test15 12
+    nice $G4STTDIR/bin/run.sh test15
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test15 12
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test16 13
+    nice $G4STTDIR/bin/run.sh test16
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test16 13
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test17 14
+    nice $G4STTDIR/bin/run.sh test17
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test17 14
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test18 15
   nice $G4STTDIR/bin/run.sh test18
-  nice $G4STTDIR/bin/run.sh test20
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test18 15
 
-  nice $G4STTDIR/bin/run.sh test101
-  nice $G4STTDIR/bin/run.sh test102
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test20 16
+    nice $G4STTDIR/bin/run.sh test20
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test20 16
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test21 17
+  nice $G4STTDIR/bin/run.sh test21
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test21 17
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test22 18
+    nice $G4STTDIR/bin/run.sh test22
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test22 18
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test101 19
+    nice $G4STTDIR/bin/run.sh test101
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test101 19
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test102 20
+    nice $G4STTDIR/bin/run.sh test102
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test102 20
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test103 21
   nice $G4STTDIR/bin/run.sh test103
-  nice $G4STTDIR/bin/run.sh test104
-  nice $G4STTDIR/bin/run.sh test104.EMtest
-  nice $G4STTDIR/bin/run.sh test105
-  nice $G4STTDIR/bin/run.sh test106
-  nice $G4STTDIR/bin/run.sh test501
-  nice $G4STTDIR/bin/run.sh test502
-  nice $G4STTDIR/bin/run.sh test503
-  nice $G4STTDIR/bin/run.sh test504
-  nice $G4STTDIR/bin/run.sh test505
-  nice $G4STTDIR/bin/run.sh test508
-  if [ $G4USE_HEPODBMS ] ; then
-    nice $G4STTDIR/bin/run.sh test401
-    nice $G4STTDIR/bin/run.sh test402
-  fi
-  nice $G4STTDIR/bin/run.sh test601
-  nice $G4STTDIR/bin/run.sh test602
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test103 21
 
-  nice $G4STTDIR/bin/run.sh test701
-  nice $G4STTDIR/bin/run.sh test702
-  nice $G4STTDIR/bin/run.sh test703
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test104 22
+    nice $G4STTDIR/bin/run.sh test104
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test104 22
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test104.EMtest 23
+    nice $G4STTDIR/bin/run.sh test104.EMtest
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test104.EMtest 23
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test105 24
+    nice $G4STTDIR/bin/run.sh test105
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test105 24
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test106 25
+    nice $G4STTDIR/bin/run.sh test106
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test106 25
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test501 26
+    nice $G4STTDIR/bin/run.sh test501
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test501 26
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test502 27
+    nice $G4STTDIR/bin/run.sh test502
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test502 27
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test503 28
+    nice $G4STTDIR/bin/run.sh test503
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test503 28
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test504 29
+    nice $G4STTDIR/bin/run.sh test504
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test504 29
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test505 30
+    nice $G4STTDIR/bin/run.sh test505
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test505 30
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test508 31
+    nice $G4STTDIR/bin/run.sh test508
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test508 31
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test5010 32
+    nice $G4STTDIR/bin/run.sh test5010
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test5010 32
+
+  if [ $G4USE_HEPODBMS ] ; then
+   nice $G4STTDIR/bin/run.sh test401
+   nice $G4STTDIR/bin/run.sh test402
+  fi
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test601 33
+    nice $G4STTDIR/bin/run.sh test601
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test601 33
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test602 34
+    nice $G4STTDIR/bin/run.sh test602
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test602 34
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test701 35
+    nice $G4STTDIR/bin/run.sh test701
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test701 35
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test702 36
+    nice $G4STTDIR/bin/run.sh test702
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test702 36
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test703 37
+    nice $G4STTDIR/bin/run.sh test703
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test703 37
+
 else
+
+#    echo n=$n
+#    ${G4STTDIR}/bin/geant4-unix.pl --start-test $1 $n
 
   if [ $1 = "test201" ] ; then 
 
@@ -163,12 +294,12 @@ else
       echo "Starting $1 in $g4identify $timestamp  $G4LARGE_N "
 
       if [ $1 = test02.hadron -o $1 = test11 -o $1 = test12 -o $1 = test13 \
-        -o $1 = test15 -o $1 = test16 ]
+        -o $1 = test15 -o $1 = test16 -o $1 = test21 ]
       then
         if [ $1 = test11 ]; then
-          NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.4
+          NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.5
           export NeutronHPCrossSections
-          echo "STT:hadrons! NeutronHPCrossSections G4NDL3.4";
+          echo "STT:hadrons! NeutronHPCrossSections G4NDL3.5";
         fi
         rm -f $dir/$1.exerciser$dot_G4LARGE_N.in
         $G4WORKDIR/bin/$G4SYSTEM/$shortname.hadronic.exerciser $G4LARGE_N \
@@ -178,11 +309,11 @@ else
         time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
         $dir/$1.exerciser$dot_G4LARGE_N.in \
         > $dir/$1$dot_G4LARGE_N.out 2> $dir/$1$dot_G4LARGE_N.err
-        if [ $1 = test11 ]; then
-          NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL0.2
-          export NeutronHPCrossSections
-          echo "STT:hadrons! NeutronHPCrossSections G4NDL0.2";
-        fi
+#        if [ $1 = test11 ]; then
+#          NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL0.2
+#          export NeutronHPCrossSections
+#          echo "STT:hadrons! NeutronHPCrossSections G4NDL0.2";
+#        fi
 
       elif [ $1 = test601 -o $1 = test602 ] 
       then
@@ -241,5 +372,10 @@ else
     fi
 
   fi
+
+#  ${G4STTDIR}/bin/geant4-unix.pl --end-test $1 $n
+#
+#n=$[$n+1]
+#echo n=$n
 
 fi
