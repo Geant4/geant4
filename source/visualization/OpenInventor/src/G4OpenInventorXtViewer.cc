@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.2 2004-07-20 23:42:17 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.3 2004-11-06 10:08:18 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -30,6 +30,7 @@
  *	Mods for SoXtHepViewer
  * gb : on Win32 use an SoXtExaminerViewer.
  * gb 05 April 2004 : revisit to separate Windows things.
+ * gb 06 November 2004 : restore the escape button.
  */
 #ifdef G4VIS_BUILD_OIX_DRIVER
 
@@ -42,6 +43,7 @@
 #include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
 #include <X11/StringDefs.h>
 #include <X11/Shell.h>
+#include <Xm/PushB.h>
 
 #include "G4OpenInventor.hh"
 #include "G4OpenInventorSceneHandler.hh"
@@ -67,6 +69,11 @@ void G4OpenInventorXtViewer::FinishView () {
 //    if (fShell!=0) XtRealizeWidget(fShell);
 //  }
 //}
+
+static void escapeButtonCbk(Widget,XtPointer aData,XtPointer) {
+ G4VInteractorManager* interactorManager = (G4VInteractorManager*)aData;
+ interactorManager->RequireExitSecondaryLoop (OIV_EXIT_CODE);
+}
 
 void G4OpenInventorXtViewer::KernelVisitDecision () {
   
@@ -175,6 +182,18 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer
   // Create and Customize the Viewer
   //
   fViewer = new SoXtExaminerViewer(parent,wName.c_str(),TRUE);
+  Widget buttonsParent = fViewer->getAppPushButtonParent();
+  if(buttonsParent) {
+    Widget escapeButton = XtCreateManagedWidget
+      ("Esc",xmPushButtonWidgetClass,buttonsParent,NULL,0);
+    XtAddCallback(escapeButton,XmNactivateCallback,
+                  escapeButtonCbk,(XtPointer)fInteractorManager);
+    fViewer->addAppPushButton(escapeButton);
+  } else {
+    G4cout << "WARNING :"
+           << " no app buttons parent on your Inventor implementation viewer !"
+           << G4endl;
+  }
   fViewer->setSize(SbVec2s(SIZE,SIZE));
   fViewer->setSceneGraph(fSelection);
   fViewer->viewAll();

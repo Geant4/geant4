@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2004-07-28 14:08:34 johna Exp $
+$Id: History,v 1.10 2004-11-06 10:08:42 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+6th November 2004  Guy Barrand
+- G4OpenInventorXtViewer : restore the escape button.
+  This button is put in the "app buttons" of the SoXtExaminerViewer.
+  (The "app buttons" are put in the left border of decoration).
+  It is ok with SGI-2.1.510 and recent SoXt of Coin, 
 
 21th July 2004  Guy Barrand (openinventor-V06-02-00)
 - G4OpenInventorXtViewer : add include X11/Shell.h to have
