@@ -746,9 +746,10 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
     
     if(PartCharge == -1) BarkasTerm = ComputeBarkasTerm( material, KinEnergy, PartMass);
     
-    if(PartCharge <= -2) BarkasTerm = sqrt( GetIonEffChargeSquare( material, KinEnergy, PartCharge))
-			            * ComputeBarkasTerm ( material, KinEnergy, PartMass);
+    //if(PartCharge <= -2) BarkasTerm = sqrt( GetIonEffChargeSquare( material, KinEnergy, PartCharge))
+	//		            * ComputeBarkasTerm ( material, KinEnergy, PartMass);
     
+    G4cout<<"  "<<BarkasTerm;
     ionloss += BarkasTerm;   
     //---------------------------------------------------------end
    
@@ -780,9 +781,35 @@ G4double G4hLowEnergyIonisation::ComputeBarkasTerm(const G4Material* material,
 	            10,   0.0025};
 
   // Information on particle and material
-  G4double ZMaterial  = material-> GetTotNbOfElectPerVolume();
-  G4double AMaterial  = material-> GetTotNbOfAtomsPerVolume();
-  G4double RoMaterial = material->GetDensity();
+  
+  G4double AMaterial;
+  G4double ZMaterial;
+  G4double random = G4UniformRand();
+  const G4ElementVector* theElementVector = material->GetElementVector();
+  G4int i;
+  G4double sum = 0;
+  G4double totalsum=0;
+   for(i=0; i<material->GetNumberOfElements(); ++i)
+    {
+      if((*theElementVector)(i)->GetZ()!=1) totalsum+=material->GetFractionVector()[i];
+    }
+  for (i = 0; i<material->GetNumberOfElements(); ++i)
+    {
+      if((*theElementVector)(i)->GetZ()!=1) sum +=material->GetFractionVector()[i];
+      if ( sum/totalsum > random )
+        {
+          AMaterial = (*theElementVector)(i)->GetA()*mole/g;
+          ZMaterial = (*theElementVector)(i)->GetZ();
+          break;
+        }
+    }
+
+  //G4double ZMaterial  = material-> GetTotNbOfElectPerVolume();
+   ZMaterial  = 14;
+  //G4double AMaterial  = material-> GetTotNbOfAtomsPerVolume();
+   AMaterial  = 28.055*g/mole;
+  //G4double RoMaterial = material->GetDensity();
+  G4double RoMaterial = 2.33*g/cm3;
   G4double Beta = sqrt( (2*KinEnergy) / PartMass );
   G4double X = ( (137*Beta) * (137*Beta) ) / ZMaterial;
   
@@ -799,7 +826,8 @@ G4double G4hLowEnergyIonisation::ComputeBarkasTerm(const G4Material* material,
   G4double BarkasCoeffLbyARB = FunctionOfW / ( sqrt(ZMaterial) * pow(X,3./2) );
   G4double BarkasTerm = 2 * BarkasCoeffLbyARB * ( 0.30708 * ZMaterial * RoMaterial )
                	          / ( AMaterial*Beta*Beta );
-  return BarkasTerm;
+  G4cout<<"I'm here"<<BarkasTerm;
+  return -BarkasTerm;
 }
 //NEW***---------------------------------------------------------end
         
