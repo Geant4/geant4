@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMuPairProduction.cc,v 1.3 1999-12-15 14:51:44 gunter Exp $
+// $Id: G4IMuPairProduction.cc,v 1.4 1999-12-15 17:49:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -55,20 +55,20 @@ G4IMuPairProduction::G4IMuPairProduction(const G4String& processName)
 
     theMeanFreePathTable = NULL ;
 
-  cout << G4endl ;
-  cout << "****************************************************************" << G4endl;
-  cout << "****************************************************************" << G4endl;
-  cout << "**                                                            **" << G4endl; 
-  cout << "**   G4IMuPairProduction :                                     **" << G4endl;
-  cout << "**      cross section/energy loss is calculated using         **" << G4endl;
-  cout << "**      the accurate cross section formula of R.Kokoulin,     **" << G4endl;
-  cout << "**      ( building the tables takes a lot of time,            **" << G4endl;
-  cout << "**                   PLEASE BE PATIENT  ! )                   **" << G4endl;
-  cout << "**      sampling of the energy of the pair is generated       **" << G4endl;
-  cout << "**      according to the sampling tables.                     **" << G4endl;
-  cout << "**                                                            **" << G4endl;
-  cout << "****************************************************************" << G4endl;
-  cout << "****************************************************************" << G4endl;
+  G4cout << G4endl ;
+  G4cout << "****************************************************************" << G4endl;
+  G4cout << "****************************************************************" << G4endl;
+  G4cout << "**                                                            **" << G4endl; 
+  G4cout << "**   G4IMuPairProduction :                                     **" << G4endl;
+  G4cout << "**      cross section/energy loss is calculated using         **" << G4endl;
+  G4cout << "**      the accurate cross section formula of R.Kokoulin,     **" << G4endl;
+  G4cout << "**      ( building the tables takes a lot of time,            **" << G4endl;
+  G4cout << "**                   PLEASE BE PATIENT  ! )                   **" << G4endl;
+  G4cout << "**      sampling of the energy of the pair is generated       **" << G4endl;
+  G4cout << "**      according to the sampling tables.                     **" << G4endl;
+  G4cout << "**                                                            **" << G4endl;
+  G4cout << "****************************************************************" << G4endl;
+  G4cout << "****************************************************************" << G4endl;
 }
  
 // destructor
@@ -1410,7 +1410,7 @@ G4Element* G4IMuPairProduction::SelectRandomAtom(G4Material* aMaterial) const
 
     if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
   }
-  cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
+  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
        << "' has no elements, NULL pointer returned." << G4endl;
   return NULL;
 }

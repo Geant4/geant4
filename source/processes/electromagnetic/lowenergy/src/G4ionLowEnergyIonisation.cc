@@ -60,7 +60,7 @@ void G4ionLowEnergyIonisation::SetIonDefinition(G4ParticleDefinition* theIonType
   theIon    = theIonType ;
   MassRatio = proton_mass_c2/(theIonType->GetPDGMass()) ;
   Charge    = (theIonType->GetPDGCharge())/eplus ;
-  cout << "New ion with Q = " << Charge << "; MassR = " << MassRatio << G4endl;
+  G4cout << "New ion with Q = " << Charge << "; MassR = " << MassRatio << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

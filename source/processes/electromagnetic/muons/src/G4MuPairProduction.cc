@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuPairProduction.cc,v 1.7 1999-12-15 14:51:44 gunter Exp $
+// $Id: G4MuPairProduction.cc,v 1.8 1999-12-15 17:49:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -786,7 +786,7 @@ G4Element* G4MuPairProduction::SelectRandomAtom(G4Material* aMaterial) const
   {
     if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
   }
-  cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
+  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
        << "' has no elements, NULL pointer returned." << G4endl;
   return NULL;
 }

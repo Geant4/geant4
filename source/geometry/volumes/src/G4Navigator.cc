@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.cc,v 1.9 1999-12-15 14:50:26 gunter Exp $
+// $Id: G4Navigator.cc,v 1.10 1999-12-15 17:51:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -379,12 +379,12 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
   G4LogicalVolume *motherLogical=motherPhysical->GetLogicalVolume();
 
 #ifdef G4VERBOSE
-  cout.precision(8);
+  G4cout.precision(8);
   if( fVerbose > 1 ) 
     {
-      cout << "*** G4Navigator::ComputeStep: ***" << G4endl; 
-      cout.precision(8);
-      cout << " I was called with the following arguments: " << G4endl
+      G4cout << "*** G4Navigator::ComputeStep: ***" << G4endl; 
+      G4cout.precision(8);
+      G4cout << " I was called with the following arguments: " << G4endl
 	   << " Globalpoint = " << G4std::setw(25) << pGlobalpoint  << G4endl
 	   << " Direction   = " << G4std::setw(25) << pDirection    << G4endl
 	   << " ProposedStepLength= " << pCurrentProposedStepLength << G4endl;
@@ -393,8 +393,8 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 
   if( fVerbose > 2 )
     {
-      // cout.precision(3);
-      cout << " Upon entering my state is: " << G4endl;
+      // G4cout.precision(3);
+      G4cout << " Upon entering my state is: " << G4endl;
       PrintState();
     }
 #endif
@@ -768,7 +768,7 @@ G4double G4Navigator::ComputeSafety(const G4ThreeVector &pGlobalpoint,
       G4cout << " I was called with the following arguments: " << G4endl
 	     << " Globalpoint = " 
 	     << G4std::setw(24) << pGlobalpoint << G4endl;
-      //       cout << "  pMaxLength  = " << pMaxLength  << G4endl;
+      //       G4cout << "  pMaxLength  = " << pMaxLength  << G4endl;
 
       G4cout << " Upon entering my state is: " << G4endl;
       PrintState();
@@ -831,10 +831,10 @@ G4double G4Navigator::ComputeSafety(const G4ThreeVector &pGlobalpoint,
 #ifdef G4VERBOSE
   if( fVerbose > 1 ) 
     {
-      cout.precision(8);
-      cout << " Upon exiting my state is: " << G4endl;
+      G4cout.precision(8);
+      G4cout << " Upon exiting my state is: " << G4endl;
       PrintState();
-      cout << "  and I return a value of Safety = " << newSafety << G4endl;
+      G4cout << "  and I return a value of Safety = " << newSafety << G4endl;
     }
 #endif
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusStopAbsorption.cc,v 1.5 1999-12-15 14:53:38 gunter Exp $
+// $Id: G4PiMinusStopAbsorption.cc,v 1.6 1999-12-15 17:51:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -190,7 +190,7 @@ G4double G4PiMinusStopAbsorption::Energy()
   
   if (_level > 0)
     {
-      cout << "E products " <<  productEnergy  
+      G4std::cout << "E products " <<  productEnergy  
 	   << " Binding " << productBinding << " " << temp << " "
 	   << " Tnucleus " << tNucleus 
 	   << " energy = " << energy << G4endl;

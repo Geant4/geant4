@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIterminal.cc,v 1.6 1999-12-15 14:50:47 gunter Exp $
+// $Id: G4UIterminal.cc,v 1.7 1999-12-15 17:52:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -70,13 +70,13 @@ void G4UIterminal::PauseSessionStart(G4String msg)
 
 G4int G4UIterminal::ReceiveG4cout(G4String coutString)
 {
-  cout << coutString << G4std::flush;
+  G4std::cout << coutString << G4std::flush;
   return 0;
 }
 
 G4int G4UIterminal::ReceiveG4cerr(G4String cerrString)
 {
-  G4cerr << cerrString << G4std::flush;
+  G4std::cerr << cerrString << G4std::flush;
   return 0;
 }
 
