@@ -88,7 +88,7 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
            Aluminium         191.93
          liquidArgon          118.7
               Copper          380.8
-                Lead         370.88
+                Lead         370.85
                Water         122.62
         Scintillator         124.52
               quartz         175.86
@@ -121,7 +121,7 @@ msc:   Tables of transport mean free paths.
            Aluminium         191.93
          liquidArgon          118.7
               Copper          380.8
-                Lead         370.88
+                Lead         370.85
                Water         122.62
         Scintillator         124.52
               quartz         175.86
@@ -159,22 +159,22 @@ MuPairProd:  theoretical cross sections
 #
 /run/particle/dumpCutValues
 ============= The cut Energy ==============================
-                            gamma              e-             mu-          proton         neutron    
-Cut in range                  2 mm            2 mm            2 mm            2 mm            2 mm 
+                            gamma              e-    
+Cut in range                  2 mm            2 mm 
 Cut in energy
-          Aluminium        9.56 keV        1.03 MeV        7.44 MeV        19.4 MeV         990 eV 
-        liquidArgon        8.59 keV         561 keV        4.78 MeV        12.3 MeV         990 eV 
-             Copper        35.7 keV        2.68 MeV        13.3 MeV        34.3 MeV         990 eV 
-               Lead         121 keV        2.61 MeV        12.6 MeV        31.8 MeV         990 eV 
-              Water        3.89 keV         568 keV        4.96 MeV        13.1 MeV         990 eV 
-       Scintillator        3.07 keV         575 keV        5.02 MeV        13.4 MeV         990 eV 
-             quartz        7.59 keV         907 keV        6.91 MeV        18.1 MeV         990 eV 
-                Air         990 eV          990 eV         82.2 keV         174 keV         990 eV 
-            Aerogel        2.32 keV         181 keV         1.9 MeV        4.84 MeV         990 eV 
-        CarbonicGas         990 eV         54.1 keV         597 keV        1.34 MeV         990 eV 
-         WaterSteam         990 eV          990 eV         29.6 keV          45 keV         990 eV 
-           Galactic         990 eV          990 eV          990 eV          990 eV          990 eV 
-               Beam         990 eV          990 eV          990 eV          990 eV          990 eV 
+          Aluminium        9.56 keV        1.03 MeV
+        liquidArgon        8.59 keV         561 keV
+             Copper        35.7 keV        2.68 MeV
+               Lead         121 keV        2.61 MeV
+              Water        3.89 keV         568 keV
+       Scintillator        3.07 keV         575 keV
+             quartz        7.59 keV         907 keV
+                Air         990 eV          990 eV 
+            Aerogel        2.32 keV         181 keV
+        CarbonicGas         990 eV         54.1 keV
+         WaterSteam         990 eV          990 eV 
+           Galactic         990 eV          990 eV 
+               Beam         990 eV          990 eV 
 ===================================================
 #
 #
