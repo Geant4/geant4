@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.9 2000-04-12 13:02:09 johna Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.10 2000-05-22 07:38:01 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -189,7 +189,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	pMaterial = pP -> ComputeMaterial (n, pVPV);
 	pP -> ComputeTransformation (n, pVPV);
 	pSol -> ComputeDimensions (pP, n, pVPV);
-	pVPV -> SetCopyNo (n);
+	// pVPV -> SetCopyNo (n);  // Uncertain of effect of this.
 	DescribeAndDescend (pVPV, soughtDepth, pLV, pSol, pMaterial,
 			    theAT, sceneHandler);
       }
@@ -247,7 +247,8 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	} 
 	pVPV -> SetTranslation (translation);
 	pVPV -> SetRotation    (pRotation);
-	pVPV -> SetCopyNo      (n);
+	// pVPV -> SetCopyNo (n); // Has no effect and might even be
+	// dangerous.
 	pSol = pLV -> GetSolid ();
 	pMaterial = pLV -> GetMaterial ();
 	DescribeAndDescend (pVPV, soughtDepth, pLV, pSol, pMaterial,
