@@ -1,7 +1,13 @@
-$Id: History,v 1.49 2002-10-23 17:21:39 gcosmo Exp $
+$Id: History,v 1.50 2003-01-27 10:46:10 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V05-00-00 27-Jan-2003 G.Cosmo
+- G4gstmed[.hh.cc] (I.Hrivnacova):
+  o added get functions for the medium table entries:
+    G4int GetSize() const
+    G3MedTableEntry* GetMTE(G4int i) const
 
 g3tog4-V04-01-00 23-Oct-2002 G.Cosmo
 - G4gsdvn.cc, G4gsposp.cc (I.Hrivnacova):
