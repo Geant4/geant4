@@ -20,51 +20,51 @@ Current available graphics systems are:
 
 ***** Table : Nb of materials = 12 *****
 
- Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
-   --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: Aluminium            density:  2.700 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm
+   --->  Element: Aluminium    Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:    Mylar     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  19.770 cm 
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  48.42 %  Abundance  18.18 %
-   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  45.47 %  Abundance  45.45 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   6.11 %  Abundance  36.36 %
+ Material: Mylar            density:  1.390 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  19.770 cm
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  48.42 %  Abundance  18.18 %
+   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  45.47 %  Abundance  45.45 %
+   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   6.11 %  Abundance  36.36 %
 
- Material: Polypropelene     density: 910.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.167 cm 
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.16 %  Abundance  66.67 %
-   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  74.84 %  Abundance  33.33 %
+ Material: Polypropelene            density: 910.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.167 cm
+   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.16 %  Abundance  66.67 %
+   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  74.84 %  Abundance  33.33 %
 
- Material:       Kr     density:  3.700 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  30.736 m  
-   --->  Element:       Kr      Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: Kr            density:  3.700 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  30.736 m
+   --->  Element: Kr    Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:    Argon     density:  1.784 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 109.604 m  
-   --->  Element:    Argon Ar   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: Argon            density:  1.784 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 109.604 m
+   --->  Element: ArgonAr   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:       N2     density:  1.251 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 303.846 m  
-   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: N2            density:  1.251 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 303.846 m
+   --->  Element: NitrogenN   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:       O2     density:  1.429 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 239.621 m  
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: O2            density:  1.429 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 239.621 m
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:      Air     density:  1.293 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 283.293 m  
-   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  75.57 %  Abundance  78.48 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  23.15 %  Abundance  21.05 %
-   --->  Element:    Argon Ar   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   1.28 %  Abundance   0.47 %
+ Material: Air            density:  1.293 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 283.293 m
+   --->  Element: NitrogenN   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  75.57 %  Abundance  78.48 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  23.15 %  Abundance  21.05 %
+   --->  Element: ArgonAr   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   1.28 %  Abundance   0.47 %
 
- Material:    Xenon     density:  5.858 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.478 m  
-   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material: Xenon            density:  5.858 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.478 m
+   --->  Element: Xenon    Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:      CO2     density:  1.977 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 158.123 m  
-   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  15.81 %  Abundance  33.33 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  84.19 %  Abundance  66.67 %
+ Material: CO2            density:  1.977 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 158.123 m
+   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  15.81 %  Abundance  33.33 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  84.19 %  Abundance  66.67 %
 
- Material:  Xe20CO2     density:  5.082 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  17.695 m  
-   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  92.20 %  Abundance  53.29 %
-   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   1.23 %  Abundance  15.57 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   6.57 %  Abundance  31.14 %
+ Material: Xe20CO2            density:  5.082 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  17.695 m
+   --->  Element: Xenon    Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  92.20 %  Abundance  53.29 %
+   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   1.23 %  Abundance  15.57 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   6.57 %  Abundance  31.14 %
 
- Material:  Kr20CO2     density:  3.601 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  33.957 m  
-   --->  Element:       Kr      Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass:  89.00 %  Abundance  55.02 %
-   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   1.74 %  Abundance  14.99 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   9.26 %  Abundance  29.99 %
+ Material: Kr20CO2            density:  3.601 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  33.957 m
+   --->  Element: Kr    Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass:  89.00 %  Abundance  55.02 %
+   --->  Element: CarbonC   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   1.74 %  Abundance  14.99 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   9.26 %  Abundance  29.99 %
 
 
 
@@ -134,10 +134,85 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 8.377
 49	fGamma = 9.283e+04	sumE = 8.504
 
-total time for build X-ray TR tables = 6.62 s
+total time for build X-ray TR tables = 4.96 s
 
 phot:  Total cross sections from Sandia parametrisation. 
-Em8PhysicsList::SetCuts:CutLength : 1 mm 
+Em8PhysicsList::SetCuts:CutLength : 1 mm
+
+total time(SetCuts)=0 s 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : Yes
+ Material : Aluminium
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : Yes
+ Material : Mylar
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : Yes
+ Material : Polypropelene
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  is not ready to print
+
+Index : 3     used in the geometry : No      recalculation needed : Yes
+ Material : Kr
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  is not ready to print
+
+Index : 4     used in the geometry : No      recalculation needed : Yes
+ Material : Argon
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  is not ready to print
+
+Index : 5     used in the geometry : No      recalculation needed : Yes
+ Material : N2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  is not ready to print
+
+Index : 6     used in the geometry : No      recalculation needed : Yes
+ Material : O2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  is not ready to print
+
+Index : 7     used in the geometry : Yes     recalculation needed : Yes
+ Material : Air
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 8     used in the geometry : No      recalculation needed : Yes
+ Material : Xenon
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  is not ready to print
+
+Index : 9     used in the geometry : No      recalculation needed : Yes
+ Material : CO2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  is not ready to print
+
+Index : 10     used in the geometry : No      recalculation needed : Yes
+ Material : Xe20CO2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  is not ready to print
+
+Index : 11     used in the geometry : Yes     recalculation needed : Yes
+ Material : Kr20CO2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -161,14 +236,89 @@ hIoni:    Knock-on electron cross sections .
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-
-total time(SetCuts)=5.92 s 
+ G4ParticleWithCuts::GetEnergyCuts  Production Cut is not defined for [kaon+]
+ G4ParticleWithCuts::GetEnergyCuts  Production Cut is not defined for [kaon-]
+ G4ParticleWithCuts::GetEnergyCuts  Production Cut is not defined for [pi+]
+ G4ParticleWithCuts::GetEnergyCuts  Production Cut is not defined for [pi-]
 #
 #control/saveHistory
 #
 /run/verbose 2
 #
 /run/initialize
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Mylar
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 3.48153 keV    e- 540.718 keV    e+ 527.568 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Polypropelene
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 2.74947 keV    e- 502.219 keV    e+ 484.009 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Kr
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 1.07368 keV    e+ 1.06054 keV
+
+Index : 4     used in the geometry : No      recalculation needed : No 
+ Material : Argon
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+
+Index : 5     used in the geometry : No      recalculation needed : No 
+ Material : N2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+
+Index : 6     used in the geometry : No      recalculation needed : No 
+ Material : O2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+
+Index : 7     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 8     used in the geometry : No      recalculation needed : No 
+ Material : Xenon
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 1.94906 keV    e+ 1.92521 keV
+
+Index : 9     used in the geometry : No      recalculation needed : No 
+ Material : CO2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+
+Index : 10     used in the geometry : No      recalculation needed : No 
+ Material : Xe20CO2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 1.67154 keV    e+ 1.65109 keV
+
+Index : 11     used in the geometry : Yes     recalculation needed : No 
+ Material : Kr20CO2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 1.08802 keV    e+ 1.07471 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 #
 #/calor/setAbsMat Xenon
 #  
@@ -193,36 +343,80 @@ total time(SetCuts)=5.92 s
 #/calor/cutE 3.0 mm
 #
 /run/initialize
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Mylar
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 3.48153 keV    e- 540.718 keV    e+ 527.568 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Polypropelene
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 2.74947 keV    e- 502.219 keV    e+ 484.009 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Kr
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 1.07368 keV    e+ 1.06054 keV
+
+Index : 4     used in the geometry : No      recalculation needed : No 
+ Material : Argon
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+
+Index : 5     used in the geometry : No      recalculation needed : No 
+ Material : N2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+
+Index : 6     used in the geometry : No      recalculation needed : No 
+ Material : O2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+
+Index : 7     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 8     used in the geometry : No      recalculation needed : No 
+ Material : Xenon
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 1.94906 keV    e+ 1.92521 keV
+
+Index : 9     used in the geometry : No      recalculation needed : No 
+ Material : CO2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+
+Index : 10     used in the geometry : No      recalculation needed : No 
+ Material : Xe20CO2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 1.67154 keV    e+ 1.65109 keV
+
+Index : 11     used in the geometry : Yes     recalculation needed : No 
+ Material : Kr20CO2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 1.08802 keV    e+ 1.07471 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 /run/particle/dumpCutValues
-============= The cut Energy ==============================
-                            gamma              e-    
-Cut in range       
-          Aluminium           1 mm            1 mm 
-              Mylar           1 mm            1 mm 
-      Polypropelene           1 mm            1 mm 
-                 Kr           1 mm            1 mm 
-              Argon           1 mm            1 mm 
-                 N2           1 mm            1 mm 
-                 O2           1 mm            1 mm 
-                Air           1 mm            1 mm 
-              Xenon           1 mm            1 mm 
-                CO2           1 mm            1 mm 
-            Xe20CO2           1 mm            1 mm 
-            Kr20CO2           1 mm            1 mm 
-Cut in energy
-          Aluminium        6.89 keV         597 keV
-              Mylar        3.48 keV         541 keV
-      Polypropelene        2.75 keV         502 keV
-                 Kr         990 eV         1.07 keV
-              Argon         990 eV          990 eV 
-                 N2         990 eV          990 eV 
-                 O2         990 eV          990 eV 
-                Air         990 eV          990 eV 
-              Xenon         990 eV         1.95 keV
-                CO2         990 eV          990 eV 
-            Xe20CO2         990 eV         1.67 keV
-            Kr20CO2         990 eV         1.09 keV
-===================================================
 #
 /gun/particle e-
 # 
@@ -233,6 +427,93 @@ Cut in energy
 #/tracking/verbose 2
 #
 /run/beamOn 1000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Mylar
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 3.48153 keV    e- 540.718 keV    e+ 527.568 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Polypropelene
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 2.74947 keV    e- 502.219 keV    e+ 484.009 keV
+
+Index : 3     used in the geometry : No      recalculation needed : No 
+ Material : Kr
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 1.07368 keV    e+ 1.06054 keV
+
+Index : 4     used in the geometry : No      recalculation needed : No 
+ Material : Argon
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+
+Index : 5     used in the geometry : No      recalculation needed : No 
+ Material : N2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+
+Index : 6     used in the geometry : No      recalculation needed : No 
+ Material : O2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+
+Index : 7     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 8     used in the geometry : No      recalculation needed : No 
+ Material : Xenon
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 1.94906 keV    e+ 1.92521 keV
+
+Index : 9     used in the geometry : No      recalculation needed : No 
+ Material : CO2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+
+Index : 10     used in the geometry : No      recalculation needed : No 
+ Material : Xe20CO2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 1.67154 keV    e+ 1.65109 keV
+
+Index : 11     used in the geometry : Yes     recalculation needed : No 
+ Material : Kr20CO2
+ Range cuts        :  gamma 1 mm    e- 1 mm    e+ 1 mm
+ Energy thresholds :  gamma 990 eV    e- 1.08802 keV    e+ 1.07471 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
+======== Table of production thresholds in range and energy ===========
+
+-----------------------------------------------------------------------
+Region : DefaultRegionForTheWorld
+-----------------------------------------------------------------------
+                              gamma            e-            e+           
+Threshold in range            1 mm             1 mm             1 mm
+   Air                           990 eV           990 eV           990 eV
+   Mylar                          3.48 keV           541 keV           528 keV
+   Aluminium                          6.89 keV           597 keV           568 keV
+   Kr20CO2                           990 eV          1.09 keV          1.07 keV
+=======================================================================
+
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -242,48 +523,48 @@ Cut in energy
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
-    Total memory consumed for geometry optimisation:   11 kByte
+    Total memory consumed for geometry optimisation:   10 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
        0.00         0.00         0.00            0k World
-       0.00         0.00         0.00           11k Radiator
+       0.00         0.00         0.00           10k Radiator
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      96.00         11k         1      305        376         0.00    Radiator
-       4.00          0k         3        7         20         0.00    World
+      95.90          9k         1      305        376         0.00    Radiator
+       4.10          0k         3        7         20         0.00    World
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=125.92s Real=140.46s Sys=1.99s
+  User=41.18s Real=41.43s Sys=0.01s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=158.505 +- 3.9418  mm  
+    mean charged track length   in absorber=159.746 +- 4.10294  mm  
 
-            mean energy deposit in absorber=0.101921 +- 0.00108118  MeV 
+            mean energy deposit in absorber=0.102109 +- 0.00109293  MeV 
 
- mean number of steps in absorber (charged) =432.655 +- 2.13903      
- mean number of steps in absorber (neutral) =5.037 +- 0.0718306      
+ mean number of steps in absorber (charged) =434.13 +- 2.00431      
+ mean number of steps in absorber (neutral) =5.114 +- 0.0706329      
 
-   mean number of charged secondaries = 1.485 +- 0.0382593
+   mean number of charged secondaries = 1.521 +- 0.0411772
 
-   mean number of neutral secondaries = 0.031 +- 0.00548078
+   mean number of neutral secondaries = 0.025 +- 0.0049371
 
-   mean number of e-s =1.485  and e+s =0
+   mean number of e-s =1.521  and e+s =0
 
-(number) transmission coeff=0.668  reflection coeff=0.038
+(number) transmission coeff=0.669  reflection coeff=0.061
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 809983670, 863331332
+ Current couple of seeds = 712430198, 1592201968
 ----------------------------------------
 #
 #

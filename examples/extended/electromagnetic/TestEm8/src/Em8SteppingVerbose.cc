@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8SteppingVerbose.cc,v 1.5 2001-07-11 09:57:56 gunter Exp $
+// $Id: Em8SteppingVerbose.cc,v 1.6 2003-02-20 11:35:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -119,7 +119,7 @@ void Em8SteppingVerbose::StepInfo()
 	       << " ---------------"
 	       << G4endl;
 
-	for(G4int lp1=(*fSecondary).size()-tN2ndariesTot; 
+	for(size_t lp1=(*fSecondary).size()-tN2ndariesTot; 
                         lp1<(*fSecondary).size(); lp1++){
 	  G4cout << "    : "
 		 << G4std::setw(6)
