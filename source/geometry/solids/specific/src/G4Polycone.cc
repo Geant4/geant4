@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polycone.cc,v 1.1 2000-04-07 11:01:50 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.2 2000-06-26 09:54:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -234,6 +234,7 @@ G4Polycone::~G4Polycone()
 	delete [] corners;
 	
 	if (original_parameters) delete original_parameters;
+	if (enclosingCylinder) delete enclosingCylinder;
 }
 
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyhedra.hh,v 1.1 2000-04-07 10:57:57 gcosmo Exp $
+// $Id: G4Polyhedra.hh,v 1.2 2000-06-26 09:54:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ class G4Polyhedra : public G4VCSGfaceted {
         G4Polyhedron* CreatePolyhedron() const;
 	G4NURBS*      CreateNURBS() const;
 	
-	inline G4int	GetNumSIde()		const { return numSide; }
+	inline G4int	GetNumSide()		const { return numSide; }
 	inline G4double	GetStartPhi()		const { return startPhi; }
 	inline G4double GetEndPhi()		const { return endPhi; }
 	inline G4bool	IsOpen()		const { return phiIsOpen; }

@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2000-04-27 10:44:38 gcosmo Exp $
+$Id: History,v 1.7 2000-06-26 09:54:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-Jun-2000, G.Cosmo  (geom-solids-specific-V01-01-00)
+--------------------
+- G4Polycone.cc: fixed memory leak by invoking destruction of member
+  enclosingCylinder, which was not cleaned up in the destructor.
+  This fixes problem report #107.
+- G4Polyhedra.hh: fixed typo in method name. Changed GetNumSIde() to
+  GetNumSide(). This fixes problem report #105.
+
+08-Jun-2000, G.Gracia
+---------------------
+- G4VCSGfaceted.cc: fix for Win/NT in function GetExtent().
 
 27-Apr-2000, G.Cosmo
 --------------------
