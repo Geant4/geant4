@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.hh,v 1.7 2003-06-16 13:09:02 gcosmo Exp $
+// $Id: G4Polyhedra.hh,v 1.8 2003-06-17 08:07:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -121,7 +121,7 @@ class G4Polyhedra : public G4VCSGfaceted
 
   G4GeometryType  GetEntityType() const;
 
-  G4std::ostream& StreamInfo( G4std::ostream& os ) const;
+  std::ostream& StreamInfo( std::ostream& os ) const;
 
   G4Polyhedron* CreatePolyhedron() const;
   G4NURBS*      CreateNURBS() const;

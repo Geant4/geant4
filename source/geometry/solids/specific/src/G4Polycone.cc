@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.9 2003-06-16 13:09:03 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.10 2003-06-17 08:07:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -444,7 +444,7 @@ G4GeometryType  G4Polycone::GetEntityType() const
 //
 // Stream object contents to an output stream
 //
-G4std::ostream& G4Polycone::StreamInfo( G4std::ostream& os ) const
+std::ostream& G4Polycone::StreamInfo( std::ostream& os ) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.7 2003-06-16 13:09:04 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.8 2003-06-17 08:07:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -498,7 +498,7 @@ G4GeometryType G4Polyhedra::GetEntityType() const
 //
 // Stream object contents to an output stream
 //
-G4std::ostream& G4Polyhedra::StreamInfo( G4std::ostream& os ) const
+std::ostream& G4Polyhedra::StreamInfo( std::ostream& os ) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
