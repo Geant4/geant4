@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationLevel.hh,v 1.11 2000-04-25 16:15:03 gcosmo Exp $
+// $Id: G4NavigationLevel.hh,v 1.12 2000-11-01 16:51:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4NavigationLevel
@@ -23,7 +23,6 @@
 #ifndef G4NAVIGATIONLEVEL_HH
 #define G4NAVIGATIONLEVEL_HH
 
-// #include <assert.h>
 #include "globals.hh"
 
 #include "G4AffineTransform.hh"
@@ -58,16 +57,18 @@ class G4NavigationLevel
 
    G4NavigationLevel& operator=(const G4NavigationLevel &right);
 
-   G4VPhysicalVolume*       GetPhysicalVolume() const;
-   const G4AffineTransform* GetTransformPtr() const ;  // New
-   const G4AffineTransform& GetTransform() const ;     // Old
-   //    G4AffineTransform& GetTransform();            // Only temporarily
-   EVolume                  GetVolumeType() const ;
-   G4int                    GetReplicaNo() const ;
+   inline G4VPhysicalVolume*       GetPhysicalVolume() const;
+   inline const G4AffineTransform* GetTransformPtr() const ;  // New
+   inline const G4AffineTransform& GetTransform() const ;     // Old
+
+   inline EVolume                  GetVolumeType() const ;
+   inline G4int                    GetReplicaNo() const ;
 
  public:  // without description
 
-   const G4AffineTransform* GetPtrTransform() const;
+   // inline    G4AffineTransform& GetTransform();
+
+   inline const G4AffineTransform* GetPtrTransform() const;
      // To try to resolve the possible problem with returning a reference.
 
    inline void *operator new(size_t);

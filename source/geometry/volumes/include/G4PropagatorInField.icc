@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.icc,v 1.9 2000-06-02 09:53:30 japost Exp $
+// $Id: G4PropagatorInField.icc,v 1.10 2000-11-01 16:51:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,7 +13,7 @@
 //	GEANT 4  include file implementation
 //
 //	For information related to this code contact:
-//	CERN, IT Division (formely CN), ASD group
+//	GEANT4 Collaboration
 // ------------------------------------------------------------------------
 // 
 // 25.10.96 John Apostolakis, design and implementation 
@@ -25,15 +25,16 @@
 //     and ?? also must know the value of the maximum displacement allowed
 //
 
-inline G4PropagatorInField::
-G4PropagatorInField( G4Navigator    *theNavigator, 
-		     G4FieldManager *detectorFieldMgr) :
-    fNavigator(theNavigator),
+inline
+G4PropagatorInField::G4PropagatorInField(G4Navigator    *theNavigator, 
+		                         G4FieldManager *detectorFieldMgr)
+  : fNavigator(theNavigator),
     fDetectorFieldMgr(detectorFieldMgr), 
-    fCurrentFieldMgr(detectorFieldMgr), 
     fmax_loop_count(10000),
     End_PointAndTangent(G4ThreeVector(0.,0.,0.),
 			G4ThreeVector(0.,0.,0.),0.0,0.0),
+    fDelta_One_Step_Value(fDefault_Delta_One_Step_Value),
+    fDelta_Intersection_Val(fDefault_Delta_Intersection_Val),
     fVerboseLevel(0)
 {
      // this->fChordFinder = new G4ChordFinder( (G4MagneticField*)0, 1e-6 );
@@ -50,10 +51,11 @@ G4ChordFinder* G4PropagatorInField::GetChordFinder()
 {
       // Now only the "Chord Finder" of the global Field Mgr is used
       //  ... 
-      return fCurrentFieldMgr->GetChordFinder(); 
+      return fDetectorFieldMgr->GetChordFinder(); 
 }
 
-inline void G4PropagatorInField::SetChargeMomentumMass( 
+inline
+void G4PropagatorInField::SetChargeMomentumMass( 
 			G4double Charge,            // in e+ units
 		        G4double Momentum,          // in GeV/c 
 		        G4double Mass)              // in ? units
@@ -64,53 +66,77 @@ inline void G4PropagatorInField::SetChargeMomentumMass(
 //  Obtain the final space-point and velocity (normal) at the end of the Step
 //
 inline
-G4ThreeVector  G4PropagatorInField::EndPosition()
+G4ThreeVector  G4PropagatorInField::EndPosition() const
 {
       return   End_PointAndTangent.Position(); 
 }
 
 inline
-G4ThreeVector  G4PropagatorInField::EndMomentumDir()
+G4ThreeVector  G4PropagatorInField::EndMomentumDir() const
 {
       return   End_PointAndTangent.GetMomentumDir(); 
 }
 
-inline G4double G4PropagatorInField::GetEpsilonStep() 
+inline
+G4double G4PropagatorInField::GetEpsilonStep() const
 { 
       return fEpsilonStep; 
 }
-inline void     G4PropagatorInField::SetEpsilonStep(G4double newEps)
+
+inline
+void     G4PropagatorInField::SetEpsilonStep(G4double newEps)
 {
       fEpsilonStep=newEps;
 }
-inline G4bool   G4PropagatorInField::IsParticleLooping()
+
+inline
+G4bool   G4PropagatorInField::IsParticleLooping() const
 {
       return fParticleIsLooping;
 }
 
-inline G4int    G4PropagatorInField::GetMaxLoopCount() 
+inline
+G4int    G4PropagatorInField::GetMaxLoopCount() const
 {
       return fmax_loop_count;
 }
 
-inline void     G4PropagatorInField::SetMaxLoopCount(G4int new_max) 
+inline
+void     G4PropagatorInField::SetMaxLoopCount(G4int new_max) 
 {
       fmax_loop_count= new_max;
 }
 
-// inline void     G4PropagatorInField::SetChordFinder(G4ChordFinder* newCF)
+inline
+G4double G4PropagatorInField::GetDeltaIntersection() const
+{
+  return fDelta_Intersection_Val;
+} 
 
+inline
+G4double G4PropagatorInField::GetDeltaOneStep() const
+{
+  return fDelta_One_Step_Value;
+}                                    
 
-inline G4double G4PropagatorInField::GetDeltaIntersection()
-{ return fCurrentFieldMgr->GetDeltaIntersection(); } 
-
-inline G4double G4PropagatorInField::     GetDeltaOneStep()    
-{ return fCurrentFieldMgr->GetDeltaOneStep();  }
-
-// void  SetDeltaIntersection(G4double);   
-inline void G4PropagatorInField::SetAccuraciesWithDeltaOneStep(G4double valDeltaOneStep)
+inline
+void
+G4PropagatorInField::SetAccuraciesWithDeltaOneStep(G4double valDeltaOneStep)
 { 
-  fDetectorFieldMgr->SetAccuraciesWithDeltaOneStep(valDeltaOneStep);
+  fDelta_One_Step_Value= valDeltaOneStep;  
+  fDelta_Intersection_Val = 0.4 * fDelta_One_Step_Value;
+}
+
+inline
+void G4PropagatorInField::SetDeltaOneStep(G4double valDeltaOneStep)
+{ 
+  fDelta_One_Step_Value= valDeltaOneStep;  
+}
+
+inline
+void G4PropagatorInField::SetDeltaIntersection(G4double valDeltaIntersection)
+{
+  fDelta_Intersection_Val = valDeltaIntersection;
 }
 
 inline
@@ -120,13 +146,13 @@ G4int G4PropagatorInField::SetVerboseLevel( G4int Verbose )
 }
 
 inline
-G4int G4PropagatorInField::Verbose()
+G4int G4PropagatorInField::Verbose() const
 {
   return fVerboseLevel;
 }
 
 inline
-G4FieldTrack G4PropagatorInField::GetEndState()
+G4FieldTrack G4PropagatorInField::GetEndState() const
 {
   return End_PointAndTangent;
 }

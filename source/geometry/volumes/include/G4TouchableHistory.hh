@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TouchableHistory.hh,v 1.3 2000-04-25 16:15:04 gcosmo Exp $
+// $Id: G4TouchableHistory.hh,v 1.4 2000-11-01 16:51:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,31 +33,32 @@ class G4TouchableHistory : public G4VTouchable
 
  public:  // with description
 
-  G4TouchableHistory(const G4NavigationHistory &history);
+  G4TouchableHistory(const G4NavigationHistory& history);
   G4TouchableHistory(); 
     // The default constructor produces a touchable-history of 
     // 'zero-depth', ie an "unphysical" and not very unusable one.
     // It is for initialisation only.  
-  ~G4TouchableHistory();
 
-  G4VPhysicalVolume* GetVolume(G4int depth=0) const;
-  G4VSolid* GetSolid(G4int depth=0) const;
+  virtual ~G4TouchableHistory();
+
+  inline G4VPhysicalVolume* GetVolume(G4int depth=0) const;
+  inline G4VSolid* GetSolid(G4int depth=0) const;
   const G4ThreeVector& GetTranslation(G4int depth=0) const;
-  const G4RotationMatrix*  GetRotation(G4int depth=0) const;
+  const G4RotationMatrix* GetRotation(G4int depth=0) const;
 
-  G4int GetReplicaNumber(G4int depth=0) const;
-  G4int GetHistoryDepth()  const;
+  inline G4int GetReplicaNumber(G4int depth=0) const;
+  inline G4int GetHistoryDepth()  const;
   G4int MoveUpHistory( G4int num_levels = 1 );
     // Access methods for touchables with history
 
   virtual void  UpdateYourself(G4VPhysicalVolume*   pPhysVol,
-			       const G4NavigationHistory* history=NULL); 
+			       const G4NavigationHistory* history=0); 
     // Update methods for touchables with history
 
  public:  // without description
 
-  const G4NavigationHistory* GetHistory() const;
-    // Should this method be "depricated" ?
+  inline const G4NavigationHistory* GetHistory() const;
+    // Should this method be "deprecated" ?
     // it is used now in G4Navigator::LocateGlobalPointAndSetup
 
   // void  ResetLevel();
@@ -65,7 +66,7 @@ class G4TouchableHistory : public G4VTouchable
 
  private:
 
-  G4int CalculateHistoryIndex(G4int stackDepth) const;
+  inline G4int CalculateHistoryIndex(G4int stackDepth) const;
 
   G4RotationMatrix frot;
   G4ThreeVector ftlate;

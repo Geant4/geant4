@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2000-05-31 15:51:46 gcosmo Exp $
+$Id: History,v 1.28 2000-11-01 16:51:05 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 1st, 2000   G. Cosmo - geomvol-V02-00-00
+
+- QA code revision and cleanup (+fixes from CodeWizard filtering):
+  o Added (private) copy constructor and assignment operator where needed.
+  o Added "const" qualifier to accessor methods, wherever needed.
+  o Added equality check on operator= where needed.
+  o Made destructor "virtual" for classes having virtual methods,
+    wherever missing.
+  o Changed virtual functions to non-inline wherever's the case.
+  o Changed return value to be "const" pointer to functions:
+    - G4LogicalBorderSurface::GetVolume1()
+    - G4LogicalBorderSurface::GetVolume2()
+    - G4LogicalSkinSurface::GetLogicalVolume()
+  o G4NavigationHistory: moved kHistoryMax and kHistoryStride to
+    geomdefs.hh and made static constants. Reorganised comments.
+  o G4VoxelNavigation: moved kNavigatorVoxelStackMax in geomdefs.hh.
+    Changed "do-loops" with "while-loops" where convenient.
+  o Added "inline" qualifier to methods' declarations.
+  o General cosmetics
 
 May     17th, 2000   G. Cosmo - geomvol-V01-01-01
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationHistory.cc,v 1.2 1999-12-15 14:50:26 gunter Exp $
+// $Id: G4NavigationHistory.cc,v 1.3 2000-11-01 16:51:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,7 +14,8 @@
 #include "G4NavigationHistory.hh"
 #include "G4ios.hh"
 
-G4std::ostream& operator << (G4std::ostream& os, const G4NavigationHistory& nav)
+G4std::ostream&
+operator << (G4std::ostream& os, const G4NavigationHistory& nav)
 {
   G4cout << "History depth="<<nav.GetDepth()<< G4endl;
   for (G4int i=0;i<=nav.GetDepth();i++)

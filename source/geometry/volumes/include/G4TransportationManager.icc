@@ -5,50 +5,49 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TransportationManager.icc,v 1.3 1999-12-15 14:50:25 gunter Exp $
+// $Id: G4TransportationManager.icc,v 1.4 2000-11-01 16:51:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-//  
 // ------------------------------------------------------------
 //	GEANT 4  inlined function members implementation
-//
-//	For information related to this code contact:
-//	CERN, CN Division, ASD group
 // ------------------------------------------------------------
 //
 // Created:  10 March 1997, J. Apostolakis
 //  
 
-inline G4Navigator* G4TransportationManager::GetNavigatorForTracking()
+inline
+G4Navigator* G4TransportationManager::GetNavigatorForTracking() const
 {
    return fNavigatorForTracking;
 }
 
-inline G4PropagatorInField* G4TransportationManager::GetPropagatorInField()
+inline
+G4PropagatorInField* G4TransportationManager::GetPropagatorInField() const
 {
    return fPropagatorInField;
 }
 
-inline G4FieldManager*   G4TransportationManager::GetFieldManager()
+inline
+G4FieldManager* G4TransportationManager::GetFieldManager() const
 {
    return fFieldManager;
 }
 
-inline void G4TransportationManager::SetNavigatorForTracking( 
-	        G4Navigator* newNavigator)
+inline
+void G4TransportationManager::SetNavigatorForTracking(G4Navigator* newNavigator)
 {
    fNavigatorForTracking= newNavigator;
    // fPropagatorInField->setNavigator(newNavigator);
 }
 
-inline void  G4TransportationManager::SetPropagatorInField( 
+inline
+void  G4TransportationManager::SetPropagatorInField( 
 		G4PropagatorInField*  newFieldPropagator )
 {
    fPropagatorInField=    newFieldPropagator;
 }
 
-inline void  G4TransportationManager::SetFieldManager(      
-		G4FieldManager*         newFieldManager)
+inline
+void G4TransportationManager::SetFieldManager(G4FieldManager* newFieldManager)
 {
    fFieldManager=      newFieldManager; 
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VoxelNavigation.cc,v 1.4 1999-12-15 14:50:27 gunter Exp $
+// $Id: G4VoxelNavigation.cc,v 1.5 2000-11-01 16:51:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -80,8 +80,8 @@ G4double G4VoxelNavigation::ComputeStep(const G4ThreeVector &localPoint,
 	initialNode=true;
 	noStep=true;
 
-	do {
-
+	while (noStep)
+	{
 	curVoxelNode=fVoxelNode;
 	curNoVolumes=curVoxelNode->GetNoContained();
 
@@ -193,7 +193,7 @@ G4double G4VoxelNavigation::ComputeStep(const G4ThreeVector &localPoint,
 				       ourStep);
 		}
 
-	} while (noStep);
+	}  // end -while (noStep)- loop
 
 	return ourStep;
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalSkinSurface.hh,v 1.4 2000-04-25 16:15:03 gcosmo Exp $
+// $Id: G4LogicalSkinSurface.hh,v 1.5 2000-11-01 16:51:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -68,15 +68,15 @@ class G4LogicalSkinSurface : public G4LogicalSurface
   
         static G4LogicalSkinSurface* GetSurface(const G4LogicalVolume* vol);
 
-	G4LogicalVolume* GetLogicalVolume() const;
-	void		 SetLogicalVolume(G4LogicalVolume* vol);
+	inline const G4LogicalVolume* GetLogicalVolume() const;
+	inline void  SetLogicalVolume(G4LogicalVolume* vol);
 
         static size_t GetNumberOfSkinSurfaces();
         static void DumpInfo(); // const 
 	  // Methods dealing with the table of surfaces.
 
 #if THESE_ARE_NEEDED
-	size_t GetIndex() const;
+	inline size_t GetIndex() const;
 #endif
 
         //////////////

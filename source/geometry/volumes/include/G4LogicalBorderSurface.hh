@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalBorderSurface.hh,v 1.4 2000-04-25 16:15:02 gcosmo Exp $
+// $Id: G4LogicalBorderSurface.hh,v 1.5 2000-11-01 16:51:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -70,14 +70,14 @@ class G4LogicalBorderSurface: public G4LogicalSurface
 	static G4LogicalBorderSurface* GetSurface(const G4VPhysicalVolume* vol1,
 					          const G4VPhysicalVolume* vol2);
 
-	void       SetPhysicalVolumes(G4VPhysicalVolume* vol1,
+	inline void  SetPhysicalVolumes(G4VPhysicalVolume* vol1,
 				      G4VPhysicalVolume* vol2);
 
-	G4VPhysicalVolume* GetVolume1() const;
-	G4VPhysicalVolume* GetVolume2() const;
+	inline const G4VPhysicalVolume* GetVolume1() const;
+	inline const G4VPhysicalVolume* GetVolume2() const;
 
-	void SetVolume1(G4VPhysicalVolume* vol1);
-	void SetVolume2(G4VPhysicalVolume* vol2);
+	inline void SetVolume1(G4VPhysicalVolume* vol1);
+	inline void SetVolume2(G4VPhysicalVolume* vol2);
           // These are potentially dangerous.
 
         static const G4RWTPtrOrderedVector<G4LogicalBorderSurface>* GetSurfaceTable();
@@ -85,7 +85,7 @@ class G4LogicalBorderSurface: public G4LogicalSurface
 	static void DumpInfo(); 
 	  //   Methods dealing with the table of surfaces.
 
-	size_t GetIndex() const;
+	inline size_t GetIndex() const;
 
         //////////////
         // Operators

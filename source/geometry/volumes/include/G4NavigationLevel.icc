@@ -5,16 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationLevel.icc,v 1.9 1999-12-15 14:50:22 gunter Exp $
+// $Id: G4NavigationLevel.icc,v 1.10 2000-11-01 16:51:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 30.09.97 J.Apostolakis Initial version. 
 //                        
 
-inline G4NavigationLevel::G4NavigationLevel(G4VPhysicalVolume*   pPhysVol,
-					const G4AffineTransform& afTransform,
-					      EVolume            volTp,
-					      G4int              repNo)
+inline
+G4NavigationLevel::G4NavigationLevel(G4VPhysicalVolume*   pPhysVol,
+				     const G4AffineTransform& afTransform,
+				     EVolume            volTp,
+				     G4int              repNo)
 {
       fLevelRep=new G4NavigationLevelRep( pPhysVol, 
 				          afTransform,
@@ -22,12 +23,12 @@ inline G4NavigationLevel::G4NavigationLevel(G4VPhysicalVolume*   pPhysVol,
 					  repNo );
 }
 
-inline G4NavigationLevel::
-   G4NavigationLevel(G4VPhysicalVolume* pPhysVol,
-		     const G4AffineTransform& levelAbove,
-		     const G4AffineTransform& relativeCurrent,
-		     EVolume            volTp,
-		     G4int              repNo)
+inline
+G4NavigationLevel::G4NavigationLevel(G4VPhysicalVolume* pPhysVol,
+		                     const G4AffineTransform& levelAbove,
+		                     const G4AffineTransform& relativeCurrent,
+		                     EVolume            volTp,
+		                     G4int              repNo)
 {
       fLevelRep=new G4NavigationLevelRep( pPhysVol, 
 					  levelAbove, 
@@ -36,25 +37,31 @@ inline G4NavigationLevel::
 					  repNo );
 }
 
-inline G4NavigationLevel::G4NavigationLevel()
+inline
+G4NavigationLevel::G4NavigationLevel()
 {
       fLevelRep= new G4NavigationLevelRep();
 }
 
-inline G4NavigationLevel::G4NavigationLevel(const G4NavigationLevel& right)
-   :  fLevelRep( right.fLevelRep )
+inline
+G4NavigationLevel::G4NavigationLevel(const G4NavigationLevel& right)
+  :  fLevelRep( right.fLevelRep )
 {
       fLevelRep->AddAReference(); 
 }
 
-inline G4NavigationLevel::~G4NavigationLevel()
+inline
+G4NavigationLevel::~G4NavigationLevel()
 {
       if( fLevelRep->RemoveAReference() ) delete fLevelRep; 
 }
 
-inline G4NavigationLevel& 
+inline
+G4NavigationLevel& 
 G4NavigationLevel::operator=(const G4NavigationLevel &right)
 { 
+      if (&right == this) return *this;
+
       // The order of these two lines is needed to handle "a=a"
       right.fLevelRep->AddAReference(); 
       if( fLevelRep->RemoveAReference() ) delete fLevelRep; 
@@ -63,34 +70,40 @@ G4NavigationLevel::operator=(const G4NavigationLevel &right)
       return *this;
 } 
 
-inline G4VPhysicalVolume* G4NavigationLevel::GetPhysicalVolume() const 
+inline
+G4VPhysicalVolume* G4NavigationLevel::GetPhysicalVolume() const 
 { 
       return fLevelRep->GetPhysicalVolume(); 
 }
 
 #if 0
-inline       G4AffineTransform& G4NavigationLevel::GetTransform()
+inline
+G4AffineTransform& G4NavigationLevel::GetTransform()
 { 
       return fLevelRep->GetTransform() ; 
 } 
 #endif
 
-inline const G4AffineTransform& G4NavigationLevel::GetTransform() const 
+inline
+const G4AffineTransform& G4NavigationLevel::GetTransform() const 
 { 
       return fLevelRep->GetTransform() ; 
 } 
 
-inline const G4AffineTransform* G4NavigationLevel::GetPtrTransform() const 
+inline
+const G4AffineTransform* G4NavigationLevel::GetPtrTransform() const 
 { 
       return fLevelRep->GetTransformPtr() ; 
 } 
 
-inline EVolume  G4NavigationLevel::GetVolumeType() const 
+inline
+EVolume  G4NavigationLevel::GetVolumeType() const 
 { 
       return fLevelRep->GetVolumeType() ; 
 }
 
-inline G4int    G4NavigationLevel::GetReplicaNo() const 
+inline
+G4int    G4NavigationLevel::GetReplicaNo() const 
 { 
       return fLevelRep->GetReplicaNo() ; 
 }
@@ -100,7 +113,8 @@ extern G4Allocator<G4NavigationLevel> aNavigationLevelAllocator;
 // I believe that there is no provision in case this class is subclassed.
 // If it is subclassed, this will fail and may not give errors!
 //
-inline void* G4NavigationLevel::operator new(size_t)
+inline
+void* G4NavigationLevel::operator new(size_t)
 {
   // void *aNavigationLevel;
   // aNavigationLevel= (void *) aNavigationLevelAllocator.MallocSingle();
@@ -110,12 +124,14 @@ inline void* G4NavigationLevel::operator new(size_t)
 
 // Added for use by STL.  F.Behner  (used for pre-allocation)
 //
-inline void* G4NavigationLevel::operator new(size_t,void *a)
+inline
+void* G4NavigationLevel::operator new(size_t,void *a)
 {
   return a;
 }
 
-inline void G4NavigationLevel::operator delete(void *aLevel)
+inline
+void G4NavigationLevel::operator delete(void *aLevel)
 {
   aNavigationLevelAllocator.FreeSingle((G4NavigationLevel *) aLevel);
 }
@@ -123,15 +139,9 @@ inline void G4NavigationLevel::operator delete(void *aLevel)
 // Added for use by STL.  J. Apostolakis  (used for free-ing pre-allocated?)
 
 #ifndef G4NOT_ISO_DELETES
-inline void G4NavigationLevel::operator delete(void *ptr, void *p)
+inline
+void G4NavigationLevel::operator delete(void *ptr, void *p)
 {
   ;
 }
 #endif
-
-
-
-
-
-
-

@@ -5,14 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VoxelNavigation.icc,v 1.2 1999-12-15 14:50:25 gunter Exp $
+// $Id: G4VoxelNavigation.icc,v 1.3 2000-11-01 16:51:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4VoxelNavigation Inline implementation
 
-inline G4VoxelNavigation::G4VoxelNavigation() :
-    fVoxelAxisStack(kNavigatorVoxelStackMax),
+inline
+G4VoxelNavigation::G4VoxelNavigation()
+  : fVoxelAxisStack(kNavigatorVoxelStackMax),
     fVoxelNoSlicesStack(kNavigatorVoxelStackMax),
     fVoxelSliceWidthStack(kNavigatorVoxelStackMax),
     fVoxelNodeNoStack(kNavigatorVoxelStackMax),
@@ -21,8 +22,10 @@ inline G4VoxelNavigation::G4VoxelNavigation() :
 {
 }
 
-inline G4SmartVoxelNode* G4VoxelNavigation::VoxelLocate(G4SmartVoxelHeader *pHead,
-                           const G4ThreeVector &localPoint)
+inline
+G4SmartVoxelNode*
+G4VoxelNavigation::VoxelLocate(G4SmartVoxelHeader *pHead,
+                               const G4ThreeVector &localPoint)
 {
 	G4SmartVoxelHeader *targetVoxelHeader=pHead;
 	G4SmartVoxelNode *targetVoxelNode=0;
@@ -32,12 +35,15 @@ inline G4SmartVoxelNode* G4VoxelNavigation::VoxelLocate(G4SmartVoxelHeader *pHea
 	G4int targetHeaderNoSlices,targetNodeNo;
 	fVoxelDepth=0;
 
-	do {
+	while (!targetVoxelNode)
+            {
 		targetHeaderAxis=targetVoxelHeader->GetAxis();
 		targetHeaderNoSlices=targetVoxelHeader->GetNoSlices();
 		targetHeaderMin=targetVoxelHeader->GetMinExtent();
-		targetHeaderNodeWidth=(targetVoxelHeader->GetMaxExtent()-targetHeaderMin)/targetHeaderNoSlices;
-		targetNodeNo=G4int ((localPoint(targetHeaderAxis)-targetHeaderMin)/targetHeaderNodeWidth);
+		targetHeaderNodeWidth= (targetVoxelHeader->GetMaxExtent()
+                                      -targetHeaderMin)/targetHeaderNoSlices;
+		targetNodeNo=G4int((localPoint(targetHeaderAxis)
+                                    -targetHeaderMin)/targetHeaderNodeWidth);
 // Rounding protection
 		if (targetNodeNo<0)
 			{
@@ -64,12 +70,13 @@ inline G4SmartVoxelNode* G4VoxelNavigation::VoxelLocate(G4SmartVoxelHeader *pHea
 		        targetVoxelHeader=sampleProxy->GetHeader();
 			fVoxelDepth++;
 			}
-		} while (!targetVoxelNode);
+             }
 	fVoxelNode=targetVoxelNode;
 	return targetVoxelNode;
 }
 
-inline G4bool G4VoxelNavigation::LevelLocate(G4NavigationHistory& history,
+inline
+G4bool G4VoxelNavigation::LevelLocate(G4NavigationHistory& history,
 			   const G4VPhysicalVolume *blockedVol,
                            const G4int,
                            const G4ThreeVector &globalPoint,
@@ -107,7 +114,7 @@ inline G4bool G4VoxelNavigation::LevelLocate(G4NavigationHistory& history,
 	{
 // Setup volume with mother ptr
 	  samplePhysical->Setup(targetPhysical);
-	  history.NewLevel(samplePhysical, kNormal, samplePhysical->GetCopyNo());
+	  history.NewLevel(samplePhysical,kNormal,samplePhysical->GetCopyNo());
 	  sampleSolid=samplePhysical->GetLogicalVolume()->GetSolid();
 	  samplePoint=history.GetTopTransform().TransformPoint(globalPoint);
 
@@ -129,4 +136,3 @@ inline G4bool G4VoxelNavigation::LevelLocate(G4NavigationHistory& history,
     }
   return false;
 }
-

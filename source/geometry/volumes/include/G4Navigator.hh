@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.hh,v 1.5 2000-04-25 16:15:03 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.6 2000-11-01 16:51:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -152,7 +152,7 @@ class G4Navigator
     // same volume as the previous position.  Usually this can be guaranteed
     // only if the point is within safety.
 
-  void LocateGlobalPointAndUpdateTouchable(
+  inline void LocateGlobalPointAndUpdateTouchable(
 			  const G4ThreeVector&       position,
 			  const G4ThreeVector&       direction,
 				G4VTouchable*        touchableToUpdate,
@@ -161,14 +161,14 @@ class G4Navigator
     // LocateGlobalPointAndSetup(). Then use the volume found and its
     // navigation history to update the touchable.
 
-  void LocateGlobalPointAndUpdateTouchable(
+  inline void LocateGlobalPointAndUpdateTouchable(
 			  const G4ThreeVector&       position,
 				G4VTouchable*        touchableToUpdate,
 			  const G4bool               RelativeSearch  =true);
     // Old version (missing direction).
     // Not recommended replace with newer version above.
 
-  void SetGeometricallyLimitedStep();
+  inline void SetGeometricallyLimitedStep();
     // Inform the navigator that the previous Step calculated
     // by the geometry was taken in its entirety.
 
@@ -181,16 +181,16 @@ class G4Navigator
     // The proposed maximum length is used to avoid volume safety
     // calculations.  The geometry must be closed.
 
-  G4ThreeVector GetCurrentLocalCoordinate() const;
+  inline G4ThreeVector GetCurrentLocalCoordinate() const;
     // Return the local coordinate of the point in the reference system
     // of its containing volume that was found by LocalGlobalPointAndSetup.
     // The local coordinate of the last located track.
 
-  G4ThreeVector ComputeLocalPoint(const G4ThreeVector& rGlobPoint) const;
+  inline G4ThreeVector ComputeLocalPoint(const G4ThreeVector& rGlobPoint) const;
     // Return position vector in local coordinate system, given a position
     // vector in world coordinate system.
 
-  G4ThreeVector ComputeLocalAxis(const G4ThreeVector& pVec) const;
+  inline G4ThreeVector ComputeLocalAxis(const G4ThreeVector& pVec) const;
     // Return the local direction of the specified vector in the reference
     // system of the volume that was found by LocalGlobalPointAndSetup.
     // The Local Coordinates of point in world coordinate system.
@@ -199,7 +199,7 @@ class G4Navigator
   G4RotationMatrix NetRotation() const;
     // Compute+return the local->global translation/rotation of current volume.
 
-  G4VPhysicalVolume* GetWorldVolume() const;
+  inline G4VPhysicalVolume* GetWorldVolume() const;
     // Return the current  world (`topmost') volume.
 
   void SetWorldVolume(G4VPhysicalVolume* pWorld);
@@ -211,14 +211,14 @@ class G4Navigator
   G4TouchableHistory* CreateTouchableHistory() const;
     // `Touchable' creation methods: caller has deletion responsibility.
 
-  G4bool        IsExitNormalValid();
+  inline G4bool IsExitNormalValid();
     // Return true if the Navigator
     //   i) found that it is exiting the previous volume and is not
     //      entering a daughter volume.
     //  ii) has obtained the normal for the previous volume (in local
     //      coordinates).
 
-  G4ThreeVector GetLocalExitNormal();
+  inline G4ThreeVector GetLocalExitNormal();
     // Can be called (i.e. can return a valid result) only if the Navigator
     // replied true to IsExitNormalValid().
     // It returns the ExitNormal of the previous volume.
@@ -256,22 +256,22 @@ class G4Navigator
     // Print the internal state of the Navigator (for debugging).
     // The level of detail is according to the verbosity.
 
-  const G4AffineTransform& GetGlobalToLocalTransform() const;
+  inline const G4AffineTransform& GetGlobalToLocalTransform() const;
   const G4AffineTransform  GetLocalToGlobalTransform() const;
     // Obtain the transformations Global/Local (and inverse).
     // Clients of these methods must copy the data if they need to keep it.
 
  protected:  // with description
 
-  void ResetStackAndState();
+  inline void ResetStackAndState();
     // Reset stack and minimum or navigator state machine necessary for reset
     // as needed by LocalGlobalPointAndSetup.
     // [Does not perform clears, resizes, or reset fLastLocatedPointLocal]
 
-  EVolume VolumeType(const G4VPhysicalVolume *pVol) const;
+  inline EVolume VolumeType(const G4VPhysicalVolume *pVol) const;
     // Characterise `type' of volume - normal/replicated/parameterised.
 
-  EVolume CharacteriseDaughters(const G4LogicalVolume *pLog) const;
+  inline EVolume CharacteriseDaughters(const G4LogicalVolume *pLog) const;
     // Characterise daughter of logical volume.
 
   void SetupHierarchy();

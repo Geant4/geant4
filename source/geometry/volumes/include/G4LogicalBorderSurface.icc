@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalBorderSurface.icc,v 1.1 2000-04-25 16:15:02 gcosmo Exp $
+// $Id: G4LogicalBorderSurface.icc,v 1.2 2000-11-01 16:51:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,13 +20,15 @@ void G4LogicalBorderSurface::SetPhysicalVolumes(G4VPhysicalVolume* vol1,
 }
 
 inline
-G4VPhysicalVolume* G4LogicalBorderSurface::GetVolume1() const
+const G4VPhysicalVolume*
+G4LogicalBorderSurface::GetVolume1() const
 {
   return Volume1;
 }
 
 inline
-G4VPhysicalVolume* G4LogicalBorderSurface::GetVolume2() const
+const G4VPhysicalVolume*
+G4LogicalBorderSurface::GetVolume2() const
 {
   return Volume2;
 }

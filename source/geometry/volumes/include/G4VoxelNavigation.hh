@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VoxelNavigation.hh,v 1.6 2000-04-25 16:15:04 gcosmo Exp $
+// $Id: G4VoxelNavigation.hh,v 1.7 2000-11-01 16:51:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,7 +22,7 @@
 #ifndef G4VOXELNAVIGATION_HH
 #define G4VOXELNAVIGATION_HH
 
-#include "globals.hh"
+#include "geomdefs.hh"
 #include "G4NavigationHistory.hh"
 #include "G4AffineTransform.hh"
 #include "G4VPhysicalVolume.hh"
@@ -38,9 +38,6 @@
 #include "G4SmartVoxelHeader.hh"
 #include "g4rw/tvvector.h"
 #include "g4rw/tpvector.h"
-
-// Voxel stack depth maximum [no resizing]
-const G4int kNavigatorVoxelStackMax = 3;
 
 class G4VoxelNavigation
 {

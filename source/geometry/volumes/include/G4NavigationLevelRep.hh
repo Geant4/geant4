@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationLevelRep.hh,v 1.4 2000-04-25 16:15:03 gcosmo Exp $
+// $Id: G4NavigationLevelRep.hh,v 1.5 2000-11-01 16:51:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4NavigationLevelRep
@@ -58,16 +58,16 @@ class G4NavigationLevelRep
 
    G4NavigationLevelRep& operator=(const G4NavigationLevelRep &right);
 
-   G4VPhysicalVolume* GetPhysicalVolume() const;
+   inline G4VPhysicalVolume* GetPhysicalVolume();
 
-   const G4AffineTransform* GetTransformPtr() const ;  // New
-   const G4AffineTransform& GetTransform() const ;     // Old
-   //    G4AffineTransform& GetTransform();            // Only temporarily
-   EVolume                  GetVolumeType() const ;
-   G4int              GetReplicaNo() const ;
+   inline const G4AffineTransform* GetTransformPtr() const ;  // New
+   inline const G4AffineTransform& GetTransform() const ;     // Old
 
-   void   AddAReference(); 
-   G4bool RemoveAReference(); 
+   inline EVolume            GetVolumeType() const ;
+   inline G4int              GetReplicaNo() const ;
+
+   inline void   AddAReference(); 
+   inline G4bool RemoveAReference(); 
      // Take care of the reference counts.
 
    inline void *operator new(size_t);
@@ -77,6 +77,7 @@ class G4NavigationLevelRep
 
  public:  // without description
 
+   // G4AffineTransform& GetTransform();
    // const G4AffineTransform* GetPtrTransform() const;
    // G4AffineTransform&  accessTransform();
 

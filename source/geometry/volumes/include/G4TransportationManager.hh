@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TransportationManager.hh,v 1.4 2000-04-25 16:15:04 gcosmo Exp $
+// $Id: G4TransportationManager.hh,v 1.5 2000-11-01 16:51:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4TransportationManager
@@ -37,13 +37,13 @@ class G4TransportationManager
 
      static G4TransportationManager* GetTransportationManager();
 
-     G4Navigator*          GetNavigatorForTracking();
-     G4PropagatorInField*  GetPropagatorInField();
-     G4FieldManager*       GetFieldManager();
+     inline G4Navigator*          GetNavigatorForTracking() const;
+     inline G4PropagatorInField*  GetPropagatorInField() const;
+     inline G4FieldManager*       GetFieldManager() const;
 
-     void  SetNavigatorForTracking( G4Navigator*        newNavigator);
-     void  SetPropagatorInField(  G4PropagatorInField*  newFieldPropagator);
-     void  SetFieldManager(       G4FieldManager*       newFieldManager);
+     inline void  SetNavigatorForTracking( G4Navigator*        newNavigator);
+     inline void  SetPropagatorInField(  G4PropagatorInField*  newFieldPropagator);
+     inline void  SetFieldManager(       G4FieldManager*       newFieldManager);
 
      ~G4TransportationManager(); 
 

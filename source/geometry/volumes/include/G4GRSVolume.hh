@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GRSVolume.hh,v 1.3 2000-04-25 16:15:02 gcosmo Exp $
+// $Id: G4GRSVolume.hh,v 1.4 2000-11-01 16:51:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,11 +43,17 @@ class G4GRSVolume : public G4VTouchable
 	        const G4ThreeVector &tlate);
     ~G4GRSVolume();
 
-    G4VPhysicalVolume* GetVolume(G4int depth=0) const;
-    G4VSolid* GetSolid(G4int depth=0) const;
-    const G4ThreeVector& GetTranslation(G4int depth=0) const;
-    const G4RotationMatrix*  GetRotation(G4int depth=0) const;
-  
+    inline G4VPhysicalVolume* GetVolume(G4int depth=0) const;
+    inline G4VSolid* GetSolid(G4int depth=0) const;
+    inline const G4ThreeVector& GetTranslation(G4int depth=0) const;
+    inline const G4RotationMatrix*  GetRotation(G4int depth=0) const;
+
+  private:
+
+    G4GRSVolume(const G4GRSVolume&);
+    G4GRSVolume& operator=(const G4GRSVolume&);
+      // Copy constructor and assignment operator NOT public
+
   private:
   
     G4VPhysicalVolume *fvol;

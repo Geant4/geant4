@@ -5,20 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TouchableHistory.icc,v 1.3 1999-12-15 14:50:25 gunter Exp $
+// $Id: G4TouchableHistory.icc,v 1.4 2000-11-01 16:51:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4TouchableHistory inline implementation
 
-inline G4TouchableHistory::G4TouchableHistory()
-  : fhistory()
+inline
+G4TouchableHistory::G4TouchableHistory()
+  : fhistory(), ftlate(G4ThreeVector(0.,0.,0.)), frot(G4RotationMatrix())
 {
-  ftlate= G4ThreeVector(0.,0.,0.);
-  frot= G4RotationMatrix();
 }
 
-inline G4TouchableHistory::G4TouchableHistory(const G4NavigationHistory &history)
+inline
+G4TouchableHistory::G4TouchableHistory(const G4NavigationHistory &history)
   : fhistory(history)
 {
   G4AffineTransform tf(fhistory.GetTopTransform().Inverse());
@@ -26,9 +26,9 @@ inline G4TouchableHistory::G4TouchableHistory(const G4NavigationHistory &history
   frot=tf.NetRotation();
 }
 
-inline 
-void  G4TouchableHistory::UpdateYourself(     G4VPhysicalVolume*   pPhysVol,
-			   const G4NavigationHistory* pHistory) 
+inline
+void  G4TouchableHistory::UpdateYourself(G4VPhysicalVolume*   pPhysVol,
+                                   const G4NavigationHistory* pHistory) 
 {
   fhistory= *pHistory;  
   G4AffineTransform tf(fhistory.GetTopTransform().Inverse());
@@ -42,38 +42,44 @@ void  G4TouchableHistory::UpdateYourself(     G4VPhysicalVolume*   pPhysVol,
   frot=tf.NetRotation();
 }
 
-G4int
-inline G4TouchableHistory::CalculateHistoryIndex(G4int stackDepth) const
+inline
+G4int G4TouchableHistory::CalculateHistoryIndex(G4int stackDepth) const
 {
   return (fhistory.GetDepth()-stackDepth); // was -1
 }
 
-inline G4VPhysicalVolume* G4TouchableHistory::GetVolume(G4int depth) const
+inline
+G4VPhysicalVolume* G4TouchableHistory::GetVolume(G4int depth) const
 {
   return fhistory.GetVolume(CalculateHistoryIndex(depth));
 }
 
-inline G4VSolid* G4TouchableHistory::GetSolid(G4int depth) const
+inline
+G4VSolid* G4TouchableHistory::GetSolid(G4int depth) const
 {
-  return fhistory.GetVolume(CalculateHistoryIndex(depth))->GetLogicalVolume()->GetSolid();
+  return fhistory.GetVolume(CalculateHistoryIndex(depth))
+                            ->GetLogicalVolume()->GetSolid();
 }
 
-inline G4int   G4TouchableHistory::GetReplicaNumber(G4int depth) const
+inline
+G4int G4TouchableHistory::GetReplicaNumber(G4int depth) const
 {
   // return this->GetHistory()->GetTopReplicaNo();
   return fhistory.GetReplicaNo(CalculateHistoryIndex(depth));
 }
 
-inline G4int  G4TouchableHistory::GetHistoryDepth()  const
+inline
+G4int G4TouchableHistory::GetHistoryDepth()  const
 {
   return  fhistory.GetDepth();
 }
 
-inline G4int  G4TouchableHistory::MoveUpHistory( G4int num_levels )
+inline
+G4int G4TouchableHistory::MoveUpHistory( G4int num_levels )
 {
   G4NavigationHistory* nHistory= &fhistory;
   G4int maxLevelsMove=  nHistory->GetDepth();
-  G4int minLevelsMove=  0;                      // Cannot redescend today!
+  G4int minLevelsMove=  0;              // Cannot redescend today!
 				        // Soon it will be possible
 					// by adding a data member here
 				        //     fCurrentDepth;
@@ -90,7 +96,8 @@ inline G4int  G4TouchableHistory::MoveUpHistory( G4int num_levels )
   return num_levels;
 }
 
-inline const G4NavigationHistory* G4TouchableHistory::GetHistory() const
+inline
+const G4NavigationHistory* G4TouchableHistory::GetHistory() const
 {
   return &fhistory;
 }
