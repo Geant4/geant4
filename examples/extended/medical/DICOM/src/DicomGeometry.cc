@@ -289,10 +289,10 @@ void DicomGeometry::PatientConstruction(G4LogicalVolume* logicWorld)
 						false,
 						0 );
   
-  G4Box* LungINhale = new G4Box( "LungINhale", patientX, patientY, patientZ);
+  G4Box* lungINhaleBox = new G4Box( "LungINhale", patientX, patientY, patientZ);
 
   G4Material* lungInhaleMaterial = G4Material::GetMaterial("Lung_Inhale");
-  G4LogicalVolume* logicLungInHale = new G4LogicalVolume(LungINhale,lungInhaleMaterial,"Logical_LungINhale",0,0,0);
+  G4LogicalVolume* logicLungInHale = new G4LogicalVolume(lungINhaleBox,lungInhaleMaterial,"Logical_LungINhale",0,0,0);
 
   // ---- MGP ---- Numbers (2.0, 0.207) to be removed from code; move to const
   G4int numberOfVoxels = patientConstructor->FindingNbOfVoxels(2.0,0.207);
