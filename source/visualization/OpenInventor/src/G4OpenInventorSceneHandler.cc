@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.21 2004-11-11 17:26:30 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.22 2004-11-12 18:18:20 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -191,16 +191,6 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
 
   G4int pointn = polymarker.size();
   if(pointn<=0) return;
-
-  if(polymarker.GetMarkerType()==G4Polymarker::line) {
-    // Why a polymarker of type line is not a G4Polyline ???
-    G4Polyline polyline (polymarker);
-    for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
-      polyline.push_back (polymarker[iPoint]);
-    }
-    AddPrimitive(polyline);
-    return;
-  }
 
   SbVec3f* points = new SbVec3f[pointn];
   for (G4int iPoint = 0; iPoint < pointn ; iPoint++) {
