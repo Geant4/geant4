@@ -110,6 +110,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void setColor (HEPREP::HepRepInstance *instance, const G4Color& color,
 			            const G4String& key = G4String("Color"));
         G4Color getColor (G4double charge);
+        void setVisibility (HEPREP::HepRepInstance *instance, const G4Visible& visible);
         void setLine   (HEPREP::HepRepInstance *instance, const G4Visible& visible);
         void setMarker (HEPREP::HepRepInstance *instance, const G4VMarker& marker);
 

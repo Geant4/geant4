@@ -377,6 +377,8 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyline& line) {
 
     setColor(instance, GetColor(line));
 
+    setVisibility(instance, line);
+
     setLine(instance, line);
 
     for (size_t i=0; i < line.size(); i++) {
@@ -395,6 +397,8 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getHitType());
 
     setColor(instance, GetColor(line));
+
+    setVisibility(instance, line);
 
     setMarker(instance, line);
 
@@ -433,6 +437,8 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
 
     setColor (instance, GetColor(circle));
 
+    setVisibility(instance, circle);
+
     setMarker(instance, circle);
 
     factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
@@ -455,7 +461,9 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     } else {
         instance = getGeometryInstance(currentLV, currentDepth);
     }
-    
+        
+    setVisibility(instance, polyhedron);
+	
     G4bool notLastFace;
     do {
         HepRepInstance* face;
@@ -499,6 +507,8 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
     G4Point3D center = transform * square.GetPosition();
 
     setColor (instance, GetColor(square));
+
+    setVisibility(instance, square);
 
     setMarker(instance, square);
 
@@ -634,6 +644,12 @@ G4Color G4HepRepSceneHandler::getColor (G4double charge) {
     else if(charge<0.0) red  =  1.0; // Red = negative.
     else                green = 1.0; // Green = neutral.
     return G4Color(red, green, blue);
+}
+
+void G4HepRepSceneHandler::setVisibility (HepRepInstance *instance, const G4Visible& visible) {
+    const G4VisAttributes* atts = visible.GetVisAttributes();
+
+    setAttribute(instance, "Visibility", (atts && (atts->IsVisible()==0)) ? false : true);
 }
 
 void G4HepRepSceneHandler::setLine (HepRepInstance *instance, const G4Visible& visible) {
@@ -896,6 +912,7 @@ HepRepType* G4HepRepSceneHandler::getGeometryRootType() {
         
         // add defaults for Geometry
         _geometryRootType->addAttValue("Color", 0.8, 0.8, 0.8, 1.0);
+        _geometryRootType->addAttValue("Visibility", true);
         _geometryRootType->addAttValue("FillColor", 0.8, 0.8, 0.8, 1.0);
         _geometryRootType->addAttValue("LineWidth", 1.0);
         _geometryRootType->addAttValue("DrawAs", G4String("Polygon"));
@@ -993,6 +1010,7 @@ HepRepType* G4HepRepSceneHandler::getEventType() {
         _eventType->addAttValue("Layer", eventLayer);
 
         // add defaults for Events
+        _eventType->addAttValue("Visibility", true);
         _eventType->addAttValue("Color", 1.0, 1.0, 1.0, 1.0);
         _eventType->addAttValue("FillColor", 1.0, 1.0, 1.0, 1.0);
         _eventType->addAttValue("LineWidth", 1.0);
