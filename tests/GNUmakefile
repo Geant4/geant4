@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.39 2001-11-27 00:14:19 stesting Exp $
+# $Id: GNUmakefile,v 1.40 2002-04-03 12:21:38 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -26,6 +26,9 @@ G3TOG4 += 01 02   ## 01 - clGeometry  02 cltog4 (actually hand coded for now)
 
 # Symbolic links to extended field examples using test701, etc...
 FIELD += 01 02 03
+
+# Symbolic links to extended BIAS examples using test801, etc...
+BIAS += 01 02 03 04 05 06 07
 
 # System Tests...
 SUBDIRS += test01 ## Geometry - CSG solids and navigator.
@@ -94,6 +97,10 @@ endif
 	@$(ECHO) Making Field Tests...
 	@for nn in $(FIELD); do \
 	  (cd test7$$nn && $(MAKE)); \
+	done;:
+	@$(ECHO) Making Biasing Tests...
+	@for nn in $(BIAS); do \
+	  (cd test8$$nn && $(MAKE)); \
 	done;:
 	@$(ECHO) Making libG4TestTool.a for System Tests...
 	@cd tools/lib && $(MAKE);:
@@ -183,6 +190,20 @@ examples_links_source:
 	    ln -s $$exout $$testdir/$$testout; \
 	  done; \
 	done;:
+
+	@for nn in $(BIAS); do \
+	  testdir=test8$$nn; \
+	  exdir=$(G4INSTALL)/examples/extended/biasing/B$$nn; \
+	  ln -s $$exdir $$testdir; \
+	  for i in $$exdir/*.in; do \
+	    exin=`basename $$i`; \
+	    exout=`basename $$i .in`.out; \
+	    testin=`echo $$exin | sed s/biasing/test8/`; \
+	    testout=`echo $$exout | sed s/biasing/test8/`; \
+	    ln -s $$exin $$testdir/$$testin; \
+	    ln -s $$exout $$testdir/$$testout; \
+	  done; \
+	done;:
 examples_links_binaries:
 	@$(MAKE) clean_examples_links_binaries
 	@for nn in $(EXAMPLES); do \
@@ -198,6 +219,9 @@ examples_links_binaries:
 	done;:
 	@for nn in $(FIELD); do \
 	  ln -s field$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test7$$nn; \
+	done;:
+	@for nn in $(BIAS); do \
+	  ln -s exampleB$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test8$$nn; \
 	done;:
 	@ln -s clGeometry $(G4WORKDIR)/bin/$(G4SYSTEM)/test601; \
 	ln -s cltog4    $(G4WORKDIR)/bin/$(G4SYSTEM)/test602; \
@@ -242,5 +266,8 @@ clean_examples_links_binaries:
 	done;:
 	@for nn in $(FIELD); do \
 	  rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test7$$nn; \
+	done;:
+	@for nn in $(BIAS); do \
+	  rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test8$$nn; \
 	done;:
 	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test601 $(G4WORKDIR)/bin/$(G4SYSTEM)/test602;:
