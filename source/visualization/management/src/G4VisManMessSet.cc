@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessSet.cc,v 1.7 2000-05-02 09:58:11 johna Exp $
+// $Id: G4VisManMessSet.cc,v 1.8 2001-02-01 17:35:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -240,8 +240,6 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (getVP);
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
@@ -344,8 +342,6 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (getVP);
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
@@ -390,8 +386,6 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (getVP);
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
@@ -445,8 +439,6 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (getVP);
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
@@ -460,6 +452,13 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
     G4cout << "Number of sides per circle in polygon approximation is "
 	 << nSides << G4endl;
     fpVMan -> SetCurrentViewParameters ().SetNoOfSides (nSides);
+    const G4ViewParameters& getVP = fpVMan -> GetCurrentViewParameters ();
+    G4VViewer* pView = fpVMan -> GetCurrentViewer ();
+    if (pView) {
+      // Copy current view parameters into current view.
+      pView -> SetViewParameters (getVP);
+    }
+    G4cout << "Issue Draw or refresh to see effect." << G4endl;
   }
 
   ///////////////////////////////////////////  /vis~/set/rep_style  ////
@@ -492,8 +491,6 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }

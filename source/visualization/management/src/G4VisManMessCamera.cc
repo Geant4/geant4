@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessCamera.cc,v 1.4 1999-12-15 14:54:26 gunter Exp $
+// $Id: G4VisManMessCamera.cc,v 1.5 2001-02-01 17:35:41 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -207,8 +207,6 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
@@ -255,8 +253,6 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
@@ -320,8 +316,6 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
@@ -377,8 +371,6 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
     if (pView) {
       // Copy current view parameters into current view.
       pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
-      // Recalculate projection matrices, etc.
-      pView -> SetView ();
     }
     G4cout << "Issue Draw or refresh to see effect." << G4endl;
   }
@@ -418,8 +410,6 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }

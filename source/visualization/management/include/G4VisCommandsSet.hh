@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSet.hh,v 1.4 1999-12-15 14:54:22 gunter Exp $
+// $Id: G4VisCommandsSet.hh,v 1.5 2001-02-01 17:35:22 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,8 +53,6 @@ public:
     if (pView) {
       // Copy current view parameters into current view.
       pView -> SetViewParameters (pVMan -> GetCurrentViewParameters ());
-      // Recalculate projection matrices, etc.
-      pView -> SetView ();
     }
     G4cout << "Issue Draw or refresh to see effect." << G4endl;
   }
@@ -86,8 +84,6 @@ public:
     if (pView) {
       // Copy current view parameters into current view.
       pView -> SetViewParameters (pVMan -> GetCurrentViewParameters ());
-      // Recalculate projection matrices, etc.
-      pView -> SetView ();
     }
     G4cout << "Issue Draw or refresh to see effect." << G4endl;
   }
@@ -115,8 +111,6 @@ public:
     if (pView) {
       // Copy current view parameters into current view.
       pView -> SetViewParameters (pVMan -> GetCurrentViewParameters ());
-      // Recalculate projection matrices, etc.
-      pView -> SetView ();
     }
     G4cout << "Issue Draw or refresh to see effect." << G4endl;
   }
