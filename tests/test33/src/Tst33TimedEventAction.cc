@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33TimedEventAction.cc,v 1.3 2002-11-04 10:57:48 dressel Exp $
+// $Id: Tst33TimedEventAction.cc,v 1.4 2002-11-04 13:27:18 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,8 +82,8 @@ void Tst33TimedEventAction::SetCell_19_Scorer(const G4CellScorer *scorer){
 
 void Tst33TimedEventAction::BeginOfEventAction(const G4Event* evt)
 {
-  struct G4std::tms time = {0};
-  G4std::times(&time);
+  struct tms time = {0};
+  times(&time);
   fEvStartTime = time.tms_utime;
 }
 
@@ -92,8 +92,10 @@ void Tst33TimedEventAction::BeginOfEventAction(const G4Event* evt)
 void Tst33TimedEventAction::EndOfEventAction(const G4Event* evt)
 {
 
-  struct G4std::tms time = {0};
-  G4std::times(&time);
+  struct tms time = {0};
+  times(&time);
+
+
   fProcessTime += time.tms_utime - fEvStartTime;
   if (fCScorer) {
     G4CellScoreValues v=fCScorer->GetCellScoreValues();
@@ -103,10 +105,7 @@ void Tst33TimedEventAction::EndOfEventAction(const G4Event* evt)
     fOld_lwe = lwe;
 
     fSig.Xin(lwediff);
-    //    G4cout << "fSumSLWE= " << v.fSumSLWE 
-    //	   << " fSumSLW= " << v.fSumSLW
-    //	   << " pro.time= " << fProcessTime
-    //	   << G4endl;
+
   }
   if (fProcessTime >= fMaxRunTime) {
     G4RunManager::GetRunManager()->AbortRun();
