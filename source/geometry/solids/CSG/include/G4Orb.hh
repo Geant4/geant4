@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Orb.hh,v 1.1 2003-08-21 14:34:05 grichine Exp $
+// $Id: G4Orb.hh,v 1.2 2003-10-31 09:00:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,13 +32,12 @@
 //
 // Class description:
 //
-//   A G4Orb is, in the most simple case of G4Sphere. It has only:
+//   A G4Orb is a simple case of G4Sphere. It has only:
 //   fRmax  outer radius
-//
-//  History:
-//
-// 20.08.03 V.Grichine - creation
 
+//  History:
+// 20.08.03 V.Grichine - created
+// --------------------------------------------------------------------
 
 #ifndef G4Orb_HH
 #define G4Orb_HH
