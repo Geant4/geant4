@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.16 2001-08-14 17:31:06 maire Exp $
+// $Id: G4hIonisation.cc,v 1.17 2001-08-29 16:43:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------- G4hIonisation physics process -----------
@@ -30,17 +30,18 @@
 //
 // corrected by L.Urban on 24/09/97
 // several bugs corrected by L.Urban on 13/01/98
-// 07-04-98: remove 'tracking cut' of the ionizing particle, mma
-// 22/10/98: cleanup L.Urban
-// 02/02/99: bugs fixed , L.Urban
-// 29/07/99: correction in BuildLossTable for low energy, L.Urban
-// 10/02/00  modifications , new e.m. structure, L.Urban
-// 10/08/00: V.Ivanchenko change BuildLambdaTable, in order to 
-//           simulate energy losses of ions; correction to
-//           cross section for particles with spin 1 is inserted as well
-// 28/05/01  V.Ivanchenko minor changes to provide ANSI -wall compilation
-// 10-08-01: new methods Store/Retrieve PhysicsTable (mma)
-// 14-08-01  new function ComputeRestrictedMeandEdx() + 'cleanup' (mma) 
+// 07-04-98 remove 'tracking cut' of the ionizing particle, mma
+// 22/10/98 cleanup L.Urban
+// 02/02/99 bugs fixed , L.Urban
+// 29/07/99 correction in BuildLossTable for low energy, L.Urban
+// 10/02/00 modifications , new e.m. structure, L.Urban
+// 10/08/00 V.Ivanchenko change BuildLambdaTable, in order to 
+//          simulate energy losses of ions; correction to
+//          cross section for particles with spin 1 is inserted as well
+// 28/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
+// 14-08-01 new function ComputeRestrictedMeandEdx() + 'cleanup' (mma)
+// 29-08-01 PostStepDoIt: correction for spin 1/2 (instead of 1) (mma)  
 //
 // --------------------------------------------------------------
 
@@ -169,7 +170,6 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
  //     tables are built for MATERIALS 
 
  G4double chargeSquare = Charge*Charge;
- G4double Value ,sigma ;
  
  //create table
  //
@@ -380,6 +380,121 @@ G4double G4hIonisation::ComputeCrossSectionPerAtom(
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4VParticleChange* G4hIonisation::PostStepDoIt(const G4Track& trackData,   
+                                               const G4Step&  stepData)         
+{
+ aParticleChange.Initialize(trackData);
+  
+ G4Material* aMaterial = trackData.GetMaterial();
+ const G4DynamicParticle*  aParticle = trackData.GetDynamicParticle();
+
+ ParticleMass = aParticle->GetDefinition()->GetPDGMass();
+ G4double KineticEnergy = aParticle->GetKineticEnergy();
+ G4double TotalEnergy = KineticEnergy + ParticleMass;
+ G4double Psquare = KineticEnergy*(TotalEnergy+ParticleMass);
+ G4double Esquare = TotalEnergy*TotalEnergy;
+ G4double betasquare=Psquare/Esquare; 
+ G4double summass = ParticleMass + electron_mass_c2;
+ G4double MaxKineticEnergyTransfer = 2.*electron_mass_c2*Psquare
+                      /(summass*summass+2.*electron_mass_c2*KineticEnergy);      
+ G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
+ 
+ // get electron cut in kinetic energy
+ G4double* DeltaCutInKineticEnergy = (G4Electron::Electron())->GetCutsInEnergy();
+ G4double DeltaThreshold =
+	G4std::max(DeltaCutInKineticEnergy[aMaterial->GetIndex()],Tmincut);
+
+ // sampling kinetic energy of the delta ray 
+ //
+  if (MaxKineticEnergyTransfer <= DeltaThreshold)
+    // pathological case (it should not happen, there is no change at all)
+    return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
+
+ // normal case 
+ G4double xc = DeltaThreshold/MaxKineticEnergyTransfer;
+ G4double rate = MaxKineticEnergyTransfer/TotalEnergy;
+ G4double te2 = 0.;
+ if (aParticle->GetDefinition()->GetPDGSpin() == 0.5) te2=0.5*rate*rate;
+ 
+ // sampling follows ...
+ G4double x,grej; 
+ G4double grejc=1.-betasquare*xc+te2*xc*xc;
+ do { x=xc/(1.-(1.-xc)*G4UniformRand());
+      grej=(1.-x*(betasquare-x*te2))/grejc;
+    } while(G4UniformRand() > grej);
+    
+ G4double  DeltaKineticEnergy = x * MaxKineticEnergyTransfer;
+
+ if (DeltaKineticEnergy <= 0.)
+   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
+
+ G4double DeltaTotalMomentum = sqrt(DeltaKineticEnergy * (DeltaKineticEnergy +
+                                               2. * electron_mass_c2 ));
+ G4double TotalMomentum = sqrt(Psquare);
+ G4double costheta = DeltaKineticEnergy * (TotalEnergy + electron_mass_c2)
+            /(DeltaTotalMomentum * TotalMomentum);
+
+ if (costheta < -1.) costheta = -1.;
+ if (costheta > +1.) costheta = +1.;
+
+ //  direction of the delta electron
+ //  
+ G4double phi = twopi * G4UniformRand(); 
+ G4double sintheta = sqrt((1.+costheta)*(1.-costheta));
+ G4double dirx = sintheta * cos(phi), diry = sintheta * sin(phi), dirz = costheta;
+
+ G4ThreeVector DeltaDirection(dirx,diry,dirz);
+ DeltaDirection.rotateUz(ParticleDirection);
+
+ // create G4DynamicParticle object for delta ray
+ //
+ G4DynamicParticle *theDeltaRay = new G4DynamicParticle;
+ theDeltaRay->SetKineticEnergy( DeltaKineticEnergy );
+ theDeltaRay->SetMomentumDirection(
+                   DeltaDirection.x(),DeltaDirection.y(),DeltaDirection.z()); 
+ theDeltaRay->SetDefinition(G4Electron::Electron());
+
+ // fill aParticleChange
+ // 
+ G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy;
+ G4double Edep = 0;
+
+ if (finalKineticEnergy > MinKineticEnergy)
+   {
+    G4double finalPx = TotalMomentum*ParticleDirection.x()
+                      - DeltaTotalMomentum*DeltaDirection.x();
+    G4double finalPy = TotalMomentum*ParticleDirection.y()
+                      - DeltaTotalMomentum*DeltaDirection.y();
+    G4double finalPz = TotalMomentum*ParticleDirection.z()
+                      - DeltaTotalMomentum*DeltaDirection.z();
+    G4double finalMomentum =
+              sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
+    finalPx /= finalMomentum;
+    finalPy /= finalMomentum;
+    finalPz /= finalMomentum;
+
+    aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
+   }
+ else
+   {
+     Edep = finalKineticEnergy;
+     finalKineticEnergy = 0.;
+     if (aParticle->GetDefinition()->GetParticleName() == "proton")
+           aParticleChange.SetStatusChange(fStopAndKill);
+     else  aParticleChange.SetStatusChange(fStopButAlive);
+   }
+
+ aParticleChange.SetEnergyChange( finalKineticEnergy );
+ aParticleChange.SetNumberOfSecondaries(1);   
+ aParticleChange.AddSecondary(theDeltaRay);
+ aParticleChange.SetLocalEnergyDeposit (Edep);
+      
+ //ResetNumberOfInteractionLengthLeft();
+return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4bool G4hIonisation::StorePhysicsTable(G4ParticleDefinition* particle,
 				              const G4String& directory, 
 				              G4bool          ascii)
@@ -452,121 +567,6 @@ G4bool G4hIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
   return true;
 }
   
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
-G4VParticleChange* G4hIonisation::PostStepDoIt(const G4Track& trackData,   
-                                               const G4Step&  stepData)         
-{
- aParticleChange.Initialize(trackData);
-  
- G4Material* aMaterial = trackData.GetMaterial();
- const G4DynamicParticle*  aParticle = trackData.GetDynamicParticle();
-
- ParticleMass = aParticle->GetDefinition()->GetPDGMass();
- G4double KineticEnergy = aParticle->GetKineticEnergy();
- G4double TotalEnergy = KineticEnergy + ParticleMass;
- G4double Psquare = KineticEnergy*(TotalEnergy+ParticleMass);
- G4double Esquare = TotalEnergy*TotalEnergy;
- G4double betasquare=Psquare/Esquare; 
- G4double summass = ParticleMass + electron_mass_c2;
- G4double MaxKineticEnergyTransfer = 2.*electron_mass_c2*Psquare
-                      /(summass*summass+2.*electron_mass_c2*KineticEnergy);      
- G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
- 
- // get electron cut in kinetic energy
- G4double* DeltaCutInKineticEnergy = (G4Electron::Electron())->GetCutsInEnergy();
- G4double DeltaThreshold =
-	G4std::max(DeltaCutInKineticEnergy[aMaterial->GetIndex()],Tmincut);
-
- // sampling kinetic energy of the delta ray 
- //
-  if (MaxKineticEnergyTransfer <= DeltaThreshold)
-    // pathological case (it should not happen, there is no change at all)
-    return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-
- // normal case 
- G4double xc = DeltaThreshold/MaxKineticEnergyTransfer;
- G4double rate = MaxKineticEnergyTransfer/TotalEnergy;
- G4double te2 = 0.;
- if (aParticle->GetDefinition()->GetPDGSpin() == 1.) te2=0.5*rate*rate;
- 
- // sampling follows ...
- G4double x,grej; 
- G4double grejc=1.-betasquare*xc+te2*xc*xc;
- do { x=xc/(1.-(1.-xc)*G4UniformRand());
-      grej=(1.-x*(betasquare-x*te2))/grejc;
-    } while(G4UniformRand() > grej);
-    
- G4double  DeltaKineticEnergy = x * MaxKineticEnergyTransfer;
-
- if (DeltaKineticEnergy <= 0.)
-   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-
- G4double DeltaTotalMomentum = sqrt(DeltaKineticEnergy * (DeltaKineticEnergy +
-                                               2. * electron_mass_c2 ));
- G4double TotalMomentum = sqrt(Psquare);
- G4double costheta = DeltaKineticEnergy * (TotalEnergy + electron_mass_c2)
-            /(DeltaTotalMomentum * TotalMomentum);
-
- if (costheta < -1.) costheta = -1.;
- if (costheta > +1.) costheta = +1.;
-
- //  direction of the delta electron
- //  
- G4double phi = twopi * G4UniformRand(); 
- G4double sintheta = sqrt((1.+costheta)*(1.-costheta));
- G4double dirx = sintheta * cos(phi), diry = sintheta * sin(phi), dirz = costheta;
-
- G4ThreeVector DeltaDirection(dirx,diry,dirz);
- DeltaDirection.rotateUz(ParticleDirection);
-
- // create G4DynamicParticle object for delta ray
- //
- G4DynamicParticle *theDeltaRay = new G4DynamicParticle;
- theDeltaRay->SetKineticEnergy( DeltaKineticEnergy );
- theDeltaRay->SetMomentumDirection(
-                   DeltaDirection.x(),DeltaDirection.y(),DeltaDirection.z()); 
- theDeltaRay->SetDefinition(G4Electron::Electron());
-
- // fill aParticleChange
- // 
- G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy;
- G4double Edep = 0;
-
- if (finalKineticEnergy > MinKineticEnergy)
-   {
-    G4double finalPx = TotalMomentum*ParticleDirection.x()
-                      - DeltaTotalMomentum*DeltaDirection.x();
-    G4double finalPy = TotalMomentum*ParticleDirection.y()
-                      - DeltaTotalMomentum*DeltaDirection.y();
-    G4double finalPz = TotalMomentum*ParticleDirection.z()
-                      - DeltaTotalMomentum*DeltaDirection.z();
-    G4double finalMomentum =
-              sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
-    finalPx /= finalMomentum;
-    finalPy /= finalMomentum;
-    finalPz /= finalMomentum;
-
-    aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
-   }
- else
-   {
-     finalKineticEnergy = 0.;
-     Edep = finalKineticEnergy;
-     if (aParticle->GetDefinition()->GetParticleName() == "proton")
-           aParticleChange.SetStatusChange(fStopAndKill);
-     else  aParticleChange.SetStatusChange(fStopButAlive);
-   }
-
- aParticleChange.SetEnergyChange( finalKineticEnergy );
- aParticleChange.SetNumberOfSecondaries(1);   
- aParticleChange.AddSecondary(theDeltaRay);
- aParticleChange.SetLocalEnergyDeposit (Edep);
-      
- //ResetNumberOfInteractionLengthLeft();
-return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hIonisation::PrintInfoDefinition()
