@@ -1,4 +1,4 @@
-$Id: History,v 1.27 1999-10-13 11:07:47 kurasige Exp $
+$Id: History,v 1.28 1999-10-20 10:41:58 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Oct 20, 99   H.Kurashige (particles-V00-01-01)
+----- partman-V00-01-04 tag
+- Bug fixes in G4PDGCodeChecker and G4IonTable
+
 - Oct 13, 99  H.Kurashige (particles-V00-01-00b)
 ----- partman-V00-01-03 tag
 - Bug fix in G4NucleiProperties  (Hisaya)
