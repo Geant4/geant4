@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scintillation.cc,v 1.4 2000-08-03 08:43:21 gcosmo Exp $
+// $Id: G4Scintillation.cc,v 1.5 2000-09-19 03:13:04 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -17,7 +17,9 @@
 // Version:     1.0
 // Created:     1998-11-07  
 // Author:      Peter Gumplinger
-// Updated:
+// Updated:     2000-09-18 by Peter Gumplinger
+//              > change: aSecondaryPosition=x0+rand*aStep.GetDeltaPosition();
+//                        aSecondaryTrack->SetTouchable(0);
 //
 // mail:        gum@triumf.ca
 //
@@ -100,7 +102,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	G4StepPoint* pPostStepPoint = aStep.GetPostStepPoint();
 
 	G4ThreeVector x0 = pPreStepPoint->GetPosition();
-        G4ThreeVector p0 = pPreStepPoint->GetMomentumDirection();
+        G4ThreeVector p0 = aStep.GetDeltaPosition().unit();
 	G4double      t0 = pPreStepPoint->GetGlobalTime();
 
         G4double TotalEnergyDeposit = aStep.GetTotalEnergyDeposit();
@@ -216,9 +218,9 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
                 // Generate new G4Track object:
 
-		G4double delta = G4UniformRand() * aStep.GetStepLength();
-		G4ThreeVector aSecondaryPosition = x0 + delta * p0;
+                G4double rand = G4UniformRand();
 
+                G4double delta = rand * aStep.GetStepLength();
 		G4double deltaTime = delta /
                        ((pPreStepPoint->GetVelocity()+
                          pPostStepPoint->GetVelocity())/2.);
@@ -228,10 +230,13 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
                 G4double aSecondaryTime = t0 + deltaTime;
 
+                G4ThreeVector aSecondaryPosition =
+                                    x0 + rand * aStep.GetDeltaPosition();
+
 		G4Track* aSecondaryTrack = 
 		new G4Track(aScintillationPhoton,aSecondaryTime,aSecondaryPosition);
 
-                aSecondaryTrack->SetTouchable(pPreStepPoint->GetTouchable());
+                aSecondaryTrack->SetTouchable(0);
 
                 aSecondaryTrack->SetParentID(aTrack.GetTrackID());
 

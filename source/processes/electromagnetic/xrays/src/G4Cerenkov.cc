@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cerenkov.cc,v 1.7 1999-12-15 14:52:05 gunter Exp $
+// $Id: G4Cerenkov.cc,v 1.8 2000-09-19 03:12:45 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -17,11 +17,15 @@
 // Version:     2.1
 // Created:     1996-02-21  
 // Author:      Juliet Armstrong
-// Updated:     1999-10-29 by Peter Gumplinger
+// Updated:     2000-09-18 by Peter Gumplinger
+//              > change: aSecondaryPosition=x0+rand*aStep.GetDeltaPosition();
+//                        aSecondaryTrack->SetTouchable(0);
+//              1999-10-29 by Peter Gumplinger
 //              > change: == into <= in GetContinuousStepLimit
 //              1997-08-08 by Peter Gumplinger
 //              > add protection against /0
 //              > G4MaterialPropertiesTable; new physics/tracking scheme
+//
 // mail:        gum@triumf.ca
 //
 ////////////////////////////////////////////////////////////////////////
@@ -70,7 +74,7 @@ G4Cerenkov::G4Cerenkov(const G4String& processName)
 
 G4Cerenkov::~G4Cerenkov() 
 {
-	if (thePhysicsTable!= NULL) {
+	if (thePhysicsTable != NULL) {
 	   thePhysicsTable->clearAndDestroy();
            delete thePhysicsTable;
 	}
@@ -103,11 +107,11 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
         const G4Material* aMaterial = aTrack.GetMaterial();
 
-	G4StepPoint* pPreStepPoint = aStep.GetPreStepPoint();
+	G4StepPoint* pPreStepPoint  = aStep.GetPreStepPoint();
 	G4StepPoint* pPostStepPoint = aStep.GetPostStepPoint();
 
 	G4ThreeVector x0 = pPreStepPoint->GetPosition();
-        G4ThreeVector p0 = pPreStepPoint->GetMomentumDirection();
+        G4ThreeVector p0 = aStep.GetDeltaPosition().unit();
 	G4double t0 = pPreStepPoint->GetGlobalTime();
 
         G4MaterialPropertiesTable* aMaterialPropertiesTable =
@@ -242,20 +246,20 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 		rand = G4UniformRand();
 
-		G4double delta = rand * aStep.GetStepLength();
-		G4ThreeVector aSecondaryPosition = x0 + delta * p0;
-
+                G4double delta = rand * aStep.GetStepLength();
 		G4double deltaTime = delta /
                        ((pPreStepPoint->GetVelocity()+
                          pPostStepPoint->GetVelocity())/2.);
 
                 G4double aSecondaryTime = t0 + deltaTime;
 
+                G4ThreeVector aSecondaryPosition =
+                                    x0 + rand * aStep.GetDeltaPosition();
+
 		G4Track* aSecondaryTrack = 
 		new G4Track(aCerenkovPhoton,aSecondaryTime,aSecondaryPosition);
 
-                aSecondaryTrack->SetTouchable(pPreStepPoint->
-                                           GetTouchable());
+                aSecondaryTrack->SetTouchable(0);
 
                 aSecondaryTrack->SetParentID(aTrack.GetTrackID());
 
