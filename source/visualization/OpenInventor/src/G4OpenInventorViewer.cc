@@ -34,6 +34,7 @@
 
 #include "HEPVis/nodes/SoImageWriter.h"
 #include "HEPVis/actions/SoGL2PSAction.h"
+#include "HEPVis/actions/SoCounterAction.h"
 
 #include "G4OpenInventor.hh"
 #include "G4OpenInventorSceneHandler.hh"
@@ -370,9 +371,15 @@ void G4OpenInventorViewer::SceneGraphStatistics() {
   callbackAction.apply(fSoSelection);
   fSoSelection->unrefNoDelete();
 
+  SoCounterAction counterAction;
+  fSoSelection->ref();
+  counterAction.apply(fSoSelection);
+  fSoSelection->unrefNoDelete();
+
   G4cout << "Number of triangles : " << counter.fTriangles << G4endl;
   G4cout << "Number of line segments : " << counter.fLineSegments << G4endl;
   G4cout << "Number of points : " << counter.fPoints << G4endl;
+  G4cout << "Number of nodes : " << counterAction.getCount() << G4endl;
 }
 
 void G4OpenInventorViewer::EraseDetector() {
@@ -381,6 +388,13 @@ void G4OpenInventorViewer::EraseDetector() {
 void G4OpenInventorViewer::EraseEvent() {
   fG4OpenInventorSceneHandler.fTransientRoot->removeAllChildren();
 }
+
+/*
+void G4OpenInventorViewer::SetAllPreviewAndFull() {
+  yyy
+  //fG4OpenInventorSceneHandler.fDetectorRoot->removeAllChildren();
+}
+*/
 void G4OpenInventorViewer::SetSolid() {
   G4ViewParameters vp = GetViewParameters();
   G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
@@ -478,3 +492,6 @@ Controls on an Inventor examiner viewer are :\n\
 }
 
 #endif
+
+
+
