@@ -1,4 +1,4 @@
-$Id: History,v 1.15 1999-12-07 11:42:04 japost Exp $
+$Id: History,v 1.16 2000-01-20 10:51:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January  19th, 2000   G. Cosmo - field-V01-00-00
+
+Syncronized versioning of files with HEAD after ISO-C++ migration
+(essentially CVS header changes).
+
 December  7th, 1999   J. Apostolakis - field-V00-01-01a
 
-  For negative or very small curve lengths (h) we suppress writing an error
+For negative or very small curve lengths (h) we suppress writing an error
 (about the distance of endpoints being further than the curve length),
 as it is meaningless.
 
