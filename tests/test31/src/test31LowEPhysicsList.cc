@@ -123,7 +123,8 @@ void test31LowEPhysicsList::ConstructProcess()
       pmanager->AddProcess(new G4MuIonisation(),      -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung(),  -1,-1,3);
       pmanager->AddProcess(new G4MuPairProduction(),  -1,-1,4);       	       
-      pmanager->AddProcess(new G4MuonMinusCaptureAtRest(),0,-1,-1);
+      if(particleName == "mu-") 
+        pmanager->AddProcess(new G4MuonMinusCaptureAtRest(),0,-1,-1);
 
     } else if (
                 particleName == "proton"  
