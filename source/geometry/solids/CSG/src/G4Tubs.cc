@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.1 1999-01-07 16:08:00 gunter Exp $
+// $Id: G4Tubs.cc,v 1.2 1999-03-24 09:37:48 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,6 +14,7 @@
 // Implementation
 // 18.06.98 n-normalisation in DistanceToOut(p.v) V. Grichine
 // 09.10.98 V. Grichine modifications in Distance ToOut(p,v,...)
+// 23.03.99 V.Grichine, bug fixed in DistanceToIn(p,v)
 
 
 #include "G4Tubs.hh"
@@ -662,6 +663,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
      if (p.z()*v.z()<0)		// at +Z going in -Z or visa versa
      {
 	s=(fabs(p.z())-fDz)/fabs(v.z());     // Z intersect distance
+        if(s<0.0) s = 0.0 ;                  // negative dist -> zero
 	xi=p.x()+s*v.x();         	     // Intersection coords
         yi=p.y()+s*v.y();
 	rho2=xi*xi+yi*yi;
