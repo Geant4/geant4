@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.83 2002-06-01 03:14:55 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.84 2002-06-02 22:49:02 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -86,8 +86,8 @@
 // 25.03.02 V.Ivanchneko    Fix in fluorescence
 // 28.03.02 V.Ivanchenko    Add flag of fluorescence
 // 28.05.02 V.Ivanchenko    Remove flag fStopAndKill
-// 31.05.02 V.Ivanchenko    Add path of Fluo + Auger cuts to 
-//                          AtomicDeexcitation
+// 03.06.02 MGP             Restore fStopAndKill (effect of removel not
+//                          sufficiently tested)
 //
 // --------------------------------------------------------------
 
@@ -484,7 +484,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
   if(finalKinEnergy < 0.0) {
     theEnergyDeposit += finalKinEnergy;
     finalKinEnergy    = 0.0;
-    aParticleChange.SetStatusChange(fStopButAlive); 
+    aParticleChange.SetStatusChange(fStopAndKill); 
 
   } else {
 
@@ -685,19 +685,12 @@ G4double G4LowEnergyIonisation::GetMeanFreePath(const G4Track& track,
 void G4LowEnergyIonisation::SetCutForLowEnSecPhotons(G4double cut)
 {
   cutForPhotons = cut;
-  deexcitationManager.SetCutForSecondaryPhotons(cut);
   ActivateFluorescence(true);
 }   
 
 void G4LowEnergyIonisation::SetCutForLowEnSecElectrons(G4double cut)
 {
   cutForElectrons = cut;
-  deexcitationManager.SetCutForAugerElectrons(cut);
   ActivateFluorescence(true);
-}
-
-void G4LowEnergyIonisation::ActivateAuger(G4bool val)
-{
-  deexcitationManager.ActivateAugerElectronProduction(val);
 }
 

@@ -74,8 +74,8 @@
 // 28 Mar   2002 V.Ivanchenko Set fluorescence off by default
 // 09 Apr   2002 V.Ivanchenko Fix table problem of GenericIons
 // 28 May   2002 V.Ivanchenko Remove flag fStopAndKill
-// 31 May   2002 V.Ivanchenko Add path of Fluo + Auger cuts to 
-//                            AtomicDeexcitation
+// 03 Jun   2002 MGP          Restore fStopAndKill (effect of remove not 
+//                            sufficiently tested)
 // -----------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -92,7 +92,6 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4AtomicDeexcitation.hh"
-#include "G4AtomicTransitionManager.hh"
 #include "G4ShellVacancy.hh"
 #include "G4hShellCrossSection.hh"
 #include "G4VEMDataSet.hh"
@@ -1013,7 +1012,7 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   if (finalT <= MinKineticEnergy ) {
      
      finalT = 0.0;
-     aParticleChange.SetStatusChange(fStopButAlive); 
+     aParticleChange.SetStatusChange(fStopAndKill); 
   } 
 
   aParticleChange.SetEnergyChange( finalT );
@@ -1380,7 +1379,7 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
       aParticleChange.SetMomentumChange(ParticleDirection.x(),
                       ParticleDirection.y(),ParticleDirection.z());
 
-      aParticleChange.SetStatusChange(fStopButAlive);
+      aParticleChange.SetStatusChange(fStopAndKill);
     }
   
   aParticleChange.SetEnergyChange( finalKineticEnergy );
@@ -2003,7 +2002,6 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 void G4hLowEnergyIonisation::SetCutForSecondaryPhotons(G4double cut)
 {
   minGammaEnergy = cut;
-  deexcitationManager.SetCutForSecondaryPhotons(cut);
   theFluo = true;
 }
 
@@ -2012,7 +2010,6 @@ void G4hLowEnergyIonisation::SetCutForSecondaryPhotons(G4double cut)
 void G4hLowEnergyIonisation::SetCutForAugerElectrons(G4double cut)
 {
   minElectronEnergy = cut;
-  deexcitationManager.SetCutForAugerElectrons(cut);
   theFluo = true;
 }
 
@@ -2021,13 +2018,6 @@ void G4hLowEnergyIonisation::SetCutForAugerElectrons(G4double cut)
 void G4hLowEnergyIonisation::ActivateFluorescence(G4bool val)
 {
   theFluo = true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4hLowEnergyIonisation::ActivateAugerElectronProduction(G4bool val)
-{
-  deexcitationManager.ActivateAugerElectronProduction(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
