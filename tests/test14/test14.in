@@ -36,13 +36,13 @@
 /tracking/verbose 0
 /run/beamOn 10000
 #
-/gun/energy 500 eV
+/gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
-/gun/energy 250 eV
+/gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
