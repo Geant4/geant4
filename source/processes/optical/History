@@ -19,6 +19,7 @@ committal in the CVS repository !
 3rd August 2000  Gabriele Cosmo (op-V02-00-00r)
 - G4OpBoundaryProcess.cc: changed RandGauss to G4RandGauss to fix problem
   of events' reproducibility.
+- Syncronized with HEAD (only CVS headers changes).
 
 21th October 1999  Peter Gumplinger (op-V00-01-01)
 - G4OpBoundaryProcess.hh and G4OpBoundaryProcess.cc have been modified
