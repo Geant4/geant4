@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunAction.cc,v 1.13 2001-10-22 10:58:58 maire Exp $
+// $Id: Em3RunAction.cc,v 1.14 2001-10-25 14:32:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -259,10 +259,10 @@ void Em3RunAction::PrintDedxTables()
       G4cout << "\nERAN  " << tkmin/GeV << " (ekmin)\t"
                            << tkmax/GeV << " (ekmax)\t"
 			   << nbin      << " (nekbin)";
-      G4double cutgam = (G4Gamma::Gamma()->GetCutsInEnergy())[mat->GetIndex()];
+      G4double cutgam = (G4Gamma::Gamma()->GetEnergyCuts())[mat->GetIndex()];
       if (cutgam < tkmin) cutgam = tkmin; if (cutgam > tkmax) cutgam = tkmax;
       G4double cutele = (G4Electron::Electron()
-                          ->GetCutsInEnergy())[mat->GetIndex()];
+                          ->GetEnergyCuts())[mat->GetIndex()];
       if (cutele < tkmin) cutele = tkmin; if (cutele > tkmax) cutele = tkmax;
       G4cout << "\nCUTS  " << cutgam/GeV << " (cutgam)\t" 
                            << cutele/GeV << " (cutele)";
