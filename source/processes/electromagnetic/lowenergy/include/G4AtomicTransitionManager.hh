@@ -43,21 +43,27 @@
 #include "g4std/algorithm"
 #include "g4std/map"
 #include "g4std/vector"
-//this class is a singleton, so to be possible for only one object of this type to exist
 
+//this class is a SINGLETON
 class G4AtomicTransitionManager {
 
 public: 
 
-// Instance() is a function u use to create the object from outside it is the only way to do it,
-// since  the creator and the destructor r protected 
-  
   static G4AtomicTransitionManager* Instance();
-  G4int NumberOfShells(G4int Z);
-  G4double TotalRadiativeTransitionProbability(G4int Z, G4int shellId);
-  G4double TotalNonRadiativeTransitionProbability(G4int Z, G4int shellId);
-  G4AtomicShell* Shell(G4int Z, G4int shellIdentifier);
-  // G4AtomicShell* Shell(G4int Z, G4int shellIdentifier);
+  //the only way to get an instance of this class is to call the 
+  //function Instance() 
+  const G4AtomicShell* Shell(G4int z, G4int shellIdentifier);
+  //z is the atomic number of the element, shellIdentifier is the 
+  //name (in EADL) of the starting shell for the transition
+  G4int NumberOfShells(G4int z);
+  //this function returns the number of shells of the element
+  //whose atomic number is z
+  G4double TotalRadiativeTransitionProbability(G4int z, G4int shellId);
+  //gives the sum of the probabilities of radiative transition from the
+  //shell named shellId of an atom og the element z
+  G4double TotalNonRadiativeTransitionProbability(G4int z, G4int shellId);
+ //gives the sum of the probabilities of non radiative transition from the
+  //shell named shellId of an atom og the element z
 
 protected:
 
@@ -65,11 +71,28 @@ protected:
   ~G4AtomicTransitionManager();
 
 private:
-  
   G4LowEnergyUtilities util;
   static G4AtomicTransitionManager* instance;
-  G4std::map<G4int,G4std::vector<G4AtomicShell::G4AtomicShell> > shellTable;
-  void BuildTable();
+  
+  G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> > shellTable;
+  // the first element of the map is the atomic number z.
+  //the second element is a vector of shells.
+  
+  G4std::vector< G4int >ZVector;
+
+  //this vector contains all the atomic numbers of the elements contained
+  //in the MaterialTable. Their order is the same in wich they appeare in the
+  //table
+
+  G4int tableLimit;
+  //EADL contains the data for radiative transition only for atoms with Z>5.
+  //tableLimit is initialized to 5 in the constructor of this class
+ 
+   void BuildZVec();
+
+  G4SecondLevel*BuildBindingEnergiesTable();
+  G4ThirdLevel*BuildTransitionTable();
+  //these two functions read the files of EADL's data and build some table
 };
 
 #endif
