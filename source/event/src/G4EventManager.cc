@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.8 2001-07-13 15:01:52 gcosmo Exp $
+// $Id: G4EventManager.cc,v 1.9 2001-07-18 01:25:45 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -122,7 +122,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
   }
 #endif
 
-  StackTracks( transformer->GimmePrimaries( currentEvent ) );
+  StackTracks( transformer->GimmePrimaries( currentEvent, trackIDCounter ),true );
 
 #ifdef G4VERBOSE
   if ( verboseLevel > 0 )
@@ -232,7 +232,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
 
 }
 
-void G4EventManager::StackTracks(G4TrackVector *trackVector)
+void G4EventManager::StackTracks(G4TrackVector *trackVector,G4bool IDhasAlreadySet)
 {
   G4Track * newTrack;
 
@@ -245,7 +245,7 @@ void G4EventManager::StackTracks(G4TrackVector *trackVector)
     {
       newTrack = (*trackVector)[ i ];
       trackIDCounter++;
-      newTrack->SetTrackID( trackIDCounter );
+      if(!IDhasAlreadySet) newTrack->SetTrackID( trackIDCounter );
       trackContainer->PushOneTrack( newTrack );
 #ifdef G4VERBOSE
       if ( verboseLevel > 1 )

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.7 2001-07-13 15:01:45 gcosmo Exp $
+// $Id: G4EventManager.hh,v 1.8 2001-07-18 01:25:44 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -76,7 +76,7 @@ class G4EventManager
       // This method must be exclusively invoked by G4RunManager.
 
   private:
-      void StackTracks(G4TrackVector *trackVector);
+      void StackTracks(G4TrackVector *trackVector, G4bool IDhasAlreadySet=false);
   
       G4Event* currentEvent;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.hh,v 1.5 2001-07-11 09:58:49 gunter Exp $
+// $Id: G4PrimaryTransformer.hh,v 1.6 2001-07-18 01:25:44 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,12 +47,13 @@ class G4PrimaryTransformer
     G4PrimaryTransformer();
     ~G4PrimaryTransformer();
     
-    G4TrackVector* GimmePrimaries(G4Event* anEvent);
+    G4TrackVector* GimmePrimaries(G4Event* anEvent, G4int trackIDCounter=0);
 
   private:
     G4TrackVector TV;
     G4ParticleTable* particleTable;
     G4int verboseLevel;
+    G4int trackID;
 
   public:
     inline void SetVerboseLevel(G4int vl)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.10 2001-07-13 15:01:54 gcosmo Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.11 2001-07-18 01:25:45 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,7 +36,7 @@
 #include "G4ios.hh"
 
 G4PrimaryTransformer::G4PrimaryTransformer()
-:verboseLevel(0)
+:verboseLevel(0),trackID(0)
 {
   particleTable = G4ParticleTable::GetParticleTable();
 }
@@ -44,8 +44,10 @@ G4PrimaryTransformer::G4PrimaryTransformer()
 G4PrimaryTransformer::~G4PrimaryTransformer()
 {;}
     
-G4TrackVector* G4PrimaryTransformer::GimmePrimaries(G4Event* anEvent)
+G4TrackVector* G4PrimaryTransformer::GimmePrimaries(G4Event* anEvent,G4int trackIDCounter)
 {
+  trackID = trackIDCounter;
+
   //TV.clearAndDestroy();
   for( size_t ii=0; ii<TV.size();ii++)
   { delete TV[ii]; }
@@ -134,6 +136,10 @@ void G4PrimaryTransformer::GenerateSingleTrack
     SetDecayProducts( primaryParticle, DP );
     // Create G4Track object
     G4Track* track = new G4Track(DP,t0,G4ThreeVector(x0,y0,z0));
+    // Set trackID and let primary particle know it
+    trackID++;
+    track->SetTrackID(trackID);
+    primaryParticle->SetTrackID(trackID);
     // Set parentID to 0 as a primary particle
     track->SetParentID(0);
     // Set weight ( vertex weight * particle weight )
