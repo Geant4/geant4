@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2000-11-20 17:31:33 gcosmo Exp $
+$Id: History,v 1.16 2000-12-04 09:38:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 04, 2000  G. Cosmo
+- Minor fix to private assignment operator.
 
 November 20, 2000  G. Cosmo                geommng-V02-00-04
 - Fixes to remove warnings from "-Wall -ansi -pedantic" g++ compiler options:

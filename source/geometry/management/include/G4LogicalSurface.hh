@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalSurface.hh,v 1.4 2000-11-01 15:39:32 gcosmo Exp $
+// $Id: G4LogicalSurface.hh,v 1.5 2000-12-04 09:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -92,17 +92,13 @@ class G4LogicalSurface
  public:
    virtual ~G4LogicalSurface();
 
- private:
-   G4LogicalSurface(const G4LogicalSurface &right); // Copying restricted
-
-        //////////////
-        // Operators
-        //////////////
  public:
    G4int operator==(const G4LogicalSurface &right) const;
    G4int operator!=(const G4LogicalSurface &right) const;
 
  private:
+
+   G4LogicalSurface(const G4LogicalSurface &right); // Copying restricted
    const G4LogicalSurface& operator=(const G4LogicalSurface& right);
 
 	// ------------------
@@ -110,6 +106,7 @@ class G4LogicalSurface
 	// ------------------
 
  private:
+
    G4String theName;		// Surface name
 
    G4OpticalSurface*              theOpticalSurface;
