@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999-04-13 09:59:28 kurasige Exp $
+$Id: History,v 1.3 1999-04-17 06:14:57 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Apr 17, 99 H.Kurashige (procman-01-00-02a)
+- correct G4IVContinousDiscreteProcess.cc
+
 - Apr 13, 99 H.Kurashige (procman-01-00-02)
 - clean up codes (Hisaya)
 
