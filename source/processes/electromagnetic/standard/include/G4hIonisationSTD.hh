@@ -50,6 +50,7 @@
 // 15-02-03 Add control on delta pointer (V.Ivanchenko)
 // 23-05-03 Add fluctuation model as a member function (V.Ivanchenko)
 // 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
+// 16-06-03 ShortLived are not applicable any more (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -133,7 +134,9 @@ private:
 
 inline G4bool G4hIonisationSTD::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);
+  return (p.GetPDGCharge() != 0.0 && 
+          p.GetPDGMass() > 10.0*MeV &&
+	 !p.IsShortLived());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
