@@ -404,6 +404,7 @@ if ( `uname -n` == "NB-BARRAND" ) then
   setenv G4SYSTEM  WIN32-VC7
   #setenv G4SYSTEM  WIN32-g++
   setenv CPPVERBOSE 1
+  setenv G4LIB_BUILD_SHARED 1
   # Specific :
   setenv CLHEP_BASE_DIR C:/barrand/CLHEP/1.8.1.0/VisualC
   # Does not compile with VisualC++ :
