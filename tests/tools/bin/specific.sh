@@ -25,9 +25,9 @@ fi
 
 
 if [ $G4DEBUG ]; then
-  DEBOPT=debug
+export DEBOPT=debug
 else
-  DEBOPT=optim
+export DEBOPT=optim
 fi
 
 # General G4 build flags :
@@ -38,6 +38,7 @@ export G4VIS_BUILD_DAWNFILE_DRIVER=1
 export G4VIS_BUILD_VRML_DRIVER=1
 export G4VIS_BUILD_VRMLFILE_DRIVER=1
 export G4VIS_BUILD_RAYTRACER_DRIVER=1
+export G4VIS_BUILD_ASCIITREE_DRIVER=1
 
 UNAMEN=`uname -n `
 ANS=`uname -n | grep rsplus`
@@ -85,7 +86,45 @@ if [ `uname -n | grep refsol7` ]; then
     export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
     export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/pro
     # Persistency...
-    if [ X$G4USE_HEPODBMS = X ]; then
+    if [ X$G4USE_HEPODBMS = Xaaa ]; then
+       . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
+       export G4EXAMPLE_FDID=207
+    fi
+  else
+# G4SYSTEM was changed!
+    export G4SYSTEM=SUN-CC
+    export DEBOPT=${DEBOPT}_ISO
+    unset G4USE_OSPACE
+    export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
+    # No Persistency tonight ...
+    unset G4USE_HEPODBMS
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/pro
+  fi
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4LIB=$G4WORKDIR/lib
+  # G4 build flags :
+  #######export G4UI_BUILD_XM_SESSION=1
+  #######export G4VIS_BUILD_OPENGLXM_DRIVER=1
+  export G4VIS_BUILD_OPENGLX_DRIVER=1
+  export OGLHOME=/usr/local
+  export OGLFLAGS="-I$OGLHOME/include"
+  export OGLLIBS="-L$OGLHOME/lib -lMesaGLU -lMesaGL"
+  #######export G4VIS_BUILD_OIX_DRIVER=1
+fi
+
+if [ `uname -n | grep sundev` ]; then
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+  if [ $G4STTNONISO ]; then
+    echo "refsol7 only supports the ISO compiler"
+    export G4SYSTEM=SUN-CC
+    export DEBOPT=${DEBOPT}_NONISO
+    export G4USE_OSPACE=1
+    export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/pro
+    # Persistency...
+    if [ X$G4USE_HEPODBMS = Xaaa ]; then
        . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
        export G4EXAMPLE_FDID=207
     fi
@@ -136,25 +175,27 @@ if [ `uname -n | grep sungeant` ]; then
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   if [ $G4STTNONISO ]; then
-    export G4SYSTEM=SUN-CC
+    export G4SYSTEM=SUN-CC4
     export DEBOPT=${DEBOPT}_NONISO
     export G4USE_OSPACE=1
     export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/pro
+###TEMPORARY!
+    unset G4USE_HEPODBMS
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC4/pro
     # Persistency...
-    if [ X$G4USE_HEPODBMS = X ]; then
+    if [ X$G4USE_HEPODBMS = Xaaa ]; then
        . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
        export G4EXAMPLE_FDID=207
     fi
   else
-    export G4SYSTEM=SUN-CC5
+    export G4SYSTEM=SUN-CC
     export DEBOPT=${DEBOPT}_ISO
     unset G4USE_OSPACE
-    export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
     export PATH=`echo $PATH | sed s/SUNWspro/SUNWspro50/`
+    export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
     # No Persistency...
     unset G4USE_HEPODBMS
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC5/pro
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/pro
   fi
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
@@ -169,7 +210,7 @@ if [ `uname -n | grep sungeant` ]; then
 fi
 
 
-if [ `uname -n | grep hp` ]; then
+if [ `uname -n | grep hpplus` ]; then
 #  export G4USE_OSPACE=1
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=HP-aCC
@@ -204,11 +245,11 @@ if [ X`uname -n | grep dxplus` != X  -o "$UNAMEN" = "dcosf01" ]; then
   if [ $G4STTNONISO ]; then
     export DEBOPT=${DEBOPT}_NONISO
     export G4USE_OSPACE=1
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/pro
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/noiso
   else
     export DEBOPT=${DEBOPT}_ISO
     unset G4USE_OSPACE
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/iso
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/pro
   fi
   if [ "$UNAMEN" = "dcosf01" ]; then
     export CLHEP_LIB=CLHEP-cxx62
@@ -247,14 +288,19 @@ fi
 
 UNAMEN=`uname -n `
 echo UNAMEN $UNAMEN
-if [ $UNAMEN = pcgeant -o $UNAMEN = pcg4speed ]; then
+if [ $UNAMEN = pcgeant ]; then
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
-  export G4SYSTEM=Linux-g++
+  export G4SYSTEM=Linux-egcs
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/pro
+  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-egcs/pro
+#
+# The G4SYSTEm (and directory) was changed!
+#  export CLHEP_LIB=CLHEP-egcs
+
+  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib
   
   # G4 build flags :
   ######export G4UI_BUILD_XM_SESSION=1
@@ -263,6 +309,74 @@ if [ $UNAMEN = pcgeant -o $UNAMEN = pcg4speed ]; then
 #  export G4VIS_BUILD_OIX_DRIVER=1
 fi
 
+UNAMEN=`uname -n `
+echo UNAMEN $UNAMEN
+if [ $UNAMEN = pcg4speed ]; then
+  export DEBOPT=${DEBOPT}_NEWGCC
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
+  export G4SYSTEM=Linux-g++
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4LIB=$G4WORKDIR/lib
+  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/pro
+
+  # Shareable library
+  #####################
+  export G4LIB_BUILD_SHARED=1
+  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM
+  
+  # G4 build flags :
+  ######export G4UI_BUILD_XM_SESSION=1
+#  export G4VIS_BUILD_OPENGLXM_DRIVER=1
+#  export G4VIS_BUILD_OPENGLX_DRIVER=1
+#  export G4VIS_BUILD_OIX_DRIVER=1
+fi
+
+# pcgeant4 "backup" for pcg4speed
+if [ $UNAMEN = pcgeant4 ]; then
+  export DEBOPT=${DEBOPT}_NEWGCC
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
+  export G4SYSTEM=Linux-g++
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4LIB=$G4WORKDIR/lib
+  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/pro
+
+  # Shareable library
+  #####################
+  export G4LIB_BUILD_SHARED=1
+  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM
+  
+  # G4 build flags :
+fi
+
+if [ $UNAMEN = pcgeant2 ]; then
+  export DEBOPT=${DEBOPT}_NEWGCC
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
+  export G4SYSTEM=Linux-g++
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4LIB=$G4WORKDIR/lib
+#  export CLHEP_BASE_DIR=/home/stesting/CLHEP
+#  export CLHEP_BASE_DIR=/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/CLHEP/1.7.0.0/
+  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/pro
+#  export G4_NO_CBRT=1
+
+  # Shareable library
+  #####################
+  export G4LIB_BUILD_SHARED=1
+  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM:${CLHEP_BASE_DIR}/lib
+#  export LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM
+
+  # G4 build flags :
+  ######export G4UI_BUILD_XM_SESSION=1
+#  export G4VIS_BUILD_OPENGLXM_DRIVER=1
+#  export G4VIS_BUILD_OPENGLX_DRIVER=1
+#  export G4VIS_BUILD_OIX_DRIVER=1
+fi
 
 if [ `uname -n | grep sgmedia` ]; then
   export G4USE_OSPACE=1
