@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForMSC.hh,v 1.3 1999-04-13 09:43:25 kurasige Exp $
+// $Id: G4ParticleChangeForMSC.hh,v 1.4 1999-11-07 16:32:00 kurasige Exp $
 // GEANT4 tag $ $
 //
 // 
@@ -15,6 +15,9 @@
 //	For information related to this code contact:
 //	CERN, CN Division, ASD group
 // 
+// Class Description
+//   This class is special "Particle Change" for Multiple Scattering process
+//
 // ------------------------------------------------------------
 //   Implemented for the new scheme                 23 Mar. 1998  H.Kurahige
 //   Add Get/SetMomentumDirectionChange             6 Feb. 1999 H.Kurashige 
@@ -45,7 +48,7 @@ class G4ParticleChangeForMSC: public G4VParticleChange
     G4ParticleChangeForMSC & operator=(const G4ParticleChangeForMSC &right);
 
 
-  public:
+  public: // with description
     // ----------------------------------------------------
     // --- the following methods are for updating G4Step -----   
     // Return the pointer to the G4Step after updating the Step information

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VParticleChange.hh,v 1.3 1999-05-06 11:42:52 kurasige Exp $
+// $Id: G4VParticleChange.hh,v 1.4 1999-11-07 16:32:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,9 +17,10 @@
 //
 // ------------------------------------------------------------
 //   Implemented for the new scheme                23 Mar. 1998  H.Kurahige
-// 
-//  This class is the abstract class for ParticleChange.
 //
+// Class Description 
+//  This class is the abstract class for ParticleChange.
+//-
 //  The ParticleChange class ontains the results after invocation 
 //  of a physics process. This includes final states of parent
 //  particle (momentum, energy, etc) and secondary particles generated 
@@ -28,8 +29,8 @@
 //  momentum are in global reference system, therefore all the
 //  needed Lorentz transformations must have been already Done
 //  when filling the data-members of this class.
-// 
-//
+//-
+//-
 //   This abstract class has following four virtual methods
 //     virtual G4Step* UpdateStepForAtRest(G4Step* Step);
 //     virtual G4Step* UpdateStepForAlongStep(G4Step* Step);
@@ -41,7 +42,7 @@
 //   User must add methods to keep the final state information 
 //   in his derived class as well as implement UpdateStep methods 
 //   which he want to use.
-//
+//-
 //   The Initialize methods is provided to refresh the final 
 //   state information and should be called by each process 
 //   at the beginning of DoIt.
@@ -85,7 +86,7 @@ class G4VParticleChange
     G4VParticleChange(const G4VParticleChange &right);
     G4VParticleChange & operator=(const G4VParticleChange &right);
  
-  public:
+  public: // with description
     // --- the following methods are for updating G4Step -----   
     virtual G4Step* UpdateStepForAtRest(G4Step* Step);
     virtual G4Step* UpdateStepForAlongStep(G4Step* Step);
@@ -94,13 +95,13 @@ class G4VParticleChange
     // by using final state information of the track given by a physics
     // process    
  
-  protected:
+  protected: // with description
     G4Step* UpdateStepInfo(G4Step* Step);
     //  Update the G4Step specific attributes 
     //  (i.e. SteppingControl, LocalEnergyDeposit, and TrueStepLength)
 
 
-  public:
+  public: // with description
     virtual void Initialize(const G4Track&);
     // This methods will be called by each process at the beginning of DoIt
     // if necessary.
@@ -114,8 +115,8 @@ class G4VParticleChange
     void InitializeStatusChange(const G4Track&);
     void InitializeSecondaries(const G4Track&);
    // ------------------------------------------------------   
-
-  public:
+ 
+  public: // with description
     //---- the following methods are for TruePathLength ----
     G4double GetTrueStepLength() const;
     void  SetTrueStepLength(G4double truePathLength);
@@ -202,7 +203,7 @@ class G4VParticleChange
     G4int verboseLevel;
     //  The Verbose level
 
-  public:
+  public: // with description
     // CheckIt method is provided for debug
     virtual G4bool CheckIt(const G4Track&);
  
@@ -219,8 +220,8 @@ class G4VParticleChange
     static const G4double accuracyForWarning;
     static const G4double accuracyForException; 
 
+  public: // with description
   //---- following methods and members are used for Event Biasing
-  public:
     virtual void   RegisterEBMechanism(G4VEvtBiasMechanism* );
     virtual void   SwOnEB();
     virtual void   SwOffEB();

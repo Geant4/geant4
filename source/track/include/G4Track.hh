@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.hh,v 1.4 1999-10-06 03:06:56 kurasige Exp $
+// $Id: G4Track.hh,v 1.5 1999-11-07 16:32:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -13,7 +13,7 @@
 //
 // G4Track.hh
 //
-// Description:
+// Class Description:
 //   This class represents the partilce under tracking.
 //   It includes information related to tracking for examples:
 //     1) current position/time of the particle,
@@ -50,16 +50,19 @@ class G4Track
 {
 
 //--------
-   public:
-//--------
+public: // With description
 
-// Constructor/Destrcutor
+// Constructor
    G4Track();
    G4Track(G4DynamicParticle* apValueDynamicParticle,
            G4double aValueTime,
            const G4ThreeVector& aValuePosition);
       // aValueTime is a global time
 
+//--------
+public: 
+
+// Destrcutor
    ~G4Track();
 
 // Operators
@@ -71,6 +74,9 @@ class G4Track
    int operator==( const G4Track& s);
       // Define "==" operator because "G4TrackVector" uses 
       //"RWPtrOrderdVector" which requires this.
+
+//--------
+public: // With description
 
 // Get/Set functions
   // track ID
@@ -86,7 +92,7 @@ class G4Track
   // particle definition
    G4ParticleDefinition* GetDefinition() const;
 
-  // position, time 
+   // position, time 
    const G4ThreeVector& GetPosition() const;
    void SetPosition(const G4ThreeVector& aValue);
 
@@ -141,9 +147,15 @@ class G4Track
 
    G4bool IsBelowThreshold() const;
    void   SetBelowThresholdFlag(G4bool value = true);
+     // The flag of "BelowThreshold" is set to true 
+     // if this track energy is below threshold energy 
+     //  in this material determined by the range cut value
 
    G4bool IsGoodForTracking() const;
    void   SetGoodForTrackingFlag(G4bool value = true);
+     // The flag of "GoodForTracking" is set by processes 
+     // if this track should be tracked
+     // even if the energy is below threshold
 
   // track length
    G4double GetTrackLength() const;
@@ -159,6 +171,10 @@ class G4Track
 
    G4double GetStepLength() const;
    void SetStepLength(G4double value);
+      // Before the end of the AlongStepDoIt loop,StepLength keeps 
+      // the initial value which is determined by the shortest geometrical Step 
+      // proposed by a physics process. After finishing the AlongStepDoIt,
+      // it will be set equal to 'StepLength' in G4Step.
 
   // vertex (,where this track was created) information  
    const G4ThreeVector& GetVertexPosition() const;
@@ -177,6 +193,10 @@ class G4Track
    void SetCreatorProcess(G4VProcess* aValue);
 
   // track weight
+     // These are methods for manipulating a weight for this track.
+     // The track weight is used by G4VEvtBiasMechanism 
+     // to execute inclusive simulation for hadronic/electomagnetic shower
+     // and neutron transportation etc. 
    G4double GetWeight() const;
    void     SetWeight(G4double aValue);
 

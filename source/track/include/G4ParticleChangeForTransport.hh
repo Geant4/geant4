@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForTransport.hh,v 1.1 1999-01-07 16:14:22 gunter Exp $
+// $Id: G4ParticleChangeForTransport.hh,v 1.2 1999-11-07 16:32:01 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,6 +18,7 @@
 // ------------------------------------------------------------
 //   Implemented for the new scheme                 10 May. 1998  H.Kurahige
 //
+// Class Description
 //  This class is a concrete class for ParticleChange for transportation
 //        
 #ifndef G4ParticleChangeForTransport_h
@@ -42,7 +43,7 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     G4ParticleChangeForTransport(const G4ParticleChangeForTransport &right);
     G4ParticleChangeForTransport & operator=(const G4ParticleChangeForTransport &right);
 
-  public:
+  public: // with description
     // ----------------------------------------------------
     // --- the following methods are for updating G4Step -----   
     // Return the pointer to the G4Step after updating the Step information

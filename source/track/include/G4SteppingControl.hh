@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingControl.hh,v 1.1 1999-01-07 16:14:23 gunter Exp $
+// $Id: G4SteppingControl.hh,v 1.2 1999-11-07 16:32:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -13,7 +13,7 @@
 //
 // G4SteppingControl  
 //
-// Description:
+// Class Description:
 //   This enumaration specifies possible conditions to control
 //   the stepping manager behavier.
 //

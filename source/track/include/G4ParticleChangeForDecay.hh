@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForDecay.hh,v 1.3 1999-04-13 09:43:23 kurasige Exp $
+// $Id: G4ParticleChangeForDecay.hh,v 1.4 1999-11-07 16:31:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,6 +18,7 @@
 // ------------------------------------------------------------
 //   Implemented for the new scheme                 23 Mar. 1998  H.Kurahige
 //
+// Class Description 
 //  This class is a concrete class for ParticleChange which
 //  has functionality for G4Decay.
 //
@@ -52,7 +53,7 @@ class G4ParticleChangeForDecay: public G4VParticleChange
     G4bool operator==(const G4ParticleChangeForDecay &right) const;
     G4bool operator!=(const G4ParticleChangeForDecay &right) const;
 
-  public:
+  public: // with description
     // ----------------------------------------------------
     // --- the following methods are for updating G4Step -----   
     // Return the pointer to the G4Step after updating the Step information

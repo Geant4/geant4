@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Step.hh,v 1.5 1999-10-06 01:21:46 kurasige Exp $
+// $Id: G4Step.hh,v 1.6 1999-11-07 16:32:01 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -13,7 +13,7 @@
 //
 // G4Step.hh
 //
-// Description:
+// Class Description:
 //   This class represents the Step of a particle tracked.
 //   It includes information of 
 //     1) List of Step points which compose the Step,
@@ -57,11 +57,13 @@ class G4Step
 
 //--------
    public:
-//--------
 
 // Constructor/Destrcutor
    G4Step();
    ~G4Step();
+
+//--------
+   public: // WIth description
 
 // Get/Set functions 
    // currnet track

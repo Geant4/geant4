@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Mars5GeVMechanism.hh,v 1.2 1999-04-13 09:43:21 kurasige Exp $
+// $Id: G4Mars5GeVMechanism.hh,v 1.3 1999-11-07 16:31:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,11 +19,12 @@
 //   First Implemention    17 Nov. 1998  M.Asai, H.Kurahige
 // 
 // ------------------------------------------------------------
+//  Class Description
 //  This is a Event Biasing mechanism based on MARS code
 //   This model is applicable to 
 //   proton/neutron/pi+-/K+-/gamma/anti_proton
 //   with energy < 5.0GeV
-//
+//*
 //  Original code is MARS13 written by Nikolai Mokhov (FNAL)
 //**************************************************************
 //*   MARS13: 9. hA EVENT GENERATOR:
@@ -57,12 +58,15 @@ class G4ParticleDefinition;
 
 class G4Mars5GeVMechanism :public G4VEvtBiasMechanism
 {
- public:
+ public: // with description
+  // constructors
   G4Mars5GeVMechanism(const G4String& name = "MARS5GeV");
   G4Mars5GeVMechanism(const G4Mars5GeVMechanism&);
 
+  //destructor
   virtual ~G4Mars5GeVMechanism();
 
+  // virtual methods derived from G4VEvtBiasMechanism
   virtual G4VParticleChange* ApplyMath( G4VParticleChange*, const G4Step& );
   virtual G4bool IsApplicable(G4ParticleDefinition*) const;
 
@@ -100,6 +104,7 @@ class G4Mars5GeVMechanism :public G4VEvtBiasMechanism
  public:
   enum {FastVectorSize = 16};
   typedef  G4FastVector<G4DynamicParticle ,FastVectorSize> G4MarsSecondaryVector;
+
  private:
 
   // information of secondary 

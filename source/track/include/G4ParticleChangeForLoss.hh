@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.2 1999-04-13 09:43:24 kurasige Exp $
+// $Id: G4ParticleChangeForLoss.hh,v 1.3 1999-11-07 16:32:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,6 +18,7 @@
 // ------------------------------------------------------------
 //   Implemented for the new scheme                 23 Mar. 1998  H.Kurahige
 //
+//  Class Description
 //  This class is a concrete class for ParticleChange for EnergyLoss
 //
 #ifndef G4ParticleChangeForLoss_h
@@ -48,7 +49,7 @@ class G4ParticleChangeForLoss: public G4VParticleChange
     G4bool operator!=(const G4ParticleChangeForLoss &right) const;
 
 
-  public:
+public: // with description
     // ----------------------------------------------------
     // --- the following methods are for updating G4Step -----   
     virtual G4Step* UpdateStepForAlongStep(G4Step* Step);

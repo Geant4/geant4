@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEvtBiasMechanism.hh,v 1.2 1999-04-13 09:43:29 kurasige Exp $
+// $Id: G4VEvtBiasMechanism.hh,v 1.3 1999-11-07 16:32:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,6 +14,11 @@
 //
 //	For information related to this code contact:
 //	CERN, CN Division, ASD group
+//   
+// -------------------------------------------------------
+//  Class Description   
+//   This class is a base class for all "event biasing mechanism". 
+//  
 // 
 // ------------------------------------------------------------
 //   Implemented for the new scheme            17 Nov. 1998  H.Kurahige
@@ -31,12 +36,18 @@ class G4ParticleDefinition;
 
 class G4VEvtBiasMechanism
 {
- public:
+public: // with description
+
+  // constructors
   G4VEvtBiasMechanism(const G4String& name = "");
   G4VEvtBiasMechanism(const G4VEvtBiasMechanism& right);
 
+public: 
+  //destructors
   virtual ~G4VEvtBiasMechanism();
 
+
+public: // with description
   // pure virtual functions
   
   // ApplyMath method will be invoked in G4VParticleChange::UpdateStepInfo()
@@ -48,7 +59,7 @@ class G4VEvtBiasMechanism
   virtual G4bool IsApplicable(G4ParticleDefinition*) const = 0;
 
   
-  // 
+  // name of the biasing mechanism
   const G4String& GetName(){ return theEBName;}
 
   // Set/Get Verbose level 
