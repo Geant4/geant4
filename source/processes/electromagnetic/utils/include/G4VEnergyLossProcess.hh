@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.29 2004-08-08 20:45:21 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.30 2004-08-27 08:39:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,6 +54,7 @@
 // 05-07-04 fix problem of GenericIons seen at small cuts (V.Ivanchenko)
 // 03-08-04 Add DEDX table to all processes for control on integral range(V.Ivanchenko)
 // 06-08-04 Clear up names of member functions (V.Ivanchenko)
+// 27-08-04 Add NeedBuildTables method (V.Ivanchneko)
 //
 // Class Description:
 //
@@ -308,8 +309,8 @@ protected:
 
 private:
 
-  // Initialise process
-  //void InitialiseProcess(const G4ParticleDefinition*);
+  // Initialise for Build or Retrieve Physics Tables
+  G4bool NeedBuildTables(const G4ParticleDefinition*);
 
   // Clear tables
   void Clear();

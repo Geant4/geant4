@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.22 2004-07-05 13:36:31 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.23 2004-08-27 08:39:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,6 +47,7 @@
 // 26-11-03 bugfix in AlongStepDoIt (L.Urban)
 // 25-05-04 add protection against case when range is less than steplimit (V.Ivanchenko)
 // 30-06-04 make destructor virtual (V.Ivanchenko)
+// 27-08-04 Add InitialiseForRun method (V.Ivanchneko)
 
 // -------------------------------------------------------------------
 //
@@ -192,6 +193,8 @@ private:
 
   void DefineMaterial(const G4MaterialCutsCouple* couple);
   // define current material
+
+  void InitialiseForRun(const G4ParticleDefinition*);
 
   // hide  assignment operator
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.30 2004-08-26 17:59:51 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.31 2004-08-27 08:39:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -76,6 +76,7 @@
 // 03-08-04 Add pointer of DEDX table to all processes (V.Ivanchenko)
 // 06-08-04 Clear up names of member functions (V.Ivanchenko)
 // 06-08-04 Clear up names of member functions (V.Ivanchenko)
+// 27-08-04 Add NeedBuildTables method (V.Ivanchneko)
 //
 // Class Description:
 //
@@ -306,11 +307,6 @@ void G4VEnergyLossProcess::Initialise()
 
 void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  currentCouple = 0;
-  preStepLambda = 0.0;
-  mfpKinEnergy  = DBL_MAX;
-  preStepMFP    = DBL_MAX;
-
   if(0 < verboseLevel) {
     G4cout << "========================================================" << G4endl;
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() for "
@@ -318,25 +314,7 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
            << " and particle " << part.GetParticleName()
            << G4endl;
   }
-
-  if (part.GetParticleName() != "GenericIon" &&
-      part.GetParticleType() == "nucleus" &&
-      part.GetParticleSubType() == "generic")
-  {
-    (G4LossTableManager::Instance())->RegisterIon(&part, this);
-    /*
-    G4cout << part.GetProcessManager() << "  "
-           << (G4GenericIon::GenericIon())->GetProcessManager()
-           << G4endl;
-    */
-    return;
-  }
-
-  // Are particle defined?
-  if( !particle ) {
-    particle = &part;
-    baseParticle = DefineBaseParticle(particle);
-  }
+  if(!NeedBuildTables(&part)) return;
 
   // Recalculation is needed because cuts were changed or recalculation is forced
   G4LossTableManager* lManager = G4LossTableManager::Instance();
@@ -354,6 +332,39 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
              << G4endl;
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4VEnergyLossProcess::NeedBuildTables(const G4ParticleDefinition* p)
+{
+  // Are particle defined?
+  if( !particle ) {
+    particle = p;
+    baseParticle = DefineBaseParticle(particle);
+  }
+
+  currentCouple = 0;
+  preStepLambda = 0.0;
+  mfpKinEnergy  = DBL_MAX;
+  preStepMFP    = DBL_MAX;
+
+  G4bool yes = true;
+
+  if (p->GetParticleName() != "GenericIon" &&
+       (  p != particle ||
+         (p->GetParticleType() == "nucleus" && p->GetParticleSubType() == "generic") )
+     )
+  {
+    (G4LossTableManager::Instance())->RegisterIon(p, this);
+    /*
+    G4cout << part.GetProcessManager() << "  "
+           << (G4GenericIon::GenericIon())->GetProcessManager()
+           << G4endl;
+    */
+    yes = false;
+  }
+  return yes;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1132,33 +1143,16 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
 			  	              G4bool ascii)
 {
   G4bool res = true;
-
-  currentCouple = 0;
-  preStepLambda = 0.0;
-  mfpKinEnergy  = DBL_MAX;
-  preStepMFP    = DBL_MAX;
+  const G4String particleName = part->GetParticleName();
 
   if(0 < verboseLevel) {
     G4cout << "========================================================" << G4endl;
     G4cout << "G4VEnergyLossProcess::RetrievePhysicsTable() for "
-           << part->GetParticleName() << " and process " << GetProcessName()
+           << particleName << " and process " << GetProcessName()
            << "; tables_are_built= " << tablesAreBuilt
            << G4endl;
   }
-
-  const G4String particleName = part->GetParticleName();
-  if( !particle ) {
-    particle = part;
-    baseParticle = DefineBaseParticle(particle);
-  }
-
-  if(particleName != "GenericIon"  &&
-     part->GetParticleType() == "nucleus"  &&
-     part->GetParticleSubType() == "generic")
-  {
-    (G4LossTableManager::Instance())->RegisterIon(part, this);
-    return res;
-  }
+  if(!NeedBuildTables(part)) return res;
 
   if(tablesAreBuilt) return res;
   Initialise();

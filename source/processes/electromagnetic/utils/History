@@ -1,4 +1,4 @@
-$Id: History,v 1.162 2004-08-26 17:59:46 vnivanch Exp $
+$Id: History,v 1.163 2004-08-27 08:39:51 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,6 +21,8 @@ committal in the CVS repository !
 - Update G4EmCalculator class - add protections and cleanup
 - Fix effective charge for He4
 - Fix deuteron energy loss
+- For G4VEnergyLossProcess and G4VMultipleScattring introduce new methods
+  to perform initialisation in both cases Build or Retrieve tables 
      
 17 August 04: L.Urban (utils-V06-02-06)
 - Name of data member facxsi changed to factail together with the corresponding 

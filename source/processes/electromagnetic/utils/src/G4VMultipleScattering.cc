@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.24 2004-06-30 14:36:51 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.25 2004-08-27 08:39:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,7 @@
 // 04-11-03 Update PrintInfoDefinition (V.Ivanchenko)
 // 01-03-04 SampleCosineTheta signature changed
 // 22-04-04 SampleCosineTheta signature changed back to original
+// 27-08-04 Add InitialiseForRun method (V.Ivanchneko)
 //
 // Class Description:
 //
@@ -94,12 +95,8 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
 
 G4VMultipleScattering::~G4VMultipleScattering()
 {
-  (G4LossTableManager::Instance())->DeRegister(this);
   delete modelManager;
-  if (theLambdaTable) {
-    theLambdaTable->clearAndDestroy();
-    delete theLambdaTable;
-  }
+  if (theLambdaTable) theLambdaTable->clearAndDestroy();
   (G4LossTableManager::Instance())->DeRegister(this);
 }
 
@@ -107,8 +104,6 @@ G4VMultipleScattering::~G4VMultipleScattering()
 
 void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  currentParticle = &part;
-  currentCouple = 0;
   if(0 < verboseLevel) {
     G4cout << "========================================================" << G4endl;
     G4cout << "### G4VMultipleScattering::BuildPhysicsTable() for "
@@ -117,11 +112,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
            << G4endl;
   }
 
-  InitialiseProcess(part);
-
-  if(latDisplasment) navigator = G4TransportationManager::GetTransportationManager()
-			       ->GetNavigatorForTracking();
-  const G4DataVector* theCuts = modelManager->Initialise(&part, 0, 10.0, verboseLevel);
+  InitialiseForRun(&part);
 
   if (buildLambdaTable) {
 
@@ -147,8 +138,6 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
              << G4endl;
     }
     if(2 < verboseLevel) G4cout << *theLambdaTable << G4endl;
-    if(5 < verboseLevel) G4cout << theCuts << G4endl;
-
   }
 
   G4String num = part.GetParticleName();
@@ -161,6 +150,22 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
            << " and particle " << part.GetParticleName()
            << G4endl;
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VMultipleScattering::InitialiseForRun(const G4ParticleDefinition* p)
+{
+  currentCouple = 0;
+  currentParticle = p;
+
+  InitialiseProcess(*p);
+
+  if(latDisplasment && !navigator)
+     navigator = G4TransportationManager::GetTransportationManager()
+       ->GetNavigatorForTracking();
+  const G4DataVector* theCuts = modelManager->Initialise(p, 0, 10.0, verboseLevel);
+  if(5 < verboseLevel) G4cout << theCuts << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -296,7 +301,6 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(G4ParticleDefinition* part,
 					     const G4String& directory,
 			  	                   G4bool ascii)
 {
-  currentParticle = part;
   if(0 < verboseLevel) {
     G4cout << "========================================================" << G4endl;
     G4cout << "G4VMultipleScattering::RetrievePhysicsTable() for "
@@ -304,12 +308,8 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(G4ParticleDefinition* part,
 	   << GetProcessName() << G4endl;
   }
 
-  InitialiseProcess(*part);
-  if(latDisplasment) navigator = G4TransportationManager::GetTransportationManager()
-                               ->GetNavigatorForTracking();
+  InitialiseForRun(part);
 
-  const G4DataVector* theCuts = modelManager->Initialise(part, 0, 10.0, verboseLevel);
-  if(5 < verboseLevel) G4cout << theCuts << G4endl;
   if(!buildLambdaTable) return true;
 
   G4String num = part->GetParticleName();
