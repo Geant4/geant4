@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.cc,v 1.26 2002-05-24 10:40:50 grichine Exp $
+// $Id: G4PAIonisation.cc,v 1.27 2002-05-24 11:36:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -448,10 +448,10 @@ G4PAIonisation::PostStepDoIt( const G4Track& trackData,
  G4double KineticEnergy = aParticle->GetKineticEnergy();
  G4double TotalEnergy = KineticEnergy + particleMass;
  G4double Psquare = KineticEnergy*(TotalEnergy+particleMass);
- G4double Esquare = TotalEnergy*TotalEnergy;
- // G4double betasquare=Psquare/Esquare; 
- G4double summass = particleMass + electron_mass_c2;
- // G4double MaxKineticEnergyTransfer = 2.*electron_mass_c2*Psquare
+ //G4double Esquare = TotalEnergy*TotalEnergy;
+ //G4double betasquare=Psquare/Esquare; 
+ //G4double summass = particleMass + electron_mass_c2;
+ //G4double MaxKineticEnergyTransfer = 2.*electron_mass_c2*Psquare
  //                    /(summass*summass+2.*electron_mass_c2*KineticEnergy);
  G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
  
