@@ -1,0 +1,42 @@
+#================================================
+# Macro file for the Ion test of "test31.cc"
+#         10.04.01 V.Ivanchneko
+#================================================
+/control/verbose 2
+/run/verbose 1
+/tracking/verbose 0
+/event/verbose 0
+/test31/verbose 0
+#
+/test31/physics/cutAll       1 mm
+#/test31/physics/MaxStep     0.1 mm
+/test31/physics/addPhysics   model
+
+/test31/AbsorberMaterial     Iron
+/test31/AbsorberThick        0.0077 mm
+/test31/HistoName            fe_st_1.paw
+
+#/test31/AbsorberMaterial     Tantalum
+#/test31/AbsorberThick        0.00458 mm
+#/test31/HistoName            ta_st_1.paw
+
+/test31/NumberOfAbsorbers    100
+/test31/maxDeltaEnergy       0.5 MeV
+/test31/WorldMaterial        Vacuum
+#/test31/HistoName           hbook.paw
+/test31/HistoNumber          2
+/test31/NumberOfEvents       0
+/test31/gun/beamE            1.0 MeV
+#
+/process/eLoss/preciseRange  true
+/run/initialize
+/process/eLoss/integral      true
+#
+/gun/particle e-
+#/gun/particle gamma
+#/gun/particle proton
+#/gun/particle alpha
+#/gun/energy 10.0 MeV
+#
+/run/beamOn 10000
+
