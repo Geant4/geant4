@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.7 2001-08-31 16:44:24 gum Exp $
+// $Id: G4OpBoundaryProcess.hh,v 1.8 2002-03-29 01:03:53 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,15 +78,15 @@
 // Class Definition
 /////////////////////
 
+enum G4OpBoundaryProcessStatus {  Undefined,
+                                  FresnelRefraction, FresnelReflection,
+                                  TotalInternalReflection,
+                                  LambertianReflection, LobeReflection,
+                                  SpikeReflection, BackScattering,
+                                  Absorption, Detection };
+
 class G4OpBoundaryProcess : public G4VDiscreteProcess 
 {
-
-enum G4OpBoundaryProcessStatus {  Undefined,
-				  FresnelRefraction, FresnelReflection, 
-				  TotalInternalReflection,
-				  LambertianReflection, LobeReflection,
-				  SpikeReflection, BackScattering,
-				  Absorption, Detection };
 
 private:
 
@@ -131,6 +131,9 @@ public: // With description
 
 	G4OpticalSurfaceModel GetModel() const;
         // Returns the optical surface mode.
+
+        G4OpBoundaryProcessStatus GetStatus() const;
+        // Returns the current status.
 
 	void           SetModel(G4OpticalSurfaceModel model);
 	// Set the optical surface model to be followed 
@@ -320,6 +323,12 @@ inline
 G4OpticalSurfaceModel G4OpBoundaryProcess::GetModel() const
 {
    return theModel;
+}
+
+inline
+G4OpBoundaryProcessStatus G4OpBoundaryProcess::GetStatus() const
+{
+   return theStatus;
 }
 
 inline
