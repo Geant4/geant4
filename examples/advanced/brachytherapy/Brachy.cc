@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this
 // statement, and all its terms.
 //
-// $Id: Brachy.cc,v 1.3 2000-12-10 08:38:15 chauvie Exp $
+// $Id: Brachy.cc,v 1.4 2000-12-10 08:56:15 chauvie Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -81,7 +81,7 @@ int main()
 
  if(pVoxel)
 	{
-	ofstream ofs;
+	G4std::ofstream ofs;
 
 	// Output voxel data to text file
 	// Format = x coord [mm] <tab> z coord [mm] <tab> edep [MeV] <eol>
@@ -102,7 +102,7 @@ int main()
 				
 				// Do not consider near voxels
 				if(fabs(x) > 3*mm || fabs(z) > 6*mm)	
-					ofs << x << '\t' << z << '\t' << pVoxel[j] << endl;
+					ofs << x << '\t' << z << '\t' << pVoxel[j] << G4endl;
 				}
 			}
 		ofs.close();
