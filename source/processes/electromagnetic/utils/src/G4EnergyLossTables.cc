@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.cc,v 1.24 2003-04-11 14:27:22 vnivanch Exp $
+// $Id: G4EnergyLossTables.cc,v 1.25 2003-04-12 17:54:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 // 15.01.03 Add interfaces required for "cut per region" (V.Ivanchenko)
 // 12.03.03 Add warnings to obsolete interfaces (V.Ivanchenko)
 // 10.04.03 Add call to G4LossTableManager is particle is not registered (V.Ivanchenko)
+//
 // -------------------------------------------------------------------
 
 #include "G4EnergyLossTables.hh"
@@ -200,6 +201,7 @@ G4double G4EnergyLossTables::GetDEDX(
     oldIndex = -1 ;
   }
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
+  if (!dEdxTable) ParticleHaveNoLoss(aParticle);
 
   G4int materialIndex = aMaterial->GetIndex();
   G4double scaledKineticEnergy = KineticEnergy*t.theMassRatio;
@@ -242,6 +244,7 @@ G4double G4EnergyLossTables::GetLabTime(
     oldIndex = -1 ;
   }
   const G4PhysicsTable* labtimeTable= t.theLabTimeTable;
+  if (!labtimeTable) ParticleHaveNoLoss(aParticle);
 
   const G4double parlowen=0.4 , ppar=0.5-parlowen ;
   G4int materialIndex = aMaterial->GetIndex();
@@ -287,6 +290,7 @@ G4double G4EnergyLossTables::GetDeltaLabTime(
     oldIndex = -1 ;
   }
   const G4PhysicsTable* labtimeTable= t.theLabTimeTable;
+  if (!labtimeTable) ParticleHaveNoLoss(aParticle);
 
   const G4double parlowen=0.4 , ppar=0.5-parlowen ;
   const G4double dToverT = 0.05 , facT = 1. -dToverT ;
@@ -364,6 +368,7 @@ G4double G4EnergyLossTables::GetProperTime(
     oldIndex = -1 ;
   }
   const G4PhysicsTable* propertimeTable= t.theProperTimeTable;
+  if (!propertimeTable) ParticleHaveNoLoss(aParticle);
 
   const G4double parlowen=0.4 , ppar=0.5-parlowen ;
   G4int materialIndex = aMaterial->GetIndex();
@@ -409,6 +414,7 @@ G4double G4EnergyLossTables::GetDeltaProperTime(
     oldIndex = -1 ;
   }
   const G4PhysicsTable* propertimeTable= t.theProperTimeTable;
+  if (!propertimeTable) ParticleHaveNoLoss(aParticle);
 
   const G4double parlowen=0.4 , ppar=0.5-parlowen ;
   const G4double dToverT = 0.05 , facT = 1. -dToverT ;
@@ -490,6 +496,7 @@ G4double G4EnergyLossTables::GetRange(
   }
   const G4PhysicsTable* rangeTable= t.theRangeTable;
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
+  if (!dEdxTable || !rangeTable) ParticleHaveNoLoss(aParticle);
 
   G4int materialIndex = aMaterial->GetIndex();
   G4double scaledKineticEnergy = KineticEnergy*t.theMassRatio;
@@ -540,6 +547,7 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
   }
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
   const G4PhysicsTable*  inverseRangeTable= t.theInverseRangeTable;
+  if (!dEdxTable || !inverseRangeTable) ParticleHaveNoLoss(aParticle);
 
   G4double scaledrange,scaledKineticEnergy ;
   G4bool isOut ;
@@ -601,6 +609,7 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
     oldIndex = -1 ;
   }
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
+  if (!dEdxTable) ParticleHaveNoLoss(aParticle);
 
   G4int materialIndex = aMaterial->GetIndex();
   G4double scaledKineticEnergy = KineticEnergy*t.theMassRatio;
@@ -647,6 +656,7 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
   }
   const G4PhysicsTable* rangeTable= t.theRangeTable;
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
+  if (!dEdxTable || !rangeTable) ParticleHaveNoLoss(aParticle);
 
   G4int materialIndex = aMaterial->GetIndex();
 
@@ -949,7 +959,7 @@ G4double G4EnergyLossTables::GetPreciseRangeFromEnergy(
 
 void G4EnergyLossTables::CPRWarning()
 {
-  if (let_counter <  let_max_num_warnings) {
+//  if (let_counter <  let_max_num_warnings) {
 
 //    G4cout << G4endl;
 //    G4cout << "##### G4EnergyLossTable WARNING: The obsolete interface is used" << G4endl;
@@ -957,17 +967,26 @@ void G4EnergyLossTables::CPRWarning()
 //    G4cout << "##### Obsolete interface will be removed soon" << G4endl;
 //    G4cout << G4endl;
 //    let_counter++;
-    if ((G4RegionStore::GetInstance())->size() > 1) {
+  if ((G4RegionStore::GetInstance())->size() > 1) {
      G4Exception("G4EnergyLossTables:: More than 1 region - table can't be accessed with obsolete interface");
      exit(1);
-   }
+  }
 
-  } else if (let_counter == let_max_num_warnings) {
+//  } else if (let_counter == let_max_num_warnings) {
 
 //    G4cout << "##### G4EnergyLossTable WARNING closed" << G4endl;
-    let_counter++;
-  }
+//    let_counter++;
+//  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4EnergyLossTables::ParticleHaveNoLoss(const G4ParticleDefinition* aParticle)
+{
+  G4String s = "G4EnergyLossTables:: dE/dx table not found for "
+             + aParticle->GetParticleName() + "!";
+  G4Exception(s);
+  exit(1);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

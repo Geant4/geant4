@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.hh,v 1.15 2003-04-11 14:27:21 vnivanch Exp $
+// $Id: G4EnergyLossTables.hh,v 1.16 2003-04-12 17:54:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -60,6 +60,7 @@
 // 26.10.01: all static functions movev from .icc to .cc file (mma)
 // 15.01.03 Add interfaces required for "cut per region" (V.Ivanchenko)
 // 12.03.03 Add warnings to obsolete interfaces (V.Ivanchenko)
+// 12.04.03 move exception to new method (V.Ivanchenko)
 //
 // -----------------------------------------------------------------------------
 
@@ -199,6 +200,7 @@ public:
 private:
 
   static void CPRWarning();
+  static void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle);
 
   typedef G4std::map<K,G4EnergyLossTablesHelper,G4std::less<K> > helper_map;
   static helper_map dict;

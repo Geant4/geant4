@@ -116,7 +116,7 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   hasRestProcess(true),
   tablesAreBuilt(false),
   integral(true),
-  meanFreePath(false)
+  meanFreePath(true)
 {
   modelManager = new G4EmModelManager();
   (G4LossTableManager::Instance())->Register(this);

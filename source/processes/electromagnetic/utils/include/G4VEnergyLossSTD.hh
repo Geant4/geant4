@@ -361,7 +361,7 @@ inline void G4VEnergyLossSTD::DefineMaterial(const G4MaterialCutsCouple* couple)
     currentCouple   = couple;
     currentMaterial = couple->GetMaterial();
     currentMaterialIndex = couple->GetIndex();
-    if(integral) ResetNumberOfInteractionLengthLeft();
+    if(integral && !meanFreePath) ResetNumberOfInteractionLengthLeft();
   }
 }
 
