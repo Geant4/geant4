@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04PhysicsList.cc,v 1.14 2003-09-29 04:53:17 kurasige Exp $
+// $Id: ExN04PhysicsList.cc,v 1.15 2003-11-19 09:26:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,7 @@ ExN04PhysicsList::ExN04PhysicsList():  G4VModularPhysicsList()
 {
   // default cut value  (1.0mm) 
   defaultCutValue = 1.0*mm;
-  SetVerboseLevel(1);
+  // SetVerboseLevel(1);
 
   // General Physics
   RegisterPhysics( new ExN04GeneralPhysics("general") );
