@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.9 2002-05-09 20:35:04 gum Exp $
+// $Id: G4Scintillation.cc,v 1.10 2002-05-16 21:20:11 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -29,7 +29,7 @@
 ////////////////////////////////////////////////////////////////////////
 //
 // File:        G4Scintillation.cc 
-// Description: Discrete Process - Generation of Scintillation Photons
+// Description: RestDiscrete Process - Generation of Scintillation Photons
 // Version:     1.0
 // Created:     1998-11-07  
 // Author:      Peter Gumplinger
@@ -66,7 +66,7 @@
         /////////////////
 
 G4Scintillation::G4Scintillation(const G4String& processName)
-                  : G4VDiscreteProcess(processName)
+                  : G4VRestDiscreteProcess(processName)
 {
 	fTrackSecondariesFirst = false;
 
@@ -103,6 +103,19 @@ G4Scintillation::~G4Scintillation()
         // Methods
         ////////////
 
+// AtRestDoIt
+// ----------
+//
+G4VParticleChange*
+G4Scintillation::AtRestDoIt(const G4Track& aTrack, const G4Step& aStep)
+
+// This routine simply calls the equivalent PostStepDoIt since all the
+// necessary information resides in aStep.GetTotalEnergyDeposit()
+
+{
+        return G4Scintillation::PostStepDoIt(aTrack, aStep);
+}
+
 // PostStepDoIt
 // -------------
 //
@@ -132,12 +145,12 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         G4MaterialPropertiesTable* aMaterialPropertiesTable =
                                aMaterial->GetMaterialPropertiesTable();
         if (!aMaterialPropertiesTable)
-             return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+             return G4VRestDiscreteProcess::PostStepDoIt(aTrack, aStep);
 
 	const G4MaterialPropertyVector* Intensity = 
                 aMaterialPropertiesTable->GetProperty("SCINTILLATION"); 
         if (!Intensity) 
-  	     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+  	     return G4VRestDiscreteProcess::PostStepDoIt(aTrack, aStep);
 
 	G4double MeanNumPhotons = ScintillationYield * TotalEnergyDeposit;
 
@@ -150,15 +163,17 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 		aParticleChange.SetNumberOfSecondaries(0);
 		
-                return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+                return G4VRestDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
 
 	////////////////////////////////////////////////////////////////
 
 	aParticleChange.SetNumberOfSecondaries(NumPhotons);
 
-	if (fTrackSecondariesFirst)
-		aParticleChange.SetStatusChange(fSuspend);
+	if (fTrackSecondariesFirst) {
+           if (aTrack.GetTrackStatus() == fAlive )
+	  	   aParticleChange.SetStatusChange(fSuspend);
+        }
 	
 	////////////////////////////////////////////////////////////////
 
@@ -273,7 +288,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	     << aParticleChange.GetNumberOfSecondaries() << G4endl;
 	}
 
-	return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+	return G4VRestDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
 
 // BuildThePhysicsTable for the scintillation process
@@ -392,5 +407,18 @@ G4double G4Scintillation::GetMeanFreePath(const G4Track& aTrack,
         *condition = Forced;
 
 	return DBL_MAX;
+
+}
+
+// GetMeanLifeTime
+// ---------------
+//
+
+G4double G4Scintillation::GetMeanLifeTime(const G4Track& aTrack,
+                                          G4ForceCondition* condition)
+{
+        *condition = Forced;
+
+        return DBL_MAX;
 
 }
