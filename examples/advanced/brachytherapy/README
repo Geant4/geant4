@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.4 2002-06-13 15:11:27 guatelli Exp $
+$Id: README,v 1.5 2002-06-13 15:59:43 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -52,11 +52,11 @@ The output is ("brachy2.hbk")
 
 1)Aida  platform for Linux:gcc compiler 2.95.2
 
--------------------------enviroment with the compiler 2.95.2 on lxplus------------------------------------
+-------------------------enviroment with the compiler 2.95.2 on lxplus---------
 
 
 setenv G4LEDATA /afs/cern.ch/sw/geant4/dev/data/G4EMLOW1.1
-setenv G4INSTALL /afs/cern.ch/user/g/guatelli/GEANT4/geant4
+setenv G4INSTALL /...
 #
 # ---- Linux setup ----
 #
@@ -112,3 +112,12 @@ setenv G4ANALYSIS_AIDA_CONFIG_LIBS   `aida-config --noLicense --libs`
 setenv LD_LIBRARY_PATH $OGLHOME/lib
 #
 # ---- end of Linux set-up ----
+
+before running remenber to delete *.hbk
+
+in the file brachy.py there are the instructions  to visualize the histograms with the old version of Lizard;
+
+in order to do that open another lxplus with egcs-2.91.66 and make:
+source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.3-sec/install/sharedstart.csh
+then digit lizard in the directory where brachy3.hbk is and then follow the instruction of the brachy.py
+
