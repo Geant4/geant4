@@ -1,4 +1,4 @@
-# $Id: G4ODBMS_BUILD.gmk,v 1.1 1999-01-07 15:58:31 gunter Exp $
+# $Id: G4ODBMS_BUILD.gmk,v 1.2 1999-09-17 13:15:29 morita Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for HepODBMS and Objectivity/DB.
 #   Youhei Morita, 9th July 1998.
@@ -11,6 +11,7 @@ endif
 
 ifdef HEP_ODBMS_DIR
   CPPFLAGS += -I$(HEP_ODBMS_DIR)/include \
+              -DHEP_ODBMS_EXPORT="" \
               -DHep_HAS_BUILDIN_BOOL_CONSTANTS
 endif
 #--------------------------------------------------------------------
