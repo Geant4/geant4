@@ -1,4 +1,4 @@
-$Id: History,v 1.84 2002-07-29 10:26:13 gcosmo Exp $
+$Id: History,v 1.85 2002-07-29 14:42:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul 29th, 2002       G. Cosmo - geomvol-V04-01-03
+- G4PropagatorInField[.hh.icc.cc]:
+  Restored call to GetChordFinder()->SetChargeMomentumMass() in method
+  SetChargeMomentumMass(), as was originally in release 4.1.
+  All modifications introduced in tag "geomvol-V04-00-11" have now been removed.
 
 Jul 29th, 2002       G. Cosmo - geomvol-V04-01-02
 - G4PropagatorInField.cc:  (J.Apostolakis)
