@@ -1,169 +1,267 @@
-<HTML>
-<HEAD>
-   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-   <META NAME="GENERATOR" CONTENT="Mozilla/4.05 [en] (X11; I; Linux 2.0.34 i586) [Netscape]">
-</HEAD>
-<BODY>
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.7 [en] (X11; I; Linux 2.2.12-20 i686) [Netscape]">
+</head>
+<body>
 
-<H1>
-Test Suite</H1>
-Note: test10n, n = 1,...,9, are reserved for symbolic links to exampleN0n.
-<BR>&nbsp;
-<TABLE BORDER WIDTH="100%" NOSAVE >
-<TR>
-<TD></TD>
+<h1>
+Test Suite</h1>
 
-<TD><B>Category</B></TD>
+<table BORDER WIDTH="100%" NOSAVE >
+<tr>
+<td><b>Range</b></td>
 
-<TD><B>Coverage</B></TD>
+<td><b>Description</b></td>
+</tr>
 
-<TD><B>Other features</B></TD>
-</TR>
+<tr>
+<td>test01,...,99</td>
 
-<TR>
-<TD>test01</TD>
+<td>Real tests under geant4/tests, described in more detail below.</td>
+</tr>
 
-<TD>geometry</TD>
+<tr>
+<td>test101,...,199</td>
 
-<TD>SimpleBox, Honeycomb</TD>
+<td>Symbolic links to examples/novice/N01,...,99.</td>
+</tr>
 
-<TD>particle gun</TD>
-</TR>
+<tr>
+<td>test201,...,299</td>
 
-<TR>
-<TD>test02</TD>
+<td>Real tests under geant4/tests, reserved for visualization, user interfaces
+and environments.</td>
+</tr>
 
-<TD>processes</TD>
+<tr>
+<td>test301,...,399</td>
 
-<TD>electromagnetic and parametrised + stopping hadrons</TD>
+<td>Reserved for future real tests.</td>
+</tr>
 
-<TD>particle gun, simple box, choice of material</TD>
-</TR>
+<tr>
+<td>test401,...,499</td>
 
-<TR>
-<TD>test03</TD>
+<td>Symbolic links to examples/extended/persistency.</td>
+</tr>
 
-<TD>processes</TD>
+<tr>
+<td>test501,...,599</td>
 
-<TD>Cerenkov process, tracking of optical photons</TD>
+<td>Symbolic links to examples/extended/electromagnetic.</td>
+</tr>
+</table>
 
-<TD>fixed gun</TD>
-</TR>
+<br>&nbsp;
+<table BORDER WIDTH="100%" NOSAVE >
+<tr>
+<td></td>
 
-<TR>
-<TD>test04</TD>
+<td><b>Category</b></td>
 
-<TD>persistency</TD>
+<td><b>Coverage</b></td>
 
-<TD></TD>
+<td><b>Other features</b></td>
+</tr>
 
-<TD></TD>
-</TR>
+<tr>
+<td>test01</td>
 
-<TR>
-<TD>test05</TD>
+<td>geometry - CSG solids and navigator</td>
 
-<TD>geometry</TD>
+<td>SimpleBox, Honeycomb.</td>
 
-<TD>STEP, BREPS</TD>
+<td>particle gun</td>
+</tr>
 
-<TD></TD>
-</TR>
+<tr>
+<td>test02</td>
 
-<TR>
-<TD>test06</TD>
+<td>processes</td>
 
-<TD>processes</TD>
+<td>(a) Standard electromagnetic processes.
+<br>(b) (test02.hadron) Low energy and high energy hadronic processes and
+stopping, including coherent elastic scattering.</td>
 
-<TD>test02 in integral approach + new p.e. effect (G4PhotoAbsorption).</TD>
+<td>particle gun, simple box, choice of material</td>
+</tr>
 
-<TD></TD>
-</TR>
+<tr>
+<td>test03</td>
 
-<TR>
-<TD>test07</TD>
+<td></td>
 
-<TD>processes, geometry, tracking</TD>
+<td>Not used.&nbsp; Optical processes covered by examples/novice/N06.</td>
 
-<TD></TD>
+<td></td>
+</tr>
 
-<TD>calorimeter, statistical test</TD>
-</TR>
+<tr>
+<td>test04</td>
 
-<TR>
-<TD>test08</TD>
+<td></td>
 
-<TD>geometry, processes</TD>
+<td>Not used.&nbsp; Persistency covered by examples/extended/persistency.</td>
 
-<TD>EM processes and navigation in Parameterised Volumes</TD>
+<td></td>
+</tr>
 
-<TD></TD>
-</TR>
+<tr>
+<td>test05</td>
 
-<TR>
-<TD>test09</TD>
+<td>geometry</td>
 
-<TD>processes</TD>
+<td>STEP, BREPS</td>
 
-<TD>test02 + polarised Compton + new p.e. + synchrotron radiation</TD>
+<td></td>
+</tr>
 
-<TD></TD>
-</TR>
+<tr>
+<td>test06</td>
 
-<TR>
-<TD>test10</TD>
+<td>processes/electromagnetic</td>
 
-<TD>geometry, processes</TD>
+<td>test02 in integral approach + new p.e. effect (G4PhotoAbsorption).</td>
 
-<TD>All CSGs using optical photons.</TD>
+<td></td>
+</tr>
 
-<TD>events of 1000 photons</TD>
-</TR>
+<tr>
+<td>test07</td>
 
-<TR>
-<TD>test11</TD>
+<td>processes, geometry, tracking</td>
 
-<TD>processes</TD>
+<td>Statistical evaluation prototype.</td>
 
-<TD>test02 + neutrons.</TD>
+<td>calorimeter, statistical test</td>
+</tr>
 
-<TD></TD>
-</TR>
+<tr>
+<td>test08</td>
 
-<TR>
-<TD>test12</TD>
+<td></td>
 
-<TD>processes</TD>
+<td>Not used.</td>
 
-<TD>test02 + FTF fragmentation</TD>
+<td></td>
+</tr>
 
-<TD></TD>
-</TR>
+<tr>
+<td>test09</td>
 
-<TR>
-<TD>test13</TD>
+<td>processes/electromagnetic</td>
 
-<TD></TD>
+<td>test02 + polarised Compton + new p.e. + synchrotron radiation</td>
 
-<TD>test02 + QGS (quark-gluon strings)</TD>
+<td></td>
+</tr>
 
-<TD></TD>
-</TR>
+<tr>
+<td>test10</td>
 
-<TR>
-<TD>test201</TD>
+<td>geometry, processes</td>
 
-<TD>interfaces, visualization, enviroments</TD>
+<td>All CSGs using optical photons.</td>
 
-<TD></TD>
+<td>events of 1000 photons</td>
+</tr>
 
-<TD></TD>
-</TR>
-</TABLE>
-&nbsp;
-<HR WIDTH="100%">
-<BR><I><A HREF="mailto:John.Allison@man.ac.uk">John Allison</A> 27th November
-1998</I>
-<BR>&nbsp;
-</BODY>
-</HTML>
+<tr>
+<td>test11</td>
+
+<td>processes/hadronic</td>
+
+<td>test02 + neutron transport.</td>
+
+<td></td>
+</tr>
+
+<tr>
+<td>test12</td>
+
+<td>processes/hadronic</td>
+
+<td>test02 + FTF fragmentation</td>
+
+<td></td>
+</tr>
+
+<tr>
+<td>test13</td>
+
+<td>processes/hadronic</td>
+
+<td>test02 + QGS (dual parton model, quark-gluon strings)</td>
+
+<td></td>
+</tr>
+
+<tr>
+<td>test14</td>
+
+<td>processes/electromagnetic/lowenergy</td>
+
+<td>LowEnergy em (photons and electrons).</td>
+
+<td></td>
+</tr>
+
+<tr>
+<td>test15</td>
+
+<td>processes/hadronic</td>
+
+<td>Isotope Production.</td>
+
+<td></td>
+</tr>
+
+<tr>
+<td>test16</td>
+
+<td>processes/hadronic</td>
+
+<td>n and p Cross-Sections.</td>
+
+<td></td>
+</tr>
+
+<tr>
+<td>test17</td>
+
+<td>processes/electromagnetic/lowenergy</td>
+
+<td>LowEnergy em (protons, antiprotons and ions)</td>
+
+<td></td>
+</tr>
+
+<tr>
+<td>test18</td>
+
+<td>processes/hadronic</td>
+
+<td>Radioactive decay.</td>
+
+<td></td>
+</tr>
+
+<tr>
+<td>test201</td>
+
+<td>interfaces, visualization, enviroments</td>
+
+<td></td>
+
+<td></td>
+</tr>
+</table>
+
+<hr WIDTH="100%">
+<br><i><a href="mailto:John.Allison@man.ac.uk">John Allison</a> 27th November
+1998</i>
+<br>&nbsp;
+</body>
+</html>
