@@ -86,58 +86,58 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.1s Real=1.3s Sys=0.13s
+  User=1s Real=1.2s Sys=0.15s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.81s Real=0.9s Sys=0.08s
+  User=0.82s Real=0.85s Sys=0.02s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2s Real=2.2s Sys=0.17s
+  User=1.9s Real=2s Sys=0.11s
 SimpleBox is now made of Cu
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.25s Real=0.26s Sys=0.01s
+  User=0.24s Real=0.24s Sys=0s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.3s Real=0.31s Sys=0.01s
+  User=0.27s Real=0.28s Sys=0.01s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.69s Real=0.71s Sys=0.02s
+  User=0.67s Real=0.68s Sys=0.01s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.4s Real=1.4s Sys=0.05s
+  User=1.3s Real=1.5s Sys=0.07s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.9s Real=1.9s Sys=0.05s
+  User=1.8s Real=2s Sys=0.07s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.7s Real=2.8s Sys=0.07s
+  User=2.6s Real=3.3s Sys=0.07s
 SimpleBox is now made of U
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1e+03 (mm)]   is too big   for material  idx=3
@@ -219,53 +219,53 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.35s Real=0.37s Sys=0.02s
+  User=0.33s Real=0.35s Sys=0.02s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=5.2s Real=5.3s Sys=0.15s
+  User=4.7s Real=6s Sys=0.1s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=7.7s Real=7.9s Sys=0.1s
+  User=7s Real=7.2s Sys=0.04s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=11s Real=11s Sys=0.11s
+  User=10s Real=10s Sys=0.08s
 SimpleBox is now made of U
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.42s Real=0.43s Sys=0.01s
+  User=0.39s Real=0.39s Sys=0s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.15s Real=0.15s Sys=0s
+  User=0.14s Real=0.14s Sys=0s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=4.6s Real=4.8s Sys=0.08s
+  User=4.2s Real=4.2s Sys=0.05s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=4s Real=4s Sys=0.03s
+  User=3.7s Real=3.7s Sys=0.01s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=5.9s Real=6s Sys=0.05s
+  User=5.3s Real=5.4s Sys=0.11s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=11s Real=12s Sys=0.13s
+  User=9.9s Real=10s Sys=0.13s
 SimpleBox is now made of Si
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1e+03 (mm)]   is too big   for material  idx=1
@@ -336,33 +336,43 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.03s Real=0.03s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.04s Real=0.04s Sys=0s
+  User=0.03s Real=0.04s Sys=0.01s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.47s Real=0.5s Sys=0.03s
+  User=0.44s Real=0.45s Sys=0.01s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.5s Real=1.6s Sys=0.1s
+  User=1.4s Real=1.5s Sys=0.06s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.98s Real=1s Sys=0.05s
+  User=0.92s Real=0.95s Sys=0.03s
 SimpleBox is now made of Si
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.39s Real=0.42s Sys=0.03s
+  User=0.36s Real=0.37s Sys=0.01s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.23s Real=0.25s Sys=0.02s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=1.2s Real=1.2s Sys=0s
 Start Run processing.
 Run terminated.
 Run Summary
@@ -372,22 +382,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.3s Real=1.3s Sys=0.05s
+  User=0.95s Real=0.98s Sys=0.03s
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.27s Real=0.31s Sys=0.04s
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=1.1s Real=1.1s Sys=0.02s
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.54s Real=0.54s Sys=0s
+  User=0.49s Real=0.49s Sys=0s
 SimpleBox is now made of H
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 

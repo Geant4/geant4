@@ -88,13 +88,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=20s Real=26s Sys=1.2s
+  User=20s Real=25s Sys=0.78s
 SimpleBox is now made of U
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=13s Real=14s Sys=1.2s
+  User=12s Real=14s Sys=0.47s
 SimpleBox is now made of Cu
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1e+03 (mm)]   is too big   for material  idx=2
@@ -160,14 +160,14 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=9.4s Real=13s Sys=2.6s
+  User=9s Real=11s Sys=0.81s
 SimpleBox is now made of Cu
 Start Run processing.
 WARNING! G4XPDGTotal::PDGTotal extrapolating cross section at 3 GeV outside the PDG fit range 3 - 4e+04 GeV 
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=7.4s Real=9.2s Sys=1.4s
+  User=7.1s Real=7.7s Sys=0.38s
 SimpleBox is now made of Si
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1e+03 (mm)]   is too big   for material  idx=1
@@ -233,13 +233,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=4s Real=5.4s Sys=0.69s
+  User=3.8s Real=4.2s Sys=0.15s
 SimpleBox is now made of Si
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.7s Real=4s Sys=0.21s
+  User=3.5s Real=3.8s Sys=0.04s
 SimpleBox is now made of H
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
@@ -302,7 +302,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 SimpleBox is now made of H
 Start Run processing.
 Run terminated.
