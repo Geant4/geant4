@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.5 2004-02-15 17:47:26 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.6 2004-02-27 09:41:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -361,11 +361,9 @@ private:
   G4int    nDEDXBinsForRange;
   G4int    nLambdaBins;
 
-  G4double faclow;
   G4double minKinEnergy;
   G4double maxKinEnergy;
   G4double maxKinEnergyForRange;
-  G4double lowKinEnergy;
 
   G4double massRatio;
   G4double reduceFactor;
@@ -413,8 +411,10 @@ inline G4double G4VEnergyLossProcess::GetDEDX(G4double& kineticEnergy,
 {
   DefineMaterial(couple);
   G4bool b;
-  return ((*theDEDXTable)[currentMaterialIndex]->
-          GetValue(kineticEnergy*massRatio, b))*chargeSqRatio;
+  G4double e = kineticEnergy*massRatio;
+  G4double x = ((*theDEDXTable)[currentMaterialIndex]->GetValue(e, b))*chargeSqRatio;
+  if(e < minKinEnergy) x *= sqrt(e/minKinEnergy);
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -426,7 +426,9 @@ inline G4double G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
   G4bool b;
   G4double x;
   G4double e = kineticEnergy*massRatio;
-  if (e < maxKinEnergyForRange) {
+  if (e <= minKinEnergy) {
+    x = (((*theRangeTable)[currentMaterialIndex])->GetValue(minKinEnergy, b))*sqrt(e/minKinEnergy);
+  } else if (e < maxKinEnergyForRange) {
     x = ((*theRangeTable)[currentMaterialIndex])->GetValue(e, b);
   } else {
     x = theRangeAtMaxEnergy[currentMaterialIndex] +
@@ -438,12 +440,13 @@ inline G4double G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossProcess::GetRangeForLoss(G4double& kineticEnergy,
-                                            const G4MaterialCutsCouple* couple)
+                                                const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
   G4bool b;
   G4double e = kineticEnergy*massRatio;
   G4double x = ((*theRangeTableForLoss)[currentMaterialIndex])->GetValue(e, b);
+  if(e < minKinEnergy) x *= sqrt(e/minKinEnergy);
   return x*reduceFactor;
 }
 
@@ -454,8 +457,17 @@ inline G4double G4VEnergyLossProcess::GetKineticEnergy(G4double& range,
 {
   DefineMaterial(couple);
   G4bool b;
-  return ((*theInverseRangeTable)[currentMaterialIndex]->
-         GetValue(range/reduceFactor, b))/massRatio;
+  G4double r = range/reduceFactor;
+  G4PhysicsVector* v = (*theInverseRangeTable)[currentMaterialIndex];
+  G4double rmin = v->GetLowEdgeEnergy(0);
+  G4double e = minKinEnergy;
+  if(r <= rmin) {
+    r /= rmin;
+    e *= r*r;
+  } else {
+    e = v->GetValue(r, b);
+  }
+  return e/massRatio;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -591,7 +603,6 @@ inline G4double G4VEnergyLossProcess::MinKinEnergy() const
 inline void G4VEnergyLossProcess::SetMinKinEnergy(G4double e)
 {
   minKinEnergy = e;
-  lowKinEnergy = minKinEnergy*faclow;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.4 2004-01-21 18:05:10 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.5 2004-02-27 09:41:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -124,7 +124,6 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   nDEDXBins(90),
   nDEDXBinsForRange(70),
   nLambdaBins(90),
-  faclow(1.5),
   linLossLimit(0.05),
   minSubRange(0.1),
   defaultRoverRange(0.2),
@@ -140,7 +139,6 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   minKinEnergy         = 0.1*keV;
   maxKinEnergy         = 100.0*GeV;
   maxKinEnergyForRange = 1.0*GeV;
-  lowKinEnergy         = minKinEnergy*faclow;
 
   pParticleChange = &fParticleChange;
 
@@ -592,7 +590,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   G4double eloss  = 0.0;
   G4bool b;
 
-  /*
+/*
   if(-1 < verboseLevel) {
     const G4ParticleDefinition* d = track.GetDefinition();
     G4cout << "AlongStepDoIt for "
@@ -605,12 +603,12 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
            << " md= " << d->GetPDGMass()
            << G4endl;
   }
-  */
+*/
     // low energy deposit case
   if (length >= fRange) {
     eloss = preStepKinEnergy;
 
-  } else if(preStepScaledEnergy <= lowKinEnergy) {
+  } else if(preStepScaledEnergy <= minKinEnergy) {
 
     G4double x = 1.0 - length/fRange;
     eloss = preStepKinEnergy*(1.0 - x*x);
@@ -634,7 +632,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
                GetValue(preStepScaledEnergy, b))*length*chargeSqRatio;
     }
 
-    /*      
+/*
     if(-1 < verboseLevel) {
       G4cout << "fRange(mm)= " << fRange/mm
              << " xPost(mm)= " << x/mm
@@ -645,7 +643,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
                GetValue(preStepScaledEnergy, b))*length*chargeSqRatio
              << G4endl;
     }
-    */
+*/
 
   }
 
@@ -653,7 +651,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   G4double tmax = MaxSecondaryEnergy(dynParticle);
   tmax = std::min(tmax,(*theCuts)[currentMaterialIndex]);
 
-  /*
+/*
   G4double eloss0 = eloss;
   if(-1 < verboseLevel) {
     //G4cout << *theDEDXTable << G4endl;
@@ -671,7 +669,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
       //   << " rangeTable= " << theRangeTable
            << G4endl;
   }
-  */
+*/
 
   // Sample fluctuations
   if (lossFluctuationFlag && eloss < preStepKinEnergy && eloss > 0.0) {
@@ -681,7 +679,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 				       currentMaterialIndex);
   }
 
-  /*
+/*
   if(-1 < verboseLevel) {
     G4cout << "eloss(MeV)= " << eloss/MeV
            << " fluc= " << (eloss-eloss0)/MeV
@@ -689,7 +687,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
            << " massRatio= " << massRatio
            << G4endl;
   }
-  */
+*/
 
   // Subcutoff and/or deexcitation
   std::vector<G4Track*>* newp =
@@ -717,14 +715,14 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
   preStepKinEnergy -= eloss;
 
-  /*
+/*
   if(-1 < verboseLevel) {
     G4cout << "eloss(MeV)= " << eloss/MeV
            << " preStepKinEnergy= " << preStepKinEnergy
            << " lossFlag= " << lossFluctuationFlag
            << G4endl;
   }
-  */
+*/
 
   if (preStepKinEnergy <= 0.0) {
 
