@@ -13,7 +13,7 @@
 alpha
 //--------
 #material
-Ni
+Bi
 #energy(MeV)
 140.
 #sigmae(MeV)
