@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst15PhysicsList.cc,v 1.1 1999-11-18 14:48:14 stesting Exp $
+// $Id: Tst15PhysicsList.cc,v 1.2 1999-11-18 15:01:52 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@
 #include <iomanip.h>   
 
 #include "G4FastSimulationManagerProcess.hh"
-
+#include "G4NeutronIsotopeProduction.hh"
 
 Tst15PhysicsList::Tst15PhysicsList():  G4VUserPhysicsList()
 {
@@ -474,6 +474,11 @@ void Tst15PhysicsList::ConstructHad()
          G4HENeutronInelastic* theHEInelasticModel = 
                                     new G4HENeutronInelastic;
          theInelasticProcess->RegisterMe(theHEInelasticModel);
+          // here the iso-prod stuff....
+         G4NeutronIsotopeProduction * aProductionModel = new G4NeutronIsotopeProduction;
+         theInelasticProcess->RegisterIsotopeProductionModel(aProductionModel);
+         G4HadronicProcess::EnableIsotopeProductionGlobally();
+          // Now fill process manager.
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }  
       else if (particleName == "anti_neutron") {
