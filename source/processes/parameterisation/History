@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2002-11-02 00:10:33 mverderi Exp $
+$Id: History,v 1.16 2002-11-20 17:05:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 20, 2002 G. Cosmo - param-V04-01-02
+	o Patched access to public static data in G4FastStep.cc
+	  and G4GlobalFastSimulationManager.cc to allow porting on
+	  Windows DLLs.
+
+Nov 15, 2002 S. Sadilov - param-V04-01-01
+	o Fixed compilation problems on Windows in
+	  G4FastSimulationManager.cc and G4GlobalFastSimulationManager.cc
 
 Nov 02, 2002 M. Verderi - param-V04-01-00
 	o Add method to retrieve G4VFastSimulationModel by name.
