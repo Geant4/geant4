@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.5 2004-06-29 13:59:26 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.6 2004-06-30 14:36:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,11 +35,12 @@
 // Creation date: 01.10.2003
 //
 // Modifications:
+// 30-06-04 make destructor virtual (V.Ivanchenko)
 //
 //
 // Class Description:
 //
-// It is the unified Rest and/or Discrete process
+// It is the unified Discrete process
 
 // -------------------------------------------------------------------
 //
@@ -128,6 +129,8 @@ public:
   G4double GetLambda(G4double& kinEnergy, const G4MaterialCutsCouple* couple);
   // It returns the Lambda of the process
 
+  const G4PhysicsTable* LambdaTable() const;
+
   G4double MicroscopicCrossSection(G4double kineticEnergy,
                              const G4MaterialCutsCouple* couple);
   // It returns the cross section of the process for energy/ material
@@ -141,6 +144,8 @@ public:
 
   virtual void ActivateFluorescence(G4bool, const G4Region* r = 0);
   virtual void ActivateAugerElectronProduction(G4bool, const G4Region* r = 0);
+
+  G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idxRegion) const;
 
 protected:
 
@@ -251,6 +256,14 @@ inline G4double G4VEmProcess::GetMeanFreePath(const G4Track& track, G4double,
 inline G4VEmModel* G4VEmProcess::SelectModel(G4double& kinEnergy)
 {
   return modelManager->SelectModel(kinEnergy, currentMaterialIndex);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VEmModel* G4VEmProcess::SelectModelForMaterial(
+                                           G4double kinEnergy, size_t& idxRegion) const
+{
+  return modelManager->SelectModel(kinEnergy, idxRegion);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.20 2004-06-29 13:59:26 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.21 2004-06-30 14:36:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,6 +46,7 @@
 //
 // 26-11-03 bugfix in AlongStepDoIt (L.Urban)
 // 25-05-04 add protection against case when range is less than steplimit (V.Ivanchenko)
+// 30-06-04 make destructor virtual (V.Ivanchenko)
 
 // -------------------------------------------------------------------
 //
@@ -149,10 +150,13 @@ public:
 
   void SetBuildLambdaTable(G4bool val);
 
+  const G4PhysicsTable* LambdaTable() const;
+
   virtual G4double TruePathLengthLimit(const G4Track& track,
                                              G4double& lambda,
                                              G4double currentMinimalStep) = 0;
 
+  G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idxRegion) const;
 
 protected:
 
@@ -340,6 +344,14 @@ inline G4VParticleChange* G4VMultipleScattering::AlongStepDoIt(
 inline void G4VMultipleScattering::SelectModel(G4double& kinEnergy)
 {
   currentModel = modelManager->SelectModel(kinEnergy, currentMaterialIndex);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VEmModel* G4VMultipleScattering::SelectModelForMaterial(
+                                           G4double kinEnergy, size_t& idxRegion) const
+{
+  return modelManager->SelectModel(kinEnergy, idxRegion);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

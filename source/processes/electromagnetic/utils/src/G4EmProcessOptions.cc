@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.3 2004-06-29 14:00:15 vnivanch Exp $
+// $Id: G4EmProcessOptions.cc,v 1.4 2004-06-30 14:36:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Creation date: 27.02.2004
 //
 // Modifications:
+// 30-06-04 G4EmProcess is pure discrete (V.Ivanchenko)
 //
 // Class Description:
 //

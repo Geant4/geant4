@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.22 2004-06-29 13:59:26 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.23 2004-06-30 14:36:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -50,6 +50,7 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 14-01-04 Activate precise range calculation (V.Ivanchenko)
 // 10-03-04 Fix problem of step limit calculation (V.Ivanchenko)
+// 30-06-04 make destructor virtual (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -263,6 +264,8 @@ public:
 
   void ResetNumberOfInteractionLengthLeft();
   // reset (determine the value of)NumberOfInteractionLengthLeft
+
+  G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idx) const;
 
 protected:
 
@@ -634,6 +637,14 @@ inline G4VEmModel* G4VEnergyLossProcess::SelectModel(G4double kinEnergy)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline G4VEmModel* G4VEnergyLossProcess::SelectModelForMaterial(
+                                           G4double kinEnergy, size_t& idx) const
+{
+  return modelManager->SelectModel(kinEnergy, idx);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline const G4ParticleDefinition* G4VEnergyLossProcess::Particle() const
 {
   return particle;
@@ -684,7 +695,7 @@ inline G4PhysicsTable* G4VEnergyLossProcess::RangeTableForLoss() const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
+
 inline G4PhysicsTable* G4VEnergyLossProcess::InverseRangeTable() const 
 {
   return theInverseRangeTable;
@@ -712,7 +723,7 @@ inline G4bool G4VEnergyLossProcess::IsIntegral() const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
+
 inline size_t G4VEnergyLossProcess::CurrentMaterialCutsCoupleIndex() const 
 {
   return currentMaterialIndex;
@@ -740,7 +751,7 @@ inline void G4VEnergyLossProcess::SetChargeSquare(G4double val)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
+
 inline void G4VEnergyLossProcess::SetChargeSquareRatio(G4double val) 
 {
   chargeSqRatio = val;

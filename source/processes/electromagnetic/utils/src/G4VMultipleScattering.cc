@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.23 2004-04-23 05:52:07 urban Exp $
+// $Id: G4VMultipleScattering.cc,v 1.24 2004-06-30 14:36:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -339,6 +339,13 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(G4ParticleDefinition* part,
   if (verboseLevel>0 || num == "e-" || num == "mu+" || num == "proton")
            PrintInfoDefinition();
   return res;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+const G4PhysicsTable* G4VMultipleScattering::LambdaTable() const
+{
+  return theLambdaTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

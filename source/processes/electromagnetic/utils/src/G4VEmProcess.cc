@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.6 2004-06-29 14:00:15 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.7 2004-06-30 14:36:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // Creation date: 01.10.2003
 //
 // Modifications:
+// 30-06-04 make it to be pure discrete process (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -51,17 +52,11 @@
 #include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VEmModel.hh"
-#include "G4VEmFluctuationModel.hh"
 #include "G4DataVector.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4VParticleChange.hh"
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4ProcessManager.hh"
-#include "G4UnitsTable.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
@@ -435,7 +430,13 @@ void G4VEmProcess::ActivateFluorescence(G4bool, const G4Region*)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEmProcess::ActivateAugerElectronProduction(G4bool, const G4Region*)
-
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+const G4PhysicsTable* G4VEmProcess::LambdaTable() const
+{
+  return theLambdaTable;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
