@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmMuonBuilder.cc,v 1.1 2004-05-04 08:33:36 vnivanch Exp $
+// $Id: G4EmMuonBuilder.cc,v 1.2 2004-11-24 13:18:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -31,6 +31,7 @@
 // Author:      V.Ivanchenko 03.05.2004
 //
 // Modified:
+// 24-11-2004 V.Ivanchenko Use the same radiation processes for mu+ and mu-
 //
 //----------------------------------------------------------------------------
 //
@@ -80,24 +81,29 @@ void G4EmMuonBuilder::ConstructParticle()
 
 void G4EmMuonBuilder::ConstructProcess()
 {
+  // Common processes for mu+ and mu-
+  G4MultipleScattering* mumsc  = new G4MultipleScattering();
+  G4MuBremsstrahlung*   mubrem = new G4MuBremsstrahlung();
+  G4MuPairProduction*   mupair = new G4MuPairProduction();
+
   // Add standard EM Processes for mu+
   const G4ParticleDefinition* particle = G4MuonPlus::MuonPlus();
   G4ProcessManager* pmanager = particle->GetProcessManager();
 
-  pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-  pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
-  pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
-  pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);
+  pmanager->AddProcess(mumsc,              -1, 1,1);
+  pmanager->AddProcess(new G4MuIonisation, -1, 2,2);
+  pmanager->AddProcess(mubrem,             -1,-1,3);
+  pmanager->AddProcess(mupair,             -1,-1,4);
 
 
   // Add standard EM Processes for mu-
   particle = G4MuonMinus::MuonMinus();
   pmanager = particle->GetProcessManager();
 
-  pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-  pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
-  pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
-  pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);
+  pmanager->AddProcess(mumsc,              -1, 1,1);
+  pmanager->AddProcess(new G4MuIonisation, -1, 2,2);
+  pmanager->AddProcess(mubrem,             -1,-1,3);
+  pmanager->AddProcess(mupair,             -1,-1,4);
 
 }
 

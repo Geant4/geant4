@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.3 2004-09-17 10:51:37 maire Exp $
+// $Id: PhysicsList.hh,v 1.4 2004-11-24 13:17:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Modified:
@@ -61,6 +61,8 @@ class PhysicsList: public G4VModularPhysicsList
     G4double cutForPositron;
     G4int    verbose;
     G4bool   emBuilderIsRegisted;
+    G4bool   decayIsRegisted;
+    G4bool   stepLimiterIsRegisted;
 
     PhysicsListMessenger* pMessenger;
 
