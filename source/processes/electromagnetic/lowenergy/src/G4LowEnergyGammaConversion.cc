@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.20 2001-07-11 10:02:43 gunter Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.21 2001-07-27 15:24:54 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 // Note that the hard coded value 1.022 should be used instead of
 // 2*electron_mass_c2 in order to agree with the value of the data bank EPDL97
 // 24.04.01 V.Ivanchenko remove RogueWave 
+// 27.07.01 F.Longo correct bug in energy distribution 
 // **************************************************************
 
 // This Class Header
@@ -214,7 +215,7 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
     do {
       if ( NormF1/(NormF1+NormF2) > G4UniformRand() ){ 
 
-	epsil = 0.5 - epsilrange*pow(G4UniformRand(), 1/3) ;
+	epsil = 0.5 - epsilrange*pow(G4UniformRand(), 0.3333) ;
 	screenvar = screenfac/(epsil*(1-epsil));
 	greject = (ScreenFunction1(screenvar) - FZ)/F10 ;
       } 
