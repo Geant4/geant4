@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03SteppingAction.hh,v 1.3 1999-12-15 14:49:24 gunter Exp $
+// $Id: ExN03SteppingAction.hh,v 1.4 2000-12-05 14:52:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,9 +24,9 @@ class ExN03SteppingAction : public G4UserSteppingAction
 {
   public:
     ExN03SteppingAction();
-    virtual ~ExN03SteppingAction();
+   ~ExN03SteppingAction();
 
-    virtual void UserSteppingAction(const G4Step*);
+    void UserSteppingAction(const G4Step*);
 };
 
 #endif
