@@ -255,7 +255,7 @@ int main(int argc, char** argv)
              << ((HBookFile*) hbookManager)->filename() << ">" << G4endl;
 
       h[0]=hbookManager->histogram("Number of Secondaries",50,-0.5,49.5);
-      h[1]=hbookManager->histogram("Type of Secondaries",10,-0.5,9.5);
+      h[1]=hbookManager->histogram("Type of secondary",10,-0.5,9.5);
       h[2]=hbookManager->histogram("Phi(degrees) of Secondaries",90,-180.0,180.0);
       h[3]=hbookManager->histogram("Pz (MeV) for protons",100,-pmax,pmax);
       h[4]=hbookManager->histogram("Pz (MeV) for pi-",100,-pmax,pmax);
@@ -365,7 +365,16 @@ int main(int argc, char** argv)
 				m = pd->GetPDGMass();
 				p = sqrt(e*(e + 2.0*m));
 			  mom *= p;
-				if(usepaw) h[2]->accumulate(mom.phi()/degree,1.0);
+        m  = pd->GetPDGMass();
+        fm = G4LorentzVector(mom, e + m);
+        labv -= fm;
+        px = mom.x();
+        py = mom.y();
+        pz = mom.z();
+        p  = sqrt(px*px +py*py + pz*pz);
+        pt = sqrt(px*px +py*py);
+				
+				if(usepaw && e > 0.0 && pt > 0.0) h[2]->accumulate(mom.phi()/degree,1.0);
 					
 				de += e;
         if(verbose) {
@@ -375,17 +384,11 @@ int main(int argc, char** argv)
 								   << "   p(MeV)= " << mom/MeV
 								   << "   m(MeV)= " << m/MeV
 						       << "   Etot(MeV)= " << (e+m)/MeV
+						       << "   pt(MeV)= " << pt/MeV
                    << G4endl;
         }
 				
-        m  = pd->GetPDGMass();
-        fm = G4LorentzVector(mom, e + m);
-        labv -= fm;
-        px = mom.x();
-        py = mom.y();
-        pz = mom.z();
-        p  = sqrt(px*px +py*py + pz*pz);
-        pt = sqrt(px*px +py*py);
+ 
 
 				if(usepaw) {
  	  			if(pd == proton) { 
@@ -460,7 +463,10 @@ int main(int argc, char** argv)
             h[6]->accumulate(pz/MeV, 1.0); 
             h[10]->accumulate(pt/MeV, 1.0);
             h[14]->accumulate(e/MeV, 1.0);
-				  }
+						
+				  } else {
+			      h[1]->accumulate(9.0, 1.0);	
+					}
 			  }
       }			
 								
