@@ -17,7 +17,9 @@ class SbColor;
 class SoStyleCache : public SoGroup {
 public:
   SoStyleCache();
+protected:
   ~SoStyleCache();
+public:
   SoMaterial* getMaterial(const SbColor&,float = 0); 
   SoMaterial* getMaterial(float,float,float,float = 0); 
   //SoDrawStyle* getLineStyle(SbLineStyle,float = 0); 
