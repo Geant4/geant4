@@ -1,4 +1,4 @@
-$Id: History,v 1.108 2001-03-07 15:31:47 johna Exp $
+$Id: History,v 1.109 2001-03-15 12:46:51 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,18 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+15th March 2001  John Allison  (vis-V03-00-08)
+- Changed rotation of phi-replicas in G4PhysicalVolumeModel.cc to
+  ensure correspondence with rule that phi=0 bisects the replica.
+  WARNING: Prior to this fix the graphics did NOT correspond to the
+  replica navigation.  If you have been relying on the graphics to
+  position daughter volumes in a phi-replica, navigation will have
+  been incorrect, possibly without causing a crash.  The above fix
+  will change the apparent position as shown by the graphics and you
+  will have to correct the positioning of daughters.  Make sure the
+  diaghters are all properly enclosed within the replica.  Graphics
+  and navigation now correspond,
 
 7th March 2001  John Allison  (vis-V03-00-07)
 - Cosmetic corrections for ISO compliance.
