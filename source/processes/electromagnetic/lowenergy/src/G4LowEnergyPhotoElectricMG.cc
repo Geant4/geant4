@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectricMG.cc,v 1.4 2001-09-16 10:54:52 pia Exp $
+// $Id: G4LowEnergyPhotoElectricMG.cc,v 1.5 2001-09-16 15:51:25 elena Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -48,6 +48,7 @@
 // 07-09-99, if no e- emitted: edep=photon energy, mma
 // 24.04.01 V.Ivanchenko remove RogueWave 
 // 12.08.2001 MGP          - Revised according to a design iteration
+// 16.09.2001   E. Guardincerri    Added fluorescence generation
 //                                  
 // --------------------------------------------------------------
 
@@ -186,32 +187,17 @@ G4VParticleChange* G4LowEnergyPhotoElectricMG::PostStepDoIt(const G4Track& aTrac
     {
       energyDeposit += eKineticEnergy;    
     }
+  // Generation of fluorescence
   if (Z > 5){
-       
     photonVector = deexcitationManager.GenerateParticles(Z,shellId);
-    for (size_t k=0; k< photonVector->size();k++)
-      {
-	G4DynamicParticle* newPhoton =(*photonVector)[k];
-	if ( newPhoton != 0)
-	  {
-	    G4double photKineticEnergy=newPhoton->GetKineticEnergy();
-	    if (photKineticEnergy>=cutForLowEnergySecondaryPhotons)
-	      {
-		energyDeposit -= photKineticEnergy* MeV;
-		
-	      }
-	  }
-      }
-   
-  }
-  // Generate fluorescence here
 
-    G4int nElectrons = electronVector.size();
-    G4int nTotPhotons = photonVector->size();
-    G4int nPhotons=0;
-    for (G4int k=0; k<nTotPhotons; k++)
-      {
-	G4DynamicParticle* aPhoton = (*photonVector)[k];
+  }
+  G4int nElectrons = electronVector.size();
+  G4int nTotPhotons = photonVector->size();
+  G4int nPhotons=0;
+  for (size_t k=0; k<nTotPhotons; k++)
+    {
+      G4DynamicParticle* aPhoton = (*photonVector)[k];
 	if(aPhoton==0)
 	  {
 	    delete aPhoton;
@@ -220,45 +206,52 @@ G4VParticleChange* G4LowEnergyPhotoElectricMG::PostStepDoIt(const G4Track& aTrac
 	  {
 	    G4double itsKineticEnergy = aPhoton->GetKineticEnergy();
 	    if(itsKineticEnergy>=cutForLowEnergySecondaryPhotons)
-	      {nPhotons++;}
+	      {
+		nPhotons++;
+		// Local energy deposit is given as the sun of the 
+		// energies of incident photons minus the energies
+		// of the outcoming fluorescence photons
+	      energyDeposit -= itsKineticEnergy* MeV;
+	      
+	      }
 	    else
 	      {delete aPhoton;}
 	  }
-      }
-    G4int nSecondaries  = nElectrons + nPhotons;
-
-    aParticleChange.SetNumberOfSecondaries(nSecondaries);
-
-    G4int l = 0;
-    for ( l = 0; l<nElectrons; l++ )
-      {
-	aParticleChange.AddSecondary(electronVector[l]);
-      }
-    for (l = 0; l < nPhotons; l++) 
-      {
-	aParticleChange.AddSecondary((*photonVector)[l]); 
-      }
-
-    // Is clear necessary?
-    delete photonVector;
+    }
+  G4int nSecondaries  = nElectrons + nPhotons;
+  
+  aParticleChange.SetNumberOfSecondaries(nSecondaries);
+  
+  G4int l = 0;
+  for ( l = 0; l<nElectrons; l++ )
+    {
+      aParticleChange.AddSecondary(electronVector[l]);
+    }
+  for (l = 0; l < nPhotons; l++) 
+    {
+      aParticleChange.AddSecondary((*photonVector)[l]); 
+    }
+  
+  // Is clear necessary?
+  delete photonVector;
     //photonVector->clear();
-    //electronVector.clear();
-
-    if (energyDeposit < 0)
-      {
-	G4cout << "WARNING - "
-	       << "G4LowEnergyPhotoElectricMG::PostStepDoIt - Negative energy deposit"
-	       << G4endl;
-	energyDeposit = 0;
-      }
-    
+  //electronVector.clear();
+  
+  if (energyDeposit < 0)
+    {
+      G4cout << "WARNING - "
+	     << "G4LowEnergyPhotoElectricMG::PostStepDoIt - Negative energy deposit"
+	     << G4endl;
+      energyDeposit = 0;
+    }
+  
   // Kill the incident photon 
   aParticleChange.SetMomentumChange( 0., 0., 0. );
   aParticleChange.SetEnergyChange( 0. );
-
+  
   aParticleChange.SetLocalEnergyDeposit(energyDeposit);  
   aParticleChange.SetStatusChange( fStopAndKill ); 
-
+  
   // Reset NbOfInteractionLengthLeft and return aParticleChange
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
 }
@@ -288,3 +281,10 @@ void G4LowEnergyPhotoElectricMG::SetCutForLowEnSecPhotons(G4double cut)
 {
   cutForLowEnergySecondaryPhotons = cut;
 }
+
+
+
+
+
+
+
