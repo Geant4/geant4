@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.28 1999-05-26 00:55:22 gcosmo Exp $
+# $Id: architecture.gmk,v 1.29 1999-05-26 15:28:19 gunter Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -604,7 +604,7 @@ ifeq ($(G4SYSTEM),WIN32-VC-NICE)
   else
     CXXFLAGS  += -Od
   endif
-  CXXFLAGS += -GX -Zm200 -DWIN32 # -TP
+  CXXFLAGS += -GX -Zm200 -DWIN32 -DG4NOT_ISO_DELETES # -TP
 #
 # Should set $INCLUDE environment, if not set as below
 #
