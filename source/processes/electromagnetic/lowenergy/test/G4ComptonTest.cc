@@ -1,3 +1,5 @@
+// source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.3(-sec|-pre1|)/install/sharedinstall.[c]sh
+// startLizard.sh --useHBook 
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -20,7 +22,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ComptonTest.cc,v 1.10 2001-09-14 09:37:05 pia Exp $
+// $Id: G4ComptonTest.cc,v 1.11 2001-09-14 16:52:20 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,12 +69,17 @@
 #include "G4GRSVolume.hh"
 #include "G4UnitsTable.hh"
 
-#include "CLHEP/Hist/TupleManager.h"
-#include "CLHEP/Hist/HBookFile.h"
-#include "CLHEP/Hist/Histogram.h"
-#include "CLHEP/Hist/Tuple.h"
+#include "Interfaces/IHistoManager.h"
+#include "Interfaces/IHistogram.h"
+#include "Interfaces/IHistogram1D.h"
+#include "Interfaces/IHistogram2D.h"
 
-HepTupleManager* hbookManager;
+//#include "CLHEP/Hist/TupleManager.h"
+//#include "CLHEP/Hist/HBookFile.h"
+//#include "CLHEP/Hist/Histogram.h"
+//#include "CLHEP/Hist/Tuple.h"
+
+//HepTupleManager* hbookManager;
 
 int main()
 {
@@ -86,35 +93,37 @@ int main()
   // ---- HBOOK initialization
 
 
-  hbookManager = new HBookFile("comptontest.hbook", 58);
+  //  hbookManager = new HBookFile("comptontest.hbook", 58);
+  IHistoManager *hbookManager = createIHistoManager();
   assert (hbookManager != 0);
-  
+  hbookManager->selectStore("comptontest.hbook");
+
   // ---- Book a histogram and ntuples
-  G4cout<<"Hbook file name: "<<((HBookFile*) hbookManager)->filename()<<endl;
+  //G4cout<<"Hbook file name: "<<((HBookFile*) hbookManager)->filename()<<endl;
   
   // ---- primary ntuple ------
-  HepTuple* ntuple1 = hbookManager->ntuple("Primary Ntuple");
-  assert (ntuple1 != 0);
+  //Tuple* ntuple1 = hbookManager->ntuple("Primary Ntuple");
+  //assert (ntuple1 != 0);
   
   // ---- secondary ntuple ------
-  HepTuple* ntuple2 = hbookManager->ntuple("Secondary Ntuple");
-  assert (ntuple2 != 0);
+  //HepTuple* ntuple2 = hbookManager->ntuple("Secondary Ntuple");
+  //assert (ntuple2 != 0);
    
   // ---- secondaries histos ----
-  HepHistogram* hEKin;
-  hEKin = hbookManager->histogram("Kinetic Energy", 100,0.,200.);
+  IHistogram1D* hEKin;
+  hEKin = hbookManager->create1D("10","Kinetic Energy", 100,0.,200.);
   assert (hEKin != 0);  
   
-  HepHistogram* hP;
-  hP = hbookManager->histogram("Momentum", 100,0.,1000.);
+  IHistogram1D* hP;
+  hP = hbookManager->create1D("20","Momentum", 100,0.,1000.);
   assert (hP != 0);  
   
-  HepHistogram* hNSec;
-  hNSec = hbookManager->histogram("Number of secondaries", 40,0.,40.);
+  IHistogram1D* hNSec;
+  hNSec = hbookManager->create1D("30","Number of secondaries", 40,0.,40.);
   assert (hNSec != 0);  
   
-  HepHistogram* hDebug;
-  hDebug = hbookManager->histogram("Local energy deposit", 100,0.,200.);
+  IHistogram1D* hDebug;
+  hDebug = hbookManager->create1D("40","Local energy deposit", 100,0.,200.);
   assert (hDebug != 0);  
   
 
@@ -376,18 +385,18 @@ int main()
       
       // Primary
 
-      ntuple1->column("eprimary", initEnergy);
-      ntuple1->column("energyf", energyChange);
-      ntuple1->column("de", dedx);
-      ntuple1->column("dedx", dedxNow);
-      ntuple1->column("pxch", pxChange);
-      ntuple1->column("pych", pyChange);
-      ntuple1->column("pzch", pzChange);
-      ntuple1->column("pch", pChange);  
-      ntuple1->column("thetach", thetaChange);  
+//	ntuple1->column("eprimary", initEnergy);
+//	ntuple1->column("energyf", energyChange);
+//	ntuple1->column("de", dedx);
+//	ntuple1->column("dedx", dedxNow);
+//	ntuple1->column("pxch", pxChange);
+//	ntuple1->column("pych", pyChange);
+//	ntuple1->column("pzch", pzChange);
+//	ntuple1->column("pch", pChange);  
+//	ntuple1->column("thetach", thetaChange);  
       
-      hNSec->accumulate(particleChange->GetNumberOfSecondaries());
-      hDebug->accumulate(particleChange->GetLocalEnergyDeposit());
+      hNSec->fill(particleChange->GetNumberOfSecondaries());
+      hDebug->fill(particleChange->GetLocalEnergyDeposit());
       
       G4int nElectrons = 0;
       G4int nPositrons = 0;
@@ -424,8 +433,8 @@ int main()
 		  <<  pz/MeV  << ") MeV "
 		  <<  G4endl;   
 	  
-	  hEKin->accumulate(eKin);
-	  hP->accumulate(p);
+	  hEKin->fill(eKin);
+	  hP->fill(p);
 	  
 	  G4int partType = 0;
 	  if (particleName == "e-") 
@@ -445,26 +454,26 @@ int main()
 	    }
 	
 	  // Fill the secondaries ntuple
-          ntuple2->column("eprimary",initEnergy);
-	  ntuple2->column("px", px);
-	  ntuple2->column("py", py);
-	  ntuple2->column("pz", pz);
-	  ntuple2->column("p", p);
-	  ntuple2->column("e", e);
-	  ntuple2->column("ekin", eKin);
-	  ntuple2->column("theta", theta);
-	  ntuple2->column("phi", phi);
-	  ntuple2->column("type", partType);
-	  
-	  ntuple2->dumpData(); 
+//	    ntuple2->column("eprimary",initEnergy);
+//	    ntuple2->column("px", px);
+//	    ntuple2->column("py", py);
+//	    ntuple2->column("pz", pz);
+//	    ntuple2->column("p", p);
+//	    ntuple2->column("e", e);
+//	    ntuple2->column("ekin", eKin);
+//	    ntuple2->column("theta", theta);
+//	    ntuple2->column("phi", phi);
+//	    ntuple2->column("type", partType);
+//	    
+//	    ntuple2->dumpData(); 
 	  
 	  delete particleChange->GetSecondary(i);
 	}
 
-      ntuple1->column("nelectrons",nElectrons);
-      ntuple1->column("npositrons",nPositrons);
-      ntuple1->column("nphotons",nPhotons);
-      ntuple1->dumpData(); 
+//	ntuple1->column("nelectrons",nElectrons);
+//	ntuple1->column("npositrons",nPositrons);
+//	ntuple1->column("nphotons",nPhotons);
+//	ntuple1->dumpData(); 
 	          
       particleChange->Clear();
       
@@ -473,7 +482,13 @@ int main()
   G4cout  << "-----------------------------------------------------"  
 	  <<  G4endl;
 
-  hbookManager->write();
+  cerr << "mean nSec" << hNSec->mean() << endl;
+
+  //  hbookManager->write();
+  hbookManager->store("10");
+  hbookManager->store("20");
+  hbookManager->store("30");
+  hbookManager->store("40");
   delete hbookManager;
 
   delete touche;
