@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.38 2005-02-23 11:44:34 allison Exp $
+// $Id: G4VisCommandsScene.cc,v 1.39 2005-03-03 16:36:52 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -158,7 +158,7 @@ void G4VisCommandSceneEdit::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String sceneName;
-  std::istrstream is ((char*)newValue.data());
+  std::istrstream is (newValue);
   is >> sceneName;
 
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
@@ -226,7 +226,7 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String action;
-  std::istrstream is ((char*)newValue.data());
+  std::istrstream is (newValue);
   is >> action;
 
   G4Scene* pScene = fpVisManager->GetCurrentScene();
@@ -302,7 +302,7 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String action;
-  std::istrstream is ((char*)newValue.data());
+  std::istrstream is (newValue);
   is >> action;
 
   G4Scene* pScene = fpVisManager->GetCurrentScene();
@@ -379,7 +379,7 @@ G4String G4VisCommandSceneList::GetCurrentValue (G4UIcommand*) {
 
 void G4VisCommandSceneList::SetNewValue (G4UIcommand*, G4String newValue) {
   G4String name, verbosityString;
-  std::istrstream is ((char*)newValue.data());
+  std::istrstream is (newValue);
   is >> name >> verbosityString;
   G4VisManager::Verbosity verbosity =
     fpVisManager->GetVerbosityValue(verbosityString);
@@ -476,7 +476,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String sceneName, refresh_flush;
-  std::istrstream is ((char*)newValue.data());
+  std::istrstream is (newValue);
   is >> sceneName >> refresh_flush;
   G4bool flush(false);
   if (refresh_flush(0) == 'f') flush = true;
