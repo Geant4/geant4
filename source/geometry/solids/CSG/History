@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-02-10 19:09:33 japost Exp $
+$Id: History,v 1.2 1999-02-10 19:20:39 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Feb   9,  99   David C. Williams      (davidw@scipp.ucsc.edu)
+
+   I've committed new versions of the CSG Polycone and Polyhedra in the
+ geant4 repository, including a new utility class called
+ G4ReduciblePolygon. The new versions fix several subtle bugs which my  
+ "test3" batch geometry testing code uncovered. In addition, the new class
+ G4ReduciblePolygon is used to run strict tests on the validity of input
+ parameters.
+   To fix a bug in Polyhedra, I had to back out some fancy code that
+ allowed it to calculate intersections at a speed that was independent of
+ the number of sides. The new version now runs at a speed proportional to
+ the number of sides, and is thus much slower for polyhedras with many
+ sides. I can fix this, but I thought it would be best to get the bug fixes
+ in as soon as possible.
+
+
 Feb  10,  99   John Apostolakis   
 
   History file created.
