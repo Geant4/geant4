@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisationTest.cc,v 1.1 2000-06-20 21:13:08 pia Exp $
+// $Id: G4eIonisationTest.cc,v 1.2 2000-06-20 21:33:46 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -286,7 +286,6 @@ main()
   ionisationProcess->BuildPhysicsTable(*electron);
 	
   G4Material* apttoMaterial ;
-  G4String MaterialName ;
 
   // --------- Test the DoIt 
 
@@ -407,14 +406,11 @@ main()
 	  Pz   = (finalParticle->GetMomentum()).z();
 	  P    = sqrt(Px*Px+Py*Py+Pz*Pz);
 
-	  if (e > initEnergy)
-	    {
+	  if (eKin > initEnergy)
+	    {	    
 	      G4cout << "WARNING: eFinal > eInit " << G4endl;
-		//	     << e
-		//		     << " > " initEnergy 
-		 
 	    }
-
+	  
 	  particleName = finalParticle->GetDefinition()->GetParticleName();
 	  G4cout  << "==== Final " 
 		  <<  particleName  <<  " "  
