@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoNuclearCrossSection.cc,v 1.6 2002-05-28 13:37:04 mkossov Exp $
+// $Id: G4PhotoNuclearCrossSection.cc,v 1.7 2002-05-29 07:16:39 mkossov Exp $
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -1530,7 +1530,8 @@ G4int G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double
   }
   if(!h)                                // High Energy part is not filled
   {
-    for(G4int k=1; k<nHA; k++) if(a<HA[k]) break;
+    G4int k=0;
+    for(k=1; k<nHA; k++) if(a<HA[k]) break;
     if(k<1) k=1;                        // Extrapolation from the first bin (D/He)
     if(k>=nHA) k=nHA-1;                 // Extrapolation from the last bin (Pu)
     G4int     k1=k-1;
