@@ -55,6 +55,7 @@
 // 27-03-02 Bug fix in scaling of lambda table (V.Ivanchenko)
 // 09-04-02 Update calculation of tables for GenericIons (V.Ivanchenko)
 // 30-04-02 V.Ivanchenko update to new design
+// 04-12-02 Add verbose level definition (VI)
 //
 // -------------------------------------------------------------------
 //
@@ -110,6 +111,7 @@ void G4hIonisationSTD::InitialiseProcess()
 
   mass = 0.0;
   ratio = 0.0;
+  SetVerboseLevel(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

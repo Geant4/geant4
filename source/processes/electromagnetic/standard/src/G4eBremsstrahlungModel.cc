@@ -34,7 +34,8 @@
 //
 // Modifications: 
 //
-// 11-11-02  Fix division by 0
+// 11-11-02  Fix division by 0 (VI)
+// 04-12-02  Change G4DynamicParticle constructor in PostStep (VI)
 //
 // Class Description: 
 //
@@ -618,7 +619,6 @@ G4std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondary(
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double tmax = G4std::min(maxEnergy, kineticEnergy);
   if(tmin >= tmax) return 0;
-  G4ThreeVector momentum = dp->GetMomentum();
 
 //
 // GEANT4 internal units.
@@ -656,6 +656,7 @@ G4std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondary(
 
   // limits of the energy sampling
   G4double totalEnergy = kineticEnergy + electron_mass_c2;
+  G4ThreeVector momentum = dp->GetMomentumDirection();
   G4double xmin     = tmin/kineticEnergy;
   G4double xmax     = tmax/kineticEnergy;
   G4double kappa    = log(xmax)/log(xmin);
@@ -785,9 +786,11 @@ G4std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondary(
   gammaDirection.rotateUz(momentum);
 
   // create G4DynamicParticle object for the Gamma 
-  G4DynamicParticle* g = new G4DynamicParticle(G4Gamma::Gamma(),
-                                               gammaEnergy,
-                                               gammaDirection);
+  G4DynamicParticle* g = new G4DynamicParticle();
+  g->SetDefinition(G4Gamma::Gamma());
+  g->SetKineticEnergy(gammaEnergy);
+  g->SetMomentumDirection(gammaDirection);
+
 
   G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
   vdp->push_back(g);

@@ -33,6 +33,7 @@
 // Creation date: 03.01.2002
 //
 // Modifications: 13.11.2002 Minor fix - use normalised direction (VI)
+//                04.12.2002 Change G4DynamicParticle constructor in PostStepDoIt (VI)
 //
 //
 // Class Description: 
@@ -336,9 +337,12 @@ G4std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondary(
   deltaDirection.rotateUz(momentum);
 
   // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle(theElectron,
-                                                   deltaKinEnergy,
-                                                   deltaDirection);
+  G4DynamicParticle* delta = new G4DynamicParticle();
+  delta->SetDefinition(theElectron);
+  delta->SetKineticEnergy(deltaKinEnergy);
+  delta->SetMomentumDirection(deltaDirection);
+
+
   G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
   vdp->push_back(delta);
 
