@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.67 2003-11-10 17:50:50 trindade Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.68 2004-01-08 17:04:52 silvarod Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -65,7 +65,7 @@
 #include "G4BremsstrahlungCrossSectionHandler.hh"
 #include "G4VBremAngularDistribution.hh"
 #include "G4ModifiedTsai.hh"
-//#include "G4Generator2BS.hh"
+#include "G4Generator2BS.hh"
 #include "G4Generator2BN.hh"
 #include "G4VDataSetAlgorithm.hh"
 #include "G4LogLogInterpolation.hh"
@@ -87,8 +87,7 @@ G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& nam)
   verboseLevel = 0;
   generatorName = "tsai";
   angularDistribution = new G4ModifiedTsai("TsaiGenerator"); // default generator
-  angularDistribution->PrintGeneratorInformation();
-
+//  angularDistribution->PrintGeneratorInformation();
   TsaiAngularDistribution = new G4ModifiedTsai("TsaiGenerator");
 }
 
@@ -115,6 +114,7 @@ G4LowEnergyBremsstrahlung::~G4LowEnergyBremsstrahlung()
   if(energySpectrum) delete energySpectrum;
   if(theMeanFreePath) delete theMeanFreePath;
   delete angularDistribution;
+  delete TsaiAngularDistribution;
   energyBins.clear();
 }
 
@@ -415,12 +415,12 @@ void G4LowEnergyBremsstrahlung::SetAngularGenerator(const G4String& name)
       angularDistribution = new G4Generator2BN("2BNGenerator");
       generatorName = name;
     }
-//  else if (name == "2bs")
-//    {
-//       delete angularDistribution;
-//       angularDistribution = new G4Generator2BS("2BSGenerator");
-//       generatorName = name;
-//    }
+  else if (name == "2bs")
+    {
+       delete angularDistribution;
+       angularDistribution = new G4Generator2BS("2BSGenerator");
+       generatorName = name;
+    }
   else
     {
       G4Exception("G4LowEnergyBremsstrahlung::SetAngularGenerator - generator does not exist");
