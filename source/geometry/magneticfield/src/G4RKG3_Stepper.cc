@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RKG3_Stepper.cc,v 1.2 1999-12-15 14:49:49 gunter Exp $
+// $Id: G4RKG3_Stepper.cc,v 1.3 2000-05-09 11:54:23 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4RKG3_Stepper.hh"
@@ -93,7 +93,7 @@ void G4RKG3_Stepper::StepWithEst( const G4double  tIn[7],
    
 {
 
- G4Exception(" G4ClassicalRK4::StepWithEst ERROR: this Method is no longer used.");
+ G4Exception(" G4RKG3_Stepper::StepWithEst ERROR: this Method is no longer used.");
 
 #if 0  
 //  const G4int nvar = 6 ; 
@@ -180,10 +180,9 @@ void G4RKG3_Stepper::StepNoErr(const G4double tIn[7],
    G4double tTemp[7], yderiv[6] ;
    G4int i ;
 
-   G4Exception(" G4ClassicalRK4::StepNoErr ERROR: this Method should no longer be used.");
-
-                                 
-#if 0
+#ifdef END_CODE_G3STEPPER
+   G4Exception(" G4RKG3_Stepper::StepNoErr ERROR: this Method should no longer be used.");
+#else
    // GetEquationOfMotion()->EvaluateRhsReturnB(tIn,dydx,B1) ;
    
    for(i=0;i<3;i++)
