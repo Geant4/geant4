@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.23 2002-01-16 09:00:27 gcosmo Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.24 2002-01-22 22:45:38 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,6 +43,11 @@
 #include "G4FConicalSurface.hh"
 #include "G4CircularCurve.hh"
 #include "G4FPlane.hh"
+
+typedef enum {
+  EInverse = 0,
+  ENormal = 1
+} ESurfaceSense;
 
 G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
 				   G4double start_angle,
@@ -105,12 +110,12 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
         //
         // 1.     2.     3.     4.    
         // --+      +--  --+      +--   
-        // xx|      |xx  xx|      |xx   
+        // xx|->  <-|xx  xx|      |xx   
         // xx+--  --+xx  --+      +--   
         // xxxxx  xxxxx    |      |     
         // xxxxx  xxxxx    +--  --+   
         // xx+--  --+xx    |xx  xx|   
-        // xx|      |xx    +--  --+   
+        // xx|->  <-|xx    +--  --+   
         // --+      +--  
         // -------------------------- Z axis
         //
@@ -119,15 +124,16 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
         //
         // 5.     6.     7.     8.
         // --+      +--  --+      +--
-        // xx|      |xx  xx|      |xx
+        // xx|->  <-|xx  xx|->  <-|xx
         // --+--  --+--  xx+--  --+xx
-        //   |xx  xx|    xxxxx  xxxxx
+        // <-|xx  xx|->  xxxxx  xxxxx
         //   +--  --+    --+xx  xx+--
-        //                 |xx  xx|  
+        //               <-|xx  xx|->
         //                 +--  --+  
         // -------------------------- Z axis
         //
         // NOTE: The pictures shows only one half of polycone!
+        //       The arrows show the expected surface normal direction.
         //       The configuration No. 3 and 4 are not valid solids!
         
         // Eliminate the invalid cases 3 and 4.
@@ -142,8 +148,46 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
           G4Exception( msgbuf );
         }
         
-        SurfaceVec[b++]  = ComputePlanarSurface( RMAX[a], RMAX[a+1], LocalOrigin, PlaneAxis, PlaneDir );
-        SurfaceVec[b++]  = ComputePlanarSurface( RMIN[a], RMIN[a+1], LocalOrigin, PlaneAxis, PlaneDir );
+        ESurfaceSense UpSurfSense, LowSurfSense;
+        
+        // We need to clasify all the cases in order to figure out the planar surface sense
+        if( RMAX[a] > RMAX[a+1] ) {
+          // Cases 1, 5, 7
+          if( RMIN[a] < RMIN[a+1] ) {
+            // Case 1
+            UpSurfSense  = ENormal;
+            LowSurfSense = ENormal;
+          } else if( RMAX[a+1] != RMIN[a]) {
+            // Case 7
+            UpSurfSense  = ENormal;
+            LowSurfSense = EInverse;
+          } else {
+            // Case 5
+            UpSurfSense  = ENormal;
+            LowSurfSense = EInverse;
+          }
+        } else {
+          // Cases 2, 6, 8
+          if( RMIN[a] > RMIN[a+1] ) {
+            // Case 2
+            UpSurfSense  = EInverse;
+            LowSurfSense = EInverse;
+          } else if( RMIN[a+1] != RMAX[a] ) {
+            // Case 8
+            UpSurfSense  = EInverse;
+            LowSurfSense = ENormal;
+          } else {
+            // Case 6
+            UpSurfSense  = EInverse;
+            LowSurfSense = ENormal;
+          }
+        }
+            
+        SurfaceVec[b]  = ComputePlanarSurface( RMAX[a], RMAX[a+1], LocalOrigin, PlaneAxis, PlaneDir, UpSurfSense );
+        SurfaceVec[b++]->SetSameSense( UpSurfSense );
+        
+        SurfaceVec[b]  = ComputePlanarSurface( RMIN[a], RMIN[a+1], LocalOrigin, PlaneAxis, PlaneDir, LowSurfSense );
+        SurfaceVec[b++]->SetSameSense( LowSurfSense );
       }
       else
       {
@@ -153,24 +197,55 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
         //
         //     RMAX          RMIN
         //    change        change
+        //
+        // 1      2      3      4
         // --+      +--  -----  -----
-        // 00|      |00  00000  00000
+        // 00|->  <-|00  00000  00000
         // 00+--  --+00  --+00  00+--
-        // 00000  00000    |00  00|
+        // 00000  00000  <-|00  00|->
         //                 +--  --+
         // --------------------------- Z axis
         //
         // NOTE: The picture shows only one half of polycone!
         
         G4double R1, R2;
+        ESurfaceSense SurfSense;
         
         // test where is the plane surface
+//         if( RMAX[a] != RMAX[a+1] ) {
+// 	        R1 = RMAX[a];
+//           R2 = RMAX[a+1];
+//         } else if(RMIN[a] != RMIN[a+1]) {
+// 	        R1 = RMIN[a];
+//           R2 = RMIN[a+1];
+//         } else   {
+//           G4cerr << "Error in construction of G4BREPSolidPCone. \n"
+//                  << "Exactly the same z, rmin and rmax given for \n"
+//                  << "consecutive indices, " << a << " and " << a+1 << G4endl;
+//           continue; 
+//         }
         if( RMAX[a] != RMAX[a+1] ) {
-	        R1 = RMAX[a];
+	        // Cases 1, 2
+          R1 = RMAX[a];
           R2 = RMAX[a+1];
+          if( R1 > R2 ) {
+            // Case 1
+            SurfSense = ENormal;
+          } else {
+            // Case 2
+            SurfSense = EInverse;
+          }
         } else if(RMIN[a] != RMIN[a+1]) {
+	        // Cases 1, 2
 	        R1 = RMIN[a];
           R2 = RMIN[a+1];
+          if( R1 > R2 ) {
+            // Case 3
+            SurfSense = EInverse;
+          } else {
+            // Case 4
+            SurfSense = ENormal;
+          }
         } else   {
           G4cerr << "Error in construction of G4BREPSolidPCone. \n"
                  << "Exactly the same z, rmin and rmax given for \n"
@@ -178,7 +253,8 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
           continue; 
         }
         
-        SurfaceVec[b++] = ComputePlanarSurface( R1, R2, LocalOrigin, PlaneAxis, PlaneDir );
+        SurfaceVec[b] = ComputePlanarSurface( R1, R2, LocalOrigin, PlaneAxis, PlaneDir, SurfSense );
+        SurfaceVec[b++]->SetSameSense( SurfSense );
         
         //      SurfaceVec[b]->SetSameSense(1);
         nb_of_surfaces--;
@@ -389,7 +465,8 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
   // outside or on the surface of the solid
 
   //  G4Vector3D v(1, 0, 0.01);
-  G4Vector3D v(1, 0, 0);
+  //G4Vector3D v(1, 0, 0);
+  G4Vector3D v(0, 0, 1);
   G4Vector3D Pttmp(Pt);
   G4Vector3D Vtmp(v);
   G4Ray r(Pttmp, Vtmp);
@@ -415,30 +492,39 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
 
   for(G4int a=0; a < nb_of_surfaces; a++)
   {
-    if(SurfaceVec[a]->IsActive())
-    {
-      if(fabs(SurfaceVec[a]->HowNear(Pt)) < kCarTolerance)
-	return kSurface;
+    G4Surface* surface = SurfaceVec[a];
+    
+    if( surface->IsActive() ) {
+      G4double hownear = surface->HowNear(Pt);
+      
+      if( fabs( hownear ) < kCarTolerance )
+        return kSurface;
 
-      if ( SurfaceVec[a]->Intersect(r) ) {
-	isIntersected = true;
-	if ( fabs(SurfaceVec[a]->GetDistance()) < dist ) {
-	  dist = SurfaceVec[a]->GetDistance();
-	  WhichSurface = a;
-	}
+      if( surface->Intersect(r) ) {
+        isIntersected = true;
+        hownear = surface->GetDistance();
+        
+        if ( fabs( hownear ) < dist ) {
+	        dist         = hownear;
+	        WhichSurface = a;
+        }
       }
     }
   }
-  if ( !isIntersected ) return kOutside; 
+  
+  if ( !isIntersected )
+    return kOutside; 
 
   // Find the point of intersection on the surface and the normal
   // !!!! be carefull the distance is sqrt(dist) !!!!
 
-  G4Vector3D IntersectionPoint = Pttmp + sqrt(dist)*Vtmp;
-  G4Vector3D Normal = SurfaceVec[WhichSurface]->SurfaceNormal(IntersectionPoint);
-  if ( Normal*Vtmp > 0 ) return kInside;
-  return kOutside;
-
+  dist = sqrt( dist );
+  G4Vector3D IntersectionPoint = Pttmp + dist*Vtmp;
+  G4Vector3D Normal = SurfaceVec[WhichSurface]->SurfaceNormal( IntersectionPoint );
+  
+  G4double dot = Normal*Vtmp;
+  
+  return( (dot > 0) ? kInside : kOutside );
 }
 
 G4ThreeVector G4BREPSolidPCone::SurfaceNormal(const G4ThreeVector& Pt) const
@@ -619,7 +705,7 @@ G4double G4BREPSolidPCone::DistanceToOut(register const G4ThreeVector& Pt,
     {
       G4Vector3D Norm = SurfaceVec[a]->SurfaceNormal(Pttmp);
       if( (Norm * Vtmp) > 0 && fabs(SurfaceVec[a]->HowNear(Pt)) < halfTolerance )
-	return 0;
+        return 0;
       // test if the ray intersect the surface
       if( (SurfaceVec[a]->Intersect(r)) )
       {
@@ -697,8 +783,10 @@ void G4BREPSolidPCone::Reset() const
 }
 
 G4Surface* G4BREPSolidPCone::ComputePlanarSurface( G4double r1, G4double r2,
-                                                         G4ThreeVector origin,
-                                                         G4ThreeVector planeAxis, G4ThreeVector planeDirection )
+                                                         G4ThreeVector& origin,
+                                                         G4ThreeVector& planeAxis,
+                                                         G4ThreeVector& planeDirection,
+                                                         G4int surfSense )
 {
   // The planar surface to return
   G4Surface* planarFace = 0;
@@ -716,7 +804,7 @@ G4Surface* G4BREPSolidPCone::ComputePlanarSurface( G4double r1, G4double r2,
 	  tmp1->Init(G4Axis2Placement3D( planeDirection, planeAxis, origin), r1);
 	  tmp1->SetBounds(ArcStart1, ArcStart1);
     
-	  if( r1 > r2 )
+	  if( surfSense )
 	    tmp1->SetSameSense(1);
 	  else
 	    tmp1->SetSameSense(0);
@@ -730,7 +818,7 @@ G4Surface* G4BREPSolidPCone::ComputePlanarSurface( G4double r1, G4double r2,
 	  tmp2->Init(G4Axis2Placement3D( planeDirection, planeAxis, origin), r2);
 	  tmp2->SetBounds(ArcStart2, ArcStart2);
     
-	  if( r1 > r2 )
+	  if( surfSense )
 	    tmp2->SetSameSense(0);
 	  else
 	    tmp2->SetSameSense(1);
