@@ -1,5 +1,5 @@
 
-$Id: History,v 1.28 2002-02-07 13:15:47 gcosmo Exp $
+$Id: History,v 1.29 2002-02-15 16:17:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Feb 15  2002  Vladimir Grichine    geom-bool-V04-00-02
+  - G4ReflectedSolid[.hh.cc]:
+    o Defined new methods Set/GetTransform3D() and Set/GetDirectTransform3D()
+      for defining/accessing the real reflected transformation
+    o Moved methods for G4AffineTransform to protected.
 
  Feb 07  2002  Gabriele Cosmo       geom-bool-V04-00-01
   - G4ReflectionFactory.cc: fixed bug causing repetition of daughter volumes.
