@@ -1,0 +1,11 @@
+This tag is now available. A node tree is set to to defer logical volume
+creation and placement until call list file reading is completed. They
+are instantiated in G3toG4BuildTree. The top-level volume is no longer
+required to be the first logical volume in the call list file. The
+actual methods to handle deferred /divided volumes have not yet been
+implemented.
+
+The code compiles without any error messages on Sun and HP.  The only RW
+classes in use are RWCStrring, RWTPtrHashDictionary and
+RWTPtrOrderedVector. clGeometry, the test example with visualization,
+has been successfully run on both platforms.
