@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cerenkov.hh,v 1.1 1999-01-07 16:11:28 gunter Exp $
+// $Id: G4Cerenkov.hh,v 1.2 1999-10-30 00:39:48 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,7 +18,8 @@
 // Version:     2.0
 // Created:     1996-02-21
 // Author:      Juliet Armstrong
-// Updated:     1997-04-09 by Peter Gumplinger
+// Updated:     1999-10-29 add method and class decriptors
+//              1997-04-09 by Peter Gumplinger
 //              > G4MaterialPropertiesTable; new physics/tracking scheme
 // mail:        gum@triumf.ca
 //
@@ -45,6 +46,11 @@
 #include "G4MaterialPropertiesTable.hh"
 #include "G4PhysicsOrderedFreeVector.hh"
 
+// Class Description:
+// Continuous Process -- Generation of Cerenkov Photons.
+// Class inherits publicly from G4VContinuousProcess.
+// Class Description - End:
+
 /////////////////////
 // Class Definition
 /////////////////////
@@ -60,7 +66,7 @@ private:
 
 	// G4Cerenkov& operator=(const G4Cerenkov &right);
 
-public:
+public: // Without description
 
 	////////////////////////////////
 	// Constructors and Destructor
@@ -76,24 +82,40 @@ public:
         // Methods
         ////////////
 
+public: // With description
+
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
+        // Returns true -> 'is applicable', for all charged particles.
 
 	G4double GetContinuousStepLimit(const G4Track& aTrack,
 					G4double  ,
 					G4double  ,
                                         G4double& );
+        // Returns the continuous step limit defined by the Cerenkov
+        // process.
 
 	G4VParticleChange* AlongStepDoIt(const G4Track& aTrack, 
 					const G4Step&  aStep);
+        // This is the method implementing the Cerenkov process.
 
 	void SetTrackSecondariesFirst(const G4bool state);
+        // If set, the primary particle tracking is interrupted and any 
+        // produced Cerenkov photons are tracked next. When all have 
+        // been tracked, the tracking of the primary resumes. 
 	
-	void SetMaxNumPhotonsPerStep(const G4int NumPhotons); 
+	void SetMaxNumPhotonsPerStep(const G4int NumPhotons);
+        // Set the maximum number of Cerenkov photons allowed to be 
+        // generated during a tracking step. This is an average ONLY; 
+        // the actual number will vary around this average. If invoked, 
+        // the maximum photon stack will roughly be of the size set.
+        // If not called, the step is not limited by the number of 
+        // photons generated.
 
         G4PhysicsTable* GetPhysicsTable() const;
-        //  Returns the address of the physics table.
+        // Returns the address of the physics table.
 
         void DumpPhysicsTable() const;
+        // Prints the physics table.
 
 private:
 

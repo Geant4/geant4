@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpRayleigh.hh,v 1.1 1999-01-07 16:14:01 gunter Exp $
+// $Id: G4OpRayleigh.hh,v 1.2 1999-10-30 00:38:17 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,7 +18,8 @@
 // Version:     1.0
 // Created:     1996-05-31
 // Author:      Juliet Armstrong
-// Updated:     1997-04-09 by Peter Gumplinger
+// Updated:     1999-10-29 add method and class decriptors
+//              1997-04-09 by Peter Gumplinger
 //              > new physics/tracking scheme
 // mail:        gum@triumf.ca
 //
@@ -44,6 +45,11 @@
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsOrderedFreeVector.hh"
 
+// Class Description:
+// Discrete Process -- Rayleigh scattering of optical photons.
+// Class inherits publicly from G4VDiscreteProcess.
+// Class Description - End:
+
 /////////////////////
 // Class Definition
 /////////////////////
@@ -59,7 +65,7 @@ private:
 
         // G4OpRayleigh& operator=(const G4OpRayleigh &right);
 
-public:
+public: // Without description
 
         ////////////////////////////////
         // Constructors and Destructor
@@ -75,19 +81,26 @@ public:
         // Methods
         ////////////
 
+public: // With description
+
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
+        // Returns true -> 'is applicable' only for an optical photon.
 
         G4double GetMeanFreePath(const G4Track& aTrack,
 				 G4double ,
                                  G4ForceCondition* );
+        // Returns the mean free path for Rayleigh scattering in water.
+        // --- Not yet implemented for other materials! ---
 
         G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
                                        const G4Step&  aStep);
+        // This is the method implementing Rayleigh scattering.
 
         G4PhysicsTable* GetPhysicsTable() const;
-        //  Returns the address of the physics table.
+        // Returns the address of the physics table.
 
         void DumpPhysicsTable() const;
+        // Prints the physics table.
 
 private:
 

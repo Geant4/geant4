@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpAbsorption.hh,v 1.2 1999-01-08 11:23:57 gunter Exp $
+// $Id: G4OpAbsorption.hh,v 1.3 1999-10-30 00:37:24 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -13,11 +13,12 @@
 ////////////////////////////////////////////////////////////////////////
 //
 // File:        G4OpAbsorption.hh
-// Description: Discrete Process -- Absorption of Optical Photons
+// Description: Discrete Process -- Bulk absorption of Optical Photons
 // Version:     1.0
 // Created:     1996-05-21
 // Author:      Juliet Armstrong
-// Updated:     1997-04-09 by Peter Gumplinger
+// Updated:     1999-10-29 add method and class decriptors
+//              1997-04-09 by Peter Gumplinger
 //              > new physics/tracking scheme
 //              1998-08-25 by Stefano Magni
 //              > Change process to use G4MaterialPropertiesTables
@@ -42,6 +43,11 @@
 #include "G4Material.hh"
 #include "G4OpticalPhoton.hh"
 
+// Class Description:
+// Discrete Process -- Bulk absorption of Optical Photons.
+// Class inherits publicly from G4VDiscreteProcess
+// Class Description - End:
+
 /////////////////////
 // Class Definition
 /////////////////////
@@ -57,7 +63,7 @@ private:
 
         // G4OpAbsorption& operator=(const G4OpAbsorption &right);
 
-public:
+public: // Without description
 
         ////////////////////////////////
         // Constructors and Destructor
@@ -73,14 +79,21 @@ public:
 	// Methods
         ////////////
 
+public: // With description
+
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
+        // Returns true -> 'is applicable' only for an optical photon.
 
 	G4double GetMeanFreePath(const G4Track& aTrack,
 				 G4double ,
 				 G4ForceCondition* );
+        // Returns the absorption length for bulk absorption of optical
+        // photons in media with a specified attenuation length. 
 
 	G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
  				        const G4Step&  aStep);
+        // This is the method implementing bulk absorption of optical 
+        // photons.
 
 };
 

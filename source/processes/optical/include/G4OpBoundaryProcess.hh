@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.2 1999-10-16 00:46:42 gum Exp $
+// $Id: G4OpBoundaryProcess.hh,v 1.3 1999-10-30 00:38:35 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,7 +18,8 @@
 //                                  optical interfaces
 // Version:     1.1
 // Created:     1997-06-18
-// Modified:    1999-10-10 - Fill NewMomentum/NewPolarization in 
+// Modified:    1999-10-29 add method and class decriptors
+//              1999-10-10 - Fill NewMomentum/NewPolarization in 
 //                           DoAbsorption. These members need to be
 //                           filled since DoIt calls 
 //                           aParticleChange.SetMomentumChange etc.
@@ -52,6 +53,11 @@
 #include "G4OpticalPhoton.hh"
 #include "G4TransportationManager.hh"
 
+// Class Description:
+// Discrete Process -- reflection/refraction at optical interfaces.
+// Class inherits publicly from G4VDiscreteProcess.                  
+// Class Description - End:             
+
 /////////////////////
 // Class Definition
 /////////////////////
@@ -76,7 +82,7 @@ private:
 
         // G4OpBoundaryProcess(const G4OpBoundaryProcess &right);
 
-public:
+public: // Without description
 
         ////////////////////////////////
         // Constructors and Destructor
@@ -90,18 +96,29 @@ public:
 	// Methods
         ////////////
 
+public: // With description
+
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
+        // Returns true -> 'is applicable' only for an optical photon.
 
 	G4double GetMeanFreePath(const G4Track& ,
 				 G4double ,
 				 G4ForceCondition* condition);
+        // Returns infinity; i. e. the process does not limit the step,
+        // but sets the 'Forced' condition for the DoIt to be invoked at
+        // every step. However, only at a boundary will any action be
+        // taken. 
 
 	G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
 				       const G4Step&  aStep);
+        // This is the method implementing boundary processes.
 
 	G4OpticalSurfaceModel GetModel() const;
+        // Returns the optical surface mode.
+
 	void           SetModel(G4OpticalSurfaceModel model);
-	// set/get the optical surface model to be followed (glisur || unified)
+	// Set the optical surface model to be followed 
+        // (glisur || unified). 
 
 private:
 

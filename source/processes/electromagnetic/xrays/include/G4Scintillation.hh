@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scintillation.hh,v 1.1 1999-01-07 16:11:28 gunter Exp $
+// $Id: G4Scintillation.hh,v 1.2 1999-10-30 00:40:01 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,7 +18,7 @@
 // Version:     1.0
 // Created:     1998-11-07
 // Author:      Peter Gumplinger
-// Updated:     
+// Updated:     1999-10-29 add method and class decriptors
 //
 // mail:        gum@triumf.ca
 //
@@ -45,6 +45,11 @@
 #include "G4MaterialPropertiesTable.hh"
 #include "G4PhysicsOrderedFreeVector.hh"
 
+// Class Description:
+// Discrete Process - Generation of Scintillation Photons.
+// Class inherits publicly from G4VDiscreteProcess.
+// Class Description - End:
+
 /////////////////////
 // Class Definition
 /////////////////////
@@ -60,7 +65,7 @@ private:
 
 	// G4Scintillation& operator=(const G4Scintillation &right);
 
-public:
+public: // Without description
 
 	////////////////////////////////
 	// Constructors and Destructor
@@ -76,31 +81,54 @@ public:
         // Methods
         ////////////
 
+public: // With description
+
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
+        // Returns true -> 'is applicable', for any particle type.
 
 	G4double GetMeanFreePath(const G4Track& aTrack,
 				       G4double ,
                                        G4ForceCondition* );
+        // Returns infinity; i. e. the process does not limit the step,
+        // but sets the 'Forced' condition for the DoIt to be invoked at 
+        // every step.
 
 	G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
 			                const G4Step&  aStep);
+        // This is the method implementing the scintillation process.
 
 	void SetTrackSecondariesFirst(const G4bool state);
+        // If set, the primary particle tracking is interrupted and any
+        // produced scintillation photons are tracked next. When all 
+        // have been tracked, the tracking of the primary resumes.
+
         G4bool GetTrackSecondariesFirst() const;
+        // Returns the boolean flag for tracking secondaries first.
 	
         void SetScintillationYield(const G4double yield);
+        // Called to set the scintillation photon yield per unit of
+        // energy deposition. IMPORTANT: 'yield' has units of 1/energy
+        // and is not a simple number!
         G4double GetScintillationYield() const;
+        // Returns the photon yield per energy unit.
 
         void SetResolutionScale(const G4double scale);
+        // Called to set sigma of the Gaussian photon yield distribution.
         G4double GetResolutionScale() const;
+        // Returns the sigma of the Gaussian photon yield distribution.
 
         void SetScintillationTime(const G4double time);
+        // Called to set the exponential time constant for the delayed
+        // scintillation photon emission.
         G4double GetScintillationTime() const;
+        // Returns the exponential time constant for the delayed 
+        // scintillation photon emission.
 
         G4PhysicsTable* GetPhysicsTable() const;
-        //  Returns the address of the physics table.
+        // Returns the address of the physics table.
 
         void DumpPhysicsTable() const;
+        // Prints the physics table.
 
 private:
 
