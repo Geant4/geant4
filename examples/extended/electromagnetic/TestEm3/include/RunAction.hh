@@ -21,8 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.10 2004-04-16 16:19:05 vnivanch Exp $
+// $Id: RunAction.hh,v 1.11 2004-04-28 16:58:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
+class PrimaryGeneratorAction;
 class RunActionMessenger;
 
 #ifdef USE_AIDA
@@ -60,7 +62,7 @@ class RunAction : public G4UserRunAction
 {
   public:
 
-    RunAction(DetectorConstruction*);
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
    ~RunAction();
 
     void BeginOfRunAction(const G4Run*);
@@ -89,8 +91,9 @@ class RunAction : public G4UserRunAction
     G4double sumLAbs [MaxAbsor], sum2LAbs [MaxAbsor];
     G4double sumEleav[MaxAbsor], sum2Eleav[MaxAbsor];           
 
-    DetectorConstruction* Detector;    
-    RunActionMessenger*   runMessenger;
+    DetectorConstruction*   Detector;
+    PrimaryGeneratorAction* Primary;    
+    RunActionMessenger*     runMessenger;
             
     G4String fileName;
     G4String hid  [MaxAbsor],  htitle[MaxAbsor];

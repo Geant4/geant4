@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.4 2004-04-16 16:19:05 vnivanch Exp $
+// $Id: PhysListEmStandard.cc,v 1.5 2004-04-28 16:58:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +36,6 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4MultipleScattering.hh"
-#include "G4MultipleScattering52.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -81,14 +80,12 @@ void PhysListEmStandard::ConstructProcess()
     } else if (particleName == "e-") {
       //electron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      //      pmanager->AddProcess(new G4MultipleScattering52, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
 	    
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      //   pmanager->AddProcess(new G4MultipleScattering52, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm3.cc,v 1.10 2003-11-28 12:30:00 vnivanch Exp $
+// $Id: TestEm3.cc,v 1.11 2004-04-28 16:58:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,7 +63,8 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList);
   //
-  runManager->SetUserAction(new PrimaryGeneratorAction(detector));
+  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
+  runManager->SetUserAction(primary);
     
 #ifdef G4VIS_USE
   // visualization manager
@@ -72,7 +73,7 @@ int main(int argc,char** argv) {
 #endif
     
   // set user action classes
-  RunAction*      runAct = new RunAction(detector);
+  RunAction*      runAct = new RunAction(detector,primary);
   EventAction*    evtAct = new EventAction(detector,runAct);
   SteppingAction* stpAct = new SteppingAction(detector,evtAct);
   

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.8 2004-04-16 16:19:05 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.9 2004-04-28 16:58:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,7 +66,6 @@ DetectorConstruction::DetectorConstruction()
   AbsorThickness[1] = 5.7*mm;
   NbOfLayers        = 50;
   CalorSizeYZ       = 40.*cm;
-  beamEnergy        = 1.0*GeV;
   ComputeCalorParameters();
   
   // materials

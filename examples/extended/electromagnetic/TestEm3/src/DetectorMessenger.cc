@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.cc,v 1.2 2004-04-16 16:19:05 vnivanch Exp $
+// $Id: DetectorMessenger.cc,v 1.3 2004-04-28 16:58:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -113,14 +113,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   MaxStepCmd->SetRange("Size>0.");
   MaxStepCmd->SetUnitCategory("Length");
   MaxStepCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
-
-  beamCmd = new G4UIcmdWithADoubleAndUnit("/testem/beamEnergy",this);
-  beamCmd->SetGuidance("Set beam energy");
-  beamCmd->SetParameterName("Beam",false);
-  beamCmd->SetRange("Beam>0.");
-  beamCmd->SetUnitCategory("Energy");
-  beamCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -135,7 +127,6 @@ DetectorMessenger::~DetectorMessenger()
   delete UpdateCmd;
   delete MaxStepCmd;
   delete testemDir;
-  delete beamCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -172,12 +163,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    
   if( command == MaxStepCmd )
    { Detector->SetMaxStepSize(MaxStepCmd->GetNewDoubleValue(newValue));}   
-
-  if (command == beamCmd)
-   {
-     G4double e = beamCmd->GetNewDoubleValue(newValue);
-     Detector->SetBeamEnergy(e);
-   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
