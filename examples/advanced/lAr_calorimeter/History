@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.1 2002-09-30 13:07:56 pia Exp $
+$Id: History,v 1.2 2002-12-06 18:32:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,5 +9,9 @@ $Id: History,v 1.1 2002-09-30 13:07:56 pia Exp $
                       Example History file
                       ---------------------
 
-30.09.2002 - MGP, Created directory
+06.12.2002 - G.Cosmo (lAr_calorimeter-V04-01-03)
+- Migrated messenger to new G4ApplicationState.
+
+30.09.2002 - MGP
+- Created directory
              
