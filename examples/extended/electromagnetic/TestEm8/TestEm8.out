@@ -118,7 +118,7 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 8.377
 49	fGamma = 9.283e+04	sumE = 8.504
 
-total time for build X-ray TR tables = 25.32 s
+total time for build X-ray TR tables = 23.54 s
 Em8PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
@@ -182,7 +182,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=40.41 s 
+total time(SetCuts)=41.1 s 
 #
 # Macro file 'run11.mac' for the initialization phase of "TestEm8.cc"
 #
@@ -220,21 +220,21 @@ total time(SetCuts)=40.41 s
 /run/initialize
 /run/particle/dumpCutValues
 ============= The cut Energy ==============================
-                            gamma              e-             mu-          proton         neutron    
-Cut in range                  1 mm            1 mm            1 mm            1 mm             
+                            gamma              e-    
+Cut in range                  1 mm            1 mm 
 Cut in energy
-          Aluminium        6.89 keV         597 keV        5.02 MeV        13.1 MeV            
-              Mylar        3.48 keV         541 keV        4.78 MeV        12.6 MeV            
-      Polypropelene        2.75 keV         502 keV        4.55 MeV        12.1 MeV            
-                 Kr         990 eV         1.07 keV        70.9 keV        83.2 keV            
-              Argon         990 eV          990 eV         50.9 keV        57.5 keV            
-                 N2         990 eV          990 eV         47.8 keV        81.2 keV            
-                 O2         990 eV          990 eV         52.1 keV        89.6 keV            
-                Air         990 eV          990 eV           49 keV        83.2 keV            
-              Xenon         990 eV         1.95 keV        85.3 keV         104 keV            
-                CO2         990 eV          990 eV         75.4 keV         156 keV            
-            Xe20CO2         990 eV         1.67 keV        83.2 keV         117 keV            
-            Kr20CO2         990 eV         1.09 keV        75.4 keV         109 keV            
+          Aluminium        6.89 keV         597 keV
+              Mylar        3.48 keV         541 keV
+      Polypropelene        2.75 keV         502 keV
+                 Kr         990 eV         1.07 keV
+              Argon         990 eV          990 eV 
+                 N2         990 eV          990 eV 
+                 O2         990 eV          990 eV 
+                Air         990 eV          990 eV 
+              Xenon         990 eV         1.95 keV
+                CO2         990 eV          990 eV 
+            Xe20CO2         990 eV         1.67 keV
+            Kr20CO2         990 eV         1.09 keV
 ===================================================
 #
 /gun/particle e-
@@ -259,28 +259,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=478.1s Real=489.82s Sys=2.61s
+  User=499.2s Real=528.93s Sys=2.64s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=43.0916 +- 0.170046  mm  
+    mean charged track length   in absorber=43.6288 +- 0.226983  mm  
 
-            mean energy deposit in absorber=0.105531 +- 0.00116314  MeV 
+            mean energy deposit in absorber=0.105986 +- 0.00116297  MeV 
 
- mean number of steps in absorber (charged) =512.368 +- 3.53047      
- mean number of steps in absorber (neutral) =5.016 +- 0.0725379      
+ mean number of steps in absorber (charged) =523.456 +- 3.87851      
+ mean number of steps in absorber (neutral) =5.124 +- 0.0694451      
 
-   mean number of charged secondaries = 1.31 +- 0.0370392
+   mean number of charged secondaries = 1.402 +- 0.0366933
 
-   mean number of neutral secondaries = 0.022 +- 0.00463853
+   mean number of neutral secondaries = 0.017 +- 0.00408791
 
-   mean number of e-s =1.31  and e+s =0
+   mean number of e-s =1.402  and e+s =0
 
-(number) transmission coeff=0.099  reflection coeff=0
+(number) transmission coeff=0.109  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1249000760, 2104541838
+ Current couple of seeds = 1680269066, 2086392423
 ----------------------------------------
 #
 #
