@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.9 2003-06-16 16:52:07 gunter Exp $
+// $Id: G4Region.cc,v 1.10 2003-10-21 20:23:27 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4Region.hh"
 #include "G4VPVParameterisation.hh"
+#include "G4VUserRegionInformation.hh"
 
 // *******************************************************************
 // Constructor:
@@ -39,7 +40,7 @@
 // *******************************************************************
 //
 G4Region::G4Region(const G4String& pName)
-  : fName(pName), fRegionMod(true), fCut(0)
+  : fName(pName), fRegionMod(true), fCut(0), fUserInfo(0)
 {
   G4RegionStore* rStore = G4RegionStore::GetInstance();
   if (rStore->GetRegion(pName,false))
@@ -63,6 +64,7 @@ G4Region::G4Region(const G4String& pName)
 G4Region::~G4Region()
 {
   G4RegionStore::GetInstance()->DeRegister(this);
+  if(fUserInfo) delete fUserInfo;
 }
 
 // *******************************************************************

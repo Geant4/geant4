@@ -1,4 +1,4 @@
-$Id: History,v 1.61 2003-10-01 14:51:38 gcosmo Exp $
+$Id: History,v 1.62 2003-10-21 20:25:26 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 21, 2003  M.Asai                       geommng-V05-02-01
+- Introducing G4VUserRegionInformation class.
 
 Sep 30, 2003  G. Cosmo                     geommng-V05-02-00
 - Logical reorganisation and restructure of modules.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.icc,v 1.4 2003-06-16 16:51:55 gunter Exp $
+// $Id: G4Region.icc,v 1.5 2003-10-21 20:22:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -144,3 +144,25 @@ size_t G4Region::GetNumberOfRootVolumes() const
 {
   return fRootVolumes.size();
 }
+
+// ********************************************************************
+// SetUserInformation
+// ********************************************************************
+//
+inline
+void G4Region::SetUserInformation(G4VUserRegionInformation* ui)
+{
+  fUserInfo = ui;
+}
+
+// ********************************************************************
+// GetUserInformation
+// ********************************************************************
+//
+inline
+G4VUserRegionInformation* G4Region::GetUserInformation() const
+{
+  return fUserInfo;
+}
+
+

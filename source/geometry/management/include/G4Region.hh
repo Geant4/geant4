@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.5 2003-06-16 16:51:54 gunter Exp $
+// $Id: G4Region.hh,v 1.6 2003-10-21 20:22:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Region
@@ -45,6 +45,7 @@
 class G4ProductionCuts;
 class G4LogicalVolume;
 class G4Material;
+class G4VUserRegionInformation;
 
 #include <vector>
 
@@ -103,6 +104,10 @@ class G4Region
       // Scans recursively the 'lv' logical volume tree, retrieves
       // and places all materials in the list if becoming a region.
 
+    void SetUserInformation(G4VUserRegionInformation* ui);
+    G4VUserRegionInformation* GetUserInformation() const;
+      // Set and Get methods for user information
+
   private:
 
     G4Region(const G4Region&);
@@ -118,6 +123,8 @@ class G4Region
 
     G4bool fRegionMod;
     G4ProductionCuts* fCut;
+
+    G4VUserRegionInformation* fUserInfo;
 };
 
 #include "G4Region.icc"
