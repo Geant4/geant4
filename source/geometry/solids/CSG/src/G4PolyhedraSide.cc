@@ -42,20 +42,14 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
 	
 	G4double phiTotal;
 	
+	//
+	// Set phi to our convention
+	//
+	startPhi = thePhiStart;
+	while (startPhi < 0.0) startPhi += 2.0*M_PI;
+	
 	phiIsOpen = thePhiIsOpen;
-	if (phiIsOpen) {
-		phiTotal = thePhiTotal;
-		startPhi = thePhiStart;
-
-		//
-		// Set phi values to our conventions
-		//
-		while (startPhi < 0.0) startPhi += 2.0*M_PI;
-	}
-	else {
-		phiTotal = 2*M_PI;
-		startPhi = 0;
-	}
+	phiTotal = (phiIsOpen) ? thePhiTotal : 2*M_PI;
 	
 	allBehind = isAllBehind;
 		
