@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeEnergyLoss.hh,v 1.2 2000-05-23 14:39:26 urban Exp $
+// $Id: G4VeEnergyLoss.hh,v 1.3 2000-06-07 17:00:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -70,7 +70,7 @@ class G4VeEnergyLoss : public G4VEnergyLoss
  
     G4VeEnergyLoss(const G4String& );
 
-   ~G4VeEnergyLoss();
+    virtual ~G4VeEnergyLoss();
 
   public: // With description
 
