@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.4 2003-12-11 11:05:15 sadilov Exp $
+# $Id: binmake.gmk,v 1.5 2003-12-12 10:07:20 sadilov Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -131,11 +131,15 @@ ifndef INCFLAGS
  endif
 endif
 
+CPPFLAGS_FINAL := $(CPPFLAGS)
+
 CPPFLAGS += $(INCFLAGS)
 LDFLAGS += -L$(G4LIBDIR)
 
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(G4TARGET)
 G4BINDIR := $(G4BIN)/$(G4SYSTEM)
+
+LDFLAGS_FINAL := $(LDFLAGS)
 
 ifdef G4EXLIB
   G4LIBDIR := $(G4TMPDIR)
