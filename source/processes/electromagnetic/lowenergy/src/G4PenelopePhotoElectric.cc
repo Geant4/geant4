@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopePhotoElectric.cc,v 1.4 2003-03-10 12:18:35 vnivanch Exp $
+// $Id: G4PenelopePhotoElectric.cc,v 1.5 2003-03-13 17:04:10 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola
@@ -131,7 +131,6 @@ G4VParticleChange* G4PenelopePhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4ParticleMomentum photonDirection = incidentPhoton->GetMomentumDirection();
    
   // Select randomly one element in the current material
-  //  G4Material* material = aTrack.GetMaterial();
   const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
   
   G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy);
@@ -142,9 +141,7 @@ G4VParticleChange* G4PenelopePhotoElectric::PostStepDoIt(const G4Track& aTrack,
   // Retrieve the corresponding identifier and binding energy of the selected shell
   const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
   const G4AtomicShell* shell = transitionManager->Shell(Z,shellIndex);
-  //G4cout << "Indice di shell: " << shellIndex << G4endl;
   G4double bindingEnergy = shell->BindingEnergy();
-  //G4cout << "Energia di legame: " << bindingEnergy/keV << " keV" << G4endl;
   G4int shellId = shell->ShellId();
 
   // Create lists of pointers to DynamicParticles (photons and electrons)
@@ -286,14 +283,8 @@ G4double G4PenelopePhotoElectric::GetMeanFreePath(const G4Track& track,
   const G4DynamicParticle* photon = track.GetDynamicParticle();
   G4double energy = photon->GetKineticEnergy();
   G4Material* material = track.GetMaterial();
-  //  size_t materialIndex = material->GetIndex();
 
   G4double meanFreePath = DBL_MAX;
-
-  //  if (energy > highEnergyLimit) 
-  //    meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);
-  //  else if (energy < lowEnergyLimit) meanFreePath = DBL_MAX;
-  //  else meanFreePath = meanFreePathTable->FindValue(energy,materialIndex);
 
   G4double cross = shellCrossSectionHandler->ValueForMaterial(material,energy);
   if(cross > 0.0) meanFreePath = 1.0/cross;
