@@ -1,4 +1,4 @@
-$Id: History,v 1.4 1999-02-17 16:59:42 japost Exp $
+$Id: History,v 1.5 1999-02-17 17:50:23 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,19 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-February 17th, 1998   J. Apostolakis  -  field-01-00-01a
-  
- Moved G4PropagatorInField files to geometry/volumes. 
- Updated GNUmakefile not to depend on geometry/volumes anymore.
-   -> the known circular dependency is removed
 
-February 17th, 1998   J. Apostolakis  -  field-01-00-01  
-
- Tag  addition of Equation of Motion for Spin 
-      and fixes (which are also required for Energy integration)
-
-
-February 10th, 1998   J. Apostolakis
+February 10th, 1998   J. Apostolakis -  field-01-00-02
 
 All the following changes are needed for energy integration also:
 
@@ -53,6 +42,15 @@ G4MagEqRhs.hh  Made SetChargeMomentumMass virtual, so that G4Mag_SpinEqRhs
 February  9th, 1998   P. Gumplinger
 
 Added Equation of Motion for Spin in Magnetic Field.
+
+
+February 17th, 1998   J. Apostolakis  -  field-01-00-01
+  --->  date is correct, made sure that tag does not include above fixes!
+  
+ Moved G4PropagatorInField files to geometry/volumes. 
+ Updated GNUmakefile not to depend on geometry/volumes anymore.
+   -> the known circular dependency is removed
+
 
 ---------------------------------------------------------------------------
     ------    Geant 4  Production Release   ------------
