@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.16 2000-10-24 07:02:59 gunter Exp $
+# $Id: common.gmk,v 1.17 2000-11-02 13:55:23 gunter Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -178,6 +178,7 @@ ifndef G4EXLIB
 clean:
 	@echo Cleaning up ...
 	@rm -f $(G4LIBDIR)/lib$(name).a
+	@rm -f $(G4LIBDIR)/lib$(name).$(SHEXT)
 	@rm -f $(schema_hh) $(schema_ref_hh)
 	@rm -rf $(G4TMPDIR)
 endif
@@ -186,4 +187,7 @@ clean_libs:
 	@if [ -f $(G4LIBDIR)/lib$(name).a ] ; then \
 	$(ECHO) Removing library lib$(name).a ... ; \
 	$(RM) -f $(G4LIBDIR)/lib$(name).a ; fi
+	@if [ -f $(G4LIBDIR)/lib$(name).$(SHEXT) ] ; then \
+	$(ECHO) Removing library lib$(name).$(SHEXT) ... ; \
+	$(RM) -f $(G4LIBDIR)/lib$(name).$(SHEXT) ; fi
 
