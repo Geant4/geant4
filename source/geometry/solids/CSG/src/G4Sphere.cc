@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.20 2003-08-17 15:40:20 grichine Exp $
+// $Id: G4Sphere.cc,v 1.21 2003-08-26 08:13:13 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -1874,8 +1874,10 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
   // => s=-pDotV3d+-sqrt(pDotV3d^2-(rad2-R^2))
   //
   const G4double  fractionTolerance = 1.0e-14;
-  const G4double  flexRadMaxTolerance = std::max(kRadTolerance, 
-                     fractionTolerance * fRmax);
+  const G4double  flexRadMaxTolerance = kRadTolerance;
+    //std::max(kRadTolerance, 
+    //         fractionTolerance * fRmax);
+
   const G4double  Rmax_plus = fRmax + flexRadMaxTolerance*0.5;
   const G4double  flexRadMinTolerance = std::max(kRadTolerance, 
                      fractionTolerance * fRmin);
@@ -2477,14 +2479,14 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
   }
   if (snxt == kInfinity)
   {
-    G4cout.precision(16);
+    G4cout.precision(20);
     G4cout << G4endl;
     DumpInfo();
     G4cout << "Position:"  << G4endl << G4endl;
     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
-    G4cout << "Rp = "<< sqrt( p.x()*p.x()+p.x()*p.x()+p.x()*p.x() )/mm << " mm" 
+    G4cout << "Rp = "<< sqrt( p.x()*p.x()+p.y()*p.y()+p.z()*p.z() )/mm << " mm" 
            << G4endl << G4endl;
     G4cout << "Direction:" << G4endl << G4endl;
     G4cout << "v.x() = "   << v.x() << G4endl;

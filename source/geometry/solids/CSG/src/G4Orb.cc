@@ -506,7 +506,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
-    G4cout << "Rp = "<< sqrt( p.x()*p.x()+p.x()*p.x()+p.x()*p.x() )/mm << " mm" 
+    G4cout << "Rp = "<< sqrt( p.x()*p.x()+p.y()*p.y()+p.z()*p.z() )/mm << " mm" 
            << G4endl << G4endl;
     G4cout << "Direction:" << G4endl << G4endl;
     G4cout << "v.x() = "   << v.x() << G4endl;
