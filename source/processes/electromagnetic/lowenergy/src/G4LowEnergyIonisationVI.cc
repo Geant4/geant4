@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisationVI.cc,v 1.5 2001-10-18 14:15:27 pia Exp $
+// $Id: G4LowEnergyIonisationVI.cc,v 1.6 2001-10-18 14:30:20 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -230,7 +230,7 @@ void G4LowEnergyIonisationVI::BuildLossTable(
   shellVacancy = new G4ShellVacancy();
   G4DataVector* ksi = 0;
   G4DataVector* energy = 0;
-  G4int binForFluo = totBin/10;
+  size_t binForFluo = totBin/10;
 
   // Do you really need to create a G4PhysicsLogVector object just for the modest
   // service of calculating the bin coordinate? 
@@ -247,7 +247,7 @@ void G4LowEnergyIonisationVI::BuildLossTable(
 
   // Loop for materials
   
-  for (size_t J=0; J<numOfMaterials; J++) {
+  for (size_t m=0; m<numOfMaterials; m++) {
     
     // create physics vector and fill it
     G4PhysicsLogVector* aVector = new G4PhysicsLogVector(lowKineticEnergy,
@@ -255,19 +255,19 @@ void G4LowEnergyIonisationVI::BuildLossTable(
 							 totBin);
 
     // get material parameters needed for the energy loss calculation
-    const G4Material* material= (*theMaterialTable)[J];
+    const G4Material* material= (*theMaterialTable)[m];
 
     // the cut cannot be below lowest limit
-    G4double tCut = ((G4Electron::Electron())->GetCutsInEnergy())[J];
+    G4double tCut = ((G4Electron::Electron())->GetCutsInEnergy())[m];
     if(tCut > highKineticEnergy) tCut = highKineticEnergy;
-    cutForDelta[J] = tCut;
+    cutForDelta[m] = tCut;
 
     const G4ElementVector* theElementVector = material->GetElementVector();
     size_t NumberOfElements = material->GetNumberOfElements() ;
     const G4double* theAtomicNumDensityVector = 
                     material->GetAtomicNumDensityVector();
     if(verboseLevel > 1) {
-      G4cout << "Energy loss for material # " << J
+      G4cout << "Energy loss for material # " << m
              << " tCut(keV)= " << tCut/keV
              << G4endl;
       }
