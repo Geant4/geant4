@@ -1,4 +1,4 @@
-$Id: History,v 1.3 1999-11-10 13:21:38 maire Exp $
+$Id: History,v 1.4 2000-03-02 14:04:55 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+02 mar 00 mma  (em-V01-00-00)
+- new G4VEnergyLoss class and related structure
+- cowork with geant4-01-00-ref-06
+     
 10 nov 99 mma  (em-V00-01-03)
 - migration to STL: remove RWT hash dictionnary
 
