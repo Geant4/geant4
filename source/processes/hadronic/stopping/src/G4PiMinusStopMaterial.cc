@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusStopMaterial.cc,v 1.8 2001-10-05 16:09:44 hpw Exp $
+// $Id: G4PiMinusStopMaterial.cc,v 1.9 2002-02-12 19:03:00 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -132,7 +132,7 @@ G4std::vector<G4LorentzVector*>* G4PiMinusStopMaterial::P4Vector(const G4double 
       mass = (*_definitions)[0]->GetPDGMass();
       energy = eKin1 + mass;
       p = sqrt(energy*energy - mass*mass);
-      G4double theta1 = GenerateAngle(pi);
+      G4double theta1 = pi*G4UniformRand();
       G4double phi1 = GenerateAngle(2.*pi);
       p1 = MakeP4(p,theta1,phi1,energy);
 
