@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SandiaTable.cc,v 1.6 2000-08-03 14:28:31 grichine Exp $
+// $Id: G4SandiaTable.cc,v 1.7 2001-02-05 17:59:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -75,10 +75,10 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
      }  
      
   //create the sandia matrix for this material  
-  fMatSandiaMatrix = new G4OrderedTable(fMatNbOfIntervals);
+  fMatSandiaMatrix = new G4OrderedTable();
   G4int interval;
   for (interval=0; interval<fMatNbOfIntervals; interval++)
-     (*fMatSandiaMatrix)(interval) = new G4ValVector(5);
+     fMatSandiaMatrix->push_back(new G4DataVector(5));
   
   //copy the Energy bins (take care of the Ionization Potential)
   G4double Ebin;
@@ -88,18 +88,18 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
         { Ebin = fSandiaTable[row][0]*keV;
           if ((row==fCumulInterval[Z[elm]-1])&&(GetIonizationPot(Z[elm])<Ebin))
               Ebin = GetIonizationPot(Z[elm]);
-          (*(*fMatSandiaMatrix)(interval++))(0) = Ebin;
+          (*(*fMatSandiaMatrix)[interval++])[0] = Ebin;
         }  
          
   //sort the energies in increasing values
   G4double tmp;
   for (G4int i1=0; i1<fMatNbOfIntervals; i1++)
      for (G4int i2=i1+1; i2<fMatNbOfIntervals; i2++)
-        {if ((*(*fMatSandiaMatrix)(i1))(0) > (*(*fMatSandiaMatrix)(i2))(0))        
+        {if ((*(*fMatSandiaMatrix)[i1])[0] > (*(*fMatSandiaMatrix)[i2])[0])        
            {
-            tmp = (*(*fMatSandiaMatrix)(i1))(0);
-            (*(*fMatSandiaMatrix)(i1))(0) = (*(*fMatSandiaMatrix)(i2))(0);
-            (*(*fMatSandiaMatrix)(i2))(0) = tmp;
+            tmp = (*(*fMatSandiaMatrix)[i1])[0];
+            (*(*fMatSandiaMatrix)[i1])[0] = (*(*fMatSandiaMatrix)[i2])[0];
+            (*(*fMatSandiaMatrix)[i2])[0] = tmp;
            }
         }
         
@@ -107,12 +107,12 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
   const G4double* NbOfAtomsPerVolume = fMaterial->GetVecNbOfAtomsPerVolume();
   for (interval=0; interval<fMatNbOfIntervals; interval++)
      {
-      Ebin = (*(*fMatSandiaMatrix)(interval))(0);        
+      Ebin = (*(*fMatSandiaMatrix)[interval])[0];        
       for (elm=0; elm<NbElm; elm++)
          {
            GetSandiaCofPerAtom(Z[elm], Ebin);
            for (G4int j=1; j<5; j++)
-              (*(*fMatSandiaMatrix)(interval))(j) += NbOfAtomsPerVolume[elm]*
+              (*(*fMatSandiaMatrix)[interval])[j] += NbOfAtomsPerVolume[elm]*
                                                      fSandiaCofPerAtom[j-1];
          }
      }
@@ -124,7 +124,7 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
 G4double  G4SandiaTable::GetSandiaCofForMaterial(G4int interval, G4int j)                                                 
 {
    assert (interval>=0 && interval<fMatNbOfIntervals && j>=0 && j<5);                      
-   return ((*(*fMatSandiaMatrix)(interval))(j)); 
+   return ((*(*fMatSandiaMatrix)[interval])[j]); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -132,8 +132,8 @@ G4double  G4SandiaTable::GetSandiaCofForMaterial(G4int interval, G4int j)
 G4double* G4SandiaTable::GetSandiaCofForMaterial(G4double energy)
 {
    G4int interval = fMatNbOfIntervals - 1;
-   while ((interval>0)&&(energy<(*(*fMatSandiaMatrix)(interval))(0))) interval--; 
-   return &((*(*fMatSandiaMatrix)(interval))(1));
+   while ((interval>0)&&(energy<(*(*fMatSandiaMatrix)[interval])[0])) interval--; 
+   return &((*(*fMatSandiaMatrix)[interval])[1]);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
