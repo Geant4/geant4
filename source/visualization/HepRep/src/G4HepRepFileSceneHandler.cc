@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.1 2001-11-06 11:48:08 johna Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.2 2001-11-08 21:50:59 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,7 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
+#include "G4Material.hh"
 #include "G4ModelingParameters.hh"
 #include "G4Polymarker.hh"
 #include "G4Polyline.hh"
@@ -91,6 +92,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Box& box) {
 	 << box.GetName()
 	 << G4endl;
   PrintThings();
+  hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(box);  // Invoke default action.
 }
 
@@ -100,6 +102,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Cons& cons) {
 	 << cons.GetName()
 	 << G4endl;
   PrintThings();
+  hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(cons);  // Invoke default action.
 }
 
@@ -109,6 +112,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Tubs& tubs) {
 	 << tubs.GetName()
 	 << G4endl;
   PrintThings();
+  hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(tubs);  // Invoke default action.
 }
 
@@ -118,6 +122,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Trd& trd) {
 	 << trd.GetName()
 	 << G4endl;
   PrintThings();
+  hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(trd);  // Invoke default action.
 }
 
@@ -127,6 +132,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Trap& trap) {
 	 << trap.GetName()
 	 << G4endl;
   PrintThings();
+  hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(trap);  // Invoke default action.
 }
 
@@ -136,6 +142,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Sphere& sphere) {
 	 << sphere.GetName()
 	 << G4endl;
   PrintThings();
+  hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(sphere);  // Invoke default action.
 }
 
@@ -145,6 +152,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Para& para) {
 	 << para.GetName()
 	 << G4endl;
   PrintThings();
+  hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(para);  // Invoke default action.
 }
 
@@ -154,6 +162,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Torus& torus) {
 	 << torus.GetName()
 	 << G4endl;
   PrintThings();
+  hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(torus);  // Invoke default action.
 }
 
@@ -163,6 +172,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Polycone& polycone) {
 	 << polycone.GetName()
 	 << G4endl;
   PrintThings();
+  hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(polycone);  // Invoke default action.
 }
 
@@ -172,6 +182,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4Polyhedra& polyhedra) {
 	 << polyhedra.GetName()
 	 << G4endl;
   PrintThings();
+  hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(polyhedra);  // Invoke default action.
 }
 
@@ -181,6 +192,7 @@ void G4HepRepFileSceneHandler::AddThis(const G4VSolid& solid) {
 	 << solid.GetName()
 	 << G4endl;
   PrintThings();
+  hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(solid);  // Invoke default action.
 }
 
@@ -301,6 +313,15 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
 
   G4Colour color = GetColour(polyhedron);
   hepRepXMLWriter->addAttValue("LineColor", color.GetRed(), color.GetGreen(), color.GetBlue());
+
+  // Additional attributes.
+  hepRepXMLWriter->addAttValue("LVol", fpCurrentLV->GetName());
+  hepRepXMLWriter->addAttValue("Solid", fpCurrentLV->GetSolid()->GetName());
+  hepRepXMLWriter->addAttValue("EType", fpCurrentLV->GetSolid()->GetEntityType());
+  hepRepXMLWriter->addAttValue("Material", fpCurrentLV->GetMaterial()->GetName());
+  hepRepXMLWriter->addAttValue("Density", fpCurrentLV->GetMaterial()->GetDensity());
+  hepRepXMLWriter->addAttValue("State", fpCurrentLV->GetMaterial()->GetState());
+  hepRepXMLWriter->addAttValue("Radlen", fpCurrentLV->GetMaterial()->GetRadlen());
 
   G4bool notLastFace;
   do {

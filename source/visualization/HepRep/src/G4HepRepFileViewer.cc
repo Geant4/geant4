@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileViewer.cc,v 1.1 2001-11-06 11:48:08 johna Exp $
+// $Id: G4HepRepFileViewer.cc,v 1.2 2001-11-08 21:51:01 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4HepRepFileViewer.hh"
@@ -48,7 +48,13 @@ G4HepRepFileViewer::~G4HepRepFileViewer() {}
 void G4HepRepFileViewer::SetView() {
   G4cout << "G4HepRepFileViewer::SetView() called." << G4endl;
   hepRepXMLWriter->open("G4HepRep.xml");
-  hepRepXMLWriter->addType("G4Volumes");
+  hepRepXMLWriter->addAttDef("LVol", "Logical Volume", "Physics","");
+  hepRepXMLWriter->addAttDef("Solid", "Solid Name", "Physics","");
+  hepRepXMLWriter->addAttDef("EType", "Entity Type", "Physics","");
+  hepRepXMLWriter->addAttDef("Material", "Material Name", "Physics","");
+  hepRepXMLWriter->addAttDef("Density", "Material Density", "Physics","");
+  hepRepXMLWriter->addAttDef("State", "Material State", "Physics","");
+  hepRepXMLWriter->addAttDef("Radlen", "Material Radiation Length", "Physics","");
 }
 
 void G4HepRepFileViewer::ClearView() {

@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2001-11-06 11:49:51 johna Exp $
+$Id: History,v 1.7 2001-11-08 21:50:53 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+
+8th November 2001  Joseph Perl
+- HepRep Type names now come from Physical Volume names.
+- Added many HepRep Attributes for other volume properties.
 
 6th November 2001  John Allison  (HepRep-pure-C++-1st-version)
 - Removed HepRep files G4HepRep.hh, G4HepRepSceneHandler.hh,

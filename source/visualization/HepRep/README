@@ -8,45 +8,13 @@ The version of HepRep produced by this driver is HepRep Version 1.
 Each call to /vis/viewer/update
 rewrites the file G4HepRep.xml.
 
+View the file using the WIRED Event Display, available from:
+http://www.slac.stanford.edu/BFROOT/www/Computing/Graphics/Wired/
 
-Use the WIRED Event Display Client to View the HepRep XML File
-
-To view the XML file, you will need to run a special new version of
-the WIRED event display.  This in turn requires Java version 1.3 or higher.
-
-For the most part, you can follow the instructions at the
-BaBar WIRED Home Page:
-
-http://www.slac.stanford.edu/BFROOT/www/Computing/Graphics/Wired/index.html#applicationinstall
-
-BUT instead of taking the version of install.class that it points you to,
-take the special new version from:
-
-http://www.slac.stanford.edu/~perl/install.class
-
-AND make sure you have Java version 1.3 or higher.
-To check, type "java -version"
-
-Once you have WIRED installed, start wired as usual by just typing "wired".
-
-An empty detector will appear.  This is a holdover from the BaBar use
-of this WIRED version.  If you are not viewing BaBar events, turn this
-detector off by opening the Event Visibility Control (the icon that
-looks like a tree) and un-checking "Detector Geometry".
-
-Open the event chooser (the icon that looks like a file folder).
-Select Open Event from File or Open Event from URL.
-File can be read in from gzip or uncompressed versions.
-
-Some example events can be found at:
-http://www.slac.stanford.edu/~perl/heprepxml/babar1.xml.gz
-http://www.slac.stanford.edu/~perl/heprepxml/babar2.xml.gz
-http://www.slac.stanford.edu/~perl/heprepxml/g4heprep.xml.gz
-http://www.slac.stanford.edu/~perl/heprepxml/underground_detector.xml.gz
-
-If nothing appears, it may be that you need to rescale the display.
-Place the mouse in the graphics window, hit the right mouse button
-and then select Orientation Actions -> Fit to Window.
+WIRED can ready xml files in zipped format as well as unzipped,
+so you can save space by applying gzip to the xml file.
+This will reduce the file to about five percent of its original size.
 
 Joseph Perl
-1 October 2001
+6 November 2001
+
