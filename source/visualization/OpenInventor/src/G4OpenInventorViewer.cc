@@ -28,6 +28,7 @@
 #include <Inventor/nodes/SoSelection.h>
 #include <Inventor/nodes/SoShape.h>
 #include <Inventor/nodes/SoOrthographicCamera.h>
+#include <Inventor/nodes/SoPerspectiveCamera.h>
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoWriteAction.h>
 #include <Inventor/sensors/SoNodeSensor.h>
@@ -49,10 +50,10 @@ G4OpenInventorViewer::G4OpenInventorViewer(
 ,fG4OpenInventorSceneHandler(sceneHandler)
 ,fInteractorManager(0)
 ,fSoSelection(0)
-,fSoCamera(0)
 ,fSoImageWriter(0)
 ,fGL2PSAction(0) //To be set be suclass.
-,fSoCameraSensor(0)
+,fGroupCameraSensor(0)
+,fCameraSensor(0)
 {
   fNeedKernelVisit = true;  //?? Temporary, until KernelVisitDecision fixed.
 
@@ -77,19 +78,33 @@ G4OpenInventorViewer::G4OpenInventorViewer(
   fSoSelection->policy = SoSelection::SINGLE;
   fSoSelection->ref();
 
-  fSoCamera = new SoOrthographicCamera;
-  fSoCamera->viewportMapping.setValue(SoCamera::ADJUST_CAMERA);
-  //camera->aspectRatio.setValue(10);
-  fSoCamera->position.setValue(0,0,10);
-  fSoCamera->orientation.setValue(SbRotation(SbVec3f(0,1,0),0));
-  fSoCamera->height.setValue(10);
-  fSoCamera->nearDistance.setValue(1);
-  fSoCamera->farDistance.setValue(100);
-  fSoCamera->focalDistance.setValue(10);
-  fSoSelection->addChild(fSoCamera);
+  SoGroup* group = new SoGroup;
+  fSoSelection->addChild(group);
 
-  fSoCameraSensor = new SoNodeSensor(CameraSensorCB,this);
-  fSoCameraSensor->attach(fSoCamera);
+  //  Have a camera under fSoSelection in order
+  // that the below SceneGraphSensor be notifed
+  // when the viewer changes the camera type.
+  //  But we put the camera under a SoGroup so that
+  // the SceneGraphSensor be not triggered at each change
+  // under the fG4OpenInventorSceneHandler.fRoot.
+  SoOrthographicCamera* camera = new SoOrthographicCamera;
+  camera->viewportMapping.setValue(SoCamera::ADJUST_CAMERA);
+  //camera->aspectRatio.setValue(10);
+  camera->position.setValue(0,0,10);
+  camera->orientation.setValue(SbRotation(SbVec3f(0,1,0),0));
+  camera->height.setValue(10);
+  camera->nearDistance.setValue(1);
+  camera->farDistance.setValue(100);
+  camera->focalDistance.setValue(10);
+  group->addChild(camera);
+
+  // To detect that the viewer had changed the camera type :
+  fGroupCameraSensor = new SoNodeSensor(SceneGraphSensorCB,this);
+  fGroupCameraSensor->setPriority(0);//Needed in order to do getTriggerNode()
+  fGroupCameraSensor->attach(group);
+
+  fCameraSensor = new SoNodeSensor(CameraSensorCB,this);
+  fCameraSensor->setPriority(0);//Needed in order to do getTriggerNode()
 
   fSoSelection->addChild(fG4OpenInventorSceneHandler.fRoot);
 
@@ -97,11 +112,14 @@ G4OpenInventorViewer::G4OpenInventorViewer(
   fSoImageWriter = new SoImageWriter();
   fSoImageWriter->fileName.setValue("g4out.ps");
   fSoSelection->addChild(fSoImageWriter);
+
 }
 
 G4OpenInventorViewer::~G4OpenInventorViewer () {
-  //fSoCameraSensor->detach();
-  //delete fSoCameraSensor;
+  fCameraSensor->detach();
+  delete fCameraSensor;
+  fGroupCameraSensor->detach();
+  delete fGroupCameraSensor;
   fSoSelection->unref();
 }
 
@@ -180,11 +198,14 @@ void G4OpenInventorViewer::SetView () {
   printf("debug : pos : %g %g %g\n",cameraPosition.x(),
                                     cameraPosition.y(),
                                     cameraPosition.z());
-  printf("debug : near %g far %g\n",pnear,pfar);
+  //printf("debug : near %g far %g\n",pnear,pfar);
 */
 
-  // fSoCamera setup :
-  fSoCamera->position.setValue((float)cameraPosition.x(),
+  SoCamera* camera = GetCamera();
+  if(!camera) return;
+
+  // viewer camera setup :
+  camera->position.setValue((float)cameraPosition.x(),
                                (float)cameraPosition.y(),
                                (float)cameraPosition.z());
 
@@ -195,52 +216,46 @@ void G4OpenInventorViewer::SetView () {
 	       (float)up.y(),
 	       (float)up.z());
   sbUp.normalize();
-  // Need Coin's fSoCamera->pointAt(sbTarget,sbUp); not in the SGI API
+  // Need Coin's camera->pointAt(sbTarget,sbUp); not in the SGI API
   // Stole Coin's code...
-  pointAt(sbTarget,sbUp);
+  pointAt(camera,sbTarget,sbUp);
 
-  //fSoCamera->height.setValue(10);
-  //fSoCamera->nearDistance.setValue((float)pnear);
-  //fSoCamera->farDistance.setValue((float)pfar);
-  //fSoCamera->focalDistance.setValue((float)cameraDistance);
+  //camera->height.setValue(10);
+  //camera->nearDistance.setValue((float)pnear);
+  //camera->farDistance.setValue((float)pfar);
+  //camera->focalDistance.setValue((float)cameraDistance);
 
-  if (fVP.GetFieldHalfAngle() == 0.) {
-    /*
-G4OpenGLViewer:
-    glOrtho (left, right, bottom, top, pnear, pfar);
-SoOrthographicCamera:
-  SoSFFloat height;
-  virtual void scaleHeight(float scalefactor);
-  virtual SbViewVolume getViewVolume(float useaspectratio = 0.0f) const;
-    */
+  if(camera->isOfType(SoOrthographicCamera::getClassTypeId())) {
+    if (fVP.GetFieldHalfAngle() == 0.) {
+      //FIXME : ((SoOrthographicCamera*)camera)->height.setValue();
+    } else {
+      //FIXME : Have to set a perspective camera !
+    }
+  } else if(camera->isOfType(SoPerspectiveCamera::getClassTypeId())) {
+    if (fVP.GetFieldHalfAngle() == 0.) {
+      //FIXME : Have to set an orthographic camera !
+    } else {
+      //FIXME : ((SoPerspectiveCamera*)camera)->heightAngle.setValue();
+    }
   }
-  else {
-    /*
-G4OpenGLViewer:
-    glFrustum (left, right, bottom, top, pnear, pfar);
-SoPerspectiveCamera:
-  SoSFFloat heightAngle;
-  virtual void scaleHeight(float scalefactor);
-  virtual SbViewVolume getViewVolume(float useaspectratio = 0.0f) const;
-    */
-  }
+
 
 }
 
 //COIN_FUNCTION_EXTENSION
 void
-G4OpenInventorViewer::pointAt(const SbVec3f & targetpoint, const SbVec3f & upvector)
+G4OpenInventorViewer::pointAt(SoCamera* camera,const SbVec3f & targetpoint, const SbVec3f & upvector)
 {
-  SbVec3f dir = targetpoint - fSoCamera->position.getValue();
+  SbVec3f dir = targetpoint - camera->position.getValue();
   if (dir.normalize() == 0.0f) return;
-  this->lookAt(dir, upvector);
+  lookAt(camera,dir, upvector);
 }
 
 //COIN_FUNCTION
 // Private method that calculates a new orientation based on camera
 // direction and camera up vector. Vectors must be unit length.
 void
-G4OpenInventorViewer::lookAt(const SbVec3f & dir, const SbVec3f & up)
+G4OpenInventorViewer::lookAt(SoCamera* camera,const SbVec3f & dir, const SbVec3f & up)
 {
   SbVec3f z = -dir;
   SbVec3f y = up;
@@ -267,13 +282,13 @@ G4OpenInventorViewer::lookAt(const SbVec3f & dir, const SbVec3f & up)
   rot[2][1] = z[1];
   rot[2][2] = z[2];
 
-  fSoCamera->orientation.setValue(SbRotation(rot));
+  camera->orientation.setValue(SbRotation(rot));
 }
 
 void
-G4OpenInventorViewer::lookedAt(SbVec3f & dir, SbVec3f & up)
+G4OpenInventorViewer::lookedAt(SoCamera* camera,SbVec3f & dir, SbVec3f & up)
 {
-  SbRotation rot = fSoCamera->orientation.getValue();
+  SbRotation rot = camera->orientation.getValue();
   SbMatrix mrot; rot.getValue(mrot);
 
   SbVec3f x, y, z;
@@ -311,20 +326,43 @@ void G4OpenInventorViewer::ShowView () {
   fInteractorManager -> SecondaryLoop ();
 }
 
-void G4OpenInventorViewer::CameraSensorCB(void* aThis,SoSensor*) { 
+void G4OpenInventorViewer::SceneGraphSensorCB(void* aThis,SoSensor* aSensor) { 
   G4OpenInventorViewer* This = (G4OpenInventorViewer*)aThis;
 
-  SbVec3f direction, up;
-  This->lookedAt(direction, up);
-  This->fVP.SetViewpointDirection
-    (G4Vector3D(-direction[0],-direction[1],-direction[2]));
-  This->fVP.SetUpVector
-    (G4Vector3D(up[0],up[1],up[2]));
+  SoNode* node = ((SoNodeSensor*)aSensor)->getTriggerNode();
+  //printf("debug : SceneGraphCB %s\n",
+  //node->getTypeId().getName().getString());
 
-  SbVec3f pos = This->fSoCamera->position.getValue();
-  SbVec3f target = pos + direction * This->fSoCamera->focalDistance.getValue();
+  if(node->isOfType(SoCamera::getClassTypeId())) {
+    // Viewer had changed the camera type, 
+    // attach the fCameraSensor to the new camera.
+    SoCamera* camera = (SoCamera*)node;
+    This->fCameraSensor->attach(camera);
+  }
 
-  This->fVP.SetCurrentTargetPoint(G4Point3D(target[0],target[1],target[2]));
+}
+
+void G4OpenInventorViewer::CameraSensorCB(void* aThis,SoSensor* aSensor) { 
+  G4OpenInventorViewer* This = (G4OpenInventorViewer*)aThis;
+
+  //printf("debug : CameraSensorCB\n");
+
+  SoNode* node = ((SoNodeSensor*)aSensor)->getTriggerNode();
+
+  if(node->isOfType(SoCamera::getClassTypeId())) {
+    SoCamera* camera = (SoCamera*)node;
+
+    SbVec3f direction, up;
+    lookedAt(camera,direction, up);
+    This->fVP.SetViewpointDirection
+      (G4Vector3D(-direction[0],-direction[1],-direction[2]));
+    This->fVP.SetUpVector(G4Vector3D(up[0],up[1],up[2]));
+
+    SbVec3f pos = camera->position.getValue();
+    SbVec3f target = pos + direction * camera->focalDistance.getValue();
+
+    This->fVP.SetCurrentTargetPoint(G4Point3D(target[0],target[1],target[2]));
+  }
 }
 
 void G4OpenInventorViewer::SelectionCB(
@@ -366,7 +404,8 @@ void G4OpenInventorViewer::DrawDetector() {
   // DrawView does a ClearStore. Do not clear the transient store :
   SoSeparator* tmp = fG4OpenInventorSceneHandler.fTransientRoot;
   fG4OpenInventorSceneHandler.fTransientRoot = new SoSeparator;
-  DrawView();  
+  KernelVisitDecision();
+  ProcessView();
   fG4OpenInventorSceneHandler.fTransientRoot->unref();
   fG4OpenInventorSceneHandler.fTransientRoot = tmp;
 }
@@ -503,6 +542,10 @@ void G4OpenInventorViewer::SetPreview() {
   DrawDetector();
 }
 
+// When ViewParameter <-> SoCamera mapping ready 
+// uncomment the below
+//#define USE_SET_VIEW
+
 void G4OpenInventorViewer::SetSolid() {
   G4ViewParameters vp = GetViewParameters();
   G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
@@ -520,23 +563,13 @@ void G4OpenInventorViewer::SetSolid() {
     break;
   }
   SetViewParameters(vp);
-/*FIXME : fSoCameraSensor : when ready, should use the below.
-  if (vp.IsAutoRefresh()) {
-    //G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
-    SetView();
-    ClearView();
-    //FIXME : do not clear transient store.
-    DrawView();  
-  }
-*/
-  //FIXME : waiting fSoCameraSensor.
-  fModified = false; //To avoid a SetView that will change the camera.
+  fModified = false; // To avoid a SetView in G4VViewer::ProcessView 
+                     // that will change the camera.
   DrawDetector();
 }
 void G4OpenInventorViewer::SetWireFrame() {
   G4ViewParameters vp = GetViewParameters();
   G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
-  //From G4VisCommandsViewerSet : /vis/viewer/set/style wire.
   switch (existingStyle) {
   case G4ViewParameters::wireframe:
     break;
@@ -550,26 +583,19 @@ void G4OpenInventorViewer::SetWireFrame() {
     break;
   }
   SetViewParameters(vp);
-/*FIXME : fSoCameraSensor : when ready, should use the below.
-  if (vp.IsAutoRefresh()) {
-    //G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
-    SetView();
-    ClearView();
-    //FIXME : do not clear transient store.
-    DrawView();
-  }
-*/
-  //FIXME : waiting fSoCameraSensor.
-  fModified = false; //To avoid a SetView that will change the camera.
+  fModified = false; // To avoid a SetView in G4VViewer::ProcessView 
+                     // that will change the camera.
   DrawDetector();
 }
 
 
 void G4OpenInventorViewer::SetReducedWireFrame(bool aValue) {
+  // Set the wire frame kind :
+  fG4OpenInventorSceneHandler.fReducedWireFrame = aValue;
+
   // Set wire frame :
   G4ViewParameters vp = GetViewParameters();
   G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
-  //From G4VisCommandsViewerSet : /vis/viewer/set/style wire.
   switch (existingStyle) {
   case G4ViewParameters::wireframe:
     break;
@@ -583,31 +609,17 @@ void G4OpenInventorViewer::SetReducedWireFrame(bool aValue) {
     break;
   }
   SetViewParameters(vp);
-/*FIXME : fSoCameraSensor : when ready, should use the below.
-  if (vp.IsAutoRefresh()) {
-    //G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
-    SetView();
-    ClearView();
-    //FIXME : do not clear transient store.
-    DrawView();
-  }
-*/
-  //FIXME : waiting fSoCameraSensor.
-  fModified = false; //To avoid a SetView that will change the camera.
-
-  // Set the wire frame kind :
-  fG4OpenInventorSceneHandler.fReducedWireFrame = aValue;
-
-  NeedKernelVisit(); //Just in case it was alread in wire framw.
+  fModified = false; // To avoid a SetView in G4VViewer::ProcessView 
+                     // that will change the camera.
+  NeedKernelVisit(); // Just in case it was alread in wire framw.
   DrawDetector();
 }
 
 void G4OpenInventorViewer::UpdateScene() {
   fG4OpenInventorSceneHandler.ClearStore();
-  //FIXME : fSoCameraSensor : when ready, should use the below.
-  //SetView();
   ClearView();
-  DrawView();
+  KernelVisitDecision();
+  ProcessView();
   ShowView();
 }
 G4String G4OpenInventorViewer::Help(const G4String& aTopic) {
@@ -629,6 +641,3 @@ Controls on an Inventor examiner viewer are :\n\
 }
 
 #endif
-
-
-

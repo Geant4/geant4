@@ -32,7 +32,7 @@
 
 class SoSelection;
 class SoPath;
-class SoOrthographicCamera;
+class SoCamera;
 class SoSensor;
 class SoNodeSensor;
 
@@ -58,6 +58,7 @@ public:
   virtual ~G4OpenInventorViewer();
 protected:
   virtual void ViewerRender() = 0;
+  virtual SoCamera* GetCamera() = 0;
   void Escape();
   void WritePostScript(const G4String& file = "g4out.ps");
   void WritePixmapPostScript(const G4String& file = "g4out.ps");
@@ -75,10 +76,11 @@ protected:
 private:
   static void SelectionCB(void*,SoPath*);
   //static void DeselectionCB(void*,SoPath*);
+  static void SceneGraphSensorCB(void*,SoSensor*);
   static void CameraSensorCB(void*,SoSensor*);
-  void pointAt(const SbVec3f & targetpoint, const SbVec3f & upvector);
-  void lookAt(const SbVec3f & dir, const SbVec3f & up);
-  void lookedAt(SbVec3f & dir, SbVec3f & up);
+  static void pointAt(SoCamera*,const SbVec3f & targetpoint, const SbVec3f & upvector);
+  static void lookAt(SoCamera*,const SbVec3f & dir, const SbVec3f & up);
+  static void lookedAt(SoCamera*,SbVec3f & dir, SbVec3f & up);
 private:
   G4bool CompareForKernelVisit(G4ViewParameters&);
   void DrawDetector();
@@ -88,10 +90,10 @@ protected:
   G4OpenInventorSceneHandler& fG4OpenInventorSceneHandler;
   G4VInteractorManager* fInteractorManager;
   SoSelection* fSoSelection;
-  SoOrthographicCamera* fSoCamera;
   Geant4_SoImageWriter* fSoImageWriter;
   Geant4_SoGL2PSAction* fGL2PSAction;
-  SoNodeSensor* fSoCameraSensor;
+  SoNodeSensor* fGroupCameraSensor;
+  SoNodeSensor* fCameraSensor;
 };
 
 #endif

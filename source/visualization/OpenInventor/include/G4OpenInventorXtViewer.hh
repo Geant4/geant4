@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.hh,v 1.11 2004-11-24 14:59:38 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.hh,v 1.12 2004-11-25 13:39:54 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,7 @@ public: //G4VViewer
   virtual void FinishView();
 protected:
   virtual void ViewerRender();
+  virtual SoCamera* GetCamera();
 public:
   G4OpenInventorXtViewer(G4OpenInventorSceneHandler& scene,
 		         const G4String& name = "");

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.19 2004-11-24 14:59:39 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.20 2004-11-25 13:39:54 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -199,6 +199,11 @@ void G4OpenInventorXtViewer::FinishView () {
 void G4OpenInventorXtViewer::ViewerRender () {
   if(!fViewer) return;
   fViewer->render();
+}
+
+SoCamera* G4OpenInventorXtViewer::GetCamera () {
+  if(!fViewer) return 0;
+  return fViewer->getCamera();
 }
 
 Widget G4OpenInventorXtViewer::AddMenu(
