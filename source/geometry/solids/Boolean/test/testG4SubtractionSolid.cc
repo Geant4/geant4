@@ -176,6 +176,32 @@ int main()
   // G4SubtractionSolid* inn = new G4SubtractionSolid("Innerpart", insp,
   //                                  tmptube, rotDz5, G4ThreeVector(0,0,0));
 
+  // LHCB RICH-detector problem:
+
+  G4ThreeVector lhcbTransl(8606.,173396.33,100110.42);
+  G4RotationMatrix lhcbMat;
+  lhcbMat.rotateX(-60*degree);
+  G4Transform3D lhcbTran = G4Transform3D(lhcbMat,lhcbTransl);
+  G4Sphere* lhcbSphere = new G4Sphere("lhcbSphere",8600*mm, 
+				                   8606*mm, 
+				             -1.6991355*degree, 
+				              3.3982711*degree, 
+				              88.528559*degree, 
+				              2.9428812*degree   );
+
+  G4Box* lhcbBox = new G4Box("lhcbBox",100000*mm, 
+			               100000*mm, 
+                                       200000*mm   );
+
+  
+  G4VSolid* lhcbSub = new G4SubtractionSolid( "lhcbSub", lhcbSphere, 
+                                                       lhcbBox, lhcbTran );
+
+  G4ThreeVector lhcbP(7298.73956059975,-394.9290932077643,1497.43923688271);
+  G4ThreeVector lhcbV(0.6062807093945133,0.06537967965081047,-0.7925586406726276);
+
+
+
    G4cout.precision(16) ;
 
 // Check Inside
@@ -423,7 +449,8 @@ int main()
     // assert(ApproxEqual(dist,kInfinity));
     G4cout<<"c3Ic4->DistanceToIn = "<<dist<<G4endl ;
 
-
+    dist=lhcbSub->DistanceToIn(lhcbP,lhcbV);
+    G4cout<<"lhcbSub->DistanceToIn(lhcbP,lhcbV) = "<<dist<<G4endl ;
 
     G4cout<<"Tracking functions are OK"<<G4endl ;
 
