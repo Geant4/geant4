@@ -2,6 +2,7 @@
 
 #include "globals.hh"
 //#include "Randomize.hh"
+
 #include "G4Collider.hh"
 #include "G4InuclCollider.hh"
 #include "G4IntraNucleiCascader.hh"
@@ -17,7 +18,6 @@
 #include "G4Analyser.hh"
 #include "G4WatcherGun.hh"
 
-
 #include "vector"
 
 G4int test();
@@ -26,7 +26,12 @@ int main() {
 
   test(); 
 
-  //  G4double init = G4UniformRand();
+  // Set the default random engine to RanecuEngine
+  //  RanecuEngine defaultEngine;
+  //HepRandom::setTheEngine(&defaultEngine);
+  //  HepRandom::setTheSeed(345354);
+  //G4double x = RandFlat::shoot();
+  //  G4double koe = G4UniformRand();
   G4int verboseLevel = 1;
   
   // General test program for hetc and inucl
@@ -149,8 +154,50 @@ int main() {
 };
 
 G4int test() {
-
+typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
   G4cout << " MeV: " << MeV << " GeV: " << GeV << G4endl;
 
+  G4cout << " ::: testing interface" << G4endl;
+// 0.8 GeV proton with momentum along Z axis
+  G4InuclParticle* bullet = new G4InuclElementaryParticle(0.8,1); // momentumBullet, bulletType 
+
+    // Set target
+    G4std::vector<G4double> targetMomentum(4, 0.0);
+
+    G4InuclNuclei * target = new G4InuclNuclei(0.,197.,79.); //Au197  momentum = 0
+    target->setEnergy();
+
+    // Resigister collider
+    G4ElementaryParticleCollider* collider = new G4ElementaryParticleCollider;
+    G4IntraNucleiCascader*        cascader = new G4IntraNucleiCascader;
+ 
+    cascader->setElementaryParticleCollider(collider);
+    cascader->setInteractionCase(1); // Interaction type is particle with nuclei.
+
+    G4int nCollisions = 2;
+
+    for (G4int i = 1; i <= nCollisions; i++){
+    // Make INC
+      G4cout << "collision " << i << G4endl; 
+    G4CollisionOutput output =  cascader->collide(bullet, target); 
+
+  // Convert Bertini data to Geant4 format
+    G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
+
+    if(!particles.empty()) 
+    { 
+      particleIterator ipart;
+
+      for(ipart = particles.begin(); ipart != particles.end(); ipart++) 
+      {
+G4std::vector<G4double> mom = ipart->getMomentum();
+	G4double ekin = ipart->getKineticEnergy() * GeV;
+	G4int type = ipart->type();
+
+	G4cout << type << " " << ekin << " " << mom[1] * GeV << " " << mom[2] * GeV << " " << mom[3] * GeV << G4endl;
+      }
+    }
+    
+    }
   return 0;
 };
