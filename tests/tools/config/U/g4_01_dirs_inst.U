@@ -1,5 +1,5 @@
 ?RCS:
-?MAKE:g4install g4includes_flag g4include g4base g4workdir g4conf: \
+?MAKE:g4install g4final_install g4includes_flag g4include g4base g4workdir g4conf: \
 	Myread Getfile cat rm g4system
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
@@ -58,6 +58,12 @@ fi
 	;;
 esac
 
+case "$g4final_install" in
+'')
+	g4final_install=$g4final_install
+	;;
+esac
+
 case "$g4workdir" in
 '')
 	g4workdir=$g4install
@@ -73,7 +79,7 @@ esac
 
 g4message=`cat << EOM
 
-Where is Geant4 installed?
+Where is Geant4 source installed?
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
@@ -83,7 +89,23 @@ rp=$g4message
 . ./getfile
 g4install=$ans
 g4workdir=$g4install
+#################################
+g4message=`cat << EOM
 
+Where is Geant4 libraries and source should be installed?
+
+It will be $(your_prefix)/geant4/lib and $(your_prefix)/geant4.
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt=$g4final_install
+fn='d~'
+rp=$g4message
+. ./getfile
+g4final_install=$ans
+#g4workdir=$g4install
+
+##################################
 g4message=`cat << EOM
 
 Do you want to copy all Geant4 headers 
