@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.hh,v 1.9 2001-07-22 01:00:24 johna Exp $
+// $Id: G4PhysicalVolumeSearchScene.hh,v 1.10 2002-10-24 14:53:38 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,6 +63,8 @@ public:
   void AddThis (const G4Polycone& s) {FindVolume (s);}
   void AddThis (const G4Polyhedra& s) {FindVolume (s);}
   void AddThis (const G4VSolid& s) {FindVolume (s);}
+  void AddThis (const G4VTrajectory&) {}
+  void AddThis (const G4VHit&) {}
   void PreAddThis (const G4Transform3D& objectTransformation,
 		   const G4VisAttributes&);
   void PostAddThis ();
