@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cerenkov.cc,v 1.4 1999-10-30 00:42:20 gum Exp $
+// $Id: G4Cerenkov.cc,v 1.5 1999-11-05 01:56:49 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -497,5 +497,5 @@ G4Cerenkov::GetAverageNumberOfPhotons(const G4DynamicParticle* aParticle,
 	G4double NumPhotons =
                  Rfact * charge*charge * (dp - ge * BetaInverse*BetaInverse);
 
-	return NumPhotons / cm;		
+	return NumPhotons;		
 }
