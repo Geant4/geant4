@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.15 2003-11-05 17:41:24 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.16 2003-11-06 10:32:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -494,13 +494,13 @@ std::ostream& G4Polycone::StreamInfo( std::ostream& os ) const
       os << "              Z plane " << i << ": "
          << original_parameters->Z_values[i] << "\n";
     }
-    os << "              Tangent distances to inner surface: \n";
+    os << "              Tangent distances to inner surface (Rmin): \n";
     for (i=0; i<numPlanes; i++)
     {
       os << "              Z plane " << i << ": "
          << original_parameters->Rmin[i] << "\n";
     }
-    os << "              Tangent distances to outer surface: \n";
+    os << "              Tangent distances to outer surface (Rmax): \n";
     for (i=0; i<numPlanes; i++)
     {
       os << "              Z plane " << i << ": "
@@ -508,7 +508,7 @@ std::ostream& G4Polycone::StreamInfo( std::ostream& os ) const
     }
   }
   os << "    number of RZ points: " << numCorner << "\n"
-     << "              RZ values: \n";
+     << "              RZ values (corners): \n";
      for (i=0; i<numCorner; i++)
      {
        os << "                         "
