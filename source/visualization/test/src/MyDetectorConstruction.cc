@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.20 2004-09-13 21:13:33 johna Exp $
+// $Id: MyDetectorConstruction.cc,v 1.21 2004-09-22 20:17:34 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -162,9 +162,12 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   {
     G4RotationMatrix rm;
     rm.rotateZ(i*rotAngle);
+    rm.print(G4cout);
+    G4VPhysicalVolume* calo_phys =
     new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(0.*cm,i*calPos,0.*cm)),
                       "calo_phys",calorimeter_log,experimentalHall_phys,
                       false,i);
+    calo_phys->GetObjectRotationValue().print(G4cout);
   }
 
   //------------------------------ tracker tube
@@ -180,11 +183,15 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   //////////////............
   G4RotationMatrix* tracker_rm = new G4RotationMatrix;
   tracker_rm->rotateY(-30.*deg);
-  new G4PVPlacement(tracker_rm,G4ThreeVector(0.*cm,trackerPos,200.*cm),
+  tracker_rm->print(G4cout);
+  G4VPhysicalVolume* tracker_phys =
+  //new G4PVPlacement(tracker_rm,G4ThreeVector(0.*cm,trackerPos,200.*cm),
+  new G4PVPlacement(G4Transform3D(*tracker_rm,G4ThreeVector(0.*cm,trackerPos,200.*cm)),
   //////////////............
   //new G4PVPlacement(0,G4ThreeVector(0.*cm,trackerPos,0.*cm),
                     "tracker_phys",tracker_log,experimentalHall_phys,
                     false,0);
+  tracker_phys->GetObjectRotationValue().print(G4cout);
 
   //------------------------------ displaced box
   G4Box * undisplaced_box = new G4Box("undisplaced_box",30.*cm,50.*cm,70.*cm);
