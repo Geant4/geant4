@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleWithCuts.cc,v 1.3 1999-04-14 10:28:30 kurasige Exp $
+// $Id: G4ParticleWithCuts.cc,v 1.4 1999-04-15 11:45:59 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -351,7 +351,7 @@ void  G4ParticleWithCuts::CalcEnergyCuts(G4double aCut)
       G4cout << " user Proton Cut " << endl;
     }
 #endif                                                      
-    G4double ChargeSquare = Charge*Charge ;
+    G4double ChargeSquare = Charge*Charge/(eplus*eplus) ;
     G4double massRatio = proton_mass_c2/(this->GetPDGMass()) ;
     
     for (G4int J=0; J<materialTable->length(); J +=1) {
