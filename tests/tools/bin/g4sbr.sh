@@ -64,9 +64,6 @@ export G4NOHIST=1
 # Setup environment in $REFTREE
 ####################################################################
 echo "STT:SETUPEnvironment Complete"
-# cd /afs/cern.ch/sw/geant4/stt/$REFTREE/testtools/geant4/tests/tools/bin
-# so we can use pwd to determine the value of $REFTREE.
-# . ${G4STTDIR}/bin/setup.sh (but this defines G4STTDIR).
 cd /afs/cern.ch/sw/geant4/stt/$REFTREE/testtools/geant4/tests/tools/bin
 .  /afs/cern.ch/sw/geant4/stt/$REFTREE/testtools/geant4/tests/tools/bin/setup.sh
 
@@ -100,9 +97,18 @@ EOF
 echo "STT:SETUPDirectories Started"
 if [ X$NONINCREMENTAL = X ]
 then
+  cd ${G4WORKDIR}
+  sttlnk=`ls -l stt|cut -d ">" -f 2 | cut -d "." -f2`
+  if [ X${sttlnk} != X${REFTAG} ]; then
+    echo "STT:ABORT Incremental update requested on ${REFTAG} but symlink is to $sttlnk"
+    rm $G4WORKDIR/inprogress.stat  # simplify a re-start with corrected parameters.
+    exit
+  fi
   cd ${G4WORKDIR}/stt/${G4SYSTEM}
-  NEXT_NUMBER=$[`ls -c1 gmake.log.*|sort|tail -1|cut -d "." -f3`+1]
-  mv gmake.log gmake.log.${NEXT_NUMBER}
+  if [ -r gmake.log ]; then
+    NEXT_NUMBER=$[`ls -c1 gmake.log.*|sort|tail -1|cut -d "." -f3`+1]
+    mv gmake.log gmake.log.${NEXT_NUMBER}
+  fi
   echo "STT:UPDATE stt.${REFTAG} and RETAIN stt symbolic link."
   echo "STT:WORKDIR ${G4WORKDIR}/stt.${REFTAG}/${G4SYSTEM}"
 else
@@ -110,6 +116,7 @@ else
   if [ -d stt.${REFTAG} ]
   then
     echo "STT:ABORT stt.${REFTAG} already exists."
+    rm $G4WORKDIR/inprogress.stat  # simplify a re-start with corrected parameters.
     exit
   fi
   echo "STT:CREATE stt.${REFTAG} and RESET stt symbolic link."
@@ -141,7 +148,6 @@ echo "STT:SETUPDirectories Finished"
 # Build&run all
 ################################
 cd ${G4WORKDIR}
-. ${G4STTDIR}/bin/blimit.sh
 
 if [ X$ACTION = Xbuild -o X$ACTION = Xall  ]
 then
