@@ -88,15 +88,22 @@ void hTestStanPhysicsList::ConstructProcess()
       
     } else if (particleName == "e-") {
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-
-      pmanager->AddProcess(new G4eIonisation,   -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);       
+      G4eIonisation* eion = new G4eIonisation();
+      eion->SetSubSec(false);
+      pmanager->AddProcess(eion,   -1, 2,2);
+      G4eBremsstrahlung* ebr = new G4eBremsstrahlung();
+      ebr->SetSubSec(false);
+      pmanager->AddProcess(ebr,    -1,-1,3);       
 
     } else if (particleName == "e+") {
 
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+      G4eIonisation* pion = new G4eIonisation();
+      pion->SetSubSec(false);
+      pmanager->AddProcess(pion,        -1, 2,2);
+      G4eBremsstrahlung* pbr = new G4eBremsstrahlung();
+      pbr->SetSubSec(false);
+      pmanager->AddProcess(pbr,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
   
     } else if( particleName == "mu+" || 

@@ -58,8 +58,6 @@ class G4IonFe56 : public G4VIon
 {
  private:
    static G4IonFe56 theIonFe56;
-   static G4double  theIonFe56LengthCut;
-   static G4double* theIonFe56KineticEnergyCuts;
 
 public: // Without description
 
@@ -77,22 +75,8 @@ public: // Without description
    virtual ~G4IonFe56();
   
    static G4IonFe56*    IonFe56Definition();
-   static G4IonFe56*    IonFe56() {return &theIonFe56;}
-   static G4double GetCuts() {return theIonFe56LengthCut;}   
-   static G4double* GetCutsInEnergy() {return theIonFe56KineticEnergyCuts;};
-
-   void SetCuts(G4double aCut); 
+   static G4IonFe56*    IonFe56();
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4IonFe56::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theIonFe56LengthCut = theCutInMaxInteractionLength;  
-  theIonFe56KineticEnergyCuts = theKineticEnergyCuts;
-  
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

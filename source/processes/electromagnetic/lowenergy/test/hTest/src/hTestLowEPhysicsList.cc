@@ -98,7 +98,10 @@ void hTestLowEPhysicsList::ConstructProcess()
     } else if (particleName == "e-") {
       if(0 < verbose) G4cout << "LowE e-" << G4endl; 
       pmanager->AddProcess(new G4MultipleScattering(), -1, 1,1);
-      pmanager->AddProcess(new G4LowEnergyIonisation(),  -1, 2,2);
+      G4LowEnergyIonisation* lei = new G4LowEnergyIonisation();
+      lei->SetCutForLowEnSecPhotons(1000.0*keV);
+      lei->SetCutForLowEnSecElectrons(1000.0*keV);
+      pmanager->AddProcess(lei,  -1, 2,2);
       pmanager->AddProcess(new G4LowEnergyBremsstrahlung(), -1,-1,3);   
 
     } else if (particleName == "e+") {

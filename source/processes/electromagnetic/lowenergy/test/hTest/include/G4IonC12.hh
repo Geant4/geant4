@@ -58,8 +58,6 @@ class G4IonC12 : public G4VIon
 {
  private:
    static G4IonC12  theIonC12;
-   static G4double  theIonC12LengthCut;
-   static G4double* theIonC12KineticEnergyCuts;
 
 public: // Without description
 
@@ -77,23 +75,7 @@ public: // Without description
    virtual ~G4IonC12();
   
    static G4IonC12*    IonC12Definition();
-   static G4IonC12*    IonC12() {return &theIonC12;}
-   static G4double GetCuts() {return theIonC12LengthCut;}   
-   static G4double* GetCutsInEnergy() {return theIonC12KineticEnergyCuts;};
-
-   void SetCuts(G4double aCut); 
+   static G4IonC12*    IonC12();
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4IonC12::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theIonC12LengthCut = theCutInMaxInteractionLength;  
-  theIonC12KineticEnergyCuts = theKineticEnergyCuts;
-  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif

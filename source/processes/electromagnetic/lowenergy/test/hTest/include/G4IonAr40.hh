@@ -58,8 +58,6 @@ class G4IonAr40 : public G4VIon
 {
  private:
    static G4IonAr40 theIonAr40;
-   static G4double  theIonAr40LengthCut;
-   static G4double* theIonAr40KineticEnergyCuts;
 
 public: // Without description
    G4IonAr40(
@@ -77,22 +75,8 @@ public: // Without description
    virtual ~G4IonAr40();
   
    static G4IonAr40*    IonAr40Definition();
-   static G4IonAr40*    IonAr40() {return &theIonAr40;}
-   static G4double GetCuts() {return theIonAr40LengthCut;}   
-   static G4double* GetCutsInEnergy() {return theIonAr40KineticEnergyCuts;};
-
-   void SetCuts(G4double aCut); 
+   static G4IonAr40*    IonAr40();
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4IonAr40::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theIonAr40LengthCut = theCutInMaxInteractionLength;  
-  theIonAr40KineticEnergyCuts = theKineticEnergyCuts;
-  
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

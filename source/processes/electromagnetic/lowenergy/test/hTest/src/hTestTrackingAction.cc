@@ -74,8 +74,9 @@ void hTestTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
   }
 
   //Save primary parameters
+  G4int pid = aTrack->GetParentID(); 
 
-  if(0 == aTrack->GetParentID()) {
+  if(0 == pid) {
 
     //    theHisto->StartEvent();      
 
@@ -109,19 +110,19 @@ void hTestTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
     }
 
     // delta-electron
-  } else if ("e-" == name) {
+  } else if (1 == pid && "e-" == name) {
     if(1 < theHisto->GetVerbose()) {
       G4cout << "hTestTrackingAction: Secondary electron " << G4endl;
     }
     theHisto->AddDeltaElectron(aTrack->GetDynamicParticle());
 
-  } else if ("e+" == name) {
+  } else if (1 == pid && "e+" == name) {
     if(1 < theHisto->GetVerbose()) {
       G4cout << "hTestTrackingAction: Secondary positron " << G4endl;
     }
     //    theHisto->AddPositron(aTrack->GetDynamicParticle());
 
-  } else if ("gamma" == name) {
+  } else if (1 == pid && "gamma" == name) {
     if(1 < theHisto->GetVerbose()) {
       G4cout << "hTestTrackingAction: Secondary gamma " << G4endl;
     }
