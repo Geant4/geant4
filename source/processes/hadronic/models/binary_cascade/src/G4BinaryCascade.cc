@@ -66,9 +66,9 @@ G4BinaryCascade::G4BinaryCascade() : G4VIntraNuclearTransportModel()
 
   theCollisionMgr = new G4CollisionManager;
   
-//  theImR.push_back(new G4BCDecay);
+  theImR.push_back(new G4BCDecay);
   theImR.push_back(new G4Scatterer);
-//  theImR.push_back(new G4MesonAbsorption);
+  if(!getenv("I_Am_G4BinaryCascade_Developer") ) theImR.push_back(new G4MesonAbsorption);
 
 //  theScatterer = new G4ScattererStub;
   thePropagator = new G4RKPropagation;
