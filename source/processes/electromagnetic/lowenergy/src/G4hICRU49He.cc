@@ -20,6 +20,7 @@
 //
 // Modifications: 
 // 20/07/2000  V.Ivanchenko First implementation
+// 18/09/2000  V.Ivanchenko clean up - all variable are the same as in ICRU
 //
 // Class Description: 
 //
@@ -106,9 +107,10 @@ G4double G4hICRU49He::StoppingPower(const G4Material* material,
   } else if ( iMolecula < 30 ) {
 
     // Reduced kinetic energy  
-    G4double kinE = kineticEnergy*rateMass/keV ;  // He energy in keV
+    // in internal units of parametrisation formula (MeV)
+    G4double T = kineticEnergy*rateMass/MeV ;  
   
-    static G4double a[30][7] = {
+    static G4double c[30][7] = {
        8.0080,  3.6287,  23.0700,  14.9900,  0.8507, 0.60, 2.0
     , 13.3100,  3.7432,  39.4130,  12.1990,  1.0950, 0.38, 1.4
     , 22.7240,  3.6040,  47.1810,  17.5490,  0.9040, 0.40, 1.4
@@ -139,19 +141,32 @@ G4double G4hICRU49He::StoppingPower(const G4Material* material,
     , 221.723,  1.5415,  87.7315,  192.5266, 1.0742, 0.50, 2.0
     , 26.7537,  1.3717,  90.8007,  77.1587,  2.3264, 0.50, 2.0
     , 37.6121,  1.8052,  73.0250,  66.2070,  1.4038, 0.50, 2.0 };
-  
-    if ( kinE > 20000.0 ) kinE = 20000.0 ;
-    G4double e1 = kinE/1000.0 ;
-    // MGP, 13/9/2000 - Changed a1 into e1 in pow(...) below
-    G4double a1 = 1.0 - exp(-a[iMolecula][1]*pow(e1,-2.0+a[iMolecula][5])) ;
-    G4double a2 = (a[iMolecula][0]*log(e1)/e1+a[iMolecula][2]/e1) *
-                   exp(-a[iMolecula][4]*pow(e1,-a[iMolecula][6])) +
-                   a[iMolecula][3]/(e1*e1) ;
 
+    G4double a1,a2 ;
+
+  // Free electron gas model
+    if ( T < 0.001 ) {
+      G4double T0 = 0.001 ;
+      a1 = 1.0 - exp(-c[iMolecula][1]*pow(T0,-2.0+c[iMolecula][5])) ;
+      a2 = (c[iMolecula][0]*log(T0)/T0 + c[iMolecula][2]/T0) *
+            exp(-c[iMolecula][4]*pow(T0,-c[iMolecula][6])) +
+            c[iMolecula][3]/(T0*T0) ;
+
+      ionloss *= sqrt(T/T0) ; 
+  
+  // Main parametrisation
+    } else {
+      a1 = 1.0 - exp(-c[iMolecula][1]*pow(T,-2.0+c[iMolecula][5])) ;
+      a2 = (c[iMolecula][0]*log(T)/T + c[iMolecula][2]/T) *
+            exp(-c[iMolecula][4]*pow(T,-c[iMolecula][6])) +
+            c[iMolecula][3]/(T*T) ;
+    }
+
+  // He effective charge
     G4double z = (material->GetTotNbOfElectPerVolume()) / 
                  (material->GetTotNbOfAtomsPerVolume()) ;
 
-    ionloss     = a1*a2 / HeEffChargeSquare(z, kinE*keV) ; 
+    ionloss     = a1*a2 / HeEffChargeSquare(z, T*keV) ; 
 
     if ( ionloss < 0.0) ionloss = 0.0 ;
   }
@@ -172,7 +187,9 @@ G4double G4hICRU49He::ElectronicStoppingPower(G4double z,
   // The data and the fit from: 
   // ICRU Report 49, 1993. Ziegler's type of parametrisations
   // Reduced kinetic energy  
-  G4double kinE = kineticEnergy*rateMass/MeV ;  // He energy in MeV
+
+  // He energy in internal units of parametrisation formula (MeV)
+  G4double T = kineticEnergy*rateMass/MeV ;  
   
   static G4double a[92][5] = {
     0.35485, 0.6456, 6.01525,  20.8933, 4.3515
@@ -269,21 +286,25 @@ G4double G4hICRU49He::ElectronicStoppingPower(G4double z,
     , 5.218,   0.5828, 245.0,	 3.838,	   1.25	
   };
   
-  if ( kinE < 0.001 ) {
+  // Free electron gas model
+  if ( T < 0.001 ) {
     G4double slow  = a[i][0] ;
     G4double shigh = log( 1.0 + a[i][3]*1000.0 + a[i][4]*0.001 ) 
                    * a[i][2]*1000.0 ;
     ionloss  = slow*shigh / (slow + shigh) ; 
-    ionloss *= sqrt(kinE*1000.0) ; 
+    ionloss *= sqrt(T*1000.0) ; 
     
+  // Main parametrisation
   } else {
-    G4double slow  = a[i][0] * pow((kinE*1000.0), a[i][1]) ;
-    G4double shigh = log( 1.0 + a[i][3]/kinE + a[i][4]*kinE ) * a[i][2]/kinE ;
+    G4double slow  = a[i][0] * pow((T*1000.0), a[i][1]) ;
+    G4double shigh = log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
     ionloss = slow*shigh / (slow + shigh) ; 
     
   }
   if ( ionloss < 0.0) ionloss = 0.0 ;
-  ionloss /= HeEffChargeSquare(z, kinE*MeV) ; 
+
+  // He effective charge
+  ionloss /= HeEffChargeSquare(z, T*MeV) ; 
   
   return ionloss;
 }

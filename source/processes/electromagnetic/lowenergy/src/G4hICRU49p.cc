@@ -20,6 +20,7 @@
 //
 // Modifications: 
 // 20/07/2000  V.Ivanchenko First implementation
+// 18/09/2000  V.Ivanchenko clean up - all variable are the same as in ICRU
 //
 // Class Description: 
 //
@@ -103,9 +104,9 @@ G4double G4hICRU49p::StoppingPower(const G4Material* material,
   
     // The data and the fit from: 
     // ICRU Report N49, 1993. Ziegler's model for protons.
-    // Proton kinetic energy in keV/amu  
+    // Proton kinetic energy for parametrisation (keV/amu)  
 
-    G4double kinE = kineticEnergy/(keV*protonMassAMU) ; 
+    G4double T = kineticEnergy/(keV*protonMassAMU) ; 
 
      static G4double a[11][5] = {
     1.187E+1, 1.343E+1, 1.069E+4, 7.723E+2, 2.153E-2, 
@@ -121,13 +122,13 @@ G4double G4hICRU49p::StoppingPower(const G4Material* material,
     2.631E+0, 2.601E+0, 1.701E+3, 1.279E+3, 1.638E-2 };
       
 
-    if ( kinE < 10.0 ) {
-      ionloss = a[iMolecula][0] * sqrt(kinE) ;
+    if ( T < 10.0 ) {
+      ionloss = a[iMolecula][0] * sqrt(T) ;
     
-    } else if ( kinE < 10000.0 ) {
-      G4double slow  = a[iMolecula][1] * pow(kinE, 0.45) ;
-      G4double shigh = log( 1.0 + a[iMolecula][3]/kinE  
-                     + a[iMolecula][4]*kinE ) * a[iMolecula][2]/kinE ;
+    } else if ( T < 10000.0 ) {
+      G4double slow  = a[iMolecula][1] * pow(T, 0.45) ;
+      G4double shigh = log( 1.0 + a[iMolecula][3]/T  
+                     + a[iMolecula][4]*T ) * a[iMolecula][2]/T ;
       ionloss = slow*shigh / (slow + shigh) ;     
     } 
 
@@ -141,13 +142,13 @@ G4double G4hICRU49p::StoppingPower(const G4Material* material,
     // continuity is (should!) be garanteed, but not continuity of the
     // first derivative. A better fit is in order!       
     if ( 10 == iMolecula ) { 
-      if (kinE < 100.0) {    
-	ionloss *= (1.0+0.023+0.0066*log10(kinE));  
+      if (T < 100.0) {    
+	ionloss *= (1.0+0.023+0.0066*log10(T));  
       }
-      else if (kinE < 700.0) {   
-	ionloss *=(1.0+0.089-0.0248*log10(kinE-99.));
+      else if (T < 700.0) {   
+	ionloss *=(1.0+0.089-0.0248*log10(T-99.));
       } 
-      else if (kinE < 10000.0) {    
+      else if (T < 10000.0) {    
 	ionloss *=(1.0+0.089-0.0248*log10(700.-99.));
       }
     }
@@ -168,9 +169,9 @@ G4double G4hICRU49p::ElectronicStoppingPower(G4double z,
   
   // The data and the fit from: 
   // ICRU Report 49, 1993. Ziegler's type of parametrisations.
-  // Proton kinetic energy in keV/amu  
+  // Proton kinetic energy for parametrisation (keV/amu)  
 
-  G4double kinE = kineticEnergy/(keV*protonMassAMU) ; 
+  G4double T = kineticEnergy/(keV*protonMassAMU) ; 
   
   static G4double a[92][5] = {
     1.254E+0, 1.440E+0, 2.426E+2, 1.200E+4, 1.159E-1,
@@ -267,21 +268,23 @@ G4double G4hICRU49p::ElectronicStoppingPower(G4double z,
     7.290E+0, 8.204E+0, 1.918E+4, 5.863E+2, 2.673E-3
   };
 
-    // Carbon specific case for E < 40 keV
-  if ( kinE < 40.0 && 5 == i) {
-    G4double slow  = a[i][1] * pow(40.0, 0.45) ;
-    G4double shigh = log( 1.0 + a[i][3]/40.0 + a[i][4]*40.0 ) * a[i][2]/40.0 ;
-    ionloss = slow*shigh*sqrt(kinE/40.0) / (slow + shigh) ;     
+  G4double fac = 1.0 ;
 
-    // Standard parametrisation
-  } else if ( kinE < 10.0 ) {
-    ionloss = a[i][0] * sqrt(kinE) ;
-    
-  } else {
-    G4double slow  = a[i][1] * pow(kinE, 0.45) ;
-    G4double shigh = log( 1.0 + a[i][3]/kinE + a[i][4]*kinE ) * a[i][2]/kinE ;
-    ionloss = slow*shigh / (slow + shigh) ;     
-  } 
+    // Carbon specific case for E < 40 keV
+  if ( T < 40.0 && 5 == i) {
+    fac = sqrt(T/40.0) ;
+    T = 40.0 ;  
+
+    // Free electron gas model
+  } else if ( T < 10.0 ) { 
+    fac = sqrt(T*0.1) ;
+    T =10.0 ;  
+  }
+
+  // Main parametrisation
+  G4double slow  = a[i][1] * pow(T, 0.45) ;
+  G4double shigh = log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
+  ionloss = slow*shigh*fac / (slow + shigh) ;     
   
   if ( ionloss < 0.0) ionloss = 0.0 ;
   

@@ -20,6 +20,7 @@
 //
 // Modifications: 
 // 20/07/2000  V.Ivanchenko First implementation
+// 18/09/2000  V.Ivanchenko clean up - all variable are the same as in ICRU
 //
 // Class Description: 
 //
@@ -86,9 +87,9 @@ G4double G4hZiegler1977p::ElectronicStoppingPower(G4double z,
   // The data and the fit from: 
   // H.H.Andersen & J.F.Ziegler Hydrogen Stopping Powers and
   // Ranges in All Elements, Vol.3, Pergamon Press, 1977
-  // Proton kinetic energy in keV/amu  
-  
-  G4double kinE = kineticEnergy/(keV*protonMassAMU) ; 
+  // Proton kinetic energy for parametrisation in Ziegler's units (keV/amu)  
+
+  G4double T = kineticEnergy/(keV*protonMassAMU) ; 
   
   static G4double a[92][12] = {
     1.262,1.440,  242.6,12000.,0.115900,0.0005099,54360.0,-5.0520,2.0490,-0.30440,0.019660,-0.0004659,
@@ -185,16 +186,16 @@ G4double G4hZiegler1977p::ElectronicStoppingPower(G4double z,
     7.290,8.204,19180.0, 586.3,0.002573,0.0469100,1207.0,-20.1800,6.9950,-0.87570,0.047530,-0.0009508
   };
   
-  if ( kinE < 10.0 ) {
-    ionloss = a[i][0] * sqrt(kinE) ;
+  if ( T < 10.0 ) {
+    ionloss = a[i][0] * sqrt(T) ;
     
-  } else if ( kinE < 1000.0 ) {
-    G4double slow  = a[i][1] * pow(kinE, 0.45) ;
-    G4double shigh = log( 1.0 + a[i][3]/kinE + a[i][4]*kinE ) * a[i][2]/kinE ;
+  } else if ( T < 1000.0 ) {
+    G4double slow  = a[i][1] * pow(T, 0.45) ;
+    G4double shigh = log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
     ionloss = slow*shigh / (slow + shigh) ; 
     
   } else {
-    G4double le = log(kinE) ;
+    G4double le = log(T) ;
     G4double gam = 1.0 + kineticEnergy / proton_mass_c2 ;
     G4double beta2 = 1.0 - 1.0/ (gam*gam) ;
     ionloss = ( log(a[i][6]*beta2/(1.0 - beta2)) - beta2 -

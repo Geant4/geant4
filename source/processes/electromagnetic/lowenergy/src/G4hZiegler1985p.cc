@@ -20,6 +20,7 @@
 //
 // Modifications: 
 // 20/07/2000  V.Ivanchenko First implementation
+// 18/09/2000  V.Ivanchenko clean up - all variable are the same as in ICRU
 //
 // Class Description: 
 //
@@ -86,9 +87,9 @@ G4double G4hZiegler1985p::ElectronicStoppingPower(G4double z,
   // The data and the fit from: 
   // J.F.Ziegler, J.P.Biersack, U.Littmark The Stoping and
   // Range of Ions in Solids, Vol.1, Pergamon Press, 1985
-  // Proton kinetic energy in keV/amu  
+  // Proton kinetic energy for parametrisation in Ziegler's units (keV/amu)  
   
-  G4double kinE = kineticEnergy/(keV*protonMassAMU) ; 
+  G4double T = kineticEnergy/(keV*protonMassAMU) ; 
   
   static G4double a[92][8] = {
    0.0091827, 0.0053496, 0.69741, 0.48493, 316.07 , 1.0143, 9329.3, 0.053989,
@@ -194,8 +195,8 @@ G4double G4hZiegler1985p::ElectronicStoppingPower(G4double z,
    2.7589,    0.0039806, 3.2092,  0.66122, 2505.4 , 0.82863, 2065.1, 0.022816
   };
   
-  G4double e = kinE ;
-  if ( kinE < 25.0 ) e = 25.0 ;
+  G4double e = T ;
+  if ( T < 25.0 ) e = 25.0 ;
   
   // universal approximation  
   G4double slow  = a[i][0] * pow(e, a[i][1]) + a[i][2] * pow(e, a[i][3])  ;
@@ -203,7 +204,7 @@ G4double G4hZiegler1985p::ElectronicStoppingPower(G4double z,
   ionloss = slow*shigh / (slow + shigh) ; 
     
   // low energy region
-  if ( kinE < 25.0 ) {
+  if ( T < 25.0 ) {
     
     G4double  s = 0.45 ;
     // light elements
@@ -211,7 +212,7 @@ G4double G4hZiegler1985p::ElectronicStoppingPower(G4double z,
     // semiconductors
     if(5 == i || 13 == i || 31 == i) s = 0.375 ;
     
-    ionloss *= pow(kinE/25.0, s) ;
+    ionloss *= pow(T/25.0, s) ;
   }
   
   if ( ionloss < 0.0) ionloss = 0.0 ;
