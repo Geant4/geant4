@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2003-10-10 16:21:19 maire Exp $
+$Id: History,v 1.8 2003-10-13 16:43:41 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+13-10-03 V.Ivanchenko (testem7-V05-02-01)
+- Update Binary cascade constructor
+
 10-10-03 mma (testem7-V05-02-00)
  - migration em STD -> em standard
  - NOHIST -> ANALYSIS_USE

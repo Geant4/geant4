@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// 
+// $Id: PhysListBinaryCascade.cc,v 1.3 2003-10-13 16:43:43 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "PhysListBinaryCascade.hh"
 #include "G4ParticleDefinition.hh"
@@ -31,9 +31,6 @@
 
 #include "G4HadronFissionProcess.hh"
 #include "G4HadronCaptureProcess.hh"
-
-#include "G4ProtonInelasticProcess.hh"
-#include "G4NeutronInelasticProcess.hh"
 
 #include "G4BinaryCascade.hh"
 
@@ -54,7 +51,7 @@ void PhysListBinaryCascade::ConstructProcess()
 {
 
   // Binary Cascade
-  G4BinaryCascade * theBC = new G4BinaryCascade();
+  G4BinaryCascade * theBC = 0;
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -63,18 +60,19 @@ void PhysListBinaryCascade::ConstructProcess()
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if (particleName == "proton") {
 
-      G4ProtonInelasticProcess* theInelasticProcess =
-                                    new G4ProtonInelasticProcess("inelastic");
-      theInelasticProcess->RegisterMe(theBC);
-      pmanager->AddDiscreteProcess(theInelasticProcess);
-          G4cout << "Add hadronic physics for proton" << G4endl;
+      theBC = new G4BinaryCascade();
+      theIPproton.RegisterMe(theBC);
+      G4CrossSectionDataStore * thePStore = theIPproton.GetCrossSectionDataStore();
+      thePStore->AddDataSet(&theXSecProton);
+      pmanager->AddDiscreteProcess(&theIPproton);
 
     } else if (particleName == "neutron") {
 
-      G4NeutronInelasticProcess* theInelasticProcess =
-                                    new G4NeutronInelasticProcess("inelastic");
-      theInelasticProcess->RegisterMe(theBC);
-      pmanager->AddDiscreteProcess(theInelasticProcess);
+      theBC = new G4BinaryCascade();
+      theIPneutron.RegisterMe(theBC);
+      G4CrossSectionDataStore * thePStore = theIPneutron.GetCrossSectionDataStore();
+      thePStore->AddDataSet(&theXSecNeutron);
+      pmanager->AddDiscreteProcess(&theIPneutron);
           // fission
       G4HadronFissionProcess* theFissionProcess =
                                     new G4HadronFissionProcess;
@@ -87,7 +85,6 @@ void PhysListBinaryCascade::ConstructProcess()
       G4LCapture* theCaptureModel = new G4LCapture;
       theCaptureProcess->RegisterMe(theCaptureModel);
       pmanager->AddDiscreteProcess(theCaptureProcess);
-          G4cout << "Add hadronic physics for neutron" << G4endl;
       /*
     if (particle == G4IonC12::IonC12()) {
       pManager->AddDiscreteProcess(&theIonProcess);
