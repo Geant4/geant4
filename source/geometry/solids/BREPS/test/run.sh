@@ -19,11 +19,11 @@ do
   target=`basename $i .cc`
   TESTTARGET=$target
   export TESTTARGET
-  echo  "Compiling $target ... "
+  # echo  "Compiling $target ... "
   gmake
-  echo  "Executing $target ... "
+  echo -n "Executing $target .."
   ./bin/$G4SYSTEM/$target > $target.newout-$host
-  echo  "Difference from expected output: "
+  echo  ".. difference from expected output: "
   diff $target.out $target.newout-$host
   echo  " "
 done
