@@ -1,4 +1,4 @@
-$Id: History,v 1.50 2002-05-24 11:51:12 maire Exp $
+$Id: History,v 1.51 2002-06-11 08:10:53 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 jun 02: Laszlo
+- important bug fixed in G4MultipleScattering.cc
+  ComputeTransportCrossSection. The bug affected the scattering
+  for all the low energy ( <~ few hundred MeV) heavy particles.
      
 24 may 02: Laszlo (utils-V04-00-07)
 - G4MultipleScattering.hh,.cc: mods in angle distribution and
