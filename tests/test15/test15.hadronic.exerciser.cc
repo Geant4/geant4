@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test15.hadronic.exerciser.cc,v 1.3 1999-11-28 18:49:34 stesting Exp $
+// $Id: test15.hadronic.exerciser.cc,v 1.4 1999-12-02 16:34:41 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -69,6 +69,8 @@ int main (int argc, char** argv) {
   materialNameList.append ("Al");
   materialNameList.append ("Air");
   materialNameList.append ("U");
+
+  OutputCases (particleNameList, energyList, materialNameList);
 
   cout << endl;
 }
