@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1SteppingAction.cc,v 1.8 2002-05-31 17:10:35 maire Exp $
+// $Id: Em1SteppingAction.cc,v 1.9 2003-05-09 09:15:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,18 +53,18 @@ Em1SteppingAction::~Em1SteppingAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1SteppingAction::UserSteppingAction(const G4Step* aStep)
-{ 
- G4double EdepStep = aStep->GetTotalEnergyDeposit();
- if (EdepStep > 0.) eventAction->addEdep(EdepStep);
- 
- const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
- if (process) runAction->CountProcesses(process->GetProcessName());
- 
- G4double charge  = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
- G4double steplen = aStep->GetStepLength();
- 
-#ifndef G4NOHIST 
- if (charge != 0.) runAction->GetHisto(2)->fill(steplen);
+{
+  G4double EdepStep = aStep->GetTotalEnergyDeposit();
+  if (EdepStep > 0.) eventAction->addEdep(EdepStep);
+
+  const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
+  if (process) runAction->CountProcesses(process->GetProcessName());
+
+
+#ifndef G4NOHIST
+  G4double charge  = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
+  G4double steplen = aStep->GetStepLength();
+  if (charge != 0.) runAction->GetHisto(2)->fill(steplen);
 #endif                    
 }
 
