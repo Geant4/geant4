@@ -1,5 +1,5 @@
 
-$Id: History,v 1.3 1999-11-10 16:56:43 japost Exp $
+$Id: History,v 1.4 1999-11-24 20:17:20 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ Nov 24   1999 				geom-solid-bool-V00-01-05
+
+  - Small fix in src/G4DisplacedSolid.cc to the return type 
+         (const G4AffineTransform --> G4AffineTransform)
+    to conform with the specification of the class.
+
+ Nov 19   1999                          geom-solid-bool-V00-01-04
+
+  -  Fixes from Vladimir, and additional tests
 
  Nov 10   1999                          geom-solid-bool-V00-01-03b
 
