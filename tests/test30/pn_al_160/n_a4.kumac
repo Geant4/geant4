@@ -35,8 +35,8 @@ gr/h/symb X Y 27 21 0.2
  
  exe ../prf n_a4 eps
 
-* null 0 160 0.01 10
-* atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
+ null 0 160 0.01 10
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
  
  hi/file 1 par.paw
  set dmod 4
@@ -52,6 +52,10 @@ gr/h/symb X Y 27 21 0.2
  line 100 0.4 110 0.4
  itx 115 2.2 'CHIPS'
  close 1
+ 
+  gr/h/symb X Y 27 21 0.2
+
+ exe ../prf nk_a4 eps
 
  opt liny
 

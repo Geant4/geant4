@@ -36,6 +36,9 @@ gr/h/symb X Y 27 21 0.2
 
 exe ../prf n_a7 eps
  
+  null 0 160 0.001 10
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dE/do (mb/MeV/sr)'
+
   hi/file 1 par.paw
  set dmod 4
  hi/pl 35 s
@@ -52,7 +55,9 @@ exe ../prf n_a7 eps
  itx 115 2.2 'CHIPS'
  close 1
  
+gr/h/symb X Y 27 21 0.2
 
  opt liny
 
+exe ../prf nk_a7 eps
 
