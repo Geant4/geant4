@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.12 2004-12-07 23:40:59 perl Exp $
+// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.13 2004-12-10 18:16:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -250,7 +250,7 @@ void G4OpenGLXmViewer::wobble_timer_callback (XtPointer clientData,
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*)clientData;
   const G4Vector3D& up = pView->fVP.GetUpVector();
   G4Vector3D third_axis = up.cross(pView->original_vp);
-  G4double pi_div_by_ten = M_PI / 10.0;
+  G4double pi_div_by_ten = pi / 10.0;
   G4Vector3D d_up = 0.1 * (std::sin ((G4double)pView->frameNo * pi_div_by_ten * 2.)) * up;
   G4Vector3D d_third_axis = 0.1 * (std::sin ((G4double)pView->frameNo * (pi_div_by_ten))) * third_axis;
 

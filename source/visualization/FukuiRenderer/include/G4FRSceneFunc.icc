@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRSceneFunc.icc,v 1.5 2004-12-07 23:40:58 perl Exp $
+// $Id: G4FRSceneFunc.icc,v 1.6 2004-12-10 18:16:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -625,8 +625,8 @@ void G4FRSCENEHANDLER::AddThis ( const G4Sphere& sphere )
 	SendTransformedCoordinates();
 
 		//----- send sphere to Fukui Renderer
-	const G4double PI_minus  = 0.9999 * M_PI ;
-	const G4double PI2_minus = 1.9999 * M_PI ;
+	const G4double PI_minus  = 0.9999 * pi ;
+	const G4double PI2_minus = 1.9999 * pi ;
 	if( dphi > PI2_minus    &&   dtheta > PI_minus ) {
 			//----- full sphere
 		SendStrDouble ( FR_SPHERE, rmax );

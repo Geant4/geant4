@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.22 2004-11-11 16:09:40 johna Exp $
+// $Id: MyDetectorConstruction.cc,v 1.23 2004-12-10 18:16:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -210,7 +210,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 
   //-------------------------------------------- Boolean solids
 
-  G4Tubs* cylinder1 = new G4Tubs("Cylinder #1",20*cm,50*cm,30*cm,0,2*M_PI);
+  G4Tubs* cylinder1 = new G4Tubs("Cylinder #1",20*cm,50*cm,30*cm,0,2*pi);
   G4Box* box1 = new G4Box("Box #1",20*cm,30*cm,40*cm);
   G4Box* box2 = new G4Box("Box #2",10*cm,20*cm,35*cm);
   G4RotationMatrix* rm1 = new G4RotationMatrix;
@@ -276,7 +276,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
     = new G4VisAttributes(G4Colour(0.5,0.5,0.5,0.5));
 
 
-  G4double tube_dPhi = 2. * M_PI;
+  G4double tube_dPhi = twopi;
   G4Tubs* tube = new G4Tubs("tube",20*cm,50*cm,30*cm,0.,tube_dPhi);
   G4LogicalVolume * tube_log
     = new G4LogicalVolume(tube,Ar,"tube_L",0,0,0);
@@ -301,7 +301,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   for (iCopy = 0; iCopy < 6; iCopy++) {
     new G4PVPlacement
       (G4Transform3D
-       (G4RotationMatrix().rotateZ(divided_tube_dPhi/2.+iCopy*M_PI/3.),
+       (G4RotationMatrix().rotateZ(divided_tube_dPhi/2.+iCopy*pi/3.),
 	G4ThreeVector()),
        divided_tube_log,"divided_tube_phys",tube_log,
        false,iCopy);

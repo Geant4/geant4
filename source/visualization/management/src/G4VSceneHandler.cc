@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.32 2004-11-11 16:06:12 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.33 2004-12-10 18:16:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -225,7 +225,7 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
   const G4double length(scale.GetLength());
   const G4double halfLength(length / 2.);
   const G4double tickLength(length / 20.);
-  const G4double piBy2(M_PI / 2.);
+  const G4double piBy2(halfpi);
 
   // Get size of scene...
   const G4double xmin = sceneExtent.GetXmin();

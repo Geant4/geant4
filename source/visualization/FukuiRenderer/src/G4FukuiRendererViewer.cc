@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererViewer.cc,v 1.8 2004-12-07 23:40:58 perl Exp $
+// $Id: G4FukuiRendererViewer.cc,v 1.9 2004-12-10 18:16:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -200,7 +200,7 @@ void G4FukuiRendererViewer::SendViewParameters ()
 		//----- Magic number to decide camera distance automatically
 	const    G4double        HOW_FAR            = 1000.0       ; // to define "infinity"
 	const    G4double        MIN_HALF_ANGLE     = 0.01         ;
-	const    G4double        MAX_HALF_ANGLE     = 0.499 * M_PI ;
+	const    G4double        MAX_HALF_ANGLE     = 0.499 * pi ;
 
 		//----- (2A) CALC camera distance
 		//..... Note: Camera cannot enter inside object
@@ -230,8 +230,8 @@ void G4FukuiRendererViewer::SendViewParameters ()
 		//----- (3A) CALC camera direction
 	const G4Vector3D& camera_direction \
 	  = fVP.GetViewpointDirection().unit();
-	const G4double v_angle =  (180.0 / M_PI) * camera_direction.theta() ;
-	const G4double h_angle =  (180.0 / M_PI) * camera_direction.phi  () ;
+	const G4double v_angle =  (180.0 / pi) * camera_direction.theta() ;
+	const G4double h_angle =  (180.0 / pi) * camera_direction.phi  () ;
 
 		//----- (2B), (3B) SEND camera position
 	fSceneHandler.SendStrDouble3( FR_CAMERA_POSITION, 

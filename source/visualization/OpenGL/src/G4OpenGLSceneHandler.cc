@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.28 2004-12-07 23:40:58 perl Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.29 2004-12-10 18:16:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -311,7 +311,7 @@ void G4OpenGLSceneHandler::DrawScreenPolygon
  const G4Point3D& centre,
  G4int nSides) {
   glBegin (GL_POLYGON);
-  const G4double dPhi = 2. * M_PI / nSides;
+  const G4double dPhi = twopi / nSides;
   const G4double r = size / 2.;
   G4double phi;
   G4int i;
@@ -333,7 +333,7 @@ void G4OpenGLSceneHandler::DrawXYPolygon
   const G4Vector3D& viewpointDirection =
     fpViewer -> GetViewParameters().GetViewpointDirection();
   const G4Vector3D& up = fpViewer->GetViewParameters().GetUpVector();
-  const G4double dPhi = 2. * M_PI / nSides;
+  const G4double dPhi = twopi / nSides;
   const G4double radius = size / 2.;
   G4Vector3D start = radius * (up.cross(viewpointDirection)).unit();
   G4double phi;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.15 2004-12-07 23:40:58 perl Exp $
+// $Id: G4DAWNFILEViewer.cc,v 1.16 2004-12-10 18:16:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -235,7 +235,7 @@ void G4DAWNFILEViewer::SendViewParameters ()
 		//----- Magic number to decide camera distance automatically
 	const    G4double        HOW_FAR            = 1000.0       ; // to define "infinity"
 	const    G4double        MIN_HALF_ANGLE     = 0.01         ;
-	const    G4double        MAX_HALF_ANGLE     = 0.499 * M_PI ;
+	const    G4double        MAX_HALF_ANGLE     = 0.499 * pi ;
 
 		//----- CALC camera distance
 		//..... Note: Camera cannot enter inside object
@@ -265,8 +265,8 @@ void G4DAWNFILEViewer::SendViewParameters ()
 		//----- CALC camera direction
 	const G4Vector3D& camera_direction \
 	  = fVP.GetViewpointDirection().unit();
-	const G4double v_angle =  (180.0 / M_PI) * camera_direction.theta() ;
-	const G4double h_angle =  (180.0 / M_PI) * camera_direction.phi  () ;
+	const G4double v_angle =  (180.0 / pi) * camera_direction.theta() ;
+	const G4double h_angle =  (180.0 / pi) * camera_direction.phi  () ;
 
 
 	//########### Generation of the file .DAWN.history for DAWN GUI
