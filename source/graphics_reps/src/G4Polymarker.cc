@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polymarker.cc,v 1.8 2003-06-16 16:55:24 gunter Exp $
+// $Id: G4Polymarker.cc,v 1.9 2004-11-11 16:41:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 #include "G4Polymarker.hh"
 
 G4Polymarker::G4Polymarker ():
-fMarkerType (line)
+fMarkerType (G4Polymarker::dots)
 {}
 
 G4Polymarker::~G4Polymarker () {}
@@ -57,8 +57,6 @@ G4Polymarker & G4Polymarker::operator = (const G4Polymarker &right) {
 std::ostream& operator << (std::ostream& os, const G4Polymarker& marker) {
   os << "G4Polymarker: type: ";
   switch (marker.fMarkerType) {
-  case G4Polymarker::line:
-    os << "line"; break;
   case G4Polymarker::dots:
     os << "dots"; break;
   case G4Polymarker::circles:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polymarker.hh,v 1.8 2003-06-16 16:55:11 gunter Exp $
+// $Id: G4Polymarker.hh,v 1.9 2004-11-11 16:41:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,7 @@ class G4Polymarker: public G4VMarker, public G4Point3DList {
 public: // With description
 
   friend std::ostream& operator << (std::ostream& os, const G4Polymarker& marker);
-  enum MarkerType {line, dots, circles, squares};
+  enum MarkerType {dots, circles, squares};
   G4Polymarker ();
   virtual ~G4Polymarker ();
   virtual G4Visible&    operator = (const G4Visible& right);
