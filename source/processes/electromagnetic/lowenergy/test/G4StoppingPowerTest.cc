@@ -50,8 +50,8 @@
 #include "G4ProcessManager.hh"
 #include "G4VParticleChange.hh"
 
-#include "G4eLowEnergyIonisation.hh"
-#include "G4LowEnergyBremsstrahlung.hh"
+#include "G4LowEnergyIonisationVI.hh"
+#include "G4LowEnergyBremsstrahlungVI.hh"
 #include "G4LowEnergyCompton.hh"
 #include "G4LowEnergyGammaConversion.hh"
 #include "G4LowEnergyPhotoElectric.hh"
@@ -97,8 +97,8 @@
 #include "hTest/include/G4IonC12.hh"
 #include "hTest/include/G4IonAr40.hh"
 
-//typedef G4LowEnergyBremsstrahlungIV G4LowEnergyBremsstrahlung;
-//typedef G4eLowEnergyIonisationIV G4LowEnergyIonisation;
+typedef G4LowEnergyBremsstrahlungVI G4LowEnergyBremsstrahlung;
+typedef G4LowEnergyIonisationVI G4LowEnergyIonisation;
 
 int main(int argc,char** argv)
 {
@@ -375,13 +375,15 @@ int main(int argc,char** argv)
     G4double emax10 = log10(emax/MeV);
     G4double bin = (emax10 - emin10) / (G4double)nbin;
 
-    HepHistogram* hist[3];
+    HepHistogram* hist[4];
     hist[0] = hbookManager->histogram("Stopping power (MeV*cm**2/g)", 
                                      nbin,emin10,emax10);
     hist[1] = hbookManager->histogram("Stopping power (MeV/mm)", 
                                      nbin,emin10,emax10);
     hist[2] = hbookManager->histogram("Step limit (mm)", 
                                      nbin,emin10,emax10);
+    hist[3] = hbookManager->histogram("Number of secondaries", 
+                                      nbin,emin10,emax10);
     //    assert (hDebug != 0);  
     G4cout<< "Histograms is initialised" << G4endl;
 
@@ -674,13 +676,14 @@ int main(int argc,char** argv)
 
       //G4cout << " de(MeV) = " << de/MeV << " n= " << n << G4endl;
 
-
       if(n > 0) {
         for(G4int i=0; i<n; i++) {
           de += (aChange->GetSecondary(i))->GetKineticEnergy();
-          G4cout << "add " 
-                 << ((aChange->GetSecondary(i))->GetKineticEnergy())/eV
-                 << " eV" << G4endl;
+          if(verbose) {
+            G4cout << "add " 
+                   << ((aChange->GetSecondary(i))->GetKineticEnergy())/eV
+                   << " eV" << G4endl;
+	  }
 	}
       }
       G4double st = de/(theStep*(material->GetDensity()));
@@ -700,6 +703,7 @@ int main(int argc,char** argv)
       hist[0]->accumulate(le,st);
       hist[1]->accumulate(le,s);
       hist[2]->accumulate(le,x/mm);
+      hist[3]->accumulate(le,(G4double)n);
     }
     if(usepaw)hbookManager->write();
     G4cout << "# hbook is writed" << G4endl;

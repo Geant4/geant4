@@ -49,8 +49,8 @@
 #include "G4VContinuousDiscreteProcess.hh"
 #include "G4ProcessManager.hh"
 
-#include "G4LowEnergyIonisation.hh"
-#include "G4LowEnergyBremsstrahlung.hh"
+#include "G4LowEnergyIonisationVI.hh"
+#include "G4LowEnergyBremsstrahlungVI.hh"
 #include "G4LowEnergyCompton.hh"
 #include "G4LowEnergyGammaConversion.hh"
 #include "G4LowEnergyPhotoElectric.hh"
@@ -95,8 +95,8 @@
 #include "CLHEP/Hist/Histogram.h"
 #include "CLHEP/Hist/Tuple.h"
 
-//typedef G4LowEnergyBremsstrahlungIV G4LowEnergyBremsstrahlung;
-//typedef G4eLowEnergyIonisationIV G4LowEnergyIonisation;
+typedef G4LowEnergyBremsstrahlungVI G4LowEnergyBremsstrahlung;
+typedef G4LowEnergyIonisationVI G4LowEnergyIonisation;
 
 int main(int argc,char** argv)
 {
