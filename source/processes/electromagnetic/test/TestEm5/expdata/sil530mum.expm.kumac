@@ -1,0 +1,43 @@
+macro sil530mum.expm
+
+*            Silicium 530 micrometer
+*            e- 1 MeV
+*
+*     M.J. Berger et al. NIM 69 (p.181) 1969
+*
+
+* distribution of the energy deposit
+*
+* (from 100 keV to 1.03 MeV by step of 10 keV --> 93 bins) 
+*
+nbin=93
+vector/create vect([nbin])
+
+vector/input vect _
+  4.0e-2 3.8e-1 1.4    3.2    5.3    6.8    7.6    6.6    5.8    5.0 _
+  4.2    3.7    3.1    2.7    2.3    2.0    1.7    1.6    1.4    1.3 _ 
+  1.15   1.1    9.4e-1 9.8e-1 9.0e-1 9.0e-1 7.6e-1 7.6e-1 6.8e-1 6.8e-1 _
+  6.0e-1 6.0e-1 5.3e-1 5.0e-1 5.3e-1 5.3e-1 5.3e-1 4.8e-1 4.2e-1 4.2e-1 _
+  4.2e-1 4.2e-1 4.4e-1 4.4e-1 3.5e-1 3.9e-1 3.8e-1 3.1e-1 3.8e-1 3.2e-1 _
+  3.5e-1 3.8e-1 3.1e-1 3.2e-1 2.9e-1 2.8e-1 2.8e-1 2.4e-1 2.6e-1 2.4e-1 _
+  2.6e-1 2.5e-1 2.1e-1 2.6e-1 2.4e-1 1.9e-1 1.3e-1 1.1e-1 1.2e-1 1.1e-1 _
+  1.1e-1 9.5e-2 1.6e-1 9.5e-2 8.6e-2 9.0e-2 8.6e-2 6.4e-2 7.8e-2 7.0e-2 _
+  7.8e-2 6.2e-2 7.0e-2 5.8e-2 5.8e-2 7.0e-2 5.8e-2 6.5e-2 1.3e-1 6.0e-1 _
+  1.6    1.2    2.1e-1
+		    
+dE=0.01
+Emin=0.1
+Emax= [Emin]+[nbin]*[dE]		     
+create/1dhisto 2 'longit energy profile' [nbin] [Emin] [Emax]
+put/contents 2 vect
+
+option stat
+option logy
+h/pl 2
+
+* save histo
+*
+*h/file 1 ../results/expdat.plot14 ! n
+*hrout 0
+ 
+return 	     
