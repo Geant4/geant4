@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IntersectingCone.cc,v 1.2 2000-10-20 16:02:30 davidw Exp $
+// $Id: G4IntersectingCone.cc,v 1.3 2001-03-30 18:44:10 davidw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -177,7 +177,7 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p, const G4ThreeVe
 	
 	G4double radical = b*b - 4*a*c;
 	
-	if (radical < -1E-6) return 0;		// No solution
+	if (radical < -1E-6*fabs(b)) return 0;		// No solution
 	
 	if (radical < 1E-6*fabs(b)) {
 		//
@@ -269,7 +269,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p, const G4ThreeVe
 	
 	G4double radical = b*b - 4*a*c;
 	
-	if (radical < -1E-6) return 0;		// No solution
+	if (radical < -1E-6*fabs(b)) return 0;		// No solution
 	
 	if (radical < 1E-6*fabs(b)) {
 		//
