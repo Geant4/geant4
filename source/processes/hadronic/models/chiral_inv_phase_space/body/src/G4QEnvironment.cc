@@ -23,7 +23,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.86 2004-03-17 13:01:40 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.87 2004-03-18 08:02:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -42,6 +42,7 @@
 //#define rdebug
 //#define ffdebug
 //#define pcdebug
+//#define mudebug
 
 #include "G4QEnvironment.hh" 
 
@@ -174,24 +175,39 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
         G4LorentzVector qt4m=mu4m+qi4m;
         G4LorentzVector nu4m(0.,0.,0.,0.);    // secondary neutrino
         G4LorentzVector qf4m(0.,0.,0.,0.);    // secondary quark-parton
-        if(!G4QHadron(qt4m).DecayIn2(nu4m,qf4m))
-        {
-          G4cerr<<"***G4QE::Constr: Muon error (1) 4M="<<mu4m<<". Fill as it is."<<G4endl;
-          G4QHadron* lepton = new G4QHadron(opHad); // Fill projMuon to Output
-          theQHadrons.push_back(lepton);        // (delete equivalent)
-          return;
-        }
-        // (mu,q->nu,q) reaction succeded and Neutrino can be pushed to Output
         G4QContent targQC=targQPDG.GetQuarkContent(); // QC of the target nucleus (local!)
         targQC+=G4QContent(1,0,0,0,1,0);      // Make iso-shift with a fake pi- (changed!)
-        G4LorentzVector fn4m=G4LorentzVector(0.,0.,0.,targM)-qi4m+qf4m;
-        G4double tm=fn4m.m();                 // Real mass of the final nucleus
+        G4LorentzVector fn4m=G4LorentzVector(0.,0.,0.,0.); // Prototype of the residual 4M
         G4QNucleus fnN(targQC,fn4m);          // Define the final state nucleus
         G4double   fnm=fnN.GetMZNS();         // GS Mass of the final state nucleus
+        G4double    tm=0.;                    // Prototype of RealMass of the final nucleus
+        G4LorentzVector tg4m=G4LorentzVector(0.,0.,0.,targM);
+        G4LorentzVector fd4m=tg4m-qi4m;
+        //while (tm<fnm)
+        //{
+          if(!G4QHadron(qt4m).DecayIn2(nu4m,qf4m))
+          {
+            G4cerr<<"***G4QE::Constr:Muon error (1) 4M="<<mu4m<<". Fill as it is."<<G4endl;
+            G4QHadron* lepton = new G4QHadron(opHad); // Fill projMuon to Output
+            theQHadrons.push_back(lepton);        // (delete equivalent)
+            return;
+          }
+#ifdef mudebug
+          G4cout<<"G4QEnv::Const:i="<<qi4m<<",t="<<qt4m<<"->n="<<nu4m<<"+q="<<qf4m<<G4endl;
+#endif      
+          fn4m=fd4m+qf4m;
+          tm=fn4m.m();                 // Real mass of the final nucleus
+		//}
+		fnN.Set4Momentum(fn4m);
+        // (mu,q->nu,q) reaction succeded and Neutrino can be pushed to Output
         G4QHadron* neutrino = 0;              // Neutrino to be filled to Output
+#ifdef mudebug
+        G4cout<<"G4QEnv::Const:fM="<<tm<<fn4m<<",GSM="<<fnm<<G4endl;
+#endif      
         if(tm<fnm)                            // Final Nucleus is below the GS threshold
 		{
           qf4m=G4LorentzVector(0.,0.,0.,fnm); // Final nucleus 4M for the final decay
+          qt4m=tg4m+mu4m;
           if(!G4QHadron(qt4m).DecayIn2(nu4m,qf4m)) // Decay in Nucleus+nu_mu
           {
             G4cerr<<"***G4QE::Constr:Muon error (2) 4M="<<mu4m<<". Fill as it is."<<G4endl;
@@ -200,8 +216,10 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
             return;
           }
           G4QHadron* fnuc = new G4QHadron(targQC,qf4m); // Fill Final Nucleus to Output
-          theQHadrons.push_back(fnuc);    // (delete equivalent)
+          //theQHadrons.push_back(fnuc);      // (delete equivalent)
+          EvaporateResidual(fnuc);            // Try to evaporate residual (del. equiv.)
           neutrino = new G4QHadron(nuPDG,nu4m);// Fill Neutrino to Output
+          theEnvironment.InitByPDG(90000000); // Create nuclear environment
           theQHadrons.push_back(neutrino);    // (delete equivalent)
           return;
         }
@@ -211,19 +229,24 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
 	    {
           if(!fnN.SplitBaryon())  // Final Nucleus is below the splittingFragment Threshold
 		  {
-            qt4m-=nu4m;
-            qf4m=G4LorentzVector(0.,0.,0.,fnm); // Final nucleus 4M for the final decay
-            if(!G4QHadron(qt4m).DecayIn2(nu4m,qf4m)) // Decay in Nucleus+photon
+#ifdef mudebug
+            G4cout<<"G4QEnv::Const: impossible to split nucleon after mu->nu"<<G4endl;
+#endif      
+            G4LorentzVector ga4m(0.,0.,0.,0.);
+            qf4m=G4LorentzVector(0.,0.,0.,fnm);// Final nucleus 4M for the final decay
+            if(!G4QHadron(fn4m).DecayIn2(ga4m,qf4m)) // Decay in Nucleus+photon
             {
-              G4cerr<<"***G4QE::Constr:LepCapError(3),4M="<<mu4m<<".Fill as it is"<<G4endl;
-              G4QHadron* muon = new G4QHadron(opHad); // Fill projMuon to Output
-              theQHadrons.push_back(muon);        // (delete equivalent)
+              G4cerr<<"***G4QE::Constr:LepCapError(3),M="<<fn4m.m()<<"<"<<fnm<<G4endl;
+              G4QHadron* resid = new G4QHadron(targQC,qt4m); // Fill ResidNucleus to Output
+              theQHadrons.push_back(resid);     // (delete equivalent)
+              theEnvironment.InitByPDG(90000000);// Create nuclear environment
               return;
             }
+            G4QHadron* photon = new G4QHadron(22,ga4m); // Fill projPhoton to Output
+            theQHadrons.push_back(photon);     // (delete equivalent)
             G4QHadron* fnuc = new G4QHadron(targQC,qf4m); // Fill Final Nucleus to Output
-            theQHadrons.push_back(fnuc);    // (delete equivalent)
-            G4QHadron* photon = new G4QHadron(22,nu4m); // Fill projPhoton to Output
-            theQHadrons.push_back(photon);    // (delete equivalent)
+            EvaporateResidual(fnuc);            // Try to evaporate residual (del. equiv.)
+            theEnvironment.InitByPDG(90000000);// Create nuclear environment
             return;
 		  }
 	    }
@@ -7134,11 +7157,10 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 #ifdef fdebug
         G4cout<<"G4QE::FSI:AntiSN==>"<<r4M<<"->A="<<RPDG<<n4M<<"+K="<<kPDG<<k4M<<G4endl;
 #endif
-        curHadr->Set4Momentum(n4M);
-        curHadr->SetQPDG(G4QPDGCode(RPDG));  // converted antiStrangeNucleus
-        G4QHadron* theKaon = new G4QHadron(kPDG,k4M);// Make a New Hadr for the kaon
-        theQHadrons.push_back(theKaon);    // (del.eq.- user is responsible for del)
-        //theFragments->push_back(theKaon);    // (delete equivalent for the kaon)
+        curHadr->Set4Momentum(k4M);                 // Kaon
+        curHadr->SetQPDG(G4QPDGCode(kPDG));
+        G4QHadron* theRes = new G4QHadron(RPDG,n4M);// Make a New Hadr for the residual
+        EvaporateResidual(theRes);                  // Try to evaporate theResNuc (del.eq.)
       }
     }
     else if(hPDG>90500000&&hPDG!=91000000&&hPDG!=91000999&&hPDG!=90999001) // Only for G4

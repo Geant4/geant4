@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.hh,v 1.1 2004-03-17 13:01:39 mkossov Exp $
+// $Id: G4QCaptureAtRest.hh,v 1.2 2004-03-18 08:02:37 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest header ----------------
@@ -123,7 +123,7 @@ protected:
 
   // zero mean lifetime
   G4double GetMeanLifeTime(const G4Track& aTrack, G4ForceCondition* );
-  void MuCaptureEMCascade(const G4Track& aTrack,G4int Z, G4int N); //Auge_e/Gamma Cascade
+  void MuCaptureEMCascade(G4int Z, G4int N, std::vector<G4double>* dV);
 
 private:
 
