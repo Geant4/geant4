@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuPairProduction.cc,v 1.13 2000-03-01 09:05:48 urban Exp $
+// $Id: G4MuPairProduction.cc,v 1.14 2000-04-25 14:19:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -44,7 +44,7 @@ G4int	 G4MuPairProduction::NbinLambda = 100 ;
 
 
 G4MuPairProduction::G4MuPairProduction(const G4String& processName)
-  : G4MuEnergyLoss(processName),  
+  : G4VMuEnergyLoss(processName),  
     theMeanFreePathTable(NULL)
 {  }
  
@@ -92,7 +92,7 @@ void G4MuPairProduction::BuildPhysicsTable(
   if(electronCutInRange != lastelectronCutInRange)
     BuildLambdaTable(aParticleType) ;
 
-  G4MuEnergyLoss::BuildDEDXTable(aParticleType) ;
+  G4VMuEnergyLoss::BuildDEDXTable(aParticleType) ;
 
   if(&aParticleType==theMuonPlus)
     PrintInfoDefinition() ;

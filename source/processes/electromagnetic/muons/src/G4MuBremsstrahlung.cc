@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.10 2000-03-01 09:05:48 urban Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.11 2000-04-25 14:19:01 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    
@@ -45,7 +45,7 @@ G4int	 G4MuBremsstrahlung::NbinLambda = 100 ;
 // constructor
  
 G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& processName)
-  : G4MuEnergyLoss(processName),  
+  : G4VMuEnergyLoss(processName),  
     theMeanFreePathTable(NULL)
 {  }
  
@@ -89,7 +89,7 @@ void G4MuBremsstrahlung::BuildPhysicsTable(
   if(gammaCutInRange != lastgammaCutInRange)
     BuildLambdaTable(aParticleType) ;
   
-  G4MuEnergyLoss::BuildDEDXTable(aParticleType) ;
+  G4VMuEnergyLoss::BuildDEDXTable(aParticleType) ;
 
   if(&aParticleType == theMuonPlus)
     PrintInfoDefinition() ;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMuPairProduction.cc,v 1.4 1999-12-15 17:49:24 gcosmo Exp $
+// $Id: G4IMuPairProduction.cc,v 1.5 2000-04-25 14:19:01 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -40,7 +40,7 @@ G4double G4IMuPairProduction::proba[5][8][1000]={0.};
 // constructor
  
 G4IMuPairProduction::G4IMuPairProduction(const G4String& processName)
-  : G4IMuEnergyLoss("IMuPairProduction"),      // initialization
+  : G4VIMuEnergyLoss("IMuPairProduction"),      // initialization
     LowestKineticEnergy (1.*keV),
     HighestKineticEnergy (1000000.*TeV),
     TotBin(200),
@@ -115,7 +115,7 @@ void G4IMuPairProduction::BuildPhysicsTable(const G4ParticleDefinition& aParticl
 
     MakeSamplingTables(&aParticleType) ;
 
-    G4IMuEnergyLoss::BuildDEDXTable(aParticleType) ;
+    G4VIMuEnergyLoss::BuildDEDXTable(aParticleType) ;
  }
  else
  {

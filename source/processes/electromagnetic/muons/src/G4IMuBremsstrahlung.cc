@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMuBremsstrahlung.cc,v 1.3 1999-12-15 14:51:43 gunter Exp $
+// $Id: G4IMuBremsstrahlung.cc,v 1.4 2000-04-25 14:19:00 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    
@@ -26,7 +26,7 @@
 // constructor
  
 G4IMuBremsstrahlung::G4IMuBremsstrahlung(const G4String& processName)
-  : G4IMuEnergyLoss("IMuBremsstrahlung"),      // initialization
+  : G4VIMuEnergyLoss("IMuBremsstrahlung"),      // initialization
     LowestKineticEnergy (1.*keV),
     HighestKineticEnergy (1000000.*TeV),
     TotBin(200),
@@ -82,7 +82,7 @@ void G4IMuBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aParticl
 
     BuildLambdaTable(aParticleType) ;
   
-    G4IMuEnergyLoss::BuildDEDXTable(aParticleType) ;
+    G4VIMuEnergyLoss::BuildDEDXTable(aParticleType) ;
 
  }
  else

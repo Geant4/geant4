@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuEnergyLoss.hh,v 1.6 2000-02-22 10:40:01 urban Exp $
+// $Id: G4VMuEnergyLoss.hh,v 1.1 2000-04-25 14:18:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //      GEANT 4 class header file 
@@ -14,7 +14,7 @@
 //      CERN, CN Division, ASD group
 //      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
-//      ---------- G4MuEnergyLoss physics process -----------
+//      ---------- G4VMuEnergyLoss physics process -----------
 //                by Laszlo Urban, September 1997
 // ********************************************************************
 // It is the implementation of the NEW UNIFIED ENERGY LOSS PROCESS.
@@ -32,8 +32,8 @@
 // corrections due to new e.m. structure L.Urban 10/02/00
 // ------------------------------------------------------------
  
-#ifndef G4MuEnergyLoss_h
-#define G4MuEnergyLoss_h 1
+#ifndef G4VMuEnergyLoss_h
+#define G4VMuEnergyLoss_h 1
  
 #include "G4ios.hh"
 #include "g4std/fstream"
@@ -57,13 +57,13 @@
  
 class G4EnergyLossMessenger ;
  
-class G4MuEnergyLoss : public G4VEnergyLoss
+class G4VMuEnergyLoss : public G4VEnergyLoss
  
 {
   public:
 
-    G4MuEnergyLoss(const G4String& );
-    ~G4MuEnergyLoss();
+    G4VMuEnergyLoss(const G4String& );
+    ~G4VMuEnergyLoss();
 
     G4bool IsApplicable(const G4ParticleDefinition&);
 
@@ -92,8 +92,8 @@ class G4MuEnergyLoss : public G4VEnergyLoss
   private:
 
   // hide  assignment operator 
-    G4MuEnergyLoss(G4MuEnergyLoss &);
-    G4MuEnergyLoss & operator=(const G4MuEnergyLoss &right);
+    G4VMuEnergyLoss(G4VMuEnergyLoss &);
+    G4VMuEnergyLoss & operator=(const G4VMuEnergyLoss &right);
 
     G4double GetConstraints(const G4DynamicParticle *aParticle,
                             G4Material *aMaterial);
@@ -207,6 +207,6 @@ class G4MuEnergyLoss : public G4VEnergyLoss
 
 };
  
-#include "G4MuEnergyLoss.icc"
+#include "G4VMuEnergyLoss.icc"
 
 #endif

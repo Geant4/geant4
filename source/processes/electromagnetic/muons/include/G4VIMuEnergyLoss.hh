@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMuEnergyLoss.hh,v 1.3 1999-12-15 14:51:41 gunter Exp $
+// $Id: G4VIMuEnergyLoss.hh,v 1.1 2000-04-25 14:18:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -16,7 +16,7 @@
 //      CERN, CN Division, ASD group
 //      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
-//      ---------- G4IMuEnergyLoss physics process -----------
+//      ---------- G4VIMuEnergyLoss physics process -----------
 //                by Laszlo Urban, September 1997
 // ********************************************************************
 // It is the implementation of the NEW UNIFIED ENERGY LOSS PROCESS.
@@ -32,8 +32,8 @@
 // some corrections by L.Urban on 27/05/98 , (but other corrections come soon!) 
 // ------------------------------------------------------------
  
-#ifndef G4IMuEnergyLoss_h
-#define G4IMuEnergyLoss_h 1
+#ifndef G4VIMuEnergyLoss_h
+#define G4VIMuEnergyLoss_h 1
  
 #include "G4ios.hh"
 #include "g4std/fstream"
@@ -56,21 +56,21 @@
 #include "G4PhysicsLinearVector.hh"
  
  
-class G4IMuEnergyLoss : public G4IVContinuousDiscreteProcess
+class G4VIMuEnergyLoss : public G4IVContinuousDiscreteProcess
  
 {
   public:
-    G4IMuEnergyLoss(const G4String& );
-    G4IMuEnergyLoss(G4IMuEnergyLoss &);
+    G4VIMuEnergyLoss(const G4String& );
+    G4VIMuEnergyLoss(G4VIMuEnergyLoss &);
 
-    ~G4IMuEnergyLoss();
+    ~G4VIMuEnergyLoss();
 
     G4bool IsApplicable(const G4ParticleDefinition&);
 
   private:
 
   // hide  assignment operator 
-    G4IMuEnergyLoss & operator=(const G4IMuEnergyLoss &right);
+    G4VIMuEnergyLoss & operator=(const G4VIMuEnergyLoss &right);
 
   public:
 
@@ -141,7 +141,7 @@ class G4IMuEnergyLoss : public G4IVContinuousDiscreteProcess
     static G4double CutInmupluslossTable;
     static G4double CutInmuminuslossTable;
 
-  //  processes inherited from G4IMuEnergyLoss 
+  //  processes inherited from G4VIMuEnergyLoss 
   //   register themselves  in the static array Recorder
   //  nb of contributing processes = NUMBEROFPROCESSES
     static G4int NUMBEROFPROCESSES ;  
@@ -271,6 +271,6 @@ class G4IMuEnergyLoss : public G4IVContinuousDiscreteProcess
 
 };
  
-#include "G4IMuEnergyLoss.icc"
+#include "G4VIMuEnergyLoss.icc"
 
 #endif

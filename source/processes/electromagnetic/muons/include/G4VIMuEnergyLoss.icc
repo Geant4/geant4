@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMuEnergyLoss.icc,v 1.2 1999-12-15 14:51:42 gunter Exp $
+// $Id: G4VIMuEnergyLoss.icc,v 1.1 2000-04-25 14:18:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -16,7 +16,7 @@
 //      CERN, CN Division, ASD group
 //      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
-//      ------------ G4IMuEnergyLoss physics process ------------
+//      ------------ G4VIMuEnergyLoss physics process ------------
 //                 by Laszlo Urban, September 1997
 // ***************************************************************
 // It is the implementation of the NEW UNIFIED ENERGY LOSS PROCESS.               
@@ -26,7 +26,7 @@
 // corrections by L. Urban on 27/05/98 ( other corrs come soon!)           
 // ---------------------------------------------------------------
 
-inline G4double G4IMuEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
+inline G4double G4VIMuEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
                                               G4Material *aMaterial) 
 {
 
@@ -121,7 +121,7 @@ inline G4double G4IMuEnergyLoss::GetConstraints(const G4DynamicParticle *aPartic
 }
 
 
-inline G4double G4IMuEnergyLoss::GetContinuousStepLimit(
+inline G4double G4VIMuEnergyLoss::GetContinuousStepLimit(
                                                const G4Track& track,
                                                G4double,
                                                G4double currentMinimumStep,
@@ -137,7 +137,7 @@ inline G4double G4IMuEnergyLoss::GetContinuousStepLimit(
   return Step ;
 }
 
-inline G4bool G4IMuEnergyLoss::IsApplicable(const G4ParticleDefinition&
+inline G4bool G4VIMuEnergyLoss::IsApplicable(const G4ParticleDefinition&
                                                      particle)
 {
    return (  (&particle == (const G4ParticleDefinition *)theMuonPlus)

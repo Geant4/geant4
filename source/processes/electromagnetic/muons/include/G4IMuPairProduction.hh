@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMuPairProduction.hh,v 1.2 1999-12-15 14:51:42 gunter Exp $
+// $Id: G4IMuPairProduction.hh,v 1.3 2000-04-25 14:18:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -26,7 +26,7 @@
 #include "G4ios.hh" 
 #include "globals.hh"
 #include "Randomize.hh" 
-#include "G4IMuEnergyLoss.hh"
+#include "G4VIMuEnergyLoss.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4Electron.hh"
@@ -37,7 +37,7 @@
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
  
-class G4IMuPairProduction : public G4IMuEnergyLoss
+class G4IMuPairProduction : public G4VIMuEnergyLoss
  
 { 
   public:
