@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst12PhysicsList.cc,v 1.6 1999-12-15 14:54:47 gunter Exp $
+// $Id: Tst12PhysicsList.cc,v 1.7 2000-08-17 21:38:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -118,7 +118,6 @@ void Tst12PhysicsList::ConstructProcess()
 #include "G4MuPairProduction.hh"
 
 #include "G4hIonisation.hh"
-#include "G4ionIonisation.hh"
 
 void Tst12PhysicsList::ConstructEM()
 {
@@ -162,7 +161,7 @@ void Tst12PhysicsList::ConstructEM()
      
     } else if( particleName == "GenericIon" ) {
       pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-      pmanager->AddProcess(new G4ionIonisation(),-1,2,2); 
+      pmanager->AddProcess(new G4hIonisation(),-1,2,2); 
     } else { 
       if ((particle->GetPDGCharge() != 0.0) && 
           (particle->GetParticleName() != "chargedgeantino")&&
