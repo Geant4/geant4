@@ -1,3 +1,8 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                  (07-Dec-99)
+             Copyright : Geant4 Collaboration
+**********************************************
 
 ***** Table : Nb of materials = 13 *****
 
@@ -206,7 +211,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.5s Real=0.75s Sys=0.03s
+  User=0.44s Real=0.57s Sys=0.05s
 Idle> #
 Idle> # list the existing physics processes
 Idle> /process/list
@@ -235,7 +240,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.43s Real=0.46s Sys=0.03s
+  User=0.47s Real=0.47s Sys=0s
 Idle> #
 Idle> # switch on MultipleScattering
 Idle> /process/activate msc
@@ -275,7 +280,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.1s Real=1.2s Sys=0.1s
+  User=1.1s Real=1.2s Sys=0.08s
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.

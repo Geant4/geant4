@@ -1,3 +1,8 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                  (07-Dec-99)
+             Copyright : Geant4 Collaboration
+**********************************************
 Start Run processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
@@ -188,5 +193,5 @@ Terminate current event processing.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.12s Real=0.17s Sys=0s
+  User=0.09s Real=0.35s Sys=0.02s
 G4 kernel has come to Quit state.
