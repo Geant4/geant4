@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2003-02-04 11:08:38 maire Exp $
+$Id: History,v 1.76 2003-02-05 10:02:45 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,14 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+05 feb 03: V.Ivant (stand-V05-00-03)
+- Fix on warnings at SUN for STD classes
+- Add Initialise method to STD classes to calculate PartialSumSigma
+- Subsitute Material by MaterialCutsCouple for PostStep STD 
 
 04 feb 03: mma
 - AnnihiToMuPair.hh and cc : first implementation from Helmut Burkhardt.
   Cosmetic simplifications (mma)
   
 24 jan 03: V.Ivant (stand-V05-00-02)
-- Migration to "cut per region"       
-     
+- Migration to "cut per region"
+
 15 jan 03: mma 
 - PhotoElectricEffect::ElecThetaDistribution : if gamma>5 --> costeta=1
  
