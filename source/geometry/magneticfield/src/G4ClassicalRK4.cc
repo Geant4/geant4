@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClassicalRK4.cc,v 1.5 2002-11-09 03:03:16 japost Exp $
+// $Id: G4ClassicalRK4.cc,v 1.6 2002-11-20 17:56:35 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ClassicalRK4.hh"
@@ -33,8 +33,8 @@
 // Constructor sets the number of variables (default = 6)
 
 G4ClassicalRK4::G4ClassicalRK4(G4Mag_EqRhs *EqRhs, G4int numberOfVariables)
-  : G4MagErrorStepper(EqRhs, numberOfVariables),
-    fNumberOfVariables(numberOfVariables)
+  : G4MagErrorStepper(EqRhs, numberOfVariables)
+    // fNumberOfVariables(numberOfVariables)
 {
    unsigned int noVariables= G4std::max(numberOfVariables,8); // For Time .. 7+1
  
@@ -70,7 +70,7 @@ G4ClassicalRK4::DumbStepper( const G4double  yIn[],
 			           G4double  h,
 			           G4double  yOut[])
 {
-  const G4int nvar = fNumberOfVariables;   //  GetNumberOfVariables(); 
+  const G4int nvar = this->GetNumberOfVariables();   //  fNumberOfVariables(); 
   G4int i;
   G4double  hh = h*0.5 , h6 = h/6.0  ;
 
