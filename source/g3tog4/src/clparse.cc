@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: clparse.cc,v 1.3 1999-05-12 08:10:28 lockman Exp $
+// $Id: clparse.cc,v 1.4 1999-05-21 22:22:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -28,7 +28,6 @@
 #include <fstream.h>
 #include <rw/rstream.h>
 #include <rw/ctoken.h>
-#include <rw/rwfile.h>
 
 #include "G3toG4.hh"
 #include "G3EleTable.hh"

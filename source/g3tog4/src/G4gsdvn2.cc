@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdvn2.cc,v 1.2 1999-05-06 04:24:55 lockman Exp $
+// $Id: G4gsdvn2.cc,v 1.3 1999-05-21 22:22:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ios.hh"
@@ -60,11 +60,11 @@ void G4gsdvn2(G4String vname, G4String vmoth, G4int ndiv, G4int iaxis,
     G3Vol.GetLVPars(&vmoth, &shape, &nmed, &Rpar, &npar, solid);
     // nullify parameter values
     for (G4int i=0; i<npar; i++) Rpar[i] = 0.;
-    //*** Generate the logical volume for the subvolumes
+    // Generate the logical volume for the subvolumes
     G4gsvolu(vname, shape, numed, Rpar, zeronpar);
-    //*** and obtain the pointer
+    // and obtain the pointer
     G4LogicalVolume *lvol = G3Vol.GetLVx(vname);
-    //*** check for negative parameters in volume definition
+    // check for negative parameters in volume definition
     G4double *pars = 0;
     G4bool negpars = G3NegVolPars(pars, &npar, vname, vmoth, "GSDVN");
     G4double width = rangehi - c0;
