@@ -5,8 +5,6 @@
 name := G4hadronic_chips
 
 SUBDIRS  =  body
-SUBDIRS +=  nucleus
-SUBDIRS +=  utils
 
 SUBLIBS  = G4hadronic_body_ci
 ifndef G4INSTALL
