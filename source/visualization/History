@@ -1,4 +1,4 @@
-$Id: History,v 1.275 2005-02-23 11:49:04 allison Exp $
+$Id: History,v 1.276 2005-03-03 16:48:28 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,17 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+3rd March 2005  John Allison  (vis-V07-00-08)
+- Introduced /vis/scene/add/logo.
+- Added Set methods to G4VModel.
+- Added argument to G4CallbackModel::operator()(const G4Transform3D&) so that
+  the model could implement a given transformation.  Provided default for
+  G4VUserVisAction::(const G4Transform3D& = G4Transform3D::Identity).
+- Improved guidance for:
+    compound commands
+    ASCIITree commands
+- Used std::istrstream::istrstream(std::string) throughout.
 
 23rd February 2005  John Allison  (vis-V07-00-07)
 - Protected scene handlers for the case of the drawing of solids NOT
