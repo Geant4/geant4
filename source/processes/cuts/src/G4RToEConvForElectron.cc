@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForElectron.cc,v 1.1 2003-09-19 14:46:38 gcosmo Exp $
+// $Id: G4RToEConvForElectron.cc,v 1.2 2003-11-08 06:10:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -160,9 +160,9 @@ void G4RToEConvForElectron::BuildRangeVector(const G4Material* aMaterial,
       G4double ltaumax = log(taumax);
       G4int    nbin = G4int(maxnbint*(ltauhigh-ltaulow)/(ltaumax-ltaulow));
       if( nbin < 1 ) nbin = 1;
-      G4double Value = RangeLogSimpson(elementVector, atomicNumDensityVector,
-                                       aMass,
-                                       ltaulow,       ltauhigh, nbin) 
+      G4double Value = RangeLogSimpson( NumEl, elementVector,
+					atomicNumDensityVector, aMass,
+					ltaulow, ltauhigh, nbin) 
 	             + rangelim;
       rangeVector->PutValue(i,Value);
     }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.1 2003-09-19 14:48:12 gcosmo Exp $
+// $Id: G4VRangeToEnergyConverter.cc,v 1.2 2003-11-08 06:10:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -165,6 +165,7 @@ G4double G4VRangeToEnergyConverter::GetHighEdgeEnergy()
 // ************************ RangeLinSimpson *****************************
 // **********************************************************************
 G4double G4VRangeToEnergyConverter::RangeLinSimpson(
+				     G4int numberOfElement,
                                      const G4ElementVector* elementVector,
                                      const G4double* atomicNumDensityVector,
                                      G4double aMass,   
@@ -177,7 +178,7 @@ G4double G4VRangeToEnergyConverter::RangeLinSimpson(
     G4double taui=taulow+dtau*i;
     G4double ti=aMass*taui;
     G4double lossi=0.;
-    size_t nEl = elementVector->size();
+    size_t nEl = (size_t)(numberOfElement);
     for (size_t j=0; j<nEl; j++) {
       G4bool isOut;
       G4int IndEl = (*elementVector)[j]->GetIndex();
@@ -201,6 +202,7 @@ G4double G4VRangeToEnergyConverter::RangeLinSimpson(
 // ************************ RangeLogSimpson *****************************
 // **********************************************************************
 G4double G4VRangeToEnergyConverter::RangeLogSimpson(
+				     G4int numberOfElement,
                                      const G4ElementVector* elementVector,
                                      const G4double* atomicNumDensityVector,
                                      G4double aMass,   
@@ -217,7 +219,8 @@ G4double G4VRangeToEnergyConverter::RangeLogSimpson(
     G4double taui = exp(ui);
     G4double ti = aMass*taui;
     G4double lossi = 0.;
-    size_t nEl = elementVector->size();
+    size_t nEl = (size_t)(numberOfElement);
+
     for (size_t j=0; j<nEl; j++) {
       G4bool isOut;
       G4int IndEl = (*elementVector)[j]->GetIndex();
@@ -376,19 +379,19 @@ void G4VRangeToEnergyConverter::BuildRangeVector(
       if ( tau <= taulim ) {
         G4int nbin = (G4int)(maxnbint*(tau-tau1)/(taulim-tau1));
         if ( nbin<1 ) nbin = 1;
-        Value += RangeLinSimpson(elementVector,atomicNumDensityVector, 
-                                 aMass,
-                                 tau1, tau, nbin);
+        Value += RangeLinSimpson( NumEl, elementVector,
+				  atomicNumDensityVector, aMass,
+                                  tau1, tau, nbin);
       } else {
-        Value += RangeLinSimpson(elementVector,atomicNumDensityVector,
-                                   aMass,
-				   tau1, taulim, maxnbint);
+        Value += RangeLinSimpson( NumEl, elementVector,
+				  atomicNumDensityVector, aMass,
+				  tau1, taulim, maxnbint);
         G4double ltaulow  = log(taulim);
         G4double ltauhigh = log(tau);
         G4int nbin = (G4int)(maxnbint*(ltauhigh-ltaulow)/(ltaumax-ltaulow));
         if ( nbin<1 ) nbin = 1;
-        Value += RangeLogSimpson(elementVector,atomicNumDensityVector,
-				 aMass,
+        Value += RangeLogSimpson(NumEl, elementVector,
+				 atomicNumDensityVector, aMass,
 				 ltaulow, ltauhigh, nbin);
       }
     }
