@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test02.hadronic.exerciser.cc,v 1.5 1999-12-15 14:54:36 gunter Exp $
+// $Id: test02.hadronic.exerciser.cc,v 1.6 2000-01-12 11:06:21 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -28,12 +28,13 @@ static void OutputCases
 	   iParticle < particleNameList.entries ();
 	   iParticle++) {
 
-	cout << "\n#\n# " << particleNameList [iParticle]
-	     << " at " << G4BestUnit (energyList [iEnergy], "Energy")
-	     << " in " << materialNameList [iMaterial]
-	     << "\n#";
+	G4cout
+	  << "\n#\n# " << particleNameList [iParticle]
+	  << " at " << G4BestUnit (energyList [iEnergy], "Energy")
+	  << " in " << materialNameList [iMaterial]
+	  << "\n#";
 
-	cout
+	G4cout
 	  << "\n/gun/particle " << particleNameList [iParticle]
 	  << "\n/gun/energy " <<  G4BestUnit (energyList [iEnergy], "Energy")
 	  << "\n/mydet/SelectMaterial " << materialNameList [iMaterial]
@@ -49,7 +50,7 @@ int main (int argc, char** argv) {
 
   G4UnitDefinition::BuildUnitsTable();
 
-  cout <<
+  G4cout <<
     "#"
     "\n# Auto-generated test input file for test02 hadronics."
     "\n#"
@@ -57,7 +58,7 @@ int main (int argc, char** argv) {
     "\n# /run/verbose 2"
     "\n/run/initialize"
     "\n/gun/direction 1 0 0";
-
+  
   G4RWTValOrderedVector <G4String> particleNameList;
   particleNameList.append ("proton");
   particleNameList.append ("pi+");
@@ -107,5 +108,5 @@ int main (int argc, char** argv) {
 
   OutputCases (particleNameList, energyList, materialNameList);
 
-  cout << G4endl;
+  G4cout << G4endl;
 }
