@@ -1,16 +1,15 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ggclos.cc,v 1.4 1999-05-26 03:49:48 lockman Exp $
+// $Id: G4ggclos.cc,v 1.5 1999-12-05 17:50:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-#include "G4ios.hh"
+
+#include "G3toG4.hh"
 #include "G3VolTable.hh"
-#include "G3G4Interface.hh"
 
 void PG4ggclos(){
   G4ggclos();

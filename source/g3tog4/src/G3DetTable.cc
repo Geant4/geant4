@@ -1,98 +1,94 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3DetTable.cc,v 1.6 1999-11-15 10:39:37 gunter Exp $
+// $Id: G3DetTable.cc,v 1.7 1999-12-05 17:50:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
 #include "G3DetTable.hh"
-#include "G4VSensitiveDetector.hh"
 
-DetTableEntry::DetTableEntry(G4String& set, G4String& det, G4int id, 
-			     G4VSensitiveDetector* D){
-  _set = set;
-  _det = det;
-  _id  = id;
-  _detpt = D;
-};
-
-DetTableEntry::~DetTableEntry(){;}
-
-G4VSensitiveDetector* 
-DetTableEntry::getSD(){
-  return _detpt;
-}
-
-G4String 
-DetTableEntry::getset(){
-  return _set;
-}
-
-G4String 
-DetTableEntry::getdet(){
-  return _det;
-}
-
-G4int
-DetTableEntry::getid(){
-  return _id;
-};
+typedef G4std::map<G4String, G3DetTableEntry*, less<G4String> >
+::iterator DTDiterator;
 
 G4String 
 G3DetTable::MakeHash(G4String& set, G4String& det){;
   return set+" "+det;
-};
+}
 
 G3DetTable::G3DetTable(){
-  _Det = new G4RWTPtrHashDictionary<G4String,DetTableEntry>(G4String::hash);
-};
+}
 
 G3DetTable::~G3DetTable(){
-  _Det->clearAndDestroy();
-  delete _Det;
+  if (DTD.size() > 0) {
+    //    G4cout << "Deleting DTD" << endl;
+    for (DTDiterator i=DTD.begin(); i != DTD.end(); i++) {
+      delete (*i).second;
+    }
+    DTD.clear();
+  }
 };
 
 G4VSensitiveDetector* 
-G3DetTable::getSD(G4String& set, G4String& det){
+G3DetTable::GetSD(G4String& set, G4String& det){
 
   // make hash ID
-  G4String HashID = MakeHash(set, det);
+  const G4String ShashID = MakeHash(set, det);
 
-  // search the Hash Dictionary
-  _DTE = _Det->findValue(&HashID);
-  if (_DTE != 0) {
-    return _DTE->getSD();
+  // search the map
+  DTDiterator i = DTD.find(ShashID);
+  G3DetTableEntry* DTE = (*i).second;
+  if (DTE != 0) {
+    return DTE->GetSD();
   } else {
-    //    G4cerr << "No G3DetTable entry with key '" << HashID << "'" << endl;
     return 0;
-  }
-};
+  }  
+}
 
 G4int 
 G3DetTable::GetID(G4String& set, G4String& det){
 
   // make hash ID
-  G4String HashID = MakeHash(set, det);
+  G4String ShashID = MakeHash(set, det);
 
   // search the Hash Dictionary
-  _DTE = _Det->findValue(&HashID);
-  if (_DTE != 0) {
-    return _DTE->getid();
+  DTDiterator i = DTD.find(ShashID);
+  G3DetTableEntry* DTE = (*i).second;
+  if (DTE != 0) {
+    return DTE->GetID();
   } else {
-    //  G4cerr << "No G3DetTable entry with key '" << HashID << "'" << endl;
     return 0;
   }
-};
+}
 
 void 
-G3DetTable::put(G4String& set, G4String& det, G4int id, 
+G3DetTable::Put(G4String& set, G4String& det, G4int id, 
 		G4VSensitiveDetector* D){
-  G4String* _HashID = new G4String(MakeHash(set, det));
-  _DTE = new DetTableEntry(set, det, id, D);
-  _Det->insertKeyAndValue(_HashID, _DTE);
-};
+  // make hash ID
+  G4String ShashID = MakeHash(set, det);
+  G3DetTableEntry* DTE = new G3DetTableEntry(set, det, id, D);
+  G4cout << "Inserted DTE with id " << ShashID << endl;
+  DTD[ShashID] = DTE;
+}
+
+void
+G3DetTable::PrintAll(){
+  if (DTD.size()>0){
+    G4int count=0;
+    G4cout << "Dump of DTD - " << DTD.size() << " entries:" << endl;
+    for (DTDiterator i=DTD.begin(); i != DTD.end(); i++) {
+      count++;
+      G3DetTableEntry* DTE = (*i).second;
+      G4cout << "DTD entry " << setw(3) << count << " sensitive detector name: " 
+	     << DTE->GetSD()->GetName() << endl;
+    }
+  }
+}
+
+
+
+
 

@@ -1,52 +1,46 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MedTable.cc,v 1.9 1999-11-11 15:35:45 gunter Exp $
+// $Id: G3MedTable.cc,v 1.10 1999-12-05 17:50:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// by I.Hrivnacova, 27 Sep 99
 
-#include <strstream.h>
-#include "globals.hh"
 #include "G3MedTable.hh"
-#include "G4Material.hh"
 
-G3MedTable::G3MedTable(){
-  _Med = new G4RWTPtrHashDictionary<G4String,G4Material>(G4String::hash);
-};
+G3MedTable::G3MedTable()
+{
+  fMedVector = new G3MediumVector();
+}
 
-G3MedTable::~G3MedTable(){
-  _Med->clear();
-  delete _Med;
-  // G4cout << "Deleted G3MedTable..." << endl;
-};
+G3MedTable::~G3MedTable()
+{
+  fMedVector->clearAndDestroy();
+  delete fMedVector;
+}
 
-G4Material*
-G3MedTable::get(G4int medid){
-  G4String _ShashID; // static
-  HashID(medid, _ShashID);
-  return _Med->findValue(&_ShashID);
-};
+G3MedTableEntry* G3MedTable::get(G4int id) const
+{
+  for (G4int i=0; i< fMedVector->entries(); i++) {
+    G3MedTableEntry* mte = (*fMedVector)[i];
+    if (id == mte->GetID()) return mte;
+  }
+  return 0;
+}    
 
-void 
-G3MedTable::put(G4int medid, G4Material* MatPT){
-  G4String* _HashID = new G4String(); // Dynamic
-  HashID(medid, _HashID);
-  _Med->insertKeyAndValue(_HashID, MatPT);
-};
+void G3MedTable::put(G4int id, G4Material* material, G4MagneticField* field,
+       G4UserLimits* limits, G4int isvol)
+{
+  G3MedTableEntry* mte 
+    = new G3MedTableEntry(id, material, field, limits, isvol);
+  fMedVector->insert(mte);
+}
 
-void
-G3MedTable::HashID(G4int medid, G4String& _HashID){
-  char s[20];
-  ostrstream ostr(s, sizeof s);
-  ostr << "Med" << medid << ends;
-  _HashID = s;
-};
-
-void 
-G3MedTable::HashID(G4int medid, G4String* _HashID){
-  HashID(medid, *_HashID);
-};
+void G3MedTable::Clear()
+{
+  fMedVector->clearAndDestroy();
+}

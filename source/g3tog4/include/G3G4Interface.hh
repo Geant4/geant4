@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3G4Interface.hh,v 1.4 1999-05-26 03:46:16 lockman Exp $
+// $Id: G3G4Interface.hh,v 1.5 1999-12-05 17:50:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -13,18 +13,19 @@
 //
 
 #include "globals.hh"
+
 class G4LogicalVolume;
 
 void G4gsvolu(G4String name, G4String shape, G4int nmed, G4double* par,
               G4int npar);
 
-void G4gspos(G4String& name, G4int num, G4String& moth, 
+void G4gspos(G4String name, G4int num, G4String moth, 
 	     G4double x, G4double y, G4double z, G4int irot, 
-	     G4String& only);
+	     G4String only);
 
-void G4gsposp(G4String& name, G4int num, G4String& moth, 
+void G4gsposp(G4String name, G4int num, G4String moth, 
 	      G4double x, G4double y, G4double z, G4int irot, 
-	      G4String& only, G4double* Rpar, G4int npar);
+	      G4String only, G4double Rpar[], G4int npar);
 
 void G4gsrotm(G4int irot, G4double theta1, G4double phi1,
               G4double theta2, G4double phi2, G4double theta3, G4double phi3);

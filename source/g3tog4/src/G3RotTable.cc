@@ -1,53 +1,44 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.cc,v 1.10 1999-11-23 04:27:25 lockman Exp $
+// $Id: G3RotTable.cc,v 1.11 1999-12-05 17:50:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// by I.Hrivnacova, 27 Sep 99
 
-#include <strstream.h>
-#include "globals.hh"
-#include "G3toG4RotationMatrix.hh"
-#include "G3toG4.hh"
 #include "G3RotTable.hh"
 
-G3RotTable::G3RotTable(){
-  _Rot = new G4RWTPtrHashDictionary<G4String,G3toG4RotationMatrix>(G4String::hash);
-};
+G3RotTable::G3RotTable()
+{
+  fRotVector = new G3RotMatrixVector();
+}
 
-G3RotTable::~G3RotTable(){
-  _Rot->clear();
-  delete _Rot;
-  // G4cout << "Deleted G3RotTable..." << endl;
-};
+G3RotTable::~G3RotTable()
+{
+  fRotVector->clearAndDestroy();
+  delete fRotVector;
+}
 
-G4RotationMatrix*
-G3RotTable::get(G4int rotid){
-  G4String _ShashID; // static
-  HashID(rotid, _ShashID);
-  return (G4RotationMatrix*) _Rot->findValue(&_ShashID);
-};
+G4RotationMatrix* G3RotTable::Get(G4int id) const
+{
+  for (G4int i=0; i<fRotVector->entries(); i++) {
+    G3RotTableEntry* rte = (*fRotVector)[i];
+    if (id == rte->GetID()) return rte->GetMatrix();
+  }
+  return 0;
+}    
 
-void 
-G3RotTable::put(G4int rotid, G3toG4RotationMatrix* RotPT){
-  G4String* _HashID = new G4String(); // Dynamic
-  HashID(rotid, _HashID);
-  _Rot->insertKeyAndValue(_HashID, RotPT);
-};
+void G3RotTable::Put(G4int id, G4RotationMatrix* matrix)
+{
+  G3RotTableEntry* rte = new G3RotTableEntry(id, matrix);
+  fRotVector->insert(rte);
+}
 
-void
-G3RotTable::HashID(G4int rotid, G4String& _HashID){
-  char s[20];
-  ostrstream ostr(s, sizeof s);
-  ostr << "Rot" << rotid << ends;
-  _HashID = s;
-};
-
-void 
-G3RotTable::HashID(G4int rotid, G4String* _HashID){
-  HashID(rotid, *_HashID);
-};
+void G3RotTable::Clear()
+{
+  fRotVector->clearAndDestroy();
+}

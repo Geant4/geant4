@@ -1,17 +1,21 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4.hh,v 1.3 1999-11-15 10:39:36 gunter Exp $
+// $Id: G3toG4.hh,v 1.4 1999-12-05 17:50:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// modified by I.Hrivnacova, 27 Sep 99
+
 #ifndef _G3TOG4_
 #define _G3TOG4_
 
 #include "globals.hh"
+
+const char gSeparator('_'); 
 
 extern G4int Ipar[1000];
 extern G4double Rpar[1000];
@@ -40,7 +44,8 @@ void G3fillParams(G4String *tokens, char *ptypes);
 #define PTgsdvn2 "ssiiri"
 #define PTgsdvt2 "ssririi"
 #define PTgsmate "isrrrriR"
-#define PTgsmixt "isriRRR"
+//#define PTgsmixt "isriRRR"
+#define PTgsmixt "isriQ"
 #define PTgstmed "isiiirrrrrriR"
 #define PTgstpar "isr"
 #define PTgspart "isirrriR"

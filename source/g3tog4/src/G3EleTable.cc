@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3EleTable.cc,v 1.5 1999-07-29 03:41:38 lockman Exp $
+// $Id: G3EleTable.cc,v 1.6 1999-12-05 17:50:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -23,7 +23,6 @@ G3EleTable::G3EleTable() :_MaxEle(109){
 G3EleTable::~G3EleTable(){
   delete [] _EleNames;
   delete [] _Ele;
-  // G4cout << "Deleted G3EleTable..." << endl;
 };
 
 G4Element* 

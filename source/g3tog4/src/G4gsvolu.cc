@@ -1,22 +1,20 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsvolu.cc,v 1.5 1999-11-15 10:39:40 gunter Exp $
+// $Id: G4gsvolu.cc,v 1.6 1999-12-05 17:50:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#include "G4ios.hh"
-#include "G3toG4.hh"
-#include "G3VolTable.hh"
-#include "G3MedTable.hh"
-#include "G4VSolid.hh"
-#include "G4makevol.hh"
+// by I.Hrivnacova, 13.10.99
 
-G4bool G3CalcParamsFn(G4double *Rpar, G4int npar, G4double *Rparm,
-                       G4String shape, G4String shapem);
+#include "g4std/iomanip"
+#include "G3VolTable.hh"
+#include "globals.hh"
+#include "G3toG4.hh"
+#include "G3toG4MakeSolid.hh"
 
 void PG4gsvolu(G4String tokens[]) {
     // fill the parameter containers
@@ -32,48 +30,42 @@ void PG4gsvolu(G4String tokens[]) {
     G4gsvolu(vname, shape, nmed, pars, npar);
 }
 
+G3VolTableEntry* G4CreateVTE(G4String vname, G4String shape, G4int nmed,
+                             G4double Rpar[], G4int npar)
+{    
+  // create the solid
+  G4bool hasNegPars;
+  G4bool deferred;   
+  G4bool okAxis[3];
+  G4VSolid* solid
+    = G3toG4MakeSolid(vname, shape, Rpar, npar, hasNegPars, deferred, okAxis);  
+
+  // if solid has been deferred 
+  // VTE is created with hasNegPars = true  
+  if (deferred) hasNegPars = true;   
+
+  // create VTE
+  G3VolTableEntry* vte 
+     = new G3VolTableEntry(vname, shape, Rpar, npar, nmed, solid, hasNegPars);
+  G3Vol.PutVTE(vte);
+  
+  return vte;
+}
+
 void G4gsvolu(G4String vname, G4String shape, G4int nmed, G4double* Rpar,
               G4int npar)
 {
-    G4double rangehi[3];
-    G4double rangelo[3];
-    G4bool isIndexed = npar == 0;
-    G4LogicalVolume *lvol = 0;
-    G4int nmax = 11;
-
-    if (npar>11) nmax = npar;
-    G4double *param = new G4double[nmax]; 
-    for (G4int i=0; i<npar; i++) {
-        param[i] = Rpar[i];
-    }
-
-    // If volume is indexed (npar=0, gsposp used, or negative length parameters)
-    // cannot Build a G4LogicalVolume now.
-    // Build a G3Vol table entry, with 0 pointer, and defer LV creation
-    // to the gsposp call.
-    if ( npar == 0 ) {
-      isIndexed = true;
-    } else {
-      // Negative length parameters?
-      if (G3CalcParamsFn(param, npar, 0, shape, shape)) {
-        isIndexed = true;
-        G4cout << "G4gsvolu: Volume " << vname << " type " << shape <<
-          " is indexed via negative parameters" << endl;
-        G4cout << "  Params: ";
-        for (G4int i=0; i<npar; i++) G4cout << param[i] << " ";
-        G4cout << endl;
-      }
-    }
-    if ( isIndexed ) {
-      G4VSolid *solid = 0;
-      G4cerr << "G4gsvolu: indexed volumes not implemented" << endl;
-      //      G3Vol.PutLV(&vname, lvol, nmed, shape, param, npar, solid);
-    } else {
-      // Else proceed with volume creation.
-      G4makevol(vname, shape, nmed, param, npar);
-    }
-    delete [] param;
+  /*
+  G4cout << "Creating logical volume " << vname << " shape " << shape
+  	 << " nmed " << nmed << " #pars "<< npar << " parameters (cm): ";
+  for (int ipar=0; ipar< npar; ipar++) G4cout << setw(8) << Rpar[ipar];
+  G4cout << endl;
+  */
+  if (G3Vol.GetVTE(vname)) {
+    // abort if VTE with given name exists
+    G4Exception("G4gsvolu: Attempt to create volume " + vname + " twice.");
+  }
+  else {  
+    G4CreateVTE(vname, shape, nmed, Rpar, npar);
+  }  
 }
-
-
-

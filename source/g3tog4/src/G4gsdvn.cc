@@ -1,22 +1,21 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdvn.cc,v 1.4 1999-11-15 10:39:38 gunter Exp $
+// $Id: G4gsdvn.cc,v 1.5 1999-12-05 17:50:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#include "G4ios.hh"
-#include "globals.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4PVReplica.hh"
-#include "G4PVParameterised.hh"
-#include "G4VPVParameterisation.hh"
-#include "G3toG4.hh"
+// by I.Hrivnacova, V.Berejnoi, 29 Oct 99
+
+#include "G3G4Interface.hh"
+#include "G3Division.hh"
+#include "G3VolTableEntry.hh"
 #include "G3VolTable.hh"
-#include "G3CalcParams.hh"
+#include "globals.hh"
+#include "G3toG4.hh"
 
 void PG4gsdvn(G4String tokens[])
 {
@@ -32,57 +31,69 @@ void PG4gsdvn(G4String tokens[])
   G4gsdvn(vname, vmoth, ndiv, iaxis);
 }
 
-void G4gsdvn(G4String vname, G4String vmoth, G4int ndiv, G4int iaxis)
-{
-  /*
-  // get the physical volume pointer of the mother from the name
-  G4VPhysicalVolume* mothPV;
-  G4int npv=0;
-  G3Vol.FindPV(&npv, &vmoth);
-  if (npv == 0) {
-    G4cout << " G4gsdvn error: No physical volume for " << vmoth << endl;
-    return;
-  }
-  for (G4int ipv=0; ipv<npv; ipv++) {
-    mothPV = G3Vol.GetPV(ipv);
-    
-    // extract the needed parameters from the mother's logical volume
-    G4double rangehi=0;
-    G4double rangelo=0;
-    EAxis axiscode;
-    G4String shape;
-    G4int nmed;
-    G4double *Rpar = NULL;
-    G4int npar;
-    G4int zeronpar=0;
-    G4VSolid *solid = NULL;
-    G3Vol.GetLVPars(&vmoth, &shape, &nmed, &Rpar, &npar, solid);
-    // nullify parameter values
-    for (G4int i=0; i<npar; i++) Rpar[i] = 0.;
-    // Generate the logical volume for the subvolumes
-    G4gsvolu(vname, shape, nmed, Rpar, zeronpar);
-    // and obtain the pointer
-    G4LogicalVolume *lvol = G3Vol.GetLVx(vname);
-    
-    // check for negative parameters in volume definition
-    G4double *pars = NULL;
-    G4double width = rangehi - rangelo;
-    G4double offset = (rangehi + rangelo)/2.;
-    //    G4bool negpars = G3NegVolPars(pars,&npar,vname,vmoth,"GSDVN");
-    G4bool negpars = false;
-    
-    if ( ! negpars ) {
-      // Generate replicas
-      G4PVReplica *pvol = new 
-	G4PVReplica(vname, lvol, mothPV, axiscode, ndiv, width, offset);
-      G3Vol.PutPV1(&vname, pvol);
-    } else {
-      G4VPVParameterisation *dvnParam = new G3CalcParams(ndiv, width, offset);
-      G4PVParameterised *pvol = new 
-	G4PVParameterised(vname, lvol, mothPV, axiscode, ndiv, dvnParam);
-      G3Vol.PutPV1(&vname, pvol);
+void G4CreateCloneVTEWithDivision(G4String vname, G3VolTableEntry* mvte,
+        G3DivType divType, G4int nofDivisions, G4int iaxis, G4int nmed, 
+	G4double c0, G4double step)
+{	
+  G3VolTableEntry* vte;
+
+  // loop over all mothers
+  for (G4int i=0; i<mvte->GetNoClones(); i++) {
+    G3VolTableEntry* mvteClone =  mvte->GetClone(i);
+    G4String shape = mvteClone->GetShape();
+    G4int    nmed  = mvteClone->GetNmed();
+    G4String mvteName = mvteClone->GetName();
+
+    G4String newName = vname;
+    if (i>0) {
+      char index[4]; sprintf(index, "%d", i);
+      newName.append(gSeparator); newName = newName + index;
+    }	
+
+    // create new VTE with 0 solid
+    // and let vol table know about it
+    G3VolTableEntry* vteClone
+      = new G3VolTableEntry(newName, shape, 0, 0, nmed, 0, true);
+    G3Vol.PutVTE(vteClone);
+
+    // set mother <-> daughter
+    // (mother/daughter are reset in case an envelope
+    //  needs to be created in G3Division::UpdateVTE)
+    mvteClone->AddDaughter(vteClone);
+    vteClone->AddMother(mvteClone);
+
+    // create new G3Division 
+    G3Division* division
+      = new G3Division(divType, vteClone, mvteClone,
+                       nofDivisions, iaxis, nmed, c0, step);
+
+    // set division to vte and update it
+    vteClone->SetDivision(division);
+    division->UpdateVTE();
+      
+    if (i == 0) {
+      // keep the first clone copy
+      vte = vteClone;
+    }
+    else {		
+      // let vte know about this clone copy
+      vte->AddClone(vteClone);     
     }
   }
-  */
-  G4cerr << "G4gsdvn currently not supported." << endl;
+}    
+
+void G4gsdvn(G4String vname, G4String vmoth, G4int ndiv, G4int iaxis)
+{
+  // find mother VTE
+  G3VolTableEntry* mvte = G3Vol.GetVTE(vmoth);
+ 
+  if (mvte == 0) {
+    G4Exception("G4gsdvn:'" + vmoth + "' has no VolTableEntry");
+  }  
+  else {
+    // a new vte clone copy with division is created
+    // for each mother (clone copy)
+    
+    G4CreateCloneVTEWithDivision(vname, mvte, kDvn, ndiv, iaxis, 0, 0., 0.); 
+  }  
 }

@@ -1,7 +1,26 @@
-$Id: History,v 1.25 1999-11-23 04:27:24 lockman Exp $
+$Id: History,v 1.26 1999-12-05 17:49:58 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V00-01-cand03 05-Dec-1999  G.Cosmo
+- Merged HEAD of main trunk with tag "wsl-991205" which now includes
+  updates by Ivana&Pedro, as well as RW->G4RW migration, STL map
+  migration and integration work by B.Lockman.
+
+g3tog4-br4_0_1fixes-iv2-99nov11    12-Nov-1999  J. Apostolakis
+- Tag of new fixes from consolidation of changes by Ivana & Pedro,
+  as these fixes were on November 11th, at 15:00
+
+g3tog4-br4_0_1fixes-iv1-99nov02    12-Nov-1999  J. Apostolakis
+- Tag of fixes from consolidation of changes by Ivana & Pedro,
+  as these fixes were on November 2nd. 
+
+Summary of changes to be added here (to be obtained from Ivana, Pedro)
+
+g3tog4-4_0_1-fixes-branch  Branch for fixes 
+- Changes introduced and tested by Ivana Hrivnacova and Pedro Arce 
+  based on geant4-00-01
 
 g3tog4-V00-01-02 22-Nov-1999 Lockman
 - g3test.F renamed to g3test.F.save

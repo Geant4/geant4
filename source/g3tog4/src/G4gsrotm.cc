@@ -1,16 +1,16 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsrotm.cc,v 1.6 1999-11-15 10:39:40 gunter Exp $
+// $Id: G4gsrotm.cc,v 1.7 1999-12-05 17:50:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#include "G4ThreeVector.hh"
 #include "G3toG4.hh"
 #include "G3RotTable.hh"
+#include "G4ThreeVector.hh"
 #include "G3toG4RotationMatrix.hh"
 
 void PG4gsrotm(G4String tokens[])
@@ -57,8 +57,17 @@ void G4gsrotm(G4int irot, G4double theta1, G4double phi1,
     G4double tol = 1.0e-3;
         
     if (1-abs(check)>tol) {
-        G4cerr << "G4gsrotm error: coordinate axes forming rotation "
-               << "matrix " << irot << " are not orthonormal" << endl;
+        G4cerr << "Coordinate axes forming rotation matrix "
+               << irot << " are not orthonormal.(" << 1-abs(check) << ")" 
+         << endl;
+        G4cerr << " theta1=" << theta1;
+        G4cerr << " phi1=" << phi1;
+        G4cerr << " theta2=" << theta2;
+        G4cerr << " phi2=" << phi2;
+        G4cerr << " theta3=" << theta3;
+        G4cerr << " phi3=" << phi3;
+        G4cerr << endl;
+        G4Exception("G4gsrotm error");
     }
     else if (1+check<=tol) {
         G4cerr << "G4gsrotm warning: coordinate axes forming rotation "
@@ -71,8 +80,5 @@ void G4gsrotm(G4int irot, G4double theta1, G4double phi1,
     
         // add it to the List
 
-    G3Rot.put(irot, rotp);
+    G3Rot.Put(irot, rotp);
 }
-
-
-

@@ -1,83 +1,44 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MatTable.cc,v 1.11 1999-11-11 15:35:44 gunter Exp $
+// $Id: G3MatTable.cc,v 1.12 1999-12-05 17:50:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// by I.Hrivnacova, 27 Sep 99
 
-#include "g4rw/tphdict.h"
-#include <strstream.h>
-#include "globals.hh"
 #include "G3MatTable.hh"
-#include "G4Material.hh"
 
-G3MatTable::G3MatTable(){
-  _Mat = new G4RWTPtrHashDictionary<G4String,G4Material>(G4String::hash);
-};
-
-G3MatTable::~G3MatTable(){
-  _Mat->clear();
-  delete _Mat;
-  // G4cout << "Deleted G3MatTable..." << endl;
-};
-
-G4Material*
-G3MatTable::get(G4int matid){
-  G4String _ShashID; // static
-  HashID(matid, _ShashID);
-  return _Mat->findValue(&_ShashID);
-};
-
-void 
-G3MatTable::put(G4int matid, G4Material* MatPT){
-  G4String* _HashID = new G4String(); // Dynamic
-  HashID(matid, _HashID);
-  _Mat->insertKeyAndValue(_HashID, MatPT);
-};
-
-void
-G3MatTable::HashID(G4int matid, G4String& _HashID){
-  char s[20];
-  ostrstream ostr(s, sizeof s);
-  ostr << "Mat" << matid << ends;
-  _HashID = s;
-};
-
-void 
-G3MatTable::HashID(G4int matid, G4String* _HashID){
-  HashID(matid, *_HashID);
-};
-
-void
-G3MatTable::print(G4int matid){
-  G4Material* Mat;
-  if (matid != -99999) {
-    G4cout << "Matid " << matid << " ";
-    Mat = get(matid);
-    G4cout << Mat << endl;
-  } else {
-    G4RWTPtrHashDictionaryIterator<G4String,G4Material> iter(*_Mat);
-    if (_Mat->entries() > 0) {
-      for (;iter();){
-	G4String a = *iter.key();
-	G4int lngth = a.length()-3;
-	Mat = iter.value();
-	G4String matid (a(3,lngth));
-	G4cout << "Matid " << matid << " ";
-	G4cout << Mat << endl;
-      }
-    } else {
-      cerr << "No entries in dictionary" << endl;
-    }
-  }
+G3MatTable::G3MatTable()
+{
+  fMatVector = new G3MaterialVector();
 }
-    
 
+G3MatTable::~G3MatTable()
+{
+  fMatVector->clearAndDestroy();
+  delete fMatVector;
+}
 
+G4Material* G3MatTable::get(G4int id) const
+{
+  for (G4int i=0; i< fMatVector->entries(); i++) {
+    G3MatTableEntry* mte = (*fMatVector)[i];
+    if (id == mte->GetID()) return mte->GetMaterial();
+  }
+  return 0;
+}    
 
+void G3MatTable::put(G4int id, G4Material* material)
+{
+  G3MatTableEntry* mte = new G3MatTableEntry(id, material);
+  fMatVector->insert(mte);
+}
 
-
+void G3MatTable::Clear()
+{
+  fMatVector->clearAndDestroy();
+}

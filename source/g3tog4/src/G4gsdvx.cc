@@ -1,15 +1,23 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdvx.cc,v 1.2 1999-11-15 10:39:39 gunter Exp $
+// $Id: G4gsdvx.cc,v 1.3 1999-12-05 17:50:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// by I.Hrivnacova, V.Berejnoi, 27 Sep 99
+
 #include "globals.hh"
 #include "G3toG4.hh"
+
+void G4gsdvn2(G4String name, G4String moth, G4int ndiv, G4int iaxis,
+              G4double c0, G4int numed);
+
+void G4gsdvt2(G4String name, G4String moth, G4double Step, G4int iaxis,
+              G4double c0, G4int numed, G4int ndvmx);
 
 void PG4gsdvx(G4String tokens[])
 {

@@ -1,13 +1,14 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4MakeSolid.cc,v 1.2 1999-05-28 02:19:36 lockman Exp $
+// $Id: G3toG4MakeSolid.cc,v 1.3 1999-12-05 17:50:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// modified by I.Hrivnacova, V.Berejnoi 27 Sep 99 
 
 #include "globals.hh"
 #include "G4Box.hh"
@@ -35,6 +36,8 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
 
   // if npar = 0 assume LV deferral
   Deferred = (npar == 0);
+  // modified
+  if (Deferred) return solid;
 
   for (int i=0;i<3;i++){
     OKAxis[i]=false;
@@ -101,6 +104,15 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
     NegVolPars= pDz<0 || pDy1<0 || pDx1<0 || pDx2<0 || pDy2<0 || pDx3<0 || pDx4<0;
 
     if (!(NegVolPars || Deferred)) {
+      // added for test only 
+      if (!(pDz>0))  pDz  += 0.001*cm;
+      if (!(pDy1>0)) pDy1 += 0.001*cm;
+      if (!(pDx1>0)) pDx1 += 0.001*cm;
+      if (!(pDx2>0)) pDx2 += 0.001*cm;
+      if (!(pDy2>0)) pDy2 += 0.001*cm;
+      if (!(pDx3>0)) pDx3 += 0.001*cm;
+      if (!(pDx4>0)) pDx4 += 0.001*cm;
+    
       solid = new 
 	G4Trap(vname, pDz, pTheta, pPhi, pDy1, pDx1, pDx2, pAlp1, pDy2, pDx3, 
 	       pDx4, pAlp2);

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gstpar.cc,v 1.3 1999-11-15 10:39:40 gunter Exp $
+// $Id: G4gstpar.cc,v 1.4 1999-12-05 17:50:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G3toG4.hh"
@@ -29,11 +29,4 @@ void G4gstpar(G4int itmed, G4String chpar, G4double parval)
     // set special tracking medium parameter. Apply to all logical
     // volumes making use of the specified tracking medium.
   G4cerr << "G4gstpar: not implemented." << endl;
-  /*
-    G3Vol.MatchTmed(itmed);
-    G4LogicalVolume *lvol;
-    while (lvol = G3Vol.NextTmed()) {
-        // $$$ apply tracking parameter
-    }
-  */
 }

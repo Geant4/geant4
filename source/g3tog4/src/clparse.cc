@@ -1,15 +1,18 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: clparse.cc,v 1.7 1999-11-15 10:39:40 gunter Exp $
+// $Id: clparse.cc,v 1.8 1999-12-05 17:50:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// modified by I.Hrivnacova
+// added G3SensVol
+
 #include "globals.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 #include "g4rw/rstream.h"
 #include "g4rw/ctoken.h"
 #include "G3toG4.hh"
@@ -20,6 +23,7 @@
 #include "G3RotTable.hh"
 #include "G3PartTable.hh"
 #include "G3DetTable.hh"
+#include "G3SensVolVector.hh"
 
 ofstream ofile;
 
@@ -36,6 +40,7 @@ G3RotTable G3Rot; // rotation ID <-> G4 transform object table
 G3PartTable G3Part; // particle ID <-> ParticleDefinition pointer
 G3DetTable G3Det; // sensitive detector name <-> pointer
 G3EleTable G3Ele; // element names table
+G3SensVolVector G3SensVol; // vector of sensitive logical volumes
 
 G4int narray;
 
@@ -230,6 +235,16 @@ void G3fillParams(G4String *tokens, char *ptypes)
                     }
                 break;
             case 'R':
+                for (k=0; k < narray; k++) 
+                    { 
+                        Rpar[nr] = atof(tokens[ipt].data()); 
+                        nr++; ipt++;
+                    }
+                break;
+            case 'Q':
+                // special case of reading three successive R arrays 
+                // into one (used in gsmixt)
+                narray = 3 * abs(narray);
                 for (k=0; k < narray; k++) 
                     { 
                         Rpar[nr] = atof(tokens[ipt].data()); 

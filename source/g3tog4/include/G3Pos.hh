@@ -1,30 +1,37 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G3Pos.hh,v 1.6 1999-12-05 17:50:03 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// modified by I.Hrivnacova, 13.10.99
+
 #ifndef _G3POS_
 #define _G3POS_ 1
 
 #include "G4ThreeVector.hh"
 
-class VolTableEntry;
-
 class G3Pos{
 private:
-  VolTableEntry* _VTE;
+  G4String _MotherName;   
   G4int _Copy;
-  G4String _LV;
   G4ThreeVector* _Position;
   G4int _Irot;
   G4String _Only;
 public:
   G3Pos(){;}
 
-  G3Pos(G4String& LV, G4int C, G4ThreeVector* T, G4int R, G4String& O);
+  G3Pos(G4String M, G4int C, G4ThreeVector* T, G4int R, G4String O);
 
   G4bool operator == (const G3Pos& g3p) const;
 
   virtual ~G3Pos();
 
-  VolTableEntry* GetVTE();
-
-  G4String& GetName();
+  G4String& GetMotherName();
 
   G4int GetIrot();
 

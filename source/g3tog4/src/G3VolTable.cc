@@ -1,66 +1,72 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTable.cc,v 1.16 1999-11-15 10:39:37 gunter Exp $
+// $Id: G3VolTable.cc,v 1.17 1999-12-05 17:50:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// modified by I.Hrivnacova, 13.10.99
 
-#include <iomanip.h>
+#include "g4std/iomanip"
 #include "globals.hh"
 #include "G3VolTable.hh"
 #include "G3Pos.hh"
 
+typedef G4std::map<G4String, G3VolTableEntry*, less<G4String> >
+::iterator VTDiterator;
+
 G3VolTable::G3VolTable() 
-  : _VTD(0), G3toG4TopVTE(0), _FirstKey("UnDefined"), _NVTE(0), _NG3Pos(0){
-    _VTD = new G4RWTPtrHashDictionary<G4String,VolTableEntry>(G4String::hash);
+  : G3toG4TopVTE(0), _FirstKey("UnDefined"), _NG3Pos(0){
 };
 
 G3VolTable::~G3VolTable(){
-  _VTD->clearAndDestroy();
-  delete _VTD;
-  // G4cout << "Deleted G3VolTable..." << endl;
+  if (VTD.size()>0){
+    //    G4cout << "Deleting VTD" << endl;
+    for (VTDiterator i=VTD.begin(); i != VTD.end(); i++) {
+      delete (*i).second;
+    }
+    VTD.clear();
+  }
 };
 
-VolTableEntry*
+G3VolTableEntry*
 G3VolTable::GetVTE(const G4String& Vname) {
-  return _VTD->findValue(&Vname);
+  VTDiterator i = VTD.find(Vname);
+  return (*i).second;
 };
 
 void 
-G3VolTable::ListVTE(){
-  G4RWTPtrHashDictionaryIterator<G4String, VolTableEntry> iter(*_VTD);
-  if (_VTD->entries()>0) {
-    for (int i=0;iter();i++){
-      _VTE = iter.value();
-      G4cout << "G3VolTable element " << setw(3) << i << " name "
-	     << _VTE->GetName() << " has " << _VTE->GetNoDaughters() 
+G3VolTable::PrintAll(){
+  if (VTD.size()){
+    G4int i=0;
+    G4cout << "Dump of VTD - " << VTD.size() << " entries:" << endl;
+    VTEStat();
+    for (VTDiterator v=VTD.begin(); v != VTD.end(); v++){
+      G3VolTableEntry* VTE = (*v).second;
+      G4cout << "G3VolTable element " << setw(3) << i++ << " name "
+	     << VTE->GetName() << " has " << VTE->GetNoDaughters() 
 	     << " daughters" << endl;
     }
   }
 }
 
-G4RWTPtrHashDictionary <G4String, VolTableEntry>* 
-G3VolTable::GetVTD() {return _VTD;}
-
-VolTableEntry*
-G3VolTable::PutVTE(VolTableEntry* aVolTableEntry){
+G3VolTableEntry*
+G3VolTable::PutVTE(G3VolTableEntry* aG3VolTableEntry){
   
-  if (GetVTE(aVolTableEntry->GetName()) == 0 ){
+  if (GetVTE(aG3VolTableEntry->GetName()) == 0 ){
     
     // create a hash key
-    G4String* _HashID = new G4String(aVolTableEntry->GetName());
+    G4String HashID = aG3VolTableEntry->GetName();
     
-    if (_FirstKey == "UnDefined") _FirstKey = *(_HashID);
+    if (_FirstKey == "UnDefined") _FirstKey = HashID;
     
     // insert into dictionary
-    _VTD->insertKeyAndValue(_HashID, aVolTableEntry);
-    _NVTE++;
+    VTD[HashID] = aG3VolTableEntry;
   }
-  return GetVTE(aVolTableEntry->GetName());
+  return GetVTE(aG3VolTableEntry->GetName());
 };
 
 void 
@@ -70,22 +76,22 @@ G3VolTable::CountG3Pos(){
 
 void
 G3VolTable::SetFirstVTE(){
-  G3toG4TopVTE = _VTD->findValue(&_FirstKey);
+  G3toG4TopVTE = VTD[_FirstKey];
+  
   if (G3toG4TopVTE->NPCopies() > 0) {
     _FirstKey = G3toG4TopVTE->GetMother()->GetName();
     SetFirstVTE();
   }
 }
 
-VolTableEntry*
+G3VolTableEntry*
 G3VolTable::GetFirstVTE() {
   return G3toG4TopVTE;
 };
 
 void
 G3VolTable::VTEStat() {
-  G4cout << "VTEStat: instantiated " << _NVTE << " logical  and "
-	 << _NG3Pos << " positioned volumes." << endl;
+  G4cout << "Instantiated " << VTD.size() << 
+    " volume table entries \n" 
+ 	 << "                      " << _NG3Pos << " positions." << endl;
 }
-
-

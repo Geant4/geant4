@@ -1,29 +1,31 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BuildGeom.cc,v 1.8 1999-07-21 08:40:13 lockman Exp $
+// $Id: G4BuildGeom.cc,v 1.9 1999-12-05 17:50:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// modified by I. Hrivnacova, 13.10.99 
 
-
-#include <iomanip.h>
-#include <fstream.h>
-#include "G4ios.hh"
-#include "G4GeometryManager.hh"
+#include "g4std/iomanip"
+#include "g4std/fstream"
+#include "globals.hh"
 #include "G3toG4.hh"
 #include "G3MatTable.hh"
 #include "G3MedTable.hh"
 #include "G3RotTable.hh"
 #include "G3VolTable.hh"
+#include "G3PartTable.hh"
+#include "G3DetTable.hh"
+#include "G3toG4BuildTree.hh"
+#include "G4GeometryManager.hh"
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
+#include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
-#include "globals.hh"
-#include "VolTableEntry.hh"
-#include "G3toG4BuildTree.hh"
 
 extern ofstream ofile;
 
@@ -45,31 +47,36 @@ G4LogicalVolume* G4BuildGeom(G4String& inFile){
 
   G3CLRead(inFile, NULL);
 
-  G3Vol.VTEStat();
+  G3Part.PrintAll();
 
+  G3Det.PrintAll();
+
+  G3Vol.PrintAll();
   G4cout << "Call List file read completed. Build geometry" << endl;
-
-  // Print the materials
-
-  // G3Mat.print();
 
   // Build the geometry
 
-  G4cout << "G3toG4 top level volume is " << G3Vol.GetFirstVTE()->GetName()
-	 << endl;
+  G3VolTableEntry* topVTE = G3Vol.GetFirstVTE();
+  G4cout << "G3toG4 top level volume is " << topVTE->GetName() << endl;
 
-  G3toG4BuildTree(G3Vol.GetFirstVTE());
+  // modified
+  G3toG4BuildTree(topVTE, 0);
 
   // Retrieve the top-level G3toG4 logical mother volume pointer
 
-  G4LogicalVolume* lG3toG4 = G3Vol.GetFirstVTE()->GetLV();
+  G4LogicalVolume* topLV = topVTE->GetLV();
+
+  // position the top logical volume
+  // (in Geant3 the top volume is not positioned)
+  // 
+  new G4PVPlacement(0, G4ThreeVector(), topLV->GetName(), topLV, 0, false, 0);
 
   // mark as invisible
 
-  lG3toG4->SetVisAttributes(G4VisAttributes::Invisible);
+  topLV->SetVisAttributes(G4VisAttributes::Invisible);
     
-  G4cout << "Top-level G3toG4 logical volume " << lG3toG4->GetName() << " "
-         << *(lG3toG4 -> GetVisAttributes()) << endl;
+  G4cout << "Top-level G3toG4 logical volume " << topLV->GetName() << " "
+         << *(topLV->GetVisAttributes()) << endl;
         
         // check the geometry here
 
@@ -79,8 +86,7 @@ G4LogicalVolume* G4BuildGeom(G4String& inFile){
     G4cout << "scan through G4LogicalVolumeStore:" << endl;
     checkVol();
   }
-  return lG3toG4;
-  return 0;
+  return topLV;
 }
 
 void checkVol()
