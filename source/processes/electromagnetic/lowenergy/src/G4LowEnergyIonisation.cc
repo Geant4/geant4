@@ -55,7 +55,7 @@ G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& nam)
     theMeanFreePathData(0),
     theGenerator(0)
 {
-  verboseLevel = 2;
+  verboseLevel = 0;
   tcut.clear();
   tmax.clear();
 }
