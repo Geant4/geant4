@@ -1,4 +1,4 @@
-$Id: History,v 1.209 2002-12-10 14:05:59 gcosmo Exp $
+$Id: History,v 1.210 2003-01-22 18:02:21 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22nd January 2003  Gabriele Cosmo (config-V05-00-00)
+- Added experimental setup WIN32-VC7.gmk for Windows .NET VC++ compiler.
+- Generalised identification of WIN32 specific setups in core scripts.
+- Forced silent generation of dependencies (added -w option to calls to g++).
 
 4th December 2002  Gabriele Cosmo (config-V04-01-08)
 - Removed obsolete setup for ObjectSpace-STL (G4USE_OSPACE and related
