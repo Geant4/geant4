@@ -523,14 +523,14 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Bar
 endif
 
 if ( `uname -n` == auger5.lal.in2p3.fr ) then
-  set prompt='g4> ' 
+  set prompt='auger5-g4> ' 
 # Core :
   setenv MAKECMD make
   setenv CVSROOT :ext:gbarrand@sungeant.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv CVS_RSH ssh
   setenv G4INSTALL /geant4/geant4.5.2.ref04
   setenv G4SYSTEM Linux-g++
-  setenv G4WORKDIR $G4INSTALL
+  setenv G4WORKDIR $G4INSTALL/rh93_gcc322
   setenv G4STTDIR $G4WORKDIR/stt
   setenv G4LIB $G4WORKDIR/lib
 #  setenv G4DEBUG 1
