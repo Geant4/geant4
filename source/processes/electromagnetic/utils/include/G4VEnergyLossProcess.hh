@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.15 2004-05-05 18:54:44 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.16 2004-05-10 18:46:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -197,7 +197,7 @@ public:
   G4PhysicsTable* DEDXTable() const {return theDEDXTable;};
 
   void SetRangeTable(G4PhysicsTable* pRange);
-  G4PhysicsTable* RangeTable() const {return thePreciseRangeTable;};
+  G4PhysicsTable* RangeTable() const;
 
   void SetRangeTableForLoss(G4PhysicsTable* p);
   G4PhysicsTable* RangeTableForLoss() const {return theRangeTableForLoss;};
@@ -675,6 +675,15 @@ inline G4VSubCutoffProcessor* G4VEnergyLossProcess::SubCutoffProcessor(size_t in
   G4VSubCutoffProcessor* p = 0;
   if( nSCoffRegions ) p = scoffProcessors[idxSCoffRegions[index]];
   return p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline G4PhysicsTable* G4VEnergyLossProcess::RangeTable() const
+{
+  G4PhysicsTable* t = thePreciseRangeTable;
+  if(!t) t = theRangeTableForLoss;
+  return t;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
