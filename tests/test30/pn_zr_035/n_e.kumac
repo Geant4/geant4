@@ -18,16 +18,16 @@ set NDVY 010205
  hi/file 1 prec.paw
  set dmod 3
  hi/pl 23 shist
- line 10 1.6 11 1.6
- itx 11.5 35 'PREC'
+ line 10 2.6 11 2.6
+ itx 11.5 400 'PREC'
  close 1
  
  
  hi/file 1 kin.paw
  set dmod 1
  hi/pl 23 shist
- line 10 1.2 11 1.2
- itx 11.5 15 'KIN'
+ line 10 2.2 11 2.2
+ itx 11.5 135 'KIN'
  close 1
  
  ve/create X(44) R 10.96 12.38 13.13 14. 15.08 15.72 15.97 16.14 16.43 17.46 18.33 19.44 19.61 19.64 20.5 21.14 22.41 22.49 22.68 22.87 23.34 23.39 23.42 23.46 23.53 23.68 23.76 23.84 23.92 23.94 24.34 24.9 25.58 25.64 26.46 26.81 27.02 27.21 27.61 27.64 27.89 27.93 28.24 28.41
@@ -47,15 +47,15 @@ gr/h/symb X Y 44 21 0.2
   hi/file 1 par.paw
  set dmod 3
  hi/pl 23 shist
- line 10 1.8 11 1.8
- itx 11.5 60 'LEPAR'
+ line 10 2.6 11 2.6
+ itx 11.5 400 'LEPAR'
  close 1
 
   hi/file 1 chips.paw
  set dmod 1
  hi/pl 23 shist
- line 10 1.4 11 1.4
- itx 11.5 22 'CHIPS'
+ line 10 2.2 11 2.2
+ itx 11.5 135 'CHIPS'
  close 1
  
  opt liny

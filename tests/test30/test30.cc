@@ -600,7 +600,7 @@ int main(int argc, char** argv)
 
     G4Timer* timer = new G4Timer();
     timer->Start();
-    const G4DynamicParticle* sec;
+    const G4DynamicParticle* sec = 0;
     G4ParticleDefinition* pd;
     G4ThreeVector  mom;
     G4LorentzVector labv, fm;
@@ -625,8 +625,23 @@ int main(int argc, char** argv)
       if(iter == 1000*(iter/1000)) {
         cerr << "##### " << iter << "-th event  #####" << G4endl;
       }	
+
+      G4int nbar = 0;
+ 
+      for(G4int j=0; j<n+1; j++) {
+
+	if(j<n) {
+	   sec = aChange->GetSecondary(j)->GetDynamicParticle();
+	   pd  = sec->GetDefinition();					
+           if(pd->GetPDGMass() > 100.*MeV) nbar++;
+
+	} else {
+	   if(aChange->GetStatusChange() == fStopAndKill) break;
+           nn++;
+	}
+      }
 		 					
-      for(G4int i=0; i<n+1; i++) {
+      for(G4int i=0; i<nn; i++) {
 
 	if(i<n) {
 	   sec = aChange->GetSecondary(i)->GetDynamicParticle();
@@ -635,8 +650,6 @@ int main(int argc, char** argv)
 	   e   = sec->GetKineticEnergy();
 
 	} else {
-	   if(aChange->GetStatusChange() == fStopAndKill) break;
-           nn++;
 	   pd = part;
 	   G4ParticleChange* bChange = dynamic_cast<G4ParticleChange*>(aChange);
 	   mom = *(bChange->GetMomentumDirectionChange());
@@ -647,7 +660,7 @@ int main(int argc, char** argv)
 	}
 
 	// for exclusive reaction 2 particles in final state
-        if(!inclusive && nn != 2) break;
+        if(!inclusive && nbar != 2) break;
 
         m = pd->GetPDGMass();
 	p = sqrt(e*(e + 2.0*m));
