@@ -808,7 +808,11 @@ void  G4BinaryCascade::FindCollisions(G4KineticTrackVector * secondaries)
   for(std::vector<G4KineticTrack *>::iterator i = secondaries->begin();
      i != secondaries->end(); ++i)
   {
-    for(std::vector<G4BCAction *>::iterator j = theImR.begin();
+    if ( (*i)->GetTrackingMomentum().mag2() < -1.*eV )
+    {
+      G4cout << "G4BinaryCascade::FindCollisions(): negative m2:" << (*i)->GetTrackingMomentum().mag2() << G4endl;
+    } 
+for(std::vector<G4BCAction *>::iterator j = theImR.begin();
         j!=theImR.end(); j++)
     {
       const std::vector<G4CollisionInitialState *> & aCandList
@@ -1171,27 +1175,24 @@ void G4BinaryCascade::StepParticlesOut()
       G4KineticTrack * kt = *i;
       if( kt->GetState() == G4KineticTrack::inside ) 
       {
-	if((kt->GetDefinition() == G4Proton::Proton()) ||                     // @@@ GF why only for nucleons?
-	   (kt->GetDefinition() == G4Neutron::Neutron()))
-        {
 	  nsec++;
-	  G4double tStep = steplength / ( kt->Get4Momentum().beta() * c_light );
+	  G4double tStep(0), tdummy(0); 
+	  ((G4RKPropagation*)thePropagator)->GetSphereIntersectionTimes(kt,tdummy,tStep);
 #ifdef debug_G4BinaryCascade
 	  G4cout << " minTimeStep, tStep Particle " <<minTimeStep << " " <<tStep
-	         << " " <<kt->GetDefinition()->GetParticleName() << " 4mom " << kt->GetTrackingMomentum()<<G4endl;
+	         << " " <<kt->GetDefinition()->GetParticleName() 
+		 << " 4mom " << kt->GetTrackingMomentum()<<G4endl;
 #endif
-	  if(tStep<minTimeStep)
+	  if(tStep<minTimeStep && tStep> 0 )
 	  {
 	    minTimeStep = tStep;
-//            G4cerr <<"Position "<<kt->GetPosition().mag()<<" "
-//	           <<kt->GetTrackingMomentum().e()-kt->GetTrackingMomentum().mag()<<G4endl;
 	  }
-        }
       } else if ( kt->GetState() != G4KineticTrack::outside ){
           PrintKTVector(&theSecondaryList, std::string(" state ERROR....."));
           throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCascade::StepParticlesOut() particle not in nucleus");
       }
     }
+    minTimeStep *= 1.2;
 //    G4cerr << "CaptureCount = "<<counter<<" "<<nsec<<" "<<minTimeStep<<" "<<1*ns<<G4endl;
     G4double timeToCollision=DBL_MAX;
     G4CollisionInitialState * nextCollision=0;
