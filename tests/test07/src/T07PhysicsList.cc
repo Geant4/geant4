@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T07PhysicsList.cc,v 1.4 1999-12-15 14:54:41 gunter Exp $
+// $Id: T07PhysicsList.cc,v 1.5 2000-02-25 13:32:17 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,7 +102,6 @@ void T07PhysicsList::ConstructMesons()
   G4PionZero::PionZeroDefinition();
   G4Eta::EtaDefinition();
   G4EtaPrime::EtaPrimeDefinition();
-  G4RhoZero::RhoZeroDefinition();
   G4KaonPlus::KaonPlusDefinition();
   G4KaonMinus::KaonMinusDefinition();
   G4KaonZero::KaonZeroDefinition();
