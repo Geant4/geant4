@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.cc,v 1.1 2000-02-09 10:21:24 urban Exp $
+// $Id: G4VEnergyLoss.cc,v 1.2 2000-02-10 14:23:30 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@ G4VEnergyLoss::G4VEnergyLoss()
                    :G4VContinuousDiscreteProcess("No Name Loss Process"),
      lastMaterial(NULL),
      MaxExcitationNumber (1.e6),
-     nmaxDirectFluct (100),
+     nmaxDirectFluct (16),
      nmaxCont1(4),
      nmaxCont2(16)
 {
@@ -55,7 +55,7 @@ G4VEnergyLoss::G4VEnergyLoss(const G4String& aName , G4ProcessType aType)
                   : G4VContinuousDiscreteProcess(aName, aType),
      lastMaterial(NULL),
      MaxExcitationNumber (1.e6),
-     nmaxDirectFluct (100),
+     nmaxDirectFluct (16),
      nmaxCont1(4),
      nmaxCont2(16)
 {
@@ -73,7 +73,7 @@ G4VEnergyLoss::G4VEnergyLoss(G4VEnergyLoss& right)
                   : G4VContinuousDiscreteProcess(right),
      lastMaterial(NULL),
      MaxExcitationNumber (1.e6),
-     nmaxDirectFluct (100),
+     nmaxDirectFluct (16),
      nmaxCont1(4),
      nmaxCont2(16)
 {
@@ -874,10 +874,10 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   G4double threshold,w1,w2,w3,lnw3,C,prob,
            beta2,suma,e0,Em,loss,lossc ,w;
   G4double a1,a2,a3;
-  G4long p1,p2,p3;
+  G4int p1,p2,p3;
   G4int nb;
   G4double Corrfac, na,alfa,rfac,namean,sa,alfa1,ea,sea;
-  G4double dp1,dnmaxDirectFluct,dp3,dnmaxCont2;
+  G4double dp1,dp3;
   G4double siga ;
   static const G4double alim=10.;
 
@@ -898,12 +898,18 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   lnw3 = log(w3);
   beta2 = tau2/(tau1*tau1);
 
-  C = (1.-rateFluct)*MeanLoss/(lnw3-ipotLogFluct-beta2);
+  C = MeanLoss/(lnw3-ipotLogFluct-beta2);
 
   a1 = C*f1Fluct*(lnw3-e1LogFluct-beta2)/e1Fluct;
   a2 = C*f2Fluct*(lnw3-e2LogFluct-beta2)/e2Fluct;
-  if (Tm > 0.) a3 = rateFluct*MeanLoss*Tm/(ipotFluct*w1*log(w2));
-  else { a1 /= 1.-rateFluct; a2 /= 1.-rateFluct; a3 = 0.;}
+  a3 = 0.;
+  if (Tm > 0.) 
+  {
+    a1 *= 1.-rateFluct ;
+    a2 *= 1.-rateFluct ;
+    a3 = rateFluct*MeanLoss*Tm/(ipotFluct*w1*log(w2));
+  }
+
   suma = a1+a2+a3;
 
   //no fluctuation if the loss is too big
@@ -942,14 +948,13 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
           if (p1 > nmaxDirectFluct)
             {
               dp1 = p1;
-              dnmaxDirectFluct=nmaxDirectFluct;
-              Corrfac = dp1/dnmaxDirectFluct;
+              Corrfac = dp1/G4float(nmaxDirectFluct);
               p1 = nmaxDirectFluct;
             }
           else Corrfac = 1.;
 
           loss = 0.;
-          for (long i=0; i<p1; i++) loss += 1./(1.-w*G4UniformRand());
+          for (G4int i=0; i<p1; i++) loss += 1./(1.-w*G4UniformRand());
           loss *= (e0*Corrfac);
 
         }
@@ -964,6 +969,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       }
       else
        p1 = G4Poisson(a1);
+
       if(a2>alim)
       {
         siga=sqrt(a2) ;
@@ -971,6 +977,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       }
       else
         p2 = G4Poisson(a2);
+
       loss = p1*e1Fluct+p2*e2Fluct;
  
       // smearing to avoid unphysical peaks
@@ -987,33 +994,36 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       else
         p3 = G4Poisson(a3);
 
-      lossc = 0.; na = 0.; alfa = 1.;
-      if (p3 > nmaxCont2)
+      lossc = 0.;
+      if(p3 > 0)
+      {
+        na = 0.; 
+        alfa = 1.;
+        if (p3 > nmaxCont2)
         {
           dp3        = p3;
-          dnmaxCont2 = nmaxCont2;
-          rfac       = dp3/(dnmaxCont2+dp3);
+          rfac       = dp3/G4float(nmaxCont2+dp3);
           namean     = p3*rfac;
           sa         = nmaxCont1*rfac;
           na         = RandGauss::shoot(namean,sa);
           if (na > 0.)
-            {
-              alfa   = w2*(nmaxCont2+p3)/(w2*nmaxCont2+p3);
-              alfa1  = alfa*log(alfa)/(alfa-1.);
-              ea     = na*ipotFluct*alfa1;
-              sea    = ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
-              lossc += RandGauss::shoot(ea,sea);
-            }
+          {
+            alfa   = w2*G4float(nmaxCont2+p3)/(w2*G4float(nmaxCont2)+G4float(p3));
+            alfa1  = alfa*log(alfa)/(alfa-1.);
+            ea     = na*ipotFluct*alfa1;
+            sea    = ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
+            lossc += RandGauss::shoot(ea,sea);
+          }
         }
 
-      nb = G4int(p3-na);
-      if (nb > 0)
+        nb = G4int(G4float(p3)-na);
+        if (nb > 0)
         {
           w2 = alfa*ipotFluct;
           w  = (w1-w2)/w1;      
           for (G4int k=0; k<nb; k++) lossc += w2/(1.-w*G4UniformRand());
         }
-         
+      }        
       loss += lossc;  
     } 
 
