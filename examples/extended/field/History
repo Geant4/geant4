@@ -1,0 +1,23 @@
+
+$Id: History,v 1.1 2004-03-23 15:54:36 japost Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    field03 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+Mar 23rd, 2004 John Apostolakis (fieldex-V06-00-00)
+---------------------------------------------------
+  Group together fixes in 
+    field01    fieldex01-V06-00-00  and  
+    field03    fieldex03-V06-00-00
+ which fix common problem in SetField methods.
