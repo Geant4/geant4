@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceScoreSampler.hh,v 1.2 2002-08-29 15:32:00 dressel Exp $
+// $Id: G4ParallelImportanceScoreSampler.hh,v 1.3 2002-09-02 13:27:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -55,7 +55,8 @@ class G4ParallelImportanceScoreSampler :
 public:  // with description
 
  
-  G4ParallelImportanceScoreSampler(G4VIStore &iw, 
+  G4ParallelImportanceScoreSampler(G4VPhysicalVolume &worldvolume,
+				   G4VIStore &iw, 
 				   G4VPScorer &ascorer,
 				   const G4String &particlename,
 				   const G4VImportanceAlgorithm *ialg = 0);
@@ -83,8 +84,8 @@ private:
 
 private:
   G4String fParticleName;
-  G4ParallelWorld &fParallelWorld;
-  G4ParallelImportanceSampler &fParallelImportanceSampler;
+  G4ParallelWorld *fParallelWorld;
+  G4ParallelImportanceSampler *fParallelImportanceSampler;
   G4VPScorer &fPScorer;
   G4PScoreProcess *fPScoreProcess;
 };

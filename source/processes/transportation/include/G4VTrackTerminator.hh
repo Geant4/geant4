@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrackTerminator.hh,v 1.1 2002-08-29 15:32:37 dressel Exp $
+// $Id: G4VTrackTerminator.hh,v 1.2 2002-09-02 13:27:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -48,7 +48,7 @@
 
 class G4VTrackTerminator {
 public:
-  virtual ~G4VTrackTerminator(){}
+  virtual ~G4VTrackTerminator() {}
   virtual void KillTrack() = 0;
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceSampler.hh,v 1.2 2002-08-13 10:07:46 dressel Exp $
+// $Id: G4ParallelImportanceSampler.hh,v 1.3 2002-09-02 13:27:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -48,13 +48,15 @@ class G4VImportanceAlgorithm;
 class G4VImportanceSplitExaminer;
 class G4ParallelImportanceProcess;
 class G4VTrackTerminator;
+class G4VPhysicalVolume;
 
 class G4ParallelImportanceSampler : public G4VSampler
 {
 
 public:  // with description
 
-  G4ParallelImportanceSampler(G4VIStore &is, 
+  G4ParallelImportanceSampler(G4VPhysicalVolume &worldvolume,
+			      G4VIStore &is, 
 			      const G4String &particlename,
 			      const G4VImportanceAlgorithm *ialg = 0);
     // if *ialg = 0: use the G4ImportanceAlgorithm 
@@ -96,7 +98,7 @@ public:  // with description
 private:
 
   G4String fParticleName;
-  G4ParallelWorld &fParallelWorld;
+  G4ParallelWorld *fParallelWorld;
   G4VTrackTerminator *fTrackTerminator;
   G4bool fCreatedPW;
 

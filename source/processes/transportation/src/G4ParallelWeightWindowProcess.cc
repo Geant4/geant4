@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWeightWindowProcess.cc,v 1.5 2002-08-29 15:32:00 dressel Exp $
+// $Id: G4ParallelWeightWindowProcess.cc,v 1.6 2002-09-02 13:27:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -85,7 +85,7 @@ PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
   if (aTrack.GetCurrentStepNumber() == 1
       && aTrack.GetTrackStatus() != fStopAndKill) {
     fInitStep = false;
-    G4double importance = fIStore.GetImportance(fPStepper.GetPStep().fPostGeometryCell);
+    G4double importance = fIStore.GetImportance(fPStepper.GetPStep().GetPostGeometryCell());
     G4double weight = aTrack.GetWeight();
     
     fNsplit_Weight = fWWAlgorithm.Calculate(weight, importance);

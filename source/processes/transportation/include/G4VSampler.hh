@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSampler.hh,v 1.2 2002-08-29 15:32:00 dressel Exp $
+// $Id: G4VSampler.hh,v 1.3 2002-09-02 13:27:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,7 +39,7 @@
 class G4VSampler
 {
 public:
-  virtual ~G4VSampler(){}
+  virtual ~G4VSampler() {}
   virtual void Initialize() = 0;
     // the user must initialize the concrete object this interface
     // covers afer the initialization of the G4RunManager

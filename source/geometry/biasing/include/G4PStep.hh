@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PStep.hh,v 1.4 2002-08-29 15:30:50 dressel Exp $
+// $Id: G4PStep.hh,v 1.5 2002-09-02 13:25:25 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -48,18 +48,32 @@
 
 class G4PStep
 {
-
-public:  // with description
-
-  G4PStep(const G4GeometryCell &preKey, const G4GeometryCell &postKey)
-   : fPreGeometryCell(preKey), fPostGeometryCell(postKey), 
+public:
+  G4PStep(const G4GeometryCell &preCell, const G4GeometryCell &postCell)
+   : fPreGeometryCell(preCell), fPostGeometryCell(postCell), 
      fCrossBoundary(false) {}
     // initialise pre and post G4GeometryCell 
 
   ~G4PStep(){}
 
-public:  // without description
+  void SetPreGeometryCell(const G4GeometryCell &preCell)  
+  {fPreGeometryCell = preCell;}
 
+  void SetPostGeometryCell(const G4GeometryCell &postCell)  
+  {fPostGeometryCell = postCell;}
+  
+  void SetCrossBoundary(G4bool b) {fCrossBoundary = b;}
+
+  G4GeometryCell GetPreGeometryCell() const 
+  {return fPreGeometryCell;}
+
+  G4GeometryCell GetPostGeometryCell() const 
+  {return fPostGeometryCell;}
+  
+  G4bool GetCrossBoundary() const 
+  {return fCrossBoundary;}
+
+private:
   G4GeometryCell fPreGeometryCell;
     // addressing the  "cell" the track previously touched 
 

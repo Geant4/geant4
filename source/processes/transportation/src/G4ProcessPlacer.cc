@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.cc,v 1.7 2002-08-29 15:32:00 dressel Exp $
+// $Id: G4ProcessPlacer.cc,v 1.8 2002-09-02 13:27:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,8 +37,7 @@
 #include "G4ParticleTable.hh"
 
 G4ProcessPlacer::G4ProcessPlacer(const G4String &particlename)
- : G4VProcessPlacer(particlename),
-   fParticleName(particlename)
+ : fParticleName(particlename)
 {
    G4cout << "+++ G4ProcessPlacer::G4ProcessPlacer: for: " <<  particlename 
 	  << G4endl;

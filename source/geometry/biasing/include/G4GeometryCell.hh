@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCell.hh,v 1.1 2002-08-29 15:31:38 dressel Exp $
+// $Id: G4GeometryCell.hh,v 1.2 2002-09-02 13:25:25 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,18 +45,21 @@ class G4VPhysicalVolume;
 
 class G4GeometryCell
 {
-
-public:  // with description
-
+public:
   G4GeometryCell(const G4VPhysicalVolume &aVolume, G4int RepNum);
     // initialise volume and replica number
 
   ~G4GeometryCell();
     // simple destruction
+  
+  const G4VPhysicalVolume &GetPhysicalVolume() const
+  {return *fVPhysiclaVolume;}
 
+  G4int GetReplicaNumber() const {return fRepNum;}
+  
+private:
   const G4VPhysicalVolume *fVPhysiclaVolume;
     // pinter to the G4VPhysicalVolume of the "cell" 
-
   G4int fRepNum;
     // replica number of the "cell"
 };

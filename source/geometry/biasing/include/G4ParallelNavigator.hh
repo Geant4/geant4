@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.hh,v 1.7 2002-08-29 15:30:50 dressel Exp $
+// $Id: G4ParallelNavigator.hh,v 1.8 2002-09-02 13:25:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -115,7 +115,7 @@ private:
 
 private:
   
-  G4Navigator &fNavigator;
+  G4Navigator *fNavigator;
   G4int fNlocated;
   G4int fMaxShiftedTrys;  
   G4TouchableHandle fCurrentTouchableH;

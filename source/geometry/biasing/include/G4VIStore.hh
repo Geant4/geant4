@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIStore.hh,v 1.6 2002-08-29 15:30:50 dressel Exp $
+// $Id: G4VIStore.hh,v 1.7 2002-09-02 13:25:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -51,8 +51,7 @@ class  G4VIStore
 
 public:  // with description
 
-  G4VIStore(G4VPhysicalVolume &worldVolume){}
-  virtual  ~G4VIStore(){}
+  virtual  ~G4VIStore() {}
 
   virtual G4double GetImportance(const G4GeometryCell &gCell) const = 0;
     // derive a importance value of a "cell" addresed by a G4GeometryCell
@@ -61,7 +60,7 @@ public:  // with description
   virtual G4bool IsKnown(const G4GeometryCell &gCell) const = 0;
     // returns true if the gCell is in the store, else false 
 
-  virtual G4VPhysicalVolume &GetWorldVolume() = 0;
+  virtual const G4VPhysicalVolume &GetWorldVolume() const = 0;
 };
 
 #endif

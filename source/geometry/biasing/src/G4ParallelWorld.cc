@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorld.cc,v 1.3 2002-08-13 10:03:30 dressel Exp $
+// $Id: G4ParallelWorld.cc,v 1.4 2002-09-02 13:25:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,9 +37,8 @@
 #include "G4VPhysicalVolume.hh"
 
 G4ParallelWorld::G4ParallelWorld(G4VPhysicalVolume &worldvolume)
- : fWorldVolume(&worldvolume),
-   fPstepper(new G4ParallelStepper),
-   fPdriver(new G4ParallelNavigator(*fWorldVolume))
+ : fPstepper(new G4ParallelStepper),
+   fPdriver(new G4ParallelNavigator(worldvolume))
 {}
 
 G4ParallelWorld::~G4ParallelWorld()
@@ -47,34 +46,6 @@ G4ParallelWorld::~G4ParallelWorld()
   delete fPdriver;
   delete fPstepper;
 }
-
-G4ParallelWorld::G4ParallelWorld(const G4ParallelWorld &rhs)
- : fWorldVolume(rhs.GetWorldVolume())
-{
-   fPstepper = new G4ParallelStepper;
-   G4ParallelNavigator *pn = new G4ParallelNavigator(*fWorldVolume);
-   pn->SetVerboseity(2);
-   fPdriver = pn;
-   
-}
-
-G4ParallelWorld &G4ParallelWorld::operator=(const G4ParallelWorld &rhs)
-{
-  if (this!=&rhs) {
-
-    fWorldVolume = rhs.GetWorldVolume();
-    fPstepper = new G4ParallelStepper;
-    fPdriver = new G4ParallelNavigator(*fWorldVolume);
-  }
-  return *this;
-}
-
-
-G4VPhysicalVolume *G4ParallelWorld::GetWorldVolume() const
-{
-  return fWorldVolume;
-}
-
 
 G4VParallelStepper &G4ParallelWorld::GetParallelStepper()
 {

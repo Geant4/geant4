@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCell.cc,v 1.1 2002-08-29 15:31:38 dressel Exp $
+// $Id: G4GeometryCell.cc,v 1.2 2002-09-02 13:25:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -32,6 +32,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4GeometryCell.hh"
+#include "G4VPhysicalVolume.hh"
 
 G4GeometryCell::G4GeometryCell(const G4VPhysicalVolume &aVolume,
                                  G4int RepNum)
@@ -45,23 +46,23 @@ G4GeometryCell::~G4GeometryCell()
 G4bool G4GeometryCellComp::operator() (const G4GeometryCell &k1,
                               const G4GeometryCell &k2) const
 {
-  if (k1.fVPhysiclaVolume != k2.fVPhysiclaVolume) {
-    return  k1.fVPhysiclaVolume < k2.fVPhysiclaVolume;
+  if (&(k1.GetPhysicalVolume()) != &(k2.GetPhysicalVolume())) {
+    return  &(k1.GetPhysicalVolume()) < &(k2.GetPhysicalVolume());
   } else {
-    return k1.fRepNum < k2.fRepNum;
+    return k1.GetReplicaNumber() < k2.GetReplicaNumber();
   }
 }
 
 G4bool operator==(const G4GeometryCell &k1, const G4GeometryCell &k2)
 {
-  if (k1.fVPhysiclaVolume != k2.fVPhysiclaVolume) return false;
-  if (k1.fRepNum != k2.fRepNum) return false;
+  if (&(k1.GetPhysicalVolume()) != &(k2.GetPhysicalVolume())) return false;
+  if (k1.GetReplicaNumber() != k2.GetReplicaNumber()) return false;
   return true;
 }
 
 G4bool operator!=(const G4GeometryCell &k1, const G4GeometryCell &k2)
 {
-  if (k1.fVPhysiclaVolume != k2.fVPhysiclaVolume) return true;
-  if (k1.fRepNum != k2.fRepNum) return true;
+  if (&(k1.GetPhysicalVolume()) != &(k2.GetPhysicalVolume())) return true;
+  if (k1.GetReplicaNumber() != k2.GetReplicaNumber()) return true;
   return false;  
 }

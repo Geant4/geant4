@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCellScorer.hh,v 1.2 2002-08-29 15:30:50 dressel Exp $
+// $Id: G4VCellScorer.hh,v 1.3 2002-09-02 13:25:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,7 +45,7 @@ class G4GeometryCell;
 
 class G4VCellScorer {
 public:  
-  virtual  ~G4VCellScorer(){}
+  virtual  ~G4VCellScorer() {}
   virtual void ScoreAnExitingStep(const G4Step &aStep, 
 				  G4GeometryCell gCell) = 0;
   virtual void ScoreAnEnteringStep(const G4Step &aStep, 

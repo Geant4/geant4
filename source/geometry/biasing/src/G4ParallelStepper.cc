@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelStepper.cc,v 1.4 2002-08-29 15:30:51 dressel Exp $
+// $Id: G4ParallelStepper.cc,v 1.5 2002-09-02 13:25:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -62,10 +62,10 @@ void G4ParallelStepper::Init(const G4GeometryCell &agCell)
     fPStep = new G4PStep(agCell, agCell);
   }
   else {
-    fPStep->fPreGeometryCell = agCell;
-    fPStep->fPostGeometryCell = agCell;
+    fPStep->SetPreGeometryCell(agCell);
+    fPStep->SetPostGeometryCell(agCell);
+    fPStep->SetCrossBoundary(false);
   }
-  UnSetCrossBoundary();
 }
 
 void G4ParallelStepper::Update(const G4GeometryCell &agCell)
@@ -73,9 +73,9 @@ void G4ParallelStepper::Update(const G4GeometryCell &agCell)
   if (!fPStep) {
     Error("fPStep == 0, Init not called?");
   }
-  fPStep->fPreGeometryCell = fPStep->fPostGeometryCell;
-  fPStep->fPostGeometryCell = agCell;
-  fPStep->fCrossBoundary = true;
+  fPStep->SetPreGeometryCell(fPStep->GetPostGeometryCell());
+  fPStep->SetPostGeometryCell(agCell);
+  fPStep->SetCrossBoundary(true);
 }
 
 void G4ParallelStepper::UnSetCrossBoundary()
@@ -83,7 +83,7 @@ void G4ParallelStepper::UnSetCrossBoundary()
   if (!fPStep) {
     Error("fPStep == 0, Init not called?");
   }
-  fPStep->fCrossBoundary = false;
+  fPStep->SetCrossBoundary(false);
 }
 
 void G4ParallelStepper::Error(const G4String &m)

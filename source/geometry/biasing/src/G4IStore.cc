@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.cc,v 1.6 2002-08-29 15:30:51 dressel Exp $
+// $Id: G4IStore.cc,v 1.7 2002-09-02 13:25:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,15 +37,14 @@
 #include "G4PStepStream.hh"
 
 
-G4IStore::G4IStore(G4VPhysicalVolume &worldvolume) :
-  G4VIStore(worldvolume),
+G4IStore::G4IStore(const G4VPhysicalVolume &worldvolume) :
   fWorldVolume(worldvolume)
 {}
 
 G4IStore::~G4IStore()
 {}
 
-G4VPhysicalVolume &G4IStore::GetWorldVolume()
+const G4VPhysicalVolume &G4IStore::GetWorldVolume() const 
 {
   return fWorldVolume;
 }

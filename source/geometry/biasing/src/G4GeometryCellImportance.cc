@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PtkImportance.cc,v 1.5 2002-08-29 15:30:51 dressel Exp $
+// $Id: G4GeometryCellImportance.cc,v 1.1 2002-09-02 13:25:46 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceSampler.cc,v 1.2 2002-08-13 10:07:47 dressel Exp $
+// $Id: G4ParallelImportanceSampler.cc,v 1.3 2002-09-02 13:27:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,19 +43,20 @@
 
 
 G4ParallelImportanceSampler::
-G4ParallelImportanceSampler(G4VIStore &is,
+G4ParallelImportanceSampler(G4VPhysicalVolume &worldvolume,
+			    G4VIStore &is,
 			    const G4String &particlename,
 			    const G4VImportanceAlgorithm *ialg)
   :
   fParticleName(particlename), 
-  fParallelWorld(*(new G4ParallelWorld(is.GetWorldVolume()))),
+  fParallelWorld(new G4ParallelWorld(worldvolume)),
   fTrackTerminator(0),
   fCreatedPW(true),
   fDeleteAlg( ( ! ialg) ),
   fIalgorithm(( (fDeleteAlg) ? 
 		new G4ImportanceAlgorithm : ialg)),
   fExaminer(new G4ImportanceSplitExaminer(*fIalgorithm, 
-					  fParallelWorld.
+					  fParallelWorld->
 					  GetParallelStepper(),  
 					  is)),
    fParallelImportanceProcess(0)
@@ -68,14 +69,14 @@ G4ParallelImportanceSampler(G4VIStore &is,
 			    const G4VImportanceAlgorithm *ialg) 
   :
   fParticleName(pname), 
-  fParallelWorld(pworld),
+  fParallelWorld(&pworld),
   fTrackTerminator(0),
   fCreatedPW(false),
   fDeleteAlg( ( ! ialg) ),
   fIalgorithm(( (fDeleteAlg) ? 
 		new G4ImportanceAlgorithm : ialg)),
   fExaminer(new G4ImportanceSplitExaminer(*fIalgorithm, 
-					  fParallelWorld.
+					  fParallelWorld->
 					  GetParallelStepper(),  
 					  is)),
    fParallelImportanceProcess(0)
@@ -89,9 +90,9 @@ G4ParallelImportanceSampler::CreateParallelImportanceProcess()
   if (!fParallelImportanceProcess) {
     fParallelImportanceProcess = 
       new G4ParallelImportanceProcess(*fExaminer, 
-				      fParallelWorld.
+				      fParallelWorld->
 				      GetGeoDriver(), 
-				      fParallelWorld.
+				      fParallelWorld->
 				      GetParallelStepper(),
 				      fTrackTerminator);
   }
@@ -111,7 +112,7 @@ G4ParallelImportanceSampler::~G4ParallelImportanceSampler()
     placer.RemoveProcess(fParallelImportanceProcess);
     delete fParallelImportanceProcess;
   }
-  if (fCreatedPW) delete &fParallelWorld;
+  if (fCreatedPW) delete fParallelWorld;
   if (fDeleteAlg) delete fIalgorithm;
   delete fExaminer;
 }

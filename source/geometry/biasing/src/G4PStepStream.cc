@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PStepStream.cc,v 1.4 2002-08-29 15:30:51 dressel Exp $
+// $Id: G4PStepStream.cc,v 1.5 2002-09-02 13:25:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,15 +37,15 @@
 
 G4std::ostream& operator<<(G4std::ostream &out, const G4GeometryCell &tk)
 {
-  out << "Volume name = " << tk.fVPhysiclaVolume->GetName() << ", ";
-  out << "Replica number = " << tk.fRepNum;
+  out << "Volume name = " << tk.GetPhysicalVolume().GetName() << ", ";
+  out << "Replica number = " << tk.GetReplicaNumber();
   return out;
 }
 
 G4std::ostream& operator<<(G4std::ostream &out, const G4PStep &ps)
 {
-  out << "PreGeometryCell : " <<  ps.fPreGeometryCell << " ";
-  out << "PostGeometryCell: " <<  ps.fPostGeometryCell << " ";
-  out << "CrossBoundary   : " <<  ps.fCrossBoundary << "\n";
+  out << "PreGeometryCell : " <<  ps.GetPreGeometryCell() << " ";
+  out << "PostGeometryCell: " <<  ps.GetPostGeometryCell() << " ";
+  out << "CrossBoundary   : " <<  ps.GetCrossBoundary() << "\n";
   return out;
 }

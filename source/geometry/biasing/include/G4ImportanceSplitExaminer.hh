@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceSplitExaminer.hh,v 1.3 2002-08-29 15:30:49 dressel Exp $
+// $Id: G4ImportanceSplitExaminer.hh,v 1.4 2002-09-02 13:25:25 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -73,7 +73,7 @@ private:
 
   const G4VImportanceAlgorithm &fIalgorithm;
   const G4VParallelStepper &fPStepper;
-  const G4ImportanceFinder &fIfinder;
+  const G4ImportanceFinder *fIfinder;
 };
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcessPlacer.hh,v 1.5 2002-08-29 15:32:00 dressel Exp $
+// $Id: G4VProcessPlacer.hh,v 1.6 2002-09-02 13:27:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -46,8 +46,7 @@ class G4VProcessPlacer
 
 public:  // with description
 
-  G4VProcessPlacer(const G4String &particlename){}
-  virtual ~G4VProcessPlacer(){}
+  virtual ~G4VProcessPlacer() {}
 
   virtual void AddProcessAsLastDoIt(G4VProcess *process) = 0;
     // place a post step do it process such that the 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPGeoDriver.hh,v 1.4 2002-08-29 15:30:50 dressel Exp $
+// $Id: G4VPGeoDriver.hh,v 1.5 2002-09-02 13:25:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,6 +43,8 @@
 #include "G4ThreeVector.hh"
 #include "G4GeometryCell.hh"
 
+class G4VPhysicalVolume;
+
 class G4VPGeoDriver
 {
 
@@ -51,7 +53,7 @@ public:  // with description
   virtual ~G4VPGeoDriver(){}
   
   virtual G4GeometryCell LocateOnBoundary(const G4ThreeVector &aPosition, 
-		                           const G4ThreeVector &aDirection) = 0;
+					  const G4ThreeVector &aDirection) = 0;
     // The location of a track according to it's position
     // and direction in case the track crosses a boundary
     // of a "parallel" geometry.

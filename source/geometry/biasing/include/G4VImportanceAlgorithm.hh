@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VImportanceAlgorithm.hh,v 1.4 2002-08-29 15:30:50 dressel Exp $
+// $Id: G4VImportanceAlgorithm.hh,v 1.5 2002-09-02 13:25:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -51,7 +51,7 @@ class G4VImportanceAlgorithm
 
 public:  // with description
 
-  virtual ~G4VImportanceAlgorithm(){}
+  virtual ~G4VImportanceAlgorithm() {}
   virtual G4Nsplit_Weight Calculate(G4double ipre_over_ipost,
                                     G4double init_w) const = 0;
     // calculate the number of tracks and their weight according 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceScoreSampler.cc,v 1.2 2002-08-13 10:07:47 dressel Exp $
+// $Id: G4ParallelImportanceScoreSampler.cc,v 1.3 2002-09-02 13:27:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,17 +41,18 @@
 #include "G4PScoreProcess.hh"
 
 G4ParallelImportanceScoreSampler::
-G4ParallelImportanceScoreSampler(G4VIStore &is, 
+G4ParallelImportanceScoreSampler(G4VPhysicalVolume &worldvolume,
+				 G4VIStore &is, 
 				 G4VPScorer &ascorer,
 				 const G4String &particlename,
 				 const G4VImportanceAlgorithm *ialg) : 
   fParticleName(particlename),
-  fParallelWorld(*(new G4ParallelWorld(is.GetWorldVolume()))),
-  fParallelImportanceSampler(*(new 
-			       G4ParallelImportanceSampler(is,
-							   fParticleName,
-							   fParallelWorld,
-							   ialg))),
+  fParallelWorld(new G4ParallelWorld(worldvolume)),
+  fParallelImportanceSampler(new 
+			     G4ParallelImportanceSampler(is,
+							 fParticleName,
+							 *fParallelWorld,
+							 ialg)),
   fPScorer(ascorer),
   fPScoreProcess(0)
 {}
@@ -63,8 +64,8 @@ G4ParallelImportanceScoreSampler::~G4ParallelImportanceScoreSampler()
     placer.RemoveProcess(fPScoreProcess);
     delete  fPScoreProcess;
   }
-  delete &fParallelImportanceSampler;
-  delete &fParallelWorld;
+  delete fParallelImportanceSampler;
+  delete fParallelWorld;
 }
 
 G4PScoreProcess *
@@ -72,8 +73,8 @@ G4ParallelImportanceScoreSampler::CreateParallelScoreProcess()
 {
   if (!fPScoreProcess) {
     fPScoreProcess = 
-      new G4PScoreProcess(fParallelWorld.
-			  GetParallelStepper(), fPScorer);
+      new G4PScoreProcess(fParallelWorld->GetParallelStepper(), 
+			  fPScorer);
   }
   return fPScoreProcess;
 }
@@ -82,6 +83,6 @@ void G4ParallelImportanceScoreSampler::Initialize()
 {
   G4ProcessPlacer placer(fParticleName);
   placer.AddProcessAsSecondDoIt(CreateParallelScoreProcess());
-  fParallelImportanceSampler.SetTrackTerminator(fPScoreProcess);
-  fParallelImportanceSampler.Initialize();
+  fParallelImportanceSampler->SetTrackTerminator(fPScoreProcess);
+  fParallelImportanceSampler->Initialize();
 }

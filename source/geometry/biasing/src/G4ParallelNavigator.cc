@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.cc,v 1.9 2002-08-29 15:30:51 dressel Exp $
+// $Id: G4ParallelNavigator.cc,v 1.10 2002-09-02 13:25:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,19 +41,20 @@
 #include "G4Pstring.hh"
 
 G4ParallelNavigator::G4ParallelNavigator(G4VPhysicalVolume &aWorldVolume)
-  : fNavigator(*(new G4Navigator)), 
+  : 
+  fNavigator(new G4Navigator), 
   fNlocated(0),
   fMaxShiftedTrys(10),
   fVerbose(1)
 {
-  //  fNavigator.SetVerboseLevel(6);
-  fNavigator.SetWorldVolume(&aWorldVolume);
-  fCurrentTouchableH = fNavigator.CreateTouchableHistory();
+  //  fNavigator->SetVerboseLevel(6);
+  fNavigator->SetWorldVolume(&aWorldVolume);
+  fCurrentTouchableH = fNavigator->CreateTouchableHistory();
 }
 
 G4ParallelNavigator::~G4ParallelNavigator()
 {
-  delete &fNavigator;
+  delete fNavigator;
 }
 
 // public functions
@@ -62,8 +63,8 @@ G4GeometryCell G4ParallelNavigator::
 LocateOnBoundary(const G4ThreeVector &aPosition, 
 		 const G4ThreeVector &aDirection)
 {/*
-  fNavigator.SetGeometricallyLimitedStep();
-  fNavigator.
+  fNavigator->SetGeometricallyLimitedStep();
+  fNavigator->
     LocateGlobalPointAndUpdateTouchableHandle( aPosition,
 					       aDirection,
 					       fCurrentTouchableH,
@@ -74,7 +75,7 @@ LocateOnBoundary(const G4ThreeVector &aPosition,
     G4cout.precision(12);
     G4cout << "LOB: " << aPosition << ", " << aDirection << G4endl;
   }
-  fNavigator.SetGeometricallyLimitedStep();
+  fNavigator->SetGeometricallyLimitedStep();
   Locate(aPosition, aDirection, true, false);
   //  since the track crosses a boundary ipdate stepper 
   return GetCurrentGeometryCell();
@@ -111,7 +112,7 @@ ComputeStepLengthCrossBoundary(const G4ThreeVector &aPosition,
   // in the DOIT of the ParalleTransport
 
   // but location in volume overcomes a problem with spheres
-  //  fNavigator.LocateGlobalPointWithinVolume(aPosition);
+  //  fNavigator->LocateGlobalPointWithinVolume(aPosition);
   return  GetStepLength("ComputeStepLengthCrossBoundary",
 			 aPosition, aDirection);
 }
@@ -133,7 +134,7 @@ ComputeStepLengthInVolume(const G4ThreeVector &aPosition,
   // not the first step, the location must be inside the 
   // volume 
 
-  fNavigator.LocateGlobalPointWithinVolume(aPosition);
+  fNavigator->LocateGlobalPointWithinVolume(aPosition);
   //  Locate(aPosition, aDirection, true); // reduces stepLength<=0. calls
   return  GetStepLengthUseLocate("ComputeStepLengthInVolume",
 				 aPosition, aDirection);
@@ -150,11 +151,11 @@ void G4ParallelNavigator::Locate(const G4ThreeVector &aPosition,
     G4cout.precision(12);
     G4cout << "Locate: " << aPosition << ", " << aDirection << G4endl;
   }
-  fNavigator.LocateGlobalPointAndSetup( aPosition, 
+  fNavigator->LocateGlobalPointAndSetup( aPosition, 
 					&aDirection, 
 					historysearch, 
 					!useDirection);
-  fCurrentTouchableH = fNavigator.CreateTouchableHistory();
+  fCurrentTouchableH = fNavigator->CreateTouchableHistory();
 
   fNlocated++;
   
@@ -171,7 +172,7 @@ GetStepLength(const G4String methodname,
     G4cout << "GetSL: " << aPosition << ", " << aDirection << G4endl;
   }
   G4double newSafety;    
-  G4double stepLength = fNavigator.ComputeStep( aPosition, aDirection,
+  G4double stepLength = fNavigator->ComputeStep( aPosition, aDirection,
 						kInfinity, newSafety);
   // if stepLength = 0 try shifting
   if (stepLength<=2*kCarTolerance) {
@@ -191,7 +192,7 @@ GetStepLengthUseLocate(const G4String methodname,
     G4cout << "GetSLuseLocate: " << aPosition << ", " << aDirection << G4endl;
   }
   G4double newSafety;    
-  G4double stepLength = fNavigator.ComputeStep( aPosition, aDirection,
+  G4double stepLength = fNavigator->ComputeStep( aPosition, aDirection,
 						kInfinity, newSafety);
   // if stepLength = 0 try locate
   if (stepLength<=2*kCarTolerance) {
@@ -231,8 +232,8 @@ ComputeStepLengthShifted(const G4String &m,
     }
     Locate(shift_pos, aDirection, true, true); // to get into the correct volume
     G4double newSafety;
-    fNavigator.LocateGlobalPointWithinVolume(aPosition);    // to place at the correct position
-    stepLength = fNavigator.ComputeStep( aPosition, aDirection,
+    fNavigator->LocateGlobalPointWithinVolume(aPosition);    // to place at the correct position
+    stepLength = fNavigator->ComputeStep( aPosition, aDirection,
 					 kInfinity, newSafety);
   }
   if (stepLength<=kCarTolerance) {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.hh,v 1.6 2002-08-29 15:30:48 dressel Exp $
+// $Id: G4IStore.hh,v 1.7 2002-09-02 13:25:25 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -52,7 +52,7 @@ class G4IStore : public G4VIStore
 
 public:  // with description
 
-  G4IStore(G4VPhysicalVolume &worldvolume);
+  G4IStore(const G4VPhysicalVolume &worldvolume);
     // initialise the importance store for the given geometry
 
   ~G4IStore();
@@ -82,7 +82,7 @@ public:  // with description
     // returns true if the gCell is in the store, else false 
 
 
-  G4VPhysicalVolume &GetWorldVolume();
+  const G4VPhysicalVolume &GetWorldVolume() const;
     // return a reference to the wolrd volume of the 
     // "importance" geometry
   
@@ -94,7 +94,7 @@ private:
   
 private:
  
-  G4VPhysicalVolume &fWorldVolume;
+  const G4VPhysicalVolume &fWorldVolume;
   G4GeometryCellImportance fGeometryCelli;
 
   mutable G4GeometryCellImportance::const_iterator fCurrentIterator;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreProcess.cc,v 1.5 2002-08-29 15:32:00 dressel Exp $
+// $Id: G4MScoreProcess.cc,v 1.6 2002-09-02 13:27:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -76,9 +76,9 @@ G4MScoreProcess::PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
 			    postpoint->GetTouchable()->GetReplicaNumber());
 
     G4PStep pstep(prekey, postkey);
-    pstep.fCrossBoundary = false;
+    pstep.SetCrossBoundary(false);
     
-    if (prekey != postkey) pstep.fCrossBoundary = true;
+    if (prekey != postkey) pstep.SetCrossBoundary(true);
   
     fScorer.Score(aStep, pstep); 
   }

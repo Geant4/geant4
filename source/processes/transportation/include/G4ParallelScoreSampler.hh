@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelScoreSampler.hh,v 1.2 2002-08-13 10:07:46 dressel Exp $
+// $Id: G4ParallelScoreSampler.hh,v 1.3 2002-09-02 13:27:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -79,7 +79,7 @@ private:
 
 private:
   G4String fParticleName;
-  G4ParallelWorld &fParallelWorld;
+  G4ParallelWorld *fParallelWorld;
   G4VPScorer &fPScorer;
   G4PScoreProcess *fPScorerProcess;
   G4ParallelTransport *fParallelTransport;

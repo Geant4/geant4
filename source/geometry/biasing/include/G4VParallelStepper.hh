@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParallelStepper.hh,v 1.4 2002-08-29 15:30:50 dressel Exp $
+// $Id: G4VParallelStepper.hh,v 1.5 2002-09-02 13:25:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -48,7 +48,7 @@ class G4VParallelStepper
 
 public:  // with description
 
-  virtual ~G4VParallelStepper(){}
+  virtual ~G4VParallelStepper() {}
 
   virtual G4PStep GetPStep() const = 0;
     // get the current G4PStep

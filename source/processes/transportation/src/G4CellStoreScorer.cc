@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CellStoreScorer.cc,v 1.1 2002-08-29 15:32:37 dressel Exp $
+// $Id: G4CellStoreScorer.cc,v 1.2 2002-09-02 13:27:26 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -58,10 +58,10 @@ Score(const G4Step &aStep, const G4PStep &aPstep){
   }
   else { 
     // chose the cells to be scored
-    G4GeometryCell pre_gCell(aPstep.fPreGeometryCell); 
-    G4GeometryCell post_gCell(aPstep.fPostGeometryCell); 
+    G4GeometryCell pre_gCell(aPstep.GetPreGeometryCell()); 
+    G4GeometryCell post_gCell(aPstep.GetPostGeometryCell()); 
     G4VCellScorer *post_cs = fCellScorerStore.GetCellScore(post_gCell);
-    if (aPstep.fCrossBoundary) { 
+    if (aPstep.GetCrossBoundary()) { 
       // entering post_gCell
       if (post_cs) {
 	post_cs->ScoreAnEnteringStep(aStep, post_gCell);
