@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.cc,v 1.5 1999-12-15 14:54:25 gunter Exp $
+// $Id: G4ViewParameters.cc,v 1.6 2000-05-18 13:45:12 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,6 +15,7 @@
 #include "G4ViewParameters.hh"
 
 #include "G4VisManager.hh"
+#include "G4UnitsTable.hh"
 #include "G4ios.hh"
 
 G4ViewParameters::G4ViewParameters ():
@@ -131,11 +132,11 @@ void G4ViewParameters::SetVisibleDensity (G4double visibleDensity) {
       "density - ignored." << G4endl;
   }
   else {
-    if (fVisibleDensity > reasonableMaximum) {
+    if (visibleDensity > reasonableMaximum) {
       G4cout << "G4ViewParameters::SetVisibleDensity: density > "
-	   << reasonableMaximum
-	   << " g / cm3 - did you mean this?"
-	   << G4endl;
+	     << G4BestUnit (reasonableMaximum, "Volumic Mass")
+	     << " - did you mean this?"
+	     << G4endl;
     }
     fVisibleDensity = visibleDensity;
   }
