@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.hh,v 1.17 2001-07-11 10:08:40 gunter Exp $
+// $Id: G4SteppingManager.hh,v 1.18 2001-11-07 13:02:07 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //---------------------------------------------------------------
@@ -73,8 +73,8 @@ class G4VSensitiveDetector;
 #include "G4Step.hh"                  // Include from 'tracking'
 #include "G4StepPoint.hh"             // Include from 'tracking'
 #include "G4VSteppingVerbose.hh"       // Include from 'tracking'
-#include "G4VTouchable.hh"            // Include from 'geometry'
-#include "G4TouchableHistory.hh"      // Include from 'geometry'
+#include "G4TouchableHandle.hh"            // Include from 'geometry'
+#include "G4TouchableHistoryHandle.hh"      // Include from 'geometry'
 
 //  must be changed in elegant way
 static const size_t SizeOfSelectedDoItVector=100;
@@ -172,10 +172,7 @@ public: //without description
    G4SelectedAlongStepDoItVector* GetfSelectedAlongStepDoItVector();
    G4SelectedPostStepDoItVector* GetfSelectedPostStepDoItVector();
    G4double   GetfPreviousStepSize();
-   const G4VTouchable* GetfTouchable1();
-   const G4VTouchable* GetfTouchable2();
-   G4bool GetfIsTouchable1Free();
-   G4bool GetfIsTouchable2Free();
+   const G4TouchableHandle& GetTouchableHandle();
    G4SteppingControl GetStepControlFlag();
    G4Navigator GetNavigator();
    G4UserSteppingAction* GetUserAction();
@@ -200,18 +197,9 @@ public: //without description
    void SetNavigator(G4Navigator* value);
    G4double CalculateSafety();
       // Return the estimated safety value at the PostStepPoint
-   const G4VTouchable* GetFreeTouchable();
-      // Get Touchable which is free, i.e. not assigined to Track/StepPoint
-      // If no free touchable is availabe, the NULL will be returned
-      // Once you get a Touchable, it will be set to NotFree. 
-   void SetAnotherTouchableFree(const G4VTouchable* value);
-      // Set the partner of the given Touchable to be free. For example,
-      // the argument has fTouchable1, then fTouchable2 will be set to 
-      // free. The state of fTouchable1 is intact.
 
-
-// Member data
-
+// Member data 
+   
    G4UserSteppingAction* fUserSteppingAction;
 
    G4VSteppingVerbose* fVerbose;
@@ -278,10 +266,7 @@ public: //without description
 
    G4double   fPreviousStepSize;
 
-   const G4VTouchable* fTouchable1;
-   const G4VTouchable* fTouchable2;
-   G4bool fIsTouchable1Free;
-   G4bool fIsTouchable2Free;
+   G4TouchableHandle fTouchableHandle;
 
    G4SteppingControl StepControlFlag;
 
@@ -319,170 +304,161 @@ public: //without description
   inline  G4double G4SteppingManager::GetCorrectedStep(){
     return CorrectedStep;
   }
-   inline G4bool G4SteppingManager::GetPreStepPointIsGeom(){
-     return PreStepPointIsGeom;
-   }
+  
+  inline G4bool G4SteppingManager::GetPreStepPointIsGeom(){
+   return PreStepPointIsGeom;
+  }
 
-   inline G4bool G4SteppingManager::GetFirstStep(){
-     return FirstStep;
-   }
+  inline G4bool G4SteppingManager::GetFirstStep(){
+   return FirstStep;
+  }
 
-   inline G4StepStatus G4SteppingManager::GetfStepStatus(){
-     return fStepStatus;
-   }
+  inline G4StepStatus G4SteppingManager::GetfStepStatus(){
+   return fStepStatus;
+  }
 
-   inline G4double G4SteppingManager::GetTempInitVelocity(){
-     return TempInitVelocity;
-   }
-   inline G4double G4SteppingManager::GetTempVelocity(){
-     return TempVelocity;
-   }
-   inline G4double G4SteppingManager::GetMass(){
-     return Mass;
-   }
+  inline G4double G4SteppingManager::GetTempInitVelocity(){
+   return TempInitVelocity;
+  }
+  inline G4double G4SteppingManager::GetTempVelocity(){
+   return TempVelocity;
+  }
+  inline G4double G4SteppingManager::GetMass(){
+   return Mass;
+  }
 
-   inline G4double G4SteppingManager::GetsumEnergyChange(){
-     return sumEnergyChange;
-   }
+  inline G4double G4SteppingManager::GetsumEnergyChange(){
+   return sumEnergyChange;
+  }
 
-   inline G4VParticleChange* G4SteppingManager::GetfParticleChange(){
-     return fParticleChange;
-   }
+  inline G4VParticleChange* G4SteppingManager::GetfParticleChange(){
+   return fParticleChange;
+  }
 
-   inline G4Track* G4SteppingManager::GetfTrack(){
-     return fTrack;
-   }
+  inline G4Track* G4SteppingManager::GetfTrack(){
+   return fTrack;
+  }
 
-   inline G4TrackVector* G4SteppingManager::GetfSecondary(){
-     return fSecondary;
-   }
-   inline G4Step* G4SteppingManager::GetfStep(){
-     return fStep;
-   }
-   inline G4StepPoint* G4SteppingManager::GetfPreStepPoint(){
-     return fPreStepPoint;
-   }
-   inline G4StepPoint* G4SteppingManager::GetfPostStepPoint(){
-     return fPostStepPoint;
-   }
+  inline G4TrackVector* G4SteppingManager::GetfSecondary(){
+   return fSecondary;
+  }
+  inline G4Step* G4SteppingManager::GetfStep(){
+   return fStep;
+  }
+  inline G4StepPoint* G4SteppingManager::GetfPreStepPoint(){
+   return fPreStepPoint;
+  }
+  inline G4StepPoint* G4SteppingManager::GetfPostStepPoint(){
+   return fPostStepPoint;
+  }
 
-   inline G4VPhysicalVolume* G4SteppingManager::GetfCurrentVolume(){
-     return fCurrentVolume;
-   }
-   inline G4VSensitiveDetector* G4SteppingManager::GetfSensitive(){
-     return fSensitive;
-   }
-   inline G4VProcess* G4SteppingManager::GetfCurrentProcess(){
-     return fCurrentProcess;
-   }
+  inline G4VPhysicalVolume* G4SteppingManager::GetfCurrentVolume(){
+   return fCurrentVolume;
+  }
+  inline G4VSensitiveDetector* G4SteppingManager::GetfSensitive(){
+   return fSensitive;
+  }
+  inline G4VProcess* G4SteppingManager::GetfCurrentProcess(){
+   return fCurrentProcess;
+  }
 
-   inline G4ProcessVector* G4SteppingManager::GetfAtRestDoItVector(){
-     return fAtRestDoItVector;
-   }
-   inline G4ProcessVector* G4SteppingManager::GetfAlongStepDoItVector(){
-     return fAlongStepDoItVector;
-   }
-   inline G4ProcessVector* G4SteppingManager::GetfPostStepDoItVector(){
-     return fPostStepDoItVector;
-   }
+  inline G4ProcessVector* G4SteppingManager::GetfAtRestDoItVector(){
+   return fAtRestDoItVector;
+  }
+  inline G4ProcessVector* G4SteppingManager::GetfAlongStepDoItVector(){
+   return fAlongStepDoItVector;
+  }
+  inline G4ProcessVector* G4SteppingManager::GetfPostStepDoItVector(){
+   return fPostStepDoItVector;
+  }
 
-   inline G4ProcessVector* G4SteppingManager::GetfAtRestGetPhysIntVector(){
-     return fAtRestGetPhysIntVector;
-   }
+  inline G4ProcessVector* G4SteppingManager::GetfAtRestGetPhysIntVector(){
+   return fAtRestGetPhysIntVector;
+  }
 
-   inline G4ProcessVector* G4SteppingManager::GetfAlongStepGetPhysIntVector(){
-     return fAlongStepGetPhysIntVector;
-   }
+  inline G4ProcessVector* G4SteppingManager::GetfAlongStepGetPhysIntVector(){
+   return fAlongStepGetPhysIntVector;
+  }
 
-   inline G4ProcessVector* G4SteppingManager::GetfPostStepGetPhysIntVector(){
-     return fPostStepGetPhysIntVector;
-   }
+  inline G4ProcessVector* G4SteppingManager::GetfPostStepGetPhysIntVector(){
+   return fPostStepGetPhysIntVector;
+  }
 
-   inline size_t G4SteppingManager::GetMAXofAtRestLoops(){
-     return MAXofAtRestLoops;
-   }
-   inline size_t G4SteppingManager::GetMAXofAlongStepLoops(){
-     return MAXofAlongStepLoops;
-   }
-   inline size_t G4SteppingManager::GetMAXofPostStepLoops(){
-     return MAXofPostStepLoops;
-   }
+  inline size_t G4SteppingManager::GetMAXofAtRestLoops(){
+   return MAXofAtRestLoops;
+  }
+  inline size_t G4SteppingManager::GetMAXofAlongStepLoops(){
+   return MAXofAlongStepLoops;
+  }
+  inline size_t G4SteppingManager::GetMAXofPostStepLoops(){
+   return MAXofPostStepLoops;
+  }
 
-   inline G4double G4SteppingManager::GetcurrentMinimumStep(){
-     return currentMinimumStep;
-   }
-   inline G4double G4SteppingManager::GetnumberOfInteractionLengthLeft(){
-     return numberOfInteractionLengthLeft;
-   }
+  inline G4double G4SteppingManager::GetcurrentMinimumStep(){
+   return currentMinimumStep;
+  }
+  inline G4double G4SteppingManager::GetnumberOfInteractionLengthLeft(){
+   return numberOfInteractionLengthLeft;
+  }
 
-   inline size_t G4SteppingManager::GetfAtRestDoItProcTriggered(){
-     return fAtRestDoItProcTriggered;
-   }
-   inline size_t G4SteppingManager::GetfAlongStepDoItProcTriggered(){
-     return fAtRestDoItProcTriggered;
-   }
-   inline size_t G4SteppingManager::GetfPostStepDoItProcTriggered(){
-     return fPostStepDoItProcTriggered;
-   }
-   inline G4int G4SteppingManager::GetfN2ndariesAtRestDoIt(){
-     return fN2ndariesAtRestDoIt;
-   }
-   inline G4int G4SteppingManager::GetfN2ndariesAlongStepDoIt(){
-     return fN2ndariesAlongStepDoIt;
-   }
-   inline G4int G4SteppingManager::GetfN2ndariesPostStepDoIt(){
-     return fN2ndariesPostStepDoIt;
-   }
+  inline size_t G4SteppingManager::GetfAtRestDoItProcTriggered(){
+   return fAtRestDoItProcTriggered;
+  }
+  inline size_t G4SteppingManager::GetfAlongStepDoItProcTriggered(){
+   return fAtRestDoItProcTriggered;
+  }
+  inline size_t G4SteppingManager::GetfPostStepDoItProcTriggered(){
+   return fPostStepDoItProcTriggered;
+  }
+  inline G4int G4SteppingManager::GetfN2ndariesAtRestDoIt(){
+   return fN2ndariesAtRestDoIt;
+  }
+  inline G4int G4SteppingManager::GetfN2ndariesAlongStepDoIt(){
+   return fN2ndariesAlongStepDoIt;
+  }
+  inline G4int G4SteppingManager::GetfN2ndariesPostStepDoIt(){
+   return fN2ndariesPostStepDoIt;
+  }
 
-   inline G4Navigator* G4SteppingManager::GetfNavigator(){
-     return fNavigator;
-   }
-   inline G4int G4SteppingManager::GetverboseLevel(){
-     return verboseLevel;
-   }
+  inline G4Navigator* G4SteppingManager::GetfNavigator(){
+   return fNavigator;
+  }
+  inline G4int G4SteppingManager::GetverboseLevel(){
+   return verboseLevel;
+  }
 
-   inline G4SelectedAtRestDoItVector* G4SteppingManager::GetfSelectedAtRestDoItVector(){
-     return fSelectedAtRestDoItVector;
-   }
+  inline G4SelectedAtRestDoItVector* G4SteppingManager::GetfSelectedAtRestDoItVector(){
+   return fSelectedAtRestDoItVector;
+  }
 
-   inline G4SelectedAlongStepDoItVector* G4SteppingManager::GetfSelectedAlongStepDoItVector(){
-     return fSelectedAlongStepDoItVector;
-   }
+  inline G4SelectedAlongStepDoItVector* G4SteppingManager::GetfSelectedAlongStepDoItVector(){
+   return fSelectedAlongStepDoItVector;
+  }
 
-   inline G4SelectedPostStepDoItVector* G4SteppingManager::GetfSelectedPostStepDoItVector(){
-     return fSelectedPostStepDoItVector;
-   }
+  inline G4SelectedPostStepDoItVector* G4SteppingManager::GetfSelectedPostStepDoItVector(){
+   return fSelectedPostStepDoItVector;
+  }
 
-   inline G4double   G4SteppingManager::GetfPreviousStepSize(){
-     return fPreviousStepSize;
-   }
+  inline G4double   G4SteppingManager::GetfPreviousStepSize(){
+   return fPreviousStepSize;
+  }
 
-   inline const G4VTouchable* G4SteppingManager::GetfTouchable1(){
-     return fTouchable1;
-   }
-   inline const G4VTouchable* G4SteppingManager::GetfTouchable2(){
-     return fTouchable2;
-   }
-   inline G4bool G4SteppingManager::GetfIsTouchable1Free(){
-     return fIsTouchable1Free;
-   }
-   inline G4bool G4SteppingManager::GetfIsTouchable2Free(){
-     return fIsTouchable2Free;
-   }
+  inline const G4TouchableHandle& G4SteppingManager::GetTouchableHandle() {
+   return fTouchableHandle;
+  }
 
-   inline G4SteppingControl G4SteppingManager::GetStepControlFlag(){
-     return StepControlFlag;
-   }
-   inline G4double G4SteppingManager::GetphysIntLength(){
-     return physIntLength;
-   }
-   inline G4ForceCondition G4SteppingManager::GetfCondition(){
-     return fCondition;
-   }
-   inline G4GPILSelection  G4SteppingManager::GetfGPILSelection(){
-     return fGPILSelection;
-   }
-
+  inline G4SteppingControl G4SteppingManager::GetStepControlFlag(){
+   return StepControlFlag;
+  }
+  inline G4double G4SteppingManager::GetphysIntLength(){
+   return physIntLength;
+  }
+  inline G4ForceCondition G4SteppingManager::GetfCondition(){
+   return fCondition;
+  }
+  inline G4GPILSelection  G4SteppingManager::GetfGPILSelection(){
+   return fGPILSelection;
+  }
 
   inline G4TrackVector* G4SteppingManager::GetSecondary() const {
     return fSecondary; 
@@ -521,30 +497,6 @@ public: //without description
 	        0.);
   }
 
-  inline const G4VTouchable* G4SteppingManager::GetFreeTouchable(){
-    if(fIsTouchable1Free){
-      fIsTouchable1Free = false;
-      return fTouchable1;
-    } 
-    else if(fIsTouchable2Free){
-      fIsTouchable2Free = false;
-      return fTouchable2;
-    }
-    else {
-      return NULL;
-    }
-  }
-
-  inline void G4SteppingManager::SetAnotherTouchableFree(const G4VTouchable* value){
-    if(value == fTouchable1){
-      fIsTouchable2Free = true;
-    }
-    else if(value == fTouchable2){
-      fIsTouchable1Free = true;
-    }
-  }
-
-//#include "G4SteppingManager.icc"
 
 #endif
 

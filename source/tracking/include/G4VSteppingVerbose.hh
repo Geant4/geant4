@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.hh,v 1.12 2001-11-07 10:42:09 radoone Exp $
+// $Id: G4VSteppingVerbose.hh,v 1.13 2001-11-07 13:04:50 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -60,7 +60,7 @@ class G4Track;
 #include "G4StepStatus.hh"            // Include from 'track'
 class G4UserSteppingAction;
 class G4StepPoint;
-class G4VTouchable;
+#include "G4TouchableHandle.hh"
 class G4VParticleChange;
 #include "G4ForceCondition.hh"  //enum 'track'
 #include "G4GPILSelection.hh"   //enum 'track'
@@ -178,10 +178,7 @@ protected:
 
   G4double   fPreviousStepSize;
 
-  const G4VTouchable* fTouchable1;
-  const G4VTouchable* fTouchable2;
-  G4bool fIsTouchable1Free;
-  G4bool fIsTouchable2Free;
+  G4TouchableHandle fTouchableHandle;
 
   G4SteppingControl StepControlFlag;
 
