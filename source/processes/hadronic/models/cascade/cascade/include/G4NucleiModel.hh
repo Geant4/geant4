@@ -104,8 +104,7 @@ public:
 
   G4CascadParticle initializeCascad(G4InuclElementaryParticle* particle);
 
-  pair<vector<G4CascadParticle>, vector<G4InuclElementaryParticle> >
-  G4NucleiModel::initializeCascad(G4InuclNuclei* bullet, G4InuclNuclei* target);
+  pair<vector<G4CascadParticle>, vector<G4InuclElementaryParticle> > initializeCascad(G4InuclNuclei* bullet, G4InuclNuclei* target);
 
   pair<G4int, G4int> getTypesOfNucleonsInvolved() const {
     return pair<G4int, G4int>(current_nucl1, current_nucl2);

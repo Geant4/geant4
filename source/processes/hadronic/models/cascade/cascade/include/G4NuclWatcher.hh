@@ -36,8 +36,8 @@ public:
 
     if(fabs(z - nuclz) < small) {
       G4bool here = false;
-
-      for(G4int i = 0; i < simulated_as.size(); i++) {
+      G4int  simulatedAsSize = simulated_as.size();
+      for(G4int i = 0; i < simulatedAsSize; i++) {
 
 	if(fabs(simulated_as[i] - a) < small) {
 	  simulated_cs[i] += 1.0;
@@ -54,8 +54,8 @@ public:
 
   void setInuclCs(G4double csec, 
 		  G4int nev) { 
-
-    for(G4int i = 0; i < simulated_as.size(); i++) {
+    G4int  simulatedAsSize = simulated_as.size();
+    for(G4int i = 0; i < simulatedAsSize ; i++) {
       double err = sqrt(simulated_cs[i]) / simulated_cs[i];
 
       simulated_prob.push_back(simulated_cs[i] / nev);
@@ -79,7 +79,8 @@ public:
     G4double cs = 0.0;
     G4double err = 0.0;
 
-    for(G4int iz = 0; iz < exper_as.size(); iz++) {
+    G4int experAsSize = exper_as.size();
+    for(G4int iz = 0; iz < experAsSize; iz++) {
       cs += exper_cs[iz];
       err += exper_err[iz];
     };
@@ -101,8 +102,8 @@ public:
 
     G4double cs = 0.0;
     G4double err = 0.0;
-
-    for(G4int iz = 0; iz < simulated_as.size(); iz++) {
+    G4int  simulatedAsSize = simulated_as.size();
+    for(G4int iz = 0; iz < simulatedAsSize; iz++) {
       cs += simulated_cs[iz];
       err += simulated_errors[iz];
     };
@@ -129,16 +130,16 @@ public:
     G4int nmatched = exper_as.size();
     G4int nused = simulated_cs.size();
     G4double lhood = 0.0;
-  
-    for(G4int iz = 0; iz < exper_as.size(); iz++) {
+    G4int experAsSize = exper_as.size();
+    for(G4int iz = 0; iz < experAsSize; iz++) {
       G4double a = exper_as[iz];
 
       exp_cs += exper_cs[iz];
       exp_cs_err += exper_err[iz];
 
       G4bool found = false;
-
-      for(G4int i = 0; i < simulated_as.size(); i++) {
+    G4int  simulatedAsSize = simulated_as.size();
+      for(G4int i = 0; i < simulatedAsSize; i++) {
 
 	if(fabs(simulated_as[i] - a) < small) {
 	  G4double rat = simulated_cs[i] / exper_cs[iz];
@@ -174,8 +175,8 @@ public:
 
     G4cout << " not found in simulations " << nmatched << G4endl;
     G4cout << " not found in exper: " << nused << G4endl;
-
-    for(G4int i = 0; i < simulated_as.size(); i++) {
+    G4int  simulatedAsSize = simulated_as.size();
+    for(G4int i = 0; i < simulatedAsSize; i++) {
       inucl_cs += simulated_cs[i];
       inucl_cs_err += simulated_errors[i];
 
