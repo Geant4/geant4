@@ -39,6 +39,10 @@
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
 
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
+
 #include "G4RunManager.hh"
 
 #include "G4VisAttributes.hh"
@@ -181,12 +185,15 @@ G4VPhysicalVolume* Em2DetectorConstruction::ConstructVolumes()
   G4double dL = dLradl*Radl, dR = dRradl*Radl;
   EcalLength = nLtot*dL; EcalRadius = nRtot*dR;
 
+
+  // Cleanup old geometry
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+
   //
   // Ecal
   //
-  if(solidEcal) delete solidEcal;
-  if(logicEcal) delete logicEcal;
-  if(physiEcal) delete physiEcal;
   solidEcal = new G4Tubs("Ecal",0.,EcalRadius,0.5*EcalLength,0.,360*deg);
   logicEcal = new G4LogicalVolume( solidEcal,myMaterial,"Ecal",0,0,0);
   physiEcal = new G4PVPlacement(0,G4ThreeVector(),

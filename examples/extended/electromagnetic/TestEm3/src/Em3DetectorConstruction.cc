@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorConstruction.cc,v 1.15 2003-05-09 09:28:01 vnivanch Exp $
+// $Id: Em3DetectorConstruction.cc,v 1.16 2003-05-16 16:57:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,6 +45,10 @@
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 #include "G4UserLimits.hh"
+
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
@@ -319,12 +323,14 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   // complete the Calor parameters definition
   ComputeCalorParameters();
 
+  // Cleanup old geometry
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+
   //
   // World
   //
-  if(solidWorld) delete solidWorld;
-  if(logicWorld) delete logicWorld;
-  if(physiWorld) delete physiWorld;
 
   solidWorld = new G4Box("World",				//its name
                    WorldSizeX/2,WorldSizeYZ/2,WorldSizeYZ/2);	//its size
@@ -344,9 +350,6 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   //
   // Calorimeter
   //
-  if(solidCalor) delete solidCalor;
-  if(logicCalor) delete logicCalor;
-  if(physiCalor) delete physiCalor;
 
   solidCalor = new G4Box("Calorimeter",				     //its name
     		       CalorThickness/2,CalorSizeYZ/2,CalorSizeYZ/2);//size
@@ -366,9 +369,6 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   //
   // Layers
   //
-  if(solidLayer) delete solidLayer;
-  if(logicLayer) delete logicLayer;
-  if(physiLayer) delete physiLayer;
 
   solidLayer = new G4Box("Layer",		                      //its name
                        LayerThickness/2,CalorSizeYZ/2,CalorSizeYZ/2); //size
@@ -395,12 +395,6 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   //
   // Absorbers
   //
-  for (G4int j=0; j<MaxAbsor; j++)
-     {
-       if(solidAbsor[j]) delete solidAbsor[j];
-       if(logicAbsor[j]) delete logicAbsor[j];
-       if(physiAbsor[j]) delete physiAbsor[j];
-     }
 
   G4double xfront = -0.5*LayerThickness;
   for (G4int k=0; k<NbOfAbsor; k++)

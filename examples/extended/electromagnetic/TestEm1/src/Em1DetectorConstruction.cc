@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: Em1DetectorConstruction.cc,v 1.14 2003-05-09 09:15:57 vnivanch Exp $
+// $Id: Em1DetectorConstruction.cc,v 1.15 2003-05-16 16:56:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,10 @@
 #include "G4UniformMagField.hh"
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
+
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 
 #include "G4RunManager.hh"
 
@@ -163,8 +167,11 @@ void Em1DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* Em1DetectorConstruction::ConstructVolumes()
 {
-  if(lBox) delete lBox;
-  if(pBox) delete pBox;
+  // Cleanup old geometry
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+
   G4Box*
   sBox = new G4Box("Container",				//its name
                    BoxSize/2,BoxSize/2,BoxSize/2);	//its dimensions
