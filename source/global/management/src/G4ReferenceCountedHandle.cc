@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReferenceCountedHandle.cc,v 1.1 2001-11-06 17:09:52 gcosmo Exp $
+// $Id: G4ReferenceCountedHandle.cc,v 1.2 2001-11-07 00:13:45 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,12 +35,13 @@
 // --------------------------------------------------------------
 
 #include "G4ReferenceCountedHandle.hh"
-
+/*
 template <class X>
-G4Allocator<G4ReferenceCountedHandle<X>::CountedObject >
-  G4ReferenceCountedHandle<X>::CountedObject::aCountedObjectAllocator;
+G4Allocator<CountedObject<X> >
+  CountedObject<X>::aCountedObjectAllocator;
 
 template <class X>
 G4Allocator<G4ReferenceCountedHandle<X> >
   G4ReferenceCountedHandle<X>::aRCHAllocator;
 
+*/
