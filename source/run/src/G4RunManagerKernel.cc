@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.18 2004-08-31 20:04:04 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.19 2004-09-25 02:00:03 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -74,6 +74,8 @@ G4RunManagerKernel::G4RunManagerKernel()
   defaultRegion->SetProductionCuts(
     G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
 
+  // Following line is tentatively moved from SetPhysics method
+  G4ParticleTable::GetParticleTable()->SetReadiness();
   // set the initial application state
   G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
 
@@ -196,7 +198,8 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
 void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 {
   physicsList = uPhys;
-  G4ParticleTable::GetParticleTable()->SetReadiness();
+  // Following line is tentatively moved to the constructor
+  // G4ParticleTable::GetParticleTable()->SetReadiness();
   if(verboseLevel>1) G4cout << "physicsList->ConstructParticle() start." << G4endl;
   physicsList->ConstructParticle();
 }
