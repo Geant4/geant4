@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsScene.cc,v 1.16 2001-02-23 15:43:27 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.17 2001-05-21 14:02:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -328,6 +328,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
 	for (G4int iV = 0; iV < nViewers; iV++) {
 	  G4VViewer* aViewer = viewerList [iV];
 	  aViewer -> ClearView ();
+	  aViewer -> SetView ();
 	  aViewer -> DrawView ();
 	  // Triggers rebuild of graphical database by notifying the scene
 	  // handler.  The viewer is supposed to be smart enough to know
