@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.hh,v 1.14 2004-10-25 12:56:28 kurasige Exp $
+// $Id: G4PhysicsTable.hh,v 1.15 2004-10-29 11:38:08 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,6 +87,7 @@ class G4PhysicsTable : public std::vector<G4PhysicsVector*>
   void clearAndDestroy();
     // Removes all items and deletes them at the same time.
 
+  void   push_back( G4PhysicsVector* );
   void   insert (G4PhysicsVector*);
     // Pushes new element to collection.
 

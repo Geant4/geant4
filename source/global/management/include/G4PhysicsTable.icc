@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.icc,v 1.5 2004-10-25 12:56:28 kurasige Exp $
+// $Id: G4PhysicsTable.icc,v 1.6 2004-10-29 11:38:08 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,8 +38,8 @@ inline
 {
   G4PhysicsVector* a;
   while (size()>0) {
-    a = back();
-    pop_back();
+    a = G4PhysCollection::back();
+    G4PhysCollection::pop_back();
     if ( a )  delete a;    
   } 
 
@@ -59,9 +59,16 @@ inline
 }
 
 inline
+ void   G4PhysicsTable::push_back(G4PhysicsVector* pvec)
+{
+  G4PhysCollection::push_back(pvec);
+  vecFlag.push_back(true);
+}
+
+inline
  void   G4PhysicsTable::insert(G4PhysicsVector* pvec)
 {
-  push_back(pvec);
+  G4PhysCollection::push_back(pvec);
   vecFlag.push_back(true);
 }
 
@@ -80,19 +87,19 @@ inline
 inline
  size_t G4PhysicsTable::entries() const 
 {
-  return size();
+  return G4PhysCollection::size();
 }
 
 inline
  size_t G4PhysicsTable::length() const 
 {
-  return size();
+  return G4PhysCollection::size();
 }
 
 inline
  G4bool G4PhysicsTable::isEmpty() const
 {
-  return empty();
+  return G4PhysCollection::empty();
 }
 
 inline

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.cc,v 1.11 2004-10-25 12:56:28 kurasige Exp $
+// $Id: G4PhysicsTable.cc,v 1.12 2004-10-29 11:38:08 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -207,7 +207,7 @@ G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
     }
 
     // add a PhysicsVector to this PhysicsTable
-    push_back(pVec);
+    G4PhysCollection::push_back(pVec);
     vecFlag.push_back(true);
     
   } 
@@ -240,7 +240,7 @@ std::ostream& operator<<(std::ostream& out,
 
 void G4PhysicsTable::ResetFlagArray()
 {
-  size_t tableSize = size(); 
+  size_t tableSize = G4PhysCollection::size(); 
   vecFlag.clear();
   for (size_t idx=0; idx<tableSize; idx++){
     vecFlag.push_back(true);
