@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.2 1999-05-05 09:09:25 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.3 1999-05-29 14:17:18 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -678,8 +678,8 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   //  sampling formula: spet(T) = A(T)*E+B(T)
   //
 
-  G4double p1, p2;
-  G4double coeffA, coeffB;
+  G4double p1 = 0, p2 = 0;
+  G4double coeffA = 0, coeffB = 0;
   G4int AtomicNum = anElement->GetZ();
   coeffA = ComputeA(AtomicNum, ElectKinEn);
   coeffB = ComputeB(AtomicNum, ElectKinEn);

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-03-02 17:13:13 aforti Exp $
+# $Id: GNUmakefile,v 1.2 1999-05-29 14:16:45 aforti Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for electromagnetic sub-library.  John Allison, 25/6/98.
 # --------------------------------------------------------------------
@@ -20,6 +20,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
+            -I$(G4BASE)/processes/electromagnetic/standard/include \
             -I$(G4BASE)/management/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/bosons/include \
