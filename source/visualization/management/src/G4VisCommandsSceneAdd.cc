@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.29 2001-11-28 16:13:41 gcosmo Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.30 2002-06-19 15:49:34 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -295,7 +295,9 @@ G4VisCommandSceneAddLogicalVolume::G4VisCommandSceneAddLogicalVolume () {
   fpCommand -> SetGuidance
     ("/vis/scene/add/logicalVolume <logical-volume-name>"
      " [<depth-of-descending>]");
-  fpCommand -> SetGuidance ("Adds a logical volume to the current scene.");
+  fpCommand -> SetGuidance ("Adds a logical volume to the current scene,");
+  fpCommand -> SetGuidance
+    ("  showing voxels and boolean components (if any).");
   fpCommand -> SetGuidance
     ("1st parameter: volume name.");
   //  fpCommand -> SetGuidance  // Not implemented - should be in geom?
