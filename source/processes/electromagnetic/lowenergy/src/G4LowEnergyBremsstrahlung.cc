@@ -20,10 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.43 2001-10-10 11:48:40 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
-//      GEANT 4 class implementation file
-//      CERN Geneva Switzerland
 //
 // File name:     G4LowEnergyBremsstrahlung
 //

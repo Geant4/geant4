@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BremsstrahlungElectronSpectrum.hh,v 1.2 2001-10-10 11:48:14 pia Exp $
+// $Id: G4eBremstrahlungElectronSpectrum.hh,v 1.1 2001-10-10 11:51:01 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------

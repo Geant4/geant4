@@ -20,23 +20,63 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4LowEnergyIonisation.cc,v 1.62 2001-10-10 11:48:40 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
-//      GEANT 4 class implementation file
-//      CERN Geneva Switzerland
 //
-// Author:        V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
+// File name:     G4LowEnergyIonisation
+//
+// Author:        Alessandra Forti
 // 
-// Creation date: 27 September 2001
+// Creation date: March 1999
 //
-// Modifications: 
+// Modifications:
+// - 11.04.2000 VL
+//   Changing use of float and G4float casts to G4double casts 
+//   because of problems with optimisation (bug ?)
+//   10.04.2000 VL
+// - Correcting Fluorescence transition probabilities in order to take into account 
+//   non-radiative transitions. No Auger electron simulated yet: energy is locally deposited.
+//   10.04.2000 VL
+// - Correction of incident electron final momentum direction
+//   07.04.2000 VL+LU
+// - First implementation of continuous energy loss
+//   22.03.2000 VL
+// - 1 bug corrected in SelectRandomAtom method (units)
+//   17.02.2000 Veronique Lefebure
+// - 5 bugs corrected: 
+//   *in Fluorescence, 2 bugs affecting 
+//   . localEnergyDeposition and
+//   . number of emitted photons that was then always 1 less
+//   *in EnergySampling method: 
+//   . expon = Parms[13]+1; (instead of uncorrect -1)
+//   . rejection /= Parms[6];(instead of uncorrect Parms[7])
+//   . Parms[6] is apparently corrupted in the data file (often = 0)  
+//     -->Compute normalisation into local variable rejectionMax
+//     and use rejectionMax  in stead of Parms[6]
 //
-// Class Description: 
+// Added Livermore data table construction methods A. Forti
+// Modified BuildMeanFreePath to read new data tables A. Forti
+// Added EnergySampling method A. Forti
+// Modified PostStepDoIt to insert sampling with EEDL data A. Forti
+// Added SelectRandomAtom A. Forti
+// Added map of the elements A. Forti
+// 20.09.00 V.Ivanchenko update fluctuations 
+// 24.04.01 V.Ivanchenko remove RogueWave 
+// 22.05.01 V.Ivanchenko update calculation of delta-ray kinematic + 
+//                       clean up the code 
+// 02.08.01 V.Ivanchenko fix energy conservation for small steps 
+// 18.08.01 V.Ivanchenko fix energy conservation for pathalogical delta-energy
+// 01.10.01 E. Guardincerri Replaced fluorescence generation in PostStepDoIt
+//                          according to design iteration
+// 04.10.01 MGP             Minor clean-up in the fluo section, removal of
+//                          compilation warnings and extra protection to
+//                          prevent from accessing a null pointer                                               
+// 29.09.01 V.Ivanchenko    revision based on design iteration
+// 10.10.01 MGP             Revision to improve code quality and consistency with design
 //
-// Bremsstrahlung process based on the model developed  
-// by Alessandra Forti, 1999, and Veronique Lefebure, 2000 
-//
-// -------------------------------------------------------------------
+// --------------------------------------------------------------
 
 #include "G4LowEnergyIonisation.hh"
 #include "G4eIonisationElectronSpectrum.hh"
@@ -54,9 +94,9 @@
 
 G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& nam)
   : G4eLowEnergyLoss(nam), 
-    theParam(0),
-    crossSectionHandler(0),
-    theMeanFreePath(0)
+  theMeanFreePath(0),
+  crossSectionHandler(0),
+  energySpectrum(0)
 {
   verboseLevel = 0;
 }
@@ -65,7 +105,7 @@ G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& nam)
 G4LowEnergyIonisation::~G4LowEnergyIonisation()
 {
   delete crossSectionHandler;
-  delete theParam;
+  delete energySpectrum;
   delete theMeanFreePath;
   cutForDelta.clear();
 }
@@ -82,8 +122,8 @@ void G4LowEnergyIonisation::BuildPhysicsTable(
   cutForDelta.clear();
 
   // Create and fill IonisationParameters once
-  if( theParam ) delete theParam;
-  theParam = new G4eIonisationElectronSpectrum();
+  if( energySpectrum ) delete energySpectrum;
+  energySpectrum = new G4eIonisationElectronSpectrum();
 
   if(verboseLevel > 0) {
     G4cout << "G4VEnergySpectrum is initialized"
@@ -98,7 +138,7 @@ void G4LowEnergyIonisation::BuildPhysicsTable(
   G4double highKineticEnergy = GetUpperBoundEloss();
   G4int    totBin = GetNbinEloss();
   crossSectionHandler = new 
-           G4eIonisationCrossSectionHandler(theParam, interpolation,
+           G4eIonisationCrossSectionHandler(energySpectrum, interpolation,
                         lowKineticEnergy, highKineticEnergy, totBin);
   crossSectionHandler->LoadShellData("ioni/ion-ss-cs-");
 
@@ -109,7 +149,7 @@ void G4LowEnergyIonisation::BuildPhysicsTable(
     crossSectionHandler->PrintData();
     G4cout << "Parameters: " 
            << G4endl;
-    theParam->PrintData();
+    energySpectrum->PrintData();
   }
 
   // Build loss table for IonisationIV
@@ -225,8 +265,8 @@ void G4LowEnergyIonisation::BuildLossTable(
 
         for (G4int n=0; n<nShells; n++) {
 
-          G4double e = theParam->AverageEnergy(Z, 0.0, tcut, lowEdgeEnergy, n);
-          G4double pro = theParam->Probability(Z, 0.0, tcut, lowEdgeEnergy, n);
+          G4double e = energySpectrum->AverageEnergy(Z, 0.0, tcut, lowEdgeEnergy, n);
+          G4double pro = energySpectrum->Probability(Z, 0.0, tcut, lowEdgeEnergy, n);
           G4double cs= crossSectionHandler->FindValue(Z, lowEdgeEnergy, n);
           ionloss   += e * cs * pro * theAtomicNumDensityVector[iel];
           if(verboseLevel > 2) {
@@ -264,13 +304,13 @@ inline G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& tra
   G4int index = mat->GetIndex();
   G4double tcut = cutForDelta[index];
 
-  G4double tmax = theParam->MaxEnergyOfSecondaries(kineticEnergy);
+  G4double tmax = energySpectrum->MaxEnergyOfSecondaries(kineticEnergy);
 
   G4int Z = crossSectionHandler->SelectRandomAtom(mat, kineticEnergy);
   G4int shell = crossSectionHandler->SelectRandomShell(Z, kineticEnergy);
   G4double bindingEnergy = (G4AtomicTransitionManager::Instance())->
                            Shell(Z, shell)->BindingEnergy();
-  G4double tdel = theParam->SampleEnergy(Z, tcut, tmax, kineticEnergy, shell);
+  G4double tdel = energySpectrum->SampleEnergy(Z, tcut, tmax, kineticEnergy, shell);
 
   if(tdel == 0.0) 
     return G4VContinuousDiscreteProcess::PostStepDoIt(track, step);
@@ -359,16 +399,28 @@ inline G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& tra
 void G4LowEnergyIonisation::PrintInfoDefinition()
 {
   G4String comments = "Total cross sections from EEDL database,";
-           comments += "Gamma energy sampled from a parametrised formula.";
-           comments += "Implementation of the continuous dE/dx part.";  
-           comments += "\n At present it can be used for electrons ";
-           comments += " in the energy range [250eV,100GeV]";
-           comments += 
-  "\n the process must work with G4LowEnergyBremsstrahlung";
-                     
-	   G4cout << G4endl << GetProcessName() << ":  " << comments<<G4endl;
-
+  comments += "Gamma energy sampled from a parametrised formula.";
+  comments += "Implementation of the continuous dE/dx part.";  
+  comments += "\n At present it can be used for electrons ";
+  comments += " in the energy range [250eV,100GeV]";
+  comments += "\n the process must work with G4LowEnergyBremsstrahlung";
+  
+  G4cout << G4endl << GetProcessName() << ":  " << comments<<G4endl;
 }         
 
+G4bool G4LowEnergyIonisation::IsApplicable(const G4ParticleDefinition& particle)
+{
+   return ( (&particle == G4Electron::Electron() );
+}
 
 
+G4double G4LowEnergyIonisation::GetMeanFreePath(const G4Track& track,
+						G4double previousStepSize,
+						G4ForceCondition* cond)
+{
+   *cond = NotForced;
+   G4int index = (track.GetMaterial())->GetIndex();
+   const G4VEMDataSet* data = theMeanFreePath->GetComponent(index);
+   G4double meanFreePath = data->FindValue(track.GetKineticEnergy());
+   return meanFreePath; 
+} 
