@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IVContinuousDiscreteProcess.cc,v 1.6 2001-07-11 10:08:19 gunter Exp $
+// $Id: G4IVContinuousDiscreteProcess.cc,v 1.7 2003-04-01 16:43:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -56,13 +56,13 @@ G4IVContinuousDiscreteProcess::G4IVContinuousDiscreteProcess(G4IVContinuousDiscr
 }
 
 
-G4double G4IVContinuousDiscreteProcess::
-                              PostStepGetPhysicalInteractionLength(
-                              const G4Track& track,
-                              G4double   previousStepSize,
-                              G4ForceCondition* condition
+G4double
+G4IVContinuousDiscreteProcess::PostStepGetPhysicalInteractionLength(
+                              const G4Track&,
+                              G4double,
+                              G4ForceCondition*
                              )
- {
+{
   G4double value = DBL_MAX ;
 
   return value;
