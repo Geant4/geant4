@@ -21,39 +21,55 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNuclearDensity.hh,v 1.2 2003-10-07 12:37:00 hpw Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
-#ifndef G4VNuclearDensity_h
-#define G4VNuclearDensity_h 1
+#ifndef G4FermiMomentum_h
+#define G4FermiMomentum_h 1
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
+#include "Randomize.hh"
 
-
-class G4VNuclearDensity 
+class G4FermiMomentum 
 {
 
   public:
-    G4VNuclearDensity();
-    virtual ~G4VNuclearDensity();
+    G4FermiMomentum();
+    ~G4FermiMomentum();
     
-    inline G4double GetDensity(const G4ThreeVector & aPosition) const
+    inline void Init(G4double anA, G4double aZ) {theA = anA; theZ = aZ;}
+    
+    inline G4double GetFermiMomentum(G4double density)
     {
-	return rho0*GetRelativeDensity(aPosition);
-    };
+	return constofpmax * cbrt(density * theA);
+    }
     
-    virtual G4double GetRelativeDensity(const G4ThreeVector & aPosition) const = 0;
-    virtual G4double GetRadius(const G4double maxRelativeDenisty) const = 0;
-    virtual G4double GetDeriv(const G4ThreeVector & point) const = 0;    
+    inline G4ThreeVector GetMomentum(G4double density, 
+    				     G4double maxMomentum=-1.)
+    { 
+	if (maxMomentum < 0 ) maxMomentum=GetFermiMomentum(density);
+	G4ThreeVector p;
+	
+	do {
+	    p=G4ThreeVector(2.*G4UniformRand()-1.,
+	    		    2.*G4UniformRand()-1.,
+	    		    2.*G4UniformRand()-1.);
+	    } while ( p.mag() > 1. );
+	return p*maxMomentum; 
+     }
 
-  protected:    
-    inline void Setrho0(G4double arho0) { rho0=arho0; };
-    inline G4double Getrho0() const { return rho0; };
-   
+  private:
+
+    G4double cbrt(G4double x) { return pow(x,1./3.); }
+
   private:
   
-    G4double rho0;
+    G4double theA;
+    G4double theZ;
+      // pmax= hbar * c * ( 3* pi**2 * rho )**(1/3) =
+      //       hbar * c * ( 3* pi**2 )**(1/3) * rho**(1/3)=
+      //       constofpmax * rho**(1/3)
+    G4double constofpmax;
+  
 };
 
 #endif

@@ -21,40 +21,29 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNuclearDensity.hh,v 1.2 2003-10-07 12:37:00 hpw Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-#ifndef G4VNuclearDensity_h
-#define G4VNuclearDensity_h 1
+
+// Modified at 8-Oct-1998 by Maxim Komogorov. Methods BoostBeam,Boost,Shift
+// were added.
+
+#ifndef G4KineticTrackVector_h
+#define G4KineticTrackVector_h 1
 
 #include "globals.hh"
-#include "G4ThreeVector.hh"
+#include "G4KineticTrack.hh"
+#include <vector>
 
-
-class G4VNuclearDensity 
-{
-
-  public:
-    G4VNuclearDensity();
-    virtual ~G4VNuclearDensity();
-    
-    inline G4double GetDensity(const G4ThreeVector & aPosition) const
+class G4KineticTrackVector : public std::vector<G4KineticTrack *>
     {
-	return rho0*GetRelativeDensity(aPosition);
-    };
-    
-    virtual G4double GetRelativeDensity(const G4ThreeVector & aPosition) const = 0;
-    virtual G4double GetRadius(const G4double maxRelativeDenisty) const = 0;
-    virtual G4double GetDeriv(const G4ThreeVector & point) const = 0;    
+public:
+  G4KineticTrackVector();
 
-  protected:    
-    inline void Setrho0(G4double arho0) { rho0=arho0; };
-    inline G4double Getrho0() const { return rho0; };
-   
-  private:
-  
-    G4double rho0;
-};
+public:
+    void BoostBeam(G4ThreeVector& BeamMom);
+    void Boost(G4ThreeVector& Velocity);
+    void Shift(G4ThreeVector& Pos);
+    };
+
+struct DeleteKineticTrack{void operator()(G4KineticTrack * aT){delete aT;}};
 
 #endif
 

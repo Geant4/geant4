@@ -21,40 +21,40 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNuclearDensity.hh,v 1.2 2003-10-07 12:37:00 hpw Exp $
+// $Id: G4VKineticNucleon.cc,v 1.1 2003-10-07 12:38:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#ifndef G4VNuclearDensity_h
-#define G4VNuclearDensity_h 1
+#include "G4VKineticNucleon.hh"
 
-#include "globals.hh"
-#include "G4ThreeVector.hh"
-
-
-class G4VNuclearDensity 
+G4VKineticNucleon::G4VKineticNucleon()
 {
+}
 
-  public:
-    G4VNuclearDensity();
-    virtual ~G4VNuclearDensity();
-    
-    inline G4double GetDensity(const G4ThreeVector & aPosition) const
-    {
-	return rho0*GetRelativeDensity(aPosition);
-    };
-    
-    virtual G4double GetRelativeDensity(const G4ThreeVector & aPosition) const = 0;
-    virtual G4double GetRadius(const G4double maxRelativeDenisty) const = 0;
-    virtual G4double GetDeriv(const G4ThreeVector & point) const = 0;    
+G4VKineticNucleon::G4VKineticNucleon(const G4VKineticNucleon &)
+{
+}
 
-  protected:    
-    inline void Setrho0(G4double arho0) { rho0=arho0; };
-    inline G4double Getrho0() const { return rho0; };
-   
-  private:
-  
-    G4double rho0;
-};
 
-#endif
+G4VKineticNucleon::~G4VKineticNucleon()
+{
+}
+
+
+//const G4VKineticNucleon & G4VKineticNucleon::operator=(const G4VKineticNucleon &right)
+//{}
+
+
+int G4VKineticNucleon::operator==(const G4VKineticNucleon &right) const
+{
+	return this == &right;
+}
+
+int G4VKineticNucleon::operator!=(const G4VKineticNucleon &right) const
+{
+	return this != &right;
+
+}
+
+
+
 

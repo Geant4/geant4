@@ -21,40 +21,34 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNuclearDensity.hh,v 1.2 2003-10-07 12:37:00 hpw Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
-#ifndef G4VNuclearDensity_h
-#define G4VNuclearDensity_h 1
 
-#include "globals.hh"
-#include "G4ThreeVector.hh"
+#include "G4NuclearShellModelDensity.hh"
 
+G4NuclearShellModelDensity::G4NuclearShellModelDensity(G4double anA, G4double aZ) 
+{
+        const G4double r0sq=0.8133*fermi*fermi;
+	theA = G4int(anA);
+	theZ = G4int(aZ);
+	theRsquare= r0sq * pow(G4double(theA), 2./3. );
+	Setrho0(pow(1./(pi*theRsquare),3./2.));
+}
 
-class G4VNuclearDensity 
+G4NuclearShellModelDensity::~G4NuclearShellModelDensity() {}
+    
+G4double G4NuclearShellModelDensity::GetRelativeDensity(const G4ThreeVector & aPosition) const
+{
+	return exp(-1*aPosition.mag2()/theRsquare);
+}
+    
+G4double G4NuclearShellModelDensity::GetRadius(const G4double maxRelativeDensity) const
 {
 
-  public:
-    G4VNuclearDensity();
-    virtual ~G4VNuclearDensity();
-    
-    inline G4double GetDensity(const G4ThreeVector & aPosition) const
-    {
-	return rho0*GetRelativeDensity(aPosition);
-    };
-    
-    virtual G4double GetRelativeDensity(const G4ThreeVector & aPosition) const = 0;
-    virtual G4double GetRadius(const G4double maxRelativeDenisty) const = 0;
-    virtual G4double GetDeriv(const G4ThreeVector & point) const = 0;    
-
-  protected:    
-    inline void Setrho0(G4double arho0) { rho0=arho0; };
-    inline G4double Getrho0() const { return rho0; };
+     return (maxRelativeDensity>0 && maxRelativeDensity <= 1 ) ?
+             sqrt(theRsquare * log(1/maxRelativeDensity) ) : DBL_MAX;
+}
    
-  private:
-  
-    G4double rho0;
-};
-
-#endif
-
+G4double   G4NuclearShellModelDensity::GetDeriv(const G4ThreeVector & aPosition) const
+{
+     return -2* aPosition.mag() / theRsquare * GetDensity(aPosition);
+}

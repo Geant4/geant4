@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHighEnergyGenerator.hh,v 1.1 2003-10-07 12:19:43 hpw Exp $
+// $Id: G4VHighEnergyGenerator.hh,v 1.2 2003-10-07 12:37:00 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4VHighEnergyGenerator_h

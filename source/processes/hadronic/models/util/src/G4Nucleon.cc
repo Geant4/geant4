@@ -21,40 +21,43 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNuclearDensity.hh,v 1.2 2003-10-07 12:37:00 hpw Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
-#ifndef G4VNuclearDensity_h
-#define G4VNuclearDensity_h 1
+#include "G4Nucleon.hh"
 
-#include "globals.hh"
-#include "G4ThreeVector.hh"
+// ------------------------------------------------------------
+//      GEANT 4 class implementation file
+//
+//      ---------------- G4Nucleon ----------------
+//             by Gunter Folger, May 1998.
+//       class for a nucleon (inside a 3D Nucleus)
+// ------------------------------------------------------------
 
+G4Nucleon::G4Nucleon()
+: theBindingE(0.) , theParticleType(NULL), theSplitableHadron(NULL)
+{}
 
-class G4VNuclearDensity 
+G4Nucleon::~G4Nucleon()
 {
+}
 
-  public:
-    G4VNuclearDensity();
-    virtual ~G4VNuclearDensity();
-    
-    inline G4double GetDensity(const G4ThreeVector & aPosition) const
-    {
-	return rho0*GetRelativeDensity(aPosition);
-    };
-    
-    virtual G4double GetRelativeDensity(const G4ThreeVector & aPosition) const = 0;
-    virtual G4double GetRadius(const G4double maxRelativeDenisty) const = 0;
-    virtual G4double GetDeriv(const G4ThreeVector & point) const = 0;    
+void G4Nucleon::Boost(const G4LorentzVector & aMomentum)
+{
+//   see e.g. CERNLIB short writeup U101 for the algorithm
+	G4double mass=aMomentum.mag();
+	G4double factor=
+	    ( theMomentum.vect()*aMomentum.vect()/(aMomentum.e()+mass) - theMomentum.e() ) / mass;
 
-  protected:    
-    inline void Setrho0(G4double arho0) { rho0=arho0; };
-    inline G4double Getrho0() const { return rho0; };
-   
-  private:
-  
-    G4double rho0;
-};
+	theMomentum.setE(1/mass*theMomentum.dot(aMomentum));
+	theMomentum.setVect(factor*aMomentum.vect() + theMomentum.vect());
+}
 
-#endif
-
+#include <iostream>
+std::ostream & operator << (std::ostream &s, const G4Nucleon& nucleon)
+{
+//	s<< nucleon.GetDefinition()->GetParticleName() 
+//	 << "  is " << nucleon.AreYouHit() ? " " : "not" 
+//	 << " hit. Momentum/position:" << G4endl;
+	s<< "  momentum : " << nucleon.Get4Momentum() << G4endl;
+	s<< "  position : " << nucleon.GetPosition() ;
+	return s;
+}	  

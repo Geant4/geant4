@@ -21,40 +21,40 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNuclearDensity.hh,v 1.2 2003-10-07 12:37:00 hpw Exp $
+// $Id: G4VHighEnergyGenerator.cc,v 1.1 2003-10-07 12:38:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#ifndef G4VNuclearDensity_h
-#define G4VNuclearDensity_h 1
+// G4VHighEnergyGenerator
+#include "G4VHighEnergyGenerator.hh"
 
-#include "globals.hh"
-#include "G4ThreeVector.hh"
-
-
-class G4VNuclearDensity 
+G4VHighEnergyGenerator::G4VHighEnergyGenerator()
 {
+}
 
-  public:
-    G4VNuclearDensity();
-    virtual ~G4VNuclearDensity();
-    
-    inline G4double GetDensity(const G4ThreeVector & aPosition) const
-    {
-	return rho0*GetRelativeDensity(aPosition);
-    };
-    
-    virtual G4double GetRelativeDensity(const G4ThreeVector & aPosition) const = 0;
-    virtual G4double GetRadius(const G4double maxRelativeDenisty) const = 0;
-    virtual G4double GetDeriv(const G4ThreeVector & point) const = 0;    
+G4VHighEnergyGenerator::G4VHighEnergyGenerator(const G4VHighEnergyGenerator &)
+{
+}
 
-  protected:    
-    inline void Setrho0(G4double arho0) { rho0=arho0; };
-    inline G4double Getrho0() const { return rho0; };
-   
-  private:
-  
-    G4double rho0;
-};
 
-#endif
+G4VHighEnergyGenerator::~G4VHighEnergyGenerator()
+{
+}
+
+
+const G4VHighEnergyGenerator & G4VHighEnergyGenerator::operator=(const G4VHighEnergyGenerator &)
+{
+  G4Exception("G4VHighEnergyGenerator::operator= meant to not be accessable");
+  return *this;
+}
+
+
+int G4VHighEnergyGenerator::operator==(const G4VHighEnergyGenerator &) const
+{
+  return 0;
+}
+
+int G4VHighEnergyGenerator::operator!=(const G4VHighEnergyGenerator &) const
+{
+  return 1;
+}
 
