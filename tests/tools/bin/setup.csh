@@ -35,6 +35,8 @@ endif
 #
 setenv NeutronHPCrossSections $G4INSTALL/../G4NDL0.1
 setenv G4LEVELGAMMADATA $G4INSTALL/data/PhotonEvaporation
+export GENERAL 1                             ## EM LowEnergy
+export G4LEDATA $G4INSTALL/../LowEnergyEM    ## EM LowEnergy
 #
 # Some aliases :
 alias g4root   "cd $G4INSTALL"
