@@ -1,4 +1,4 @@
-$Id: History,v 1.26 1999-05-14 01:32:44 gcosmo Exp $
+$Id: History,v 1.27 1999-05-14 16:04:42 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-13th May 1999  Gabriele Cosmo
+13th May 1999  Gabriele Cosmo (config-01-00-05)
 - architecture.gmk: G4USE_OSPACE setup is now independent from G4USE_STL which
   is now devoted for generic STL setup. Added -DOS_NO_TYPEDEF_5 option to HP-aCC
   for ObjectSpace.
