@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.1 2004-03-05 13:28:33 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.2 2004-03-05 16:10:33 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest header ----------------
@@ -66,6 +66,7 @@ G4bool G4QCaptureAtRest::IsApplicable(const G4ParticleDefinition& particle)
   else if (&particle ==    G4SigmaMinus::SigmaMinus()   ) return true;
   else if (&particle ==       G4XiMinus::XiMinus()      ) return true;
   else if (&particle ==    G4OmegaMinus::OmegaMinus()   ) return true;
+  else if (&particle ==       G4Neutron::Neutron()      ) return true;
   else if (&particle ==   G4AntiNeutron::AntiNeutron()  ) return true;
   else if (&particle == G4AntiSigmaPlus::AntiSigmaPlus()) return true;
   return false;
@@ -109,6 +110,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   else if (particle ==    G4SigmaMinus::SigmaMinus()   ) projPDG= 3112;
   else if (particle ==       G4XiMinus::XiMinus()      ) projPDG= 3312;
   else if (particle ==    G4OmegaMinus::OmegaMinus()   ) projPDG= 3334;
+  else if (particle ==       G4Neutron::Neutron()      ) projPDG= 2112;
   else if (particle ==   G4AntiNeutron::AntiNeutron()  ) projPDG=-2112;
   else if (particle == G4AntiSigmaPlus::AntiSigmaPlus()) projPDG=-3222;
   if(!projPDG)
