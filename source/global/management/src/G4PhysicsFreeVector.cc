@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsFreeVector.cc,v 1.2 1999-11-16 17:46:51 gcosmo Exp $
+// $Id: G4PhysicsFreeVector.cc,v 1.3 2000-11-20 17:26:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,7 +68,7 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(const G4DataVector& theBinVector,
 
   ptrNextTable = 0;
 
-  for (int i=0; i<numberOfBin; i++) {
+  for (size_t i=0; i<numberOfBin; i++) {
      binVector(i) = theBinVector(i);
      dataVector(i) = theDataVector(i);
   }

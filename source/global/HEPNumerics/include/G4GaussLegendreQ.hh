@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GaussLegendreQ.hh,v 1.2 1999-11-16 17:30:58 gcosmo Exp $
+// $Id: G4GaussLegendreQ.hh,v 1.3 2000-11-20 17:26:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class description:
@@ -86,11 +86,10 @@ public:
                               
         G4double AccurateIntegral(G4double a, G4double b) const ;
 
-protected:
-
 private:
 
-} ;
-
+	G4GaussLegendreQ(const G4GaussLegendreQ&);
+	G4GaussLegendreQ& operator=(const G4GaussLegendreQ&);
+};
 
 #endif

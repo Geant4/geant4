@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsVector.cc,v 1.4 1999-11-23 15:00:05 gcosmo Exp $
+// $Id: G4PhysicsVector.cc,v 1.5 2000-11-20 17:26:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,14 +31,40 @@ G4PhysicsVector::G4PhysicsVector()
 
 G4PhysicsVector::~G4PhysicsVector() {}
 
+G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
+ : edgeMin(right.edgeMin), edgeMax(right.edgeMax),
+   numberOfBin(right.numberOfBin), lastEnergy(right.lastEnergy),
+   lastValue(right.lastValue), lastBin(right.lastBin),
+   dataVector(right.dataVector), binVector(right.binVector),
+   ptrNextTable(right.ptrNextTable), comment(right.comment) {}
+
+G4PhysicsVector&
+G4PhysicsVector::operator=(const G4PhysicsVector& right)
+{
+  if (&right==this) return *this;
+
+  edgeMin = right.edgeMin;
+  edgeMax = right.edgeMax;
+  numberOfBin = right.numberOfBin;
+  lastEnergy = right.lastEnergy;
+  lastValue = right.lastValue;
+  lastBin = right.lastBin;
+  dataVector = right.dataVector;
+  binVector = right.binVector;
+  ptrNextTable = right.ptrNextTable;
+  comment = right.comment;
+
+  return *this;
+}
+
 G4int G4PhysicsVector::operator==(const G4PhysicsVector &right) const
 {
-  return (this == (G4PhysicsVector *) &right);
+  return (this == &right);
 }
 
 G4int G4PhysicsVector::operator!=(const G4PhysicsVector &right) const
 {
-  return (this != (G4PhysicsVector *) &right);
+  return (this != &right);
 }
 
 void G4PhysicsVector::PutValue(size_t binNumber, G4double theValue)
@@ -47,7 +73,7 @@ void G4PhysicsVector::PutValue(size_t binNumber, G4double theValue)
 
   // Fill the bin which is hidden to user with theValue. This is to 
   // handle correctly when Energy=theEmax in getValue.
-  if(binNumber=numberOfBin-1) {
+  if(binNumber==numberOfBin-1) {
     dataVector(binNumber+1) = theValue;
   }                                 
 }

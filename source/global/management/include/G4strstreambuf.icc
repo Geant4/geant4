@@ -1,0 +1,112 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4strstreambuf.icc,v 1.1 2000-11-20 17:26:47 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// ---------------------------------------------------------------
+//
+// class G4strstreambuf
+// inline implementation
+// 
+// ---------------------------------------------------------------
+
+inline
+G4strstreambuf::G4strstreambuf()
+{
+  destination = NULL;
+  count = 0;
+  size = 4095;
+  buffer = new char[size+1];
+}
+
+inline
+G4strstreambuf::~G4strstreambuf()
+{
+  delete buffer;
+}
+
+inline
+G4strstreambuf::G4strstreambuf(const G4strstreambuf& right)
+   : destination(right.destination),
+     buffer(right.buffer), count(right.count), size(right.size)
+{
+}
+
+inline
+G4strstreambuf& G4strstreambuf::operator=(const G4strstreambuf& right)
+{
+  if (&right==this) return *this;
+
+  destination = right.destination;
+  buffer = right.buffer;
+  count = right.count;
+  size = right.size;
+
+  return *this;
+}
+
+inline
+void G4strstreambuf::SetDestination(G4coutDestination * value)
+{
+  destination = value;
+}
+
+inline
+G4int G4strstreambuf::overflow(G4int c)
+{
+  G4int result = 0;
+  if(count>=size) {
+    buffer[count] = '\0';
+    count = 0;
+    result = ReceiveString ();
+  }
+  buffer[count] = c;
+  count++;
+  if(c=='\n') {
+    buffer[count] = '\0';
+    count = 0;
+    result = ReceiveString ();
+  }
+  return result;
+}
+
+inline
+G4int G4strstreambuf::sync()
+{
+  buffer[count] = '\0';
+  count = 0;
+  return ReceiveString ();
+}
+
+#ifdef WIN32
+inline
+G4int G4strstreambuf::underflow()
+{
+  return 0;
+}
+#endif
+
+inline
+G4int G4strstreambuf::ReceiveString ()
+{
+  G4String stringToSend = G4String(buffer);
+  G4int result =0;
+  if(this == & G4coutbuf && destination != NULL) {
+    result =  destination->ReceiveG4cout(stringToSend);
+  } else if(this == & G4cerrbuf && destination != NULL) {
+    result =  destination->ReceiveG4cerr(stringToSend);
+  } else if(this == & G4coutbuf && destination == NULL) {
+    G4std::cout << stringToSend << G4std::flush;
+    result =0;
+  } else if(this == & G4cerrbuf && destination == NULL) {
+    G4std::cerr << stringToSend << G4std::flush;
+    result =0;
+  }
+  return result;
+}

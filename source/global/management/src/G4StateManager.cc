@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StateManager.cc,v 1.1 2000-07-22 10:45:35 asaim Exp $
+// $Id: G4StateManager.cc,v 1.2 2000-11-20 17:26:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,7 +13,7 @@
 //      GEANT 4 class implementation file 
 //
 //      For information related to this code contact:
-//      CERN, CN Division, ASD group
+//      Geant4 Collaboration
 //      ---------------- G4StateManager ----------------
 //             by Gabriele Cosmo, November 1996
 // ------------------------------------------------------------
@@ -33,24 +33,33 @@ G4StateManager::~G4StateManager()
 }
 
 G4StateManager::G4StateManager(const G4StateManager &right)
+  : theCurrentState(right.theCurrentState),
+    thePreviousState(right.thePreviousState),
+    theDependentsList(right.theDependentsList),
+    theBottomDependent(right.theBottomDependent)
 {
-   *this = right;
 }
 
 G4StateManager& G4StateManager::operator=(const G4StateManager &right)
 {
-   *this = right;
+   if (&right == this) return *this;
+
+   theCurrentState = right.theCurrentState;
+   thePreviousState = right.thePreviousState;
+   theDependentsList = right.theDependentsList;
+   theBottomDependent = right.theBottomDependent;
+
    return *this;
 }
 
 G4int G4StateManager::operator==(const G4StateManager &right) const
 {
-   return (this == (G4StateManager *) &right);
+   return (this == &right);
 }
 
 G4int G4StateManager::operator!=(const G4StateManager &right) const
 {
-   return (this != (G4StateManager *) &right);
+   return (this != &right);
 }
 
 
@@ -95,7 +104,7 @@ G4ApplicationState G4StateManager::GetPreviousState()
 
 G4bool G4StateManager::SetNewState(G4ApplicationState requestedState)
 {
-   G4int i=0;
+   size_t i=0;
    G4bool ack = true;
    G4ApplicationState savedState = thePreviousState;
    thePreviousState = theCurrentState;

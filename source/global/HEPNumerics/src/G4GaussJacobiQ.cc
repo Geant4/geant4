@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GaussJacobiQ.cc,v 1.2 1999-11-16 17:31:10 gcosmo Exp $
+// $Id: G4GaussJacobiQ.cc,v 1.3 2000-11-20 17:26:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4GaussJacobiQ.hh"
@@ -26,8 +26,9 @@ G4GaussJacobiQ::G4GaussJacobiQ(       function pFunction,
   const G4double tolerance = 1.0e-12 ;
   const G4double maxNumber = 12 ;
   G4int i, k, j ;
+  G4double root=0.;
   G4double alphaBeta, alphaReduced, betaReduced, root1, root2, root3 ;
-  G4double a, b, c, newton1, newton2, newton3, newton, temp, root, rootTemp ;
+  G4double a, b, c, newton1, newton2, newton3, newton, temp, rootTemp ;
 
   fNumber   = nJacobi ;
   fAbscissa = new G4double[fNumber] ;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LPhysicsFreeVector.cc,v 1.2 1999-11-16 17:46:51 gcosmo Exp $
+// $Id: G4LPhysicsFreeVector.cc,v 1.3 2000-11-20 17:26:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@ G4LPhysicsFreeVector::~G4LPhysicsFreeVector()
 
 void G4LPhysicsFreeVector::DumpValues()
 {
-   for (G4int i = 0; i < numberOfBin; i++) {
+   for (size_t i = 0; i < numberOfBin; i++) {
      //      printf(" %12.4f   %7.1f\n", binVector(i), dataVector(i)*1.e-27);
       printf(" %12.4f   %7.1f\n", binVector(i), dataVector(i)/millibarn);
    }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChebyshevApproximation.hh,v 1.2 1999-11-16 17:30:55 gcosmo Exp $
+// $Id: G4ChebyshevApproximation.hh,v 1.3 2000-11-20 17:26:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class description:
@@ -149,7 +149,10 @@ public:
 	
 	void IntegralChebyshevCof(G4double integralCof[]) const ;
        
-protected:
+private:
+
+	G4ChebyshevApproximation(const G4ChebyshevApproximation&);
+	G4ChebyshevApproximation& operator=(const G4ChebyshevApproximation&);
 
 private:
 

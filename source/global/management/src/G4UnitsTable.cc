@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.cc,v 1.10 2000-05-25 15:40:48 johna Exp $
+// $Id: G4UnitsTable.cc,v 1.11 2000-11-20 17:26:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,9 +97,9 @@ G4double G4UnitDefinition::GetValueOf(G4String string)
 {
   if(theUnitsTable.entries()==0) BuildUnitsTable();
   G4String name,symbol;
-  for (G4int i=0;i<theUnitsTable.entries();i++)
+  for (size_t i=0;i<theUnitsTable.entries();i++)
      { G4UnitsContainer& units = theUnitsTable[i]->GetUnitsList();
-       for (G4int j=0;j<units.entries();j++)
+       for (size_t j=0;j<units.entries();j++)
           { name=units[j]->GetName(); symbol=units[j]->GetSymbol();
             if(string==name||string==symbol) 
                return units[j]->GetValue();
@@ -117,9 +117,9 @@ G4String G4UnitDefinition::GetCategory(G4String string)
 {
   if(theUnitsTable.entries()==0) BuildUnitsTable();
   G4String name,symbol;
-  for (G4int i=0;i<theUnitsTable.entries();i++)
+  for (size_t i=0;i<theUnitsTable.entries();i++)
      { G4UnitsContainer& units = theUnitsTable[i]->GetUnitsList();
-       for (G4int j=0;j<units.entries();j++)
+       for (size_t j=0;j<units.entries();j++)
           { name=units[j]->GetName(); symbol=units[j]->GetSymbol();
             if(string==name||string==symbol) 
                return theUnitsTable[i]->GetName();
@@ -389,7 +389,7 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4BestUnit a)
   G4double value = G4std::max(G4std::max(fabs(a.Value[0]),fabs(a.Value[1])),
                               fabs(a.Value[2]));
 
-  for (G4int k=0; k<List.entries(); k++)
+  for (size_t k=0; k<List.entries(); k++)
      {
        G4double unit = List[k]->GetValue();
             if (value==DBL_MAX) {if(unit>umax) {umax=unit; ksup=k;}}

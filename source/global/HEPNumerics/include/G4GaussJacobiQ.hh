@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GaussJacobiQ.hh,v 1.2 1999-11-16 17:30:57 gcosmo Exp $
+// $Id: G4GaussJacobiQ.hh,v 1.3 2000-11-20 17:26:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class description:
@@ -55,12 +55,10 @@ public:
 			     
         G4double Integral() const ;
 
-
-protected:
-
 private:
 
-} ;
-
+	G4GaussJacobiQ(const G4GaussJacobiQ&);
+	G4GaussJacobiQ& operator=(const G4GaussJacobiQ&);
+};
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VStateDependent.cc,v 1.1 2000-07-22 10:45:35 asaim Exp $
+// $Id: G4VStateDependent.cc,v 1.2 2000-11-20 17:26:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,7 +13,7 @@
 //      GEANT 4 class implementation file 
 //
 //      For information related to this code contact:
-//      CERN, CN Division, ASD group
+//      Geant4 Collaboration
 //      ---------------- G4VStateDependent ----------------
 //             by Gabriele Cosmo, November 1996
 // ------------------------------------------------------------
@@ -40,16 +40,17 @@ G4VStateDependent::G4VStateDependent(const G4VStateDependent &right)
 
 G4VStateDependent& G4VStateDependent::operator=(const G4VStateDependent &right)
 {
+   if (&right == this) return *this;
    *this = right;
    return *this;
 }
 
 G4int G4VStateDependent::operator==(const G4VStateDependent &right) const
 {
-   return (this == (G4VStateDependent *) &right);
+   return (this == &right);
 }
 
 G4int G4VStateDependent::operator!=(const G4VStateDependent &right) const
 {
-   return (this != (G4VStateDependent *) &right);
+   return (this != &right);
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GaussChebyshevQ.hh,v 1.2 1999-11-16 17:30:56 gcosmo Exp $
+// $Id: G4GaussChebyshevQ.hh,v 1.3 2000-11-20 17:26:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class description:
@@ -35,7 +35,7 @@
 
 // ------------------------------- HISTORY --------------------------------
 //
-// 13.05.97 V.Grichine (Vladimir.Grichine@cern.chz0
+// 13.05.97 V.Grichine (Vladimir.Grichine@cern.ch)
 
 #ifndef G4GAUSSCHEBYSHEVQ_HH
 #define G4GAUSSCHEBYSHEVQ_HH
@@ -57,11 +57,11 @@ public:
         G4double Integral(G4double a, G4double b) const ;
 
 
-protected:
-
 private:
 
-} ;
+	G4GaussChebyshevQ(const G4GaussChebyshevQ&);
+	G4GaussChebyshevQ& operator=(const G4GaussChebyshevQ&);
 
+};
 
 #endif

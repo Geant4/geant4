@@ -1,4 +1,4 @@
-$Id: History,v 1.57 2000-11-03 17:26:35 gcosmo Exp $
+$Id: History,v 1.58 2000-11-20 17:26:41 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 20, 2000 G.Cosmo (global-V02-00-05)
+- QA code cleanup and fixes to remove warnings from
+  "-Wall -ansi -pedantic" g++ compiler options:
+  o added/fixed declaration/implementation of private copy constructor
+    and assignment operator where needed.
+  o commented out variables declared and not used.
+  o fixed declaration of variables used before being initialised.
+  o fixed order of initialisation of member data in constructors.
+  o fixed usage of unsigned-int (size_t) for array indeces.
+  o G4strstreambuf: created .icc file and moved implementation of
+    inlined functions therein.
 
 November 3, 2000 G.Folger (global-V02-00-04)
 - Added rules for "includes" target to GNUmakefile and management/GNUmakefile.

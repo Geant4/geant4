@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4strstreambuf.hh,v 1.6 1999-12-16 08:15:57 gunter Exp $
+// $Id: G4strstreambuf.hh,v 1.7 2000-11-20 17:26:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,70 +26,35 @@ class G4strstreambuf;
 extern G4strstreambuf G4coutbuf;
 extern G4strstreambuf G4cerrbuf;
 
-class G4strstreambuf : public G4std::streambuf {
-public:
-  G4strstreambuf() {
-    destination = NULL;
-    count = 0;
-    size = 4095;
-    buffer = new char[size+1];
-  }
-  ~G4strstreambuf() {
-    delete buffer;
-  }
-  void SetDestination(G4coutDestination * value) {
-    destination = value;
-  }
-  int overflow(int c=EOF) {
-    int result = 0;
-    if(count>=size) {
-      buffer[count] = '\0';
-      count = 0;
-      result = ReceiveString ();
-    }
-    buffer[count] = c;
-    count++;
-    if(c=='\n') {
-      buffer[count] = '\0';
-      count = 0;
-      result = ReceiveString ();
-    }
-    return result;
-  }
-  int sync() {
-    buffer[count] = '\0';
-    count = 0;
-    return ReceiveString ();
+class G4strstreambuf : public G4std::streambuf
+{
+  public:
 
-  }
+    G4strstreambuf();
+    ~G4strstreambuf();
+
+    inline void SetDestination(G4coutDestination * value);
+
+    inline G4int overflow(G4int c=EOF);
+    inline G4int sync();
 #ifdef WIN32
-  int underflow() {
-    return 0;
-  }
+    inline G4int underflow();
 #endif
-  int ReceiveString () {
-    G4String stringToSend = buffer;
-    int result;
-    if(this == & G4coutbuf && destination != NULL) {
-      result =  destination->ReceiveG4cout(stringToSend);
-    } else if(this == & G4cerrbuf && destination != NULL) {
-      result =  destination->ReceiveG4cerr(stringToSend);
-    } else if(this == & G4coutbuf && destination == NULL) {
-      G4std::cout << stringToSend << G4std::flush;
-      result =0;
-    } else if(this == & G4cerrbuf && destination == NULL) {
-      G4std::cerr << stringToSend << G4std::flush;
-      result =0;
-    }
-    return result;
-  };
 
-private:
-  G4coutDestination * destination;
-  char* buffer;
-  int count,size;
+    inline G4int ReceiveString ();
+
+  private:
+
+    G4strstreambuf(const G4strstreambuf&);
+    G4strstreambuf& operator=(const G4strstreambuf&);
+
+  private:
+
+    G4coutDestination * destination;
+    char* buffer;
+    G4int count,size;
 };
 
+#include "G4strstreambuf.icc"
 
- 
 #endif

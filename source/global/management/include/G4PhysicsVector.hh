@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsVector.hh,v 1.3 1999-11-16 17:40:43 gcosmo Exp $
+// $Id: G4PhysicsVector.hh,v 1.4 2000-11-20 17:26:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,6 +120,12 @@ class G4PhysicsVector
          // Linear interpolation function
     virtual size_t FindBinLocation(G4double theEnergy) const=0;
          // Find the bin# in which theEnergy belongs - pure virtual function
+
+  private:
+
+    G4PhysicsVector(const G4PhysicsVector&);
+    G4PhysicsVector& operator=(const G4PhysicsVector&);
+         // Private copy constructor and assignment operator.
 
   private:
 

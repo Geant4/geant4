@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Allocator.hh,v 1.3 1999-11-23 15:00:03 gcosmo Exp $
+// $Id: G4Allocator.hh,v 1.4 2000-11-20 17:26:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -117,7 +117,7 @@ template <class Type>
 void G4Allocator<Type>::AddNewPage()
 {
   G4AllocatorPage<Type> *aPage;
-  register int unit_no;
+  register unsigned int unit_no;
 
   aPage = new G4AllocatorPage<Type>;
   aPage->fNext = fPages;

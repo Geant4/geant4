@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsFreeVector.hh,v 1.2 1999-11-16 17:40:40 gcosmo Exp $
+// $Id: G4PhysicsFreeVector.hh,v 1.3 2000-11-20 17:26:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,7 +81,7 @@ inline size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const
   // the binary search algorithm.
   //
   // Because this is a virtual function, it is accessed through a
-  // pointer to the G4PhyiscsVector object for most usages. In this
+  // pointer to the G4PhysicsVector object for most usages. In this
   // case, 'inline' will not be invoked. However, there is a possibility 
   // that the user access to the G4PhysicsFreeVector object directly and 
   // not through pointers or references. In this case, the 'inline' will
@@ -90,13 +90,13 @@ inline size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const
   size_t lowerBound = 0;
   size_t upperBound = numberOfBin-1;
 
-  do {
+  while (lowerBound <= upperBound) {
     size_t midBin = (lowerBound + upperBound)/2;
     if( theEnergy < binVector(midBin) )
        upperBound = midBin-1;
     else
        lowerBound = midBin+1;
-  } while (lowerBound <= upperBound); 
+  } 
 
   return upperBound;
 }
