@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.58 2005-03-09 16:44:23 allison Exp $
+cvs log $Id: History,v 1.59 2005-03-22 16:44:21 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-9th March 2005  John Allison  (greps-V07-00-01, needed by vis-V07-00-10)
+22nd March 2005  John Allison  (greps-V07-00-02)
+- G4Polyhedron: Added fLineSegmentsPerCircleAtTimeOfCreation.
+
+9th March 2005  John Allison  (greps-V07-00-01)
 - HepPolyhedron: Added IsErrorBooleanProcess().
 - BooleanProcessor: Added get_processor_error().
 - G4Visible: Moved SetVisAttributes (const G4VisAttributes&) from .icc

@@ -21,29 +21,37 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.cc,v 1.12 2003-04-03 15:31:07 gcosmo Exp $
+// $Id: G4Polyhedron.cc,v 1.13 2005-03-22 16:44:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4Polyhedron.hh"
 
-G4Polyhedron::G4Polyhedron () {}
+G4Polyhedron::G4Polyhedron ():
+  fLineSegmentsPerCircleAtTimeOfCreation (fNumberOfRotationSteps)
+{}
 
 G4Polyhedron::~G4Polyhedron () {}
 
 G4Polyhedron::G4Polyhedron (const G4Polyhedron& from)
   : HepPolyhedron(from), G4VVisPrim(from)
 {
-  *this = from;
+  fLineSegmentsPerCircleAtTimeOfCreation =
+    from.fLineSegmentsPerCircleAtTimeOfCreation;
 }
 
-G4Polyhedron::G4Polyhedron (const HepPolyhedron& from) {
-  *this = from;
+G4Polyhedron::G4Polyhedron (const HepPolyhedron& from)
+  : HepPolyhedron(from)
+{
+  fLineSegmentsPerCircleAtTimeOfCreation =
+    from.fNumberOfRotationSteps;
 }
 
 G4Polyhedron& G4Polyhedron::operator = (const G4Polyhedron& from) {
   if (&from == this) return *this;
   HepPolyhedron::operator = (from);
   G4VVisPrim::operator = (from);
+  fLineSegmentsPerCircleAtTimeOfCreation =
+    from.fLineSegmentsPerCircleAtTimeOfCreation;
   return *this;
 }
 

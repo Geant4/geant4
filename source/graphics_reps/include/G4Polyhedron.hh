@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.hh,v 1.10 2001-07-11 10:01:02 gunter Exp $
+// $Id: G4Polyhedron.hh,v 1.11 2005-03-22 16:44:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4POLYHEDRON_HH
@@ -93,6 +93,11 @@
 // History:
 // 21st February 2000  Evgeni Chernaev, John Allison
 // - Re-written to inherit HepPolyhedron.
+//
+// 11.03.05 J.Allison
+// - added fLineSegmentsPerCircleAtTimeOfCreation and access method.
+//   (This is also called no. of sides per circle.  In HepPolyhedron
+//   it is called NoOfRotationSides.)
 
 #include "globals.hh"
 #include "HepPolyhedron.h"
@@ -114,6 +119,11 @@ public:
     return HepPolyhedron::operator = (from);
   }
   G4Polyhedron& operator = (const G4Polyhedron& from);
+  G4int GetLineSegmentsPerCircleAtTimeOfCreation() const {
+    return fLineSegmentsPerCircleAtTimeOfCreation;
+  }
+private:
+  G4int fLineSegmentsPerCircleAtTimeOfCreation;
 };
 
 class G4PolyhedronBox: public G4Polyhedron {
