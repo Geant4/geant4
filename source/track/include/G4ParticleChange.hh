@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChange.hh,v 1.1 1999-01-07 16:14:21 gunter Exp $
+// $Id: G4ParticleChange.hh,v 1.2 1999-02-06 10:44:33 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 //  modify AddSecondary methods for "GoodForTracking" flag 
 //                                                 8 June 1998 H.Kurashige
 //   Add Track weight                              12 Nov. 1998  H.Kurashige
+//   Add Get/SetMomentumDirectionChange             6 Feb. 1999 H.Kurashige 
 // -------------------------------------------------------------
 #ifndef G4ParticleChange_h
 #define G4ParticleChange_h 1
@@ -44,7 +45,7 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4ThreeVector.hh"
-#include "G4ParticleMomentum.hh"
+#include "G4ThreeVector.hh"
 class G4DynamicParticle;
 #include "G4VParticleChange.hh"
 
@@ -105,10 +106,13 @@ class G4ParticleChange: public G4VParticleChange
     //   "Change", what it stores (and returns in get) are the "FINAL" 
     //   values of the Position, Momentum, etc.
 
-    const G4ParticleMomentum* GetMomentumChange() const;
+    const G4ThreeVector* GetMomentumDirectionChange() const;
+    void SetMomentumDirectionChange(G4double Px, G4double Py, G4double Pz);
+    void SetMomentumDirectionChange(const G4ThreeVector& Pfinal);
+    const G4ThreeVector* GetMomentumChange() const;
     void SetMomentumChange(G4double Px, G4double Py, G4double Pz);
     void SetMomentumChange(const G4ThreeVector& Pfinal);
-    // Get/Set theMomentumChange vector: it is the final momentum direction.
+    // Get/Set theMomentumDirectionChange vector: it is the final momentum direction.
 
     const G4ThreeVector* GetPolarizationChange() const;
     void SetPolarizationChange(G4double Px, G4double Py, G4double Pz);
@@ -145,7 +149,7 @@ class G4ParticleChange: public G4VParticleChange
     //  Convert the time delay to the global time.
 
     G4ThreeVector CalcMomentum(G4double           energy,
-			       G4ParticleMomentum direction,
+			       G4ThreeVector direction,
 			       G4double           mass      ) const;
     //  Calculate momentum by using Energy, Momentum Direction, and Mass 
     // ----------------------------------------------------
@@ -178,7 +182,7 @@ class G4ParticleChange: public G4VParticleChange
     virtual void DumpInfo() const;
 
   protected:
-    G4ParticleMomentum theMomentumChange;
+    G4ThreeVector theMomentumDirectionChange;
     //  It is the vector containing the final momentum direction
     //  after the invoked process. The application of the change
     //  of the momentum direction of the particle is not Done here.

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChange.icc,v 1.1 1999-01-07 16:14:21 gunter Exp $
+// $Id: G4ParticleChange.icc,v 1.2 1999-02-06 10:44:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,9 +30,10 @@ inline
 }
 
 inline 
- const G4ParticleMomentum* G4ParticleChange::GetMomentumChange() const
+inline 
+ const G4ThreeVector* G4ParticleChange::GetMomentumChange() const
 {
-  return &theMomentumChange;
+  return &theMomentumDirectionChange;
 }
 
 inline 
@@ -41,15 +42,37 @@ inline
 						G4double Py, 
 						G4double Pz	)
 {
-  theMomentumChange.setX(Px);
-  theMomentumChange.setY(Py);
-  theMomentumChange.setZ(Pz);
+  theMomentumDirectionChange.setX(Px);
+  theMomentumDirectionChange.setY(Py);
+  theMomentumDirectionChange.setZ(Pz);
 }
-
 inline 
  void G4ParticleChange::SetMomentumChange(const G4ThreeVector& P)
 {
-  theMomentumChange = P;
+  theMomentumDirectionChange = P;
+}
+
+inline 
+ const G4ThreeVector* G4ParticleChange::GetMomentumDirectionChange() const
+{
+  return &theMomentumDirectionChange;
+}
+
+inline 
+ void G4ParticleChange::SetMomentumDirectionChange(
+						G4double Px, 
+						G4double Py, 
+						G4double Pz	)
+{
+  theMomentumDirectionChange.setX(Px);
+  theMomentumDirectionChange.setY(Py);
+  theMomentumDirectionChange.setZ(Pz);
+}
+
+inline 
+ void G4ParticleChange::SetMomentumDirectionChange(const G4ThreeVector& P)
+{
+  theMomentumDirectionChange = P;
 }
 
 inline 
@@ -148,7 +171,7 @@ inline
 
 inline  
   G4ThreeVector G4ParticleChange::CalcMomentum(G4double          energy,
-			    	              G4ParticleMomentum direction,
+			    	              G4ThreeVector   direction,
 			                      G4double           mass      
 					      ) const
 {

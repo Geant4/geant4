@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForDecay.hh,v 1.1 1999-01-07 16:14:21 gunter Exp $
+// $Id: G4ParticleChangeForDecay.hh,v 1.2 1999-02-06 10:44:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,6 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4ThreeVector.hh"
-#include "G4ParticleMomentum.hh"
 class G4DynamicParticle;
 #include "G4VParticleChange.hh"
 
