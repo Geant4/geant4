@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.34 2005-01-26 16:57:31 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.35 2005-01-27 20:06:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,13 +107,13 @@ G4VSceneHandler::~G4VSceneHandler () {
 
 void G4VSceneHandler::EndModeling () {}
 
-void G4VSceneHandler::PreAddThis (const G4Transform3D& objectTransformation,
+void G4VSceneHandler::PreAddSolid (const G4Transform3D& objectTransformation,
                                   const G4VisAttributes& visAttribs) {
   fpObjectTransformation = &objectTransformation;
   fpVisAttribs = &visAttribs;
 }
 
-void G4VSceneHandler::PostAddThis () {
+void G4VSceneHandler::PostAddSolid () {
   fpObjectTransformation = &G4Transform3D::Identity;
   fpVisAttribs = 0;
 }
@@ -128,14 +128,14 @@ void G4VSceneHandler::ClearStore () {
 void G4VSceneHandler::ClearTransientStore () {
 }
 
-void G4VSceneHandler::AddThis (const G4Box& box) {
+void G4VSceneHandler::AddSolid (const G4Box& box) {
   RequestPrimitives (box);
 // If your graphics system is sophisticated enough to handle a
 //  particular solid shape as a primitive, in your derived class write a
 //  function to override this.  (Note: some compilers warn that your
 //  function "hides" this one.  That's OK.)
 // Your function might look like this...
-// void G4MyScene::AddThis (const G4Box& box) {
+// void G4MyScene::AddSolid (const G4Box& box) {
 // Get parameters of appropriate object, e.g.:
 //   G4double dx = box.GetXHalfLength ();
 //   G4double dy = box.GetYHalfLength ();
@@ -143,51 +143,51 @@ void G4VSceneHandler::AddThis (const G4Box& box) {
 // and Draw or Store in your display List.
 }
 
-void G4VSceneHandler::AddThis (const G4Tubs& tubs) {
+void G4VSceneHandler::AddSolid (const G4Tubs& tubs) {
   RequestPrimitives (tubs);
 }
 
-void G4VSceneHandler::AddThis (const G4Cons& cons) {
+void G4VSceneHandler::AddSolid (const G4Cons& cons) {
   RequestPrimitives (cons);
 }
 
-void G4VSceneHandler::AddThis (const G4Trd& trd) {
+void G4VSceneHandler::AddSolid (const G4Trd& trd) {
   RequestPrimitives (trd);
 }
 
-void G4VSceneHandler::AddThis (const G4Trap& trap) {
+void G4VSceneHandler::AddSolid (const G4Trap& trap) {
   RequestPrimitives (trap);
 }
 
-void G4VSceneHandler::AddThis (const G4Sphere& sphere) {
+void G4VSceneHandler::AddSolid (const G4Sphere& sphere) {
   RequestPrimitives (sphere );
 }
 
-void G4VSceneHandler::AddThis (const G4Para& para) {
+void G4VSceneHandler::AddSolid (const G4Para& para) {
   RequestPrimitives (para);
 }
 
-void G4VSceneHandler::AddThis (const G4Torus& torus) {
+void G4VSceneHandler::AddSolid (const G4Torus& torus) {
   RequestPrimitives (torus);
 }
 
-void G4VSceneHandler::AddThis (const G4Polycone& polycone) {
+void G4VSceneHandler::AddSolid (const G4Polycone& polycone) {
   RequestPrimitives (polycone);
 }
 
-void G4VSceneHandler::AddThis (const G4Polyhedra& polyhedra) {
+void G4VSceneHandler::AddSolid (const G4Polyhedra& polyhedra) {
   RequestPrimitives (polyhedra);
 }
 
-void G4VSceneHandler::AddThis (const G4VSolid& solid) {
+void G4VSceneHandler::AddSolid (const G4VSolid& solid) {
   RequestPrimitives (solid);
 }
 
-void G4VSceneHandler::AddThis (const G4VTrajectory& traj) {
+void G4VSceneHandler::AddCompound (const G4VTrajectory& traj) {
   traj.DrawTrajectory(((G4TrajectoriesModel*)fpModel)->GetDrawingMode());
 }
 
-void G4VSceneHandler::AddThis (const G4VHit& hit) {
+void G4VSceneHandler::AddCompound (const G4VHit& hit) {
   ((G4VHit&)hit).Draw(); // Cast to non-const because Draw is non-const!!!!
 }
 

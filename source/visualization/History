@@ -1,4 +1,4 @@
-$Id: History,v 1.267 2005-01-26 17:18:24 johna Exp $
+$Id: History,v 1.268 2005-01-27 20:04:11 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,24 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+27th January 2005  John Allison  (vis-V07-00-01, needs intercoms-V07-00-00)
+- Migration from AddThis to AddSolid and AddCompound.
+- AddSolid: Methods for adding solids to the scene handler.  They
+  must always be called in the triplet PreAddSolid, AddSolid and
+  PostAddSolid.  The transformation and visualization attributes
+  must be set by the call to PreAddSolid.  A possible default
+  implementation is to request the solid to provide a G4Polyhedron
+  or similar primitive - see, for example, G4VSceneHandler.
+- AddCompound: Methods for adding "compound" GEANT4 objects to the scene
+  handler.  These methods may either (a) invoke "user code" that
+  uses the "user interface", G4VVisManager (see, for example,
+  G4VSceneHandler in the Visualization Category, which for
+  trajectories uses G4VTrajectory::DrawTrajectory, via
+  G4TrajectoriesModel in the Modeling Category) or (b) invoke
+  AddPrimitives below (between calls to Begin/EndPrimitives) or (c)
+  use graphics-system-specific code or (d) any combination of the
+  above.
 
 26th January 2005  John Allison  (vis-V07-00-00)
 - G4VisManager:: removed optional argument

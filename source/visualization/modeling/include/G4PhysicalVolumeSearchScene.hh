@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.hh,v 1.12 2005-01-26 17:07:13 johna Exp $
+// $Id: G4PhysicalVolumeSearchScene.hh,v 1.13 2005-01-27 20:06:37 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,22 +52,22 @@ public:
   G4PhysicalVolumeSearchScene
   (const G4String& requiredPhysicalVolumeName, G4int requiredCopyNo);
   virtual ~G4PhysicalVolumeSearchScene ();
-  void AddThis (const G4Box& s) {FindVolume (s);}
-  void AddThis (const G4Cons & s) {FindVolume (s);}
-  void AddThis (const G4Tubs& s) {FindVolume (s);}
-  void AddThis (const G4Trd& s) {FindVolume (s);}
-  void AddThis (const G4Trap& s) {FindVolume (s);}
-  void AddThis (const G4Sphere& s) {FindVolume (s);}
-  void AddThis (const G4Para& s) {FindVolume (s);}
-  void AddThis (const G4Torus& s) {FindVolume (s);}
-  void AddThis (const G4Polycone& s) {FindVolume (s);}
-  void AddThis (const G4Polyhedra& s) {FindVolume (s);}
-  void AddThis (const G4VSolid& s) {FindVolume (s);}
-  void AddThis (const G4VTrajectory&) {}
-  void AddThis (const G4VHit&) {}
-  void PreAddThis (const G4Transform3D& objectTransformation,
-		   const G4VisAttributes&);
-  void PostAddThis ();
+  void PreAddSolid (const G4Transform3D& objectTransformation,
+		    const G4VisAttributes&);
+  void PostAddSolid ();
+  void AddSolid (const G4Box& s) {FindVolume (s);}
+  void AddSolid (const G4Cons & s) {FindVolume (s);}
+  void AddSolid (const G4Tubs& s) {FindVolume (s);}
+  void AddSolid (const G4Trd& s) {FindVolume (s);}
+  void AddSolid (const G4Trap& s) {FindVolume (s);}
+  void AddSolid (const G4Sphere& s) {FindVolume (s);}
+  void AddSolid (const G4Para& s) {FindVolume (s);}
+  void AddSolid (const G4Torus& s) {FindVolume (s);}
+  void AddSolid (const G4Polycone& s) {FindVolume (s);}
+  void AddSolid (const G4Polyhedra& s) {FindVolume (s);}
+  void AddSolid (const G4VSolid& s) {FindVolume (s);}
+  void AddCompound (const G4VTrajectory&) {}
+  void AddCompound (const G4VHit&) {}
   void EstablishSpecials (G4PhysicalVolumeModel&);
   G4int                GetFoundDepth          () const;
   G4VPhysicalVolume*   GetFoundVolume         () const;

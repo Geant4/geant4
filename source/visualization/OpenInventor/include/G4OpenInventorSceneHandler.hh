@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.23 2004-11-24 14:59:38 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.24 2005-01-27 20:05:04 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,7 @@ public:
   void EndPrimitives ();
   void EndModeling ();
   static G4int GetSceneCount ();
-  void PreAddThis (const G4Transform3D& objectTransformation,
+  void PreAddSolid (const G4Transform3D& objectTransformation,
 		   const G4VisAttributes& visAttribs);
 
 private:

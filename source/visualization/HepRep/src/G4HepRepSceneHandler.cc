@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.78 2004-12-07 23:40:58 perl Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.79 2005-01-27 20:04:41 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -586,9 +586,9 @@ void G4HepRepSceneHandler::AddPrimitive (const G4NURBS&) {
 }
 
 
-void G4HepRepSceneHandler::AddThis (const G4VTrajectory& trajectory) {
+void G4HepRepSceneHandler::AddCompound (const G4VTrajectory& trajectory) {
 #ifdef PDEBUG
-    cout << "G4HepRepSceneHandler::AddThis(G4VTrajectory&) " << endl;
+    cout << "G4HepRepSceneHandler::AddCompound(G4VTrajectory&) " << endl;
 #endif
 
     vector<G4AttValue>* trajectoryAttValues = trajectory.CreateAttValues();
@@ -634,23 +634,23 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& trajectory) {
 
 
 
-void G4HepRepSceneHandler::PreAddThis (const G4Transform3D& objectTransformation,
+void G4HepRepSceneHandler::PreAddSolid (const G4Transform3D& objectTransformation,
 				  const G4VisAttributes& visAttribs) {
 
-    G4VSceneHandler::PreAddThis (objectTransformation, visAttribs);
+    G4VSceneHandler::PreAddSolid (objectTransformation, visAttribs);
 
     transform = objectTransformation;
 #ifdef SDEBUG
-    cout << "G4HepRepSceneHandler::PreAddThis(G4Transform3D&, G4VisAttributes&)" << endl;
+    cout << "G4HepRepSceneHandler::PreAddSolid(G4Transform3D&, G4VisAttributes&)" << endl;
 #endif
 }
 
 
-void G4HepRepSceneHandler::PostAddThis () {
+void G4HepRepSceneHandler::PostAddSolid () {
 #ifdef SDEBUG
-    cout << "G4HepRepSceneHandler::PostAddThis()" << endl;
+    cout << "G4HepRepSceneHandler::PostAddSolid()" << endl;
 #endif
-    G4VSceneHandler::PostAddThis();
+    G4VSceneHandler::PostAddSolid();
 }
 
 

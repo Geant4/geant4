@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.29 2004-12-10 18:16:00 gcosmo Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.30 2005-01-27 20:04:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -629,12 +629,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
   gluDeleteNurbsRenderer (gl_nurb);
 }
 
-void G4OpenGLSceneHandler::AddThis(const G4VTrajectory& traj) {
-  G4VSceneHandler::AddThis(traj);  // For now.
+void G4OpenGLSceneHandler::AddCompound(const G4VTrajectory& traj) {
+  G4VSceneHandler::AddCompound(traj);  // For now.
 }
 
-void G4OpenGLSceneHandler::AddThis(const G4VHit& hit) {
-  G4VSceneHandler::AddThis(hit);  // For now.
+void G4OpenGLSceneHandler::AddCompound(const G4VHit& hit) {
+  G4VSceneHandler::AddCompound(hit);  // For now.
 }
 
 #endif

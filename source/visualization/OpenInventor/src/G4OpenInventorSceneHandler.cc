@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.35 2004-11-25 15:35:36 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.36 2005-01-27 20:05:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -512,7 +512,7 @@ void G4OpenInventorSceneHandler::RequestPrimitives (const G4VSolid& solid) {
     G4VSceneHandler::RequestPrimitives (solid);
 }
 
-void G4OpenInventorSceneHandler::PreAddThis
+void G4OpenInventorSceneHandler::PreAddSolid
 (const G4Transform3D& objectTransformation,
  const G4VisAttributes& visAttribs) {
 
@@ -520,7 +520,7 @@ void G4OpenInventorSceneHandler::PreAddThis
   // G4VPhysicalVolume.  This is true at present, but beware!  We
   // might have to think about the cast in the following code.
 
-  G4VSceneHandler::PreAddThis (objectTransformation, visAttribs);
+  G4VSceneHandler::PreAddSolid (objectTransformation, visAttribs);
   // Stores arguments away for future use, e.g., AddPrimitives.
 
   // This routines prepares to add solids to the scene database.  
@@ -571,7 +571,7 @@ void G4OpenInventorSceneHandler::PreAddThis
   G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVisAttribs);
   fReducedWireFrame = !isAuxEdgeVisible;
 
-  //printf("debug : PreAddThis : %g %g %g : %d\n",
+  //printf("debug : PreAddSolid : %g %g %g : %d\n",
     //red,green,blue,pVisAttribs->IsVisible());
                
   if(!fpCurrentLV || !fpCurrentPV) return; //GB 
@@ -624,14 +624,26 @@ void G4OpenInventorSceneHandler::PreAddThis
     G4LogicalVolume* MotherVolume = fpCurrentPV->GetMotherLogical();
     if (MotherVolume) {
       if (fSeparatorMap.find(MotherVolume) != fSeparatorMap.end()) {
-        //printf("debug : PreAddThis : mother found in map\n");
+        //printf("debug : PreAddSolid : mother found in map\n");
         fSeparatorMap[MotherVolume]->addChild(detectorTreeKit);
       } else {
-        //printf("debug : PreAddThis : mother not found in map !!!\n");
+        //printf("debug : PreAddSolid : mother not found in map !!!\n");
         fDetectorRoot->addChild(detectorTreeKit);
+	/*
+	do {
+	  SoSeparator* dummySeparator   =  
+	    (SoSeparator*) g4DetectorTreeKit->getPart("dummySeparator",TRUE);
+	  dummySeparator->renderCaching = SoSeparator::OFF; //????
+	  dummySeparator->addChild(transform);
+	  fSeparatorMap[MotherVolume] = dummySeparator;
+	  MotherVolume = MotherVolume->GetPhysicalVolume()->GetMotherLogical();
+	} while
+	  (MotherVolume &&
+	   fSeparatorMap.find(MotherVolume) == fSeparatorMap.end());
+	*/
       }
     } else {
-      //printf("debug : PreAddThis : has no mother\n");
+      //printf("debug : PreAddSolid : has no mother\n");
       fDetectorRoot->addChild(detectorTreeKit);
     }
 
@@ -646,7 +658,7 @@ void G4OpenInventorSceneHandler::PreAddThis
         fCurrentSeparator = fSeparatorMap[MotherVolume];
       } else {
 /*
-        G4cerr << "G4OpenInventorSceneHandler::PreAddThis() : WARNING :"
+        G4cerr << "G4OpenInventorSceneHandler::PreAddSolid() : WARNING :"
                << " volume " << fpCurrentPV->GetName()
                << " has invisible mother (" << MotherVolume->GetName() << ")." 
                << G4endl;
@@ -658,6 +670,7 @@ void G4OpenInventorSceneHandler::PreAddThis
       }
     } else {
       fCurrentSeparator = fDetectorRoot;
+      /* Fix here as above!!! */
     }
 
     SoMaterial* material = 
@@ -733,12 +746,12 @@ G4double  G4OpenInventorSceneHandler::GetMarkerSize ( const G4VMarker& mark )
 
 } // G4OpenInventorSceneHandler::GetMarkerSize ()
 
-//void G4OpenInventorSceneHandler::AddThis(const G4VTrajectory& traj) {
-//  G4VSceneHandler::AddThis(traj);  // For now.
+//void G4OpenInventorSceneHandler::AddSolid(const G4VTrajectory& traj) {
+//  G4VSceneHandler::AddSolid(traj);  // For now.
 //}
 
-//void G4OpenInventorSceneHandler::AddThis(const G4VHit& hit) {
-//  G4VSceneHandler::AddThis(hit);  // For now.
+//void G4OpenInventorSceneHandler::AddSolid(const G4VHit& hit) {
+//  G4VSceneHandler::AddSolid(hit);  // For now.
 //}
 
 #endif

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.hh,v 1.33 2004-11-11 16:01:51 johna Exp $
+// $Id: G4HepRepSceneHandler.hh,v 1.34 2005-01-27 20:04:34 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -56,22 +56,22 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         G4HepRepSceneHandler (G4VGraphicsSystem& system, G4HepRepMessenger& messenger, const G4String& name = "");
         virtual ~G4HepRepSceneHandler ();
 
-        void AddThis (const G4Box& box)                 { G4VSceneHandler::AddThis (box); }
-        void AddThis (const G4Cons& cons)               { G4VSceneHandler::AddThis (cons); }
-        void AddThis (const G4Tubs& tubs)               { G4VSceneHandler::AddThis (tubs); }
-        void AddThis (const G4Trd& trd)                 { G4VSceneHandler::AddThis (trd); }
-        void AddThis (const G4Trap& trap)               { G4VSceneHandler::AddThis (trap); }
-        void AddThis (const G4Sphere& sphere)           { G4VSceneHandler::AddThis (sphere); }
-        void AddThis (const G4Para& para)               { G4VSceneHandler::AddThis (para); }
-        void AddThis (const G4Torus& torus)             { G4VSceneHandler::AddThis (torus); }
-        void AddThis (const G4Polycone& polycone)       { G4VSceneHandler::AddThis (polycone); }
-        void AddThis (const G4Polyhedra& polyhedra)     { G4VSceneHandler::AddThis (polyhedra); }
-        void AddThis (const G4VSolid& solid)            { G4VSceneHandler::AddThis(solid); }
-        void AddThis (const G4VTrajectory&);
-        void AddThis (const G4VHit& hit)                { G4VSceneHandler::AddThis(hit); }
+        void AddSolid (const G4Box& box)                 { G4VSceneHandler::AddSolid (box); }
+        void AddSolid (const G4Cons& cons)               { G4VSceneHandler::AddSolid (cons); }
+        void AddSolid (const G4Tubs& tubs)               { G4VSceneHandler::AddSolid (tubs); }
+        void AddSolid (const G4Trd& trd)                 { G4VSceneHandler::AddSolid (trd); }
+        void AddSolid (const G4Trap& trap)               { G4VSceneHandler::AddSolid (trap); }
+        void AddSolid (const G4Sphere& sphere)           { G4VSceneHandler::AddSolid (sphere); }
+        void AddSolid (const G4Para& para)               { G4VSceneHandler::AddSolid (para); }
+        void AddSolid (const G4Torus& torus)             { G4VSceneHandler::AddSolid (torus); }
+        void AddSolid (const G4Polycone& polycone)       { G4VSceneHandler::AddSolid (polycone); }
+        void AddSolid (const G4Polyhedra& polyhedra)     { G4VSceneHandler::AddSolid (polyhedra); }
+        void AddSolid (const G4VSolid& solid)            { G4VSceneHandler::AddSolid(solid); }
+        void AddCompound (const G4VTrajectory&);
+        void AddCompound (const G4VHit& hit)                { G4VSceneHandler::AddCompound(hit); }
 
-        void PreAddThis (const G4Transform3D& objectTransformation, const G4VisAttributes& visAttribs);
-        void PostAddThis ();
+        void PreAddSolid (const G4Transform3D& objectTransformation, const G4VisAttributes& visAttribs);
+        void PostAddSolid ();
 
         void AddPrimitive (const G4Polyline&);
         void AddPrimitive (const G4Text&);

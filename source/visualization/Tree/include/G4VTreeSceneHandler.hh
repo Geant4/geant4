@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.hh,v 1.12 2004-11-11 16:03:41 johna Exp $
+// $Id: G4VTreeSceneHandler.hh,v 1.13 2005-01-27 20:05:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,9 +45,9 @@ public:
   G4VTreeSceneHandler(G4VGraphicsSystem& system,
 		      const G4String& name);
   virtual ~G4VTreeSceneHandler ();
-  void PreAddThis (const G4Transform3D& objectTransformation,
+  void PreAddSolid (const G4Transform3D& objectTransformation,
 		   const G4VisAttributes&);
-  void PostAddThis ();
+  void PostAddSolid ();
 
   ////////////////////////////////////////////////////////////////
   // Functions not used but required by the abstract interface.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh,v 1.8 2003-06-16 17:14:28 gunter Exp $
+// $Id: G4ModelingParameters.hh,v 1.9 2005-01-27 20:06:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

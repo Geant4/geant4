@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.17 2004-11-11 16:04:27 johna Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.18 2005-01-27 20:06:03 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,147 +91,147 @@ void G4XXXSceneHandler::PrintThings() {
 }
 #endif
 
-void G4XXXSceneHandler::AddThis(const G4Box& box) {
+void G4XXXSceneHandler::AddSolid(const G4Box& box) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Box& box) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Box& box) called for "
 	 << box.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(box);  // Invoke default action.
+  G4VSceneHandler::AddSolid(box);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Cons& cons) {
+void G4XXXSceneHandler::AddSolid(const G4Cons& cons) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Cons& cons) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Cons& cons) called for "
 	 << cons.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(cons);  // Invoke default action.
+  G4VSceneHandler::AddSolid(cons);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Tubs& tubs) {
+void G4XXXSceneHandler::AddSolid(const G4Tubs& tubs) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Tubs& tubs) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Tubs& tubs) called for "
 	 << tubs.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(tubs);  // Invoke default action.
+  G4VSceneHandler::AddSolid(tubs);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Trd& trd) {
+void G4XXXSceneHandler::AddSolid(const G4Trd& trd) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Trd& trd) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Trd& trd) called for "
 	 << trd.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(trd);  // Invoke default action.
+  G4VSceneHandler::AddSolid(trd);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Trap& trap) {
+void G4XXXSceneHandler::AddSolid(const G4Trap& trap) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Trap& trap) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Trap& trap) called for "
 	 << trap.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(trap);  // Invoke default action.
+  G4VSceneHandler::AddSolid(trap);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Sphere& sphere) {
+void G4XXXSceneHandler::AddSolid(const G4Sphere& sphere) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Sphere& sphere) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Sphere& sphere) called for "
 	 << sphere.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(sphere);  // Invoke default action.
+  G4VSceneHandler::AddSolid(sphere);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Para& para) {
+void G4XXXSceneHandler::AddSolid(const G4Para& para) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Para& para) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Para& para) called for "
 	 << para.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(para);  // Invoke default action.
+  G4VSceneHandler::AddSolid(para);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Torus& torus) {
+void G4XXXSceneHandler::AddSolid(const G4Torus& torus) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Torus& torus) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Torus& torus) called for "
 	 << torus.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(torus);  // Invoke default action.
+  G4VSceneHandler::AddSolid(torus);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Polycone& polycone) {
+void G4XXXSceneHandler::AddSolid(const G4Polycone& polycone) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Polycone& polycone) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Polycone& polycone) called for "
 	 << polycone.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(polycone);  // Invoke default action.
+  G4VSceneHandler::AddSolid(polycone);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4Polyhedra& polyhedra) {
+void G4XXXSceneHandler::AddSolid(const G4Polyhedra& polyhedra) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Polyhedra& polyhedra) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Polyhedra& polyhedra) called for "
 	 << polyhedra.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(polyhedra);  // Invoke default action.
+  G4VSceneHandler::AddSolid(polyhedra);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4VSolid& solid) {
+void G4XXXSceneHandler::AddSolid(const G4VSolid& solid) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4Solid& solid) called for "
+    "G4XXXSceneHandler::AddSolid(const G4Solid& solid) called for "
 	 << solid.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(solid);  // Invoke default action.
+  G4VSceneHandler::AddSolid(solid);  // Invoke default action.
 }
 
-void G4XXXSceneHandler::AddThis(const G4VTrajectory& traj) {
+void G4XXXSceneHandler::AddCompound(const G4VTrajectory& traj) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4VTrajectory& traj) called."
+    "G4XXXSceneHandler::AddCompound(const G4VTrajectory& traj) called."
 	 << G4endl;
 #endif
 
-  G4VSceneHandler::AddThis(traj);  // Draw trajectory in good old way for now.
+  G4VSceneHandler::AddCompound(traj);  // Draw trajectory in good old way for now.
 
   traj.ShowTrajectory();
   G4cout << G4endl;
 }
 
-void G4XXXSceneHandler::AddThis(const G4VHit& hit) {
+void G4XXXSceneHandler::AddCompound(const G4VHit& hit) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddThis(const G4VHit& hit) called."
+    "G4XXXSceneHandler::AddCompound(const G4VHit& hit) called."
 	 << G4endl;
 #endif
-  G4VSceneHandler::AddThis(hit);  // Invoke default action.
+  G4VSceneHandler::AddCompound(hit);  // Invoke default action.
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4Polyline& polyline) {

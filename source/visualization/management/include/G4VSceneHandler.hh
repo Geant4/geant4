@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.23 2005-01-26 17:06:38 johna Exp $
+// $Id: G4VSceneHandler.hh,v 1.24 2005-01-27 20:06:07 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,28 +69,61 @@ public: // With description
 
   virtual ~G4VSceneHandler ();
 
-  //////////////////////////////////////////////////////////////
-  // Functions for adding raw GEANT4 objects, if the graphics system
-  // can can understand them (optional on the part of the graphics
-  // system).  If your graphics system is sophisticated enough to
-  // handle a particular solid shape as a primitive, in your derived
-  // class write a function to override one or more of the following.
-  // See the implementation of G4VSceneHandler::AddThis (const G4Box& box) for
-  // more suggestions.  If not, please implement the base class
-  // invocation.
-  virtual void AddThis (const G4Box&);
-  virtual void AddThis (const G4Cons&);
-  virtual void AddThis (const G4Tubs&);
-  virtual void AddThis (const G4Trd&);
-  virtual void AddThis (const G4Trap&);
-  virtual void AddThis (const G4Sphere&);
-  virtual void AddThis (const G4Para&);
-  virtual void AddThis (const G4Torus&);
-  virtual void AddThis (const G4Polycone&);
-  virtual void AddThis (const G4Polyhedra&);
-  virtual void AddThis (const G4VSolid&);  // For solids not above.
-  virtual void AddThis (const G4VTrajectory&);
-  virtual void AddThis (const G4VHit&);
+  ///////////////////////////////////////////////////////////////////
+  // Methods for adding raw GEANT4 objects to the scene handler.  They
+  // must always be called in the triplet PreAddSolid, AddSolid and
+  // PostAddSolid.  The transformation and visualization attributes
+  // must be set by the call to PreAddSolid.  If your graphics system
+  // is sophisticated enough to handle a particular solid shape as a
+  // primitive, in your derived class write a function to override one
+  // or more of the following.  See the implementation of
+  // G4VSceneHandler::AddSolid (const G4Box& box) for more
+  // suggestions.  If not, please implement the base class invocation.
+
+  virtual void PreAddSolid (const G4Transform3D& objectTransformation,
+			   const G4VisAttributes& visAttribs);
+  // objectTransformation is the transformation in the world
+  // coordinate system of the object about to be added, and visAttribs
+  // is its visualization attributes.
+  // IMPORTANT: invoke this from your polymorphic versions, e.g.:
+  // void MyXXXSceneHandler::PreAddSolid
+  //  (const G4Transform3D& objectTransformation,
+  //   const G4VisAttributes& visAttribs) {
+  //   G4VSceneHandler::PreAddSolid (objectTransformation, visAttribs);
+  //   ...
+  // }
+
+  virtual void PostAddSolid ();
+  // IMPORTANT: invoke this from your polymorphic versions, e.g.:
+  // void MyXXXSceneHandler::PostAddSolid () {
+  //   ...
+  //   G4VSceneHandler::PostAddSolid (objectTransformation, visAttribs);
+  // }
+
+  virtual void AddSolid (const G4Box&);
+  virtual void AddSolid (const G4Cons&);
+  virtual void AddSolid (const G4Tubs&);
+  virtual void AddSolid (const G4Trd&);
+  virtual void AddSolid (const G4Trap&);
+  virtual void AddSolid (const G4Sphere&);
+  virtual void AddSolid (const G4Para&);
+  virtual void AddSolid (const G4Torus&);
+  virtual void AddSolid (const G4Polycone&);
+  virtual void AddSolid (const G4Polyhedra&);
+  virtual void AddSolid (const G4VSolid&);  // For solids not above.
+
+  ///////////////////////////////////////////////////////////////////
+  // Methods for adding "compound" GEANT4 objects to the scene
+  // handler.  These methods may either (a) invoke "user code" that
+  // uses the "user interface", G4VVisManager (see, for example,
+  // G4VSceneHandler, which for trajectories uses
+  // G4VTrajectory::DrawTrajectory, via G4TrajectoriesModel in the
+  // Modeling Category) or (b) invoke AddPrimitives below (between
+  // calls to Begin/EndPrimitives) or (c) use graphics-system-specific
+  // code or (d) any combination of the above.
+
+  virtual void AddCompound (const G4VTrajectory&);
+  virtual void AddCompound (const G4VHit&);
 
   ///////////////////////////////////////////////////////////////
   // Other inherited functions.
@@ -99,26 +132,6 @@ public: // With description
   // Used to establish any special relationships between scene and this
   // particular type of model - non-pure, i.e., no requirement to
   // implement.  See G4PhysicalVolumeModel.hh for details.
-
-  virtual void PreAddThis (const G4Transform3D& objectTransformation,
-			   const G4VisAttributes& visAttribs);
-  // objectTransformation is the transformation in the world
-  // coordinate system of the object about to be added, and visAttribs
-  // is its visualization attributes.
-  // IMPORTANT: invoke this from your polymorphic versions, e.g.:
-  // void MyXXXSceneHandler::PreAddThis
-  //  (const G4Transform3D& objectTransformation,
-  //   const G4VisAttributes& visAttribs) {
-  //   G4VSceneHandler::PreAddThis (objectTransformation, visAttribs);
-  //   ...
-  // }
-
-  virtual void PostAddThis ();
-  // IMPORTANT: invoke this from your polymorphic versions, e.g.:
-  // void MyXXXSceneHandler::PostAddThis () {
-  //   ...
-  //   G4VSceneHandler::PostAddThis (objectTransformation, visAttribs);
-  // }
 
   //////////////////////////////////////////////////////////////
   // Functions for adding primitives.
@@ -251,7 +264,7 @@ public: // With description
 protected:
 
   //////////////////////////////////////////////////////////////
-  // Default routine used by default AddThis ().
+  // Default routine used by default AddSolid ().
 
   virtual void RequestPrimitives (const G4VSolid& solid);
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.20 2004-11-11 16:02:08 johna Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.21 2005-01-27 20:04:38 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -103,141 +103,141 @@ void G4HepRepFileSceneHandler::PrintThings() {
 #endif
 
 
-void G4HepRepFileSceneHandler::AddThis(const G4Box& box) {
+void G4HepRepFileSceneHandler::AddSolid(const G4Box& box) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
-    "G4HepRepFileSceneHandler::AddThis(const G4Box& box) called for "
+    "G4HepRepFileSceneHandler::AddSolid(const G4Box& box) called for "
 	 << box.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(box);  // Invoke default action.
+  G4VSceneHandler::AddSolid(box);  // Invoke default action.
 }
 
 
-void G4HepRepFileSceneHandler::AddThis(const G4Cons& cons) {
+void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
-    "G4HepRepFileSceneHandler::AddThis(const G4Cons& cons) called for "
+    "G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) called for "
 	 << cons.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(cons);  // Invoke default action.
+  G4VSceneHandler::AddSolid(cons);  // Invoke default action.
 }
 
 
-void G4HepRepFileSceneHandler::AddThis(const G4Tubs& tubs) {
+void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
-    "G4HepRepFileSceneHandler::AddThis(const G4Tubs& tubs) called for "
+    "G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) called for "
 	 << tubs.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(tubs);  // Invoke default action.
+  G4VSceneHandler::AddSolid(tubs);  // Invoke default action.
 }
 
 
-void G4HepRepFileSceneHandler::AddThis(const G4Trd& trd) {
+void G4HepRepFileSceneHandler::AddSolid(const G4Trd& trd) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
-    "G4HepRepFileSceneHandler::AddThis(const G4Trd& trd) called for "
+    "G4HepRepFileSceneHandler::AddSolid(const G4Trd& trd) called for "
 	 << trd.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(trd);  // Invoke default action.
+  G4VSceneHandler::AddSolid(trd);  // Invoke default action.
 }
 
 
-void G4HepRepFileSceneHandler::AddThis(const G4Trap& trap) {
+void G4HepRepFileSceneHandler::AddSolid(const G4Trap& trap) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
-    "G4HepRepFileSceneHandler::AddThis(const G4Trap& trap) called for "
+    "G4HepRepFileSceneHandler::AddSolid(const G4Trap& trap) called for "
 	 << trap.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(trap);  // Invoke default action.
+  G4VSceneHandler::AddSolid(trap);  // Invoke default action.
 }
 
 
-void G4HepRepFileSceneHandler::AddThis(const G4Sphere& sphere) {
+void G4HepRepFileSceneHandler::AddSolid(const G4Sphere& sphere) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
-    "G4HepRepFileSceneHandler::AddThis(const G4Sphere& sphere) called for "
+    "G4HepRepFileSceneHandler::AddSolid(const G4Sphere& sphere) called for "
 	 << sphere.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(sphere);  // Invoke default action.
+  G4VSceneHandler::AddSolid(sphere);  // Invoke default action.
 }
 
 
-void G4HepRepFileSceneHandler::AddThis(const G4Para& para) {
+void G4HepRepFileSceneHandler::AddSolid(const G4Para& para) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
-    "G4HepRepFileSceneHandler::AddThis(const G4Para& para) called for "
+    "G4HepRepFileSceneHandler::AddSolid(const G4Para& para) called for "
 	 << para.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(para);  // Invoke default action.
+  G4VSceneHandler::AddSolid(para);  // Invoke default action.
 }
 
 
-void G4HepRepFileSceneHandler::AddThis(const G4Torus& torus) {
+void G4HepRepFileSceneHandler::AddSolid(const G4Torus& torus) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
-    "G4HepRepFileSceneHandler::AddThis(const G4Torus& torus) called for "
+    "G4HepRepFileSceneHandler::AddSolid(const G4Torus& torus) called for "
 	 << torus.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(torus);  // Invoke default action.
+  G4VSceneHandler::AddSolid(torus);  // Invoke default action.
 }
 
 
-void G4HepRepFileSceneHandler::AddThis(const G4Polycone& polycone) {
+void G4HepRepFileSceneHandler::AddSolid(const G4Polycone& polycone) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
-    "G4HepRepFileSceneHandler::AddThis(const G4Polycone& polycone) called for "
+    "G4HepRepFileSceneHandler::AddSolid(const G4Polycone& polycone) called for "
 	 << polycone.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(polycone);  // Invoke default action.
+  G4VSceneHandler::AddSolid(polycone);  // Invoke default action.
 }
 
 
-void G4HepRepFileSceneHandler::AddThis(const G4Polyhedra& polyhedra) {
+void G4HepRepFileSceneHandler::AddSolid(const G4Polyhedra& polyhedra) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
-    "G4HepRepFileSceneHandler::AddThis(const G4Polyhedra& polyhedra) called for "
+    "G4HepRepFileSceneHandler::AddSolid(const G4Polyhedra& polyhedra) called for "
 	 << polyhedra.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(polyhedra);  // Invoke default action.
+  G4VSceneHandler::AddSolid(polyhedra);  // Invoke default action.
 }
 
 
-void G4HepRepFileSceneHandler::AddThis(const G4VSolid& solid) {
+void G4HepRepFileSceneHandler::AddSolid(const G4VSolid& solid) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
-    "G4HepRepFileSceneHandler::AddThis(const G4Solid& solid) called for "
+    "G4HepRepFileSceneHandler::AddSolid(const G4Solid& solid) called for "
 	 << solid.GetName()
 	 << G4endl;
   PrintThings();
 #endif
-  G4VSceneHandler::AddThis(solid);  // Invoke default action.
+  G4VSceneHandler::AddSolid(solid);  // Invoke default action.
 }
 
 
-void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
+void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 #ifdef G4HEPREPFILEDEBUG
-    G4cout << "G4HepRepFileSceneHandler::AddThis(G4VTrajectory&) " << G4endl;
+    G4cout << "G4HepRepFileSceneHandler::AddCompound(G4VTrajectory&) " << G4endl;
 #endif
 
   std::vector<G4AttValue>* attValues = traj.CreateAttValues();
@@ -344,7 +344,7 @@ void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
       std::map<G4String,G4AttDef>::const_iterator iAttDef =
 	attDefs->find(iAttVal->GetName());
       if (iAttDef == attDefs->end()) {
-	G4cout << "G4HepRepFileSceneHandler::AddThis(traj):"
+	G4cout << "G4HepRepFileSceneHandler::AddCompound(traj):"
 	  "\n  WARNING: no matching definition for attribute \""
 	       << iAttVal->GetName() << "\", value: "
 	       << iAttVal->GetValue();
@@ -420,11 +420,11 @@ void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
 }
 
 
-void G4HepRepFileSceneHandler::AddThis (const G4VHit& hit) {
+void G4HepRepFileSceneHandler::AddCompound (const G4VHit& hit) {
 #ifdef G4HEPREPFILEDEBUG
-    G4cout << "G4HepRepFileSceneHandler::AddThis(G4VHit&) " << G4endl;
+    G4cout << "G4HepRepFileSceneHandler::AddCompound(G4VHit&) " << G4endl;
 #endif
-    G4VSceneHandler::AddThis(hit);  // Invoke default action.
+    G4VSceneHandler::AddCompound(hit);  // Invoke default action.
 }
 
 
@@ -597,8 +597,8 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
       hepRepXMLWriter->addInstance();
     }
 
-    // Applications have the option of either calling AddThis(G4VTrajectory&) and
-    // AddThis(G4VHits&), or of just decomposing these into simpler primitives.
+    // Applications have the option of either calling AddSolid(G4VTrajectory&) and
+    // AddSolid(G4VHits&), or of just decomposing these into simpler primitives.
     // In the former case, drawing will be handled above and will include setting of
     // physics attributes.
     // In the latter case, which is an older style of working, we end up drawing the

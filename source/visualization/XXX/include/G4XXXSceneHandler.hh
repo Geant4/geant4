@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.11 2004-11-11 16:04:14 johna Exp $
+// $Id: G4XXXSceneHandler.hh,v 1.12 2005-01-27 20:05:59 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,22 +44,22 @@ public:
 
   ////////////////////////////////////////////////////////////////
   // No need to implement these, but if you do...
-  void AddThis(const G4Box&);
-  void AddThis(const G4Cons&);
-  void AddThis(const G4Tubs&);
-  void AddThis(const G4Trd&);
-  void AddThis(const G4Trap&);
-  void AddThis(const G4Sphere&);
-  void AddThis(const G4Para&);
-  void AddThis(const G4Torus&);
-  void AddThis(const G4Polycone&);
-  void AddThis(const G4Polyhedra&);
-  void AddThis(const G4VSolid&);
-  void AddThis(const G4VTrajectory&);
-  void AddThis(const G4VHit&);
-  // void PreAddThis(const G4Transform3D& objectTransformation,
+  void AddSolid(const G4Box&);
+  void AddSolid(const G4Cons&);
+  void AddSolid(const G4Tubs&);
+  void AddSolid(const G4Trd&);
+  void AddSolid(const G4Trap&);
+  void AddSolid(const G4Sphere&);
+  void AddSolid(const G4Para&);
+  void AddSolid(const G4Torus&);
+  void AddSolid(const G4Polycone&);
+  void AddSolid(const G4Polyhedra&);
+  void AddSolid(const G4VSolid&);
+  void AddCompound(const G4VTrajectory&);
+  void AddCompound(const G4VHit&);
+  // void PreAddSolid(const G4Transform3D& objectTransformation,
   //                 const G4VisAttributes&);
-  // void PostAddThis();
+  // void PostAddSolid();
 
   ////////////////////////////////////////////////////////////////
   // Required implementation of pure virtual functions...

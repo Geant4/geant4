@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.59 2005-01-26 16:54:15 johna Exp $
+// $Id: G4VisManager.cc,v 1.60 2005-01-27 20:06:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -348,7 +348,7 @@ void G4VisManager::Draw (const G4VHit& hit) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
     CheckModel();
-    fpSceneHandler -> AddThis (hit);
+    fpSceneHandler -> AddCompound (hit);
   }
 }
 
@@ -358,7 +358,7 @@ void G4VisManager::Draw (const G4VTrajectory& traj,
     ClearTransientStoreIfMarked();
     fpSceneHandler -> SetModel (&dummyTrajectoriesModel);
     dummyTrajectoriesModel.SetDrawingMode(i_mode);
-    fpSceneHandler -> AddThis (traj);
+    fpSceneHandler -> AddCompound (traj);
   }
 }
 
@@ -376,9 +376,9 @@ void G4VisManager::Draw (const G4VSolid& solid,
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
     CheckModel();
-    fpSceneHandler -> PreAddThis (objectTransform, attribs);
+    fpSceneHandler -> PreAddSolid (objectTransform, attribs);
     solid.DescribeYourselfTo (*fpSceneHandler);
-    fpSceneHandler -> PostAddThis ();
+    fpSceneHandler -> PostAddSolid ();
   }
 }
 

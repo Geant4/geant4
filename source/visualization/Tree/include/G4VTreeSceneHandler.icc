@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.icc,v 1.4 2001-07-11 10:09:07 gunter Exp $
+// $Id: G4VTreeSceneHandler.icc,v 1.5 2005-01-27 20:05:26 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,10 +32,10 @@ inline G4int G4VTreeSceneHandler::GetSceneCount() {
   return fSceneCount;
 }
 
-inline void G4VTreeSceneHandler::PreAddThis
+inline void G4VTreeSceneHandler::PreAddSolid
 (const G4Transform3D& objectTransformation,
  const G4VisAttributes&) {
   fpCurrentObjectTransformation = &objectTransformation;
 }
 
-inline void G4VTreeSceneHandler::PostAddThis () {}
+inline void G4VTreeSceneHandler::PostAddSolid () {}

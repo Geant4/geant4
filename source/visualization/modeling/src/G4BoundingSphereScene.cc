@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.cc,v 1.8 2001-07-25 21:10:22 johna Exp $
+// $Id: G4BoundingSphereScene.cc,v 1.9 2005-01-27 20:06:49 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@ G4BoundingSphereScene::G4BoundingSphereScene (G4VModel* pModel):
 
 G4BoundingSphereScene::~G4BoundingSphereScene () {}
 
-void G4BoundingSphereScene::PreAddThis
+void G4BoundingSphereScene::PreAddSolid
 (const G4Transform3D& objectTransformation,
  const G4VisAttributes&) {
   fpObjectTransformation = &objectTransformation;

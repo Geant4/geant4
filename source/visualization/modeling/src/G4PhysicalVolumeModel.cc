@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.26 2005-01-26 17:07:34 johna Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.27 2005-01-27 20:07:01 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -390,9 +390,9 @@ void G4PhysicalVolumeModel::DescribeSolid
  G4VSolid* pSol,
  const G4VisAttributes* pVisAttribs,
  G4VGraphicsScene& sceneHandler) {
-  sceneHandler.PreAddThis (theAT, *pVisAttribs);
+  sceneHandler.PreAddSolid (theAT, *pVisAttribs);
   pSol -> DescribeYourselfTo (sceneHandler);
-  sceneHandler.PostAddThis ();
+  sceneHandler.PostAddSolid ();
 }
 
 G4bool G4PhysicalVolumeModel::IsThisCulled (const G4LogicalVolume* pLV,

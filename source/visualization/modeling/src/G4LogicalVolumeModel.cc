@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeModel.cc,v 1.9 2003-11-03 17:08:50 gcosmo Exp $
+// $Id: G4LogicalVolumeModel.cc,v 1.10 2005-01-27 20:06:56 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,7 +122,7 @@ void G4LogicalVolumeModel::DescribeSolid
     DescribeSolid (theAT, pSol1, &constituentAttributes, sceneHandler);
   }
   // In any case draw the original/resultant solid...
-  sceneHandler.PreAddThis (theAT, *pVisAttribs);
+  sceneHandler.PreAddSolid (theAT, *pVisAttribs);
   pSol -> DescribeYourselfTo (sceneHandler);
-  sceneHandler.PostAddThis ();
+  sceneHandler.PostAddSolid ();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.hh,v 1.6 2002-12-11 15:59:34 johna Exp $
+// $Id: G4RayTracerSceneHandler.hh,v 1.7 2005-01-27 20:05:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // John Allison  17th March 2000
@@ -48,19 +48,19 @@ public:
   void AddPrimitive(const G4Polymarker&){}
   void AddPrimitive(const G4Scale&){}
 
-  void AddThis(const G4Box&){}
-  void AddThis(const G4Cons&){}
-  void AddThis(const G4Tubs&){}
-  void AddThis(const G4Trd&){}
-  void AddThis(const G4Trap&){}
-  void AddThis(const G4Sphere&){}
-  void AddThis(const G4Para&){}
-  void AddThis(const G4Torus&){}
-  void AddThis(const G4Polycone&){}
-  void AddThis(const G4Polyhedra&){}
-  void AddThis(const G4VSolid&){}
-  void AddThis(const G4VTrajectory&){}
-  void AddThis(const G4VHit&){}
+  void AddSolid(const G4Box&){}
+  void AddSolid(const G4Cons&){}
+  void AddSolid(const G4Tubs&){}
+  void AddSolid(const G4Trd&){}
+  void AddSolid(const G4Trap&){}
+  void AddSolid(const G4Sphere&){}
+  void AddSolid(const G4Para&){}
+  void AddSolid(const G4Torus&){}
+  void AddSolid(const G4Polycone&){}
+  void AddSolid(const G4Polyhedra&){}
+  void AddSolid(const G4VSolid&){}
+  void AddCompound(const G4VTrajectory&){}
+  void AddCompound(const G4VHit&){}
 
   static G4int GetSceneCount();
 
