@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: hepmcEx02.cc,v 1.1 2002-04-29 20:44:20 asaim Exp $
+// $Id: hepmcEx02.cc,v 1.2 2002-05-28 14:19:07 murakami Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,36 +39,32 @@
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 
-#include "XXDetectorConstruction.hh"
-#include "XXPhysicsList.hh"
-#include "XXPrimaryGeneratorAction.hh"
-#include "XXEventAction.hh"
-#include "XXTrackingAction.hh"
-#include "XXSteppingAction.hh"
-#include "XXStackingAction.hh"
+#include "H02DetectorConstruction.hh"
+#include "H02PhysicsList.hh"
+#include "H02PrimaryGeneratorAction.hh"
+#include "H02EventAction.hh"
+#include "H02SteppingAction.hh"
 
 #ifdef G4VIS_USE
-#include "XXVisManager.hh"
+#include "H02VisManager.hh"
 #endif
 
 int main(int argc, char** argv)
 {
   G4RunManager* runManager= new G4RunManager;
 
-  runManager-> SetUserInitialization(new XXDetectorConstruction);
-  runManager-> SetUserInitialization(new XXPhysicsList);
+  runManager-> SetUserInitialization(new H02DetectorConstruction);
+  runManager-> SetUserInitialization(new H02PhysicsList);
 
   runManager-> Initialize();
 
-  runManager-> SetUserAction(new XXPrimaryGeneratorAction);
-  runManager-> SetUserAction(new XXEventAction);
-  runManager-> SetUserAction(new XXTrackingAction);
-  runManager-> SetUserAction(new XXSteppingAction);
-  runManager-> SetUserAction(new XXStackingAction);
+  runManager-> SetUserAction(new H02PrimaryGeneratorAction);
+  runManager-> SetUserAction(new H02EventAction);
+  runManager-> SetUserAction(new H02SteppingAction);
 
 #ifdef G4VIS_USE
   // initialize visualization package
-  G4VisManager* visManager= new XXVisManager;
+  G4VisManager* visManager= new H02VisManager;
   visManager-> Initialize();
   G4cout << G4endl;
 #endif

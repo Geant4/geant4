@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2002-04-29 20:44:19 asaim Exp $
+# $Id: GNUmakefile,v 1.2 2002-05-28 14:19:07 murakami Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -6,16 +6,14 @@ name := hepmcEx02
 G4TARGET := $(name)
 G4EXLIB := true
 
-ifndef G4WORKDIR
-  G4WORKDIR := .
-endif
+#ifndef G4WORKDIR
+#  G4WORKDIR := .
+#endif
 
 .PHONY: all
 all : lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
-CXXFLAGS += -DQERAUOY
-#CXXFLAGS += -DDEBUG_HEPMC
 
 # -----------------------------------------------------------------
 # HepMC and PYTHIA
@@ -43,7 +41,7 @@ endif
 ifdef USE_PYTHIA
     LDLIBS1  += -L$(HEPMC_DIR) -lHepMC
 else
-    LDLIBS1  += -L$(HEPMC_DIR) -lHepMC $(G4TMPDIR)/G4HEPEvtcom.o
+    LDLIBS1  += -L$(HEPMC_DIR) -lHepMC $(G4TMPDIR)/HEPEvtcom.o
 endif
 
 ifdef USE_PYTHIA 
