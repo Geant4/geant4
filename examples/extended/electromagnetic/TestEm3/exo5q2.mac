@@ -1,4 +1,4 @@
-# $Id: exo5q2.mac,v 1.1 2002-02-14 14:20:45 maire Exp $
+# $Id: exo5q2.mac,v 1.2 2002-12-12 11:19:33 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 #
@@ -9,17 +9,17 @@
 /run/particle/setCut 5 cm
 /run/initialize
 #
-/calor/setNbOfLayers 1
-/calor/setNbOfAbsor 1
-/calor/setAbsor 0 Tungsten 50 mum
-/calor/setSizeYZ 70 mum
-/calor/update
+/testem/det/setNbOfLayers 1
+/testem/det/setNbOfAbsor 1
+/testem/det/setAbsor 0 Tungsten 50 mum
+/testem/det/setSizeYZ 70 mum
+/testem/det/update
 #
-/gun/setDefault
+/testem/gun/setDefault
 #
 /control/execute vis.mac
 #
 /gun/particle e-
 /gun/energy 600 keV
 #
-/tracking/stepMax 1 mum
+/testem/tracking/stepMax 1 mum

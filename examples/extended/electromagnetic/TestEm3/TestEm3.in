@@ -1,4 +1,4 @@
-# $Id: TestEm3.in,v 1.4 2001-11-28 17:54:46 maire Exp $
+# $Id: TestEm3.in,v 1.5 2002-12-12 11:19:32 maire Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -10,7 +10,7 @@
 /run/initialize
 #
 /run/verbose 2
-/event/printModulo 50
+/testem/event/printModulo 50
 #
 /gun/particle e-
 /gun/energy 1 GeV

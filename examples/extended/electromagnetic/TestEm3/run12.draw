@@ -1,4 +1,4 @@
-# $Id: run12.draw,v 1.3 2001-11-05 15:28:39 maire Exp $
+# $Id: run12.draw,v 1.4 2002-12-12 11:19:34 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -11,14 +11,14 @@
 /run/particle/setCut 1 mm
 /run/initialize
 #
-/calor/setNbOfLayers 1
-/calor/setNbOfAbsor 2
-/calor/setAbsor 0 Iron 1 cm
-/calor/setAbsor 1 Scintillator 1 cm
-/calor/setSizeYZ 2 cm
-/calor/update
+/testem/det/setNbOfLayers 1
+/testem/det/setNbOfAbsor 2
+/testem/det/setAbsor 0 Iron 1 cm
+/testem/det/setAbsor 1 Scintillator 1 cm
+/testem/det/setSizeYZ 2 cm
+/testem/det/update
 #
-/gun/setDefault
+/testem/gun/setDefault
 #
 /run/verbose 2
 /tracking/verbose 1

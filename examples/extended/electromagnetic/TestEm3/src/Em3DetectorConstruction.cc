@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorConstruction.cc,v 1.5 2001-10-22 10:58:55 maire Exp $
+// $Id: Em3DetectorConstruction.cc,v 1.6 2002-12-12 11:19:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -219,6 +219,14 @@ density = 1.290*mg/cm3;
 G4Material* Air = new G4Material(name="Air"  , density, ncomponents=2);
 Air->AddElement(N, fractionmass=0.7);
 Air->AddElement(O, fractionmass=0.3);
+
+density = 1.205*mg/cm3;
+pressure    = 1.*atmosphere;
+temperature = 293.*kelvin;
+G4Material* Air20 = new G4Material(name="Air20"  , density, ncomponents=2,
+                                     kStateGas,temperature,pressure);
+Air20->AddElement(N, fractionmass=0.7);
+Air20->AddElement(O, fractionmass=0.3);
 
 //
 // define a material from elements and/or others materials (mixture of mixtures)

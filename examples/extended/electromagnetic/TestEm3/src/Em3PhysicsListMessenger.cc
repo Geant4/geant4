@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3PhysicsListMessenger.cc,v 1.4 2002-12-05 00:24:24 asaim Exp $
+// $Id: Em3PhysicsListMessenger.cc,v 1.5 2002-12-12 11:19:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,21 +39,21 @@
 Em3PhysicsListMessenger::Em3PhysicsListMessenger(Em3PhysicsList* pPhys)
 :pPhysicsList(pPhys)
 {   
-  gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/run/particle/setGCut",this);  
+  gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setGCut",this);  
   gammaCutCmd->SetGuidance("Set gamma cut.");
   gammaCutCmd->SetParameterName("Gcut",false);
   gammaCutCmd->SetUnitCategory("Length");
   gammaCutCmd->SetRange("Gcut>0.0");
   gammaCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  electCutCmd = new G4UIcmdWithADoubleAndUnit("/run/particle/setECut",this);  
+  electCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setECut",this);  
   electCutCmd->SetGuidance("Set electron cut.");
   electCutCmd->SetParameterName("Ecut",false);
   electCutCmd->SetUnitCategory("Length");
   electCutCmd->SetRange("Ecut>0.0");
   electCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  protoCutCmd = new G4UIcmdWithADoubleAndUnit("/run/particle/setPCut",this);  
+  protoCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setPCut",this);  
   protoCutCmd->SetGuidance("Set proton cut.");
   protoCutCmd->SetParameterName("Pcut",false);
   protoCutCmd->SetUnitCategory("Length");

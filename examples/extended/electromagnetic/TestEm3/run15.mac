@@ -1,4 +1,4 @@
-# $Id: run15.mac,v 1.4 2001-11-05 15:28:39 maire Exp $
+# $Id: run15.mac,v 1.5 2002-12-12 11:19:34 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -10,22 +10,22 @@
 /run/particle/setCut 10 mum
 /run/initialize
 #
-/calor/setNbOfLayers 20
-/calor/setNbOfAbsor 2
-/calor/setAbsor 0 Iron 14 mm
-/calor/setAbsor 1 Scintillator 3 mm
-/calor/setSizeYZ 30 cm
-/calor/update
+/testem/det/setNbOfLayers 20
+/testem/det/setNbOfAbsor 2
+/testem/det/setAbsor 0 Iron 14 mm
+/testem/det/setAbsor 1 Scintillator 3 mm
+/testem/det/setSizeYZ 30 cm
+/testem/det/update
 #
-/gun/setDefault
+/testem/gun/setDefault
 #
 /run/verbose 2
-/event/printModulo 1000
+/testem/event/printModulo 1000
 #
 /gun/particle mu+
 /gun/energy 20 GeV
 #
-/run/setHisto 0 100 0. 1.e-1
-/run/setHisto 1 100 0. 5.e-3
+/testem/run/setHisto 0 100 0. 1.e-1
+/testem/run/setHisto 1 100 0. 5.e-3
 #
 /run/beamOn 20000

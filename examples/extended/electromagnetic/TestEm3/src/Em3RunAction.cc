@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunAction.cc,v 1.18 2002-12-05 17:11:11 gcosmo Exp $
+// $Id: Em3RunAction.cc,v 1.19 2002-12-12 11:19:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,15 +44,7 @@
 #include "g4std/iomanip"
 
 #ifndef G4NOHIST
- #include "AIDA/IAnalysisFactory.h"
- #include "AIDA/ITreeFactory.h"
- #include "AIDA/ITree.h"
- #include "AIDA/IHistogramFactory.h"
- #include "AIDA/IHistogram1D.h"
- #include "AIDA/IAxis.h"
- #include "AIDA/IAnnotation.h"
- #include "AIDA/ITupleFactory.h"
- #include "AIDA/ITuple.h"
+ #include "AIDA/AIDA.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,13 +56,15 @@ Em3RunAction::Em3RunAction(Em3DetectorConstruction* det)
 
 #ifndef G4NOHIST
    // Creating the analysis factory
- IAnalysisFactory* af = AIDA_createAnalysisFactory();
+ AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
  
  // Creating the tree factory
- ITreeFactory* tf = af->createTreeFactory();
+ AIDA::ITreeFactory* tf = af->createTreeFactory();
  
  // Creating a tree mapped to an hbook file.
- tree = tf->create("testem3.paw", false, false, "hbook");
+ G4bool readOnly  = false;
+ G4bool createNew = true;
+ tree = tf->create("testem3.paw", "hbook", readOnly, createNew);
 
  // Creating a histogram factory, whose histograms will be handled by the tree
  hf   = af->createHistogramFactory(*tree);
@@ -140,7 +134,7 @@ void Em3RunAction::bookHisto()
   for (G4int k=0; k<NbOfAbsor; ++k)
      {
       if (histo[k]==0)
-        { histo[k] = hf->create1D(id[k+1],title+id[k],nbins,vmin,vmax);
+        { histo[k] = hf->createHistogram1D(id[k+1],title+id[k],nbins,vmin,vmax);
           G4cout << "bookHisto: " << k << " " << histo[k] << G4endl;
 	}  
      }   
@@ -155,7 +149,7 @@ void Em3RunAction::SetHisto(G4int k,G4int nbins,G4double vmin,G4double vmax)
   // (re)book histograms
   const G4String title  = "Edep/Ebeam in absorber ";
   const G4String id[] = {"0","1","2","3","4","5","6","7","8","9","10"};  
-  histo[k] = hf->create1D(id[k+1],title+id[k],nbins,vmin,vmax);
+  histo[k] = hf->createHistogram1D(id[k+1],title+id[k],nbins,vmin,vmax);
   G4cout << "SetHisto: " << k << " " << histo[k] << G4endl;  
 #endif   
 }

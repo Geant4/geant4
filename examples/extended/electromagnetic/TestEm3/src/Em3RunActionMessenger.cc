@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunActionMessenger.cc,v 1.9 2002-12-05 00:24:24 asaim Exp $
+// $Id: Em3RunActionMessenger.cc,v 1.10 2002-12-12 11:19:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@
 Em3RunActionMessenger::Em3RunActionMessenger(Em3RunAction* run)
 :Em3Run(run)
 {    
-  HistoCmd = new G4UIcommand("/run/setHisto",this);
+  HistoCmd = new G4UIcommand("/testem/run/setHisto",this);
   HistoCmd->SetGuidance("Set histo Edep/Ebeam in absorber k");
   HistoCmd->SetGuidance("  histo=absor number : from 0 to NbOfAbsor-1");
   HistoCmd->SetGuidance("  number of bins; Emin/Ebeam; Emax/Ebeam");

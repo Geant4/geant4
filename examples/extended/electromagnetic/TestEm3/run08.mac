@@ -1,4 +1,4 @@
-# $Id: run08.mac,v 1.1 2002-08-02 09:59:14 maire Exp $
+# $Id: run08.mac,v 1.2 2002-12-12 11:19:34 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -10,19 +10,19 @@
 /run/particle/setCut 1 mm
 /run/initialize
 #
-/calor/setNbOfLayers 1
-/calor/setNbOfAbsor 1
-/calor/setAbsor 0 Iron 5 cm
-/calor/setSizeYZ 4 cm
-/calor/update
+/testem/det/setNbOfLayers 1
+/testem/det/setNbOfAbsor 1
+/testem/det/setAbsor 0 Iron 5 cm
+/testem/det/setSizeYZ 4 cm
+/testem/det/update
 #
 /process/inactivate msc
 #
-/gun/setDefault
+/testem/gun/setDefault
 #
 /run/verbose 2
-/event/printModulo 100
-/tracking/stepMax 2 cm
+/testem/event/printModulo 100
+/testem/tracking/stepMax 2 cm
 #
 /gun/particle proton
 /gun/energy 500 MeV

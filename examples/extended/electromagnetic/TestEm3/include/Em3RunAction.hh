@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunAction.hh,v 1.10 2002-06-05 12:13:04 maire Exp $
+// $Id: Em3RunAction.hh,v 1.11 2002-12-12 11:19:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,9 +43,11 @@ class G4Run;
 class Em3RunActionMessenger;
 
 #ifndef G4NOHIST
+namespace AIDA {
  class ITree;
  class IHistogramFactory;
  class IHistogram1D;
+} 
 #endif
 
 class Em3RunAction : public G4UserRunAction
@@ -61,7 +63,7 @@ class Em3RunAction : public G4UserRunAction
     void fillPerEvent(G4int,G4double,G4double);
     
 #ifndef G4NOHIST
-    IHistogram1D* GetHisto(G4int id) {return histo[id];}    
+    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}    
 #endif
 
     void SetHisto (G4int id, G4int nbins, G4double vmin, G4double vmax);
@@ -80,9 +82,9 @@ class Em3RunAction : public G4UserRunAction
     Em3RunActionMessenger*   runMessenger;        
     
 #ifndef G4NOHIST    
-    ITree* tree;
-    IHistogramFactory* hf;    
-    IHistogram1D* histo[MaxAbsor];
+    AIDA::ITree* tree;
+    AIDA::IHistogramFactory* hf;    
+    AIDA::IHistogram1D* histo[MaxAbsor];
 #endif               
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorMessenger.cc,v 1.7 2002-12-05 00:24:24 asaim Exp $
+// $Id: Em3DetectorMessenger.cc,v 1.8 2002-12-12 11:19:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,29 +44,29 @@
 Em3DetectorMessenger::Em3DetectorMessenger(Em3DetectorConstruction * Em3Det)
 :Em3Detector(Em3Det)
 { 
-  Em3detDir = new G4UIdirectory("/calor/");
-  Em3detDir->SetGuidance("Em3 detector control.");
+  testemDir = new G4UIdirectory("/testem/");
+  testemDir->SetGuidance("UI commands specific to this example");
   
-  SizeYZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setSizeYZ",this);
+  SizeYZCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSizeYZ",this);
   SizeYZCmd->SetGuidance("Set tranverse size of the calorimeter");
   SizeYZCmd->SetParameterName("Size",false);
   SizeYZCmd->SetRange("Size>0.");
   SizeYZCmd->SetUnitCategory("Length");
   SizeYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  NbLayersCmd = new G4UIcmdWithAnInteger("/calor/setNbOfLayers",this);
+  NbLayersCmd = new G4UIcmdWithAnInteger("/testem/det/setNbOfLayers",this);
   NbLayersCmd->SetGuidance("Set number of layers.");
   NbLayersCmd->SetParameterName("NbLayers",false);
   NbLayersCmd->SetRange("NbLayers>0 && NbLayers<500");
   NbLayersCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  NbAbsorCmd = new G4UIcmdWithAnInteger("/calor/setNbOfAbsor",this);
+  NbAbsorCmd = new G4UIcmdWithAnInteger("/testem/det/setNbOfAbsor",this);
   NbAbsorCmd->SetGuidance("Set number of Absorbers.");
   NbAbsorCmd->SetParameterName("NbAbsor",false);
   NbAbsorCmd->SetRange("NbAbsor>0");
   NbAbsorCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
    
-  AbsorCmd = new G4UIcommand("/calor/setAbsor",this);
+  AbsorCmd = new G4UIcommand("/testem/det/setAbsor",this);
   AbsorCmd->SetGuidance("Set the absor nb, the material, the thickness.");
   AbsorCmd->SetGuidance("  absor number : from 0 to NbOfAbsor-1");
   AbsorCmd->SetGuidance("  material name");
@@ -94,20 +94,20 @@ Em3DetectorMessenger::Em3DetectorMessenger(Em3DetectorConstruction * Em3Det)
   //
   AbsorCmd->AvailableForStates(G4State_Idle);
   
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
+  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);  
   MagFieldCmd->SetGuidance("Define magnetic field.");
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false);
   MagFieldCmd->SetUnitCategory("Magnetic flux density");
   MagFieldCmd->AvailableForStates(G4State_Idle);
      
-  UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
+  UpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(G4State_Idle);
       
-  MaxStepCmd = new G4UIcmdWithADoubleAndUnit("/tracking/stepMax",this);
+  MaxStepCmd = new G4UIcmdWithADoubleAndUnit("/testem/tracking/stepMax",this);
   MaxStepCmd->SetGuidance("Set max allowed step size");
   MaxStepCmd->SetParameterName("Size",false);
   MaxStepCmd->SetRange("Size>0.");
@@ -126,7 +126,7 @@ Em3DetectorMessenger::~Em3DetectorMessenger()
   delete MagFieldCmd;
   delete UpdateCmd;
   delete MaxStepCmd;
-  delete Em3detDir;
+  delete testemDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
