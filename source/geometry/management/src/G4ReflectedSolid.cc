@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.3 2004-10-13 13:06:51 gcosmo Exp $
+// $Id: G4ReflectedSolid.cc,v 1.4 2005-03-22 15:04:21 allison Exp $
 //
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -524,7 +524,7 @@ std::ostream& G4ReflectedSolid::StreamInfo(std::ostream& os) const
 void 
 G4ReflectedSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 ////////////////////////////////////////////////////
