@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DrawVoxels.hh,v 1.10 2001-07-11 09:59:16 gunter Exp $
+// $Id: G4DrawVoxels.hh,v 1.11 2002-04-19 08:20:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,7 +68,7 @@ class G4DrawVoxels
       // Copy constructor and assignment operator not supported (array
       // fvoxelcolours ...).
 
-    ~G4DrawVoxels(){};
+    ~G4DrawVoxels();
       // Destructor NOT virtual. Not a base class.
     
     void DrawVoxels(const G4LogicalVolume* lv) const;

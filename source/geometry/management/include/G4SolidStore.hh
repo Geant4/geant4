@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidStore.hh,v 1.6 2001-07-11 09:59:18 gunter Exp $
+// $Id: G4SolidStore.hh,v 1.7 2002-04-19 08:20:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4SolidStore
@@ -66,9 +66,11 @@ class G4SolidStore : public G4std::vector<G4VSolid*>
       // Remove the solid from the collection.
     static G4SolidStore* GetInstance();
       // Get a ptr to the unique G4SolidStore, creating it if necessary.
+    static void Clean();
+      // Delete all solids from the store.
 
     virtual ~G4SolidStore();
-      // Default destructor.
+      // Destructor: takes care to delete allocated solids.
 
   protected:
 
@@ -77,6 +79,7 @@ class G4SolidStore : public G4std::vector<G4VSolid*>
   private:
 
     static G4SolidStore* fgInstance;
+    static G4bool locked;
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidStore.cc,v 1.7 2001-07-11 09:59:21 gunter Exp $
+// $Id: G4SolidStore.cc,v 1.8 2002-04-19 08:20:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4SolidStore
@@ -34,6 +34,10 @@
 #include "G4SolidStore.hh"
 #include "globals.hh"
 
+// Static class variables
+G4SolidStore* G4SolidStore::fgInstance = 0;
+G4bool G4SolidStore::locked = false;
+
 // Protected constructor: Construct underlying container with
 // initial size of 100 entries
 G4SolidStore::G4SolidStore()
@@ -45,31 +49,54 @@ G4SolidStore::G4SolidStore()
 // Destructor
 G4SolidStore::~G4SolidStore() 
 {
-  while (!empty())
-  {
-//    delete front();
-    erase(begin());
-  }
+  // NOTE: destruction of solids is client responsibility !
+  // clear();
+  Clean();
 }
 
-// Static class variable
-G4SolidStore* G4SolidStore::fgInstance = 0;
+// Delete all elements from the store
+void G4SolidStore::Clean()
+{
+  size_t i=0;
+  locked = true;
+  G4SolidStore* store = GetInstance();
+  G4std::vector<G4VSolid*>::iterator pos;
+
+#ifdef G4GEOMETRY_VOXELDEBUG
+  G4cout << "Deleting Solids ... ";
+#endif
+
+  for(pos=store->begin(); pos!=store->end(); pos++)
+  {
+    if (*pos) delete *pos; i++;
+  }
+
+#ifdef G4GEOMETRY_VOXELDEBUG
+  G4cout << i-1 << " solids deleted !" << G4endl;
+#endif
+
+  locked = false;
+  store->clear();
+}
 
 // Add Solid to container
 void G4SolidStore::Register(G4VSolid* pSolid)
 {
-    GetInstance()->push_back(pSolid);
+  GetInstance()->push_back(pSolid);
 }
 
 // Remove Solid from container
 void G4SolidStore::DeRegister(G4VSolid* pSolid)
 {
-  for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+  if (!locked)
   {
-    if (**i==*pSolid)
+    for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
     {
-      GetInstance()->erase(i);
-      break;
+      if (**i==*pSolid)
+      {
+        GetInstance()->erase(i);
+        break;
+      }
     }
   }
 }
@@ -77,10 +104,10 @@ void G4SolidStore::DeRegister(G4VSolid* pSolid)
 // Return ptr to Store, setting if necessary
 G4SolidStore* G4SolidStore::GetInstance()
 {
-    static G4SolidStore worldStore;
-    if (!fgInstance)
-	{
-	    fgInstance = &worldStore;
-	}
-    return fgInstance;
+  static G4SolidStore worldStore;
+  if (!fgInstance)
+  {
+    fgInstance = &worldStore;
+  }
+  return fgInstance;
 }

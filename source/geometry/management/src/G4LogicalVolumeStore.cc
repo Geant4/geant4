@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.cc,v 1.6 2001-07-11 09:59:20 gunter Exp $
+// $Id: G4LogicalVolumeStore.cc,v 1.7 2002-04-19 08:20:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4LogicalVolumeStore
@@ -34,6 +34,10 @@
 #include "G4LogicalVolumeStore.hh"
 #include "globals.hh"
 
+// Static class variables
+G4LogicalVolumeStore* G4LogicalVolumeStore::fgInstance = 0;
+G4bool G4LogicalVolumeStore::locked = false;
+
 // Protected constructor: Construct underlying container with
 // initial size of 100 entries
 G4LogicalVolumeStore::G4LogicalVolumeStore()
@@ -45,15 +49,33 @@ G4LogicalVolumeStore::G4LogicalVolumeStore()
 // Destructor
 G4LogicalVolumeStore::~G4LogicalVolumeStore()
 {
-  while (!empty())
-  {
-//    delete front();
-    erase(begin());
-  }
+  Clean();
 }
 
-// Static class variable
-G4LogicalVolumeStore* G4LogicalVolumeStore::fgInstance = 0;
+// Delete all elements from the store
+void G4LogicalVolumeStore::Clean()
+{
+  size_t i=0;
+  locked = true;
+  G4LogicalVolumeStore* store = GetInstance();
+  G4std::vector<G4LogicalVolume*>::iterator pos;
+
+#ifdef G4GEOMETRY_VOXELDEBUG
+  G4cout << "Deleting Logical Volumes ... ";
+#endif
+
+  for(pos=store->begin(); pos!=store->end(); pos++)
+  {
+    if (*pos) delete *pos; i++;
+  }
+
+#ifdef G4GEOMETRY_VOXELDEBUG
+  G4cout << i-1 << " volumes deleted !" << G4endl;
+#endif
+
+  locked = false;
+  store->clear();
+}
 
 // Add volume to container
 void G4LogicalVolumeStore::Register(G4LogicalVolume* pVolume)
@@ -64,12 +86,15 @@ void G4LogicalVolumeStore::Register(G4LogicalVolume* pVolume)
 // Remove volume from container
 void G4LogicalVolumeStore::DeRegister(G4LogicalVolume* pVolume)
 {
-  for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+  if (!locked)
   {
-    if (**i==*pVolume)
+    for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
     {
-      GetInstance()->erase(i);
-      break;
+      if (**i==*pVolume)
+      {
+        GetInstance()->erase(i);
+        break;
+      }
     }
   }
 }

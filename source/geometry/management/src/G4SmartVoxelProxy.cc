@@ -21,40 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelNode.cc,v 1.4 2002-04-19 08:20:22 gcosmo Exp $
+// $Id: G4SmartVoxelProxy.cc,v 1.1 2002-04-19 08:20:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class G4SmartVoxelNode
+// Class G4SmartVoxelProxy
 //
 // Implementation
 //
 
-#include "G4SmartVoxelNode.hh"
+#include "G4SmartVoxelProxy.hh"
 
 // Empty destructor
 //
-G4SmartVoxelNode::~G4SmartVoxelNode()
+G4SmartVoxelProxy::~G4SmartVoxelProxy()
 {
-}
-
-// Return true if contents equal
-//
-// Preconditions:
-//
-// Node contents were entered in the same order
-G4bool G4SmartVoxelNode::operator == (const G4SmartVoxelNode& v) const
-{
-    G4int maxNode=GetNoContained();
-    if (maxNode==v.GetNoContained())
-	{
-	    for (G4int node=0;node<maxNode;node++)
-		{
-		    if (GetVolume(node)!=v.GetVolume(node))
-			{
-			    return false;
-			}
-		}
-	    return true;
-	}
-    return false;
 }

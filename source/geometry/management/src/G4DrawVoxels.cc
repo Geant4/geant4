@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DrawVoxels.cc,v 1.14 2001-07-11 09:59:20 gunter Exp $
+// $Id: G4DrawVoxels.cc,v 1.15 2002-04-19 08:20:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,22 @@
 #include "G4DrawVoxels.hh"
 #include "G4VVisManager.hh"
 /****************************/
+
+
+//Private Constructor
+G4DrawVoxels::G4DrawVoxels(){
+	fVoxelsVisAttributes[0].SetColour(G4Colour(1.,0.,0.));
+	fVoxelsVisAttributes[1].SetColour(G4Colour(0.,1.,0.));
+	fVoxelsVisAttributes[2].SetColour(G4Colour(0.,0.,1.));
+	fBoundingBoxVisAttributes.SetColour(G4Colour(.3,0.,.2));
+}
+
+
+// Destructor
+G4DrawVoxels::~G4DrawVoxels()
+{
+}
+
 
 //Methods that allow changing colors of the drawing
 void G4DrawVoxels::SetVoxelsVisAttributes(G4VisAttributes& VA_voxelX,G4VisAttributes& VA_voxelY,G4VisAttributes& VA_voxelZ){
@@ -172,14 +188,6 @@ void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
 }//end of ComputeVoxelPolyhedra...
 //######################################################################################################################
 
-//Private Constructor
-G4DrawVoxels::G4DrawVoxels(){
-	fVoxelsVisAttributes[0].SetColour(G4Colour(1.,0.,0.));
-	fVoxelsVisAttributes[1].SetColour(G4Colour(0.,1.,0.));
-	fVoxelsVisAttributes[2].SetColour(G4Colour(0.,0.,1.));
-	fBoundingBoxVisAttributes.SetColour(G4Colour(.3,0.,.2));
-}
-
 G4AffineTransform G4DrawVoxels::GetAbsoluteTransformation(const G4VPhysicalVolume* pv) const{
   //Initialisation of the transformation to be computed
   G4AffineTransform transf; //default constructor ie Id
@@ -207,6 +215,7 @@ G4PlacedPolyhedronList* G4DrawVoxels::CreatePlacedPolyhedra(const G4LogicalVolum
    ComputeVoxelPolyhedra(lv,lv->GetVoxelHeader(),limits,pplist);
    return pplist; //it s up to the calling program to destroy it then!
 }
+
 
 
 void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv) const{

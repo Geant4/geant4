@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.11 2002-04-16 08:21:08 grichine Exp $
+// $Id: G4VSolid.cc,v 1.12 2002-04-19 08:20:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -50,11 +50,10 @@
 // Constructor
 //  - Copies name
 //  - Add ourselves to solid Store
-
-G4VSolid::G4VSolid(const G4String& name) :
-fshapeName(name) 
+G4VSolid::G4VSolid(const G4String& name)
+  : fshapeName(name) 
 {
-    G4SolidStore::GetInstance()->push_back(this);
+    G4SolidStore::GetInstance()->Register(this);
 }
 
 //////////////////////////////////////////////////////////////////////////

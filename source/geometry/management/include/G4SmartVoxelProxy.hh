@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelProxy.hh,v 1.5 2001-07-11 09:59:18 gunter Exp $
+// $Id: G4SmartVoxelProxy.hh,v 1.6 2002-04-19 08:20:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4SmartVoxelProxy
@@ -62,7 +62,7 @@ class G4SmartVoxelProxy
       : fHeader(0), fNode(pNode) {}
       // Proxy for the specified node.
 
-    ~G4SmartVoxelProxy() {}
+    ~G4SmartVoxelProxy();
       // Destructor - do nothing. Not responsible for proxied objects.
 
     G4bool IsHeader() const;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelNode.hh,v 1.6 2001-07-11 09:59:18 gunter Exp $
+// $Id: G4SmartVoxelNode.hh,v 1.7 2002-04-19 08:20:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4SmartVoxelNode
@@ -64,10 +64,10 @@ class G4SmartVoxelNode
     G4SmartVoxelNode(G4int pSlice=0) : fminEquivalent(pSlice),
                                        fmaxEquivalent(pSlice) {}
       // Constructor. Create an empty node with slice number pSlice.
-      // THis number is not stored, but used to provide defaults for the
+      // This number is not stored, but used to provide defaults for the
       // minimum and maximum equivalent node numbers.
 
-    ~G4SmartVoxelNode() {}
+    ~G4SmartVoxelNode();
       // Destructor. No actions.
 
     G4int GetVolume(G4int pVolumeNo) const;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.hh,v 1.6 2001-07-11 09:59:17 gunter Exp $
+// $Id: G4LogicalVolumeStore.hh,v 1.7 2002-04-19 08:20:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4LogicalVolumeStore
@@ -65,11 +65,12 @@ class G4LogicalVolumeStore : public G4std::vector<G4LogicalVolume*>
     static void DeRegister(G4LogicalVolume* pVolume);
       // Remove the logical volume from the collection.
     static G4LogicalVolumeStore* GetInstance();
-      // Get a ptr to the unique G4LogicalVolumeStore,
-      // creating it if necessary.
+      // Get a ptr to the unique G4LogicalVolumeStore, creating it if necessary.
+    static void Clean();
+      // Delete all volumes from the store.
 
     virtual ~G4LogicalVolumeStore();
-      // Destructor.
+      // Destructor: takes care to delete allocated logical volumes.
 
   protected:
 
@@ -78,6 +79,7 @@ class G4LogicalVolumeStore : public G4std::vector<G4LogicalVolume*>
   private:
 
     static G4LogicalVolumeStore* fgInstance;
+    static G4bool locked;
 };
 
 #endif

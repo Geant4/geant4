@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.hh,v 1.7 2001-07-11 09:59:17 gunter Exp $
+// $Id: G4PhysicalVolumeStore.hh,v 1.8 2002-04-19 08:20:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PhysicalVolume
@@ -65,11 +65,12 @@ class G4PhysicalVolumeStore : public G4std::vector<G4VPhysicalVolume*>
     static void DeRegister(G4VPhysicalVolume* pSolid);
       // Remove the volume from the collection.
     static G4PhysicalVolumeStore* GetInstance();
-      // Get a ptr to the unique G4PhysicalVolumeStore,
-      // creating it if necessary.
+      // Get a ptr to the unique G4PhysicalVolumeStore, creating it if necessary.
+    static void Clean();
+      // Delete all volumes from the store.
 
     virtual ~G4PhysicalVolumeStore();
-      // Default destructor.
+      // Destructor: takes care to delete allocated physical volumes.
 
   protected:
 
@@ -78,6 +79,7 @@ class G4PhysicalVolumeStore : public G4std::vector<G4VPhysicalVolume*>
   private:
 
     static G4PhysicalVolumeStore* fgInstance;
+    static G4bool locked;
 };
 
 #endif

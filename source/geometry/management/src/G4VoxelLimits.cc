@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelLimits.cc,v 1.6 2002-04-16 08:21:08 grichine Exp $
+// $Id: G4VoxelLimits.cc,v 1.7 2002-04-19 08:20:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VoxelLimits
@@ -39,8 +39,25 @@
 
 ///////////////////////////////////////////////////////////////////////////
 //
+// Empty constructor and destructor
+//
+
+G4VoxelLimits::G4VoxelLimits()
+ : fxAxisMin(-kInfinity),fxAxisMax(kInfinity),
+   fyAxisMin(-kInfinity),fyAxisMax(kInfinity),
+   fzAxisMin(-kInfinity),fzAxisMax(kInfinity)
+{
+}
+
+G4VoxelLimits::~G4VoxelLimits()
+{
+}
+
+///////////////////////////////////////////////////////////////////////////
+//
 // Further restrict limits
 // No checks for illegal restrictions
+//
 
 void G4VoxelLimits::AddLimit( const EAxis pAxis, 
                               const G4double pMin,
@@ -297,10 +314,3 @@ G4std::ostream& operator << (G4std::ostream& os, const G4VoxelLimits& pLim)
     os << "}";
     return os;
 }
-
-
-
-
-
-
-
