@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FcalTBEventAction.cc,v 1.2 2002-10-01 13:49:12 ahoward Exp $
+// $Id: FcalTBEventAction.cc,v 1.3 2002-10-01 14:05:13 araujo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,7 +17,8 @@
 
 #include "ExN03CalorHit.hh"
 
-#include "g4rw/tvordvec.h"
+//#include "g4rw/tvordvec.h"
+#include "g4std/vector"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
