@@ -1,4 +1,4 @@
-$Id: History,v 1.115 2003-12-05 17:11:19 gcosmo Exp $
+$Id: History,v 1.116 2003-12-08 11:28:13 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -31,6 +31,7 @@ December 1st, 2003  G. Cosmo - geomvol-V05-02-06
 - G4LogicalBorderSurface[.hh.icc.cc], G4LogicalSkinSurface[.hh.icc.cc]:
   o modified to use G4SurfaceProperty instead of G4OpticalSurface.
     Requires tag "materials-V05-02-00".
+    Requires tag "geommng-V05-02-05".
 - Updated unit tests to use derived navigator.
 
 November 17th, 2003  G. Cosmo - geomvol-V05-02-05
