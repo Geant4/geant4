@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorConstruction.cc,v 1.13 2003-03-26 16:23:17 maire Exp $
+// $Id: Em2DetectorConstruction.cc,v 1.14 2003-05-09 07:45:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -281,13 +281,7 @@ void Em2DetectorConstruction::SetMagField(G4double fieldValue)
 
 void Em2DetectorConstruction::UpdateGeometry()
 {
-  G4bool first = true;
-  if (physiEcal) first = false;
-  G4VPhysicalVolume* v = ConstructVolumes();
-  G4RunManager* rm = G4RunManager::GetRunManager();
-  rm->GeometryHasBeenModified();
-  rm->DefineWorldVolume(v);
-  if (!first) rm->ResetNavigator();
+  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
