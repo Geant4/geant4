@@ -4,6 +4,7 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE:                                                              #
+#        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
 #        June     20, 2001                                            #
 #        November 26, 2000                                            #
 #        October  17, 2000                                            # 
@@ -27,13 +28,11 @@
 #                                                                     #
 #    % setenv OGLHOME     ... (e.g. /usr/X11R6)                       #
 #    % setenv G4VIS_BUILD_OPENGLX_DRIVER   1                          # 
-#    % setenv G4VIS_BUILD_DAWNFILE_DRIVER  1                          #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
 #    % setenv G4VIS_USE_OPENGLX            1                          #
-#    % setenv G4VIS_USE_DAWNFILE           1                          #
 #                                                                     #
 #  ADDITIONAL NOTES:                                                  #
 #    The compound command "/vis/open <vis-driver-name>"               #
@@ -48,12 +47,6 @@
 #      /vis/scene/create                                              #
 #      /vis/scene/add/volume $1                                       #
 #      /vis/sceneHandler/attach                                       #
-#      /vis/viewer/refresh                                            #
-#                                                                     #
-#    WARNING: You should execute "/vis/viewer/update"  after          #
-#             "/vis/drawVolume" in order to complete visualization    #
-#             when you use  post-processin visualization drivers      #
-#             such as the DAWNFILE, VRMLFILE, OpenGL Motif drivers.   #
 #                                                                     #
 #######################################################################
 
@@ -64,6 +57,7 @@
 
 # Invoke the OGLIX driver
 /vis/open OGLIX
+#/vis/open DAWNFILE
 
 # Set camera 
 /vis/viewer/reset 
@@ -71,6 +65,14 @@
 
 # Visualize of the whole detector geometry
 /vis/drawVolume
+
+# The following two commands "flush" 
+#  the action of the current viewer.
+#  They are required for the post-processing drivers 
+#  such as DAWNFILE, VRMLFILE, HepRep drivers, etc.
+#  For OpenGL drivers, these commands are not required
+#  but harmless even if they are described.
+/vis/viewer/refresh
 /vis/viewer/update
 
 #########################################################
@@ -78,11 +80,6 @@
 #
 #  * Each visualized view is saved to a file "g4_XX.eps"  
 #    with the "vectorized" PostScript format.
-#
-#  * In order to make the file "g4_XX.eps" printable, 
-#    append the "showpage" PostScript command to the file. 
-#    You can do it with the 4th page of the DAWN GUI panel 
-#    or by editing the EPS file by hand.
 #
 #  * Set an environmental variable if you wish to 
 #    skip DAWN GUI:
@@ -92,21 +89,14 @@
 # Invoke the DAWNFILE driver
 /vis/open DAWNFILE
 
-# Create a new scene 
-/vis/scene/create
-
 # Add the world volume to the current scene
-/vis/scene/add/volume
+/vis/drawVolume
 
 # Add trajectories to the current scene
 #  Note: This command is not necessary in exampleN03,
 #        since the C++ method DrawTrajectory() is 
 #        described in the event action.
 #/vis/scene/add/trajectories
-
-# Attach the current scene handler 
-# to the current scene (omitable)
-/vis/sceneHandler/attach 
 
 # Set camera 
 /vis/viewer/reset 
@@ -115,5 +105,4 @@
 
 # Visualize events added to the current scene
 /tracking/storeTrajectory 1
-/run/beamOn 10
-
+/run/beamOn 3

@@ -4,6 +4,7 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE:                                                              #
+#        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
 #        June     20, 2001                                            #
 #        November 26, 2000                                            #
 #        October  17, 2000                                            #  
@@ -20,20 +21,17 @@
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
-#    % setenv G4VIS_BUILD_VRMLFILE_DRIVER  1                          #
+#    * Unnecessary                                                    #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
-#    % setenv G4VIS_USE_VRMLFILE           1                          #
+#    * Unnecessary                                                    #
 #                                                                     #
 #  RECOMMENDED ENVIRONMENTAL VARIABLES FOR VISUALIZATION:             #
 #                                                                     #
 #    % setenv G4VRMLFILE_VIEWER        vrmlview                       #
 #     ( The default value is "NONE".)                                 #
-#                                                                     #
-#    % setenv G4VRMLFILE_MAX_FILE_NUM  100                            #
-#     ( The default value is "1".)                                    #
 #                                                                     #
 #  ADDITIONAL NOTES:                                                  #
 #   The VRML-file viewer "vrmlview" is obtainable from the following  #
@@ -55,17 +53,14 @@
 /tracking/storeTrajectory 1
 
 # Invoke the VRML2FILE driver
+#  Note: The VRML1FILE driver generates VRML 1.0 format files.
+#        The VRML2FILE driver generates VRML 2.0 format files.
 /vis/open VRML2FILE
 
-# Create a new scene  
-/vis/scene/create
-
-# Attach the current scene handler  
-# to the current scene
-/vis/sceneHandler/attach  
-
-# Add the world volume to the current scene
-/vis/scene/add/volume
+# Visualize the detector geometry
+/vis/drawVolume
+/vis/viewer/refresh
+/vis/viewer/update
 
 # Visualize one event added to the current scene
 #  Note: The command /vis/scene/add/trajectories
@@ -75,4 +70,3 @@
 #/vis/scene/add/trajectories
 /vis/viewer/set/style wireframe
 /run/beamOn 3
-

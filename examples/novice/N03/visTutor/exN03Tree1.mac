@@ -4,6 +4,7 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE:                                                              #
+#        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
 #        June     20, 2001                                            #
 #                                                                     #
 #  CONTENTS: A macro to demonstrate GAG DTREE                         #
@@ -17,12 +18,12 @@
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
 #                                                                     #
-#    % setenv  G4VIS_BUILD_GAGTREE_DRIVER    1                        #
+#    * Unnecessary                                                    #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
-#    %   setenv  G4VIS_USE_GAGTREE         1                          #
+#    * Unnecessary                                                    #
 #                                                                     # 
 #  VERBOSE LEVEL:                                                     #
 #                                                                     # 
@@ -35,33 +36,28 @@
 #    >=  2: prints solid name and type.                               #
 #                                                                     #
 #  ADDITIONAL NOTES:                                                  #
-#    * The geometry tree is displayed in the stdout.                  #
-#                                                                     # 
-#    * The compound command                                           # 
-#      "/vis/drawTree [<physical-volume-name>] [<system>]"            # 
-#     is equivalent to the following set of commands:                 #
-#        /vis/open                 system                             #
-#        /vis/drawVolume           PV-name                            #
-#                                                                     # 
-#     The PV-name "world" is always means the world volume,           #
-#     whatever its real name, e.g., "World" in example N03, is.       #      
-#                                                                     # 
+#    * The geometry tree is displayed in GAG windows stdout.          #
+#      (If you are using the G4 character terminals, the tree is      #
+#       displayed in stdout.)                                         # 
+#    * The compound command to visualize geometry tree:               # 
+#      /vis/drawTree [<physical-volume-name>] [<system>]              #
 #######################################################################
 
 # Draw the whole geometry tree
-/vis/drawTree world GAGTree
+#  Note: "!" means the default argument, i.e., "world"
+/vis/drawTree ! GAGTree
 
 # Draw a part of tree
 /vis/drawTree Gap GAGTree
 
 # Change the level to display details 
 /vis/GAGTree/verbose 1
-/vis/drawTree world GAGTree
+/vis/drawTree ! GAGTree
 
 # Change the level to display details
 /vis/GAGTree/verbose 2
-/vis/drawTree world GAGTree
+/vis/drawTree ! GAGTree
 
 # Change the level to display details
 /vis/GAGTree/verbose 10
-/vis/drawTree world GAGTree
+/vis/drawTree ! GAGTree

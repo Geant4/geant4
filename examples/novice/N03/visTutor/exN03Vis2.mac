@@ -4,6 +4,7 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE:                                                              #
+#        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
 #        June     20, 2001                                            # 
 #        November 26, 2000                                            #
 #        October  17, 2000                                            # 
@@ -26,13 +27,11 @@
 #                                                                     #
 #    % setenv OGLHOME     ... (e.g. /usr/X11R6)                       #
 #    % setenv G4VIS_BUILD_OPENGLX_DRIVER   1                          # 
-#    % setenv G4VIS_BUILD_DAWNFILE_DRIVER  1                          #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
 #    % setenv G4VIS_USE_OPENGLX            1                          #
-#    % setenv G4VIS_USE_DAWNFILE           1                          #
 #                                                                     # 
 #  ADDITIONAL NOTES:                                                  #
 #    The compound command "/vis/open <vis-driver-name>"               #
@@ -55,15 +54,8 @@
 # Invoke the OGLSX driver 
 /vis/open OGLSX
 
-# Create a new scene 
-/vis/scene/create
-
 # Add the world volume to the current scene
-/vis/scene/add/volume
-
-# Attach the current scene handler
-# to the current scene (omitable)
-/vis/sceneHandler/attach
+/vis/drawVolume
 
 # Add trajectories to the current scene
 #  Note: This command is not necessary in exampleN03,
@@ -78,18 +70,9 @@
 /vis/viewer/reset
 /vis/viewer/set/style surface
 /vis/viewer/viewpointThetaPhi   10  10
-/vis/viewer/zoom                0.9 
 
 # Generate one event and visualize it.
 /run/beamOn  1
-
-# Slide show (spinning). 
-#  Draw 18 frames with steps of 20 degrees.
-#  The OGLSX driver stores the previously visualized view
-#  in the display list.  So the particle trajectories are 
-#  also rotated together with the detector geometry.
-#  
-/vis/camera/spin      18 20
 
 
 ##########################################################
@@ -111,21 +94,19 @@
 # Invoke the DAWNFILE driver 
 /vis/open DAWNFILE
 
-# Create a new scene
-/vis/scene/create
-
 # Add the world volume to the current scene
-/vis/scene/add/volume
-
-# Attach the current scene handler
-# to the current scene (omitable)
-/vis/sceneHandler/attach
+/vis/drawVolume 
 
 # Add trajectories to the current scene
 #  Note: This command is not necessary in exampleN03,
 #        since the C++ method DrawTrajectory() is 
 #        described in the event action.
 #/vis/scene/add/trajectories
+
+# Set the trajectory-accumulation mode to "accumulate".
+#  Trajectories of each event are accumulated
+#  and visualized at the end of one run.
+/vis/scene/endOfEventAction    accumulate
 
 # Visualize many events (bird's eye view)
 #  viewpoint  : (theta,phi) = (45*deg, 45*deg) 
@@ -145,3 +126,7 @@
 /vis/viewer/viewpointThetaPhi   90 0
 /vis/viewer/zoom        5
 /run/beamOn             50
+
+# Reset trajectory-accumulation mode to "refresh" (default)
+#  Trajectories are visualized at the end of each event.
+/vis/scene/endOfEventAction       refresh

@@ -4,6 +4,7 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE:                                                              #
+#        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
 #        June     20, 2001                                            #
 #        November 26, 2000                                            #
 #        October  17, 2000                                            # 
@@ -26,13 +27,11 @@
 #                                                                     #
 #    % setenv OGLHOME     ... (e.g. /usr/X11R6)                       #
 #    % setenv G4VIS_BUILD_OPENGLX_DRIVER   1                          # 
-#    % setenv G4VIS_BUILD_DAWNFILE_DRIVER  1                          #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
 #    % setenv G4VIS_USE_OPENGLX            1                          #
-#    % setenv G4VIS_USE_DAWNFILE           1                          #
 #                                                                     # 
 #  ADDITIONAL NOTES:                                                  #
 #    The compound command "/vis/open <vis-driver-name>"               #
@@ -47,12 +46,6 @@
 #      /vis/scene/create                                              #
 #      /vis/scene/add/volume $1                                       #
 #      /vis/sceneHandler/attach                                       #
-#      /vis/viewer/refresh                                            #
-#                                                                     #
-#    WARNING: You should execute "/vis/viewer/update"  after          #
-#             "/vis/drawVolume" in order to complete visualization    #
-#             when you use  post-processin visualization drivers      #
-#             such as the DAWNFILE, VRMLFILE, OpenGL Motif drivers.   #
 #                                                                     #
 #######################################################################
 
@@ -63,19 +56,6 @@
 
 # Invoke the OGLSX driver 
 /vis/open OGLSX
-
-# Visualize the detector geometry 
-#  with the defalut camera parameters
-/vis/viewer/reset
-/vis/drawVolume
-/vis/viewer/update
-
-# Slide show (spinning) of the view visualized above.
-#  Draw 60 frames with steps of 3 degrees.
-/vis/viewer/reset
-/vis/viewer/viewpointThetaPhi  20 20
-/vis/viewer/zoom               0.8 
-/vis/camera/spin               60 3
 
 # Bird's-eye view of the detector geometry 
 #
@@ -89,6 +69,14 @@
 /vis/viewer/viewpointThetaPhi  20 70
 /vis/viewer/zoom               0.8 
 /vis/drawVolume
+
+# The following two commands "flush" 
+#  the action of the current viewer.
+#  They are required for the post-processing drivers 
+#  such as DAWNFILE, VRMLFILE, HepRep drivers, etc.
+#  For OpenGL drivers, these commands are not required
+#  but harmless even if they are described.
+/vis/viewer/refresh
 /vis/viewer/update
 
 ##########################################################
@@ -120,27 +108,34 @@
 /vis/viewer/reset
 /vis/viewer/zoom               1.1
 /vis/viewer/viewpointThetaPhi  35 35
-/vis/scene/create                                              
-/vis/scene/add/volume    Absorber 
-/vis/scene/add/axes      0 0 0 500
-/vis/scene/add/text      0 0 0 mm  40 -100 -120   Absorber 
-/vis/sceneHandler/attach
-/vis/viewer/refresh
+/vis/drawVolume           Absorber 
+/vis/scene/add/axes      0 0 0 500 mm
+/vis/scene/add/text      0 0 0 mm  40 -100 -140   Absorber 
+/vis/scene/add/scale     10 cm z 1 0 0 manual -2.5 -5 0  cm
+
+# "Flush the action of all the existing viewers.
+#   Note: You may have to execute these commands, e.g.,  
+#         when the current scene is modified.
+#         In this example, they are equivalent to
+#         /vis/viewer/refresh + /vis/viewer/update,
+#         which flushes only the current viewer.
+/vis/scene/notifyHandlers
 /vis/viewer/update
 
 # Bird's-eye view of a detector component (Gap)
 /vis/viewer/reset
 /vis/viewer/zoom               1.1
 /vis/viewer/viewpointThetaPhi  35 35
-/vis/scene/create                                              
-/vis/scene/add/volume     Gap 
-/vis/scene/add/axes  	  0 0 0 500
-/vis/scene/add/text       0 0 0 mm  50 -100 -120   Gap 
-/vis/sceneHandler/attach
-/vis/viewer/refresh
+/vis/drawVolume                Gap 
+/vis/scene/add/axes  	  0 0 0 500 mm
+/vis/scene/add/text       0 0 0 mm  50 -100 -140   Gap 
+/vis/scene/add/scale      10 cm z 1 0 0 manual -2.5 -5  0 cm
+
+# "Flush the action of all the existing viewers.
+/vis/scene/notifyHandlers
 /vis/viewer/update
 
-# Bird's-eye view of the whole detector components
+# Bird's-eye view of the whole detector components (world)
 #  * The argument "world" of the command 
 #    "/vis/scene/add/volume" is omittable.
 #  * "/vis/viewer/set/culling false" makes the invisible 
@@ -151,13 +146,16 @@
 /vis/viewer/zoom               1.1
 /vis/viewer/viewpointThetaPhi  35 35
 /vis/viewer/set/culling         global false
-/vis/scene/create                                              
-/vis/scene/add/volume 
-/vis/scene/add/axes      0 0 0 500
-/vis/scene/add/text      0 0 0 mm 50 -100 -190   World
-/vis/sceneHandler/attach
-/vis/viewer/refresh
+/vis/drawVolume 
+/vis/scene/add/axes      0 0 0 500 mm
+/vis/scene/add/text      0 0 0 mm 50 -100 -240   World
+/vis/scene/add/scale     10 cm x 1 0 0 
+
+# "Flush the action of all the existing viewers.
+/vis/scene/notifyHandlers
 /vis/viewer/update
 
 # Make the culling on for next visualization
+#  Note: You may also use "/vis/viewer/reset" 
+#        for this initialization. 
 /vis/viewer/set/culling       global true
