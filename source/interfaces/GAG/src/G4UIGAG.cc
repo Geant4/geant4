@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGAG.cc,v 1.13 2001-11-29 06:04:45 yhajime Exp $
+// $Id: G4UIGAG.cc,v 1.14 2002-04-26 21:28:25 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UIGAG.cc
@@ -438,7 +438,7 @@ void G4UIGAG::TerminalHelp(G4String newCommand)
   {
     int ii = prefix.index("/",prefixIndex);
     floor[iFloor+1] =
-      floor[iFloor]->GetTree(prefix(0,ii+1));
+      floor[iFloor]->GetTree(G4String(prefix(0,ii+1)));
     prefixIndex = ii+1;
     iFloor++;
   }
@@ -521,7 +521,7 @@ G4UIcommandTree * G4UIGAG::FindDirPath(G4String newCommand)
   while( idx < newCommand.length()-1 )
   {
     int i = newCommand.index("/",idx);
-    comTree = comTree->GetTree(newCommand(0,i+1));
+    comTree = comTree->GetTree(G4String(newCommand(0,i+1)));
     if( comTree == NULL ) 
     { return NULL; }
     idx = i+1;

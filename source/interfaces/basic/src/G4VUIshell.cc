@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUIshell.cc,v 1.6 2001-11-26 19:15:08 asaim Exp $
+// $Id: G4VUIshell.cc,v 1.7 2002-04-26 21:28:26 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -125,7 +125,7 @@ G4UIcommandTree* G4VUIshell::GetCommandTree(const G4String& input) const
     G4int jslash= absPath.index("/", indx);  // search index begin with "/" 
     if(jslash != G4int(G4String::npos)) {
       if(cmdTree != NULL)
-        cmdTree= cmdTree-> GetTree(absPath(0,jslash+1));
+        cmdTree= cmdTree-> GetTree(G4String(absPath(0,jslash+1)));
     }
     indx= jslash+1;
   }
