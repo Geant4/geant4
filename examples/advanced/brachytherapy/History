@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.5 2003-10-20 18:11:08 vnivanch Exp $
+$Id: History,v 1.6 2003-11-12 16:44:06 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.5 2003-10-20 18:11:08 vnivanch Exp $
 
                       Category History file
                       ---------------------
+
+12.11.2003 - John Allison
+             Updated Vis Manager.
 
 20.10.2003 - Vladimir Ivanchenko, tag brachy-V05-02-00
              Migration to cut per region
