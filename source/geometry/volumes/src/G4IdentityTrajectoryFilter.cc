@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IdentityTrajectoryFilter.cc,v 1.2 2002-11-19 16:40:10 jacek Exp $
+// $Id: G4IdentityTrajectoryFilter.cc,v 1.3 2002-11-30 17:22:37 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4IdentityTrajectoryFilter.hh"
@@ -34,5 +34,5 @@ G4IdentityTrajectoryFilter::TakeIntermediatePoint( G4ThreeVector newPoint ) {
   // the final version, will probably want to create the intermediate
   // points at this stage.
   fpFilteredPoints->push_back( newPoint );
-  cout << "spong: G4IdentityTrajectoryFilter::TakeIntermediatePoint" << endl;
+  G4cout << "spong: G4IdentityTrajectoryFilter::TakeIntermediatePoint" << G4endl;
 }

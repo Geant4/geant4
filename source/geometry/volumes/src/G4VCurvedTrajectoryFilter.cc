@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCurvedTrajectoryFilter.cc,v 1.2 2002-11-19 15:23:25 jacek Exp $
+// $Id: G4VCurvedTrajectoryFilter.cc,v 1.3 2002-11-30 17:22:37 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4VCurvedTrajectoryFilter.hh"
@@ -47,7 +47,7 @@ G4VCurvedTrajectoryFilter::CreateNewTrajectorySegment( ) {
     // GimmePoints has not been called (it would have set the
     // pointer to NULL), therefore nobody has taken charge of the
     // points and they will never be deleted!
-    cout << "!!!!!!!! Filter: auxliary points are being memory leaked !!!!!" << endl;
+    G4cout << "!!!!!!!! Filter: auxliary points are being memory leaked !!!!!" << G4endl;
   }
   fpFilteredPoints = new G4std::vector<G4ThreeVector>;
 }    
