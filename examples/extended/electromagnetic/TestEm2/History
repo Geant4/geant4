@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2003-02-14 14:21:27 vnivanch Exp $
+$Id: History,v 1.27 2003-03-17 15:41:14 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14-02-03 V.Ivanchenko (testem2-V05-00-01)
+-17-03-03 V.Ivanchenko (testem2-V05-00-02)
+- Addition to migration to cut per region
+- Update modular structure of PhysicsList
+
+-14-02-03 V.Ivanchenko (testem2-V05-00-01)
 - Migration to cut per region
 
 12-02-03 mma (testem2-V05-00-00)
