@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.5 2004-01-15 17:49:45 maire Exp $
+// $Id: RunAction.hh,v 1.6 2004-01-16 08:12:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,7 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -73,18 +74,28 @@ class RunAction : public G4UserRunAction
     
   private:
     
-    G4double sumEAbs [MaxAbsor], sum2EAbs [MaxAbsor]; 
-    G4double sumLAbs [MaxAbsor], sum2LAbs [MaxAbsor];
-    G4double sumEleav[MaxAbsor], sum2Eleav[MaxAbsor];       
+    std::vector<G4double> sumEAbs; 
+    std::vector<G4double> sum2EAbs; 
+    std::vector<G4double> sumLAbs; 
+    std::vector<G4double> sum2LAbs;
+    std::vector<G4double> sumEleav; 
+    std::vector<G4double> sum2Eleav;       
 
     DetectorConstruction* Detector;    
     RunActionMessenger*   runMessenger;        
+    G4String              filename;
+    std::vector<G4String> hid;    
+    std::vector<G4String> htitle;    
+    std::vector<G4int>    hbins;    
+    std::vector<G4double> hmin;    
+    std::vector<G4double> hmax;    
+    std::vector<G4double> histoUnit;
+    G4int  nmax;    
     
 #ifdef G4ANALYSIS_USE    
     AIDA::ITree* tree;
-    AIDA::IHistogramFactory* hf;    
-    AIDA::IHistogram1D* histo[MaxAbsor];
-    G4double histoUnit[MaxAbsor];    
+    AIDA::IHistogramFactory* hf;
+    std::vector<AIDA::IHistogram1D*> histo;
 #endif      
              
 };
