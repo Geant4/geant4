@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.19 2002-04-24 10:45:40 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.20 2002-05-06 11:02:06 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -45,6 +45,7 @@
 // 22-04-02 boundary algorithm modified -> important improvement in timing !!!!
 //          (L.Urban)
 // 24-04-02 some minor changes in boundary algorithm, L.Urban 
+// 06-05-02 bug fixed in GetContinuousStepLimit, L.Urban
 //
 // -----------------------------------------------------------------------------
 //
@@ -459,7 +460,8 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
            valueGPILSelectionMSC = CandidateForSelection;
          } 
       }
-      else if((stepno - stepnolastmsc) <= stepnodif)
+
+      if(((stepno - stepnolastmsc) <= stepnodif) && (stepno >= stepnolastmsc))
       {
         tmsc += G4float(stepno-stepnolastmsc)*tlimit ;
         if(tmsc > range) tmsc = range ;
