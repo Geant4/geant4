@@ -19,7 +19,7 @@
 
 //....
 
-BrachyWaterBoxSD::BrachyWaterBoxSD(G4String name, int NumVoxelX, int NumVoxelZ)
+BrachyWaterBoxSD::BrachyWaterBoxSD(G4String name, G4int NumVoxelX, G4int NumVoxelZ)
 	:G4VSensitiveDetector(name),m_NumVoxelX(NumVoxelX),m_NumVoxelZ(NumVoxelZ)
 {
  G4String HCname;
@@ -41,8 +41,8 @@ void BrachyWaterBoxSD::Initialize(G4HCofThisEvent*HCE)
 {
  m_pWaterBoxHitsCollection = new BrachyWaterBoxHitsCollection(SensitiveDetectorName,collectionName[0]);
 
- for(int k=0;k<m_NumVoxelZ;k++)
- 	for(int i=0;i<m_NumVoxelX;i++)
+ for(G4int k=0;k<m_NumVoxelZ;k++)
+ 	for(G4int i=0;i<m_NumVoxelX;i++)
  		m_pVoxelID[i+k*m_NumVoxelX] = -1;
 }
 
@@ -64,8 +64,8 @@ G4bool BrachyWaterBoxSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
  G4VPhysicalVolume* mothVol = ROhist->GetVolume(1);
   
  // Read Voxel indexes: i is the x index, k is the z index
- int k = ROhist->GetReplicaNumber();
- int i = ROhist->GetReplicaNumber(1);
+ G4int k = ROhist->GetReplicaNumber();
+ G4int i = ROhist->GetReplicaNumber(1);
 
  if(m_pVoxelID[i+k*m_NumVoxelX]==-1)
  	{

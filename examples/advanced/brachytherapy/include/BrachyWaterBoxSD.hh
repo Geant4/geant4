@@ -17,7 +17,7 @@ class G4TouchableHistory;
 class BrachyWaterBoxSD : public G4VSensitiveDetector
 {
  public:
-      BrachyWaterBoxSD(G4String name, int NumVoxelX, int NumVoxelZ);
+      BrachyWaterBoxSD(G4String name, G4int NumVoxelX, G4int NumVoxelZ);
       ~BrachyWaterBoxSD();
 
       void Initialize(G4HCofThisEvent*HCE);
@@ -29,9 +29,9 @@ class BrachyWaterBoxSD : public G4VSensitiveDetector
  private:
       BrachyWaterBoxHitsCollection *m_pWaterBoxHitsCollection;
 	
-      const int m_NumVoxelX;
-      const int m_NumVoxelZ;
-      int *m_pVoxelID;
+      const G4int m_NumVoxelX;
+      const G4int m_NumVoxelZ;
+      G4int *m_pVoxelID;
 };
 #endif
 

@@ -21,7 +21,7 @@
 
 //....
 
-BrachyEventAction::BrachyEventAction(float *pVoxel,G4int NumVoxelX,G4int NumVoxelZ) :
+BrachyEventAction::BrachyEventAction(G4float *pVoxel,G4int NumVoxelX,G4int NumVoxelZ) :
 	m_NumVoxelX(NumVoxelX),m_NumVoxelZ(NumVoxelZ)
 {
  m_HitsCollectionID = -1;
@@ -61,8 +61,8 @@ void BrachyEventAction::EndOfEventAction(const G4Event* evt)
 	if(m_pVoxel)
 		{
 		// Fill voxel matrix with energy deposit data
-		int HitCount = CHC->entries();
-		for (int h=0; h<HitCount; h++)
+		G4int HitCount = CHC->entries();
+		for (G4int h=0; h<HitCount; h++)
 			m_pVoxel[((*CHC)[h])->GetZID() + ((*CHC)[h])->GetXID()*m_NumVoxelX] += (*CHC)[h]->GetEdep();
 		}
 	}	

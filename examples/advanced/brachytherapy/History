@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.1 2000-11-09 16:44:38 sgarelli Exp $
+$Id: History,v 1.2 2000-11-16 21:54:20 sgarelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,5 +10,10 @@ $Id: History,v 1.1 2000-11-09 16:44:38 sgarelli Exp $
                       ---------------------
 
 09.11.2000 - SA, tag brachy-V02-00-00
-             First submission of Brachytherapy advanced example.
+             (dvnote) First submission of Brachytherapy advanced example.
+
+15.11.2000 - SA, tag brachy-V02-00-01
+             (minrev) Data fully compliant to Geant4 types.
+             (newfea) LowEnergy option available (see BRACHY_OPT_USELOWENERGY in BrachyPhysicsList.cc).
+
 

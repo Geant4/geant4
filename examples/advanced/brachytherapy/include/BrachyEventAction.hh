@@ -13,7 +13,7 @@
 class BrachyEventAction : public G4UserEventAction
 {
   public:
-    BrachyEventAction(float *pVoxel,G4int NumVoxelX,G4int NumVoxelZ);
+    BrachyEventAction(G4float *pVoxel,G4int NumVoxelX,G4int NumVoxelZ);
     ~BrachyEventAction();
 
   public:
@@ -23,7 +23,7 @@ class BrachyEventAction : public G4UserEventAction
   public:
     const G4int m_NumVoxelX;
     const G4int m_NumVoxelZ;
-    float *m_pVoxel;
+    G4float *m_pVoxel;
 
   private:
     G4int m_HitsCollectionID;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this
 // statement, and all its terms.
 //
-// $Id: Brachy.cc,v 1.1 2000-11-09 16:44:38 sgarelli Exp $
+// $Id: Brachy.cc,v 1.2 2000-11-16 21:54:19 sgarelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -21,7 +21,8 @@
 //
 // Simplified gamma generation is used.
 // Source axis is oriented along Z axis. 
-// Voxel data on the X-Z plane is output to ASCII file "Brachy.out".
+// Voxel data on the X-Z plane is output to ASCII file
+// "Brachy.out".
 //
 // For information related to this code contact the developers.
 //
@@ -63,8 +64,8 @@ int main()
  pRunManager->Initialize();
 
  // Alloc and initialize voxel matrix
- float* pVoxel = new float[NumVoxelX*NumVoxelZ];
- for(int j=0;j<NumVoxelX*NumVoxelZ;j++)
+ G4float* pVoxel = new G4float[NumVoxelX*NumVoxelZ];
+ for(G4int j=0;j<NumVoxelX*NumVoxelZ;j++)
 	pVoxel[j] = 0.0F;
  
  BrachyEventAction *pEventAction;
@@ -86,17 +87,17 @@ int main()
 	// Format = x coord [mm] <tab> z coord [mm] <tab> edep [MeV] <eol>
 	ofs.open("Brachy.out");
 		{
-		double VoxelWidth_X = pDetectorConstruction->m_BoxDimX/NumVoxelX;
-		double VoxelWidth_Z = pDetectorConstruction->m_BoxDimZ/NumVoxelZ;
-		double x,z;
+		G4double VoxelWidth_X = pDetectorConstruction->m_BoxDimX/NumVoxelX;
+		G4double VoxelWidth_Z = pDetectorConstruction->m_BoxDimZ/NumVoxelZ;
+		G4double x,z;
 
-		for(int k=0; k<NumVoxelZ; k++)
+		for(G4int k=0;k<NumVoxelZ;k++)
 			{
 			z = (-NumVoxelZ+1+2*k)*VoxelWidth_Z/2;
 
-			for(int i=0; i<NumVoxelX; i++)
+			for(G4int i=0;i<NumVoxelX;i++)
 				{
-				int j = i+k*NumVoxelX;
+				G4int j = i+k*NumVoxelX;
 				x = (-NumVoxelX+1+2*i)*VoxelWidth_X/2;
 				
 				// Do not consider near voxels
