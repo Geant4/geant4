@@ -1,4 +1,4 @@
-$Id: README,v 1.10 2004-04-01 09:56:08 mantero Exp $
+$Id: README,v 1.11 2004-05-29 10:02:08 mantero Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,14 @@ with different shapes of the primary generator.
 Apart from the sample and the detector there are two diaphragm reproducing 
 those used to collimate the incident beam during the test beam.
 
+Other two geometries are present for the user: an infinte-plane geometry and
+a planetary one, with the status of "beta release". The user must select, 
+at the moment of the execution, which geometry wants to use.
+If the program is executed in batch mode, it is possible to specify 
+geometry from command line. Example: 
+/path/XrayFluo macro.mac 1 (for test beam Geometry)
+/path/XrayFluo macro.mac 2 (for infinite plane Geometry)
+
 The aim of this advanced example is to illustrate the use of particle 
 generation and analysis schemes available in Geant4:
 
@@ -30,7 +38,7 @@ generation and analysis schemes available in Geant4:
   shows how to use it in order to obtain a beam of circular section or
   a particle source isotropic in space
 
-_ the example includes the possibility to shoot particles according to a 
+- the example includes the possibility to shoot particles according to a 
   given energy spectrum: the files B_flare.dat, C_Flare.dat and M_flare.dat
   store the spectra of photons during solar flares, the files 
   mercury2_flx_solmax.dat and mercury_flx_solmin.dat contain the spectra of
@@ -66,16 +74,15 @@ setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
 # flag that we want to use analysis:
 setenv G4ANALYSIS_USE               1
 
-#select AIDA implementation: Anaphe 5.0.5 (for cern AFS)
+#select AIDA implementation: PI 1.2.1  (for cern AFS)
+
 setenv G4ANALYSIS_BUILD  1
-source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.6/scripts/setupAnaphe.csh
-setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.6/scripts/
-setenv LD_LIBRARY_PATH $OGLHOME/lib:$LD_LIBRARY_PATH
-setenv ANAPHE5_REL_DIR /afs/cern.ch/sw/lhcxx/specific/redhat73/gcc-3.2/5.0.6/
-setenv LD_LIBRARY_PATH $OGLHOME/lib:$LD_LIBRARY_PATH
-setenv LD_LIBRARY_PATH "/afs/cern.ch/sw/lhcxx/specific/redhat73/gcc-3.2/5.0.6/lib:${LD_LIBRARY_PATH}"
-setenv LD_LIBRARY_PATH "/usr/local/gcc-alt-3.2/lib:${ANAPHE5_REL_DIR}/lib:${LD_LIBRARY_PATH}"
-setenv LD_LIBRARY_PATH "`aida-config --run`:${LD_LIBRARY_PATH}"
+setenv PI_VERSION 1_2_1
+
+setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/PI/Linux-g++/bin"
+
+eval `aida-config -r csh`
+
 
 #path to the lowEnergy data base
 
@@ -126,7 +133,7 @@ XrayFluoParticleGeneratorAction.cc
 
 6. Analysis
 
-At present the analisys is provided by any AIDA-3.0 compliant analysis system. 
+At present the analisys is provided by any AIDA-3.2.1 compliant analysis system. 
 In the example the Anaphe toolkit is used.
 
 AIDA / Anaphe configuration for compilation and link are in GNUmakefile, once 
@@ -135,19 +142,23 @@ is set the environmente as above:
 ifdef G4ANALYSIS_USE
  CPPFLAGS += `aida-config --include`
  LDFLAGS  += `aida-config --lib`
- LOADLIBS += `aida-config --lib`
 endif
 
 To build and execute the example on platforms where there is no
 implementation of the analysis system, the environment variables 
 must not be set.
 
-By setting visPlotter variable in XrayFluoAnalysisManager to true, 
+It is possible to visualize the outpu of the simulation. In order to do this 
+is necessary to uncomment all lines in XrayFluoAnalysisManager.cc / .hh regarding plotting; 
+and the same must be done for plotting refernces in XrayFluoRunManager.cc and XrayFluoEventAction.cc.
+And link against other AIDA compliant analysis sistems, such as Anaphe or JAS.
+ 
+Finally, by setting visPlotter variable in XrayFluoAnalysisManager to true, 
 it is possible to display the simulated output of the detector while 
-simulation is in progress. Graph window is updated every 1000 events. 
+simulation is in progress. Graph window is updated every 100000 events. 
 
 The example provides also a simple Python file used to display
-histograms with Lizard 3.0.0.x 
+histograms with Lizard 3.0.0.x (from Anaphe)
 
 Various commads, with help,  are available for Geant4 UI. 
 /analysis/outputFile and /analysis/fileType respectively for 

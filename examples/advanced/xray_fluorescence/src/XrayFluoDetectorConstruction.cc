@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoDetectorConstruction.cc
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// GEANT4 tag $Name: xray_fluo-V06-02-00
 //
 // Author: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //
@@ -32,6 +32,7 @@
 //    Nov 2002 Alfonso Mantero materials added, 
 //             Material selection implementation
 // 16 Jul 2003 Alfonso Mantero Detector type selection added + minor fixes
+// 28 May 2004 Alfonso Mantero sample material selection + bug fixes
 // -------------------------------------------------------------------
 
 #include "XrayFluoDetectorConstruction.hh"
@@ -54,6 +55,9 @@
 #include "G4UserLimits.hh"
 #include "XrayFluoMaterials.hh"
 
+
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -82,13 +86,13 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   NbOfPixelRows     =  1; // should be 1
   NbOfPixelColumns  =  1; // should be 1
   NbOfPixels        =  NbOfPixelRows*NbOfPixelColumns;
-  PixelSizeXY       = sqrt(40) * mm; // should be sqrt(40) * mm
+  PixelSizeXY       =  sqrt(40) * mm; // should be sqrt(40) * mm
   PixelThickness = 3.5 * mm; //should be 3.5 mm
 
   G4cout << "PixelThickness(mm): "<< PixelThickness/mm << G4endl;
   G4cout << "PixelSizeXY(cm): "<< PixelSizeXY/cm << G4endl;
 
-  ContactSizeXY     = sqrt(40) * mm; //should be 5
+  ContactSizeXY     = sqrt(40) * mm; //should be the same as PixelSizeXY
   SampleThickness = 4 * mm;
   SampleSizeXY = 3. * cm;
   Dia1Thickness = 1. *mm;
@@ -100,8 +104,8 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   DiaInnerSize = 1 * mm; //(Hole in the detector's diaphragm)
 
 
-  OhmicNegThickness = 0.005*mm;
-  OhmicPosThickness = 0.005*mm;
+  OhmicNegThickness = 0.005*mm;// 0.005
+  OhmicPosThickness = 0.005*mm;// 0.005
   ThetaHPGe = 135. * deg;
   PhiHPGe = 225. * deg;
 
@@ -131,6 +135,10 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   // create commands for interactive definition of the apparate
   
   detectorMessenger = new XrayFluoDetectorMessenger(this);
+
+  G4String regName = "SampleRegion";
+  sampleRegion = new G4Region(regName);
+
   G4cout << "XrayFluoDetectorConstruction created" << G4endl;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -199,7 +207,7 @@ void XrayFluoDetectorConstruction::DefineDefaultMaterials()
   Dia1Material = materials->GetMaterial("Lead");
   Dia3Material = materials->GetMaterial("Lead");
   pixelMaterial = materials->GetMaterial("Silicon");
-  OhmicPosMaterial = materials->GetMaterial("Copper");
+  OhmicPosMaterial = materials->GetMaterial("Galactic");
   OhmicNegMaterial = materials->GetMaterial("Lead");
   defaultMaterial = materials->GetMaterial("Galactic");
 
@@ -570,6 +578,14 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
     {
       logicPixel->SetSensitiveDetector(HPGeSD);
     }
+
+  // cut per region
+
+
+  logicSample->SetRegion(sampleRegion);
+  sampleRegion->AddRootLogicalVolume(logicSample);
+
+
   
   // Visualization attributes
   
@@ -684,7 +700,8 @@ void XrayFluoDetectorConstruction::SetSampleMaterial(G4String newMaterial)
 
 
     G4cout << "Material Change in Progress" << newMaterial << G4endl;
-    logicSample->SetMaterial(materials->GetMaterial(newMaterial));
+    sampleMaterial = materials->GetMaterial(newMaterial);
+    logicSample->SetMaterial(sampleMaterial);
     PrintApparateParameters();
   
 }

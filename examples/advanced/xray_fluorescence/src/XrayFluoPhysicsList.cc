@@ -44,6 +44,9 @@
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"
 
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -55,13 +58,23 @@ XrayFluoPhysicsList::XrayFluoPhysicsList(XrayFluoDetectorConstruction* p)
 
   //  SetGELowLimit(250*eV);
 
-  defaultCutValue = 0.000001*mm;
+  defaultCutValue = 0.1*mm;
 
   cutForGamma = defaultCutValue;
   cutForElectron = defaultCutValue;
   cutForProton    = 0.001*mm;
   SetVerboseLevel(1);
   physicsListMessenger = new XrayFluoPhysicsListMessenger(this);
+
+  G4String regName = "SampleRegion";
+  G4double cutValue = 0.000001 * mm;  
+  G4Region* reg = G4RegionStore::GetInstance()->GetRegion(regName);
+  G4ProductionCuts* cuts = new G4ProductionCuts;
+  cuts->SetProductionCut(cutValue);
+  reg->SetProductionCuts(cuts);
+
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -311,7 +324,7 @@ void XrayFluoPhysicsList::SetCuts(){
 
 void XrayFluoPhysicsList::SetLowEnSecPhotCut(G4double cut){
   
-  G4cout<<"Low energy secondary photons cut is now set to: "<<cut*MeV<<" (MeV)"<<G4endl;
+  G4cout<<"Low energy secondary photons cut is now set to: "<<cut/MeV<<" (MeV)"<<G4endl;
   G4cout<<"for processes LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation"<<G4endl;
   LeBrprocess->SetCutForLowEnSecPhotons(cut);
   LePeprocess->SetCutForLowEnSecPhotons(cut);
@@ -320,7 +333,7 @@ void XrayFluoPhysicsList::SetLowEnSecPhotCut(G4double cut){
 
 void XrayFluoPhysicsList::SetLowEnSecElecCut(G4double cut){
   
-  G4cout<<"Low energy secondary electrons cut is now set to: "<<cut*MeV<<" (MeV)"<<G4endl;
+  G4cout<<"Low energy secondary electrons cut is now set to: "<<cut/MeV<<" (MeV)"<<G4endl;
  
   G4cout<<"for processes LowEnergyIonisation"<<G4endl;
  

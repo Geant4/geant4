@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -136,7 +137,7 @@ void XrayFluoRunAction::BeginOfRunAction(const G4Run* aRun)
   // Book histograms and ntuples
   XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
   analysis->book();
-  analysis->InitializePlotter();
+  //  analysis->InitializePlotter();
 #endif
 }
 

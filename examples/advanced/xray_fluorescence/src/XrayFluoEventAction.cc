@@ -133,8 +133,8 @@ void XrayFluoEventAction::BeginOfEventAction(const G4Event* evt)
     else G4cout << "#"<< G4endl;
     //    if ( eventNumber % 5e6 == 0 ) G4cout << "#"<< G4endl;
 
-    XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
-    analysis->PlotCurrentResults();
+    //    XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
+    //    analysis->PlotCurrentResults();
   }
 
   if (HPGeCollID==-1)

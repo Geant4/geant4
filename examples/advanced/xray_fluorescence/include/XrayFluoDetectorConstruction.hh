@@ -262,6 +262,9 @@ private:
   XrayFluoDetectorMessenger* detectorMessenger; //pointer to the Messenger
 
   XrayFluoSD* HPGeSD;  //pointer to the sensitive detector
+
+  G4Region* sampleRegion;
+
   
 private:
   

@@ -89,9 +89,9 @@ public:
   G4bool GetDeletePersistencyFileFlag();
 
   // methods used by RunManager and EvenManager to visualize partial results
-  void InitializePlotter();
+  //  void InitializePlotter();
 
-  void PlotCurrentResults();
+  //  void PlotCurrentResults();
 
 private:
   //private constructor in order to create a singleton
@@ -99,7 +99,7 @@ private:
 
   G4String outputFileName;
 
-  G4bool visPlotter;
+  //  G4bool visPlotter;
 
   G4String persistencyType;
 
@@ -118,8 +118,8 @@ private:
   AIDA::IAnalysisFactory* analysisFactory;
   AIDA::ITree* tree;
   AIDA::IHistogramFactory* histogramFactory;
-  AIDA::IPlotterFactory* plotterFactory;
-  AIDA::IPlotter* plotter;
+  //  AIDA::IPlotterFactory* plotterFactory;
+  //  AIDA::IPlotter* plotter;
 
   AIDA::IHistogram1D*   histo_1;
   AIDA::IHistogram1D*   histo_2;
