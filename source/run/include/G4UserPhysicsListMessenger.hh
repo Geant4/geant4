@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserPhysicsListMessenger.hh,v 1.3 1999-04-15 04:13:41 kurasige Exp $
+// $Id: G4UserPhysicsListMessenger.hh,v 1.4 1999-11-07 13:11:49 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,13 +13,12 @@
 //
 //  G4UserPhysicsListMessenger.hh
 //
-//  Description:
+//  Class Description:
 //    This is a messenger class to interface to exchange information
 //    between ParticleUserList and UI.
-//
-// ------------------------------------------------------
+// --
 //  the List of Directory and Commands
-// ------------------------------------------------------
+// -       
 //  /run/particle/   Paricle control commands.
 //   Commands : 
 //    SetCuts *  Set default cut value
@@ -28,6 +27,7 @@
 //    Verbose * Set the Verbose level of G4VUserPhysicsList.
 //    addProcessManager * add process manager
 //    buildPhysicsTable * build physics table
+//
 // ------------------------------------------------------------
 //	History
 //        first version                   09 Jan. 1998 by H.Kurashige 
@@ -60,7 +60,7 @@ class G4UserPhysicsListMessenger: public G4UImessenger
     G4UserPhysicsListMessenger(G4VUserPhysicsList* pParticleList);
     virtual ~G4UserPhysicsListMessenger();
     
-  public:
+public: // with description
     virtual  void SetNewValue(G4UIcommand * command,G4String newValues);
     virtual  G4String GetCurrentValue(G4UIcommand * command);
 

@@ -1,17 +1,17 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.hh,v 1.4 1999-04-16 09:32:05 kurasige Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.5 1999-11-07 13:11:49 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
-//
+// Class Description:
 //      This class is an abstruct class for
 //      constructing particles and processes.
 //      User must implement following four virtual methods
@@ -23,7 +23,8 @@
 //        G4VUserPhysicsList::SetCuts()
 //           set cut values in range to all particles
 //           (and rebuilding physics table will be invoked )
-// 
+//
+// ------------------------------------------- 
 //	History
 //        first version                   09 Jan. 1998 by H.Kurashige 
 //        modified                        24 Jan. 1998 by H.Kurashige
@@ -54,17 +55,17 @@ class G4UserPhysicsListMessenger;
 
 class G4VUserPhysicsList
 {
-  public:
+  public: 
     G4VUserPhysicsList();
     virtual ~G4VUserPhysicsList();
 
-  public:
+  public:  // with description
     // By calling the "Construct" method, 
     // particles and processes are created    
     void Construct();
  
 
-  protected:
+  protected: // with description
     // These two methods of  ConstructParticle() and ConstructProcess()
     // will be invoked in the Construct() method. 
 
@@ -75,7 +76,7 @@ class G4VUserPhysicsList
     // registered to the process manager of each particle type 
     virtual void ConstructProcess() = 0;
 
-  protected:
+  protected: // with description
    //  User must invoke this method in his ConstructProcess() 
    //  implementation in order to insures particle transportation.
    //  !! Caution: this class must not be overriden !!
@@ -87,16 +88,16 @@ class G4VUserPhysicsList
    //   in the particle table
    virtual void SetCuts() = 0; 
 
-  protected:
+  protected: // with description
    //  "SetCutsWithDefault" method sets a cut value with the default
    //   cut values for all particle types in the particle table
    void SetCutsWithDefault();   
 
-  public:
+  public: // with description
     // 
     void BuildPhysicsTable(G4ParticleDefinition* );    
  
-  protected:
+  protected: // with description
     // Following are utility methods for SetCuts/reCalcCuts  
 
     // Reset cut values in energy for all particle types
@@ -131,7 +132,7 @@ class G4VUserPhysicsList
     //  to all particle types which have not be called SetCuts() methods yet.
     void ReCalcCutValueForOthers();
 
-  public: 
+  public:  // with description
     //  set/get the default cut value
     //  Calling SetDefaultCutValue causes re-calcuration of cut values
     //  and physics tables just before the next event loop
@@ -143,27 +144,27 @@ class G4VUserPhysicsList
     G4double defaultCutValue;
 
   /////////////////////////////////////
-  public:
+  public: // with description
     // Print out the List of registered particles types
     void DumpList() const;
 
-  public:
+  public: // with description
   // Print out information of cut values
     void DumpCutValuesTable() const;
     void DumpCutValues(const G4String &particle_name = "ALL") const;
     void DumpCutValues(G4ParticleDefinition* ) const;
 
-  protected:
+  protected: // with description
     // adds new ProcessManager to all particles in the Particle Table
     //   this routine is used in Construct()
     void InitializeProcessManager();
 
-  public:
+  public: // with description
     // remove and delete ProcessManagers for all particles in tha Particle Table
     //    this routine is invoked from RunManager 
     void RemoveProcessManager();
 
-  public:
+  public: // with description
     // add process manager for particles created on-the-fly 
     void AddProcessManager(G4ParticleDefinition* newParticle,
 			   G4ProcessManager*    newManager = NULL );
@@ -173,20 +174,20 @@ class G4VUserPhysicsList
     G4ParticleTable* theParticleTable;
     G4ParticleTable::G4PTblDicIterator* theParticleIterator;
 
-  protected:
+  protected: 
   // pointer to G4UserPhysicsListMessenger
     G4UserPhysicsListMessenger* theMessenger;
 
- public:
+ public: // with description
    void  SetVerboseLevel(G4int value);
    G4int GetVerboseLevel() const;
-
- protected:
-   G4int verboseLevel;
-   // controle flag for output message
+   // set/get controle flag for output message
    //  0: Silent
    //  1: Warning message
    //  2: More
+
+ protected:
+   G4int verboseLevel;
 
 };
 
