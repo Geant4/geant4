@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.hh,v 1.21 2003-11-19 10:16:38 vnivanch Exp $
+// $Id: G4eIonisation.hh,v 1.22 2003-11-19 19:38:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -186,16 +186,11 @@ inline void G4eIonisation::SecondariesPostStep(
                                                   G4double& tcut,
                                                   G4double& kinEnergy)
 {
-  G4cout<< "### tcut= " << tcut << " e= " << kinEnergy << G4endl;
   G4DynamicParticle* delta = model->SampleSecondary(couple, dp, tcut, kinEnergy);
-  G4cout<< "Edelta= " << delta->GetKineticEnergy() << " p= " << delta->GetMomentum() << G4endl;
   G4ThreeVector finalP = dp->GetMomentum();
-  G4cout<< "Ein= " << kinEnergy << " p= " << finalP << G4endl;
   kinEnergy -= delta->GetKineticEnergy();
   finalP -= delta->GetMomentum();
-  G4cout<< "Eend= " << kinEnergy << " p= " << finalP << G4endl;
   finalP = finalP.unit();
-  G4cout<< " p= " << finalP << G4endl;
   aParticleChange.SetNumberOfSecondaries(1);
   aParticleChange.AddSecondary(delta);
   aParticleChange.SetMomentumDirectionChange(finalP);

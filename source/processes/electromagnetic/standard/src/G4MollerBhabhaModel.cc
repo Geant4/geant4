@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.13 2003-11-19 11:08:31 vnivanch Exp $
+// $Id: G4MollerBhabhaModel.cc,v 1.14 2003-11-19 19:38:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -353,19 +353,12 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
   G4double sint = sqrt(1.0 - cost*cost);
 
   G4double phi = twopi * G4UniformRand() ;
-  G4cout <<"x= "<<x<<" totalMomentum= "<<totalMomentum<<" deltaMomentum= "<<deltaMomentum<<G4endl;
+
   G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
   deltaDirection.rotateUz(momentum);
-  G4cout << "InPart: e= " << dp->GetKineticEnergy() << " p= " << dp->GetMomentum() 
-         << " v= " << dp->GetMomentumDirection()<< "  " << dp << G4endl;
 
   // create G4DynamicParticle object for delta ray
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
-  G4cout << "InNew:  e= " << dp->GetKineticEnergy() << " p= " << dp->GetMomentum() 
-         << " v= " << dp->GetMomentumDirection() << "  " << dp << G4endl;
-  G4cout << "OutP:   e= " << delta->GetKineticEnergy() << " p= " << delta->GetMomentum() 
-         << " v= " << delta->GetMomentumDirection() << "  " << delta << G4endl;
-
   return delta;
 }
 
