@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.cc,v 1.10 2001-02-09 01:35:06 tsasaki Exp $
+// $Id: G4Trajectory.cc,v 1.11 2001-02-09 01:38:14 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,7 +58,6 @@ G4Trajectory::G4Trajectory(const G4Track* aTrack)
    fTrackID = aTrack->GetTrackID();
    fParentID = aTrack->GetParentID();
    //   positionRecord = new G4RWTPtrOrderedVector<G4VTrajectoryPoint>;
-   //   G4std::vector<t*> *
    positionRecord = new TrajectoryPointContainer();
    positionRecord->push_back(new G4TrajectoryPoint(aTrack->GetPosition()));
 }
