@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10DetectorConstruction.cc,v 1.5 2003-01-30 10:59:07 gcosmo Exp $
+// $Id: Tst10DetectorConstruction.cc,v 1.6 2003-05-15 08:24:16 gcosmo Exp $
 // ------------------------------------------------------------
 //  GEANT 4 class header file 
 //
@@ -71,10 +71,7 @@ Tst10DetectorConstruction::~Tst10DetectorConstruction()
 
 void Tst10DetectorConstruction::SwitchDetector()
 {
-  G4RunManager* theRunManager = G4RunManager::GetRunManager();
-  theRunManager->GeometryHasBeenModified();
-  theRunManager->DefineWorldVolume(PhysicalVolume);
-  theRunManager->ResetNavigator();
+  G4RunManager::GetRunManager()->DefineWorldVolume(PhysicalVolume);
 }
 
 G4VPhysicalVolume*
