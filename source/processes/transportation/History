@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2003-04-03 08:36:19 gcosmo Exp $
+$Id: History,v 1.68 2003-04-07 14:14:20 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr, 7rd, V.Ivanchenko     transport-V05-00-04
+-----------------
+- Migrade to cut per region for G4UserSpecialCuts
 
 Apr, 3rd, G.Cosmo          transport-V05-00-03
 -----------------
