@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2000-11-24 10:23:43 stesting Exp $
+$Id: History,v 1.5 2001-02-06 14:19:32 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,9 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-25th November 2000 Steve O'Neale (tagset210)
-- Updated exampleN06.out for em tags (checked with developer)
-- Changes attributed to precision and change in random sequence/decision
+06-02-2001 Update reference output for op-V03-00-05 S.W.O'Neale
 
 June 17, 2000  John Allison  (exampleN06-V01-01-00)
 - Updated exampleN06.out for geant4-01-01-ref-06.
