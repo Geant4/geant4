@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.hh,v 1.6 2002-06-07 13:57:36 radoone Exp $
+// $Id: G4AssemblyVolume.hh,v 1.7 2002-06-22 00:39:23 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,17 +120,19 @@ class G4AssemblyVolume
 
   void MakeImprint( G4LogicalVolume* pMotherLV,
                     G4ThreeVector& translationInMother,
-                    G4RotationMatrix* pRotationInMother);
+                    G4RotationMatrix* pRotationInMother,
+                    G4int copyNumBase = 0 );
     //
     // Creates instance of an assembly volume inside the given mother volume.
 
   void MakeImprint( G4LogicalVolume* pMotherLV,
-                    G4Transform3D&   transformation);
+                    G4Transform3D&   transformation,
+                    G4int copyNumBase = 0 );
     //
     // The same as previous but takes complete 3D transformation in space
     // as its argument.
 
-private:    
+ private:    
 
   G4std::vector<G4AssemblyTriplet> fTriplets;
     //
@@ -149,9 +151,12 @@ private:
     // generated physical volumes and rotation matrices as well !
     // This may affect validity of detector contruction !
 
- protected:
+ public:
 
   unsigned int GetImprintsCount() const;
+  
+ protected:
+    
   void         SetImprintsCount( unsigned int value );
   void         ImprintsCountPlus();
   void         ImprintsCountMinus();
@@ -165,9 +170,12 @@ private:
     //
     // Number of imprints of the given assembly volume.
 
- protected:
-
+ public:
+    
   unsigned int GetInstanceCount() const;
+  
+ protected:
+     
   void         SetInstanceCount( unsigned int value );
   void         InstanceCountPlus();
   void         InstanceCountMinus();

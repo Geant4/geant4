@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.8 2002-06-07 13:40:42 radoone Exp $
+// $Id: G4AssemblyVolume.cc,v 1.9 2002-06-22 00:40:15 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -153,13 +153,26 @@ void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume,
 //
 void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
                                     G4ThreeVector&    translationInMother,
-                                    G4RotationMatrix* pRotationInMother )
+                                    G4RotationMatrix* pRotationInMother,
+                                    G4int copyNumBase )
 {
-  unsigned int        numberOfDaughters = pMotherLV->GetNoDaughters();
+  // 22/06/2002 R. Chytracek
+  // The resolution of the Bugzilla Report #382
+  // If needed user can specify explicitly the base count from which to start off for the generation
+  // of phys. vol. copy numbers
+  // The old behaviour is preserved when copyNumBase == 0, e.g. the generated copy numbers start
+  // from the count equal to current number of daughter volumes before a imprint is made
+  unsigned int        numberOfDaughters;
+  
+  if( copyNumBase != 0 ) {
+    numberOfDaughters = pMotherLV->GetNoDaughters();
+  } else {
+    numberOfDaughters = copyNumBase;
+  }
 
   // We start from the first available index
   numberOfDaughters++;
-
+  
   ImprintsCountPlus();
   
   if( pRotationInMother == 0 ) {
@@ -222,9 +235,22 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
 }
 
 void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
-                                    G4Transform3D&    transformation )
+                                    G4Transform3D&    transformation,
+                                    G4int copyNumBase )
 {
-  unsigned int        numberOfDaughters = pMotherLV->GetNoDaughters();
+  // 22/06/2002 R. Chytracek
+  // The resolution of the Bugzilla Report #382
+  // If needed user can specify explicitly the base count from which to start off for the generation
+  // of phys. vol. copy numbers
+  // The old behaviour is preserved when copyNumBase == 0, e.g. the generated copy numbers start
+  // from the count equal to current number of daughter volumes before a imprint is made
+  unsigned int        numberOfDaughters;
+  
+  if( copyNumBase != 0 ) {
+    numberOfDaughters = pMotherLV->GetNoDaughters();
+  } else {
+    numberOfDaughters = copyNumBase;
+  }
 
   // We start from the first available index
   numberOfDaughters++;
