@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: EnergyHists.hh,v 1.1 2003-05-27 13:44:44 hpw Exp $
+// $Id: EnergyHists.hh,v 1.2 2003-05-27 14:35:04 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 #ifndef EnergyHists_h
 #define EnergyHists_h 1
 
+#ifdef USE_AIDA
 #include "AIDA/AIDA.h"
 #include "globals.hh"
 
@@ -59,7 +60,7 @@ class EnergyHists
     G4double binSize;
 
 };
-
+#endif
 #endif
 
     

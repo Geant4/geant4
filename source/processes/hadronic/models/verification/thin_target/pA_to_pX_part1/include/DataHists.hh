@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: DataHists.hh,v 1.1 2003-05-27 13:44:44 hpw Exp $
+// $Id: DataHists.hh,v 1.2 2003-05-27 14:35:04 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 #ifndef DataHists_h
 #define DataHists_h 1
 
+#ifdef USE_AIDA
 #include "AIDA/AIDA.h"
 #include "globals.hh"
 
@@ -59,6 +60,7 @@ class DataHists
     G4double binSize;
 
 };
+#endif
 
 #endif
 
