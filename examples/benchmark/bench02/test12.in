@@ -1,0 +1,176 @@
+#
+# Auto-generated test input file for test12 hadronics.
+#
+/control/verbose 2
+# /run/verbose 2
+/run/particle/setCut 1 m
+/run/initialize
+/gun/direction 1 0 0
+#
+# proton at 100 GeV in Pb
+#
+/gun/particle proton
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 200
+#
+# neutron at 100 GeV in Pb
+#
+/gun/particle neutron
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 200
+#
+# pi+ at 100 GeV in Pb
+#
+/gun/particle pi+
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 200
+#
+# pi- at 100 GeV in Pb
+#
+/gun/particle pi-
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 200
+#
+# kaon+ at 100 GeV in Pb
+#
+/gun/particle kaon+
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 200
+#
+# kaon- at 100 GeV in Pb
+#
+/gun/particle kaon-
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 200
+#
+# kaon0S at 100 GeV in Pb
+#
+/gun/particle kaon0S
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 200
+#
+# kaon0L at 100 GeV in Pb
+#
+/gun/particle kaon0L
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 200
+#
+# proton at 100 GeV in Al
+#
+/gun/particle proton
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
+/run/beamOn 200
+#
+# neutron at 100 GeV in Al
+#
+/gun/particle neutron
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
+/run/beamOn 200
+#
+# pi+ at 100 GeV in Al
+#
+/gun/particle pi+
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
+/run/beamOn 200
+#
+# pi- at 100 GeV in Al
+#
+/gun/particle pi-
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
+/run/beamOn 200
+#
+# kaon+ at 100 GeV in Al
+#
+/gun/particle kaon+
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
+/run/beamOn 200
+#
+# kaon- at 100 GeV in Al
+#
+/gun/particle kaon-
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
+/run/beamOn 200
+#
+# kaon0S at 100 GeV in Al
+#
+/gun/particle kaon0S
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
+/run/beamOn 200
+#
+# kaon0L at 100 GeV in Al
+#
+/gun/particle kaon0L
+/gun/energy 100 GeV
+/mydet/SelectMaterial Al
+/run/beamOn 200
+#
+# proton at 100 GeV in Air
+#
+/gun/particle proton
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
+/run/beamOn 200
+#
+# neutron at 100 GeV in Air
+#
+/gun/particle neutron
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
+/run/beamOn 200
+#
+# pi+ at 100 GeV in Air
+#
+/gun/particle pi+
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
+/run/beamOn 200
+#
+# pi- at 100 GeV in Air
+#
+/gun/particle pi-
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
+/run/beamOn 200
+#
+# kaon+ at 100 GeV in Air
+#
+/gun/particle kaon+
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
+/run/beamOn 200
+#
+# kaon- at 100 GeV in Air
+#
+/gun/particle kaon-
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
+/run/beamOn 200
+#
+# kaon0S at 100 GeV in Air
+#
+/gun/particle kaon0S
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
+/run/beamOn 200
+#
+# kaon0L at 100 GeV in Air
+#
+/gun/particle kaon0L
+/gun/energy 100 GeV
+/mydet/SelectMaterial Air
+/run/beamOn 200

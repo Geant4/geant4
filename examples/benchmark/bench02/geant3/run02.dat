@@ -1,0 +1,20 @@
+LIST
+C
+C            Al  L=13.5radl   R=1.35radl
+C            e- 1 GeV     500 events
+C
+C     Experimental results: Electron-induced cascade showers
+C                           J&H Crannel - Phys. Rev. 184-2 - August69
+C
+MATE  4
+BINS  12 (nbZ)  12 (nbR)  1.1245 (dZ/radl)   0.11245 (dR/radl)
+TRIG  500
+KINE  3 (Itype)    1. (Ekine)
+DEBUG 10  5  10
+SWIT  0 (draw)  1 (save)
+CUTS    10.0e-6 (cutgam)    10.0e-6 (cutele) 3*10.e-03 (cutneu/had/muo)
+      2*10.8e-6 (bcute/m) 2*1.03e-3 (dcute/m)
+LOSS 1
+HADR 0
+ABAN 0
+TIME 2=1.
