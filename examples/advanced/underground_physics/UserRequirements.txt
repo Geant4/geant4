@@ -4,11 +4,12 @@ UserRequirements.txt - Alex Howard, e-mail: a.s.howard@ic.ac.uk, 29/11/01.
 
 Introduction:
 
-This document is an initial introduction to the Dark Matter Example - DMX.
-A single liquid xenon cell is simulated within Geant4 and the scintillation
-light produced from interactions from various calibration species is recorded
-as PhotoMultiplier hits.  The output is then written to an ASCII file for
-future off-line analysis.
+This document is an initial introduction to the Dark Matter Example -
+DMX.  A single liquid xenon cell is simulated within Geant4 and the
+scintillation light produced from interactions from various
+calibration species is recorded as hits in a PhotoMultiplier Tube
+(PMT).  The output is then written to an ASCII file for future
+off-line analysis.
 
 -------------------------------------------------------------------------------
 
@@ -25,23 +26,41 @@ UR 1.2:    Configure the event loop
 Geometry:
 Experimental set-up:
 
-UR 2.1:
-A "cavern" 5m x 6m x 3m with concrete walls is defined as the World Volume.
-In the centre of the cavern a steel vacuum vessel containing liquid and gaseous
-xenon is placed.  The internal construction of the vessel accurately
-reproduces a prototype Dark Matter detector that has allows experimentally
-comparison.  A series of metal rings, copper thermal equalisation and an
-internal PhotoMultiplier Tube are incorporated.
+UR 2.1: 
+A "cavern" of dimensions 5m x 6m x 3m with concrete walls is defined
+as the World Volume.  In the centre of the cavern a steel vacuum
+vessel containing liquid and gaseous xenon is placed.  The internal
+construction of the vessel accurately reproduces an existing prototype
+Dark Matter detector which allows experimental comparison. The active
+detector volume is defined by a series of metal rings, complemented by
+a cover mirror and a PMT immersed in the liquid.  Two grids and a
+thermalising copper shield are also incorporated. The liquid/gas
+interface is located 6mm away from the mirror surface. A Am241
+calibration source is suspended from one of the grids in the liquid
+phase, above the PMT.
+
+      XXX================XXX mirror
+      XXX________________XXX gas phase
+      XXX                XXX 
+      XXX                XXX liquid phase
+      XXX                XXX
+      XXX.......U........XXX grid + calibrator
+      XXX................XXX grid
+      XXX|              |XXX
+         | ___------___ | 
+         ||    PMT     ||
+         ||            ||
 
 An accurate simulation of the above set-up should be carried.  
 
-UR 2.2:
-Record the energy deposited in the sensitive volume of the xenon chamber
+UR 2.2: 
+Record the energy deposited in the sensitive volume of the xenon
+chamber (liquid phase).
 
-UR 2.3:
-Produce scintillation light with different time constants depending upon the
-species of particle causing the excitation - either nuclear recoil or electron
-recoil type interactions.
+UR 2.3: 
+Produce scintillation photons with different time constants and light
+yields depending upon the species of particle causing the excitation -
+either nuclear recoil or electron recoil type interactions.
 
 UR 2.4:
 Implement reflectivities and transmission probabilities for all materials
@@ -59,9 +78,9 @@ The following areas of physics should be included:
 UR 3.1:  ·     Low Energy Electromagnetic - to 250eV for both e and photons
                Maximum energy range around 10 MeV for any particle
 UR 3.2:  ·     Compton Scattering
-UR 3.3:  ·     Photoelectric
+UR 3.3:  ·     Photoelectric Effect
 UR 3.4:  ·     Bremsstrahlung
-UR 3.5:  ·     Rayleigh Scattering - both for optical photons and hard
+UR 3.5:  ·     Rayleigh Scattering - for both optical photons and hard
                X-rays/Gammas
 UR 3.6:  ·     Electromagnetic ionisation
 UR 3.7:  ·     Delta Rays
@@ -72,33 +91,33 @@ UR 3.8:  ·     Heavy Ion Transport - to 250eV for protons, alphas and nuclei
                (electrons)
 UR 3.9:  ·     Radioactive Decay - induced
 	       All materials are sensitive to induced activity as a consequence
-               of photonuclear or neutron capture
+               of photo-nuclear or neutron capture
 UR 3.10: ·     Radioactive Decay - sources
 	       Specific nuclei can be decayed within the geometry to reproduce
                experimental calibration the experiment
 UR 3.11: ·     Neutron tracking from medium energy (few MeV) to thermal capture
 	       Discretely transported through-out the volume to give full
-               detector like response of both neutron capture activation and
+               detector response for both neutron capture activation and
                elastic and inelastic interaction in the target volume
 UR 3.12: ·     Scintillation light production and ray-tracing to PMT
-	       Optical photon transport introduced to allow true detector
-               response to be produced.
+	       Optical photon transport introduced to allow realistic
+               detector response to be produced.
 
 ParticleSource:
 
 UR 4.1:
 Implement a generic particle source that allows various particles, ions and
-nuclei to be fired or decayed anywhere within the volume
+nuclei to be fired or decayed anywhere within the volume.
 
 UR 4.2:
 Allow confinement of the particle source to within given volumes and randomly
-select particle or ion production within that volume
+select particle or ion production within that volume.
 
 UR 4.3:
-Allow various source shapes - rectangular, plane, sphere, cylinder to be
-implemented
+Allow various source shapes - point, sphere and cylinder have been
+implemented.
 
-UR 4.4:
+UR 4.4: !!!! not in ours !!!
 Allow spectrum of energies to be chosen as well as a monoenergetic particle
 type.
 
@@ -107,24 +126,30 @@ Radioactive Decay Module:
 
 UR 5.1:
 Allows specific ions to be decayed within set nuclear limits and energies and
-positions - linked to Particle Source above
+positions - linked to Particle Source above.
 
 UR 5.2:
-Can control induced activity to specific volumes
+Can control induced activity to specific volumes.
 
 UR 5.3:
 Allows increased functionality in terms of choice of weighting for the decay
-and other non-analogue MC techiniques.
+and other non-analogue MC techniques.
 
 
 Analysis:
 
-UR 6.1:
-Output the deposited energy, scintillation time, photon hits in the PMT and
-type of particle causing first and then subsequent energy depositions.
+UR 6.1: 
+Outputs to file "hits.out" the event number (Evt #), the energy
+deposited in the liquid phase (Etot, MeV), the number of hits in LXe
+(LXe hits), the time of the first hit (LXeTime, ns), the number of PMT
+hits (PMT hits), the average PMT hit time relative to the first hit in
+LXe (PmtTime, ns), the first particle to hit the LXe (First hit) and
+flags the type of particles depositing energy - gamma, neutron,
+electron, positron, proton, other (Flags).
 
 UR 6.2:
-Record of particle type history important for identifying and differentiating
+The "First hit" and "Flags" described above constitute a record of
+particle type history important for identifying and differentiating
 between elastic and inelastic neutron interactions.
 
 
@@ -132,22 +157,22 @@ between elastic and inelastic neutron interactions.
 Visualisation:
 
 UR 7.1:
-Visualise the experimental set-up
+Visualise the experimental set-up.
 
 UR 7.2:
-Visualise tracks in the experimental set-up
+Visualise tracks in the experimental set-up.
 
 UR 7.3:
-Allow the choice between scintillation, PMT surface hits, and full tracking to
-be displayed
+Allow the choice between scintillation light, PMT photocathode hits,
+and full tracking to be displayed.
 
 UR 7.4:
 Allow the user to choose specific track colours for gammas, neutrons,
-charged-plus and charged-minus tracks
+charged-plus and charged-minus tracks.
 
 UR 7.5:
 Allow output to stored interactive files using the HEPREP interface which can
-then be read into Wired and other XML packages
+then be read into Wired and other XML packages.
 
 
 User Interface:
@@ -193,7 +218,7 @@ The user should have the ability to change several features including
 
 UR 8.3:
 Control the output to the screen into Modulo N events:
-using printModulo control
+using printModulo control.
 
 Command /dmx/printModulo
 Guidance :
@@ -212,8 +237,9 @@ DM Example draw commands.
 
  Sub-directories : 
  Commands : 
- 1) drawColours * Tracks drawn by Event (standard colours) or by Step (custom colours)
- 2) drawTracks * Draw the tracks in the event
+ 1) drawColours * Tracks drawn by Event (standard colours) or 
+                  by Step (custom colours)
+ 2) drawTracks * Which tracks to draw in the event
  3) drawHits * Set flag to draw hits in PMT.
  4) neutronColour * Colour of neutron in the event
  5) gammaColour * Colour of gamma in the event
@@ -224,8 +250,8 @@ DM Example draw commands.
 
 
 UR 8.5:
-Control the files to be saved - either PMT hits or event summary in terms of
-energy deposit and number of photon hits observed
+Control the files to be saved - PMT hits and event summary in terms of
+energy deposit and number of photon hits observed.
 
 Command /dmx/savePmt
 Guidance :
@@ -251,10 +277,11 @@ Parameter : saveHitsFlag
 
 
 UR 8.6:
-Allow the suppression of physics processes within specific volumes in order to
-optimise running of the neutron transport code.
+Allow the suppression of physics processes within specific volumes in
+order to optimise running of the neutron transport code.
 
-Gammas are killed in the concrete wall in order to reduce processing time significantly.
+Gammas may be killed in the concrete wall in order to reduce
+processing time significantly.
 
 Command /dmx/KillGammasInConcrete
 Guidance :
@@ -271,12 +298,12 @@ Parameter : KillGammasFlag
 CUTS:
 
 UR 9.1:
-User can apply special cuts to time and step length to tracks.  If the global
-time is exceeded then the track is killed
+User can apply special cuts to time and step length to tracks.  If the
+global time is exceeded then the track is killed.
 
 UR 9.2:
-Allow gammas to be killed in the concrete wall in order to optimise processing
-time for neutron transport
+Allow gammas to be killed in the concrete wall in order to optimise
+processing time for neutron transport.
 
 ------------------------------------------------------------------------------
 

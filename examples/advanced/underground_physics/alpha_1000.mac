@@ -47,4 +47,6 @@
 /tracking/storeTrajectory 0
 #
 /run/beamOn 1000
+#
+/tracking/storeTrajectory 1
 

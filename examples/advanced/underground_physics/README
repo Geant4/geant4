@@ -3,10 +3,10 @@
 
 UNDERGROUND PHYSICS
 
-An example of a underground dark matter example.
+An example of a underground dark matter experiment.
 
-Please see the UserRequirements.txt and related web-pages at the end of that
-document.
+Please see the UserRequirements.txt and related web-pages referred to
+at the end of that document.
 
 Over-view:
 A single liquid xenon cell is simulated within Geant4 and the scintillation
@@ -17,42 +17,108 @@ future off-line analysis.
 Geometry:
 Experimental set-up:
 
-A "cavern" 5m x 6m x 3m with concrete walls is defined as the World Volume.
-In the centre of the cavern a steel vacuum vessel containing liquid and gaseous
-xenon is placed.  The internal construction of the vessel accurately
-reproduces a prototype Dark Matter detector that has allows experimentally
-comparison.  A series of metal rings, copper thermal equalisation and an
-internal PhotoMultilier Tube are incorporated.
+A "cavern" of dimensions 5m x 6m x 3m with concrete walls is defined
+as the World Volume.  In the centre of the cavern a steel vacuum
+vessel containing liquid and gaseous xenon is placed.  The internal
+construction of the vessel accurately reproduces an existing prototype
+Dark Matter detector which allows experimental comparison. The active
+detector volume is defined by a series of metal rings, complemented by
+a cover mirror and a PMT immersed in the liquid.  Two grids and a
+thermalising copper shield are also incorporated. The liquid/gas
+interface is located 6mm away from the mirror surface. A Am241
+calibration source is suspended from one of the grids in the liquid
+phase, above the PMT.
+
+      XXX================XXX mirror
+      XXX________________XXX gas phase
+      XXX                XXX 
+      XXX                XXX liquid phase
+      XXX                XXX
+      XXX.......U........XXX grid + calibrator
+      XXX................XXX grid
+      XXX|              |XXX
+         | ___------___ | 
+         ||    PMT     ||
+         ||            ||
 
 
-Hits Output:
+Hits Output (file "hits.out"):
 An ASCII file containing the following information:
-"Event# TotalEnergyDeposit LXeDeposit LXeTime PMTHits PmtTime FirstParticle   
-Flags to indicate which particles have been hits" 
+     Evt #         : event number
+     Etot, MeV     : energy deposited in liquid xenon
+     LXe hits      : number of hits in liquid xenon
+     LXeTime, ns   : time of first hit in liquid xenon
+     PMT hits      : number of hits in PMT (photocathode)
+     PmtTime, ns   : average PMT hit time relative to LXeTime
+     First hit     : first particle to hit liquid xenon
+     Flags         : particles contributing to energy deposition
 
-Pmt Output:
+     Note:
+
+     The time information PmtTime is erroneous when forcing nuclear
+     decay with the RadioactiveDecay module due to the precision
+     required to detect nanosecond scintillation times on a global
+     time of 432 years (in the case of 241Am decay).
+
+
+Pmt Output (file "pmt.out"):
+Photon hit positions within the PMT face (overwritten every event):
 "Hit#    X, mm   Y, mm   Z, mm"
-Photon hit positions within the PMT face
 
 
 To Run:
-Either run the macro files interactively or in batch if the command
-DMX macro_name.mac
-is executed.
-
-Note:
-The output file hits.out contains an event summary.  However, if using the
-RadioactiveDecay of nuclei the time information is erroneous due to the
-precision required to detect a scintillation time ~10's nanoseconds on a global
-time of 432 years (in the case of 241Am decay)
+Either run the macro files interactively or in batch with the command
+DMX macro_name.mac.
 
 
-Note: The following environment variables need to be set:
-G4RADIOACTIVEDATA -> points to Radioactive Decay Data files
-G4LEDATA -> points to low energy data base - G4EMLOW0.4
-G4LEVELGAMMADATA -> points to PhotoEvaporation data
-NeutronHPCrossSections -> points to neutron data files G4NDL3.5
+Macros:
 
+   initInter.mac
+   Initialisation macro for interactive mode.
+
+   gamma.mac
+   Shoots one 60 keV gamma upwards from the calibrator and traces the
+   scintillation light produced in LXe to the PMT. All tracks are drawn
+   with custom colours. PMT hits in photocathode are also shown. Event
+   summary is writen to file "hits.out".
+
+   gamma_1000.mac 
+   Similar to above, but 1000 gammas are emmited isotropically from the
+   source. No hits or tracks are draw, and the verbosity is reduced.
+
+   alpha.mac
+   Shoots one 5.486 MeV alpha particle upwards from the calibrator and
+   traces the scintillation light to the PMT. All tracks except
+   optical photons are drawn. Event summary is written to file
+   "hits.out" and PMT hits to file "pmt.out".
+
+   alpha_1000.mac
+   Similar to above, but 1000 alphas are emmited isotropically from the
+   source. No tracks are stored, and the verbosity is reduced. Event
+   summary is written to file "hits.out", PMT hits are not written out.
+
+   neutron.mac
+   Shoots one 2.48 MeV neutron inside the room aimed at the detector. 
+   All tracks except scintillation photons are drawn (custom colours).
+   Gammas are not killed at the concrete wall. Event summery is written
+   to file "hits.out".
+
+   sourceAm241.mac
+   Forces the decay of 241Am nuclei in the calibrator and tracks the
+   resulting particles (237Np + alpha + gamma from 237Np
+   de-excitation). All tracks are drawn except scintillation photons.
+   Event summery is written to file "hits.out".
+
+   sourceAm241_1000.mac
+   Similar to above but for 1000 events. No tracks are stored.
+
+
+Note: 
+The following environment variables need to be set:
+G4RADIOACTIVEDATA      : points to Radioactive Decay Data files
+G4LEDATA               : points to low energy data base - G4EMLOW0.5
+G4LEVELGAMMADATA       : points to PhotoEvaporation data
+NeutronHPCrossSections : points to neutron data files G4NDL3.5
 
 
 NB:

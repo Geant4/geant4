@@ -94,6 +94,7 @@ private:
   G4Material*  liqPhase_mat;
   G4Material*  CuShield_mat;
   G4Material*     alpha_mat;
+  G4Material*    recess_mat;
   G4Material* americium_mat;
   G4Material*      ring_mat;
   G4Material*    mirror_mat;
@@ -127,10 +128,8 @@ private:
   G4VPhysicalVolume* liqPhase_phys;  
   G4LogicalVolume*   alpha_log;   
   G4VPhysicalVolume* alpha_phys; 
-  /*  
-      G4LogicalVolume*   recess_log;   
-      G4VPhysicalVolume* recess_phys; 
-  */
+  G4LogicalVolume*   recess_log;   
+  G4VPhysicalVolume* recess_phys; 
   G4LogicalVolume*   americium_log;   
   G4VPhysicalVolume* americium_phys; 
   G4LogicalVolume*   ring_log;   
