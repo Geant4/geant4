@@ -109,5 +109,6 @@
 
   --- For bash-shell :   . setupAidaPi.sh
 
+ Notice that you need g++ 3.2 or 3.23.
  
  
