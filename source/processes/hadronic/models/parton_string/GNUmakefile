@@ -1,19 +1,23 @@
-# ----------------------------------------------------------------
+# --------------------------------------------------------------
+# GNUmakefile for chips library. HPW 20-Nov-99
+# --------------------------------------------------------------
 
-name := G4hadronic_gen
+name := G4had_string
 
-SUBDIRS =  diffraction
-SUBDIRS += hadronization
-SUBDIRS += management
-SUBDIRS += qgsm
-
-SUBLIBS =  G4hadronic_diffstring 
-SUBLIBS += G4hadronic_qgstring 
-SUBLIBS += G4hadronic_string_common
-SUBLIBS += G4hadronic_stringfrag 
 
 ifndef G4INSTALL
   G4INSTALL = ../../../../..
 endif
+
+SUBDIRS  = diffraction
+SUBDIRS += hadronization   
+SUBDIRS += management
+SUBDIRS += qgsm
+
+
+SUBLIBS  = G4had_string_diff
+SUBLIBS += G4had_string_frag
+SUBLIBS += G4had_string_man
+SUBLIBS += G4hadronic_qgstring
 
 include $(G4INSTALL)/config/globlib.gmk
