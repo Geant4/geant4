@@ -24,6 +24,9 @@
 #ifndef G4EpdlTables_hh
 #define G4EpdlTables_hh
 
+// Base Class Header
+#include "G4VTables.hh"
+
 // Other Class Headers
 #include "globals.hh"
 #include "G4DataVector.hh"
@@ -37,7 +40,7 @@
 // Class Declarations
 class G4VDataFile;
 
-class G4EpdlTables{
+class G4EpdlTables: public G4VTables{
 
 public:
   
@@ -60,10 +63,6 @@ public:
   inline G4PhysicsTable* GetTrdDataTable(){return theDataTable3;};
 
   RWTPtrSlist< RWTPtrSlist<G4DataVector> >* GetGlobalList();
-
-  void MakeNtuple(const char* fname);
-
-private:
 
 protected:
 

@@ -31,10 +31,6 @@
 #include "G4PhysicsFreeVector.hh"
 #include "CLHEP/String/Strings.h"
 
-#include "CLHEP/Hist/HBookFile.h"
-#include "CLHEP/Hist/TupleManager.h"
-#include "CLHEP/Hist/HBookTuple.h"
-
 // C++ Headers
 #include <iostream.h>
 #include <fstream.h>
@@ -44,6 +40,7 @@
 
 // Constructors
 G4EpdlTables::G4EpdlTables(G4VDataFile& DFile):
+  G4VTables(), 
   datfile(DFile)
 {   
   theDataTable1 = 0;
@@ -310,131 +307,6 @@ void G4EpdlTables::FillTheTable(G4int numEl) {
   }// end for(;;)
 
 } // end FillDataTable
-
-
-void G4EpdlTables::MakeNtuple(const char* fname){
-
-
-  G4PhysicsVector* outVec = 0;
-  G4PhysicsVector* outVec2 = 0;
-  G4PhysicsVector* outVec3 = 0;
-
-  HepString name(fname);
-  G4int N;
-
-  if(theDataTable1->length()){
-    
-    HepTupleManager* tupleManager;
-    HepString hbname = name + "1" + ".hbook";
-    tupleManager = new HBookFile(hbname, 100);
-    cout<<"HBOOK file name is: "<<((HBookFile*) tupleManager)->filename()<<endl;
-
-    for(N = 0; N < 50; N++){
-
-      HepString numElem(N);
-      HepString tupleName = name + numElem;
-      cout<<"MakeNtuples "<<tupleName<<endl;
-      HepTuple* tuple = tupleManager->ntuple(tupleName);
-
-      outVec = (*theDataTable1)(N);
-
-      if(theDataTable2->length()){
-
-        outVec2 = (*theDataTable2)(N);
-      }
-
-      if(theDataTable3->length()){
-
-        outVec3 = (*theDataTable3)(N);
-      }
-
-      for(G4int i = 0; i < outVec->GetVectorLength(); i++){
-	
-        tuple->column("arg", outVec->GetLowEdgeEnergy(i));
-
-        tuple->column("val", (*outVec)(i));
-
-        if(theDataTable2->length()){
-
-          tuple->column("val2", (*outVec2)(i)*barn);
-
-        }
-
-        if(theDataTable3->length()){
-
-          tuple->column("val3", (*outVec3)(i));
-        }
-
-        tuple->column("index",i);      
-        tuple->dumpData();
-        
-      }
-    }
-
-    tupleManager->write();
-    delete tupleManager;
-
-//*****************************************************************************
- 
-    hbname = name + "2" +".hbook";
-    tupleManager = new HBookFile(hbname, 100);
-    cout<<"HBOOK file name is: "<<((HBookFile*) tupleManager)->filename()<<endl;
-
-    for(N = 0; N < theDataTable1->length()-50; N++){
-
-      HepString numElem(N);
-      HepString tupleName = name + numElem;
-      cout<<"MakeNtuples "<<tupleName<<endl;
-      HepTuple* tuple = tupleManager->ntuple(tupleName);
-
-      outVec = (*theDataTable1)(N+50);
-
-      if(theDataTable2->length()){
-        outVec2 = (*theDataTable2)(N+50);
-      }
-
-      if(theDataTable3->length()){
-        outVec3 = (*theDataTable3)(N+50);
-      }
-
-      for(G4int i = 0; i < outVec->GetVectorLength(); i++){
-
-
-        tuple->column("arg", outVec->GetLowEdgeEnergy(i));
-        tuple->column("val", (*outVec)(i));
-
-
-        if(theDataTable2->length()){
-
-          tuple->column("val2", (*outVec2)(i));
-        }
-
-        if(theDataTable3->length()){
-
-          tuple->column("val3", (*outVec3)(i));
-        }
-
-        tuple->column("index",i);      
-        tuple->dumpData();
-      }
-    }
-
-
-    tupleManager->write();
-    delete tupleManager;
-  } // end if(DataTable1)
-}
-
-
-
-
-
-
-
-
-
-
-
 
 
 
