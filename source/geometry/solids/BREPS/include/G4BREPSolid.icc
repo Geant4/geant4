@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.icc,v 1.5 2004-09-15 09:50:32 grichine Exp $
+// $Id: G4BREPSolid.icc,v 1.6 2004-09-22 09:52:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -139,10 +139,29 @@ inline void G4BREPSolid::QuickSort( register G4Surface** SrfVec,
     if( i < right ) QuickSort(SrfVec,i, right);    
 }
 
+inline G4int G4BREPSolid::GetCubVolStatistics() const
+{
+  return fCubVolStatistics;
+}
+
+inline G4double G4BREPSolid::GetCubVolEpsilon() const
+{
+  return fCubVolEpsilon;
+}
+
+inline void G4BREPSolid::SetCubVolStatistics(G4int st)
+{
+  fCubVolStatistics=st;
+}
+
+inline void G4BREPSolid::SetCubVolEpsilon(G4double ep)
+{
+  fCubVolEpsilon=ep;
+}
+
 ///////////////////////////////////////////////////
 
-inline
-G4double G4BREPSolid::GetCubicVolume()
+inline G4double G4BREPSolid::GetCubicVolume()
 {
   if(fCubicVolume != 0.) ;
   else   fCubicVolume = EstimateCubicVolume(fCubVolStatistics,fCubVolEpsilon); 

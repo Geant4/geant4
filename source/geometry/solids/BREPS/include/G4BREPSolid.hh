@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.hh,v 1.12 2004-09-15 09:50:32 grichine Exp $
+// $Id: G4BREPSolid.hh,v 1.13 2004-09-22 09:52:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -140,15 +140,17 @@ public: // with description
   inline G4int GetNumberOfSolids() const;
   inline const G4Axis2Placement3D* GetPlace() const;
   inline const G4BoundingBox3D*    GetBBox()  const;
-  inline G4double GetCubicVolume();
-   // Accessors methods.
-  G4int GetCubVolStatistics() const {return fCubVolStatistics;};
-  G4double GetCubVolEpsilon() const {return fCubVolEpsilon;};
-
-  void SetCubVolStatistics(G4int st) {fCubVolStatistics=st;};
-  void SetCubVolEpsilon(G4double ep) {fCubVolEpsilon=ep;};
+  inline G4int GetCubVolStatistics() const;
+  inline G4double GetCubVolEpsilon() const;
+  inline void SetCubVolStatistics(G4int st);
+  inline void SetCubVolEpsilon(G4double ep);
+    // Accessors methods.
 
 public:
+
+  inline G4double GetCubicVolume();
+    // Returns an estimation of the geometrical cubic volume of the
+    // solid. Caches the computed value once computed the first time.
 
   inline G4double IntersectionDistance() const;
   inline void IntersectionDistance(G4double) const;
@@ -208,7 +210,7 @@ private:
   G4int    fCubVolStatistics;
   G4double fCubVolEpsilon;
   G4double fCubicVolume;
-
+    // Statistics, error accuracy and cached value for volume.
 
   G4BREPSolid(const G4BREPSolid&);
   G4BREPSolid& operator=(const G4BREPSolid&);
