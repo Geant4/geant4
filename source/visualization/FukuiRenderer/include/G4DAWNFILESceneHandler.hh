@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILESceneHandler.hh,v 1.1 1999-01-09 16:11:38 allison Exp $
+// $Id: G4DAWNFILESceneHandler.hh,v 1.2 1999-05-10 15:38:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -38,7 +38,7 @@ public:
 
 	//----- constructor and destructor
   G4DAWNFILESceneHandler (G4DAWNFILE& system, const G4String& name = "");
-  ~G4DAWNFILESceneHandler ();
+  virtual ~G4DAWNFILESceneHandler ();
 
 	//----- overriding base class methods
   void AddPrimitive (const G4Polyline& line);

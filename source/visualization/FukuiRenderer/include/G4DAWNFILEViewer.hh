@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILEViewer.hh,v 1.2 1999-01-11 00:47:18 allison Exp $
+// $Id: G4DAWNFILEViewer.hh,v 1.3 1999-05-10 15:38:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -31,7 +31,7 @@ class G4DAWNFILEViewer: public G4VViewer {
 public:
 	//----- constructor and destructor
   G4DAWNFILEViewer  (G4DAWNFILESceneHandler& scene, const G4String& name = "");
-  ~G4DAWNFILEViewer ();
+  virtual ~G4DAWNFILEViewer ();
 
 	//----- overriding base class methods
   void SetView   (); // Do nothing. SendViewParameters will do its job. 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1FileViewer.hh,v 1.2 1999-01-11 00:47:59 allison Exp $
+// $Id: G4VRML1FileViewer.hh,v 1.3 1999-05-10 15:39:07 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1FileViewer.hh
@@ -24,7 +24,7 @@ class G4VRML1FileSceneHandler;
 class G4VRML1FileViewer: public G4VViewer {
 public:
 	G4VRML1FileViewer(G4VRML1FileSceneHandler& scene, const G4String& name = "");
-	~G4VRML1FileViewer();
+	virtual ~G4VRML1FileViewer();
 	void ClearView();
 	void DrawView();
 	void ShowView();

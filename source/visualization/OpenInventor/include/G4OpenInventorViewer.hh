@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorViewer.hh,v 1.2 1999-01-11 00:47:52 allison Exp $
+// $Id: G4OpenInventorViewer.hh,v 1.3 1999-05-10 15:38:56 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@ class G4OpenInventorViewer: public G4VViewer {
 public:
   		  G4OpenInventorViewer (G4OpenInventorSceneHandler& scene,
 				      const G4String& name = "");
-  		 ~G4OpenInventorViewer ();
+         virtual ~G4OpenInventorViewer ();
   void 		  DrawView ();
   void 		  ShowView ();
   G4bool 	  GetOIVisualFound () const;

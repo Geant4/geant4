@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorWin32.hh,v 1.2 1999-01-09 16:25:13 allison Exp $
+// $Id: G4OpenInventorWin32.hh,v 1.3 1999-05-10 15:38:57 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // OpenInventor graphics system factory.
@@ -20,6 +20,7 @@
 class G4OpenInventorWin32: public G4OpenInventor {
 public:
   G4OpenInventorWin32 ();
+  virtual ~G4OpenInventorWin32 ();
 };
 
 #endif

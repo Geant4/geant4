@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorX.cc,v 1.2 1999-01-09 16:25:18 allison Exp $
+// $Id: G4OpenInventorX.cc,v 1.3 1999-05-10 15:39:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,5 +37,7 @@ G4OpenInventorX::G4OpenInventorX ()
 
   InitHEPVis();
 }
+
+G4OpenInventorX::~G4OpenInventorX () {}
 
 #endif

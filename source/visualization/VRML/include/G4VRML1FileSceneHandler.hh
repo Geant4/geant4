@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1FileSceneHandler.hh,v 1.1 1999-01-09 16:27:31 allison Exp $
+// $Id: G4VRML1FileSceneHandler.hh,v 1.2 1999-05-10 15:39:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1FileSceneHandler.hh
@@ -33,7 +33,7 @@ class G4VRML1FileSceneHandler: public G4VSceneHandler {
 // methods (public) 
 public:
 	G4VRML1FileSceneHandler(G4VRML1File& system, const G4String& name = "");
-	~G4VRML1FileSceneHandler();
+	virtual ~G4VRML1FileSceneHandler();
 	void AddThis(const G4Box&);
 	void AddThis(const G4Cons&);
 	void AddThis(const G4Tubs&);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILE.hh,v 1.3 1999-01-11 00:47:17 allison Exp $
+// $Id: G4DAWNFILE.hh,v 1.4 1999-05-10 15:38:26 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -30,7 +30,7 @@ class G4DAWNFILE: public G4VGraphicsSystem {
 
 public:
   G4DAWNFILE ();
-  ~G4DAWNFILE ();
+  virtual ~G4DAWNFILE ();
   G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
   G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
 

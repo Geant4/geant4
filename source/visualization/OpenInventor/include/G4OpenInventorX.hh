@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorX.hh,v 1.2 1999-01-09 16:25:13 allison Exp $
+// $Id: G4OpenInventorX.hh,v 1.3 1999-05-10 15:38:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,6 +22,7 @@
 class G4OpenInventorX: public G4OpenInventor {
 public:
   G4OpenInventorX ();
+  virtual ~G4OpenInventorX ();
 };
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.1 1999-01-09 16:25:10 allison Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.2 1999-05-10 15:38:54 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@ public:
   typedef const G4VPhysicalVolume* G4VPhysicalVolumePointer;
   typedef SoSeparator*       SoSeparatorPointer;
   G4OpenInventorSceneHandler (G4OpenInventor& system, const G4String& name = "");
-  ~G4OpenInventorSceneHandler ();
+  virtual ~G4OpenInventorSceneHandler ();
   void AddPrimitive (const G4Polyline& line);
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Circle&);

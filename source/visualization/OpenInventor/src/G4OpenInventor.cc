@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventor.cc,v 1.3 1999-01-11 00:47:53 allison Exp $
+// $Id: G4OpenInventor.cc,v 1.4 1999-05-10 15:39:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef G4VIS_BUILD_OI_DRIVER
@@ -32,6 +32,9 @@ G4OpenInventor::G4OpenInventor (
 ,interactorManager(NULL)
 {
 }
+
+G4OpenInventor::~G4OpenInventor () {}
+
 void G4OpenInventor::SetInteractorManager (G4VInteractorManager* im) {
   interactorManager = im;
 }

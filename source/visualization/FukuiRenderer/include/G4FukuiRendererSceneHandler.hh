@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRendererSceneHandler.hh,v 1.1 1999-01-09 16:11:44 allison Exp $
+// $Id: G4FukuiRendererSceneHandler.hh,v 1.2 1999-05-10 15:38:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,7 +104,7 @@ public:
 
 	//----- constructor and destructor
   G4FukuiRendererSceneHandler (G4FukuiRenderer& system, const G4String& name = "");
-  ~G4FukuiRendererSceneHandler ();
+  virtual ~G4FukuiRendererSceneHandler ();
 
 	//----- overriding base class methods
   void AddPrimitive (const G4Polyline& line);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRendererViewer.hh,v 1.2 1999-01-11 00:47:19 allison Exp $
+// $Id: G4FukuiRendererViewer.hh,v 1.3 1999-05-10 15:38:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,7 @@ class G4FukuiRendererViewer: public G4VViewer {
 public:
 	//----- constructor and destructor
   G4FukuiRendererViewer  (G4FukuiRendererSceneHandler& scene, const G4String& name);
-  ~G4FukuiRendererViewer ();
+  virtual ~G4FukuiRendererViewer ();
 
 	//----- overriding base class methods
   void SetView   (); // Do nothing. SendViewParameters will do its job. 
