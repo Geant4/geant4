@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.hh,v 1.11 2003-11-05 10:52:04 japost Exp $
+// $Id: G4FieldManager.hh,v 1.12 2003-11-08 03:27:04 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -72,12 +72,11 @@ class G4Track;  // Forward reference for parameter configuration
 class G4FieldManager
 {
   public:  // with description
-
-     G4FieldManager();     // Useless unless SetField method is added
-     G4FieldManager(G4Field       *detectorField, 
-		    G4ChordFinder *pChordFinder, 
-		    G4bool        fieldChangesEnergy);
-          // New general constructor for any field
+     G4FieldManager(G4Field       *detectorField=0, 
+		    G4ChordFinder *pChordFinder=0, 
+		    G4bool       b=true ); // fieldChangesEnergy is taken from field
+          // General constructor for any field.
+          // -> Must be set with field and chordfinder for use.
      G4FieldManager(G4MagneticField *detectorMagneticField);
           // Creates ChordFinder
           //   - assumes pure magnetic field (so Energy constant)
