@@ -34,7 +34,7 @@ The following environment variables need to be set:                     |
 
 G4LEDATA: points to low energy data base - G4EMLOW2.3                   |
 
-setup for analysis with AIDA 3.2.1/PI 1.2.1 for user with afs system:
+setup for analysis with AIDA 3.2.1/PI 1.2.1 for users with afs system:
 
 ---------- SETUP.py ------------------------                            |                                            
 setenv G4ANALYSIS_USE  1
@@ -50,9 +50,11 @@ eval `scram runtime -csh`                                               |
 cd ${CURDIR}
                                                                         |
 ------------------------------------------
- Please take a look to the web page                                     |
+The users not provided of afs service can download the analysis tools   |
+from the web.
+Please take a look to the web page                                      |
         http://www.cern.ch/PI 
- for more info                                                          |
+for more info                                                           |
 
 ------------------------------------------------------------------------
 ----> 3.How to run the example.                                         |
