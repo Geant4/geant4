@@ -25,6 +25,8 @@
 
 G4bool G4MesonSplitter::SplitMeson(G4int PDGcode, G4int* aEnd, G4int* bEnd)
 {
+  G4bool result = true;
+  if (absPDGcode >= 1000) return false;
   G4int absPDGcode = abs(PDGcode);
   if(absPDGcode == 22)
   {
@@ -32,19 +34,18 @@ G4bool G4MesonSplitter::SplitMeson(G4int PDGcode, G4int* aEnd, G4int* bEnd)
     if(G4UniformRand()<.5) it++;
     *aEnd = it;
     *bEnd = -it;
-    return TRUE; 	 
   }
-  if (absPDGcode >= 1000) return FALSE;
-
-  G4int heavy =  absPDGcode/100;
-  G4int light = (absPDGcode%100)/10;
-  G4int anti  = 1 - 2*(std::max(heavy, light)%2);
-  if (PDGcode < 0 ) anti = -anti;
-  heavy *=  anti;
-  light *= -anti;
-  if ( anti < 0) 
-     G4SwapObj(&heavy, &light);
-  *aEnd = heavy;
-  *bEnd = light;
-  return TRUE; 	 
+  else
+  {
+    G4int heavy =  absPDGcode/100;
+    G4int light = (absPDGcode%100)/10;
+    G4int anti  = 1 - 2*(std::max(heavy, light)%2);
+    if (PDGcode < 0 ) anti = -anti;
+    heavy *=  anti;
+    light *= -anti;
+    if ( anti < 0) G4SwapObj(&heavy, &light);
+    *aEnd = heavy;
+    *bEnd = light;
+  }
+  return result; 	 
 }
