@@ -223,6 +223,10 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
     G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable for "
            << aParticleType.GetParticleName() << G4endl;
   }
+  
+  G4CutsPerMaterialWarning warning;
+  warning.PrintWarning(&aParticleType);
+
   InitializeParametrisation() ;
   G4Proton* theProton = G4Proton::Proton();
   G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
