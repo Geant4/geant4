@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelasticTest.cc,v 1.14 2003-06-30 09:44:33 hpw Exp $
+// $Id: G4NeutronHPInelasticTest.cc,v 1.15 2003-11-20 14:04:34 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -59,9 +59,7 @@
 #include "G4StepPoint.hh"
 
 
-#include "../src/G4NeutronHPInelasticCompFS.cc"
-#include "../src/G4NeutronHPInelasticBaseFS.cc"
-
+using namespace std;
  
  // forward declarations
  
@@ -150,10 +148,10 @@
 //      // existiert: Data/InInelastic/F24/7_14_Nitrogen line 300, 
 // // combined bug in G4LegendreTable and G4PhotonDist fixed
 //      // Init runs
-      G4Material *theN = new G4Material(name="Nitrogen", density=0.9*g/cm3, nEl=1);
-      G4Element *elN = new G4Element(name="Nitrogen", symbol="N", iz=7., a=14.007*g/mole);
-      theN->AddElement( elN, 1 );
-      theMaterials[4] = theN;
+//      G4Material *theN = new G4Material(name="Nitrogen", density=0.9*g/cm3, nEl=1);
+//      G4Element *elN = new G4Element(name="Nitrogen", symbol="N", iz=7., a=14.007*g/mole);
+//      theN->AddElement( elN, 1 );
+//      theMaterials[4] = theN;
 // 
 //      // Init runs
 //      G4Material *theO = new G4Material(name="Oxygen", density=1.1*g/cm3, nEl=1);
@@ -175,6 +173,12 @@
 //      G4Element *elMg = new G4Element(name="Magnesium", symbol="Mg", iz=12, a=24.305*g/mole);
 //      theMg->AddElement( elMg,  1 );
 //      theMaterials[7] = theMg;
+//
+//      // Init runs
+      G4Material *theGe = new G4Material(name="Germanium", density=10.*g/cm3, nEl=1);
+      G4Element *elGe = new G4Element(name="Germanium", symbol="Ge", iz=32, a=72.64*g/mole);
+      theGe->AddElement( elGe,  1 );
+      theMaterials[7] = theGe;
 //      
 //      // File-name: ../Data/InInelastic/F01/13_27_Aluminum
 //      // G4InterpolationManager: unknown interpolation scheme 
@@ -392,7 +396,7 @@
    G4cout << "Please enter the neutron energy"<<G4endl;
    G4cin >> incomingEnergy;
    G4int errorOne;
-   G4cout << "Please enter the problematic event number"<<endl;
+   G4cout << "Please enter the problematic event number"<<G4endl;
    G4cin >> errorOne;
    for (i=0; i<numberOfParticles; i++)
    {
@@ -456,6 +460,7 @@ int j = 0;
              G4cout << aSec->GetMomentum().z()<<" ";
 	     G4cout << (1-isec)*aFinalState->GetNumberOfSecondaries()<<" ";
              G4cout << " SECONDARIES info";
+             G4cout << aSec->GetDefinition()->GetParticleName();
 	     G4cout << G4endl;
              QValue += aSec->GetKineticEnergy();
 	     delete second;
