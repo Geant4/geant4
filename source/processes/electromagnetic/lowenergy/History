@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2000-11-03 09:32:40 vnivanch Exp $
+$Id: History,v 1.46 2000-11-03 10:43:32 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,9 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-03.11.2000 - 
+
+03.11.2000 - MGP, tag emlowen-V02-00-14
+             Fix by V. Ivanchenko to remove the cause of instability
+             of hadron ionisation on different platforms, related to the last
+             step
+             Set MinKineticEnergy = LowestKineticEnergy = 10eV
+	     Results changed w.r.t. the previous version by 0.5% for protons, 
+             1% for antiprotons and 2.8% for C12
+
+03.11.2000 - Modification
              MinKineticEnergy=LowestKineticEnergy=10eV
              V. Ivanchenko
+
+03.11.2000 - MGP, tag emlowen-V02-00-13
+             Same as emlowen-V02-00-12, added comments for the generation of
+             the Software Reference Manual 
 
 31.10.2000 - MGP, tag emlowen-V02-00-12
              Including modifications by V. Ivanchenko since emlowen-V02-00-11
