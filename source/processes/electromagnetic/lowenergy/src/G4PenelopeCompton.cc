@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.11 2003-03-25 15:15:41 pandola Exp $
+// $Id: G4PenelopeCompton.cc,v 1.12 2003-04-16 16:22:13 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -35,6 +35,7 @@
 // 10 Mar 2003 V.Ivanchenko   Remove CutPerMaterial warning
 // 13 Mar 2003 L.Pandola      Code "cleaned"  
 // 20 Mar 2003 L.Pandola      ReadData() changed (performance improved) 
+// 26 Mar 2003 L.Pandola      Added fluorescence
 //
 // -------------------------------------------------------------------
 
@@ -59,6 +60,10 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4VRangeTest.hh"
 #include "G4RangeTest.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4AtomicTransitionManager.hh"
+#include "G4AtomicShell.hh"
+#include "G4AtomicDeexcitation.hh"
 #include "G4PenelopeIntegrator.hh"
 #include "G4MaterialCutsCouple.hh"
 
@@ -71,7 +76,8 @@ G4PenelopeCompton::G4PenelopeCompton(const G4String& processName)
     intrinsicHighEnergyLimit(100*GeV),
     energyForIntegration(0.0),
     ZForIntegration(1),
-    nBins(200)
+    nBins(200),
+    cutForLowEnergySecondaryPhotons(250.0*eV)
 {
   if (lowEnergyLimit < intrinsicLowEnergyLimit ||
       highEnergyLimit > intrinsicHighEnergyLimit)
@@ -430,7 +436,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
   
   G4double diffEnergy = photonEnergy0*(1-epsilon);
   ionEnergy = (*((*ionizationEnergy)[Z-1]))[iosc];
-  G4double eKineticEnergy = diffEnergy - ionEnergy;
+  //G4double eKineticEnergy = diffEnergy - ionEnergy;
   G4double Q2 = pow(photonEnergy0,2)+photonEnergy1*(photonEnergy1-2.0*photonEnergy0*cosTheta);
   G4double cosThetaE; //scattering angle for the electron
   if (Q2 > 1.0e-12)
@@ -443,10 +449,62 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
     }
   G4double sinThetaE = sqrt(1-pow(cosThetaE,2));
 
-  // Generate the electron only if with large enough range w.r.t. cuts and safety
+ 
+ 
+  const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
+  const G4AtomicShell* shell = transitionManager->Shell(Z,iosc);
+  G4double bindingEnergy = shell->BindingEnergy();
+  G4int shellId = shell->ShellId();
+  //G4cout << bindingEnergy/keV << " " << ionEnergy/keV << " keV" << G4endl;
+  ionEnergy = G4std::max(bindingEnergy,ionEnergy); //protection against energy non-conservation 
+  G4double eKineticEnergy = diffEnergy - ionEnergy;
 
+  size_t nTotPhotons=0;
+  G4int nPhotons=0;
+
+  const G4ProductionCutsTable* theCoupleTable=
+    G4ProductionCutsTable::GetProductionCutsTable();
+  size_t indx = couple->GetIndex();
+  G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[indx];
+  cutg = G4std::min(cutForLowEnergySecondaryPhotons,cutg);
+
+  G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[indx];
+  cute = G4std::min(cutForLowEnergySecondaryPhotons,cute);
+  
+  G4std::vector<G4DynamicParticle*>* photonVector=0;
+  G4DynamicParticle* aPhoton;
+  G4AtomicDeexcitation deexcitationManager;
+
+  if (Z>5 && (ionEnergy > cutg || ionEnergy > cute))
+    {
+      photonVector = deexcitationManager.GenerateParticles(Z,shellId);
+      nTotPhotons = photonVector->size();
+      for (size_t k=0;k<nTotPhotons;k++){
+	aPhoton = (*photonVector)[k];
+	if (aPhoton)
+	  {
+	    G4double itsCut = cutg;
+	    if (aPhoton->GetDefinition() == G4Electron::Electron()) itsCut = cute;
+	    G4double itsEnergy = aPhoton->GetKineticEnergy();
+	    if (itsEnergy > itsCut && itsEnergy <= ionEnergy)
+	      {
+		nPhotons++;
+		ionEnergy -= itsEnergy;
+	      }
+	    else
+	      {
+		delete aPhoton;
+		(*photonVector)[k]=0;
+	      }
+	  }
+      }
+    }
+  G4double energyDeposit =ionEnergy; //il deposito locale e' quello che rimane
+  G4int nbOfSecondaries=nPhotons;
+
+  // Generate the electron only if with large enough range w.r.t. cuts and safety 
   G4double safety = aStep.GetPostStepPoint()->GetSafety();
-
+  G4DynamicParticle* electron = 0;
   if (rangeTest->Escape(G4Electron::Electron(),couple,eKineticEnergy,safety))
     {
       G4double xEl = sinThetaE * cos(phi+pi); 
@@ -454,17 +512,33 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
       G4double zEl = cosThetaE;
       G4ThreeVector eDirection(xEl,yEl,zEl); //electron direction
    
-      G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(),
-							   eDirection,eKineticEnergy) ;
-      aParticleChange.SetNumberOfSecondaries(1);
-      aParticleChange.AddSecondary(electron);
-      aParticleChange.SetLocalEnergyDeposit(0.); 
+      electron = new G4DynamicParticle (G4Electron::Electron(),
+					eDirection,eKineticEnergy) ;
+      nbOfSecondaries++;
     }
   else
     {
-      aParticleChange.SetNumberOfSecondaries(0);
-      aParticleChange.SetLocalEnergyDeposit(eKineticEnergy);
+      
+      energyDeposit += eKineticEnergy;
     }
+
+  aParticleChange.SetNumberOfSecondaries(nbOfSecondaries);
+  if (electron) aParticleChange.AddSecondary(electron);
+  for (size_t ll=0;ll<nTotPhotons;ll++)
+    {
+      aPhoton = (*photonVector)[ll];
+      if (aPhoton) aParticleChange.AddSecondary(aPhoton);
+    }
+  delete photonVector;
+  if (energyDeposit < 0)
+    {
+      G4cout << "WARNING-" 
+	     << "G4PenelopeCompton::PostStepDoIt - Negative energy deposit"
+	     << G4endl;
+      energyDeposit=0;
+    }
+  aParticleChange.SetLocalEnergyDeposit(energyDeposit);
+  
 
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }
