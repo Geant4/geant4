@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.13 2001-12-07 16:17:43 sadilov Exp $
+# $Id: Configure,v 1.14 2001-12-11 11:40:44 sadilov Exp $
 #
-# Generated on Fri Dec  7 17:07:59 CET 2001 [metaconfig 3.0 PL70]
+# Generated on Mon Dec 10 23:26:27 CET 2001 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -936,9 +936,8 @@ a question, you may use a ! shell escape to start a subshell or execute a
 command.  Many of the questions will have default answers in square brackets;
 typing carriage return will set the default.
 
-If asked for a path or file name, you are allowed to use the ~username
-construct to specify the AFS path.
-Questions where this is allowed will be marked "(~username ok)".
+On AFS it is allowed to specify either absolute or relative
+paths (i.e. starting with the ~username construct).
 
 EOH
 	rp=''
@@ -955,9 +954,9 @@ Everytime there is a substitution, you will have to confirm.  If there is an
 error (e.g. an unmatched backtick), the default answer will remain unchanged
 and you will be prompted again.
 
-Running 'Configure -d' will bypass nearly all the questions and use the
-computed defaults (or the previous answers if there was already a config.sh
-file generated).
+Running 'Configure -d' will bypass nearly all the questions and
+use the computed defaults (or answers saved in a configuration
+previously generated).
 
 Type 'Configure -h' for a list of options.
 
@@ -971,7 +970,7 @@ EOH
 Much effort has been spent to ensure that this shell script will run on any
 Unix system. If despite that you can't run Configure for some reason, you'll
 have to set the proper environment variables by hand and follow the "manual"
-installation.
+installation as specified in the Geant4 Installation Guide.
 
 EOH
 	dflt='Type carriage return to continue'
@@ -1986,7 +1985,7 @@ while test "$type"; do
 	rp="$orig_rp"
 	dflt="$orig_dflt"
 	case "$tilde" in
-	true) rp="$rp (~name ok)";;
+	true) rp="$rp ";;
 	esac
 	. UU/myread
 	if test -f UU/getfile.ok && \
@@ -2245,13 +2244,10 @@ g4message=`cat << EOM
 (OPTIONAL) You can now customise installation directories:
   G4TMP - tmp/ containing temporary dependency (.d) and object (.o) files;
   G4LIB - lib/ containing final static (.a) or shared (.so) libraries;
-  G4BIN - bin/ containing final executable and scripts.
 
 1) G4TMP:		$g4tmp
 
 2) G4LIB:		$g4lib
-
-3) G4BIN:		$g4bin
 
 Select from list above (e.g. 2) 
 EOM`
@@ -2280,13 +2276,13 @@ gans=$ans
 		. ./getfile
 		g4lib=$ans
 		;;
-	3) 
-		dflt=$g4bin
-		fn='d~+'
-		rp="Where will be your Geant4 bin directory?"
-		. ./getfile
-		g4bin=$ans
-		;;
+#	3) 
+#		dflt=$g4bin
+#		fn='d~+'
+#		rp="Where will be your Geant4 bin directory?"
+#		. ./getfile
+#		g4bin=$ans
+#		;;
 
 #	[eE]) 
 #		break
@@ -2536,6 +2532,22 @@ case "$g4global" in
 	;;
 esac
 
+echo " "
+# By default it's 'grabular'!
+case "$g4granular" in
+'')
+	g4granular=y
+	;;
+esac
+
+echo " "
+# Will be set (if needed) in GNUmakefile!
+case "$g4lib_use_granular" in
+'')
+	g4lib_use_granular=n
+	;;
+esac
+
 #
 # Ask about g4global - default "(empty)". 
 #
@@ -2557,10 +2569,14 @@ gans=$ans
 	
 	n*|N*) 
 		g4global=n
+		g4granular=y
+		g4lib_use_granular=n
 		break
 		;;
 	y*|Y*) 
 		g4global=y
+		g4granular=n
+		g4lib_use_granular=n
 		break
 		;;
 #	[eE]) 
@@ -2572,13 +2588,6 @@ gans=$ans
 #		;;
 	esac
 done
-
-echo " "
-case "$g4granular" in
-'')
-	g4granular=n
-	;;
-esac
 
 if [ X$g4global = Xy ] ; then
 #
@@ -2618,14 +2627,6 @@ gans=$ans
 #		;;
 	esac
 done
-fi
-
-echo " "
-case "$g4lib_use_granular" in
-'')
-	g4lib_use_granular=n
-	;;
-esac
 
 if [ X$g4granular = Xy ] ; then
 #
@@ -2666,7 +2667,7 @@ gans=$ans
 	esac
 done
 fi
-
+fi
 echo " "
 case "$g4lib_build_shared" in
 '')
@@ -2823,27 +2824,32 @@ fi
 
 
 echo " "
+
+# Set by default!
 case "$g4ui_build_terminal_session" in
 '')
 	g4ui_build_terminal_session=y
 	;;
 esac
 
+# Set by default!
 case "$g4ui_use_terminal" in
 '')
 	g4ui_use_terminal=y
 	;;
 esac
 
+# Set by default!
 case "$g4ui_build_gag_session" in
 '')
-	g4ui_build_gag_session=n
+	g4ui_build_gag_session=y
 	;;
 esac
 
+# Set by default!
 case "$g4ui_use_gag" in
 '')
-	g4ui_use_gag=n
+	g4ui_use_gag=y
 	;;
 esac
 
@@ -2853,21 +2859,33 @@ case "$g4ui_build_xm_session" in
 	;;
 esac
 
-case "$g4ui_build_xaw_session" in
-'')
-	g4ui_build_xaw_session=n
-	;;
-esac
-
 case "$g4ui_use_xm" in
 '')
 	g4ui_use_xm=n
 	;;
 esac
 
+case "$g4ui_build_xaw_session" in
+'')
+	g4ui_build_xaw_session=n
+	;;
+esac
+
 case "$g4ui_use_xaw" in
 '')
 	g4ui_use_xaw=n
+	;;
+esac
+
+case "$g4ui_build_wo_session" in
+'')
+	g4ui_build_wo_session=n
+	;;
+esac
+
+case "$g4ui_use_wo" in
+'')
+	g4ui_use_wo=n
 	;;
 esac
 
@@ -2883,9 +2901,10 @@ case "$g4ui_use_win32" in
 	;;
 esac
 
+# Set by default!
 case "$g4ui_use_tcsh" in
 '')
-	g4ui_use_tcsh=n
+	g4ui_use_tcsh=y
 	;;
 esac
 
@@ -2904,8 +2923,9 @@ EOM`
 
 dflt=$g4ui_use_terminal
 rp=$g4message
-. ./myread
-gans=$ans
+#. ./myread
+#gans=$ans
+gans=y
 
 	case $gans in
 	
@@ -2932,8 +2952,9 @@ EOM`
 
 dflt=$g4ui_use_gag
 rp=$g4message
-. ./myread
-gans=$ans
+#. ./myread
+#gans=$ans
+gans=y
 
 	case $gans in
 	
@@ -3034,6 +3055,33 @@ gans=$ans
 
 g4message=`cat << EOM
 
+  G4UI_BUILD_WO_SESSION
+Gabriele, where can I take descriprion? 
+
+  G4UI_USE_WO
+Gabriele, where can I take descriprion? 
+
+EOM`
+
+dflt=$g4ui_use_wo
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4ui_build_wo_session=n
+		g4ui_use_wo=n
+		;;
+	y*|Y*) 
+		g4ui_build_wo_session=y
+		g4ui_use_wo=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
   G4UI_USE_TCSH
   Specifies to use the tcsh-style terminal in the application
   to be built.
@@ -3041,8 +3089,9 @@ EOM`
 
 dflt=$g4ui_use_tcsh
 rp=$g4message
-. ./myread
-gans=$ans
+#. ./myread
+#gans=$ans
+gans=y
 
 	case $gans in
 	
@@ -3069,8 +3118,9 @@ In Geant4, object persistency is provided as an optional category, so
 that the users could be able to run Geant4 with or without a commercial 
 ODBMS package. How to store and retrieve Geant4 events, hits and geometry 
 objects is explained in documentation.
-Currently the only supported DB is Objectivity. For setting this you
-should have Objectivity installed and running!
+
+For setting this you should have an ODMG compliant database
+(Objectivity) installed and running on your system!
 EOM`
 
 dflt=$g4use_hepodbms
@@ -3090,9 +3140,57 @@ gans=$ans
 
 
 echo " "
+case "$g4vis_none" in
+'')
+	g4vis_none=n
+	;;
+esac
+
+case "$g4vis_build_heprep_driver" in
+'')
+	g4vis_build_heprep_driver=n
+	;;
+esac
+
+case "$g4vis_use_heprep" in
+'')
+	g4vis_use_heprep=n
+	;;
+esac
+
+case "$g4vis_build_openglwin32_driver" in
+'')
+	g4vis_build_openglwin32_driver=n
+	;;
+esac
+
+case "$g4vis_use_openglwin32" in
+'')
+	g4vis_use_openglwin32=n
+	;;
+esac
+
+case "$g4vis_build_oiwin32_driver" in
+'')
+	g4vis_build_oiwin32_driver=n
+	;;
+esac
+
+case "$g4vis_use_oiwin32" in
+'')
+	g4vis_use_oiwin32=n
+	;;
+esac
+
 case "$g4vis_build_dawn_driver" in
 '')
 	g4vis_build_dawn_driver=n
+	;;
+esac
+
+case "$g4vis_use_dawn" in
+'')
+	g4vis_use_dawn=n
 	;;
 esac
 
@@ -3103,9 +3201,22 @@ case "$g4vis_build_dawnfile_driver" in
 	;;
 esac
 
+# Set by default!
+case "$g4vis_use_dawnfile" in
+'')
+	g4vis_use_dawnfile=y
+	;;
+esac
+
 case "$g4vis_build_opacs_driver" in
 '')
 	g4vis_build_opacs_driver=n
+	;;
+esac
+
+case "$g4vis_use_opacs" in
+'')
+	g4vis_use_opacs=n
 	;;
 esac
 
@@ -3115,15 +3226,33 @@ case "$g4vis_build_openglx_driver" in
 	;;
 esac
 
+case "$g4vis_use_openglx" in
+'')
+	g4vis_use_openglx=n
+	;;
+esac
+
 case "$g4vis_build_openglxm_driver" in
 '')
 	g4vis_build_openglxm_driver=n
 	;;
 esac
 
+case "$g4vis_use_openglxm" in
+'')
+	g4vis_use_openglxm=n
+	;;
+esac
+
 case "$g4vis_build_oix_driver" in
 '')
 	g4vis_build_oix_driver=n
+	;;
+esac
+
+case "$g4vis_use_oix" in
+'')
+	g4vis_use_oix=n
 	;;
 esac
 
@@ -3134,9 +3263,22 @@ case "$g4vis_build_raytracer_driver" in
 	;;
 esac
 
+# Set by default!
+case "$g4vis_use_raytracer" in
+'')
+	g4vis_use_raytracer=y
+	;;
+esac
+
 case "$g4vis_build_vrml_driver" in
 '')
 	g4vis_build_vrml_driver=n
+	;;
+esac
+
+case "$g4vis_use_vrml" in
+'')
+	g4vis_use_vrml=n
 	;;
 esac
 
@@ -3148,66 +3290,16 @@ case "$g4vis_build_vrmlfile_driver" in
 esac
 
 # Set by default!
-case "$g4vis_build_asciitree_driver" in
-'')
-	g4vis_build_asciitree_driver=y
-	;;
-esac
-
-case "$g4vis_use_dawn" in
-'')
-	g4vis_use_dawn=n
-	;;
-esac
-
-# Set by default!
-case "$g4vis_use_dawnfile" in
-'')
-	g4vis_use_dawnfile=y
-	;;
-esac
-
-case "$g4vis_use_opacs" in
-'')
-	g4vis_use_opacs=n
-	;;
-esac
-
-case "$g4vis_use_openglx" in
-'')
-	g4vis_use_openglx=n
-	;;
-esac
-
-case "$g4vis_use_openglxm" in
-'')
-	g4vis_use_openglxm=n
-	;;
-esac
-
-case "$g4vis_use_oix" in
-'')
-	g4vis_use_oix=n
-	;;
-esac
-
-# Set by default!
-case "$g4vis_use_raytracer" in
-'')
-	g4vis_use_raytracer=y
-	;;
-esac
-
-case "$g4vis_use_vrml" in
-'')
-	g4vis_use_vrml=n
-	;;
-esac
-
-# Set by default!
 case "$g4vis_use_vrmlfile" in
 '')
 	g4vis_use_vrmlfile=y
+	;;
+esac
+
+# Set by default!
+case "$g4vis_build_asciitree_driver" in
+'')
+	g4vis_build_asciitree_driver=y
 	;;
 esac
 
@@ -3218,20 +3310,135 @@ case "$g4vis_use_asciitree" in
 	;;
 esac
 
+# Set by default!
+case "$g4vis_build_gagtree_driver" in
+'')
+	g4vis_build_gagtree_driver=y
+	;;
+esac
+
+# Set by default!
+case "$g4vis_use_gagtree" in
+'')
+	g4vis_use_gagtree=y
+	;;
+esac
+
 echo ""
+
+g4message=`cat << EOM
+
+  G4VIS_NONE
+
+DESCRIPTION
+
+EOM`
+
+dflt=$g4vis_none
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_none=n
+		;;
+	y*|Y*) 
+		g4vis_none=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_HEPREP_DRIVER
+  G4VIS_USE_HEPREP
+
+DESCRIPTION
+
+EOM`
+
+dflt=$g4vis_use_heprep
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_heprep_driver=n
+		g4vis_use_heprep=n
+		;;
+	y*|Y*) 
+		g4vis_build_heprep_driver=y
+		g4vis_use_heprep=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_OPENGLWIN32_DRIVER
+  G4VIS_USE_OPENGLWIN32
+
+DESCRIPTION
+
+EOM`
+
+dflt=$g4vis_use_openglwin32
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_openglwin32_driver=n
+		g4vis_use_openglwin32=n
+		;;
+	y*|Y*) 
+		g4vis_build_openglwin32_driver=y
+		g4vis_use_openglwin32=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_OIWIN32_DRIVER
+  G4VIS_USE_OIWIN32
+
+DESCRIPTION
+
+EOM`
+
+dflt=$g4vis_use_oiwin32
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_oiwin32_driver=n
+		g4vis_use_oiwin32=n
+		;;
+	y*|Y*) 
+		g4vis_build_oiwin32_driver=y
+		g4vis_use_oiwin32=y
+		;;
+	esac
 
 g4message=`cat << EOM
 
   G4VIS_BUILD_DAWN_DRIVER
   G4VIS_USE_DAWN
 
-DAWN drivers are interfaces to Fukui Renderer DAWN. It is a vectorized 3D 
-PostScript processor, and so well suited to prepare technical high
-quality outputs for presentation and/or documentation. 
-When Geant4 Visualization is performed with the DAWN driver, 
-the visualized view is automatically saved to a file
-named g4.eps in the current directory, which describes a vectorized 
-(Encapsulated) PostScript data of the view. 
+DAWN drivers are interfaces to the Fukui Renderer DAWN. DAWN is
+a vectorized 3D PostScript processor suited to prepare technical
+high quality outputs for presentation and/or documentation.
+
+The DAWNFILE driver sends 3D data to DAWN via an intermediate file, 
+named g4.prim in the current directory. The file g4.prim is able to 
+be re-visualized later without the help of Geant4. 
 EOM`
 
 dflt=$g4vis_use_dawn
@@ -3313,11 +3520,10 @@ g4message=`cat << EOM
   G4VIS_BUILD_OPENGLX_DRIVER
   G4VIS_USE_OPENGLX
 
-It is an interface to the de facto standard 3D graphics library, OpenGL. 
-It is well suited for real-time fast visualization
-and demonstration. Fast visualization is realized with hardware 
-acceleration, reuse of shapes stored in a display list, etc. 
-NURBS visualization is also supported. This is version for Xlib.
+It is an interface to the de facto standard 3D graphics library,
+OpenGL. It is well suited for real-time fast visualization
+and prototyping. The X11 version of the OpenGL libraries is
+required.
 EOM`
 
 dflt=$g4vis_use_openglx
@@ -3342,11 +3548,10 @@ g4message=`cat << EOM
   G4VIS_BUILD_OPENGLXM_DRIVER
   G4VIS_USE_OPENGLXM
 
-It is an interface to the de facto standard 3D graphics library, OpenGL. 
-It is well suited for real-time fast visualization
-and demonstration. Fast visualization is realized with hardware 
-acceleration, reuse of shapes stored in a display list, etc. 
-NURBS visualization is also supported. This is version for Motif.
+It is an interface to the de facto standard 3D graphics library,
+OpenGL. It is well suited for real-time fast visualization
+and prototyping. The X11 version of the OpenGL libraries is
+required.
 EOM`
 
 dflt=$g4vis_use_openglxm
@@ -3371,10 +3576,9 @@ g4message=`cat << EOM
   G4VIS_BUILD_OIX_DRIVER
   G4VIS_USE_OIX
 
-These drivers are based on the "Hepvis class library". 
-The OpenInventor drivers and the Hepvis class library are based on the
-well-established OpenInventor technology for scientific visualization. 
-They have high extendibility. 
+This driver is based on the "Hepvis" class library.
+The OpenInventor driver and the Hepvis class library are based
+on OpenInventor technology for scientific visualization.
 EOM`
 
 dflt=$g4vis_use_oix
@@ -3482,6 +3686,7 @@ gans=y
 		;;
 	esac
 
+
 g4message=`cat << EOM
 
   G4VIS_BUILD_ASCIITREE_DRIVER
@@ -3494,6 +3699,7 @@ dflt=$g4vis_use_asciitree
 rp=$g4message
 # Don't ask by default and set to 'y'!
 #. ./myread
+#gans=$ans
 gans=y
 
 	case $gans in
@@ -3509,6 +3715,33 @@ gans=y
 	esac
 
 
+g4message=`cat << EOM
+
+  G4VIS_BUILD_GAGTREE_DRIVER
+  G4VIS_USE_GAGTREE
+
+Description????????????????????????
+EOM`
+
+dflt=$g4vis_use_gagtree
+rp=$g4message
+# Don't ask by default and set to 'y'!
+#. ./myread
+#gans=$ans
+gans=y
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_gagtree_driver=n
+		g4vis_use_gagtree=n
+		;;
+	y*|Y*) 
+		g4vis_build_gagtree_driver=y
+		g4vis_use_gagtree=y
+		;;
+	esac
+
 echo " "
 
 case "$g4wanalysis_use" in
@@ -3522,8 +3755,12 @@ echo ""
 g4message=`cat << EOM
 
   G4ANALYSIS_USE
-  Specifies to include using of the abstract G4analysisManager for
-  activating interfaces based on AIDA to analysis drivers.
+
+Activates the configuration setup for allowing plugins to
+analysis tools based on AIDA (Astract Interfaces for Data
+Analysis). In order to use AIDA features and compliant analysis
+tools, the proper environment for these tools will have to be
+set (see documentation for the specific analysis tools).
 EOM`
 
 dflt=$g4wanalysis_use
@@ -3578,7 +3815,7 @@ esac
 
 : create config.sh file
 echo " "
-echo "Creating config.sh..." >&4
+echo "Creating configuration setup file..." >&4
 mkdir -p $g4conf
 $spitshell <<EOT > $g4conf/config.sh
 $startsh
@@ -3745,9 +3982,11 @@ cont)
 	nostick=true
 	$cat <<EOM
 
-WARNING: You can check and edit!
-If you'd like to make any change to the $g4conf/config.sh file before the final
-configuration, do it as a shell escape now (e.g. !vi $g4conf/config.sh).
+WARNING: the generated configuration file
+can be edited if necessary!
+You can introduce any change to the configuration file
+$g4conf/config.sh before the final installation. 
+To do so, use a shell escape now (e.g. !vi $g4conf/config.sh).
 
 EOM
 	rp="Press [Enter] to start installation or use a shell escape to edit config.sh:"
