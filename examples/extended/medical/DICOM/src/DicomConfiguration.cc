@@ -26,13 +26,15 @@
 #include "DicomConfiguration.hh"
 #include "g4std/iostream"
 #include "g4std/fstream"
-//#include <stdio.h>
+
+#include <stdio.h>
+#include "g4std/iomanip"
 
 G4int DicomConfiguration::ReadDataFile()
 {
   G4std::ifstream dataFile( "Data.dat" );
 
-  if ( DataFile.good() != 1 )
+  if ( dataFile.good() != 1 )
     return 1;
 
   dataFile >> compressionValue;
@@ -51,7 +53,7 @@ G4int DicomConfiguration::ReadDataFile()
 G4int DicomConfiguration::ReadG4File( G4String g4File )
 {
 
-  DensityValue.clear();
+  densityValue.clear();
 	
   g4File = g4File + ".g4";
   G4std::ifstream readingG4FileHeader( g4File.c_str() );
@@ -65,7 +67,7 @@ G4int DicomConfiguration::ReadG4File( G4String g4File )
   readingG4FileHeader >> sliceLocation;
   readingG4FileHeader >> compressionUsed;
 
-  double DensityValueBuffer=0;
+  G4double densityValueBuffer = 0;
   while ( readingG4FileHeader >> densityValueBuffer )
     {
       densityValue.push_back( densityValueBuffer );

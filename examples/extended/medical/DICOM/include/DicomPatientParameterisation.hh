@@ -10,20 +10,8 @@
 #ifndef DicomPatientParameterisation_h
 #define DicomPatientParameterisation_h 1
 
-
-#include "G4Material.hh"
-#include "G4MaterialTable.hh"
-#include "G4Box.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4PVPlacement.hh"
-#include "G4GeometryManager.hh"
-#include "G4TransportationManager.hh"
 #include "globals.hh"
-#include "G4Element.hh"
-#include "G4ElementTable.hh"
-#include "G4VisAttributes.hh"
-#include "G4Colour.hh"
+
 #include "G4ios.hh"
 #include "G4VPVParameterisation.hh"
 
@@ -33,15 +21,18 @@
 #include "g4std/vector"
 
 class G4VPhysicalVolume;
+class G4LogicalVolume;
 class G4Box;
+class G4Material;
+class G4VisAttributes;
 
 class DicomPatientParameterisation : public G4VPVParameterisation
 {
 public:
 
   DicomPatientParameterisation(G4int NoVoxels, 
-			       G4double max_density, 
-			       G4double min_density ,
+			       G4double maxDensity, 
+			       G4double minDensity ,
 			       G4Material* lunginhale,
 			       G4Material* lungexhale,
 			       G4Material* adipose_tissue,
@@ -56,11 +47,48 @@ public:
 
   virtual void ComputeTransformation (const G4int copyNo, G4VPhysicalVolume* physVol) const;
 
-  virtual void ComputeDimensions (G4Box & Voxels, const G4int copyNo, const G4VPhysicalVolume* physVol) const;
+  //  virtual void ComputeDimensions (G4Box & voxels, const G4int copyNo, const G4VPhysicalVolume* physVol) const;
+  virtual void ComputeDimensions (G4Box&, 
+				  const G4int, 
+				  const G4VPhysicalVolume* ) const;
+
+  // ---- MGP ---- The following are useless, added just to remove a pedantic warning
+   virtual void ComputeDimensions(G4Tubs &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+
+    virtual void ComputeDimensions(G4Trd &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+	
+    virtual void ComputeDimensions(G4Trap &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+	
+    virtual void ComputeDimensions(G4Cons &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+
+    virtual void ComputeDimensions(G4Sphere &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+
+    virtual void ComputeDimensions(G4Torus &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+
+    virtual void ComputeDimensions(G4Para &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+
+    virtual void ComputeDimensions(G4Hype &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+  // ---- MGP ---- End of useless 
 
   virtual G4Material* ComputeMaterial(const G4int copyNo, G4VPhysicalVolume* physVol);
 
-  void GetDensity( double maxdensity , double mindensity );
+  void GetDensity( G4double maxDensity, G4double minDensity );
 
 private:
   G4Material* P_lung_exhale;

@@ -34,9 +34,9 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/strstream"
-#include "g4std/streambuf"
-#include "G4strstreambuf.hh"
+//#include "g4std/strstream"
+//#include "g4std/streambuf"
+//#include "G4strstreambuf.hh"
 
 class DicomHandler
 {

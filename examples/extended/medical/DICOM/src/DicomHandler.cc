@@ -33,7 +33,13 @@
 #include "G4strstreambuf.hh"
 #include "g4std/fstream"
 
-G4int dicomHandler::readHeader(FILE *dicom, char filename2[300])
+DicomHandler::DicomHandler()
+{
+  compression = 0;
+  max = 0;
+}
+
+G4int DicomHandler::readHeader(FILE *dicom, char filename2[300])
 {
   G4int returnvalue = 0;
 
@@ -266,7 +272,7 @@ G4int dicomHandler::readHeader(FILE *dicom, char filename2[300])
   return returnvalue;
 }
 
-G4int dicomHandler::readData(FILE *dicom,	char filename2[300])
+G4int DicomHandler::readData(FILE *dicom,	char filename2[300])
 {
   G4int returnvalue=0;
   char compressionbuf[100],maxbuf[100];
@@ -385,7 +391,7 @@ G4int dicomHandler::readData(FILE *dicom,	char filename2[300])
   return returnvalue;
 }
 
-G4int dicomHandler::displayImage(char command[300])
+G4int DicomHandler::displayImage(char command[300])
 {
   //   Display DICOM images using ImageMagick
   char commandName[500];
@@ -395,7 +401,7 @@ G4int dicomHandler::displayImage(char command[300])
   return (G4int )i;
 }
 
-G4double dicomHandler::pixel2density(G4int pixel)
+G4double DicomHandler::pixel2density(G4int pixel)
 {
   G4double density=-1;
   G4int nbrequali=0;
@@ -456,7 +462,7 @@ G4double dicomHandler::pixel2density(G4int pixel)
 }
 
 
-void dicomHandler::checkFileFormat()
+void DicomHandler::checkFileFormat()
 {
   G4std::ifstream checkData("Data.dat");
   char * oneLine = new char[101];

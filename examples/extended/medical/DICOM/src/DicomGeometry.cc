@@ -20,29 +20,25 @@
 // tel (418) 525-4444 #6720
 // fax (418) 691 5268
 //*******************************************************
-#include "G4Material.hh"
-#include "G4MaterialTable.hh"
+
+#include "globals.hh"
+
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "G4GeometryManager.hh"
-#include "G4TransportationManager.hh"
-#include "globals.hh"
+#include "G4PVParameterised.hh"
+#include "G4Material.hh"
 #include "G4Element.hh"
-#include "G4ElementTable.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 #include "G4ios.hh"
-#include "G4PVParameterised.hh"
+
 #include "DicomGeometry.hh"
 #include "DicomPatientParameterisation.hh"
 #include "DicomPatientConstructor.hh"
 #include "DicomConfiguration.hh"
-#include <iomanip>
-#include <fstream>
-#include <stdio.h>
-#include <math.h>
+
 
 DicomGeometry::DicomGeometry()
 {
@@ -84,11 +80,11 @@ void DicomGeometry::InitialisationOfMaterials()
                                   symbol = "C",
                                   z = 6.0, a = 12.011 * g/mole );
   G4Element* elH = new G4Element( name = "Hydrogen",
-                                 symbol = "H",
-                                 z = 1.0, a = 1.008  * g/mole );
+				  symbol = "H",
+				  z = 1.0, a = 1.008  * g/mole );
   G4Element* elN = new G4Element( name = "Nitrogen",
-                                 symbol = "N",
-                                 z = 7.0, a = 14.007 * g/mole );
+				  symbol = "N",
+				  z = 7.0, a = 14.007 * g/mole );
   G4Element* elO = new G4Element( name = "Oxygen",
                                   symbol = "O",
                                   z = 8.0, a = 16.00  * g/mole );
@@ -121,8 +117,8 @@ void DicomGeometry::InitialisationOfMaterials()
 
   // Trabecular Bone 
   trabecularBone = new G4Material( "Skeleton_Spongiosa", 
-                                  density = 1159*kg/m3, 
-                                  numberofElements = 12 );
+				   density = 1159*kg/m3, 
+				   numberofElements = 12 );
   trabecularBone->AddElement(elH,0.085);
   trabecularBone->AddElement(elC,0.404);
   trabecularBone->AddElement(elN,0.058);
@@ -201,7 +197,7 @@ void DicomGeometry::InitialisationOfMaterials()
   breast->AddElement(elS,0.001);
   breast->AddElement(elCl,0.001); 
 
- // Adipose tissue
+  // Adipose tissue
   adiposeTissue = new G4Material( "adipose_tissue", 
                                   density = 967*kg/m3, 
                                   numberofElements = 7);
@@ -241,7 +237,7 @@ void DicomGeometry::InitialisationOfMaterials()
   lunginhale->AddElement(elK,0.003);
 
 
- // Air
+  // Air
   air = new G4Material( "Air",
                         1.290*mg/cm3,
                         numberofElements = 2 );
@@ -251,21 +247,21 @@ void DicomGeometry::InitialisationOfMaterials()
 
 void DicomGeometry::PatientConstruction()
 {
-  DicomConfiguration* ReadConfiguration = new DicomConfiguration;
-  ReadConfiguration->ReadDataFile();
+  DicomConfiguration readConfiguration;
+  readConfiguration.ReadDataFile();
 		
-  G4String listOfFile = ReadConfiguration->GetListOfFile()[0];	
+  G4String listOfFile = readConfiguration.GetListOfFile()[0];	
   // images must have the same dimension ... 
-  ReadConfiguration->ReadG4File( listOfFile );
+  readConfiguration.ReadG4File( listOfFile );
   // open a .g4 file to read some values ...
   
-  G4int compressionUsed = ReadConfiguration->IsCompressionUsed();	
-  G4double sliceThickness = ReadConfiguration->GetSliceThickness();
-  G4double xPixelSpacing = ReadConfiguration->GetXPixelSpacing(); 
-  G4double yPixelSpacing = ReadConfiguration->GetYPixelSpacing(); 	
-  G4int totalNumberOfFile = ReadConfiguration->GetTotalNumberOfFile(); 
-  G4int totalRows = ReadConfiguration->GetTotalRows(); 
-  G4int totalColumns = ReadConfiguration->GetTotalColumns();
+  G4int compressionUsed = readConfiguration.IsCompressionUsed();	
+  G4double sliceThickness = readConfiguration.GetSliceThickness();
+  G4double xPixelSpacing = readConfiguration.GetXPixelSpacing(); 
+  G4double yPixelSpacing = readConfiguration.GetYPixelSpacing(); 	
+  G4int totalNumberOfFile = readConfiguration.GetTotalNumberOfFile(); 
+  G4int totalRows = readConfiguration.GetTotalRows(); 
+  G4int totalColumns = readConfiguration.GetTotalColumns();
 
   G4double patientX = (compressionUsed*(xPixelSpacing)/2.0) *mm;
   G4double patientY = (compressionUsed*(yPixelSpacing)/2.0) *mm;
@@ -279,56 +275,60 @@ void DicomGeometry::PatientConstruction()
                                      1. );
   
   //Building up the parameterisation ...
- G4Box* parameterisedBox = new G4Box( "Parameterisation Mother", 
-                                      totalColumns*(xPixelSpacing)/2.*mm, 
-                                      totalRows*(yPixelSpacing)/2.*mm,
-                                      totalNumberOfFile*(sliceThickness)/2.*mm);
+  G4Box* parameterisedBox = new G4Box( "Parameterisation Mother", 
+				       totalColumns*(xPixelSpacing)/2.*mm, 
+				       totalRows*(yPixelSpacing)/2.*mm,
+				       totalNumberOfFile*(sliceThickness)/2.*mm);
   G4LogicalVolume* parameterisedLogicalvolume = 
-                               new G4LogicalVolume( parameterisedBox,
-                                                   air,
-                                                   "Parameterisation Mother (logical)" );
+    new G4LogicalVolume( parameterisedBox,
+			 air,
+			 "Parameterisation Mother (logical)" );
   parameterisedLogicalvolume->SetVisAttributes(visualisationAttribute);
   
-  G4double MiddleLocationValue = 0;
+  G4double middleLocationValue = 0;
   for ( G4int i=0; i< totalNumberOfFile;i++ )
     {
-      ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[i] );
-      MiddleLocationValue = MiddleLocationValue+ReadConfiguration->GetSliceLocation();
+      readConfiguration.ReadG4File( readConfiguration.GetListOfFile()[i] );
+      middleLocationValue = middleLocationValue + readConfiguration.GetSliceLocation();
     }
-  MiddleLocationValue = MiddleLocationValue/totalNumberOfFile;
+  middleLocationValue = middleLocationValue / totalNumberOfFile;
     
-  G4ThreeVector origin( 0.*mm,0.*mm,MiddleLocationValue*mm );
+  G4ThreeVector origin( 0.*mm,0.*mm,middleLocationValue*mm );
   G4VPhysicalVolume* parameterisedPhysVolume =  
-                        new G4PVPlacement( 0,origin,
-                                           parameterisedLogicalvolume,
-                                           "Parameterisation Mother (placement)",                                                    logicWorld,
-                                           false,
-                                           0);
+    new G4PVPlacement( 0,origin,
+		       parameterisedLogicalvolume,
+		       "Parameterisation Mother (placement)",
+		       logicWorld,
+		       false,
+		       0);
 
   G4Box* LungINhale = new G4Box( "LungINhale", patientX, patientY, patientZ);
 
   G4LogicalVolume* logicLungInHale = new G4LogicalVolume(LungINhale,lunginhale,"Logical_LungINhale",0,0,0);
+
+  // ---- MGP ---- Numbers (2.0, 0.207) to be removed from code; move to const
   G4int numberOfVoxels = patientConstructor->FindingNbOfVoxels(2.0,0.207);
 
   G4VPVParameterisation* paramLungINhale = new DicomPatientParameterisation
-                                                    ( numberOfVoxels,
-                                                      2.0 , 0.207 ,
-						      lunginhale,
-						      lungexhale,
-						      adiposeTissue,
-						      breast,
-						      phantom,
-						      muscle,
-						      liver,
-						      denseBone,
-						      trabecularBone );
+    ( numberOfVoxels,
+      2.0 , 0.207 ,
+      lunginhale,
+      lungexhale,
+      adiposeTissue,
+      breast,
+      phantom,
+      muscle,
+      liver,
+      denseBone,
+      trabecularBone );
+
   G4VPhysicalVolume*  physicalLungINhale = 
-                    new G4PVParameterised( "Physical_LungINhale" , 
-                                           logicLungInHale, 
-                                           parameterisedLogicalvolume,
-                                           kZAxis, numberOfVoxels, 
-                                           paramLungINhale );
-  delete ReadConfiguration;
+    new G4PVParameterised( "Physical_LungINhale" , 
+			   logicLungInHale, 
+			   parameterisedLogicalvolume,
+			   kZAxis, numberOfVoxels, 
+			   paramLungINhale );
+  // delete ReadConfiguration;
 }
 
 G4VPhysicalVolume* DicomGeometry::Construct()

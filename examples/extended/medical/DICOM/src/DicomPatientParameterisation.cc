@@ -37,8 +37,12 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"
+#include "G4Box.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Material.hh"
+#include "G4VisAttributes.hh"
 
-DicomPatientParameterisation::DicomPatientParameterisation(G4int NoVoxels, 
+DicomPatientParameterisation::DicomPatientParameterisation(G4int, // NoVoxels, 
 							   G4double max_density, 
 							   G4double min_density ,
 							   G4Material* lunginhale,
@@ -159,12 +163,12 @@ void DicomPatientParameterisation::ComputeTransformation(const G4int copyNo, G4V
   physVol->SetTranslation(origin);
 }
 
-
-void DicomPatientParameterisation::ComputeDimensions(G4Box& Voxels, const G4int copyNo, const G4VPhysicalVolume* physVol) const
+//void DicomPatientParameterisation::ComputeDimensions(G4Box& Voxels, const G4int copyNo, const G4VPhysicalVolume* physVol) const
+void DicomPatientParameterisation::ComputeDimensions(G4Box& voxels, const G4int, const G4VPhysicalVolume*) const
 {
-  Voxels.SetXHalfLength((pixel_spacing_X*compression/2.0)*mm);
-  Voxels.SetYHalfLength((pixel_spacing_Y*compression/2.0)*mm);
-  Voxels.SetZHalfLength((SliceTickness/2.0)*mm);
+  voxels.SetXHalfLength((pixel_spacing_X * compression/2.0) * mm);
+  voxels.SetYHalfLength((pixel_spacing_Y * compression/2.0) * mm);
+  voxels.SetZHalfLength((SliceTickness / 2.0) * mm);
 }
 
 G4Material*  DicomPatientParameterisation::ComputeMaterial(const G4int copyNo,G4VPhysicalVolume* physVol)
