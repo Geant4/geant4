@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.23 2001-11-28 16:44:52 japost Exp $
+// $Id: G4PropagatorInField.icc,v 1.24 2001-11-28 19:05:45 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,13 +48,13 @@ G4PropagatorInField::G4PropagatorInField(G4Navigator    *theNavigator,
     End_PointAndTangent(G4ThreeVector(0.,0.,0.),
 			G4ThreeVector(0.,0.,0.),0.0,0.0,0.0,0.0,0.0),
     fVerboseLevel(0),
-    fmax_loop_count(10000),
     fEpsilonMin(fEpsilonMinDefault),
-    fEpsilonMax(fEpsilonMaxDefault)  
+    fEpsilonMax(fEpsilonMaxDefault),  
+    fmax_loop_count(10000),
+    fNoZeroStep(0)
 {
      // this->fChordFinder = new G4ChordFinder( (G4MagneticField*)0, 1e-6 );
 
-     fNoZeroStep=0;                
      fThresholdNo_ZeroSteps= 2; 
      // fMidPoint_CurveLen_of_LastAttempt= -1;
      fFull_CurveLen_of_LastAttempt= -1; 
@@ -196,3 +196,6 @@ inline void      G4PropagatorInField::SetLargestAcceptableStep(G4double newBigDi
 
 inline G4double  G4PropagatorInField::GetLargestAcceptableStep()
 {return fLargestAcceptableStep;}
+
+inline G4FieldManager*  G4PropagatorInField::GetCurrentFieldManager()
+{ return fCurrentFieldMgr; } 
