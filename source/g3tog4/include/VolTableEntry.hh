@@ -67,7 +67,7 @@ public:
 
   VolTableEntry* GetDaughter(G4int i);
 
-  VolTableEntry* FindDaughter(G4String& vname);
+  VolTableEntry* FindDaughter(const G4String& vname);
 
   G4bool operator == ( const VolTableEntry& vte) const;
 };

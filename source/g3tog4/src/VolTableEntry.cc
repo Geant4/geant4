@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: VolTableEntry.cc,v 1.4 1999-05-26 03:50:30 lockman Exp $
+// $Id: VolTableEntry.cc,v 1.5 1999-05-26 05:15:29 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -122,7 +122,7 @@ VolTableEntry::AddDaughter(VolTableEntry* aDaughter){
 };
 
 VolTableEntry*
-VolTableEntry::FindDaughter(G4String& Dname){
+VolTableEntry::FindDaughter(const G4String& Dname){
   for (int idau=0; idau<GetNoDaughters(); idau++){
     if (GetDaughter(idau)->GetName() == Dname) return GetDaughter(idau);
   }
