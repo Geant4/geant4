@@ -1,0 +1,21 @@
+2
+2
+16
+16
+0
+0
+400
+1.0 e/fm: good to tune pion and proton yields
+156 #final states considered
+0.9 epsilon1 - high gets protons down.
+0.8 epsilon2 - high gets protons down.
+1.  omega = clustering probability - good for deuterons and tritons
+    also for proton yield.
+180.0 Temperature; good for ?
+0.3
+0.3
+1. vacuum to in medium ratio
+50. nuc.rad: together with e/fm good to tune pion and proton yields
+10000000
+
+
