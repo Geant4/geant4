@@ -34,6 +34,22 @@ ifdef G4ANALYSIS_BUILD_JAS
   LIB_JAS = 1	
 endif
 
+# ------------- OpenScientist -----------------
+ifdef G4ANALYSIS_USE_LIZARD
+  CPPFLAGS += -DG4ANALYSIS_USE_LIZARD
+  CPPFLAGS += -DG4ANALYSIS_USE
+  G4ANALYSIS_BUILD_LIZARD = 1
+endif
+
+ifdef G4ANALYSIS_BUILD_LIZARD
+  CPPFLAGS += -DG4ANALYSIS_BUILD
+  CPPFLAGS += -DG4ANALYSIS_BUILD_LIZARD
+  INC_ANALYSIS = 1	
+  LIB_ANALYSIS = 1	
+  INC_LIZARD = 1	
+  LIB_LIZARD = 1	
+endif
+
 # ------------- Else ---------------
 
 ifdef G4ANALYSIS_TUPLE
@@ -51,13 +67,17 @@ endif
 ifdef LIB_OPEN_SCIENTIST
   ANALYSISLIBS += -lG4OpenScientist
 endif
-ifdef LIB_ANALYSIS
-  ANALYSISLIBS += -lG4analysis_management 
-endif
 ifdef LIB_JAS
   ANALYSISLIBS += -lG4jas
 endif
+ifdef LIB_LIZARD
+  ANALYSISLIBS += -lG4lizard
+endif
+ifdef LIB_ANALYSIS
+  ANALYSISLIBS += -lG4analysis_management 
+endif
 #
+# ------------- OpenScientist -----------------
 ifdef INC_OPEN_SCIENTIST
   CPPFLAGS += -I$(G4BASE)/analysis/OpenScientist/include
   CPPFLAGS += -I$(LIBHOME)/include -I$(HCLHOME)/include -I$(LABHOME)/include
@@ -74,6 +94,7 @@ ifdef LIB_OPEN_SCIENTIST
   ANALYSISLIBS += $(DLDLIBS)
 endif
 #
+# ------------- jas -----------------
 ifdef INC_JAS
   CPPFLAGS += -I$(G4BASE)/analysis/jas/include
   CPPFLAGS += -I$(JDKHOME)/include -I$(JDKHOME)/include/linux
@@ -81,6 +102,14 @@ endif
 #
 ifdef LIB_JAS
   ANALYSISLIBS += -L$(JDKHOME)/jre/lib/i386/classic -L$(JDKHOME)/jre/lib/i386/native_threads -ljvm -lhpi
+endif
+
+# ------------- Lizard -----------------
+ifdef INC_LIZARD
+  CPPFLAGS += -I$(G4BASE)/analysis/Lizard/include
+endif
+#
+ifdef LIB_LIZARD
 endif
 
 

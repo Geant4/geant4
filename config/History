@@ -1,4 +1,4 @@
-$Id: History,v 1.114 2000-10-26 13:59:39 gcosmo Exp $
+$Id: History,v 1.115 2000-10-31 21:45:15 barrand Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+First November 2000 : Guy Barrand
+- ananlysis.gmk : declare Lizard.
 
 24th October 2000   Gunter Folger (config-V02-00-03)
 - architecture.gmk, common.gmk, globlib.gmk, sys/*:
