@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2001-08-10 13:55:04 maire Exp $
+$Id: History,v 1.27 2001-08-13 14:34:28 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+13 aug 01: mma
+- G4eIonisation: new function ComputeRestrictedMeandEdx()
      
 10 aug 01: mma
 - store/retrieve PhysicsTables implemented in photelec, compton, gamaconv,

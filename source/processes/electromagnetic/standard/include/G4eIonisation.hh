@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.hh,v 1.10 2001-08-09 17:24:22 maire Exp $
+// $Id: G4eIonisation.hh,v 1.11 2001-08-13 14:34:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------- G4eIonisation physics process -----------
@@ -29,6 +29,7 @@
 //
 // 10-02-00 modifications , new e.m. structure, L.Urban
 // 03-08-01 new methods Store/Retrieve PhysicsTable (mma)
+// 13-08-01 new function ComputeRestrictedMeandEdx() (mma)
 //
 // ------------------------------------------------------------
 
@@ -106,7 +107,7 @@ class G4eIonisation : public G4VeEnergyLoss
       // It returns the MeanFreePath of the process for the current track :
       // (energy, material)
       // The previousStepSize and G4ForceCondition* are not used.
-      // This function overloads a virtual function of the base class.		      
+      // This function overloads a virtual function of the base class.
       // It is invoked by the ProcessManager of the Particle.
         
     G4VParticleChange *PostStepDoIt(const G4Track& track,         
@@ -120,13 +121,20 @@ class G4eIonisation : public G4VeEnergyLoss
       // It returns the MeanFreePath of the process for a (energy, material)
 
   protected:   // with description
-
+  
+    virtual G4double ComputeRestrictedMeandEdx(
+                            const G4ParticleDefinition& aParticleType,
+                            G4double KineticEnergy,
+                            const G4Material* material,
+                            G4double DeltaThreshold);
+      // computes restricted mean dE/dx in Geant4 internal units. 
+            
     virtual G4double ComputeCrossSectionPerAtom(
                             const G4ParticleDefinition& aParticleType,
                             G4double KineticEnergy,
                             G4double AtomicNumber,
                             G4double DeltaThreshold);
-      // computes total cross section per atom.      
+      // computes total cross section per atom in Geant4 internal units.      
      			    
   protected:
                                 
