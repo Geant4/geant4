@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2002-11-11 14:35:40 miheikki Exp $
+# $Id: GNUmakefile,v 1.10 2002-11-12 12:59:37 miheikki Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -76,9 +76,10 @@ CPPFLAGS  += \
 
 LDLIBS   +=  \
 	-L$(G4INSTALL)/lib/$(G4SYSTEM) \
-	    -lG4globman \
-            -lG4hadronic_bert_cascade \
-            -lG4hepnumerics \
+	-lG4globman \
+	-lG4hadronic_bert_cascade \
+	-lG4hepnumerics \
+	-lCLHEP \
 #	    -lG4materials \
 #	    -lG4hadronic_diffstring \
 #	    -lG4hadronic_stringfrag \
