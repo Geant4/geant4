@@ -102,62 +102,48 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
   G4CollisionOutput output;
 
-  G4bool runOnlyINC = false; // Flag for running only INC or all models.
-
-  if (runOnlyINC) { // Run only INC
-  
-    // Resigister collider
-    G4ElementaryParticleCollider* colep = new G4ElementaryParticleCollider;
-    G4IntraNucleiCascader*     collider = new G4IntraNucleiCascader;
- 
-    collider->setElementaryParticleCollider(colep);
-    collider->setInteractionCase(1); // Interaction type is particle with nuclei.
-
-    output = collider->collide(bullet, target); 
- 
-  } else { // Run all models
 
     // Colliders initialisation
-    G4ElementaryParticleCollider*   colep = new G4ElementaryParticleCollider;
-    G4IntraNucleiCascader*            inc = new G4IntraNucleiCascader; // the actual cascade
-    inc->setInteractionCase(1); // Interaction type is particle with nuclei.
+  G4ElementaryParticleCollider*   colep = new G4ElementaryParticleCollider;
+  G4IntraNucleiCascader*            inc = new G4IntraNucleiCascader; // the actual cascade
+  inc->setInteractionCase(1); // Interaction type is particle with nuclei.
 
-    G4NonEquilibriumEvaporator*     noneq = new G4NonEquilibriumEvaporator;
-    G4EquilibriumEvaporator*         eqil = new G4EquilibriumEvaporator;
-    G4Fissioner*                     fiss = new G4Fissioner;
-    G4BigBanger*                     bigb = new G4BigBanger;
+  G4NonEquilibriumEvaporator*     noneq = new G4NonEquilibriumEvaporator;
+  G4EquilibriumEvaporator*         eqil = new G4EquilibriumEvaporator;
+  G4Fissioner*                     fiss = new G4Fissioner;
+  G4BigBanger*                     bigb = new G4BigBanger;
 
-    G4InuclCollider*             collider = new G4InuclCollider(colep, inc, noneq, eqil, fiss, bigb);
+  G4InuclCollider*             collider = new G4InuclCollider(colep, inc, noneq, eqil, fiss, bigb);
 
 
-    if ( theNucleusA < 1.5 ) 
-      {
-	// Get momentum from H model
-	G4NucleiModel* model = new G4NucleiModel(new G4InuclNuclei(targetMomentum, 1, 1));
-	targetH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); 
+  if ( theNucleusA < 1.5 ) 
+    {
+      // Get momentum from H model
+      G4NucleiModel* model = new G4NucleiModel(new G4InuclNuclei(targetMomentum, 1, 1));
+      targetH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); 
       
-	if (verboseLevel > 2) {
-	  G4cout << "Target:  " << G4endl;  
-	  targetH->printParticle();
-	}
-
-	do
-	  {
-	    output = collider->collide(bullet, targetH); 
-	  } 
-	while(output.getOutgoingParticles().size()<2.5);
-      } 
-    else 
-      {
-	output = collider->collide(bullet, target ); 
+      if (verboseLevel > 2) {
+	G4cout << "Target:  " << G4endl;  
+	targetH->printParticle();
       }
 
-    if (verboseLevel > 1) 
-      {
-	G4cout << " Cascade output: " << G4endl;
-	output.printCollisionOutput();
-      }
-  }
+      do
+	{
+	  output = collider->collide(bullet, targetH); 
+	} 
+      while(output.getOutgoingParticles().size()<2.5);
+    } 
+  else 
+    {
+      output = collider->collide(bullet, target ); 
+    }
+
+  if (verboseLevel > 1) 
+    {
+      G4cout << " Cascade output: " << G4endl;
+      output.printCollisionOutput();
+    }
+  
 
   // Convert cascade data to use hadronics interface
 
