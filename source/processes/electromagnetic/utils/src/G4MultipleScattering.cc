@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.36 2003-04-14 09:30:30 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.37 2003-04-26 03:02:57 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -858,6 +858,32 @@ G4bool G4MultipleScattering::RetrievePhysicsTable(
 					         const G4String& directory, 
 				                 G4bool          ascii)
 {
+  // set values of some data members
+    if((particle->GetParticleName() == "e-") ||
+       (particle->GetParticleName() == "e+"))  
+    {
+       // parameters for e+/e-
+       alfa1 = 1.45 ;
+       alfa2 = 0.60 ;
+       alfa3 = 0.30 ;
+       b = 1. ;
+       xsi = facxsi*2.22 ;
+       c0 = 2.30 ;
+    }
+    else
+    {
+       // parameters for heavy particles
+       alfa1 = 1.10 ;
+       alfa2 = 0.14 ;
+       alfa3 = 0.07 ;
+       b = 1. ;
+       xsi = facxsi*2.70 ;
+       c0 = 1.40 ;
+    }
+
+  // ..............................
+    Tlow = particle->GetPDGMass();
+
   // delete theTransportMeanFreePathTable
   if (theTransportMeanFreePathTable != 0) {
     theTransportMeanFreePathTable->clearAndDestroy();

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScatteringSTD.cc,v 1.15 2003-04-24 16:38:59 vnivanch Exp $
+// $Id: G4MultipleScatteringSTD.cc,v 1.16 2003-04-26 03:02:58 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -870,6 +870,31 @@ G4bool G4MultipleScatteringSTD::RetrievePhysicsTable(
 					         const G4String& directory,
 				                 G4bool          ascii)
 {
+  // set values of some data members
+    if((aParticleType.GetParticleName() == "e-") ||
+       (aParticleType.GetParticleName() == "e+"))
+    {
+       // parameters for e+/e-
+       alfa1 = 1.45 ;
+       alfa2 = 0.60 ;
+       alfa3 = 0.30 ;
+       b = 1. ;
+       xsi = facxsi*2.22 ;
+       c0 = 2.30 ;
+    }
+    else
+    {
+       // parameters for heavy particles
+       alfa1 = 1.10 ;
+       alfa2 = 0.14 ;
+       alfa3 = 0.07 ;
+       b = 1. ;
+       xsi = facxsi*2.70 ;
+       c0 = 1.40 ;
+    }
+
+    Tlow = aParticleType.GetPDGMass();
+
   // delete theTransportMeanFreePathTable
   if (theTransportMeanFreePathTable != 0) {
     theTransportMeanFreePathTable->clearAndDestroy();
