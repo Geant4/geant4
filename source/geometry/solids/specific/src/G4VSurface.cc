@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.cc,v 1.11 2004-12-17 16:34:59 link Exp $
+// $Id: G4VSurface.cc,v 1.12 2005-03-01 14:04:49 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 // History:
 //   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
 //                 from original version in Jupiter-2.5.02 application.
+//   01-Mar-2005 - O.Link Windows/VC++ Warning concering G4int i in for-loop fixed
 // --------------------------------------------------------------------
 
 #include "G4VSurface.hh"
@@ -479,8 +480,8 @@ G4double G4VSurface::DistanceToOut(const G4ThreeVector &gp,
 
    nxx = DistanceToSurface(gp, gv, gxx, distance, areacode,
                            isvalid, kValidateWithTol);
-   G4int i;
-   for (i=0; i<nxx; i++) {
+
+   for (G4int i=0; i<nxx; i++) {
       if (!(isvalid[i])) {
          continue;
       }
