@@ -101,6 +101,8 @@ private:
 				 G4KineticTrackVector * oldTarget,
 				 G4KineticTrackVector * newSecondaries);
   G4bool DoTimeStep(G4double timeStep);
+  G4KineticTrackVector* CorrectBarionsOnBoundary(G4KineticTrackVector *in, 
+                                               G4KineticTrackVector *out);
   G4Fragment * FindFragments();
   void StepParticlesOut();
   G4LorentzVector GetFinal4Momentum();

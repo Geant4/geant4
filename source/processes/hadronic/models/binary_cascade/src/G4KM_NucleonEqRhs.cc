@@ -81,9 +81,11 @@ void G4KM_NucleonEqRhs::EvaluateRhsGivenB(const G4double y[],
   const G4VNuclearDensity * nuclearDensity=theNucleus->GetNuclearDensity();
 
 // do not check for theMass != 0 : it is an error and core dump will signal it
-  
-  G4double deriv = (factor/theMass)*
-    pow(nuclearDensity->GetDensity(pos), -1./3.)*nuclearDensity->GetDeriv(pos);
+
+  G4double density=  nuclearDensity->GetDensity(pos);
+  G4double deriv(0);
+  if (density > 0 ) deriv = (factor/theMass)*
+			pow(density, -1./3.)*nuclearDensity->GetDeriv(pos);
 
 //  dydx[3] = yMod == 0 ? 0 : -deriv*y[0]/yMod;
 //  dydx[4] = yMod == 0 ? 0 : -deriv*y[1]/yMod;

@@ -273,25 +273,36 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
     if(!GetSphereIntersectionTimes(kt, t_enter, t_leave))
     {
        kt->SetState(G4KineticTrack::miss_nucleus);
+       G4cout << " kt missing nucleus... " << kt << G4endl;
        continue;
     }  
 
-/*
- *    G4cout <<" timeStep, Intersection times tenter, tleave  "
- *    	<< currTimeStep << " / " << t_enter << " / " << t_leave <<G4endl;
- */
-// if the particle is already outside nucleus go to next
+
+     G4cout <<" kt,timeStep, Intersection times tenter, tleave  "
+     	<<kt<<" "<< currTimeStep << " / " << t_enter << " / " << t_leave <<G4endl;
+ 
+// if the particle is already outside nucleus go to next  @@GF should never happen? check!
     if(t_leave < 0)
-      continue;
+    {  
+       G4Exception("G4RKPropagation:: Attempt to track particle past a  nucleus");
+       continue;
+    }  
 
 // Apply a straight line propagation for particle types
 // not included in the model
     if( ! currentField )
     {
-      if(currTimeStep == DBL_MAX)currTimeStep = t_leave;
+      if(currTimeStep == DBL_MAX)currTimeStep = t_leave*1.05;
       FreeTransport(kt, currTimeStep);
+      if ( currTimeStep >= t_leave ) 
+      {
+         if ( kt->GetState() == G4KineticTrack::inside ) 
+	   { kt->SetState(G4KineticTrack::gone_out); }
+	 else
+	   { kt->SetState(G4KineticTrack::miss_nucleus);}
 //      G4cout << " Particle not in model : " << kt->GetDefinition()->GetParticleName() << G4endl;
-      continue;
+       }
+       continue;
     }
 
     if(t_enter > 0)  // the particle is out. Transport free to the surface
@@ -350,7 +361,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	is_exiting=true;
     }
 
-//        G4cerr << "RKPropagation t_leave, curTimeStep " <<t_leave << " " <<currTimeStep<<G4endl;
+ G4cerr << "RKPropagation is_exiting?, t_leave, curTimeStep " <<is_exiting<<" "<<t_leave << " " <<currTimeStep<<G4endl;
 #ifdef debug_1_RKPropagation
         G4cout << "RKPropagation Ekin, field, p "
 	<< kt->GetTrackingMomentum().e() - kt->GetTrackingMomentum().mag() << " "
@@ -381,20 +392,18 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 // FixMe: in some cases there could be a significant
 //        part to do still in the nucleus, or we stepped to far... depending on
 //        slope of potential
-    if(is_exiting)  // particle is exiting
+    G4double t_in, t_out;
+
+// should go out, or are already out by a too long step..
+    if(is_exiting || 
+       (GetSphereIntersectionTimes(kt, t_in, t_out) &&t_in<0 && t_out<=0 ))  // particle is exiting
     {
-// transport free to a position that is surely out of the nucleus, to avoid
-// a new transportation and a new adding the barrier next loop.
-      G4double t_in, t_out;
-      if(GetSphereIntersectionTimes(kt, t_in, t_out))
-      {
-        G4double velocity=kt->GetTrackingMomentum().vect().mag()/kt->GetTrackingMomentum().e()*c_light;
-	G4double t_min=0.1*fermi/velocity;
-	t_out=G4std::max(abs(t_out),t_min); // avoid transport by 0 step not taking it out..
 	if(t_in < 0 && t_out >= 0)   //still inside, transport safely out.
 	{
+// transport free to a position that is surely out of the nucleus, to avoid
+// a new transportation and a new adding the barrier next loop.
 	  G4ThreeVector savePos = kt->GetPosition();
-	  FreeTransport(kt, 1.1*t_out);
+	  FreeTransport(kt, t_out);
 	  // and evaluate the right the energy
 	  G4double newE=kt->GetTrackingMomentum().e();
 
@@ -416,35 +425,27 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 
 	   if(newE < kt->GetActualMass())
 	   {
-//	     G4cout << "RKPropagation-Transport: problem with particle exiting - ignored" << G4endl;
+	     G4cout << "RKPropagation-Transport: problem with particle exiting - ignored" << G4endl;
+             G4cout << " cannot leave nucleus, E in/out: " << kt->GetTrackingMomentum() << " / " << newE <<G4endl;
+             kt->SetState(G4KineticTrack::captured);
 	     continue; // the particle cannot exit the nucleus
 	   }
-//	   G4cout << "%%%% before update %%%% "<< kt->GetTrackingMomentum()<<G4endl;
 	   G4double newP = sqrt(newE*newE- sqr(kt->GetActualMass()));
 	   G4LorentzVector new4Mom(newP*kt->GetTrackingMomentum().vect().unit(), newE);
 	   G4ThreeVector transfer(kt->GetTrackingMomentum().vect()-new4Mom.vect());
 	   G4ThreeVector boost= transfer / sqrt(transfer.mag2() + sqr(theNucleus->GetMass()));
 	   new4Mom*=G4LorentzRotation(boost);
 	   kt->Set4Momentum(new4Mom);
-	   kt->SetState(G4KineticTrack::gone_out);
-//old	   kt->Update4Momentum(newE);
-//	   G4cout << "%%%% beyond update %%%% "<< kt->GetTrackingMomentum()<<G4endl;
-//	   G4cout << "Field values: "<<currentField->GetField(savePos)<<" "
-//	          <<currentField->GetField(kt->GetPosition())<<" "<<kt->GetDefinition()->GetParticleName()<<G4endl;
 	}
-      } else
-      {
-      	  G4cerr << "G4BinaryCascade-G4RKPropagation: Positioning problem(ignored)"<< G4endl;
-      }
-
-      // add the potential barrier
-      // FixMe the Coulomb field is not parallel to mom, this is simple approximation
-      G4double newE = kt->GetTrackingMomentum().e()+currentField->GetField(kt->GetPosition());
-//      G4cout << " leave nucleus, E in/out: " << kt->GetTrackingMomentum() << " / " << newE <<G4endl;
-      if(newE < kt->GetActualMass())
-      {  // the particle cannot exit the nucleus  @@@ GF check.
-	continue;
-      }
+	// add the potential barrier
+	// FixMe the Coulomb field is not parallel to mom, this is simple approximation
+	G4double newE = kt->GetTrackingMomentum().e()+currentField->GetField(kt->GetPosition());
+	if(newE < kt->GetActualMass())
+	{  // the particle cannot exit the nucleus  @@@ GF check.
+          G4cout << " cannot leave nucleus, E in/out: " << kt->GetTrackingMomentum() << " / " << newE <<G4endl;
+          kt->SetState(G4KineticTrack::captured);
+	  continue;
+	}
 	G4double newP = sqrt(newE*newE- sqr(kt->GetActualMass()));
 	G4LorentzVector new4Mom(newP*kt->GetTrackingMomentum().vect().unit(), newE);
 	G4ThreeVector transfer(kt->GetTrackingMomentum().vect()-new4Mom.vect());
@@ -452,8 +453,8 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	new4Mom*=G4LorentzRotation(boost);
 	kt->Set4Momentum(new4Mom);
 	kt->SetState(G4KineticTrack::gone_out);
-//old      kt->Update4Momentum(newE);
-    }
+      }
+
 
 
   }

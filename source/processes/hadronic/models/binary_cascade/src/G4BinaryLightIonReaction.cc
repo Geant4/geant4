@@ -147,6 +147,13 @@
       if( (*result)[i]->GetNewlyAdded() ) 
       {
         fState += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
+        G4cout <<" secondary ... " << (*result)[i]<< " "<< (*result)[i]->GetMomentum()<< " " <<
+	                            (*result)[i]->GetTotalEnergy() << G4endl;
+        
+      }
+      else {
+        G4cout <<" spectator ... " << (*result)[i]<< " "<< (*result)[i]->GetMomentum()<< " " <<
+	                            (*result)[i]->GetTotalEnergy() << G4endl;
       }
     }
     G4LorentzVector momentum(iState-fState);
