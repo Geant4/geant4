@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.6 2003-10-21 20:45:12 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.7 2003-11-04 01:58:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,7 +58,7 @@ G4RunManagerKernel::G4RunManagerKernel()
 :physicsList(0),currentWorld(0),
  geometryInitialized(false),physicsInitialized(false),
  geometryNeedsToBeClosed(true),geometryToBeOptimized(true),
- verboseLevel(0)
+ physicsNeedsToBeReBuilt(true),verboseLevel(0)
 {
   defaultExceptionHandler = new G4ExceptionHandler();
   if(fRunManagerKernel)
@@ -295,10 +295,12 @@ void G4RunManagerKernel::UpdateRegion()
 
 void G4RunManagerKernel::BuildPhysicsTables()
 { 
-  if(G4ProductionCutsTable::GetProductionCutsTable()->IsModified())
+  if(G4ProductionCutsTable::GetProductionCutsTable()->IsModified()
+  || physicsNeedsToBeReBuilt)
   {
     physicsList->BuildPhysicsTable();
     G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
+    physicsNeedsToBeReBuilt = false;
   }
 
   if(verboseLevel>1) DumpRegion();

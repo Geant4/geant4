@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.19 2003-08-01 19:30:14 asaim Exp $
+// $Id: G4RunMessenger.cc,v 1.20 2003-11-04 01:58:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -135,6 +135,13 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   geomCmd->SetGuidance(" first initialization (or BeamOn).");
   geomCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  physCmd = new G4UIcmdWithoutParameter("/run/physicsModified",this);
+  physCmd->SetGuidance("Force all physics tables recalculated again.");
+  physCmd->SetGuidance("This command must be applied");
+  physCmd->SetGuidance(" if physics process has been modified after the");
+  physCmd->SetGuidance(" first initialization (or BeamOn).");
+  physCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   cutCmd = new G4UIcmdWithoutParameter("/run/cutoffModified",this);
   cutCmd->SetGuidance("/run/cutoffModified becomes obsolete.");
   cutCmd->SetGuidance("It is safe to remove invoking this command.");
@@ -215,6 +222,7 @@ G4RunMessenger::~G4RunMessenger()
   delete abortEventCmd;
   delete initCmd;
   delete geomCmd;
+  delete physCmd;
   delete cutCmd;
   delete randDirOld; delete storeRandOld; delete restoreRandOld; 
   delete runDirectory;
@@ -268,6 +276,8 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->Initialize(); }
   else if( command==geomCmd )
   { runManager->GeometryHasBeenModified(); }
+  else if( command==physCmd )
+  { runManager->PhysicsHasBeenModified(); }
   else if( command==cutCmd )
   { runManager->CutOffHasBeenModified(); }
   

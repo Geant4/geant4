@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.hh,v 1.2 2003-10-21 20:45:12 asaim Exp $
+// $Id: G4RunManagerKernel.hh,v 1.3 2003-11-04 01:58:28 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,6 +125,7 @@ class G4RunManagerKernel
     G4bool physicsInitialized;
     G4bool geometryNeedsToBeClosed;
     G4bool geometryToBeOptimized;
+    G4bool physicsNeedsToBeReBuilt;
     G4int verboseLevel;
 
     G4EventManager * eventManager;
@@ -138,6 +139,13 @@ class G4RunManagerKernel
     //  This method must be invoked (or equivalent UI commands can be used)
     // in case the user changes his/her detector geometry.
     // This method is automatically invoked from DefineWorldVolume() method.
+
+    inline void PhysicsHasBeenModified()
+    { physicsNeedsToBeReBuilt = true; }
+    //  This method must be invoked in case the user changes his/her physics
+    // process(es), e.g. (in)activate some processes. Once this method is
+    // invoked, regardless of cuts are changed or not, BuildPhysicsTable()
+    // of PhysicsList is invoked for refreshing all physics tables.
 
   public:
     inline G4EventManager* GetEventManager() const

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.36 2003-08-01 19:29:49 asaim Exp $
+// $Id: G4RunManager.hh,v 1.37 2003-11-04 01:58:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -330,6 +330,14 @@ class G4RunManager
     // in case the user changes his/her detector geometry after
     // Initialize() metho has been invoked. Then, at the begining of the next BeamOn(),
     // all necessary re-initialization will be done.
+
+    inline void PhysicsHasBeenModified()
+    { kernel->PhysicsHasBeenModified(); }
+    //  This method must be invoked (or equivalent UI command can be used)
+    // in case the user changes his/her physics process(es), e.g. (in)activate 
+    // some processes. Once this method is invoked, regardless of cuts are 
+    // changed or not, BuildPhysicsTable() of PhysicsList is invoked for 
+    // refreshing all physics tables.
 
     inline void CutOffHasBeenModified()
     {

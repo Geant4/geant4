@@ -1,4 +1,4 @@
-$Id: History,v 1.102 2003-11-03 02:16:34 kurasige Exp $
+$Id: History,v 1.103 2003-11-04 01:57:54 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-November 3, 2003 (run-V05-02-06)
+
+November 03, 2003, M.Asai (run-V05-02-07)
+- Introducing PhysicsHasBeenModified() method in G4RunManagerKernel class
+  and relared wrapper methods in G4RunManager and G4RunMessenger.
+
+November 3, 2003, H.Kurashige (run-V05-02-06)
 - G4VUserPhysicsList:
   o Clean Up error messages for store/retreiving physcs table
 
