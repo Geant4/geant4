@@ -784,6 +784,7 @@ void  G4BinaryCascade::FindCollisions(G4KineticTrackVector * secondaries)
       collisionTime = theScatterer->GetTimeToInteraction(*pkt, *tkt);
       if(collisionTime == DBL_MAX)  // no collision
 	continue;
+   G4cout << "found collision! time= " << collisionTime << G4endl;
       theCollisionMgr->AddCollision(collisionTime+theCurrentTime, pkt, tkt);
 //      G4cerr <<" !!!!!! debug collisions "<<collisionTime<<" "<<pkt->GetDefinition()->GetParticleName()<<G4endl;      
    }
@@ -816,6 +817,22 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   //G4cerr << "G4BinaryCascade::ApplyCollision start"<<G4endl;
   G4KineticTrack * primary = collision->GetPrimary();
   G4KineticTrack * target = collision->GetTarget();
+
+
+  // The projectile MUST not be outside of nucleus!
+  if(primary->GetState() != G4KineticTrack::inside)
+  {
+     G4cout << "G4BinaryCasacde::ApplyCollision(): StateError " << primary << G4endl;
+     G4KineticTrackVector debug;
+     debug.push_back(primary);
+     debug.push_back(target);
+     PrintKTVector(&debug,G4std::string("primay- target"));
+#ifdef debug_BinaryCascade
+     G4Exception("G4BinaryCasacde::ApplyCollision()");
+#else
+     return false;
+#endif
+  }
 
   G4KineticTrackVector * products=0;
 
@@ -883,15 +900,6 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   currentA += finalBaryon-initialBaryon;
   currentZ += finalCharge-initialCharge;
   
-  // assume due to rounding errors or similar, the projectile is still outside.
-  if(primary->GetState() != G4KineticTrack::inside)
-  {
-    G4int primBaryon = primary->GetDefinition()->GetBaryonNumber();
-    G4int primCharge(0);
-    if(primBaryon!=0) primCharge=static_cast<G4int>(primary->GetDefinition()->GetPDGCharge()+.1);
-    currentA+=primBaryon;
-    currentZ+=primCharge;
-  }
   G4KineticTrackVector oldSecondaries;
   oldSecondaries.push_back(primary);
   G4cout << "Balancing debug ====== "
