@@ -64,12 +64,13 @@ processes/decay                                  decay-V06-00-00
 ---------------
 - Fixed bug in PostStepGPIL() in case of stopping during AlongStep actions.
 
-processes/electromagnetic/lowenergy              emlowen-V06-00-01
+processes/electromagnetic/lowenergy              emlowen-V06-00-08
 -----------------------------------
 - Bug fixes in G4IonisationParameters, G4PenelopeCompton and
   G4PenelopeIonisation.
 - Fixed some compilation warnings on Intel/icc compiler.
-- Performance improvement in G4Generator2BN.
+- Bug fix in G4PenelopeRayleigh, related to problem report #605.
+- Performance improvement in G4Generator2BN and Penelope processes.
 
 processes/electromagnetic/muons                  muons-V06-00-02
 -------------------------------
@@ -94,7 +95,7 @@ processes/electromagnetic/utils                  utils-V06-00-08
 
 processes/hadronic                               ghad-V06-00-05
 ------------------
-- models/binary_cascade (ghad-bin-V06-00-02)
+- models/binary_cascade (ghad-bin-V06-00-03)
   o Fixed a few memory leaks in G4BinaryLightIonReaction.
     Corrected a logic bug.
   o Removed one recurring run time warning from G4RKPropagation.
@@ -166,6 +167,8 @@ examples                                         examples-V06-00-02
 tests                                            tests-V06-00-02
 -----
 - Updated reference outputs.
+- tests/test14 (test14-V06-00-00)
+  o Updated macro for testing Penelope model.
 - tests/test32 (test32-V06-00-00)
   o Fixed processing of hits in sensitive detector.
 - tests/test50 (test50-V06-00-00)
