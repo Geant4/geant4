@@ -115,7 +115,7 @@ Cut in energy
            Tungsten         105 keV        2.31 MeV
                Lead         101 keV        1.38 MeV
 ===================================================
-# $Id: TestEm2.out,v 1.14 2001-04-19 19:30:40 stesting Exp $
+# $Id: TestEm2.out,v 1.15 2001-04-19 19:34:50 stesting Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
