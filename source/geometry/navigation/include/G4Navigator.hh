@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.6 2004-06-09 13:48:45 japost Exp $
+// $Id: G4Navigator.hh,v 1.7 2004-06-11 10:10:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -355,34 +355,32 @@ class G4Navigator
   G4ThreeVector fGrandMotherExitNormal;  // Leaving volume normal, in its 
                                          // own coordinate system
   G4NavigationHistory fHistory;
-                                // Transformation & `path' history
-                                // of current path through geomtrical
-                                // hierarchy
+    // Transformation & `path' history of current path
+    // through geomtrical hierarchy
 
-  //  Count zero steps - as one or two can occur due to changing momentum at a boundary
-  //                       or at an edge common between volumes
-  //                   - several are a sign of a problem in the geometry description
-  //                       or the Navigator  
+  // Count zero steps - as one or two can occur due to changing momentum at
+  //                    a boundary or at an edge common between volumes
+  //                  - several are likely a problem in the geometry
+  //                    description or in the navigation
   //
-  G4bool  fLastStepWasZero;
-                                // Whether the last ComputeStep moved Zero
-                                //  Used to check for edges.
-  G4bool  fLocatedOnEdge;       
-                                // Whether the Navigator has detected an edge
+  G4bool fLastStepWasZero;
+    // Whether the last ComputeStep moved Zero. Used to check for edges.
+
+  G4bool fLocatedOnEdge;       
+    // Whether the Navigator has detected an edge
   G4int fNumberZeroSteps;
-                                // Number of preceding ComputeStep moves that were Zero
-                                //  Reset to 0 after finite step
+    // Number of preceding moves that were Zero. Reset to 0 after finite step
   G4int fActionThreshold_NoZeroSteps;  
-                                // After this many failed/zero steps, act (push etc) 
+    // After this many failed/zero steps, act (push etc) 
   G4int fAbandonThreshold_NoZeroSteps; 
-                                // After this many failed/zero steps, abandon track
+    // After this many failed/zero steps, abandon track
 
   G4ThreeVector  fPreviousSftOrigin;
   G4double       fPreviousSafety; 
-                                // Memory of last safety origin & value.
-                                //  Used in ComputeStep to ensure that
-                                //  origin of current Step is in the same
-                                //  volume as the point of the last relocation.
+    // Memory of last safety origin & value. Used in ComputeStep to ensure
+    // that origin of current Step is in the same volume as the point of the
+    // last relocation
+
   //
   // END State information
   //
