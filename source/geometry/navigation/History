@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2003-12-04 16:20:33 japost Exp $
+$Id: History,v 1.15 2003-12-05 17:08:51 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,35 +16,43 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec  5th, 2003 - G.Cosmo - (geomnav-V05-02-12)
+------------------------
+- G4TransportationManager.cc:
+  o removed initialisation of allocators for navigation levels, where they
+    were introduced as workaround for solving static initialisation a long
+    time ago. Now moved to "volumes" module, where they should belong, in
+    G4TouchableHistory.cc.
+- Restored original unit-tests, using inherited navigator.
+
 Dec  4th, 2003 - J.Apostolakis  (geomnav-V05-02-11)
 ------------------------------
-- G4PropagatorInField.cc 
-  o Corrected placement of #endif for an #ifdef VERBOSE
+- G4PropagatorInField.cc:
+  o Corrected placement of #endif for an #ifdef VERBOSE.
 
 Dec  2nd, 2003 - J.Apostolakis  (geomnav-V05-02-10)
 ------------------------------
-- G4PropagatorInField[.hh.cc] 
+- G4PropagatorInField[.hh.cc]:
    o Fixed LocateIntersectionPoint for long-standing error.
-      A section of the chord was not considered in use case where
-      a previous chord at first appeared to have an intersection, but did not.
+     A section of the chord was not considered in use case where
+     a previous chord at first appeared to have an intersection, but did not.
 
 Nov 26th, 2003 - J.Apostolakis  (geomnav-V05-02-09)
 ------------------------------
-- G4PropagatorInField[.hh.cc] 
-   o Added argument Method LocateIntersectionPoint G4bool& recalculatedEndPt
-     to return 'true' if the endpoint has been recalculated.
-     This fixes a problem that can occasionally cause the skipping of a volume 
-       boundary - in the case when a re-integration was done near a boundary,
-       because the new endpoint was previously not passed back.
-   o ComputeStep also changed to accept above recalculation.
-   o New method GetVerboseLevel(),  closer to std naming than Verbose()
+- G4PropagatorInField[.hh.cc]:
+  o Added argument Method LocateIntersectionPoint G4bool& recalculatedEndPt
+    to return 'true' if the endpoint has been recalculated.
+    This fixes a problem that can occasionally cause the skipping of a volume 
+    boundary - in the case when a re-integration was done near a boundary,
+    because the new endpoint was previously not passed back.
+  o ComputeStep also changed to accept above recalculation.
+  o New method GetVerboseLevel(),  closer to std naming than Verbose()
 
 Nov 14th, 2003 - J.Apostolakis  (geomnav-V05-02-08)
 ------------------------------
- Retagged the files of tag geomnav-V05-0out-big2-jaMod.n1
-2-07, 
-   due to tagging with same name incorrectly files in another directory
-   and as such confusing Bonsai.
+- Retagged the files of tag "geomnav-V05-02-07", due to tagging with same
+  name incorrectly files in another directory and, as such confusing Bonsai.
 
 Nov 13th, 2003 - J.Apostolakis  (geomnav-V05-02-07)
 ------------------------------
