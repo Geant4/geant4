@@ -52,28 +52,28 @@
 
 G4int DicomPatientConstructor::FindingNbOfVoxels(G4double MaxDensity , G4double MinDensity)
 {
-  FILE* lecturepref = fopen("Data.dat","r");
-  fscanf(lecturepref,"%s",compressionbuf);
+  FILE* lecturepref = G4std::fopen("Data.dat","r");
+  G4std::fscanf(lecturepref,"%s",compressionbuf);
   compression = atoi(compressionbuf);
-  fscanf(lecturepref,"%s",maxbuf);
+  G4std::fscanf(lecturepref,"%s",maxbuf);
   G4int max = atoi(maxbuf);    
   G4int copy_counter = 0;
   for (G4int i=1;i<=max;i++)
     {
-      fscanf(lecturepref,"%s",name);
-      sprintf(fullname,"%s.g4",name);
-      readData = fopen(fullname,"r");
-      fscanf(readData,"%s %s",rowsbuf,columnsbuf);
+      G4std::fscanf(lecturepref,"%s",name);
+      G4std::sprintf(fullname,"%s.g4",name);
+      readData = G4std::fopen(fullname,"r");
+      G4std::fscanf(readData,"%s %s",rowsbuf,columnsbuf);
       G4int rows=atoi(rowsbuf);
       G4int columns=atoi(columnsbuf);
-      fscanf(readData,"%s %s",pixel_spacing_Xbuf,pixel_spacing_Ybuf);
+      G4std::fscanf(readData,"%s %s",pixel_spacing_Xbuf,pixel_spacing_Ybuf);
       pixel_spacing_X=atof(pixel_spacing_Xbuf);
       pixel_spacing_Y=atof(pixel_spacing_Ybuf);
-      fscanf(readData,"%s",SliceTicknessbuf);
+      G4std::fscanf(readData,"%s",SliceTicknessbuf);
       SliceTickness=atoi(SliceTicknessbuf);
-      fscanf(readData,"%s",SliceLocationbuf);
+      G4std::fscanf(readData,"%s",SliceLocationbuf);
       SliceLocation=atof(SliceLocationbuf);
-      fscanf(readData,"%s",compressionbuf);
+      G4std::fscanf(readData,"%s",compressionbuf);
       compression=atoi(compressionbuf);
       lenr=abs(rows/compression);
       lenc=abs(columns/compression);
@@ -81,7 +81,7 @@ G4int DicomPatientConstructor::FindingNbOfVoxels(G4double MaxDensity , G4double 
         {
 	  for (G4int w=1;w<=lenc;w++)
             {
-	      if ( fscanf(readData,"%s",Densitybuf) != -1 )
+	      if ( G4std::fscanf(readData,"%s",Densitybuf) != -1 )
                 {
 		  if ( atof(Densitybuf) >= MinDensity && atof(Densitybuf) <= MaxDensity )
                     {
@@ -91,7 +91,7 @@ G4int DicomPatientConstructor::FindingNbOfVoxels(G4double MaxDensity , G4double 
                 }
             }
         }
-      fclose(readData);
+      G4std::fclose(readData);
     }
   return copy_counter;
 }
@@ -114,7 +114,7 @@ void DicomPatientConstructor::readContour()
   lenROI = 0;
   lenPOINTS = 0;
 
-  readingContours = fopen("Plan.roi","r");
+  readingContours = G4std::fopen("Plan.roi","r");
   if ( (G4int *)readingContours == 0 )
     {
       G4std::printf("### No contours file ('Plan.roi')\n");
@@ -124,7 +124,7 @@ void DicomPatientConstructor::readContour()
     {
       flag_contours=1;
       G4std::printf("### There is a contour file ('Plan.roi')\n");
-      while( fgets(ROIplanLine,2000,readingContours) )
+      while( G4std::fgets(ROIplanLine,2000,readingContours) )
         {
 	  if ( ROIplanLine[0] == '/' && ROIplanLine[1] == '/' )
             {
@@ -132,7 +132,7 @@ void DicomPatientConstructor::readContour()
             }
 	  else if ( Flag == 1 )
             {
-	      sscanf(ROIplanLine,"%s %s %s %s %s",Word_1,Word_2,Word_3,Word_4,Word_5);
+	      G4std::sscanf(ROIplanLine,"%s %s %s %s %s",Word_1,Word_2,Word_3,Word_4,Word_5);
 	      // we seek :: num_curve = 39;
 	      if( Word_1[0] == 'n' &&  Word_1[1] == 'u' &&  Word_1[2] == 'm' &&  Word_1[3] == '_' &&  Word_1[4] == 'c' &&  Word_1[5] == 'u' &&  Word_1[6] == 'r' &&  Word_1[7] == 'v' &&  Word_1[8] == 'e' )
                 {
@@ -142,7 +142,7 @@ void DicomPatientConstructor::readContour()
             }
 	  else if ( Flag == 2 )
             {
-	      sscanf(ROIplanLine,"%s %s %s %s %s",Word_1,Word_2,Word_3,Word_4,Word_5);
+	      G4std::sscanf(ROIplanLine,"%s %s %s %s %s",Word_1,Word_2,Word_3,Word_4,Word_5);
 	      // we seek :: num_points = 131
 	      if( Word_1[0] == 'n' &&  Word_1[1] == 'u' &&  Word_1[2] == 'm' &&  Word_1[3] == '_' &&  Word_1[4] == 'p' &&  Word_1[5] == 'o' &&  Word_1[6] == 'i' &&  Word_1[7] == 'n' &&  Word_1[8] == 't' )
                 {
@@ -152,7 +152,7 @@ void DicomPatientConstructor::readContour()
             }
 	  else if ( Flag == 3 )
             {
-	      sscanf(ROIplanLine,"%s %s %s %s %s",Word_1,Word_2,Word_3,Word_4,Word_5);
+	      G4std::sscanf(ROIplanLine,"%s %s %s %s %s",Word_1,Word_2,Word_3,Word_4,Word_5);
 	      if ( lenPOINTS == 0 )
                 {
 		  ContoursX[lenCURVE][lenPOINTS]=lenPOINTSref;
@@ -172,7 +172,7 @@ void DicomPatientConstructor::readContour()
 	  else
             {
 	      G4int x=0;
-	      sscanf(ROIplanLine,"%s %s %s %s %s",Word_1,Word_2,Word_3,Word_4,Word_5);
+	      G4std::sscanf(ROIplanLine,"%s %s %s %s %s",Word_1,Word_2,Word_3,Word_4,Word_5);
 	      while( Word_1[x] != 0 )
                 {
 		  x++;
@@ -206,7 +206,7 @@ void DicomPatientConstructor::readContour()
 
       if ( (int *)readingContours != 0 )
         {
-	  fclose(readingContours);
+	  G4std::fclose(readingContours);
         }
     }
 }

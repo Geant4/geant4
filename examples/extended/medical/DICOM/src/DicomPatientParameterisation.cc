@@ -120,28 +120,28 @@ DicomPatientParameterisation::DicomPatientParameterisation(G4int NoVoxels,
   Attributes_air->SetColour(red=0,green=0,blue=1,alpha=1.);
   Attributes_air->SetForceSolid(false);
 
-  readData = fopen("Data.dat","r");
-  fscanf(readData,"%s",compressionbuf);
+  readData = G4std::fopen("Data.dat","r");
+  G4std::fscanf(readData,"%s",compressionbuf);
   compression=atoi(compressionbuf);
-  fscanf(readData,"%s",maxbuf);
+  G4std::fscanf(readData,"%s",maxbuf);
   max=atoi(maxbuf);
-  fscanf(readData,"%s",name);
-  fclose(readData);
+  G4std::fscanf(readData,"%s",name);
+  G4std::fclose(readData);
 
-  sprintf(fullname,"%s.g4",name);
-  readData =  fopen(fullname,"r");
+  G4std::sprintf(fullname,"%s.g4",name);
+  readData =  G4std::fopen(fullname,"r");
 
-  fscanf(readData,"%s %s",rowsbuf,columnsbuf);
+  G4std::fscanf(readData,"%s %s",rowsbuf,columnsbuf);
   rows=atoi(rowsbuf);
   columns=atoi(columnsbuf);
-  fscanf(readData,"%s %s",pixel_spacing_Xbuf,pixel_spacing_Ybuf);
+  G4std::fscanf(readData,"%s %s",pixel_spacing_Xbuf,pixel_spacing_Ybuf);
   pixel_spacing_X=atof(pixel_spacing_Xbuf);
   pixel_spacing_Y=atof(pixel_spacing_Ybuf);
-  fscanf(readData,"%s",SliceTicknessbuf);
+  G4std::fscanf(readData,"%s",SliceTicknessbuf);
   SliceTickness=atoi(SliceTicknessbuf);
-  fscanf(readData,"%s",SliceLocationbuf);
+  G4std::fscanf(readData,"%s",SliceLocationbuf);
   SliceLocation=atof(SliceLocationbuf);
-  fscanf(readData,"%s",compressionbuf);
+  G4std::fscanf(readData,"%s",compressionbuf);
   compression=atoi(compressionbuf);
     
   GetDensity( max_density , min_density );

@@ -45,7 +45,7 @@ G4int dicomHandler::readHeader(FILE *dicom, char filename2[300])
 
   // Read information up to the pixel data
   // note: it should be a while instead of a for
-  for (G4int i=0;i<=100000000;i++)
+  for ( G4int i = 0; i <= 100000000; i++ )
     {
       //Reading groups and elements :
       G4std::fread(&read_group_id,1,2,dicom);
@@ -59,13 +59,19 @@ G4int dicomHandler::readHeader(FILE *dicom, char filename2[300])
 
       G4std::fread(&element_length,1,2,dicom);
 
-      // If value representation (VR) is OB, OW, SQ, UN, the next length is 32 bits
-      if (element_length == 16975 || element_length == 22351 || element_length == 20819 || element_length == 20053)
+      // If value representation (VR) is OB, OW, SQ, UN, 
+      //the next length is 32 bits
+      if ( element_length == 16975 || 
+           element_length == 22351 || 
+           element_length == 20819 || 
+           element_length == 20053)
         {
 	  //skip 2 reserved "bytes"
 	  G4std::fread( buffer, 1, 2,dicom); // Skip 2 reserved bytes
-	  G4std::fread(&element_length3, 4, 1, dicom);// Reading length of the information
-	  G4std::fread(&value[i],element_length3,1,dicom);// Reading the information with
+	  G4std::fread(&element_length3, 4, 1, dicom);
+          // Reading length of the information
+	  G4std::fread(&value[i],element_length3,1,dicom);
+          // Reading the information with
 	  // (BIG) buffer : "value"
 	  // Creating a tag to be identified afterward
 	  tag_dictionnary=read_group_id*0x10000 + read_element_id;
@@ -187,7 +193,7 @@ G4int dicomHandler::readHeader(FILE *dicom, char filename2[300])
       if (tag_dictionnary == 0x00180050 )  // Slice Tickness
         {
 	  G4std::printf("[0x00180050] Slice Tickness (mm) -> %s\n",value[i]);
-	  sprintf(slice_tickness,"%s",value[i]);//slice_tickness=value[i];
+	  G4std::sprintf(slice_tickness,"%s",value[i]);//slice_tickness=value[i];
 	  bits_stored=(bits_stored)/8;
         }
       if (tag_dictionnary == 0x00201041 )  // Slice Location
@@ -208,18 +214,18 @@ G4int dicomHandler::readHeader(FILE *dicom, char filename2[300])
   // Creating files to store information
   char compressionbuf[100],maxbuf[100];
   char filename[300];
-  G4int compression=0;
-  G4int  max=0;
+  G4int compression = 0;
+  G4int  max = 0;
   FILE* configuration;
 
-  configuration=fopen("Data.dat","r");
+  configuration = G4std::fopen("Data.dat","r");
   if ( configuration != 0 )
     {
       G4std::fscanf(configuration,"%s",compressionbuf);
-      compression=atoi(compressionbuf);
-      fscanf(configuration,"%s",maxbuf);
+      compression = atoi(compressionbuf);
+      G4std::fscanf(configuration,"%s",maxbuf);
       max=atoi(maxbuf);
-      fclose(configuration);
+      G4std::fclose(configuration);
     }
   else
     {
@@ -228,13 +234,13 @@ G4int dicomHandler::readHeader(FILE *dicom, char filename2[300])
     }
 
   G4std::sprintf(filename,"%s.dat",filename2);
-  data = fopen(filename,"w+");
+  data = G4std::fopen(filename,"w+");
   // Note: the .dat files contain basic information on the images.
 
   char exception = '\\';
-  G4bool toggle=false;
-  G4int z=0;
-  for (G4int y=0;y<=300;y++)
+  G4bool toggle = false;
+  G4int z = 0;
+  for ( G4int y = 0; y <= 300; y++ )
     {
       if ( pixel_spacing[y] != exception )
         {
@@ -248,7 +254,7 @@ G4int dicomHandler::readHeader(FILE *dicom, char filename2[300])
         }
       else if ( pixel_spacing[y] == exception )
         {
-	  toggle=true;
+	  toggle = true;
         }
     }
 
@@ -267,12 +273,12 @@ G4int dicomHandler::readData(FILE *dicom,	char filename2[300])
   char compressionbuf[100],maxbuf[100];
   G4int compression=0, max=0;
 
-  FILE* configuration=fopen("Data.dat","r");
+  FILE* configuration=G4std::fopen("Data.dat","r");
   G4std::fscanf(configuration,"%s",compressionbuf);
   compression=atoi(compressionbuf);
   G4std::fscanf(configuration,"%s",maxbuf);
   max=atoi(maxbuf);
-  fclose(configuration);
+  G4std::fclose(configuration);
 
   //  READING THE PIXELS :
   G4int w=0;
@@ -313,7 +319,7 @@ G4int dicomHandler::readData(FILE *dicom,	char filename2[300])
   FILE* processed;
 
   G4std::sprintf(nameProcessed,"%s.g4",filename2);
-  processed = fopen(nameProcessed,"w+");
+  processed = G4std::fopen(nameProcessed,"w+");
   G4std::printf("### Writing of %s ###\n",nameProcessed);
 
   G4std::fprintf(processed,"%8i   %8i\n",rows,columns);
@@ -370,13 +376,12 @@ G4int dicomHandler::readData(FILE *dicom,	char filename2[300])
 	      cpt=1;
 
 	      if (overflow != true)
-	G4std::fprintf(processed,"%f   ",pixel2density( mean) );
+		G4std::fprintf(processed,"%f   ",pixel2density( mean) );
             }
 	  G4std::fprintf(processed,"\n");
         }
     }
   G4std::fclose(processed);
-
 
   return returnvalue;
 }
@@ -406,13 +411,13 @@ G4double dicomHandler::pixel2density(G4int pixel)
 
   // CT2Density.dat contains the calibration curve to convert CT (Hounsfield) number to
   // physical density
-  calibration=fopen("CT2Density.dat","r");
+  calibration=G4std::fopen("CT2Density.dat","r");
   G4std::fscanf(calibration,"%s",nbrequalibuf);
   nbrequali=atoi(nbrequalibuf);
 
   if (calibration == 0 )
     {
-      printf("@@@ No value to transform pixels in density!\n");
+      G4std::printf("@@@ No value to transform pixels in density!\n");
       exit(1);
     }
   else // calibration != 0
@@ -500,19 +505,19 @@ void dicomHandler::checkFileFormat()
       FILE* dicom;
       FILE *lecturepref;
       char compressionc[300],maxc[300];
-      lecturepref=fopen("Data.dat","r");
-      fscanf(lecturepref,"%s",compressionc);
+      lecturepref= G4std::fopen("Data.dat","r");
+      G4std::fscanf(lecturepref,"%s",compressionc);
       compression=atoi(compressionc);
-      fscanf(lecturepref,"%s",maxc);
+      G4std::fscanf(lecturepref,"%s",maxc);
       max=atoi(maxc);
 
-      for (G4int i=1;i<=max;i++) // Begin loop on filenames
+      for ( G4int i = 1; i <= max; i++ ) // Begin loop on filenames
         {
-	  fscanf(lecturepref,"%s",name_in_file);
-	  sprintf(name,"%s.dcm",name_in_file);
+	  G4std::fscanf(lecturepref,"%s",name_in_file);
+	  G4std::sprintf(name,"%s.dcm",name_in_file);
 	  //  Open input file and give it to gestion_dicom :
-	  printf("### Opening %s and reading :\n",name);
-	  dicom = fopen(name,"rb");
+	  G4std::printf("### Opening %s and reading :\n",name);
+	  dicom = G4std::fopen(name,"rb");
 	  // Reading the .dcm in two steps:
 	  //      1.  reading the header
 	  //	2. reading the pixel data and store the density in Moyenne.dat
@@ -521,17 +526,13 @@ void dicomHandler::checkFileFormat()
 	      readHeader(dicom,name_in_file);
 	      readData(dicom,name_in_file);
             }
-	  else //if ( dicom == 0 )
+	  else 
             {
 	      G4cout << "\nError opening file : " << name << G4endl;
 	      exit(0);
             }
-	  fclose(dicom);
-        }// End loop on filenames
-      fclose(lecturepref);
-    } // files .g4 built
-  else
-    G4cout << "\nProcessed images found, a bit of time saved\n";
-
-  G4cout << "#+#+#+#+#+#+#+#+#+#+#+#+#+##+#+#+#+#+#+#+#+#+#\n\n\n";
+	  G4std::fclose(dicom);
+        }
+      G4std::fclose(lecturepref);
+    } 
 }
