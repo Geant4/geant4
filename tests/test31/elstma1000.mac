@@ -22,7 +22,7 @@
 /test31/maxDeltaEnergy      1.0 MeV
 /test31/WorldMaterial       Vacuum
 #/test31/HistoName           hbook.paw 
-/test31/HistoName           el_st_ma1000.paw 
+/test31/HistoName           el_st_ma1000a.paw 
 /test31/HistoNumber         5
 /test31/NumberOfEvents      100
 /test31/gun/beamE           1000.0 MeV

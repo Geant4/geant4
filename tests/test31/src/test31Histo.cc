@@ -109,7 +109,7 @@ void test31Histo::EndOfHisto()
     G4cout << setprecision(4) << "Range(mm)= " << zend/mm 
            << "; Stragling(mm)= " << sig/mm 
            << setprecision(2) << " +- " << zend2/mm 
-           << "    " << zEvt << " events" << G4endl;
+           << "    " << zEvt << " events for range" << G4endl;
   }  
   G4double x = (G4double)n_evt;
   if(n_evt > 0) x = 1.0/x;
@@ -117,6 +117,7 @@ void test31Histo::EndOfHisto()
   G4double xg = x*(G4double)n_gam;
   G4double xp = x*(G4double)n_posit;
   G4double xs = x*(G4double)n_step;
+  G4cout                    << "Number of events          " << n_evt <<G4endl; 
   G4cout << setprecision(4) << "Average number of e-      " << xe << G4endl; 
   G4cout << setprecision(4) << "Average number of gamma   " << xg << G4endl; 
   G4cout << setprecision(4) << "Average number of e+      " << xp << G4endl; 
