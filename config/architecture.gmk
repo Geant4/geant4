@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.4 1999-02-18 15:53:53 johna Exp $
+# $Id: architecture.gmk,v 1.5 1999-04-14 01:00:14 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -392,7 +392,7 @@ endif
 ifeq ($(G4SYSTEM),HP-aCC)
   CXX       := aCC
   ifdef G4OPTIMISE
-    CXXFLAGS  := +O2
+    CXXFLAGS  := +O2 +Onolimit
   else
     CXXFLAGS  := -g
     FCFLAGS  := -g
@@ -425,11 +425,12 @@ endif
 ifeq ($(G4SYSTEM),SGI-CC)
   CXX       := CC
   ifdef G4OPTIMISE
-    CXXFLAGS  := -O -ptused
+    CXXFLAGS  := -O -Olimit 5000
   else
-    CXXFLAGS  := -g -ptused
+    CXXFLAGS  := -g 
     FCFLAGS := -g
   endif
+  CXXFLAGS  += -ptused
   FC        := f77
   FCLIBS    := -lftn
   SHEXT     := so
@@ -458,7 +459,7 @@ ifeq ($(G4SYSTEM),DEC-cxx)
   CFRONT_G4TEMPLATE_REPOSITORY  := true
   G4_HAVE_BOOL  := yes
   LDFLAGS	+= -taso
-  CXXFLAGS	+= -ieee
+  CXXFLAGS	+= -ieee -timplicit_local
   FC		:= f77
   FCLIBS	:= -lUfor -lfor -lFutil -lots
   X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
