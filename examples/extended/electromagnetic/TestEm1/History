@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2000-11-24 10:36:58 stesting Exp $
+$Id: History,v 1.7 2000-12-07 11:43:03 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+07-12-00  mma (testem1-V02-00-03 & testem-noHist)
+          remove hbook histograms: GNUmakefile,runAction,trackingAction,
+	                           steppingAction
+				   
+06-12-00  mma (testem1-V02-00-02 & testem-withHist)
+          update of init.mac for new vis commands.
+	  G4UItcsh in the main()
+	  				        
 24-11-00  Steve O'Neale (tagset210) (testem1-V02-00-01)
           Update test output Change in processes below ~ 5 per cent
           eIoni and hIoni  min.delta energy(keV) and energy cut table

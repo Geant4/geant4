@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em1RunAction.cc,v 1.5 2000-11-13 09:15:45 gcosmo Exp $
+// $Id: Em1RunAction.cc,v 1.6 2000-12-07 11:43:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,20 +24,12 @@
 
 #include "Randomize.hh"
 
-#ifndef G4NOHIST
- #include "CLHEP/Hist/HBookFile.h"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em1RunAction::Em1RunAction()
   : ProcCounter(0), saveRndm (1),
     runMessenger(new Em1RunActionMessenger(this))
-{
-#ifndef G4NOHIST
-  hbookManager = NULL;
-#endif 
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -50,26 +42,12 @@ Em1RunAction::~Em1RunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Em1RunAction::bookHisto()
-{
-#ifndef G4NOHIST
-  hbookManager = new HBookFile("testem1.histo", 68);
-
-  // booking histograms
-  histo[0] = hbookManager->histogram("track length (mm) of a charged particle",100,0.,50*cm);
-  histo[1] = hbookManager->histogram("Nb of steps per track (charged particle)",100,0.,100.);
-  histo[2] = hbookManager->histogram("step length (mm) charged particle",100,0.,10*mm);
-#endif   
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Em1RunAction::cleanHisto()
-{
-#ifndef G4NOHIST
-  delete [] histo;
-  delete hbookManager;
-#endif   
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -156,11 +134,6 @@ void Em1RunAction::EndOfRunAction(const G4Run* aRun)
     { HepRandom::showEngineStatus();
       HepRandom::saveEngineStatus("endOfRun.rndm");
     }
-    
-#ifndef G4NOHIST     
-  // writing histogram file
-  hbookManager->write();
-#endif               
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
