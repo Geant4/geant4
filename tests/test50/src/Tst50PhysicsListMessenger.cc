@@ -42,14 +42,9 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithABool.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 Tst50PhysicsListMessenger::Tst50PhysicsListMessenger(Tst50PhysicsList * List)
 :Tst50List(List)
 {
-  //lowEnDir = new G4UIdirectory("/le/");
-  //lowEnDir->SetGuidance("LowEnergy commands");
- 
   EnDir = new G4UIdirectory("/physics/");
   EnDir->SetGuidance("physics commands");
 
@@ -59,46 +54,29 @@ Tst50PhysicsListMessenger::Tst50PhysicsListMessenger(Tst50PhysicsList * List)
   physicsListCmd->AvailableForStates(G4State_PreInit);  
 
   
- cutECmd = new G4UIcmdWithADoubleAndUnit("/physics/cutE",this);
+  cutECmd = new G4UIcmdWithADoubleAndUnit("/physics/cutE",this);
   cutECmd->SetGuidance("Set cut values.");
   cutECmd->SetParameterName("range",true);
   cutECmd->SetDefaultValue(1.);
   cutECmd->SetDefaultUnit("mm");
   cutECmd->AvailableForStates(G4State_PreInit);
-  
-
-
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst50PhysicsListMessenger::~Tst50PhysicsListMessenger()
-{
-
-  
-  
+{  
   delete cutECmd;
-  delete  physicsListCmd;
+  delete physicsListCmd;
   delete EnDir;
-
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
 void Tst50PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
-  
-
-if (command == physicsListCmd)
+  if (command == physicsListCmd)
    { Tst50List->AddPhysicsList(newValue); }
 
  if (command == cutECmd)
    {Tst50List->SetParticleCut(cutECmd->GetNewDoubleValue(newValue)); }
-
-
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 

@@ -15,7 +15,6 @@
 /target/setTargetY 15000000. cm
 /target/setMaxStep 0.000001 cm
 /target/update
-/physics/cutE 1. m
 /gun/particle proton
 /gun/position 0. 0. 0.
 /gun/randomDirection on 

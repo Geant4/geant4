@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.27 2003-07-31 08:15:52 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.28 2003-11-17 14:43:42 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -54,9 +54,10 @@
 Tst50DetectorConstruction::Tst50DetectorConstruction()
   :isRegisteredUserLimits(false), hydrogen(0),beryllium(0),graphite(0), 
    magnesium(0), aluminium(0),silicon(0),liquidArgon(0),titanium(0),iron(0),
-   cobalt(0),nickel(0),copper(0),zinc(0),
+   cobalt(0),nickel(0),indium(0), tin(0),
+    copper(0),zinc(0),
    gallium(0),germanium(0), zirconium(0),
-   molybdenium(0), silver(0),cadmium(0),indium(0), tin(0),
+   molybdenium(0), silver(0),cadmium(0),
    cesium(0),samarium(0), ytterbium(0),tantalum(0),tungsten(0),
    gold(0),
    lead(0),uranium(0), water(0), quartz(0), air(0),vacuum(0),

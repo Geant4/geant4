@@ -6,7 +6,7 @@
 /physics/addPhysics electron-standard
 /physics/addPhysics positron-standard
 /target/setUserLimits true
-physics/cutE 1. m
+/physics/cutE 1. m
 /run/initialize
 /target/setTargetMat Aluminium
 /target/setTargetThick 15000000. cm

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50PhysicsList.hh,v 1.10 2003-04-28 14:58:56 guatelli Exp $
+// $Id: Tst50PhysicsList.hh,v 1.11 2003-11-17 14:43:41 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Original author unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -62,17 +62,6 @@ public:
   void SetElectronCut(G4double cut);
   void SetParticleCut(G4double value);
   // Production thresholds, expressed in energy, for photons, electrons and both
-  void SetGammaLowLimit(G4double cut);
-  void SetElectronLowLimit(G4double cut);
-  void SetGELowLimit(G4double cut);
-
-  // Cut for generation of secondaries for EEDL/EPDL processes
-  void SetLowEnSecPhotCut(G4double cut);
-  void SetLowEnSecElecCut(G4double cut);
- 
-  // Activation of Auger effect in electron ionisation and photoelectric effect
-  void ActivateAuger(G4bool flag);
-
 private:
 
   G4bool electronIsRegistered;

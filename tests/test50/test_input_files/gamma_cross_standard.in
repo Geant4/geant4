@@ -19,12 +19,13 @@
 /target/setTargetThick 0.0005 mm
 /target/update
 /gun/energy 10. keV
-/run/beamOn  10000
+/run/beamOn  1000
 /target/setTargetThick 0.003 mm
 /target/update
 /gun/energy 15. keV
-/run/beamOn  10000
+/run/beamOn  1000
 /target/setTargetThick 0.005 mm
 /target/update
 /gun/energy 20. keV
-/run/beamOn  10000
+/run/beamOn  1000
+
