@@ -116,7 +116,7 @@ else
 echo "Starting $1 in $G4WORKDIR `date`"
 
     if [ $1 = test02.hadron -o $1 = test11 -o $1 = test12 -o $1 = test13 \
-      -o $1 = test15 =o $1 = test16 ]
+      -o $1 = test15 -o $1 = test16 ]
     then
       $G4WORKDIR/bin/$G4SYSTEM/$shortname.hadronic.exerciser \
       > $dir/$1.exerciser.in; \
