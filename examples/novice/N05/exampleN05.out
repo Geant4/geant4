@@ -10,6 +10,39 @@ ExN05DetectorConstruction....
 
 phot:  Total cross sections from Sandia parametrisation. 
 
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : Yes
+ Material : CsI
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : Yes
+ Material : He
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : Yes
+ Material : Fer
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : Yes
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
@@ -80,6 +113,39 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 38.4052 keV    e- 691.669 keV    e+ 658.435 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : He
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Fer
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 20.8323 keV    e- 1.28002 MeV    e+ 1.21851 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 0 start.
 ExN05EMShowerModel::DoIt
 >>> Event 0
@@ -112,6 +178,39 @@ ExN05EMShowerModel::DoIt
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 number of event = 5
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 38.4052 keV    e- 691.669 keV    e+ 658.435 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : He
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Fer
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 20.8323 keV    e- 1.28002 MeV    e+ 1.21851 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 1 start.
 ExN05EMShowerModel::DoIt
 >>> Event 0
@@ -144,6 +243,39 @@ ExN05EMShowerModel::DoIt
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 number of event = 5
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 38.4052 keV    e- 691.669 keV    e+ 658.435 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : He
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Fer
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 20.8323 keV    e- 1.28002 MeV    e+ 1.21851 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 2 start.
 ExN05EMShowerModel::DoIt
 >>> Event 0
@@ -176,6 +308,39 @@ ExN05EMShowerModel::DoIt
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 number of event = 5
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 38.4052 keV    e- 691.669 keV    e+ 658.435 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : He
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Fer
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 20.8323 keV    e- 1.28002 MeV    e+ 1.21851 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 3 start.
 ExN05EMShowerModel::DoIt
 >>> Event 0
@@ -208,6 +373,39 @@ ExN05EMShowerModel::DoIt
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 number of event = 5
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 38.4052 keV    e- 691.669 keV    e+ 658.435 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : He
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Fer
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 20.8323 keV    e- 1.28002 MeV    e+ 1.21851 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 4 start.
 ExN05PionShowerModel::DoIt
 >>> Event 0
@@ -239,6 +437,39 @@ ExN05PionShowerModel::DoIt
      15 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 1.77988 (GeV)
 number of event = 5
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 38.4052 keV    e- 691.669 keV    e+ 658.435 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : He
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Fer
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 20.8323 keV    e- 1.28002 MeV    e+ 1.21851 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 5 start.
 ExN05PionShowerModel::DoIt
 >>> Event 0
@@ -271,6 +502,39 @@ ExN05PionShowerModel::DoIt
      33 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 6.03965 (GeV)
 number of event = 5
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 38.4052 keV    e- 691.669 keV    e+ 658.435 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : He
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Fer
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 20.8323 keV    e- 1.28002 MeV    e+ 1.21851 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 6 start.
 ExN05PionShowerModel::DoIt
 >>> Event 0
@@ -303,6 +567,39 @@ ExN05PionShowerModel::DoIt
      60 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 10.5593 (GeV)
 number of event = 5
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 38.4052 keV    e- 691.669 keV    e+ 658.435 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : He
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Fer
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 20.8323 keV    e- 1.28002 MeV    e+ 1.21851 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 7 start.
 ExN05PionShowerModel::DoIt
 >>> Event 0
@@ -335,6 +632,39 @@ ExN05PionShowerModel::DoIt
      73 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 12.6592 (GeV)
 number of event = 5
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 38.4052 keV    e- 691.669 keV    e+ 658.435 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : He
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Fer
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 20.8323 keV    e- 1.28002 MeV    e+ 1.21851 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 8 start.
 >>> Event 0
      31 hits are stored in EM ExN05CalorimeterHitsCollection.
@@ -342,50 +672,83 @@ number of event = 5
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 >>> Event 1
-     36 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.980311 (GeV)
-     2 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.0036638 (GeV)
+     38 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.981147 (GeV)
+     1 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 0.00282705 (GeV)
 >>> Event 2
      37 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.991035 (GeV)
-     2 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.00156932 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.990604 (GeV)
+     1 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 0.00266872 (GeV)
 >>> Event 3
      37 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.989798 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.977335 (GeV)
+     6 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 0.0109203 (GeV)
 >>> Event 4
-     39 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.993616 (GeV)
-     2 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.00270411 (GeV)
+     32 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.990215 (GeV)
+     4 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 0.00681301 (GeV)
 number of event = 5
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : CsI
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 38.4052 keV    e- 691.669 keV    e+ 658.435 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : He
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Fer
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 20.8323 keV    e- 1.28002 MeV    e+ 1.21851 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 9 start.
 >>> Event 0
-     29 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.983441 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
+     25 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.986606 (GeV)
+     3 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 0.00536992 (GeV)
 >>> Event 1
-     20 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.992494 (GeV)
+     32 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.988047 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 >>> Event 2
-     24 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.998882 (GeV)
-     0 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0 (GeV)
+     22 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.986101 (GeV)
+     2 hits are stored in HAD ExN05CalorimeterHitsCollection.
+     Total energy deposition in HAD calorimeter towers : 0.00276051 (GeV)
 >>> Event 3
-     18 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.994512 (GeV)
+     26 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.984868 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 >>> Event 4
-     24 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.996505 (GeV)
+     20 hits are stored in EM ExN05CalorimeterHitsCollection.
+     Total energy deposition in EM calorimeter crytals : 0.982937 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 number of event = 5

@@ -3,6 +3,58 @@
                                 (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : Yes
+ Material : ArgonGas
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : Yes
+ Material : Aluminum
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : Yes
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : ArgonGas
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma -1 MeV    e- -1 MeV    e+ -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Aluminum
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma -1 MeV    e- -1 MeV    e+ -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
+ Energy thresholds :  gamma -1 MeV    e- -1 MeV    e+ -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Start Run processing.
 =====================================
   G4EventManager::ProcessOneEvent()  
@@ -193,5 +245,5 @@ Terminate current event processing.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.03s Real=0.05s Sys=0.02s
+  User=0.03s Real=0.06s Sys=0.03s
 G4 kernel has come to Quit state.
