@@ -1,0 +1,53 @@
+#================================================
+# Macro file for the Ion test of "test31.cc"
+#         10.04.01 V.Ivanchneko
+#================================================
+/control/verbose 2
+/run/verbose 1
+/tracking/verbose 1
+/event/verbose 0
+/test31/verbose 0
+#
+/testem/phys/setCuts         100000. mm
+#/testem/phys/stepMax        0.1 mm
+#/testem/phys/addPhysics      standard
+#/testem/phys/addPhysics      standard70
+#/testem/phys/addPhysics      lowenergy
+/testem/phys/addPhysics      lowenergyMA
+#/test31/AbsorberMaterial     Beryllium
+/test31/AbsorberMaterial     Tangsten
+/test31/AbsorberThick        10 mm
+/test31/NumberOfAbsorbers    60
+/test31/maxDeltaEnergy       1.0 MeV
+/test31/WorldMaterial        Vacuum
+#/testem/histo/fileName       pos_st70.aida
+#/testem/histo/fileName       pos_leMA.aida
+/testem/histo/fileType       xml
+/test31/HistoNumber          0
+/test31/verbose              0
+#/process/eLoss/preciseRange  true
+/run/initialize
+#
+#/gun/particle e+
+#/gun/particle gamma
+#/gun/particle proton
+/gun/particle alpha
+/test31/gun/beamE 0.01 MeV
+#
+/run/beamOn 1
+#
+/testem/histo/fileName       dedx_21.aida
+/testem/histo/fileType       xml
+/testem/calc/verbose 1
+/testem/calc/hist  proton Beryllium hIoni dedx 1
+/testem/calc/hist  proton Aluminum  hIoni dedx 2
+/testem/calc/hist  proton Iron      hIoni dedx 3
+/testem/calc/hist  proton Tangsten  hIoni dedx 4
+/testem/calc/hist  alpha Beryllium ionIoni dedx 5
+/testem/calc/hist  alpha Aluminum  ionIoni dedx 6
+/testem/calc/hist  alpha Iron      ionIoni dedx 7
+/testem/calc/hist  alpha Tangsten  ionIoni dedx 8
+#
+/testem/calc/list  -1 
+/testem/calc/save
+#
