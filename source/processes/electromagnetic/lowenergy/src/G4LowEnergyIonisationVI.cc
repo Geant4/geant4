@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisationVI.cc,v 1.8 2001-10-24 08:12:15 vnivanch Exp $
+// $Id: G4LowEnergyIonisationVI.cc,v 1.9 2001-10-24 18:11:38 elena Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -542,100 +542,97 @@ G4std::vector<G4DynamicParticle*>*
 G4LowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
 				            G4double incidentEnergy,
 				            G4double eLoss)
-{
-
-  if(eLoss < cutForPhotons && eLoss < cutForElectrons) return 0;
-
-  G4AtomicTransitionManager* transitionManager = 
-                             G4AtomicTransitionManager::Instance();
-
-  size_t nElements = material->GetNumberOfElements();
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  G4bool stop = true;
-
-  for (size_t j=0; j<nElements; j++) {
-
-    G4int Z = (G4int)((*theElementVector)[j]->GetZ());
-    G4double maxE = transitionManager->Shell(Z, 0)->BindingEnergy();
-
-    if (Z>5 && (maxE>cutForPhotons || maxE>cutForElectrons) ) {
-      stop = false;
-      break;
-    }
-  }
-
-  if(stop) return 0;
-
-  // create vector of tracks of secondary particles
-
+{ 
+  // create vector of secondary particles
+  
   G4std::vector<G4DynamicParticle*>* partVector = 
                                  new G4std::vector<G4DynamicParticle*>;
-  G4std::vector<G4DynamicParticle*>* secVector = 0;
-  G4DynamicParticle* aSecondary = 0;
-  G4ParticleDefinition* type = 0;
-  G4double e;
-  G4ThreeVector position;
-  G4int shell, shellId;
+ 
+  if(eLoss > cutForPhotons && eLoss > cutForElectrons) 
 
-  // sample secondaries
-
-  G4double etot = 0.0; 
-  G4std::vector<G4int> n = shellVacancy->GenerateNumberOfIonisations(material,
-                                         incidentEnergy, eLoss);
-
-  for (size_t i=0; i<nElements; i++) {
-
-    size_t nVacancies = n[i];
-    G4int Z = (G4int)((*theElementVector)[i]->GetZ());
-    G4double maxE = transitionManager->Shell(Z, 0)->BindingEnergy();
-
-    if (nVacancies && Z>5 && (maxE>cutForPhotons || maxE>cutForElectrons) ) {
-
-      for(size_t j=0; j<nVacancies; j++) {
-     
-        shell = crossSectionHandler->SelectRandomShell(Z, incidentEnergy);
-        shellId = transitionManager->Shell(Z, shell)->ShellId();
-        G4double maxE = transitionManager->Shell(Z, shell)->BindingEnergy();
-
-        if (maxE>cutForPhotons || maxE>cutForElectrons ) {
-          secVector = deexcitationManager.GenerateParticles(Z, shellId);
-	} else {
-          secVector = 0;
+    {
+      G4AtomicTransitionManager* transitionManager = 
+	G4AtomicTransitionManager::Instance();
+      
+      size_t nElements = material->GetNumberOfElements();
+      const G4ElementVector* theElementVector = material->GetElementVector();
+      
+      G4DynamicParticle* aSecondary = 0;
+      G4ParticleDefinition* type = 0;
+      G4double e;
+      G4ThreeVector position;
+      G4int shell, shellId;
+      
+      // sample secondaries
+      
+      G4double eTot = 0.0; 
+      G4std::vector<G4int> n = shellVacancy->GenerateNumberOfIonisations(material,
+									 incidentEnergy, eLoss);
+      G4std::vector<size_t> counters; 
+      size_t totCounters = 0;
+      size_t totVacancies = 0;
+      for (size_t i=0; i<nElements; i++) {
+	counters.push_back(0);
+      }
+      for (size_t k = 0; k<n.size();k++)
+	{
+	  totVacancies += n[k];
 	}
-
-        if (secVector) {	
-
-          for (size_t l = 0; l<secVector->size(); l++) {
-
-            aSecondary = (*secVector)[l];
-            if(aSecondary) {
+      while (totCounters<totVacancies){
+	G4double random = G4UniformRand() * nElements;
+	size_t intRandom = random;
+	if (intRandom==nElements)
+	  {
+	    intRandom -= 1;
+	  }
+	
+	size_t nVacancies = n[intRandom];
+	if (counters[intRandom]<nVacancies)
+	  {counters[intRandom]++;
+	  totCounters++;
+	  G4int Z = (G4int)((*theElementVector)[i]->GetZ());
+	  G4double maxE = transitionManager->Shell(Z, 0)->BindingEnergy();
 	  
-              e = aSecondary->GetKineticEnergy();
-              type = aSecondary->GetDefinition();
-              if ( etot + e <= eLoss &&
-                   (type == G4Gamma::Gamma() && e > cutForPhotons ) || 
-                   (type == G4Electron::Electron() && e > cutForElectrons) ) {
-                   
-                     etot += e;  
-                     partVector->push_back(aSecondary);
-
-	      } else {
-                     delete aSecondary;
+	  if (Z>5 && (maxE>cutForPhotons || maxE>cutForElectrons)&& nVacancies!=0 ) 
+	    {
+	      for(size_t j=0; j<nVacancies; j++) {
+		
+		shell = crossSectionHandler->SelectRandomShell(Z, incidentEnergy);
+		shellId = transitionManager->Shell(Z, shell)->ShellId();
+		G4double maxEShell = transitionManager->Shell(Z, shell)->BindingEnergy();
+		
+		if (maxEShell>cutForPhotons || maxEShell>cutForElectrons ) {
+		  partVector = deexcitationManager.GenerateParticles(Z, shellId);
+		}
+		if (partVector != 0) {	
+		  
+		  for (size_t l = 0; l<partVector->size(); l++) {
+		    
+		    aSecondary = (*partVector)[l];
+		    if(aSecondary != 0) {
+		      
+		      e = aSecondary->GetKineticEnergy();
+		      type = aSecondary->GetDefinition();
+		      if ( eTot + e <= eLoss &&
+			   (type == G4Gamma::Gamma() && e > cutForPhotons ) || 
+			   (type == G4Electron::Electron() && e > cutForElectrons) ) {
+			
+			eTot += e;  
+			
+		      } 
+		      else {
+			delete aSecondary;
+			(*(partVector))[l] =0;
+			
+		      }
+		    }
+		  }
+		} 
 	      }
 	    }
 	  }
-          delete secVector;
-	} 
       }
     }
-  }
-
-
-  if(partVector->size()==0) {
-    delete partVector;
-    return 0;
-  }
-
   return partVector;
 }
 
