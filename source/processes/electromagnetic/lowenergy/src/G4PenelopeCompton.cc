@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.7 2003-02-22 18:06:12 pia Exp $
+// $Id: G4PenelopeCompton.cc,v 1.8 2003-02-26 15:21:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -398,11 +398,11 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
       G4double b2 = 1.0-T*tau*cosTheta;
       if (pzomc > 0.0)
 	{
-	  epsilon = (tau/b1)*(b2+sqrt(G4std::abs(b2*b2-b1*(1.0-T))));
+	  epsilon = (tau/b1)*(b2+sqrt(abs(b2*b2-b1*(1.0-T))));
 	}
       else
 	{
-	  epsilon = (tau/b1)*(b2-sqrt(G4std::abs(b2*b2-b1*(1.0-T))));
+	  epsilon = (tau/b1)*(b2-sqrt(abs(b2*b2-b1*(1.0-T))));
 	}
     }
   
