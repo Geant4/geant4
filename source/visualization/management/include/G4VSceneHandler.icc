@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.icc,v 1.10 2001-07-11 10:09:14 gunter Exp $
+// $Id: G4VSceneHandler.icc,v 1.11 2001-07-25 21:21:52 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ inline const G4ViewerList& G4VSceneHandler::GetViewerList () const {
   return fViewerList;
 }
 
-inline const G4VModel* G4VSceneHandler::GetModel () const {
+inline G4VModel* G4VSceneHandler::GetModel () const {
   return fpModel;
 }
 
@@ -88,7 +88,7 @@ inline G4ViewerList& G4VSceneHandler::SetViewerList () {
 }
 
 inline void
-G4VSceneHandler::SetModel (const G4VModel* pModel) {
+G4VSceneHandler::SetModel (G4VModel* pModel) {
   fpModel = pModel;
 }
 

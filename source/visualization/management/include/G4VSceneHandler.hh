@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.15 2001-07-22 01:04:59 johna Exp $
+// $Id: G4VSceneHandler.hh,v 1.16 2001-07-25 21:21:50 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -167,12 +167,12 @@ public: // With description
   G4VGraphicsSystem*  GetGraphicsSystem () const;
   G4Scene*            GetScene          () const;
   const G4ViewerList& GetViewerList     () const;
-  const G4VModel*     GetModel          () const;
+  G4VModel*           GetModel          () const;
   G4VViewer*          GetCurrentViewer  () const;
   void          SetCurrentViewer (G4VViewer*);
   void          SetScene         (G4Scene*);
   G4ViewerList& SetViewerList    ();  // Non-const so you can change.
-  void          SetModel         (const G4VModel*);
+  void          SetModel         (G4VModel*);
 
   //////////////////////////////////////////////////////////////
   // Public utility functions.
@@ -261,13 +261,13 @@ protected:
   //////////////////////////////////////////////////////////////
   // Workspace...
 
-  G4bool fReadyForTransients;  // I.e., not processing scene.
-  const G4VModel*          fpModel;      // Current model.
-  const G4Transform3D*     fpObjectTransformation;  // Accum'd obj. transfn.
-  const G4VisAttributes*   fpVisAttribs; // Working vis attributes.
-  G4int              fCurrentDepth; // Current depth of geom. hierarchy.
-  G4VPhysicalVolume* fpCurrentPV;   // Current physical volume.
-  G4LogicalVolume*   fpCurrentLV;   // Current logical volume.
+  G4bool fReadyForTransients;           // I.e., not processing scene.
+  G4VModel*              fpModel;       // Current model.
+  const G4Transform3D*   fpObjectTransformation;  // Accum'd obj. transfn.
+  const G4VisAttributes* fpVisAttribs;  // Working vis attributes.
+  G4int                  fCurrentDepth; // Current depth of geom. hierarchy.
+  G4VPhysicalVolume*     fpCurrentPV;   // Current physical volume.
+  G4LogicalVolume*       fpCurrentLV;   // Current logical volume.
 
 private:
 
