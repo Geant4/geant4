@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.hh,v 1.5 1999-08-30 08:27:50 kurasige Exp $
+// $Id: G4ParticleTable.hh,v 1.6 1999-10-06 09:40:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,19 +90,6 @@ class G4ParticleTable
    G4ParticleDefinition* FindAntiParticle(const G4String &particle_name);
    G4ParticleDefinition* FindAntiParticle(const G4ParticleDefinition *particle);
    // returns a pointer to its anti-particle (0 if not contained)
-
-
-   G4ParticleDefinition* FindIon( G4int atomicNumber, 
-				  G4int atomicMass, 
-				  G4int excitationLevel = 0);
-   //  return the pointer to an ion (returns 0 if the ion does not exist)
-   //    excitationLevel is integer (0: ground state)
-
-   G4ParticleDefinition* GetIon(  G4int atomicNumber, 
-				  G4int atomicMass, 
-				  G4int excitationLevel = 0);
-   //  return the pointer to an ion ( create ion if the ion does not exist)
-   //    excitationLevel is integer (0: ground state)
 
    G4ParticleDefinition* FindIon( G4int    atomicNumber, 
 				  G4int    atomicMass, 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.cc,v 1.8 1999-08-30 08:27:59 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.9 1999-10-06 09:40:41 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -250,27 +250,7 @@ G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4int J, G4int 
 {
    if (Z<=0) return 0;
    if (A<Z) return 0;
-   if (J<0) return 0;
-   if (Q<0) Q=Z;
-   return fIonTable->GetIon(Z, A, 0);
-}
-
-////////////////////
-G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4int L)
-{
-   if (Z<=0) return 0;
-   if (A<Z) return 0;
-   if (L<0) return 0;
-   return fIonTable->FindIon(Z, A, L);
-}
-
-////////////////////
-G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4int L)
-{
-   if (Z<=0) return 0;
-   if (A<Z) return 0;
-   if (L<0) return 0;
-   return fIonTable->GetIon(Z, A, L);
+   return fIonTable->GetIon(Z, A);
 }
 
 ////////////////////
