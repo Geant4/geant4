@@ -1,4 +1,4 @@
-$Id: History,v 1.43 1999-11-05 16:39:56 johna Exp $
+$Id: History,v 1.44 1999-11-10 18:36:09 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,12 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+vis-V00-01-08  10th November 1999  John Allison
+- Added capability of viewing Boolean solids - coworks with geometry-V00-01-01.
+- Fixed bug in G4VViewer to maintain proper status of fNeedKernelVisit.
+- Added Boolean solids to test/src/MyDetectorConstruction.cc.
+- Added circle to represent end of step in test/src/MySteppingAction.cc.
 
 vis-V00-01-07  5th November  John Allison
 - Added /vis/viewer/update [<viewer-name>].
