@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryPoint.hh,v 1.9 2002-10-16 11:38:37 johna Exp $
+// $Id: G4TrajectoryPoint.hh,v 1.10 2002-10-28 11:10:57 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -80,8 +80,8 @@ public: // without description
    { return fPosition; };
 
 // Get method for HEPRep style attributes
-   virtual const G4std::vector<G4AttDef>* GetAttDefs() const;
-   virtual G4std::vector<G4AttValue>* GetAttValues() const;
+   virtual const G4std::map<G4String,G4AttDef>* GetAttDefs() const;
+   virtual G4std::vector<G4AttValue>* CreateAttValues() const;
 
 //---------
    private:

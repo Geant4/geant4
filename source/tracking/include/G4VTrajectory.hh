@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.hh,v 1.9 2002-10-16 11:38:37 johna Exp $
+// $Id: G4VTrajectory.hh,v 1.10 2002-10-28 11:10:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,15 +43,15 @@
 #ifndef G4VTrajectory_h
 #define G4VTrajectory_h 1
 
+#include "globals.hh"
+#include "g4std/vector"
+#include "g4std/map"
+#include "G4ThreeVector.hh"
+
 class G4Step;
 class G4VTrajectoryPoint;
 class G4AttDef;
 class G4AttValue;
-
-#include "G4ios.hh"
-#include "g4std/vector"
-#include "globals.hh"
-#include "G4ThreeVector.hh"
 
 class G4VTrajectory
 {
@@ -87,16 +87,18 @@ class G4VTrajectory
    // to ostream. If default is used, it will be sent to G4cout.
    virtual void DrawTrajectory(G4int i_mode=0) const = 0;
    // Draw the trajectory
-   virtual const G4std::vector<G4AttDef>* GetAttDefs() const
+   virtual const G4std::map<G4String,G4AttDef>* GetAttDefs() const
    { return 0; }
-   // If implemented by a derived class, returns a pointer to a list
-   // of attribute definitions suitable, e.g., for picking.  The user
+   // If implemented by a derived class, returns a pointer to a map of
+   // attribute definitions for the attribute values below.  The user
    // must test the validity of this pointer.
-   virtual G4std::vector<G4AttValue>* GetAttValues() const
+   virtual G4std::vector<G4AttValue>* CreateAttValues() const
    { return 0; }
    // If implemented by a derived class, returns a pointer to a list
-   // of attribute values suitable, e.g., for picking.  The user must
-   // test the validity of this pointer and delete the list after use.
+   // of attribute values suitable, e.g., for picking.  Each must
+   // refer to an attribute definition in the above map; its name is
+   // the key.  The user must test the validity of this pointer and
+   // delete the list after use.
 
  public:
    // Following methods MUST be invoked exclusively by G4TrackingManager

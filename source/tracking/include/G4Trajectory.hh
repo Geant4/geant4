@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.hh,v 1.16 2002-10-16 11:38:36 johna Exp $
+// $Id: G4Trajectory.hh,v 1.17 2002-10-28 11:10:57 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -112,8 +112,8 @@ public: // with description
 
    G4ParticleDefinition* GetParticleDefinition();
 
-   virtual const G4std::vector<G4AttDef>* GetAttDefs() const;
-   virtual G4std::vector<G4AttValue>* GetAttValues() const;
+   virtual const G4std::map<G4String,G4AttDef>* GetAttDefs() const;
+   virtual G4std::vector<G4AttValue>* CreateAttValues() const;
 
 //---------
    private:

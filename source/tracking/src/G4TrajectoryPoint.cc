@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryPoint.cc,v 1.8 2002-10-16 11:38:38 johna Exp $
+// $Id: G4TrajectoryPoint.cc,v 1.9 2002-10-28 11:11:05 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,8 +54,8 @@ G4TrajectoryPoint::~G4TrajectoryPoint()
 {
 }
 
-const G4std::vector<G4AttDef>* G4TrajectoryPoint::GetAttDefs() const
+const G4std::map<G4String,G4AttDef>* G4TrajectoryPoint::GetAttDefs() const
 { return 0; }  // Empty for now.
 
-G4std::vector<G4AttValue>* G4TrajectoryPoint::GetAttValues() const
+G4std::vector<G4AttValue>* G4TrajectoryPoint::CreateAttValues() const
 { return 0; }  // Empty for now.
