@@ -29,16 +29,18 @@ void G4NeutronHPInelasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 {
   if(&aP!=G4Neutron::Neutron()) 
      G4Exception("Attempt to use NeutronHP data for particles other than neutrons!!!");  
-  G4int numberOfElements = G4Element::GetNumberOfElements();
+  size_t numberOfElements = G4Element::GetNumberOfElements();
   theCrossSections = new G4PhysicsTable( numberOfElements );
 
   // make a PhysicsVector for each element
 
   static const G4ElementTable *theElementTable = G4Element::GetElementTable();
-  for( G4int i=0; i<numberOfElements; ++i )
-    (*theCrossSections)(i) =
-      G4NeutronHPData::
+  for( size_t i=0; i<numberOfElements; ++i )
+  {
+     G4PhysicsVector* physVec = G4NeutronHPData::
       Instance()->MakePhysicsVector((*theElementTable)[i], this);
+     theCrossSections->push_back(physVec);
+  }
 }
 
 void G4NeutronHPInelasticData::DumpPhysicsTable(const G4ParticleDefinition& aP)
