@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2005-02-15 17:50:05 gcosmo Exp $
+$Id: History,v 1.4 2005-02-17 11:49:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17.02.2005, G.Cosmo - ghad-lists-V07-00-01
+- Added missing fix in LBE physics-list for usage of 'this' pointer for
+  porting on gcc-3.4.X compiler series.
 
 15.02.2005, G.Cosmo - ghad-lists-V07-00-00
 - Implemented porting on gcc-3.4.X compiler series:
