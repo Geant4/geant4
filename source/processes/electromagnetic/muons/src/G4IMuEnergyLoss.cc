@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMuEnergyLoss.cc,v 1.2 1999-08-16 09:57:34 maire Exp $
+// $Id: G4IMuEnergyLoss.cc,v 1.3 1999-09-08 14:50:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -29,6 +29,7 @@
 
 #include "G4IMuEnergyLoss.hh"
 #include "G4EnergyLossTables.hh"
+#include "G4Poisson.hh"
 
 // Initialisation of static members **********************************************
 //  ( this stuff should be defined later using RW ..........)
@@ -1335,8 +1336,6 @@ G4VParticleChange* G4IMuEnergyLoss::AlongStepDoIt(
   return &aParticleChange ;
 
 }
-
-#include "G4Poisson.hh"
 
 G4double G4IMuEnergyLoss::GetLossWithFluct(const G4DynamicParticle *aParticle,
                                         G4Material *aMaterial)
