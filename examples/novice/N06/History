@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2003-03-26 12:09:06 maire Exp $
+$Id: History,v 1.15 2003-04-22 12:12:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 17, 2003 Peter Gumplinger (exampleN06-V05-00-03)
+- changed OpWaterSurface to dielectric_dielectric in class
+  ExN06DetectorConstruction
      
 March 26, 2003 Michel Maire (exampleN06-V05-00-02)
 - G4PVPlacement in logical mother
