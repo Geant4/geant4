@@ -61,6 +61,7 @@ int main()
   std::cout << aFragment << "\n\n";
   
   G4LorentzVector p4null(0.0,0.0,0.0,0.0);
+  G4double multiplicity = 0.0;
   
   for (G4int i = 0; i < iterations; ++i)
     {
@@ -70,6 +71,7 @@ int main()
       G4FragmentVector * theResult = model.BreakItUp(aFragment);
       std::cout << "Number of fragments: " << theResult->size() << '\n';
       std::cout << "-------------------------------------------\n";
+      multiplicity += static_cast<G4double>(theResult->size());
       for (G4FragmentVector::iterator i = theResult->begin(); i != theResult->end(); ++i)
         {
           std::cout << (*i);
@@ -82,6 +84,8 @@ int main()
       std::cout << "Fragments total momentum : " << p4cons << '\n';
       std::cout << "            Conservation : " << p4-p4cons << '\n';
     }
+  std::cout << "\n###########################################\n";
+  std::cout << "       Mean multiplicity : " << multiplicity/static_cast<G4double>(iterations) << '\n';
   return 0;
 }
 
