@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.33 2003-09-22 10:34:42 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.34 2003-11-06 15:09:47 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -201,7 +201,8 @@ G4VisCommandSceneEndOfEventAction::G4VisCommandSceneEndOfEventAction () {
   fpCommand -> SetGuidance
     ("/vis/scene/endOfEventAction [accumulate|refresh]");
   fpCommand -> SetGuidance
-    ("Requests viewer to refresh hits, tracks, etc., at end of event."
+    ("Requests viewer to refresh hits, tracks, etc., at end of event"
+     "\n  (or, rather, just before drawing next event)."
      "\n  Or they are accumulated.  Detector remains or is redrawn.");
   fpCommand -> SetParameterName ("action",
 				 omitable = true);
