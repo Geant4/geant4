@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.22 2003-06-16 17:00:35 gunter Exp $
+// $Id: G4eIonisationSpectrum.cc,v 1.23 2004-07-01 09:27:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -566,8 +566,6 @@ void G4eIonisationSpectrum::PrintData() const
 G4double G4eIonisationSpectrum::MaxEnergyOfSecondaries(G4double kineticEnergy,
 						       G4int, // Z = 0,
 						       const G4ParticleDefinition* ) const
-  { return 0.5 * kineticEnergy; };
-
-
-
-
+{
+  return 0.5 * kineticEnergy;
+}

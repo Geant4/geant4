@@ -378,9 +378,4 @@ G4double G4PenelopeGammaConversion::GetScreeningRadius(G4double Z)
   G4String excep = "G4PenelopeGammaConversion - Screening Radius for not found in the data file";
   G4Exception(excep);
   return 0;
-};
-
-
-  
-
-     
+}
