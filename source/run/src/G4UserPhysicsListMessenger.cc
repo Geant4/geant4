@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.17 2003-03-17 17:46:11 asaim Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.18 2003-04-10 21:15:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -146,6 +146,8 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   applyCutsCmd->SetGuidance("Obsolete command for setting ApplyCuts flag.");
   applyCutsCmd->SetGuidance("It is harmless to remove this command from UI macro.");
   applyCutsCmd->SetGuidance("This command does nothing but kept for backward compatibility.");
+  applyCutsCmd->SetGuidance("Similar functionarity will be provided by future release");
+  applyCutsCmd->SetGuidance("with different command name.");
   param = new G4UIparameter("Flag",'s',true);
   param->SetDefaultValue("true");
   applyCutsCmd->SetParameter(param);
