@@ -1,0 +1,23 @@
+$Id: History,v 1.1 1999-04-17 08:01:40 kurasige Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 10  History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+17 Apr., 1999 H.Kurashige 
+- Modify SetCuts() and ConstructParticle() in Tst10PhysicsList
+- Modify BeginOfRunAction() and EndOfRunAction() in Tst10RunAction
+- Modify BeginOfEventAction() and EndOfEventAction() in Tst10EventAct
+
+30th November 1998  John Allison

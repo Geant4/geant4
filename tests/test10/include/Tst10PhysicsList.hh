@@ -1,4 +1,4 @@
-// $Id: Tst10PhysicsList.hh,v 1.1 1999-01-08 16:35:32 gunter Exp $
+// $Id: Tst10PhysicsList.hh,v 1.2 1999-04-17 08:01:47 kurasige Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -26,7 +26,7 @@ class Tst10PhysicsList: public G4VUserPhysicsList
     virtual void ConstructProcess();
 
     // 
-    virtual void SetCuts(G4double aCut);
+    virtual void SetCuts();
     
   protected:
     // these methods Construct particles 

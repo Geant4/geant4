@@ -1,4 +1,4 @@
-// $Id: Tst10PhysicsList.cc,v 1.1 1999-01-08 16:35:33 gunter Exp $
+// $Id: Tst10PhysicsList.cc,v 1.2 1999-04-17 08:01:52 kurasige Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -14,7 +14,8 @@
 #include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
-#include "G4ParticleTypes.hh"
+#include "G4Geantino.hh"
+#include "G4OpticalPhoton.hh"
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
@@ -92,36 +93,20 @@ void Tst10PhysicsList::ConstructGeneral()
   }
 }
 
-void Tst10PhysicsList::SetCuts(G4double cut)
+void Tst10PhysicsList::SetCuts()
 {
   if (verboseLevel >0){
     G4cout << "Tst10PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
-  }  
-  // uppress error messages even in case e/gamma/proton do not exist            
-  G4int temp = GetVerboseLevel();                                               
-  SetVerboseLevel(0);                                                           
-                                                                                
-  // set cut values for gamma at first and for e- second and next for e+,       
-  // because some processes for e+/e- need cut values for gamma                 
-  SetCutValue(cut, "gamma");                                                    
-  SetCutValue(cut, "e-");                                                       
-  SetCutValue(cut, "e+");                                                       
-                                                                                
-  // set cut values for proton and anti_proton before all other hadrons         
-  // because some processes for hadrons need cut values for proton/anti_proton  
-  SetCutValue(cut, "proton");                                                   
-  SetCutValue(cut, "anti_proton");                                              
-                                                                                
-  // set a cut value to all particles                                           
-                                                                                
-  SetCutValueForOthers(cut);                                                    
-                                                                                
-  SetVerboseLevel(temp);                                                        
-
-  if (verboseLevel>1) {
-    DumpCutValuesTable();
+    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << endl;
   }
+  // set verbose level 0 to surpress messages
+  G4int temp = GetVerboseLevel();
+  SetVerboseLevel(0);  
+
+  SetCutsWithDefault();   
+
+  // retrieve verbose level
+  SetVerboseLevel(temp);
 }
 
 

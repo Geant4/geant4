@@ -1,4 +1,4 @@
-// $Id: Tst10RunAction.hh,v 1.1 1999-01-08 16:35:33 gunter Exp $
+// $Id: Tst10RunAction.hh,v 1.2 1999-04-17 08:01:49 kurasige Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -21,11 +21,11 @@ class Tst10RunAction : public G4UserRunAction
 {
   public:
     Tst10RunAction();
-    ~Tst10RunAction();
+    virtual ~Tst10RunAction();
 
   public:
-    void BeginOfRunAction(G4Run* aRun);
-    void EndOfRunAction(G4Run* aRun);
+    virtual void BeginOfRunAction(const G4Run* aRun);
+    virtual void EndOfRunAction(const G4Run* aRun);
 
   private:
     G4int runIDcounter;

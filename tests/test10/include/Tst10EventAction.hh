@@ -1,4 +1,4 @@
-// $Id: Tst10EventAction.hh,v 1.1 1999-01-08 16:35:32 gunter Exp $
+// $Id: Tst10EventAction.hh,v 1.2 1999-04-17 08:01:45 kurasige Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -20,11 +20,11 @@ class Tst10EventAction : public G4UserEventAction
 {
   public:
     Tst10EventAction();
-    ~Tst10EventAction();
+    virtual ~Tst10EventAction();
 
   public:
-    void BeginOfEventAction();
-    void EndOfEventAction();
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 };
 
 #endif

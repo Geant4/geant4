@@ -1,4 +1,4 @@
-// $Id: Tst10EventAction.cc,v 1.1 1999-01-08 16:35:33 gunter Exp $
+// $Id: Tst10EventAction.cc,v 1.2 1999-04-17 08:01:51 kurasige Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -27,16 +27,13 @@ Tst10EventAction::Tst10EventAction()
 Tst10EventAction::~Tst10EventAction()
 {;}
 
-void Tst10EventAction::BeginOfEventAction()
+void Tst10EventAction::BeginOfEventAction(const G4Event* evt)
 {
-	G4Event* evt = fpEventManager->GetNonconstCurrentEvent();
   cout << ">>> Start Event " << evt->GetEventID() << endl;
 }
 
-void Tst10EventAction::EndOfEventAction()
+void Tst10EventAction::EndOfEventAction(const G4Event* evt)
 {
-  
-	G4Event* evt = fpEventManager->GetNonconstCurrentEvent();
   cout << ">>> End Event " << evt->GetEventID() << endl;
 
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
