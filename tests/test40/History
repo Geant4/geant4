@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2004-06-18 11:14:47 vnivanch Exp $
+$Id: History,v 1.8 2004-07-01 11:19:50 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+01-07-04 J.Apostolakis & V.Ivanchenko (test40-V06-02-00)
+- Fixed the initialisation of radial profile
+- Took out the VisManager
+- New value for <E> for use with release 6.1 and SPEC
 
 18-06-04 V.Ivanchenko (test40-V06-01-00)
 - Update for the release 6.2
