@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2001-07-25 21:02:21 johna Exp $
+$Id: History,v 1.8 2001-08-24 20:41:25 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization/Tree sub-category
 ------------------------------------------------
+
+24th August 2001  John Allison  (vis-V03-02-13)
+- Replaced Dump by RequestPrimitives.  No change of functionality.
 
 25th July 2001  John Allison  (vis-V03-02-07)
 - Improved use of G4PhysicalVolumeModel::CurtailDescent().

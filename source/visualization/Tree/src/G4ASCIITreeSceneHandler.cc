@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.10 2001-07-25 21:02:25 johna Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.11 2001-08-24 20:41:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,7 +70,7 @@ void G4ASCIITreeSceneHandler::EndModeling () {
   G4VTreeSceneHandler::EndModeling ();  // To re-use "culling off" code.
 }
 
-void G4ASCIITreeSceneHandler::Dump (const G4VSolid& solid) {
+void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 
   const G4ASCIITree* pSystem = (G4ASCIITree*)GetGraphicsSystem();
   const G4int verbosity = pSystem->GetVerbosity();

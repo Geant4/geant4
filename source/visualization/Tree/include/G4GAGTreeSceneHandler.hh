@@ -82,7 +82,9 @@ public:
   void BeginModeling();
   void EndModeling();
 protected:
-  void Dump(const G4VSolid&);
+  void RequestPrimitives(const G4VSolid&);
+  // Overrides G4VScenehandler::RequestPrimitives and implements dump
+  // of leaves of the geometry heirachy.
   G4std::set<G4LogicalVolume*,G4std::less<G4LogicalVolume*> > fLVSet;
   typedef
   G4std::set<G4LogicalVolume*,G4std::less<G4LogicalVolume*> >::iterator
