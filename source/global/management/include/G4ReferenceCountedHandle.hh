@@ -21,28 +21,32 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReferenceCountedHandle.hh,v 1.10 2001-11-03 00:27:28 rado Exp $
+// $Id: G4ReferenceCountedHandle.hh,v 1.11 2001-11-06 17:09:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// Class G4RereferenceCountedHandle
+// Class G4ReferenceCountedHandle
+//
 // Class description:
-// A class to provide reference counting mechanism for a class which
-// is designed without this support. It is a templated class, a smart pointer,
-// wrapping the class to be counted and performs the reference counting
-// during the life-time of the counted object. When its count goes to zero
+//
+// A class to provide reference counting mechanism.
+// It is a templated class, acting as a smart pointer,
+// wrapping the type to be counted. It performs the reference counting
+// during the life-time of the counted object. When its count reaches zero
 // the counted object is destroyed by explicit call to its destructor.
-// This class provides overloaded operators *() and ->() to make the
-// maniplutation syntax the same as for the normal "dumb" pointers.
-// The basic rule for the use of this class is that it is passed always by
-// reference and is not constructed by calling new.
-// Before the use of this smart pointer object one can test its validity
-// using the operator !() or operator bool().
-//  if( !smartPtrObj ) { ... } // Problem! We must initialize it first!
-//  else               { ... } // OK!
-// The code which tries to delete this object won't compile, because it is
-// not a pointer it is an object.
-// Author:      Radovan Chytracek
+// This class provides overloaded operators *() and ->() to allow similar
+// syntax as for the normal "dumb" pointers.
+// The basic rule for the use of this class is that a handle must always
+// be exchanged by reference never dinamically allocated (i.e. never
+// instantiated using 'new').
+// The validity of a smart pointer object can be verified by using the
+// operator !() or operator bool(). I.e.:
+//    if( !smartPtrObj ) { ... } // Problem! We must initialize it first!
+//    else               { ... } // OK!
+// Trying to 'delete' a smart pointer object will generate a compilation
+// error (since we're dealing with objects, not pointers!).
+
+// Author:      Radovan Chytracek, CERN  (Radovan.Chytracek@cern.ch)
 // Version:     2.0
 // Date:        November 2001
 // ----------------------------------------------------------------------
@@ -50,89 +54,144 @@
 #define _G4REFERENCECOUNTEDHANDLE_H_ 1
 
 #include "G4Allocator.hh"
-#define RCH_USING_G4ALLOCATOR 1
 
-template <class X> class G4ReferenceCountedHandle
+template <class X>
+class G4ReferenceCountedHandle
 {
-public:
 
-  typedef G4ReferenceCountedHandle RCH;
+public: // with description
+
+  inline G4ReferenceCountedHandle( X* rep );
+    // Constructor.
   
-private: // with description
+  inline G4ReferenceCountedHandle( const G4ReferenceCountedHandle<X>& right );
+    // Copy constructor.
+  
+  inline ~G4ReferenceCountedHandle();
+    // Destructor.
+  
+  inline G4ReferenceCountedHandle<X>&
+    operator =( const G4ReferenceCountedHandle<X>& right );
+    // Assignment operator by reference.
+  
+  inline G4ReferenceCountedHandle<X>& operator =( X* objPtr );
+    // Assignment operator by pointer.
+  
+  inline unsigned int Count() const;
+    // Forward to Counter class.
+  
+  inline X* operator ->() const;
+    // Operator -> allowing the access to counted object.
+    // The check for 0-ness is left out for performance reasons,
+    // see operator () below.
+    // May be called on initialised smart-pointer only!
+  
+  inline G4bool operator !() const;
+    // Validity test operator.
+  
+  inline operator bool() const;
+    // Boolean operator.
+  
+  inline X* operator ()() const;
+    // Functor operator (for convenience).
+  
+  // There is no provision that this class is subclassed.
+  // If it is subclassed & new data members are added then the
+  // following "new" & "delete" will fail and give errors. 
+  //
+  inline void* operator new( size_t );
+    // Operator new defined for G4Allocator.
+  
+  inline void operator delete( void *pObj );
+    // Operator delete defined for G4Allocator.
+  
+#ifdef WIN32
+  inline void* operator new( size_t, void *pObj );
+    // This is required by Windows/VC++ in order to compile.
+    // A warning will be issued for not existing correspondent delete...
+    // Normally this variant is not needed but when this class is used
+    // in the context of STL container.
+#endif
+
+public: // with description
 
   class CountedObject
   {
     
-    friend G4ReferenceCountedHandle<X>;
+    friend class G4ReferenceCountedHandle<X>;
     
-  public:
+  public:  // with description
 
-    CountedObject( X* pObj = 0 ) : fCount(0), fRep( pObj ) {
-      if( pObj != 0 ) {
-        fCount = 1;
-      }
-    } // Constructor
+    CountedObject( X* pObj = 0 );
+      // Constructor.
     
-    ~CountedObject() {
-      delete fRep;
-    } // Destructor
+    ~CountedObject();
+      // Destructor.
     
-    inline void AddRef() {
-      ++fCount;
-    } // Forward to Counter class
+    inline void AddRef();
+      // Forward to Counter class.
     
-    inline void Release() {
-      if( --fCount == 0 ) delete this;
-    } // Forward to Counter class
-    
-    typedef G4Allocator<CountedObject> COUNTEDOBJALLOCATOR;
+    inline void Release();
+      // Forward to Counter class.
     
     // There is no provision that this class is subclassed.
     // If it is subclassed & new data members are added then the
-    // following "new" & "delete" will fail and give errors. 
-    inline void* operator new( size_t )	{
-      return( (void *)CountedObject::GetAllocator().MallocSingle() );
-    } // operator new defined for G4Allocator
+    // following "new" & "delete" will fail and give errors.
+    //
+    inline void* operator new( size_t );
+      // Operator new defined for G4Allocator.
     
-    inline void operator delete( void *pObj )	{
-      CountedObject::GetAllocator().FreeSingle( (CountedObject*)pObj );
-    } // operator delete defined for G4Allocator
+    inline void operator delete( void *pObj );
+      // operator delete defined for G4Allocator.
     
   private:
 
     unsigned int fCount;
-    // Reference counter
-    X*           fRep;
-    // The counted object
+      // Reference counter.
+    X* fRep;
+      // The counted object.
     
-  private:
-
-    static COUNTEDOBJALLOCATOR& GetAllocator() {
-      return( aCountedObjectAllocator );
-    }
-    
-  private:
-
     static G4Allocator<CountedObject> aCountedObjectAllocator;
   };
-  
-public: // with description
 
-  G4ReferenceCountedHandle( X* rep = 0 )	: fObj( 0 ) {
-    if( rep != 0 ) {
+private:
+
+  CountedObject*     fObj;
+    // The object subject to reference counting.
+
+  static G4Allocator< G4ReferenceCountedHandle<X> > aRCHAllocator;
+};
+
+// ----------------- Inline function definitions --------------------
+
+template <class X>
+G4ReferenceCountedHandle<X>::
+ G4ReferenceCountedHandle( X* rep )
+ : fObj( 0 )
+{
+  if( rep != 0 ) {
       fObj = new CountedObject( rep );
-    }
-  } // Constructor
-  
-  G4ReferenceCountedHandle( const G4ReferenceCountedHandle& right ) : fObj( right.fObj ) {
+  }
+}
+
+template <class X>
+G4ReferenceCountedHandle<X>::
+ G4ReferenceCountedHandle( const G4ReferenceCountedHandle<X>& right )
+ : fObj( right.fObj )
+{
     fObj->AddRef();
-  } // Copy constructor
+}
   
-  ~G4ReferenceCountedHandle()  {
+template <class X>
+G4ReferenceCountedHandle<X>::~G4ReferenceCountedHandle()
+{
     if( fObj ) fObj->Release();
-  } // Destructor
+}
   
-  inline G4ReferenceCountedHandle& operator =( const G4ReferenceCountedHandle& right ) {
+template <class X>
+G4ReferenceCountedHandle<X>& G4ReferenceCountedHandle<X>::
+ operator =( const G4ReferenceCountedHandle<X>& right )
+{
     if( fObj != right.fObj ) {
       if( fObj )
         fObj->Release();
@@ -140,72 +199,112 @@ public: // with description
       fObj->AddRef();
     }
     return *this;
-  } // Assignment operator by reference
+}
   
-  inline G4ReferenceCountedHandle& operator =( X* objPtr ) {
+template <class X>
+G4ReferenceCountedHandle<X>& G4ReferenceCountedHandle<X>::
+ operator =( X* objPtr )
+{
     if( fObj )
       fObj->Release();
     this->fObj = new  CountedObject( objPtr );
     return *this;
-  } // Assignment operator by reference
+}
   
-  inline unsigned int Count() const {
+template <class X>
+unsigned int G4ReferenceCountedHandle<X>::Count() const
+{
     return( fObj ? fObj->fCount : 0 );
-  } // Forward to Counter class
+}
   
-  inline X* operator ->() const {
+template <class X>
+X* G4ReferenceCountedHandle<X>::operator ->() const
+{
     return( fObj ? fObj->fRep : 0 );
-  } // Operator -> allowing the access to counted object
-    // The check for 0-ness is left out for performance reasons, see operator () bellow
-    // May be called on initialized smart-pointer only!
+}
   
-  inline bool operator !() const {
+template <class X>
+G4bool G4ReferenceCountedHandle<X>::operator !() const
+{
     return( ( !fObj ) ? true : false );
-  } // Validity test operator
+}
   
-  inline operator bool() const {
+template <class X>
+G4ReferenceCountedHandle<X>::operator bool() const
+{
     return( ( fObj ) ? true : false );
-  }
+}
   
-  inline X* operator ()() const {
+template <class X>
+X* G4ReferenceCountedHandle<X>::operator ()() const
+{
     return( fObj ? fObj->fRep : 0 );
-  } // Functor operator (for covinience)
+}
   
-  typedef  G4Allocator< G4ReferenceCountedHandle<X> > RCHALLOCATOR;
+template <class X>
+void* G4ReferenceCountedHandle<X>::operator new( size_t )
+{
+    return( (void *)aRCHAllocator.MallocSingle() );
+}
   
-  // There is no provision that this class is subclassed.
-  // If it is subclassed & new data members are added then the
-  // following "new" & "delete" will fail and give errors. 
-  inline void* operator new( size_t ) {
-    return( (void *)G4ReferenceCountedHandle<X>::GetAllocator().MallocSingle() );
-  } // operator new defined for G4Allocator
-  
-  inline void operator delete( void *pObj )	{
-    G4ReferenceCountedHandle<X>::GetAllocator().FreeSingle( (G4ReferenceCountedHandle<X>*)pObj );
-  } // operator delete defined for G4Allocator
-  
-  inline void* operator new( size_t, void *pObj ) {
+template <class X>
+void G4ReferenceCountedHandle<X>::operator delete( void *pObj )
+{
+    aRCHAllocator.FreeSingle( (G4ReferenceCountedHandle<X>*)pObj );
+}
+
+#ifdef WIN32
+template <class X>
+void* G4ReferenceCountedHandle<X>::operator new( size_t, void *pObj )
+{
     return pObj;
-  } // This is required by VC++ in order to compile but produces warning about missing operator delete(...)
-  // Normally this variant is not needed but when this class is used in the context of STL container
-  
-private:
+}
+#endif
 
-  static RCHALLOCATOR& GetAllocator() {
-    return aRCHAllocator;
-  }
-  
-private:
+template <class X>
+G4ReferenceCountedHandle<X>::CountedObject::CountedObject( X* pObj = 0 )
+ : fCount(0), fRep( pObj )
+{
+    if( pObj != 0 ) {
+      fCount = 1;
+    }
+}
 
-  CountedObject*     fObj;
-  // Object being the subject to reference counting
+template <class X>
+G4ReferenceCountedHandle<X>::CountedObject::~CountedObject()
+{
+    delete fRep;
+}
+    
+template <class X>
+void G4ReferenceCountedHandle<X>::CountedObject::AddRef()
+{
+    ++fCount;
+}
+    
+template <class X>
+void G4ReferenceCountedHandle<X>::CountedObject::Release()
+{
+    if( --fCount == 0 ) delete this;
+}
+    
+template <class X>
+void* G4ReferenceCountedHandle<X>::CountedObject::operator new( size_t )
+{
+    return( (void *)aCountedObjectAllocator.MallocSingle() );
+}
+    
+template <class X>
+void G4ReferenceCountedHandle<X>::CountedObject::operator delete( void *pObj )
+{
+    aCountedObjectAllocator.FreeSingle( (CountedObject*)pObj );
+}
 
-private:
+// ------------------------------------------------------------------
 
-  static G4Allocator< G4ReferenceCountedHandle<X> > aRCHAllocator;
-};
+// In order to save the human's typing and brain the macro is provided
+// for definition of the allocators for generic type of counted objects.
 
-// In order to save the human's typing and brain the macro is provided for definition of the allocators
 #define DEFINE_RCH_ALLOCATOR(CountedType) \
   \
   G4Allocator<G4ReferenceCountedHandle<##CountedType##>::CountedObject> \
