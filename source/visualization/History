@@ -1,4 +1,4 @@
-$Id: History,v 1.269 2005-02-04 16:44:43 johna Exp $
+$Id: History,v 1.270 2005-02-09 21:20:27 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,11 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-4th February 2005  John Allison  (vis-V07-00-02')
+9th February 2005  John Allison  (vis-V07-00-03)
+- Migration from AddThis to AddSolid and AddCompound: fixed previously
+  missed FukuiRendererSceneHander.
+
+4th February 2005  John Allison  (vis-V07-00-02)
 - Introduced G4VisExecutive.  MyVisManager deprecated.
 
 27th January 2005  John Allison  (vis-V07-00-01, needs intercoms-V07-00-00)
