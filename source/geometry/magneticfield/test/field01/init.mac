@@ -1,0 +1,35 @@
+#
+# Macro file for the initialization phase of "exampleN03.cc"
+#
+# Sets some default verbose
+# and initializes the graphic.
+#
+/control/verbose 2
+/run/verbose 2
+/step/setMaxStep 2 mm
+#
+# Create empty scene ("world" is default)
+#
+/vis/scene/create
+#
+# Create a scene handler for a specific graphics system
+# Edit the next line(s) to choose another graphic system
+#
+#/vis/open DAWNFILE
+#
+/vis/open OGLIX
+#
+# Draw scene
+#
+/vis/viewer/viewpointThetaPhi 90 0
+/vis/camera/zoom 1.4
+/vis/drawVolume
+#
+# for drawing the tracks
+# if too many tracks cause core dump => storeTrajectory 0
+#
+/gun/particle e-
+/gun/energy 10000.0 MeV
+#
+/tracking/storeTrajectory 1
+/event/drawTracks all
