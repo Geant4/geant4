@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.12 2004-04-07 15:18:23 gbarrand Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.13 2004-07-14 15:35:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,6 @@
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
 
-#include "G4VisManager.hh"
 #include "G4OpenGLXmSliderBar.hh"
 
 #include "G4Xt.hh"
