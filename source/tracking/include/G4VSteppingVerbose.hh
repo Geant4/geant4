@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSteppingVerbose.hh,v 1.4 1999-12-15 14:53:57 gunter Exp $
+// $Id: G4VSteppingVerbose.hh,v 1.5 2000-06-01 03:17:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -159,8 +159,8 @@ protected:
 
   G4double   fPreviousStepSize;
 
-  G4VTouchable* fTouchable1;
-  G4VTouchable* fTouchable2;
+  const G4VTouchable* fTouchable1;
+  const G4VTouchable* fTouchable2;
   G4bool fIsTouchable1Free;
   G4bool fIsTouchable2Free;
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.hh,v 1.11 2000-01-26 04:20:30 asaim Exp $
+// $Id: G4SteppingManager.hh,v 1.12 2000-06-01 03:17:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //---------------------------------------------------------------
@@ -152,8 +152,8 @@ class G4SteppingManager
    G4SelectedAlongStepDoItVector* GetfSelectedAlongStepDoItVector();
    G4SelectedPostStepDoItVector* GetfSelectedPostStepDoItVector();
    G4double   GetfPreviousStepSize();
-   G4VTouchable* GetfTouchable1();
-   G4VTouchable* GetfTouchable2();
+   const G4VTouchable* GetfTouchable1();
+   const G4VTouchable* GetfTouchable2();
    G4bool GetfIsTouchable1Free();
    G4bool GetfIsTouchable2Free();
    G4SteppingControl GetStepControlFlag();
@@ -180,11 +180,11 @@ class G4SteppingManager
    void SetNavigator(G4Navigator* value);
    G4double CalculateSafety();
       // Return the estimated safety value at the PostStepPoint
-   G4VTouchable* GetFreeTouchable();
+   const G4VTouchable* GetFreeTouchable();
       // Get Touchable which is free, i.e. not assigined to Track/StepPoint
       // If no free touchable is availabe, the NULL will be returned
       // Once you get a Touchable, it will be set to NotFree. 
-   void SetAnotherTouchableFree(G4VTouchable* value);
+   void SetAnotherTouchableFree(const G4VTouchable* value);
       // Set the partner of the given Touchable to be free. For example,
       // the argument has fTouchable1, then fTouchable2 will be set to 
       // free. The state of fTouchable1 is intact.
@@ -258,8 +258,8 @@ class G4SteppingManager
 
    G4double   fPreviousStepSize;
 
-   G4VTouchable* fTouchable1;
-   G4VTouchable* fTouchable2;
+   const G4VTouchable* fTouchable1;
+   const G4VTouchable* fTouchable2;
    G4bool fIsTouchable1Free;
    G4bool fIsTouchable2Free;
 
@@ -437,10 +437,10 @@ class G4SteppingManager
      return fPreviousStepSize;
    }
 
-   inline G4VTouchable* G4SteppingManager::GetfTouchable1(){
+   inline const G4VTouchable* G4SteppingManager::GetfTouchable1(){
      return fTouchable1;
    }
-   inline G4VTouchable* G4SteppingManager::GetfTouchable2(){
+   inline const G4VTouchable* G4SteppingManager::GetfTouchable2(){
      return fTouchable2;
    }
    inline G4bool G4SteppingManager::GetfIsTouchable1Free(){
@@ -501,7 +501,7 @@ class G4SteppingManager
 	        0.);
   }
 
-  inline G4VTouchable* G4SteppingManager::GetFreeTouchable(){
+  inline const G4VTouchable* G4SteppingManager::GetFreeTouchable(){
     if(fIsTouchable1Free){
       fIsTouchable1Free = false;
       return fTouchable1;
@@ -515,7 +515,7 @@ class G4SteppingManager
     }
   }
 
-  inline void G4SteppingManager::SetAnotherTouchableFree(G4VTouchable* value){
+  inline void G4SteppingManager::SetAnotherTouchableFree(const G4VTouchable* value){
     if(value == fTouchable1){
       fIsTouchable2Free = true;
     }
