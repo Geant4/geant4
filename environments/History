@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999-01-08 16:31:23 gunter Exp $
+$Id: History,v 1.3 1999-05-20 10:13:46 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+envs-01-00-02  20th May 1999  John Allison
+- Only OPACS and History tagged.
+- Archived Momo (cvs remove) which puts it in the Attic.  Can be retrieved
+  with cvs update -D 990519 environmants/Momo.
+- OPACS development (Guy).
+- XVT not currently under development.
+
 envs-00-04-01	7th January 1999 hajime Yoshida
 - New Momo with make capabilities along with library selection
 - GGEmake updated for the latest g++ (egcs-1.1)
