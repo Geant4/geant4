@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.6 2004-02-27 17:54:48 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.7 2004-02-27 18:07:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,6 +67,8 @@
 // 04-11-03 Add checks in RetrievePhysicsTable (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
+// 27-02-04 Fix problem of loss in low presure gases, cleanup precise range
+//          calculation, use functions ForLoss in AlongStepDoIt (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -604,16 +606,10 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
            << G4endl;
   }
 */
-    // low energy deposit case
+  // stopping
   if (length >= fRange) {
     eloss = preStepKinEnergy;
 
-/*
-  } else if(preStepScaledEnergy <= minKinEnergy) {
-
-    G4double x = 1.0 - length/fRange;
-    eloss = preStepKinEnergy*(1.0 - x*x);
-*/
   // Short step
   } else if( length <= linLossLimit * fRange ) {
     eloss = GetDEDXForLoss(preStepKinEnergy)*length*chargeSqRatio;
