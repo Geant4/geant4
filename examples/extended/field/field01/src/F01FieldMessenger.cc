@@ -5,14 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: F01FieldMessenger.cc,v 1.1 2001-03-28 16:51:06 grichine Exp $
+// $Id: F01FieldMessenger.cc,v 1.2 2001-03-29 10:51:00 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
 #include "F01FieldMessenger.hh"
 
-#include "F01DetectorConstruction.hh"
+#include "F01ElectroMagneticField.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -21,59 +21,19 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-F01FieldMessenger::F01FieldMessenger(F01DetectorConstruction * F01Det)
-:F01Detector(F01Det)
+F01FieldMessenger::F01FieldMessenger(F01ElectroMagneticField* pEMfield)
+:fEMfield(pEMfield)
 { 
   F01detDir = new G4UIdirectory("/field/");
-  F01detDir->SetGuidance("F01 detector control.");
-      
-  AbsMaterCmd = new G4UIcmdWithAString("/field/setAbsMat",this);
-  AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
-  AbsMaterCmd->SetParameterName("choice",true);
-  AbsMaterCmd->SetDefaultValue("Xe");
-  AbsMaterCmd->AvailableForStates(Idle);
+  F01detDir->SetGuidance("F01 field tracking control.");
 
-  
-  WorldMaterCmd = new G4UIcmdWithAString("/field/setWorldMat",this);
-  WorldMaterCmd->SetGuidance("Select Material of the World.");
-  WorldMaterCmd->SetParameterName("wchoice",true);
-  WorldMaterCmd->SetDefaultValue("Air");
-  WorldMaterCmd->AvailableForStates(Idle);
-  
-  AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/field/setAbsThick",this);
-  AbsThickCmd->SetGuidance("Set Thickness of the Absorber");
-  AbsThickCmd->SetParameterName("SizeZ",false,false);
-  AbsThickCmd->SetDefaultUnit("mm");
-  AbsThickCmd->SetRange("SizeZ>0.");
-  AbsThickCmd->AvailableForStates(Idle);
+  StepperCmd = new G4UIcmdWithAnInteger("/field/setStepperType",this);
+  StepperCmd->SetGuidance("Select stepper type for magnetic field");
+  StepperCmd->SetParameterName("choice",true);
+  StepperCmd->SetDefaultValue(4);
+  StepperCmd->AvailableForStates(PreInit,Idle);
 
-  AbsRadCmd = new G4UIcmdWithADoubleAndUnit("/field/setAbsRad",this);
-  AbsRadCmd->SetGuidance("Set radius of the Absorber");
-  AbsRadCmd->SetParameterName("SizeR",false,false);
-  AbsRadCmd->SetDefaultUnit("mm");
-  AbsRadCmd->SetRange("SizeR>0.");
-  AbsRadCmd->AvailableForStates(Idle);
-  
-  AbsZposCmd = new G4UIcmdWithADoubleAndUnit("/field/setAbsZpos",this);
-  AbsZposCmd->SetGuidance("Set Z pos. of the Absorber");
-  AbsZposCmd->SetParameterName("Zpos",false,false);
-  AbsZposCmd->SetDefaultUnit("mm");
-  AbsZposCmd->AvailableForStates(Idle);
-  
-  WorldZCmd = new G4UIcmdWithADoubleAndUnit("/field/setWorldZ",this);
-  WorldZCmd->SetGuidance("Set Z size of the World");
-  WorldZCmd->SetParameterName("WSizeZ",false,false);
-  WorldZCmd->SetDefaultUnit("mm");
-  WorldZCmd->SetRange("WSizeZ>0.");
-  WorldZCmd->AvailableForStates(Idle);
-  
-  WorldRCmd = new G4UIcmdWithADoubleAndUnit("/field/setWorldR",this);
-  WorldRCmd->SetGuidance("Set R size of the World");
-  WorldRCmd->SetParameterName("WSizeR",false,false);
-  WorldRCmd->SetDefaultUnit("mm");
-  WorldRCmd->SetRange("WSizeR>0.");
-  WorldRCmd->AvailableForStates(Idle);
-  
+ 
   UpdateCmd = new G4UIcmdWithoutParameter("/field/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
@@ -86,6 +46,13 @@ F01FieldMessenger::F01FieldMessenger(F01DetectorConstruction * F01Det)
   MagFieldCmd->SetParameterName("Bz",false,false);
   MagFieldCmd->SetDefaultUnit("tesla");
   MagFieldCmd->AvailableForStates(Idle);  
+      
+  AbsMaterCmd = new G4UIcmdWithAString("/field/setAbsMat",this);
+  AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
+  AbsMaterCmd->SetParameterName("choice",true);
+  AbsMaterCmd->SetDefaultValue("Xe");
+  AbsMaterCmd->AvailableForStates(Idle);
+
 
 }
 
@@ -93,52 +60,34 @@ F01FieldMessenger::F01FieldMessenger(F01DetectorConstruction * F01Det)
 
 F01FieldMessenger::~F01FieldMessenger()
 {
-  delete AbsMaterCmd; 
-  delete AbsThickCmd; 
-  delete AbsRadCmd;  
-  delete AbsZposCmd; 
-  delete WorldMaterCmd;
-  delete WorldZCmd;
-  delete WorldRCmd;
-  delete UpdateCmd;
+  delete StepperCmd;
   delete MagFieldCmd;
   delete F01detDir;
+  delete UpdateCmd;
+
+  delete AbsMaterCmd; 
 }
 
 ////////////////////////////////////////////////////////////////////////////
 //
 //
 
-void F01FieldMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void F01FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
 { 
-  if( command == AbsMaterCmd )
-   { F01Detector->SetAbsorberMaterial(newValue);}
-
-   
-  if( command == WorldMaterCmd )
-   { F01Detector->SetWorldMaterial(newValue);}
-   
-  if( command == AbsThickCmd )
-   { F01Detector->SetAbsorberThickness(AbsThickCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == AbsRadCmd )
-   { F01Detector->SetAbsorberRadius(AbsRadCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == AbsZposCmd )
-   { F01Detector->SetAbsorberZpos(AbsZposCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == WorldZCmd )
-   { F01Detector->SetWorldSizeZ(WorldZCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == WorldRCmd )
-   { F01Detector->SetWorldSizeR(WorldRCmd->GetNewDoubleValue(newValue));}
-   
+  if( command == StepperCmd )
+  { 
+    fEMfield->SetStepperType(StepperCmd->GetNewIntValue(newValue));
+  }  
   if( command == UpdateCmd )
-   { F01Detector->UpdateGeometry(); }
-
+  { 
+    fEMfield->UpdateField(); 
+  }
   if( command == MagFieldCmd )
-   { F01Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
-
+  { 
+    fEMfield->SetFieldValue(MagFieldCmd->GetNewDoubleValue(newValue));
+  }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+//
+/////////////////////////////////////////////////////////////////////////

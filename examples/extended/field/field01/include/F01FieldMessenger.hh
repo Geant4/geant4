@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: F01FieldMessenger.hh,v 1.1 2001-03-28 16:50:22 grichine Exp $
+// $Id: F01FieldMessenger.hh,v 1.2 2001-03-29 10:50:48 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,7 +19,6 @@
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class F01DetectorConstruction;
 class F01ElectroMagneticField;
 class G4UIdirectory;
 class G4UIcmdWithAString;
@@ -31,30 +30,24 @@ class G4UIcmdWithoutParameter;
 class F01FieldMessenger: public G4UImessenger
 {
   public:
-    F01FieldMessenger(F01DetectorConstruction* );
+    F01FieldMessenger(F01ElectroMagneticField* );
    ~F01FieldMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     void SetNewValue(G4UIcommand*, G4int);
     
   private:
-    F01DetectorConstruction*   F01Detector;
-    F01ElectroMagneticField*   F01Field;
+
+    F01ElectroMagneticField*   fEMfield;
     
     G4UIdirectory*             F01detDir;
 
-    G4UIcmdWithAString*        AbsMaterCmd;
-    G4UIcmdWithADoubleAndUnit* AbsThickCmd;
-    G4UIcmdWithADoubleAndUnit* AbsRadCmd;
-
-    G4UIcmdWithADoubleAndUnit* AbsZposCmd;
-
-    G4UIcmdWithAString*        WorldMaterCmd;
-    G4UIcmdWithADoubleAndUnit* WorldZCmd;
-    G4UIcmdWithADoubleAndUnit* WorldRCmd;
-
+    G4UIcmdWithAnInteger*      StepperCmd;
     G4UIcmdWithADoubleAndUnit* MagFieldCmd;
     G4UIcmdWithoutParameter*   UpdateCmd;
+
+    G4UIcmdWithAString*        AbsMaterCmd;
+
 
 };
 

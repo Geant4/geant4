@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: F01ElectroMagneticField.hh,v 1.2 2001-03-28 16:50:09 grichine Exp $
+// $Id: F01ElectroMagneticField.hh,v 1.3 2001-03-29 10:50:48 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,6 +32,7 @@ class G4FieldManager;
 class G4ChordFinder;
 class G4Mag_UsualEqRhs;
 class G4MagIntegratorStepper;
+class F01FieldMessenger;
 
 class F01ElectroMagneticField: public G4MagneticField
 {
@@ -42,12 +43,13 @@ public:
  ~F01ElectroMagneticField() ;  
       
   void  GetFieldValue( const  G4double Point[3],
-			      G4double *Bfield ) const {};
+			      G4double *Bfield ) const {;} ;
   
-  void SetStepperType(G4int i){ fStepperType = i ; } ;
+  void SetStepperType( G4int i) { fStepperType = i ; } ;
+
   void SetStepper();
 
-  void SetMinStep(G4double s){ fMinStep = s ; } ;
+  void SetMinStep(G4double s) { fMinStep = s ; } ;
 
   void UpdateField();
 
@@ -70,6 +72,9 @@ protected:
   G4int                   fStepperType ;
 
   G4double                fMinStep ;
+ 
+  F01FieldMessenger*      fFieldMessenger;
+
 };
 
 #endif

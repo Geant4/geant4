@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: F01ElectroMagneticField.cc,v 1.2 2001-03-28 16:51:06 grichine Exp $
+// $Id: F01ElectroMagneticField.cc,v 1.3 2001-03-29 10:51:00 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -14,6 +14,7 @@
 
 
 #include "F01ElectroMagneticField.hh"
+#include "F01FieldMessenger.hh"
 
 #include "G4UniformMagField.hh"
 #include "G4MagneticField.hh"
@@ -47,7 +48,7 @@ F01ElectroMagneticField::F01ElectroMagneticField()
   //  fieldMgr->SetDetectorField(fMagneticField);
   //  fieldMgr->CreateChordFinder(fMagneticField);
 
-  
+  fFieldMessenger = new F01FieldMessenger(this) ;  
  
   fEquation = new G4Mag_UsualEqRhs(fMagneticField); 
  
