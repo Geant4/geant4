@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.cc,v 1.7 2001-09-18 15:17:44 maire Exp $
+// $Id: G4OpRayleigh.cc,v 1.8 2001-10-18 17:13:54 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,6 +35,8 @@
 // Version:     1.0
 // Created:     1996-05-31  
 // Author:      Juliet Armstrong
+// Updated:     2001-10-18 by Peter Gumplinger
+//              eliminate unused variable warning on Linux (gcc-2.95.2)
 // Updated:     2001-09-18 by mma
 //		>numOfMaterials=G4Material::GetNumberOfMaterials() in BuildPhy
 // Updated:     2001-01-30 by Peter Gumplinger
