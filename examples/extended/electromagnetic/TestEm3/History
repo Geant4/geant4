@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2004-06-15 11:39:54 maire Exp $
+$Id: History,v 1.55 2004-06-16 10:35:40 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
      
-15-06-04  mma 
+15-06-04  mma (testem3-V06-01-03)
 - introduction of the class HistoManager (like TestEm5)
      
 09-06-04  mma (testem3-V06-01-02)

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoMessenger.cc,v 1.1 2004-06-15 11:39:59 maire Exp $
+// $Id: HistoMessenger.cc,v 1.2 2004-06-16 10:35:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,7 @@ HistoMessenger::HistoMessenger(HistoManager* manager)
   //
   G4UIparameter* ih = new G4UIparameter("ih",'i',false);
   ih->SetGuidance("histo number : from 1 to MaxHisto");
-  ih->SetParameterRange("ih>0");
+  ih->SetParameterRange("ih>=0");
   histoCmd->SetParameter(ih);
   //
   G4UIparameter* nbBins = new G4UIparameter("nbBins",'i',false);
@@ -78,7 +78,7 @@ HistoMessenger::HistoMessenger(HistoManager* manager)
   rmhistoCmd = new G4UIcmdWithAnInteger("/testem/histo/removeHisto",this);
   rmhistoCmd->SetGuidance("desactivate histo  #id");
   rmhistoCmd->SetParameterName("id",false);
-  rmhistoCmd->SetRange("id>0");
+  rmhistoCmd->SetRange("id>=0");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

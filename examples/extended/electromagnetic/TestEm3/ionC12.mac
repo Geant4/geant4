@@ -1,4 +1,4 @@
-# $Id: ionC12.mac,v 1.5 2004-03-19 10:58:59 maire Exp $
+# $Id: ionC12.mac,v 1.6 2004-06-16 10:35:41 maire Exp $
 #
 # Macro file for "TestEm3.cc"
 # (can be run in batch, without graphic)
@@ -26,7 +26,7 @@
 /gun/particle ionC12
 /gun/energy 108 GeV
 #
-/testem/run/setHisto 0 200 350. 550. MeV
+/testem/histo/setHisto 0 200 350. 550. MeV
 #
 /testem/event/printModulo 1000
 /run/beamOn 5000

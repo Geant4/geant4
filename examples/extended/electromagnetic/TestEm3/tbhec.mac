@@ -1,4 +1,4 @@
-# $Id: tbhec.mac,v 1.9 2004-04-28 16:58:43 maire Exp $
+# $Id: tbhec.mac,v 1.10 2004-06-16 10:35:41 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 #
@@ -19,9 +19,9 @@
 #
 /run/initialize
 #
-/testem/run/setFileName 10gev.paw
-/testem/run/setHisto 0 100   0.   1000.  MeV
-/testem/run/setHisto 1 100   9.   10.  GeV
+/testem/histo/setFileName 10gev.paw
+/testem/histo/setHisto 0 100   0.   1000.  MeV
+/testem/histo/setHisto 1 100   9.   10.  GeV
 #
 /gun/particle e-
 /gun/energy 10 GeV
