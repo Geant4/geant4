@@ -745,7 +745,7 @@ int main(int argc, char** argv)
 		 << G4endl;
 	}
 	de += e;
-        if(verbose>0 || abs(mom.phi()/degree - 90.) < 0.01) {
+        if(verbose>0 || abs(mom.phi()/degree - 90.) < 0.001) {
           G4cout << i << "-th secondary  "
 		 << pd->GetParticleName() << "   Ekin(MeV)= "
                  << e/MeV
