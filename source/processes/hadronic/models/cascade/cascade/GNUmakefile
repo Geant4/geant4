@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.3 1999-11-11 15:56:26 miheikki Exp $
+# $Id: GNUmakefile,v 1.4 2001-07-30 21:14:40 miheikki Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
 
-name := G4hadronic_cascade_bertini
+name := G4hadronic_bert_cascade
 
 ifndef G4INSTALL
   G4INSTALL = ../../../../../..
@@ -30,7 +30,9 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
 	    -I$(G4BASE)/processes/hadronic/models/generator/util/include \
 	    -I$(G4BASE)/processes/hadronic/models/generator/pre_equilibrium/include \
 	    -I$(G4BASE)/processes/hadronic/models/generator/diffractive_string/include \
-            -I$(G4BASE)/particles/management/include \
+	    -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
+	    -I$(G4BASE)/processes/hadronic/models/cascade/utils/include \
+	    -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/bosons/include \
             -I$(G4BASE)/particles/hadrons/mesons/include \
@@ -38,6 +40,8 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/particles/shortlived/include \
             -I$(G4BASE)/materials/include
-           
 include $(G4INSTALL)/config/common.gmk
+
+
+
 
