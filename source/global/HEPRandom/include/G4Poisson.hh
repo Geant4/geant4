@@ -5,24 +5,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Poisson.hh,v 1.3 1999-09-08 14:45:58 maire Exp $
+// $Id: G4Poisson.hh,v 1.4 1999-11-16 17:31:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
 //      GEANT 4 class header file 
-//
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
-//
 // ------------------------------------------------------------
-// Description:
-// -----------
+// Class description:
+//
 // G4Poisson is the C++ implementation of the CERNLIB GPOISS algorithm
-// for the generation of Gaussian distributed random numbers. It has been
+// for the generation of Poisson distributed random numbers. It has been
 // adapted to invoke HepRandom from CLHEP for the primary engine generators.
 // GPOISS is recognized to be a faster algorithm, providing however a less
 // accurate output, than the algorithm adopted in CLHEP.
+
 // ------------------------------------------------------------
 #ifndef G4POISSON_HH
 #define G4POISSON_HH
