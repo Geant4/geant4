@@ -1,4 +1,4 @@
-$Id: History,v 1.132 2004-10-29 09:15:54 gcosmo Exp $
+$Id: History,v 1.133 2004-11-01 13:08:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 01, 2004  H.Kurasige (global-V06-02-03)
+- Code cleanup in G4PhysicsParticle implementation.
+- Added push_back() method.
 
 Oct 29, 2004  G.Cosmo (global-V06-02-02)
 - Added global function G4RandomDirection() providing a random 3-vector
