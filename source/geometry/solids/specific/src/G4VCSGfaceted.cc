@@ -26,7 +26,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.14 2004-10-13 13:34:44 gcosmo Exp $
+// $Id: G4VCSGfaceted.cc,v 1.15 2005-03-03 16:06:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -363,7 +363,7 @@ G4double G4VCSGfaceted::DistanceTo( const G4ThreeVector &p,
 //
 void G4VCSGfaceted::DescribeYourselfTo( G4VGraphicsScene& scene ) const
 {
-   scene.AddThis( *this );
+   scene.AddSolid( *this );
 }
 
 

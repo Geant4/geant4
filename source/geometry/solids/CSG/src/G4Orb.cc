@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.15 2004-12-02 09:31:28 gcosmo Exp $
+// $Id: G4Orb.cc,v 1.16 2005-03-03 16:06:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -599,7 +599,7 @@ std::ostream& G4Orb::StreamInfo( std::ostream& os ) const
 
 void G4Orb::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 G4Polyhedron* G4Orb::CreatePolyhedron () const

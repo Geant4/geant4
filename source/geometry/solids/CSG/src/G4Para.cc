@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.25 2004-12-02 10:12:10 gcosmo Exp $
+// $Id: G4Para.cc,v 1.26 2005-03-03 16:06:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -1258,7 +1258,7 @@ std::ostream& G4Para::StreamInfo( std::ostream& os ) const
 
 void G4Para::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 G4Polyhedron* G4Para::CreatePolyhedron () const

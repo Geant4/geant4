@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.31 2004-12-02 09:31:25 gcosmo Exp $
+// $Id: G4BREPSolid.cc,v 1.32 2005-03-03 16:06:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -1036,7 +1036,7 @@ G4double G4BREPSolid::DistanceToOut(const G4ThreeVector& Pt)const
 
 void G4BREPSolid::DescribeYourselfTo (G4VGraphicsScene& scene) const 
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 G4Polyhedron* G4BREPSolid::CreatePolyhedron () const

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.30 2004-12-02 10:12:10 gcosmo Exp $
+// $Id: G4Box.cc,v 1.31 2005-03-03 16:06:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -978,7 +978,7 @@ std::ostream& G4Box::StreamInfo(std::ostream& os) const
 
 void G4Box::DescribeYourselfTo (G4VGraphicsScene& scene) const 
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 G4VisExtent G4Box::GetExtent() const 

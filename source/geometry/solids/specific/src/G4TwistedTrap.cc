@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TwistedTrap.cc,v 1.5 2004-12-10 16:22:39 gcosmo Exp $
+// $Id: G4TwistedTrap.cc,v 1.6 2005-03-03 16:06:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1010,7 +1010,7 @@ std::ostream& G4TwistedTrap::StreamInfo(std::ostream& os) const
 
 void G4TwistedTrap::DescribeYourselfTo (G4VGraphicsScene& scene) const 
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 //=====================================================================

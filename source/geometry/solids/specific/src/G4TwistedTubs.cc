@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.10 2004-12-02 09:31:33 gcosmo Exp $
+// $Id: G4TwistedTubs.cc,v 1.11 2005-03-03 16:06:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -910,7 +910,7 @@ std::ostream& G4TwistedTubs::StreamInfo(std::ostream& os) const
 
 void G4TwistedTubs::DescribeYourselfTo (G4VGraphicsScene& scene) const 
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 //=====================================================================

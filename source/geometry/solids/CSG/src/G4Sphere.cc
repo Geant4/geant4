@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.34 2004-12-10 16:22:37 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.35 2005-03-03 16:06:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -2789,7 +2789,7 @@ G4VisExtent G4Sphere::GetExtent() const
 
 void G4Sphere::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 G4Polyhedron* G4Sphere::CreatePolyhedron () const

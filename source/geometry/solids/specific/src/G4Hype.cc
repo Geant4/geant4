@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.16 2004-12-10 16:22:38 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.17 2005-03-03 16:06:06 allison Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -1151,7 +1151,7 @@ std::ostream& G4Hype::StreamInfo(std::ostream& os) const
 
 void G4Hype::DescribeYourselfTo (G4VGraphicsScene& scene) const 
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 G4VisExtent G4Hype::GetExtent() const 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.40 2004-12-10 16:22:37 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.41 2005-03-03 16:06:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -2291,7 +2291,7 @@ std::ostream& G4Torus::StreamInfo( std::ostream& os ) const
 
 void G4Torus::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
 {
-  scene.AddThis (*this);
+  scene.AddSolid (*this);
 }
 
 G4Polyhedron* G4Torus::CreatePolyhedron () const 
