@@ -92,6 +92,8 @@ if [ $1 = "all" ] ; then
     nice $G4STTDIR/bin/run.sh test401
     nice $G4STTDIR/bin/run.sh test402
   fi
+  nice $G4STTDIR/bin/run.sh test601
+  nice $G4STTDIR/bin/run.sh test602
   nice $G4STTDIR/bin/run.sh test01
   nice $G4STTDIR/bin/run.sh test02
   nice $G4STTDIR/bin/run.sh test02.hadron
@@ -156,7 +158,24 @@ else
         time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
         $dir/$1.exerciser$dot_G4LARGE_N.in \
         > $dir/$1$dot_G4LARGE_N.out 2> $dir/$1$dot_G4LARGE_N.err
+
+      elif [ $1 = test601 -o $1 = test602 ] 
+      then
+        if [ -z "$G4LARGE_N" -o \
+          \( -n "$G4LARGE_N" -a \
+             -f $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \) ]; then
+          rm -f $dir/$1$dot_G4LARGE_N.out
+          rm -f $dir/$1$dot_G4LARGE_N.err
+          time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
+            $G4INSTALL/examples/extended/g3tog4/data/testmodel.dat \
+          < $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \
+          > $dir/$1$dot_G4LARGE_N.out 2> $dir/$1$dot_G4LARGE_N.err
+        else
+          echo "tests/$shortname/$1$dot_G4LARGE_N.in does not exist."
+        fi
+
       else
+
         if [ -z "$G4LARGE_N" -o \
           \( -n "$G4LARGE_N" -a \
              -f $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \) ]; then

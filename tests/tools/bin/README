@@ -75,3 +75,53 @@
     csh> g4tail
     csh> g4filter
 
+ SWON...
+
+ g4allsys.sh takes commands or a datafile to build and run tests on all systems.
+ 
+ g4allsys.sh invokes g4sbr.sh via remote shell
+      cli is parsed to tokens
+             host devprod debopt tag action actarg1 actarg2 actarg3 nonincremental
+      for each line giving a host a remote shell is invoked 
+          under account stesting to run the script (with full pathname)
+          /afs/cern.ch/sw/geant4/stt/$devprod/
+           testtools/geant4/tests/tools/bin/g4sbr.sh 
+          with the arguments devprod debopt tag action actarg1 actarg2 actarg3 nonincremental
+          and appends to an output logfile  $host.$devprod.$debopt.log
+      otherwise # indicates a comment
+                % indicates a (local) unix command
+
+ g4sbr.sh SetupBuildRun
+          Does a few checks on the environment and file systems
+          Environment variables are set (or unset) according to the arguments
+          G4LARGE_N
+          G4DEBUG
+          G4STTNONISO
+          G4NOHIST
+          and then runs (full path) setup.sh
+            which defines
+            CLHEP_BASE_DIR
+            G4STTDIR
+            G4WORKDIR
+            [finish/restructure]
+            G4INSTALL   /afs/cern.ch/sw/geant4/stt/dev1/src/geant4
+            G4SYSTEM    Linux-g++
+            G4STTDIR    /afs/cern.ch/sw/geant4/stt/dev1/testtools/geant4/tests/tools
+            G4WORKDIR   /afs/cern.ch/sw/geant4/stt/dev1/Linux-g++/debug
+            G4LIB       /afs/cern.ch/sw/geant4/stt/dev1/Linux-g++/debug/lib
+      
+          checks some locks
+            stt         is a softlink stt.reftag
+          makes a new stt.reftag directory (if non-incremental)
+          cd's to G4WORKDIR
+               sources (oops ${G4INSTALL}/tests/tools/bin/limit.sh)
+               source   ${G4STTDIR}/bin/tmpenv.sh
+               runs ${G4STTDIR}/bin/build.sh (arg1 arg2) if action build/all
+               runs ${G4STTDIR}/bin/run.sh   (arg3)      if action run/all
+          waits for completion (how ?)
+
+ setup.csh (blah above ?)
+ build.sh 
+   cd's to  $G4INSTALL/source and runs gmake -k
+   cd's to  $G4INSTALL/tests  and runs gmake -k clean_bin and then gmake -k
+
