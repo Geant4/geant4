@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.14 2002-01-23 03:20:38 asaim Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.15 2002-08-19 20:20:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -129,8 +129,8 @@ void G4PrimaryTransformer::GenerateSingleTrack
                         primaryParticle->GetPolZ());
     if(primaryParticle->GetProperTime()>0.0)
     { DP->SetPreAssignedDecayProperTime(primaryParticle->GetProperTime()); }
-    // Set Charge
-    if (abs(primaryParticle->GetCharge()-DP->GetCharge())>eplus) {
+    // Set Charge is specified
+    if (primaryParticle->GetCharge()<DBL_MAX) {
       DP->SetCharge(primaryParticle->GetCharge());
     } 
     // Set decay products to the DynamicParticle
