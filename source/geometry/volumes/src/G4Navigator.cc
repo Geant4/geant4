@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.17 2001-11-26 11:18:23 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.18 2001-12-04 16:41:44 radoone Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
@@ -51,14 +51,17 @@ G4Navigator::~G4Navigator()
 G4VPhysicalVolume* 
 G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 				       const G4ThreeVector* pGlobalDirection,
-				       const G4bool relativeSearch)
+				       const G4bool relativeSearch,
+				       const G4bool ignoreDirection)
 {
   G4bool notKnownContained=true,noResult;
   G4VPhysicalVolume *targetPhysical;
   G4LogicalVolume *targetLogical;
   G4VSolid *targetSolid;
-  G4ThreeVector localPoint;
+  G4ThreeVector localPoint, globalDirection=*pGlobalDirection;
   EInside insideCode;
+
+  G4bool considerDirection = (!ignoreDirection) || fLocatedOnEdge;
 
 #ifdef G4DEBUG_NAVIGATION
   G4cerr << "Upon entering LocateGlobalPointAndSetup " << G4endl;
@@ -217,26 +220,46 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 	      return 0;
 	    }			
 	}
-      else if (insideCode==kSurface&&fExiting)
-	{
-	  if (fHistory.GetDepth())
-	    {
-	      fBlockedPhysicalVolume=fHistory.GetTopVolume();
-	      fBlockedReplicaNo=fHistory.GetTopReplicaNo();
-	      fHistory.BackLevel();
-	      // Still on surface but exited volume not necessarily convex
-	      fValidExitNormal=false;
-	    }
-	  else
-	    {
-	      // Have exited world volume
-	      return 0;
-	    }			
-	}
+      else if (insideCode==kSurface)
+      {
+        G4bool isExiting= fExiting;
+        if((!fExiting)&&considerDirection){
+           // Figure out whether we are exiting this level's volume by using the direction
+           G4bool directionExiting= false;
+	   G4ThreeVector localDirection;
+           localDirection=fHistory.GetTopTransform().TransformAxis(globalDirection);
+           if (fHistory.GetTopVolumeType()!=kReplica){
+	      G4ThreeVector normal= targetSolid->SurfaceNormal(localPoint);
+	      directionExiting= normal.dot(localDirection) > 0.0;
+
+	      isExiting= isExiting || directionExiting;
+	   }
+        }
+        if(isExiting)
+      	{
+      	  if (fHistory.GetDepth())
+  	      {
+	          fBlockedPhysicalVolume=fHistory.GetTopVolume();
+  	        fBlockedReplicaNo=fHistory.GetTopReplicaNo();
+  	        fHistory.BackLevel();
+	          // Still on surface but exited volume not necessarily convex
+	          fValidExitNormal=false;
+          } 
+          else
+          {
+	          // Have exited world volume
+	          return 0;
+	        }
+        }
+        else
+        {
+           notKnownContained=false;
+        }			
+      }
       else
-	{
-	  notKnownContained=false;
-	}
+      {
+         notKnownContained=false;
+      }
     }
   
 //
@@ -252,7 +275,8 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 
   noResult=true;  // noResult should be renamed to 
                   //  something like enteredLevel, as that is its meaning.
-  do
+
+      do
     {
       
 // Determine `type' of current mother volume
@@ -268,7 +292,7 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 					     fBlockedReplicaNo,
 					     globalPoint,
 					     pGlobalDirection,
-					     fLocatedOnEdge,
+					     considerDirection,
 					     localPoint);
 	    }
 	  else
@@ -278,7 +302,7 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 					      fBlockedReplicaNo,
 					      globalPoint,
 					      pGlobalDirection,
-					      fLocatedOnEdge,
+					      considerDirection,
 					      localPoint);
 	    }
 	  break;
@@ -288,7 +312,7 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 					   fBlockedReplicaNo,
 					   globalPoint,
 					   pGlobalDirection,
-					   fLocatedOnEdge,
+					   considerDirection,
 					   localPoint);
 	  break;
 	case kParameterised:
@@ -297,7 +321,7 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 					 fBlockedReplicaNo,
 					 globalPoint,
 					 pGlobalDirection,
-					 fLocatedOnEdge,
+					 considerDirection,
 					 localPoint);
 	  break;
 	}
