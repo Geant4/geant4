@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.10 2002-11-18 15:03:05 jwellisc Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.11 2002-11-26 08:44:32 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -2321,7 +2321,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
   G4double dlg1=lastG+lastG-1.;
   G4double lgoe=lastG/lastE;
   for(G4int i=lastF;i<=lastL;i++) Y[i]=dlg1*lastJ1[i]-lgoe*(lastJ2[i]+lastJ2[i]-lastJ3[i]/lastE);
-  if(lastSig>Y[lastL]&&lastL<mL)
+  if(lastSig>1.01*Y[lastL]&&lastL<mL)
   {
     if(Y[lastL]<1.E-30) return 3.0*MeV; // quick and dirty workaround @@@ HP.
   }
