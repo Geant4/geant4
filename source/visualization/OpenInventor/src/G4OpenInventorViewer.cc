@@ -107,32 +107,32 @@ void G4OpenInventorViewer::KernelVisitDecision () {
   fG4OpenInventorSceneHandler.fLastVP = fVP;
 }
  
-G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters&) {
+G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
 
   if (
-      (fLastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
-      (fLastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
-      (fLastVP.IsCulling ()          != fVP.IsCulling ())          ||
-      (fLastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
-      (fLastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
-      (fLastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
-      (fLastVP.IsSection ()          != fVP.IsSection ())          ||
+      (vp.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
+      (vp.GetRepStyle ()        != fVP.GetRepStyle ())        ||
+      (vp.IsCulling ()          != fVP.IsCulling ())          ||
+      (vp.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
+      (vp.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
+      (vp.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
+      (vp.IsSection ()          != fVP.IsSection ())          ||
       // No need to visit kernel if section plane changes.
-      (fLastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
-      (fLastVP.GetCutawayPlanes ().size () !=
+      (vp.IsCutaway ()          != fVP.IsCutaway ())          ||
+      (vp.GetCutawayPlanes ().size () !=
                                  fVP.GetCutawayPlanes ().size ()) ||
       // No need to visit kernel if cutaway planes change.
-      (fLastVP.IsExplode ()          != fVP.IsExplode ())          ||
-      (fLastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())
+      (vp.IsExplode ()          != fVP.IsExplode ())          ||
+      (vp.GetNoOfSides ()       != fVP.GetNoOfSides ())
       ) {
       return true;;
   }
-  if (fLastVP.IsDensityCulling () &&
-      (fLastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
+  if (vp.IsDensityCulling () &&
+      (vp.GetVisibleDensity () != fVP.GetVisibleDensity ()))
     return true;
 
-  if (fLastVP.IsExplode () &&
-      (fLastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
+  if (vp.IsExplode () &&
+      (vp.GetExplodeFactor () != fVP.GetExplodeFactor ()))
     return true;
       
   return false;
@@ -152,8 +152,8 @@ void G4OpenInventorViewer::SetView () {
   const G4double cameraDistance = fVP.GetCameraDistance (radius);
   const G4Vector3D& direction = fVP.GetViewpointDirection().unit();
   const G4Point3D cameraPosition = target + cameraDistance * direction;
-  const GLdouble pnear = fVP.GetNearDistance (cameraDistance, radius);
-  const GLdouble pfar  = fVP.GetFarDistance  (cameraDistance, pnear, radius);
+  const G4double pnear = fVP.GetNearDistance (cameraDistance, radius);
+  const G4double pfar  = fVP.GetFarDistance  (cameraDistance, pnear, radius);
   //const G4Normal3D& up = fVP.GetUpVector ();  
 
   /*FIXME : G4OpenGLView::SetView does the below. Do we need that with IV ?
