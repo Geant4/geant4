@@ -1,4 +1,7 @@
 2004 November 25
+
+CHANGES** for Geant4.7 release
+
  - Integration of GAG and Gain into MOMO
     - GAG.jar and Gain.jar are no more required and removed from the distribution.
     - GAG and Gain have their own logging window which displays G4cout
@@ -8,18 +11,27 @@
     - logican volume's name is choosable from the name list to make physical volume
     - "set G4WORKDIR" butto helps to choose files or to save files (GGE, GPE, GAG)
 
- NOTICE on Java Version!
+EXAMPLE**
+
+  A working full set of files are foud in MomoHome. Please have a look at
+ MomoHome/README file.
+
+NOTICE 1 ** on Java Version!
+
    The present version of MOMO is tested with j2sdk1.4. Some mal-functionning
 was found when used with j2sdk-1.5.
 
- BUG in Help function !
+ABOUT **  Help function !
+
    "Help" is displayed only when MOMO.jar is started in the directory where
 it is stored.
 
- NOTICE on "Project" menus
+NOTICE 2 ** on "Project" menus
+
 "Compile" buttin is effective only when java is started in the canonical
 directory of Geant4, that is just above the src and include directories.
 
+-------------------------------------------------------------------------
 2003 December 08
  - present MOMO's XML functions (save and load) are limited.
 	-only available GDML tags are implemented. Not implemented are
