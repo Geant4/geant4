@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2002-11-08 13:32:16 ahoward Exp $
+# $Id: GNUmakefile,v 1.4 2002-12-17 11:44:40 pmendez Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -31,4 +31,15 @@ include $(G4INSTALL)/config/binmake.gmk
 visclean:
 	rm -f g4*.prim g4*.eps g4*.wrl
 	rm -f .DAWN_*
+
+
+
+
+
+
+
+
+
+
+
 
