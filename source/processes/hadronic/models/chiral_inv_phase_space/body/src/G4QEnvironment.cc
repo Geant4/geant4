@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.11 2000-09-18 09:01:40 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.12 2000-09-18 09:29:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -984,7 +984,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
             theQHadrons.insert(curH2);           // Fill the curH2 to output
             return theQHadrons;
 		  }
-          else if(totBN==1&&totPDG&&totMass<totM+mPi0+.001)// ==> "Baryon+gamma" case
+          else if(totBN<2&&totPDG&&totMass<totM+mPi0+.001)// ==> "Meson/Baryon+gamma" case
 		  {
             G4LorentzVector h4Mom(0.,0.,0.,totM);
             G4LorentzVector g4Mom(0.,0.,0.,0.);
