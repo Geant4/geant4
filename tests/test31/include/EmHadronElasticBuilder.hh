@@ -20,50 +20,57 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.4 2004-12-03 13:01:34 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// ------------------------------------------------------------
+//	GEANT 4 class header file 
+// Class Description:
+//      This class is an derived class of G4VPhysicsConstructor
+//      It is provide PhysicsList for hadron eleastic process
+//
+// ------------------------------------------------------------
+//	History
+//        Created:       14.10.02  V.Ivanchenko
+//
+//        Modified:
+//
+// ------------------------------------------------------------
+//
+#ifndef EmHadronElasticBuilder_h
+#define EmHadronElasticBuilder_h 1
 
-#ifndef PhysicsListMessenger_h
-#define PhysicsListMessenger_h 1
-
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
 
-class PhysicsList;
-class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
+class G4HadronElasticProcess;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class PhysicsListMessenger: public G4UImessenger
+class EmHadronElasticBuilder : public G4VPhysicsConstructor
 {
 public:
-  
-  PhysicsListMessenger(PhysicsList* );
-  ~PhysicsListMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
-    
+  EmHadronElasticBuilder(const G4String& name = "elastic");
+  virtual ~EmHadronElasticBuilder();
+
+public:
+  // This method will be invoked in the Construct() method.
+  // each particle type will be instantiated
+  void ConstructParticle() {};
+
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  void ConstructProcess();
+
 private:
-  
-  PhysicsList*               pPhysicsList;
-    
-  G4UIdirectory*             physDir;    
-  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-  G4UIcmdWithADoubleAndUnit* electCutCmd;
-  G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-  G4UIcmdWithADoubleAndUnit* allCutCmd;    
-  G4UIcmdWithAnInteger*      verbCmd;
-  G4UIcmdWithAString*        pListCmd;
-    
+  G4HadronElasticProcess* theElasticProcess;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 

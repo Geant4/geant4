@@ -20,47 +20,42 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.4 2004-12-03 13:01:34 vnivanch Exp $
+//
+// $Id: G4PenelopeQEDBuilder.hh,v 1.1 2004-12-03 13:01:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsListMessenger_h
-#define PhysicsListMessenger_h 1
+#ifndef G4PenelopeQEDBuilder_h
+#define G4PenelopeQEDBuilder_h 1
 
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
-
-class PhysicsList;
-class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+class G4PenelopeQEDBuilder : public G4VPhysicsConstructor
 {
 public:
-  
-  PhysicsListMessenger(PhysicsList* );
-  ~PhysicsListMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
-    
+  G4PenelopeQEDBuilder(const G4String& name = "Penelope_QED");
+  virtual ~G4PenelopeQEDBuilder();
+
+public:
+  // This method is dummy for physics
+  virtual void ConstructParticle();
+
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  virtual void ConstructProcess();
+
 private:
-  
-  PhysicsList*               pPhysicsList;
-    
-  G4UIdirectory*             physDir;    
-  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-  G4UIcmdWithADoubleAndUnit* electCutCmd;
-  G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-  G4UIcmdWithADoubleAndUnit* allCutCmd;    
-  G4UIcmdWithAnInteger*      verbCmd;
-  G4UIcmdWithAString*        pListCmd;
-    
+
+   // hide assignment operator
+  G4PenelopeQEDBuilder & operator=(const G4PenelopeQEDBuilder &right);
+  G4PenelopeQEDBuilder(const G4PenelopeQEDBuilder&);
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmLowEnergyHadronBuilderMA.cc,v 1.2 2004-10-15 14:13:16 vnivanch Exp $
+// $Id: G4LowEnergyQEDBuilder.cc,v 1.1 2004-12-03 13:01:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4EmLowEnergyHadronBuilder
+// ClassName:   G4LowEnergyQEDBuilder
 //
 // Author:      V.Ivanchenko 03.05.2004
 //
@@ -38,75 +38,78 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4EmLowEnergyHadronBuilderMA.hh"
+#include "G4LowEnergyQEDBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
+#include "G4LowEnergyCompton.hh"
+#include "G4LowEnergyGammaConversion.hh"
+#include "G4LowEnergyPhotoElectric.hh"
+#include "G4LowEnergyRayleigh.hh"
+
 #include "G4MultipleScattering.hh"
 
-#include "G4hLowEnergyIonisation.hh"
-//#include "G4hLowEnergyIonisationMA.hh"
+#include "G4LowEnergyIonisation.hh"
+#include "G4LowEnergyBremsstrahlung.hh"
 
+#include "G4eIonisation.hh"
+#include "G4eBremsstrahlung.hh"
+#include "G4eplusAnnihilation.hh"
+
+#include "G4Gamma.hh"
 #include "G4Electron.hh"
-#include "G4Proton.hh"
-#include "G4GenericIon.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmLowEnergyHadronBuilderMA::G4EmLowEnergyHadronBuilderMA(const G4String& name)
+G4LowEnergyQEDBuilder::G4LowEnergyQEDBuilder(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmLowEnergyHadronBuilderMA::~G4EmLowEnergyHadronBuilderMA()
+G4LowEnergyQEDBuilder::~G4LowEnergyQEDBuilder()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmLowEnergyHadronBuilderMA::ConstructParticle()
+void G4LowEnergyQEDBuilder::ConstructParticle()
 {
+  G4Gamma::Gamma();
   G4Electron::Electron();
-  G4Proton::Proton();
-  G4GenericIon::GenericIon();
+  G4Positron::Positron();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmLowEnergyHadronBuilderMA::ConstructProcess()
+void G4LowEnergyQEDBuilder::ConstructProcess()
 {
-  // Add standard EM Processes
-  theParticleIterator->reset();
+  // Add standard EM Processes for gamma
+  G4ParticleDefinition* particle = G4Gamma::Gamma();
+  G4ProcessManager* pmanager = particle->GetProcessManager();
 
-  G4hLowEnergyIonisation* proc;
-  const G4String table_name = "ICRU_R49He";
+  pmanager->AddDiscreteProcess( new G4LowEnergyPhotoElectric() );
+  pmanager->AddDiscreteProcess( new G4LowEnergyCompton() );
+  pmanager->AddDiscreteProcess( new G4LowEnergyGammaConversion() );
+  pmanager->AddDiscreteProcess( new G4LowEnergyRayleigh() );
 
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  // Add standard EM Processes for e-
+  particle = G4Electron::Electron();
+  pmanager = particle->GetProcessManager();
 
-    if(particle->GetPDGMass() > 110.*MeV) {
-      G4ProcessManager* pmanager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
+  pmanager->AddProcess(new G4MultipleScattering,       -1, 1,1);
+  pmanager->AddProcess(new G4LowEnergyIonisation,      -1, 2,2);
+  pmanager->AddProcess(new G4LowEnergyBremsstrahlung,  -1,-1,3);
 
+  // Add standard EM Processes for e+
+  particle = G4Positron::Positron();
+  pmanager = particle->GetProcessManager();
 
-      if (particleName == "GenericIon") {
+  pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+  pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
+  pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+  pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
 
-        proc = new G4hLowEnergyIonisation();
-        //proc->SetElectronicStoppingPowerModel(table_name);
-        pmanager->AddProcess(new G4MultipleScattering,   -1, 1,1);
-        pmanager->AddProcess(proc, -1, 2,2);
-
-      } else if ((!particle->IsShortLived()) &&
-	         (particle->GetPDGCharge() != 0.0) &&
-	         (particle->GetParticleName() != "chargedgeantino")) {
-
-        proc = new G4hLowEnergyIonisation();
-        //proc->SetElectronicStoppingPowerModel(table_name);
-        pmanager->AddProcess(new G4MultipleScattering,   -1,1,1);
-        pmanager->AddProcess(proc, -1,2,2);
-      }
-    }
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -20,45 +20,52 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4EmLowEnergyHadronBuilderMA.hh,v 1.1 2004-09-21 10:43:47 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#ifndef PhantomSD_h
+#define PhantomSD_h 1
 
-#ifndef G4EmLowEnergyHadronBuilderMA_h
-#define G4EmLowEnergyHadronBuilderMA_h 1
+// -------------------------------------------------------------
+//
+//      ---------- PhantomSD -------------
+//
+//  Modified:
+//
+// -------------------------------------------------------------
 
-#include "G4VPhysicsConstructor.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "G4VSensitiveDetector.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class G4EmLowEnergyHadronBuilderMA : public G4VPhysicsConstructor
+class G4Step;
+class G4TouchableHistory;
+class G4HCofThisEvent;
+class Histo;
+
+class PhantomSD : public G4VSensitiveDetector
 {
-public:
-  G4EmLowEnergyHadronBuilderMA(const G4String& name = "EM_LowE_had");
-  virtual ~G4EmLowEnergyHadronBuilderMA();
+public: // Without description
 
-public:
-  // This method is dummy for physics
-  virtual void ConstructParticle();
+      PhantomSD(const G4String&);
+     ~PhantomSD();
 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  virtual void ConstructProcess();
+      void Initialize(G4HCofThisEvent*);
+      G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+      void EndOfEvent(G4HCofThisEvent*);
+      void clear();
+      void PrintAll();
+      void setShiftZ(G4double val) {shiftZ = val;};
 
-private:
+  private:
 
-   // hide assignment operator
-  G4EmLowEnergyHadronBuilderMA & operator=(const G4EmLowEnergyHadronBuilderMA &right);
-  G4EmLowEnergyHadronBuilderMA(const G4EmLowEnergyHadronBuilderMA&);
-
+      Histo* theHisto;
+      G4int evno;
+      G4double shiftZ;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
 

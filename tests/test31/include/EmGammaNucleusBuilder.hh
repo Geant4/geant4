@@ -20,44 +20,56 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMaxMessenger.cc,v 1.2 2004-07-27 09:17:05 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// ------------------------------------------------------------
+//	GEANT 4 class header file 
+// Class Description:
+//      This class is an derived class of G4VPhysicsConstructor
+//      It is provide PhysicsList for hadron eleastic process
+//
+// ------------------------------------------------------------
+//	History
+//        Created:       14.10.02  V.Ivanchenko
+//
+//        Modified:
+//
+// ------------------------------------------------------------
+// 
+#ifndef EmGammaNucleusBuilder_h
+#define EmGammaNucleusBuilder_h 1
 
-#include "StepMaxMessenger.hh"
-
-#include "StepMax.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepMaxMessenger::StepMaxMessenger(StepMax* stepM)
-:stepMax(stepM)
-{ 
-  StepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
-  StepMaxCmd->SetGuidance("Set max allowed step length");
-  StepMaxCmd->SetParameterName("mxStep",false);
-  StepMaxCmd->SetRange("mxStep>0.");
-  StepMaxCmd->SetUnitCategory("Length");
-  StepMaxCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-StepMaxMessenger::~StepMaxMessenger()
+class EmGammaNucleusBuilder : public G4VPhysicsConstructor
 {
-  delete StepMaxCmd;
-}
+public:
+  EmGammaNucleusBuilder(const G4String& name = "gamma_e_A");
+  virtual ~EmGammaNucleusBuilder();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+public:
+  // This method will be invoked in the Construct() method.
+  // each particle type will be instantiated
+  void ConstructParticle();
 
-void StepMaxMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{ 
-  if (command == StepMaxCmd)
-    { stepMax->SetMaxStep(StepMaxCmd->GetNewDoubleValue(newValue));}
-}
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  void ConstructProcess();
+  
+private:
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+};
+
+
+#endif
+
+
+
+
+
+
+
+

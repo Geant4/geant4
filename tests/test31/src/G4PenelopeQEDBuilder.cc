@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmHadronBuilder.cc,v 1.4 2004-12-03 13:01:34 vnivanch Exp $
+// $Id: G4PenelopeQEDBuilder.cc,v 1.1 2004-12-03 13:01:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4EmHadronBuilder
+// ClassName:   G4PenelopeQEDBuilder
 //
 // Author:      V.Ivanchenko 03.05.2004
 //
@@ -38,67 +38,75 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4EmHadronBuilder.hh"
+#include "G4PenelopeQEDBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
+#include "G4PenelopeCompton.hh"
+#include "G4PenelopeGammaConversion.hh"
+#include "G4PenelopePhotoElectric.hh"
+#include "G4PenelopeRayleigh.hh"
+
 #include "G4MultipleScattering.hh"
 
-#include "G4hIonisation.hh"
-#include "G4ionIonisation.hh"
+#include "G4PenelopeIonisation.hh"
+#include "G4PenelopeBremsstrahlung.hh"
+#include "G4PenelopeAnnihilation.hh"
 
+#include "G4Gamma.hh"
 #include "G4Electron.hh"
-#include "G4Proton.hh"
-#include "G4GenericIon.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmHadronBuilder::G4EmHadronBuilder(const G4String& name)
+G4PenelopeQEDBuilder::G4PenelopeQEDBuilder(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmHadronBuilder::~G4EmHadronBuilder()
+G4PenelopeQEDBuilder::~G4PenelopeQEDBuilder()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmHadronBuilder::ConstructParticle()
+void G4PenelopeQEDBuilder::ConstructParticle()
 {
+  G4Gamma::Gamma();
   G4Electron::Electron();
-  G4Proton::Proton();
-  G4GenericIon::GenericIon();
+  G4Positron::Positron();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmHadronBuilder::ConstructProcess()
+void G4PenelopeQEDBuilder::ConstructProcess()
 {
-  // Add standard EM Processes
-  theParticleIterator->reset();
+  // Add standard EM Processes for gamma
+  G4ParticleDefinition* particle = G4Gamma::Gamma();
+  G4ProcessManager* pmanager = particle->GetProcessManager();
 
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  pmanager->AddDiscreteProcess( new G4PenelopePhotoElectric() );
+  pmanager->AddDiscreteProcess( new G4PenelopeCompton() );
+  pmanager->AddDiscreteProcess( new G4PenelopeGammaConversion() );
+  pmanager->AddDiscreteProcess( new G4PenelopeRayleigh() );
 
-    if(particle->GetPDGMass() > 110.*MeV) {
-      G4ProcessManager* pmanager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
+  // Add standard EM Processes for e-
+  particle = G4Electron::Electron();
+  pmanager = particle->GetProcessManager();
 
-      if (particleName == "GenericIon" || particleName == "alpha" || particleName == "He3") {
+  pmanager->AddProcess(new G4MultipleScattering,     -1, 1,1);
+  pmanager->AddProcess(new G4PenelopeIonisation,     -1, 2,2);
+  pmanager->AddProcess(new G4PenelopeBremsstrahlung, -1,-1,3);
 
-        pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-        pmanager->AddProcess(new G4ionIonisation,      -1, 2,2);
+  // Add standard EM Processes for e+
+  particle = G4Positron::Positron();
+  pmanager = particle->GetProcessManager();
 
-      } else if ((!particle->IsShortLived()) &&
-	         (particle->GetPDGCharge() != 0.0) &&
-	         (particle->GetParticleName() != "chargedgeantino")) {
+  pmanager->AddProcess(new G4MultipleScattering,    -1, 1,1);
+  pmanager->AddProcess(new G4PenelopeIonisation,    -1, 2,2);
+  pmanager->AddProcess(new G4PenelopeBremsstrahlung,-1,-1,3);
+  pmanager->AddProcess(new G4PenelopeAnnihilation,   0,-1,4);
 
-        pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
-        pmanager->AddProcess(new G4hIonisation,       -1,2,2);
-      }
-    }
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

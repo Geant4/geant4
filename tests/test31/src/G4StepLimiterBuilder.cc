@@ -20,50 +20,66 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.4 2004-12-03 13:01:34 vnivanch Exp $
+//
+// $Id: G4StepLimiterBuilder.cc,v 1.1 2004-12-03 13:01:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4StepLimiterBuilder
+//
+// Author:      V.Ivanchenko 24.11.2004
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsListMessenger_h
-#define PhysicsListMessenger_h 1
-
-#include "globals.hh"
-#include "G4UImessenger.hh"
-
-class PhysicsList;
-class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
+#include "G4StepLimiterBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
+#include "G4StepLimiterPerRegion.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+G4StepLimiterBuilder::G4StepLimiterBuilder(const G4String& name)
+   :  G4VPhysicsConstructor(name)
 {
-public:
-  
-  PhysicsListMessenger(PhysicsList* );
-  ~PhysicsListMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
-    
-private:
-  
-  PhysicsList*               pPhysicsList;
-    
-  G4UIdirectory*             physDir;    
-  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-  G4UIcmdWithADoubleAndUnit* electCutCmd;
-  G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-  G4UIcmdWithADoubleAndUnit* allCutCmd;    
-  G4UIcmdWithAnInteger*      verbCmd;
-  G4UIcmdWithAString*        pListCmd;
-    
-};
+  stepMax = new G4StepLimiterPerRegion();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+G4StepLimiterBuilder::~G4StepLimiterBuilder()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4StepLimiterBuilder::ConstructParticle()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4StepLimiterBuilder::ConstructProcess()
+{
+  // Add Decay Process
+
+
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+
+    if (stepMax->IsApplicable(*particle) && !particle->IsShortLived()) {
+
+      pmanager->AddProcess(stepMax, -1,-1,6);
+
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

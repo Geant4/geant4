@@ -118,7 +118,7 @@ void EmAnalysis::setHisto1D(G4int id, G4int nbins, G4double emin, G4double emax)
 {
   for(G4int i=0; i<nHisto; i++) {
     if(id == histid[i]) {
-      histo->setHisto1D(id,nbins,log10(emin),log10(emax),1.0);
+      histo->setHisto1D(id,nbins,std::log10(emin),std::log10(emax),1.0);
       break;
     }
   }
@@ -196,8 +196,8 @@ void EmAnalysis::saveToFile()
       G4int nb = histo->NumberOfBins(i);
       G4double x0    = histo->MinBin(i);
       G4double step0 = (histo->MaxBin(i) - x0)/((G4double)nb);
-      G4double x     = pow(10.0, x0 + step0*0.5);
-      G4double step  = pow(10.0, step0);
+      G4double x     = std::pow(10.0, x0 + step0*0.5);
+      G4double step  = std::pow(10.0, step0);
       G4bool isdedx = false;
       G4bool iscspe = false;
       G4bool ismumu = false;
@@ -217,12 +217,12 @@ void EmAnalysis::saveToFile()
   	  s /= (unit*mat->GetElectronDensity());
         } else if(ismumu) {
           G4double y = eth/x;
-          if(y < 1.0) s = mufac*y*(1.0 + 0.5*y)*sqrt(1.0 - y)/unit; 
+          if(y < 1.0) s = mufac*y*(1.0 + 0.5*y)*std::sqrt(1.0 - y)/unit; 
         } else { 
           s = calc.ComputeCrossSection(particle[ii],material[ii],process[ii],x,cut);
   	  s /= (unit*mat->GetTotNbOfAtomsPerVolume());
         }
-	histo->fill(i,log10(x),s); 
+	histo->fill(i,std::log10(x),s); 
 	x *= step;
       }
     }

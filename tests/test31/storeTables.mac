@@ -1,6 +1,6 @@
-# $Id: storeTables.mac,v 1.1 2004-09-21 10:43:47 vnivanch Exp $
+# $Id: storeTables.mac,v 1.2 2004-12-03 13:01:33 vnivanch Exp $
 #
-# Macro file for "testEm3.cc"
+# Macro file for "test31.cc"
 # 
 /control/verbose 2
 /run/verbose 1
@@ -10,11 +10,10 @@
 #
 /testem/phys/setCuts         1. mm
 #/testem/phys/stepMax        0.1 mm
-#/testem/phys/addPhysics      standard
+/testem/phys/addPhysics      standard
 #/testem/phys/addPhysics     g4v52
 #/testem/phys/addPhysics     standard70
-/testem/phys/addPhysics      lowenergy
-#/testem/phys/addPhysics      lowenergyMA
+#/testem/phys/addPhysics      lowenergy
 #/test31/AbsorberMaterial    Beryllium
 /test31/AbsorberMaterial     Tangsten
 /test31/AbsorberThick        10 mm

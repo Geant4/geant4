@@ -13,7 +13,6 @@
 /testem/phys/addPhysics      standard
 #/testem/phys/addPhysics      standard70
 #/testem/phys/addPhysics      lowenergy
-#/testem/phys/addPhysics      lowenergyMA
 #/test31/AbsorberMaterial     Beryllium
 /test31/AbsorberMaterial     Iron
 #/test31/AbsorberMaterial     Tangsten

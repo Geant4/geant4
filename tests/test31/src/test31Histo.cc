@@ -127,8 +127,8 @@ void test31Histo::EndOfHisto()
     zend2 /= zEvt;
     zend2 -= zend*zend;
     G4double sig = 0.0;
-    if(zend2 > 0.) sig = sqrt(zend2);
-    zend2 = sig / sqrt(zEvt);
+    if(zend2 > 0.) sig = std::sqrt(zend2);
+    zend2 = sig / std::sqrt(zEvt);
     G4cout << std::setprecision(5) << "Range(mm)= " << zend/mm
            << "; Stragling(mm)= " << sig/mm
            << std::setprecision(2) << " +- " << zend2/mm
@@ -329,8 +329,8 @@ void test31Histo::TableControl()
   G4double fact = gram/(MeV*cm2*mat->GetDensity());
 
 
-  G4double xmin = log10(tmin);
-  G4double xmax = log10(tmax);
+  G4double xmin = std::log10(tmin);
+  G4double xmax = std::log10(tmax);
   G4double step = (xmax - xmin)/(G4double)nbin;
   G4double x    = xmin;
   G4cout << "====================================================================" << G4endl;
@@ -339,7 +339,7 @@ void test31Histo::TableControl()
   G4cout << "====================================================================" << G4endl;
 
   for(G4int i=0; i<=nbin; i++) {
-    G4double e  = pow(10.,x);
+    G4double e  = std::pow(10.,x);
     //    G4double dedx0 = cal.GetDEDX(part_name,mat_name,e);
     G4double dedx0 = cal.GetDEDX(part,mat,e);
     G4double dedx = cal.ComputeDEDX(part_name,mat_name,proc_name,e,cut);

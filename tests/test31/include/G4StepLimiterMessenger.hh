@@ -20,54 +20,36 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.hh,v 1.3 2004-08-05 10:23:34 vnivanch Exp $
+// $Id: G4StepLimiterMessenger.hh,v 1.1 2004-12-03 13:01:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef StepMax_h
-#define StepMax_h 1
+#ifndef G4StepLimiterMessenger_h
+#define G4StepLimiterMessenger_h 1
 
 #include "globals.hh"
-#include "G4VDiscreteProcess.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Step.hh"
+#include "G4UImessenger.hh"
 
-class StepMaxMessenger;
+class G4StepLimiterPerRegion;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StepMax : public G4VDiscreteProcess
+class G4StepLimiterMessenger: public G4UImessenger
 {
-  public:
+public:
+  G4StepLimiterMessenger(G4StepLimiterPerRegion*);
+  ~G4StepLimiterMessenger();
 
-     StepMax(const G4String& processName = "UserMaxStep");
-    ~StepMax();
+  void SetNewValue(G4UIcommand*, G4String);
 
-     G4bool IsApplicable(const G4ParticleDefinition&);
-
-     void SetMaxStep(G4double);
-
-     G4double GetMaxStep() {return MaxChargedStep;};
-
-     G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
-			                       G4double previousStepSize,
-			                       G4ForceCondition* condition);
-
-     G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
-
-     G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
-     {return 0.;};    // it is not needed here !
-
-  private:
-
-     G4double MaxChargedStep;
-     StepMaxMessenger*  pMess;
-
+private:
+  G4StepLimiterPerRegion* stepLimiter;
+  G4UIcmdWithADoubleAndUnit* stepMaxCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

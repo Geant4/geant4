@@ -21,82 +21,73 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmHadronBuilder.cc,v 1.4 2004-12-03 13:01:34 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//---------------------------------------------------------------------------
-//
-// ClassName:   G4EmHadronBuilder
-//
-// Author:      V.Ivanchenko 03.05.2004
-//
-// Modified:
-//
-//----------------------------------------------------------------------------
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// 
 
-#include "G4EmHadronBuilder.hh"
+#include "EmBinaryCascadeBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
+#include "G4LFission.hh"
+#include "G4LCapture.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4HadronFissionProcess.hh"
+#include "G4HadronCaptureProcess.hh"
 
-#include "G4hIonisation.hh"
-#include "G4ionIonisation.hh"
+#include "G4ProtonInelasticProcess.hh"
+#include "G4NeutronInelasticProcess.hh"
 
-#include "G4Electron.hh"
-#include "G4Proton.hh"
-#include "G4GenericIon.hh"
+#include "G4BinaryCascade.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmHadronBuilder::G4EmHadronBuilder(const G4String& name)
+EmBinaryCascadeBuilder::EmBinaryCascadeBuilder(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmHadronBuilder::~G4EmHadronBuilder()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4EmHadronBuilder::ConstructParticle()
+EmBinaryCascadeBuilder::~EmBinaryCascadeBuilder()
 {
-  G4Electron::Electron();
-  G4Proton::Proton();
-  G4GenericIon::GenericIon();
+  delete theBC;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmHadronBuilder::ConstructProcess()
+void EmBinaryCascadeBuilder::ConstructProcess()
 {
-  // Add standard EM Processes
-  theParticleIterator->reset();
 
+  // Binary Cascade
+  theBC = new G4BinaryCascade();
+
+  theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
+    G4String particleName = particle->GetParticleName();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+    if (particleName == "proton") {
 
-    if(particle->GetPDGMass() > 110.*MeV) {
-      G4ProcessManager* pmanager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
+      G4ProtonInelasticProcess* theInelasticProcess =
+                                    new G4ProtonInelasticProcess("inelastic");
+      theInelasticProcess->RegisterMe(theBC);
+      pmanager->AddDiscreteProcess(theInelasticProcess);
 
-      if (particleName == "GenericIon" || particleName == "alpha" || particleName == "He3") {
+    } else if (particleName == "neutron") {
 
-        pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-        pmanager->AddProcess(new G4ionIonisation,      -1, 2,2);
-
-      } else if ((!particle->IsShortLived()) &&
-	         (particle->GetPDGCharge() != 0.0) &&
-	         (particle->GetParticleName() != "chargedgeantino")) {
-
-        pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
-        pmanager->AddProcess(new G4hIonisation,       -1,2,2);
-      }
+      G4NeutronInelasticProcess* theInelasticProcess =
+                                    new G4NeutronInelasticProcess("inelastic");
+      theInelasticProcess->RegisterMe(theBC);
+      pmanager->AddDiscreteProcess(theInelasticProcess);
+          // fission
+      G4HadronFissionProcess* theFissionProcess =
+                                    new G4HadronFissionProcess;
+      G4LFission* theFissionModel = new G4LFission;
+      theFissionProcess->RegisterMe(theFissionModel);
+      pmanager->AddDiscreteProcess(theFissionProcess);
+         // capture
+      G4HadronCaptureProcess* theCaptureProcess =
+                                    new G4HadronCaptureProcess;
+      G4LCapture* theCaptureModel = new G4LCapture;
+      theCaptureProcess->RegisterMe(theCaptureModel);
+      pmanager->AddDiscreteProcess(theCaptureProcess);
     }
   }
 }

@@ -97,7 +97,7 @@ void test31TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
       theHisto->SaveToTuple("mass", mass/MeV);
       //theHisto->SaveToTuple("char",(particle->GetPDGCharge())/eplus);
       G4double beta = 1.;
-      if(mass > 0.) beta = sqrt(kinE*(kinE + 2.0*mass))/(kinE + mass);
+      if(mass > 0.) beta = std::sqrt(kinE*(kinE + 2.0*mass))/(kinE + mass);
 
       theHisto->SaveToTuple("beta", beta);
     }

@@ -20,50 +20,54 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.4 2004-12-03 13:01:34 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// 
 
-#ifndef PhysicsListMessenger_h
-#define PhysicsListMessenger_h 1
-
-#include "globals.hh"
-#include "G4UImessenger.hh"
-
-class PhysicsList;
-class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
+#include "EmHadronElasticBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
+#include "G4LElastic.hh"   
+#include "G4HadronElasticProcess.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+EmHadronElasticBuilder::EmHadronElasticBuilder(const G4String& name)
+   :  G4VPhysicsConstructor(name)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+EmHadronElasticBuilder::~EmHadronElasticBuilder()
 {
-public:
-  
-  PhysicsListMessenger(PhysicsList* );
-  ~PhysicsListMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
-    
-private:
-  
-  PhysicsList*               pPhysicsList;
-    
-  G4UIdirectory*             physDir;    
-  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-  G4UIcmdWithADoubleAndUnit* electCutCmd;
-  G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-  G4UIcmdWithADoubleAndUnit* allCutCmd;    
-  G4UIcmdWithAnInteger*      verbCmd;
-  G4UIcmdWithAString*        pListCmd;
-    
-};
+  delete theElasticProcess;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void EmHadronElasticBuilder::ConstructProcess()
+{
+  
+  // Hadron elastic process
+  theElasticProcess = new G4HadronElasticProcess();
+  theElasticProcess->RegisterMe( new G4LElastic() );
+
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pManager = particle->GetProcessManager();
+    if (particle->GetPDGMass() > 110.*MeV && 
+        theElasticProcess->IsApplicable(*particle) &&
+        !particle->IsShortLived()) { 
+      pManager->AddDiscreteProcess(theElasticProcess);
+      /*
+      G4cout << "### Elastic model are registered for " 
+             << particle->GetParticleName()
+             << G4endl;
+      */
+    }
+  }
+
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

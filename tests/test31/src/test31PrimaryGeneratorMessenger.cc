@@ -176,7 +176,7 @@ void test31PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
     if(theHisto->GetMaxEnergy() == 0.0) theHisto->SetMaxEnergy(e);
   }
   if(command == maxThetaCmd)
-    {theGen->SetBeamMinCosTheta(cos(maxThetaCmd->GetNewDoubleValue(newValue)));}
+    {theGen->SetBeamMinCosTheta(std::cos(maxThetaCmd->GetNewDoubleValue(newValue)));}
   if(command == partCmd)
     {(G4UImanager::GetUIpointer())->ApplyCommand("/gun/particle "+newValue);}
   if(command == beamBetaCmd)
