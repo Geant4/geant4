@@ -1,4 +1,4 @@
-$Id: History,v 1.29 1999-10-29 08:43:33 kurasige Exp $
+$Id: History,v 1.30 1999-11-03 14:48:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Nov 03, 99   G.Cosmo
+- Modified top-level GNUmakefile to fix G4barions to G4baryons for
+  the "gmake global" target.
+
 - Oct 29, 99   H.Kurashige 
 ------ hadrons-V00-01-01
 - Fixed particle name for G4RhoPlus
