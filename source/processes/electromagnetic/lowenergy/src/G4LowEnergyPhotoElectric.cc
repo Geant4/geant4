@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.23 2000-01-26 09:50:01 lefebure Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.24 2000-02-18 10:27:53 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,6 +18,12 @@
 //      ------------ G4LowEnergyPhotoelctric: low energy modifications --------
 //                   by Alessandra Forti, October 1998
 // **************************************************************
+// 17.02.2000 Veronique Lefebure
+// - bugs corrected in fluorescence simulation: 
+//   . when final use of binding energy: no photon was ever created
+//   . no Fluorescence was simulated when the photo-electron energy
+//     was below production threshold.
+//
 // Added Livermore data table construction methods A. Forti
 // Modified BuildMeanFreePath to read new data tables A. Forti
 // Added EnergySampling method A. Forti
@@ -429,6 +435,11 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
     G4DynamicParticle* aElectron = new G4DynamicParticle (G4Electron::Electron(), 
 							  PhotonDirection, ElecKineEnergy) ;
     elecvec.append(aElectron);
+  } // END OF CUTS
+  
+  else{
+    theEnergyDeposit += ElecKineEnergy;    
+  }
 
     // load the transition probability table for the element
     // theTable[i][j][k] 
@@ -491,7 +502,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	  G4double lastTransEnergy = ((*(*theBindEnVec)[1])[k])*MeV;
 	  thePrimaryShell = (G4int) fluorPar[0];
 
-	  if(fluorPar[2]*MeV >= CutForLowEnergySecondaryPhotons){
+	  if(lastTransEnergy >= CutForLowEnergySecondaryPhotons){
 
 	    theEnergyDeposit -= lastTransEnergy;
 	
@@ -530,12 +541,6 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
       theEnergyDeposit = 0;
     }
     
-  } // END OF CUTS
-  
-  else{
-    theEnergyDeposit = PhotonEnergy;    
-    aParticleChange.SetNumberOfSecondaries(0) ;
-  }
 
   // Kill the incident photon 
   aParticleChange.SetMomentumChange( 0., 0., 0. );
