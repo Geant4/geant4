@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.3 2001-11-21 11:57:14 mverderi Exp $
+// $Id: Em10PhysicsList.cc,v 1.4 2002-02-05 11:06:38 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -153,7 +153,7 @@ void Em10PhysicsList::ConstructBarions()
 void Em10PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  AddParameterisation();
+  // AddParameterisation();
 
   ConstructEM();
   ConstructGeneral();
@@ -179,7 +179,9 @@ void Em10PhysicsList::ConstructProcess()
 
 #include "G4hIonisation.hh"
 #include "G4PAIonisation.hh"
+
 #include "G4ForwardXrayTR.hh"
+#include "G4RegularXTRadiator.hh"
 
 #include "Em10StepCut.hh"
 
@@ -229,9 +231,19 @@ void Em10PhysicsList::ConstructEM()
        pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
                                      pDet->GetLogicalAbsorber(),
                                     "IonisationByLogVol"),-1,1,-1);
-
+             
+       pmanager->AddContinuousProcess(
+                 new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
+						    pDet->GetFoilMaterial(),
+						    pDet->GetGasMaterial(),
+						    pDet->GetFoilThick(),
+						    pDet->GetGasThick(),
+						    pDet->GetFoilNumber(),
+					 "RegularXTRadiator"));
+       // ,-1,1,-1);
+       
        pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,-1); 
-
+       
        //   pmanager->AddProcess(fPAIonisation,-1,2,2);
  
        //  pmanager->AddProcess(fForwardXrayTR,-1,-1,2);
@@ -303,7 +315,7 @@ void Em10PhysicsList::ConstructEM()
 
         pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
                                      pDet->GetLogicalAbsorber(),
-                                    "IonisationByLogVolHadr"),-1,2,2);
+                                    "IonisationByLogVolHadr"),-1,2,-2);
 
       //  pmanager->AddProcess(thehMultipleScattering,-1,1,1);
       //  pmanager->AddProcess(thehIonisation,-1,2,2);
@@ -347,7 +359,7 @@ void Em10PhysicsList::ConstructGeneral()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-
+/*
 void Em10PhysicsList::AddParameterisation()
 {
   G4FastSimulationManagerProcess* theFastSimulationManagerProcess = 
@@ -365,7 +377,7 @@ void Em10PhysicsList::AddParameterisation()
     pmanager->AddProcess(theFastSimulationManagerProcess, -1, 1, 1);
   }
 }
-
+*/
 
 
 /////////////////////////////////////////////////////////////////////////////

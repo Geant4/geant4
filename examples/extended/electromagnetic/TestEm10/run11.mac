@@ -13,24 +13,24 @@
 # Xe55He15CH4, Xe10CH4, Xe20CH4, Xe5CH4, Xe20CO2, Kr20CO2
 # Kr7CH4, Ar7CH4, XeArCH4
 #
-/XTRdetector/setAbsMat Xe20CO2 
-/XTRdetector/setAbsThick 3.0 mm
-/XTRdetector/setWorldZ 4000.0 mm
+#/XTRdetector/setAbsMat Xe10CH4 
+#/XTRdetector/setAbsThick 30.0 mm
+#/XTRdetector/setWorldZ 4000.0 mm
 #
 # Parameters of Radiator (default mm)
 # TRT_CH2, Radiator, CarbonFiber, Li, Be, Mylar, Kapton ?, CH2
 # Air, CO2, He, Ne, Kr, Ar, Xe, 
 #
-/XTRdetector/setRadMat CH2
-/XTRdetector/setWorldMat Air
-/XTRdetector/setRadThick 0.02 mm
-/XTRdetector/setGasGapThick 0.2 mm
-/XTRdetector/setFoilNum 200
+#/XTRdetector/setRadMat Li
+#/XTRdetector/setWorldMat He
+#/XTRdetector/setRadThick 0.04 mm
+#/XTRdetector/setGasGapThick 0.126 mm
+#/XTRdetector/setFoilNum 300
 # 
 # Selection of XTR parametrisation model: 1-10
-# TRmodel/XTRdEdx: Foam 1/2, GamDistr 3/4, Irr 5/6, Plate 7/8, Reg 9/10 
+# TRmodel/XTRdEdx: Foam 1/2, GamDistr 3/4, Irr 5/6, Plate 7/8, Reg 9/10, no model 0 
 #
-/XTRdetector/setModel 10
+#/XTRdetector/setModel 0
 #
 # Update geometry after changing its parametrs
 #
@@ -39,9 +39,9 @@
 #  PLOT: energy deposit distribution in absorber (g4.11)
 #
 /plots/sethistName g4.p11
-/plots/setnbinEn 40
+/plots/setnbinEn 73
 /plots/setEnlow 0.0 MeV
-/plots/setEnhigh 0.02  MeV  
+/plots/setEnhigh 0.011  MeV  
 #
 #
 /run/initialize
@@ -50,13 +50,15 @@
 # Particle and its energy
 #
 /gun/particle e-
+/gun/energy 3000.0 MeV
 #
-/gun/energy 40000.0 MeV
+#/gun/particle proton
+#/gun/energy 10000.0 GeV
 #
-#/tracking/verbose 2
+#/tracking/verbose 6
 #
-/event/printModulo 100
-/run/beamOn 1000
+/event/printModulo 500
+/run/beamOn 5000
 #
 #
 

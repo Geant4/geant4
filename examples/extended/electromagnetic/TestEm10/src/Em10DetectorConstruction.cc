@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.7 2001-11-21 18:48:56 mverderi Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.8 2002-02-05 11:06:38 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,16 +73,27 @@ Em10DetectorConstruction::Em10DetectorConstruction()
 {
   // default parameter values of the calorimeter
 
-  WorldSizeZ = 80.*cm;
+
+  G4double inch = 2.54*cm ;
+  G4double  mil = inch/1000.0 ;
+
+  WorldSizeZ = 200.*cm;
   WorldSizeR = 20.*cm;
 
   // Radiator and detector parameters
 
-  fRadThickness = 40.0*micrometer ;   // 25*micrometer ;     
-  fGasGap       = 0.126*mm ;          //  1500*micrometer  ;   
-  fFoilNumber   = 300 ;               //  188 ;
 
-  AbsorberThickness = 3.0*cm ;        // 40.0*mm ;
+  fRadThickness = 0.0127*mm ; // 25*micrometer ;     
+  fGasGap       = 0.762*mm ;          //  1500*micrometer  ;   
+  foilGasRatio = fRadThickness/(fRadThickness+fGasGap) ;
+  fFoilNumber   = 100 ;             //  188 ;
+
+  fAlphaPlate   = 160.0 ;
+  fAlphaGas     = 160.0 ;
+  fModelNumber  = 0 ;
+
+
+  AbsorberThickness = 15.0*mm ;   // 40.0*mm ;
 
   AbsorberRadius   = 10.*cm;
   zAbsorber = 36.*cm ;
@@ -94,10 +105,11 @@ Em10DetectorConstruction::Em10DetectorConstruction()
 
   fDetThickness =  40.0*mm ;
   fDetLength    = 200.0*cm  ;
-  fDetGap       =   1.0*mm ;
+  fDetGap       =   0.01*mm ;
 
-  fStartR       = 40.0*cm  ;
-  fStartZ       = 50.0*mm  ;
+
+  fStartR       = 40*cm  ;
+  fStartZ       = 100.0*mm  ;
 
   fModuleNumber = 1      ;  
 
@@ -134,10 +146,10 @@ void Em10DetectorConstruction::DefineMaterials()
 { 
   //This function illustrates the possible ways to define materials
   
-  G4String name, symbol ;             //a =mass of a mole;
-  G4double a, z, density ;            //z =mean number of protons;  
-  //G4int iz, n, nel ;                //iz=number of protons  in an isotope; 
-                                      //n =number of nucleons in an isotope;
+  G4String name, symbol ;                            //a =mass of a mole;
+  G4double a, z ;   //z =mean number of protons;  
+  G4double density, foilDensity, gasDensity, totDensity ;
+  G4double fractionFoil, fractionGas ;
   G4int nel ; 
   
   //G4int ncomponents, natoms;
@@ -241,8 +253,8 @@ void Em10DetectorConstruction::DefineMaterials()
   Kapton->AddElement(elH,4);
   
   // Polypropelene
-  
-  G4Material* CH2 = new G4Material ("Polypropelene" , 0.91*g/cm3, 2);
+
+  G4Material* CH2 = new G4Material ("CH2" , 0.91*g/cm3, 2);
   CH2->AddElement(elH,2);
   CH2->AddElement(elC,1);
   
@@ -280,10 +292,10 @@ void Em10DetectorConstruction::DefineMaterials()
   a = 131.29*g/mole ;
   G4Material* Xe  = new G4Material(name="Xenon",z=54., a, density );
 
-  /////////////////////////////////////////////////////////////////////////////
-  //
-  // Hydrocarbones, metane and others
-  
+/////////////////////////////////////////////////////////////////////////////
+//
+// Hydrocarbones, metane and others
+
   // Metane, STP
   
   density = 0.7174*mg/cm3 ;
@@ -304,13 +316,14 @@ void Em10DetectorConstruction::DefineMaterials()
   G4Material* isobutane = new G4Material(name="isoC4H10",density,nel=2) ;
   isobutane->AddElement(elC,4) ;
   isobutane->AddElement(elH,10) ;
-  
-  ///////////////////////////////////////////////////////////////////////////
-  //
-  // Molecular gases
-  
-  // Carbon dioxide
-  
+
+
+///////////////////////////////////////////////////////////////////////////
+//
+// Molecular gases
+
+  // Carbon dioxide, STP 
+
   density = 1.977*mg/cm3;
   G4Material* CO2 = new G4Material(name="CO2", density, nel=2,
 				       kStateGas,273.15*kelvin,1.*atmosphere);
@@ -415,21 +428,64 @@ void Em10DetectorConstruction::DefineMaterials()
 				       ncomponents=2);
   Xe20CH4->AddMaterial( Xe,       fractionmass = 0.97 ) ;
   Xe20CH4->AddMaterial( metane,   fractionmass = 0.03 ) ;
-  
-  
+
+  // 93% Ar + 7% CH4, STP ; NIM 107 (1973) 413-422
+
+  density = 1.709*mg/cm3 ;      
+  G4Material* Ar7CH4 = new G4Material(name="Ar7CH4"  , density, 
+                                                  ncomponents=2);
+  Ar7CH4->AddMaterial( Argon,       fractionmass = 0.971 ) ;
+  Ar7CH4->AddMaterial( metane,   fractionmass = 0.029 ) ;
+
+  // 93% Kr + 7% CH4, STP ; NIM 107 (1973) 413-422
+
+  density = 3.491*mg/cm3 ;      
+  G4Material* Kr7CH4 = new G4Material(name="Kr7CH4"  , density, 
+                                                  ncomponents=2);
+  Kr7CH4->AddMaterial( Kr,       fractionmass = 0.986 ) ;
+  Kr7CH4->AddMaterial( metane,   fractionmass = 0.014 ) ;
+
+  // 0.5*(95% Xe + 5% CH4)+0.5*(93% Ar + 7% CH4), STP ; NIM A214 (1983) 261-268
+
+  density = 3.655*mg/cm3 ;      
+  G4Material* XeArCH4 = new G4Material(name="XeArCH4"  , density, 
+                                                  ncomponents=2);
+  XeArCH4->AddMaterial( Xe5CH4,       fractionmass = 0.766 ) ;
+  XeArCH4->AddMaterial( Ar7CH4,   fractionmass = 0.234 ) ;
+
+
+  // Preparation of mixed radiator material
+
+  foilDensity = 1.39*g/cm3; // Mylar 0.534*g/cm3; //Li  0.91*g/cm3 ;// CH2      
+  gasDensity  = 1.2928*mg/cm3 ; // Air 0.178*mg/cm3 ; // He 1.977*mg/cm3; // CO2 
+  totDensity  = foilDensity*foilGasRatio + gasDensity*(1.0-foilGasRatio) ;
+
+  fractionFoil =  foilDensity*foilGasRatio/totDensity ; 
+  fractionGas  =  gasDensity*(1.0-foilGasRatio)/totDensity ;  
+    
+  G4Material* radiatorMat = new G4Material(name="radiatorMat"  , totDensity, 
+                                                  ncomponents=2);
+  radiatorMat->AddMaterial( Mylar, fractionFoil ) ;
+  radiatorMat->AddMaterial( Air, fractionGas  ) ;
+
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
   
   // default materials of the calorimeter and TR radiator
-  
-  fRadiatorMat =  Li ; // CH2 Mylar ; 
+
+  fRadiatorMat = radiatorMat ; // CH2 Mylar ; 
+  fFoilMat     = Mylar ; // Li ; // CH2 ;  
+  fGasMat      = Air ; // He ;// CO2 ; 
   
   fWindowMat = Mylar ;
   fElectrodeMat = Al ;
-  
-  AbsorberMaterial = Xe10CH4 ; 
+
+  AbsorberMaterial = Ar7CH4; // Xe10CH4; // Xe55He15CH4;
+ 
+
   fGapMat          = Xe10CH4 ;
-  
-  WorldMaterial    = He ;
+
+  WorldMaterial    = Air ; // CO2 ;  
+
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -471,12 +527,13 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
 
   // TR radiator envelope
 
-  G4double radThick = fFoilNumber*(fRadThickness + fGasGap) + fDetGap   ;
+  G4double radThick = fFoilNumber*(fRadThickness + fGasGap) - fGasGap + fDetGap   ;
 
   G4double zRad = fStartZ + 0.5*radThick ;
   G4cout<<"zRad = "<<zRad/mm<<" mm"<<G4endl ;
 
-  radThick *= 1.2 ;
+  //  radThick *= 1.02 ;
+
   G4cout<<"radThick = "<<radThick/mm<<" mm"<<G4endl ;
   G4cout<<"fFoilNumber = "<<fFoilNumber<<G4endl ;
   G4cout<<"fRadiatorMat = "<<fRadiatorMat->GetName()<<G4endl ;
@@ -491,7 +548,7 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
                                               0.5*radThick             ) ; 
                          
   logicRadiator = new G4LogicalVolume(solidRadiator,	
-                                                       WorldMaterial,      
+                                                       fRadiatorMat,      
                                                        "Radiator");	       
                                    
   physiRadiator = new G4PVPlacement(0,
@@ -509,9 +566,9 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
   fLogicRadSlice = new G4LogicalVolume(fSolidRadSlice,fRadiatorMat,
                                           "RadSlice",0,0,0);
 
-  zModule = fStartZ + fRadThickness ; 
+  zModule = fStartZ ;   //  ??? + fRadThickness ; 
   G4cout<<"zModule = "<<zModule/mm<<" mm"<<G4endl ;
-
+  /*
     for(j=0;j<fFoilNumber;j++)
     {  
 
@@ -524,7 +581,7 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
                                           physiRadiator,false,j);
      }                                 
   G4cout<<G4endl ;
-
+  */
   G4Box* solidWindow = new G4Box("Window",AbsorberRadius,
                                           AbsorberRadius,
                                           fWindowThick/2.  ); 
@@ -532,11 +589,11 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
   G4LogicalVolume* logicWindow = new G4LogicalVolume(solidWindow,
                                      fWindowMat, "Window"); 
    
-  G4double zWindow = fStartZ + radThick + fWindowThick/2. + 5.0*mm ;    
+  G4double zWindow = fStartZ + radThick + fWindowThick/2. + 15.0*mm ;    
       			                  
-  // G4VPhysicalVolume*    physiWindow = new G4PVPlacement(0,		   
-  // 		                       G4ThreeVector(0.,0.,zWindow),        
-  //                                    "Window",logicWindow,physiWorld,false,0); 
+  G4VPhysicalVolume*    physiWindow = new G4PVPlacement(0,		   
+                        G4ThreeVector(0.,0.,zWindow),        
+                              "Window",logicWindow,physiWorld,false,0); 
 
   G4Box* solidGap = new G4Box("Gap",AbsorberRadius,
                                     AbsorberRadius,
@@ -567,7 +624,7 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
   // Absorber
 
   zAbsorber = zElectrode + fElectrodeThick/2. + AbsorberThickness/2. + 0.01*mm; 
-
+  G4cout<<"zAbsorber = "<<zAbsorber/mm<<" mm"<<G4endl;
   if (AbsorberThickness > 0.) 
   { 
       if(solidAbsorber) delete solidAbsorber ;
@@ -605,7 +662,7 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
 
   // Parameterisation
 
-  ParametrisationModel();
+  //  ParametrisationModel();
 
   // always return physics world
 
@@ -620,6 +677,7 @@ void Em10DetectorConstruction::ParametrisationModel()
 {
   G4cout<<"Em10DetectorConstruction::ParametrisationModel() is called"<<G4endl;
   G4cout<<"fModelNumber = "<<fModelNumber<<G4endl;
+  G4cout<<"start fXTRModel = "<<fXTRModel<<G4endl;
 
   G4double alphaPlate = 160.0 ;
   G4double alphaGas   = 160.0 ;
@@ -631,6 +689,7 @@ void Em10DetectorConstruction::ParametrisationModel()
     delete fXTRModel;
   }
 
+
   switch(fModelNumber)
   {
   case 1:
@@ -641,13 +700,13 @@ void Em10DetectorConstruction::ParametrisationModel()
     break;
   case 3:
     fXTRModel = new G4GamDistrXrayTRmodel(logicRadiator,
-  				       fRadThickness,alphaPlate,
-                                               fGasGap,alphaGas);
+  				       fRadThickness,fAlphaPlate,
+                                               fGasGap,fAlphaGas);
     break;
   case 4:
     fXTRModel = new G4GamDistrXTRdEdx(logicRadiator,
-  				       fRadThickness,alphaPlate,
-                                               fGasGap,alphaGas);
+  				       fRadThickness,fAlphaPlate,
+                                               fGasGap,fAlphaGas);
     break;
   case 5:
     fXTRModel = new G4IrregularXrayTRmodel(logicRadiator,fRadThickness,fGasGap);
@@ -673,6 +732,7 @@ void Em10DetectorConstruction::ParametrisationModel()
     G4cout<<"Warning: No parametrisation model was defined?"<<G4endl ;
     break ;
   }
+  G4cout<<"finish fXTRModel = "<<fXTRModel<<G4endl;
   //  fXTRModel->GetPlateZmuProduct() ;
   //  fXTRModel->GetGasZmuProduct() ;
 

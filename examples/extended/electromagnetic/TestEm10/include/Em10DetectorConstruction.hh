@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.hh,v 1.4 2001-07-11 09:57:20 gunter Exp $
+// $Id: Em10DetectorConstruction.hh,v 1.5 2002-02-05 11:06:37 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,7 +65,9 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
  
      void SetGasGapThickness(G4double);     
    
-     void SetFoilNumber (G4int i){fFoilNumber=i;};     
+     void SetFoilNumber (G4int    i)  {fFoilNumber = i;  };     
+     void SetAlphaPlate (G4double val){fAlphaPlate = val;};     
+     void SetAlphaGas   (G4double val){fAlphaGas   = val;};     
 
      void SetWorldMaterial(G4String);
      void SetWorldSizeZ(G4double);
@@ -96,7 +98,14 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
      const G4VPhysicalVolume* GetphysiWorld() {return physiWorld;};           
      const G4VPhysicalVolume* GetAbsorber()   {return physiAbsorber;};
      G4LogicalVolume* GetLogicalAbsorber()    {return logicAbsorber;};
-                 
+
+     G4LogicalVolume* GetLogicalRadiator()    {return logicRadiator;};
+     G4double         GetFoilThick()          {return fRadThickness;};      
+     G4double         GetGasThick()           {return fGasGap;};      
+     G4int            GetFoilNumber()         {return fFoilNumber;};      
+     G4Material* GetFoilMaterial()  {return fFoilMat;};
+     G4Material* GetGasMaterial()  {return fGasMat;};
+                
   private:
      
      G4bool             worldchanged;
@@ -112,6 +121,9 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
 
   G4Material*        fGapMat ;
   G4double           fGapThick ;
+
+  G4double           fAlphaPlate ;
+  G4double           fAlphaGas ;
 
  
   G4double           zAbsorber ;
@@ -139,38 +151,41 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
   G4LogicalVolume*   logicRadiator; 
   G4VPhysicalVolume* physiRadiator;
 
-  G4Material* fRadiatorMat;        //pointer to the TR radiator material
+  G4Material* fRadiatorMat;        // pointer to the mixed TR radiator material
+  G4Material* fFoilMat;            // pointer to the TR foil radiator material
+  G4Material* fGasMat;             // pointer to the TR gas radiator material
 
-     G4double fRadThickness ;
-     G4double fGasGap       ;
+  G4double fRadThickness ;
+  G4double fGasGap       ;
+  G4double foilGasRatio  ;
 
-     G4int fFoilNumber ;
-     G4int fModelNumber ; // selection of parametrisation model1-10
+  G4int fFoilNumber ;
+  G4int fModelNumber ; // selection of parametrisation model1-10
 
-     G4double fDetThickness ;
-     G4double fDetLength    ;
-     G4double fDetGap       ;
+  G4double fDetThickness ;
+  G4double fDetLength    ;
+  G4double fDetGap       ;
 
-     G4double fStartR       ;
-     G4double fStartZ       ;
+  G4double fStartR       ;
+  G4double fStartZ       ;
 
-     G4int fModuleNumber ;   // the number of Rad-Det modules
+  G4int fModuleNumber ;   // the number of Rad-Det modules
 
-     G4Box*             solidAbsorber; //pointer to the solid Absorber
-     G4LogicalVolume*   logicAbsorber; //pointer to the logical Absorber
-     G4VPhysicalVolume* physiAbsorber; //pointer to the physical Absorber
+  G4Box*             solidAbsorber; //pointer to the solid Absorber
+  G4LogicalVolume*   logicAbsorber; //pointer to the logical Absorber
+  G4VPhysicalVolume* physiAbsorber; //pointer to the physical Absorber
      
-     G4UniformMagField* magField;      //pointer to the magnetic field
+  G4UniformMagField* magField;      //pointer to the magnetic field
      
-     Em10DetectorMessenger* detectorMessenger;  //pointer to the Messenger
-     Em10CalorimeterSD*     calorimeterSD;  //pointer to the sensitive detector
-     G4VXrayTRmodel*        fXTRModel ;
+  Em10DetectorMessenger* detectorMessenger;  //pointer to the Messenger
+  Em10CalorimeterSD*     calorimeterSD;  //pointer to the sensitive detector
+  G4VXrayTRmodel*        fXTRModel ;
       
-  private:
+private:
     
-     void DefineMaterials();
-     void ComputeCalorParameters();
-     G4VPhysicalVolume* ConstructCalorimeter();     
+  void DefineMaterials();
+  void ComputeCalorParameters();
+  G4VPhysicalVolume* ConstructCalorimeter();     
 };
 
 ////////////////////////////////////////////////////////////////////////
