@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2001-05-31 17:35:50 gcosmo Exp $
+$Id: History,v 1.25 2001-10-22 16:08:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 22, 2001  G. Cosmo                 geommng-V03-02-00
+- Added definition of G4TouchableHandle (R.Chytracek)
+- Added class G4SmartVoxelStat for statistics on geometry optimisation
+  of volumes through voxelisation (courtesy of D.C.Williams).
+- Modified G4GeometryManager to make use of G4SmartVoxelStat when run in
+  verbose mode.
 
 May 31, 2001  G. Cosmo                     geommng-V03-01-04
 - Adopt explicit initialisation for 'minExtents' and 'maxExtents'
