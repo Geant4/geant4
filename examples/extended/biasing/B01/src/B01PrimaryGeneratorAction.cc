@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B01PrimaryGeneratorAction.cc,v 1.4 2002-05-15 02:48:42 asaim Exp $
+// $Id: B01PrimaryGeneratorAction.cc,v 1.5 2002-09-17 13:59:16 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,7 +40,7 @@ B01PrimaryGeneratorAction::B01PrimaryGeneratorAction()
   particleGun = new G4ParticleGun(n_particle);
   particleGun->SetParticleDefinition(G4Neutron::NeutronDefinition());
   particleGun->SetParticleEnergy(10.0*MeV);
-  particleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, -15.0005*cm));
+  particleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, -90.0005*cm));
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.0, 0.0, 1.0));
 }
 

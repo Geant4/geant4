@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: B01PhysicsList.hh,v 1.2 2002-04-19 10:54:24 gcosmo Exp $
+// $Id: B01PhysicsList.hh,v 1.3 2002-09-17 13:59:15 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#ifndef B01PhysicsList_h
-#define B01PhysicsList_h 1
+#ifndef B01PhysicsList_hh
+#define B01PhysicsList_hh B01PhysicsList_hh
 
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"

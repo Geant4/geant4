@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.12 2002-08-29 15:37:24 dressel Exp $
+// $Id: exampleB01.cc,v 1.13 2002-09-17 13:59:14 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,56 +34,53 @@
 // 
 // --------------------------------------------------------------
 
-#include "g4std/set"
-#include "g4std/iomanip"
+#include "CLHEP/Random/Random.h"
+#include "B01SimulationFactory.hh"
+#include "B01VSimulation.hh"
 
-#include "G4VPhysicalVolume.hh"
-#include "G4RunManager.hh"
-
-#include "B01DetectorConstruction.hh"
-#include "B01PhysicsList.hh"
-#include "B01PrimaryGeneratorAction.hh"
-
-// Files specific for scoring 
-#include "G4Scorer.hh"
-#include "G4MassScoreSampler.hh"
-
-// table for scores
-#include "G4ScoreTable.hh"
+void usage(const G4String &simnames){
+  G4cout << "exmpleB01: usage: " 
+	 << "\n"
+	 << "           exmpleB01 <simulationname> <numberofevents>"
+	 << "\n"
+	 << "           simulationname: \n" << simnames 
+	 << "\n" << G4endl;
+}
 
 int main(int argc, char **argv)
 {  
-
-  G4std::ostream *myout = &G4cout;
-  G4int numberOfEvent = 1000;
-
-  G4String random_status_out_file, random_status_in_file;
   G4long myseed = 345354;
-
   HepRandom::setTheSeed(myseed);
 
-  G4RunManager *runManager = new G4RunManager;
-  
-  // create the detector      ---------------------------
-  runManager->SetUserInitialization(new B01DetectorConstruction);
-  //  ---------------------------------------------------
-  runManager->SetUserInitialization(new B01PhysicsList);
-  runManager->SetUserAction(new B01PrimaryGeneratorAction);
-  runManager->Initialize();
 
-  // create scorer and sampler to score neutrons in the detector
 
-  G4Scorer scorer; // a scorer 
+  // construct the simulation factory
+  B01SimulationFactory simfac;
 
-  G4MassScoreSampler msm(scorer, "neutron"); // to be done after 
-  msm.Initialize();                           // runManager->Initialize()
+  G4int nevents;
+  // check the argument
+  if (argc != 3) {
+    usage(simfac.GetSimulationNames());
+    return 0;
+  } 
+  else {
+    if (!simfac.SimulationExists(argv[1])) {
+       usage(simfac.GetSimulationNames());
+      return 0;
+    }
+    nevents = atoi(argv[2]);
+  }
 
-  runManager->BeamOn(numberOfEvent);
-
-  // ======= after running ============================
-
-  G4ScoreTable sp;
-  sp.Print(scorer.GetMapGeometryCellCellScorer(), myout);
-
+  // construct 
+  B01VSimulation *sim = simfac.Create(argv[1]);
+  if (sim) {
+    sim->Construct();
+    sim->Run(nevents);
+    sim->PostRun(&G4cout);
+    delete sim;
+  }
+  else {
+    G4cout << "No simulation constructed"  << G4endl;
+  }
   return 0;
 }

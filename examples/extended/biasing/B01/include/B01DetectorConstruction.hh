@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.hh,v 1.2 2002-04-19 10:54:24 gcosmo Exp $
+// $Id: B01DetectorConstruction.hh,v 1.3 2002-09-17 13:59:15 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,11 +35,11 @@ class G4VPhysicalVolume;
 class B01DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-  B01DetectorConstruction();
+  B01DetectorConstruction(G4VPhysicalVolume &worldvol);
   ~B01DetectorConstruction();
   
   G4VPhysicalVolume* Construct();
-  G4VPhysicalVolume* GetWorldVolume(){return fWorldVolume;}
+
 private:
   G4VPhysicalVolume* fWorldVolume;
 };
