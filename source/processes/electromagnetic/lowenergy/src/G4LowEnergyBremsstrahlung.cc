@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.48 2001-10-28 11:52:30 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.49 2001-10-28 11:53:20 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -79,7 +79,6 @@ G4LowEnergyBremsstrahlung::~G4LowEnergyBremsstrahlung()
   if(crossSectionHandler) delete crossSectionHandler;
   if(energySpectrum) delete energySpectrum;
   if(theMeanFreePath) delete theMeanFreePath;
-  cutForSecondaryPhotons.clear();
 }
 
 

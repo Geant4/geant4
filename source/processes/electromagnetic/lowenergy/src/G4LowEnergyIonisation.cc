@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.71 2001-10-26 13:58:02 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.72 2001-10-28 11:52:30 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -121,7 +121,6 @@ G4LowEnergyIonisation::~G4LowEnergyIonisation()
   delete energySpectrum;
   delete theMeanFreePath;
   delete shellVacancy;
-  cutForDelta.clear();
 }
 
 
@@ -188,7 +187,7 @@ void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParti
     CounterOfPositronProcess++;
   }
 
-  // Build mean free path data using cuts values
+  // Build mean free path data using cut values
 
   if( theMeanFreePath ) delete theMeanFreePath;
   theMeanFreePath = crossSectionHandler->
@@ -244,7 +243,7 @@ void G4LowEnergyIonisation::BuildLossTable(
   
   // Clean up the vector of cuts
 
-  cutForDelta.resize(numOfMaterials);
+  //cutForDelta.resize(numOfMaterials);
 
   // Loop for materials
   
@@ -261,7 +260,7 @@ void G4LowEnergyIonisation::BuildLossTable(
     // the cut cannot be below lowest limit
     G4double tCut = ((G4Electron::Electron())->GetCutsInEnergy())[m];
     if(tCut > highKineticEnergy) tCut = highKineticEnergy;
-    cutForDelta[m] = tCut;
+    cutForDelta.push_back(tCut);
 
     const G4ElementVector* theElementVector = material->GetElementVector();
     size_t NumberOfElements = material->GetNumberOfElements() ;
