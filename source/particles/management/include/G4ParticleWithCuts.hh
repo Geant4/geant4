@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleWithCuts.hh,v 1.11 2001-10-18 04:31:22 kurasige Exp $
+// $Id: G4ParticleWithCuts.hh,v 1.12 2001-10-18 05:59:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -143,10 +143,6 @@ class G4ParticleWithCuts : public G4ParticleDefinition
 
      //  set energy range  
       static void SetEnergyRange(G4double lowedge, G4double highedge) ;    
-
-     // applyCuts flag
-      G4bool                GetApplyCutsFlag() const;
-      void                  SetApplyCutsFlag(G4bool flag);
 
   public:  // With Description
    // This method concerning cut values is supposed to be used by
