@@ -14,7 +14,8 @@
 //
 //      File name:     G4AtomicTransitionManager.cc
 //
-//      Author:        Alfonso Mantero (Alf@mailandnews.com)
+//      Authors:        Alfonso Mantero (alfonso.mantero@ge.infn.it)
+//                      Elena Guardincerri (elena.guardincerri@ge.infn.it)
 // 
 //      Creation date: 4 May 2001
 // -------------------------------------------------------------------
@@ -84,8 +85,6 @@ G4AtomicTransitionManager::G4AtomicTransitionManager( )
 	  if (id == tmpId){
 	    
 	    prob.push_back((*(*(*oneAtomTrans)[FinalShellIndex])[ProbCol])[k]);
-	    
-	    G4double ppo =((*(*(*oneAtomTrans)[FinalShellIndex])[ProbCol])[k]);
 	    
 	    energies.push_back((*(*(*oneAtomTrans)[FinalShellIndex])[EnergyCol])[k]);
 	    
