@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst25DetectorMessenger.cc,v 1.1 2002-11-18 10:50:58 jwellisc Exp $
+// $Id: Tst25DetectorMessenger.cc,v 1.2 2002-12-08 22:31:55 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,7 +48,7 @@ Tst25DetectorMessenger::Tst25DetectorMessenger(Tst25DetectorConstruction * myDC)
   selMatCmd->SetParameterName("choice",true);
   selMatCmd->SetDefaultValue("U");
   selMatCmd->SetCandidates("H Si Cu U");
-  selMatCmd->AvailableForStates(PreInit,Idle);
+  selMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   myDetector->SelectMaterial(defParam="U");
 }
