@@ -1,4 +1,4 @@
-$Id: History,v 1.135 2004-11-12 17:38:58 gcosmo Exp $
+$Id: History,v 1.136 2004-12-02 10:09:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 02, 2004  G.Cosmo (global-V06-02-05)
+- Added inclusion of <cstddef> to G4Allocator.hh to make the header
+  self-consistent.
 
 Nov 12, 2004  G.Cosmo (global-V06-02-04)
 - Migrated code to use 'std' namespace for mathematical functions
