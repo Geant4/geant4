@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2000-08-28 14:37:06 stesting Exp $
+$Id: History,v 1.10 2000-12-06 10:24:41 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+tests-V02-00-07   6th December 2000 Steve O'Neale 
+- install large_N reference outputs
+ 
 tests-V02-00-04  28th August 2000 Steve O'Neale 
 - update test outputs tags145, and code changes in tests needed 
   for recent EM work
