@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh,v 1.5 2001-07-11 10:01:15 gunter Exp $
+// $Id: G4VVisManager.hh,v 1.6 2001-08-17 22:49:26 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison 19/Oct/1996.
 // 
@@ -71,6 +71,7 @@
 class G4Polyline;
 class G4Text;
 class G4Circle;
+class G4Scale;
 class G4Square;
 class G4Polymarker;
 class G4Polyhedron;
@@ -94,35 +95,49 @@ public:
 
 public: // With description
 
-  virtual void Draw (const G4Polyline&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
-
-  virtual void Draw (const G4Text&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+  ///////////////////////////////////////////////////////////////////////
+  // Draw methods for Geant4 Visualization Primitives, useful
+  // for representing hits, digis, etc.
 
   virtual void Draw (const G4Circle&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
-
-  virtual void Draw (const G4Square&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
-
-  virtual void Draw (const G4Polymarker&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
-
-  virtual void Draw (const G4Polyhedron&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
 
   virtual void Draw (const G4NURBS&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
 
-  virtual void Draw (const G4VSolid&, const G4VisAttributes&,
+  virtual void Draw (const G4Polyhedron&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+
+  virtual void Draw (const G4Polyline&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+
+  virtual void Draw (const G4Polymarker&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+
+  virtual void Draw (const G4Scale&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+
+  virtual void Draw (const G4Square&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+
+  virtual void Draw (const G4Text&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+
+  ///////////////////////////////////////////////////////////////////////
+  // Draw methods for Geant4 Geometry Objects as if they were
+  // Visualization Primitives.  Useful for representing hits.
 
   virtual void Draw (const G4LogicalVolume&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
 
   virtual void Draw (const G4VPhysicalVolume&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+
+  virtual void Draw (const G4VSolid&, const G4VisAttributes&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
+
+  //////////////////////////////////////////////////////////////////////
+  // Other methods...
 
   virtual void GeometryHasChanged () = 0;
   // This is used by the run manager to notify a change of geometry.
