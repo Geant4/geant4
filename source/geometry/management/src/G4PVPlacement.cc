@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.6 2003-03-05 18:06:58 gcosmo Exp $
+// $Id: G4PVPlacement.cc,v 1.7 2003-03-31 14:18:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -124,11 +124,11 @@ G4VPVParameterisation* G4PVPlacement::GetParameterisation() const
   return 0;
 }
 
-void G4PVPlacement::GetReplicationData(EAxis&    axis,
-                                       G4int&    nReplicas,
-                                       G4double& width,
-                                       G4double& offset,
-                                       G4bool&   consuming) const
+void G4PVPlacement::GetReplicationData( EAxis&,
+                                        G4int&,
+                                        G4double&,
+                                        G4double&,
+                                        G4bool&   ) const
 {
   // No-operations
 }

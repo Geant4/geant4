@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.16 2003-01-15 09:37:26 gcosmo Exp $
+// $Id: G4VSolid.cc,v 1.17 2003-03-31 14:18:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -81,9 +81,9 @@ G4std::ostream& operator<< ( G4std::ostream& os, const G4VSolid& e )
 //
 // Throw exception if ComputeDimensions called for illegal derived class
 
-void G4VSolid::ComputeDimensions(G4VPVParameterisation* p,
-	                         const G4int n,
-                                 const G4VPhysicalVolume* pRep)
+void G4VSolid::ComputeDimensions(G4VPVParameterisation*,
+	                         const G4int,
+                                 const G4VPhysicalVolume*)
 {
     G4cout << "ERROR - Illegal call to G4VSolid::ComputeDimensions()" << G4endl
            << "        Method not overloaded by derived class !" << G4endl;
@@ -249,7 +249,7 @@ void G4VSolid::CalculateClippedPolygonExtent(G4ThreeVectorList& pPolygon,
 
 void G4VSolid::ClipPolygon(      G4ThreeVectorList& pPolygon,
 			   const G4VoxelLimits& pVoxelLimit,
-                           const EAxis              pAxis          ) const
+                           const EAxis                        ) const
 {
   G4ThreeVectorList outputPolygon;
 
@@ -373,10 +373,10 @@ void G4VSolid::ClipPolygonToSimpleLimits( G4ThreeVectorList& pPolygon,
   }
 }
 
-const G4VSolid* G4VSolid::GetConstituentSolid(G4int no) const
+const G4VSolid* G4VSolid::GetConstituentSolid(G4int) const
 { return 0; } 
 
-G4VSolid* G4VSolid::GetConstituentSolid(G4int no)
+G4VSolid* G4VSolid::GetConstituentSolid(G4int)
 { return 0; } 
 
 const G4DisplacedSolid* G4VSolid::GetDisplacedSolidPtr() const
