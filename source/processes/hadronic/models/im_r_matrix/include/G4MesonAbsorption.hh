@@ -22,7 +22,19 @@ class G4MesonAbsorption : public G4BCAction
                                          std::vector<G4KineticTrack *> targets);
 
   private:
+  G4double GetTimeToAbsorption(const G4KineticTrack& trk1, const G4KineticTrack& trk2);
   
+  void FindAndFillCluster(G4KineticTrackVector & result, 
+                         G4KineticTrack * aProjectile,
+			 std::vector<G4KineticTrack *> & someCandidates);
+  
+  G4double AbsorptionCrossSection(const G4KineticTrack & trk1, const G4KineticTrack & trk2)
+  {
+    return 100*millibarn;
+  }
+  
+  private:
+  std::vector<G4CollisionInitialState *> theCollisions;
 };
 
 #endif

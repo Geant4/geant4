@@ -4,16 +4,65 @@
 #include "Randomize.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4CollisionInitialState.hh"
+#include <cmath>
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
 
 // first prototype
 
 const std::vector<G4CollisionInitialState *> & G4MesonAbsorption::
 GetCollisions(G4KineticTrack * aProjectile, 
-	      std::vector<G4KineticTrack *> & someCandidates,
+              std::vector<G4KineticTrack *> & someCandidates,
 	      G4double aCurrentTime)
 {
-  std::vector<G4CollisionInitialState *> result;
-  return result;
+  theCollisions.clear();
+  if(someCandidates.size() >1)
+  {
+    std::vector<G4KineticTrack *>::iterator j=someCandidates.begin();
+    for(; j != someCandidates.end(); ++j)
+    {
+      G4double collisionTime = GetTimeToAbsorption(*aProjectile, **j);
+      if(collisionTime == DBL_MAX) 
+      {
+        continue;
+      }
+      G4KineticTrackVector aTarget;
+      aTarget.push_back(*j);
+      FindAndFillCluster(aTarget, aProjectile, someCandidates);
+      theCollisions.push_back(
+        new G4CollisionInitialState(collisionTime+aCurrentTime, aProjectile, aTarget, this) );
+    }
+  }
+  return theCollisions;
+}
+
+
+void G4MesonAbsorption::
+FindAndFillCluster(G4KineticTrackVector & result, 
+                   G4KineticTrack * aProjectile, std::vector<G4KineticTrack *> & someCandidates)
+{
+  std::vector<G4KineticTrack *>::iterator j=someCandidates.begin();
+  G4KineticTrack * aTarget = result[0];
+  G4int chargeSum = lrint(aTarget->GetDefinition()->GetPDGCharge());
+  chargeSum+=lrint(aProjectile->GetDefinition()->GetPDGCharge());
+  G4ThreeVector firstBase = aTarget->GetPosition();
+  G4double min = DBL_MAX;
+  G4KineticTrack * partner = 0;
+  for(; j != someCandidates.end(); ++j)
+  {
+    if(*j == aTarget) continue;
+    G4int cCharge = lrint((*j)->GetDefinition()->GetPDGCharge());
+    if (chargeSum+cCharge > 2) continue;
+    if (chargeSum+cCharge < 0) continue;
+    // get the one with the smallest distance. 
+    G4ThreeVector secodeBase = (*j)->GetPosition();
+    if((firstBase+secodeBase).mag()<min)
+    {
+      min=(firstBase+secodeBase).mag();
+      partner = *j;
+    }
+  }
+  if(partner) result.push_back(partner);
 }
 
 
@@ -21,6 +70,7 @@ G4KineticTrackVector * G4MesonAbsorption::
 GetFinalState(G4KineticTrack * projectile, 
               std::vector<G4KineticTrack *> & targets)
 {
+  // G4cout << "We have an absorption !!!!!!!!!!!!!!!!!!!!!!"<<G4endl;
   // Only 2-body absorption for the time being.
   // If insufficient, use 2-body absorption and clusterization to emulate 3-,4-,etc body absorption.
   G4LorentzVector thePro = projectile->Get4Momentum();
@@ -45,10 +95,56 @@ GetFinalState(G4KineticTrack * projectile,
   thePro = toZ * thePro;
   G4LorentzRotation toLab(toZ.inverse());
   
+  // Get definitions
+  G4ParticleDefintion * d1 = targets[0]->GetDefinition();
+  G4ParticleDefintion * d2 = targets[1]->GetDefinition();
+  if(0.5>G4UniformRand())
+  {
+    G4ParticleDefintion * temp;
+    temp=d1;d1=d2;d2=temp;
+  }
+  G4ParticleDefintion * dp = projectile->GetDefinition();
+  if(dp->GetPDGCharge()<-.5)
+  {
+    if(d1->GetPDGCharge()>.5)
+    {
+      if(d2->GetPDGCharge()>.5 && 0.5>G4UniformRand())
+      {
+        d2 = G4Neutron::NeutronDefinition();
+      }
+      else
+      {
+        d1 = G4Neutron::NeutronDefinition();
+      }
+    }
+    else if(d2->GetPDGCharge()>.5)
+    {
+      d2 = G4Neutron::NeutronDefinition();  
+    }
+  }
+  else if(dp->GetPDGCharge()>.5)
+  {
+    if(d1->GetPDGCharge()<.5)
+    {
+      if(d2->GetPDGCharge()<.5 && 0.5>G4UniformRand())
+      {
+        d2 = G4Proton::ProtonDefinition();
+      }
+      else
+      {
+        d1 = G4Proton::ProtonDefinition();
+      }
+    }
+    else if(d2->GetPDGCharge()<.5)
+    {
+      d2 = G4Proton::ProtonDefinition();  
+    }
+  }
+  
   // calculate the momenta.
   G4double M = (thePro+theT1+theT2).mag();
-  G4double m1 = targets[0]->GetDefinition()->GetPDGMass();
-  G4double m2 = targets[1]->GetDefinition()->GetPDGMass();
+  G4double m1 = d1->GetPDGMass();
+  G4double m2 = d2->GetPDGMass();
   G4double m = sqrt(M*M-m1*m1-m2*m2);
   G4double p = sqrt((m*m*m*m - 4.*m1*m1 * m2*m2)/(4.*(M*M)));
   G4double costh = 2.*G4UniformRand()-1.;
@@ -72,15 +168,81 @@ GetFinalState(G4KineticTrack * projectile,
   
   // make the final state
   G4KineticTrack * f1 = 
-      new G4KineticTrack(targets[0]->GetDefinition(), 0., 
-                        targets[0]->GetPosition(), final1);
+      new G4KineticTrack(d1, 0., targets[0]->GetPosition(), final1);
   G4KineticTrack * f2 = 
-      new G4KineticTrack(targets[1]->GetDefinition(), 0., 
-                        targets[1]->GetPosition(), final2);
-  std::vector<G4KineticTrack *> * result = new G4KineticTrackVector;
+      new G4KineticTrack(d2, 0., targets[1]->GetPosition(), final2);
+  G4KineticTrackVector * result = new G4KineticTrackVector;
   result->push_back(f1);
   result->push_back(f2);
 
   return result;
 }
 
+
+G4double G4MesonAbsorption::
+GetTimeToAbsorption(const G4KineticTrack& trk1, const G4KineticTrack& trk2)
+{
+  if(trk1.GetDefinition()!=G4PionPlus::PionPlusDefinition() &&
+     trk1.GetDefinition()!=G4PionMinus::PionMinusDefinition() &&
+     trk2.GetDefinition()!=G4PionPlus::PionPlusDefinition() &&
+     trk2.GetDefinition()!=G4PionMinus::PionMinusDefinition())
+  {
+    return DBL_MAX;
+  }  
+  G4double time = DBL_MAX;
+  G4double sqrtS = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
+
+  // Check whether there is enough energy for elastic scattering 
+  // (to put the particles on to mass shell
+  
+  if (trk1.GetActualMass() + trk2.GetActualMass() < sqrtS)
+  {
+    G4LorentzVector mom1 = trk1.GetTrackingMomentum();      
+    G4ThreeVector position = trk1.GetPosition() - trk2.GetPosition();    
+    if ( mom1.mag2() < -1.*eV )
+    {
+      G4cout << "G4MesonAbsorption::GetTimeToInteraction(): negative m2:" << mom1.mag2() << G4endl;
+    } 
+    G4ThreeVector velocity = mom1.vect()/mom1.e() * c_light; 
+    G4double collisionTime = - (position * velocity) / (velocity * velocity); 
+
+    if (collisionTime > 0)
+    { 
+      G4LorentzVector mom2(0,0,0,trk2.Get4Momentum().mag());
+      G4LorentzRotation toCMSFrame((-1)*(mom1 + mom2).boostVector());
+      mom1 = toCMSFrame * mom1;
+      mom2 = toCMSFrame * mom2;
+
+      G4LorentzVector coordinate1(trk1.GetPosition(), 100.);
+      G4LorentzVector coordinate2(trk2.GetPosition(), 100.);
+      G4ThreeVector pos = ((toCMSFrame * coordinate1).vect() - 
+			    (toCMSFrame * coordinate2).vect());
+      G4ThreeVector mom = mom1.vect() - mom2.vect();
+
+      G4double distance = pos * pos - (pos*mom) * (pos*mom) / (mom*mom);
+
+      // global optimization
+      static const G4double maxCrossSection = 500*millibarn;
+      if(pi*distance>maxCrossSection) return time;	   
+      // charged particles special optimization
+      static const G4double maxChargedCrossSection = 200*millibarn;
+      if(abs(trk1.GetDefinition()->GetPDGCharge())>0.1 && 
+        abs(trk2.GetDefinition()->GetPDGCharge())>0.1 &&
+	pi*distance>maxChargedCrossSection) return time;	      
+      // neutrons special optimization 
+      if(( trk1.GetDefinition() == G4Neutron::Neutron() ||
+	   trk1.GetDefinition() == G4Neutron::Neutron() ) &&
+	   sqrtS>1.91*GeV && pi*distance>maxChargedCrossSection) return time;
+
+      G4double totalCrossSection = AbsorptionCrossSection(trk1,trk2);
+      if ( totalCrossSection > 0 )
+      {
+	if (distance <= totalCrossSection / pi)
+	{
+	  time = collisionTime;
+	}
+      } 
+    }
+  }
+  return time;
+}
