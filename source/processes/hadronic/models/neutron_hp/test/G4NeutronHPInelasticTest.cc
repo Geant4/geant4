@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelasticTest.cc,v 1.3 2000-04-15 07:56:35 hpw Exp $
+// $Id: G4NeutronHPInelasticTest.cc,v 1.4 2000-08-10 12:53:00 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -148,10 +148,10 @@
 //      // *** G4Exception: Aborting execution ***
 // // combined bug in G4LegendreTable and G4PhotonDist fixed
 //      // Init runs
-//      G4Material *theAl = new G4Material(name="Aluminium", density=2.70*g/cm3, nEl=1);
-//      G4Element *elAl  = new G4Element(name="Aluminium", symbol="Al", iz=13., a=26.98*g/mole);
-//      theAl->AddElement( elAl, 1 );
-//      theMaterials[8] = theAl;
+      G4Material *theAl = new G4Material(name="Aluminium", density=2.70*g/cm3, nEl=1);
+      G4Element *elAl  = new G4Element(name="Aluminium", symbol="Al", iz=13., a=26.98*g/mole);
+      theAl->AddElement( elAl, 1 );
+      theMaterials[8] = theAl;
 //      
 // // natural silicon only; swiches to aluminium
 // // copied to 14_28_Silicon
@@ -242,10 +242,10 @@
 //      //G4NeutronHPPhotonDist: Transition probability array not sampled for the moment.
 // // Fix for reading, sampling to be tested
 //      // Init runs
-//       G4Material *thePb = new G4Material(name="Lead", density=11.35*g/cm3, nEl=1);
-//       G4Element *elPb = new G4Element(name="Lead", symbol="Pb", iz=82., a=207.19*g/mole);
-//       thePb->AddElement( elPb, 1 );
-//      theMaterials[21] = thePb;
+       G4Material *thePb = new G4Material(name="Lead", density=11.35*g/cm3, nEl=1);
+       G4Element *elPb = new G4Element(name="Lead", symbol="Pb", iz=82., a=207.19*g/mole);
+       thePb->AddElement( elPb, 1 );
+      theMaterials[21] = thePb;
 //
 //     // Init runs
 //     G4Material *theU = new G4Material(name="Uranium", density=18.95*g/cm3, nEl=1);
@@ -253,11 +253,11 @@
 //      theU->AddElement( elU, 1 );
 //     theMaterials[22] = theU;
 //     
-     G4Material *theAu = new G4Material(name="Gold", density=18.95*g/cm3, nEl=1);
-     G4Element *elAu  = new G4Element(name="Gold", symbol="Au", iz=79., a=197.*g/mole);
-     theAu->AddElement( elAu, 1 );
-     theMaterials[23] = theAu;
-    
+//     G4Material *theAu = new G4Material(name="Gold", density=18.95*g/cm3, nEl=1);
+//     G4Element *elAu  = new G4Element(name="Gold", symbol="Au", iz=79., a=197.*g/mole);
+//     theAu->AddElement( elAu, 1 );
+//     theMaterials[23] = theAu;
+//    
     G4cout << "Please enter material number"<<G4endl;
     G4int inputNumber;
     G4cin >> inputNumber;
