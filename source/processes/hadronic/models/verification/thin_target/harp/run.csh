@@ -1,7 +1,7 @@
 
 echo "Start of run for " $TARGET
 
-$G4MY/cascade10gev $TARGET/run.mac  >& /dev/null
+$G4MY/harp $TARGET/run.mac  >& /dev/null
 
 mv bic.paw   $TARGET/
 mv ber.paw   $TARGET/

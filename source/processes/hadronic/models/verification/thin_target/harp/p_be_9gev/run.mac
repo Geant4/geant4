@@ -2,39 +2,44 @@
 //        Macro file for test30
 //         examine PostStepDoIt
 //        for hadronic physics
-//      Created: 13.03.2002 V.Ivanchenko
+//      Created: 23.11.2004 V.Ivanchenko
 //---------------------------------------
 #verbose
 0
 #events
-100
+1000
 //--------Proton_processes
 #particle
 proton
 //--------
 #material
-Al
+Be
 #energy(MeV)
-12900.
-#paw
+8900.
+#emax(MeV)
+9000.
 //--------
 #generator
 binary
+#paw
 bic.paw
 #run
 //--------
 #generator
 bertini
+#paw
 ber.paw
 #run
 //--------
 #generator
 qgsp
+#paw
 qgsp.paw
 #run
 //--------
 #generator
 qgsc
+#paw
 qgsc.paw
 #run
 //--------Exit

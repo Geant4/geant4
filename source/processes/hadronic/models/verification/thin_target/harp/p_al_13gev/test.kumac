@@ -1,18 +1,3 @@
-opt zfl
-opt nfit
-opt sta
-opt nbox
-opt ngri
-set MSCF 0.80
-set XLAB 0.6
-set NDVX 010206
-set NDVY 010205
- zone
-
- hi/file 1 bin.paw
- hi/pl 3 hist
-* itx 0 400 'Binary'
- close 1
-
-
-exe ../prf phi eps
+exe ../ptot
+title 'p + Al at 12.9GeV/c (G4 6.2p02) theta = (15 - 300)mrad'
+exe ../prf ptot62 eps

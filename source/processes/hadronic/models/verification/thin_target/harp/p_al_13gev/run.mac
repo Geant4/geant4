@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-100000
+1000
 //--------Proton_processes
 #particle
 proton
@@ -16,6 +16,8 @@ proton
 Al
 #energy(MeV)
 12900.
+#emax(MeV)
+13000.
 //--------
 #generator
 binary

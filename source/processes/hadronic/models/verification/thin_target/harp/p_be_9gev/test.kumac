@@ -1,0 +1,3 @@
+exe ../ptot
+title 'p + Be at 8.9GeV/c (G4 6.2p02) theta = (15 - 300)mrad'
+exe ../prf ptot62 eps
