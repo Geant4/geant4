@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLTransform3D.hh,v 1.4 2001-07-11 10:08:50 gunter Exp $
+// $Id: G4OpenGLTransform3D.hh,v 1.5 2003-06-10 17:41:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,6 +35,11 @@
 #define G4OPENGLTRANSFORM3D_HH
 
 #include "G4Transform3D.hh"
+
+#ifdef WIN32
+  #include <windows.h>
+#endif
+#include <GL/gl.h>
 
 class G4OpenGLTransform3D : public G4Transform3D {
 public:
