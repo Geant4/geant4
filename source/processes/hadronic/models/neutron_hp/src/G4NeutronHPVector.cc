@@ -4,7 +4,7 @@
 #include "G4NeutronHPVector.hh"
  
   // if the ranges do not match, constant extrapolation is used.
-  G4NeutronHPVector & operator + (const G4NeutronHPVector & left, const G4NeutronHPVector & right)
+  G4NeutronHPVector & operator + (G4NeutronHPVector & left, G4NeutronHPVector & right)
   {
     G4NeutronHPVector * result = new G4NeutronHPVector;
     G4int j=0;
