@@ -1,4 +1,4 @@
-# $Id: ioni.mac,v 1.1 2004-07-27 10:13:16 maire Exp $
+# $Id: ioni.mac,v 1.2 2004-11-03 12:42:47 maire Exp $
 #
 # Macro file for "MuonProcesses.cc"
 # (can be run in batch, without graphic)
@@ -15,9 +15,9 @@
 #
 /run/initialize
 #
-/process/inactivate MuPairProd
-/process/inactivate MuBrems
-/process/inactivate MuNucl
+/process/inactivate muPairProd
+/process/inactivate muBrems
+/process/inactivate muNucl
 #
 /gun/particle mu+
 /gun/energy 10 TeV

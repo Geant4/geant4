@@ -1,4 +1,4 @@
-# $Id: munucl.in,v 1.1 2004-09-03 18:43:58 vnivanch Exp $
+# $Id: munucl.mac,v 1.1 2004-11-03 12:42:50 maire Exp $
 #
 # Macro file for "MuonProcesses.cc"
 # (can be run in batch, without graphic)

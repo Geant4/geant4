@@ -1,4 +1,4 @@
-# $Id: brem.mac,v 1.1 2004-07-27 10:13:16 maire Exp $
+# $Id: brem.mac,v 1.2 2004-11-03 12:42:46 maire Exp $
 #
 # Macro file for "MuonProcesses.cc"
 # (can be run in batch, without graphic)
@@ -15,9 +15,9 @@
 #
 /run/initialize
 #
-/process/inactivate MuIoni
-/process/inactivate MuPairProd
-/process/inactivate MuNucl
+/process/inactivate muIoni
+/process/inactivate muPairProd
+/process/inactivate muNucl
 #
 /gun/particle mu+
 /gun/energy 10 TeV

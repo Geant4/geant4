@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MuNuclearBuilder.cc,v 1.1 2004-08-17 18:07:30 vnivanch Exp $
+// $Id: MuNuclearBuilder.cc,v 1.2 2004-11-03 12:43:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,12 +54,12 @@ void MuNuclearBuilder::ConstructProcess()
   // Add standard EM Processes for Muon
   G4ParticleDefinition* particle = G4MuonPlus::MuonPlus();
   G4ProcessManager* pmanager = particle->GetProcessManager();    
-  pmanager->AddProcess(new G4MuNuclearInteraction,-1,-1,4);       
+  pmanager->AddProcess(new G4MuNuclearInteraction("muNucl"),-1,-1,4);       
 
   particle = G4MuonMinus::MuonMinus();
   pmanager = particle->GetProcessManager();    
 
-  pmanager->AddProcess(new G4MuNuclearInteraction,-1,-1,4);
+  pmanager->AddProcess(new G4MuNuclearInteraction("muNucl"),-1,-1,4);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

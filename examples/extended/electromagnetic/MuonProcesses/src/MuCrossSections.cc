@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MuCrossSections.cc,v 1.3 2004-08-27 11:06:23 vnivanch Exp $
+// $Id: MuCrossSections.cc,v 1.4 2004-11-03 12:43:01 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,7 +75,7 @@ G4double MuCrossSections::CR_PerAtom(const G4String& process, G4Element* element
  else if (process == "muIoni")
    sigma = CRK_Mephi(z,a/(g/mole),tkin/GeV,ep/GeV)*(cm2/(g*GeV))*a/Avogadro;
    
- else if (process == "MuNucl")
+ else if (process == "muNucl")
    sigma = CRN_Mephi(z,a/(g/mole),tkin/GeV,ep/GeV)*(cm2/(g*GeV))*a/Avogadro;
    
  else if (process == "muPairProd")
