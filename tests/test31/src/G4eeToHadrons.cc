@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.cc,v 1.1 2004-08-19 16:30:06 vnivanch Exp $
+// $Id: G4eeToHadrons.cc,v 1.2 2004-09-13 14:05:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -156,6 +156,7 @@ G4double G4eeToHadrons::ComputeMeanFreePath(G4double kineticEnergy,
         mfpKineticEnergy = peak;
     }  
     
+    G4double cross = MicroscopicCrossSection(kineticEnergy, couple);
     if(mfpKineticEnergy == 0.0) {
        mfpKineticEnergy = kineticEnergy;
        abovePeak = false; 
@@ -163,9 +164,10 @@ G4double G4eeToHadrons::ComputeMeanFreePath(G4double kineticEnergy,
       G4double e = kineticEnergy*lambdaFactor;
       if(e > mfpKineticEnergy) mfpKineticEnergy = e;
       abovePeak = true; 
+      G4double cross1 = MicroscopicCrossSection(mfpKineticEnergy, couple);
+      if(cross1 > cross) cross = cross1;
     }
     preStepMFP = DBL_MAX;
-    G4double cross = MicroscopicCrossSection(mfpKineticEnergy, couple);
     if(cross > 0.0) preStepMFP = 1.0/cross;
   }
   return preStepMFP;
@@ -187,6 +189,7 @@ std::vector<G4DynamicParticle*>* G4eeToHadrons::GenerateSecondaries(
     for(G4int i=0; i<nModels; i++) {
       if(q < cumSum[i]) {
         newp = (models[i])->SampleSecondaries(currentCouple,dp,0.0,0.0);
+        break;
       }
     }
   }

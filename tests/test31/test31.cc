@@ -78,8 +78,7 @@ int main(int argc,char** argv) {
   if(verbose >0) G4cout << "Physics List is defined" << G4endl;
 
 #ifdef G4VIS_USE
-  G4cout << "VisManager will be inicialized" << G4endl;
-  // visualization manager
+  G4cout << "VisManager will be initialized" << G4endl;
   G4VisManager* visManager = new VisManager;
   visManager->Initialize();
 #endif 
@@ -129,8 +128,6 @@ int main(int argc,char** argv) {
   timer->Stop();
   G4cout << "  "  << *timer << G4endl;
   delete timer;
-
-  //  G4cout << "runManager will be deleted" << G4endl;  
   delete runManager;
   return 0;
 }

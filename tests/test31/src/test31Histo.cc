@@ -172,21 +172,21 @@ void test31Histo::EndOfHisto()
 
 void test31Histo::SaveEvent()
 {
-  if(nTuple) histo->addRow();        
+  if(nTuple) histo->addRow(0);        
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void test31Histo::SaveToTuple(const G4String& parname, G4double val)
 {
-  if(nTuple) histo->fillTuple( parname, val);
+  if(nTuple) histo->fillTuple(0, parname, val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void test31Histo::SaveToTuple(const G4String& parname,G4double val, G4double)
 {
-  if(nTuple) histo->fillTuple( parname, val);
+  if(nTuple) histo->fillTuple(0, parname, val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -224,8 +224,9 @@ void test31Histo::bookHisto()
     for(G4int i=nHisto; i<5; i++) {histo->activate(histoID[i], false);}
   }
 
-  if(nTuple) histo->addTuple( "100", "Range/Energy",
-  "float tkin mass beta xend, yend, zend, ltpk, tend, teta, loss, dedx, back, leak, edep" );
+  if(nTuple) 
+    if(histo->addTuple( "100", "Range/Energy",
+  "float tkin mass beta xend, yend, zend, ltpk, tend, teta, loss, dedx, back, leak, edep" ));
 
 }
 
@@ -291,7 +292,7 @@ void test31Histo::AddParticleBack(const G4DynamicParticle* dp)
 void test31Histo::TableControl()
 {
   G4EmCalculator cal;
-
+  cal.SetVerbose(2);
 // parameters
   G4double tmin = 1.*keV;
   G4double tmax = 1.*GeV;
@@ -307,8 +308,10 @@ void test31Histo::TableControl()
 
   //  G4String part_name = "proton";
    G4String part_name = "alpha";
-  G4String mat_name  = "Beryllium";
+  G4String mat_name  = "Tangsten";
+  //  G4String mat_name  = "Beryllium";
   G4String proc_name = "ionIoni";
+  //G4String proc_name = "hLowEIoni";
 
   const G4ParticleDefinition* part = cal.FindParticle(part_name);
   const G4Material* mat = cal.FindMaterial(mat_name);
@@ -329,10 +332,12 @@ void test31Histo::TableControl()
     //    G4double dedx0 = cal.GetDEDX(part_name,mat_name,e);
     G4double dedx0 = cal.GetDEDX(part,mat,e);
     G4double dedx = cal.ComputeDEDX(part_name,mat_name,proc_name,e,cut);
+    /*
     G4cout << i << ".   e(MeV)= " << e/MeV 
            << ";  Computed  dedx(MeV*cm^2/g)= " << dedx*fact
            << ";  Tabled  dedx(MeV*cm^2/g)= " << dedx0*fact
            << G4endl;
+    */
     x += step;
   }
 
