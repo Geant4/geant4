@@ -526,7 +526,8 @@ export XENVIRONMENT=$OIVHOME/app-defaults/Inventor
 fi
 
 if [ `uname -n` = nb-barrand2 ] ; then
-#export CVSROOT=':pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs'
+export CVSROOT=:ext:gbarrand@sungeant.cern.ch:/afs/cern.ch/sw/geant4/cvs
+export CVS_RSH=ssh
 export G4INSTALL=Z:/geant4/geant4-05-00-ref-01
 export G4SYSTEM=WIN32-VC
 #export G4WORKDIR=$G4INSTALL

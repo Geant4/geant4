@@ -454,7 +454,8 @@ endif
 if ( `uname -n` == "VMhost.lal.in2p3.fr" || `uname -n` == "nb-barrand2" ) then
   set prompt='g4-pc-gbp> ' 
 # Core :
-  setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
+  setenv CVSROOT :ext:gbarrand@sungeant.cern.ch:/afs/cern.ch/sw/geant4/cvs
+  setenv CVS_RSH ssh
   setenv G4INSTALL /geant4/geant4-05-00-ref-01
   setenv G4SYSTEM Linux-g++
   setenv G4WORKDIR $G4INSTALL
