@@ -1,4 +1,4 @@
-$Id: History,v 1.160 2001-08-30 00:15:10 johna Exp $
+$Id: History,v 1.161 2001-10-02 00:36:07 perl Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+1st October 2001  Joseph Perl
+- Added pure C++ HepRep driver, HepRepFile, needs no external libraries.
 
 29th August 2001  John Allison/Joseph Perl  (config-V03-02-06)
 - Needed by vis-V03-02-14.

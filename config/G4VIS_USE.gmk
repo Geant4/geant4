@@ -1,4 +1,4 @@
-# $Id: G4VIS_USE.gmk,v 1.9 2001-08-27 16:22:11 johna Exp $
+# $Id: G4VIS_USE.gmk,v 1.10 2001-10-02 00:36:05 perl Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for visualization USE phase.
 #   John Allison, 24th January 1998.
@@ -15,6 +15,10 @@ endif
 CPPFLAGS += -DG4VIS_USE_DAWNFILE
 CPPFLAGS += -I$(G4BASE)/visualization/FukuiRenderer/include
 VISLIBS  += -lG4FR
+
+CPPFLAGS += -DG4VIS_USE_HEPREPFILE
+CPPFLAGS += -I$(G4BASE)/visualization/HepRepFile/include
+VISLIBS  += -lG4HepRepFile
 
 CPPFLAGS += -DG4VIS_USE_RAYTRACER
 CPPFLAGS += -I$(G4BASE)/visualization/RayTracer/include
