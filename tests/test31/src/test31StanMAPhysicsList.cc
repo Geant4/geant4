@@ -50,7 +50,7 @@
 #include "G4eBremsstrahlungSTD.hh"
 #include "G4eplusAnnihilation.hh"
 
-#include "G4MuIonisation.hh"
+#include "G4MuIonisationSTD.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
 #include "G4MuonMinusCaptureAtRest.hh"
@@ -91,32 +91,32 @@ void test31StanMAPhysicsList::ConstructProcess()
     } else if (particleName == "e-") {
       pmanager->AddProcess(new G4MultipleScatteringSTD, -1, 1,1);
       G4eIonisationSTD* eion = new G4eIonisationSTD();
-      eion->SetParticle(particle);
-      eion->SetSubCutoff(false);
+      //      eion->SetParticle(particle);
+      //      eion->SetSubCutoff(false);
       pmanager->AddProcess(eion,   -1, 2,2);
       G4eBremsstrahlungSTD* ebr = new G4eBremsstrahlungSTD();
-      ebr->SetParticle(particle);
-      ebr->SetSubCutoff(false);
+      //      ebr->SetParticle(particle);
+      //      ebr->SetSubCutoff(false);
       pmanager->AddProcess(ebr,    -1,-1,3);       
 
     } else if (particleName == "e+") {
 
       pmanager->AddProcess(new G4MultipleScatteringSTD, -1, 1,1);
       G4eIonisationSTD* pion = new G4eIonisationSTD();
-      pion->SetParticle(particle);
-      pion->SetSubCutoff(false);
+      //      pion->SetParticle(particle);
+      //      pion->SetSubCutoff(false);
       pmanager->AddProcess(pion,        -1, 2,2);
       G4eBremsstrahlungSTD* pbr = new G4eBremsstrahlungSTD();
-      pbr->SetParticle(particle);
-      pbr->SetSubCutoff(false);
+      //      pbr->SetParticle(particle);
+      //      pbr->SetSubCutoff(false);
       pmanager->AddProcess(pbr,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
   
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
 
-      //      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      //      pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
+      pmanager->AddProcess(new G4MultipleScatteringSTD,-1, 1,1);
+      pmanager->AddProcess(new G4MuIonisationSTD,      -1, 2,2);
       //      pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
       //      pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       	       
       //      pmanager->AddProcess(new G4MuonMinusCaptureAtRest,0,-1,-1);
@@ -132,8 +132,8 @@ void test31StanMAPhysicsList::ConstructProcess()
       }
 
       G4hIonisationSTD* hion = new G4hIonisationSTD();
-      hion->SetParticle(particle);
-      hion->SetSubCutoff(false);
+      //      hion->SetParticle(particle);
+      //      hion->SetSubCutoff(false);
       pmanager->AddProcess(hion,-1,2,2);
 
    } else if (
@@ -147,9 +147,9 @@ void test31StanMAPhysicsList::ConstructProcess()
       }
 
       G4hIonisationSTD* hion = new G4hIonisationSTD();
-      hion->SetParticle(particle);
-      hion->SetSubCutoff(false);
-      hion->SetBaseParticle(G4Proton::Proton());
+      //      hion->SetParticle(particle);
+      //      hion->SetSubCutoff(false);
+      //      hion->SetBaseParticle(G4Proton::Proton());
       pmanager->AddProcess(hion,-1,2,2);   
 
    } else if (
@@ -163,9 +163,9 @@ void test31StanMAPhysicsList::ConstructProcess()
       }
 
       G4hIonisationSTD* hion = new G4hIonisationSTD();
-      hion->SetParticle(particle);
-      hion->SetSubCutoff(false);
-      hion->SetBaseParticle(G4AntiProton::AntiProton());
+      //      hion->SetParticle(particle);
+      //      hion->SetSubCutoff(false);
+      //      hion->SetBaseParticle(G4AntiProton::AntiProton());
       pmanager->AddProcess(hion,-1,2,2);   
 
 
@@ -183,9 +183,9 @@ void test31StanMAPhysicsList::ConstructProcess()
       }
 
       G4hIonisationSTD* iIon = new G4hIonisationSTD();
-      iIon->SetParticle(particle);
-      iIon->SetSubCutoff(false);
-      iIon->SetBaseParticle(G4Proton::Proton());
+      //      iIon->SetParticle(particle);
+      //      iIon->SetSubCutoff(false);
+      //      iIon->SetBaseParticle(G4Proton::Proton());
       pmanager->AddProcess(iIon,-1,2,2);
 
     } else if (particleName == "GenericIon"  
@@ -198,9 +198,9 @@ void test31StanMAPhysicsList::ConstructProcess()
       }
 
       G4ionIonisation* iIon = new G4ionIonisation();
-      iIon->SetParticle(particle);
-      iIon->SetSubCutoff(false);
-      iIon->SetBaseParticle(G4Proton::Proton());
+      //      iIon->SetParticle(particle);
+      //      iIon->SetSubCutoff(false);
+      //      iIon->SetBaseParticle(G4Proton::Proton());
       pmanager->AddProcess(iIon,-1,2,2);
     }
   }
