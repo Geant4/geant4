@@ -1,0 +1,47 @@
+Prepared by R.Kokoulin, May 22nd, 2000
+
+Brief summary of G4 muon activity, May 2nd - May 23rd, 2000
+S.Kelner, R.Kokoulin, M.Maire, A.Rybin, L.Urban
+
+1. G4 muon tests
+The test procedure of the verification of muon interaction simulation which allows to check 
+both mean free path calculation and energy transfer sampling has been suggested and 
+implemented.
+First test results revealed appreciable deviations of the distributions of the energy loss from 
+theoretical dependencies (for bremsstrahlung, pair production, nuclear interaction). Several bugs 
+have been found and eliminated; it has greatly improved the agreement.
+The program of further G4 muon tests has been prepared and agreed, including thin target 
+tests (extending the set of materials, energies, and increasing statistics), and thick target 
+simulation which will allow to verify the consistency of consideration of restricted continuous 
+energy loss.
+
+2. Refinement of the processes already implemented
+Simple formulae and algorithm for sampling photon and muon angles in muon 
+bremsstrahlung have been suggested and prepared for implementation in G4. It will be coded in 
+the nearest days.
+Final states for other processes (pair production, photonuclear interaction) have been 
+clarified, fixed and introduced into documentation.
+Logical scheme of a consistent inclusion of bremsstrahlung correction in high-energy knock-
+on electron production and ionisation energy loss is prepared.
+List of questions concerning the validity of multiple scattering model has been compiled. 
+After answering these questions, the "calibration" simulation of MCS for high-energy muons can 
+be performed.
+
+3. Documentation
+Sections concerning three basic muon interaction processes (bremsstrahlung, pair production, 
+photonuclear interaction) for PRM (Phys. Ref. Manual) have been extended, updated and 
+corrected.
+Suggestions for improvements for the section in PRM about muon ionisation, and also 
+comments and corrections for "Electromagnetic Physics" gallery have been prepared.
+
+4. Extension of the muon interactions in G4
+List of muon processes for further inclusion in G4 has been discussed. The processes of 
+interest are: muon pair production by photon, muon pair production by muon, diffractive 
+bremsstrahlung (which leads to a difference in positive/negative muon energy loss). Refinement 
+of multiple scattering and introduction of the  screening correction to bremsstrahlung and pair 
+production based on recent calculations of radiation logarithm in HF model are also important 
+and can improve the accuracy of G4-based simulations. The level of theoretical knowledge of 
+these processes is sufficient for their implementation into algorithms and codes.
+Theoretical clarification of LPM and Coulomb corrections for electron pair production by 
+muons is needed; these are important both for accelerator and high-energy cosmic ray 
+applications.

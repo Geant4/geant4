@@ -1,0 +1,27 @@
+Some references concerning multiple scattering	(May, 2000; RPK)
+
+1) S.Hayakawa. Cosmic Ray Physics.
+2) S.Striganov. Nucl.Phys.B (Proc.Suppl.) 51A (1996) 172-178.
+3) B.Rossi. High Energy Particles.
+4) I.S.Baishev e.a. Sov.J.Nucl.Phys. 42 (1985) 745-749.
+5) G.R.Lynch, O.I.Dahl. NIM B58 (1991) 6-10.
+6) A.Van Ginneken. NIM A251 (1986) 21-39.
+7) A.Van Ginneken. NIM A362 (1995) 213-223.
+8) D.Liljequist. J.Appl.Phys. 62 (1987) 333-341.
+9) D.Liljequist, M.Ismail. J.Appl.Phys. 62 (1987) 342-350.
+10) D.Liljequist e.a. J.Appl.Phys. 68 (1990) 3061-3065.
+11) G.Shen e.a. Phys.Rev.D 20 (1979) 1584-1588.
+12) J.M.Fernandez-Varea e.a. NIM B73 (1993) 447-473.
+13) P.Arce, M.Wadhwa. CMS Note 1999/000 (?).
+14) L.Urban. G4 Phys.Ref.Manual (also G3toG4/quick overview and references).
+15) G.Moliere. Z.Naturforsch. 2a (1947) 133-145.
+16) G.Moliere. Z.Naturforsch. 3a (1948) 78-97.
+17) H.A.Bethe. Phys.Rev. 89 (1953) 1256-1266.
+18) W.T.Scott. Rev.Mod.Phys. 35 (1963) 231-313.
+19) L.N.Cooper, J.Rainwater. Phys.Rev. 97 (1955) 492-504.
+20) U.Fano. Phys.Rev. 93 (1954) 117-120.
+21) H.W.Lewis. Phys.Rev. 78 (1950) 526-529.
+22) S.Goudsmit, J.L.Sounderson. Phys.Rev. 57 (1940) 24-29.
+23) S.Goudsmit, J.L.Sounderson. Phys.Rev. 58 (1940) 36-42.
+24) Y.S.Tsai. Rev.Mod.Phys. 46 (1974) 815-851; ibid.  49 (1977) 421 - Errata.
+25) L.V.Spencer, C.H.Blanchard. Phys.Rev. 93 (1954) 114-116.

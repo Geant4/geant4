@@ -1,0 +1,21 @@
+COMMENTS ON IONISATION AND KNOCK-ON ELECTRONS  WITH 
+CORRECTION
+
+1) Let us introduce Tbound (? 100 KeV); below Tbound the correction to the 
+differential cross section is negligibly small.
+2) There also exists Tmax (= function (E)) defined by kinematics. In this case, the 
+following possibilities appear:
+3) Tmax < Tbound; usual BBS energy loss (and Bhabha cross section – for Tcut < 
+Tmax, with correction or without it, it does not play any substantial role) may be 
+used, as it was earlier. But it takes place only for rather low muon energies.
+4) Tmax > Tbound, with three possibilities for Tcut:
+5) Tcut < Tbound: restricted BBS energy loss (< Tcut), numerical calculation of the total  
+cross section with accurate formula and sampling with accurate formula are needed.
+6) Tbound < Tcut < Tmax: for energy loss it is necessary to take “usual” restricted BBS 
+(< Tbound) plus “twice restricted” numerically integrated energy loss for the interval 
+(Tbound,Tcut), total cross section and sampling being similar to preceding point.
+7) Tcut > Tmax: restricted BBS (< Tbound) plus twice restricted numerical (Tbound, 
+Tmax); discrete interactions are not simulated.
+
+RPK 10.05.2000
+
