@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.cc,v 1.21 2001-09-20 06:56:21 urban Exp $
+// $Id: G4MuPairProduction.cc,v 1.22 2001-09-20 10:38:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -32,13 +32,15 @@
 //      -------- G4MuPairProduction physics process ---------
 //                by Laszlo Urban, May 1998 
 // **************************************************************
-// 04-06-98, in DoIt,secondary production condition:range>G4std::min(threshold,safety)
-// 26/10/98, new stuff from R. Kokoulin + cleanup , L.Urban
-// 06/05/99 , bug fixed , L.Urban
-// 10/02/00  modifications+bug fix , new e.m. structure, L.Urban
+// 04-06-98 in DoIt,secondary production condition:range>G4std::min(threshold,safety)
+// 26/10/98 new stuff from R. Kokoulin + cleanup , L.Urban
+// 06/05/99 bug fixed , L.Urban
+// 10/02/00 modifications+bug fix , new e.m. structure, L.Urban
 // 29/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation
-// 10-08-01 : new methods Store/Retrieve PhysicsTable (mma)
-// 17-09-01, migration of Materials to pure STL (mma)    
+// 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
+// 17-09-01 migration of Materials to pure STL (mma)
+// 20-09-01 (L.Urban) in ComputeMicroscopicCrossSection, remove:
+//          if(MaxPairEnergy<CutInPairEnergy) MaxPairEnergy=CutInPairEnergy     
 // --------------------------------------------------------------
 
 #include "G4MuPairProduction.hh"
