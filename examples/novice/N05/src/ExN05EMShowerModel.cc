@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EMShowerModel.cc,v 1.5 2001-11-05 08:24:52 gcosmo Exp $
+// $Id: ExN05EMShowerModel.cc,v 1.6 2001-11-08 10:21:28 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05EMShowerModel.hh"
@@ -35,7 +35,8 @@
 #include "G4Gamma.hh"
 #include "G4TransportationManager.hh"
 #include "G4VSensitiveDetector.hh"
-#include "G4VTouchable.hh"
+#include "G4TouchableHandle.hh"
+//#include "G4TouchableHistory.hh"
 
 ExN05EMShowerModel::ExN05EMShowerModel(G4String modelName, G4LogicalVolume* envelope)
 : G4VFastSimulationModel(modelName, envelope)
@@ -43,9 +44,9 @@ ExN05EMShowerModel::ExN05EMShowerModel(G4String modelName, G4LogicalVolume* enve
   fFakeStep          = new G4Step();
   fFakePreStepPoint  = fFakeStep->GetPreStepPoint();
   fFakePostStepPoint = fFakeStep->GetPostStepPoint();
-  fpTouchable = new G4TouchableHistory();
-  fpNavigator = new G4Navigator();
-  fNaviSetup  = false;
+  fTouchableHandle   = new G4TouchableHistory();
+  fpNavigator        = new G4Navigator();
+  fNaviSetup         = false;
 }
 
 ExN05EMShowerModel::ExN05EMShowerModel(G4String modelName)
@@ -54,15 +55,14 @@ ExN05EMShowerModel::ExN05EMShowerModel(G4String modelName)
   fFakeStep          = new G4Step();
   fFakePreStepPoint  = fFakeStep->GetPreStepPoint();
   fFakePostStepPoint = fFakeStep->GetPostStepPoint();
-  fpTouchable = new G4TouchableHistory();
-  fpNavigator = new G4Navigator();
-  fNaviSetup  = false;
+  fTouchableHandle   = new G4TouchableHistory();
+  fpNavigator        = new G4Navigator();
+  fNaviSetup         = false;
 }
 
 ExN05EMShowerModel::~ExN05EMShowerModel()
 {
   delete fFakeStep;
-  delete fpTouchable;
   delete fpNavigator;
 }
 
@@ -83,6 +83,8 @@ G4bool ExN05EMShowerModel::ModelTrigger(const G4FastTrack& fastTrack)
 void ExN05EMShowerModel::DoIt(const G4FastTrack& fastTrack, 
 		     G4FastStep& fastStep)
 {
+  G4cout << "ExN05EMShowerModel::DoIt" << G4endl;
+
   // Kill the parawmeterised particle:
   fastStep.KillPrimaryTrack();
   fastStep.SetPrimaryTrackPathLength(0.0);
@@ -226,7 +228,7 @@ void ExN05EMShowerModel::FillFakeStep(const ExN05EnergySpot &eSpot)
 		       GetNavigatorForTracking()->GetWorldVolume());
       fpNavigator->
 	LocateGlobalPointAndUpdateTouchable(eSpot.GetPosition(),
-					    fpTouchable,
+					    fTouchableHandle(),
 					    false);
       fNaviSetup = true;
     }
@@ -234,14 +236,14 @@ void ExN05EMShowerModel::FillFakeStep(const ExN05EnergySpot &eSpot)
     {
       fpNavigator->
 	LocateGlobalPointAndUpdateTouchable(eSpot.GetPosition(),
-					    fpTouchable);
+					    fTouchableHandle());
      }
   //--------------------------------------
   // Fills attribute of the G4Step needed
   // by our sensitive detector:
   //-------------------------------------
   // set touchable volume at PreStepPoint:
-  fFakePreStepPoint->SetTouchable(fpTouchable);
+  fFakePreStepPoint->SetTouchableHandle(fTouchableHandle);
   // set total energy deposit:
   fFakeStep->SetTotalEnergyDeposit(eSpot.GetEnergy());
 }
