@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Transportation.cc,v 1.2 1999-01-08 11:23:58 gunter Exp $
+// $Id: G4Transportation.cc,v 1.3 1999-04-27 09:51:28 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,8 +89,7 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
   //    Find whether the geometry limits the Step, and to what length
   //    Calculate the new value of the safety and return it.
   //    Store the final time, position and momentum.
-  G4double geometryStepLength, endpointSafety=0;
-
+  G4double geometryStepLength, newSafety; 
   fParticleIsLooping = false;
 
   // GPILSelection is set to defaule value of CandidateForSelection
@@ -100,9 +99,9 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
   // Get initial Energy/Momentum of the track
   //
   const G4DynamicParticle*  pParticle  = track.GetDynamicParticle();
-  // const G4double      startEnergy      = pParticle->GetKineticEnergy();
-  const G4ThreeVector startMomentumDir = pParticle->GetMomentumDirection();
-  const G4ThreeVector startPosition  = track.GetPosition();
+  G4double      startEnergy      = pParticle->GetKineticEnergy();
+  G4ThreeVector startMomentumDir = pParticle->GetMomentumDirection();
+  G4ThreeVector startPosition  = track.GetPosition();
   // G4double   theTime        = track.GetGlobalTime();
 
   // The Step Point safety is now generalised to mean the limit of assumption
@@ -151,9 +150,7 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
 	fGeometryLimitedStep= false;
      }
      else
-     {  
-        G4double newSafety;
-
+     {
 	//  Find whether the straight path intersects a volume
 	linearStepLength= fLinearNavigator->ComputeStep( 
 					 startPosition, startMomentumDir,
@@ -184,8 +181,6 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
      fTransportEndKineticEnergy= track.GetKineticEnergy();
      fParticleIsLooping = false;
      fMomentumChanged = false; 
-
-     endpointSafety= currentSafety - endpointDistance;
   }
   else
   {
@@ -236,11 +231,11 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
      fTransportEndMomentumDir= aFieldTrack.GetMomentumDir();
 
      // fTransportEndKineticEnergy= aFieldTrack.GetEnergy(); // Energy is wrong
-#if EBUG_ENERGY_IN_FIELD
+#if 0
      G4ThreeVector endVelocity = aFieldTrack.GetVelocity();
      G4double  veloc_sq = endVelocity.mag2();
      fTransportEndKineticEnergy  = 0.5 * restMass * veloc_sq /
-                       ( 1. - (veloc_sq / c_squared) );  // Lorentz correction
+                        ( 1 - veloc_sq / c_squared );   // Lorentz correction
 #endif
      fTransportEndKineticEnergy = track.GetKineticEnergy();
 
@@ -248,15 +243,6 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
 
      fParticleIsLooping = fFieldPropagator->IsParticleLooping();
      endpointDistance= (fTransportEndPosition-startPosition).mag();
-
-     // Recover an endpoint safety
-     fPreviousSftOrigin= fFieldPropagator->GetLastSafetyOrigin();
-     fPreviousSafety=    fFieldPropagator->GetLastSafetyValue();
-
-     // Calculate the endpoint safety
-     G4double distEnd2LastSafOrigin;
-     distEnd2LastSafOrigin= (fTransportEndPosition-fPreviousSftOrigin).mag();
-     endpointSafety = fPreviousSafety - distEnd2LastSafOrigin;
   }
 
   // If we are asked to go a step length of 0, and we are on a boundary
@@ -266,31 +252,32 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
 	fGeometryLimitedStep= true;
      }
   }
-  // Check the endpointSafety
-  G4double distEnd2Start;
-  distEnd2Start= (fTransportEndPosition-startPosition).mag();
-  endpointSafety = fPreviousSafety - distEnd2Start;
 
   // Update the safety starting from the end-point, if it will become 
   //  negative at the end-point.
   // 
-  if( endpointSafety < 0 ){
-      endpointSafety = fLinearNavigator->ComputeSafety( fTransportEndPosition);
+  if( currentSafety < endpointDistance ) {
+      G4double endSafety;
+      endSafety = fLinearNavigator->ComputeSafety( fTransportEndPosition);
+      currentSafety= endSafety;
       fPreviousSftOrigin = fTransportEndPosition;
-      fPreviousSafety= endpointSafety; 
+      fPreviousSafety= currentSafety; 
+      // Because the Stepping Manager assumes it is from the start point, 
+      //  add the StepLength
+      currentSafety += endpointDistance;
 
 #ifdef G4DEBUG_TRANSPORT      
       cout.precision(5);
       cout << "***Transportation::AlongStepGPIL ** " << endl ;
       cout << "  Called Navigator->ComputeSafety " << endl
 	   << "    with position = " << fTransportEndPosition << endl
-	   << "    and it returned safety= " << endpointSafety << endl; 
+	   << "    and it returned safety= " << endSafety << endl; 
+      cout << "  I add the endpoint distance " << endpointDistance 
+	   << "   to it " 
+	   << "   to obtain a pseudo-safety= " << currentSafety 
+	   << "   which I return."  << endl; 
 #endif
   }				    
-
-  // Because the Stepping Manager assumes it is from the start point, 
-  //  we must add the StepLength to create a "pseudo" safety at start point.
-  currentSafety = endpointDistance + endpointSafety;
 
   return geometryStepLength;
 }
