@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1999-05-29 14:12:31 stesting Exp $
+# $Id: GNUmakefile,v 1.3 1999-06-02 08:10:28 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -10,7 +10,7 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 #Genuine tests...
-SUBDIRS = test01 test02 test03
+SUBDIRS = test01 ## test02 test03
 # SUBDIRS += test04 ## Persistency.
 SUBDIRS += test05 test06 test07 test08 test09 test10
 SUBDIRS += test11 test12
@@ -26,10 +26,16 @@ EXAMPLES = 01 02 03 04 05 06
 .PHONY : all clean clean_libs
 
 all:
+	@rm -f test104/test104.EMtest.in
+	@rm -f test104/test104.EMtest.out
+	@ln -s $(G4INSTALL)/examples/novice/N04/exampleN04.EMtest.in \
+          test104/test104.EMtest.in
+	@ln -s $(G4INSTALL)/examples/novice/N04/exampleN04.EMtest.out \
+          test104/test104.EMtest.out
 	@for dir in $(HADEXERDIRS); \
-	  do (cd $$dir; $(MAKE) -f GNUmakefile.hadronic.exerciser); done
-	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done
-	@for example in $(EXAMPLES); do \
+	  do (cd $$dir; $(MAKE) -f GNUmakefile.hadronic.exerciser); done; \
+	  for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done; \
+	  for example in $(EXAMPLES); do \
 	  testdir=test1$$example; \
 	  testin=test1$$example.in; \
 	  testout=test1$$example.out; \
@@ -47,10 +53,6 @@ all:
 	    $(G4WORKDIR)/bin/$(G4SYSTEM)/test1$$example; \
 	  (cd $$testdir; $(MAKE)); \
 	done
-	@ln -s $(G4INSTALL)/examples/novice/N04/exampleN04.EMtest.in \
-          test104/test104.EMtest.in
-	@ln -s $(G4INSTALL)/examples/novice/N04/exampleN04.EMtest.out \
-          test104/test104.EMtest.out
 
 clean:
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean); done
