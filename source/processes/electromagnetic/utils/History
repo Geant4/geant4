@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2002-05-24 07:36:51 urban Exp $
+$Id: History,v 1.50 2002-05-24 11:51:12 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-24 may 02: Laszlo
+24 may 02: Laszlo (utils-V04-00-07)
 - G4MultipleScattering.hh,.cc: mods in angle distribution and
   in boundary algorithm 
 
