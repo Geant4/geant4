@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm3.cc,v 1.1 1999-01-08 16:32:50 gunter Exp $
+// $Id: TestEm3.cc,v 1.2 1999-01-26 16:27:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Comments
@@ -33,7 +33,7 @@
 #include "Em3CalorHit.hh"
 template class RWTPtrOrderedVector <Em3CalorHit>;
 template class RWTPtrVector <Em3CalorHit>;
-template class G4Allocator <Em3CalorHit>;
+template class G4Allocator  <Em3CalorHit>;
 #endif
 
 int main(int argc,char** argv) {

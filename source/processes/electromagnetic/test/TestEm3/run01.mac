@@ -1,9 +1,9 @@
-# $Id: run01.mac,v 1.1 1999-01-08 16:32:50 gunter Exp $
+# $Id: run01.mac,v 1.2 1999-01-26 16:27:35 maire Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
 #
-# Lead-liquidArgon 10 layers; electron 500 MeV
+# Lead-liquidArgon 50 layers; electron 500 MeV
 #
 /control/verbose 2
 #

@@ -1,9 +1,9 @@
 LIST
 C
-C     Lead-liquidArgon  10 layers; electon 500 MeV
+C     Lead-liquidArgon  50 layers; electon 500 MeV
 C
 MATE   8  (Imat1) 5 (Imat2)
-CALOR  10 (nbLay) 1.(thck1) 0.5 (thck2) 10. (calorYZ) 0. (field)
+CALOR  50 (nbLay) 0.23(thck1) 0.57 (thck2) 20. (calorYZ) 0. (field)
 TRIG   100
 KINE   3 (Itype) 0.500 (Ekine) -9. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
 DEBUG  10  5 1000
