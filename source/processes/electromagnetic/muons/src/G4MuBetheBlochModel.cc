@@ -29,14 +29,15 @@
 // File name:     G4MuBetheBlochModel
 //
 // Author:        Vladimir Ivanchenko on base of Laszlo Urban code
-// 
+//
 // Creation date: 09.08.2002
 //
-// Modifications: 
+// Modifications:
 //
 // 04-12-02 Fix problem of G4DynamicParticle constructor (V.Ivanchenko)
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 //
 
 //
@@ -53,8 +54,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuBetheBlochModel::G4MuBetheBlochModel(const G4ParticleDefinition* p)
-  : G4VEmModel(),
+G4MuBetheBlochModel::G4MuBetheBlochModel(const G4ParticleDefinition* p, 
+                                         const G4String& nam)
+  : G4VEmModel(nam),
   particle(0),
   highKinEnergy(100.*TeV),
   lowKinEnergy(2.0*MeV),
@@ -111,6 +113,7 @@ G4double G4MuBetheBlochModel::MinEnergyCut(const G4ParticleDefinition* p,
 
 G4bool G4MuBetheBlochModel::IsInCharge(const G4ParticleDefinition* p)
 {
+  if(!particle) SetParticle(p);
   return (p->GetPDGCharge() != 0.0 && p->GetPDGMass() > 10.*MeV
                                    && p->GetPDGSpin() == 0.5);
 }
@@ -130,7 +133,6 @@ G4double G4MuBetheBlochModel::ComputeDEDX(const G4Material* material,
                                               G4double kineticEnergy,
                                               G4double cutEnergy)
 {
-  if(!particle) SetParticle(p);
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tau   = kineticEnergy/mass;
   G4double x     = 1.0;
@@ -205,20 +207,19 @@ G4double G4MuBetheBlochModel::CrossSection(const G4Material* material,
                                                  G4double cutEnergy,
                                                  G4double maxEnergy) 
 {
-  if(!particle) SetParticle(p);
   G4double cross = 0.0;
   G4double tmaxSecondary = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tmax = G4std::min(tmaxSecondary, maxEnergy);
   if(cutEnergy < tmax) {
-    
+
     const G4ElementVector* theElementVector = material->GetElementVector();
     const G4double* NbOfAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();
     G4int NumberOfElements = material->GetNumberOfElements();
- 
+
     for (G4int iel=0; iel<NumberOfElements; iel++ ) {
 
-      cross +=  NbOfAtomsPerVolume[iel]* CrossSectionPerAtom( 
-                                    (*theElementVector)[iel]->GetZ(), 
+      cross +=  NbOfAtomsPerVolume[iel]* CrossSectionPerAtom(
+                                    (*theElementVector)[iel]->GetZ(),
                                     kineticEnergy, cutEnergy, tmax, tmaxSecondary);
 
     }

@@ -1,4 +1,4 @@
-$Id: History,v 1.77 2003-02-12 08:57:28 gcosmo Exp $
+$Id: History,v 1.78 2003-02-13 16:22:32 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+13 feb 03: V.Ivant
+- add names for all models
+- make the set of model per region available
+- make SubCutoff regime available per region
 
 12 feb 03: G.Cosmo (stand-V05-00-04)
 - Replaced call to RandPoisson::shoot() with G4Poisson(), more performant.

@@ -38,6 +38,7 @@
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 24-01-03 Fix for compounds (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 //
 
 //
@@ -69,8 +70,9 @@ G4double G4MuBremsstrahlungModel::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p)
-  : G4VEmModel(),
+G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
+                                                 const G4String& nam)
+  : G4VEmModel(nam),
   highKinEnergy(100.*TeV),
   lowKinEnergy(1.0*keV),
   minThreshold(1.0*keV),

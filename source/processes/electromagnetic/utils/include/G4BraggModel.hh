@@ -29,12 +29,13 @@
 // File name:     G4BraggModel
 //
 // Author:        Vladimir Ivanchenko
-// 
+//
 // Creation date: 03.01.2002
 //
 // Modifications:
 // 23-12-02 V.Ivanchenko change interface in order to moveto cut per region
 // 24-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -55,7 +56,7 @@ class G4BraggModel : public G4VEmModel
 
 public:
 
-  G4BraggModel(const G4ParticleDefinition* p = 0);
+  G4BraggModel(const G4ParticleDefinition* p = 0, const G4String& nam = "Bragg");
 
   ~G4BraggModel();
 

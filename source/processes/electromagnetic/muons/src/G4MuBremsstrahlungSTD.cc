@@ -43,10 +43,10 @@
 // 26-09-01 completion of store/retrieve PhysicsTable (mma)
 // 28-09-01 suppression of theMuonPlus ..etc..data members (mma)
 // 29-10-01 all static functions no more inlined (mma)
-// 08-11-01 particleMass becomes a local variable (mma)  
+// 08-11-01 particleMass becomes a local variable (mma)
 // 19-08-02 V.Ivanchenko update to new design
-// 23-12-02 Change interface in order to move to cut per region (VI)
-// 26-12-02 Secondary production moved to derived classes (VI)
+// 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
+// 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -89,9 +89,7 @@ void G4MuBremsstrahlungSTD::InitialiseProcess()
   G4VEmModel* em = new G4MuBremsstrahlungModel();
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(em, 0);
-  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
-  AddEmFluctuationModel(fm);
+  AddEmModel(1, em);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

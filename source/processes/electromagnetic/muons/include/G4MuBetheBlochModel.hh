@@ -29,13 +29,14 @@
 // File name:     G4MuBetheBlochModel
 //
 // Author:        Vladimir Ivanchenko on base of Laszlo Urban code
-// 
+//
 // Creation date: 09.08.2002
 //
 // Modifications:
 //
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 24-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 Add Nama (V.Ivanchenko)
 //
 
 //
@@ -57,7 +58,7 @@ class G4MuBetheBlochModel : public G4VEmModel
 
 public:
 
-  G4MuBetheBlochModel(const G4ParticleDefinition* p = 0);
+  G4MuBetheBlochModel(const G4ParticleDefinition* p = 0, const G4String& nam = "MuBetheBloch");
 
   ~G4MuBetheBlochModel();
 
@@ -131,7 +132,7 @@ private:
   G4double highKinEnergy;
   G4double lowKinEnergy;
   G4double twoln10;
-  G4double bg2lim; 
+  G4double bg2lim;
   G4double taulim;
   G4double qc;
 };

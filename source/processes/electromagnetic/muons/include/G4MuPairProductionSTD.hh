@@ -29,10 +29,10 @@
 // File name:     G4MuPairProductionSTD
 //
 // Author:        Laszlo Urban
-// 
+//
 // Creation date: 30.05.1998
 //
-// Modifications: 
+// Modifications:
 
 // 10-02-00 modifications , new e.m. structure, L.Urban
 // 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
@@ -41,6 +41,7 @@
 // 26-12-02 secondary production moved to derived classes (VI)
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
+// 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -89,10 +90,6 @@ public:
                                    G4double&,
                                    G4double&);
 
-  void SetSubCutoffProcessor(G4VSubCutoffProcessor*);
-
-  G4VSubCutoffProcessor* SubCutoffProcessor() {return subCutoffProcessor;};
-
   void SetSubCutoff(G4bool val);
 
   void PrintInfoDefinition() const;
@@ -115,7 +112,6 @@ private:
   const G4ParticleDefinition* theParticle;
   const G4ParticleDefinition* theBaseParticle;
 
-  G4VSubCutoffProcessor* subCutoffProcessor;
   G4bool                      subCutoff;
 
 };
@@ -149,8 +145,11 @@ inline G4std::vector<G4Track*>*  G4MuPairProductionSTD::SecondariesAlongStep(
 {
   G4std::vector<G4Track*>* newp = 0;
   if(subCutoff) {
-    G4VEmModel* model = SelectModel(kinEnergy);
-    newp = subCutoffProcessor->SampleSecondaries(step,tmax,eloss,model);
+    G4VSubCutoffProcessor* sp = SubCutoffProcessor(CurrentMaterialCutsCoupleIndex());
+    if (sp) {
+      G4VEmModel* model = SelectModel(kinEnergy);
+      newp = sp->SampleSecondaries(step,tmax,eloss,model);
+    }
   }
   return newp;
 }

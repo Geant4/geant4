@@ -37,11 +37,12 @@
 // 04-12-02 Fix problem of G4DynamicParticle constructor (V.Ivanchenko)
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 
-// Class Description: 
+// Class Description:
 //
-// Implementation of energy loss and delta-electron production by 
-// slow charged heavy particles 
+// Implementation of energy loss and delta-electron production by
+// slow charged heavy particles
 
 // -------------------------------------------------------------------
 //
@@ -56,8 +57,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4BraggModel::G4BraggModel(const G4ParticleDefinition* p) 
-  : G4VEmModel(),
+G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
+  : G4VEmModel(nam),
   particle(0),
   highKinEnergy(2.0*MeV),
   lowKinEnergy(0.0*MeV),
@@ -70,12 +71,12 @@ G4BraggModel::G4BraggModel(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4BraggModel::~G4BraggModel() 
+G4BraggModel::~G4BraggModel()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4BraggModel::SetParticle(const G4ParticleDefinition* p) 
+void G4BraggModel::SetParticle(const G4ParticleDefinition* p)
 {
   particle = p;
   mass = particle->GetPDGMass();
@@ -89,15 +90,15 @@ void G4BraggModel::SetParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BraggModel::HighEnergyLimit(const G4ParticleDefinition* p) 
+G4double G4BraggModel::HighEnergyLimit(const G4ParticleDefinition* p)
 {
   if(!particle) SetParticle(p);
   return highKinEnergy;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BraggModel::LowEnergyLimit(const G4ParticleDefinition* p) 
+G4double G4BraggModel::LowEnergyLimit(const G4ParticleDefinition* p)
 {
   if(!particle) SetParticle(p);
   return lowKinEnergy;
@@ -115,6 +116,7 @@ G4double G4BraggModel::MinEnergyCut(const G4ParticleDefinition* p,
 
 G4bool G4BraggModel::IsInCharge(const G4ParticleDefinition* p)
 {
+  if(!particle) SetParticle(p);
   return (p->GetPDGCharge() != 0.0 && p->GetPDGMass() > 10.*MeV);
 }
 
@@ -133,7 +135,6 @@ G4double G4BraggModel::ComputeDEDX(const G4Material* material,
                                          G4double kineticEnergy,
                                          G4double cutEnergy)
 {
-  if(!particle) SetParticle(p);
 
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double dedx  = DEDX(material, kineticEnergy/massRate);
@@ -142,20 +143,20 @@ G4double G4BraggModel::ComputeDEDX(const G4Material* material,
 
     G4double x   = cutEnergy/tmax;
     G4double tau = kineticEnergy/mass;
-    G4double gam = tau + 1.0;    
+    G4double gam = tau + 1.0;
     G4double beta2 = 1. - 1./(gam*gam);
-    //    G4double bg2   = tau * (tau+2.0);        
-    dedx += (log(x) + (1.0 - x)*beta2) * twopi_mc2_rcl2 
+    //    G4double bg2   = tau * (tau+2.0);
+    dedx += (log(x) + (1.0 - x)*beta2) * twopi_mc2_rcl2
           *  (material->GetElectronDensity())/beta2;
-  }    
-    
+  }
+
   // now compute the total ionization loss
 
   if (dedx < 0.0) dedx = 0.0 ;
-  
+
   dedx *= chargeSquare;
-  
-  return dedx; 
+
+  return dedx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -164,9 +165,9 @@ G4double G4BraggModel::CrossSection(const G4Material* material,
                                     const G4ParticleDefinition* p,
                                           G4double kineticEnergy,
                                           G4double cutEnergy,
-                                          G4double maxEnergy) 
+                                          G4double maxEnergy)
 {
-  if(!particle) SetParticle(p);
+
   G4double cross = 0.0;
   G4double tmax = G4std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
   if(cutEnergy < tmax) {

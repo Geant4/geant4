@@ -44,6 +44,7 @@
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
 // 06-02-03 Add control on tmax in PostStepDoIt (V.Ivanchenko)
+// 13-02-03 SubCutoffProcessors defined for regions (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -77,12 +78,14 @@
 #include "G4GenericIon.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4Region.hh"
+#include "G4RegionStore.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
                  G4VContinuousDiscreteProcess(name, type),
-  emFluctModel(0),
+  nSCoffRegions(0),
+  idxSCoffRegions(0),
   theDEDXTable(0),
   theRangeTable(0),
   theSecondaryRangeTable(0),
@@ -105,6 +108,8 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
 {
   modelManager = new G4EmModelManager();
   (G4LossTableManager::Instance())->Register(this);
+  scoffProcessors.clear();
+  scoffRegions.clear();
 
   // default dRoverRange and finalRange
   SetStepLimits(0.2, 200.0*micrometer);
@@ -120,8 +125,20 @@ G4VEnergyLossSTD::~G4VEnergyLossSTD()
   if(theLambdaTable) theLambdaTable->clearAndDestroy();
   delete modelManager;
 
-  if(emFluctModel) delete emFluctModel;
   (G4LossTableManager::Instance())->Clear();
+
+  if (nSCoffRegions) {
+    for (G4int i=0; i<nSCoffRegions; i++) {
+      if (scoffProcessors[i]) {
+	for (G4int j=i+1; j<nSCoffRegions; j++) {
+	  if(scoffProcessors[i] == scoffProcessors[j]) scoffProcessors[j] = 0;
+	}
+        delete scoffProcessors[i];
+      }
+    }
+    scoffProcessors.clear();
+    scoffRegions.clear();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -169,29 +186,42 @@ void G4VEnergyLossSTD::Initialise()
   }
 
   theCuts = modelManager->Initialise(particle, secondaryParticle, minSubRange, verboseLevel);
+  
+  // Sub Cutoff Regime
 
-  if(1 < verboseLevel) {
-    G4cout << "G4VEnergyLossSTD::Initialise(): emFluctModel= " << emFluctModel
-           << G4endl;
-  }
+  idxSCoffRegions.clear();
 
-  if(emFluctModel) emFluctModel->Initialise(particle);
-
-  G4VSubCutoffProcessor* subCutoffProcessor = SubCutoffProcessor();
-
-  if (subCutoffProcessor) {
+  if (nSCoffRegions) {
     const G4DataVector* theSubCuts = modelManager->SubCutoff();
-    subCutoffProcessor->Initialise(particle, secondaryParticle, theCuts, theSubCuts);
+    const G4ProductionCutsTable* theCoupleTable=
+          G4ProductionCutsTable::GetProductionCutsTable();
+    size_t numOfCouples = theCoupleTable->GetTableSize();
+
+    for (G4int i=0; i<nSCoffRegions; i++) {
+      scoffProcessors[i]->Initialise(particle, secondaryParticle, theCuts, theSubCuts);
+    }
+    for (size_t j=0; j<numOfCouples; j++) {
+
+      const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(j);
+      const G4ProductionCuts* pcuts = couple->GetProductionCuts();
+      G4int reg = nSCoffRegions;
+      do {reg--;} while (reg && pcuts != (scoffRegions[reg]->GetProductionCuts()));
+      idxSCoffRegions.push_back(reg);
+    }
   }
-  if(0 < verboseLevel) {
+  if (0 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::Initialise() is done "
            << " chargeSqRatio= " << chargeSqRatio
            << " massRatio= " << massRatio
-           << " reduceFactor= " << reduceFactor;
-    if(subCutoffProcessor) G4cout << " SubCutoff Regime is ON";
-    G4cout << G4endl;
+           << " reduceFactor= " << reduceFactor << G4endl;
+    if (nSCoffRegions) {
+      G4cout << " SubCutoff Regime is ON for regions: " << G4endl;
+      for (G4int i=0; i<nSCoffRegions; i++) {
+        const G4Region* r = scoffRegions[i];
+	G4cout << "           " << r->GetName() << G4endl;
+      }
+    }
   }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -253,9 +283,10 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
 
   theLambdaTable = BuildLambdaTable();
 
-  G4VSubCutoffProcessor* subCutoffProcessor = SubCutoffProcessor();
-  if (subCutoffProcessor) {
-    subCutoffProcessor->SetLambdaSubTable(BuildLambdaSubTable());
+  if (nSCoffRegions) {
+    for (G4int i=0; i<nSCoffRegions; i++) {
+      scoffProcessors[i]->SetLambdaSubTable(BuildLambdaSubTable());
+    }
   }
   tablesAreBuilt = true;
 
@@ -263,7 +294,7 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
 
   if(0 < verboseLevel) {
     G4cout << "Tables are built for " << particle->GetParticleName()
-           << " Integral= " <<  integral
+           << " IntegralFlag= " <<  integral
            << G4endl;
     if(2 < verboseLevel) {
       G4cout << "DEDXTable address= " << theDEDXTable << G4endl;
@@ -313,16 +344,22 @@ G4bool G4VEnergyLossSTD::StorePhysicsTable(G4ParticleDefinition* part,
   }
 
   G4PhysicsTable*  theLambdaSubTable = 0;
-  G4VSubCutoffProcessor* subCutoffProcessor = SubCutoffProcessor();
-  if(subCutoffProcessor) theLambdaSubTable = subCutoffProcessor->LambdaSubTable();
+  if(nSCoffRegions) {
+    for (G4int i=0; i<nSCoffRegions; i++) {
+      if(scoffProcessors[i]) {
+        theLambdaSubTable = scoffProcessors[i]->LambdaSubTable();
 
-  if (theLambdaSubTable) {
-    filename = GetPhysicsTableFileName(part,directory,"LambdaSub",ascii);
-    if ( !theLambdaSubTable->StorePhysicsTable(filename, ascii) ){
-      G4cout << "Fatal error theLambdaSubTable->StorePhysicsTable in <"
-             << filename << ">"
-             << G4endl;
-      return false;
+        if (theLambdaSubTable) {
+          filename = GetPhysicsTableFileName(part,directory,
+	               "LambdaSub"+scoffProcessors[i]->GetName(),ascii);
+          if ( !theLambdaSubTable->StorePhysicsTable(filename, ascii) ){
+            G4cout << "Fatal error theLambdaSubTable->StorePhysicsTable in <"
+                   << filename << ">"
+                   << G4endl;
+            return false;
+	  }
+        }
+      }
     }
   }
   G4cout << GetProcessName() << " for " << particle->GetParticleName()
@@ -408,32 +445,40 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
   }
 
   G4PhysicsTable*  theLambdaSubTable = 0;
-  filename = GetPhysicsTableFileName(part,directory,"LambdaSub",ascii);
-  theLambdaSubTable = new G4PhysicsTable(numOfCouples);
-  if (theLambdaSubTable->RetrievePhysicsTable(filename, ascii) ){
-    G4cout << "LambdaSub table for " << particleName << " is retrieved from <"
-           << filename << ">"
-           << G4endl;
-    G4VSubCutoffProcessor* subCutoffProcessor = SubCutoffProcessor();
-    if(subCutoffProcessor) subCutoffProcessor->SetLambdaSubTable(theLambdaSubTable);
-  } else {
-    G4cout << "LambdaSub table for " << particleName << " in file <"
-           << filename << "> is not exist"
-           << G4endl;
+  if (nSCoffRegions) {
+    for (G4int i=0; i<nSCoffRegions; i++) {
+      if(scoffProcessors[i]) {
+
+        filename = GetPhysicsTableFileName(part,directory,
+                    "LambdaSub"+scoffProcessors[i]->GetName(),ascii);
+        theLambdaSubTable = new G4PhysicsTable(numOfCouples);
+        if (theLambdaSubTable->RetrievePhysicsTable(filename, ascii) ){
+          G4cout << "LambdaSub table for " << particleName << " is retrieved from <"
+                 << filename << ">"
+                 << G4endl;
+
+          scoffProcessors[i]->SetLambdaSubTable(theLambdaSubTable);
+
+        } else {
+          G4cout << "LambdaSub table for " << particleName << " in file <"
+                 << filename << "> is not exist"
+                 << G4endl;
+        }
+      }
+    }
   }
 
   // G4LossTableManager manages DEDX and range tables
 
   (G4LossTableManager::Instance())->RetrieveDEDXTable(particle, this);
 
-
-  G4cout << GetProcessName() << " for " << particleName 
+  G4cout << GetProcessName() << " for " << particleName
          << ": end of retrieving PhysicsTables from directory <"
          << directory << ">" << G4endl;
- 	 
+
   return true;
 }
-  
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -466,18 +511,35 @@ void G4VEnergyLossSTD::SetParticles(const G4ParticleDefinition* p1,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::AddEmModel(G4VEmModel* p, G4int order, const G4Region* r)
+void G4VEnergyLossSTD::AddEmModel(G4int order, G4VEmModel* p, G4VEmFluctuationModel* fluc,
+                                const G4Region* region)
 {
-  modelManager->AddEmModel(p, order, r);
+  modelManager->AddEmModel(order, p, fluc, region);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::AddEmFluctuationModel(G4VEmFluctuationModel* p, const G4Region*)
+void G4VEnergyLossSTD::AddSubCutoffProcessor(G4VSubCutoffProcessor* p,
+                                       const G4Region* r)
 {
-  if(emFluctModel) delete emFluctModel;
-  emFluctModel = p;
-  if(p) lossFluctuationFlag = true;
+  if( !p ) {
+    G4cout << "G4VEnergyLossSTD::AddSubCutoffProcessor WARNING: no SubCutoffProcessor defined." << G4endl;
+    return;
+  }
+  G4RegionStore* regionStore = G4RegionStore::GetInstance();
+  if (!r) r = regionStore->GetRegion("DefaultRegionForTheWorld", false);
+  if (nSCoffRegions) {
+    for (G4int i=0; i<nSCoffRegions; i++) {
+      if (r == scoffRegions[i]) {
+        if ( scoffProcessors[i] ) delete scoffProcessors[i];
+	scoffProcessors[i] = p;
+        return;
+      }
+    }
+  }
+  scoffProcessors.push_back(p);
+  scoffRegions.push_back(r);
+  nSCoffRegions++;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -559,7 +621,7 @@ G4PhysicsTable* G4VEnergyLossSTD::BuildLambdaTable()
     theTable->insert(aVector) ;
   }
 
-  if(1 < verboseLevel) {
+  if(0 < verboseLevel) {
     G4cout << "Lambda table is built" << G4endl;
   }
 
@@ -593,7 +655,7 @@ G4PhysicsTable* G4VEnergyLossSTD::BuildLambdaSubTable()
     theTable->insert(aVector) ;
   }
 
-  if(1 < verboseLevel) {
+  if(0 < verboseLevel) {
     G4cout << "Table is built" << G4endl;
   }
 
@@ -662,7 +724,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
              << G4endl;
     }
     */
-    
+
     if(eloss <= 0.0) eloss = preStepKinEnergy*sqrt(length/fRange);
 
   }
@@ -671,6 +733,23 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
   G4double tmax = MaxSecondaryEnergy(dynParticle);
   tmax = G4std::min(tmax,(*theCuts)[currentMaterialIndex]);
 
+  // Sample fluctuations
+  if (lossFluctuationFlag && eloss + minKinEnergy < preStepKinEnergy) {
+
+    eloss = modelManager->SampleFluctuations(currentMaterial, dynParticle,
+                                       tmax, length, eloss, preStepKinEnergy, 
+				       currentMaterialIndex);
+  }
+
+  /*
+  if(-1 < verboseLevel) {
+    G4cout << "eloss(MeV)= " << eloss/MeV
+           << " currentChargeSquare= " << chargeSquare
+           << G4endl;
+  }
+  */
+
+  // Subcutoff and/or deexcitation
   G4std::vector<G4Track*>* newp =
            SecondariesAlongStep(step, tmax, eloss, preStepKinEnergy);
 
@@ -703,23 +782,8 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
   }
   */
 
-  // Sample fluctuations
 
-  if (lossFluctuationFlag && eloss + minKinEnergy < preStepKinEnergy) {
-    
-    eloss =  emFluctModel->SampleFluctuations(currentMaterial, dynParticle,
-                                       tmax, length, eloss);
-      if(eloss < 0.0) eloss = 0.0;
-  }
   preStepKinEnergy -= eloss;
-
-  /*  
-  if(-1 < verboseLevel) {
-    G4cout << "eloss(MeV)= " << eloss/MeV
-           << " currentChargeSquare= " << chargeSquare
-           << G4endl;
-  }
-  */
 
   if (preStepKinEnergy < minKinEnergy) {
 

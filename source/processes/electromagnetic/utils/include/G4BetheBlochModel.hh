@@ -36,6 +36,7 @@
 //
 // 23-12-02 V.Ivanchenko change interface in order to moveto cut per region
 // 24-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 
 //
 // Class Description:
@@ -56,7 +57,7 @@ class G4BetheBlochModel : public G4VEmModel
 
 public:
 
-  G4BetheBlochModel(const G4ParticleDefinition* p = 0);
+  G4BetheBlochModel(const G4ParticleDefinition* p = 0, const G4String& nam = "BetheBloch");
 
   ~G4BetheBlochModel();
 

@@ -37,6 +37,7 @@
 // 03-12-02 V.Ivanchenko fix a bug in model selection
 // 20-01-03 Migrade to cut per region (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 The set of models is defined for region (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -53,16 +54,55 @@
 #ifndef G4EmModelManager_h
 #define G4EmModelManager_h 1
 
-#include "globals.hh"
-#include "G4Track.hh"
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsVector.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class G4Step;
+#include "globals.hh"
+#include "G4DataVector.hh"
+
+class G4RegionModels
+{
+
+friend class G4EmModelManager;
+
+public:
+
+private:
+
+  G4RegionModels(G4int nMod, G4std::vector<G4int>& list, G4DataVector& lowE);
+
+  ~G4RegionModels();
+
+  G4int SelectIndex(G4double e) const {
+    G4int idx = 0;
+    if (nModelsForRegion>1) {
+      idx = nModelsForRegion;
+      do {idx--;} while (idx && e <= lowKineticEnergy[idx]);
+    }
+    return theListOfModelIndexes[idx];
+  };
+
+  G4int ModelIndex(G4int n) const {
+    return theListOfModelIndexes[n];
+  };
+
+  G4int NumberOfModels() const {
+    return nModelsForRegion;
+  };
+
+  G4int              nModelsForRegion;
+  G4int*             theListOfModelIndexes;
+  G4double*          lowKineticEnergy;
+
+};
+
+#include "G4VEmModel.hh"
+#include "G4VEmFluctuationModel.hh"
+#include "G4DynamicParticle.hh"
+
+class G4Region;
 class G4ParticleDefinition;
-class G4VEmModel;
 class G4DataVector;
-class G4VParticleChange;
+class G4PhysicsVector;
 class G4MaterialCutsCouple;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -94,7 +134,15 @@ public:
 
   G4VEmModel* SelectModel(G4double& energy, size_t& index);
 
-  void AddEmModel(G4VEmModel*, G4int, const G4Region*);
+  G4double SampleFluctuations(const G4Material* material,
+                              const G4DynamicParticle* dp,
+                                    G4double& tmax,
+		                    G4double& length,
+		                    G4double& eloss,
+				    G4double& preStepKinEnergy,
+				    size_t&   index);
+
+  void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel*, const G4Region*);
 
 private:
 
@@ -110,13 +158,18 @@ private:
   G4DataVector                theCuts;
   G4DataVector                theSubCuts;
 
-  G4VEmModel*                 emModels[5];
-  G4int                       nEmModels;
-  G4int                       nmax;
+  G4std::vector<G4VEmModel*>                models;
+  G4std::vector<G4VEmFluctuationModel*>     flucModels;
+  G4std::vector<const G4Region*>            regions;
+  G4std::vector<G4int>                      orderOfModels;
+  G4DataVector                              upperEkin;
 
-  G4int                       order[5];
-  G4double                    upperEkin[5];
-  G4bool                      orderIsChanged;
+  G4int                       nEmModels;
+  G4int                       nRegions;
+  G4int                       nCouples;
+
+  G4std::vector<G4int>                      idxOfRegionModels;
+  G4std::vector<G4RegionModels*>            setOfRegionModels;
 
   G4double                    minSubRange;
 
@@ -126,24 +179,37 @@ private:
   G4int                       verboseLevel;
 
   // cash
-  G4VEmModel*                 currentModel;
+  G4int                       currentIdx;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VEmModel* G4EmModelManager::SelectModel(G4double& energy, size_t&)
+inline G4VEmModel* G4EmModelManager::SelectModel(G4double& kinEnergy, size_t& index)
 {
-  if(nEmModels == 4 && energy > upperEkin[2]) {
-    currentModel = emModels[3];
-  } else if(nEmModels >= 3 && energy > upperEkin[1]) {
-    currentModel = emModels[2];
-  } else if(nEmModels >= 2 && energy > upperEkin[0]) {
-    currentModel = emModels[1];
-  } else {
-    currentModel = emModels[0];
-  }
-  return currentModel;
+  currentIdx = (setOfRegionModels[idxOfRegionModels[index]])->SelectIndex(kinEnergy);
+  return models[currentIdx];
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4EmModelManager::SampleFluctuations(
+                              const G4Material* material,
+                              const G4DynamicParticle* dp,
+                                    G4double& tmax,
+		                    G4double& length,
+		                    G4double& eloss,
+				    G4double& kinEnergy,
+				    size_t&   index)
+
+{
+  currentIdx = (setOfRegionModels[idxOfRegionModels[index]])->SelectIndex(kinEnergy);
+  G4VEmFluctuationModel* fm = flucModels[currentIdx];
+  G4double x = eloss;
+  if(fm) x = fm->SampleFluctuations(material,dp,tmax,length,eloss);
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -163,6 +229,4 @@ inline const G4DataVector* G4EmModelManager::SubCutoff() const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
-
-
 

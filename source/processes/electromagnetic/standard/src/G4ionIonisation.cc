@@ -29,13 +29,14 @@
 // File name:     G4ionIonisation
 //
 // Author:        Vladimir Ivanchenko
-// 
+//
 // Creation date: 07.05.2002
 //
-// Modifications: 
+// Modifications:
 //
-// 23.12.2002 Change interface in order to move to cut per region (VI)
-// 26.12.2002 Secondary production moved to derived classes (VI)
+// 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
+// 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
+// 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 //
 //
 // -------------------------------------------------------------------
@@ -59,7 +60,6 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
   : G4VEnergyLossSTD(name),
     theParticle(0),
     theBaseParticle(G4Proton::Proton()),
-    subCutoffProcessor(0),
     subCutoff(false)
 {
   InitialiseProcess();
@@ -67,14 +67,12 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ionIonisation::~G4ionIonisation() 
-{
-  if(subCutoffProcessor) delete subCutoffProcessor;  
-}
+G4ionIonisation::~G4ionIonisation()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ionIonisation::InitialiseProcess() 
+void G4ionIonisation::InitialiseProcess()
 {
   SetSecondaryParticle(G4Electron::Electron());
 
@@ -83,17 +81,16 @@ void G4ionIonisation::InitialiseProcess()
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
 
+  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
+
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(2.0*MeV);
-  AddEmModel(em, 0);
+  AddEmModel(1, em, fm);
   G4VEmModel* em1 = new G4BetheBlochModel();
   em1->SetLowEnergyLimit(2.0*MeV);
   em1->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(em1, 1);
-
-  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
-  AddEmFluctuationModel(fm);
+  AddEmModel(2, em1, fm);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -118,19 +115,11 @@ void G4ionIonisation::PrintInfoDefinition() const
          << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
-
-void G4ionIonisation::SetSubCutoffProcessor(G4VSubCutoffProcessor* p)
-{
-  if(subCutoffProcessor) delete subCutoffProcessor;
-  subCutoffProcessor = p;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4ionIonisation::SetSubCutoff(G4bool val)
 {
-  if(subCutoffProcessor) subCutoff = val;
+  subCutoff = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

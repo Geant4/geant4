@@ -37,6 +37,7 @@
 // 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
 // 29-12-02 Change interface (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -61,7 +62,7 @@ class G4SCProcessorStand   :  public G4VSubCutoffProcessor
 
 public:
 
-  G4SCProcessorStand();
+  G4SCProcessorStand(const G4String& nam = "ProcSTD");
 
   ~G4SCProcessorStand();
 

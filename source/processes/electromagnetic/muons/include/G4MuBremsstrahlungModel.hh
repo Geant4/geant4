@@ -36,6 +36,7 @@
 //
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 //
 
 //
@@ -56,7 +57,7 @@ class G4MuBremsstrahlungModel : public G4VEmModel
 
 public:
 
-  G4MuBremsstrahlungModel(const G4ParticleDefinition* p = 0);
+  G4MuBremsstrahlungModel(const G4ParticleDefinition* p = 0, const G4String& nam = "MuBrem");
 
   ~G4MuBremsstrahlungModel();
 

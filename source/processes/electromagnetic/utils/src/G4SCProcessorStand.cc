@@ -38,6 +38,7 @@
 // 23-12-02 change interface in order to move to cut per region (V.Ivanchenko)
 // 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 //
 //
 // -------------------------------------------------------------------
@@ -54,18 +55,19 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4VEmModel.hh"
 #include "Randomize.hh"
+#include "G4Step.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4SCProcessorStand::G4SCProcessorStand() 
-  : G4VSubCutoffProcessor(),
+G4SCProcessorStand::G4SCProcessorStand(const G4String& nam)
+  : G4VSubCutoffProcessor(nam),
     theLambdaSubTable(0),
     thePositron(G4Positron::Positron())
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4SCProcessorStand::~G4SCProcessorStand() 
+G4SCProcessorStand::~G4SCProcessorStand()
 {
   if(theLambdaSubTable) theLambdaSubTable->clearAndDestroy();
 }
@@ -73,9 +75,9 @@ G4SCProcessorStand::~G4SCProcessorStand()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4SCProcessorStand::Initialise(const G4ParticleDefinition* p,
-                                    const G4ParticleDefinition* sp, 
+                                    const G4ParticleDefinition* sp,
                                     const G4DataVector* vCuts,
-                                    const G4DataVector* vSubCuts) 
+                                    const G4DataVector* vSubCuts)
 {
   particle = p;
   secondaryParticle = sp;

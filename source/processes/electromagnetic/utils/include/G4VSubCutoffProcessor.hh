@@ -34,10 +34,11 @@
 //
 // Modifications: 
 //
-// 26-12-02 Secondary production moved to derived classes (VI)
-// 29-12-02 Change interface (VI)
+// 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
+// 29-12-02 Change interface (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 //
-// Class Description: 
+// Class Description:
 //
 // Abstract class for interface to simualtion of subCutoff
 
@@ -58,12 +59,12 @@ class G4VEmModel;
 class G4DataVector;
 class G4PhysicsTable;
 
-class G4VSubCutoffProcessor 
+class G4VSubCutoffProcessor
 {
 
 public:
 
-  G4VSubCutoffProcessor() {};
+  G4VSubCutoffProcessor(const G4String& nam): name(nam) {};
 
   virtual ~G4VSubCutoffProcessor() {};
 
@@ -72,14 +73,16 @@ public:
 						           G4double& meanLoss,
                                                            G4VEmModel*) = 0;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-                          const G4ParticleDefinition*, 
+  virtual void Initialise(const G4ParticleDefinition*,
+                          const G4ParticleDefinition*,
                           const G4DataVector*,
                           const G4DataVector*) = 0;
 
   virtual void SetLambdaSubTable(G4PhysicsTable*) = 0;
 
   virtual G4PhysicsTable* LambdaSubTable() = 0;
+  
+  G4String GetName() const {return name;};
 
 protected:
 
@@ -89,6 +92,7 @@ private:
   G4VSubCutoffProcessor & operator=(const  G4VSubCutoffProcessor &right);
   G4VSubCutoffProcessor(const  G4VSubCutoffProcessor&);
 
+  const G4String   name;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

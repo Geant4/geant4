@@ -35,6 +35,7 @@
 //
 // 28-12-02 add method Dispersion (V.Ivanchenko)
 // 07-02-03 change signature (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 //
 // Class Description: 
 //
@@ -54,8 +55,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
-G4UniversalFluctuation::G4UniversalFluctuation()
- :G4VEmFluctuationModel(),
+G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
+ :G4VEmFluctuationModel(nam),
   minNumberInteractionsBohr(10.0),
   theBohrBeta2(50.0*keV/proton_mass_c2),
   minLoss(0.000001*eV),
@@ -77,7 +78,7 @@ G4UniversalFluctuation::~G4UniversalFluctuation()
 
 void G4UniversalFluctuation::Initialise(const G4ParticleDefinition* part)
 {
-  particle       = part; 
+  particle       = part;
   particleMass   = part->GetPDGMass();
   G4double q     = part->GetPDGCharge()/eplus;
   chargeSquare   = q*q;
@@ -85,7 +86,7 @@ void G4UniversalFluctuation::Initialise(const G4ParticleDefinition* part)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material, 
+G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
                                                 const G4DynamicParticle* dp,
 				                      G4double& tmax,
 					              G4double& length,

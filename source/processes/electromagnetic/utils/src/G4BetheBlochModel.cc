@@ -29,14 +29,15 @@
 // File name:     G4BetheBlochModel
 //
 // Author:        Vladimir Ivanchenko on base of Laszlo Urban code
-// 
+//
 // Creation date: 03.01.2002
 //
-// Modifications: 
+// Modifications:
 //
 // 04-12-02 Fix problem of G4DynamicParticle constructor (V.Ivanchenko)
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -51,8 +52,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p)
-  : G4VEmModel(),
+G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p, const G4String& nam)
+  : G4VEmModel(nam),
   particle(0),
   highKinEnergy(100.*TeV),
   lowKinEnergy(2.0*MeV),
@@ -67,7 +68,6 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p)
 
 G4BetheBlochModel::~G4BetheBlochModel()
 {}
-// 27-01-03 Make models region aware (V.Ivanchenko)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -111,6 +111,7 @@ G4double G4BetheBlochModel::MinEnergyCut(const G4ParticleDefinition* p,
 
 G4bool G4BetheBlochModel::IsInCharge(const G4ParticleDefinition* p)
 {
+  if(!particle) SetParticle(p);
   return (p->GetPDGCharge() != 0.0 && p->GetPDGMass() > 10.*MeV);
 }
 
@@ -129,12 +130,11 @@ G4double G4BetheBlochModel::ComputeDEDX(const G4Material* material,
                                               G4double kineticEnergy,
                                               G4double cutEnergy)
 {
-  if(!particle) SetParticle(p);
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tau   = kineticEnergy/mass;
   G4double x     = 1.0;
   if(cutEnergy < tmax) x = cutEnergy/tmax;
-  G4double gam   = tau + 1.0;    
+  G4double gam   = tau + 1.0;
   G4double beta2 = 1. - 1./(gam*gam);
   G4double bg2   = tau * (tau+2.0);
 
@@ -200,24 +200,23 @@ G4double G4BetheBlochModel::CrossSection(const G4Material* material,
                                                G4double cutEnergy,
                                                G4double maxEnergy) 
 {
-  if(!particle) SetParticle(p);
   G4double cross = 0.0;
   G4double tmax = G4std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
   if(cutEnergy < tmax) {
-    
+
     G4double x      = cutEnergy/tmax;
     G4double energy = kineticEnergy + mass;
     G4double gam    = energy/mass;
     G4double beta2  = 1. - 1./(gam*gam);
     cross = (1.0 - x*(1.0 - beta2*log(x)))/cutEnergy;
-    
+
     // +term for spin=1/2 particle
     if( 0.5 == spin ) {
       cross +=  0.5 * (tmax - cutEnergy) / (energy*energy);
-    
+
     // +term for spin=1 particle
     } else if( 0.9 < spin ) {
-      
+
       cross += -log(x)/(3.0*qc) +
 	(tmax - cutEnergy) * ((1.0+ 0.25*tmax*(1.0 + x)/qc)/(energy*energy)
 	- beta2 / (tmax * qc) )/3.0;

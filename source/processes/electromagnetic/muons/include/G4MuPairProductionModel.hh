@@ -29,13 +29,14 @@
 // File name:     G4MuPairProductionModel
 //
 // Author:        Vladimir Ivanchenko on base of Laszlo Urban code
-// 
+//
 // Creation date: 18.05.2002
 //
-// Modifications: 
+// Modifications:
 //
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 //
 
 //
@@ -57,12 +58,12 @@ class G4MuPairProductionModel : public G4VEmModel
 
 public:
 
-  G4MuPairProductionModel(const G4ParticleDefinition* p = 0);
+  G4MuPairProductionModel(const G4ParticleDefinition* p = 0, const G4String& nam = "MuPairProd");
 
   ~G4MuPairProductionModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-  
+
   G4double HighEnergyLimit(const G4ParticleDefinition* p);
 
   G4double LowEnergyLimit(const G4ParticleDefinition* p);

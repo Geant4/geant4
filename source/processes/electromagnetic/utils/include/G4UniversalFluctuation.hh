@@ -32,11 +32,12 @@
 // 
 // Creation date: 03.01.2002
 //
-// Modifications: 
+// Modifications:
 //
 // 09-12-02 remove warnings (V.Ivanchenko)
 // 28-12-02 add method Dispersion (V.Ivanchenko)
 // 07-02-03 change signature (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 //
 // Class Description: 
 //
@@ -56,20 +57,20 @@ class G4UniversalFluctuation : public G4VEmFluctuationModel
 
 public:
 
-  G4UniversalFluctuation();
+  G4UniversalFluctuation(const G4String& nam = "UniFluc");
 
   ~G4UniversalFluctuation();
 
-  G4double SampleFluctuations(const G4Material*, 
+  G4double SampleFluctuations(const G4Material*,
                           const G4DynamicParticle*,
- 				G4double&, 
-                                G4double&, 
-                                G4double&); 
+ 				G4double&,
+                                G4double&,
+                                G4double&);
 
-  G4double Dispersion(    const G4Material*, 
+  G4double Dispersion(    const G4Material*,
                           const G4DynamicParticle*,
- 				G4double&, 
-                                G4double&); 
+ 				G4double&,
+                                G4double&);
 
   void Initialise(const G4ParticleDefinition*);
 
@@ -77,7 +78,7 @@ protected:
 
 private:
 
-  // hide assignment operator 
+  // hide assignment operator
   G4UniversalFluctuation & operator=(const  G4UniversalFluctuation &right);
   G4UniversalFluctuation(const  G4UniversalFluctuation&);
 

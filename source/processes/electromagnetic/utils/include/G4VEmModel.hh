@@ -32,10 +32,11 @@
 //
 // Creation date: 03.01.2002
 //
-// Modifications: 
+// Modifications:
 //
 // 23-12-02 V.Ivanchenko change interface before move to cut per region
 // 24-01-03 Cut per region (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 //
 
 //
@@ -62,7 +63,7 @@ class G4VEmModel
 
 public:
 
-  G4VEmModel() {};
+  G4VEmModel(const G4String& nam): name(nam) {};
 
   virtual ~G4VEmModel() {};
 
@@ -107,6 +108,8 @@ public:
   virtual G4double MaxSecondaryEnergy(
 				const G4DynamicParticle* dynParticle) = 0;
 
+  G4String GetName() const {return name;};
+
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
@@ -118,6 +121,7 @@ private:
   G4VEmModel & operator=(const  G4VEmModel &right);
   G4VEmModel(const  G4VEmModel&);
 
+  const G4String  name;
 };
 
 #endif

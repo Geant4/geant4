@@ -39,6 +39,7 @@
 // 23-12-02  Change interface in order to move to cut per region (V.Ivanchenko)
 // 24-01-03  Fix for compounds (V.Ivanchenko)
 // 27-01-03  Make models region aware (V.Ivanchenko)
+// 13-02-03 Add name (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -61,8 +62,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p)
-  : G4VEmModel(),
+G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p, 
+                                               const G4String& nam)
+  : G4VEmModel(nam),
   particle(0),
   highKinEnergy(100.*TeV),
   lowKinEnergy(1.0*keV),

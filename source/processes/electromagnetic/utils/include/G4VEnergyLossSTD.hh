@@ -38,6 +38,7 @@
 // 20-01-03 Migrade to cut per region (V.Ivanchenko)
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
+// 13-02-03 SubCutoffProcessors defined for regions (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -157,14 +158,10 @@ public:
     // File name should is constructed as processName+particleName and the
     // should be placed under the directory specifed by the argument.
 
-  void AddEmModel(G4VEmModel*, G4int, const G4Region* region = 0);
+  void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel* fluc = 0,
+                                const G4Region* region = 0);
 
-  void AddEmFluctuationModel(G4VEmFluctuationModel*, const G4Region* region = 0);
-
-  virtual void SetSubCutoffProcessor(G4VSubCutoffProcessor*,
-                               const G4Region* region = 0) {};
-
-  virtual G4VSubCutoffProcessor* SubCutoffProcessor() {return 0;};
+  void AddSubCutoffProcessor(G4VSubCutoffProcessor*, const G4Region* region = 0);
 
   virtual void SetSubCutoff(G4bool) {};
 
@@ -244,6 +241,10 @@ protected:
 
   G4VEmModel* SelectModel(G4double& kinEnergy);
 
+  G4VSubCutoffProcessor* SubCutoffProcessor(size_t index);
+
+  size_t CurrentMaterialCutsCoupleIndex() const {return currentMaterialIndex;};
+
   void SetMassRatio(G4double val) {massRatio = val;};
 
   void SetReduceFactor(G4double val) {reduceFactor = val;};
@@ -271,8 +272,11 @@ private:
 
 private:
 
-  G4EmModelManager*                modelManager;
-  G4VEmFluctuationModel*           emFluctModel;
+  G4EmModelManager*                     modelManager;
+  G4std::vector<G4VSubCutoffProcessor*> scoffProcessors;
+  G4std::vector<const G4Region*>        scoffRegions;
+  G4int                                 nSCoffRegions;
+  G4std::vector<G4int>                  idxSCoffRegions;
 
   // tables and vectors
   G4PhysicsTable*  theDEDXTable;
@@ -554,6 +558,15 @@ inline void G4VEnergyLossSTD::SetStepLimits(G4double v1, G4double v2)
   c1lim=dRoverRange;
   c2lim=2.*(1-dRoverRange)*finalRange;
   c3lim=-(1.-dRoverRange)*finalRange*finalRange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VSubCutoffProcessor* G4VEnergyLossSTD::SubCutoffProcessor(size_t index)
+{
+  G4VSubCutoffProcessor* p = 0;
+  if( nSCoffRegions ) p = scoffProcessors[idxSCoffRegions[index]];
+  return p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

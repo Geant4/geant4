@@ -82,7 +82,7 @@ G4eBremsstrahlungSTD::~G4eBremsstrahlungSTD()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlungSTD::InitialiseProcess() 
+void G4eBremsstrahlungSTD::InitialiseProcess()
 {
   SetSecondaryParticle(G4Gamma::Gamma());
 
@@ -91,12 +91,13 @@ void G4eBremsstrahlungSTD::InitialiseProcess()
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
 
+//  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
+//  AddEmFluctuationModel(fm);
+
   G4VEmModel* em = new G4eBremsstrahlungModel();
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(em, 0);
-  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
-  AddEmFluctuationModel(fm);
+  AddEmModel(1, em);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
