@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.33 2002-08-06 10:35:56 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.34 2002-11-04 18:54:06 jacek Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -126,6 +126,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
         }
         else
         {
+	  fLastLocatedPointLocal = localPoint;
           return 0;           // Have exited world volume
         }
         // A fix for the case where a volume is "entered" at an edge
@@ -233,6 +234,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
       }
       else
       {
+	fLastLocatedPointLocal = localPoint;
         return 0;         // Have exited world volume
       }
     }
@@ -269,6 +271,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
           } 
           else
           {
+	    fLastLocatedPointLocal = localPoint;
             return 0;          // Have exited world volume
           }
         }
