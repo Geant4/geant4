@@ -199,7 +199,7 @@ G4LogicalVolume* G4CrystalMatrix::constructGlobal() {
     angle  = 0.5 * getLayAngle() * (2*i + 1 - getCrystNum());
     yp     = angle * (getCrystPar(4) + getLayRadius()) * mm;
     zp     = (getCrystPar(0)*abs(sin(angle)) - getCrystTol()) * mm;
-    rotstr = "CrystalMatrixCrystal" + i;
+    rotstr = idName + "Crystal" + i;
     rot    = rotfact->findMatrix(rotstr);
     if (!rot) {
 #ifdef ddebug

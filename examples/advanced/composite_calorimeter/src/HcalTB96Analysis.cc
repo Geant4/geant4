@@ -16,6 +16,8 @@
 #include <AIDA/ITuple.h>
 #include <AIDA/IManagedObject.h>
 
+//#define debug
+
 HcalTB96Analysis* HcalTB96Analysis::instance = 0;
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -74,21 +76,22 @@ HcalTB96Analysis::HcalTB96Analysis() :analysisFactory(0), tree(0), tuple(0),
 	  analysisFactory->createHistogramFactory(*tree);  
 	if (histoFactory) {
 	  // Create histos :
-	  char id[4], ntupletag[10];
+	  char id[4], ntupletag[50];
 	  //Energy deposit in Hcal layers and profiles
 	  for (int i = 0; i<28; i++) {
-	    sprintf(id, "%d",i+1);
-	    sprintf(ntupletag, "Hcal%d",i);
+	    sprintf(id, "%d",i+100);
+	    sprintf(ntupletag, "Energy Deposit in Hcal Layer%d",i);
 	    hcalE[i] = histoFactory->create1D(id, ntupletag, 300, 0.,
 					      300000.);
-	    sprintf(id, "%d",i+29);
+	    sprintf(id, "%d",i+150);
+	    sprintf(ntupletag, "Energy profile in Hcal Layer%d",i);
 	    lateralProfile[i] = histoFactory->create1D(id, ntupletag, 
 						       300, 0., 300000.);
 	  }
 	  //Energy deposits in Ecal towers
 	  for (i = 0; i<49; i++) {
-	    sprintf(id, "%d",i+57);
-	    sprintf(ntupletag, "Ecal%d",i);
+	    sprintf(id, "%d",i+200);
+	    sprintf(ntupletag, "Energy Deposit in Ecal Tower%d",i);
 	    ecalE[i] = histoFactory->create1D(id, ntupletag, 300, 0., 
 					      300000.);
 	  }
@@ -101,7 +104,7 @@ HcalTB96Analysis::HcalTB96Analysis() :analysisFactory(0), tree(0), tuple(0),
 	  //Time slices	  
 	  for (i=0; i<numberOfTimeSlices; i++){
 	    sprintf(id, "%d",i+300);
-	    sprintf(ntupletag, "slice%d",i);
+	    sprintf(ntupletag, "Time slice %d",i);
 	    timeHist[i] =  histoFactory->create1D(id, ntupletag, 100, 0.,
 						  200000.);
 	  }
@@ -142,29 +145,65 @@ HcalTB96Analysis* HcalTB96Analysis::getInstance() {
 
 
 // This function fill the 1d histogram of the energies in HCal layers
-void HcalTB96Analysis::InsertEnergyHcal(int i, float v) {
-  if (hcalE[i]) hcalE[i]->fill(double(v));
+void HcalTB96Analysis::InsertEnergyHcal(float* v) {
+  for (int i=0; i<28; i++) {
+    if (hcalE[i]) {
+      double x = v[i];
+      hcalE[i]->fill(x);
+#ifdef debug
+      cout << "Fill Hcal histo " << i << " with " << x << endl;
+#endif
+    }
+  }
 }
 
 // This function fill the 1d histogram of the energies in ECal layers
-void HcalTB96Analysis::InsertEnergyEcal(int i, float v) {
-  if (ecalE[i]) ecalE[i]->fill(double(v));
+void HcalTB96Analysis::InsertEnergyEcal(float* v) {
+  for (int i=0; i<49; i++) {
+    if (ecalE[i]) {
+      double x = v[i];
+      ecalE[i]->fill(x);
+#ifdef debug
+      cout << "Fill Ecal histo " << i << " with " << x << endl;
+#endif
+    }
+  }
 }
 
 // This function fill the 1d histogram of the lateral profile
-void HcalTB96Analysis::InsertLateralProfile(int i, float v) {
-  if (lateralProfile[i]) lateralProfile[i]->fill(double(v));
+void HcalTB96Analysis::InsertLateralProfile(float* v) {
+  for (int i=0; i<28; i++) {
+    if (lateralProfile[i]) {
+      double x = v[i];
+      lateralProfile[i]->fill(x);
+#ifdef debug
+      cout << "Fill Profile Hcal histo " << i << " with " << x << endl;
+#endif
+    }
+  }
 }
 
 // This function fill the 1d histogram of the energy 
 void HcalTB96Analysis::InsertEnergy(float v) {
-  if (energy) energy->fill(double(v));
+  if (energy) {
+    double x = v;
+    energy->fill(x);
+#ifdef debug
+    cout << "Fill Total energy Hcal histo with " << x << endl;
+#endif
+  }
 }
 
 // This function fill the 1d histograms of time profiles
 void HcalTB96Analysis::InsertTime(float* v) {
-  for (int j=0; j<numberOfTimeSlices; j++){
-    if (timeHist[j]) timeHist[j]->fill(double(v[j]));
+  for (int j=0; j<numberOfTimeSlices; j++) {
+    if (timeHist[j]) {
+      double x = v[j];
+      timeHist[j]->fill(x);
+#ifdef debug
+      cout << "Fill Time profile histo " << j << " with " << x << endl;
+#endif
+    }
   }
 }
 

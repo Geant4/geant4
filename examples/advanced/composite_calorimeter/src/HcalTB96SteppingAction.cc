@@ -45,13 +45,11 @@ void HcalTB96SteppingAction::UserSteppingAction(const G4Step* aStep){
 void HcalTB96SteppingAction::endOfEvent(){
 
   HcalTB96Analysis* analysis = HcalTB96Analysis::getInstance();
-  for (int j=0; j<28; j++){
-    analysis->InsertLateralProfile(j,LateralProfile[j]);  
-    LateralProfile[j] = 0.;        
-  }
-
+  analysis->InsertLateralProfile(LateralProfile);  
   analysis->InsertTime(timeDeposit); 
   
-  for (int i=0; i<50; i++) {timeDeposit[i] = 0.;}
+  int i=0;
+  for (i=0; i<28; i++){LateralProfile[i] = 0.;}
+  for (i=0; i<50; i++){timeDeposit[i] = 0.;}
   
 }  

@@ -27,10 +27,10 @@ public:
 
   int maxbin() {return numberOfTimeSlices;}
 
-  void InsertEnergyHcal(int i, float v);
-  void InsertEnergyEcal(int i, float v);
+  void InsertEnergyHcal(float*);
+  void InsertEnergyEcal(float*);
   void InsertEnergy(float v);
-  void InsertLateralProfile(int i, float v);
+  void InsertLateralProfile(float*);
   void InsertTime(float*); 
 
   void setNtuple(float* hcalE, float* ecalE, float elab, float x, float y, 

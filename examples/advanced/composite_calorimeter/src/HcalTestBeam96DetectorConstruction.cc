@@ -40,14 +40,12 @@ G4VPhysicalVolume* HcalTestBeam96DetectorConstruction::Construct() {
 #ifdef debug
   cout << "Retrieving materials...." << endl;
 #endif
-  CMSMaterialFactory* matfact = 
-    CMSMaterialFactory::getInstance("material.cms");
+  CMSMaterialFactory::getInstance("material.cms");
 
 #ifdef debug
   cout << "Retrieving rotation matrices....." << endl;
 #endif
-  CMSRotationMatrixFactory* rotfact = 
-    CMSRotationMatrixFactory::getInstance("rotation.cms");
+  CMSRotationMatrixFactory::getInstance("rotation.cms");
 
   //-------------------------------------------------------------------------
   // Magnetic field

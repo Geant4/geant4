@@ -78,7 +78,6 @@ void HcalTB96EndOfEventAction::EndOfEventAction(const G4Event* evt){
   if (!isInitialized) initialize();
 
   theSteppingAction->endOfEvent();
-  HcalTB96Analysis* analysis = HcalTB96Analysis::getInstance();
   
   //
   // Look for the Hit Collection 
@@ -164,13 +163,10 @@ void HcalTB96EndOfEventAction::EndOfEventAction(const G4Event* evt){
   float edhc = edep[0];
   delete[] edep;
 
+  HcalTB96Analysis* analysis = HcalTB96Analysis::getInstance();
   analysis->InsertEnergy(fullE);
-  for (i=0; i<28; i++) {
-    analysis->InsertEnergyHcal(i,hcalE[i]);
-  }
-  for (i=0; i<49; i++) {
-    analysis->InsertEnergyEcal(i,ecalE[i]);
-  }
+  analysis->InsertEnergyHcal(hcalE);
+  analysis->InsertEnergyEcal(ecalE);
   analysis->setNtuple(hcalE, ecalE, ener, x, y, z, fullE, edec, edhc);
   analysis->EndOfEvent(nhit);
 }
