@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2002-01-10 16:21:18 gcosmo Exp $
+$Id: History,v 1.50 2002-01-17 08:06:41 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Jan 10th, 2002  G. Cosmo
+Jan 10th, 2002  G. Cosmo - field-V04-00-00
 ------------------------
 - Activated G4DEBUG_FIELD in GNUmakefile.
+
+Jan 7th, 2002  J. Apostolakis
+-----------------------------
+- G4MagHelicalStepper.cc: renamed local variables "*Velocity" to "*Momentum".
 
 Dec 4th, 2001  G. Cosmo - field-V03-02-08
 -----------------------
