@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2002-07-18 14:59:22 dressel Exp $
+$Id: History,v 1.60 2002-08-08 17:33:44 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 8, 2002 M.Asai (run-V04-01-00)
+- G4RunManager and G4RunMessenger are modified to
+ - introduce "soft abortion", i.e. event loop is aborted after processing the current event
+ - introduce AbortEvent() method and corresponding UI command
+- NOTE :
+ internal-1-run-V04-01-01 is NOT included in this tag
 
 July 18, 2002 M.Dressel
 - change G4StandardScorerTable to the new G4IStore 
