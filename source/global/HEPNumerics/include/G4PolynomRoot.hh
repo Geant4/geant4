@@ -33,6 +33,7 @@
 
 #include <cmath>
 #include <cfloat>
+#include <vector>
 
 #include "globals.hh"
 
@@ -51,11 +52,12 @@ class G4PolynomRoot
 
   private:
 
-  G4double *p;
-  G4double *qp;
-  G4double *k;
-  G4double *qk;
-  G4double *svk;
+  std::vector<G4double> p ;
+  std::vector<G4double> qp ;
+  std::vector<G4double> k ;
+  std::vector<G4double> qk ;
+  std::vector<G4double> svk ;
+
   G4double sr;
   G4double si;
   G4double u,v; 
@@ -83,8 +85,13 @@ class G4PolynomRoot
   void ComputeScalarFactors(G4int *type);
   void ComputeNextPolynomial(G4int *type);
   void ComputeNewEstimate(G4int type,G4double *uu,G4double *vv);
-  void QuadraticSyntheticDivision(G4int n,G4double *u,G4double *v,G4double *p,G4double *q,
-	      G4double *a,G4double *b);
+  void QuadraticSyntheticDivision(G4int n,
+				  G4double *u,
+				  G4double *v,
+				  std::vector<G4double> &p, 
+				  std::vector<G4double> &q, 
+				  G4double *a,
+				  G4double *b);
   
 
 };

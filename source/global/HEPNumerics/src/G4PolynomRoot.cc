@@ -33,23 +33,22 @@
 
 #include "G4PolynomRoot.hh"
 
-const G4double G4PolynomRoot::base = 2;
-const G4double G4PolynomRoot::eta = DBL_EPSILON;
-const G4double G4PolynomRoot::infin = DBL_MAX;
+const G4double G4PolynomRoot::base   = 2;
+const G4double G4PolynomRoot::eta    = DBL_EPSILON;
+const G4double G4PolynomRoot::infin  = DBL_MAX;
 const G4double G4PolynomRoot::smalno = DBL_MIN;
-const G4double G4PolynomRoot::are = DBL_EPSILON;
-const G4double G4PolynomRoot::mre = DBL_EPSILON;
-const G4double G4PolynomRoot::lo =  DBL_MIN/DBL_EPSILON ;
+const G4double G4PolynomRoot::are    = DBL_EPSILON;
+const G4double G4PolynomRoot::mre    = DBL_EPSILON;
+const G4double G4PolynomRoot::lo     = DBL_MIN/DBL_EPSILON ;
 
 G4int G4PolynomRoot::FindRoots(G4double *op, G4int degree, G4double *zeror, G4double *zeroi) 
 {
-  G4double t,aa,bb,cc,*temp,factor,rot;
-  G4double *pt;
+  G4double t,aa,bb,cc,factor,rot;
+  //  G4double *pt, *temp;
   G4double max,min,xx,yy,cosr,sinr,xxx,x,sc,bnd;
   G4double xm,ff,df,dx;
   G4int cnt,nz,i,j,jj,l,nm1,zerok;
 
-  
   /*  Initialization of constants for shift rotation. */        
   xx = std::sqrt(0.5);
   yy = -xx;
@@ -70,6 +69,8 @@ G4int G4PolynomRoot::FindRoots(G4double *op, G4int degree, G4double *zeror, G4do
   /*
    *  Allocate memory here
    */
+
+#if 0 
   temp = new G4double [degree+1];
   pt = new G4double [degree+1];
   p = new G4double [degree+1];
@@ -77,6 +78,17 @@ G4int G4PolynomRoot::FindRoots(G4double *op, G4int degree, G4double *zeror, G4do
   k = new G4double [degree+1];
   qk = new G4double [degree+1];
   svk = new G4double [degree+1];
+#endif
+
+  std::vector<G4double> temp(degree+1) ;
+  std::vector<G4double> pt(degree+1) ;
+
+  p.assign(degree+1,0) ;
+  qp.assign(degree+1,0) ;
+  k.assign(degree+1,0) ;
+  qk.assign(degree+1,0) ;
+  svk.assign(degree+1,0) ;
+
     /*  Make a copy of the coefficients. */
   for (i=0;i<=n;i++)
     p[i] = op[i];
@@ -86,14 +98,14 @@ G4int G4PolynomRoot::FindRoots(G4double *op, G4int degree, G4double *zeror, G4do
     zeror[degree-1] = -p[1]/p[0];
     zeroi[degree-1] = 0.0;
     n -= 1;
-    goto _99;
+    return degree - n ;
   }
     /*  Calculate the final zero or pair of zeros. */
   if (n == 2) {
     Quadratic(p[0],p[1],p[2],&zeror[degree-2],&zeroi[degree-2],
 	 &zeror[degree-1],&zeroi[degree-1]);
     n -= 2;
-    goto _99;
+    return degree - n ;
   }
 /*  Find largest and smallest moduli of coefficients. */
   max = 0.0;
@@ -105,24 +117,27 @@ G4int G4PolynomRoot::FindRoots(G4double *op, G4int degree, G4double *zeror, G4do
   }
 /*  Scale if there are large or very small coefficients.
  *  Computes a scale factor to multiply the coefficients of the
- *  polynomial. The scaling si done to avoid overflow and to
+ *  polynomial. The scaling is done to avoid overflow and to
  *  avoid undetected underflow interfering with the convergence
  *  criterion. The factor is a power of the base.
  */
   sc = lo/min;
-  if (sc > 1.0 && infin/sc < max) goto _110;
-  if (sc <= 1.0) {
-    if (max < 10.0) goto _110;
-    if (sc == 0.0)
-      sc = smalno;
+
+  if ( sc <= 1.0 && max >= 10.0 
+       || sc > 1.0 && infin/sc >= max 
+       || infin/sc >= max && max >= 10 ) {
+
+    if ( sc == 0.0 ) 
+      sc = smalno ;
+
+    l = (G4int)(std::log(sc)/std::log(base) + 0.5);
+    factor = std::pow(base*1.0,l);
+    if (factor != 1.0) {
+      for (i=0;i<=n;i++) 
+	p[i] = factor*p[i];     /* Scale polynomial. */
+    }
   }
-  l = (G4int)(std::log(sc)/std::log(base) + 0.5);
-  factor = std::pow(base*1.0,l);
-  if (factor != 1.0) {
-    for (i=0;i<=n;i++) 
-      p[i] = factor*p[i];     /* Scale polynomial. */
-  }
-_110:
+
 /*  Compute lower bound on moduli of roots. */
   for (i=0;i<=n;i++) {
     pt[i] = (std::fabs(p[i]));
@@ -236,6 +251,8 @@ _110:
     }
   } 
 /*  Return with failure if no convergence with 20 shifts. */
+
+#if 0 
 _99:
   delete [] svk;
   delete [] qk;
@@ -244,6 +261,7 @@ _99:
   delete [] p;
   delete [] pt;
   delete [] temp;
+#endif
 
   return degree - n;
 }
@@ -662,8 +680,13 @@ void G4PolynomRoot::ComputeNewEstimate(G4int type,G4double *uu,G4double *vv)
   return;
 }
 
-void G4PolynomRoot::QuadraticSyntheticDivision(G4int nn,G4double *u,G4double *v,G4double *p,G4double *q,
-    G4double *a,G4double *b)
+void G4PolynomRoot::QuadraticSyntheticDivision(G4int nn,
+					       G4double *u,
+					       G4double *v,
+					       std::vector<G4double> &p,
+					       std::vector<G4double> &q,  
+					       G4double *a,
+					       G4double *b)
 {
 /*  Divides p by the quadratic 1,u,v placing the quotient
  *  in q and the remainder in a,b.
