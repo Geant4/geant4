@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LightMedia.hh,v 1.5 2002-12-12 19:18:39 gunter Exp $
+// $Id: G4LightMedia.hh,v 1.6 2003-06-03 09:20:33 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Light Media Charge and/or Strangeness Exchange
@@ -47,7 +47,7 @@
     
     ~G4LightMedia() { }
     
-    G4LightMedia & operator=( const G4LightMedia &right )
+    G4LightMedia & operator=( const G4LightMedia &)
     { return *this; }
     
     G4bool operator==( const G4LightMedia &right ) const

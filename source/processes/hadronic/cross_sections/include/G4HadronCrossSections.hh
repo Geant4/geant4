@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronCrossSections.hh,v 1.8 2002-12-12 19:16:49 gunter Exp $
+// $Id: G4HadronCrossSections.hh,v 1.9 2003-06-03 09:21:38 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -105,7 +105,7 @@ public:
    }
 
    G4bool IsApplicable(const G4DynamicParticle* aParticle,
-                       const G4Element* anElement)
+                       const G4Element* )
    {
       return (GetParticleCode(aParticle) > 0);
    }

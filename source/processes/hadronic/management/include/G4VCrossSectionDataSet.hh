@@ -76,7 +76,7 @@ public: // Without Description
       verboseLevel = value;
    }
 
-   G4int GetVerboseLevel(G4int value)
+   G4int GetVerboseLevel()
    {
       return verboseLevel;
    }
