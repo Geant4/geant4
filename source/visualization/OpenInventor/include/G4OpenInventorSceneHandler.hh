@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.19 2004-11-14 11:34:02 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.20 2004-11-17 22:06:22 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,22 +69,6 @@ public:
   //
   // Primitives for use of HEPVis
   //
-  void AddThis (const G4Box  & Box);
-  void AddThis (const G4Tubs & Tubs);
-  void AddThis (const G4Cons & Cons);
-  void AddThis (const G4Trd  & Trd);
-  void AddThis (const G4Trap & Trap);
-
-  // Base class callbacks defined in G4OpenInventorSceneHandler.icc
-  void AddThis (const G4Sphere&);
-  void AddThis (const G4Para&);
-  void AddThis (const G4Torus&);
-  void AddThis (const G4Polycone&);
-  void AddThis (const G4Polyhedra&);
-  void AddThis (const G4VSolid&);
-  void AddThis (const G4VTrajectory&);
-  void AddThis (const G4VHit&);
-
   void BeginPrimitives (const G4Transform3D& objectTransformation);
   void EndPrimitives ();
   void EndModeling ();

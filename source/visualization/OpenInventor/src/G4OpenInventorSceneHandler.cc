@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.24 2004-11-15 11:02:00 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.25 2004-11-17 22:06:22 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -363,26 +363,8 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& Square) {
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   if (polyhedron.GetNoFacets() == 0) return;
-
-  //
-  // Define Material
-  //
-  const G4Colour& c = GetColour (polyhedron);
-  SoMaterial* material = 
-    fStyleCache->getMaterial((float)c.GetRed(),
-                             (float)c.GetGreen(),
-                             (float)c.GetBlue(),
-                             (float)(1-c.GetAlpha()));
-  fCurrentSeparator->addChild(material);
-
-  G4bool modelingSolid = false;
-  SoLightModel* lightModel = 
-    modelingSolid ? fStyleCache->getLightModelPhong() : 
-                    fStyleCache->getLightModelBaseColor();
-  fCurrentSeparator->addChild(lightModel);
-
   Geant4_SoPolyhedron* soPolyhedron = new Geant4_SoPolyhedron(polyhedron);
-  soPolyhedron->solid.setValue(modelingSolid);
+  soPolyhedron->solid.setValue(fModelingSolid);
   fCurrentSeparator->addChild(soPolyhedron);  
 }
 
@@ -526,95 +508,6 @@ void G4OpenInventorSceneHandler::RequestPrimitives (const G4VSolid& solid) {
     G4VSceneHandler::RequestPrimitives (solid);
 }
 
-
-void G4OpenInventorSceneHandler::AddThis (const G4Box & box) {
-#ifdef USE_SOPOLYHEDRON
-  Geant4_SoPolyhedron* soPolyhedron = 
-    new Geant4_SoPolyhedron(box.CreatePolyhedron());
-  soPolyhedron->solid.setValue(fModelingSolid?TRUE:FALSE);
-  fCurrentSeparator->addChild(soPolyhedron);  
-#else
-  SoCube *g4Box = new SoCube();
-  g4Box->width =2*box.GetXHalfLength();
-  g4Box->height=2*box.GetYHalfLength();
-  g4Box->depth =2*box.GetZHalfLength(); 
-  fCurrentSeparator->addChild(g4Box);
-#endif
-}
-void G4OpenInventorSceneHandler::AddThis (const G4Tubs & tubs) {
-#ifdef USE_SOPOLYHEDRON
-  Geant4_SoPolyhedron* soPolyhedron = 
-    new Geant4_SoPolyhedron(tubs.CreatePolyhedron());
-  soPolyhedron->solid.setValue(fModelingSolid?TRUE:FALSE);
-  fCurrentSeparator->addChild(soPolyhedron);  
-#else
-  SoTubs *g4Tubs = new SoTubs();
-  g4Tubs->pRMin = tubs.GetRMin();
-  g4Tubs->pRMax = tubs.GetRMax();
-  g4Tubs->pDz = tubs.GetDz();
-  g4Tubs->pSPhi = tubs.GetSPhi();
-  g4Tubs->pDPhi = tubs.GetDPhi();
-  fCurrentSeparator->addChild(g4Tubs);
-#endif
-}
-void G4OpenInventorSceneHandler::AddThis (const G4Cons &cons) {
-#ifdef USE_SOPOLYHEDRON
-  Geant4_SoPolyhedron* soPolyhedron = 
-    new Geant4_SoPolyhedron(cons.CreatePolyhedron());
-  soPolyhedron->solid.setValue(fModelingSolid?TRUE:FALSE);
-  fCurrentSeparator->addChild(soPolyhedron);  
-#else
-  SoCons *g4Cons = new SoCons();
-  g4Cons->fRmin1 = cons.GetRmin1();
-  g4Cons->fRmin2 = cons.GetRmin2();
-  g4Cons->fRmax1 = cons.GetRmax1();
-  g4Cons->fRmax2 = cons.GetRmax2();
-  g4Cons->fDz    = cons.GetDz();
-  g4Cons->fSPhi  = cons.GetSPhi();
-  g4Cons->fDPhi  = cons.GetDPhi();
-  fCurrentSeparator->addChild(g4Cons);
-#endif
-}
-
-void G4OpenInventorSceneHandler::AddThis (const G4Trap &trap) {
-#ifdef USE_SOPOLYHEDRON
-  Geant4_SoPolyhedron* soPolyhedron = 
-    new Geant4_SoPolyhedron(trap.CreatePolyhedron());
-  soPolyhedron->solid.setValue(fModelingSolid?TRUE:FALSE);
-  fCurrentSeparator->addChild(soPolyhedron);  
-#else
-  G4ThreeVector SymAxis=trap.GetSymAxis();
-    SoTrap *g4Trap = new SoTrap();
-  g4Trap->pDz  = trap.GetZHalfLength();
-  g4Trap->pPhi = atan2(SymAxis(kYAxis),SymAxis(kXAxis));
-  g4Trap->pTheta = acos(SymAxis(kZAxis));
-  g4Trap->pDy1 = trap.GetYHalfLength1();
-  g4Trap->pDx1 = trap.GetXHalfLength1();
-  g4Trap->pDx2 = trap.GetXHalfLength2();
-  g4Trap->pDy2 = trap.GetYHalfLength2();
-  g4Trap->pDx3 = trap.GetXHalfLength3();
-  g4Trap->pDx4 = trap.GetXHalfLength4();
-  fCurrentSeparator->addChild(g4Trap);
-#endif
-}
-
-void G4OpenInventorSceneHandler::AddThis (const G4Trd &trd) {
-#ifdef USE_SOPOLYHEDRON
-  Geant4_SoPolyhedron* soPolyhedron = 
-    new Geant4_SoPolyhedron(trd.CreatePolyhedron());
-  soPolyhedron->solid.setValue(fModelingSolid?TRUE:FALSE);
-  fCurrentSeparator->addChild(soPolyhedron);  
-#else
-  SoTrd *g4Trd = new SoTrd();
-  g4Trd->fDx1 = trd.GetXHalfLength1();
-  g4Trd->fDx2 = trd.GetXHalfLength2();
-  g4Trd->fDy1 = trd.GetYHalfLength1();
-  g4Trd->fDy2 = trd.GetYHalfLength2();
-  g4Trd->fDz  = trd.GetZHalfLength();
-  fCurrentSeparator->addChild(g4Trd);
-#endif
-}
-
 void G4OpenInventorSceneHandler::PreAddThis
 (const G4Transform3D& objectTransformation,
  const G4VisAttributes& visAttribs) {
@@ -700,18 +593,6 @@ void G4OpenInventorSceneHandler::PreAddThis
       fModelingSolid ? fStyleCache->getLightModelPhong() : 
                        fStyleCache->getLightModelBaseColor();
     g4DetectorTreeKit->setPart("appearance.lightModel",lightModel);
-
-    /*
-    SoMaterial* matColor = (SoMaterial*) 
-      g4DetectorTreeKit->getPart("appearance.material", TRUE);
-    matColor->diffuseColor.setValue(red,green,blue);
-
-    SoLightModel* lightModel = (SoLightModel*)
-      g4DetectorTreeKit->getPart("appearance.lightModel", TRUE);
-    lightModel->model.setValue(fModelingSolid ?
-			       SoLightModel::PHONG:
-			       SoLightModel::BASE_COLOR);
-   */
 
     //
     // Add the full separator to the dictionary; it is indexed by the 
@@ -853,12 +734,12 @@ G4double  G4OpenInventorSceneHandler::GetMarkerSize ( const G4VMarker& mark )
 
 } // G4OpenInventorSceneHandler::GetMarkerSize ()
 
-void G4OpenInventorSceneHandler::AddThis(const G4VTrajectory& traj) {
-  G4VSceneHandler::AddThis(traj);  // For now.
-}
+//void G4OpenInventorSceneHandler::AddThis(const G4VTrajectory& traj) {
+//  G4VSceneHandler::AddThis(traj);  // For now.
+//}
 
-void G4OpenInventorSceneHandler::AddThis(const G4VHit& hit) {
-  G4VSceneHandler::AddThis(hit);  // For now.
-}
+//void G4OpenInventorSceneHandler::AddThis(const G4VHit& hit) {
+//  G4VSceneHandler::AddThis(hit);  // For now.
+//}
 
 #endif

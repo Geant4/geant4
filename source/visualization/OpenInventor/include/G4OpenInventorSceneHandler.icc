@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.icc,v 1.6 2004-11-07 17:03:43 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.icc,v 1.7 2004-11-17 22:06:22 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,28 +31,4 @@
 
 inline G4int G4OpenInventorSceneHandler::GetSceneCount () {
   return fSceneCount;
-}
-
-inline void G4OpenInventorSceneHandler::AddThis (const G4Sphere& sphere) {
-  G4VSceneHandler::AddThis (sphere);
-}
-
-inline void G4OpenInventorSceneHandler::AddThis (const G4Para& para) {
-  G4VSceneHandler::AddThis (para);
-}
-
-inline void G4OpenInventorSceneHandler::AddThis (const G4Torus& torus) {
-  G4VSceneHandler::AddThis (torus);
-}
-
-inline void G4OpenInventorSceneHandler::AddThis (const G4Polycone& polycone) {
-  G4VSceneHandler::AddThis (polycone);
-}
-
-inline void G4OpenInventorSceneHandler::AddThis (const G4Polyhedra& polyhedra) {
-  G4VSceneHandler::AddThis (polyhedra);
-}
-
-inline void G4OpenInventorSceneHandler::AddThis (const G4VSolid& vsolid) {
-  G4VSceneHandler::AddThis (vsolid);
 }
