@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHandle.hh,v 1.3 2001-07-11 09:59:18 gunter Exp $
+// $Id: G4TouchableHandle.hh,v 1.4 2001-10-22 15:52:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Class G4TouchableHandle
@@ -32,7 +32,7 @@
 // objects.
 // The basic rule for the use of this class is that it is passed always by
 // reference and is not constructed by calling new.
-//
+
 // For more details see G4ReferenceCountedHandle.hh file.
 //
 // Author:      Radovan Chytracek
