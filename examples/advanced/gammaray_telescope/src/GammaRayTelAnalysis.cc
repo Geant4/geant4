@@ -42,6 +42,8 @@
 #include "G4ThreeVector.hh"
 #include "GammaRayTelDetectorConstruction.hh"
 
+//using namespace Lizard;
+
 GammaRayTelAnalysis* GammaRayTelAnalysis::instance = 0;
  
 GammaRayTelAnalysis::GammaRayTelAnalysis() :
@@ -67,16 +69,20 @@ void GammaRayTelAnalysis::Init()
   analysisMessenger = new GammaRayTelAnalysisMessenger(this);
   histoManager = createIHistoManager();
 
+#ifdef G4ANALYSIS_USE_NTUPLE
   ntFactory = Lizard::createNTupleFactory();
+#endif
   vectorFactory = createIVectorFactory();
   plotter = createIPlotter();
 }                       
 
 void GammaRayTelAnalysis::Finish()
 {
+#ifdef G4ANALYSIS_USE_NTUPLE
   delete ntFactory;
   ntFactory = 0;
-
+#endif
+  
   delete histoManager;
   histoManager = 0;
 
@@ -211,9 +217,13 @@ void GammaRayTelAnalysis::BeginOfRun(G4int n)
     plotter->zone(1,1,0,0);
 
   sprintf(name,"gammaraytel%d.hbook::1", n);
+  
+
+#ifdef G4ANALYSIS_USE_NTUPLE
+  
   // Book ntuples
   ntuple = ntFactory->createC(name);
-
+  
   //  Add and bind the attributes to the ntuple
   if ( !( ntuple->addAndBind( "energy", ntEnergy) &&
 	  ntuple->addAndBind( "plane" , ntPlane) &&
@@ -223,6 +233,7 @@ void GammaRayTelAnalysis::BeginOfRun(G4int n)
     delete ntuple;
     G4Exception(" GammaRayTelAnalysis::BeginOfRun - Could not addAndBind ntuple");
   }  
+#endif
 
 }
 
@@ -292,10 +303,11 @@ void GammaRayTelAnalysis::EndOfRun(G4int n)
   histoManager->store("2");
   histoManager->store("4");
 
+#ifdef G4ANALYSIS_USE_NTUPLE
   delete ntuple;
   ntuple = 0;
   G4cout << "Deleted ntuple" << G4endl;
-
+#endif
 // close files for this run
   if (histoManager != 0) Finish();    
 
@@ -364,8 +376,10 @@ void GammaRayTelAnalysis::plot2D(IHistogram2D* histo)
   delete v;	
 }
 
+#ifdef G4ANALYSIS_USE_NTUPLE
 void GammaRayTelAnalysis::setNtuple(float E, float p, float x, float y, float z)
 {
+  G4cout << "USO NTUPLA" << G4endl;
   ntEnergy = E;
   ntPlane = p;
   ntX = x;
@@ -374,6 +388,8 @@ void GammaRayTelAnalysis::setNtuple(float E, float p, float x, float y, float z)
 
   ntuple->addRow();
 }
+#endif
+
 
 #endif
 

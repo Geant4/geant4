@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelRunAction.cc,v 1.6 2001-11-28 15:18:31 griccard Exp $
+// $Id: GammaRayTelRunAction.cc,v 1.7 2001-12-04 11:40:28 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -51,7 +51,7 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 
-extern ofstream outFile;
+extern G4std::ofstream outFile;
 
 GammaRayTelRunAction::GammaRayTelRunAction()
 {

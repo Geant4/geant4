@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDigitizer.cc,v 1.2 2001-11-29 09:34:17 flongo Exp $
+// $Id: GammaRayTelDigitizer.cc,v 1.3 2001-12-04 11:40:28 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -119,8 +119,9 @@ void GammaRayTelDigitizer::Digitize()
 	}
       
       G4cout << "Number of tracker digits in this event =  " 
-	     << DigitsCollection->entries() << " " << DigitsCollection->GetName() 
-	     << " " << DigitsCollection->GetDMname() 
+	     << DigitsCollection->entries()  
+	// << " " << DigitsCollection->GetName()  
+	// << " " << DigitsCollection->GetDMname() 
 	     << G4endl;
       
       
@@ -129,7 +130,7 @@ void GammaRayTelDigitizer::Digitize()
       G4int DCID = -1;
       if(DCID<0)
 	{ 
-	  DigiMan->List();
+	  //	  DigiMan->List();
 	  DCID = DigiMan->GetDigiCollectionID("TrackerDigitizer/DigitsCollection");
 	}
       

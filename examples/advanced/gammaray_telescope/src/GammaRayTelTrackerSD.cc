@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerSD.cc,v 1.5 2001-11-29 11:19:18 griccard Exp $
+// $Id: GammaRayTelTrackerSD.cc,v 1.6 2001-12-04 11:40:28 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -133,17 +133,15 @@ G4bool GammaRayTelTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
   
   for (j=0;j<TileTotal;j++)
     {
-
-      G4cout << j << " " << NTile << " " << StripNumber << G4endl;
       if(NTile==j) StripNumber += StripTotal*NTile;
     }  
   
   NChannel = PlaneNumber*TileTotal*StripTotal + StripNumber;
 
-  G4cout << NChannel << " Channel Number" << G4endl;
-
-  G4cout << " Plane Number = " << PlaneNumber << " " << PlaneName << G4endl;
-  G4cout << StripName << " " << StripNumber << G4endl;       
+  /*  G4cout << NChannel << " Channel Number" << G4endl;
+      G4cout << " Plane Number = " << PlaneNumber << " " << PlaneName 
+      << G4endl;
+      G4cout << StripName << " " << StripNumber << G4endl;      */ 
   
   if (PlaneName == "TKRDetectorX" )
     // The hit is on an X silicon plane

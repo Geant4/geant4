@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -64,10 +65,6 @@
 // Histogramming from Anaphe
 #include "Interfaces/IHistoManager.h"
 
-// Ntuples from Anaphe
-#include "NtupleTag/LizardNTupleFactory.h"
-#include "NtupleTag/LizardQuantity.h"
-
 // Vectors from ?
 #include "Interfaces/IVector.h"
 #include "Interfaces/IVectorFactory.h"
@@ -76,8 +73,19 @@
 #include "Interfaces/IPlotter.h"
 //#include "AIDA_Plotter/AIDAPlotter.h"
 
+// Ntuples from Anaphe
+
+#ifdef G4ANALYSIS_USE_NTUPLE
+
+#include "NtupleTag/LizardNTupleFactory.h"
+#include "NtupleTag/LizardQuantity.h"
+#include "NtupleTag/LizardNTuple.h"
+
+//using namespace Lizard;
+
+#endif
+
 class G4Track;
-class NTuple;
 class GammaRayTelAnalysisMessenger;
 class GammaRayTelDetectorConstruction;
 
@@ -106,7 +114,10 @@ public:
   void InsertEnergy(double en);
   void InsertHits(int nplane);
 
+#ifdef G4ANALYSIS_USE_NTUPLE
   void setNtuple(float E, float p, float x, float y, float z);
+#endif
+
   static GammaRayTelAnalysis* getInstance();
 
 private:
@@ -123,19 +134,23 @@ private:
   IVectorFactory* vectorFactory;
   IPlotter* plotter;
 
+#ifdef G4ANALYSIS_USE_NTUPLE
+
   // ---- NOTE ----
   // Histograms are compliant to AIDA interfaces, ntuples are Lizard specific
- 
+  
   Lizard::NTuple* ntuple;
   Lizard::NTupleFactory* ntFactory;
 
   // Quantities for the ntuple
   Lizard::Quantity<float> ntEnergy;
-  Lizard::Quantity<float>   ntPlane;
+  Lizard::Quantity<float> ntPlane;
   Lizard::Quantity<float> ntX;
   Lizard::Quantity<float> ntY;
   Lizard::Quantity<float> ntZ;
-
+  
+#endif
+  
   GammaRayTelDetectorConstruction*    GammaRayTelDetector;
 
   G4String histo1DDraw;
@@ -150,3 +165,10 @@ private:
 
 #endif 
 #endif 
+
+
+
+
+
+
+

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.hh,v 1.8 2001-11-28 14:31:46 flongo Exp $
+// $Id: GammaRayTelEventAction.hh,v 1.9 2001-12-04 11:40:28 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -71,6 +71,7 @@ private:
 #endif
 
     
+
 
 
 

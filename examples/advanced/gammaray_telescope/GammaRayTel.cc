@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc,v 1.7 2001-11-29 11:19:16 griccard Exp $
+// $Id: GammaRayTel.cc,v 1.8 2001-12-04 11:40:27 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,6 +59,8 @@
 #ifdef G4ANALYSIS_USE
 #include "GammaRayTelAnalysis.hh"
 #endif
+
+//using namespace Lizard;
 
 
 /* This global file is used to store relevant data for
@@ -106,6 +108,7 @@ int main(int argc, char** argv)
   session = new G4UIterminal();
 #endif
 #endif
+
 #ifdef G4VIS_USE
   // Visualization manager
   G4VisManager* visManager = new GammaRayTelVisManager;
@@ -148,6 +151,8 @@ int main(int argc, char** argv)
   delete runManager;
   return 0;
 }
+
+
 
 
 
