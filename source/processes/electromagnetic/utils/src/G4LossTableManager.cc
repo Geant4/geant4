@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.31 2003-11-11 09:59:14 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.32 2003-11-11 14:05:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -327,8 +327,6 @@ void G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition* aParticle
            << G4endl;
   }
 
-  //  Initialise();
-
   if(aParticle == theElectron) {
     if(!electron_table_are_built) {
       eIonisation = BuildTables(theElectron);
@@ -403,6 +401,7 @@ void G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition* aParticle
     }
   }
 
+  if(all_tables_are_built) return;
   all_tables_are_built = true;
   for (G4int ii=0; ii<n_loss; ii++) {
     if ( !tables_are_built[ii] ) {
@@ -412,9 +411,12 @@ void G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition* aParticle
   }
 
   if(0 < verbose) {
-    G4cout << "### G4LossTableManager::BuildDEDXTable: end; "
+    G4cout << "### G4LossTableManager::BuildDEDXTable end: "
            << "all_tables_are_built= " << all_tables_are_built
            << G4endl;
+  }
+  if(all_tables_are_built) {
+      G4cout << "### All dEdx and Range tables are built #####" << G4endl;
   }
 }
 
@@ -426,6 +428,7 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
   if(0 < verbose) {
     G4cout << "G4LossTableManager::RetrievePhysicsTable() for "
            << aParticle->GetParticleName()
+           << "; all_tables_are_built= " << all_tables_are_built
            << G4endl;
   }
   if(all_tables_are_built) return;
@@ -435,8 +438,8 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
   G4int i;
   for (i=0; i<n_loss; i++) {
     if ( theLoss == loss_vector[i] ) {
-      if(n_loss-1 == i ||
-         n_loss-2 == i && part_vector[n_loss-1] == G4Proton::Proton()) isLast = true;
+      if((n_loss-1 == i && part_vector[n_loss-1] != G4Proton::Proton()) ||
+         (n_loss-2 == i && part_vector[n_loss-1] == G4Proton::Proton())) isLast = true;
       tables_are_built[i] = true;
       if (theLoss->RangeTable()) {
         if (part_vector[i] == theElectron) {
@@ -500,7 +503,7 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
   }
 
   if(0 < verbose) {
-    G4cout << "G4LossTableManager::RetrievePhysicsTable: end; "
+    G4cout << "G4LossTableManager::RetrievePhysicsTable end: "
            << "all_tables_are_built= " << all_tables_are_built
            << " i= " << i << " n_loss= " << n_loss
            << G4endl;
@@ -508,7 +511,7 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
   if(all_tables_are_built) {
       G4cout << "##### All dEdx and Range tables are retrieved #####" << G4endl;
   } else if(isLast) {
-      G4cout << "### G4LossTableManager: WARNING! not all dEdx and Range tables are retrieved" << G4endl;
+      G4Exception("G4LossTableManager ERROR: not all dEdx and Range tables are retrieved");
   }
 }
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.cc,v 1.60 2003-11-05 15:17:18 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.cc,v 1.61 2003-11-11 14:05:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -276,6 +276,7 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
   currentCouple = 0;
   preStepLambda = 0.0;
   if(0 < verboseLevel) {
+    G4cout << "========================================================" << G4endl;
     G4cout << "### G4VEnergyLossSTD::BuildPhysicsTable() for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
@@ -307,8 +308,6 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
 
     // It is responsability of the G4LossTables to build DEDX and range tables
     lManager->BuildPhysicsTable(particle);
-
-    tablesAreBuilt = true;
 
     if(!baseParticle) PrintInfoDefinition();
 
@@ -885,6 +884,7 @@ void G4VEnergyLossSTD::SetInverseRangeTable(G4PhysicsTable* p)
 void G4VEnergyLossSTD::SetLambdaTable(G4PhysicsTable* p)
 {
   theLambdaTable = p;
+  tablesAreBuilt = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1094,9 +1094,11 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
   currentCouple = 0;
   preStepLambda = 0.0;
   if(0 < verboseLevel) {
+    G4cout << "========================================================" << G4endl;
     G4cout << "G4VEnergyLossSTD::RetrievePhysicsTable() for "
-           << part->GetParticleName() << " and process "
-	   << GetProcessName() << G4endl;
+           << part->GetParticleName() << " and process " << GetProcessName() 
+           << "; tables_are_built= " << tablesAreBuilt
+           << G4endl;
   }
 
   const G4String particleName = part->GetParticleName();
@@ -1111,6 +1113,7 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
     return res;
   }
 
+  if(tablesAreBuilt) return res;
   Initialise();
 
   // Recalculation is needed because cuts were changed or recalculation is forced
@@ -1232,7 +1235,11 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
                  << G4endl;
 	}
       }
-      PrintInfoDefinition();
+      if(res) PrintInfoDefinition();
+      else {
+        G4cout << "### BuildPhysicsTable will be requested for " <<  GetProcessName() 
+               << " for " << particleName << G4endl; 
+      }
     }
     tablesAreBuilt = true;
   }

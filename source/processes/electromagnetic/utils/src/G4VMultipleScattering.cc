@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.20 2003-11-11 09:59:14 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.21 2003-11-11 14:05:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -109,6 +109,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
   currentParticle = &part;
   currentCouple = 0;
   if(0 < verboseLevel) {
+    G4cout << "========================================================" << G4endl;
     G4cout << "### G4VMultipleScattering::BuildPhysicsTable() for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
@@ -301,6 +302,7 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(G4ParticleDefinition* part,
 {
   currentParticle = part;
   if(0 < verboseLevel) {
+    G4cout << "========================================================" << G4endl;
     G4cout << "G4VMultipleScattering::RetrievePhysicsTable() for "
            << part->GetParticleName() << " and process "
 	   << GetProcessName() << G4endl;
@@ -323,7 +325,7 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(G4ParticleDefinition* part,
   theLambdaTable = new G4PhysicsTable(numOfCouples);
   G4bool res = theLambdaTable->RetrievePhysicsTable(filename,ascii);
   if ( res ) {
-    if (0 < verboseLevel) {
+    if (-1 < verboseLevel) {
         G4cout << "Lambda table for " << num << " is retrieved from <"
                << filename << ">"
                << G4endl;
