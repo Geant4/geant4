@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleRunge.cc,v 1.5 2002-11-29 13:44:01 japost Exp $
+// $Id: G4SimpleRunge.cc,v 1.6 2002-11-29 23:17:16 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Simple Runge:
@@ -49,8 +49,12 @@ G4SimpleRunge::G4SimpleRunge(G4Mag_EqRhs *EqRhs, G4int numberOfVariables)
   : G4MagErrorStepper(EqRhs, numberOfVariables),
     fNumberOfVariables(numberOfVariables)
 {
-   dydxTemp = new G4double[fNumberOfVariables] ;
-   yTemp    = new G4double[fNumberOfVariables] ;
+   
+   unsigned int noVariables= G4std::max(numberOfVariables,
+					GetNumberOfStateVariables()); 
+                                             // To deal with Time >= 7+1 
+   dydxTemp = new G4double[noVariables] ;
+   yTemp    = new G4double[noVariables] ;
 }
 
 
@@ -74,6 +78,9 @@ G4SimpleRunge::DumbStepper( const G4double  yIn[],
 			          G4double  h,
 			 	  G4double  yOut[])
 {
+  // Initialise time to t0, needed when it is not updated by the integration.
+  yTemp[7] = yOut[7] = yIn[7];   //  Better to set it to NaN;  // TODO
+
   G4int i;
 
   for( i = 0; i < fNumberOfVariables; i++ ) 
