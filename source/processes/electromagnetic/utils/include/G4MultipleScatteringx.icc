@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScatteringx.icc,v 1.6 2001-08-23 08:31:04 urban Exp $
+// $Id: G4MultipleScatteringx.icc,v 1.7 2001-08-23 08:37:19 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    ------- G4MultipleScatteringx physics process ------
@@ -32,7 +32,6 @@
 // 18-05-01 V.Ivanchenko Clean up against Linux ANSI compilation 
 // 23-08-01, new angle and z distribution,energy dependence reduced,
 //           Store,Retrieve methods commented out temporarily, L.Urban
-/
 //
 //---------------------------------------------------------------
 

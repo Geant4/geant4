@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScatteringx.cc,v 1.8 2001-08-23 08:31:30 urban Exp $
+// $Id: G4MultipleScatteringx.cc,v 1.9 2001-08-23 08:37:38 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -30,7 +30,6 @@
 // 07/08/01  new methods Store/Retrieve PhysicsTable (mma) 
 // 23-08-01, new angle and z distribution,energy dependence reduced,
 //           Store,Retrieve methods commented out temporarily, L.Urban
-/
 // --------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
