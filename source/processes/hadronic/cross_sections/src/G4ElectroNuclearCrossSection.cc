@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.9 2002-05-28 13:37:03 mkossov Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.10 2002-11-18 15:03:05 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -2322,7 +2322,13 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
   G4double lgoe=lastG/lastE;
   for(G4int i=lastF;i<=lastL;i++) Y[i]=dlg1*lastJ1[i]-lgoe*(lastJ2[i]+lastJ2[i]-lastJ3[i]/lastE);
   if(lastSig>Y[lastL]&&lastL<mL)
+  {
+    if(Y[lastL]<1.E-30) return 3.0*MeV; // quick and dirty workaround @@@ HP.
+  }
+  else
+  {
     G4cerr<<"***G4EleNucCrS::GetEquPhotE:S="<<lastSig<<">"<<Y[lastL]<<",l="<<lastL<<"<"<<mL<<G4endl;
+  }
   G4double ris=lastSig*G4UniformRand(); // Sig can be > Y[lastL=mL], then it is in the func. region
 #ifdef debug
   G4cout<<"G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy: "<<ris<<",Y="<<Y[lastL]<<G4endl;
