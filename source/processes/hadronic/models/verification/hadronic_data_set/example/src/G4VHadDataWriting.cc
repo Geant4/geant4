@@ -45,22 +45,29 @@
 #include <sys/stat.h>
 //end sim
 
+static const G4String G4VHadDataWriting::fAnyNumber = "1234567890.+-";
+static const G4String G4VHadDataWriting::fAnyEmptySpace = " \t";
+
+
+
 G4VHadDataWriting::G4VHadDataWriting()
 {
-  fEnergyUnit     = "GeV"; 
+  fEnergyUnit     = "MeV"; 
   fAngleUnit      = "degree"; 
   fXscUnit        = "millibarn";
   fXscPeAngleUnit = "millibarn/degree"; 
-  fXscPerMomCUnit = "millibarn/GeV";
-  fDdXscUnit      = "millibarn/degree/GeV";
+  fXscPerMomCUnit = "millibarn/MeV";
+  fDdXscUnit      = "millibarn/steradian/GeV";
 
   fTkinBin = 1.;
   fNo = 1;
   fTkinVector          = new G4DataVector();  
   fTkinBinVector       = new G4DataVector();  
   fXscVector           = new G4DataVector();  
+  fDeltaXscVector      = new G4DataVector();  
   fMultiplicityVector  = new G4DataVector();  
   fMomentumCVector     = new G4DataVector;
+  fDeltaMomCVector     = new G4DataVector;
   fMomentumCBinVector  = new G4DataVector;
   fAngleVector         = new G4DataVector();
   fAngleBinVector      = new G4DataVector();

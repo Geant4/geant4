@@ -78,7 +78,7 @@ protected:
   void FillMultiplicity(G4String&);
 
   void FillDifferentialXSC(G4String&,G4bool);
-  void FillDoubleDiffXSC(G4String&);
+  virtual  void FillDoubleDiffXSC(G4String&);
 
   void SetEnergyUnit( G4String&);
   void SetAngleUnit( G4String&);
@@ -88,21 +88,31 @@ protected:
   G4String fInputFileName;
   void SetInputFileName(G4String fn) {fInputFileName=fn;}
 
-private:
+protected:
 
   G4String fEnergyUnit, fAngleUnit, fXscUnit;
   G4String fXscPeAngleUnit, fXscPerMomCUnit, fDdXscUnit;
 
   G4double fTkinBin;
   G4int    fNo;
+
+  static const G4String fAnyNumber;
+  static const G4String fAnyEmptySpace;
+
+  std::vector<G4int> fEnergyNoVector;
+  std::vector<G4int> fAngleNoVector;
+  std::vector<G4int> fOmegaNoVector;
+
   
   G4DataVector*  fTkinVector;
   G4DataVector*  fTkinBinVector;
 
   G4DataVector*  fXscVector;
+  G4DataVector*  fDeltaXscVector;
   G4DataVector*  fMultiplicityVector;
 
   G4DataVector*  fMomentumCVector;
+  G4DataVector*  fDeltaMomCVector;
   G4DataVector*  fMomentumCBinVector;
 
   G4DataVector*  fAngleVector;
