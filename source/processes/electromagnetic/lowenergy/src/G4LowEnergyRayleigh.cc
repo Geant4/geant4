@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.11 1999-07-30 15:18:46 aforti Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.12 1999-09-28 13:15:45 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,17 +18,13 @@
 //      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
 //      ------------ G4LowEnergyRayleigh physics process --------
-//                   by Michel Maire, April 1996
+//                   by Alessandra Forti, November 1998
 // **************************************************************
-// 28-05-96, DoIt() small change in ElecDirection, by M.Maire
-// 10-06-96, simplification in ComputeMicroscopicCrossSection(), by M.Maire
-// 21-06-96, SetCuts implementation, M.Maire
-// 13-09-96, small changes in DoIt for better efficiency. Thanks to P.Urban
-// 06-01-97, crossection table + meanfreepath table, M.Maire
-// 05-03-97, new Physics scheme, M.Maire
-// 28-03-97, protection in BuildPhysicsTable, M.Maire
-// 07-04-98, remove 'tracking cut' of the scattered gamma, MMa
-// 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
+// Added Livermore data table construction methods A. Forti
+// Added BuildMeanFreePath A. Forti
+// Added PostStepDoIt A. Forti
+// Added SelectRandomAtom A. Forti
+// Added map of the elements  A.Forti
 // --------------------------------------------------------------
 
 // This Class Header
@@ -99,7 +95,7 @@ void G4LowEnergyRayleigh::BuildPhysicsTable(const G4ParticleDefinition& GammaTyp
   // build the scattering function table
   BuildFormFactorTable();
 }
-
+// CONSTRUCT THE CS TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EPDL97 DATA
 void G4LowEnergyRayleigh::BuildCrossSectionTable(){
  
   if (theCrossSectionTable) {
@@ -120,7 +116,7 @@ void G4LowEnergyRayleigh::BuildCrossSectionTable(){
     
   }//end for on atoms
 }
-
+// BUILD THE FF TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EPDL97 DATA
 void G4LowEnergyRayleigh::BuildFormFactorTable(){
  
   if (theFormFactorTable) {
@@ -141,7 +137,7 @@ void G4LowEnergyRayleigh::BuildFormFactorTable(){
     
   }//end for on atoms
 }
-
+// vector mapping the elements in the material table
 void G4LowEnergyRayleigh::BuildZVec(){
 
   const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
@@ -190,7 +186,7 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
 // TeV (draft). 
 
 
-  aParticleChange.Initialize(aTrack);
+//  aParticleChange.Initialize(aTrack);
   // Dynamic particle quantities  
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
   G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();
@@ -212,7 +208,7 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
   const G4int numOfElem = aMaterial->GetNumberOfElements();
   G4Element* theElement = SelectRandomAtom(aDynamicGamma, aMaterial);
   
-  // sample the energy rate of the scattered gamma 
+  // sample the energy of the scattered gamma 
 
   G4double wlGamma = h_Planck*c_light/GammaEnergy0;
   G4int elementZ = (G4int) theElement->GetZ();
@@ -233,13 +229,13 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
 
     DataFormFactor = util.DataLogInterpolation(x, (*(*oneAtomFF)[0]), 
 					       (*(*oneAtomFF)[1]))/cm;
-    RandomFormFactor = G4UniformRand()*elementZ;
+    RandomFormFactor = G4UniformRand()*elementZ*elementZ;
 
     Theta = Theta_Half*2;
     cosTheta = cos(Theta);
     sinTheta = sin(Theta);
-    
-    greject = cosTheta*cosTheta*DataFormFactor;
+    G4double sqr_rayl = 1+cosTheta*cosTheta;    
+    greject = sqr_rayl*DataFormFactor*DataFormFactor;
 
   }while( greject < RandomFormFactor);
 
@@ -256,15 +252,18 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
   aParticleChange.SetMomentumChange(GammaDirection1);
   
   aParticleChange.SetNumberOfSecondaries(0);
+
 #ifdef G4VERBOSE
+
   if(verboseLevel > 15){
+
     G4cout<<"LE Rayleigh PostStepDoIt"<<endl;
   }
 #endif
 
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }
-
+// used log-log interpolation instead of linear interpolation to build the MFP
 void G4LowEnergyRayleigh::BuildMeanFreePathTable(){
 
   if (theMeanFreePathTable) {
@@ -321,7 +320,8 @@ void G4LowEnergyRayleigh::BuildMeanFreePathTable(){
   }
 }
 
-
+// METHOD BELOW FROM STANDARD E_M PROCESSES CODE MODIFIED TO USE 
+// LIVERMORE DATA (using log-log interpolation as reported in stepanek paper)
 G4Element* G4LowEnergyRayleigh::SelectRandomAtom(const G4DynamicParticle* aDynamicGamma,
                                                G4Material* aMaterial) {
 
@@ -357,8 +357,7 @@ G4Element* G4LowEnergyRayleigh::SelectRandomAtom(const G4DynamicParticle* aDynam
     PartialSumSigma += theAtomNumDensityVector[i] * crossSection;
     if(rval <= PartialSumSigma) return ((*theElementVector)(i));
   }
-  //  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-  //   << "' has no elements" << endl;
+
   return (*theElementVector)(0);
 }
 

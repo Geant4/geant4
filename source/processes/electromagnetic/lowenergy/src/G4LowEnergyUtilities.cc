@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyUtilities.cc,v 1.1 1999-06-28 15:46:05 aforti Exp $
+// $Id: G4LowEnergyUtilities.cc,v 1.2 1999-09-28 13:15:45 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -209,4 +209,11 @@ G4FirstLevel* G4LowEnergyUtilities::BuildFirstLevelTables(const G4int TableInd,
   file.close();
   return oneAtomPar;
 }
+
+
+
+
+
+
+
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.17 1999-07-30 15:18:46 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.18 1999-09-28 13:15:44 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,6 +19,8 @@
 //      2nd December 1995, G.Cosmo
 //      ------------ G4LowEnergyPhotoElectric physics process --------
 //                   by Michel Maire, April 1996
+//      ------------ G4LowEnergyPhotoelctric: low energy modifications --------
+//                   by Alessandra Forti, October 1998
 // **************************************************************
 // 12-06-96, Added SelectRandomAtom() method, by M.Maire
 // 21-06-96, SetCuts implementation, M.Maire
@@ -28,6 +30,13 @@
 // 13-03-97, adapted for the new physics scheme, M.Maire
 // 28-03-97, protection in BuildPhysicsTable, M.Maire
 // 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
+// Added Livermore data table construction methods A. Forti
+// Modified BuildMeanFreePath to read new data tables A. Forti
+// Added EnergySampling method A. Forti
+// Modified PostStepDoIt to insert sampling with EPDL97 data A. Forti
+// Added SelectRandomAtom A. Forti
+// Added map of the elements A. Forti
+//                                  
 // --------------------------------------------------------------
 
 // This Class Header
@@ -66,7 +75,6 @@ G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
 G4LowEnergyPhotoElectric::~G4LowEnergyPhotoElectric()
 {
    if (theCrossSectionTable) {
-     //   theCrossSectionTable->clearAndDestroy();
       delete theCrossSectionTable;
    }
 
@@ -132,12 +140,11 @@ void G4LowEnergyPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& Pho
    
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+// CONSTRUCT THE CROSS SECTION TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EPDL DATA
 void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
- 
+
   if (theCrossSectionTable) {
     
-    //theCrossSectionTable->clearAndDestroy(); 
     delete theCrossSectionTable; 
   }
 
@@ -154,7 +161,7 @@ void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
    
   }//end for on atoms
 }
-
+// CONSTRUCT THE SUBSHELL CS TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EPDL DATA
 void G4LowEnergyPhotoElectric::BuildShellCrossSectionTable(){
 
    if (allAtomShellCrossSec) {
@@ -176,7 +183,7 @@ void G4LowEnergyPhotoElectric::BuildShellCrossSectionTable(){
    }//end for on atoms
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+// CONSTRUCT THE BE TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EADL DATA
 void G4LowEnergyPhotoElectric::BuildBindingEnergyTable(){
 
   if (theBindingEnergyTable) {
@@ -188,7 +195,7 @@ void G4LowEnergyPhotoElectric::BuildBindingEnergyTable(){
   theBindingEnergyTable = util.BuildSecondLevelTables(0,dataNum,"fluor/binding");
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+// CONSTRUCT THE FTP TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EADL DATA
 void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(){
 
   if (theFluorTransitionTable) {
@@ -214,7 +221,9 @@ void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(){
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+//
+// vector mapping the elements of the material table 
+// 
 void G4LowEnergyPhotoElectric::BuildZVec(){
 
   const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
@@ -248,6 +257,8 @@ void G4LowEnergyPhotoElectric::BuildZVec(){
     }
   }
 }
+// Compute total cross section from subshell integrated cross section: needed for 
+// selection of the first subshell ionized.
 
 G4double G4LowEnergyPhotoElectric::ComputeCrossSection(const G4double AtomIndex,
 						    const G4double IncEnergy){
@@ -301,7 +312,10 @@ void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
   for ( G4int J = 0 ; J < NumbOfMaterials; J++ ) { // For each material 
   
     //create physics vector then fill it ....
-    // WARNING!!! below 50 ev cross section lower limit depend on the element  
+    // WARNING: Lower limit of total cross sections in the data is the binding energy 
+    // of the relative subshell. MeanFreePath table require a common lowest limit.
+    // This LowestEnergyLimit is at the moment fixed at 250 ev.
+ 
     ptrVector = new  G4PhysicsLogVector(LowestEnergyLimit, HighestEnergyLimit, NumbBinTable);
     
     material = (*theMaterialTable)(J);
@@ -323,7 +337,7 @@ void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
 	  = (*theCrossSectionTable)[ZNumVec->index(AtomIndex)];
 
 	G4double interCrsSec = util.DataLogInterpolation(LowEdgeEnergy, (*(*oneAtomCS)[0]), (*(*oneAtomCS)[1]))*barn;
-	  //DataLogInterpolation(LowEdgeEnergy, tableIndex, theCrossSectionTable)*barn;
+
 	SIGMA += theAtomNumDensityVector[k]*interCrsSec;
       }       
       
@@ -340,14 +354,13 @@ void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
 
 G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
 
-  // First Ionised subshell chosen basing on subshell integrated cross section EPDL97
-  // Fluorescence:
+  // Fluorescence (as reported by stepanek):
   // J. Stepanek " A program to determine the radiation spectra due to a single atomic 
   // subshell ionisation by a particle or due to deexcitation or decay of radionuclides", 
   // Comp. Phys. Comm. 1206 pp 1-1-9 (1997)
   // 
   // incoming particle initialization
-  aParticleChange.Initialize(aTrack);
+  //  aParticleChange.Initialize(aTrack);
 
   G4Material* aMaterial = aTrack.GetMaterial();
 
@@ -367,10 +380,14 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   // select randomly one element constituing the material.
   G4Element* anElement = SelectRandomAtom(aDynamicPhoton, aMaterial);
 
-  // PAY ATTENTION TO THE MEANING OF THIS NUMBER
+  // PAY ATTENTION TO THE MEANING OF THIS NUMBER!!! SelectRandomAtom requires to use AtomNum
+  // the BindingEnergyTable requires AtomNum-1
   G4int AtomNum = (G4int) anElement->GetZ();
 
-  // Select the subshell WARNING!!!!
+  // First Ionised subshell is chosen basing on subshell integrated cross section EPDL97
+  // using the partial sum method.
+  // Select the subshell WARNING!!!!: it returns the subshell index in the table.
+
   G4int subShellIndex = SelectRandomShell(AtomNum, PhotonEnergy);
 
   G4FirstLevel* theBindEnVec = (*theBindingEnergyTable)[AtomNum-1];
@@ -598,7 +615,6 @@ G4LowEnergyPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhot
 	= (*theCrossSectionTable)[ZNumVec->index(AtomIndex)];
 
       crossSection =  util.DataLogInterpolation(GammaEnergy, (*(*oneAtomCS)[0]), (*(*oneAtomCS)[1]))*barn;
-	//DataLogInterpolation(GammaEnergy, tableIndex, theCrossSectionTable)*barn;
     }
 
     PartialSumSigma += theAtomNumDensityVector[i] * crossSection;
@@ -606,20 +622,23 @@ G4LowEnergyPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhot
     if (rval <= PartialSumSigma) return ((*theElementVector)(i));
 
   }
-
-  //  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-  // << "' has no elements" << endl;
   return (*theElementVector)(0);
 }
+
+//
+// Select a random transition with the transition probabilities and the partial sum 
+// method using EADL data (A. Forti)
+//
 
 G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell, 
 							G4double* TransParam,
 							const oneAtomTable* TransitionTable){
   
   G4int SubShellCol = 0, ProbCol = 1, EnergyCol = 2;
-  //transitionTable means  for one atom not for one shell
+  // transitionTable contains all the transition probabilities of one atom:
+  // loop on subshell is inside the method.
 
-  // too check when the subshell are finished
+  // when the last subshell is reached CollIsFull becomes FALSE.
   G4bool ColIsFull = TRUE;
   G4int ShellNum = 0;
   G4double TotalSum = 0; 
@@ -636,9 +655,10 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
       ShellNum++;
     }
     
-    //    if(ShellNum <= maxNumOfShells) {
-      
-      //TransProb start from 1 because the first element of the list is the primary shall id number
+    // TransProb is the index of the loop and of the table of transition. it starts from 1 
+    // because the first element of the data table is the primary shell id number and not a 
+    // transition probability: it must not be added to TotalSum. 
+
       G4int TransProb = 1;
       for(TransProb = 1; TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->length(); TransProb++){ 
 	
@@ -663,16 +683,6 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
 	
 	TransProb++;
       }
-
-    //if(TransProb == (*(*TransitionTable)[ShellNum])[ProbCol]->length()-1) {
-
-    //ColIsFull = FALSE;
-    //}
-      //}
-      //else{
-      
-      // ColIsFull = FALSE;
-      //}
   }
   else{
 
