@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComplexTest.cc,v 1.15 2002-07-26 09:33:04 vnivanch Exp $
+// $Id: G4ComplexTest.cc,v 1.16 2003-02-21 16:53:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,7 +38,7 @@
 // 
 //      Creation date: 8 May 2001
 //
-//      Modifications: 
+//      Modifications:
 //
 // -------------------------------------------------------------------
 
@@ -47,7 +47,10 @@
 #include "g4std/fstream"
 #include "g4std/iomanip"
 
+#include "G4ProductionCuts.hh"
+#include "G4ProductionCutsTable.hh"
 #include "G4Material.hh"
+#include "G4MaterialCutsCouple.hh"
 #include "G4VContinuousDiscreteProcess.hh"
 #include "G4ProcessManager.hh"
 
@@ -88,6 +91,9 @@
 
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4LogicalVolume.hh"
+#include "G4RunManager.hh"
 
 #include "G4Step.hh"
 #include "G4GRSVolume.hh"
@@ -97,18 +103,9 @@
 // New Histogramming (from AIDA and Anaphe):
 #include <memory> // for the auto_ptr(T>
 
-#include "AIDA/IAnalysisFactory.h"
+#include "AIDA/AIDA.h"
 
-#include "AIDA/ITreeFactory.h"
-#include "AIDA/ITree.h"
 
-#include "AIDA/IHistogramFactory.h"
-#include "AIDA/IHistogram1D.h"
-#include "AIDA/IHistogram2D.h"
-//#include "AIDA/IHistogram3D.h"
-
-#include "AIDA/ITupleFactory.h"
-#include "AIDA/ITuple.h"
 #include "G4Timer.hh"
 
 int main(int argc,char** argv)
@@ -131,8 +128,8 @@ int main(int argc,char** argv)
   G4double range     = 1.0*micrometer;
   G4double cutG      = 1.0*micrometer;
   G4double cutE      = 1.0*micrometer;
-  G4Material* material = 0; 
-  G4String name[6] = {"Ionisation", "Bremsstrahlung", "Compton", 
+  G4Material* material = 0;
+  G4String name[6] = {"Ionisation", "Bremsstrahlung", "Compton",
                       "GammaConversion", "PhotoElectric", "Raylaigh"};
 
 
@@ -184,7 +181,7 @@ int main(int argc,char** argv)
   m = new G4Material ("Ethane" , 0.4241*g/cm3, 2);
   m->AddElement(H,6);
   m->AddElement(C,2);
-  
+
   m = new G4Material ("CsI" , 4.53*g/cm3, 2);
   m->AddElement(Cs,1);
   m->AddElement(I,1);
@@ -198,6 +195,7 @@ int main(int argc,char** argv)
   for (mat = 0; mat < nMaterials; mat++) {
     G4cout << mat << ") " << (*theMaterialTable)[mat]->GetName() << G4endl;
   }
+  material = (*theMaterialTable)[0];
 
   G4cout << "Available processes are: " << G4endl;
   for (mat = 0; mat < 6; mat++) {
@@ -213,19 +211,23 @@ int main(int argc,char** argv)
   G4ParticleDefinition* antiproton = G4AntiProton::AntiProtonDefinition();
   G4ParticleDefinition* part = gamma;
 
-  // Geometry 
+  // Geometry
 
-  G4double initX = 0.; 
-  G4double initY = 0.; 
+  G4double initX = 0.;
+  G4double initY = 0.;
   G4double initZ = 1.;
   G4double dimX = 100.0*cm;
   G4double dimY = 100.0*cm;
-  G4double dimZ = 100.0*cm;  
+  G4double dimZ = 100.0*cm;
 
   G4Box* sFrame = new G4Box ("Box",dimX, dimY, dimZ);
   G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
   G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box",
                                             lFrame,0,false,0);
+  G4RunManager* rm = new G4RunManager();
+  G4cout << "World is defined " << G4endl;
+  rm->GeometryHasBeenModified();
+  rm->DefineWorldVolume(pFrame);
 
   // -------------------------------------------------------------------
   // ---- Read input file
@@ -247,7 +249,7 @@ int main(int argc,char** argv)
   G4cout << "#exit" << G4endl;
   G4cout << pFrame << G4endl;
 
-  G4ProcessManager *elecManager, *positManager, *gammaManager, 
+  G4ProcessManager *elecManager, *positManager, *gammaManager,
                    *protManager, *aprotManager;
 
   elecManager = new G4ProcessManager(electron);
@@ -336,12 +338,12 @@ int main(int argc,char** argv)
     } else if(nPart == 4) {
       part = antiproton;
     } else {
-      G4cout << "Particle #" << nPart 
+      G4cout << "Particle #" << nPart
              << " is absent in the list of particles: Exit" << G4endl;
       break;
     }
     if(nProcess < 0 || nProcess > 5) {
-      G4cout << "Process #" << nProcess 
+      G4cout << "Process #" << nProcess
              << " is absent in the list of processes: Exit" << G4endl;
       break;
     }
@@ -358,16 +360,16 @@ int main(int argc,char** argv)
     G4cout << "The cut on g: " << cutG/mm << " mm" << G4endl;
     G4cout << "The step:     " << theStep/mm << " mm" << G4endl;
     if(postDo && lowE) {
-      G4cout << "Test of PostStepDoIt  for " << name[nProcess] 
+      G4cout << "Test of PostStepDoIt  for " << name[nProcess]
              << " for lowenergy" << G4endl;
     } else if(postDo && !lowE) {
-      G4cout << "Test of PostStepDoIt  for " << name[nProcess] 
+      G4cout << "Test of PostStepDoIt  for " << name[nProcess]
              << " for standard" << G4endl;
     } else if(!postDo && !lowE) {
       G4cout << "Test of AlongStepDoIt  for " << name[nProcess] 
              << " for standard" << G4endl;
     } else if(!postDo && lowE) {
-      G4cout << "Test of AlongStepDoIt  for " << name[nProcess] 
+      G4cout << "Test of AlongStepDoIt  for " << name[nProcess]
              << " for lowenergy" << G4endl;
     }
 
@@ -375,21 +377,21 @@ int main(int argc,char** argv)
     // ---- HBOOK initialization
 
     // Creating the analysis factory
-    G4std::auto_ptr< IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+    G4std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
 
     // Creating the tree factory
-    G4std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
+    G4std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
     // Creating a tree mapped to a new hbook file.
-    G4std::auto_ptr< ITree > tree( tf->create( hFile,false,false,"hbook" ) );
+    G4std::auto_ptr< AIDA::ITree > tree( tf->create( hFile,"hbook" ,false,false ) );
     G4cout << "Tree store : " << tree->storeName() << G4endl;
- 
-    // Creating a tuple factory, whose tuples will be handled by the tree
-    //    G4std::auto_ptr< ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
-    IHistogram1D* hist[4];
-    //ITuple* ntuple1 = 0;
-    //ITuple* ntuple2 = 0;
+    // Creating a tuple factory, whose tuples will be handled by the tree
+    //    G4std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
+
+    AIDA::IHistogram1D* hist[4];
+    //AIDA::ITuple* ntuple1 = 0;
+    //AIDA::ITuple* ntuple2 = 0;
 
     if(usepaw) {
 
@@ -401,33 +403,54 @@ int main(int argc,char** argv)
 
 
       // Creating a histogram factory, whose histograms will be handled by the tree
-      G4std::auto_ptr< IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
+      G4std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
 
       // Creating an 1-dimensional histogram in the root directory of the tree
 
-      hist[0] = hf->create1D("11","Kinetic Energy (T/T0)", 50,0.,1.0); 
-      hist[1] = hf->create1D("12","Momentum (MeV/c)", 50,0.,gEnergy*0.1/MeV);
-      hist[2] = hf->create1D("13","Number of secondaries", 20,-0.5,19.5);
-      hist[3] = hf->create1D("14","Energy deposition (MeV)", 50,0.,gEnergy*0.1/MeV);
+      hist[0] = hf->createHistogram1D("11","Kinetic Energy (T/T0)", 50,0.,1.0);
+      hist[1] = hf->createHistogram1D("12","Momentum (MeV/c)", 50,0.,gEnergy*0.1/MeV);
+      hist[2] = hf->createHistogram1D("13","Number of secondaries", 20,-0.5,19.5);
+      hist[3] = hf->createHistogram1D("14","Energy deposition (MeV)", 50,0.,gEnergy*0.1/MeV);
 
       G4cout<< "Histograms is initialised" << G4endl;
     }
 
     G4Timer* timer = new G4Timer();
     timer->Start();
+    G4ProductionCutsTable* cutsTable = G4ProductionCutsTable::GetProductionCutsTable();
 
-    gamma->SetCuts(cutG);
-    electron->SetCuts(cutE);
-    //    positron->SetCuts(cutE);
-  
-    // Processes 
+    G4ProductionCuts* cuts = cutsTable->GetDefaultProductionCuts();
+    cuts->SetProductionCut(cutG, 0);
+    cuts->SetProductionCut(cutE, 1);
+    cuts->SetProductionCut(cutE, 2);
+    G4cout << "Cuts are defined " << G4endl;
+
+/*
+    G4MaterialCutsCouple* couple;
+    G4MaterialCutsCouple* theCouple = 0;
+    for (mat = 0; mat < nMaterials; mat++) {
+      G4Material* mm = (*theMaterialTable)[mat];
+      couple = new G4MaterialCutsCouple(mm,cuts);
+      couple->SetIndex(mat);
+      if(mm == material) {
+        couple->SetUseFlag(true);
+	theCouple = couple;
+      } else {
+        couple->SetUseFlag(false);
+      }
+    }
+    */
+    cutsTable->UpdateCoupleTable();
+    (G4ProductionCutsTable::GetProductionCutsTable())->DumpCouples();
+    const G4MaterialCutsCouple* theCouple = cutsTable->GetMaterialCutsCouple(material,cuts);
+   // Processes
 
     G4VDiscreteProcess*            dProcess;
     G4VContinuousDiscreteProcess* cdProcess;
     dProcess = 0;
     cdProcess = 0;
 
-    G4cout  <<  "Start BuildPhysicsTable"  <<  G4endl;; 
+    G4cout  <<  "Start BuildPhysicsTable"  <<  G4endl;;
 
     if(lowE) {
       if(ionis) {
@@ -443,7 +466,7 @@ int main(int argc,char** argv)
         if(nProcess == 2) dProcess =  new G4LowEnergyCompton();
         if(nProcess == 3) dProcess =  new G4LowEnergyGammaConversion();
         if(nProcess == 4) dProcess =  new G4LowEnergyPhotoElectric();
-        if(nProcess == 5) dProcess =  new G4LowEnergyRayleigh(); 
+        if(nProcess == 5) dProcess =  new G4LowEnergyRayleigh();
         if(dProcess) {
           gammaManager->AddProcess(dProcess);
           dProcess->BuildPhysicsTable(*gamma);
@@ -506,13 +529,13 @@ int main(int argc,char** argv)
       }
     }
 
-    G4cout  <<  "Physics tables are built"  <<  G4endl;; 
+    G4cout  <<  "Physics tables are built"  <<  G4endl;;
 
     timer->Stop();
     G4cout << "  "  << *timer << G4endl;
     delete timer;
 
-  
+
     // Control on processes
     if(postDo && !dProcess && !cdProcess) {
         G4cout << "Discret Process is not found out! Exit" << G4endl;
@@ -523,28 +546,29 @@ int main(int argc,char** argv)
         break;
     }
 
-    // Create a DynamicParticle  
-  
+    // Create a DynamicParticle
+
     G4ParticleMomentum gDir(initX,initY,initZ);
     G4DynamicParticle dParticle(part,gDir,gEnergy);
 
-    // Track 
+    // Track
     G4ThreeVector aPosition(0.,0.,0.);
     G4double aTime = 0. ;
 
     G4Track* gTrack;
     gTrack = new G4Track(&dParticle,aTime,aPosition);
 
-    // Step 
+    // Step
 
     G4Step* step;
-    step = new G4Step();  
+    step = new G4Step();
     step->SetTrack(gTrack);
 
     G4StepPoint *aPoint, *bPoint;
     aPoint = new G4StepPoint();
     aPoint->SetPosition(aPosition);
     aPoint->SetMaterial(material);
+    aPoint->SetMaterialCutsCouple(theCouple);
     G4double safety = 10000.*cm;
     aPoint->SetSafety(safety);
     step->SetPreStepPoint(aPoint);
@@ -555,7 +579,7 @@ int main(int argc,char** argv)
     step->SetPostStepPoint(bPoint);
     step->SetStepLength(theStep);
 
-  // --------- Test the DoIt 
+  // --------- Test the DoIt
     G4int nElectrons = 0;
     G4int nPositrons = 0;
     G4int nPhotons = 0;
@@ -563,18 +587,21 @@ int main(int argc,char** argv)
     G4double de = 0.0;
     G4double de2 = 0.0;
 
-    G4cout << "dProcess= " << dProcess << "  cdProcess= " << cdProcess << G4endl;
+    G4cout << "dProcess= " << dProcess << "  cdProcess= " << cdProcess;
+    if(dProcess) G4cout << "  name= " << dProcess->GetProcessName() << G4endl;
+    if(cdProcess) G4cout << "  name= " << cdProcess->GetProcessName() << G4endl;
+
 
     timer = new G4Timer();
     timer->Start();
 
     for (G4int iter=0; iter<nEvt; iter++) {
 
-      gTrack->SetStep(step); 
- 
+      gTrack->SetStep(step);
+
       if(verbose) {
-        G4cout  <<  "Iteration = "  <<  iter 
-	        << "  -  Step Length = " 
+        G4cout  <<  "Iteration = "  <<  iter
+	        << "  -  Step Length = "
 	        << step->GetStepLength()/mm << " mm "
 	        << G4endl;
       }
@@ -582,18 +609,20 @@ int main(int argc,char** argv)
       G4VParticleChange* dummy = 0;
       if(postDo) {
         if(dProcess)  dummy = dProcess->PostStepDoIt(*gTrack, *step);
-        if(cdProcess) dummy = cdProcess->PostStepDoIt(*gTrack, *step);
+        if(cdProcess) {
+	  dummy = cdProcess->PostStepDoIt(*gTrack, *step);
+        }
       } else {
         dummy = cdProcess->AlongStepDoIt(*gTrack, *step);
       }
       G4ParticleChange* particleChange = (G4ParticleChange*) dummy;
-      
-      // Primary physical quantities 
+
+      // Primary physical quantities
 
       G4double energyChange = particleChange->GetEnergyChange();
       G4double deltaE = gEnergy - energyChange ;
       G4double dedx = deltaE / (step->GetStepLength());
-      
+
       G4ThreeVector change = particleChange->CalcMomentum(energyChange,
 		            *(particleChange->GetMomentumChange()),
 			     part->GetPDGMass());
@@ -604,19 +633,19 @@ int main(int argc,char** argv)
 
       if(verbose) {
         G4cout << "---- Primary after the step ---- " << G4endl;
-        G4cout << "---- Energy: " << energyChange/MeV << " MeV,  " 
+        G4cout << "---- Energy: " << energyChange/MeV << " MeV,  "
 	       << "(px,py,pz): ("
 	       << pxChange/MeV << ","
-	       << pyChange/MeV << "," 
+	       << pyChange/MeV << ","
 	       << pzChange/MeV << ") MeV"
 	       << G4endl;
-        G4cout << "---- Energy loss (dE) = " << deltaE/keV << " keV;" 
-               << "Stopping power (dE/dx)=" << dedx*mm/keV << " keV/mm" 
+        G4cout << "---- Energy loss (dE) = " << deltaE/keV << " keV;"
+               << "Stopping power (dE/dx)=" << dedx*mm/keV << " keV/mm"
                << "; rmax(mm)= " << rmax << G4endl;
       }
 
       // Primary
- 
+
       G4int nsec = particleChange->GetNumberOfSecondaries();
       /*
       if(ntuple1) {
@@ -626,26 +655,26 @@ int main(int argc,char** argv)
         ntuple1->column("nsec", nsec);
         ntuple1->column("nele", nElectrons);
         ntuple1->column("npho", nPhotons);
-        ntuple1->dumpData(); 
+        ntuple1->dumpData();
       }
       */
       de  += deltaE;
-      de2 += deltaE*deltaE; 
-      
-      // Secondaries physical quantities 
-      
+      de2 += deltaE*deltaE;
+
+      // Secondaries physical quantities
+
       if(usepaw) {
-        hist[2]->fill((float)nsec, 1.0);
-        hist[3]->fill(particleChange->GetLocalEnergyDeposit()/MeV, 1.0);
-      }      
+        hist[2]->fill((float)nsec, (float)1.0);
+        hist[3]->fill((float)(particleChange->GetLocalEnergyDeposit()/MeV), (float)1.0);
+      }
 
       for (G4int i = 0; i<nsec; i++) {
 	  // The following two items should be filled per event, not
 	  // per secondary; filled here just for convenience, to avoid
 	  // complicated logic to dump ntuple when there are no secondaries
-	  
+
         G4Track* finalParticle = particleChange->GetSecondary(i) ;
-	  
+
         G4double e    = finalParticle->GetTotalEnergy();
         G4double eKin = finalParticle->GetKineticEnergy();
         G4double px   = (finalParticle->GetMomentum()).x();
@@ -660,37 +689,37 @@ int main(int argc,char** argv)
 
         G4String partName = finalParticle->GetDefinition()->GetParticleName();
         if(verbose) {
-	  G4cout  << "==== Final " 
-		  <<  partName  <<  " "  
-		  << "E= " <<  e/MeV  <<  " MeV,  " 
-		  << "eKin: " <<  eKin/MeV  <<  " MeV, " 
+	  G4cout  << "==== Final "
+		  <<  partName  <<  " "
+		  << "E= " <<  e/MeV  <<  " MeV,  "
+		  << "eKin: " <<  eKin/MeV  <<  " MeV, "
 		  << "(px,py,pz): ("
-		  <<  px/MeV  <<  "," 
+		  <<  px/MeV  <<  ","
 		  <<  py/MeV  <<  ","
-		  <<  pz/MeV  << ") MeV," 
-                  << " p= " << p << " MeV" 
-		  <<  G4endl;   
+		  <<  pz/MeV  << ") MeV,"
+                  << " p= " << p << " MeV"
+		  <<  G4endl;
 	}
-	  
+
         if(usepaw) {
-	  hist[0]->fill(eKin/gEnergy, 1.0);
-          hist[1]->fill(p/MeV, 1.0);
+	  hist[0]->fill((float)(eKin/gEnergy), (float)1.0);
+          hist[1]->fill((float)(p/MeV), (float)1.0);
 	}
-	  
+
         G4int partType = 0;
         if (partName == "e-") {
 	  partType = 1;
           nElectrons++;
-	   
-	} else if (partName == "e+") { 
+
+	} else if (partName == "e+") {
 	  partType = 2;
           nPositrons++;
-	   
-	} else if (partName == "gamma") { 
+
+	} else if (partName == "gamma") {
 	  partType = 0;
           nPhotons++;
         }
-	
+
 	// Fill the secondaries ntuple
 	/*
         if(ntuple2) {
@@ -702,33 +731,34 @@ int main(int argc,char** argv)
           ntuple2->column("e", e);
           ntuple2->column("theta", theta);
           ntuple2->column("ekin", eKin);
-          ntuple2->column("type", partType);  
-	  ntuple2->dumpData(); 
+          ntuple2->column("type", partType);
+	  ntuple2->dumpData();
 	}
 	*/
 	delete particleChange->GetSecondary(i);
       }
-	          
-      particleChange->Clear();      
-    
+
+      particleChange->Clear();
+
     }
     G4cout << "###### Statistics:" << G4endl;
-    G4cout << "Average number of secondary electrons= " 
+    G4cout << "Average number of secondary electrons= "
            << (G4double)nElectrons/(G4double)nEvt << G4endl;
-    G4cout << "Average number of secondary positrons= " 
+    G4cout << "Average number of secondary positrons= "
              << (G4double)nPositrons/(G4double)nEvt << G4endl;
-    G4cout << "Average number of secondary photons= " 
+    G4cout << "Average number of secondary photons= "
            << (G4double)nPhotons/(G4double)nEvt << G4endl;
     G4double x = de/(G4double)nEvt;
     G4double y = de2/(G4double)nEvt - x*x;
-    if(0.0 < y) y = sqrt(y); 
-    G4cout << "Average energy deposition(MeV)= " 
+    if(0.0 < y) y = sqrt(y);
+    G4cout << "Average energy deposition(MeV)= "
            << x/MeV << " +- " << y/MeV << G4endl;
 
+ 
     timer->Stop();
     G4cout << "  "  << *timer << G4endl;
     delete timer;
-  
+
     if(usepaw) {
       tree->commit();
       G4std::cout << "Closing the tree..." << G4std::endl;
@@ -737,7 +767,7 @@ int main(int argc,char** argv)
     }
 
     G4cout << "###### End of run # " << run << "     ######" << G4endl;
-    
+
   } while(end);
   G4cout << "###### End of test #####" << G4endl;
 }
