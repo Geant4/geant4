@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03PhysicsList.cc,v 1.3 2001-10-15 17:20:51 gcosmo Exp $
+// $Id: F03PhysicsList.cc,v 1.4 2001-10-25 10:03:54 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -247,16 +247,15 @@ void F03PhysicsList::ConstructEM()
     {
       // Construct processes for muon+ 
 
-      //  F03StepCut* muonStepCut = new F03StepCut();
+      F03StepCut* muonStepCut = new F03StepCut();
 
-      // G4MuIonisation* themuIonisation = new G4MuIonisation() ;
-      // pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-      // pmanager->AddProcess(themuIonisation,-1,2,2);
-      // pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
-      // pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4); 
-      // pmanager->AddProcess(new G4PAIonisation("Xenon"),-1,2,2) ;
-      // pmanager->AddProcess( muonStepCut,-1,-1,3);
-      // muonStepCut->SetMaxStep(MaxChargedStep) ;
+      G4MuIonisation* themuIonisation = new G4MuIonisation() ;
+      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      pmanager->AddProcess(themuIonisation,-1,2,2);
+      pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
+      pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4); 
+      pmanager->AddProcess( muonStepCut,-1,-1,3);
+      muonStepCut->SetMaxStep(MaxChargedStep) ;
     } 
     else if (
                 particleName == "proton"  
@@ -267,11 +266,17 @@ void F03PhysicsList::ConstructEM()
                || particleName == "kaon-"  
               )
     {
-        F03StepCut* thehadronStepCut = new F03StepCut();
+      F03StepCut* thehadronStepCut = new F03StepCut();
 
-        pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
-                                     pDet->GetLogicalAbsorber(),
-                                    "IonisationByLogVolHadr"),-1,2,2);
+      G4hIonisation* thehIonisation = new G4hIonisation() ; 
+      G4MultipleScattering* thehMultipleScattering =
+                     new G4MultipleScattering() ;
+
+
+      pmanager->AddProcess(thehMultipleScattering,-1,1,1);
+      pmanager->AddProcess(thehIonisation,-1,2,2);
+
+
         pmanager->AddProcess( thehadronStepCut,-1,-1,3);
         thehadronStepCut->SetMaxStep(MaxChargedStep) ;
     }
