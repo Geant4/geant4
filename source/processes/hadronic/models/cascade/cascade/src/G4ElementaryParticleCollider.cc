@@ -118,7 +118,7 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 	    ipart->setMomentum(mom); 
 	  };
 
-	  sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
+	  G4std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
 
 	  if(verboseLevel > 2){
 	    G4cout << " In SCM: total outgoing momentum " << G4endl 
@@ -186,7 +186,7 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 	        ipart->setMomentum(mom); 
 	      };
 
-	      sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
+	      G4std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
 
 	      if(verboseLevel > 2){
 		G4cout << " In SCM: total outgoing momentum " << G4endl 
@@ -327,7 +327,7 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
   };
 
   const G4double large_cut = 4.0;
-  pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
+  G4std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
   G4int ik = iksk.first;
   G4double sk = iksk.second;
   G4int l = is;
@@ -630,7 +630,8 @@ generateSCMfinalState(G4double ekin,
 
 	    if (fabs(ct) < ang_cut) {
 
-	      for (G4int i = 0; i < multiplicity - 2; i++) 
+	      G4int i(0);
+	      for (i = 0; i < multiplicity - 2; i++) 
 		scm_momentums[i] = toSCM->rotate(scm_momentums[i]);
 
 	      tot_mom = toSCM->rotate(tot_mom);  
@@ -1078,7 +1079,7 @@ generateOutgoingKindsFor2toMany(
   };
 
   G4int il = getIL(is, mult);
-  pair<G4int, G4double> iksk = getPositionInEnergyScale1(ekin);
+  G4std::pair<G4int, G4double> iksk = getPositionInEnergyScale1(ekin);
   G4int ik = iksk.first;
   G4double sk = iksk.second;
   G4int n;      
