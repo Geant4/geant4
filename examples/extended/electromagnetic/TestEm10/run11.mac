@@ -43,9 +43,25 @@
 /plots/setEnlow 0.0 MeV
 /plots/setEnhigh 0.011  MeV  
 #
+#/XTRdetector/setGammaCut 10.0
+#/XTRdetector/setElectronCut 10.0
+#/XTRdetector/setPositronCut 100.
+#/XTRdetector/update
 #
+#/process/inactivate eIoni
 /run/initialize
 /run/particle/dumpCutValues
+#
+#Innactivate some processes: msc eIoni eBrem RegularXTRadiator
+#
+/process/inactivate msc
+/process/inactivate eIoni
+#
+/process/inactivate eBrem
+#
+#/process/inactivate RegularXTRadiator
+#
+#/process/eLoss/fluct false
 #
 # Particle and its energy
 #
@@ -55,10 +71,13 @@
 #/gun/particle proton
 #/gun/energy 10000.0 GeV
 #
-#/tracking/verbose 6
+#/tracking/verbose 1
 #
-/event/printModulo 500
-/run/beamOn 5000
+/event/printModulo 1000
+#/run/beamOn 1
+#/process/inactivate eIoni
+#/process/inactivate eBrem
+/run/beamOn 10000
 #
 #
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10RunAction.cc,v 1.6 2004-12-03 09:33:46 vnivanch Exp $
+// $Id: Em10RunAction.cc,v 1.7 2005-01-14 11:42:15 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -816,13 +816,17 @@ void Em10RunAction::FillNbOfSteps(G4double)// ns)
 
 //////////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::FillEn(G4double) // En)
+void Em10RunAction::FillEn(G4double En)
 {
-  /*
+
+  // #ifndef G4NOHIST
+
+  
+
   G4double bin ;
   G4int ibin;
 
-  if(histo2)
+  //  if(histo2)
   {
     entryEn += 1. ;
  
@@ -834,9 +838,13 @@ void Em10RunAction::FillEn(G4double) // En)
       ibin= (G4int)bin ;
       distEn[ibin] += 1. ;
     }
-    histo2->accumulate(En/keV) ; // was /MeV
+    //    histo2->accumulate(En/keV) ; // was /MeV
   }
-  */
+
+  // #endif
+
+  
+
 }
 
 ////////////////////////////////////////////////////////////////////////////

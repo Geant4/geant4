@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.9 2004-08-30 15:47:34 vnivanch Exp $
+// $Id: Em10PhysicsList.cc,v 1.10 2005-01-14 11:42:14 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -170,6 +170,9 @@ void Em10PhysicsList::ConstructProcess()
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
+#include "G4PAIModel.hh"
+#include "G4PAIPhotonModel.hh"
+#include "G4PAIwithPhotons.hh"
 
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
@@ -182,11 +185,16 @@ void Em10PhysicsList::ConstructProcess()
 
 #include "Em10StepCut.hh"
 
-#include "G4PAIModel.hh"
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
+
 
 
 void Em10PhysicsList::ConstructEM()
 {
+  const G4RegionStore* theRegionStore = G4RegionStore::GetInstance();
+  G4Region* gas = theRegionStore->GetRegion("XTRdEdxDetector");
+
   theParticleIterator->reset();
 
   while( (*theParticleIterator)() )
@@ -213,20 +221,18 @@ void Em10PhysicsList::ConstructEM()
       // Construct processes for electron
 
       theeminusMultipleScattering = new G4MultipleScattering();
-      theeminusIonisation = new G4eIonisation();
       theeminusBremsstrahlung = new G4eBremsstrahlung();
 
-     // fPAIonisation = new G4PAIonisation("Xenon") ;
-     // fForwardXrayTR = new G4ForwardXrayTR("Air","Polypropelene","XrayTR") ;
-
       theeminusStepCut = new Em10StepCut();
+      
+      theeminusIonisation = new G4eIonisation();
+      G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      theeminusIonisation->AddEmModel(0,pai,pai,gas);
 
-      pmanager->AddProcess(theeminusMultipleScattering,-1,1,1);
       pmanager->AddProcess(theeminusIonisation,-1,2,2);
+      
+      pmanager->AddProcess(theeminusMultipleScattering,-1,1,1);
       pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3);
-
-      //G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
-      //eion->AddEmModel(0,pai,pai,gas);
 
       pmanager->AddContinuousProcess(
                  new G4RegularXTRadiator(pDet->GetLogicalRadiator(),
@@ -238,7 +244,6 @@ void Em10PhysicsList::ConstructEM()
 					 "RegularXTRadiator"));
        // ,-1,1,-1);
 
-       //  pmanager->AddProcess(fForwardXrayTR,-1,-1,2);
 
       pmanager->AddProcess(theeminusStepCut,-1,-1,4);
       theeminusStepCut->SetMaxStep(MaxChargedStep) ;
@@ -253,16 +258,17 @@ void Em10PhysicsList::ConstructEM()
       theeplusBremsstrahlung = new G4eBremsstrahlung();
       theeplusAnnihilation = new G4eplusAnnihilation();
 
-      // fForwardXrayTR = new G4ForwardXrayTR("Air","Polypropelene","XrayTR") ;
 
       theeplusStepCut = new Em10StepCut();
+
+      G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      theeplusIonisation->AddEmModel(0,pai,pai,gas);
 
       pmanager->AddProcess(theeplusMultipleScattering,-1,1,1);
       pmanager->AddProcess(theeplusIonisation,-1,2,2);
       pmanager->AddProcess(theeplusBremsstrahlung,-1,-1,3);
       pmanager->AddProcess(theeplusAnnihilation,0,-1,4);
 
-      // pmanager->AddProcess(fForwardXrayTR,-1,-1,2);
 
       pmanager->AddProcess(theeplusStepCut,-1,-1,5);
       theeplusStepCut->SetMaxStep(MaxChargedStep) ;
@@ -276,6 +282,10 @@ void Em10PhysicsList::ConstructEM()
       Em10StepCut* muonStepCut = new Em10StepCut();
 
       G4MuIonisation* themuIonisation = new G4MuIonisation() ;
+
+      G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      themuIonisation->AddEmModel(0,pai,pai,gas);
+
       pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
       pmanager->AddProcess(themuIonisation,-1,2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
@@ -296,10 +306,13 @@ void Em10PhysicsList::ConstructEM()
     {
       Em10StepCut* thehadronStepCut = new Em10StepCut();
 
-      G4hIonisation* thehIonisation = new G4hIonisation() ;
+      G4hIonisation* thehIonisation = new G4hIonisation();
       G4MultipleScattering* thehMultipleScattering =
                         new G4MultipleScattering() ;
 
+
+      G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      thehIonisation->AddEmModel(0,pai,pai,gas);
 
       pmanager->AddProcess(thehMultipleScattering,-1,1,1);
       pmanager->AddProcess(thehIonisation,-1,2,2);

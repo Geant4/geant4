@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.9 2003-04-17 07:20:35 grichine Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.10 2005-01-14 11:42:13 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,9 +53,21 @@
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
 #include "G4SDManager.hh"
+#include "G4GeometryManager.hh"
 #include "G4RunManager.hh"
 #include "G4FastSimulationManager.hh"
 
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
+#include "G4ProductionCuts.hh"
+
+#include "G4VisAttributes.hh"
+#include "G4Colour.hh"
+
+#include "G4UnitsTable.hh"
 #include "G4ios.hh"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -69,7 +81,7 @@ Em10DetectorConstruction::Em10DetectorConstruction()
    solidRadiator(0),  logicRadiator(0),   physiRadiator(0),
    fRadiatorMat(0),
    solidAbsorber(0),  logicAbsorber(0),   physiAbsorber(0),
-   magField(0),       calorimeterSD(0),   fXTRModel(0)
+   magField(0),       calorimeterSD(0),   fXTRModel(0),fRegGasDet(NULL)
 {
   // default parameter values of the calorimeter
 
@@ -114,6 +126,11 @@ Em10DetectorConstruction::Em10DetectorConstruction()
   fModuleNumber = 1      ;  
 
   // create commands for interactive definition of the calorimeter  
+
+  fGammaCut    = 23*mm; 
+  fElectronCut = 23*mm; 
+  fPositronCut = 23*mm; 
+
 
   detectorMessenger = new Em10DetectorMessenger(this);
 }
@@ -494,6 +511,18 @@ void Em10DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
 {
+
+ // Cleanup old geometry
+
+  G4GeometryManager::GetInstance()->OpenGeometry();
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+
+
+
+
+
   //  G4int i, j ; 
   G4int j ;
   //  G4double zModule, zRadiator, rModule, rRadiator ; 
@@ -648,6 +677,30 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
                                         0);                
                                         
   }
+  
+
+  if( fRegGasDet != 0 )  // remove obsolete root logical volume
+  {
+    fRegGasDet->RemoveRootLogicalVolume(logicAbsorber);
+  }
+  G4ProductionCuts* cuts = 0;
+
+  if( fRegGasDet == 0 ) // First time - instantiate a region and a cut objects
+  {    
+    fRegGasDet = new G4Region("XTRdEdxDetector");
+    cuts = new G4ProductionCuts();
+    fRegGasDet->SetProductionCuts(cuts);
+  }
+  else  // Second time - get a cut object from region
+  {   
+    cuts = fRegGasDet->GetProductionCuts();
+  }
+  fRegGasDet->AddRootLogicalVolume(logicAbsorber);                               
+
+  cuts->SetProductionCut(fGammaCut,"gamma");
+  cuts->SetProductionCut(fElectronCut,"e-");
+  cuts->SetProductionCut(fPositronCut,"e+");
+
                                  
   // Sensitive Detectors: Absorber 
   

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorConstruction.hh,v 1.5 2002-02-05 11:06:37 grichine Exp $
+// $Id: Em10DetectorConstruction.hh,v 1.6 2005-01-14 11:42:13 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,6 +38,7 @@ class G4Tubs;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
+class G4Region;
 class G4UniformMagField;
 class Em10DetectorMessenger;
 class Em10CalorimeterSD;
@@ -72,6 +73,12 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
      void SetWorldMaterial(G4String);
      void SetWorldSizeZ(G4double);
      void SetWorldSizeR(G4double);
+
+     void SetGammaCut(G4double    cut){fGammaCut    = cut;};
+     void SetElectronCut(G4double cut){fElectronCut = cut;};
+     void SetPositronCut(G4double cut){fPositronCut = cut;};
+
+
 
      void SetMagField(G4double);
      
@@ -176,9 +183,16 @@ class Em10DetectorConstruction : public G4VUserDetectorConstruction
   G4VPhysicalVolume* physiAbsorber; //pointer to the physical Absorber
      
   G4UniformMagField* magField;      //pointer to the magnetic field
-     
+
+  G4double fElectronCut, fGammaCut, fPositronCut;
+       
   Em10DetectorMessenger* detectorMessenger;  //pointer to the Messenger
   Em10CalorimeterSD*     calorimeterSD;  //pointer to the sensitive detector
+  G4Region*             fRegGasDet;
+  
+
+
+
   G4VXrayTRmodel*        fXTRModel ;
       
 private:
