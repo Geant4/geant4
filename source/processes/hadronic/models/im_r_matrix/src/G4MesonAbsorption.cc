@@ -271,7 +271,32 @@ GetTimeToAbsorption(const G4KineticTrack& trk1, const G4KineticTrack& trk2)
 }
 
 G4double G4MesonAbsorption::
-AbsorptionCrossSection(const G4KineticTrack & , const G4KineticTrack & )
+AbsorptionCrossSection(const G4KineticTrack & aT, const G4KineticTrack & bT)
 {
+  G4double t = 0;
+  if(aT.GetDefinition()==G4PionPlus::PionPlusDefinition() ||
+     aT.GetDefinition()==G4PionMinus::PionMinusDefinition() )
+  {
+    t = aT.Get4Momentum().t()-aT.Get4Momentum().mag();
+  } 
+  else if(bT.GetDefinition()==G4PionPlus::PionPlusDefinition() ||
+        bT.GetDefinition()!=G4PionMinus::PionMinusDefinition())
+  {
+    t = bT.Get4Momentum().t()-bT.Get4Momentum().mag();
+  }
+  static G4double it [26] =
+        {0,4,50,5.5,75,8,95,10,120,11.5,140,12,160,11.5,180,10,190,8,210,6,235,4,260,3,300,2};
+  t /= MeV;
+  if(t>it[24]) theCross = it[25];
+  else 
+  {
+    G4int count = -1;
+    while(t<it[++count])count++;
+    G4double x1 = it[count-1];
+    G4double x2 = it[count+1];
+    G4double y1 = it[count];
+    G4double y2 = it[count+2];
+    theCross = y1+(y2-y1)/(x2-x1)*t;
+  }
   return theCross*millibarn;
 }

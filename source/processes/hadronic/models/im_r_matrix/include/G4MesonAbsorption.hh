@@ -9,12 +9,9 @@
 class G4MesonAbsorption : public G4BCAction
 {
   public:
-  G4MesonAbsorption()
-  {
-    std::cout << "Please enter the microscopic pion absorption cross-section"
-              << std::endl;
-    std::cin >> theCross;
-  }
+  G4MesonAbsorption(){}
+  virtual ~G4MesonAbsorption(){}
+
   virtual const std::vector<G4CollisionInitialState *> &
          GetCollisions(G4KineticTrack * aProjectile, 
 	               std::vector<G4KineticTrack *> & someCandidates,
@@ -38,6 +35,7 @@ class G4MesonAbsorption : public G4BCAction
   private:
   std::vector<G4CollisionInitialState *> theCollisions;
   G4double theCross;
+    
 };
 
 #endif
