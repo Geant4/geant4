@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.cc,v 1.6 2001-07-11 10:08:43 gunter Exp $
+// $Id: G4VSteppingVerbose.cc,v 1.7 2001-11-07 13:15:18 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -120,10 +120,7 @@ void G4VSteppingVerbose::CopyState()
 
    fPreviousStepSize = fManager->GetfPreviousStepSize();
 
-   fTouchable1 = fManager->GetfTouchable1();
-   fTouchable2 = fManager->GetfTouchable2();
-   fIsTouchable1Free = fManager->GetfIsTouchable1Free();
-   fIsTouchable2Free = fManager->GetfIsTouchable2Free();
+   fTouchableHandle = fManager->GetTouchableHandle();
 
    StepControlFlag = fManager->GetStepControlFlag();
 

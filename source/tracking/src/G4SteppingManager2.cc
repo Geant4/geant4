@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.3 2001-11-07 10:48:16 radoone Exp $
+// $Id: G4SteppingManager2.cc,v 1.4 2001-11-07 13:14:45 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //---------------------------------------------------------------
 //
-// G4SteppingManager.icc
+// G4SteppingManager2.cc
 //
 // Description:
 //   This class represents the manager who steers to move the give
