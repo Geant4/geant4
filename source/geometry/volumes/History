@@ -1,4 +1,4 @@
-$Id: History,v 1.4 1999-03-19 11:42:20 japost Exp $
+$Id: History,v 1.5 1999-03-19 11:43:59 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -28,6 +28,9 @@ March    18, 99      J. Apostolakis
         In the case where a zero step is done in Replicas, we must allow
     ReplicaNavigator to handle the case itself - or else we loop.
 
+March    11, 99      J. Apostolakis
+
+   G4GRSVolume.icc: corrected G4Exception messages.
 
 February 15, 99      J. Apostolakis        geomvol-01-00-01
 
