@@ -4,6 +4,7 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE:                                                              #
+#        Nov      07, 2001                                            #
 #        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
 #        June     20, 2001                                            # 
 #        November 26, 2000                                            #
@@ -62,19 +63,13 @@
 
 # Visualize a selected logical volume
 /vis/specify           Absorber 
-/vis/viewer/refresh
-/vis/viewer/update
+/vis/viewer/flush
 
 ##########################################################
 # Visualization with the DAWNFILE driver
 #
 #  * Each visualized view is saved to a file "g4_XX.eps"  
 #    with the "vectorized" PostScript format.
-#
-#  * In order to make the file "g4_XX.eps" printable, 
-#    append the "showpage" PostScript command to the file. 
-#    You can do it with the 4th page of the DAWN GUI panel 
-#    or by editing the EPS file by hand.
 #
 #  * Set an environmental variable if you wish to 
 #    skip DAWN GUI:
@@ -95,9 +90,16 @@
 /vis/scene/notifyHandlers
 /vis/viewer/update
 
+# FOR FUTURE UPDATION
+#/vis/viewer/flushAll
+
 # Visualize a selected logical volume (2)
 /vis/specify  Gap
 /vis/scene/add/axes    0 0 0 500 mm
 /vis/scene/add/text    0 0 0 mm  40 -100 -200   LogVol:Gap
 /vis/scene/notifyHandlers
 /vis/viewer/update
+
+# FOR FUTURE UPDATION
+#/vis/viewer/flushAll
+

@@ -4,6 +4,7 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE:                                                              #
+#        Nov      07, 2001                                            #
 #        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
 #        June     20, 2001                                            #
 #        November 26, 2000                                            #
@@ -61,9 +62,6 @@
 #
 #  viewpoint  : (theta,phi) = (20*deg, 70*deg), 
 #  zoom factor: 0.8 of the full screen size
-#  coordinate axes:
-#     x-axis:red,  y-axis:green,  z-axis:blue
-#     origin: (0,0,0),  length: 500
 #
 /vis/viewer/reset
 /vis/viewer/viewpointThetaPhi  20 70
@@ -76,19 +74,13 @@
 #  such as DAWNFILE, VRMLFILE, HepRep drivers, etc.
 #  For OpenGL drivers, these commands are not required
 #  but harmless even if they are described.
-/vis/viewer/refresh
-/vis/viewer/update
+/vis/viewer/flush
 
 ##########################################################
 # Visualization with the DAWNFILE driver
 #
 #  * Each visualized view is saved to a file "g4_XX.eps"  
 #    with the "vectorized" PostScript format.
-#
-#  * In order to make the file "g4_XX.eps" printable, 
-#    append the "showpage" PostScript command to the file. 
-#    You can do it with the 4th page of the DAWN GUI panel 
-#    or by editing the EPS file by hand.
 #
 #  * Set an environmental variable if you wish to 
 #    skip DAWN GUI:
@@ -104,6 +96,9 @@
 #  coordinate axes:
 #     x-axis:red,  y-axis:green,  z-axis:blue
 #     origin: (0,0,0),  length: 500
+#  Scale: length = 10 cm, Orientation = z, color = red, 
+#         placing_algorithm = manual, 
+#         center = (-2.5 cm , -5 cm, 0 cm)
 #
 /vis/viewer/reset
 /vis/viewer/zoom               1.1
@@ -114,13 +109,13 @@
 /vis/scene/add/scale     10 cm z 1 0 0 manual -2.5 -5 0  cm
 
 # "Flush the action of all the existing viewers.
-#   Note: You may have to execute these commands, e.g.,  
+#   Note: You should execute these commands, e.g.,  
 #         when the current scene is modified.
-#         In this example, they are equivalent to
-#         /vis/viewer/refresh + /vis/viewer/update,
-#         which flushes only the current viewer.
 /vis/scene/notifyHandlers
 /vis/viewer/update
+
+# FOR FUTURE UPDATION
+#/vis/viewer/flushAll
 
 # Bird's-eye view of a detector component (Gap)
 /vis/viewer/reset
@@ -134,6 +129,10 @@
 # "Flush the action of all the existing viewers.
 /vis/scene/notifyHandlers
 /vis/viewer/update
+
+# FOR FUTURE UPDATION
+#/vis/viewer/flushAll
+
 
 # Bird's-eye view of the whole detector components (world)
 #  * The argument "world" of the command 
@@ -154,6 +153,10 @@
 # "Flush the action of all the existing viewers.
 /vis/scene/notifyHandlers
 /vis/viewer/update
+
+# FOR FUTURE UPDATION
+#/vis/viewer/flushAll
+
 
 # Make the culling on for next visualization
 #  Note: You may also use "/vis/viewer/reset" 

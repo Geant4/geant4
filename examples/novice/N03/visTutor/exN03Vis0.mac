@@ -4,6 +4,7 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE:                                                              #
+#        Nov      07, 2001                                            #
 #        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
 #        June     20, 2001                                            #
 #        November 26, 2000                                            #
@@ -63,17 +64,16 @@
 /vis/viewer/reset 
 /vis/viewer/viewpointThetaPhi 70 20
 
-# Visualize of the whole detector geometry
+# Create an empty scene and add the detector geometry to it
 /vis/drawVolume
 
-# The following two commands "flush" 
+# The following command "flush" 
 #  the action of the current viewer.
 #  They are required for the post-processing drivers 
 #  such as DAWNFILE, VRMLFILE, HepRep drivers, etc.
 #  For OpenGL drivers, these commands are not required
 #  but harmless even if they are described.
-/vis/viewer/refresh
-/vis/viewer/update
+/vis/viewer/flush
 
 #########################################################
 # Visualization of events with the DAWNFILE driver

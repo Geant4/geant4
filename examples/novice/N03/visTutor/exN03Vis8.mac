@@ -4,6 +4,7 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE:                                                              #
+#        Nov      07, 2001                                            #
 #        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
 #        June     20, 2001                                            #
 #        November 26, 2000                                            #
@@ -61,32 +62,23 @@
 /vis/viewer/viewpointThetaPhi  35 35
 
 # Generate page 1: Absorber
-/vis/scene/create                                              
-/vis/scene/add/volume     Absorber 
+/vis/drawVolume           Absorber 
 /vis/scene/add/axes       0 0 0 500 mm
 /vis/scene/add/text       0 0 0 mm  30 -150 -200   Page1/3:Absorber 
-/vis/sceneHandler/attach
-/vis/viewer/refresh
-/vis/viewer/update
+/vis/viewer/flush
 
 # Generate page 2: Gap
-/vis/scene/create                                              
-/vis/scene/add/volume     Gap
+/vis/drawVolume           Gap
 /vis/scene/add/axes       0 0 0 500 mm
 /vis/scene/add/text       0 0 0 mm 30 -100 -200   Page2/3:Gap
-/vis/sceneHandler/attach
-/vis/viewer/refresh
-/vis/viewer/update
+/vis/viewer/flush
 
 # Generate page 3: World
 /vis/viewer/set/culling   global  false
-/vis/scene/create                                              
-/vis/scene/add/volume     
+/vis/drawVolume           
 /vis/scene/add/axes       0 0 0 500 mm
 /vis/scene/add/text       0 0 0 mm 50 -100 -200   Page3/3:world
-/vis/sceneHandler/attach
-/vis/viewer/refresh
-/vis/viewer/update
+/vis/viewer/flush
 
 # Make the culling on for next visualization
 #  Note: You may also use "/vis/viewer/reset" 

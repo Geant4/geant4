@@ -4,6 +4,7 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE:                                                              #
+#        Nov      07, 2001                                            #
 #        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
 #        June     20, 2001                                            #
 #        November 26, 2000                                            #
@@ -20,12 +21,10 @@
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
 #  (See geant4/source/visualization/README for details.)              #
-#                                                                     #
 #    * Unnecessary                                                    #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
 #  (See geant4/source/visualization/README for details.)              #
-#                                                                     #
 #    * Unnecessary                                                    #
 #                                                                     #
 #  RECOMMENDED ENVIRONMENTAL VARIABLES FOR VISUALIZATION:             #
@@ -43,10 +42,6 @@
 ###################################################
 # Visualization of detector geometry and events  
 # with the VRML2FILE driver.
-#
-# Note: "/vis/viewer/set/style wireframe" means  
-#       "half-transparent" in the VRML2FILE driver.  
-#       It is a convention of this driver.
 ###################################################
 
 # Store particle trajactories for visualization
@@ -57,16 +52,17 @@
 #        The VRML2FILE driver generates VRML 2.0 format files.
 /vis/open VRML2FILE
 
-# Visualize the detector geometry
+# Create an empty scene and add the detector geometry to it
 /vis/drawVolume
-/vis/viewer/refresh
-/vis/viewer/update
 
-# Visualize one event added to the current scene
+# Visualize 3 events in the wireframe mode 
 #  Note: The command /vis/scene/add/trajectories
 #        is not necessary in exampleN03,
 #        since the C++ method DrawTrajectory() is  
 #        described in the event action.
+#  Note: "/vis/viewer/set/style wireframe" means  
+#       "half-transparent" in the VRML2FILE driver.  
+#       It is a convention only for this driver.
 #/vis/scene/add/trajectories
 /vis/viewer/set/style wireframe
 /run/beamOn 3
