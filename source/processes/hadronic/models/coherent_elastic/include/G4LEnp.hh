@@ -43,9 +43,6 @@
 #include "G4TrackStatus.hh"
 #include "G4HadronicInteraction.hh"
 
-#include "HbookHistogram.hh"
-
-
 class G4LEnp : public G4HadronicInteraction
 {
  private:
@@ -68,14 +65,6 @@ class G4LEnp : public G4HadronicInteraction
    static G4float sig[NENERGY][NANGLE];
    static G4float pcm[NENERGY], elab[NENERGY], 
      dsigmax[NENERGY], sigtot[NENERGY];
-
-
-   HbookHistogram *HPxCM, *HPyCM, *HPzCM;
-   HbookHistogram* HAngCM;
-   FILE* RawData; 
-   HbookHistogram *HPx1, *HPy1, *HPz1, *HPx2, *HPy2, *HPz2;
-   HbookHistogram *HAng1, *HAng2, *HNsec;
-
 };
 
 #endif
