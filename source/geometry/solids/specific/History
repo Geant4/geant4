@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2004-05-25 12:52:52 gcosmo Exp $
+$Id: History,v 1.38 2004-05-28 18:22:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-May-2004, G.Cosmo (geom-specific-V06-01-03)
+- Fixed archiving problem on WIN32-VC7: replaced structs with classes
+  in G4VSurface.
+- Replaced misleading names for masks in G4VSurface and moved inlined
+  methods of nested classes to .cc.
 
 25-May-2004, G.Cosmo (geom-specific-V06-01-02)
 - Fixed compilation problem on SUN-CC. Made EValidate enum public in
