@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.27 1999-05-19 16:36:30 stesting Exp $
+# $Id: architecture.gmk,v 1.28 1999-05-26 00:55:22 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -431,7 +431,7 @@ ifeq ($(G4SYSTEM),SUN-CC)
     endif
   endif
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
-  VISLIBS  +=  -L/usr/lib -lsocket -lnsl
+  LOADLIBS += -L/usr/lib -lsocket -lnsl
   CPPFLAGS += -DG4NOT_ISO_DELETES
   ifdef G4USE_STL
     CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM)
