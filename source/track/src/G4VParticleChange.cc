@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.cc,v 1.11 2002-11-20 16:52:49 gcosmo Exp $
+// $Id: G4VParticleChange.cc,v 1.12 2003-05-19 15:16:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -194,7 +194,7 @@ void G4VParticleChange::DumpInfo() const
   G4cout << G4endl;      
 }
 
-G4bool G4VParticleChange::CheckIt(const G4Track& aTrack)
+G4bool G4VParticleChange::CheckIt(const G4Track& )
 {
 
   G4bool    exitWithError = false;
