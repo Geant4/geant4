@@ -33,6 +33,7 @@
 // 19-02-03 Rename G4ProductionCuts (V.Ivanchenko)
 // 03-03-03 Add energy limits (V.Ivanchenko)
 // 04-03-03 Define default EM module + limits on g,e-,e+ energy (V.Ivanchenko)
+// 11-11-03 Remove STD (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -47,7 +48,7 @@
 #include "Tst26PhysListParticles.hh"
 #include "Tst26PhysListGeneral.hh"
 #include "Tst26PhysListEmStandard.hh"
-#include "Tst26PhysListEmModel.hh"
+#include "Tst26PhysListEm52.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "G4ProductionCuts.hh"
@@ -127,7 +128,7 @@ void Tst26PhysicsList::AddPhysicsList(const G4String& name)
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new Tst26PhysListEmModel(name);
+    emPhysicsList = new Tst26PhysListEm52(name);
 
   } else {
 

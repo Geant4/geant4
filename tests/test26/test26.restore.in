@@ -1,4 +1,4 @@
-# $Id: test26.restore.in,v 1.1 2003-04-26 20:10:07 vnivanch Exp $
+# $Id: test26.restore.in,v 1.2 2003-11-12 10:22:14 vnivanch Exp $
 #
 # Macro file for "test26.cc"
 # V.Ivanchenko
@@ -25,10 +25,13 @@
 /run/initialize
 /run/beamOn 100
 #
+#/process/eLoss/verbose 1
 /gun/particle pi+
+#/tracking/verbose  1
 /gun/energy 1 GeV
 /run/beamOn 100
 #
+#/tracking/verbose  1
 /gun/particle ion
 /gun/ion      6 12 6 0
 /gun/energy 1 GeV

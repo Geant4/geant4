@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26EventAction.cc,v 1.4 2003-03-13 12:00:14 maire Exp $
+// $Id: Tst26EventAction.cc,v 1.5 2003-11-12 10:22:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,6 +101,8 @@ void Tst26EventAction::EndOfEventAction(const G4Event* evt)
       if (Evert[i] > Eth) nPad++;
     }
   }
+  //  G4cout << "EndOfEvent: " << E1 << " " <<  E9 << " " <<  E25 << " " 
+  //       <<  Eabs1 << " " << Eabs2 << " " <<  Eabs3 << " " <<  Eabs4 << " " <<  nPad << G4endl;
   Tst26Run->AddEvent(E1, E9, E25, Eabs1, Eabs2, Eabs3, Eabs4, nPad);
   
   // extract the trajectories and draw them

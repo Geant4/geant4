@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26RunAction.cc,v 1.5 2003-06-16 17:15:47 gunter Exp $
+// $Id: Tst26RunAction.cc,v 1.6 2003-11-12 10:22:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 /////////////////////////////////////////////////////////////////////////
@@ -102,13 +102,14 @@ void Tst26RunAction::EndOfRunAction(const G4Run*)
 
   G4double x, y, z;     
   G4double ntot = (G4double)evtNo;
-  if(ntot == 0.0) ntot = 1.0;
+  if(ntot <= 1.0) ntot = 1.0;
 
   G4double norm = 1./ntot;
   for(G4int i=0; i<8; i++) {
     e[i]  *= norm;
     e2[i] *= norm;
     e2[i] -= e[i]*e[i];
+    if(e2[i]<0.0) e2[i] = 0.0;
     e2[i]  = sqrt(e2[i]);
     s[i]   = e2[i]*sqrt(norm);
   }

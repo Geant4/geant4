@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26PhysListEmStandard.cc,v 1.2 2003-02-01 18:14:59 vnivanch Exp $
+// $Id: Tst26PhysListEmStandard.cc,v 1.3 2003-11-12 10:22:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -31,6 +31,8 @@
 // Created: 31.01.03 V.Ivanchenko
 //
 // Modified:
+//
+// 11-11-03 Ion ionisation for GenericIons (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -57,6 +59,7 @@
 #include "G4MuPairProduction.hh"
 
 #include "G4hIonisation.hh"
+#include "G4ionIonisation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -97,7 +100,7 @@ void Tst26PhysListEmStandard::ConstructProcess()
       //positron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
       
     } else if( particleName == "mu+" || 
@@ -105,9 +108,14 @@ void Tst26PhysListEmStandard::ConstructProcess()
       //muon  
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
-      pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       
+      pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
+      pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);       
      
+    } else if (particleName ==  "GenericIon") {
+
+      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
+      pmanager->AddProcess(new G4ionIonisation,     -1,2,2);
+
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {

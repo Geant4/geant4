@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26SteppingVerbose.cc,v 1.3 2003-06-16 17:15:48 gunter Exp $
+// $Id: Tst26SteppingVerbose.cc,v 1.4 2003-11-12 10:22:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -132,9 +132,9 @@ void Tst26SteppingVerbose::PrintStep(G4bool firstStep)
 	     << std::setw( 8) << "Y(mm)"      << " "
              << std::setw( 8) << "Z(mm)"      << " "
              << std::setw( 9) << "KinE(MeV)"  << " " 
-	     << std::setw( 8) << "dE(keV)"    << " "
+	     << std::setw( 8) << "dE(MeV)"    << " "
              << std::setw( 8) << "StepL(mm)"   << " "
-	     << std::setw(10) << "TrackL(cm)"  << " "
+	     << std::setw(10) << "TrackL(mm)"  << " "
              << std::setw( 9) << "idxCouple" << " "
              << std::setw( 9) << "Material" << " "
              << std::setw(10) << "NextVolume" << " "
@@ -145,9 +145,9 @@ void Tst26SteppingVerbose::PrintStep(G4bool firstStep)
                  << std::setw( 8) << fTrack->GetPosition().y()/mm  << " "
                  << std::setw( 8) << fTrack->GetPosition().z()/mm  << " "
                  << std::setw( 9) << fTrack->GetKineticEnergy()/MeV << " "
-                 << std::setw( 8) << fStep->GetTotalEnergyDeposit()/keV << " "
+                 << std::setw( 8) << fStep->GetTotalEnergyDeposit()/MeV << " "
                  << std::setw( 8) << fStep->GetStepLength()/mm << " "
-                 << std::setw(10) << fTrack->GetTrackLength()/cm << "     ";
+                 << std::setw(10) << fTrack->GetTrackLength()/mm << "     ";
 
   if( firstStep ) {
     G4cout << "                    ";
