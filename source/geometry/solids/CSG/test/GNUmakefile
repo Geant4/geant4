@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2000-02-29 13:26:01 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2000-04-07 12:53:40 gcosmo Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -25,7 +25,7 @@ INCFLAGS := -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/global/HEPGeometry/include \
             -I$(G4BASE)/graphics_reps/include
 
-LDLIBS   := -lG4volumes -lG4csg -lG4geometrymng -lG4volumes -lG4geometrymng \
+LDLIBS   := -lG4csg -lG4volumes -lG4geometrymng \
             -lG4graphics_reps \
             -lG4globman
 
