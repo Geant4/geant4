@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.4 2003-11-03 17:55:10 hpw Exp $
+// $Id: G4PreCompoundModel.cc,v 1.5 2003-11-19 19:13:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -118,6 +118,7 @@ G4HadFinalState * G4PreCompoundModel::ApplyYourself(const G4HadProjectile & theP
   theCreatorModels.clear();
 #endif
   // fill particle change
+  theResult.Clear();
   theResult.SetStatusChange(stopAndKill);
   for(G4ReactionProductVector::iterator i= result->begin(); i != result->end(); ++i)
     {
