@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8XrayTRmodel.cc,v 1.1 2000-02-09 10:49:07 grichine Exp $
+// $Id: Em8XrayTRmodel.cc,v 1.2 2000-03-02 10:55:36 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -149,8 +149,8 @@ void Em8XrayTRmodel::DoIt( const G4FastTrack& fastTrack ,
   }
   iPlace = iTkin - 1 ;
 
-  G4ParticleMomentum particleDir = fastTrack.GetPrimaryTrack()->
-                                   GetMomentumDirection() ;
+  //  G4ParticleMomentum particleDir = fastTrack.GetPrimaryTrack()->
+  //                     GetMomentumDirection() ;
 
   if(iTkin == 0) // Tkin is too small, neglect of TR photon generation
   {
@@ -221,7 +221,7 @@ void Em8XrayTRmodel::DoIt( const G4FastTrack& fastTrack ,
         dirZ = cos(theta)           ;
 
         G4ThreeVector directionTR(dirX,dirY,dirZ) ;
-        directionTR.rotateUz(particleDir) ;
+        directionTR.rotateUz(direction) ;
         directionTR.unit() ;
 
         G4DynamicParticle aPhotonTR(G4Gamma::Gamma(),directionTR,energyTR) ;
@@ -397,8 +397,10 @@ G4double Em8XrayTRmodel::GetPlateLinearPhotoAbs(G4double omega)
   {
     if( omega < fPlatePhotoAbsCof[i][0] ) break ;
   }
-  if( i == 0 ) G4Exception("Invalid ( < first ionisation potential ) energy in \n 
-                           Em8XrayTRmodel::GetPlateLinearPhotoAbs(energy)") ;
+  if( i == 0 )
+  { 
+    G4Exception("Invalid (<I1) energy in Em8XrayTRmodel::GetPlateLinearPhotoAbs");
+  }
   else i-- ;
   
   return fPlatePhotoAbsCof[i][1]/omega  + fPlatePhotoAbsCof[i][2]/omega2 + 
@@ -488,8 +490,10 @@ G4double Em8XrayTRmodel::GetGasLinearPhotoAbs(G4double omega)
   {
     if( omega < fGasPhotoAbsCof[i][0] ) break ;
   }
-  if( i == 0 ) G4Exception("Invalid ( < first ionisation potential ) energy in \n 
-                           Em8XrayTRmodel::GetGasLinearPhotoAbs(energy)") ;
+  if( i == 0 )
+  { 
+   G4Exception("Invalid (<I1) energy in Em8XrayTRmodel::GetGasLinearPhotoAbs");
+  }
   else i-- ;
   
   return fGasPhotoAbsCof[i][1]/omega  + fGasPhotoAbsCof[i][2]/omega2 + 
@@ -612,6 +616,9 @@ void Em8XrayTRmodel::BuildTable()
 	
   if(fGammaTkinCut > fTheMaxEnergyTR) fMaxEnergyTR = 2.0*fGammaTkinCut ;  
   else                                fMaxEnergyTR = fTheMaxEnergyTR ;
+
+  G4cout.precision(4) ;
+
   G4Timer timer ;
   timer.Start() ;	
   for(iTkin=0;iTkin<fTotBin;iTkin++)      // Lorentz factor loop
@@ -624,6 +631,8 @@ void Em8XrayTRmodel::BuildTable()
                             GetLowEdgeEnergy(iTkin)/proton_mass_c2) ;
 
      fMaxThetaTR = 10000.0/(fGamma*fGamma) ;  // theta^2
+
+     fTheMinAngle = 1.0e-4 ;
  
      if( fMaxThetaTR > fTheMaxAngle )    fMaxThetaTR = fTheMaxAngle ; 
      else
@@ -634,6 +643,7 @@ void Em8XrayTRmodel::BuildTable()
      G4PhysicsLinearVector* angleVector = new G4PhysicsLinearVector(        0.0,
                                                                     fMaxThetaTR,
                                                                     fBinTR      ) ;
+
      G4double energySum = 0.0 ;
      G4double angleSum  = 0.0 ;
      G4Integrator integral ;
@@ -642,7 +652,7 @@ void Em8XrayTRmodel::BuildTable()
 
      for(iTR=fBinTR-2;iTR>=0;iTR--)
      {
-        energySum += fCofTR*integral.Legendre96(this,
+        energySum += fCofTR*integral.Legendre10(this,
                      &Em8XrayTRmodel::XTRNSpectralDensity, 
                      energyVector->GetLowEdgeEnergy(iTR),
                      energyVector->GetLowEdgeEnergy(iTR+1) ) ; 
@@ -709,7 +719,9 @@ G4double Em8XrayTRmodel::XTRNSpectralDensity(G4double energy)
   fEnergy = energy ;
   G4Integrator integral ;
   return integral.Legendre96(this,&Em8XrayTRmodel::XTRNSpectralAngleDensity,
-			     0.0,fMaxThetaTR) ;
+			     0.0,0.2*fMaxThetaTR) +
+         integral.Legendre10(this,&Em8XrayTRmodel::XTRNSpectralAngleDensity,
+			     0.2*fMaxThetaTR,fMaxThetaTR) ;
 } 
  
 //////////////////////////////////////////////////////////////////////////
