@@ -65,7 +65,7 @@ Test30VSecondaryGenerator::Test30VSecondaryGenerator(G4HadronicInteraction* hadi
 
 Test30VSecondaryGenerator::~Test30VSecondaryGenerator()
 {
-  if(hInteraction) delete hInteraction;
+  //  if(hInteraction) delete hInteraction;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

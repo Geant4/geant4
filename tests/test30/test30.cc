@@ -424,6 +424,9 @@ int main(int argc, char** argv)
 			
     for (G4int iter=0; iter<nevt; iter++) {
 
+      if(verbose>1) {
+        G4cout << "### " << iter << "-th event start " << G4endl;
+      }
       gTrack->SetStep(step); 
       gTrack->SetKineticEnergy(energy); 
       //G4double x = 0.0;
