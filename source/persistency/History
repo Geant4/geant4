@@ -5,7 +5,7 @@
 
                       Category History file
                       ---------------------
-This file should be used by G4 developers and category coordinators
+his file should be used by G4 developers and category coordinators
 to briefly summarize all major modifications introduced in the code
 and keep track of all category-tags.
 It DOES NOT substitute the  CVS log-message one should put at every
@@ -14,6 +14,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 8, 99  Y.Morita (persistency-V00-01-02)
+- Modified HepVArray/HepRefVArray to d_Varray<>, d_Varray<d_Ref<>>
+- Modified ooRef() to d_Ref<>
+- Some mod G4int to G4Pint
+- G4PEvent: Set associations to G4PPrimaryVertex, G4PHCofThisEvent
+- Created G4PVHitsCollection and G4PHCofThisEvent
+
+November 4, 99  Y.Morita
+- ./GNUmakefile: Added G4phits
+- digits+hits/hits/GNUmakefile:
+   Added G4OODDLX_BOOT
+   Added explicit dependencies of G4PHCofThisEvent.hh: G4PVHitsCollection.hh
+- moved G4PLogicalVolume from persistency/geometry/volumes to
+  persistency/geometry/management to avoid circular dependency
+- G4PersistencyManager: Allow constructor with the name of Boot file
 
 October 27, 99  J.Allison 
 - Created persistency/global/include.
