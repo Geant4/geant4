@@ -116,7 +116,7 @@
 #include "G4VhShellCrossSection.hh"
 #include "G4hShellCrossSection.hh"
 #include "G4hShellCrossSectionExp.hh"
-//#include "G4hShellCrossSectionDoubleExp.hh"
+#include "G4hShellCrossSectionDoubleExp.hh"
 #include "G4VEMDataSet.hh"
 #include "G4EMDataSet.hh"
 #include "G4CompositeEMDataSet.hh"
@@ -170,15 +170,15 @@ void G4hLowEnergyIonisation::InitializeMe()
 
 //****************************************************************************
 // By default the method of cross section's calculation is swiched on an 
-// first implementation empirical model (G4hShellCrossSectionExp), 
+// 2nd implementation empirical model (G4hShellCrossSectionDoubleExp), 
 // if you want to use Gryzinski's model (G4hShellCrossSection()) or the
-// second empiric one (G4hShellCrossSectionDoubleExp), you must change the 
+// 1st empiric one (G4hShellCrossSectionExp), you must change the 
 // selection below and switching expFlag to FALSE
 //****************************************************************************
 
   //shellCS = new G4hShellCrossSection();
   //shellCS = new G4hShellCrossSectionExp();
-  shellCS = new G4hShellCrossSectionExp();
+  shellCS = new G4hShellCrossSectionDoubleExp();
   expFlag=true;
 }
 
