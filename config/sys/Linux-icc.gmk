@@ -1,9 +1,9 @@
 #
 # ------ GNU/LINUX ------     !!! not supported !!!
-#                                 Intel icc 7.1
+#                                 Intel icc 8.0
 ifeq ($(G4SYSTEM),Linux-icc)
   CXX       := icc
-  CXXFLAGS  := -ansi -Xa -w1
+  CXXFLAGS  := -ansi -w1
   ifdef G4OPTIMISE
     CXXFLAGS  += -O
     FCFLAGS   := -O
@@ -27,9 +27,9 @@ ifeq ($(G4SYSTEM),Linux-icc)
   endif
   G4RUNPATHOPTION := -Xlinker
   CC := gcc
-  FC := ifc
-  #FCFLAGS +=
-  FCLIBS := 
+  FC := g77
+  FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
+  FCLIBS := -lg2c -lnsl
   AR := xiar r
   ECHO    := /bin/echo -e
   SHEXT   := so
