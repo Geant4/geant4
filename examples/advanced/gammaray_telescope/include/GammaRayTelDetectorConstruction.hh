@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDetectorConstruction.hh,v 1.6 2001-07-11 09:56:56 gunter Exp $
+// $Id: GammaRayTelDetectorConstruction.hh,v 1.7 2004-06-02 15:21:29 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -44,6 +44,7 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
 class G4UniformMagField;
+class G4Region;
 class GammaRayTelDetectorMessenger;
 class GammaRayTelTrackerSD;
 class GammaRayTelAnticoincidenceSD;
@@ -264,6 +265,8 @@ private:
   GammaRayTelCalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
   GammaRayTelAnticoincidenceSD* anticoincidenceSD;  //pointer to the sensitive detector
 
+  G4Region* aTKRRegion; // TKR cut region
+  G4Region* aCALRegion; // CAL cut region
 
 private:
     
