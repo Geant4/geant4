@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test19.cc,v 1.19 2004-07-01 15:51:34 johna Exp $
+// $Id: test19.cc,v 1.20 2005-02-04 16:26:35 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,9 @@
 #include "G4RunManager.hh"
 
 #ifdef G4VIS_USE
-#include "MyVisManager.cc"
+#include "G4VisExecutive.hh"
+// G4VisExecutive is a G4VisManager that implements graphics system
+// registration in the user domain.
 #include "G4XXX.hh"
 #endif
 
@@ -126,7 +128,7 @@ int main (int argc, char** argv) {
 
 #ifdef G4VIS_USE
   // Instantiate and initialise Visualization Manager.
-  G4VisManager* visManager = new MyVisManager;
+  G4VisManager* visManager = new G4VisExecutive;
   visManager -> SetVerboseLevel (verbosityString);
   visManager -> RegisterGraphicsSystem(new G4XXX);
   visManager -> Initialize ();
