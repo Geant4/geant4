@@ -4,10 +4,10 @@
 *     User routine called at the end of each event
 *     
 #include "geant321/gcflag.inc"
+#include "geant321/gckine.inc"
 #include "calor.inc"
 #include "celoss.inc"
 *
-      DIMENSION sumevent(2*MaxAbS)
       CHARACTER*4 unit
 *                                                                               
 * *** drawing
@@ -20,12 +20,11 @@
       END IF
 #endif      
 *
-*     ntuple: energies and track length per event
+*     histo: energy deposit per tracking medium
       do k=1,NbAbsor
-        sumevent(2*k-1) = EdepAbs(k)
-        sumevent(2*k  ) = TrckAbs(k)
+        ratio = EdepAbs(k)/pkine(1)
+	call hfill (k,ratio,0.,1.)
       enddo
-      CALL HFN(1,sumevent)     
 *
 *     cumul energy deposited and charged track length
       do k=1,NbAbsor
