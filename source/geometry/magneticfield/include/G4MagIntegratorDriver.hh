@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.12 2002-11-09 02:32:15 japost Exp $
+// $Id: G4MagIntegratorDriver.hh,v 1.13 2003-06-05 16:11:56 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -170,6 +170,9 @@ class G4MagInt_Driver
 			 G4double             dotVelocities);       
        //  Verbose output for debugging
 
+     void PrintStatisticsReport() ;
+       //  Report on the number of steps, maximum errors etc.
+
 #ifdef QUICK_ADV_TWO
      G4bool QuickAdvance(        G4double     yarrin[],     // In
 			   const G4double     dydx[],  
@@ -187,7 +190,7 @@ class G4MagInt_Driver
 
    private:
 
-     G4double hminimum_val;
+     G4double  fMinimumStep;
         // Minimum Step allowed in a Step.
 
      const G4int  fNoIntegrationVariables;  // Number of Variables in integration
@@ -210,6 +213,12 @@ class G4MagInt_Driver
 
      G4int  fVerboseLevel;
         // Verbosity level for printing (debug, ..)
+
+     G4int  fNoTotalSteps, fNoBadSteps, fNoSmallSteps, fNoInitialSmallSteps; 
+     G4double fDyerr_max, fDyerr_mx2;
+     G4double fDyerrPos_smTot, fDyerrVel_smTot, fDyerrPos_lgTot, fDyerrVel_lgTot; 
+     G4double fSumH_sm,   fSumH_lg; 
+        // Step Statistics 
 };
 
 #include "G4MagIntegratorDriver.icc"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.31 2002-12-12 08:19:38 gcosmo Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.32 2003-06-05 16:12:27 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,6 +52,10 @@ const G4double G4MagInt_Driver::max_stepping_decrease = 0.1;
 //
 const G4int  G4MagInt_Driver::fMaxStepBase = 250;  // Was 5000
 
+#ifndef G4NO_FIELD_STATISTICS
+#define G4FLD_STATS  1
+#endif
+
 //  Constructor
 //
 G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum, 
@@ -60,25 +64,39 @@ G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum,
   : fNoIntegrationVariables(numComponents), 
     fMinNoVars(12), 
     fNoVars( G4std::max( fNoIntegrationVariables, fMinNoVars )),
-    fVerboseLevel(0)
+    fVerboseLevel(0),
+    fNoTotalSteps(0),  fNoBadSteps(0), fNoSmallSteps(0), fNoInitialSmallSteps(0),
+    fDyerr_max(0.0), fDyerr_mx2(0.0), 
+    fDyerrPos_smTot(0.0), fDyerrPos_lgTot(0.0), fDyerrVel_lgTot(0.0), 
+    fSumH_sm(0.0),   fSumH_lg(0.0)
 {  
 // In order to accomodate "Laboratory Time", which is [7], fMinNoVars=8 is required.
 // For proper time of flight and spin,  fMinNoVars must be 12
 
       // fNoVars= G4std::max( fNoVars, fMinNoVars );  
       RenewStepperAndAdjust( pItsStepper );
-      hminimum_val= hminimum;
+      fMinimumStep= hminimum;
       fMaxNoSteps = fMaxStepBase / pIntStepper->IntegratorOrder();
 #ifdef G4DEBUG_FIELD
       fVerboseLevel=2;
 #endif
+
+      G4cout << "MagIntDriver version: 'invE_nS' New InvEps, Stats-Optional "
+#ifdef G4FLD_STATS
+      << " Stats-disabled "
+#else
+      << " Stats-disabled "
+#endif
+	<< G4endl;
 }
 
 //  Destructor
 //
 G4MagInt_Driver::~G4MagInt_Driver()
-{
+{ 
+   PrintStatisticsReport() ;
 }
+
 
 // To add much printing for debugging purposes, uncomment this:
 // #define  G4DEBUG_FIELD 1    
@@ -97,12 +115,12 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 // The source is similar to odeint routine from NRC p.721-722 .
 
 {
-  G4int nstp, i; 
+  G4int nstp, i, no_warnings=0;; 
   G4double x, hnext, hdid, h ;
 
-  G4int  no_warnings=0;
 #ifdef G4DEBUG_FIELD
   static G4int dbg=1;
+  static G4int nStpPr=50;   // For debug printing of long integrations
   G4double ySubStepStart[G4FieldTrack::ncompSVEC];
   G4FieldTrack  yFldTrkStart(y_current);
 #endif
@@ -111,6 +129,10 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
   G4double ystart[G4FieldTrack::ncompSVEC], yEnd[G4FieldTrack::ncompSVEC]; 
   G4double  x1, x2;
   G4bool succeeded = true, lastStepSucceeded;
+
+  G4int  noFullIntegr=0, noSmallIntegr = 0 ;
+  static G4int  noGoodSteps =0 ;  // Bad = chord > curve-len 
+  const  int    nvar= fNoVars;
 
   G4FieldTrack yStartFT(y_current);
 
@@ -123,10 +145,6 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
   //  Initial Step size "h" is the full interval
   h = hstep;   
   x = x1;
-
-  G4int  noFullIntegr=0, noSmallIntegr = 0 ;
-  static G4int  noGoodSteps =0, noBadSteps = 0 ;  // Bad = chord > curve-len 
-  const  int    nvar= fNoVars;
 
   for(i=0;i<nvar;i++) y[i] = ystart[i] ;
 
@@ -147,20 +165,14 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
      if( x+h > x2 ) {
         h = x2 - x ;     // When stepsize overshoots, decrease it!
         if( h < eps * hstep) {
-	    lastStep = true;   //  Ensure that this must be the last step
-                               //   - since otherwise numerical (im)precision
-                               //     could force lots of small last steps
+	    lastStep = true;   //  Avoid numerous small last steps
 	}
      }
 
-#ifdef  G4DEBUG_FIELD
-     static G4int nStpPr=50;   // For debug printing of long integrations
-#endif
-
+     fNoTotalSteps++;
      // Perform the Integration
      //      
-
-     if( h > Hmin() ){ 
+     if( h > fMinimumStep ){ 
         OneGoodStep(y,dydx,x,h,eps,hdid,hnext) ;
         //--------------------------------------
         lastStepSucceeded= (hdid == h);   
@@ -176,14 +188,30 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 
         QuickAdvance( yFldTrk, dydx, h, dchord_step, dyerr_len ); 
         //-----------------------------------------------------
-
         // #ifdef G4DEBUG_FIELD
- 	   // if(dbg>1) OneGoodStep(y,dydx,x,h,2*eps,hdid,hnext) ;
-	   // if(dbg>1) PrintStatus( ystart, x1, y, x, h, -nstp);  
+	// if(dbg>1) OneGoodStep(y,dydx,x,h,2*eps,hdid,hnext) ;
+	// if(dbg>1) PrintStatus( ystart, x1, y, x, h, -nstp);  
 
         yFldTrk.DumpToArray(y);    
-#ifdef  G4DEBUG_FIELD
-  	  if(dbg>1) PrintStatus( ySubStepStart, x1, y, x, h,  nstp);   // Only this
+
+#ifdef G4FLD_STATS
+	fNoSmallSteps++; 
+        if( dyerr_len > fDyerr_max) fDyerr_max= dyerr_len;
+        fDyerrPos_smTot += dyerr_len;
+	fSumH_sm += h;  // Length total for 'small' steps
+        if(nstp<=1) fNoInitialSmallSteps++;
+#endif
+#ifdef G4DEBUG_FIELD
+	if(dbg>1) {
+	   if(fNoSmallSteps<2) PrintStatus( ySubStepStart, x1, y, x, h, -nstp);
+	   G4cout << "Another sub-min step, no " << fNoSmallSteps 
+		  << " of " << fNoTotalSteps << " this time " << nstp << G4endl; 
+	   PrintStatus( ySubStepStart, x1, y, x, h,  nstp);   // Only this
+	   G4cout << " dyerr= " << dyerr_len << " relative = " << dyerr_len / h 
+		  << " epsilon= " << eps << " hstep= " << hstep 
+		  << " h= " << h << " hmin= " << fMinimumStep
+		  << G4endl;
+        }
 #endif	
 	dyerr = dyerr_len / h;
 	hdid= h;
@@ -208,14 +236,14 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
      // Check the endpoint
      G4double endPointDist= (EndPos-StartPos).mag(); 
      if( endPointDist >= hdid*(1.+perMillion) ){
-        noBadSteps  ++;
+        fNoBadSteps  ++;
         // Issue a warning only for gross differences -
         //   we understand how small difference occur.
         if( endPointDist >= hdid*(1.+perThousand) ){ 
 #ifdef  G4DEBUG_FIELD
            if(dbg){
 	      WarnEndPointTooFar ( endPointDist, hdid, eps, dbg ); 
-	      G4cerr << "  Total steps:  bad" << noBadSteps << " good " << noGoodSteps << G4endl;
+	      G4cerr << "  Total steps:  bad " << fNoBadSteps << " good " << noGoodSteps << " current h= " << hdid << G4endl;
 	      // G4cerr << "Mid:EndPtFar> ";
 	      PrintStatus( ystart, x1, y, x, hstep, no_warnings?nstp:-nstp);  
                 // Potentially add as arguments:  <dydx> - as Initial Force
@@ -408,21 +436,30 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
 
       h = htry ; // Set stepsize to the initial trial value
 
-      // G4double inv_epspos_sq= 1.0 / eps * eps; 
+      // G4double inv_epspos_sq = 1.0 / eps * eps; 
+      G4double inv_eps_vel_sq = 1.0 / (eps_rel_max*eps_rel_max); 
+      G4double errpos_last_sq=0.0, errvel_last_sq=0.0; 
 
       for (;;)
       {
 	  pIntStepper-> Stepper(y,dydx,h,ytemp,yerr); 
-          G4double eps_pos = eps_rel_max * G4std::max(h, Hmin()); 
+          //            *******
+          G4double eps_pos = eps_rel_max * G4std::max(h, fMinimumStep); 
+	  G4double inv_eps_pos_sq = 1.0 / (eps_pos*eps_pos); 
+
 	  // Evaluate accuracy
 	  //
 	  errpos_sq =  sqr(yerr[0]) + sqr(yerr[1]) + sqr(yerr[2]) ;
-	  errpos_sq /= eps_pos*eps_pos; // Scale relative to required tolerance
+	  errpos_last_sq= errpos_sq;
+	  // errpos_sq /= eps_pos*eps_pos; // Scale to tolerance
+	  errpos_sq *= inv_eps_pos_sq; // Scale relative to required tolerance
 
           // Accuracy for momentum
           errvel_sq =  (sqr(yerr[3]) + sqr(yerr[4]) + sqr(yerr[5]) )
                      / (sqr(y[3]) + sqr(y[4]) + sqr(y[5]) );
-          errvel_sq /= eps_rel_max*eps_rel_max; 
+          errvel_last_sq= errvel_sq; 
+          // errvel_sq /= eps_rel_max*eps_rel_max; 
+          errvel_sq *= inv_eps_vel_sq;
 
           errmax_sq = G4std::max( errpos_sq, errvel_sq ); // Square of maximum error
           errmax = sqrt( errmax_sq );
@@ -444,6 +481,12 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
 	     break;
 	  }
       }
+#ifdef G4FLD_STATS
+      // Sum of squares of position error // and momentum dir (underestimated)
+      fSumH_lg += h; 
+      fDyerrPos_lgTot += errpos_last_sq;  //  + errvel_last_sq * h * h ; 
+      fDyerrVel_lgTot += errvel_last_sq * h * h; 
+#endif
 
       // Compute size of next Step
       if(errmax > errcon) hnext = GetSafety()*h*pow(errmax,GetPgrow()) ;
@@ -749,4 +792,46 @@ void G4MagInt_Driver::PrintStat_Aux(
        G4cout << G4std::setw( 9) << " InitialStep " << " "; 
     // G4cout << G4std::setw(12) << safety << " ";
     G4cout << G4endl;
+}
+
+void G4MagInt_Driver::PrintStatisticsReport()
+{
+  G4int noPrecBig= 6, noPrecSmall=4; 
+  G4int oldPrec= G4cout.precision(noPrecBig);
+
+  G4cout << "G4MagInt_Driver Number of Steps: "
+	 << " Total= " <<  fNoTotalSteps
+         << " Bad= "   <<  fNoBadSteps 
+         << " Small= " <<  fNoSmallSteps 
+	 << " Non-initial small= " << (fNoSmallSteps-fNoInitialSmallSteps)
+	 << G4endl;
+
+ #ifdef G4FLD_STATS
+ G4cout << "MID dyerr: " 
+	 << " maximum= " << fDyerr_max 
+	 << " 2nd max= " << fDyerr_mx2
+	 << " Total small= " << fDyerrPos_smTot 
+	 << " sqrt(Sum large^2): pos= " << sqrt(fDyerrPos_lgTot)
+	 << " vel= " << sqrt( fDyerrVel_lgTot )
+	 << " Total h-distance: small= " << fSumH_sm 
+	 << " large= " << fSumH_lg
+	 << G4endl;
+
+  G4cout.precision(noPrecSmall);
+  G4cout << "MIDnums: " << fMinimumStep
+	 << "   " << fNoTotalSteps 
+	 << "  "  <<  fNoSmallSteps
+         << "  "  << fNoSmallSteps-fNoInitialSmallSteps
+	 << "  "  << fNoBadSteps         
+	 << "   " << fDyerr_max
+	 << "   " << fDyerr_mx2 
+	 << "   " << fDyerrPos_smTot 
+	 << "   " << fSumH_sm
+	 << "   " << fDyerrPos_lgTot
+	 << "   " << fDyerrVel_lgTot
+	 << "   " << fSumH_lg
+	 << G4endl;
+ #endif 
+
+ G4cout.precision(oldPrec);
 }
