@@ -16,10 +16,10 @@
 name := G4persistency
 G4ODBMS := true
 
-SUBDIRS = events digits+hits/hits run \
+SUBDIRS = digits+hits/hits events run \
           geometry/management geometry/solids/CSG \
           management
-SUBLIBS = G4pevents G4phits G4prun G4pgeomn G4pcsg G4pmanagement
+SUBLIBS = G4phits G4pevents G4prun G4pgeomn G4pcsg G4pmanagement
 
 ifndef G4INSTALL
   G4INSTALL = ../..
