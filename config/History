@@ -1,4 +1,4 @@
-$Id: History,v 1.252 2004-06-14 10:42:29 gcosmo Exp $
+$Id: History,v 1.253 2004-06-17 15:17:58 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th June 2004 Gabriele Cosmo (config-V06-01-09)
+- Darwin-g++.gmk: use twolevel_namespace and GLOBLIBS for shared-libs
+  build on MacOS. Shared-libs build are possible only global libraries
+  and requires shared-lib version of CLHEP build with compatible options
+  (G.Barrand).
 
 14th June 2004 Gabriele Cosmo (config-V06-01-08)
 - architecture.gmk: added specification for G4LIB_USE_DLL.
