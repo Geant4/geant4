@@ -59,7 +59,8 @@ G4EqMagElectricField::EvaluateRhsGivenB(const G4double y[],
 
    G4double pModuleInverse  = 1.0/sqrt(pSquared) ;
 
-   G4double inverse_velocity = Energy * c_light * pModuleInverse;
+   //  G4double inverse_velocity = Energy * c_light * pModuleInverse;
+   G4double inverse_velocity = Energy * pModuleInverse / c_light;
 
    G4double cof1     = fElectroMagCof*pModuleInverse ;
 
@@ -80,3 +81,6 @@ G4EqMagElectricField::EvaluateRhsGivenB(const G4double y[],
    dydx[7] = inverse_velocity;
    return ;
 }
+
+
+
