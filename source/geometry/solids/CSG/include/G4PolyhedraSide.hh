@@ -30,7 +30,7 @@ class G4PolyhedraSide : public G4VCSGface {
 			 const G4PolyhedraSideRZ *nextRZ,
 			 const G4int    numSide,
 			 const G4double phiStart, const G4double phiTotal, 
-			 const G4bool phiIsOpen );
+			 const G4bool phiIsOpen, const G4bool isAllBehind=false );
 	virtual ~G4PolyhedraSide();
 	
 	G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,	
@@ -50,7 +50,7 @@ class G4PolyhedraSide : public G4VCSGface {
 	void CalculateExtent( const EAxis axis, 
 			      const G4VoxelLimits &voxelLimit,
 			      const G4AffineTransform &tranform,
-			      G4double &min, G4double &max        );
+			      G4SolidExtentList &extentList        );
 	
 	protected:
 	//
@@ -81,6 +81,7 @@ class G4PolyhedraSide : public G4VCSGface {
 		 deltaPhi,	// Delta phi (0 to 2pi), if phiIsOpen
 		 endPhi;	// End phi (>startPhi), if phiIsOpen
 	G4bool	 phiIsOpen;	// True if there is a phi slice
+	G4bool	 allBehind;	// True if the entire solid is "behind" this face
 	
 	G4IntersectingCone	*cone;	// Our intersecting cone
 	

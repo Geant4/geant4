@@ -28,6 +28,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+#include "float.h"
+
 #include "G4Polyhedra.hh"
 #include "G4PolyhedraSide.hh"
 #include "G4PolyPhiFace.hh"
@@ -56,11 +58,11 @@ G4Polyhedra::G4Polyhedra( G4String name,
 	// Calculate conversion factor from G3 radius to G4 radius
 	//
 	G4double phiTotal = thePhiTotal;
-	if (phiTotal <=0 || phiTotal > 2*M_PI) phiTotal = 2*M_PI;
+	if (phiTotal <=0 || phiTotal >= 2*M_PI*(1-DBL_EPSILON)) phiTotal = 2*M_PI;
 	G4double convertRad = cos(0.5*phiTotal/theNumSide);
 
 	//
-	// Some historical ugliness
+	// Some historical stuff
 	//
 	original_parameters.exist = true;
 	
@@ -134,7 +136,7 @@ void G4Polyhedra::Create( const G4double phiStart,
 		
 	G4double rzArea = rz->Area();
 	if (rzArea < -kCarTolerance) 
-		G4Exception( "G4Polyhedra: Illegal input parameters: R/Z values must be specified counter-clockwise" );
+		G4Exception( "G4Polyhedra: Illegal input parameters: R/Z values must be specified clockwise" );
 	else if (rzArea < -kCarTolerance)
 		G4Exception( "G4Polyhedra: Illegal input parameters: R/Z cross section is zero or near zero" );
 		
@@ -151,7 +153,7 @@ void G4Polyhedra::Create( const G4double phiStart,
         // Phi opening? Account for some possible roundoff, and interpret
         // nonsense value as representing no phi opening
         //
-        if (phiTotal <= 0 || phiTotal > 2.0*M_PI-1E-10) {
+        if (phiTotal <= 0 || phiTotal > 2.0*M_PI*(1-DBL_EPSILON)) {
                 phiIsOpen = false;
 		startPhi = 0;
                 endPhi = 2*M_PI;
@@ -216,6 +218,26 @@ void G4Polyhedra::Create( const G4double phiStart,
 		if (nextNext >= corners+numCorner) nextNext = corners;
 		
 		if (corner->r < 1/kInfinity && next->r < 1/kInfinity) continue;
+
+		//
+		// We must decide here if we can dare declare one of our faces
+		// as having a "valid" normal (i.e. allBehind = true). This
+		// is never possible if the face faces "inward" in r *unless*
+		// we have only one side
+		//
+		G4bool allBehind;
+		if ((corner->z > next->z) && (numSide > 1)) {
+			allBehind = false;
+		}
+		else {
+			//
+			// Otherwise, it is only true if the line passing
+			// through the two points of the segment do not
+			// split the r/z cross section
+			//
+			allBehind = !rz->BisectedBy( corner->r, corner->z,
+						     next->r, next->z, kCarTolerance );
+		}
 		
 		*face++ = new G4PolyhedraSide( prev, corner, next, nextNext,
 					       numSide, startPhi, endPhi-startPhi, phiIsOpen );

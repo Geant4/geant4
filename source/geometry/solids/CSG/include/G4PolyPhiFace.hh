@@ -24,7 +24,7 @@
 class G4ReduciblePolygon;
 
 typedef struct {
-        G4double r, z;          // position
+        G4double x, y, r, z;          // position
         G4double rNorm, 
                  zNorm;         // r/z normal
 	G4ThreeVector norm3D;	// 3D normal
@@ -61,7 +61,7 @@ class G4PolyPhiFace : public G4VCSGface {
 	void CalculateExtent( const EAxis axis, 
 			      const G4VoxelLimits &voxelLimit,
 			      const G4AffineTransform &tranform,
-			      G4double &min, G4double &max        );
+			      G4SolidExtentList &extentList        );
 	
 	protected:
 	G4PolyPhiFaceEdge	*edges;		// The edges of the face
@@ -72,7 +72,11 @@ class G4PolyPhiFace : public G4VCSGface {
 	G4ThreeVector		surface;	// Point on surface
 	G4double		rMin, rMax,	// Extent in r
 				zMin, zMax;	// Extent in z
+	G4bool			allBehind;	// True if the entire polycone/polyhedra is behind the place
+						// of this face 
 				
+	G4bool InsideEdgesExact( const G4double r, const G4double z, 
+			  	 const G4double normSign, const G4ThreeVector &p, const G4ThreeVector &v );
 	G4bool InsideEdges( const G4double r, const G4double z );
 	G4bool InsideEdges( const G4double r, const G4double z, 
 			    G4double *distRZ2, G4PolyPhiFaceVertex **base3Dnorm=0,

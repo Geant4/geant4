@@ -4,6 +4,14 @@
 // Declaration of a utility class of a polycon that can be clipped
 // by a voxel
 //
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 #ifndef G4ClippablePolycon_hh
 #define G4ClippablePolycon_hh
 
@@ -29,9 +37,15 @@ class G4ClippablePolygon {
 	void ClearAllVertices();
 	
 	void Clip( const G4VoxelLimits &voxelLimit );
+
+	void PartialClip( const G4VoxelLimits &voxelLimit, const EAxis IgnoreMe );
 	
-	void GetExtent( const EAxis axis, 
-			G4double &min, G4double &max );
+	void ClipAlongOneAxis( const G4VoxelLimits &voxelLimit, const EAxis axis );
+	
+	G4bool GetExtent( const EAxis axis, 
+			  G4double &min, G4double &max );
+			       
+	G4bool GetNumVertices() const { return vertices.entries(); }
 			      
 	private:
 	G4ThreeVectorList vertices;

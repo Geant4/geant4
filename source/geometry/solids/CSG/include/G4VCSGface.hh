@@ -92,13 +92,16 @@
 //              pVoxelLimit - (in) Limits along x, y, and/or z axes
 //              pTransform  - (in) A coordinate transformation on which
 //                                 to apply to the shape before testing
-//              min         - (in/out) If the face has any point on its
+//              min         - (out) If the face has any point on its
 //                                 surface after tranformation and limits
 //                                 along pAxis
 //                                 that is smaller than the value of min,
 //                                 than it is used to replace min.
-//              max         - (in/out) Same as min, except for the largest
-//                                 point.
+//                                 Undefined if the return value is false.
+//              max         - (out) Same as min, except for the largest
+//                                 point. Undefined if the return value is false.
+//
+//              return value = true if anything remains of the face
 //
 //         Calculate the extent of the face for the voxel navigator.
 //	   In analogy with CalculateExtent for G4VCSGfaceted, this is
@@ -109,10 +112,17 @@
 //               2. Clip the face to those boundaries as specified in
 //                  pVoxelLimit. This may include limits in any number
 //                  of x, y, or z axes.
-//               3. If nothing remains of the face after clipping, return.
-//               4. Check the extent of the remaining surface along
-//                  axis pAxis and check these values against min and max,
-//                  modifying them as necessary.
+//               3. For each part of the face that remains (there could
+//                  be many separate pieces in general):
+// 		       4. Check to see if the piece overlaps the currently
+//                        existing limits along axis pAxis. For 
+//                        pVoxelLimit.IsLimited(pAxis) = false, there are
+//                        no limits.
+//                     5. For a piece that does overlap, update min/max
+//                        accordingly (within confines of pre-existing
+//                        limits) along the direction pAxis.
+//               6. If min/max were updated, return true
+//                           
 //       
 //
 // Implementation notes:
@@ -132,7 +142,7 @@
 //        A, C, F, and H: closest distance is the distance to
 //        the adjacent corner.
 //
-//        B, D, E, and F: closest distance is the distance to
+//        B, D, E, and G: closest distance is the distance to
 //        the adjacent line.
 //
 //        I: normal distance to plane
@@ -209,6 +219,7 @@
 
 class G4VoxelLimits;
 class G4AffineTransform;
+class G4SolidExtentList;
 
 class G4VCSGface {
 	public: 
@@ -232,7 +243,7 @@ class G4VCSGface {
 	virtual void CalculateExtent( const EAxis axis, 
 				      const G4VoxelLimits &voxelLimit,
 				      const G4AffineTransform &tranform,
-				      G4double &min, G4double &max        ) = 0;
+				      G4SolidExtentList &extentList       ) = 0;
 };
 
 #endif

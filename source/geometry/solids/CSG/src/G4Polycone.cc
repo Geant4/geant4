@@ -78,6 +78,8 @@ G4Polycone::G4Polycone( G4String name,
 	G4ReduciblePolygon *rz = new G4ReduciblePolygon( r, z, numRZ );
 	
 	Create( phiStart, phiTotal, rz );
+	
+	delete rz;
 }
 
 
@@ -98,7 +100,7 @@ void G4Polycone::Create( const G4double phiStart,
 		
 	G4double rzArea = rz->Area();
 	if (rzArea < -kCarTolerance) 
-		G4Exception( "G4Polycone: Illegal input parameters: R/Z values must be specified counter-clockwise" );
+		G4Exception( "G4Polycone: Illegal input parameters: R/Z values must be specified clockwise" );
 	else if (rzArea < -kCarTolerance)
 		G4Exception( "G4Polycone: Illegal input parameters: R/Z cross section is zero or near zero" );
 		
@@ -173,8 +175,27 @@ void G4Polycone::Create( const G4double phiStart,
 		
 		if (corner->r < 1/kInfinity && next->r < 1/kInfinity) continue;
 		
+		//
+		// We must decide here if we can dare declare one of our faces
+		// as having a "valid" normal (i.e. allBehind = true). This
+		// is never possible if the face faces "inward" in r.
+		//
+		G4bool allBehind;
+		if (corner->z > next->z) {
+			allBehind = false;
+		}
+		else {
+			//
+			// Otherwise, it is only true if the line passing
+			// through the two points of the segment do not
+			// split the r/z cross section
+			//
+			allBehind = !rz->BisectedBy( corner->r, corner->z,
+						     next->r, next->z, kCarTolerance );
+		}
+		
 		*face++ = new G4PolyconeSide( prev, corner, next, nextNext,
-					      startPhi, endPhi-startPhi, phiIsOpen );
+					      startPhi, endPhi-startPhi, phiIsOpen, allBehind );
 	} while( prev=corner, corner=next, corner > corners );
 	
 	if (phiIsOpen) {

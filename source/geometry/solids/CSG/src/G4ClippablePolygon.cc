@@ -3,6 +3,14 @@
 //
 // Based on code from G4VSolid (P. Kent, V. Grichine, J. Allison)
 //
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 
 #include "G4ClippablePolygon.hh"
 
@@ -26,78 +34,116 @@ void G4ClippablePolygon::ClearAllVertices()
 }
 
 
+
 //
 // Clip
 //
 void G4ClippablePolygon::Clip( const G4VoxelLimits &voxelLimit )
-{    
-	//
-	// Heh. Do we have anything to do?
-	//
+{
 	if (!voxelLimit.IsLimited()) return;
 	
-	//
-	// Loop over all axes
-	//
-	static EAxis axes[3] = { kXAxis, kYAxis, kZAxis };
-	
-	EAxis *axis = axes;
-	do {
-		if (voxelLimit.IsLimited(*axis)) {
-			G4ThreeVectorList tempPolygon;
-		
-			//
-			// Build a "simple" voxelLimit that includes only the min extent
-			// and apply this to our vertices, producing result in tempPolygon
-			//
-			G4VoxelLimits simpleLimit1;
-			simpleLimit1.AddLimit( *axis, voxelLimit.GetMinExtent(*axis), kInfinity );
-			ClipToSimpleLimits( vertices, tempPolygon, simpleLimit1 );
-
-			//
-			// If nothing is left from the above clip, we might as well return now
-			// (but with an empty vertices)
-			//
-			if (tempPolygon.entries() == 0) {
-				vertices.clear();
-				return;
-			}
-			
-			//
-			// Now do the same, but using a "simple" limit that includes only the max extent.
-			// Apply this to out tempPolygon, producing result in vertices.
-			//
-			G4VoxelLimits simpleLimit2;
-			simpleLimit2.AddLimit( *axis, -kInfinity, voxelLimit.GetMaxExtent(*axis) );
-			ClipToSimpleLimits( tempPolygon, vertices, simpleLimit2 );
-			
-			//
-			// If nothing is left, return now
-			//
-			if (vertices.entries() == 0) return;
-		}
-	} while( ++axis < axes + sizeof(axes)/sizeof(EAxis) );
+	ClipAlongOneAxis( voxelLimit, kXAxis );
+	ClipAlongOneAxis( voxelLimit, kYAxis );
+	ClipAlongOneAxis( voxelLimit, kZAxis );
 }
 
+
+//
+// PartialClip
+//
+// Clip, while ignoring the indicated axis
+//
+void G4ClippablePolygon::PartialClip( const G4VoxelLimits &voxelLimit, const EAxis IgnoreMe )
+{
+	if (!voxelLimit.IsLimited()) return;
+	
+	if (IgnoreMe != kXAxis) ClipAlongOneAxis( voxelLimit, kXAxis );
+	if (IgnoreMe != kYAxis) ClipAlongOneAxis( voxelLimit, kYAxis );
+	if (IgnoreMe != kZAxis) ClipAlongOneAxis( voxelLimit, kZAxis );
+}
 
 
 //
 // GetExtent
 //
-void G4ClippablePolygon::GetExtent( const EAxis axis, 
-				    G4double &min, G4double &max )
+G4bool G4ClippablePolygon::GetExtent( const EAxis axis, 
+				      G4double &min, G4double &max )
 {
+	//
+	// Okay, how many entries do we have?
+	//
 	G4int noLeft = vertices.entries();
 	
+	//
+	// Return false if nothing is left
+	//
+	if (noLeft == 0) return false;
+	
+	//
+	// Initialize min and max to our first vertex
+	//
+	min = max = vertices(0).operator()( axis );
+	
+	//
+	// Compare to the rest
+	//
 	G4int i;
-	for( i=0; i<noLeft; i++ ) {
+	for( i=1; i<noLeft; i++ ) {
 		G4double component = vertices(i).operator()( axis );
 		if (component < min )
 			min = component;
 		else if (component > max )
 			max = component;
 	}
+	
+	return true;
 }
+
+
+
+//
+// Clip along just one axis, as specified in voxelLimit
+//
+void G4ClippablePolygon::ClipAlongOneAxis( const G4VoxelLimits &voxelLimit, const EAxis axis )
+{    
+	if (!voxelLimit.IsLimited(axis)) return;
+	
+	G4ThreeVectorList tempPolygon;
+
+	//
+	// Build a "simple" voxelLimit that includes only the min extent
+	// and apply this to our vertices, producing result in tempPolygon
+	//
+	G4VoxelLimits simpleLimit1;
+	simpleLimit1.AddLimit( axis, voxelLimit.GetMinExtent(axis), kInfinity );
+	ClipToSimpleLimits( vertices, tempPolygon, simpleLimit1 );
+
+	//
+	// If nothing is left from the above clip, we might as well return now
+	// (but with an empty vertices)
+	//
+	if (tempPolygon.entries() == 0) {
+		vertices.clear();
+		return;
+	}
+
+	//
+	// Now do the same, but using a "simple" limit that includes only the max extent.
+	// Apply this to out tempPolygon, producing result in vertices.
+	//
+	G4VoxelLimits simpleLimit2;
+	simpleLimit2.AddLimit( axis, -kInfinity, voxelLimit.GetMaxExtent(axis) );
+	ClipToSimpleLimits( tempPolygon, vertices, simpleLimit2 );
+
+	//
+	// If nothing is left, return now
+	//
+	if (vertices.entries() == 0) return;
+}
+
+
+
+
 
 
 // pVoxelLimits must be only limited along one axis, and either the maximum

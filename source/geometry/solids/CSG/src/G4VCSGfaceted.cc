@@ -4,41 +4,6 @@
 // Implementation of the virtual class of a CSG type shape that is built
 // entirely out of G4VCSGface faces.
 //
-// \begin{preach mode}
-//
-// Do not be fooled by the content, the algorithms in here are not
-// very clever. This is obvious if one (tries) to read a good textbook
-// on 3D modeling.
-//
-// GEANT4 has some rather esoteric demands on its geometric models,
-// which makes most canned 3D routines not useful. So we have to
-// try to invent a few. This is dangerous, because 3D modeling is
-// a serious programming game.
-//
-// One of the real simplifications in the methods I've used here for
-// a shape is that each face of a solid is treated separately. Or, at
-// least this is the illusion. In fact, for non-convex solids (which
-// abound in GEANT4), the face routine Inside cannot be correctly written
-// unless each face knows something about all of it's neighbor. Furthermore,
-// is is absolutely *crucial* that the algebraic instructions for
-// deciding if a track intersection falls outside a face matches
-// for the edge between adjacent faces. If not, THERE WILL BE A
-// CRACK IN YOUR SOLID, GUARANTEED. It will be small, but it will
-// be there.
-//
-// So? If we were writing a 3D display routine, cracks wouldn't
-// matter. But we are writing instead a tracking simulation. One crack,
-// and things may fall about very quickly. Probably not, if you generate a
-// 100 events, or a thousand, but millions?? *BEWARE*
-//
-// Note that none of this is obvious in the pretty code below. Such
-// invisible interdependencies are a evil sin for a software designer.
-// So, I *confess*.
-//
-// Now, I should explain what you have to do.
-//
-// \end{preach mode}
-//
 // ----------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
@@ -49,6 +14,7 @@
 //
 #include "G4VCSGfaceted.hh"
 #include "G4VCSGface.hh"
+#include "G4SolidExtentList.hh"
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -76,44 +42,35 @@ G4VCSGfaceted::~G4VCSGfaceted()
 //
 // CalculateExtent
 //
-G4bool G4VCSGfaceted::CalculateExtent( const EAxis pAxis,
-				       const G4VoxelLimits& pVoxelLimit,
-				       const G4AffineTransform& pTransform,
-				       G4double &pMin, G4double &pMax ) const
+G4bool G4VCSGfaceted::CalculateExtent( const EAxis axis,
+				       const G4VoxelLimits &voxelLimit,
+				       const G4AffineTransform &transform,
+				       G4double &min, G4double &max ) const
 {
-	//
-	// Loop over all faces, testing each as we go
-	//
-	G4VCSGface **face = faces;
-	G4double max = -kInfinity, min = +kInfinity;
-	do {
-		(*face)->CalculateExtent( pAxis, pVoxelLimit, pTransform, min, max );
-	} while( ++face < faces + numFace );
+	G4SolidExtentList	extentList;
 
 	//
-	// Any luck?
+	// Loop over all faces, checking min/max extent as we go.
 	//
-	if (max == -kInfinity) return false;
+	G4VCSGface **face = faces;
+	do {
+		(*face)->CalculateExtent( axis, voxelLimit, transform, extentList );
+	} while( ++face < faces + numFace );
 	
 	//
-	// What are the voxel limits along this particular axis?
+	// Return min/max value
 	//
-	if (pVoxelLimit.IsLimited(pAxis)) {
-		G4double vMax = pVoxelLimit.GetMaxExtent(pAxis),
-			 vMin = pVoxelLimit.GetMinExtent(pAxis);
-			 
-		if (max < vMin) return false;
-		if (min > vMax) return false;
-			 
-		pMin = min < vMin ? vMin : min;
-		pMax = max > vMax ? vMax : max;
-	}
-	else {
-		pMin = min;
-		pMax = max;
-	}
+	G4bool answer;
 	
-	return true;
+	if (voxelLimit.IsLimited(axis)) {
+		max = voxelLimit.GetMaxExtent(axis);
+		min = voxelLimit.GetMinExtent(axis);
+		answer = extentList.UpdateLimitedExtent( min, max );
+	}
+	else 
+		answer = extentList.GetExtent( min, max );
+		
+	return answer;
 }
 
 
@@ -143,6 +100,7 @@ EInside G4VCSGfaceted::Inside( const G4ThreeVector &p ) const
 	return answer;
 }
 
+
 //
 // SurfaceNormal
 //
@@ -162,6 +120,7 @@ G4ThreeVector G4VCSGfaceted::SurfaceNormal( const G4ThreeVector& p) const
 
 	return answer;
 }
+
 
 //
 // DistanceToIn(p,v)
@@ -291,8 +250,6 @@ void G4VCSGfaceted::DescribeYourselfTo( G4VGraphicsScene& scene ) const
 
 //
 // GetExtent
-//
-// This routine might need testing
 //
 G4VisExtent G4VCSGfaceted::GetExtent() const
 {  

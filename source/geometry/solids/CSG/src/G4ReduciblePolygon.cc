@@ -362,6 +362,42 @@ G4bool G4ReduciblePolygon::CrossesItself( const G4double tolerance )
 
 
 //
+// BisectedBy
+//
+// Decide if a line through two points crosses the polygon, within tolerance
+//
+G4bool G4ReduciblePolygon::BisectedBy( const G4double a1, const G4double b1,
+			 	       const G4double a2, const G4double b2, const G4double tolerance )
+{
+	G4int nNeg = 0, nPos = 0;
+	
+	G4double a12 = a2-a1, b12 = b2-b1;
+	G4double len12 = sqrt( a12*a12 + b12*b12 );
+	a12 /= len12; b12 /= len12;
+	
+	ABVertex *curr = vertexHead;
+	do {
+		G4double av = curr->a - a1,
+			 bv = curr->b - b1;
+			 
+		G4double cross = av*b12 - bv*a12;
+		
+		if (cross < -tolerance) {
+			if (nPos) return true;
+			nNeg++;
+		}
+		else if (cross > tolerance) {
+			if (nNeg) return true;
+			nPos++;
+		}
+	} while( curr = curr->next );
+		
+	return false;
+}
+
+
+
+//
 // Area
 //
 // Calculated signed polygon area, where polygons specified in a clockwise manner

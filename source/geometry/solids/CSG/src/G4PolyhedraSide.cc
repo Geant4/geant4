@@ -16,6 +16,7 @@
 #include "G4IntersectingCone.hh"
 #include "G4ClippablePolygon.hh"
 #include "G4AffineTransform.hh"
+#include "G4SolidExtentList.hh"
 
 //
 // Constructor
@@ -30,7 +31,8 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
 				  const G4int theNumSide, 
 				  const G4double thePhiStart, 
 				  const G4double thePhiTotal, 
-				  const G4bool thePhiIsOpen )
+				  const G4bool thePhiIsOpen,
+				  const G4bool isAllBehind )
 {
 	//
 	// Record values
@@ -54,6 +56,8 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
 		phiTotal = 2*M_PI;
 		startPhi = 0;
 	}
+	
+	allBehind = isAllBehind;
 		
 	//
 	// Make our intersecting cone
@@ -327,12 +331,12 @@ G4PolyhedraSide::~G4PolyhedraSide()
 G4bool G4PolyhedraSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &v,	
 				   const G4bool outgoing, const G4double surfTolerance,
 				   G4double &distance, G4double &distFromSurface,
-				   G4ThreeVector &normal, G4bool &allBehind )
+				   G4ThreeVector &normal, G4bool &isAllBehind )
 {
 	G4double normSign = outgoing ? +1 : -1;
 	
-	allBehind = true;	// this is always true for this face
-
+	isAllBehind = allBehind;
+	
 	//
 	// Which phi segment does the starting point p belong to?
 	// If we are not on a segment (i.e. in the phi gap), PhiSegment
@@ -346,9 +350,9 @@ G4bool G4PolyhedraSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &
 	// pretty straight forward. The simple thing therefore is to
 	// form a loop and check them all in sequence.
 	//
-	// But, I really, really worry about one day someone making
+	// But, I worry about one day someone making
 	// a polygon with a thousands sides. A linear search
-	// would be a bad idea in such a case.
+	// would not be ideal in such a case.
 	//
 	// So, it would be nice to be able to quickly decide
 	// which face would be intersected. One can make a very
@@ -522,7 +526,7 @@ G4ThreeVector G4PolyhedraSide::Normal( const G4ThreeVector &p,  G4double *bestDi
 //
 G4double G4PolyhedraSide::Extent( const G4ThreeVector axis )
 {
-	if (axis.perp2() < 1.0/kInfinity) {
+	if (axis.perp2() < 1.0/DBL_MAX) {
 		//
 		// Special case
 		//
@@ -579,7 +583,7 @@ G4double G4PolyhedraSide::Extent( const G4ThreeVector axis )
 void G4PolyhedraSide::CalculateExtent( const EAxis axis, 
 				       const G4VoxelLimits &voxelLimit,
 				       const G4AffineTransform &transform,
-				       G4double &min, G4double &max        )
+				       G4SolidExtentList &extentList        )
 {
 	G4ClippablePolygon polygon;
 	
@@ -603,8 +607,24 @@ void G4PolyhedraSide::CalculateExtent( const EAxis axis,
 		// Get extent
 		//	
 		polygon.Clip( voxelLimit );
-		polygon.GetExtent( axis, min, max );
+		
+		//
+		// Add it to the list
+		//
+		G4double min, max;
+		
+		if (polygon.GetExtent( axis, min, max )) {
+			//
+			// Get dot product of normal along target axis
+			//
+			G4ThreeVector rotatedNormal = transform.TransformAxis(vec->normal);
+			G4double dotNormal = rotatedNormal(axis);
+			
+			extentList.AddSurface( min, max, dotNormal, dotNormal, kCarTolerance );
+		}
 	} while( ++vec < vecs+numSide );
+	
+	return;
 }
 
 
@@ -897,15 +917,14 @@ G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
 		//
 		// Below in RZ
 		//
-		*normDist = pc.dot(vec.edgeNorm[0]);
-		
 		if (pcDotPhi < -lenPhiZ) {
 			//
 			// ...and below in phi. Find distance to point (A)
 			//
 			G4double distOutPhi = pcDotPhi+lenPhiZ;
 			distOut2 = distOutPhi*distOutPhi + distOutZ*distOutZ;
-			*normDist = pc.dot(vec.edges[0]->cornNorm[0]);
+			G4ThreeVector pa = p - vec.edges[0]->corner[0];
+			*normDist = pa.dot(vec.edges[0]->cornNorm[0]);
 		}
 		else if (pcDotPhi > lenPhiZ) {
 			//
@@ -913,14 +932,16 @@ G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
 			//
 			G4double distOutPhi = pcDotPhi-lenPhiZ;
 			distOut2 = distOutPhi*distOutPhi + distOutZ*distOutZ;
-			*normDist = pc.dot(vec.edges[1]->cornNorm[0]);
+			G4ThreeVector pb = p - vec.edges[1]->corner[0];
+			*normDist = pb.dot(vec.edges[1]->cornNorm[0]);
 		}
 		else {
 			//
 			// ...and inside in phi. Find distance to line (C)
 			//
+			G4ThreeVector pa = p - vec.edges[0]->corner[0];
 			distOut2 = distOutZ*distOutZ;
-			*normDist = pc.dot(vec.edgeNorm[0]);
+			*normDist = pa.dot(vec.edgeNorm[0]);
 		}
 	}
 	else if (pcDotRZ > lenRZ) {
@@ -935,7 +956,8 @@ G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
 			//
 			G4double distOutPhi = pcDotPhi+lenPhiZ;
 			distOut2 = distOutPhi*distOutPhi + distOutZ*distOutZ;
-			*normDist = pc.dot(vec.edges[0]->cornNorm[1]);
+			G4ThreeVector pd = p - vec.edges[0]->corner[1];
+			*normDist = pd.dot(vec.edges[0]->cornNorm[1]);
 		}
 		else if (pcDotPhi > lenPhiZ) {
 			//
@@ -943,14 +965,16 @@ G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
 			//
 			G4double distOutPhi = pcDotPhi-lenPhiZ;
 			distOut2 = distOutPhi*distOutPhi + distOutZ*distOutZ;
-			*normDist = pc.dot(vec.edges[1]->cornNorm[1]);
+			G4ThreeVector pe = p - vec.edges[1]->corner[1];
+			*normDist = pe.dot(vec.edges[1]->cornNorm[1]);
 		}
 		else {
 			//
 			// ...and inside in phi. Find distance to line (F)
 			//
 			distOut2 = distOutZ*distOutZ;
-			*normDist = pc.dot(vec.edgeNorm[1]);
+			G4ThreeVector pd = p - vec.edges[0]->corner[1];
+			*normDist = pd.dot(vec.edgeNorm[1]);
 		}
 	}
 	else {
@@ -964,7 +988,8 @@ G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
 			//
 			G4double distOut = edgeNorm*(pcDotPhi+lenPhiZ);
 			distOut2 = distOut*distOut;
-			*normDist = pc.dot(vec.edges[0]->normal);
+			G4ThreeVector pd = p - vec.edges[0]->corner[1];
+			*normDist = pd.dot(vec.edges[0]->normal);
 		}
 		else if (pcDotPhi > lenPhiZ) {
 			//
@@ -972,7 +997,8 @@ G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
 			//
 			G4double distOut = edgeNorm*(pcDotPhi-lenPhiZ);
 			distOut2 = distOut*distOut;
-			*normDist = pc.dot(vec.edges[1]->normal);
+			G4ThreeVector pe = p - vec.edges[1]->corner[1];
+			*normDist = pe.dot(vec.edges[1]->normal);
 		}
 		else {
 			//
