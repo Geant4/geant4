@@ -20,13 +20,13 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyDetectorMessenger.cc,v 1.0
+// $Id: HadrontherapyDetectorMessenger.cc,v 2.0
 // --------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // --------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone, G. Russo, Francesco Di Rosa
+// G.A.P. Cirrone, G. Russo
 // Laboratori Nazionali del Sud - INFN, Catania, Italy
 //
 // --------------------------------------------------------------
@@ -40,37 +40,36 @@
 
 // -----------------------------------------------------------------------------
 HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(
-							       HadrontherapyDetectorConstruction* HadrontherapyDet)
-  :HadrontherapyDetector(HadrontherapyDet)
+                                           HadrontherapyDetectorConstruction* HadrontherapyDet)
+:HadrontherapyDetector(HadrontherapyDet)
 { 
-  HadronDir = new G4UIdirectory("/modulator/");
-  HadronDir->SetGuidance("Command to rotate the modulator wheel");
+  N03Dir = new G4UIdirectory("/Modulator/");
+  N03Dir->SetGuidance("Command to rotate the modulator wheel");
   
-  detDir = new G4UIdirectory("/modulator/angle/");
+  detDir = new G4UIdirectory("/Modulator/angle/");
   detDir->SetGuidance("Modulator angle control");
 
-  ModulatorAngleCmd = new G4UIcmdWithADoubleAndUnit("/modulator/angle/modAngle",this);
-  ModulatorAngleCmd->SetGuidance("Set Modulator Angle");
-  ModulatorAngleCmd->SetParameterName("Size",false);
-  ModulatorAngleCmd->SetRange("Size>=0.");
-  ModulatorAngleCmd->SetUnitCategory("Angle");  
-  ModulatorAngleCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-}
+    ModulatorAngleCmd = new G4UIcmdWithADoubleAndUnit("/Modulator/angle/modAngle",this);
+    ModulatorAngleCmd->SetGuidance("Set Modulator Angle");
+    ModulatorAngleCmd->SetParameterName("Size",false);
+    ModulatorAngleCmd->SetRange("Size>=0.");
+    ModulatorAngleCmd->SetUnitCategory("Angle");  
+    ModulatorAngleCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  }
 
 // -------------------------------------------------------------------------------
 HadrontherapyDetectorMessenger::~HadrontherapyDetectorMessenger()
 {
-  
   delete ModulatorAngleCmd;
   delete detDir;
-  delete HadronDir;  
+  delete N03Dir;  
 }
 // --------------------------------------------------------------------------------
 void HadrontherapyDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
 
   if( command == ModulatorAngleCmd )
-    { HadrontherapyDetector->SetModulatorAngle(ModulatorAngleCmd->GetNewDoubleValue(newValue));}
+  { HadrontherapyDetector->SetModulatorAngle(ModulatorAngleCmd->GetNewDoubleValue(newValue));}
 
 }
 // ------------------------------------------------------------------------------------

@@ -19,51 +19,29 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-// $Id: HadrontherapyDetectorMessenger.hh,v 1.0
-// --------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-// --------------------------------------------------------------
 
-#ifndef HadrontherapyDetectorMessenger_h
-#define HadrontherapyDetectorMessenger_h 1
+// Dummy sensitive used only to flag sensitivity in cells of RO geometry.
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+#ifndef HadrontherapyDummySD_h
+#define HadrontherapyDummySD_h 1
 
-class HadrontherapyDetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+#include "G4VSensitiveDetector.hh"
+class G4Step;
 
-// -------------------------------------------------------------------
-class HadrontherapyDetectorMessenger: public G4UImessenger
+class HadrontherapyDummySD : public G4VSensitiveDetector
 {
-  public:
-    HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* );
-   ~HadrontherapyDetectorMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-private:
-  HadrontherapyDetectorConstruction* HadrontherapyDetector;
+public:
+  HadrontherapyDummySD();
+  ~HadrontherapyDummySD() {};
   
-  G4UIdirectory*             N03Dir;
-  G4UIdirectory*             detDir;
-  G4UIcmdWithADoubleAndUnit* outerRadiusDosemeterCmd;
-  G4UIcmdWithADoubleAndUnit* ModulatorAngleCmd;
-  G4UIcmdWithoutParameter*   UpdateCmd;
+  void Initialize(G4HCofThisEvent* ) {};
+  G4bool ProcessHits(G4Step* ,G4TouchableHistory*) {return false;}
+  void EndOfEvent(G4HCofThisEvent*) {};
+  void clear() {};
+  void DrawAll() {};
+  void PrintAll() {};
 };
 
-// ----------------------------------------------------------------------
-
+HadrontherapyDummySD::HadrontherapyDummySD() : G4VSensitiveDetector("dummySD")
+{}
 #endif
-

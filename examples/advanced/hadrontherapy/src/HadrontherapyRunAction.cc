@@ -19,81 +19,93 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-// $Id: HadrontherapyRunAction.cc,v 1.0
-// --------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-// --------------------------------------------------------------
+
 #include "HadrontherapyRunAction.hh"
+#include "HadrontherapyEventAction.hh"
+
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 #include "G4ios.hh"
-#include <iomanip.h>
-#include "Randomize.hh"
+#include "HadrontherapyDetectorConstruction.hh"
+#include "G4SDManager.hh"
+#include "G4Timer.hh"
+#include "HadrontherapyRunAction.hh"
+#ifdef G4ANALYSIS_USE
+#include "HadrontherapyAnalysisManager.hh"
+#endif
 
-// ---------------------------------------------------------------
-HadrontherapyRunAction::HadrontherapyRunAction()
-:NbOfLayer(20000)  
+HadrontherapyRunAction::HadrontherapyRunAction(G4String &SDNAME)
 {
+  extern G4String sensitiveDetectorName;
+  sensitiveDetectorName = SDNAME;
+  detector = new HadrontherapyDetectorConstruction(sensitiveDetectorName);
 }
 
-// ---------------------------------------------------------------
 HadrontherapyRunAction::~HadrontherapyRunAction()
-{
-}
-
-// ---------------------------------------------------------------
-void HadrontherapyRunAction::BeginOfRunAction(const G4Run* aRun)
 { 
-  for (G4int i=0; i < 50000; i++) 
-    {
-      energy[i] = 0.0; 
-    };
-  
-
-G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-  
-// save Rndm status
-G4RunManager::GetRunManager() -> SetRandomNumberStore(true);
-HepRandom::showEngineStatus();
+  delete detector; 
 }
 
-// ---------------------------------------------------------------------
-void HadrontherapyRunAction::EndOfRunAction(const G4Run*) 
-{  
-  // WRITE ASCII FILE FOR THE REGISTRATION OF THE BRAGG PEAK
-  // The a two column file (piccoXX.dat) is registered. The first column represents
-  // the ionization chamber position (in mm of water); the second
-  // is the energy deposited for each position of the chamber
+void HadrontherapyRunAction::BeginOfRunAction(const G4Run*aRun)
+{ 
+#ifdef G4ANALYSIS_USE
+  HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::getInstance();
+  analysis->book();
+#endif  	
+  //inizializza la matrice di dose
+  extern G4double matrix[40][40][40];
 
-  for (G4int i = 0; i < 20000; i++) {
-    
-G4double depth = 0;
-depth = i*0.002; //the number represents the thickness of the ionization chamber (in mm ofwater)
-    
- std::ofstream pmtfile("BraggPeak.out", std::ios::app);
- if(pmtfile.is_open())
-   
-   {
-     pmtfile << depth  << '\t' << energy[i]  << '\t'  << G4endl; 
-   } 
-  }
+  G4int indexI; 
+  G4int indexJ; 
+  G4int indexK;
+
+  for (indexI = 0; indexI < 40; indexI++){
+    for (indexJ = 0; indexJ < 40; indexJ++){
+      for (indexK = 0; indexK < 40; indexK++){
+	matrix[indexI][indexJ][indexK] = 0;
+      }}};
   
+ G4RunManager::GetRunManager()->SetRandomNumberStore(true);
 
-  // show Rndm status
-  HepRandom::showEngineStatus();
+
 }
 
-// -----------------------------------------------------------------------------
-void HadrontherapyRunAction::EnergyTotSlice(G4int slice, G4double energy_dep) 
+void HadrontherapyRunAction::EndOfRunAction(const G4Run* aRun)
 {
-  energy[ slice ] = energy [ slice ] + energy_dep;  
-}
+
+  extern G4double matrix[40][40][40];
+  G4int indexI; 
+  G4int indexJ; 
+  G4int indexK;
+  G4int count;
+  count = 0;
+
+#ifdef G4ANALYSIS_USE
+  HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::getInstance();  
+  //Scrittura della matrice di dose su file
+  for (indexI = 0; indexI < 40; indexI++){
+    for (indexJ = 0; indexJ < 40; indexJ++){
+      for (indexK = 0; indexK < 40; indexK++){
+	
+	std::ofstream pmtfile("matrice.out", std::ios::app);
+	if(pmtfile.is_open())
+	  
+	  {
+           if (matrix[indexI][indexJ][indexK] != 0)
+	     {
+	      pmtfile << matrix[indexI][indexJ][indexK]/MeV << G4endl; 
+            
+              analysis -> energyDeposit3D(count, indexI, indexJ, indexK,
+                                         matrix[indexI][indexJ][indexK]/MeV);	              count ++;
+	     }
+	  }
+      }}};
+
+  analysis -> finish();
+#endif
+  }
+
+
+
+

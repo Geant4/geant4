@@ -20,50 +20,51 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyDetectorMessenger.hh,v 1.0
-// --------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-// --------------------------------------------------------------
-
-#ifndef HadrontherapyDetectorMessenger_h
-#define HadrontherapyDetectorMessenger_h 1
+#ifdef G4ANALYSIS_USE
+#ifndef G4PROCESSTESTANALYSIS_HH
+#define G4PROCESSTESTANALYSIS_HH
 
 #include "globals.hh"
-#include "G4UImessenger.hh"
+#include <vector>
+#include "G4ThreeVector.hh"
+# include <AIDA/AIDA.h>
 
-class HadrontherapyDetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
-
-// -------------------------------------------------------------------
-class HadrontherapyDetectorMessenger: public G4UImessenger
-{
-  public:
-    HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* );
-   ~HadrontherapyDetectorMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-private:
-  HadrontherapyDetectorConstruction* HadrontherapyDetector;
-  
-  G4UIdirectory*             N03Dir;
-  G4UIdirectory*             detDir;
-  G4UIcmdWithADoubleAndUnit* outerRadiusDosemeterCmd;
-  G4UIcmdWithADoubleAndUnit* ModulatorAngleCmd;
-  G4UIcmdWithoutParameter*   UpdateCmd;
+namespace AIDA{
+  class ITree; 
+  class IDataPoint;
+  class IAnalysisFactory;
+  class ITreeFactory;
 };
 
-// ----------------------------------------------------------------------
+class HadrontherapyAnalysisManager
+{
+private:
+  HadrontherapyAnalysisManager();
+
+public:
+  ~HadrontherapyAnalysisManager();
+  static HadrontherapyAnalysisManager* getInstance();
+  void book();
+
+  void energyDeposit3D(G4int PointNumber, G4int voxelX, G4int voxelY, 
+                       G4int voxelZ, G4double edep);  
+//Store the energy deposit of the sensitive detector in a DataSet
+  
+  void finish();
+
+private:
+  static HadrontherapyAnalysisManager* instance;
+
+private:
+  AIDA::IAnalysisFactory*  aFact;
+  AIDA::ITree*             theTree;
+  AIDA::ITreeFactory      *treeFact;
+  AIDA::IDataPointSetFactory *  dataPointFactory;  
+  AIDA::IDataPointSet *  energyDepositDataPoint; 
+};
 
 #endif
+#endif
+
+
 

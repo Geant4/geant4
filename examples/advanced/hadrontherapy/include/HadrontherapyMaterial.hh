@@ -20,50 +20,42 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyDetectorMessenger.hh,v 1.0
-// --------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-// --------------------------------------------------------------
-
-#ifndef HadrontherapyDetectorMessenger_h
-#define HadrontherapyDetectorMessenger_h 1
-
+#ifndef HadrontherapyMaterial_H
+#define HadrontherapyMaterial_H 1
 #include "globals.hh"
-#include "G4UImessenger.hh"
+class G4Material;
 
-class HadrontherapyDetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+class HadrontherapyMaterial
+{ 
+public:
+  HadrontherapyMaterial();
+  ~ HadrontherapyMaterial();
 
-// -------------------------------------------------------------------
-class HadrontherapyDetectorMessenger: public G4UImessenger
-{
-  public:
-    HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* );
-   ~HadrontherapyDetectorMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-private:
-  HadrontherapyDetectorConstruction* HadrontherapyDetector;
+public:
+  void  DefineMaterials();
+  G4Material* GetMat(G4String); //returns the material
   
-  G4UIdirectory*             N03Dir;
-  G4UIdirectory*             detDir;
-  G4UIcmdWithADoubleAndUnit* outerRadiusDosemeterCmd;
-  G4UIcmdWithADoubleAndUnit* ModulatorAngleCmd;
-  G4UIcmdWithoutParameter*   UpdateCmd;
+private:
+G4Material* matW; 
+G4Material* matplexiglass;
+G4Material* matPb;
+G4Material* matir192;
+G4Material* Titanium;
+G4Material* matAir;
+G4Material* matH2O;
+G4Material* soft;
+G4Material* matsteel;
+G4Material* gold;
+G4Material* matI; 
+G4Material* ceramic;
+G4Material* Vacuum; 
+G4Material* bone;
+G4Material* muscle;
+G4Material* Ta;
+G4Material* Brass;
+G4Material* Kapton;
+G4Material* matAl;
+G4Material* matTa;
+G4Material* matCu;
 };
-
-// ----------------------------------------------------------------------
-
 #endif
-

@@ -20,47 +20,43 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyRunAction.hh,v 1.0
-// --------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-// --------------------------------------------------------------
-
 #ifndef HadrontherapyRunAction_h
 #define HadrontherapyRunAction_h 1
 
 #include "G4UserRunAction.hh"
+#include "G4RunManager.hh"
 #include "globals.hh"
-#include <iostream.h>
 
 class G4Run;
+class HadrontherapyAnalysisManager;
+class HadrontherapyDetectorConstruction;
+class HadrontherapyRunMessenger;
+class HadrontherapyFactory;
+class HadrontherapyFactoryIr;
+class HadrontherapyFactoryI;
 
-// -------------------------------------------------------------
+
+
 class HadrontherapyRunAction : public G4UserRunAction
 {
 public:
-  HadrontherapyRunAction();
+  HadrontherapyRunAction(G4String& );
   ~HadrontherapyRunAction();
-  
-  G4double energy[50000];
-  
+
 public:
   void BeginOfRunAction(const G4Run*);
-  void EndOfRunAction(const G4Run*);
-  G4int GetProva();
-
-  void  EnergyTotSlice(G4int, G4double); 
-  void  EnergyTotMarkus();
+  void EndOfRunAction(const G4Run* );
+  void SelectEnergy(G4int); 
 
 private:
-  G4int NbOfLayer; 
-  G4int slice;
-  G4double energy_dep;
+  
+  G4String sensitiveDetectorName;
+  HadrontherapyDetectorConstruction* detector;
+  HadrontherapyRunMessenger* runMessenger;
+  HadrontherapyFactory *factory; 
+  G4int sourceChoice; //select primary particle 
 };
 #endif
+
+
 

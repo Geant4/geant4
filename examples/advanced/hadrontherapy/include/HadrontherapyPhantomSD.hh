@@ -20,86 +20,44 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyCalorimeterSD.cc,v 1.0
-// --------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-// --------------------------------------------------------------
-#ifndef HadrontherapyCalorimeterSD_h
-#define HadrontherapyCalorimeterSD_h 1
+
+#ifndef HadrontherapyPhantomSD_h
+#define HadrontherapyPhantomSD_h 1
 
 #include "G4VSensitiveDetector.hh"
+#include "HadrontherapyPhantomHit.hh"
+#include "HadrontherapyRunAction.hh"
 #include "globals.hh"
 #include "G4ios.hh"
-#include "HadrontherapyHit.hh"
-class HadrontherapyDetectorConstruction;
-class G4HCofThisEvent;
-class G4Step;
-class HadrontherapyRunAction;
-class HadrontherapyHit;
 
-// -------------------------------------------------------------
-class HadrontherapyCalorimeterSD : public G4VSensitiveDetector
+
+class G4Step;
+class G4HCofThisEvent;
+class G4TouchableHistory;
+
+
+
+class HadrontherapyPhantomSD : public G4VSensitiveDetector
 {
 public:
- 
-  HadrontherapyCalorimeterSD(G4String, HadrontherapyDetectorConstruction*);
-  ~HadrontherapyCalorimeterSD();
-  
+  HadrontherapyPhantomSD(G4String name);
+  ~HadrontherapyPhantomSD();
+
   void Initialize(G4HCofThisEvent*);
-  G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-  void EndOfEvent(G4HCofThisEvent*);
+  G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
+  void EndOfEvent(G4HCofThisEvent*HCE);
   void clear();
+  void DrawAll();
   void PrintAll();
+  void Ponte();
 
-private:
-  G4String filename;
-  G4int sliceID[50000];
-  G4double energy[50000];
-  G4double depth;
-  
-  HadrontherapyDetectorConstruction* Detector;
+  private:
 
-  G4double backEnergy;
-  G4double leakEnergy;
-  G4double delta;
-  G4double depthMax;
-  G4double tkinold;
-  G4bool   part_is_out;
-  G4int evno;
-  G4int evnOld;
-  G4int trIDold;
-  G4int NbOfLayer;
-  HadrontherapyRunAction* p_Run;
-  HadrontherapyHitsCollection* CalCollection;  
+ 
+
 };
+
+
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

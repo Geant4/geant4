@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhysicsList.cc,v 1.0
+// $Id: HadrontherapyPhysicsList.cc,v 2.0
 // --------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // --------------------------------------------------------------
@@ -33,6 +33,7 @@
 #include "globals.hh"
 #include "HadrontherapyPhysicsList.hh"
 #include "HadrontherapyDetectorConstruction.hh"
+//#include "HadrontherapyPhysicsListMessenger.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
@@ -47,20 +48,21 @@
 
 // ---------------------------------------------------------------------
 HadrontherapyPhysicsList::HadrontherapyPhysicsList(HadrontherapyDetectorConstruction* p)
-  :G4VUserPhysicsList()
+:G4VUserPhysicsList()
 {
   pDet = p;
 
-  currentDefaultCut = defaultCutValue = 10 *mm;
-  cutForGamma       = defaultCutValue;
-  cutForElectron    = defaultCutValue;
-  cutForProton      = defaultCutValue;
-  SetVerboseLevel(1);
+currentDefaultCut = defaultCutValue = 10 *mm;
+cutForGamma       = defaultCutValue;
+cutForElectron    = defaultCutValue;
+cutForProton      = defaultCutValue;
+SetVerboseLevel(1);
 }
 
 // ----------------------------------------------------------------------
 HadrontherapyPhysicsList::~HadrontherapyPhysicsList()
 {
+  //  delete physicsListMessenger; 
 }
 
 // -----------------------------------------------------------------------
@@ -84,12 +86,12 @@ void HadrontherapyPhysicsList::ConstructBosons()
   // ******* 
   //  gamma
   // *******
-  G4Gamma::GammaDefinition();
+G4Gamma::GammaDefinition();
   
   // **************** 
   //  optical photons
   // ****************
-  G4OpticalPhoton::OpticalPhotonDefinition();
+G4OpticalPhoton::OpticalPhotonDefinition();
 }
 
 // ------------------------------------------------------------------------
@@ -98,14 +100,14 @@ void HadrontherapyPhysicsList::ConstructLeptons()
   // *******  
   // leptons
   // *******
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
+G4Electron::ElectronDefinition();
+G4Positron::PositronDefinition();
+G4MuonPlus::MuonPlusDefinition();
+G4MuonMinus::MuonMinusDefinition();
+G4NeutrinoE::NeutrinoEDefinition();
+G4AntiNeutrinoE::AntiNeutrinoEDefinition();
+G4NeutrinoMu::NeutrinoMuDefinition();
+G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 }
 
 // ------------------------------------------------------------------------
@@ -114,11 +116,11 @@ void HadrontherapyPhysicsList::ConstructMesons()
   // ********
   //  mesons
   // ********
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
-  G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus::KaonMinusDefinition();
+G4PionPlus::PionPlusDefinition();
+G4PionMinus::PionMinusDefinition();
+G4PionZero::PionZeroDefinition();
+G4KaonPlus::KaonPlusDefinition();
+G4KaonMinus::KaonMinusDefinition();
 }
 
 // ------------------------------------------------------------------------
@@ -127,10 +129,10 @@ void HadrontherapyPhysicsList::ConstructBarions()
   // **********
   //  barions
   // **********
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-  G4Neutron::NeutronDefinition();
-  G4AntiNeutron::AntiNeutronDefinition();
+G4Proton::ProtonDefinition();
+G4AntiProton::AntiProtonDefinition();
+G4Neutron::NeutronDefinition();
+G4AntiNeutron::AntiNeutronDefinition();
 }
 
 // -----------------------------------------------------------------------
@@ -139,20 +141,20 @@ void HadrontherapyPhysicsList::ConstructIons()
   // ******
   //  ions
   // ******
-  G4Deuteron::DeuteronDefinition();
-  G4Triton::TritonDefinition();
-  G4He3::He3Definition();
-  G4Alpha::AlphaDefinition();
-  G4GenericIon::GenericIonDefinition();
+G4Deuteron::DeuteronDefinition();
+G4Triton::TritonDefinition();
+G4He3::He3Definition();
+G4Alpha::AlphaDefinition();
+G4GenericIon::GenericIonDefinition();
 }
 
 // -----------------------------------------------------------------------
 void HadrontherapyPhysicsList::ConstructProcess()
 {
-  AddTransportation(); 
-  ConstructEM();
-  ConstructHad();
-  ConstructGeneral();
+AddTransportation(); 
+ConstructEM();
+ConstructHad();
+ConstructGeneral();
 }
 
 // -----------------------------------------------------------------------
@@ -175,8 +177,7 @@ void HadrontherapyPhysicsList::ConstructProcess()
 #include "G4eBremsstrahlung.hh"
 
 // >>>  Alpha and generic Ions, deuteron, triton, He3  <<<
-#include "G4hLowEnergyIonisation.hh"  
-// hLowEnergyIonisation uses Ziegler 1988 as the default
+#include "G4hLowEnergyIonisation.hh"  // hLowEnergyIonisation uses Ziegler 1988 as the default
 #include "G4EnergyLossTables.hh"
 
 // >>> muon  <<<<
@@ -197,157 +198,162 @@ void HadrontherapyPhysicsList::ConstructProcess()
 void HadrontherapyPhysicsList::ConstructEM()
 {
   G4int LowEnergy = 1;
-  // to active the Low Energy processes make LowEnergy =1;
+  // to activate the Low Energy processes make LowEnergy = 1;
   
   // ***********
   //  processes
   // ***********
-  G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
-  G4LowEnergyPhotoElectric* lowePhot        = new G4LowEnergyPhotoElectric();
-  G4LowEnergyIonisation* loweIon            = new G4LowEnergyIonisation();
-  G4LowEnergyBremsstrahlung* loweBrem       = new G4LowEnergyBremsstrahlung();
-  G4hLowEnergyIonisation* ahadronLowEIon    = new G4hLowEnergyIonisation();
+G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+G4LowEnergyPhotoElectric* lowePhot        = new G4LowEnergyPhotoElectric();
+G4LowEnergyIonisation* loweIon            = new G4LowEnergyIonisation();
+G4LowEnergyBremsstrahlung* loweBrem       = new G4LowEnergyBremsstrahlung();
+G4hLowEnergyIonisation* ahadronLowEIon    = new G4hLowEnergyIonisation();
 
-  if (LowEnergy == 1) 
-   {    
-    ahadronLowEIon -> SetNuclearStoppingPowerModel("ICRU_R49") ; // ICRU49 models for nuclear SP
-    ahadronLowEIon -> SetNuclearStoppingOn() ;
+  // note LowEIon uses proton as basis for its data-base, therefore
+  // cannot specify different LowEnergyIonisation models for different
+  // particles, but can change model globally for Ion, Alpha and Proton.
+if (LowEnergy == 1) {
+    //ahadronLowEIon->SetNuclearStoppingOn() ;
+  ahadronLowEIon->SetNuclearStoppingPowerModel("ICRU_R49") ; // ICRU49 models for nuclear SP
+  ahadronLowEIon->SetNuclearStoppingOn() ;
   
     // setting tables explicitly for electronic stopping power
-    ahadronLowEIon -> SetElectronicStoppingPowerModel(G4GenericIon::GenericIonDefinition(), 
-						    "ICRU_R49p") ;  // ICRU49 models for elettronic SP
-    ahadronLowEIon -> SetElectronicStoppingPowerModel(G4Proton::ProtonDefinition(), 
-						    "ICRU_R49p") ;
-    // Switch off the Barkas and Bloch corrections
-    ahadronLowEIon -> SetBarkasOff();
-  }  
+ahadronLowEIon->SetElectronicStoppingPowerModel(G4GenericIon::GenericIonDefinition(), 
+						  "ICRU_R49p") ;  // ICRU49 models for elettronic SP
+ahadronLowEIon->SetElectronicStoppingPowerModel(G4Proton::ProtonDefinition(), 
+						  "ICRU_R49p") ;
+  // Switch off the Barkas and Bloch corrections
+ahadronLowEIon->SetBarkasOff();
+}  
 
-  theParticleIterator -> reset();
-  while( (*theParticleIterator)() )
-    {
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
-      G4String particleType = particle->GetParticleType();
-      G4double charge = particle->GetPDGCharge();
+theParticleIterator -> reset();
+ while( (*theParticleIterator)() )
+   {
+     G4ParticleDefinition* particle = theParticleIterator->value();
+     G4ProcessManager* pmanager = particle->GetProcessManager();
+     G4String particleName = particle->GetParticleName();
+     G4String particleType = particle->GetParticleType();
+     G4double charge = particle->GetPDGCharge();
 
-      if (particleName == "gamma") 
-	{
-	  // >>>  gamma  <<<
+     if (particleName == "gamma") 
+       {
+	 // >>>  gamma  <<<
 	 
-	  if (LowEnergy == 1) {
-	    // Low Energy processes
-	    pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh());  
-	    pmanager->AddDiscreteProcess(lowePhot);
-	    pmanager->AddDiscreteProcess(new G4LowEnergyCompton());
-	    pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion());
-	  }
+	 if (LowEnergy == 1) {
+	   // Low Energy processes
+	   pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh());  
+	   pmanager->AddDiscreteProcess(lowePhot);
+	   pmanager->AddDiscreteProcess(new G4LowEnergyCompton());
+	   pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion());
+	 }
 	 
-	  else {
-	    // Standard processes
-	    pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-	    pmanager->AddDiscreteProcess(new G4ComptonScattering);
-	    pmanager->AddDiscreteProcess(new G4GammaConversion);
-	  }
-	} 
+	 else {
+	   // Standard processes
+	   pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
+	   pmanager->AddDiscreteProcess(new G4ComptonScattering);
+	  pmanager->AddDiscreteProcess(new G4GammaConversion);
+	 }
+       } 
      
-      else if (particleName == "e-") 
+     else if (particleName == "e-") 
        
-	{
-	  // >>>  electron  <<<
+       {
 	 
-	  if (LowEnergy == 1) {
-	    // Low energy process
-	    pmanager->AddProcess(aMultipleScattering,     -1, 1, 1);
-	    pmanager->AddProcess(loweIon,                 -1, 2, 2);
-	    pmanager->AddProcess(loweBrem,                -1,-1, 3);
-	  }
+	 // >>>  electron  <<<
 	 
-	  else {
-	    // Standard processes
-	    pmanager->AddProcess(aMultipleScattering,     -1, 1, 1);
-	    pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-	    pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-	  }
-	} 
+	 if (LowEnergy == 1) {
+	   // Low energy process
+	   pmanager->AddProcess(aMultipleScattering,     -1, 1, 1);
+	   pmanager->AddProcess(loweIon,                 -1, 2, 2);
+	   pmanager->AddProcess(loweBrem,                -1,-1, 3);
+	 }
+	 
+	 else {
+	   // Standard processes
+	   pmanager->AddProcess(aMultipleScattering,     -1, 1, 1);
+	   pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
+	   pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+	 }
+       } 
      
-      else if (particleName == "e+") 
-	{
-	  // >>>  positron  <<<
+     else if (particleName == "e+") 
+       {
+	 // >>>  positron  <<<
 	 
-	  // Standard processes
-	  pmanager->AddProcess(aMultipleScattering,     -1, 1,1);
-	  pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-	  pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-	  pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
+	 // Standard processes
+	 pmanager->AddProcess(aMultipleScattering,     -1, 1,1);
+	 pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
+	 pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+	 pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
 	 
-	} 
-      else if( particleName == "mu+" || 
-	       particleName == "mu-"    ) 
-	{
-	  // >>>  muon  <<<  
-	  pmanager->AddProcess(aMultipleScattering,     -1, 1,1);
-	  pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
-	  pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
-	  pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);
+       } 
+     else if( particleName == "mu+" || 
+	      particleName == "mu-"    ) 
+       {
+	 // >>>  muon  <<<  
+	 pmanager->AddProcess(aMultipleScattering,     -1, 1,1);
+	 pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
+	 pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
+	 pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);
 	 
-	} 
-      else if (
-	       particleName == "proton"  
-	       || particleName == "antiproton"  
-	       || particleName == "pi+"  
-	       || particleName == "pi-"  
-	       || particleName == "kaon+"  
-	       || particleName == "kaon-"  
-	       )
-	{
+       } 
+     else if (
+	      particleName == "proton"  
+	      || particleName == "antiproton"  
+	      || particleName == "pi+"  
+	      || particleName == "pi-"  
+	      || particleName == "kaon+"  
+	      || particleName == "kaon-"  
+	      )
+       {
 	 
-	  if (LowEnergy == 1) { 
-	    pmanager->AddProcess(aMultipleScattering,     -1,1,1); 
-	    pmanager->AddProcess(ahadronLowEIon,       -1,2,2);
-	  }
-	  else {
-	    pmanager->AddProcess(aMultipleScattering,     -1,1,1);
-	    pmanager->AddProcess(new G4hIonisation,       -1,2,2);
-	  }
-	}
+	 if (LowEnergy == 1) { 
+	   pmanager->AddProcess(aMultipleScattering,     -1,1,1); 
+	   pmanager->AddProcess(ahadronLowEIon,       -1,2,2);
+	 }
+	 else {
+	   pmanager->AddProcess(aMultipleScattering,     -1,1,1);
+	   pmanager->AddProcess(new G4hIonisation,       -1,2,2);
+	 }
+       }
      
-      else if ((!particle->IsShortLived()) &&
-	       (charge != 0.0) ) 
-	{
-	  //all others charged particles except geantino
+     else if ((!particle->IsShortLived()) &&
+	      (charge != 0.0) ) 
+       {
+	 //all others charged particles except geantino
 	 
-	  if (LowEnergy == 1) {
-	    pmanager->AddProcess(aMultipleScattering,-1,1,1);
-	    pmanager->AddProcess(ahadronLowEIon,       -1,2,2);
+	 
+	 if (LowEnergy == 1) {
+	   pmanager->AddProcess(aMultipleScattering,-1,1,1);
+	   pmanager->AddProcess(ahadronLowEIon,       -1,2,2);
 	   
-	  }
-	  else {
-	    pmanager->AddProcess(aMultipleScattering,-1,1,1); 
-	    pmanager->AddProcess(new G4hIonisation(),-1, 2,2);
-	  }
+	 }
+	 else {
+	   pmanager->AddProcess(aMultipleScattering,-1,1,1); 
+	   pmanager->AddProcess(new G4hIonisation(),-1, 2,2);
+	 }
 	 
-	}
-    }
+       }
+   }
 }
 
 // ----------------------------------------------------------------------
 #include "G4Decay.hh"
 void HadrontherapyPhysicsList::ConstructGeneral()
 {
-  G4Decay* theDecayProcess = new G4Decay();
+G4Decay* theDecayProcess = new G4Decay();
    
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
+theParticleIterator->reset();
+ while( (*theParticleIterator)() ){
+   G4ParticleDefinition* particle = theParticleIterator->value();
+   G4ProcessManager* pmanager = particle->GetProcessManager();
     
-    //add decay process
-    if (theDecayProcess->IsApplicable(*particle)) { 
-      pmanager ->AddProcess(theDecayProcess);
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
+   //add decay process
+   if (theDecayProcess->IsApplicable(*particle)) { 
+     pmanager ->AddProcess(theDecayProcess);
+   // set ordering for PostStepDoIt and AtRestDoIt
+     pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
+     pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
     }
   }
 }
@@ -398,10 +404,10 @@ void HadrontherapyPhysicsList::SetCuts()
   // reactualise cutValues
   if (currentDefaultCut != defaultCutValue)
     {
-      if(cutForGamma    == currentDefaultCut) cutForGamma    = defaultCutValue;
-      if(cutForElectron == currentDefaultCut) cutForElectron = defaultCutValue;
-      if(cutForProton   == currentDefaultCut) cutForProton   = defaultCutValue;
-      currentDefaultCut = defaultCutValue;
+     if(cutForGamma    == currentDefaultCut) cutForGamma    = defaultCutValue;
+     if(cutForElectron == currentDefaultCut) cutForElectron = defaultCutValue;
+     if(cutForProton   == currentDefaultCut) cutForProton   = defaultCutValue;
+     currentDefaultCut = defaultCutValue;
     }
   
   // set cut values for gamma at first and for e- second and next for e+,
@@ -410,29 +416,35 @@ void HadrontherapyPhysicsList::SetCuts()
   SetCutValue(cutForElectron,"e-");
   SetCutValue(cutForElectron,"e+");
 
+  // set cut values for proton and anti_proton before all other hadrons
+  // because some processes for hadrons need cut values for proton/anti_proton 
+
+  //SetCutValue(defaultCutValue, "proton");
+  //SetCutValue(defaultCutValue, "anti_proton");
+
   
   // Cut per region
   // in region dosemeter we need a very accurate precision
-  G4Region* region;
-  G4String regName;
-  G4ProductionCuts* cuts;
+G4Region* region;
+G4String regName;
+G4ProductionCuts* cuts;
     
-  regName = "Dosemeter";
-  region = G4RegionStore::GetInstance()->GetRegion(regName);
-  cuts = new G4ProductionCuts;
-  cuts->SetProductionCut(0.02*mm,G4ProductionCuts::GetIndex("gamma"));
-  cuts->SetProductionCut(0.02*mm,G4ProductionCuts::GetIndex("e-"));
-  cuts->SetProductionCut(0.02*mm,G4ProductionCuts::GetIndex("e+"));
-  region->SetProductionCuts(cuts);
+regName = "PhantomLog";
+region = G4RegionStore::GetInstance()->GetRegion(regName);
+    cuts = new G4ProductionCuts;
+    cuts->SetProductionCut(0.001*mm,G4ProductionCuts::GetIndex("gamma"));
+    cuts->SetProductionCut(0.001*mm,G4ProductionCuts::GetIndex("e-"));
+    cuts->SetProductionCut(0.001*mm,G4ProductionCuts::GetIndex("e+"));
+    region->SetProductionCuts(cuts);
       
-  //  SetCutValueForOthers(defaultCutValue);        
+    //  SetCutValueForOthers(defaultCutValue);        
    
-  if (verboseLevel >0){
-    G4cout << "HadrontherapyPhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }
+    if (verboseLevel >0){
+      G4cout << "HadrontherapyPhysicsList::SetCuts:";
+      G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
+    }
     
-  if (verboseLevel>0) DumpCutValuesTable();
+    if (verboseLevel>0) DumpCutValuesTable();
 }
 
 // ---------------------------------------------------------------------------
@@ -459,17 +471,17 @@ void HadrontherapyPhysicsList::SetProtonCut(G4double val)
 // ---------------------------------------------------------------------------
 void HadrontherapyPhysicsList::GetRange(G4double val)
 {
-  G4ParticleTable* theParticleTable =  G4ParticleTable::GetParticleTable();
-  G4Material* currMat = pDet->GetDosemeterMaterial();
+G4ParticleTable* theParticleTable =  G4ParticleTable::GetParticleTable();
+G4Material* currMat = pDet->GetPhantomMaterial();
 
-  G4ParticleDefinition* part;
-  G4double cut;
-  part = theParticleTable->FindParticle("e-");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  G4cout << "material : " << currMat->GetName() << G4endl;
-  G4cout << "particle : " << part->GetParticleName() << G4endl;
-  G4cout << "energy   : " << G4BestUnit(val,"Energy") << G4endl;
-  G4cout << "range    : " << G4BestUnit(cut,"Length") << G4endl;
+G4ParticleDefinition* part;
+G4double cut;
+part = theParticleTable->FindParticle("e-");
+cut = G4EnergyLossTables::GetRange(part,val,currMat);
+G4cout << "material : " << currMat->GetName() << G4endl;
+G4cout << "particle : " << part->GetParticleName() << G4endl;
+G4cout << "energy   : " << G4BestUnit(val,"Energy") << G4endl;
+G4cout << "range    : " << G4BestUnit(cut,"Length") << G4endl;
 }
 
 

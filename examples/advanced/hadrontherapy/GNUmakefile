@@ -1,9 +1,11 @@
-# $Id: GNUmakefile,v 1.1 2004-04-13 12:10:02 cirrone Exp $
+# --------------------------------------------------------------
+# $Id: GNUmakefile,v 1.2 2004-06-28 14:31:52 guatelli Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
 name := Hadrontherapy
+
 G4TARGET := $(name)
 G4EXLIB := true
 
@@ -15,3 +17,11 @@ endif
 all: lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
+
+ifdef G4ANALYSIS_USE  
+ CPPFLAGS += `aida-config --include`
+ LDFLAGS  += `aida-config --lib`
+ LOADLIBS += `aida-config --lib` 
+endif
+
+

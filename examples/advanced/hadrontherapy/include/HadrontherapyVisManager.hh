@@ -20,29 +20,27 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyVisManager.hh,v 1.0
-// --------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
-// Code developed by:
+//This class permits the visualisation of the experimerimental set up
 //
-// G.A.P. Cirrone, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-// -------------------------------------------------------------
-
 #ifndef HadrontherapyVisManager_h
 #define HadrontherapyVisManager_h 1
 
+#ifdef G4VIS_USE
+
 #include "G4VisManager.hh"
 
-// ------------------------------------------------------------
-class HadrontherapyVisManager: public G4VisManager {
-
+class HadrontherapyVisManager: public G4VisManager 
+{
 public:
+
   HadrontherapyVisManager ();
 
 private:
+
   void RegisterGraphicsSystems ();
 };
 #endif
+#endif
+
+
+

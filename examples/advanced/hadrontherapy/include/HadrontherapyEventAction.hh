@@ -20,55 +20,31 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HadrontherapyEventAction.hh,v 1.0
-// --------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// --------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone, G. Russo
-// Laboratori Nazionali del Sud - INFN, Catania, Italy
-//
-// --------------------------------------------------------------
+
 
 #ifndef HadrontherapyEventAction_h
 #define HadrontherapyEventAction_h 1
+
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class HadrontherapyRunAction;
-class HadrontherapyEventActionMessenger;
-class HadrontherapyHit;
-// ---------------------------------------------------------------
 class HadrontherapyEventAction : public G4UserEventAction
 {
 public:
-  HadrontherapyEventAction(HadrontherapyRunAction* runAction );
+  HadrontherapyEventAction();
   ~HadrontherapyEventAction();
-
+  
 public:
   void BeginOfEventAction(const G4Event*);
   void EndOfEventAction(const G4Event*);
-  void setEventVerbose(G4int level);
-  void CountStepsCharged() ;
-  void CountStepsNeutral() ;
-  void AddCharged() ;
-  void AddNeutral() ;
-  void AddE();
-  void AddP();   
-  void SetTr();
-  void SetRef();
   
-  G4int GetEventno();
-  G4int Trasporto();
-
+  
 private:
-  G4int event_id;
-  G4int    calorimeterCollID;
-  HadrontherapyEventActionMessenger*  eventMessenger;
-  HadrontherapyRunAction* p_Run;
-  G4int verboselevel;
-  G4double nstep;
-  G4double energyDep[50000];
+  
+  G4String drawFlag; //Visualisation flag
 };
+
 #endif
+
+
+
