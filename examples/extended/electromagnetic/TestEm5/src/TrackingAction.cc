@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: TrackingAction.cc,v 1.6 2004-06-16 15:52:15 maire Exp $
+// $Id: TrackingAction.cc,v 1.7 2004-06-18 09:47:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,10 +38,6 @@
 #include "HistoManager.hh"
 
 #include "G4Track.hh"
- 
-#ifdef G4ANALYSIS_USE
- #include "AIDA/IHistogram1D.h"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,13 +45,13 @@ TrackingAction::TrackingAction(DetectorConstruction* DET,RunAction* RA,
                                EventAction* EA, HistoManager* HM)
 :detector(DET), runaction(RA), eventaction(EA), histoManager(HM)
 { }
-
+ 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PreUserTrackingAction(const G4Track* aTrack )
-{ 
+{
   // few initialisations
-  //     
+  //
   if (aTrack->GetTrackID() == 1) {
     worldLimit = 0.5*(detector->GetWorldSizeX());
     primaryCharge = aTrack->GetDefinition()->GetPDGCharge();
@@ -79,11 +75,10 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   if (aTrack->GetTrackID() == 1) flag = 2;
   if (transmit) eventaction->SetTransmitFlag(flag);
   if (reflect)  eventaction->SetReflectFlag(flag);
-  
-#ifdef G4ANALYSIS_USE
-  // 
+
+  //
   //histograms
-  // 
+  //
   G4int id = 0;
   G4bool charged  = (charge != 0.);
   G4bool neutral = !charged;
@@ -94,57 +89,51 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   else if (transmit && neutral) id =  8;
   else if (reflect  && charged) id = 11;
   else if (reflect  && neutral) id = 14;
-  if (histoManager->GetHisto(id)) {
+
+  if(histoManager->HistoExist(id)) {
     G4double energy = aTrack->GetKineticEnergy();
-    G4double unit   = histoManager->GetHistoUnit(id);
-    histoManager->GetHisto(id)->fill(energy/unit);
+    histoManager->FillHisto(id,energy);
   }
-  
+
   //space angle distribution at exit
   //
        if (transmit && charged) id =  5;
   else if (transmit && neutral) id =  9;
   else if (reflect  && charged) id = 12;
   else if (reflect  && neutral) id = 15;
-  if (histoManager->GetHisto(id)) {
-    G4ThreeVector direction = aTrack->GetMomentumDirection();
-    G4double theta  = acos(abs(direction.x()));
+
+  G4ThreeVector direction = aTrack->GetMomentumDirection();
+  if(histoManager->HistoExist(id)) {
+    G4double theta  = acos(direction.x());
     G4double dteta  = histoManager->GetBinWidth(id);
-    G4double weight = 1./(2*pi*sin(theta)*dteta);  
+    G4double weight = 1./(twopi*sin(theta)*dteta);
     G4double unit   = histoManager->GetHistoUnit(id);
-    histoManager->GetHisto(id)->fill(theta/unit,weight*unit*unit); 
+    histoManager->FillHisto(id,theta,weight*unit*unit);
   }
-    
+
   //projected angles distribution at exit
   //
        if (transmit && charged) id =  6;
   else if (transmit && neutral) id = 10;
   else if (reflect  && charged) id = 13;
   else if (reflect  && neutral) id = 16;
-  if (histoManager->GetHisto(id)) {
-    G4ThreeVector momentum = aTrack->GetMomentum();  
-    G4double unit = histoManager->GetHistoUnit(id);
-    histoManager->GetHisto(id)->fill(atan(momentum.y()/abs(momentum.x()))/unit);
-    histoManager->GetHisto(id)->fill(atan(momentum.z()/abs(momentum.x()))/unit);
+
+  if(id>0) {
+    G4double tet = atan(direction.y()/abs(direction.x()));
+    histoManager->FillHisto(id,tet);
+    if (transmit && (flag == 2)) runaction->AddMscProjTheta(tet);
+
+    tet = atan(direction.z()/abs(direction.x()));
+    histoManager->FillHisto(id,tet);
+    if (transmit && (flag == 2)) runaction->AddMscProjTheta(tet);
   }
-            
+
   //projected position at exit
   //
-  if (transmit && charged) id =  7;
-  if (histoManager->GetHisto(id)) {
-    G4double unit   = histoManager->GetHistoUnit(id);
-    histoManager->GetHisto(id)->fill(position.y()/unit);
-    histoManager->GetHisto(id)->fill(position.z()/unit);    
-  }  
-#endif
-
-  //compute projected angles of transmitted primary particle
-  // 
-  if (transmit && (flag == 2)) {
-  G4ThreeVector moment = aTrack->GetMomentum();
-  runaction->AddMscProjTheta(atan(moment.y()/abs(moment.x())));
-  runaction->AddMscProjTheta(atan(moment.z()/abs(moment.x())));  
-  }   
+  if (transmit && charged && histoManager->HistoExist(7)) {
+    histoManager->FillHisto(7,position.y());
+    histoManager->FillHisto(7,position.z());
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

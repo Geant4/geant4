@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.3 2004-06-16 15:52:14 maire Exp $
+// $Id: RunAction.hh,v 1.4 2004-06-18 09:47:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,39 +59,40 @@ class RunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
 
-    void AddEnergy (G4double edep) 
+    void AddEnergy (G4double edep)
                    {EnergyDeposit += edep; EnergyDeposit2 += edep*edep;};
-    
+
     void AddTrakLenCharg (G4double length)
                  {TrakLenCharged += length; TrakLenCharged2 += length*length;};
-		 
+
     void AddTrakLenNeutr (G4double length)
                  {TrakLenNeutral += length; TrakLenNeutral2 += length*length;};
-		 
+
     void AddMscProjTheta (G4double theta)
-                 {MscProjecTheta += theta;  MscProjecTheta2 += theta*theta;};
-		 		 
+                 { if(abs(theta) < 3.0*MscHighland) {
+		     MscProjecTheta += theta;  MscProjecTheta2 += theta*theta; nTheta++;}};
+
     void CountStepsCharg (G4int nSteps)
                  {nbStepsCharged += nSteps; nbStepsCharged2 += nSteps*nSteps;};
-		 
+
     void CountStepsNeutr (G4int nSteps)
                  {nbStepsNeutral += nSteps; nbStepsNeutral2 += nSteps*nSteps;};
-		 
+
     void CountParticles (G4ParticleDefinition* part)
                  {     if (part == G4Gamma::Gamma())       nbGamma++ ;
 		  else if (part == G4Electron::Electron()) nbElect++ ;
 		  else if (part == G4Positron::Positron()) nbPosit++ ; };
-		  
+
     void CountTransmit (G4int flag)
                  {     if (flag == 1)  Transmit[0]++;
-		  else if (flag == 2) {Transmit[0]++; Transmit[1]++; }};	  
-		   		 
+		  else if (flag == 2) {Transmit[0]++; Transmit[1]++; }};
+
     void CountReflect (G4int flag)
                  {     if (flag == 1)  Reflect[0]++;
-		  else if (flag == 2) {Reflect[0]++; Reflect[1]++; }};	  
-    
+		  else if (flag == 2) {Reflect[0]++; Reflect[1]++; }};
+
     G4double ComputeMscHighland();
-    		  		 		     
+
   private:
     G4double EnergyDeposit,  EnergyDeposit2;
     G4double TrakLenCharged, TrakLenCharged2;
@@ -99,9 +100,10 @@ class RunAction : public G4UserRunAction
     G4double nbStepsCharged, nbStepsCharged2;
     G4double nbStepsNeutral, nbStepsNeutral2;
     G4double MscProjecTheta, MscProjecTheta2;
-    G4int    nbGamma, nbElect, nbPosit;
+    G4double MscHighland;
+    G4int    nbGamma, nbElect, nbPosit, nTheta;
     G4int    Transmit[2],   Reflect[2];
-    
+
     DetectorConstruction*   detector;
     PrimaryGeneratorAction* primary;
     HistoManager*           histoManager;

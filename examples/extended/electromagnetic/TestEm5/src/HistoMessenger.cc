@@ -21,13 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.cc,v 1.2 2004-06-10 14:04:17 maire Exp $
+// $Id: HistoMessenger.cc,v 1.3 2004-06-18 09:47:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#ifdef G4ANALYSIS_USE
 
 #include "HistoMessenger.hh"
 
@@ -48,7 +46,10 @@ HistoMessenger::HistoMessenger(HistoManager* manager)
 
   factoryCmd = new G4UIcmdWithAString("/testem/histo/setFileName",this);
   factoryCmd->SetGuidance("set name for the histograms file");
-   
+
+  typeCmd = new G4UIcmdWithAString("/testem/histo/setFileType",this);
+  typeCmd->SetGuidance("set histograms file type");
+
   histoCmd = new G4UIcommand("/testem/histo/setHisto",this);
   histoCmd->SetGuidance("Set bining of the histo number ih :");
   histoCmd->SetGuidance("  nbBins; valMin; valMax; unit (of vmin and vmax)");
@@ -61,8 +62,8 @@ HistoMessenger::HistoMessenger(HistoManager* manager)
   G4UIparameter* nbBins = new G4UIparameter("nbBins",'i',false);
   nbBins->SetGuidance("number of bins");
   nbBins->SetParameterRange("nbBins>0");
-  histoCmd->SetParameter(nbBins);  
-  //    
+  histoCmd->SetParameter(nbBins);
+  //
   G4UIparameter* valMin = new G4UIparameter("valMin",'d',false);
   valMin->SetGuidance("valMin, expressed in unit");
   histoCmd->SetParameter(valMin);  
@@ -89,7 +90,8 @@ HistoMessenger::~HistoMessenger()
   delete rmhistoCmd;
   delete histoCmd;
   delete factoryCmd;
-  delete histoDir;  
+  delete histoDir;
+  delete typeCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,7 +100,10 @@ void HistoMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
   if (command == factoryCmd)
     histoManager->SetFileName(newValues);
-    
+
+  if (command == typeCmd)
+    histoManager->SetFileType(newValues);
+
   if (command == histoCmd)
    { G4int ih,nbBins; G4double vmin,vmax; char unts[30];
      const char* t = newValues;
@@ -116,4 +121,3 @@ void HistoMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif      

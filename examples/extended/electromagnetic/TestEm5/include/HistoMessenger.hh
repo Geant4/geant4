@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: HistoMessenger.hh,v 1.3 2004-06-10 14:04:16 maire Exp $
+// $Id: HistoMessenger.hh,v 1.4 2004-06-18 09:47:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,8 +32,6 @@
 
 #ifndef HistoMessenger_h
 #define HistoMessenger_h 1
-
-#ifdef G4ANALYSIS_USE
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
@@ -63,12 +61,13 @@ class HistoMessenger: public G4UImessenger
    
    G4UIdirectory*          histoDir;   
    G4UIcmdWithAString*     factoryCmd;
+   G4UIcmdWithAString*     typeCmd;
    G4UIcommand*            histoCmd;
-   G4UIcmdWithAnInteger*   rmhistoCmd;    
- 
+   G4UIcmdWithAnInteger*   rmhistoCmd;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-#endif
+

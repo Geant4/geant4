@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.2 2004-02-19 18:18:52 maire Exp $
+// $Id: EventAction.cc,v 1.3 2004-06-18 09:47:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,19 +84,14 @@ void EventAction::EndOfEventAction(const G4Event* evt)
  runaction->AddEnergy(EnergyDeposit);
  runaction->AddTrakLenCharg(TrakLenCharged);
  runaction->AddTrakLenNeutr(TrakLenNeutral);
-  
+
  runaction->CountStepsCharg(nbStepsCharged);
  runaction->CountStepsNeutr(nbStepsNeutral);
- 
+
  runaction->CountTransmit (TransmitFlag);
  runaction->CountReflect  (ReflectFlag);
-      
-#ifdef G4ANALYSIS_USE
- if (histoManager->GetHisto(1)) {
-    G4double unit = histoManager->GetHistoUnit(1);
-    histoManager->GetHisto(1)->fill(EnergyDeposit/unit);
- }   
-#endif
+
+ histoManager->FillHisto(1,EnergyDeposit);
 
  if (G4VVisManager::GetConcreteInstance())
   {

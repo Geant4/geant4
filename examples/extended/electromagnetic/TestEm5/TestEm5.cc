@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm5.cc,v 1.10 2004-04-19 18:30:52 vnivanch Exp $
+// $Id: TestEm5.cc,v 1.11 2004-06-18 09:47:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,19 +71,16 @@ int main(int argc,char** argv) {
   // visualization manager
   G4VisManager* visManager = new VisManager;
   visManager->Initialize();
-#endif 
+#endif
 
-  HistoManager* histo = 0;
-#ifdef G4ANALYSIS_USE
-  histo = new HistoManager();
-#endif  
- 
+  HistoManager* histo = new HistoManager();
+
   // set user action classes
   //
   //primaryGenerator
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(primary);
-  
+
   //runAction
   RunAction* runaction = new RunAction(detector,primary,histo);
   runManager->SetUserAction(runaction);
@@ -91,7 +88,7 @@ int main(int argc,char** argv) {
   //eventAction
   EventAction* eventaction = new EventAction(runaction,histo);
   runManager->SetUserAction(eventaction);
-  
+
   //trackAction
   TrackingAction* trackingaction = new TrackingAction(detector, runaction,
                                                       eventaction, histo);
