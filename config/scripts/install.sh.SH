@@ -208,13 +208,6 @@ echo "On this machine the G4VIS_BUILD_DAWN_DRIVER=\$G4VIS_BUILD_DAWN_DRIVER"
 fi 
 
 #+
-if [ X$g4vis_build_opacs_driver = Xy ] ; then
-G4VIS_BUILD_OPACS_DRIVER=1
-export G4VIS_BUILD_OPACS_DRIVER
-echo "On this machine the G4VIS_BUILD_OPACS_DRIVER=\$G4VIS_BUILD_OPACS_DRIVER"
-fi 
-
-#+
 if [ X$g4vis_build_openglx_driver = Xy ] ; then
 G4VIS_BUILD_OPENGLX_DRIVER=1
 export G4VIS_BUILD_OPENGLX_DRIVER
@@ -261,13 +254,6 @@ if [ X$g4vis_use_dawn = Xy ] ; then
 G4VIS_USE_DAWN=1
 export G4VIS_USE_DAWN
 echo "On this machine the G4VIS_USE_DAWN=\$G4VIS_USE_DAWN"
-fi 
-
-#+
-if [ X$g4vis_use_opacs = Xy ] ; then
-G4VIS_USE_OPACS=1
-export G4VIS_USE_OPACS
-echo "On this machine the G4VIS_USE_OPACS=\$G4VIS_USE_OPACS"
 fi 
 
 #+

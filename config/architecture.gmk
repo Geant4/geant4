@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.89 2003-10-01 15:52:37 gcosmo Exp $
+# $Id: architecture.gmk,v 1.90 2003-10-17 10:17:11 gbarrand Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -235,21 +235,6 @@ ifndef OIVFLAGS
 endif
 ifndef OIVLIBS
   OIVLIBS   := -L${HEPVISLIB} -lHEPVis -lHEPVisXt -lInventor -lInventorXt
-endif
-#
-# ----------------- OPACS --------------------
-# lesstiff is bugged for popups ; then OPACS/Xo uses 
-# the Xaw widgets for handling popups. The OPACS distrib
-# for Linux assumes that lesstif is used by default. To be
-# coherent we set in Geant4 the default toolkit to lesstif 
-# on Linux in order to link with -lXaw, etc...
-#
-ifndef G4_OPACS_WIDGET_SET
-  ifeq ($(findstring Linux,$(G4SYSTEM)),Linux)
-    G4_OPACS_WIDGET_SET := lesstif
-  else
-    G4_OPACS_WIDGET_SET := Xm
-  endif
 endif
 
 # For cfront compilers the repository location is set to

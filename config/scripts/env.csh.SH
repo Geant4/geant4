@@ -178,12 +178,6 @@ echo "On this machine the G4VIS_BUILD_DAWN_DRIVER=\$G4VIS_BUILD_DAWN_DRIVER"
 endif
 
 #+
-if ( X$g4vis_build_opacs_driver == Xy ) then
-setenv G4VIS_BUILD_OPACS_DRIVER 1
-echo "On this machine the G4VIS_BUILD_OPACS_DRIVER=\$G4VIS_BUILD_OPACS_DRIVER"
-endif
-
-#+
 if ( X$g4vis_build_openglx_driver == Xy ) then
 setenv G4VIS_BUILD_OPENGLX_DRIVER 1
 echo "On this machine the G4VIS_BUILD_OPENGLX_DRIVER=\$G4VIS_BUILD_OPENGLX_DRIVER"
@@ -223,12 +217,6 @@ endif
 if ( X$g4vis_use_dawn == Xy ) then
 setenv G4VIS_USE_DAWN 1
 echo "On this machine the G4VIS_USE_DAWN=\$G4VIS_USE_DAWN"
-endif
-
-#+
-if ( X$g4vis_use_opacs == Xy ) then
-setenv G4VIS_USE_OPACS 1
-echo "On this machine the G4VIS_USE_OPACS=\$G4VIS_USE_OPACS"
 endif
 
 #+
