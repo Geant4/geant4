@@ -1,4 +1,7 @@
 #!/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/PublicDomainPackages/2.0.0/bin/python2.2
+
+# #!/opt/Anaphe/5.0.1/specific/redhat72/gcc-2.95.2/PublicDomainPackages/2.0.0/bin/python2.2
+
 # #!/usr/bin/env python2
 
 
@@ -15,13 +18,13 @@ import string
 execfile("B03Application.py")
 #executing the application could be done "by hand"
 
-Bapp = B03Application(15)
+Bapp = B03Application(10)
 Bapp.initializeApplication()
 Bapp.setupParallelGeometry()
 Bapp.createIstoreAndScorer()
 Bapp.setupSampler()
 
-Bapp.run(15)
+Bapp.run(30)
 
 # using lizard and ANAPHE to create a histogram
 # check if lizrd is loaded by looking for the af instance of the AnalysisFactory

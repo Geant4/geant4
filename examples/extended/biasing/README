@@ -77,12 +77,20 @@ GNUmakefile of this example shows how to use Anaphe as analysis
 package.
 The following list shows what to do if you are at CERN using rehat61
 and gcc-2.95.2:
-1) Set the variable "ANAPHEPATH" in the GNUmakefile to the
-directory where the script "aida-config" can be found.
+use the shell /bin/sh
+1) set the following variables (for example):
+ANAPHETOP=/afs/cern.ch/sw/lhcxx
+  (or if installed in opt: /opt/Anaphe/5.0.1)
+AIDA_DIR=/afs/cern.ch/sw/contrib/AIDA/3.0/src/cpp
+  (or if installed in opt: /opt/AIDA/3.0.0/3.0.0/AIDA/3.0/src/cpp)
+export ANAPHETOP AIDA_DIR
+
 2) Source the script:
-/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.1/scripts/setupAnaphe.csh
+. $ANAPHETOP/share/LHCXX/5.0.1/scripts/setupAnaphe
+
 3) and add to lirary path the following directories:
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}:${G4WORKDIR}/tmp/${G4SYSTEM}/exampleB02
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}:${G4WORKDIR}/tmp/${G4SYSTEM}/exampleB02
+
 
 The example stores the plot in the file b02.hbook.
 To look at the histogram using lizard you also may use Anaphe 5.0.1
@@ -103,25 +111,25 @@ Compiling and running
 ---------------------
   To compile and run this example you need a python2.2 installation
 see http://www.python.org.
-  Please set the variable "PYTHON_DIR" in the GNUmakefile
-to your python2.2 installation.
+  Please set the environment variable "PYTHON_DIR" to your python2.2 
+installation e.g:
+using afs:
+to /afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/PublicDomainPackages/2.0.0
+or if Anaphe is installed in opt /opt/Anaphe/5.0.1/specific/redhat72/gcc-2.95.2/PublicDomainPackages/2.0.0.
+
   Please add to your environment variables
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}:${G4WORKDIR}/tmp/${G4SYSTEM}/exampleB03
   and setenv PYTHONPATH $LD_LIBRARY_PATH.
 
-?????????
- Now you need to build a shared library from the example:
- Set the environment variable G4LIB_BUILD_SHARED 1
-before compiling the example.
------
-
+ You may run gmake now.
  You should be able to execute the file B03RunApplication.py from your 
 shell now.
 
-If you have Anaphe 5.0.1 installed you may also execute the file
+  If you have Anaphe 5.0.1 installed you may also execute the file
 B03RunApplication.py from a lizard session. This will create a 
-histogram.
-See http://anaphe.web.cern.ch/anaphe/index2.html.
+histogram. Therefore you may follow the steps 1 and two
+in the above exampleB02.
+  See http://anaphe.web.cern.ch/anaphe/index2.html.
 
 Files in B03;
 env.csh: Is an example script to set the environment. It should work 
