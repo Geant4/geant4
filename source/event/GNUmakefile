@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:06:31 gunter Exp $
+# $Id: GNUmakefile,v 1.2 1999-10-04 18:58:33 johna Exp $
 # ------------------------------------------------------------
 # GNUmakefile for events library.  Makoto Asai, 5/9/95.
 # ------------------------------------------------------------
@@ -32,7 +32,6 @@ CPPFLAGS += \
 	    -I$(G4BASE)/digits+hits/detector/include \
 	    -I$(G4BASE)/digits+hits/hits/include \
 	    -I$(G4BASE)/digits+hits/digits/include \
-	    -I$(G4BASE)/graphics_reps/include \
 	    -I$(G4BASE)/intercoms/include
 
 ifdef G4_STORE_TRAJECTORY

@@ -1,4 +1,4 @@
-$Id: History,v 1.4 1999-06-07 16:53:58 stesting Exp $
+$Id: History,v 1.5 1999-10-04 18:58:34 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 4, 99, J.Allison (tag event-V00-01-00)
+- Removed -I$(G4BASE)/graphics_reps/include from GNUmakefile (no
+  longer necessary after G4VVisManager moved to intercoms).
 
 Jun 7, 99, J.Allison (tag event-01-00-03)
 - Trapped "G4HEPEvtInterface:: cannot open file."
