@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.cc,v 1.6 2000-03-21 11:17:06 urban Exp $
+// $Id: G4VEnergyLoss.cc,v 1.7 2000-04-10 09:57:24 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1001,9 +1001,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       loss = p1*e1Fluct+p2*e2Fluct;
  
       // smearing to avoid unphysical peaks
-      if(p2 > 0)
-        loss += (1.-2.*G4UniformRand())*e2Fluct;
-      else if (loss>0.)
+      if (loss>0.)
         loss += (1.-2.*G4UniformRand())*e1Fluct;   
 
       // ionisation .......................................
