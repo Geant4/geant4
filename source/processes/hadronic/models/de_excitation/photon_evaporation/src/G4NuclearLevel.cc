@@ -54,17 +54,24 @@
 
 #include "globals.hh"
 
+G4int G4NuclearLevel::Increment(G4int aF)
+{
+  static G4int instanceCount = 0;
+  instanceCount+=aF;
+  return instanceCount;
+}
+
 G4NuclearLevel::G4NuclearLevel(const G4double energy, const G4double halfLife,
 			       const G4double angularMomentum,
-			       const G4DataVector& eGamma,
-			       const G4DataVector& wGamma,
-			       const G4DataVector& polarities,
-			       const G4DataVector& kCC, const G4DataVector& l1CC,
-			       const G4DataVector& l2CC, const G4DataVector& l3CC,
-			       const G4DataVector& m1CC, const G4DataVector& m2CC,
-			       const G4DataVector& m3CC, const G4DataVector& m4CC,
-			       const G4DataVector& m5CC, const G4DataVector& nPlusCC,
-			       const G4DataVector& totalCC)
+			       const std::vector<double>& eGamma,
+			       const std::vector<double>& wGamma,
+			       const std::vector<double>& polarities,
+			       const std::vector<double>& kCC, const std::vector<double>& l1CC,
+			       const std::vector<double>& l2CC, const std::vector<double>& l3CC,
+			       const std::vector<double>& m1CC, const std::vector<double>& m2CC,
+			       const std::vector<double>& m3CC, const std::vector<double>& m4CC,
+			       const std::vector<double>& m5CC, const std::vector<double>& nPlusCC,
+			       const std::vector<double>& totalCC)
 
 {
   _energy = energy;
@@ -91,10 +98,13 @@ G4NuclearLevel::G4NuclearLevel(const G4double energy, const G4double halfLife,
   _nGammas = _energies.size();
   MakeProbabilities();
   MakeCumProb();
+ // G4cout << "####### Incrementing "<<Increment(1)<<G4endl;
 }
 
 G4NuclearLevel::~G4NuclearLevel()
-{ }
+{ 
+ // G4cout << "####### Decrementing "<<Increment(-1)<<G4endl;
+}
 
 
 G4bool G4NuclearLevel::operator==(const G4NuclearLevel &right) const
@@ -116,85 +126,85 @@ G4bool G4NuclearLevel::operator<(const G4NuclearLevel &right) const
 }
 
 
-const G4DataVector& G4NuclearLevel::GammaEnergies() const
+const std::vector<double>& G4NuclearLevel::GammaEnergies() const
 {
   return _energies;
 }
  
-const G4DataVector& G4NuclearLevel::GammaWeights() const
+const std::vector<double>& G4NuclearLevel::GammaWeights() const
 {
   return _weights;
 }
  
 
-const G4DataVector& G4NuclearLevel::GammaProbabilities() const
+const std::vector<double>& G4NuclearLevel::GammaProbabilities() const
 {
   return _prob;
 }
  
 
-const G4DataVector& G4NuclearLevel::GammaCumulativeProbabilities() const
+const std::vector<double>& G4NuclearLevel::GammaCumulativeProbabilities() const
 {
   return _cumProb;
 }
  
 
-const G4DataVector& G4NuclearLevel::GammaPolarities() const
+const std::vector<double>& G4NuclearLevel::GammaPolarities() const
 {
   return _polarities;
 }
  
-const G4DataVector& G4NuclearLevel::KConvertionProbabilities() const
+const std::vector<double>& G4NuclearLevel::KConvertionProbabilities() const
 {
   return _kCC;
 }
  
-const G4DataVector& G4NuclearLevel::L1ConvertionProbabilities() const
+const std::vector<double>& G4NuclearLevel::L1ConvertionProbabilities() const
 {
   return _l1CC;
 }
  
-const G4DataVector& G4NuclearLevel::L2ConvertionProbabilities() const
+const std::vector<double>& G4NuclearLevel::L2ConvertionProbabilities() const
 {
   return _l2CC;
 }
  
-const G4DataVector& G4NuclearLevel::L3ConvertionProbabilities() const
+const std::vector<double>& G4NuclearLevel::L3ConvertionProbabilities() const
 {
   return _l3CC;
 }
  
-const G4DataVector& G4NuclearLevel::M1ConvertionProbabilities() const
+const std::vector<double>& G4NuclearLevel::M1ConvertionProbabilities() const
 {
   return _m1CC;
 }
  
-const G4DataVector& G4NuclearLevel::M2ConvertionProbabilities() const
+const std::vector<double>& G4NuclearLevel::M2ConvertionProbabilities() const
 {
   return _m2CC;
 }
  
-const G4DataVector& G4NuclearLevel::M3ConvertionProbabilities() const
+const std::vector<double>& G4NuclearLevel::M3ConvertionProbabilities() const
 {
   return _m3CC;
 }
  
-const G4DataVector& G4NuclearLevel::M4ConvertionProbabilities() const
+const std::vector<double>& G4NuclearLevel::M4ConvertionProbabilities() const
 {
   return _m4CC;
 }
  
-const G4DataVector& G4NuclearLevel::M5ConvertionProbabilities() const
+const std::vector<double>& G4NuclearLevel::M5ConvertionProbabilities() const
 {
   return _m5CC;
 }
  
-const G4DataVector& G4NuclearLevel::NPlusConvertionProbabilities() const
+const std::vector<double>& G4NuclearLevel::NPlusConvertionProbabilities() const
 {
   return _nPlusCC;
 }
  
-const G4DataVector& G4NuclearLevel::TotalConvertionProbabilities() const
+const std::vector<double>& G4NuclearLevel::TotalConvertionProbabilities() const
 {
   return _totalCC;
 }

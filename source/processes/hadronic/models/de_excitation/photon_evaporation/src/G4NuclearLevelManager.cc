@@ -278,23 +278,23 @@ void G4NuclearLevelManager::MakeLevels()
 
   _levels = new G4PtrLevelVector;
   
-  G4DataVector eLevel;
-  G4DataVector eGamma;
-  G4DataVector wGamma;
-  G4DataVector pGamma; // polarity
-  G4DataVector hLevel; // half life
-  G4DataVector aLevel; // angular momentum
-  G4DataVector kConve; //  internal convertion coefficiencies
-  G4DataVector l1Conve;
-  G4DataVector l2Conve;
-  G4DataVector l3Conve;
-  G4DataVector m1Conve;
-  G4DataVector m2Conve;
-  G4DataVector m3Conve;
-  G4DataVector m4Conve;
-  G4DataVector m5Conve;
-  G4DataVector npConve;
-  G4DataVector toConve;
+  std::vector<G4double> eLevel;
+  std::vector<G4double> eGamma;
+  std::vector<G4double> wGamma;
+  std::vector<G4double> pGamma; // polarity
+  std::vector<G4double> hLevel; // half life
+  std::vector<G4double> aLevel; // angular momentum
+  std::vector<G4double> kConve; //  internal convertion coefficiencies
+  std::vector<G4double> l1Conve;
+  std::vector<G4double> l2Conve;
+  std::vector<G4double> l3Conve;
+  std::vector<G4double> m1Conve;
+  std::vector<G4double> m2Conve;
+  std::vector<G4double> m3Conve;
+  std::vector<G4double> m4Conve;
+  std::vector<G4double> m5Conve;
+  std::vector<G4double> npConve;
+  std::vector<G4double> toConve;
  
 	
   while (Read(inFile))
@@ -328,20 +328,20 @@ void G4NuclearLevelManager::MakeLevels()
   G4double thisLevelEnergy = eLevel[0];
   G4double thisLevelHalfLife = 0.;
   G4double thisLevelAngMom = 0.;
-  G4DataVector thisLevelEnergies;
-  G4DataVector thisLevelWeights;
-  G4DataVector thisLevelPolarities;
-  G4DataVector thisLevelkCC;
-  G4DataVector thisLevell1CC;
-  G4DataVector thisLevell2CC;
-  G4DataVector thisLevell3CC;
-  G4DataVector thisLevelm1CC;
-  G4DataVector thisLevelm2CC;
-  G4DataVector thisLevelm3CC;
-  G4DataVector thisLevelm4CC;
-  G4DataVector thisLevelm5CC;
-  G4DataVector thisLevelnpCC;
-  G4DataVector thisLeveltoCC;
+  std::vector<G4double> thisLevelEnergies;
+  std::vector<G4double> thisLevelWeights;
+  std::vector<G4double> thisLevelPolarities;
+  std::vector<G4double> thisLevelkCC;
+  std::vector<G4double> thisLevell1CC;
+  std::vector<G4double> thisLevell2CC;
+  std::vector<G4double> thisLevell3CC;
+  std::vector<G4double> thisLevelm1CC;
+  std::vector<G4double> thisLevelm2CC;
+  std::vector<G4double> thisLevelm3CC;
+  std::vector<G4double> thisLevelm4CC;
+  std::vector<G4double> thisLevelm5CC;
+  std::vector<G4double> thisLevelnpCC;
+  std::vector<G4double> thisLeveltoCC;
  
   G4double e = -1.;
   G4int i;
