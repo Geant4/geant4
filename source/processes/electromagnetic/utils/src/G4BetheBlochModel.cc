@@ -32,7 +32,7 @@
 // 
 // Creation date: 03.01.2002
 //
-// Modifications: 
+// Modifications: 04.12.2002 VI Fix problem of G4DynamicParticle constructor
 //
 // -------------------------------------------------------------------
 //
@@ -50,8 +50,6 @@
 G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p) 
   : G4VEmModel(),
   particle(0),
-  mass(proton_mass_c2),
-  chargeSquare(1.0),
   highKinEnergy(100.*TeV),
   lowKinEnergy(2.0*MeV),
   twoln10(2.0*log(10.0)),
@@ -85,6 +83,7 @@ void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 G4double G4BetheBlochModel::HighEnergyLimit(const G4ParticleDefinition* p,
                                             const G4Material*) 
 {
+  if(!particle) SetParticle(p);
   return highKinEnergy;
 }
 
@@ -93,6 +92,7 @@ G4double G4BetheBlochModel::HighEnergyLimit(const G4ParticleDefinition* p,
 G4double G4BetheBlochModel::LowEnergyLimit(const G4ParticleDefinition* p,
                                            const G4Material*) 
 {
+  if(!particle) SetParticle(p);
   return lowKinEnergy;
 }
 
@@ -233,11 +233,12 @@ G4std::vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondary(
   G4double xmax = G4std::min(tmax, maxEnergy)/tmax;
   if(xmin >= xmax) return 0;
 
-  G4ThreeVector momentum = dp->GetMomentum();
+  G4ThreeVector momentum = dp->GetMomentumDirection();
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy = kineticEnergy + mass;
   G4double beta2 = 1. - mass*mass/(energy*energy);
+  G4double totMomentum = sqrt(energy*energy - mass*mass);
   G4double x = 0.0;
   G4double y = 0.0;
   G4double grej = 1.0 - beta2*xmin;
@@ -251,18 +252,15 @@ G4std::vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondary(
     }
   }
   G4double z, f;
-      
+
   // sampling follows ...      
   do {
     G4double q = G4UniformRand();
     z = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
 
-    f = 1.0 - beta2 * z;
+    f = 1.0 - z * (beta2 - z*x);
 
-    if (0.5 == spin) {
-      f += z*z*x;
-
-    } else if (spin > 0.9) {
+    if (spin > 0.9) {
       f += (1.0 - beta2*z)*z*y + x*z*z*(2.0/3.0 + z*y);
     }
     if(f > grej) {
@@ -272,26 +270,27 @@ G4std::vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondary(
                << G4endl; 
     }
 
-  } while( grej*G4UniformRand() >= f );
+  } while( grej*G4UniformRand() > f );
   
   G4double deltaKinEnergy = z * tmax;
     
   G4double deltaMomentum = 
            sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
   G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
-                                   (deltaMomentum * momentum.mag());
+                                   (deltaMomentum * totMomentum);
   G4double sint = sqrt(1.0 - cost*cost);
  
   G4double phi = twopi * G4UniformRand() ; 
 
+
   G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
   deltaDirection.rotateUz(momentum);
-
+  
   // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle(G4Electron::Electron(),
-                                                   deltaKinEnergy,
-                                                   deltaDirection);
-
+  G4DynamicParticle* delta = new G4DynamicParticle();
+  delta->SetDefinition(G4Electron::Electron());
+  delta->SetKineticEnergy(deltaKinEnergy);
+  delta->SetMomentumDirection(deltaDirection);
   G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
   vdp->push_back(delta);
 

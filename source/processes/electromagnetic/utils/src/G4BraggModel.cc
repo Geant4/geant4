@@ -32,7 +32,7 @@
 // 
 // Creation date: 03.01.2002
 //
-// Modifications: 
+// Modifications: 04.12.2002 VI Fix problem of G4DynamicParticle constructor
 //
 // Class Description: 
 //
@@ -55,8 +55,6 @@
 G4BraggModel::G4BraggModel(const G4ParticleDefinition* p) 
   : G4VEmModel(),
   particle(0),
-  mass(proton_mass_c2),
-  chargeSquare(1.0),
   highKinEnergy(2.0*MeV),
   lowKinEnergy(0.0*MeV),
   iMolecula(0),
@@ -90,6 +88,7 @@ void G4BraggModel::SetParticle(const G4ParticleDefinition* p)
 G4double G4BraggModel::HighEnergyLimit(const G4ParticleDefinition* p,
                                             const G4Material*) 
 {
+  if(!particle) SetParticle(p);
   return highKinEnergy;
 }
 
@@ -98,6 +97,7 @@ G4double G4BraggModel::HighEnergyLimit(const G4ParticleDefinition* p,
 G4double G4BraggModel::LowEnergyLimit(const G4ParticleDefinition* p,
                                            const G4Material*) 
 {
+  if(!particle) SetParticle(p);
   return lowKinEnergy;
 }
 
@@ -194,7 +194,7 @@ G4std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondary(
   G4double grej = 1.0 - beta2*xmin;
   G4double z, f;
       
-  G4ThreeVector momentum = dp->GetMomentum();
+  G4ThreeVector momentum = dp->GetMomentumDirection();
 
   // sampling follows ...      
   do {
@@ -216,8 +216,9 @@ G4std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondary(
     
   G4double deltaMomentum = 
            sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
+  G4double totMomentum = sqrt(energy*energy - mass*mass);
   G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
-                                   (deltaMomentum * momentum.mag());
+                                   (deltaMomentum * totMomentum);
   G4double sint = sqrt(1.0 - cost*cost);
  
   G4double phi = twopi * G4UniformRand() ; 
@@ -226,9 +227,10 @@ G4std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondary(
   deltaDirection.rotateUz(momentum);
 
   // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle(G4Electron::Electron(),
-                                                   deltaKinEnergy,
-                                                   deltaDirection);
+  G4DynamicParticle* delta = new G4DynamicParticle();
+  delta->SetDefinition(G4Electron::Electron());
+  delta->SetKineticEnergy(deltaKinEnergy);
+  delta->SetMomentumDirection(deltaDirection);
 
   G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
   vdp->push_back(delta);

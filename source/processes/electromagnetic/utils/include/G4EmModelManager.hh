@@ -32,7 +32,7 @@
 // 
 // Creation date: 07.05.2002
 //
-// Modifications: 
+// Modifications: 03.12.2002 V.Ivanchenko fix a bug in model selection
 //
 // Class Description: 
 //
@@ -132,9 +132,9 @@ inline G4VEmModel* G4EmModelManager::SelectModel(G4double energy)
 {
   if(nEmModels == 4 && energy > upperEkin[2]) {
     currentModel = emModels[3];
-  } else if(nEmModels == 3 && energy > upperEkin[1]) {
+  } else if(nEmModels >= 3 && energy > upperEkin[1]) {
     currentModel = emModels[2];
-  } else if(nEmModels == 2 && energy > upperEkin[0]) {
+  } else if(nEmModels >= 2 && energy > upperEkin[0]) {
     currentModel = emModels[1];
   } else {    
     currentModel = emModels[0];

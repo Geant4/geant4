@@ -33,6 +33,7 @@
 // Creation date: 03.01.2002
 //
 // Modifications: 13.11.2002 Minor fix - use normalised direction (VI)
+//                04.12.2002 Minor change in PostStepDoIt (VI) 
 //
 // Class Description: 
 //
@@ -733,6 +734,14 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
   G4double tcut = (*theCuts)[currentMaterialIndex];
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
 
+  if(0 < verboseLevel) {
+    const G4ParticleDefinition* pd = dynParticle->GetDefinition();
+    G4cout << "G4VEnergyLossSTD::PostStepDoIt: Sample secondary; E= " << finalT/MeV 
+           << " MeV; model= (" << currentModel->LowEnergyLimit(pd, currentMaterial)
+           << ", " <<  currentModel->HighEnergyLimit(pd, currentMaterial) << ")"
+           << G4endl;
+  }
+
   G4std::vector<G4DynamicParticle*>* newp = 
     currentModel->SampleSecondary(currentMaterial, dynParticle, tcut, finalT);
 
@@ -740,9 +749,6 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
     G4int n = newp->size();
     
     G4ThreeVector finalP = dynParticle->GetMomentum();
-    G4StepPoint* postPoint = step.GetPostStepPoint();
-    G4ThreeVector point = postPoint->GetPosition();
-    G4double time = postPoint->GetGlobalTime();
     G4DynamicParticle* dp;
     G4double e;
     aParticleChange.SetNumberOfSecondaries(n);
@@ -750,11 +756,14 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
        dp = (*newp)[i];
        e = dp->GetKineticEnergy();
        const G4ParticleDefinition* pd = dp->GetDefinition();
-       if (pd != theGamma && pd != theElectron ) e += pd->GetPDGMass();
+       G4ThreeVector v = dp->GetMomentumDirection();
+       G4double m = pd->GetPDGMass();
+       G4double p = sqrt(e*(e + 2.0*m));
+       if (pd != theGamma && pd != theElectron ) e += m;
+       v *= p;
        finalT -= e;
-       finalP -= dp->GetMomentum();
-       G4Track* t = new G4Track(dp, time, point);
-       aParticleChange.AddSecondary(t); 
+       finalP -= v;
+       aParticleChange.AddSecondary(dp); 
     }
 
     if (finalT < minKinEnergy) {
