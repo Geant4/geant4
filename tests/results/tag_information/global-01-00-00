@@ -1,0 +1,19 @@
+May 3rd G.Cosmo (global-01-00-00)
+- Updates to STL interface ISO/ANSI headers (F.Benher)
+- Added G4Exception call with STL strings in globals.hh and
+  G4Exception.cc (F.Benher)
+ 
+April 29th  G.Cosmo
+- Moved SystemOfUnits.SI.h to G4UnitsTest.hh in management/include.
+  This file is used only for test purposes and will not be tagged
+  for public versions.
+ 
+March 30th  M.Maire
+- CodeWizard cleanup in G4UnitsTable. Fixed definition of operator=.
+ 
+March 18th  J.Allison
+- globals.hh: Added #ifdef G4USE_STL, changed position of
+  #include <rw/cstring.h>.
+
+December 17th 1998  J.Allison
+- Added first version of STL interface.
