@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2003-06-16 15:36:54 dressel Exp $
+# $Id: GNUmakefile,v 1.4 2003-11-07 12:39:11 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -10,20 +10,26 @@ G4EXLIB := true
 ifndef G4INSTALL
   G4INSTALL = ../..
 endif
+
+
+ifdef G4ANALYSIS_USE
+  CPPFLAGS += -DG4ANALYSIS_USE
+endif
+
 include $(G4INSTALL)/config/architecture.gmk
 
 .PHONY: all tiaraClean
 
 all: lib bin
 
-
-
-
-include $(G4INSTALL)/config/binmake.gmk
-
 ifdef G4ANALYSIS_USE
-CPPFLAGS += `$(ANAPHE_SCRIPTS)/aida-config -i`
+  CPPFLAGS += `aida-config --include`
+  LDFLAGS  += `aida-config --lib`
 endif
+
+#ifdef G4ANALYSIS_USE
+#CPPFLAGS += `$(ANAPHE_SCRIPTS)/aida-config -i`
+#endif
 
 CPPFLAGS += -I$(PYTHON_INCLUDE_DIR) \
 	    -I$(TIARA_BASE)/source/tiaraPhysicsPackaging/include \
@@ -36,9 +42,9 @@ LDFLAGS += -L$(G4WORKDIR)/tmp/$(G4SYSTEM)/tiaraPhysicsPackaging \
 LDLIBS1 +=  -ltiaraPhysicsLists \
 	    -ltiaraPhysicsPackaging-handMade
 
-ifdef G4ANALYSIS_USE
-LDLIBS +=   `$(ANAPHE_SCRIPTS)/aida-config -l`
-endif
+#ifdef G4ANALYSIS_USE
+#LDLIBS +=   `$(ANAPHE_SCRIPTS)/aida-config -l`
+#endif
 
 LDLIBS +=   -lpython$(PYTHONVERSION) \
 	    -lnsl \
@@ -48,6 +54,8 @@ LDLIBS +=   -lpython$(PYTHONVERSION) \
 	    -lieee \
 	    -lpthread \
 	    -lutil 
+
+include $(G4INSTALL)/config/binmake.gmk
 
 tiaraClean:
 	@echo Cleaning up $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)

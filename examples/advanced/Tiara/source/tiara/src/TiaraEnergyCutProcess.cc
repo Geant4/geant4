@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TiaraEnergyCutProcess.cc,v 1.3 2003-06-25 09:13:00 gunter Exp $
+// $Id: TiaraEnergyCutProcess.cc,v 1.4 2003-11-07 12:39:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,8 +43,8 @@ TiaraEnergyCutProcess::~TiaraEnergyCutProcess()
 }
 
 G4double TiaraEnergyCutProcess::
-PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-				     G4double   previousStepSize,
+PostStepGetPhysicalInteractionLength(const G4Track&,
+				     G4double,
 				     G4ForceCondition* condition)
 {
   *condition = Forced;
@@ -52,7 +52,7 @@ PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 }
   
 G4VParticleChange * 
-TiaraEnergyCutProcess::PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
+TiaraEnergyCutProcess::PostStepDoIt(const G4Track& aTrack, const G4Step &)
 {
   pParticleChange->Initialize(aTrack);
 

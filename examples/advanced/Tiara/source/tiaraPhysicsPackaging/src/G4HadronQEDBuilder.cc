@@ -31,6 +31,8 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ProcessManager.hh"
 
+#include "G4Proton.hh"
+#include "G4AntiProton.hh"
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
 #include "G4KaonPlus.hh"
