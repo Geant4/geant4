@@ -9,6 +9,9 @@
 // Customer:         ESA/ESTEC
 //
 ///////////////////////////////////////////////////////////////////////////////
+// $Id: G4GeneralParticleSourceMessenger.cc,v 1.3 2001-06-28 15:06:54 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+///////////////////////////////////////////////////////////////////////////////
 //
 // CHANGE HISTORY
 // --------------
@@ -41,7 +44,6 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4ios.hh"
 
-//#include <iostream.h>
 #include "g4std/fstream"
 
 #include "g4std/iomanip"               

@@ -8,14 +8,16 @@
 // Organisation: University of Southampton / DERA
 // Customer:     ESA/ESTEC
 //
-// Documentation avaialable at http://www.space.dera.gov.uk/space_env/gspm.html
+// Documentation available at http://www.space.dera.gov.uk/space_env/gspm.html
 //   These include:
 //       User Requirement Document (URD)
 //       Software Specification Documents (SSD)
 //       Software User Manual (SUM)
 //       Technical Note (TN) on the physics and algorithms
 //
-
+///////////////////////////////////////////////////////////////////////////////
+// $Id: G4GeneralParticleSource.cc,v 1.8 2001-06-28 15:06:54 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 ///////////////////////////////////////////////////////////////////////////////
 //
 // CHANGE HISTORY
@@ -3141,9 +3143,4 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event *evt)
 
   evt->AddPrimaryVertex( vertex );
 }
-
-
-
-
-
 
