@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MySteppingAction.cc,v 1.2 1999-04-28 14:09:19 johna Exp $
+// $Id: MySteppingAction.cc,v 1.3 1999-11-10 18:14:07 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,6 +23,7 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 #include "G4Polyline.hh"
+#include "G4Circle.hh"
 
 void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
 #ifdef G4VIS_USE_OPACS
@@ -63,10 +64,10 @@ void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
 	   <<  pl << endl;
     }
     pVVisManager -> Draw (pl);
+    G4Circle intercept (pStep -> GetPostStepPoint () -> GetPosition ());
+    pVVisManager -> Draw (intercept);
+    
   }
   // User Action Example - end snippet.
 }
-
-
-
 
