@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.2 2002-06-05 14:21:00 maire Exp $
+// $Id: RunAction.hh,v 1.3 2002-06-05 14:49:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,7 @@ class RunAction : public G4UserRunAction
 #ifndef G4NOHIST 
   private:      
     ITree* tree;
-    IHistogram1D* histo[5];
+    IHistogram1D* histo[6];
 #endif                     
 };
 
