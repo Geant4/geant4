@@ -13,6 +13,8 @@ Some of the development/fixes included since the last reference tag are:
   o Fixes in G4DynamicParticle's constructors for the calculation of masses
     to avoid negative values result of precision loss when massless particles
     (like photons) are treated.
+  o Design iteration in cross-sections hadronic module. Overall design
+    iteration and re-implementation of pre_equilibrium model.
   o Cleared most compilation warnings in hadronic modules.
   o First implementation of GL viewer on WIN32 platforms for native
     Windows OpenGL.
@@ -223,44 +225,69 @@ processes/hadronic                      ghad-V05-01-02
 ------------------
 + Cleared most compilation warnings.
 + cross_sections (gcross-V05-01-02)
+  o Design iteration.
+  o Fixed problem with electro-nuclear cross-sections.
   o Fixed usage of arguments to pow() for porting on .NET 7.1 compiler.
 + management (ghad-man-V05-01-01)
+  o Added AddDataSet directly to the process interface
+  o Reimplementation of the registry to make it suitable for dynamic
+    loading of libraries.
   o Fixed warning generated after migration from g4std.
-+ models/cascade/evaporation (ghad-evap-V05-01-00)
++ models/cascade/evaporation 
   o Fixed usage of arguments to pow() for porting on .NET 7.1 compiler.
-+ models/chiral_inv_phase_space (ghad-chips-V05-01-00)
++ models/chiral_inv_phase_space 
   o Fixed usage of arguments to pow() for porting on .NET 7.1 compiler.
 + models/generator/de_excitation (ghad-deex-V05-01-05)
+  o Reimplemented Coulomb barrier in the GEM emission probabilities.
+  o Fixed floating-point exception observed in G4NuclearLevelManager.
+  o Improved mass calculation in G4VGammaDeexcitation.
+  o Introduced C++ casts.
+  o Reconfigured Fermi-break-up.
   o Fixed case of floating-point exception in internal conversion.
   o Fixed usage of arguments to pow() for porting on .NET 7.1 compiler.
   o Removed usage of G4USE_STD_NAMESPACE.
 + models/generator/kinetic_model (ghad-bin-V05-01-04)
+  o Improved transition between pre-equilibrium decay and binary cascade.
   o Corrected dummy declaration of virtual function to allow porting
     on WIN32 platforms.
 + models/generator/pre_equilibrium (ghad-preco-V05-01-05)
+  o Overall design iteration and re-implementation.
+  o Added GNASH transition probabilities as option.
+  o Added HETC emission probabilities as option.
+  o Re-work of alpha emission probabilities.
   o Fixed compilation problem on WIN32 platforms.
   o Removed usage of G4USE_STD_NAMESPACE.
 + models/generator/scattering (ghad-scatt-V05-01-04)
   o Fixed long-standing error on SUN dealing with ordering of static
     construction.
-+ models/generator/util (ghad-genutil-V05-01-05)
+  o Fixed calculation of lower bound in sampling resonance masses
+    for multiple resonance final states.
++ models/generator/util 
+  o Extended nucleon interface to allow tracing during the cascading.
+  o Added fermi-momentum to G4Nucleon.
+  o Enabled hit-counting in G4Nucleon.
   o Cleared printout on value of excitation energy.
   o Fixed usage of arguments to pow() for porting on .NET 7.1 compiler.
   o Removed usage of G4USE_STD_NAMESPACE.
++ models/low_energy
+  o Added re-coil creation and energy transfer calculation to elastic
+    scattering
+  o Bug fix for random coincidence exception in elastic scattering.
 + models/neutron_hp (ghad-neu-V05-01-01)
   o Removed usage of G4USE_STD_NAMESPACE.
   o Fixed usage of arguments to pow() for porting on .NET 7.1 compiler.
 + models/radiative_decay (radiative_decay-V05-01-00)
   o Fix in G4ITDecayChannel and G4RadioactiveDecay for porting on
-    Windows .NET (WIN23-VC7) compiler: changed signature in constructor
-    for G4ITDecayChannel to use G4Ions instead of generic G4ParticleDefinition.
+    Windows .NET (WIN23-VC7) compiler: changed signature in
+    constructor for G4ITDecayChannel to use G4Ions instead of generic
+    G4ParticleDefinition.
++ processes
+  o Implemented the AddDataSet interface in all process classes.
 + stopping (ghad-stop-V05-01-01)
   o Fixed bug in alpha evaporation from nucleus observed when mu- stops
     in air.
   o Adopt trivial workaround to avoid "internal compiler error" on WIN32
     platforms.
-+ util (ghad_util-V05-01-00)
-  o Cleanup compilation warnings.
 
 processes/photolepton_hadron            photolepton_hadron-V05-01-00
 ----------------------------
@@ -304,7 +331,7 @@ visualization                           vis-V05-01-01
     - G4OpenGLWin32Viewer[.hh.cc]: removed inclusion of <GL/glx.h>.
     - G4OpenGLViewer.cc: replaced local variables near/far with pnear/pfar
       since declared 'obsolete' in WIN32 platforms.
-    - Fixed ciompilation warnings on Windows in viewers classes.
+    - Fixed compilation warnings on Windows in viewers classes.
     - Added inclusion of <windows.h> for WIN32 platforms when GL headers
       are included.
 - RayTracer (raytracer-V05-01-01)
