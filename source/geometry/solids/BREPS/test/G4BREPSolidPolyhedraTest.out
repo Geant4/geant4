@@ -1,5 +1,5 @@
 
-=======     PGone test      ========
+=======     PolyGon test      ========
 Parameters of the G4PGone MyPolyhedra
   starting angle =0
   opening angle =6.28319
@@ -12,7 +12,7 @@ Parameters of the G4PGone MyPolyhedra
    Z[4] = 40   Rmin[4] = 42.4264   Rmax[4] = 113.137
 
 
-PCone created ! 
+Pgon (G4BREPSolid-Polyhedra) created ! 
 
 
 ==================================================
