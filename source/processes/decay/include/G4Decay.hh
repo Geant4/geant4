@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.hh,v 1.9 2004-03-12 04:46:31 kurasige Exp $
+// $Id: G4Decay.hh,v 1.10 2004-08-09 22:17:49 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,7 +43,8 @@
 //   Remove PhysicsTable          12 Feb. 2002 H.Kurashige
 //   Fixed bug in PostStepGPIL 
 //    in case of stopping during AlongStepDoIt 12 Mar. 2004 H.Kurashige
-//
+//   Add GetRemainderLifeTime  10 Aug/2004 H.Kurashige
+
 #ifndef G4Decay_h
 #define G4Decay_h 1
 
@@ -119,7 +120,6 @@ class G4Decay : public G4VRestDiscreteProcess
                              G4ForceCondition* condition
                             );
 
-
   protected: // With Description
     // GetMeanFreePath returns ctau*beta*gamma for decay in flight 
     // GetMeanLifeTime returns ctau for decay at rest
@@ -136,7 +136,10 @@ class G4Decay : public G4VRestDiscreteProcess
      void SetExtDecayer(G4VExtDecayer*);
      const G4VExtDecayer* GetExtDecayer() const;
      // Set/Get External Decayer
-    
+   
+    G4double GetRemainderLifeTime() const;  
+    //Get Remainder of life time at rest decay 
+
   public:
      void  SetVerboseLevel(G4int value);
      G4int GetVerboseLevel() const;
@@ -246,6 +249,11 @@ inline
   return pExtDecayer;
 }
 
+inline
+ G4double G4Decay::GetRemainderLifeTime() const 
+{
+  return fRemainderLifeTime;
+}
 #endif
 
 
