@@ -155,7 +155,7 @@ template <class Type> class G4GAGTreeList {
 
 //----- 
 template <class Type>
-inline G4GAGTreeList<Type>::G4GAGTreeList( const char* name_ )
+inline G4GAGTreeList<Type>::G4GAGTreeList( const char* )
 {
 	cur = head = tail = NULL ;
 	nItem = 0 ;
