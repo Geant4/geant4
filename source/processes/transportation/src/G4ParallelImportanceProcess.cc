@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.cc,v 1.12 2003-06-13 09:27:04 dressel Exp $
+// $Id: G4ParallelImportanceProcess.cc,v 1.13 2003-06-13 09:35:09 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -60,7 +60,9 @@ G4ParallelImportanceProcess(const G4VImportanceSplitExaminer &aImportanceSplitEx
 }
 
 G4ParallelImportanceProcess::~G4ParallelImportanceProcess()
-{}
+{
+  delete fImportancePostStepDoIt;
+}
 
 
 G4VParticleChange *G4ParallelImportanceProcess::

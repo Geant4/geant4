@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.cc,v 1.13 2003-06-13 09:27:04 dressel Exp $
+// $Id: G4MassImportanceProcess.cc,v 1.14 2003-06-13 09:35:09 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -62,6 +62,7 @@ G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
 
 G4MassImportanceProcess::~G4MassImportanceProcess()
 {
+  delete fImportancePostStepDoIt;
   delete fParticleChange;
 }
 
