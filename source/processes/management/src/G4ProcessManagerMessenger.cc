@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManagerMessenger.cc,v 1.2 1999-04-13 09:48:01 kurasige Exp $
+// $Id: G4ProcessManagerMessenger.cc,v 1.3 1999-06-17 09:02:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -76,6 +76,7 @@ G4ProcessManagerMessenger::G4ProcessManagerMessenger(G4ParticleTable* pTable)
   param = new G4UIparameter("index",'i',true);
   param->SetDefaultValue(-1);
   verboseCmd->SetParameter(param);
+  verboseCmd->AvailableForStates(PreInit,Init,Idle,GeomClosed,EventProc);
 
   //Commnad   /particle/process/Activate
   activateCmd = new G4UIcmdWithAnInteger("/particle/process/activate",this);
@@ -84,6 +85,7 @@ G4ProcessManagerMessenger::G4ProcessManagerMessenger(G4ParticleTable* pTable)
   activateCmd->SetParameterName("index", false);
   activateCmd->SetDefaultValue(0);
   activateCmd->SetRange("index >=0");
+  activateCmd->AvailableForStates(Idle,GeomClosed,EventProc);
 
   //Commnad   /particle/process/inactivate
   inactivateCmd = new G4UIcmdWithAnInteger("/particle/process/inactivate",this);
@@ -92,6 +94,8 @@ G4ProcessManagerMessenger::G4ProcessManagerMessenger(G4ParticleTable* pTable)
   inactivateCmd->SetParameterName("index", false);
   inactivateCmd->SetDefaultValue(0);
   inactivateCmd->SetRange("index >=0");
+  inactivateCmd->AvailableForStates(Idle,GeomClosed,EventProc);
+
 }
 
 G4ProcessManagerMessenger::~G4ProcessManagerMessenger()

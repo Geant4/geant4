@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.cc,v 1.7 1999-05-10 17:12:21 fbehner Exp $
+// $Id: G4ProcessManager.cc,v 1.8 1999-06-17 09:02:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,6 +25,7 @@
 
 #include "G4ProcessManagerMessenger.hh"
 #include "G4ProcessManager.hh"
+#include "G4StateManager.hh"
 #include <iomanip.h>
 #include "G4ProcessTable.hh"
 #include "G4ios.hh"
@@ -712,6 +713,23 @@ void G4ProcessManager::SetProcessOrderingToLast(
 // ///////////////////////////////////////
 G4VProcess* G4ProcessManager::InActivateProcess(G4int index)
 {
+  G4ApplicationState currentState 
+   = G4StateManager::GetStateManager()->GetCurrentState();
+  if ( (currentState == PreInit) || (currentState == Init) ) {
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>1) {
+      G4cout << "G4ProcessManager::InActivateProcess is not valid in ";
+      if (currentState == PreInit ) {
+	G4cout << "PreInit ";
+      } else if  (currentState == Init ) {
+	G4cout << "Init ";
+      } 
+      G4cout << "state !" << endl;
+    }
+#endif
+   return 0;
+  }
+
   //find the process attribute
   G4ProcessAttribute* pAttr = GetAttribute(index);
   if (pAttr == 0) return 0;
@@ -780,6 +798,23 @@ G4VProcess* G4ProcessManager::InActivateProcess(G4int index)
 // ///////////////////////////////////////
 G4VProcess* G4ProcessManager::ActivateProcess(G4int index)
 {
+  G4ApplicationState currentState 
+   = G4StateManager::GetStateManager()->GetCurrentState();
+  if ( (currentState == PreInit) || (currentState == Init) ) {
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>1) {
+      G4cout << "G4ProcessManager::ActivateProcess is not valid in ";
+      if (currentState == PreInit ) {
+	G4cout << "PreInit ";
+      } else  if (currentState == Init ) {
+	G4cout << "Init ";
+      } 
+      G4cout << "state !" << endl;
+    }
+#endif
+   return 0;
+  }
+
   //find the process attribute
   G4ProcessAttribute* pAttr = GetAttribute(index);
   if (pAttr == 0) return 0;
