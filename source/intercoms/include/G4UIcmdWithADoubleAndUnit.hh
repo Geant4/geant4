@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithADoubleAndUnit.hh,v 1.6 2004-05-16 18:42:30 asaim Exp $
+// $Id: G4UIcmdWithADoubleAndUnit.hh,v 1.7 2004-05-16 20:42:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,6 +53,14 @@ class G4UIcmdWithADoubleAndUnit : public G4UIcommand
     static G4double GetNewUnitValue(const char* paramString);
     //  Convert the unit string to the value of the unit. "paramString"
     // must contain a double value AND a unit string.
+    G4String ConvertToStringWithBestUnit(G4double val);
+    //  Convert a double value to a string of digits and unit. Best unit is
+    // chosen from the unit category of default unit (in case SetDefaultUnit()
+    //  is defined) or category defined by SetUnitCategory().
+    G4String ConvertToStringWithDefaultUnit(G4double val);
+    //  Convert a double value to a string of digits and unit. Best unit is
+    // chosen from the category defined by SetUnitCategory() in case default
+    // unit is not defined.
     void SetParameterName(const char * theName,G4bool omittable,
                           G4bool currentAsDefault=false);
     //  Set the parameter name for double parameterxs. Name is used by

@@ -21,12 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWith3VectorAndUnit.cc,v 1.6 2004-05-16 18:42:30 asaim Exp $
+// $Id: G4UIcmdWith3VectorAndUnit.cc,v 1.7 2004-05-16 20:42:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
 #include "G4UIcmdWith3VectorAndUnit.hh"
+#include "G4Tokenizer.hh"
+#include "G4UnitsTable.hh"
 #include <strstream>
 
 G4UIcmdWith3VectorAndUnit::G4UIcmdWith3VectorAndUnit
@@ -70,6 +72,31 @@ G4double G4UIcmdWith3VectorAndUnit::GetNewUnitValue(const char* paramString)
   is >> vx >> vy >> vz >> unts;
   G4String unt = unts;
   return ValueOf(unt);
+}
+
+G4String G4UIcmdWith3VectorAndUnit::ConvertToStringWithBestUnit(G4ThreeVector vec)
+{
+  G4UIparameter* unitParam = GetParameter(3);
+  G4String canList = unitParam->GetParameterCandidates();
+  G4Tokenizer candidateTokenizer(canList);
+  G4String aToken = candidateTokenizer();
+  char strg[120];
+  std::ostrstream os(strg,120);
+  os << G4BestUnit(vec,CategoryOf(aToken)) << '\0';
+
+  G4String st = strg;
+  return st;
+}
+
+G4String G4UIcmdWith3VectorAndUnit::ConvertToStringWithDefaultUnit(G4ThreeVector vec)
+{
+  G4UIparameter* unitParam = GetParameter(3);
+  G4String st;
+  if(unitParam->IsOmittable())
+  { st = ConvertToString(vec,unitParam->GetDefaultValue()); }
+  else
+  { st = ConvertToStringWithBestUnit(vec); }
+  return st;
 }
 
 void G4UIcmdWith3VectorAndUnit::SetParameterName

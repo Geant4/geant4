@@ -21,12 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithADoubleAndUnit.cc,v 1.6 2004-05-16 18:42:30 asaim Exp $
+// $Id: G4UIcmdWithADoubleAndUnit.cc,v 1.7 2004-05-16 20:42:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4Tokenizer.hh"
+#include "G4UnitsTable.hh"
 #include <strstream>
 
 G4UIcmdWithADoubleAndUnit::G4UIcmdWithADoubleAndUnit
@@ -66,6 +68,31 @@ G4double G4UIcmdWithADoubleAndUnit::GetNewUnitValue(const char* paramString)
   G4String unt = unts;
   
   return ValueOf(unt);
+}
+
+G4String G4UIcmdWithADoubleAndUnit::ConvertToStringWithBestUnit(G4double val)
+{
+  G4UIparameter* unitParam = GetParameter(1);
+  G4String canList = unitParam->GetParameterCandidates();
+  G4Tokenizer candidateTokenizer(canList);
+  G4String aToken = candidateTokenizer();
+  char strg[60];
+  std::ostrstream os(strg,60);
+  os << G4BestUnit(val,CategoryOf(aToken)) << '\0';
+
+  G4String st = strg;
+  return st;
+}
+
+G4String G4UIcmdWithADoubleAndUnit::ConvertToStringWithDefaultUnit(G4double val)
+{
+  G4UIparameter* unitParam = GetParameter(1);
+  G4String st;
+  if(unitParam->IsOmittable())
+  { st = ConvertToString(val,unitParam->GetDefaultValue()); }
+  else
+  { st = ConvertToStringWithBestUnit(val); }
+  return st;
 }
 
 void G4UIcmdWithADoubleAndUnit::SetParameterName
