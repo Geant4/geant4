@@ -22,11 +22,11 @@
 //
  //
  // G4 Low energy model: nn or pp scattering
- // L.G. Greeniaus and F.W. Jones, TRIUMF, May-1999
- // modified by Joe Chuma, Jan 2000
+ // F.W. Jones, L.G. Greeniaus, H.P. Wellisch
  //  
  // For further comments see G4LEpp.cc
  //
+
 #ifndef G4LEpp_h
 #define G4LEpp_h 1
  
@@ -42,6 +42,9 @@
 #include "G4Step.hh"
 #include "G4TrackStatus.hh"
 #include "G4HadronicInteraction.hh"
+
+#include "HbookHistogram.hh"
+
 
 class G4LEpp : public G4HadronicInteraction
 {
@@ -65,6 +68,8 @@ class G4LEpp : public G4HadronicInteraction
    static G4float sig[NENERGY][NANGLE];
    static G4float pcm[NENERGY], elab[NENERGY], 
      dsigmax[NENERGY], sigtot[NENERGY];
- };
+
+  HbookHistogram* HAng;
+};
 
 #endif
