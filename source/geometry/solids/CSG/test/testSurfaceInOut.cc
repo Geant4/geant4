@@ -30,7 +30,7 @@
 //
 // History:
 //
-// 14.07.04 V.Grichine creation for sphere
+// 14.07.04 V.Grichine creation for box, orb and sphere
 
 #include "G4ios.hh"
 #include <assert.h>
@@ -61,11 +61,6 @@
 ///////////////////////////////////////////////////////////////////////////
 //
 //
-
-
-
-
-
 
 
 //const G4double kApproxEqualTolerance = kCarTolerance;
@@ -210,6 +205,103 @@ G4ThreeVector GetVectorOnOrb(G4Orb& orb)
   return G4ThreeVector(px,py,pz);
 }
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// Random vector on sphere surface
+
+G4ThreeVector GetVectorOnSphere(G4Sphere& sphere)
+{
+  G4double cosTheta, sinTheta, phi, radius, px, py, pz;
+  G4double part = 1./6.;
+  G4double rand = G4UniformRand();
+
+  G4double pRmin  = sphere.GetInsideRadius();
+  G4double pRmax  = sphere.GetOuterRadius();
+  G4double phi1   = sphere.GetStartPhiAngle();
+  G4double phi2   = phi1 + sphere.GetDeltaPhiAngle();
+  G4double theta1 = sphere.GetStartThetaAngle();
+  G4double theta2 = theta1 + sphere.GetDeltaThetaAngle();
+
+  if      ( rand < part ) // Rmax
+  {
+    radius   = pRmax -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand(); 
+
+    cosTheta = cos(theta2+0.5*kAngTolerance) + 
+              (cos(theta1-0.5*kAngTolerance)-cos(theta2+0.5*kAngTolerance))*G4UniformRand();
+    if( cosTheta > 1.)  cosTheta = 1.;
+    if( cosTheta < -1.) cosTheta = -1.;
+    sinTheta = sqrt( 1. - cosTheta*cosTheta );
+  
+    phi      = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
+  }
+  else if ( rand < 2*part )  // Rmin
+  {
+    radius   = pRmin -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand(); 
+
+    cosTheta = cos(theta2+0.5*kAngTolerance) + 
+              (cos(theta1-0.5*kAngTolerance)-cos(theta2+0.5*kAngTolerance))*G4UniformRand();
+    if( cosTheta > 1.)  cosTheta = 1.;
+    if( cosTheta < -1.) cosTheta = -1.;
+    sinTheta = sqrt( 1. - cosTheta*cosTheta );
+  
+    phi      = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
+  }
+  else if ( rand < 3*part )  // phi1
+  {
+    radius   = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand(); 
+
+    cosTheta = cos(theta2+0.5*kAngTolerance) + 
+              (cos(theta1-0.5*kAngTolerance)-cos(theta2+0.5*kAngTolerance))*G4UniformRand();
+    if( cosTheta > 1.)  cosTheta = 1.;
+    if( cosTheta < -1.) cosTheta = -1.;
+    sinTheta = sqrt( 1. - cosTheta*cosTheta );
+  
+    phi      = phi1 -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
+  }
+  else if ( rand < 4*part )  // phi2
+  {
+    radius   = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand(); 
+
+    cosTheta = cos(theta2+0.5*kAngTolerance) + 
+              (cos(theta1-0.5*kAngTolerance)-cos(theta2+0.5*kAngTolerance))*G4UniformRand();
+    if( cosTheta > 1.)  cosTheta = 1.;
+    if( cosTheta < -1.) cosTheta = -1.;
+    sinTheta = sqrt( 1. - cosTheta*cosTheta );
+  
+    phi      = phi2 -0.5*kCarTolerance + (kCarTolerance)*G4UniformRand();
+  }
+  else if ( rand < 5*part )  // theta1
+  {
+    radius   = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand(); 
+
+    cosTheta = cos(theta1+0.5*kAngTolerance) + 
+              (cos(theta1-0.5*kAngTolerance)-cos(theta1+0.5*kAngTolerance))*G4UniformRand();
+    if( cosTheta > 1.)  cosTheta = 1.;
+    if( cosTheta < -1.) cosTheta = -1.;
+    sinTheta = sqrt( 1. - cosTheta*cosTheta );
+  
+    phi      = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
+  }
+  else // theta2
+  {
+    radius   = pRmin - 0.5*kCarTolerance + (pRmax-pRmin+kCarTolerance)*G4UniformRand(); 
+
+    cosTheta = cos(theta2+0.5*kAngTolerance) + 
+              (cos(theta2-0.5*kAngTolerance)-cos(theta2+0.5*kAngTolerance))*G4UniformRand();
+    if( cosTheta > 1.)  cosTheta = 1.;
+    if( cosTheta < -1.) cosTheta = -1.;
+    sinTheta = sqrt( 1. - cosTheta*cosTheta );
+  
+    phi      = phi1 - 0.5*kAngTolerance + (phi2 - phi1 + kAngTolerance)*G4UniformRand();
+  }
+
+  px = radius*sinTheta*cos(phi);
+  py = radius*sinTheta*sin(phi);
+  pz = radius*cosTheta;
+
+  return G4ThreeVector(px,py,pz);
+}
+
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -217,6 +309,7 @@ G4ThreeVector GetVectorOnOrb(G4Orb& orb)
 
 int main(void)
 {
+  G4int i,j, iMax=10000, jMax=1000;
   G4double distIn, distOut;
   EInside surfaceP;
   G4ThreeVector norm,*pNorm;
@@ -224,10 +317,12 @@ int main(void)
 
   enum Esolid {kBox, kOrb, kSphere, kCons, kTubs, kTorus, kPara, kTrapezoid, kTrd};
 
-  Esolid useCase = kOrb;
+  Esolid useCase = kSphere;
 
   pNorm=&norm;
   pgoodNorm=&goodNorm;
+
+  G4cout.precision(20);
 
   // Boxes for test
 
@@ -246,16 +341,6 @@ int main(void)
 
   // spheres for test
 
-  G4Sphere s1("Solid G4Sphere",0,50,0,twopi,0,pi);
-  G4Sphere s2("Spherical Shell",45,50,0,twopi,0,pi);
-  G4Sphere s3("Band (theta segment)",45,50,0,twopi,pi/4,halfpi);
-  G4Sphere s32("Band (theta segment2)",45,50,0,twopi,0,pi/4);
-  G4Sphere s33("Band (theta segment1)",45,50,0,twopi,pi*3/4,pi/4);
-  G4Sphere s34("Band (theta segment)",4,50,0,twopi,pi/4,halfpi);
-  G4Sphere s4("Band (phi segment)",45,50,-pi/4,halfpi,0,twopi);
-  //    G4cout<<"s4.fSPhi = "<<s4.GetSPhi()<<G4endl;
-  G4Sphere s41("Band (phi segment)",5,50,-pi,3.*pi/2.,0,twopi);
-  G4Sphere s42("Band (phi segment)",5,50,-pi/2,3.*pi/2.,0,twopi);
   G4Sphere s5("Patch (phi/theta seg)",45,50,-pi/4,halfpi,pi/4,halfpi);
   G4Sphere s6("John example",300,500,0,5.76,0,pi) ; 
   G4Sphere s7("sphere7",1400.,1550.,0.022321428571428572,0.014642857142857141,
@@ -296,13 +381,20 @@ int main(void)
                                         0.*degree, 180.0*degree );
 
 
+  // Check of some use cases shown zero-zero problems
+
+  G4ThreeVector pCheck, vCheck;
+
+  pCheck = G4ThreeVector( 41.418613476008794, -16.893662525384702, 4.9094423552800466 );
+  vCheck = G4ThreeVector( 0.34553222148699703, 0.91172822040596313, 0.22216916084289551 );
+
+  distIn  = s5.DistanceToIn(pCheck,vCheck);
+  distOut = s5.DistanceToOut(pCheck,vCheck,calcNorm,pgoodNorm,pNorm); 
+
 #ifdef NDEBUG
     G4Exception("FAIL: *** Assertions must be compiled in! ***");
 #endif
 
-  G4cout.precision(20);
-
-  G4int i,j, iMax=10000, jMax=1000;
   
   // Check box tracking function 
 
@@ -393,6 +485,54 @@ int main(void)
             G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
             G4cout<<" direction v: "<<G4endl;
             G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
+	  }     
+        }
+      }
+    }
+    break;
+
+    case kSphere:
+      G4cout<<"Testing all cutted G4Sphere:"<<G4endl<<G4endl;
+    for(i=0;i<iMax;i++)
+    {
+      G4ThreeVector p = GetVectorOnSphere(s5);
+    
+      surfaceP = s5.Inside(p);
+      if(surfaceP != kSurface)
+      {
+        G4cout<<"p is out of surface: "<<G4endl;
+        G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl<<G4endl;
+
+      }
+      else
+      {
+        for(j=0;j<jMax;j++)
+        {
+          G4ThreeVector v = GetRandomUnitVector();
+
+          distIn  = s5.DistanceToIn(p,v);
+          distOut = s5.DistanceToOut(p,v,calcNorm,pgoodNorm,pNorm); 
+
+	  //  if( distIn < kCarTolerance && distOut < kCarTolerance )
+          if( distIn == 0. && distOut == 0. )
+	  {
+	    G4cout<<" distIn < kCarTolerance && distOut < kCarTolerance"<<G4endl;
+            G4cout<<"distIn = "<<distIn<<";  distOut = "<<distOut<<G4endl;
+            G4cout<<"location p: "<<G4endl;
+            G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
+            G4cout<<" direction v: "<<G4endl;
+            G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
+	  }
+          else if(distIn > 100000*kCarTolerance && distOut > 100*kCarTolerance)
+	  {
+	    /*
+	    G4cout<<" distIn > 100000*kCarTolerance && distOut > 100*kCarTolerance"<<G4endl;
+            G4cout<<"distIn = "<<distIn<<";  distOut = "<<distOut<<G4endl;
+            G4cout<<"location p: "<<G4endl;
+            G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
+            G4cout<<" direction v: "<<G4endl;
+            G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
+	    */
 	  }     
         }
       }
