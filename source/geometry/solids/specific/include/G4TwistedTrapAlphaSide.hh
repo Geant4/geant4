@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapAlphaSide.hh,v 1.1 2005-02-15 13:48:24 link Exp $
+// $Id: G4TwistedTrapAlphaSide.hh,v 1.2 2005-02-15 16:28:06 link Exp $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -131,8 +131,8 @@ class G4TwistedTrapAlphaSide : public G4VSurface
     G4double fDx3minus1 ; // fDx3 - fDx1          -
     G4double fDy2plus1 ;  // fDy2 + fDy1  == b2/2 + b1/2
     G4double fDy2minus1 ; // fDy2 - fDy1          -
-    G4double fa1md1 ;   // 2 fDx2 - 2 fDx3  == a1 - d1
- 
+    G4double fa1md1 ;   // 2 fDx2 - 2 fDx1  == a1 - d1
+    G4double fa2md2 ;  // 2 fDx4 - 2 fDx3 
 
 
     G4double fdeltaX ;
@@ -196,19 +196,15 @@ G4ThreeVector G4TwistedTrapAlphaSide::NormAng( G4double phi, G4double u )
   // function to calculate the norm at a given point on the surface
   // replace a1-d1
 
-  G4double L = 2*fDz ;
-
- 
-  G4ThreeVector nvec( 8*b1*L*(2*b1*(std::cos(phi)-std::sin(phi)*fTAlph) + fa1md1*std::sin(phi)),
-		      8*b1*L*(2*b1*std::sin(phi) + std::cos(phi)*(-fa1md1 + 2*b1*fTAlph)),
-		      b1*(4*(a1-a2)*b1 + 4*b1*(d1-d2) + a1*(a1+a2)*dphi -
-			  (a2+d1)*d1*dphi + fa1md1*d2*dphi  - 
-			  16*b1*dx + 8*fa1md1*dy  + 
-			  2*(-(fa1md1*(a1 - a2 + d1 - d2 - 4*dx)) + 8*b1*dy)*phi) + 
-		      4*(4*b1*b1 + (fa1md1)*(fa1md1))*dphi*u - 
-		      2*b1*fTAlph*(b1*((a1 + a2 + d1 + d2)*dphi + 8*dy - 
-				       2*(a1 - a2 + d1 - d2 - 4*dx)*phi) + 8*(fa1md1)*dphi*u - 
-				   8*b1*dphi*u*fTAlph) ) ;
+  G4ThreeVector nvec( 16*fDy1*2*fDz*(4*fDy1*(std::cos(phi)-std::sin(phi)*fTAlph) + fa1md1*std::sin(phi)),
+		      16*fDy1*2*fDz*(4*fDy1*std::sin(phi) + std::cos(phi)*(-fa1md1 + 4*fDy1*fTAlph)),
+		      2*fDy1*(-16*fDy1*(fDx4minus2 + fDx3minus1)  + 4*fDx2*fDx4plus2*fPhiTwist -
+			  (fDx4+fDx1)*4*fDx1*fPhiTwist + 2*fa1md1*fDx3*fPhiTwist  -  32*fDy1*fdeltaX*fPhiTwist + 8*fa1md1*fdeltaY*fPhiTwist  + 
+			  2*(-(fa1md1*(-2*(fDx4minus2 + fDx3minus1) - 4*fdeltaX*fPhiTwist)) + 16*fDy1*fdeltaY*fPhiTwist)*phi) + 
+		      4*(16*fDy1*fDy1 + (fa1md1)*(fa1md1))*fPhiTwist*u - 
+		      4*fDy1*fTAlph*(2*fDy1*(2*(fDx4plus2+fDx3plus1)*fPhiTwist 
+					     + 8*fdeltaY*fPhiTwist - 2*(-2*(fDx4minus2+fDx3minus1) - 4*fdeltaX*fPhiTwist)*phi) 
+				     + 8*(fa1md1)*fPhiTwist*u - 16*fDy1*fPhiTwist*u*fTAlph) ) ;
 
 
   return nvec.unit();

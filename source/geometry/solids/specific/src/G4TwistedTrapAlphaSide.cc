@@ -119,11 +119,14 @@ G4TwistedTrapAlphaSide::G4TwistedTrapAlphaSide(const G4String     &name,
   fDy2plus1  = fDy2 + fDy1 ;
   fDy2minus1 = fDy2 - fDy1 ;
 
+  fa1md1 = 2*fDx2 - 2*fDx1  ; 
+  fa2md2 = 2*fDx4 - 2*fDx3 ;
+
   fPhiTwist = PhiTwist ;     // dphi
   fAngleSide = AngleSide ;  // 0,90,180,270 deg
 
-  fdeltaX = 2 * fDz * std::tan(fTheta) * std::cos(fPhi) / fPhiTwist ;
-  fdeltaY = 2 * fDz * std::tan(fTheta) * std::sin(fPhi) / fPhiTwist ;
+  fdeltaX = 2 * fDz * std::tan(fTheta) * std::cos(fPhi) / fPhiTwist ;  // dx/dphi in surface equation
+  fdeltaY = 2 * fDz * std::tan(fTheta) * std::sin(fPhi) / fPhiTwist ;  // dy/dphi in surface equation
   
   fRot.rotateZ( AngleSide ) ; 
   
