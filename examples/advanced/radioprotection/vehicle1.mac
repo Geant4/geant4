@@ -40,8 +40,8 @@
 /configuration/AddShielding On
 #/configuration/AddSPE On
 /shielding/thickness 10. cm
-#/analysis/formatFile hbook
 #/analysis/formatFile xml
+#/analysis/formatFile hbook
 # Number of events
 /run/beamOn 50
 
