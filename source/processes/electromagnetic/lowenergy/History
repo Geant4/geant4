@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2000-04-03 10:02:55 vnivanch Exp $
+$Id: History,v 1.5 2000-04-04 14:25:32 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04.04.2000 - MGP, tag emlowen-V01-01-05
+             removed dependency on standard category (G4eEnergyLoss)
+
+04.04.2000 - MGP, tag emlowen-V01-01-04
+             tag Vladimir's and Stephane's modifications for antiprotons
+
 03.04.2000 - Vladimir Ivanchenko and Stephane Chauvie
              1) Linearity into Barkas effect and nuclear stopping power
                 for antiprotons
+
+02.04.2000 - MGP, tag emlowen-V01-01-03
+             tag V.L.'s modifications to G4LowEnergyIonisation (units)
+
+02.04.2000 - MGP, tag emlowen-V01-01-02
+             tag V.L.'s fix of typo in G4LowEnergyGammaConversion
+
+02.04.2000 - MGP, tag emlowen-V01-01-01
+             tag V.I.'s modifications, 31.03.2000 
 
 31.03.2000 - Vladimir Ivanchenko update 
              1) G4hLowEnergyIonisation.cc limitation DeltaCut > Eexc
@@ -30,7 +45,6 @@ committal in the CVS repository !
                 section calculation, cross section sampling, de/dx
              4) IfAplicable check lepton number
                 
-
 21.01.2000 - Vladimir Ivanchenko update 
              1) G4hLowEnergyIonisation.cc Barkas effect calculation
                 and inicialisation 
