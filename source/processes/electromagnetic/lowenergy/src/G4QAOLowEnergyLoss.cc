@@ -29,6 +29,7 @@
 // 01/06/2001 V.Ivanchenko replace names by Z, change the validity range
 //                         from 50 keV to 5 KeV and change sign of the
 //                         Barkas term
+// 4/06/2001 S. Chauvie  Corrected small bugs
 //
 // ************************************************************
 // It is the Quantal Harmonic Oscillator Model for energy loss
@@ -170,13 +171,15 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
                                               G4double kineticEnergy,
                                               G4double zParticle) const 
 {
-  //  G4int nbOfShell = GetNumberOfShell(material);
+  G4int nbOfShell = GetNumberOfShell(material);
 
-  G4int iz = (G4int)(material->GetZ());
-  if(iz < 1) iz = 1;
-  else if(iz > 100) iz = 100;
-  G4int nbOfShell = fNumberOfShells[iz];
-
+  //G4int iz = (G4int)(material->GetZ());
+  //if(iz < 1) iz = 1;
+  //else if(iz > 100) iz = 100;
+  //G4int nbOfShell = fNumberOfShells[iz];
+  
+  if(nbOfShell < 1) nbOfShell = 1;
+  
   //  G4cout << " E(MeV)= " << kineticEnergy/MeV << " n= " 
   //       << nbOfShell 
   //       << " for " << material->GetZ() << G4endl; 
