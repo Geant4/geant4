@@ -1,0 +1,7 @@
+ exe pip_a0
+ exe pip_a1
+ exe pip_a2
+ exe pip_a3
+ exe pip_a4
+ shell rm *.old
+ shell rm *~
