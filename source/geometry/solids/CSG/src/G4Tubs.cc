@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.19 2000-10-18 15:46:29 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.20 2000-10-23 11:04:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1056,14 +1056,14 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
   t2   = p.x()*v.x() + p.y()*v.y() ;
   t3   = p.x()*p.x() + p.y()*p.y() ;
 
-  roi2 = snxt*snxt*t1 + 2*snxt*t2 + t3 ; // radius^2 on +-fDz
+//  roi2 = snxt*snxt*t1 + 2*snxt*t2 + t3 ; // radius^2 on +-fDz
 
   if ( t1 > 0 ) // Check not parallel
   {
 // Calculate sr, r exit distance
 	   
-    if ( t2   >= 0.0 && 
-         roi2 > fRMax*(fRMax + kRadTolerance) )
+    if ( t2   >= 0.0 ) 
+//         roi2 > fRMax*(fRMax + kRadTolerance) )
     {
 // Delta r not negative => leaving via rmax
 
@@ -1101,7 +1101,8 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
     }             
     else  // i.e.  t2 < 0; Possible rmin intersection
     {
-      roMin2 = t3 + t2*t2*(1.0 - 2.0/t1) ; // min ro2 of the plane of movement 
+//    roMin2 = t3 + t2*t2*(1.0 - 2.0/t1) ; // min ro2 of the plane of movement 
+      roMin2 = t3 - t2*t2/t1 ;
 
       if ( fRMin    && 
            roMin2 < fRMin*(fRMin - kRadTolerance) )
