@@ -2068,7 +2068,7 @@ BooleanProcessor::draw_contour(int i1col, int i2col, int ihead) {
   int i; 
   std::cin >> i; 
 }
-*/
+
 //--------------------------------------------------------------------
 void
 BooleanProcessor::print_face(int iface) {
@@ -2145,3 +2145,4 @@ BooleanProcessor::print_edge(int iedge) {
        << edges[i].ivis   << ", "
        << edges[i].inext  << endl;
 }
+*/
