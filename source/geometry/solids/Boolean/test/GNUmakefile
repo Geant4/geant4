@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-08 16:31:48 gunter Exp $
+# $Id: GNUmakefile,v 1.2 1999-11-09 18:38:27 japost Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -28,7 +28,7 @@ INCFLAGS := -I$(G4BASE)/geometry/management/include \
 
 LDLIBS   := -lG4volumes -lG4geomBoolean -lG4csg -lG4geometrymng \
             -lG4graphics_reps \
-            -lG4global
+            -lG4globman
 
 OLD_LDLIBS   := -lG4geometry \
             -lG4graphics_reps \
