@@ -15,6 +15,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 March, 01   G.Cosmo (persistency-V03-00-00)
+- G4Pglobals.hh: substituted inclusion of G4UnitsTest.hh with G4SIUnits.hh
+  according to tag "global-V03-00-06".
+
 15 December, 00   Y.Morita (persistency-V02-00-03)
 - added more SRM comments
 
