@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.7 1999-10-25 10:29:15 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.8 1999-11-05 16:29:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -136,15 +136,17 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
   if (model) {
     G4Scene* pScene = fpVisManager -> GetCurrentScene ();
     const G4String& currentSceneName = pScene -> GetName ();
-    pScene -> AddRunDurationModel (model);
+    G4bool successful = pScene -> AddRunDurationModel (model);
     UpdateVisManagerScene (currentSceneName);
-    G4cout << "First occurrence of \"" << foundVolume -> GetName ()
-	   << "\", copy no. " << copyNo
-	   << ", found at depth " << foundDepth
-	   << ",\n  with further requested depth of descent "
-	   << requestedDepthOfDescent
-	   << ", has been added to scene \"" << currentSceneName << "\""
-	   << endl;
+    if (successful) {
+      G4cout << "First occurrence of \"" << foundVolume -> GetName ()
+	     << "\", copy no. " << copyNo
+	     << ", found at depth " << foundDepth
+	     << ",\n  with further requested depth of descent "
+	     << requestedDepthOfDescent
+	     << ", has been added to scene \"" << currentSceneName << "\""
+	     << endl;
+    }
   }
 }
 
@@ -211,13 +213,15 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
   G4VModel* model = new G4LogicalVolumeModel (pLV, requestedDepthOfDescent);
   G4Scene* pScene = fpVisManager -> GetCurrentScene ();
   const G4String& currentSceneName = pScene -> GetName ();
-  pScene -> AddRunDurationModel (model);
+  G4bool succesful = pScene -> AddRunDurationModel (model);
   UpdateVisManagerScene (currentSceneName);
-  G4cout << "Logical volume \"" << pLV -> GetName ()
-	 << " with requested depth of descent "
-	 << requestedDepthOfDescent
-	 << ",\n  has been added to scene \"" << currentSceneName << "\""
-	 << endl;
+  if (succesful) {
+    G4cout << "Logical volume \"" << pLV -> GetName ()
+	   << " with requested depth of descent "
+	   << requestedDepthOfDescent
+	   << ",\n  has been added to scene \"" << currentSceneName << "\""
+	   << endl;
+  }
 }
 
 
@@ -268,16 +272,19 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
   
   if(newValue=="all") {
     G4VFlavoredParallelWorld* CurrentFlavoredWorld;
+    G4bool successful;
     for (G4int iParticle=0; iParticle<theParticleTable->entries(); 
 	 iParticle++)
       if(CurrentFlavoredWorld=theGlobalFastSimulationManager->
 	 GetFlavoredWorldForThis(theParticleTable->
 				 GetParticle(iParticle)))
-	pCurrentScene -> AddRunDurationModel
+	successful = pCurrentScene -> AddRunDurationModel
 	  (new G4FlavoredParallelWorldModel (CurrentFlavoredWorld));
     UpdateVisManagerScene ();
-    G4cout << "Ghosts added to the Scene, refresh the view to see it."
-	   << endl;
+    if (successful) {
+      G4cout << "Ghosts added to the Scene, refresh the view to see it."
+	     << endl;
+    }
     return;
   }
   
@@ -291,11 +298,13 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
   G4VFlavoredParallelWorld* worldForThis;
   if(worldForThis=theGlobalFastSimulationManager->
      GetFlavoredWorldForThis(currentParticle)) {
-    pCurrentScene -> AddRunDurationModel
+    G4bool successful = pCurrentScene -> AddRunDurationModel
       (new G4FlavoredParallelWorldModel (worldForThis));
     UpdateVisManagerScene (currentSceneName);
-    G4cout << "Ghosts added to the Scene, refresh the view to see it."
-           << endl;
+    if (successful) {
+      G4cout << "Ghosts added to the Scene, refresh the view to see it."
+	     << endl;
+    }
   }
   else G4cout << "There are no ghosts for \""<<newValue<<"\""<<endl;
 }
