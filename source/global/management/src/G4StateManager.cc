@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StateManager.cc,v 1.2 2000-11-20 17:26:49 gcosmo Exp $
+// $Id: G4StateManager.cc,v 1.3 2001-03-06 15:56:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,12 +24,31 @@
 G4StateManager* G4StateManager::theStateManager = 0;
 
 G4StateManager::G4StateManager()
-:theCurrentState(PreInit),thePreviousState(PreInit) 
-{ theBottomDependent = 0; }
+ : theCurrentState(PreInit),
+   thePreviousState(PreInit),
+   theBottomDependent(0)
+{
+}
 
 G4StateManager::~G4StateManager()
 {
-   theDependentsList.clearAndDestroy();
+  G4VStateDependent* state=0;
+
+  while (theDependentsList.size()>0)
+  {
+    state = theDependentsList.back();
+    theDependentsList.pop_back();
+    for (G4std::vector<G4VStateDependent*>::iterator
+         i=theDependentsList.begin(); i!=theDependentsList.end(); i++)
+    {
+      if (*i==state)
+      {
+	theDependentsList.erase(i);
+	i--;
+      }
+    } 
+    if ( state ) delete state;    
+  } 
 }
 
 G4StateManager::G4StateManager(const G4StateManager &right)
@@ -40,7 +59,8 @@ G4StateManager::G4StateManager(const G4StateManager &right)
 {
 }
 
-G4StateManager& G4StateManager::operator=(const G4StateManager &right)
+G4StateManager&
+G4StateManager::operator=(const G4StateManager &right)
 {
    if (&right == this) return *this;
 
@@ -52,69 +72,93 @@ G4StateManager& G4StateManager::operator=(const G4StateManager &right)
    return *this;
 }
 
-G4int G4StateManager::operator==(const G4StateManager &right) const
+G4int
+G4StateManager::operator==(const G4StateManager &right) const
 {
    return (this == &right);
 }
 
-G4int G4StateManager::operator!=(const G4StateManager &right) const
+G4int
+G4StateManager::operator!=(const G4StateManager &right) const
 {
    return (this != &right);
 }
 
 
-G4StateManager* G4StateManager::GetStateManager()
+G4StateManager*
+G4StateManager::GetStateManager()
 {
     if (!theStateManager)
-        {
-            theStateManager = new G4StateManager;
-        }
+    {
+      theStateManager = new G4StateManager;
+    }
     return theStateManager;    
 }
 
-G4bool G4StateManager::RegisterDependent(G4VStateDependent* aDependent,G4bool bottom)
+G4bool
+G4StateManager::RegisterDependent(G4VStateDependent* aDependent, G4bool bottom)
 {
-   G4bool ack=true;
-   if(!bottom)
-   { theDependentsList.insert(aDependent); }
-   else
-   { 
-     if(theBottomDependent)
-     { theDependentsList.insert(theBottomDependent); }
-     theBottomDependent = aDependent;
-   }
-   return ack;
+    G4bool ack=true;
+    if(!bottom)
+    {
+      theDependentsList.push_back(aDependent);
+    }
+    else
+    { 
+      if(theBottomDependent)
+      {
+        theDependentsList.push_back(theBottomDependent);
+      }
+      theBottomDependent = aDependent;
+    }
+    return ack;
 }
 
-G4bool G4StateManager::DeregisterDependent(G4VStateDependent* aDependent)
+G4bool
+G4StateManager::DeregisterDependent(G4VStateDependent* aDependent)
 {
-   G4VStateDependent* aD = theDependentsList.remove(aDependent);
-   return (aD != NULL);
+  G4VStateDependent* tmp = 0;
+  G4std::vector<G4VStateDependent*>::iterator i;
+  for (i=theDependentsList.begin(); i!=theDependentsList.end(); i++)
+    {
+      if (**i==*aDependent) 
+	{
+	  tmp = *i;
+	  theDependentsList.erase(i);
+	} 
+    }
+  return (tmp != 0);
 }
 
-G4ApplicationState G4StateManager::GetCurrentState()
+G4ApplicationState
+G4StateManager::GetCurrentState() const
 {
    return theCurrentState;
 }
 
-G4ApplicationState G4StateManager::GetPreviousState()
+G4ApplicationState
+G4StateManager::GetPreviousState() const
 {
    return thePreviousState;
 }
 
-G4bool G4StateManager::SetNewState(G4ApplicationState requestedState)
+G4bool
+G4StateManager::SetNewState(G4ApplicationState requestedState)
 {
    size_t i=0;
    G4bool ack = true;
    G4ApplicationState savedState = thePreviousState;
    thePreviousState = theCurrentState;
    theCurrentState = requestedState;
-   while ((ack) && (i<theDependentsList.entries())) {
-     ack = theDependentsList(i)->Notify(requestedState);
+   while ((ack) && (i<theDependentsList.size()))
+   {
+     ack = theDependentsList[i]->Notify(requestedState);
      i++;
    }
    if(theBottomDependent)
-   { ack = theBottomDependent->Notify(requestedState); }
+   {
+     ack = theBottomDependent->Notify(requestedState);
+   }
 
    if(!ack)
    {
@@ -124,12 +168,24 @@ G4bool G4StateManager::SetNewState(G4ApplicationState requestedState)
    return ack;
 }
 
-G4VStateDependent* G4StateManager::RemoveDependent(const G4VStateDependent* aDependent)
+G4VStateDependent*
+G4StateManager::RemoveDependent(const G4VStateDependent* aDependent)
 {
-   return theDependentsList.remove(aDependent);
+  G4VStateDependent* tmp = 0;
+  G4std::vector<G4VStateDependent*>::iterator i;
+  for (i=theDependentsList.begin(); i!=theDependentsList.end(); i++)
+    {
+      if (**i==*aDependent) 
+	{
+	  tmp = *i;
+	  theDependentsList.erase(i);
+	} 
+    }
+  return tmp;
 }
 
-G4String G4StateManager::GetStateString(G4ApplicationState aState)
+G4String
+G4StateManager::GetStateString(G4ApplicationState aState) const
 {
   G4String stateName;
   switch(aState)
@@ -169,4 +225,3 @@ G4String G4StateManager::GetStateString(G4ApplicationState aState)
 //{
 //  G4UImanager::GetUIpointer()->PauseSession(msg);
 //}
-

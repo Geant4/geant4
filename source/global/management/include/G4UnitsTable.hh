@@ -5,26 +5,26 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.hh,v 1.9 2000-01-19 11:16:46 gcosmo Exp $
+// $Id: G4UnitsTable.hh,v 1.10 2001-03-06 15:56:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // -----------------------------------------------------------------
-//	GEANT 4 class header file 
 //
 //      ------------------- class G4UnitsTable -----------------
 //
 // 17-05-98: first version, M.Maire
-// 13-10-98: Units and symbols printed in fixed length
-// 18-01-00: BestUnit for three vector
-
+// 13-10-98: Units and symbols printed in fixed length, M.Maire
+// 18-01-00: BestUnit for three vector, M.Maire
+// 06-03-01: Migrated to STL vectors, G.Cosmo
+//
 // Class description:
 //
 // This class maintains a table of Units.
 // A Unit has a name, a symbol, a value and belong to a category (i.e. its
 // dimensional definition): Length, Time, Energy, etc...
 // The Units are grouped by category. The TableOfUnits is a list of categories.
-// The class BestUnit allow to convert automaticaly a physical quantity
+// The class G4BestUnit allows to convert automaticaly a physical quantity
 // from its internal value into the most appropriate Unit of the same category.
 //
 
@@ -35,11 +35,11 @@
 #define G4UnitsTable_HH
 
 #include "globals.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 #include "G4ThreeVector.hh"
 
 class G4UnitsCategory;
-typedef G4RWTPtrOrderedVector<G4UnitsCategory> G4UnitsTable;
+typedef G4std::vector<G4UnitsCategory*> G4UnitsTable;
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -48,8 +48,8 @@ class G4UnitDefinition
 {
 public:  // with description
 
-    G4UnitDefinition(G4String name, G4String symbol,G4String category,
-            G4double value);
+    G4UnitDefinition(G4String name, G4String symbol,
+                     G4String category, G4double value);
 	    
 public:  // without description
 	    
@@ -64,18 +64,17 @@ private:
    
 public:  // with description
 
-    G4String      GetName()       {return Name;};
-    G4String      GetSymbol()     {return SymbolName;};
-    G4double      GetValue()      {return Value;};
+    G4String      GetName()   const {return Name;}
+    G4String      GetSymbol() const {return SymbolName;}
+    G4double      GetValue()  const {return Value;}
     
     void          PrintDefinition();
     
     static void BuildUnitsTable();    
     static void PrintUnitsTable();
     
-    static  
-    G4UnitsTable&   GetUnitsTable() {return theUnitsTable;};
-        
+    static G4UnitsTable& GetUnitsTable() {return theUnitsTable;}
+
     static G4double GetValueOf (G4String);
     static G4String GetCategory(G4String);
 
@@ -94,7 +93,7 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-typedef G4RWTPtrOrderedVector<G4UnitDefinition> G4UnitsContainer;
+typedef G4std::vector<G4UnitDefinition*> G4UnitsContainer;
 
 class G4UnitsCategory
 {
@@ -112,13 +111,13 @@ private:
    
 public:  // without description
 
-    G4String          GetName()      {return Name;};
-    G4UnitsContainer& GetUnitsList() {return UnitsList;};
-    G4int             GetNameMxLen() {return NameMxLen;};
-    G4int             GetSymbMxLen() {return SymbMxLen;};
-    void  UpdateNameMxLen(G4int len) {if (NameMxLen<len) NameMxLen=len;};
-    void  UpdateSymbMxLen(G4int len) {if (SymbMxLen<len) SymbMxLen=len;};
-    void PrintCategory();
+    G4String          GetName()      const {return Name;}
+    G4UnitsContainer& GetUnitsList()       {return UnitsList;}
+    G4int             GetNameMxLen() const {return NameMxLen;}
+    G4int             GetSymbMxLen() const {return SymbMxLen;}
+    void  UpdateNameMxLen(G4int len) {if (NameMxLen<len) NameMxLen=len;}
+    void  UpdateSymbMxLen(G4int len) {if (SymbMxLen<len) SymbMxLen=len;}
+    void  PrintCategory();
 
 private:
 
@@ -134,25 +133,25 @@ class G4BestUnit
 {
 public:  // with description
 
-    G4BestUnit(G4double      internalValue, G4String category);
+    G4BestUnit(G4double internalValue, G4String category);
     G4BestUnit(const G4ThreeVector& internalValue, G4String category);    
-    // These constructors convert a physical quantity from its internalValue
-    // into the most appropriate unit of the same category.
-    // In practice it builds an object VU = (newValue, newUnit)
-    
+      // These constructors convert a physical quantity from its internalValue
+      // into the most appropriate unit of the same category.
+      // In practice it builds an object VU = (newValue, newUnit)
+
    ~G4BestUnit();
    
 public:  // without description
 
-    G4double*  GetValue()           {return Value;};
-    G4String   GetCategory()        {return Category;};
-    size_t     GetIndexOfCategory() {return IndexOfCategory;};
+    G4double*  GetValue()                 {return Value;}
+    G4String   GetCategory()        const {return Category;}
+    size_t     GetIndexOfCategory() const {return IndexOfCategory;}
     
 public:  // with description 
    
     friend
     G4std::ostream&  operator<<(G4std::ostream&,G4BestUnit VU);
-    // Default format to print the objet VU above.
+      // Default format to print the objet VU above.
 
 private:
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DataVector.hh,v 1.6 2001-02-05 10:37:12 gcosmo Exp $
+// $Id: G4DataVector.hh,v 1.7 2001-03-06 15:56:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,7 +17,7 @@
 //
 //   Utility class providing similar behaviour of vector<G4double>.
 //   It includes additional methods for compatibility with Rogue Wave
-//   RWTValOrderedVector<double> collection.
+//   collection.
 //
 
 #ifndef G4DataVector_h

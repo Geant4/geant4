@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OrderedTable.hh,v 1.6 2001-02-05 10:37:12 gcosmo Exp $
+// $Id: G4OrderedTable.hh,v 1.7 2001-03-06 15:56:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,9 +15,7 @@
 // Sep. 1996  : M.Maire 
 // Jan. 2001  : H.Kurashige
 //              - G4ValVector is replaced with G4DataVector 
-//              - Migrated to G4std::vector<G4DataVector*> from
-//                G4RWTPtrOrderedVector
-//
+//              - Migrated to G4std::vector<G4DataVector*>.
 //
 // Class Description:
 //

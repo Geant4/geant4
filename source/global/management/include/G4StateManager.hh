@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StateManager.hh,v 1.2 2000-11-20 17:26:46 gcosmo Exp $
+// $Id: G4StateManager.hh,v 1.3 2001-03-06 15:56:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@
 #ifndef G4StateManager_h
 #define G4StateManager_h 1
 
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 #include "globals.hh"
 #include "G4ApplicationState.hh"
 #include "G4VStateDependent.hh"
@@ -60,9 +60,9 @@ public:
 
 public: // with description
 
-  G4ApplicationState GetCurrentState();
+  G4ApplicationState GetCurrentState() const;
     // Returns the current state
-  G4ApplicationState GetPreviousState();
+  G4ApplicationState GetPreviousState() const;
     // Returns the previous state
   G4bool SetNewState(G4ApplicationState requestedState);
     // Set Geant4 to a new state.
@@ -79,7 +79,7 @@ public: // with description
   G4VStateDependent* RemoveDependent(const G4VStateDependent* aDependent);
     // Remove the registration.
     // Removed pointer is returned.
-  G4String GetStateString(G4ApplicationState aState);
+  G4String GetStateString(G4ApplicationState aState) const;
     // Utility method which returns a string of the state name.
 
 public:
@@ -104,7 +104,7 @@ private:
   static G4StateManager* theStateManager;
   G4ApplicationState theCurrentState;
   G4ApplicationState thePreviousState;
-  G4RWTPtrOrderedVector<G4VStateDependent> theDependentsList;
+  G4std::vector<G4VStateDependent*> theDependentsList;
   G4VStateDependent* theBottomDependent;
 
 };
