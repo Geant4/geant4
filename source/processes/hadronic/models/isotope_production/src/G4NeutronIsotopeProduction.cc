@@ -51,7 +51,7 @@ G4NeutronIsotopeProduction::
 
 G4IsoResult * G4NeutronIsotopeProduction::
 GetIsotope(const G4Track& aTrack,
-           const G4Nucleus & aNucleus)
+           const G4Nucleus & )
 {
   // is applicable?
   if(aTrack.GetDynamicParticle()->GetDefinition() != G4Neutron::Neutron()) return NULL;

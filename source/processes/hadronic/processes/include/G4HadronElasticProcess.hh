@@ -78,8 +78,8 @@ public:
    ~G4HadronElasticProcess();
  
    inline
-   G4double GetMeanFreePath(const G4Track& aTrack, G4double previousStepSize,
-                            G4ForceCondition* condition)
+   G4double GetMeanFreePath(const G4Track& aTrack, G4double ,
+                            G4ForceCondition* )
    {
       return GetMeanFreePathBasic(aTrack.GetDynamicParticle(),
                                   aTrack.GetMaterial());
