@@ -56,7 +56,7 @@
 Em3PhysicsList::SetCuts:CutLength : 0.5 (mm)
 
 
-# $Id: run01.27jan99.out,v 1.1 1999-02-03 15:46:46 maire Exp $
+# $Id: 27jan99.out,v 1.1 1999-06-22 10:01:18 maire Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
