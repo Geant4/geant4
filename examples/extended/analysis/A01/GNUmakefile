@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2003-10-13 20:52:06 duns Exp $
+# $Id: GNUmakefile,v 1.4 2003-10-13 23:59:16 duns Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module
 # --------------------------------------------------------------
@@ -27,4 +27,9 @@ ifeq ($(G4SYSTEM),Linux-g++)
 $(G4TMP)/$(G4SYSTEM)/$(name)/A01HadronPhysics.o: src/A01HadronPhysics.cc
 	@echo "Compiling A01HadronPhysics.cc ..."
 	@$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/A01HadronPhysics.cc
+endif
+
+ifdef G4ANALYSIS_USE
+   CPPFLAGS += `aida-config --include`
+   LOADLIBS += `aida-config --lib`
 endif
