@@ -1,5 +1,6 @@
 //#define CHECK_MOMC
 
+#include "globals.hh"
 #include "G4Collider.hh"
 #include "G4InuclCollider.hh"
 #include "G4IntraNucleiCascader.hh"
@@ -17,20 +18,22 @@
 
 #include "vector"
 
-G4int verboseLevel = 1;
-
 int main() {
+ 
+  //  G4int verboseLevel = 1;
   
   // General test program for hetc and inucl
 
-  const G4int to_report = 100;
-
-  G4int nrain = 10; // number of interactions to be generated
-
+  const G4int to_report = 1;
+  G4int nrain = 1; // number of interactions to be generated
+  G4double eMin  = 0.5; // minimun energy for bullet
+  G4double eMax  = 4.0;   // maximum energy for bullet
+  G4int    eBins = 1;   // bullet energy bins
+  G4double eStep = (eMax-eMin)/eBins;
   for(G4int e = 0; e < 10; e++) { // Scan with different energy
  
     // Auxiliarly stuff for ugly analysis
-    G4Analyser* analyser = new G4Analyser;
+    G4Analyser* analyser = new G4Analyser();
     G4WatcherGun* gun = new G4WatcherGun;
     gun->setWatchers();
     analyser->setWatchers(gun->getWatchers());
@@ -47,9 +50,10 @@ int main() {
 
     // Bullet / Target initialisation
     // Bullet could be nucleon or pion or nuclei
-    // [0.5, 5.0, step 0.5]   GeV proton momentum in Z-direction
-
-    G4InuclParticle* bull = new G4InuclElementaryParticle(0.5 * (e+1), 1); 
+    // proton momentum in Z-direction [GeV]
+    G4double bulletEnergy = eMin + eStep * e; 
+    G4cout << "Bullet E =" << bulletEnergy << " GeV" << endl;
+    G4InuclParticle* bull = new G4InuclElementaryParticle(bulletEnergy, 1); 
 
     /*
       Neutron  with the momentum defined by the vector momb(4)
@@ -71,21 +75,23 @@ int main() {
     // has to be nucleon)
 
     // Au197 target at rest
-    G4InuclParticle* targ = new G4InuclNuclei(0.0, 197.0, 79.0);
+    // G4InuclParticle* targ = new G4InuclNuclei(0.0, 197.0, 79.0);
+
+    G4InuclParticle* targ = new G4InuclNuclei(0.0, 208.0, 82.0); // Pb
 
     /*
-      // Neutron with momentum momta
-      vector<G4double> momta(4);
-      momta[1] = -0.3; 
-      momta[2] = 0.2; 
-      momta[3] = -0.2; 
-      G4InuclParticle* targ = new G4InuclElementaryParticle(momta, 2);
+    // Neutron with momentum momta
+    vector<G4double> momta(4);
+    momta[1] = -0.3; 
+    momta[2] = 0.2; 
+    momta[3] = -0.2; 
+    G4InuclParticle* targ = new G4InuclElementaryParticle(momta, 2);
     */
 
     /*
-      // C12 nuclei with momentum momta
-      G4InuclParticle* targ = new G4InuclNuclei(momta, 12.0, 6.0);
-      ((G4InuclNuclei*)targ)->setEnergy();
+    // C12 nuclei with momentum momta
+    G4InuclParticle* targ = new G4InuclNuclei(momta, 12.0, 6.0);
+    ((G4InuclNuclei*)targ)->setEnergy();
     */
 
 #ifdef CHECK_MOMC
@@ -98,12 +104,11 @@ int main() {
     G4cout << " tot in mom: px " << total_mom_in[1] << " py " << total_mom_in[2]
 	   << " pz " << total_mom_in[3] << " e " << total_mom_in[0] << G4endl;
 #endif
-
     for(G4int i = 0; i < nrain; i++) {
       if((i + 1) % to_report == 0) 
-	if (verboseLevel > 1) {
-	  G4cout << " ---- EVENT ------ " << i+1 << G4endl;
-	}
+	//	if (verboseLevel > 1) {
+	G4cout << " Event " << i+1 <<":" << G4endl;
+      //	}
       G4CollisionOutput cascadeParticles = collider->collide(bull, targ); // standard method
       //  auxiliarly method to get more information about the different stages 
       //  of interaction  
@@ -120,20 +125,11 @@ int main() {
 	" dPz " << total_mom_out[3] - total_mom_in[3] << G4endl;
 #endif
       analyser->analyse(cascadeParticles);
-
     };
     //  analyser->printResults();
     //  analyser->printResultsSimple();
     analyser->printResultsNtuple();
   }
-  return 0;
-        
-}   
 
-
-
-
-
-
-
-
+  return 0;       
+}
