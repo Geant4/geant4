@@ -119,7 +119,8 @@ run                                              run-V06-00-02
 ---
 - Invocation of G4Navigator::LocateGlobalPointAndSetup() is now moved to
   G4EventManager so that the navigation history is reset for every new event.
-- Updated date to run-manager kernel.
+- Updated date to run-manager kernel, added reference and WWW information
+  to run-time header.
 
 visualization                                    vis-V06-00-01
 -------------
