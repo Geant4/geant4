@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Step.hh,v 1.3 1999-04-13 09:43:26 kurasige Exp $
+// $Id: G4Step.hh,v 1.4 1999-10-05 10:29:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -247,6 +247,10 @@ class G4Step
    fpTrack->SetKineticEnergy(fpPostStepPoint->GetKineticEnergy());
    fpTrack->SetPolarization(fpPostStepPoint->GetPolarization());
    fpTrack->SetStepLength(fStepLength);
+   //
+   G4DynamicParticle* pParticle = fpTrack->GetDynamicParticle();
+   pParticle->SetMass(fpPostStepPoint->GetMass());
+   pParticle->SetCharge(fpPostStepPoint->GetCharge());
    // NextTouchable is updated 
    // (G4Track::Touchable points touchable of Pre-StepPoint)
    fpTrack->SetNextTouchable(fpPostStepPoint->GetTouchable());
