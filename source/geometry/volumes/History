@@ -1,4 +1,4 @@
-$Id: History,v 1.56 2001-12-04 18:34:54 japost Exp $
+$Id: History,v 1.57 2001-12-05 08:31:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,34 +16,27 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Dec  4th, 2001       J. Apostolakis - geomvol-V03-02-03
 
-G4Navigator:
-***********
-- Modified the interface
+Dec  4th, 2001       J. Apostolakis - geomvol-V03-02-03
+- G4Navigator:
+  o Modified the interface
     - creating a new ResetState method (that only reset state - not stack)
     - adding a new optional argument to LocateGlobalPointAndSetup method 
     - adding direction argument to LGPAS w/ touchable history 
-- Modified the implementation 
+  o Modified the implementation 
     - to reset its state when touchable history is used to re-initialise it
     - to use the direction in LocateGlobalPointAndSetup methods!
-
-G4PropagatorInField:
--  Added use of new Largest Acceptable Step data member.
--  Protected, in reseting of Proposed Step length, against
-          making it bigger in cases where several zero steps seen.
--  Several debugging prints added. (only in G4Verbose, ...)
-
+- G4PropagatorInField:
+  o Added use of new Largest Acceptable Step data member.
+  o Protected, in reseting of Proposed Step length, against
+    making it bigger in cases where several zero steps seen.
+  o Several debugging prints added. (only in G4Verbose, ...)
 
 Nov 28th, 2001       J. Apostolakis - geomvol-V03-02-02
-
 - Added GetCurrentFieldManager method to PropagatorInField
-
 - Incorporates additions seen in "geomvol-V03-02-00a/b/c"
    and in "geomvol-V03-02-01". 
-
 - This tag is required by the new tag "transport-V03-02-06" in Transportation.
-
 
 Oct 18th, 2001       J. Apostolakis - geomvol-V03-02-01
 - Added a new 'maximum' epsilon value in G4PropagatorInField,
