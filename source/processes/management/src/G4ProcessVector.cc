@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessVector.cc,v 1.1 2000-11-03 03:44:52 kurasige Exp $
+// $Id: G4ProcessVector.cc,v 1.2 2000-11-03 06:15:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,6 +22,7 @@
 /////// Constructors
 G4ProcessVector::G4ProcessVector(size_t):pProcVector(0)
 {
+   pProcVector = new G4ProcVector();
 }
 
 G4ProcessVector::G4ProcessVector(const G4ProcessVector& right)

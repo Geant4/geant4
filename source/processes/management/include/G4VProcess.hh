@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VProcess.hh,v 1.5 1999-11-07 17:11:47 kurasige Exp $
+// $Id: G4VProcess.hh,v 1.6 2000-11-03 06:15:33 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,7 @@
 //   modified for new ParticleChange 12 Mar. 1998  H.Kurashige
 //   Add process trype            27 Mar. 1998  H.Kurashige
 //   Remove thePhysicsTable       2 Aug. 1998   H.Kurashige
+//   Add PILfactor and GPIL       3 Nov. 2000   H.Kurashige
 
 #ifndef G4VProcess_h 
 #define G4VProcess_h 1
@@ -152,6 +153,28 @@ class G4VProcess
       //        this value is used for transformation of
       //        true path length to geometrical path length
 
+      ////////// PIL factor ////////
+      void SetPILfactor(G4double value);
+      G4double GetPILfactor() const;
+      // Set/Get factor for PhysicsInteractionLength 
+      // which is passed to G4SteppingManager for both AtRest and PostStep
+
+      // These three GPIL methods are used by Stepping Manager.
+      // They invoke virtual GPIL methods listed above.
+      // As for AtRest and PostStep the returned value is multipled by thePILfactor 
+      // 
+      G4double AlongStepGPIL( const G4Track& track,
+                              G4double  previousStepSize,
+                              G4double  currentMinimumStep,
+                              G4double& proposedSafety,
+                              G4GPILSelection* selection     );
+
+      G4double AtRestGPIL( const G4Track& track,
+                           G4ForceCondition* condition );
+
+      G4double PostStepGPIL( const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition );
 
   ////////////////////// 
       virtual G4bool IsApplicable(const G4ParticleDefinition&){return true;};
@@ -172,6 +195,7 @@ class G4VProcess
       // private void BuildThePhysicsTable()
       // function. Not another BuildPhysicsTable, please.
 
+ 
   ////////////////////////////
       const G4String& GetProcessName() const;
       //  Returns the name of the process.
@@ -231,6 +255,10 @@ class G4VProcess
       G4ProcessType theProcessType;
       //  The type of the process
 
+      G4double thePILfactor;
+      // factor for PhysicsInteractionLength 
+      // which is passed to G4SteppingManager
+      
  public: // with description
    virtual void  DumpInfo() const;
    // dump out process information    
@@ -293,6 +321,45 @@ inline void G4VProcess::ClearNumberOfInteractionLengthLeft()
   theNumberOfInteractionLengthLeft =  -1.0;
 }
 
+inline void G4VProcess::SetPILfactor(G4double value)
+{
+  if (value>0.) {
+    thePILfactor = value;
+  }
+}
+
+inline G4double G4VProcess::GetPILfactor() const
+{
+  return thePILfactor;
+}
+
+inline G4double G4VProcess::AlongStepGPIL( const G4Track& track,
+                                     G4double  previousStepSize,
+                                     G4double  currentMinimumStep,
+                                     G4double& proposedSafety,
+                                     G4GPILSelection* selection     )
+{
+  G4double value
+   =AlongStepGetPhysicalInteractionLength(track, previousStepSize, currentMinimumStep, proposedSafety, selection);
+  return value;
+}
+
+inline G4double G4VProcess::AtRestGPIL( const G4Track& track,
+                                 G4ForceCondition* condition )
+{
+  G4double value
+   =AtRestGetPhysicalInteractionLength(track, condition);
+  return thePILfactor*value;
+}
+
+inline G4double G4VProcess::PostStepGPIL( const G4Track& track,
+                                   G4double   previousStepSize,
+                                   G4ForceCondition* condition )
+{
+  G4double value
+   =PostStepGetPhysicalInteractionLength(track, previousStepSize, condition);
+  return thePILfactor*value;
+}
 #endif
 
 
