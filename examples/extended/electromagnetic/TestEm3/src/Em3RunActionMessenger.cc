@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunActionMessenger.cc,v 1.10 2002-12-12 11:19:39 maire Exp $
+// $Id: Em3RunActionMessenger.cc,v 1.11 2003-04-01 10:40:21 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,12 +59,12 @@ Em3RunActionMessenger::Em3RunActionMessenger(Em3RunAction* run)
   //    
   G4UIparameter* VminPrm = new G4UIparameter("Vmin",'d',false);
   VminPrm->SetGuidance("Vmin=Emin/Ebeam");
-  VminPrm->SetParameterRange("Vmin>=0.&&Vmin<=1.");
+  VminPrm->SetParameterRange("Vmin>=0.&&Vmin<=1.1");
   HistoCmd->SetParameter(VminPrm);
   //    
   G4UIparameter* VmaxPrm = new G4UIparameter("Vmax",'d',false);
   VmaxPrm->SetGuidance("Vmax=Emax/Ebeam");
-  VmaxPrm->SetParameterRange("Vmax>=0.&&Vmax<=1.");
+  VmaxPrm->SetParameterRange("Vmax>=0.&&Vmax<=1.1");
   HistoCmd->SetParameter(VmaxPrm);  
   //
   HistoCmd->AvailableForStates(G4State_Idle);    

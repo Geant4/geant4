@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorConstruction.cc,v 1.13 2003-03-31 12:44:20 maire Exp $
+// $Id: Em3DetectorConstruction.cc,v 1.14 2003-04-01 10:40:21 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -130,12 +130,18 @@ void Em3DetectorConstruction::DefineMaterials()
 
   a = 28.09*g/mole;
   G4Element* Si = new G4Element(name="Silicon",symbol="Si" , z= 14., a);
-
+  
+  a = 72.59*g/mole;
+  G4Element* Ge = new G4Element(name="Germanium", symbol="Ge",z=32., a);
+  
   a = 126.90*g/mole;
   G4Element* I  = new G4Element(name="Iodine"  ,symbol="I" , z= 53., a);
 
   a = 132.90*g/mole;
   G4Element* Cs = new G4Element(name="Cesium" ,symbol="Cs" , z= 55., a);
+      
+  a = 208.98*g/mole;
+  G4Element* Bi = new G4Element(name="Bismuth"  , symbol="Bi",z=83., a);  
 
   //
   // define an Element from isotopes, by relative abundance
@@ -225,6 +231,12 @@ void Em3DetectorConstruction::DefineMaterials()
   CsI->AddElement(Cs, natoms=1);
   CsI->AddElement(I , natoms=1);
   CsI->GetIonisation()->SetMeanExcitationEnergy(553.1*eV);
+      
+  density = 7.10*g/cm3;
+  G4Material* BGO = new G4Material(name="BGO", density, ncomponents=3);
+  BGO->AddElement(O , natoms=12);
+  BGO->AddElement(Ge, natoms= 3);
+  BGO->AddElement(Bi, natoms= 4);  
 
   //
   // define a material from elements.   case 2: mixture by fractional mass
