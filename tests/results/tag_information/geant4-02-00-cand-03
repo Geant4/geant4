@@ -1,0 +1,16 @@
+                      geant4-02-00-cand-03
+                      ====================
+
+geant4-02-00-cand-02 is geant4-02-00-cand-02 plus:
+
+.               geant4-02-00-cand-02
+./config                config-V02-00-05
+./examples/extended/electromagnetic/TestEm1             testem1-V02-00-00
+./source/GNUmakefile            source-gmk-V02-00-01
+./source/event          event-V02-00-03
+./source/geometry/management            geommng-V02-00-03
+./source/geometry/solids                geomsolids-V02-00-01
+./source/parameterisations              parmodels-V02-00-00
+./source/processes/parameterisation             param-V02-00-01
+
+Test result and large_N tests have been updated for this tag

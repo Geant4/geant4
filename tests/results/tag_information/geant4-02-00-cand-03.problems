@@ -1,0 +1,98 @@
+           Problems and Fixes with geant4-02-00-cand-03
+           ============================================
+
+geant4-02-00-cand-03 is geant4-02-00-cand-02 plus:
+
+./config                config-V02-00-05
+./examples/extended/electromagnetic/TestEm1             testem1-V02-00-00
+./source/GNUmakefile            source-gmk-V02-00-01
+./source/event          event-V02-00-03
+./source/geometry/management            geommng-V02-00-03
+./source/geometry/solids                geomsolids-V02-00-01
+./source/parameterisations              parmodels-V02-00-00
+./source/processes/parameterisation             param-V02-00-01
+
+Test result and large_N tests have been updated for this tag
+
+Problems Fixed
+--------------
+G4Exceptions, not terminating program, are not seen in standard tests
+(i.e. low number of events) since geant4-02-00-ref-04 
+for
+G4CameronTruranHilfShellCorrections out of table for Z = 1
+and
+G4ExcitationHandlerWarning:   Photonevaporation data not exact.
+
+New Problems and Features
+-------------------------
+
+
+disabled tests
+--------------
+
+disable.test11.DEC-cxx.debug_ISO    disable.test11.DEC-cxx.optim_ISO  
+disable.test15.DEC-cxx.debug_ISO    disable.test15.DEC-cxx.optim_ISO  
+problem reading neutron data.
+
+disable.test601.DEC-cxx.debug_ISO   disable.test601.DEC-cxx.optim_ISO 
+disable.test602.DEC-cxx.debug_ISO   disable.test602.DEC-cxx.optim_ISO
+prompts indefinitely.
+
+
+Problems remaining for large N (no of events) tests.
+------------------
+
+G4Exceptions, not neccessarily terminating program, are reported from
+
+  G4CameronTruranHilfShellCorrections
+    out of table for Z = 1
+
+  G4ExcitationHandler
+    Warning: Photonevaporation data not exact.
+    Warning: Found gamma with energy = 1.44773e-13MeV 
+
+on many platforms, including.
+
+
+  DEC: debug: NON-ISO:    T16:      G4ExcitationHandler exception.
+  DEC: optim: ISO:        T12:      G4ExcitationHandler exception.
+  DEC: optim: NON-ISO:    T12:      G4ExcitationHandler exception.
+  SUN: debug: NON-ISO:    T13:      G4ExcitationHandler exception.
+  SUN: optim: NON-ISO:    T13:      G4ExcitationHandler exception.
+  HP: debug:              T12:      G4ExcitationHandler exception.
+  HP: debug:              T16:      G4ExcitationHandler exception.
+  HP: optim:          T02.had:      G4ExcitationHandler exception.
+  HP: optim:              T12:      G4ExcitationHandler exception.
+  HP: optim:              T16:      G4ExcitationHandler exception.
+  SUN: optim: NON-ISO:    T15:      G4ExcitationHandler exception.
+
+  DEC: debug: NON-ISO:    T16:      G4CameronTruranHilfShellCorrections exception.
+  DEC: optim: ISO:        T16:      G4CameronTruranHilfShellCorrections exception.
+  DEC: optim: NON-ISO:    T16:      G4CameronTruranHilfShellCorrections exception.
+  DEC: optim: NON-ISO:    T15:      G4CameronTruranHilfShellCorrections exception.
+  HP:  debug:             T16:      G4CameronTruranHilfShellCorrections exception.
+  HP:  optim:             T16:      G4CameronTruranHilfShellCorrections exception.
+  HP:  debug:         T02.had:      G4CameronTruranHilfShellCorrections exception.
+  HP:  optim:         T02.had:      G4CameronTruranHilfShellCorrections exception.
+  SUN: optim: NON-ISO:    T16:      G4CameronTruranHilfShellCorrections exception.
+
+
+  G4VParticleChange::SetNumberOfSecondaries() 
+    Warning theListOfSecondaries is not empty
+  
+  SUN: optim: NON-ISO:    T09:
+  SUN: debug: NON-ISO:    T09:
+
+
+ Large N tests are still runningi on shared platforms with monitors which
+ may kill processes.
+ The following are noted.
+
+DEC-cxx.optim_ISO/test02.hadron.large_N.err:time: command terminated abnormally.
+HP-aCC.debug/test02.hadron.large_N.err:time: command terminated abnormally.
+HP-aCC.debug/test07.large_N.err:time: command terminated abnormally.
+HP-aCC.debug/test104.EMtest.large_N.err:time: command terminated abnormally.
+HP-aCC.debug/test13.large_N.err:time: command terminated abnormally.
+HP-aCC.optim/test104.EMtest.large_N.err:time: command terminated abnormally.
+HP-aCC.optim/test13.large_N.err:time: command terminated abnormally.
+
