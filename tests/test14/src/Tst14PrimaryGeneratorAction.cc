@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst14PrimaryGeneratorAction.cc,v 1.4 1999-12-15 14:54:51 gunter Exp $
+// $Id: Tst14PrimaryGeneratorAction.cc,v 1.5 2000-01-20 10:33:22 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,7 +87,8 @@ void Tst14PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   {
     x0 = 0. ;
     y0 = 0. ;
-    z0 = -0.5*(Tst14Detector->GetWorldSizeZ()) ;
+    //z0 = -0.5*(Tst14Detector->GetWorldSizeZ()) ;
+    z0 = Tst14Detector->GetzstartAbs() ;
   }
   G4double r0,phi0 ;
   if (rndmFlag == "on")
