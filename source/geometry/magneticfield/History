@@ -1,4 +1,4 @@
-$Id: History,v 1.61 2002-06-25 08:37:39 japost Exp $
+$Id: History,v 1.62 2002-07-23 09:09:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul  23rd, 2002   G. Cosmo - field-V04-01-00
+--------------------------
+- G4MagIntegratorDriver.cc: cleared warning of unused variable.
+  Protected variable 'nStpPr' with G4DEBUG_FIELD.
+- Updated reference outputs and some other updates to unit tests.
 
 Jun  25th, 2002   J. Apostolakis - field-V04-00-05
 --------------------------------
