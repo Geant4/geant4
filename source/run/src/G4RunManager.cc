@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.9 1999-11-11 15:38:00 gunter Exp $
+// $Id: G4RunManager.cc,v 1.10 1999-12-02 16:26:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,6 +70,12 @@ G4RunManager::G4RunManager()
   previousEvents = new G4RWTPtrOrderedVector<G4Event>;
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
+  G4cout 
+  << "**********************************************" << endl
+  << " Geant4 version $Name: not supported by cvs2svn $" << endl
+  << "                                  (07-Dec-99)" << endl
+  << "             Copyright : Geant4 Collaboration" << endl
+  << "**********************************************" << endl;
 }
 
 G4RunManager::~G4RunManager()
