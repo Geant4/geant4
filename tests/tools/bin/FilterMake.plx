@@ -153,11 +153,14 @@ foreach $Platform (@Platforms) {
                  if ( $line =~ m#^Using granular#) {next}
                  if ( $line =~ m#^Linking#) {next}
 
-#                if ( "$Action" eq "C++ warning" ) {next}
-                 if ( $line =~ m#^ild:# ) { $ild++; next}
+#                if ( "$Action" eq "C++ warning" ) {next} # lots of these so leys do something more
+#                                                         # general for multiline warnings.
+
+                 if ( $line =~ m#^ild:# ) { $Action = "Loader Error"; $ild++; next}
                  if ( $line =~ m#^\"src/SdaiCONFIG_CONTROL_DESIGN.cc\", line (\d+): (\w+): (.*)$# ) {
                      $LineNum=$1; $Severity=$2; $Whinge=$3;
                      print " SDAI: $LineNum $Severity $Whinge\"\n";
+                     $Action = "Step Error";
                      $Sdai++;
                      next;
                  }
@@ -269,6 +272,7 @@ foreach $Platform (@Platforms) {
                  if ( $line =~ m#^Preprocessing.*\.ddl\s+\.\.\.# ) {
                     $line = &AnalyseSunddl($line,$filehandlemaybe);
                  }
+                 if ( "$Action" eq "C++ warning" ) {next}
                  print "$line\n";
 #  Perhaps I can structure this code rather than just adding blocks.
 #  need to call with the current line and maybe a filehandle to read
