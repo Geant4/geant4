@@ -22,7 +22,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: HepRepXMLWriter.cc,v 1.7 2002-02-02 04:00:30 perl Exp $
+// 	$Id: HepRepXMLWriter.cc,v 1.8 2002-02-05 19:52:01 perl Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -74,6 +74,13 @@ void HepRepXMLWriter::addType(const char* name,int newTypeDepth)
 
     if (newTypeDepth < 0)
       newTypeDepth = 0;
+
+    // Insert any layers that are missing from the hierarchy (protects against
+    // callers that skip from, say, layer 1 to layer 3 with no layer 2).
+    while (typeDepth < (newTypeDepth-1)) {
+      addType("Layer Inserted by HepRepXMLWriter", typeDepth + 1);
+      addInstance();
+    }
 
     // If moving closer to the root, close previously open types.
     while (newTypeDepth<typeDepth)
