@@ -2,7 +2,7 @@
                  Geant4 5.2 - patch-02 Release Notes
                  -----------------------------------
 
-                                                            2 October 2003
+                                                            3 October 2003
 
 List of fixes included in this public patch to release 5.2-patch01:
 
