@@ -406,7 +406,7 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
           const G4ParticleDefinition* bpd = base_part_vector[j];
           if (pd) nm = pd->GetParticleName();
           if (bpd) nm2 = bpd->GetParticleName();
-          if (part_vector[i]) nm1 = part_vector[j]->GetParticleName();
+          if (part_vector[j]) nm1 = part_vector[j]->GetParticleName();
           G4cout << "For " << loss_vector[j]->GetProcessName()
                  << " for " << nm
                  << " (" << nm1 << ") "
