@@ -147,14 +147,15 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 
     //    bulletMomentum[3] = momZ;
     if ( G4int(A) == 1 ) {
-      bulletMomentum[3] = 2*momZ;
+
+
+      //   bulletMomentum[3] = sqrt(momZ*momZ+2*momZ*0.93827);
     } else {
       bulletMomentum[3] = 2*momZ;
     }
 
-    //    G4InuclParticle* bull = new G4InuclElementaryParticle(bulletMomentum, bulletType);
-    bull = new G4InuclElementaryParticle(bulletMomentum, bulletType);
-
+    bull = new G4InuclElementaryParticle(bulletMomentum, bulletType); // counts mom[0] = E tot from mom[1]-mom[3]
+   
  
     if (verboseLevel > 2) {
       G4cout << "Bullet:  " << G4endl;  
@@ -236,7 +237,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 
     G4double nc = G4double(nCollisions);
 
-    if (verboseLevel > 3) {
+    if (verboseLevel > 2) {
       G4cout << 
 	setw(8)  << momZ    << 
 	setw(8)  << i    << 
@@ -461,19 +462,53 @@ G4int printCross(G4int i) {
 }
 
 G4int test() {
+  G4int verboseLevel = 3;
 
-  G4int verboseLevel = 1;
-
-  if (verboseLevel > 1) {
+  if (verboseLevel > 2) {
     G4cout << " >>> test() " << G4endl;
   }
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 2) {
     G4cout << " MeV: " << MeV << " GeV: " << GeV << G4endl;
   }
 
+  if (verboseLevel > 2) {
+    G4std::vector<G4double>  m(4, 0.0);
+    G4InuclParticle* b;
+    G4double momZ = 1.5;
+    G4double mass = 0.93827;
+
+    m[3] = momZ;
+
+    //      G4double ekin = ipart->getKineticEnergy() * GeV;
+    //G4ThreeVector aMom(mom[1], mom[2], mom[3]);
+    //aMom = aMom.unit();
+
+    bull = new G4InuclElementaryParticle(m, 1);
+    bull->printParticle();
+
+
+    m[3] = sqrt(momZ * momZ + 2 * momZ * mass);
+    bull = new G4InuclElementaryParticle(m, 1);
+    bull->printParticle();
+
+    cout << ">>>" << endl;
+
+
+    m[3] = momZ;
+    m[2] = 0;
+    m[1] = 0;
+    m[0] = sqrt(m[1] * m[1] + m[2] * m[2] + m[3] * m[3] + mass * mass);
+
+    //    bull = new G4InuclElementaryParticle(bulletMomentum, bulletType); // counts mom[0] = E tot from mom[1]-mom[3]
+    //    bull = new G4InuclParticle(bulletMomentum); // expects full mom[0]-mom[3] with correct E tot
+
+    b = new G4InuclParticle(m); // expects full mom[0]-mom[3] with correct E tot
+    b->printParticle();
+  }
+
   return 0;
-};
+}
 
 
 
