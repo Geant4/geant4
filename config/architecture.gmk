@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.21 1999-05-13 16:25:56 gcosmo Exp $
+# $Id: architecture.gmk,v 1.22 1999-05-14 01:32:45 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -41,9 +41,6 @@ MAKEFLAGS= --no-print-directory
 # Specify G4USE_STL when using STL, even for using our "temporary"
 # STLinterface to RogueWave.
 #
-ifdef G4USE_OSPACE
-  G4USE_STL := 1
-endif
 ifdef G4USE_STL
   CPPFLAGS  += -DG4USE_STL
 endif
@@ -156,57 +153,60 @@ endif
 # Rogue Wave Tools.h++ path & ObjectSpace STL
 #
 
-ifdef G4USE_STL
+ifdef G4USE_OSPACE
   RWINC      := $(G4BASE)/global/STLInterface
-  ifdef G4USE_OSPACE
-    OSPACEDIR  := /afs/cern.ch/sw/geant4/dev/ObjectSpace/$(G4SYSTEM)/pro/ToolKit
-    OSPACEINC  := -I$(OSPACEDIR)/ospace/stl -I$(OSPACEDIR)/ospace/std
-    OSPACELIBS := -L$(OSPACEDIR)/ospace/lib -lospace
-  endif
+  OSPACEDIR  := /afs/cern.ch/sw/geant4/dev/ObjectSpace/$(G4SYSTEM)/pro/ToolKit
+  OSPACEINC  := -I$(OSPACEDIR)/ospace/stl -I$(OSPACEDIR)/ospace/std
+  OSPACELIBS := -L$(OSPACEDIR)/ospace/lib -lospace
+  CPPFLAGS   += -DG4USE_STL
 else
-  ifndef RWBASE
-    RWBASE    := /afs/cern.ch/sw/geant4/dev/rogue/$(G4SYSTEM)
-  endif
-  RWINC     := $(RWBASE)
-  RWLIBDIR  := $(RWBASE)/lib
-  RWLIB     := rwtool
+  ifdef G4USE_STL
+    RWINC      := $(G4BASE)/global/STLInterface
+  else
+    ifndef RWBASE
+      RWBASE    := /afs/cern.ch/sw/geant4/dev/rogue/$(G4SYSTEM)
+    endif
+    RWINC     := $(RWBASE)
+    RWLIBDIR  := $(RWBASE)/lib
+    RWLIB     := rwtool
 
-  ifeq ($(G4SYSTEM),HP-aCC)
-    RWBASE    := /opt/aCC
-    RWINC     := $(RWBASE)/include
-    RWLIBDIR  := /usr/lib
-  endif
+    ifeq ($(G4SYSTEM),HP-aCC)
+      RWBASE    := /opt/aCC
+      RWINC     := $(RWBASE)/include
+      RWLIBDIR  := /usr/lib
+    endif
 
-  ifeq ($(G4SYSTEM),WIN32-VC-NICE)
-  #
-  # NiceNT policy for letter drive mapping 
-  #
-  ifndef RWBASE
-    RWBASE    := "z:\p32\lhcpp\rw\tools\7.0.2\rogue"
-  endif
-    RWINC        := $(RWBASE)
-    RWLIBDIR     := $(RWBASE)"\lib"
-    RWLIB        := mtldmt.lib
-    RWINCGPP     := /rogue
-  endif
+    ifeq ($(G4SYSTEM),WIN32-VC-NICE)
+      #
+      # NiceNT policy for letter drive mapping 
+      #
+      ifndef RWBASE
+        RWBASE    := "z:\p32\lhcpp\rw\tools\7.0.2\rogue"
+      endif
+      RWINC        := $(RWBASE)
+      RWLIBDIR     := $(RWBASE)"\lib"
+      RWLIB        := mtldmt.lib
+      RWINCGPP     := /rogue
+    endif
 
-  ifeq ($(G4SYSTEM),WIN32-G++-NICE)
-  #
-  # locally installed RogueWave for g++ (mount mapping)
-  #
-    RWBASE       := /rogue
-    RWINC        := $(RWBASE)
-    RWLIBDIR     := $(RWBASE)/lib
-    RWLIB        := rwtool
-  endif
+    ifeq ($(G4SYSTEM),WIN32-G++-NICE)
+      #
+      # locally installed RogueWave for g++ (mount mapping)
+      #
+      RWBASE       := /rogue
+      RWINC        := $(RWBASE)
+      RWLIBDIR     := $(RWBASE)/lib
+      RWLIB        := rwtool
+    endif
 
-  #
-  # Make dependencies files by g++ then need right RW include
-  #
-  ifdef RWINCGPP
-    RWINCGPP := -I$(RWINCGPP)
-  endif
-endif # ifdef G4USE_STL
+    #
+    # Make dependencies files by g++ then need right RW include
+    #
+    ifdef RWINCGPP
+      RWINCGPP := -I$(RWINCGPP)
+    endif
+  endif # ifdef G4USE_STL
+endif # ifdef G4USE_OSPACE
 
 #
 # Paths for G4 data
@@ -431,7 +431,7 @@ ifeq ($(G4SYSTEM),SUN-CC)
   endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_SOLARIS_2_5 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
-    CPPFLAGS += $(OSPACEINC) -I$(OSPACEDIR)
+    CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACEDIR)
   endif
 endif
 
@@ -474,13 +474,12 @@ ifeq ($(G4SYSTEM),HP-aCC)
     endif
   endif
   ifdef G4USE_STL
-    CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM)
-    CXXFLAGS += -ext
+    CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM) -DG4USE_EXPLICIT_TYPES_IN_TEMPLATES
   endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_HPUX_10_20 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
-    CPPFLAGS += -D__HPACC_NOEH 
-    CPPFLAGS += $(OSPACEINC) -I$(OSPACEDIR)
+    CPPFLAGS += -DOS_NO_TYPEDEF_5 -D__HPACC_NOEH -DG4USE_EXPLICIT_TYPES_IN_TEMPLATES 
+    CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACEDIR)
   endif
 endif
 
@@ -547,7 +546,8 @@ ifeq ($(G4SYSTEM),DEC-cxx)
   endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_OSF1_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS -D__NO_EDG_EXCEPTION_CLASSES
-    CPPFLAGS += $(OSPACEINC) -I$(OSPACEDIR)
+    CPPFLAGS += -I$(RWINC)/wrappers/$(G4SYSTEM) $(OSPACEINC) -I$(OSPACEDIR)
+    CXXFLAGS += -nostdnew
   endif
 endif
 
@@ -658,7 +658,9 @@ endif
 
 # Standard Template Library (STL) not installed
 ifndef G4USE_STL
-  CPPFLAGS += -DRW_NO_STL
+  ifndef G4USE_OSPACE
+    CPPFLAGS += -DRW_NO_STL
+  endif
 endif
 
 # Verbosity code can be left out (for better performance)

@@ -1,4 +1,4 @@
-$Id: History,v 1.25 1999-05-12 21:28:37 gcosmo Exp $
+$Id: History,v 1.26 1999-05-14 01:32:44 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13th May 1999  Gabriele Cosmo
+- architecture.gmk: G4USE_OSPACE setup is now independent from G4USE_STL which
+  is now devoted for generic STL setup. Added -DOS_NO_TYPEDEF_5 option to HP-aCC
+  for ObjectSpace.
 
 12th May 1999  Gabriele Cosmo
 - architecture.gmk: modified path to STL wrapper files directory to point to
