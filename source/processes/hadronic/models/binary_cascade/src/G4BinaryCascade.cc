@@ -32,6 +32,7 @@
 #include "G4V3DNucleus.hh"
 #include "G4Fancy3DNucleus.hh"
 #include "G4Scatterer.hh"
+#include "G4MesonAbsorption.hh"
 #include "G4ping.hh"
 #include "G4Delete.hh"
 
@@ -68,7 +69,7 @@ G4BinaryCascade::G4BinaryCascade() : G4VIntraNuclearTransportModel()
   
   theImR.push_back(new G4BCDecay);
   theImR.push_back(new G4Scatterer);
-  if(!getenv("I_Am_G4BinaryCascade_Developer") ) theImR.push_back(new G4MesonAbsorption);
+  if(getenv("I_Am_G4BinaryCascade_Developer") ) theImR.push_back(new G4MesonAbsorption);
 
 //  theScatterer = new G4ScattererStub;
   thePropagator = new G4RKPropagation;
