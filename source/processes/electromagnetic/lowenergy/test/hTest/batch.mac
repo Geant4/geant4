@@ -3,13 +3,13 @@
 #
 # It creates the default geometry (simple absorber box) 
 #
-#/control/verbose 2
+/control/verbose 2
 #control/saveHistory
 /run/verbose 2
-/step/verbose 2
-/tracking/verbose 2
-/stepping/verbose 2
-/event/verbose 2
+#/step/verbose 2
+#/tracking/verbose 2
+#/stepping/verbose 2
+#/event/verbose 2
 #
 #/run/initialize
 #
@@ -19,38 +19,27 @@
 #/calor/update
 #
 #  PLOT: angle distr. of transmitted particles
-/plots/setnbinTh 60
-/plots/setThlow 0.0 deg
-/plots/setThhigh 6.0 deg
+#/plots/setnbinTh 60
+#/plots/setThlow 0.0 deg
+#/plots/setThhigh 6.0 deg
 #
 #/calor/cutG 2130.0 micrometer
 #/calor/cutE 50.0 mm
-/calor/cutG 100.0 micrometer
-/calor/cutE 100.0 micrometer
+/calor/cutG 1.0 mm
+/calor/cutE 1.0 mm
 #  hist file name
-/plots/sethistName prot.paw 
+/plots/sethistName c12s.paw 
 /run/initialize
 #/run/particle/dumpCutValues
 #/event/drawTracks none
 #
 #/gun/particle gamma
-/gun/particle proton
-#/gun/particle IonC12
-#/gun/energy 6.56 MeV
-/gun/energy 10.0 MeV
-#
-/run/beamOn 1
-/plots/sethistName antip.paw
-/run/initialize
-/gun/particle antiproton
-/gun/energy 10.0 MeV
-/run/beamOn 1
-#
-/plots/sethistName ionc12.plot 
-/run/initialize
+#/gun/particle proton
 /gun/particle IonC12
-/gun/energy 100.0 MeV
-/run/beamOn 1
+#/gun/energy 6.56 MeV
+/gun/energy 3240.0 MeV
+#
+/run/beamOn 10
 
 
 

@@ -48,10 +48,10 @@ hTestDetectorConstruction::hTestDetectorConstruction()
  magField(NULL),calorimeterSD(NULL),defaultWorld(true)
 {
   // default parameter values of the calorimeter
-  AbsorberThickness = 100.0*mm;
-  AbsorberSizeYZ    = 10.*cm;
+  AbsorberThickness = 1.0*mm;
+  AbsorberSizeYZ    = 100.*cm;
   XposAbs           = 0.*cm ;  
-  NumberOfAbsorbers = 1;
+  NumberOfAbsorbers = 300;
   ComputeCalorParameters();
 
   // create commands for interactive definition of the calorimeter  
@@ -247,10 +247,13 @@ G4VPhysicalVolume* hTestDetectorConstruction::ConstructCalorimeter()
   //                                        
   // Visualization attributes
   //
+  /*
+#ifdef G4VIS_USE
   G4VisAttributes* VisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   VisAtt->SetVisibility(true);
   logicWorld->SetVisAttributes(VisAtt);
-  
+#endif
+*/
   //
   //always return the physical World
   //

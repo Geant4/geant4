@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: hTest.cc,v 1.1 2000-05-21 16:42:41 chauvie Exp $
+// $Id: hTest.cc,v 1.2 2000-08-10 20:22:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,12 +53,15 @@ int main(int argc,char** argv) {
   detector = new hTestDetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new hTestPhysicsList(detector));
-  
+  /*  
 #ifdef G4VIS_USE
+  G4cout << "VisManager will be inicialized" << G4endl;
   // visualization manager
   G4VisManager* visManager = new hTestVisManager;
   visManager->Initialize();
 #endif 
+*/
+  G4cout << "User actions will be inicialized" << G4endl;
  
   // set user action classes
   runManager->SetUserAction(new hTestPrimaryGeneratorAction(detector));
@@ -93,11 +96,16 @@ int main(int argc,char** argv) {
     }
     
   // job termination
+  /*
 #ifdef G4VIS_USE
   delete visManager;
-#endif  
+#endif
+*/
+  G4cout << "runManager will be deleted" << G4endl;  
   delete runManager;
+  G4cout << "runManager is deleted" << G4endl;  
 
   return 0;
+
 }
 

@@ -31,23 +31,22 @@ hTestCalorimeterSD::hTestCalorimeterSD(G4String name,
 :G4VSensitiveDetector(name),Detector(det)
 {
   collectionName.insert("CalCollection");
-  HitID = new G4int[500];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 hTestCalorimeterSD::~hTestCalorimeterSD()
-{
-  delete [] HitID;
-}
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void hTestCalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 {
-  CalCollection = new hTestCalorHitsCollection
+   
+ CalCollection = new hTestCalorHitsCollection
                       (SensitiveDetectorName,collectionName[0]); 
   for (G4int j=0;j<1; j++) {HitID[j] = -1;};
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -102,7 +101,9 @@ void hTestCalorimeterSD::EndOfEvent(G4HCofThisEvent* HCE)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void hTestCalorimeterSD::clear()
-{} 
+{
+  delete CalCollection;
+} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

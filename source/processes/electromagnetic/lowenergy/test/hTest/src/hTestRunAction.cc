@@ -24,9 +24,6 @@
 #include <assert.h>
 #endif
 
-#include "G4EnergyLossTables.hh"
-#include "G4hLowEnergyIonisation.hh"
-//#include "G4ionLowEnergyIonisation.hh"
 #include "hTestPrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -53,9 +50,9 @@ hTestRunAction::hTestRunAction()
   Steplow  = -0.5;
   Stephigh = 95.5;
 
-  nbinEn = 100;
+  nbinEn = 300;
   Enlow  = 0.0;
-  Enhigh = 5.0;
+  Enhigh = 300.0;
 
   nbinTh = 90;
   Thlow  = 0.0;
@@ -96,6 +93,8 @@ hTestRunAction::~hTestRunAction()
 {
   delete runMessenger;
 #ifndef G4NOHIST
+  delete hbookManager;
+  /*
   delete histo1 ;
   delete histo2 ;
   delete histo3 ;
@@ -106,51 +105,10 @@ hTestRunAction::~hTestRunAction()
   delete histo8 ;
   delete histo9 ;
   delete histo10 ;
-  delete histo11 ;
-  delete histo12 ;
-  delete histo13 ;
-  delete histo14 ;
-  delete histo15 ;
-  delete histo21 ;
-  delete histo22 ;
-  delete histo23 ;
-  delete histo24 ;
-  delete histo25 ;
-  delete histo31 ;
-  delete histo32 ;
-  delete histo33 ;
-  delete histo34 ;
-  delete histo35 ;
-  delete histo41 ;
-  delete histo42 ;
-  delete histo43 ;
-  delete histo44 ;
-  delete histo45 ;
-  delete histo51 ;
-  delete histo52 ;
-  delete histo53 ;
-  delete histo54 ;
-  delete histo55 ;
-  delete histo61 ;
-  delete histo62 ;
-  delete histo63 ;
-  delete histo64 ;
-  delete histo65 ;
-  delete histo71 ;
-  delete histo72 ;
-  delete histo73 ;
-  delete histo74 ;
-  delete histo75 ;
-  delete histo76 ;
-  delete histo81 ;
-  delete histo82 ;
-  delete histo83 ;
-  delete histo84 ;
-  delete histo85 ;
-  delete histo86 ;
-  delete hbookManager;
   delete ntup;
+  */
 #endif
+  G4cout << "runMessenger and histograms are deleted" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -236,97 +194,6 @@ void hTestRunAction::bookHisto()
 //                  ,nbinGamma,log10(ElowGamma),log10(EhighGamma))  ;
 
 
-  // Test on G4hLowEnergyIonisation
-  histo11 = hbookManager->histogram("proton 40 keV ionisation (keV*cm2/10^15!atoms) Z77p"
-                                                  ,92,0.5,92.5) ;
-  histo12 = hbookManager->histogram("He 10 keV ionisation (keV*cm2/10^15!atoms) Z77 p"
-                                                  ,92,0.5,92.5) ;
-  histo13 = hbookManager->histogram("He4 effective charge in Carbon"
-                                   ,TotBin,log10(LowestEnergy),log10(HighestEnergy)) ;
-  histo14 = hbookManager->histogram("C12 ionisation in Al (MeV/(mg/cm2)) Geant4"
-                                   ,TotBin,log10(LowestEnergy),log10(HighestEnergy)) ;
-
-  histo15 = hbookManager->histogram("Ar40 ionisation in Al (MeV/(mg/cm2)) Geant4"
-                                   ,TotBin,log10(LowestEnergy),log10(HighestEnergy)) ;
-
-  histo21 = hbookManager->histogram("proton 40 keV ionisation (keV*cm2/10^15!atoms) G4 Ziegler1977p"
-                                                  ,92,0.5,92.5) ;
-  histo22 = hbookManager->histogram("proton 100 keV ionisation (keV*cm2/10^15!atoms) G4 Ziegler1977p"
-                                                  ,92,0.5,92.5) ;
-  histo23 = hbookManager->histogram("proton 400 keV ionisation (keV*cm2/10^15!atoms) G4 Ziegler1977p"
-                                                  ,92,0.5,92.5) ;
-  histo24 = hbookManager->histogram("proton 1 MeV ionisation (keV*cm2/10^15!atoms) G4 Ziegler1977p"
-                                                  ,92,0.5,92.5) ;
-  histo25 = hbookManager->histogram("proton 4 MeV ionisation (keV*cm2/10^15!atoms) G4 Ziegler1977p"
-                                                  ,92,0.5,92.5) ;
-  histo31 = hbookManager->histogram("proton ionisation in Carbon (MeV/mm) Geant4 Ziegler"
-                                   ,TotBin,log10(LowestEnergy),log10(HighestEnergy)) ;
-  histo32 = hbookManager->histogram("proton ionisation in Si (MeV/mm) Geant4 Ziegler"
-                                   ,TotBin,log10(LowestEnergy),log10(HighestEnergy)) ;
-  histo33 = hbookManager->histogram("proton ionisation in Cu (MeV/mm) Geant4 Ziegler"
-                                   ,TotBin,log10(LowestEnergy),log10(HighestEnergy)) ;
-  histo34 = hbookManager->histogram("proton ionisation in CH4 (MeV/mm) Geant4 Ziegler"
-                                   ,TotBin,log10(LowestEnergy),log10(HighestEnergy)) ;
-  histo35 = hbookManager->histogram("He effective charge for Au(79)"
-                                   ,TotBin,log10(LowestEnergy),log10(HighestEnergy)) ;
-
-  histo41 = hbookManager->histogram("proton 40 keV ionisation (keV*cm2/10^15!atoms) G4 ICRU_49p"
-                                                  ,92,0.5,92.5) ;
-  histo42 = hbookManager->histogram("proton 100 keV ionisation (keV*cm2/10^15!atoms) G4 ICRU_49p"
-                                                  ,92,0.5,92.5) ;
-  histo43 = hbookManager->histogram("proton 400 keV ionisation (keV*cm2/10^15!atoms) G4 ICRU_49p"
-                                                  ,92,0.5,92.5) ;
-  histo44 = hbookManager->histogram("proton 1 MeV ionisation (keV*cm2/10^15!atoms) G4 ICRU_49p"
-                                                  ,92,0.5,92.5) ;
-  histo45 = hbookManager->histogram("proton 4 MeV ionisation (keV*cm2/10^15!atoms) G4 ICRU_49p"
-                                                  ,92,0.5,92.5) ;
-  histo51 = hbookManager->histogram("proton ionisation in Al (MeV/mm) Geant4"
-                                   ,TotBin,log10(LowestEnergy),log10(HighestEnergy)) ;
-  histo52 = hbookManager->histogram("proton ionisation in Fe (MeV/mm) Geant4"
-                                   ,TotBin,log10(LowestEnergy),log10(HighestEnergy)) ;
-  histo53 = hbookManager->histogram("proton ionisation in Pb (MeV/mm) Geant4"
-                                   ,TotBin,log10(LowestEnergy),log10(HighestEnergy)) ;
-  histo54 = hbookManager->histogram("proton ionisation in H2O (MeV/mm) Geant4"
-                                   ,TotBin,log10(LowestEnergy),log10(HighestEnergy)) ;
-  histo55 = hbookManager->histogram("proton ionisation in Graphite (MeV/mm) Geant4"
-                                   ,TotBin,log10(LowestEnergy),log10(HighestEnergy)) ;
-
-
-  histo61 = hbookManager->histogram("proton 40 keV ionisation (keV*cm2/10^15!atoms) G4 Ziegler1977He"
-                                                  ,92,0.5,92.5) ;
-  histo62 = hbookManager->histogram("proton 100 keV ionisation (keV*cm2/10^15!atoms) G4 Ziegler1977He"
-                                                  ,92,0.5,92.5) ;
-  histo63 = hbookManager->histogram("proton 400 keV ionisation (keV*cm2/10^15!atoms) G4 Ziegler1977He"
-                                                  ,92,0.5,92.5) ;
-  histo64 = hbookManager->histogram("proton 1 MeV ionisation (keV*cm2/10^15!atoms) G4 Ziegler1977He"
-                                                  ,92,0.5,92.5) ;
-  histo65 = hbookManager->histogram("proton 4 MeV ionisation (keV*cm2/10^15!atoms) G4 Ziegler1977He"
-                                                  ,92,0.5,92.5) ;
-
-  histo71 = hbookManager->histogram("He 40 keV ionisation (keV*cm2/10^15!atoms) G4 Ziegler1977He"
-                                                  ,92,0.5,92.5) ;
-  histo72 = hbookManager->histogram("He 100 keV ionisation (keV*cm2/10^15!atoms) G4 Ziegler1977He"
-                                                  ,92,0.5,92.5) ;
-  histo73 = hbookManager->histogram("He 400 keV ionisation (keV*cm2/10^15!atoms) G4 Ziegler1977He"
-                                                  ,92,0.5,92.5) ;
-  histo74 = hbookManager->histogram("He 1 MeV ionisation (keV*cm2/10^15!atoms) G4 Ziegler1977He"
-                                                  ,92,0.5,92.5) ;
-  histo75 = hbookManager->histogram("He 4 MeV ionisation (keV*cm2/10^15!atoms) G4 Ziegler1977He"
-                                                  ,92,0.5,92.5) ;
-  histo76 = hbookManager->histogram("He 10 keV ionisation (keV*cm2/10^15!atoms) G4 Ziegler1977He"
-                                                  ,92,0.5,92.5) ;
-  histo81 = hbookManager->histogram("He 40 keV ionisation (keV*cm2/10^15!atoms) G4 ICRU49He"
-                                                  ,92,0.5,92.5) ;
-  histo82 = hbookManager->histogram("He 100 keV ionisation (keV*cm2/10^15!atoms) G4 ICRU49He"
-                                                  ,92,0.5,92.5) ;
-  histo83 = hbookManager->histogram("He 400 keV ionisation (keV*cm2/10^15!atoms) G4 ICRU49He"
-                                                  ,92,0.5,92.5) ;
-  histo84 = hbookManager->histogram("He 1 MeV ionisation (keV*cm2/10^15!atoms) G4 ICRU49He"
-                                                  ,92,0.5,92.5) ;
-  histo85 = hbookManager->histogram("He 4 MeV ionisation (keV*cm2/10^15!atoms) G4 ICRU49He"
-                                                  ,92,0.5,92.5) ;
-  histo86 = hbookManager->histogram("He 10 keV ionisation (keV*cm2/10^15!atoms) G4 ICRU49He"
-                                                  ,92,0.5,92.5) ;
 
 }
 #endif
@@ -336,7 +203,8 @@ void hTestRunAction::bookHisto()
 void hTestRunAction::BeginOfRunAction(const G4Run* aRun)
 {  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-
+  /*
+#ifdef G4VIS_USE
   G4UImanager* UI = G4UImanager::GetUIpointer();
    
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
@@ -345,6 +213,12 @@ void hTestRunAction::BeginOfRunAction(const G4Run* aRun)
   {
     UI->ApplyCommand("/vis/scene/notifyHandlers");
   }
+#endif
+*/
+#ifndef G4NOHIST
+  bookHisto();
+  G4cout << "Histograms are booked" << G4endl;
+#endif
       
   EnergySumAbs = 0. ;
   EnergySquareSumAbs = 0.;
@@ -487,6 +361,7 @@ void hTestRunAction::BeginOfRunAction(const G4Run* aRun)
       distvertexz[iz]=0.;
     }
   }
+  G4cout << "Run is started!!!" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -494,6 +369,8 @@ void hTestRunAction::BeginOfRunAction(const G4Run* aRun)
 void hTestRunAction::EndOfRunAction(const G4Run* aRun)
 {
   G4double sAbs,sigAbs,sigstep,sigcharged,signeutral;
+
+  G4cout << "End of run actions are started" << G4endl;
 
   tlSumAbs /= TotNbofEvents ;
   sAbs = tlsquareSumAbs/TotNbofEvents-tlSumAbs*tlSumAbs ;
@@ -905,13 +782,16 @@ void hTestRunAction::EndOfRunAction(const G4Run* aRun)
   
  G4cout.precision(prec);
   
+ /*
+#ifdef G4VIS_USE
   if (G4VVisManager::GetConcreteInstance())
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-    
+#endif
+*/ 
    // Write histogram file
 #ifndef G4NOHIST
-   FillLowEnergyTest() ;
    hbookManager->write();
+   G4cout << "Histograms and Ntuples were saved" << G4endl;
 #endif
 
 }
@@ -994,7 +874,7 @@ void hTestRunAction::FillNbOfSteps(G4double ns)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void hTestRunAction::FillEn(G4double En)
+void hTestRunAction::FillEn(G4double En, G4double zn)
 {
   G4double bin ;
   G4int ibin;
@@ -1004,17 +884,13 @@ void hTestRunAction::FillEn(G4double En)
   {
     entryEn += 1. ;
  
-    if(En<Enlow)
-      underEn += 1. ;
-    else if(En>=Enhigh)
-      overEn  += 1. ;
-    else
-    {
-      bin = (En-Enlow)/dEn ;
-      ibin= G4int(bin) ;
-      distEn[ibin] += 1. ;
-    }
-  histo2->accumulate(En/MeV) ;
+  bin = (zn-Enlow)/dEn ;
+  ibin= G4int(bin) ;
+  if(ibin < 0) ibin = 0 ;
+  if(ibin >= nbinEn) ibin = nbinEn-1 ;
+  distEn[ibin] += En ;
+
+  histo2->accumulate(zn,En/MeV) ;
   }
 #endif
 }
@@ -1464,347 +1340,6 @@ void hTestRunAction::AddEP(G4double nele,G4double npos)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#ifndef G4NOHIST
-void hTestRunAction::FillLowEnergyTest( )
-{
-  G4int J ;
-  G4double* DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
-  G4hLowEnergyIonisation* hLEIon = new G4hLowEnergyIonisation() ;
-  G4ParticleDefinition* theH = G4Proton::Proton() ;
-
-  //G4double fac = 4.026/1.0073 ;
-  //G4double cac = 1.0 ;
-  //  theProton = G4Proton::Proton() ;
-    G4double fac = 1.0 ;
-    G4double cac = 2.0 ;
-    theProton = G4Alpha::Alpha() ;
-
-    G4hLowEnergyIonisation* ionLEIon = new G4ionLowEnergyIonisation() ;
-    //  ionLEIon->SetIonDefinition(theProton) ;
-
-    G4hLowEnergyIonisation* ionLEIonC = new G4ionLowEnergyIonisation() ;
-    G4ParticleDefinition* theC12 = G4IonC12::IonC12() ;
-    //ionLEIonC->SetIonDefinition(theC12) ;
-    G4double chc = 6.0 ;
-
-    G4hLowEnergyIonisation* ionLEIonAr = new G4ionLowEnergyIonisation() ;
-    G4ParticleDefinition* theAr40 = G4IonAr40::IonAr40() ;
-    //ionLEIonAr->SetIonDefinition(theAr40) ;
-    G4double cha = 18.0 ;
-
-
-  //  G4ionLowEnergyIonisation* ionLEIonFe = new G4ionLowEnergyIonisation() ;
-  //  G4ParticleDefinition* theFe56 = G4IonFe56::IonFe56() ;
-  //  ionLEIonFe->SetIonDefinition(theFe56) ;
-  //  G4double chf = 26.0 ;
-
-    G4double mrC12 = (theC12->GetPDGMass()) / (theH->GetPDGMass()) ; 
-    G4double mrAr40 = (theAr40->GetPDGMass()) / (theH->GetPDGMass()) ; 
-
-  G4double de ;
-
-  // Ziegler1977p
-  G4double tau = 40*keV ;
-  for ( J=1; J<93; J++)
-  { 
-    de = hLEIon->GetStoppingPower1977H(J, tau) ;
-    histo21->accumulate(double(J),de) ;
-  }
-  tau = 100*keV ;
-  for ( J=1; J<93; J++)
-  { 
-    de = hLEIon->GetStoppingPower1977H(J, tau) ;
-    histo22->accumulate(double(J),de) ;
-  }
-  tau = 400*keV ;
-  for ( J=1; J<93; J++)
-  { 
-    de = hLEIon->GetStoppingPower1977H(J, tau) ;
-    histo23->accumulate(double(J),de) ;
-  }
-  tau = 1000*keV ;
-  for ( J=1; J<93; J++)
-  { 
-    de = hLEIon->GetStoppingPower1977H(J, tau) ;
-    histo24->accumulate(double(J),de) ;
-  }
-  tau = 4000*keV ;
-  for ( J=1; J<93; J++)
-  { 
-    de = hLEIon->GetStoppingPower1977H(J, tau) ;
-    histo25->accumulate(double(J),de) ;
-  }
-
-  // Ziegler1977He
-  tau = 40*keV*4.026/1.0073 ;
-  for ( J=1; J<93; J++)
-  { 
-    de = (hLEIon->GetStoppingPower1977He(J, tau)) /
-                  (hLEIon->GetHeEffChargeSquare(J, tau)) ;
-    histo61->accumulate(double(J),de) ;
-  }
-  tau = 100*keV*4.026/1.0073 ;
-  for ( J=1; J<93; J++)
-  { 
-    de = (hLEIon->GetStoppingPower1977He(J, tau)) /
-                  (hLEIon->GetHeEffChargeSquare(J, tau)) ;
-    histo62->accumulate(double(J),de) ;
-  }
-  tau = 400*keV*4.026/1.0073 ;
-  for ( J=1; J<93; J++)
-  { 
-    de = (hLEIon->GetStoppingPower1977He(J, tau)) /
-                  (hLEIon->GetHeEffChargeSquare(J, tau)) ;
-    histo63->accumulate(double(J),de) ;
-  }
-  tau = 1000*keV*4.026/1.0073 ;
-  for ( J=1; J<93; J++)
-  { 
-    de = (hLEIon->GetStoppingPower1977He(J, tau)) /
-                  (hLEIon->GetHeEffChargeSquare(J, tau)) ;
-    histo64->accumulate(double(J),de) ;
-  }
-  tau = 4000*keV*4.026/1.0073 ;
-  for ( J=1; J<93; J++)
-  { 
-    de = (hLEIon->GetStoppingPower1977He(J, tau)) /
-                  (hLEIon->GetHeEffChargeSquare(J, tau)) ;
-    histo65->accumulate(double(J),de) ;
-  }
-
-  // ICRU_49p
-  tau = 40*keV ;
- 
-  for ( J=1; J<93; J++)
-  { 
-    de = hLEIon->GetStoppingPowerICRU_R49p(J, tau, "Ele") ;
-    histo41->accumulate(double(J),de) ;
-  }
-  tau = 100*keV ;
-  for ( J=1; J<93; J++)
-  { 
-    de = hLEIon->GetStoppingPowerICRU_R49p(J, tau, "Ele") ;
-    histo42->accumulate(double(J),de) ;
-  }
-  tau = 400*keV ;
-  for ( J=1; J<93; J++)
-  { 
-    de = hLEIon->GetStoppingPowerICRU_R49p(J, tau, "Ele") ;
-    histo43->accumulate(double(J),de) ;
-  }
-  tau = 1000*keV ;
-  for ( J=1; J<93; J++)
-  { 
-    de = hLEIon->GetStoppingPowerICRU_R49p(J, tau, "Ele") ;
-    histo44->accumulate(double(J),de) ;
-  }
-  tau = 4000*keV ;
-   for ( J=1; J<93; J++)
-  { 
-   de = hLEIon->GetStoppingPowerICRU_R49p(J, tau, "Ele") ;
-   histo45->accumulate(double(J),de) ;
-  }
- 
-  for ( J=1; J<93; J++)
-  { 
-    static G4double S40[92] = {
-    6.22, 6.55, 7.61, 10.4, 12.9, 13.9, 15.9, 14.6, 11.7, 11.1,
-    14.2, 20.6, 20.7,  22.3, 18.1, 19.3, 27.5, 30.5, 27.9, 29.8,
-    28.3, 26.7, 25.1,  22.5, 19.8, 20.1, 18.0, 20.1, 20.4, 23.4,
-    27.5, 29.0, 29.3,  31.0, 31.1, 34.8, 31.5, 35.0, 35.5, 37.3,
-    38.3, 35.9, 38.0,  34.4, 33.4, 29.8, 30.9, 32.7, 34.9, 36.0,
-    40.9, 39.1, 43.1,  45.8, 40.8, 44.1, 44.9, 42.0, 41.0, 40.0,
-    39.0, 38.0, 37.1,  38.2, 35.3, 31.5, 29.9, 29.1, 28.3, 27.5, 
-    28.1, 28.9, 27.3,  26.3, 29.9, 29.1, 28.4, 25.8, 28.0, 24.9,
-    27.3, 30.7, 34.3,  35.4, 35.6, 35.5, 39.8, 42.9, 43.7, 44.1,
-    42.4, 41.8} ;
-    histo11->accumulate(double(J),S40[J-1]) ;
-  }
-
-  //============================ He ions ===========
-  // Ziegler1977He
-  tau = 40*keV ;
-  for ( J=1; J<93; J++)
-  { 
-    de = (hLEIon->GetStoppingPower1977He(J, tau)) ;
-    histo71->accumulate(double(J),de) ;
-    de = hLEIon->GetStoppingPowerICRU_R49He(J, tau ) ;
-    histo81->accumulate(double(J),de) ;
-  }
-  tau = 100*keV ;
-  for ( J=1; J<93; J++)
-  { 
-    de = (hLEIon->GetStoppingPower1977He(J, tau)) ;
-    histo72->accumulate(double(J),de) ;
-    de = hLEIon->GetStoppingPowerICRU_R49He(J, tau ) ;
-    histo82->accumulate(double(J),de) ;
-  }
-  tau = 400*keV ;
-  for ( J=1; J<93; J++)
-  { 
-    de = (hLEIon->GetStoppingPower1977He(J, tau)) ;
-    histo73->accumulate(double(J),de) ;
-    de = hLEIon->GetStoppingPowerICRU_R49He(J, tau ) ;
-    histo83->accumulate(double(J),de) ;
-  }
-  tau = 1000*keV ;
-  for ( J=1; J<93; J++)
-  { 
-    de = (hLEIon->GetStoppingPower1977He(J, tau)) ;
-    histo74->accumulate(double(J),de) ;
-    de = hLEIon->GetStoppingPowerICRU_R49He(J, tau ) ;
-    histo84->accumulate(double(J),de) ;
-  }
-  tau = 4*MeV ;
-  for ( J=1; J<93; J++)
-  { 
-    de = (hLEIon->GetStoppingPower1977He(J, tau)) ;
-    histo75->accumulate(double(J),de) ;
-    de = hLEIon->GetStoppingPowerICRU_R49He(J, tau ) ;
-    histo85->accumulate(double(J),de) ;
-  }
-  tau = 10*keV ;
-  for ( J=1; J<93; J++)
-  { 
-    de = (hLEIon->GetStoppingPower1977He(J, tau)) ;
-    histo76->accumulate(double(J),de) ;
-    de = hLEIon->GetStoppingPowerICRU_R49He(J, tau ) ;
-    histo86->accumulate(double(J),de) ;
-  }
- 
-  for ( J=1; J<93; J++)
-  { 
-    static G4double Q40[92] = {
-    11.8, 16.7, 21.9,  24.1, 34.7, 36.1, 45.5, 46.1, 45.8, 44.9,
-    46.9, 51.7, 54.9,  63.2, 63.8, 67.4, 79.8, 80.8, 78.0, 83.2,
-    85.4, 84.2, 90.6,  85.7, 84.1, 86.4, 82.0, 77.7, 74.4, 75.1,
-    75.6, 80.7, 84.9,  87.0, 88.6, 103.0, 103.0, 113.0, 116.0, 123.0,
-    120.0, 115.0, 118.0, 115.0, 113.0, 112.0, 111.0, 110.0, 116.0, 117.0,
-    119.0, 123.0, 122.0, 139.0, 138.0, 143.0, 152.0, 141.0, 139.0, 137.0,
-    135.0, 134.0, 130.0, 137.0, 129.0, 128.0, 124.0, 125.0, 120.0, 118.0, 
-    119.0, 120.0, 121.0, 122.0, 125.0, 127.0, 128.0, 120.0, 125.0, 128.0,
-    136.0, 138.0, 144.0, 148.0, 151.0, 162.0, 166.0, 177.0, 179.0, 183.0, 
-    177.0, 176.0 } ;   
-    histo12->accumulate(double(J),Q40[J-1]) ;
-  }
-  //============================ He ions ===========
-
-
-  //  find out materials table
-  static const G4MaterialTable* theMaterialTable=
-                                   G4Material::GetMaterialTable();
-
-  G4int numOfMaterials = theMaterialTable->length();
-  G4double dedx ;
-    // create physics vector and fill it
-
-  G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
-               LowestEnergy, HighestEnergy, TotBin);
-
-
-  //  loop for materials - the parametrisation is defined in the G4PhysicsList
-
-  for ( J=0; J<numOfMaterials; J++)
-  {
-    G4Material* material = (*theMaterialTable)[J];
-    if ("Carbon" == material->GetName()) {
-      for (G4int i = 0 ; i < TotBin-1 ; i++)
-      {
-        tau = 0.5*(aVector->GetLowEdgeEnergy(i) + aVector->GetLowEdgeEnergy(i+1)) ;
-        dedx = G4EnergyLossTables::GetPreciseDEDX(theProton,tau/fac,material) ;
-	//	G4double cf = ionLEIon->GetIonEffChargeSquare(material, tau, cac) / (cac*cac);
-	G4double cf = ionLEIon->GetHeEffChargeSquare(6, tau) / (cac*cac);
-        histo31->accumulate(log10(tau),dedx*cf) ;
-        histo13->accumulate(log10(tau),cf*cac*cac) ;
-      }
-    } else if ("Silicon" == material->GetName()) {
-      for (G4int i = 0 ; i < TotBin-1 ; i++)
-      {
-        tau = 0.5 * (aVector->GetLowEdgeEnergy(i) + aVector->GetLowEdgeEnergy(i+1)) ;
-        dedx = G4EnergyLossTables::GetPreciseDEDX(theProton,tau/fac,material) ;
-	G4double cf = ionLEIon->GetIonEffChargeSquare(material, tau, cac) / (cac*cac);
-        histo32->accumulate(log10(tau),dedx*cf) ;
-      }
-    } else if ("Copper" == material->GetName()) {
-      for (G4int i = 0 ; i < TotBin-1 ; i++)
-      {
-        tau = 0.5 * (aVector->GetLowEdgeEnergy(i) + aVector->GetLowEdgeEnergy(i+1)) ;
-        dedx = G4EnergyLossTables::GetPreciseDEDX(theProton,tau/fac,material) ;
-	G4double cf = ionLEIon->GetIonEffChargeSquare(material, tau, cac) / (cac*cac);
-        histo33->accumulate(log10(tau),dedx*cf) ;
-      }
-    } else if ("CH_4" == material->GetChemicalFormula()) {
-      for (G4int i = 0 ; i < TotBin-1 ; i++)
-      {
-	tau = 0.5 * (aVector->GetLowEdgeEnergy(i) + aVector->GetLowEdgeEnergy(i+1)) ;
-        dedx = G4EnergyLossTables::GetPreciseDEDX(theProton,tau/fac,material) ;
-	G4double cf = ionLEIon->GetIonEffChargeSquare(material, tau, cac) / (cac*cac);
-
-
-        histo34->accumulate(log10(tau),dedx*cf) ;
-	cf = hLEIon->GetHeEffChargeSquare(79, tau*4.026/1.0073) ;
-        histo35->accumulate(log10(tau),cf) ;
-      }
-    } else if ("Aluminum" == material->GetName()) {
-      for (G4int i = 0 ; i < TotBin-1 ; i++)
-      {
-        tau = 0.5 * (aVector->GetLowEdgeEnergy(i) + aVector->GetLowEdgeEnergy(i+1)) ;
-	dedx = G4EnergyLossTables::GetPreciseDEDX(theProton,tau/fac,material) ;
-	G4double cf = ionLEIon->GetIonEffChargeSquare(material, tau, cac) / (cac*cac);
-        histo51->accumulate(log10(tau),dedx*cf) ;
-	
-	dedx = G4EnergyLossTables::GetPreciseDEDX(theC12,tau*mrC12,material) ;
-	cf = ionLEIonC->GetIonEffChargeSquare(material, tau*mrC12, chc) / (chc*chc);
-        histo14->accumulate(log10(tau), dedx*cf / 270.0  ) ;
-	dedx = G4EnergyLossTables::GetPreciseDEDX(theAr40,tau*mrAr40,material) ;
-	cf = ionLEIonAr->GetIonEffChargeSquare(material, tau*mrAr40, cha) / (cha*cha);
-        histo15->accumulate(log10(tau), dedx*cf / 270.0  ) ;
-	
-      }
-    } else if ("Iron" == material->GetName()) {
-      for (G4int i = 0 ; i < TotBin-1 ; i++)
-      {
-        tau = 0.5 * (aVector->GetLowEdgeEnergy(i) + aVector->GetLowEdgeEnergy(i+1)) ;
-        dedx = G4EnergyLossTables::GetPreciseDEDX(theProton,tau/fac,material) ;
-	G4double cf = ionLEIon->GetIonEffChargeSquare(material, tau, cac) / (cac*cac);
-        histo52->accumulate(log10(tau),dedx*cf) ;
-      }
-    } else if ("Lead" == material->GetName()) {
-      for (G4int i = 0 ; i < TotBin-1 ; i++)
-      {
-        tau = 0.5 * (aVector->GetLowEdgeEnergy(i) + aVector->GetLowEdgeEnergy(i+1)) ;
-        dedx = G4EnergyLossTables::GetPreciseDEDX(theProton,tau/fac,material) ;
-	//	G4double cf = ionLEIon->GetIonEffChargeSquare(material, tau, cac) / (cac*cac);
-	G4double cf = hLEIon->GetIonEffChargeSquare(material, tau, cac) / (cac*cac);
-        histo53->accumulate(log10(tau),dedx*cf) ;
-      }
-    } else if ("Water" == material->GetName()) {
-      for (G4int i = 0 ; i < TotBin-1 ; i++)
-      {
-        tau = 0.5 * (aVector->GetLowEdgeEnergy(i) + aVector->GetLowEdgeEnergy(i+1)) ;
-        dedx = G4EnergyLossTables::GetPreciseDEDX(theProton,tau/fac,material) ;
-	G4double cf = ionLEIon->GetIonEffChargeSquare(material, tau, cac) / (cac*cac) ;
-	//        G4cout << "Energy = " << tau << " MeV; dedx = " << dedx << G4endl;
-        histo54->accumulate(log10(tau),dedx*cf) ;
-      }
-    } else if ("Graphite" == material->GetName()) {
-      for (G4int i = 0 ; i < TotBin-1 ; i++)
-	{
-	  tau = 0.5 * (aVector->GetLowEdgeEnergy(i) + aVector->GetLowEdgeEnergy(i+1)) ;
-	  dedx = G4EnergyLossTables::GetPreciseDEDX(theProton,tau/fac,material) ;
-	G4double cf = ionLEIon->GetIonEffChargeSquare(material, tau, cac) / (cac*cac) ;
-	  histo55->accumulate(log10(tau),dedx*cf) ;
-	}
-    }
-  } 
-    delete hLEIon ;
-    delete ionLEIon ;
-    delete ionLEIonC ;
-    delete ionLEIonAr ;
-    //    delete ionLEIonFe ;
-}
-#endif
 
 
 

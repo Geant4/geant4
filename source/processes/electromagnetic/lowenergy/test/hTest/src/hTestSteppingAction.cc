@@ -47,7 +47,6 @@ hTestSteppingAction::~hTestSteppingAction()
 
 void hTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
-
   G4double Edep,Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,xend,yend,zend,rend ;
   G4double Tkin ;
   G4int evno = eventaction->GetEventno() ; 
@@ -56,12 +55,13 @@ void hTestSteppingAction::UserSteppingAction(const G4Step* aStep)
           100000000*(aStep->GetTrack()->GetParentID()); 
 
   Tkin = aStep->GetTrack()->GetKineticEnergy() ; 
-    //   Edep = aStep->GetTotalEnergyDeposit() ;         
-  Edep = aStep->GetDeltaEnergy() ;         
+  Edep = -(aStep->GetDeltaEnergy()) ;         
+  xend = 0.5*((aStep->GetPreStepPoint()->GetPosition().x()) +
+              (aStep->GetPostStepPoint()->GetPosition().x())  ) / mm ;
   Tsec = Tkin - Edep ;
   Theta = acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
 
-  eventaction->AddE(abs(Edep)) ;
+  runaction->FillEn(Edep,xend) ;
 
   // new particle
   if(IDnow != IDold) {
@@ -114,9 +114,9 @@ void hTestSteppingAction::UserSteppingAction(const G4Step* aStep)
       if((0.0 == Tkin) || 
          (aStep->GetTrack()->GetNextVolume()->GetName()=="World") ) {
 
-            xend= aStep->GetTrack()->GetPosition().x()/mm ;
-            yend= aStep->GetTrack()->GetPosition().y()/mm ;
-            zend= aStep->GetTrack()->GetPosition().z()/mm ;
+            xend= aStep->GetPostStepPoint()->GetPosition().x()/mm ;
+            yend= aStep->GetPostStepPoint()->GetPosition().y()/mm ;
+            zend= aStep->GetPostStepPoint()->GetPosition().z()/mm ;
             runaction->SaveToTuple("XEND",xend,1000.0);      
             runaction->SaveToTuple("YEND",yend,1000.0);      
             runaction->SaveToTuple("ZEND",zend,1000.0);      

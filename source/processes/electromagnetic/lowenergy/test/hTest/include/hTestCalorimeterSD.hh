@@ -43,7 +43,7 @@ public: // Without description
   
       hTestCalorHitsCollection*  CalCollection;      
       hTestDetectorConstruction* Detector;
-      G4int*                   HitID;
+      G4int HitID[500];
 };
 
 #endif

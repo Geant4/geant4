@@ -47,7 +47,7 @@ hTestPhysicsList::hTestPhysicsList(hTestDetectorConstruction* p)
   cutForProton    = defaultCutValue;
   
   //  MaxChargedStep = DBL_MAX; 
-  MaxChargedStep = 1*mm; 
+  MaxChargedStep = 2*mm; 
   
   SetVerboseLevel(2);
   physicsListMessenger = new hTestPhysicsListMessenger(this);
@@ -165,7 +165,6 @@ void hTestPhysicsList::ConstructProcess()
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 #include "G4hLowEnergyIonisation.hh"
-//#include "G4ionLowEnergyIonisation.hh"
 
 #include "hTestStepCut.hh"
 
@@ -261,10 +260,10 @@ void hTestPhysicsList::ConstructEM()
       G4cout << "Ionic processes for " << particleName << G4endl; 
 
       // Standard ionisation
-      // G4ionIonisation* iIon = new G4ionIonisation() ;
+      G4hIonisation* iIon = new G4hIonisation() ;
 
       // Standard ionisation with low energy extantion
-        G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
+      // G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
       // G4ionLowEnergyIonisation* iIon = new G4ionLowEnergyIonisation() ;
       //      iIon->SetNuclearStoppingOff() ;
 	//  iIon->SetNuclearStoppingOn() ;

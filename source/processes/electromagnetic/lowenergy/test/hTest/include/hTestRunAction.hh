@@ -67,7 +67,7 @@ public: // Without description
 
     void AddTrRef(G4double tr,G4double ref);
 
-    void FillEn(G4double En);
+    void FillEn(G4double En, G4double zn);
     void FillTh(G4double Th);
     void FillThBack(G4double Th);
     void FillR(G4double R);
@@ -132,24 +132,10 @@ public: // Without description
   private:
 
 #ifndef G4NOHIST
-    void FillLowEnergyTest();
-#endif
-
-  private:
-
-#ifndef G4NOHIST
     G4String histName ;
     HepTupleManager* hbookManager;
     HepHistogram *histo1, *histo2, *histo3, *histo4, *histo5 ;
     HepHistogram *histo6, *histo7, *histo8, *histo9, *histo10;
-    HepHistogram *histo11, *histo12, *histo13, *histo14, *histo15;
-    HepHistogram *histo21, *histo22, *histo23, *histo24, *histo25;
-    HepHistogram *histo31, *histo32, *histo33, *histo34, *histo35;
-    HepHistogram *histo41, *histo42, *histo43, *histo44, *histo45;
-    HepHistogram *histo51, *histo52, *histo53, *histo54, *histo55;
-    HepHistogram *histo61, *histo62, *histo63, *histo64, *histo65;
-    HepHistogram *histo71, *histo72, *histo73, *histo74, *histo75, *histo76;
-    HepHistogram *histo81, *histo82, *histo83, *histo84, *histo85, *histo86;
     HepTuple *ntup;
 #endif
 
@@ -172,7 +158,7 @@ public: // Without description
     G4double entryStep,underStep,overStep,distStep[200];
     G4double Steplow,Stephigh,dStep;
     G4int    nbinStep;
-    G4double entryEn,underEn,overEn,distEn[200];
+    G4double entryEn,underEn,overEn,distEn[300];
     G4double Enlow,Enhigh,dEn;
     G4int    nbinEn;
     G4double entryTt,underTt,overTt,distTt[200];

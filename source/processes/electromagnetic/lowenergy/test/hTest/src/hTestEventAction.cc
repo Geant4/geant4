@@ -49,21 +49,10 @@ hTestEventAction::~hTestEventAction()
 void hTestEventAction::BeginOfEventAction(const G4Event* evt)
 {  
 
-#ifndef G4NOHIST
-  if(0 == GetEventno()) runaction->bookHisto();
-#endif
-
-
-  if(calorimeterCollID==-1)
-  {
-    G4SDManager * SDman = G4SDManager::GetSDMpointer();
-    calorimeterCollID = SDman->GetCollectionID("CalCollection");
-  } 
-
   EnergyDeposition = 0.0;
 
   if(verboselevel>1)
-    G4cout << "<<< Event  " << evt->GetEventID() << " started." << G4endl;
+    G4cout << " Event  " << evt->GetEventID() << " started!!!" << G4endl;
   nstep = 0. ;
   nstepCharged = 0. ;
   nstepNeutral = 0. ;
@@ -79,51 +68,22 @@ void hTestEventAction::BeginOfEventAction(const G4Event* evt)
 
 void hTestEventAction::EndOfEventAction(const G4Event* evt)
 {
-
-  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  hTestCalorHitsCollection* CHC = NULL;
-  if (HCE)
-      CHC = (hTestCalorHitsCollection*)(HCE->GetHC(calorimeterCollID));
-
-  if (CHC)
-   {
-    int n_hit = CHC->entries();
-   // if(verboselevel==2)
-   // G4cout << "     " << n_hit
-   //      << " hits are stored in hTestCalorHitsCollection." << G4endl;
-
-    G4double totEAbs=0, totLAbs=0;
-    for (int i=0;i<n_hit;i++)
-      { totEAbs += (*CHC)[i]->GetEdepAbs(); 
-        totLAbs += (*CHC)[i]->GetTrakAbs();
-      }
-  if(verboselevel==2)
-    G4cout
-       << "   Absorber: total energy: " << G4std::setw(7) << 
-                             G4BestUnit(totEAbs,"Energy")
-       << "       total track length: " << G4std::setw(7) <<
-                             G4BestUnit(totLAbs,"Length")
-       << G4endl;           
-
    // count event, add deposits to the sum ...
     runaction->CountEvent() ;
-    runaction->AddTrackLength(totLAbs) ;
     runaction->AddnStepsNeutral(nstepNeutral) ;
     if(verboselevel==2)
       G4cout << " Ncharged=" << Nch << "  ,   Nneutral=" << Nne << G4endl;
     runaction->CountParticles(Nch,Nne);
     runaction->AddEP(NE,NP);
     runaction->AddTrRef(Transmitted,Reflected) ;
-    runaction->AddEdeps(totEAbs) ;
-    runaction->FillEn(totEAbs) ;
 
     nstep=nstepCharged+nstepNeutral ;
     runaction->FillNbOfSteps(nstep);
     runaction->SaveToTuple("EDEP",EnergyDeposition);      
 
     runaction->SaveEvent();
-  }
-  
+    /* 
+#ifdef G4VIS_USE  
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
   if(pVVisManager)
@@ -138,7 +98,8 @@ void hTestEventAction::EndOfEventAction(const G4Event* evt)
                                trj->DrawTrajectory(50); 
       }
   }  
-
+#endif
+*/
   if(verboselevel>0)
     G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;
 }
