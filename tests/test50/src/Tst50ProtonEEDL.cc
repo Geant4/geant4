@@ -45,13 +45,15 @@ theParticleIterator->reset();
       G4ProcessManager* manager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
      
-      if (particleName == "proton") 
+      if (particleName == "proton" || particleName == "alpha" ||
+	  particleName == "IonO16" || particleName == "IonC12"
+	 || particleName == "IonFe52" || particleName == "IonSi28") 
 	{
 	  G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
           // G4VProcess*  multipleScattering= new G4MultipleScattering(); 
-          manager->AddProcess(ionisation,-1,2,2);
+	  ionisation -> SetEnlossFluc(false);
+	  manager->AddProcess(ionisation,-1,2,2);
           //  manager->AddProcess(multipleScattering,-1,1,1);  	
-          ionisation -> SetEnlossFluc(false);
-	}
+	}	
     }
 }

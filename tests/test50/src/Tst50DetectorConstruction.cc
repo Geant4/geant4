@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.28 2003-11-17 14:43:42 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.29 2004-06-02 09:46:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -60,7 +60,7 @@ Tst50DetectorConstruction::Tst50DetectorConstruction()
    molybdenium(0), silver(0),cadmium(0),
    cesium(0),samarium(0), ytterbium(0),tantalum(0),tungsten(0),
    gold(0),
-   lead(0),uranium(0), water(0), quartz(0), air(0),vacuum(0),
+   lead(0),uranium(0), water(0), quartz(0), air(0),vacuum(0),nytrogen(0),
    targetMaterial(0),defaultMaterial(0),
    solidWorld(0),logicWorld(0),physiWorld(0),
    solidTarget(0),logicTarget(0),physiTarget(0), 
@@ -82,6 +82,7 @@ Tst50DetectorConstruction::Tst50DetectorConstruction()
 Tst50DetectorConstruction::~Tst50DetectorConstruction()
 {
   delete messenger;
+  delete nytrogen;
   delete vacuum;
   delete air;
   delete quartz;
@@ -176,18 +177,28 @@ void Tst50DetectorConstruction::DefineMaterials()
   a = 12.01*g/mole;
   density = 1.7*g/cm3; 
   graphite = new G4Material(name="Graphite", z=6., a, density);
+  graphite -> GetIonisation()->SetMeanExcitationEnergy(78.*eV);
+ 
+  a = 16.00*g/mole;
+  density = 0.00133*g/cm3;
+  ossigeno = new G4Material(name="Oxygen", z=8.,a,density);
+  ossigeno->GetIonisation()->SetMeanExcitationEnergy(95.*eV);
 
   a = 24.312*g/mole;
   density = 1.738*g/cm3; 
   magnesium = new G4Material(name="Magnesium", z=12., a, density);
+  
 
   a = 26.981*g/mole;
   density = 2.6989*g/cm3; 
   aluminium = new G4Material(name="Aluminium", z=13., a, density);
+  aluminium->GetIonisation()->SetMeanExcitationEnergy(166.0*eV);
 
   a = 28.085*g/mole;
   density = 2.336*g/cm3; 
   silicon = new G4Material(name="Silicon", z=14., a, density);
+  silicon->GetIonisation()->SetMeanExcitationEnergy(173.0*eV);
+
 
   density = 1.390*g/cm3;
   a = 39.95*g/mole;
@@ -202,7 +213,8 @@ void Tst50DetectorConstruction::DefineMaterials()
   a = 55.845*g/mole;
   density = 7.874*g/cm3;
   iron = new G4Material(name="Iron", z=26., a, density);
-
+  iron -> GetIonisation()->SetMeanExcitationEnergy(286.*eV);
+ 
   a = 58.933*g/mole;
   density = 8.9 *g/cm3;
   cobalt = new G4Material(name="Cobalt", z=27., a, density);
@@ -292,7 +304,7 @@ void Tst50DetectorConstruction::DefineMaterials()
   water = new G4Material(name="Water", density, ncomponents=2);
   water->AddElement(H, natoms=2);
   water->AddElement(O, natoms=1);
-
+  water->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
   density = 2.200*g/cm3;
   quartz = new G4Material(name="Quartz", density, ncomponents=2);
@@ -303,6 +315,7 @@ void Tst50DetectorConstruction::DefineMaterials()
   air = new G4Material(name="Air"  , density, ncomponents=2);
   air->AddElement(N, fractionmass=0.7);
   air->AddElement(O, fractionmass=0.3);
+  air->GetIonisation()->SetMeanExcitationEnergy(85.7*eV);
 
   //
   // examples of vacuum
@@ -313,6 +326,12 @@ void Tst50DetectorConstruction::DefineMaterials()
   temperature = 2.73*kelvin;
   vacuum = new G4Material(name="Galactic", z=1., a=1.01*g/mole,
 				      density,kStateGas,temperature,pressure);
+
+  density = 1.16*mg/cm3;
+  a = 14.*g/mole;
+  nytrogen = new G4Material(name="Nytrogen", z=7., a, density);
+  nytrogen->GetIonisation()->SetMeanExcitationEnergy(82.0*eV);
+
   targetMaterial = liquidArgon;
   defaultMaterial  = vacuum;
 }

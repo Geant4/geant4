@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.hh,v 1.15 2003-07-31 08:15:52 guatelli Exp $
+// $Id: Tst50DetectorConstruction.hh,v 1.16 2004-06-02 09:46:53 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -109,9 +109,10 @@ private:
   G4Material* uranium;
   G4Material* water; 
   G4Material* quartz; 
+  G4Material* ossigeno;
   G4Material* air; 
   G4Material* vacuum;
-  
+   G4Material* nytrogen;
   G4Material*        targetMaterial;
   G4Material*        defaultMaterial;//World absorber material: vacuum
   
