@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoNuclearCrossSection.hh,v 1.4 2001-11-22 16:15:43 gcosmo Exp $
+// $Id: G4PhotoNuclearCrossSection.hh,v 1.5 2001-11-26 22:04:34 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
