@@ -80,7 +80,8 @@ public:  // With description
 
     // Access methods
     G4VSolid*                GetConstituentMovedSolid();
-    const G4AffineTransform  GetTransform() const; 
+    G4AffineTransform        GetTransform() const; 
+    G4AffineTransform        GetDirectTransform() const; 
     
     // Get the rotation/translation, as applied to the frame of reference
     G4RotationMatrix         GetFrameRotation() const;

@@ -95,6 +95,12 @@ const G4AffineTransform  G4DisplacedSolid::GetTransform() const
    return aTransform;
 }
 
+const G4AffineTransform  G4DisplacedSolid::GetDirectTransform() const
+{
+   G4AffineTransform aTransform= *fDirectTransform;
+   return aTransform;
+}
+
 G4RotationMatrix G4DisplacedSolid::GetFrameRotation() const
 {
    G4RotationMatrix InvRotation= fPtrTransform->NetRotation();
