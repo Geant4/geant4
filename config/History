@@ -1,4 +1,4 @@
-$Id: History,v 1.168 2001-11-16 14:43:52 barrand Exp $
+$Id: History,v 1.169 2001-11-19 11:40:41 johna Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19th November 2001  John Allison  (config-V03-02-11)
+- Does not include Guy's changes of 16rd November.
+- Re-instated creation of CPPFLAGS (see 6th November) but conditonal
+  on existence of corresponding environment variable.  If no environmet
+  variable is set, CPPFLAGS += -DG4UI_USE_TERMINAL.
 
 16rd November 2001  Guy Barrand
 - analysis.gmk : add flags to use an AIDA 2.2 compliant analysis system.
