@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacPhantomROGeometry.cc,v 1.2 2004-04-02 17:48:03 mpiergen Exp $
+// $Id: MedLinacPhantomROGeometry.cc,v 1.3 2004-05-14 18:25:40 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -63,11 +63,24 @@ G4VPhysicalVolume* MedLinacPhantomROGeometry::Build()
  
   G4cout << " MedLinacPhantomROGeometry::Build()-----------------------" << G4endl;
   
-  // A dummy material is used to fill the volumes of the readout geometry.
-  // (It will be allowed to set a NULL pointer in volumes of such virtual
-  // division in future, since this material is irrelevant for tracking.)
+  //G4Material* dummyMat = new G4Material(name="dummyMat", 1., 1.*g/mole, 1.*g/cm3);
+  G4double a;  // atomic mass
+  G4double z;  // atomic number
+  G4int natoms;
+  G4String name;
+  G4String symbol;
+  a = 16.00*g/mole;
+  G4Element* elO = new G4Element(name="Oxygen",symbol="O", z=8., a);
 
-  G4Material* dummyMat = new G4Material(name="dummyMat", 1., 1.*g/mole, 1.*g/cm3);
+  a = 1.00794*g/mole;
+  G4Element* elH = new G4Element(name="Hydrogen",symbol="H", z=1., a);
+
+  G4double density;
+  G4int ncomponents;
+  density = 1.000*g/cm3;
+  G4Material* H2O = new G4Material(name="Water",density, ncomponents=2);
+  H2O->AddElement(elH, natoms=2);
+  H2O->AddElement(elO, natoms=1);
 
   G4double expHall_x = 3.0*m;
   G4double expHall_y = 3.0*m;
@@ -92,7 +105,7 @@ G4VPhysicalVolume* MedLinacPhantomROGeometry::Build()
 			     expHall_z);
 
   G4LogicalVolume *ROWorldLog = new G4LogicalVolume(ROWorld,
-						    dummyMat,
+						    H2O,
 						    "ROWorldLog",
 						    0,0,0);
 
@@ -109,7 +122,7 @@ G4VPhysicalVolume* MedLinacPhantomROGeometry::Build()
 			       PhantomDimensionZ);
 
   G4LogicalVolume *ROPhantomLog = new G4LogicalVolume(ROPhantom,
-						      dummyMat,
+						      H2O,
 						      "ROPhantomLog",
 						      0,0,0);
 
@@ -129,7 +142,7 @@ G4VPhysicalVolume* MedLinacPhantomROGeometry::Build()
 					halfXVoxelDimensionZ);
 
   G4LogicalVolume *ROPhantomXDivisionLog = new G4LogicalVolume(ROPhantomXDivision,
-							       dummyMat,
+							       H2O,
 							       "ROPhantomXDivisionLog",
 							       0,0,0);
 
@@ -147,7 +160,7 @@ G4VPhysicalVolume* MedLinacPhantomROGeometry::Build()
 					halfZVoxelDimensionZ);
 
   G4LogicalVolume *ROPhantomZDivisionLog = new G4LogicalVolume(ROPhantomZDivision,
-							       dummyMat,
+							       H2O,
 							       "ROPhantomZDivisionLog",
 							       0,0,0);
 
@@ -165,7 +178,7 @@ G4VPhysicalVolume* MedLinacPhantomROGeometry::Build()
 					halfZVoxelDimensionX);
 
   G4LogicalVolume *ROPhantomYDivisionLog = new G4LogicalVolume(ROPhantomYDivision,
-							       dummyMat,
+							       H2O,
 							       "ROPhantomYDivisionLog",
 							       0,0,0);
  

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 // ********************************************************************
-// $Id: MedLinacAnalysisManager.cc,v 1.2 2004-04-02 17:48:03 mpiergen Exp $
+// $Id: MedLinacAnalysisManager.cc,v 1.3 2004-05-14 18:25:39 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -42,12 +42,11 @@
 #include "AIDA/ITupleFactory.h"
 #include "AIDA/ITreeFactory.h"
 #include "AIDA/ITree.h"
-#include "AIDA/ITuple.h"
 
 MedLinacAnalysisManager* MedLinacAnalysisManager::instance = 0;
 
 MedLinacAnalysisManager::MedLinacAnalysisManager(): 
-  aFact(0), theTree(0), histFact(0),h1(0),h2(0),h3(0),h4(0),h5(0)
+  aFact(0), theTree(0), histFact(0),h1(0),h2(0),h3(0),h4(0),h5(0),h6(0),h7(0),h8(0)
   
 {
   //build up  the  factories
@@ -87,22 +86,43 @@ void MedLinacAnalysisManager::book()
 {
   //creating a 2D histogram ...
   h1 = histFact->createHistogram2D("10","Energy, pos x z", //histoID,histo name
-				    300 ,-170.,170.,   //bins'number,xmin,xmax 
-                                    300,-170.,170.    );//bins'number,zmin,zmax 
+				    340 ,-170.,170.,   //bins'number,xmin,xmax 
+                                    340,-170.,170.    );//bins'number,zmin,zmax
+
+
+
   //creating a 1D histogram ...
   h2 = histFact->createHistogram1D("20","Initial Energy", //histoID,histo name 
-				  300,4.0,8.0); //bins' number, xmin, xmax
+				  500,3.0,9.0); //bins' number, xmin, xmax
+
+
+
+
   //creating an other 2D histogram ...
   h3 = histFact->createHistogram2D("30","Energy, pos x y", //histoID,histo name
-				    300 ,-170.,170.,   //bins'number,xmin,xmax 
-                                    300,-170.,170.    );//bins'number,ymin,ymax 
+				    340 ,-170.,170.,   //bins'number,xmin,xmax 
+                                    340,-170.,170.    );//bins'number,ymin,ymax 
 
   //creating an other 1D histogram ...
   h4 = histFact->createHistogram1D("40","PDD", //histoID,histo name
-				    100,-170.0,170.0); //bins' number, zmin, zmax
+				    300,-150.0,150.0); //bins' number, zmin, zmax
   //creating an other 1D histogram ...
-  h5 = histFact->createHistogram1D("50","Flatness", //histoID,histo name
-				    100,-170.0,170.0); //bins' number, zmin, zmax
+  h5 = histFact->createHistogram1D("50","Flatness at build-up depth", //histoID,histo name
+				    300,-150.0,150.0); //bins' number, zmin, zmax
+
+ //creating an other 1D histogram ...
+  h6 = histFact->createHistogram1D("60","Flatness 50mm depth", //histoID,histo name
+				    300,-150.0,150.0); //bins' number, zmin, zmax
+ //creating an other 1D histogram ...
+  h7 = histFact->createHistogram1D("70","Flatness 100mm depth", //histoID,histo name
+				    300,-150.0,150.0); //bins' number, zmin, zmax
+ //creating an other 1D histogram ...
+  h8 = histFact->createHistogram1D("80","Flatness 200mm depth", //histoID,histo name
+				    300,-150.0,150.0); //bins' number, zmin, zmax
+
+
+
+
 
 }
  
@@ -110,26 +130,22 @@ void MedLinacAnalysisManager::FillHistogram1WithEnergy(G4double x,
                                                     G4double z, 
                                                     G4float energyDeposit)
 {
-  G4cout << " fill HISTO1-------------"<<G4endl;
-  //2DHistrogram: energy deposit in a voxel which center is fixed in position (x,z)  
+    //2DHistrogram: energy deposit in a voxel which center is fixed in position (x,z)  
   h1->fill(x,z,energyDeposit);
 }               
                                                                         
-//Units:   the energy deposit is in MeV;
-//       x, y, z in mm for both 2D-histogram and ntuple  
+//Units:   the energy deposit is in MeV;  x, y, z in mm for histograms 
 
 void MedLinacAnalysisManager::PrimaryParticleEnergySpectrum(G4double pEnergy)
 {
-  G4cout << " fill histo primaryparticle-------------"<<G4endl;
-  //1DHistogram: energy spectrum of primary particles  
+    //1DHistogram: energy spectrum of primary particles  
   h2->fill(pEnergy/MeV);
 }
 void MedLinacAnalysisManager::FillHistogram3WithEnergy(G4double x,
                                                     G4double y, 
                                                     G4float energyDeposit)
 {
-  G4cout << " fill HISTO3-------------"<<G4endl;
-  //2DHistrogram: energy deposit in a voxel which center is fixed in position (x,y)  
+    //2DHistrogram: energy deposit in a voxel which center is fixed in position (x,y)  
   h3->fill(x,y,energyDeposit);
 }
 
@@ -137,17 +153,36 @@ void MedLinacAnalysisManager::FillHistogram3WithEnergy(G4double x,
 void MedLinacAnalysisManager::FillHistogram4WithEnergy(G4double z, 
                                                     G4float energyDeposit)
 {
-  G4cout << " fill HISTO4-------------"<<G4endl;
-  //1DHistrogram: energy deposit in a voxel which center is fixed in position (0,0,z)  
+    //1DHistrogram: energy deposit in a voxel which center is fixed in position (0,0,z)  
   h4->fill(z,energyDeposit);
 }
 
 void MedLinacAnalysisManager::FillHistogram5WithEnergy(G4double x, 
                                                     G4float energyDeposit)
 {
-  G4cout << " fill HISTO5-------------"<<G4endl;
-  //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,295mm)  
+    //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,135mm)  
   h5->fill(x,energyDeposit);
+}
+
+void MedLinacAnalysisManager::FillHistogram6WithEnergy(G4double x, 
+                                                    G4float energyDeposit)
+{
+    //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,100mm)
+  h6->fill(x,energyDeposit);
+}
+
+void MedLinacAnalysisManager::FillHistogram7WithEnergy(G4double x, 
+                                                    G4float energyDeposit)
+{
+    //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,50mm)
+  h7->fill(x,energyDeposit);
+}
+
+void MedLinacAnalysisManager::FillHistogram8WithEnergy(G4double x, 
+                                                    G4float energyDeposit)
+{
+ //1DHistrogram: energy deposit in a voxel which center is fixed in position (x,0,-50mm)
+  h8->fill(x,energyDeposit);
 }
 
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 // 
-//// $Id: MedLinacPhysicsList.hh,v 1.2 2004-04-02 17:48:41 mpiergen Exp $
+//// $Id: MedLinacPhysicsList.hh,v 1.3 2004-05-14 18:25:39 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -33,6 +33,7 @@
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
+class G4ProductionCuts;
 class G4LowEnergyPhotoElectric;
 class G4LowEnergyIonisation;
 class G4LowEnergyBremsstrahlung;
@@ -49,6 +50,11 @@ class MedLinacPhysicsList: public G4VUserPhysicsList
     void ConstructProcess();
     void SetCuts();
 
+  //private:
+    
+  //G4double cutForGamma;
+  //G4double cutForElectron;
+  //G4double cutForPositron;
 
 protected:
     // these methods Construct particles 
@@ -57,7 +63,7 @@ protected:
  
   protected:
   // these methods Construct physics processes and register them
-  void ConstructGeneral();
+  //void ConstructGeneral();
   void ConstructEM();
 
   // private:

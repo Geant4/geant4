@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacEventAction.hh,v 1.2 2004-04-02 17:48:41 mpiergen Exp $
+// $Id: MedLinacEventAction.hh,v 1.3 2004-05-14 18:25:39 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -32,16 +32,16 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class G4Event;
-class MedLinacDetectorConstruction; 
-class MedLinacAnalysisManager;
+//class G4Event;
+//class MedLinacDetectorConstruction; 
+//class MedLinacAnalysisManager;
 
 //*********************************************************************
 
 class MedLinacEventAction : public G4UserEventAction
 {
   public:
-    MedLinacEventAction(G4String);
+    MedLinacEventAction();
    ~MedLinacEventAction();
 
   public:
@@ -50,12 +50,7 @@ class MedLinacEventAction : public G4UserEventAction
 
 private:
   G4String drawFlag; //Visualisation flag
-  G4int hitsCollectionID; 
-  MedLinacDetectorConstruction* detector;
-  G4int numberOfVoxelZ; 
-  G4double voxelWidthZ; 
-
-};
+  };
 
 //*********************************************************************
 

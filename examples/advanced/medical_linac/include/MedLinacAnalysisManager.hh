@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // 
-// $Id: MedLinacAnalysisManager.hh,v 1.2 2004-04-02 17:48:41 mpiergen Exp $
+// $Id: MedLinacAnalysisManager.hh,v 1.3 2004-05-14 18:25:39 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -60,6 +60,9 @@ public:
   void FillHistogram3WithEnergy(G4double,G4double,G4float);
   void FillHistogram4WithEnergy(G4double,G4float);
   void FillHistogram5WithEnergy(G4double,G4float);
+  void FillHistogram6WithEnergy(G4double,G4float);
+  void FillHistogram7WithEnergy(G4double,G4float);
+  void FillHistogram8WithEnergy(G4double,G4float);
   void PrimaryParticleEnergySpectrum(G4double);
   void finish();
 
@@ -81,6 +84,9 @@ private:
   AIDA::IHistogram2D *h3;
   AIDA::IHistogram1D *h4;
   AIDA::IHistogram1D *h5;
+  AIDA::IHistogram1D *h6;
+  AIDA::IHistogram1D *h7;
+  AIDA::IHistogram1D *h8;
 };
 
 #endif

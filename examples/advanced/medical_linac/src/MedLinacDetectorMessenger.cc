@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MedLinacDetectorMessenger.cc,v 1.2 2004-04-02 17:48:03 mpiergen Exp $
+// $Id: MedLinacDetectorMessenger.cc,v 1.3 2004-05-14 18:25:40 mpiergen Exp $
 //
 //  Code developed by: M. Piergentili
 
@@ -41,7 +41,6 @@ MedLinacDetectorMessenger::MedLinacDetectorMessenger(
 :MedLinacDetector(MedLinacDet)
 { 
 
-  G4cout <<"==================DetectorMessenger  "<<G4endl;
   MedLinacDir = new G4UIdirectory("/Jaws/");
   MedLinacDir->SetGuidance("jaws position");
   

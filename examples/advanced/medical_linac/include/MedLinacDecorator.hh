@@ -20,67 +20,30 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacRunAction.cc,v 1.3 2004-05-14 18:25:40 mpiergen Exp $
+//
+// $Id: MedLinacDecorator.hh,v 1.1 2004-05-14 18:25:39 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
 
-#include "MedLinacRunAction.hh"
-#include "MedLinacEventAction.hh"
+#ifndef MedLinacDecorator_h
+#define MedLinacDecorator_h 1
 
-#include "G4Run.hh"
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
-#include "G4ios.hh"
-#include "MedLinacDetectorConstruction.hh"
-#include "G4SDManager.hh"
-#include "G4Timer.hh"
+#include "MedLinacVGeometryComponent.hh"
 
-#ifdef G4ANALYSIS_USE
-#include "MedLinacAnalysisManager.hh"
-#endif
+class G4VPhysicalVolume;
+class MedLinacVGeometryComponent;
 
-
-MedLinacRunAction::MedLinacRunAction(G4String SDName)
+class MedLinacDecorator: public MedLinacVGeometryComponent
 {
+public:
+  MedLinacDecorator(MedLinacVGeometryComponent*);
+  virtual  ~MedLinacDecorator();
 
-  sensitiveDetectorName = SDName;
-  detector = MedLinacDetectorConstruction::GetInstance(sensitiveDetectorName);
-}
+  virtual void ConstructComponent(G4VPhysicalVolume*, G4VPhysicalVolume*)=0;
+  virtual void DestroyComponent()=0; 
 
-
-MedLinacRunAction::~MedLinacRunAction()
-{ 
-  delete detector;
-}
-
-void MedLinacRunAction::BeginOfRunAction(const G4Run* aRun)
-{
-#ifdef G4ANALYSIS_USE
-  MedLinacAnalysisManager* analysis = MedLinacAnalysisManager::getInstance();
-  analysis->book();
+private:
+   MedLinacVGeometryComponent* component;
+};
 #endif
-
-
-  G4cout << "Run " << aRun->GetRunID() << " start." << G4endl;
-
-}
-
-void MedLinacRunAction::EndOfRunAction(const G4Run* aRun)
-{
-  
-#ifdef G4ANALYSIS_USE
-  MedLinacAnalysisManager* analysis = MedLinacAnalysisManager::getInstance();
-#endif
-  G4cout << "number of event = " << aRun->GetNumberOfEvent() << G4endl;
-  
-#ifdef G4ANALYSIS_USE      
-  analysis->finish();
-#endif
-
-
-}
-
-
-

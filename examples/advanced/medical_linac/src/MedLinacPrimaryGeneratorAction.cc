@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacPrimaryGeneratorAction.cc,v 1.2 2004-04-02 17:48:03 mpiergen Exp $
+// $Id: MedLinacPrimaryGeneratorAction.cc,v 1.3 2004-05-14 18:25:40 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -47,8 +47,7 @@ MedLinacPrimaryGeneratorAction::MedLinacPrimaryGeneratorAction()
 {
   G4int n_particle = 1;
   particleGun = new G4ParticleGun(n_particle);
-  G4cout <<"l'energia di default delle particelle primarie e'(ImrtPrimaryGeneratorAction) "  << pEnergy <<" " <<"MeV"<< G4endl;
-//create a messenger for this class
+  //create a messenger for this class
   gunMessenger = new MedLinacPrimaryGeneratorMessenger(this);
 
   // default particle kinematic
@@ -58,13 +57,8 @@ MedLinacPrimaryGeneratorAction::MedLinacPrimaryGeneratorAction()
 
   particleGun->SetParticleDefinition(particleTable->FindParticle(particleName="e-"));
   particleGun->SetParticleEnergy(pEnergy);
-
-  //**********************************************************************
-  //**********************************************************************
-  particleGun->SetParticlePosition(G4ThreeVector(0.0*cm, 0.0*cm, 101.0*cm));
-  //**********************************************************************
-  //**********************************************************************
-
+  particleGun->SetParticlePosition(G4ThreeVector(0.0*cm, 0.0*cm, 123.0*cm));
+  
 }
 
 MedLinacPrimaryGeneratorAction::~MedLinacPrimaryGeneratorAction()
@@ -81,20 +75,13 @@ void MedLinacPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   MedLinacAnalysisManager* analysis = MedLinacAnalysisManager::getInstance();
 #endif
  
-  //BeamLine
-   //G4ThreeVector v(0.0,0.0,-1.0);
-  //particleGun->SetParticleMomentumDirection(v);
+   G4double cosTheta = RandGauss::shoot(-1.,0.00003);
+   G4double phi = twopi * G4UniformRand();
 
-
- //uniform distribution in solid angle (-1<cosTheta<-0.9999; 0<phi<2pi)
-  //
-  G4double cosTheta = -0.0001*G4UniformRand()-0.9999;
-  G4double phi = twopi * G4UniformRand();
-
-    G4double sinTheta = sqrt(1. - cosTheta*cosTheta);
-    G4double ux = sinTheta*cos(phi);
-    G4double uy = sinTheta*sin(phi);
-    G4double uz = cosTheta;
+   G4double sinTheta = sqrt(1. - cosTheta*cosTheta);
+   G4double ux = sinTheta*cos(phi);
+   G4double uy = sinTheta*sin(phi);
+   G4double uz = cosTheta;
 
    particleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,uz));
 
@@ -102,9 +89,7 @@ void MedLinacPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   energy = RandGauss::shoot(pEnergy,sigma);
   particleGun->SetParticleEnergy(energy);
 
-  G4cout <<"the energy of the primaries is  "  << energy <<" "<<"MeV"<< G4endl;
-  G4cout <<"the sigma of the energy is  "  << sigma <<" "<<"MeV"<< G4endl;
-
+  
  //1D Histogram of primary particle energy ...
 #ifdef G4ANALYSIS_USE
   analysis->PrimaryParticleEnergySpectrum(energy);

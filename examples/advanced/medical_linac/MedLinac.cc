@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinac.cc,v 1.2 2004-04-02 17:47:34 mpiergen Exp $
+// $Id: MedLinac.cc,v 1.3 2004-05-14 18:25:38 mpiergen Exp $
 //
 // --------------------------------------------------------------
 //      GEANT 4 -  medical_linac
@@ -104,9 +104,10 @@ int main(int argc ,char ** argv)
     }
 
   // set mandatory user action class
+  
   runManager->SetUserAction(new MedLinacPrimaryGeneratorAction);
-
-  MedLinacEventAction *pMedLinacEventAction = new MedLinacEventAction(sensitiveDetectorName);
+  //MedLinacEventAction *pMedLinacEventAction = new MedLinacEventAction(sensitiveDetectorName);
+  MedLinacEventAction *pMedLinacEventAction = new MedLinacEventAction();
   runManager->SetUserAction(pMedLinacEventAction);
 
   MedLinacRunAction *pRunAction = new MedLinacRunAction(sensitiveDetectorName);
@@ -124,10 +125,10 @@ int main(int argc ,char ** argv)
  if (session)   // Define UI session for interactive mode.
     { 
       G4cout<<" UI session starts ..."<< G4endl;
-      //UI->ApplyCommand("/control/execute dawnvis.mac");
        session->SessionStart();
        delete session;
     }
+
   else           // Batch mode
     { 
       G4String command = "/control/execute ";

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacEventAction.cc,v 1.2 2004-04-02 17:48:03 mpiergen Exp $
+// $Id: MedLinacEventAction.cc,v 1.3 2004-05-14 18:25:40 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -48,112 +48,24 @@
 
  // Retrieve information about the energy deposit in the phantom ...
 
-MedLinacEventAction::MedLinacEventAction(G4String SDName) :
+MedLinacEventAction::MedLinacEventAction() :
   drawFlag("all" )
 {
-  hitsCollectionID = -1;
-
-  G4String sensitiveDetectorName=SDName;
-  detector = MedLinacDetectorConstruction::GetInstance(sensitiveDetectorName);
-  numberOfVoxelZ = detector->GetNumVoxelZ();
-  voxelWidthZ = 0.1*cm; 
  }
 
  
 MedLinacEventAction::~MedLinacEventAction()
 {
-  delete detector;
-}
-
-
+ }
  
 void MedLinacEventAction::BeginOfEventAction(const G4Event*)
 {
-  
-
-  G4SDManager* sensitiveDetectorManager = G4SDManager::GetSDMpointer();
-  if(hitsCollectionID == -1)
-     hitsCollectionID = 
-           sensitiveDetectorManager->GetCollectionID("PhantomHitsCollection");
-  G4cout << " begin of event action hitsCollectionID "<< hitsCollectionID << G4endl;
 }
 
  
 void MedLinacEventAction::EndOfEventAction(const G4Event* evt)
 {  
-  if(hitsCollectionID < 0) return; 
-
-  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  MedLinacPhantomHitsCollection* CHC = NULL; 
-  //G4cout << "prima dell'analisi HCE vale: "<< HCE  <<G4endl;
-  if(HCE)
-     CHC = (MedLinacPhantomHitsCollection*)(HCE->GetHC(hitsCollectionID));
-
-  if(CHC)
-    {
-      G4int hitCount = CHC->entries();
-      G4cout << " hitCount vale:"<< hitCount <<"----------------" <<G4endl;
-      for (G4int h = 0; h < hitCount; h++)
-	{
-
-#ifdef G4ANALYSIS_USE	  
-          //Store information about energy deposit
-	  MedLinacAnalysisManager* analysis = 
-                                      MedLinacAnalysisManager::getInstance();   
-	  
-          G4int i=((*CHC)[h])->GetZID();
-	  G4int k=((*CHC)[h])->GetXID();
-	  G4int j=((*CHC)[h])->GetYID();                       
-
-	  G4double EnergyDep=((*CHC)[h]->GetEdep());
-          G4cout << " EnergyDep in MedLinacEventAction e'-------------------- " << EnergyDep <<G4endl;       
-	  G4double x = (-numberOfVoxelZ+1+2*k)*voxelWidthZ/2; 
-	  G4double z = (- numberOfVoxelZ+1+2*i)*voxelWidthZ/2;
-	  G4double y = (- numberOfVoxelZ+1+2*j)*voxelWidthZ/2;
-
-
-	  //--------------------------------------------------------------
-	     //2Dhistogram with the distribution of energy in the surface of the phantom 
-	     //(x,y,energy)  (YThickness = 1. mm)
-	  if(EnergyDep != 0)                       
-	    {  
-	      if (z<150.*mm){if (z> 149.*mm) 
-		{analysis->FillHistogram3WithEnergy(x,y,EnergyDep/MeV);}
-		}
-	      }
-	  //---------------------------------------------------------------
-	  if(EnergyDep != 0)                       
-	  {
-	  analysis->FillHistogram1WithEnergy(x,z,EnergyDep/MeV);
-	  }
-	  //**** PDD in isocenter (Y and X Thickness = 1. mm) ***********			
- if(EnergyDep != 0)                       
-	    { 
-	      if (y<1.0*mm){if (y> -1.0*mm)
-		{
-		  if(x<1.0*mm){if (x> -1.0*mm)
-		{analysis->FillHistogram4WithEnergy(z,EnergyDep/MeV);}
-		  }}}
-	    }
-          //**************************************************************
-
-          //***** flatness  along x **************************************
-
-  if(EnergyDep != 0)                       
-    {  
-       if (z<150.*mm){if (z> 149.*mm) 
-	 { if (y<1.0*mm){if (y> -1.0*mm)
-       {analysis->FillHistogram5WithEnergy(x,EnergyDep/MeV);}
-
-	                }
-	 }
-                     }
-    }
-          //**************************************************************
-#endif 	       
-	}
-    }
-  // extract the trajectories and draw them ...
+ // extract the trajectories and draw them ...
 
   if (G4VVisManager::GetConcreteInstance())
     {
@@ -172,5 +84,8 @@ void MedLinacEventAction::EndOfEventAction(const G4Event* evt)
 	    trj->DrawTrajectory(50);	     	     
 	}
     }
-}
+ }
+
+
+
 

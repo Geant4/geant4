@@ -20,67 +20,29 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacRunAction.cc,v 1.3 2004-05-14 18:25:40 mpiergen Exp $
 //
+// $Id: MedLinacVGeometryComponent.hh,v 1.1 2004-05-14 18:25:39 mpiergen Exp $
 //
 // Code developed by: M. Piergentili
+//
+//
 
-#include "MedLinacRunAction.hh"
-#include "MedLinacEventAction.hh"
+#ifndef MedLinacVGeometryComponent_h
+#define MedLinacVGeometryComponent_h 1
 
-#include "G4Run.hh"
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
-#include "G4ios.hh"
-#include "MedLinacDetectorConstruction.hh"
-#include "G4SDManager.hh"
-#include "G4Timer.hh"
+#include "globals.hh"
 
-#ifdef G4ANALYSIS_USE
-#include "MedLinacAnalysisManager.hh"
-#endif
-
-
-MedLinacRunAction::MedLinacRunAction(G4String SDName)
+class G4LogicalVolume;
+class G4VPhysicalVolume; 
+class G4Material;
+class G4VisAttributes;
+class MedLinacVGeometryComponent
 {
+public:
+  MedLinacVGeometryComponent();
+  virtual ~MedLinacVGeometryComponent();
 
-  sensitiveDetectorName = SDName;
-  detector = MedLinacDetectorConstruction::GetInstance(sensitiveDetectorName);
-}
-
-
-MedLinacRunAction::~MedLinacRunAction()
-{ 
-  delete detector;
-}
-
-void MedLinacRunAction::BeginOfRunAction(const G4Run* aRun)
-{
-#ifdef G4ANALYSIS_USE
-  MedLinacAnalysisManager* analysis = MedLinacAnalysisManager::getInstance();
-  analysis->book();
+  virtual void ConstructComponent(G4VPhysicalVolume*,G4VPhysicalVolume*)=0;
+  virtual void DestroyComponent()=0;
+};
 #endif
-
-
-  G4cout << "Run " << aRun->GetRunID() << " start." << G4endl;
-
-}
-
-void MedLinacRunAction::EndOfRunAction(const G4Run* aRun)
-{
-  
-#ifdef G4ANALYSIS_USE
-  MedLinacAnalysisManager* analysis = MedLinacAnalysisManager::getInstance();
-#endif
-  G4cout << "number of event = " << aRun->GetNumberOfEvent() << G4endl;
-  
-#ifdef G4ANALYSIS_USE      
-  analysis->finish();
-#endif
-
-
-}
-
-
-

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: MedLinacPrimaryGeneratorMessenger.cc,v 1.2 2004-04-02 17:48:03 mpiergen Exp $
+// $Id: MedLinacPrimaryGeneratorMessenger.cc,v 1.3 2004-05-14 18:25:40 mpiergen Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -66,7 +66,7 @@ void MedLinacPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4Stri
    G4double newSourceType = SourceTypeCmd->GetNewDoubleValue(newValue);
       MedLinacAction->SetSourceType(newSourceType);
     
-      G4cout << "dev stand "<< newSourceType << G4endl;  
+      G4cout << " standard deviation"<< newSourceType << G4endl;  
  }
 }
 
