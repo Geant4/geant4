@@ -65,7 +65,6 @@
 class G4Step;
 class G4ParticleDefinition;
 class G4VEmModel;
-class G4VEffectiveChargeModel;
 class G4VEmFluctuationModel;
 class G4DataVector;
 class G4VParticleChange;
@@ -343,6 +342,7 @@ private:
 
 inline void G4VEnergyLossSTD::DefineMaterial(const G4MaterialCutsCouple* couple)
 {
+//  G4cout << "couple= " << couple << " currentCouple= " <<  currentCouple << G4endl;
   if(couple != currentCouple) {
     currentCouple   = couple;
     currentMaterial = couple->GetMaterial();

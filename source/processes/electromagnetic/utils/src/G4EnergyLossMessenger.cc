@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.5 2002-12-04 21:07:43 asaim Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.6 2003-03-24 17:28:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,24 +52,24 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   RndmStepCmd->SetGuidance("Randomize the proposed step by eLoss.");
   RndmStepCmd->SetParameterName("choice",true);
   RndmStepCmd->SetDefaultValue(false);
-  RndmStepCmd->AvailableForStates(G4State_Idle);
+  RndmStepCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   EnlossFlucCmd = new G4UIcmdWithABool("/process/eLoss/fluct",this);
   EnlossFlucCmd->SetGuidance("Switch true/false the energy loss fluctuations.");
   EnlossFlucCmd->SetParameterName("choice",true);
   EnlossFlucCmd->SetDefaultValue(true);
-  EnlossFlucCmd->AvailableForStates(G4State_Idle);
+  EnlossFlucCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   SubSecCmd = new G4UIcmdWithABool("/process/eLoss/subsec",this);
   SubSecCmd->SetGuidance("Switch true/false the subcutoff generation.");
   SubSecCmd->SetParameterName("choice",true);
   SubSecCmd->SetDefaultValue(true);
-  SubSecCmd->AvailableForStates(G4State_Idle);
+  SubSecCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   MinSubSecCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/minsubsec",this);
   MinSubSecCmd->SetGuidance("Set the min. cut for subcutoff delta in range.");
   MinSubSecCmd->SetParameterName("rcmin",true);
-  MinSubSecCmd->AvailableForStates(G4State_Idle);
+  MinSubSecCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   StepFuncCmd = new G4UIcommand("/process/eLoss/StepFunction",this);
   StepFuncCmd->SetGuidance("Set the energy loss step limitation parameters.");
@@ -93,7 +93,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   unitPrm->SetParameterCandidates(unitCandidates);
   
   StepFuncCmd->SetParameter(unitPrm);
-  StepFuncCmd->AvailableForStates(G4State_Idle);
+  StepFuncCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

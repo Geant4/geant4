@@ -93,9 +93,9 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
                                                       G4double& meanLoss)
 {
 //  calculate actual loss from the mean loss
-//  The model used to get the fluctuation is essentially the same 
+//  The model used to get the fluctuation is essentially the same
 // as in Glandz in Geant3.
-
+  
   // shortcut for very very small loss 
   if(meanLoss < minLoss) return meanLoss;
 

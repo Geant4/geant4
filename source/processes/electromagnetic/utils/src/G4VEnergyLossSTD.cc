@@ -51,6 +51,7 @@
 // 26-02-03 Simplify control on GenericIons (V.Ivanchenko)
 // 06-03-03 Control on GenericIons using SubType + update verbose (V.Ivanchenko)
 // 10-03-03 Add Ion registration (V.Ivanchenko)
+// 22-03-03 Add Initialisation of cash (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -104,6 +105,7 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   secondaryParticle(0),
   theGamma(G4Gamma::Gamma()),
   theElectron(G4Electron::Electron()),
+  currentCouple(0),
   minKinEnergy(1.0*eV),
   maxKinEnergy(100.0*GeV),
   linLossLimit(0.05),
@@ -257,7 +259,7 @@ void G4VEnergyLossSTD::Initialise()
 
 void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-
+  currentCouple = 0;
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::BuildPhysicsTable() for "
            << GetProcessName()
@@ -495,7 +497,7 @@ G4PhysicsTable* G4VEnergyLossSTD::BuildLambdaSubTable()
   }
 
   if(0 < verboseLevel) {
-    G4cout << "Table is built for " 
+    G4cout << "Table is built for "
            << particle->GetParticleName()
            << G4endl;
   }
@@ -518,7 +520,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
   G4double eloss  = 0.0;
   G4bool b;
 
-  /*  
+  /*
   if(-1 < verboseLevel) {
     const G4ParticleDefinition* d = track.GetDefinition();
     G4cout << "AlongStepDoIt for "
@@ -555,7 +557,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
     G4double postStepScaledEnergy = v->GetValue(x, b);
     eloss = (preStepScaledEnergy - postStepScaledEnergy)/massRatio;
 
-    /*    
+    /*
     if(-1 < verboseLevel) {
       G4cout << "fRange(mm)= " << fRange/mm
              << " xPost(mm)= " << x/mm
@@ -576,21 +578,24 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
   G4double tmax = MaxSecondaryEnergy(dynParticle);
   tmax = G4std::min(tmax,(*theCuts)[currentMaterialIndex]);
 
-  /*  
-  G4double eloss0 = eloss;
+/*
+  //G4double eloss0 = eloss;
   if(-1 < verboseLevel) {
-    G4cout << *theDEDXTable << G4endl;
+    //G4cout << *theDEDXTable << G4endl;
     G4cout << "eloss(MeV)= " << eloss/MeV
            << " eloss0(MeV)= " << (((*theDEDXTable)[currentMaterialIndex])->
                GetValue(preStepScaledEnergy, b))*length*chargeSqRatio
            << " r0(mm)= " << (((*theRangeTable)[currentMaterialIndex])->
                GetValue(preStepScaledEnergy, b))
            << " tmax= " << tmax
+	   << " mat= " << currentMaterial
            << " matIdx= " << currentMaterialIndex
-           << " rangeTable= " << theRangeTable
+	   << " preCouple= " << (step.GetPreStepPoint())->GetMaterialCutsCouple()
+	   << " postCouple= " << (step.GetPostStepPoint())->GetMaterialCutsCouple()
+        //   << " rangeTable= " << theRangeTable
            << G4endl;
   }
-  */
+*/
 
   // Sample fluctuations
   if (lossFluctuationFlag && eloss + minKinEnergy < preStepKinEnergy) {
