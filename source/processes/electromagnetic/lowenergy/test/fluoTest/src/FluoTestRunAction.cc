@@ -8,7 +8,7 @@
 #include "G4ios.hh"
 #include "FluoTestDataSet.hh"
 #include "FluoTestNormalization.hh"
-#include "FluoTestResponse.hh"
+//#include "FluoTestResponse.hh"
 #include "G4LogLogInterpolation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -22,14 +22,15 @@ FluoTestRunAction::FluoTestRunAction(FluoTestAnalysisManager* aMgr)
 }
 FluoTestRunAction::FluoTestRunAction()
 {
-      G4double min = 0.*keV;
-      G4double max = 10.*keV;
-      G4int nBins = 100;
+      G4double min = 0.*MeV;
+      G4double max = 0.10000E+06 *MeV;
+      G4int nBins = 835;
 
       FluoTestNormalization* normalization = new FluoTestNormalization();
-    
-      dataSet = normalization->Normalize(min, max, nBins);
      
+      dataSet = normalization->Normalize(min, max, nBins,"mercury_flx_solmin");
+      //dataSet = normalization->Normalize(min, max, nBins,"B_flare");
+      
       G4String fileName = "efficienza";
       G4VDataSetAlgorithm* interpolation = new G4LogLogInterpolation();
       efficiencySet = new FluoTestDataSet(1,fileName,interpolation,keV,1);

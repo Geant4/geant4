@@ -12,9 +12,13 @@
 /vis/viewer/update
 /tracking/storeTrajectory 1
 /lowenergy/cutEnergy 250 eV
-/gun/randomVert on
+/gun/spectrum on
+/gun/isoVert on
+/gun/randomVert off
 /gun/particle proton
-/gun/energy 5 MeV
-/run/beamOn 100
+/run/beamOn 10
+/vis/scene/notifyHandlers
+/vis/viewer/update
+/run/beamOn 10
 /vis/scene/notifyHandlers
 /vis/viewer/update

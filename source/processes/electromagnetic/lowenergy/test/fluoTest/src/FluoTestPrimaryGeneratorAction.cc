@@ -1,14 +1,3 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
-//
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
-//
-// $Id: FluoTestPrimaryGeneratorAction.cc,v 1.10 2001-11-15 13:04:12 guardi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -143,12 +132,31 @@ void FluoTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       
       G4int i = 0;
       G4int id = 0;
-      G4double minEnergy = 0. * keV;
+      G4double minEnergy = 0. * MeV;
       G4double particleEnergy= 0.;
-      G4double maxEnergy = 10. * keV;
+      G4double maxEnergy = 100000. * MeV;
       G4double energyRange = maxEnergy - minEnergy;
-      
-    
+
+     /*
+     while (sum<randomNum)
+       {
+	
+	 G4cout<<"randomNum = "<<randomNum<<G4endl;
+	 particleEnergy = minEnergy+i*energyStep;
+	 sum+=(dataSet->FindValue(particleEnergy,id));
+	 G4cout<<"sum = "<<sum<<G4endl;
+	 //manca la riga in cui si trova l'energia
+	 i++;
+	 G4cout<<"i = "<<i<<G4endl;
+       }
+     */
+
+      //even if the following algorithm is heavy, it is the only
+      //one I know wich mantains the continuous character of the 
+      //spectrum. 
+      //If the spectrum is reduced again to an histogram, the integral
+      //calculated in FluoTestNormalization is meaningless
+
       while ( i == 0)
 	{
 	  G4double random = G4UniformRand();
@@ -163,11 +171,8 @@ void FluoTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	      
 	    }
 	}
-      /*      
-	      #ifdef G4ANALYSIS_USE 
-	      analysisManager->InsSpectrum(particleEnergy/keV);
-	      #endif
-      */
+      
+    
  particleGun->SetParticleEnergy(particleEnergy);
 
     }      
@@ -182,21 +187,20 @@ void FluoTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       G4double y = rho*sin(theta)*cos(phi);
       G4double z = -(rho*cos(theta));
       particleGun->SetParticlePosition(G4ThreeVector(x,y,z));
-      G4cout<<"x = "<<x/m <<" m"<<G4endl;
-      G4cout<<"y = "<<y/m <<" m"<<G4endl;
-      G4cout<<"z = "<<z/m <<" m"<<G4endl;
+     
       G4double Xdim = FluoTestDetector->GetSampleSizeXY();
       G4double Ydim = FluoTestDetector->GetSampleSizeXY();
      
       G4double Dx = Xdim*(G4UniformRand()-0.5);
-      G4cout<<"Dx = "<<Dx/m<<" m"<<G4endl;
+     
       G4double Dy = Ydim*(G4UniformRand()-0.5);
-      G4cout<<"Dy = "<<Dy/m<<" m"<<G4endl;
+      
       particleGun->SetParticleMomentumDirection(G4ThreeVector(-x+Dx,-y+Dy,-z));
       
     }
 #ifdef G4ANALYSIS_USE 
   G4double partEnergy = particleGun->GetParticleEnergy();
+  
   analysisManager->InsSpectrum(partEnergy/keV);
  
 #endif

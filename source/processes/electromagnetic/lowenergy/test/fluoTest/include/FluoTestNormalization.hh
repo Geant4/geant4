@@ -9,7 +9,7 @@ public:
 
   FluoTestNormalization();
   ~FluoTestNormalization();
-  const FluoTestDataSet* Normalize(G4double, G4double, G4int);
+  const FluoTestDataSet* Normalize(G4double, G4double, G4int,G4String);
 
 private:
 

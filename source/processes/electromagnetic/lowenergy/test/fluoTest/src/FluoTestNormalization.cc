@@ -11,18 +11,19 @@ FluoTestNormalization::~FluoTestNormalization()
 
 { }
 
-const FluoTestDataSet* FluoTestNormalization::Normalize(G4double minIntExtreme, G4double maxIntExtreme, G4int nBins)
+const FluoTestDataSet* FluoTestNormalization::Normalize(G4double minIntExtreme, G4double maxIntExtreme, G4int nBins, G4String fileName)
 {
  
- G4String fileName = "C_flare";
  G4VDataSetAlgorithm* interpolation = new G4LogLogInterpolation();
  FluoTestDataSet* dataSet = 
-   new FluoTestDataSet(1,fileName,interpolation,keV,1);
+   new FluoTestDataSet(1,fileName,interpolation,MeV,1);
+
  G4double integral = Integrate(minIntExtreme, maxIntExtreme, nBins, dataSet);
 
  G4VDataSetAlgorithm* interpolation2 = new G4LogLogInterpolation();
- FluoTestDataSet* finalDataSet = new FluoTestDataSet(1,fileName,interpolation2,keV,1/(integral/keV));
-
+ //FluoTestDataSet* finalDataSet = new FluoTestDataSet(1,fileName,interpolation2,keV,1/(integral/keV));
+ //FluoTestDataSet* finalDataSet = new FluoTestDataSet(1,fileName,interpolation2,MeV,1/integral);
+ FluoTestDataSet* finalDataSet = new FluoTestDataSet(1,fileName,interpolation2,MeV,1/(integral/MeV));
  return finalDataSet;
 }
 
@@ -43,6 +44,7 @@ G4double FluoTestNormalization::Integrate(G4double minIntExtreme, G4double maxIn
    }
 
  G4double integral = lenghtOfBins * partialHeight;
+ //G4double integral = partialHeight;
 
  delete dataSet;
  dataSet = 0;

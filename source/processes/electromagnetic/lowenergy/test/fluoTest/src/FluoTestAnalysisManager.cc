@@ -27,10 +27,12 @@ FluoTestAnalysisManager::FluoTestAnalysisManager(FluoTestDetectorConstruction* F
   histoGamDetPre(0),
   histoGamLeavSam(0),
   histoEleLeavSam(0),
-  histoGamLS(0),
-  histoGamLSP(0),
+  //histoGamLS(0),
+  //histoGamLSP(0),
   histoGamBornSam(0),
   histoEleBornSam(0),
+  histoProtLeavSam(0),
+  histoProtDetPre(0),
   histoSpectrum(0)
 {
    // Define the messenger and the analysis system
@@ -68,7 +70,7 @@ void FluoTestAnalysisManager::InsEleBornSample(double eBs)
 {
   histoEleBornSam->fill(eBs);
 }
-
+/*
 void FluoTestAnalysisManager::InsGamLS(double gS)
 {
   histoGamLS->fill(gS);
@@ -76,7 +78,7 @@ void FluoTestAnalysisManager::InsGamLS(double gS)
 void FluoTestAnalysisManager::InsGamLSP(double gSP)
 {
   histoGamLSP->fill(gSP);
-}
+}*/
 void FluoTestAnalysisManager::InsGamLeavSam(double gLs)
 {
   histoGamLeavSam->fill(gLs);
@@ -95,6 +97,14 @@ void FluoTestAnalysisManager::InsSpectrum(double sp)
 {
   histoSpectrum->fill(sp);
 }
+void FluoTestAnalysisManager::InsProtDetPre(double pdp)
+{
+  histoProtDetPre->fill(pdp);
+}
+void FluoTestAnalysisManager::InsProtLeavSam(double pLs)
+{
+  histoProtLeavSam->fill(pLs);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -106,16 +116,17 @@ void FluoTestAnalysisManager::BeginOfRun()
 { 
   ntuple = factory->createC( "fluoTestHisto1.hbook::1" );
   assert ( ntuple != 0 );
-  histoGamDet = histoManager->create1D("10","Energy deposit in the detector", 800,0,5000);
-  histoGamDetPre = histoManager->create1D("20","Gammas reaching the detector", 800,0,5000);
-  histoGamLeavSam = histoManager->create1D("30","Gammas leaving the sample", 800,0,5000);
-  histoEleLeavSam = histoManager->create1D("40","Electrons leaving the sample", 800,0,5000);
-  histoGamLS = histoManager->create1D("50","Theta of gammas leaving the sample", 800,0.,pi);
-  histoGamLSP = histoManager->create1D("60","Phi of gammas leaving the sample", 800,-pi,pi);
-  histoGamBornSam = histoManager->create1D("70"," Gammas born in the sample", 800,0,5000);
-  histoEleBornSam = histoManager->create1D("80"," Electrons born in the sample", 800,0,5000);
-  histoSpectrum =  histoManager->create1D("90","Spectrum of the incident photons",800,0,6000);
- 
+  histoGamDet = histoManager->create1D("10","Energy deposit in the detector", 1000,0,100000);
+  histoGamDetPre = histoManager->create1D("20","Gammas reaching the detector", 1000,0,100000);
+  histoGamLeavSam = histoManager->create1D("30","Gammas leaving the sample", 1000,0,100000);
+  histoEleLeavSam = histoManager->create1D("40","Electrons leaving the sample", 1000,0,100000);
+  // histoGamLS = histoManager->create1D("50","Theta of gammas leaving the sample", 800,0.,pi);
+  // histoGamLSP = histoManager->create1D("60","Phi of gammas leaving the sample", 800,-pi,pi);
+  histoGamBornSam = histoManager->create1D("70"," Gammas born in the sample", 1000,0,10000);
+  histoEleBornSam = histoManager->create1D("80"," Electrons born in the sample", 1000,0,10000);
+  histoSpectrum =  histoManager->create1D("90","Spectrum of the incident photons",1000,0,10000);
+  histoProtLeavSam = histoManager->create1D("50","Gammas leaving the sample", 1000,0,100000);
+  histoProtDetPre = histoManager->create1D("60","Gammas reaching the detector", 1000,0,100000);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -132,6 +143,8 @@ void FluoTestAnalysisManager::EndOfRun(G4int n)
   histoManager->store("70");
   histoManager->store("80");
   histoManager->store("90");
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

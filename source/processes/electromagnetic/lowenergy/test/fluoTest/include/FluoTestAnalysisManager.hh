@@ -30,13 +30,16 @@ public:
 
   void InsGamBornSample(double gBs);
   void InsEleBornSample(double eBs);
-  void InsGamLS(double gS);
-  void InsGamLSP(double gSP);
+  //void InsGamLS(double gS);
+  //void InsGamLSP(double gSP);
   void InsGamLeavSam(double gLs);
   void InsEleLeavSam(double eLs);
+ void InsProtLeavSam(double pLs);
   void InsGamDetPre(double gDpr);
+ void InsProtDetPre(double pdp);
   void InsDetETot(double dEt);
   void InsGamDet(double gD);
+
   void InsSpectrum(double sp);
   
   void BeginOfRun();
@@ -54,11 +57,14 @@ private:
   IHistogram1D*  histoGamDetPre;
   IHistogram1D*  histoGamLeavSam;
   IHistogram1D*  histoEleLeavSam;
-  IHistogram1D* histoGamLS;
- IHistogram1D* histoGamLSP;
+  //IHistogram1D* histoGamLS;
+  //IHistogram1D* histoGamLSP;
   IHistogram1D*  histoGamBornSam;
   IHistogram1D*  histoEleBornSam;
+  IHistogram1D*  histoProtLeavSam;
+  IHistogram1D*  histoProtDetPre;
   IHistogram1D*  histoSpectrum;
+
 
   FluoTestAnalysisMessenger* analysisMessenger;
 };

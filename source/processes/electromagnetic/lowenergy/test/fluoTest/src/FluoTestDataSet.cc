@@ -47,14 +47,12 @@ G4double FluoTestDataSet::FindValue(G4double e, G4int id) const
   size_t bin = FindBinLocation(e);
   if (bin == numberOfBins)
     {
-      //      G4cout << "WARNING - FluoTestSet::FindValue: energy outside upper boundary"
-      //     << G4endl;
+     
       value = (*data)[bin];
     }
   else if (e <= e0)
     {
-      //     G4cout << "WARNING - FluoTestSet::FindValue: energy outside lower boundary"
-      //     << G4endl;
+    
       value = (*data)[0];
     }
   else
@@ -71,13 +69,7 @@ G4int FluoTestDataSet::FindBinLocation(G4double energy) const
   G4double e0 = (*energies)[0];
   if (energy < e0)
     {
-      //  G4cout << z
-      //     << " - WARNING - FluoTestSet::FindBinLocation called with argument " 
-      //     << energy 
-      //    << " outside lower limit " 
-      //   << e0
-      //   << "; replaced with lower limit" 
-      //  << G4endl;
+    
       energy = e0;
     }
 
@@ -107,7 +99,7 @@ void FluoTestDataSet::LoadData(const G4String& fileName)
   
   G4String name(nameChar);
   
-  char* path = "/mnt/home/guardi/workdir/flAIDAInt2/fluoTest";
+  char* path = "/mnt/home/guardi/workdir/diffuseFluo/fluoTest";
  
   G4String pathString(path);
   G4String dirFile = pathString + "/" + name;
@@ -133,6 +125,7 @@ void FluoTestDataSet::LoadData(const G4String& fileName)
       //                                       -2   -2
       if (a == -1 || a == -2)
 	{
+	 
 	}
       else
 	{
@@ -140,12 +133,15 @@ void FluoTestDataSet::LoadData(const G4String& fileName)
 	    {	
 	      G4double e = a * unit1;
 	      energies->push_back(e);
+	    
 	      k++;
+
 	    }
 	  else if (k%nColumns == 0)
 	    {
 	      G4double value = a * unit2;
 	      data->push_back(value);
+	     
 	      k = 1;
 	    }
 	}

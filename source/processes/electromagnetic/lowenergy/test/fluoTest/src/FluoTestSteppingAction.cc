@@ -34,14 +34,14 @@ FluoTestSteppingAction::~FluoTestSteppingAction()
 void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   G4double gammaAtTheDetPre=0;
-  G4double gammaTheta = 0;
-  G4double gammatheta = 0;
-  G4double gammaPhi = 0;
-  G4double gammaphi = 0;
-  //G4double gammaAtTheDetPost=0;
+  //G4double gammaTheta = 0;
+  //G4double gammatheta = 0;
+  // G4double gammaPhi = 0;
+  // G4double gammaphi = 0;
+  G4double protonsAtTheDetPre=0;
   G4double gammaLeavingSample=0;
   G4double eleLeavingSample=0;
-  // G4double gammaLSBackw=0;
+   G4double protonsLeavSam=0;
   
   G4double gammaBornInSample=0;
   
@@ -56,20 +56,15 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
       { 
 	if ((aStep->GetTrack()->GetDynamicParticle()
 	     ->GetDefinition()-> GetParticleName()) == "gamma" ) 
-	  { gammaPhi = aStep->GetTrack()->GetMomentumDirection().phi();
-	  gammaTheta = aStep->GetTrack()->GetMomentumDirection().theta();
-	  /* if ((gammaPhi> 1.45649)&&(gammaPhi>1.70049))
-	     {if(( gammaTheta>2.27673)&&(gammaPhi>2.43589))
-	     {gamma++;
-	     G4cout<<"gamma = "<<gamma<<G4endl;
-	      }
-	      }*/
+	  { //gammaPhi = aStep->GetTrack()->GetMomentumDirection().phi();
+	    // gammaTheta = aStep->GetTrack()->GetMomentumDirection().theta();
+	 
 	  gammaLeavingSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
 	  
 #ifdef G4ANALYSIS_USE
 	  analysisManager->InsGamLeavSam(gammaLeavingSample/keV);  
-	  analysisManager->InsGamLS(gammaTheta);
-	  analysisManager->InsGamLSP(gammaPhi);
+	  // analysisManager->InsGamLS(gammaTheta);
+	  // analysisManager->InsGamLSP(gammaPhi);
 #endif 
 	  
 	  }
@@ -90,6 +85,16 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 	    analysisManager->InsEleLeavSam(eleLeavingSample/keV);  
 #endif
 	  }
+	else if ((aStep->GetTrack()->GetDynamicParticle()
+	     ->GetDefinition()-> GetParticleName()) == "proton" )
+ {
+	    protonsLeavSam = (aStep->GetPreStepPoint()->GetKineticEnergy());
+	    
+#ifdef G4ANALYSIS_USE
+	    analysisManager->InsProtLeavSam(protonsLeavSam/keV);  
+#endif
+	  }
+
       }
   }
   
@@ -105,7 +110,7 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 	  {
 	    gammaBornInSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
 	    
-	     G4cout<<"Prodotto un gamma con energia: "<< gammaBornInSample/keV<<" keV"<<G4endl;
+	     
 #ifdef G4ANALYSIS_USE
 	    analysisManager->InsGamBornSample(gammaBornInSample/keV);  
 #endif 
@@ -125,7 +130,7 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 	 {if(aStep->GetTrack()->GetVolume()->GetName() == "Sample")
 	   {
 	     eleBornInSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
-	     G4cout<<"Prodotto un elettrone con energia: "<< eleBornInSample/keV<<" keV"<<G4endl;
+	    
 #ifdef G4ANALYSIS_USE
 	     analysisManager->InsEleBornSample(eleBornInSample/keV);  
 #endif 
@@ -144,13 +149,23 @@ void FluoTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 	{ 
 	  if ((aStep->GetTrack()->GetDynamicParticle()
 	       ->GetDefinition()-> GetParticleName()) == "gamma" ) 
-	    {gammaphi = aStep->GetTrack()->GetMomentumDirection().phi();
-	    gammatheta = aStep->GetTrack()->GetMomentumDirection().theta();
-	    //  G4cout<<"il phi e' "<<gammaphi<<", il theta e' "<< gammatheta<<G4endl;
+	    {//gammaphi = aStep->GetTrack()->GetMomentumDirection().phi();
+	    //gammatheta = aStep->GetTrack()->GetMomentumDirection().theta();
+	  
 	    gammaAtTheDetPre = (aStep->GetPreStepPoint()->GetKineticEnergy());
 	    
 #ifdef G4ANALYSIS_USE
 	    analysisManager->InsGamDetPre(gammaAtTheDetPre/keV);  
+#endif 
+
+	    }
+	  else if ((aStep->GetTrack()->GetDynamicParticle()
+		    ->GetDefinition()-> GetParticleName()) == "proton" ) 
+	    {
+	      protonsAtTheDetPre = (aStep->GetPreStepPoint()->GetKineticEnergy());
+	    
+#ifdef G4ANALYSIS_USE
+	    analysisManager->InsProtDetPre(protonsAtTheDetPre/keV);  
 #endif 
 
 	    }

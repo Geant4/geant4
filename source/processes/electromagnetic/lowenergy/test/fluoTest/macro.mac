@@ -7,12 +7,12 @@
 /lowenergy/cutEnergy 250 eV
 
 #/tracking/verbose 1
-#/gun/spectrum on
-#/gun/isoVert on
-/gun/randomVert on
+/gun/spectrum on
+/gun/isoVert on
+/gun/randomVert off
 #/gun/particle gamma
 /gun/particle proton
-/gun/energy 5 MeV
+#/gun/energy 5 MeV
 
-/run/beamOn 100
+/run/beamOn 100000
 #/run/beamOn 10

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FluoTestPrimaryGeneratorAction.hh,v 1.11 2001-11-15 13:04:07 guardi Exp $
+// $Id: FluoTestPrimaryGeneratorAction.hh,v 1.12 2001-11-16 13:51:34 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -4,7 +4,7 @@
 #include "FluoTestSensorHit.hh"
 #include "FluoTestEventActionMessenger.hh"
 #include "FluoTestRunAction.hh"
-#include "FluoTestResponse.hh"
+//#include "FluoTestResponse.hh"
 #ifdef G4ANALYSIS_USE
 #include "FluoTestAnalysisManager.hh"
 #endif
