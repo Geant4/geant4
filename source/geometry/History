@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-01-07 16:06:59 gunter Exp $
+$Id: History,v 1.2 1999-03-19 19:33:56 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,46 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar  19,  98   John Apostolakis              geometry-01-00-01
+
+ Category tag using:
+   solids:       [tag geomsolids-01-00-01]
+   volumes:      [tag geomsolids-01-00-01]
+   management:   [tag geommng-01-00-02 ]
+   magneticfield [tag field-01-00-03]
+
+Mar  19,  98   John Apostolakis
+
+ Summary of significant changes in sub-categories/sub-directories
+   management:   [tag geommng-01-00-02 ]
+      G4AffineTransform.icc InverseProduct fix (used in Navigator). 
+
+   [....  Add information here .... ? ]
+
+Jan  15,  98   John Apostolakis   
+
+   Fixes in CSG solids (Cons by V.Grichine, CSG Pcone+Pgon by D.C.Williams)
+
+Jan  15,  98   Simone Giani      ( rec by JA. )
+   Fixes in the creation of Smart Voxels: 
+
+   Less memory intensive and much more performant at initialisation.
+   No worse, but a little faster at tracking time.  (G4SmartVoxelHeader)
+
+Jan  10,  98   John Apostolakis   ( geometry-01-00-01 to be done)
+                                    geometry as in geant4-00-patch2
+
+   Fixes in BREPs (Pcone, Pgon, ...)  see solids/BREPS/History
+   includes the subtags
+
+      stepinterface-01-00-01      
+      step-01-00-01
+
+===============================================================================
+  Geant4.0.0  , 1st production release. 
+===============================================================================
+
 Dec  11,  98   John Apostolakis   geometry-00-04-04
 
    Fixes in BREP Pcone, Pgon
