@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: XrayTelAnalysis.cc,v 1.6 2002-11-14 12:03:11 santin Exp $
+// $Id: XrayTelAnalysis.cc,v 1.7 2002-11-15 11:19:32 santin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
@@ -121,9 +121,6 @@ void XrayTelAnalysis::book()
 	histoFactory->createHistogram2D("2","y-z, all /mm", 100,-500.,500.,100,-500.,500.);
 	histoFactory->createHistogram1D("3","Energy, entering detector /keV", 500,0.,500.);
 	histoFactory->createHistogram2D("4","y-z, entering detector /mm", 200,-50.,50.,200,-50.,50.);
-
-	// Divide the plot into 4 zones to show the 4 histograms during execution
-	//  plotter->zone(2,2,0,0);
 
 	// Book ntuples
 	AIDA::ITuple* ntuple10 = tupleFactory->create( "10", "Track ntuple", 
@@ -232,9 +229,6 @@ void XrayTelAnalysis::plotAll()
 	// Map the plotter on screen :
 	G4cout << "Showing the Plotter on screen" << G4endl;
 	plotter->show();
-	// Have multiple plotting regions (two columns, two rows).
-	// G4cout << "Dividing the Plotter in multiple regions" << G4endl;
-	// plotter->createRegions(2,2); 
       } else {
 	G4cout << "XrayTelAnalysis::plotAll: WARNING: Plotter not created" << G4endl;
       }
@@ -249,18 +243,6 @@ void XrayTelAnalysis::plotAll()
     AIDA::IHistogram1D& h  = *hp;  
     (plotter->currentRegion()).plot(h);
     plotter->refresh();
-//     plotter->next();
-//     hp = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("2") );
-//     h  = *hp;
-//     (plotter->currentRegion()).plot(h);
-//     plotter->next();
-//     hp = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("3") );
-//     h  = *hp;
-//     (plotter->currentRegion()).plot(h);
-//     plotter->next();
-//     hp = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("4") );
-//     h  = *hp;
-//     (plotter->currentRegion()).plot(h);
   }
 }
 #endif
