@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.9 2004-05-11 15:39:45 kurasige Exp $
+// $Id: G4ParticleChangeForLoss.hh,v 1.10 2004-06-14 11:23:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -86,8 +86,8 @@ public:
   void SetProposedKineticEnergy(G4double proposedKinEnergy);
   // Get/Set the final kinetic energy of the current particle.
 
-//  G4double GetEnergy() const;
-//  void ProposeEnergy(G4double finalEnergy);
+  //  G4double GetEnergy() const;
+  //  void ProposeEnergy(G4double finalEnergy);
   // Get/Propose the final kinetic energy of the current particle.
 
   const G4ThreeVector& GetProposedMomentumDirection() const;
@@ -96,6 +96,10 @@ public:
   void ProposeMomentumDirection(G4double Px, G4double Py, G4double Pz);
   void ProposeMomentumDirection(const G4ThreeVector& Pfinal);
   // Get/Propose the MomentumDirection vector: it is the final momentum direction.
+
+  G4double GetWeight() const;
+  void ProposeWeight(G4double finalWeight);
+  //   Get/Propose the final Weight of the current particle
 
   virtual void DumpInfo() const;
 
@@ -111,10 +115,16 @@ private:
 
   const G4Track* currentTrack;
   // The pointer to G4Track
+
   G4double proposedKinEnergy;
   //  The final kinetic energy of the current particle.
+
   G4double currentCharge;
   //  The final charge of the current particle.
+
+  G4double theProposedWeight;
+  //  The parent and final weight of a given track
+
   G4ThreeVector proposedMomentumDirection;
   //  The final momentum direction of the current particle.
 };
@@ -147,6 +157,17 @@ inline void G4ParticleChangeForLoss::SetProposedCharge(G4double theCharge)
 inline void G4ParticleChangeForLoss::ProposeCharge(G4double theCharge)
 {
   currentCharge = theCharge;
+}
+
+inline G4double G4ParticleChangeForLoss::GetWeight() const
+{
+  return theProposedWeight;
+}
+
+inline void G4ParticleChangeForLoss::ProposeWeight(G4double w)
+{
+  theProposedWeight = w;
+  theParentWeight   = w;
 }
 
 inline
@@ -188,6 +209,7 @@ inline void G4ParticleChangeForLoss::InitializeForAlongStep(const G4Track& track
   InitializeSecondaries(track);
   proposedKinEnergy = track.GetKineticEnergy();
   currentCharge = track.GetDynamicParticle()->GetCharge();
+  theProposedWeight = track.GetWeight();
 }
 
 inline void G4ParticleChangeForLoss::InitializeForPostStep(const G4Track& track)
@@ -197,6 +219,7 @@ inline void G4ParticleChangeForLoss::InitializeForPostStep(const G4Track& track)
   InitializeSecondaries(track);
   proposedKinEnergy = track.GetKineticEnergy();
   currentCharge = track.GetDynamicParticle()->GetCharge();
+  theProposedWeight = track.GetWeight();
   proposedMomentumDirection = track.GetMomentumDirection();
   currentTrack = &track;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.cc,v 1.11 2004-05-11 15:39:45 kurasige Exp $
+// $Id: G4ParticleChangeForLoss.cc,v 1.12 2004-06-14 11:23:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,6 +72,7 @@ G4ParticleChangeForLoss::G4ParticleChangeForLoss(
       currentTrack = right.currentTrack;
       proposedKinEnergy = right.proposedKinEnergy;
       currentCharge = right.currentCharge;
+      theProposedWeight = right.theProposedWeight;
       proposedMomentumDirection = right.proposedMomentumDirection;
 }
 
@@ -94,6 +95,7 @@ G4ParticleChangeForLoss & G4ParticleChangeForLoss::operator=(
       currentTrack = right.currentTrack;
       proposedKinEnergy = right.proposedKinEnergy;
       currentCharge = right.currentCharge;
+      theProposedWeight = right.theProposedWeight;
       proposedMomentumDirection = right.proposedMomentumDirection;
    }
    return *this;
@@ -112,11 +114,12 @@ G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
   // So, the differences (delta) between these two states have to be
   // calculated and be accumulated in PostStepPoint.
 
+  G4StepPoint* pPreStepPoint = pStep->GetPreStepPoint();
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
 
   // calculate new kinetic energy
   G4double kinEnergy = pPostStepPoint->GetKineticEnergy()
-                    + (proposedKinEnergy - pStep->GetPreStepPoint()->GetKineticEnergy());
+                    + (proposedKinEnergy - pPreStepPoint->GetKineticEnergy());
 
   // update kinetic energy and momentum direction
   if (kinEnergy < 0.0) {
@@ -126,6 +129,11 @@ G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
 
   pPostStepPoint->SetKineticEnergy( kinEnergy );
   pPostStepPoint->SetCharge( currentCharge );
+
+  // update weight
+  G4double newWeight = theProposedWeight/(pPreStepPoint->GetWeight())*(pPostStepPoint->GetWeight());
+  pPostStepPoint->SetWeight( newWeight );
+
 
 // Not necessary to check now
 //#ifdef G4VERBOSE
@@ -151,6 +159,9 @@ G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
   pPostStepPoint->SetKineticEnergy( proposedKinEnergy );
   pPostStepPoint->SetCharge( currentCharge );
   pPostStepPoint->SetMomentumDirection( proposedMomentumDirection );
+
+  // update weight
+  pPostStepPoint->SetWeight( theProposedWeight );
 
 // Not necessary to check now
 //#ifdef G4VERBOSE
