@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalPhoton.hh,v 1.10 2005-01-14 03:49:05 asaim Exp $
+// $Id: G4OpticalPhoton.hh,v 1.11 2005-01-30 22:57:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@
 // ###                         OPTICAL PHOTON                         ###
 // ######################################################################
 
-class G4OpticalPhoton : G4ParticleDefinition
+class G4OpticalPhoton : public G4ParticleDefinition
 {
  private:
    static G4OpticalPhoton* theInstance;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoTau.hh,v 1.11 2005-01-14 03:49:17 asaim Exp $
+// $Id: G4NeutrinoTau.hh,v 1.12 2005-01-30 22:58:04 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@
 // ###                         NEUTRINO TAU                           ###
 // ######################################################################
 
-class G4NeutrinoTau : G4ParticleDefinition
+class G4NeutrinoTau : public G4ParticleDefinition
 {
  private:
    static G4NeutrinoTau* theInstance;

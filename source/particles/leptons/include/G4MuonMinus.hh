@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonMinus.hh,v 1.9 2005-01-14 03:49:17 asaim Exp $
+// $Id: G4MuonMinus.hh,v 1.10 2005-01-30 22:58:04 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@
 // ###                        MUONMINUS                               ###
 // ######################################################################
 
-class G4MuonMinus : G4ParticleDefinition
+class G4MuonMinus : public G4ParticleDefinition
 {
  private:
    static G4MuonMinus* theInstance;

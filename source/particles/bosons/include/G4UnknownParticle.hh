@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnknownParticle.hh,v 1.3 2005-01-14 03:49:05 asaim Exp $
+// $Id: G4UnknownParticle.hh,v 1.4 2005-01-30 22:58:02 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@
 // ###                         UNKNOWN                                ###
 // ######################################################################
 
-class G4UnknownParticle : G4ParticleDefinition
+class G4UnknownParticle : public G4ParticleDefinition
 {
  private:
    static G4UnknownParticle* theInstance;
