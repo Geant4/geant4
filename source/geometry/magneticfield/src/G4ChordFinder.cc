@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.30 2002-11-06 17:10:19 grichine Exp $
+// $Id: G4ChordFinder.cc,v 1.31 2002-11-09 02:50:48 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -248,6 +248,11 @@ if( dbg ) {
 G4double G4ChordFinder::NewStep(G4double  stepTrialOld, 
 		                G4double  dChordStep, // Current dchord achieved.
                                 G4double& stepEstimate_Unconstrained )  
+//
+//  Is called to estimate the next step size, even for successful steps,
+//     in order to predict an accurate 'chord-sensitive' first step
+//     which is likely to assist in more performant 'stepping'.
+//
 		   
 {
   G4double stepTrial;
@@ -259,12 +264,13 @@ G4double G4ChordFinder::NewStep(G4double  stepTrialOld,
   if (dChordStep > 0.0)
   {
     stepEstimate_Unconstrained = stepTrialOld * sqrt( fDeltaChord / dChordStep );
+    stepTrial =  0.98 * stepEstimate_Unconstrained;
   }
   else
   {
-    stepEstimate_Unconstrained = stepTrialOld ;
+    // Should not update the Unconstrained Step estimate: incorrect!
+    stepTrial =  stepTrialOld * 2.; 
   }
-  stepTrial =  0.98 * stepEstimate_Unconstrained;
 
   // if ( dChordStep < threshold * fDeltaChord ){
   //    stepTrial= stepTrialOld *  multiplier;    
