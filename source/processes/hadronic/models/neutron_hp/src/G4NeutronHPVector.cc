@@ -2,6 +2,48 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 #include "G4NeutronHPVector.hh"
+ 
+  // if the ranges do not match, constant extrapolation is used.
+  G4NeutronHPVector & operator + (const G4NeutronHPVector & left, const G4NeutronHPVector & right)
+  {
+    G4NeutronHPVector * result = new G4NeutronHPVector;
+    G4int j=0;
+    G4double x;
+    G4double yl, yr, y;
+    G4int running = 0;
+    for(G4int i=0; i<left.nEntries; i++)
+    {
+      while(j<right.nEntries)
+      {
+        if(right.GetX(j)<left.GetX(i)*1.001)
+        {
+          x = right.GetX(j);
+          y = right.GetY(j)+left.GetY(x);
+          result->SetData(running++, x, y);
+          j++;
+        }
+        else if(abs((right.GetX(j)-left.GetX(i))/(left.GetX(i)+right.GetX(j)))>0.001)
+        {
+          x = left.GetX(i);
+          y = left.GetY(i)+right.GetY(x);
+          result->SetData(running++, x, y);
+          break;
+        }
+        else
+        {
+          break;
+        }
+      }
+      if(j==right.nEntries)
+      {
+        x = left.GetX(i);
+        y = left.GetY(i)+right.GetY(x);
+        result->SetData(running++, x, y);     
+      }
+    }
+    result->ThinOut(0.02);
+    return *result;
+  }
 
   G4NeutronHPVector::G4NeutronHPVector()
   {
@@ -46,7 +88,7 @@
     return *this;
   }
 
-  G4double G4NeutronHPVector::GetXsec(G4double e)
+  G4double G4NeutronHPVector::GetXsec(G4double e) const
   {
     if(nEntries <= 1) 
     {
@@ -56,7 +98,7 @@
     G4int found = 0;
     G4int low   = 0;
     G4int high  = 0;
-    G4double eps = 0.00001*e;  // fast fix of precision problems, needs improvement
+    G4double eps = 0.00001*e;  // fast fix of precision problems, needs improvement @@@
 //    if(Verbose==1) G4cout <<"G4NeutronHPVector::GetXsec";
     if(e<=theData[0].GetX()) return theData[0].GetY();
     G4int i=0, ii;
@@ -120,6 +162,23 @@
     y1 = theData[low] .GetY();
     y2 = theData[high].GetY();
     y = theInt.Interpolate(theManager.GetScheme(high), x, x1, x2, y1, y2);
+    if(e>=theData[nEntries-1].GetX()) 
+    {
+      if(theData[nEntries-1].GetY()>y) 
+      {
+        y=max(y, 0.8*theData[nEntries-1].GetY());
+      }
+      else
+      {
+        if(low!=0)
+        {
+          x1 = theData[low-1] .GetX();
+          y1 = theData[low-1] .GetY();
+          y = theInt.Interpolate(theManager.GetScheme(high), x, x1, x2, y1, y2);
+          if(y>theData[nEntries-1].GetY()) y = theData[nEntries-1].GetY();
+        }
+      }
+    }
     return y;
   }
 
@@ -240,8 +299,8 @@
       }
       current++ ;
     }
-    aBuff[count] = theData[GetVectorLength()-1];
-    delete theData;
+    aBuff[count++] = theData[GetVectorLength()-1];
+    delete [] theData;
     theData = aBuff;
     nEntries = count;
   }
