@@ -1,0 +1,120 @@
+
+                       geant4-04-01-ref-04
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Fixed PDG codes for particles k0_star(1430), a0(1450) and f0(1370).
+  o Bug fixes to ion ionisation in low-energy electromagnetic processes.
+  o New angular distribution for multiple scattering and fix to the
+    boundary algorithm.
+  o Added a cut-off for materials heavier than uranium in neutron
+    hadronic model.
+  o Implemented DumpInfo() mechanism for solids. Interface change
+    required for concrete solids inherited from G4VSolid to implement
+    streaming function.
+  o Fixes in G4BREPPolycone and specific solids.
+  
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+event                                   event-V04-01-03
+-----
+- Added protection against user's mis-use of destruction of
+  G4TrajectoryContainer. By design it was expected that
+  G4TrajectoryContainer would be deleted by G4Event destructor,
+  after clearAndDestroy() is separately invoked.
+
+geometry/management                     geommng-V04-01-03
+-------------------
+- Added checks for illegal geometry contructions for G4PVReplica and
+  G4PVParameterised. Contructors now verify unicity of daughter volumes
+  for replicas and parameterised volumes, as well as checks for attempt
+  to replicate/parameterise the world volume. 
+- Added new method IsParameterised() for G4PVParameterised and
+  G4PVPlacement, to enquire for existing parameterisation for a placed
+  volume. 
+- Added methods IsParameterised() and GetMultiplicity() for G4PVReplica
+  andG4VPhysicalVolume to enquire for existing parameterisation of
+  placed volume, and number of replicated volumes.
+- Added pure virtual method StreamInfo() in G4VSolid to stream contents
+  of a solid to a generic output stream. Interface change required for
+  all derived concrete solids.
+  Added method DumpInfo() using StreamInfo() to dump contents to the
+  standard output. 
+
+geometry/solids                         geomsolids-V04-01-00
+---------------
+- Implemented mechanism for dumping contents of solids on streams 
+  (BREPS solids to be completed still). 
+- General cleanup: 
+  o removal of characters and uniform indentation of code 
+  o inline methods moved to .icc files 
+  o reorganised comments for Software Reference Manual.
+- Boolean solids:    (geom-bool-V04-01-01)
+  o Added method CleanTransformations() to G4DisplacedSolid and
+    corrected implementation in destructor of G4BooleanSolid to
+    not call for deletion of G4VSolid in the case where displacement
+    is used. 
+    This fixes a problem noticed on Linux-g++ at application closeout
+    for double deletion of a solid in such special case. 
+- Specific solids:   (geom-specific-V04-01-01)
+  o Fixed un-initialised data members in constructors of classes: 
+    G4ClippablePolygon, G4EnclosingCylinder, G4PolyconeSide, 
+    G4ReduciblePolygon, G4VCSGfaceted. 
+- BREPS solids:      (breps-V04-01-01)
+  o Fix in G4BREPSolidPCone in construction for creation of
+    begin & end planar surfaces in the case where
+    [RMIN[0] == 0.0 && RMAX[0] > 0.0] and/or 
+    [RMIN[sections] == 0.0 && RMAX[sections] > 0.0]. 
+    Fixes problem report #419. 
+
+particles                               particles-V04-01-00
+---------
+- Fixed PDG codes for k0_star(1430), a0(1450) and f0(1370).
+
+processes/electromagnetic/lowenergy     emlowen-V04-01-04
+-----------------------------------
+- Bug fixes for ion ionisation, related to the interaction between
+  energy loss and fluorescence.
+
+processes/electromagnetic/standard      stand-V04-01-01
+----------------------------------
+- PAIxSection and PAIonisation: synchronised HEAD of repository,
+  no functional changes.
+
+processes/electromagnetic/utils         utils-V04-01-02
+-------------------------------
+- Multiple scattering: new angular distribution and minor fix in the
+  boundary algorithm. 
+
+processes/hadronic/models/neutron_hp    neu-V04-01-01
+------------------------------------
+- Added a cut-off for materials heavier than uranium.
+- Included unit tests for robustness.
+
+processes/management                    procman-V04-01-00
+--------------------
+- Added new command /process/setVerbose for G4ProcessTableMessenger.
+
+visualization				vis-V04-01-01
+-------------
+- OpenGL driver: fixes for WIN32 architecture at compilation level.
+  Viewer still to be implemented. 
+
+g3tog4                                  g3tog4-V04-01-00
+------
+- Fix in G4gsdvn G4gsposp to enable larger number of clone volumes 
+- Fix for division defined in a mother with not yet defined parameters. 
+
+examples
+--------
+- Updated reference outputs
+
+tests
+-----
+- Updated reference outputs
+- test17 (test17-V04-01-00)
+  o extended test to cover more use cases - GenericIons, PIXE, Auger.
