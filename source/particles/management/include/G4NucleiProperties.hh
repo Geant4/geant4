@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiProperties.hh,v 1.4 1999-05-26 16:22:10 larazb Exp $
+// $Id: G4NucleiProperties.hh,v 1.5 1999-08-20 14:26:45 larazb Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,12 +20,14 @@
 // Added Shell-Pairing corrections to the Cameron mass 
 // excess formula by V.Lara (9 May 99)
 // 
+
 #ifndef G4NucleiProperties_h
 #define G4NucleiProperties_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiPropertiesTheoreticalTable.hh"
 #include "G4ParticleTable.hh"
 
 class G4NucleiProperties
@@ -54,6 +56,7 @@ public:
 			return 0.0;
 		} else {
 			if (G4NucleiPropertiesTable::IsInTable(Z,A)) return G4NucleiPropertiesTable::GetMassExcess(Z,A);
+			else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)) return G4NucleiPropertiesTheoreticalTable::GetMassExcess(Z,A);
 			else return MassExcess(A,Z);
 		}
 	}
@@ -66,8 +69,8 @@ public:
 		} else if (abs(A - G4int(A)) > 1.e-10) {
 			return AtomicMass(Z,A);
 		} else {
-			if (G4NucleiPropertiesTable::IsInTable(Z,A))
-					return G4NucleiPropertiesTable::GetAtomicMass(Z,A);
+			if (G4NucleiPropertiesTable::IsInTable(Z,A)) return G4NucleiPropertiesTable::GetAtomicMass(Z,A);
+			else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)) return G4NucleiPropertiesTheoreticalTable::GetAtomicMass(Z,A);
 			else return AtomicMass(Z,A);
 		}
 	}
@@ -80,6 +83,7 @@ public:
 			return 0.0;
 		} else {
 			if (G4NucleiPropertiesTable::IsInTable(Z,A)) return G4NucleiPropertiesTable::GetBindingEnergy(Z,A);
+			else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)) return G4NucleiPropertiesTheoreticalTable::GetBindingEnergy(Z,A);
 			else return BindingEnergy(A,Z);
 		}
 	}
@@ -95,18 +99,9 @@ private:
 	
 	static G4double BindingEnergy(G4double A, G4double Z);
 
-	static G4double MassExcess(G4double A, G4double Z)
-	{return GetNuclearMass(A,Z) - A*amu_c2;}
+	static G4double MassExcess(G4double A, G4double Z) {return GetAtomicMass(A,Z) - A*amu_c2;}
 	
 	
-
-//private:
- 
-//  enum { TableSize = 200 };
-
-//  static const G4double SPZTable[TableSize];
-
-//  static const G4double SPNTable[TableSize];
 };
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiProperties.cc,v 1.3 1999-05-26 14:05:17 larazb Exp $
+// $Id: G4NucleiProperties.cc,v 1.4 1999-08-20 14:26:54 larazb Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,6 +24,69 @@
 
 
 #include "G4NucleiProperties.hh"
+
+
+
+G4double  G4NucleiProperties::AtomicMass(G4double Z, G4double A)
+{
+  const G4double hydrogen_mass_excess = G4NucleiPropertiesTable::GetMassExcess(1,1);
+  const G4double neutron_mass_excess =  G4NucleiPropertiesTable::GetMassExcess(0,1);
+
+  G4double mass =
+      (A-Z)*neutron_mass_excess + Z*hydrogen_mass_excess - BindingEnergy(A,Z) + A*amu_c2;
+
+  return mass;
+}
+
+G4double  G4NucleiProperties::BindingEnergy(G4double A, G4double Z)
+{ 
+  //
+  // Weitzsaecker's Mass formula
+  //
+  G4int Npairing = G4int(A-Z)%2;                  // pairing
+  G4int Zpairing = G4int(Z)%2;
+  G4double binding =
+      - 15.67*A                           // nuclear volume
+      + 17.23*pow(A,2./3.)                // surface energy
+      + 93.15*((A/2.-Z)*(A/2.-Z))/A       // asymmetry
+      + 0.6984523*Z*Z*pow(A,-1./3.);      // coulomb
+  if( Npairing == Zpairing ) binding += (Npairing+Zpairing-1) * 12.0 / sqrt(A);  // pairing
+
+  return -binding*MeV;
+}
+
+
+G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
+{
+	if (A < 1 || Z < 0 || Z > A) {
+		G4cout << "G4NucleiProperties::GetNuclearMass: Wrong values for A = " << A 
+				 << " and Z = " << Z << endl;
+		return 0.0;
+	} else {
+	 	G4ParticleDefinition * nucleus = 0;
+		if ( (Z<=2) ) {
+			if ( (Z==1)&&(A==1) ) {
+				nucleus = G4ParticleTable::GetParticleTable()->FindParticle("proton"); // proton 
+			} else if ( (Z==0)&&(A==1) ) {
+			  	nucleus = G4ParticleTable::GetParticleTable()->FindParticle("neutron"); // neutron 
+    		} else if ( (Z==1)&&(A==2) ) {
+	  			nucleus = G4ParticleTable::GetParticleTable()->FindParticle("deuteron"); // deuteron 
+    		} else if ( (Z==1)&&(A==3) ) {
+	  			nucleus = G4ParticleTable::GetParticleTable()->FindParticle("triton"); // triton 
+    		} else if ( (Z==2)&&(A==4) ) {
+	  			nucleus = G4ParticleTable::GetParticleTable()->FindParticle("alpha"); // alpha 
+    		} else if ( (Z==2)&&(A==3) ) {
+	  			nucleus = G4ParticleTable::GetParticleTable()->FindParticle("He3"); // He3 
+			}
+  		}
+		if (nucleus!=0) {
+			return nucleus->GetPDGMass();
+  		}else {
+			return AtomicMass(A,Z) - Z*electron_mass_c2 + 1.433e-5*MeV*pow(Z,2.39);
+		}
+	}
+}
+
 
 // G4double G4NucleiProperties::CameronMassExcess(const G4int A, const G4int Z)
 // {
@@ -73,99 +136,6 @@
 // 			 
 // 	return MassExcess;
 // }
-
-
-G4double  G4NucleiProperties::AtomicMass(G4double Z, G4double A)
-{
-  // derived from original FORTRAN code ATOMAS by H. Fesefeldt (2-Dec-1986)
-  //
-  // Computes atomic mass in MeV
-  // units for A example:  A = material->GetA()/(g/mole);
-  //
-  // Note:  can't just use aEff and zEff since the Nuclear Reaction
-  //        function needs to calculate atomic mass for various values of A and Z
-  
-  G4ParticleDefinition* proton = G4ParticleTable::GetParticleTable()->FindParticle("proton");
-  G4ParticleDefinition* neutron = G4ParticleTable::GetParticleTable()->FindParticle("neutron");
-  G4ParticleDefinition* electron = G4ParticleTable::GetParticleTable()->FindParticle("e-");
-  if ((proton == 0)||(neutron == 0)||(electron == 0)) {
-    G4Exception("G4NucleiProperties::AtomicMass G4Proton or G4Neutron is not defined !!"); 
-  }
-  const G4double proton_mass = proton->GetPDGMass();
-  const G4double neutron_mass =  neutron->GetPDGMass();
-  const G4double electron_mass = electron->GetPDGMass();
-  //
-  // Weitzsaecker's Mass formula
-  //
-  G4int nNeutron = A-Z;
-  G4int ipp = G4int(nNeutron)%2;            // pairing
-  G4int izz = G4int(Z)%2;
-  G4double mass =
-      nNeutron*neutron_mass + Z*proton_mass 
-      - 15.67*double(A)                                  // nuclear volume
-      + 17.23*pow(double(A),2./3.)                       // surface energy
-      + 93.15*(double(A/2.-Z)*double(A/2.-Z))/double(A)  // asymmetry
-      + 0.6984523*double(Z*Z)*pow(double(A),-1./3.)      // coulomb
-      + Z*electron_mass;                                 // electrons mass 
-  if( ipp == izz ) mass += (ipp+izz-1) * 12.0 / sqrt(double(A));  // pairing
-
-  return mass*MeV;
-}
-
-G4double  G4NucleiProperties::BindingEnergy(G4double A, G4double Z)
-{ 
-  //
-  // Weitzsaecker's Mass formula
-  //
-  G4int nNeutron = A-Z;
-  G4int ipp = G4int(nNeutron)%2;            // pairing
-  G4int izz = G4int(Z)%2;
-  G4double binding =
-      - 15.67*A                           // nuclear volume
-      + 17.23*pow(A,2./3.)                // surface energy
-      + 93.15*((A/2.-Z)*(A/2.-Z))/A       // asymmetry
-      + 0.6984523*Z*Z*pow(A,-1./3.);      // coulomb
-  if( ipp == izz ) binding += (ipp+izz-1) * 12.0 / sqrt(A);  // pairing
-
-  return -binding*MeV;
-}
-
-
-G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
-{
-	if (A < 1 || Z < 0 || Z > A) {
-		G4cout << "G4NucleiProperties::GetNuclearMass: Wrong values for A = " << A 
-				 << " and Z = " << Z << endl;
-		return 0.0;
-	} else {
-	 	G4ParticleDefinition * nucleus = 0;
-		if ( (Z<=2) ) {
-			if ( (Z==1)&&(A==1) ) {
-				nucleus = G4ParticleTable::GetParticleTable()->FindParticle("proton"); // proton 
-			} else if ( (Z==0)&&(A==1) ) {
-			  	nucleus = G4ParticleTable::GetParticleTable()->FindParticle("neutron"); // neutron 
-    		} else if ( (Z==1)&&(A==2) ) {
-	  			nucleus = G4ParticleTable::GetParticleTable()->FindParticle("deuteron"); // deuteron 
-    		} else if ( (Z==1)&&(A==3) ) {
-	  			nucleus = G4ParticleTable::GetParticleTable()->FindParticle("triton"); // tritoon 
-    		} else if ( (Z==2)&&(A==4) ) {
-	  			nucleus = G4ParticleTable::GetParticleTable()->FindParticle("alpha"); // alpha 
-    		} else if ( (Z==2)&&(A==3) ) {
-	  			nucleus = G4ParticleTable::GetParticleTable()->FindParticle("He3"); // He3 
-			}
-  		}
-		if (nucleus!=0) {
-			return nucleus->GetPDGMass();
-  		}else {
-			G4double bindingEnergy = GetBindingEnergy(A,Z);
-			G4double protonMass = G4ParticleTable::GetParticleTable()->FindParticle("proton")->GetPDGMass();
-			G4double neutronMass = G4ParticleTable::GetParticleTable()->FindParticle("neutron")->GetPDGMass();
-			return Z*protonMass + (A-Z)*neutronMass - bindingEnergy;
-		}
-	}
-}
-
-
 
 
 // S(Z)+P(Z) from Tab. 1 from A.G.W. Cameron, Canad. J. Phys., 35(1957)1021
