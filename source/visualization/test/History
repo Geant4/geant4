@@ -1,7 +1,10 @@
-$Id: History,v 1.12 2001-08-17 22:57:51 johna Exp $
+$Id: History,v 1.13 2001-08-24 20:25:55 johna Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+24th August 2001  John Allison  (vis-V03-02-13)
+- Moved drawing of scale from stepping action to event action.
 
 17th August 2001  John Allison  (vis-V03-02-12)
 - test19.cc registers graphics system XXX.

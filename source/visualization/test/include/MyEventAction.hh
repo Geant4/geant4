@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyEventAction.hh,v 1.3 2001-07-11 10:09:25 gunter Exp $
+// $Id: MyEventAction.hh,v 1.4 2001-08-24 20:25:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,8 +39,8 @@ class MyEventAction : public G4UserEventAction
     ~MyEventAction();
 
   public:
-    void BeginOfEventAction();
-    void EndOfEventAction();
+    void BeginOfEventAction(const G4Event* anEvent);
+    void EndOfEventAction(const G4Event* anEvent);
 };
 
 #endif

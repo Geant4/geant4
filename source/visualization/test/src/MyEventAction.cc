@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyEventAction.cc,v 1.3 2001-07-11 10:09:28 gunter Exp $
+// $Id: MyEventAction.cc,v 1.4 2001-08-24 20:25:59 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,9 +37,13 @@
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
 #include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
+#include "G4Scale.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
+
+//#define DRAWTRAJHIT
 
 MyEventAction::MyEventAction()
 {;}
@@ -47,40 +51,57 @@ MyEventAction::MyEventAction()
 MyEventAction::~MyEventAction()
 {;}
 
-void MyEventAction::BeginOfEventAction()
+void MyEventAction::BeginOfEventAction(const G4Event* anEvent)
 {;}
 
-void MyEventAction::EndOfEventAction()
+void MyEventAction::EndOfEventAction(const G4Event* anEvent)
 {
-  const G4Event* evt = fpEventManager->GetConstCurrentEvent();
+  static int coutCount = 0;
+  if (coutCount < 10) {
+    coutCount++;
+    G4cout << "MySteppingAction::EndOfEventActionAction called." << G4endl;
+  }
+
+  const G4Event* evt = anEvent;
 
   G4SDManager * SDman = G4SDManager::GetSDMpointer();
   G4String colNam;
   G4int trackerCollID = SDman->GetCollectionID(colNam="TrackerCollection");
   G4int calorimeterCollID = SDman->GetCollectionID(colNam="CalCollection");
 
-  G4cout << ">>> Event " << evt->GetEventID() << G4endl;
+  if (coutCount < 10) {
+    G4cout << ">>> Event " << evt->GetEventID() << G4endl;
+  }
+
+#ifdef DRAWTRAJHIT
 
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;
   if(trajectoryContainer)
   { n_trajectories = trajectoryContainer->entries(); }
-  G4cout << "    " << n_trajectories 
-       << " trajectories stored in this event." << G4endl;
+  if (coutCount < 10) {
+    G4cout << "    " << n_trajectories 
+	   << " trajectories stored in this event." << G4endl;
+  }
 
   G4HCofThisEvent * HCE = evt->GetHCofThisEvent();
   G4int n_hitCollection = 0;
   if(HCE)
   { n_hitCollection = HCE->GetCapacity(); }
-  G4cout << "    " << n_hitCollection
-       << " hitsCollections stored in this event." << G4endl;
+  if (coutCount < 10) {
+    G4cout << "    " << n_hitCollection
+	   << " hitsCollections stored in this event." << G4endl;
+  }
+
+#endif
 
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
   if(pVVisManager)
   {
-    //G4UImanager::GetUIpointer()->ApplyCommand("/vis~/clear/view");
-    //G4UImanager::GetUIpointer()->ApplyCommand("/vis~/draw/current");
+
+#ifdef DRAWTRAJHIT
+
     for(G4int i=0; i<n_trajectories; i++)
     { (*(evt->GetTrajectoryContainer()))[i]->DrawTrajectory(50); }
 
@@ -91,7 +112,13 @@ void MyEventAction::EndOfEventAction()
       = (MyCalorimeterHitsCollection*)(HCE->GetHC(calorimeterCollID));
     if(CHC) CHC->DrawAllHits();
 
-    //G4UImanager::GetUIpointer()->ApplyCommand("/vis~/show/view");
+#endif
+
+    G4Scale scale(1. * m, "Test Scale");
+    G4VisAttributes va (G4Colour(1.,0.,0.));
+    scale.SetVisAttributes(&va);
+    pVVisManager->Draw(scale);
+
   }
 }
 
