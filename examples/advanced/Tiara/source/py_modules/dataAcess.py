@@ -1,4 +1,4 @@
-# $Id: dataAcess.py,v 1.2 2003-06-16 17:06:44 dressel Exp $
+# $Id: dataAcess.py,v 1.3 2003-06-26 11:54:13 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -103,12 +103,11 @@ class MC_Data(object):
         dname = self.baseName + det.name
         if histo:
             dname += "_" + histo
-        sourceDetectorVolume = 9.33
         scale = self.getScale (atColiExit)
         hGen = self.getGeneratedHisto()
         binEdges = dpsManip.getBinEdges(hGen)
         dGenScaled = dpsManip.getScaledDPS(hGen,
-                                           scale/sourceDetectorVolume,
+                                           scale/detector.sourceDetectorVolume,
                                            df,
                                            dname + "GenScaled")
         dGenLethScaled = dpsManip.dLogWeightDPS(dGenScaled, df,
