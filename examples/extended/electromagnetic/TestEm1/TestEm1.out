@@ -140,7 +140,7 @@ Cut in energy
                Lead         101 keV        1.38 MeV
             Uranium         110 keV        1.92 MeV
 ===================================================
-# $Id: TestEm1.out,v 1.8 2001-01-25 10:11:14 stesting Exp $
+# $Id: TestEm1.out,v 1.9 2001-02-07 15:20:32 stesting Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -274,18 +274,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=120.31s Real=130.69s Sys=10.26s
+  User=52.67s Real=57.93s Sys=5.09s
 
- nb tracks/event   neutral:   28.13   charged:  666.69
- nb  steps/event   neutral:  152.78   charged: 2205.98
+ nb tracks/event   neutral:   27.57   charged:  666.07
+ nb  steps/event   neutral:  144.93   charged: 2194.99
 
  nb of process calls per event: 
-       eIoni    eBrem    compt     phot     conv  annihil
-     2179.31    25.16   124.65    26.62     1.51     1.51
+       eIoni    eBrem     conv  annihil    compt     phot
+     2168.94    24.47     1.58     1.58   117.36    25.99
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 214647638, 1893120385
+ Current couple of seeds = 1463312763, 65501812
 ----------------------------------------
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
