@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.21 2004-11-18 06:38:57 tsasaki Exp $
+// $Id: G4SteppingManager2.cc,v 1.22 2004-12-01 17:08:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -512,7 +512,7 @@ void G4SteppingManager::InvokePSDIP(size_t np)
          } //end of loop on secondary 
 
          // Set the track status according to what the process defined
-         fTrack->SetTrackStatus( fParticleChange->GetStatusChange() );
+         fTrack->SetTrackStatus( fParticleChange->GetTrackStatus() );
 
          // clear ParticleChange
          fParticleChange->Clear();
