@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.22 2002-06-24 22:12:09 stesting Exp $
+# $Id: Configure,v 1.23 2002-06-26 11:38:19 stesting Exp $
 #
-# Generated on Tue Jun 25 00:08:40 CEST 2002 [metaconfig 3.0 PL70]
+# Generated on Wed Jun 26 13:35:12 CEST 2002 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -311,14 +311,26 @@ if `$sh -c '#' >/dev/null 2>&1`; then
 	echo "#!$xcat" >try
 	$eunicefix try
 	chmod +x try
-	./try > today
+#
+# $xcat is wrong on WIN32: there is no /bin/cat and /usr/bin/cat by default.
+# But we are sure that sharpbang is to be '#!' and let 'today' will be !=0.
+#
+#	./try > today
+	echo "#!$xcat" >today
+
 	if test -s today; then
 		sharpbang='#!'
 	else
 		echo "#! $xcat" > try
 		$eunicefix try
 		chmod +x try
-		./try > today
+#
+# $xcat is wrong on WIN32: there is no /bin/cat and /usr/bin/cat by default.
+# But we are sure that sharpbang is to be '#!' and let 'today' will be !=0.
+#
+#	./try > today
+	echo "#!$xcat" >today
+
 		if test -s today; then
 			sharpbang='#! '
 		else
