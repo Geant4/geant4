@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingVerbose.hh,v 1.4 1999-07-05 10:56:22 maire Exp $
+// $Id: G4SteppingVerbose.hh,v 1.5 1999-09-21 16:08:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -44,12 +44,13 @@ class G4SteppingManager;              // Include from 'tracking'
 #include "G4TrackVector.hh"           // Include from 'tracking'
 class G4Track;
 #include "G4StepStatus.hh"            // Include from 'tracking'
+#include "G4VSteppingVerbose.hh"
 class G4UserSteppingAction;
 class G4StepPoint;
 class G4VTouchable;
 
 
-class G4SteppingVerbose {
+class G4SteppingVerbose : public G4VSteppingVerbose {
 public:   
 // Constructor/Destructor
 //  G4SteppingVerbose();

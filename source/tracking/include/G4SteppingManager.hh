@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.hh,v 1.4 1999-07-05 10:56:22 maire Exp $
+// $Id: G4SteppingManager.hh,v 1.5 1999-09-21 16:08:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,7 +52,7 @@ class G4VSensitiveDetector;
 #include "G4UserSteppingAction.hh"       // Include from 'tracking'
 #include "G4Step.hh"                     // Include from 'tracking'
 #include "G4StepPoint.hh"                // Include from 'tracking'
-#include "G4SteppingVerbose.hh"          // Include from 'tracking'
+#include "G4VSteppingVerbose.hh"         // Include from 'tracking'
 #include "G4SteppingVerboseWithUnits.hh" // Include from 'tracking'
 #include "G4VTouchable.hh"               // Include from 'geometry'
 #include "G4TouchableHistory.hh"         // Include from 'geometry'
@@ -94,7 +94,7 @@ class G4SteppingManager
    void SetUserAction(G4UserSteppingAction* apAction);
    G4Track* GetTrack() const;
    void SetVerboseLevel(G4int vLevel);
-   void SetVerbose(G4SteppingVerbose*);
+   void SetVerbose(G4VSteppingVerbose*);
    G4Step* GetStep() const;
 
 
@@ -196,7 +196,7 @@ class G4SteppingManager
 
    G4UserSteppingAction* fUserSteppingAction;
 
-   G4SteppingVerbose* fVerbose;
+   G4VSteppingVerbose* fVerbose;
 
    G4double PhysicalStep;
    G4double GeometricalStep;
@@ -490,7 +490,7 @@ class G4SteppingManager
     verboseLevel = vLevel; 
   }
 
-  inline void G4SteppingManager::SetVerbose(G4SteppingVerbose* yourVerbose){
+  inline void G4SteppingManager::SetVerbose(G4VSteppingVerbose* yourVerbose){
      fVerbose = yourVerbose;
   }
 
