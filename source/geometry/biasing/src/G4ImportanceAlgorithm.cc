@@ -2,6 +2,8 @@
 #include "Randomize.hh"
 #include "g4std/strstream"
 
+using namespace std;
+
 G4ImportanceAlgorithm::G4ImportanceAlgorithm(): fWorned(false) {}
 G4ImportanceAlgorithm::~G4ImportanceAlgorithm(){
   if(fWorned) {

@@ -6,6 +6,7 @@
 #include "G4VParallelStepper.hh"
 #include "g4std/strstream"
 
+using namespace std;
 
 G4ParallelNavigator::G4ParallelNavigator(G4VPhysicalVolume &aWorldVolume): 
   fNavigator(*(new G4Navigator)),

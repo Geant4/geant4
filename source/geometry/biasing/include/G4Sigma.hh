@@ -3,6 +3,8 @@
 #include "globals.hh"
 #include <iostream>
 
+using namespace std;
+
 class G4Sigma { 
   
  public:

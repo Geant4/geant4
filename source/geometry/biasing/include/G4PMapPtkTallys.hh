@@ -5,6 +5,7 @@
 #include "globals.hh"
 #include "G4PTouchableKey.hh"
 
+using namespace std;
 
 class G4Sigma;
 

@@ -4,7 +4,7 @@
 #include "g4std/map"
 #include "globals.hh"
 #include "G4PTouchableKey.hh"
-
+using namespace std;
 
 typedef map<G4PTouchableKey, G4double, G4PTkComp> G4PtkImportance;
 

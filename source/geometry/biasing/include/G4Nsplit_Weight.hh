@@ -3,6 +3,8 @@
 
 #include "globals.hh"
 
+using namespace std;
+
 struct G4Nsplit_Weight {
   G4Nsplit_Weight(G4int an, G4double aw): fN(an), fW(aw){}
   G4int fN;
