@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (28-Jun-2002)
+                                (31-Jul-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -161,7 +161,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=5.71 s 
+total time(SetCuts)=5.65 s 
 #
 #control/saveHistory
 #
@@ -247,42 +247,42 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.64            0k World
-       0.00         0.00         0.64           11k Radiator
+       0.00         0.00         0.92            0k World
+       0.00         0.00         0.92           11k Radiator
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      96.00         11k         1      305        376     42709.94    Radiator
-       4.00          0k         3        7         20     42709.94    World
+      96.00         11k         1      305        376     42710.48    Radiator
+       4.00          0k         3        7         20     42710.48    World
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=124.71s Real=127.43s Sys=1.91s
+  User=133.83s Real=135.97s Sys=2.07s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=155.499 +- 3.90364  mm  
+    mean charged track length   in absorber=154.051 +- 3.85073  mm  
 
-            mean energy deposit in absorber=0.101305 +- 0.00101646  MeV 
+            mean energy deposit in absorber=NaN +- 0  MeV 
 
- mean number of steps in absorber (charged) =430.761 +- 1.31017      
- mean number of steps in absorber (neutral) =5.127 +- 0.072006      
+ mean number of steps in absorber (charged) =431.589 +- 1.9428      
+ mean number of steps in absorber (neutral) =5.123 +- 0.0714694      
 
-   mean number of charged secondaries = 1.481 +- 0.0379426
+   mean number of charged secondaries = 1.479 +- 0.0375707
 
-   mean number of neutral secondaries = 0.033 +- 0.00564898
+   mean number of neutral secondaries = 0.039 +- 0.00628323
 
-   mean number of e-s =1.481  and e+s =0
+   mean number of e-s =1.479  and e+s =0
 
-(number) transmission coeff=0.682  reflection coeff=0.048
+(number) transmission coeff=0.676  reflection coeff=0.042
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1389024498, 296616067
+ Current couple of seeds = 961582791, 786870356
 ----------------------------------------
 #
 #

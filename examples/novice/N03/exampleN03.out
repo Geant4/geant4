@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (28-Jun-2002)
+                                (31-Jul-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -167,7 +167,7 @@ Cut in energy
 ----------------------------------------
 ---> End of event: 0
    Absorber: total energy: 279.411 MeV       total track length: 18.8834 cm 
-        Gap: total energy: 12.3279 MeV       total track length: 6.12525 cm 
+        Gap: total energy: 12.3279 MeV       total track length: 6.12524 cm 
 
      8 hits are stored in ExN03CalorHitsCollection.
      Transportation,              hIoni,                msc,              eIoni
@@ -208,9 +208,9 @@ Cut in energy
  Current couple of seeds = 2129424520, 867017805
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 387.241 MeV       total track length: 92.4175 cm 
-        Gap: total energy: 92.7356 MeV       total track length: 2.58238 m  
+   Absorber: total energy: 418.425 MeV       total track length:  1.0002 m  
+        Gap: total energy:  80.681 MeV       total track length: 2.30206 m  
 
-     26 hits are stored in ExN03CalorHitsCollection.
+     24 hits are stored in ExN03CalorHitsCollection.
 Graphics systems deleted.
 Visualization Manager deleting...

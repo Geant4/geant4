@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (28-Jun-2002)
+                                (31-Jul-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -263,14 +263,14 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=79s Real=2.2e+03s Sys=2.5e+02s
+  User=59s Real=9.7e+02s Sys=1.2e+02s
  ================== run summary =====================
  end of Run TotNbofEvents = 100000
-    mean charged track length   in absorber=0.0209457 +- 1.48628e-05  mm  
+    mean charged track length   in absorber=0.0209456 +- 1.48624e-05  mm  
 
-            mean energy deposit in absorber=0.006678 +- 2.04253e-05  MeV 
+            mean energy deposit in absorber=0.00667782 +- 2.04235e-05  MeV 
 
- mean number of steps in absorber (charged) =0.05875 +- 0.00124032      
+ mean number of steps in absorber (charged) =0.05874 +- 0.0012402      
  mean number of steps in absorber (neutral) =3e-05 +- 1.73202e-05      
 
    mean number of charged secondaries = 0.03788 +- 0.000638476
@@ -284,7 +284,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2114771135, 1541635325
+ Current couple of seeds = 834373565, 724208784
 ----------------------------------------
 #
 Graphics systems deleted.

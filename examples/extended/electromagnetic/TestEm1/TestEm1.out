@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (28-Jun-2002)
+                                (31-Jul-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -172,18 +172,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=14s Real=20s Sys=2.6s
+  User=14s Real=18s Sys=2.5s
 
- nb tracks/event   neutral:    27.5700   charged:   695.0200
- nb  steps/event   neutral:   148.5400   charged:  1331.6000
+ nb tracks/event   neutral:    27.7900   charged:   693.1400
+ nb  steps/event   neutral:   149.1800   charged:  1327.8800
 
  nb of process calls per event: 
-          eIoni       eBrem        phot       compt        conv     annihil
-      1305.3700     24.8300     26.1700    120.9700      1.4000      1.4000
+          eIoni       eBrem       compt        phot        conv     annihil
+      1301.6500     24.6300    121.3900     26.1900      1.6000      1.6000
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2126832091, 1419935556
+ Current couple of seeds = 233978172, 992537049
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
