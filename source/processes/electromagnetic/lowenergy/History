@@ -1,4 +1,4 @@
-$Id: History,v 1.168 2003-02-22 18:19:43 pia Exp $
+$Id: History,v 1.169 2003-02-24 02:17:50 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24.02-2003   MGP, tag emlowen-V05-00-08
+             Small fixes related to Penelope processes for photons
 
 22.02-2003   MGP, tag emlowen-V05-00-07
              Porting Penelope processes for photons to SUN
