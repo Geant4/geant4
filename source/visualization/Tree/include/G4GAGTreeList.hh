@@ -42,7 +42,7 @@ template <class Type> class G4GAGTreeList {
 		//----- Constructor
 		//.....  Initialize head and current node of list to NULL.
 		//.....  Set name of list ( default name is "no_name")
-	G4GAGTreeList( char* name_ = "no_name" ) ;
+	G4GAGTreeList( const char* name_ = "no_name" ) ;
 
 		//----- Destructor
 	~G4GAGTreeList() { this->Clear() ; }
@@ -134,7 +134,7 @@ template <class Type> class G4GAGTreeList {
 
 //----- 
 template <class Type>
-inline G4GAGTreeList<Type>::G4GAGTreeList( char* name_ )
+inline G4GAGTreeList<Type>::G4GAGTreeList( const char* name_ )
 {
 	cur = head = tail = NULL ;
 	nItem = 0 ;
