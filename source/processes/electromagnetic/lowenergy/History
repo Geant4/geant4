@@ -1,4 +1,4 @@
-$Id: History,v 1.156 2002-10-11 00:32:14 pia Exp $
+$Id: History,v 1.157 2002-10-28 09:51:46 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28.10-2002   MGP, tag emlowen-V04-01-??
+             VI optimisation of tables in G4LowEnergyIonisation,
+                G4eLowEnergyLoss, G4hLowEnergyLoss, G4hLowEnergyIonisation
 
 08.10-2002   MGP, tag emlowen-V04-01-04
              VI G4hLowEnergyIonisation.cc - clean up fluo flag definition and init

@@ -117,8 +117,9 @@ void hTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     uy *= sin(phi) ;
     direction = G4ThreeVector(ux,uy,uz) ;
   }
- 
-  particleGun->SetParticleMomentumDirection(direction.unit());
+
+  direction = direction.unit();
+  particleGun->SetParticleMomentumDirection(direction);
   G4ParticleDefinition* particle = particleGun->GetParticleDefinition();
   G4double mass = particle->GetPDGMass();
 
