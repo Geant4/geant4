@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2000-08-01 08:31:01 gcosmo Exp $
+$Id: History,v 1.9 2000-08-03 08:40:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 Aug 00 Gabriele Cosmo
+- Fixes for events' reproducibility:
+  o G4GammaConversion.cc: changed usage of RandFlat::shootBit() to
+    RandBit::shootBit().
+  o G4VIeEnergyLoss.cc, G4VIhEnergyLoss.cc, G4PAIxSectionTest.cc:
+    changed RandGauss to G4RandGauss.
 
 31 Jul 00 Gonzalo Gracia
 - G4IhIonisation.cc: initialisisation to zero of several  G4PhysicsTable*

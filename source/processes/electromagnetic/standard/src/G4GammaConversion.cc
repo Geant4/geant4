@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GammaConversion.cc,v 1.3 1999-12-15 14:51:50 gunter Exp $
+// $Id: G4GammaConversion.cc,v 1.4 2000-08-03 08:36:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,7 +14,7 @@
 //      CERN Geneva Switzerland
 //
 //      For information related to this code contact:
-//      CERN, IT Division, ASD group
+//      GEANT4 Collaboration
 //      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
 //      ------------ G4GammaConversion physics process --------
@@ -280,7 +280,7 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
    //
 
    G4double ElectTotEnergy, PositTotEnergy;
-   if (RandFlat::shootBit())
+   if (RandBit::shootBit())
      {
        ElectTotEnergy = (1.-epsil)*GammaEnergy;
        PositTotEnergy = epsil*GammaEnergy;
