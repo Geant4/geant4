@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2002-10-24 15:06:24 johna Exp $
+$Id: History,v 1.20 2002-11-11 18:39:47 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+11th November 2002  John Allison  (modeling-V04-00-00)
+- Added fDrawingMode data member to G4TrajectoriesModel.
 
 24th October 2002  John Allison (vis-V04-01-03)
 - Changes for AddThis(const G4VTrajectory&) and (const G4VHit&).
