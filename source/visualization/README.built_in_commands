@@ -31,17 +31,22 @@ Step 1. Create a scene handler and a viewer.
 
 Step 2. Create an empty scene.
 
-Step 3. Add raw 3D data to the created scene.
+Step 3. Add raw 3D data (e.g., geometrical objects, axes, options to
+        draw trajectories, etc.) to the created scene.
 
 Step 4. Attach the current scene handler to the current scene.
 
 Step 5. Set camera parameters, drawing style (wireframe/surface), etc.
 
-Step 6. Make the viewer execute visualization.
+Step 6. Refresh the viewer.
 
-Step 7. Declare the end of visualization for flushing.
+Step 7. Draw transients (trajectories, hits, etc)
 
-Note that the above list does not mean that you have to execute 7
+Step 8. Flush the viewer if necessary, i.e., those viewers which need
+        to render a view after all data is assembled and
+        pseudo-viewers, e.g., file writers that need to close files.
+
+Note that the above list does not mean that you have to execute 8
 commands for visualization.  You can use "compound commands" which can
 execute several visualization commands at one time.
 
@@ -105,11 +110,18 @@ NI                      [<copy-no>] [<depth>]
   Adds an annotated scale line to the current scene.  See G4Scale.hh
   for further description.
 
-/vis/scene/add/text
+/vis/scene/add/text x y z unit font_size x_offset y_offset text
+  Adds text at (x*unit, y*unit, z*unit) with font_size x_offset y_offset
+  Font size and offsets in pixels.
 
-/vis/scene/add/trajectories [<sensitive-volume-name>]
-  default:                      (argument not impl'd yet.)
+/vis/scene/add/trajectories [drawing-mode] [<sensitive-volume-name>]
+  default:                       0         (this argument not impl'd yet.)
   Causes trajectories, if any, to be drawn at the end of processiing an event.
+  The drawing mode is an integer that is passed to the DrawTrajectory method.
+  The default implementation in G4VTrajectory draws the trajectory as a
+  polyline and, if drawing-mode>0, draws markers of screen size
+  drawing-mode/10 in pixels at each step and auxiliary point, if any.  So
+  drawing-mode == 50 is a good choice.
   (Enable storing with "/tracking/storeTrajectory 1".)
   See also "/vis/scene/endOfEventAction".
 
