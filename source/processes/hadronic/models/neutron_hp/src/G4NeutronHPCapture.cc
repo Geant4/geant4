@@ -43,10 +43,14 @@
     xSec = new G4double[n];
     G4double sum=0;
     G4int i, index;
+    G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
+    G4double rWeight;    
     for (i=0; i<n; i++)
     {
       index = theMaterial->GetElement(i)->GetIndex();
+      rWeight = NumAtomsPerVolume[i];
       xSec[i] = theCapture[index].GetXsec(aTrack.GetKineticEnergy());
+      xSec[i] *= rWeight;
       sum+=xSec[i];
     }
     G4double random = G4UniformRand();
