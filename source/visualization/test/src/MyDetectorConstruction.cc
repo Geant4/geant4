@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.24 2005-01-26 17:15:50 johna Exp $
+// $Id: MyDetectorConstruction.cc,v 1.25 2005-03-04 16:23:00 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -418,7 +418,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 		    "PD_physical", PD_log_crystal,
 		    experimentalHall_phys,false,0);
 
-  //-------------------------------------------- Sphere
+  //-------------------------------------------- Orb
 
   G4Orb* orb 
     = new G4Orb("Test orb", 100.*cm);
