@@ -92,7 +92,12 @@ G4PAIonisation::G4PAIonisation( const G4String& materialName,
      theElectron ( G4Electron::Electron() )
 {
   G4int  iMat ;
-  theMeanFreePathTable  = NULL;
+  theLossTable = 0;
+  theMeanFreePathTable = 0;
+  fLambdaVector = 0;
+  fdNdxCutVector = 0;
+  fdEdxVector = 0;
+  fPAItransferBank = 0;    
 
   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   G4int numberOfMat = G4Material::GetNumberOfMaterials() ;
