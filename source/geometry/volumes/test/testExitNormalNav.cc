@@ -21,12 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: testExitNormalNav.cc,v 1.1 2002-06-19 08:44:16 japost Exp $
+// $Id: testExitNormalNav.cc,v 1.2 2002-10-22 12:40:30 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-//   Locate & Step within simple boxlike geometry, both
-//   with and without voxels. Parameterised volumes are included.
+//   Testing the product of Exit Normal of the Navigator for
+//     simple hierarchial geometry.  
+//      ( replicas, parameterised volumes currently not included )
+//  
+// First version:  J. Apostolakis,  18th June 2002
 
 #include <assert.h>
 #include "ApproxEqual.hh"
@@ -39,8 +41,8 @@
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "G4PVParameterised.hh"
-#include "G4VPVParameterisation.hh"
+// #include "G4PVParameterised.hh"
+// #include "G4VPVParameterisation.hh"
 #include "G4Box.hh"
 
 #include "G4GeometryManager.hh"
@@ -267,28 +269,27 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
     return true;
 }
 
-int verbose= 0;
+int verbose= 1;
 //
 // Test Stepping
 //
-G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
+G4bool testExitNormal(G4VPhysicalVolume *pTopNode,
+                      G4ThreeVector     initialPoint, 
+		      G4ThreeVector     direction,
+		      G4ThreeVector     expectedExitNorm)
 {
     G4Navigator myNav;
     G4VPhysicalVolume *located;
     G4double Step,physStep,safety;
-    G4ThreeVector xHat(1,0,0),yHat(0,1,0),zHat(0,0,1);
-    G4ThreeVector mxHat(-1,0,0),myHat(0,-1,0),mzHat(0,0,-1);
     
     myNav.SetWorldVolume(pTopNode);
-  
 //
 // Test location & Step computation
 //  
-    G4ThreeVector initPoint(0,0,0), newPoint(0,0,0);
-    G4ThreeVector direction= xHat;
+    G4ThreeVector initPoint(initialPoint), newPoint(0,0,0);
+    // G4ThreeVector direction= xHat;
     G4bool valid;
 
-    initPoint= G4ThreeVector(-50.0*cm,0.01*cm,0.);
     if( verbose ){
       G4cout << "Initial step " << G4endl;
       G4cout << "-Initial Point = "  << initPoint    << G4endl;
@@ -314,7 +315,7 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
     G4ThreeVector localNormal = myNav.GetLocalExitNormal(&valid); 
     assert(valid);
     G4ThreeVector globalNormal = myNav.GetLocalToGlobalTransform().TransformAxis(localNormal);
-    assert( globalNormal == G4ThreeVector(1.0,0.0,0.0) );
+    assert( globalNormal == expectedExitNorm );
 
     myNav.SetGeometricallyLimitedStep();
     located=myNav.LocateGlobalPointAndSetup(initPoint);
@@ -324,7 +325,7 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
 
     // Next Steps
     G4int istep;
-    for ( istep=0; istep < 10; istep++ ){
+    for ( istep=0; istep < 15; istep++ ){
 
        initPoint= newPoint;
 
@@ -371,130 +372,38 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
 	 G4cout << " localNorm  = "  << localNormal << G4endl;
 	 G4cout << " globalNorm = " << globalNormal << G4endl;
        }
-       assert( ApproxEqual( globalNormal, G4ThreeVector(1.0,0.0,0.0) ) );
+       assert( ApproxEqual( globalNormal, expectedExitNorm ) );
 
     }
 
-    // Written till here - Goodbye
-    return 0; 
-
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,0,-10));
-    assert(located->GetName()=="World");
-    physStep=kInfinity;
-    Step=myNav.ComputeStep(G4ThreeVector(0,0,-10),xHat,physStep,safety);
-    assert(ApproxEqual(Step,5));
-//    assert(ApproxEqual(safety,5));
-
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,0,-10));
-    assert(located->GetName()=="World");
-    physStep=kInfinity;
-    Step=myNav.ComputeStep(G4ThreeVector(0,0,-10),zHat,physStep,safety);
-    assert(ApproxEqual(Step,30));
-//    assert(ApproxEqual(safety,5));
-    assert(safety>=0);
-
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,0,-10));
-    assert(located->GetName()=="World");
-    physStep=kInfinity;
-    Step=myNav.ComputeStep(G4ThreeVector(0,0,-10),mzHat,physStep,safety);
-    assert(ApproxEqual(Step,10));
-//    assert(ApproxEqual(safety,5));
-    assert(safety>=0);
-
-
-//
-// Test stepping through common boundaries
-//
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(-7,7,-20));
-    assert(located->GetName()=="Target 1");
-    physStep=kInfinity;
-    Step=myNav.ComputeStep(G4ThreeVector(-7,7,-20),zHat,physStep,safety);
-    assert(ApproxEqual(Step,20));
-    assert(ApproxEqual(safety,0));
-    myNav.SetGeometricallyLimitedStep();
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(-7,7,0));
-    assert(located->GetName()=="Target 4");
-    Step=myNav.ComputeStep(G4ThreeVector(-7,7,0),zHat,physStep,safety);
-    assert(ApproxEqual(Step,20));
-    assert(ApproxEqual(safety,0));
-    myNav.SetGeometricallyLimitedStep();
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(-7,7,20));
-    assert(!located);
-
-//
-// Test mother limited Step
-//
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(-25,0,10));
-    assert(located->GetName()=="World");
-    physStep=kInfinity;
-    Step=myNav.ComputeStep(G4ThreeVector(-25,0,10),xHat,physStep,safety);
-    assert(ApproxEqual(Step,50));
-    assert(ApproxEqual(safety,0));
-
-//
-// Test stepping through parameterised volumes
-//
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(15,-25,-10),0,false);
-    assert(located->GetName()=="Target 3");
-    physStep=kInfinity;
-    Step=myNav.ComputeStep(G4ThreeVector(15,-25,-10),yHat,physStep,safety);
-    assert(ApproxEqual(Step,5));
-    assert(ApproxEqual(safety,0));
-    myNav.SetGeometricallyLimitedStep();
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(15,-20,-10));
-    assert(located->GetName()=="Vari' Blocks");
-    Step=myNav.ComputeStep(G4ThreeVector(15,-20,-10),yHat,physStep,safety);
-    assert(ApproxEqual(Step,10));
-    assert(ApproxEqual(safety,0));
-    myNav.SetGeometricallyLimitedStep();
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(15,-10,-10));
-    assert(located->GetName()=="Target 3");
-    Step=myNav.ComputeStep(G4ThreeVector(15,-10,-10),yHat,physStep,safety);
-    assert(ApproxEqual(Step,4));
-    assert(ApproxEqual(safety,0));
-    myNav.SetGeometricallyLimitedStep();
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(15,-6,-10));
-    assert(located->GetName()=="Vari' Blocks");
-    Step=myNav.ComputeStep(G4ThreeVector(15,-6,-10),yHat,physStep,safety);
-    assert(ApproxEqual(Step,12));
-    assert(ApproxEqual(safety,0));
-    myNav.SetGeometricallyLimitedStep();
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(15,6,-10));
-    assert(located->GetName()=="Target 3");
-    Step=myNav.ComputeStep(G4ThreeVector(15,6,-10),yHat,physStep,safety);
-    assert(ApproxEqual(Step,2));
-    assert(ApproxEqual(safety,0));
-    myNav.SetGeometricallyLimitedStep();
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(15,8,-10));
-    assert(located->GetName()=="Vari' Blocks");
-    Step=myNav.ComputeStep(G4ThreeVector(15,8,-10),yHat,physStep,safety);
-    assert(ApproxEqual(Step,14));
-    assert(ApproxEqual(safety,0));
-    myNav.SetGeometricallyLimitedStep();
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(15,22,-10));
-    assert(located->GetName()=="Target 3");
-    Step=myNav.ComputeStep(G4ThreeVector(15,22,-10),yHat,physStep,safety);
-    assert(ApproxEqual(Step,3));
-    assert(ApproxEqual(safety,0));
-    myNav.SetGeometricallyLimitedStep();
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(15,25,-10));
-    assert(!located);
-
-    return true;
+    return true; 
 }
 
 int main()
 {
     G4VPhysicalVolume *myTopNode;
+    const G4ThreeVector xHat(1,0,0),yHat(0,1,0),zHat(0,0,1);
+    const G4ThreeVector mxHat(-1,0,0),myHat(0,-1,0),mzHat(0,0,-1);
+
+    G4ThreeVector initPointMinusX(-50.0*cm,0.01*cm,0.);
+    G4ThreeVector initPointPluxX(50.0*cm, -0.01*cm,0.);
+
     myTopNode=BuildGeometry();	// Build the geometry
     G4GeometryManager::GetInstance()->CloseGeometry(false);
     testG4Navigator1(myTopNode);
-    testG4Navigator2(myTopNode);
+    testExitNormal(myTopNode, initPointMinusX, xHat,  xHat);
+    testExitNormal(myTopNode, initPointPluxX, mxHat, mxHat);
+    testExitNormal(myTopNode, G4ThreeVector(-50.0*cm,2.0*cm,0.0),  xHat, xHat);
+    testExitNormal(myTopNode, G4ThreeVector(-50.0*cm,-2.0*cm,0.0), xHat, xHat);
+
 // Repeat tests but with full voxels
     G4GeometryManager::GetInstance()->OpenGeometry();
     G4GeometryManager::GetInstance()->CloseGeometry(true);
     testG4Navigator1(myTopNode);
-    testG4Navigator2(myTopNode);
+    testExitNormal(myTopNode, initPointMinusX, xHat, xHat);
+    testExitNormal(myTopNode, initPointPluxX, mxHat, mxHat);
+    testExitNormal(myTopNode, G4ThreeVector(-50.0*cm,2.0*cm,0.0),  xHat, xHat);
+    testExitNormal(myTopNode, G4ThreeVector(-50.0*cm,-2.0*cm,0.0), xHat, xHat);
 
     G4GeometryManager::GetInstance()->OpenGeometry();
     return 0;
