@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4JTPolynomialSolver.cc,v 1.2 2005-03-15 19:11:35 gcosmo Exp $
+// $Id: G4JTPolynomialSolver.cc,v 1.3 2005-03-16 13:45:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------------
@@ -627,6 +627,7 @@ RealPolynomialIteration(G4double *sss, G4int *nz, G4int *iflag)
     //
     if (j > 10)  { return; }
     if (j >= 2)
+    {
       if (!(std::fabs(t) > 0.001*std::fabs(s-t) || mp < omp))
       {
         // A cluster of zeros near the real axis has been encountered.
@@ -636,6 +637,7 @@ RealPolynomialIteration(G4double *sss, G4int *nz, G4int *iflag)
         *sss = s;
         return;
       }  // Return if the polynomial value has increased significantly.
+    }
 
     omp = mp;
 

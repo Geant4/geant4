@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GaussLegendreQ.cc,v 1.5 2005-03-15 19:11:35 gcosmo Exp $
+// $Id: G4GaussLegendreQ.cc,v 1.6 2005-03-16 13:45:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4GaussLegendreQ.hh"
@@ -45,7 +45,7 @@ G4GaussLegendreQ::G4GaussLegendreQ( function pFunction,
    : G4VGaussianQuadrature(pFunction)
 {
    const G4double tolerance = 1.6e-10 ;
-   G4int i, k = nLegendre ;
+   G4int k = nLegendre ;
    fNumber = (nLegendre + 1)/2 ;
    if(2*fNumber != k)
    {
@@ -58,7 +58,7 @@ G4GaussLegendreQ::G4GaussLegendreQ( function pFunction,
    fAbscissa = new G4double[fNumber] ;
    fWeight   = new G4double[fNumber] ;
       
-   for(i=1;i<=fNumber;i++)      // Loop over the desired roots
+   for(G4int i=1;i<=fNumber;i++)      // Loop over the desired roots
    {
       newton = std::cos(pi*(i - 0.25)/(k + 0.5)) ;  // Initial root
       do                                            // approximation
