@@ -282,7 +282,7 @@
       ZMAX=NLTOT*DLX0
                                                                                            
       CALL HBPROF(4,'longit energy profile    (in percent of E inc)'          
-     *, NLTOT, 0.,ZMAX, 0., 100.,' ')
+     *, NLTOT, 0.,ZMAX, 0., 1000.,' ')
 *      
       ZMIN = 0.5*DLX0
       ZMAX = ZMIN + NLTOT*DLX0
@@ -305,7 +305,7 @@
       RMAX=NRTOT*DRX0
       
       CALL HBPROF(10,'radial energy profile    (in percent of E inc)'          
-     *, NRTOT, 0.,RMAX, 0., 100.,' ')
+     *, NRTOT, 0.,RMAX, 0., 1000.,' ')
 *
       RMIN = 0.5*DRX0
       RMAX = RMIN + NRTOT*DRX0
@@ -438,7 +438,7 @@
          SEL2C(I) = SEL2C(I) + DLC**2
          
 	 BIN = (FLOAT(I)-0.5)*DLX0
-         CALL HFILL(4,BIN,100*DEDL(I)/PKINE(3),1.)
+         CALL HFILL(4,BIN,100*DEDL(I)/(DLX0*PKINE(3)),1.)
          BIN = FLOAT(I)*DLX0
          CALL HFILL(5,BIN,100*DLC    /PKINE(3),1.)                                                                                                                 
    2  CONTINUE                                                                  
@@ -453,7 +453,7 @@
          SER2C(I) = SER2C(I) + DRC**2
 	 
          BIN = (FLOAT(I)-0.5)*DRX0
-         CALL HFILL(10,BIN,100*DEDR(I)/PKINE(3),1.)
+         CALL HFILL(10,BIN,100*DEDR(I)/(DRX0*PKINE(3)),1.)
          BIN = FLOAT(I)*DRX0
          CALL HFILL(11,BIN,100*DRC    /PKINE(3),1.)                                                  
    3  CONTINUE                                                                  
