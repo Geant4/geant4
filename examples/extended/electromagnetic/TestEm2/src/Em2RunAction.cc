@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2RunAction.cc,v 1.4 2000-01-21 10:56:15 maire Exp $
+// $Id: Em2RunAction.cc,v 1.5 2000-05-18 15:30:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -287,8 +287,8 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
     histo6->accumulate(bin, rmsELongitCumul(i));
     
     histo7->accumulate(bin, gammaFlux(i));
-    histo8->accumulate(bin, electronFlux(i));
-    histo9->accumulate(bin, positronFlux(i));
+    histo8->accumulate(bin, positronFlux(i));
+    histo9->accumulate(bin, electronFlux(i));
 #endif                                            
    }
    
