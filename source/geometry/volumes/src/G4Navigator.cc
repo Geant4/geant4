@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.20 2001-12-06 14:53:52 radoone Exp $
+// $Id: G4Navigator.cc,v 1.21 2001-12-06 18:16:56 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
@@ -621,6 +621,7 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
        // We must calculate the normal anyway (in order to have it if requested)
        G4ThreeVector FinalPoint=  fLastLocatedPointLocal + localDirection*Step;
        fExitNormal= motherLogical->GetSolid()->SurfaceNormal(FinalPoint);
+
      }
 
 #ifdef G4VERBOSE
@@ -807,7 +808,7 @@ void  G4Navigator::PrintState()
   if( fVerbose >= 4 )
     {
       G4cout.precision(3);
-      G4cout << " Upon exiting my state is: " << G4endl;
+      G4cout << "The current state of G4Navigator is: " << G4endl;
       G4cout << "  ValidExitNormal= " << fValidExitNormal << G4endl
 	   << "  ExitNormal     = " << fExitNormal      << G4endl
 	   << "  Exiting        = " << fExiting         << G4endl
@@ -825,7 +826,7 @@ void  G4Navigator::PrintState()
   if( ( 1 < fVerbose) && (fVerbose < 4) )
     {
       G4cout.precision(3);
-      G4cout << G4std::setw(18) << " ExitNormal "  << " "     
+      G4cout << G4std::setw(24) << " ExitNormal "  << " "     
 	   << G4std::setw( 5) << " Valid "       << " "     
 	   << G4std::setw( 9) << " Exiting "     << " "      
 	   << G4std::setw( 9) << " Entering"     << " " 
@@ -833,7 +834,7 @@ void  G4Navigator::PrintState()
 	   << G4std::setw( 9) << " ReplicaNo"        << " "  
 	   << G4std::setw( 8) << " LastStepZero  "   << " "   
 	   << G4endl;   
-      G4cout << G4std::setw(18)  << fExitNormal       << " "
+      G4cout << G4std::setw(24)  << fExitNormal       << " "
 	   << G4std::setw( 5)  << fValidExitNormal  << " "   
 	   << G4std::setw( 9)  << fExiting          << " "
 	   << G4std::setw( 9)  << fEntering         << " ";
@@ -903,6 +904,18 @@ void G4Navigator::LocateGlobalPointWithinVolume(const  G4ThreeVector& pGlobalpoi
 	 }
      }
 
+     // Reset the state variables 
+     //   - which would have been affected
+     //      by the 'equivalent' call to LocateGlobalPointAndSetup
+     //   - who's values have been invalidated by the 'move'.
+     fWasLimitedByGeometry= false;
+     fBlockedPhysicalVolume=0; 
+     fBlockedReplicaNo= -1;
+
+     fEntering=false;
+     fEnteredDaughter=false;  // Boundary not encountered, did not enter
+     fExiting=false;
+     fExitedMother=false;     // Boundary not encountered, did not exit
 #if 0
    else
      {
