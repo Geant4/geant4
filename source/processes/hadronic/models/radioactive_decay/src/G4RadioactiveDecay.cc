@@ -86,6 +86,7 @@
 #include "G4BetaPlusDecayChannel.hh"
 #include "G4KshellECDecayChannel.hh"
 #include "G4LshellECDecayChannel.hh"
+#include "G4MshellECDecayChannel.hh"
 #include "G4AlphaDecayChannel.hh"
 #include "G4VDecayChannel.hh"
 #include "G4RadioactiveDecayMode.hh"
@@ -870,11 +871,10 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
 			{modeFirstRecord[5] = false; modeTotalBR[5] = b;}
 		      else
 			{
-			  G4LshellECDecayChannel *aLECChannel = new
-			    G4LshellECDecayChannel (GetVerboseLevel(), &theParentNucleus,
+			  G4MshellECDecayChannel *aMECChannel = new
+			    G4MshellECDecayChannel (GetVerboseLevel(), &theParentNucleus,
 						    b, c*MeV, a*MeV);
-			  theDecayTable->Insert(aLECChannel);
-			  //delete aLECChannel;
+			  theDecayTable->Insert(aMECChannel);
 			  modeSumBR[5] += b;
 			}
 		      break;
