@@ -38,35 +38,6 @@ System Test Incident Reports</h1>
 </tr>
 
 <tr>
-<td><b>17</b></td>
-
-<td><a href="pre-beta02/TIR-16-19.txt">test05 dumps core on various platforms</a></td>
-
-<td>(STEP geometry test)&nbsp;
-<br><b>Lionel Broglia</b></td>
-
-<td>980901&nbsp;
-<br>981124</td>
-
-<td><b>under test</b></td>
-</tr>
-
-<tr>
-<td><b>41</b></td>
-
-<td>N04: much platform and/or compiler option dependency.&nbsp; Comment
-from Hans-Peter: This is very general. We have followed up several of these
-cases in the past, and always traced back to a divergence in the use of
-random numbers.</td>
-
-<td><b>Hans-Peter Wellisch</b></td>
-
-<td>981111</td>
-
-<td><b>keep under review</b></td>
-</tr>
-
-<tr>
 <td><b>45</b></td>
 
 <td>System dependency in safety, navigator in field.</td>
@@ -116,19 +87,29 @@ Voxel navigation?</a></td>
 </tr>
 
 <tr>
-<td><b>51</b></td>
+<td><b>52</b></td>
 
-<td><a href="TIR_information/TIR-51">test02.extended: G4Exception: GetHadronicInteraction:
-No model found for this energy range<br>
-</a>The reason for this is, that in test02 there are no high energy models
-registered, and hence any particle above 20GeV will trigger this exception.
-This is intended behaviour.</td>
+<td><a href="TIR_information/TIR-52">test05 (BREP/STEP) crashes (SEGV)on
+DEC when compiled with optimisation.</a></td>
+
+<td><b>John Apostolakis</b></td>
+
+<td>990215</td>
+
+<td><b>open</b></td>
+</tr>
+
+<tr>
+<td><b>53</b></td>
+
+<td><a href="TIR_information/TIR-53">test02.hadronic and test12 crash (SEGV)
+on DEC when compiled with optimisation.</a></td>
 
 <td><b>Hans-Peter Wellisch</b></td>
 
-<td>981130</td>
+<td>990215</td>
 
-<td><b>fixed</b></td>
+<td><b>open</b></td>
 </tr>
 </table>
 
@@ -177,6 +158,20 @@ still in N02/3/5/6&nbsp;</a></td>
 <td><b>fixed</b></td>
 
 <td>981001</td>
+</tr>
+
+<tr>
+<td><b>17</b></td>
+
+<td><a href="pre-beta02/TIR-16-19.txt">test05 dumps core on various platforms</a></td>
+
+<td><b>Lionel Broglia</b></td>
+
+<td>981124</td>
+
+<td><b>largely fixed - but see TIR-52</b></td>
+
+<td>990215</td>
 </tr>
 
 <tr>
@@ -369,6 +364,23 @@ STEPfile.h</a></td>
 </tr>
 
 <tr>
+<td><b>41</b></td>
+
+<td>N04: much platform and/or compiler option dependency.&nbsp; Comment
+from Hans-Peter: This is very general. We have followed up several of these
+cases in the past, and always traced back to a divergence in the use of
+random numbers.</td>
+
+<td><b>Hans-Peter Wellisch</b></td>
+
+<td>981111</td>
+
+<td><b>keep under review</b></td>
+
+<td>990215</td>
+</tr>
+
+<tr>
 <td><b>42</b></td>
 
 <td>test08, N02, N03: various small differences</td>
@@ -439,12 +451,31 @@ mode</a></td>
 
 <td>981124</td>
 </tr>
+
+<tr>
+<td><b>51</b></td>
+
+<td><a href="TIR_information/TIR-51">test02.extended: G4Exception: GetHadronicInteraction:
+No model found for this energy range</a>
+<br>The reason for this is, that in test02 there are no high energy models
+registered, and hence any particle above 20GeV will trigger this exception.
+This is intended behaviour.</td>
+
+<td><b>Hans-Peter Wellisch</b></td>
+
+<td>981130</td>
+
+<td><b>non problem</b></td>
+
+<td>990215</td>
+</tr>
 </table>
 (Please record future <b>TIR</b>s in the table.)
 <blockquote><b>TIR-2:</b> <a href="beta01-02/TIR-2">g++-CLHEP abs problem
 </a>-
 <b>fixed
-</b>- notified 21st August 1998, fixed 25th August.
+</b>-
+notified 21st August 1998, fixed 25th August.
 <br><b>TIR-4: </b><a href="http://wwwinfo.cern.ch/asd/geant/geant4_public/testing/geant4/tests/results/beta01-02/TIR-4.txt">N04/6
 compilation problems </a>- <b>fixed </b>- notified 25/08/98<b>.</b>
 <br><b>TIR-5: </b><a href="http://wwwinfo.cern.ch/asd/geant/geant4_public/testing/geant4/tests/results/beta01-02/TIR-5.txt">OSF1/cxx
@@ -476,7 +507,8 @@ on all platforms </a>- <b>fixed</b> - notified 01/09/98.
 <br><b>TIR-21: </b><a href="pre-beta02/TIR-21.txt">N06 core dumps on Sun
 </a>-
 <b>fixed
-</b>- notified 01/09/98.
+</b>-
+notified 01/09/98.
 <br><b>TIR-24: </b><a href="pre-beta02/TIR-24.txt">OSF1/cxx error compiling
 G4HadronKineticModel.cc</a>- <b>fixed</b> - notified 09/09/98.
 <br><b>TIR-26: </b><a href="pre-beta02/TIR-26.txt">NT/VC nasty compilation
