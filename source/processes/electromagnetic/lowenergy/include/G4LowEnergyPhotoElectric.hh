@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.21 2001-09-21 08:24:02 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.22 2001-09-21 08:43:32 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -29,8 +29,9 @@
 //
 // History:
 // -----------
-// 02 Mar 1999   A. Forti   1st implementation
-// 12 Aug 2001   MGP        Major revision according to a design iteration
+// 02 Mar  1999   A. Forti   1st implementation
+// 12 Aug  2001   MGP        Major revision according to a design iteration
+// 16 Sept 2001   E. Guardincerri Added fluorescence generation
 //
 // -------------------------------------------------------------------
 
@@ -46,6 +47,7 @@
 #include "globals.hh"
 #include "G4VDiscreteProcess.hh"
 #include "G4ShellData.hh"
+#include "G4AtomicDeexcitation.hh"
 
 class G4Track;
 class G4Step;
@@ -105,6 +107,7 @@ private:
   G4double cutForLowEnergySecondaryPhotons;
 
   G4ShellData shellData;
+  G4AtomicDeexcitation deexcitationManager;
 };
 
 #endif
