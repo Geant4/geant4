@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2002-12-13 14:27:33 sadilov Exp $
+# $Id: GNUmakefile,v 1.3 2003-02-21 13:05:00 sadilov Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
@@ -15,9 +15,11 @@ endif
 
 all: lib bin
 
-include $(G4INSTALL)/config/binmake.gmk
+include $(G4INSTALL)/config/scripts/binmake.gmk
 
 CXXFLAGS_FINAL := $(CXXFLAGS) 
 INCFLAGS_FINAL := $(INCFLAGS)
 LDLIBS_FINAL := $(LDLIBS)
-LDFLAGS_FINAL := $(LDFLAGS)
+LDLIB3_FINAL := $(LDLIBS3)
+LDLIB4_FINAL := $(LDLIBS4)
+#LDFLAGS_FINAL := $(LDFLAGS)
