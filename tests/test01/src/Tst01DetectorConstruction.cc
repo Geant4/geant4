@@ -223,6 +223,10 @@ void Tst01DetectorConstruction::SwitchBoolean()
 
   G4Tubs* tubs1 = new G4Tubs("tubs1",80*cm,90*cm,50*cm,0,2*pi) ;
 
+  G4Sphere* sphere1 = new G4Sphere("shere1",80*cm,90*cm,0,2*pi,0,pi) ;
+  G4Sphere* sphere2 = new G4Sphere("shere2",0,50*cm,0,2*pi,0,pi) ;
+  G4Sphere* sphere3 = new G4Sphere("shere3",0,40*cm,0,2*pi,0,pi) ;
+
   G4VSolid* testBool ;
   
   switch(fChoiceBool)
@@ -232,6 +236,7 @@ void Tst01DetectorConstruction::SwitchBoolean()
       // testBool = new G4UnionSolid("b1UnionB2", pb1, pb2) ;
       // testBool = new G4UnionSolid("b1UnionT1", pb1, tubs1) ;
       testBool = new G4UnionSolid("b1UnionDisPb4", pb1, disPb4) ;
+      testBool = new G4UnionSolid("sp1UnionDisSp2",sphere1,sphere2) ;
       break ;
     }
     case 2 :
@@ -255,17 +260,18 @@ void Tst01DetectorConstruction::SwitchBoolean()
 
   // daughters
   
-  G4LogicalVolume*   testD1Log = new G4LogicalVolume(pb3,selectedMaterial,
+  G4LogicalVolume*   testD1Log = new G4LogicalVolume(sphere3,selectedMaterial,
                                                 "testD1Log",0,0,0) ;
 
   G4VPhysicalVolume* testD1Vol = new G4PVPlacement(0,G4ThreeVector(),
                              "testD1Vol",testD1Log,testBoolVol,false,0);  
 
-  G4LogicalVolume*   testD2Log = new G4LogicalVolume(disPb4,selectedMaterial,
+  G4LogicalVolume*   testD2Log = new G4LogicalVolume(sphere1,selectedMaterial,
                                                 "testD2Log",0,0,0) ;
 
   G4VPhysicalVolume* testD2Vol = new G4PVPlacement(0,G4ThreeVector(0,0,0),
                              "testD2Vol",testD2Log,testBoolVol,false,0);  
+
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -439,10 +445,4 @@ void Tst01DetectorConstruction::ConstructDetectors()
   myTargetLog->SetVisAttributes(calorimeterTubeVisAtt);
 
 }
-
-
-
-
-
-
 
