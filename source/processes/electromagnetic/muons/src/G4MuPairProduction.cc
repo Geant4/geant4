@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuPairProduction.cc,v 1.14 2000-04-25 14:19:02 maire Exp $
+// $Id: G4MuPairProduction.cc,v 1.15 2000-05-23 09:58:49 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -34,13 +34,14 @@ G4int G4MuPairProduction::nzdat = 5 ;
 G4double G4MuPairProduction::zdat[]={1.,4.,13.,26.,92.};
 G4int G4MuPairProduction::ntdat = 8 ;
 G4double G4MuPairProduction::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e10};
-G4int G4MuPairProduction::NBIN = 100 ; //500 ;
-G4double G4MuPairProduction::ya[1000]={0.};
-G4double G4MuPairProduction::proba[5][8][1000]={0.};
+G4int G4MuPairProduction::NBIN = 1000 ; //100 ;
+G4double G4MuPairProduction::ya[1001]={0.};
+G4double G4MuPairProduction::proba[5][8][1001]={0.};
+G4double G4MuPairProduction::MinPairEnergy = 4.*electron_mass_c2 ;
 
 G4double G4MuPairProduction::LowerBoundLambda = 1.*keV ;
-G4double G4MuPairProduction::UpperBoundLambda = 10000.*TeV ;
-G4int	 G4MuPairProduction::NbinLambda = 100 ;
+G4double G4MuPairProduction::UpperBoundLambda = 1000000.*TeV ;
+G4int	 G4MuPairProduction::NbinLambda = 150 ;
 
 
 G4MuPairProduction::G4MuPairProduction(const G4String& processName)
@@ -185,7 +186,6 @@ G4double G4MuPairProduction::ComputePairLoss(
 
   G4double CutInPairEnergy = ElectronEnergyCut+PositronEnergyCut
                             +2.*electron_mass_c2 ;
-  G4double MinPairEnergy = 4.*electron_mass_c2 ;
   if( CutInPairEnergy <= MinPairEnergy ) return loss ;
 
   G4double MaxPairEnergy = KineticEnergy+ParticleMass*(1.-0.75*sqrte*z13) ;
@@ -354,12 +354,9 @@ G4double G4MuPairProduction::ComputeMicroscopicCrossSection(
 void G4MuPairProduction::MakeSamplingTables(
                                    const G4ParticleDefinition* ParticleType)
 {
-  G4double epbin[1000],xbin[1000],prbin[1000] ;
   G4int nbin;
-  G4double AtomicNumber,KineticEnergy,MinPairEnergy ;  
+  G4double AtomicNumber,KineticEnergy ;  
   G4double c,y,ymin,ymax,dy,yy,dx,x,ep ;
-
-  MinPairEnergy = 4.*electron_mass_c2 ;
 
   static const G4double sqrte = sqrt(exp(1.)) ;
 
@@ -396,9 +393,6 @@ void G4MuPairProduction::MakeSamplingTables(
         if(nbin<NBIN)
         {
           nbin += 1 ;
-          epbin[nbin]=ep;
-          xbin[nbin]=x;
-          prbin[nbin]=CrossSection ;
           ya[nbin]=y ;
           proba[iz][it][nbin] = CrossSection ;
         }
@@ -409,8 +403,8 @@ void G4MuPairProduction::MakeSamplingTables(
       {
         for(G4int ib=0; ib<=nbin; ib++)
         {
-          prbin[ib] /= CrossSection ;
           proba[iz][it][ib] /= CrossSection ;
+
         }
       }
     }
@@ -548,6 +542,15 @@ G4double G4MuPairProduction::ComputeDDMicroscopicCrossSection(
 
 }
       
+G4double G4MuPairProduction::GetDMicroscopicCrossSection(
+                                 const G4ParticleDefinition* ParticleType,
+                                 G4double KineticEnergy, G4double AtomicNumber,
+                                 G4double PairEnergy)
+{
+  return ComputeDMicroscopicCrossSection(ParticleType,KineticEnergy,
+                                         AtomicNumber,PairEnergy) ;
+}
+      
 G4double G4MuPairProduction::ComputeDMicroscopicCrossSection(
                                  const G4ParticleDefinition* ParticleType,
                                  G4double KineticEnergy, G4double AtomicNumber,
@@ -611,7 +614,6 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
       ((*G4Positron::Positron()).GetCutsInEnergy())[aMaterial->GetIndex()];
    G4double CutInPairEnergy = ElectronEnergyCut + PositronEnergyCut ;
 
-   G4double MinPairEnergy = 4.*electron_mass_c2 ;
    if (CutInPairEnergy < MinPairEnergy) CutInPairEnergy = MinPairEnergy ;
 
    // check against insufficient energy
@@ -813,7 +815,7 @@ G4Element* G4MuPairProduction::SelectRandomAtom(G4Material* aMaterial) const
 void G4MuPairProduction::PrintInfoDefinition()
 {
   G4String comments = "theoretical cross sections \n ";
-           comments += "         Good description up to 1000 TeV.";
+           comments += "         Good description up to 1000 PeV.";
 
   G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n    PhysicsTables from " << G4BestUnit(LowerBoundLambda,

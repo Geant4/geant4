@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuIonisation.cc,v 1.10 2000-04-25 14:19:01 maire Exp $
+// $Id: G4MuIonisation.cc,v 1.11 2000-05-23 09:58:47 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,8 +35,8 @@
 
 
 G4double G4MuIonisation::LowerBoundLambda = 1.*keV ;
-G4double G4MuIonisation::UpperBoundLambda = 10000.*TeV ;
-G4int	 G4MuIonisation::NbinLambda = 100 ;
+G4double G4MuIonisation::UpperBoundLambda = 1000000.*TeV ;
+G4int	 G4MuIonisation::NbinLambda = 150 ;
 
 
 // constructor and destructor

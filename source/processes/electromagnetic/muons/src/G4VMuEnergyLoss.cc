@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.1 2000-04-25 14:19:02 maire Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.2 2000-05-23 09:58:50 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -62,8 +62,8 @@ G4PhysicsTable* G4VMuEnergyLoss::themuminusRangeCoeffBTable = NULL ;
 G4PhysicsTable* G4VMuEnergyLoss::themuminusRangeCoeffCTable = NULL ;
  
 G4double G4VMuEnergyLoss::LowerBoundEloss = 1.*keV ;
-G4double G4VMuEnergyLoss::UpperBoundEloss = 10000.*TeV ;
-G4int    G4VMuEnergyLoss::NbinEloss = 100 ;
+G4double G4VMuEnergyLoss::UpperBoundEloss = 1000000.*TeV ;
+G4int    G4VMuEnergyLoss::NbinEloss = 150 ;
 G4double G4VMuEnergyLoss::RTable,G4VMuEnergyLoss::LOGRTable;
 
 G4EnergyLossMessenger* G4VMuEnergyLoss::eLossMessenger = NULL ;
@@ -397,7 +397,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
  
   // do not track further if kin.energy < 1. eV
    const G4double MinKineticEnergy = 1.*eV;
-   const G4double linLossLimit = 0.02 ;
+   const G4double linLossLimit = 0.05 ;
   
   G4double MeanLoss, finalT;
  
