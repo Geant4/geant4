@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2000-03-03 12:24:06 gcosmo Exp $
+$Id: History,v 1.12 2000-03-14 09:27:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 14,   00   V. Grichine
+ - Added diagnostics in G4Cons, G4Sphere and G4Torus in function
+   DistanceToOut(p,v,...).
 
 Mar 03,   00   G. Cosmo                   geom-solids-csg-V01-00-05
  - Minor fixes to unit tests to make them up-to-date with recent
