@@ -782,17 +782,17 @@ HepRepType* G4HepRepSceneHandler::getGeometryRootType() {
     
         // Add attdefs used by all geometry types.
         _geometryRootType->addAttDef  ("LVol", "Logical Volume", "Physics","");
-        _geometryRootType->addAttValue("LVol", "");
+        _geometryRootType->addAttValue("LVol", G4String(""));
         _geometryRootType->addAttDef  ("Solid", "Solid Name", "Physics","");
-        _geometryRootType->addAttValue("Solid", "");
+        _geometryRootType->addAttValue("Solid", G4String(""));
         _geometryRootType->addAttDef  ("EType", "Entity Type", "Physics","");
-        _geometryRootType->addAttValue("EType", "G4Box");
+        _geometryRootType->addAttValue("EType", G4String("G4Box"));
         _geometryRootType->addAttDef  ("Material", "Material Name", "Physics","");
-        _geometryRootType->addAttValue("Material", "Air");
+        _geometryRootType->addAttValue("Material", G4String("Air"));
         _geometryRootType->addAttDef  ("Density", "Material Density", "Physics","");
         _geometryRootType->addAttValue("Density", 0.0);
         _geometryRootType->addAttDef  ("State", "Material State", "Physics","");
-        _geometryRootType->addAttValue("State", "Gas");
+        _geometryRootType->addAttValue("State", G4String("Gas"));
         _geometryRootType->addAttDef  ("Radlen", "Material Radiation Length", "Physics","");
         _geometryRootType->addAttValue("Radlen", 0.0);
         
@@ -916,9 +916,9 @@ HepRepType* G4HepRepSceneHandler::getTrajectoryType() {
         G4Color color = getColor(charge);
         _trajectoryType->addAttValue("Color", color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
         _trajectoryType->addAttValue("ID", -1);
-        _trajectoryType->addAttValue("IMom", "");
+        _trajectoryType->addAttValue("IMom", G4String(""));
         _trajectoryType->addAttValue("PDG", -1);
-        _trajectoryType->addAttValue("PN", "");
+        _trajectoryType->addAttValue("PN", G4String(""));
         _trajectoryType->addAttValue("PID", -1);
 
         _trajectoryType->addAttValue("Layer", trajectoryLayer);
@@ -961,7 +961,7 @@ HepRepType* G4HepRepSceneHandler::getCalHitType() {
         _calHitType = factory->createHepRepType(getEventType(), "CalHit");
         _calHitType->addAttValue("Layer", calHitLayer);
         _calHitType->addAttValue("Fill", true);
-        _calHitType->addAttValue("DrawAs", "Polygon");
+        _calHitType->addAttValue("DrawAs", G4String("Polygon"));
     }
     return _calHitType;
 }
