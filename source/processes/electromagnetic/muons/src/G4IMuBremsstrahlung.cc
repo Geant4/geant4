@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMuBremsstrahlung.cc,v 1.1 1999-01-07 16:11:05 gunter Exp $
+// $Id: G4IMuBremsstrahlung.cc,v 1.2 1999-05-04 14:24:21 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    
@@ -821,6 +821,8 @@ void G4IMuBremsstrahlung::BuildLambdaTable(const G4ParticleDefinition& ParticleT
       delete theMeanFreePathTable;
    }
    theMeanFreePathTable = new G4PhysicsTable( G4Material::GetNumberOfMaterials() ) ;
+   PartialSumSigma.resize(G4Material::GetNumberOfMaterials());
+
    G4PhysicsLogVector* ptrVector;
    for ( G4int J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )  
        { 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuPairProduction.cc,v 1.3 1999-03-09 13:21:50 urban Exp $
+// $Id: G4MuPairProduction.cc,v 1.4 1999-05-04 14:24:23 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -173,7 +173,7 @@ G4double G4MuPairProduction::ComputePairLoss(
   wgi[] ={ 0.0506,0.1112,0.1569,0.1813,0.1813,0.1569,0.1112,0.0506 };
   static const G4double ak1=6.9 ;
   static const G4double ak2=1.0 ;
-  G4double sqrte = sqrt(exp(1.)) ;
+  static const G4double sqrte = sqrt(exp(1.)) ;
   G4double z13 = exp(log(AtomicNumber)/3.) ;
 
   G4double loss = 0.0 ;
@@ -229,6 +229,7 @@ void G4MuPairProduction::BuildLambdaTable(
    }
   theMeanFreePathTable = new 
                       G4PhysicsTable( G4Material::GetNumberOfMaterials() ) ;
+   PartialSumSigma.resize(G4Material::GetNumberOfMaterials());
 
    G4PhysicsLogVector* ptrVector;
    for ( G4int J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )  
@@ -297,7 +298,7 @@ G4double G4MuPairProduction::ComputeMicroscopicCrossSection(
   static const G4double ak1=6.9 ;
   static const G4double ak2=1.0 ;
 
-  G4double sqrte = sqrt(exp(1.)) ;
+  static const G4double sqrte = sqrt(exp(1.)) ;
   G4double z13 = exp(log(AtomicNumber)/3.) ;
 
   G4double CrossSection = 0.0 ;
@@ -350,7 +351,7 @@ void G4MuPairProduction::MakeSamplingTables(
 
   MinPairEnergy = 4.*electron_mass_c2 ;
 
-  G4double sqrte = sqrt(exp(1.)) ;
+  static const G4double sqrte = sqrt(exp(1.)) ;
 
   for (G4int iz=0; iz<nzdat; iz++)
   {
@@ -413,7 +414,7 @@ G4double G4MuPairProduction::ComputeDDMicroscopicCrossSection(
  // Calculates the double differential (DD) microscopic cross section 
  //   using the cross section formula of R.P. Kokoulin (18/01/98)
 {
-  G4double sqrte = sqrt(exp(1.)) ;
+  static const G4double sqrte = sqrt(exp(1.)) ;
 
   G4double bbbtf= 183. ;
   G4double bbbh = 202.4 ; 
