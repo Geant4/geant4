@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.33 1999-10-26 07:54:16 morita Exp $
+# $Id: binmake.gmk,v 1.34 1999-11-10 14:36:45 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -19,6 +19,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/global/management/include \
               -I$(G4BASE)/global/HEPRandom/include \
               -I$(G4BASE)/global/HEPGeometry/include \
+              -I$(G4BASE)/global/HEPNumerics/include \
               -I$(G4BASE)/run/include \
               -I$(G4BASE)/materials/include \
               -I$(G4BASE)/particles/management/include \

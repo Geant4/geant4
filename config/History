@@ -1,4 +1,4 @@
-$Id: History,v 1.65 1999-10-29 08:51:23 barrand Exp $
+$Id: History,v 1.66 1999-11-10 14:36:45 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,8 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10th November 1999  Gabriele Cosmo (config-V00-01-05)
+- binmake.gmk: added path to HEPNumerics/include which was missing.
+
 29th October 1999  Guy Barrand
-- architecture.gmk, interactivity.gmk : introduce 
+- architecture.gmk, interactivity.gmk: introduced
   "G4_OPACS_WIDGET_SET lesstif" logic to handle the case
   of using, on Linux, the bugged lesstif with the non bugged OPACS.
 
