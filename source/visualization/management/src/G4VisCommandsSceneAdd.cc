@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.15 2001-04-10 14:56:43 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.16 2001-04-20 20:46:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -267,7 +267,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
   is >> name >> requestedDepthOfDescent;
 
   G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
-  int nLV = pLVStore -> entries ();
+  int nLV = pLVStore -> size ();
   int iLV;
   G4LogicalVolume* pLV;
   for (iLV = 0; iLV < nLV; iLV++ ) {
