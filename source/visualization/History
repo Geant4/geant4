@@ -1,4 +1,4 @@
-$Id: History,v 1.152 2001-08-24 20:50:42 johna Exp $
+$Id: History,v 1.153 2001-08-24 21:51:51 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -31,6 +31,8 @@ History file for visualization category
 - Improved READMEs.
 - Reduced warnings from OpenGL - see OpenGL/History.
 - Cosmetic changes to test.
+- Added explicit invocation of base class methods to avoid warnings about
+  hiding of base class methods.
 
 17th August 2001  John Allison  (vis-V03-02-12)
 - Coworks with greps-V03-02-02 and intercoms-V03-02-04.

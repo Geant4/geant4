@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.hh,v 1.6 2001-08-24 20:41:29 johna Exp $
+// $Id: G4VTreeSceneHandler.hh,v 1.7 2001-08-24 21:42:13 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,6 +64,8 @@ public:
   virtual void AddPrimitive (const G4Square&)     {}
   virtual void AddPrimitive (const G4Polyhedron&) {}
   virtual void AddPrimitive (const G4NURBS&)      {}
+  virtual void AddPrimitive (const G4Polymarker&) {}
+  virtual void AddPrimitive (const G4Scale&)      {}
 
   virtual void BeginModeling();
   virtual void EndModeling();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.11 2001-08-14 18:38:32 johna Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.12 2001-08-24 21:48:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,6 +57,12 @@ public:
   void AddPrimitive (const G4Polyhedron& p);
   void AddPrimitive (const G4NURBS& nurb);
   void AddPrimitive (const G4Polymarker&);
+  ////////////////////////////////////////////////////////////////
+  // Explicitly invoke base class methods to avoid warnings about
+  // hiding of base class methods.
+  void AddPrimitive (const G4Scale& scale) {
+    G4VSceneHandler::AddPrimitive (scale);
+  }
   
   //
   // Primitives for use of HEPVis
