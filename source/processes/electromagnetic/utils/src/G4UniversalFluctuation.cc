@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.17 2004-04-26 16:10:43 vnivanch Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.18 2004-04-26 16:11:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,6 +42,7 @@
 // 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
 // 07-11-03 Fix problem of rounding of double in G4UniversalFluctuations
 // 06-02-04 Add control on big sigma > 2*meanLoss (V.Ivanchenko)
+// 26-04-04 Comment out the case of very small step (V.Ivanchenko)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
