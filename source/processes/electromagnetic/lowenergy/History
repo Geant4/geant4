@@ -1,4 +1,4 @@
-$Id: History,v 1.110 2001-10-11 14:55:48 pia Exp $
+$Id: History,v 1.111 2001-10-12 16:06:24 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12.10.2001 - MGP, tag emlowen-V03-02-28
+             Cosmetics in the source code (FALSE/TRUE moved to false/true)
+             and update of all tests to new materials migrated to STL
 
 11.10.2001 - MGP, tag emlowen-V03-02-27
              Further revision of the new code in the previous tag
