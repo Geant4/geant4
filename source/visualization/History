@@ -1,4 +1,4 @@
-$Id: History,v 1.29 1999-09-15 12:27:06 barrand Exp $
+$Id: History,v 1.30 1999-10-01 03:11:45 stanaka Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+30 Sep 1999  Satoshi Tanaka
+- RW/STL dependence was removed from VRML 1.0 driver
 
 15 Sep 1999  Guy Barrand
 - Modify  G4OpenGLStoredSceneHandler.cc to compile on Linux-g++ with STL.
