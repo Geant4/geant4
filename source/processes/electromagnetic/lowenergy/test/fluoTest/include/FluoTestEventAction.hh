@@ -42,7 +42,7 @@ class FluoTestEventAction : public G4UserEventAction
     G4int                       printModulo;                         
  
   G4double RandomCut(G4double);
-
+  G4double ResponseFunction(G4double);
 
 #ifdef G4ANALYSIS_USE
     FluoTestAnalysisManager* fAnalysisManager;

@@ -49,7 +49,8 @@ protected:
   // these methods Construct particles 
   virtual void ConstructBosons();
   virtual void ConstructLeptons();
-  virtual void ConstructHadrons();
+  virtual void ConstructBarions();
+  virtual void ConstructIons();
 
 protected:
   // these methods Construct physics processes and register them

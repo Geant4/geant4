@@ -33,9 +33,8 @@ FluoTestEventAction::FluoTestEventAction(FluoTestAnalysisManager* aMgr):
  {
    eventMessenger = new FluoTestEventActionMessenger(this);
    runManager = new FluoTestRunAction();
-   
-}
-
+  
+ }
 #else
 
 FluoTestEventAction::FluoTestEventAction()
@@ -68,13 +67,13 @@ FluoTestEventAction::~FluoTestEventAction()
 void FluoTestEventAction::BeginOfEventAction(const G4Event* evt)
 {
   
-  /*G4int evtNb = evt->GetEventID(); // Returns the event ID
-     if (evtNb%printModulo == 0)
-   { 
-  G4cout << "\n---> Begin of event: " << evtNb << G4endl;
-  HepRandom::showEngineStatus();
-      }
-  */
+  // G4int evtNb = evt->GetEventID(); // Returns the event ID
+  //   if (evtNb%printModulo == 0)
+  // { 
+  //G4cout << "\n---> Begin of event: " << evtNb << G4endl;
+  //HepRandom::showEngineStatus();
+  //   }
+  
   if (HPGeCollID==-1)
     {
       G4SDManager * SDman = G4SDManager::GetSDMpointer();
@@ -98,7 +97,7 @@ void FluoTestEventAction::EndOfEventAction(const G4Event* evt)
     FluoTestSensorHitsCollection* HPGeHC = 0;
     G4int n_hit = 0;
     G4double totEnergyDetect=0., totEnergy=0, energyD=0.;
-    G4double energyDeposit = 0.;
+   
     if (HCE) HPGeHC = (FluoTestSensorHitsCollection*)(HCE->GetHC(HPGeCollID));
     if(HPGeHC)
       {
@@ -107,8 +106,8 @@ void FluoTestEventAction::EndOfEventAction(const G4Event* evt)
 	  {
 	    totEnergy += (*HPGeHC)[i]->GetEdepTot(); 
 	
-	    energyD = RandomCut(totEnergy);
-
+	    //energyD = RandomCut(totEnergy);
+	    energyD = ResponseFunction(totEnergy);
 	  
 	    totEnergyDetect += energyD;
 
@@ -195,5 +194,70 @@ G4double FluoTestEventAction::RandomCut(G4double energy)
     return   EdepDetect;
     
 };
+G4double FluoTestEventAction::ResponseFunction(G4double energy)
+{
+  G4double eMin = 1* keV;
+  G4double eMax = 10*keV; 
+  G4double value = 0.;
+  G4double efficiency = 1.;
+  //G4double id = 0;
+ 
+  // efficiency = dataSet->FindValue(energy,id);
+
+  G4double random = G4UniformRand();
+ 
+  if (energy>=eMin && energy <=eMax)
+    {
+      G4double infEnergy = (G4int)(energy/keV)* keV;
+      
+      G4double supEnergy = ((G4int)(energy/keV) + 1)*keV;
+      
+      
+      
+      G4double infData = runManager->GetInfData(energy, random);
+      
+      G4double supData = runManager->GetSupData(energy,random);
+      
+      value = (log10(infData)*log10(supEnergy/energy) +
+	       log10(supData)*log10(energy/infEnergy)) / 
+	log10(supEnergy/infEnergy);
+      value = pow(10,value);
+    }
+  else if (energy<eMin)
+    { 
+      G4double infEnergy = eMin;
+      G4double supEnergy = eMin/keV +1*keV;
+ 
+      G4double infData = runManager->GetInfData(eMin, random);
+      G4double supData = runManager->GetSupData(eMin,random);
+      value = (log10(infData)*log10(supEnergy/eMin) +
+	       log10(supData)*log10(eMin/infEnergy)) / 
+	log10(supEnergy/infEnergy);
+      value = pow(10,value);
+      value = value-eMin+ energy;
 
 
+    }
+ else if (energy>eMax)
+    { 
+      G4double infEnergy = eMax/keV - 1. *keV;
+      G4double supEnergy = eMax;
+ 
+      G4double infData = runManager->GetInfData(eMax, random);
+      G4double supData = runManager->GetSupData(eMax,random);
+      value = (log10(infData)*log10(supEnergy/eMax) +
+	       log10(supData)*log10(eMax/infEnergy)) / 
+	log10(supEnergy/infEnergy);
+      value = pow(10,value);
+      value = value+energy- eMax;
+    }
+  G4double  RandomNum = G4UniformRand(); 
+  
+  if ( RandomNum>efficiency )
+    {
+      value = 0.;
+    }
+ 
+  return value;
+
+}

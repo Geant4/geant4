@@ -1,9 +1,7 @@
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "FluoTestPrimaryGeneratorAction.hh"
-
+#include "G4DataVector.hh"
 #include "FluoTestDetectorConstruction.hh"
 #include "FluoTestPrimaryGeneratorMessenger.hh"
 #include "FluoTestRunAction.hh"
@@ -19,32 +17,32 @@
 
 #ifdef G4ANALYSIS_USE
 FluoTestPrimaryGeneratorAction::FluoTestPrimaryGeneratorAction( FluoTestDetectorConstruction* FluoTestDC,FluoTestAnalysisManager* analysisMgr)
-  :FluoTestDetector(FluoTestDC),analysisManager(analysisMgr),rndmFlag("off"),
-   rndmPart("off"),beam("off"),spectrum("off"),isoVert("off")
+  :FluoTestDetector(FluoTestDC),analysisManager(analysisMgr),
+   rndmFlag("off"),beam("off"),spectrum("off"),isoVert("off")
 { G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);
-  
-  //create a messenger for this class
-  gunMessenger = new FluoTestPrimaryGeneratorMessenger(this);
-  runManager = new FluoTestRunAction();
+ particleGun  = new G4ParticleGun(n_particle);
+ 
+ //create a messenger for this class
+ gunMessenger = new FluoTestPrimaryGeneratorMessenger(this);
+ runManager = new FluoTestRunAction();
+ 
+ // default particle kinematic
 
-  // default particle kinematic
-
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4String particleName;
-  G4ParticleDefinition* particle
-                    = particleTable->FindParticle(particleName="e-");
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(50.*MeV);
-  G4double position = -0.5*(FluoTestDetector->GetWorldSizeZ());
-  particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
+ G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+ G4String particleName;
+ G4ParticleDefinition* particle
+   = particleTable->FindParticle(particleName="e-");
+ particleGun->SetParticleDefinition(particle);
+ particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+ particleGun->SetParticleEnergy(50.*MeV);
+ G4double position = -0.5*(FluoTestDetector->GetWorldSizeZ());
+ particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
 }
 #else
 FluoTestPrimaryGeneratorAction::FluoTestPrimaryGeneratorAction(
-                                               FluoTestDetectorConstruction* FluoTestDC)
+							       FluoTestDetectorConstruction* FluoTestDC)
   :FluoTestDetector(FluoTestDC),rndmFlag("off"),
- rndmPart("off"),beam("off"),spectrum("off"),isoVert("off")
+   beam("off"),spectrum("off"),isoVert("off")
 {
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);
@@ -52,20 +50,20 @@ FluoTestPrimaryGeneratorAction::FluoTestPrimaryGeneratorAction(
   //create a messenger for this class
   gunMessenger = new FluoTestPrimaryGeneratorMessenger(this);
   runManager = new FluoTestRunAction();
-
+  
   // default particle kinematic
-
+  
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
   G4ParticleDefinition* particle
-                    = particleTable->FindParticle(particleName="e-");
+    = particleTable->FindParticle(particleName="e-");
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
- 
+  
   particleGun->SetParticleEnergy(50.*MeV);
   G4double position = -0.5*(FluoTestDetector->GetWorldSizeZ());
   particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
-
+  
 }
 #endif
 
@@ -87,31 +85,11 @@ void FluoTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double z0 = -0.5*(FluoTestDetector->GetWorldSizeZ());
   G4double y0 = 0.*cm, x0 = 0.*cm;
   if (rndmFlag == "on")
-     {y0 = (FluoTestDetector->GetSampleSizeXY())*(G4UniformRand()-0.5);
-      x0 = (FluoTestDetector->GetSampleSizeXY())*(G4UniformRand()-0.5);
-     } 
+    {y0 = (FluoTestDetector->GetSampleSizeXY())*(G4UniformRand()-0.5);
+    x0 = (FluoTestDetector->GetSampleSizeXY())*(G4UniformRand()-0.5);
+    } 
   particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
-
- //randomize particles
-
-  G4double random = G4UniformRand();
-  if (rndmPart == "on")
-    {  
-      G4String particleName;
-      G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-      G4ParticleDefinition* particle;
-      G4double electronAbundance = 0.5;
-      G4double photonAbundance = 0.5;
-      if ( random < electronAbundance)
-	{
-	  particle = particleTable->FindParticle(particleName="e-");
-	}
-      else{
-	particle = particleTable->FindParticle(particleName="gamma");
-      }
-      particleGun->SetParticleDefinition(particle);
-      
-    }
+  
   //randomize starting point
   if (beam == "on")
     {
@@ -119,63 +97,143 @@ void FluoTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       G4double rho = radius*sqrt(G4UniformRand());
       G4double theta = 2*pi*G4UniformRand()*rad;
       G4double position = -0.5*(FluoTestDetector->GetWorldSizeZ());
-
+      
       G4double y = rho * sin(theta);
       G4double x = rho * cos(theta);
       
       particleGun->SetParticlePosition(G4ThreeVector(x,y,position));
     }
-//shoot particles according to a certain spectrum
+  //shoot particles according to a certain spectrum
   if (spectrum =="on")
     {
-      const FluoTestDataSet* dataSet = runManager->GetSet();
-      
-      G4int i = 0;
-      G4int id = 0;
-      G4double minEnergy = 0. * MeV;
-      G4double particleEnergy= 0.;
-      G4double maxEnergy = 100000. * MeV;
-      G4double energyRange = maxEnergy - minEnergy;
-
-     /*
-     while (sum<randomNum)
-       {
-	
-	 G4cout<<"randomNum = "<<randomNum<<G4endl;
-	 particleEnergy = minEnergy+i*energyStep;
-	 sum+=(dataSet->FindValue(particleEnergy,id));
-	 G4cout<<"sum = "<<sum<<G4endl;
-	 //manca la riga in cui si trova l'energia
-	 i++;
-	 G4cout<<"i = "<<i<<G4endl;
-       }
-     */
-
-      //even if the following algorithm is heavy, it is the only
-      //one I know wich mantains the continuous character of the 
-      //spectrum. 
-      //If the spectrum is reduced again to an histogram, the integral
-      //calculated in FluoTestNormalization is meaningless
-
-      while ( i == 0)
+      G4String particle =  particleGun->GetParticleDefinition()
+	->GetParticleName();
+      if(particle == "proton"|| particle == "alpha")
 	{
-	  G4double random = G4UniformRand();
-	  
-	  G4double randomNum = G4UniformRand();
-	  
-	  particleEnergy = random *  energyRange;
-	  
-	  if ((dataSet->FindValue(particleEnergy,id)) > randomNum)
+	  G4DataVector* energies =  runManager->GetEnergies();
+	  G4DataVector* data =  runManager->GetData();
+	 
+	  G4double sum = runManager->GetDataSum();
+	  G4double partSum = 0;
+	  G4int j = 0;
+	  G4double random= sum*G4UniformRand();
+	  while (partSum<random)
 	    {
-	      i = 1;
-	      
+	      partSum += (*data)[j];
+	      j++;
 	    }
+	 
+	  particleGun->SetParticleEnergy((*energies)[j]);
+	  /*
+	  const FluoTestDataSet* dataSet = runManager->GetSet();
+	   
+	  G4int i = 0;
+	  G4double minEnergy = 0. * MeV;
+	  G4double maxEnergy = 100000. * MeV;
+	  G4double energyRange = maxEnergy - minEnergy;
+	  G4int id = 0;
+	  G4double particleEnergy= 0.;
+	 */
+	  /*
+     
+       while (sum<randomNum)
+       {
+       
+       G4cout<<"randomNum = "<<randomNum<<G4endl;
+       particleEnergy = minEnergy+i*energyStep;
+       sum+=(dataSet->FindValue(particleEnergy,id));
+       G4cout<<"sum = "<<sum<<G4endl;
+       //manca la riga in cui si trova l'energia
+       i++;
+	 G4cout<<"i = "<<i<<G4endl;
+	 }
+     */
+	  
+	  //even if the following algorithm is heavy, it is the only
+	  //one I know wich mantains the continuous character of the 
+	  //spectrum. 
+	  //If the spectrum is reduced again to an histogram, the integral
+	  //calculated in FluoTestNormalization is meaningless
+	  /*
+	  while ( i == 0)
+	    {
+	      G4double random = G4UniformRand();
+	      
+	      G4double randomNum = G4UniformRand()*235.93;
+	      
+	      particleEnergy = random *  energyRange;
+	      if(dataSet == 0)
+		{G4cout<<"dataSet == 0"<<G4endl;}
+	      G4cout<<"particleEnergy = "<<particleEnergy/MeV<<" MeV"<<G4endl;
+	      G4cout<<"dataSet->FindValue(particleEnergy,id) = "<<
+		dataSet->FindValue(particleEnergy,id)<<G4endl;
+	      G4cout<<"randomNum = "<<randomNum<<G4endl;
+	      if ((dataSet->FindValue(particleEnergy,id)) > randomNum)
+		{
+		  i = 1;
+		  
+		}
+	    }
+	  particleGun->SetParticleEnergy(particleEnergy);
+	  */
 	}
-      
-    
- particleGun->SetParticleEnergy(particleEnergy);
+      else if (particle == "gamma")
+	{
+	  const FluoTestDataSet* dataSet = runManager->GetGammaSet();
+	  
+	  G4int i = 0;
+	  G4int id = 0;
+	  G4double minEnergy = 0. * keV;
+	  G4double particleEnergy= 0.;
+	  G4double maxEnergy = 10. * keV;
+	  G4double energyRange = maxEnergy - minEnergy;
 
-    }      
+	   while ( i == 0)
+	    {
+	      G4double random = G4UniformRand();
+	      
+	      G4double randomNum = G4UniformRand()*5.0E6;
+	      
+	      particleEnergy = random *  energyRange;
+	      
+	      if ((dataSet->FindValue(particleEnergy,id)) > randomNum)
+		{
+		  i = 1;
+		  
+		}
+	    }
+	   particleGun->SetParticleEnergy(particleEnergy);
+	}
+
+	  /*
+const FluoTestDataSet* dataSet = runManager->GetAlphaSet();
+	  
+	  G4int i = 0;
+	  G4int id = 0;
+	  G4double minEnergy = 0. * MeV;
+	  G4double particleEnergy= 0.;
+	  G4double maxEnergy = 100000. * MeV;
+	  G4double energyRange = maxEnergy - minEnergy;
+
+	   while ( i == 0)
+	    {
+	      G4double random = G4UniformRand();
+	      
+	      G4double randomNum = G4UniformRand()*12.419;
+	      
+	      particleEnergy = random *  energyRange;
+	      
+	      if ((dataSet->FindValue(particleEnergy,id)) > randomNum)
+		{
+		  i = 1;
+		  
+		}
+	    }
+ particleGun->SetParticleEnergy(particleEnergy);
+	  */
+    }
+  
+      
   if (isoVert == "on")
     {
       G4double rho = 1. *m;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FluoTestPrimaryGeneratorMessenger.cc,v 1.7 2001-11-16 13:51:41 guardi Exp $
+// $Id: FluoTestPrimaryGeneratorMessenger.cc,v 1.8 2001-11-23 10:54:32 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,14 +30,6 @@ FluoTestPrimaryGeneratorMessenger::FluoTestPrimaryGeneratorMessenger(FluoTestPri
   RndmCmd->SetDefaultValue("on");
   RndmCmd->SetCandidates("on off");
   RndmCmd->AvailableForStates(PreInit,Idle);
-
- RndmPart = new G4UIcmdWithAString("/gun/randomPart",this);
-  RndmPart->SetGuidance("Shoot randomly the incident particle.");
-  RndmPart->SetGuidance("  Choice : on(default), off");
-  RndmPart->SetParameterName("choice",true);
-  RndmPart->SetDefaultValue("on");
-  RndmPart->SetCandidates("on off");
-  RndmPart->AvailableForStates(PreInit,Idle);
 
   RndmVert = new G4UIcmdWithAString("/gun/randomVert",this);
   RndmVert->SetGuidance("Shoot randomly the incident particle.");
@@ -70,7 +62,6 @@ FluoTestPrimaryGeneratorMessenger::FluoTestPrimaryGeneratorMessenger(FluoTestPri
 FluoTestPrimaryGeneratorMessenger::~FluoTestPrimaryGeneratorMessenger()
 {
   delete RndmCmd;
-  delete RndmPart;
   delete  RndmVert;
   delete spectrum;
   delete isoVert;
@@ -82,8 +73,6 @@ void FluoTestPrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4Stri
 { 
   if( command == RndmCmd )
    { FluoTestAction->SetRndmFlag(newValue);}
- if( command == RndmPart )
-   { FluoTestAction->SetRndmPart(newValue);}
  if( command == RndmVert )
    { FluoTestAction->SetRndmVert(newValue);}
  if( command == spectrum )

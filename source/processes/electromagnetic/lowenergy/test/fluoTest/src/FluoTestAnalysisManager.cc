@@ -116,17 +116,17 @@ void FluoTestAnalysisManager::BeginOfRun()
 { 
   ntuple = factory->createC( "fluoTestHisto1.hbook::1" );
   assert ( ntuple != 0 );
-  histoGamDet = histoManager->create1D("10","Energy deposit in the detector", 1000,0,100000);
-  histoGamDetPre = histoManager->create1D("20","Gammas reaching the detector", 1000,0,100000);
-  histoGamLeavSam = histoManager->create1D("30","Gammas leaving the sample", 1000,0,100000);
-  histoEleLeavSam = histoManager->create1D("40","Electrons leaving the sample", 1000,0,100000);
+  histoGamDet = histoManager->create1D("10","Energy deposit in the detector", 1000,0,6.5);
+  histoGamDetPre = histoManager->create1D("20","Gammas reaching the detector", 1000,0,6.5);
+  histoGamLeavSam = histoManager->create1D("30","Gammas leaving the sample", 1000,0,6.5);
+  histoEleLeavSam = histoManager->create1D("40","Electrons leaving the sample", 1000,0,6.5);
   // histoGamLS = histoManager->create1D("50","Theta of gammas leaving the sample", 800,0.,pi);
   // histoGamLSP = histoManager->create1D("60","Phi of gammas leaving the sample", 800,-pi,pi);
-  histoGamBornSam = histoManager->create1D("70"," Gammas born in the sample", 1000,0,10000);
-  histoEleBornSam = histoManager->create1D("80"," Electrons born in the sample", 1000,0,10000);
-  histoSpectrum =  histoManager->create1D("90","Spectrum of the incident photons",1000,0,10000);
-  histoProtLeavSam = histoManager->create1D("50","Gammas leaving the sample", 1000,0,100000);
-  histoProtDetPre = histoManager->create1D("60","Gammas reaching the detector", 1000,0,100000);
+  histoGamBornSam = histoManager->create1D("70"," Gammas born in the sample", 1000,0,6.5);
+  histoEleBornSam = histoManager->create1D("80"," Electrons born in the sample", 1000,0,6.5);
+  histoSpectrum =  histoManager->create1D("90","Spectrum of the incident photons",1000,0,6.5);
+  histoProtLeavSam = histoManager->create1D("50","Gammas leaving the sample", 1000,0,6.5);
+  histoProtDetPre = histoManager->create1D("60","Gammas reaching the detector", 1000,0,6.5);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FluoTestPrimaryGeneratorAction.hh,v 1.12 2001-11-16 13:51:34 guardi Exp $
+// $Id: FluoTestPrimaryGeneratorAction.hh,v 1.13 2001-11-23 10:54:29 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,6 @@ class FluoTestPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   public:
   void GeneratePrimaries(G4Event*);
   void SetRndmFlag(G4String val) { rndmFlag = val;}
-  void SetRndmPart (G4String val) { rndmPart = val;}
   void SetRndmVert (G4String val) { beam = val;}
   void SetSpectrum (G4String val) { spectrum= val  ;}
   void SetIsoVert  (G4String val) { isoVert = val  ;}
@@ -63,8 +62,7 @@ private:
 #endif
 
 
-  G4String                      rndmFlag;	  //flag for a random impact point  
-  G4String                      rndmPart;//flag for a random particle shot
+  G4String                      rndmFlag;   //flag for a random impact point 
   G4String                      beam;
   G4String                      spectrum;
   G4String                      isoVert;

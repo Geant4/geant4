@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: FluoTestPhysicsList.cc,v 1.19 2001-11-16 13:51:39 guardi Exp $
+// $Id: FluoTestPhysicsList.cc,v 1.20 2001-11-23 10:54:31 guardi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,7 +79,8 @@ void FluoTestPhysicsList::ConstructParticle()
 
   ConstructBosons();
   ConstructLeptons();
-  ConstructHadrons();
+  ConstructBarions();
+  ConstructIons();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -101,9 +102,14 @@ void FluoTestPhysicsList::ConstructLeptons()
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void FluoTestPhysicsList::ConstructHadrons()
+void FluoTestPhysicsList::ConstructBarions()
 {
   G4Proton::ProtonDefinition();
+}
+void FluoTestPhysicsList::ConstructIons()
+{
+//  Ions
+ G4Alpha::AlphaDefinition();
 }
 
 void FluoTestPhysicsList::ConstructProcess()
@@ -172,14 +178,23 @@ void FluoTestPhysicsList::ConstructEM()
       //proton
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
       pmanager->AddProcess(new G4hLowEnergyIonisation,-1, 2,2);
-      /*
- Test17StepCut* thehadronStepCut = new Test17StepCut();
+    }
+    else if (   particleName == "alpha" )
+      {
+	
+	pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
+	G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
+	pmanager->AddProcess(iIon,-1,2,2);
+      }
+    
+    /*
+      Test17StepCut* thehadronStepCut = new Test17StepCut();
       thehadronStepCut->SetMaxStep(MaxChargedStep);          		       
       pmanager->AddProcess( thehadronStepCut,       -1,-1,3);
-      */
-
-    }
+    */
+    
   }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -240,6 +255,8 @@ void FluoTestPhysicsList::SetCuts(){
    SetCutValue(cutForElectron,"e-");
    SetCutValue(cutForElectron,"e+");
    SetCutValue(cutForProton, "proton");
+   SetCutValueForOthers(cutForProton);
+   if (verboseLevel>0) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -289,8 +306,7 @@ void FluoTestPhysicsList::SetCutsByEnergy(G4double val)
   part = theFluoTestParticleTable->FindParticle("proton");
   cut = G4EnergyLossTables::GetRange(part,val,currMat);
   SetCutValue(cut, "proton");
-  G4cout<<"cut in energy set : "<<cut/eV<<" eV"<<G4endl;
-  if (verboseLevel>0) DumpCutValuesTable();
+ 
 }
 
 
