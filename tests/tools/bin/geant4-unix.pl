@@ -35,33 +35,69 @@ sub InitVars {
     $CVS = 'cvs -z3';
     $CVSCO = 'co -P';
 
-    # Keep $StartTime in $G4WORKDIR/StartTime
-    if (open(STARTTIME,"$ENV{'G4WORKDIR'}/StartTime")) {
-	while(<STARTTIME>) {
-	    chop;
-	    $StartTime = $_;
-	}
-    } else {
-	$StartTime = time;
-	system("echo $StartTime > $ENV{'G4WORKDIR'}/StartTime");
-    }
+    $AFSDir = "/afs/cern.ch/project/cndoc/wwwasd/cgi-bin/geant4/tinderbox/mail";
+    $REF = "$ENV{REF}";
+    $G4SYSTEM = "$ENV{G4SYSTEM}";
+    $DEBOPT = "$ENV{DEBOPT}";
+    $UNIQ = "$REF.$G4SYSTEM.$DEBOPT.$$";
+#################################################################
+# Start/End times.
+#
 
-    $CurrentTime = time;
+# Get tagset number from OnTest
+
+    $OnTest = "$ENV{G4STTDIR}/bin/OnTest";
+
+open(ONTEST,"$OnTest") || die "Failed to open read OnTest $!";
+
+while(<ONTEST>) {
+#         1    2                     3              4    5
+    (/^(\S+)(\s+)geant4-\d+-\d+-(ref|cand)-\d+\+(tags)(\d+)/) ;
+    $tagset = $5;
+#    print "tagset=$5\n";
+}
+
+close(ONTEST);
+
+
+# Get number of tests from its list
+# to be imlemented
+    $tests_number = 45;
+
+# Calculate 'tagset time'
+    $BaseTime = ($tagset-1) * ($tests_number) * 5 * 60;
+
+#    # Keep $StartTime in $G4WORKDIR/StartTime
+#    if (open(STARTTIME,"$ENV{'G4WORKDIR'}/StartTime")) {
+#	while(<STARTTIME>) {
+#	    chop;
+#	    $StartTime = $_;
+#	}
+#    } else {
+#	$StartTime = time;
+#	system("echo $StartTime > $ENV{'G4WORKDIR'}/StartTime");
+#    }
+#
+#    $CurrentTime = time;
+
+
+###################################################################
     
     $GmakeLog = "$ENV{'G4WORKDIR'}/stt/$ENV{'G4SYSTEM'}/gmake.log";
     $StartLog = "$ENV{'G4WORKDIR'}/start.log";
     $EndLog = "$ENV{'G4WORKDIR'}/end.log";
     
     # Set these proper values for your tinderbox server
-    $Tinderbox_server = 'g4tinder\@pcitapi08';
-#    $Tinderbox_server = 'g4tinder\@pcitapiww';
+#    $Tinderbox_server = 'g4tinder\@pcitapi08';
+    $Tinderbox_server = 'g4tinder\@pcitapiww';
     #$Tinderbox_server = 'external-tinderbox-incoming\@tinderbox.seawood.org';
 
     # These shouldn't really need to be changed
     $BuildSleep = 10; # Minimum wait period from start of build to start
                       # of next build in minutes
 #    $BuildTree = &GetTestArea;
-    $BuildTree = "Project_A";
+#    $BuildTree = "Project_A";
+    $BuildTree = $tagset;
     $BuildTag = '';
     $BuildName = &GetBuildName;
     $TopLevel = '.';
@@ -167,7 +203,8 @@ sub StartBuild {
     close( LOG );
 
     if ( $TestScript == 0) {
-	system("$mail $Tinderbox_server < $StartLog");
+#	system("$mail $Tinderbox_server < $StartLog");
+	system("cp $StartLog $AFSDir/$UNIQ");
 	system("rm $StartLog");
     }
 }
@@ -187,7 +224,9 @@ sub StartTest {
 	# ?
 	print LOG "tinderbox: starttime: $StartTime\n";
 	print LOG "tinderbox: timenow: $StartTime\n";
-	print LOG "tinderbox: status: $TestName-running\n";
+#	print LOG "tinderbox: status: $TestName-running\n";
+	print LOG "tinderbox: status: tests-running\n";
+	print LOG "tinderbox: testname: $TestName\n";
 	# SUN-CC/debug
 	print LOG "tinderbox: buildname: $BuildName\n"; 
 	print LOG "tinderbox: errorparser: unix\n";
@@ -196,7 +235,9 @@ sub StartTest {
     close( LOG );
     
     if ( $TestScript == 0) {
-	system("$mail $Tinderbox_server < $StartLog");
+#	system("$mail $Tinderbox_server < $StartLog");
+#	system("cp $StartLog StartLog");
+	system("cp $StartLog $AFSDir/$UNIQ");
 	system("rm $StartLog");
     }
     
@@ -230,7 +271,8 @@ sub EndBuild {
 	system("rm $ENV{'G4WORKDIR'}/StartTime");
 	
 	system("cat $GmakeLog >> $EndLog");
-	system("$mail $Tinderbox_server < $EndLog");
+#	system("$mail $Tinderbox_server < $EndLog");
+	system("cp $EndLog $AFSDir/$UNIQ");
 	system("rm $EndLog");
     }
 }
@@ -244,6 +286,66 @@ sub EndTest {
 
 #    @felist = split(/,/, $FE);
 
+#
+# Get the size of $TestName.err 
+#
+    $filename = "$ENV{'G4WORKDIR'}/stt/$ENV{'G4SYSTEM'}/$TestName.err";
+    $errsize = (stat($filename))[7];
+
+    open(ERRFILE,"$filename") || die "Failed to open read $filename $!";
+    
+    while(<ERRFILE>) {
+	if ($ENV{'G4SYSTEM'} eq 'Linux-g++') {
+	    if (/(\d+)\:(\d+)\.(\d+)elapsed/) {
+		
+		$sec = $1*60+$2;
+		$deltatime = "$sec.$3";
+		
+#		print "deltatime=$deltatime\n";
+	    }
+	} else {
+	    if (/^real(\s+)(\d+)\.(\d+)/) {
+		
+		$deltatime = "$2.$3";
+		
+#		print "deltatime=$deltatime\n";
+	    }
+	}
+    }
+    
+    close(ERRFILE);
+    
+    if ($ENV{'G4SYSTEM'} eq "DEC-cxx") {
+	$minerr=30;
+	$maxerr=45;
+    } 
+
+    if ($ENV{'G4SYSTEM'} eq "Linux-g++") {
+	$minerr=125;
+	$maxerr=140;
+    } 
+
+    if ($ENV{'G4SYSTEM'} eq "Linux-egcs") {
+	$minerr=125;
+	$maxerr=140;
+    } 
+
+    if ($ENV{'G4SYSTEM'} eq "SUN-CC") {
+	$minerr=45;
+	$maxerr=55;
+    } 
+
+    if ($ENV{'G4SYSTEM'} eq "HP-aCC") {
+	$minerr=45;
+	$maxerr=55;
+    } 
+
+    if ($errsize < $maxerr && $errsize > $minerr) {
+	$BuildStatus = "success";
+    } else {
+	$BuildStatus = "failed";
+    }
+
 #    die "SERVER: " . $Tinderbox_server . "\n";
 ###    open( LOG, "|$mail $Tinderbox_server" );
     open( LOG, "|cat >> $EndLog" );
@@ -253,7 +355,13 @@ sub EndTest {
 	# ?
 	print LOG "tinderbox: starttime: $StartTime\n";
 	print LOG "tinderbox: timenow: $CurrentTime\n";
-	print LOG "tinderbox: status: $TestName-$BuildStatus\n";
+#	print LOG "tinderbox: status: $TestName-$BuildStatus\n";
+	print LOG "tinderbox: status: tests-$BuildStatus\n";
+	print LOG "tinderbox: testname: $TestName\n";
+	print LOG "tinderbox: errsize:  err=$errsize\n";
+	print LOG "tinderbox: deltatime:  time=$deltatime\n";
+#	print LOG "tinderbox: diffsize: 200\n";
+#	print LOG "tinderbox: outsize:  300\n";
 	# SUN-CC/debug
 	print LOG "tinderbox: buildname: $BuildName\n"; 
 	print LOG "tinderbox: errorparser: unix\n";
@@ -263,8 +371,9 @@ sub EndTest {
     if ( $TestScript == 0) {
 	system("rm $ENV{'G4WORKDIR'}/StartTime");
 	
-	system("cat $GmakeLog >> $EndLog");
-	system("$mail $Tinderbox_server < $EndLog");
+	system("cat $filename >> $EndLog");
+#	system("$mail $Tinderbox_server < $EndLog");
+	system("cp $EndLog $AFSDir/$UNIQ");
 	system("rm $EndLog");
     }
 }
@@ -334,21 +443,31 @@ sub ParseArgs {
     $manArg = 0;
     while( $i < @ARGV ) {
 	if ($ARGV[$i] eq '--start') {
+	    $i++;
 	    $TinderboxMessage = "StartBuild";
+	    $TestName = "Build";
+	    $TestNumber = $ARGV[$i];
  	    $manArg++;
 	}
 	elsif ($ARGV[$i] eq '--end') {
+	    $i++;
 	    $TinderboxMessage = "EndBuild";
+	    $TestName = "Build";
+	    $TestNumber = $ARGV[$i];
 	    $manArg++;
 	} elsif ($ARGV[$i] eq '--start-test') {
 	    $i++;
 	    $TinderboxMessage = "StartTest";
 	    $TestName = $ARGV[$i];
+	    $i++;
+	    $TestNumber = $ARGV[$i];
 	    $manArg++;
 	} elsif ($ARGV[$i] eq '--end-test') {
 	    $i++;
 	    $TinderboxMessage = "EndTest";
 	    $TestName = $ARGV[$i];
+	    $i++;
+	    $TestNumber = $ARGV[$i];
 	    $manArg++;
     } else {
 	&PrintUsage;
@@ -392,6 +511,10 @@ sub GetBuildStatus {
 #&SetupEnv;
 #&SetupPath;
 #&BuildIt;
+
+print "TestNumber=$TestNumber\n";
+    $StartTime = $BaseTime + ($TestNumber-1)*5*60;
+    $CurrentTime = $BaseTime + ($TestNumber)*5*60-1;
 
 if ($TinderboxMessage eq "StartBuild") {
     &StartBuild;
