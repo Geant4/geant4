@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInterpolator.hh,v 1.11 2003-02-12 12:37:51 jwellisc Exp $
+// $Id: G4NeutronHPInterpolator.hh,v 1.12 2003-06-03 09:31:45 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPInterpolator_h
@@ -112,7 +112,7 @@ Interpolate(G4InterpolationScheme aScheme,
 }
 
 inline G4double G4NeutronHPInterpolator::
-Histogram(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
+Histogram(G4double , G4double , G4double , G4double y1, G4double ) const
 {
   G4double result;
   result = y1;

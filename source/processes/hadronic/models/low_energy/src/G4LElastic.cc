@@ -240,11 +240,11 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    }
    else
    {
-     G4double pphi = 2*pi*G4UniformRand();
-     G4double ccth = 2*G4UniformRand()-1;
+     //G4double pphi = 2*pi*G4UniformRand();
+     //G4double ccth = 2*G4UniformRand()-1;
      pxnew = 0;//sin(acos(ccth))*sin(pphi);
      pynew = 0;//sin(acos(ccth))*cos(phi);
-     pznew = 1;ccth;
+     pznew = 1;//ccth;
    }
    if (verboseLevel > 1) {
       G4cout << "DoIt: returning new momentum vector" << G4endl;
