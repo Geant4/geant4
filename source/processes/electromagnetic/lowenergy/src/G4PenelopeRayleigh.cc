@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4PenelopeRayleigh.cc,v 1.10 2004-03-17 10:48:06 pandola Exp $
+// $Id: G4PenelopeRayleigh.cc,v 1.11 2004-03-18 13:40:36 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
@@ -34,6 +34,7 @@
 // 10 Mar 2003 V.Ivanchenko   Remove CutPerMaterial warning
 // 12 Mar 2003 L.Pandola      Code "cleaned" - Cuts per region 
 // 17 Mar 2004 L.Pandola      Removed unnecessary calls to pow(a,b)
+// 18 Mar 2004 M.Mendenhall   Introduced SamplingTable (performance improvement)
 // --------------------------------------------------------------------
 
 #include "G4PenelopeRayleigh.hh"
@@ -73,8 +74,8 @@ G4PenelopeRayleigh::G4PenelopeRayleigh(const G4String& processName)
       G4Exception("G4PenelopeRayleigh::G4PenelopeRayleigh - energy limit outside intrinsic process validity range");
     }
 
-  samplingFunction_x = new G4DataVector();
-  samplingFunction_y = new G4DataVector();
+  samplingFunction_x = 0;
+  samplingFunction_y = 0;
   meanFreePathTable = 0;
   material = 0;
 
@@ -90,10 +91,15 @@ G4PenelopeRayleigh::G4PenelopeRayleigh(const G4String& processName)
 
 G4PenelopeRayleigh::~G4PenelopeRayleigh()
 {
-  delete meanFreePathTable;
-  delete samplingFunction_x;
-  delete samplingFunction_y;
+	delete meanFreePathTable;
+	
+	SamplingTablePair::iterator i;
+	for(i=SamplingTables.begin(); i != SamplingTables.end(); i++) {
+		delete (*i).second.first;
+		delete (*i).second.second;
+	}
 }
+
 
 void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& )
 {
@@ -319,33 +325,42 @@ G4double G4PenelopeRayleigh::GetMeanFreePath(const G4Track& track,
 
 void G4PenelopeRayleigh::InizialiseSampling()
 {
+  SamplingTablePair::iterator theTable=SamplingTables.find(material);
   const G4int points=241;
-  samplingFunction_x->clear();
-  samplingFunction_y->clear();
-  G4double sum = 0.0;
-  G4double Xlow=0;
+  G4double Xlow = 0.;
   G4double Xhigh=1e-04;
   G4double fact = pow((1e06/Xhigh),(1/240.0));
-  G4PenelopeIntegrator<G4PenelopeRayleigh,G4double(G4PenelopeRayleigh::*)(G4double)> theIntegrator;
-  sum = theIntegrator.Calculate(this,&G4PenelopeRayleigh::MolecularFormFactor,
-				Xlow,Xhigh,1e-10); 
-  samplingFunction_x->push_back(Xhigh);
-  samplingFunction_y->push_back(sum);
-  G4int i;
-  for (i=1;i<points;i++){
-    Xlow=Xhigh;
-    Xhigh=Xhigh*fact;
-    sum = theIntegrator.Calculate(this,
-				  &G4PenelopeRayleigh::MolecularFormFactor,
-				  Xlow,Xhigh,1e-10);
-    samplingFunction_x->push_back(Xhigh);
-    samplingFunction_y->push_back(sum+(*samplingFunction_y)[i-1]);
-  }
-  for (i=0;i<points;i++){
-    (*samplingFunction_x)[i]=log((*samplingFunction_x)[i]);
-    (*samplingFunction_y)[i]=log((*samplingFunction_y)[i]);
-  }
   samplingConstant=log(fact);
+  
+  if (theTable==SamplingTables.end()) { //material not inizialized yet
+    samplingFunction_x = new G4DataVector();
+    samplingFunction_y = new G4DataVector();
+    G4double sum = 0.0;
+    G4PenelopeIntegrator<G4PenelopeRayleigh,G4double(G4PenelopeRayleigh::*)(G4double)> theIntegrator;
+    sum = theIntegrator.Calculate(this,&G4PenelopeRayleigh::MolecularFormFactor,
+				  Xlow,Xhigh,1e-10); 
+    samplingFunction_x->push_back(Xhigh);
+    samplingFunction_y->push_back(sum);
+    G4int i;
+    for (i=1;i<points;i++){
+      Xlow=Xhigh;
+      Xhigh=Xhigh*fact;
+      sum = theIntegrator.Calculate(this,
+				    &G4PenelopeRayleigh::MolecularFormFactor,
+				    Xlow,Xhigh,1e-10);
+      samplingFunction_x->push_back(Xhigh);
+      samplingFunction_y->push_back(sum+(*samplingFunction_y)[i-1]);
+    }
+    for (i=0;i<points;i++){
+      (*samplingFunction_x)[i]=log((*samplingFunction_x)[i]);
+      (*samplingFunction_y)[i]=log((*samplingFunction_y)[i]);
+    }
+    SamplingTables[material] = std::pair<G4DataVector*,G4DataVector*> (samplingFunction_x,samplingFunction_y);
+  }
+  else { //material already inizialized
+    samplingFunction_x=(*theTable).second.first;
+    samplingFunction_y=(*theTable).second.second;
+  }
 }
 
 
