@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (27-July-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -150,25 +150,25 @@ msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
-MuIoni:   tables are built for  mu+
+muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
-MuBrems:   tables are built for  mu+
+muBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-MuPairProd:   tables are built for  mu+
+muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 ### All dEdx and Range tables are built #####
 
-MuIoni:   tables are built for  mu-
+muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
@@ -245,28 +245,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=31.72s Real=35.27s Sys=3.55s
+  User=32.5s Real=36.13s Sys=3.53s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
-Average number of e-         1306
-Average number of gamma      685.7
-Average number of e+         48.55
-Average number of steps      3832
-Edep 1x1 =                   0.832 +- 0.002799
-Edep 3x3 =                   0.9587 +- 0.001343
-Edep 5x5 =                   0.9793 +- 0.000987
+Average number of e-         1309
+Average number of gamma      691.2
+Average number of e+         48.09
+Average number of steps      3844
+Edep 1x1 =                   0.8305 +- 0.003021
+Edep 3x3 =                   0.9596 +- 0.001082
+Edep 5x5 =                   0.98 +- 0.0008549
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.832  delEdep1x1= -0.006015 nrms= -1.886
-Erms1x1: 0.02799  delErms1x1= -0.003905 nrms= -1.224
-Edep3x3: 0.9587  delEdep3x3= -0.001826 nrms= -1.25
-Erms3x3: 0.01343  delErms3x3= -0.001166 nrms= -0.7985
-Edep5x5: 0.9793  delEdep5x5= -0.001216 nrms= -1.031
-Erms5x5: 0.00987  delErms5x5= -0.00193 nrms= -1.635
+Edep1x1: 0.8305  delEdep1x1= -0.007457 nrms= -2.337
+Erms1x1: 0.03021  delErms1x1= -0.001692 nrms= -0.5305
+Edep3x3: 0.9596  delEdep3x3= -0.0008706 nrms= -0.5963
+Erms3x3: 0.01082  delErms3x3= -0.003776 nrms= -2.587
+Edep5x5: 0.98  delEdep5x5= -0.0005387 nrms= -0.4565
+Erms5x5: 0.008549  delErms5x5= -0.003251 nrms= -2.755
 <<<<<END>>>>>   IS ACCEPTED
 
 #

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (27-July-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -93,11 +93,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=15.15s Real=435.56s Sys=43.22s
+  User=16.69s Real=454.65s Sys=41.33s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1888278667, 436168634
+ Current couple of seeds = 197009218, 2002171415
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
