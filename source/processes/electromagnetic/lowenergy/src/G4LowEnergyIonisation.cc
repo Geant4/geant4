@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.33 2000-04-07 15:40:28 lefebure Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.34 2000-04-10 06:48:22 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,7 +18,7 @@
 //                by Alessandra Forti May 1999  
 // **************************************************************
 //   07.04.2000 VL+LU
-// - First implemention of continuous energy loss
+// - First implementation of continuous energy loss
 //   22.03.2000 VL
 // - 1 bug corrected in SelectRandomAtom method (units)
 //   17.02.2000 Veronique Lefebure
@@ -984,6 +984,12 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 
   }
 
+    // Create lists of pointers to DynamicParticles (photons and electrons) 
+    G4ParticleVector photvec;
+    G4int photInd = 0; 
+    G4ParticleVector elecvec;
+    G4int elecInd = 0; 
+
   // select randomly one element constituing the material.
   G4Element* anElement = SelectRandomAtom(aParticle, aMaterial);
   G4int AtomIndex = (G4int) anElement->GetZ();
@@ -1037,42 +1043,13 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 	   << "  BindingEn=" << BindingEn/eV << "  ***********" << G4endl;
   }
   // deposit energy if delta energy is below cut
+  G4ThreeVector DeltaDirection(0.,0.,0.);
   if(DeltaKineticEnergy <= DeltaThreshold){
     G4cout<<"This should not happen DeltaKineticEnergy= "<<DeltaKineticEnergy<<G4endl;
-    if(finalKineticEnergy > factor*DeltaThreshold){
-
-      aParticleChange.SetEnergyChange(KineticEnergy - DeltaKineticEnergy - BindingEn);
-
-      if((DeltaKineticEnergy+BindingEn) < 0.){
-
-	G4cout << " 2. negative deposit:" << (DeltaKineticEnergy+BindingEn)/eV << G4endl; 
-      }
-
-      aParticleChange.SetLocalEnergyDeposit(DeltaKineticEnergy+BindingEn);
-    }
-    else{
-      
-      aParticleChange.SetStatusChange(fStopAndKill);
-      aParticleChange.SetEnergyChange(0.);
-
-      if(KineticEnergy < 0.){
-
-	G4cout << " 3. negative deposit:" << KineticEnergy/eV << G4endl; 
-      }
-
-      aParticleChange.SetLocalEnergyDeposit(KineticEnergy);
-  
-    }
-
-    return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
+    theEnergyDeposit += DeltaKineticEnergy;
+    DeltaKineticEnergy = 0.;
   } 
-    
-  if(thePrimShVec.length() != 0){
-    
-    thePrimShVec.clear();
-  }
-  
-  thePrimShVec.insert(thePrimaryShell);
+  else{  
   
   // delta ray kinematics
   // step 1. costheta from assumption : atomic e- free and at rest 
@@ -1112,19 +1089,9 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
      dirx = sintheta * cos(phi), diry = sintheta * sin(phi), dirz = costheta;
     }
 
-    G4ThreeVector DeltaDirection(dirx,diry,dirz);
+    DeltaDirection = G4ThreeVector(dirx,diry,dirz);
     DeltaDirection.rotateUz(ParticleDirection);
-    
-    G4double finalPx=ParticleDirection.x() ;
-    G4double finalPy=ParticleDirection.y() ;
-    G4double finalPz=ParticleDirection.z() ;
-    
-    // Create lists of pointers to DynamicParticles (photons and electrons) 
-    G4ParticleVector photvec;
-    G4int photInd = 0; 
-    G4ParticleVector elecvec;
-    G4int elecInd = 0; 
-    
+        
     // create G4DynamicParticle object for delta ray
     G4DynamicParticle* theDeltaRay = new G4DynamicParticle;
     theDeltaRay->SetKineticEnergy( DeltaKineticEnergy );
@@ -1134,6 +1101,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
     
     theDeltaRay->SetDefinition(G4Electron::Electron());
     elecvec.insert(theDeltaRay);
+   }//create delta-ray.
     
     // FLUORESCENCE
     // load the transition probability table for the element
@@ -1143,7 +1111,9 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
     
     // Fluorescence data start from element 6
 
-    if(AtomIndex > 5){
+     if(thePrimShVec.length() != 0){thePrimShVec.clear();}
+     thePrimShVec.insert(thePrimaryShell);
+     if(AtomIndex > 5){
       
       G4bool ThereAreShells = TRUE;
       G4int AtomInd = ZNumVecFluor->index(AtomIndex);
@@ -1243,6 +1213,23 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
     // changed energy and momentum of the actual particle
     
     if(finalKineticEnergy > factor*DeltaThreshold){
+       G4double TotalEnergy = KineticEnergy + ParticleMass;
+       G4double Psquare = KineticEnergy*(TotalEnergy+ParticleMass);
+       G4double TotalMomentum = sqrt(Psquare);
+       G4double DeltaTotalMomentum = sqrt(DeltaKineticEnergy * (DeltaKineticEnergy +
+                                                             2. * electron_mass_c2 ));
+       G4double finalPx = TotalMomentum*ParticleDirection.x()
+                        - DeltaTotalMomentum*DeltaDirection.x(); 
+       G4double finalPy = TotalMomentum*ParticleDirection.y()
+                        - DeltaTotalMomentum*DeltaDirection.y(); 
+       G4double finalPz = TotalMomentum*ParticleDirection.z()
+                        - DeltaTotalMomentum*DeltaDirection.z(); 
+      G4double finalMomentum =
+                sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz) ;
+      finalPx /= finalMomentum ;
+      finalPy /= finalMomentum ;
+      finalPz /= finalMomentum ;
+
        aParticleChange.SetMomentumChange(finalPx,finalPy,finalPz);
        aParticleChange.SetEnergyChange(finalKineticEnergy);
        if(theEnergyDeposit < 0.) G4cout << " 4. negative deposit:" << theEnergyDeposit/eV << G4endl; 
@@ -1710,7 +1697,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
 void G4LowEnergyIonisation::PrintInfoDefinition()
 {
   G4String comments = "Low energy ionisation code ";
-           comments += "with first implementation of the continuous dE/dx part.";   
+           comments += "with first implementation of the continuous dE/dx part.";  
            comments += "\n At present it can be used for electrons only ";
            comments += " in the energy range [250 eV,100 GeV]";
   G4cout << G4endl << GetProcessName() << ":  " << comments << G4endl;
