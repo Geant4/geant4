@@ -195,14 +195,15 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
 
       G4double floss = 0.;
       G4int nmax = 100;
-      G4int nn;
+     
       G4double vmin=log(kmin);
       G4double vmax=log(kmax) ;
-      nn = int(nmax*(vmax-vmin)/(log(highKinEnergy)-vmin)) ;
+      G4int nn = (G4int)(nmax*(vmax-vmin)/(log(highKinEnergy)-vmin)) ;
       G4double u,fac,c,v,dv ;
-      dv = (vmax-vmin)/nn ;
-      v  = vmin-dv ;
       if(nn > 0) {
+
+        dv = (vmax-vmin)/nn ;
+        v  = vmin-dv ;
 
         for(G4int n=0; n<=nn; n++) {
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.cc,v 1.26 2002-11-11 18:59:21 vnivanch Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.27 2002-11-12 17:04:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -277,15 +277,15 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
 
              G4double floss = 0. ;
              G4int nmax = 100 ;
-             G4int nn ;
+   
              G4double vmin=log(kmin);
              G4double vmax=log(kmax) ;
-             nn = int(nmax*(vmax-vmin)/(log(HighestKineticEnergy)-vmin)) ;
+             G4int nn = (G4int)(nmax*(vmax-vmin)/(log(HighestKineticEnergy)-vmin)) ;
              G4double u,fac,c,v,dv ;
-             dv = (vmax-vmin)/nn ;
-             v = vmin-dv ;
             if(nn > 0)
             {
+             dv = (vmax-vmin)/nn ;
+             v = vmin-dv ;
              for(G4int n=0; n<=nn; n++)
              {
                v += dv;  u = exp(v);               
