@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2002-02-26 18:26:38 gcosmo Exp $
+$Id: History,v 1.31 2002-04-16 10:39:06 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 16, 2002  V. Grichine                geommng-V04-00-02
+- G4VSolid[.hh.cc]: fixed bug in G4VSolid::ClipPoligon() to consider
+  clipping related to a single axis.
+- G4VoxelLimits.cc: cosmetics changes and debug printouts ...
 
 February 26, 2002  G. Cosmo                geommng-V04-00-01
 - G4GeometryManager.cc: fixed handling of ios manipulators and precision to reset
