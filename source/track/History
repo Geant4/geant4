@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2000-10-18 15:00:06 kurasige Exp $
+$Id: History,v 1.23 2000-10-20 11:43:35 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Oct 19, 00 H.kurashige (track-V02-00-01)
+- Bug fixes in copy constructor of G4ParticleChange
+
 Oct 18, 00 H.Kurashige (track-V02-00-00)
 - Add "const" to G4DynamicParticle pointer  of returned value of G4Track::GetDynamicParticle 
 
