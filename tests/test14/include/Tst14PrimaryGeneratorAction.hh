@@ -21,13 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PrimaryGeneratorAction.hh,v 1.5 2001-07-11 10:09:57 gunter Exp $
+// $Id: Tst14PrimaryGeneratorAction.hh,v 1.6 2003-02-23 09:49:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef Tst14PrimaryGeneratorAction_h
 #define Tst14PrimaryGeneratorAction_h 1
@@ -40,7 +37,6 @@ class G4Event;
 class Tst14DetectorConstruction;
 //class Tst14PrimaryGeneratorMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Tst14PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {

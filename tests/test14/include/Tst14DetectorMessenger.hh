@@ -21,13 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14DetectorMessenger.hh,v 1.5 2001-07-11 10:09:57 gunter Exp $
+// $Id: Tst14DetectorMessenger.hh,v 1.6 2003-02-23 09:49:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef Tst14DetectorMessenger_h
 #define Tst14DetectorMessenger_h 1
@@ -42,7 +39,6 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Tst14DetectorMessenger: public G4UImessenger
 {

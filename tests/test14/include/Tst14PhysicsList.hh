@@ -20,6 +20,23 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: Tst14PhysicsList.hh,v 1.9 2003-02-23 09:49:14 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Created
+//
+// -------------------------------------------------------------------
+
+// Class description:
+// System test for e/gamma, standard photon processes for PhysicsList
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
+// -------------------------------------------------------------------
+
 #ifndef TST14PHYSICSLIST_HH
 #define TST14PHYSICSLIST_HH 1
 

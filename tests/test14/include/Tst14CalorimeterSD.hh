@@ -21,13 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14CalorimeterSD.hh,v 1.5 2001-07-11 10:09:56 gunter Exp $
+// $Id: Tst14CalorimeterSD.hh,v 1.6 2003-02-23 09:49:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef Tst14CalorimeterSD_h
 #define Tst14CalorimeterSD_h 1
@@ -40,7 +37,6 @@ class G4HCofThisEvent;
 class G4Step;
 #include "Tst14CalorHit.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Tst14CalorimeterSD : public G4VSensitiveDetector
 {

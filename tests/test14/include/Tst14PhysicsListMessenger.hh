@@ -21,16 +21,26 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PhysicsListMessenger.hh,v 1.7 2002-06-01 03:17:01 vnivanch Exp $
+// $Id: Tst14PhysicsListMessenger.hh,v 1.8 2003-02-23 09:49:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+//
+// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Created
+//
+// -------------------------------------------------------------------
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// Class description:
+// System test for e/gamma, UI for PhysicsList
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
 
-#ifndef Tst14PhysicsListMessenger_h
-#define Tst14PhysicsListMessenger_h 1
+// -------------------------------------------------------------------
+
+#ifndef TST14PHYSICSLISTMESSENGER_HH
+#define TST14PHYSICSLISTMESSENGER_HH 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
@@ -42,31 +52,34 @@ class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithABool;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class Tst14PhysicsListMessenger: public G4UImessenger
-{
-  
+class Tst14PhysicsListMessenger: public G4UImessenger {
 public:
-
+  
   Tst14PhysicsListMessenger(Tst14PhysicsList*);
+  
   ~Tst14PhysicsListMessenger();
   
   void SetNewValue(G4UIcommand*, G4String);
   
 private:
-
+  
   Tst14PhysicsList*          Tst14List;
-
+  
   G4UIdirectory* lowEnDir;
+
   G4UIcmdWithADoubleAndUnit* cutGLowLimCmd;
   G4UIcmdWithADoubleAndUnit* cutELowLimCmd;
   G4UIcmdWithADoubleAndUnit* cutGELowLimCmd;
+
   G4UIcmdWithADoubleAndUnit* cutSecPhotCmd;
   G4UIcmdWithADoubleAndUnit* cutSecElecCmd;
+
   G4UIcmdWithADoubleAndUnit* cutGCmd;
   G4UIcmdWithADoubleAndUnit* cutECmd;
+
   G4UIcmdWithABool*          augerCmd;
+
+  G4UIcmdWithAString*        physicsListCmd
 };
 
 #endif

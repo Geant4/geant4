@@ -21,13 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14CalorHit.hh,v 1.5 2001-07-11 10:09:56 gunter Exp $
+// $Id: Tst14CalorHit.hh,v 1.6 2003-02-23 09:49:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef Tst14CalorHit_h
 #define Tst14CalorHit_h 1
@@ -36,7 +33,6 @@
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Tst14CalorHit : public G4VHit
 {
@@ -70,13 +66,10 @@ class Tst14CalorHit : public G4VHit
       
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 typedef G4THitsCollection<Tst14CalorHit> Tst14CalorHitsCollection;
 
 extern G4Allocator<Tst14CalorHit> Tst14CalorHitAllocator;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void* Tst14CalorHit::operator new(size_t)
 {
@@ -85,7 +78,6 @@ inline void* Tst14CalorHit::operator new(size_t)
   return aHit;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void Tst14CalorHit::operator delete(void* aHit)
 {

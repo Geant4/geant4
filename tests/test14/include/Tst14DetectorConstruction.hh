@@ -21,13 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14DetectorConstruction.hh,v 1.6 2003-01-31 08:06:11 vnivanch Exp $
+// $Id: Tst14DetectorConstruction.hh,v 1.7 2003-02-23 09:49:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef Tst14DetectorConstruction_h
 #define Tst14DetectorConstruction_h 1
@@ -45,7 +42,6 @@ class G4UniformMagField;
 class Tst14DetectorMessenger;
 class Tst14CalorimeterSD;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Tst14DetectorConstruction : public G4VUserDetectorConstruction
 {
