@@ -18,10 +18,10 @@ macro run que=513-2-asd
 ****  zone 2 2
   zone 2 2
 *           TITLE         NAME   NTH NEX XMIN XMAX YMIN YMAX XTXT YTXT
-  exec phot e+^1!H(1GeV)  h1_epl 100 326   0. 1.e3   1. 1.e7 5.e2 1.e5
-  exec phot e+^1!H(10TeV) h1_eph 100 310   0. 1.e7   1. 1.e7 5.e6 1.e5
-  exec phot e+Al(1GeV)    cu_epl 100 396   0. 1.e3   1. 1.e7 5.e2 1.e5
-  exec phot e+Al(10GeV)   cu_eph 100 303   0. 1.e4   1. 1.e7 5.e3 1.e5
+  exec phot e+^1!H(1GeV)  h1_epl 100 326   0. 1.e3   1. 1.e7 5.e2 4.e5
+  exec phot e+^1!H(10TeV) h1_eph 100 310   0. 1.e7   1. 1.e7 5.e6 4.e5
+  exec phot e+Al(1GeV)    cu_epl 100 396   0. 1.e3   1. 1.e7 5.e2 4.e5
+  exec phot e+Al(10GeV)   cu_eph 100 303   0. 1.e4   1. 1.e7 5.e3 4.e5
 print:
   meta 0
   for/clo 99
@@ -75,7 +75,7 @@ macro phot targ=^12!C file=h1 nth=227 nex=326 xmin=1 _
 *  igset PMCI 1
 *  igset PLCI 1
 *  gra/hp/errors eg ex de er [nex] 20 .1 1
-  SET CHHE 1.
+  SET CHHE .5
   igset txci 1
   itx [xt] [yt]  [targ]
   ve/re e,ap [file].out

@@ -45,7 +45,7 @@ int main()
 							 new G4Element("Lead", "Pb", 82, 208.*g/mole)};
   G4ParticleDefinition* theParticleDefinition = G4Electron::ElectronDefinition();
   G4DynamicParticle* theDynamicParticle;
-  for(G4int n=0; n<1; n++)
+  for(G4int n=0; n<4; n++)
   {
     G4double ekin=1000.;
     if(n==3) ekin=10000.;
@@ -55,14 +55,14 @@ int main()
     theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
 											   G4ParticleMomentum(1.,0.,0.), ekin*MeV);
 	G4double sig = eACrossSection.GetCrossSection(theDynamicParticle,theElement[nel])/millibarn;
-	G4cout<<"Cross Section="<<sig<<G4endl;
+	G4cout<<"n="<<n<<", Cross Section="<<sig<<G4endl;
 	delete theDynamicParticle;
 	G4int prob[100];
 	for(G4int k=0; k<100; k++) prob[k]=0;
 	for(G4int i=0; i<10000000; i++)
 	{
 	  G4double phe=eACrossSection.GetEffectivePhotonEnergy();
-      if(phe<100.)G4Exception("Too low photon energy");
+      //if(phe<100.)G4Exception("Too low photon energy");
 	  G4int ind=static_cast<int>(phe/10.);
 	  if(n==3) ind/=10;
 	  else if(n==1) ind/=10000;
