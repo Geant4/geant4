@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSVolumeHandle.cc,v 1.2 2001-11-06 17:08:14 gcosmo Exp $
+// $Id: G4GRSVolumeHandle.cc,v 1.3 2001-11-07 00:47:12 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Class G4GRSVolumeHandle
@@ -34,4 +34,6 @@
 // ----------------------------------------------------------------------
 #include "G4GRSVolumeHandle.hh"
 
-DEFINE_RCHALLOCATOR(G4GRSVolume);
+//#ifdef RCH_USING_G4ALLOCATOR
+//DEFINE_RCHALLOCATOR(G4GRSVolume)
+//#endif // RCH_USING_G4ALLOCATOR
