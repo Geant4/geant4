@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.39 2003-06-25 15:30:13 japost Exp $
+// $Id: G4Transportation.cc,v 1.40 2003-07-17 18:39:05 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -37,6 +37,10 @@
 //
 // =======================================================================
 // Modified:   
+//            21 June 2003, J.Apostolakis: Calling field manager with 
+//                            track, to enable it to configure its accuracy
+//            13 May  2003, J.Apostolakis: Zero field areas now taken into
+//                            account correclty in all cases (thanks to W Pokorski).
 //            29 June 2001, J.Apostolakis, D.Cote-Ahern, P.Gumplinger: 
 //                          correction for spin tracking   
 //            20 Febr 2001, J.Apostolakis:  update for new FieldTrack
@@ -436,20 +440,21 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
   {
      // The time was not integrated .. make the best estimate possible
      //
-     G4double finalVelocity   = track.GetVelocity() ;
+     G4double finalVelocity   = 0.0; 
      G4double initialVelocity = stepData.GetPreStepPoint()->GetVelocity() ;
      G4double stepLength      = track.GetStepLength() ;
+     G4double restMass = track.GetDynamicParticle()->GetDefinition()->GetPDGMass();
 
-     if (finalVelocity > 0.0)
+     if( (restMass>0.0) && ((finalVelocity=track.GetVelocity()) > 0.0) )
      { 
-        G4double meanInverseVelocity ;
-        // deltaTime = stepLength/finalVelocity ;  
-        meanInverseVelocity = 0.5
+        G4double meanInverseVelocity = 0.5
                             * ( 1.0 / initialVelocity + 1.0 / finalVelocity ) ;
         deltaTime = stepLength * meanInverseVelocity ; 
      }
      else
      {
+        //  A photon will remain in the medium of the initial point
+        //   during the step, so it has the initial velocity.
         deltaTime = stepLength/initialVelocity ;     
      }
      fCandidateEndGlobalTime   = startTime + deltaTime ; 
