@@ -78,7 +78,7 @@ private:
   void BuildTargetList();
   void FindCollisions(G4KineticTrackVector * secondaries);
   G4bool ApplyCollision(G4CollisionInitialState * collision);
-  G4bool Capture();
+  G4bool Capture(G4bool verbose=false);
   G4bool Absorb();
   G4bool CheckPauliPrinciple(G4KineticTrackVector * products);
   G4double GetExcitationEnergy();
@@ -89,6 +89,7 @@ private:
 				 G4KineticTrackVector * newSecondaries);
   G4bool DoTimeStep(G4double timeStep);
   G4Fragment * FindFragments();
+  void StepParticlesOut();
   G4LorentzVector GetFinal4Momentum();
   G4LorentzVector GetFinalNucleusMomentum();
   G4ReactionProductVector * Propagate1H1(G4KineticTrackVector * secondaries,
