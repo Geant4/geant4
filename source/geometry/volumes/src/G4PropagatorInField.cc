@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.2 1999-07-01 17:56:22 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.3 1999-07-23 11:48:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,8 +27,8 @@
 #include "G4ios.hh"
 #include <iomanip.h>
  
-const G4double G4PropagatorInField::delta_intersection_val= 0.1 * mm;
-const G4double G4PropagatorInField::delta_one_step_val = 0.25 * mm;
+const G4double G4PropagatorInField::fDefault_Delta_Intersection_Val= 0.1 * mm;
+const G4double G4PropagatorInField::fDefault_Delta_One_Step_Value = 0.25 * mm;
 
 G4double 
 G4PropagatorInField::
@@ -99,7 +99,7 @@ G4PropagatorInField::
 		  fNavigator->GetWorldVolume()->GetLogicalVolume()->
                   GetSolid()->DistanceToOut(StartPointA, VelocityUnit) ) ;
   }
-  this->SetEpsilonStep( DeltaOneStep() / CurrentProposedStepLength);
+  this->SetEpsilonStep( GetDeltaOneStep() / CurrentProposedStepLength);
 
   G4int  do_loop_count=0; 
   do
@@ -352,7 +352,7 @@ G4PropagatorInField::LocateIntersectionPoint(
     //                    ------------
     G4ThreeVector  ChordEF_Vector = CurrentF_Point - CurrentE_Point;
 
-    if ( ChordEF_Vector.mag2() <= sqr(DeltaIntersection()) ){
+    if ( ChordEF_Vector.mag2() <= sqr(GetDeltaIntersection()) ){
 
 	found_approximate_intersection = true;
 
