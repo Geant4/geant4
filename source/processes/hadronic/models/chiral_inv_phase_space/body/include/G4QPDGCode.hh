@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.hh,v 1.16 2003-10-08 14:48:22 hpw Exp $
+// $Id: G4QPDGCode.hh,v 1.17 2003-11-13 14:40:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -52,10 +52,10 @@ public:
 
   // Operators
   const G4QPDGCode& operator=(const G4QPDGCode& rhs);
-  G4int             operator==(const G4QPDGCode& rhs) const;
-  G4int             operator==(const G4int& rhs) const;
-  G4int             operator!=(const G4QPDGCode& rhs) const;
-  G4int             operator!=(const G4int& rhs) const;
+  G4bool            operator==(const G4QPDGCode& rhs) const;
+  G4bool            operator==(const G4int& rhs) const;
+  G4bool            operator!=(const G4QPDGCode& rhs) const;
+  G4bool            operator!=(const G4int& rhs) const;
   G4QPDGCode        operator+=(const G4int& rhs);
   G4QPDGCode        operator+=(const G4QPDGCode& rhs);
   G4QPDGCode        operator-=(const G4int& rhs);
@@ -120,10 +120,10 @@ G4int      operator%(const G4QPDGCode& lhs, const G4int&      rhs);
 // Not member functions
 //----------------------------------------------------------------------------------------
 
-inline G4int G4QPDGCode::operator==(const G4QPDGCode& rhs) const {return this==&rhs;}
-inline G4int G4QPDGCode::operator==(const G4int&      rhs) const {return thePDGCode==rhs;}
-inline G4int G4QPDGCode::operator!=(const G4QPDGCode& rhs) const {return this!=&rhs;}
-inline G4int G4QPDGCode::operator!=(const G4int&      rhs) const {return thePDGCode!=rhs;}
+inline G4bool G4QPDGCode::operator==(const G4QPDGCode& rhs) const {return this==&rhs;}
+inline G4bool G4QPDGCode::operator==(const G4int&      rhs) const {return thePDGCode==rhs;}
+inline G4bool G4QPDGCode::operator!=(const G4QPDGCode& rhs) const {return this!=&rhs;}
+inline G4bool G4QPDGCode::operator!=(const G4int&      rhs) const {return thePDGCode!=rhs;}
 
 inline G4QPDGCode G4QPDGCode::operator+=(const G4QPDGCode& rhs)
 {

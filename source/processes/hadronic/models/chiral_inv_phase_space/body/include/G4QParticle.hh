@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.hh,v 1.15 2003-10-08 14:48:22 hpw Exp $
+// $Id: G4QParticle.hh,v 1.16 2003-11-13 14:40:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QParticle ----------------
@@ -49,8 +49,8 @@ public:
 
   // Operators
   const G4QParticle& operator=(const G4QParticle& right);
-  G4int              operator==(const G4QParticle& rhs) const;
-  G4int              operator!=(const G4QParticle& rhs) const;
+  G4bool             operator==(const G4QParticle& rhs) const;
+  G4bool             operator!=(const G4QParticle& rhs) const;
 
   // Selectors
   G4QPDGCode          GetQPDG() const;          // Get a PDG-Particle of the Particle
@@ -88,8 +88,8 @@ std::ostream&   operator<<(std::ostream& lhs, G4QParticle& rhs);
 // Not member functions
 //----------------------------------------------------------------------------------------
 
-inline G4int G4QParticle::operator==(const G4QParticle& rhs) const {return this==&rhs;}
-inline G4int G4QParticle::operator!=(const G4QParticle& rhs) const {return this!=&rhs;}
+inline G4bool G4QParticle::operator==(const G4QParticle& rhs) const {return this==&rhs;}
+inline G4bool G4QParticle::operator!=(const G4QParticle& rhs) const {return this!=&rhs;}
  
 inline G4QPDGCode         G4QParticle::GetQPDG()    const {return aQPDG;}
 inline G4int              G4QParticle::GetPDGCode() const {return aQPDG.GetPDGCode();}

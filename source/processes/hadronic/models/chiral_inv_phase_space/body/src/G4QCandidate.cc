@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidate.cc,v 1.24 2003-10-24 08:26:34 mkossov Exp $
+// $Id: G4QCandidate.cc,v 1.25 2003-11-13 14:40:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidate ----------------
@@ -34,12 +34,12 @@
 #include "G4QCandidate.hh"
 #include <algorithm>
 
-G4QCandidate::G4QCandidate() : relativeProbability(0.),integralProbability(0.)
+G4QCandidate::G4QCandidate() : G4QHadron(), relativeProbability(0.), integralProbability(0.)
 {
 }
 
 G4QCandidate::G4QCandidate(G4int PDGcode) :
-  relativeProbability(0.),integralProbability(0.)
+ G4QHadron(PDGcode), relativeProbability(0.), integralProbability(0.)
 {
   G4LorentzVector cur4Mom(0.,0.,0.,0.);
   G4QPDGCode QPDG(PDGcode);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.13 2003-10-24 08:26:31 mkossov Exp $
+// $Id: G4QEnvironment.hh,v 1.14 2003-11-13 14:40:45 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -33,6 +33,9 @@
 #define G4QEnvironment_h 1
 
 // Standard G4-headers
+#include "G4HadronicException.hh"
+
+// CHIPS headers
 #include "G4QuasmonVector.hh"
 
 class G4QEnvironment 
@@ -45,8 +48,8 @@ public:
 
   // Overloaded operators
   const G4QEnvironment& operator=(const G4QEnvironment& right);
-  int operator==(const G4QEnvironment &right) const;
-  int operator!=(const G4QEnvironment &right) const;
+  G4bool operator==(const G4QEnvironment &right) const;
+  G4bool operator!=(const G4QEnvironment &right) const;
 
   //Selectors
   G4QNucleus       GetEnvironment() const;
@@ -54,7 +57,7 @@ public:
   G4QHadronVector* GetQHadrons();
 
   // Modifiers
-  G4QHadronVector* Fragment();                        // Unresp. wrapper for HadronizeQEnvironment()
+  G4QHadronVector* Fragment();                        // User must clear and destroy the G4QHadronVec
 
   // Static functions
   static void SetParameters( G4double solAn=0.4, G4bool efFlag=false, G4double piThresh=141.4,
@@ -63,6 +66,7 @@ public:
   G4ThreeVector    RndmDir();                         // Randomize 3D direction (@@subst by libFunc)
 
 private:  
+  G4QHadronVector* FSInteraction();                   // Final State Interaction after Hadronization
   G4QHadronVector  HadronizeQEnvironment();           // Main HadronizationFunction used in Fragment
   void             CopyAndDeleteHadronVector(G4QHadronVector* HV);// Copy theHadrVect to theOutputHV
   void             CreateQuasmon(const G4QContent& projQC, const G4LorentzVector& proj4M);
@@ -100,9 +104,9 @@ private:
   G4LorentzVector    tot4Mom;         // Total 4-momentum in the reaction
 };
 
-inline int G4QEnvironment::operator==(const G4QEnvironment &right) const {return this == &right;}
-inline int G4QEnvironment::operator!=(const G4QEnvironment &right) const {return this != &right;}
-inline G4QNucleus G4QEnvironment::GetEnvironment()                 const {return theEnvironment;}
+inline G4bool G4QEnvironment::operator==(const G4QEnvironment &rhs) const {return this == &rhs;}
+inline G4bool G4QEnvironment::operator!=(const G4QEnvironment &rhs) const {return this != &rhs;}
+inline G4QNucleus G4QEnvironment::GetEnvironment()                  const {return theEnvironment;}
 #endif
 
 

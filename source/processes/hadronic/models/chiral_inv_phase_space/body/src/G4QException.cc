@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QException.cc,v 1.1 2003-11-10 16:54:39 mkossov Exp $
+// $Id: G4QException.cc,v 1.2 2003-11-13 14:40:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QException ----------------

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.22 2003-11-10 16:54:35 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.23 2003-11-13 14:40:45 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -57,8 +57,8 @@ public:
   virtual ~G4QHadron();                             // Destructor
   // Operators
   const G4QHadron& operator=(const G4QHadron& right);
-  G4int           operator==(const G4QHadron& right) const;
-  G4int           operator!=(const G4QHadron& right) const;
+  G4bool           operator==(const G4QHadron& right) const;
+  G4bool           operator!=(const G4QHadron& right) const;
   // Selectors
   G4int                 GetPDGCode()      const;    // Get PDG code of the Hadron
   G4int                 GetQCode()        const;    // Get Q code of the Hadron
@@ -100,8 +100,8 @@ private:
   G4int                 nFragm;                     // =0 - stable, =N - decayed in N particles
 };
 
-inline G4int G4QHadron::operator==(const G4QHadron &right) const {return this==&right;}
-inline G4int G4QHadron::operator!=(const G4QHadron &right) const {return this!=&right;}
+inline G4bool G4QHadron::operator==(const G4QHadron &rhs) const {return this==&rhs;}
+inline G4bool G4QHadron::operator!=(const G4QHadron &rhs) const {return this!=&rhs;}
  
 inline G4int           G4QHadron::GetPDGCode()      const   {return theQPDG.GetPDGCode();}
 inline G4int           G4QHadron::GetQCode()        const   {return theQPDG.GetQCode();}

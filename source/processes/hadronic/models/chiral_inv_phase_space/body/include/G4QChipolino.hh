@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QChipolino.hh,v 1.15 2003-11-10 16:54:34 mkossov Exp $
+// $Id: G4QChipolino.hh,v 1.16 2003-11-13 14:40:45 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QChipolino ----------------
@@ -48,8 +48,8 @@ public:
 
   // Operators
   const G4QChipolino& operator=(const G4QChipolino& right);
-  G4int              operator==(const G4QChipolino& right) const;
-  G4int              operator!=(const G4QChipolino& right) const;
+  G4bool              operator==(const G4QChipolino& right) const;
+  G4bool              operator!=(const G4QChipolino& right) const;
 
   // Selectors
   G4double              GetMass();            // Get mass of the Chipolino (MinDoubleHadronMass)
@@ -75,8 +75,8 @@ private:
 
 std::ostream& operator<<(std::ostream& lhs, G4QChipolino& rhs);
 //std::ostream& operator<<(std::ostream& lhs, const G4QChipolino& rhs);
-inline G4int G4QChipolino::operator==(const G4QChipolino& right) const {return this==&right;}
-inline G4int G4QChipolino::operator!=(const G4QChipolino& right) const {return this!=&right;}
+inline G4bool G4QChipolino::operator==(const G4QChipolino& rhs) const {return this==&rhs;}
+inline G4bool G4QChipolino::operator!=(const G4QChipolino& rhs) const {return this!=&rhs;}
  
 inline G4double   G4QChipolino::GetMass()      {return minM;}
 inline G4double   G4QChipolino::GetMass2()     {return minM*minM;}

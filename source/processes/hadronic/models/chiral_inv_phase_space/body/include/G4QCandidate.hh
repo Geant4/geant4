@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidate.hh,v 1.19 2003-10-08 14:48:21 hpw Exp $
+// $Id: G4QCandidate.hh,v 1.20 2003-11-13 14:40:44 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCandidate ----------------
@@ -46,12 +46,12 @@ public:
   ~G4QCandidate();                                           // Destructor
   // Overloaded Operators
   const G4QCandidate& operator=(const G4QCandidate& right);
-  G4int operator==(const G4QCandidate &right) const;
-  G4int operator!=(const G4QCandidate &right) const;
+  G4bool operator==(const G4QCandidate &right) const;
+  G4bool operator!=(const G4QCandidate &right) const;
   // Specific Selectors
   G4QParentCluster* TakeParClust(G4int nPC);// Get pointer to Parent Cluster from ParClastVector
   G4int    GetPClustEntries()    const;     // Get a number of Parent Clusters in ParClastVector
-  G4bool   GetPossibility()      const;     // Get possibility(true)/forbiding(false) to be a hadr./fragm.
+  G4bool   GetPossibility()      const;     // Get possibility(true)/forbiding(false) to be a hadr/fr
   G4bool   GetParPossibility()   const;     // Get possibility(true)/forbiding(false) to be a parent
   G4double GetKMin()             const;     // Get k-minimal for the candidate
   G4double GetEBMass()           const;     // Get bound mass in respect to Environment 
@@ -93,8 +93,8 @@ private:
   G4double NBMass;                          // Bound Mass of the cluster in the Total Nucleus
 };
 
-inline G4int G4QCandidate::operator==(const G4QCandidate &right) const  {return this==&right;}
-inline G4int G4QCandidate::operator!=(const G4QCandidate &right) const  {return this!=&right;}
+inline G4bool G4QCandidate::operator==(const G4QCandidate &rhs) const  {return this==&rhs;}
+inline G4bool G4QCandidate::operator!=(const G4QCandidate &rhs) const  {return this!=&rhs;}
 
 inline G4QParentCluster* G4QCandidate::TakeParClust(G4int nPC)  {return thePClusters[nPC];}
 inline G4int    G4QCandidate::GetPClustEntries()          const {return thePClusters.size();}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.36 2003-11-10 16:54:39 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.37 2003-11-13 14:40:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -35,17 +35,18 @@
 
 #include "G4QNucleus.hh"
 
-G4QNucleus::G4QNucleus() : Z(0),N(0),S(0),maxClust(0) {probVect[0]=mediRatio;}
+G4QNucleus::G4QNucleus() : G4QHadron(),Z(0),N(0),S(0),maxClust(0) {probVect[0]=mediRatio;}
 
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
-  Z(z),N(n),S(s),maxClust(0)
+  G4QHadron(90000000+s*1000000+z*1000+n),Z(z),N(n),S(s),maxClust(0)
+  //Z(z),N(n),S(s),maxClust(0)
 {
   probVect[0]=mediRatio;
 #ifdef debug
   G4cout<<"G4QNucleus::Construction By Z="<<z<<",N="<<n<<",S="<<s<<G4endl;
 #endif
   SetZNSQC(z,n,s);
-  G4QPDGCode nQPDG(90000000+S*1000000+Z*1000+N);
+  G4QPDGCode nQPDG(90000000+S*1000000+Z*1000+N); // Not necessary (? look above)
 #ifdef debug
   G4cout<<"G4QNucleus::ConstructionByZNS: nQPDG="<<nQPDG<<G4endl;
 #endif
@@ -53,7 +54,7 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
 #ifdef debug
   G4cout<<"G4QNucleus::ConstructionByZNS: mass="<<mass<<G4endl;
 #endif
-  SetQPDG(nQPDG);
+  SetQPDG(nQPDG);                                // Not necessary (? look above)
 #ifdef debug
   G4cout<<"G4QNucleus::ConstructionByZNS: nQPDG set"<<G4endl;
 #endif
@@ -62,16 +63,16 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
   SetNFragments(0);
 }
 
-G4QNucleus::G4QNucleus(G4int nucPDG):maxClust(0) {InitByPDG(nucPDG);}
+G4QNucleus::G4QNucleus(G4int nucPDG): G4QHadron(nucPDG), maxClust(0) {InitByPDG(nucPDG);}
 
-G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG):maxClust(0)
+G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG): G4QHadron(nucPDG,p),maxClust(0)
 {
   InitByPDG(nucPDG);
   Set4Momentum(p);
 }
 
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
-  Z(z),N(n),S(s),maxClust(0)
+  G4QHadron(90000000+s*1000000+z*1000+n,p),Z(z),N(n),S(s),maxClust(0)
 {
   probVect[0]=mediRatio;
   Set4Momentum(p);
@@ -83,7 +84,7 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
   SetZNSQC(z,n,s);
 }
 
-G4QNucleus::G4QNucleus(G4QContent nucQC):maxClust(0)
+G4QNucleus::G4QNucleus(G4QContent nucQC): G4QHadron(nucQC), maxClust(0)
 {
 #ifdef debug
   G4cout<<"G4QNucleus::Construction By QC="<<nucQC<<G4endl;
@@ -117,7 +118,7 @@ G4QNucleus::G4QNucleus(G4QContent nucQC):maxClust(0)
   SetNFragments(0);
 }
 
-G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p):maxClust(0)
+G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p): G4QHadron(nucQC,p), maxClust(0)
 {
 #ifdef debug
   G4cout<<"G4QNucleus::(LV)Construction By QC="<<nucQC<<G4endl;
@@ -301,6 +302,7 @@ G4int G4QNucleus::UpdateClusters(G4bool din)
   //static const G4double prQ = 1.0;              // relative probability for a Quasmon
   //static const G4double prQ = 0.;               //@@for pi@@relative probability for Quasmon
   G4double probSInt[254];                         // integrated static probabilities
+  for (G4int in=0; in<256; in++) probVect[in]=0.; // Make preinitialization to avoid the postinitial.
   probSInt[0]=0;                                  // integrated static probabilities
   G4int a = Z + N + S;                            // atomic number
 #ifdef pdebug
@@ -439,7 +441,7 @@ G4int G4QNucleus::UpdateClusters(G4bool din)
   G4cout<<"G4QNucleus::UpdateClusters: Sum of weighted probabilities s="<<sum<<G4endl;
 #endif
   maxClust=maxi-1;
-  for (G4int j=maxi; j<255; j++) probVect[j]=0.; // Make the rest to be 0
+  //for (G4int j=maxi; j<255; j++) probVect[j]=0.; // Make the rest to be 0 [preinitialized above]
   // ===================== From here probability randomization starts ===============
   //  G4int rA=a;                                    // Residual number of nucleons
   //#ifdef pdebug

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.27 2003-11-10 16:54:35 mkossov Exp $
+// $Id: G4Quasmon.hh,v 1.28 2003-11-13 14:40:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -57,8 +57,8 @@ public:
 
   // Overloaded Operators
   const G4Quasmon& operator=(const G4Quasmon& right);
-  int operator==(const G4Quasmon &right) const;
-  int operator!=(const G4Quasmon &right) const;
+  G4bool operator==(const G4Quasmon &right) const;
+  G4bool operator!=(const G4Quasmon &right) const;
 
   // Static functions
   static void SetParameters(G4double temperature, G4double ssin2g, G4double etaetap);
@@ -131,8 +131,8 @@ private:
   G4QContent         bEnQC;           // QuarkContent of the LimitActiveNuclEnv
 };
 
-inline int G4Quasmon::operator==(const G4Quasmon &right) const {return this == &right;}
-inline int G4Quasmon::operator!=(const G4Quasmon &right) const {return this != &right;}
+inline G4bool G4Quasmon::operator==(const G4Quasmon &rhs) const {return this == &rhs;}
+inline G4bool G4Quasmon::operator!=(const G4Quasmon &rhs) const {return this != &rhs;}
 inline G4double        G4Quasmon::GetTemper()    const {return Temperature;}
 inline G4double        G4Quasmon::GetSOverU()    const {return SSin2Gluons;}
 inline G4double        G4Quasmon::GetEtaSup()    const {return EtaEtaprime;}

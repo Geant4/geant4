@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChan.hh,v 1.14 2003-10-08 14:48:21 hpw Exp $
+// $Id: G4QDecayChan.hh,v 1.15 2003-11-13 14:40:45 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QDecayChan ----------------
@@ -50,8 +50,8 @@ public:
 
   // Operators
   const G4QDecayChan& operator=(const G4QDecayChan& right);
-  G4int               operator==(const G4QDecayChan& rhs) const;
-  G4int               operator!=(const G4QDecayChan& rhs) const;
+  G4bool               operator==(const G4QDecayChan& rhs) const;
+  G4bool               operator!=(const G4QDecayChan& rhs) const;
 
   // Selectors
   G4double         GetDecayChanLimit() const;    // Get a Decay Channel Probability Limit
@@ -77,8 +77,8 @@ private:
 std::ostream&   operator<<(std::ostream& lhs, G4QDecayChan& rhs);
 //----------------------------------------------------------------------------------------
 
-inline G4int G4QDecayChan::operator==(const G4QDecayChan& rhs) const {return this==&rhs;}
-inline G4int G4QDecayChan::operator!=(const G4QDecayChan& rhs) const {return this!=&rhs;}
+inline G4bool G4QDecayChan::operator==(const G4QDecayChan& rhs) const {return this==&rhs;}
+inline G4bool G4QDecayChan::operator!=(const G4QDecayChan& rhs) const {return this!=&rhs;}
  
 inline G4double G4QDecayChan::GetDecayChanLimit() const    {return aDecayChanLimit;}
 inline G4double G4QDecayChan::GetMinMass() const           {return theMinMass;}

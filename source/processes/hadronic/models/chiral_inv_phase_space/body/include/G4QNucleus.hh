@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.18 2003-10-24 08:26:31 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.19 2003-11-13 14:40:45 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -49,8 +49,8 @@ public:
   ~G4QNucleus();                                           // Destructor
   // Overloaded Operators
   const G4QNucleus& operator=(const G4QNucleus& right);
-  G4int operator==(const G4QNucleus &right) const;
-  G4int operator!=(const G4QNucleus &right) const;
+  G4bool operator==(const G4QNucleus &right) const;
+  G4bool operator!=(const G4QNucleus &right) const;
   // Specific Selectors
   G4int      GetPDG()      const;                          // Get a PDG Code of the nucleus
   G4int      GetZ()        const;                          // Get a#of protons
@@ -122,8 +122,8 @@ private:
 std::ostream& operator<<(std::ostream& lhs, G4QNucleus& rhs);
 std::ostream& operator<<(std::ostream& lhs, const G4QNucleus& rhs);
 
-inline G4int G4QNucleus::operator==(const G4QNucleus &right) const  {return this==&right;}
-inline G4int G4QNucleus::operator!=(const G4QNucleus &right) const  {return this!=&right;}
+inline G4bool G4QNucleus::operator==(const G4QNucleus &right) const  {return this==&right;}
+inline G4bool G4QNucleus::operator!=(const G4QNucleus &right) const  {return this!=&right;}
 
 inline G4int    G4QNucleus::GetPDG()const {return 90000000+1000*(1000*S+Z)+N;}
 inline G4int    G4QNucleus::GetZ()  const {return Z;}

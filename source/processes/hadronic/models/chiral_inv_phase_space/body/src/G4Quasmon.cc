@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.cc,v 1.55 2003-11-10 16:54:40 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.56 2003-11-13 14:40:50 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------

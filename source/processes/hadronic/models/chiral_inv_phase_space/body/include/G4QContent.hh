@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.hh,v 1.20 2003-11-10 16:54:34 mkossov Exp $
+// $Id: G4QContent.hh,v 1.21 2003-11-13 14:40:45 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
@@ -48,8 +48,8 @@ public:
 
   // Overloaded operators
   const G4QContent& operator=(const G4QContent& rhs);
-  G4int             operator==(const G4QContent& rhs) const;
-  G4int             operator!=(const G4QContent& rhs) const;
+  G4bool            operator==(const G4QContent& rhs) const;
+  G4bool            operator!=(const G4QContent& rhs) const;
   G4QContent        operator+=(G4QContent& rhs);
   G4QContent        operator-=(G4QContent& rhs);
   G4QContent        operator*=(G4int& rhs);
@@ -160,8 +160,8 @@ G4QContent operator*(const G4int&      lhs, const G4QContent& rhs);
 // Not member functions
 //----------------------------------------------------------------------------------------
 
-inline G4int      G4QContent::operator==(const G4QContent& rhs) const {return this==&rhs;}	
-inline G4int      G4QContent::operator!=(const G4QContent& rhs) const {return this!=&rhs;}
+inline G4bool     G4QContent::operator==(const G4QContent& rhs) const {return this==&rhs;}	
+inline G4bool     G4QContent::operator!=(const G4QContent& rhs) const {return this!=&rhs;}
 inline G4int      G4QContent::GetQ() const {return nU+nD+nS;}
 inline G4int      G4QContent::GetAQ() const {return nAU+nAD+nAS;}
 inline G4int      G4QContent::GetTot() const {return nU+nD+nS+nAU+nAD+nAS;}

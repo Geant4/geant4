@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParentCluster.hh,v 1.15 2003-10-08 14:48:22 hpw Exp $
+// $Id: G4QParentCluster.hh,v 1.16 2003-11-13 14:40:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QParentCluster ----------------
@@ -49,8 +49,8 @@ public:
 
   // Operators
   const G4QParentCluster& operator=(const G4QParentCluster& rhs);
-  G4int                   operator==(const G4QParentCluster& rhs) const;
-  G4int                   operator!=(const G4QParentCluster& rhs) const;
+  G4bool                   operator==(const G4QParentCluster& rhs) const;
+  G4bool                   operator!=(const G4QParentCluster& rhs) const;
 
   // Selectors
   G4int      GetPDGCode()      const;   // Get PDG code of the Parent Cluster
@@ -100,8 +100,8 @@ private:
 std::ostream&   operator<<(std::ostream& lhs, G4QParentCluster& rhs);
 std::ostream&   operator<<(std::ostream& lhs, const G4QParentCluster& rhs);
 
-inline G4int G4QParentCluster::operator==(const G4QParentCluster& rhs) const {return this==&rhs;}
-inline G4int G4QParentCluster::operator!=(const G4QParentCluster& rhs) const {return this!=&rhs;}
+inline G4bool G4QParentCluster::operator==(const G4QParentCluster& rhs) const {return this==&rhs;}
+inline G4bool G4QParentCluster::operator!=(const G4QParentCluster& rhs) const {return this!=&rhs;}
  
 inline G4int      G4QParentCluster::GetPDGCode()     const {return thePDGCode;}
 inline G4double   G4QParentCluster::GetProbability() const {return theProbability;}
