@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiPropertiesTable.hh,v 1.3 1999-05-12 11:40:49 larazb Exp $
+// $Id: G4NucleiPropertiesTable.hh,v 1.4 1999-05-26 12:54:49 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,7 +78,7 @@ public:
   static G4double GetAtomicMass(G4int Z, G4int A);
 
   // Operation: GetName
-  static G4String& GetName(G4int Z, G4int A);
+  static const char*& GetName(G4int Z, G4int A);
 
   // Is the nucleus (A,Z) in table?
   static G4bool IsInTable(G4int Z, G4int A);
@@ -122,8 +122,8 @@ private:
 
   
   // Chemical Symbol
-  static G4String Name[nEntries];
-  static G4String noName;
+  static const char* Name[nEntries];
+  static const char* noName;
 
     
   // Table of Z (number of protons) and A (number of nucleons)
@@ -180,7 +180,7 @@ inline G4double  G4NucleiPropertiesTable::GetAtomicMass(G4int Z, G4int A)
     }
 }
   
-inline G4String& G4NucleiPropertiesTable::GetName(G4int Z, G4int A)
+inline const char*& G4NucleiPropertiesTable::GetName(G4int Z, G4int A)
 {
     G4int i=GetIndex(Z, A);
     if (i >= 0){
