@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarterMessenger.cc,v 1.8 2003-11-18 12:46:13 gcosmo Exp $
+// $Id: Tst33AppStarterMessenger.cc,v 1.9 2003-11-25 10:32:54 gcosmo Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -42,23 +42,21 @@
 
 Tst33AppStarterMessenger::
 Tst33AppStarterMessenger(Tst33AppStarter &appstarter)
-  :
-  G4UImessenger(),
-  fAppStarter(appstarter),
-  fMassGeoCmd(new G4UIcommand("/Tst33/MassGeometry", this)),
-  fParallelGeoCmd(new G4UIcommand("/Tst33/ParallelGeometry",this)),
-  fScoringCmd(new G4UIcommand("/Tst33/Scoring",this)),
-  fImpCmd(new G4UIcommand("/Tst33/ImportanceSampling",this)),
-  fWWCmd(new G4UIcmdWithAString("/Tst33/WeightWindow",this)),
-  fWWRCmd(new G4UIcmdWithAnInteger("/Tst33/WeightRoulette",this)),
-  fClearSmaplingCmd(new G4UIcommand("/Tst33/ClearSampling",this)),
-  fConfigureSamplingCmd(new G4UIcommand("/Tst33/ConfigureSampling",this)),
-  fVisAppComand(new G4UIcommand("/Tst33/Visualization",this)),
-  fTimedAppComand(new G4UIcmdWithAnInteger("/Tst33/Timed",this)),
-  fPostRunCmd(new G4UIcommand("/Tst33/PostRun",this)),
-  fRunCmd(new G4UIcmdWithAnInteger("/Tst33/Run", this)),
-  fWeightChangerCmd(new G4UIcommand("/Tst33/AddWeightChanger",this))
+  : G4UImessenger(), fAppStarter(appstarter)
 {
+  fMassGeoCmd = new G4UIcommand("/Tst33/MassGeometry", this);
+  fParallelGeoCmd = new G4UIcommand("/Tst33/ParallelGeometry",this);
+  fScoringCmd = new G4UIcommand("/Tst33/Scoring",this);
+  fImpCmd = new G4UIcommand("/Tst33/ImportanceSampling",this);
+  fWWCmd = new G4UIcmdWithAString("/Tst33/WeightWindow",this);
+  fWWRCmd = new G4UIcmdWithAnInteger("/Tst33/WeightRoulette",this);
+  fClearSmaplingCmd = new G4UIcommand("/Tst33/ClearSampling",this);
+  fConfigureSamplingCmd = new G4UIcommand("/Tst33/ConfigureSampling",this);
+  fVisAppComand = new G4UIcommand("/Tst33/Visualization",this);
+  fTimedAppComand = new G4UIcmdWithAnInteger("/Tst33/Timed",this);
+  fPostRunCmd = new G4UIcommand("/Tst33/PostRun",this);
+  fRunCmd = new G4UIcmdWithAnInteger("/Tst33/Run", this);
+  fWeightChangerCmd = new G4UIcommand("/Tst33/AddWeightChanger",this);
 }
 
 Tst33AppStarterMessenger::~Tst33AppStarterMessenger(){
