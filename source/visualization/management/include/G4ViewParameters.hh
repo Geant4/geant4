@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.hh,v 1.8 2000-05-13 10:51:31 johna Exp $
+// $Id: G4ViewParameters.hh,v 1.9 2001-02-04 01:37:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,8 +69,6 @@ class G4ViewParameters {
 
 public: // With description
 
-  friend G4std::ostream& operator << (G4std::ostream& os, const G4ViewParameters& v);
-
   enum DrawingStyle {
     wireframe,  // Draw edges    - no hidden line removal.
     hlr,        // Draw edges    - hidden lines removed.
@@ -82,6 +80,12 @@ public: // With description
     polyhedron, // Use G4Polyhedron.
     nurbs       // Use G4NURBS.
   };
+
+  friend G4std::ostream& operator << (G4std::ostream&,
+				      const DrawingStyle&);
+
+  friend G4std::ostream& operator << (G4std::ostream&,
+				      const G4ViewParameters&);
 
   G4ViewParameters ();
   ~G4ViewParameters ();
@@ -166,6 +170,8 @@ public: // With description
   void IncrementDolly          (G4double dollyIncrement);
   void SetLightpointDirection  (const G4Vector3D& lightpointDirection);
   void SetLightsMoveWithCamera (G4bool moves);
+  void SetPan                  (G4double right, G4double up);
+  void IncrementPan            (G4double right, G4double up);
   void SetViewGeom             ();
   void UnsetViewGeom           ();
   void SetViewHits             ();
@@ -179,11 +185,6 @@ public: // With description
   void SetMarkerHidden         ();
   void SetMarkerNotHidden      ();
   void SetWindowSizeHint       (G4int xHint, G4int yHint);
-
-  void Pan                     (G4double right, G4double up);
-  // Note: the result of above "pan"operation is always an Increment
-  // relative to the current target point and also depends on the
-  // veiwpoint and up directions.
 
   void PrintDifferences (const G4ViewParameters& v) const;
 

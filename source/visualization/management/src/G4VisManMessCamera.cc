@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessCamera.cc,v 1.5 2001-02-01 17:35:41 johna Exp $
+// $Id: G4VisManMessCamera.cc,v 1.6 2001-02-04 01:37:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -237,7 +237,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       const char* aString = newValues;
       G4std::istrstream is((char*) aString);is >> right >> up;
       G4cout << "Pan " << right << " right, " << up << " up." << G4endl;
-      fpVMan -> SetCurrentViewParameters ().Pan (right, up);
+      fpVMan -> SetCurrentViewParameters ().IncrementPan (right, up);
       if (fpVMan -> GetVerboseLevel () > 0) {
 	G4cout << "Current target point changed to "
 	     << fpVMan -> GetCurrentViewParameters ().GetCurrentTargetPoint ()

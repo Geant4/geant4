@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2001-02-03 18:38:58 johna Exp $
+$Id: History,v 1.102 2001-02-04 01:38:48 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,21 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+4th February 2001  John Allison  (vis-V03-00-03)
+- Added several new vis commands:
+  /vis/viewer/dolly
+  /vis/viewer/dollyTo
+  /vis/viewer/lightsThetaPhi
+  /vis/viewer/lightsVector
+  /vis/viewer/pan
+  /vis/viewer/panTo
+  /vis/viewer/viewpointThetaPhi
+  /vis/viewer/viewpointVector
+  /vis/viewer/zoom
+  /vis/viewer/zoomTo
+  /vis/viewer/set/hiddenMarker
+  /vis/viewer/set/lightsMove
 
 3rd February 2001  John Allison  (vis-V03-00-02)
 - Tidied for CodeWizard.  Small changes to many files in management, modeling

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.cc,v 1.7 2000-07-03 10:36:33 johna Exp $
+// $Id: G4ViewParameters.cc,v 1.8 2001-02-04 01:37:35 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -180,7 +180,13 @@ void G4ViewParameters::SetLightpointDirection
   SetViewAndLights (fViewpointDirection);
 }
 
-void G4ViewParameters::Pan (G4double right, G4double up) {
+void G4ViewParameters::SetPan (G4double right, G4double up) {
+  G4Vector3D unitRight = (fUpVector.cross (fViewpointDirection)).unit();
+  G4Vector3D unitUp    = (fViewpointDirection.cross (unitRight)).unit();
+  fCurrentTargetPoint  = right * unitRight + up * unitUp;
+}
+
+void G4ViewParameters::IncrementPan (G4double right, G4double up) {
   G4Vector3D unitRight = (fUpVector.cross (fViewpointDirection)).unit();
   G4Vector3D unitUp    = (fViewpointDirection.cross (unitRight)).unit();
   fCurrentTargetPoint += right * unitRight + up * unitUp;
@@ -246,11 +252,9 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
   }
 }
 
-G4std::ostream& operator << (G4std::ostream& os, const G4ViewParameters& v) {
-  os << "View parameters and options:";
-
-  os << "\n  Drawing style: ";
-  switch (v.fDrawingStyle) {
+G4std::ostream& operator << (G4std::ostream& os,
+			     const G4ViewParameters::DrawingStyle& style) {
+  switch (style) {
   case G4ViewParameters::wireframe:
     os << "wireframe"; break;
   case G4ViewParameters::hlr:
@@ -261,6 +265,12 @@ G4std::ostream& operator << (G4std::ostream& os, const G4ViewParameters& v) {
     os << "hlhsr - hidden line, hidden surface removed"; break;
   default: os << "unrecognised"; break;
   }
+}
+
+G4std::ostream& operator << (G4std::ostream& os, const G4ViewParameters& v) {
+  os << "View parameters and options:";
+
+  os << "\n  Drawing style: " << v.fDrawingStyle;
 
   os << "\n  Representation style: ";
   switch (v.fRepStyle) {

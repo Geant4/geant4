@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.19 2000-06-07 08:43:28 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.20 2001-02-04 01:37:36 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -17,6 +17,8 @@
 #include "G4VisCommandsScene.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
 #include "g4std/strstream"
@@ -195,6 +197,173 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
   }
 }
 
+////////////// /vis/viewer/dolly and dollyTo ////////////////////////////
+
+G4VisCommandViewerDolly::G4VisCommandViewerDolly ():
+  fDollyIncrement  (0.),
+  fDollyTo (0.)
+{
+  G4bool omitable, currentAsDefault;
+
+  fpCommandDolly = new G4UIcmdWithADoubleAndUnit
+    ("/vis/viewer/dolly", this);
+  fpCommandDolly -> SetGuidance
+    ("/vis/viewer/dolly [<increment>] [<unit>]");
+  fpCommandDolly -> SetGuidance
+    ("Moves the camera incrementally in by this distance.");
+  fpCommandDolly -> SetParameterName("increment",
+				     omitable=true,
+				     currentAsDefault=true);
+  fpCommandDolly -> SetDefaultUnit("m");
+
+  fpCommandDollyTo = new G4UIcmdWithADoubleAndUnit
+    ("/vis/viewer/dollyTo", this);
+  fpCommandDollyTo -> SetGuidance
+    ("/vis/viewer/dollyTo [<distance>] [<unit>]");
+  fpCommandDollyTo -> SetGuidance
+    ("Moves the camera in this distance relative to standard target point.");
+  fpCommandDollyTo -> SetParameterName("distance",
+				       omitable=true,
+				       currentAsDefault=true);
+  fpCommandDollyTo -> SetDefaultUnit("m");
+}
+
+G4VisCommandViewerDolly::~G4VisCommandViewerDolly () {
+  delete fpCommandDolly;
+  delete fpCommandDollyTo;
+}
+
+G4String G4VisCommandViewerDolly::GetCurrentValue (G4UIcommand* command) {
+  if (command == fpCommandDolly) {
+    return fpCommandDolly->ConvertToString(fDollyIncrement, "m");
+  }
+  else if (command == fpCommandDollyTo) {
+    return fpCommandDollyTo->ConvertToString(fDollyTo, "m");
+  }
+}
+
+void G4VisCommandViewerDolly::SetNewValue (G4UIcommand* command,
+					   G4String newValue) {
+
+  G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
+  if (!currentViewer) {
+    G4cout << "G4VisCommandsViewerDolly::SetNewValue: no current viewer."
+           << G4endl;
+    return;
+  }
+
+  G4ViewParameters vp = currentViewer->GetViewParameters();
+
+  if (command == fpCommandDolly) {
+    fDollyIncrement = fpCommandDolly->GetNewDoubleValue(newValue);
+    vp.IncrementDolly(fDollyIncrement);
+  }
+  else if (command == fpCommandDollyTo) {
+    fDollyTo = fpCommandDolly->GetNewDoubleValue(newValue);
+    vp.SetDolly(fDollyTo);
+  }
+
+  if (fpVisManager->GetVerboseLevel() > 0) {
+    G4cout << "Dolly distance changed to " << vp.GetDolly() << G4endl;
+  }
+
+  currentViewer->SetViewParameters(vp);
+  G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
+  // For now...
+  fpVisManager->SetCurrentViewParameters() = vp;
+}
+
+//////// /vis/viewer/lightsThetaPhi and lightsVector /////////////
+
+G4VisCommandViewerLights::G4VisCommandViewerLights ():
+  fLightsVector (G4ThreeVector(0.,0.,1.))
+{
+  G4bool omitable;
+
+  fpCommandLightsThetaPhi = new G4UIcommand
+    ("/vis/viewer/lightsThetaPhi", this);
+  fpCommandLightsThetaPhi -> SetGuidance
+    ("/vis/viewer/lightsThetaPhi  [<theta>] [<phi>] [deg|rad]");
+  fpCommandLightsThetaPhi -> SetGuidance
+    ("Set direction from target to lights.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter("theta", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandLightsThetaPhi -> SetParameter (parameter);
+  parameter = new G4UIparameter("phi", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandLightsThetaPhi -> SetParameter (parameter);
+  parameter = new G4UIparameter ("unit", 's', omitable = true);
+  parameter -> SetDefaultValue ("deg");
+  fpCommandLightsThetaPhi -> SetParameter (parameter);
+
+  fpCommandLightsVector = new G4UIcommand
+    ("/vis/viewer/lightsVector", this);
+  fpCommandLightsVector -> SetGuidance
+    ("/vis/viewer/lightsVector  [<x>] [<y>] [<z>]");
+  fpCommandLightsVector -> SetGuidance
+    ("Set direction from target to lights.");
+  parameter = new G4UIparameter("x", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandLightsVector -> SetParameter (parameter);
+  parameter = new G4UIparameter("y", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandLightsVector -> SetParameter (parameter);
+  parameter = new G4UIparameter ("z", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandLightsVector -> SetParameter (parameter);
+}
+
+G4VisCommandViewerLights::~G4VisCommandViewerLights () {
+  delete fpCommandLightsThetaPhi;
+  delete fpCommandLightsVector;
+}
+
+G4String G4VisCommandViewerLights::GetCurrentValue (G4UIcommand* command) {
+  if (command == fpCommandLightsThetaPhi) {
+    return ConvertToString(fLightsVector.theta(),
+			   fLightsVector.phi(), "deg");
+  }
+  else if (command == fpCommandLightsVector) {
+    return ConvertToString(fLightsVector);
+  }
+}
+
+void G4VisCommandViewerLights::SetNewValue (G4UIcommand* command,
+					   G4String newValue) {
+
+  G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
+  if (!currentViewer) {
+    G4cout << "G4VisCommandsViewerLights::SetNewValue: no current viewer."
+           << G4endl;
+    return;
+  }
+
+  G4ViewParameters vp = currentViewer->GetViewParameters();
+
+  if (command == fpCommandLightsThetaPhi) {
+    G4double theta, phi;
+    GetNewDoublePairValue(newValue, theta, phi);
+    G4double x = sin (theta) * cos (phi);
+    G4double y = sin (theta) * sin (phi);
+    G4double z = cos (theta);
+    fLightsVector = G4Vector3D (x, y, z);
+  }
+  else if (command == fpCommandLightsVector) {
+    fLightsVector = GetNew3VectorValue(newValue);
+  }
+  vp.SetLightpointDirection(fLightsVector);
+
+  if (fpVisManager->GetVerboseLevel() > 0) {
+    G4cout << "Lights direction set to " << fLightsVector << G4endl;
+  }
+
+  currentViewer->SetViewParameters(vp);
+  G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
+  // For now...
+  fpVisManager->SetCurrentViewParameters() = vp;
+}
+
 ////////////// /vis/viewer/list ///////////////////////////////////////
 
 G4VisCommandViewerList::G4VisCommandViewerList () {
@@ -298,6 +467,97 @@ void G4VisCommandViewerList::SetNewValue (G4UIcommand* command,
   }
 }
 
+////////////// /vis/viewer/pan and panTo ////////////////////////////
+
+G4VisCommandViewerPan::G4VisCommandViewerPan ():
+  fPanIncrementRight  (0.),
+  fPanIncrementUp  (0.),
+  fPanToRight (0.),
+  fPanToUp (0.)
+{
+  G4bool omitable;
+
+  fpCommandPan = new G4UIcommand
+    ("/vis/viewer/pan", this);
+  fpCommandPan -> SetGuidance
+    ("/vis/viewer/pan [<right-increment>] [<up-increment>] [<unit>]");
+  fpCommandPan -> SetGuidance
+    ("Moves the camera incrementally right and up by these amounts.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter("right-increment", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandPan -> SetParameter (parameter);
+  parameter = new G4UIparameter("up-increment", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandPan -> SetParameter (parameter);
+  parameter = new G4UIparameter ("unit", 's', omitable = true);
+  parameter -> SetDefaultValue ("m");
+  fpCommandPan -> SetParameter (parameter);
+
+  fpCommandPanTo = new G4UIcommand
+    ("/vis/viewer/panTo", this);
+  fpCommandPanTo -> SetGuidance
+    ("/vis/viewer/panTo [<right>] [<up>] [<unit>]");
+  fpCommandPanTo -> SetGuidance
+    ("Moves the camera to this position right and up relative to standard"
+     "target point.");
+  parameter = new G4UIparameter("right", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandPanTo -> SetParameter (parameter);
+  parameter = new G4UIparameter("up", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandPanTo -> SetParameter (parameter);
+  parameter = new G4UIparameter ("unit", 's', omitable = true);
+  parameter -> SetDefaultValue ("m");
+  fpCommandPanTo -> SetParameter (parameter);
+}
+
+G4VisCommandViewerPan::~G4VisCommandViewerPan () {
+  delete fpCommandPan;
+  delete fpCommandPanTo;
+}
+
+G4String G4VisCommandViewerPan::GetCurrentValue (G4UIcommand* command) {
+  if (command == fpCommandPan) {
+    return ConvertToString(fPanIncrementRight, fPanIncrementUp, "m");
+  }
+  else if (command == fpCommandPanTo) {
+    return ConvertToString(fPanToRight, fPanToUp, "m");
+  }
+}
+
+void G4VisCommandViewerPan::SetNewValue (G4UIcommand* command,
+					   G4String newValue) {
+
+  G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
+  if (!currentViewer) {
+    G4cout << "G4VisCommandsViewerPan::SetNewValue: no current viewer."
+           << G4endl;
+    return;
+  }
+
+  G4ViewParameters vp = currentViewer->GetViewParameters();
+
+  if (command == fpCommandPan) {
+    GetNewDoublePairValue(newValue, fPanIncrementRight, fPanIncrementUp);
+    vp.IncrementPan(fPanIncrementRight, fPanIncrementUp);
+  }
+  else if (command == fpCommandPanTo) {
+    GetNewDoublePairValue(newValue, fPanToRight, fPanToUp);
+    vp.SetPan(fPanToRight, fPanToUp);
+  }
+
+  if (fpVisManager->GetVerboseLevel() > 0) {
+    G4cout << "Current target point now " << vp.GetCurrentTargetPoint()
+	   << G4endl;
+  }
+
+  currentViewer->SetViewParameters(vp);
+  G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
+  // For now...
+  fpVisManager->SetCurrentViewParameters() = vp;
+}
+
 ////////////// /vis/viewer/refresh ///////////////////////////////////////
 
 G4VisCommandViewerRefresh::G4VisCommandViewerRefresh () {
@@ -335,19 +595,38 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
   G4String& refreshName = newValue;
   G4VViewer* viewer = fpVisManager -> GetViewer (refreshName);
-  if (viewer) {
-    G4cout << "Refreshing viewer \"" << viewer -> GetName () << "\"..."
-	   << G4endl;
-    viewer -> ClearView ();
-    viewer -> DrawView ();
-    G4cout << "Viewer \"" << viewer -> GetName () << "\"" << " refreshed."
-	   "\n  (You might also need \"/vis/viewer/update\".)" << G4endl;
-  }
-  else {
+  if (!viewer) {
     G4cout << "Viewer \"" << refreshName << "\"" <<
       " not found - \"/vis/viewer/list\"\n  to see possibilities."
 	   << G4endl;
+    return;
   }
+
+  G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
+  if (!sceneHandler) {
+    G4cout << "Viewer \"" << refreshName << "\"" <<
+      " has no scene handler - report serious bug."
+	   << G4endl;
+    return;
+  }
+
+  G4Scene* scene = sceneHandler->GetScene();
+  if (!scene) {
+    G4cout << "SceneHandler \"" << sceneHandler->GetName()
+	   << "\", to which viewer \"" << refreshName << "\"" <<
+      "\n  is attached, has no scene - \"/vis/scene/create\" and"
+      "\"/vis/sceneHandler/attach\""
+      "\n  (or use compound command \"/vis/drawVolume\")."
+	   << G4endl;
+    return;
+  }
+
+  G4cout << "Refreshing viewer \"" << viewer -> GetName () << "\"..."
+	 << G4endl;
+  viewer -> ClearView ();
+  viewer -> DrawView ();
+  G4cout << "Viewer \"" << viewer -> GetName () << "\"" << " refreshed."
+    "\n  (You might also need \"/vis/viewer/update\".)" << G4endl;
 }
 
 ////////////// /vis/viewer/remove ///////////////////////////////////////
@@ -581,4 +860,175 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand* command,
     G4cout << " not found - \"/vis/viewer/list\""
       "\n  to see possibilities." << G4endl;
   }
+}
+
+//////// /vis/viewer/viewpointThetaPhi and viewpointVector /////////////
+
+G4VisCommandViewerViewpoint::G4VisCommandViewerViewpoint ():
+  fViewpointVector (G4ThreeVector(0.,0.,1.))
+{
+  G4bool omitable;
+
+  fpCommandViewpointThetaPhi = new G4UIcommand
+    ("/vis/viewer/viewpointThetaPhi", this);
+  fpCommandViewpointThetaPhi -> SetGuidance
+    ("/vis/viewer/viewpointThetaPhi  [<theta>] [<phi>] [deg|rad]");
+  fpCommandViewpointThetaPhi -> SetGuidance
+    ("Set direction from target to camera.  Also changes lightpoint direction"
+     "\nif lights are set to move with camera.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter("theta", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandViewpointThetaPhi -> SetParameter (parameter);
+  parameter = new G4UIparameter("phi", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandViewpointThetaPhi -> SetParameter (parameter);
+  parameter = new G4UIparameter ("unit", 's', omitable = true);
+  parameter -> SetDefaultValue ("deg");
+  fpCommandViewpointThetaPhi -> SetParameter (parameter);
+
+  fpCommandViewpointVector = new G4UIcommand
+    ("/vis/viewer/viewpointVector", this);
+  fpCommandViewpointVector -> SetGuidance
+    ("/vis/viewer/viewpointVector  [<x>] [<y>] [<z>]");
+  fpCommandViewpointVector -> SetGuidance
+    ("Set direction from target to camera.  Also changes lightpoint direction"
+     "\nif lights are set to move with camera.");
+  parameter = new G4UIparameter("x", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandViewpointVector -> SetParameter (parameter);
+  parameter = new G4UIparameter("y", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandViewpointVector -> SetParameter (parameter);
+  parameter = new G4UIparameter ("z", 'd', omitable = true);
+  parameter -> SetCurrentAsDefault (true);
+  fpCommandViewpointVector -> SetParameter (parameter);
+}
+
+G4VisCommandViewerViewpoint::~G4VisCommandViewerViewpoint () {
+  delete fpCommandViewpointThetaPhi;
+  delete fpCommandViewpointVector;
+}
+
+G4String G4VisCommandViewerViewpoint::GetCurrentValue (G4UIcommand* command) {
+  if (command == fpCommandViewpointThetaPhi) {
+    return ConvertToString(fViewpointVector.theta(),
+			   fViewpointVector.phi(), "deg");
+  }
+  else if (command == fpCommandViewpointVector) {
+    return ConvertToString(fViewpointVector);
+  }
+}
+
+void G4VisCommandViewerViewpoint::SetNewValue (G4UIcommand* command,
+					   G4String newValue) {
+
+  G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
+  if (!currentViewer) {
+    G4cout << "G4VisCommandsViewerViewpoint::SetNewValue: no current viewer."
+           << G4endl;
+    return;
+  }
+
+  G4ViewParameters viewParams = currentViewer->GetViewParameters();
+
+  if (command == fpCommandViewpointThetaPhi) {
+    G4double theta, phi;
+    GetNewDoublePairValue(newValue, theta, phi);
+    G4double x = sin (theta) * cos (phi);
+    G4double y = sin (theta) * sin (phi);
+    G4double z = cos (theta);
+    fViewpointVector = G4Vector3D (x, y, z);
+  }
+  else if (command == fpCommandViewpointVector) {
+    fViewpointVector = GetNew3VectorValue(newValue);
+  }
+  viewParams.SetViewAndLights(fViewpointVector);
+
+  if (fpVisManager->GetVerboseLevel() > 0) {
+    G4cout << "Viewpoint direction set to " << fViewpointVector << G4endl;
+    if (viewParams.GetLightsMoveWithCamera ()) {
+      G4cout << "Lightpoint direction set to "
+             << viewParams.GetActualLightpointDirection () << G4endl;
+    }
+  }
+
+  currentViewer->SetViewParameters(viewParams);
+  G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
+  // For now...
+  fpVisManager->SetCurrentViewParameters() = viewParams;
+}
+
+////////////// /vis/viewer/zoom and zoomTo ////////////////////////////
+
+G4VisCommandViewerZoom::G4VisCommandViewerZoom ():
+  fZoomMultiplier (1.),
+  fZoomTo         (1.)
+{
+  G4bool omitable, currentAsDefault;
+
+  fpCommandZoom = new G4UIcmdWithADouble
+    ("/vis/viewer/zoom", this);
+  fpCommandZoom -> SetGuidance
+    ("/vis/viewer/zoom [<multiplier>]");
+  fpCommandZoom -> SetGuidance
+    ("Multiplies magnification by this factor.");
+  fpCommandZoom -> SetParameterName("multiplier",
+				     omitable=true,
+				     currentAsDefault=true);
+
+  fpCommandZoomTo = new G4UIcmdWithADouble
+    ("/vis/viewer/zoomTo", this);
+  fpCommandZoomTo -> SetGuidance
+    ("/vis/viewer/zoomTo [<factor>]");
+  fpCommandZoomTo -> SetGuidance
+    ("Magnifies by this factor relative to standard view.");
+  fpCommandZoomTo -> SetParameterName("factor",
+				       omitable=true,
+				       currentAsDefault=true);
+}
+
+G4VisCommandViewerZoom::~G4VisCommandViewerZoom () {
+  delete fpCommandZoom;
+  delete fpCommandZoomTo;
+}
+
+G4String G4VisCommandViewerZoom::GetCurrentValue (G4UIcommand* command) {
+  if (command == fpCommandZoom) {
+    return fpCommandZoom->ConvertToString(fZoomMultiplier);
+  }
+  else if (command == fpCommandZoomTo) {
+    return fpCommandZoomTo->ConvertToString(fZoomTo);
+  }
+}
+
+void G4VisCommandViewerZoom::SetNewValue (G4UIcommand* command,
+					   G4String newValue) {
+
+  G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
+  if (!currentViewer) {
+    G4cout << "G4VisCommandsViewerZoom::SetNewValue: no current viewer."
+           << G4endl;
+    return;
+  }
+
+  G4ViewParameters vp = currentViewer->GetViewParameters();
+
+  if (command == fpCommandZoom) {
+    fZoomMultiplier = fpCommandZoom->GetNewDoubleValue(newValue);
+    vp.MultiplyZoomFactor(fZoomMultiplier);
+  }
+  else if (command == fpCommandZoomTo) {
+    fZoomTo = fpCommandZoom->GetNewDoubleValue(newValue);
+    vp.SetZoomFactor(fZoomTo);
+  }
+
+  if (fpVisManager->GetVerboseLevel() > 0) {
+    G4cout << "Zoom factor changed to " << vp.GetZoomFactor() << G4endl;
+  }
+
+  currentViewer->SetViewParameters(vp);
+  G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
+  // For now...
+  fpVisManager->SetCurrentViewParameters() = vp;
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewerSet.hh,v 1.4 2001-02-03 18:39:49 johna Exp $
+// $Id: G4VisCommandsViewerSet.hh,v 1.5 2001-02-04 01:37:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -30,13 +30,13 @@ public:
 private:
   G4VisCommandsViewerSet (const G4VisCommandsViewerSet&);
   G4VisCommandsViewerSet& operator = (const G4VisCommandsViewerSet&);
-  G4String ConvertToString(G4bool blValue);
-  G4bool GetNewBoolValue(const G4String& paramString);
   G4UIcmdWithAString* fpCommandAll;
+  G4UIcommand*        fpCommandCulling;
+  G4UIcmdWithABool*   fpCommandEdge;
+  G4UIcmdWithABool*   fpCommandHiddenEdge;
+  G4UIcmdWithABool*   fpCommandHiddenMarker;
+  G4UIcmdWithAString* fpCommandLightsMove;
   G4UIcmdWithAString* fpCommandStyle;
-  G4UIcmdWithABool* fpCommandEdge;
-  G4UIcmdWithABool* fpCommandHiddenEdge;
-  G4UIcommand* fpCommandCulling;
 };
 
 #endif

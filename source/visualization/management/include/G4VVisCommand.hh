@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisCommand.hh,v 1.6 1999-12-16 17:19:15 johna Exp $
+// $Id: G4VVisCommand.hh,v 1.7 2001-02-04 01:37:26 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Base class for visualization commands - John Allison  9th August 1998
@@ -15,6 +15,7 @@
 #define G4VVISCOMMAND_HH
 
 #include "G4UImessenger.hh"
+#include "G4ThreeVector.hh"
 #include "g4std/vector"
 
 class G4VisManager;
@@ -28,6 +29,17 @@ public:
   virtual ~G4VVisCommand ();
   static void SetVisManager (G4VisManager*);
 protected:
+  static G4double G4VVisCommand::ValueOf(G4String unitName);
+  static G4String ConvertToString(G4bool blValue);
+  static G4String ConvertToString(G4double x, G4double y,
+				  const char * unitName);
+  static G4String ConvertToString(const G4ThreeVector& vec);
+  static G4bool        GetNewBoolValue(const G4String& paramString);
+  static G4double      GetNewDoubleValue(G4String paramString);
+  static G4ThreeVector GetNew3VectorValue(G4String paramString);
+  static void          GetNewDoublePairValue(G4String paramString,
+					     G4double& xval,
+					     G4double& yval);
   static G4VisManager* fpVisManager;
   static  G4std::vector<G4UIcommand*> sceneNameCommands;
   typedef G4std::vector<G4UIcommand*>::iterator sceneNameCommandsIterator; 
