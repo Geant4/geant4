@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PhysicsListMessenger.cc,v 1.7 2002-06-01 03:17:09 vnivanch Exp $
+// $Id: Tst14PhysicsListMessenger.cc,v 1.8 2002-12-05 02:19:05 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,55 +52,55 @@ Tst14PhysicsListMessenger::Tst14PhysicsListMessenger(Tst14PhysicsList * List)
   cutGLowLimCmd->SetParameterName("energy",true);
   cutGLowLimCmd->SetDefaultValue(1e-3);
   cutGLowLimCmd->SetDefaultUnit("MeV");
-  cutGLowLimCmd->AvailableForStates(Idle);
+  cutGLowLimCmd->AvailableForStates(G4State_Idle);
 
   cutELowLimCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/lowlimE",this);
   cutELowLimCmd->SetGuidance("Set ENERGY low limit for e-.");
   cutELowLimCmd->SetParameterName("energy",true);
   cutELowLimCmd->SetDefaultValue(1e-3);
   cutELowLimCmd->SetDefaultUnit("MeV");
-  cutELowLimCmd->AvailableForStates(Idle);
+  cutELowLimCmd->AvailableForStates(G4State_Idle);
 
   cutGELowLimCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/lowlimGE",this);
   cutGELowLimCmd->SetGuidance("Set ENERGY low limit for e- and Gamma.");
   cutGELowLimCmd->SetParameterName("energy",true);
   cutGELowLimCmd->SetDefaultValue(1e-3);
   cutGELowLimCmd->SetDefaultUnit("MeV");
-  cutGELowLimCmd->AvailableForStates(Idle);
+  cutGELowLimCmd->AvailableForStates(G4State_Idle);
 
   augerCmd = new G4UIcmdWithABool("/lowenergy/auger",this);
   augerCmd->SetGuidance("Set flag Auger electrons production.");
   augerCmd->SetParameterName("Auger",true);
   augerCmd->SetDefaultValue(false);
-  augerCmd->AvailableForStates(PreInit,Idle);
+  augerCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   cutSecPhotCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/secphotcut",this);
   cutSecPhotCmd->SetGuidance("Set production threshold for secondary Gamma.");
   cutSecPhotCmd->SetParameterName("energy",true);
   cutSecPhotCmd->SetDefaultValue(5e-5);
   cutSecPhotCmd->SetDefaultUnit("MeV");
-  cutSecPhotCmd->AvailableForStates(Idle);
+  cutSecPhotCmd->AvailableForStates(G4State_Idle);
 
   cutSecElecCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/seceleccut",this);
   cutSecElecCmd->SetGuidance("Set production threshold for secondary e-");
   cutSecElecCmd->SetParameterName("energy",true);
   cutSecElecCmd->SetDefaultValue(5e-5);
   cutSecElecCmd->SetDefaultUnit("MeV");
-  cutSecElecCmd->AvailableForStates(Idle);
+  cutSecElecCmd->AvailableForStates(G4State_Idle);
 
   cutGCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/cutG",this);
   cutGCmd->SetGuidance("Set cut values by RANGE for Gamma.");
   cutGCmd->SetParameterName("range",true);
   cutGCmd->SetDefaultValue(1.);
   cutGCmd->SetDefaultUnit("mm");
-  cutGCmd->AvailableForStates(Idle);
+  cutGCmd->AvailableForStates(G4State_Idle);
 
   cutECmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/cutE",this);
   cutECmd->SetGuidance("Set cut values by RANGE for e-.");
   cutECmd->SetParameterName("range",true);
   cutECmd->SetDefaultValue(1.);
   cutECmd->SetDefaultUnit("mm");
-  cutECmd->AvailableForStates(Idle);
+  cutECmd->AvailableForStates(G4State_Idle);
 
 }
 

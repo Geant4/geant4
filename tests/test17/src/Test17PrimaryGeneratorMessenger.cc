@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test17PrimaryGeneratorMessenger.cc,v 1.2 2001-07-11 10:10:09 gunter Exp $
+// $Id: Test17PrimaryGeneratorMessenger.cc,v 1.3 2002-12-05 02:19:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@ Test17PrimaryGeneratorMessenger::Test17PrimaryGeneratorMessenger(Test17PrimaryGe
 { 
   DefaultCmd = new G4UIcmdWithoutParameter("/gun/setDefault",this);
   DefaultCmd->SetGuidance("set/reset the kinematic defined in PrimaryGenerator");
-  DefaultCmd->AvailableForStates(PreInit,Idle);
+  DefaultCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

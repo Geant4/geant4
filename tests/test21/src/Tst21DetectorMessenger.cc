@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst21DetectorMessenger.cc,v 1.1 2001-11-01 15:38:43 hpw Exp $
+// $Id: Tst21DetectorMessenger.cc,v 1.2 2002-12-05 02:19:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,7 +48,7 @@ Tst21DetectorMessenger::Tst21DetectorMessenger(Tst21DetectorConstruction * myDC)
   selMatCmd->SetParameterName("choice",true);
   selMatCmd->SetDefaultValue("Pb");
   selMatCmd->SetCandidates("Air Al Pb");
-  selMatCmd->AvailableForStates(PreInit,Idle);
+  selMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   myDetector->SelectMaterial(defParam="Pb");
 }

@@ -46,64 +46,64 @@ Test17DetectorMessenger::Test17DetectorMessenger(Test17DetectorConstruction * Te
   AbsMaterCmd = new G4UIcmdWithAString("/calor/setAbsMat",this);
   AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
   AbsMaterCmd->SetParameterName("choice",false);
-  AbsMaterCmd->AvailableForStates(Idle);
+  AbsMaterCmd->AvailableForStates(G4State_Idle);
   
   WorldMaterCmd = new G4UIcmdWithAString("/calor/setWorldMat",this);
   WorldMaterCmd->SetGuidance("Select Material of the World.");
   WorldMaterCmd->SetParameterName("wchoice",false);
-  WorldMaterCmd->AvailableForStates(Idle);
+  WorldMaterCmd->AvailableForStates(G4State_Idle);
 
   NumOfAbsCmd = new G4UIcmdWithAnInteger("/calor/setNumOfAbs",this);
   NumOfAbsCmd->SetGuidance("Set number of absorbers");
   NumOfAbsCmd->SetParameterName("Nabs",false);
-  NumOfAbsCmd->AvailableForStates(Idle);
+  NumOfAbsCmd->AvailableForStates(G4State_Idle);
   
   AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsThick",this);
   AbsThickCmd->SetGuidance("Set Thickness of the Absorber");
   AbsThickCmd->SetParameterName("SizeZ",false);  
   AbsThickCmd->SetRange("SizeZ>0.");
   AbsThickCmd->SetUnitCategory("Length");  
-  AbsThickCmd->AvailableForStates(Idle);
+  AbsThickCmd->AvailableForStates(G4State_Idle);
   
   AbsSizYZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsYZ",this);
   AbsSizYZCmd->SetGuidance("Set sizeYZ of the Absorber");
   AbsSizYZCmd->SetParameterName("SizeYZ",false);
   AbsSizYZCmd->SetRange("SizeYZ>0.");
   AbsSizYZCmd->SetUnitCategory("Length");
-  AbsSizYZCmd->AvailableForStates(Idle);
+  AbsSizYZCmd->AvailableForStates(G4State_Idle);
   
   AbsXposCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsXpos",this);
   AbsXposCmd->SetGuidance("Set X pos. of the Absorber");
   AbsXposCmd->SetParameterName("Xpos",false);
   AbsXposCmd->SetUnitCategory("Length");
-  AbsXposCmd->AvailableForStates(Idle);
+  AbsXposCmd->AvailableForStates(G4State_Idle);
   
   WorldXCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldX",this);
   WorldXCmd->SetGuidance("Set X size of the World");
   WorldXCmd->SetParameterName("WSizeX",false);
   WorldXCmd->SetRange("WSizeX>0.");
   WorldXCmd->SetUnitCategory("Length");
-  WorldXCmd->AvailableForStates(Idle);
+  WorldXCmd->AvailableForStates(G4State_Idle);
   
   WorldYZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldYZ",this);
   WorldYZCmd->SetGuidance("Set sizeYZ of the World");
   WorldYZCmd->SetParameterName("WSizeYZ",false);
   WorldYZCmd->SetRange("WSizeYZ>0.");
   WorldYZCmd->SetUnitCategory("Length");
-  WorldYZCmd->AvailableForStates(Idle);
+  WorldYZCmd->AvailableForStates(G4State_Idle);
   
   UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(Idle);
+  UpdateCmd->AvailableForStates(G4State_Idle);
       
   MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
   MagFieldCmd->SetGuidance("Define magnetic field.");
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false);
   MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(Idle);  
+  MagFieldCmd->AvailableForStates(G4State_Idle);  
 
 }
 

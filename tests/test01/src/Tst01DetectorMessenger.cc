@@ -44,7 +44,7 @@ Tst01DetectorMessenger::Tst01DetectorMessenger(Tst01DetectorConstruction * myDC)
   selDetCmd->SetParameterName("choice",true);
   selDetCmd->SetDefaultValue("SimpleBox");
   selDetCmd->SetCandidates("SimpleBox Honeycomb Assembly");
-  selDetCmd->AvailableForStates(PreInit,Idle);
+  selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   switchCmd = new G4UIcmdWithAString("/mydet/SwitchDetector",this);
   switchCmd->SetGuidance("Assign the selected geometry to G4RunManager.");
@@ -54,7 +54,7 @@ Tst01DetectorMessenger::Tst01DetectorMessenger(Tst01DetectorConstruction * myDC)
   switchCmd->SetParameterName("choice",true);
   switchCmd->SetDefaultValue(" ");
   switchCmd->SetCandidates("SimpleBox Honeycomb Assembly \" \"");
-  switchCmd->AvailableForStates(PreInit,Idle);
+  switchCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   selMatCmd = new G4UIcmdWithAString("/mydet/SelectMaterial",this);
   selMatCmd->SetGuidance("Select Material of the SimpleBox.");
@@ -62,7 +62,7 @@ Tst01DetectorMessenger::Tst01DetectorMessenger(Tst01DetectorConstruction * myDC)
   selMatCmd->SetParameterName("choice",true);
   selMatCmd->SetDefaultValue("Pb");
   selMatCmd->SetCandidates("Air Al Pb");
-  selMatCmd->AvailableForStates(PreInit,Idle);
+  selMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   // Select/Switch SCG inside Detector
 
@@ -72,7 +72,7 @@ Tst01DetectorMessenger::Tst01DetectorMessenger(Tst01DetectorConstruction * myDC)
   selCSGcmd->SetParameterName("choice",true);
   selCSGcmd->SetDefaultValue("Box");
   selCSGcmd->SetCandidates("Box Tubs Cons Sphere");
-  selCSGcmd->AvailableForStates(PreInit,Idle);
+  selCSGcmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   switchCSGcmd = new G4UIcmdWithAString("/mydet/SwitchCSG",this);
   switchCSGcmd->SetGuidance("Assign the selected CSG geometry to G4RunManager.");
@@ -86,7 +86,7 @@ Tst01DetectorMessenger::Tst01DetectorMessenger(Tst01DetectorConstruction * myDC)
   switchCSGcmd->SetParameterName("choice",true);
   switchCSGcmd->SetDefaultValue(" ");
   switchCSGcmd->SetCandidates("Box Tubs Cons Sphere \" \"");
-  switchCSGcmd->AvailableForStates(PreInit,Idle);
+  switchCSGcmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   // Select/Switch Boolean inside Detector
 
@@ -96,7 +96,7 @@ Tst01DetectorMessenger::Tst01DetectorMessenger(Tst01DetectorConstruction * myDC)
   selBoolCmd->SetParameterName("choice",true);
   selBoolCmd->SetDefaultValue("Intersection");
   selBoolCmd->SetCandidates("Intersection Union Subtraction");
-  selBoolCmd->AvailableForStates(PreInit,Idle);
+  selBoolCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   switchBoolCmd = new G4UIcmdWithAString("/mydet/SwitchBool",this);
   switchBoolCmd->
@@ -111,7 +111,7 @@ Tst01DetectorMessenger::Tst01DetectorMessenger(Tst01DetectorConstruction * myDC)
   switchBoolCmd->SetParameterName("choice",true);
   switchBoolCmd->SetDefaultValue(" ");
   switchBoolCmd->SetCandidates("Intersection Union Subtraction \" \"");
-  switchBoolCmd->AvailableForStates(PreInit,Idle);
+  switchBoolCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   // Default selections
 

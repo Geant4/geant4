@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst05DetectorMessenger.cc,v 1.4 2001-07-11 10:09:39 gunter Exp $
+// $Id: Tst05DetectorMessenger.cc,v 1.5 2002-12-05 02:19:04 asaim Exp $
 // ------------------------------------------------------------
 
 #include "Tst05DetectorConstruction.hh"
@@ -41,7 +41,7 @@ Tst05DetectorMessenger::Tst05DetectorMessenger(Tst05DetectorConstruction * myDC)
   selDetCmd->SetParameterName("choice",true);
   selDetCmd->SetDefaultValue("rod_place_asm");
   selDetCmd->SetCandidates("rod_place_asm CMSTracker");
-  selDetCmd->AvailableForStates(PreInit,Idle);
+  selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   switchCmd = new G4UIcmdWithAString("/mydet/SwitchDetector",this);
   switchCmd->SetGuidance("Assign the selected geometry to G4RunManager.");
@@ -50,7 +50,7 @@ Tst05DetectorMessenger::Tst05DetectorMessenger(Tst05DetectorConstruction * myDC)
   switchCmd->SetParameterName("choice",true);
   switchCmd->SetDefaultValue(" ");
   switchCmd->SetCandidates("rod_place_asm CMSTracker \" \"");
-  switchCmd->AvailableForStates(PreInit,Idle);
+  switchCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   myDetector->SelectDetector(defParam="rod_place_asm");
 }

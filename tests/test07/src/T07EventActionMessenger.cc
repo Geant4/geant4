@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: T07EventActionMessenger.cc,v 1.3 2001-07-11 10:09:44 gunter Exp $
+// $Id: T07EventActionMessenger.cc,v 1.4 2002-12-05 02:19:04 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@ T07EventActionMessenger::T07EventActionMessenger(T07EventAction* EvAct)
   DrawCmd->SetParameterName("choice",true);
   DrawCmd->SetDefaultValue("charged");
   DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(Idle);
+  DrawCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

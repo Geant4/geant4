@@ -44,7 +44,7 @@ Tst10DetectorMessenger::Tst10DetectorMessenger(Tst10DetectorConstruction * myDC)
   selDetCmd->SetParameterName("choice",true);
   selDetCmd->SetDefaultValue("Sphere");
   selDetCmd->SetCandidates("Sphere Box Cone Tube Hype Torus Para Trd");
-  selDetCmd->AvailableForStates(PreInit,Idle);
+  selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   myDetector->SelectDetector(defParam="Sphere");
 }

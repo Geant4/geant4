@@ -56,7 +56,7 @@ Tst18RunActionMessenger::Tst18RunActionMessenger(Tst18RunAction* run)
   //FileCmd->SetGuidance("   default = rdmex2.log ");
   //FileCmd->SetParameterName(" Input ",true);
   //FileCmd->SetDefaultValue("rdmex2.log");
-  //FileCmd->AvailableForStates(Idle);
+  //FileCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

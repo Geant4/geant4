@@ -41,42 +41,42 @@ Test17PhysicsListMessenger::Test17PhysicsListMessenger(Test17PhysicsList * List)
   cutGCmd->SetParameterName("cutG",false);
   cutGCmd->SetRange("cutG>0.");
   cutGCmd->SetUnitCategory("Length");
-  cutGCmd->AvailableForStates(Idle);
+  cutGCmd->AvailableForStates(G4State_Idle);
 
   cutECmd = new G4UIcmdWithADoubleAndUnit("/test17/cutE",this);
   cutECmd->SetGuidance("Set cut values by RANGE for e- e+.");
   cutECmd->SetParameterName("cutE",false);
   cutECmd->SetRange("cutE>0.");
   cutECmd->SetUnitCategory("Length");  
-  cutECmd->AvailableForStates(Idle);
+  cutECmd->AvailableForStates(G4State_Idle);
 
   cutPCmd = new G4UIcmdWithADoubleAndUnit("/test17/cutP",this);
   cutPCmd->SetGuidance("Set cut values by RANGE for proton and others.");
   cutPCmd->SetParameterName("cutP",false);
   cutPCmd->SetRange("cutP>0.");
   cutPCmd->SetUnitCategory("Length");    
-  cutPCmd->AvailableForStates(Idle);
+  cutPCmd->AvailableForStates(G4State_Idle);
 
   eCmd = new G4UIcmdWithADoubleAndUnit("/test17/cutGammaEnergy",this);
   eCmd->SetGuidance("Set cut values by ENERGY for secondary gamma.");
   eCmd->SetParameterName("cutenergy",false);
   eCmd->SetRange("cutenergy>0.");
   eCmd->SetUnitCategory("Energy");   
-  eCmd->AvailableForStates(Idle);
+  eCmd->AvailableForStates(G4State_Idle);
 
   eaCmd = new G4UIcmdWithADoubleAndUnit("/test17/cutAugerEnergy",this);
   eaCmd->SetGuidance("Set cut values by ENERGY for Auger electrons.");
   eaCmd->SetParameterName("cutAenergy",false);
   eaCmd->SetRange("cutAenergy>0.");
   eaCmd->SetUnitCategory("Energy");   
-  eaCmd->AvailableForStates(Idle);
+  eaCmd->AvailableForStates(G4State_Idle);
 
   rCmd = new G4UIcmdWithADoubleAndUnit("/test17/range",this);
   rCmd->SetGuidance("Display the RANGE of Electron for the current material.");
   rCmd->SetParameterName("range",false);
   rCmd->SetRange("range>0.");
   rCmd->SetUnitCategory("Length");     
-  rCmd->AvailableForStates(Idle);
+  rCmd->AvailableForStates(G4State_Idle);
 
   setMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/step/setMaxStep",this);
   setMaxStepCmd->SetGuidance("Set max. step length in the detector");

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst23PhysicsListMessenger.cc,v 1.1 2001-12-14 14:53:43 kurasige Exp $
+// $Id: Tst23PhysicsListMessenger.cc,v 1.2 2002-12-05 02:19:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -64,7 +64,7 @@ Tst23PhysicsListMessenger::Tst23PhysicsListMessenger(Tst23PhysicsList* myPL)
    cmdSetCut->SetParameter(dblParam);
    G4UIparameter * untParam = new G4UIparameter("Unit",'s',false);
    cmdSetCut->SetParameter(untParam);
-   cmdSetCut->AvailableForStates(PreInit,Idle);
+   cmdSetCut->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 Tst23PhysicsListMessenger::~Tst23PhysicsListMessenger()

@@ -39,7 +39,7 @@
 // 16 August 1999, F Lei, DERA UK
 // Adapted from a verson by Bill Lockman, SLAC, to whom all credits go:
 //
-// $Id: Tst18EventActionMessenger.cc,v 1.6 2001-07-11 10:10:13 gunter Exp $
+// $Id: Tst18EventActionMessenger.cc,v 1.7 2002-12-05 02:19:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,7 +63,7 @@ Tst18EventActionMessenger::Tst18EventActionMessenger(Tst18EventAction* EvAct)
   DrawCmd->SetParameterName("choice",true);
   DrawCmd->SetDefaultValue("all");
   DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(Idle);
+  DrawCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
