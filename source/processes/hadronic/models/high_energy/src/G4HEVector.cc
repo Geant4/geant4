@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEVector.cc,v 1.4 1999-12-15 16:42:01 gunter Exp $
+// $Id: G4HEVector.cc,v 1.5 2000-08-09 07:24:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -558,7 +558,11 @@ G4HEVector::CosAng( const G4HEVector & p )
      if( a != 0.0 ) 
        {
          a = (px*p.px + py*p.py + pz*p.pz)/a;
-         if( fabs(a) > 1.0 ) a<0.0 ? a=-1.0 : a=1.0;
+         if( fabs(a) > 1.0 ) 
+         {
+           if(a<0.0) a=-1.0;
+           else a=1.0;
+         }   
        }
      return a;
    }
@@ -570,7 +574,11 @@ G4HEVector::Ang(const G4HEVector & p )
      if( a != 0.0 ) 
        {
          a = (px*p.px + py*p.py + pz*p.pz)/a;
-         if( fabs(a) > 1.0 ) a<0.0 ? a=-1.0 : a=1.0;
+         if( fabs(a) > 1.0 ) 
+         {
+           if(a<0.0) a=-1.0;
+           else a=1.0;
+         } 
        }
      return acos(a);
    }      
@@ -692,14 +700,15 @@ G4HEVector::Exch( G4HEVector & p1)
 void 
 G4HEVector::Defs1( const G4HEVector & p1, const G4HEVector & p2)
    {
-     G4double pt2 = p1.px*p1.px + p1.py*p1.py;
+     G4double pt2 = p2.px*p2.px + p2.py*p2.py;
      if (pt2 > 0.0)
         {
           G4double ph, qx, qy, qz;
           G4double a     = sqrt(p2.px*p2.px + p2.py*p2.py + p2.pz*p2.pz);
           G4double cost  = p2.pz/a; 
           G4double sint  = 0.5 * (sqrt(fabs((1.-cost)*(1.+cost))) + sqrt(pt2)/a);
-          (p2.py < 0.) ? ph = 1.5*M_PI : ph = 0.5*M_PI;
+          if(p2.py < 0.) ph = 1.5*M_PI;
+          else ph = 0.5*M_PI;
           if( p2.px != 0.0) 
              ph = atan2(p2.py,p2.px);             
           qx =   cost*cos(ph)*p1.px - sin(ph)*p1.py
