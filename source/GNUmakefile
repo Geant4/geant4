@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.36 2002-08-20 09:43:39 gcosmo Exp $
+# $Id: GNUmakefile,v 1.37 2002-10-30 16:06:31 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -11,8 +11,6 @@
 # "gmake clean_all" removes all platforms installations.
 #
 # (The .o files(s) are made by implicit rules.)
-
-MAKEFLAGS= --no-print-directory
 
 SUBDIR1 = global particles processes geometry digits+hits
 SUBDIR2 = event tracking track materials run graphics_reps intercoms parameterisations readout
