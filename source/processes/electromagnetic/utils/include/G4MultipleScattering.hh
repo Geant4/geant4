@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.14 2003-02-05 12:28:18 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.15 2003-02-06 18:05:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------- G4MultipleScattering physics process --------------------------
@@ -128,7 +128,7 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
 
 			    
    G4double GetTransportMeanFreePath(
-                          G4double KineticEnergy,G4Material* material);
+                          G4double KineticEnergy,const G4Material* material);
      // Just a utility method to get the values of the transport
      //  mean free path . (It is not used inside the class.)
    
