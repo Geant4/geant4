@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc,v 1.5 2004-03-10 16:48:45 vnivanch Exp $
+// $Id: G4GammaConversionToMuons.cc,v 1.6 2004-08-05 11:16:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
@@ -57,25 +57,84 @@ G4GammaConversionToMuons::~G4GammaConversionToMuons() // (empty) destructor
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
+G4bool G4GammaConversionToMuons::IsApplicable(
+                                        const G4ParticleDefinition& particle)
+{
+   return ( &particle == G4Gamma::Gamma() );
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4GammaConversionToMuons::BuildPhysicsTable(const G4ParticleDefinition&)
 // Build cross section and mean free path tables
 {  //here no tables, just calling PrintInfoDefinition
    PrintInfoDefinition();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4GammaConversionToMuons::SetCrossSecFactor(G4double fac)
-// Set the factor to artificially increase the cross section
-{ CrossSecFactor=fac;
-  G4cout << "The cross section for GammaConversionToMuons is artificially "
-         << "increased by the CrossSecFactor=" << CrossSecFactor << G4endl;
+G4double G4GammaConversionToMuons::GetMeanFreePath(const G4Track& aTrack,
+                                              G4double, G4ForceCondition*)
+
+// returns the photon mean free path in GEANT4 internal units
+// (MeanFreePath is a private member of the class)
+
+{
+   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
+   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
+   G4Material* aMaterial = aTrack.GetMaterial();
+
+   if (GammaEnergy <  LowestEnergyLimit)
+     MeanFreePath = DBL_MAX;
+   else
+     MeanFreePath = ComputeMeanFreePath(GammaEnergy,aMaterial);
+
+   return MeanFreePath;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4GammaConversionToMuons::ComputeMeanFreePath(G4double GammaEnergy,
+                                                       G4Material* aMaterial)
+
+// computes and returns the photon mean free path in GEANT4 internal units
+{
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+  const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();
+
+  G4double SIGMA = 0 ;
+
+  for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
+  {
+    G4double AtomicZ = (*theElementVector)[i]->GetZ();
+    G4double AtomicA = (*theElementVector)[i]->GetA()/(g/mole);
+    SIGMA += NbOfAtomsPerVolume[i] *
+      ComputeCrossSectionPerAtom(GammaEnergy,AtomicZ,AtomicA);
+  }
+  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4GammaConversionToMuons::GetCrossSectionPerAtom(
+                                   const G4DynamicParticle* aDynamicGamma,
+                                         G4Element*         anElement)
+
+// gives the total cross section per atom in GEANT4 internal units
+{
+   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
+   G4double AtomicZ = anElement->GetZ();
+   G4double AtomicA = anElement->GetA()/(g/mole);
+   G4double crossSection =
+        ComputeCrossSectionPerAtom(GammaEnergy,AtomicZ,AtomicA);
+   return crossSection;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4double G4GammaConversionToMuons::ComputeCrossSectionPerAtom(
                          G4double Egam, G4double Z, G4double A)
+			 
 // Calculates the microscopic cross section in GEANT4 internal units.
 // Total cross section parametrisation from H.Burkhardt
 // It gives a good description at any energy (from 0 to 10**21 eV)
@@ -120,6 +179,15 @@ G4double G4GammaConversionToMuons::ComputeCrossSectionPerAtom(
   CrossSection=7./9.*sigfac*log(1.+WMedAppr*CorFuc*Eg);
   CrossSection*=CrossSecFactor; // increase the CrossSection by  (by default 1)
   return CrossSection;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4GammaConversionToMuons::SetCrossSecFactor(G4double fac)
+// Set the factor to artificially increase the cross section
+{ CrossSecFactor=fac;
+  G4cout << "The cross section for GammaConversionToMuons is artificially "
+         << "increased by the CrossSecFactor=" << CrossSecFactor << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

@@ -1,4 +1,4 @@
-$Id: History,v 1.119 2004-08-05 10:34:24 maire Exp $
+$Id: History,v 1.120 2004-08-05 11:17:15 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
      
 05 Aug 04: mma
-- suppress G4eplusAnnihilation.icc
+- suppress G4eplusAnnihilation.icc, G4GammaConversionToMuons.icc
      
 29 Jun 04: mma (stand-V06-02-00)
 - G4ComptonScattering.cc : improve totalCrossSection parametrization below

@@ -21,13 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.hh,v 1.6 2004-05-11 18:22:20 vnivanch Exp $
+// $Id: G4GammaConversionToMuons.hh,v 1.7 2004-08-05 11:16:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
 // -----------------------------------------------------------------------------
-
+//
+// 05-08-04: suppression of .icc file
+//
 // class description
 //
 // gamma ---> mu+ mu-
@@ -135,8 +137,6 @@ class G4GammaConversionToMuons : public G4VDiscreteProcess
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4GammaConversionToMuons.icc"
 
 #endif
 
