@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.69 2003-04-03 18:43:32 asaim Exp $
+// $Id: G4RunManager.cc,v 1.70 2003-04-03 18:56:54 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -215,12 +215,12 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
 
 void G4RunManager::RunInitialization()
 {
-  BuildPhysicsTables();
-
   currentRun = 0;
   if(userRunAction) currentRun = userRunAction->GenerateRun();
   if(!currentRun) currentRun = new G4Run();
   currentRun->SetRunID(runIDCounter);
+
+  BuildPhysicsTables();
 
   currentRun->SetDCtable(DCtable);
   G4SDManager* fSDM = G4SDManager::GetSDMpointerIfExist();
