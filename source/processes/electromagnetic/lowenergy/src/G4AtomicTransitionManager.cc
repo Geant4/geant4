@@ -173,24 +173,35 @@ G4AtomicShell* G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex) cons
   
   pos = shellTable.find(Z);
   
-  if (pos!= shellTable.end()){
-    
-    G4std::vector<G4AtomicShell*> v = (*pos).second;
-    
-    if (shellIndex<v.size()){
-      
-      return(v[shellIndex]);
-      
+  if (pos!= shellTable.end())
+    {
+      G4std::vector<G4AtomicShell*> v = (*pos).second;
+      if (shellIndex<v.size())
+	{
+	  return(v[shellIndex]);
+	}
+      else 
+	{
+	  size_t lastShell = v.size();
+	  G4cout << "G4AtomicTransitionManager::Shell - Z = " 
+		 << Z << ", shellIndex = " << shellIndex 
+		 << " not found; number of shells = " << lastShell << G4endl;
+	  //  G4Exception("G4AtomicTransitionManager:shell not found");
+	  if (lastShell > 0)
+	    {
+	      return v[lastShell - 1];
+	    }
+	  else
+	    {	    
+	      return 0;
+	    }
+	}
     }
-    else {
-      G4Exception("G4AtomicTransitionManager:shell not found");
+  else
+    {
+      G4Exception("G4AtomicTransitionManager:Z not found");
       return 0;
-    }
-  }
-  else{
-    G4Exception("G4AtomicTransitionManager:Z not found");
-    return 0;
-  } 
+    } 
 }
 
 // This function gives, upon Z and the Index of the initial shell where te vacancy is, 
