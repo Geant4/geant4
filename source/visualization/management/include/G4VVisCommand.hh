@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisCommand.hh,v 1.9 2001-02-06 23:36:51 johna Exp $
+// $Id: G4VVisCommand.hh,v 1.10 2001-03-28 14:11:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Base class for visualization commands - John Allison  9th August 1998
@@ -28,7 +28,7 @@ public:
   G4VVisCommand ();
   virtual ~G4VVisCommand ();
   static void SetVisManager (G4VisManager*);
-  static G4double G4VVisCommand::ValueOf(G4String unitName);
+  static G4double ValueOf(G4String unitName);
   static G4String ConvertToString(G4bool blValue);
   static G4String ConvertToString(G4double x, G4double y,
 				  const char * unitName);
