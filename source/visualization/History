@@ -1,4 +1,4 @@
-$Id: History,v 1.199 2002-10-16 11:47:12 johna Exp $
+$Id: History,v 1.200 2002-10-24 15:33:10 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,24 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+17th October 2002  John Allison (vis-V04-01-03 with...)
+- Coworking tags are:
+    geant4/source/tracking       traj02
+    geant4/source/intercoms      intercoms-V04-00-04
+    geant4/source/graphics_reps  greps-V04-01-00
+    geant4/source/digits+hits    hits-traj02
+- More changes for AddThis(const G4VTrajectory&) and (const G4VHit&).
+- Minor corrections to warning messages, etc.
+- Improved end of run behaviour for non-post-processing graphics
+  systems by changing false to true in G4VisManager::EndOfRun
+  fpSceneHandler->SetMarkForClearingTransientStore(true);
+- Further corrections/improvements in OpenGLWin32 - not yet complete.
+
+17th October 2002  John Allison (vis-V04-01-02 with intercoms-V04-01-00)
+- Added two new pure virtual functions to G4VGraphicsScene:
+    AddThis(const G4VTrajectory&)
+    AddThis(const G4VHit&)
 
 16th October 2002  John Allison  (vis-traj01 co-works with tracking tag traj01)
 - Tag for changes in G4VTrajectory, etc. (raytracer-V04-00-00).
