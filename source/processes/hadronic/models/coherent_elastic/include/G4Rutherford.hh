@@ -6,6 +6,7 @@
 #include "G4HadFinalState.hh"
 #include "G4VCrossSectionDataSet.hh"
 #include "G4HadProjectile.hh"
+#include <vector>
 
 class G4Rutherford : public G4HadronicInteraction, public G4VCrossSectionDataSet
 {
@@ -81,9 +82,9 @@ class G4Rutherford : public G4HadronicInteraction, public G4VCrossSectionDataSet
    G4bool game;
    G4double theMaxCosTh;
    
-   vector<G4double> theRuther;
-   vector<G4double> theValue;
-   vector<G4double> integral;
+   std::vector<G4double> theRuther;
+   std::vector<G4double> theValue;
+   std::vector<G4double> integral;
    G4double total;
 
    
