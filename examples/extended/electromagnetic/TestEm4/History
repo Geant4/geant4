@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2000-11-24 11:15:45 stesting Exp $
+$Id: History,v 1.6 2000-12-07 13:02:11 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+07-12-00  mma (testem4-V02-00-03 & testem-noHist)
+          remove hbook histograms: GNUmakefile,runAction,eventAction
+				   
+06-12-00  mma (testem4-V02-00-02 & testem-withHist)
+          update of init.mac for new vis commands.
+	  G4UItcsh in the main()
+	  				
 25th November 2000 Steve O'Neale (tagset210)
 - Update test outputs for Change in energy cut table printout (cuts not calculated) 
 - After 50000 events the seeds are not the same as for Aug 28th.

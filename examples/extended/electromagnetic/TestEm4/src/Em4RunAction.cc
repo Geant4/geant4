@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em4RunAction.cc,v 1.4 2000-01-20 17:27:57 maire Exp $
+// $Id: Em4RunAction.cc,v 1.5 2000-12-07 13:02:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,10 +23,6 @@
 
 #include "Randomize.hh"
 
-#ifndef G4NOHIST
- #include "CLHEP/Hist/HBookFile.h"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em4RunAction::Em4RunAction()
@@ -42,28 +38,12 @@ Em4RunAction::Em4RunAction()
 Em4RunAction::~Em4RunAction()
 {
   delete runMessenger;
-
-#ifndef G4NOHIST 
- // Delete HBOOK stuff
-  delete [] histo;
-  delete hbookManager;
-#endif  
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Em4RunAction::bookHisto()
-{
-#ifndef G4NOHIST 
-  // init hbook
-  hbookManager = new HBookFile("TestEm4.histo", 68);
-
-  // book histograms
-  histo[0] = hbookManager->histogram("total energy deposit in C6F6 (MeV)"
-                                   , 100,0.,10.);
-#endif      
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -99,12 +79,6 @@ void Em4RunAction::EndOfRunAction(const G4Run* aRun)
     { HepRandom::showEngineStatus();
       HepRandom::saveEngineStatus("endOfRun.rndm");      
     }
-    
-#ifndef G4NOHIST     
-  // Write histogram file 
-  hbookManager->write();
-#endif
-            
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em4EventAction.cc,v 1.3 2000-01-20 17:27:56 maire Exp $
+// $Id: Em4EventAction.cc,v 1.4 2000-12-07 13:02:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,10 +26,6 @@
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
-
-#ifndef G4NOHIST
-  #include "CLHEP/Hist/HBookFile.h"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -65,10 +61,6 @@ void Em4EventAction::EndOfEventAction( const G4Event* evt)
     G4cout << " Energy deposit: " 
            << G4BestUnit(TotalEnergyDeposit,"Energy") << G4endl;
 	   
-#ifndef G4NOHIST
-  Em4Run->GetHisto(0)->accumulate(TotalEnergyDeposit/MeV);
-#endif
-
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
   if(pVVisManager)

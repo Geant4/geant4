@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em4RunAction.hh,v 1.3 2000-01-20 17:27:55 maire Exp $
+// $Id: Em4RunAction.hh,v 1.4 2000-12-07 13:02:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,11 +24,6 @@
 class G4Run;
 class Em4RunActionMessenger;
 
-#ifndef G4NOHIST
-  class HepTupleManager;
-  class HepHistogram;
-#endif
-
 class Em4RunAction : public G4UserRunAction
 {
   public:
@@ -41,10 +36,6 @@ class Em4RunAction : public G4UserRunAction
 
     void  SetRndmFreq(G4int    val) {saveRndm = val;}
     G4int GetRndmFreq()             {return saveRndm;}
-    
-#ifndef G4NOHIST    
-    HepHistogram* GetHisto(G4int id) {return histo[id];}
-#endif
         
   private:
     void bookHisto();
@@ -52,11 +43,6 @@ class Em4RunAction : public G4UserRunAction
   private:  
     Em4RunActionMessenger* runMessenger;
     G4int saveRndm;
-    
-#ifndef G4NOHIST         
-    HepTupleManager* hbookManager;    
-    HepHistogram* histo[1];
-#endif         
 };
 
 #endif
