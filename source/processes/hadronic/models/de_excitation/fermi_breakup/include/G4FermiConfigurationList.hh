@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiConfigurationList.hh,v 1.2 2003-11-20 09:46:23 jwellisc Exp $
+// $Id: G4FermiConfigurationList.hh,v 1.3 2004-05-09 16:49:07 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -41,7 +41,10 @@ public:
   G4FermiConfigurationList();
 
   ~G4FermiConfigurationList()
-  {};
+  {
+    std::for_each(Configurations.begin(),Configurations.end(),
+                  DeleteConfiguration()); 
+  }
   
 private:
   G4FermiConfigurationList(const G4FermiConfigurationList &right);
@@ -66,6 +69,16 @@ private:
   std::vector<G4double> NormalizedWeights;
   
   std::vector<G4FermiConfiguration*> Configurations;
+
+  struct DeleteConfiguration
+  {
+    template<typename T>
+    void operator()(const T* ptr) const
+    {
+      delete ptr;
+    }
+  };
+
 
 };
 
