@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScatteringx.icc,v 1.8 2001-08-23 08:42:52 urban Exp $
+// $Id: G4MultipleScatteringx.icc,v 1.9 2001-08-27 11:08:32 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    ------- G4MultipleScatteringx physics process ------
@@ -32,6 +32,7 @@
 // 18-05-01 V.Ivanchenko Clean up against Linux ANSI compilation 
 // 23-08-01, new angle and z distribution,energy dependence reduced,
 //           Store,Retrieve methods commented out temporarily, L.Urban
+// 27-08-01, bugfix in AlongStepDoIt, L.Urban
 //
 //---------------------------------------------------------------
 
@@ -204,12 +205,16 @@ G4VParticleChange* G4MultipleScatteringx::AlongStepDoIt(
   { 
      if(geomPathLength <= z1)
      {
-       truePathLength = -fTransportMeanFreePath*log(1.-geomPathLength/fTransportMeanFreePath) ;
+       if(geomPathLength < fTransportMeanFreePath)
+         truePathLength = -fTransportMeanFreePath*log(1.-geomPathLength/fTransportMeanFreePath) ;
+       else
+         truePathLength = range ;
+
        lambda1 = -1. ;
      }
      else
      {
-       if(1.-(geomPathLength-z1)/(cth1*lambda1)>0.) 
+       if((geomPathLength-z1)/(cth1*lambda1) < 1.) 
        {
          truePathLength = 0.5*tLast-lambda1*log(1.-(geomPathLength-z1)/(cth1*lambda1)) ;
        }
