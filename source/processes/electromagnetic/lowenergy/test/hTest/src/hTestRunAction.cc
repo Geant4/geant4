@@ -194,7 +194,7 @@ void hTestRunAction::SaveToTuple(G4String parname,G4double val,G4double defval)
 #ifndef G4NOHIST
 void hTestRunAction::bookHisto()
 {
-  G4cout << "Histo booked for the particle: " << hTestPrimaryGeneratorAction::GetPrimaryName() << endl;
+  G4cout << "Histo booked for the particle: " << hTestPrimaryGeneratorAction::GetPrimaryName() << G4endl;
 
   // init hbook
   hbookManager = new HBookFile(histName, 68);
