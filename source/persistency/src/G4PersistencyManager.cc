@@ -1,4 +1,4 @@
-// $Id: G4PersistencyManager.cc,v 1.5 2002-12-04 11:39:56 gcosmo Exp $
+// $Id: G4PersistencyManager.cc,v 1.6 2002-12-04 11:54:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // File: G4PersistencyManager.cc
@@ -45,8 +45,10 @@ void G4PersistencyManager::SetVerboseLevel(int v)
            << G4endl;
   }
   if (   EventIO() != 0 )   EventIO()->SetVerboseLevel(m_verbose);
+#ifndef WIN32
   if (   HepMCIO() != 0 )   HepMCIO()->SetVerboseLevel(m_verbose);
   if ( MCTruthIO() != 0 ) MCTruthIO()->SetVerboseLevel(m_verbose);
+#endif
   if (     HitIO() != 0 )     HitIO()->SetVerboseLevel(m_verbose);
   if (   DigitIO() != 0 )   DigitIO()->SetVerboseLevel(m_verbose);
   if (TransactionManager() != 0) TransactionManager()->SetVerboseLevel(m_verbose);
@@ -112,12 +114,13 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
   }
 
   G4std::string file;
+  G4std::string obj;
 
 #ifndef WIN32
 
   // Store HepMC event
   //
-  G4std::string obj = "HepMC";
+  obj = "HepMC";
   HepMC::GenEvent* hepevt = 0;
   if ( f_pc->CurrentStoreMode(obj) == kOn ) {
 
@@ -206,6 +209,8 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
     }
   }
 
+#ifndef WIN32
+
   // Store this G4EVENT
   //
   if ( hepevt!=0 || mctevt!=0 || evt!=0 ) {
@@ -223,8 +228,14 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
       st3 = false;
     }
   }
-
+  
   G4bool st = sthep && stmct && st1 && st2 && st3;
+
+#else
+
+  G4bool st = st1 && st2;
+
+#endif
 
   if ( st ) {
     TransactionManager()->Commit();
