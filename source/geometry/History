@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2000-05-12 15:12:36 gcosmo Exp $
+$Id: History,v 1.15 2000-11-17 12:50:42 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -98,33 +98,50 @@ Jan 19, 2000  Gabriele Cosmo                geometry-V01-00-00
   Collecting subtags: field-V01-00-00, geomsolids-V01-00-00,
                       geommng-V01-00-00 and geomvol-V01-00-00.
 
+Changes are now documented in the individual sub-category History files.
+------------------------------------------------------------------------
+
+Nov  10,  99   John Apostolakis              geometry-V00-01-01
+
+   geomsolids-V00-01-03
+      which includes the following sub-tags:
+        geom-solids-csg-01-00-02-cand
+        geom-solid-bool-V00-01-03b
+        breps-V00-01-00
+        stepinterface-V00-01-00
+
+   geomvol-01-01-01b
+
+   geommng-V00-01-01
+
+   field-V00-01-02    
+
 ===============================================================================
   Geant4 1.0  , 1st STL-based release. 
 ===============================================================================
 
-May  21,  98   John Apostolakis              geometry-01-00-05
-
+May  21,  99   John Apostolakis              geometry-01-00-05
 - Tagged.
 
-May  20,  98   S.Giani, S.Magni
+May  20,  99   S.Giani, S.Magni
 
   Fixes in BREP  Line, & (PCone, FCylindrical/FConical surf) respectively
   For more details see solids/BREP/History
 
   Also see changes mentioned in solids/CSG/History for CSG Pcon/Pgon
 
-May  19,  98   Frank  Behner
+May  19,  99   Frank  Behner
   
   Volumes: Further minor fixes for STL.
 
-May  12,  98   John Apostolakis              geometry-01-00-04
+May  12,  99   John Apostolakis              geometry-01-00-04
 
 - Tagged.
 
-May  12,  98   Simone Giani
+May  12,  99   Simone Giani
   Fixes to G4BREPSolidPolyhedra and G4FPlane.
 
-May  10,  98   Frank  Behner
+May  10,  99   Frank  Behner
   Changes in RW use for compatibility with RW/STL in
         management/src/G4PhysicalVolumeStore.cc  
         management/src/G4LogicalVolumeStore.cc
@@ -135,7 +152,7 @@ May   7,  98   John Apostolakis
   Changed G4Navigator to issue warning in the case of small inaccuracies
    & cause fatal exception only for large deviations.
 
-May   3,  98   John Apostolakis              geometry-01-00-03
+May   3,  99   John Apostolakis              geometry-01-00-03
 
  Minor fixes 
     In CSG solids:  Cons & Tubs  minor, and in PCon/PGon 
@@ -153,7 +170,7 @@ Apr  15,  99   John Allison
    Added -I$(G4BASE)/intercoms/include to BREPS, Boolean abd CSG GNUmakefiles
             in preparation for move of G4VGraphicsScene to intercoms.
 
-Mar  19,  98   John Apostolakis              geometry-01-00-01
+Mar  19,  99   John Apostolakis              geometry-01-00-01
 
  Category tag using:
    solids:       [tag geomsolids-01-00-01]
@@ -161,7 +178,7 @@ Mar  19,  98   John Apostolakis              geometry-01-00-01
    management:   [tag geommng-01-00-02 ]
    magneticfield [tag field-01-00-03]
 
-Mar  19,  98   John Apostolakis
+Mar  19,  99   John Apostolakis
 
  Summary of significant changes in sub-categories/sub-directories
    management:   [tag geommng-01-00-02 ]
@@ -169,17 +186,17 @@ Mar  19,  98   John Apostolakis
 
    [....  Add information here .... ? ]
 
-Jan  15,  98   John Apostolakis   
+Jan  15,  99   John Apostolakis   
 
    Fixes in CSG solids (Cons by V.Grichine, CSG Pcone+Pgon by D.C.Williams)
 
-Jan  15,  98   Simone Giani      ( rec by JA. )
+Jan  15,  99   Simone Giani      ( rec by JA. )
    Fixes in the creation of Smart Voxels: 
 
    Less memory intensive and much more performant at initialisation.
    No worse, but a little faster at tracking time.  (G4SmartVoxelHeader)
 
-Jan  10,  98   John Apostolakis   ( geometry-01-00-01 to be done)
+Jan  10,  99   John Apostolakis   ( geometry-01-00-01 to be done)
                                     geometry as in geant4-00-patch2
 
    Fixes in BREPs (Pcone, Pgon, ...)  see solids/BREPS/History
