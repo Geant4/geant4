@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc,v 1.10 2001-11-29 19:01:36 vnivanch Exp $
+// $Id: G4BremsstrahlungParameters.cc,v 1.11 2001-11-29 22:59:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -161,7 +161,6 @@ void G4BremsstrahlungParameters::LoadData()
   G4DataVector* data;
   G4double ener = 0.0;
   G4double sum = 0.0;
-  size_t nZ  = activeZ.size();
   energies   = new G4DataVector(); 
   data       = new G4DataVector(); 
   G4int z    = 0;
