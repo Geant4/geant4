@@ -127,7 +127,8 @@ int main(int argc ,char ** argv)
   G4UImanager* UI = G4UImanager::GetUIpointer();  
   if (session)   // Define UI session for interactive mode.
     { 
-      G4cout<<" UI session starts ..."<< G4endl;    
+      G4cout<<" UI session starts ..."<< G4endl;
+      UI->ApplyCommand("/control/execute VisualisationMacro.mac");    
       session->SessionStart();
       delete session;
     }

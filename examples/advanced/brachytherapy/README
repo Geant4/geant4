@@ -38,7 +38,7 @@ setup for analysis with AIDA 3.0/Anaphe 5.0.5 for user with account     |
 on lxplus:
                                                                         |
 setenv G4ANALYSIS_USE  1
-setenv G4ANALYSIS_BUILD  1                                              |
+                                                                        |
 source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
 setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/    |
 
@@ -55,7 +55,8 @@ setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/    |
   $G4WORDIR/bin/Linux-g++/Brachy LeipzigSourceMacro.mac  
                                                                         |
 - Interative mode:                                                      
-  3) $G4WORDIR/bin/Linux-g++/Brachy                                     |
+  3) $G4WORDIR/bin/Linux-g++/Brachy
+     The VisualisationMacro.mac is loaded automatically                 |
 
 -->possible different configurations for interactive mode:              |
 
@@ -79,28 +80,32 @@ Phantom:                                                                |
 idle>/phantom/selectMaterial  materialName
                                                                         |
 - batch mode: executable Brachy macroFile.mac 
-  a macro is provided as example: IodiumSourceMacro.mac                 |
+  macros are provided as example: IodiumSourceMacro.mac,
+  IridiumSourceMacro.mac, LeipzigSourceMacro.mac                        |
   (ex. $G4WORKDIR/bin/Linux-g++/Brachy IodiumSourceMacro.mac)   
 ------------------------------------------------------------------------
 ----> 4. Simulation output                                              |
 
 if ANALYSIS_USE = 1 in the set-up, the output is brachytherapy.hbk      | 
+
  It contains:
  1)1Dhistogram with the primary particle energy                         |
  2)2Dhistogram with the distribution of energy in the plane 
-   (x,z,energy) containing the source (YThickness = 1. mm)              |
- 3)Ntuple with the 3D energy deposit in the Phantom                    
+   (x,z,energy) containing the source (YThickness = 1. mm)   
+ 3)1Dhistogram with the energy deposit along the X axis in the plane    |
+   containing the source.
+ 4)Ntuple with the 3D energy deposit in the Phantom                    
                                                                         |
 Units:   the energy deposit is in MeV;
-         x, y, z in mm for both 2D-histogram and ntuple                 |
+         x, y, z in mm for histograms and ntuple                        |
 ------------------------------------------------------------------------
 ----> 5.Visualisation                                                   | 
 
-a macro is provided ad example of visulisation:  VisualisationMacro.mac |
-run $G4WORKDIR/bin/Linux-g++/Brachy VisualisationMacro.mac
+a macro is provided ad example of visualisation:  VisualisationMacro.mac|
+
 ------------------------------------------------------------------------
 
 for comments, advices, doubts and questions: guatelli@ge.infn.it
 for more info http://www.ge.infn.it/geant4/examples/index.html
 
-last modified: Susanna Guatelli 18/11/2003
+last modified: Susanna Guatelli 11/3/2004

@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyEventAction.cc,v 1.17 2003-05-27 08:37:54 guatelli Exp $
+// $Id: BrachyEventAction.cc,v 1.18 2004-03-11 15:38:42 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyEventAction.hh"
@@ -73,14 +73,17 @@ BrachyEventAction::~BrachyEventAction()
 
 void BrachyEventAction::BeginOfEventAction(const G4Event*)
 {
+  /*
   G4SDManager* sensitiveDetectorManager = G4SDManager::GetSDMpointer();
   if(hitsCollectionID == -1)
      hitsCollectionID = 
            sensitiveDetectorManager->GetCollectionID("PhantomHitsCollection");
+  */
 }
 
 void BrachyEventAction::EndOfEventAction(const G4Event* evt)
 {  
+  /*
   if(hitsCollectionID < 0) return; 
 
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
@@ -120,6 +123,8 @@ void BrachyEventAction::EndOfEventAction(const G4Event* evt)
 #endif 	       
 	}
     }
+  */
+
   // extract the trajectories and draw them ...
 
   if (G4VVisManager::GetConcreteInstance())
