@@ -1,4 +1,4 @@
-$Id: History,v 1.56 2002-11-09 07:26:40 yhajime Exp $
+$Id: History,v 1.57 2002-11-15 12:56:25 yhajime Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,10 @@ committal in the CVS repository !
 
 
 =======
+15 November 2002, Hajime Yoshida (interfaces-V04-01-00)
+- basic/src/G4UIArrayStrings.cc is now working for "konsole" type termcap.
+	by Koichi Murakami
+
 09 November 2002, Hajime Yoshida (interfaces-V04-00-05)
 - G4UIGainServer.cc uses socklen_t as before. It must work for Solaris CC and HP.
 - test/G4cout_test01 updated. An example of setCoutDestination(UI) by a user.
