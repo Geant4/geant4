@@ -5,7 +5,7 @@
 
                       Category History file
                       ---------------------
-his file should be used by G4 developers and category coordinators
+This file should be used by G4 developers and category coordinators
 to briefly summarize all major modifications introduced in the code
 and keep track of all category-tags.
 It DOES NOT substitute the  CVS log-message one should put at every
@@ -15,7 +15,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 17, 99  Y.Morita (persistency-V00-01-06)
+November 19, 99  Y.Morita (persistency-V00-01-06)
+- bug fixes in G4PersistentEventMan.cc and G4PersistentRunMan.cc
+
+November 18, 99  Y.Morita
+- Use absolute path in GNUmakefile to include right dependencies for liblist
+- bug fixes in G4PBooleanSolid, G4PersistentEventMan
+
+November 17, 99  Y.Morita
 - Move schema header files from tmp to schema/include (requires new config)
 
 November 16, 99  Y.Morita
