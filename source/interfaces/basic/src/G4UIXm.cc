@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIXm.cc,v 1.8 2002-11-06 08:12:37 barrand Exp $
+// $Id: G4UIXm.cc,v 1.9 2003-05-30 11:05:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -365,7 +365,7 @@ void G4UIXm::keyHandler (
  Widget a_widget
 ,XtPointer a_tag
 ,XEvent* a_event
-,Boolean* a_dispatch
+,Boolean*
 )
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -382,7 +382,7 @@ void G4UIXm::keyHandler (
 }
 /***************************************************************************/
 void clearButtonCallback (
- Widget a_widget
+ Widget
 ,XtPointer a_tag
 ,XtPointer
 )
