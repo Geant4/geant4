@@ -9,7 +9,7 @@ if [ `uname -n | grep rsplus` ]; then
 ulimit -d 400000
 ulimit -s 100000
 ulimit -m 100000
-if [ X$REFTREE = Xref ]; then
+if [ X$REFTREE = Xprod ]; then
 echo "Nothing set for TMPDIR!"
 else
 echo
@@ -23,7 +23,7 @@ fi
 
 if [ `uname -n | grep hpplus` ]; then
 echo "Nothing set for limit!"
-if [ X$REFTREE = Xref ]; then
+if [ X$REFTREE = Xprod ]; then
 echo
 export TMPDIR=/afs/cern.ch/user/s/stesting/stt/tmpdir
 else
@@ -41,7 +41,7 @@ fi
 if [ `uname -n | grep sgmedia` ]; then
 ulimit -s 200000
 ulimit -m 400000
-if [ X$REFTREE = Xref ]; then
+if [ X$REFTREE = Xprod ]; then
 echo
 export TMPDIR=/afs/cern.ch/user/s/stesting/stt/tmpdir
 else

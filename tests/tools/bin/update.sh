@@ -1,6 +1,6 @@
 #! /bin/sh
-# $Id: update.sh,v 1.2 1999-01-20 10:28:27 allison Exp $
-# Edit stt-ref.sdb and execute.
+# $Id: update.sh,v 1.3 1999-07-20 09:55:25 stesting Exp $
+# Edit stt-prod.sdb or stt-dev.sdb and execute.
 # Usage: update.sh [-n]
 
 # Some checks :

@@ -9,10 +9,10 @@
 #########set -x
 
 # Execute stt members specifc setup first :
-if [ `pwd | grep ref+` ]; then
-. /afs/cern.ch/sw/geant4/stt/ref+/src/geant4/tests/tools/bin/specific.sh
+if [ `pwd | grep dev` ]; then
+. /afs/cern.ch/sw/geant4/stt/dev/src/geant4/tests/tools/bin/specific.sh
 else
-. /afs/cern.ch/sw/geant4/stt/ref/src/geant4/tests/tools/bin/specific.sh
+. /afs/cern.ch/sw/geant4/stt/prod/src/geant4/tests/tools/bin/specific.sh
 fi
 
 if [ -z "$G4SYSTEM" ]; then

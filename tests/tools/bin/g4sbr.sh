@@ -18,9 +18,9 @@ ACTARG2=$6
 ACTARG3=$7
 NONINCREMENTAL=$8
 ##############################################
-# We have agreement about tag name: tag_name+
+# Specify *this* version by a suitable name.
 ##############################################
-PREVTAG=`echo $REFTAG|cut -d + -f1`
+THISTAG=`echo $REFTAG|cut -d + -f1`
 
 if [ X$TREE = X -o X$DEBOPT = X -o X$REFTAG = X ]
 then
@@ -33,13 +33,13 @@ fi
 
 if [ X$TREE = Xd -o X$TREE = XD ]
 then
-  REFTREE=ref+
+  REFTREE=dev
 elif [ X$TREE = Xp -o X$TREE = XP ]
 then
-  REFTREE=ref
+  REFTREE=prod
 else
   echo
-  echo "Usage: First argument is dev (uses ref+/) or prod (uses ref/)."
+  echo "Usage: First argument is dev or prod."
   exit
 fi
 
@@ -83,7 +83,7 @@ ${REFTAG}
 EOF
 
 ######################################################################
-# Prepare in ref[+] if not incremental: moving stt/, clear bin|lib|tmp
+# Prepare if not incremental: create new stt and link, clear bin|lib|tmp
 ######################################################################
 if [ X$NONINCREMENTAL = X ]
 then
@@ -92,14 +92,22 @@ NEXT_NUMBER=$[`ls -c1 gmake.log.*|sort|tail -1|cut -d "." -f3`+1]
 mv gmake.log gmake.log.${NEXT_NUMBER}
 else
 cd ${G4WORKDIR}
-echo REMOVE
-mv stt stt.${PREVTAG}
+if [ -d stt.${THISTAG} ]
+then
+echo stt.${THISTAG} already exists - aborting.
+exit
+fi
+echo CREATE stt.${THISTAG} and RESET stt symbolic link.
+mkdir stt.${THISTAG}
+rm -f stt
+ln -s stt.${THISTAG} stt
+echo 'REMOVE bin/* lib/* tmp/*'
 rm -r bin/* lib/* tmp/*
 fi
 ########################################################
 
 ################################
-# Build&run all in ref[+]
+# Build&run all
 ################################
 cd ${G4WORKDIR}
 . ${G4INSTALL}/tests/tools/bin/limit.sh

@@ -127,7 +127,7 @@ else
 #echo "Finished $1 in $G4WORKDIR `date`"
 
     diff -w $1.out $dir/$1.out > $dir/$1.diff 2> $dir/$1.diff_err
-    diff -w $dir/$1.out /afs/cern.ch/sw/geant4/stt/ref+/$G4SYSTEM/debug/stt/$G4SYSTEM/$1.out > $dir/$1.RW_debug.diff 2> $dir/$1.RW_debug.diff_err
+    diff -w $dir/$1.out /afs/cern.ch/sw/geant4/stt/dev/$G4SYSTEM/debug/stt/$G4SYSTEM/$1.out > $dir/$1.RW_debug.diff 2> $dir/$1.RW_debug.diff_err
     #cat $dir/$1.diff
   fi
 

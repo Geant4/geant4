@@ -30,7 +30,7 @@ do
 #    flavour=OPTIM
 #fi
 
-if [ `echo $devprod | grep ref+` ]
+if [ `echo $devprod | grep dev` ]
 then
   devprod=dev
 else

@@ -8,10 +8,10 @@
 ####################################################
 #
 
-if [ `pwd | grep ref+` ]; then
-  REF=ref+
+if [ `pwd | grep /dev/` ]; then
+  REF=dev
 else
-  REF=ref
+  REF=prod
 fi
 
 if [ $G4DEBUG ]; then

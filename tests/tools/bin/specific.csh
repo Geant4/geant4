@@ -11,10 +11,10 @@
 # Guy Barrand barrand@lal.in2p3.fr
 ####################################################
 
-if ( `pwd | grep ref+` != "" ) then
-  setenv REF ref+
+if ( `pwd | grep /dev/` != "" ) then
+  setenv REF dev
 else
-  setenv REF ref
+  setenv REF prod
 endif
 
 if ( $?G4DEBUG ) then
