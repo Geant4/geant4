@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2000-05-30 08:30:29 mora Exp $
+$Id: History,v 1.8 2000-06-06 08:47:38 mora Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun  6, 2000 M. Verderi & P. Mora de Freitas
+- fixed compilation errors with HP-aCC for the files G4RegularXrayTRmodel.cc,
+  G4GamDistrXrayTRmodel.cc and G4FoamXrayTRmodel.cc.
 
 May 30, 2000 M. Verderi & P. Mora de Freitas
 

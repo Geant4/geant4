@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FoamXrayTRmodel.cc,v 1.1 2000-05-16 13:43:49 grichine Exp $
+// $Id: G4FoamXrayTRmodel.cc,v 1.2 2000-06-06 08:47:46 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -75,9 +75,9 @@ G4FoamXrayTRmodel::GetStackFactor( G4double energy,
   G4complex Hb = 1.0/Cb ;
   G4complex H  = Ha*Hb ;
 
-  G4complex F1 = ( 0.5*(1+Qa)*(1+H) - Ha - Qa*Hb )/(1-H) ;
+  G4complex F1 = ( 0.5*(1+Qa)*(1.0+H) - Ha - Qa*Hb )/(1.0-H) ;
 
-  G4complex F2 = (1-Ha)*(Qa-Ha)*Hb/(1-H)/(Q-H) ;
+  G4complex F2 = (1.0-Ha)*(Qa-Ha)*Hb/(1.0-H)/(Q-H) ;
 
   F2          *= pow(Q,fPlateNumber) - pow(H,fPlateNumber) ;
 
