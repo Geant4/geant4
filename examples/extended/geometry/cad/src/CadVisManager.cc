@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: CadVisManager.cc,v 1.1 2002-06-20 10:00:56 gcosmo Exp $
+// $Id: CadVisManager.cc,v 1.2 2002-11-26 08:28:07 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------------
 
@@ -35,6 +35,7 @@
 #include "G4DAWNFILE.hh"
 #include "G4GAGTree.hh"
 #include "G4HepRepFile.hh"
+#include "G4HepRep.hh"
 #include "G4RayTracer.hh"
 
 CadVisManager::CadVisManager () {}
@@ -45,6 +46,7 @@ void CadVisManager::RegisterGraphicsSystems ()
   RegisterGraphicsSystem (new G4DAWNFILE);
   RegisterGraphicsSystem (new G4GAGTree);
   RegisterGraphicsSystem (new G4HepRepFile);
+  RegisterGraphicsSystem (new G4HepRep);
   RegisterGraphicsSystem (new G4RayTracer);
 
   if (fVerbose > 0)
