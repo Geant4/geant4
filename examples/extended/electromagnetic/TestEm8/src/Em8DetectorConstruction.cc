@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.cc,v 1.8 2003-04-17 07:19:58 grichine Exp $
+// $Id: Em8DetectorConstruction.cc,v 1.9 2003-04-17 13:05:19 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -482,7 +482,7 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
     //      G4ThreeVector(0.,0.,fStartZ+1.2*fDetThickness),
     //             "RadSlice",fLogicRadSlice,
     //               physiWorld,false,0);
-    
+    /*
   for(i=0;i<fModuleNumber;i++)
   {
     //   rModule = fStartR + fDetThickness + fDetGap + 
@@ -528,7 +528,7 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
     //                        fLogicDetSlice,physiWorld,false,i); 
   }                                            
   G4cout<<G4endl ;
-
+    */
   G4Tubs* solidElectrode = new G4Tubs("Electrode",0.,AbsorberRadius,
                                        fElectrodeThick/2.,0.,twopi); 
                           
@@ -605,8 +605,8 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
 
   // Parameterisation
 
-   G4VXrayTRmodel* pTRModel = new G4IrregularXrayTRmodel(logicRadiator,
-            fRadThickness,fGasGap);
+  //   G4VXrayTRmodel* pTRModel = new G4IrregularXrayTRmodel(logicRadiator,
+  //        fRadThickness,fGasGap);
 
   //  G4VXrayTRmodel* pTRModel = new G4FoamXrayTRmodel(logicRadiator,
   //                                    fRadThickness,fGasGap);

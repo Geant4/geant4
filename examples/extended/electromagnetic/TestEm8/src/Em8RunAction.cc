@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8RunAction.cc,v 1.6 2001-07-11 09:57:56 gunter Exp $
+// $Id: Em8RunAction.cc,v 1.7 2003-04-17 13:04:20 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -844,11 +844,11 @@ void Em8RunAction::FillNbOfSteps(G4double ns)
 
 void Em8RunAction::FillEn(G4double En)
 {
-#ifndef G4NOHIST
+  // #ifndef G4NOHIST
   G4double bin ;
   G4int ibin;
 
-  if(histo2)
+  //  if(histo2)
   {
     entryEn += 1. ;
  
@@ -860,9 +860,9 @@ void Em8RunAction::FillEn(G4double En)
       ibin= (G4int)bin ;
       distEn[ibin] += 1. ;
     }
-    histo2->accumulate(En/keV) ; // was /MeV
+    // histo2->accumulate(En/keV) ; // was /MeV
   }
-#endif
+  // #endif
 }
 
 ////////////////////////////////////////////////////////////////////////////
