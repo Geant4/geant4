@@ -1,4 +1,4 @@
-$Id: README,v 1.5 1999-08-24 04:37:55 stanaka Exp $
+$Id: README,v 1.6 1999-08-27 07:57:12 johna Exp $
 
 Below are some steps for making GEANT4 with visualization run on
 rsplus.cern.ch.
@@ -85,7 +85,7 @@ Now, here are the visualization-specific actions.
    a) "gmake clean" IN THE APPROPRIATE SUBDIRECTORY - E.G.,
       (cd visualization/OpenGL/; gmake clean; gmake)
    b) TOUCH AND RECOMPILE G4VisManager - E.G.
-      (cd visualization/; touch management/src/G4VisManager.cc; make global)
+      (cd visualization/; touch management/src/G4VisManager.cc; gmake)
    *******************************************************************
 
 
