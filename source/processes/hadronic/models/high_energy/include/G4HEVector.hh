@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEVector.hh,v 1.3 1999-12-15 14:52:54 gunter Exp $
+// $Id: G4HEVector.hh,v 1.4 1999-12-15 16:42:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -108,9 +108,13 @@ class G4HEVector
 
    G4String getParticleName(G4int code, G4int baryon);
  
-   void setMomentum( G4ParticleMomentum mom ); 
+   void setMomentum( const G4ParticleMomentum mom ); 
 
-   void setMomentumAndUpdate( G4ParticleMomentum mom );
+   void setMomentum( const G4ParticleMomentum * mom ); 
+
+   void setMomentumAndUpdate( const G4ParticleMomentum mom );
+
+   void setMomentumAndUpdate( const G4ParticleMomentum * mom );
 
    const G4ParticleMomentum getMomentum() const ;
 

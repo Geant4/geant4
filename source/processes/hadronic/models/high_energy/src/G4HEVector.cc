@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEVector.cc,v 1.3 1999-12-15 14:52:57 gunter Exp $
+// $Id: G4HEVector.cc,v 1.4 1999-12-15 16:42:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -86,7 +86,7 @@ G4String G4HEVector::getParticleName(G4int aCode, G4int aBaryon)
 
 
 void 
-G4HEVector::setMomentum( G4ParticleMomentum mom ) 
+G4HEVector::setMomentum(const G4ParticleMomentum mom ) 
    {
       px  = mom.x();
       py  = mom.y();
@@ -95,11 +95,31 @@ G4HEVector::setMomentum( G4ParticleMomentum mom )
    }
 
 void 
-G4HEVector::setMomentumAndUpdate( G4ParticleMomentum mom )
+G4HEVector::setMomentum(const G4ParticleMomentum * mom ) 
+   {
+      px  = mom->x();
+      py  = mom->y();
+      pz  = mom->z(); 
+      return; 
+   }
+
+void 
+G4HEVector::setMomentumAndUpdate( const G4ParticleMomentum mom )
    {
      px = mom.x();
      py = mom.y();
      pz = mom.z();
+     energy        = sqrt(mass*mass + px*px + py*py + pz*pz);
+     kineticEnergy = G4std::max(0.,energy - mass);
+     return;
+   }
+
+void 
+G4HEVector::setMomentumAndUpdate( const G4ParticleMomentum * mom )
+   {
+     px = mom->x();
+     py = mom->y();
+     pz = mom->z();
      energy        = sqrt(mass*mass + px*px + py*py + pz*pz);
      kineticEnergy = G4std::max(0.,energy - mass);
      return;
