@@ -1,4 +1,4 @@
-$Id: History,v 1.103 2001-02-04 20:27:59 johna Exp $
+$Id: History,v 1.104 2001-02-04 21:56:04 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,6 +25,7 @@ History file for visualization category
 ---------------------------------------
 
 4th February 2001  John Allison
+- /vis/viewer commands no longer update vis manager's view parameters.
 - Added "auto refresh" to view parameters.
 - Added "default" view parameters to viewers.
 - Made OpenGL viewers "auto refresh" by default.
