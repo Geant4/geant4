@@ -1,14 +1,14 @@
 #
 # ------ GNU/WIN32 CYGNUS ------   !!! not supported !!!
-#                                  cygnus b20 with cygwin1.dll 1.1.5 patch
-#                                  Windows 95 4.00.1111
+#                                  Cygnus CygWin - gcc-2.95.3
+#                                  Windows 2000
 #
-# Stefano Agostinelli - IST Group, Genova
+# Stefano Agostinelli (agos001@pn.itnet.it) - IST Group, Genova
 #
 ifeq ($(G4SYSTEM),WIN32-g++)
   CXX       := g++
   GNU_GCC = 1
-  CXXFLAGS  := -pipe -fno-for-scope -DGNU_GCC
+  CXXFLAGS  := -ansi -pipe -fno-for-scope -DGNU_GCC
   ifdef G4OPTIMISE
     CXXFLAGS  += -O
     FCFLAGS   := -O
@@ -40,13 +40,10 @@ ifeq ($(G4SYSTEM),WIN32-g++)
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
   OIVFLAGS  += -I$(OIHOME)/include 
-  ifdef G4USE_OSPACE
-    CPPFLAGS += -DOS_LINUX_2 -DOS_NEW_CHECK -DOS_STL_ASSERT
-    CPPFLAGS += -DG4USE_OSPACE -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
-    CPPFLAGS += -I$(OSPACE_BASE_DIR)/ospace/std -I$(OSPACE_BASE_DIR)
-  endif
+  G4USE_STD_NAMESPACE := yes
+  CPPFLAGS += -DG4USE_STD_NAMESPACE
   ifdef G4ODBMS
-    G4DDLX_FLAGS += -D__STL_CLASS_PARTIAL_SPECIALIZATION -Dstd="" -DG4std=""
+    G4DDLX_FLAGS += -DG4std=""
   endif
 
   define build-granular-shared-lib
