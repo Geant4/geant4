@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.hh,v 1.12 2003-05-15 16:00:59 guatelli Exp $
+// $Id: Tst50RunAction.hh,v 1.13 2003-05-17 11:32:34 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,35 +49,23 @@ class Tst50RunAction : public G4UserRunAction
   public:
   void Set_Trans(G4String);
   G4bool Get_flag();
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
+  void BeginOfRunAction(const G4Run*);
+  void EndOfRunAction(const G4Run*);
   void Trans_number();
   void Back_number();
-   void gamma_transmitted();
+  void gamma_transmitted();
   G4int GetRun_ID ();
+
 private:
   G4double number;
   G4double numberB;
-  G4double numberTransp;
-  G4int  numberRay;
-  G4int  numberPh;
-  G4int  numberCo; 
   G4int numberEvents;
-  G4int numberPair;
   G4int runID;
-  G4bool Foil;
   G4double fg;
   Tst50PrimaryGeneratorAction* p_Primary;
   Tst50DetectorConstruction* p_Detector;
   G4bool flag;
   Tst50RunMessenger* p_messenger;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
-
-
-
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

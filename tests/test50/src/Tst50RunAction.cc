@@ -21,27 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.cc,v 1.14 2003-05-15 16:00:59 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.15 2003-05-17 11:32:48 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "Tst50RunAction.hh"
+#include "G4ios.hh"
 #include <math.h>
 #include "G4Run.hh"
-#include "Tst50RunMessenger.hh"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
-#include "G4ios.hh"
+#include "Tst50RunAction.hh"
+#include "Tst50RunMessenger.hh"
 #include "Tst50PrimaryGeneratorAction.hh"
 #include "Tst50DetectorConstruction.hh"
 #ifdef G4ANALYSIS_USE
 #include "Tst50AnalysisManager.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 Tst50RunAction::Tst50RunAction()
 {
  p_messenger= new Tst50RunMessenger(this);
@@ -72,11 +70,7 @@ void Tst50RunAction::BeginOfRunAction(const G4Run* aRun)
   numberEvents=0;
   number=0;
   numberB=0;
-  numberTransp=0;
-  numberRay=0;
-  numberPh=0; 
-  numberCo=0;
-  numberPair=0;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -96,59 +90,45 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
 {
   G4RunManager* runManager = G4RunManager::GetRunManager();
   p_Primary =
-(Tst50PrimaryGeneratorAction*)(runManager->GetUserPrimaryGeneratorAction());
-G4double energy= p_Primary->GetInitialEnergy();
- G4String particle_name= p_Primary->GetParticle();
- 
-
- p_Detector =
-(Tst50DetectorConstruction*)(runManager->GetUserDetectorConstruction());
-
-G4String name=p_Detector->GetMaterialName(); 
-G4double density =p_Detector->GetDensity();
-G4double thickness =p_Detector->GetTargetThickness();
+    (Tst50PrimaryGeneratorAction*)(runManager->GetUserPrimaryGeneratorAction());
+  G4double energy= p_Primary->GetInitialEnergy();
+  G4String particle_name= p_Primary->GetParticle();
+  p_Detector =
+    (Tst50DetectorConstruction*)(runManager->GetUserDetectorConstruction());
+  G4String name=p_Detector->GetMaterialName(); 
+  G4double density =p_Detector->GetDensity();
+  G4double thickness =p_Detector->GetTargetThickness();
 
   if (G4VVisManager::GetConcreteInstance())
     {
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
     }
+
   numberEvents=aRun->GetNumberOfEvent();
   
   if (particle_name =="gamma")
     {
- G4double trans=(fg/numberEvents); 
- 
- G4double tran_coeff= -(log(trans))/(thickness*density);
- G4double error= -(log(sqrt(trans)))/(thickness*density);
-
-#ifdef G4ANALYSIS_USE
-Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
- analysis -> attenuation_coeffiecient(runID,energy/MeV,tran_coeff/(cm2/g));
-#endif
-
-
+      G4double trans=(fg/numberEvents); 
+      G4double tran_coeff= -(log(trans))/(thickness*density);
+      Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
+      analysis -> attenuation_coeffiecient(runID,energy/MeV,tran_coeff/(cm2/g));
     }
  
   if(flag)
     {
- if (particle_name =="e-" || particle_name =="e+")
-    {
-      
-      G4double ft=(number/numberEvents) ;
-      G4double fb=(numberB/numberEvents);
-      G4double fa=(((numberEvents-(numberB+number)))/numberEvents);
-      G4double trans=(fg/numberEvents); 
-
- Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
- analysis-> trasmission(runID,energy/MeV,ft,fb);
-
-}}}
+     if (particle_name =="e-" || particle_name =="e+")
+      {
+       G4double ft=(number/numberEvents) ;
+       G4double fb=(numberB/numberEvents);
+       Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
+       analysis-> trasmission(runID,energy/MeV,ft,fb);
+      }
+    }
+}
 
 void  Tst50RunAction::Set_Trans(G4String newValue)
 {
   if (newValue=="on"){flag=true;} else {flag=false;};
-
-
 } 
 
 

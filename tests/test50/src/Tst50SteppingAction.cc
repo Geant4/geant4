@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.30 2003-05-15 16:00:59 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.31 2003-05-17 11:32:54 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,30 +63,17 @@ void Tst50SteppingAction::UserSteppingAction(const G4Step* Step)
 Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
 #endif
   
-G4int evno = eventaction->GetEventno() ;
-G4int run_ID= runaction-> GetRun_ID();
-G4bool flag=runaction-> Get_flag();
+  G4int evno = eventaction->GetEventno() ;
+  G4int run_ID= runaction-> GetRun_ID();
+  G4bool flag=runaction-> Get_flag();
 
-G4double  initial_energy= p_Primary->GetInitialEnergy();
+  G4double  initial_energy= p_Primary->GetInitialEnergy();
  
-G4int IDnow = run_ID+1000*evno+10000*(Step->GetTrack()->GetTrackID())+
+  G4int IDnow = run_ID+1000*evno+10000*(Step->GetTrack()->GetTrackID())+
           100000000*(Step->GetTrack()->GetParentID()); 
 
-G4double  KinE = Step->GetTrack()->GetKineticEnergy();
-G4String PrimaryName= p_Primary->GetParticle(); 
-
-
-  G4double  XIMD=0.;
-  G4double  YIMD=0.;
-  G4double  ZIMD=1.;
-
-
-  G4double  XPos = Step->GetTrack()->GetPosition().x();
-  G4double  YPos = Step->GetTrack()->GetPosition().y();
-  G4double  ZPos = Step->GetTrack()->GetPosition().z();
-
-  G4double  XMoD = Step->GetTrack()->GetMomentumDirection().x();
-  G4double  YMoD = Step->GetTrack()->GetMomentumDirection().y();
+  G4double  KinE = Step->GetTrack()->GetKineticEnergy();
+  G4String PrimaryName= p_Primary->GetParticle(); 
   G4double  ZMoD = Step->GetTrack()->GetMomentumDirection().z();
     
 // ---------- energy of primary transmitted particles-----------// 
@@ -97,8 +84,7 @@ G4String PrimaryName= p_Primary->GetParticle();
       if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target")
 	{
 	  if(Step->GetTrack()->GetNextVolume()->GetName() == "World" ) 
-	    {
-	      G4double energy=(KinE/initial_energy);
+	    { 
 	      if(0 == Step->GetTrack()->GetParentID() ) 
 		{ if(IDnow != IDold) 
 		  {
@@ -111,7 +97,7 @@ G4String PrimaryName= p_Primary->GetParticle();
 		      {
 			runaction->Back_number(); 
 		      }
-		    G4double initial=initial_energy/MeV;
+		    
 		    if( (initial_energy == KinE) &&( ZMoD==1.))
 		      {
 			runaction->gamma_transmitted();

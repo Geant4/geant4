@@ -12,7 +12,7 @@
 G4SYSTEM = Linux-g++
 compiler = gcc-3.2
 
-no ANALYSIS 
+ANALYSIS=1
 
 --------> Modular Physics <----------
 
@@ -53,7 +53,41 @@ the directory test_input_files
  
 --------> Output <----------
 
-test50_output.txt
+test50.xml
+Output format: DataPoint 
+
+In the following section measure units for each particular test
+
+1) CSDA range and Stopping Power test for e-,p 
+
+ <item key="Name" value="CSDA Range test"/>
+ <dataPoint>
+ <measurement value="1.00000000e-02"/> --> initial particle energy in MeV
+ <measurement value="3.40865506e-04"/> --> CSDA range in g/cm2
+ </dataPoint>
+
+ <item key="Name" value="Stopping Power test"/>
+ <dataPoint>
+ <measurement value="1.00000000e-02"/> --> initial particle energy in MeV
+ <measurement value="1.68486933e+01"/> --> Stopping Power in MeV*(cm2/g)
+ </dataPoint>
+
+2)-3) gamma attenuation coefficient and gamma process' cross section 
+
+ <item key="Name" value="Gamma attenuation coefficient test"/>
+ <dataPoint>
+ <measurement value="1.00000000e-03"/> --> initial gamma energy in MeV
+ <measurement value="1.20433458e+03"/> --> attenuation coefficient in (cm2/g)
+ </dataPoint>
+
+4)-5) e-  backscattering and e+, e- transmission
+
+<item key="Name" value="Transmission test"/>
+<dataPoint>
+<measurement value="1.00000000e-03"/> -> particle initial energy in MeV
+<measurement value="0.00000000e+00"/> -> transmitted particle/NumberOfEvents
+<measurement value="1.60000000e-01"/> -> backscattered particles/NumberOfEvents
+</dataPoint>
 
 
 --------> Test description <----------
