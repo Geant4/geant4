@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: T07VisManager.hh,v 1.1 1999-01-08 16:35:10 gunter Exp $
+// $Id: T07VisManager.hh,v 1.2 1999-06-23 09:51:19 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,6 +31,8 @@
 #ifndef T07VisManager_h
 #define T07VisManager_h 1
 
+#ifdef G4VIS_USE
+
 #include "G4VisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -46,5 +48,7 @@ private:
   void RegisterGraphicsSystems ();
 
 };
+
+#endif
 
 #endif
