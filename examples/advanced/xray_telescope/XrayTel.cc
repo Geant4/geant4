@@ -43,7 +43,7 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-//#include "G4UIGAG.hh"
+#include "G4UIGAG.hh"
 #include "G4UIterminal.hh"
 #include "G4UIXm.hh" 
 #include "XrayTelDetectorConstruction.hh"
@@ -95,8 +95,8 @@ int main( int argc, char** argv )
   // get the pointer to the User Interface manager 
   G4UImanager *UI = G4UImanager::GetUIpointer();  
   if ( argc==1 ){
-    //    G4UIsession * session = new G4UIGAG;
-    G4UIsession * session = new G4UIterminal;
+    G4UIsession * session = new G4UIGAG;
+    //G4UIsession * session = new G4UIterminal;
     session->SessionStart();
     delete session;
   }

@@ -12,8 +12,8 @@
 // * MODULE:            XrayTelPrimaryGeneratorActionMessenger.cc       *
 // * -------                                                            *
 // *                                                                    *
-// * Version:           0.4                                             *
-// * Date:              06/11/00                                        *
+// * Version:           0.5                                             *
+// * Date:              08/11/00                                        *
 // * Author:            R Nartallo                                      *
 // * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands           *
 // *                                                                    *
@@ -22,10 +22,12 @@
 // CHANGE HISTORY
 // --------------
 //
-// 06.11.2000 R.Nartallo
-// - First implementation of xray_telescope Physics list
+// 06.11.2000 R. Nartallo
+// - First implementation of PrimaryGeneratorMessenger
 // - Based on Chandra and XMM models by S Magni and F Lei
 // 
+// 08.11.2000 R. Nartallo
+// - Removed line "delete ErndmCmd" from destructor
 //
 // **********************************************************************
 
@@ -72,7 +74,6 @@ XrayTelPrimaryGeneratorMessenger::XrayTelPrimaryGeneratorMessenger(XrayTelPrimar
 XrayTelPrimaryGeneratorMessenger::~XrayTelPrimaryGeneratorMessenger()
 {
   delete RndmCmd;
-  delete ErndmCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

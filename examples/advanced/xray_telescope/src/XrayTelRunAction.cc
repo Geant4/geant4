@@ -12,8 +12,8 @@
 // * MODULE:            XrayTelRunAction.cc                             *
 // * -------                                                            *
 // *                                                                    *
-// * Version:           0.4                                             *
-// * Date:              06/11/00                                        *
+// * Version:           0.5                                             *
+// * Date:              08/11/00                                        *
 // * Author:            R Nartallo                                      *
 // * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands           *
 // *                                                                    *
@@ -22,10 +22,13 @@
 // CHANGE HISTORY
 // --------------
 //
-// 06.11.2000 R.Nartallo
-// - First implementation of xray_telescope Physics list
+// 06.11.2000 R. Nartallo
+// - First implementation of RunAction
 // - Based on Chandra and XMM models
-// 
+//
+// 08.11.2000 R. Nartallo
+// - Modified "/vis/****" commands to the G4UIManager in 
+//   BeginOfRunAction and EndOfRunAction
 //
 // **********************************************************************
 
@@ -63,8 +66,7 @@ void XrayTelRunAction::BeginOfRunAction(const G4Run* aRun)
 
   if (G4VVisManager::GetConcreteInstance()) {
     G4UImanager* UI = G4UImanager::GetUIpointer(); 
-    UI->ApplyCommand("/vis/clear/view");
-    UI->ApplyCommand("/vis/draw/current");
+    UI->ApplyCommand("/vis/scene/notifyHandlers");
   } 
 
   EnteringEnergy->clear();
@@ -75,8 +77,9 @@ void XrayTelRunAction::BeginOfRunAction(const G4Run* aRun)
 
 void XrayTelRunAction::EndOfRunAction(const G4Run* )
 {
-  if (G4VVisManager::GetConcreteInstance())
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
+  if (G4VVisManager::GetConcreteInstance()) {
+     G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
+  }
 
   G4std::ofstream outscat("detector.hist", ios::app);
 

@@ -11,8 +11,8 @@
 # *                                                                 * #
 # *                    GEANT 4 xray_telescope advanced example      * #
 # *                                                                 * #
-# * MACRO:             dawn.mac                                     * #
-# * ------             demostrates the DAWN DRIVER                  * #
+# * MACRO:             opengl.mac                                   * #
+# * ------             demostrates the OGLIX DRIVER                 * #
 # *                                                                 * #
 # * Version:           0.5                                          * #
 # * Date:              08/11/00                                     * #
@@ -23,53 +23,35 @@
 #                                                                     #
 #  NOTES                                                              #
 #  -----                                                              #
-#  USAGE:  Idle> /control/execute dawn.mac                            #
-#          prompt> XrayTel dawn.mac                                   #
+#  USAGE:  Idle> /control/execute opengl.mac.                         #
+#          prompt> XrayTel opengl.mac                                 #
 #                                                                     #
-#  REQUIRED PLATFORMS & SOFTWARE:   DAWN (version 3.85 or after)      #
-#                                   Ghostview                         #
+#  REQUIRED PLATFORMS & SOFTWARE: OpenGL, e.g. Mesa                   #
 #                                                                     #
 #  ENVIRONMENT VARIABLES (C-MACROS) FOR INSTALLATION:                 #
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
-#    % setenv G4VIS_USE_DAWN               1                          #
-#    % setenv G4VIS_USE_DAWNFILE           1                          #
-#    % setenv G4VIS_BUILD_DAWN_DRIVER      1                          #
-#    % setenv G4VIS_BUILD_DAWNFILE_DRIVER  1                          #
+#    % setenv OGLHOME opengl_home_dir                                 #
+#    (where opengl_home_dir is e.g. /usr/local/Mesa-3.2.1             #
 #                                                                     #
-#  Addional Notes:                                                    #
-#                                                                     #
-#  * You may have to set the command path to the directory where      #
-#    a Fukui Renderer DAWN is installed, e.g., to                     #
-#    "/afs/cern.ch/sw/contrib/DAWN/3.85/bin/Linux/"                   #
-#    at CERN.                                                         #
-#                                                                     #
-#  * Set as follows to skip DAWN GUI:                                 #
-#    % setenv G4DAWNFILE_VIEWER "dawn -d"                             # 
-#                                                                     #
-#  * In order to make the generated PostScript file "g4_XX.eps"       #
-#    printable, append the "showpage" PostScript command to the file. #
-#    You can do it with the 4th page of the DAWN GUI panel            #
-#    or by editing the file by hand.                                  #
+#    % setenv G4VIS_USE_OPENGLX          1                            #
+#    % setenv G4VIS_BUILD_OPENGLX_DRIVER 1                            #
 #                                                                     #
 #######################################################################
 #                                                                     #
 #   CHANGE HISTORY                                                    #
 #   --------------                                                    #
 #                                                                     #
-#   17.10.2000 S. Tanaka                                              #
-#   - First implementation                                            #
-#                                                                     #
 #   08.11.2000 R. Nartallo                                            #
-#   - Modified version                                                #
+#   - First implementation                                            #
 #                                                                     #
 #######################################################################
 
 # Set verbose level
 /run/verbose 2
 
-# Invoke the DAWNFILE driver
-/vis/open DAWNFILE
+# Invoke the OGLIX driver 
+/vis/open OGLIX
 
 # Create a new scene 
 /vis/scene/create
@@ -80,13 +62,16 @@
 # Add the world volume to the current scene
 /vis/scene/add/volume
 
+# Add all trajectories to the current scene
+/vis/scene/add/trajectories
+
 # Set drawing style
 /vis/viewer/set/style surface
-#/vis/viewer/set/style wireframe
 
 # Set camera
 /vis/camera/reset
 /vis/camera/viewpoint 25 0
+/vis/camera/spin     360 1
 
 # Visualize one event added to the current scene
 # * Command "/vis/scene/notifyHandlers" is written in 
@@ -111,7 +96,10 @@
 /gun/energy 0.5 MeV
 
 # Set number of particles and start
-/run/beamOn 10000
+/run/beamOn 1000
+
+
+
 
 
 

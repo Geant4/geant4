@@ -1,0 +1,11 @@
+/tracking/storeTrajectory 1
+/gun/particle proton
+/gun/energy 0.5 MeV
+/run/beamOn 10000
+
+
+
+
+
+
+

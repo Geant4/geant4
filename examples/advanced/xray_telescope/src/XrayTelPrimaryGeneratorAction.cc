@@ -23,7 +23,7 @@
 // --------------
 //
 // 06.11.2000 R.Nartallo
-// - First implementation of xray_telescope Physics list
+// - First implementation of PrimaryGeneratorAction
 // - Based on Chandra and XMM models by S Magni and F Lei
 // 
 //
