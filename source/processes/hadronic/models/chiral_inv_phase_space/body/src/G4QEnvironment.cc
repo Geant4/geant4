@@ -23,7 +23,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.89 2004-03-29 09:03:21 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.90 2004-04-06 12:49:13 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -7203,7 +7203,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       }
       G4LorentzVector r4M=curHadr->Get4Momentum(); // Real 4-momentum of the hypernucleus
       G4double reM=r4M.m();                    // Real mass of the hypernucleus
-      G4int rlPDG = hPDG-nL*1000000-nSP*1000999-nSM*999000;// Subtract Lamb/Sig from Nucl
+      G4int rlPDG = hPDG-nL*1000000-nSP*1000999-nSM*1999000;// Subtract Lamb/Sig from Nucl
       G4int    sPDG=3122;                      // Prototype for the Hyperon PDG
       G4double MLa=mLamb;                      // Prototype for one Hyperon decay
       if(nSP||nSM)
