@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.hh,v 1.13 2002-05-17 09:18:13 grichine Exp $
+// $Id: G4PAIonisation.hh,v 1.14 2002-05-20 16:30:06 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -173,6 +173,7 @@ class G4PAIonisation : public G4VPAIenergyLoss
     static G4PhysicsLogVector* fProtonEnergyVector ;
     G4PhysicsLogVector* fLambdaVector ;
     G4PhysicsLogVector* fdNdxCutVector ;
+    G4PhysicsLogVector* fdEdxVector ;
 
     // cut in range
 

@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.cc,v 1.24 2002-05-17 09:18:14 grichine Exp $
+// $Id: G4PAIonisation.cc,v 1.25 2002-05-20 16:31:49 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // **************************************************************
 //
+// 18.05.02 V. Grichine, delta-electrons > cut
 // 08.11.01 particleMass becomes a local variable (mma)
 // 17.09.01 migration of Materials to pure STL (mma)
 // 28.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
@@ -106,6 +107,7 @@ G4PAIonisation::~G4PAIonisation()
    }
    if ( fLambdaVector)  delete fLambdaVector;
    if ( fdNdxCutVector) delete fdNdxCutVector;
+   if ( fdEdxVector) delete fdEdxVector;
    
    if( fPAItransferBank )    
    {
@@ -233,7 +235,7 @@ G4PAIonisation::BuildPAIonisationTable()
       theLossTable->clearAndDestroy();
       delete theLossTable;
    }
-   theLossTable = new G4PhysicsTable();
+   theLossTable = new G4PhysicsTable(1);
    
    if( fPAItransferBank )    
    {
@@ -242,15 +244,14 @@ G4PAIonisation::BuildPAIonisationTable()
    }
    fPAItransferBank = new G4PhysicsTable(TotBin) ;
      
-   //create physics vector then fill it ....
-
-   G4PhysicsLogVector* aVector = new G4PhysicsLogVector( LowestKineticEnergy, 
-							 HighestKineticEnergy,
-							 TotBin               ) ;
-
+   //create physics dE/dx vector then fill it ....
    
+   if(fdEdxVector) delete fdEdxVector ;
+   fdEdxVector = new G4PhysicsLogVector( LowestKineticEnergy, 
+					 HighestKineticEnergy,
+					 TotBin               ) ;
 
-   DeltaCutInKineticEnergyNow = 100*keV ; // From gas detector experience
+   //   DeltaCutInKineticEnergyNow = 100*keV ; // From gas detector experience
 
    Tmin = fSandiaPhotoAbsCof[0][0] ;      // low energy Sandia interval
 
@@ -274,10 +275,11 @@ G4PAIonisation::BuildPAIonisationTable()
       massRatio = electron_mass_c2/proton_mass_c2 ;
 
       Tmax = 2.*electron_mass_c2*bg2/(1.+2.*gamma*massRatio+massRatio*massRatio) ;
+      // G4cout<<"proton Tkin = "<<LowEdgeEnergy/MeV<<" MeV"
+      // <<" Tmax = "<<Tmax/MeV<<" MeV"<<G4endl;
+      // Tkin = DeltaCutInKineticEnergyNow ;
 
-      Tkin = DeltaCutInKineticEnergyNow ;
-
-      if ( DeltaCutInKineticEnergyNow > Tmax)         // was <
+      // if ( DeltaCutInKineticEnergyNow > Tmax)         // was <
       {
          Tkin = Tmax ;
       }
@@ -293,10 +295,10 @@ G4PAIonisation::BuildPAIonisationTable()
 	    
       ionloss = protonPAI.GetMeanEnergyLoss() ;   //  total <dE/dx>
 
-   // G4cout<<"ionloss = "<<ionloss*cm/keV<<" keV/cm"<<endl ;
-   // G4cout<<"n1 = "<<protonPAI.GetIntegralPAIxSection(1)*cm<<" 1/cm"<<endl ;
-	    // G4cout<<"protonPAI.GetSplineSize() = "<<
-            // protonPAI.GetSplineSize()<<G4endl ;
+      // G4cout<<"ionloss = "<<ionloss*cm/keV<<" keV/cm"<<endl ;
+      // G4cout<<"n1 = "<<protonPAI.GetIntegralPAIxSection(1)*cm<<" 1/cm"<<endl ;
+      //   G4cout<<"protonPAI.GetSplineSize() = "<<
+      //     protonPAI.GetSplineSize()<<G4endl<<G4endl ;
 
       G4PhysicsFreeVector* transferVector = new 
                              G4PhysicsFreeVector(protonPAI.GetSplineSize()) ;
@@ -309,13 +311,13 @@ G4PAIonisation::BuildPAIonisationTable()
       }  
       if ( ionloss <= 0.)  ionloss = DBL_MIN ;
 
-      aVector->PutValue(i,ionloss) ;
+      fdEdxVector->PutValue(i,ionloss) ;
 
       fPAItransferBank->insertAt(i,transferVector) ;
 
             // delete[] transferVector ;
     }                                        // end of Tkin loop
-    theLossTable->insert(aVector);
+    theLossTable->insert(fdEdxVector);
                                               // end of material loop
    // G4cout<<"G4PAIonisation::BuildPAIonisationTable() have been called"<<G4endl ;
    // G4cout<<"G4PAIonisation::BuildLossTable() have been called"<<G4endl ;

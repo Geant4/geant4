@@ -36,6 +36,7 @@
 // 06.01.00 V.Grichine, modifications in GetConstraints and GetMenaFreePath
 // 11.07.00 V.Grichine, modifications in GetMeanFreePath
 // 12.07.00 V.Grichinw, GetFreePath and GetdEdx were added
+// 18.05.02 V.Grichinw, Creation of delta-electrons > cut
 
 
 ////////////////////////////////////////////////////////////////////
@@ -47,7 +48,7 @@ inline G4double
                                               G4Material *aMaterial    ) 
 {  
   size_t index = aMaterial->GetIndex() ;
-
+  return DBL_MAX ;
 //  G4cout<<"G4PAIonisation::GetConstraints is called"<<G4endl ;
 
   if(index != fMatIndex)
