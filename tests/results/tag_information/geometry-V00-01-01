@@ -1,0 +1,20 @@
+  A new tag of the whole geometry category is in place. It is called 
+
+     geometry-V00-01-01
+
+and it includes all the new code except the Voxel drawer.  That will be
+included in a sub-category tag called   "geommng-V00-01-02".
+
+  It includes the following sub-tags:
+
+   geomsolids-V00-01-03
+      [ geom-solids-csg-01-00-02-cand
+        geom-solid-bool-V00-01-03b
+        breps-V00-01-00
+        stepinterface-V00-01-00 ]
+
+   geomvol-01-01-01b
+
+   geommng-V00-01-01
+
+   field-V00-01-02    
