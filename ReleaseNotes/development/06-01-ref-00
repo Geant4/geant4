@@ -7,6 +7,9 @@ Some of the development/fixes included since the last reference tag are:
   o Added "check_mode" state for navigators and improved overall verbosity
     levels and output formatting.
   o Added new classes for retrieving particle properties from file.
+  o Added a white-board functionality to allow for in-core inspection of
+    reaction conditions. Added a signal-handler to print the reaction 
+    conditions.
   o Implemented new debug system for CHIPS hadronic model.
   o Bug Fixes in model variant of multiple-scattering and simplifications
     of calculation of energy dependence on internal parameters.
@@ -95,15 +98,25 @@ processes/electromagnetic/utils                  utils-V06-00-08
 
 processes/hadronic                               ghad-V06-00-06
 ------------------
-- management (ghad-man-V06-00-02)
-  o Fixed bug in G4HadronicProcess for run-time errors reported by
-    Valgrind about double-deletion of strings.
+- Transition from the old G4Pair to std::pair from the <utility> header.
+- management & utils
+  o Added a white-board functionality to allow for in-core inspection of
+    reaction conditions in optimized.
+  o Added a signal-handler (for SIGSEGV) that prints the reaction 
+    conditions before handling it over to the experiment (or default)
+    signal handler.
+  o Fixed cases of double deletion of memory in cases when
+    isotope-production models are used.
+  o Run-time checking fo NaN values of energies of secondaries.
+  o Fix for suspended particles (only neutron_hp code has these).
+  o Rudimentary verification of consistancy of hadronic physics.
 - models/binary_cascade (ghad-bin-V06-00-03)
   o Fixed a few memory leaks in G4BinaryLightIonReaction.
-    Corrected a logic bug.
+  o Fix for single nucleon spectator, resulting in occasional
+    momentum non-conservation.
   o Removed one recurring run time warning from G4RKPropagation.
     Relates to problem report #593. 
-- models/chiral_inv_phase_space/body (ghad-chips-body-V06-00-04):
+- models/chiral_inv_phase_space (ghad-chips-body-V06-00-04):
   o Implemented new debug system of step by step energy/momentum and
     charge/baryon_number conservation control.
   o Resolved en/mom conflicts in the Sigma+Delta++ and Sigma-Delta-
@@ -115,8 +128,19 @@ processes/hadronic                               ghad-V06-00-06
   o Fixed bug for Delta-,Delta-,n under 3n+2pi- together with all possible
     Delta-Delta-,(k*n) under (k+2)*n+2pi- threshold and Delta++,Delta++,(k*p)
     under  (k+2)*p+2pi+ threshold possible fragmentation states. 
+  o Bug fixes and porting in the interface classses
+- models/im_r_matrix
+  o Improved configuration and configurability, using TMPs.
+- models/leading_particle
+  o Added constructor message, specifying what code is used.
 - models/neutron_hp
+  o Bug fix concerning Mandrake linux (CSTOP enum replaced).
   o Fixed Valgrind run-time error on G4NeutronHPVector.
+- models/qgsm:
+  o Introduced minimal transverse mass for diffractive scattering of
+    gammas.
+- stopping
+  o Updated implementation of mu-nuclear absorption at rest.
 
 processes/optical                                op-V06-00-03
 -----------------
