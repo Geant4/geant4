@@ -1,4 +1,4 @@
-$Id: History,v 1.57 2003-09-20 15:33:15 vnivanch Exp $
+$Id: History,v 1.58 2003-09-27 13:29:45 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 Sept 03: V.Ivant (muons-V05-02-05)
+-Change secondary particle to be e+
 
 20 Sept 03: V.Ivant (muons-V05-02-04)
 -Update energy intervals for ionisation models

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.cc,v 1.37 2003-08-08 11:28:41 vnivanch Exp $
+// $Id: G4MuPairProduction.cc,v 1.38 2003-09-27 13:29:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,6 +55,7 @@
 // 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
+// 27-09-03 e+ set to be a secondary particle (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -63,6 +64,7 @@
 
 #include "G4MuPairProduction.hh"
 #include "G4Electron.hh"
+#include "G4Positron.hh"
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
 #include "G4MuPairProductionModel.hh"
@@ -88,7 +90,8 @@ G4MuPairProduction::~G4MuPairProduction()
 
 void G4MuPairProduction::InitialiseProcess()
 {
-  SetSecondaryParticle(G4Electron::Electron());
+  //  SetSecondaryParticle(G4Electron::Electron());
+  SetSecondaryParticle(G4Positron::Positron());
 
   SetDEDXBinning(120);
   SetLambdaBinning(120);
