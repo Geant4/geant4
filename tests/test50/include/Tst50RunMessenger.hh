@@ -50,6 +50,5 @@ private:
   Tst50RunAction* run;
   G4UIdirectory*  runDir;
   G4UIcmdWithAString* transmissionTestCmd;
-
 };
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.hh,v 1.12 2003-05-17 18:11:52 guatelli Exp $
+// $Id: Tst50EventAction.hh,v 1.13 2003-07-03 13:43:09 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -50,6 +50,10 @@ public:
   void BeginOfEventAction(const G4Event*);
   void EndOfEventAction(const G4Event*);
   G4int    GetEventNo();
+
+private:
+  G4int    collisionID;
+  G4double  totalEnergy; 
 };
 #endif
 

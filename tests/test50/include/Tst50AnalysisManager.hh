@@ -65,10 +65,11 @@ public:
   ~Tst50AnalysisManager();
   static Tst50AnalysisManager* getInstance();
   void book();
+  void bookHistograms(); 
   void AttenuationGammaCoeffiecient(G4int,G4double,G4double,G4double);
   void StoppingPower(G4int,G4double,G4double);
   void CSDARange(G4int,G4double,G4double);
-  void ParticleTransmission(G4int,G4double,G4double,G4double,G4double,G4double); 
+  void ParticleTransmission(G4int,G4double,G4double,G4double,G4double,G4double);  void FillEnergyDeposit(G4double);
   void finish();
 
 private:
@@ -79,11 +80,15 @@ private:
   AIDA::IAnalysisFactory*  aFact; 
   AIDA::ITreeFactory*      treeFact;
   AIDA::ITree*             theTree;
-  AIDA::IDataPointSetFactory *  dataPointFactory;
+
+  AIDA::IDataPointSetFactory *  dataPointFactory; 
+  AIDA::IHistogramFactory*     histogramFactory;
+
   AIDA::IDataPointSet *  stoppingPowerDataPoint;  
   AIDA::IDataPointSet *  CSDARangeDataPoint;
   AIDA::IDataPointSet *  particleTransmissionDataPoint;
   AIDA::IDataPointSet *  gammaAttenuationCoefficientDataPoint;
+  AIDA::IHistogram1D* histogramEnergyDeposit;
 };
 #endif
 #endif

@@ -27,8 +27,9 @@
 //    *******************************
 //
 
-// $Id: Tst50AnalysisManager.cc,v 1.22 2003-06-25 10:20:15 gunter Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.23 2003-07-03 13:43:10 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
 // History:
@@ -49,10 +50,10 @@
 Tst50AnalysisManager* Tst50AnalysisManager::instance = 0;
 
 Tst50AnalysisManager::Tst50AnalysisManager() 
-:  aFact(0), treeFact(0),theTree(0),dataPointFactory(0),
+  :  aFact(0), treeFact(0),theTree(0),dataPointFactory(0), histogramFactory(0),
   stoppingPowerDataPoint(0),CSDARangeDataPoint(0),
   particleTransmissionDataPoint(0),
-  gammaAttenuationCoefficientDataPoint(0)
+  gammaAttenuationCoefficientDataPoint(0),histogramEnergyDeposit(0)
 { 
   aFact = AIDA_createAnalysisFactory();
   treeFact = aFact -> createTreeFactory();
@@ -72,6 +73,9 @@ Tst50AnalysisManager::~Tst50AnalysisManager()
   delete stoppingPowerDataPoint;
   stoppingPowerDataPoint = 0; 
 
+  delete histogramFactory;
+  histogramFactory = 0;
+
   delete treeFact;
   treeFact = 0;
 
@@ -89,13 +93,30 @@ Tst50AnalysisManager* Tst50AnalysisManager::getInstance()
 }
 
 void Tst50AnalysisManager::book() 
-{ 
+{
   theTree = treeFact -> create("test50.xml","xml",false, true,"uncompress");
+  G4cout<< " arrivo dentro il book degli xml"<<G4endl;
+  
+  //Create the factories for dataPoint and histograms
   dataPointFactory = aFact -> createDataPointSetFactory(*theTree); 
+  
+  //Create Data Points
   stoppingPowerDataPoint = dataPointFactory -> create("Stopping Power test",2); 
   CSDARangeDataPoint = dataPointFactory -> create ("CSDA Range test",2);
   particleTransmissionDataPoint = dataPointFactory -> create ("Transmission test",3);
-  gammaAttenuationCoefficientDataPoint = dataPointFactory -> create ("Gamma attenuation coefficient test",2); 
+  gammaAttenuationCoefficientDataPoint = dataPointFactory -> create ("Gamma attenuation coefficient test",2);  
+
+ histogramFactory = aFact -> createHistogramFactory( *theTree );
+ histogramEnergyDeposit = histogramFactory->createHistogram1D
+("10"," Energy Deposit per event",120,0.,1.2); 
+ }
+void Tst50AnalysisManager::bookHistograms() 
+{
+ std::string fileName = "test50.hbk";
+ theTree = treeFact->create(fileName,"hbook",false, true);
+ histogramFactory = aFact -> createHistogramFactory( *theTree );
+ histogramEnergyDeposit = histogramFactory->createHistogram1D
+("10"," Energy Deposit per event",120,0.,1.2); 
 }
 
 void Tst50AnalysisManager::AttenuationGammaCoeffiecient(G4int PointNumber,
@@ -158,6 +179,10 @@ void Tst50AnalysisManager::ParticleTransmission(G4int PointNumber,
   coordinateZ -> setValue(BackFraction);
   coordinateZ -> setErrorPlus(BackError);
   coordinateZ -> setErrorMinus(BackError);
+}
+void Tst50AnalysisManager::FillEnergyDeposit(G4double energyDep)
+{
+  histogramEnergyDeposit ->fill(energyDep);
 }
 
 void Tst50AnalysisManager::finish() 

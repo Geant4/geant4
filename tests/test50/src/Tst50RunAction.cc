@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.cc,v 1.20 2003-05-17 18:11:54 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.21 2003-07-03 13:43:10 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -58,7 +58,10 @@ Tst50RunAction::~Tst50RunAction()
 void Tst50RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
   runID = aRun->GetRunID();
- 
+  
+  //Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
+  //analysis->bookHistograms();
+  
   if (G4VVisManager::GetConcreteInstance())
     {
       G4UImanager* UI = G4UImanager::GetUIpointer();

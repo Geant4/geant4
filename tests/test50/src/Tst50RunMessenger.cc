@@ -48,6 +48,7 @@ Tst50RunMessenger::Tst50RunMessenger(Tst50RunAction* tst50run)
   transmissionTestCmd -> SetDefaultValue("off");
   transmissionTestCmd -> SetCandidates("on off");
   transmissionTestCmd -> AvailableForStates(G4State_Idle);
+
 }
 
 Tst50RunMessenger::~Tst50RunMessenger()
@@ -58,5 +59,5 @@ Tst50RunMessenger::~Tst50RunMessenger()
  
 void Tst50RunMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
-  if (command == transmissionTestCmd){run->SetTransmissionTest(newValue);}
-}
+  if (command == transmissionTestCmd){run->SetTransmissionTest(newValue);} 
+ }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.cc,v 1.17 2003-05-17 18:11:53 guatelli Exp $
+// $Id: Tst50EventAction.cc,v 1.18 2003-07-03 13:43:10 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -43,7 +43,9 @@
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
-
+#ifdef G4ANALYSIS_USE
+#include "Tst50AnalysisManager.hh"
+#endif
 #include "Tst50TrackerHit.hh"
 #include "Tst50EventAction.hh"
 
@@ -55,11 +57,36 @@ Tst50EventAction::~Tst50EventAction()
 
 void Tst50EventAction::BeginOfEventAction(const G4Event*)
 { 
-  
+if (collisionID==-1)
+    {
+      G4SDManager * SDman = G4SDManager::GetSDMpointer();
+      collisionID = SDman->GetCollectionID("Tst50Collection");
+    }  
+
+ totalEnergy = 0;
 }
  
 void Tst50EventAction::EndOfEventAction(const G4Event* evt)
 {
+ G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
+  
+  Tst50TrackerHitsCollection* hitCollection = 0;
+  G4int hitNumber = 0;
+    
+  if (HCE) hitCollection = (Tst50TrackerHitsCollection*)
+                                                     (HCE->GetHC(collisionID));
+  if(hitCollection)
+    {
+      hitNumber = hitCollection->entries();
+      for (G4int i=0;i<hitNumber;i++)
+	{
+	  totalEnergy += (*hitCollection)[i]->GetEdep();
+	}
+    }
+
+  Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
+  analysis -> FillEnergyDeposit(totalEnergy/MeV);
+
   G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;
   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();

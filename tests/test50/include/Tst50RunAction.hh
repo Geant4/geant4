@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.hh,v 1.16 2003-05-17 18:11:53 guatelli Exp $
+// $Id: Tst50RunAction.hh,v 1.17 2003-07-03 13:43:10 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //
 //
-// $Id: Tst50RunAction.hh,v 1.16 2003-05-17 18:11:53 guatelli Exp $
+// $Id: Tst50RunAction.hh,v 1.17 2003-07-03 13:43:10 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -61,6 +61,7 @@ class Tst50RunAction : public G4UserRunAction
                    //SP and CSDA range test 
   void EndOfRunAction(const G4Run*);
   void SetTransmissionTest(G4String);
+  void EnergyDepositTest(G4String);
   void TransmittedGammaNumber();
   void TransmittedParticleNumber();
   void BackscatteredParticleNumber();
@@ -69,6 +70,7 @@ private:
   Tst50RunMessenger* messenger;
   G4bool flag; // if true transmission test, if false SP and CSDA range
                // valid for massive particles
+
   G4int runID;
   G4double gammaTransmitted; //number of transmitted gamma 
   G4int numberEvents;// number of events in the BeamOn

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50TrackerSD.cc,v 1.5 2003-05-28 09:42:17 guatelli Exp $
+// $Id: Tst50TrackerSD.cc,v 1.6 2003-07-03 13:43:10 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,26 +42,24 @@
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
+#include "Tst50DetectorConstruction.hh"
 
-Tst50TrackerSD::Tst50TrackerSD(G4String name)
-  :G4VSensitiveDetector(name)
+Tst50TrackerSD::Tst50TrackerSD(G4String name, Tst50DetectorConstruction* det)
+  :G4VSensitiveDetector(name),Detector(det)
 { 
   G4String HCname;
-  collectionName.insert(HCname="trackerCollection");
-  hitID = new G4int[500];
+  collectionName.insert(HCname="Tst50Collection");
+  tst50Collection = 0;
 }
 
 Tst50TrackerSD::~Tst50TrackerSD()
 {
-  delete [] hitID;
 }
 
 void Tst50TrackerSD::Initialize(G4HCofThisEvent*)
 {
-  trackerCollection = new Tst50TrackerHitsCollection
+  tst50Collection = new Tst50TrackerHitsCollection
     (SensitiveDetectorName,collectionName[0]); 
-  for (G4int j=0;j<1;j++)
-    {hitID [j]= -1;}; 
 }
 
 G4bool Tst50TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
@@ -69,20 +67,10 @@ G4bool Tst50TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   G4double edep = aStep->GetTotalEnergyDeposit();
   if(edep==0.) return false;
 
-  G4TouchableHistory* theTouchable
-    = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
-    
-  theTouchable->MoveUpHistory();     
-    
-  if ( hitID[0]==-1)
-    { 
-      Tst50TrackerHit* newHit = new Tst50TrackerHit();
-      newHit->SetEdep(edep); 
-      hitID[0] = trackerCollection->insert(newHit) - 1;
-    }
-  else
-    { (*trackerCollection)[hitID[0]]->AddEnergy(edep); 
-    }
+  Tst50TrackerHit* newHit = new Tst50TrackerHit();
+ 
+  newHit->SetEdep(edep);
+  tst50Collection->insert( newHit );
  
   return true;
 }
@@ -92,7 +80,7 @@ void Tst50TrackerSD::EndOfEvent(G4HCofThisEvent* HCE)
   static G4int HCID = -1;
   if(HCID<0)
     { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
-  HCE->AddHitsCollection(HCID,trackerCollection);
+  HCE->AddHitsCollection(HCID,tst50Collection);
 }
 
 

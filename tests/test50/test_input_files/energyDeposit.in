@@ -1,0 +1,16 @@
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+/physics/addPhysics photon-epdl
+/physics/addPhysics  electron-standard
+/physics/addPhysics positron-standard
+/run/initialize
+/target/setTargetMat Silicon
+/target/update
+/physics/cutE 7. micrometer
+/gun/particle e-
+/target/setTargetThick 0.53 mm
+/target/update
+/gun/energy 1. MeV
+/run/beamOn 100

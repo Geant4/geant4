@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50TrackerSD.hh,v 1.3 2003-05-17 18:11:53 guatelli Exp $
+// $Id: Tst50TrackerSD.hh,v 1.4 2003-07-03 13:43:10 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -40,12 +40,13 @@
 
 class G4Step;
 class G4HCofThisEvent;
-class Tst50AnalysisManager;
+
+class Tst50DetectorConstruction;
 
 class Tst50TrackerSD : public G4VSensitiveDetector
 {
 public:
-  Tst50TrackerSD(G4String);
+  Tst50TrackerSD(G4String, Tst50DetectorConstruction*);
   ~Tst50TrackerSD();
 
   void Initialize(G4HCofThisEvent*);
@@ -53,8 +54,9 @@ public:
   void EndOfEvent(G4HCofThisEvent*);
 
 private:
-  Tst50TrackerHitsCollection* trackerCollection;
+  Tst50TrackerHitsCollection* tst50Collection;
   G4int*                   hitID;
+  Tst50DetectorConstruction* Detector;
 };
 #endif
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.22 2003-05-28 08:10:11 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.23 2003-07-03 13:43:10 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -295,10 +295,12 @@ G4VPhysicalVolume* Tst50DetectorConstruction::ConstructWorld()
   if (targetSD == 0)
     {
       G4String targetSD_name = "target";
-      targetSD = new Tst50TrackerSD( targetSD_name );
+      targetSD = new Tst50TrackerSD( targetSD_name,this );
       SDman -> AddNewDetector( targetSD );
-      logicTarget -> SetSensitiveDetector( targetSD );
+      G4cout<<"SD initialised in detector"<<G4endl;
     }
+     logicTarget -> SetSensitiveDetector( targetSD );
+  
    
   // Visualization attributes
   //
