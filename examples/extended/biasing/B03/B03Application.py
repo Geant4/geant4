@@ -1,3 +1,14 @@
+# This file is used by G03RunApplication.py
+#
+# A very prototype like class which allows to do a given number
+# of runs runs (nruns) of a given number of events (nevents)
+# by calling nruns times BeamOn(nevents).
+# The class fills a list after every call to BeamOn(nevents)
+# with the number of tracks entered in a certain cell
+# in the last run.
+
+
+
 import math
 import string
 
@@ -6,10 +17,6 @@ import string
 from  B03App import *
 
 
-# A very prototype like class which allows to do a given number
-# of runs runs (nruns) of a given number of events (nevents)
-# by calling nruns times BeamOn(nevents).
-# The class fills a histogram after every call to BeamOn(nevents).
 
 class B03Application:
     def __init__(self, nevents):

@@ -1,11 +1,18 @@
-# $Id: GNUmakefile,v 1.6 2002-11-13 09:27:41 mdressel Exp $
+# $Id: GNUmakefile,v 1.7 2002-11-18 13:22:48 dressel Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
+#
+# The variable ANAPHE_BASE has to be set before using this make file.
+#
 
 name := exampleB03
 G4TARGET := $(name)
 G4EXLIB := true
+
+# you have to set PYTHON_DIR to the directory where python2.2 is installed
+PYTHON_DIR:=/afs/cern.ch/sw/lhcxx/specific/redhat72/gcc-2.95.2/PublicDomainPackages/2.0.0
+
 
 ifndef G4INSTALL
   G4INSTALL = ../../..
@@ -17,15 +24,14 @@ all: lib _B03App.so bin
 include $(G4INSTALL)/config/architecture.gmk
 
 
-CPPFLAGS += -I$(ANAPHE_BASE)/PublicDomainPackages/2.0.0/include/python2.2/
+CPPFLAGS += -I$(PYTHON_DIR)/include/python2.2/
 
 
 
 LDFLAGS += \
-	   -L$(ANAPHE_BASE)/PublicDomainPackages/2.0.0/lib/python2.2/config \
+	   -L$(PYTHON_DIR)/lib/python2.2/config \
 	   -L/lib \
-	   -lpython2.2 \
-	   -lnsl -ldl -lreadline /lib/libtermcap.so.2  -lieee -lpthread -lutil 
+	   -lnsl -ldl -lreadline /lib/libtermcap.so.2  -lieee -lpthread -lutil -lpython2.2
 
 include $(G4INSTALL)/config/binmake.gmk
 

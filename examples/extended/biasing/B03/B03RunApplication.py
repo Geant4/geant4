@@ -1,4 +1,6 @@
-#!/usr/bin/env python2.2
+#!/afs/cern.ch/sw/lhcxx/specific/redhat72/gcc-2.95.2/PublicDomainPackages/2.0.0/bin/python2.2
+# #!/usr/bin/env python2
+
 
 #  This example needs python2.2 http://www.python.org or later.
 #  
@@ -19,7 +21,7 @@ Bapp.setupParallelGeometry()
 Bapp.createIstoreAndScorer()
 Bapp.setupSampler()
 
-Bapp.run(50)
+Bapp.run(15)
 
 # using lizard and ANAPHE to create a histogram
 # check if lizrd is loaded by looking for the af instance of the AnalysisFactory
