@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.24 2004-12-01 11:16:52 grichine Exp $
+// $Id: G4Para.cc,v 1.25 2004-12-02 10:12:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -70,9 +70,9 @@ void G4Para::SetAllParameters( G4double pDx, G4double pDy, G4double pDz,
     fDx         = pDx;
     fDy         = pDy;
     fDz         = pDz;
-    fTalpha     = tan(pAlpha);
-    fTthetaCphi = tan(pTheta)*cos(pPhi);
-    fTthetaSphi = tan(pTheta)*sin(pPhi);
+    fTalpha     = std::tan(pAlpha);
+    fTthetaCphi = std::tan(pTheta)*std::cos(pPhi);
+    fTthetaSphi = std::tan(pTheta)*std::sin(pPhi);
   }
   else
   {
@@ -245,7 +245,7 @@ G4bool G4Para::CalculateExtent( const EAxis pAxis,
                        *(zMin-pt[2].z())/(pt[6].z()-pt[2].z()) ;
     temp[3] = pt[2].y()+(pt[6].y()-pt[2].y())
                        *(zMax-pt[2].z())/(pt[6].z()-pt[2].z()) ;        
-    yMax = yoffset - fabs(fDz*fTthetaSphi) - fDy - fDy ;
+    yMax = yoffset - std::fabs(fDz*fTthetaSphi) - fDy - fDy ;
     yMin = -yMax ;
     for(i=0;i<4;i++)
     {
@@ -290,7 +290,7 @@ G4bool G4Para::CalculateExtent( const EAxis pAxis,
     temp[7] = pt[1].x()+(pt[5].x()-pt[1].x())
                        *(zMax-pt[1].z())/(pt[5].z()-pt[1].z()) ;
 
-    xMax = xoffset - fabs(fDz*fTthetaCphi) - fDx - fDx -fDx - fDx;
+    xMax = xoffset - std::fabs(fDz*fTthetaCphi) - fDx - fDx -fDx - fDx;
     xMin = -xMax ;
     for(i=0;i<8;i++)
     {
@@ -401,13 +401,13 @@ EInside G4Para::Inside( const G4ThreeVector& p ) const
   EInside  in = kOutside;
 
   yt1 = p.y() - fTthetaSphi*p.z();
-  yt  = fabs(yt1) ;
+  yt  = std::fabs(yt1) ;
 
-  // xt = fabs( p.x() - fTthetaCphi*p.z() - fTalpha*yt );
+  // xt = std::fabs( p.x() - fTthetaCphi*p.z() - fTalpha*yt );
 
-  xt = fabs( p.x() - fTthetaCphi*p.z() - fTalpha*yt1 );
+  xt = std::fabs( p.x() - fTthetaCphi*p.z() - fTalpha*yt1 );
 
-  if ( fabs( p.z() ) <= fDz - kCarTolerance*0.5)
+  if ( std::fabs( p.z() ) <= fDz - kCarTolerance*0.5)
   {
     if (yt <= fDy - kCarTolerance*0.5)
     {
@@ -419,7 +419,7 @@ EInside G4Para::Inside( const G4ThreeVector& p ) const
       if ( xt <= fDx + kCarTolerance*0.5 ) in = kSurface;  
     }
   }
-  else  if ( fabs(p.z()) <= fDz + kCarTolerance*0.5 )
+  else  if ( std::fabs(p.z()) <= fDz + kCarTolerance*0.5 )
   {
     if ( yt <= fDy + kCarTolerance*0.5)
     {
@@ -446,17 +446,17 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
 
   newpx  = p.x()-fTthetaCphi*p.z();
   newpy  = p.y()-fTthetaSphi*p.z();
-  calpha = 1/sqrt(1+fTalpha*fTalpha);
+  calpha = 1/std::sqrt(1+fTalpha*fTalpha);
 
-  if (fTalpha)  salpha = -calpha/fTalpha;  // NOTE: actually use MINUS sin(alpha)
+  if (fTalpha)  salpha = -calpha/fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
   else          salpha = 0.;
   
 
   xshift=newpx*calpha+newpy*salpha;
 
-  distx=fabs(fabs(xshift)-fDx*calpha);
-  disty=fabs(fabs(newpy)-fDy);
-  distz=fabs(fabs(p.z())-fDz);
+  distx=std::fabs(std::fabs(xshift)-fDx*calpha);
+  disty=std::fabs(std::fabs(newpy)-fDy);
+  distz=std::fabs(std::fabs(p.z())-fDz);
     
 
 #ifndef G4NEW_SURF_NORMAL
@@ -477,15 +477,15 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
     case kNX:
       tntheta = fTthetaCphi*calpha+fTthetaSphi*salpha;
 
-      if ( xshift < 0 )  cosntheta = -1/sqrt(1+tntheta*tntheta);
-      else               cosntheta =  1/sqrt(1+tntheta*tntheta);
+      if ( xshift < 0 )  cosntheta = -1/std::sqrt(1+tntheta*tntheta);
+      else               cosntheta =  1/std::sqrt(1+tntheta*tntheta);
       
       norm = G4ThreeVector(calpha*cosntheta, salpha*cosntheta,-tntheta*cosntheta);
       break;
 
     case kNY:
-      if (newpy < 0)   ycomp = -1/sqrt(1+fTthetaSphi*fTthetaSphi);    
-      else             ycomp =  1/sqrt(1+fTthetaSphi*fTthetaSphi);
+      if (newpy < 0)   ycomp = -1/std::sqrt(1+fTthetaSphi*fTthetaSphi);    
+      else             ycomp =  1/std::sqrt(1+fTthetaSphi*fTthetaSphi);
       
       norm = G4ThreeVector(0, ycomp,-fTthetaSphi*ycomp);
       break;
@@ -505,11 +505,11 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
   G4double delta    = 0.5*kCarTolerance;
 
             tntheta = fTthetaCphi*calpha + fTthetaSphi*salpha;
-          cosntheta =  1/sqrt(1+tntheta*tntheta);
+          cosntheta =  1/std::sqrt(1+tntheta*tntheta);
   G4ThreeVector nX  = G4ThreeVector( calpha*cosntheta, salpha*cosntheta,-tntheta*cosntheta);
   G4ThreeVector nmX = -nX;
 
-              ycomp =  1/sqrt(1+fTthetaSphi*fTthetaSphi);
+              ycomp =  1/std::sqrt(1+fTthetaSphi*fTthetaSphi);
   G4ThreeVector nY  = G4ThreeVector( 0, ycomp,-fTthetaSphi*ycomp);
   G4ThreeVector nmY = -nY;
   G4ThreeVector nZ  = G4ThreeVector( 0, 0,  1.0);
@@ -682,7 +682,7 @@ G4double G4Para::DistanceToIn( const G4ThreeVector& p,
   }
   else
   {
-    if (fabs(p.z())<=fDz) // Inside
+    if (std::fabs(p.z())<=fDz) // Inside
     {
       smin=0;
       smax=kInfinity;
@@ -728,7 +728,7 @@ G4double G4Para::DistanceToIn( const G4ThreeVector& p,
   }
   else
   {
-    if (fabs(yt)<=fDy)
+    if (std::fabs(yt)<=fDy)
     {
       tmin=0;
       tmax=kInfinity;
@@ -782,7 +782,7 @@ G4double G4Para::DistanceToIn( const G4ThreeVector& p,
     }
     else
     {
-      if (fabs(xt)<=fDx)
+      if (std::fabs(xt)<=fDx)
       {
         tmin=0;
         tmax=kInfinity;
@@ -842,7 +842,7 @@ G4double G4Para::DistanceToIn( const G4ThreeVector& p ) const
 
   // Transformed x into `box' system
   //
-  cosy=1.0/sqrt(1.0+fTthetaSphi*fTthetaSphi);
+  cosy=1.0/std::sqrt(1.0+fTthetaSphi*fTthetaSphi);
   disty1=(trany-fDy)*cosy;
   disty2=(-fDy-trany)*cosy;
     
@@ -850,7 +850,7 @@ G4double G4Para::DistanceToIn( const G4ThreeVector& p ) const
   if (disty2>safe) safe=disty2;
 
   tranx=p.x()-fTthetaCphi*p.z()-fTalpha*trany;
-  cosx=1.0/sqrt(1.0+fTalpha*fTalpha+fTthetaCphi*fTthetaCphi);
+  cosx=1.0/std::sqrt(1.0+fTalpha*fTalpha+fTthetaCphi*fTthetaCphi);
   distx1=(tranx-fDx)*cosx;
   distx2=(-fDx-tranx)*cosx;
     
@@ -946,7 +946,7 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
       if (calcNorm)
       {      
         *validNorm=true; // Leaving via plus Y
-        ycomp=1/sqrt(1+fTthetaSphi*fTthetaSphi);
+        ycomp=1/std::sqrt(1+fTthetaSphi*fTthetaSphi);
         *n=G4ThreeVector(0,ycomp,-fTthetaSphi*ycomp);
       }
       return snxt=0;
@@ -969,7 +969,7 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
       if (calcNorm)
       {
         *validNorm=true; // Leaving via minus Y
-        ycomp=-1/sqrt(1+fTthetaSphi*fTthetaSphi);
+        ycomp=-1/std::sqrt(1+fTthetaSphi*fTthetaSphi);
         *n=G4ThreeVector(0,ycomp,-fTthetaSphi*ycomp);
       }
       return snxt=0;
@@ -999,17 +999,17 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
       if (calcNorm)
       {
         *validNorm=true; // Leaving via plus X
-        calpha=1/sqrt(1+fTalpha*fTalpha);
+        calpha=1/std::sqrt(1+fTalpha*fTalpha);
         if (fTalpha)
         {
-          salpha=-calpha/fTalpha;  // NOTE: actually use MINUS sin(alpha)
+          salpha=-calpha/fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
         }
         else
         {
           salpha=0;
         }
         tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
-        cosntheta=1/sqrt(1+tntheta*tntheta);
+        cosntheta=1/std::sqrt(1+tntheta*tntheta);
         *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);
       }
       return snxt=0;
@@ -1032,17 +1032,17 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
       if (calcNorm)
       {
         *validNorm=true; // Leaving via minus X
-        calpha=1/sqrt(1+fTalpha*fTalpha);
+        calpha=1/std::sqrt(1+fTalpha*fTalpha);
         if (fTalpha)
         {
-          salpha=-calpha/fTalpha;  // NOTE: actually use MINUS sin(alpha)
+          salpha=-calpha/fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
         }
         else
         {
           salpha=0;
         }
         tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
-        cosntheta=-1/sqrt(1+tntheta*tntheta);
+        cosntheta=-1/std::sqrt(1+tntheta*tntheta);
         *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);           
         return snxt=0;
       }
@@ -1061,39 +1061,39 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
         *n=G4ThreeVector(0,0,1);
         break;
       case kMY:
-        ycomp=-1/sqrt(1+fTthetaSphi*fTthetaSphi);
+        ycomp=-1/std::sqrt(1+fTthetaSphi*fTthetaSphi);
         *n=G4ThreeVector(0,ycomp,-fTthetaSphi*ycomp);
         break;        
       case kPY:
-        ycomp=1/sqrt(1+fTthetaSphi*fTthetaSphi);
+        ycomp=1/std::sqrt(1+fTthetaSphi*fTthetaSphi);
         *n=G4ThreeVector(0,ycomp,-fTthetaSphi*ycomp);
         break;        
       case kMX:
-        calpha=1/sqrt(1+fTalpha*fTalpha);
+        calpha=1/std::sqrt(1+fTalpha*fTalpha);
         if (fTalpha)
         {
-          salpha=-calpha/fTalpha;  // NOTE: actually use MINUS sin(alpha)
+          salpha=-calpha/fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
         }
         else
         {
           salpha=0;
         }
         tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
-        cosntheta=-1/sqrt(1+tntheta*tntheta);
+        cosntheta=-1/std::sqrt(1+tntheta*tntheta);
         *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);
         break;
       case kPX:
-        calpha=1/sqrt(1+fTalpha*fTalpha);
+        calpha=1/std::sqrt(1+fTalpha*fTalpha);
         if (fTalpha)
         {
-          salpha=-calpha/fTalpha;  // NOTE: actually use MINUS sin(alpha)
+          salpha=-calpha/fTalpha;  // NOTE: actually use MINUS std::sin(alpha)
         }
         else
         {
           salpha=0;
         }
         tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
-        cosntheta=1/sqrt(1+tntheta*tntheta);
+        cosntheta=1/std::sqrt(1+tntheta*tntheta);
         *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);
         break;
       default:
@@ -1149,7 +1149,7 @@ G4double G4Para::DistanceToOut( const G4ThreeVector& p ) const
 
   // Transformed x into `box' system
   //
-  cosy=1.0/sqrt(1.0+fTthetaSphi*fTthetaSphi);
+  cosy=1.0/std::sqrt(1.0+fTthetaSphi*fTthetaSphi);
   disty1=(fDy-trany)*cosy;
   disty2=(fDy+trany)*cosy;
     
@@ -1157,7 +1157,7 @@ G4double G4Para::DistanceToOut( const G4ThreeVector& p ) const
   if (disty2<safe) safe=disty2;
 
   tranx=p.x()-fTthetaCphi*p.z()-fTalpha*trany;
-  cosx=1.0/sqrt(1.0+fTalpha*fTalpha+fTthetaCphi*fTthetaCphi);
+  cosx=1.0/std::sqrt(1.0+fTalpha*fTalpha+fTthetaCphi*fTthetaCphi);
   distx1=(fDx-tranx)*cosx;
   distx2=(fDx+tranx)*cosx;
     
@@ -1244,9 +1244,9 @@ std::ostream& G4Para::StreamInfo( std::ostream& os ) const
      << "    half length X: " << fDx/mm << " mm \n"
      << "    half length Y: " << fDy/mm << " mm \n"
      << "    half length Z: " << fDz/mm << " mm \n"
-     << "    tan(alpha)         : " << fTalpha/degree << " degrees \n"
-     << "    tan(theta)*cos(phi): " << fTthetaCphi/degree << " degrees \n"
-     << "    tan(theta)*sin(phi): " << fTthetaSphi/degree << " degrees \n"
+     << "    std::tan(alpha)         : " << fTalpha/degree << " degrees \n"
+     << "    std::tan(theta)*std::cos(phi): " << fTthetaCphi/degree << " degrees \n"
+     << "    std::tan(theta)*std::sin(phi): " << fTthetaSphi/degree << " degrees \n"
      << "-----------------------------------------------------------\n";
 
   return os;
@@ -1263,9 +1263,9 @@ void G4Para::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 
 G4Polyhedron* G4Para::CreatePolyhedron () const
 {
-  G4double phi = atan2(fTthetaSphi, fTthetaCphi);
-  G4double alpha = atan(fTalpha);
-  G4double theta = atan(sqrt(fTthetaCphi*fTthetaCphi
+  G4double phi = std::atan2(fTthetaSphi, fTthetaCphi);
+  G4double alpha = std::atan(fTalpha);
+  G4double theta = std::atan(std::sqrt(fTthetaCphi*fTthetaCphi
                             +fTthetaSphi*fTthetaSphi));
     
   return new G4PolyhedronPara(fDx, fDy, fDz, alpha, theta, phi);
