@@ -8,13 +8,14 @@ G4ParallelScoreManager::
 G4ParallelScoreManager(G4VPhysicalVolume &worldvolume,
 		       const G4String &particlename,
 		       G4VPScorer &scorer) :
-  G4ParallelManager(worldvolume, particlename),
+  fParallelManager(*(new G4ParallelManager(worldvolume, particlename))),
   fPScorer(scorer),
   fPScorerProcess(0)
 {}
 
 G4ParallelScoreManager::
 ~G4ParallelScoreManager(){
+  delete &fParallelManager;
   if (fPScorerProcess) delete  fPScorerProcess;
 }
 
@@ -22,15 +23,15 @@ G4ParallelScoreManager::
 G4PScoreProcess *G4ParallelScoreManager::CreateParallelScoreProcess(){
   if (!fPScorerProcess) {
     fPScorerProcess = 
-      new G4PScoreProcess(G4ParallelManager::GetParallelWorld().
+      new G4PScoreProcess(fParallelManager.GetParallelWorld().
 			  GetParallelStepper(), fPScorer);
   }
   return fPScorerProcess;
 }
 
 void G4ParallelScoreManager::Initialize(){
-  G4ProcessPlacer placer(G4ParallelManager::GetParticleName());
+  G4ProcessPlacer placer(fParallelManager.GetParticleName());
   placer.AddProcessAsSecondDoIt(CreateParallelScoreProcess());
-  G4ParallelManager::Initialize();
+  fParallelManager.Initialize();
 }
 

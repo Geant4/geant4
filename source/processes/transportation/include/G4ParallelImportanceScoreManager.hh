@@ -1,15 +1,16 @@
 #ifndef G4ParallelImportanceScoreManager_hh
 #define G4ParallelImportanceScoreManager_hh
 
-#include "G4ParallelImportanceManager.hh"
-#include "G4ParallelWorld.hh"
-#include "G4ProcessPlacer.hh"
+#include "globals.hh"
 
+class G4VIStore;
 class G4VPScorer;
+class G4VImportanceAlgorithm;
 class G4PScoreProcess;
+class G4ParallelManager;
+class G4ParallelImportanceManager;
 
-class G4ParallelImportanceScoreManager :
-  private G4ParallelImportanceManager {
+class G4ParallelImportanceScoreManager{
 public:
   G4ParallelImportanceScoreManager(G4VIStore &iw, 
 				   G4VPScorer &ascorer,
@@ -28,6 +29,8 @@ private:
   G4ParallelImportanceScoreManager &
   operator=(const G4ParallelImportanceScoreManager &);
 
+  G4ParallelManager &fParallelManager;
+  G4ParallelImportanceManager &fParallelImportanceManager;
   G4VPScorer &fPScorer;
   G4PScoreProcess *fPScoreProcess;
 };

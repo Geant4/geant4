@@ -10,52 +10,87 @@
 G4ParallelImportanceManager::
 G4ParallelImportanceManager(G4VIStore &is,
 			    const G4String &particlename) :
-  G4ParallelManager(is.GetWorldVolume(), particlename),
+  fParallelManager(*(new 
+		     G4ParallelManager(is.GetWorldVolume(), particlename))),
+  fCreatedPM(true),
   fIalgorithm(*(new G4ImportanceAlgorithm())),
   fDeleteAlg(true),
   fSampler(new G4ImportanceSampler(fIalgorithm, 
-				   G4ParallelManager::
+				   fParallelManager.
+				   GetParallelWorld().GetParallelStepper(),  
+				   is)),
+  fParallelImportanceProcess(0)
+{}
+
+G4ParallelImportanceManager::
+G4ParallelImportanceManager(G4VIStore &is, 
+			    G4ParallelManager &pmanager):
+  fParallelManager(pmanager),
+  fCreatedPM(false),
+  fIalgorithm(*(new G4ImportanceAlgorithm())),
+  fDeleteAlg(true),
+  fSampler(new G4ImportanceSampler(fIalgorithm, 
+				   fParallelManager.
 				   GetParallelWorld().GetParallelStepper(),  
 				   is)),
   fParallelImportanceProcess(0)
 {}
 
 
-  
 G4ParallelImportanceManager::
 G4ParallelImportanceManager(G4VIStore &is,
 			    const G4String &particlename,
 			    G4VImportanceAlgorithm &ialg): 
-  G4ParallelManager(is.GetWorldVolume(), particlename),
+  fParallelManager(*(new 
+		     G4ParallelManager(is.GetWorldVolume(), particlename))),
+  fCreatedPM(true),
   fIalgorithm(ialg),
   fDeleteAlg(false),
   fSampler(new G4ImportanceSampler(fIalgorithm, 
-				   G4ParallelManager::
+				   fParallelManager.
 				   GetParallelWorld().GetParallelStepper(),  
 				   is)),
   fParallelImportanceProcess(0)
 {}
+
+G4ParallelImportanceManager::
+G4ParallelImportanceManager(G4VIStore &is, 
+			    G4VImportanceAlgorithm &ialg,
+			    G4ParallelManager &pmanager):
+  fParallelManager(pmanager),
+  fCreatedPM(false),
+  fIalgorithm(ialg),
+  fDeleteAlg(false),
+  fSampler(new G4ImportanceSampler(fIalgorithm, 
+				   fParallelManager.
+				   GetParallelWorld().GetParallelStepper(),  
+				   is)),
+  fParallelImportanceProcess(0)
+{}
+  
+  
   
 G4ParallelImportanceProcess *
 G4ParallelImportanceManager::CreateParallelImportanceProcess(){
   if (!fParallelImportanceProcess) {
     fParallelImportanceProcess = 
       new G4ParallelImportanceProcess(*fSampler, 
-				      G4ParallelManager::
+				      fParallelManager.
 				      GetParallelWorld().
 				      GetGeoDriver(), 
-				      G4ParallelManager::
+				      fParallelManager.
 				      GetParallelWorld().
 				      GetParallelStepper());
   }
   return fParallelImportanceProcess;
 }
 void G4ParallelImportanceManager::Initialize(){
-  G4ProcessPlacer placer(G4ParallelManager::GetParticleName());
+  G4ProcessPlacer placer(fParallelManager.GetParticleName());
   placer.AddProcessAsSecondDoIt(CreateParallelImportanceProcess());
 }
 
 G4ParallelImportanceManager::~G4ParallelImportanceManager(){
+  if (fCreatedPM) delete &fParallelManager;
   if (fDeleteAlg) delete &fIalgorithm;
   if (fParallelImportanceProcess) delete fParallelImportanceProcess;
   delete fSampler;
