@@ -9,9 +9,11 @@
 
 BEGIN { 
 print "# ErrorView generated script for viewing error in SBT #" ;
-print "/vis/open/VRML1" ;
-print "/vis/draw/current" ;
-print "/vis~/create_view/new_graphics_system VRML1" ;
+print "/vis/open VRML2FILE"
+print "/vis/viewer/set/style wireframe"
+print "#/vis/open VRML1FILE"
+print "/vis/drawVolume test"
+print "/tracking/storeTrajectory 1"
 print "/test/errorFileName " ARGV[1] ;
 }
 
