@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.26 2003-03-09 13:50:05 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.27 2003-03-09 13:58:21 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -226,7 +226,7 @@ if(0 == Step->GetTrack()->GetParentID() )
 #endif 
     if( (initial_energy == KinE) &&( ZMoD==1.))
       {
-	G4cout<<"arrivo al fotone trasmeso"<<G4endl;
+	
 	runaction->gamma_transmitted();
 	
 
