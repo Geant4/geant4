@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05DetectorConstruction.cc,v 1.4 2001-11-05 08:24:52 gcosmo Exp $
+// $Id: ExN05DetectorConstruction.cc,v 1.5 2002-01-09 17:24:19 ranjard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "ExN05DetectorConstruction.hh"

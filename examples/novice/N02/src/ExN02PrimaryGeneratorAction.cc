@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02PrimaryGeneratorAction.cc,v 1.5 2001-10-11 12:32:37 maire Exp $
+// $Id: ExN02PrimaryGeneratorAction.cc,v 1.6 2002-01-09 17:24:10 ranjard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

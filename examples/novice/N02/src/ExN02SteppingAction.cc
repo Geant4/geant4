@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02SteppingAction.cc,v 1.7 2001-11-05 08:24:50 gcosmo Exp $
+// $Id: ExN02SteppingAction.cc,v 1.8 2002-01-09 17:24:10 ranjard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN05.cc,v 1.9 2001-07-11 09:58:31 gunter Exp $
+// $Id: exampleN05.cc,v 1.10 2002-01-09 17:24:16 ranjard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

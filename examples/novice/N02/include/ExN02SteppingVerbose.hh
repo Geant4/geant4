@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02SteppingVerbose.hh,v 1.6 2001-10-11 12:32:36 maire Exp $
+// $Id: ExN02SteppingVerbose.hh,v 1.7 2002-01-09 17:24:09 ranjard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   This class manages the verbose outputs in G4SteppingManager. 

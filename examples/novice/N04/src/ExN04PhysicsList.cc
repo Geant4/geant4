@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04PhysicsList.cc,v 1.11 2001-11-22 16:18:39 vnivanch Exp $
+// $Id: ExN04PhysicsList.cc,v 1.12 2002-01-09 17:24:15 ranjard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,7 +80,6 @@ void ExN04PhysicsList::SetCuts()
   //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
   //   the default cut value for all particle types 
   SetCutsWithDefault();   
-  if (verboseLevel>0) DumpCutValuesTable();
 }
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.cc,v 1.11 2001-10-10 14:58:12 maire Exp $
+// $Id: ExN03PhysicsList.cc,v 1.12 2002-01-09 17:24:13 ranjard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

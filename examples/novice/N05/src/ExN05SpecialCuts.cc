@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05SpecialCuts.cc,v 1.4 2001-07-11 09:58:36 gunter Exp $
+// $Id: ExN05SpecialCuts.cc,v 1.5 2002-01-09 17:24:20 ranjard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PionShowerModel.hh,v 1.6 2001-11-08 10:16:04 radoone Exp $
+// $Id: ExN05PionShowerModel.hh,v 1.7 2002-01-09 17:24:18 ranjard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04HadronPhysics.cc,v 1.2 2001-07-11 09:58:29 gunter Exp $
+// $Id: ExN04HadronPhysics.cc,v 1.3 2002-01-09 17:24:15 ranjard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

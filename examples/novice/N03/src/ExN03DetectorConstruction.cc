@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.10 2001-11-27 11:37:37 maire Exp $
+// $Id: ExN03DetectorConstruction.cc,v 1.11 2002-01-09 17:24:12 ranjard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

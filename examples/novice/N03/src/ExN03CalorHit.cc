@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03CalorHit.cc,v 1.4 2001-10-10 14:58:12 maire Exp $
+// $Id: ExN03CalorHit.cc,v 1.5 2002-01-09 17:24:12 ranjard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.15 2001-10-24 11:45:06 maire Exp $
+// $Id: exampleN03.cc,v 1.16 2002-01-09 17:24:10 ranjard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
