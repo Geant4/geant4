@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.7 2001-04-02 14:04:42 johna Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.8 2001-05-23 14:47:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -219,11 +219,13 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   style = fVP.GetRepStyle();
   
   if (style == G4ViewParameters::polyhedron) {
-    if(special_widget = XtNameToWidget(rep_style_pullright, "button_0")) {
+    special_widget = XtNameToWidget(rep_style_pullright, "button_0");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else if (style == G4ViewParameters::nurbs) {
-    if(special_widget = XtNameToWidget(rep_style_pullright, "button_1")) {
+    special_widget = XtNameToWidget(rep_style_pullright, "button_1");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else {
@@ -263,19 +265,23 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   d_style = fVP.GetDrawingStyle();
   
   if (d_style == G4ViewParameters::wireframe) {
-    if(special_widget = XtNameToWidget(drawing_style_pullright, "button_0")) {
+    special_widget = XtNameToWidget(drawing_style_pullright, "button_0");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else if (d_style == G4ViewParameters::hlr) {
-    if(special_widget = XtNameToWidget(drawing_style_pullright, "button_1")) {
+    special_widget = XtNameToWidget(drawing_style_pullright, "button_1");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else if (d_style == G4ViewParameters::hsr) {
-    if(special_widget = XtNameToWidget(drawing_style_pullright, "button_2")) {
+    special_widget = XtNameToWidget(drawing_style_pullright, "button_2");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else if (d_style == G4ViewParameters::hlhsr) {
-    if(special_widget = XtNameToWidget(drawing_style_pullright, "button_3")) {
+    special_widget = XtNameToWidget(drawing_style_pullright, "button_3");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else {
@@ -311,13 +317,13 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      NULL);
   
   if (white_background == true) {
-    if(special_widget = XtNameToWidget(background_color_pullright, 
-				       "button_0")) {
+    special_widget = XtNameToWidget(background_color_pullright, "button_0");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else if (white_background == false) {
-    if(special_widget = XtNameToWidget(background_color_pullright,
-				       "button_1")) {
+    special_widget = XtNameToWidget(background_color_pullright, "button_1");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else {
@@ -429,13 +435,13 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      NULL);
   
   if (transparency_enabled == false) {
-    if(special_widget = XtNameToWidget(transparency_pullright, 
-				       "button_0")) {
+    special_widget = XtNameToWidget(transparency_pullright, "button_0");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else if (transparency_enabled == true) {
-    if(special_widget = XtNameToWidget(transparency_pullright,
-				       "button_1")) {
+    special_widget = XtNameToWidget(transparency_pullright, "button_1");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else {
@@ -461,13 +467,13 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      NULL);
   
   if (antialiasing_enabled == false) {
-    if(special_widget = XtNameToWidget(antialias_pullright, 
-				       "button_0")) {
+    special_widget = XtNameToWidget(antialias_pullright, "button_0");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else if (antialiasing_enabled == true) {
-    if(special_widget = XtNameToWidget(antialias_pullright,
-				       "button_1")) {
+    special_widget = XtNameToWidget(antialias_pullright, "button_1");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else {
@@ -493,13 +499,13 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      NULL);
   
   if (haloing_enabled == false) {
-    if(special_widget = XtNameToWidget(haloing_pullright, 
-				       "button_0")) {
+    special_widget = XtNameToWidget(haloing_pullright, "button_0");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else if (haloing_enabled == true) {
-    if(special_widget = XtNameToWidget(haloing_pullright,
-				       "button_1")) {
+    special_widget = XtNameToWidget(haloing_pullright, "button_1");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else {
@@ -564,26 +570,26 @@ G4OpenGLXmViewer::G4OpenGLXmViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
 G4OpenGLViewer (scene),
 G4OpenGLXViewer (scene),
-zoom_low (fVP.GetZoomFactor() / 10.0),
 zoom_high (fVP.GetZoomFactor() * 10.0),
+zoom_low (fVP.GetZoomFactor() / 10.0),
 dolly_low (fVP.GetDolly() - 1000.0),
 dolly_high (fVP.GetDolly() + 1000.0),
-rot_sens (4.),
-frameNo (0),
-wob_sens (20.),
+fov (0.0),
 rot_sens_limit (90.),
 pan_sens_limit (100.),
-fov (0.0),
+rot_sens (4.),
+wob_sens (20.),
 original_vp(fVP.GetViewpointDirection()),
-fppanning_top (NULL),
+frameNo (0),
 fprotation_top (NULL),
-fpmiscellany_top (NULL),
-fpsetting_top (NULL),
-fpprint_top (NULL),
-fppanning_slider (NULL),
 fprotation_slider (NULL),
+fppanning_top (NULL),
+fppanning_slider (NULL),
 fpzoom_slider (NULL),
-fpdolly_slider (NULL)
+fpdolly_slider (NULL),
+fpsetting_top (NULL),
+fpmiscellany_top (NULL),
+fpprint_top (NULL)
 {
 
   WinSize_x = 100;

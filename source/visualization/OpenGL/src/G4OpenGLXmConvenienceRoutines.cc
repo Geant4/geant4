@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.4 2001-04-02 14:04:40 johna Exp $
+// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.5 2001-05-23 14:47:07 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -215,17 +215,20 @@ void G4OpenGLXmViewer::Add_radio_box (char* label_string,
 				       NULL);
 
   XmString lab = XmStringCreateLocalized (label_string);
-  Widget label = XtVaCreateManagedWidget ("radio_label",
-					  xmLabelWidgetClass,
-					  radio_box,
-					  XmNalignment, XmALIGNMENT_CENTER,
-					  XmNlabelString, lab,
-					  XtNvisual, pView->vi->visual,
-					  XtNdepth, pView->vi->depth,
-					  XtNcolormap, pView->cmap,
-					  XtNborderColor, pView->borcol,
-					  XtNbackground, pView->bgnd,
-					  NULL);
+
+  // Unused!
+  //Widget label = XtVaCreateManagedWidget ("radio_label",
+  //				  xmLabelWidgetClass,
+  //				  radio_box,
+  //				  XmNalignment, XmALIGNMENT_CENTER,
+  //				  XmNlabelString, lab,
+  //				  XtNvisual, pView->vi->visual,
+  //				  XtNdepth, pView->vi->depth,
+  //				  XtNcolormap, pView->cmap,
+  //				  XtNborderColor, pView->borcol,
+  //				  XtNbackground, pView->bgnd,
+  //				  NULL);
+
   XmStringFree (lab);
 
   for (i = 0; i < num_buttons; i++) {
@@ -276,20 +279,23 @@ void G4OpenGLXmViewer::Add_set_field (char* w_name,
   strcat (text_field_name, "_text_field");
   
   XmString local_text = XmStringCreateLocalized (local_w_text);
-  Widget label = XtVaCreateManagedWidget (label_name, 
-					  xmLabelWidgetClass,
-					  *row_col_box,
-					  XmNlabelString, local_text,
-					  XtNvisual, pView->vi->visual, 
-					  XtNdepth, pView->vi->depth, 
-					  XtNcolormap, pView->cmap, 
-					  XtNborderColor, pView->borcol,
-					  XtNbackground, pView->bgnd,
-					  NULL);
+
+  // Unused!
+  //  Widget label = XtVaCreateManagedWidget (label_name, 
+  //				  xmLabelWidgetClass,
+  //				  *row_col_box,
+  //				  XmNlabelString, local_text,
+  //				  XtNvisual, pView->vi->visual, 
+  //				  XtNdepth, pView->vi->depth, 
+  //				  XtNcolormap, pView->cmap, 
+  //				  XtNborderColor, pView->borcol,
+  //				  XtNbackground, pView->bgnd,
+  //				  NULL);
+
   XmStringFree (local_text);
 
   char initial[50];
-  sprintf (initial, "%6.2f\0", *val);
+  sprintf (initial, "%6.2f", *val);
   
   *wid = XtVaCreateManagedWidget (text_field_name,
 				  xmTextFieldWidgetClass,
@@ -404,17 +410,19 @@ void G4OpenGLXmViewer::Add_slider_box (char* label_string,
 
   XmString lab = XmStringCreateLocalized (label_string);
 
-  Widget label = XtVaCreateManagedWidget ("slider_label",
-					  xmLabelWidgetClass,
-					  slider_box,
-					  XmNlabelString, lab,
-					  XmNalignment, XmALIGNMENT_CENTER,
-					  XtNvisual, pView->vi->visual,
-					  XtNdepth, pView->vi->depth,
-					  XtNcolormap, pView->cmap,
-					  XtNborderColor, pView->borcol,
-					  XtNbackground, pView->bgnd,
-					  NULL);
+  // Unused!
+  //Widget label = XtVaCreateManagedWidget ("slider_label",
+  //				  xmLabelWidgetClass,
+  //				  slider_box,
+  //				  XmNlabelString, lab,
+  //				  XmNalignment, XmALIGNMENT_CENTER,
+  //				  XtNvisual, pView->vi->visual,
+  //				  XtNdepth, pView->vi->depth,
+  //				  XtNcolormap, pView->cmap,
+  //				  XtNborderColor, pView->borcol,
+  //				  XtNbackground, pView->bgnd,
+  //				  NULL);
+
   XmStringFree (lab);
   
   for (i = 0; i < num_sliders; i++) {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BoundingSphereScene.hh,v 1.7 2000-05-15 11:08:49 johna Exp $
+// $Id: G4BoundingSphereScene.hh,v 1.8 2001-05-23 14:47:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,7 @@ class G4BoundingSphereScene: public G4VGraphicsScene {
 
 public:
   G4BoundingSphereScene ();
-  ~G4BoundingSphereScene ();
+  virtual ~G4BoundingSphereScene ();
   void AddThis (const G4Box& s) {Accrue (s);}
   void AddThis (const G4Cons& s) {Accrue (s);}
   void AddThis (const G4Tubs& s) {Accrue (s);}

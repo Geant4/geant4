@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.9 2001-05-03 11:16:44 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.10 2001-05-23 14:47:05 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,7 +108,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
     << "\" at " << text.GetPosition ()
     << ", size " << size
     << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
-    << ", type " << sizeType
+    << ", type " << G4int(sizeType)
     << G4endl;
 }
 

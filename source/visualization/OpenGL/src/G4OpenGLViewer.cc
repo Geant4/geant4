@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLViewer.cc,v 1.10 2001-02-04 20:24:38 johna Exp $
+// $Id: G4OpenGLViewer.cc,v 1.11 2001-05-23 14:47:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,11 +43,11 @@ int G4OpenGLViewer::dblBuf_RGBA[11] =
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
-fSceneHandler (scene),
 white_background (False),
 transparency_enabled (False),
 antialiasing_enabled (False),
-haloing_enabled (False)
+haloing_enabled (False),
+fSceneHandler (scene)
 {
   // Make changes to view parameters for OpenGL...
   fVP.SetAutoRefresh(true);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.cc,v 1.12 2001-05-21 14:03:21 johna Exp $
+// $Id: G4VViewer.cc,v 1.13 2001-05-23 14:47:12 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,7 +23,6 @@
 #include "G4Scene.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Transform3D.hh"
-#include "G4Event.hh"
 
 G4VViewer::G4VViewer (G4VSceneHandler& sceneHandler,
 		      G4int id, const G4String& name):

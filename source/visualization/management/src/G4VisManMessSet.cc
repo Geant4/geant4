@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessSet.cc,v 1.11 2001-02-23 15:43:31 johna Exp $
+// $Id: G4VisManMessSet.cc,v 1.12 2001-05-23 14:47:16 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -493,7 +493,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       }
       fpVMan -> SetCurrentViewParameters ().SetRepStyle (repStyle);
       if (fpVMan -> GetVerboseLevel () > 0) {
-	G4cout << "Representation style changed to " << repStyle << G4endl;
+	G4cout << "Representation style changed to "
+	       << G4int(repStyle) << G4endl;
 	if (fpVMan -> GetVerboseLevel () > 1) {
 	  fpVMan -> PrintCurrentView ();
 	}
@@ -668,8 +669,6 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	G4cout << "Available views:";
 	for (int iView = 0; iView < nViewTotal; iView++) {
 	  const G4VViewer* pView = vList [iView];
-	  const G4VSceneHandler* pScene = pView -> GetSceneHandler ();
-	  const G4VGraphicsSystem* pSystem = pScene -> GetGraphicsSystem ();
 	  G4cout << "\n  " << iView << ") " << pView -> GetName ();
 	}
 	G4cout << "\nChoose by specifying integer parameter.";

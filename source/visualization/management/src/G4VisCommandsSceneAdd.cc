@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.17 2001-05-03 11:12:59 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.18 2001-05-23 14:47:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -148,9 +148,9 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
     G4bool successful;
     for (G4int iParticle=0; iParticle<theParticleTable->entries(); 
 	 iParticle++)
-      if(CurrentFlavoredWorld=theGlobalFastSimulationManager->
-	 GetFlavoredWorldForThis(theParticleTable->
-				 GetParticle(iParticle)))
+      CurrentFlavoredWorld = theGlobalFastSimulationManager->
+	GetFlavoredWorldForThis(theParticleTable->GetParticle(iParticle));
+      if(CurrentFlavoredWorld)
 	successful = pCurrentScene -> AddRunDurationModel
 	  (new G4FlavoredParallelWorldModel (CurrentFlavoredWorld));
     UpdateVisManagerScene ();
@@ -168,9 +168,9 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
     return;
   }
 
-  G4VFlavoredParallelWorld* worldForThis;
-  if(worldForThis=theGlobalFastSimulationManager->
-     GetFlavoredWorldForThis(currentParticle)) {
+  G4VFlavoredParallelWorld* worldForThis =
+    theGlobalFastSimulationManager->GetFlavoredWorldForThis(currentParticle);
+  if(worldForThis) {
     G4bool successful = pCurrentScene -> AddRunDurationModel
       (new G4FlavoredParallelWorldModel (worldForThis));
     UpdateVisManagerScene (currentSceneName);

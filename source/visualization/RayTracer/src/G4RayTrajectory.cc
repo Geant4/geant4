@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayTrajectory.cc,v 1.6 2001-02-23 15:43:14 johna Exp $
+// $Id: G4RayTrajectory.cc,v 1.7 2001-05-23 14:47:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,7 +37,7 @@ G4RayTrajectory :: G4RayTrajectory()
 G4RayTrajectory :: G4RayTrajectory(G4RayTrajectory & right)
 {
   positionRecord = new G4std::vector<G4RayTrajectoryPoint*>;
-  for(int i=0;i<right.positionRecord->size();i++)
+  for(size_t i=0;i<right.positionRecord->size();i++)
   {
     G4RayTrajectoryPoint* rightPoint = (G4RayTrajectoryPoint*)
 				((*(right.positionRecord))[i]);
@@ -48,7 +48,7 @@ G4RayTrajectory :: G4RayTrajectory(G4RayTrajectory & right)
 G4RayTrajectory :: ~G4RayTrajectory()
 {
   //positionRecord->clearAndDestroy();
-  for(int i=0;i<positionRecord->size();i++)
+  for(size_t i=0;i<positionRecord->size();i++)
   { delete (*positionRecord)[i]; }
   positionRecord->clear();
   delete positionRecord;

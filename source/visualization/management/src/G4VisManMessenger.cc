@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessenger.cc,v 1.4 2001-02-23 15:43:31 johna Exp $
+// $Id: G4VisManMessenger.cc,v 1.5 2001-05-23 14:47:16 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,7 +23,6 @@ G4VisManMessenger::G4VisManMessenger (G4VisManager* pVMan):
 fpVMan (pVMan)
 {
   G4UIcommand* command;
-  G4UIparameter* param;
 
   /////////////////////////////////////////////////  /vis~/...  ////
   command = new G4UIcommand ("/vis~/", this);

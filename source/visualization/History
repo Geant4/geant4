@@ -1,4 +1,4 @@
-$Id: History,v 1.119 2001-05-22 12:16:52 johna Exp $
+$Id: History,v 1.120 2001-05-23 14:47:03 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,10 +24,13 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-22nd May 2001 John Allison
+23rd May 2001  John Allison
+- Eliminated Linux pedantic warnings, except FukuiRenderer, VRML and OPACS.
+
+22nd May 2001  John Allison
 - Refined ASCIITree.
 
-21st May 2001 John Allison (vis-V03-01-02)
+21st May 2001  John Allison (vis-V03-01-02)
 - Minor bug corrections (mostly to fix things that used to work with the
   old /vis~/ commands but ceased to work with the new /vis/commands:
   o If a scene is empty at drawing time, the "world" is added.

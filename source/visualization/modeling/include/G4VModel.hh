@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VModel.hh,v 1.7 2001-02-23 15:43:33 johna Exp $
+// $Id: G4VModel.hh,v 1.8 2001-05-23 14:47:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,9 +75,9 @@ protected:
 
   G4String                    fGlobalTag;
   G4String                    fGlobalDescription;
-  const G4ModelingParameters* fpMP;
   G4VisExtent                 fExtent;
   G4Transform3D               fTransform;           
+  const G4ModelingParameters* fpMP;
 
 private:
 

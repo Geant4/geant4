@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmTextField.cc,v 1.4 2001-03-07 14:56:20 johna Exp $
+// $Id: G4OpenGLXmTextField.cc,v 1.5 2001-05-23 14:47:08 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Text field class. Inherits from G4OpenGLXmVWidgetComponent
@@ -23,7 +23,7 @@ G4OpenGLXmTextField::G4OpenGLXmTextField (const char* n,
 {
   name = n;
   initial = new char[50];
-  sprintf (initial, "%6.2f\0", *val);
+  sprintf (initial, "%6.2f", *val);
   value = (void*)val;
   text=false;
 }
@@ -61,7 +61,7 @@ const char* G4OpenGLXmTextField::GetName ()
 
 void G4OpenGLXmTextField::SetValue (G4double val)
 {
-  sprintf (initial, "%6.2f\0", val);
+  sprintf (initial, "%6.2f", val);
   
   XtVaSetValues (text_field,
 		 XmNvalue, (String)initial,

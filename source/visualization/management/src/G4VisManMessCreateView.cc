@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessCreateView.cc,v 1.7 2001-02-23 15:43:29 johna Exp $
+// $Id: G4VisManMessCreateView.cc,v 1.8 2001-05-23 14:47:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@ void G4VisManMessenger::AddCommandCreateView () {
   const G4GraphicsSystemList& gslist =
     fpVMan -> GetAvailableGraphicsSystems ();
   G4String candidates;
-  for (int igslist = 0; igslist < gslist.size (); igslist++) {
+  for (size_t igslist = 0; igslist < gslist.size (); igslist++) {
     G4String nickname = gslist [igslist] -> GetNickname ();
     if (nickname . length () > 0) {
       candidates += nickname;

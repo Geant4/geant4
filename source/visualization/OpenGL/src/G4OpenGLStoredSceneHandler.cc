@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.9 2001-02-23 15:43:11 johna Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.10 2001-05-23 14:47:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -111,7 +111,7 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
 
   G4VSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
 
-  int i;
+  size_t i;
 
   // Delete OpenGL display lists.
   for (i = 0; i < fPODLList.size (); i++) {
@@ -158,7 +158,7 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
 //  }
 
   glNewList (fTopPODL, GL_COMPILE); {
-    for (int i = 0; i < fPODLList.size (); i++) {
+    for (size_t i = 0; i < fPODLList.size (); i++) {
       glPushMatrix();
       G4OpenGLTransform3D oglt (fPODLTransformList [i]);
       glMultMatrixd (oglt.GetGLMatrix ());

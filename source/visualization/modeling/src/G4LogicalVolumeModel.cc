@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolumeModel.cc,v 1.6 2001-05-03 11:16:42 johna Exp $
+// $Id: G4LogicalVolumeModel.cc,v 1.7 2001-05-23 14:47:18 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ void G4LogicalVolumeModel::DescribeYourselfTo
     G4DrawVoxels dv;
     G4PlacedPolyhedronList* pPPL =
       dv.CreatePlacedPolyhedra (fpTopPV -> GetLogicalVolume ());
-    for (int i = 0; i < pPPL -> size (); i++) {
+    for (size_t i = 0; i < pPPL -> size (); i++) {
       const G4Transform3D& transform = (*pPPL)[i].GetTransform ();
       const G4Polyhedron& polyhedron = (*pPPL)[i].GetPolyhedron ();
       sceneHandler.BeginPrimitives (transform);

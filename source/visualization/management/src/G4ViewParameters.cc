@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.cc,v 1.11 2001-02-23 15:47:24 johna Exp $
+// $Id: G4ViewParameters.cc,v 1.12 2001-05-23 14:47:13 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -241,7 +241,7 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       G4cout << "Difference in no of cutaway planes." << G4endl;
     }
     else {
-      for (int i = 0; i < fCutawayPlanes.size (); i++) {
+      for (size_t i = 0; i < fCutawayPlanes.size (); i++) {
 	if (!(fCutawayPlanes[i] == v.fCutawayPlanes[i]))
 	  G4cout << "Difference in cutaway plane no. " << i << G4endl;
       }
@@ -310,7 +310,7 @@ G4std::ostream& operator << (G4std::ostream& os, const G4ViewParameters& v) {
   os << "\n  Cutaway flag: ";
   if (v.fCutaway) {
     os << "true, cutaway planes: ";
-    for (int i = 0; i < v.fCutawayPlanes.size (); i++) {
+    for (size_t i = 0; i < v.fCutawayPlanes.size (); i++) {
       os << ' ' << v.fCutawayPlanes[i];
     }
   }
@@ -446,7 +446,7 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
     if (fCutawayPlanes.size () != v.fCutawayPlanes.size ())
       return true;
     else {
-      for (int i = 0; i < fCutawayPlanes.size (); i++) {
+      for (size_t i = 0; i < fCutawayPlanes.size (); i++) {
 	if (!(fCutawayPlanes[i] == v.fCutawayPlanes[i])) return true;
       }
     }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCompound.cc,v 1.11 2001-05-03 11:14:18 johna Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.12 2001-05-23 14:47:13 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -187,7 +187,7 @@ G4VisCommandOpen::G4VisCommandOpen() {
    const G4GraphicsSystemList& gslist =
     fpVisManager->GetAvailableGraphicsSystems();
   G4String candidates;
-  for (int igslist = 0; igslist < gslist.size(); igslist++) {
+  for (size_t igslist = 0; igslist < gslist.size(); igslist++) {
     const G4String& name = gslist[igslist]->GetName();
     const G4String& nickname = gslist[igslist]->GetNickname();
     if (nickname.isNull()) {

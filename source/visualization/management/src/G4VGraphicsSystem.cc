@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGraphicsSystem.cc,v 1.6 2001-02-23 15:43:24 johna Exp $
+// $Id: G4VGraphicsSystem.cc,v 1.7 2001-05-23 14:47:12 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,19 +52,19 @@ G4std::ostream& operator << (G4std::ostream& os, const G4VGraphicsSystem& gs) {
   if (gs.GetDescription () != "") {
     os << "\n  Description: " << gs.GetDescription ();
   }
-  os << "\n  Functionality: " << gs.GetFunctionality ();
+  os << "\n  Functionality: " << G4int(gs.GetFunctionality());
   if (pVMan -> GetVerboseLevel () > 1) {
-    G4int nScenes = scenes.size ();
+    size_t nScenes = scenes.size ();
     if (nScenes) {
       G4int nScenesOfThisSystem = 0;
-      for (int i = 0; i < nScenes; i++) {
+      for (size_t i = 0; i < nScenes; i++) {
 	if (scenes [i] -> GetGraphicsSystem () == &gs) {
 	  nScenesOfThisSystem++;
 	}
       }
       if (nScenesOfThisSystem) {
 	os << "\n  Its scenes are: ";
-	for (int i = 0; i < nScenes; i++) {
+	for (size_t i = 0; i < nScenes; i++) {
 	  if (scenes [i] -> GetGraphicsSystem () == &gs) {
 	    os << "\n  " << *(scenes [i]);
 	  }

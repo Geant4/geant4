@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorViewer.cc,v 1.4 2001-02-23 15:43:13 johna Exp $
+// $Id: G4OpenInventorViewer.cc,v 1.5 2001-05-23 14:47:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -122,7 +122,7 @@ G4OpenInventorViewer::G4OpenInventorViewer (G4OpenInventorSceneHandler& scene,
   fInteractorManager = 
     ((G4OpenInventor*)fSceneHandler.GetGraphicsSystem())->
     GetInteractorManager();
-  Widget toplevel = (Widget)fInteractorManager->GetMainInteractor ();
+//Widget toplevel = (Widget)fInteractorManager->GetMainInteractor ();
 
 //fInteractorManager->
 //AddSecondaryLoopPostAction ((G4SecondaryLoopAction)SecondaryLoopPostAction);

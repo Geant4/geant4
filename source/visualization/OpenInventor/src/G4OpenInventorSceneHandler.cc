@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.10 2001-05-03 11:16:45 johna Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.11 2001-05-23 14:47:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -212,9 +212,10 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Circle& circle) {
   //
   // Dimensions
   //
-  G4double userSpecified = circle.GetWorldSize() || circle.GetScreenSize();
-  const G4VMarker& defaultMarker =
-     fpViewer -> GetViewParameters().GetDefaultMarker();
+  // (userSpecified and defaultMarker are unused - what was intended here?)
+  //G4double userSpecified = circle.GetWorldSize() || circle.GetScreenSize();
+  //const G4VMarker& defaultMarker =
+  //   fpViewer -> GetViewParameters().GetDefaultMarker();
 
   G4double size = GetMarkerSize ( circle );
 
@@ -738,12 +739,13 @@ G4double  G4OpenInventorSceneHandler::GetMarkerSize ( const G4VMarker& mark )
 	if ( extent_radius_3d <= 0.0 ) { extent_radius_3d = 1.0 ; } 
 
 	//----- get marker radius in 3D units
-	if        ( size = mark.GetWorldSize()  ) {
+	size = mark.GetWorldSize();
+	if        ( size  ) {
 
 		// get mark radius in 3D units
 		size = 0.5 * mark.GetWorldSize()  ; 
 
-	} else if ( size = mark.GetScreenSize() ) {
+	} else if ( (size = mark.GetScreenSize()) ) {
 
 		// local
 		double mark_radius_2d   = 0.5 * mark.GetScreenSize() ;
