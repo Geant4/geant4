@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.icc,v 1.3 1999-05-29 14:17:55 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.icc,v 1.4 1999-06-01 22:34:21 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -103,10 +103,12 @@ inline G4int G4LowEnergyBremsstrahlung::FindBinLocation(G4double arg, G4PhysicsV
 inline G4double G4LowEnergyBremsstrahlung::ComputeA(G4int AtomicNumber, G4double ElectronKinEnergy){
 
   G4double aVal;
-  G4DataVector ElectEnVec = (*(*(*ATable)[AtomicNumber-1])[0]);
-  G4DataVector AValueVec = (*(*(*ATable)[AtomicNumber-1])[1]);
+  G4FirstLevel* oneAtomCoeff = (*ATable)[AtomicNumber-1];
+  G4Data* ElectEnVec = (*oneAtomCoeff)[0];
+  G4Data* AValueVec = (*oneAtomCoeff)[1];
+  cout<<"EEV Length: "<<ElectEnVec->entries()<<endl;
 
-  aVal = DataLogInterpolation(ElectronKinEnergy, ElectEnVec, AValueVec);
+  aVal = DataLogInterpolation(ElectronKinEnergy, (*ElectEnVec), (*AValueVec));
 	
   if(AtomicNumber > 99){
 
@@ -139,8 +141,8 @@ inline G4double G4LowEnergyBremsstrahlung::ComputeB(G4int AtomicNumber, G4double
 }
 
 inline G4double G4LowEnergyBremsstrahlung::DataLogInterpolation(G4double Argument, 
-							       const G4DataVector& argVec, 
-                                                               const G4DataVector& valVec){
+							       const G4Data& argVec, 
+                                                               const G4Data& valVec){
 
   G4int theLoc = FindBinLocation(Argument, argVec); 
 
@@ -160,7 +162,7 @@ inline G4double G4LowEnergyBremsstrahlung::DataLogInterpolation(G4double Argumen
 }
 
 
-inline G4int G4LowEnergyBremsstrahlung::FindBinLocation(G4double arg, const G4DataVector & vec){
+inline G4int G4LowEnergyBremsstrahlung::FindBinLocation(G4double arg, const G4Data& vec){
 
   G4int numberOfBin = vec.length();
   G4int lowerBound = 0;

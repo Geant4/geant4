@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.icc,v 1.3 1999-04-01 06:43:38 aforti Exp $
+// $Id: G4LowEnergyCompton.icc,v 1.4 1999-06-01 22:34:22 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,10 +37,13 @@ G4LowEnergyCompton::GetMeanFreePath(const G4Track& aTrack, G4double, G4ForceCond
   
   if(GammaEnergy > HighestEnergyLimit){
     MeanFreePath = DBL_MAX;
+
   }
   else {
+
     if (GammaEnergy < LowestEnergyLimit) GammaEnergy = LowestEnergyLimit;   
     MeanFreePath = DataLogInterpolation(GammaEnergy, aMaterial->GetIndex(), theMeanFreePathTable);	
+
   }                                     
   
   return MeanFreePath;
@@ -49,7 +52,9 @@ G4LowEnergyCompton::GetMeanFreePath(const G4Track& aTrack, G4double, G4ForceCond
 inline G4double G4LowEnergyCompton::DataLogInterpolation(G4double Argument, G4double TableIndex, G4PhysicsTable* Table){
 
 
-  G4PhysicsVector* theVec = (*Table)(TableIndex);
+  G4PhysicsVector* theVec = 0;
+  theVec = (*Table)(TableIndex);
+
   G4int theLoc = FindBinLocation(Argument, theVec); 
 
   G4double val1 = (*theVec)(theLoc), val2 = (*theVec)(theLoc+1);
@@ -66,6 +71,12 @@ inline G4double G4LowEnergyCompton::DataLogInterpolation(G4double Argument, G4do
 
 inline G4int G4LowEnergyCompton::FindBinLocation(G4double arg, G4PhysicsVector* vec){
 
+  if(!vec){
+
+    G4Exception("G4LowEnergy: FindBinLocation: Vector Empty "
+        "probably the program hasn't found data files or data files are empty");
+   }
+	
   G4int numberOfBin = vec->GetVectorLength();
   G4int lowerBound = 0;
   G4int upperBound = numberOfBin-1;
