@@ -8,6 +8,7 @@ class G4BertiniHydrogenCollision : public G4BertiniModel {
 public:
   G4BertiniHydrogenCollision();
   ~G4BertiniHydrogenCollision();
+
 private:
 };
 
