@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.23 2005-03-22 19:12:20 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.24 2005-03-25 17:58:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -200,6 +200,7 @@ void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 {
   physicsList = uPhys;
   // G4ParticleTable::GetParticleTable()->SetReadiness();
+  physicsList->ConstructParticle();
 }
   
 void G4RunManagerKernel::InitializePhysics()
