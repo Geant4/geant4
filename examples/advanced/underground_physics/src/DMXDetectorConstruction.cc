@@ -171,7 +171,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   world_phys = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),
      "world_phys", world_log, NULL, false,0);
 
-  G4VisAttributes* world_vat= new G4VisAttributes(white);
+  //  G4VisAttributes* world_vat= new G4VisAttributes(white);
   world_log->SetVisAttributes(G4VisAttributes::Invisible);
   //world_vat->SetVisibility(true);
   //world_vat->SetVisibility(false);
@@ -213,7 +213,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4double LN2PosZ            = 0.5*jacketHeight + 0.5*LN2jacketHeight 
                                 + jacketflangeHeight + PosZ;
 
-  G4double temp_jackZ = 0.5*labHeight - LN2PosZ - 0.5*LN2jacketHeight;
+  //  G4double temp_jackZ = 0.5*labHeight - LN2PosZ - 0.5*LN2jacketHeight;
   //  G4cout << " Position of LN2 top from ceiling is: " 
   //	 << G4BestUnit(temp_jackZ,"Length") << G4endl;
 
@@ -499,7 +499,6 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4double LXeTubeHeight     = LXeHeight - PMTDetectorHeight;
   G4double LXe_solVPos       = -0.5*(LXeTubeHeight+PMTDetectorHeight);
   G4double LXeVPos           = -0.5*TotalvesselHeight + 0.5*LXeHeight;
-  G4double mirrorVPosOff     = 21.3*cm - PMTDetectorHeight;
 
   G4Tubs* LXe_tube = new G4Tubs("GXe_tube",
      0.*cm, DetectorRadius, 0.5*LXeTubeHeight, 0.*deg, 360.*deg);
@@ -873,7 +872,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
     //    ("AmericiumSurface", unified, polished, dielectric_metal);
   G4LogicalBorderSurface* AmericiumSurface;
   AmericiumSurface = new G4LogicalBorderSurface
-    ("Americium", LXe_phys, americium_phys, OpAlphaSurface);
+    ("Americium", LXe_phys, americium_phys, OpAmericiumSurface);
 
   G4double americium_PP[NUM]   = { 6.00*eV, 7.50*eV };
   G4double americium_REFL[NUM] = { 0.47, 0.42 };

@@ -138,41 +138,43 @@ void DMXAnalysisManager::book(G4String histogramfile)
 
   // Creating an 1-dimensional histogram in the root directory of the tree
 
-  IHistogram1D* hEsourcep     = hf->create1D("10","Source Energy /keV", 
-					    1000,0.,10000.);
+  IHistogram1D* hEsourcep;
+  hEsourcep    = hf->create1D("10","Source Energy /keV",  1000,0.,10000.);
 
-  IHistogram1D* hEdepp        = hf->create1D("20","Energy Deposit /keV", 
-					    1000,0.,1000.);
+  IHistogram1D* hEdepp;
+  hEdepp       = hf->create1D("20","Energy Deposit /keV", 1000,0.,1000.);
   
-  IHistogram1D* hEdepRecoil   = hf->create1D("30","Nuclear Recoil Edep /keV", 
-					    100,0.,100.);
+  IHistogram1D* hEdepRecoil;
+  hEdepRecoil  = hf->create1D("30","Nuclear Recoil Edep /keV", 100,0.,100.);
   
-  IHistogram1D* hNumPhLow     = hf->create1D("40","Number of Photons - LowE", 
-					    200,0.,200.);
+  IHistogram1D* hNumPhLow;
+  hNumPhLow    = hf->create1D("40","Number of Photons - LowE", 200,0.,200.);
   
-  IHistogram1D* hNumPhHigh    = hf->create1D("50","Number of Photons - HighE", 
-					    100,0.,10000.);
+  IHistogram1D* hNumPhHigh;
+  hNumPhHigh   = hf->create1D("50","Number of Photons - HighE", 100,0.,10000.);
   
-  IHistogram1D* hAvPhArrival  = hf->create1D("60","Average Photon Arrival/ns", 
-					    200,0.,200.);
-  IHistogram1D* h1stPhArrival = hf->create1D("61","1st event Photon Arrival", 
-					    200,0.,200.);
+  IHistogram1D* hAvPhArrival;
+  hAvPhArrival  = hf->create1D("60","Average Photon Arrival/ns", 200,0.,200.);
+  IHistogram1D* h1stPhArrival;
+  h1stPhArrival = hf->create1D("61","1st event Photon Arrival", 200,0.,200.);
   
-  IHistogram2D* hPMTHits      = hf->create2D("70","PMT Hit Pattern", 
-					    300 ,-30.,30.,300,-30.,30.);
-  IHistogram2D* h1stPMTHit    = hf->create2D("71","1st event PMT Hit Pattern", 
-					    300 ,-30.,30.,300,-30.,30.);
+  IHistogram2D* hPMTHits;
+  hPMTHits    = hf->create2D("70","PMT Hit Pattern", 
+			  300 ,-30.,30.,300,-30.,30.);
+  IHistogram2D* h1stPMTHit;
+  h1stPMTHits = hf->create2D("71","1st event PMT Hit Pattern", 
+			     300 ,-30.,30.,300,-30.,30.);
 
-  IHistogram1D* hGammaEdep    = hf->create1D("91","Gamma Energy Deposit/keV", 
-					    1000,0.,1000.);
-  IHistogram1D* hNeutronEdep  = hf->create1D("92","Neutron Ener Deposit/keV", 
-					    1000,0.,1000.);
-  IHistogram1D* hElectronEdep = hf->create1D("93","Electron Ener Deposit/keV", 
-					    1000,0.,1000.);
-  IHistogram1D* hPositronEdep = hf->create1D("94","Positron Ener Deposit/keV", 
-					    1000,0.,1000.);
-  IHistogram1D* hOtherEdep    = hf->create1D("95","Other Ener Deposit/keV", 
-					    1000,0.,1000.);
+  IHistogram1D* hGammaEdep;
+  hGammaEdep    = hf->create1D("91","Gamma Energy Deposit/keV", 1000,0.,1000.);
+  IHistogram1D* hNeutronEdep;
+  hNeutronEdep  = hf->create1D("92","Neutron Ener Deposit/keV", 1000,0.,1000.);
+  IHistogram1D* hElectronEdep;
+  hElectronEdep = hf->create1D("93","Electron Ener Deposit/keV",1000,0.,1000.);
+  IHistogram1D* hPositronEdep;
+  hPositronEdep = hf->create1D("94","Positron Ener Deposit/keV",1000,0.,1000.);
+  IHistogram1D* hOtherEdep;
+  hOtherEdep    = hf->create1D("95","Other Ener Deposit/keV", 1000,0.,1000.);
   
   delete tf;
 

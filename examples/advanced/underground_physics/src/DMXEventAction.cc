@@ -332,10 +332,9 @@ void DMXEventAction::writeScintHitsToFile(void) {
       hitsfile.close();
     }
 
-    long seed1 = *seeds;
-    long seed2 = *(seeds+1);
-    
 #ifdef G4ANALYSIS_USE
+    long seed1 = *seeds;
+    long seed2 = *(seeds+1);    
     // pass event summary to analysis manager for booking into histos and ntple
     DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
     analysis->analyseScintHits(event_id,energy_pri,totEnergy,S_hits,firstLXeHitTime,P_hits,aveTimePmtHits,firstParticleName,firstParticleE,gamma_ev,neutron_ev,positron_ev,electron_ev,other_ev,seed1,seed2);
