@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeEnergyLoss.cc,v 1.10 2001-01-23 11:54:13 urban Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.11 2001-03-27 15:10:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 
@@ -17,6 +17,7 @@
 // 28/04/99  bug fixed (unit independece now),L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // 23/01/01  bug fixed in AlongStepDoIt , L.Urban
+// 27/03/01 : commented out the printing of subcutoff energies
 // --------------------------------------------------------------
 
  
@@ -287,16 +288,16 @@ void G4VeEnergyLoss::BuildDEDXTable(
      if(!setMinDeltaCutInRange )
      MinDeltaCutInRange = G4Electron::Electron()->GetCuts()/10. ;
 
-     if((subSecFlag) && (&aParticleType==G4Electron::Electron()))
-     {
-       G4cout << G4endl;
-       G4cout.precision(5) ;
-       G4cout << " eIoni   Minimum Delta cut in range=" << MinDeltaCutInRange/mm
-              << "  mm." << G4endl;
-       G4cout <<  G4endl;
-       G4cout << "           material       min.delta energy(keV) " << G4endl;
-       G4cout << G4endl;
-     }
+//     if((subSecFlag) && (&aParticleType==G4Electron::Electron()))
+//     {
+//       G4cout << G4endl;
+//       G4cout.precision(5) ;
+//       G4cout << " eIoni   Minimum Delta cut in range=" << MinDeltaCutInRange/mm
+//              << "  mm." << G4endl;
+//       G4cout <<  G4endl;
+//       G4cout << "           material       min.delta energy(keV) " << G4endl;
+//       G4cout << G4endl;
+//     }
 
        if(MinDeltaEnergy) delete MinDeltaEnergy ;
        MinDeltaEnergy = new G4double [numOfMaterials] ; 
@@ -316,15 +317,15 @@ void G4VeEnergyLoss::BuildDEDXTable(
 	 if(MinDeltaEnergy[mat]>G4Electron::Electron()->GetCutsInEnergy()[mat])
 	     MinDeltaEnergy[mat]=G4Electron::Electron()->GetCutsInEnergy()[mat] ;
 
-	 if((subSecFlag) && (&aParticleType==G4Electron::Electron()))
-         {
-	   G4cout << G4std::setw(20) << (*theMaterialTable)(mat)->GetName()
-	 	  << G4std::setw(15) << MinDeltaEnergy[mat]/keV ;
-           if(LowerLimitForced[mat])
-              G4cout << "  lower limit forced." << G4endl;
-           else
-              G4cout << G4endl ; 
-         }
+//	 if((subSecFlag) && (&aParticleType==G4Electron::Electron()))
+//         {
+//	   G4cout << G4std::setw(20) << (*theMaterialTable)(mat)->GetName()
+//	 	  << G4std::setw(15) << MinDeltaEnergy[mat]/keV ;
+//           if(LowerLimitForced[mat])
+//              G4cout << "  lower limit forced." << G4endl;
+//           else
+//              G4cout << G4endl ; 
+//         }
 
        }
   }

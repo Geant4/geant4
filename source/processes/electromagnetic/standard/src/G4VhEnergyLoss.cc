@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.cc,v 1.15 2001-01-23 11:54:13 urban Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.16 2001-03-27 15:10:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -24,6 +24,7 @@
 // 17/08/00 : V.Ivanchenko change EnergyLossFluctuation 
 // 18/08/00 : V.Ivanchenko bug fixed in GetConstrained 
 // 23/01/01 : bug fixed in AlongStepDoIt , L.Urban
+// 27/03/01 : commented out the printing of subcutoff energies
 // --------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -324,16 +325,16 @@ void G4VhEnergyLoss::BuildDEDXTable(
    if(!setMinDeltaCutInRange)
      MinDeltaCutInRange = G4Electron::Electron()->GetCuts()/10.;
 
-  if((subSecFlag) && (aParticleType.GetParticleName()=="proton"))
-  {
-    G4cout << G4endl;
-    G4cout.precision(5) ;
-    G4cout << " hIoni    Minimum Delta cut in range=" << MinDeltaCutInRange/mm
-           << "  mm." << G4endl;
-    G4cout << G4endl;
-    G4cout << "           material        min.delta energy(keV) " << G4endl;
-    G4cout << G4endl;
-  }
+//  if((subSecFlag) && (aParticleType.GetParticleName()=="proton"))
+//  {
+//    G4cout << G4endl;
+//    G4cout.precision(5) ;
+//    G4cout << " hIoni    Minimum Delta cut in range=" << MinDeltaCutInRange/mm
+//           << "  mm." << G4endl;
+//    G4cout << G4endl;
+//    G4cout << "           material        min.delta energy(keV) " << G4endl;
+//    G4cout << G4endl;
+//  }
 
     if(MinDeltaEnergy) delete MinDeltaEnergy ;
     MinDeltaEnergy = new G4double [numOfMaterials] ;
@@ -352,15 +353,15 @@ void G4VhEnergyLoss::BuildDEDXTable(
       if(MinDeltaEnergy[mat]>G4Electron::Electron()->GetCutsInEnergy()[mat])
         MinDeltaEnergy[mat]=G4Electron::Electron()->GetCutsInEnergy()[mat] ;
 
-     if((subSecFlag) && (aParticleType.GetParticleName()=="proton"))
-     {
-       G4cout << G4std::setw(20) << (*theMaterialTable)(mat)->GetName()
-	      << G4std::setw(15) << MinDeltaEnergy[mat]/keV ;
-	   if(LowerLimitForced[mat])
-	 	G4cout << "  lower limit forced." << G4endl;
-	   else
-	 	G4cout << G4endl ;
-     }
+//     if((subSecFlag) && (aParticleType.GetParticleName()=="proton"))
+//     {
+//       G4cout << G4std::setw(20) << (*theMaterialTable)(mat)->GetName()
+//	      << G4std::setw(15) << MinDeltaEnergy[mat]/keV ;
+//	   if(LowerLimitForced[mat])
+//	 	G4cout << "  lower limit forced." << G4endl;
+//	   else
+//	 	G4cout << G4endl ;
+//     }
     }
 }
       
