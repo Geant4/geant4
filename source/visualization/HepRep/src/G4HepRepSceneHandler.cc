@@ -24,7 +24,6 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: G4HepRepSceneHandler.cc,v 1.10 2002-11-19 21:54:42 duns Exp $
  */
 
 #include "globals.hh"
@@ -56,7 +55,8 @@
 #include "G4NURBS.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4VSolid.hh"
-#include "G4VSolid.hh"
+#include "G4VTrajectory.hh"
+#include "G4VHit.hh"
 #include "G4Scene.hh"
 
 //This
@@ -137,6 +137,7 @@ void G4HepRepSceneHandler::open() {
     geometryType->addAttDef("Density", "Material Density", "Physics","");
     geometryType->addAttDef("State", "Material State", "Physics","");
     geometryType->addAttDef("Radlen", "Material Radiation Length", "Physics","");
+    geometryType->addAttValue("Layer", G4String("Geometry"));
     typeTree->addType(geometryType);
 
     eventType = heprepFactory->createHepRepType(NULL, "Event");
@@ -458,8 +459,8 @@ void G4HepRepSceneHandler::AddThis (const G4VHit& hit) {
     G4VSceneHandler::AddThis (hit);
 }
 
-void 
-G4HepRepSceneHandler::PreAddThis 
+void
+G4HepRepSceneHandler::PreAddThis
 (const G4Transform3D& objectTransformation,
 			                           const G4VisAttributes& visAttribs) {
 

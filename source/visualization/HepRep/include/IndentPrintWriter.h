@@ -14,7 +14,6 @@
  * print, println methods taking other arguments may not be indented properly.
  *
  * @author Mark Donszelmann
- * @version $Id: IndentPrintWriter.h,v 1.7 2002-11-19 21:53:57 duns Exp $
  */
 class IndentPrintWriter {
 

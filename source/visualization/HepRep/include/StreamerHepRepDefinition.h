@@ -14,7 +14,6 @@
 /**
  *
  * @author M.Donszelmann
- * @version $Id: StreamerHepRepDefinition.h,v 1.7 2002-11-19 21:54:07 duns Exp $
  */
 class StreamerHepRepDefinition : public StreamerHepRepAttribute, public virtual HEPREP::HepRepDefinition {
 
