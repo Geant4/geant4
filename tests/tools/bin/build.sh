@@ -40,8 +40,6 @@ if [ -z "${G4WORKDIR}" ] ; then
   echo "G4WORKDIR not set. Execute setup file first !"
   exit
 fi
-# Disconnect usage of visualization :
-G4VIS_DONT_USE=1;export G4VIS_DONT_USE
 #
 # Make $G4WORKDIR/stt directory :
 dir=$G4WORKDIR/stt
