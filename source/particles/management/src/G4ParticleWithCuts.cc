@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleWithCuts.cc,v 1.13 2001-10-15 09:58:35 kurasige Exp $
+// $Id: G4ParticleWithCuts.cc,v 1.14 2001-10-18 04:31:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,9 +48,12 @@
 #include "g4std/strstream"
 
 
+// energy range
 G4double  G4ParticleWithCuts::LowestEnergy = 0.99e-3*MeV;
 G4double  G4ParticleWithCuts::HighestEnergy = 100.0e6*MeV;
 
+// pointer to G4Proton
+G4ParticleDefinition* G4ParticleWithCuts::theProton = 0;
 
 G4ParticleWithCuts::G4ParticleWithCuts(
 		const G4String&  aName,  
@@ -88,9 +91,6 @@ G4ParticleWithCuts::G4ParticleWithCuts(
    //-- default values for SetCuts ------------------------------
    //    Lowest/Highest energy is defined in MeV
          TotBin = 200;
-
-   // pointer to G4Proton
-   theProton=0;
 }
 
 G4ParticleWithCuts::~G4ParticleWithCuts()

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleWithCuts.hh,v 1.10 2001-10-15 09:58:31 kurasige Exp $
+// $Id: G4ParticleWithCuts.hh,v 1.11 2001-10-18 04:31:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -268,6 +268,12 @@ inline
  G4double  G4ParticleWithCuts::GetEnergyThreshold(const G4Material* aMaterial) const
 {
    return theKineticEnergyCuts[aMaterial->GetIndex()]; 
+}
+
+inline 
+ G4double  G4ParticleWithCuts::GetRangeThreshold(const G4Material* aMaterial) const
+{
+   return theCutInMaxInteractionLength[aMaterial->GetIndex()]; 
 }
 
 
