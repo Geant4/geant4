@@ -275,26 +275,29 @@ please consult:
 <P> </P>
 <B>Step limitation</B>
 <P> </P>
+A user now needs to change his/her code, in order to limit the step size of a 
+particle -- when using the class <TT>G4UserLimits</TT> to limit the step.
+
 Up to the previous release, step limitation due to the maximum step length 
-of <TT>G4UserLimits</TT> was directly dealt by <TT>G4SteppingManager</TT>,
+of <TT>G4UserLimits</TT> was directly done by <TT>G4SteppingManager</TT>,
 while all other limits (<TT>maxTrackLength</TT>, <TT>maxStepNumber</TT>,
 <TT>MinKinEnergy</TT> and <TT>minRemainRange</TT>) were dealt by
 <TT>G4UserSpecialCuts</TT> process. To solve this inconsistency, 
-to provide a better performance for the application which is not utilizing the 
-step limitation, and to give more usability to the user, we introduce a new 
+to simplify the majority of applications which do not utilize the step limitation, 
+and to give more usability to the user, we introduce a new 
 process <TT>G4StepLimiter</TT> and move the step limitation procedure in 
 <TT>G4SteppingManager</TT> to this new process. 
 <UL>
-<LI><TT>G4UserLimits</TT> class is kept as it is, and can specify all limits as before.</LI>
-<LI><TT>G4UserSpecialCuts</TT> is kept as it is. This is the process which kills
-    a track once a track comes to a limit specified by <TT>G4UserLimits</TT> (as
-    it did previously). This is a kind of "tracking cut" to be utilized intentionally
-    by the user.</LI>
 <LI>The new process, <TT>G4StepLimiter</TT>, limits the step size specified by
     <TT>G4UserLimits</TT>, but will not kill a track.</LI>
+<LI><TT>G4UserLimits</TT> class is kept as it is, and can specify all limits as before.</LI>
+<LI><TT>G4UserSpecialCuts</TT> is kept as it is. This process kills
+    a track once the track comes to a limit specified by <TT>G4UserLimits</TT> (as
+    it did previously). This provides the user the ability
+    to impose one or more kinds of "tracking cuts".</LI>
 <LI>Given no process took place for max step length limitation in the old design, 
-    <TT>G4StepPoint::GetProcessDefinedStep()</TT> method returned <TT>NULL</TT>.
-    On the other hand in this new scheme, if a step is limited by the maximum step
+    <TT>G4StepPoint::GetProcessDefinedStep()</TT> method used to return <TT>NULL</TT>.
+    In the new scheme, if a step is limited by the maximum step
     length limitation, this method now returns a valid pointer of <TT>G4StepLimiter</TT>
     process.</LI>
 </UL>
@@ -305,15 +308,37 @@ all particle types.<BR>
 No change is required for the user who is NOT using <TT>G4UserLimits</TT> for the
 purpose of maximum step limitation.
 
+<!-- ---------------------------------------------- -->
 <P> </P>
 <B>Killing of a particle</B>
 <P> </P>
-Energy-loss processes no longer change the track status as part of their <TT>AlongStepDoIt()</TT>
-action. For user-defined processes with "continuous" component, in order to kill a particle in
-their <TT>AlongStepDoIt()</TT> method, it is now just required to propose zero kinetic energy
-for the particle itself, or contribute to the particles arriving at zero energy as a result
-of the action of two or more processes.
+An advanced user who has created a process with a continuous component 
+('AlongStep' action) that can kill or bring a particle to a rest will need to 
+review their process implementation.
 
+Energy-loss processes no longer change the track status of a charged particle
+as part of their <TT>AlongStepDoIt()</TT> action. 
+For a user-defined process with a "continuous" component, 
+in order to stop (and thus either kill or bring to a rest in an 'alive' state) 
+a particle in its <TT>AlongStepDoIt()</TT> method, 
+it is now necessary to propose zero kinetic energy for the particle. 
+Alternatively a process can contribute to the particle arriving at zero energy,
+as a result of the action of two or more processes, eg energy loss and propagation
+in an electric field (in the transportation process).
+
+Once a particle has zero (or less) proposed energy, it is brought to a rest 
+and its energy is set exactly to zero. 
+If the particle can decay, can be annihilated or generally has 
+one or more 'AtRest' actions, 
+then another step will be performed that calls these.  
+Else the particle is killed.
+The discrete component (or 'PostStep' action) of a process will not be performed 
+once the particle has come to a stop.
+
+Note: the case of a particle that comes to a rest in a field, and is then
+reaccelerated is not supported at this time.
+
+<!-- ---------------------------------------------- -->
 <P> </P>
 <B>Future migration for <TT>G4GeneralParticleSource</TT> class</B>
 <P> </P>
