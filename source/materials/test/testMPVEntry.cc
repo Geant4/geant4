@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testMPVEntry.cc,v 1.3 2001-07-11 10:01:29 gunter Exp $
+// $Id: testMPVEntry.cc,v 1.4 2001-07-17 15:54:44 verderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,14 +50,14 @@ G4MPVEntry TestStorage (void)
 {
 	G4double pm, pv;
 	
- 	G4cout << "Input photon momentum for G4MPVEntry:  ";
+ 	G4cout << "Input photon momentum for G4MPVEntry:  " << G4endl;
         G4cin >> pm;
-        G4cout << "Input a property value for this photon momentum: ";
+        G4cout << "Input a property value for this photon momentum: " << G4endl;
         G4cin >> pv;
         
         G4MPVEntry newEntry(pm, pv);
 
-        G4cout << "This is your entry: ";
+        G4cout << "This is your entry: " << G4endl;
         newEntry.DumpEntry();
 	G4cout << G4endl;
 	G4cout << G4endl;
@@ -82,3 +82,7 @@ void TestLogicalEquality(G4MPVEntry& e1, G4MPVEntry& e2)
 		G4cout << "the two entries are NOT equal." << G4endl;
 
 }
+
+
+
+

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh,v 1.12 2001-07-11 10:01:26 gunter Exp $
+// $Id: G4Material.hh,v 1.13 2001-07-17 15:54:38 verderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -71,25 +71,25 @@
 // 19-07-99, new data member (chemicalFormula) added by V.Ivanchenko
 // 12-03-01, G4bool fImplicitElement (mma)
 // 30-03-01, suppression of the warning message in GetMaterial
+// 17-77-01, migration to STL. M. Verderi.
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 #ifndef G4MATERIAL_HH
 #define G4MATERIAL_HH
 
-#include "G4ios.hh"
-#include "g4rw/tpvector.h"
-#include "g4rw/tpordvec.h"
 #include "globals.hh"
+#include "G4ios.hh"
+#include "g4std/vector"
 #include "G4Element.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4IonisParamMat.hh"
 #include "G4SandiaTable.hh"
 
-typedef G4RWTPtrVector<G4Element> G4ElementVector;
+typedef G4std::vector<G4Element*> G4ElementVector;
 
 class G4Material;              //forward declaration
-typedef G4RWTPtrOrderedVector<G4Material> G4MaterialTable;
+typedef G4std::vector<G4Material*> G4MaterialTable;
 
 enum G4State { kStateUndefined, kStateSolid, kStateLiquid, kStateGas };
 
@@ -232,7 +232,7 @@ public:  // with description
     static
     const G4MaterialTable* GetMaterialTable() {return &theMaterialTable;};    
     static
-    size_t GetNumberOfMaterials()   {return theMaterialTable.length();};
+    size_t GetNumberOfMaterials()   {return theMaterialTable.size();};
     //the index of this material in the Table:    
     size_t GetIndex() const         {return fIndexInTable;};
     
@@ -318,7 +318,7 @@ inline
 G4Material* G4Material::GetMaterial(G4String materialName)
 {  
   // search the material by its name 
-  for (size_t J=0 ; J<theMaterialTable.length() ; J++)
+  for (size_t J=0 ; J<theMaterialTable.size() ; J++)
    {
     if(theMaterialTable[J]->GetName() == materialName)
       return theMaterialTable[J];
@@ -337,7 +337,7 @@ G4double G4Material::GetZ() const
      G4cerr << "WARNING in GetZ. The material: " << fName << " is a mixture." << G4endl;
      G4Exception ( " the Atomic number is not well defined." );
   } 
-  return (*theElementVector)(0)->GetZ();      
+  return (*theElementVector)[0]->GetZ();      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -350,7 +350,7 @@ G4double G4Material::GetA() const
      G4cerr << "WARNING in GetA. The material: " << fName << " is a mixture." << G4endl;
      G4Exception ( " the Atomic mass is not well defined." );
   } 
-  return  (*theElementVector)(0)->GetA();      
+  return  (*theElementVector)[0]->GetA();      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

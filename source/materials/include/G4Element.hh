@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh,v 1.9 2001-07-11 10:01:25 gunter Exp $
+// $Id: G4Element.hh,v 1.10 2001-07-17 15:54:37 verderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -61,24 +61,24 @@
 // 04-08-98, new method GetElement(elementName), M.Maire
 // 16-11-98, Subshell -> Shell, mma
 // 30-03-01, suppression of the warning message in GetElement
+// 17-07-01, migration to STL, M. Verderi
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 #ifndef G4ELEMENT_HH
 #define G4ELEMENT_HH
 
-#include "G4ios.hh"
-#include "g4rw/tpvector.h"
-#include "g4rw/tpordvec.h"
 #include "globals.hh"
+#include "G4ios.hh"
+#include "g4std/vector"
 #include "G4Isotope.hh"
 #include "G4AtomicShells.hh"
 #include "G4IonisParamElm.hh"
 
-typedef G4RWTPtrVector<G4Isotope> G4IsotopeVector;
+typedef G4std::vector<G4Isotope*> G4IsotopeVector;
 
 class G4Element;              //forward declaration
-typedef G4RWTPtrOrderedVector<G4Element> G4ElementTable;
+typedef G4std::vector<G4Element*> G4ElementTable;
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -138,7 +138,7 @@ public:  // with description
 
     //the (static) Table of Elements:
     static const  G4ElementTable* GetElementTable() {return &theElementTable;};
-    static size_t GetNumberOfElements() {return theElementTable.length();};
+    static size_t GetNumberOfElements() {return theElementTable.size();};
     //the index of this element in the Table:
     size_t GetIndex() const             {return fIndexInTable;};
     
@@ -216,7 +216,7 @@ inline
 G4Element* G4Element::GetElement(G4String elementName)
 {  
   // search the element by its name 
-  for (size_t J=0 ; J<theElementTable.length() ; J++)
+  for (size_t J=0 ; J<theElementTable.size() ; J++)
    {
     if(theElementTable[J]->GetName() == elementName)
       return theElementTable[J];

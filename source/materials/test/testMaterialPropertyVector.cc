@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testMaterialPropertyVector.cc,v 1.3 2001-07-11 10:01:29 gunter Exp $
+// $Id: testMaterialPropertyVector.cc,v 1.4 2001-07-17 15:54:44 verderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,11 +67,13 @@ int main ()
 	// ----------------	
 	G4cout << "Test GetProperty" << G4endl;
 	G4cout << "----------------" << G4endl << G4endl; 
-        G4cout << "Input a photon momentum value for which you wish" << G4endl;
-        G4cout << "to find the absorption coefficient:  ";
+        G4cout << "Input a photon momentum value (MeV) for which you wish" << G4endl;
+        G4cout << "to find the absorption coefficient:  " << G4endl;
 
         G4cin >> aPhotonMomentum;
 	G4cout << G4endl;
+
+	aPhotonMomentum *= aPhotonMomentum*MeV;
 
 	anAbsorptionCoefficient = absco.GetProperty(aPhotonMomentum);
 
@@ -95,10 +97,12 @@ int main ()
 	G4cout << "Test RemoveElement" << G4endl;
         G4cout << "------------------" << G4endl << G4endl;
         G4cout << "Input a photon momentum value for which you wish" << G4endl;
-        G4cout << "to remove the OPVEntry:  ";
+        G4cout << "to remove the OPVEntry:  " << G4endl;
 
         G4cin >> aPhotonMomentum;
 	G4cout << G4endl;
+
+	aPhotonMomentum *= aPhotonMomentum*MeV;
 
 	absco.RemoveElement(aPhotonMomentum);
 	absco.DumpVector(); 
@@ -113,7 +117,7 @@ int main ()
 
 	while (++absco)
 	{
-		G4cout << absco.GetPhotonMomentum() << "\t"
+		G4cout << absco.GetPhotonMomentum()/MeV << "MeV \t"
 		     << absco.GetProperty() << G4endl;
 	}
 	G4cout << "\n\n <END OF TEST>" << G4endl;

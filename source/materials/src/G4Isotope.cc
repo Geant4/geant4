@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc,v 1.6 2001-07-11 10:01:27 gunter Exp $
+// $Id: G4Isotope.cc,v 1.7 2001-07-17 15:54:40 verderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
+// 17-07-01, migration to STL. M. Verderi.
 // 03-05-01, flux.precision(prec) at begin/end of operator<<
 // 29-01-97: Forbidden to create Isotope with Z<1 or N<Z, M.Maire
 // 26-06-96: Code uses operators (+=, *=, ++, -> etc.) correctly, P. Urban
@@ -49,8 +50,13 @@ G4Isotope::G4Isotope(const G4String& Name, G4int Z, G4int N, G4double A)
     if (N<Z) G4Exception
       (" ERROR! Attempt to create an Isotope with N < Z !!!" );
 
-    theIsotopeTable.insert(this);
-    fIndexInTable = theIsotopeTable.index(this);
+    theIsotopeTable.push_back(this);
+    G4IsotopeTable::const_iterator iter;
+    size_t pos = 0;
+    fIndexInTable = -1;
+    for (iter = theIsotopeTable.begin(); iter != theIsotopeTable.end(); iter++, pos++)
+      if (**iter==*this) {fIndexInTable = pos;  break;}
+    if (-1 == fIndexInTable) G4Exception("Isotope not found");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -64,8 +70,13 @@ G4Isotope::G4Isotope(G4Isotope& right)
   *this = right;
   
   //insert this new isotope in table
-  theIsotopeTable.insert(this);
-  fIndexInTable = theIsotopeTable.index(this);  
+  theIsotopeTable.push_back(this);
+  G4IsotopeTable::const_iterator iter;
+  size_t pos = 0;
+  fIndexInTable = -1;
+  for (iter = theIsotopeTable.begin(); iter != theIsotopeTable.end(); iter++, pos++)
+    if (**iter==*this) {fIndexInTable = pos;  break;}
+  if (-1 == fIndexInTable) G4Exception("Isotope not found");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -78,7 +89,12 @@ G4Isotope & G4Isotope::operator=(const G4Isotope& right)
     fZ = right.fZ;
     fN = right.fZ;
     fA = right.fA;
-    fIndexInTable = theIsotopeTable.index(this);     
+    G4IsotopeTable::const_iterator iter;
+    size_t pos = 0;
+    fIndexInTable = -1;
+    for (iter = theIsotopeTable.begin(); iter != theIsotopeTable.end(); iter++, pos++)
+      if (**iter==*this) {fIndexInTable = pos;  break;}
+    if (-1 == fIndexInTable) G4Exception("Isotope not found");
   }
   return *this;
 }
@@ -130,10 +146,10 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4IsotopeTable IsotopeTable)
 {
  //Dump info for all known isotopes
    flux 
-     << "\n***** Table : Nb of isotopes = " << IsotopeTable.length() 
+     << "\n***** Table : Nb of isotopes = " << IsotopeTable.size() 
      << " *****\n" << G4endl;
         
-   for (size_t i=0; i<IsotopeTable.length(); i++)
+   for (size_t i=0; i<IsotopeTable.size(); i++)
      flux << IsotopeTable[i] << G4endl;
 
    return flux;

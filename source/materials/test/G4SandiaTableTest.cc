@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTableTest.cc,v 1.4 2001-07-11 10:01:28 gunter Exp $
+// $Id: G4SandiaTableTest.cc,v 1.5 2001-07-17 15:54:43 verderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -263,7 +263,7 @@ int main()
   G4double unit;
   G4String materialName = "Air";
   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  numberOfMat = theMaterialTable->length() ;
+  numberOfMat = theMaterialTable->size() ;
 
   for(iMat=0;iMat<numberOfMat;iMat++)
   {

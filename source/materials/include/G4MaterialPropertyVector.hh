@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.hh,v 1.5 2001-07-11 10:01:26 gunter Exp $
+// $Id: G4MaterialPropertyVector.hh,v 1.6 2001-07-17 15:54:39 verderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,9 +50,8 @@
 // Includes
 /////////////
 
-#include "g4rw/tpsrtvec.h"
-#include "g4rw/cstring.h"
 #include "G4MPVEntry.hh"
+#include "g4std/vector"
 
 // Class Description:
 // A one-to-one mapping from Photon Momentum to some optical property.
@@ -156,7 +155,8 @@ private:
         // Private Data Members
 	/////////////////////////
 
-	G4RWTPtrSortedVector<G4MPVEntry> MPV;
+  //G4RWTPtrSortedVector<G4MPVEntry> MPV;
+        G4std::vector<G4MPVEntry*> MPV;
 	G4int NumEntries;
 	G4int CurrentEntry;
 };
@@ -168,25 +168,25 @@ private:
 inline 
 G4double G4MaterialPropertyVector::GetMaxProperty() const
 {
-	return MPV.last()->GetProperty();
+  return MPV.back()->GetProperty();
 }
 
 inline
 G4double G4MaterialPropertyVector::GetMinProperty() const
 {
-	return MPV.first()->GetProperty();
+  return MPV.front()->GetProperty();
 }
 
 inline
 G4double G4MaterialPropertyVector::GetMaxPhotonMomentum() const
 {
-	return MPV.last()->GetPhotonMomentum();
+  return MPV.back()->GetPhotonMomentum();
 }
 
 inline 
 G4double G4MaterialPropertyVector::GetMinPhotonMomentum() const
 {
-	return MPV.first()->GetPhotonMomentum();
+  return MPV.front()->GetPhotonMomentum();
 }
 
 #endif /* G4MaterialPropertyVector_h */

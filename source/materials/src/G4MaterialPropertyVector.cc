@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.cc,v 1.6 2001-07-11 10:01:28 gunter Exp $
+// $Id: G4MaterialPropertyVector.cc,v 1.7 2001-07-17 15:54:41 verderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,7 @@ G4MaterialPropertyVector::operator =(const G4MaterialPropertyVector& right)
 	
         // clear the vector of current contents
 
-	MPV.clearAndDestroy();
+	MPV.clear();
 
         // create an actual copy (instead of the shallow copy that the
         // assignment operator defaults to for G4RWTPtrSortedVector)
@@ -83,7 +83,7 @@ G4MaterialPropertyVector::operator =(const G4MaterialPropertyVector& right)
 
         for (G4int i = 0 ; i < right.NumEntries; i++) {
                 G4MPVEntry *newElement = new G4MPVEntry(right.GetEntry(i));
-                MPV.insert(newElement);
+                MPV.push_back(newElement);
                 NumEntries++;
         }
 
@@ -120,7 +120,7 @@ G4MaterialPropertyVector::G4MaterialPropertyVector
 
         for (G4int i = 0 ; i < right.NumEntries; i++) {
         	G4MPVEntry *newElement = new G4MPVEntry(right.GetEntry(i));
-                MPV.insert(newElement);
+                MPV.push_back(newElement);
                 NumEntries++;
         }
 }
@@ -131,7 +131,7 @@ G4MaterialPropertyVector::G4MaterialPropertyVector
 
 G4MaterialPropertyVector::~G4MaterialPropertyVector()
 {
-	MPV.clearAndDestroy();
+	MPV.clear();
 }
 
         ////////////
@@ -143,23 +143,31 @@ void G4MaterialPropertyVector::AddElement(G4double aPhotonMomentum,
 	G4MPVEntry *newElement;
 	
 	newElement = new G4MPVEntry(aPhotonMomentum, aPropertyValue);
-	MPV.insert(newElement);
+	MPV.push_back(newElement);
 	NumEntries++; 
 }
 
 void G4MaterialPropertyVector::RemoveElement(G4double aPhotonMomentum)
 {
 	G4MPVEntry *newElement;
-	G4MPVEntry *success;
+	G4MPVEntry *success(NULL);
 
 	newElement = new G4MPVEntry(aPhotonMomentum, DBL_MAX);
-	success = MPV.remove(newElement);
+
+	G4std::vector<G4MPVEntry*>::const_iterator i;
+	for (i = MPV.begin(); i != MPV.end(); i++)
+	  if (**i == *newElement) {success = *i; break;}
+	//	success = MPV.remove(newElement);
 
 	if(success == NULL)
 	{
 	G4Exception("G4MaterialPropertyVector::RemoveElement==>"
 					       "element not found");
 	return;
+	}
+	else
+	{
+	  MPV.erase(i); // remove done here.
 	}
 
 	NumEntries--;
@@ -176,10 +184,10 @@ G4MaterialPropertyVector::GetProperty(G4double aPhotonMomentum) const
 	// Establish table range 
 	/////////////////////////
 
-	G4double PMmin = MPV.first()->GetPhotonMomentum(); 
-	G4double minProp = MPV.first()->GetProperty(); 
-	G4double PMmax = MPV.last()->GetPhotonMomentum();
-	G4double maxProp = MPV.last()->GetProperty();
+	G4double PMmin   = MPV.front()->GetPhotonMomentum(); 
+	G4double minProp = MPV.front()->GetProperty(); 
+	G4double PMmax   = MPV.back() ->GetPhotonMomentum();
+	G4double maxProp = MPV.back() ->GetProperty();
 
 	///////////////////////////////////////////
 	// Does value fall outside range of table?
@@ -203,7 +211,11 @@ G4MaterialPropertyVector::GetProperty(G4double aPhotonMomentum) const
 	
 	target = new G4MPVEntry(aPhotonMomentum, 0.0);
 
-	temp = MPV.find(target);
+	temp = NULL;
+	//temp = MPV.find(target);
+	G4std::vector<G4MPVEntry*>::const_iterator i;
+	for (i = MPV.begin(); i != MPV.end(); i++)
+	  if (**i == *target) {temp = *i; break;}
 	if (temp != NULL) {
 
 		////////////////////////
@@ -281,10 +293,10 @@ G4MaterialPropertyVector::GetPhotonMomentum(G4double aProperty) const
 	// Establish Table range
 	//////////////////////////
 
-	G4double PropMin = MPV.first()->GetProperty();
-	G4double PMmin= MPV.first()->GetPhotonMomentum();
-	G4double PropMax = MPV.last()->GetProperty();
-	G4double PMmax= MPV.last()->GetPhotonMomentum();
+	G4double PropMin = MPV.front()->GetProperty();
+	G4double PMmin   = MPV.front()->GetPhotonMomentum();
+	G4double PropMax = MPV.back() ->GetProperty();
+	G4double PMmax   = MPV.back() ->GetPhotonMomentum();
 
 	///////////////////////////////////////////
 	// Does value fall outside range of table?
@@ -310,7 +322,7 @@ G4MaterialPropertyVector::GetPhotonMomentum(G4double aProperty) const
 	//////////////////////////////
 
 	left = 0;
-        right = MPV.entries();
+        right = MPV.size(); // was .entries()
 
         // find values in bins on either side of aProperty 
 	
@@ -355,7 +367,7 @@ void G4MaterialPropertyVector::ResetIterator()
 
 void G4MaterialPropertyVector::DumpVector()
 {
- 	if (MPV.isEmpty())  {
+ 	if (MPV.empty())  {
  		G4cerr << "nothing to dump" << G4endl;
 		G4Exception("G4MaterialPropertyVector::DumpVector ==>"
 			    "Nothing to dump!  Vector is empty");
@@ -383,7 +395,7 @@ G4MaterialPropertyVector::GetAdjacentBins(G4double aPhotonMomentum,
         G4int mid;
 
         *left = 0;
-        *right = (MPV.entries() - 1);
+        *right = (MPV.size() - 1); // was .entries()
 
         // find values in bins on either side of aPhotonMomentum
 

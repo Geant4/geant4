@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.8 2001-07-11 10:01:27 gunter Exp $
+// $Id: G4Element.cc,v 1.9 2001-07-17 15:54:40 verderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -84,9 +84,13 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
     ComputeDerivedQuantities();
 
     // Store in table and set the index
-    theElementTable.insert(this);
-    fIndexInTable = theElementTable.index(this);
-
+    theElementTable.push_back(this);
+    G4ElementTable::const_iterator iter;
+    size_t pos = 0;
+    fIndexInTable = -1;
+    for (iter = theElementTable.begin(); iter != theElementTable.end(); iter++, pos++)
+	if (**iter==*this) {fIndexInTable = pos;  break;}
+    if (-1 == fIndexInTable) G4Exception("Element not found");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -118,7 +122,7 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
        " Trying to add an Isotope before contructing the element.");
 
     // filling ...
-    if ( fNumberOfIsotopes < theIsotopeVector->length() ) {
+    if ( fNumberOfIsotopes < theIsotopeVector->size() ) {
        // check same Z
        if (fNumberOfIsotopes==0) fZeff = G4double(isotope->GetZ());
        else if (G4double(isotope->GetZ()) != fZeff) 
@@ -126,21 +130,21 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
 	   " Try to add isotopes with different Z");
        //Z ok   
        fRelativeAbundanceVector[fNumberOfIsotopes] = abundance;
-       (*theIsotopeVector)(fNumberOfIsotopes) = isotope;
+       (*theIsotopeVector)[fNumberOfIsotopes] = isotope;
        ++fNumberOfIsotopes;
       } 
     else G4Exception ("ERROR from G4Element::AddIsotope!"  
        " Attempt to add more than the declared number of isotopes.");
 
     // filled.
-    if ( fNumberOfIsotopes == theIsotopeVector->length() ) {
+    if ( fNumberOfIsotopes == theIsotopeVector->size() ) {
       // Compute Neff, Aeff
       G4double wtSum=0.0;
 
       fNeff = fAeff = 0.0;
       for (size_t i=0;i<fNumberOfIsotopes;i++) {
-        fNeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)(i)->GetN();
-        fAeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)(i)->GetA();
+	fNeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetN();
+	fAeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetA();
         wtSum +=  fRelativeAbundanceVector[i];
       }
       fNeff /=  wtSum;
@@ -154,8 +158,13 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
       ComputeDerivedQuantities();
 
       // Store in table and set the index
-      theElementTable.insert(this);
-      fIndexInTable = theElementTable.index(this);
+      theElementTable.push_back(this);
+      G4ElementTable::const_iterator iter;
+      size_t pos = 0;
+      fIndexInTable = -1;
+      for (iter = theElementTable.begin(); iter != theElementTable.end(); iter++, pos++)
+	if (**iter==*this) {fIndexInTable = pos;  break;}
+      if (-1 == fIndexInTable) G4Exception("Element not found");
     }
 }
 
@@ -247,8 +256,13 @@ G4Element::G4Element(G4Element& right)
       *this = right;
 
       // Store this new element in table and set the index
-      theElementTable.insert(this);
-      fIndexInTable = theElementTable.index(this);	   
+      theElementTable.push_back(this);
+      G4ElementTable::const_iterator iter;
+      size_t pos = 0;
+      fIndexInTable = -1;
+      for (iter = theElementTable.begin(); iter != theElementTable.end(); iter++, pos++)
+	if (**iter==*this) {fIndexInTable = pos;  break;}
+      if (-1 == fIndexInTable) G4Exception("Element not found");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -341,11 +355,11 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4Element* element)
 G4std::ostream& operator<<(G4std::ostream& flux, G4ElementTable ElementTable)
 {
  //Dump info for all known elements
-   flux << "\n***** Table : Nb of elements = " << ElementTable.length() 
+   flux << "\n***** Table : Nb of elements = " << ElementTable.size() 
         << " *****\n" << G4endl;
         
-   for (size_t i=0; i<ElementTable.length(); i++) flux << ElementTable[i] 
-                                                      << G4endl << G4endl;
+   for (size_t i=0; i<ElementTable.size(); i++) flux << ElementTable[i] 
+						     << G4endl << G4endl;
 
    return flux;
 }

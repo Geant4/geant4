@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.11 2001-07-11 10:01:28 gunter Exp $
+// $Id: G4Material.cc,v 1.12 2001-07-17 15:54:41 verderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -50,6 +50,7 @@
 // 12-03-01, G4bool fImplicitElement;
 //           copy constructor and assignement operator revised (mma)
 // 03-05-01, flux.precision(prec) at begin/end of operator<<
+// 17-07-01, migration to STL. M. Verderi.
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -88,11 +89,11 @@ G4Material::G4Material(const G4String& name, G4double z,
 
     // Initialize theElementVector allocating one
     // element corresponding to this material
-    maxNbComponents  = fNumberOfComponents = fNumberOfElements = 1;
-    fImplicitElement = true;
-    theElementVector    = new G4ElementVector(1);
-    theElementVector[0] = new G4Element(name, " ", z, a);
-    fMassFractionVector = new G4double[1];
+    maxNbComponents        = fNumberOfComponents = fNumberOfElements = 1;
+    fImplicitElement       = true;
+    theElementVector       = new G4ElementVector(1);
+    (*theElementVector)[0] = new G4Element(name, " ", z, a);
+    fMassFractionVector    = new G4double[1];
     fMassFractionVector[0] = 1. ;
 
     if (fState == kStateUndefined)
@@ -104,8 +105,13 @@ G4Material::G4Material(const G4String& name, G4double z,
     ComputeDerivedQuantities();
 
     // Store in the table of Materials
-    theMaterialTable.insert(this);
-    fIndexInTable = theMaterialTable.index(this);
+    theMaterialTable.push_back(this);
+    G4MaterialTable::const_iterator iter;
+    size_t pos = 0;
+    fIndexInTable = -1;
+    for (iter = theMaterialTable.begin(); iter != theMaterialTable.end(); iter++, pos++)
+      if (**iter==*this) {fIndexInTable = pos;  break;}
+    if (-1 == fIndexInTable) G4Exception("Material not found");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -174,11 +180,11 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
 
     // Initialize theElementVector allocating one
     // element corresponding to this material
-    maxNbComponents  = fNumberOfComponents = fNumberOfElements = 1;
-    fImplicitElement = true;
-    theElementVector    = new G4ElementVector(1);
-    theElementVector[0] = new G4Element(name, " ", z, a);
-    fMassFractionVector = new G4double[1];
+    maxNbComponents        = fNumberOfComponents = fNumberOfElements = 1;
+    fImplicitElement       = true;
+    theElementVector       = new G4ElementVector(1);
+    (*theElementVector)[0] = new G4Element(name, " ", z, a);
+    fMassFractionVector    = new G4double[1];
     fMassFractionVector[0] = 1. ;
 
     if (fState == kStateUndefined)
@@ -190,8 +196,13 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
     ComputeDerivedQuantities();
 
     // Store in the table of Materials
-    theMaterialTable.insert(this);
-    fIndexInTable = theMaterialTable.index(this);
+    theMaterialTable.push_back(this);
+    G4MaterialTable::const_iterator iter;
+    size_t pos = 0;
+    fIndexInTable = -1;
+    for (iter = theMaterialTable.begin(); iter != theMaterialTable.end(); iter++, pos++)
+      if (**iter==*this) {fIndexInTable = pos;  break;}
+    if (-1 == fIndexInTable) G4Exception("Material not found");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -272,9 +283,14 @@ void G4Material::AddElement(G4Element* element, G4int nAtoms)
        ComputeDerivedQuantities();
 
        // Store in the static Table of Materials
-       theMaterialTable.insert(this);
-       fIndexInTable = theMaterialTable.index(this);
-     }
+       theMaterialTable.push_back(this);
+       G4MaterialTable::const_iterator iter;
+       size_t pos = 0;
+       fIndexInTable = -1;
+       for (iter = theMaterialTable.begin(); iter != theMaterialTable.end(); iter++, pos++)
+	 if (**iter==*this) {fIndexInTable = pos;  break;}
+       if (-1 == fIndexInTable) G4Exception("Material not found");
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -301,7 +317,7 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
         while ((el<fNumberOfElements)&&(element!=(*theElementVector)[el])) el++;
         if (el<fNumberOfElements) fMassFractionVector[el] += fraction;
         else {
-          if(el>=theElementVector->length()) theElementVector->resize(el+1);
+          if(el>=theElementVector->size()) theElementVector->resize(el+1);
           (*theElementVector)[el] = element;
           fMassFractionVector[el] = fraction;
           fNumberOfElements ++;
@@ -326,8 +342,13 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
        ComputeDerivedQuantities();
 
        // Store in the static Table of Materials
-       theMaterialTable.insert(this);
-       fIndexInTable = theMaterialTable.index(this);
+       theMaterialTable.push_back(this);
+       G4MaterialTable::const_iterator iter;
+       size_t pos = 0;
+       fIndexInTable = -1;
+       for (iter = theMaterialTable.begin(); iter != theMaterialTable.end(); iter++, pos++)
+	 if (**iter==*this) {fIndexInTable = pos;  break;}
+       if (-1 == fIndexInTable) G4Exception("Material not found");
     }
 }
 
@@ -357,7 +378,7 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
             if (el<fNumberOfElements) fMassFractionVector[el] += fraction
                                                   *(material->GetFractionVector())[elm];
             else {
-              if(el>=theElementVector->length()) theElementVector->resize(el+1);
+              if(el>=theElementVector->size()) theElementVector->resize(el+1);
               (*theElementVector)[el] = element;
               fMassFractionVector[el] = fraction*(material->GetFractionVector())[elm];
               fNumberOfElements ++;
@@ -384,8 +405,13 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
        ComputeDerivedQuantities();
 
        // Store in the static Table of Materials
-       theMaterialTable.insert(this);
-       fIndexInTable = theMaterialTable.index(this);
+       theMaterialTable.push_back(this);
+       G4MaterialTable::const_iterator iter;
+       size_t pos = 0;
+       fIndexInTable = -1;
+       for (iter = theMaterialTable.begin(); iter != theMaterialTable.end(); iter++, pos++)
+	 if (**iter==*this) {fIndexInTable = pos;  break;}
+       if (-1 == fIndexInTable) G4Exception("Material not found");
     }
 }
 
@@ -494,8 +520,13 @@ G4Material::G4Material(const G4Material& right)
     *this = right;
         
     // Store this new material in the table of Materials
-    theMaterialTable.insert(this);
-    fIndexInTable = theMaterialTable.index(this);
+    theMaterialTable.push_back(this);
+    G4MaterialTable::const_iterator iter;
+    size_t pos = 0;
+    fIndexInTable = -1;
+    for (iter = theMaterialTable.begin(); iter != theMaterialTable.end(); iter++, pos++)
+      if (**iter==*this) {fIndexInTable = pos;  break;}
+    if (-1 == fIndexInTable) G4Exception("Material not found");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -524,10 +555,10 @@ const G4Material& G4Material::operator=(const G4Material& right)
       if (fImplicitElement) {
         G4double z = (*right.theElementVector)[0]->GetZ();
 	G4double a = (*right.theElementVector)[0]->GetA();
-        theElementVector       = new G4ElementVector(1);
-	theElementVector[0]    = new G4Element(fName," ",z,a);
-	fMassFractionVector    = new G4double[1];
-	fMassFractionVector[0] = 1.;
+        theElementVector          = new G4ElementVector(1);
+	(*theElementVector)[0]    = new G4Element(fName," ",z,a);
+	fMassFractionVector       = new G4double[1];
+	fMassFractionVector[0]    = 1.;
       } else {		
         theElementVector       = new G4ElementVector(fNumberOfElements);
         fMassFractionVector    = new G4double[fNumberOfElements];     
@@ -614,10 +645,10 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4Material* material)
 G4std::ostream& operator<<(G4std::ostream& flux, G4MaterialTable MaterialTable)
 {
  //Dump info for all known materials
-   flux << "\n***** Table : Nb of materials = " << MaterialTable.length() 
+   flux << "\n***** Table : Nb of materials = " << MaterialTable.size() 
         << " *****\n" << G4endl;
         
-   for (size_t i=0; i<MaterialTable.length(); i++) flux << MaterialTable[i] 
+   for (size_t i=0; i<MaterialTable.size(); i++) flux << MaterialTable[i] 
                                                        << G4endl << G4endl;
 
    return flux;

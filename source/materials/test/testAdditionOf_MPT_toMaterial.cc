@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testAdditionOf_MPT_toMaterial.cc,v 1.4 2001-07-11 10:01:28 gunter Exp $
+// $Id: testAdditionOf_MPT_toMaterial.cc,v 1.5 2001-07-17 15:54:43 verderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,14 +36,14 @@
 //G4MPVEntry* G4RWTPtrOrderedVector<G4MPVEntry>::find(const G4MPVEntry*) const;
 //void G4RWTPtrOrderedVector<G4DecayChannel>::clearAndDestroy(void);
 
-G4RWTPtrOrderedVector<G4MPVEntry> lof;
-#include "G4DecayChannel.hh"
-G4RWTPtrOrderedVector<G4DecayChannel> lof3;
-void lof2() {
-  lof.clearAndDestroy();
-  lof3.clearAndDestroy();
-  lof.find(0);
-}
+// G4RWTPtrOrderedVector<G4MPVEntry> lof;
+// #include "G4DecayChannel.hh"
+// G4RWTPtrOrderedVector<G4DecayChannel> lof3;
+// void lof2() {
+//   lof.clearAndDestroy();
+//   lof3.clearAndDestroy();
+//   lof.find(0);
+// }
 
 
 void LoopUntilPressEnter();

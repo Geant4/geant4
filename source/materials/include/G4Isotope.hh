@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh,v 1.8 2001-07-11 10:01:26 gunter Exp $
+// $Id: G4Isotope.hh,v 1.9 2001-07-17 15:54:38 verderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -50,13 +50,12 @@
 #ifndef G4ISOTOPE_HH
 #define G4ISOTOPE_HH
 
-#include "G4ios.hh"
-#include "g4rw/tpordvec.h"
 #include "globals.hh"
+#include "G4ios.hh"
+#include "g4std/vector"
 
 class G4Isotope;
-typedef G4RWTPtrOrderedVector<G4Isotope> G4IsotopeTable;
-
+typedef G4std::vector<G4Isotope*> G4IsotopeTable;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -83,7 +82,7 @@ class G4Isotope
     
     static
     const G4IsotopeTable* GetIsotopeTable() {return &theIsotopeTable;};
-    static size_t GetNumberOfIsotopes()     {return theIsotopeTable.length();};
+    static size_t GetNumberOfIsotopes()     {return theIsotopeTable.size();};
     
     friend
     G4std::ostream& operator<<(G4std::ostream&, G4Isotope*);
@@ -122,7 +121,7 @@ inline
 G4Isotope* G4Isotope::GetIsotope(G4String isotopeName)
 {  
   // search the isotope by its name 
-  for (size_t J=0 ; J<theIsotopeTable.length() ; J++)
+  for (size_t J=0 ; J<theIsotopeTable.size() ; J++)
    {
     if(theIsotopeTable[J]->GetName() == isotopeName)
       return theIsotopeTable[J];

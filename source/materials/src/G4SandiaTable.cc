@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.cc,v 1.12 2001-07-11 10:01:28 gunter Exp $
+// $Id: G4SandiaTable.cc,v 1.13 2001-07-17 15:54:42 verderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
+// 10.07.01 Migration to STL. M. Verderi.
 // 03.04.01 fnulcof returned if energy < emin
 // 22.02.01 GetsandiaCofForMaterial(energy) return 0 below lowest interval  mma  
 // 16.02.01 adapted for STL.  mma
@@ -98,7 +99,7 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
   G4int MaxIntervals = 0;
   G4int elm;    
   for (elm=0; elm<NbElm; elm++)
-     { Z[elm] = (int)(*ElementVector)(elm)->GetZ();
+     { Z[elm] = (int)(*ElementVector)[elm]->GetZ();
        MaxIntervals += fNbOfIntervals[Z[elm]];
      }  
      
