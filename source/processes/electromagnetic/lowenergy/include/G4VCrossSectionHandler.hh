@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.hh,v 1.9 2001-10-10 09:49:29 pia Exp $
+// $Id: G4VCrossSectionHandler.hh,v 1.10 2002-04-18 13:41:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -30,6 +30,7 @@
 // -----------
 // 16 Sep 2001   MGP           Created
 // 26 Sep 2001   V.Ivanchenko  Hide copy constructor and assignement operator
+// 18 Apr 2002   V.Ivanchenko  Move member function ValueForMaterial to public
 //
 // -------------------------------------------------------------------
 
@@ -86,6 +87,8 @@ public:
 
   G4double FindValue(G4int Z, G4double e, G4int shellIndex) const;
 
+  G4double ValueForMaterial(const G4Material* material, G4double e) const;
+
   void LoadData(const G4String& dataFile);
 
   void LoadShellData(const G4String& dataFile);
@@ -97,8 +100,6 @@ public:
 protected: 
    
   G4int NumberOfComponents(G4int Z) const;
-
-  G4double ValueForMaterial(const G4Material* material, G4double e) const;
 
   void ActiveElements();
 
