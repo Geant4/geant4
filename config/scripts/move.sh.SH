@@ -360,21 +360,39 @@ echo ""
 echo "Starting installation..."
 echo ""
 
-cd $g4install/source
+cd $g4install
 #echo `pwd`
 
+
+# Remove 'verbosity' in 'tar' command
+# If not INCLUDE then install full tree in 'src' directory!
+#
 if [ X$g4includes_flag = Xn ] ; then
-mkdir -p $g4final_install/include/geant4/source
-find . -name \*.h -o -name \*.hh -o -name \*.icc | xargs tar cvf - |(cd $g4final_install/include/geant4/source; tar xf -)
+echo ""
+echo "Installing sources and headers..."
+echo ""
+mkdir -p $g4final_install/src/geant4/
+tar cf - Configure .config/ config/ source/ environments/ physics_lists/ examples/ |(cd $g4final_install/src/geant4/; tar xf -)
 fi
 
 ########################################
 # There is no env!
 if [ X$g4includes_flag = Xy ] ; then
-$g4make includes
+echo ""
+echo "Installing sources..."
+echo ""
+mkdir -p $g4final_install/src/geant4/
+tar cf - Configure .config/ config/ source/ environments/ physics_lists/ examples/ |(cd $g4final_install/src/geant4/; tar xf -)
+echo ""
+echo "Installing headers..."
+echo ""
+$g4make includes dependencies=""
 fi
 
 # Move libraries
+echo ""
+echo "Installing libraries..."
+echo ""
 mkdir -p $g4final_install/lib/geant4
 cd $g4install/lib
 tar cvf - $g4system |(cd $g4final_install/lib/geant4; tar xf -)
