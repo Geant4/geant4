@@ -1,4 +1,4 @@
-$Id: History,v 1.151 2001-08-17 23:05:24 johna Exp $
+$Id: History,v 1.152 2001-08-24 20:50:42 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,14 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+24th August 2001  John Allison  (vis-V03-02-13)
+- Fixed bugs in G4VisManager::GeometryHasChanged.
+- Separated out G4Scene::CalculateExtent.
+- Improved robustness and timeliness of invocation of some commands.
+- Improved READMEs.
+- Reduced warnings from OpenGL - see OpenGL/History.
+- Cosmetic changes to test.
 
 17th August 2001  John Allison  (vis-V03-02-12)
 - Coworks with greps-V03-02-02 and intercoms-V03-02-04.
