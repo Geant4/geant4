@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VXrayTRmodel.cc,v 1.2 2001-02-27 07:40:41 grichine Exp $
+// $Id: G4VXrayTRmodel.cc,v 1.3 2001-03-28 10:19:04 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -73,8 +73,13 @@ G4VXrayTRmodel::G4VXrayTRmodel(G4Envelope *anEnvelope, G4double a, G4double b) :
   // index of plate material
   fMatIndex1 = anEnvelope->GetDaughter(0)->GetLogicalVolume()->
                            GetMaterial()->GetIndex()  ;
+  G4cout<<"plate material = "<<anEnvelope->GetDaughter(0)->GetLogicalVolume()->
+                           GetMaterial()->GetName()<<G4endl ;
+
   // index of gas material
   fMatIndex2 = anEnvelope->GetMaterial()->GetIndex()  ;
+  G4cout<<"gas material = "<<anEnvelope->
+                           GetMaterial()->GetName()<<G4endl ;
 
   // plasma energy squared for plate material
 
