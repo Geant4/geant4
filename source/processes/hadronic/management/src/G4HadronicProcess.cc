@@ -22,7 +22,10 @@
 //
 //
 //
- // HPW to implement the choosing of an element for scattering.
+// HPW to implement the choosing of an element for scattering.
+
+#include "G4Types.hh"
+
 #include <fstream>
 #include <strstream>
 #include <stdlib.h>
