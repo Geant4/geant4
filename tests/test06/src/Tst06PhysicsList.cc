@@ -21,10 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: Tst06PhysicsList.cc,v 1.7 2001-07-11 10:09:41 gunter Exp $
+// $Id: Tst06PhysicsList.cc,v 1.8 2001-10-16 14:25:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+//
+// 16.10.01 remove all 'Integral' processes (mma)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -92,7 +93,7 @@ void Tst06PhysicsList::ConstructBosons()
   // optical photon
   G4OpticalPhoton::OpticalPhotonDefinition();
 }
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Tst06PhysicsList::ConstructLeptons()
 {
@@ -153,17 +154,16 @@ void Tst06PhysicsList::ConstructProcess()
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4MultipleScattering.hh"
-#include "G4IMultipleScattering.hh"
 
-#include "G4IeIonisation.hh"
-#include "G4IeBremsstrahlung.hh"
-#include "G4IeplusAnnihilation.hh"
+#include "G4eIonisation.hh"
+#include "G4eBremsstrahlung.hh"
+#include "G4eplusAnnihilation.hh"
 
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
 
-#include "G4IhIonisation.hh"
+#include "G4hIonisation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -183,16 +183,16 @@ void Tst06PhysicsList::ConstructEM()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4IMultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4IeIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4IeBremsstrahlung,   -1,-1,3);      
+      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);      
 
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4IMultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4IeIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4IeBremsstrahlung,   -1,-1,3);
-      pmanager->AddProcess(new G4IeplusAnnihilation,  0,-1,4);
+      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
+      pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
       
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
@@ -206,8 +206,8 @@ void Tst06PhysicsList::ConstructEM()
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      pmanager->AddProcess(new G4IMultipleScattering,-1,1,1);
-      pmanager->AddProcess(new G4IhIonisation,       -1,2,2);                  
+      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
+      pmanager->AddProcess(new G4hIonisation,       -1,2,2);                  
     }
   }
 }
