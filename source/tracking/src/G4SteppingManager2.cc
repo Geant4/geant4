@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.6 2002-11-01 00:06:02 tsasaki Exp $
+// $Id: G4SteppingManager2.cc,v 1.7 2002-11-07 18:31:11 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -487,48 +487,29 @@ void G4SteppingManager::InvokePostStepDoItProcs()
 {
 
 // Invoke the specified discrete processes
-  fN2ndariesPostStepDoIt = 0;
-  
-  if(fTrack->GetTrackStatus() != fStopAndKill){
-    for(size_t np=0; np < MAXofPostStepLoops; np++){
-      InvokePSDIP(np);
-    }
-  } else { 
-    for(size_t np1=0; np1 < MAXofPostStepLoops; np1++){
-      size_t np1GPIL = MAXofPostStepLoops-np1-1;
-      // a magic on process ordering
-      if( np1==0 || (*fSelectedPostStepDoItVector)[np1GPIL] == StronglyForced){
-	InvokePSDIP(np1);
-      }
-      return;
-    }
-  }
+   fN2ndariesPostStepDoIt = 0;
 
-}
-
-void G4SteppingManager::InvokePSDIP(size_t np)
-{
-     
+   for(size_t np=0; np < MAXofPostStepLoops; np++){
    //
    // Note: DoItVector has inverse order against GetPhysIntVector
    //       and SelectedPostStepDoItVector.
- 
-   G4int Stat = (*fSelectedPostStepDoItVector)[MAXofPostStepLoops-np-1];
-    if(Stat != InActivated){
-
-      if( ((Stat == NotForced) && (fStepStatus == fPostStepDoItProc)) ||
-	  ((Stat == Forced) && (fStepStatus != fExclusivelyForcedProc)) ||
-	  ((Stat == Conditionally) && (fStepStatus == fAlongStepDoItProc)) ||
-	  ((Stat == ExclusivelyForced) && (fStepStatus == fExclusivelyForcedProc)) || 
-	  ((Stat == StronglyForced) && (fStepStatus == fPostStepDoItProc)) 
+   //
+     //     size_t npGPIL = MAXofPostStepLoops-np-1;
+     G4int Stat = (*fSelectedPostStepDoItVector)[MAXofPostStepLoops-np-1];
+     if(Stat != InActivated){
+       if( ((Stat == NotForced) && (fStepStatus == fPostStepDoItProc)) ||
+	   ((Stat == Forced) && (fStepStatus != fExclusivelyForcedProc)) ||
+	   ((Stat == Conditionally) && (fStepStatus == fAlongStepDoItProc)) ||
+	   ((Stat == ExclusivelyForced) && (fStepStatus == fExclusivelyForcedProc)) || 
+	   ((Stat == StronglyForced) ) 
 	  ) {
-	
-	fCurrentProcess = (*fPostStepDoItVector)[np];
-	fParticleChange 
-	  = fCurrentProcess->PostStepDoIt( *fTrack, *fStep);
+	 
+         fCurrentProcess = (*fPostStepDoItVector)[np];
+         fParticleChange 
+            = fCurrentProcess->PostStepDoIt( *fTrack, *fStep);
 
          // Update PostStepPoint of Step according to ParticleChange
-	fParticleChange->UpdateStepForPostStep(fStep);
+	 fParticleChange->UpdateStepForPostStep(fStep);
 #ifdef G4VERBOSE
                  // !!!!! Verbose
            if(verboseLevel>0) fVerbose->PostStepDoItOneByOne();
@@ -615,7 +596,12 @@ void G4SteppingManager::InvokePSDIP(size_t np)
 
          // clear ParticleChange
          fParticleChange->Clear();
-      }
+       }
+     } //if(*fSelectedPostStepDoItVector(np) != 0){
 
-    } //if(*fSelectedPostStepDoItVector(np) != 0){
+   // Exit from PostStepLoop if the track has been killed
+   if(fTrack->GetTrackStatus() == fStopAndKill) break;
+
+   } //for(size_t np=0; np < MAXofPostStepLoops; np++){
 }
+
