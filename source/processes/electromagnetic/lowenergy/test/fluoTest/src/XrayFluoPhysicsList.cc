@@ -21,13 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoPhysicsList.cc,v 1.1 2001-11-27 14:59:34 elena Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: XrayFluoPhysicsList.cc
+// GEANT4 tag $Name: 
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+//
+// History:
+// -----------
+// 28 Nov 2001 Elena Guardincerri     Created
+//
+// -------------------------------------------------------------------
 
 #include "XrayFluoPhysicsList.hh"
 #include "XrayFluoPhysicsListMessenger.hh"

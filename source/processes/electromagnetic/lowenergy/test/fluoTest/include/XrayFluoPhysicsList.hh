@@ -20,6 +20,18 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// $Id: XrayFluoPhysicsList.hh
+// GEANT4 tag $Name: 
+//
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+//
+// History:
+// -----------
+//  28 Nov 2001  Elena Guardincerri   Created
+//
+// -------------------------------------------------------------------
+
 #ifndef XrayFluoPhysicsList_h
 #define XrayFluoPhysicsList_h 1
 
