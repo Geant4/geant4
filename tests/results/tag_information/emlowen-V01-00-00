@@ -1,0 +1,6 @@
+In lowenergy two main upgrade have been down:
+   - anti_pronon energy losses were was updated in order to provide
+     simulation down to 1 keV (in previous version it was limited by 
+     0.5 MeV);
+   - in G4ionLowEnergyIonisation the minor bug was fixed, thuis bug
+     was seen as unstoped job.
