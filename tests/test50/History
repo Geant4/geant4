@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2003-11-13 15:27:26 johna Exp $
+$Id: History,v 1.3 2004-11-25 09:47:32 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-11-2004 Susanna Guatelli
+           SP and CSDA range of alpha added  
 
 12-11-2003  John Allison
 - Reconstructed Vis Manager.

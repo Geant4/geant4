@@ -121,7 +121,7 @@ In the following sections measurement units for each particular test
 
 --------> Test description <----------
 
-1) CSDA range and Stopping Power test for e-,p 
+1) CSDA range and Stopping Power test for e-,p, alpha 
 
 experimental set-up: monochromatic e- are delivered from the center of 
                      a box filled with absorber material with random direction
@@ -139,12 +139,10 @@ example of file.in for e- test: - test_input_files/SP_lowE_electron.in
                                 - test_input_files/SP_standard_electron.in
 
 
-example of file.in for proton test: - test_input_files/SP_standard_proton.in
+example of file.in for proton test: - test_input_files/SPproton.in
 
-                                    - test_input_files/SP_lowE_proton.in
+                                    - test_input_files/SPalpha.in
                                     
-                                    - test_input_files/SP_lowE_ziegler_proton.in
-
 
 2) gamma attenuation coefficient
 

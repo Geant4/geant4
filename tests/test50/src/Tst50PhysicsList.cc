@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50PhysicsList.cc,v 1.23 2004-11-24 17:11:19 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.24 2004-11-25 09:47:32 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -298,7 +298,8 @@ if (name == "alpha-standard")
 	} 
       else 
 	{
-	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name
+           << " is registered" << G4endl;
 	  RegisterPhysics( new Tst50AlphaStandard(name) );
 	  alphaIsRegistered = true;
 	}
