@@ -76,10 +76,10 @@
    delete theTotalResult;
    std::for_each(theProductionModels.begin(), 
             theProductionModels.end(), 
-	    Delete<G4VIsotopeProduction>());
+	    G4Delete());
    std::for_each(theBias.begin(), 
             theBias.end(), 
-	    Delete<G4VLeadingParticleBiasing>());
+	    G4Delete());
  }
 
  void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )

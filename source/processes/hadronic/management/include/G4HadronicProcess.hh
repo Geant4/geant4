@@ -101,6 +101,20 @@ class G4ParticleChange;
     {
       xBiasOn = true;
       aScaleFactor = aScale;
+      G4String it = GetProcessName(); 
+      if( (it != "PhotonInelastic") && 
+          (it != "ElectroNuclear") && 
+	  (it != "PositronNuclear") )
+      {
+        G4Exception("G4HadronicProcess", "007", FatalException,
+                    "Cross-section biasing available only for gamma and electro nuclear reactions.");
+      }
+      if(aScale<100)
+      {
+        G4Exception("G4HadronicProcess", "001", JustWarning,
+                    "Cross-section bias readjusted to be above safe limit. New value is 100");        
+        aScaleFactor = 100.;
+      }
     }
     
  protected:
