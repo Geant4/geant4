@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.29 2004-11-21 11:28:59 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.30 2004-11-21 14:19:51 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,7 +97,6 @@ typedef HEPVis_SoMarkerSet SoMarkerSet;
 #include "G4Material.hh"
 #include "G4VisAttributes.hh"
 
-typedef SoDetectorTreeKit SoDetectorTreeKit;
 G4Point3D translation;
 
 G4int G4OpenInventorSceneHandler::fSceneIdCount = 0;
@@ -364,6 +363,8 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& Square) {
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   if (polyhedron.GetNoFacets() == 0) return;
   Geant4_SoPolyhedron* soPolyhedron = new Geant4_SoPolyhedron(polyhedron);
+  SbName sbName(fpCurrentLV?fpCurrentLV->GetName().c_str():"");
+  soPolyhedron->setName(sbName);
   soPolyhedron->solid.setValue(fModelingSolid);
   fCurrentSeparator->addChild(soPolyhedron);  
 }

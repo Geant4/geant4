@@ -38,6 +38,7 @@
 #include "G4OpenInventorSceneHandler.hh"
 #include "G4VInteractorManager.hh"
 #include "G4Scene.hh"
+#include "Geant4_SoPolyhedron.h"
 
 G4OpenInventorViewer::G4OpenInventorViewer(
  G4OpenInventorSceneHandler& sceneHandler
@@ -63,6 +64,10 @@ G4OpenInventorViewer::G4OpenInventorViewer(
 
   // Main user scene graph root sent to the viewers.
   fSoSelection = new SoSelection;
+
+  fSoSelection->addSelectionCallback(SelectionCB,this);
+  //fSoSelection->addDeselectionCallback(DeselectionCB,this);
+
   fSoSelection->policy = SoSelection::SINGLE;
   fSoSelection->ref();
 
@@ -207,6 +212,44 @@ void G4OpenInventorViewer::DrawView () {
 void G4OpenInventorViewer::ShowView () {
   fInteractorManager -> SecondaryLoop ();
 }
+
+void G4OpenInventorViewer::SelectionCB(
+ void* aData
+,SoPath* aPath
+) 
+{
+  G4OpenInventorViewer* This = (G4OpenInventorViewer*)aData;
+  SoNode* node = ((SoFullPath*)aPath)->getTail();
+  G4String name((char*)node->getName().getString());
+  G4String cls((char*)node->getTypeId().getName().getString());
+  G4cout << "SoNode : " << node 
+         << " SoType : " << cls 
+         << " name : " << name 
+         << G4endl;
+/*FIXME : to explore
+  if(node->isOfType(Geant4_SoPolyhedron::getClassTypeId())) {
+    Geant4_SoPolyhedron* polyhedron = (Geant4_SoPolyhedron*)node;
+    if(polyhedron->solid.getValue()==FALSE)
+      polyhedron->solid.setValue(TRUE);
+    else
+      polyhedron->solid.setValue(FALSE);
+  }*/
+  This->fSoSelection->deselectAll();
+}
+/*
+void G4OpenInventorViewer::DeselectionCB(
+ void* aData
+,SoPath* aPath
+) 
+{
+  //G4OpenInventorViewer* This = (G4OpenInventorViewer*)aData;
+  G4String name((char*)aPath->getTail()->getTypeId().getName().getString());
+  G4cout << "Deselect : " << name << G4endl;
+}
+*/
+//////////////////////////////////////////////////////////////////////////////
+/// Menu items callbacks /////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
 void G4OpenInventorViewer::Escape(){
   G4cout << "Escape..." <<G4endl;

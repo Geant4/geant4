@@ -31,6 +31,7 @@
 #include "G4VViewer.hh"
 
 class SoSelection;
+class SoPath;
 class SoOrthographicCamera;
 class Geant4_SoImageWriter;
 class Geant4_SoGL2PSAction;
@@ -65,6 +66,9 @@ protected:
   void SetWireFrame();
   void UpdateScene();
   void Help(const G4String& topic = "controls");
+private:
+  static void SelectionCB(void*,SoPath*);
+  //static void DeselectionCB(void*,SoPath*);
 private:
   G4bool CompareForKernelVisit(G4ViewParameters&);
 private:

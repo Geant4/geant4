@@ -1,4 +1,4 @@
-$Id: History,v 1.42 2004-11-21 13:16:33 gbarrand Exp $
+$Id: History,v 1.43 2004-11-21 14:19:51 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,6 +21,8 @@ History file for visualization/OpenInventor
 -------------------------------------------
 
 21th November 2004  Guy Barrand
+- G4OpenInventor[Xt,Win]Viewer, SceneHandler : add a simple picking that
+  dumps picked SoNode address, type and name.
 - G4OpenInventor[Xt,Win]Viewer : "Help controls" menu item.
 - G4OpenInventorSceneHandler::PreAddThis : comment the "ERROR leaf protocal"
   message. Misleading to users.
