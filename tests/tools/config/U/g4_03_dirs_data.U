@@ -28,13 +28,13 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4install/../G4EMLOW2.2
+	g4ledata=$g4data/G4EMLOW2.3
 	;;
 esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4install/../G4NDL3.7
+	g4neutronhpcrosssections=$g4data/G4NDL3.7
 	;;
 esac
 
@@ -47,8 +47,6 @@ Please, specify directories where the Geant4 data is installed:
 1) G4LEVELGAMMADATA:		$g4levelgammadata
 
 2) G4RADIOACTIVEDATA:		$g4radioactivedata
-
-Data which is not part of the default Geant4 distribution:
 
 3) G4LEDATA:			$g4ledata
 
@@ -84,7 +82,7 @@ gans=$ans
 	3) 
 		dflt=$g4ledata
 		fn='f~'
-		rp="Where is G4EMLOW1.1 data installed ?"
+		rp="Where is G4EMLOW2.3 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;
