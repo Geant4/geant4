@@ -26,10 +26,10 @@
       hasXsec = false;
       return;
     }
-#ifndef WIN32
+#ifdef G4USE_STD_NAMESPACE
     G4std::ifstream theData(filename, G4std::ios::in);
 #else
-    G4std::ifstream theData(filename, G4std::ios::in|G4std::ios::nocreate);
+    ifstream theData(filename, ios::in|ios::nocreate);
 #endif
     // here it comes
     G4int infoType, dataType;

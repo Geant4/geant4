@@ -14,10 +14,10 @@
     G4NeutronHPDataUsed aFile = theNames.GetName(A, Z, dirName, aFSType, result);
     filename = aFile.GetName();
 //    if(filename=="") return false;
-#ifndef WIN32
+#ifdef G4USE_STD_NAMESPACE
     G4std::ifstream theChannel(filename);
 #else
-    G4std::ifstream theChannel(filename,G4std::ios::in|G4std::ios::nocreate);
+    ifstream theChannel(filename,ios::in|ios::nocreate);
 #endif
     
     if(!theChannel) return false;

@@ -28,10 +28,10 @@
       hasXsec = false;
       return; // no data for exactly this isotope.
     }
-#ifndef WIN32
+#ifdef G4USE_STD_NAMESPACE
     G4std::ifstream theData(filename, G4std::ios::in);
 #else
-    G4std::ifstream theData(filename, G4std::ios::in|G4std::ios::nocreate);
+    ifstream theData(filename, ios::in|ios::nocreate);
 #endif
     G4int dummy;
     G4double dumm;

@@ -50,10 +50,10 @@
       result.SetName(*theName);
       result.SetA(myA);
       result.SetZ(myZ);
-#ifndef WIN32
+#ifdef G4USE_STD_NAMESPACE
       check.open(*theName);
 #else
-      check.open(*theName,G4std::ios::in|G4std::ios::nocreate);
+      check.open(*theName,ios::in|ios::nocreate);
 #endif
       if(!(check)) 
       {
@@ -73,10 +73,10 @@
           G4double natA = myZ/G4SandiaTable::GetZtoA(myZ);
           result.SetA(natA);
           result.SetZ(myZ);
-#ifndef WIN32
+#ifdef G4USE_STD_NAMESPACE
           check.open(*theName);
 #else
-          check.open(*theName,G4std::ios::in|G4std::ios::nocreate);
+          check.open(*theName,ios::in|ios::nocreate);
 #endif
           if (!check) 
           {
