@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.7 2003-10-07 08:31:04 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.hh,v 1.8 2003-10-13 10:49:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,7 +52,7 @@
 class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithABool;
-class G4UIcmdWithAnInteger
+class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -78,7 +78,7 @@ class G4EnergyLossMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* MaxEnCmd;
     G4UIcmdWithABool*          IntegCmd;
     G4UIcmdWithABool*          rangeCmd;
-    G4UIcmdWithAnInteger*   verCmd;
+    G4UIcmdWithAnInteger*      verCmd;
 };
 
 #endif

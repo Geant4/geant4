@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.10 2003-10-07 08:31:05 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.11 2003-10-13 10:49:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,7 +49,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
 {
   eLossDirectory = new G4UIdirectory("/process/eLoss/");
   eLossDirectory->SetGuidance("Commands for G4VEnergyLoss.");
-         
+
   RndmStepCmd = new G4UIcmdWithABool("/process/eLoss/rndmStep",this);
   RndmStepCmd->SetGuidance("Randomize the proposed step by eLoss.");
   RndmStepCmd->SetParameterName("choice",true);
@@ -121,7 +121,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   rangeCmd->SetDefaultValue(true);
   rangeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  verCmd = new G4UIcmdWithABool("/process/eLoss/verbose",this);
+  verCmd = new G4UIcmdWithAnInteger("/process/eLoss/verbose",this);
   verCmd->SetGuidance("Set verbose level for EM physics.");
   verCmd->SetParameterName("verb",true);
   verCmd->SetDefaultValue(true);
@@ -196,7 +196,7 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     lossTables->SetBuildPreciseRange(rangeCmd->GetNewBoolValue(newValue));
   }
   if (command == verCmd) {
-    lossTables->SetVerbose(verCmd->GetNewIntegerValue(newValue));
+    lossTables->SetVerbose(verCmd->GetNewIntValue(newValue));
   }
 
 }
