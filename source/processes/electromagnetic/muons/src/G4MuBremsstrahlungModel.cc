@@ -70,7 +70,7 @@ G4double G4MuBremsstrahlungModel::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
+G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition*,
                                                  const G4String& nam)
   : G4VEmModel(nam),
   highKinEnergy(100.*TeV),

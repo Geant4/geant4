@@ -103,7 +103,7 @@ G4double G4MuBetheBlochModel::LowEnergyLimit(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuBetheBlochModel::MinEnergyCut(const G4ParticleDefinition* p,
+G4double G4MuBetheBlochModel::MinEnergyCut(const G4ParticleDefinition*,
                                            const G4MaterialCutsCouple* couple)
 {
   return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();

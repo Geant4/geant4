@@ -100,8 +100,6 @@ public:
 
   void SetSubCutoff(G4bool val);
 
-  void SetIntegral(G4bool val); 
-
   void PrintInfoDefinition();
   // Print out of the class parameters
 
@@ -132,7 +130,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4MuIonisationSTD::MinPrimaryEnergy(const G4ParticleDefinition* p,
+inline G4double G4MuIonisationSTD::MinPrimaryEnergy(const G4ParticleDefinition*,
                                                     const G4Material*,
                                                           G4double cut)
 {

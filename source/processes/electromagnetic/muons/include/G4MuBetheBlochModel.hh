@@ -140,7 +140,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4MuBetheBlochModel::MaxSecondaryEnergy(
-          const G4ParticleDefinition* p,
+          const G4ParticleDefinition*,
                 G4double kinEnergy) 
 {
 

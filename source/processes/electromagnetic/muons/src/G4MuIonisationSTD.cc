@@ -146,20 +146,6 @@ void G4MuIonisationSTD::SetSubCutoff(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuIonisationSTD::SetIntegral(G4bool val)
-{ 
-  // Fluctuation model can be changed only before BuildPhysicsTable
-  if (!theParticle) {
-    delete  flucModel;
-    if(val) flucModel = new G4BohrFluctuations();
-    else    flucModel = new G4UniversalFluctuation();
-  }
-    
-  G4VEnergyLossSTD::SetIntegral(val); 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
-
 
 
 

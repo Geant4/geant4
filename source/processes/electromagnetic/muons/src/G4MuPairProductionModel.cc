@@ -70,7 +70,7 @@ G4double G4MuPairProductionModel::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
+G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition*,
                                                  const G4String& nam)
   : G4VEmModel(nam),
   minPairEnergy(4.*electron_mass_c2),
@@ -168,7 +168,7 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4MuPairProductionModel::ComputeDEDX(const G4Material* material,
-                                              const G4ParticleDefinition* p,
+                                              const G4ParticleDefinition*,
                                                     G4double kineticEnergy,
                                                     G4double cutEnergy)
 {
@@ -251,7 +251,6 @@ G4double G4MuPairProductionModel::ComputMuPairLoss(G4double Z,
 G4double G4MuPairProductionModel::ComputeMicroscopicCrossSection(
                                            G4double tkin,
                                            G4double Z,
-                                           G4double A,
                                            G4double cut)
 
 {
@@ -326,13 +325,7 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
 
   if(tmn <= 0.) return cross;
 
-  //  G4cout << "a= " << a << " b= " << b << " tmn= " << tmn << G4endl;
-
-
   tmn = log(tmn);
-
-  //  G4cout << "a= " << a << " b= " << b << " tmn= " << tmn << G4endl;
-
 
   // Gaussian integration in ln(1-ro) ( with 8 points)
   for (G4int i=0; i<7; i++)
@@ -499,12 +492,12 @@ G4double G4MuPairProductionModel::CrossSection(const G4Material* material,
   for (size_t i=0; i<material->GetNumberOfElements(); i++) {
 
     G4double Z = (*theElementVector)[i]->GetZ();
-    G4double A = (*theElementVector)[i]->GetA()/(g/mole) ;
+    //    G4double A = (*theElementVector)[i]->GetA()/(g/mole) ;
 
-    G4double cr = ComputeMicroscopicCrossSection(kineticEnergy, Z, A, cutEnergy);
+    G4double cr = ComputeMicroscopicCrossSection(kineticEnergy, Z, cutEnergy);
 
     if(maxEnergy < kineticEnergy) {
-      cr -= ComputeMicroscopicCrossSection(kineticEnergy, Z, A, maxEnergy);
+      cr -= ComputeMicroscopicCrossSection(kineticEnergy, Z, maxEnergy);
     }
     cross += theAtomNumDensityVector[i] * cr;
   }
@@ -533,10 +526,10 @@ G4DataVector* G4MuPairProductionModel::ComputePartialSumSigma(
   for (G4int i=0; i<nElements; i++ ) {
 
     G4double Z = (*theElementVector)[i]->GetZ();
-    G4double A = (*theElementVector)[i]->GetA()/(g/mole) ;
+    //    G4double A = (*theElementVector)[i]->GetA()/(g/mole) ;
 
     cross += theAtomNumDensityVector[i] * ComputeMicroscopicCrossSection(kineticEnergy,
-              Z, A, cut);
+              Z, cut);
     dv->push_back(cross);
   }
   return dv;

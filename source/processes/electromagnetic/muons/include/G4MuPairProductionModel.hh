@@ -113,7 +113,6 @@ private:
 
   G4double ComputeMicroscopicCrossSection(G4double tkin,
                                           G4double Z,
-                                          G4double A,
                                           G4double cut);
 
   G4double ComputeDMicroscopicCrossSection(G4double tkin,
