@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: globals.hh,v 1.20 2002-08-19 18:20:11 asaim Exp $
+// $Id: globals.hh,v 1.21 2003-01-22 17:57:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,7 +66,7 @@
   #define CLHEP_MAX_MIN_DEFINED
 #endif
 
-#if defined(WIN32) && defined(G4USE_STD_NAMESPACE)
+#if defined(WIN32) && defined(G4USE_STD_NAMESPACE) && !defined(XPNET)
 // For NT with Native STL (used in ISO standard mode)
 // templated functions min and max should be _MIN _MAX
   #define min _MIN
