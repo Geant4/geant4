@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Jun-2000)
+                                (15-Dec-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
@@ -54,9 +54,9 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-                 Air         86.583
-           Aluminium     1.0854e+05
-                Lead     7.0465e+10
+                 Air         87.453
+           Aluminium          75754
+                Lead     1.9789e+10
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -80,9 +80,9 @@ msc:   Tables of transport mean free paths.
 
            material        min.delta energy(keV) 
 
-                 Air         86.583
-           Aluminium     1.0854e+05
-                Lead     7.0465e+10
+                 Air         87.453
+           Aluminium          75754
+                Lead     1.9789e+10
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
