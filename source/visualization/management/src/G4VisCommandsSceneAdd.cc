@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.3 1999-01-11 00:48:32 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.4 1999-02-07 17:33:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -43,6 +43,8 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   fpCommand -> SetGuidance
     ("1st parameter: volume name (default \"world\").");
   fpCommand -> SetGuidance
+    ("               \"list\" to list all volumes.");
+  fpCommand -> SetGuidance
     ("2nd parameter: copy number (default 0).");
   fpCommand -> SetGuidance
     ("3rd parameter: depth of descending geometry hierarchy"
@@ -64,7 +66,7 @@ G4VisCommandSceneAddVolume::~G4VisCommandSceneAddVolume () {
 }
 
 G4String G4VisCommandSceneAddVolume::GetCurrentValue (G4UIcommand* command) {
-  return "";
+  return "world 0 -1";
 }
 
 void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
@@ -101,13 +103,23 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
     }
   }
   else {
+ 
+    // Create search scene, model and modeling parameters with
+    // long-enough life...
     G4PhysicalVolumeSearchScene searchScene (name, copyNo);
     G4PhysicalVolumeModel searchModel (world);
+    G4ModelingParameters mp;
+    searchModel.SetModelingParameters (&mp);
+
+    // Initiate search...
     searchModel.DescribeYourselfTo (searchScene);
+
+    // OK, what have we got...?
     foundVolume = searchScene.GetFoundVolume ();
     const G4Transform3D&
       transformation = searchScene.GetFoundTransformation ();
     foundDepth = searchScene.GetFoundDepth ();
+
     if (foundVolume) {
       model = new G4PhysicalVolumeModel (foundVolume,
 					 requestedDepthOfDescent,
