@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2003-12-02 17:24:49 japost Exp $
+$Id: History,v 1.14 2003-12-04 16:20:33 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Dec  4th, 2003 - J.Apostolakis  (geomnav-V05-02-11)
+------------------------------
+- G4PropagatorInField.cc 
+  o Corrected placement of #endif for an #ifdef VERBOSE
+
 Dec  2nd, 2003 - J.Apostolakis  (geomnav-V05-02-10)
 ------------------------------
 - G4PropagatorInField[.hh.cc] 
@@ -36,7 +41,8 @@ Nov 26th, 2003 - J.Apostolakis  (geomnav-V05-02-09)
 
 Nov 14th, 2003 - J.Apostolakis  (geomnav-V05-02-08)
 ------------------------------
- Retagged the files of tag geomnav-V05-02-07, 
+ Retagged the files of tag geomnav-V05-0out-big2-jaMod.n1
+2-07, 
    due to tagging with same name incorrectly files in another directory
    and as such confusing Bonsai.
 
