@@ -71,10 +71,15 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
     G4Exception("Folding with error.");
   }
   G4double photonEnergy = 10*GeV;  
+  G4double xSec;
   while(photonEnergy>3.*GeV)
   {
-    G4double xSec = theData.GetCrossSection(aTrack.GetDynamicParticle(), anElement);
+    xSec = theData.GetCrossSection(aTrack.GetDynamicParticle(), anElement);
     photonEnergy = theData.GetEffectivePhotonEnergy();
+  }
+  if(aTrack.GetDynamicParticle()->GetKineticEnergy() - photonEnergy < 0)
+  {
+    G4Exception("G4ElectroNuclearReaction: photonEnergy above electron energy");
   }
   theResult.SetEnergyChange(aTrack.GetDynamicParticle()->GetKineticEnergy() - photonEnergy);
   
