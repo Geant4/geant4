@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2000-06-26 13:56:45 stesting Exp $
+$Id: History,v 1.3 2000-08-18 11:10:22 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+18th August 2000  Michel Maire  
+- standard G4ionIonisation removed from the PhysicsList
 
 26.06.2000 - JA, tag test17-V01-01-03
 - Added test17.large_N.in.
