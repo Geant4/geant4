@@ -2,6 +2,10 @@
 #define G4IsoParticleChange_h
 
 #include "G4Nucleus.hh"
+// Class Description
+// THis is the class you can retrieve from the hadronic process, that contains
+// the isotope production information/
+// Class Description - End
 
 class G4IsoParticleChange 
 {
@@ -14,6 +18,9 @@ public:
   void SetMotherNucleus(const G4Nucleus & aTarget) {theTarget = aTarget; }
   void SetProducer(const G4String & aProducer) { theProducer = aProducer; }
 
+public:// With description
+  // This is the information you can retrieve.
+  
   G4String GetIsotope() {return theIsotope;}
   G4ThreeVector GetProductionPosition() {return thePosition;}
   G4double GetProductionTime() {return theProductionTime;}
