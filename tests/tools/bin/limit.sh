@@ -13,7 +13,7 @@ if [ X$REFTREE = Xref ]; then
 echo "Nothing set for TMPDIR!"
 else
 echo
-export TMPDIR=/afs/cern.ch/user/s/stesting/stt/ref/SUN-CC/debug.p.rd44.stt.sun2
+export TMPDIR=/afs/cern.ch/user/s/stesting/stt/tmpdir
 fi
 fi
 
@@ -25,10 +25,10 @@ if [ `uname -n | grep hpplus` ]; then
 echo "Nothing set for limit!"
 if [ X$REFTREE = Xref ]; then
 echo
-export TMPDIR=/afs/cern.ch/user/s/stesting/stt/ref/SUN-CC/debug.p.rd44.stt.sun2
+export TMPDIR=/afs/cern.ch/user/s/stesting/stt/tmpdir
 else
 echo
-export TMPDIR=/afs/cern.ch/user/s/stesting/stt/ref/SUN-CC/debug.p.rd44.stt.sun2
+export TMPDIR=/afs/cern.ch/user/s/stesting/stt/tmpdir
 fi
 fi
 
@@ -43,10 +43,10 @@ ulimit -s 200000
 ulimit -m 400000
 if [ X$REFTREE = Xref ]; then
 echo
-export TMPDIR=/afs/cern.ch/user/s/stesting/stt/ref/SUN-CC/debug.p.rd44.stt.sun2
+export TMPDIR=/afs/cern.ch/user/s/stesting/stt/tmpdir
 else
 echo
-export TMPDIR=/afs/cern.ch/user/s/stesting/stt/ref/SUN-CC/debug.p.rd44.stt.sun2
+export TMPDIR=/afs/cern.ch/user/s/stesting/stt/tmpdir
 fi
 fi
 
@@ -54,5 +54,3 @@ if [ `uname -n | grep dxplus` ]; then
 echo "I don't know about limits here :)...ooops...already know :("
 ulimit -d 400000
 fi
-
-
