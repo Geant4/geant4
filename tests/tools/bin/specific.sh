@@ -119,12 +119,16 @@ if [ `uname -n | grep sungeant` ]; then
   export G4VIS_BUILD_OPENGLX_DRIVER=1
   export OGLHOME=/usr/local
   export OGLFLAGS="-I$OGLHOME/include"
-  export OGLLIBS="-L$OGLHOME/LIB -lMesaGLU -lMesaGL"
+  export OGLLIBS="-L$OGLHOME/lib -lMesaGLU -lMesaGL"
   #######export G4VIS_BUILD_OIX_DRIVER=1
   export G4VIS_BUILD_DAWN_DRIVER=1
   export G4VIS_BUILD_DAWNFILE_DRIVER=1
   export G4VIS_BUILD_VRML_DRIVER=1
   export G4VIS_BUILD_VRMLFILE_DRIVER=1
+  . $G4INSTALL/examples/extended/E02/g4odbms_setup.sh
+  export G4EXAMPLE_BOOT_DIR=$G4WORKDIR/tmp/$G4SYSTEM/exampleE02/odbms_boot
+  export G4EXAMPLE_BOOT=${G4EXAMPLE_BOOT_DIR}/G4EXAMPLE
+  export G4EXAMPLE_FDID=207
 fi
 
 
