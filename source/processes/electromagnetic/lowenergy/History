@@ -1,4 +1,4 @@
-$Id: History,v 1.139 2002-04-18 13:41:09 vnivanch Exp $
+$Id: History,v 1.140 2002-04-18 13:54:27 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18.04.2002 - MGP, tag emlowen-V04-00-04
+             Modification to G4VCrossSectionHandler and 
+             G4LowEnergyPhotoElectric to fix a problem
+
 18.04.2002 - VNI
              G4LowEnergyPhotoElectric: fix in Fluo part + MeanFreePath
              calculation using crossSectionHandler and cross sections
              directly 
 
-17.04.2002 - MGP, tag emlowen-V04-00-03
+18.04.2002 - MGP, tag emlowen-V04-00-03
              Modification to table calculation for GenericIon as below
 
 09.04.2002 - VNI
