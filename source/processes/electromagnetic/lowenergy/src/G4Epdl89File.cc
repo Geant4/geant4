@@ -33,7 +33,7 @@ G4Epdl89File::G4Epdl89File(const G4String& filename, G4int* paramVec):
   G4VDataFile(filename),
   _flags(paramVec)
 {   
-  SetBufferSize(74);
+  SetBufferSize(80);
 }
 
 // Destructor  

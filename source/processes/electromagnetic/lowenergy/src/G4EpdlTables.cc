@@ -333,6 +333,7 @@ void G4EpdlTables::MakeNtuple(const char* fname){
 
       HepString numElem(N);
       HepString tupleName = name + numElem;
+      cout<<"MakeNtuples "<<tupleName<<endl;
       HepTuple* tuple = tupleManager->ntuple(tupleName);
 
       outVec = (*theDataTable1)(N);
@@ -349,23 +350,19 @@ void G4EpdlTables::MakeNtuple(const char* fname){
 
       for(G4int i = 0; i < outVec->GetVectorLength(); i++){
 	
-        HepString arg = "val1" + numElem;
-        tuple->column(arg, outVec->GetLowEdgeEnergy(i));
+        tuple->column("arg", outVec->GetLowEdgeEnergy(i));
 
-        HepString fval = "val2" + numElem;
-        tuple->column(fval, (*outVec)(i));
+        tuple->column("val", (*outVec)(i));
 
         if(theDataTable2->length()){
 
-          HepString fval2 = "val3" + numElem;
-          tuple->column(fval2, (*outVec2)(i));
+          tuple->column("val2", (*outVec2)(i)*barn);
 
         }
 
         if(theDataTable3->length()){
 
-          HepString fval3 = "val4" + numElem;
-          tuple->column(fval3, (*outVec3)(i));
+          tuple->column("val3", (*outVec3)(i));
         }
 
         tuple->column("index",i);      
@@ -387,6 +384,7 @@ void G4EpdlTables::MakeNtuple(const char* fname){
 
       HepString numElem(N);
       HepString tupleName = name + numElem;
+      cout<<"MakeNtuples "<<tupleName<<endl;
       HepTuple* tuple = tupleManager->ntuple(tupleName);
 
       outVec = (*theDataTable1)(N+50);
@@ -401,22 +399,19 @@ void G4EpdlTables::MakeNtuple(const char* fname){
 
       for(G4int i = 0; i < outVec->GetVectorLength(); i++){
 
-        HepString arg = "val1" + numElem;
-        tuple->column(arg, outVec->GetLowEdgeEnergy(i));
-        HepString fval = "val2" + numElem;
-        tuple->column(fval, (*outVec)(i));
+
+        tuple->column("arg", outVec->GetLowEdgeEnergy(i));
+        tuple->column("val", (*outVec)(i));
 
 
         if(theDataTable2->length()){
 
-          HepString fval2 = "val3" + numElem;
-          tuple->column(fval2, (*outVec2)(i));
+          tuple->column("val2", (*outVec2)(i));
         }
 
         if(theDataTable3->length()){
 
-          HepString fval3 = "val4" + numElem;
-          tuple->column(fval3, (*outVec3)(i));
+          tuple->column("val3", (*outVec3)(i));
         }
 
         tuple->column("index",i);      
