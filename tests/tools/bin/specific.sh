@@ -94,8 +94,7 @@ if [ `uname -n | grep sungeant` ]; then
     export DEBOPT=${DEBOPT}_NONISO
     export G4USE_OSPACE=1
     export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/new
-#   export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/pro
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/pro
     # Persistency...
     if [ X$G4USE_HEPODBMS = X ]; then
        . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
@@ -109,7 +108,7 @@ if [ `uname -n | grep sungeant` ]; then
     export PATH=`echo $PATH | sed s/SUNWspro/SUNWspro50/`
     # No Persistency...
     unset G4USE_HEPODBMS
-#   export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC5/new 
+#   export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC5/pro # iso does not exist
   fi
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
@@ -131,7 +130,7 @@ if [ `uname -n | grep hp` ]; then
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/HP-aCC/new
+  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/HP-aCC/pro
   # G4 build flags :
   ######export G4UI_BUILD_XM_SESSION=1
 #  export G4VIS_BUILD_OPENGLXM_DRIVER=1
@@ -157,11 +156,11 @@ if [ X`uname -n | grep dxplus` != X  -o "$UNAMEN" = "dcosf01" ]; then
   if [ $G4STTNONISO ]; then
     export DEBOPT=${DEBOPT}_NONISO
     export G4USE_OSPACE=1
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/new
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/pro
   else
     export DEBOPT=${DEBOPT}_ISO
     unset G4USE_OSPACE
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/newiso
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/iso
   fi
   if [ "$UNAMEN" = "dcosf01" ]; then
     export CLHEP_LIB=CLHEP-cxx62
@@ -200,7 +199,7 @@ if [ $UNAMEN = pcgeant -o $UNAMEN = pcg4speed ]; then
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/new
+  export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/pro
   
   # G4 build flags :
   ######export G4UI_BUILD_XM_SESSION=1
@@ -244,7 +243,7 @@ export G4VIS_BUILD_OPENGLX_DRIVER=1
 export G4VIS_USE_OPENGLX=1
 export G4VIS_BUILD_OPENGLXM_DRIVER=1
 export G4VIS_USE_OPENGLXM=1
-export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/new
+export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/pro
 #/usr/local/CLHEP1.3/CLHEP
 export CLHEP_LIB=CLHEP
 #CLHEP-c++
