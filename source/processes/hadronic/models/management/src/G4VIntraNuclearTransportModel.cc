@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIntraNuclearTransportModel.cc,v 1.1 2003-10-07 12:38:35 hpw Exp $
+// $Id: G4VIntraNuclearTransportModel.cc,v 1.2 2003-12-09 09:04:23 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: G4VIntraNuclearTransportModel.cc,v 1.0 1998/06/30
@@ -57,7 +57,7 @@ G4VIntraNuclearTransportModel(const G4VIntraNuclearTransportModel& right) : G4Ha
 
 G4VIntraNuclearTransportModel::~G4VIntraNuclearTransportModel()
 {
-  if(the3DNucleus!=NULL) delete the3DNucleus;
+//  if(the3DNucleus!=NULL) delete the3DNucleus;
   // This is deleted by ~G4HadronicInteractionRegistry
   // if(theDeExcitation!=NULL) delete theDeExcitation;
 }
