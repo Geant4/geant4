@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.34 2004-11-10 08:55:00 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.35 2004-11-10 14:37:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1231,7 +1231,6 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* pa
       yes = theDEDXunRestrictedTable->ExistPhysicsTable(filename);
       if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(theDEDXunRestrictedTable,filename,ascii);
       if(yes) {
-        SetDEDXunRestrictedTable(theDEDXunRestrictedTable);
         if (-1 < verboseLevel) {
           G4cout << "Non-restricted DEDX table for " << particleName << " is Retrieved from <"
                  << filename << ">"
@@ -1249,7 +1248,6 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* pa
       yes = thePreciseRangeTable->ExistPhysicsTable(filename);
       if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(thePreciseRangeTable,filename,ascii);
       if(yes) {
-        SetPreciseRangeTable(thePreciseRangeTable);
         if (-1 < verboseLevel) {
           G4cout << "Precise Range table for " << particleName << " is Retrieved from <"
                  << filename << ">"
@@ -1283,7 +1281,6 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* pa
       yes = theLambdaTable->ExistPhysicsTable(filename);
       if(yes) yes = G4PhysicsTableHelper::RetrievePhysicsTable(theLambdaTable,filename,ascii);
       if(yes) {
-        SetLambdaTable(theLambdaTable);
         if (-1 < verboseLevel) {
           G4cout << "Lambda table for " << particleName << " is Retrieved from <"
                  << filename << ">"

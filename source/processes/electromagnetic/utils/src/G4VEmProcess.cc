@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.14 2004-11-10 08:55:00 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.15 2004-11-10 14:37:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -411,7 +411,6 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
   filename = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
   yes = G4PhysicsTableHelper::RetrievePhysicsTable(theLambdaTable,filename,ascii);
   if ( yes ) {
-    FindLambdaMax();
     if (-1 < verboseLevel) {
       G4cout << "Lambda table for " << particleName << " is Retrieved from <"
              << filename << ">"
