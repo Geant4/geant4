@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1PhysicsList.cc,v 1.9 2003-03-11 18:00:35 vnivanch Exp $
+// $Id: Em1PhysicsList.cc,v 1.10 2003-03-17 11:04:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,9 @@
 #include "Em1PhysicsListMessenger.hh"
 
 #include "G4UImanager.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -260,23 +263,24 @@ void Em1PhysicsList::SetCuts()
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForElectron, "e+");
 
-  if (verboseLevel>0) DumpCutValuesTable();
+  if (verboseLevel>-1) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1PhysicsList::SetGammaCut(G4double val)
 {
-  ResetCuts();
   cutForGamma = val;
+  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1PhysicsList::SetElectronCut(G4double val)
 {
-  ResetCuts();
   cutForElectron = val;
+  SetParticleCuts(cutForElectron, G4Electron::Electron());
+  SetParticleCuts(cutForElectron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
