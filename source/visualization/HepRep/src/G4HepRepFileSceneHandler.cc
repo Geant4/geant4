@@ -43,7 +43,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.15 2003-07-12 19:48:15 duns Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.16 2003-11-13 01:11:47 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -701,5 +701,14 @@ void G4HepRepFileSceneHandler::CheckFileOpen() {
     hepRepXMLWriter->addAttDef("Density", "Material Density", "Physics","");
     hepRepXMLWriter->addAttDef("State", "Material State", "Physics","");
     hepRepXMLWriter->addAttDef("Radlen", "Material Radiation Length", "Physics","");
+  }
+}
+
+void G4HepRepFileSceneHandler::ClearTransientStore () {
+  G4VSceneHandler::ClearTransientStore ();
+  if (fpViewer) {
+    fpViewer -> SetView ();
+    fpViewer -> ClearView ();
+    fpViewer -> DrawView ();
   }
 }

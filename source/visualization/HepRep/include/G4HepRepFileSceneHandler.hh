@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.13 2003-07-12 19:48:15 duns Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.14 2003-11-13 01:11:41 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -110,6 +110,12 @@ public:
 
   void BeginModeling();
   void EndModeling();
+
+  //////////////////////////////////////////////////////////////
+  // Administration functions.
+
+  //void ClearStore ();
+  void ClearTransientStore ();
 
   ////////////////////////////////////////////////////////////////
   // Required...
