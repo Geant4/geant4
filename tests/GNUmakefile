@@ -1,4 +1,3 @@
-# $Id: GNUmakefile,v 1.61 2004-06-23 16:05:27 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -22,7 +21,7 @@ ELECTROMAGNETIC += 8 9 10 ## Transistion radiation and PAI (photoabsorption
                         ## ionisation) model.
 
 # Symbolic links to extended g3tog4 examples using test601, etc...
-#temp G3TOG4 += 01 02   ## 01 - clGeometry  02 cltog4 (actually hand coded for now)
+G3TOG4 += 01 02   ## 01 - clGeometry  02 cltog4 (actually hand coded for now)
 
 # Symbolic links to extended field examples using test701, etc...
 FIELD += 01 02 03
@@ -68,7 +67,7 @@ SUBDIRS += test18
 SUBDIRS += test20
 SUBDIRS += test21
 SUBDIRS += test22
-SUBDIRS += test23
+SUBDIRS += test23 ## Old test on 'cuts per material', now obsolete 
 SUBDIRS += test24
 SUBDIRS += test25
 SUBDIRS += test26
@@ -84,6 +83,8 @@ SUBDIRS_AIDA += test50
 
 # Tests with hadronic exercisers.
 HADEXERDIRS = test02 test11 test12 test13 test15 test16 test21 
+
+HADRONICSDIRS = test02 test11 test12 test13 test15 test16 test21 test22 test23 test24 test25 test27 test28
 
 #temp ADV_EXAMPLES += 01 02  03 04 05 06 07
 
@@ -117,10 +118,10 @@ endif
 
 #temp 
 # G3TOG4
-#	@$(ECHO) Making G3toG4 Tests...
-#	@for nn in $(G3TOG4); do \
-#	  (cd test6$$nn && $(MAKE)); \
-#	done;:
+	@$(ECHO) Making G3toG4 Tests...
+	@for nn in $(G3TOG4); do \
+	  (cd test6$$nn && $(MAKE)); \
+	done;:
 
 # Field
 	@$(ECHO) Making Field Tests...
@@ -404,8 +405,9 @@ examples_links_binaries:
 
 #temp
 # G3TOG4
-#	@ln -s clGeometry $(G4WORKDIR)/bin/$(G4SYSTEM)/test601; \
-#	ln -s cltog4    $(G4WORKDIR)/bin/$(G4SYSTEM)/test602; \
+	@ln -s clGeometry $(G4WORKDIR)/bin/$(G4SYSTEM)/test601; \
+	ln -s cltog4    $(G4WORKDIR)/bin/$(G4SYSTEM)/test602; \
+	true
 
 #temp
 # OLAP
@@ -555,3 +557,14 @@ clean_examples_links_binaries:
 
 # Truc for test33/test34
 	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test34;:
+
+# Hadronics Tests
+hadronics:
+	@$(ECHO) Making Hadronics Tests...
+	@for dir in $(HADRONICSDIRS); do (cd $$dir && $(MAKE)); done;:
+
+# Hadronic exercises
+	@$(ECHO) Making hadronic exercisers for System Tests...
+	@for dir in $(HADEXERDIRS); \
+	  do (cd $$dir && $(MAKE) -f GNUmakefile.hadronic.exerciser); done;:
+
