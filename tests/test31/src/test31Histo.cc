@@ -44,8 +44,11 @@
 #include "G4EmCalculator.hh"
 #include "EmAnalysis.hh"
 #include "G4EmCorrections.hh"
-#include "G4NistMaterialManager.hh"
+#include "G4NistManager.hh"
+#include "G4BraggModel.hh"
+#include "G4BetheBlochModel70.hh"
 #include <iomanip>
+#include <fstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -304,8 +307,8 @@ void test31Histo::TableControl()
   G4double tmin = 1.*keV;
   G4double tmax = 1.*GeV;
   G4int    nbin = 60;
-  //  G4int   index = 1;
-  G4double cut  = 1.*GeV; 
+   //  G4int   index = 1;
+  G4double cut  = 100.*GeV; 
   //G4ParticleDefinition* part = G4Proton::Proton();
   //  G4ParticleDefinition* part = G4Electron::Electron();
   //  G4ParticleDefinition* part = G4Alpha::Alpha();
@@ -350,6 +353,8 @@ void test31Histo::TableControl()
     */
     x += step;
   }
+  G4NistManager*  mman = G4NistManager::Instance();
+  G4EmCorrections* emc = G4LossTableManager::Instance()->EmCorrections();
 
   G4bool icorr = true;
   if(icorr) {
@@ -358,38 +363,57 @@ void test31Histo::TableControl()
     G4cout << "====================================================================" << G4endl;
 
     G4String nm[7] = {"G4_H", "G4_C", "G4_Al", "G4_Cu", "G4_Ag", "G4_Au", "G4_Pb"};
-    G4double ek[7] = {1.0, 2.0, 6.5, 12., 19.8, 100., 1000.};
-    G4NistMaterialManager  mman;
-    G4EmCorrections* emc = G4LossTableManager::Instance()->EmCorrections();
+    G4double ek[17] = {1.0, 1.25, 1.5,1.75, 2.0, 2.5, 3.0, 3.5,  4.0, 4.5, 5.0, 6.5, 8.0,  12.5, 20.0, 100., 1000.};
+
     part = cal.FindParticle("proton");
+    G4double mass = part->GetPDGMass();
   
-    G4double L, L0, L1, L2, Spin, KS, LS, S, del;
+    G4double L, L0, L1, L2, Spin, KS, LS, S, S0, del, mk, dedx, fac, fact, dc, nuc;
     for(G4int i=0; i<7; i++) {
-      mat = mman.FindOrBuildMaterial(nm[i]);
+      dc = 0.0;
+      mat = mman->FindOrBuildMaterial(nm[i]);
+      fact = gram/(MeV*cm2*mat->GetDensity());
+      fac = 2.0*twopi_mc2_rcl2*(mat->GetElectronDensity())*fact;
       G4cout << "   New Material  " << mat->GetName() << G4endl;
-      for(G4int j=0; j<7; j++) {
-	G4double e = ek[j]*MeV;
+      for(G4int j=0; j<17; j++) {
+        G4double e = ek[j]*MeV;
+        G4double tau = e/mass;
+        G4double gamma = 1.0 + tau;
+        G4double beta2 = tau*(tau + 2.0)/(gamma*gamma);
+	//        G4double dedx0 = cal.ComputeDEDX(e,part,"hIoni",mat)*fact;
+    
 	L0   = emc->Bethe(part,mat,e);
 	Spin = emc->SpinCorrection(part,mat,e);
 	KS   = emc->KShellCorrection(part,mat,e);
 	LS   = emc->LShellCorrection(part,mat,e);
 	S    = emc->ShellCorrection(part,mat,e);
+	S0   = emc->ShellCorrectionSTD(part,mat,e);
 	L1   = emc->BarkasCorrection(part,mat,e);
 	L2   = emc->BlochCorrection(part,mat,e);
         del  = 0.5*emc->DensityCorrection(part,mat,e);
-        L = L0 + L1 + L2 - del -S;
+        mk   = 0.5*emc->MottCorrection(part,mat,e);
+        nuc  = fact*emc->NuclearDEDX(part,mat,e);
+        L = L0 + L1 + L2 + mk - del -S;
+        dedx = L*fac/beta2;
+	// if(0 == j) dc = (dedx0 - dedx)*MeV*MeV;
+	//	dedx += dc/(e*e);
         x = S + del - L1 - L2;
 	G4cout << j+1 << ". " << ek[j] << " MeV "
-	       << " L0= " << L0
-	       << " Spin= " << Spin
+	  // << " L0= " << L0
+	  //     << " Spin= " << Spin
 	       << " KShell= " << KS
 	       << " LShell= " << LS
-	       << " Shell= " << S 
+	       << " Sh= " << S 
+	       << " Sh0= " << S0 
 	       << " L1= " << L1
 	       << " L2= " << L2
 	       << " del= " << del
+	       << " mott= " << mk
 	       << " x= " << x
 	       << " L= " << L
+	       << " dedx= " << dedx
+	  //     << " dedx0= " << dedx0
+	       << " nuc= " << nuc
 	       << G4endl;
       }
       G4cout << "====================================================================" << G4endl;
@@ -397,6 +421,123 @@ void test31Histo::TableControl()
   }
 
   G4cout << "====================================================================" << G4endl;
+
+  G4bool ish = true;
+  if (ish) {
+
+    const G4ParticleDefinition* proton = cal.FindParticle("proton");
+    G4BraggModel        bragg;
+    G4BetheBlochModel70 bethe;
+    G4DataVector        empty;
+    bragg.Initialise(proton, empty);
+    bethe.Initialise(proton, empty);
+    const G4Element* elm;
+    const G4Material* ma;
+   
+    G4double e     = 2.0*MeV;
+    G4double tau   = e/proton_mass_c2;
+    G4double gam   = tau + 1.0;
+    G4double bg2   = tau * (tau+2.0);
+    G4double beta2 = bg2/(gam*gam);
+    G4double eta   = beta2/(fine_structure_const*fine_structure_const);
+    G4double fact  = 0.5 * beta2*eta*eta / twopi_mc2_rcl2;
+    G4double dedx0, dedx1;
+
+    for(G4int z=1; z<93; z++) {
+      elm = mman->FindOrBuildElement(z, false);
+      G4String nam = "G4_"+elm->GetSymbol();
+      ma = mman->FindOrBuildMaterial(nam, false);
+      //      G4cout << "Elm " << elm << "  mat " << ma << "   " << nam << G4endl;
+    }
+    for(G4int z=1; z<93; z++) {
+      elm = mman->FindOrBuildElement(z, false);
+      G4String nam = "G4_"+elm->GetSymbol();
+      ma = mman->FindOrBuildMaterial(nam, false);
+      dedx0 = bragg.ComputeDEDX(ma,proton,e,GeV);
+      dedx1 = bethe.ComputeDEDX(ma,proton,e,GeV);
+      G4cout << " " << (dedx1 - dedx0)*fact/(ma->GetElectronDensity()) << ",";
+      if(z/10*10 == z) G4cout << G4endl;
+    }
+    G4cout << G4endl;
+    G4double fe     = 8.0*MeV;
+    G4double ftau   = fe/proton_mass_c2;
+    G4double fgam   = ftau + 1.0;
+    G4double fbg2   = ftau * (ftau+2.0);
+    G4double fbeta2 = fbg2/(fgam*fgam);
+    G4double ffact  = 0.5 * fbeta2 / twopi_mc2_rcl2;
+    G4double fdedx0, fdedx1, s0, s1;
+    G4cout << G4endl;
+    for(G4int z=1; z<93; z++) {
+      elm = mman->FindOrBuildElement(z, false);
+      G4String nam = "G4_"+elm->GetSymbol();
+      ma = mman->FindOrBuildMaterial(nam, false);
+      fdedx0 = bragg.ComputeDEDX(ma,proton,e,GeV)*ffact/ma->GetElectronDensity();
+      fdedx1 = bethe.ComputeDEDX(ma,proton,e,GeV)*ffact/ma->GetElectronDensity();
+      s0 = fdedx1 - fdedx0;
+      s1 = emc->ShellCorrectionSTD(proton,ma,fe);
+
+      G4cout << " " << (s1*std::log(tau) - s0*std::log(ftau))/(ftau - tau) << ",";
+      // << " s0= " << s0 << " s1= " << s1 << G4endl;;
+      if(z/10*10 == z) G4cout << G4endl;
+    }
+    G4cout << G4endl;
+  }
+
+  G4bool ihist = true;
+  if (ihist) {
+    G4cout << "====================================================================" << G4endl;
+    G4cout << "             Stopping Powers" << G4endl;
+    G4cout << "====================================================================" << G4endl;
+
+    G4String nm[5] = {"G4_Be", "G4_Al", "G4_Fe", "G4_Ag", "G4_Au"};
+    const G4String partc[2] = {"proton", "alpha"};
+    const G4String proc[2] = {"hIoni", "ionIoni"};
+    
+    G4double e, se, sn, st, mce, mcn, mct; 
+    char line[200];
+
+    for(G4int ii=0; ii<2; ii++) {
+    
+      const G4ParticleDefinition* part = cal.FindParticle(partc[ii]);
+
+      for(G4int i=0; i<5; i++) {
+	mat = mman->FindOrBuildMaterial(nm[i]);
+        G4cout << "  Particle  " << partc[ii] << " in  Material  " << mat->GetName() << G4endl;
+	G4double fact = gram/(MeV*cm2*mat->GetDensity());
+        std::ifstream* fin = new std::ifstream();
+        std::string fname = "stopping/" + partc[ii] + "_" + nm[i];
+        std::string fnamef= fname + ".txt";
+        fin->open(fnamef.c_str());
+        if( !fin->is_open()) {
+          G4cout << "Input file <" << fname << "> does not exist! Exit" << G4endl;
+          exit(1);
+        }
+        G4int i1 = histo->addCloud1D(fname);
+        for(G4int j=0; j<8; j++) {fin->getline( line, 200);}
+        do {
+          (*fin) >> e >> se >> sn >> st;
+          e *= MeV;
+          mce = fact*(cal.ComputeDEDX(e,part,proc[ii],mat));
+          mcn = fact*emc->NuclearDEDX(part,mat,e,false);
+          mct = mce + mcn;
+          G4double diff = 100.*(mct/st - 1.0);
+          G4cout << e/MeV 
+                 << " NIST:  dedx= " << se
+                 << " nuc= " << sn
+                 << " tot= " << st
+                 << " G4:  dedx= " << mce
+                 << " nuc= " << mcn
+                 << " tot= " << mct
+                 << " diff= " << diff << " %"
+                 << G4endl;
+          histo->fill(i1,e,diff);
+              
+        } while ( std::fabs(e - 1000.) > MeV);
+        G4cout << "====================================================================" << G4endl;
+        fin->close();
+      }
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

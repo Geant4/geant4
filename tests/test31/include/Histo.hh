@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Histo.hh,v 1.6 2004-09-22 08:40:47 vnivanch Exp $
+// $Id: Histo.hh,v 1.7 2005-02-26 21:59:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef Histo_h
@@ -55,6 +55,7 @@ namespace AIDA {
  class ITree;
  class ITuple;
  class IHistogram1D;
+ class ICloud1D;
 }
 
 class Histo
@@ -79,15 +80,23 @@ public:
                                                 G4double x2=1., G4double u=1.);
   // In this method histogramms are predefined
 
+  G4int addCloud1D(const G4String&); 
+
   void setHisto1D(G4int id, G4int nb=100, 
                   G4double x1=0., G4double x2=1., G4double u=1.);
   // It change bins and boundaries
 
   void activate(G4int, G4bool val=true);
-  // Histogramms are filled
+  // Histogram is activated
+
+  void activateCloud(G4int, G4bool val=true);
+  // Cloud is activated
 
   void fill(G4int, G4double, G4double w=1.);
-  // Histogramms are filled
+  // Histogram is filled
+
+  void fillCloud(G4int, G4double, G4double w=1.);
+  // Cloud is filled
 
   void scale(G4int, G4double);
 
@@ -131,11 +140,13 @@ private:
   std::vector<G4String> m_tupleColumns;
 
   G4int         m_Histo;
+  G4int         m_Clouds;
   G4int         m_Tuple;
   G4int         m_verbose;
   G4bool        m_defaultAct;
 
   std::vector<AIDA::IHistogram1D*> m_histo;
+  std::vector<AIDA::ICloud1D*>     m_cloud;
   std::vector<AIDA::ITuple*>       m_ntup;
 
   AIDA::ITree*    m_tree;
@@ -145,9 +156,11 @@ private:
   std::vector<G4double>  m_xmax;
   std::vector<G4double>  m_unit;
   std::vector<G4bool>    m_active;
+  std::vector<G4bool>    m_activeCl;
   std::vector<G4int>     m_bins;
   std::vector<G4String>  m_ids;
   std::vector<G4String>  m_titles;
+  std::vector<G4String>  m_titlesCl;
 };
 
 #endif

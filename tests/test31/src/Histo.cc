@@ -66,6 +66,7 @@ Histo::Histo()
   m_histName   = "histo.paw";
   m_histType   = "hbook";
   m_Histo      = 0;
+  m_Clouds     = 0;
   m_Tuple      = 0;
   m_defaultAct = true;
   m_messenger  = 0;
@@ -101,6 +102,9 @@ void Histo::clear()
   for(G4int j=0; j<nt; j++) {
     m_ntup[j] = 0;
   }
+  for(G4int k=0; k<m_Clouds; k++) {
+    m_cloud[j] = 0;
+  }
   if(m_tree) delete m_tree;
   m_tree = 0;
 #endif
@@ -130,12 +134,16 @@ void Histo::book()
   std::auto_ptr<AIDA::IHistogramFactory> hf(af->createHistogramFactory(*m_tree));
 
   // Creating an 1-dimensional histograms in the root directory of the tree
-  for(G4int i=0; i<m_Histo; i++) {
+  G4int i;
+  for(i=0; i<m_Histo; i++) {
     if(m_active[i]) {
       m_histo[i] = hf->createHistogram1D(m_ids[i], m_titles[i], m_bins[i], 
                                          m_xmin[i], m_xmax[i]);
       if(m_histo[i] && m_verbose>0) ListHistogram(i);
     }
+  }
+  for(i=0; i<m_Clouds; i++) {
+    if(m_activeCl[i]) m_cloud[i] = hf->createCloud1D(m_titlesCl[i]);
   }
   // Creating a tuple factory, whose tuples will be handled by the tree
   G4int nt = m_ntup.size();
@@ -198,6 +206,24 @@ G4int Histo::add1D(const G4String& id, const G4String& name, G4int nb,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4int Histo::addCloud1D(const G4String& name)
+{
+  G4int ID = m_Clouds;
+  m_Clouds++;
+  if(m_verbose > 0) {
+    G4cout << "New cloud will be booked: id= " << ID 
+           << "  <" << name 
+           << ">  " 
+           << G4endl;
+  }
+  m_activeCl.push_back(m_defaultAct);
+  m_titlesCl.push_back(name);
+  m_cloud.push_back(0);
+  return ID;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void Histo::setHisto1D(G4int i, G4int nb, G4double x1, G4double x2, G4double u)
 {
   if(i>=0 && i<m_Histo) {
@@ -229,6 +255,18 @@ void Histo::activate(G4int i, G4bool w)
   }
   if(i>=0 && i<m_Histo) m_active[i] = w;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Histo::activateCloud(G4int i, G4bool w)
+{
+  if(m_verbose > 0) {
+    G4cout << "Histo: cloud: ID= " << i 
+           << "  activation= " << w
+           << G4endl;   
+  }
+  if(i>=0 && i<m_Clouds) m_activeCl[i] = w;
+}
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -244,6 +282,24 @@ void Histo::fill(G4int i, G4double x, G4double w)
     if(m_histo[i]) m_histo[i]->fill(x/m_unit[i], w);
   } else {
     G4cout << "Histo::fill: WARNING! wrong histogram ID " << i << G4endl;
+  }
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Histo::fillCloud(G4int i, G4double x, G4double w)
+{
+  if(m_verbose > 1) {
+    G4cout << "Histo:fill cloud ID= " << i << " at x= " << x 
+           << "  weight= " << w   
+           << G4endl;   
+  }
+#ifdef G4ANALYSIS_USE  
+  if(i>=0 && i<m_Clouds) {
+    if(m_cloud[i]) m_cloud[i]->fill(x, w);
+  } else {
+    G4cout << "Histo::fillCloud: WARNING! wrong histogram ID " << i << G4endl;
   }
 #endif
 }

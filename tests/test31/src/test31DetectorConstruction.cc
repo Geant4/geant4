@@ -55,6 +55,7 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
+#include "G4NistManager.hh"
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
@@ -84,12 +85,12 @@ test31DetectorConstruction::test31DetectorConstruction():
 {
   // Default parameter values of the calorimeter
   // corresponds to water test
-  nameMatAbsorber   = G4String("Water");
+  nameMatAbsorber   = G4String("G4_WATER");
   AbsorberThickness = 1.0*mm;    
   SizeXY            = 1000.0*mm;
   gap               = 0.0;
   NumberOfAbsorbers = 300;
-  nameMatWorld      = G4String("Air");
+  nameMatWorld      = G4String("G4_AIR");
   WorldSizeZ        = 400.0*mm;
   maxDelta          = 10.0*MeV;
 
@@ -120,7 +121,7 @@ void test31DetectorConstruction::DefineMaterials()
   if(myVerbose > 0) {
     G4cout << "test31DetectorConstruction: DefineMaterials starts" << G4endl;  
   } 
-
+  /*
   G4String name, symbol;             //a=mass of a mole;
   G4double a, z, density;            //z=mean number of protons;  
 
@@ -277,7 +278,7 @@ void test31DetectorConstruction::DefineMaterials()
   ma = new G4Material("Vacuum", z, a, density,
                                       kStateGas,temperature,pressure);
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
-
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -374,7 +375,8 @@ void test31DetectorConstruction::PrintGeomParameters()
 G4Material* test31DetectorConstruction::GetMaterial(const G4String& mat)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(mat);     
+  G4Material* pttoMaterial = G4NistManager::Instance()->FindOrBuildMaterial(mat, false);
+  if(!pttoMaterial) G4cout << "Find or BUild material " << mat << " fail " << G4endl;  
   if(detIsConstructed) MaterialIsChanged();
   return pttoMaterial;
 }
