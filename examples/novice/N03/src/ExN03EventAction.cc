@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.cc,v 1.22 2003-11-06 14:46:08 johna Exp $
+// $Id: ExN03EventAction.cc,v 1.23 2003-11-12 16:15:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,8 +97,11 @@ void ExN03EventAction::EndOfEventAction(const G4Event* evt)
   // extract the trajectories and draw them
 
   // You can get a default drawing without this code by using, e.g.,
-  // /vis/scene/add/trajectories 2000
+  // /vis/scene/add/trajectories 1000
   // The code here adds sophistication under control of drawFlag.
+
+  // See comments in G4VTrajectory::DrawTrajectory for the
+  // interpretation of the argument, 1000.
   
   G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
   if (pVisManager)
@@ -109,11 +112,11 @@ void ExN03EventAction::EndOfEventAction(const G4Event* evt)
 
      for (G4int i=0; i<n_trajectories; i++) 
         { G4VTrajectory* trj = ((*(evt->GetTrajectoryContainer()))[i]);
-          if (drawFlag == "all") pVisManager->Draw(*trj,2000);
+          if (drawFlag == "all") pVisManager->Draw(*trj,1000);
           else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                                  pVisManager->Draw(*trj,2000);
+                                  pVisManager->Draw(*trj,1000);
           else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-                                  pVisManager->Draw(*trj,2000);
+                                  pVisManager->Draw(*trj,1000);
         }
   }
 }  
