@@ -172,6 +172,8 @@ tests                                            tests-V06-00-02
 - Updated reference outputs.
 - tests/test14 (test14-V06-00-00)
   o Updated macro for testing Penelope model.
+- tests/test25 (test25-V06-00-00)
+  o Fixed definition of materials and values in messenger.
 - tests/test32 (test32-V06-00-00)
   o Fixed processing of hits in sensitive detector.
 - tests/test50 (test50-V06-00-00)
