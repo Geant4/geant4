@@ -23,7 +23,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.72 2003-11-28 08:45:38 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.73 2003-11-28 11:14:33 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -3951,13 +3951,17 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       if(hM<sum || !G4QHadron(h4Mom).DecayIn3(nu4M,ba4M,pi4M))
 	  {
         G4int eA=theEnvironment.GetA();
+#ifdef pdebug
         G4cerr<<"***G4QEnv::FSI:T="<<hPDG<<"("<<hM<<")-> N="<<nuQPDG<<"(M="<<nucM<<") + B="
               <<barPDG<<"("<<barM<<")+N/pi="<<tPDG<<"("<<tM<<")="<<sum<<", A="<<eA<<G4endl;
+#endif
         if(!eA)
         {
           G4QHadron* theLast = theCurr;        // Prototype of the pointer to theLastHadron
           G4QHadron* qH = new G4QHadron(theCurr); // Copy of the Current Hadron
+#ifdef pdebug
           G4cerr<<"***G4QE::FSI:#"<<ipo<<",4MQC="<<qH->Get4Momentum()<<qH->GetQC()<<G4endl;
+#endif
           if(ipo+1<theQHadrons.size())         // If ipo<Last, swap CurHadr and theLastHadr
           {
             G4int nhd1=theQHadrons.size()-1;
