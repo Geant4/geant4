@@ -1,0 +1,391 @@
+
+                 Geant4 3.2 Release Notes
+                 ------------------------
+
+                                                      29th June 2001
+
+These are the main new features/fixes included in this release since
+release 3.1 (for the detailed list of fixes/additions, please refer to the
+related History files):
+
+  o Configuration:
+    -------------
+    - Added G4VIS_BUILD_ASCIITREE_DRIVER, G4VIS_USE_ASCIITREE and
+      G4VIS_BUILD_GAGTREE_DRIVER, G4VIS_USE_GAGTREE variables to
+      activate module for ascii/GAG hierachycal tree of geometry volumes.
+    - Introduced changes for persistency: common.gmk is now split in three, 
+      one general, and one for specific for transient and persistent each. 
+      Dependencies now much better handled in persistency. 
+    - Removed G4_NO_CBRT flag from WIN32-VC.gmk, no more needed.
+
+  o Event:
+    -----
+    - Fixes to cowork with STL vector migration of 'geometry'.
+
+  o Electromagnetic Processes (Low-energy):
+    --------------------------------------
+    - Migration to STL vector. Removed references to RW wrappers.
+    - Fixed pedantic warnings detected on Linux ANSI setup.
+    - Added new process for polarised Compton scattering.
+    - Bug fix in anti-proton ionisation.
+
+  o Electromagnetic Processes (Standard):
+    ------------------------------------
+    - Fixed pedantic warnings detected on Linux ANSI setup.
+
+  o General Processes, Parameterisation, Decay, Optical:
+    ---------------------------------------------------
+    - Fixed pedantic warnings detected on Linux ANSI setup.
+
+  o Geometry:
+    --------
+    - Migrated code to native STL vector. Removed all references to
+      Rogue-Wave wrappers.
+    - Management:
+      o Adopt explicit initialisation for 'minExtents' and 'maxExtents' 
+        in G4SmartVoxelHeader::BuildNodes(...).
+    - Boolean solids:
+      o Fix in G4IntersectionSolid::DistanceToIn(p,v) resolving 
+        bug observed in problem report #153. 
+    - BREPS solids:
+      o Fixes to allow -ansi compilation on Linux-g++, gcc-2.95-2 compiler: 
+        - G4Ray: changed usage of hypot(x,y) to sqrt(x*x+y*y). 
+        - G4Hyperbola: changed usage of atanh(x) to 0.5*log((1+x)/(1-x)). 
+      o G4ProjectedSurface: corrected initialisation of temporary
+        G4Point3D objects, to use the correct CLHEP constructor. 
+    - CSG solids:
+      o Added G4CSGDEBUG preprocessor flag to discriminate for debug
+        verbosity specific to CSG solids. Included in G4Exception of
+        DistanceToOut() for "point p is outside" in G4Box, G4Cons,
+	G4Tubs.
+      o G4Trap: fixed memory leak in CalculateExtent() for creation of
+        vertices in case of finite rotation.
+    - Magnetic Field:
+      o Updated G4Mag_SpinEqRhs for correction to spin tracking.
+      o Fixed G4FieldManager constructors to give default values to
+        delta parameters.
+    - STEP reader:
+      - Fix for porting on Linux-g++ 2.95-2 -ansi: removed usage of
+        strdup() in dirobj.cc; replaced with existing solution for
+        __O3DB__. 
+    - Volumes:
+      o G4AuxiliaryNavServices::CheckPointOnSurface(): added additional
+        check to resolve endless looping of G4Navigator in case the track
+        is passing through a point, edge or surface shared by two solids. 
+        Fixes problem report #185. 
+      o Fixes in G4ReplicaNavigation for bug reports #253 and #254: 
+        - in VoxelLocate(...), treated particular case of rotational
+          symmetry  with extent over 360 degrees. 
+        - in DistanceToOutPhi(...), fix to correctly handle cases where
+          the starting point is on boundary of replicas and direction is
+          along boundary. 
+      o Enabled the use of different field managers for different parts
+        of the detector. This first implementation allows a volume that
+        has a field manager to override the global one. 
+        - Note: All field managers currently must refer to fields
+                in global coordinates. 
+        - New ability: setting of the delta accuracy parameters differently
+                in different volumes (even while maintaining the same
+                field as the global one).
+      o Added new parameter to G4PropagatorInField 'fEpsilonMin' which is
+        the minimal relative accuracy for MF driving. 
+
+  o Global:
+    ------
+    - Added contructor to G4DataVector with additional argument 
+      for initialising values of collection.
+    - Removed definition of cbrt() in globals.hh to allow ANSI compilation
+      on Linux-g++ architecture with compiler gcc-2.95-2.
+    - Defined 'str_size' as G4std::string::size_type and replaced usage of
+      'size_t' in G4String and G4SubString. Fixes problem report #40. 
+
+  o Graphics Representations:
+    ------------------------
+  - Fixes in HepPolyhedron:
+    o Extended implementation to cover unforeseen earlier situation 
+      during preselection of faces without intersection. 
+    o Made GetNumberOfRotationSteps() static and public.
+    o Added GetSurfaceArea() and GetVolume(). 
+  - Fixed warnings about possible use of uninitialized variables. 
+  - Migrated to STL vector. Removed references to RW wrappers.
+  - Bug fix in BooleanProcessor to address problem report #153. 
+
+  o Hadronic Processes:
+    ------------------
+  - Migration to STL vector of the pre-compound and evaporation codes and
+    removal of most warnings detected by Linux ANSI pedantic setup.
+  - Management:
+    o Fixes memory leak in G4InelasticInteraction: systematic search
+      for leaks - energy scan 50MeV-10GeV. 
+  - High energy model:
+    o Introduced temporary workaround in G4HEInelastic for high energy
+      problem (number of particles created in one event larger than
+      allocation).
+    o Missing initialization of strangeness corrected, removing energy
+      non-conservation in rare cases. 
+  - Generator models:
+    o Upgrade of angular distributions and fission yields in pre-compound
+      and evaporation models.
+    o Defined local cbrt() in G4FermiMomentum, to allow porting 
+      on gcc-2.95-2 ANSI setup.
+    o Kinetic model: fixed exceptional condition for inelastic scattering
+      off Hydrogene. No recoil required. 
+  - Radiative-decay model:
+    o Fixes to cowork with STL vector migration of 'geometry'.
+  - Low energy neutron transport model:
+    o New code revision: requires new set of data, G4NDL3.0 or later.
+    o Includes also an upgrade of the doppler broadening.
+      Allows for running on 0K data, and doing exact doppler broadening
+      on the fly (according to the temperature specified in G4Material),
+      with good performance up to about 5000K. 
+  - Utilities:
+    o Fixed memory leak in G4ReactionDynamics: systematic search for
+      leaks - energy scan verification 50MeV-10GeV.
+    o Fixed bug in nuclear reactions for light ions. 
+
+  o Materials:
+    ---------
+    - Fixed pedantic warnings detected on Linux ANSI setup.
+    - Fix to explicitly initialise to zero values of G4DataVector used
+      to fill sandia-matrix.
+
+  o Particles:
+    ---------
+    - Added a0(980), f0(400-1200), f0(980).
+    - Fixed bugs in G4ParticleDefinition::GetPDGIsospin().
+    - Fixed element name in G4IonTable.
+    - Fixed PDG encoding for excited Lambdas.
+    - Added special treatment for Lamdas in G4PDGCodeChecker.
+    - Fixed pedantic warnings detected on Linux ANSI setup.
+
+  o Persistency:
+    -----------
+    - Removed useless declaration of typedef G4ThreeVectorList.
+    - Adapted to new config setup. 
+    - Changed usage of NULL to 0. 
+
+  o Run and Intercoms:
+    -----------------
+    - Added binary mode for G4VUserPhysicsList::Retrieve/StorePhysicsTable().
+    - Added G4VUserPhysicsList::RetrieveCutValues and related.
+    - Added G4VUserPhysicsList::Set/ResetStoredInAscii() to switch on ascii
+      mode for Retrieve/StorePhysicsTable().
+    - Added 'setStoredInAscii' command in G4UserPhysicsList.
+
+  o Tracking & Track:
+    ----------------
+    - Migration to STL vector. Removed references to RW wrappers.
+    - Moved G4TrackingMessenger* messenger to the class scope in
+      G4TrackingManager.
+    - Fixed problem of vertex information loss for suspended tracks.
+      Fixes problem report #240.
+    - Fix to G4SteppingManager to explicitly initialise values in STL
+      collections members of the class. 
+
+  o Transportation:
+    --------------
+    - Correction for 'spin-update' to G4Transportation: to avoid overwrite
+      of the spin value for photons and other non-charged particles (and
+      for charged particles in zero field).
+
+  o Visualization:
+    -------------
+    - Added two new commands:
+      /vis/scene/add/text
+      /vis/scene/add/axes
+    - Improvements in /vis/scene/add/volume.
+    - Added /vis/drawTree.
+    - Introduced first version of G4ASCIITree to dump geometry hierarchy
+      to standard output as ASCII stream.
+      This requires two new environment variables:
+      G4VIS_BUILD_ASCIITREE_DRIVER and G4VIS_USE_ASCIITREE.
+    - Introduced first version of G4GAGTree to dump geometry hierarchy
+      to GAG GUI system.
+      This requires two new environment variables:
+      G4VIS_BUILD_GAGTREE_DRIVER and G4VIS_USE_GAGTREE.
+    - Migration to STL vector. Removed references to RW wrappers.
+    - Removed OS dependence from the DAWN-network driver. 
+      * gethostname() removed 
+      * removed G4SocketConfig.hh and G4SocketMacro.hh. 
+      NOTE: now "setenv G4DAWN_HOST_NAME hostname" is mandatory to use 
+            the DAWN-network driver. 
+
+  o G4toG4 Tool:
+    -----------
+    - Fix in GNUmakefile: G4MAKESHLIB replaced with G4LIB_BUILD_SHARED
+      to allow building of shared library according to the new mechanism.
+    - Fix in G3toG4BuildTree for a case of the placement a volume in
+      cloned mothers. G3toG4BuildTree() has been split in two methods
+      G3toG4BuildLVTree() and G3toG4BuildPVTree(), the first creating
+      logical volumes only, the second performing placements afterwards.
+    - Cleared pedantic warnings detected on Linux-g++ with ISO/ANSI setup.
+
+  o Examples:
+    --------
+    - exampleN03: updated visualization macros in visTutor: 
+      o Commands /vis/set/XXX's are replaced with /vis/viewer/set/XXX 
+      o Commands /vis/camera/XXX's are replaced with /vis/viewer/XXX 
+        except for /vis/camera/spin. 
+      o Added exN03Tree0.mac for ASCII DTREE and exN03Tree1.mac for
+        GAG DTREE 
+    - Migrated novice/N05 to STL vector.
+    - Added new interactive commands in extended/electromagnetic/TestEm5.
+    - Updated examples:
+      o extended/analysis/AnaEx01
+      o extended/persistency/PersistentEx01 and PersistentEx02
+      o advanced/xray_telescope
+
+Notes: 
+
+  o  Geant4 3.2 is based on STL and can be installed with strict
+     ISO/ANSI C++ compliant setup or not. See notes below.
+
+The code and some binary libraries are available through our "Source Code"
+Web page:
+- see our <A href="http://cern.ch/geant4">Geant4 Home Page</A>.
+
+Please refer to <A
+href="http://cern.ch/geant4/G4UsersDocuments/Overview/html/index.html">Geant4
+User Documentation</A> for further information about using Geant4.
+Updates to the documentation for Geant4 3.2 are expected to be published as
+usual within three weeks from the release date.
+
+
+Contents
+--------
+
+  1. Supported and Tested Platforms
+  2. ANAPHE and CLHEP
+  3. The Standard Template Library (STL)
+  4. Persistency
+  5. Compiler Specific Problems
+  6. Known Run-Time Problems
+  7. Compilation Warnings
+  8. Known Run-Time Warnings
+
+
+1. Supported and Tested Platforms
+---------------------------------
+
+  o SUN Solaris 5.6/5.7, C++ 4.2 Patch 104631-04, C++ 5.2 Patch 109508-03.
+  o HP 10.20, aCC C++ B3910B A.01.23
+  o Linux 2.2.17-7, gcc C++ egcs-2.91.66 (egcs 1.1.2), gcc 2.95-2.
+      This configuration was tested with the RedHat 6.1 distribution, but
+      versions of Geant4 have also been compiled successfully on more recent
+      RedHat, Debian and Suse distributions.
+  o NT 4.0 with Service Pack 4 or Windows-2000 and Cygnus Tools b20 with:
+      Visual C++ 6.0 Service Pack 2
+
+Platforms also tested but giving rise to some problems - see below:
+
+  o DEC V4.0, cxx C++ V6.1-027.
+
+Platforms configured but not tested and not supported:
+  o SGI V6.5.5, CC 7.2.1 with ObjectSpace
+  o AIX 4.3.2, xlC compiler with ObjectSpace
+
+
+2. ANAPHE and CLHEP
+-------------------
+
+Geant4 3.2 requires the installation of CLHEP. 
+
+See <A href="http://wwwinfo.cern.ch/asd/lhc++/INSTALLATION/clhep.html">
+CLHEP</A>. Tests have been performed with CLHEP 1.6.0.0.
+
+By default, the CLHEP installation scripts will activate ISO/ANSI C++ features
+if the compiler is capable. You need to explicitly disable CLHEP settings in
+case you wish non-ISO/ANSI setup on specific compilers.
+
+Geant4 3.2 coworks with ANAPHE 3.6.0 and components included therein:
+  Objectivity 6.1 
+  ObjectSpace 2.1
+  HepODBMS 0.3.2.9
+  CLHEP 1.6.0.0
+
+For more information about ANAPHE 3.6.0, see:
+  <A href="http://cern.ch/anaphe">ANAPHE</A>
+
+
+3. The Standard Template Library
+--------------------------------
+
+The following versions of STL have been tested:
+
+   ObjectSpace STL on SUN (CC 4.2).
+
+          See <A href="http://www.objectspace.com/">ObjectSpace</A>.
+
+   "Native" STL on: Windows/NT, Linux, HP, DEC and SUN (CC 5.2).
+
+This is selected at installation/compile time by the environment variable
+G4USE_OSPACE in the case of the former - see documentation.
+
+NOTES:
+- Be aware that by default, the installation scripts will expect to use
+  the native STL implementation. You must set the G4USE_OSPACE variable
+  in the environment in order to select the ObjectSpace implementation.
+
+- Platform specific setup:
+  o DEC:   ObjectSpace is required in non ISO/ANSI setup.
+           Native STL is required for ISO/ANSI setup.
+  o HP:    Native STL is used (non ISO/ANSI setup).
+  o SUN:   ObjectSpace is required in non ISO/ANSI setup (CC 4.2).
+           Native STL is required for ISO/ANSI setup (CC 5.2 only).
+  o Linux: Native STL is required (non ISO/ANSI setup).
+  o NT:    Native STL and ISO/ANSI setup required.
+
+
+4. Persistency
+--------------
+
+  See release notes for Geant4 3.0.   
+
+5. Compiler Specific Problems
+-----------------------------
+
+  o DEC V4.0, cxx C++ V6.1-027.
+
+    - We have found cases of mis-compilation of min and max templates
+      on DEC.  We have traced those which cause serious malfunction
+      but there is no guarantee that there are no other cases.
+      Detailed inspection of assembler output suggests that this
+      problem might not be confined to min and max.  This has been
+      reported to DEC/Compaq.  We understand a new version 6.2 of the
+      compiler is now available.  However we cannot guarantee correct
+      execution of Geant4 on DEC with the current version of the
+      compiler.
+    - A bug in cin.getline() system function causes an anomalous
+      behavior when running in interactive-mode on DEC-cxx 6.1 in
+      ISO/ANSI mode. We tested the bug has been fixed in more recent
+      versions of the compiler.
+
+
+6. Known Run-Time Problems and Limitations
+------------------------------------------
+
+For a complete list of outstanding run-time problems and to submit any
+problem you may find running this version of Geant4, please refer to the
+Geant4 Problem Reporting System, available on the Web at this address:
+
+    http://wwwinfo.cern.ch/asd/cgi-bin/geant4/problemreport
+
+
+7. Compilation Warnings
+-----------------------
+
+There are compilation warnings on some platforms.  We do not believe
+that any will lead to incorrect run-time behaviour, but we are working
+on reducing them.
+
+
+8. Known Run-Time Warnings
+--------------------------
+
+The following messages can be written to error output while tracking.  We
+believe none give rise to incorrect behaviour.
+
+  o G4PropagateInField: Warning: Particle is looping 
+    -  tracking in field will be stopped. 
+       It has performed 10000 steps in Field  while a maximum of 10000
+       are allowed. 
