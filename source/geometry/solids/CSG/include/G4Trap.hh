@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trap.hh,v 1.4 2000-04-11 16:04:27 johna Exp $
+// $Id: G4Trap.hh,v 1.5 2000-11-02 17:06:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -159,11 +159,12 @@ struct TrapSidePlane
 				// => Ax+By+Cz+D=0  
 };
 
-class G4Trap : public G4CSGSolid {
+class G4Trap : public G4CSGSolid
+{
 
-public:
+  public:
 
-// The most general constructor for G4Trap     
+  // The most general constructor for G4Trap     
 
     G4Trap( const G4String& pName,
              G4double pDz,
@@ -176,94 +177,57 @@ public:
      G4Trap( const G4String& pName,
 	     const G4ThreeVector pt[8]) ;
 
-// Constructor for Right Angular Wedge from STEP
+  // Constructor for Right Angular Wedge from STEP (assumes pLTX<=pX)
 
      G4Trap( const G4String& pName,
               G4double pZ,
 	      G4double pY,
 	      G4double pX, G4double pLTX);
 
-// Constructor for G4Trd	     
+  // Constructor for G4Trd	     
 	     
      G4Trap( const G4String& pName,
                G4double pDx1,  G4double pDx2,
 	       G4double pDy1,  G4double pDy2,
                G4double pDz);
 
-// Constructor for G4Para
+  // Constructor for G4Para
 	     
      G4Trap(const G4String& pName,
 	     G4double pDx, G4double pDy, G4double pDz,
 	     G4double pAlpha, G4double pTheta, G4double pPhi);
 	     
-	     virtual ~G4Trap() ;
+     virtual ~G4Trap() ;
     
   // Constructor for "nominal" G4Trap whose parameters are to be set
-  // by a G4VPramaterisation later.
+  // by a G4VParamaterisation later.
 
      G4Trap(const G4String& pName);
 
-                                      // Access functions
+  // Access functions
 
-    G4double GetZHalfLength() const
-    {
-	return fDz ;
-    }
-    
+    G4double GetZHalfLength() const { return fDz ; }
     G4ThreeVector GetSymAxis() const
     {
-     G4double cosTheta = 1.0/sqrt(1+fTthetaCphi*fTthetaCphi+fTthetaSphi*fTthetaSphi) ;
+      G4double cosTheta = 1.0/sqrt(1+fTthetaCphi*fTthetaCphi +
+                                     fTthetaSphi*fTthetaSphi) ;
      
-     return G4ThreeVector(fTthetaCphi*cosTheta,fTthetaSphi*cosTheta,cosTheta) ;
+      return G4ThreeVector(fTthetaCphi*cosTheta,
+                           fTthetaSphi*cosTheta,
+			   cosTheta) ;
     }
+    G4double GetYHalfLength1() const { return fDy1 ; }
+    G4double GetXHalfLength1() const { return fDx1 ; }
+    G4double GetXHalfLength2() const { return fDx2 ; }
+    G4double GetTanAlpha1()    const { return fTalpha1 ; }
+    G4double GetYHalfLength2() const { return fDy2 ; }
+    G4double GetXHalfLength3() const { return fDx3 ; }
+    G4double GetXHalfLength4() const { return fDx4 ; }
+    G4double GetTanAlpha2()    const { return fTalpha2 ; }
+    TrapSidePlane GetSidePlane(G4int n ) const { return fPlanes[n] ; }
 
-    G4double GetYHalfLength1() const
-    {
-	return fDy1 ;
-    }
-    
+  // Set Methods
 
-    G4double GetXHalfLength1() const
-    {
-	return fDx1 ;
-    }
-
-    G4double GetXHalfLength2() const
-    {
-	return fDx2 ;
-    }
-
-    G4double GetTanAlpha1()    const
-    {
-        return fTalpha1 ; 
-    }
-    
-    G4double GetYHalfLength2() const
-    {
-	return fDy2 ;
-    }
-
-    G4double GetXHalfLength3() const
-    {
-	return fDx3 ;
-    }
-
-    G4double GetXHalfLength4() const
-    {
-	return fDx4 ;
-    }
-
-    G4double GetTanAlpha2()    const
-    {
-        return fTalpha2 ; 
-    }
-    
-    TrapSidePlane GetSidePlane(G4int n ) const
-    {
-        return fPlanes[n] ;
-    }
-
-                                                      // Set Methods
     void SetAllParameters ( G4double pDz,
 			    G4double pTheta,
 			    G4double pPhi,
@@ -276,7 +240,7 @@ public:
 			    G4double pDx4,
 			    G4double pAlp2);
 	                              
-                                                      // Methods
+  // Methods
     
     void ComputeDimensions(G4VPVParameterisation* p,
                            const G4int n,
@@ -301,19 +265,16 @@ public:
 			   
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
-             // Naming method (pseudo-RTTI : run-time type identification
+    G4GeometryType  GetEntityType() const { return G4String("G4Trap"); }
+      // Naming method (pseudo-RTTI : run-time type identification
 
-    virtual G4GeometryType  GetEntityType() const { return G4String("G4Trap"); }
+  // Visualisation functions
 
-                        // Visualisation functions
-
-    void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
-    
+    void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
     G4Polyhedron* CreatePolyhedron   () const;
-    
     G4NURBS*      CreateNURBS        () const;
 
-protected:
+  protected:
 
     G4bool MakePlanes();
     G4bool MakePlane( const G4ThreeVector& p1,
@@ -325,7 +286,7 @@ protected:
     G4ThreeVectorList*
     CreateRotatedVertices(const G4AffineTransform& pTransform) const;
 
-private:
+  private:
 
     G4double fDz,fTthetaCphi,fTthetaSphi;
     G4double fDy1,fDx1,fDx2,fTalpha1;

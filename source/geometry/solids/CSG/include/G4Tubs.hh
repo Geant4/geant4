@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.hh,v 1.4 2000-04-11 16:04:27 johna Exp $
+// $Id: G4Tubs.hh,v 1.5 2000-11-02 17:06:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,8 +75,10 @@
 
 #include "G4CSGSolid.hh"
 
-class G4Tubs : public G4CSGSolid {
-public:
+class G4Tubs : public G4CSGSolid
+{
+  public:
+
     G4Tubs(const G4String &pName,
 	   G4double pRMin,
 	   G4double pRMax,
@@ -95,14 +97,14 @@ public:
 			   const G4AffineTransform& pTransform,
 			   G4double& pmin, G4double& pmax) const;
 
-    G4double    GetInnerRadius  () const { return fRMin; }
-    G4double    GetOuterRadius () const { return fRMax; }
+    G4double    GetInnerRadius   () const { return fRMin; }
+    G4double    GetOuterRadius   () const { return fRMax; }
     G4double    GetZHalfLength   () const { return fDz  ; }
     G4double    GetStartPhiAngle () const { return fSPhi; }
     G4double    GetDeltaPhiAngle () const { return fDPhi; }
 
-    void        SetInnerRadius  (G4double newRMin) { fRMin= newRMin; }
-    void        SetOuterRadius (G4double newRMax) { fRMax= newRMax; } 
+    void        SetInnerRadius  (G4double newRMin)  { fRMin= newRMin; }
+    void        SetOuterRadius  (G4double newRMax)  { fRMax= newRMax; } 
     void        SetZHalfLength   (G4double newDz)   { fDz=   newDz  ; }
     void        SetStartPhiAngle (G4double newSPhi) { fSPhi= newSPhi; }
     void        SetDeltaPhiAngle (G4double newDPhi) { fDPhi= newDPhi; }
@@ -118,31 +120,34 @@ public:
 			   G4bool *validNorm=0,G4ThreeVector *n=0) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
-    // Naming method (pseudo-RTTI : run-time type identification)
-    virtual G4GeometryType  GetEntityType() const { return G4String("G4Tubs"); }
+    G4GeometryType  GetEntityType() const { return G4String("G4Tubs"); }
+      // Naming method (pseudo-RTTI : run-time type identification)
 
-    // Visualisation functions
+  // Visualisation functions
+
     void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
     G4Polyhedron*       CreatePolyhedron   () const;
     G4NURBS*            CreateNURBS        () const;
 
-    //  Older names for access functions
-    G4double    GetRMin() const { return GetInnerRadius(); }   // fRMin 
+  //  Older names for access functions
+
+    G4double    GetRMin() const { return GetInnerRadius(); }  // fRMin 
     G4double    GetRMax() const { return GetOuterRadius(); }  // fRMax 
     G4double    GetDz  () const { return GetZHalfLength()  ; }  // fDz   
     G4double    GetSPhi() const { return GetStartPhiAngle(); }  // fSPhi 
     G4double    GetDPhi() const { return GetDeltaPhiAngle(); }  // fDPhi
 
-protected:
+  protected:
+
     G4ThreeVectorList*
     CreateRotatedVertices(const G4AffineTransform& pTransform) const;
 
     G4double fRMin,fRMax,fDz,fSPhi,fDPhi;
 
   // Used by distanceToOut
-  enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
+    enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
   // used by normal
-  enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
+    enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
 
 };
    	

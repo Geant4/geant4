@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Para.hh,v 1.5 2000-04-11 16:04:27 johna Exp $
+// $Id: G4Para.hh,v 1.6 2000-11-02 17:06:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,79 +55,51 @@
 
 #include "G4CSGSolid.hh"
 
-class G4Para : public G4CSGSolid {
-public:
-          G4Para(const G4String& pName,
+class G4Para : public G4CSGSolid
+{
+  public:
+
+    G4Para(const G4String& pName,
 	         G4double pDx, G4double pDy, G4double pDz,
 	         G4double pAlpha, G4double pTheta, G4double pPhi);
 		 
-          G4Para( const G4String& pName,
-	          const G4ThreeVector pt[8]) ;
-		 
-	  virtual ~G4Para() ;
-    
-                                      // Access functions
+    G4Para( const G4String& pName,
+	    const G4ThreeVector pt[8]) ;
 
-    G4double GetZHalfLength() const
-    {
-	return fDz ;
-    }
+    virtual ~G4Para() ;
     
+  // Access functions
+
+    G4double GetZHalfLength() const { return fDz ; }
     G4ThreeVector GetSymAxis() const
     {
-     G4double cosTheta = 1.0/sqrt(1+fTthetaCphi*fTthetaCphi+fTthetaSphi*fTthetaSphi) ;
+       G4double cosTheta = 1.0/sqrt(1+fTthetaCphi*fTthetaCphi +
+                                      fTthetaSphi*fTthetaSphi) ;
      
-     return G4ThreeVector(fTthetaCphi*cosTheta,fTthetaSphi*cosTheta,cosTheta) ;
+       return G4ThreeVector(fTthetaCphi*cosTheta,
+                            fTthetaSphi*cosTheta,
+			    cosTheta) ;
     }
-
-    G4double GetYHalfLength() const
-    {
-	return fDy ;
-    }
+    G4double GetYHalfLength() const { return fDy ; }
+    G4double GetXHalfLength() const { return fDx ; }
+    G4double GetTanAlpha()    const { return fTalpha ; }
     
+  // Set  functions
 
-    G4double GetXHalfLength() const
-    {
-	return fDx ;
-    }
-
-
-    G4double GetTanAlpha()    const
-    {
-        return fTalpha ; 
-    }
-    
-                                             // Set  functions
-
-    void SetXHalfLength(G4double val)
-    {
-	fDx= val;
-    }
-    void SetYHalfLength(G4double val) 
-    {
-	fDy= val;
-    }
-    void SetZHalfLength(G4double val) 
-    {
-	fDz= val;
-    }
-    void SetAlpha(double alpha)    
-    {
-        fTalpha= tan(alpha); 
-    }
-    void SetTanAlpha(double val)    
-    {
-        fTalpha= val; 
-    }
+    void SetXHalfLength(G4double val) { fDx= val; }
+    void SetYHalfLength(G4double val) { fDy= val; }
+    void SetZHalfLength(G4double val) { fDz= val; }
+    void SetAlpha(G4double alpha)  { fTalpha= tan(alpha); }
+    void SetTanAlpha(G4double val) { fTalpha= val; }
     void SetThetaAndPhi(double pTheta, double pPhi)    
     {
 	fTthetaCphi=tan(pTheta)*cos(pPhi);
 	fTthetaSphi=tan(pTheta)*sin(pPhi);
     }
     void SetAllParameters(G4double pDx, G4double pDy, G4double pDz, 
-            G4double pAlpha, G4double pTheta, G4double pPhi);
+                          G4double pAlpha, G4double pTheta, G4double pPhi);
     
-                                                      // Methods
+  // Methods
     
     void ComputeDimensions(G4VPVParameterisation* p,
                            const G4int n,
@@ -153,33 +125,23 @@ public:
 
              // Naming method (pseudo-RTTI : run-time type identification
 
-    virtual G4GeometryType  GetEntityType() const { return G4String("G4Para"); }
+    G4GeometryType  GetEntityType() const { return G4String("G4Para"); }
 
-                        // Visualisation functions
+  // Visualisation functions
 
-    void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
-    
+    void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
     G4Polyhedron* CreatePolyhedron   () const;
-    
     G4NURBS*      CreateNURBS        () const;
 
-protected:
+  protected:
 
     G4ThreeVectorList*
     CreateRotatedVertices(const G4AffineTransform& pTransform) const;
 
-private:
+  private:
+
     G4double fDx,fDy,fDz;
     G4double fTalpha,fTthetaCphi,fTthetaSphi;
 };
    	
 #endif
-
-
-
-
-
-
-
-
-

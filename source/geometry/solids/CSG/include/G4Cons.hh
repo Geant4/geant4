@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cons.hh,v 1.4 2000-04-11 16:04:27 johna Exp $
+// $Id: G4Cons.hh,v 1.5 2000-11-02 17:06:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,7 +51,7 @@
 
 class G4Cons : public G4CSGSolid
 {
-public:
+  public:
         G4Cons(const G4String& pName,
 	       G4double pRmin1, G4double pRmax1,
                G4double pRmin2, G4double pRmax2,
@@ -60,7 +60,7 @@ public:
 	       
 	virtual ~G4Cons() ;
 
-// Access functions	
+  // Access functions	
         G4double    GetInnerRadiusMinusZ() const { return fRmin1 ; }
         G4double    GetOuterRadiusMinusZ() const { return fRmax1 ; } 
         G4double    GetInnerRadiusPlusZ()  const { return fRmin2 ; }
@@ -108,7 +108,7 @@ public:
 			       
         G4double DistanceToOut(const G4ThreeVector& p) const ;
 			       
-        virtual G4GeometryType  GetEntityType() const { return G4String("G4Cons"); }
+        G4GeometryType  GetEntityType() const { return G4String("G4Cons"); }
 			   
         void   DescribeYourselfTo(G4VGraphicsScene& scene) const;
        
@@ -127,7 +127,7 @@ public:
         G4double    GetSPhi() const { return GetStartPhiAngle(); }  // fSPhi 
         G4double    GetDPhi() const { return GetDeltaPhiAngle(); }  // fDPhi
 
-protected:
+  protected:
  
         G4ThreeVectorList*
         CreateRotatedVertices(const G4AffineTransform& pTransform) const;
@@ -140,7 +140,7 @@ protected:
   
         enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
 
-private:
+  private:
 
         G4double fRmin1,fRmin2,
 	         fRmax1,fRmax2,

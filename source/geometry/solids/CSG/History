@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2000-10-31 18:40:56 gcosmo Exp $
+$Id: History,v 1.28 2000-11-02 17:06:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 02,   00   G. Cosmo                  geom-solids-csg-V02-00-08
+- QA code revision and cleanup (+fixes from CodeWizard filtering):
+  o Removed virtual keyword from GetEntityType() concrete function.
+  o General cosmetics.
 
 Oct 31,   00   V. Grichine               geom-solids-csg-V02-00-07
 - G4Tubs::DistanceToOut(p,v,...):

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.hh,v 1.10 2000-10-26 13:10:18 gcosmo Exp $
+// $Id: G4Torus.hh,v 1.11 2000-11-02 17:06:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -94,20 +94,20 @@ public:
   virtual ~G4Torus();
     
   void SetAllParameters(G4double pRmin, G4double pRmax, G4double pRtor,
-						G4double pSPhi, G4double pDPhi);
+			G4double pSPhi, G4double pDPhi);
  
   void ComputeDimensions(G4VPVParameterisation* p,
-						 const G4int n,
-						 const G4VPhysicalVolume* pRep);
+			 const G4int n,
+			 const G4VPhysicalVolume* pRep);
 			   
   G4int TorusRoots(G4double Ri,
-				   const G4ThreeVector& p,
-				   const G4ThreeVector& v) const ;
+		   const G4ThreeVector& p,
+		   const G4ThreeVector& v) const ;
 
   G4bool CalculateExtent(const EAxis pAxis,
-						 const G4VoxelLimits& pVoxelLimit,
-						 const G4AffineTransform& pTransform,
-						 G4double& pmin, G4double& pmax) const;
+			 const G4VoxelLimits& pVoxelLimit,
+			 const G4AffineTransform& pTransform,
+			 G4double& pmin, G4double& pmax) const;
 
   G4double    GetRmin() const { return fRmin ; }
   G4double    GetRmax() const { return fRmax ; } 
@@ -122,14 +122,15 @@ public:
   G4double DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) const;
   G4double DistanceToIn(const G4ThreeVector& p) const;
   G4double DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
-						 const G4bool calcNorm=G4bool(false),
-						 G4bool *validNorm=0,G4ThreeVector *n=0) const;
+			 const G4bool calcNorm=G4bool(false),
+			 G4bool *validNorm=0,G4ThreeVector *n=0) const;
   G4double DistanceToOut(const G4ThreeVector& p) const;
 
-  // Naming method (pseudo-RTTI : run-time type identification)
-  virtual G4GeometryType  GetEntityType() const { return G4String("G4Torus"); }
+  G4GeometryType  GetEntityType() const { return G4String("G4Torus"); }
+    // Naming method (pseudo-RTTI : run-time type identification)
 
   // Visualisation functions
+
   void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
   G4Polyhedron*       CreatePolyhedron   () const;
   G4NURBS*            CreateNURBS        () const;
@@ -148,9 +149,8 @@ protected:
                         const G4ThreeVector& v,
 			G4bool IsDistanceToIn) const;
 
-  G4ThreeVectorList*
-  CreateRotatedVertices(const G4AffineTransform& pTransform,
-			G4int& noPolygonVertices) const;
+  G4ThreeVectorList* CreateRotatedVertices(const G4AffineTransform& pTransform,
+			                   G4int& noPolygonVertices) const;
 
   G4double fRmin,fRmax,fRtor,fSPhi,fDPhi;
 
@@ -161,8 +161,8 @@ protected:
 
 private:
 
-  inline G4double TorusEquation (G4double x, G4double y, G4double z,
-                                 G4double R0, G4double R1) const
+  G4double TorusEquation (G4double x, G4double y, G4double z,
+                          G4double R0, G4double R1) const
   {
 	/* R0 : Radius of all little circles
 	   R1 : Radius of little circles
@@ -185,27 +185,27 @@ private:
 	return temp ;
   }
   
-  inline G4double TorusDerivativeX (G4double x, G4double y, G4double z,
-                                    G4double R0, G4double R1) const
+  G4double TorusDerivativeX (G4double x, G4double y, G4double z,
+                             G4double R0, G4double R1) const
   {
 	return 4*x*(x*x + y*y + z*z +  R0*R0 - R1*R1) - 8*R0*R0*x ;
   }
 
-  inline G4double TorusDerivativeY (G4double x, G4double y, G4double z,
-                                    G4double R0, G4double R1) const
+  G4double TorusDerivativeY (G4double x, G4double y, G4double z,
+                             G4double R0, G4double R1) const
   {
 	return 4*y*(x*x + y*y + z*z +  R0*R0 - R1*R1) - 8*R0*R0*y ;
   }
 
-  inline G4double TorusDerivativeZ (G4double x, G4double y, G4double z,
-                                    G4double R0, G4double R1) const
+  G4double TorusDerivativeZ (G4double x, G4double y, G4double z,
+                             G4double R0, G4double R1) const
   {
 	return 4*z*(x*x + y*y + z*z +  R0*R0 - R1*R1) ;
   }
 
-  inline G4double TorusGradient(G4double dx, G4double dy, G4double dz,
-				G4double x, G4double y, G4double z,
-				G4double Rmax, G4double Rmin) const
+  G4double TorusGradient(G4double dx, G4double dy, G4double dz,
+			 G4double x, G4double y, G4double z,
+			 G4double Rmax, G4double Rmin) const
   {
     /* This tell the normal at a surface point */
     G4double result;

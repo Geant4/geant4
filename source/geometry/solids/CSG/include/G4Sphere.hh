@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Sphere.hh,v 1.4 2000-04-11 16:04:27 johna Exp $
+// $Id: G4Sphere.hh,v 1.5 2000-11-02 17:06:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,8 +53,9 @@
 
 #include "G4CSGSolid.hh"
 
-class G4Sphere : public G4CSGSolid {
-public:
+class G4Sphere : public G4CSGSolid
+{
+  public:
           G4Sphere(const G4String& pName,
 	           G4double pRmin, G4double pRmax,
 	           G4double pSPhi, G4double pDPhi,
@@ -62,7 +63,7 @@ public:
 		   
 	  virtual ~G4Sphere() ;
 	  
-	  // Access functions
+      // Access functions
 		   
 	  G4double    GetInsideRadius   () const { return fRmin;   }
 	  G4double    GetOuterRadius  () const { return fRmax;   }
@@ -104,19 +105,18 @@ public:
 				 
           G4double DistanceToOut(const G4ThreeVector& p) const;
 
-             // Naming method (pseudo-RTTI : run-time type identification)
+          G4GeometryType  GetEntityType() const { return G4String("G4Sphere"); }
+            // Naming method (pseudo-RTTI : run-time type identification)
 
-          virtual G4GeometryType  GetEntityType() const { return G4String("G4Sphere"); }
 
-              // Visualisation functions
+      // Visualisation functions
   
-          void   DescribeYourselfTo(G4VGraphicsScene& scene) const;
-       
+          void          DescribeYourselfTo(G4VGraphicsScene& scene) const;
           G4Polyhedron* CreatePolyhedron() const;
-       
           G4NURBS*      CreateNURBS() const;
        
-          // Old access functions
+      // Old access functions
+
           G4double  GetRmin()   const { return GetInsideRadius   (); }
           G4double  GetRmax()   const { return GetOuterRadius    (); }
           G4double  GetSPhi()   const { return GetStartPhiAngle  (); }
@@ -124,26 +124,25 @@ public:
 	  G4double  GetSTheta() const { return GetStartThetaAngle(); }
           G4double  GetDTheta() const { return GetDeltaThetaAngle(); }
 
-protected:
+  protected:
  
           G4ThreeVectorList*
           CreateRotatedVertices(const G4AffineTransform& pTransform,
 	                        G4int& noPolygonVertices) const;
 	
-  // Used by distanceToOut
+      // Used by distanceToOut
   
           enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kSTheta,kETheta};
   
-  // used by normal
+      // used by normal
   
           enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
 
-private:
+  private:
 
     G4double fRmin,fRmax,
              fSPhi,fDPhi,
 	     fSTheta,fDTheta;
-	     
 };
    	
 #endif

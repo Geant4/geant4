@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Box.hh,v 1.4 2000-04-07 12:55:02 gcosmo Exp $
+// $Id: G4Box.hh,v 1.5 2000-11-02 17:06:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -23,8 +23,8 @@
 //
 //   As inherited from G4CSGSolid +
 //
-//     G4Box(const G4String& pName, G4double pX,
-//           G4double pY, G4double pZ)
+//     G4Box(const G4String& pName,
+//                 G4double pX, G4double pY, G4double pZ)
 //
 //     - Construct a box with name, and half lengths pX,pY,pZ
 //
@@ -63,10 +63,9 @@
 
 class G4Box : public G4CSGSolid 
 {
-public:
+  public:
 
-    G4Box(const G4String& pName, G4double pX,
-	  G4double pY, G4double pZ);
+    G4Box(const G4String& pName, G4double pX, G4double pY, G4double pZ);
 
     virtual ~G4Box();
 
@@ -78,69 +77,51 @@ public:
 			   const G4VoxelLimits& pVoxelLimit,
 			   const G4AffineTransform& pTransform,
 			   G4double& pmin, G4double& pmax) const;
-// Access functions
+  // Access functions
 
-    G4double GetXHalfLength() const
-    {
-	return fDx;
-    }
+    G4double GetXHalfLength() const { return fDx; }
     
-    G4double GetYHalfLength() const
-    {
-	return fDy;
-    }
+    G4double GetYHalfLength() const { return fDy; }
     
-    G4double GetZHalfLength() const
-    {
-	return fDz;
-    }
+    G4double GetZHalfLength() const { return fDz; }
 
-    void SetXHalfLength(G4double dx)
-    {
-	fDx=dx;
-    }
+    void SetXHalfLength(G4double dx) { fDx=dx; }
 
-    void SetYHalfLength(G4double dy)
-    {
-	fDy=dy;
-    }
+    void SetYHalfLength(G4double dy) { fDy=dy; }
 
-    void SetZHalfLength(G4double dz)
-    {
-	fDz=dz;
-    }
+    void SetZHalfLength(G4double dz) { fDz=dz; }
     
     EInside Inside(const G4ThreeVector& p) const;
 
     G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
 
-    G4double DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) const;
+    G4double DistanceToIn(const G4ThreeVector& p, const G4ThreeVector& v) const;
 
     G4double DistanceToIn(const G4ThreeVector& p) const;
 
-    G4double DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
+    G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
 			   const G4bool calcNorm=false,
 			   G4bool *validNorm=0,G4ThreeVector *n=0) const;
 
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
-    virtual G4GeometryType  GetEntityType() const { return G4String("G4Box"); }
+    G4GeometryType  GetEntityType() const { return G4String("G4Box"); }
 
-    void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
-    G4VisExtent         GetExtent          () const;
+    void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
+    G4VisExtent   GetExtent          () const;
     G4Polyhedron* CreatePolyhedron   () const;
     G4NURBS*      CreateNURBS        () const;
 
-protected:
+  protected:
 
     G4ThreeVectorList*
     CreateRotatedVertices(const G4AffineTransform& pTransform) const;
     
-// Codes for faces (kPX=plus x face,kMY= minus y face etc)
+  // Codes for faces (kPX=plus x face,kMY= minus y face etc)
 
     enum ESide {kUndefined,kPX,kMX,kPY,kMY,kPZ,kMZ};
 
-private:
+  private:
 
     G4double fDx,fDy,fDz;
 };

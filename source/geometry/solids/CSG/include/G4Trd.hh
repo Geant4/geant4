@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trd.hh,v 1.5 2000-04-11 16:04:27 johna Exp $
+// $Id: G4Trd.hh,v 1.6 2000-11-02 17:06:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,52 +87,23 @@ class G4Trd : public G4CSGSolid
 
     virtual ~G4Trd();
 
-// Access functions
-    G4double GetXHalfLength1() const
-    {
-	return fDx1;
-    }
+  // Access functions
 
-    G4double GetXHalfLength2() const
-    {
-	return fDx2;
-    }
-    
-    G4double GetYHalfLength1() const
-    {
-	return fDy1;
-    }
+    G4double GetXHalfLength1() const { return fDx1; }
+    G4double GetXHalfLength2() const { return fDx2; }
+    G4double GetYHalfLength1() const { return fDy1; }
+    G4double GetYHalfLength2() const { return fDy2; }
+    G4double GetZHalfLength()  const { return fDz; }
 
-    G4double GetYHalfLength2() const
-    {
-	return fDy2;
-    }
-    
-    G4double GetZHalfLength() const
-    {
-	return fDz;
-    }
-    
-    void SetXHalfLength1(G4double val) 
-    {
-	fDx1= val;
-    }
-    void SetXHalfLength2(G4double val)
-    {
-	fDx2= val;
-    }
-    void SetYHalfLength1(G4double val) 
-    {
-	fDy1= val;
-    }
-    void SetYHalfLength2(G4double val)
-    {
-	fDy2= val;
-    }
-    void SetZHalfLength(G4double val)
-    {
-	fDz= val;
-    }
+  // Set functions
+
+    void SetXHalfLength1(G4double val) { fDx1= val; }
+    void SetXHalfLength2(G4double val) { fDx2= val; }
+    void SetYHalfLength1(G4double val) { fDy1= val; }
+    void SetYHalfLength2(G4double val) { fDy2= val; }
+    void SetZHalfLength(G4double val)  { fDz= val; }
+
+  // Methods
 
     void ComputeDimensions(G4VPVParameterisation* p,
                            const G4int n,
@@ -161,42 +132,34 @@ class G4Trd : public G4CSGSolid
 
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
-             // Naming method (pseudo-RTTI : run-time type identification
+    void CheckAndSetAllParameters (G4double pdx1, G4double pdx2,
+                                   G4double pdy1, G4double pdy2,
+                                   G4double pdz);
 
-    virtual G4GeometryType  GetEntityType() const { return G4String("G4Trd"); }
+    void SetAllParameters (G4double pdx1, G4double pdx2,
+                           G4double pdy1, G4double pdy2,
+                           G4double pdz);
 
-                        // Visualisation functions
+    G4GeometryType  GetEntityType() const { return G4String("G4Trd"); }
+      // Naming method (pseudo-RTTI : run-time type identification
 
-    void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
+  // Visualisation functions
+
+    void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
     G4Polyhedron* CreatePolyhedron   () const;
     G4NURBS*      CreateNURBS        () const;
 
-    void CheckAndSetAllParameters (G4double pdx1, G4double pdx2,
-                             G4double pdy1, G4double pdy2,
-                             G4double pdz);
-
-    void SetAllParameters (G4double pdx1, G4double pdx2,
-                             G4double pdy1, G4double pdy2,
-                             G4double pdz);
-
-protected:
+  protected:
 
     G4ThreeVectorList*
     CreateRotatedVertices(const G4AffineTransform& pTransform) const;
     
     G4double fDx1,fDx2,fDy1,fDy2,fDz;
 
-// Codes for faces (kPX=plus x face,kMY= minus y face etc)
+  // Codes for faces (kPX=plus x face,kMY= minus y face etc)
 
-  enum ESide {kUndefined, kPX,kMX,kPY,kMY,kPZ,kMZ};
+    enum ESide {kUndefined, kPX,kMX,kPY,kMY,kPZ,kMZ};
 
 };
 
 #endif
-
-
-
-
-
-
-
