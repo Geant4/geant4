@@ -5,13 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.icc,v 1.1 1999-10-06 01:21:50 kurasige Exp $
+// $Id: G4Track.icc,v 1.2 2000-02-16 16:10:06 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-----------------------------------------------------------------
 // Definitions of inline functions
 //-----------------------------------------------------------------
-
+//   change GetMaterial        16 Feb. 2000  H.Kurashige
+  
 // Operators
    extern G4Allocator<G4Track> aTrackAllocator;
    inline void* G4Track::operator new(size_t)
@@ -93,22 +94,23 @@
 
 // material
    inline G4Material* G4Track::GetMaterial() const
-   { return fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial(); }
+   { return fpStep->GetPreStepPoint()->GetMaterial(); }
 
    inline G4Material* G4Track::GetNextMaterial() const
-   { return fpNextTouchable->GetVolume()->GetLogicalVolume()->GetMaterial(); }
+   { return fpStep->GetPostStepPoint()->GetMaterial(); }
+
 
 // touchable
-   inline G4VTouchable* G4Track::GetTouchable() const
+   inline const G4VTouchable* G4Track::GetTouchable() const
    { return fpTouchable; }
 
-   inline void G4Track::SetTouchable(G4VTouchable* apValue)
+   inline void G4Track::SetTouchable(const G4VTouchable* apValue)
    { fpTouchable = apValue; }
 
-   inline G4VTouchable* G4Track::GetNextTouchable() const
+   inline const  G4VTouchable* G4Track::GetNextTouchable() const
    { return fpNextTouchable; }
 
-   inline void G4Track::SetNextTouchable(G4VTouchable* apValue)
+   inline void G4Track::SetNextTouchable(const G4VTouchable* apValue)
    { fpNextTouchable = apValue; }
 
 // kinetic energy
@@ -236,7 +238,7 @@
 //-------------------------------------------------------------
 #include "G4Step.hh"
 
-   inline G4Step* G4Track::GetStep() const
+   inline const G4Step* G4Track::GetStep() const
    { return fpStep; }
 
    inline void G4Track::SetStep(G4Step* aValue)

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForTransport.hh,v 1.2 1999-11-07 16:32:01 kurasige Exp $
+// $Id: G4ParticleChangeForTransport.hh,v 1.3 2000-02-16 16:10:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,7 @@
 // 
 // ------------------------------------------------------------
 //   Implemented for the new scheme                 10 May. 1998  H.Kurahige
+//   Added theMaterialChange                        16 FEb. 2000  H.Kurahige
 //
 // Class Description
 //  This class is a concrete class for ParticleChange for transportation
@@ -64,10 +65,13 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     //   "Change", what it stores (and returns in get) are the "FINAL" 
     //   values of the Position, Momentum, etc.
 
-    G4VTouchable* GetTouchableChange() const;
+    const G4VTouchable* GetTouchableChange() const;
     void  SetTouchableChange(G4VTouchable* fTouchable);
     //  Get/Set the touchable of the current particle.
     //  Note: Touchable in PostStepPoint will be updated only after PostStepDoIt
+    G4Material* GetMaterialChange() const;
+    void SetMaterialChange(G4Material* fMaterial);
+    //  Get/Set the material in the touchable of the current particle.
 
     G4bool GetMomentumChanged() const;
     void SetMomentumChanged(G4bool b);
@@ -80,7 +84,8 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     //  The changed touchable of a given particle.
 
   private:
-    G4bool isMomentumChanged;
+    G4bool     isMomentumChanged;
+    G4Material* theMaterialChange;
 
 };
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.hh,v 1.5 1999-11-07 16:32:03 kurasige Exp $
+// $Id: G4Track.hh,v 1.6 2000-02-16 16:10:06 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -115,11 +115,11 @@ public: // With description
    G4Material* GetMaterial() const;
    G4Material* GetNextMaterial() const;
 
-   G4VTouchable* GetTouchable() const;
-   void SetTouchable(G4VTouchable* apValue);
+   const G4VTouchable* GetTouchable() const;
+   void SetTouchable(const G4VTouchable* apValue);
 
-   G4VTouchable* GetNextTouchable() const;
-   void SetNextTouchable(G4VTouchable* apValue);
+   const G4VTouchable* GetNextTouchable() const;
+   void SetNextTouchable(const G4VTouchable* apValue);
 
   // energy
    G4double GetKineticEnergy() const;
@@ -163,7 +163,7 @@ public: // With description
       // Accumulated the track length
 
   // step information
-   G4Step* GetStep() const;
+   const G4Step* GetStep() const;
    void SetStep(G4Step* aValue);
 
    G4int GetCurrentStepNumber() const;
@@ -213,8 +213,8 @@ public: // With description
    G4int fParentID;
    G4int fTrackID;
 
-   G4VTouchable* fpTouchable;
-   G4VTouchable* fpNextTouchable;
+   const G4VTouchable* fpTouchable;
+   const G4VTouchable* fpNextTouchable;
 
    G4DynamicParticle* fpDynamicParticle;
    G4TrackStatus fTrackStatus;
@@ -246,6 +246,7 @@ public: // With description
    G4VProcess* fpCreatorProcess;        // Process which created the track
    
 };
+#include "G4Step.hh"
 #include "G4Track.icc"
 
 #endif

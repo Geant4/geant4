@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.5 1999-12-15 14:53:56 gunter Exp $
+// $Id: G4ParticleChangeForTransport.cc,v 1.6 2000-02-16 16:10:06 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,6 +64,7 @@ G4ParticleChangeForTransport & G4ParticleChangeForTransport::operator=(const G4P
       theNumberOfSecondaries = right.theNumberOfSecondaries;
       theStatusChange = right.theStatusChange;
       theTouchableChange = right.theTouchableChange;
+      theMaterialChange = right.theMaterialChange;
       theMomentumDirectionChange = right.theMomentumDirectionChange;
       thePolarizationChange = right.thePolarizationChange;
       thePositionChange = right.thePositionChange;
@@ -175,6 +176,8 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForPostStep(G4Step* pStep)
   // update next touchable 
   // (touchable can be changed only at PostStepDoIt) 
   pPostStepPoint->SetTouchable( theTouchableChange );
+
+  pPostStepPoint->SetMaterial( theMaterialChange );
 
   // It used to call base class's method 
   //   - but this would copy uninitialised data members
