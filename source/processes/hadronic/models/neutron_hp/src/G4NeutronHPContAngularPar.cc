@@ -142,8 +142,8 @@
         else
         {
           G4double e1, e2;
-          e1 = theAngular[it].GetLabel();
-          e2 = theAngular[it-1].GetLabel();
+          e1 = theAngular[it-1].GetLabel();
+          e2 = theAngular[it].GetLabel();
           fsEnergy = theInt.Interpolate(theManager.GetInverseScheme(it),
                                         random,
                                         running[it-1]/running[nEnergies-1], 
