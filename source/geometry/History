@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2002-04-10 12:34:24 gcosmo Exp $
+$Id: History,v 1.26 2002-04-19 08:17:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 19, 2002   Gabriele Cosmo               geometry-V04-00-03
+-----------------------------
+- Groups the following tags (see related History files for details):
+  geom-bool-V04-00-04, geom-csg-V04-00-03, geommng-V04-00-03,
+  geomvol-V04-00-06, geomver-V04-00-00.
 
 Apr 10, 2002   Gabriele Cosmo               geometry-V04-00-02
 -----------------------------
