@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.13 2001-12-04 15:30:20 radoone Exp $
+// $Id: G4Navigator.hh,v 1.14 2001-12-04 16:55:07 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -140,12 +140,16 @@ class G4Navigator
     // is returned together with the computed isotropic safety
     // distance. Geometry must be closed.
 
-  inline G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector &p,
+//  inline G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector &p,
+//  			                          const G4TouchableHistory &h);
+  inline G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector &point,
+                                                      const G4ThreeVector &direction,
   			                          const G4TouchableHistory &h);
 
   G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector& point,
 					       const G4ThreeVector* direction=0,
-					       const G4bool pRelativeSearch=true);
+					       const G4bool pRelativeSearch=true,
+                 const G4bool ignoreDirection=true);
     // Search the geometrical hierarchy for the volumes deepest in the hierarchy
     // containing the point in the global coordinate space. Two main cases are:
     //  i) If pRelativeSearch=false it makes use of no previous/state
@@ -155,10 +159,12 @@ class G4Navigator
     //     hierarchy at the location of the last located point, or the endpoint of
     //     the previous Step if SetGeometricallyLimitedStep() has been called
     //     immediately before.
-    // The direction is used (to check if a volume is entered) only if 
-    // the Navigator has determined that it is on an edge shared by two or more
-    // volumes.  (This is state information.)
-    // The geometry must be closed.
+    // The direction is used (to check if a volume is entered) if either
+    //   - the argument ignoreDirection is false, or
+    //   - the Navigator has determined that it is on an edge shared by two or more
+    //     volumes.  (This is state information.)
+    // 
+    // Important Note: In order to call this the geometry MUST be closed.
 
   void LocateGlobalPointWithinVolume( const  G4ThreeVector& position);
     // Notify the Navigator that a track has moved to the new Global point
