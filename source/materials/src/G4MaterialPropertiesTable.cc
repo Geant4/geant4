@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.cc,v 1.12 2001-10-17 07:59:54 gcosmo Exp $
+// $Id: G4MaterialPropertiesTable.cc,v 1.13 2002-11-07 02:30:29 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,8 @@
 // Version:     1.0
 // Created:     1996-02-08
 // Author:      Juliet Armstrong
-// Updated:     1999-11-05 Migration from G4RWTPtrHashDictionary to STL
+// Updated:     2002-11-05 add named material constants by P. Gumplinger
+//              1999-11-05 Migration from G4RWTPtrHashDictionary to STL
 //                         by John Allison
 //              1997-03-26 by Peter Gumplinger
 //              > cosmetics (only)
@@ -44,69 +45,11 @@
 #include "globals.hh"
 #include "G4MaterialPropertiesTable.hh"
 
-        //////////////
-        // Operators
-        //////////////
-
-/**************
-G4MaterialPropertiesTable&
-G4MaterialPropertiesTable::operator =(const G4MaterialPropertiesTable& right)
-{
-        if (this == &right) return *this;
-	
-	// clear any current contents of MPT
-
-        MPT.clearAndDestroy();
-
-        // want to make an actual copy -- not a shallow copy which is
-	// the default for RWTPrtHashDictionary's assignment operator
- 
-        G4RWTPtrHashDictionary<G4String, G4MaterialPropertyVector> 
-						rightMPT(right.MPT);
-        G4RWTPtrHashDictionaryIterator<G4String, G4MaterialPropertyVector> 
-						rightIterator(rightMPT); 
-        rightIterator.reset();
-        while (++rightIterator) {
-		G4MaterialPropertyVector *newProp =
-                        new G4MaterialPropertyVector(*(rightIterator.value()));
-                G4String *newKey =
-                        new G4String(*(rightIterator.key()));
-                MPT.insertKeyAndValue(newKey, newProp);
-        }
-        return *this;
-}
-**********/
-
         /////////////////
         // Constructors
         /////////////////
 
 G4MaterialPropertiesTable::G4MaterialPropertiesTable() {}
-
-/*********
-G4MaterialPropertiesTable::G4MaterialPropertiesTable
-			   (const G4MaterialPropertiesTable &right) : 
-			   MPT(hashString), MPTiterator(MPT)
-{
-        // want to make an actual copy -- not a shallow copy which is
-	// the default for RWTPrtHashDictionary's assignment operator
-
-        G4RWTPtrHashDictionary<G4String, G4MaterialPropertyVector> 
-						rightMPT(right.MPT);
-        G4RWTPtrHashDictionaryIterator<G4String, G4MaterialPropertyVector> 
-						rightIterator(rightMPT); 
-
-        rightIterator.reset();
-
-        while (++rightIterator) {
-		G4MaterialPropertyVector *newProp =
-                        new G4MaterialPropertyVector(*(rightIterator.value()));
-                G4String *newKey =
-                        new G4String(*(rightIterator.key()));
-                MPT.insertKeyAndValue(newKey, newProp);
-        }
-}
-*******/
 
         ////////////////
         // Destructors
@@ -114,23 +57,35 @@ G4MaterialPropertiesTable::G4MaterialPropertiesTable
 
 G4MaterialPropertiesTable::~G4MaterialPropertiesTable()
 {
-  //	MPT.clearAndDestroy();
-  MPTiterator i;
-  for (i = MPT.begin(); i != MPT.end(); ++i) {
-    delete (*i).second;
-  }
-  MPT.clear();
+        MPTiterator i;
+        for (i = MPT.begin(); i != MPT.end(); ++i) {
+            delete (*i).second;
+        }
+        MPT.clear();
+        MPTC.clear();
 }
 
         ////////////
         // Methods
         ////////////
 
+void G4MaterialPropertiesTable::AddConstProperty(const char     *key,
+                                                 G4double PropertyValue)
+{
+//      Provides a way of adding a constant property to the Mataerial Properties
+//      Table given a key
+
+        MPTC [G4String(key)] = PropertyValue;
+}
+
 void G4MaterialPropertiesTable::AddProperty(const char     *key,
 					    G4double *PhotonMomenta,
 					    G4double *PropertyValues,
 					    G4int     NumEntries)
 {
+//      Privides a way of adding a property to the Material Properties
+//      Table given a pair of numbers and a key
+
 	G4MaterialPropertyVector *mpv = 
 			new G4MaterialPropertyVector(PhotonMomenta, 
 					  	     PropertyValues, 
@@ -147,19 +102,46 @@ void G4MaterialPropertiesTable::AddProperty(const char *key,
 	MPT [G4String(key)] = mpv;
 } 
 
+void G4MaterialPropertiesTable::RemoveConstProperty(const char *key)
+{
+        MPTC.erase(G4String(key));
+}
+
 void G4MaterialPropertiesTable::RemoveProperty(const char *key)
 {
 	MPT.erase(G4String(key));
 }
 
+G4double G4MaterialPropertiesTable::GetConstProperty(const char *key)
+{
+//      Returns the constant material property corresponding to a key
+
+        MPTCiterator j;
+        j = MPTC.find(G4String(key));
+        if ( j != MPTC.end() ) {
+           return j->second;
+        } 
+        else {
+           G4Exception("G4MaterialPropertiesTable::GetConstProperty ==> "
+                       "Constant Material Property not found.");
+           return G4double(0.0);
+        }
+}
+
 G4MaterialPropertyVector* G4MaterialPropertiesTable::GetProperty(const char *key)
 {
-	return MPT [G4String(key)];
+//      Returns a Material Property Vector corresponding to a key
+
+        return MPT [G4String(key)];
 }
 
 void G4MaterialPropertiesTable::AddEntry(const char     *key,
 					 G4double  aPhotonMomentum,
 					 G4double  aPropertyValue)
+
+//      Allows to add an entry pair directly to the Material Property Vector
+//      given a key
+
 {
 	G4MaterialPropertyVector *targetVector=MPT [G4String(key)];
 	if (targetVector != 0) {
@@ -174,6 +156,9 @@ void G4MaterialPropertiesTable::AddEntry(const char     *key,
 void G4MaterialPropertiesTable::RemoveEntry(const char *key,  
 					    G4double  aPhotonMomentum)
 {
+//      Allows to remove an entry pair directly from the Material Property Vector
+//      given a key
+
         G4MaterialPropertyVector *targetVector=MPT [G4String(key)];
 	if (targetVector) {
 		targetVector->RemoveElement(aPhotonMomentum);
@@ -195,4 +180,15 @@ void G4MaterialPropertiesTable::DumpTable()
                   G4cout << "NULL Material Property Vector Pointer." << G4endl;
                 }
   }
+  MPTCiterator j;
+  for (j = MPTC.begin(); j != MPTC.end(); ++j) {
+                 G4cout << j->first << G4endl;
+                 if ( j->second != 0 ) {
+                   G4cout << j->second << G4endl;
+                 }
+                 else {
+                   G4cout << "No Material Constant Property." << G4endl;
+                 }
+  }
+
 }
