@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlung.cc,v 1.8 2003-05-24 14:33:03 pia Exp $
+// $Id: G4PenelopeBremsstrahlung.cc,v 1.9 2003-05-24 16:44:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -37,6 +37,7 @@
 //                           Restored NotForced in GetMeanFreePath
 // 23.05.2003 L.Pandola    - Bug fixed. G4double cast to elements of
 //                           ebins vector (is it necessary?)
+// 23.05.2003 MGP          - Removed memory leak (fix in destructor)
 //
 //----------------------------------------------------------------
 
@@ -80,9 +81,9 @@ G4PenelopeBremsstrahlung::G4PenelopeBremsstrahlung(const G4String& nam)
 
 G4PenelopeBremsstrahlung::~G4PenelopeBremsstrahlung()
 {
-  if(crossSectionHandler) delete crossSectionHandler;
-  if(energySpectrum) delete energySpectrum;
-  if(theMeanFreePath) delete theMeanFreePath;
+  delete crossSectionHandler;
+  delete energySpectrum;
+  delete theMeanFreePath;
 
   for (size_t m=0; m<materialAngularData.size(); m++)
     {
@@ -90,7 +91,6 @@ G4PenelopeBremsstrahlung::~G4PenelopeBremsstrahlung()
       for (size_t i=0; i<materialData.size(); i++)
       {
 	delete materialData[i];
-        materialData[i] = 0;
       }
       delete &materialData;
     }
@@ -107,49 +107,48 @@ void G4PenelopeBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aPa
   cutForSecondaryPhotons.clear();
 
   // Create and fill BremsstrahlungParameters once
-  if( energySpectrum != 0 ) delete energySpectrum;
+  if ( energySpectrum != 0 ) delete energySpectrum;
   //grid of reduced energy bins for photons  
   
-  G4DataVector ebins;
-  // ebins.clear();
+  G4DataVector eBins;
 
-  G4double value;
-  ebins.push_back(1.0e-12);
-  ebins.push_back(0.05);
-  ebins.push_back(0.075);
-  ebins.push_back(0.1);
-  ebins.push_back(0.125);
-  ebins.push_back(0.15);
-  ebins.push_back(0.2);
-  ebins.push_back(0.25);
-  ebins.push_back(0.3);
-  ebins.push_back(0.35);
-  ebins.push_back(0.40);
-  ebins.push_back(0.45);
-  ebins.push_back(0.50);
-  ebins.push_back(0.55);
-  ebins.push_back(0.60);
-  ebins.push_back(0.65);
-  ebins.push_back(0.70);
-  ebins.push_back(0.75);
-  ebins.push_back(0.80);
-  ebins.push_back(0.85);
-  ebins.push_back(0.90);
-  ebins.push_back(0.925);
-  ebins.push_back(0.95);
-  ebins.push_back(0.97);
-  ebins.push_back(0.99);
-  ebins.push_back(0.995);
-  ebins.push_back(0.999);
-  ebins.push_back(0.9995);  
-  ebins.push_back(0.9999);
-  ebins.push_back(0.99995);
-  ebins.push_back(0.99999);
-  ebins.push_back(1.0);
+  //G4double value;
+  eBins.push_back(1.0e-12);
+  eBins.push_back(0.05);
+  eBins.push_back(0.075);
+  eBins.push_back(0.1);
+  eBins.push_back(0.125);
+  eBins.push_back(0.15);
+  eBins.push_back(0.2);
+  eBins.push_back(0.25);
+  eBins.push_back(0.3);
+  eBins.push_back(0.35);
+  eBins.push_back(0.40);
+  eBins.push_back(0.45);
+  eBins.push_back(0.50);
+  eBins.push_back(0.55);
+  eBins.push_back(0.60);
+  eBins.push_back(0.65);
+  eBins.push_back(0.70);
+  eBins.push_back(0.75);
+  eBins.push_back(0.80);
+  eBins.push_back(0.85);
+  eBins.push_back(0.90);
+  eBins.push_back(0.925);
+  eBins.push_back(0.95);
+  eBins.push_back(0.97);
+  eBins.push_back(0.99);
+  eBins.push_back(0.995);
+  eBins.push_back(0.999);
+  eBins.push_back(0.9995);  
+  eBins.push_back(0.9999);
+  eBins.push_back(0.99995);
+  eBins.push_back(0.99999);
+  eBins.push_back(1.0);
 
  
   const G4String dataName("/penelope/br-sp-pen.dat");
-  energySpectrum = new G4eBremsstrahlungSpectrum(ebins,dataName);
+  energySpectrum = new G4eBremsstrahlungSpectrum(eBins,dataName);
  
   //the shape of the energy spectrum for positron is the same used for the electrons, 
   //as the differential cross section is scaled of a factor f(E,Z) which is independent 
@@ -319,7 +318,7 @@ void G4PenelopeBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParti
 
 
 G4VParticleChange* G4PenelopeBremsstrahlung::PostStepDoIt(const G4Track& track,
-							   const G4Step& step)
+							  const G4Step& step)
 {
   aParticleChange.Initialize(track);
 
