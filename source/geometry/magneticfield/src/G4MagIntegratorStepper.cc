@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorStepper.cc,v 1.7 2002-05-07 16:11:59 japost Exp $
+// $Id: G4MagIntegratorStepper.cc,v 1.8 2002-11-20 18:12:56 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4MagIntegratorStepper.hh"
@@ -30,9 +30,12 @@
 // 
 
 G4MagIntegratorStepper::G4MagIntegratorStepper(G4EquationOfMotion* Equation,
-					       G4int       num_var)
+					       G4int       num_integration_vars,
+					       G4int       num_state_vars)
   : fEquation_Rhs(Equation),
-    fNumberOfVariables(num_var)
+    fNoIntegrationVariables(num_integration_vars),
+    fNoStateVariables(num_state_vars)
+    // fNumberOfVariables( G4std::max(num_var,fNoStateVariables) )
 {
 }
 
