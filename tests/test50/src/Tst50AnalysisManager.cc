@@ -28,7 +28,7 @@
 //    *******************************
 //
 
-// $Id: Tst50AnalysisManager.cc,v 1.19 2003-05-17 18:11:53 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.20 2003-05-28 08:10:11 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
@@ -49,8 +49,11 @@
 
 Tst50AnalysisManager* Tst50AnalysisManager::instance = 0;
 
-Tst50AnalysisManager::Tst50AnalysisManager() : 
-  aFact(0), treeFact(0),theTree(0),dataPointFactory(0),stoppingPowerDataPoint(0),CSDARangeDataPoint(0),particleTransmissionDataPoint(0),gammaAttenuationCoefficientDataPoint(0)
+Tst50AnalysisManager::Tst50AnalysisManager() 
+:  aFact(0), treeFact(0),theTree(0),dataPointFactory(0),
+  stoppingPowerDataPoint(0),CSDARangeDataPoint(0),
+  particleTransmissionDataPoint(0),
+  gammaAttenuationCoefficientDataPoint(0)
 { 
   aFact = AIDA_createAnalysisFactory();
   treeFact = aFact -> createTreeFactory();
@@ -80,13 +83,11 @@ Tst50AnalysisManager::~Tst50AnalysisManager()
   aFact = 0;
 }
 
-
 Tst50AnalysisManager* Tst50AnalysisManager::getInstance()
 {
   if (instance == 0) instance = new Tst50AnalysisManager;
   return instance;
 }
-
 
 void Tst50AnalysisManager::book() 
 { 
@@ -98,7 +99,10 @@ void Tst50AnalysisManager::book()
   gammaAttenuationCoefficientDataPoint = dataPointFactory -> create ("Gamma attenuation coefficient test",2); 
 }
 
-void Tst50AnalysisManager::AttenuationGammaCoeffiecient(G4int PointNumber,G4double primaryParticleEnergy, G4double gammaAttenuationCoefficient, G4double gammaAttenuationCoefficientError )
+void Tst50AnalysisManager::AttenuationGammaCoeffiecient(G4int PointNumber,
+                                                        G4double primaryParticleEnergy, 
+                                                        G4double gammaAttenuationCoefficient,
+                                                        G4double gammaAttenuationCoefficientError )
 {
   gammaAttenuationCoefficientDataPoint -> addPoint();
   AIDA::IDataPoint* point = gammaAttenuationCoefficientDataPoint -> point(PointNumber);
@@ -109,7 +113,10 @@ void Tst50AnalysisManager::AttenuationGammaCoeffiecient(G4int PointNumber,G4doub
   coordinateY -> setErrorPlus(gammaAttenuationCoefficientError );
   coordinateY -> setErrorMinus(gammaAttenuationCoefficientError);
  }
-void Tst50AnalysisManager::StoppingPower(G4int PointNumber,G4double primaryParticleEnergy, G4double SP)
+
+void Tst50AnalysisManager::StoppingPower(G4int PointNumber,
+                                         G4double primaryParticleEnergy,
+                                         G4double SP)
 {
   stoppingPowerDataPoint->addPoint();
   AIDA::IDataPoint* point = stoppingPowerDataPoint->point(PointNumber);
@@ -120,7 +127,10 @@ void Tst50AnalysisManager::StoppingPower(G4int PointNumber,G4double primaryParti
   AIDA::IMeasurement* coordinateY = point->coordinate( 1 );
   coordinateY -> setValue( SP);
 }
-void Tst50AnalysisManager::CSDARange(G4int PointNumber,G4double primaryParticleEnergy, G4double range)
+
+void Tst50AnalysisManager::CSDARange(G4int PointNumber,
+                                     G4double primaryParticleEnergy, 
+                                     G4double range)
 {
   CSDARangeDataPoint -> addPoint();
   AIDA::IDataPoint* point = CSDARangeDataPoint -> point(PointNumber);
@@ -129,7 +139,13 @@ void Tst50AnalysisManager::CSDARange(G4int PointNumber,G4double primaryParticleE
   AIDA::IMeasurement* coordinateY = point -> coordinate( 1 );
   coordinateY -> setValue(range);
 }
-void Tst50AnalysisManager::ParticleTransmission(G4int PointNumber,G4double primaryParticleEnergy, G4double TransFraction, G4double BackFraction, G4double TransError, G4double BackError)
+
+void Tst50AnalysisManager::ParticleTransmission(G4int PointNumber,
+                                                G4double primaryParticleEnergy,
+                                                G4double TransFraction,
+                                                G4double BackFraction, 
+                                                G4double TransError, 
+                                                G4double BackError)
 {
   particleTransmissionDataPoint -> addPoint();
   AIDA::IDataPoint* point = particleTransmissionDataPoint -> point(PointNumber);

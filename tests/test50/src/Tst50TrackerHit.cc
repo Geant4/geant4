@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50TrackerHit.cc,v 1.4 2003-05-17 18:11:54 guatelli Exp $
+// $Id: Tst50TrackerHit.cc,v 1.5 2003-05-28 08:10:11 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "Tst50TrackerHit.hh"
@@ -41,18 +41,19 @@ Tst50TrackerHit::Tst50TrackerHit()
 Tst50TrackerHit::~Tst50TrackerHit() 
 {}
 
-Tst50TrackerHit::Tst50TrackerHit(const Tst50TrackerHit& right)
+Tst50TrackerHit::Tst50TrackerHit(const Tst50TrackerHit& right) 
+: G4VHit()
 {
-  edep      = right.edep;  
+  edep = right.edep;  
 }
 
 const Tst50TrackerHit& Tst50TrackerHit::operator=(const Tst50TrackerHit& right)
 {
-  edep      = right.edep;
+  edep = right.edep;
   return *this;
 }
 
-int Tst50TrackerHit::operator==(const Tst50TrackerHit& right) const
+int Tst50TrackerHit::operator==(const Tst50TrackerHit&) const
 {
   return 0;
 }

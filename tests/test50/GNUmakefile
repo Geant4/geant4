@@ -1,5 +1,5 @@
 # --------------------------------------------------------------
-# $Id: GNUmakefile,v 1.11 2003-05-15 16:00:58 guatelli Exp $
+# $Id: GNUmakefile,v 1.12 2003-05-28 08:10:06 guatelli Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -16,8 +16,11 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-
-CPPFLAGS += -I${LHCXX_REL_DIR}/include -I/afs/cern.ch/sw/contrib/AIDA/3.0/cpp -g
+ifdef G4ANALYSIS_USE  
+ CPPFLAGS += `aida-config --include`
+ LDFLAGS  += `aida-config --lib`
+ LOADLIBS += `aida-config --lib` 
+endif
 
 .PHONY: all
 all: lib bin

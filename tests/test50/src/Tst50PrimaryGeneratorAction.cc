@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PrimaryGeneratorAction.cc,v 1.10 2003-05-17 18:11:53 guatelli Exp $
+// $Id: Tst50PrimaryGeneratorAction.cc,v 1.11 2003-05-28 08:10:11 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -36,7 +36,6 @@
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4RadioactiveDecay.hh"
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
 #include "Randomize.hh"
@@ -106,8 +105,6 @@ G4String Tst50PrimaryGeneratorAction::GetParticle()
   G4String primaryParticleName = particleGun->GetParticleDefinition()->GetParticleName();
   return primaryParticleName;
 }
-
-
 
 
 

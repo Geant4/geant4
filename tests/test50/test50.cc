@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.25 2003-05-17 18:11:38 guatelli Exp $
+// $Id: test50.cc,v 1.26 2003-05-28 08:10:09 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,34 +48,36 @@
 int main(int argc,char** argv) {
  	
   HepRandom::setTheEngine(new RanecuEngine);   
-  G4int seed=time(0);
+  G4int seed = time(0);
   HepRandom ::setTheSeed(seed);
  
   G4RunManager * runManager = new G4RunManager;
 
-  Tst50DetectorConstruction* Tst50detector = new Tst50DetectorConstruction();
-  runManager->SetUserInitialization(Tst50detector);  
+  Tst50DetectorConstruction* tst50Detector = new Tst50DetectorConstruction();
+  runManager->SetUserInitialization(tst50Detector);  
 
-  Tst50PhysicsList* fisica = new Tst50PhysicsList();
-  runManager->SetUserInitialization(fisica);
+  Tst50PhysicsList* tst50Physics = new Tst50PhysicsList();
+  runManager->SetUserInitialization(tst50Physics);
 
 #ifdef G4VIS_USE 
   G4VisManager* visManager = new Tst50VisManager;
   visManager->Initialize();
 #endif
 
-  Tst50PrimaryGeneratorAction* p_Primary = new Tst50PrimaryGeneratorAction(); 
-  runManager->SetUserAction(p_Primary);
+  Tst50PrimaryGeneratorAction* tst50PrimaryParticle = new Tst50PrimaryGeneratorAction(); 
+  runManager->SetUserAction(tst50PrimaryParticle);
 
-  Tst50RunAction* p_run=new Tst50RunAction(); 
-  runManager->SetUserAction(p_run);  
+  Tst50RunAction* tst50Run=new Tst50RunAction(); 
+  runManager->SetUserAction(tst50Run);  
 
-  Tst50EventAction *pEventAction = new Tst50EventAction();
+  Tst50EventAction *tst50EventAction = new Tst50EventAction();
  
-  runManager->SetUserAction(pEventAction);
+  runManager->SetUserAction(tst50EventAction);
      
-  Tst50SteppingAction* steppingaction = new Tst50SteppingAction(pEventAction, p_Primary, p_run,Tst50detector);
-  runManager->SetUserAction(steppingaction);
+  Tst50SteppingAction* tst50SteppingAction = new Tst50SteppingAction(tst50PrimaryParticle,
+                                                                tst50Run,
+                                                                tst50Detector);
+  runManager->SetUserAction(tst50SteppingAction);
 
   Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
   analysis->book();

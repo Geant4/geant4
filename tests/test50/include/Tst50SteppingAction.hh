@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.hh,v 1.14 2003-05-18 10:42:35 pia Exp $
+// $Id: Tst50SteppingAction.hh,v 1.15 2003-05-28 08:10:10 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
 // History:
 // -----------
+// 27 May  2003   S.Guatelli    first code review 
 // 17 May  2003   S. Guatelli   1st implementation
 //
 // -------------------------------------------------------------------
@@ -43,7 +44,6 @@
 
 class G4Step;
 class Tst50AnalysisManager;
-class Tst50EventAction;
 class Tst50RunAction;
 class Tst50PrimaryGeneratorAction;
 class Tst50DetectorConstruction;
@@ -51,23 +51,18 @@ class Tst50SteppingAction : public G4UserSteppingAction
 {
 public:
 
-  Tst50SteppingAction(Tst50EventAction*,
-		      Tst50PrimaryGeneratorAction*,
+  Tst50SteppingAction(Tst50PrimaryGeneratorAction*,
 		      Tst50RunAction*, 
 		      Tst50DetectorConstruction*);
 
   ~Tst50SteppingAction();
 
-  void UserSteppingAction(const G4Step* Step);
+  void UserSteppingAction(const G4Step* aStep);
 
 private:
 
-  G4int idOld;
-  Tst50EventAction* eventAction;
   Tst50PrimaryGeneratorAction* primaryAction;
   Tst50RunAction* runAction; 
   Tst50DetectorConstruction* detector;     
- 
 };
-
 #endif

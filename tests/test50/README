@@ -9,10 +9,24 @@
 
 --------> Set-up <----------
 
-G4SYSTEM = Linux-g++
+setup with:
 compiler = gcc-3.2
+G4SYSTEM = linux-g++
 
-ANALYSIS=1
+The following environment variables need to be set:
+G4LEDATA: points to low energy data base - G4EMLOW2.2
+
+setup for analysis with AIDA 3.0/Anaphe 5.0.5 for user with account
+on lxplus:
+
+setenv G4ANALYSIS_USE  1
+setenv G4ANALYSIS_BUILD  1
+source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
+setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/
+
+ Please take a look to the Anaphe/Lizard web page
+        http://anaphe.web.cern.ch/anaphe 
+ for more info
 
 --------> Modular Physics <----------
 
@@ -49,21 +63,23 @@ gmake
 1) batch mode
 $G4WORKDIR/bin/Linux-g++/test50 file.in
 
-examples of file.in for each kind of test are available in 
-the directory test_input_files
+examples of file.in for each kind of test are available in the present
+directory
 
 2) interactive mode
 $G4WORKDIR/bin/Linux-g++/test50
 
-default macro file: default.mac
+---------------------------------------------------------------------*
+default macro file is initialised ---> default.mac                   
+                                                                     *
 Standard processes for gamma, e-, e+
-a beam of gamma (1.MeV) energy impinge on a target of liquid argon  whose
-dimensions are:
-
+a beam of gamma (1.MeV) energy impinges on a target of liquid argon  *
+whose dimensions are:
+                                                                     *
  Target zdimension is: 0.1 mm
- Target xdimension is: 200 mm
- Target ydimension is: 200 mm 
-
+ Target xdimension is: 200 mm                                        *
+ Target ydimension is: 200 mm                                        
+---------------------------------------------------------------------*
 --------> Output <----------
 
 test50.xml

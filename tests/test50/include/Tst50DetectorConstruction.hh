@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.hh,v 1.10 2003-05-17 18:11:52 guatelli Exp $
+// $Id: Tst50DetectorConstruction.hh,v 1.11 2003-05-28 08:10:10 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -74,9 +74,32 @@ public:
   G4Material* GetTargetMaterial()  {return targetMaterial;}; 
   //returns the absorber material
 
-private:
+private: 
+  G4bool  isRegisteredUserLimits;
+  
+  // available materials ...
+  G4Material* hydrogen;
+  G4Material* beryllium;
+  G4Material* graphite; 
+  G4Material* magnesium;
+  G4Material* aluminium;
+  G4Material* silicon;
+  G4Material* liquidArgon;  
+  G4Material* iron;   
+  G4Material* gallium;
+  G4Material* germanium;
+  G4Material* silver;
+  G4Material* cesium; 
+  G4Material* gold; 
+  G4Material* lead;
+  G4Material* water; 
+  G4Material* quartz; 
+  G4Material* air; 
+  G4Material* vacuum;
+  
   G4Material*        targetMaterial;
   G4Material*        defaultMaterial;//World absorber material: vacuum
+  
   G4Box*             solidWorld; 
   G4LogicalVolume*   logicWorld; 
   G4VPhysicalVolume* physiWorld; 
@@ -84,14 +107,14 @@ private:
   G4LogicalVolume*   logicTarget;
   G4VPhysicalVolume* physiTarget;
   Tst50TrackerSD* targetSD; 
-  G4bool  isRegisteredUserLimits;
+  
   G4double           targetThickness;
   G4double targetX;
   G4double targetY;
   G4UserLimits*    theUserLimitsForTarget;    
   G4bool           fUseUserLimits;
   G4double         theMaxStepInTarget;
-  Tst50DetectorMessenger* messenger;   
+  Tst50DetectorMessenger* messenger;
 };
 #endif
 
