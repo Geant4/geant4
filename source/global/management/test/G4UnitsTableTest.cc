@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTableTest.cc,v 1.4 2001-03-01 16:05:23 maire Exp $
+// $Id: G4UnitsTableTest.cc,v 1.5 2001-03-05 12:00:27 gcosmo Exp $
 // 
 // ----------------------------------------------------------------------
 #include "G4ios.hh"
@@ -13,8 +13,7 @@
 #include "G4ThreeVector.hh"
 #include "G4UnitsTable.hh"
 
-#include <iomanip.h>
-
+#include "g4std/iomanip"
  
 int main()
 {
@@ -48,20 +47,20 @@ int main()
    G4cout << "\n \t G4BestUnit \n";
    G4cout.precision(3);   
 
-   G4cout << " a = " << setw(4) << G4BestUnit (0.5*GeV ,"Energy") << endl;    
-   G4cout << " b = " << setw(4) << G4BestUnit (0.15*MeV,"Energy") << endl;
-   G4cout << " c = " << setw(4) << G4BestUnit (4000*MeV,"Energy") << endl;
+   G4cout << " a = " << G4std::setw(4) << G4BestUnit (0.5*GeV ,"Energy") << G4endl;    
+   G4cout << " b = " << G4std::setw(4) << G4BestUnit (0.15*MeV,"Energy") << G4endl;
+   G4cout << " c = " << G4std::setw(4) << G4BestUnit (4000*MeV,"Energy") << G4endl;
 
    G4double x = -1000.*cm;   
-   G4BestUnit d(x,"Length");         G4cout << " x = " << d << endl;
-   G4BestUnit e(2e40*m,"Length");    G4cout << " e = " << e << endl;
-   G4BestUnit f(DBL_MAX  ,"Energy"); G4cout << " f = " << f << endl;
-   G4BestUnit h(0.,"Magnetic flux density"); G4cout << " h = " << h << endl;
+   G4BestUnit d(x,"Length");         G4cout << " x = " << d << G4endl;
+   G4BestUnit e(2e40*m,"Length");    G4cout << " e = " << e << G4endl;
+   G4BestUnit f(DBL_MAX  ,"Energy"); G4cout << " f = " << f << G4endl;
+   G4BestUnit h(0.,"Magnetic flux density"); G4cout << " h = " << h << G4endl;
    
    G4ThreeVector point(2*mm, 3*cm, 1*m);
    G4ThreeVector momen(3*MeV, 2*keV, 0.);
-   G4cout << setw(6) << G4BestUnit (point, "Length") << endl;
-   G4cout << setw(6) << G4BestUnit (momen, "Energy") << endl;
+   G4cout << G4std::setw(6) << G4BestUnit (point, "Length") << G4endl;
+   G4cout << G4std::setw(6) << G4BestUnit (momen, "Energy") << G4endl;
    
 // Define new units
 //
@@ -69,7 +68,7 @@ int main()
    new G4UnitDefinition("g/cm3","g/cm3","Volumic Mass",g/cm3);
 
    G4double rho = 14.*mg/mm3;   
-   G4cout << " rho = " << G4BestUnit (rho,"Volumic Mass") << endl;
+   G4cout << " rho = " << G4BestUnit (rho,"Volumic Mass") << G4endl;
    
    new G4UnitDefinition("g/cm2","g/cm2","Depth",g/cm2);
    
