@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VContinuousDiscreteProcess.hh,v 1.5 2001-07-11 10:08:18 gunter Exp $
+// $Id: G4VContinuousDiscreteProcess.hh,v 1.6 2002-04-15 04:29:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,11 +36,11 @@
 // ------------------------------------------------------------
 //   New Physics scheme            8  Mar. 1997  H.Kurahige
 // ------------------------------------------------------------
-//   modified                     26 Mar. 1997 H.Kurashige
-//   modified                     16 Apr. 1997 L.Urban     
-//   modified AlongStepGPIL etc.  17 Dec. 1997 H.Kurashige
 //   fix bugs in GetGPILSelection() 24 Jan. 1998 H.Kurashige
 //   modified for new ParticleChange 12 Mar. 1998  H.Kurashige
+//   Fixed a bug in PostStepGetPhysicalInteractionLength  
+//                                15 Apr. 2002 H.Kurashige 
+//
 
 #ifndef G4VContinuousDiscreteProcess_h
 #define G4VContinuousDiscreteProcess_h 1
@@ -171,7 +171,12 @@ inline G4double G4VContinuousDiscreteProcess::PostStepGetPhysicalInteractionLeng
   }
 #endif
 
-  G4double value = theNumberOfInteractionLengthLeft * currentInteractionLength;
+  G4double value;
+  if (currentInteractionLength <DBL_MAX) {
+    value = theNumberOfInteractionLengthLeft * currentInteractionLength;
+  } else {
+    value = DBL_MAX;
+  }
 #ifdef G4VERBOSE
   if (verboseLevel>1){
     G4cout << "G4VContinuousDiscreteProcess::PostStepGetPhysicalInteractionLength ";
