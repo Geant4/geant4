@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2001-04-27 14:20:25 gcosmo Exp $
+$Id: History,v 1.25 2001-06-15 11:59:35 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15/06/2001 : G. Cosmo            breps-V03-01-02
+- Fixes to allow -ansi compilation on Linux-g++, gcc-2.95-2 compiler:
+  o G4Ray.cc: changed usage of hypot(x,y) to sqrt(x*x+y*y).
+  o G4Hyperbola[.icc.cc]: changed usage of atanh(x) to 0.5*log((1+x)/(1-x)).
+- G4ProjectedSurface.cc: corrected initialisation of temporary G4Point3D
+  objects, to use the correct CLHEP constructor.
 
 27/04/2001 : G. Cosmo            breps-V03-01-01
 - G4BSplineCurve.cc: fixed compilation warnings on HP-UX, concerning

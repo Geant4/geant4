@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hyperbola.icc,v 1.5 2000-11-08 14:22:02 gcosmo Exp $
+// $Id: G4Hyperbola.icc,v 1.6 2001-06-15 11:59:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -66,12 +66,7 @@ G4double G4Hyperbola::GetPPoint(const G4Point3D& pt) const
 {
   G4Point3D ptLocal= position.GetToPlacementCoordinates()*pt;
   G4double xval= ptLocal.y()/ptLocal.x()*ratioAxisImagAxis;
-  #ifdef WIN32
-    G4double ppoint= 0.5*log((1+xval)/(1-xval));
-  #else
-    G4double ppoint= atanh(xval);
-  #endif
-  return ppoint;
+  return 0.5*log((1+xval)/(1-xval));  // atanh(xval)
 }
 
 /////////////////////////////////////////////////////////////////////////////

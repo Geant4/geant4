@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ray.cc,v 1.5 2000-11-20 17:54:40 gcosmo Exp $
+// $Id: G4Ray.cc,v 1.6 2001-06-15 11:59:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -103,12 +103,12 @@ void G4Ray::MatVecOrtho(register G4Vector3D &out,
     i_Which=2;
   
   if(!i_Which)
-    f = hypot( in.y(), in.z() );
+    f = sqrt((in.y())*(in.y())+(in.z())*(in.z()));    // hypot(in.y(),in.z())
   else
     if(i_Which==1)
-      f = hypot( in.z(), in.x() );
+      f = sqrt((in.z())*(in.z())+(in.x())*(in.x()));  // hypot(in.z(),in.x())
     else
-      f = hypot( in.x(), in.y() );
+      f = sqrt((in.x())*(in.x())+(in.y())*(in.y()));  // hypot(in.x(),in.y())
   
     if( NearZero( f, SMALL ) )
     {

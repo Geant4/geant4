@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hyperbola.cc,v 1.5 2000-11-08 14:22:10 gcosmo Exp $
+// $Id: G4Hyperbola.cc,v 1.6 2001-06-15 11:59:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -100,11 +100,7 @@ G4Curve* G4Hyperbola::Project(const G4Transform3D& tr)
 
   G4double xval = -2*a*b/(a.mag2()+b.mag2());
   
-#ifdef WIN32
-  G4double u= (0.5*log((1+xval)/(1-xval)))/2;
-#else
-  G4double u= atanh( xval ) / 2;
-#endif
+  G4double u= (0.5*log((1+xval)/(1-xval)))/2;  // atanh(xval)/2
 
   // get the coordinate axis directions and the semiaxis lengths
   G4Vector3D sAxis= G4Vector3D( a*cosh(u)+b*sinh(u) );
@@ -154,13 +150,9 @@ void G4Hyperbola::InitBounded()
       
       if (abs(tanhu)<=1) 
       {
-        #ifdef WIN32
-          G4double u= 0.5*log((1+tanhu)/(1-tanhu));
-        #else
-	  G4double u= atanh(tanhu);
-        #endif
-	
-	  if (IsPOn(u)) bBox.Extend(GetPoint(u));
+        G4double u= 0.5*log((1+tanhu)/(1-tanhu));  // atanh(tanhu)
+	if (IsPOn(u))
+	  bBox.Extend(GetPoint(u));
       }
     }
   }
