@@ -57,7 +57,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
-     g++ -dynamiclib -twolevel_namespace -undefined error -dynamic \
+     g++ -dynamiclib -twolevel_namespace -undefined define_a_way -dynamic \
          -single_module -o $$libdir/$(@F) *.o -L$(G4LIB)/$(G4SYSTEM) \
          $(patsubst lib%,-l%,$(patsubst %.lib,%,$(GLOBLIBS))) \
          -L$(CLHEP_LIB_DIR) -l$(CLHEP_LIB) $(INTYLIBS)
