@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst14PositronStandard.cc,v 1.1 2003-02-23 17:47:05 pia Exp $
+// $Id: Tst14PositronStandard.cc,v 1.2 2003-02-23 17:50:51 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -31,7 +31,7 @@
 //
 // -------------------------------------------------------------------
 
-#include "Tst14ElectronStandard.hh"
+#include "Tst14PositronStandard.hh"
 
 #include "G4ProcessManager.hh"
 #include "G4Gamma.hh"
@@ -41,15 +41,15 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
-Tst14ElectronStandard::Tst14ElectronStandard(const G4String& name): G4VPhysicsConstructor(name)
+Tst14PositronStandard::Tst14PositronStandard(const G4String& name): G4VPhysicsConstructor(name)
 { }
 
-Tst14ElectronStandard::~Tst14ElectronStandard()
+Tst14PositronStandard::~Tst14PositronStandard()
 { }
 
-void Tst14ElectronStandard::ConstructProcess()
+void Tst14PositronStandard::ConstructProcess()
 {
-  // Add standard processes for electrons
+  // Add standard processes for positrons
   
   theParticleIterator->reset();
 
