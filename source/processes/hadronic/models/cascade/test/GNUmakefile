@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2002-11-06 19:59:07 miheikki Exp $
+# $Id: GNUmakefile,v 1.6 2002-11-08 14:31:06 miheikki Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -78,7 +78,7 @@ LDLIBS   +=  \
 	-L$(G4INSTALL)/lib/$(G4SYSTEM) \
 	    -lG4globman \
             -lG4hadronic_bert_cascade \
-#           -lG4hepnumerics \
+            -lG4hepnumerics \
 #	    -lG4materials \
 #	    -lG4hadronic_diffstring \
 #	    -lG4hadronic_stringfrag \
@@ -97,7 +97,7 @@ LDLIBS   +=  \
 #	    -lG4intercoms \
 # 	    -lG4global \
 #	    -lcomplex \
-	#    $(G4BIN)/$(G4SYSTEM)/hbfinit.o \
+#    $(G4BIN)/$(G4SYSTEM)/hbfinit.o \
         #   -lG4event \
 	    -lCLHEP `cernlib packlib` $(FCLIBS)
 
@@ -118,13 +118,13 @@ NEWCC = $(addprefix G4, $(OLDCC))
 diffCc:
 	diff $(GM)/cascade/cascade/src/$(NEWCC) $(GM)/cascade/doc/inucl/inuclC/$(OLDCC)
 
- 
+
 t1: # :::(t for test)
 	rm -r hetcCascadeTest; rm -r hetcCascadeTest.out; gmake hetcCascadeTest; hetcCascadeTest > hetcCascadeTest.out;cat hetcCascadeTest.out
 
- 
+
 t2: # ::: integrated test 
-	rm -r cascade; rm -r cascade.out; gmake cascade; cascade > cascade.out; 
+	rm -r cascade; rm -r cascade.out; gmake cascade; cascade > cascade.out; cat cascade.out
 
 tt2: # :: timing for t1
 	time -v gmake t2

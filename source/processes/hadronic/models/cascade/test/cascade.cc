@@ -159,7 +159,7 @@ typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
   G4cout << " ::: testing interface" << G4endl;
 // 0.8 GeV proton with momentum along Z axis
-  G4InuclParticle* bullet = new G4InuclElementaryParticle(0.8,1); // momentumBullet, bulletType 
+  G4InuclParticle* bullet = new G4InuclElementaryParticle(0.1,1); // momentumBullet, bulletType 
 
     // Set target
     G4std::vector<G4double> targetMomentum(4, 0.0);
