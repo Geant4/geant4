@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.22 2004-05-11 15:56:36 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.23 2004-05-27 17:22:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,6 +42,7 @@
 // 18-04-03 Use IonFluctuations (V.Ivanchenko)
 // 03-08-03 Add effective charge (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 27-05-04 Set integral to be a default regime (V.Ivanchenko) 
 //
 //
 // -------------------------------------------------------------------
@@ -95,11 +96,10 @@ void G4ionIonisation::InitialiseProcess()
   em1->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(2, em1, flucModel);
 
-  SetIntegral(false);
   chargeLowLimit = 0.1;
   energyLowLimit = 25.*MeV;
   SetLinearLossLimit(0.15);
-  //SetStepLimits(0.1, 0.1*mm);
+  SetStepLimits(0.1, 0.1*mm);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
