@@ -133,10 +133,9 @@ if ( `uname -n | grep sun` != "" ) then
   setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
   setenv G4VIS_BUILD_VRML_DRIVER     1
   setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
-#  source $G4INSTALL/examples/extended/E02/g4odbms_setup.csh
-#  setenv G4EXAMPLE_BOOT_DIR   $G4WORKDIR/tmp/$G4SYSTEM/exampleE02/odbms_boot
-#  setenv G4EXAMPLE_BOOT       ${G4EXAMPLE_BOOT_DIR}/G4EXAMPLE
-#  setenv G4EXAMPLE_FDID 207
+# Persistency...
+  source $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.csh
+  setenv G4EXAMPLE_FDID 207
 endif
 
 if ( `uname -n | grep hp` != "" ) then

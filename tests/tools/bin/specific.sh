@@ -110,9 +110,8 @@ if [ `uname -n | grep sungeant` ]; then
   export G4VIS_BUILD_DAWNFILE_DRIVER=1
   export G4VIS_BUILD_VRML_DRIVER=1
   export G4VIS_BUILD_VRMLFILE_DRIVER=1
-  . $G4INSTALL/examples/extended/E02/g4odbms_setup.sh
-  export G4EXAMPLE_BOOT_DIR=$G4WORKDIR/tmp/$G4SYSTEM/exampleE02/odbms_boot
-  export G4EXAMPLE_BOOT=${G4EXAMPLE_BOOT_DIR}/G4EXAMPLE
+# Persistency...
+  . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
   export G4EXAMPLE_FDID=207
 fi
 
