@@ -15,6 +15,7 @@
 /vis/heprep/setCoordinateSystem zxy
 /vis/viewer/set/culling global false
 /vis/viewer/zoom 0.0001
+#/vis/viewer/set/viewpointThetaPhi 20 40 deg
 #/vis/scene/endOfEventAction accumulate
 #
 # Add volume to scene
