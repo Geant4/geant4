@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Navigator4.cc,v 1.1 2003-10-29 10:58:44 japost Exp $
+// $Id: testG4Navigator4.cc,v 1.2 2003-11-10 15:25:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -162,62 +162,62 @@ G4bool testG4NavigatorLocate(G4VPhysicalVolume *pTopNode)
 
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(-19.75,10,-10));
     assert(located->GetName()=="Slab");
-    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-		       G4ThreeVector(-1,10,-10)));
+//    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
+//		       G4ThreeVector(-1,10,-10)));
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(-7.25,10,-10));
     assert(located->GetName()=="Slab");
-    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-		       G4ThreeVector(-1,10,-10)));
+//    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
+//		       G4ThreeVector(-1,10,-10)));
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(5.25,10,-10));
     assert(located->GetName()=="Slab");
-    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-		       G4ThreeVector(-1,10,-10)));
+//    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
+//		       G4ThreeVector(-1,10,-10)));
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(17.75,10,-10));
     assert(located->GetName()=="Slab");
-    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-		       G4ThreeVector(-1,10,-10)));
+//    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
+//		       G4ThreeVector(-1,10,-10)));
 
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(-7.5,7.5,45),0,false);
     assert(located->GetName()=="Slab3");
-    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-		       G4ThreeVector(0,0,10)));
+//    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
+//		       G4ThreeVector(0,0,10)));
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(-1.5,7.5,45),0,false);
     assert(located->GetName()=="Slab3");
-    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-		       G4ThreeVector(1,0,10)));
+//    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
+//		       G4ThreeVector(1,0,10)));
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(4.5,7.5,45),0,false);
     assert(located->GetName()=="Slab3");
-    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-		       G4ThreeVector(2,0,10)));
+//    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
+//		       G4ThreeVector(2,0,10)));
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(10,7.5,45),0,false);
     assert(located->GetName()=="Slab3");
-    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-		       G4ThreeVector(2.5,0,10)));
+//    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
+//		       G4ThreeVector(2.5,0,10)));
 
 
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(-7.5,-7.5,45));
     assert(located->GetName()=="Slab3");
-    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-		       G4ThreeVector(0,0,10)));
+//    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
+//		       G4ThreeVector(0,0,10)));
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(-1.5,-1.5,45));
     assert(located->GetName()=="Slab3");
-    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-		       G4ThreeVector(1,1,10)));
+//    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
+//		       G4ThreeVector(1,1,10)));
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(4.5,4.5,45));
     assert(located->GetName()=="Slab3");
-    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-		       G4ThreeVector(2,2,10)));
+//    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
+//		       G4ThreeVector(2,2,10)));
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(10,10,45));
     assert(located->GetName()=="Slab3");
-    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-		       G4ThreeVector(2.5,2.5,10)));
+//    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
+//		       G4ThreeVector(2.5,2.5,10)));
 
     // Check found to be inside daughter volumes of replicas
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(36,36,36),0,false);
     //    G4cout << "At " << G4ThreeVector(36,36,36) << G4endl << myNav;
     assert(located->GetName()=="Target");
-    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-		       G4ThreeVector(1.5,-1.5,1)));
+//    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
+//		       G4ThreeVector(1.5,-1.5,1)));
     return true;
 }
 
@@ -348,8 +348,8 @@ G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
     located=myNav.LocateGlobalPointAndSetup(pos);
     //    G4cout << "At " << pos << G4endl << myNav;
     assert(located->GetName()=="Slab5");
-    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-		       G4ThreeVector(-2,-1.5,1)));
+//    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
+//		       G4ThreeVector(-2,-1.5,1)));
     Step=myNav.ComputeStep(pos,dir,physStep,safety);
     assert(ApproxEqual(Step,0.5));
     assert(ApproxEqual(safety,0));
