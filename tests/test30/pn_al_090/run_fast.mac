@@ -9,7 +9,6 @@
 #events
 100000
 //--------Proton_processes
-#exclusive
 #particle
 proton
 //--------
