@@ -22,7 +22,7 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.23 2001-10-10 11:48:14 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.24 2001-10-10 17:37:27 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -66,13 +66,15 @@ public:
   
   G4bool IsApplicable(const G4ParticleDefinition&);
   
-  void PrintInfoDefinition();
-  
   void BuildPhysicsTable(const G4ParticleDefinition& particleType);
   
   G4VParticleChange* PostStepDoIt(const G4Track& track,         
 				  const G4Step& step);                 
-      
+ 
+ void SetCutForLowEnSecPhotons(G4double cut);
+  
+  void PrintInfoDefinition();
+        
 
 protected:
 
@@ -94,7 +96,7 @@ private:
 
   // Lower limit for generation of gamma in this model
   G4DataVector cutForSecondaryPhotons;
-
+  G4double cutForPhotons;
 };
 
 

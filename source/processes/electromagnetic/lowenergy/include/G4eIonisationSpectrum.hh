@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationElectronSpectrum.hh,v 1.2 2001-10-10 16:45:56 pia Exp $
+// $Id: G4eIonisationSpectrum.hh,v 1.1 2001-10-10 17:37:27 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -28,7 +28,7 @@
 // GEANT4 Class file
 //
 //
-// File name:     G4eIonisationElectronSpectrum
+// File name:     G4eIonisationSpectrum
 //
 // Author:        V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
 // 
@@ -46,22 +46,22 @@
 
 // -------------------------------------------------------------------
 
-#ifndef G4EIONISATIONELECTRONSPECTRUM_HH
-#define GG4EIONISATIONELECTRONSPECTRUM_HH 1
+#ifndef G4EIONISATIONSPECTRUM_HH
+#define GG4EIONISATIONSPECTRUM_HH 1
 
 #include "G4VEnergySpectrum.hh"
  
 class G4eIonisationParameters;
 class G4DataVector;
 
-class G4eIonisationElectronSpectrum : public G4VEnergySpectrum
+class G4eIonisationSpectrum : public G4VEnergySpectrum
 {
 
 public:
 
-  G4eIonisationElectronSpectrum();
+  G4eIonisationSpectrum();
 
-  ~G4eIonisationElectronSpectrum();
+  ~G4eIonisationSpectrum();
 
   G4double Probability(G4int Z, G4double tmin, G4double tmax, 
 		       G4double kineticEnergy, G4int shell,
@@ -88,22 +88,22 @@ private:
 
   G4double IntSpectrum(size_t n, G4double tmin, G4double tmax, G4double b,
                        const G4DataVector& p) const; 
-
+  
   G4double AverageValue(size_t n, G4double tmin, G4double tmax, G4double b,
-                       const G4DataVector& p) const; 
-
+			const G4DataVector& p) const; 
+  
   G4double Function(size_t n, G4double e, G4double b, 
-                       const G4DataVector& p) const; 
+		    const G4DataVector& p) const; 
 
   G4double MaxFunction(size_t n, G4double tmin, G4double tmax, G4double b, 
                        const G4DataVector& p) const; 
-
+  
   // Hide copy constructor and assignment operator 
-  G4eIonisationElectronSpectrum(const  G4eIonisationElectronSpectrum&);
-  G4eIonisationElectronSpectrum & operator = (const G4eIonisationElectronSpectrum &right);
-
+  G4eIonisationSpectrum(const  G4eIonisationSpectrum&);
+  G4eIonisationSpectrum & operator = (const G4eIonisationSpectrum &right);
+  
 private:
-
+  
   G4eIonisationParameters* theParam;
   G4double                 lowestE;
   G4int                    verbose;      

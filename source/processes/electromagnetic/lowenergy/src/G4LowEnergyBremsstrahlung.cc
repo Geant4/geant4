@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.44 2001-10-10 11:59:35 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.45 2001-10-10 17:37:55 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -68,6 +68,7 @@ G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& nam)
   theMeanFreePath(0),
   energySpectrum(0)
 {
+  cutForPhotons = 0.;
   verboseLevel = 0;
 }
 
@@ -328,12 +329,12 @@ void G4LowEnergyBremsstrahlung::PrintInfoDefinition()
   comments += " in the energy range [250eV,100GeV]";
   comments += "\n the process must work with G4LowEnergyIonisation";
   
-  G4cout << G4endl << GetProcessName() << ":  " << comments<<G4endl;
+  G4cout << G4endl << GetProcessName() << ":  " << comments << G4endl;
 }         
 
 G4bool G4LowEnergyBremsstrahlung::IsApplicable(const G4ParticleDefinition& particle)
 {
-   return (  (&particle == G4Electron::Electron())  );
+  return (  (&particle == G4Electron::Electron())  );
 }
 
 
@@ -341,13 +342,15 @@ G4double G4LowEnergyBremsstrahlung::GetMeanFreePath(const G4Track& track,
 						    G4double previousStepSize,
 						    G4ForceCondition* cond)
 {
-   *cond = NotForced;
-   G4int index = (track.GetMaterial())->GetIndex();
-   const G4VEMDataSet* data = theMeanFreePath->GetComponent(index);
-   G4double meanFreePath = data->FindValue(track.GetKineticEnergy());
-   return meanFreePath; 
+  *cond = NotForced;
+  G4int index = (track.GetMaterial())->GetIndex();
+  const G4VEMDataSet* data = theMeanFreePath->GetComponent(index);
+  G4double meanFreePath = data->FindValue(track.GetKineticEnergy());
+  return meanFreePath; 
 } 
 
-
-
+void G4LowEnergyBremsstrahlung::SetCutForLowEnSecPhotons(G4double cut)
+{
+  cutForPhotons = cut;
+}
 

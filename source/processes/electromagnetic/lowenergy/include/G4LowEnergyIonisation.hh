@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyIonisation.hh,v 1.26 2001-10-10 11:48:14 pia Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.27 2001-10-10 17:37:27 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -77,6 +77,10 @@ protected:
   G4double GetMeanFreePath(const G4Track& track,
 			   G4double previousStepSize,
 			   G4ForceCondition* condition );
+
+  void SetCutForLowEnSecPhotons(G4double cut);
+
+  void SetCutForLowEnSecElectrons(G4double cut);
     
 private:
 
@@ -92,7 +96,9 @@ private:
 
   // Lower limit for generation of gamma in this model
   G4DataVector cutForDelta;
-
+  G4double cutForPhotons;
+  G4double cutForElectrons;
+ 
 };
 
 #endif

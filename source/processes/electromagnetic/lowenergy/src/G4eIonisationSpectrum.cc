@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationElectronSpectrum.cc,v 1.4 2001-10-10 16:49:28 pia Exp $
+// $Id: G4eIonisationSpectrum.cc,v 1.1 2001-10-10 17:37:57 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -28,7 +28,7 @@
 // GEANT4 Class file
 //
 //
-// File name:     G4eIonisationElectronSpectrum
+// File name:     G4eIonisationSpectrum
 //
 // Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
 // 
@@ -41,7 +41,7 @@
 // -------------------------------------------------------------------
 //
 
-#include "G4eIonisationElectronSpectrum.hh"
+#include "G4eIonisationSpectrum.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4AtomicShell.hh"
 #include "G4eIonisationParameters.hh"
@@ -49,8 +49,7 @@
 #include "Randomize.hh"
 
 
-G4eIonisationElectronSpectrum::G4eIonisationElectronSpectrum():
-                               G4VEnergySpectrum(),
+G4eIonisationSpectrum::G4eIonisationSpectrum(): 
   lowestE(0.1*eV),
   verbose(0)
 {
@@ -58,18 +57,18 @@ G4eIonisationElectronSpectrum::G4eIonisationElectronSpectrum():
 }
 
 
-G4eIonisationElectronSpectrum::~G4eIonisationElectronSpectrum() 
+G4eIonisationSpectrum::~G4eIonisationSpectrum() 
 {
   delete theParam;
 }
 
 
-G4double G4eIonisationElectronSpectrum::Probability(G4int Z, 
-                                                    G4double tMin, 
-                                                    G4double tMax, 
-                                                    G4double e,
-                                                    G4int shell,
-						    const G4ParticleDefinition*) const
+G4double G4eIonisationSpectrum::Probability(G4int Z, 
+					    G4double tMin, 
+					    G4double tMax, 
+					    G4double e,
+					    G4int shell,
+					    const G4ParticleDefinition*) const
 {
   // Please comment what Probability does and what are the three 
   // functions mentioned below
@@ -85,7 +84,7 @@ G4double G4eIonisationElectronSpectrum::Probability(G4int Z,
   G4double t2 = theParam->Parameter(Z, shell, 15, 0.0);
 
   if(verbose > 1) {
-    G4cout << "G4eIonisationElectronSpectrum::Probability: Z= " << Z
+    G4cout << "G4eIonisationSpectrum::Probability: Z= " << Z
            << "; shell= " << shell
            << "; E(keV)= " << e/keV
            << "; t1= " << t1 
@@ -165,12 +164,12 @@ G4double G4eIonisationElectronSpectrum::Probability(G4int Z,
 }
 
 
-G4double G4eIonisationElectronSpectrum::AverageEnergy(G4int Z,
-                                                      G4double tMin, 
-                                                      G4double tMax, 
-                                                      G4double e,
-                                                      G4int shell,
-						      const G4ParticleDefinition*) const
+G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
+					      G4double tMin, 
+					      G4double tMax, 
+					      G4double e,
+					      G4int shell,
+					      const G4ParticleDefinition*) const
 {
   // Please comment what AverageEnergy does and what are the three 
   // functions mentioned below
@@ -186,7 +185,7 @@ G4double G4eIonisationElectronSpectrum::AverageEnergy(G4int Z,
   G4double t2 = theParam->Parameter(Z, shell, 15, 0.0);
 
   if(verbose > 1) {
-    G4cout << "G4eIonisationElectronSpectrum::AverageEnergy: Z= " << Z
+    G4cout << "G4eIonisationSpectrum::AverageEnergy: Z= " << Z
            << "; shell= " << shell
            << "; E(keV)= " << e/keV
            << "; t1= " << t1 
@@ -270,12 +269,12 @@ G4double G4eIonisationElectronSpectrum::AverageEnergy(G4int Z,
 }
 
 
-G4double G4eIonisationElectronSpectrum::SampleEnergy(G4int Z,
-                                                     G4double tMin, 
-                                                     G4double tMax, 
-                                                     G4double e,
-                                                     G4int shell,
-						     const G4ParticleDefinition*) const
+G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
+					     G4double tMin, 
+					     G4double tMax, 
+					     G4double e,
+					     G4int shell,
+					     const G4ParticleDefinition*) const
 {
   // Please comment what SampleEnergy does
   G4double tdel = 0.0;
@@ -284,7 +283,7 @@ G4double G4eIonisationElectronSpectrum::SampleEnergy(G4int Z,
   if(t0 > tm) return tdel;
 
   if(verbose > 1 && Z == 14) {
-    G4cout << "G4eIonisationElectronSpectrum::Probability: Z= " << Z
+    G4cout << "G4eIonisationSpectrum::Probability: Z= " << Z
            << "; shell= " << shell
            << "; E(keV)= " << e/keV
            << G4endl;
@@ -331,7 +330,7 @@ G4double G4eIonisationElectronSpectrum::SampleEnergy(G4int Z,
       fun  = Function(6, tdel, bindingEnergy, p);
 
       if(fun > amaj) {
-        G4cout << "WARNING in G4eIonisationElectronSpectrum::SampleEnergy:" 
+        G4cout << "WARNING in G4eIonisationSpectrum::SampleEnergy:" 
                << " 1st majoranta " << amaj 
                << " < " << fun
                << G4endl;
@@ -367,7 +366,7 @@ G4double G4eIonisationElectronSpectrum::SampleEnergy(G4int Z,
       fun  = Function(4, tdel, bindingEnergy, p);
 
       if(fun > amaj) {
-        G4cout << "WARNING in G4eIonisationElectronSpectrum::SampleEnergy:" 
+        G4cout << "WARNING in G4eIonisationSpectrum::SampleEnergy:" 
                << " 3d majoranta " << amaj 
                << " < " << fun
                << G4endl;
@@ -384,11 +383,11 @@ G4double G4eIonisationElectronSpectrum::SampleEnergy(G4int Z,
 }
 
 
-G4double G4eIonisationElectronSpectrum::IntSpectrum(size_t n, 
-                                                    G4double tMin, 
-                                                    G4double tMax,
-                                                    G4double b,
-						    const G4DataVector& p) const
+G4double G4eIonisationSpectrum::IntSpectrum(size_t n, 
+					    G4double tMin, 
+					    G4double tMax,
+					    G4double b,
+					    const G4DataVector& p) const
 {
   // Please comment what IntSpectrum does
   G4int k = 0;
@@ -408,11 +407,11 @@ G4double G4eIonisationElectronSpectrum::IntSpectrum(size_t n,
 } 
 
 
-G4double G4eIonisationElectronSpectrum::AverageValue(size_t n, 
-                                                     G4double tMin, 
-                                                     G4double tMax,
-                                                     G4double b,
-						     const G4DataVector& p) const
+G4double G4eIonisationSpectrum::AverageValue(size_t n, 
+					     G4double tMin, 
+					     G4double tMax,
+					     G4double b,
+					     const G4DataVector& p) const
 {
   G4int k = 0;
   if(n == 4) k = 7;
@@ -431,10 +430,10 @@ G4double G4eIonisationElectronSpectrum::AverageValue(size_t n,
 } 
 
 
-G4double G4eIonisationElectronSpectrum::Function(size_t n, 
-                                                 G4double e, 
-                                                 G4double b,
-						 const G4DataVector& p) const
+G4double G4eIonisationSpectrum::Function(size_t n, 
+					 G4double e, 
+					 G4double b,
+					 const G4DataVector& p) const
 {
   // Please comment what Function does
   G4int k = 0;
@@ -451,11 +450,11 @@ G4double G4eIonisationElectronSpectrum::Function(size_t n,
 } 
 
 
-G4double G4eIonisationElectronSpectrum::MaxFunction(size_t n, 
-                                                    G4double tMin, 
-                                                    G4double tMax,
-                                                    G4double b,
-						    const G4DataVector& p) const
+G4double G4eIonisationSpectrum::MaxFunction(size_t n, 
+					    G4double tMin, 
+					    G4double tMax,
+					    G4double b,
+					    const G4DataVector& p) const
 {
   // Please comment what MaxFunction does
 
@@ -472,7 +471,12 @@ G4double G4eIonisationElectronSpectrum::MaxFunction(size_t n,
   return x*1.2;
 } 
 
-void G4eIonisationElectronSpectrum::PrintData() const 
+void G4eIonisationSpectrum::PrintData() const 
 {
   theParam->PrintData();
 }
+
+
+
+
+

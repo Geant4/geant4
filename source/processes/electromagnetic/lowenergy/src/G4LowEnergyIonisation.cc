@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.63 2001-10-10 16:46:05 pia Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.64 2001-10-10 17:37:56 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -79,7 +79,7 @@
 // --------------------------------------------------------------
 
 #include "G4LowEnergyIonisation.hh"
-#include "G4eIonisationElectronSpectrum.hh"
+#include "G4eIonisationSpectrum.hh"
 #include "G4eIonisationCrossSectionHandler.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4AtomicShell.hh"
@@ -98,6 +98,8 @@ G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& nam)
   theMeanFreePath(0),
   energySpectrum(0)
 {
+  cutForPhotons = 0.;
+  cutForElectrons = 0.;
   verboseLevel = 0;
 }
 
@@ -111,8 +113,7 @@ G4LowEnergyIonisation::~G4LowEnergyIonisation()
 }
 
 
-void G4LowEnergyIonisation::BuildPhysicsTable(
-                         const G4ParticleDefinition& aParticleType)
+void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
   if(verboseLevel > 0) {
     G4cout << "G4LowEnergyIonisation::BuildPhysicsTable start"
@@ -123,7 +124,7 @@ void G4LowEnergyIonisation::BuildPhysicsTable(
 
   // Create and fill IonisationParameters once
   if( energySpectrum ) delete energySpectrum;
-  energySpectrum = new G4eIonisationElectronSpectrum();
+  energySpectrum = new G4eIonisationSpectrum();
 
   if(verboseLevel > 0) {
     G4cout << "G4VEnergySpectrum is initialized"
@@ -137,9 +138,11 @@ void G4LowEnergyIonisation::BuildPhysicsTable(
   G4double lowKineticEnergy  = GetLowerBoundEloss();
   G4double highKineticEnergy = GetUpperBoundEloss();
   G4int    totBin = GetNbinEloss();
-  crossSectionHandler = new 
-           G4eIonisationCrossSectionHandler(energySpectrum, interpolation,
-                        lowKineticEnergy, highKineticEnergy, totBin);
+  crossSectionHandler = new G4eIonisationCrossSectionHandler(energySpectrum, 
+							     interpolation,
+							     lowKineticEnergy, 
+							     highKineticEnergy,
+							     totBin);
   crossSectionHandler->LoadShellData("ioni/ion-ss-cs-");
 
   if (verboseLevel > 0) {
@@ -196,8 +199,7 @@ void G4LowEnergyIonisation::BuildPhysicsTable(
 }
 
 
-void G4LowEnergyIonisation::BuildLossTable(
-                          const G4ParticleDefinition& aParticleType)
+void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 {
   // Build table for energy loss due to soft brems
   // the tables are built for *MATERIALS* binning is taken from LowEnergyLoss
@@ -369,6 +371,61 @@ inline G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& tra
   G4double theEnergyDeposit = bindingEnergy;
 
   // Fluorescence should be implemented here
+  // Fluorescence data start from element 6
+
+  if(thePrimShVec.size() != 0) thePrimShVec.clear();
+  thePrimShVec.push_back(thePrimaryShell);
+
+  size_t nElectrons = 1;
+  size_t nTotPhotons = 0;
+  size_t nPhotons = 0;
+  
+  // Generation of fluorescence
+  if (Z > 5)
+    {
+      photonVector = deexcitationManager.GenerateParticles(Z,shell);
+      if (photonVector != 0)
+	{
+	  nTotPhotons = photonVector->size();
+	  for (size_t k=0; k<nTotPhotons; k++)
+	    {
+	      G4DynamicParticle* aPhoton = (*photonVector)[k];
+	      if (aPhoton != 0)
+		{
+		  G4double itsKineticEnergy = aPhoton->GetKineticEnergy();
+		  G4double eDepositTmp = theEnergyDeposit - itsKineticEnergy;
+		  if (itsKineticEnergy >= cutForPhotons && eDepositTmp > 0.)
+		    {
+		      nPhotons++;
+		      // Local energy deposit is given as the sum of the 
+		      // energies of incident photons minus the energies
+		      // of the outcoming fluorescence photons
+		      theEnergyDeposit -= itsKineticEnergy;
+		    }
+		  else
+		    {
+		      // The current photon would be below threshold,
+		      // or it would cause a negative energy deposit
+		      delete aPhoton;
+		    }
+		}
+	    }
+	}
+    }
+      
+  size_t nSecondaries  = nElectrons + nPhotons;
+  
+  aParticleChange.SetNumberOfSecondaries(nSecondaries);
+      
+  for (size_t l = 0; l < nPhotons; l++) 
+    {
+      aParticleChange.AddSecondary((*photonVector)[l]); 
+    }
+  
+  if (photonVector != 0)
+    {
+      delete photonVector;
+    }
 
   // fill ParticleChange 
   // changed energy and momentum of the actual particle
@@ -424,4 +481,14 @@ G4double G4LowEnergyIonisation::GetMeanFreePath(const G4Track& track,
    G4double meanFreePath = data->FindValue(track.GetKineticEnergy());
    return meanFreePath; 
 } 
+
+void G4LowEnergyIonisation::SetCutForLowEnSecPhotons(G4double cut)
+{
+  cutForPhotons = cut;
+}   
+
+void G4LowEnergyIonisation::SetCutForLowEnSecElectrons(G4double cut)
+{
+  cutForElectrons = cut;
+}
 

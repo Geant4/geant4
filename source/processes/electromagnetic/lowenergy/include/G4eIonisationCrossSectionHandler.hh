@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4eIonisationCrossSectionHandler.hh,v 1.2 2001-10-10 17:37:27 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -33,20 +35,19 @@
 // Creation date: 17 September 2001
 //
 // Modified: 
+// 10 Oct 2001  M.G. Pia        Revision to improve code quality and consistency with design
 //
 // -------------------------------------------------------------------
 
-// Class Description: 
-//
-// Provides build cross sections with cut for LowEnergyIonisation 
-//
-// Class Description: End 
+// Class description: 
+// Provides cross sections with cut for LowEnergyIonisation 
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------
 //
 
-#ifndef G4eIonisationCrossSectionHandler_h
-#define G4eIonisationCrossSectionHandler_h 1
+#ifndef G4EIONISATIONCROSSSECTIONHANDLER_HH
+#define GG4EIONISATIONCROSSSECTIONHANDLER_HH 1
 
 #include "G4VCrossSectionHandler.hh"
 #include "globals.hh"
@@ -58,7 +59,6 @@ class G4VDataSetAlgorithm;
 
 class G4eIonisationCrossSectionHandler : public G4VCrossSectionHandler
 {
-
 public:
 
   G4eIonisationCrossSectionHandler(const G4VEnergySpectrum* spec,

@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4eIonisationCrossSectionHandler.cc,v 1.2 2001-10-10 17:37:56 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -33,10 +35,9 @@
 // Creation date: 25 Sept 2001
 //
 // Modifications: 
+// 10 Oct 2001  M.G. Pia        Revision to improve code quality and consistency with design
 //
 // -------------------------------------------------------------------
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4eIonisationCrossSectionHandler.hh"
 #include "G4VEnergySpectrum.hh"
@@ -49,7 +50,6 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eIonisationCrossSectionHandler::G4eIonisationCrossSectionHandler(
     const G4VEnergySpectrum* spec, G4VDataSetAlgorithm* alg, 
@@ -61,14 +61,12 @@ G4eIonisationCrossSectionHandler::G4eIonisationCrossSectionHandler(
   interp = new G4SemiLogInterpolation();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eIonisationCrossSectionHandler::~G4eIonisationCrossSectionHandler() 
 {
   delete interp;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4std::vector<G4VEMDataSet*>* 
        G4eIonisationCrossSectionHandler::BuildCrossSectionsForMaterials(
@@ -131,9 +129,3 @@ G4std::vector<G4VEMDataSet*>*
  
   return set;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
