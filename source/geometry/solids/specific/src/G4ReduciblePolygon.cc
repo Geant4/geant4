@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReduciblePolygon.cc,v 1.7 2003-10-28 17:15:57 gcosmo Exp $
+// $Id: G4ReduciblePolygon.cc,v 1.8 2003-11-03 18:39:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,8 +38,8 @@
 //
 // --------------------------------------------------------------------
 
-#include "globals.hh"
 #include "G4ReduciblePolygon.hh"
+#include "globals.hh"
 
 //
 // Constructor: with simple arrays

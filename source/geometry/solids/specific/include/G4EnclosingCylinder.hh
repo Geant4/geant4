@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnclosingCylinder.hh,v 1.5 2002-10-28 11:47:50 gcosmo Exp $
+// $Id: G4EnclosingCylinder.hh,v 1.6 2003-11-03 18:39:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,11 +39,10 @@
 // Author: 
 //   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-
 #ifndef G4EnclosingCylinder_hh
 #define G4EnclosingCylinder_hh
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "geomdefs.hh"
 #include "G4ThreeVector.hh"
 
