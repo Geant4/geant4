@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.17 2001-07-11 10:08:30 gunter Exp $
+// $Id: G4Transportation.cc,v 1.18 2001-07-17 02:16:41 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -37,7 +37,8 @@
 //
 // =======================================================================
 // Modified:
-//            11 Aprl 2001, P. Gumplinger: correction for spin tracking   
+//            29 June 2001, J. Apostolakis, D. Cote-Ahern, P. Gumplinger: 
+//                          correction for spin tracking   
 //            20 Febr 2001, J. Apostolakis:  update for new FieldTrack
 //            22 Sept 2000, V. Grichine:     update of Kinetic Energy
 //             9 June 1999, J. Apostolakis & S.Giani: protect full relocation

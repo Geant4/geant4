@@ -28,7 +28,7 @@
 //
 //            J. Apostolakis, February 8th, 1999
 //            P. Gumplinger,  February 8th, 1999
-//            P. Gumplinger,  April 11th, 2001
+//            D. Cote-Ahern, P. Gumplinger,  April 11th, 2001
 //
 #include "G4Mag_SpinEqRhs.hh"
 #include "G4ThreeVector.hh"
