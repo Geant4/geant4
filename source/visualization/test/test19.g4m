@@ -80,6 +80,9 @@ help /vis/sceneHandler/create
 /vis/viewer/update
 #
 # To view replicas...
+# Investigating BaBar problem...
+# G4SmartVoxelHeader::BuildNodes - PANIC! Daughter physical volume
+# name = EB20 is entirely outside mother logical volume name = EBMX
 /vis/camera/viewpoint 0 0
 /vis/camera/pan -2000 0 0
 /vis/camera/zoom 7
