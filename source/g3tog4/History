@@ -1,7 +1,11 @@
-$Id: History,v 1.35 2000-07-26 14:54:50 gcosmo Exp $
+$Id: History,v 1.36 2000-08-01 09:09:03 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V02-00-03 01-Aug-2000 G.Cosmo
+- Fixed initialisation of pDPhi for CONS in G3toG4MakeSolid.cc (I.Hrivnacova).
+- Updated README file and removed src/README.
 
 g3tog4-V02-00-02 26-Jul-2000 G.Cosmo
 - Fixed definition of G4TMPDIR in GNUmakefile.

@@ -53,7 +53,7 @@ To remove all G3toG4 libraries, executables and .d files, simply type
 
 gmake clean
 
- the implementation (April '99)
+ the implementation (April 1999)
 ----------------------------------------
 - PGON, PCON are built using the CSG classes G4Polycone and G4Polyhedra.
 - G3 MANY feature has not been tested.
@@ -69,5 +69,19 @@ gmake clean
   hit code can be activated.
 - GSPART has to be updated.
 - Usage of magnetic field class has to be turned on.
+
+ the implementation (July 2000)
+----------------------------------------
+- Supported shapes: all G3 shapes except for
+  "HYPE", "GTRA", "CTUB"
+- G3 MANY feature is not supported.
+- GSDV* routines for dividing volumes implemented, using
+  G4PVReplicas, for shapes:
+      "BOX", "TUBE", "TUBS" - all axes;
+      "CONE", "CONS" - axes 2, 3;
+      "TRD1", "TRD2", "TRAP" - axis 3; 
+      "PGON", "PCON" - axis 2;
+  Unsupported shapes:    
+      "SPHE", "PARA", "ELTU", "HYPE", "GTRA", "CTUB"
 
 See History file for modification history.
