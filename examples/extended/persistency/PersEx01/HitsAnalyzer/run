@@ -1,0 +1,2 @@
+#!/bin/sh
+../../rootio/bin/Linux-g++/HitsAnalyzer -v -r -f ../G4run0001.root -n 20
