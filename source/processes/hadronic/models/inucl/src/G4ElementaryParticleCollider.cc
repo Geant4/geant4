@@ -1,28 +1,28 @@
 //#define DEBUG
 //#define REPORT
 
-#include "Collider.h"
-#include "ElementaryParticleCollider.h"
-#include "ParticleLargerEkin.h"
+#include "G4Collider.hh"
+#include "G4ElementaryParticleCollider.hh"
+#include "G4ParticleLargerEkin.hh"
 #include "algorithm"
 
-typedef vector<InuclElementaryParticle>::iterator particleIterator;
+typedef vector<G4InuclElementaryParticle>::iterator particleIterator;
 
-CollisionOutput  ElementaryParticleCollider::collide(InuclParticle* bullet,
-                     InuclParticle* target) {
+G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
+                     G4InuclParticle* target) {
 
 //  generate nucleon or pion collission with NUCLEON 
 //  or pion with quasideutron
 #ifdef DEBUG
-        cout << " here " << endl;
+        G4cout << " here " << G4endl;
 #endif		
 
-  CollisionOutput output;
+  G4CollisionOutput output;
   
-  InuclElementaryParticle* particle1 =
-          dynamic_cast<InuclElementaryParticle*>(bullet);
-  InuclElementaryParticle* particle2 =	
-          dynamic_cast<InuclElementaryParticle*>(target);
+  G4InuclElementaryParticle* particle1 =
+          dynamic_cast<G4InuclElementaryParticle*>(bullet);
+  G4InuclElementaryParticle* particle2 =	
+          dynamic_cast<G4InuclElementaryParticle*>(target);
 	     
   if(particle1 && particle2) { // particle / particle 
 
@@ -31,66 +31,66 @@ CollisionOutput  ElementaryParticleCollider::collide(InuclParticle* bullet,
       if(particle1->nucleon() || particle2->nucleon()) { // ok
 
 #ifdef DEBUG
-        cout << " here1 " << endl;
+        G4cout << " here1 " << G4endl;
 	particle1->printParticle();
 	particle2->printParticle();
-	vector<double> momb = particle1->getMomentum();
-	vector<double> momt = particle2->getMomentum();
-	for(int i = 0; i < 4; i++) momb[i] += momt[i];
-	cout << " total input: px " << momb[1] << " py " << momb[2] 
+	vector<G4double> momb = particle1->getMomentum();
+	vector<G4double> momt = particle2->getMomentum();
+	for(G4int i = 0; i < 4; i++) momb[i] += momt[i];
+	G4cout << " total input: px " << momb[1] << " py " << momb[2] 
 	  << " pz " << momb[3] << " e " << momb[0] << endl;
 #endif		
-	LorentzConvertor convertToSCM;
+	G4LorentzConvertor convertToSCM;
 	if(particle2->nucleon()) {
-          convertToSCM.setBullet(particle1->getMomentum(),particle1->getMass());
-          convertToSCM.setTarget(particle2->getMomentum(),particle2->getMass());
+          convertToSCM.setBullet(particle1->getMomentum(), particle1->getMass());
+          convertToSCM.setTarget(particle2->getMomentum(), particle2->getMass());
 	}
 	 else {
-          convertToSCM.setBullet(particle2->getMomentum(),particle2->getMass());
-          convertToSCM.setTarget(particle1->getMomentum(),particle1->getMass());
+          convertToSCM.setBullet(particle2->getMomentum(), particle2->getMass());
+          convertToSCM.setTarget(particle1->getMomentum(), particle1->getMass());
 	};  
         convertToSCM.toTheCenterOfMass(); 
         double ekin = convertToSCM.getKinEnergyInTheTRS();
         double etot_scm = convertToSCM.getTotalSCMEnergy();
         double pscm = convertToSCM.getSCMMomentum();
 #ifdef DEBUG
-        cout << " ekin " << ekin << " etot_scm " << etot_scm << " pscm " <<
-	   	pscm << endl;
+        G4cout << " ekin " << ekin << " etot_scm " << etot_scm << " pscm " <<
+	   	pscm << G4endl;
 #endif		
-        vector<InuclElementaryParticle> particles = 	    
-           generateSCMfinalState(ekin,etot_scm,pscm,particle1,particle2,&convertToSCM);
+        vector<G4InuclElementaryParticle> particles = 	    
+           generateSCMfinalState(ekin, etot_scm, pscm, particle1, particle2, &convertToSCM);
 #ifdef DEBUG
-        cout << " particles " << particles.size() << endl;
-	for(int i = 0; i < particles.size(); i++) 
+        G4cout << " particles " << particles.size() << G4endl;
+	for(G4int i = 0; i < particles.size(); i++) 
 	  particles[i].printParticle();
 #endif
 	if(!particles.empty()) { // convert back to Lab
 #ifdef DEBUG
-	  vector<double> totscm(4,0.);
-	  vector<double> totlab(4,0.);
+	  vector<G4double> totscm(4, 0.0);
+	  vector<G4double> totlab(4, 0.0);
 #endif
 	  particleIterator ipart;
 	  for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
 #ifdef DEBUG
-	    vector<double> mom_scm = ipart->getMomentum();
-	    for(int i = 0; i < 4; i++) totscm[i] += mom_scm[i];
+	    vector<G4double> mom_scm = ipart->getMomentum();
+	    for(G4int i = 0; i < 4; i++) totscm[i] += mom_scm[i];
 #endif
-	    vector<double> mom = 
+	    vector<G4double> mom = 
 	      convertToSCM.backToTheLab(ipart->getMomentum());
 #ifdef DEBUG
-	    for(int i = 0; i < 4; i++) totlab[i] += mom[i];
+	    for(G4int i = 0; i < 4; i++) totlab[i] += mom[i];
 #endif
 	    ipart->setMomentum(mom); 
 	  };
 	  sort(particles.begin(), particles.end(),
 	                            ParticleLargerEkin());
 #ifdef DEBUG
-	  cout << " In SCM: total outgoing momentum " << endl 
+	  G4cout << " In SCM: total outgoing momentum " << G4endl 
 	   << " E " << totscm[0] << " px " << totscm[1]
-	    << " py " << totscm[2] << " pz " << totscm[3] << endl; 
-	  cout << " In Lab: total outgoing momentum " << endl 
+	    << " py " << totscm[2] << " pz " << totscm[3] << G4endl; 
+	  G4cout << " In Lab: total outgoing momentum " << G4endl 
 	   << " E " << totlab[0] << " px " << totlab[1]
-	    << " py " << totlab[2] << " pz " << totlab[3] << endl; 
+	    << " py " << totlab[2] << " pz " << totlab[3] << G4endl; 
 #endif
 	};
 	
@@ -114,181 +114,181 @@ CollisionOutput  ElementaryParticleCollider::collide(InuclParticle* bullet,
 	                                    particle1->getMass());
 	    }; 
             convertToSCM.toTheCenterOfMass(); 
-            double etot_scm = convertToSCM.getTotalSCMEnergy();
+            G4double etot_scm = convertToSCM.getTotalSCMEnergy();
 #ifdef DEBUG
-            cout << " etot_scm " << etot_scm << endl;
+            G4cout << " etot_scm " << etot_scm << G4endl;
 #endif
-            vector<InuclElementaryParticle> particles = 
-	      generateSCMpionAbsorption(etot_scm,particle1,particle2);
+            vector<G4InuclElementaryParticle> particles = 
+	      generateSCMpionAbsorption(etot_scm, particle1, particle2);
 #ifdef DEBUG
-            cout << " particles " << particles.size() << endl;
-	    for(int i = 0; i < particles.size(); i++) 
+            G4cout << " particles " << particles.size() << G4endl;
+	    for(G4int i = 0; i < particles.size(); i++) 
 	         particles[i].printParticle();
 #endif
 	    if(!particles.empty()) { // convert back to Lab
 #ifdef DEBUG
-	      vector<double> totscm(4,0.);
+	      vector<G4double> totscm(4, 0.0);
 #endif
 	      particleIterator ipart;
 	      for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
 #ifdef DEBUG
-	        vector<double> mom_scm = ipart->getMomentum();
-	        for(int i = 0; i < 4; i++) totscm[i] += mom_scm[i];
+	        vector<G4double> mom_scm = ipart->getMomentum();
+	        for(G4int i = 0; i < 4; i++) totscm[i] += mom_scm[i];
 #endif
-	        vector<double> mom = 
+	        vector<G4double> mom = 
 	          convertToSCM.backToTheLab(ipart->getMomentum());
 	        ipart->setMomentum(mom); 
 	      };
 	      sort(particles.begin(), particles.end(),
 	                            ParticleLargerEkin());
 #ifdef DEBUG
-	      cout << " In SCM: total outgoing momentum " << endl 
+	      G4cout << " In SCM: total outgoing momentum " << G4endl 
 	           << " E " << totscm[0] << " px " << totscm[1]
-	           << " py " << totscm[2] << " pz " << totscm[2] << endl; 
+	           << " py " << totscm[2] << " pz " << totscm[2] << G4endl; 
 #endif
 	
  	      output.addOutgoingParticles(particles);
             };
 	  }
 	   else {
-	    cout << " ElementaryParticleCollider -> can collide just pions with
-               deutron at the moment " << endl;
+	    G4cout << " ElementaryParticleCollider -> can collide just pions with
+               deutron at the moment " << G4endl;
 	  }; 
 	}
 	 else {
-	  cout << " ElementaryParticleCollider -> can collide just smth. with
-            nucleon or deutron at the moment " << endl;
+	  G4cout << " ElementaryParticleCollider -> can collide just smth. with
+            nucleon or deutron at the moment " << G4endl;
         };
       };  
     }
      else {
-      cout << " ElementaryParticleCollider -> can not collide photons
-       at the moment " << endl;
+      G4cout << " ElementaryParticleCollider -> can not collide photons
+       at the moment " << G4endl;
     }; 
   }
    else {
-    cout << " ElementaryParticleCollider -> can collide only particle
-      with particle " << endl;
+    G4cout << " ElementaryParticleCollider -> can collide only particle
+      with particle " << G4endl;
   }; 	 	 
 
   return output;
 }
 
-int ElementaryParticleCollider::generateMultiplicity(
-                              int is, double ekin) const {
+int G4ElementaryParticleCollider::generateMultiplicity(
+                              G4int is, G4double ekin) const {
 
-const double asig[4][6][31] = {
-      1.00,1.00,1.00,1.00,1.00,1.00,24.3,24.1,24.0,26.3,
-      28.6,24.8,19.9,19.2,17.4,15.3,13.5,12.3,11.9,10.4,
-      11.8,11.4,11.0,10.8,10.9,11.7,11.4,10.2,11.0,11.0,
-      9.0, 0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,1.45,2.90,
-      4.10,5.30,22.0,21.2,19.9,14.9,12.6,12.3,11.3,10.8,
-      9.50,8.27,7.20,6.70,6.25,6.04,5.89,5.70,5.60,5.05,
-      4.17,4.00,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-      0.  ,0.  ,0.  ,2.27,4.28,7.81,8.03,8.11,7.90,7.82,
-      7.61,7.47,7.07,7.66,7.05,6.71,6.38,6.36,6.37,6.57,
-      6.01,5.48,6.80,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-      0.  ,0.  ,0.  ,0.  ,0.  ,1.20,2.85,3.70,4.81,5.33,
-      7.74,6.91,6.94,7.57,7.21,7.11,7.10,6.93,6.79,6.71,
-      6.55,6.55,6.15,8.50,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-      0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,.005,0.54,0.74,
-      0.86,0.91,1.10,1.16,1.36,1.40,1.43,1.47,1.47,1.43,
-      1.38,1.38,1.63,1.36,2.80,0.  ,0.  ,0.  ,0.  ,0.  ,
-      0.  ,0.  ,0.  ,0.  ,0.  ,34.0,46.2,46.9,45.2,47.1,
-      42.3,41.8,41.2,41.6,41.6,41.0,43.0,42.4,40.0,39.9,
-      39.8,42.0,40.0,39.8,39.6,38.7,
-      1.00,1.00,1.00,1.00,1.00,1.00,33.0,31.3,29.5,27.8,
-      14.6,16.0,17.5,18.3,19.4,18.7,15.6,14.8,13.6,12.5,
-      12.2,11.9,11.4,11.2,10.1,9.62,8.41,7.14,7.09,5.04,
-      10.2,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,2.00,4.00,
-      6.50,19.5,20.8,19.8,18.6,17.7,14.4,13.5,10.4,10.1,
-      12.0,8.87,8.51,8.49,9.20,8.29,7.43,8.20,4.69,4.57,
-      4.06,4.10,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-      0.  ,0.  ,0.68,2.76,3.85,8.35,12.7,12.3,10.8,12.0,
-      10.9,10.2,10.6,12.2,11.8,11.0,10.4,10.5,11.0,10.6,
-      11.8,12.5,13.2,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-      0.  ,0.  ,0.  ,0.22,0.52,0.64,1.19,1.52,1.75,1.51,
-      2.04,1.85,1.70,1.92,1.66,1.74,1.50,1.39,1.35,1.41,
-      1.48,1.43,1.35,3.20,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-      0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.14,0.24,0.30,0.46,
-      0.85,1.40,1.54,1.52,1.47,1.48,1.49,1.42,1.39,1.37,
-      1.22,1.19,0.93,0.  ,2.10,0.  ,0.  ,0.  ,0.  ,0.  ,
-      0.  ,0.  ,0.  ,0.  ,0.  ,35.0,40.0,42.4,42.3,41.0,
-      40.9,40.4,39.8,35.0,33.6,41.2,41.0,41.1,41.2,41.2,
-      39.6,36.0,36.0,36.2,0.  ,40.2,
-      1.00,1.00,1.00,1.00,1.00,1.00,60.0,38.0,30.6,24.0,
-      18.5,12.8,13.6,9.15,8.20,7.80,7.10,6.40,5.81,5.85,
-      5.50,5.33,5.40,5.50,4.90,5.02,5.00,4.98,4.96,4.96,
-      4.50,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.38,0.75,
-      1.28,2.26,11.8,11.1,7.56,6.04,5.68,4.15,3.21,2.12,
-      1.66,1.54,1.53,1.47,1.33,1.39,1.35,1.29,1.23,1.13,
-      1.06,0.70,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-      0.  ,0.  ,0.05,2.19,6.02,7.36,6.97,5.83,6.53,5.09,
-      4.24,3.24,3.31,3.11,2.91,2.78,2.72,2.68,2.48,2.27,
-      2.02,1.77,4.40,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-      0.  ,0.  ,0.  ,0.06,0.35,0.55,0.77,0.89,0.80,0.86,
-      0.97,0.90,0.86,0.84,0.84,0.83,0.81,0.79,0.82,0.76,
-      0.88,0.89,0.89,3.00,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-      0.  ,0.  ,0.  ,0.  ,0.  ,0.02,0.07,0.33,0.92,1.39,
-      2.11,1.81,2.39,2.60,2.19,1.70,1.60,0.68,1.43,1.46,
-      1.46,1.37,1.16,1.09,2.60,0.  ,0.  ,0.  ,0.  ,0.  ,
-      0.  ,0.  ,0.  ,0.  ,0.  ,18.9,27.2,34.9,29.1,30.8,
-      29.6,28.2,27.5,26.9,26.3,25.9,25.6,25.2,26.1,25.5,
-      25.4,25.3,25.1,24.9,24.8,24.1,
-      5.90,9.40,24.5,62.6,65.3,41.3,29.3,24.3,22.7,22.9,
-      23.2,28.4,11.7,10.1,8.30,7.16,6.49,6.36,6.60,5.84,
-      5.30,4.50,3.90,4.40,4.74,.794,.824,.714,0.59,0.  ,
-      4.60,0.  ,0.  ,0.  ,0.  ,0.10,0.40,2.70,3.50,5.30,
-      6.60,9.10,17.6,12.2,9.78,7.51,6.91,6.86,6.46,6.19,
-      5.13,3.90,2.82,3.10,3.12,2.52,2.22,2.02,2.01,1.98,
-      2.14,1.20,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-      0.  ,0.  ,0.76,2.63,3.72,6.53,7.47,7.94,7.12,6.85,
-      6.09,5.35,4.12,3.85,3.68,4.09,3.58,3.29,3.08,2.93,
-      2.80,2.65,3.30,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-      0.  ,0.  ,0.  ,0.59,0.74,1.47,4.10,4.78,4.90,5.07,
-      5.50,5.48,5.03,4.65,4.39,4.06,3.53,3.08,3.05,2.91,
-      3.42,3.93,3.93,4.10,0.  ,0.  ,0.  ,0.  ,0.  ,0.  ,
-      0.  ,0.  ,0.  ,0.  ,0.01,.007,0.03,.099,.251,.376,
-      .419,.582,.755,.777,1.13,1.08,1.13,1.08,.962,.866,
-      .738,.674,.645,.613,1.30,0.  ,0.  ,0.  ,0.  ,0.  ,
-      0.  ,0.  ,0.  ,0.  ,0.  ,31.3,46.0,30.0,35.7,33.4,
-      31.6,30.4,29.6,28.9,28.5,28.1,27.5,31.0,27.7,27.8,
-      26.1,25.2,6.92,6.70,0.  ,25.7
+const G4double asig[4][6][31] = {
+      1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 24.3, 24.1, 24.0, 26.3,
+      28.6, 24.8, 19.9, 19.2, 17.4, 15.3, 13.5, 12.3, 11.9, 10.4,
+      11.8, 11.4, 11.0, 10.8, 10.9, 11.7, 11.4, 10.2, 11.0, 11.0,
+      9.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.45, 2.90,
+      4.10, 5.30, 22.0, 21.2, 19.9, 14.9, 12.6, 12.3, 11.3, 10.8,
+      9.50, 8.27, 7.20, 6.70, 6.25, 6.04, 5.89, 5.70, 5.60, 5.05,
+      4.17, 4.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00,
+      0.00, 0.00, 0.00, 2.27, 4.28, 7.81, 8.03, 8.11, 7.90, 7.82,
+      7.61, 7.47, 7.07, 7.66, 7.05, 6.71, 6.38, 6.36, 6.37, 6.57,
+      6.01, 5.48, 6.80, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00,
+      0.00, 0.00, 0.00, 0.00, 0.00, 1.20, 2.85, 3.70, 4.81, 5.33,
+      7.74, 6.91, 6.94, 7.57, 7.21, 7.11, 7.10, 6.93, 6.79, 6.71,
+      6.55, 6.55, 6.15, 8.50, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00,
+      0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.005,0.54, 0.74,
+      0.86, 0.91, 1.10, 1.16, 1.36, 1.40, 1.43, 1.47, 1.47, 1.43,
+      1.38, 1.38, 1.63, 1.36, 2.80, 0.00, 0.00, 0.00, 0.00, 0.00,
+      0.00, 0.00, 0.00, 0.00, 0.00, 34.0, 46.2, 46.9, 45.2, 47.1,
+      42.3, 41.8, 41.2, 41.6, 41.6, 41.0, 43.0, 42.4, 40.0, 39.9,
+      39.8, 42.0, 40.0, 39.8, 39.6, 38.7,
+      1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 33.0, 31.3, 29.5, 27.8,
+      14.6, 16.0, 17.5, 18.3, 19.4, 18.7, 15.6, 14.8, 13.6, 12.5,
+      12.2, 11.9, 11.4, 11.2, 10.1, 9.62, 8.41, 7.14, 7.09, 5.04,
+      10.2, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2.00, 4.00,
+      6.50, 19.5, 20.8, 19.8, 18.6, 17.7, 14.4, 13.5, 10.4, 10.1,
+      12.0, 8.87, 8.51, 8.49, 9.20, 8.29, 7.43, 8.20, 4.69, 4.57,
+      4.06, 4.10, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00,
+      0.00, 0.00, 0.68, 2.76, 3.85, 8.35, 12.7, 12.3, 10.8, 12.0,
+      10.9, 10.2, 10.6, 12.2, 11.8, 11.0, 10.4, 10.5, 11.0, 10.6,
+      11.8, 12.5, 13.2, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00,
+      0.00, 0.00, 0.00, 0.22, 0.52, 0.64, 1.19, 1.52, 1.75, 1.51,
+      2.04, 1.85, 1.70, 1.92, 1.66, 1.74, 1.50, 1.39, 1.35, 1.41,
+      1.48, 1.43, 1.35, 3.20, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00,
+      0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.14, 0.24, 0.30, 0.46,
+      0.85, 1.40, 1.54, 1.52, 1.47, 1.48, 1.49, 1.42, 1.39, 1.37,
+      1.22, 1.19, 0.93, 0.00, 2.10, 0.00, 0.00, 0.00, 0.00, 0.00,
+      0.00, 0.00, 0.00, 0.00, 0.00, 35.0, 40.0, 42.4, 42.3, 41.0,
+      40.9, 40.4, 39.8, 35.0, 33.6, 41.2, 41.0, 41.1, 41.2, 41.2,
+      39.6, 36.0, 36.0, 36.2, 0.00, 40.2,
+      1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 60.0, 38.0, 30.6, 24.0,
+      18.5, 12.8, 13.6, 9.15, 8.20, 7.80, 7.10, 6.40, 5.81, 5.85,
+      5.50, 5.33, 5.40, 5.50, 4.90, 5.02, 5.00, 4.98, 4.96, 4.96,
+      4.50, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.38, 0.75,
+      1.28, 2.26, 11.8, 11.1, 7.56, 6.04, 5.68, 4.15, 3.21, 2.12,
+      1.66, 1.54, 1.53, 1.47, 1.33, 1.39, 1.35, 1.29, 1.23, 1.13,
+      1.06, 0.70, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00,
+      0.00, 0.00, 0.05, 2.19, 6.02, 7.36, 6.97, 5.83, 6.53, 5.09,
+      4.24, 3.24, 3.31, 3.11, 2.91, 2.78, 2.72, 2.68, 2.48, 2.27,
+      2.02, 1.77, 4.40, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00,
+      0.00, 0.00, 0.00, 0.06, 0.35, 0.55, 0.77, 0.89, 0.80, 0.86,
+      0.97, 0.90, 0.86, 0.84, 0.84, 0.83, 0.81, 0.79, 0.82, 0.76,
+      0.88, 0.89, 0.89, 3.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00,
+      0.00, 0.00, 0.00, 0.00, 0.00, 0.02, 0.07, 0.33, 0.92, 1.39,
+      2.11, 1.81, 2.39, 2.60, 2.19, 1.70, 1.60, 0.68, 1.43, 1.46,
+      1.46, 1.37, 1.16, 1.09, 2.60, 0.00, 0.00, 0.00, 0.00, 0.00,
+      0.00, 0.00, 0.00, 0.00, 0.00, 18.9, 27.2, 34.9, 29.1, 30.8,
+      29.6, 28.2, 27.5, 26.9, 26.3, 25.9, 25.6, 25.2, 26.1, 25.5,
+      25.4, 25.3, 25.1, 24.9, 24.8, 24.1,
+      5.90, 9.40, 24.5, 62.6, 65.3, 41.3, 29.3, 24.3, 22.7, 22.9,
+      23.2, 28.4, 11.7, 10.1, 8.30, 7.16, 6.49, 6.36, 6.60, 5.84,
+      5.30, 4.50, 3.90, 4.40, 4.74, 0.794,0.824,0.714,0.59, 0.00,
+      4.60, 0.00, 0.00, 0.00, 0.00, 0.10, 0.40, 2.70, 3.50, 5.30,
+      6.60, 9.10, 17.6, 12.2, 9.78, 7.51, 6.91, 6.86, 6.46, 6.19,
+      5.13, 3.90, 2.82, 3.10, 3.12, 2.52, 2.22, 2.02, 2.01, 1.98,
+      2.14, 1.20, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00,
+      0.00, 0.00, 0.76, 2.63, 3.72, 6.53, 7.47, 7.94, 7.12, 6.85,
+      6.09, 5.35, 4.12, 3.85, 3.68, 4.09, 3.58, 3.29, 3.08, 2.93,
+      2.80, 2.65, 3.30, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00,
+      0.00, 0.00, 0.00, 0.59, 0.74, 1.47, 4.10, 4.78, 4.90, 5.07,
+      5.50, 5.48, 5.03, 4.65, 4.39, 4.06, 3.53, 3.08, 3.05, 2.91,
+      3.42, 3.93, 3.93, 4.10, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00,
+      0.00, 0.00, 0.00, 0.00, 0.01,0.007, 0.03,0.099,0.251,.0376,
+      0.419, 0.582, 0.755, 0.777, 1.13, 1.08, 1.13, 1.08, 0.962, 0.866,
+      0.738, 0.674, 0.645, 0.613, 1.30, 0.00, 0.00, 0.00, 0.00, 0.00,
+      0.00, 0.00, 0.00, 0.00, 0.00, 31.3, 46.0, 30.0, 35.7, 33.4,
+      31.6, 30.4, 29.6, 28.9, 28.5, 28.1, 27.5, 31.0, 27.7, 27.8,
+      26.1, 25.2, 6.92, 6.70, 0.00, 25.7
 };
 
-  const double large_cut = 4.;
+  const G4double large_cut = 4.0;
   
-  pair<int,double> iksk = getPositionInEnergyScale2(ekin);
-  int ik = iksk.first;
-  double sk = iksk.second;
-  int l = is;
+  pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
+  G4int ik = iksk.first;
+  G4double sk = iksk.second;
+  G4int l = is;
   if(l == 4) l = 1; 
   if(l == 10) l = 3; 
   if(l == 5 || l == 6) l = 4; 
 
-  vector<double> sigm(5);
-  double stot = 0.;
+  vector<G4double> sigm(5);
+  G4double stot = 0.0;
   if(l == 7 || l == 14) { // pi0 P or pi0 N
-    for(int j = 0; j < 5; j++) {
-      sigm[j] = fabs(0.5*(asig[2][j][ik-1] + asig[3][j][ik-1] +
-        sk*(asig[2][j][ik] + asig[3][j][ik] - 
-	       asig[2][j][ik-1] - asig[3][j][ik-1])));
+    for(G4int j = 0; j < 5; j++) {
+      sigm[j] = fabs(0.5 * (asig[2][j][ik - 1] + asig[3][j][ik - 1] +
+        sk * (asig[2][j][ik] + asig[3][j][ik] - 
+	       asig[2][j][ik - 1] - asig[3][j][ik - 1])));
       stot += sigm[j];
     };
   }
    else {
-    for(int j = 0; j < 5; j++) {
-      sigm[j] = fabs(asig[l-1][j][ik-1] + sk*(asig[l-1][j][ik] 
-                   - asig[l-1][j][ik-1]));
+    for(G4int j = 0; j < 5; j++) {
+      sigm[j] = fabs(asig[l - 1][j][ik - 1] + sk * (asig[l - 1][j][ik] 
+                   - asig[l - 1][j][ik - 1]));
       stot += sigm[j];
     };
   };
 
-  double sl = inuclRndm();
-  double ptot = 0.;
-  int mul;
-  for(int i = 0; i < 5; i++) {
-    ptot += sigm[i]/stot;
+  G4double sl = inuclRndm();
+  G4double ptot = 0.0;
+  G4int mul;
+  for(G4int i = 0; i < 5; i++) {
+    ptot += sigm[i] / stot;
     if(sl <= ptot) {
       mul = i;
       break;
@@ -296,7 +296,7 @@ const double asig[4][6][31] = {
   };
   if(ekin > large_cut && mul == 1) mul = 2;
 #ifdef DEBUG
-  cout << " multiplicity " << mul + 2 << endl; 
+  G4cout << " multiplicity " << mul + 2 << G4endl; 
 #endif
 return mul + 2;
 
