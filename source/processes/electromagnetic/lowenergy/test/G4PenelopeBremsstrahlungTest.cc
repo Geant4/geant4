@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeBremsstrahlungTest.cc,v 1.3 2003-06-16 17:00:55 gunter Exp $
+// $Id: G4PenelopeBremsstrahlungTest.cc,v 1.4 2003-07-04 11:12:45 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -308,7 +308,7 @@ int main()
   G4ProcessManager* ProcessManager = new G4ProcessManager(realpt);
   realpt->SetProcessManager(ProcessManager);
   ProcessManager->AddProcess(bremProcess);
-  G4ForceCondition* condition=0;  //l'ho fissata a zero! E' onesto??
+  G4ForceCondition* condition; 
 
   
   //--------------
