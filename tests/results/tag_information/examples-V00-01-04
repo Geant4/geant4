@@ -1,4 +1,40 @@
-You will need to do the following in your PhysicsList:
+Some class names have changed:
+
+  G4VBarion            has been changed to G4VBaryon
+  G4VBarionConstructor has been changed to G4BaryonConstructor
+
+and the library libG4barions has been renamed to libG4baryons.
+
+Note that for the time being subdirectory names remain unchanged,
+e.g., particles/hadrons/barions.
+
+********** REQUIRED CHANGE  ************************************
+
+This REQUIRES changes in some PhysicsLists.  The changes in examples
+and tests have already been made and are included in this tag.  But in
+your own PhysicsList you might require the following change:
+
+  G4BarionConstructor pConstructor;
+  pConstructor.ConstructParticle();
+
+should become:
+
+  G4BaryonConstructor pConstructor;
+  pConstructor.ConstructParticle();
+
+Also you will need to remake the library map.  In geant4/source:
+
+  gmake
+
+but you probably will have done this anyway.
+
+*********** END OF REQUIRED CHANGE ******************************
+
+*********** OPTIONAL CHANGES ******************************
+
+You might also like to change some internally used names.  E.g., in
+exampleN02 the following changes, although not strictly necessary,
+have also been made:
 
 In .hh, change:
   virtual void ConstructBarions();
@@ -14,4 +50,4 @@ and:
 to:
   void ExN02PhysicsList::ConstructBaryons()
 
-That's it!
+*********** END OF OPTIONAL CHANGES ******************************
