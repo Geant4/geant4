@@ -606,14 +606,17 @@ G4PAIModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
     deltaTkin = 10*eV;
     G4cout<<"Set G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
   }
-  if(deltaTkin > kineticEnergy) deltaTkin = kineticEnergy;
+  if(deltaTkin > kineticEnergy && 
+     particleMass != electron_mass_c2) deltaTkin = kineticEnergy;
+  if (deltaTkin > 0.5*kineticEnergy && 
+     particleMass == electron_mass_c2) deltaTkin = 0.5*kineticEnergy;
 
   G4double deltaTotalMomentum = sqrt(deltaTkin*(deltaTkin + 2. * electron_mass_c2 ));
   G4double totalMomentum      = sqrt(pSquare);
   G4double costheta           = deltaTkin*(totalEnergy + electron_mass_c2)
                                 /(deltaTotalMomentum * totalMomentum);
   if (costheta < 0.) costheta = 0.;
-  if (costheta > +1.) costheta = +1.;
+  if (costheta > 1.) costheta = 1.;
 
     //  direction of the delta electron
   
