@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingVerbose.cc,v 1.8 2001-07-11 10:08:42 gunter Exp $
+// $Id: G4SteppingVerbose.cc,v 1.9 2001-11-07 10:57:54 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -87,41 +87,37 @@ void G4SteppingVerbose::AtRestDoItInvoked()
      for(size_t np=0; np < MAXofAtRestLoops; np++){
        size_t npGPIL = MAXofAtRestLoops-np-1;
        if( (*fSelectedAtRestDoItVector)[npGPIL] == 2 ){
-	 npt++;                
-	 ptProcManager = (*fAtRestDoItVector)[np];
-	 G4cout << "   # " << npt << " : " 
-	   << ptProcManager->GetProcessName() 
-	     << " (Forced)" << G4endl;
+	       npt++;                
+	       ptProcManager = (*fAtRestDoItVector)[np];
+	       G4cout << "   # " << npt << " : " 
+	              << ptProcManager->GetProcessName() 
+	              << " (Forced)" << G4endl;
        } else if ( (*fSelectedAtRestDoItVector)[npGPIL] == 1 ){
-	 npt++;                
-	 ptProcManager = (*fAtRestDoItVector)[np];
-	 G4cout << "   # " << npt << " : " 
-	   << ptProcManager->GetProcessName() << G4endl;
+	       npt++;                
+	       ptProcManager = (*fAtRestDoItVector)[np];
+	       G4cout << "   # " << npt << " : "  << ptProcManager->GetProcessName() << G4endl;
        }
      }
      
      G4cout << "   Generated secondries # : " << fN2ndariesAtRestDoIt << G4endl;
      
      if( fN2ndariesAtRestDoIt > 0 ){
-       G4cout << "   -- List of secondaries generated : " 
-	 << "(x,y,z,kE,t,PID) --" << G4endl; 
-       for( G4int lp1=(*fSecondary).size()-fN2ndariesAtRestDoIt; 
-	   lp1<(*fSecondary).size(); lp1++){
-	 G4cout << "      "
-		<< G4std::setw( 9)
-		<< G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length") << " "
-		<< G4std::setw( 9)
-		<< G4BestUnit((*fSecondary)[lp1]->GetPosition().y(),"Length") << " "
-		<< G4std::setw( 9)
-		<< G4BestUnit((*fSecondary)[lp1]->GetPosition().z(),"Length") << " "
-		<< G4std::setw( 9)
-		<< G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy(),"Energy") << " "
-		<< G4std::setw( 9)
-		<< G4BestUnit((*fSecondary)[lp1]->GetGlobalTime(),"Time") << " "
-		<< G4std::setw(18)
-		<< (*fSecondary)[lp1]->GetDefinition()
-	                             ->GetParticleName();
-	 G4cout << G4endl;
+       G4cout << "   -- List of secondaries generated : " << "(x,y,z,kE,t,PID) --" << G4endl; 
+       for( size_t lp1=(*fSecondary).size()-fN2ndariesAtRestDoIt;
+                   lp1<(*fSecondary).size(); lp1++) {
+         G4cout << "      "
+                << G4std::setw( 9)
+                << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length") << " "
+                << G4std::setw( 9)
+                << G4BestUnit((*fSecondary)[lp1]->GetPosition().y(),"Length") << " "
+                << G4std::setw( 9)
+                << G4BestUnit((*fSecondary)[lp1]->GetPosition().z(),"Length") << " "
+                << G4std::setw( 9)
+                << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy(),"Energy") << " "
+                << G4std::setw( 9)
+                << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime(),"Time") << " "
+                << G4std::setw(18)
+                << (*fSecondary)[lp1]->GetDefinition()->GetParticleName() << G4endl;
        }
      }
    }
@@ -139,46 +135,44 @@ void G4SteppingVerbose::AlongStepDoItAllDone()
 
    CopyState();
 
-     if(verboseLevel >= 3){ 
-        G4cout << G4endl;
-        G4cout << " >>AlongStepDoIt (after all invocations):" << G4endl;
-        G4cout << "    ++List of invoked processes " << G4endl;
- 
-        for(size_t ci=0; ci<MAXofAlongStepLoops; ci++){
-            ptProcManager = (*fAlongStepDoItVector)(ci);
-            G4cout << "      " << ci+1 << ") ";
-            if(ptProcManager != NULL){
-               G4cout << ptProcManager->GetProcessName() << G4endl;
-            }
-        }         
+   if(verboseLevel >= 3){ 
+      G4cout << G4endl;
+      G4cout << " >>AlongStepDoIt (after all invocations):" << G4endl;
+      G4cout << "    ++List of invoked processes " << G4endl;
 
-        ShowStep();
-        G4cout << G4endl;
-        G4cout << "    ++List of secondaries generated " 
+      for(size_t ci=0; ci<MAXofAlongStepLoops; ci++){
+          ptProcManager = (*fAlongStepDoItVector)(ci);
+          G4cout << "      " << ci+1 << ") ";
+          if(ptProcManager != NULL){
+             G4cout << ptProcManager->GetProcessName() << G4endl;
+          }
+      }
+
+      ShowStep();
+      G4cout << G4endl;
+      G4cout << "    ++List of secondaries generated " 
              << "(x,y,z,kE,t,PID):"
              << "  No. of secodaries = " 
              << (*fSecondary).size() << G4endl;
 
-        if((*fSecondary).size()>0){
-           for(G4int lp1=0; lp1<(*fSecondary).size(); lp1++){
-               G4cout << "      "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length") << " "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetPosition().y(),"Length") << " "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetPosition().z(),"Length") << " "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy(),"Energy") << " "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime(),"Time")  << " "
-                    << G4std::setw(18)
-                    << (*fSecondary)[lp1]->GetDefinition()
-                                         ->GetParticleName();
-               G4cout << G4endl;
-	   }
-	}
-     }
+      if((*fSecondary).size()>0){
+         for(size_t lp1=0; lp1<(*fSecondary).size(); lp1++){
+           G4cout << "      "
+                  << G4std::setw( 9)
+                  << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length")  << " "
+                  << G4std::setw( 9)
+                  << G4BestUnit((*fSecondary)[lp1]->GetPosition().y(),"Length")  << " "
+                  << G4std::setw( 9)
+                  << G4BestUnit((*fSecondary)[lp1]->GetPosition().z(),"Length")  << " "
+                  << G4std::setw( 9)
+                  << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy(),"Energy") << " "
+                  << G4std::setw( 9)
+                  << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime(),"Time")      << " "
+                  << G4std::setw(18)
+                  << (*fSecondary)[lp1]->GetDefinition()->GetParticleName()      << G4endl;
+	       }
+	    }
+   }
 }
 ////////////////////////////////////////////////////
 void G4SteppingVerbose::PostStepDoItAllDone()
@@ -191,64 +185,60 @@ void G4SteppingVerbose::PostStepDoItAllDone()
    if(fStepStatus != fPostStepDoItProc) return;
 
    if(verboseLevel >= 3){ 
-        G4int npt=0;
-        G4cout << G4endl;
-        G4cout << " **PostStepDoIt (after all invocations):" << G4endl;
-        G4cout << "    ++List of invoked processes " << G4endl;
+      G4int npt=0;
+      G4cout << G4endl;
+      G4cout << " **PostStepDoIt (after all invocations):" << G4endl;
+      G4cout << "    ++List of invoked processes " << G4endl;
 
-        for(size_t np=0; np < MAXofPostStepLoops; np++){
-	    size_t npGPIL = MAXofPostStepLoops-np-1;
-            if( (*fSelectedPostStepDoItVector)[npGPIL] == 2){
-               npt++;                
-               ptProcManager = (*fPostStepDoItVector)[np];
-               G4cout << "      " << npt << ") " 
-                    << ptProcManager->GetProcessName()  
-                    << " (Forced)" << G4endl;
-	     } else if ( (*fSelectedPostStepDoItVector)[npGPIL] == 1){
-               npt++;                
-               ptProcManager = (*fPostStepDoItVector)[np];
-               G4cout << "      " << npt << ") " 
-                    << ptProcManager->GetProcessName() << G4endl;
-	     }
-	  }
+      for(size_t np=0; np < MAXofPostStepLoops; np++){
+	      size_t npGPIL = MAXofPostStepLoops-np-1;
+        if( (*fSelectedPostStepDoItVector)[npGPIL] == 2){
+           npt++;                
+           ptProcManager = (*fPostStepDoItVector)[np];
+           G4cout << "      " << npt << ") " 
+                  << ptProcManager->GetProcessName()  
+                  << " (Forced)" << G4endl;
+	      } else if ( (*fSelectedPostStepDoItVector)[npGPIL] == 1){
+             npt++;                
+             ptProcManager = (*fPostStepDoItVector)[np];
+             G4cout << "      " << npt << ") " << ptProcManager->GetProcessName() << G4endl;
+	      }
+	    }
 
-        ShowStep();
-        G4cout << G4endl;
-        G4cout << "    ++List of secondaries generated " 
+      ShowStep();
+      G4cout << G4endl;
+      G4cout << "    ++List of secondaries generated " 
              << "(x,y,z,kE,t,PID):"
              << "  No. of secodaries = " 
              << (*fSecondary).size() << G4endl;
-        G4cout << "      [Note]Secondaries from AlongStepDoIt included."
-             << G4endl; 
+      G4cout << "      [Note]Secondaries from AlongStepDoIt included." << G4endl; 
 
-        if((*fSecondary).size()>0){
-	  for(G4int lp1=0; lp1<(*fSecondary).size(); lp1++){
-               G4cout << "      "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length") << " "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetPosition().y() , "Length") << " "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetPosition().z() , "Length") << " "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy() , "Energy") << " "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime() , "Time") << " "
-                    << G4std::setw(18)
-                    << (*fSecondary)[lp1]->GetDefinition()
-                                         ->GetParticleName();
-               G4cout << G4endl;
-	     }
-	}
-      }
+      if((*fSecondary).size()>0){
+	      for(size_t lp1=0; lp1<(*fSecondary).size(); lp1++){
+          G4cout  << "      "
+                  << G4std::setw( 9)
+                  << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length") << " "
+                  << G4std::setw( 9)
+                  << G4BestUnit((*fSecondary)[lp1]->GetPosition().y() , "Length") << " "
+                  << G4std::setw( 9)
+                  << G4BestUnit((*fSecondary)[lp1]->GetPosition().z() , "Length") << " "
+                  << G4std::setw( 9)
+                  << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy() , "Energy") << " "
+                  << G4std::setw( 9)
+                  << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime() , "Time") << " "
+                  << G4std::setw(18)
+                  << (*fSecondary)[lp1]->GetDefinition()->GetParticleName() << G4endl;
+	      }
+	    }
+   }
+}
 
- }
 /////////////////////////////////////////
 void G4SteppingVerbose::StepInfo()
 /////////////////////////////////////////
 {
   CopyState();
-  
+ 
   G4int prec = G4cout.precision(3);
 
   if( verboseLevel >= 1 ){
@@ -257,96 +247,76 @@ void G4SteppingVerbose::StepInfo()
       G4cout << G4endl;
 #ifdef G4_USE_G4BESTUNIT_FOR_VERBOSE      
       G4cout << G4std::setw( 5) << "#Step#" << " "
-	     << G4std::setw( 8) << "X"      << "     "
-	     << G4std::setw( 8) << "Y"      << "     "  
+	     << G4std::setw( 8) << "X"      << "     " << G4std::setw( 8) << "Y"      << "     "  
 	     << G4std::setw( 8) << "Z"      << "     "
-	     << G4std::setw( 9) << "KineE"  << "     "
-	     << G4std::setw( 8) << "dE"     << "     "  
-	     << G4std::setw(12) << "StepLeng"   << " "  
-	     << G4std::setw(12) << "TrackLeng"  << " "
-	     << G4std::setw(12) << "NextVolume" << " "
-	     << G4std::setw( 8) << "ProcName"   << G4endl;	       
+	     << G4std::setw( 9) << "KineE"  << "     " << G4std::setw( 8) << "dE"     << "     "  
+	     << G4std::setw(12) << "StepLeng"   << " " << G4std::setw(12) << "TrackLeng"  << " "
+	     << G4std::setw(12) << "NextVolume" << " " << G4std::setw( 8) << "ProcName"   << G4endl;	       
 #else
-      G4cout << G4std::setw( 5) << "#Step#"     << " "
-	     << G4std::setw( 8) << "X(mm)"      << " "
-	     << G4std::setw( 8) << "Y(mm)"      << " "  
+      G4cout << G4std::setw( 5) << "#Step#"      << " "
+	     << G4std::setw( 8) << "X(mm)"      << " " << G4std::setw( 8) << "Y(mm)"      << " "  
 	     << G4std::setw( 8) << "Z(mm)"      << " "
-	     << G4std::setw( 9) << "KinE(MeV)"  << " "
-	     << G4std::setw( 8) << "dE(MeV)"    << " "  
-	     << G4std::setw( 8) << "StepLeng"   << " "  
-	     << G4std::setw( 9) << "TrackLeng"  << " "  
-	     << G4std::setw(11) << "NextVolume" << " "
-	     << G4std::setw( 8) << "ProcName"   << G4endl;
+	     << G4std::setw( 9) << "KinE(MeV)"  << " " << G4std::setw( 8) << "dE(MeV)"    << " "  
+	     << G4std::setw( 8) << "StepLeng"   << " " << G4std::setw( 9) << "TrackLeng"  << " "  
+	     << G4std::setw(11) << "NextVolume" << " " << G4std::setw( 8) << "ProcName"   << G4endl;
 #endif	     
     }
-
     G4cout << G4std::setw( 5) << fTrack->GetCurrentStepNumber() << " "
-	   << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().x() , "Length") << " "
-	   << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().y() , "Length") << " "
-	   << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().z() , "Length") << " "
-	   << G4std::setw( 9) << G4BestUnit(fTrack->GetKineticEnergy() , "Energy") << " "
-	   << G4std::setw( 8) << G4BestUnit(fStep->GetTotalEnergyDeposit(), "Energy") << " "
-	   << G4std::setw( 8) << G4BestUnit(fStep->GetStepLength() , "Length") << " "
-	   << G4std::setw( 9) << G4BestUnit(fTrack->GetTrackLength() , "Length") << " ";
+	         << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().x() , "Length") << " "
+	         << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().y() , "Length") << " "
+	         << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().z() , "Length") << " "
+	         << G4std::setw( 9) << G4BestUnit(fTrack->GetKineticEnergy() , "Energy") << " "
+	         << G4std::setw( 8) << G4BestUnit(fStep->GetTotalEnergyDeposit(), "Energy") << " "
+	         << G4std::setw( 8) << G4BestUnit(fStep->GetStepLength() , "Length") << " "
+	         << G4std::setw( 9) << G4BestUnit(fTrack->GetTrackLength() , "Length") << " ";
 
-    // if( fStepStatus != fWorldBoundary){ 
+    // Put cut comment here
     if( fTrack->GetNextVolume() != 0 ) { 
       G4cout << G4std::setw(11) << fTrack->GetNextVolume()->GetName() << " ";
     } else {
       G4cout << G4std::setw(11) << "OutOfWorld" << " ";
     }
-
     if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
-      G4cout << fStep->GetPostStepPoint()->GetProcessDefinedStep()
-	->GetProcessName();
+      G4cout << fStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
     } else {
       G4cout << "User Limit";
     }
-
     G4cout << G4endl;
-
-    if( verboseLevel == 2 ){
-      G4int tN2ndariesTot = fN2ndariesAtRestDoIt +
-	                    fN2ndariesAlongStepDoIt +
-	                    fN2ndariesPostStepDoIt;
+    if( verboseLevel == 2 )
+    {
+      G4int tN2ndariesTot = fN2ndariesAtRestDoIt + fN2ndariesAlongStepDoIt + fN2ndariesPostStepDoIt;
       if(tN2ndariesTot>0){
-	G4cout << "    :----- List of 2ndaries - "
-	       << "#SpawnInStep=" << G4std::setw(3) << tN2ndariesTot 
-	       << "(Rest=" << G4std::setw(2) << fN2ndariesAtRestDoIt
-	       << ",Along=" << G4std::setw(2) << fN2ndariesAlongStepDoIt
-	       << ",Post="  << G4std::setw(2) << fN2ndariesPostStepDoIt
-	       << "), "
-	       << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).size()
-	       << " ---------------"
-	       << G4endl;
+        G4cout << "    :----- List of 2ndaries - "
+	             << "#SpawnInStep=" << G4std::setw(3) << tN2ndariesTot 
+	             << "(Rest=" << G4std::setw(2) << fN2ndariesAtRestDoIt
+	             << ",Along=" << G4std::setw(2) << fN2ndariesAlongStepDoIt
+	             << ",Post="  << G4std::setw(2) << fN2ndariesPostStepDoIt
+	             << "), "
+	             << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).size()
+	             << " ---------------"
+	             << G4endl;
 
-	for(G4int lp1=(*fSecondary).size()-tN2ndariesTot; 
-                        lp1<(*fSecondary).size(); lp1++){
-	  G4cout << "    : "
-		 << G4std::setw( 9)
-		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length")<< " "
-		 << G4std::setw( 9)
-		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().y() , "Length")<< " "
-		 << G4std::setw( 9)
-		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().z() , "Length") << " "
-		 << G4std::setw( 9)
-		 << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy() , "Energy")<< " "
-		 << G4std::setw(18)
-		 << (*fSecondary)[lp1]->GetDefinition()
- 	                              ->GetParticleName();
-	  G4cout << G4endl;
-	}
-              
-	G4cout << "    :-----------------------------"
-	       << "----------------------------------"
-	       << "-- EndOf2ndaries Info ---------------"
-	       << G4endl;
+	      for(size_t lp1=(*fSecondary).size()-tN2ndariesTot; lp1<(*fSecondary).size(); lp1++){
+	        G4cout << "    : "
+		             << G4std::setw( 9)
+		             << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length")<< " "
+		             << G4std::setw( 9)
+		             << G4BestUnit((*fSecondary)[lp1]->GetPosition().y() , "Length")<< " "
+		             << G4std::setw( 9)
+		             << G4BestUnit((*fSecondary)[lp1]->GetPosition().z() , "Length") << " "
+		             << G4std::setw( 9)
+		             << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy() , "Energy")<< " "
+		             << G4std::setw(18)
+		             << (*fSecondary)[lp1]->GetDefinition()->GetParticleName() << G4endl;
+	      }
+	      G4cout << "    :-----------------------------" << "----------------------------------"
+	             << "-- EndOf2ndaries Info ---------------"  << G4endl;
       }
     }
-    
   }
   G4cout.precision(prec);
 }
+// Put cut comment here if( fStepStatus != fWorldBoundary){ 
 
 ////////////////////////////////////////////
 void G4SteppingVerbose::DPSLStarted()
@@ -355,9 +325,7 @@ void G4SteppingVerbose::DPSLStarted()
   CopyState();
 
   if( verboseLevel > 5 ){
-    G4cout << G4endl;
-    G4cout << " >>DefinePhysicalStepLength (List of proposed StepLengths): "
-      << G4endl;
+    G4cout << G4endl << " >>DefinePhysicalStepLength (List of proposed StepLengths): "  << G4endl;
   }
 }
 //////////////////////////////////////////////
@@ -368,11 +336,9 @@ void G4SteppingVerbose::DPSLUserLimit()
 
   if( verboseLevel > 5 ){
     G4cout << G4endl << G4endl;
-    G4cout << "=== Defined Physical Step Length (DPSL)" << G4endl;
-    G4cout << "    ++ProposedStep(UserLimit) = " 
-      << G4std::setw( 9) << physIntLength
-	<< " : ProcName = User defined maximum allowed Step"
-	  << G4endl;
+    G4cout << "=== Defined Physical Step Length (DPSL)"             << G4endl;
+    G4cout << "    ++ProposedStep(UserLimit) = " << G4std::setw( 9) << physIntLength
+	         << " : ProcName = User defined maximum allowed Step"     << G4endl;
   }
 }
 /////////////////////////////////////////////
@@ -382,11 +348,8 @@ void G4SteppingVerbose::DPSLPostStep()
   CopyState();
 
   if( verboseLevel > 5 ){
-    G4cout << "    ++ProposedStep(PostStep ) = " 
-      << G4std::setw( 9) << physIntLength
-	<< " : ProcName = "
-	  << fCurrentProcess->GetProcessName() 
-            << " (";
+    G4cout << "    ++ProposedStep(PostStep ) = " << G4std::setw( 9) << physIntLength
+           << " : ProcName = " << fCurrentProcess->GetProcessName() << " (";
     if(fCondition==ExclusivelyForced){
       G4cout << "ExclusivelyForced)" << G4endl;
     }
@@ -437,35 +400,35 @@ G4int prec = G4cout.precision(3);
 #ifdef G4_USE_G4BESTUNIT_FOR_VERBOSE
     G4cout << G4std::setw( 5) << "Step#"  << " "
            << G4std::setw( 8) << "X"      << "     "
-	   << G4std::setw( 8) << "Y"      << "     "  
-	   << G4std::setw( 8) << "Z"      << "     "
-	   << G4std::setw( 9) << "KineE"  << "     "
-	   << G4std::setw( 8) << "dE"     << "     "  
-	   << G4std::setw(12) << "StepLeng"   << " "  
-	   << G4std::setw(12) << "TrackLeng"  << " "
-	   << G4std::setw(12) << "NextVolume" << " "
-	   << G4std::setw( 8) << "ProcName"   << G4endl;	     
+	         << G4std::setw( 8) << "Y"      << "     "  
+	         << G4std::setw( 8) << "Z"      << "     "
+	         << G4std::setw( 9) << "KineE"  << "     "
+	         << G4std::setw( 8) << "dE"     << "     "  
+	         << G4std::setw(12) << "StepLeng"   << " "  
+	         << G4std::setw(12) << "TrackLeng"  << " "
+	         << G4std::setw(12) << "NextVolume" << " "
+	         << G4std::setw( 8) << "ProcName"   << G4endl;	     
 #else
     G4cout << G4std::setw( 5) << "Step#"      << " "
-	   << G4std::setw( 8) << "X(mm)"      << " "
-	   << G4std::setw( 8) << "Y(mm)"      << " "  
-	   << G4std::setw( 8) << "Z(mm)"      << " "
-	   << G4std::setw( 9) << "KinE(MeV)"  << " "
-	   << G4std::setw( 8) << "dE(MeV)"    << " "  
-	   << G4std::setw( 8) << "StepLeng"   << " "  
-	   << G4std::setw( 9) << "TrackLeng"  << " "
-	   << G4std::setw(11) << "NextVolume" << " "
-	   << G4std::setw( 8) << "ProcName"   << G4endl;	     
+	         << G4std::setw( 8) << "X(mm)"      << " "
+	         << G4std::setw( 8) << "Y(mm)"      << " "  
+	         << G4std::setw( 8) << "Z(mm)"      << " "
+	         << G4std::setw( 9) << "KinE(MeV)"  << " "
+	         << G4std::setw( 8) << "dE(MeV)"    << " "  
+	         << G4std::setw( 8) << "StepLeng"   << " "  
+	         << G4std::setw( 9) << "TrackLeng"  << " "
+	         << G4std::setw(11) << "NextVolume" << " "
+	         << G4std::setw( 8) << "ProcName"   << G4endl;	     
 #endif
 
     G4cout << G4std::setw( 5) << fTrack->GetCurrentStepNumber() << " "
-	   << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().x(),"Length")<< " "
-	   << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().y(),"Length") << " "
-	   << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().z(),"Length")<< " "
-	   << G4std::setw( 9) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")<< " "
-	   << G4std::setw( 8) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy") << " "
-	   << G4std::setw( 8) << G4BestUnit(fStep->GetStepLength(),"Length")<< " "
-	   << G4std::setw( 9) << G4BestUnit(fTrack->GetTrackLength(),"Length") << " ";
+	         << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().x(),"Length")<< " "
+	         << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().y(),"Length") << " "
+	         << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().z(),"Length")<< " "
+	         << G4std::setw( 9) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")<< " "
+	         << G4std::setw( 8) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy") << " "
+	         << G4std::setw( 8) << G4BestUnit(fStep->GetStepLength(),"Length")<< " "
+	         << G4std::setw( 9) << G4BestUnit(fTrack->GetTrackLength(),"Length") << " ";
 
     if(fTrack->GetNextVolume()){
       G4cout << G4std::setw(11) << fTrack->GetNextVolume()->GetName() << " ";
@@ -481,94 +444,86 @@ void G4SteppingVerbose::AlongStepDoItOneByOne()
 //////////////////////////////////////////////////////
 { 
   CopyState();
-    if(verboseLevel >= 4){ 
-        G4cout << G4endl;
-        G4cout << " >>AlongStepDoIt (process by process): "
-             << "   Process Name = " 
-             << fCurrentProcess->GetProcessName() << G4endl;
+  if(verboseLevel >= 4){ 
+    G4cout << G4endl;
+    G4cout << " >>AlongStepDoIt (process by process): "
+           << "   Process Name = " 
+           << fCurrentProcess->GetProcessName() << G4endl;
 
-        ShowStep();
-        G4cout << "          "
-	       << "!Note! Safety of PostStep is only valid "
-	       << "after all DoIt invocations."
-	       << G4endl; 
+    ShowStep();
+    G4cout << "          "
+	         << "!Note! Safety of PostStep is only valid "
+	         << "after all DoIt invocations."
+	         << G4endl; 
 
-        VerboseParticleChange();    
-        G4cout << G4endl;
+    VerboseParticleChange();    
+    G4cout << G4endl;
 
-        G4cout << "    ++List of secondaries generated " 
-	       << "(x,y,z,kE,t,PID):"
-	       << "  No. of secodaries = " 
-	       << fN2ndariesAlongStepDoIt << G4endl;
+    G4cout << "    ++List of secondaries generated " 
+	         << "(x,y,z,kE,t,PID):"
+	         << "  No. of secodaries = " 
+	         << fN2ndariesAlongStepDoIt << G4endl;
 
-        if(fN2ndariesAlongStepDoIt>0){
-           for(G4int lp1=(*fSecondary).size()-fN2ndariesAlongStepDoIt; 
-                     lp1<(*fSecondary).size(); lp1++){
-               G4cout << "      "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length")<< " "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetPosition().y() , "Length")<< " "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetPosition().z() , "Length")<< " "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy() , "Energy")<< " "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime() , "Time")<< " "
-                    << G4std::setw(18)
-                    << (*fSecondary)[lp1]->GetDefinition()
-                                         ->GetParticleName();
-               G4cout << G4endl;
-	   }
-	}
-     }
-
+    if(fN2ndariesAlongStepDoIt>0){
+       for(size_t lp1=(*fSecondary).size()-fN2ndariesAlongStepDoIt; lp1<(*fSecondary).size(); lp1++){
+          G4cout  << "      "
+                  << G4std::setw( 9)
+                  << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length")<< " "
+                  << G4std::setw( 9)
+                  << G4BestUnit((*fSecondary)[lp1]->GetPosition().y() , "Length")<< " "
+                  << G4std::setw( 9)
+                  << G4BestUnit((*fSecondary)[lp1]->GetPosition().z() , "Length")<< " "
+                  << G4std::setw( 9)
+                  << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy() , "Energy")<< " "
+                  << G4std::setw( 9)
+                  << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime() , "Time")<< " "
+                  << G4std::setw(18)
+                  << (*fSecondary)[lp1]->GetDefinition()->GetParticleName() << G4endl;
+	     }
+	  }
+  }
 }
 //////////////////////////////////////////////////////
 void G4SteppingVerbose::PostStepDoItOneByOne()
 //////////////////////////////////////////////////////
 {
   CopyState();
-     if(fStepStatus != fPostStepDoItProc) return;
+  if(fStepStatus != fPostStepDoItProc) return;
 
-     if(verboseLevel >= 4){ 
-        G4cout << G4endl;
-        G4cout << " >>PostStepDoIt (process by process): "
-             << "   Process Name = " 
-             << fCurrentProcess->GetProcessName() << G4endl;
+  if(verboseLevel >= 4){ 
+    G4cout << G4endl;
+    G4cout << " >>PostStepDoIt (process by process): "
+           << "   Process Name = " 
+           << fCurrentProcess->GetProcessName() << G4endl;
 
-        ShowStep();
-        G4cout << G4endl;
-        VerboseParticleChange();    
-        G4cout << G4endl;
-         
-        G4cout << "    ++List of secondaries generated " 
-             << "(x,y,z,kE,t,PID):"
-             << "  No. of secodaries = " 
-             << fN2ndariesPostStepDoIt << G4endl;
+    ShowStep();
+    G4cout << G4endl;
+    VerboseParticleChange();    
+    G4cout << G4endl;
 
-        if(fN2ndariesPostStepDoIt>0){
-           for(G4int lp1=(*fSecondary).size()-fN2ndariesPostStepDoIt; 
-                     lp1<(*fSecondary).size(); lp1++){
-               G4cout << "      "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length")<< " "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetPosition().y(), "Length") << " "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetPosition().z(), "Length") << " "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy(), "Energy") << " "
-                    << G4std::setw( 9)
-                    << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime(), "Time") << " "
-                    << G4std::setw(18)
-                    << (*fSecondary)[lp1]->GetDefinition()
-                                         ->GetParticleName();
-               G4cout << G4endl;
-	   }
-	}
-     }
+    G4cout << "    ++List of secondaries generated " 
+           << "(x,y,z,kE,t,PID):"
+           << "  No. of secodaries = " 
+           << fN2ndariesPostStepDoIt << G4endl;
 
+    if(fN2ndariesPostStepDoIt>0){
+      for(size_t lp1=(*fSecondary).size()-fN2ndariesPostStepDoIt; lp1<(*fSecondary).size(); lp1++){
+         G4cout << "      "
+                << G4std::setw( 9)
+                << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length")<< " "
+                << G4std::setw( 9)
+                << G4BestUnit((*fSecondary)[lp1]->GetPosition().y(), "Length") << " "
+                << G4std::setw( 9)
+                << G4BestUnit((*fSecondary)[lp1]->GetPosition().z(), "Length") << " "
+                << G4std::setw( 9)
+                << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy(), "Energy") << " "
+                << G4std::setw( 9)
+                << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime(), "Time") << " "
+                << G4std::setw(18)
+                << (*fSecondary)[lp1]->GetDefinition()->GetParticleName() << G4endl;
+	    }
+    }
+  }
 }
 
 
@@ -863,14 +818,12 @@ void G4SteppingVerbose::ShowStep() const
         if( fStep->GetPreStepPoint()->GetProcessDefinedStep() == NULL ){
  	   G4cout << G4std::setw(20) << "Undefined";
         } else {
-  	   G4cout << G4std::setw(20) << fStep->GetPreStepPoint()->GetProcessDefinedStep()
-                                             ->GetProcessName();
+  	   G4cout << G4std::setw(20) << fStep->GetPreStepPoint()->GetProcessDefinedStep()->GetProcessName();
         }
         if( fStep->GetPostStepPoint()->GetProcessDefinedStep() == NULL){
   	   G4cout << G4std::setw(20) << "Undefined";
         } else {
- 	   G4cout << G4std::setw(20) << fStep->GetPostStepPoint()->GetProcessDefinedStep()
-                                              ->GetProcessName(); 
+ 	   G4cout << G4std::setw(20) << fStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName(); 
         }
 
    G4cout << G4endl;
