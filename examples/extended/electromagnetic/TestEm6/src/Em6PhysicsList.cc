@@ -160,6 +160,7 @@ void Em6PhysicsList::ConstructProcess()
 #include "G4MuPairProduction.hh"
 
 #include "G4hIonisation.hh"
+#include "G4ionIonisation.hh"
 #include "G4hLowEnergyIonisation.hh"
 #include "G4ionLowEnergyIonisation.hh"
 
@@ -224,18 +225,18 @@ void Em6PhysicsList::ConstructEM()
       G4cout << "Hadronic processes for " << particleName << G4endl; 
 
       // Standard ionisation
-      // G4hIonisation* hIon = new G4hIonisation() ;
+      //       G4hIonisation* hIon = new G4hIonisation() ;
 
       // Standard ionisation with low energy extantion
       // G4ionLowEnergyIonisation* hIon = new G4ionLowEnergyIonisation() ;
       //    hIon->SetNuclearStoppingOff() ;
-         G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
-         hIon->SetNuclearStoppingOff() ;
+      G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
+      hIon->SetNuclearStoppingOff() ;
        //hIon->SetNuclearStoppingOn() ;
 
        //hIon->SetStoppingPowerTableName("Ziegler1977He") ;
        //hIon->SetStoppingPowerTableName("Ziegler1977H") ;
-       //  hIon->SetStoppingPowerTableName("ICRU_R49p") ;
+         hIon->SetStoppingPowerTableName("ICRU_R49p") ;
        //hIon->SetStoppingPowerTableName("ICRU_R49He") ;
        //hIon->SetStoppingPowerTableName("ICRU_R49PowersHe") ;
 
@@ -259,17 +260,18 @@ void Em6PhysicsList::ConstructEM()
       G4cout << "Ionic processes for " << particleName << G4endl; 
 
       // Standard ionisation
-      // G4hIonisation* hIon = new G4ionIonisation() ;
+      // G4ionIonisation* iIon = new G4ionIonisation() ;
 
       // Standard ionisation with low energy extantion
-        G4ionLowEnergyIonisation* iIon = new G4ionLowEnergyIonisation() ;
-        iIon->SetNuclearStoppingOff() ;
-      //iIon->SetNuclearStoppingOn() ;
-        iIon->SetIonDefinition(particle) ;
+      //  G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
+      G4ionLowEnergyIonisation* iIon = new G4ionLowEnergyIonisation() ;
+      iIon->SetNuclearStoppingOff() ;
+      //  iIon->SetNuclearStoppingOn() ;
+      iIon->SetIonDefinition(particle) ;
 
       //iIon->SetStoppingPowerTableName("Ziegler1977He") ;
       //iIon->SetStoppingPowerTableName("Ziegler1977H") ;
-        iIon->SetStoppingPowerTableName("ICRU_R49p") ;
+      iIon->SetStoppingPowerTableName("ICRU_R49p") ;
       //iIon->SetStoppingPowerTableName("ICRU_R49He") ;
       //iIon->SetStoppingPowerTableName("ICRU_R49PowersHe") ;
 

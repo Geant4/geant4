@@ -96,6 +96,7 @@ int main(int argc,char** argv) {
  #endif
  
   delete runManager;
+  G4cout << "TestEm6 is finished!!!" << G4endl;
 
   return 0;
 }

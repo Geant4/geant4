@@ -1,0 +1,298 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                  (07-Dec-99)
+             Copyright : Geant4 Collaboration
+**********************************************
+G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
+
+***** Table : Nb of materials = 13 *****
+
+ Material: Beryllium     density:  1.848 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  35.267 cm 
+   --->  Element: Beryllium      Z =  4.0   N =   9.0   A =   9.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Aluminum     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
+   --->  Element: Aluminum      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:   Carbon     density:  2.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  21.348 cm 
+   --->  Element:   Carbon      Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:  Silicon     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
+   --->  Element:  Silicon      Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
+   --->  Element: liquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
+   --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:   Copper     density:  8.960 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.436 cm 
+   --->  Element:   Copper      Z = 29.0   N =  63.5   A =  63.55 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Gold     density: 19.320 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.344 mm 
+   --->  Element:     Gold      Z = 79.0   N = 197.0   A = 196.97 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
+   --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:    Water H_2O   density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material:  Methane CH_4   density:  0.667 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 696.375 m  
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.19 %  Abundance  80.00 %
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass:  74.81 %  Abundance  20.00 %
+
+ Material: Graphite Graphite   density:  2.265 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.834 cm 
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:      Air     density:  1.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 367.858 m  
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+
+
+ The  WORLD   is made of 50 cm  of Air. The transverse size (YZ) of the world is 12 cm 
+ The ABSORBER is made of 250 items of 1 mm  of Water. The transverse size (YZ) is 10 cm 
+ X position of the middle of the absorber 0 fm 
+G4VUserPhysicsList::Construct()
+Construct particles 
+Construct processes 
+Ionic processes for IonAr40
+New ion with Q = 18; MassR = 0.025
+Ionic processes for IonC12
+New ion with Q = 6; MassR = 0.084
+Ionic processes for IonFe56
+New ion with Q = 26; MassR = 0.018
+Ionic processes for alpha
+New ion with Q = 2; MassR = 0.25
+Hadronic processes for anti_proton
+Ionic processes for deuteron
+New ion with Q = 1; MassR = 0.5
+Hadronic processes for kaon+
+Hadronic processes for kaon-
+Hadronic processes for pi+
+Hadronic processes for pi-
+Hadronic processes for proton
+Em6PhysicsList::SetCuts:CutLength : 1 mm 
+Set cuts for all particles! 
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+Set cuts for gamma
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+Set cuts for e-
+
+annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+Set cuts for e+
+Set cuts for mu-
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+MuIoni:  knock-on electron cross sections .
+          Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+Set cuts for mu+
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+hLowEIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 10 eV  to 1e+02 TeV  in 150 bins.
+        Low energy losses approximation is taken from  ICRU_R49p
+        from 1 keV  to 2 MeV .
+        Parametrization of the Barkas effect is switched on.
+Set cuts for proton
+Set cuts for anti_proton
+G4VUserPhysicsList::SetCutValueForOthers   :1[mm]
+Set cuts for IonAr40
+Set cuts for IonC12
+Set cuts for IonFe56
+Set cuts for alpha
+Set cuts for anti_nu_e
+Set cuts for anti_nu_mu
+Set cuts for chargedgeantino
+Set cuts for deuteron
+Set cuts for geantino
+Set cuts for kaon+
+Set cuts for kaon-
+Set cuts for nu_e
+Set cuts for nu_mu
+Set cuts for pi+
+Set cuts for pi-
+Set cuts for pi0
+============= The cut Energy ==============================
+                            gamma              e-             mu-          proton         neutron    
+Cut in range                  1 mm            1 mm            1 mm            1 mm             
+Cut in energy
+          Beryllium        1.99 keV         466 keV        4.28 MeV        11.5 MeV            
+           Aluminum        6.89 keV         597 keV        5.02 MeV        13.1 MeV            
+             Carbon        3.14 keV         521 keV        4.63 MeV        12.3 MeV            
+            Silicon        6.89 keV         541 keV        4.72 MeV        12.2 MeV            
+        liquidArgon        6.18 keV         343 keV        3.24 MeV        8.32 MeV            
+               Iron        20.8 keV        1.28 MeV        8.52 MeV          22 MeV            
+             Copper        24.6 keV         1.4 MeV        8.95 MeV          23 MeV            
+               Gold         111 keV        2.28 MeV        11.7 MeV        29.2 MeV            
+               Lead         101 keV        1.38 MeV        8.52 MeV        20.9 MeV            
+              Water         2.9 keV         347 keV        3.39 MeV        8.95 MeV            
+            Methane         990 eV          990 eV         39.8 keV        82.2 keV            
+           Graphite        3.29 keV         568 keV        4.96 MeV        13.1 MeV            
+                Air         990 eV          990 eV         39.8 keV          59 keV            
+===================================================
+#
+# Macro file for the initialization phase of "TestEm6.cc"
+#
+# It creates the default geometry (simple absorber box) 
+#
+#/control/verbose 2
+#control/saveHistory
+#/step/verbose 2
+#/tracking/verbose 2
+#/stepping/verbose 2
+#/event/verbose 2
+#
+#/calor/setAbsMat Silicon   
+#/calor/setAbsThick 50. mum  
+#/calor/setAbsYZ 10. cm
+#/calor/update
+#/calor/cutG 100.0 micrometer
+#/calor/cutE 100.0 micrometer
+#  hist file name
+#/plots/sethistName p.plot 
+#/run/initialize
+#/run/particle/dumpCutValues
+#/event/drawTracks none
+#
+# Gun with Protons 10 MeV
+#
+#
+### Run 0 start.
+Start closing geometry.
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=56s Real=67s Sys=10s
+ ================== run summary =====================
+ end of Run TotNbofEvents = 1000
+    mean charged track length   in absorber=0.0147529 +- 0.00406827  mm  
+
+            mean energy deposit in absorber=0.00282675 +- 0.00076118  MeV 
+
+ mean number of steps in absorber (charged) =278.625 +- 1.50063      
+ mean number of steps in absorber (neutral) =305.527 +- 6.45728      
+
+   mean number of charged secondaries = 4.059 +- 0.0643857
+
+   mean number of neutral secondaries = 4.234 +- 0.0639941
+
+   mean number of e-s =4.039  and e+s =0.02
+
+(number) transmission coeff=0.084  reflection coeff=0.051
+
+#
+# Gun with antiProtons 10 MeV
+#
+#/plots/sethistName antip.plot 
+### Run 1 start.
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=56s Real=66s Sys=10s
+ ================== run summary =====================
+ end of Run TotNbofEvents = 1000
+    mean charged track length   in absorber=0.00913263 +- 0.00344976  mm  
+
+            mean energy deposit in absorber=0.00178667 +- 0.000625494  MeV 
+
+ mean number of steps in absorber (charged) =281.93 +- 1.38131      
+ mean number of steps in absorber (neutral) =297.295 +- 6.09923      
+
+   mean number of charged secondaries = 4.075 +- 0.0645087
+
+   mean number of neutral secondaries = 4.12 +- 0.0617705
+
+   mean number of e-s =4.048  and e+s =0.027
+
+(number) transmission coeff=0.085  reflection coeff=0.054
+
+#
+# Gun with IonC12 100 MeV
+#
+#/plots/sethistName ionc12.plot 
+### Run 2 start.
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=55s Real=66s Sys=9.8s
+ ================== run summary =====================
+ end of Run TotNbofEvents = 1000
+    mean charged track length   in absorber=0.0169369 +- 0.00716996  mm  
+
+            mean energy deposit in absorber=0.00305399 +- 0.001254  MeV 
+
+ mean number of steps in absorber (charged) =278.204 +- 1.47858      
+ mean number of steps in absorber (neutral) =292.72 +- 6.18325      
+
+   mean number of charged secondaries = 4.094 +- 0.0649089
+
+   mean number of neutral secondaries = 4.081 +- 0.0605181
+
+   mean number of e-s =4.076  and e+s =0.018
+
+(number) transmission coeff=0.082  reflection coeff=0.043
+
+#
+G4 kernel has come to Quit state.
+Deletion of G4 kernel class start.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+G4SDManager deleted.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManager is deleting.
+TestEm6 is finished!!!
