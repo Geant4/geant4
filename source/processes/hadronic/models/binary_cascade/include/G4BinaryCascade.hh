@@ -48,6 +48,9 @@
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
 
+#include "G4BCDecay.hh"
+#include "G4BCAction.hh"
+
 class G4CollisionManager;
 
 class G4Track;
@@ -126,7 +129,8 @@ private:
 
   G4ExcitationHandler * theExcitationHandler;
   G4CollisionManager * theCollisionMgr;
-  G4VScatterer * theScatterer;
+
+  std::vector<G4BCAction *> theImR;
   G4VFieldPropagation * thePropagator;
   G4double theCurrentTime;
   G4double theCutOnP;
@@ -139,6 +143,8 @@ private:
   G4bool thePrimaryEscape;
   G4ParticleDefinition * thePrimaryType;
   G4ThreeVector theMomentumTransfer;
+  
+  
 
 };
 
