@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.cc,v 1.11 2003-11-08 03:26:33 japost Exp $
+// $Id: G4FieldManager.cc,v 1.12 2003-11-08 03:44:52 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -88,5 +88,17 @@ G4FieldManager::CreateChordFinder(G4MagneticField *detectorMagField)
       delete fChordFinder;
    fChordFinder= new G4ChordFinder( detectorMagField );
    fAllocatedChordFinder= true;
+}
+
+G4bool G4FieldManager::SetDetectorField(G4Field *pDetectorField)
+{
+   fDetectorField= pDetectorField;
+
+   if ( pDetectorField )
+     fFieldChangesEnergy= pDetectorField->DoesFieldChangeEnergy();
+   else
+     fFieldChangesEnergy= false;   //  No field 
+
+   return false;
 }
 
