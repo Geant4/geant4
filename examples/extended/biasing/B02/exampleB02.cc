@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB02.cc,v 1.9 2002-05-31 11:46:23 dressel Exp $
+// $Id: exampleB02.cc,v 1.10 2002-07-11 08:12:22 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,12 +47,12 @@
 #include "B02ScoringDetectorConstruction.hh"
 
 // Files specific for scoring 
-#include "B02Scorer.hh"
-#include "G4Sigma.hh"
+#include "G4StandardScorer.hh"
 #include "G4ParallelScoreSampler.hh"
 
-// helper function for print out
-G4std::string FillString(const G4std::string &name, char c, G4int n, G4bool back = true);
+// table for scores
+#include "G4StandardScoreTable.hh"
+
 
 int main(int argc, char **argv)
 {  
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
   B02ScoringDetectorConstruction scoringdetector;
   
   // create scorer and sampler to score neutrons in the "scoring" detector
-  B02Scorer pScorer;
+  G4StandardScorer pScorer;
   G4ParallelScoreSampler pmgr(*(scoringdetector.Construct()), 
 			      "neutron", pScorer);
   pmgr.Initialize();
@@ -92,79 +92,12 @@ int main(int argc, char **argv)
   *myout << pScorer << G4endl;
   *myout << "----------------------------------------------"  << G4endl;
 
-  // print some exclusive numbers
+  // print a table
 
-  // head line
-  G4int FieldName = 25;
-  G4int FieldValue = 12;
-  G4std::string vname = FillString("Volume name", ' ', FieldName+1);
-  *myout << vname << '|';
-  vname = FillString(" AV E/Track ", ' ', FieldValue+1, false);
-  *myout << vname << '|';
-  vname = FillString(" sigma", ' ', FieldValue+1);
-  *myout << vname << '|';
-  vname = FillString("Coll_Ent.Tr", ' ', FieldValue+1, false);
-  *myout << vname << '|';
-  *myout << G4endl;
-
-  const G4PMapPtkTallys &m = pScorer.GetMapPtkTallys();
-  for (G4PMapPtkTallys::const_iterator mit = m.begin();
-       mit != m.end(); mit++) {
-    G4PTouchableKey ptk = (*mit).first; // get a key identifying a volume
-    G4PMapNameTally mtallies = (*mit).second; // get tallies of the volume
-    G4String name(ptk.fVPhysiclaVolume->GetName()); // print volume name
-    G4int nEnteringTracks = 0;
-    G4double colli_EnteringTrack = 0;
-    G4double meanTrackEnergy = 0, sigmaTrackEnergy = 0;
-    for (G4PMapNameTally::iterator mt = mtallies.begin();
-	 mt != mtallies.end(); mt++) {
-      G4String tmp((*mt).first);
-      if (tmp == "HistorysEntering") {
-	nEnteringTracks = G4int((*mt).second.GetXsum());
-      }
-      if (tmp == "EnergyEnteringHistory") {
-	meanTrackEnergy =  (*mt).second.GetMean();
-	sigmaTrackEnergy = (*mt).second.GetSigma();
-      }
-      if (tmp == "Collisions") {
-	if (!nEnteringTracks) {
-	  G4cout << "exampleB01: Error nEnteringTracks=0" <<G4endl;
-	}
-	else {
-	  colli_EnteringTrack =  (*mt).second.GetXsum() / nEnteringTracks;
-	}
-      }
-    }
-
-    // print values
-
-    G4std::string fname = FillString(name, '.', FieldName);
-    *myout << fname << " |";
-    *myout << G4std::setw(FieldValue) << meanTrackEnergy << " |"; 
-    *myout << G4std::setw(FieldValue) << sigmaTrackEnergy << " |";
-    *myout << G4std::setw(FieldValue) << colli_EnteringTrack << " |";
-    *myout << G4endl;
-  }
+  G4StandardScoreTable stable;
+  stable.Print(pScorer.GetMapPtkStandardCellScorer(), myout);
+ 
 
   return 0;
 }
 
-G4std::string FillString(const G4std::string &name, char c, G4int n, bool back)
-{
-  G4std::string fname;
-  G4int k = n - name.size();
-  if (k > 0) {
-    if (back) {
-      fname = name;
-      fname += G4std::string(k,c);
-    }
-    else {
-      fname = G4std::string(k,c);
-      fname += name;
-    }
-  }
-  else {
-    fname = name;
-  }
-  return fname;
-}

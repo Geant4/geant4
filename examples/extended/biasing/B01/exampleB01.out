@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (28-Feb-2002)
+                                (28-Jun-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -18,7 +18,7 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
@@ -37,7 +37,7 @@ annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -47,7 +47,7 @@ hIoni:    Knock-on electron cross sections .
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
 MuIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -99,115 +99,44 @@ DoIt Vector:
 ================================================
 output mScorer, mass geometry, neutron
 Volume name = worldCylinder_phys, Replica number = -1
-HistorysEntering
-entries                             : 331
-Sum(w)                              : 331
-Sum(w*x)                            : 331
-Sum(w*x*x)                          : 331
-mean=Sum(w*x) / Sum(w)              : 1
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 331
-Sum(x^2)                            : 331
-EnergyEnteringHistory
-entries                             : 331
-Sum(w)                              : 331
-Sum(w*x)                            : 2868.82
-Sum(w*x*x)                          : 26144.9
-mean=Sum(w*x) / Sum(w)              : 8.66714
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.96678
-Sum(x)                              : 2868.82
-Sum(x^2)                            : 26144.9
+Tracks entering: 331
+Population:      331
+Collisions:      0
+Collisions*Wgt:  0
+NumWGTedEnergy:  0.230448
+FluxWGTedEnergy: 10
+Aver.TrackWGT*I: 1
 Volume name = cell: 02, shield, Replica number = 0
-HistorysEntering
-entries                             : 1066
-Sum(w)                              : 1066
-Sum(w*x)                            : 1066
-Sum(w*x*x)                          : 1066
-mean=Sum(w*x) / Sum(w)              : 1
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 1066
-Sum(x^2)                            : 1066
-EnergyEnteringHistory
-entries                             : 1066
-Sum(w)                              : 1066
-Sum(w*x)                            : 10503.1
-Sum(w*x*x)                          : 104013
-mean=Sum(w*x) / Sum(w)              : 9.85277
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0.704593
-Sum(x)                              : 10503.1
-Sum(x^2)                            : 104013
-Collisions
-entries                             : 1274
-Sum(w)                              : 1274
-Sum(w*x)                            : 1274
-Sum(w*x*x)                          : 1274
-mean=Sum(w*x) / Sum(w)              : 1
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 1274
-Sum(x^2)                            : 1274
+Tracks entering: 1066
+Population:      1237
+Collisions:      1274
+Collisions*Wgt:  1274
+NumWGTedEnergy:  0.220869
+FluxWGTedEnergy: 9.3253
+Aver.TrackWGT*I: 1
 Volume name = cell: 03, shield, Replica number = 0
-HistorysEntering
-entries                             : 665
-Sum(w)                              : 665
-Sum(w*x)                            : 665
-Sum(w*x*x)                          : 665
-mean=Sum(w*x) / Sum(w)              : 1
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 665
-Sum(x^2)                            : 665
-EnergyEnteringHistory
-entries                             : 665
-Sum(w)                              : 665
-Sum(w*x)                            : 6401.76
-Sum(w*x*x)                          : 62732.9
-mean=Sum(w*x) / Sum(w)              : 9.62671
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.28905
-Sum(x)                              : 6401.76
-Sum(x^2)                            : 62732.9
-Collisions
-entries                             : 908
-Sum(w)                              : 908
-Sum(w*x)                            : 908
-Sum(w*x*x)                          : 908
-mean=Sum(w*x) / Sum(w)              : 1
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 908
-Sum(x^2)                            : 908
+Tracks entering: 665
+Population:      795
+Collisions:      908
+Collisions*Wgt:  908
+NumWGTedEnergy:  0.217448
+FluxWGTedEnergy: 9.0925
+Aver.TrackWGT*I: 1
 Volume name = cell: 04, shield, Replica number = 0
-HistorysEntering
-entries                             : 376
-Sum(w)                              : 376
-Sum(w*x)                            : 376
-Sum(w*x*x)                          : 376
-mean=Sum(w*x) / Sum(w)              : 1
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 376
-Sum(x^2)                            : 376
-EnergyEnteringHistory
-entries                             : 376
-Sum(w)                              : 376
-Sum(w*x)                            : 3528.31
-Sum(w*x*x)                          : 34285
-mean=Sum(w*x) / Sum(w)              : 9.3838
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.76852
-Sum(x)                              : 3528.31
-Sum(x^2)                            : 34285
-Collisions
-entries                             : 522
-Sum(w)                              : 522
-Sum(w*x)                            : 522
-Sum(w*x*x)                          : 522
-mean=Sum(w*x) / Sum(w)              : 1
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 522
-Sum(x^2)                            : 522
+Tracks entering: 376
+Population:      438
+Collisions:      522
+Collisions*Wgt:  522
+NumWGTedEnergy:  0.215811
+FluxWGTedEnergy: 8.99032
+Aver.TrackWGT*I: 1
 
 ----------------------------------------------
-Volume name               |  AV E/Track | sigma       |  Coll_Ent.Tr|
-worldCylinder_phys....... |     8.66714 |     1.96678 |           0 |
-cell: 02, shield......... |     9.85277 |    0.704593 |     1.19512 |
-cell: 03, shield......... |     9.62671 |     1.28905 |     1.36541 |
-cell: 04, shield......... |      9.3838 |     1.76852 |      1.3883 |
+Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
+cell: 02, shield_rep:0... |           1 |        1066 |        1237 |        1274 |        1274 |    0.220869 |      9.3253 |           1 |
+cell: 03, shield_rep:0... |           1 |         665 |         795 |         908 |         908 |    0.217448 |      9.0925 |           1 |
+cell: 04, shield_rep:0... |           1 |         376 |         438 |         522 |         522 |    0.215811 |     8.99032 |           1 |
+worldCylinder_phys_rep:-1 |           1 |         331 |         331 |           0 |           0 |    0.230448 |          10 |           1 |
 +++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
   ProcessName: MScoreProcess, will be removed!
 The initial Vectors: 
