@@ -131,10 +131,12 @@ endif
 
 # ------------- Lizard -----------------
 ifdef INC_LIZARD
+  CPPFLAGS += -I$(G4BASE)/analysis/Lizard/include
   CPPFLAGS += -I$(LIZARDROOT)/include
 endif
 #
 ifdef LIB_LIZARD
+  ANALYSISLIBS += -L$(LIZARDROOT)/lib -lAIDA_HTL -lAIDA_Annotation -lT_Histoxx -lAIDA_Plotter -lqp -lqpqwt -lqpadapt -lqpview -lqt -lqt-mt -lqutil -lGemini -lminuit
 endif
 
 
