@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Sphere.cc,v 1.3 2001-07-11 10:00:01 gunter Exp $
+// $Id: testG4Sphere.cc,v 1.4 2001-11-21 16:02:21 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -70,6 +70,23 @@
 //	    ApproxEqual(check.z(),target.z()))? true : false;
 //}
 
+///////////////////////////////////////////////////////////////////
+//
+// Dave's auxiliary function
+
+const G4String OutputInside(const EInside a)
+{
+	switch(a) 
+        {
+		case kInside:  return "Inside"; 
+		case kOutside: return "Outside";
+		case kSurface: return "Surface";
+	}
+	return "????";
+}
+
+
+
 int main(void)
 {
     G4double Dist,low,high;
@@ -108,7 +125,7 @@ int main(void)
     pgoodNorm=&goodNorm;
 
     G4Sphere s1("Solid G4Sphere",0,50,0,2*M_PI,0,M_PI);
-    G4Sphere s2("Spherical Shell",45,50,0,2*M_PI,0,M_PI);
+     G4Sphere s2("Spherical Shell",45,50,0,2*M_PI,0,M_PI);
     G4Sphere s3("Band (theta segment)",45,50,0,2*M_PI,M_PI/4,M_PI/2);
     G4Sphere s32("Band (theta segment2)",45,50,0,2*M_PI,0,M_PI/4);
     G4Sphere s33("Band (theta segment1)",45,50,0,2*M_PI,M_PI*3/4,M_PI/4);
@@ -117,10 +134,20 @@ int main(void)
     //    G4cout<<"s4.fSPhi = "<<s4.GetSPhi()<<G4endl;
     G4Sphere s5("Patch (phi/theta seg)",45,50,-M_PI/4,M_PI/2,M_PI/4,M_PI/2);
     G4Sphere s6("John example",300,500,0,5.76,0,M_PI) ; 
+    G4Sphere s7("sphere7",1400.,1550.,0.022321428571428572,0.014642857142857141,
+	                  1.5631177553663251,0.014642857142857141    );
+    G4Sphere s8("sphere",278.746*mm, 280.0*mm, 0.0*degree, 360.0*degree,
+		                               0.0*degree, 90.0*degree);
+
+
 
 #ifdef NDEBUG
     G4Exception("FAIL: *** Assertions must be compiled in! ***");
 #endif
+
+    //////////////// Check name /////////////////////////
+
+    assert(s1.GetName()=="Solid G4Sphere");
 
     Dist = s4.DistanceToOut(ponrmin3,vmz,calcNorm,pgoodNorm,pNorm) ;
     G4cout<<"s4.DistanceToOut(ponrmin3,vmz,calcNorm,pgoodNorm,pNorm) = "<<Dist
@@ -132,9 +159,40 @@ int main(void)
     G4cout<<"s6.DistanceToOut(ponrmaxJ,vmz,calcNorm,pgoodNorm,pNorm) = "<<Dist
         <<G4endl ;
 
-    assert(s1.GetName()=="Solid G4Sphere");
+    Dist = s7.DistanceToOut(G4ThreeVector(1399.984667238032,
+                                             5.9396696802500299,
+                                            -2.7661927818688308),
+                            G4ThreeVector(0.50965504781062942,
+                                         -0.80958849145715217,
+                                          0.29123565499656401),
+                                        calcNorm,pgoodNorm,pNorm) ;
+    G4cout<<"s7.DistanceToOut(shereP,sphereV,calcNorm,pgoodNorm,pNorm) = "<<Dist
+        <<G4endl ;
+
+    Dist = s7.DistanceToIn(G4ThreeVector(1399.984667238032,
+                                             5.9396696802500299,
+                                            -2.7661927818688308),
+                            G4ThreeVector(0.50965504781062942,
+                                         -0.80958849145715217,
+                                          0.29123565499656401)) ;
+    G4cout<<"s7.DistanceToIn(shereP,sphereV,calcNorm,pgoodNorm,pNorm) = "<<Dist
+        <<G4endl ;
+
+
     
 // Check G4Sphere::Inside
+
+    EInside inside = s7.Inside(G4ThreeVector(1399.984667238032,
+                                             5.9396696802500299,
+                                            -2.7661927818688308)  ) ;
+    G4cout<<"s7.Inside(G4ThreeVector(1399.98466 ... = "
+          <<OutputInside(inside)<<G4endl ;
+
+    inside = s8.Inside(G4ThreeVector(-249.5020724528353*mm,
+					       26.81253142743162*mm,
+                                              114.8988524453591*mm  )  ) ;
+    G4cout<<"s8.Inside(G4ThreeVector(-249.5020 ... = "
+          <<OutputInside(inside)<<G4endl ;
     assert(s1.Inside(pzero)==kInside);
     assert(s2.Inside(pzero)==kOutside);
     assert(s2.Inside(ponrmin2)==kSurface);
@@ -302,6 +360,9 @@ int main(void)
      assert(ApproxEqual(Dist,45));
      Dist=s3.DistanceToIn(ptesttheta1,vmz);
      assert(ApproxEqual(Dist,100-48/sqrt(2.)));
+
+     ///////////////////////////////////////////////////////////////////////////
+
 
 // CalculateExtent
     G4VoxelLimits limit;		// Unlimited
