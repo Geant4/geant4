@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMuEnergyLoss.hh,v 1.1 2000-04-25 14:18:59 maire Exp $
+// $Id: G4VMuEnergyLoss.hh,v 1.2 2000-06-07 16:50:21 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //      GEANT 4 class header file 
@@ -63,7 +63,8 @@ class G4VMuEnergyLoss : public G4VEnergyLoss
   public:
 
     G4VMuEnergyLoss(const G4String& );
-    ~G4VMuEnergyLoss();
+    
+    virtual ~G4VMuEnergyLoss();
 
     G4bool IsApplicable(const G4ParticleDefinition&);
 
