@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.8 2000-11-05 12:17:06 vnivanch Exp $
+// $Id: G4hLowEnergyLoss.cc,v 1.9 2001-05-10 17:03:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -23,12 +23,13 @@
 // It calculates the energy loss of charged hadrons.
 // **************************************************************
 //
-// 7/10/98: bug fixes + some cleanup , L.Urban 
-// 22/10/98 : cleanup , L.Urban
-// 07/12/98 : works for ions as well+ bug corrected, L.Urban
-// 02/02/99 : several bugs fixed, L.Urban
-// 31/03/00 : rename to lowenergy as G4hLowEnergyLoss.cc V.Ivanchenko
-// 05/11/00 : new method to calculate particle ranges
+// 7/10/98    bug fixes + some cleanup , L.Urban 
+// 22/10/98   cleanup , L.Urban
+// 07/12/98   works for ions as well+ bug corrected, L.Urban
+// 02/02/99   several bugs fixed, L.Urban
+// 31/03/00   rename to lowenergy as G4hLowEnergyLoss.cc V.Ivanchenko
+// 05/11/00   new method to calculate particle ranges
+// 10/05/01   V.Ivanchenko Clean up againist Linux compilation with -Wall
 // --------------------------------------------------------------
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -62,33 +63,33 @@ G4int            G4hLowEnergyLoss::CounterOfpbarProcess = 0 ;
 G4PhysicsTable** G4hLowEnergyLoss::RecorderOfpbarProcess =
                                            new G4PhysicsTable*[10] ;
 
-G4PhysicsTable* G4hLowEnergyLoss::theDEDXpTable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::theDEDXpbarTable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::theRangepTable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::theRangepbarTable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::theInverseRangepTable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::theInverseRangepbarTable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::theLabTimepTable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::theLabTimepbarTable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::theProperTimepTable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::theProperTimepbarTable = NULL ;
+G4PhysicsTable* G4hLowEnergyLoss::theDEDXpTable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::theDEDXpbarTable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::theRangepTable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::theRangepbarTable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::theInverseRangepTable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::theInverseRangepbarTable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::theLabTimepTable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::theLabTimepbarTable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::theProperTimepTable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::theProperTimepbarTable = 0 ;
 
-G4PhysicsTable* G4hLowEnergyLoss::thepRangeCoeffATable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::thepRangeCoeffBTable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::thepRangeCoeffCTable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::thepbarRangeCoeffATable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::thepbarRangeCoeffBTable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::thepbarRangeCoeffCTable = NULL ;
+G4PhysicsTable* G4hLowEnergyLoss::thepRangeCoeffATable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::thepRangeCoeffBTable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::thepRangeCoeffCTable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::thepbarRangeCoeffATable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::thepbarRangeCoeffBTable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::thepbarRangeCoeffCTable = 0 ;
 
-G4PhysicsTable* G4hLowEnergyLoss::theDEDXTable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::theRangeTable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::theInverseRangeTable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::theLabTimeTable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::theProperTimeTable = NULL ;
+G4PhysicsTable* G4hLowEnergyLoss::theDEDXTable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::theRangeTable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::theInverseRangeTable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::theLabTimeTable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::theProperTimeTable = 0 ;
 
-G4PhysicsTable* G4hLowEnergyLoss::theRangeCoeffATable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::theRangeCoeffBTable = NULL ;
-G4PhysicsTable* G4hLowEnergyLoss::theRangeCoeffCTable = NULL ;
+G4PhysicsTable* G4hLowEnergyLoss::theRangeCoeffATable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::theRangeCoeffBTable = 0 ;
+G4PhysicsTable* G4hLowEnergyLoss::theRangeCoeffCTable = 0 ;
 
 //const G4Proton* G4hLowEnergyLoss::theProton=G4Proton::Proton() ;
 //const G4AntiProton* G4hLowEnergyLoss::theAntiProton=G4AntiProton::AntiProton() ;
@@ -125,15 +126,15 @@ G4double G4hLowEnergyLoss::RTable,G4hLowEnergyLoss::LOGRTable;
  
 G4hLowEnergyLoss::G4hLowEnergyLoss(const G4String& processName)
    : G4VContinuousDiscreteProcess (processName),
-     theLossTable (NULL),
-     MinKineticEnergy(0.0), 
-     linLossLimit(0.05),
-     lastMaterial (NULL),
+     lastMaterial (0),
      MaxExcitationNumber (1.e6),
      probLimFluct (0.01),
      nmaxDirectFluct (100),
      nmaxCont1(4),
-     nmaxCont2(16) 
+     nmaxCont2(16),
+     theLossTable(0),
+     linLossLimit(0.05),
+     MinKineticEnergy(0.0) 
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -173,10 +174,10 @@ void G4hLowEnergyLoss::BuildDEDXTable(
   else           {theDEDXTable= theDEDXpbarTable;}
 
   if(
-     ((Charge>0.) && ((theDEDXTable==NULL) || 
+     ((Charge>0.) && ((theDEDXTable==0) || 
      (ElectronCutInRange != ptableElectronCutInRange)))
      ||  
-     ((Charge<0.) && ((theDEDXTable==NULL) || 
+     ((Charge<0.) && ((theDEDXTable==0) || 
      (ElectronCutInRange != pbartableElectronCutInRange)))
     )
       MakeTable = true ;
@@ -440,8 +441,7 @@ void G4hLowEnergyLoss::BuildLabTimeVector(G4int materialIndex,
            LowEdgeEnergy,tau,Value ;
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
-  const G4MaterialTable* theMaterialTable =
-                                G4Material::GetMaterialTable() ;
+  //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
 
   // low energy part first...
   losslim = physicsVector->GetValue(tlim,isOut);
@@ -501,8 +501,7 @@ void G4hLowEnergyLoss::BuildProperTimeVector(G4int materialIndex,
            LowEdgeEnergy,tau,Value ;
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
-  const G4MaterialTable* theMaterialTable =
-                                G4Material::GetMaterialTable() ;
+  //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
 
   // low energy part first...
   losslim = physicsVector->GetValue(tlim,isOut);

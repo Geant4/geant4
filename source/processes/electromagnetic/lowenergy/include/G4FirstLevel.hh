@@ -32,9 +32,7 @@
 #define G4FIRSTLEVEL_HH
 
 #include "G4DataVector.hh"
-//#include "g4rw/tpordvec.h"
 
-//class G4FirstLevel : public G4RWTPtrOrderedVector< G4DataVector >{
 class G4FirstLevel : public G4std::vector< G4DataVector* >
 
 {

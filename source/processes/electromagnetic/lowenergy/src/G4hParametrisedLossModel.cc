@@ -22,6 +22,7 @@
 // 20/07/2000  V.Ivanchenko First implementation
 // 18/08/2000  V.Ivanchenko TRIM85 model is added
 // 03/10/2000  V.Ivanchenko CodeWizard clean up
+// 10/05/2001  V.Ivanchenko Clean up againist Linux compilation with -Wall
 //
 // Class Description: 
 //
@@ -196,7 +197,7 @@ G4double G4hParametrisedLossModel::StoppingPower(
                           const G4Material* material,
                                 G4double kineticEnergy) 
 {
-  G4double eloss = 0.0, eloss125 = 0.0;
+  G4double eloss = 0.0;
   const G4int numberOfElements = material->GetNumberOfElements() ;
   const G4double* theAtomicNumDensityVector =
                                  material->GetAtomicNumDensityVector() ;
@@ -344,7 +345,7 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
   } ;
 
   // Search for the compaund in the table
-  for (G4int i=0; i<numberOfMolecula; i++)
+  for (size_t i=0; i<numberOfMolecula; i++)
     { 
       if(chFormula == name[i]) { 
         G4double exp125 = expStopping[i] * 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.7 2001-05-07 23:32:10 pia Exp $
+// $Id: G4VeLowEnergyLoss.cc,v 1.8 2001-05-10 17:03:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,6 +21,7 @@
 // Modifications:
 // 20/09/00 update fluctuations V.Ivanchenko
 // 22/11/00 minor fix in fluctuations V.Ivanchenko
+// 10/05/01  V.Ivanchenko Clean up againist Linux compilation with -Wall
 //
 // --------------------------------------------------------------
 
@@ -131,8 +132,7 @@ void G4VeLowEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
   G4double oldValue,tauold ;
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
-  const G4MaterialTable* theMaterialTable =
-                                G4Material::GetMaterialTable() ;
+  //  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
 
   // low energy part first...
  // heavy particle
@@ -383,8 +383,7 @@ void G4VeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
            LowEdgeEnergy,tau,Value ;
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
-  const G4MaterialTable* theMaterialTable =
-                                G4Material::GetMaterialTable() ;
+  //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
   // low energy part first...
   losslim = physicsVector->GetValue(tlim,isOut);
@@ -445,8 +444,7 @@ void G4VeLowEnergyLoss::BuildProperTimeVector(G4PhysicsTable* theDEDXTable,
            LowEdgeEnergy,tau,Value ;
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
-  const G4MaterialTable* theMaterialTable =
-                                G4Material::GetMaterialTable() ;
+  //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
   // low energy part first...
   losslim = physicsVector->GetValue(tlim,isOut);

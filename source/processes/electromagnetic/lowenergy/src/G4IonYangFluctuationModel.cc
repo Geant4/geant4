@@ -22,6 +22,7 @@
 // 18/08/2000  V.Ivanchenko First implementation
 // 04/09/2000  V.Ivanchenko Rename fluctuations            
 // 03/10/2000  V.Ivanchenko CodeWizard clean up
+// 10/05/2001  V.Ivanchenko Clean up againist Linux compilation with -Wall
 //
 // -------------------------------------------------------------------
 // Class Description: 
@@ -156,11 +157,11 @@ G4double G4IonYangFluctuationModel::YangFluctuationModel(
   //                                    3 for ions in molecular gases
   //                                    4 for ions in solids
   static G4double b[5][4] = {
-  0.1014,  0.3700,  0.9642,  3.987,
-  0.1955,  0.6941,  2.522,   1.040,
-  0.05058, 0.08975, 0.1419, 10.80,
-  0.05009, 0.08660, 0.2751,  3.787,
-  0.01273, 0.03458, 0.3951,  3.812
+  {0.1014,  0.3700,  0.9642,  3.987},
+  {0.1955,  0.6941,  2.522,   1.040},
+  {0.05058, 0.08975, 0.1419, 10.80},
+  {0.05009, 0.08660, 0.2751,  3.787},
+  {0.01273, 0.03458, 0.3951,  3.812}
   } ;
 
   // protons (hadrons) 

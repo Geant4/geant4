@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.icc,v 1.15 2001-05-07 23:32:08 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.icc,v 1.16 2001-05-10 17:03:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,6 +16,9 @@
 //      CERN, CN Division, ASD group
 //      ------------ G4LowEnergyPhotoElectric physics process ---------
 //                   by A.Forti 1999/03/02
+//
+// 10/05/2001  V.Ivanchenko Clean up againist Linux compilation with -Wall
+//
 // ***************************************************************
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,16 +59,14 @@ G4LowEnergyPhotoElectric::GetMeanFreePath(const G4Track& aTrack, G4double,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double 
-G4LowEnergyPhotoElectric::GetCrossSection(G4DynamicParticle* aDynamicGamma,
-			                  G4Element* anElement)
+inline G4double G4LowEnergyPhotoElectric::GetCrossSection(G4DynamicParticle* aDynamicGamma,
+			                                  G4Element* anElement)
  
 // gives the microscopic total cross section in GEANT4 internal units
 
 {
    G4double crossSection;
    G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
-   G4bool isOutRange ;
 
    if (GammaEnergy < LowestEnergyLimit || GammaEnergy > HighestEnergyLimit)
       crossSection = 0.;

@@ -212,8 +212,6 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
     lF /= norm ;
   }
 
-  G4double w, q ;
-
   // Helium ion case
   if( ionCharge < 2.5 ) {
 
@@ -224,7 +222,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
       y *= e ;
       x += y * c[i] ;
     }
-    q = 7.6 -  e ; 
+    G4double q = 7.6 -  e ; 
     q = 1.0 + ( 0.007 + 0.00005 * z ) * exp( -q*q ) ;
     return  4.0 * q * q * (1.0 - exp(-x)) ;
 

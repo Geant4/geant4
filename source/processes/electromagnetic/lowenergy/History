@@ -1,4 +1,4 @@
-$Id: History,v 1.63 2001-05-07 23:33:28 pia Exp $
+$Id: History,v 1.64 2001-05-10 17:03:16 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10.05.2001 - V.Ivanchenko, 
+             Removed compilation warnings in ANSI strict mode
 
 08.05.2001 - MGP, tag emlowen-V03-01-04
              Removed compilation warnings in ANSI strict mode
