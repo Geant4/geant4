@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.8 2001-09-23 23:08:57 pia Exp $
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.9 2001-10-24 09:07:37 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -38,6 +38,8 @@
 //                        Temporary protection to avoid crash in the case 
 //                        of polarisation || incident photon direction
 //
+// 17 October 2001 - F.Longo - Revised according to a design iteration
+//
 // ************************************************************
 //
 // Corrections by Rui Curado da Silva (2000)
@@ -49,256 +51,82 @@
 // --------------------------------------------------------------
 
 #include "G4LowEnergyPolarizedCompton.hh"
-#include "G4Electron.hh"
-#include "G4EnergyLossTables.hh"
-#include "G4Gamma.hh"
-#include "G4SecondLevel.hh"
-#include "G4PhysicsTable.hh"
-#include "G4DataVector.hh"
+#include "Randomize.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ThreeVector.hh"
+#include "G4Track.hh"
+#include "G4Step.hh"
+#include "G4ForceCondition.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4DynamicParticle.hh"
 #include "G4VParticleChange.hh"
+#include "G4ThreeVector.hh"
+#include "G4EnergyLossTables.hh"
+#include "G4VCrossSectionHandler.hh"
+#include "G4CrossSectionHandler.hh"
+#include "G4VEMDataSet.hh"
+#include "G4CompositeEMDataSet.hh"
+#include "G4VDataSetAlgorithm.hh"
+#include "G4LogLogInterpolation.hh"
+#include "G4VRangeTest.hh"
+#include "G4RangeTest.hh"
 
 // constructor
 
 G4LowEnergyPolarizedCompton::G4LowEnergyPolarizedCompton(const G4String& processName)
   : G4VDiscreteProcess(processName),
-    theCrossSectionTable(0),
-    theScatteringFunctionTable(0),
-    theMeanFreePathTable(0),
-    ZNumVec(0),
-    lowestEnergyLimit (250*eV),              // initialization
-    highestEnergyLimit(100*GeV),
-    numbBinTable(200),
-    meanFreePath(0)
+    lowEnergyLimit (250*eV),              // initialization
+    highEnergyLimit(100*GeV),
+    intrinsicLowEnergyLimit(10*eV),
+    intrinsicHighEnergyLimit(100*GeV)
 {
-  if (verboseLevel>0) {
-    G4cout << GetProcessName() << " is created "<< G4endl;
-    G4cout << "LowestEnergy: " << lowestEnergyLimit/keV << "keV ";
-    G4cout << "HighestEnergy: " << highestEnergyLimit/TeV << "TeV " << G4endl;
-  }
+  if (lowEnergyLimit < intrinsicLowEnergyLimit || 
+      highEnergyLimit > intrinsicHighEnergyLimit)
+    {
+      G4Exception("G4LowEnergyPolarizedCompton::G4LowEnergyPolarizedCompton - energy outside intrinsic process validity range");
+    }
+  
+  crossSectionHandler = new G4CrossSectionHandler;
+  
+  
+  G4VDataSetAlgorithm* scatterInterpolation = new G4LogLogInterpolation;
+  G4String scatterFile = "comp/ce-sf-";
+  scatterFunctionData = new 
+    G4CompositeEMDataSet(scatterFile,scatterInterpolation,1.,1.);
+  
+  meanFreePathTable = 0;
+  
+  rangeTest = new G4RangeTest;
+  
+   if (verboseLevel > 0) 
+     {
+       G4cout << GetProcessName() << " is created " << G4endl
+	      << "Energy range: " 
+	      << lowEnergyLimit / keV << " keV - "
+	      << highEnergyLimit / GeV << " GeV" 
+	      << G4endl;
+     }
 }
 
 // destructor
- 
+
 G4LowEnergyPolarizedCompton::~G4LowEnergyPolarizedCompton()
 {
-   if (theCrossSectionTable) {
-      delete theCrossSectionTable;
-   }
-
-   if (theScatteringFunctionTable) {
-      delete theScatteringFunctionTable;
-   }
-
-   if (theMeanFreePathTable) {
-      theMeanFreePathTable->clearAndDestroy();
-      delete theMeanFreePathTable;
-   }
-
-   if(ZNumVec){
-     ZNumVec->clear();
-     delete ZNumVec;
-   }
+  delete meanFreePathTable;
+  delete crossSectionHandler;
+  delete scatterFunctionData;
+  delete rangeTest;
 }
  
- void G4LowEnergyPolarizedCompton::BuildPhysicsTable(const G4ParticleDefinition& GammaType){
 
-  BuildZVec();
-
-  // Build microscopic cross section table and mean free path table
-  BuildCrossSectionTable();
-
-  // Build mean free path table for the Compton Scattering process
-  BuildMeanFreePathTable();
-
-  // build the scattering function table
-  BuildScatteringFunctionTable();
-
+void G4LowEnergyPolarizedCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
+{
+  crossSectionHandler->Clear();
+  G4String crossSectionFile = "comp/ce-cs-";
+  crossSectionHandler->LoadData(crossSectionFile);
+  delete meanFreePathTable;
+  meanFreePathTable = crossSectionHandler->BuildMeanFreePathForMaterials();
 }
-void G4LowEnergyPolarizedCompton::BuildCrossSectionTable(){
-
-  // BUILD THE CS TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC
- 
-  if (theCrossSectionTable) {
-    
-    delete theCrossSectionTable; 
-  }
-  
-  theCrossSectionTable = new G4SecondLevel();
-  G4int dataNum = 2;
-  
-  for(size_t tableInd = 0; tableInd < ZNumVec->size(); tableInd++){
-    
-    G4int atomInd = (G4int) (*ZNumVec)[tableInd];
-    
-    G4FirstLevel* oneAtomCS = util.BuildFirstLevelTables(atomInd, dataNum, "comp/ce-cs-");
-    
-    //    theCrossSectionTable->insert(oneAtomCS);
-    theCrossSectionTable->push_back(oneAtomCS);
-    
-  }//end for on atoms
-}
-
-void G4LowEnergyPolarizedCompton::BuildScatteringFunctionTable(){
-
-// BUILD THE SF TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC
-
-  if (theScatteringFunctionTable) {
-    
-    delete theScatteringFunctionTable; 
-  }
-
-  theScatteringFunctionTable = new G4SecondLevel();
-  G4int dataNum = 2;
- 
-  for(size_t tableInd = 0; tableInd < ZNumVec->size(); tableInd++){
-
-    G4int atomInd = (G4int) (*ZNumVec)[tableInd];
-
-    G4FirstLevel* oneAtomSF = util.BuildFirstLevelTables(atomInd, dataNum, "comp/ce-sf-");
-     
-    //     theScatteringFunctionTable->insert(oneAtomSF);
-     theScatteringFunctionTable->push_back(oneAtomSF);
-   
-  }//end for on atoms
-}
-
-
-void G4LowEnergyPolarizedCompton::BuildZVec(){
-
-// vector mapping the elements in the material table
-
-  const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
-  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
-
-  if(ZNumVec){
-    ZNumVec->clear();
-    delete ZNumVec;
-  }
-
-  ZNumVec = new G4DataVector(); 
-  for (G4int J=0 ; J < numOfMaterials; J++){ 
- 
-    const G4Material* material= (*theMaterialTable)[J];        
-    const G4ElementVector* theElementVector = material->GetElementVector();
-    const G4int numberOfElements = material->GetNumberOfElements() ;
-
-    for (G4int iel=0; iel<numberOfElements; iel++ ){
-
-      G4double Zel = (*theElementVector)[iel]->GetZ();
-
-      if(!(ZNumVec->contains(Zel))){
-	ZNumVec->push_back(Zel);
-      }  else{
-	continue;
-      }
-    }
-  }
-}
-
-
-void G4LowEnergyPolarizedCompton::BuildMeanFreePathTable(){
-
-// used log-log interpolation instead of linear interpolation to build the MFP 
-// as reported in the stepanek paper 
-
-  if (theMeanFreePathTable) {
-    theMeanFreePathTable->clearAndDestroy(); delete theMeanFreePathTable; }
-
-  // material
-  G4double NumbOfMaterials = G4Material::GetNumberOfMaterials();
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
-  G4Material* material;
-
-  // MeanFreePath 
-  G4double lowEdgeEnergy, value;
-  theMeanFreePathTable = new G4PhysicsTable(NumbOfMaterials);
-  G4PhysicsLogVector* ptrVector;
-
-  for ( G4int J = 0 ; J < NumbOfMaterials; J++ ) { // For each material 
-  
-    //create physics vector then fill it ....
-    ptrVector = new  G4PhysicsLogVector(lowestEnergyLimit, highestEnergyLimit, numbBinTable);
-    
-    material = (*theMaterialTable)[J];
-    const G4ElementVector* theElementVector = material->GetElementVector();
-    const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();   
-    
-    for ( G4int i = 0 ; i < numbBinTable ; i++ ){ 
-      //For each energy
-      
-      lowEdgeEnergy = ptrVector->GetLowEdgeEnergy(i);
-      
-      const G4double bigPath = DBL_MAX;
-      G4double sigma = 0. ;
-      for ( size_t k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
-
-	G4int atomIndex = (G4int) (*theElementVector)[k]->GetZ();
-	const G4FirstLevel* oneAtomCS
-	  = (*theCrossSectionTable)[ZNumVec->index(atomIndex)];
-	
-	G4double interCrsSec = util.DataLogInterpolation(lowEdgeEnergy, 
-							 (*(*oneAtomCS)[0]), 
-							 (*(*oneAtomCS)[1]))*barn;
-	sigma += theAtomNumDensityVector[k]*interCrsSec;
-      }       
-      
-      value = sigma<=0.0 ? bigPath : 1./sigma ;
-      ptrVector->PutValue( i , value ) ;
-
-    }
-    
-    theMeanFreePathTable->insertAt( J , ptrVector );
-  }
-}
-
-
-G4Element* G4LowEnergyPolarizedCompton::SelectRandomAtom(const G4DynamicParticle* aDynamicGamma,
-                                               G4Material* aMaterial){
-
-// METHOD BELOW  FROM STANDARD E_M PROCESSES CODE MODIFIED TO USE 
-// LIVERMORE DATA (using log-log interpolation as reported in stepanek paper)
-
-
-  // select randomly 1 element within the material 
-  G4double gammaEnergy = aDynamicGamma->GetKineticEnergy();
-  const G4int NumberOfElements = aMaterial->GetNumberOfElements();
-  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
-
-  if (NumberOfElements == 1) return (*theElementVector)[0];
-
-  const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
- 
-  G4double partialSumSigma = 0.;
-
-  G4double rval = 0;
-  rval = G4UniformRand()/meanFreePath;
-
-  for ( G4int i=0 ; i < NumberOfElements ; i++ ){ 
-
-    G4double crossSection;
-    if (gammaEnergy <  lowestEnergyLimit)
-      crossSection = 0. ;
-    else {
-      if (gammaEnergy > highestEnergyLimit) gammaEnergy = 0.99*highestEnergyLimit ;
-      
-      G4int atomIndex = (G4int) (*theElementVector)[i]->GetZ();
-      const G4FirstLevel* oneAtomCS
-	= (*theCrossSectionTable)[ZNumVec->index(atomIndex)];
-
-      crossSection =  util.DataLogInterpolation(gammaEnergy, 
-						(*(*oneAtomCS)[0]), 
-						(*(*oneAtomCS)[1]))*barn;
-    }
-
-    partialSumSigma += theAtomNumDensityVector[i] * crossSection;
-    if(rval <= partialSumSigma) return ((*theElementVector)[i]);
-  }
-
-  return (*theElementVector)[0];
-}
-
 
 G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTrack,
 							     const G4Step&  aStep)
@@ -312,261 +140,211 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
   aParticleChange.Initialize(aTrack);
 
   // Dynamic particle quantities  
-  const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
-  G4double gammaEnergy0 = aDynamicGamma->GetKineticEnergy();
-  G4ThreeVector gammaPolarization0 = aDynamicGamma->GetPolarization(); 
-  G4double polarisation = gammaPolarization0.mag();
+  const G4DynamicParticle* incidentPhoton = aTrack.GetDynamicParticle();
+  G4double gammaEnergy0 = incidentPhoton->GetKineticEnergy();
+  G4ThreeVector gammaPolarization0 = incidentPhoton->GetPolarization(); 
 
-  // Check magnitude of polarisation vector
-  G4bool isPolarised = false;
-  if (polarisation > 0. && polarisation <= 1.) 
-    {
-      isPolarised = true;
-    }
+  //  gammaPolarization0 = gammaPolarization0.unit(); // 
 
-  // Temporary protection: a polarisation parallel to the 
-  // direction causes problems; in that case apply the regular LowEnergyCompton algorithm
-  G4ThreeVector gammaDirection = aDynamicGamma->GetMomentumDirection();
+  // Protection: a polarisation parallel to the 
+  // direction causes problems; 
+  // in that case find a random polarization
+  
+  G4ThreeVector gammaDirection = incidentPhoton->GetMomentumDirection();
+  
+  G4double scalarproduct = gammaPolarization0.dot(gammaDirection);
   G4double angle = gammaPolarization0.angle(gammaDirection);
-  if (angle == 0.)
+  
+  if (scalarproduct != 0. || angle == 0)
     {
-      isPolarised = false;
+      //      isPolarised = false;
+      gammaPolarization0 = SetRandomPolarization(gammaDirection);
     }
-  // End of temporary protection
-
+  
+  // End of Protection
+  
+  //  G4double polarisation = gammaPolarization0.mag();
+  
   // Within energy limit?
-
-  if(gammaEnergy0 <= lowestEnergyLimit)
-{
-  aParticleChange.SetStatusChange(fStopAndKill);
-  aParticleChange.SetEnergyChange(0.);
-  aParticleChange.SetLocalEnergyDeposit(gammaEnergy0);
   
-  return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
-}
+  if(gammaEnergy0 <= lowEnergyLimit)
+    {
+      aParticleChange.SetStatusChange(fStopAndKill);
+      aParticleChange.SetEnergyChange(0.);
+      aParticleChange.SetLocalEnergyDeposit(gammaEnergy0);
+      return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
+    }
   
-  // Select randomly one element 
-  G4Material* aMaterial = aTrack.GetMaterial();
-  G4Element* theElement = SelectRandomAtom(aDynamicGamma, aMaterial);
-  G4int elementZ = (G4int) theElement->GetZ();
-
   G4double E0_m = gammaEnergy0 / electron_mass_c2 ;
+  G4ThreeVector gammaDirection0 = incidentPhoton->GetMomentumDirection();
 
-  G4ThreeVector gammaDirection0 = aDynamicGamma->GetMomentumDirection();
+  // Select randomly one element in the current material
+  
+  G4Material* material = aTrack.GetMaterial();
+  G4int Z = crossSectionHandler->SelectRandomAtom(material,gammaEnergy0);
 
+  // Sample the energy and the polarization of the scattered photon 
+  
   G4double epsilon, epsilonSq, onecost, sinThetaSqr, greject ;
-
+  
   G4double epsilon0 = 1./(1. + 2*E0_m);
   G4double epsilon0Sq = epsilon0*epsilon0;
   G4double alpha1   = - log(epsilon0);
   G4double alpha2 = 0.5*(1.- epsilon0Sq);
-  G4double ScatteringFunction;
-  G4double x;
+
   G4double wlGamma = h_Planck*c_light/gammaEnergy0;
   G4double gammaEnergy1;
   G4ThreeVector gammaDirection1;
+  
+  //  if (isPolarised) // apply Polarized Condition
+  //  {
 
-  if (isPolarised)
+  do {
+    if ( alpha1/(alpha1+alpha2) > G4UniformRand() )
+      { 
+	epsilon   = exp(-alpha1*G4UniformRand());  
+	epsilonSq = epsilon*epsilon; 
+      }
+    else 
+      {
+	epsilonSq = epsilon0Sq + (1.- epsilon0Sq)*G4UniformRand();
+	epsilon   = sqrt(epsilonSq);
+      }
+    
+    onecost = (1.- epsilon)/(epsilon*E0_m);
+    sinThetaSqr   = onecost*(2.-onecost);
+    
+    // Protection
+    if (sinThetaSqr > 1.)
+      {
+	if (verboseLevel>0) G4cout 
+	  << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
+	  << "sin(theta)**2 = " 
+	  << sinThetaSqr
+	  << "; set to 1" 
+	  << G4endl;
+	sinThetaSqr = 1.;
+      }
+    if (sinThetaSqr < 0.)
+      {
+	if (verboseLevel>0) G4cout 
+	  << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
+	  << "sin(theta)**2 = " 
+	  << sinThetaSqr
+	  << "; set to 0" 
+	  << G4endl;
+	sinThetaSqr = 0.;
+      }
+    // End protection
+
+    G4double x =  sqrt(onecost/2.) / (wlGamma/cm);;
+    G4double scatteringFunction = scatterFunctionData->FindValue(x,Z-1);
+    greject = (1. - epsilon*sinThetaSqr/(1.+ epsilonSq))*scatteringFunction;    
+    //greject = 1. - epsilon*sinThetaSqr/(1.+ epsilonSq);
+    
+  } while(greject < G4UniformRand()*Z);
+  //(greject < G4UniformRand());
+  
+  
+  // ****************************************************
+  //		Phi determination
+  // ****************************************************
+  
+  G4double phi = SetPhi(epsilon,sinThetaSqr);
+  
+  //
+  // scattered gamma angles. ( Z - axis along the parent gamma)
+  //
+  
+  G4double cosTheta = 1. - onecost;
+  
+  // Protection
+  
+  if (cosTheta > 1.)
     {
-      do {
-	if ( alpha1/(alpha1+alpha2) > G4UniformRand() )
-	  { 
-	    epsilon   = exp(-alpha1*G4UniformRand());  
-	    epsilonSq = epsilon*epsilon; 
-	  }
-	else 
-	  {
-	    epsilonSq = epsilon0Sq + (1.- epsilon0Sq)*G4UniformRand();
-	    epsilon   = sqrt(epsilonSq);
-	  }
-	
-	onecost = (1.- epsilon)/(epsilon*E0_m);
-	sinThetaSqr   = onecost*(2.-onecost);
-
-	// Protection
-	if (sinThetaSqr > 1.)
-	  {
-	    if (verboseLevel>0) G4cout 
-	      << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
-	      << "sin(theta)**2 = " 
-	      << sinThetaSqr
-	      << "; set to 1" 
-	      << G4endl;
-	    sinThetaSqr = 1.;
-	  }
-	if (sinThetaSqr < 0.)
-	  {
-	    if (verboseLevel>0) G4cout 
-	      << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
-	      << "sin(theta)**2 = " 
-	      << sinThetaSqr
-	      << "; set to 0" 
-	      << G4endl;
-	    sinThetaSqr = 0.;
-	  }
-        // End protection
-	
-	greject = 1. - epsilon*sinThetaSqr/(1.+ epsilonSq);
-      } while (greject < G4UniformRand());
+      if (verboseLevel>0) G4cout 
+	<< " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
+	<< "cosTheta = " 
+	<< cosTheta
+	<< "; set to 1" 
+	<< G4endl;
+      cosTheta = 1.;
+    }
+  if (cosTheta < -1.)
+    {
+      if (verboseLevel>0) G4cout 
+	<< " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
+	<< "cosTheta = " 
+	<< cosTheta
+	<< "; set to -1" 
+	<< G4endl;
+      cosTheta = -1.;
+    }
+  // End protection      
+  
+  
+  G4double sinTheta = sqrt (sinThetaSqr);
+  
+  // Protection
+  if (sinTheta > 1.)
+    {
+      if (verboseLevel>0) G4cout 
+	<< " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
+	<< "sinTheta = " 
+	<< sinTheta
+	<< "; set to 1" 
+	<< G4endl;
+      sinTheta = 1.;
+    }
+  if (sinTheta < -1.)
+    {
+      if (verboseLevel>0) G4cout 
+	<< " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
+	<< "sinTheta = " 
+	<< sinTheta
+	<< "; set to -1" 
+	<< G4endl;
+      sinTheta = -1.;
+    }
+  // End protection
+  
       
-      // ****************************************************
-      //		Phi determination
-      // ****************************************************
+  G4double dirx = sinTheta*cos(phi);
+  G4double diry = sinTheta*sin(phi);
+  G4double dirz = cosTheta ;
+  
+  //
+  // update G4VParticleChange for the scattered photon 
+  //
+  
+  gammaEnergy1 = epsilon*gammaEnergy0;
       
-      G4double phi = SetPhi(epsilon,sinThetaSqr);
-
-      //
-      // scattered gamma angles. ( Z - axis along the parent gamma)
-      //
+  // New polarization
+  
+  G4ThreeVector gammaPolarization1 = SetNewPolarization(epsilon,
+							sinThetaSqr,
+							phi,
+							cosTheta);
+  
+  // Set new direction 
+  //G4ThreeVector tmpDirection1( dirx,diry,dirz );
+  
+  G4ParticleMomentum tmpDirection1( dirx,diry,dirz );
+  gammaDirection1 = tmpDirection1;
       
-      G4double cosTheta = 1. - onecost;
-
-      // Protection
-      
-      if (cosTheta > 1.)
-	{
-	  if (verboseLevel>0) G4cout 
-	    << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
-	    << "cosTheta = " 
-	    << cosTheta
-	    << "; set to 1" 
-	    << G4endl;
-	  cosTheta = 1.;
-	}
-      if (cosTheta < -1.)
-	{
-	  if (verboseLevel>0) G4cout 
-	    << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
-	    << "cosTheta = " 
-	    << cosTheta
-	    << "; set to -1" 
-	    << G4endl;
-	  cosTheta = -1.;
-	}
-      // End protection      
-      
-      
-      G4double sinTheta = sqrt (sinThetaSqr);
-      
-      // Protection
-      if (sinTheta > 1.)
-	{
-	  if (verboseLevel>0) G4cout 
-	    << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
-	    << "sinTheta = " 
-	    << sinTheta
-	    << "; set to 1" 
-	    << G4endl;
-	  sinTheta = 1.;
-	}
-      if (sinTheta < -1.)
-	{
-	  if (verboseLevel>0) G4cout 
-	    << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
-	    << "sinTheta = " 
-	    << sinTheta
-	    << "; set to -1" 
-	    << G4endl;
-	  sinTheta = -1.;
-	}
-      // End protection
-      
-      
-      G4double dirx = sinTheta*cos(phi);
-      G4double diry = sinTheta*sin(phi);
-      G4double dirz = cosTheta ;
-      
-      //
-      // update G4VParticleChange for the scattered gamma 
-      //
-      
-      gammaEnergy1 = epsilon*gammaEnergy0;
-      
-      // New polarization
-
-
-      G4ThreeVector gammaPolarization1 = SetNewPolarization(epsilon,
-							    sinThetaSqr,
-							    phi,
-							    cosTheta);
-      
-      // Set new direction 
-      //G4ThreeVector tmpDirection1( dirx,diry,dirz );
-      G4ParticleMomentum tmpDirection1( dirx,diry,dirz );
-      
-      gammaDirection1 = tmpDirection1;
-      
-      // Change reference frame.
-
-      SystemOfRefChange(gammaDirection0,gammaDirection1,
-			gammaPolarization0,gammaPolarization1);   
-      
-      if (gammaEnergy1 > 0.)
-	{
-	  aParticleChange.SetEnergyChange( gammaEnergy1 ) ;
-	}
-      else
-	{    
-	  aParticleChange.SetEnergyChange(0.) ;
-	  aParticleChange.SetStatusChange(fStopAndKill);
-	}
-      
+  // Change reference frame.
+  
+  SystemOfRefChange(gammaDirection0,gammaDirection1,
+		    gammaPolarization0,gammaPolarization1);   
+  
+  if (gammaEnergy1 > 0.)
+    {
+      aParticleChange.SetEnergyChange( gammaEnergy1 ) ;
     }
   else
-    {
-      // Temporary, same algorithm as G4LowEnergyCompton
-
-      do{
-	
-	if ( alpha1/(alpha1+alpha2) > G4UniformRand()){
-	  
-	  epsilon   = exp(-alpha1*G4UniformRand());  // pow(epsilon0,G4UniformRand())
-	  epsilonSq = epsilon*epsilon; 
-	}
-	else{
-	  
-	  epsilonSq = epsilon0Sq + (1.- epsilon0Sq)*G4UniformRand();
-	  epsilon   = sqrt(epsilonSq);
-	}
-	
-	onecost = (1.- epsilon)/(epsilon*E0_m);
-	sinThetaSqr   = onecost*(2.-onecost);
-	
-	x = sqrt(onecost/2)/(wlGamma/cm);
-	
-	const G4FirstLevel* oneAtomSF
-	  = (*theScatteringFunctionTable)[ZNumVec->index(elementZ)];
-	
-	ScatteringFunction = util.DataLogInterpolation(x, (*(*oneAtomSF)[0]), 
-						       (*(*oneAtomSF)[1]));
-	greject = (1. - epsilon*sinThetaSqr/(1.+ epsilonSq))*ScatteringFunction;
-	
-      }  while(greject < G4UniformRand()*elementZ);
-      
-      G4double cosTheta = 1. - onecost ;
-      G4double sinTheta = sqrt (sinThetaSqr);
-      G4double phi     = twopi * G4UniformRand() ;
-      G4double dirx = sinTheta*cos(phi) , diry = sinTheta*sin(phi) , dirz = cosTheta ;
-      
-      //
-      // update G4VParticleChange for the scattered gamma 
-      //
-      
-      G4ThreeVector tmpGammaDirection( dirx,diry,dirz );
-      gammaDirection1 = tmpGammaDirection;
-      gammaDirection1.rotateUz(gammaDirection0);
-      aParticleChange.SetMomentumChange( gammaDirection1 ) ;
-      gammaEnergy1 = epsilon*gammaEnergy0;
-      if (gammaEnergy1 > 0.)
-	{
-	  aParticleChange.SetEnergyChange( gammaEnergy1 ) ;
-	}
-      else
-	{    
-	  aParticleChange.SetEnergyChange(0.) ;
-	  aParticleChange.SetStatusChange(fStopAndKill);
-	}
-      
+    {    
+      aParticleChange.SetEnergyChange(0.) ;
+      aParticleChange.SetStatusChange(fStopAndKill);
     }
   
   //
@@ -575,36 +353,26 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
   
   G4double ElecKineEnergy = gammaEnergy0 - gammaEnergy1 ;
   
-  if((G4EnergyLossTables::GetRange(G4Electron::Electron(),
-				   ElecKineEnergy,aMaterial)>aStep.GetPostStepPoint()->GetSafety())
-     ||
-     (ElecKineEnergy > 
-      (G4Electron::Electron()->GetCutsInEnergy())[aMaterial->GetIndex()]))              
+
+  // Generate the electron only if with large enough range w.r.t. cuts and safety
+  
+  G4double safety = aStep.GetPostStepPoint()->GetSafety();
+  
+  if (rangeTest->Escape(G4Electron::Electron(),material,ElecKineEnergy,safety))
     {
       G4double ElecMomentum = sqrt(ElecKineEnergy*(ElecKineEnergy+2.*electron_mass_c2));
-      G4ThreeVector ElecDirection (
-				   (gammaEnergy0*gammaDirection0 - gammaEnergy1*gammaDirection1)*(1./ElecMomentum) );
-      
-      // create G4DynamicParticle object for the electron.  
-      G4DynamicParticle* aElectron= new G4DynamicParticle (G4Electron::Electron(),
-							   ElecDirection, 
-							   ElecKineEnergy) ;
-      
-      aParticleChange.SetNumberOfSecondaries(1) ;
-      aParticleChange.AddSecondary( aElectron ) ;
-      aParticleChange.SetLocalEnergyDeposit (0.) ; 
+      G4ThreeVector ElecDirection((gammaEnergy0 * gammaDirection0 - 
+				   gammaEnergy1 * gammaDirection1) * (1./ElecMomentum));  
+      G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(),ElecDirection,ElecKineEnergy) ;
+      aParticleChange.SetNumberOfSecondaries(1);
+      aParticleChange.AddSecondary(electron);
+      aParticleChange.SetLocalEnergyDeposit(0.); 
     }
   else
     {
-      aParticleChange.SetNumberOfSecondaries(0) ;
-      aParticleChange.SetLocalEnergyDeposit (ElecKineEnergy) ;
+      aParticleChange.SetNumberOfSecondaries(0);
+      aParticleChange.SetLocalEnergyDeposit(ElecKineEnergy);
     }
-  
-  
-  
-  // --- The end ---
-  
-  //  Reset NbOfInteractionLengthLeft and return aParticleChange
   
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
   
@@ -639,6 +407,44 @@ G4double G4LowEnergyPolarizedCompton::SetPhi(G4double energyRate,
   return phi;
 }
 
+
+G4ThreeVector G4LowEnergyPolarizedCompton::SetPerpendicularVector(G4ThreeVector& a)
+{
+  G4double dx = a.x();
+  G4double dy = a.y();
+  G4double dz = a.z();
+  G4double x = dx < 0.0 ? -dx : dx;
+  G4double y = dy < 0.0 ? -dy : dy;
+  G4double z = dz < 0.0 ? -dz : dz;
+  if (x < y) {
+    return x < z ? G4ThreeVector(-dy,dx,0) : G4ThreeVector(0,-dz,dy);
+  }else{
+    return y < z ? G4ThreeVector(dz,0,-dx) : G4ThreeVector(-dy,dx,0);
+  }
+}
+
+G4ThreeVector G4LowEnergyPolarizedCompton::SetRandomPolarization(G4ThreeVector& direction0)
+{
+  G4ThreeVector d0 = direction0.unit();
+  G4ThreeVector a1 = SetPerpendicularVector(d0); //different orthogonal
+  G4ThreeVector a0 = a1.unit(); // unit vector
+
+  G4double rand1 = G4UniformRand();
+  
+  G4double angle = twopi*rand1; // random polar angle
+  G4ThreeVector b0 = d0.cross(a0); // cross product
+  
+  G4ThreeVector c;
+  
+  c.setX(cos(angle)*(a0.x())+sin(angle)*b0.x());
+  c.setY(cos(angle)*(a0.y())+sin(angle)*b0.y());
+  c.setZ(cos(angle)*(a0.z())+sin(angle)*b0.z());
+  
+  G4ThreeVector c0 = c.unit();
+
+  return c0;
+  
+}
 
 G4ThreeVector G4LowEnergyPolarizedCompton::SetNewPolarization(G4double epsilon, 
 							      G4double sinSqrTh, 
@@ -683,9 +489,9 @@ G4ThreeVector G4LowEnergyPolarizedCompton::SetNewPolarization(G4double epsilon,
   
   G4double xParallel = normalisation*cosBeta;
   G4double yParallel = -(sinSqrTh*cosPhi*sinPhi)*cosBeta/normalisation;
-  G4double zParallel = -(cosTheta*sinTheta*cosPhi)*cosBeta/normalisation;
+  G4double zParallel = -(costheta*sinTheta*cosPhi)*cosBeta/normalisation;
   G4double xPerpendicular = 0.;
-  G4double yPerpendicular = (cosTheta)*sinBeta/normalisation;
+  G4double yPerpendicular = (costheta)*sinBeta/normalisation;
   G4double zPerpendicular = -(sinTheta*sinPhi)*sinBeta/normalisation;
   
   G4double xTotal = (xParallel + xPerpendicular);
@@ -737,7 +543,9 @@ void G4LowEnergyPolarizedCompton::SystemOfRefChange
     }
   
   // Added protection
+
   G4double psi = 0;
+
   if (sinPsi < 0.) psi = -pi/2.;
   if (sinPsi > 0.) psi = pi/2.;
 
@@ -768,35 +576,21 @@ G4bool G4LowEnergyPolarizedCompton::IsApplicable(const G4ParticleDefinition& par
 }
 
 
-G4double G4LowEnergyPolarizedCompton::GetMeanFreePath(const G4Track& aTrack, G4double, G4ForceCondition*)
+G4double G4LowEnergyPolarizedCompton::GetMeanFreePath(const G4Track& track, 
+						      G4double previousStepSize,
+						      G4ForceCondition*)
 {
-
-  // returns the gamma mean free path in GEANT4 internal units
-  const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
-  G4double gammaEnergy = aDynamicGamma->GetKineticEnergy();
-  G4Material* aMaterial = aTrack.GetMaterial();
+  const G4DynamicParticle* photon = track.GetDynamicParticle();
+  G4double energy = photon->GetKineticEnergy();
+  G4Material* material = track.GetMaterial();
+  size_t materialIndex = material->GetIndex();
   
-  //  G4bool isOutRange ;
-  
-  
-  if (gammaEnergy > highestEnergyLimit)
-    {
-      meanFreePath = DBL_MAX;
-    }	
-  else if(gammaEnergy < lowestEnergyLimit)
-    {
-      meanFreePath = DBL_MIN;
-    }
-  else 
-    {
-      meanFreePath = util.DataLogInterpolation(gammaEnergy, 
-					       aMaterial->GetIndex(), 
-					       theMeanFreePathTable);	
-    }                                     
-  
+  G4double meanFreePath;
+  if (energy > highEnergyLimit) meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);
+  else if (energy < lowEnergyLimit) meanFreePath = DBL_MAX;
+  else meanFreePath = meanFreePathTable->FindValue(energy,materialIndex);
   return meanFreePath;
 }
-
 
 
 

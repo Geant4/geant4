@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.hh,v 1.6 2001-09-10 18:05:16 pia Exp $
+// $Id: G4LowEnergyPolarizedCompton.hh,v 1.7 2001-10-24 09:07:20 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -35,26 +35,27 @@
 // 24 May 2001 - MGP      Modified to inherit from G4VDiscreteProcess
 // 25 May 2001 - MGP      Added protections to avoid crashes
 //
+// 17 October 2001 - F.Longo  Major revision according to design iteration
+//
 // Class description:
 // Low Energy electromagnetic process, Polarised Compton scattering
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // ------------------------------------------------------------
 
-#ifndef G4LowEnergyPolarizedCompton_h
-#define G4LowEnergyPolarizedCompton_h 1
+#ifndef G4LOWENERGYPOLARIZEDCOMPTON_H
+#define G4LOWENERGYPOLARIZEDCOMPTON_H 1
 
 #include "globals.hh"
 #include "G4VDiscreteProcess.hh"
-#include "G4LowEnergyUtilities.hh"
-//#include "G4VParticleChange.hh"
 
-class G4SecondLevel;
-class G4PhysicsTable;
-class G4DataVector;
+class G4Track;
+class G4Step;
 class G4ParticleDefinition;
 class G4VParticleChange;
-
+class G4VEMDataSet;
+class G4VCrossSectionHandler;
+class G4VRangeTest;
 
 class G4LowEnergyPolarizedCompton : public  G4VDiscreteProcess
 {  
@@ -64,53 +65,60 @@ public:
   
   ~G4LowEnergyPolarizedCompton();
 
-  G4bool IsApplicable(const G4ParticleDefinition&);
+  G4bool IsApplicable(const G4ParticleDefinition& definition);
   
-  void BuildPhysicsTable(const G4ParticleDefinition& GammaType);
- 
+  void BuildPhysicsTable(const G4ParticleDefinition& photon);
+  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);
+  
+  
+  // For testing purpose only
+  G4double DumpMeanFreePath(const G4Track& aTrack, 
+			    G4double previousStepSize, 
+			    G4ForceCondition* condition) 
+  { return GetMeanFreePath(aTrack, previousStepSize, condition); }
+  
+  
+protected:
+  
   G4double GetMeanFreePath(const G4Track& aTrack, 
 			   G4double previousStepSize, 
 			   G4ForceCondition* condition);
-
-  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);
-
-protected:
-
-  void BuildScatteringFunctionTable();
-  void BuildCrossSectionTable();
-  void BuildMeanFreePathTable();
-  void BuildZVec();
-
 private:
+
+  // Hide copy constructor and assignment operator as private 
+
+  G4LowEnergyPolarizedCompton& operator=(const G4LowEnergyPolarizedCompton& 
+					 right);
+  G4LowEnergyPolarizedCompton(const G4LowEnergyPolarizedCompton& );
   
-  G4Element* SelectRandomAtom(const G4DynamicParticle*, G4Material*);
+  G4double lowEnergyLimit;  // low energy limit  applied to the process
+  G4double highEnergyLimit; // high energy limit applied to the process
   
-  G4SecondLevel* theCrossSectionTable;
-  G4SecondLevel* theScatteringFunctionTable;
-  G4PhysicsTable* theMeanFreePathTable;
-  G4DataVector* ZNumVec;
+  G4VEMDataSet* meanFreePathTable;
+  G4VEMDataSet* scatterFunctionData;
 
-  G4double lowestEnergyLimit; // low  energy limit of the crosssection data 
-  G4double highestEnergyLimit; // high energy limit of the crosssection data
-  G4int numbBinTable; // number of bins in the data  tables
+  G4VCrossSectionHandler* crossSectionHandler;
+  G4VRangeTest* rangeTest;
 
-  G4LowEnergyUtilities util;
 
-  G4double meanFreePath; // actual Mean Free Path (current medium)
+  
+  
+  const G4double intrinsicLowEnergyLimit; // intrinsic validity range
+  const G4double intrinsicHighEnergyLimit;
 
+  // specific methods for polarization 
+  
+  G4ThreeVector SetRandomPolarization(G4ThreeVector& direction0); // Random Polarization
+  
+  G4ThreeVector SetPerpendicularVector(G4ThreeVector& a); // temporary
+  
   G4ThreeVector SetNewPolarization(G4double epsilon, G4double sinSqrTheta, 
 				   G4double phi, G4double cosTheta);
-  
   G4double SetPhi(G4double, G4double);
   
   void SystemOfRefChange(G4ThreeVector& direction0, G4ThreeVector& direction1, 
 			 G4ThreeVector& polarization0, G4ThreeVector& polarization1);
-
-  // hide assignment operator as private 
-  G4LowEnergyPolarizedCompton& operator=(const G4LowEnergyPolarizedCompton &right);
-  G4LowEnergyPolarizedCompton(const G4LowEnergyPolarizedCompton& );
-
-
+  
 };
 
 #endif
