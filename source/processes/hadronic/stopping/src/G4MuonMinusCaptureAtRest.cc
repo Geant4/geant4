@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.3 2000-04-07 16:06:48 vnivanch Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.4 2000-07-12 09:17:11 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -118,6 +118,8 @@ G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName)
   pdefFragm[3] = G4Triton::Triton();
   pdefFragm[4] = G4He3::He3();
   pdefFragm[5] = G4Alpha::Alpha();
+
+  nGkine = 0;
 
   if (verboseLevel>=0) {
     G4cout << GetProcessName() << " is created "<< G4endl;
