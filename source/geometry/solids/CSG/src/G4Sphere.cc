@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.31 2004-07-16 08:13:54 grichine Exp $
+// $Id: G4Sphere.cc,v 1.32 2004-09-16 07:37:58 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -30,6 +30,7 @@
 //
 // History:
 //
+// 16.09.04 V.Grichine: bug fixed in SurfaceNormal(p), theta normals
 // 16.07.04 V.Grichine: bug fixed in DistanceToOut(p,v), Rmin go outside
 // 02.06.04 V.Grichine: bug fixed in DistanceToIn(p,v), on Rmax,Rmin go inside
 // 30.10.03 J.Apostolakis: new algorithm in Inside for SPhi-sections
@@ -576,12 +577,13 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   //
   // Distance to phi planes
   //
+  // Protected against (0,0,z) 
+    
+  pPhi = atan2(p.y(),p.x());
+  if (pPhi<0) pPhi += 2*M_PI;
+
   if (fDPhi<2.0*M_PI&&rho)
   {
-    // Protected against (0,0,z) (above)
-    //
-    pPhi=atan2(p.y(),p.x());
-    if (pPhi<0) pPhi+=2*M_PI;
     if (fSPhi<0)
     {
       distSPhi=fabs(pPhi-(fSPhi+2.0*M_PI))*rho;
@@ -657,15 +659,28 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
     case kNEPhi:
       norm=G4ThreeVector(-sin(fSPhi+fDPhi),cos(fSPhi+fDPhi),0);
       break;
-
     case kNSTheta:
-      norm=G4ThreeVector(-cos(fSTheta)*sin(fSPhi),
-             -cos(fSTheta)*cos(fSPhi),sin(fSTheta));
+      norm=G4ThreeVector(-cos(fSTheta)*cos(pPhi),
+                         -cos(fSTheta)*sin(pPhi),
+                          sin(fSTheta)            );
+      //  G4cout<<G4endl<<" case kNSTheta:"<<G4endl;
+      //  G4cout<<"pPhi = "<<pPhi<<G4endl;
+      //  G4cout<<"rad  = "<<rad<<G4endl;
+      //  G4cout<<"pho  = "<<rho<<G4endl;
+      //  G4cout<<"p:    "<<p.x()<<"; "<<p.y()<<"; "<<p.z()<<G4endl;
+      //  G4cout<<"norm: "<<norm.x()<<"; "<<norm.y()<<"; "<<norm.z()<<G4endl;
       break;
     case kNETheta:
-      norm=G4ThreeVector(-cos(fSTheta+fDTheta)*cos(fSPhi+fDPhi),
-             -cos(fSTheta+fDTheta)*sin(fSPhi+fDPhi),
-             -sin(fSTheta+fDTheta));
+      norm=G4ThreeVector( cos(fSTheta+fDTheta)*cos(pPhi),
+                          cos(fSTheta+fDTheta)*sin(pPhi),
+                         -sin(fSTheta+fDTheta)              );
+
+      //  G4cout<<G4endl<<" case kNETheta:"<<G4endl;
+      //  G4cout<<"pPhi = "<<pPhi<<G4endl;
+      //  G4cout<<"rad  = "<<rad<<G4endl;
+      //  G4cout<<"pho  = "<<rho<<G4endl;
+      //  G4cout<<"p:    "<<p.x()<<"; "<<p.y()<<"; "<<p.z()<<G4endl;
+      //  G4cout<<"norm: "<<norm.x()<<"; "<<norm.y()<<"; "<<norm.z()<<G4endl;
       break;
     default:
       DumpInfo();
