@@ -63,8 +63,8 @@
     G4cout << "Entering the decision point "
            << (mom.t()-mom.mag())/a1 << " "
 	   << a1<<" "<< z1<<" "
-	   << a2<<" "<< z1<<" "<<mom.t()-mom.mag()<<G4endl;
-    if( (mom.mag())/a1 < 50*MeV )
+	   << a2<<" "<< z2<<" "<<mom.t()-mom.mag()<<G4endl;
+    if( (mom.t()-mom.mag())/a1 < 50*MeV )
     {
       G4cout << "Using pre-compound only, E= "<<mom.t()-mom.mag()<<G4endl;
       m_nucl = mom.mag();
@@ -75,6 +75,7 @@
       aPreFrag.SetNumberOfCharged(G4lrint(z1));
       aPreFrag.SetNumberOfHoles(0);
       G4ThreeVector plop(0.,0., mom.vect().mag());
+      G4double m2=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(G4lrint(z2),G4lrint(a2));
       G4LorentzVector aL(mom.t()+m2, plop);
       aPreFrag.SetMomentum(aL);
       G4ParticleDefinition * preFragDef;
@@ -82,6 +83,8 @@
                       ->FindIon(G4lrint(z1+z2),G4lrint(a1+a2),0,G4lrint(z1+z2));  
       aPreFrag.SetParticleDefinition(preFragDef);
 
+      G4cout << "Fragment INFO "<< a1+a2 <<" "<<z1+z2<<" "
+             << aL <<" "<<preFragDef->GetParticleName()<<G4endl;
       cascaders = theProjectileFragmentation.DeExcite(aPreFrag);
       G4double tSum = 0;
       for(size_t count = 0; count<cascaders->size(); count++)
