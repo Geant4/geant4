@@ -66,6 +66,7 @@
   G4double LXe_RIND[NUMENTRIES]  = { 1.59 , 1.57, 1.54 };
   G4double LXe_ABSL[NUMENTRIES]  = { 35.*cm, 35.*cm, 35.*cm}; //atten length
   G4MaterialPropertiesTable *LXe_mt = new G4MaterialPropertiesTable();
+  LXe_mt->AddProperty("FASTCOMPONENT", LXe_PP, LXe_SCINT, NUMENTRIES);
   LXe_mt->AddProperty("SLOWCOMPONENT", LXe_PP, LXe_SCINT, NUMENTRIES);
   LXe_mt->AddProperty("RINDEX",        LXe_PP, LXe_RIND,  NUMENTRIES);
   LXe_mt->AddProperty("ABSLENGTH",     LXe_PP, LXe_ABSL,  NUMENTRIES);
@@ -75,7 +76,9 @@
   // but the Fano factor is already partially included in the correlated 
   // electron production - therefore not the absolute Fano factor here:
   LXe_mt->AddConstProperty("RESOLUTIONSCALE",1.0);
+  LXe_mt->AddConstProperty("FASTTIMECONSTANT",20.*ns);
   LXe_mt->AddConstProperty("SLOWTIMECONSTANT",45.*ns);
+  LXe_mt->AddConstProperty("YIELDRATIO",1.0);
   LXe->SetMaterialPropertiesTable(LXe_mt);
 
   //  G4double GXe_PP[NUMENTRIES]    = { 7.07*eV, 7.07*eV };
@@ -84,12 +87,15 @@
   G4double GXe_RIND[NUMENTRIES]  = { 1.00, 1.00, 1.00 };
   G4double GXe_ABSL[NUMENTRIES]  = { 100*m, 100*m, 100*m}; //atten length
   G4MaterialPropertiesTable *GXe_mt = new G4MaterialPropertiesTable();
+  GXe_mt->AddProperty("FASTCOMPONENT", GXe_PP, GXe_SCINT, NUMENTRIES);
   GXe_mt->AddProperty("SLOWCOMPONENT", GXe_PP, GXe_SCINT, NUMENTRIES);
   GXe_mt->AddProperty("RINDEX",        GXe_PP, GXe_RIND,  NUMENTRIES);
   GXe_mt->AddProperty("ABSLENGTH",     GXe_PP, GXe_ABSL,  NUMENTRIES);
   GXe_mt->AddConstProperty("SCINTILLATIONYIELD",12000./MeV); // include QE 20%
   GXe_mt->AddConstProperty("RESOLUTIONSCALE",1.0);
+  GXe_mt->AddConstProperty("FASTTIMECONSTANT",20.*ns);
   GXe_mt->AddConstProperty("SLOWTIMECONSTANT",45.*ns);
+  GXe_mt->AddConstProperty("YIELDRATIO",1.0);
   GXe->SetMaterialPropertiesTable(GXe_mt);
 
 
