@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst14PhysicsList.hh,v 1.11 2003-02-23 14:35:11 pia Exp $
+// $Id: Tst14PhysicsList.hh,v 1.12 2003-02-23 17:22:07 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Original author unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -51,6 +51,8 @@ public:
   Tst14PhysicsList();
 
   virtual ~Tst14PhysicsList();
+
+  virtual void SetCuts();
   
   // Register PhysicsList chunks
   void AddPhysicsList(const G4String& name);

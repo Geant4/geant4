@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst14PhotonPolarised.cc,v 1.1 2003-02-23 16:25:30 pia Exp $
+// $Id: Tst14PhotonPolarised.cc,v 1.2 2003-02-23 17:22:15 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -62,7 +62,7 @@ void Tst14PhotonPolarised::ConstructProcess()
       if (particleName == "gamma") 
 	{
 	  manager->AddDiscreteProcess(new G4LowEnergyPhotoElectric);
-	  manager->AddDiscreteProcess(new G4LowEnergyPolarisedCompton);
+	  manager->AddDiscreteProcess(new G4LowEnergyPolarizedCompton);
 	  manager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
 	  manager->AddDiscreteProcess(new G4LowEnergyRayleigh);
 	}   

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst14PhysicsList.cc,v 1.18 2003-02-23 16:25:30 pia Exp $
+// $Id: Tst14PhysicsList.cc,v 1.19 2003-02-23 17:22:15 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -33,14 +33,15 @@
 
 #include "Tst14PhysicsList.hh"
 #include "Tst14PhysicsListMessenger.hh"
-#include "Tst14PhotonStandard.hh".
-#include "Tst14PhotonEPDL.hh".
-#include "Tst14PhotonPenelope.hh".
-#include "Tst14PhotonPolarised.hh".
-#include "Tst14ElectronStandard.hh".
-#include "Tst14ElectronEPDL.hh".
-#include "Tst14ElectronPenelope.hh".
-#include "Tst14PositronStandard.hh".
+#include "Tst14Particles.hh"
+#include "Tst14PhotonStandard.hh"
+#include "Tst14PhotonEPDL.hh"
+#include "Tst14PhotonPenelope.hh"
+#include "Tst14PhotonPolarised.hh"
+#include "Tst14ElectronStandard.hh"
+#include "Tst14ElectronEEDL.hh"
+#include "Tst14ElectronPenelope.hh"
+#include "Tst14PositronStandard.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4Gamma.hh"
@@ -49,9 +50,9 @@
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4VProcess.hh"
-#include " G4LowEnergyPhotoElectric.hh"
-#include " G4LowEnergyIonisation.hh"
-#include " G4LowEnergyBremsstrahlung.hh"
+#include "G4LowEnergyPhotoElectric.hh"
+#include "G4LowEnergyIonisation.hh"
+#include "G4LowEnergyBremsstrahlung.hh"
 
 
 Tst14PhysicsList::Tst14PhysicsList(): G4VModularPhysicsList(),
@@ -66,22 +67,19 @@ Tst14PhysicsList::Tst14PhysicsList(): G4VModularPhysicsList(),
   SetVerboseLevel(1);
 
   // UI messenger
-  physicsListMessenger = new Tst14PhysicsListMessenger(this);
+  messenger = new Tst14PhysicsListMessenger(this);
  
   // Particles
   RegisterPhysics( new Tst14Particles("particles") );
 
   // Transportation
   AddTransportation();
-
-  // General chunk of PhysicsList (transportation,...)
-  RegisterPhysics( new Tst14GeneralProcesses("general") );
 }
 
 
 Tst14PhysicsList::~Tst14PhysicsList()
 {
-  delete physicsListMessenger;
+  delete messenger;
 }
 
 
@@ -279,16 +277,16 @@ void Tst14PhysicsList::SetLowEnSecPhotCut(G4double cut)
   G4int nPhotonProcesses = photonProcesses->size();
 
   // Loop over photon processes until one retrieves LowEnergyPhotoElectric
-  for (G4int iPhoton=0; i<nPhotonProcesses; i++)
+  for (G4int iPhoton=0; iPhoton<nPhotonProcesses; iPhoton++)
     {
-      G4VProcess* process = photonProcesses[iPhoton];
-      G4String& name = process->GetProcessName();
+      G4VProcess* process = (*photonProcesses)[iPhoton];
+      const G4String& name = process->GetProcessName();
       G4String nameLowE("LowEnPhotoElec");
       if (name == nameLowE)
 	{
 	  // The only way to get access to the cut stting is through a dynamic_cast
 	  // (it is ugly!)
-	  G4LowEnergyPhotoElectric* lowEProcess = dynamic_cast<G4LowEnergyPhotoElectric*> process;
+	  G4LowEnergyPhotoElectric* lowEProcess = dynamic_cast<G4LowEnergyPhotoElectric*>(process);
 	  if (lowEProcess != 0) 
 	    {
 	     lowEProcess->SetCutForLowEnSecPhotons(cut);
@@ -306,17 +304,17 @@ void Tst14PhysicsList::SetLowEnSecPhotCut(G4double cut)
   G4int nElectronProcesses = electronProcesses->size();
 
   // Loop over electron processes until one retrieves LowEnergyIonisation or LowEnergyBremsstrahlung
-  for (G4int iElectron=0; i<nElectronProcesses; i++)
+  for (G4int iElectron=0; iElectron<nElectronProcesses; iElectron++)
     {
-      G4VProcess* process = electronProcesses[iElectron];
-      G4String& name = process->GetProcessName();
+      G4VProcess* process = (*electronProcesses)[iElectron];
+      const G4String& name = process->GetProcessName();
 
       G4String nameIoni("LowEnergyIoni");
       if (name == nameIoni)
 	{
 	  // The only way to get access to the cut setting is through a dynamic_cast
 	  // (it is ugly!)
-	  G4LowEnergyIonisation* lowEProcess = dynamic_cast<G4LowEnergyIonisation*> process;
+	  G4LowEnergyIonisation* lowEProcess = dynamic_cast<G4LowEnergyIonisation*>(process);
 	  if (lowEProcess != 0) 
 	    {
 	      lowEProcess->SetCutForLowEnSecPhotons(cut);
@@ -332,7 +330,7 @@ void Tst14PhysicsList::SetLowEnSecPhotCut(G4double cut)
 	{
 	  // The only way to get access to the cut setting is through a dynamic_cast
 	  // (it is ugly!)
-	  G4LowEnergyIonisation* lowEProcess = dynamic_cast<G4LowEnergyBremsstrahlung*> process;
+	  G4LowEnergyBremsstrahlung* lowEProcess = dynamic_cast<G4LowEnergyBremsstrahlung*>(process);
 	  if (lowEProcess != 0) 
 	    {
 	      lowEProcess->SetCutForLowEnSecPhotons(cut);
@@ -356,16 +354,16 @@ void Tst14PhysicsList::SetLowEnSecElecCut(G4double cut)
   G4int nPhotonProcesses = photonProcesses->size();
 
   // Loop over photon processes until one retrieves LowEnergyPhotoElectric
-  for (G4int iPhoton=0; i<nPhotonProcesses; i++)
+  for (G4int iPhoton=0; iPhoton<nPhotonProcesses; iPhoton++)
     {
-      G4VProcess* process = photonProcesses[iPhoton];
-      G4String& name = process->GetProcessName();
+      G4VProcess* process = (*photonProcesses)[iPhoton];
+      const G4String& name = process->GetProcessName();
       G4String nameLowE("LowEnPhotoElec");
       if (name == nameLowE)
 	{
 	  // The only way to get access to the cut stting is through a dynamic_cast
 	  // (it is ugly!)
-	  G4LowEnergyPhotoElectric* lowEProcess = dynamic_cast<G4LowEnergyPhotoElectric*> process;
+	  G4LowEnergyPhotoElectric* lowEProcess = dynamic_cast<G4LowEnergyPhotoElectric*>(process);
 	  if (lowEProcess != 0) 
 	    {
 	     lowEProcess->SetCutForLowEnSecElectrons(cut);
@@ -383,16 +381,16 @@ void Tst14PhysicsList::SetLowEnSecElecCut(G4double cut)
   G4int nElectronProcesses = electronProcesses->size();
 
   // Loop over electron processes until one retrieves LowEnergyIonisation
-  for (G4int iElectron=0; i<nElectronProcesses; i++)
+  for (G4int iElectron=0; iElectron<nElectronProcesses; iElectron++)
     {
-      G4VProcess* process = electronProcesses[iElectron];
-      G4String& name = process->GetProcessName();
+      G4VProcess* process = (*electronProcesses)[iElectron];
+      const G4String& name = process->GetProcessName();
       G4String nameLowE("LowEnergyIoni");
       if (name == nameLowE)
 	{
 	  // The only way to get access to the cut setting is through a dynamic_cast
 	  // (it is ugly!)
-	  G4LowEnergyIonisation* lowEProcess = dynamic_cast<G4LowEnergyIonisation*> process;
+	  G4LowEnergyIonisation* lowEProcess = dynamic_cast<G4LowEnergyIonisation*>(process);
 	  if (lowEProcess != 0) 
 	    {
 	      lowEProcess->SetCutForLowEnSecElectrons(cut);
@@ -414,16 +412,16 @@ void Tst14PhysicsList::ActivateAuger(G4bool value)
   G4int nPhotonProcesses = photonProcesses->size();
 
   // Loop over photon processes until one retrieves LowEnergyPhotoElectric
-  for (G4int iPhoton=0; i<nPhotonProcesses; i++)
+  for (G4int iPhoton=0; iPhoton<nPhotonProcesses; iPhoton++)
     {
-      G4VProcess* process = photonProcesses[iPhoton];
-      G4String& name = process->GetProcessName();
+      G4VProcess* process = (*photonProcesses)[iPhoton];
+      const G4String& name = process->GetProcessName();
       G4String nameLowE("LowEnPhotoElec");
       if (name == nameLowE)
 	{
 	  // The only way to get access to the Auger activation is through a dynamic_cast
 	  // (it is ugly!)
-	  G4LowEnergyPhotoElectric* lowEProcess = dynamic_cast<G4LowEnergyPhotoElectric*> process;
+	  G4LowEnergyPhotoElectric* lowEProcess = dynamic_cast<G4LowEnergyPhotoElectric*>(process);
 	  if (lowEProcess != 0) 
 	    {
 	     lowEProcess->ActivateAuger(value);
@@ -439,16 +437,16 @@ void Tst14PhysicsList::ActivateAuger(G4bool value)
   G4int nElectronProcesses = electronProcesses->size();
 
   // Loop over electron processes until one retrieves LowEnergyIonisation
-  for (G4int iElectron=0; i<nElectronProcesses; i++)
+  for (G4int iElectron=0; iElectron<nElectronProcesses; iElectron++)
     {
-      G4VProcess* process = electronProcesses[iElectron];
-      G4String& name = process->GetProcessName();
+      G4VProcess* process = (*electronProcesses)[iElectron];
+      const G4String& name = process->GetProcessName();
       G4String nameLowE("LowEnergyIoni");
       if (name == nameLowE)
 	{
 	  // The only way to get access to the Auger activation is through a dynamic_cast
 	  // (it is ugly!)
-	  G4LowEnergyIonisation* lowEProcess = dynamic_cast<G4LowEnergyIonisation*> process;
+	  G4LowEnergyIonisation* lowEProcess = dynamic_cast<G4LowEnergyIonisation*>(process);
 	  if (lowEProcess != 0) 
 	    {
 	      lowEProcess->ActivateAuger(value);

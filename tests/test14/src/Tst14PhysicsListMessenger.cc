@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PhysicsListMessenger.cc,v 1.9 2003-02-23 10:17:25 pia Exp $
+// $Id: Tst14PhysicsListMessenger.cc,v 1.10 2003-02-23 17:22:15 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -40,9 +40,10 @@
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithAString.hh"
 
 Tst14PhysicsListMessenger::Tst14PhysicsListMessenger(Tst14PhysicsList * physList)
-:List(physicsList)
+:physicsList(physList)
 {
   // MGP ---- ToDo: who is responsible for deleting lowEnDir?
   lowEnDir = new G4UIdirectory("/lowenergy/");

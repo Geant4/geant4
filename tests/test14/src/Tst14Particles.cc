@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst14Particles.cc,v 1.1 2003-02-23 14:36:31 pia Exp $
+// $Id: Tst14Particles.cc,v 1.2 2003-02-23 17:22:15 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -40,7 +40,7 @@ Tst14Particles::Tst14Particles(const G4String& name)
   :  G4VPhysicsConstructor(name)
 { }
 
-Tst14Particles::~Tst26PhysListParticles()
+Tst14Particles::~Tst14Particles()
 {}
 
 void Tst14Particles::ConstructParticle()
