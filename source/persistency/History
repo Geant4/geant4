@@ -15,7 +15,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-2 November, 00  Y.Morita (persistency-V01-00-00)
+2 November, 00  Y.Morita (persistency-V02-00-00)
 - created global/include/G4Pglobals.hh
 - workaround to protect old ooddlx from new STL syntax.
 
