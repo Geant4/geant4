@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2002-03-28 18:10:37 japost Exp $
+$Id: History,v 1.55 2002-04-12 14:55:28 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -274,6 +274,12 @@ Jun 2nd, 2000  J. Apostolakis
 - G4FieldManager[.hh.icc]
   o Added DeltaIntersection and DeltaOneStep to FieldManager: added
     Get/Set methods and SetAccuraciesWithDeltaOneStep().
+
+May 31st, 2000  J. Apostolakis - field-V01-01-03
+
+include/G4FieldManager.hh,icc
+  o Moved Delta Intersection and Delta One Step to FieldManager
+     (from Propagator in Field),  to allow them to differ over the detector.
 
 May 11th, 2000  J. Apostolakis - field-V01-01-02
 
