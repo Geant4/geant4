@@ -152,6 +152,7 @@ void Test30Physics::Initialise()
   G4Deuteron::DeuteronDefinition();
   G4Alpha::AlphaDefinition();
   G4Triton::TritonDefinition();
+  G4GenericIon::GenericIonDefinition();
   theProcess = 0;
   theDeExcitation = 0;
   thePreCompound = 0;
@@ -176,6 +177,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
   else if(part_name == "neutron") man = new G4ProcessManager(G4Neutron::Neutron());
   else if(part_name == "deuteron") man = new G4ProcessManager(G4Deuteron::Deuteron());
   else if(part_name == "alpha") man = new G4ProcessManager(G4Alpha::Alpha());
+  else if(part_name == "GenericIon") man = new G4ProcessManager(G4GenericIon::GenericIon());
 
   if(!man) return 0;
 
