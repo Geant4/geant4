@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.97 2004-05-27 11:02:24 flei Exp $
+# $Id: binmake.gmk,v 1.98 2004-06-01 06:38:08 hpw Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -64,12 +64,14 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/electromagnetic/lowenergy/include \
               -I$(G4BASE)/processes/hadronic/cross_sections/include \
 	      -I$(G4BASE)/processes/hadronic/management/include \
+	      -I$(G4BASE)/processes/hadronic/models/abrasion/include \
 	      -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
 	      -I$(G4BASE)/processes/hadronic/models/cascade/evaporation/include \
 	      -I$(G4BASE)/processes/hadronic/models/cascade/utils/include \
               -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
               -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
               -I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
+              -I$(G4BASE)/processes/hadronic/models/em_dissociation/include \
               -I$(G4BASE)/processes/hadronic/models/high_energy/include \
               -I$(G4BASE)/processes/hadronic/models/isotope_production/include \
               -I$(G4BASE)/processes/hadronic/models/leading_particle/include \
@@ -86,6 +88,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
+              -I$(G4BASE)/processes/hadronic/models/de_excitation/ablation/include \
               -I$(G4BASE)/processes/hadronic/models/inucl/include \
               -I$(G4BASE)/processes/hadronic/models/photolepton_hadron/muon_nuclear/include \
               -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
