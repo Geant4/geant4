@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.52 2004-11-10 08:53:20 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.53 2004-11-17 18:21:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -120,6 +120,7 @@ void G4hIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part
   else if(bpart == 0) theBaseParticle = G4Proton::Proton();
   else                theBaseParticle = bpart;
 
+  SetBaseParticle(theBaseParticle);
   SetSecondaryParticle(G4Electron::Electron());
   mass  = theParticle->GetPDGMass();
   ratio = electron_mass_c2/mass;

@@ -1,4 +1,4 @@
-$Id: History,v 1.130 2004-11-10 08:53:17 vnivanch Exp $
+$Id: History,v 1.131 2004-11-17 18:21:22 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17 Nov 04: V.Ivant (stand-V06-02-10)
+- Fix problem of test27
 
 11 Nov 04: V.Ivant (stand-V06-02-09)
 - Migration to new algorithm to Store/Retrieve tables

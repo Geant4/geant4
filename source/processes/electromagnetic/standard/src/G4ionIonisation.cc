@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.29 2004-11-10 08:53:20 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.30 2004-11-17 18:21:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -96,6 +96,7 @@ void G4ionIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* pa
   else if(bpart == 0) theBaseParticle = G4GenericIon::GenericIon();
   else                theBaseParticle = bpart;
 
+  SetBaseParticle(theBaseParticle);
   SetSecondaryParticle(G4Electron::Electron());
 
   flucModel = new G4IonFluctuations();
