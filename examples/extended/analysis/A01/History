@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2004-12-13 16:02:49 gcosmo Exp $
+$Id: History,v 1.29 2005-03-31 16:04:00 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,6 +10,11 @@ $Id: History,v 1.28 2004-12-13 16:02:49 gcosmo Exp $
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------  
+
+31 March 2005 Mark Donszelmann (exampleA01-V07-00-00)
+- Fixed linking problem with AIDA by replacing LOADLIBS with LDLIBS
+  which is not touched by the replacement strategy in binmake.gmk
+  for WIN32-VC.
 
 13th December 2004 Gabriele Cosmo (exampleA01-V06-02-03)
 - Modified hadlists.gmk to new phys-lists structure.
