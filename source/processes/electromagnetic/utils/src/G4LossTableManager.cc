@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.27 2003-10-27 17:24:42 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.28 2003-10-30 16:20:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,8 +91,8 @@ G4LossTableManager::~G4LossTableManager()
     if(msc_vector[j] ) delete msc_vector[j];
   }
   size_t emp = emp_vector.size();
-  for (size_t j=0; j<emp; j++) {
-    if(emp_vector[j] ) delete emp_vector[j];
+  for (size_t k=0; k<emp; k++) {
+    if(emp_vector[k] ) delete emp_vector[k];
   }
  Clear();
   delete theMessenger;
@@ -666,8 +666,8 @@ void G4LossTableManager::SetMinEnergy(G4double val)
     if(msc_vector[j]) msc_vector[j]->SetMinKinEnergy(val);
   }
   size_t emp = emp_vector.size();
-  for (size_t j=0; j<emp; j++) {
-    if(emp_vector[j]) emp_vector[j]->SetMinKinEnergy(val);
+  for (size_t k=0; k<emp; k++) {
+    if(emp_vector[k]) emp_vector[k]->SetMinKinEnergy(val);
   }
 }
 
@@ -685,8 +685,8 @@ void G4LossTableManager::SetMaxEnergy(G4double val)
     if(msc_vector[j]) msc_vector[j]->SetMaxKinEnergy(val);
   }
   size_t emp = emp_vector.size();
-  for (size_t j=0; j<emp; j++) {
-    if(emp_vector[j]) emp_vector[j]->SetMaxKinEnergy(val);
+  for (size_t k=0; k<emp; k++) {
+    if(emp_vector[k]) emp_vector[k]->SetMaxKinEnergy(val);
   }
 }
 
@@ -703,8 +703,8 @@ void G4LossTableManager::SetVerbose(G4int val)
     if(msc_vector[j]) msc_vector[j]->SetVerboseLevel(val);
   }
   size_t emp = emp_vector.size();
-  for (size_t j=0; j<emp; j++) {
-    if(emp_vector[j]) emp_vector[j]->SetVerboseLevel(val);
+  for (size_t k=0; k<emp; k++) {
+    if(emp_vector[k]) emp_vector[k]->SetVerboseLevel(val);
   }
 }
 
