@@ -66,18 +66,18 @@ template<class T> TLBE<T>::TLBE() : G4VUserPhysicsList()
   G4DataQuestionaire it(photon, lowenergy, neutron, radioactive);
   G4cout << "You are using the simulation engine: LBE 5.3"<<G4endl;
   G4cout <<G4endl<<G4endl;
-  defaultCutValue     = 1.0*micrometer; //
-  cutForGamma         = defaultCutValue;
+  this->defaultCutValue     = 1.0*micrometer; //
+  cutForGamma         = this->defaultCutValue;
   cutForElectron      = 1.0*nanometer;
-  cutForPositron      = defaultCutValue;
-  cutForProton        = defaultCutValue;
+  cutForPositron      = this->defaultCutValue;
+  cutForProton        = this->defaultCutValue;
   cutForAlpha         = 1.0*nanometer;
   cutForGenericIon    = 1.0*nanometer;
 
   VerboseLevel = 1;
   OpVerbLevel = 0;
 
-  SetVerboseLevel(VerboseLevel);
+  this->SetVerboseLevel(VerboseLevel);
 }
 
 
@@ -212,9 +212,9 @@ template<class T> TLBE<T>::~TLBE()
   
   G4VUserPhysicsList::AddTransportation();
   
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  this->theParticleIterator->reset();
+  while( (*(this->theParticleIterator))() ){
+    G4ParticleDefinition* particle = this->theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
     // time cuts for ONLY neutrons:
@@ -292,9 +292,9 @@ template<class T> TLBE<T>::~TLBE()
   //  ahadronLowEIon->SetBarkasOff();
 
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  this->theParticleIterator->reset();
+  while( (*(this->theParticleIterator))() ){
+    G4ParticleDefinition* particle = this->theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
     G4String particleType = particle->GetParticleType();
@@ -421,10 +421,10 @@ template<class T> TLBE<T>::~TLBE()
   G4OpticalSurfaceModel themodel = unified;
   theBoundaryProcess->SetModel(themodel);
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() )
+  this->theParticleIterator->reset();
+  while( (*(this->theParticleIterator))() )
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ParticleDefinition* particle = this->theParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
       if (theScintProcessDef->IsApplicable(*particle)) {
@@ -530,10 +530,10 @@ template<class T> TLBE<T>::~TLBE()
   G4LElastic* theElasticModel = new G4LElastic;
   theElasticProcess->RegisterMe(theElasticModel);
   
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()) 
+  this->theParticleIterator->reset();
+  while ((*(this->theParticleIterator))()) 
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ParticleDefinition* particle = this->theParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
 
@@ -750,10 +750,10 @@ template<class T> TLBE<T>::~TLBE()
 
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() )
+  this->theParticleIterator->reset();
+  while( (*(this->theParticleIterator))() )
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ParticleDefinition* particle = this->theParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
       
       if (theDecayProcess->IsApplicable(*particle)) 
@@ -791,13 +791,13 @@ template<class T> TLBE<T>::~TLBE()
 template<class T> void TLBE<T>::SetCuts() 
 {
   
-  if (verboseLevel >1)
+  if (this->verboseLevel >1)
     G4cout << "LBE::SetCuts:";
   
-  if (verboseLevel>0){
+  if (this->verboseLevel>0){
     G4cout << "LBE::SetCuts:";
     G4cout << "CutLength : " 
-	   << G4BestUnit(defaultCutValue,"Length") << G4endl;
+	   << G4BestUnit(this->defaultCutValue,"Length") << G4endl;
   }
 
   //special for low energy physics
@@ -807,17 +807,17 @@ template<class T> void TLBE<T>::SetCuts()
    
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
+  this->SetCutValue(cutForGamma, "gamma");
+  this->SetCutValue(cutForElectron, "e-");
+  this->SetCutValue(cutForPositron, "e+");
   
-  //  SetCutValue(cutForProton, "proton");
-  //  SetCutValue(cutForProton, "anti_proton");
-  //  SetCutValue(cutForAlpha,  "alpha");
-  //  SetCutValue(cutForGenericIon,  "GenericIon");
+  //  this->SetCutValue(cutForProton, "proton");
+  //  this->SetCutValue(cutForProton, "anti_proton");
+  //  this->SetCutValue(cutForAlpha,  "alpha");
+  //  this->SetCutValue(cutForGenericIon,  "GenericIon");
   
-  //  SetCutValueForOthers(defaultCutValue);
+  //  this->SetCutValueForOthers(this->defaultCutValue);
   
-  if (verboseLevel>0) DumpCutValuesTable();
+  if (this->verboseLevel>0) this->DumpCutValuesTable();
 }
 
