@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2001-10-17 13:01:23 gcosmo Exp $
+$Id: History,v 1.21 2001-10-22 16:40:30 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Oct 17, 2001   Gabriele Cosmo
+Oct 22, 2001   Gabriele Cosmo               geometry-V03-02-01
 -----------------------------
 - Introduced new module "verification" for geometry debugging.
+- This tag includes the following tags on top of "geant4-03-02-ref-05":
+  geomver-V03-02-00, field-V03-02-00, geomvol-V03-02-00,
+  geommng-V03-02-00, geom-solid-bool-V03-02-01.
+  See related History files for details.
 
 Jul 11, 2001   Gabriele Cosmo               geometry-V03-02-00
 -----------------------------
