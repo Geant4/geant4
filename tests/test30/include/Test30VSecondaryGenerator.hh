@@ -57,7 +57,7 @@ public:
 
   Test30VSecondaryGenerator(G4HadronicInteraction* hadi, G4Material* mat);
 
-  ~Test30VSecondaryGenerator();
+  virtual ~Test30VSecondaryGenerator();
 
   virtual G4VParticleChange* Secondaries(const G4Track& track);
 
