@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.10 1999-12-16 17:19:36 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.11 2000-01-11 17:22:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -113,7 +113,8 @@ clicks, spawn other windows, change viewpoint, etc.).
 * /vis/viewer/set/notifyOption immediate|delayed
 * /vis/viewer/notifyHandler
 * /vis/viewer/clone
-/vis/viewer/update [<viewer-name>]
+/vis/viewer/show [<viewer-name>]
+/vis/viewer/update - synonym for /vis/viewer/show.
 
 
 Global Commands
@@ -142,7 +143,7 @@ would be
 
 /vis/scene/add/volume $1
 /vis/scene/notifyHandlers
-/vis/viewer/update
+/vis/viewer/show
 
 or some such.
 
@@ -208,7 +209,7 @@ or some such.
   fMessengerList.append (new G4VisCommandViewerRefresh);
   fMessengerList.append (new G4VisCommandViewerRemove);
   fMessengerList.append (new G4VisCommandViewerSelect);
-  fMessengerList.append (new G4VisCommandViewerUpdate);
+  fMessengerList.append (new G4VisCommandViewerShow);
 
   // Camera - OLD STYLE!!
   fMessengerList.append

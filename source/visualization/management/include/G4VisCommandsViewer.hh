@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.hh,v 1.6 1999-12-16 17:19:17 johna Exp $
+// $Id: G4VisCommandsViewer.hh,v 1.7 2000-01-11 17:22:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -85,15 +85,16 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
-class G4VisCommandViewerUpdate: public G4VVisCommandViewer {
+class G4VisCommandViewerShow: public G4VVisCommandViewer {
 public:
   // Uses compiler defaults for copy constructor and assignment.
-  G4VisCommandViewerUpdate ();
-  ~G4VisCommandViewerUpdate ();
+  G4VisCommandViewerShow ();
+  ~G4VisCommandViewerShow ();
   G4String GetCurrentValue (G4UIcommand* command);
   void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
   G4UIcmdWithAString* fpCommand;
+  G4UIcmdWithAString* fpCommand1;
 };
 
 #endif

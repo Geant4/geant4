@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.9 1999-12-16 17:19:35 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.10 2000-01-11 17:22:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -354,9 +354,6 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand* command,
 	if (refreshShortName == ShortName (viewer -> GetName ())) {
 	  found = true;
 	  fpVisManager -> SetCurrentViewer (viewer);
-	  fpVisManager -> SetCurrentSceneHandler (sceneHandler);
-	  fpVisManager -> SetCurrentGraphicsSystem
-	    (sceneHandler -> GetGraphicsSystem ());
 	  break;
 	}
       }
@@ -370,7 +367,7 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand* command,
     viewer -> SetViewParameters (fpVisManager -> GetCurrentViewParameters ());
     viewer -> DrawView ();
     viewer -> ShowView ();
-    G4cout << " refreshd.";
+    G4cout << " refreshed.";
   }
   else {
     G4cout << " not found - \"/vis/viewer/list\""
@@ -536,14 +533,18 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand* command,
   }
 }
 
-////////////// /vis/viewer/update ///////////////////////////////////////
+////////////// /vis/viewer/show ///////////////////////////////////////
+// Synonym (deprecated): /vis/viewer/update ///////////////////////////
 
-G4VisCommandViewerUpdate::G4VisCommandViewerUpdate () {
+G4VisCommandViewerShow::G4VisCommandViewerShow () {
   G4bool omitable, currentAsDefault;
-  fpCommand = new G4UIcmdWithAString ("/vis/viewer/update", this);
-  fpCommand -> SetGuidance ("/vis/viewer/update [<viewer-name>]");
+  fpCommand = new G4UIcmdWithAString ("/vis/viewer/show", this);
+  fpCommand -> SetGuidance ("/vis/viewer/show [<viewer-name>]");
   fpCommand -> SetGuidance
-    ("Updates viewer (necessary for graphical database post-processing.");
+    ("Triggers graphical database post-processing for viewers"
+     " using that technique.");
+  fpCommand -> SetGuidance
+    ("For such viewers the view only becomes visible with this command.");
   fpCommand -> SetGuidance ("Viewer becomes current.");
   fpCommand -> SetGuidance
     ("Specify viewer by name (\"/vis/viewer/list\""
@@ -552,13 +553,21 @@ G4VisCommandViewerUpdate::G4VisCommandViewerUpdate () {
 				 omitable = true,
 				 currentAsDefault = true);
   viewerNameCommands.push_back (fpCommand);
+  fpCommand1 = new G4UIcmdWithAString ("/vis/viewer/update", this);
+  fpCommand1 -> SetGuidance
+    ("Synonym for \"/vis/viewer/show\" - see that command for guidance.");
+  fpCommand1 -> SetParameterName ("viewer-name",
+				  omitable = true,
+				  currentAsDefault = true);
+  viewerNameCommands.push_back (fpCommand1);
 }
 
-G4VisCommandViewerUpdate::~G4VisCommandViewerUpdate () {
+G4VisCommandViewerShow::~G4VisCommandViewerShow () {
   delete fpCommand;
+  delete fpCommand1;
 }
 
-G4String G4VisCommandViewerUpdate::GetCurrentValue 
+G4String G4VisCommandViewerShow::GetCurrentValue 
 (G4UIcommand* command) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
   if (viewer) {
@@ -569,14 +578,14 @@ G4String G4VisCommandViewerUpdate::GetCurrentValue
   }
 }
 
-void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand* command,
+void G4VisCommandViewerShow::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
-  G4String& updateName = newValue;
-  G4String updateShortName = ShortName (updateName);
+  G4String& showName = newValue;
+  G4String showShortName = ShortName (showName);
 
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
   G4bool found = true;
-  if (updateShortName != ShortName (viewer -> GetName ())) {
+  if (showShortName != ShortName (viewer -> GetName ())) {
     found = false;
     const G4SceneHandlerList& sceneHandlerList =
       fpVisManager -> GetAvailableSceneHandlers ();
@@ -586,12 +595,9 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand* command,
       const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
       for (G4int iViewer = 0; iViewer < viewerList.entries (); iViewer++) {
 	viewer = viewerList [iViewer];
-	if (updateShortName == ShortName (viewer -> GetName ())) {
+	if (showShortName == ShortName (viewer -> GetName ())) {
 	  found = true;
 	  fpVisManager -> SetCurrentViewer (viewer);
-	  fpVisManager -> SetCurrentSceneHandler (sceneHandler);
-	  fpVisManager -> SetCurrentGraphicsSystem
-	    (sceneHandler -> GetGraphicsSystem ());
 	  break;
 	}
       }
@@ -599,10 +605,10 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand* command,
     }
   }
 
-  G4cout << "Viewer \"" << updateName << "\"";
+  G4cout << "Viewer \"" << showName << "\"";
   if (found) {
     viewer -> ShowView ();
-    G4cout << " updated.";
+    G4cout << " post-processing triggered.";
   }
   else {
     G4cout << " not found - \"/vis/viewer/list\""
