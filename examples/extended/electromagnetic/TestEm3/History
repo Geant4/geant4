@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2001-02-21 11:17:02 maire Exp $
+$Id: History,v 1.7 2001-03-26 16:01:57 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+26-03-01  mma (testem3-V03-00-04)
+          - change in histogramming : 1d histo of Edep/Ebeam
+	  in each absorber instead of ntuple, both in G4 and G3.
+	  - interactive command /run/setHisto (in G4) and ffread
+	  data card *histo (in G3) to control the binning of the
+	  histos.
+	  - in G3, new data card cutpr to set bcute, dcute, ppcutm for
+	  each tracking medium
+	  - in gnumakefile : the cpp flag g4nohist=true by default.
+	    --> no histograms in G4 by default. 
+	  
+	       
 21-02-01  mma (testem3-V03-00-03)
           - hbook histograms restored
 	       

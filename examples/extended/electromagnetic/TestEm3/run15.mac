@@ -1,0 +1,34 @@
+# $Id: run15.mac,v 1.1 2001-03-26 16:01:57 maire Exp $
+#
+# Macro file for "TestEm3.cc" 
+# (can be run in batch, without graphic)
+#
+# Iron-scintillator 20 layers;
+#
+/control/verbose 2
+#
+/calor/setNbOfLayers 20
+/calor/setNbOfAbsor 2
+/calor/setAbsor 0 Iron 14 mm
+/calor/setAbsor 1 Scintillator 3 mm
+/calor/setSizeYZ 30 cm
+/calor/update
+/gun/setDefault
+#
+/vis/camera/zoom 1.2
+/vis/drawVolume
+#
+/run/particle/setCut 1 mm
+/run/initialize
+#
+/run/verbose 2
+/event/printModulo 1000
+/event/drawTracks charged
+#
+/gun/particle mu+
+/gun/energy 180 GeV
+#
+/run/setHisto 0 100 0. 1.e-2
+/run/setHisto 1 100 0. 5.e-4
+#
+/run/beamOn 20000

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3EventAction.cc,v 1.7 2001-02-21 11:17:03 maire Exp $
+// $Id: Em3EventAction.cc,v 1.8 2001-03-26 16:01:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,6 +16,7 @@
 #include "Em3EventAction.hh"
 
 #include "Em3RunAction.hh"
+#include "Em3PrimaryGeneratorAction.hh"
 #include "Em3DetectorConstruction.hh"
 #include "Em3CalorHit.hh"
 #include "Em3EventActionMessenger.hh"
@@ -41,8 +42,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Em3EventAction::Em3EventAction(Em3RunAction* run, Em3DetectorConstruction* det)
-:Em3Run(run),Detector(det),calorimeterCollID(-1),drawFlag("all"),
+Em3EventAction::Em3EventAction(Em3RunAction* run,Em3PrimaryGeneratorAction* kin,
+                               Em3DetectorConstruction* det)
+:Em3Run(run),Em3Kin(kin),Detector(det),calorimeterCollID(-1),drawFlag("all"),
  eventMessenger(NULL),printModulo(10000)
 {
   eventMessenger = new Em3EventActionMessenger(this);
@@ -88,13 +90,8 @@ void Em3EventAction::EndOfEventAction(const G4Event* evt)
   Em3CalorHitsCollection* CHC = NULL;
   G4int NbHits=0;
   G4int NbOfAbsor=Detector->GetNbOfAbsor();
+  G4double Ebeam = Em3Kin->GetParticleGun()->GetParticleEnergy();
   G4double totEAbs, totLAbs;
-  char str1[6], str2[6];
-  strcpy(str1,"EAbs");strcpy(str2,"LAbs");
-
-#ifndef G4NOHIST  
-  HepTuple* ntuple=Em3Run->GetnTuple();
-#endif
        
   if (HCE) CHC = (Em3CalorHitsCollection*)(HCE->GetHC(calorimeterCollID));
 
@@ -111,16 +108,11 @@ void Em3EventAction::EndOfEventAction(const G4Event* evt)
          Em3Run->fillPerEvent(k,totEAbs,totLAbs);
 	 
 #ifndef G4NOHIST        
-         //fill ntuple
+         //fill histo
          //	 
-	 str1[4] = str2[4] = (char)((int)('0') + k);
-         ntuple->column(str1,totEAbs);
-         ntuple->column(str2,totLAbs);
+	 Em3Run->GetHisto(k)->accumulate(totEAbs/Ebeam);
 #endif  	 	 
        }
-#ifndef G4NOHIST       
-      ntuple->dumpData();
-#endif         
     }
     
   if (G4VVisManager::GetConcreteInstance())

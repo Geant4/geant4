@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm3.cc,v 1.4 2000-12-06 16:43:38 maire Exp $
+// $Id: TestEm3.cc,v 1.5 2001-03-26 16:01:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -46,8 +46,9 @@ int main(int argc,char** argv) {
   Em3DetectorConstruction* detector = new Em3DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new Em3PhysicsList);
-  
-  runManager->SetUserAction(new Em3PrimaryGeneratorAction(detector));
+  //
+  Em3PrimaryGeneratorAction* KinAct = new Em3PrimaryGeneratorAction(detector);
+  runManager->SetUserAction(KinAct);
     
 #ifdef G4VIS_USE
   // visualization manager
@@ -58,7 +59,7 @@ int main(int argc,char** argv) {
   // set user action classes
   Em3RunAction* RunAct = new Em3RunAction(detector);
   runManager->SetUserAction(RunAct);
-  runManager->SetUserAction(new Em3EventAction(RunAct,detector));
+  runManager->SetUserAction(new Em3EventAction(RunAct,KinAct,detector));
   runManager->SetUserAction(new Em3SteppingAction);
   
   //Initialize G4 kernel

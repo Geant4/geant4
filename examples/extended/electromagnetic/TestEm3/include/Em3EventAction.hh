@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3EventAction.hh,v 1.2 1999-12-15 14:49:01 gunter Exp $
+// $Id: Em3EventAction.hh,v 1.3 2001-03-26 16:01:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,6 +20,7 @@
 #include "globals.hh"
 
 class Em3RunAction;
+class Em3PrimaryGeneratorAction;
 class Em3DetectorConstruction;
 class Em3EventActionMessenger;
 
@@ -29,7 +30,8 @@ class Em3EventAction : public G4UserEventAction
 {
   public:
   
-    Em3EventAction(Em3RunAction*,Em3DetectorConstruction*);
+    Em3EventAction(Em3RunAction*,Em3PrimaryGeneratorAction*,
+                   Em3DetectorConstruction*);
    ~Em3EventAction();
 
     void BeginOfEventAction(const G4Event*);
@@ -40,12 +42,13 @@ class Em3EventAction : public G4UserEventAction
         
   private:
   
-    Em3RunAction*             Em3Run;
-    Em3DetectorConstruction*  Detector;
-    G4int                     calorimeterCollID;  // Hits collection ID
-    G4String                  drawFlag;           // draw/print the event
-    G4int                     printModulo;         
-    Em3EventActionMessenger*  eventMessenger;
+    Em3RunAction*              Em3Run;
+    Em3PrimaryGeneratorAction* Em3Kin;
+    Em3DetectorConstruction*   Detector;
+    G4int                      calorimeterCollID;  // Hits collection ID
+    G4String                   drawFlag;           // draw/print the event
+    G4int                      printModulo;         
+    Em3EventActionMessenger*   eventMessenger;
 };
 
 #endif
