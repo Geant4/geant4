@@ -97,6 +97,7 @@ NI                      [<copy-no>] [<depth>]
 
 /vis/scene/add/logicalVolume <logical-volume-name> [<depth>] 
   default:                                             1
+  Draws a logical volume in its own coordinate system, showing voxels.
 
 /vis/scene/add/scale [<length> <length-unit>] [x|y|z] [<red>] [<green>] [<blue>] [auto|manual] [<xmid> <ymid> <zmid> <unit>]
   default:                1          m           x       1         0        0        auto          0      0      0     m
