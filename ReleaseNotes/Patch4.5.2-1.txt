@@ -11,9 +11,6 @@ List of fixes included in this public patch to release 5.2:
     + WIN32-VC.gmk, WIN32-VC7.gmk:
       o reinstated options "-D_CONSOLE -D_WIN32 -DOS" to allow correct
         treatment/opening of data files at run-time.
-    + Configure:
-      o updated defaults for data files and implemented automatic detection
-        of pre-installed third-party software for default selection.
 
   o Electromagnetic processes (standard):
     ------------------------------------
