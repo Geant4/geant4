@@ -233,8 +233,9 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 //
 // Determine the radii of the projectile and target nuclei.
 //
-  G4double rP   = G4WilsonRadius::G4WilsonRadius().GetWilsonRadius(AP);
-  G4double rT   = G4WilsonRadius::G4WilsonRadius().GetWilsonRadius(AT);
+  G4WilsonRadius aR;
+  G4double rP   = aR.GetWilsonRadius(AP);
+  G4double rT   = aR.GetWilsonRadius(AT);
   G4double rPsq = rP * rP;
   G4double rTsq = rT * rT;
   if (verboseLevel >= 2)

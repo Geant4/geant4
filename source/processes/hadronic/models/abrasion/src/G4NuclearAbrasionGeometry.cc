@@ -20,6 +20,9 @@
 // 15 March 2004, P R Truscott, QinetiQ Ltd, UK
 // Beta release
 //
+// 4 June 2004, J.P. Wellisch, CERN, Switzerland
+// resolving technical portability issues.
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // ********************************************************************
@@ -66,10 +69,11 @@ G4NuclearAbrasionGeometry::G4NuclearAbrasionGeometry (G4double AP1,
 //
 // Initialise variables for interaction geometry.
 //
+  G4WilsonRadius aR;
   AP = AP1;
   AT = AT1;
-  rP = G4WilsonRadius::G4WilsonRadius().GetWilsonRadius(AP);
-  rT = G4WilsonRadius::G4WilsonRadius().GetWilsonRadius(AT);
+  rP = aR.GetWilsonRadius(AP);
+  rT = aR.GetWilsonRadius(AT);
   r  = r1;
   n  = rP / (rP + rT);
   b  = r / (rP + rT);
