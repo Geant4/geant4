@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.cc,v 1.11 2001-08-31 16:12:33 gum Exp $
+// $Id: G4MaterialPropertiesTable.cc,v 1.12 2001-10-17 07:59:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -162,7 +162,7 @@ void G4MaterialPropertiesTable::AddEntry(const char     *key,
 					 G4double  aPropertyValue)
 {
 	G4MaterialPropertyVector *targetVector=MPT [G4String(key)];
-	if (targetVector != NULL) {
+	if (targetVector != 0) {
 		targetVector->AddElement(aPhotonMomentum, aPropertyValue);
 	}
 	else {
@@ -188,7 +188,7 @@ void G4MaterialPropertiesTable::DumpTable()
   MPTiterator i;
   for (i = MPT.begin(); i != MPT.end(); ++i) {
 		G4cout << (*i).first << G4endl;
-                if ( (*i).second != NULL ) {
+                if ( (*i).second != 0 ) {
 		  (*i).second->DumpVector();
                 }
                 else {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh,v 1.16 2001-09-17 09:14:02 maire Exp $
+// $Id: G4Material.hh,v 1.17 2001-10-17 07:59:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -86,8 +86,7 @@
 #include "G4MaterialPropertiesTable.hh"
 #include "G4IonisParamMat.hh"
 #include "G4SandiaTable.hh"
-
-typedef G4std::vector<G4Element*> G4ElementVector;
+#include "G4ElementVector.hh"
 
 class G4Material;              //forward declaration
 typedef G4std::vector<G4Material*> G4MaterialTable;
@@ -232,10 +231,10 @@ public:  // with description
   //the (static) Table of Materials:
   //
   static
-  const G4MaterialTable* GetMaterialTable() {return &theMaterialTable;};
+  const G4MaterialTable* GetMaterialTable();
       
   static
-  size_t GetNumberOfMaterials()   {return theMaterialTable.size();};
+  size_t GetNumberOfMaterials();
   
   //the index of this material in the Table:    
   size_t GetIndex() const;
@@ -314,22 +313,6 @@ private:
   G4IonisParamMat* fIonisation;           // ionisation parameters
   G4SandiaTable*   fSandiaTable;          // Sandia table         
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-G4Material* G4Material::GetMaterial(G4String materialName)
-{  
-  // search the material by its name 
-  for (size_t J=0 ; J<theMaterialTable.size() ; J++)
-   {
-    if (theMaterialTable[J]->GetName() == materialName)
-       return theMaterialTable[J];
-   }
-   
-  // the material does not exist in the table
-  return NULL;          
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

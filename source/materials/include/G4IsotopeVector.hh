@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IsotopeVector.hh,v 1.3 2001-07-11 10:01:26 gunter Exp $
+// $Id: G4IsotopeVector.hh,v 1.4 2001-10-17 07:59:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,9 @@
 #ifndef G4ISOTOPEVECTOR_HH
 #define G4ISOTOPEVECTOR_HH
 
-#include "G4Element.hh"
+#include "g4std/vector"
+#include "G4Isotope.hh"
+
+typedef G4std::vector<G4Isotope*> G4IsotopeVector;
 
 #endif

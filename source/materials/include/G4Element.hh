@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh,v 1.13 2001-09-17 09:14:01 maire Exp $
+// $Id: G4Element.hh,v 1.14 2001-10-17 07:59:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -71,13 +71,12 @@
 #define G4ELEMENT_HH
 
 #include "globals.hh"
-#include "G4ios.hh"
 #include "g4std/vector"
+#include "G4ios.hh"
 #include "G4Isotope.hh"
 #include "G4AtomicShells.hh"
 #include "G4IonisParamElm.hh"
-
-typedef G4std::vector<G4Isotope*> G4IsotopeVector;
+#include "G4IsotopeVector.hh"
 
 class G4Element;              //forward declaration
 typedef G4std::vector<G4Element*> G4ElementTable;
@@ -148,10 +147,10 @@ public:  // with description
   //the (static) Table of Elements:
   //
   static 
-  const  G4ElementTable* GetElementTable() {return &theElementTable;};
+  const  G4ElementTable* GetElementTable();
   
   static 
-  size_t GetNumberOfElements() {return theElementTable.size();};
+  size_t GetNumberOfElements();
   
   //the index of this element in the Table:
   //
@@ -234,22 +233,6 @@ private:
   G4double fRadTsai;             // Tsai formula for the radiation length
   G4IonisParamElm* fIonisation;  // Pointer to ionisation parameters
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-G4Element* G4Element::GetElement(G4String elementName)
-{  
-  // search the element by its name 
-  for (size_t J=0 ; J<theElementTable.size() ; J++)
-   {
-    if (theElementTable[J]->GetName() == elementName)
-      return theElementTable[J];
-   }
-   
-  // the element does not exist in the table 
-  return NULL;   
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

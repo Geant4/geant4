@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.hh,v 1.9 2001-07-11 10:01:26 gunter Exp $
+// $Id: G4SandiaTable.hh,v 1.10 2001-10-17 07:59:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -144,80 +144,6 @@ private:
   
 };
     
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-// Inline function implementations
-
-
-inline
-G4int G4SandiaTable::GetNbOfIntervals(G4int Z)
-{
-   return fNbOfIntervals[Z];
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-inline
-G4double  G4SandiaTable::GetSandiaCofPerAtom(G4int Z, G4int interval, G4int j)
-{
-   assert (Z>0 && Z<101 && interval>=0 && interval<fNbOfIntervals[Z]
-                        && j>=0 && j<5);
-
-   G4int row = fCumulInterval[Z-1] + interval;
-   if (j==0) return fSandiaTable[row][0]*keV;
-   G4double AoverAvo = Z*amu/fZtoAratio[Z];         
-   return AoverAvo*(fSandiaTable[row][j]*cm2*pow(keV,G4double(j))/g);     
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-inline
-G4double* G4SandiaTable::GetSandiaCofPerAtom(G4int Z, G4double energy)
-{
-   assert (Z > 0);
-   
-   G4double Emin  = fSandiaTable[fCumulInterval[Z-1]][0]*keV;
-   G4double Iopot = fIonizationPotentials[Z]*eV;
-   if (Iopot > Emin) Emin = Iopot;
-   
-   G4int interval = fNbOfIntervals[Z] - 1;
-   G4int row = fCumulInterval[Z-1] + interval;
-   while ((interval>0) && (energy<fSandiaTable[row][0]*keV))
-         row = fCumulInterval[Z-1] + --interval;
-
-   if (energy >= Emin)
-     {        
-      G4double AoverAvo = Z*amu/fZtoAratio[Z];
-         
-      fSandiaCofPerAtom[0]=AoverAvo*(fSandiaTable[row][1]*cm2*keV/g);     
-      fSandiaCofPerAtom[1]=AoverAvo*(fSandiaTable[row][2]*cm2*keV*keV/g);     
-      fSandiaCofPerAtom[2]=AoverAvo*(fSandiaTable[row][3]*cm2*keV*keV*keV/g);     
-      fSandiaCofPerAtom[3]=AoverAvo*(fSandiaTable[row][4]*cm2*keV*keV*keV*keV/g);
-     }
-   else
-      fSandiaCofPerAtom[0] = fSandiaCofPerAtom[1] = fSandiaCofPerAtom[2] =
-      fSandiaCofPerAtom[3] = 0.;
-                        
-   return fSandiaCofPerAtom;     
-
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-inline
-G4double G4SandiaTable::GetIonizationPot(G4int Z)
-{
-   return fIonizationPotentials[Z]*eV;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-inline
-G4double G4SandiaTable::GetZtoA(G4int Z)
-{
-   return fZtoAratio[Z];
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 ///////////////////////////////////////////////////////////////////////

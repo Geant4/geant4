@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.12 2001-09-19 08:02:24 gcosmo Exp $
+// $Id: G4Element.cc,v 1.13 2001-10-17 07:59:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -117,7 +117,7 @@ G4Element::G4Element(const G4String& name, const G4String& symbol, G4int nIsotop
 
 void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
 {
-    if (theIsotopeVector == NULL)
+    if (theIsotopeVector == 0)
        G4Exception ("ERROR from G4Element::AddIsotope!"
        " Trying to add an Isotope before contructing the element.");
 
@@ -167,10 +167,10 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
 
 void G4Element::InitializePointers()
 {
-    theIsotopeVector = NULL;
-    fRelativeAbundanceVector = NULL;
-    fAtomicShells = NULL;
-    fIonisation = NULL;
+    theIsotopeVector = 0;
+    fRelativeAbundanceVector = 0;
+    fAtomicShells = 0;
+    fIonisation = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -255,6 +255,35 @@ G4double G4Element::GetAtomicShell(G4int i) const
   if (i<0 || i>=fNbOfAtomicShells)
       G4Exception("Invalid argument in G4Element::GetAtomicShell");
   return fAtomicShells[i];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+const G4ElementTable* G4Element::GetElementTable()
+{
+  return &theElementTable;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+size_t G4Element::GetNumberOfElements()
+{
+  return theElementTable.size();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Element* G4Element::GetElement(G4String elementName)
+{  
+  // search the element by its name 
+  for (size_t J=0 ; J<theElementTable.size() ; J++)
+   {
+    if (theElementTable[J]->GetName() == elementName)
+      return theElementTable[J];
+   }
+   
+  // the element does not exist in the table 
+  return 0;   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

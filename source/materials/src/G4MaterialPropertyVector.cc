@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.cc,v 1.9 2001-09-13 08:57:47 maire Exp $
+// $Id: G4MaterialPropertyVector.cc,v 1.10 2001-10-17 07:59:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -150,7 +150,7 @@ void G4MaterialPropertyVector::AddElement(G4double aPhotonMomentum,
 void G4MaterialPropertyVector::RemoveElement(G4double aPhotonMomentum)
 {
 	G4MPVEntry *newElement;
-	G4MPVEntry *success(NULL);
+	G4MPVEntry *success(0);
 
 	newElement = new G4MPVEntry(aPhotonMomentum, DBL_MAX);
 
@@ -159,7 +159,7 @@ void G4MaterialPropertyVector::RemoveElement(G4double aPhotonMomentum)
 	  if (**i == *newElement) {success = *i; break;}
 	//	success = MPV.remove(newElement);
 
-	if(success == NULL)
+	if(success == 0)
 	{
 	G4Exception("G4MaterialPropertyVector::RemoveElement==>"
 					       "element not found");
@@ -211,12 +211,12 @@ G4MaterialPropertyVector::GetProperty(G4double aPhotonMomentum) const
 	
 	target = new G4MPVEntry(aPhotonMomentum, 0.0);
 
-	temp = NULL;
+	temp = 0;
 	//temp = MPV.find(target);
 	G4std::vector<G4MPVEntry*>::const_iterator i;
 	for (i = MPV.begin(); i != MPV.end(); i++)
 	  if (**i == *target) {temp = *i; break;}
-	if (temp != NULL) {
+	if (temp != 0) {
 
 		////////////////////////
 		// Return actual value

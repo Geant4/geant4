@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.cc,v 1.6 2001-07-11 10:01:28 gunter Exp $
+// $Id: G4OpticalSurface.cc,v 1.7 2001-10-17 07:59:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,7 +79,7 @@ G4OpticalSurface::G4OpticalSurface(const G4String& name,
 		  			  theModel(model),
 		  			  theFinish(finish),
 		  			  theType(type),
-		  			  theMaterialPropertiesTable(NULL)
+		  			  theMaterialPropertiesTable(0)
 {
 	if (model == glisur ){
 		polish = value;

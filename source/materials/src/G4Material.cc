@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.15 2001-09-19 08:02:24 gcosmo Exp $
+// $Id: G4Material.cc,v 1.16 2001-10-17 07:59:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,7 +93,7 @@ G4Material::G4Material(const G4String& name, G4double z,
   // element corresponding to this material
   maxNbComponents        = fNumberOfComponents = fNumberOfElements = 1;
   fImplicitElement       = true;
-  theElementVector       = new G4ElementVector(1,0);
+  theElementVector       = new G4ElementVector(1,(G4Element*)0);
   (*theElementVector)[0] = new G4Element(name, " ", z, a);
   fMassFractionVector    = new G4double[1];
   fMassFractionVector[0] = 1. ;
@@ -142,7 +142,7 @@ G4Material::G4Material(const G4String& name, G4double density,
   maxNbComponents     = nComponents;
   fNumberOfComponents = fNumberOfElements = 0;
   fImplicitElement    = false;
-  theElementVector    = new G4ElementVector(maxNbComponents,0);
+  theElementVector    = new G4ElementVector(maxNbComponents,(G4Element*)0);
     
   if (fState == kStateUndefined) 
     {
@@ -180,7 +180,7 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
   // element corresponding to this material
   maxNbComponents        = fNumberOfComponents = fNumberOfElements = 1;
   fImplicitElement       = true;
-  theElementVector       = new G4ElementVector(1,0);
+  theElementVector       = new G4ElementVector(1,(G4Element*)0);
   (*theElementVector)[0] = new G4Element(name, " ", z, a);
   fMassFractionVector    = new G4double[1];
   fMassFractionVector[0] = 1. ;
@@ -230,7 +230,7 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
   maxNbComponents     = nComponents;
   fNumberOfComponents = fNumberOfElements = 0;
   fImplicitElement    = false;
-  theElementVector    = new G4ElementVector(maxNbComponents,0);
+  theElementVector    = new G4ElementVector(maxNbComponents,(G4Element*)0);
     
   if (fState == kStateUndefined) 
     {
@@ -476,14 +476,54 @@ void G4Material::ComputeNuclearInterLength()
 
 void G4Material::InitializePointers()
 {
-    theElementVector         = NULL;
-    fMassFractionVector      = NULL;
-    fAtomsVector             = NULL;
-    fMaterialPropertiesTable = NULL;
+    theElementVector         = 0;
+    fMassFractionVector      = 0;
+    fAtomsVector             = 0;
+    fMaterialPropertiesTable = 0;
     
-    VecNbOfAtomsPerVolume    = NULL;
-    fIonisation              = NULL;
-    fSandiaTable             = NULL;
+    VecNbOfAtomsPerVolume    = 0;
+    fIonisation              = 0;
+    fSandiaTable             = 0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+const G4MaterialTable* G4Material::GetMaterialTable()
+{
+  return &theMaterialTable;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+size_t G4Material::GetNumberOfMaterials()
+{
+  return theMaterialTable.size();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Material* G4Material::GetMaterial(G4String materialName)
+{  
+  // search the material by its name 
+  for (size_t J=0 ; J<theMaterialTable.size() ; J++)
+   {
+    if (theMaterialTable[J]->GetName() == materialName)
+       return theMaterialTable[J];
+   }
+   
+  // the material does not exist in the table
+  return 0;          
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Material::G4Material(const G4Material& right)
+{
+    InitializePointers();
+    *this = right;
+        
+    // Store this new material in the table of Materials
+    theMaterialTable.push_back(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -505,17 +545,6 @@ G4Material::~G4Material()
   G4MaterialTable::iterator iter  = theMaterialTable.begin();
   while ((iter != theMaterialTable.end())&&(*iter != this)) iter++;
   if (iter != theMaterialTable.end()) theMaterialTable.erase(iter);    
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4Material::G4Material(const G4Material& right)
-{
-    InitializePointers();
-    *this = right;
-        
-    // Store this new material in the table of Materials
-    theMaterialTable.push_back(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -544,7 +573,7 @@ const G4Material& G4Material::operator=(const G4Material& right)
       if (fImplicitElement) {
         G4double z = (*right.theElementVector)[0]->GetZ();
 	G4double a = (*right.theElementVector)[0]->GetA();
-        theElementVector          = new G4ElementVector(1,0);
+        theElementVector          = new G4ElementVector(1,(G4Element*)0);
 	(*theElementVector)[0]    = new G4Element(fName," ",z,a);
 	fMassFractionVector       = new G4double[1];
 	fMassFractionVector[0]    = 1.;

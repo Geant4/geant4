@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh,v 1.12 2001-09-17 09:14:02 maire Exp $
+// $Id: G4Isotope.hh,v 1.13 2001-10-17 07:59:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,7 +71,7 @@ class G4Isotope
                     G4int     n,		//number of nucleons
                     G4double  a);		//mass of mole
                     
-   virtual ~G4Isotope();
+    virtual ~G4Isotope();
 
     // Retrieval methods
     G4String GetName()  const {return fName;};    
@@ -87,10 +87,10 @@ class G4Isotope
     G4Isotope* GetIsotope(G4String name);
     
     static const
-    G4IsotopeTable* GetIsotopeTable() {return &theIsotopeTable;};
+    G4IsotopeTable* GetIsotopeTable();
     
     static 
-    size_t GetNumberOfIsotopes()      {return theIsotopeTable.size();};
+    size_t GetNumberOfIsotopes();
     
     size_t GetIndex() const;    
     
@@ -125,22 +125,6 @@ class G4Isotope
     static 
     G4IsotopeTable theIsotopeTable;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-G4Isotope* G4Isotope::GetIsotope(G4String isotopeName)
-{  
-  // search the isotope by its name 
-  for (size_t J=0 ; J<theIsotopeTable.size() ; J++)
-   {
-    if (theIsotopeTable[J]->GetName() == isotopeName)
-      return theIsotopeTable[J];
-   }
-   
-  // the isotope does not exist in the table
-  return NULL;          
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

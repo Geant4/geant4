@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc,v 1.9 2001-09-14 16:36:56 maire Exp $
+// $Id: G4Isotope.cc,v 1.10 2001-10-17 07:59:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -154,3 +154,30 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4IsotopeTable IsotopeTable)
 }
       
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+const G4IsotopeTable* G4Isotope::GetIsotopeTable()
+{
+  return &theIsotopeTable;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+size_t G4Isotope::GetNumberOfIsotopes()
+{
+  return theIsotopeTable.size();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Isotope* G4Isotope::GetIsotope(G4String isotopeName)
+{  
+  // search the isotope by its name 
+  for (size_t J=0 ; J<theIsotopeTable.size() ; J++)
+   {
+    if (theIsotopeTable[J]->GetName() == isotopeName)
+      return theIsotopeTable[J];
+   }
+   
+  // the isotope does not exist in the table
+  return 0;          
+}
