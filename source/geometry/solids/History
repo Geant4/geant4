@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2000-04-12 08:57:16 gcosmo Exp $
+$Id: History,v 1.6 2000-04-27 10:36:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr   27th, 2000   G. Cosmo
+
+- Updated comments for the Software Reference Manual in "Boolean", added
+  CVS and standard G4 headers where missing.
+
+Apr   18th, 2000   D. Williams
+
+- Minor fixes and cosmectics in "specific" solids. Removed dependency
+  over the CSG module.
+- Updated SBT test to cope with new shapes in "specific".
 
 Apr   11th, 2000   J. Allison
 
