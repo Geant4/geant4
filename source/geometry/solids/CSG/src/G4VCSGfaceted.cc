@@ -175,6 +175,7 @@ G4double G4VCSGfaceted::DistanceToIn( const G4ThreeVector &p, const G4ThreeVecto
 {
 	G4double distance = kInfinity;
 	G4double distFromSurface;
+	G4VCSGface *bestFace;
 	G4VCSGface **face = faces;
 	do {
 		G4double 	faceDistance,
@@ -190,11 +191,15 @@ G4double G4VCSGfaceted::DistanceToIn( const G4ThreeVector &p, const G4ThreeVecto
 			if (faceDistance < distance) {
 				distance = faceDistance;
 				distFromSurface = faceDistFromSurface;
+				bestFace = *face;
+				if (distFromSurface <= 0) return 0;
 			}
 		}
 	} while( ++face < faces + numFace );
 	
-	if ((distance < kInfinity) && (fabs(distFromSurface)<kCarTolerance/2) ) distance = 0;
+	if (distance < kInfinity && distFromSurface<kCarTolerance/2) {
+		if (bestFace->Distance(p,false) < kCarTolerance/2) distance = 0;
+	}
 
 	return distance;
 }
@@ -220,6 +225,7 @@ G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector &p, const G4ThreeVect
 	G4double distance = kInfinity;
 	G4double distFromSurface;
 	G4ThreeVector normal;
+	G4VCSGface *bestFace;
 	
 	G4VCSGface **face = faces;
 	do {
@@ -238,12 +244,18 @@ G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector &p, const G4ThreeVect
 				distance = faceDistance;
 				distFromSurface = faceDistFromSurface;
 				normal = faceNormal;
+				bestFace = *face;
+				if (distFromSurface <= 0) break;
 			}
 		}
 	} while( ++face < faces + numFace );
 	
 	if (distance < kInfinity) {
-		if (fabs(distFromSurface)<kCarTolerance/2) distance = 0;
+		if (distFromSurface <= 0)
+			distance = 0;
+		else if (distFromSurface<kCarTolerance/2) {
+			if (bestFace->Distance(p,true) < kCarTolerance/2) distance = 0;
+		}
 
 		if (calcNorm) {
 			*validNorm = allBehind;
