@@ -28,13 +28,13 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4install/../G4EMLOW0.3
+	g4ledata=$g4install/../G4EMLOW
 	;;
 esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4install/../G4NDL0.2
+	g4neutronhpcrosssections=$g4install/../G4NDL
 	;;
 esac
 
