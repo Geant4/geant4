@@ -19,6 +19,15 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+// $Id: B03App.hh,v 1.3 2002-12-13 11:26:33 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+#ifndef B03App_hh
+#define B03App_hh B03App_hh
+
+class G4RunManager;
 class B03PrimaryGeneratorAction;
 class B03PhysicsList;
 class B03DetectorConstruction;

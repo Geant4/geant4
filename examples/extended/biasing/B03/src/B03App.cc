@@ -19,6 +19,14 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+// $Id: B03App.cc,v 1.3 2002-12-13 11:26:34 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+#include "B03App.hh"
+#include "g4std/iostream"
+
 #include "CLHEP/Random/Random.h"
 
 #include "G4RunManager.hh"
