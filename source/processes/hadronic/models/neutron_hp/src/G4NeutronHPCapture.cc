@@ -133,6 +133,7 @@
         theResult.Initialize(aTrack);
         G4int nSecondaries = thePhotons->length();
         theResult.SetNumberOfSecondaries(nSecondaries);
+        theResult.SetStatusChange(fStopAndKill);
         G4DynamicParticle * theSec;
         for(G4int gammaCount=0; gammaCount<nSecondaries; gammaCount++)
         {
