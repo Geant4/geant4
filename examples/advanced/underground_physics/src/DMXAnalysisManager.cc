@@ -162,7 +162,7 @@ void DMXAnalysisManager::book(G4String histogramfile)
   hPMTHits    = hf->create2D("70","PMT Hit Pattern", 
 			  300 ,-30.,30.,300,-30.,30.);
   IHistogram2D* h1stPMTHit;
-  h1stPMTHits = hf->create2D("71","1st event PMT Hit Pattern", 
+  h1stPMTHit  = hf->create2D("71","1st event PMT Hit Pattern", 
 			     300 ,-30.,30.,300,-30.,30.);
 
   IHistogram1D* hGammaEdep;
