@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionComposite.hh,v 1.5 2003-12-12 15:38:21 hpw Exp $
+// $Id: G4CollisionComposite.hh,v 1.6 2003-12-15 12:28:40 hpw Exp $
 // -------------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -66,12 +66,12 @@ public:
 
   virtual G4bool IsInCharge(const G4KineticTrack& trk1, 
 			    const G4KineticTrack& trk2) const;
+  void AddComponent(G4VCollision * aC) {components.push_back(aC);}
 
 protected:
   virtual const G4VCrossSectionSource* GetCrossSectionSource() const { return 0; }
   virtual const G4VAngularDistribution* GetAngularDistribution() const { return 0; }
 
-  void AddComponent(G4VCollision * aC) {components.push_back(aC);}
   virtual const G4CollisionVector* GetComponents() const  { return &components;}
   struct Register
   {

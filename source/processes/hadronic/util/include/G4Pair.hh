@@ -4,6 +4,7 @@
 template <class t1, class t2>
 class G4Pair
 {
+  public:
   typedef t1 first;
   typedef t2 rest;
 };
@@ -145,6 +146,7 @@ struct G4ForEach<G4Terminator, functor>
 template <class t1, int i2, class t3>
 class G4INT
 {
+  public:
   typedef t1 it;
   enum {i = i2};
   typedef t3 rest;
