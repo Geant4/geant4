@@ -10,8 +10,6 @@ Some of the development/fixes included since the last reference tag are:
   o Added caching mechanism for G4Polyhedron in physical volumes.
   o Added new standard EM model G4BraggIonModel for ion ionization
     and new process and model classes for e+ annihilation to pi+pi-.
-  o Particles: removed most intermediate level abstract classes and
-    migrated classes for particles to become 'utility' classes.
 
 ---------- Reference-tag 'Release Notes' -----------
 
@@ -45,17 +43,6 @@ global                                           global-V06-02-00
 
 particles                                        particles-V06-02-04
 ---------
-- All particles except shortlived become direct instances of
-  G4particleDefinition class.
-- Intermediate level abstract classes except G4VShortLivedParticle
-  are eliminated.
-- Classes with particle names (e.g. G4Gamma) are no longer derived from
-  G4ParticleDefinition nor intermediate level abstract classes (e.g.
-  G4VLepton), they are now utility classes which return corresponding
-  pointer of G4ParticleDefinition. These classes instantiate corresponding
-  G4ParticleDefinition objects at the first access to these classes, if and
-  only if corresponding particles have not yet instantiated elsewhere
-  (typically by the user).
 - Introduced G4MuonDecayChannelWithSpin class.
 
 processes/cuts                                   procuts-V06-02-00
