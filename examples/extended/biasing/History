@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2002-04-10 13:14:47 dressel Exp $
+$Id: History,v 1.6 2002-04-12 15:24:30 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 12th, 2002 M.Dressel - exbiasing-V04-00-03
+- Change class B06ImportanceDetectorConstruction.hh and exampleB06.cc.
+  B06ImportanceDetectorConstruction does not derive from 
+  G4UserDetectorConstruction, function Construct made private
+  and called in Constructor.
+
 April 8th, 2002  G.Cosmo - exbiasing-V04-00-03
 - Fixed usage of 'first'/'second' in iterators for porting
   on DEC-cxx non-ISO.
