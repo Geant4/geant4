@@ -6,7 +6,7 @@ Some of the following is taken from the freehep checkout
 instructions available at:
 http://java.freehep.org/source.thtml
 
-Checkout freehep as follows:
+Checkout freehep as follows (probably needs cvs version 1.10 or newer):
 setenv CVSROOT :pserver:anoncvs@cvs.freehep.org:/nfs/slac/g/jas/fhroot
 cvs login
 CVS Password: jascvs
@@ -17,6 +17,9 @@ Make sure you have a copy of the Java Development Kit
 The latter doesn't contain the compiler, necessary for the make.
 The Java Development Kit is freely available from
 http://java.sun.com/j2se/
+
+Modify the first line of freehep/tools/bootstrap-freehep
+as necessary to correctly point to your bash.
 
 Make the freehep C++ library as follows:
   setenv JDK_HOME your_java_directory
