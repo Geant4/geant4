@@ -1,0 +1,979 @@
+macro runs z=6 f=1 
+ nEvts = 2000 * [f]
+if     [z] =  6 then
+ exec apca targ=^12!C   file=c0606    np=6  nn=6   runn=[nEvts]
+elseif [z] = 13 then
+ exec apca targ=^27!Al  file=al1314   np=13 nn=14  runn=[nEvts]
+elseif [z] = 14 then
+ exec apca targ=^28!Si  file=si1414   np=14 nn=14  runn=[nEvts]
+elseif [z] = 20 then
+ exec apca targ=^40!Ca  file=ca2020   np=20 nn=20  runn=[nEvts]
+elseif [z] = 29 then
+ exec apca targ=^64!Cu  file=cu2935   np=29 nn=35  runn=[nEvts]
+elseif [z] = 42 then				  
+ exec apca targ=^92!Mo  file=mo4250   np=42 nn=50  runn=[nEvts]
+ exec apca targ=^100!Mo file=mo4258   np=42 nn=58  runn=[nEvts]
+elseif [z] = 47 then				  
+ exec apca targ=^108!Ag file=ag4761   np=47 nn=61  runn=[nEvts]
+elseif [z] = 67 then				  
+ exec apca targ=^165!Ho file=ho6798   np=67 nn=98  runn=[nEvts]
+elseif [z] = 73 then
+ exec apca targ=^181!Ta file=ta73108  np=73 nn=108 runn=[nEvts]
+elseif [z] = 79 then
+ exec apca targ=^197!Au file=au79118  np=79 nn=118 runn=[nEvts]
+elseif [z] = 83 then
+ exec apca targ=^209!Bi file=bi83126  np=83 nn=126 runn=[nEvts]
+elseif [z] = 92 then
+ exec apca targ=^238!U  file=u92146   np=92 nn=146 runn=[nEvts]
+endif
+return
+*
+macro run f=5
+ nEvts = 2000 * [f]
+ exec apca targ=^12!C   file=c0606    np=6  nn=6   runn=[nEvts]
+* exec apca targ=^27!Al  file=al1314   np=13 nn=14  runn=[nEvts]
+* exec apca targ=^28!Si  file=si1414   np=14 nn=14  runn=[nEvts]
+* exec apca targ=^40!Ca  file=ca2020   np=20 nn=20  runn=[nEvts]
+* exec apca targ=^64!Cu  file=cu2935   np=29 nn=35  runn=[nEvts]
+* exec apca targ=^92!Mo  file=mo4250   np=42 nn=50  runn=[nEvts]
+* exec apca targ=^100!Mo file=mo4258   np=42 nn=58  runn=[nEvts]
+* exec apca targ=^108!Ag file=ag4761   np=47 nn=61  runn=[nEvts]
+* exec apca targ=^165!Ho file=ho6798   np=67 nn=98  runn=[nEvts]
+* exec apca targ=^181!Ta file=ta73108  np=73 nn=108 runn=[nEvts]
+* exec apca targ=^197!Au file=au79118  np=79 nn=118 runn=[nEvts]
+* exec apca targ=^209!Bi file=bi83126  np=83 nn=126 runn=[nEvts]
+ exec apca targ=^238!U  file=u92146   np=92 nn=146 runn=[nEvts]
+return
+*
+macro apca targ=^12!C file=c0606 np=6 nn=6 runn=2000
+  Nbin  = 60
+  Tmin  = 2.
+  Tmax  = 2000.
+  kmin  = 0.1
+  kmax  = 1199.
+  ymin  = 2.e-10
+  ymax  = 0.03
+  if [np] = 6 then
+    ymax  = 0.01
+    ymin  = 0.8e-10
+  endif
+  ndots = 100
+*
+  hi/del *
+  ve/del *
+  exec creavec
+  clo 35
+*
+  if [runn] > 0 then
+    exec chips [targ] [file] [np] [nn] [runn]
+  endif
+*
+  exec datread [np] [file]
+  hi/fil 35 chips_[file].hbook
+  hrin 1
+  nevts = $hinfo(1,'entries')
+*  nevts = 20707
+  mess 'nevents='//[nevts]
+  hi/del 1
+*
+  lTmin = $sigma(log10([Tmin]))
+  lTmax = $sigma(log10([Tmax]))
+  dlog10T = $sigma(([lTmax]-[lTmin])/[Nbin])
+  1d          101 'log?10!(T?proton! in MeV)' [Nbin] [lTmin] [lTmax]
+  hi/copy 101 102 'log?10!(T?neutron! in MeV)'
+  hi/copy 101 103 'log?10!(T?deuteron! in MeV)'
+  hi/copy 101 104 'log?10!(T?tritium! in MeV)'
+  hi/copy 101 105 'log?10!(T?[K],charged! in MeV)'
+  hi/copy 101 106 'log?10!(T?[p]! in MeV)'
+  hi/copy 101 107 'log?10!(T?[L]! in MeV)'
+  hi/copy 101 108 'log?10!(T?helium3! in MeV)'
+  hi/copy 101 109 'log?10!(T?alpha! in MeV)'
+  hi/copy 101 110 'log?10!(T?h summ! in MeV)'
+  hi/copy 101 100 'Conversion factor to dN/dT in Nevts^-1 MeV^-1'
+  call hbarx(0)
+  ve/cr lt0([Nbin]) r
+  get/abs 100 lt0
+  ve/copy $sigma(lt0+0.5*[dlog10T]) lt1
+  ve/copy $sigma(lt1-[dlog10T])     lt0
+  ve/copy $sigma(1./(10.**lt1-10.**lt0)/[nevts]) norm
+  ve/copy $sigma(0.000001*norm) dnorm
+  put/cont 100  norm 
+  put/err  100 dnorm 
+*
+  cut 0 -
+  cut $1 PDG=2212.or.(ns=0.and.nz=1.and.nn=0).and.nd=0                 | proton
+  cut $2 PDG=2112.or.(ns=0.and.nz=0.and.nn=1).and.nd=0                 | neutron
+  cut $3 ns=0.and.nz=1.and.nn=1.and.nd=0                               | deuteron
+  cut $4 ns=0.and.nz=1.and.nn=2.and.nd=0                               | tritium
+*  cut $5 (abs(PDG)=321.or.PDG=130.or.PDG=310).and.nd=0                | all kaons
+  cut $5 abs(PDG)=321.and.nd=0                                         | charged kaons
+  cut $6 abs(PDG)=211.and.nd=0                                         | charged pions
+  cut $7 (PDG=3122.or.PDG=3212.or.(ns=1.and.nz=0.and.nn=0)).and.nd=0   | Lambda(Sigma0-6%)
+  cut $8 ns=0.and.nz=2.and.nn=1.and.nd=0                               | He3
+  cut $9 ns=0.and.nz=2.and.nn=2.and.nd=0                           | He4
+*                  -- p -- -- n -- -- d -- -- t -- --k -- --pi-- -Lambd- - He3 - - He4 -
+  ve/cr vmass(9) r 938.273 939.567 1875.61 2808.92 493.68 139.57 1115.68 2808.39 3727.38
+*                   - 1 -   - 2 -   - 3 -   - 4 -  - 5 -  - 6 -   - 7 -   - 8 -   - 9 -
+  opt zfl
+  swi z
+*  zone 4 4
+  do i = 1 , 9 
+*    nt/pl 20.log10(E-m) (E-m)>0..and.$[i] ! ! -10[i]
+    nt/proj  10[i] 20.log10(E-m) (E-m)>0..and.$[i]
+    mul 10[i] 100 10[i] 1. 1.
+  enddo
+*  fun1 99 exp(-x**2/2) 210 -7 7
+  pi/del ' '
+  swi gz
+*
+  title 'Antiproton annihilation on '//[targ]//' nucleus'
+  clr
+  zone 1 1
+  set dmod 1
+  set lwid 1
+  opt ndat
+  opt tic
+  opt nsta
+  opt utit
+  opt logy
+  opt linx
+  title 'k = (p+E?kin!)/2 (MeV)' u
+  exec ~/PTOOL/black
+  null [kmin] [kmax] [ymin] [ymax]
+  atitle ' ' 'dN/pdE (MeV^-2! Annihilation^-1!)                ^!'
+  title ' ' 
+  title ' ' u
+  opt linx
+*
+  dk   = [kmax]-[kmin]
+  xt   = $sigma([kmin]+0.70*([dk]))
+  xtx  = $sigma([kmin]+0.72*([dk]))
+  xtxt = $sigma([kmin]+0.75*([dk]))
+  xdi  = $sigma([kmin]+0.90*([dk]))
+  xdf  = $sigma([kmin]+0.97*([dk]))
+  ytx  = [ymax] / 2.
+  ydx  = [ytx]
+  if [np] = 6 then
+    dytx = 1.07
+  else
+    dytx = 1.07
+  endif
+  fytx = 1.75
+  xp   = $sigma([lTmin]+0.09*([lTmax]-[lTmin]))
+  yp   = [ymax] / 2.
+*
+* markertype-24 and order of
+  ve/cr ji(9) i 21 20 29 22 27 31 27 23 28
+* marker colour
+*  ve/cr ic(9) i 1 2 3 4 5 6 7 8 9
+  ve/cr ic(9) i 1 1 1 1 1 1 1 1 1
+  do j = 1 , 9
+*    i = ji([j])
+    exec colmark [j]
+    im = vmarker(1)
+    ic = vcolor(1)
+*    if [j] < 7 then
+      ve/cr xval([ndots]) r
+      ve/cr yval([ndots]) r
+      call plexk.f([ndots],[j])
+      set mtyp 20
+      set ksiz .3
+      igset mscf 1.0
+*      graph [ndots] xval yval P
+      ve/del xval,yval
+*    endif
+    m = vmass([j])
+* protons ----------------------------- DATA
+    if [j] = 1 then
+      if $vexist(vmrp) = 1 then
+        nmr = $sigma(nco(vmrp))
+        ve/copy $sigma(sqrt(vmrp**2+[m]**2)) vmre
+        h/errors $sigma(0.5*(vmrp+vmre-[m])) _
+                 $sigma(0.1*vmry*vmre/vmrp/vmrp) _
+               ? $sigma(0.1*vmrdy*vmre/vmrp/vmrp) [nmr] 25 .2
+      endif
+      if $vexist(vPlPt) = 1 then
+        nPlP = $sigma(nco(vPlPt))
+        ve/copy $sigma(vPlPt+[m]) vPlPe
+        ve/copy $sigma(sqrt(vPlPe**2-[m]**2)) vPlPp
+        h/errors $sigma(0.5*(vPlPp+vPlPt)) _
+                 $sigma(vPlPy/vPlPp) _
+               ? $sigma(vPlPdy/vPlPp) [nPlP] [im] .2
+      endif
+    endif
+* neutrons ------------------------ DATA
+    if [j] = 2 then
+      if $vexist(vchp) = 1 then
+        nch = $sigma(nco(vchp))
+        ve/copy $sigma(sqrt(vchp**2+[m]**2)) vche
+        h/errors $sigma(0.5*(vchp+vche-[m])) _
+                 $sigma(0.1*vchy*vche/vchp/vchp) _
+               ? $sigma(0.1*vchdy*vche/vchp/vchp) [nch] 24 .2 
+      endif
+      if $vexist(vPlNt) = 1 then
+        nPlN = $sigma(nco(vPlNt))
+        ve/copy $sigma(vPlNt+[m]) vPlNe
+        ve/copy $sigma(sqrt(vPlNe**2-[m]**2)) vPlNp
+        h/errors $sigma(0.5*(vPlNp+vPlNt)) _
+                 $sigma(vPlNy/vPlNp) _
+               ? $sigma(vPlNdy/vPlNp) [nPlN] [im] .2
+      endif
+    endif
+* deuterons ------------------------ DATA
+    if [j] = 3 then
+      if $vexist(vPlDt) = 1 then
+        nPlD = $sigma(nco(vPlDt))
+        ve/copy $sigma(vPlDt+[m]) vPlDe
+        ve/copy $sigma(sqrt(vPlDe**2-[m]**2)) vPlDp
+        h/errors $sigma(0.5*(vPlDp+vPlDt)) _
+                 $sigma(vPlDy/vPlDp) _
+               ? $sigma(vPlDdy/vPlDp) [nPlD] [im] .2
+      endif
+    endif
+* tritons ------------------------ DATA
+    if [j] = 4 then
+      if $vexist(vPlTt) = 1 then
+        nPlT = $sigma(nco(vPlTt))
+        ve/copy $sigma(vPlTt+[m]) vPlTe
+        ve/copy $sigma(sqrt(vPlTe**2-[m]**2)) vPlTp
+        h/errors $sigma(0.5*(vPlTp+vPlTt)) _
+                 $sigma(0.1*vPlTy/vPlTp) _
+               ? $sigma(0.1*vPlTdy/vPlTp) [nPlT] [im] .2
+      endif
+    endif
+* kons ------------------------ DATA
+    if [j] = 5 then
+      if $vexist(vPlKt) = 1 then
+        nPlK = $sigma(nco(vPlKt))
+        ve/copy $sigma(vPlKt+[m]) vPlKe
+        ve/copy $sigma(sqrt(vPlKe**2-[m]**2)) vPlKp
+        h/errors $sigma(0.5*(vPlKp+vPlKt+[m])) _
+                 $sigma(vPlKy/vPlKp) _
+               ? $sigma(vPlKdy/vPlKp) [nPlK] [im] .2
+      endif
+    endif
+* pions ------------------------ DATA
+    if [j] = 6 then
+      if $vexist(vPlPIt) = 1 then
+        nPlPI = $sigma(nco(vPlPIt))
+        ve/copy $sigma(vPlPIt+[m]) vPlPIe
+        ve/copy $sigma(sqrt(vPlPIe**2-[m]**2)) vPlPIp
+        h/errors $sigma(0.5*(vPlPIp+vPlPIe)) _
+                 $sigma(100*vPlPIy/vPlPIp) _
+               ? $sigma(100*vPlPIdy/vPlPIp) [nPlPI] 31 .15
+      endif
+    endif
+*
+* pions of different signs (or summ) ------------- DATA
+    if [j] = 6 then
+      exec cudat [np]
+    endif
+    im = vmarker(1)
+    set mtyp [im]
+    set ksiz .3
+    igset mscf 1.0
+    tytx=[ytx]*[dytx]
+    if     [j] = 1 then
+       set mtyp 25
+       exec ~/PTOOL/legend0 [xt] [ytx] ' ' 0. .5 -40
+       set mtyp [im]
+       exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
+       exec ~/PTOOL/snotes [xtxt] [tytx] 'protons' 0. .3 -40
+       exec hsolid 10[j] 0 12 [Nbin] 2 [im] [m] 8 1 [np]
+       exec drlin [ydx] [xdi] [xdf]
+       ytx = [ytx] / [fytx]
+       ydx = [ydx] / [fytx]
+    elseif [j] = 2 then	   		
+       set mtyp 24
+       exec ~/PTOOL/legend0 [xt] [ytx] ' ' 0. .5 -40
+       set mtyp [im]
+       exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
+       exec ~/PTOOL/snotes [xtxt] [tytx] 'neutrons' 0. .3 -40
+       exec hsolid 10[j] 0 1 [Nbin] 2 [im] [m] 8 2 [np]
+       exec drlin [ydx] [xdi] [xdf]
+       ytx = [ytx] / [fytx]
+       ydx = [ydx] / [fytx]
+    elseif [j] = 3 then	   		
+       set mtyp 30
+       exec ~/PTOOL/legend0 [xt] [ytx] ' ' 0. .5 -40
+       set mtyp [im]
+       exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
+       exec ~/PTOOL/snotes [xtxt] [tytx] 'deuterons' 0. .3 -40
+       exec hsolid 10[j] 0 14 [Nbin] 2 [im] [m] 4 1 [np]
+       exec drlin [ydx] [xdi] [xdf]
+       ytx = [ytx] / [fytx]
+       ydx = [ydx] / [fytx]
+    elseif [j] = 4 then	   		
+       set mtyp 26
+       exec ~/PTOOL/legend0 [xt] [ytx] ' ' 0. .5 -40
+       set mtyp [im]
+       exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
+       exec ~/PTOOL/snotes [xtxt] [tytx] 'tritons (x 0.1)' 0. .3 -40
+       exec hsolid 10[j] 0 15 [Nbin] 2 [im] [m] 4 2 [np]
+       exec drlin [ydx] [xdi] [xdf]
+       ytx = [ytx] / [fytx]
+       ydx = [ydx] / [fytx]
+    elseif [j] = 5 then	   		
+       exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
+       exec ~/PTOOL/snotes [xtxt] [tytx] 'kaons (x 100)' 0. .3 -40
+       exec hsolid 10[j] 0 23 [Nbin] 2 [im] [m] 8 3 [np]
+       exec drlin [ydx] [xdi] [xdf]
+       ytx = [ytx] / [fytx]
+       ydx = [ydx] / [fytx]
+    elseif [j] = 6 then	   		
+       exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
+       exec ~/PTOOL/snotes [xtxt] [tytx] 'pions (x 100)' 0. .3 -40
+       exec hsolid 10[j] 0 20 [Nbin] 2 [im] [m] 8 4 [np]
+       exec drlin [ydx] [xdi] [xdf]
+       ytx = [ytx] / [fytx]
+       ydx = [ydx] / [fytx]
+*    elseif [j] = 7 then	   		
+*       exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
+*       exec ~/PTOOL/snotes [xtxt] [tytx] 'Lambdas(x100)' 0. .3 -40
+*       exec hsolid 10[j] 0 20 [Nbin] 2 [im] [m] 16 3 [np]
+*       exec drlin [ydx] [xdi] [xdf]
+*       ytx = [ytx] / [fytx]
+*       ydx = [ydx] / [fytx]
+    elseif [j] = 8 then	   		
+       exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
+       exec ~/PTOOL/snotes [xtxt] [tytx] 'He-3 (x 0.1)' 0. .3 -40
+       exec hsolid 10[j] 0 20 [Nbin] 2 [im] [m] 4 4 [np]
+       exec drlin [ydx] [xdi] [xdf]
+       ytx = [ytx] / [fytx]
+       ydx = [ydx] / [fytx]
+    elseif [j] = 9 then	   		
+       exec ~/PTOOL/legend0 [xtx] [ytx] ' ' 0. .5 -40
+       if [np] = 92 then 
+         exec ~/PTOOL/snotes [xtxt] [tytx] 'He-4 (x 0.001)' 0. .3 -40
+       else
+         exec ~/PTOOL/snotes [xtxt] [tytx] 'He-4 (x 0.001)' 0. .3 -40
+       endif
+       exec hsolid 10[j] 0 4 [Nbin] 2 [im] [m] 4 3 [np]
+       exec drlin [ydx] [xdi] [xdf]
+       ytx = [ytx] / [fytx]
+       ydx = [ydx] / [fytx]
+    endif
+    set lwid 1
+    set dmod 1
+  enddo
+*
+  exec ~/PTOOL/black
+  if [runn] > 0. then
+    exec paramline [xp] [yp]
+  endif
+  set   mtyp
+  set   ksiz
+  igset mscf 1.0
+*
+  exec prieps [file] 
+  if [runn] = 0 then
+    wait ' ' 2
+*    shell lpr -Patsbhpd [file].ps
+  endif
+*
+return
+*
+macro chips targ=C file=c0606 np=6 nn=6 runn=2000
+  exec readpar pf=chipstest_[file].in
+*
+  pdg  = $sigma([np]*1000+[nn])
+  pdgt = 90000000 + [pdg]
+  ve/cr   work(3) i [pdgt] [runn] -2212
+  ve/copy work(1:1) pdgtg
+  ve/copy work(2:2) nevnt
+  ve/copy work(3:3) pdgpr
+  ve/del  work  
+  ve/cr   work(2) r 0. 0.
+  ve/copy work(1:1) enb
+  ve/copy work(2:2) momb
+  ve/del  work  
+  exec writepar pf=chipstest.in
+*  shell rm chips_[file].log
+  wait ' ' 2
+  shell ./CHIPStest | > chips_[file].log
+  wait ' ' 2
+  exec makehbk
+  wait ' ' 2
+  shell mv chips.hbook chips_[file].hbook
+*
+return
+*
+macro readpar  pf=chipstest.in
+  ve/read  temp,ssse,eepr,nop,momb,enb,pdgpr,pdgtg,nevnt,freeN,freeD,clustP,rM,sA_
+              [pf] 'F7.2,F5.2,F5.2,I4,F6.0,F6.0,2I9,I9,5F5.2' 'OC' -/*/  
+return
+*
+macro writepar pf=chipstest.in
+  ve/write temp,ssse,eepr,nop,momb,enb,pdgpr,pdgtg,nevnt,freeN,freeD,clustP,rM,sA_
+              [pf] 'F7.2,F5.2,F5.2,I4,F6.0,F6.0,2I9,I9,5F5.2' 'OC'
+return
+*
+macro colmark i=1
+ icol = ic([i])
+ imkt = ji([i])
+ exec ~/PTOOL/white [icol]
+ set mtyp [imkt]
+ ve/cr work(2) r [icol] [imkt]
+ ve/copy work(1:1) vcolor
+ ve/copy work(2:2) vmarker
+ ve/del work
+return
+*
+macro creavec
+ ve/cr temp(1) r 
+ ve/cr ssse(1) r
+ ve/cr eepr(1) r
+ ve/cr nop(1) i
+ ve/cr momb(1) r
+ ve/cr enb(1) r
+ ve/cr pdgpr(1) i
+ ve/cr pdgtg(1) i
+ ve/cr nevnt(1) i
+ ve/cr freeN(1) r
+ ve/cr freeD(1) r
+ ve/cr clustP(1) r
+ ve/cr rM(1) r
+ ve/cr sA(1) r
+ ve/cr ZcpZA(3,9) r
+ ve/cr xlimits(3,9) r
+ ve/cr vM(3,9) r
+ ve/cr vdM(3,9) r
+ ve/cr vT(3,9) r
+ ve/cr vdT(3,9) r
+ ve/cr vmarker(1) r
+ ve/cr vcolor(1) r
+return
+*
+macro prieps fnam=radshow fil=99
+*
+  for/fil [fil] [fnam].eps
+  meta -[fil] -113
+  mess '*** Creating eps-file: '//[fnam]//'.eps'
+*  for/fil [fil] [fnam].ps
+*  meta -[fil] -115
+*  mess '*** Creating ps-file: '//[fnam]//'.ps'
+  pi/pl ' '
+  meta 0
+  for/clo [fil]
+return
+*
+macro kpar
+ ve/cr tk(13) r 101.5 103. 106. 102.5 99. 94. 98. 92. 92. 90.5 87. 85. 84.
+ ve/cr mk(13) r   5.3   5.5  5.8  5.9  5.7 5.8 5.8 5.5 5.6 5.2  5.0 4.5 4.3
+ ve/copy $sigma(mk*0.01) mk
+ ve/cr bk(13) r
+ tmin = 60.
+ tmax = 200.
+ nbin = 700
+ swi z
+ do i = 1, 13
+   t = tk([i])
+   m = mk([i])
+   dx = $sigma(([tmax]-[tmin])/[nbin])
+   fun1 98 sqrt(x*(x+493.646*2.))*exp(-x/[t]) [nbin] [tmin] [tmax] 0. 
+   s = $hinfo(98,'sum')
+   b = $sigma([m]/([s]*[dx]))
+   ve/cr work(1) r [b]
+   ve/copy work bk([i]:[i])
+   ve/del work
+   hi/del 98
+ enddo
+ ve/pri bk
+return
+*
+macro paramline xp=0.05 yp=0.96
+ttemp   = temp(1)
+tssse   = ssse(1)
+teepr   = eepr(1)
+tmomb   = momb(1)
+tenb    = enb(1)
+tfreeN  = freeN(1) 
+tfreeD  = freeD(1) 
+tclustP = clustP(1)
+txrM    = rM(1) r
+txsA    = sA(1) r
+txtm = 't='//[ttemp]//' ss='//[tssse]//' eep='//[teepr]//' p='//[tmomb]_
+//' e='//[tenb]//' fN='//[tfreeN]//' fD='//[tfreeD]//' cP='//[tclustP]_
+//' rM='//[txrM]//' sA='//[txsA]
+*exec ~/PTOOL/snotes [xp] [yp] [txtm] 0. 0.35 40 0
+return
+*
+macro hsolid id=66 id2=0 hf=1 hn=60 icol=1 im=20 m=939.567 iw=1 is=1 z=6
+*** id=Hist1,id2=Hist2,hf=1stChan,hn=TotNC,icol=Color,im=Mark,m=Mass,iw=LWid,is=LStyle,z=Zt
+  nb = $sigma([hn]-[hf]+1)
+  ve/cr tx([hn]) r
+  ve/cr ty([hn]) r
+  ve/cr td([hn]) r
+  ve/cr wx([nb]) r
+  ve/cr wy([nb]) r
+  ve/cr wd([nb]) r
+  ve/cr cy([nb]) r
+  ve/cr cd([nb]) r
+  *mess 'i1='//[id]//',i2='//[id2]//',f='//[hf]//',n='//[hn]//',nb='//[nb]
+  if [id2] = 0 then
+    get/abs  [id] tx
+    get/cont [id] ty
+    get/err  [id] td
+    ve/copy  tx([hf]:[hn]) wx
+    ve/copy  ty([hf]:[hn]) cy
+    ve/copy  td([hf]:[hn]) cd
+    if     [id] = 104 then
+      ve/copy  $SIGMA(cy*0.1) wy
+      ve/copy  $SIGMA(cd*0.1) wd
+    elseif [id] = 105 then
+      ve/copy  $SIGMA(cy*100.) wy
+      ve/copy  $SIGMA(cd*100.) wd
+    elseif [id] = 106 then
+      ve/copy  $SIGMA(cy*100.) wy
+      ve/copy  $SIGMA(cd*100.) wd
+    elseif [id] = 107 then
+      ve/copy  $SIGMA(cy*100.) wy
+      ve/copy  $SIGMA(cd*100.) wd
+    elseif [id] = 108 then
+*      mess 'He3 * 0.1'
+      ve/copy  $SIGMA(cy*0.1) wy
+      ve/copy  $SIGMA(cd*0.1) wd
+    elseif [id] = 109 then
+      if [z] = 92 then
+        mess 'He4 from Uranium 0.001'
+        ve/copy  $SIGMA(cy*0.001) wy
+        ve/copy  $SIGMA(cd*0.001) wd
+      else
+        mess 'He4 from Carbon 0.001'
+        ve/copy  $SIGMA(cy*0.001) wy
+        ve/copy  $SIGMA(cd*0.001) wd
+      endif
+    else
+      ve/copy  cy wy
+      ve/copy  cd wd
+    endif
+  else
+    hist/op/add [id] [id2] 110
+    get/abs  110 tx
+    get/cont 110 ty
+    get/err  110 td
+    ve/copy  tx([hf]:[hn]) wx
+    ve/copy  ty([hf]:[hn]) cy
+    ve/copy  td([hf]:[hn]) cd
+    ve/copy  $SIGMA(cy*100.) wy
+    ve/copy  $SIGMA(cd*100.) wd
+  endif
+  ve/copy $sigma(10.**wx) wt
+  ve/copy $sigma(sqrt(wt*(2.*[m]+wt))) wp
+  if [m] < 900 then
+    ve/copy $sigma(wt+[m]) wt
+  endif
+  exec ~/PTOOL/white 8
+  set ksiz 0.18
+  *set mtyp 20
+  *graph [nb] $sigma(0.5*(wp+wt)) $sigma(wy/wp) lp
+  exec ~/PTOOL/white [icol]
+  set lwid [iw]
+  set dmod [is]
+  graph [nb] $sigma(0.5*(wp+wt)) $sigma(wy/wp) C
+  ve/del cy,cd,tx,ty,td,wx,wy,wd,wt,wp
+return
+*
+macro drlin yv=0 xi=0 xf=0
+  ve/cr xc(2) R [xi] [xf]
+  ve/cr yc(2) R [yv] [yv]
+  graph 2 xc yc C
+  ve/del xc,yc
+return
+*
+macro CUdat np=6 m=139.57
+if [np] = 6 then
+  tg = c
+  npt=84
+  nptt=22
+  npt3=48
+  npt4=45
+  khe=.0000081
+  kpdt=.000077
+  he4m=.001
+elseif [np] = 92 then
+  tg = u
+  npt=89
+  nptt=27
+  npt3=49
+  npt4=47
+  khe=.0000142
+  kpdt=.000225
+  he4m=.001
+endif
+file = 'data_apc_'//[tg]//'.vexp'
+ve/cr kex(100) r
+ve/cr sexp(100) r
+ve/cr dsexp(100) r
+ve/cr sexm(100) r
+ve/cr dsexm(100) r
+ve/read kex,sexp,dsexp,sexm,dsexm [file]
+nexh = kex(1)
+nex  = [nexh]
+nex1 = [nexh] - 1
+scmm =  sexp(1)
+sc   = dsexp(1)
+* -- From 1/10 GeV scale to GeV/c^-1
+ve/copy $sigma(sexp/[scmm]*[sc]/10.) scexp
+ve/copy $sigma((dsexp-sexp)/[scmm]*[sc]/10.) dscexp
+ve/copy $sigma(sexm/[scmm]*[sc]/10.) scexm
+ve/copy $sigma((dsexm-sexm)/[scmm]*[sc]/10.) dscexm
+* -- convert to f(k)
+ve/copy kex(2:[nex])    pex
+ve/copy scexp(2:[nex])  fexp
+ve/copy scexm(2:[nex])  fexm
+ve/copy dscexp(2:[nex])  dfexp
+ve/copy dscexm(2:[nex])  dfexm
+ve/copy $sigma(sqrt(pex**2+(0.001*[m])**2)) eex
+ve/copy $sigma(fexp*eex/pex/pex/1000000.) fexp
+ve/copy $sigma(fexm*eex/pex/pex/1000000.) fexm
+ve/copy $sigma(dfexp*eex/pex/pex/1000000.) dfexp
+ve/copy $sigma(dfexm*eex/pex/pex/1000000.) dfexm
+ve/copy $sigma(100*(fexp+fexm)) fex
+ve/copy $sigma(100*sqrt(dfexp*dfexp+dfexm*dfexm)) dfex
+set dmod
+if [nex1] > 0.5 then
+    set dmod 1
+*    h/errors kex(2:[nex]) scexp(2:[nex]) _
+*                      ? dscexp(2:[nex]) [nex1] 24 .15
+*    h/errors kex(2:[nex]) scexm(2:[nex]) _
+*                      ? dscexm(2:[nex]) [nex1] 25 .15
+*
+**    h/errors $sigma((pex+eex)/0.002) fexp ? dfexp [nex1] 24 .15
+**    h/errors $sigma((pex+eex)/0.002) fexm ? dfexm [nex1] 20 .15
+*    h/errors $sigma((pex+eex)/0.002) fex ? dfex [nex1] 31 .25
+endif
+*
+******************** all pions direct linear *********************
+ve/cr tex([npt]) r
+ve/cr qex([npt]) r
+ve/cr xex([npt]) r
+ve/cr dxex([npt]) r
+filet = 'minor92_'//[tg]//'_pi_lin.vexp'
+******* tex - total energy, xex=E*dN/dE
+ve/read tex,xex,dxex [filet]
+ve/copy $sigma(sqrt(tex**2-[m]**2)) qex
+ve/copy $sigma(100.*xex/tex/qex/10.) xex
+ve/copy $sigma(100.*dxex/tex/qex/10.) dxex
+h/errors $sigma((qex+tex)/2) xex ? dxex [npt] 31 .25
+*
+******************** all pions direct log *********************
+ve/cr mex(60) r
+ve/cr ten(60) r
+ve/cr xsex(60) r
+ve/cr dsex(60) r
+filel = 'minor92_'//[tg]//'_pi_log.vexp'
+******* tex - total energy, xex=E*dN/dE
+ve/read mex,xsex,dsex [filel]
+ve/copy $sigma(sqrt(mex**2+[m]**2)) ten
+ve/copy $sigma(100.*xsex*ten/mex/mex/10000.) xsex
+ve/copy $sigma(100.*dsex*ten/mex/mex/10000.) dsex
+h/errors $sigma((mex+ten)/2) xsex ? dsex [npt] 31 .25
+*
+set dmod
+ve/del kex,sexp,dsexp,sexm,dsexm,scexp,dscexp,scexm,dscexm
+ve/del pex,eex,fexp,fexm,dfexp,dfexm,mex,ten,dsex,tex,qex,xex,dxex
+******************** all lambdas *********************
+m=vmass(5)
+if [np] = 92 then
+  npl=8
+  filet = 'barmin93_xe_ks.vexp'
+  klam = .0246/59/100.
+else
+  npl=7
+  filet = 'balestra91_ne_ks.vexp'
+  klam = 136./84./120./30364
+endif
+ve/cr nev([npl]) r
+ve/cr tex([npl]) r
+ve/cr eex([npl]) r
+ve/cr qex([npl]) r
+ve/cr xex([npl]) r
+ve/cr dxex([npl]) r
+******* tex - kinetic energy, nev=dN/dp
+ve/read tex,nev [filet]
+ve/copy $sigma(tex+[m]) eex
+ve/copy $sigma(sqrt((tex+[m])**2-[m]*[m])) qex
+ve/copy $sigma(100*[klam]*nev*eex/qex/qex) xex
+ve/copy $sigma(100*[klam]*sqrt(nev)*eex/qex/qex) dxex
+*h/errors $sigma((eex+tex)/2) xex ? dxex [npt] 27 .15
+ve/del tex,eex,qex,xex,dxex,nev
+******************** all lambdas *********************
+m=vmass(7)
+if [np] = 92 then
+  npl=6
+  filet = 'barmin93_xe_lam.vexp'
+  klam = 196./73.8/100./7975
+else
+  npl=7
+  filet = 'balestra91_ne_lam.vexp'
+  klam = 153./86./120./30364
+endif
+ve/cr nev([npl]) r
+ve/cr tex([npl]) r
+ve/cr eex([npl]) r
+ve/cr qex([npl]) r
+ve/cr xex([npl]) r
+ve/cr dxex([npl]) r
+******* tex - kinetic energy, nev=dN/dp
+ve/read tex,nev [filet]
+ve/copy $sigma(tex+[m]) eex
+ve/copy $sigma(sqrt((tex+[m])**2-[m]*[m])) qex
+ve/copy $sigma(100*[klam]*nev*eex/qex/qex) xex
+ve/copy $sigma(100*[klam]*sqrt(nev)*eex/qex/qex) dxex
+set lwid 5
+*h/errors $sigma((qex+tex)/2) xex ? dxex [npt] 28 .15
+set lwid 1
+ve/del tex,eex,qex,xex,dxex,nev
+******************** Hofmann protons *********************
+m=vmass(2)
+npt=43
+ve/cr nev([npt]) r
+ve/cr tex([npt]) r
+ve/cr qex([npt]) r
+ve/cr xex([npt]) r
+ve/cr dxex([npt]) r
+filet = 'hofman90_'//[tg]//'_p.vexp'
+******* tex - kinetic energy, xex=ln(dN/dE)
+ve/read tex,xex [filet]
+ve/copy $sigma(exp(.2587*xex)) nev
+ve/copy $sigma(sqrt((tex+[m])**2-[m]**2)) qex
+ve/copy $sigma([kpdt]*nev/qex) xex
+ve/copy $sigma([kpdt]*sqrt(nev)/qex) dxex
+h/errors $sigma((qex+tex)/2) xex ? dxex [npt] 25 .15
+ve/del tex,qex,xex,dxex,nev
+*
+******************** Hofmann deuterons *********************
+m=vmass(3)
+npt=24
+ve/cr nev([npt]) r
+ve/cr tex([npt]) r
+ve/cr qex([npt]) r
+ve/cr xex([npt]) r
+ve/cr dxex([npt]) r
+filet = 'hofman90_'//[tg]//'_d.vexp'
+******* tex - kinetic energy, xex=ln(dN/dE)
+ve/read tex,xex [filet]
+ve/copy $sigma(.1*exp(.2578*xex)) nev
+ve/copy $sigma(sqrt((tex+[m])**2-[m]**2)) qex
+ve/copy $sigma([kpdt]*nev/qex) xex
+ve/copy $sigma([kpdt]*sqrt(nev)/qex) dxex
+h/errors $sigma((qex+tex)/2) xex ? dxex [npt] 30 .25
+ve/del tex,qex,xex,dxex,nev
+*
+******************** Hofmann tritons * 0.1 *********************
+m=vmass(4)
+npt=[nptt]
+ve/cr nev([npt]) r
+ve/cr tex([npt]) r
+ve/cr qex([npt]) r
+ve/cr xex([npt]) r
+ve/cr dxex([npt]) r
+filet = 'hofman90_'//[tg]//'_t.vexp'
+******* tex - kinetic energy, xex=ln(dN/dE)
+ve/read tex,xex [filet]
+ve/copy $sigma(.1*exp(.2568*xex)) nev
+ve/copy $sigma(sqrt((tex+[m])**2-[m]**2)) qex
+ve/copy $sigma(.1*[kpdt]*nev/qex) xex
+ve/copy $sigma(.1*[kpdt]*sqrt(nev)/qex) dxex
+h/errors $sigma((qex+tex)/2) xex ? dxex [npt] 26 .2
+ve/del tex,qex,xex,dxex,nev
+*
+******************** Hofmann He3 * 0.1 *********************
+m=vmass(8)
+npt=[npt3]
+ve/cr nev([npt]) r
+ve/cr tex([npt]) r
+ve/cr qex([npt]) r
+ve/cr xex([npt]) r
+ve/cr dxex([npt]) r
+filet = 'hofman90_'//[tg]//'_he3.vexp'
+******* tex - kinetic energy, xex=dN/dE
+ve/read tex,nev [filet]
+ve/copy $sigma(sqrt((tex+[m])**2-[m]**2)) qex
+ve/copy $sigma(.1*[khe]*nev/qex) xex
+ve/copy $sigma(.1*[khe]*sqrt(nev)/qex) dxex
+h/errors $sigma((qex+tex)/2) xex ? dxex [npt] 23 .2
+ve/del tex,qex,xex,dxex,nev
+*
+******************** Hofmann He4 * 0.01 *********************
+m=vmass(9)
+npt=[npt4]
+ve/cr nev([npt]) r
+ve/cr tex([npt]) r
+ve/cr qex([npt]) r
+ve/cr xex([npt]) r
+ve/cr dxex([npt]) r
+filet = 'hofman90_'//[tg]//'_he4.vexp'
+******* tex - kinetic energy, xex=dN/dE
+ve/read tex,nev [filet]
+ve/copy $sigma(sqrt((tex+[m])**2-[m]**2)) qex
+ve/copy $sigma([he4m]*[khe]*nev/qex) xex
+ve/copy $sigma([he4m]*[khe]*sqrt(nev)/qex) dxex
+mess 'He4 DATA' // [he4m]
+h/errors $sigma((qex+tex)/2) xex ? dxex [npt] 28 .2
+ve/del tex,qex,xex,dxex,nev
+*
+return
+*
+macro datread np=6 file=f
+  ve/re ZcpZA,xlimits,vM,vdM,vT,vdT [file].dat
+*
+* -- Read Minor's data:
+* MINOR 92   ZP A342, 447
+* PBAR C --> P X
+* P IN GEV   0
+* x = P(P=3) IN MEV
+* y = 10.*D(N)/D(P) IN 1/MEV
+* x        y       +- dy              
+*
+  if [np] = 6 then
+    ve/cr vmrp(96) r
+    ve/cr vmry(96) r
+    ve/cr vmrdy(96) r
+    ve/read vmrp,vmry,vmrdy minor92data_c0606.vexp
+  endif
+  if [np] = 92 then 
+    ve/cr vmrp(96) r
+    ve/cr vmry(96) r
+    ve/cr vmrdy(96) r
+    ve/read vmrp,vmry,vmrdy minor92data_u92146.vexp
+  endif
+*
+* -- Read B.Chen's data
+* CHEN 92 PRC 45, 2332
+* PBAR U --> N X
+* P IN MEV
+* X = P
+* Y = 10*dN/dP MeV^-1
+  if [np] = 92 then 
+    ve/cr vchp(44) r
+    ve/cr vchy(44) r
+    ve/cr vchdy(44) r
+    ve/read vchp,vchy,vchdy chen92data_u92146.vexp
+  endif
+*
+* -- Read D.Polster's data
+* Polster 95 PRC 51, 1167
+* PBAR U --> N,P X
+* X = xmm; Ekin = xmm*200.0/81.5 MeV 
+* Y = ymm; dN/dEkin = 0.001*10**(3*ymm/53.8) MeV^-1
+* dY = dymm; d(dN/dEkin) = dN/dEkin - 0.001*10**(3*(ymm-dymm)/53.8)
+*
+* ============ Uranium ===================
+  if [np] = 92 then 
+* neutrons
+    ve/cr xmm(52) r
+    ve/cr ymm(52) r
+    ve/cr dymm(52) r
+    ve/read xmm,ymm,dymm polst95data_n_u92146.vexp
+    ve/copy $sigma(xmm*200.0/81.5) vPlNt
+    ve/copy $sigma(0.001*10**(3*ymm/53.8)) vPlNy
+    ve/copy $sigma(vPlNy-0.001*10**(3*(ymm-dymm)/53.8)) vPlNdy
+    ve/del xmm,ymm,dymm
+* protons
+    ve/cr xmm(28) r
+    ve/cr ymm(28) r
+    ve/cr dymm(28) r
+    ve/read xmm,ymm,dymm polst95data_p_u92146.vexp
+    ve/copy $sigma(xmm*200.0/81.5) vPlPt
+    ve/copy $sigma(0.001*10**(3*ymm/53.8)) vPlPy
+    ve/copy $sigma(vPlPy-0.001*10**(3*(ymm-dymm)/53.8)) vPlPdy
+    ve/del xmm,ymm,dymm
+* deuterons
+    ve/cr xmm(21) r
+    ve/cr ymm(21) r
+    ve/cr dymm(21) r
+    ve/read xmm,ymm,dymm polst95data_d_u92146.vexp
+    ve/copy $sigma(xmm) vPlDt
+    ve/copy $sigma(ymm) vPlDy
+    ve/copy $sigma(dymm) vPlDdy
+    ve/del xmm,ymm,dymm
+* tritons
+    ve/cr xmm(16) r
+    ve/cr ymm(16) r
+    ve/cr dymm(16) r
+    ve/read xmm,ymm,dymm polst95data_t_u92146.vexp
+    ve/copy $sigma(xmm) vPlTt
+    ve/copy $sigma(ymm) vPlTy
+    ve/copy $sigma(dymm) vPlTdy
+    ve/del xmm,ymm,dymm
+* kaons
+    ve/cr xmm(16) r
+    ve/cr ymm(16) r
+    ve/cr dymm(16) r
+    ve/read xmm,ymm,dymm polst95data_k_u92146.vexp
+    ve/copy $sigma(xmm) vPlKt
+    ve/copy $sigma(ymm*100.) vPlKy
+    ve/copy $sigma(dymm*100.) vPlKdy
+    ve/del xmm,ymm,dymm
+* pions
+    ve/cr xmm(38) r
+    ve/cr ymm(38) r
+    ve/cr dymm(38) r
+    ve/read xmm,ymm,dymm polst95data_pi_u92146.vexp
+    ve/copy $sigma(xmm) vPlPIt
+    ve/copy $sigma(ymm) vPlPIy
+    ve/copy $sigma(dymm) vPlPIdy
+    ve/del xmm,ymm,dymm
+  endif
+*
+* ==============  Carbon =========================================
+  if [np] = 6 then 
+* protons --- Plot DATA
+    ve/cr xmm(46) r
+    ve/cr ymm(46) r
+    ve/cr dymm(46) r
+    ve/read xmm,ymm,dymm polst95data_n_c0606.vexp
+    ve/copy $sigma(xmm*200.0/81.5) vPlNt
+    ve/copy $sigma(0.001*10**(3*ymm/53.5)) vPlNy
+    ve/copy $sigma(vPlNy-0.001*10**(3*(ymm-dymm)/53.5)) vPlNdy
+    ve/del xmm,ymm,dymm
+* neutrons --- Plot DATA
+    ve/cr xmm(27) r
+    ve/cr ymm(27) r
+    ve/cr dymm(27) r
+    ve/read xmm,ymm,dymm polst95data_p_c0606.vexp
+    ve/copy $sigma(xmm*200.0/81.5) vPlPt
+    ve/copy $sigma(0.001*10**(3*ymm/53.5)) vPlPy
+    ve/copy $sigma(vPlPy-0.001*10**(3*(ymm-dymm)/53.5)) vPlPdy
+    ve/del xmm,ymm,dymm
+  endif
+return
+*
+macro makehbk
+ ve/cr nevts(1) r
+ ve/read nevts histnevt.out
+ 1d 1 'N events' 1 0. 2. 0.
+ put/cont 1 nevts
+ hi/fil 35 chips.hbook ! n
+ nt/create 20 'Incl' 43 //lun35 8096 _
+  Netv  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p   ND    PDG   NS    NZ    NN    m     Px    _
+  Py    Pz    E
+ nt/read 20 tuplincl.out ! ! 9000000
+ nt/create 22 '3pi' 40 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p   m3pi  m12   m13   m23   pdg1  pdg2  pdg3
+ nt/read 22 tuple3pi.out ! ! 9000000
+ nt/create 25 'EvtA' 33 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p
+ nt/read 25 tuplevta.out ! ! 9000000
+ nt/create 27 'EvtQ' 33 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p
+ nt/read 27 tuplevtq.out ! ! 9000000
+ hrout *
+ clo 35
+ ve/del nevts
+ hi/del *
+return
