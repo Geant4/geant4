@@ -375,6 +375,9 @@ fi
 
 #####################################################################
 
+echo g4conf=$g4conf
+
+#####################################################################
 # Create GNUmakefile.db to keep ALL GNUmakefile DB :)
 
 if test -f \$G4INSTALL/config/scripts/GNUmakefile.db ; then
@@ -391,19 +394,44 @@ echo ""
 echo "Starting installation..."
 echo ""
 cd $g4install/source
-echo `pwd`
+#echo `pwd`
 
 # There is no env!
 if [ X$g4global = Xy ] ; then
-$g4make global
+echo ""
+rm -r $g4conf/g4make.log
+$g4make global 2>&1 | tee $g4conf/g4make.log
 fi
 
 # There is env for binaries - for User: should be set in env.[c]sh!
 if [ X$g4granular = Xy ] ; then
 G4LIB_USE_GRANULAR=1
 export G4LIB_USE_GRANULAR
-$g4make
+rm -r $g4conf/g4make.log
+$g4make 2>&1 | tee $g4conf/g4make.log
 fi
+
+# Check for errors in log file
+export err=\$[`grep Error $g4conf/g4make.log | wc -w`]
+# echo err=\$err
+
+if [ X\$err = X0 ] ; then
+echo ""
+echo "####################################################"
+echo "# Your Geant4 installation seems to be successful! #"
+echo "# To be sure please have a look into the log file: #"
+echo "# $g4conf/g4make.log				 #"
+echo "####################################################"
+echo ""
+else
+echo ""
+echo "############################################################"
+echo "# It looks like you had errors during Geant4 installation! #"
+echo "# Please check log file:				      	 #"
+echo "# $g4conf/g4make.log					 #"
+echo "############################################################"
+echo ""
+fi 
 
 # There is no env!
 if [ X$g4includes_flag = Xy ] ; then
