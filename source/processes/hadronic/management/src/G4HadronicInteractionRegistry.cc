@@ -35,7 +35,7 @@ RegisterMe(G4HadronicInteraction * aModel)
 void G4HadronicInteractionRegistry::
 RemoveMe(G4HadronicInteraction * aModel)
 {
-  theRegistry.allModels.erase(find(theRegistry.allModels.begin(), theRegistry.allModels.end(), aModel));
+  theRegistry.allModels.erase(G4std::find(theRegistry.allModels.begin(), theRegistry.allModels.end(), aModel));
   theRegistry.nModels = theRegistry.allModels.size();
 }
 
