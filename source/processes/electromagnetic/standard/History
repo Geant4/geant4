@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2000-11-17 15:03:16 maire Exp $
+$Id: History,v 1.15 2001-01-16 18:03:42 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+16 jan 01: mma (stand-V03-00-00)
+- small corrections in e/hEnergyLoss.cc L.Urban 11-01-01
+- change in energy loss computation in eBrems.hh and .cc L.Urban 11-01-01
 
 17 Nov 00 mma : stand-V02-00-04
      
