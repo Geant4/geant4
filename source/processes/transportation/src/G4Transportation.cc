@@ -5,8 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Transportation.cc,v 1.10 2000-05-15 17:35:59 japost Exp $
+// $Id: G4Transportation.cc,v 1.11 2000-06-19 16:13:48 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+
 //
 // 
 // ------------------------------------------------------------
@@ -287,6 +288,8 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
 	   << "   which I return."  << G4endl; 
 #endif
   }				    
+
+  fParticleChange.SetTrueStepLength(geometryStepLength) ;
 
   return geometryStepLength;
 }
