@@ -1,0 +1,37 @@
+?RCS:
+?MAKE:g4use_hepodbms:\
+	Myread Getfile cat rm test
+?MAKE:	-pick add $@ %<
+?S:g4osname:
+?S:	This variable contains the value of the 'g4osname' symbol, which
+?S:	used for building G4SYSTEM.
+?S:.
+
+echo " "
+case "$g4use_hepodbms" in
+'')
+	g4use_hepodbms=n
+	;;
+esac
+
+g4message=`cat << EOM
+
+  G4USE_HEPODBMS
+Persistency.
+EOM`
+
+dflt=$g4use_hepodbms
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4use_hepodbms=n
+		;;
+	y*|Y*) 
+		g4use_hepodbms=y
+		;;
+	esac
+
