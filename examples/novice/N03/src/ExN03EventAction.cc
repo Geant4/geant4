@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03EventAction.cc,v 1.11 2000-11-21 10:59:44 maire Exp $
+// $Id: ExN03EventAction.cc,v 1.12 2001-04-27 13:16:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,8 +17,6 @@
 
 #include "ExN03CalorHit.hh"
 #include "ExN03EventActionMessenger.hh"
-
-#include "g4rw/tvordvec.h"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"

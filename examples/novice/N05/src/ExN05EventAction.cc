@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05EventAction.cc,v 1.4 1999-12-15 14:49:30 gunter Exp $
+// $Id: ExN05EventAction.cc,v 1.5 2001-04-27 13:14:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -22,7 +22,6 @@
 #include "G4VVisManager.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
-#include "g4rw/tvordvec.h"
 #include "G4ios.hh"
 
 ExN05EventAction::ExN05EventAction()
