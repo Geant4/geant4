@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyTest.cc,v 1.5 2001-09-10 18:07:55 pia Exp $
+// $Id: G4LowEnergyTest.cc,v 1.6 2001-10-12 13:10:55 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // KaonMinusAtRestTest.cc 
@@ -420,7 +420,7 @@ main()
     Tkin[d] = pow(10,(log10(minArg) + d*argStp));
   }
   
-  for ( G4int J = 0 ; J < theMaterialTable->length() ; J++ ){
+  for ( G4int J = 0 ; J < G4Material::GetNumberOfMaterials() ; J++ ){
 
     apttoMaterial = (*theMaterialTable)[ J ] ;
     MaterialName  = apttoMaterial->GetName() ;

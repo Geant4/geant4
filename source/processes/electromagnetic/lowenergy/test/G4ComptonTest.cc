@@ -47,7 +47,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ComptonTest.cc,v 1.13 2001-09-18 16:09:14 pfeiffer Exp $
+// $Id: G4ComptonTest.cc,v 1.14 2001-10-12 13:10:55 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -316,12 +316,12 @@ int main()
 
   // Dump the material table
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  G4int nMaterials = theMaterialTable->length();
+  G4int nMaterials = G4Material::GetNumberOfMaterials();
   G4cout << "Available materials are: " << G4endl;
   for (G4int mat = 0; mat < nMaterials; mat++)
     {
       G4cout << mat << ") "
-	     << (*theMaterialTable)(mat)->GetName()
+	     << (*theMaterialTable)[mat]->GetName()
 	     << G4endl;
     }
 
@@ -329,7 +329,7 @@ int main()
   G4int materialId;
   G4cin >> materialId;
 
-  G4Material* material = (*theMaterialTable)(materialId) ;
+  G4Material* material = (*theMaterialTable)[materialId] ;
 
   G4cout << "The selected material is: "
 	 << material->GetName()
@@ -347,7 +347,7 @@ int main()
 
   G4Box* theFrame = new G4Box ("Frame",dimX, dimY, dimZ);
   G4LogicalVolume* logicalFrame = new G4LogicalVolume(theFrame,
-						      (*theMaterialTable)(materialId),
+						      (*theMaterialTable)[materialId],
 						      "LFrame", 0, 0, 0);
   logicalFrame->SetMaterial(material); 
   G4PVPlacement* physicalFrame = new G4PVPlacement(0,G4ThreeVector(),

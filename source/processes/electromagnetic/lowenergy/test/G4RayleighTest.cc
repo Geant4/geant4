@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayleighTest.cc,v 1.6 2001-09-10 18:07:56 pia Exp $
+// $Id: G4RayleighTest.cc,v 1.7 2001-10-12 13:10:56 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -178,20 +178,20 @@ int main()
 
   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
- G4int nMaterials = theMaterialTable->length();
+ G4int nMaterials = G4Material::GetNumberOfMaterials();
 
   G4cout << "Available materials are: " << G4endl;
   for (G4int mat = 0; mat < nMaterials; mat++)
     {
       G4cout << mat << ") "
-	     << (*theMaterialTable)(mat)->GetName()
+	     << (*theMaterialTable)[mat]->GetName()
 	     << G4endl;
     }
 
   G4cout << "Which material? " << G4endl;
   G4cin >> materialId;
 
-  G4Material* material = (*theMaterialTable)(materialId) ;
+  G4Material* material = (*theMaterialTable)[materialId] ;
 
   G4cout << "The selected material is: "
 	 << material->GetName()
@@ -206,7 +206,7 @@ int main()
   G4Box* theFrame = new G4Box ("Frame",dimX, dimY, dimZ);
   
   G4LogicalVolume* logicalFrame = new G4LogicalVolume(theFrame,
-						      (*theMaterialTable)(materialId),
+						      (*theMaterialTable)[materialId],
 						      "LFrame", 0, 0, 0);
   logicalFrame->SetMaterial(material); 
   

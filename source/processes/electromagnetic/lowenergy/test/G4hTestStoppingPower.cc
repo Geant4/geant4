@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hTestStoppingPower.cc,v 1.11 2001-09-10 18:07:56 pia Exp $
+// $Id: G4hTestStoppingPower.cc,v 1.12 2001-10-12 13:10:56 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -146,7 +146,7 @@ main()
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   
   //  create table
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   G4double dimx = 1*mm, dimy = 1*mm, dimz = 1*mm;
   G4int imat = 0;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hTestLossTableProduction.cc,v 1.4 2001-09-10 18:07:56 pia Exp $
+// $Id: G4hTestLossTableProduction.cc,v 1.5 2001-10-12 13:10:56 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -178,7 +178,7 @@ main()
   
   //____________________LOSS TABLE TEST________________________________________________
     
-  for ( G4int J = 0 ; J < theMaterialTable->length() ; J++ ){
+  for ( G4int J = 0 ; J < G4Material::GetNumberOfMaterials() ; J++ ){
 
     apttoMaterial = (*theMaterialTable)[ J ] ;
     MaterialName  = apttoMaterial->GetName() ;

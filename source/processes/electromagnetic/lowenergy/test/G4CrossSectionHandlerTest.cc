@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandlerTest.cc,v 1.1 2001-08-20 17:28:50 pia Exp $
+// $Id: G4CrossSectionHandlerTest.cc,v 1.2 2001-10-12 13:10:55 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -107,7 +107,7 @@ int main()
 
   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
-  G4int nMaterials = theMaterialTable->length();
+  G4int nMaterials = G4Material::GetNumberOfMaterials();
   G4cout << "The MaterialTable contains "
 	 << nMaterials
 	 << " materials "
@@ -163,14 +163,14 @@ int main()
   for (G4int mat = 0; mat < nMaterials; mat++)
     {
       G4cout << mat << ") "
-	     << (*theMaterialTable)(mat)->GetName()
+	     << (*theMaterialTable)[mat]->GetName()
 	     << G4endl;
     }
 
   G4int materialId;
   G4cout << "Which material? " << G4endl;
   G4cin >> materialId;
-  G4Material* material = (*theMaterialTable)(materialId) ;
+  G4Material* material = (*theMaterialTable)[materialId] ;
 
   G4double materialSigma = manager->ValueForMaterial(material,e);
   G4cout << "Material value calculated by manager = " << materialSigma << G4endl;
@@ -194,7 +194,7 @@ int main()
   meanFreePathTable->PrintData();
   G4cout << "MeanFreePathTable has " << nRows << " components" << G4endl;
 
-  const G4VEMDataSet* materialSet = meanFreePathTable->GetComponent(materialId);
+  const G4VEMDataSet* materialSet = meanFreePathTable->GetComponent[materialId];
 
   G4int i;
   for (i=2; i<10; i++)
