@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMuEnergyLoss.cc,v 1.1 1999-01-07 16:11:06 gunter Exp $
+// $Id: G4IMuEnergyLoss.cc,v 1.2 1999-08-16 09:57:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -1336,6 +1336,7 @@ G4VParticleChange* G4IMuEnergyLoss::AlongStepDoIt(
 
 }
 
+#include "G4Poisson.hh"
 
 G4double G4IMuEnergyLoss::GetLossWithFluct(const G4DynamicParticle *aParticle,
                                         G4Material *aMaterial)
@@ -1364,7 +1365,7 @@ G4double G4IMuEnergyLoss::GetLossWithFluct(const G4DynamicParticle *aParticle,
   G4double Tkin,rmass,tau,tau1,tau2,Tm,w1,w2,w3,lnw3,C,prob,
            beta2,suma,e0,Em,loss,lossc ,w ;
   G4double a1,a2,a3 ;
-  long p1,p2,p3 ;
+  G4long p1,p2,p3 ;
   G4int nb ;
   G4double Corrfac, na,alfa,rfac,namean,sa,alfa1,ea,sea ;
   G4double dp1,dnmaxDirectFluct,dp3,dnmaxCont2 ;
@@ -1428,14 +1429,14 @@ G4double G4IMuEnergyLoss::GetLossWithFluct(const G4DynamicParticle *aParticle,
     if( Tm<= 0.)
     {
       a1=fMeanLoss/e0;
-      p1 = RandPoisson::shoot(a1);
+      p1 = G4Poisson(a1);
       loss = p1*e0 ;
     }
     else
     {
       Em = Tm+e0;
       a1 = fMeanLoss*(Em-e0)/(Em*e0*log(Em/e0));
-      p1 = RandPoisson::shoot(a1);
+      p1 = G4Poisson(a1);
       w = (Em-e0)/Em;
 // just to save time .....
       if ( p1> nmaxDirectFluct)
@@ -1461,13 +1462,13 @@ G4double G4IMuEnergyLoss::GetLossWithFluct(const G4DynamicParticle *aParticle,
   else
 // not so small Step ...
   {
-    p1 = RandPoisson::shoot(a1);
-    p2 = RandPoisson::shoot(a2);
+    p1 = G4Poisson(a1);
+    p2 = G4Poisson(a2);
     loss = p1*e1Fluct+p2*e2Fluct;
     if(loss>0.)
       loss += (1.-2.*G4UniformRand())*e1Fluct;   
 
-     p3 = RandPoisson::shoot(a3);
+     p3 = G4Poisson(a3);
 
 //    direct sampling of the 'ionization' loss
 //    --------it is slow-------------------

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLoss.cc,v 1.8 1999-06-18 11:30:10 urban Exp $
+// $Id: G4eEnergyLoss.cc,v 1.9 1999-08-16 09:56:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // $Id: 
@@ -966,6 +966,8 @@ G4VParticleChange* G4eEnergyLoss::AlongStepDoIt( const G4Track& trackData,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#include "G4Poisson.hh"
+
 G4double G4eEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
                                                G4Material* aMaterial,
                                              G4double    MeanLoss)
@@ -993,7 +995,7 @@ G4double G4eEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   G4double threshold,w1,w2,w3,lnw3,C,prob,
            beta2,suma,e0,Em,loss,lossc ,w;
   G4double a1,a2,a3;
-  long p1,p2,p3;
+  G4long p1,p2,p3;
   G4int nb;
   G4double Corrfac, na,alfa,rfac,namean,sa,alfa1,ea,sea;
   G4double dp1,dnmaxDirectFluct,dp3,dnmaxCont2;
@@ -1044,7 +1046,7 @@ G4double G4eEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
             p1 = max(0,int(RandGauss::shoot(a1,siga)+0.5));
           }
           else
-            p1 = RandPoisson::shoot(a1);
+            p1 = G4Poisson(a1);
           loss = p1*e0 ;
         }
      else
@@ -1057,7 +1059,7 @@ G4double G4eEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
             p1 = max(0,int(RandGauss::shoot(a1,siga)+0.5));
           }
           else
-            p1 = RandPoisson::shoot(a1);
+            p1 = G4Poisson(a1);
           w  = (Em-e0)/Em;
           // just to save time 
           if (p1 > nmaxDirectFluct)
@@ -1084,14 +1086,14 @@ G4double G4eEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
         p1 = max(0,int(RandGauss::shoot(a1,siga)+0.5));
       }
       else
-       p1 = RandPoisson::shoot(a1);
+       p1 = G4Poisson(a1);
       if(a2>alim)
       {
         siga=sqrt(a2) ;
         p2 = max(0,int(RandGauss::shoot(a2,siga)+0.5));
       }
       else
-        p2 = RandPoisson::shoot(a2);
+        p2 = G4Poisson(a2);
       loss = p1*e1Fluct+p2*e2Fluct;
       if (loss>0.) loss += (1.-2.*G4UniformRand())*e1Fluct;   
       if(a3>alim)
@@ -1100,7 +1102,7 @@ G4double G4eEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
         p3 = max(0,int(RandGauss::shoot(a3,siga)+0.5));
       }
       else
-        p3 = RandPoisson::shoot(a3);
+        p3 = G4Poisson(a3);
 
       lossc = 0.; na = 0.; alfa = 1.;
       if (p3 > nmaxCont2)
