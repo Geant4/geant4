@@ -77,7 +77,7 @@ class G4MuIonisationSTD : public G4VEnergyLossSTD
 
 public:
 
-  G4MuIonisationSTD(const G4String& name = "muIoni");
+  G4MuIonisationSTD(const G4String& name = "MuIoni");
 
   ~G4MuIonisationSTD();
 
