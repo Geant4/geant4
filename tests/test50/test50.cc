@@ -22,12 +22,16 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.19 2003-03-12 17:21:22 pia Exp $
+// $Id: test50.cc,v 1.20 2003-04-25 08:43:33 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+#include <strstream.h>
 //#include <iostream.h>
+
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/fstream"
@@ -55,21 +59,32 @@ int main(int argc,char** argv) {
        
   HepRandom::setTheEngine(new RanecuEngine);
 
-  G4bool lowE = false;
+
   G4bool rangeOn = false;
   G4bool maxStep = false;
   G4bool radiationYield = false;
   G4bool end = true;
-  G4bool stoppingPower = false;
+  G4bool stoppingPower = true;
   G4bool foil = false;
   G4bool hadronic = false;
   G4bool penelope = false;
   G4bool back = false;
-  G4String filename = "test50.txt";
+  
   G4cout << argc << ":argc" << G4endl;
-  G4cout.setf(G4std::ios::scientific, G4std::ios::floatfield);
-   
+  G4String filename = "Test50_output.txt";  
 
+  G4cout.setf(G4std::ios::scientific, G4std::ios::floatfield);
+  
+      G4std::ofstream ofs;
+      ofs.open(filename);
+      {
+	ofs << " Geant4 version:  geant4-05-00 "<< G4endl;
+      } 
+      ofs.close();                     
+		
+     
+
+  /*
   if (argc == 1) { G4cout << "Input file is not specified!" << G4endl; }
   G4std::ifstream* fin=new G4std::ifstream();
   G4String fname=argv[1];
@@ -89,6 +104,7 @@ int main(int argc,char** argv) {
   G4cout << "#Foil (on/off)" << G4endl;
   G4cout << "#Back (on/off)" << G4endl;
   G4cout << "#Hadronic (on/off)" << G4endl; 
+
 
   G4String line, line1, line2;
  
@@ -146,11 +162,9 @@ int main(int argc,char** argv) {
       if (line == "end") { end = false;}
 
     } while(end);           
-     
-  if (rangeOn == true)        filename = "Range.txt";
-  if (stoppingPower == true)  filename = "StoppingPower.txt";
-  if (radiationYield == true) filename = "RadiationYeld.txt";
-  if (foil == true)           filename = "Transmission.txt";
+  
+  */
+   
   
   G4int seed=time(NULL);
   HepRandom ::setTheSeed(seed);
@@ -161,22 +175,24 @@ int main(int argc,char** argv) {
   G4RunManager * runManager = new G4RunManager;
 
   // UserInitialization classes (mandatory)
-  Tst50DetectorConstruction* Tst50detector = new Tst50DetectorConstruction(maxStep);
+  Tst50DetectorConstruction* Tst50detector = new Tst50DetectorConstruction();
   runManager->SetUserInitialization(Tst50detector);
+  
 
-  Tst50PhysicsList* fisica = new Tst50PhysicsList(lowE,rangeOn,stoppingPower,
-						  radiationYield,hadronic,penelope,back);
+  Tst50PhysicsList* fisica = new Tst50PhysicsList();
   runManager->SetUserInitialization(fisica);
   
-#ifdef G4VIS_USE
+
+
   // Visualization, if you choose to have it!
   G4VisManager* visManager = new Tst50VisManager;
   visManager->Initialize();
-#endif
-   
+
+
   // UserAction classes
   Tst50PrimaryGeneratorAction* p_Primary = new Tst50PrimaryGeneratorAction(); 
   runManager->SetUserAction(p_Primary);
+
   Tst50RunAction* p_run=new Tst50RunAction(foil); 
   runManager->SetUserAction(p_run);  
 
@@ -190,60 +206,8 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(steppingaction);
 
   //Initialize G4 kernel
-  runManager->Initialize();
-    
-  if (rangeOn)
-    {
-      G4std::ofstream ofs;
-      ofs.open(filename);
-      {
-	ofs << "range(g/cm2)(y)" 
-	    << '\t'
-	    << "e- energy (MeV)(x)" 
-	    <<'\t' 
-	    << G4endl;
-      }	       
-      ofs.close();                     		
-    }
- 
-  if (stoppingPower)
-    {
-      G4std::ofstream ofs;
-      ofs.open(filename);
-      {
-	ofs << "StoppingPower(MeV*cm2/g)(y)" 
-	    << '\t' 
-	    << "e- energy (MeV)(x)" 
-	    << '\t' 
-	    << G4endl;
-      }       
-      ofs.close();                     		
-    }
- 
-  if (radiationYield)
-    {
-      G4std::ofstream ofs;
-      ofs.open(filename);
-      {
-	ofs << "RadiationYield"
-	    << '\t'
-	    << "e- energy (MeV)(x)"
-	    << '\t' 
-	    << G4endl;
-      }       
-      ofs.close();                     	
-    }
+  //  runManager->Initialize();
 
-  if (foil)
-    {
-      G4std::ofstream ofs;
-      ofs.open(filename);
-      {
-	ofs << "Global information about primary particles (e+ or e- or proton or gamma)" << G4endl;
-      } 
-      ofs.close();                     
-		
-    }
   
   //get the pointer to the User Interface manager 
   G4UImanager * UI = G4UImanager::GetUIpointer();  
@@ -251,7 +215,7 @@ int main(int argc,char** argv) {
   UI->ApplyCommand("/event/verbose 0");
   UI->ApplyCommand("/tracking/verbose 0");
   
-  if (argc == 2)
+  if (argc == 1)
     // Define (G)UI terminal for interactive mode  
     { 
       // G4UIterminal is a (dumb) terminal.
@@ -271,7 +235,7 @@ int main(int argc,char** argv) {
     // Batch mode
     {     
       G4String command =("/control/execute ");
-      G4String fileName = argv[2];
+      G4String fileName = argv[1];
       G4cout << fileName << G4endl;
       UI->ApplyCommand(command+fileName);
     }

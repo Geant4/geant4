@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.18 2003-03-04 18:09:05 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.19 2003-04-25 08:43:34 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,10 +50,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst50DetectorConstruction::Tst50DetectorConstruction(G4bool  max_Step)
+Tst50DetectorConstruction::Tst50DetectorConstruction()
 :TargetMaterial(0),defaultMaterial(0),
  solidWorld(0),logicWorld(0),physiWorld(0),
- solidTarget(0),logicTarget(0),physiTarget(0), pTargetSD(0)
+ solidTarget(0),logicTarget(0),physiTarget(0), pTargetSD(0),
+ IsRegistered_UseLimits(false)
  
 {
   // default parameter values of the calorimeter
@@ -64,8 +65,8 @@ Tst50DetectorConstruction::Tst50DetectorConstruction(G4bool  max_Step)
 
 
  
-theUserLimitsForTarget = NULL; 
- fUseUserLimits = max_Step;//non fa nulla se c'e false ,devo mettere true 
+ theUserLimitsForTarget = NULL; 
+ fUseUserLimits = false;//non fa nulla se c'e false ,devo mettere true 
  theMaxStepInTarget = 0.000000001*micrometer;
 
  detectorMessenger = new Tst50DetectorMessenger(this);
@@ -605,14 +606,16 @@ G4VPhysicalVolume* Tst50DetectorConstruction::ConstructWorld()
 
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
 
+  
   if (pTargetSD ==0)
-    {
+   {
   G4String targetSD_name = "target";
-  pTargetSD = new Tst50TrackerSD( targetSD_name  );
+  pTargetSD = new Tst50TrackerSD( targetSD_name );
   // qui il problema
-   SDman->AddNewDetector( pTargetSD );
-  logicTarget->SetSensitiveDetector( pTargetSD );
-    }
+  SDman->AddNewDetector( pTargetSD );
+  
+  logicTarget->SetSensitiveDetector( pTargetSD );}
+   
 
  
   // Visualization attributes
@@ -671,10 +674,21 @@ G4String Tst50DetectorConstruction::GetMaterialName()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Tst50DetectorConstruction::SetTargetThickness(G4double val)
-{
+{ 
+ 
   // change Target thickness
   TargetThickness = val;
+ 
 }  
+G4double Tst50DetectorConstruction::GetTargetThickness()
+{ 
+ 
+  // change Target thickness
+ return  TargetThickness;
+ 
+}  
+
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void Tst50DetectorConstruction::SetTargetX(G4double valX)
@@ -703,7 +717,8 @@ void  Tst50DetectorConstruction::SetMaxStepInTarget(G4double value)
   if (theUserLimitsForTarget != NULL) 
   {
     theUserLimitsForTarget->SetMaxAllowedStep(value);
-  }
+    G4cout<<"----- SetMaxStep fixed---- :"  << value; 
+}
 }
 
 void  Tst50DetectorConstruction::UseUserLimits(G4bool isUse) 
@@ -713,3 +728,18 @@ void  Tst50DetectorConstruction::UseUserLimits(G4bool isUse)
   {logicTarget->SetUserLimits(theUserLimitsForTarget);
   }    
 } 
+void  Tst50DetectorConstruction::SetUserLimits(G4bool isUse) 
+{
+  if (IsRegistered_UseLimits == false) {
+
+ fUseUserLimits = isUse;
+ 
+ if( fUseUserLimits && (theUserLimitsForTarget!= NULL))   
+ {logicTarget->SetUserLimits(theUserLimitsForTarget);
+  } 
+        G4cout<< " ho switchato FUseUserLimits:  " <<fUseUserLimits <<G4endl;
+	IsRegistered_UseLimits = true; }
+ else 
+   {
+     G4cout<< "UseLimits is registered!  "<<G4endl;}  
+}

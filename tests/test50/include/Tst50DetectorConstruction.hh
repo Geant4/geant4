@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.hh,v 1.7 2003-03-04 18:09:05 guatelli Exp $
+// $Id: Tst50DetectorConstruction.hh,v 1.8 2003-04-25 08:43:33 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@ class Tst50DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
   
-    Tst50DetectorConstruction(G4bool);
+    Tst50DetectorConstruction();
    ~Tst50DetectorConstruction();
 
   public:
@@ -60,11 +60,13 @@ class Tst50DetectorConstruction : public G4VUserDetectorConstruction
      void SetTargetX(G4double); 
      void SetTargetY(G4double); 
   G4double GetDensity();
-          
+  G4double  GetTargetThickness();
+      
      G4VPhysicalVolume* Construct();
 
      void UpdateGeometry();
      void      UseUserLimits(G4bool value); 
+  void SetUserLimits(G4bool);
      void  SetMaxStepInTarget(G4double value); 
 
  G4bool           fUseUserLimits;
@@ -76,7 +78,7 @@ class Tst50DetectorConstruction : public G4VUserDetectorConstruction
                     
   G4String  GetMaterialName();   
      G4Material* GetTargetMaterial()  {return TargetMaterial;};
-     G4double    GetTargetThickness() {return TargetThickness;};      
+    
      
         
    
@@ -108,7 +110,7 @@ class Tst50DetectorConstruction : public G4VUserDetectorConstruction
      Tst50TrackerSD* pTargetSD;  //pointer to the sensitive detector
       
   private:
-    
+  G4bool  IsRegistered_UseLimits;
      void DefineMaterials();
      void ComputeParameters();
      G4VPhysicalVolume* ConstructWorld();     

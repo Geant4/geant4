@@ -2,43 +2,5 @@
 /run/verbose 0
 /event/verbose 0
 /tracking/verbose 0
-# create empty scene
-#
-#/vis/scene/create
-#
-# Create a scene handler for a specific graphics system
-# (Edit the next line(s) to choose another graphic system)
-#/control/saveHistory
-#
-#/vis/open OGLIX
-#/vis/open DAWNFILE
-#/vis/viewer/flush
-#/vis/viewer/update
-#/tracking/storeTrajectory 1
-#/vis/scene/endOfEventAction accumulate
-/target/setTargetThick 10. mm
-/target/setTargetMat  Aluminium
-/target/update
-#/target/setMaxStep 0.01 cm 
-/le/cutE 0.0001 mm
-/gun/particle e-
-/gun/energy 100. keV
-/run/beamOn 10000
-/gun/energy 200. keV
-/run/beamOn 10000
-/gun/energy 300. keV
-/run/beamOn 10000
-/gun/energy 400. keV
-/run/beamOn 10000
-/gun/energy 500. keV
-/run/beamOn 10000
-/gun/energy 1. MeV
-/run/beamOn 10000
-/gun/energy 2. MeV
-/run/beamOn 10000
-/gun/energy 5. MeV
-/run/beamOn 10000
-/gun/energy 10. MeV
-/run/beamOn 10000
-
-#/vis/viewer/update
+/run/initialize
+/run/beamOn  1

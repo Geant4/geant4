@@ -40,31 +40,32 @@
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithABool.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst50PhysicsListMessenger::Tst50PhysicsListMessenger(Tst50PhysicsList * List)
 :Tst50List(List)
 {
-
-  lowEnDir = new G4UIdirectory("/le/");
-  lowEnDir->SetGuidance("LowEnergy commands");
+  //lowEnDir = new G4UIdirectory("/le/");
+  //lowEnDir->SetGuidance("LowEnergy commands");
  
-  
-  RangeDir = new G4UIcmdWithAString("/le/range_processes",this);
-  RangeDir->SetGuidance("Multiple scattering and energy loss fluctuations switched.");
-  RangeDir->SetGuidance("  Choice : on (default), off");
-  RangeDir->SetParameterName("choice",true);
-  RangeDir->SetDefaultValue("on");
-  RangeDir->SetCandidates("on off");
-  RangeDir->AvailableForStates(G4State_PreInit,G4State_Idle); 
+  EnDir = new G4UIdirectory("/physics/");
+  EnDir->SetGuidance("physics commands");
 
- cutECmd = new G4UIcmdWithADoubleAndUnit("/le/cutE",this);
-  cutECmd->SetGuidance("Set cut values by RANGE for e- e+.");
+  physicsListCmd = new G4UIcmdWithAString("/physics/addPhysics",this);  
+  physicsListCmd->SetGuidance("Add chunks of PhysicsList:photon-standard, photon-epdl, photon-penelope");
+  physicsListCmd->SetParameterName("choice",false);
+  physicsListCmd->AvailableForStates(G4State_PreInit);  
+
+  
+ cutECmd = new G4UIcmdWithADoubleAndUnit("/physics/cutE",this);
+  cutECmd->SetGuidance("Set cut values.");
   cutECmd->SetParameterName("range",true);
   cutECmd->SetDefaultValue(1.);
   cutECmd->SetDefaultUnit("mm");
   cutECmd->AvailableForStates(G4State_Idle);
-
+  
 
 
 }
@@ -75,10 +76,10 @@ Tst50PhysicsListMessenger::~Tst50PhysicsListMessenger()
 {
 
   
-
-  delete  cutECmd;
-  delete RangeDir;
-  delete lowEnDir;
+  
+  delete cutECmd;
+  delete  physicsListCmd;
+  delete EnDir;
 
 }
 
@@ -86,16 +87,15 @@ Tst50PhysicsListMessenger::~Tst50PhysicsListMessenger()
   
 void Tst50PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
-  /*
-  if(command == cutELowLimCmd)
-    { Tst50List->SetElectronLowLimit(cutELowLimCmd->GetNewDoubleValue(newValue));}
-  */
- if( command == RangeDir )
-   { Tst50List->SetRangeConditions(newValue);
-   G4cout<<"arrivo al PhysicsMessenger"<<G4endl;} 
+  
 
-if( command == cutECmd  )
- { Tst50List->SetElectronCut(cutECmd->GetNewDoubleValue(newValue));}
+if (command == physicsListCmd)
+   { Tst50List->AddPhysicsList(newValue); }
+
+ if (command == cutECmd)
+   {Tst50List->SetParticleCut(cutECmd->GetNewDoubleValue(newValue)); }
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

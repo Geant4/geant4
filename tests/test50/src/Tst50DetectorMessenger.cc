@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorMessenger.cc,v 1.6 2003-01-28 08:57:49 guatelli Exp $
+// $Id: Tst50DetectorMessenger.cc,v 1.7 2003-04-25 08:43:34 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,6 +47,11 @@ Tst50DetectorMessenger::Tst50DetectorMessenger(
 { 
   Tst50detDir = new G4UIdirectory("/target/");
   Tst50detDir->SetGuidance("Tst50 target control.");
+
+  UseUserLimitCmd = new G4UIcmdWithABool("/target/setUserLimits",this);
+    UseUserLimitCmd->SetGuidance("switch on/off the UserLimits");
+    UseUserLimitCmd->SetParameterName("choice",false,false);
+  UseUserLimitCmd->AvailableForStates(G4State_PreInit);
       
   AbsMaterCmd = new G4UIcmdWithAString("/target/setTargetMat",this);
   AbsMaterCmd->SetGuidance("Select Material of the Target.");
@@ -73,6 +79,7 @@ Tst50DetectorMessenger::Tst50DetectorMessenger(
   YThickCmd->SetRange("Size>=0.");
   YThickCmd->SetUnitCategory("Length");
   YThickCmd->AvailableForStates(G4State_Idle);
+
  
  SetStepCmd = new G4UIcmdWithADoubleAndUnit("/target/setMaxStep",this);
  SetStepCmd->SetGuidance("Set the particle Max Step in the target ");
@@ -80,6 +87,7 @@ Tst50DetectorMessenger::Tst50DetectorMessenger(
  SetStepCmd->SetRange("Size>=0.");
  SetStepCmd->SetUnitCategory("Length");
  SetStepCmd->AvailableForStates(G4State_Idle);
+
   
 UpdateCmd = new G4UIcmdWithoutParameter("/target/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
@@ -93,7 +101,7 @@ UpdateCmd = new G4UIcmdWithoutParameter("/target/update",this);
 
 Tst50DetectorMessenger::~Tst50DetectorMessenger()
 {
- 
+  delete UseUserLimitCmd;
   delete AbsMaterCmd; 
   delete AbsThickCmd; 
  delete YThickCmd; 
@@ -125,6 +133,9 @@ void Tst50DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
  if( command ==SetStepCmd)
    {Tst50Detector-> SetMaxStepInTarget(SetStepCmd->GetNewDoubleValue(newValue));}
+ 
+ if( command ==UseUserLimitCmd )
+   {Tst50Detector->SetUserLimits(UseUserLimitCmd->GetNewBoolValue(newValue));}
 
  if( command == UpdateCmd )
    { Tst50Detector->UpdateGeometry(); }

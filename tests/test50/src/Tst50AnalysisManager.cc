@@ -29,8 +29,10 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst50AnalysisManager.cc,v 1.14 2003-03-12 17:21:23 pia Exp $
+
+// $Id: Tst50AnalysisManager.cc,v 1.15 2003-04-25 08:43:34 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+
 //
 #ifdef  G4ANALYSIS_USE
 
@@ -119,8 +121,13 @@ void Tst50AnalysisManager::book()
 
   h1= histFact->createHistogram1D("10","Energy Deposit X event",100.*initial_energy ,0.,initial_energy*2.);
 
+<<<<<<< Tst50AnalysisManager.cc
+ h2=histFact->createHistogram1D("20","Primary transmitted particle energy/initial_energy",300. ,0.,1.);
+ h3=histFact->createHistogram1D("30","Primary backscattered  particle energy/initial_energy",1000. ,0.,1.5);
+=======
   h2=histFact->createHistogram1D("20","Primary transmitted particle energy/initial_energy",1000. ,0.,1.5);
   h3=histFact->createHistogram1D("30","Primary backscattered  particle energy/initial_energy",1000. ,0.,1.5);
+>>>>>>> 1.14
  
   h4=histFact->createHistogram1D("40","angle of backscattered particles",80.*10, 80.,190.);
 

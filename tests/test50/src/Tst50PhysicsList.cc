@@ -20,404 +20,470 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: Tst50PhysicsList.cc,v 1.12 2003-03-11 10:48:08 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.13 2003-04-25 08:43:35 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Re-designed for modular Physics List
+//
+// -------------------------------------------------------------------
 
-#include "globals.hh"
 #include "Tst50PhysicsList.hh"
 #include "Tst50PhysicsListMessenger.hh"
+#include "Tst50Particles.hh"
+#include "Tst50PhotonStandard.hh"
+#include "Tst50PhotonEPDL.hh"
+#include "Tst50PhotonPenelope.hh"
+#include "Tst50PhotonPolarised.hh"
+#include "Tst50ElectronStandard.hh"
+#include "Tst50ElectronEEDL.hh"
+#include "Tst50ElectronEEDLrange.hh"
+#include "Tst50ElectronPenelope.hh"
+#include "Tst50PositronStandard.hh"
+
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-#include"G4VeLowEnergyLoss.hh"
-#include "G4Material.hh"
-#include "G4ios.hh"
-#include "g4std/iomanip"                
+#include "G4VProcess.hh"
+#include "G4LowEnergyPhotoElectric.hh"
+#include "G4LowEnergyIonisation.hh"
+#include "G4LowEnergyBremsstrahlung.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst50PhysicsList::Tst50PhysicsList(G4bool LowEn,G4bool range,G4bool SP,G4bool RY,G4bool adr,G4bool penelope, G4bool Back):  G4VUserPhysicsList()
-{ RangeOn=range;
- Stopping= SP;
-  Low=LowEn;
-  RadiationY=RY;
-  Penelope=penelope;
-  defaultCutValue = 1.*mm;
-   SetVerboseLevel(1);
-   Adronic=adr;
-   back=Back;
- physicsListMessenger = new Tst50PhysicsListMessenger(this);
- // cutForElectron = defaultCutValue ;
+Tst50PhysicsList::Tst50PhysicsList(): G4VModularPhysicsList(),
+				      electronIsRegistered(false), 
+				      positronIsRegistered(false),
+				      photonIsRegistered(false)
+{
+  defaultCutValue = 1. * mm;
+  //cutForGamma = defaultCutValue;
+  //cutForElectron = defaultCutValue;
+
+  SetVerboseLevel(1);
+
+  // UI messenger
+  messenger = new Tst50PhysicsListMessenger(this);
+ 
+  // Particles
+  RegisterPhysics( new Tst50Particles("particles") );
+
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Tst50PhysicsList::~Tst50PhysicsList()
 {
-  delete  physicsListMessenger;
+  delete messenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Tst50PhysicsList::ConstructParticle()
+void Tst50PhysicsList::AddPhysicsList(const G4String& name)
 {
-  // In this method, static member functions should be called
-  // for all particles which you want to use.
-  // This ensures that objects of these particle types will be
-  // created in the program. 
 
-  ConstructBosons();
-  ConstructLeptons();
-  ConstructMesons();
-  ConstructBaryons();
+  G4cout << "Adding PhysicsList chunk " << name << G4endl;
 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Tst50PhysicsList::ConstructBosons()
-{
-  // pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();
-
-  // gamma
-  G4Gamma::GammaDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Tst50PhysicsList::ConstructLeptons()
-{
-  // leptons
-  //  e+/-
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  // mu+/-
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
-  // nu_e
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  // nu_mu
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Tst50PhysicsList::ConstructMesons()
-{
-  //  mesons
-  //    light mesons
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
-  G4Eta::EtaDefinition();
-  G4EtaPrime::EtaPrimeDefinition();
-  G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus::KaonMinusDefinition();
-  G4KaonZero::KaonZeroDefinition();
-  G4AntiKaonZero::AntiKaonZeroDefinition();
-  G4KaonZeroLong::KaonZeroLongDefinition();
-  G4KaonZeroShort::KaonZeroShortDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Tst50PhysicsList::ConstructBaryons()
-{
-  //  barions
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-
-  G4Neutron::NeutronDefinition();
-  G4AntiNeutron::AntiNeutronDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Tst50PhysicsList::ConstructProcess()
-{
-  AddTransportation();
-  ConstructEM();
-  ConstructHad();
-  ConstructGeneral();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ComptonScattering.hh"
-#include "G4GammaConversion.hh"
-#include "G4PhotoElectricEffect.hh"
-
-#include "G4MultipleScattering.hh"
-
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
-
-#include "G4MuIonisation.hh"
-#include "G4MuBremsstrahlung.hh"
-#include "G4MuPairProduction.hh"
-
-#include "G4hIonisation.hh"
-
-#include "G4UserSpecialCuts.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-//Low energy processes for gamma and e-
-// gamma
-#include "G4LowEnergyRayleigh.hh" 
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyCompton.hh"  
-#include "G4LowEnergyGammaConversion.hh" 
-//gamma penelope
-
-#include "G4PenelopeCompton.hh"
-#include "G4PenelopeGammaConversion.hh"
-#include "G4PenelopePhotoElectric.hh"
-#include "G4PenelopeRayleigh.hh"
-
-// e-
-#include "G4LowEnergyIonisation.hh" 
-#include "G4LowEnergyBremsstrahlung.hh" 
-//proton
-#include "G4hLowEnergyIonisation.hh"
-#include "G4hIonisation.hh"
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void Tst50PhysicsList::ConstructEM()
-{
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    G4String particleName = particle->GetParticleName();
-     
-    if (particleName == "gamma") {
-    // gamma
-    
-      if ( Low==true)
-	{
- lowePhot = new  G4LowEnergyPhotoElectric("LowEnPhotoElec");
- pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
- pmanager->AddDiscreteProcess(lowePhot);
-       pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
-      pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
-     G4cout<<"Low Energy processes for gamma ray"<<G4endl;}
-      else if (Penelope== true)
-	{
-	  
-
-	          pmanager->AddDiscreteProcess(new G4PenelopePhotoElectric);
-	     pmanager->AddDiscreteProcess(new G4PenelopeCompton);
-	    pmanager->AddDiscreteProcess(new G4PenelopeGammaConversion);
-	       pmanager->AddDiscreteProcess(new G4PenelopeRayleigh);
-	 
- G4cout<<" Penelope  processes for gamma ray"<<G4endl;
-	}
-else{
-    pmanager->AddDiscreteProcess(new G4GammaConversion());
-      pmanager->AddDiscreteProcess(new G4ComptonScattering());      
-    	     pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
-           G4cout<<"Standard  processes for gamma ray"<<G4endl;
-}
-     
-    } else if (particleName == "e-") {
- 
-
-//------------- Standard for e- --------------------//
-          
-  if(Low==true)
-	{    
-	
-     loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
-     loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
-   
-
- 
-     G4MultipleScattering*  multipleScattering= new G4MultipleScattering();
-						
-       pmanager->AddProcess(multipleScattering, -1, 1,1);
-     
-      pmanager->AddProcess(loweIon,     -1, 2,2);
-      pmanager->AddProcess(loweBrem,    -1,-1,3);
-
- if(back==true){
- multipleScattering->SetFacrange(0.00005);      
- G4cout<<"SetFacrange(0.00005) fixed for e- in low "<<G4endl;}
-
- 
- if(RangeOn==true || Stopping==true || RadiationY==true){
-    pmanager->RemoveProcess(multipleScattering);
-   G4VeLowEnergyLoss::SetEnlossFluc(false);
-  
- }}
-      else{
-     
- 	
-	   G4VProcess* theeminusIonisation         = new G4eIonisation();
-	  G4VProcess* theeminusBremsstrahlung     = new G4eBremsstrahlung();
-	   
-     G4MultipleScattering* theeminusMultipleScattering=new G4MultipleScattering();
-	   pmanager->AddProcess( theeminusIonisation, -1, 2,2);
-	  pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3);
-pmanager->AddProcess(theeminusMultipleScattering,-1,1,1);
-if(back==true){
- theeminusMultipleScattering->SetFacrange(0.00005);      
- G4cout<<"SetFacrange(0.00005) fixed for e- in Standard"<<G4endl;}
-
- if(RangeOn==true || Stopping==true|| RadiationY==true){pmanager->RemoveProcess(theeminusMultipleScattering);}
-      }
-    } else if (particleName == "e+") {
-    //positron
-G4MultipleScattering* theeplusMultipleScattering = new G4MultipleScattering();
-      G4VProcess* theeplusIonisation         = new G4eIonisation();
-      G4VProcess* theeplusBremsstrahlung     = new G4eBremsstrahlung();
-      G4VProcess* theeplusAnnihilation       = new G4eplusAnnihilation();
-      //
-      // add processes
-      pmanager->AddProcess(theeplusMultipleScattering,-1,1,1);
-      pmanager->AddProcess(theeplusIonisation, -1, 2,2);
-      pmanager->AddProcess(theeplusBremsstrahlung, -1,-1,3);
-      pmanager->AddProcess(theeplusAnnihilation,0,-1,4);
-if(back==true){
- theeplusMultipleScattering->SetFacrange(0.00005);      
- G4cout<<"SetFacrange(0.00005) fixed for e+"<<G4endl;}
-
-
-    }
-else if (particleName == "proton")
-          { G4VProcess*  multipleScattering= new G4MultipleScattering(); 
-        G4hLowEnergyIonisation* ahadronLowEIon = new G4hLowEnergyIonisation();
-	    if(Low)
-	      {
-		G4cout<<"proton processes"<< G4endl; 
-	// OBJECT may be dynamically created as either a GenericIon or nucleus
-	// G4Nucleus exists and therefore has particle type nucleus
-	// genericIon:
-	pmanager->AddProcess(multipleScattering,-1,1,1);
-	pmanager->AddProcess(ahadronLowEIon,-1,2,2); 
-	      } 
-	    else{  
-	      G4VProcess* anIonisation= new G4hIonisation();   
-     pmanager->AddProcess(anIonisation,-1,2,2);
-     pmanager->AddProcess(multipleScattering,-1,1,1);  
-
-	    }}
-
-
-  }}
-    
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Decay.hh"
-void Tst50PhysicsList::ConstructGeneral()
-{
-  // Add Decay Process
-  G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (theDecayProcess->IsApplicable(*particle)) { 
-      pmanager ->AddProcess(theDecayProcess);
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
-    }
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-#include "G4ProtonInelasticProcess.hh"
-#include "G4HadronElasticProcess.hh"
-#include "G4LElastic.hh"
-#include "G4LEProtonInelastic.hh"
-#include "G4HEProtonInelastic.hh"
-
-void Tst50PhysicsList:: ConstructHad()
-{
-  if(Adronic)
+  // Register standard processes for photons
+  if (name == "photon-standard") 
     {
-G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
-  G4LElastic* theElasticModel = new G4LElastic;
-  theElasticProcess->RegisterMe(theElasticModel);
-  
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()) 
-    {
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
-      
-	
-if (particleName == "proton") 
+      if (photonIsRegistered) 
 	{
-	  pmanager->AddDiscreteProcess(theElasticProcess);
-	  G4ProtonInelasticProcess* theInelasticProcess = 
-	    new G4ProtonInelasticProcess("inelastic");
-	  G4LEProtonInelastic* theLEInelasticModel = new G4LEProtonInelastic;
-	  theInelasticProcess->RegisterMe(theLEInelasticModel);
-	  G4HEProtonInelastic* theHEInelasticModel = new G4HEProtonInelastic;
-	  theInelasticProcess->RegisterMe(theHEInelasticModel);
-	  pmanager->AddDiscreteProcess(theInelasticProcess);
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- photon List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50PhotonStandard(name) );
+	  photonIsRegistered = true;
 	}
+    }
+  // Register LowE-EPDL processes for photons
+  if (name == "photon-epdl") 
+    {
+      if (photonIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- photon List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50PhotonEPDL(name) );
+	  photonIsRegistered = true;
+	}
+   } 
+  // Register processes a' la Penelope for photons
+  if (name == "photon-penelope")
+    {
+     if (photonIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- photon List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  //RegisterPhysics( new Tst50PhotonPenelope(name) );
+	  // photonIsRegistered = true;
+	}
+    }
+  // Register polarised processes for photons
+  if (name == "photon-polarised")
+    {
+      if (photonIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- photon List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50PhotonPolarised(name) );
+	  photonIsRegistered = true;
+	}
+    }
+  // Register standard processes for electrons
+  if (name == "electron-standard") 
+    {
+      if (electronIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- electron List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50ElectronStandard(name) );	  
+	  electronIsRegistered = true;
+	}
+    }
+  // Register LowE-EEDL processes for electrons
+  if (name == "electron-eedl") 
+    {
+      if (electronIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- electron List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50ElectronEEDL(name) );
+	  electronIsRegistered = true;
+	}
+   } 
 
-    }}
+ if (name == "electron-eedl-range") 
+    {
+      if (electronIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- electron List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50ElectronEEDLrange(name) );
+	  electronIsRegistered = true;
+	}
+   } 
+  // Register processes a' la Penelope for electrons
+  if (name == "electron-penelope")
+    {
+     if (electronIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name 
+		 << " cannot be registered ---- electron List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50ElectronPenelope(name) );
+	  electronIsRegistered = true;
+	}
+    }
+  // Register standard processes for positrons
+  if (name == "positron-standard") 
+    {
+      if (positronIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- positron List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50PositronStandard(name) );
+	  positronIsRegistered = true;
+	}
+    }
+
+  if (electronIsRegistered && positronIsRegistered && photonIsRegistered)
+    {
+      G4cout << "PhysicsList for electron, positron and photon registered" << G4endl;
+    }
 }
-void Tst50PhysicsList::SetCuts()
-{ 
-if (verboseLevel >0)
-  {
-    G4cout << "Tst50PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  } 
- G4VUserPhysicsList::SetCutsWithDefault();
-// method sets 
-   //  the default cut value for all particle types 
-  
- /*
- G4VUserPhysicsList::SetCutValue(cutForElectron,"e-");
-  G4cout<<"arrivo dopo gli e-"<<G4endl;
 
-   G4VUserPhysicsList:: SetCutValueForOthers(defaultCutValue);
-   G4cout<<"arrivo dopo tutte"<<G4endl;
- */
-  if (verboseLevel>0) DumpCutValuesTable();
+
+void Tst50PhysicsList::SetGELowLimit(G4double cut)
+{
+  if (verboseLevel > 0)
+    {
+      G4cout << "Tst50PhysicsList - Gamma and electron cut in energy = " 
+	     << cut * MeV << " MeV" << G4endl;
+    }  
+  G4Gamma::SetEnergyRange(cut,1e5);
+  G4Electron::SetEnergyRange(cut,1e5);
+  G4Positron::SetEnergyRange(cut,1e5);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void  Tst50PhysicsList::SetRangeConditions(G4String val)
-{ 
- rangeOn = val;
- ConstructEM();
- /*
-if (rangeOn=="off")
-      { G4VeLowEnergyLoss::SetEnlossFluc(false); 
-      G4cout<<"no energy loss fluct"<<G4endl;}
 
-if (rangeOn=="on")
-      { G4VeLowEnergyLoss::SetEnlossFluc(true); 
-      G4cout<<"energy loss fluct on"<<G4endl;}
- */
+void Tst50PhysicsList::SetGammaLowLimit(G4double cut)
+{
+  if (verboseLevel > 0)
+    {
+      G4cout << "Tst50PhysicsList - Gamma cut in energy = " 
+	     << cut * MeV << " MeV" << G4endl;
+    }  
+  G4Gamma::SetEnergyRange(cut,1e5);
 }
 
-void Tst50PhysicsList::SetElectronCut(G4double val)
+void Tst50PhysicsList::SetElectronLowLimit(G4double cut)
+{
+  if (verboseLevel > 0)
+    {
+      G4cout << "Tst50PhysicsList - Electron cut in energy = " 
+	     << cut * MeV << " MeV" << G4endl;
+    }  
+  G4Electron::SetEnergyRange(cut,1e5);
+}
+
+void Tst50PhysicsList::SetGammaCut(G4double value)
 {
   ResetCuts();
- defaultCutValue = val;
-
+  cutForGamma = value;
 }
 
+
+void Tst50PhysicsList::SetElectronCut(G4double value)
+{
+  ResetCuts();
+  cutForElectron = value;
+}
+
+void Tst50PhysicsList::SetParticleCut(G4double value)
+{
+  G4cout<<"cambio il cut sulle particelle"<<G4endl;
+  ResetCuts();
+  defaultCutValue= value;
+  
+}
+
+
+void Tst50PhysicsList::SetCuts()
+{
+ G4VUserPhysicsList::SetCutsWithDefault();
+//  SetCutValue(cutForGamma,"gamma");
+//  SetCutValue(cutForElectron,"e-");
+//  SetCutValue(cutForElectron,"e+");
+ if (verboseLevel>0) DumpCutValuesTable();
+}
+
+
+void Tst50PhysicsList::SetLowEnSecPhotCut(G4double cut)
+{
+  // This m.f. is pertinent to LowEnergy EPDL/EEDL processes only
+
+  // Get the ProcessManager for photons and the list of photon processes
+  G4ProcessManager* photonManager = G4Gamma::GammaDefinition()->GetProcessManager();
+  G4ProcessVector* photonProcesses = photonManager->GetProcessList();
+  G4int nPhotonProcesses = photonProcesses->size();
+
+  // Loop over photon processes until one retrieves LowEnergyPhotoElectric
+  for (G4int iPhoton=0; iPhoton<nPhotonProcesses; iPhoton++)
+    {
+      G4VProcess* process = (*photonProcesses)[iPhoton];
+      const G4String& name = process->GetProcessName();
+      G4String nameLowE("LowEnPhotoElec");
+      if (name == nameLowE)
+	{
+	  // The only way to get access to the cut stting is through a dynamic_cast
+	  // (it is ugly!)
+	  G4LowEnergyPhotoElectric* lowEProcess = dynamic_cast<G4LowEnergyPhotoElectric*>(process);
+	  if (lowEProcess != 0) 
+	    {
+	     lowEProcess->SetCutForLowEnSecPhotons(cut);
+	     G4cout << "Low energy secondary photons cut is now set to: "
+		    << cut * MeV
+		    << " (MeV) for LowEnergyPhotoElectric"
+		    << G4endl;
+	    }
+	}
+    }
+  
+  // Get the ProcessManager for electrons and the list of electron processes
+  G4ProcessManager* electronManager = G4Electron::ElectronDefinition()->GetProcessManager();
+  G4ProcessVector* electronProcesses = electronManager->GetProcessList();
+  G4int nElectronProcesses = electronProcesses->size();
+
+  // Loop over electron processes until one retrieves LowEnergyIonisation or LowEnergyBremsstrahlung
+  for (G4int iElectron=0; iElectron<nElectronProcesses; iElectron++)
+    {
+      G4VProcess* process = (*electronProcesses)[iElectron];
+      const G4String& name = process->GetProcessName();
+
+      G4String nameIoni("LowEnergyIoni");
+      if (name == nameIoni)
+	{
+	  // The only way to get access to the cut setting is through a dynamic_cast
+	  // (it is ugly!)
+	  G4LowEnergyIonisation* lowEProcess = dynamic_cast<G4LowEnergyIonisation*>(process);
+	  if (lowEProcess != 0) 
+	    {
+	      lowEProcess->SetCutForLowEnSecPhotons(cut);
+	      G4cout << "Low energy secondary photons cut is now set to: "
+		     << cut * MeV
+		     << " (MeV) for LowEnergyIonisation"
+		     << G4endl;
+	    }
+	}
+
+      G4String nameBrems("LowEnBrem");
+      if (name == nameBrems)
+	{
+	  // The only way to get access to the cut setting is through a dynamic_cast
+	  // (it is ugly!)
+	  G4LowEnergyBremsstrahlung* lowEProcess = dynamic_cast<G4LowEnergyBremsstrahlung*>(process);
+	  if (lowEProcess != 0) 
+	    {
+	      lowEProcess->SetCutForLowEnSecPhotons(cut);
+	      G4cout << "Low energy secondary photons cut is now set to: "
+		     << cut * MeV
+		     << " (MeV) for LowEnergyBremsstrahlung"
+		     << G4endl;
+	    }
+	}
+    }
+}
+
+
+void Tst50PhysicsList::SetLowEnSecElecCut(G4double cut)
+{  
+  // This m.f. is pertinent to LowEnergy EPDL/EEDL processes only
+
+  // Get the ProcessManager for photons and the list of photon processes
+  G4ProcessManager* photonManager = G4Gamma::GammaDefinition()->GetProcessManager();
+  G4ProcessVector* photonProcesses = photonManager->GetProcessList();
+  G4int nPhotonProcesses = photonProcesses->size();
+
+  // Loop over photon processes until one retrieves LowEnergyPhotoElectric
+  for (G4int iPhoton=0; iPhoton<nPhotonProcesses; iPhoton++)
+    {
+      G4VProcess* process = (*photonProcesses)[iPhoton];
+      const G4String& name = process->GetProcessName();
+      G4String nameLowE("LowEnPhotoElec");
+      if (name == nameLowE)
+	{
+	  // The only way to get access to the cut stting is through a dynamic_cast
+	  // (it is ugly!)
+	  G4LowEnergyPhotoElectric* lowEProcess = dynamic_cast<G4LowEnergyPhotoElectric*>(process);
+	  if (lowEProcess != 0) 
+	    {
+	     lowEProcess->SetCutForLowEnSecElectrons(cut);
+	     G4cout << "Low energy secondary electrons cut is now set to: "
+		    << cut * MeV
+		    << " (MeV) for LowEnergyPhotoElectric"
+		    << G4endl;
+	    }
+	}
+    }
+  
+  // Get the ProcessManager for electrons and the list of electron processes
+  G4ProcessManager* electronManager = G4Electron::ElectronDefinition()->GetProcessManager();
+  G4ProcessVector* electronProcesses = electronManager->GetProcessList();
+  G4int nElectronProcesses = electronProcesses->size();
+
+  // Loop over electron processes until one retrieves LowEnergyIonisation
+  for (G4int iElectron=0; iElectron<nElectronProcesses; iElectron++)
+    {
+      G4VProcess* process = (*electronProcesses)[iElectron];
+      const G4String& name = process->GetProcessName();
+      G4String nameLowE("LowEnergyIoni");
+      if (name == nameLowE)
+	{
+	  // The only way to get access to the cut setting is through a dynamic_cast
+	  // (it is ugly!)
+	  G4LowEnergyIonisation* lowEProcess = dynamic_cast<G4LowEnergyIonisation*>(process);
+	  if (lowEProcess != 0) 
+	    {
+	      lowEProcess->SetCutForLowEnSecElectrons(cut);
+	      G4cout << "Low energy secondary electrons cut is now set to: "
+		     << cut * MeV
+		     << " (MeV) for LowEnergyIonisation"
+		     << G4endl;
+	    }
+	}
+    }
+}
+
+
+void Tst50PhysicsList::ActivateAuger(G4bool value)
+{  
+  // Get the ProcessManager for photons and the list of photon processes
+  G4ProcessManager* photonManager = G4Gamma::GammaDefinition()->GetProcessManager();
+  G4ProcessVector* photonProcesses = photonManager->GetProcessList();
+  G4int nPhotonProcesses = photonProcesses->size();
+
+  // Loop over photon processes until one retrieves LowEnergyPhotoElectric
+  for (G4int iPhoton=0; iPhoton<nPhotonProcesses; iPhoton++)
+    {
+      G4VProcess* process = (*photonProcesses)[iPhoton];
+      const G4String& name = process->GetProcessName();
+      G4String nameLowE("LowEnPhotoElec");
+      if (name == nameLowE)
+	{
+	  // The only way to get access to the Auger activation is through a dynamic_cast
+	  // (it is ugly!)
+	  G4LowEnergyPhotoElectric* lowEProcess = dynamic_cast<G4LowEnergyPhotoElectric*>(process);
+	  if (lowEProcess != 0) 
+	    {
+	     lowEProcess->ActivateAuger(value);
+	      G4cout << "Auger electron production flag is " << value
+		     << " for LowEnergyPhotoElectric process" << G4endl;
+	    }
+	}
+    }
+  
+  // Get the ProcessManager for electrons and the list of electron processes
+  G4ProcessManager* electronManager = G4Electron::ElectronDefinition()->GetProcessManager();
+  G4ProcessVector* electronProcesses = electronManager->GetProcessList();
+  G4int nElectronProcesses = electronProcesses->size();
+
+  // Loop over electron processes until one retrieves LowEnergyIonisation
+  for (G4int iElectron=0; iElectron<nElectronProcesses; iElectron++)
+    {
+      G4VProcess* process = (*electronProcesses)[iElectron];
+      const G4String& name = process->GetProcessName();
+      G4String nameLowE("LowEnergyIoni");
+      if (name == nameLowE)
+	{
+	  // The only way to get access to the Auger activation is through a dynamic_cast
+	  // (it is ugly!)
+	  G4LowEnergyIonisation* lowEProcess = dynamic_cast<G4LowEnergyIonisation*>(process);
+	  if (lowEProcess != 0) 
+	    {
+	      lowEProcess->ActivateAuger(value);
+	      G4cout << "Auger electron production flag is " << value
+		     << " for LowEnergyIonisation process" << G4endl;
+	    }
+	}
+    }
+}
 
 
 

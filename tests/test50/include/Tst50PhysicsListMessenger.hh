@@ -45,6 +45,7 @@ class G4UIcmdWithoutParameter;
 class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
+class G4UIcmdWithABool;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Tst50PhysicsListMessenger: public G4UImessenger
@@ -61,9 +62,9 @@ private:
 
   Tst50PhysicsList*          Tst50List;
 
-  G4UIdirectory* lowEnDir;
-   G4UIcmdWithAString* RangeDir;
- 
+  G4UIdirectory* EnDir;
+   G4UIcmdWithAString*  physicsListCmd;
+
   G4UIcmdWithADoubleAndUnit* cutECmd;
 };
 

@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.cc,v 1.11 2003-03-04 18:09:06 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.12 2003-04-25 08:43:35 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Tst50RunAction.hh"
-
+#include <math.h>
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -93,21 +93,49 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
   p_Primary =
 (Tst50PrimaryGeneratorAction*)(runManager->GetUserPrimaryGeneratorAction());
 G4double energy= p_Primary->GetInitialEnergy();
-  p_Detector =
+ G4String particle_name= p_Primary->GetParticle();
+ 
+
+ p_Detector =
 (Tst50DetectorConstruction*)(runManager->GetUserDetectorConstruction());
 
-  G4String name=p_Detector->GetMaterialName(); 
+G4String name=p_Detector->GetMaterialName(); 
+G4double density =p_Detector->GetDensity();
+G4double thickness =p_Detector->GetTargetThickness();
+
 #ifdef G4ANALYSIS_USE
  Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
 
   analysis->finish();
 #endif
+
   if (G4VVisManager::GetConcreteInstance())
     {
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
     }
   numberEvents=aRun->GetNumberOfEvent();
-  if (Foil)
+  
+  if (particle_name =="gamma")
+    {
+ G4double trans=(fg/numberEvents); 
+ 
+ G4double tran_coeff= -(log(trans))/(thickness*density);
+
+G4std::ofstream pmtfile("Test50_output.txt", G4std::ios::app);
+if(pmtfile.is_open()){
+  if (runID==0)
+    { pmtfile<<" TEST ----> gamma attenuation coefficient  <-----"<<name<<G4endl;
+      pmtfile<<" slab absorber material: "<<name<<G4endl;
+      pmtfile<<" slab density: "<<density/(g/cm3)<<G4endl;
+ pmtfile<< " energy gamma ( MeV)"<<"    "<<"attenuation coeff(cm2/g)"<< G4endl; 
+    }  
+ 
+  pmtfile<<energy/MeV <<"                    "<<tran_coeff/(cm2/g)<< G4endl; }
+ 
+    }
+}
+  /*
+if (Foil)
     {  
       G4double ft=(number/numberEvents) ;
       G4double fb=(numberB/numberEvents);
@@ -126,8 +154,8 @@ pmtfile<<"fraction Transmitted/n.events:"<<ft <<G4endl;
   pmtfile<<"fraction Absorbed/n.events: "<<fa<<G4endl;
   pmtfile<<"fraction transmitted/n.events with"<<G4endl; 
 pmtfile<<"transmission energy= initial energy && transmission angle= 0. deg(important for gamma for attenuation coefficient): "<<trans<<G4endl;
-}
-    }
+}*/
+
   /* 
  if (numberTransp==0 && numberRay==0 && numberPh==0 && numberCo==0 &&numberPair==0){;}
 else
@@ -143,7 +171,7 @@ G4cout<<"---------- Particelle primarie gamma -------------- "<<number<<G4endl;
   */
  
  
-}
+
 void  Tst50RunAction::gamma_transmitted()
 {
   fg = fg +1;

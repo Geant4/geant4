@@ -20,52 +20,49 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: Tst50DetectorMessenger.hh,v 1.5 2003-04-25 08:43:33 guatelli Exp $
+// $Id: Tst50ElectronEEDL.cc,v 1.1 2003-04-25 08:43:34 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+// Author: Maria.Grazia.Pia@cern.ch
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Designed for modular Physics List
+//
+// -------------------------------------------------------------------
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "Tst50ElectronEEDL.hh"
 
-#ifndef Tst50DetectorMessenger_h
-#define Tst50DetectorMessenger_h 1
+#include "G4ProcessManager.hh"
+#include "G4Gamma.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4MultipleScattering.hh"
+#include "G4LowEnergyIonisation.hh"
+#include "G4LowEnergyBremsstrahlung.hh"
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+Tst50ElectronEEDL::Tst50ElectronEEDL(const G4String& name): G4VPhysicsConstructor(name)
+{ }
 
-class Tst50DetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
-class G4UIcmdWithABool;
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+Tst50ElectronEEDL::~Tst50ElectronEEDL()
+{ }
 
-class Tst50DetectorMessenger: public G4UImessenger
+void Tst50ElectronEEDL::ConstructProcess()
 {
-  public:
-    Tst50DetectorMessenger(Tst50DetectorConstruction* );
-   ~Tst50DetectorMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-    Tst50DetectorConstruction* Tst50Detector;
-    
-    G4UIdirectory*             Tst50detDir;
-    G4UIcmdWithAString*        AbsMaterCmd;
-  G4UIcmdWithABool* UseUserLimitCmd; 
-    G4UIcmdWithADoubleAndUnit* AbsThickCmd; 
-  G4UIcmdWithADoubleAndUnit*   XThickCmd;
-   G4UIcmdWithADoubleAndUnit*   YThickCmd; 
-  G4UIcmdWithADoubleAndUnit*   SetStepCmd;
-       G4UIcmdWithoutParameter*   UpdateCmd;
-};
+  // Add EEDL processes for electrons
+  
+  theParticleIterator->reset();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#endif
-
+  while( (*theParticleIterator)() )
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* manager = particle->GetProcessManager();
+      G4String particleName = particle->GetParticleName();
+     
+      if (particleName == "e-") 
+	{
+	  manager->AddProcess(new G4MultipleScattering,     -1, 1,1);
+	  manager->AddProcess(new G4LowEnergyIonisation,    -1, 2,2);
+	  manager->AddProcess(new G4LowEnergyBremsstrahlung,-1,-1,3);
+	}   
+    }
+}

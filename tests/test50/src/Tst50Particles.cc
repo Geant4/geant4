@@ -20,52 +20,32 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: Tst50DetectorMessenger.hh,v 1.5 2003-04-25 08:43:33 guatelli Exp $
+// $Id: Tst50Particles.cc,v 1.1 2003-04-25 08:43:34 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+//
+// History:
+// -----------
+// 22 Feb 2003 MGP          Created
+//
+// -------------------------------------------------------------------
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "Tst50Particles.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
-#ifndef Tst50DetectorMessenger_h
-#define Tst50DetectorMessenger_h 1
+Tst50Particles::Tst50Particles(const G4String& name)
+  :  G4VPhysicsConstructor(name)
+{ }
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+Tst50Particles::~Tst50Particles()
+{}
 
-class Tst50DetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
-class G4UIcmdWithABool;
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class Tst50DetectorMessenger: public G4UImessenger
+void Tst50Particles::ConstructParticle()
 {
-  public:
-    Tst50DetectorMessenger(Tst50DetectorConstruction* );
-   ~Tst50DetectorMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-    Tst50DetectorConstruction* Tst50Detector;
-    
-    G4UIdirectory*             Tst50detDir;
-    G4UIcmdWithAString*        AbsMaterCmd;
-  G4UIcmdWithABool* UseUserLimitCmd; 
-    G4UIcmdWithADoubleAndUnit* AbsThickCmd; 
-  G4UIcmdWithADoubleAndUnit*   XThickCmd;
-   G4UIcmdWithADoubleAndUnit*   YThickCmd; 
-  G4UIcmdWithADoubleAndUnit*   SetStepCmd;
-       G4UIcmdWithoutParameter*   UpdateCmd;
-};
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#endif
-
+  G4Gamma::GammaDefinition();
+  G4Electron::ElectronDefinition();
+  G4Positron::PositronDefinition();
+}

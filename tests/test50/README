@@ -1,17 +1,22 @@
 --------> Available tests
 1) CSDA range test for e- 
 2) Stopping Power for e-
-3) Radiation Yeld for e-
-4) particles impinging on a target
-                       (Energy deposit, transmission, backscattering,
-                       (bremmstrahlung spectra, track length, 
-                       (number of steps in a track, step length, proton mean range,
-                       (gamma attenuation coefficient 
+4) gamma attenuation coefficient 
+         
 
 -------> Test Configuration
 
-for every test: file.in 
-in batch mode: file.in and file.mac
+---*gamma attenuation coefficient:
+
+with Standard Processes
+$G4WORKDIR/bin/Linux-g++/test50 < gamma_attenuation_standard.in
+
+with LowEnergy processes
+$G4WORKDIR/bin/Linux-g++/test50 < gamma_attenuation_low.in
+
+---* e- stopping power
+
+
 
 -----------------------------------------------------------------------------
 In file.in you can define:
