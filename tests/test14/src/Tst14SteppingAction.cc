@@ -31,7 +31,10 @@
 #include "G4TrackVector.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleTypes.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+
 #include "G4ios.hh"
 #include "g4std/iomanip"
 
