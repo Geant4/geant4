@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.36 2001-08-14 18:28:30 johna Exp $
+// $Id: G4VisManager.cc,v 1.37 2001-08-17 23:01:18 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -245,8 +245,9 @@ const G4GraphicsSystemList& G4VisManager::GetAvailableGraphicsSystems () {
 	"\n  2) Did you instantiate your own Visualization Manager and forget"
 	"\n     to implement RegisterGraphicsSystems correctly?"
 	"\n  3) You can register your own graphics system, e.g.,"
-	"\n     G4VisManager::GetInstance () ->"
-	"\n       RegisterGraphicsSystem (new MyGraphicsSystem);)"
+	"\n     visManager->RegisterGraphicsSystem(new MyGraphicsSystem);)"
+	"\n     after instantiating your vis manager and before"
+	"\n     visManager->Initialize()."
 	     << G4endl;
     }
   }
@@ -276,38 +277,6 @@ G4bool G4VisManager::RegisterGraphicsSystem (G4VGraphicsSystem* pSystem) {
   return happy;
 }
 
-void G4VisManager::Draw (const G4Polyline& line,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (line);
-    fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
-  }
-}
-
-void G4VisManager::Draw (const G4Text& text,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (text);
-    fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
-  }
-}
-
 void G4VisManager::Draw (const G4Circle& circle,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
@@ -317,54 +286,6 @@ void G4VisManager::Draw (const G4Circle& circle,
     fpSceneHandler -> SetModel (pModel);
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (circle);
-    fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
-  }
-}
-
-void G4VisManager::Draw (const G4Square& Square,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (Square);
-    fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
-  }
-}
-
-void G4VisManager::Draw (const G4Polymarker& polymarker,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (polymarker);
-    fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
-  }
-}
-
-void G4VisManager::Draw (const G4Polyhedron& polyhedron,
-			 const G4Transform3D& objectTransform) {
-  if (IsValidView ()) {
-    ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
-    fpSceneHandler -> BeginPrimitives (objectTransform);
-    fpSceneHandler -> AddPrimitive (polyhedron);
     fpSceneHandler -> EndPrimitives ();
     fpSceneHandler -> SetModel (0);
     delete pModel;
@@ -388,6 +309,110 @@ void G4VisManager::Draw (const G4NURBS& nurbs,
   }
 }
 
+void G4VisManager::Draw (const G4Polyhedron& polyhedron,
+			 const G4Transform3D& objectTransform) {
+  if (IsValidView ()) {
+    ClearTransientStoreIfMarked();
+    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
+    G4VModel* pModel = new G4NullModel (pMP);
+    fpSceneHandler -> SetModel (pModel);
+    fpSceneHandler -> BeginPrimitives (objectTransform);
+    fpSceneHandler -> AddPrimitive (polyhedron);
+    fpSceneHandler -> EndPrimitives ();
+    fpSceneHandler -> SetModel (0);
+    delete pModel;
+    delete pMP;
+  }
+}
+
+void G4VisManager::Draw (const G4Polyline& line,
+			 const G4Transform3D& objectTransform) {
+  if (IsValidView ()) {
+    ClearTransientStoreIfMarked();
+    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
+    G4VModel* pModel = new G4NullModel (pMP);
+    fpSceneHandler -> SetModel (pModel);
+    fpSceneHandler -> BeginPrimitives (objectTransform);
+    fpSceneHandler -> AddPrimitive (line);
+    fpSceneHandler -> EndPrimitives ();
+    fpSceneHandler -> SetModel (0);
+    delete pModel;
+    delete pMP;
+  }
+}
+
+void G4VisManager::Draw (const G4Polymarker& polymarker,
+			 const G4Transform3D& objectTransform) {
+  if (IsValidView ()) {
+    ClearTransientStoreIfMarked();
+    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
+    G4VModel* pModel = new G4NullModel (pMP);
+    fpSceneHandler -> SetModel (pModel);
+    fpSceneHandler -> BeginPrimitives (objectTransform);
+    fpSceneHandler -> AddPrimitive (polymarker);
+    fpSceneHandler -> EndPrimitives ();
+    fpSceneHandler -> SetModel (0);
+    delete pModel;
+    delete pMP;
+  }
+}
+
+void G4VisManager::Draw (const G4Scale& scale,
+			 const G4Transform3D& objectTransform) {
+  if (IsValidView ()) {
+    ClearTransientStoreIfMarked();
+    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
+    G4VModel* pModel = new G4NullModel (pMP);
+    fpSceneHandler -> SetModel (pModel);
+    fpSceneHandler -> BeginPrimitives (objectTransform);
+    fpSceneHandler -> AddPrimitive (scale);
+    fpSceneHandler -> EndPrimitives ();
+    fpSceneHandler -> SetModel (0);
+    delete pModel;
+    delete pMP;
+  }
+}
+
+void G4VisManager::Draw (const G4Square& square,
+			 const G4Transform3D& objectTransform) {
+  if (IsValidView ()) {
+    ClearTransientStoreIfMarked();
+    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
+    G4VModel* pModel = new G4NullModel (pMP);
+    fpSceneHandler -> SetModel (pModel);
+    fpSceneHandler -> BeginPrimitives (objectTransform);
+    fpSceneHandler -> AddPrimitive (square);
+    fpSceneHandler -> EndPrimitives ();
+    fpSceneHandler -> SetModel (0);
+    delete pModel;
+    delete pMP;
+  }
+}
+
+void G4VisManager::Draw (const G4Text& text,
+			 const G4Transform3D& objectTransform) {
+  if (IsValidView ()) {
+    ClearTransientStoreIfMarked();
+    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
+    G4VModel* pModel = new G4NullModel (pMP);
+    fpSceneHandler -> SetModel (pModel);
+    fpSceneHandler -> BeginPrimitives (objectTransform);
+    fpSceneHandler -> AddPrimitive (text);
+    fpSceneHandler -> EndPrimitives ();
+    fpSceneHandler -> SetModel (0);
+    delete pModel;
+    delete pMP;
+  }
+}
+
+void G4VisManager::Draw (const G4LogicalVolume& logicalVol,
+			 const G4VisAttributes& attribs,
+			 const G4Transform3D& objectTransform) {
+  // Find corresponding solid.
+  G4VSolid* pSol = logicalVol.GetSolid ();
+  Draw (*pSol, attribs, objectTransform);
+}
+
 void G4VisManager::Draw (const G4VSolid& solid,
 			 const G4VisAttributes& attribs,
 			 const G4Transform3D& objectTransform) {
@@ -403,14 +428,6 @@ void G4VisManager::Draw (const G4VSolid& solid,
     delete pModel;
     delete pMP;
   }
-}
-
-void G4VisManager::Draw (const G4LogicalVolume& logicalVol,
-			 const G4VisAttributes& attribs,
-			 const G4Transform3D& objectTransform) {
-  // Find corresponding solid.
-  G4VSolid* pSol = logicalVol.GetSolid ();
-  Draw (*pSol, attribs, objectTransform);
 }
 
 void G4VisManager::Draw (const G4VPhysicalVolume& physicalVol,
@@ -971,6 +988,20 @@ G4String G4VisManager::VerbosityGuidanceString
  "\n  5) parameters,    // ...and parameters of scenes and views..."
  "\n  6) all            // ...and everything available."
  );
+
+G4String G4VisManager::VerbosityString(Verbosity verbosity) {
+  G4String s;
+  switch (verbosity) {
+  case         quiet: s = "quiet (0)"; break;
+  case       startup: s = "startup (1)"; break;
+  case        errors: s = "errors (2)"; break;
+  case      warnings: s = "warnings (3)"; break;
+  case confirmations: s = "confirmations (4)"; break;
+  case    parameters: s = "parameters (5)"; break;
+  case           all: s = "all (6)"; break;
+  }
+  return s;
+}
 
 G4VisManager::Verbosity
 G4VisManager::GetVerbosityValue(const G4String& verbosityString) {

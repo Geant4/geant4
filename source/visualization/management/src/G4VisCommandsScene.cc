@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.24 2001-08-14 18:33:34 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.25 2001-08-17 23:00:45 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -451,7 +451,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
 	  G4VViewer* aViewer = viewerList [iV];
 	  aSceneHandler -> SetCurrentViewer (aViewer);  // Temporarily.
 	  aViewer -> SetView ();  // Temporarily switch contexts.
-	  aViewer -> ClearView ();
+	  //??aViewer -> ClearView ();
 	  aViewer -> DrawView ();
 	  if (verbosity >= G4VisManager::confirmations) {
 	    G4cout << "Viewer \"" << aViewer -> GetName ()
