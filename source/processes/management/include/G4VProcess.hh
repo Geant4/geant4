@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.15 2004-10-25 13:02:51 kurasige Exp $
+// $Id: G4VProcess.hh,v 1.16 2004-11-07 01:41:10 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -223,14 +223,14 @@ class G4VProcess
       // Not another BuildPhysicsTable, please.
 
 
-      virtual G4bool StorePhysicsTable(G4ParticleDefinition* ,
+      virtual G4bool StorePhysicsTable(const G4ParticleDefinition* ,
 				       const G4String&, 
 				       G4bool          ascii = false)
                                       {ascii=false; return true;}
       // Store PhysicsTable in a file. 
       // (return false in case of failure at I/O ) 
  
-      virtual G4bool RetrievePhysicsTable( G4ParticleDefinition* ,
+      virtual G4bool RetrievePhysicsTable( const G4ParticleDefinition* ,
 					   const G4String&, 
 				           G4bool          ascii = false)
                                       {ascii=false; return false;}
