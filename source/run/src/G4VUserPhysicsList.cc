@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.cc,v 1.5 1999-04-16 09:32:09 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.6 1999-05-10 18:06:14 fbehner Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -488,11 +488,11 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
   
   // Rebuild the physics tables for every process for this particle type
   G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
-  for ( j=0; j < pVector->length(); ++j) {
+  for ( j=0; j < pVector->entries(); ++j) {
     (*pVector)[j]->BuildPhysicsTable(*particle);
   }
 
-  for ( j=0; j < pVector->length(); ++j) {
+  for ( j=0; j < pVector->entries(); ++j) {
 
     //*********************************************************************
     // temporary addition to make the integral schema of electromagnetic
@@ -587,7 +587,7 @@ void G4VUserPhysicsList::DumpCutValues( G4ParticleDefinition* particle) const
     if (theKineticEnergyCuts != 0) {
       const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
       G4cout << "   - Material ---------------- Energy Cut ---" << endl;
-      for (G4int idx=0; idx<materialTable->length(); idx++){
+      for (G4int idx=0; idx<materialTable->entries(); idx++){
 	G4cout << "     " << setw(19) << (*materialTable)[idx]->GetName(); 
 	G4cout << " : "   << setw(10) << G4BestUnit(theKineticEnergyCuts[idx],"Energy");
 	G4cout << endl;
@@ -647,7 +647,7 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
 
  // line 6 ..
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  for (G4int J=0; J<materialTable->length(); J++) {
+  for (G4int J=0; J<materialTable->entries(); J++) {
     G4cout << " " << setw(18) << ((*materialTable)[J])->GetName();
     for (idx=0; idx <size; idx++) {
       if (particle[idx] == 0) {
