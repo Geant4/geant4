@@ -1,0 +1,17 @@
+# $Id: run10.mac,v 1.1 2002-08-19 15:54:07 maire Exp $
+#
+# Macro file for "TestEm1.cc"
+# (can be run in batch, without graphic)
+#
+# electron 10 GeV; all processes
+#
+/control/verbose 2
+#
+/run/initialize
+#
+/run/verbose 2
+#
+/gun/particle e-
+/gun/energy 10 GeV
+/event/printModulo 10
+/run/beamOn 100
