@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.45 2003-03-31 14:42:51 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.46 2003-05-08 00:39:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -91,6 +91,10 @@ G4PropagatorInField::ComputeStep(
                 G4double&          currentSafety,                // IN/OUT
                 G4VPhysicalVolume* pPhysVol)
 {
+  // If CurrentProposedStepLength is too small for finding Chords
+  // just forget.
+  if(CurrentProposedStepLength<kCarTolerance) return DBL_MAX;
+
   // Introducing smooth trajectory display (jacek 01/11/2002)
   if (fpTrajectoryFilter) {
     fpTrajectoryFilter->CreateNewTrajectorySegment();
