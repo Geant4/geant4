@@ -5,13 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trd.cc,v 1.5 2000-04-11 16:04:30 johna Exp $
+// $Id: G4Trd.cc,v 1.6 2000-05-05 10:05:56 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Implementation for G4Trd class
 //
 // $ Id: $ 
+//
+// History:
+// ~1996,  V. Grichine, 1st implementation based on old code of P. Kent
+// 07.05.00, V. Grichine, in d = DistanceToIn(p,v), if d<0.5*kCarTolerance, d=0
+
+
 
 #include "G4Trd.hh"
 
@@ -437,289 +443,224 @@ G4ThreeVector G4Trd::SurfaceNormal( const G4ThreeVector& p) const
 G4double G4Trd::DistanceToIn(const G4ThreeVector& p,
                              const G4ThreeVector& v) const
 {  
-    G4double snxt=kInfinity;		// snxt = default return value
-    G4double smin,smax;
-    G4double s1,s2,tanxz,tanyz,ds1,ds2;
-    G4double ss1,ss2,sn1,sn2,Dist;
+  G4double snxt = kInfinity ;		// snxt = default return value
+  G4double smin,smax;
+  G4double s1,s2,tanxz,tanyz,ds1,ds2;
+  G4double ss1,ss2,sn1,sn2,Dist;
 
-// Calculate valid z intersect range
-    if (v.z())
-	{
-// Calculate smax: must be +ve or no intersection.
-	    if (v.z()>0)
-		{
-		    Dist=fDz-p.z();	// to plane at +dz
-		    if (Dist>=kCarTolerance/2)
-			{
-			    smax=Dist/v.z();
-			    smin=-(fDz+p.z())/v.z();
-			}
-		    else
-			{
-			    return snxt;
-			}
-		}
-	    else
-		{
-// v.z <0
-		    Dist=fDz+p.z();	// plane at -dz
-		    if (Dist>=kCarTolerance/2)
-			{
-			    smax=-Dist/v.z();
-			    smin=(fDz-p.z())/v.z();
-			}
-		    else
-			{
-			    return snxt;
-			}
-		}
-	    if (smin<0) smin=0;
-	}
+  if ( v.z() )  // Calculate valid z intersect range
+  {
+    if ( v.z() > 0 )   // Calculate smax: must be +ve or no intersection.
+    {
+      Dist = fDz - p.z() ;	// to plane at +dz
+
+      if (Dist >= 0.5*kCarTolerance)
+      {
+        smax = Dist/v.z() ;
+	smin = -(fDz + p.z())/v.z() ;
+      }
+      else  return snxt ;
+    }
+    else // v.z <0
+    {
+      Dist=fDz+p.z();	// plane at -dz
+
+      if ( Dist >= 0.5*kCarTolerance )
+      {
+        smax = -Dist/v.z() ;
+	smin = (fDz - p.z())/v.z() ;
+      }
+      else return snxt ; 
+    }
+    if (smin < 0 ) smin = 0 ;
+  }
+  else // v.z=0
+  {
+    if (fabs(p.z()) >= fDz ) return snxt ;     // Outside & no intersect
     else
-	{
-// v.z=0
-	    if (fabs(p.z())>fDz)
-		{
-		    return snxt;	// Outside & no intersect
-		}
-	    else
-		{
-		    smin=0;		// Always inside z range
-		    smax=kInfinity;
-		}
-	}
+    {
+      smin = 0 ;		// Always inside z range
+      smax = kInfinity;
+    }
+  }
 
-//
 // Calculate x intersection range
 //
-
 // Calc half width at p.z, and components towards planes
-    tanxz=(fDx2-fDx1)*0.5/fDz;
-    s1=0.5*(fDx1+fDx2)+tanxz*p.z();	// x half width at p.z
-    ds1=v.x()-tanxz*v.z();		// Components of v towards faces at +-x
-    ds2=v.x()+tanxz*v.z();
-    ss1=s1-p.x();			// -delta x to +ve plane
-					// -ve when outside
-    ss2=-s1-p.x();			// -delta x to -ve plane
-					// +ve when outside
+
+  tanxz = (fDx2 - fDx1)*0.5/fDz ;
+  s1    = 0.5*(fDx1+fDx2) + tanxz*p.z() ;  // x half width at p.z
+  ds1   = v.x() - tanxz*v.z() ;	           // Components of v towards faces at +-x
+  ds2   = v.x() + tanxz*v.z() ;
+  ss1   = s1 - p.x() ;			   // -delta x to +ve plane
+					   // -ve when outside
+  ss2   = -s1 - p.x() ;			   // -delta x to -ve plane
+					   // +ve when outside
     
-    if (ss1<0&&ss2<=0)
-	{
-// In +ve coord Area
-	    if (ds1<0)
-		{
-		    sn1=ss1/ds1;
-		    if (ds2<0)
-			{
-			    sn2=ss2/ds2;
-			}
-		    else
-			{
-			    sn2=kInfinity;
-			}
-		}
-	    else
-		{
-		    return snxt;
-		}
-	    
-	}
-    else if (ss1>=0&&ss2>0)
-	{
-// In -ve coord Area
-	    if (ds2>0)
-		{
-		    sn1=ss2/ds2;
-		    if (ds1>0)
-			{
-			    sn2=ss1/ds1;
-			}
-		    else
-			{
-			    sn2=kInfinity;
-			}
+  if (ss1 < 0 && ss2 <= 0 )
+  {
+    if (ds1 < 0)   // In +ve coord Area
+    {
+      sn1 = ss1/ds1 ;
+
+      if ( ds2 < 0 ) sn2 = ss2/ds2 ;		       
+      else           sn2 = kInfinity ;
+    }
+    else return snxt ;
+  }
+  else if ( ss1 >= 0 && ss2 > 0 )
+  {
+    if ( ds2 > 0 )  // In -ve coord Area
+    {
+      sn1 = ss2/ds2 ;
+
+      if (ds1 > 0)  sn2 = ss1/ds1 ;			
+      else          sn2 = kInfinity;			
 		    
-		}
-	    else 
-		{
-		    return snxt;
-		}
-	    }
-    else if (ss1>=0&&ss2<=0)
-	{
+    }
+    else   return snxt ;
+  }
+  else if (ss1 >= 0 && ss2 <= 0 )
+  {
+
 // Inside Area - calculate leaving distance
 // *Don't* use exact distance to side for tolerance = ss1*cos(ang xz)
 //                                                  = ss1/sqrt(1.0+tanxz*tanxz)
-	    sn1=0;
-	    if (ds1>0)
-		{
-		    if (ss1>kCarTolerance/2)
-			{
-			    sn2=ss1/ds1; // Leave +ve side extent
-			}
-		    else
-			{
-			    return snxt; // Leave immediately by +ve
-			}
-		}
-	    else
-		{
-		    sn2=kInfinity;
-		}
-	    
-	    if (ds2<0)
-		{
-		    if (ss2<-kCarTolerance/2)
-			{
-			    Dist=ss2/ds2; // Leave -ve side extent
-			    if (Dist<sn2) sn2=Dist;
-			}
-		    else
-			{
-			    return snxt;
-			}
-		}
-	    
-	}
-    else if (ss1<0&&ss2>0)
-	{
-// Within +/- plane cross-over areas (not on boundaries ss1||ss2==0)a
-	    if (ds1>=0||ds2<=0)
-		{
-		    return snxt;
-		}
-	    else
-		{
-// Will intersect & stay inside
-		    sn1=ss1/ds1;
-		    Dist=ss2/ds2;
-		    if (Dist>sn1) sn1=Dist;
-		    sn2=kInfinity;
-		}
-	}
+    sn1 = 0 ;
 
-	
+    if ( ds1 > 0 )
+    {
+      if (ss1 > 0.5*kCarTolerance) sn2 = ss1/ds1 ; // Leave +ve side extent
+      else                         return snxt ;   // Leave immediately by +ve 
+    }
+    else  sn2 = kInfinity ;
+	    
+    if ( ds2 < 0 )
+    {
+      if ( ss2 < -0.5*kCarTolerance )
+      {
+        Dist = ss2/ds2 ;            // Leave -ve side extent
+        if ( Dist < sn2 ) sn2 = Dist ;
+      }
+      else  return snxt ;
+    }    
+  }
+  else if (ss1 < 0 && ss2 > 0 )
+  {
+
+// Within +/- plane cross-over areas (not on boundaries ss1||ss2==0)
+
+    if ( ds1 >= 0 || ds2 <= 0 )
+    {   
+      return snxt ;
+    }
+    else  // Will intersect & stay inside
+    {
+      sn1  = ss1/ds1 ;
+      Dist = ss2/ds2 ;
+      if (Dist > sn1 ) sn1 = Dist ;
+      sn2 = kInfinity ;
+    }
+  }
+
 // Reduce allowed range of distances as appropriate
-    if (sn1>smin) smin=sn1;
-    if (sn2<smax) smax=sn2;
+
+  if ( sn1 > smin ) smin = sn1 ;
+  if ( sn2 < smax ) smax = sn2 ;
+
 // Check for incompatible ranges (eg z intersects between 50 ->100 and x
 // only 10-40 -> no intersection)
-    if (smax<smin) return snxt;
 
+  if ( smax < smin ) return snxt ;
 
 // Calculate valid y intersection range 
 // (repeat of x intersection code)
-    tanyz=(fDy2-fDy1)*0.5/fDz;
-    s2=0.5*(fDy1+fDy2)+tanyz*p.z();	// y half width at p.z
-    ds1=v.y()-tanyz*v.z();		// Components of v towards faces at +-y
-    ds2=v.y()+tanyz*v.z();
-    ss1=s2-p.y();			// -delta y to +ve plane
-    ss2=-s2-p.y();			// -delta y to -ve plane
+
+  tanyz = (fDy2-fDy1)*0.5/fDz ;
+  s2    = 0.5*(fDy1+fDy2) + tanyz*p.z() ;  // y half width at p.z
+  ds1   = v.y() - tanyz*v.z() ;		   // Components of v towards faces at +-y
+  ds2   = v.y() + tanyz*v.z() ;
+  ss1   = s2 - p.y() ;			   // -delta y to +ve plane
+  ss2   = -s2 - p.y() ;			   // -delta y to -ve plane
     
-    if (ss1<0&&ss2<=0)
-	{
-// In +ve coord Area
-	    if (ds1<0)
-		{
-		    sn1=ss1/ds1;
-		    if (ds2<0)
-			{
-			    sn2=ss2/ds2;
-			}
-		    else
-			{
-			    sn2=kInfinity;
-			}
-		}
-	    else
-		{
-		    return snxt;
-		}
-	    
-	}
-    else if (ss1>=0&&ss2>0)
-	{
-// In -ve coord Area
-	    if (ds2>0)
-		{
-		    sn1=ss2/ds2;
-		    if (ds1>0)
-			{
-			    sn2=ss1/ds1;
-			}
-		    else
-			{
-			    sn2=kInfinity;
-			}
-		    
-		}
-	    else 
-		{
-		    return snxt;
-		}
-	    }
-    else if (ss1>=0&&ss2<=0)
-	{
+  if ( ss1 < 0 && ss2 <= 0 )
+  {
+    if (ds1 < 0 ) // In +ve coord Area
+    {
+      sn1 = ss1/ds1 ;
+
+      if ( ds2 < 0 )  sn2 = ss2/ds2 ;
+      else            sn2 = kInfinity ;
+    }
+    else   return snxt ;
+  }
+  else if ( ss1 >= 0 && ss2 > 0 )
+  {
+    if ( ds2 > 0 )  // In -ve coord Area
+    {
+      sn1 = ss2/ds2 ;
+
+      if ( ds1 > 0 )  sn2 = ss1/ds1 ;
+      else            sn2 = kInfinity ;	    
+    }
+    else   return snxt ;
+  }
+  else if (ss1 >= 0 && ss2 <= 0 )
+  {
+
 // Inside Area - calculate leaving distance
 // *Don't* use exact distance to side for tolerance = ss1*cos(ang yz)
 //                                                  = ss1/sqrt(1.0+tanyz*tanyz)
-	    sn1=0;
-	    if (ds1>0)
-		{
-		    if (ss1>kCarTolerance/2)
-			{
-			    sn2=ss1/ds1; // Leave +ve side extent
-			}
-		    else
-			{
-			    return snxt; // Leave immediately by +ve
-			}
-		}
-	    else
-		{
-		    sn2=kInfinity;
-		}
+    sn1 = 0 ;
+
+    if ( ds1 > 0 )
+    {
+      if (ss1 > 0.5*kCarTolerance) sn2 = ss1/ds1 ; // Leave +ve side extent
+      else                         return snxt ;   // Leave immediately by +ve
+    }
+    else  sn2 = kInfinity ;
 	    
-	    if (ds2<0)
-		{
-		    if (ss2<-kCarTolerance/2)
-			{
-			    Dist=ss2/ds2; // Leave -ve side extent
-			    if (Dist<sn2) sn2=Dist;
-			}
-		    else
-			{
-			    return snxt;
-			}
-		}
-	    
-	}
-    else if (ss1<0&&ss2>0)
-	{
-// Within +/- plane cross-over areas (not on boundaries ss1||ss2==0)a
-	    if (ds1>=0||ds2<=0)
-		{
-		    return snxt;
-		}
-	    else
-		{
-// Will intersect & stay inside
-		    sn1=ss1/ds1;
-		    Dist=ss2/ds2;
-		    if (Dist>sn1) sn1=Dist;
-		    sn2=kInfinity;
-		}
-	}
+    if ( ds2 < 0 )
+    {
+      if ( ss2 < -0.5*kCarTolerance )
+      {
+        Dist = ss2/ds2 ; // Leave -ve side extent
+
+	if (Dist < sn2) sn2=Dist;
+      }
+      else  return snxt ;
+    }    
+  }
+  else if (ss1 < 0 && ss2 > 0 )
+  {
+
+// Within +/- plane cross-over areas (not on boundaries ss1||ss2==0)
+
+    if (ds1 >= 0 || ds2 <= 0 )  
+    {
+      return snxt ;
+    }
+    else  // Will intersect & stay inside
+    {
+      sn1 = ss1/ds1 ;
+      Dist = ss2/ds2 ;
+      if (Dist > sn1 ) sn1 = Dist ;
+      sn2 = kInfinity ;
+    }
+  }
 	
 // Reduce allowed range of distances as appropriate
-    if (sn1>smin) smin=sn1;
-    if (sn2<smax) smax=sn2;
+
+  if ( sn1 > smin) smin = sn1 ;
+  if ( sn2 < smax) smax = sn2 ;
 
 // Check for incompatible ranges (eg x intersects between 50 ->100 and y
 // only 10-40 -> no intersection). Set snxt if ok
-    if (smax>smin) snxt=smin;
 
-    return snxt;
+  if ( smax > smin ) snxt = smin ;
+  if (snxt < 0.5*kCarTolerance ) snxt = 0.0 ;
+
+  return snxt ;
 }
 
 /////////////////////////////////////////////////////////////////////////
