@@ -176,8 +176,8 @@
 
 #include "G4NeutronHPThermalBoost.hh"
 
-  G4ParticleChange * G4NeutronHPChannel::
-  ApplyYourself(const G4Track & theTrack, G4int anIsotope)
+  G4HadFinalState * G4NeutronHPChannel::
+  ApplyYourself(const G4HadProjectile & theTrack, G4int anIsotope)
   {
 //    G4cout << "G4NeutronHPChannel::ApplyYourself+"<<niso<<G4endl;
     if(anIsotope != -1) return theFinalStates[anIsotope]->ApplyYourself(theTrack);
@@ -189,7 +189,7 @@
     {
       if(theFinalStates[i]->HasAnyData())
       {
-        xsec[i] = theIsotopeWiseData[i].GetXsec(aThermalE.GetThermalEnergy(theTrack.GetDynamicParticle(),
+        xsec[i] = theIsotopeWiseData[i].GetXsec(aThermalE.GetThermalEnergy(theTrack,
 		                                                           theFinalStates[i]->GetN(),
 									   theFinalStates[i]->GetZ(),
 						  		           theTrack.GetMaterial()->GetTemperature()));
@@ -226,7 +226,7 @@
       if(it==niso) it--;
     }
     delete [] xsec;
-    G4ParticleChange * theFinalState=NULL;
+    G4HadFinalState * theFinalState=NULL;
     while(theFinalState==NULL)
     {
 //    G4cout << "TESTHP 24 it="<<it<<G4endl;

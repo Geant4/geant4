@@ -113,14 +113,13 @@
     }
     theData.close();
   }
-  G4ParticleChange * G4NeutronHPElasticFS::ApplyYourself(const G4Track & theTrack)
+  G4HadFinalState * G4NeutronHPElasticFS::ApplyYourself(const G4HadProjectile & theTrack)
   {  
 //    G4cout << "G4NeutronHPElasticFS::ApplyYourself+"<<G4endl;
-    theResult.Initialize(theTrack);   
     G4double eKinetic = theTrack.GetKineticEnergy();
-    const G4DynamicParticle *incidentParticle = theTrack.GetDynamicParticle();
-    G4ReactionProduct theNeutron( incidentParticle->GetDefinition() );
-    theNeutron.SetMomentum( incidentParticle->GetMomentum() );
+    const G4HadProjectile *incidentParticle = &theTrack;
+    G4ReactionProduct theNeutron( const_cast<G4ParticleDefinition *>(incidentParticle->GetDefinition()) );
+    theNeutron.SetMomentum( incidentParticle->Get4Momentum().vect() );
     theNeutron.SetKineticEnergy( eKinetic );
 //    G4cout << "G4NeutronHPElasticFS::ApplyYourself++"<<eKinetic<<" "<<G4endl;
 //    G4cout << "CMSVALUES 0 "<<theNeutron.GetTotalMomentum()<<G4endl;
@@ -278,10 +277,9 @@
                                ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0, static_cast<G4int>(theBaseZ)));
     }
     theRecoil->SetMomentum(theTarget.GetMomentum());
-    theResult.SetNumberOfSecondaries(1);
     theResult.AddSecondary(theRecoil);
 //    G4cout << "G4NeutronHPElasticFS::ApplyYourself 10+"<<G4endl;
     // postpone the tracking of the primary neutron
-     theResult.SetStatusChange(fSuspend);
+     theResult.SetStatusChange(suspend);
     return &theResult;
   }

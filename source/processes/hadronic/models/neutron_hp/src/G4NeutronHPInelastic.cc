@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.14 2003-05-30 11:32:34 hpw Exp $
+// $Id: G4NeutronHPInelastic.cc,v 1.15 2003-07-01 15:58:39 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4NeutronHPInelastic.hh"
@@ -102,9 +102,9 @@
   
   #include "G4NeutronHPThermalBoost.hh"
   
-  G4VParticleChange * G4NeutronHPInelastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& )
+  G4HadFinalState * G4NeutronHPInelastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& )
   {
-    G4Material * theMaterial = aTrack.GetMaterial();
+    const G4Material * theMaterial = aTrack.GetMaterial();
     G4int n = theMaterial->GetNumberOfElements();
     G4int index = theMaterial->GetElement(0)->GetIndex();
     G4int it=0;
@@ -120,7 +120,7 @@
       {
         index = theMaterial->GetElement(i)->GetIndex();
         rWeight = NumAtomsPerVolume[i];
-        xSec[i] = theInelastic[index].GetXsec(aThermalE.GetThermalEnergy(aTrack.GetDynamicParticle(),
+        xSec[i] = theInelastic[index].GetXsec(aThermalE.GetThermalEnergy(aTrack,
   		                                                         theMaterial->GetElement(i),
     								         theMaterial->GetTemperature()));
         xSec[i] *= rWeight;

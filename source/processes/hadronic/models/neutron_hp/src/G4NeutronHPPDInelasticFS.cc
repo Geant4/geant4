@@ -29,7 +29,7 @@
 #include "G4Proton.hh"
 #include "G4Deuteron.hh"
 
-G4ParticleChange * G4NeutronHPPDInelasticFS::ApplyYourself(const G4Track & theTrack)
+G4HadFinalState * G4NeutronHPPDInelasticFS::ApplyYourself(const G4HadProjectile & theTrack)
 {
 // these are the particle types in the final state
 

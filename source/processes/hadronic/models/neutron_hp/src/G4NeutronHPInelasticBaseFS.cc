@@ -143,17 +143,16 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirNam
   theData.close();
 }
   
-void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack, 
+void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack, 
                                            G4ParticleDefinition ** theDefs, 
                                            G4int nDef)
 {
-  theResult.Initialize(theTrack); 
 
 // prepare neutron
   G4double eKinetic = theTrack.GetKineticEnergy();
-  const G4DynamicParticle *incidentParticle = theTrack.GetDynamicParticle();
-  G4ReactionProduct theNeutron( incidentParticle->GetDefinition() );
-  theNeutron.SetMomentum( incidentParticle->GetMomentum() );
+  const G4HadProjectile *incidentParticle = &theTrack;
+  G4ReactionProduct theNeutron( const_cast<G4ParticleDefinition *>(incidentParticle->GetDefinition()) );
+  theNeutron.SetMomentum( incidentParticle->Get4Momentum().vect() );
   theNeutron.SetKineticEnergy( eKinetic );
 
 // prepare target
@@ -187,7 +186,6 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
     {
       aPhaseMass+=theDefs[ii]->GetPDGMass();
     }
-    theResult.SetNumberOfSecondaries(nDef);
     thePhaseSpaceDistribution.Init(aPhaseMass, nDef);
     thePhaseSpaceDistribution.SetNeutron(&theNeutron);
     thePhaseSpaceDistribution.SetTarget(&theTarget);
@@ -204,7 +202,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
       delete aSec;
       theResult.AddSecondary(aPart);     
     }   
-    theResult.SetStatusChange(fStopAndKill);
+    theResult.SetStatusChange(stopAndKill);
     return;
   }
 
@@ -421,7 +419,6 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
   unsigned int nPhotons = 0;
   if(thePhotons!=NULL) nPhotons = thePhotons->size();
   nSecondaries += nPhotons;
-  theResult.SetNumberOfSecondaries(nSecondaries);
   G4DynamicParticle * theSec;
 
   for(i=0; i<nSecondaries-nPhotons; i++)
@@ -449,5 +446,5 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
   delete tmpHadrons;
 
 // clean up the primary neutron
-  theResult.SetStatusChange(fStopAndKill);
+  theResult.SetStatusChange(stopAndKill);
 }

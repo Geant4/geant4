@@ -26,8 +26,8 @@
 //
 #include "G4NeutronHPChannelList.hh"
 #include "G4Element.hh"
-#include "G4ParticleChange.hh"
-#include "G4Track.hh"
+#include "G4HadFinalState.hh"
+#include "G4HadProjectile.hh"
 #include "G4NeutronHPFinalState.hh"
 
   G4int G4NeutronHPChannelList::trycounter = 0;
@@ -61,7 +61,7 @@
   }
     
   #include "G4NeutronHPThermalBoost.hh"
-  G4ParticleChange * G4NeutronHPChannelList::ApplyYourself(const G4Element * , const G4Track & aTrack)
+  G4HadFinalState * G4NeutronHPChannelList::ApplyYourself(const G4Element * , const G4HadProjectile & aTrack)
   {
     G4NeutronHPThermalBoost aThermalE;
     G4int i, ii;
@@ -81,7 +81,7 @@
       {
 	if(theChannels[ii]->HasAnyData(i))
 	{
-          running[i] +=theChannels[ii]->GetWeightedXsec(aThermalE.GetThermalEnergy(aTrack.GetDynamicParticle(),
+          running[i] +=theChannels[ii]->GetWeightedXsec(aThermalE.GetThermalEnergy(aTrack,
 		                                                  theChannels[ii]->GetN(i),
 								  theChannels[ii]->GetZ(i),
 						  		  aTrack.GetMaterial()->GetTemperature()),
@@ -106,7 +106,7 @@
       if(i!=0) running[i] = running[i-1];
       if(theChannels[i]->HasAnyData(isotope))
       {
-        running[i] += theChannels[i]->GetFSCrossSection(aThermalE.GetThermalEnergy(aTrack.GetDynamicParticle(),
+        running[i] += theChannels[i]->GetFSCrossSection(aThermalE.GetThermalEnergy(aTrack,
 		                                                  theChannels[i]->GetN(isotope),
 								  theChannels[i]->GetZ(isotope),
 						  		  aTrack.GetMaterial()->GetTemperature()),

@@ -168,15 +168,14 @@ G4int G4NeutronHPInelasticCompFS::SelectExitChannel(G4double eKinetic)
   return it;
 }
 
-void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4ParticleDefinition * aDefinition)
+void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack, G4ParticleDefinition * aDefinition)
 {
-    theResult.Initialize(theTrack); 
 
 // prepare neutron
     G4double eKinetic = theTrack.GetKineticEnergy();
-    const G4DynamicParticle *incidentParticle = theTrack.GetDynamicParticle();
-    G4ReactionProduct theNeutron( incidentParticle->GetDefinition() );
-    theNeutron.SetMomentum( incidentParticle->GetMomentum() );
+    const G4HadProjectile *incidentParticle = &theTrack;
+    G4ReactionProduct theNeutron( const_cast<G4ParticleDefinition *>(incidentParticle->GetDefinition()) );
+    theNeutron.SetMomentum( incidentParticle->Get4Momentum().vect() );
     theNeutron.SetKineticEnergy( eKinetic );
 
 // prepare target
@@ -429,9 +428,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
     G4int nPhotons = 0;
     if(thePhotons!=NULL) nPhotons = thePhotons->size();
     nSecondaries += nPhotons;
-    
-    theResult.SetNumberOfSecondaries(nSecondaries);
-    
+        
     G4DynamicParticle * theSec;
     
     if( theParticles==NULL )
@@ -503,5 +500,5 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
       delete thePhotons;
     }
 // clean up the primary neutron
-    theResult.SetStatusChange(fStopAndKill);
+    theResult.SetStatusChange(stopAndKill);
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFinalState.hh,v 1.8 2003-05-30 11:32:33 hpw Exp $
+// $Id: G4NeutronHPFinalState.hh,v 1.9 2003-07-01 15:58:36 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPFinalState_h
@@ -29,9 +29,10 @@
 
 #include "G4Material.hh"
 #include "G4FastVector.hh"
-#include "G4ParticleChange.hh"
+#include "G4HadFinalState.hh"
 #include "G4NeutronHPNames.hh"
 #include "G4NeutronHPVector.hh"
+#include "G4HadProjectile.hh"
 
 class G4NeutronHPFinalState
 {
@@ -49,9 +50,9 @@ public:
   virtual ~G4NeutronHPFinalState(){};
 
   virtual void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType) = 0;
-  virtual G4ParticleChange * ApplyYourself(const G4Track & ) 
+  virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & ) 
   {
-    G4Exception("G4ParticleChange * ApplyYourself(const G4Track & theTrack) needs implementation");
+    G4Exception("G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack) needs implementation");
     return NULL;
   }
   
@@ -78,7 +79,7 @@ public:
   G4bool hasAnyData;
   G4NeutronHPNames theNames;
   
-  G4ParticleChange theResult;
+  G4HadFinalState theResult;
   
   G4double theBaseA;
   G4double theBaseZ;

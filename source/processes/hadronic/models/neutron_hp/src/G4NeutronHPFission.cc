@@ -54,10 +54,9 @@
   }
   
   #include "G4NeutronHPThermalBoost.hh"
-  
-  G4VParticleChange * G4NeutronHPFission::ApplyYourself(const G4Track& aTrack, G4Nucleus& )
+  G4HadFinalState * G4NeutronHPFission::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& )
   {
-    G4Material * theMaterial = aTrack.GetMaterial();
+    const G4Material * theMaterial = aTrack.GetMaterial();
     G4int n = theMaterial->GetNumberOfElements();
     G4int index = theMaterial->GetElement(0)->GetIndex();
     if(n!=1)
@@ -72,7 +71,7 @@
       {
         index = theMaterial->GetElement(i)->GetIndex();
         rWeight = NumAtomsPerVolume[i];
-        xSec[i] = theFission[index].GetXsec(aThermalE.GetThermalEnergy(aTrack.GetDynamicParticle(),
+        xSec[i] = theFission[index].GetXsec(aThermalE.GetThermalEnergy(aTrack,
   		                                                      theMaterial->GetElement(i),
   								      theMaterial->GetTemperature()));
         xSec[i] *= rWeight;

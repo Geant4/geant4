@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFission.hh,v 1.6 2002-12-12 19:18:12 gunter Exp $
+// $Id: G4NeutronHPFission.hh,v 1.7 2003-07-01 15:58:36 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: High Precision low E neutron tracking
@@ -56,7 +56,7 @@ class G4NeutronHPFission : public G4HadronicInteraction
 
   ~G4NeutronHPFission();
   
-  G4VParticleChange * ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus);
+  G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
 
   private:
   

@@ -28,7 +28,7 @@
 #include "G4Nucleus.hh"
 #include "G4Proton.hh"
 
-G4ParticleChange * G4NeutronHP3NPInelasticFS::ApplyYourself(const G4Track & theTrack)
+G4HadFinalState * G4NeutronHP3NPInelasticFS::ApplyYourself(const G4HadProjectile & theTrack)
 {
 // these are the particle types in the final state
 

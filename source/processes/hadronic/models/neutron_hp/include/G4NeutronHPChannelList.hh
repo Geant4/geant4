@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPChannelList.hh,v 1.7 2003-06-16 17:10:33 gunter Exp $
+// $Id: G4NeutronHPChannelList.hh,v 1.8 2003-07-01 15:58:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
@@ -36,8 +36,8 @@
 #include "G4StableIsotopes.hh"
 
 class G4Element;
-class G4ParticleChange;
-class G4Track;
+class G4HadFinalState;
+class G4HadProjectile;
 class G4NeutronHPFinalState;
 
 class G4NeutronHPChannelList
@@ -53,7 +53,7 @@ class G4NeutronHPChannelList
 
   ~G4NeutronHPChannelList();
   
-  G4ParticleChange * ApplyYourself(const G4Element * theElement, const G4Track & aTrack);
+  G4HadFinalState * ApplyYourself(const G4Element * theElement, const G4HadProjectile & aTrack);
       
   void Init(G4Element * anElement, const G4String & dirName);
     

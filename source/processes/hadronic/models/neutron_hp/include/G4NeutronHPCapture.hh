@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPCapture.hh,v 1.7 2002-12-12 19:18:10 gunter Exp $
+// $Id: G4NeutronHPCapture.hh,v 1.8 2003-07-01 15:58:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
@@ -51,7 +51,7 @@ class G4NeutronHPCapture : public G4HadronicInteraction
 
   ~G4NeutronHPCapture();
 
-  G4VParticleChange * ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus);
+  G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
 
   private:
   
@@ -61,7 +61,7 @@ class G4NeutronHPCapture : public G4HadronicInteraction
   G4int numEle;
   G4int it;
   
-  G4ParticleChange theResult;
+  G4HadFinalState theResult;
 };
 
 #endif
