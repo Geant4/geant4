@@ -118,7 +118,7 @@
     toZ.rotateY(-1*mom.theta());
     G4LorentzRotation toLab(toZ.inverse());
   
-    // Fill the particle change, while rotating. set z->-z in case we swapped.  
+    // Fill the particle change, while rotating. Boost from projectile breit-frame in case we swapped.  
     theParticleChange.Clear();
     theParticleChange.Initialize(aTrack);
     theParticleChange.SetStatusChange(fStopAndKill);
