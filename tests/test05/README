@@ -1,4 +1,4 @@
-$Id: README,v 1.1 1999-01-08 16:34:48 gunter Exp $
+$Id: README,v 1.2 2000-05-12 14:55:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,12 +8,9 @@ $Id: README,v 1.1 1999-01-08 16:34:48 gunter Exp $
                             Test05
                             ------
 
-                                                Jari Sulkimo
-                                                31/10/97
-
 This is an example using particle tracking in STEP CAD-models
-from the CMS detector project. The model can be changed
-by substituting the model name in the Parameters.txt file's
-first line with the other model name in the file.
-
+from the CMS detector project. The model can be changed by invoking
+the UI command "/mydet/SelectDetector <model-name>", where
+<model-name> is the name of the STEP file <model-name>.stp which
+describes the detector geometry.
 
