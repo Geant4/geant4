@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeGammaConversionTest.cc,v 1.1 2002-12-06 16:26:46 pandola Exp $
+// $Id: G4PenelopeGammaConversionTest.cc,v 1.2 2003-03-13 17:32:19 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,8 +74,10 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
-//#include "G4ComptonScattering.hh"
-//#include "G4PhotoElectricEffect.hh"
+#include "G4ComptonScattering.hh"
+#include "G4PhotoElectricEffect.hh"
+
+#include "G4RunManager.hh"
 
 #include "G4Electron.hh"
 #include "G4Positron.hh"
@@ -85,6 +87,8 @@
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
 #include "G4Step.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4MaterialCutsCouple.hh"
 
 #include "G4UnitsTable.hh"
 #include "AIDA/IManagedObject.h"
@@ -230,27 +234,35 @@ G4int main()
   
   G4PVPlacement* physicalFrame = new G4PVPlacement(0,G4ThreeVector(),
 						   "PFrame",logicalFrame,0,false,0);
-  
+
+  G4RunManager* rm = new G4RunManager();
+  G4cout << "World is defined " << G4endl;
+  rm->GeometryHasBeenModified();
+  rm->DefineWorldVolume(physicalFrame);
+
   // Particle definitions
   
   G4ParticleDefinition* gamma = G4Gamma::GammaDefinition();
   G4ParticleDefinition* electron = G4Electron::ElectronDefinition();
   G4ParticleDefinition* positron = G4Positron::PositronDefinition();
   
-  gamma->SetCuts(1*micrometer);
-  electron->SetCuts(1*micrometer);
-  positron->SetCuts(1*micrometer);
+  G4ProductionCutsTable* cutsTable = G4ProductionCutsTable::GetProductionCutsTable();
+  G4ProductionCuts* cuts = cutsTable->GetDefaultProductionCuts();
+  G4double cutG=1*micrometer;
+  G4double cutE=1*micrometer;
+  cuts->SetProductionCut(cutG, 0); //gammas
+  cuts->SetProductionCut(cutE, 1); //electrons
+  cuts->SetProductionCut(cutE, 2); //positrons
+  G4cout << "Cuts are defined " << G4endl;
 
   G4Gamma::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
   G4Electron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
   G4Positron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
 
-  G4cout<<"the cut in energy for gamma in: "<<
-    (*theMaterialTable)[materialId]->GetName()
-	<<" is: "<< gamma->GetEnergyCuts()[materialId]/keV << " keV" << G4endl;
-  G4cout<<"the cut in energy for e- in: "<<
-    (*theMaterialTable)[materialId]->GetName()
-	<<" is: "<< electron->GetEnergyCuts()[materialId]/keV << " keV" << G4endl;
+  cutsTable->UpdateCoupleTable();
+  //cutsTable->DumpCouples();
+  const G4MaterialCutsCouple* theCouple = cutsTable->GetMaterialCutsCouple(material,cuts);
+  G4int indx=theCouple->GetIndex();
   
   // Processes 
   
@@ -397,6 +409,7 @@ G4int main()
   G4StepPoint* aPoint = new G4StepPoint();
   aPoint->SetPosition(aPosition);
   aPoint->SetMaterial(material);
+  aPoint->SetMaterialCutsCouple(theCouple);
   G4double safety = 10000.*cm;
   aPoint->SetSafety(safety);
   step->SetPreStepPoint(aPoint);
