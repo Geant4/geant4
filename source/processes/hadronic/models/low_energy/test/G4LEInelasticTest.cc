@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEInelasticTest.cc,v 1.10 2003-02-18 18:01:56 jwellisc Exp $
+// $Id: G4LEInelasticTest.cc,v 1.11 2003-02-18 18:04:30 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -44,7 +44,7 @@
 #include "G4VLongitudinalStringDecay.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4QGSMFragmentation.hh"
-#include "G4LEProtonInelastic.hh"
+#include "G4HEProtonInelastic.hh"
 
 #include "G4DynamicParticle.hh"
 #include "G4LeptonConstructor.hh"
@@ -159,7 +159,7 @@
    G4ProcessManager* theProtonProcessManager = new G4ProcessManager(theProton);
    theProton->SetProcessManager(theProtonProcessManager);
    G4ProtonInelasticProcess theInelasticProcess; 
-   G4LEProtonInelastic theProtonModel;
+   G4HEProtonInelastic theProtonModel;
 //   theProtonModel.ForceEnergyConservation(false);
     G4ExcitationHandler theHandler;
     G4TheoFSGenerator * theTheoModel = new G4TheoFSGenerator;
