@@ -1,7 +1,7 @@
 #
 # -------- SUN ---------
 #
-ifeq ($(G4SYSTEM),SUN-CC)
+ifeq ($(G4SYSTEM),SUN-CC6)
   CXX       := CC
   ifdef G4OPTIMISE
     CXXFLAGS  := -O
@@ -12,13 +12,14 @@ ifeq ($(G4SYSTEM),SUN-CC)
       CCFLAGS := -g
     endif
   endif
+#  CXXFLAGS += -fnonstd
   ifdef G4LIB_BUILD_SHARED
     CXXFLAGS += -KPIC
     FCFLAGS  += -KPIC
     CCFLAGS  += -KPIC
   endif
   G4RUNPATHOPTION = -R
-#  CXXFLAGS += -fnonstd
+  G4_HAVE_BOOL := yes
   CFRONT_G4TEMPLATE_REPOSITORY  := true
   FC     := f77
   SHEXT  := so
@@ -49,6 +50,14 @@ ifeq ($(G4SYSTEM),SUN-CC)
     CPPFLAGS += -DOS_SOLARIS_2_5 -DOS_NEW_CHECK -DOS_STL_ASSERT
     CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
     CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
+    CXXFLAGS += -compat
+  else
+    ifndef G4NO_STD_NAMESPACE
+      G4USE_STD_NAMESPACE := yes
+      CPPFLAGS += -DG4USE_STD_NAMESPACE
+    else
+      CXXFLAGS += -compat
+    endif
   endif
 
   define build-granular-shared-lib
