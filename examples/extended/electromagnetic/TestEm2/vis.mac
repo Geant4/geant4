@@ -31,4 +31,5 @@
 /vis/scene/endOfEventAction accumulate
 #
 /testem/event/drawTracks charged
+#/testem/event/drawTracks all
 

@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.13 2003-10-08 17:28:29 maire Exp $
+# $Id: run01.mac,v 1.14 2003-11-13 14:12:50 vnivanch Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -15,7 +15,7 @@
 #
 /run/initialize
 #
-###/run/particle/applyCuts
+/run/particle/applyCuts
 #
 /gun/particle e-
 /gun/energy 5 GeV
