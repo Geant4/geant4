@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2002-06-24 07:15:27 gcosmo Exp $
+$Id: History,v 1.38 2002-09-11 12:36:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 11, 2002  G. Cosmo               geommng-V04-01-00
+- G4AssemblyVolume[.hh.icc.cc]:
+  o Fixed bug #409 concerning missing imprint counter method.
+  o Fixed bug #410 concerning the internal counting mechanism.
+    The fix involved the addition of a new data member fAssemblyID,
+    holding the instance ID of the given object derived from
+    class-wide counter. Corresponding accessor methods has been
+    added as well.
+- Updated unit test TestAssemblyVolume, to add call to G4RunManager
+  for resetting nagivator state in TstVADetectorConstruction.cc.
 
 June 24, 2002  G. Cosmo                    geommng-V04-00-08
 - G4AssemblyVolume[.hh.cc]:
