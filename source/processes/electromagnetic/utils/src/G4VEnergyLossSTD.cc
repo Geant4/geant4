@@ -56,6 +56,7 @@
 // 09-04-03 Fix problem of negative range limit for non integral (V.Ivanchenko)
 // 26-04-03 Fix retrieve tables (V.Ivanchenko)
 // 06-05-03 Set defalt finalRange = 1 mm (V.Ivanchenko)
+// 12-05-03 Update range calculations + lowKinEnergy (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -109,8 +110,14 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   theGamma(G4Gamma::Gamma()),
   theElectron(G4Electron::Electron()),
   currentCouple(0),
-  minKinEnergy(1.0*eV),
+  nDEDXBins(90),
+  nDEDXBinsForRange(70),
+  nLambdaBins(90),
+  faclow(1.5),
+  minKinEnergy(0.1*keV),
   maxKinEnergy(100.0*GeV),
+  maxKinEnergyForRange(1.0*GeV),
+  lowKinEnergy(minKinEnergy*faclow),
   linLossLimit(0.05),
   minSubRange(0.1),
   lossFluctuationFlag(true),
@@ -124,6 +131,8 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   (G4LossTableManager::Instance())->Register(this);
   scoffProcessors.clear();
   scoffRegions.clear();
+  theDEDXAtMaxEnergy.clear();
+  theRangeAtMaxEnergy.clear();
 
   // default dRoverRange and finalRange
   SetStepLimits(0.2, 1.0*mm);
@@ -174,6 +183,8 @@ void G4VEnergyLossSTD::Clear()
   theSecondaryRangeTable = 0;
   theLambdaTable = 0;
   theSubLambdaTable = 0;
+  theDEDXAtMaxEnergy.clear();
+  theRangeAtMaxEnergy.clear();
   modelManager->Clear();
   tablesAreBuilt = false;
 }
@@ -529,17 +540,15 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
            << G4endl;
   }
   */
-
-  //  static const G4double faclow = 1.5;
-
     // low energy deposit case
   if (length >= fRange) {
     eloss = preStepKinEnergy;
-    /*
-  } else if(preStepScaledEnergy < faclow*minKinEnergy) {
+    
+  } else if(preStepScaledEnergy <= lowKinEnergy) {
 
-    eloss = preStepKinEnergy*sqrt(length/fRange);
-    */
+    G4double x = 1.0 - length/fRange;
+    eloss = preStepKinEnergy*(1.0 - x*x);
+    
   // Short step
   } else if( length <= linLossLimit * fRange ) {
     eloss = (((*theDEDXTable)[currentMaterialIndex])->
@@ -548,14 +557,13 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
   // Long step
   } else {
     G4double x = (fRange-length)/reduceFactor;
-    G4PhysicsVector* v = (*theInverseRangeTable)[currentMaterialIndex];
-    G4double postStepScaledEnergy = v->GetValue(x, b);
+    G4double postStepScaledEnergy = ((*theInverseRangeTable)[currentMaterialIndex])->
+             GetValue(x, b);
     eloss = (preStepScaledEnergy - postStepScaledEnergy)/massRatio;
 
     if (eloss <= 0.0) {
       eloss = (((*theDEDXTable)[currentMaterialIndex])->
                GetValue(preStepScaledEnergy, b))*length*chargeSqRatio;
-     // eloss = preStepKinEnergy*sqrt(length/fRange);
     }
 
     /*
@@ -723,12 +731,12 @@ void G4VEnergyLossSTD::PrintInfoDefinition() const
 {
   G4cout << G4endl << GetProcessName() << ":  " << G4endl
          << "      dE/dx and range tables from "
-	 << G4BestUnit(MinKinEnergy(),"Energy")
-         << " to " << G4BestUnit(MaxKinEnergy(),"Energy")
-         << " in " << DEDXBinning() << " bins." << G4endl
+	 << G4BestUnit(minKinEnergy,"Energy")
+         << " to " << G4BestUnit(maxKinEnergy,"Energy")
+         << " in " << nDEDXBins << " bins." << G4endl
          << "      Lambda tables from threshold to "
-         << G4BestUnit(MaxKinEnergy(),"Energy")
-         << " in " << LambdaBinning() << " bins."
+         << G4BestUnit(maxKinEnergy,"Energy")
+         << " in " << nLambdaBins << " bins."
          << G4endl;
   /*   
       G4cout << "DEDXTable address= " << theDEDXTable << G4endl;
@@ -770,6 +778,22 @@ void G4VEnergyLossSTD::SetDEDXTable(G4PhysicsTable* p)
 void G4VEnergyLossSTD::SetRangeTable(G4PhysicsTable* p)
 {
   theRangeTable = p;
+  size_t n = p->length();
+  G4PhysicsVector* pv = (*p)[0];
+  G4bool b;
+  size_t nbins = pv->GetVectorLength();
+  highKinEnergyForRange = pv->GetLowEdgeEnergy(nbins);
+
+  for (size_t i=0; i<n; i++) {
+    pv = (*p)[i];
+    G4double e1 = pv->GetLowEdgeEnergy(nbins-1);
+    G4double r1 = pv->GetValue(e1, b);
+    G4double e2 = pv->GetLowEdgeEnergy(nbins);
+    G4double r2 = pv->GetValue(e2, b);
+    G4double dedx = (e2-e1)/(r2-r1);
+    theDEDXAtMaxEnergy.push_back(dedx);
+    theRangeAtMaxEnergy.push_back(r2);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -813,6 +837,18 @@ G4PhysicsVector* G4VEnergyLossSTD::DEDXPhysicsVector(const G4MaterialCutsCouple*
   if( couple->IsUsed() ) nbins = nDEDXBins;
   //G4double emax = maxKinEnergy*exp( log(maxKinEnergy/minKinEnergy) / ((G4double)(nbins-1)) );
   G4PhysicsVector* v = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nbins);
+  return v;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4PhysicsVector* G4VEnergyLossSTD::DEDXPhysicsVectorForPreciseRange(
+                             const G4MaterialCutsCouple* couple)
+{
+  G4int nbins = 3;
+  if( couple->IsUsed() ) nbins = nDEDXBinsForRange;
+  //G4double emax = maxKinEnergy*exp( log(maxKinEnergy/minKinEnergy) / ((G4double)(nbins-1)) );
+  G4PhysicsVector* v = new G4PhysicsLogVector(minKinEnergy, maxKinEnergyForRange, nbins);
   return v;
 }
 
