@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.16 2004-04-08 09:41:11 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.17 2004-06-14 09:27:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,12 +57,12 @@
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/nodes/SoResetTransform.h>
 
-#include <HEPVis/nodes/SoBox.h>
-#include <HEPVis/nodes/SoTubs.h>
-#include <HEPVis/nodes/SoCons.h>
-#include <HEPVis/nodes/SoTrd.h>
-#include <HEPVis/nodes/SoTrap.h>
-#include <HEPVis/nodekits/SoDetectorTreeKit.h>
+#include "HEPVis/nodes/SoBox.h"
+#include "HEPVis/nodes/SoTubs.h"
+#include "HEPVis/nodes/SoCons.h"
+#include "HEPVis/nodes/SoTrd.h"
+#include "HEPVis/nodes/SoTrap.h"
+#include "HEPVis/nodekits/SoDetectorTreeKit.h"
 
 #include "G4Scene.hh"
 #include "G4NURBS.hh"

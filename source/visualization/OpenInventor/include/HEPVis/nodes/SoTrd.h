@@ -1,3 +1,36 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: SoTrd.h,v 1.2 2004-06-14 09:27:37 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+/*-----------------------------Hepvis----------------------------------------*/
+/*                                                                           */
+/* Node:             SoTrd                                                   */
+/* Description:      Represents the G4Trd Geant Geometry entity              */
+/* Author:           Joe Boudreau Nov 11 1996                                */
+/*                                                                           */
+/*---------------------------------------------------------------------------*/
 #ifndef HEPVis_SoTrd_h
 #define HEPVis_SoTrd_h
 
@@ -15,8 +48,6 @@ class SoSFNode;
  * Description:     Inventor version of the G4Trd Geant Geometry entity
  * 
  * Author:	    Joe Boudreau Nov 11 1996
- * 
- * The documentation from Geant says:
  * 
  * A Trd is a trapezoid with the x and y dimensions varying along z
  *

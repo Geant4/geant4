@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2004-04-08 12:24:55 gbarrand Exp $
+$Id: History,v 1.7 2004-06-14 09:27:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,7 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
-08th April 2004  Guy Barrand
+08th April 2004  Guy Barrand (openinventor-V06-01-00)
 - Bring in the repository the necessary HEPVis code. In fact few of HEPVis
   is used in this G4 driver. Then HEPVis is no more needed.
   Note that, to avoid clashes of G4/vis within experiments, the HEPVis

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventor.cc,v 1.10 2004-04-08 09:41:11 gbarrand Exp $
+// $Id: G4OpenInventor.cc,v 1.11 2004-06-14 09:27:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef G4VIS_BUILD_OI_DRIVER
@@ -29,12 +29,12 @@
 // this :
 #include "G4OpenInventor.hh"
 
-#include <HEPVis/nodes/SoBox.h>
-#include <HEPVis/nodes/SoTubs.h>
-#include <HEPVis/nodes/SoCons.h>
-#include <HEPVis/nodes/SoTrd.h>
-#include <HEPVis/nodes/SoTrap.h>
-#include <HEPVis/nodekits/SoDetectorTreeKit.h>
+#include "HEPVis/nodes/SoBox.h"
+#include "HEPVis/nodes/SoTubs.h"
+#include "HEPVis/nodes/SoCons.h"
+#include "HEPVis/nodes/SoTrd.h"
+#include "HEPVis/nodes/SoTrap.h"
+#include "HEPVis/nodekits/SoDetectorTreeKit.h"
 
 #include "G4OpenInventorSceneHandler.hh"
 

@@ -1,6 +1,32 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: SoCons.h,v 1.2 2004-06-14 09:27:36 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 /*-----------------------------Hepvis----------------------------------------*/
 /*                                                                           */
-/* Node:             SoCons                                                */
+/* Node:             SoCons                                                  */
 /* Description:      Represents the G4Cons Geant Geometry entity             */
 /* Author:           Joe Boudreau Nov 11 1996                                */
 /*                                                                           */
@@ -21,8 +47,6 @@ class SoSFNode;
  * Description:      The Inventor version of the G4Cons Geant Geometry entity
  *
  * Author:	     Joe Boudreau Nov 11 1996
- *
- * The documentation from Geant says:
  *
  * A G4Cons is, in the general case, a Phi segment of a cone, with half-length
  * fDz, inner and outer radii specified at -fDz and +fDz. The Phi segment is
