@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.1 2003-04-22 16:25:06 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2003-05-15 11:39:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +37,10 @@
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
 #include "G4RunManager.hh"
+
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
@@ -65,6 +69,7 @@ DetectorConstruction::DetectorConstruction()
 
   // create commands for interactive definition of the detector  
   detectorMessenger = new DetectorMessenger(this);
+  DefineMaterials();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,7 +81,6 @@ DetectorConstruction::~DetectorConstruction()
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-  DefineMaterials();
   return ConstructVolumes();
 }
 
@@ -137,6 +141,10 @@ G4Material* vacuum = new G4Material("Galactic",z=1,a=1.008*g/mole,density,
   
 G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 {
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+
   // World
   //
   G4Box*
@@ -242,7 +250,8 @@ void DetectorConstruction::SetSizeX(G4double value)
 
 void DetectorConstruction::SetSizeYZ(G4double value)
 {
-  absorSizeYZ = value; worldSizeYZ = 1.2*absorSizeYZ;
+  absorSizeYZ = value; 
+  worldSizeYZ = 1.2*absorSizeYZ;
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -251,9 +260,10 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
   // search the material by its name   
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
-  if (pttoMaterial)
-    { absorMaterial = pttoMaterial;
-      lAbsor->SetMaterial(absorMaterial); 
+  if (pttoMaterial) 
+    { 
+      absorMaterial = pttoMaterial;
+      if ( lAbsor ) lAbsor->SetMaterial(absorMaterial); 
     }             
 }
 

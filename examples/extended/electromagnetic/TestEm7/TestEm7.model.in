@@ -1,0 +1,41 @@
+# $Id: TestEm7.model.in,v 1.1 2003-05-15 11:39:58 vnivanch Exp $
+#
+# Macro file for "TestEm7.cc"
+# (can be run in batch, without graphic)
+#
+#
+/control/verbose 2
+/run/verbose 1
+#
+#
+#  select EM PhysicsList
+#
+/testem/phys/addPhysics  model
+#/testem/phys/addPhysics  standard
+#
+/testem/phys/addPhysics  binary
+#
+#/testem/phys/setCuts 5.0 mm
+/testem/det/setMat Water
+/testem/det/setSizeX  20 cm
+/testem/det/setSizeYZ 20 cm
+#
+/testem/det/tallyMat Water
+/testem/det/tallySize 2. 2. 2. mm
+/testem/det/tallyPosition -9.9 0. 0. cm
+/testem/det/tallyPosition -5.  0. 0. cm
+/testem/det/tallyPosition  0.  0. 0. cm
+/testem/det/tallyPosition  5.  0. 0. cm
+#
+#/testem/det/update
+#
+/run/initialize
+#
+/gun/particle proton
+/gun/energy 160 MeV
+/testem/gun/rndm 2 mm
+#
+/run/verbose 2
+/testem/event/printModulo 1000
+#
+/run/beamOn 10000
