@@ -126,7 +126,7 @@ void G4hLowEnergyIonisation::SetNuclearStoppingOn()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hLowEnergyIonisation::SetNuclearStoppingOff()
-{B
+{
   nStopping = false ;
 }
 
@@ -790,7 +790,7 @@ G4double G4hLowEnergyIonisation::ComputeBarkasTerm(const G4Material* material,
   G4double EtaChi = Eta0Chi * ( 1 + 6.02*pow( ZMaterial,-1.19 ) );
   G4double W = ( EtaChi * pow( ZMaterial,1./6 ) ) / sqrt(X); 
   G4double FunctionOfW = 0;
-    for(int IndexOfFTable=0;IndexOfFTable<27;IndexOfFTable++){
+    for(int IndexOfFTable=0;IndexOfFTable<37;IndexOfFTable++){
      if(W<FTable[IndexOfFTable][0]){
      		FunctionOfW =( FTable[IndexOfFTable][1] + FTable[IndexOfFTable-1][1] ) /2;
 		break;}
