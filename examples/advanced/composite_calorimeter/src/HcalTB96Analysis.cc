@@ -23,12 +23,19 @@ HcalTB96Analysis* HcalTB96Analysis::instance = 0;
 HcalTB96Analysis::HcalTB96Analysis() :analysisFactory(0), tree(0), tuple(0), 
   energy(0), profile(0) {
 
-    analysisFactory = AIDA_createAnalysisFactory();
+  int i=0;
+  for (i=0; i<28; i++) {
+    hcalE[i] = 0;
+    lateralProfile[i] = 0;
+  }
+  for (i=0; i<49; i++) {ecalE[i] = 0;}
+  for (i=0; i<numberOfTimeSlices; i++) {timeHist[i] = 0;}
+
+  analysisFactory = AIDA_createAnalysisFactory();
   if (analysisFactory) {
 
     ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
-    int i=0;
-    if(treeFactory) {
+    if (treeFactory) {
       // Tree in memory :
       // Create a "tree" associated to an hbook
       const char* opFileptr = getenv("OSCAR_FILENAME");
@@ -136,36 +143,28 @@ HcalTB96Analysis* HcalTB96Analysis::getInstance() {
 
 // This function fill the 1d histogram of the energies in HCal layers
 void HcalTB96Analysis::InsertEnergyHcal(int i, float v) {
-  if (hcalE) {
-    if (hcalE[i]) hcalE[i]->fill(double(v));
-  }
+  if (hcalE[i]) hcalE[i]->fill(double(v));
 }
 
 // This function fill the 1d histogram of the energies in ECal layers
 void HcalTB96Analysis::InsertEnergyEcal(int i, float v) {
-  if (ecalE) {
-    if (ecalE[i]) ecalE[i]->fill(double(v));
-  }
+  if (ecalE[i]) ecalE[i]->fill(double(v));
 }
 
 // This function fill the 1d histogram of the lateral profile
 void HcalTB96Analysis::InsertLateralProfile(int i, float v) {
-  if (lateralProfile) {
-    if (lateralProfile[i]) lateralProfile[i]->fill(double(v));
-  }
+  if (lateralProfile[i]) lateralProfile[i]->fill(double(v));
 }
 
 // This function fill the 1d histogram of the energy 
 void HcalTB96Analysis::InsertEnergy(float v) {
-
   if (energy) energy->fill(double(v));
 }
 
 // This function fill the 1d histograms of time profiles
 void HcalTB96Analysis::InsertTime(float* v) {
-
   for (int j=0; j<numberOfTimeSlices; j++){
-    if ( timeHist[j]) timeHist[j]->fill(double(v[j]));
+    if (timeHist[j]) timeHist[j]->fill(double(v[j]));
   }
 }
 
@@ -268,7 +267,7 @@ void HcalTB96Analysis::EndOfRun(G4int n)  {
       cu += w[i];
       edep += hcalE[i]->mean();
       double wt = hcalE[i]->mean()/w[i];
-      profile->fill(cu,wt);
+      if (profile) profile->fill(cu,wt);
     }
   }
   oFile.close(); 

@@ -111,7 +111,7 @@ G4Material* CMSMaterialFactory::findMaterial(const G4String & mat) const {
 
 G4Element* CMSMaterialFactory::findElement(const G4String & mat) const {
   const G4ElementTable  theElements = *(G4Element::GetElementTable());
-  for (int i=0; i<theElements.size(); i++)
+  for (unsigned int i=0; i<theElements.size(); i++)
     if (theElements[i]->GetName()==mat){
 #ifdef ddebug
       cout << "Element " << mat << " found!" << endl;
@@ -190,7 +190,7 @@ void CMSMaterialFactory::readMaterials(const G4String& matfile) {
 
 G4Material* CMSMaterialFactory::findG4Material(const G4String & mat) const {
   const G4MaterialTable theG4Materials = *(G4Material::GetMaterialTable());
-  for (int i=0; i<theG4Materials.size(); i++) {
+  for (unsigned int i=0; i<theG4Materials.size(); i++) {
     if (theG4Materials[i]->GetName()==mat){
       return theG4Materials[i];
     }
@@ -199,7 +199,7 @@ G4Material* CMSMaterialFactory::findG4Material(const G4String & mat) const {
 }
 
 CMSMaterial* CMSMaterialFactory::findCMSMaterial(const G4String & mat) const {
-  for (int i=0; i<theCMSMaterials.size(); i++)
+  for (unsigned int i=0; i<theCMSMaterials.size(); i++)
     if (theCMSMaterials[i]->Name()==mat){
 #ifdef ddebug
       cout << "CMSMaterial " << mat << " found!" << endl;
@@ -210,7 +210,7 @@ CMSMaterial* CMSMaterialFactory::findCMSMaterial(const G4String & mat) const {
 }
 
 CMSAMaterial* CMSMaterialFactory::findCMSAMaterial(const G4String & mat) const {
-  for (int i=0; i<theCMSAMaterials.size(); i++)
+  for (unsigned int i=0; i<theCMSAMaterials.size(); i++)
     if (theCMSAMaterials[i]->Name()==mat){
 #ifdef ddebug
       cout << "CMSMaterial " << mat << " found!" << endl;
@@ -315,7 +315,7 @@ void CMSMaterialFactory::readElements(ifstream& is){
 	 << A << "\t" << Z << "\t" << density << endl;
 #endif
     
-    G4Element* theEl = addElement(name, symbol, Z, A, density);
+    addElement(name, symbol, Z, A, density);
     
     readName(is,name);
   };
@@ -334,13 +334,8 @@ void CMSMaterialFactory::readMaterials(ifstream& is){
   G4double density  = universe_mean_density;   //from PhysicalConstants.h
   G4double pressure = 1.E-19*pascal;
   G4double temperature = 0.1*kelvin;
-  G4Material *vacuum = new G4Material("Vacuum",
-				      /*Z=*/ 1.,
-				      /*A=*/ 1.01*g/mole,
-				      density,
-				      kStateGas,
-				      temperature,
-				      pressure);
+  new G4Material("Vacuum", /*Z=*/ 1., /*A=*/ 1.01*g/mole,
+		 density, kStateGas, temperature, pressure);
 
   //There should come the list of materials. #. Defines a comment
   //*ENDDO defines the block.
