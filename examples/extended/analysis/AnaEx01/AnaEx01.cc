@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: AnaEx01.cc,v 1.5 2000-11-10 14:08:02 gbarrand Exp $
+// $Id: AnaEx01.cc,v 1.6 2000-11-15 13:46:23 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new AnaEx01EventAction());
   runManager->SetUserAction(new AnaEx01SteppingAction());
 #endif
-    
+
   //Initialize G4 kernel
   runManager->Initialize();
     
