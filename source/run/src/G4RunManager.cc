@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.5 1999-05-17 16:17:44 stesting Exp $
+// $Id: G4RunManager.cc,v 1.6 1999-06-09 01:08:22 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,6 +16,7 @@
 
 #include "G4RunManager.hh"
 
+#include "Randomize.hh"
 #include "G4Run.hh"
 #include "G4RunMessenger.hh"
 #include "G4VUserDetectorConstruction.hh"
@@ -44,12 +45,14 @@ G4RunManager* G4RunManager::GetRunManager()
 
 G4RunManager::G4RunManager()
 :userDetector(NULL),physicsList(NULL),
- userRunAction(NULL),userPrimaryGeneratorAction(NULL),
+ userRunAction(NULL),userPrimaryGeneratorAction(NULL),userEventAction(NULL),
+ userStackingAction(NULL),userTrackingAction(NULL),userSteppingAction(NULL),
  currentRun(NULL),currentEvent(NULL),n_perviousEventsToBeStored(0),
  geometryInitialized(false),physicsInitialized(false),cutoffInitialized(false),
  geometryNeedsToBeClosed(true),initializedAtLeastOnce(false),
  runAborted(false),pauseAtBeginOfEvent(false),pauseAtEndOfEvent(false),
- geometryToBeOptimized(true),verboseLevel(0),DCtable(NULL),runIDCounter(0)
+ geometryToBeOptimized(true),verboseLevel(0),DCtable(NULL),runIDCounter(0),
+ storeRandomNumberStatus(0)
 {
   if(fRunManager)
   { G4Exception("G4RunManager constructed twice."); }
@@ -188,6 +191,9 @@ void G4RunManager::RunInitialization()
   { previousEvents->insert((G4Event*)NULL); }
 
   runAborted = false;
+
+  if(storeRandomNumberStatus>0) HepRandom::saveEngineStatus();
+  
   if(verboseLevel>0) G4cout << "Start Run processing." << endl;
 }
 
@@ -212,6 +218,8 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
   for( i_event=0; i_event<n_event; i_event++ )
   {
     stateManager->SetNewState(EventProc);
+    if(storeRandomNumberStatus==2) HepRandom::saveEngineStatus();
+
     if(pauseAtBeginOfEvent) stateManager->Pause("BeginOfEvent");
 
     currentEvent = GenerateEvent(i_event);
@@ -376,7 +384,10 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
   geometryNeedsToBeClosed = true;
 }
 
-
+void G4RunManager::RestoreRandomNumberStatus()
+{
+  HepRandom::restoreEngineStatus();
+}
 
 
 

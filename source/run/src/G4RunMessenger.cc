@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunMessenger.cc,v 1.1 1999-01-07 16:14:18 gunter Exp $
+// $Id: G4RunMessenger.cc,v 1.2 1999-06-09 01:08:22 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -105,6 +105,26 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   cutCmd->SetGuidance(" if cutoff value(s) have been modified after the");
   cutCmd->SetGuidance(" first initialization (or BeamOn).");
   cutCmd->AvailableForStates(PreInit,Idle);
+
+  storeRandCmd = new G4UIcmdWithAnInteger("/run/storeRandomNumberStatus",this);
+  storeRandCmd->SetGuidance("Store the status of the random number engine to a file.");
+  storeRandCmd->SetGuidance("See CLHEP manual for detail.");
+  storeRandCmd->SetGuidance("Frequency : 0 - not stored");
+  storeRandCmd->SetGuidance("            1 - begining of each run");
+  storeRandCmd->SetGuidance("            2 - begining of each event before generating primaries");
+  storeRandCmd->SetGuidance("Stored status can be restored by ");
+  storeRandCmd->SetGuidance("  /run/restoreRandomNumberStatus command.");
+  storeRandCmd->AvailableForStates(PreInit,Idle);
+  storeRandCmd->SetParameterName("frequency",true);
+  storeRandCmd->SetDefaultValue(1);
+  storeRandCmd->SetRange("frequency >=0 && frequency <=2");
+
+  restoreRandCmd = new G4UIcmdWithoutParameter("/run/restoreRandomNumberStatus",this);
+  restoreRandCmd->SetGuidance("Restore the status of the random number engine from a file.");
+  restoreRandCmd->SetGuidance("See CLHEP manual for detail.");
+  restoreRandCmd->SetGuidance("The engine status must be stored beforehand.");
+  restoreRandCmd->AvailableForStates(PreInit,Idle,GeomClosed);
+
 }
 
 G4RunMessenger::~G4RunMessenger()
@@ -118,6 +138,8 @@ G4RunMessenger::~G4RunMessenger()
   delete initCmd;
   delete geomCmd;
   delete cutCmd;
+  delete storeRandCmd;
+  delete restoreRandCmd;
   delete runDirectory;
 }
 
@@ -151,6 +173,10 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->GeometryHasBeenModified(); }
   else if( command==cutCmd )
   { runManager->CutOffHasBeenModified(); }
+  else if( command==storeRandCmd )
+  { runManager->SetRandomNumberStore(storeRandCmd->GetNewIntValue(newValue)); }
+  else if( command==restoreRandCmd )
+  { runManager->RestoreRandomNumberStatus(); }
 }
 
 G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)
@@ -159,6 +185,8 @@ G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)
   
   if( command==verboseCmd )
   { cv = verboseCmd->ConvertToString(runManager->GetVerboseLevel()); }
+  else if( command==storeRandCmd )
+  { cv = storeRandCmd->ConvertToString(runManager->GetRandomNumberStore()); }
   
   return cv;
 }
