@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.11 2001-07-03 13:25:59 sadilov Exp $
+# $Id: Configure,v 1.12 2001-12-06 17:29:30 sadilov Exp $
 #
-# Generated on Tue Jul  3 15:21:54 CEST 2001 [metaconfig 3.0 PL70]
+# Generated on Thu Dec  6 18:23:56 CET 2001 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -134,74 +134,6 @@ unset CDPATH
 cd UU && rm -f ./*
 
 eunicefix=''
-Mcc=''
-ar=''
-awk=''
-bash=''
-bison=''
-byacc=''
-cat=''
-chgrp=''
-chmod=''
-chown=''
-comm=''
-compress=''
-cp=''
-cpio=''
-cpp=''
-csh=''
-date=''
-echo=''
-egrep=''
-emacs=''
-expr=''
-find=''
-flex=''
-gcc=''
-grep=''
-gzip=''
-inews=''
-ksh=''
-less=''
-line=''
-lint=''
-ln=''
-lp=''
-lpr=''
-ls=''
-mail=''
-mailx=''
-make=''
-mkdir=''
-more=''
-mv=''
-nroff=''
-perl=''
-pg=''
-pmake=''
-pr=''
-rm=''
-rmail=''
-sed=''
-sendmail=''
-shar=''
-sleep=''
-smail=''
-sort=''
-submit=''
-tail=''
-tar=''
-tbl=''
-test=''
-touch=''
-tr=''
-troff=''
-uname=''
-uniq=''
-uuname=''
-vi=''
-zcat=''
-zip=''
 g4compiler=''
 g4osname=''
 g4system=''
@@ -244,8 +176,6 @@ g4tmp=''
 g4global=''
 g4granular=''
 g4lib_use_granular=''
-g4ospace_base_dir=''
-g4use_ospace=''
 g4use_hepodbms=''
 g4lib_build_shared=''
 g4lib_build_static=''
@@ -1052,8 +982,8 @@ EOH
 fi
 
 : find out where common programs are
-echo " "
-echo "Locating common programs..." >&4
+#echo " "
+#echo "Locating common programs..." >&4
 cat <<EOSC >loc
 $startsh
 case \$# in
@@ -1102,6 +1032,7 @@ tr
 "
 trylist="
 date
+gcc
 ln
 test
 uname
@@ -1126,10 +1057,10 @@ for file in $loclist; do
 	eval _$file=$xxx
 	case "$xxx" in
 	/*)
-		echo $file is in $xxx.
+		echo "$file is in $xxx." > /dev/null
 		;;
 	?:[\\/]*)
-		echo $file is in $xxx.
+		echo "$file is in $xxx." > /dev/null
 		;;
 	*)
 		echo "I don't know where '$file' is." >&4
@@ -1138,8 +1069,8 @@ for file in $loclist; do
 		;;
 	esac
 done
-echo " "
-echo "Don't worry if any of the following aren't found..."
+#echo " "
+#echo "Don't worry if any of the following aren't found..."
 say=offhand
 for file in $trylist; do
 	eval xxx=\$$file
@@ -1159,10 +1090,10 @@ for file in $trylist; do
 	eval _$file=$xxx
 	case "$xxx" in
 	/*)
-		echo $file is in $xxx.
+		echo "$file is in $xxx." > /dev/null
 		;;
 	?:[\\/]*)
-		echo $file is in $xxx.
+		echo "$file is in $xxx." > /dev/null
 		;;
 	*)
 		echo "I don't see $file out there, $say."
@@ -1172,23 +1103,23 @@ for file in $trylist; do
 done
 case "$egrep" in
 egrep)
-	echo "Substituting grep for egrep."
+#	echo "Substituting grep for egrep."
 	egrep=$grep
 	;;
 esac
 case "$ln" in
 ln)
-	echo "Substituting cp for ln."
+#	echo "Substituting cp for ln."
 	ln=$cp
 	;;
 esac
 case "$test" in
 test)
-	echo "Hopefully test is built into your sh."
+	echo "Hopefully test is built into your sh." > /dev/null
 	;;
 *)
 	if `sh -c "PATH= test true" >/dev/null 2>&1`; then
-		echo "Using the test built into your sh."
+		echo "Using the test built into your sh." > /dev/null
 		test=test
 		_test=test
 	fi
@@ -1196,16 +1127,16 @@ test)
 esac
 case "$echo" in
 echo)
-	echo "Hopefully echo is built into your sh."
+	echo "Hopefully echo is built into your sh." > /dev/null
 	;;
 '') ;;
 *)
-	echo " "
-echo "Checking compatibility between $echo and builtin echo (if any)..." >&4
+#	echo " "
+#echo "Checking compatibility between $echo and builtin echo (if any)..." >&4
 	$echo $n "hi there$c" >foo1
 	echo $n "hi there$c" >foo2
 	if cmp foo1 foo2 >/dev/null 2>&1; then
-		echo "They are compatible.  In fact, they may be identical."
+		echo "They are compatible.  In fact, they may be identical." > /dev/null
 	else
 		case "$n" in
 		'-n') n='' c='\c';;
@@ -1226,29 +1157,29 @@ FOO
 esac
 
 : determine whether symbolic links are supported
-echo " "
+#echo " "
 $touch blurfl
 if $ln -s blurfl sym > /dev/null 2>&1 ; then
-	echo "Symbolic links are supported." >&4
+#	echo "Symbolic links are supported." >&4
 	lns="$ln -s"
 else
-	echo "Symbolic links are NOT supported." >&4
+#	echo "Symbolic links are NOT supported." >&4
 	lns="$ln"
 fi
 $rm -f blurfl sym
 
 : see whether [:lower:] and [:upper:] are supported character classes
-echo " "
+#echo " "
 up='[A-Z]'
 low='[a-z]'
 case "`echo AbyZ | $tr '[:lower:]' '[:upper:]' 2>/dev/null`" in
 ABYZ)
-	echo "Good, your tr supports [:lower:] and [:upper:] to convert case." >&4
+#	echo "Good, your tr supports [:lower:] and [:upper:] to convert case." >&4
 	up='[:upper:]'
 	low='[:lower:]'
 	;;
 *)
-	echo "Your tr only supports [a-z] and [A-Z] to convert case." >&4
+#	echo "Your tr only supports [a-z] and [A-Z] to convert case." >&4
 	;;
 esac
 : set up the translation script tr, must be called with ./tr of course
@@ -1267,6 +1198,8 @@ $eunicefix tr
 case "$config_sh" in
 '')
 myuname=`( ($uname -a) 2>/dev/null || hostname) 2>&1`
+
+mygcc=`( ($g++ -v) 2>/dev/null) 2>&1`
 myuname=`echo $myuname | $sed -e 's/^[^=]*=//' -e 's/\///g' | \
 	./tr '[A-Z]' '[a-z]' | tr '\012' ' '`
 newmyuname="$myuname"
@@ -1290,7 +1223,7 @@ esac
 hint=default
 cd ..
 
-	(cd $src/hints; ls -C *.sh) | $sed 's/\.sh/   /g' >&4
+	(cd $src/hints; ls -C *.sh 2> /dev/null) | $sed 's/\.sh/   /g' >&4 
 	dflt=''
 	: Half the following guesses are probably wrong... If you have better
 	: tests or hints, please send them to Serguei.Sadilov@cern.ch
@@ -1634,7 +1567,20 @@ case  "$g4compiler" in
 				g4compiler=aCC
 				;;
 		'Linux')
-				g4compiler=g++
+#				g4compiler=g++
+# Assume if "gcc" is in place then "g++" is here
+	gcccompiler=`( ($gcc -v) 1>/dev/null || echo "ERROR: There is no 'gcc' ('g++'?) compiler.") 2>&1`
+				case $gcccompiler in
+				*egcs*) g4compiler=egcs
+				;;
+				*2.96*) 
+				echo "WARNING: Found version of 'g++' (2.96.XXX) is known to be buggy!"
+				g4compiler="g++"
+				;;
+				*) g4compiler="g++"
+				;;
+				esac				
+
 				;;
 		'SGI')
 				g4compiler=CC
@@ -1789,16 +1735,25 @@ if [ X$install = X ] ; then
 	if test -f $src/.config/bin/$g4system/env.sh; then
 	cat >&2 <<EOM
 ---------------------------------------------------
+The Geant4 toolkit installation was found.
+The files env.[c]sh will be copied to your current directory.
 For setting Geant4 environments you should make:
 
-source $src/.config/bin/$g4system/env.csh
+source env.csh
 
 or
 
-. $src/.config/bin/$g4system/env.sh
+. env.sh
+
+You can use these files for further modifications
+(adding your own environments).
 ---------------------------------------------------
 EOM
 	$rm -rf UU
+
+cp -i $src/.config/bin/$g4system/env.csh .
+cp -i $src/.config/bin/$g4system/env.sh  .
+
 	exit 1
 else
 	echo " "
@@ -2868,52 +2823,6 @@ fi
 
 
 echo " "
-case "$g4use_ospace" in
-'')
-	g4use_ospace=n
-	;;
-esac
-
-case "$g4ospace_base_dir" in
-'')
-	g4ospace_base_dir=""
-	;;
-esac
-
-#
-# Ask about g4install used. 
-#
-echo ""
-
-g4message=`cat << EOM
-
-In case your compiler do not provide 'native' STL and choose for a non
-ISO/ANSI installation, ObjectSpace STL (if available in your system) may
-be used and its installation path specified.
-
-Do you want to use ObjectSpace STL?
-EOM`
-
-dflt=$g4use_ospace
-rp=$g4message
-. ./myread
-g4use_ospace=$ans
-
-if [ X$g4use_ospace = Xy ] ; then
-		
-dflt=$g4ospace_base_dir
-fn='d~'
-rp="Where is OSPACE installed?"
-. ./getfile
-g4ospace_base_dir=$ans
-
-fi
-
-#if test "X$g4use_ospace" = "X[NOT DEFINED]" ; then
-#g4use_ospace=""
-#fi
-
-echo " "
 case "$g4ui_build_terminal_session" in
 '')
 	g4ui_build_terminal_session=y
@@ -3155,11 +3064,13 @@ esac
 
 g4message=`cat << EOM
 
-  G4USE_HEPODBMS
+G4USE_HEPODBMS
 In Geant4, object persistency is provided as an optional category, so
 that the users could be able to run Geant4 with or without a commercial 
 ODBMS package. How to store and retrieve Geant4 events, hits and geometry 
-objects is explained in documentation. 
+objects is explained in documentation.
+Currently the only supported DB is Objectivity. For setting this you
+should have Objectivity installed and running!
 EOM`
 
 dflt=$g4use_hepodbms
@@ -3185,9 +3096,10 @@ case "$g4vis_build_dawn_driver" in
 	;;
 esac
 
+# Set by default!
 case "$g4vis_build_dawnfile_driver" in
 '')
-	g4vis_build_dawnfile_driver=n
+	g4vis_build_dawnfile_driver=y
 	;;
 esac
 
@@ -3215,9 +3127,10 @@ case "$g4vis_build_oix_driver" in
 	;;
 esac
 
+# Set by default!
 case "$g4vis_build_raytracer_driver" in
 '')
-	g4vis_build_raytracer_driver=n
+	g4vis_build_raytracer_driver=y
 	;;
 esac
 
@@ -3227,9 +3140,10 @@ case "$g4vis_build_vrml_driver" in
 	;;
 esac
 
+# Set by default!
 case "$g4vis_build_vrmlfile_driver" in
 '')
-	g4vis_build_vrmlfile_driver=n
+	g4vis_build_vrmlfile_driver=y
 	;;
 esac
 
@@ -3246,9 +3160,10 @@ case "$g4vis_use_dawn" in
 	;;
 esac
 
+# Set by default!
 case "$g4vis_use_dawnfile" in
 '')
-	g4vis_use_dawnfile=n
+	g4vis_use_dawnfile=y
 	;;
 esac
 
@@ -3276,9 +3191,10 @@ case "$g4vis_use_oix" in
 	;;
 esac
 
+# Set by default!
 case "$g4vis_use_raytracer" in
 '')
-	g4vis_use_raytracer=n
+	g4vis_use_raytracer=y
 	;;
 esac
 
@@ -3288,9 +3204,10 @@ case "$g4vis_use_vrml" in
 	;;
 esac
 
+# Set by default!
 case "$g4vis_use_vrmlfile" in
 '')
-	g4vis_use_vrmlfile=n
+	g4vis_use_vrmlfile=y
 	;;
 esac
 
@@ -3349,8 +3266,9 @@ EOM`
 
 dflt=$g4vis_use_dawnfile
 rp=$g4message
-. ./myread
-gans=$ans
+#. ./myread
+#gans=$ans
+gans=y
 
 	case $gans in
 	
@@ -3489,8 +3407,9 @@ EOM`
 
 dflt=$g4vis_use_raytracer
 rp=$g4message
-. ./myread
-gans=$ans
+#. ./myread
+#gans=$ans
+gans=y
 
 	case $gans in
 	
@@ -3547,8 +3466,9 @@ EOM`
 
 dflt=$g4vis_use_vrmlfile
 rp=$g4message
-. ./myread
-gans=$ans
+#. ./myread
+#gans=$ans
+gans=y
 
 	case $gans in
 	
@@ -3590,29 +3510,6 @@ gans=y
 
 
 echo " "
-case "$g4wanalysis_build" in
-'')
-	g4wanalysis_build=n
-	;;
-esac
-
-case "$g4wanalysis_build_jas" in
-'')
-	g4wanalysis_build_jas=n
-	;;
-esac
-
-case "$g4wanalysis_build_lab" in
-'')
-	g4wanalysis_build_lab=n
-	;;
-esac
-
-case "$g4wanalysis_build_lizard" in
-'')
-	g4wanalysis_build_lizard=n
-	;;
-esac
 
 case "$g4wanalysis_use" in
 '')
@@ -3620,34 +3517,13 @@ case "$g4wanalysis_use" in
 	;;
 esac
 
-case "$g4wanalysis_use_jas" in
-'')
-	g4wanalysis_use_jas=n
-	;;
-esac
-
-case "$g4wanalysis_use_lab" in
-'')
-	g4wanalysis_use_lab=n
-	;;
-esac
-
-case "$g4wanalysis_use_lizard" in
-'')
-	g4wanalysis_use_lizard=n
-	;;
-esac
-
 echo ""
 
 g4message=`cat << EOM
 
-  G4ANALYSIS_BUILD
   G4ANALYSIS_USE
-  Specifies to include building (using) of the abstract G4analysisManager for
+  Specifies to include using of the abstract G4analysisManager for
   activating interfaces based on AIDA to analysis drivers.
-  No histogramming capabilities are possible without a specific
-  wanalysis driver activated.
 EOM`
 
 dflt=$g4wanalysis_use
@@ -3658,94 +3534,12 @@ gans=$ans
 	case $gans in
 	
 	n*|N*) 
-		g4wanalysis_build=n
 		g4wanalysis_use=n
 		;;
 	y*|Y*) 
-		g4wanalysis_build=y
 		g4wanalysis_use=y
 		;;
 	esac
-
-g4message=`cat << EOM
-
-  G4ANALYSIS_BUILD_LAB
-  Includes the Open Scientist proxy driver for analysis in the kernel.
-
-  G4ANALYSIS_USE_LAB
-  To use Open Scientist as analysis system in the application
-  to be built.
-EOM`
-
-dflt=$g4wanalysis_use_lab
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4wanalysis_build_lab=n
-		g4wanalysis_use_lab=n
-		;;
-	y*|Y*) 
-		g4wanalysis_build_lab=y
-		g4wanalysis_use_lab=y
-		;;
-	esac
-
-g4message=`cat << EOM
-
-  G4ANALYSIS_BUILD_LIZARD
-  Includes the Lizard proxy driver for analysis in the kernel.
-
-  G4ANALYSIS_USE_LIZARD
-  To use Lizard as analysis system in the application to be built.
-EOM`
-
-dflt=$g4wanalysis_use_lizard
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4wanalysis_build_lizard=n
-		g4wanalysis_use_lizard=n
-		;;
-	y*|Y*) 
-		g4wanalysis_build_lizard=y
-		g4wanalysis_use_lizard=y
-		;;
-	esac
-
-g4message=`cat << EOM
-
-  G4ANALYSIS_BUILD_JAS
-  Includes the JAS proxy driver for analysis in the kernel.
-
-  G4ANALYSIS_USE_JAS
-  To use JAS as analysis system in the application to be built.
-EOM`
-
-dflt=$g4wanalysis_use_jas
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4wanalysis_build_jas=n
-		g4wanalysis_use_jas=n
-		;;
-	y*|Y*) 
-		g4wanalysis_build_jas=y
-		g4wanalysis_use_jas=y
-		;;
-	esac
-
 
 : end of configuration questions
 echo " "
@@ -3807,39 +3601,16 @@ Header='$Header'
 Id='$Id'
 Locker='$Locker'
 Log='$Log'
-Mcc='$Mcc'
 RCSfile='$RCSfile'
 Revision='$Revision'
 Source='$Source'
 State='$State'
-ar='$ar'
-awk='$awk'
-bash='$bash'
-bison='$bison'
-byacc='$byacc'
 c='$c'
-cat='$cat'
 cf_by='$cf_by'
 cf_time='$cf_time'
-chgrp='$chgrp'
-chmod='$chmod'
-chown='$chown'
-comm='$comm'
-compress='$compress'
 contains='$contains'
-cp='$cp'
-cpio='$cpio'
-cpp='$cpp'
-csh='$csh'
 d_portable='$d_portable'
-date='$date'
-echo='$echo'
-egrep='$egrep'
-emacs='$emacs'
 eunicefix='$eunicefix'
-expr='$expr'
-find='$find'
-flex='$flex'
 g4base='$g4base'
 g4bin='$g4bin'
 g4clhep_base_dir='$g4clhep_base_dir'
@@ -3864,7 +3635,6 @@ g4lib_use_shared='$g4lib_use_shared'
 g4lib_use_static='$g4lib_use_static'
 g4neutronhpcrosssections='$g4neutronhpcrosssections'
 g4osname='$g4osname'
-g4ospace_base_dir='$g4ospace_base_dir'
 g4radioactivedata='$g4radioactivedata'
 g4system='$g4system'
 g4tmp='$g4tmp'
@@ -3880,7 +3650,6 @@ g4ui_use_win32='$g4ui_use_win32'
 g4ui_use_xaw='$g4ui_use_xaw'
 g4ui_use_xm='$g4ui_use_xm'
 g4use_hepodbms='$g4use_hepodbms'
-g4use_ospace='$g4use_ospace'
 g4vis_build_asciitree_driver='$g4vis_build_asciitree_driver'
 g4vis_build_dawn_driver='$g4vis_build_dawn_driver'
 g4vis_build_dawnfile_driver='$g4vis_build_dawnfile_driver'
@@ -3910,65 +3679,20 @@ g4wanalysis_use_jas='$g4wanalysis_use_jas'
 g4wanalysis_use_lab='$g4wanalysis_use_lab'
 g4wanalysis_use_lizard='$g4wanalysis_use_lizard'
 g4workdir='$g4workdir'
-gcc='$gcc'
-grep='$grep'
-gzip='$gzip'
 hint='$hint'
-inews='$inews'
-ksh='$ksh'
-less='$less'
-line='$line'
-lint='$lint'
-ln='$ln'
 lns='$lns'
-lp='$lp'
-lpr='$lpr'
-ls='$ls'
-mail='$mail'
-mailx='$mailx'
-make='$make'
-mkdir='$mkdir'
-more='$more'
-mv='$mv'
 myuname='$myuname'
 n='$n'
-nroff='$nroff'
 osname='$osname'
 osvers='$osvers'
 package='$package'
-perl='$perl'
-pg='$pg'
-pmake='$pmake'
-pr='$pr'
-rm='$rm'
-rmail='$rmail'
-sed='$sed'
-sendmail='$sendmail'
 sh='$sh'
-shar='$shar'
 sharpbang='$sharpbang'
 shsharp='$shsharp'
-sleep='$sleep'
-smail='$smail'
-sort='$sort'
 spackage='$spackage'
 spitshell='$spitshell'
 src='$src'
 startsh='$startsh'
-submit='$submit'
-tail='$tail'
-tar='$tar'
-tbl='$tbl'
-test='$test'
-touch='$touch'
-tr='$tr'
-troff='$troff'
-uname='$uname'
-uniq='$uniq'
-uuname='$uuname'
-vi='$vi'
-zcat='$zcat'
-zip='$zip'
 EOT
 
 : add special variables
