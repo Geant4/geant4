@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.cc,v 1.5 2000-03-06 16:33:23 grichine Exp $
+// $Id: G4Torus.cc,v 1.6 2000-03-14 08:49:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1675,27 +1675,27 @@ G4double G4Torus::DistanceToOut(const G4ThreeVector& p,
 		    break;
       default:
 
-        G4cout.precision(16) ;
-        G4cout<<endl ;
-        G4cout<<"Torus parameters:"<<endl<<endl ;
-        G4cout<<"fRmin = "<<fRmin/mm<<" mm"<<endl ;
-        G4cout<<"fRmax = "<<fRmax/mm<<" mm"<<endl ;
-        G4cout<<"fRtor = "<<fRtor/mm<<" mm"<<endl ;
-        G4cout<<"fSPhi = "<<fSPhi/degree<<" degree"<<endl ;
-        G4cout<<"fDPhi = "<<fDPhi/degree<<" degree"<<endl ;
-        G4cout<<"Position:"<<endl<<endl ;
-        G4cout<<"p.x() = "<<p.x()/mm<<" mm"<<endl ;
-        G4cout<<"p.y() = "<<p.y()/mm<<" mm"<<endl ;
-        G4cout<<"p.z() = "<<p.z()/mm<<" mm"<<endl<<endl ;
-        G4cout<<"Direction:"<<endl<<endl ;
-        G4cout<<"v.x() = "<<v.x()<<endl ;
-        G4cout<<"v.y() = "<<v.y()<<endl ;
-        G4cout<<"v.z() = "<<v.z()<<endl<<endl ;
-        G4cout<<"Proposed distance :"<<endl<<endl ;
-        G4cout<<"snxt = "<<snxt/mm<<" mm"<<endl<<endl ; 
-
-		    G4Exception("Invalid enum in G4Torus::DistanceToOut");
-		    break;
+        G4cout.precision(16);
+        G4cout << G4endl;
+        G4cout << "Torus parameters:" << G4endl << G4endl;
+        G4cout << "fRmin = "   << fRmin/mm << " mm" << G4endl;
+        G4cout << "fRmax = "   << fRmax/mm << " mm" << G4endl;
+        G4cout << "fRtor = "   << fRtor/mm << " mm" << G4endl;
+        G4cout << "fSPhi = "   << fSPhi/degree << " degree" << G4endl;
+        G4cout << "fDPhi = "   << fDPhi/degree << " degree" << G4endl;
+        G4cout << "Position:"  << G4endl << G4endl;
+        G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
+        G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
+        G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
+        G4cout << "Direction:" << G4endl << G4endl;
+        G4cout << "v.x() = "   << v.x() << G4endl;
+        G4cout << "v.y() = "   << v.y() << G4endl;
+        G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
+        G4cout << "Proposed distance :" << G4endl << G4endl;
+        G4cout << "snxt = " << snxt/mm << " mm" << G4endl << G4endl;
+	
+	G4Exception("Invalid enum in G4Torus::DistanceToOut");
+	break;
     }
   }
   return snxt;

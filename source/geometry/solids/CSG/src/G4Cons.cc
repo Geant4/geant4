@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cons.cc,v 1.7 2000-03-06 16:33:14 grichine Exp $
+// $Id: G4Cons.cc,v 1.8 2000-03-14 08:49:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -2106,26 +2106,27 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 		    *validNorm=true;
 		    break;
 	default:
-        G4cout.precision(16) ;
-        G4cout<<endl ;
-        G4cout<<"Cons parameters:"<<endl<<endl ;
-        G4cout<<"fRmin1 = "<<fRmin1/mm<<" mm"<<endl ;
-        G4cout<<"fRmax1 = "<<fRmax1/mm<<" mm"<<endl ;
-        G4cout<<"fRmin2 = "<<fRmin2/mm<<" mm"<<endl ;
-        G4cout<<"fRmax2 = "<<fRmax2/mm<<" mm"<<endl ;
-        G4cout<<"fDz = "<<fDz/mm<<" mm"<<endl ;
-        G4cout<<"fSPhi = "<<fSPhi/degree<<" degree"<<endl ;
-        G4cout<<"fDPhi = "<<fDPhi/degree<<" degree"<<endl ;
-        G4cout<<"Position:"<<endl<<endl ;
-        G4cout<<"p.x() = "<<p.x()/mm<<" mm"<<endl ;
-        G4cout<<"p.y() = "<<p.y()/mm<<" mm"<<endl ;
-        G4cout<<"p.z() = "<<p.z()/mm<<" mm"<<endl<<endl ;
-        G4cout<<"Direction:"<<endl<<endl ;
-        G4cout<<"v.x() = "<<v.x()<<endl ;
-        G4cout<<"v.y() = "<<v.y()<<endl ;
-        G4cout<<"v.z() = "<<v.z()<<endl<<endl ;
-        G4cout<<"Proposed distance :"<<endl<<endl ;
-        G4cout<<"snxt = "<<snxt/mm<<" mm"<<endl<<endl ; 
+
+          G4cout.precision(16);
+          G4cout << G4endl;
+          G4cout << "Cons parameters:" << G4endl << G4endl;
+          G4cout << "fRmin1 = "  << fRmin1/mm << " mm" << G4endl;
+          G4cout << "fRmax1 = "  << fRmax1/mm << " mm" << G4endl;
+          G4cout << "fRmin2 = "  << fRmin2/mm << " mm" << G4endl;
+          G4cout << "fRmax2 = "  << fRmax2/mm << " mm" << G4endl;
+          G4cout << "fDz = "     << fDz/mm << " mm" << G4endl;
+          G4cout << "fSPhi = "   << fSPhi/degree << " degree" << G4endl;
+          G4cout << "fDPhi = "   << fDPhi/degree << " degree" << G4endl;
+          G4cout << "Position:"  << G4endl << G4endl;
+          G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
+          G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
+          G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
+          G4cout << "Direction:" << G4endl << G4endl;
+          G4cout << "v.x() = "   << v.x() << G4endl;
+          G4cout << "v.y() = "   << v.y() << G4endl;
+          G4cout << "v.z() = "   << v.z() << G4endl<< G4endl;
+          G4cout << "Proposed distance :" << G4endl<< G4endl;
+          G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
 	 
           G4Exception("Invalid enum in G4Cons::DistanceToOut");
 	  break;
