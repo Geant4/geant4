@@ -26,6 +26,7 @@ Current available graphics systems are:
 
  You selected a Sphere detector
 Tst10PhysicsList::SetCuts:CutLength : 1 (mm)
+G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 ---> Begin of Event: 0
   A 10000 optical photons vertex has been generated at (-690.585,174.228,404.117)

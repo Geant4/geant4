@@ -98,6 +98,7 @@ PhysicsList::SetCuts:CutLength : 1 mm
 #
 /testem/histo/setFileName run0.aida 
 /run/beamOn 200
+G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -151,6 +152,13 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
+ionIoni:   tables are built for  GenericIon
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
@@ -171,7 +179,6 @@ muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
-### All dEdx and Range tables are built #####
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -179,6 +186,16 @@ muIoni:   tables are built for  mu-
       Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -216,7 +233,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 200
-  User=58.3s Real=85.12s Sys=20.86s
+  User=59.81s Real=85.71s Sys=20.48s
 
  ======================== run summary ======================
 
@@ -224,34 +241,35 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.773 MeV
+ total energy deposit: 99.802 MeV
 
- nb tracks/event   neutral:     27.405   charged:    698.285
- nb  steps/event   neutral:    142.215   charged:   3502.605
+ nb tracks/event   neutral:     27.525   charged:    697.600
+ nb  steps/event   neutral:    140.895   charged:   3494.165
 
  nb of process calls per event: 
           eIoni       brCMS        phot       compt        conv     annihilTransportation
-       3475.460      25.735      24.980     114.810       1.405       1.405       1.025
+       3466.725      26.030      25.195     113.370       1.405       1.405       0.930
 
 ---------------------------------------------------------
  Primary particle : 
- CSDA Range = 4.754 cm    rms = 5.142 cm 
- proj Range = 4.468 cm    rms = 4.604 cm 
- proj/CSDA  = 0.940
- transverse dispersion at end = 9.821 mm 
+ CSDA Range = 5.221 cm    rms = 5.068 cm 
+ proj Range = 4.920 cm    rms = 4.537 cm 
+ proj/CSDA  = 0.942
+ transverse dispersion at end = 9.404 mm 
 
- mass CSDA Range from simulation = 12.837 g/cm2
-               from PhysicsTable = 85.395 g/cm2
+ mass CSDA Range from simulation = 14.097 g/cm2
+               from PhysicsTable = 85.419 g/cm2
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1581583651, 650015561
+ Current couple of seeds = 168671499, 334566224
 ----------------------------------------
 #
 /testem/phys/setCuts 1 mm
 /testem/histo/setFileName run1.aida
 /run/beamOn 200
+G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -305,6 +323,13 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
+ionIoni:   tables are built for  GenericIon
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
@@ -325,7 +350,6 @@ muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
-### All dEdx and Range tables are built #####
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -333,6 +357,16 @@ muIoni:   tables are built for  mu-
       Step function: finalRange(mm)= 0.0017, dRoverRange= 0.183, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -357,7 +391,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1581583651, 650015561
+ Current couple of seeds = 168671499, 334566224
 ----------------------------------------
 Start Run processing.
 
@@ -365,7 +399,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 200
-  User=18.9s Real=31.7s Sys=10.88s
+  User=19.46s Real=32s Sys=10.87s
 
  ======================== run summary ======================
 
@@ -373,29 +407,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.457 MeV
+ total energy deposit: 99.762 MeV
 
- nb tracks/event   neutral:     27.585   charged:    149.735
- nb  steps/event   neutral:    141.215   charged:   1086.065
+ nb tracks/event   neutral:     27.875   charged:    148.485
+ nb  steps/event   neutral:    140.000   charged:   1080.310
 
  nb of process calls per event: 
-          brCMS       eIoni       compt        phot        conv     annihilTransportation
-         25.895    1058.760     113.630      25.150       1.405       1.405       1.035
+          brCMS       eIoni       compt        photTransportation        conv     annihil
+         26.050    1052.810     112.125      25.430       1.005       1.445       1.445
 
 ---------------------------------------------------------
  Primary particle : 
- CSDA Range = 5.023 cm    rms = 5.313 cm 
- proj Range = 4.682 cm    rms = 4.700 cm 
- proj/CSDA  = 0.932
- transverse dispersion at end = 9.493 mm 
+ CSDA Range = 4.983 cm    rms = 5.426 cm 
+ proj Range = 4.602 cm    rms = 4.686 cm 
+ proj/CSDA  = 0.924
+ transverse dispersion at end = 1.029 cm 
 
- mass CSDA Range from simulation = 13.563 g/cm2
-               from PhysicsTable = 67.818 g/cm2
+ mass CSDA Range from simulation = 13.454 g/cm2
+               from PhysicsTable = 67.828 g/cm2
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1056151229, 75803827
+ Current couple of seeds = 1252170047, 862649963
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -19,6 +19,7 @@ SimpleBox is now made of Cu
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=2
 The cut in energy is set1.79769e+305GeV 
+G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -90,7 +91,6 @@ muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
-### All dEdx and Range tables are built #####
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -98,6 +98,16 @@ muIoni:   tables are built for  mu-
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -148,7 +158,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -169,7 +179,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=3.3s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -190,7 +200,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.96s Real=4.9s Sys=0.09s
+  User=0.97s Real=1.08s Sys=0.07s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -211,7 +221,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.71s Real=1.07s Sys=0.05s
+  User=0.9s Real=0.95s Sys=0.05s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -232,7 +242,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.57s Real=1.7s Sys=0.09s
+  User=1.05s Real=1.13s Sys=0.08s
 SimpleBox is now made of Cu
 
 Region DefaultRegionForTheWorld
@@ -254,7 +264,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.05s Real=0.05s Sys=0s
+  User=0.06s Real=0.06s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -275,7 +285,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.24s Real=0.26s Sys=0.02s
+  User=0.11s Real=0.11s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -296,7 +306,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.17s Real=0.19s Sys=0.02s
+  User=0.09s Real=0.09s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -317,7 +327,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.55s Real=0.56s Sys=0.01s
+  User=0.97s Real=0.99s Sys=0.02s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -338,7 +348,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.5s Real=1.59s Sys=0.09s
+  User=1.57s Real=1.7s Sys=0.1s
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
@@ -359,7 +369,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.6s Real=0.66s Sys=0.06s
+  User=2.04s Real=2.18s Sys=0.14s
 SimpleBox is now made of U
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=4
@@ -370,6 +380,7 @@ The cut in energy is set1.7976931e+305GeV
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
 The cut in range [1000 (mm)]   is too big   for material  idx=4
 The cut in energy is set1.7976931e+305GeV 
+G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -441,7 +452,6 @@ muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
-### All dEdx and Range tables are built #####
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -449,6 +459,16 @@ muIoni:   tables are built for  mu-
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -530,7 +550,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.09s Real=2.13s Sys=0.04s
+  User=0s Real=0s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -556,7 +576,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.91s Real=0.92s Sys=0.01s
+  User=0s Real=0s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -582,7 +602,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.95s Real=3.1s Sys=0.06s
+  User=3.66s Real=5.87s Sys=0.04s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -608,7 +628,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=8.35s Real=8.54s Sys=0.19s
+  User=9.13s Real=9.34s Sys=0.21s
 SimpleBox is now made of U
 
 Region DefaultRegionForTheWorld
@@ -635,7 +655,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.25s Real=0.25s Sys=0s
+  User=0.21s Real=0.21s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -661,7 +681,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.8s Real=0.81s Sys=0.01s
+  User=1.92s Real=1.96s Sys=0.04s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -687,7 +707,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.8s Real=1.83s Sys=0.03s
+  User=0.2s Real=0.21s Sys=0.01s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -713,7 +733,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.57s Real=2.62s Sys=0.05s
+  User=3.96s Real=4.06s Sys=0.1s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -739,7 +759,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=5.31s Real=5.4s Sys=0.09s
+  User=8.71s Real=8.82s Sys=0.11s
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
@@ -765,11 +785,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=7.81s Real=7.94s Sys=0.13s
+  User=0.31s Real=0.31s Sys=0s
 SimpleBox is now made of Si
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=1
 The cut in energy is set1.7976931e+305GeV 
+G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -841,7 +862,6 @@ muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
-### All dEdx and Range tables are built #####
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -849,6 +869,16 @@ muIoni:   tables are built for  mu-
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -945,7 +975,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -976,7 +1006,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.24s Real=0.24s Sys=0s
+  User=1.19s Real=1.23s Sys=0.04s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1007,7 +1037,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.4s Real=0.41s Sys=0.01s
+  User=1.05s Real=1.07s Sys=0.02s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1038,7 +1068,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.46s Real=0.46s Sys=0s
+  User=0.15s Real=0.16s Sys=0.01s
 SimpleBox is now made of Si
 
 Region DefaultRegionForTheWorld
@@ -1070,7 +1100,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.12s Real=0.14s Sys=0s
+  User=0.12s Real=0.12s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1101,7 +1131,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.2s Real=0.2s Sys=0s
+  User=0.24s Real=0.25s Sys=0.01s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1132,7 +1162,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.69s Real=0.69s Sys=0s
+  User=0.45s Real=0.46s Sys=0.01s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1163,7 +1193,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.3s Real=0.31s Sys=0.01s
+  User=0.7s Real=0.8s Sys=0.01s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1194,7 +1224,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.06s Real=1.09s Sys=0.03s
+  User=0.7s Real=0.7s Sys=0s
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
@@ -1225,8 +1255,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.07s Real=1.08s Sys=0.01s
+  User=1.22s Real=1.31s Sys=0.05s
 SimpleBox is now made of H
+G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -1298,7 +1329,6 @@ muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
-### All dEdx and Range tables are built #####
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -1306,6 +1336,16 @@ muIoni:   tables are built for  mu-
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.

@@ -82,8 +82,8 @@ for LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation
             annihil,      LowEnergyIoni,          LowEnBrem,    polarLowEnCompt
     LowEnConversion,     LowEnPhotoElec,      LowEnRayleigh
 /particle/list
-                 e+,                 e-,              gamma,           geantino
-             proton,
+         GenericIon,                 e+,                 e-,              gamma
+           geantino,
 /run/particle/dumpCutValues
 #
 /gun/direction 0 0 1
@@ -97,6 +97,7 @@ for LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation
 /gun/polarization 1. 0. 0.
 /tracking/verbose 2
 /run/beamOn 1
+G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -123,14 +124,12 @@ LowEnBrem:  Total cross sections from EEDL database.
       Implementation of the continuous dE/dx part.
       At present it can be used for electrons in the energy range [250eV,100GeV].
       The process must work with G4LowEnergyIonisation.
-### All dEdx and Range tables are built #####
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-### All dEdx and Range tables are built #####
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -198,21 +197,21 @@ Run Summary
 
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
- Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
+ Production cuts :  gamma 100 mum    e- 100 mum    e+ 100 mum
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
- Energy thresholds :  gamma 2.5e+02 eV     e- 2.5e+02 eV     e+ 2.5e+02 eV 
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
- Energy thresholds :  gamma 2.3 keV    e- 1.3e+02 keV    e+ 1.3e+02 keV
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -222,7 +221,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.4s Real=0.4s Sys=0s
+  User=0.39s Real=0.4s Sys=0s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
@@ -274,7 +273,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -294,7 +293,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -304,7 +303,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.41s Real=0.41s Sys=0s
+  User=0.4s Real=0.4s Sys=0s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
@@ -327,7 +326,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -356,7 +355,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -376,7 +375,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -386,7 +385,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.4s Real=0.4s Sys=0s
+  User=0.37s Real=0.38s Sys=0s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
@@ -409,7 +408,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -438,7 +437,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -458,7 +457,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -468,7 +467,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.39s Real=0.39s Sys=0s
+  User=0.38s Real=0.38s Sys=0s
 #
 /calor/setAbsMat Lead      
 #====================
@@ -480,6 +479,7 @@ Run Summary
 /gun/polarization 1. 0. 0.
 /tracking/verbose 2
 /run/beamOn 1
+G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -496,14 +496,12 @@ LowEnBrem:  Total cross sections from EEDL database.
       Implementation of the continuous dE/dx part.
       At present it can be used for electrons in the energy range [250eV,100GeV].
       The process must work with G4LowEnergyIonisation.
-### All dEdx and Range tables are built #####
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-### All dEdx and Range tables are built #####
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -531,12 +529,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -565,7 +563,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -585,12 +583,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -600,7 +598,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.57s Real=0.57s Sys=0s
+  User=0.58s Real=0.58s Sys=0s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
@@ -657,7 +655,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -677,12 +675,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -715,12 +713,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -769,12 +767,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -784,7 +782,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.5s Real=0.5s Sys=0s
+  User=0.51s Real=0.51s Sys=0s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
@@ -807,12 +805,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -861,12 +859,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -876,7 +874,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.48s Real=0.48s Sys=0s
+  User=0.49s Real=0.49s Sys=0s
 #
 /calor/setAbsMat Water
 #======================
@@ -888,6 +886,7 @@ Run Summary
 /gun/polarization 1. 0. 0.
 /tracking/verbose 2
 /run/beamOn 1
+G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -904,14 +903,12 @@ LowEnBrem:  Total cross sections from EEDL database.
       Implementation of the continuous dE/dx part.
       At present it can be used for electrons in the energy range [250eV,100GeV].
       The process must work with G4LowEnergyIonisation.
-### All dEdx and Range tables are built #####
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
-### All dEdx and Range tables are built #####
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -939,17 +936,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -974,13 +971,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0    -47.5   0.00946        0        0         0    Absorber initStep
-    1  0.00739  -0.0369    -47.5   0.00164  0.00782     0.37      0.37    Absorber LowEnergyIoni
-    2  0.00834  -0.0414    -47.5  0.000409  0.00123     0.37      0.74    Absorber LowEnergyIoni
-    3  0.00833  -0.0414    -47.5         0 0.000409     0.37      1.11    Absorber LowEnergyIoni
+    1  0.00737  -0.0368    -47.5   0.00164  0.00782    0.368     0.368    Absorber LowEnergyIoni
+    2  0.00831  -0.0413    -47.5  0.000409  0.00123    0.368     0.736    Absorber LowEnergyIoni
+    3  0.00831  -0.0413    -47.5         0 0.000409    0.368       1.1    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1000,17 +997,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1020,7 +1017,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.37s Real=1.46s Sys=0.09s
+  User=1.35s Real=1.45s Sys=0.1s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
@@ -1067,7 +1064,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000537  0.00114   0.00114    Absorber LowEnPhotoElec
+    1        0        0      -50         0 0.000537  0.00122   0.00122    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50   0.00146                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -1078,12 +1075,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50   0.00146        0        0         0    Absorber initStep
-    1 -0.000932 -0.000477      -50  0.000604 0.000859     0.37      0.37    Absorber LowEnergyIoni
-    2 -0.000946 -0.000493      -50         0 0.000604     0.37     0.739    Absorber LowEnergyIoni
+    1 0.000552 -0.000979      -50  0.000158  0.00131    0.368     0.368    Absorber LowEnergyIoni
+    2 0.000572 -0.00102      -50  3.98e-05 0.000118    0.368     0.735    Absorber LowEnergyIoni
+    3 0.000601 -0.00104      -50  1.43e-05 2.55e-05    0.368       1.1    Absorber LowEnergyIoni
+    4 0.000603 -0.00103      -50  1.22e-05 2.15e-06    0.368      1.47    Absorber LowEnergyIoni
+    5 0.000599 -0.00104      -50  1.03e-05 1.84e-06     0.35      1.82    Absorber LowEnergyIoni
+    6 0.000597 -0.00103      -50  5.67e-06 4.67e-06    0.301      2.12    Absorber LowEnergyIoni
+    7 0.000604 -0.00104      -50  1.78e-06 3.89e-06    0.252      2.37    Absorber LowEnergyIoni
+    8 0.000605 -0.00104      -50         0 1.78e-06    0.194      2.57    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0.02s Sys=0.02s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1103,17 +1106,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1123,7 +1126,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.29s Real=1.38s Sys=0.09s
+  User=1.32s Real=1.38s Sys=0.06s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
@@ -1146,17 +1149,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1170,7 +1173,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000537  0.00271   0.00271    Absorber LowEnPhotoElec
+    1        0        0      -50         0 0.000537 0.000522  0.000522    Absorber LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
     :         0         0       -50  6.27e-05                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
@@ -1181,110 +1184,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  6.27e-05        0        0         0    Absorber initStep
-    1  0.00043 0.000952      -50  5.64e-05 6.29e-06     0.37      0.37    Absorber LowEnergyIoni
-    2 0.000429  0.00095      -50         0 5.64e-05     0.37     0.739    Absorber LowEnergyIoni
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region DefaultRegionForTheWorld
- Materials : Air Water 
- Production cuts :  gamma 100 mum    e- 100 mum    e+ 100 mum
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=3.37s Real=3.48s Sys=0.11s
-#
-/gun/energy 300 eV
-/gun/polarization 0. 0. 1.
-/tracking/verbose 2
-/run/beamOn 1
-
-Region DefaultRegionForTheWorld
- Materials : Air Water 
- Production cuts :  gamma 100 mum    e- 100 mum    e+ 100 mum
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 1.42e-05 0.000628  0.000628    Absorber LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0       -50  0.000286                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000286        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000286     0.37      0.37    Absorber LowEnergyIoni
+    1        0        0      -50         0 6.27e-05    0.368     0.368    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -1308,17 +1208,17 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1328,7 +1228,112 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.9s Real=1.97s Sys=0.07s
+  User=3.29s Real=3.45s Sys=0.16s
+#
+/gun/energy 300 eV
+/gun/polarization 0. 0. 1.
+/tracking/verbose 2
+/run/beamOn 1
+
+Region DefaultRegionForTheWorld
+ Materials : Air Water 
+ Production cuts :  gamma 100 mum    e- 100 mum    e+ 100 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0003        0        0         0    Absorber initStep
+    1        0        0      -50         0 2.92e-05 0.000515  0.000515    Absorber LowEnPhotoElec
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
+    :         0         0       -50  0.000271                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50  0.000271        0        0         0    Absorber initStep
+    1 0.000421 0.000284      -50  0.000213 5.83e-05    0.368     0.368    Absorber LowEnergyIoni
+    2 0.000423 0.000283      -50  8.63e-05 0.000126    0.368     0.735    Absorber LowEnergyIoni
+    3  0.00042 0.000284      -50   5.6e-05 3.03e-05    0.368       1.1    Absorber LowEnergyIoni
+    4 0.000419 0.000285      -50         0  5.6e-05    0.368      1.47    Absorber LowEnergyIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0.01s Sys=0.01s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region DefaultRegionForTheWorld
+ Materials : Air Water 
+ Production cuts :  gamma 100 mum    e- 100 mum    e+ 100 mum
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 250 eV     e- 250 eV     e+ 250 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Aluminium
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Water
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=1.84s Real=1.92s Sys=0.08s
 #
 /gun/particle gamma
 #------------------
@@ -1363,19 +1368,19 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 2.3311051 keV    e- 130.14733 keV    e+ 127.66646 keV
+ Energy thresholds :  gamma 2.331105122779143 keV    e- 130.147332742996 keV    e+ 127.666462607321 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 29.54601 keV    e- 240.93815 keV    e+ 231.84017 keV
+ Energy thresholds :  gamma 29.54600981988182 keV    e- 240.9381519612027 keV    e+ 231.8401670073336 keV
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : Water
  Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
- Energy thresholds :  gamma 1.1043189 keV    e- 85.221552 keV    e+ 83.597058 keV
+ Energy thresholds :  gamma 1.104318907643669 keV    e- 85.22155196191412 keV    e+ 83.59705763904017 keV
 
 ====================================================================
 
@@ -1383,7 +1388,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.76s Real=0.78s Sys=0.02s
+  User=0.71s Real=0.71s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -1466,7 +1471,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.32s Real=3.66s Sys=0.34s
+  User=3.33s Real=3.52s Sys=0.19s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -1506,7 +1511,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.03s Real=2.1s Sys=0.07s
+  User=1.81s Real=1.9s Sys=0.09s
 /calor/setAbsMat Water
 #======================
 /tracking/verbose 0
@@ -1589,7 +1594,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.26s Real=0.26s Sys=0s
+  User=0.25s Real=0.25s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
@@ -1597,9 +1602,9 @@ UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 G4SDManager deleted.
 LowEnBrem for e- in Water : 80 calls
-LowEnConversion for gamma in Aluminium : 421 calls
-LowEnConversion for gamma in Lead : 1476 calls
-LowEnConversion for gamma in Water : 113 calls
+LowEnConversion for gamma in Aluminium : 436 calls
+LowEnConversion for gamma in Lead : 1475 calls
+LowEnConversion for gamma in Water : 122 calls
 LowEnPhotoElec for gamma in Air : 17 calls
 LowEnPhotoElec for gamma in Aluminium : 4050 calls
 LowEnPhotoElec for gamma in Lead : 4011 calls
@@ -1610,18 +1615,19 @@ LowEnRayleigh for gamma in Water : 48 calls
 LowEnergyIoni for e- in Air : 57 calls
 LowEnergyIoni for e- in Aluminium : 4050 calls
 LowEnergyIoni for e- in Lead : 4011 calls
-LowEnergyIoni for e- in Water : 9549 calls
-Transportation for e+ in Air : 1352 calls
+LowEnergyIoni for e- in Water : 9541 calls
+Transportation for e+ in Air : 1395 calls
 Transportation for e- in Air : 6279 calls
-Transportation for gamma in Air : 5337 calls
-annihil for e+ in Aluminium : 37 calls
-annihil for e+ in Lead : 619 calls
-annihil for e+ in Water : 2 calls
+Transportation for e- in Aluminium : 1 calls
+Transportation for gamma in Air : 5274 calls
+annihil for e+ in Aluminium : 47 calls
+annihil for e+ in Lead : 588 calls
+annihil for e+ in Water : 3 calls
 msc for e- in Air : 1 calls
-polarLowEnCompt for gamma in Air : 4 calls
-polarLowEnCompt for gamma in Aluminium : 3841 calls
-polarLowEnCompt for gamma in Lead : 37003 calls
-polarLowEnCompt for gamma in Water : 790 calls
+polarLowEnCompt for gamma in Air : 5 calls
+polarLowEnCompt for gamma in Aluminium : 3626 calls
+polarLowEnCompt for gamma in Lead : 36288 calls
+polarLowEnCompt for gamma in Water : 832 calls
 EventManager deleted.
 UImanager deleted.
 StateManager deleted.

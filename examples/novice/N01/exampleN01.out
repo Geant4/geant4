@@ -6,6 +6,7 @@
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 ========= Table of registered couples ==============================
 
@@ -222,5 +223,5 @@ Terminate current event processing.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.04s Real=0.05s Sys=0.01s
+  User=0.03s Real=0.06s Sys=0.03s
 G4 kernel has come to Quit state.

@@ -95,6 +95,7 @@ Muon cuts are set
 /gun/particle e-
 /gun/energy 1 GeV
 /run/beamOn 100
+G4VUserPhysicsList::BuildPhysicsTable does not retrieve Cut Table but calculate 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -146,6 +147,13 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
+ionIoni:   tables are built for  GenericIon
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
@@ -166,7 +174,6 @@ muPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
-### All dEdx and Range tables are built #####
 
 muIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -174,6 +181,16 @@ muIoni:   tables are built for  mu-
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -245,28 +262,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=31.98s Real=35.59s Sys=3.61s
+  User=30.38s Real=34.25s Sys=3.87s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
-Average number of e-         1316
-Average number of gamma      692.9
-Average number of e+         48.08
-Average number of steps      3865
-Edep 1x1 =                   0.8275 +- 0.0036
-Edep 3x3 =                   0.9556 +- 0.001532
-Edep 5x5 =                   0.9778 +- 0.00107
+Average number of e-         1306
+Average number of gamma      687.3
+Average number of e+         48.19
+Average number of steps      3832
+Edep 1x1 =                   0.83 +- 0.003401
+Edep 3x3 =                   0.9561 +- 0.001493
+Edep 5x5 =                   0.9794 +- 0.0009595
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8275  delEdep1x1= -0.01049 nrms= -3.287
-Erms1x1: 0.036  delErms1x1= 0.004102 nrms= 1.286
-Edep3x3: 0.9556  delEdep3x3= -0.004882 nrms= -3.344
-Erms3x3: 0.01532  delErms3x3= 0.0007239 nrms= 0.4958
-Edep5x5: 0.9778  delEdep5x5= -0.002686 nrms= -2.276
-Erms5x5: 0.0107  delErms5x5= -0.001097 nrms= -0.9294
+Edep1x1: 0.83  delEdep1x1= -0.007985 nrms= -2.503
+Erms1x1: 0.03401  delErms1x1= 0.002114 nrms= 0.6627
+Edep3x3: 0.9561  delEdep3x3= -0.00436 nrms= -2.986
+Erms3x3: 0.01493  delErms3x3= 0.0003346 nrms= 0.2292
+Edep5x5: 0.9794  delEdep5x5= -0.001099 nrms= -0.9313
+Erms5x5: 0.009595  delErms5x5= -0.002205 nrms= -1.868
 <<<<<END>>>>>   IS ACCEPTED
 
 #
