@@ -23,27 +23,35 @@ voxels (1.mm dimension)                                                 |
 -------------------------------------------------------------------------
 ----> 2.SET-UP 
                                                                         |
- -example enviroment with the compiler 3.2                              
+ -example enviroment with the compiler 3.2.3                              
  -a standard Geant4 example GNUmakefile is provided                     |
 
 setup with:                                                             |
-compiler = gcc-3.2
+compiler = gcc-3.2.3
 G4SYSTEM = linux-g++                                                    |
 
 The following environment variables need to be set:                     |
 
-G4LEDATA: points to low energy data base - G4EMLOW2.2                   |
+G4LEDATA: points to low energy data base - G4EMLOW2.3                   |
 
-setup for analysis with AIDA 3.0/Anaphe 5.0.5 for user with account     |
-on lxplus:
-                                                                        |
+setup for analysis with AIDA 3.2.1/PI 1.2.1 for user with afs system:
+
+---------- SETUP.py ------------------------                            |                                            
 setenv G4ANALYSIS_USE  1
                                                                         |
-source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
-setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/    |
+source /afs/cern.ch/sw/lcg/app/spi/tools/latest/setup/lcgspi.csh
+setenv PI_VERSION 1_2_1                                                 |
+setenv SCRAM_ARCH rh73_gcc32
+echo "setting up PI version " ${PI_VERSION}                             |
+setenv CURDIR `pwd`
+cd /afs/cern.ch/sw/lcg/app/releases/PI/PI_${PI_VERSION}                 |
 
- Please take a look to the Anaphe/Lizard web page                       |
-        http://anaphe.web.cern.ch/anaphe 
+eval `scram runtime -csh`                                               |
+cd ${CURDIR}
+                                                                        |
+------------------------------------------
+ Please take a look to the web page                                     |
+        http://www.cern.ch/PI 
  for more info                                                          |
 
 ------------------------------------------------------------------------
