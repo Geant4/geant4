@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.2 2002-12-11 11:27:35 pandola Exp $
+// $Id: G4PenelopeCompton.cc,v 1.3 2002-12-12 09:55:33 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -214,12 +214,9 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 
   G4ParticleMomentum photonDirection0 = incidentPhoton->GetMomentumDirection();
 
-  // Select randomly one element in the current material
-  //Probabilmente NON funziona perche' il CrossSectionHandler non
-  //ha letto i dati...c'e' un'altra interfaccia
-
   G4Material* material = aTrack.GetMaterial();
   G4int Z = SelectRandomAtomForCompton(material,photonEnergy0);
+  //La routine di estrazione funziona
   const G4int nmax = 64;
   G4double rn[nmax],pac[nmax];
   
@@ -238,7 +235,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
   ki1 = ki3-ki2-1.0;
   taumin = 1.0/ki2;
   a1 = log(ki2);
-  a2 = a1+2.0*ki*(1+ki)/(ki2*ki2);
+  a2 = a1+2.0*ki*(1.0+ki)/(ki2*ki2);
   if (photonEnergy0 > 5*MeV)
     {
       do{
@@ -257,18 +254,19 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	epsilon=tau;
 	cosTheta = 1.0 - (1.0-tau)/(ki*tau);
 	//Target shell electron
-	TST = Z*G4UniformRand();  ///che cos'e' ZT nel fortran???
+	TST = Z*G4UniformRand(); 
 	for (G4int j=0;j<nosc;j++)
 	  {
 	    OccupNb = (G4int) (*((*OccupationNumber)[Z-1]))[j];
 	    S = S + OccupNb;
 	    if (S > TST) iosc = j;
+	    if (S > TST) break; //funziona anche dentro l'if??
 	  }
 	IonEnergy = (*((*IonizationEnergy)[Z-1]))[iosc];
       }while((epsilon*photonEnergy0-photonEnergy0+IonEnergy) >0);
     }
 
-  else
+  else //photonEnergy0<5 MeV
     {
       //Incoherent scattering function for theta=PI
       G4double s0=0.0;
@@ -298,15 +296,13 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
       G4double cdt1;
       do
 	{
-	  G4double rand1 = G4UniformRand();
-	  if (rand1*a2 > a1)
+	  if ((G4UniformRand()*a2) > a1)
 	    {
-	      tau = taumin*G4UniformRand();
+	      tau = pow(taumin,G4UniformRand());
 	    }
 	  else
 	    {
 	      tau = sqrt(1.0+G4UniformRand()*(taumin*taumin-1.0));
-	      
 	    }
 	  cdt1 = (1.0-tau)/(ki*tau);
 	  
@@ -350,6 +346,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	      TST =S*G4UniformRand();
 	      for (i=0;i<nosc;i++){
 		if (pac[i]>TST) iosc = i;
+		if (pac[i]>TST) break; //funziona anche nello stesso if?
 	      }
 	      G4double A = G4UniformRand()*rn[iosc];
 	      HarFunc = (*((*HartreeFunction)[Z-1]))[iosc];
@@ -374,7 +371,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	    }
 	  fpz = 1.0+AF*G4std::max(G4std::min(pzomc,0.2),-0.2);
 	}while ((fpzmax*G4UniformRand())>fpz);
-      
+     
       //Energy of the scattered photon
       G4double T = pow(pzomc,2);
       G4double b1 = 1.0-T*tau*tau;
@@ -389,6 +386,8 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	}
     }
   
+
+  //G4cout << "Epsilon: " << epsilon << " cosTheta: " << cosTheta << G4endl;
   G4double sinTheta = sqrt(1-pow(cosTheta,2));
   G4double phi = twopi * G4UniformRand() ;
   G4double dirx = sinTheta * cos(phi);
