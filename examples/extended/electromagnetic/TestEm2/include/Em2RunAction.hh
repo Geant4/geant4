@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2RunAction.hh,v 1.3 1999-12-15 14:48:59 gunter Exp $
+// $Id: Em2RunAction.hh,v 1.4 2000-01-21 10:56:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,8 +35,10 @@ class Em2RunActionMessenger;
 
 class G4Run;
 
-class HepTupleManager;
-class HepHistogram;
+#ifndef G4NOHIST
+ class HepTupleManager;
+ class HepHistogram;
+#endif
 
 class Em2RunAction : public G4UserRunAction
 {
@@ -54,7 +56,6 @@ class Em2RunAction : public G4UserRunAction
     inline void fillPerStep (G4double,G4int,G4int);
     inline void particleFlux(G4ParticleDefinition*,G4int);
     
-    void SetSaveFlag (G4String val) {saveFlag = val;}
     void  SetRndmFreq(G4int    val) {saveRndm = val;}
     G4int GetRndmFreq()             {return saveRndm;}    
     
@@ -93,16 +94,18 @@ class Em2RunAction : public G4UserRunAction
     G4double NeutrTrLength;
     G4double sumNeutrTrLength;
     G4double sum2NeutrTrLength;
-        
+    
+    Em2RunActionMessenger* runMessenger;        
+    G4int saveRndm;
+                  
+#ifndef G4NOHIST        
     HepTupleManager* hbookManager;
     HepHistogram *histo1, *histo2, *histo3;    
     HepHistogram *histo4, *histo5, *histo6;
     HepHistogram *histo7, *histo8, *histo9;
     HepHistogram *hist10, *hist11, *hist12;
+#endif
     
-    Em2RunActionMessenger* runMessenger;        
-    G4String saveFlag;
-    G4int saveRndm;          
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

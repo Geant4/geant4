@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2RunActionMessenger.hh,v 1.2 1999-12-15 14:48:59 gunter Exp $
+// $Id: Em2RunActionMessenger.hh,v 1.3 2000-01-21 10:56:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,6 @@ class Em2RunActionMessenger: public G4UImessenger
     
   private:
     Em2RunAction*          Em2Run;  
-    G4UIcmdWithAString*    SaveCmd;
     G4UIdirectory*         RndmDir;
     G4UIcmdWithAnInteger*  RndmSaveCmd;    
     G4UIcmdWithAString*    RndmReadCmd;

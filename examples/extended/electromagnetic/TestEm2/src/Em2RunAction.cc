@@ -5,9 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2RunAction.cc,v 1.3 1999-12-15 14:49:00 gunter Exp $
+// $Id: Em2RunAction.cc,v 1.4 2000-01-21 10:56:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -29,13 +28,16 @@
 #include <assert.h>
 
 #include "Randomize.hh"
-#include "CLHEP/Hist/HBookFile.h"
+
+#ifndef G4NOHIST
+ #include "CLHEP/Hist/HBookFile.h"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em2RunAction::Em2RunAction(Em2DetectorConstruction*   det,
                            Em2PrimaryGeneratorAction* kin)
-:Em2Det(det),Em2Kin(kin),hbookManager(NULL)			   
+:Em2Det(det),Em2Kin(kin)			   
 { 
   nLbin = Em2Det->GetnLtot();
   dEdL             = *new MyVector(nLbin);
@@ -56,8 +58,12 @@ Em2RunAction::Em2RunAction(Em2DetectorConstruction*   det,
   sumE2RadialCumul = *new MyVector(nRbin);
    
   runMessenger = new Em2RunActionMessenger(this);   
-  saveFlag = "off";
-  saveRndm = 1;  
+  saveRndm = 1;
+  
+#ifndef G4NOHIST
+   hbookManager = NULL;
+#endif
+    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -72,6 +78,7 @@ Em2RunAction::~Em2RunAction()
 
 void Em2RunAction::bookHisto()
 {
+#ifndef G4NOHIST
   hbookManager = new HBookFile("TestEm2.histo", 68);
   assert (hbookManager != 0);
   
@@ -115,17 +122,20 @@ void Em2RunAction::bookHisto()
                                     nRbin,Rmin,Rmax);
                                     
   hist12 = hbookManager->histogram("rms on cumul radial Edep (% of E inc)",
-                                    nRbin,Rmin,Rmax);                                                                                                                                                                                                                                                                                                                                 
+                                    nRbin,Rmin,Rmax);
+#endif				                                                                                                                                                                                                                                                                                                                                     
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Em2RunAction::cleanHisto()
 {
+#ifndef G4NOHIST
   delete histo1; delete histo2; delete histo3;
   delete histo4; delete histo5; delete histo6;
   delete histo7; delete histo8; delete histo9;
   delete hist10; delete hist11; delete hist12;
   delete hbookManager;
+#endif  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -218,6 +228,7 @@ void Em2RunAction::fillPerEvent()
   sumNeutrTrLength  += NeutrTrLength;
   sum2NeutrTrLength += NeutrTrLength*NeutrTrLength;
   
+#ifndef G4NOHIST  
   //fill histograms
   //
   G4double Ekin=Em2Kin->GetParticleGun()->GetParticleEnergy();
@@ -226,7 +237,8 @@ void Em2RunAction::fillPerEvent()
   
   histo1->accumulate(100.*dLCumul/(Ekin+mass));
   histo2->accumulate(ChargTrLength/radl);
-  histo3->accumulate(NeutrTrLength/radl);    
+  histo3->accumulate(NeutrTrLength/radl);
+#endif      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -266,7 +278,8 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
     gammaFlux   (i) /= NbOfEvents;
     electronFlux(i) /= NbOfEvents;
     positronFlux(i) /= NbOfEvents;                                    
-                                    
+
+#ifndef G4NOHIST                                    
     bin = i*dLradl;                                
     histo4->accumulate(bin,MeanELongit(i)/dLradl);
     bin = (i+1)*dLradl;
@@ -275,7 +288,8 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
     
     histo7->accumulate(bin, gammaFlux(i));
     histo8->accumulate(bin, electronFlux(i));
-    histo9->accumulate(bin, positronFlux(i));                                        
+    histo9->accumulate(bin, positronFlux(i));
+#endif                                            
    }
    
   //radial
@@ -295,12 +309,13 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
      rmsERadialCumul(i) = norme*sqrt(abs(NbOfEvents*sumE2RadialCumul(i) 
                                     - sumERadialCumul(i)*sumERadialCumul(i)));
                                  
-                                    
+#ifndef G4NOHIST                                     
     bin = i*dRradl;                                
     hist10->accumulate(bin,MeanERadial(i)/dRradl);
     bin = (i+1)*dRradl;
     hist11->accumulate(bin,MeanERadialCumul(i));
-    hist12->accumulate(bin, rmsERadialCumul(i));                                       
+    hist12->accumulate(bin, rmsERadialCumul(i));
+#endif                                           
    }
 
   //track length
@@ -374,15 +389,17 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
                 
   G4cout.setf(oldform,G4std::ios::floatfield);
   G4cout.precision(oldprec);
-  
-  // Write histogram file 
-  if (saveFlag == "on") hbookManager->write();
-  
+
   // save Rndm status
   if (saveRndm == 1)
     { HepRandom::showEngineStatus();
       HepRandom::saveEngineStatus("endOfRun.rndm");
-    }                        
+    }
+    
+#ifndef G4NOHIST   
+  // Write histogram file 
+  hbookManager->write();
+#endif                              
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

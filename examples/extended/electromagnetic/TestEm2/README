@@ -1,4 +1,4 @@
-$Id: README,v 1.1 1999-10-11 15:08:24 maire Exp $
+$Id: README,v 1.2 2000-01-21 10:56:13 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -87,8 +87,7 @@ $Id: README,v 1.1 1999-10-11 15:08:24 maire Exp $
  	
  7- HISTOGRAMS
  
-     Testem2 produces several histo which are saved as testem2.histo
-     under the control of the command /run/save on
+     TestEm2 produces several histo which are saved as testem2.histo
      
      Content of these histo:
   
