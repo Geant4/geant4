@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlung.cc,v 1.4 1999-03-04 07:54:52 urban Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.5 1999-03-04 16:31:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,7 +28,7 @@
 // 20-03-97 : new energy loss+ionisation+brems scheme, L.Urban
 // 07-04-98 : remove 'tracking cut' of the diffracted particle, MMa
 // 13-08-98 : new methods SetBining() PrintInfo()
-// 03/03/99 : Bug fixed in LPM effect, L.Urban
+// 03-03-99 : Bug fixed in LPM effect, L.Urban
 // --------------------------------------------------------------
 
 #include "G4eBremsstrahlung.hh"
@@ -932,7 +932,7 @@ G4Element* G4eBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
 
 void G4eBremsstrahlung::PrintInfoDefinition()
 {
-  G4String comments = "Total cross sections from a parametrisation(L.Urban). ";
+  G4String comments = "Total cross sections from a parametrisation. ";
            comments += "Good description from 1 KeV to 100 GeV.\n";
            comments += "        log scale extrapolation above 100 GeV \n";
            comments += "        Gamma energy sampled from a parametrised formula.";

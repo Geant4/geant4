@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeBremsstrahlung.cc,v 1.1 1999-01-07 16:11:20 gunter Exp $
+// $Id: G4IeBremsstrahlung.cc,v 1.2 1999-03-04 16:31:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -1412,7 +1412,7 @@ G4Element* G4IeBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
 
 void G4IeBremsstrahlung::PrintInfoDefinition()
 {
-  G4String comments = "Total cross sections from a parametrisation(L.Urban). ";
+  G4String comments = "Total cross sections from a parametrisation. ";
            comments += "Good description from 1 KeV to 100 GeV.\n";
            comments += "        log scale extrapolation above 100 GeV \n";
            comments += "        Gamma energy sampled from a parametrised formula.";
