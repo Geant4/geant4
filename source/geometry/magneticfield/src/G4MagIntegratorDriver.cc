@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.21 2001-12-08 00:00:46 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.22 2002-04-18 12:26:11 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,7 @@
 #include "G4MagIntegratorDriver.hh"
 #include "G4FieldTrack.hh"
 #include "geomdefs.hh"         //  for kCarTolerance
+#include "g4std/iomanip"
 
 //  Stepsize can increase by no more than 5.0
 //           and decrease by no more than 1/10. = 0.1
@@ -141,7 +142,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
                           //   could otherwise force lots of small last steps.
      }
 
-//     static G4int nStpPr=50;   // For debug printing of integrations with many steps
+     static G4int nStpPr=50;   // For debug printing of integrations with many steps
 
      // Perform the Integration
      //      
@@ -164,7 +165,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
         yFldTrk.DumpToArray(y);    
   	  if(dbg>1) PrintStatus( ystart, x1, y, x, h,  nstp);   // Only this
 #         endif	
-	dyerr = dyerr_len / hstep;
+	dyerr = dyerr_len / h;    // was dyerr_len / hstep;
 	hdid= h;
         x += hdid;
         // Compute suggested new step
@@ -178,7 +179,8 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 
 #ifdef  G4DEBUG_FIELD
      if(nstp>nStpPr) {
-       G4cout <<  "hdid=" << hdid << "hnext =" << hnext << " " << endl;
+       G4cout << "hdid="  << G4std::setw(12) << hdid  << " "
+	      << "hnext=" << G4std::setw(12) << hnext << " " << endl;
        PrintStatus( ystart, x1, y, x, h, nstp==nStpPr ? -nstp: nstp); 
      }
 #endif
@@ -591,7 +593,7 @@ void G4MagInt_Driver::PrintStatus( const G4double*   StartArr,
    PrintStatus(StartFT, CurrentFT, requestStep, subStepNo ); 
 }
 
-#include "g4std/iomanip"
+
 
 void G4MagInt_Driver::PrintStatus(
                   const G4FieldTrack&  StartFT,
