@@ -106,6 +106,11 @@ public:
       return theCrossSectionDataStore;
    }
 
+   void AddDataSet(G4VCrossSectionDataSet * aDataSet)
+   {
+      theCrossSectionDataStore->AddDataSet(aDataSet);
+   }
+
   //   inline
   //   void setCrossSectionDataVerboseLevel(G4int value)
   //   {

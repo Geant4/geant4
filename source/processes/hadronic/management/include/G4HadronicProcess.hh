@@ -52,6 +52,7 @@
 #include "G4VIsotopeProduction.hh"
 #include "G4IsoParticleChange.hh"
 #include "G4HadLeadBias.hh"
+#include "G4VCrossSectionDataSet.hh"
  
  class G4HadronicProcess : public G4VDiscreteProcess
  {
