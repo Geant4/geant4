@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.cc,v 1.56 2003-10-27 09:15:27 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.57 2003-10-30 14:14:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -1499,7 +1499,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
                   }
                   else if(eCount==1 && CheckGroundState(pQ,true)) // Try to correct and finish     ^
                   {
-                    for_each(output->begin(), output->end(), DeleteQHadron());        // >---------^
+                    std::for_each(output->begin(), output->end(), DeleteQHadron());   // >---------^
                     output->clear();                 //                                            ^
                     delete output;                   // >==========================================^
                     pQ->KillQuasmon();               // If BackFusion succeeded, kill the Quasmon  ^
