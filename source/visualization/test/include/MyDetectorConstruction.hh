@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyDetectorConstruction.hh,v 1.2 1999-12-15 14:54:33 gunter Exp $
+// $Id: MyDetectorConstruction.hh,v 1.3 2000-05-02 13:50:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -14,6 +14,8 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+#include "G4Material.hh"
+#include "g4std/vector"
 
 class MyDetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -39,6 +41,8 @@ class MyDetectorConstruction : public G4VUserDetectorConstruction
      G4double trackerRadius;
      G4double trackerHight;
      G4double trackerPos;
+
+     G4std::vector<G4Material*> materialPointerStore;
 
   public:
      inline void SetCalMaterial(G4String name)
