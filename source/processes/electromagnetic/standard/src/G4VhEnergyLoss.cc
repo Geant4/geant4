@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.34 2002-05-29 12:25:39 vnivanch Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.35 2002-06-10 15:38:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -51,6 +51,7 @@
 // 06-02-02 bug fixed in MinDeltaCutInRange computation, L.Urban
 // 26-02-02 bug fixed in TouchebleHandle definition, V.Ivanchenko
 // 29-05-02 bug fixed in N of subcutoff delta, V.Ivanchenko
+// 10-06-02 bug fixed for stopping hadrons, V.Ivanchenko
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -713,7 +714,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
  if (finalT <= 0.)
   {
    finalT = 0.;
-   if(!aParticle->GetDefinition()->GetProcessManager()->GetAtRestProcessVector() )
+   if(!aParticle->GetDefinition()->GetProcessManager()->GetAtRestProcessVector()->size())
           aParticleChange.SetStatusChange(fStopAndKill);
    else   aParticleChange.SetStatusChange(fStopButAlive); 
   } 
