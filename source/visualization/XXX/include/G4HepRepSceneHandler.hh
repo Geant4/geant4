@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.2 2001-08-24 21:42:30 johna Exp $
+// $Id: G4HepRepSceneHandler.hh,v 1.1 2001-08-24 23:06:19 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  5th April 2001
 // A base class for a scene handler to dump geometry hierarchy.
 
-#ifndef G4XXXSCENEHANDLER_HH
-#define G4XXXSCENEHANDLER_HH
+#ifndef G4HepRepSCENEHANDLER_HH
+#define G4HepRepSCENEHANDLER_HH
 
 #include "G4VSceneHandler.hh"
 #include "G4Box.hh"
@@ -43,16 +43,25 @@
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
 
+// HepRep
+#include "JHepRep.hh"
+#include "JHepRepAttribute.hh"
+#include "JHepRepFactory.hh"
+#include "JHepRepType.hh"
+#include "JHepRepInstance.hh"
+#include "JHepRepPrimitive.hh"
+#include "JHepRepPoint.hh"
+
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4ModelingParameters;
 
-class G4XXXSceneHandler: public G4VSceneHandler {
+class G4HepRepSceneHandler: public G4VSceneHandler {
 
 public:
-  G4XXXSceneHandler(G4VGraphicsSystem& system,
+  G4HepRepSceneHandler(G4VGraphicsSystem& system,
 		      const G4String& name);
-  virtual ~G4XXXSceneHandler();
+  virtual ~G4HepRepSceneHandler();
 
   ////////////////////////////////////////////////////////////////
   // No need to implement these, but if you do...
@@ -78,21 +87,12 @@ public:
   // Required implementation of pure virtual functions...
 
   void AddPrimitive(const G4Polyline&);
+  void AddPrimitive(const G4Polymarker&);
   void AddPrimitive(const G4Text&);
   void AddPrimitive(const G4Circle&);
   void AddPrimitive(const G4Square&);
   void AddPrimitive(const G4Polyhedron&);
   void AddPrimitive(const G4NURBS&);
-
-  ////////////////////////////////////////////////////////////////
-  // Explicitly invoke base class methods to avoid warnings about
-  // hiding of base class methods.
-  void AddPrimitive(const G4Polymarker& polymarker) {
-    G4VSceneHandler::AddPrimitive (polymarker);
-  }
-  void AddPrimitive (const G4Scale& scale) {
-    G4VSceneHandler::AddPrimitive (scale);
-  }
 
   ////////////////////////////////////////////////////////////////
   // Further optional AddPrimtive methods...
@@ -114,14 +114,25 @@ public:
 
   static G4int GetSceneCount() {return fSceneCount;}
 
+  JHepRep *GetHepRep();
+  JHepRepFactory *GetHepRepFactory();
+
 protected:
-  static G4int         fSceneIdCount;  // Counter for XXX scene handlers.
+  static G4int         fSceneIdCount;  // Counter for HepRep scene handlers.
   static G4int         fSceneCount;    // No. of extanct scene handlers.
   G4int                fCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume*   fpCurrentPV;    // Current physical volume.
   G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
 
 private:
+  void SetColour (JHepRepAttribute *attribute, const G4Colour&);
+        
+  JHepRep *heprep;
+  JHepRepFactory *factory;
+  JHepRepType *type;
+  JHepRepInstance *instance;
+  JHepRepPrimitive *primitive;
+
   void PrintThings();
 };
 

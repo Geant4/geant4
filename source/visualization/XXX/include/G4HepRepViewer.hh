@@ -21,32 +21,33 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXViewer.cc,v 1.1 2001-08-17 23:04:38 johna Exp $
+// $Id: G4HepRepViewer.hh,v 1.1 2001-08-24 23:06:22 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// John Allison  5th April 2001
+// A base class for a dummy viewer to dump geometry hierarchy.
 
-#include "G4XXXViewer.hh"
+#ifndef G4HepRepVIEWER_HH
+#define G4HepRepVIEWER_HH
 
-#include "G4ios.hh"
-#include "g4std/strstream"
+#include "G4VViewer.hh"
 
-#include "G4VSceneHandler.hh"
+#include "JHepRep.hh"
+#include "JHepRepFactory.hh"
 
-G4XXXViewer::G4XXXViewer
-(G4VSceneHandler& sceneHandler, const G4String& name):
-  G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name) {}
+class G4HepRepViewer: public G4VViewer {
+public:
+  G4HepRepViewer(G4VSceneHandler&,const G4String& name);
+  virtual ~G4HepRepViewer();
+  void SetView();
+  void ClearView();
+  void DrawView();
+  void ShowView();
 
-G4XXXViewer::~G4XXXViewer() {}
+private:
+  JHepRep *heprep;
+  JHepRepFactory *factory;
+};
 
-void G4XXXViewer::SetView() {
-  G4cout << "G4XXXViewer::SetView() called." << G4endl;
-}
-
-void G4XXXViewer::ClearView() {
-  G4cout << "G4XXXViewer::ClearView() called." << G4endl;
-}
-
-void G4XXXViewer::DrawView() {
-  G4cout << "G4XXXViewer::DrawView() called." << G4endl;
-  NeedKernelVisit ();  // Always need to visit G4 kernel.
-  ProcessView ();
-}
+#endif

@@ -21,41 +21,52 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXX.cc,v 1.1 2001-08-17 23:04:33 johna Exp $
+// $Id: G4HepRep.cc,v 1.1 2001-08-24 23:06:37 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  5th April 2001
 // A graphics system to dump geometry hierarchy.
 
-#include "G4XXX.hh"
-#include "G4XXXSceneHandler.hh"
-#include "G4XXXViewer.hh"
+//HepRep
+#include "JHepRep.hh"
+#include "JHepRepFactory.hh"
 
-G4XXX::G4XXX():
-  G4VGraphicsSystem("G4XXX",
-		    "XXX",
+#include "G4HepRep.hh"
+#include "G4HepRepSceneHandler.hh"
+#include "G4HepRepViewer.hh"
+
+static JHepRepFactory* factory;
+static JHepRep* heprep = NULL;
+
+G4HepRep::G4HepRep():
+  G4VGraphicsSystem("G4HepRep",
+		    "HepRep",
 		    "A template graphics driver",
-		    G4VGraphicsSystem::noFunctionality) {}
+		    G4VGraphicsSystem::noFunctionality) {
+        factory = new JHepRepFactory();
+	heprep = factory->CreateHepRep();
+	//factory->RunWired(heprep);
+}
 
-G4XXX::~G4XXX() {}
+G4HepRep::~G4HepRep() {}
 
-G4VSceneHandler* G4XXX::CreateSceneHandler(const G4String& name) {
-  G4VSceneHandler* pScene = new G4XXXSceneHandler(*this, name);
-  G4cout << G4XXXSceneHandler::GetSceneCount()
+G4VSceneHandler* G4HepRep::CreateSceneHandler(const G4String& name) {
+  G4VSceneHandler* pScene = new G4HepRepSceneHandler(*this, name);
+  G4cout << G4HepRepSceneHandler::GetSceneCount()
          << ' ' << fName << " scene handlers extanct." << G4endl;
   return pScene;
 }
 
-G4VViewer* G4XXX::CreateViewer(G4VSceneHandler& scene,
+G4VViewer* G4HepRep::CreateViewer(G4VSceneHandler& scene,
 			       const G4String& name) {
   G4VViewer* pView =
-    new G4XXXViewer((G4XXXSceneHandler&) scene, name);
+    new G4HepRepViewer((G4HepRepSceneHandler&) scene, name);
   if (pView) {
     if (pView->GetViewId() < 0) {
       G4cout <<
-	"G4XXX::CreateViewer: ERROR flagged by negative"
-        " view id in G4XXXViewer creation."
+	"G4HepRep::CreateViewer: ERROR flagged by negative"
+        " view id in G4HepRepViewer creation."
         "\n Destroying view and returning null pointer."
 	     << G4endl;
       delete pView;
@@ -64,8 +75,16 @@ G4VViewer* G4XXX::CreateViewer(G4VSceneHandler& scene,
   }
   else {
     G4cout <<
-      "G4XXX::CreateViewer: ERROR: null pointer on new G4XXXViewer."
+      "G4HepRep::CreateViewer: ERROR: null pointer on new G4HepRepViewer."
 	   << G4endl;
   }
   return pView;
+}
+
+JHepRepFactory* G4HepRep::GetHepRepFactory () {
+    return factory;
+}
+
+JHepRep* G4HepRep::GetHepRep () {
+    return heprep;
 }

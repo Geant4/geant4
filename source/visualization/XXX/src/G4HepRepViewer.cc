@@ -21,24 +21,55 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXX.hh,v 1.1 2001-08-17 23:04:25 johna Exp $
+// $Id: G4HepRepViewer.cc,v 1.1 2001-08-24 23:06:42 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-// John Allison  5th April 2001
-// A graphics system to dump geometry hierarchy.
 
-#ifndef G4XXX_HH
-#define G4XXX_HH
+#include "G4HepRepViewer.hh"
 
-#include "G4VGraphicsSystem.hh"
+#include "G4ios.hh"
+#include "g4std/strstream"
 
-class G4XXX: public G4VGraphicsSystem {
-public:
-  G4XXX();
-  virtual ~G4XXX();
-  G4VSceneHandler* CreateSceneHandler(const G4String& name = "");
-  G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& name = "");
-};
+#include "G4VSceneHandler.hh"
 
+#include "G4HepRepSceneHandler.hh"
+
+//HepRep
+#include "JHepRep.hh"
+#include "JHepRepFactory.hh"
+
+G4HepRepViewer::G4HepRepViewer
+(G4VSceneHandler& sceneHandler, const G4String& name):
+  G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name) {
+
+  factory = ((G4HepRepSceneHandler*)(&sceneHandler))->GetHepRepFactory();
+  heprep = ((G4HepRepSceneHandler*)(&sceneHandler))->GetHepRep();
+}
+
+G4HepRepViewer::~G4HepRepViewer() {}
+
+void G4HepRepViewer::SetView() {
+  G4cout << "G4HepRepViewer::SetView() called." << G4endl;
+}
+
+void G4HepRepViewer::ClearView() {
+  G4cout << "G4HepRepViewer::ClearView() called." << G4endl;
+}
+
+void G4HepRepViewer::DrawView() {
+  G4cout << "G4HepRepViewer::DrawView() called." << G4endl;
+  NeedKernelVisit ();  // Always need to visit G4 kernel.
+  ProcessView ();
+}
+
+void G4HepRepViewer::ShowView () {
+//    OCameraViewNode (fGoCamera,fSceneHandler.GetRootNode());  
+#ifdef DEBUG
+    G4cout << "G4HepRepViewer::ShowView" << G4endl;
 #endif
+    G4VViewer::ShowView();
+    
+    if (factory->SaveAsXML(heprep, "HepRepTest.xml")) {
+        // FIXME: no need to exit JVM file here
+        factory->Error("Could not write XML file");
+    }
+}
