@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.21 2000-12-05 17:18:44 morita Exp $
+# $Id: common.gmk,v 1.22 2000-12-08 09:41:27 gcosmo Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -46,7 +46,7 @@ endif
 ifneq ($(G4LIB_BUILD_SHARED),)
    g4libraries_to_build += $(G4LIBDIR)/lib$(name).$(SHEXT)
 endif
-ifneq ($(G4LIB_BUILD_ARCHIVE),)
+ifneq ($(G4LIB_BUILD_STATIC),)
    g4libraries_to_build += $(G4LIBDIR)/lib$(name).a
 endif
 
@@ -62,7 +62,7 @@ $(G4LIBDIR)/lib$(name).$(SHEXT): $(G4TMPDIR)/obj.last
 	$(build-granular-shared-lib)
 endif
 
-ifneq ($(G4LIB_BUILD_ARCHIVE),)
+ifneq ($(G4LIB_BUILD_STATIC),)
 # Make static (archive) library.
 $(G4LIBDIR)/lib$(name).a: $(G4TMPDIR)/obj.last
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi

@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.14 2000-11-03 16:49:48 gunter Exp $
+# $Id: globlib.gmk,v 1.15 2000-12-08 09:41:27 gcosmo Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -38,7 +38,7 @@ else
   SHARED_LIB=
 endif
 
-ifneq ($(G4LIB_BUILD_ARCHIVE),)
+ifneq ($(G4LIB_BUILD_STATIC),)
   g4libraries_to_build += $(G4LIBDIR)/lib$(name).a
 endif
 
@@ -49,9 +49,9 @@ glob global: headers d_files objs wipe_libs includes $(g4libraries_to_build) $(G
 endif
 
 ##
-## make archive libraries
+## make static libraries
 ##
-ifneq ($(G4LIB_BUILD_ARCHIVE),)
+ifneq ($(G4LIB_BUILD_STATIC),)
 $(G4LIBDIR)/lib$(name).a: \
   $(foreach dir,$(SUBLIBS),$(G4TMP)/$(G4SYSTEM)/$(dir)/obj.last)
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ; fi
