@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.hh,v 1.7 2001-08-24 20:36:23 johna Exp $
+// $Id: G4TrajectoriesModel.hh,v 1.8 2002-11-11 18:39:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@ class G4TrajectoriesModel: public G4VModel {
 
 public: // With description
 
-  G4TrajectoriesModel ();
+  G4TrajectoriesModel (G4int drawingMode = 0);
    
   virtual ~G4TrajectoriesModel ();
 
@@ -56,6 +56,13 @@ public: // With description
 
   virtual G4String GetCurrentTag () const;
   // A tag which depends on the current state of the model.
+
+  G4int GetDrawingMode() const { return fDrawingMode;}
+  void SetDrawingMode(G4int drawingMode) {fDrawingMode = drawingMode;}
+
+private:
+
+  G4int fDrawingMode;
 
 };
 
