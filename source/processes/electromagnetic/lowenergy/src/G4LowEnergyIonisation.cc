@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.19 1999-07-05 14:27:34 aforti Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.20 1999-07-06 13:20:25 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -393,27 +393,6 @@ G4double G4LowEnergyIonisation::ComputeCrossSection(const G4double AtomIndex,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
  
-G4VParticleChange* G4LowEnergyIonisation::AlongStepDoIt( const G4Track& trackData,
-                                                 const G4Step&  stepData)
-{
-
-  static const G4double AbsCut = LowestKineticEnergy;
-
-  // get particle energy
-  G4double E = trackData.GetDynamicParticle()->GetKineticEnergy();
-
-  aParticleChange.Initialize(trackData);
-
-  if(E <= AbsCut)
-  {
-    aParticleChange.SetStatusChange(fStopAndKill);
-    aParticleChange.SetEnergyChange(0.);
-    aParticleChange.SetLocalEnergyDeposit(E);
-  }
-  return &aParticleChange;
-}
-
-
 G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData,   
 							const G4Step&  stepData){
 
@@ -426,6 +405,17 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
   G4Element* anElement = SelectRandomAtom(aParticle, aMaterial);
   G4int AtomIndex = (G4int) anElement->GetZ();
   G4double KineticEnergy = aParticle->GetKineticEnergy();
+
+  if(KineticEnergy <= LowestKineticEnergy){
+    
+    aParticleChange.SetStatusChange(fStopAndKill);
+    aParticleChange.SetEnergyChange(0.);
+    aParticleChange.SetLocalEnergyDeposit(KineticEnergy);
+    
+    return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
+
+  }
+
 
   // Select the subshell WARNING!!!!
   G4int subShellIndex = SelectRandomShell(AtomIndex, KineticEnergy);
@@ -479,8 +469,8 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
   } 
 
-  //  G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy;
-  G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy - BindingEn;
+  G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy;
+  //  G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy - BindingEn;
     
   if(thePrimShVec.length() != 0){
     
@@ -648,7 +638,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
     for(l = 0; l<numOfElec; l++ ){
 
       aParticleChange.AddSecondary(elecvec[l]);
-   }
+    }
     
     for(l = 0; l < numOfPhot; l++) {
       
@@ -665,8 +655,9 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
       theEnergyDeposit = 0;
     }
     
-    aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
-    aParticleChange.SetEnergyChange( finalKineticEnergy );
+    aParticleChange.SetMomentumChange(finalPx,finalPy,finalPz);
+    aParticleChange.SetEnergyChange(finalKineticEnergy);
+    aParticleChange.SetLocalEnergyDeposit (0.);
     aParticleChange.SetLocalEnergyDeposit (theEnergyDeposit);
   }
     
