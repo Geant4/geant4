@@ -1,4 +1,4 @@
-$Id: History,v 1.71 2001-03-06 15:56:09 gcosmo Exp $
+$Id: History,v 1.72 2001-03-09 03:45:26 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+March 09, 2001
+- add Store/RetrievePhysicsTable methods (G4PhysicsTable)
+- add Store/Retrieve and GetType methods (G4PhysicsVector and related)
+- add G4PhysicsVectorType class
+
 
 March 06, 2001 G.Cosmo (global-V03-00-07)
 - Completed migration to STL vector for all classes in "global/management"
