@@ -3,7 +3,7 @@
 #include "G4Sigma.hh"
 
 
-ostream& operator<<(ostream &out, const G4PMapNameTally &tallys){
+G4std::ostream& operator<<(G4std::ostream &out, const G4PMapNameTally &tallys){
   for (G4PMapNameTally::const_iterator it = tallys.begin();
        it != tallys.end(); it++) {
     out << it->first << "\n";
@@ -11,7 +11,7 @@ ostream& operator<<(ostream &out, const G4PMapNameTally &tallys){
   }
   return out;
 }
-ostream& operator<<(ostream &out, const G4PMapPtkTallys &tallystore){
+G4std::ostream& operator<<(G4std::ostream &out, const G4PMapPtkTallys &tallystore){
   for (G4PMapPtkTallys::const_iterator it = tallystore.begin();
        it != tallystore.end(); it++) {
     out << it->first << "\n";
