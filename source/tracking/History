@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2003-10-03 14:51:53 gcosmo Exp $
+$Id: History,v 1.68 2003-11-10 08:52:53 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov.10, 2003 G.Cosmo (tracking-V05-02-03)
+- G4SteppingManager.cc: renamed method LocateGlobalPointAndSetup(p,v,history) to
+  to ResetHistoryAndLocate(p,v,history) according to changes in G4Navigator.
 
 Oct.4, 2003 G.Cosmo (tracking-V05-02-02)
 - GNUmakefile:
