@@ -83,10 +83,7 @@ private:
     std::vector<G4KineticTrack *>::iterator i;
     for(i = aV.begin(); i != aV.end(); ++i)
     {
-       if((*i)->GetDefinition() == G4Proton::Proton())
-       {
-          ++result;
-       }
+       result += G4lrint((*i)->GetDefinition()->GetPDGCharge());
     }
     return result;
   }
