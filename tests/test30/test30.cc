@@ -504,6 +504,7 @@ int main(int argc, char** argv)
     } else if(part == neutron) {
       cs = new G4NeutronInelasticCrossSection();
     }
+
     if(cs) {
       cs->BuildPhysicsTable(*part);
       cross_sec = cs->GetCrossSection(&dParticle, material->GetElement(0));
@@ -519,38 +520,50 @@ int main(int argc, char** argv)
            << "### factora = " << factor 
            << "    cross(b)= " << cross_sec/barn << G4endl;
   
-    for(G4int k=0; k<nangl; k++) {
+    if(nangl > 0) {
+      for(G4int k=0; k<nangl; k++) {
    
-      if(k == 0) {
-        bng1[0] = G4std::max(0.0,ang[0] - dangl);
-        bng2[0] = G4std::min(0.5*(ang[0] + ang[1]), ang[0] + dangl);
-      } else if(k < nangl-1) {
-        bng1[k] = G4std::max(bng2[k-1], ang[k]-dangl);
-        bng2[k] = G4std::min(0.5*(ang[k] + ang[k+1]), ang[k] + dangl);
-      } else {
-        bng1[k] = G4std::max(bng2[k-1], ang[k]-dangl);
-        bng2[k] = G4std::min(180., ang[k] + dangl);
-      }
+        if(nangl == 1) {
+          bng1[0] = G4std::max(0.0,ang[0] - dangl);
+          bng2[0] = G4std::min(180., ang[0] + dangl);
+        } else if(k == 0) {
+          bng1[0] = G4std::max(0.0,ang[0] - dangl);
+          bng2[0] = G4std::min(0.5*(ang[0] + ang[1]), ang[0] + dangl);
+        } else if(k < nangl-1) {
+          bng1[k] = G4std::max(bng2[k-1], ang[k]-dangl);
+          bng2[k] = G4std::min(0.5*(ang[k] + ang[k+1]), ang[k] + dangl);
+        } else {
+          bng1[k] = G4std::max(bng2[k-1], ang[k]-dangl);
+          bng2[k] = G4std::min(180., ang[k] + dangl);
+        }
 
-      cng[k] = cross_sec*MeV*1000.0*(G4double)nbinsd/
-         (twopi*(cos(degree*bng1[k]) - cos(degree*bng2[k]))*barn*emax*(G4double)nevt);
+        cng[k] = cross_sec*MeV*1000.0*(G4double)nbinsd/
+         (twopi*(cos(degree*bng1[k]) - cos(degree*bng2[k]))*
+                barn*emax*(G4double)nevt);
+      }
     }
 
-    for(k=0; k<nanglpi; k++) {
+    if(nanglpi > 0) {
+      for(G4int k=0; k<nanglpi; k++) {
    
-      if(k == 0) {
-        bngpi1[0] = G4std::max(0.0,angpi[0] - dangl);
-        bngpi2[0] = G4std::min(0.5*(angpi[0] + angpi[1]), angpi[0] + dangl);
-      } else if(k < nanglpi-1) {
-        bngpi1[k] = G4std::max(bngpi2[k-1], angpi[k]-dangl);
-        bngpi2[k] = G4std::min(0.5*(angpi[k] + angpi[k+1]), angpi[k] + dangl);
-      } else {
-        bngpi1[k] = G4std::max(bngpi2[k-1], angpi[k]-dangl);
-        bngpi2[k] = G4std::min(180., angpi[k] + dangl);
-      }
+        if(nangl == 1) {
+          bngpi1[0] = G4std::max(0.0,angpi[0] - dangl);
+          bngpi2[0] = G4std::min(180., angpi[0] + dangl);
+        } else if(k == 0) {
+          bngpi1[0] = G4std::max(0.0,angpi[0] - dangl);
+          bngpi2[0] = G4std::min(0.5*(angpi[0] + angpi[1]), angpi[0] + dangl);
+        } else if(k < nanglpi-1) {
+          bngpi1[k] = G4std::max(bngpi2[k-1], angpi[k]-dangl);
+          bngpi2[k] = G4std::min(0.5*(angpi[k] + angpi[k+1]), angpi[k] + dangl);
+        } else {
+          bngpi1[k] = G4std::max(bngpi2[k-1], angpi[k]-dangl);
+          bngpi2[k] = G4std::min(180., angpi[k] + dangl);
+        }
 
-      cngpi[k] = cross_sec*MeV*1000.0*(G4double)nbinspi/
-         (twopi*(cos(degree*bngpi1[k]) - cos(degree*bngpi2[k]))*barn*emax*(G4double)nevt);
+        cngpi[k] = cross_sec*MeV*1000.0*(G4double)nbinspi/
+         (twopi*(cos(degree*bngpi1[k]) - cos(degree*bngpi2[k]))*
+                 barn*emax*(G4double)nevt);
+      }
     }
 
     G4Track* gTrack;

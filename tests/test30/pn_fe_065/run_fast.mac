@@ -15,7 +15,7 @@ neutron
 #material
 Fe
 #energy(MeV)
-65
+65.
 #emax(MeV)
 80
 #elim(MeV)

@@ -1,3 +1,41 @@
+TITLE      Preequilibrium Analysis of (P,N) Spectra on Various
+           Targets at Proton Energies of 25 to 45 MeV.
+AUTHOR     (M.BLANN,R.R.DOERING,AARON GALONSKY,D.M.PATTERSON,
+           F.E.SERR)
+INSTITUTE  (1USAROC)
+           (1USAMSU)
+           (1USATEX)
+           (1USASTF)
+REFERENCE  (J,NP/A,257,15,76)
+HISTORY    (960605C)
+           (961208A) O0222001 Bib Section was Corrected.
+           (970116U) Last checking has been done.
+ADD-RES    (COMP).The Geometry-Dependent Hydrid Model.
+DETECTOR   (SCIN).A 7.0 Cm Diameter by 3.3 Cm Thick Ne213
+           Scintillator Coupled to an Rca 8575 Photomultiplier
+           Tube.
+FACILITY   (CYCLO,1USAMSU)
+METHOD     (TOF)
+ANALYSIS   (INTAD) Measured Angular Distributions Included
+           The Angles from 0 Upto 160 Degrees with Step 5 Degrees.
+ERR-ANALYS The 20% Error Estimate Also Includes 10% Uncertainties
+           In the Neutron Detection Efficiencies Calculated with
+           A Modified Version of Kurz' Code and 5% Contributions
+           From the Measurements of Target Thickness and the
+           Calculations of Neutron Attenuation Along the Flight
+           Path.
+           (ERR-T).The Uncertainty is Reported by Authors.
+           (E-ERR).Data-Point Reader Uncertainty.
+STATUS     (CURVE).By CAJAD.
+COMMENT    - By Compiler - The Size of Published Figures is Very
+           Small.  Experimental Points Could not be Distinguished.
+           Therefore Compiler Read Data from Smooth Curves.
+ENDBIB              32
+COMMON               2          3
+E-ERR      ERR-T
+MEV        PER-CENT
+       0.15        20.
+
 REACTION   (40-ZR-90(P,X)0-NN-1,,DE,,,EXP)  Fig.5
 EN-SEC     (E,N)
 SAMPLE     Zr-90,Isotopic Enrichments-98.66%,Thickness was

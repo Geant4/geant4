@@ -15,9 +15,9 @@ proton
 #material
 Pb
 #energy(MeV)
-35
+35.
 #emax(MeV)
-35
+35.
 #elim(MeV)
 1.
 #nangle
