@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Mag_SpinEqRhs.hh,v 1.4 2000-11-01 15:15:50 gcosmo Exp $
+// $Id: G4Mag_SpinEqRhs.hh,v 1.5 2001-04-13 01:16:59 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -19,6 +19,7 @@
 
 // History:
 // - Created: J.Apostolakis, P.Gumplinger - February 8th, 1999.
+// - Modified: P.Gumplinger - April 11th, 2001.
 
 #ifndef G4MAG_SPIN_EQRHS
 #define G4MAG_SPIN_EQRHS
@@ -50,6 +51,10 @@ class G4Mag_SpinEqRhs : public G4Mag_EqRhs
      G4double omegac;
      G4double anomaly;
      G4double ParticleCharge;
+
+     G4double E;
+     G4double gamma;
+     G4double beta;
 
 };
 
