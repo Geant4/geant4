@@ -18,8 +18,9 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
         Scattered gamma energy according Klein-Nishina.
         PhysicsTables from 10 keV to 100 GeV in 100 bins. 
 
-phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all ZSandia crossSection below 50 KeV
-        PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 

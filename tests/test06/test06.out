@@ -11,8 +11,9 @@ physicsList->Construct() start.
 physicsList->setCut() start.
 Tst06PhysicsList::SetCuts:CutLength : 1 (mm)
 
-phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all ZSandia crossSection below 50 KeV
-        PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
         Scattered gamma energy according Klein-Nishina.
@@ -81,7 +82,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=36.02s Real=37.13s Sys=1.02s
+  User=38.24s Real=39.52s Sys=1.02s
 Idle> #
 Idle> # electron 500 MeV in Air
 Idle> #
@@ -94,7 +95,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.02s Real=3.04s Sys=0.02s
+  User=3.28s Real=3.36s Sys=0.04s
 Idle> #
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.

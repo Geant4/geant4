@@ -168,21 +168,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0  0.00525  0.00052    -49.9   0.00139        0        0         0    Absorber initStep
-    1 -0.00483  -0.0308    -49.9   0.00127 0.000114 6.46e-06  6.46e-06    Absorber LowEnergyIoni
-    2 -0.00365  -0.0261    -49.9    0.0012 7.37e-05 1.62e-06  8.08e-06    Absorber LowEnergyIoni
-    3 -0.00394  -0.0152    -49.9    0.0011 9.54e-05  8.2e-07   8.9e-06    Absorber LowEnergyIoni
-    4  -0.0105   -0.024    -49.9    0.0011 6.36e-06 1.33e-05  2.22e-05    Absorber LowEnergyIoni
-    5  -0.0104   -0.024    -49.9   0.00109 7.26e-06 5.53e-06  2.78e-05    Absorber LowEnergyIoni
-    6  -0.0101  -0.0238    -49.9   0.00108  6.2e-06 2.79e-06  3.06e-05    Absorber LowEnergyIoni
-    7 -0.00981  -0.0228    -49.9  0.000967 0.000118 9.51e-06  4.01e-05    Absorber LowEnergyIoni
-    8  -0.0112  -0.0213    -49.9  0.000909 5.74e-05 7.11e-08  4.01e-05    Absorber LowEnergyIoni
-    9  -0.0114  -0.0227    -49.9  0.000891 1.82e-05 5.05e-06  4.52e-05    Absorber LowEnergyIoni
-   10  -0.0114  -0.0228    -49.9  0.000865 2.61e-05 3.86e-06  4.91e-05    Absorber LowEnergyIoni
-   11  -0.0114  -0.0228    -49.9  0.000855    1e-05 4.92e-06   5.4e-05    Absorber LowEnergyIoni
-   12  -0.0114  -0.0228    -49.9  0.000538 0.000317 1.19e-06  5.52e-05    Absorber LowEnergyIoni
-   13  -0.0114  -0.0228    -49.9  0.000517 2.15e-05 1.91e-06  5.71e-05    Absorber LowEnergyIoni
-   14  -0.0114  -0.0228    -49.9  0.000511 5.57e-06 1.44e-06  5.85e-05    Absorber LowEnergyIoni
-   15  -0.0114  -0.0228    -49.9         0 0.000511 4.83e-07   5.9e-05    Absorber LowEnergyIoni
+    1  0.00525 0.000518    -49.9   0.00127 0.000114 6.46e-06  6.46e-06    Absorber LowEnergyIoni
+    2  0.00525 0.000518    -49.9   0.00126 1.68e-05 1.62e-06  8.08e-06    Absorber LowEnergyIoni
+    3  0.00525 0.000517    -49.9   0.00125  5.8e-06 7.11e-07  8.79e-06    Absorber LowEnergyIoni
+    4  0.00525 0.000517    -49.9   0.00119 6.18e-05 8.92e-07  9.68e-06    Absorber LowEnergyIoni
+    5  0.00526  0.00052    -49.9   0.00115 3.45e-05 7.29e-06   1.7e-05    Absorber LowEnergyIoni
+    6  0.00526  0.00052    -49.9  0.000929 0.000225 2.97e-07  1.73e-05    Absorber LowEnergyIoni
+    7  0.00526 0.000516    -49.9  0.000688 0.000242 8.97e-06  2.62e-05    Absorber LowEnergyIoni
+    8  0.00526 0.000515    -49.9  0.000585 0.000103 1.41e-06  2.77e-05    Absorber LowEnergyIoni
+    9  0.00526 0.000514    -49.9  0.000566 1.89e-05 1.33e-06   2.9e-05    Absorber LowEnergyIoni
+   10  0.00526 0.000513    -49.9  0.000556 9.99e-06 2.99e-06   3.2e-05    Absorber LowEnergyIoni
+   11  0.00526 0.000514    -49.9         0 0.000556 6.32e-06  3.83e-05    Absorber LowEnergyIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -190,247 +186,244 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50   0.00845        0        0         0    Absorber initStep
-    1 -0.00737  -0.0468      -50   0.00844 7.04e-06 1.08e-05  1.08e-05    Absorber LowEnergyIoni
-    2  -0.0529  -0.0598      -50   0.00833 0.000109 4.31e-05  5.39e-05    Absorber LowEnergyIoni
-    3  -0.0529  -0.0597      -50   0.00819 0.000143 1.91e-05  7.29e-05    Absorber LowEnergyIoni
-    4  -0.0529  -0.0598      -50   0.00818 1.39e-05 9.28e-06  8.22e-05    Absorber LowEnergyIoni
-    5   -0.053  -0.0598      -50   0.00666 1.02e-05 2.38e-05  0.000106    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  3(Rest= 0,Along= 0,Post= 3), #SpawnTotal=  3 ---------------
-    :    -0.053   -0.0598       -50    0.0014                 e-
-    :    -0.053   -0.0598       -50  3.78e-05              gamma
-    :    -0.053   -0.0598       -50   7.1e-05              gamma
+    1 1.01e-06 -2.33e-06      -50   0.00844 6.35e-06 1.45e-05  1.45e-05    Absorber LowEnergyIoni
+    2 1.34e-06 -2.07e-06      -50   0.00842 2.57e-05  2.2e-06  1.67e-05    Absorber LowEnergyIoni
+    3 2.42e-06 -1.49e-06      -50   0.00838 4.15e-05 1.28e-05  2.95e-05    Absorber LowEnergyIoni
+    4 4.76e-06 -2.11e-06      -50   0.00809 0.000289 9.53e-06   3.9e-05    Absorber LowEnergyIoni
+    5 1.48e-05 2.02e-06      -50   0.00789 0.000197 2.82e-05  6.73e-05    Absorber LowEnergyIoni
+    6 1.44e-05 2.21e-06      -50   0.00667 1.02e-05 5.77e-06   7.3e-05    Absorber LowEnergyIoni
+    :----- List of 2ndaries - #SpawnInStep=  2(Rest= 0,Along= 0,Post= 2), #SpawnTotal=  2 ---------------
+    :  1.44e-05  2.21e-06       -50   0.00114                 e-
+    :  1.44e-05  2.21e-06       -50  7.06e-05              gamma
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    6  -0.0529  -0.0598      -50   0.00665 5.46e-06 2.49e-06  0.000109    Absorber LowEnergyIoni
-    7  -0.0529  -0.0597      -50   0.00664 7.81e-06 1.56e-06   0.00011    Absorber LowEnergyIoni
-    8  -0.0529  -0.0597      -50    0.0066 4.33e-05 2.08e-05  0.000131    Absorber LowEnergyIoni
-    9  -0.0529  -0.0597      -50   0.00659 7.64e-06  2.8e-05  0.000159    Absorber LowEnergyIoni
-   10  -0.0529  -0.0596      -50   0.00658 6.89e-06 1.14e-05   0.00017    Absorber LowEnergyIoni
-   11  -0.0528  -0.0596      -50   0.00658 5.88e-06 3.78e-06  0.000174    Absorber LowEnergyIoni
-   12  -0.0528  -0.0595      -50   0.00657 5.11e-06 2.01e-05  0.000194    Absorber LowEnergyIoni
-   13  -0.0527  -0.0593      -50   0.00655 2.31e-05 8.21e-06  0.000202    Absorber LowEnergyIoni
-   14   -0.053  -0.0593      -50   0.00638  0.00017  6.8e-05   0.00027    Absorber LowEnergyIoni
-   15   -0.053  -0.0592      -50   0.00637 1.13e-05 1.25e-05  0.000283    Absorber LowEnergyIoni
-   16   -0.053  -0.0591      -50   0.00633 4.15e-05 7.88e-06  0.000291    Absorber LowEnergyIoni
-   17  -0.0529   -0.059      -50   0.00598 1.02e-05 2.62e-07  0.000291    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  4 ---------------
-    :   -0.0529    -0.059       -50  0.000336                 e-
+    7 1.45e-05  2.5e-06      -50   0.00664 3.16e-05 1.06e-06  7.41e-05    Absorber LowEnergyIoni
+    8 1.44e-05 2.73e-06      -50   0.00652 0.000121 3.42e-06  7.75e-05    Absorber LowEnergyIoni
+    9 2.23e-05 3.59e-06      -50   0.00643 8.52e-05 2.38e-05  0.000101    Absorber LowEnergyIoni
+   10 2.75e-05 4.96e-07      -50    0.0064 3.23e-05 8.46e-06   0.00011    Absorber LowEnergyIoni
+   11    3e-05 -1.39e-06      -50   0.00607 1.02e-05 4.59e-06  0.000114    Absorber LowEnergyIoni
+    :----- List of 2ndaries - #SpawnInStep=  2(Rest= 0,Along= 0,Post= 2), #SpawnTotal=  4 ---------------
+    :     3e-05 -1.39e-06       -50  0.000254                 e-
+    :     3e-05 -1.39e-06       -50  7.06e-05              gamma
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   18  -0.0527   -0.059      -50   0.00589 8.82e-05 6.86e-07  0.000292    Absorber LowEnergyIoni
-   19  -0.0531  -0.0593      -50   0.00588 1.11e-05 2.24e-05  0.000314    Absorber LowEnergyIoni
-   20   -0.053  -0.0592      -50   0.00572  0.00016 9.95e-06  0.000324    Absorber LowEnergyIoni
-   21   -0.053  -0.0592      -50   0.00495 1.02e-05 5.71e-06   0.00033    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  5 ---------------
-    :    -0.053   -0.0592       -50  0.000759                 e-
+   12 3.26e-05 -3.52e-06      -50   0.00562 1.02e-05 4.79e-06  0.000119    Absorber LowEnergyIoni
+    :----- List of 2ndaries - #SpawnInStep=  3(Rest= 0,Along= 0,Post= 3), #SpawnTotal=  7 ---------------
+    :  3.26e-05 -3.52e-06       -50  0.000328                 e-
+    :  3.26e-05 -3.52e-06       -50  3.83e-05              gamma
+    :  3.26e-05 -3.52e-06       -50  7.06e-05              gamma
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   22  -0.0531  -0.0593      -50   0.00493 2.61e-05 1.46e-05  0.000344    Absorber LowEnergyIoni
-   23  -0.0531  -0.0592      -50   0.00481 0.000123 1.02e-06  0.000345    Absorber LowEnergyIoni
-   24  -0.0531  -0.0592      -50    0.0048 8.24e-06  2.2e-06  0.000348    Absorber LowEnergyIoni
-   25   -0.053  -0.0592      -50   0.00476 4.25e-05 8.51e-06  0.000356    Absorber LowEnergyIoni
-   26  -0.0531  -0.0591      -50   0.00459 0.000162 2.61e-05  0.000382    Absorber LowEnergyIoni
-   27  -0.0531  -0.0592      -50   0.00457 2.73e-05 2.86e-06  0.000385    Absorber LowEnergyIoni
-   28  -0.0531  -0.0592      -50   0.00455 1.08e-05 4.12e-06  0.000389    Absorber LowEnergyIoni
-   29  -0.0531  -0.0592      -50   0.00453 2.15e-05 6.59e-06  0.000396    Absorber LowEnergyIoni
-   30  -0.0531  -0.0592      -50   0.00452 1.21e-05 5.45e-06  0.000401    Absorber LowEnergyIoni
-   31  -0.0998  -0.0663      -50    0.0045 2.04e-05 8.08e-06  0.000409    Absorber LowEnergyIoni
-   32   -0.134  -0.0894      -50    0.0045 5.57e-06 2.75e-05  0.000437    Absorber LowEnergyIoni
-   33   -0.134  -0.0894      -50   0.00448 1.58e-05 6.49e-06  0.000443    Absorber LowEnergyIoni
-   34   -0.134  -0.0894      -50   0.00446 1.66e-05 1.17e-05  0.000455    Absorber LowEnergyIoni
-   35   -0.175  -0.0876      -50   0.00419 0.000269 5.51e-05   0.00051    Absorber LowEnergyIoni
-   36   -0.175  -0.0876      -50   0.00419 7.64e-06 5.58e-06  0.000516    Absorber LowEnergyIoni
-   37   -0.175  -0.0875      -50   0.00418 6.28e-06 2.49e-07  0.000516    Absorber LowEnergyIoni
-   38   -0.175  -0.0875      -50   0.00405 0.000132 2.34e-05  0.000539    Absorber LowEnergyIoni
-   39   -0.175  -0.0873      -50   0.00346 1.02e-05 5.75e-06  0.000545    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  6 ---------------
-    :    -0.175   -0.0873       -50  0.000578                 e-
+   13 4.62e-05 -1.57e-05      -50   0.00556 5.92e-05 1.97e-05  0.000139    Absorber LowEnergyIoni
+   14 6.56e-05 -3.24e-05      -50   0.00447 1.02e-05 2.78e-05  0.000167    Absorber LowEnergyIoni
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  8 ---------------
+    :  6.56e-05 -3.24e-05       -50   0.00108                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   40   -0.175  -0.0873      -50   0.00336 9.98e-05 5.84e-06  0.000551    Absorber LowEnergyIoni
-   41   -0.175  -0.0875      -50   0.00335 5.73e-06 4.98e-06  0.000556    Absorber LowEnergyIoni
-   42   -0.175  -0.0876      -50   0.00281 1.02e-05 6.06e-06  0.000562    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  2(Rest= 0,Along= 0,Post= 2), #SpawnTotal=  8 ---------------
-    :    -0.175   -0.0876       -50  0.000467                 e-
-    :    -0.175   -0.0876       -50  7.06e-05              gamma
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   43   -0.175  -0.0876      -50   0.00279 1.25e-05 2.51e-06  0.000565    Absorber LowEnergyIoni
-   44   -0.175  -0.0876      -50   0.00279 6.18e-06 1.76e-05  0.000582    Absorber LowEnergyIoni
-   45   -0.175  -0.0876      -50   0.00262 0.000167 4.31e-06  0.000586    Absorber LowEnergyIoni
-   46   -0.175  -0.0876      -50   0.00261 1.27e-05 1.71e-05  0.000603    Absorber LowEnergyIoni
-   47   -0.175  -0.0875      -50   0.00252 9.11e-05 8.04e-06  0.000612    Absorber LowEnergyIoni
-   48   -0.175  -0.0875      -50   0.00249 2.68e-05 3.67e-06  0.000615    Absorber LowEnergyIoni
-   49   -0.175  -0.0875      -50   0.00239   0.0001 9.93e-06  0.000625    Absorber LowEnergyIoni
-   50   -0.175  -0.0875      -50   0.00236 3.32e-05 3.85e-06  0.000629    Absorber LowEnergyIoni
-   51   -0.172   -0.122    -49.9   0.00235 5.64e-06 1.24e-05  0.000641    Absorber LowEnergyIoni
-   52   -0.141  -0.0826      -50   0.00163 1.02e-05 1.39e-05  0.000655    Absorber LowEnergyIoni
+   15 6.71e-05 -3.15e-05      -50    0.0044  6.2e-05 1.75e-06  0.000168    Absorber LowEnergyIoni
+   16 6.87e-05 -3.07e-05      -50   0.00435 5.48e-05 1.87e-06   0.00017    Absorber LowEnergyIoni
+   17 7.65e-05 -2.53e-05      -50   0.00409 0.000259 1.08e-05  0.000181    Absorber LowEnergyIoni
+   18 8.61e-05 -1.67e-05      -50   0.00401 8.17e-05 1.34e-05  0.000194    Absorber LowEnergyIoni
+   19 8.88e-05 -1.27e-05      -50   0.00399 1.54e-05 4.98e-06  0.000199    Absorber LowEnergyIoni
+   20 9.18e-05 -8.03e-06      -50   0.00394 5.28e-05 5.75e-06  0.000205    Absorber LowEnergyIoni
+   21  9.7e-05 3.19e-06      -50   0.00382 0.000115 1.31e-05  0.000218    Absorber LowEnergyIoni
+   22 9.85e-05 5.58e-06      -50   0.00356 4.88e-06 2.86e-06  0.000221    Absorber LowEnergyIoni
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  9 ---------------
-    :    -0.141   -0.0826       -50  0.000708                 e-
+    :  9.85e-05  5.58e-06       -50  0.000261                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   53   -0.141  -0.0826      -50   0.00163 5.95e-06 8.22e-06  0.000663    Absorber LowEnergyIoni
-   54   -0.141  -0.0826      -50   0.00162 8.85e-06 1.07e-06  0.000665    Absorber LowEnergyIoni
-   55   -0.141  -0.0826      -50   0.00161  8.9e-06 3.06e-06  0.000668    Absorber LowEnergyIoni
-   56   -0.141  -0.0826      -50    0.0015 0.000105 1.66e-06  0.000669    Absorber LowEnergyIoni
-   57   -0.141  -0.0826      -50    0.0015 6.81e-06 1.21e-06   0.00067    Absorber LowEnergyIoni
-   58   -0.124  -0.0468      -50   0.00149 7.14e-06 1.13e-05  0.000682    Absorber LowEnergyIoni
-   59   -0.124  -0.0468      -50   0.00147 1.78e-05 7.43e-07  0.000683    Absorber LowEnergyIoni
-   60   -0.124  -0.0468      -50   0.00146 7.16e-06 7.19e-06   0.00069    Absorber LowEnergyIoni
-   61   -0.124  -0.0468      -50   0.00129 0.000177 5.01e-06  0.000695    Absorber LowEnergyIoni
-   62   -0.124  -0.0468      -50   0.00128 5.82e-06 6.58e-07  0.000695    Absorber LowEnergyIoni
-   63   -0.124  -0.0468      -50   0.00128  6.3e-06 1.26e-06  0.000697    Absorber LowEnergyIoni
-   64   -0.124  -0.0468      -50   0.00127 5.35e-06 1.43e-06  0.000698    Absorber LowEnergyIoni
-   65   -0.124  -0.0468      -50  0.000836 1.02e-05 4.02e-06  0.000702    Absorber LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  2(Rest= 0,Along= 0,Post= 2), #SpawnTotal= 11 ---------------
-    :    -0.124   -0.0468       -50  0.000354                 e-
-    :    -0.124   -0.0468       -50  7.06e-05              gamma
+   23   0.0001 1.38e-05      -50    0.0029 1.02e-05  1.2e-05  0.000233    Absorber LowEnergyIoni
+    :----- List of 2ndaries - #SpawnInStep=  3(Rest= 0,Along= 0,Post= 3), #SpawnTotal= 12 ---------------
+    :    0.0001  1.38e-05       -50  0.000539                 e-
+    :    0.0001  1.38e-05       -50  3.83e-05              gamma
+    :    0.0001  1.38e-05       -50  7.06e-05              gamma
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   66   -0.124  -0.0468      -50  0.000829 7.32e-06 3.67e-06  0.000706    Absorber LowEnergyIoni
-   67   -0.124  -0.0468      -50  0.000741 8.79e-05 1.83e-07  0.000706    Absorber LowEnergyIoni
-   68   -0.124  -0.0468      -50  0.000732 9.61e-06 3.72e-06   0.00071    Absorber LowEnergyIoni
-   69   -0.124  -0.0468      -50  0.000719 1.22e-05 1.92e-07   0.00071    Absorber LowEnergyIoni
-   70   -0.124  -0.0468      -50  0.000654 6.57e-05 2.99e-06  0.000713    Absorber LowEnergyIoni
-   71   -0.124  -0.0468      -50  0.000619 3.42e-05 3.02e-06  0.000716    Absorber LowEnergyIoni
-   72   -0.149  -0.0613      -50  0.000606 1.31e-05 3.06e-06  0.000719    Absorber LowEnergyIoni
-   73    -0.12  -0.0782      -50  0.000593 1.38e-05 6.11e-06  0.000725    Absorber LowEnergyIoni
-   74    -0.12  -0.0782      -50  0.000584 8.45e-06 3.61e-06  0.000729    Absorber LowEnergyIoni
-   75    -0.12  -0.0782      -50   0.00057 1.39e-05 1.91e-06  0.000731    Absorber LowEnergyIoni
-   76    -0.12  -0.0782      -50         0  0.00057 1.08e-07  0.000731    Absorber LowEnergyIoni
+   24 9.65e-05 1.85e-05      -50   0.00285 5.34e-05 6.25e-06  0.000239    Absorber LowEnergyIoni
+   25 9.42e-05 2.38e-05      -50    0.0024 1.02e-05 6.24e-06  0.000246    Absorber LowEnergyIoni
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 13 ---------------
+    :  9.42e-05  2.38e-05       -50  0.000432                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+   26 8.85e-05 1.96e-05      -50   0.00239 1.52e-05 2.23e-05  0.000268    Absorber LowEnergyIoni
+   27 8.83e-05 2.04e-05      -50   0.00237 2.08e-05    1e-06  0.000269    Absorber LowEnergyIoni
+   28 8.83e-05 2.09e-05      -50   0.00231 6.04e-05 5.83e-07   0.00027    Absorber LowEnergyIoni
+   29 8.53e-05  2.6e-05      -50   0.00228 2.94e-05 1.18e-05  0.000281    Absorber LowEnergyIoni
+   30  8.4e-05 2.73e-05      -50   0.00214 0.000138  3.5e-06  0.000285    Absorber LowEnergyIoni
+   31 8.39e-05 3.28e-05      -50     0.002 0.000141 6.52e-06  0.000291    Absorber LowEnergyIoni
+   32 8.41e-05 4.76e-05      -50   0.00162 1.02e-05 2.13e-05  0.000313    Absorber LowEnergyIoni
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 14 ---------------
+    :  8.41e-05  4.76e-05       -50  0.000369                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+   33 8.49e-05 4.78e-05      -50   0.00159 2.94e-05 8.98e-07  0.000314    Absorber LowEnergyIoni
+   34 8.87e-05 5.04e-05      -50   0.00154 5.52e-05 5.41e-06  0.000319    Absorber LowEnergyIoni
+   35 9.28e-05 5.14e-05      -50   0.00152 1.75e-05 4.74e-06  0.000324    Absorber LowEnergyIoni
+   36 9.46e-05 4.96e-05      -50   0.00149 3.18e-05 2.75e-06  0.000327    Absorber LowEnergyIoni
+   37 9.52e-05 4.48e-05      -50   0.00146 2.58e-05 5.22e-06  0.000332    Absorber LowEnergyIoni
+   38 9.73e-05 4.04e-05      -50   0.00118 0.000282 6.28e-06  0.000338    Absorber LowEnergyIoni
+   39 9.71e-05 3.94e-05      -50   0.00116 1.97e-05 1.04e-06  0.000339    Absorber LowEnergyIoni
+   40 9.65e-05 3.83e-05      -50  0.000735 1.02e-05 1.44e-06  0.000341    Absorber LowEnergyIoni
+    :----- List of 2ndaries - #SpawnInStep=  2(Rest= 0,Along= 0,Post= 2), #SpawnTotal= 16 ---------------
+    :  9.65e-05  3.83e-05       -50  0.000343                 e-
+    :  9.65e-05  3.83e-05       -50  7.06e-05              gamma
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+   41 9.64e-05 3.82e-05      -50  0.000657 7.82e-05  4.5e-07  0.000341    Absorber LowEnergyIoni
+   42 9.61e-05 3.79e-05      -50         0 0.000657 5.73e-07  0.000342    Absorber LowEnergyIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 22,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 9.65e-05 3.83e-05      -50  7.06e-05        0        0         0    Absorber initStep
+    1 9.65e-05 3.83e-05      -50         0 7.06e-05 1.05e-308 1.05e-308    Absorber LowEnCompton
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 21,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 9.65e-05 3.83e-05      -50  0.000343        0        0         0    Absorber initStep
+    1 9.75e-05 3.87e-05      -50         0 0.000343 1.35e-06  1.35e-06    Absorber LowEnergyIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 20,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 8.41e-05 4.76e-05      -50  0.000369        0        0         0    Absorber initStep
+    1 8.41e-05 4.78e-05      -50         0 0.000369 1.81e-07  1.81e-07    Absorber LowEnergyIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 19,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 9.42e-05 2.38e-05      -50  0.000432        0        0         0    Absorber initStep
+    1 9.44e-05 2.41e-05      -50         0 0.000432 3.66e-07  3.66e-07    Absorber LowEnergyIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 18,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   0.0001 1.38e-05      -50  7.06e-05        0        0         0    Absorber initStep
+    1   0.0001 1.38e-05      -50         0 7.06e-05 5.54e-309 5.54e-309    Absorber LowEnPhotoElec
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 17,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.124  -0.0468      -50  7.06e-05        0        0         0    Absorber initStep
-    1   -0.124  -0.0468      -50         0 7.06e-05 1.88e-308 1.88e-308    Absorber LowEnRayleigh
+    0   0.0001 1.38e-05      -50  3.83e-05        0        0         0    Absorber initStep
+    1   0.0001 1.38e-05      -50         0 3.83e-05 3.07e-309 3.07e-309    Absorber LowEnPhotoElec
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 16,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.124  -0.0468      -50  0.000354        0        0         0    Absorber initStep
-    1   -0.127  -0.0493      -50         0 0.000354 2.88e-07  2.88e-07    Absorber LowEnergyIoni
+    0   0.0001 1.38e-05      -50  0.000539        0        0         0    Absorber initStep
+    1   0.0001  1.4e-05      -50  0.000512 2.69e-05 6.82e-07  6.82e-07    Absorber LowEnergyIoni
+    2   0.0001 1.56e-05      -50         0 0.000512  2.3e-06  2.98e-06    Absorber LowEnergyIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 15,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.141  -0.0826      -50  0.000708        0        0         0    Absorber initStep
-    1   -0.132  -0.0779      -50  0.000692 1.66e-05 1.42e-07  1.42e-07    Absorber LowEnergyIoni
-    2   -0.131  -0.0717    -49.9  0.000685 6.82e-06  5.5e-06  5.65e-06    Absorber LowEnergyIoni
-    3   -0.131  -0.0654    -49.9  0.000576 0.000109 2.88e-07  5.93e-06    Absorber LowEnergyIoni
-    4   -0.131  -0.0609    -49.9  0.000564 1.18e-05 1.02e-06  6.96e-06    Absorber LowEnergyIoni
-    5   -0.133    -0.06    -49.9  0.000557 7.51e-06  2.7e-07  7.23e-06    Absorber LowEnergyIoni
-    6   -0.133  -0.0574    -49.9         0 0.000557 3.96e-07  7.62e-06    Absorber LowEnergyIoni
+    0 9.85e-05 5.58e-06      -50  0.000261        0        0         0    Absorber initStep
+    1   0.0001 4.44e-06      -50         0 0.000261 3.27e-06  3.27e-06    Absorber LowEnergyIoni
 
 *********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 14,   Parent ID = 2
+* G4Track Information:   Particle = e-,   Track ID = 14,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.175  -0.0876      -50  7.06e-05        0        0         0    Absorber initStep
-    1   -0.175  -0.0876      -50         0 7.06e-05 1.01e-308 1.01e-308    Absorber LowEnRayleigh
+    0 6.56e-05 -3.24e-05      -50   0.00108        0        0         0    Absorber initStep
+    1 6.61e-05 -3.01e-05      -50   0.00107 1.68e-05 2.56e-06  2.56e-06    Absorber LowEnergyIoni
+    2 6.74e-05 -2.65e-05      -50  0.000957  0.00011 4.23e-06  6.79e-06    Absorber LowEnergyIoni
+    3 6.68e-05 -2.6e-05      -50   0.00095 6.91e-06 1.44e-06  8.23e-06    Absorber LowEnergyIoni
+    4 6.69e-05 -1.69e-05      -50  0.000765 0.000185 1.46e-05  2.29e-05    Absorber LowEnergyIoni
+    5 6.82e-05 -1.68e-05      -50  0.000731 3.38e-05 1.32e-06  2.42e-05    Absorber LowEnergyIoni
+    6 6.95e-05 -1.64e-05      -50  0.000675 5.62e-05  1.6e-06  2.58e-05    Absorber LowEnergyIoni
+    7 6.95e-05 -1.56e-05      -50  0.000665 9.97e-06 8.33e-07  2.66e-05    Absorber LowEnergyIoni
+    8 6.93e-05 -1.22e-05      -50  0.000643 2.19e-05 4.28e-06  3.09e-05    Absorber LowEnergyIoni
+    9 6.89e-05 -1.18e-05      -50  0.000583 5.97e-05 6.36e-07  3.15e-05    Absorber LowEnergyIoni
+   10 6.95e-05 -8.86e-06      -50  0.000565 1.85e-05 4.12e-06  3.57e-05    Absorber LowEnergyIoni
+   11 7.12e-05   -7e-06      -50         0 0.000565 2.88e-06  3.85e-05    Absorber LowEnergyIoni
 
 *********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 13,   Parent ID = 2
+* G4Track Information:   Particle = gamma,   Track ID = 13,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.175  -0.0876      -50  0.000467        0        0         0    Absorber initStep
-    1   -0.148  -0.0706    -49.9         0 0.000467 2.36e-07  2.36e-07    Absorber LowEnergyIoni
+    0 3.26e-05 -3.52e-06      -50  7.06e-05        0        0         0    Absorber initStep
+    1 3.26e-05 -3.52e-06      -50         0 7.06e-05 2.61e-309 2.61e-309    Absorber LowEnCompton
 
 *********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 12,   Parent ID = 2
+* G4Track Information:   Particle = gamma,   Track ID = 12,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.175  -0.0873      -50  0.000578        0        0         0    Absorber initStep
-    1    -0.15  -0.0908    -49.9  0.000571 7.13e-06 3.48e-06  3.48e-06    Absorber LowEnergyIoni
-    2    -0.15   -0.091    -49.9         0 0.000571 7.16e-06  1.06e-05    Absorber LowEnergyIoni
+    0 3.26e-05 -3.52e-06      -50  3.83e-05        0        0         0    Absorber initStep
+    1 3.26e-05 -3.52e-06      -50         0 3.83e-05 1.29e-308 1.29e-308    Absorber LowEnCompton
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 11,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.053  -0.0592      -50  0.000759        0        0         0    Absorber initStep
-    1  -0.0349  -0.0247    -49.9  0.000751 8.01e-06 9.82e-07  9.82e-07    Absorber LowEnergyIoni
-    2   0.0157   0.0306    -49.9  0.000713 3.75e-05  2.2e-06  3.18e-06    Absorber LowEnergyIoni
-    3   0.0157   0.0306    -49.9  0.000704 8.74e-06 8.57e-07  4.04e-06    Absorber LowEnergyIoni
-    4   0.0157   0.0306    -49.9  0.000694 9.81e-06 7.12e-08  4.11e-06    Absorber LowEnergyIoni
-    5   0.0157   0.0306    -49.9  0.000672  2.2e-05 1.09e-07  4.22e-06    Absorber LowEnergyIoni
-    6   0.0716   0.0751      -50   0.00066 1.29e-05 1.83e-06  6.05e-06    Absorber LowEnergyIoni
-    7   0.0716   0.0751      -50  0.000622 3.81e-05 6.76e-07  6.72e-06    Absorber LowEnergyIoni
-    8    0.082    0.107    -49.9  0.000528  9.4e-05 1.51e-06  8.23e-06    Absorber LowEnergyIoni
-    9   0.0979   0.0829      -50         0 0.000528 2.72e-06   1.1e-05    Absorber LowEnergyIoni
+    0 3.26e-05 -3.52e-06      -50  0.000328        0        0         0    Absorber initStep
+    1 3.07e-05 -4.29e-06      -50         0 0.000328 3.88e-06  3.88e-06    Absorber LowEnergyIoni
 
 *********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 10,   Parent ID = 2
+* G4Track Information:   Particle = gamma,   Track ID = 10,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0  -0.0529   -0.059      -50  0.000336        0        0         0    Absorber initStep
-    1  -0.0658  -0.0242    -49.9         0 0.000336  5.5e-07   5.5e-07    Absorber LowEnergyIoni
+    0    3e-05 -1.39e-06      -50  7.06e-05        0        0         0    Absorber initStep
+    1    3e-05 -1.39e-06      -50         0 7.06e-05 4.99e-310 4.99e-310    Absorber LowEnCompton
 
 *********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 9,   Parent ID = 2
+* G4Track Information:   Particle = e-,   Track ID = 9,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.053  -0.0598      -50   7.1e-05        0        0         0    Absorber initStep
-    1   -0.053  -0.0598      -50         0  7.1e-05 2.52e-309 2.52e-309    Absorber LowEnPhotoElec
+    0    3e-05 -1.39e-06      -50  0.000254        0        0         0    Absorber initStep
+    1    3e-05 -1.45e-06      -50         0 0.000254 8.58e-08  8.58e-08    Absorber LowEnergyIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 8,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.053  -0.0598      -50  3.78e-05        0        0         0    Absorber initStep
-    1   -0.053  -0.0598      -50         0 3.78e-05 3.17e-308 3.17e-308    Absorber LowEnCompton
+    0 1.44e-05 2.21e-06      -50  7.06e-05        0        0         0    Absorber initStep
+    1 1.44e-05 2.21e-06      -50         0 7.06e-05 2.38e-308 2.38e-308    Absorber LowEnRayleigh
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.053  -0.0598      -50    0.0014        0        0         0    Absorber initStep
-    1  -0.0799  -0.0616    -49.9   0.00139 1.67e-05 1.43e-06  1.43e-06    Absorber LowEnergyIoni
-    2  -0.0804  -0.0616    -49.9   0.00137  1.3e-05 7.31e-07  2.16e-06    Absorber LowEnergyIoni
-    3  -0.0804  -0.0616    -49.9   0.00135  2.3e-05 1.52e-06  3.68e-06    Absorber LowEnergyIoni
-    4   -0.118   -0.125      -50   0.00125 0.000104 2.87e-06  6.55e-06    Absorber LowEnergyIoni
-    5   -0.148   -0.154      -50   0.00122 2.58e-05 6.21e-06  1.28e-05    Absorber LowEnergyIoni
-    6   -0.174    -0.16    -49.9   0.00121 5.89e-06 1.02e-05   2.3e-05    Absorber LowEnergyIoni
-    7   -0.174    -0.16    -49.9    0.0012 1.14e-05 7.77e-06  3.08e-05    Absorber LowEnergyIoni
-    8   -0.174    -0.16    -49.9   0.00117 2.86e-05 1.02e-06  3.18e-05    Absorber LowEnergyIoni
-    9   -0.213   -0.202      -50   0.00116 1.13e-05 6.04e-06  3.78e-05    Absorber LowEnergyIoni
-   10   -0.213   -0.202      -50   0.00115 1.25e-05  6.3e-07  3.84e-05    Absorber LowEnergyIoni
-   11    -0.22   -0.231      -50   0.00112 3.25e-05 2.57e-06   4.1e-05    Absorber LowEnergyIoni
-   12    -0.22   -0.231      -50   0.00111 1.22e-05 2.19e-06  4.32e-05    Absorber LowEnergyIoni
-   13   -0.218   -0.237      -50    0.0011 8.67e-06 7.57e-06  5.08e-05    Absorber LowEnergyIoni
-   14   -0.218   -0.237      -50   0.00108 1.39e-05 4.59e-06  5.54e-05    Absorber LowEnergyIoni
-   15   -0.218   -0.237      -50   0.00108 5.92e-06 3.15e-06  5.85e-05    Absorber LowEnergyIoni
-   16   -0.218   -0.237      -50   0.00106 1.62e-05 2.31e-07  5.88e-05    Absorber LowEnergyIoni
-   17   -0.216   -0.237      -50   0.00104 1.71e-05 4.89e-06  6.37e-05    Absorber LowEnergyIoni
-   18   -0.216   -0.237      -50    0.0009 0.000144 3.33e-06   6.7e-05    Absorber LowEnergyIoni
-   19   -0.216   -0.237      -50   0.00088 2.03e-05 3.28e-06  7.03e-05    Absorber LowEnergyIoni
-   20   -0.215   -0.236      -50  0.000873 6.68e-06 9.79e-06  8.01e-05    Absorber LowEnergyIoni
-   21   -0.215   -0.236      -50  0.000775 9.79e-05 9.15e-06  8.92e-05    Absorber LowEnergyIoni
-   22   -0.215   -0.236      -50  0.000758 1.73e-05 4.97e-06  9.42e-05    Absorber LowEnergyIoni
-   23   -0.215   -0.236      -50  0.000743 1.48e-05 6.57e-06  0.000101    Absorber LowEnergyIoni
-   24   -0.215   -0.236      -50  0.000562 0.000181 9.41e-07  0.000102    Absorber LowEnergyIoni
-   25   -0.215   -0.236      -50  0.000554 8.21e-06  1.6e-06  0.000103    Absorber LowEnergyIoni
-   26   -0.215   -0.236      -50  0.000548 6.03e-06 5.54e-07  0.000104    Absorber LowEnergyIoni
-   27   -0.214   -0.235      -50   0.00053 1.82e-05 4.74e-06  0.000109    Absorber LowEnergyIoni
-   28   -0.214   -0.235      -50         0  0.00053 1.36e-06   0.00011    Absorber LowEnergyIoni
+    0 1.44e-05 2.21e-06      -50   0.00114        0        0         0    Absorber initStep
+    1 1.44e-05 -3.96e-08      -50  0.000987 0.000153 2.41e-06  2.41e-06    Absorber LowEnergyIoni
+    2 1.45e-05 -5.85e-07      -50  0.000962  2.5e-05 5.85e-07  2.99e-06    Absorber LowEnergyIoni
+    3 1.44e-05 -2.1e-06      -50  0.000885  7.7e-05 1.82e-06  4.81e-06    Absorber LowEnergyIoni
+    4 1.71e-05 -3.41e-06      -50   0.00086 2.53e-05 9.94e-06  1.48e-05    Absorber LowEnergyIoni
+    5  1.2e-05 -6.46e-06      -50  0.000853 6.25e-06 8.83e-06  2.36e-05    Absorber LowEnergyIoni
+    6 8.07e-06 -6.95e-06      -50   0.00084 1.37e-05 4.55e-06  2.81e-05    Absorber LowEnergyIoni
+    7 8.15e-06 -6.89e-06      -50  0.000713 0.000126 3.08e-07  2.84e-05    Absorber LowEnergyIoni
+    8 6.98e-06 -7.54e-06      -50  0.000648 6.52e-05 6.02e-06  3.45e-05    Absorber LowEnergyIoni
+    9 6.67e-06 -7.92e-06      -50  0.000628 2.03e-05 9.46e-07  3.54e-05    Absorber LowEnergyIoni
+   10 6.48e-06 -8.78e-06      -50  0.000618 9.64e-06 2.39e-06  3.78e-05    Absorber LowEnergyIoni
+   11    6e-06 -9.99e-06      -50  0.000554 6.37e-05 1.45e-06  3.92e-05    Absorber LowEnergyIoni
+   12 6.02e-06 -1.05e-05      -50  0.000536 1.87e-05  7.1e-07     4e-05    Absorber LowEnergyIoni
+   13 6.19e-06 -1.21e-05      -50         0 0.000536 1.76e-06  4.17e-05    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.28s Real=0.41s Sys=0.03s
+  User=0.18s Real=0.27s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.5e+02s Real=1.6e+02s Sys=11s
+  User=98s Real=1.1e+02s Sys=7.3s
 Idle> # 
 Idle> /gun/energy 2 keV
 Idle> /tracking/verbose 2
@@ -443,10 +436,10 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100     0.002        0        0         0       World initStep
-    1        0        0    -89.5         0 1.15e-05     10.5      10.5       World LowEnPhotoElec
+    1        0        0    -95.7         0 1.15e-05     4.33      4.33       World LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  2(Rest= 0,Along= 0,Post= 2), #SpawnTotal=  2 ---------------
-    :         0         0     -89.5    0.0016                 e-
-    :         0         0     -89.5  0.000393              gamma
+    :         0         0     -95.7    0.0016                 e-
+    :         0         0     -95.7  0.000393              gamma
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -454,10 +447,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0    -89.5  0.000393        0        0         0       World initStep
-    1    0.799   -0.282    -89.8         0 2.31e-05    0.897     0.897       World LowEnPhotoElec
+    0        0        0    -95.7  0.000393        0        0         0       World initStep
+    1   -0.449    -1.85    -98.7         0 2.31e-05     3.59      3.59       World LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :     0.799    -0.282     -89.8   0.00037                 e-
+    :    -0.449     -1.85     -98.7   0.00037                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -465,60 +458,49 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.799   -0.282    -89.8   0.00037        0        0         0       World initStep
-    1    -3.11    -2.52    -98.3         0  0.00037 0.000423  0.000423       World LowEnergyIoni
+    0   -0.449    -1.85    -98.7   0.00037        0        0         0       World initStep
+    1   -0.449    -1.85    -98.7         0  0.00037 0.000655  0.000655       World LowEnergyIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0    -89.5    0.0016        0        0         0       World initStep
-    1     2.79     10.1    -89.5   0.00158 1.58e-05   0.0014    0.0014       World LowEnergyIoni
-    2     6.97    0.495    -89.6   0.00157 1.34e-05  0.00492   0.00633       World LowEnergyIoni
-    3     6.97    0.493    -89.6   0.00155 1.56e-05  0.00103   0.00735       World LowEnergyIoni
-    4     6.97    0.493    -89.6   0.00154 1.19e-05  0.00125    0.0086       World LowEnergyIoni
-    5     8.43     10.8    -89.5   0.00152 2.02e-05  0.00141      0.01       World LowEnergyIoni
-    6     2.02     2.53    -89.6   0.00149 2.55e-05  0.00281    0.0128       World LowEnergyIoni
-    7    -6.95     7.71    -89.1   0.00118 1.15e-05   0.0179    0.0308       World LowEnergyIoni
+    0        0        0    -95.7    0.0016        0        0         0       World initStep
+    1 -0.000409 0.000217    -95.7   0.00157 2.84e-05  0.00261   0.00261       World LowEnergyIoni
+    2 -0.00211  0.00216    -95.7    0.0015 6.79e-05  0.00544   0.00804       World LowEnergyIoni
+    3 -0.00201  0.00257    -95.7   0.00119 2.31e-05  0.00158   0.00963       World LowEnergyIoni
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :     -6.95      7.71     -89.1  0.000301                 e-
+    :  -0.00201   0.00257     -95.7  0.000287                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    8    -6.93     7.71    -89.1   0.00116 2.05e-05  0.00142    0.0322       World LowEnergyIoni
-    9    -6.95     7.71    -89.1   0.00103  0.00013  0.00678     0.039       World LowEnergyIoni
-   10    -6.96     7.71    -89.1   0.00102 1.16e-05  0.00148    0.0404       World LowEnergyIoni
-   11    -6.16     18.3      -87     0.001 1.76e-05  0.00234    0.0428       World LowEnergyIoni
-   12    -18.6     14.7    -87.4  0.000985 1.51e-05  0.00243    0.0452       World LowEnergyIoni
-   13    -6.54     11.2    -88.3  0.000813 0.000172   0.0156    0.0608       World LowEnergyIoni
-   14    -6.55     11.2    -88.3   0.00073 8.31e-05 0.000909    0.0617       World LowEnergyIoni
-   15    -6.57     11.2    -88.3  0.000715 1.48e-05  0.00421    0.0659       World LowEnergyIoni
-   16    -6.61     11.2    -88.3  0.000689 2.59e-05  0.00123    0.0671       World LowEnergyIoni
-   17    -6.65     11.2    -88.3  0.000675 1.44e-05  0.00918    0.0763       World LowEnergyIoni
-   18    -6.62     11.3    -88.3  0.000636 3.84e-05  0.00608    0.0824       World LowEnergyIoni
-   19    -6.52     11.3    -88.3  0.000623 1.38e-05 0.000646    0.0831       World LowEnergyIoni
-   20    -6.53     11.3    -88.3  0.000574 4.88e-05  0.00315    0.0862       World LowEnergyIoni
-   21    -6.52     11.3    -88.3  0.000561 1.27e-05  0.00337    0.0896       World LowEnergyIoni
-   22    -6.52     11.2    -88.3  0.000526 3.46e-05 0.000288    0.0899       World LowEnergyIoni
-   23    -6.52     11.2    -88.3         0 0.000526 0.000989    0.0909       World LowEnergyIoni
+    4 -0.00111  0.00144    -95.7   0.00111 8.03e-05  0.00345    0.0131       World LowEnergyIoni
+    5 -0.00128 -0.00164    -95.7   0.00109 1.49e-05  0.00346    0.0165       World LowEnergyIoni
+    6 -0.00207 -0.00259    -95.7  0.000975 0.000119  0.00196    0.0185       World LowEnergyIoni
+    7 -0.00632 -0.00469    -95.6  0.000958 1.68e-05   0.0115      0.03       World LowEnergyIoni
+    8  -0.0105  -0.0061    -95.6  0.000935  2.3e-05  0.00692    0.0369       World LowEnergyIoni
+    9  -0.0106 -0.00623    -95.6   0.00084 9.57e-05 0.000273    0.0372       World LowEnergyIoni
+   10  -0.0144 -0.00548    -95.6   0.00076 7.97e-05  0.00859    0.0458       World LowEnergyIoni
+   11  -0.0129 -0.00577    -95.6  0.000567 0.000193   0.0051    0.0509       World LowEnergyIoni
+   12  -0.0121 -0.00609    -95.6         0 0.000567  0.00111     0.052       World LowEnergyIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -6.95     7.71    -89.1  0.000301        0        0         0       World initStep
-    1    -11.4     12.1    -80.2         0 0.000301 0.000253  0.000253       World LowEnergyIoni
+    0 -0.00201  0.00257    -95.7  0.000287        0        0         0       World initStep
+    1 -0.00238  0.00283    -95.7         0 0.000287 0.000531  0.000531       World LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.07s Real=0.07s Sys=0s
+  User=0.03s Real=0.05s Sys=0.01s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=31s Real=33s Sys=1.8s
+  User=22s Real=23s Sys=1.1s
 Idle> #
 Idle> /gun/energy 600 eV
 Idle> /tracking/verbose 2
@@ -531,10 +513,10 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100    0.0006        0        0         0       World initStep
-    1        0        0    -98.8         0 1.42e-05     1.24      1.24       World LowEnPhotoElec
+    1        0        0      -99         0 1.15e-05    0.951     0.951       World LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  2(Rest= 0,Along= 0,Post= 2), #SpawnTotal=  2 ---------------
-    :         0         0     -98.8  6.27e-05                 e-
-    :         0         0     -98.8  0.000523              gamma
+    :         0         0       -99  0.000195                 e-
+    :         0         0       -99  0.000393              gamma
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -542,58 +524,38 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0    -98.8  0.000523        0        0         0       World initStep
-    1     0.29  -0.0611    -97.8         0 1.15e-05    0.993     0.993       World LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  2(Rest= 0,Along= 0,Post= 2), #SpawnTotal=  2 ---------------
-    :      0.29   -0.0611     -97.8  0.000118                 e-
-    :      0.29   -0.0611     -97.8  0.000393              gamma
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 5,   Parent ID = 3
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     0.29  -0.0611    -97.8  0.000393        0        0         0       World initStep
-    1   -0.122    0.623      -97         0 2.31e-05     1.17      1.17       World LowEnPhotoElec
+    0        0        0      -99  0.000393        0        0         0       World initStep
+    1  -0.0762   -0.121    -98.8         0 2.31e-05    0.268     0.268       World LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :    -0.122     0.623       -97   0.00037                 e-
+    :   -0.0762    -0.121     -98.8   0.00037                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 5
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.122    0.623      -97   0.00037        0        0         0       World initStep
-    1  -0.0125     1.44    -97.5         0  0.00037 0.000243  0.000243       World LowEnergyIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 3
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     0.29  -0.0611    -97.8  0.000118        0        0         0       World initStep
-    1     0.29  -0.0611    -97.8         0 0.000118 1.05e-308 1.05e-308       World LowEnBrem
+    0  -0.0762   -0.121    -98.8   0.00037        0        0         0       World initStep
+    1  -0.0768   -0.121    -98.8         0  0.00037  0.00109   0.00109       World LowEnergyIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0    -98.8  6.27e-05        0        0         0       World initStep
-    1        0        0    -98.8         0 6.27e-05 1.63e-309 1.63e-309       World LowEnBrem
+    0        0        0      -99  0.000195        0        0         0       World initStep
+    1        0        0      -99         0 0.000195 3.8e-309  3.8e-309       World LowEnBrem
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.02s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.8s Real=4.1s Sys=0.3s
+  User=4.2s Real=4.4s Sys=0.27s
 Idle> #
 Idle> /gun/energy 300 eV
 Idle> /tracking/verbose 2
@@ -606,9 +568,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100    0.0003        0        0         0       World initStep
-    1        0        0    -99.6         0 2.31e-05    0.391     0.391       World LowEnPhotoElec
+    1        0        0     -100         0 2.31e-05   0.0443    0.0443       World LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :         0         0     -99.6  0.000277                 e-
+    :         0         0      -100  0.000277                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -616,12 +578,12 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0    -99.6  0.000277        0        0         0       World initStep
-    1 1.06e-07 -2.49e-07    -99.6         0 0.000277  0.00275   0.00275       World LowEnergyIoni
+    0        0        0     -100  0.000277        0        0         0       World initStep
+    1 -0.000628 -6.87e-05     -100         0 0.000277  0.00154   0.00154       World LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 1000
 Start Run processing.
@@ -643,22 +605,176 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100      0.01        0        0         0       World initStep
-    1 -5.24e-07 -3.02e-07     -100   0.00998 2.11e-05   0.0418    0.0418       World LowEnergyIoni
-    2   0.0028  5.9e-05     -100   0.00992 6.22e-05  0.00826    0.0501       World LowEnergyIoni
-    3  0.00592 0.000162     -100    0.0099 1.27e-05     0.03      0.08       World LowEnergyIoni
-    4  0.00372 0.000617     -100   0.00989 1.31e-05  0.00456    0.0846       World LowEnergyIoni
-    5  0.00403 -0.000435     -100   0.00989        0  0.00307    0.0877  OutOfWorld Transportation
+    1 -0.000214 -0.00139     -100   0.00985 0.000155   0.0155    0.0155       World LowEnergyIoni
+    2 -0.00131  0.00293     -100   0.00983 1.63e-05   0.0182    0.0337       World LowEnergyIoni
+    3  0.00124  0.00714    -99.9   0.00978 5.22e-05   0.0266    0.0603       World LowEnergyIoni
+    4  0.00098   0.0104    -99.9   0.00972 5.64e-05   0.0129    0.0732       World LowEnergyIoni
+    5 0.000642   0.0141    -99.9    0.0096 0.000118   0.0108     0.084       World LowEnergyIoni
+    6 0.000742   0.0144    -99.9    0.0095 0.000101  0.00274    0.0867       World LowEnergyIoni
+    7 0.000341   0.0153    -99.9   0.00948 2.52e-05  0.00938    0.0961       World LowEnergyIoni
+    8 0.000443   0.0167    -99.9   0.00938 9.57e-05  0.00766     0.104       World LowEnergyIoni
+    9 -0.000564   0.0206    -99.9   0.00915 0.000229   0.0109     0.115       World LowEnergyIoni
+   10 -5.87e-05   0.0238    -99.9   0.00914  1.2e-05   0.0145     0.129       World LowEnergyIoni
+   11 -0.000119   0.0263    -99.9   0.00911 3.28e-05  0.00695     0.136       World LowEnergyIoni
+   12 -0.000315   0.0285    -99.9   0.00909  1.7e-05  0.00526     0.141       World LowEnergyIoni
+   13  0.00658   0.0546    -99.8   0.00906 2.88e-05    0.055     0.196       World LowEnergyIoni
+   14  0.00488   0.0567    -99.8   0.00892 0.000141  0.00994     0.206       World LowEnergyIoni
+   15   0.0039   0.0582    -99.8   0.00888 3.56e-05  0.00717     0.214       World LowEnergyIoni
+   16  0.00325   0.0692    -99.8   0.00887 1.48e-05   0.0481     0.262       World LowEnergyIoni
+   17  0.00251   0.0693    -99.7   0.00858 1.15e-05  0.00869      0.27       World LowEnergyIoni
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
+    :   0.00251    0.0693     -99.7  0.000281                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+   18   0.0037    0.072    -99.7   0.00813 0.000448   0.0107     0.281       World LowEnergyIoni
+   19  0.00395   0.0721    -99.7   0.00811 2.44e-05 0.000725     0.282       World LowEnergyIoni
+   20  0.00446   0.0725    -99.7   0.00809  1.5e-05  0.00167     0.283       World LowEnergyIoni
+   21  0.00718   0.0746    -99.7   0.00807 2.37e-05   0.0103     0.294       World LowEnergyIoni
+   22   0.0131   0.0726    -99.7   0.00803 3.25e-05   0.0364      0.33       World LowEnergyIoni
+   23   0.0146   0.0743    -99.7   0.00795 8.87e-05  0.00547     0.335       World LowEnergyIoni
+   24   0.0133   0.0803    -99.7   0.00781 0.000132   0.0288     0.364       World LowEnergyIoni
+   25   0.0225   0.0852    -99.6   0.00779 1.93e-05   0.0399     0.404       World LowEnergyIoni
+   26   0.0237   0.0858    -99.6   0.00776 3.09e-05   0.0159      0.42       World LowEnergyIoni
+   27   0.0239    0.086    -99.6   0.00772 4.39e-05  0.00218     0.422       World LowEnergyIoni
+   28   0.0239   0.0865    -99.6   0.00769 3.13e-05  0.00391     0.426       World LowEnergyIoni
+   29   0.0256   0.0885    -99.6   0.00761 7.81e-05   0.0201     0.446       World LowEnergyIoni
+   30   0.0253   0.0886    -99.6   0.00759 1.51e-05  0.00158     0.448       World LowEnergyIoni
+   31 -0.00839      0.1    -99.5   0.00746 0.000133   0.0781     0.526       World LowEnergyIoni
+   32 -0.00757   0.0996    -99.5   0.00743 3.49e-05  0.00302     0.529       World LowEnergyIoni
+   33   0.0119      0.1    -99.5   0.00734 8.22e-05   0.0402     0.569       World LowEnergyIoni
+   34   0.0169    0.103    -99.5   0.00731  3.9e-05   0.0107      0.58       World LowEnergyIoni
+   35   0.0195    0.104    -99.5   0.00717 0.000134  0.00436     0.584       World LowEnergyIoni
+   36   0.0229    0.107    -99.5   0.00715 2.24e-05  0.00666     0.591       World LowEnergyIoni
+   37   0.0356    0.121    -99.4   0.00708 6.72e-05   0.0247     0.615       World LowEnergyIoni
+   38   0.0475    0.127    -99.4   0.00689 0.000188   0.0178     0.633       World LowEnergyIoni
+   39   0.0522    0.131    -99.4   0.00686 3.49e-05  0.00835     0.642       World LowEnergyIoni
+   40   0.0547    0.132    -99.4   0.00681 4.62e-05  0.00415     0.646       World LowEnergyIoni
+   41   0.0569    0.134    -99.4   0.00676 5.74e-05  0.00454      0.65       World LowEnergyIoni
+   42   0.0625    0.136    -99.4   0.00672 3.28e-05    0.014     0.664       World LowEnergyIoni
+   43   0.0754    0.141    -99.4   0.00664 8.15e-05   0.0421     0.706       World LowEnergyIoni
+   44    0.088    0.143    -99.3   0.00662 2.39e-05   0.0171     0.724       World LowEnergyIoni
+   45   0.0966    0.141    -99.3   0.00656 5.55e-05   0.0124     0.736       World LowEnergyIoni
+   46      0.1    0.141    -99.3   0.00646 9.73e-05  0.00363      0.74       World LowEnergyIoni
+   47    0.112    0.138    -99.3   0.00631 0.000158   0.0124     0.752       World LowEnergyIoni
+   48    0.149    0.139    -99.3   0.00624 6.41e-05   0.0419     0.794       World LowEnergyIoni
+   49    0.157    0.138    -99.3   0.00618 6.03e-05  0.00912     0.803       World LowEnergyIoni
+   50    0.188    0.132    -99.3   0.00616 2.14e-05   0.0316     0.835       World LowEnergyIoni
+   51    0.198    0.126    -99.3    0.0056 0.000557   0.0117     0.846       World LowEnergyIoni
+   52    0.219    0.114    -99.3   0.00549 0.000109   0.0252     0.872       World LowEnergyIoni
+   53    0.222    0.112    -99.3   0.00539 0.000106  0.00414     0.876       World LowEnergyIoni
+   54    0.225     0.11    -99.3   0.00531 7.59e-05  0.00377     0.879       World LowEnergyIoni
+   55    0.226     0.11    -99.3    0.0053 1.26e-05 0.000727      0.88       World LowEnergyIoni
+   56    0.239    0.106    -99.3    0.0052 0.000105   0.0134     0.894       World LowEnergyIoni
+   57    0.253    0.107    -99.3   0.00506 0.000131   0.0147     0.908       World LowEnergyIoni
+   58    0.263    0.109    -99.3   0.00505 1.85e-05   0.0103     0.919       World LowEnergyIoni
+   59    0.283    0.116    -99.3   0.00503 1.66e-05   0.0222     0.941       World LowEnergyIoni
+   60     0.29    0.118    -99.3   0.00491 0.000124  0.00667     0.947       World LowEnergyIoni
+   61    0.293    0.119    -99.3   0.00482  8.5e-05  0.00332     0.951       World LowEnergyIoni
+   62    0.294    0.119    -99.3   0.00476 6.14e-05  0.00172     0.952       World LowEnergyIoni
+   63    0.325    0.124    -99.3    0.0046  0.00016    0.032     0.984       World LowEnergyIoni
+   64     0.35    0.134    -99.3   0.00448 0.000116   0.0301      1.01       World LowEnergyIoni
+   65     0.41    0.146    -99.3   0.00442 6.51e-05   0.0713      1.09       World LowEnergyIoni
+   66     0.41    0.147    -99.3   0.00439 3.15e-05   0.0258      1.11       World LowEnergyIoni
+   67    0.411    0.147    -99.3   0.00425 0.000132  0.00323      1.11       World LowEnergyIoni
+   68    0.413    0.148    -99.2   0.00421 4.15e-05  0.00979      1.12       World LowEnergyIoni
+   69    0.413    0.148    -99.2    0.0042 1.47e-05 0.000232      1.12       World LowEnergyIoni
+   70    0.411     0.15    -99.2   0.00416 3.31e-05   0.0103      1.14       World LowEnergyIoni
+   71    0.411    0.154    -99.2   0.00411 5.04e-05  0.00667      1.14       World LowEnergyIoni
+   72     0.41    0.157    -99.2   0.00409 2.74e-05  0.00625      1.15       World LowEnergyIoni
+   73     0.41    0.157    -99.2   0.00381 2.31e-05  0.00263      1.15       World LowEnergyIoni
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  2 ---------------
+    :      0.41     0.157     -99.2   0.00025                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+   74    0.408    0.159    -99.2   0.00374 7.29e-05   0.0107      1.16       World LowEnergyIoni
+   75    0.411    0.162    -99.2   0.00359 0.000151  0.00978      1.17       World LowEnergyIoni
+   76    0.412    0.162    -99.2   0.00358 1.16e-05  0.00408      1.18       World LowEnergyIoni
+   77    0.412    0.163    -99.2    0.0035  8.2e-05  0.00185      1.18       World LowEnergyIoni
+   78    0.413    0.164    -99.2   0.00348 1.29e-05  0.00202      1.18       World LowEnergyIoni
+   79    0.413    0.164    -99.2   0.00342 6.52e-05   0.0024      1.18       World LowEnergyIoni
+   80    0.415    0.166    -99.2    0.0034 1.43e-05  0.00725      1.19       World LowEnergyIoni
+   81    0.414    0.167    -99.2   0.00334 6.05e-05  0.00902       1.2       World LowEnergyIoni
+   82    0.413    0.167    -99.2    0.0033 4.53e-05  0.00239       1.2       World LowEnergyIoni
+   83    0.411    0.168    -99.2   0.00327 3.03e-05  0.00502      1.21       World LowEnergyIoni
+   84    0.411    0.168    -99.2   0.00321 5.36e-05 0.000292      1.21       World LowEnergyIoni
+   85    0.402    0.166    -99.2   0.00309 0.000124   0.0153      1.22       World LowEnergyIoni
+   86    0.386    0.166    -99.2   0.00308 1.31e-05   0.0179      1.24       World LowEnergyIoni
+   87    0.378    0.169    -99.1   0.00304 3.79e-05    0.011      1.25       World LowEnergyIoni
+   88     0.37    0.177    -99.1   0.00302 1.51e-05   0.0136      1.26       World LowEnergyIoni
+   89    0.369    0.178    -99.1   0.00298 4.05e-05  0.00162      1.26       World LowEnergyIoni
+   90    0.362    0.182    -99.1   0.00296 2.24e-05  0.00966      1.27       World LowEnergyIoni
+   91    0.357    0.187    -99.1   0.00294 2.12e-05  0.00744      1.28       World LowEnergyIoni
+   92    0.351    0.188    -99.1    0.0028  0.00014   0.0092      1.29       World LowEnergyIoni
+   93    0.346    0.192    -99.1   0.00269 0.000105  0.00685       1.3       World LowEnergyIoni
+   94    0.343    0.194    -99.1    0.0026 9.57e-05  0.00622       1.3       World LowEnergyIoni
+   95    0.336    0.197    -99.1   0.00251 8.77e-05   0.0104      1.31       World LowEnergyIoni
+   96    0.333    0.196    -99.1   0.00247 4.27e-05  0.00845      1.32       World LowEnergyIoni
+   97     0.33    0.195    -99.1   0.00244  3.1e-05  0.00419      1.33       World LowEnergyIoni
+   98    0.325    0.195    -99.1   0.00241 2.79e-05  0.00474      1.33       World LowEnergyIoni
+   99    0.323    0.195    -99.1   0.00237 4.19e-05   0.0027      1.33       World LowEnergyIoni
+  100    0.322    0.195    -99.1   0.00234 2.94e-05  0.00064      1.34       World LowEnergyIoni
+  101    0.303    0.205    -99.1   0.00229 4.46e-05   0.0246      1.36       World LowEnergyIoni
+  102    0.301    0.206    -99.1   0.00225 4.35e-05  0.00161      1.36       World LowEnergyIoni
+  103     0.29    0.211    -99.1   0.00223 2.06e-05   0.0136      1.38       World LowEnergyIoni
+  104    0.286    0.212    -99.1   0.00222 1.29e-05  0.00359      1.38       World LowEnergyIoni
+  105    0.286    0.212    -99.1    0.0022 1.38e-05 0.000836      1.38       World LowEnergyIoni
+  106    0.279    0.216    -99.1    0.0021 0.000106  0.00777      1.39       World LowEnergyIoni
+  107    0.275    0.218    -99.1   0.00199 0.000109  0.00483      1.39       World LowEnergyIoni
+  108     0.27     0.22    -99.1   0.00186  0.00013  0.00534       1.4       World LowEnergyIoni
+  109    0.268     0.22    -99.1   0.00184 1.55e-05  0.00203       1.4       World LowEnergyIoni
+  110     0.26     0.22    -99.1   0.00167 0.000166  0.00851      1.41       World LowEnergyIoni
+  111    0.259    0.219    -99.1   0.00163 4.24e-05  0.00161      1.41       World LowEnergyIoni
+  112    0.254    0.216    -99.1    0.0016 3.05e-05  0.00564      1.42       World LowEnergyIoni
+  113    0.252    0.214    -99.1   0.00151 9.49e-05  0.00301      1.42       World LowEnergyIoni
+  114    0.246    0.208    -99.1   0.00145 5.84e-05  0.00898      1.43       World LowEnergyIoni
+  115    0.245    0.208    -99.1   0.00142 2.67e-05 0.000738      1.43       World LowEnergyIoni
+  116    0.244     0.21    -99.1   0.00135 6.91e-05  0.00274      1.43       World LowEnergyIoni
+  117    0.243     0.21    -99.1   0.00133  2.4e-05  0.00013      1.43       World LowEnergyIoni
+  118    0.243     0.21    -99.1   0.00128 5.33e-05 0.000809      1.43       World LowEnergyIoni
+  119    0.231    0.209    -99.1  0.000974 2.31e-05   0.0138      1.45       World LowEnergyIoni
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  3 ---------------
+    :     0.231     0.209     -99.1  0.000278                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+  120    0.231    0.209    -99.1  0.000962 1.24e-05 0.000464      1.45       World LowEnergyIoni
+  121    0.231    0.209    -99.1  0.000949 1.27e-05 0.000335      1.45       World LowEnergyIoni
+  122    0.229     0.21    -99.1  0.000859 8.96e-05  0.00208      1.45       World LowEnergyIoni
+  123    0.224    0.205    -99.1  0.000823 3.69e-05   0.0092      1.46       World LowEnergyIoni
+  124    0.223    0.203    -99.1  0.000723 9.98e-05  0.00284      1.46       World LowEnergyIoni
+  125     0.22    0.203    -99.1  0.000711 1.21e-05  0.00267      1.46       World LowEnergyIoni
+  126    0.218    0.201    -99.1         0 0.000711   0.0032      1.47       World LowEnergyIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.231    0.209    -99.1  0.000278        0        0         0       World initStep
+    1    0.231     0.21    -99.1         0 0.000278   0.0017    0.0017       World LowEnergyIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     0.41    0.157    -99.2   0.00025        0        0         0       World initStep
+    1     0.41    0.157    -99.2         0  0.00025 0.000349  0.000349       World LowEnergyIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0  0.00251   0.0693    -99.7  0.000281        0        0         0       World initStep
+    1  0.00234   0.0695    -99.7         0 0.000281 0.000298  0.000298       World LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.03s Sys=0s
+  User=0.22s Real=0.24s Sys=0.02s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=58s Real=61s Sys=3.5s
+  User=1.4e+02s Real=1.5e+02s Sys=8.1s
 Idle> #
 Idle> #/gun/particle e-
 Idle> /gun/energy 2 keV
@@ -672,39 +788,40 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100     0.002        0        0         0       World initStep
-    1 -6.08e-09 2.08e-08     -100   0.00199 1.34e-05  0.00203   0.00203       World LowEnergyIoni
-    2 -2.62e-05 -5.89e-05     -100   0.00197 2.12e-05  0.00892    0.0109       World LowEnergyIoni
-    3    0.001 0.000133     -100   0.00173 0.000232  0.00125    0.0122       World LowEnergyIoni
-    4  0.00413 0.000682     -100   0.00171  2.6e-05  0.00858    0.0208       World LowEnergyIoni
-    5  0.00377  0.00278     -100   0.00169  1.8e-05  0.00535    0.0261       World LowEnergyIoni
-    6  0.00429  0.00277     -100   0.00167 1.63e-05 0.000726    0.0269       World LowEnergyIoni
-    7  0.00694   0.0027     -100   0.00166 1.63e-05   0.0142     0.041       World LowEnergyIoni
-    8  0.00859  0.00336     -100   0.00155 0.000109  0.00249    0.0435       World LowEnergyIoni
-    9    0.011  0.00439     -100   0.00152 2.38e-05  0.00505    0.0486       World LowEnergyIoni
-   10  0.00988  0.00523     -100   0.00151 1.61e-05  0.00189    0.0504       World LowEnergyIoni
-   11   0.0103  0.00387     -100   0.00143 7.35e-05  0.00339    0.0538       World LowEnergyIoni
-   12   0.0102  0.00393     -100   0.00141 2.26e-05 0.000362    0.0542       World LowEnergyIoni
-   13   0.0102  0.00394     -100    0.0014 1.32e-05  1.9e-05    0.0542       World LowEnergyIoni
-   14  0.00964  0.00418     -100   0.00139 1.29e-05  0.00174     0.056       World LowEnergyIoni
-   15  0.00837  0.00469     -100  0.000786 0.000599  0.00746    0.0634       World LowEnergyIoni
-   16  0.00844  0.00477     -100   0.00077 1.67e-05 0.000387    0.0638       World LowEnergyIoni
-   17  0.00859  0.00495     -100  0.000755 1.43e-05  0.00094    0.0647       World LowEnergyIoni
-   18  0.00914   0.0055     -100  0.000665 8.99e-05  0.00617    0.0709       World LowEnergyIoni
-   19   0.0092  0.00557     -100  0.000637 2.81e-05 0.000403    0.0713       World LowEnergyIoni
-   20  0.00964  0.00602     -100  0.000605 3.21e-05  0.00443    0.0757       World LowEnergyIoni
-   21  0.00837  0.00645     -100   0.00054 6.55e-05  0.00284    0.0786       World LowEnergyIoni
-   22  0.00812  0.00558     -100         0  0.00054  0.00135    0.0799       World LowEnergyIoni
+    1 3.52e-06 1.49e-05     -100   0.00198  2.4e-05   0.0003    0.0003       World LowEnergyIoni
+    2 -0.000458 -0.000109     -100    0.0018 0.000179  0.00301   0.00331       World LowEnergyIoni
+    3 -0.000657 0.000664     -100   0.00177  2.4e-05  0.00319    0.0065       World LowEnergyIoni
+    4 -0.000311  0.00105     -100    0.0016 0.000172  0.00143   0.00793       World LowEnergyIoni
+    5 3.33e-05  0.00147     -100   0.00158  1.6e-05  0.00132   0.00924       World LowEnergyIoni
+    6 0.000569  0.00376     -100   0.00156 2.81e-05  0.00498    0.0142       World LowEnergyIoni
+    7 -5.95e-05  0.00466     -100   0.00154 1.19e-05  0.00245    0.0167       World LowEnergyIoni
+    8 -0.000658   0.0045     -100   0.00152 2.62e-05  0.00141    0.0181       World LowEnergyIoni
+    9 -0.00454  0.00645     -100   0.00138 0.000137   0.0071    0.0252       World LowEnergyIoni
+   10 -0.00843  0.00562     -100    0.0012  0.00018   0.0101    0.0353       World LowEnergyIoni
+   11  -0.0102  0.00608     -100   0.00118 2.39e-05   0.0038    0.0391       World LowEnergyIoni
+   12 -0.00786  0.00437     -100    0.0011 8.26e-05   0.0155    0.0546       World LowEnergyIoni
+   13 -0.00929  0.00223     -100   0.00107 2.45e-05  0.00445     0.059       World LowEnergyIoni
+   14 -0.00938  0.00207     -100   0.00104 2.86e-05 0.000237    0.0593       World LowEnergyIoni
+   15  -0.0088 -7.67e-05    -99.9   0.00099 5.16e-05  0.00326    0.0625       World LowEnergyIoni
+   16  -0.0121 -0.00994     -100  0.000969 2.12e-05    0.012    0.0745       World LowEnergyIoni
+   17  -0.0126 -0.00987    -99.9  0.000946 2.29e-05 0.000633    0.0752       World LowEnergyIoni
+   18  -0.0141 -0.00903    -99.9  0.000835 0.000111  0.00222    0.0774       World LowEnergyIoni
+   19  -0.0168  -0.0107    -99.9  0.000692 0.000143  0.00349    0.0809       World LowEnergyIoni
+   20   -0.018  -0.0104    -99.9  0.000613 7.87e-05  0.00132    0.0822       World LowEnergyIoni
+   21  -0.0203  -0.0103    -99.9  0.000549 6.44e-05  0.00262    0.0848       World LowEnergyIoni
+   22  -0.0212  -0.0118    -99.9  0.000519 2.95e-05  0.00182    0.0866       World LowEnergyIoni
+   23  -0.0214  -0.0121    -99.9         0 0.000519 0.000412    0.0871       World LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.04s Real=0.04s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=22s Real=24s Sys=1.5s
+  User=25s Real=27s Sys=1.3s
 Idle> #
 Idle> #/gun/particle e-
 Idle> /gun/energy 600 eV
@@ -718,20 +835,29 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100    0.0006        0        0         0       World initStep
-    1 1.51e-08 1.98e-08     -100   0.00058 2.05e-05 0.000945  0.000945       World LowEnergyIoni
-    2 -1.3e-05 1.62e-05     -100  0.000517 6.23e-05  0.00106     0.002       World LowEnergyIoni
-    3 -5.74e-05 4.56e-05     -100         0 0.000517  0.00513   0.00713       World LowEnergyIoni
+    1 -0.000928 -0.000836     -100         0 0.000321  0.00332   0.00332       World LowEnergyIoni
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
+    : -0.000928 -0.000836      -100  0.000279                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.000928 -0.000836     -100  0.000279        0        0         0       World initStep
+    1 -0.00024  0.00101     -100         0 0.000279  0.00228   0.00228       World LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.4s Real=4.6s Sys=0.13s
+  User=3.5s Real=3.6s Sys=0.08s
 Idle> #
 Idle> #/gun/particle e-
 Idle> /gun/energy 300 eV
@@ -745,18 +871,18 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100    0.0003        0        0         0       World initStep
-    1 3.97e-07 3.43e-09     -100         0   0.0003  0.00149   0.00149       World LowEnergyIoni
+    1 -0.00102 -0.000578     -100         0   0.0003  0.00253   0.00253       World LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.1s Real=1.1s Sys=0s
+  User=1.2s Real=1.2s Sys=0s
 Idle> #
 Idle> /calor/setAbsMat Lead
 Idle> #
@@ -787,7 +913,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.2s Real=4.4s Sys=0.22s
+  User=4.3s Real=4.5s Sys=0.23s
 Idle> # 
 Idle> /gun/energy 2 keV
 Idle> /tracking/verbose 2
@@ -800,10 +926,10 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100     0.002        0        0         0       World initStep
-    1     27.8        0     -100         0 1.15e-05     27.8      27.8       World LowEnPhotoElec
+    1     16.4        0     -100         0 1.42e-05     16.4      16.4       World LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  2(Rest= 0,Along= 0,Post= 2), #SpawnTotal=  2 ---------------
-    :      27.8         0      -100    0.0016                 e-
-    :      27.8         0      -100  0.000393              gamma
+    :      16.4         0      -100   0.00146                 e-
+    :      16.4         0      -100  0.000523              gamma
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -811,10 +937,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     27.8        0     -100  0.000393        0        0         0       World initStep
-    1     27.6    0.231    -99.5         0 2.31e-05    0.558     0.558       World LowEnPhotoElec
+    0     16.4        0     -100  0.000523        0        0         0       World initStep
+    1     16.4 0.000454     -100         0 2.31e-05  0.00912   0.00912       World LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :      27.6     0.231     -99.5   0.00037                 e-
+    :      16.4  0.000454      -100    0.0005                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -822,28 +948,28 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     27.6    0.231    -99.5   0.00037        0        0         0       World initStep
-    1     27.6    0.232    -99.5         0  0.00037  0.00317   0.00317       World LowEnergyIoni
+    0     16.4 0.000454     -100    0.0005        0        0         0       World initStep
+    1     16.4  0.00044     -100         0   0.0005 0.000245  0.000245       World LowEnergyIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     27.8        0     -100    0.0016        0        0         0       World initStep
-    1     27.8        0     -100   0.00155 4.79e-05 0.000522  0.000522       World LowEnergyIoni
-    2     27.8        0     -100   0.00155        0        0  0.000522  OutOfWorld Transportation
+    0     16.4        0     -100   0.00146        0        0         0       World initStep
+    1     16.4        0     -100    0.0014 5.78e-05 0.000183  0.000183       World LowEnergyIoni
+    2     16.4        0     -100    0.0014        0        0  0.000183  OutOfWorld Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=10s Real=11s Sys=0.41s
+  User=10s Real=10s Sys=0.39s
 Idle> #
 Idle> /gun/energy 600 eV
 Idle> /tracking/verbose 2
@@ -856,10 +982,10 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100    0.0006        0        0         0       World initStep
-    1  0.00697        0     -100         0 1.15e-05  0.00697   0.00697       World LowEnPhotoElec
+    1    0.125        0     -100         0 1.15e-05    0.125     0.125       World LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  2(Rest= 0,Along= 0,Post= 2), #SpawnTotal=  2 ---------------
-    :   0.00697         0      -100  0.000195                 e-
-    :   0.00697         0      -100  0.000393              gamma
+    :     0.125         0      -100  0.000195                 e-
+    :     0.125         0      -100  0.000393              gamma
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -867,16 +993,16 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0  0.00697        0     -100  0.000393        0        0         0       World initStep
-    1  0.00697        0     -100  0.000393        0        0         0  OutOfWorld Transportation
+    0    0.125        0     -100  0.000393        0        0         0       World initStep
+    1    0.125        0     -100  0.000393        0        0         0  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0  0.00697        0     -100  0.000195        0        0         0       World initStep
-    1  0.00697        0     -100         0 0.000195 1.29e-308 1.29e-308       World LowEnBrem
+    0    0.125        0     -100  0.000195        0        0         0       World initStep
+    1    0.125        0     -100         0 0.000195 2.59e-309 2.59e-309       World LowEnBrem
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -887,7 +1013,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.4s Real=3.5s Sys=0.16s
+  User=3.6s Real=3.9s Sys=0.33s
 Idle> #
 Idle> /gun/energy 300 eV
 Idle> /tracking/verbose 2
@@ -900,9 +1026,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100    0.0003        0        0         0       World initStep
-    1    0.046        0     -100         0 1.42e-05    0.046     0.046       World LowEnPhotoElec
+    1     4.75        0     -100         0 1.42e-05     4.75      4.75       World LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :     0.046         0      -100  0.000286                 e-
+    :      4.75         0      -100  0.000286                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -910,8 +1036,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.046        0     -100  0.000286        0        0         0       World initStep
-    1   0.0475        0     -100         0 0.000286   0.0024    0.0024       World LowEnergyIoni
+    0     4.75        0     -100  0.000286        0        0         0       World initStep
+    1     4.75        0     -100         0 0.000286 0.000354  0.000354       World LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -922,7 +1048,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.1s Real=2.1s Sys=0s
+  User=2.2s Real=2.2s Sys=0s
 Idle> #
 Idle> /gun/particle e-
 Idle> #
@@ -937,70 +1063,19 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100      0.01        0        0         0       World initStep
-    1  0.00356        0     -100   0.00998 1.56e-05   0.0354    0.0354       World LowEnergyIoni
-    2  0.00132 -0.00132     -100   0.00995 3.72e-05   0.0182    0.0536       World LowEnergyIoni
-    3 0.000883 -0.00443     -100   0.00992 3.06e-05  0.00781    0.0615       World LowEnergyIoni
-    4 -0.00242 -0.00411     -100   0.00989 3.15e-05  0.00996    0.0714       World LowEnergyIoni
-    5 -0.00324 -0.00186     -100   0.00987 2.01e-05   0.0654     0.137       World LowEnergyIoni
-    6 -0.00137 0.000566     -100   0.00985 1.93e-05   0.0107     0.148       World LowEnergyIoni
-    7 -0.00259  0.00323     -100   0.00982    3e-05  0.00626     0.154       World LowEnergyIoni
-    8 0.000515  0.00352     -100   0.00979 2.29e-05  0.00749     0.161       World LowEnergyIoni
-    9 -0.00236  0.00226     -100   0.00977 1.93e-05   0.0076     0.169       World LowEnergyIoni
-   10 -0.00578  0.00151     -100   0.00975 2.27e-05   0.0762     0.245       World LowEnergyIoni
-   11 -0.00694  0.00487     -100    0.0097 5.22e-05   0.0367     0.282       World LowEnergyIoni
-   12  -0.0087  0.00527     -100   0.00967 2.84e-05  0.00391     0.286       World LowEnergyIoni
-   13  -0.0111  0.00579     -100   0.00965 2.12e-05   0.0104     0.296       World LowEnergyIoni
-   14   -0.011  0.00588     -100   0.00963 1.53e-05 0.000188     0.296       World LowEnergyIoni
-   15 -0.00982  0.00687     -100   0.00962 1.52e-05  0.00255     0.299       World LowEnergyIoni
-   16 -0.00945  0.00565     -100   0.00953 8.55e-05   0.0285     0.327       World LowEnergyIoni
-   17 -0.00817  0.00885     -100    0.0095 3.44e-05   0.0623      0.39       World LowEnergyIoni
-   18 -0.00657   0.0114     -100   0.00948 1.91e-05   0.0179     0.408       World LowEnergyIoni
-   19 -0.00551   0.0138     -100   0.00947 1.28e-05   0.0377     0.445       World LowEnergyIoni
-   20 -0.00285   0.0154     -100   0.00944 2.38e-05  0.00789     0.453       World LowEnergyIoni
-   21 -0.00171   0.0181     -100   0.00943 1.74e-05   0.0268      0.48       World LowEnergyIoni
-   22  -0.0011   0.0195     -100   0.00941 1.32e-05     0.04      0.52       World LowEnergyIoni
-   23  -0.0013   0.0196     -100   0.00939 2.06e-05 0.000211      0.52       World LowEnergyIoni
-   24  -0.0047     0.02     -100   0.00937 1.96e-05    0.018     0.538       World LowEnergyIoni
-   25 -0.00576   0.0232     -100   0.00933 4.16e-05   0.0144     0.553       World LowEnergyIoni
-   26 -0.00845   0.0252     -100   0.00931 2.15e-05   0.0151     0.568       World LowEnergyIoni
-   27  -0.0102   0.0283     -100   0.00925 5.45e-05   0.0233     0.591       World LowEnergyIoni
-   28 -0.00884   0.0274     -100   0.00914 0.000117   0.0638     0.655       World LowEnergyIoni
-   29  -0.0119   0.0283     -100   0.00908 6.18e-05   0.0278     0.682       World LowEnergyIoni
-   30  -0.0147   0.0265     -100   0.00906 1.84e-05   0.0101     0.693       World LowEnergyIoni
-   31  -0.0171    0.024     -100   0.00904 1.56e-05   0.0174      0.71       World LowEnergyIoni
-   32   -0.017   0.0229     -100   0.00901 3.63e-05  0.00134     0.711       World LowEnergyIoni
-   33  -0.0169   0.0195     -100   0.00899 1.37e-05   0.0337     0.745       World LowEnergyIoni
-   34  -0.0191   0.0168     -100   0.00896 3.42e-05   0.0164     0.761       World LowEnergyIoni
-   35  -0.0172   0.0183     -100   0.00894  1.4e-05   0.0139     0.775       World LowEnergyIoni
-   36  -0.0207   0.0184     -100   0.00893 1.42e-05   0.0439     0.819       World LowEnergyIoni
-   37  -0.0237   0.0171     -100   0.00877 0.000159  0.00931     0.828       World LowEnergyIoni
-   38  -0.0269   0.0157     -100   0.00876 1.31e-05   0.0593     0.888       World LowEnergyIoni
-   39  -0.0297   0.0174     -100   0.00871 4.57e-05   0.0243     0.912       World LowEnergyIoni
-   40    -0.03   0.0149     -100   0.00858 0.000136   0.0639     0.976       World LowEnergyIoni
-   41  -0.0331   0.0154     -100   0.00853 4.38e-05   0.0111     0.987       World LowEnergyIoni
-   42  -0.0316   0.0185     -100   0.00852 1.23e-05   0.0208      1.01       World LowEnergyIoni
-   43  -0.0349   0.0198     -100   0.00847 4.75e-05   0.0157      1.02       World LowEnergyIoni
-   44  -0.0329   0.0205     -100   0.00844 3.44e-05   0.0364      1.06       World LowEnergyIoni
-   45  -0.0318   0.0235     -100   0.00842 1.75e-05   0.0133      1.07       World LowEnergyIoni
-   46  -0.0324   0.0259     -100   0.00841 1.19e-05   0.0129      1.09       World LowEnergyIoni
-   47  -0.0351   0.0271     -100   0.00838  2.5e-05  0.00707      1.09       World LowEnergyIoni
-   48  -0.0343    0.028     -100   0.00837 1.24e-05   0.0054       1.1       World LowEnergyIoni
-   49  -0.0337   0.0287     -100   0.00834 3.44e-05  0.00409       1.1       World LowEnergyIoni
-   50  -0.0331   0.0294     -100   0.00832 1.92e-05  0.00447      1.11       World LowEnergyIoni
-   51  -0.0318   0.0313     -100    0.0083 1.55e-05  0.00495      1.11       World LowEnergyIoni
-   52  -0.0344    0.033     -100   0.00828 1.95e-05   0.0503      1.16       World LowEnergyIoni
-   53  -0.0343    0.033     -100   0.00828        0 0.000735      1.16  OutOfWorld Transportation
+    1   0.0179        0     -100   0.00998 1.84e-05    0.018     0.018       World LowEnergyIoni
+    2   0.0179        0     -100   0.00998        0        0     0.018  OutOfWorld Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.11s Real=0.11s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=21s Real=22s Sys=1.2s
+  User=28s Real=29s Sys=1.3s
 Idle> #
 Idle> #/gun/particle e-
 Idle> /gun/energy 2 keV
@@ -1014,16 +1089,14 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100     0.002        0        0         0       World initStep
-    1  0.00354        0     -100   0.00198 1.69e-05   0.0196    0.0196       World LowEnergyIoni
-    2  0.00425    0.001     -100   0.00197 1.24e-05   0.0124     0.032       World LowEnergyIoni
-    3  0.00464  0.00159     -100   0.00196 1.21e-05  0.00334    0.0354       World LowEnergyIoni
-    4  0.00343 -0.00104     -100   0.00193 2.41e-05  0.00656    0.0419       World LowEnergyIoni
-    5  0.00127 0.000648     -100   0.00191 2.44e-05  0.00682    0.0487       World LowEnergyIoni
-    6 0.000279  0.00141     -100   0.00185 5.61e-05  0.00173    0.0505       World LowEnergyIoni
-    7 -0.00227   0.0033     -100    0.0018 5.87e-05   0.0149    0.0654       World LowEnergyIoni
-    8 -0.000913  0.00415     -100   0.00178 1.57e-05  0.00214    0.0675       World LowEnergyIoni
-    9 -0.00249  0.00449     -100   0.00176 1.82e-05   0.0025      0.07       World LowEnergyIoni
-   10 -0.00296   0.0046     -100   0.00176        0 0.000579    0.0706  OutOfWorld Transportation
+    1  0.00281        0     -100   0.00196 3.57e-05  0.00287   0.00287       World LowEnergyIoni
+    2  0.00917  0.00175     -100   0.00185 0.000117  0.00678   0.00965       World LowEnergyIoni
+    3   0.0108  0.00201     -100    0.0017 0.000151  0.00187    0.0115       World LowEnergyIoni
+    4   0.0206  0.00894     -100   0.00162 7.79e-05   0.0127    0.0243       World LowEnergyIoni
+    5   0.0218  0.00972     -100   0.00157 4.86e-05  0.00177     0.026       World LowEnergyIoni
+    6   0.0287   0.0152     -100   0.00144 0.000129  0.00925    0.0353       World LowEnergyIoni
+    7   0.0308   0.0156     -100   0.00124 0.000206  0.00287    0.0382       World LowEnergyIoni
+    8   0.0319   0.0165     -100   0.00124        0  0.00202    0.0402  OutOfWorld Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -1034,7 +1107,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=9s Real=9.4s Sys=0.4s
+  User=9.8s Real=10s Sys=0.47s
 Idle> #
 Idle> #/gun/particle e-
 Idle> /gun/energy 600 eV
@@ -1048,20 +1121,18 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100    0.0006        0        0         0       World initStep
-    1   0.0013        0     -100  0.000588 1.18e-05  0.00162   0.00162       World LowEnergyIoni
-    2  0.00444 7.22e-05     -100  0.000562 2.59e-05  0.00759   0.00922       World LowEnergyIoni
-    3   0.0044 3.32e-05     -100  0.000562        0 7.63e-05   0.00929  OutOfWorld Transportation
+    1  0.00315        0     -100         0   0.0006  0.00379   0.00379       World LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.04s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.1s Real=3.3s Sys=0.17s
+  User=2.9s Real=2.9s Sys=0.02s
 Idle> #
 Idle> #/gun/particle e-
 Idle> /gun/energy 300 eV
@@ -1075,7 +1146,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100    0.0003        0        0         0       World initStep
-    1  0.00064        0     -100         0   0.0003 0.000661  0.000661       World LowEnergyIoni
+    1  0.00102        0     -100         0   0.0003  0.00118   0.00118       World LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
