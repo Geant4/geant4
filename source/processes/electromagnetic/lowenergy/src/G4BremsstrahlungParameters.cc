@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc,v 1.8 2001-11-15 11:33:33 vnivanch Exp $
+// $Id: G4BremsstrahlungParameters.cc,v 1.9 2001-11-27 11:30:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -147,7 +147,7 @@ void G4BremsstrahlungParameters::LoadData()
   char* path = getenv("G4LEDATA");
   if (!path)
     { 
-      G4String excep = G4String("G4BremsstrahlungParameters - G4LEDATA") +
+      G4String excep = G4String("G4BremsstrahlungParameters - G4LEDATA")
                      + G4String("environment variable not set");
       G4Exception(excep);
     }
