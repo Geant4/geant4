@@ -1,4 +1,4 @@
-$Id: History,v 1.12 1999-06-05 13:37:46 stesting Exp $
+$Id: History,v 1.13 1999-06-07 16:45:02 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+7th June 1999  John Allison (examples-01-00-10)
+- Compiled ExN04PhysicsList.cc non-optimised on Linux-g++.
 
 5th June 1999  John Allison (examples-01-00-09)
 - exampleN04/GNUmakefile: Force non-optimised compliation of some
