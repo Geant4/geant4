@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh,v 1.10 2001-09-13 08:57:46 maire Exp $
+// $Id: G4Isotope.hh,v 1.11 2001-09-14 16:36:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// 30.03.01: suppression of the warnig message in GetIsotope
+// 14.09.01: fCountUse: nb of elements which use this isotope 
+// 13.09.01: stl migration. Suppression of the data member fIndexInTable
+// 30.03.01: suppression of the warning message in GetIsotope
 // 04.08.98: new method GetIsotope(isotopeName) (mma)
 // 17.01.97: aesthetic rearrangement (mma)
 
@@ -76,13 +78,21 @@ class G4Isotope
     G4int    GetZ()     const {return fZ;};
     G4int    GetN()     const {return fN;};
     G4double GetA()     const {return fA;};
-    size_t   GetIndex() const {return fIndexInTable;};
     
-    static  G4Isotope* GetIsotope(G4String name);
+    G4int GetCountUse() const {return fCountUse;};
+    void  increaseCountUse()  {fCountUse++;};
+    void  decreaseCountUse()  {fCountUse--;};
     
-    static
-    const G4IsotopeTable* GetIsotopeTable() {return &theIsotopeTable;};
-    static size_t GetNumberOfIsotopes()     {return theIsotopeTable.size();};
+    static  
+    G4Isotope* GetIsotope(G4String name);
+    
+    static const
+    G4IsotopeTable* GetIsotopeTable() {return &theIsotopeTable;};
+    
+    static 
+    size_t GetNumberOfIsotopes()      {return theIsotopeTable.size();};
+    
+    size_t GetIndex();    
     
     friend
     G4std::ostream& operator<<(G4std::ostream&, G4Isotope*);
@@ -109,10 +119,11 @@ class G4Isotope
     G4int    fZ;                 // atomic number
     G4int    fN;                 // number of nucleons
     G4double fA;                 // mass of a mole
+    
+    G4int    fCountUse;          // nb of elements which use this isotope
 
     static 
     G4IsotopeTable theIsotopeTable;
-    size_t   fIndexInTable;      // index in the Isotope Table
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -129,6 +140,21 @@ G4Isotope* G4Isotope::GetIsotope(G4String isotopeName)
    
   // the isotope does not exist in the table
   return NULL;          
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+size_t G4Isotope::GetIndex()
+{  
+  // return the index of this isotope in theIsotopeTable
+  //
+  size_t J=0, Jmax=theIsotopeTable.size();
+  while ((J<Jmax)&&(theIsotopeTable[J] != this)) J++;  
+
+  if (J==Jmax) G4Exception("G4Isotope::GetIndex() Isotope not in IsotopeTable");
+  
+  return J;        
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.10 2001-09-13 08:57:46 maire Exp $
+// $Id: G4Element.cc,v 1.11 2001-09-14 16:36:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,8 +40,10 @@
 // 16-11-98: name Subshell -> Shell; GetBindingEnergy() (mma)
 // 09-03-01: assignement operator revised (mma)
 // 02-05-01: check identical Z in AddIsotope (marc)
-// 03-05-01, flux.precision(prec) at begin/end of operator<<
-
+// 03-05-01; flux.precision(prec) at begin/end of operator<<
+// 13-09-01: suppression of the data member fIndexInTable
+// 14-09-01: fCountUse: nb of materials which use this element
+ 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Element.hh"
@@ -83,9 +85,10 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
            
     ComputeDerivedQuantities();
 
-    // Store in table and set the index
+    // Store in ElementTable
     theElementTable.push_back(this);
-    fIndexInTable = theElementTable.size() - 1;
+    
+    fCountUse = 0;           //nb of materials which use this element
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,6 +107,8 @@ G4Element::G4Element(const G4String& name, const G4String& symbol, G4int nIsotop
 
     theIsotopeVector         = new G4IsotopeVector(n);
     fRelativeAbundanceVector = new G4double[nIsotopes];
+    
+    fCountUse = 0;           //nb of materials which use this element    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -127,6 +132,7 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
        fRelativeAbundanceVector[fNumberOfIsotopes] = abundance;
        (*theIsotopeVector)[fNumberOfIsotopes] = isotope;
        ++fNumberOfIsotopes;
+       isotope->increaseCountUse();
       } 
     else G4Exception ("ERROR from G4Element::AddIsotope!"  
        " Attempt to add more than the declared number of isotopes.");
@@ -152,9 +158,8 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
          
       ComputeDerivedQuantities();
 
-      // Store in table and set the index
+      // Store in table
       theElementTable.push_back(this);
-      fIndexInTable = theElementTable.size() - 1;      
      }
 }
 
@@ -172,10 +177,24 @@ void G4Element::InitializePointers()
 
 G4Element::~G4Element()
 {
-  if (theIsotopeVector)         delete    theIsotopeVector;
+  if (fCountUse != 0)
+    G4cout << "--> warning from ~G4Element(): the element " << fName
+           << " is still referenced by " << fCountUse << " G4Materials \n" 
+	   << G4endl;
+	   
+  if (theIsotopeVector)
+    { for (size_t i=0; i<fNumberOfIsotopes; i++)
+                          (*theIsotopeVector)[i]->decreaseCountUse();         
+      delete theIsotopeVector;
+    } 
   if (fRelativeAbundanceVector) delete [] fRelativeAbundanceVector;
   if (fAtomicShells)            delete [] fAtomicShells;
   if (fIonisation)              delete    fIonisation;
+  
+  //remove this element from theElementTable
+  G4ElementTable::iterator iter  = theElementTable.begin();
+  while ((iter != theElementTable.end())&&(*iter != this)) iter++;
+  if (iter != theElementTable.end()) theElementTable.erase(iter);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -247,7 +266,6 @@ G4Element::G4Element(G4Element& right)
 
       // Store this new element in table and set the index
       theElementTable.push_back(this);
-      fIndexInTable = theElementTable.size() - 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

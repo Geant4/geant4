@@ -21,15 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc,v 1.8 2001-09-13 08:57:46 maire Exp $
+// $Id: G4Isotope.cc,v 1.9 2001-09-14 16:36:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// 17-07-01, migration to STL. M. Verderi.
-// 03-05-01, flux.precision(prec) at begin/end of operator<<
-// 29-01-97: Forbidden to create Isotope with Z<1 or N<Z, M.Maire
-// 26-06-96: Code uses operators (+=, *=, ++, -> etc.) correctly, P. Urban
+// 14.09.01: fCountUse: nb of elements which use this isotope 
+// 13.09.01: suppression of the data member fIndexInTable
+// 17.07.01: migration to STL. M. Verderi.
+// 03.05.01: flux.precision(prec) at begin/end of operator<<
+// 29.01.97: Forbidden to create Isotope with Z<1 or N<Z, M.Maire
+// 26.06.96: Code uses operators (+=, *=, ++, -> etc.) correctly, P. Urban
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -40,9 +42,12 @@
 
 G4IsotopeTable G4Isotope::theIsotopeTable;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 // Create an isotope
+//
 G4Isotope::G4Isotope(const G4String& Name, G4int Z, G4int N, G4double A)
-: fName(Name), fZ(Z), fN(N), fA(A)
+: fName(Name), fZ(Z), fN(N), fA(A), fCountUse(0)
 {
   if (Z<1) G4Exception
     (" ERROR! It is not allowed to create an Isotope with Z < 1" );
@@ -51,12 +56,22 @@ G4Isotope::G4Isotope(const G4String& Name, G4int Z, G4int N, G4double A)
     (" ERROR! Attempt to create an Isotope with N < Z !!!" );
 
   theIsotopeTable.push_back(this);
-  fIndexInTable = theIsotopeTable.size() - 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Isotope::~G4Isotope() {}
+G4Isotope::~G4Isotope()
+{
+  if (fCountUse != 0)
+    G4cout << "--> warning from ~G4Isotope(): the isotope " << fName
+           << " is still referenced by " << fCountUse << " G4Elements \n" 
+	   << G4endl;
+	     
+  //remove this isotope from theIsotopeTable
+  G4IsotopeTable::iterator iter  = theIsotopeTable.begin();
+  while ((iter != theIsotopeTable.end())&&(*iter != this)) iter++;
+  if (iter != theIsotopeTable.end()) theIsotopeTable.erase(iter);
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,7 +81,6 @@ G4Isotope::G4Isotope(G4Isotope& right)
   
   //insert this new isotope in table
   theIsotopeTable.push_back(this);
-  fIndexInTable = theIsotopeTable.size() - 1;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -106,8 +120,8 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4Isotope* isotope)
     
   flux
     << " Isotope: " << G4std::setw(5) << isotope->fName 
-    << "   Z = " << G4std::setw(2) <<  isotope->fZ 
-    << "   N = " << G4std::setw(3) <<  isotope->fN
+    << "   Z = " << G4std::setw(2)    << isotope->fZ 
+    << "   N = " << G4std::setw(3)    << isotope->fN
     << "   A = " << G4std::setw(6) << G4std::setprecision(2) 
     << (isotope->fA)/(g/mole) << " g/mole";
 

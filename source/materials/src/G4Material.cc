@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.13 2001-09-13 08:57:47 maire Exp $
+// $Id: G4Material.cc,v 1.14 2001-09-14 16:36:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,6 +51,8 @@
 //           copy constructor and assignement operator revised (mma)
 // 03-05-01, flux.precision(prec) at begin/end of operator<<
 // 17-07-01, migration to STL. M. Verderi.
+// 14-09-01, Suppression of the data member fIndexInTable
+
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -95,7 +97,9 @@ G4Material::G4Material(const G4String& name, G4double z,
   (*theElementVector)[0] = new G4Element(name, " ", z, a);
   fMassFractionVector    = new G4double[1];
   fMassFractionVector[0] = 1. ;
-
+  
+  (*theElementVector)[0] -> increaseCountUse();
+  
   if (fState == kStateUndefined)
     {
      if (fDensity > kGasThreshold) fState = kStateSolid;
@@ -106,7 +110,6 @@ G4Material::G4Material(const G4String& name, G4double z,
   
   // Store in the table of Materials
   theMaterialTable.push_back(this);
-  fIndexInTable = theMaterialTable.size() - 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -181,7 +184,9 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
   (*theElementVector)[0] = new G4Element(name, " ", z, a);
   fMassFractionVector    = new G4double[1];
   fMassFractionVector[0] = 1. ;
-
+  
+  (*theElementVector)[0] -> increaseCountUse();
+  
   if (fState == kStateUndefined)
     {
      if (fDensity > kGasThreshold) fState = kStateSolid;
@@ -192,7 +197,6 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
 
   // Store in the table of Materials
   theMaterialTable.push_back(this);
-  fIndexInTable = theMaterialTable.size() - 1;    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -252,6 +256,7 @@ void G4Material::AddElement(G4Element* element, G4int nAtoms)
      (*theElementVector)[fNumberOfElements] = element;
      fAtomsVector       [fNumberOfElements] = nAtoms;
      fNumberOfComponents = ++fNumberOfElements;
+     element->increaseCountUse();
   }
   else
      G4Exception
@@ -275,7 +280,6 @@ void G4Material::AddElement(G4Element* element, G4int nAtoms)
 
      // Store in the static Table of Materials
      theMaterialTable.push_back(this);
-     fIndexInTable = theMaterialTable.size() - 1;       
   }
 }
 
@@ -307,6 +311,7 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
         (*theElementVector)[el] = element;
         fMassFractionVector[el] = fraction;
         fNumberOfElements ++;
+	element->increaseCountUse();
       }
       fNumberOfComponents++;  
   }
@@ -330,7 +335,6 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
 
      // Store in the static Table of Materials
      theMaterialTable.push_back(this);
-     fIndexInTable = theMaterialTable.size() - 1;  
   }
 }
 
@@ -367,6 +371,7 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
           fMassFractionVector[el] = fraction
 	                                  *(material->GetFractionVector())[elm];
           fNumberOfElements ++;
+	  element->increaseCountUse();
         }
        } 
       fNumberOfComponents++;  
@@ -392,7 +397,6 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
 
      // Store in the static Table of Materials
      theMaterialTable.push_back(this);
-     fIndexInTable = theMaterialTable.size() - 1;
   }
 }
 
@@ -486,6 +490,9 @@ void G4Material::InitializePointers()
 
 G4Material::~G4Material()
 {
+  for (size_t i=0; i<fNumberOfElements; i++)
+                  (*theElementVector)[i]->decreaseCountUse();
+		  
   if (fImplicitElement)       delete    ((*theElementVector)[0]);
   if (theElementVector)       delete    theElementVector;
   if (fMassFractionVector)    delete [] fMassFractionVector;
@@ -493,6 +500,11 @@ G4Material::~G4Material()
   if (VecNbOfAtomsPerVolume)  delete [] VecNbOfAtomsPerVolume;
   if (fIonisation)            delete    fIonisation;
   if (fSandiaTable)           delete    fSandiaTable;
+  
+  //remove this material from theMaterialTable
+  G4MaterialTable::iterator iter  = theMaterialTable.begin();
+  while ((iter != theMaterialTable.end())&&(*iter != this)) iter++;
+  if (iter != theMaterialTable.end()) theMaterialTable.erase(iter);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -504,7 +516,6 @@ G4Material::G4Material(const G4Material& right)
         
     // Store this new material in the table of Materials
     theMaterialTable.push_back(this);
-    fIndexInTable = theMaterialTable.size() - 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh,v 1.14 2001-09-13 08:57:46 maire Exp $
+// $Id: G4Material.hh,v 1.15 2001-09-14 16:36:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -72,6 +72,7 @@
 // 12-03-01, G4bool fImplicitElement (mma)
 // 30-03-01, suppression of the warning message in GetMaterial
 // 17-07-01, migration to STL. M. Verderi.
+// 14-09-01, Suppression of the data member fIndexInTable
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -229,13 +230,16 @@ public:  // with description
                                      {return fMaterialPropertiesTable;};
 
   //the (static) Table of Materials:
+  //
   static
-  const G4MaterialTable* GetMaterialTable() {return &theMaterialTable;};    
+  const G4MaterialTable* GetMaterialTable() {return &theMaterialTable;};
+      
   static
   size_t GetNumberOfMaterials()   {return theMaterialTable.size();};
-  //the index of this material in the Table:    
-  size_t GetIndex() const         {return fIndexInTable;};
   
+  //the index of this material in the Table:    
+  size_t GetIndex();
+    
   //return  pointer to a material, given its name:    
   static  G4Material* GetMaterial(G4String name);
   
@@ -295,7 +299,6 @@ private:
 
   static
   G4MaterialTable theMaterialTable;       // the material table
-  size_t          fIndexInTable;          // Index in the material table
 
   //
   // Derived data members (computed from the basic data members)
@@ -343,7 +346,6 @@ G4double G4Material::GetZ() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 inline
 G4double G4Material::GetA() const
 { 
@@ -353,6 +355,21 @@ G4double G4Material::GetA() const
      G4Exception ( " the Atomic mass is not well defined." );
   } 
   return  (*theElementVector)[0]->GetA();      
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+size_t G4Material::GetIndex()
+{  
+  // return the index of this Material in theMaterialTable
+  //
+  size_t J=0, Jmax=theMaterialTable.size();
+  while ((J<Jmax)&&(theMaterialTable[J] != this)) J++;  
+
+  if (J==Jmax) G4Exception("G4Material::GetIndex()  not in MaterialTable");
+  
+  return J;        
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

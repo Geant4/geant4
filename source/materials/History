@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2001-08-31 16:13:02 gum Exp $
+$Id: History,v 1.25 2001-09-14 16:36:55 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+14.09.01 mma - materials-V03-02-02
+        -G4Isotope,Element,Material: IndexInTable is obtained dynamically
+	 via GetIndex(). An Isotope,Element,Material can be deleted.
+	-fCountUse counts the nb of materials which reference a given element.
+	 (idem for elements->isotope) 
 
 31.08.01 P.Gumplinger - materials-V03-02-01
          Fix printing of property name and check for NULL property vector 
