@@ -29,6 +29,7 @@
 #include "Tst21PhysicsList.hh"
 #include "Tst21SteppingAction.hh"
 #include "Tst21StackingAction.hh"
+#include "Tst21EventAction.hh"
 
 
 #include "G4UImanager.hh"
@@ -54,6 +55,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new Tst21RunAction);
   runManager->SetUserAction(new Tst21PrimaryGeneratorAction);
   runManager->SetUserAction(new Tst21StackingAction);
+  runManager->SetUserAction(new Tst21EventAction);
 
   if(argc==1)
   {
