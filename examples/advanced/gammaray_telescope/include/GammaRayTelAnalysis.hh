@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysis.hh,v 1.7 2001-12-07 12:57:32 pfeiffer Exp $
+// $Id: GammaRayTelAnalysis.hh,v 1.8 2001-12-07 13:20:20 pfeiffer Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -42,7 +42,7 @@
 //
 // ************************************************************
 
-#ifndef GammaRayTelAnalysis_h
+#ifndef GammaRayTelAnalysis_h 
 #define GammaRayTelAnalysis_h 1
 
 #include "globals.hh"
@@ -122,12 +122,4 @@ private:
 
 
 #endif
-
-
-
-
-
-
-
-
 

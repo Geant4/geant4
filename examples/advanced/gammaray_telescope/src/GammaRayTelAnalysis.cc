@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysis.cc,v 1.7 2001-12-07 12:57:32 pfeiffer Exp $
+// $Id: GammaRayTelAnalysis.cc,v 1.8 2001-12-07 13:20:20 pfeiffer Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -42,7 +42,8 @@
 //
 // ************************************************************
 
-#include "G4RunManager.hh"
+
+#include "G4RunManager.hh" 
 
 #include "GammaRayTelAnalysis.hh"
 #include "GammaRayTelDetectorConstruction.hh"
@@ -340,14 +341,4 @@ void GammaRayTelAnalysis::EndOfEvent(G4int flag)
   if(plotter) plotter->refresh();
 #endif
 }
-
-
-
-
-
-
-
-
-
-
 
