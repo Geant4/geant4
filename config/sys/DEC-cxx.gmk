@@ -1,0 +1,41 @@
+#
+# -------- DEC ---------
+#
+ifeq ($(G4SYSTEM),DEC-cxx)
+  CXX		:= cxx
+  ifdef G4OPTIMISE
+    CXXFLAGS	:= -O
+  else
+    ifdef G4DEBUG
+      CXXFLAGS	:= -gall
+      FCFLAGS	:= -g
+      CCFLAGS   := -g
+    endif
+  endif
+  G4_HAVE_BOOL  := yes
+  CXXFLAGS	+= -ieee -timplicit_local
+  FC		:= f77
+  FCLIBS	:= -lUfor -lfor -lFutil -lots
+  X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
+  ifndef OGLFLAGS
+    OGLFLAGS  := -I$(OGLHOME)/include 
+#   OGLFLAGS  := -I/usr/include -I/usr/local/include
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+#   OGLLIBS   := -lMesaGLU -lMesaGL
+  endif
+  CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
+  ifdef G4USE_OSPACE
+    CPPFLAGS += -DOS_OSF1_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING
+    CPPFLAGS += -DOS_NO_ALLOCATORS -D__NO_EDG_EXCEPTION_CLASSES
+    CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
+    CXXFLAGS += -nostdnew
+  else
+    ifndef G4NO_STD_NAMESPACE
+      G4USE_STD_NAMESPACE := yes
+      CXXFLAGS += -std strict_ansi
+      CPPFLAGS += -DG4USE_STD_NAMESPACE
+    endif
+  endif
+endif

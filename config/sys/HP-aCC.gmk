@@ -1,0 +1,45 @@
+#
+# -------- HP ---------
+#
+ifeq ($(G4SYSTEM),HP-aCC)
+  CXX       := aCC
+  ifdef G4OPTIMISE
+    CXXFLAGS  := +O2 +Onolimit
+  else
+    ifdef G4DEBUG
+      CXXFLAGS := -g
+      FCFLAGS  := -g
+      CCFLAGS  := -g
+    endif
+  endif
+  CXXFLAGS += +DAportable +W823
+  CPPFLAGS += -I/usr
+  ifdef G4MAKESHLIB
+    CXXFLAGS += +Z
+  endif
+  G4_HAVE_BOOL := yes
+  FC      := f77
+  FCFLAGS += +E6 +ppu
+  CCFLAGS += -Ae +DAportable
+  X11FLAGS  := -I/usr/include/X11/extensions -I/usr/contrib/X11R6/include
+  X11FLAGS  += -I/usr/contrib/X11R6/include/X11
+  X11LIBS   := -L/usr/contrib/X11R6/lib -lXmu -L/usr/lib -lXt -lXext -lX11
+  XMFLAGS   := -I/usr/include/Motif1.2
+  XMLIBS    := -L/usr/lib/Motif1.2_R6 -lXm
+  XAWFLAGS  := -I/usr/contrib/X11R6/include -I/usr/contrib/X11R6/include/X11
+  XAWLIBS   := -L/usr/contrib/X11R6/lib -lXaw
+  ifndef OGLFLAGS
+    OGLFLAGS  := -I$(OGLHOME)/include 
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+    OGLLIBS   += -L/opt/graphics/common/lib -lXwindow -lhpgfx -lXhp11 -ldld
+  endif
+  CPPFLAGS += -DG4NOT_ISO_DELETES
+  CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
+  ifdef G4USE_OSPACE
+    CPPFLAGS += -DOS_HPUX_10_20 -DOS_NEW_CHECK -DOS_STL_ASSERT
+    CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS -D__HPACC_NOEH
+    CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
+  endif
+endif
