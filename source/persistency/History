@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 June, 04  G.Cosmo (persistency-V06-01-00)
+- GNUmakefile: added definition of GLOBLIBS for DLLs support on Windows.
+
 04 October, 03  G.Cosmo (persistency-V05-02-00)
 - GNUmakefile:
   o replaced "digits+hits" with "digits_hits".
