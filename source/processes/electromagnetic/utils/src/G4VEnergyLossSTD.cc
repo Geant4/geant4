@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.cc,v 1.46 2003-07-23 11:36:26 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.cc,v 1.47 2003-08-06 15:21:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -122,7 +122,6 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   faclow(1.5),
   linLossLimit(0.05),
   minSubRange(0.1),
-  rangeCoeff(1.0),
   lossFluctuationFlag(true),
   rndmStepFlag(false),
   hasRestProcess(true),
@@ -135,6 +134,7 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   maxKinEnergy         = 100.0*GeV;
   maxKinEnergyForRange = 1.0*GeV;
   lowKinEnergy         = minKinEnergy*faclow;
+
   // default dRoverRange and finalRange
   SetStepLimits(0.2, 1.0*mm);
   SetVerboseLevel(0);
@@ -613,12 +613,12 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
     // low energy deposit case
   if (length >= fRange) {
     eloss = preStepKinEnergy;
-    
+
   } else if(preStepScaledEnergy <= lowKinEnergy) {
 
     G4double x = 1.0 - length/fRange;
     eloss = preStepKinEnergy*(1.0 - x*x);
-    
+
   // Short step
   } else if( length <= linLossLimit * fRange ) {
     eloss = (((*theDEDXTable)[currentMaterialIndex])->
@@ -988,7 +988,9 @@ void G4VEnergyLossSTD::SetStepLimits(G4double v1, G4double v2)
 {
   dRoverRange = v1;
   finalRange = v2;
+  if (dRoverRange > 0.999) dRoverRange = 1.0;
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLossSTD::SetParticle(const G4ParticleDefinition* p)
@@ -1206,14 +1208,5 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
   return res;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEnergyLossSTD::SetRangeCoeff(G4double val)
-{
-  if (val > 0.0) {
-    if (val < 1.0) rangeCoeff = val;
-    else           rangeCoeff = 1.0;
-  }
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

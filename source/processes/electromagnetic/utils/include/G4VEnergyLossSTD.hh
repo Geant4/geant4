@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.hh,v 1.29 2003-07-23 11:36:25 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.hh,v 1.30 2003-08-06 15:21:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -236,8 +236,6 @@ public:
 
   void SetStepLimits(G4double v1, G4double v2);
 
-  void SetRangeCoeff(G4double val);
-
   G4bool TablesAreBuilt() const {return  tablesAreBuilt;};
 
   G4int NumberOfSubCutoffRegions() const {return nSCoffRegions;};
@@ -343,6 +341,7 @@ private:
   const G4Material*           currentMaterial;
   const G4MaterialCutsCouple* currentCouple;
   size_t                      currentMaterialIndex;
+  G4double                    minStepLimit;
 
   G4int    nDEDXBins;
   G4int    nDEDXBinsForRange;
@@ -368,7 +367,6 @@ private:
   G4double minSubRange;
   G4double dRoverRange;
   G4double finalRange;
-  G4double rangeCoeff;
 
   G4bool lossFluctuationFlag;
   G4bool rndmStepFlag;
@@ -383,11 +381,12 @@ private:
 
 inline void G4VEnergyLossSTD::DefineMaterial(const G4MaterialCutsCouple* couple)
 {
-//  G4cout << "couple= " << couple << " currentCouple= " <<  currentCouple << G4endl;
   if(couple != currentCouple) {
     currentCouple   = couple;
     currentMaterial = couple->GetMaterial();
     currentMaterialIndex = couple->GetIndex();
+    minStepLimit = std::min(finalRange,
+           currentCouple->GetProductionCuts()->GetProductionCut(idxG4ElectronCut));
     if(integral && !meanFreePath) ResetNumberOfInteractionLengthLeft();
   }
 }
@@ -472,7 +471,7 @@ inline G4double G4VEnergyLossSTD::GetMeanFreePath(const G4Track& track,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
-                                  G4double, G4double currentMinimumStep, G4double&)
+                                  G4double, G4double currentMinStep, G4double&)
 {
   G4double x = DBL_MAX;
 
@@ -480,17 +479,15 @@ inline G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
     G4bool b;
     fRange = ((*theRangeTable)[currentMaterialIndex])->
             GetValue(preStepScaledEnergy, b)*reduceFactor;
-    x = fRange;
-    if( integral ) {
-      if(x < currentMinimumStep && x > finalRange) x *= rangeCoeff;
-    } else {
-      G4double r = std::min(finalRange, currentCouple->GetProductionCuts()
-                 ->GetProductionCut(idxG4ElectronCut));
-      if (fRange > r) {
 
-        x = dRoverRange*fRange + r*(1.0 - dRoverRange)*(2.0 - r/fRange);
-//        if(rndmStepFlag) x = r + (x-r)*G4UniformRand();
+    x = fRange;
+    G4double y = x*dRoverRange;
+    if(x > minStepLimit && y < currentMinStep ) {
+      if (integral) x = std::max(y,minStepLimit);
+      else {
+        x = y + minStepLimit*(1.0 - dRoverRange)*(2.0 - minStepLimit/fRange);
         if(x > fRange) x = fRange;
+        if(rndmStepFlag) x = minStepLimit + (x-minStepLimit)*G4UniformRand();
       }
     }
   }

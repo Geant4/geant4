@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.hh,v 1.4 2003-07-21 12:52:06 vnivanch Exp $
+// $Id: G4IonFluctuations.hh,v 1.5 2003-08-06 15:21:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -75,6 +75,7 @@ private:
 
   G4double CoeffitientA(G4double&);
   G4double CoeffitientB(const G4Material*, G4double&);
+  G4double RelativisticFactor(const G4Material*, G4double&);
 
   // hide assignment operator
   G4IonFluctuations & operator=(const  G4IonFluctuations &right);
@@ -85,6 +86,7 @@ private:
   G4double particleMass;
   G4double charge;
   G4double chargeSquare;
+  G4double chargeSqRatio;
 
   // data members to speed up the fluctuation calculation
   G4double minNumberInteractionsBohr;
