@@ -28,7 +28,7 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4install/../G4EMLOW1.1
+	g4ledata=$g4install/../G4EMLOW2.2
 	;;
 esac
 
