@@ -13,7 +13,7 @@
 proton
 //--------
 #material
-Al
+Pb
 #energy(MeV)
 800.
 #emax(MeV)
@@ -23,7 +23,7 @@ Al
 #nbinsd
 200
 #elim(MeV)
-0.5
+1.0
 #nangle
 5
 #angles
