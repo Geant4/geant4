@@ -11,6 +11,9 @@ List of fixes included in this public patch to release 5.0:
     - Added experimental setup WIN32-VC7.gmk for Windows .NET VC++ compiler.
     - Generalised identification of WIN32 specific setups in core scripts.
     - Forced silent generation of dependencies.
+    - Configure script: fixed GNUmakefile access problem for correct execution
+      of flags/libs command options. Added automatic recognition of 'Darwin' OS.
+    - source/GNUmakefile: included patch to release 5.0.
 
   o Electromagnetic processes (low-energy):
     --------------------------------------
