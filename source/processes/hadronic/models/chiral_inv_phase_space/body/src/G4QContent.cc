@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QContent.cc,v 1.3 2000-08-17 13:53:19 mkossov Exp $
+// $Id: G4QContent.cc,v 1.4 2000-09-10 13:58:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -28,7 +28,7 @@
 G4QContent::G4QContent(G4int d, G4int u, G4int s, G4int ad, G4int au, G4int as):
   nD(d),nU(u),nS(s),nAD(ad),nAU(au),nAS(as){}
 
-G4QContent::G4QContent(const G4QContent &right)
+G4QContent::G4QContent(const G4QContent& right)
 {
   nU  = right.nU;
   nD  = right.nD;
@@ -36,6 +36,29 @@ G4QContent::G4QContent(const G4QContent &right)
   nAU = right.nAU;
   nAD = right.nAD;
   nAS = right.nAS;
+}
+
+G4QContent::G4QContent(G4QContent* right)
+{
+  nU  = right->nU;
+  nD  = right->nD;
+  nS  = right->nS;
+  nAU = right->nAU;
+  nAD = right->nAD;
+  nAS = right->nAS;
+}
+
+// Assignment operator (copy stile for possible Vector extention)
+const G4QContent& G4QContent::operator=(const G4QContent &right)
+{//               ==============================================
+  nU  = right.nU;
+  nD  = right.nD;
+  nS  = right.nS;
+  nAU = right.nAU;
+  nAD = right.nAD;
+  nAS = right.nAS;
+		
+  return *this;
 }
 
 // Standard output for QC {d,u,s,ad,au,as}
@@ -66,19 +89,6 @@ G4QContent operator-(const G4QContent& lhs, const G4QContent& rhs)
 {//        =======================================================
   G4QContent s  = lhs;
   return     s -= rhs;
-}
-
-// Assignment operator (copy stile for possible Vector extention)
-const G4QContent& G4QContent::operator=(const G4QContent &right)
-{//               ==============================================
-  nU  = right.nU;
-  nD  = right.nD;
-  nS  = right.nS;
-  nAU = right.nAU;
-  nAD = right.nAD;
-  nAS = right.nAS;
-		
-  return *this;
 }
 
 // Destructor - - - - - - - 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QChipolino.cc,v 1.1 2000-08-17 13:55:49 mkossov Exp $
+// $Id: G4QChipolino.cc,v 1.2 2000-09-10 13:58:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -458,13 +458,22 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
   }
 }
 
-
-G4QChipolino::G4QChipolino(const G4QChipolino &right)
+G4QChipolino::G4QChipolino(const G4QChipolino& right)
 {
   theQPDG1  = right.theQPDG1;
   theQPDG2  = right.theQPDG2;
   theQCont  = right.theQCont;
   theQCont1 = right.theQCont1;
+  minM      = right.minM;
+}
+
+G4QChipolino::G4QChipolino(G4QChipolino* right)
+{
+  theQPDG1  = right->theQPDG1;
+  theQPDG2  = right->theQPDG2;
+  theQCont  = right->theQCont;
+  theQCont1 = right->theQCont1;
+  minM      = right->minM;
 }
 
 const G4QChipolino& G4QChipolino::operator=(const G4QChipolino &right)
@@ -473,6 +482,7 @@ const G4QChipolino& G4QChipolino::operator=(const G4QChipolino &right)
   theQPDG2  = right.theQPDG2;
   theQCont  = right.theQCont;
   theQCont1 = right.theQCont1;
+  minM      = right.minM;
 
   return *this;
 }

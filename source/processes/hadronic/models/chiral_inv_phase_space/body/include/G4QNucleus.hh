@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.hh,v 1.2 2000-09-04 07:44:01 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.3 2000-09-10 13:58:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,7 +35,8 @@ public:
   G4QNucleus(G4QContent nucQC, G4LorentzVector p);         // Full QuarkCont-Constructor
   G4QNucleus(G4int z, G4int n, G4int s);                   // At Rest ZNS-Constructor
   G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p);// Full ZNS-Constructor
-  G4QNucleus(const G4QNucleus &right);                     // Copy Constructor
+  G4QNucleus(const G4QNucleus& right);                     // Copy Constructor by value
+  G4QNucleus(G4QNucleus* right);                           // Copy Constructor by pointer
   ~G4QNucleus();                                           // Destructor
   // Overloaded Operators
   const G4QNucleus & operator=(const G4QNucleus &right);
@@ -59,9 +60,11 @@ public:
 
   // Specific Modifiers
   G4bool     EvaporateBaryon(G4QHadron* h1,G4QHadron* h2); // Evaporate one Baryon from Nucleus
-  void       InitByPDG(G4int newPDG);                      // Init existing nucleus by new PDGC
+  void       InitByPDG(G4int newPDG);                      // Init existing nucleus by new PDG
+  void       InitByQC(G4QContent newQC);                   // Init existing nucleus by new QCont
   void       IncProbability(G4int bn);                     // Add one cluster to probability
-  void       Increase(G4int PDG);                          // Increas Nucleus by PDG fragment
+  void       Increase(G4int PDG, G4LorentzVector LV = G4LorentzVector(0.,0.,0.,0.));
+  void       Increase(G4QContent QC, G4LorentzVector LV = G4LorentzVector(0.,0.,0.,0.));
   void       Reduce(G4int PDG);                            // Reduce Nucleus by PDG fragment
   void       CalculateMass();                              // Recalculate (calculate) the mass
   void       SetMaxClust(G4int maxC);                      // Get Max BarNum of Clusters
@@ -77,7 +80,12 @@ private:
   // Specific Encapsulated Functions
   G4QNucleus        GetThis() const;
 
+// Body
 private:
+  // Static Parameters
+  static G4double freeNuc;      // probability of the quasi-free baryon on surface
+  static G4double freeDib;      // probability of the quasi-free dibaryon on surface
+  static G4double clustProb;    // clusterization probability in dense region
   // The basic  
   G4int Z;                      // Z of the Nucleus
   G4int N;                      // N of the Nucleus
@@ -88,10 +96,6 @@ private:
   G4int dS;                     // S of the dense region of the nucleus
   G4int maxClust;               // Baryon Number of the last calculated cluster
   G4double probVect[256];       // Cluster probability ("a#of issues" can be real) Vector
-  // Static Parameters
-  static G4double freeNuc;      // probability of the quasi-free baryon on surface
-  static G4double freeDib;      // probability of the quasi-free dibaryon on surface
-  static G4double clustProb;    // clusterization probability in dense region
 };
 
 ostream& operator<<(ostream& lhs, G4QNucleus& rhs);
@@ -111,13 +115,25 @@ inline G4int    G4QNucleus::GetDS() const {return dS;}
 inline G4int    G4QNucleus::GetDA() const {return dZ+dN+dS;}
 inline G4int    G4QNucleus::GetMaxClust() const {return maxClust;}
 inline G4double G4QNucleus::GetProbability(G4int bn) const {return probVect[bn];}
+
+// Init existing nucleus by new Quark Content
+inline void G4QNucleus::InitByQC(G4QContent newQC)
+{//  =============================================
+  G4int PDG=G4QPDGCode(newQC).GetPDGCode();
+  InitByPDG(PDG);
+}
+
 inline G4double G4QNucleus::GetMZNS() const
 {
   G4QPDGCode tmp(111);
   return tmp.GetNuclMass(GetZ(), GetN(), GetS());
 }
 inline G4double   G4QNucleus::GetGSMass() const {return GetQPDG().GetMass();}
-inline G4QContent G4QNucleus::GetQCZNS()  const {return G4QContent(Z+N+N+S,Z+Z+N+S,S,0,0,0);}
+inline G4QContent G4QNucleus::GetQCZNS()  const
+{
+  if(S>=0) return G4QContent(Z+N+N+S,Z+Z+N+S,S,0,0,0);
+  else     return G4QContent(Z+N+N+S,Z+Z+N+S,0,0,0,-S);
+}
 inline void       G4QNucleus::SetMaxClust(G4int maxC) {maxClust=maxC;}
 inline void       G4QNucleus::CalculateMass()
                     {Set4Momentum(G4LorentzVector(0.,0.,0.,GetGSMass()));}

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QParticle.hh,v 1.1 2000-08-17 13:55:07 mkossov Exp $
+// $Id: G4QParticle.hh,v 1.2 2000-09-10 13:58:56 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,6 +32,8 @@ public:
   // Constructors
   G4QParticle();                                // Default Constructor
   G4QParticle(G4int thePDG);                    // PDGCode Constructor
+  G4QParticle(const G4QParticle& right);        // Copy Constructor by value
+  G4QParticle(G4QParticle* right);              // Copy Constructor by pointer
 
   ~G4QParticle();                               // Destructor
 

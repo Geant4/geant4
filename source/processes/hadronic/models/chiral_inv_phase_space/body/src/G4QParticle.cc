@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QParticle.cc,v 1.1 2000-08-17 13:55:49 mkossov Exp $
+// $Id: G4QParticle.cc,v 1.2 2000-09-10 13:58:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -32,7 +32,52 @@ G4QParticle::G4QParticle(G4int thePDG)
   aDecay     = InitDecayVector(aQPDG.GetQCode());
 }
 
+G4QParticle::G4QParticle(const G4QParticle& right)
+{
+  aQPDG                = right.aQPDG;
+  //aDecay (Vector)
+  G4int nD             = right.aDecay.entries();
+  if(nD) for(G4int id=0; id<nD; id++)
+  {
+    G4QDecayChan* curD = new G4QDecayChan(right.aDecay[id]);
+    aDecay.insert(curD);
+  }
+
+  aQuarkCont           = right.aQuarkCont;
+}
+
+G4QParticle::G4QParticle(G4QParticle* right)
+{
+  aQPDG                = right->aQPDG;
+  //aDecay (Vector)
+  G4int nD             = right->aDecay.entries();
+  if(nD) for(G4int id=0; id<nD; id++)
+  {
+    G4QDecayChan* curD = new G4QDecayChan(right->aDecay[id]);
+    aDecay.insert(curD);
+  }
+
+  aQuarkCont           = right->aQuarkCont;
+}
+
 G4QParticle::~G4QParticle() {aDecay.clearAndDestroy();};
+
+// Assignment operator
+const G4QParticle& G4QParticle::operator=(const G4QParticle &right)
+{
+  aQPDG                = right.aQPDG;
+  //aDecay (Vector)
+  G4int nD             = right.aDecay.entries();
+  if(nD) for(G4int id=0; id<nD; id++)
+  {
+    G4QDecayChan* curD = new G4QDecayChan(right.aDecay[id]);
+    aDecay.insert(curD);
+  }
+
+  aQuarkCont           = right.aQuarkCont;
+
+  return *this;
+}
 
 // Standard output for QParticle
 ostream& operator<<(ostream& lhs, G4QParticle& rhs)

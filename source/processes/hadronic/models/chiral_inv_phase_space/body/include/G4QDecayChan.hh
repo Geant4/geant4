@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QDecayChan.hh,v 1.1 2000-08-17 13:55:06 mkossov Exp $
+// $Id: G4QDecayChan.hh,v 1.2 2000-09-10 13:58:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,9 +30,11 @@ class G4QDecayChan
 {
 public:
   // Constructors
-  //G4QDecayChan();                                                    // Default Constructor
+  G4QDecayChan();                                                    // Default Constructor
   G4QDecayChan(G4QPDGCodeVector secHadr, G4double probLimit = 1.);   // General Constructor
   G4QDecayChan(G4double pLev, G4int PDG1, G4int PDG2, G4int PDG3=0); // Detailed Constructor
+  G4QDecayChan(const G4QDecayChan& right);                           // Copy Constructor by value
+  G4QDecayChan(G4QDecayChan* right);                                 // Copy Constructor by pointer
 
   ~G4QDecayChan();                                                   // Destructor
 

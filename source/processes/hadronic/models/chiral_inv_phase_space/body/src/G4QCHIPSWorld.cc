@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QCHIPSWorld.cc,v 1.1 2000-09-04 07:46:39 mkossov Exp $
+// $Id: G4QCHIPSWorld.cc,v 1.2 2000-09-10 13:58:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -28,14 +28,31 @@ G4QCHIPSWorld::G4QCHIPSWorld(G4int nOfParts)
   qWorld = InitCHIPSWorld(nOfParts); // Initialization of the CHIPS World with N particles
 }
 
+G4QCHIPSWorld::G4QCHIPSWorld(const G4QCHIPSWorld& right)
+{
+  qWorld = right.qWorld;
+}
+
+G4QCHIPSWorld::G4QCHIPSWorld(G4QCHIPSWorld* right)
+{
+  qWorld = right->qWorld;
+}
+
 G4QCHIPSWorld::~G4QCHIPSWorld() {};
 
-// Standard output for QPDGCode
+const G4QCHIPSWorld& G4QCHIPSWorld::operator=(const G4QCHIPSWorld &right)
+{//   ===================================================================
+  qWorld = right.qWorld;
+
+  return *this;
+}
+
+// Standard output for CHIPS World
 ostream& operator<<(ostream& lhs, G4QCHIPSWorld& rhs)
 //       ============================================
 {
   // @@ Later make a list of activated particles and clusters
-  //lhs << "[ PDG=" << rhs.GetPDGCode() << ", Q=" << rhs.GetQCode() << "]";
+  lhs << "[ a#of particles in the CHIPS World =" << rhs.GetQPEntries() << "]";
   return lhs;
 }
 

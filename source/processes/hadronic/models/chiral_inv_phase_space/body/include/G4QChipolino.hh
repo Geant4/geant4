@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QChipolino.hh,v 1.1 2000-08-17 13:55:06 mkossov Exp $
+// $Id: G4QChipolino.hh,v 1.2 2000-09-10 13:58:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,12 +32,16 @@ public:
   // Constructors
   G4QChipolino();                                      // Default Constructor
   G4QChipolino(G4QContent& QContent);                  // Construction by Quark Content
-  G4QChipolino(const G4QChipolino& right);             // Copy constructor
+  G4QChipolino(const G4QChipolino& right);             // Copy constructor by value
+  G4QChipolino(G4QChipolino* right);                   // Copy constructor by pointer
+
   ~G4QChipolino();                                     // Destructor
+
   // Operators
   const G4QChipolino& operator=(const G4QChipolino& right);
   G4int              operator==(const G4QChipolino& right) const;
   G4int              operator!=(const G4QChipolino& right) const;
+
   // Selectors
   G4double              GetMass();            // Get mass of the Chipolino (MinDoubleHadronMass)
   G4double              GetMass2();           // Get mass^2 of the Chipolino
@@ -46,11 +50,12 @@ public:
   G4QContent            GetQContent() const;  // Get private quark content of the Chipolino
   G4QContent            GetQContent1() const; // Get 1-st quark content of the Chipolino
   G4QContent            GetQContent2() const; // Get 2-st quark content of the Chipolino
+
   // Modifiers
   void SetHadronQPDG(const G4QPDGCode& QPDG); // Set QPDG of 1-st Hadron of the Chipolino
   void SetHadronPDGCode(const G4int& PDGCode);// Set PDGCode of 1-st Hadron of the Chipolino
   void SetHadronQCont(const G4QContent& QC);  // Set QContent of 1-st Hadron of the Chipolino
-  // General
+
 private:  
   G4QPDGCode            theQPDG1;             // QPDG of the 1-st Hadron of the Chipolino
   G4QPDGCode            theQPDG2;             // QPDG of the 2-nd Hadron of the Chipolino

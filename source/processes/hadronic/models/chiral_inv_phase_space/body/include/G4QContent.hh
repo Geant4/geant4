@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QContent.hh,v 1.3 2000-08-17 13:53:02 mkossov Exp $
+// $Id: G4QContent.hh,v 1.4 2000-09-10 13:58:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,10 +30,12 @@ class G4QContent
 {
 public:
   G4QContent(G4int d=0, G4int u=0, G4int s=0, G4int ad=0, G4int au=0, G4int as=0);
-  G4QContent(const G4QContent& rhs);
+  G4QContent(const G4QContent& rhs);     // Copy constructor by value
+  G4QContent(G4QContent* rhs);           // Copy constructor by pointer
 
   ~G4QContent();
 
+  // Overloaded operators
   const G4QContent& operator=(const G4QContent& rhs);
   G4int             operator==(const G4QContent& rhs) const;
   G4int             operator!=(const G4QContent& rhs) const;
@@ -43,14 +45,8 @@ public:
   G4QContent        operator+=(const G4QContent& rhs);
   G4QContent        operator-=(const G4QContent& rhs);
   G4QContent        operator*=(const G4int& rhs);
-  G4QContent        IndQ (G4int ind=0);
-  G4QContent        IndAQ(G4int ind=0);
-  G4QContent        SplitChipo(G4double mQ);
-  G4bool            SubtractHadron(G4QContent h);
-  G4bool            SubtractPi0();
-  G4bool            SubtractPion();
-  G4bool            SubtractKaon(G4double mQ);
-  
+
+  // Selectors  
   G4int             GetCharge() const;
   G4int             GetBaryonNumber() const;
   G4int             GetStrangeness() const;
@@ -61,7 +57,6 @@ public:
   G4int             GetAQ() const;
   G4int             GetTot() const;
   G4bool            CheckNegative() const;
-  void              Anti();
 
   G4int GetP() const;       // A#of protons
   G4int GetN() const;       // A#of neutrons
@@ -90,6 +85,15 @@ public:
   G4int GetADAS() const;    // A#of anti-ds-di-quarks
   G4int GetAUAS() const;    // A#of anti-us-di-quarks
 
+  // Modifiers
+  void              Anti();
+  G4QContent        IndQ (G4int ind=0);
+  G4QContent        IndAQ(G4int ind=0);
+  G4QContent        SplitChipo(G4double mQ);
+  G4bool            SubtractHadron(G4QContent h);
+  G4bool            SubtractPi0();
+  G4bool            SubtractPion();
+  G4bool            SubtractKaon(G4double mQ);
 
   void SetD (G4int n=0);
   void SetU (G4int n=0);
@@ -116,6 +120,8 @@ public:
 
 private:
   G4QContent        GetThis() const;
+
+  // Body
 private:            //                       C    S
   G4int nD;         // a#of      d-quarks (-1/3)( 0)
   G4int nU;         // a#of      u-quarks (+2/3)( 0)

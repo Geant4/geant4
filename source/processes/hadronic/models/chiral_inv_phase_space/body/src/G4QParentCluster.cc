@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QParentCluster.cc,v 1.1 2000-08-17 13:55:49 mkossov Exp $
+// $Id: G4QParentCluster.cc,v 1.2 2000-09-10 13:58:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -30,14 +30,38 @@ G4QParentCluster::G4QParentCluster(G4int PDGCode, G4double prob):
 
 G4QParentCluster::G4QParentCluster(const G4QParentCluster& rhs)
 {
-  thePDGCode     = rhs.thePDGCode;
-  theProbability = rhs.theProbability;
+  thePDGCode       = rhs.thePDGCode;
+  theProbability   = rhs.theProbability;
+  nQPart2          = rhs.nQPart2;
+  transQC          = rhs.transQC;
+  lowLimit         = rhs.lowLimit;
+  highLimit        = rhs.highLimit;
+  theBoundedMass   = rhs.theBoundedMass;
+  theBindingEnergy = rhs.theBindingEnergy;
+}
+
+G4QParentCluster::G4QParentCluster(G4QParentCluster* rhs)
+{
+  thePDGCode       = rhs->thePDGCode;
+  theProbability   = rhs->theProbability;
+  nQPart2          = rhs->nQPart2;
+  transQC          = rhs->transQC;
+  lowLimit         = rhs->lowLimit;
+  highLimit        = rhs->highLimit;
+  theBoundedMass   = rhs->theBoundedMass;
+  theBindingEnergy = rhs->theBindingEnergy;
 }
 
 const G4QParentCluster& G4QParentCluster::operator=(const G4QParentCluster& rhs)
 {
-  thePDGCode     = rhs.thePDGCode;
-  theProbability = rhs.theProbability;
+  thePDGCode       = rhs.thePDGCode;
+  theProbability   = rhs.theProbability;
+  nQPart2          = rhs.nQPart2;
+  transQC          = rhs.transQC;
+  lowLimit         = rhs.lowLimit;
+  highLimit        = rhs.highLimit;
+  theBoundedMass   = rhs.theBoundedMass;
+  theBindingEnergy = rhs.theBindingEnergy;
 
   return *this;
 }

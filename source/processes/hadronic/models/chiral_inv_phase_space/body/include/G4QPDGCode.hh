@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QPDGCode.hh,v 1.2 2000-09-04 07:44:01 mkossov Exp $
+// $Id: G4QPDGCode.hh,v 1.3 2000-09-10 13:58:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,30 +34,40 @@ public:
   // Constructors
   G4QPDGCode(G4int PDGCode = 0);                     // Construction by PDGCode
   G4QPDGCode(G4QContent QCont);                      // Construction by Quark Content
-  G4QPDGCode(const G4QPDGCode& rhs);                 // Copy Constructor
+  G4QPDGCode(const G4QPDGCode& rhs);                 // Copy Constructor by value
+  G4QPDGCode(G4QPDGCode* rhs);                       // Copy Constructor by pointer
 
   ~G4QPDGCode();                                     // Destructor
 
   // Operators
   const G4QPDGCode& operator=(const G4QPDGCode& rhs);
-  G4int            operator==(const G4QPDGCode& rhs) const;
-  G4int            operator==(const G4int& rhs) const;
-  G4int            operator!=(const G4QPDGCode& rhs) const;
-  G4int            operator!=(const G4int& rhs) const;
-  G4QPDGCode       operator+=(const G4int& rhs);
-  G4QPDGCode       operator+=(const G4QPDGCode& rhs);
-  G4QPDGCode       operator-=(const G4int& rhs);
-  G4QPDGCode       operator-=(const G4QPDGCode& rhs);
-  G4QPDGCode       operator*=(const G4int& rhs);
-  G4QPDGCode       operator/=(const G4int& rhs);
+  G4int             operator==(const G4QPDGCode& rhs) const;
+  G4int             operator==(const G4int& rhs) const;
+  G4int             operator!=(const G4QPDGCode& rhs) const;
+  G4int             operator!=(const G4int& rhs) const;
+  G4QPDGCode        operator+=(const G4int& rhs);
+  G4QPDGCode        operator+=(const G4QPDGCode& rhs);
+  G4QPDGCode        operator-=(const G4int& rhs);
+  G4QPDGCode        operator-=(const G4QPDGCode& rhs);
+  G4QPDGCode        operator*=(const G4int& rhs);
+  G4QPDGCode        operator/=(const G4int& rhs);
 
   // Selectors
-  G4int   GetPDGCode()                       const; // Get PDG code of the Hadron
-  G4int   GetQCode()                         const; // Get Q code of the Hadron
-  G4QContent GetExQContent(G4int i, G4int o) const; // Get Q Content for the Quark Exchange  
-  G4int   GetRelCrossIndex(G4int i, G4int o) const; // Relative Cross Index for q_i->q_o
-  G4int   GetNumOfComb(G4int i, G4int o)     const; // Get number of Combinations for q_i->q_o
-  G4int   GetTotNumOfComb(G4int i)           const; // Get a total # of Combinations for q_i 
+  G4double   GetMass();                                // GS Mass for the QHadron
+  G4double   GetMass2();                               // Squared GS Mass for the QHadron
+  G4double   GetWidth();                               // Width for the QHadron
+  G4double   GetNuclMass(G4int Z, G4int N, G4int S);   // Wrapper for nuclear mass calculation
+  G4double   GetNuclMass(G4int PDGCode);               // Wrapper for nuclear mass calculation
+  G4QContent GetQuarkContent()                  const; // Get QC for the particle
+  G4int      GetBaryNum()                       const; // Get Baryon Number of the Hadron
+  G4int      GetSpin()                          const; // Returns 2s+1 for hadrons or 1 for nuclei
+  G4int      GetCharge()                        const; // Get Charge of the Hadron
+  G4int      GetPDGCode()                       const; // Get PDG code of the Hadron
+  G4int      GetQCode()                         const; // Get Q code of the Hadron
+  G4QContent GetExQContent(G4int i, G4int o)    const; // Get Q Content for the Quark Exchange  
+  G4int      GetRelCrossIndex(G4int i, G4int o) const; // Relative Cross Index for q_i->q_o
+  G4int      GetNumOfComb(G4int i, G4int o)     const; // Get number of Combinations for q_i->q_o
+  G4int      GetTotNumOfComb(G4int i)           const; // Get a total # of Combinations for q_i 
 
   // Modifiers
   void  SetPDGCode(G4int newPDGCode);               // Set PDG code of the Hadron
@@ -65,17 +75,8 @@ public:
   void  InitByQCode(G4int QCode);                   // Init existing QPDG by Q Code
 
   // General
-  G4QContent GetQuarkContent()               const; // Get QC for the particle
-  G4double   GetMass();
-  G4double   GetMass2();
-  G4double   GetWidth();
-  G4int      GetSpin()                       const; // Returns 2s+1 for hadrons or 1 for nuclei
-  G4int      GetCharge()                     const; // Get Charge of the Hadron
-  G4int      GetBaryNum()                    const; // Get Baryon Number of the Hadron
   G4bool     TestRealNeutral();
   void       NegPDGCode();
-  G4double   GetNuclMass(G4int Z, G4int N, G4int S);// Wrapper for nuclear mass calculation
-  G4double   GetNuclMass(G4int PDGCode);            // Wrapper for nuclear mass calculation
 
 private:
   // Encapsulated functions

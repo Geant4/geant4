@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.hh,v 1.1 2000-09-04 07:46:21 mkossov Exp $
+// $Id: G4QEnvironment.hh,v 1.2 2000-09-10 13:58:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,29 +30,32 @@ class G4QEnvironment
 {
 public:
   G4QEnvironment(const G4QHadronVector& projHadrons, const G4int targPDG);
-  G4QEnvironment(const G4QEnvironment &right);                   // QEnvironment duplication
-
+  G4QEnvironment(const G4QEnvironment& right);         // copy QEnvironment by value
+  G4QEnvironment(G4QEnvironment* right);               // copy QEnvironment by pointer
   ~G4QEnvironment();
 
+  // Overloaded operators
+  const G4QEnvironment& operator=(const G4QEnvironment& right);
   int operator==(const G4QEnvironment &right) const;
   int operator!=(const G4QEnvironment &right) const;
 
   //Selectors
   G4QNucleus       GetEnvironment() const;
-  //General
   G4QuasmonVector* GetQuasmons();
-  G4QHadronVector* Fragment();
+  G4QHadronVector* Fragment();                   // GetQHadrons
+
   // Static functions
-  static void SetParameters(G4bool efFlag, G4double solAn=0.8, G4double piThresh=141.4,
+  static void SetParameters( G4double solAn, G4bool efFlag=false, G4double piThresh=141.4,
                             G4double mpisq=20000., G4double dinum=1880.);
 private:  
   G4QHadronVector  HadronizeQEnvironment();
   void             CreateQuasmon(const G4QContent& projQC, const G4LorentzVector& proj4M);
-  void             FillNEnvInVector();
   void             InitClustersVector(G4int maxClust);
-  void             PrepareClusters();
+  void             PrepareClusters();            // Prepare nuclear clusters for interaction
+  void             CleanUp();                    // Nulefies theEnvironment & kills Quasmons
   void             PrepareInteractionProbabilities(const G4QContent& projQC);
   void             EvaporateResidual(G4QHadron* evap);
+  void             DecayDibaryon(G4QHadron* dB);
   G4bool           DecayOutHadron(G4QHadron* qHadron);
   G4ThreeVector    RndmDir();
 

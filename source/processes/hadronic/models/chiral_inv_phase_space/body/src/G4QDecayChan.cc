@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QDecayChan.cc,v 1.1 2000-08-17 13:55:49 mkossov Exp $
+// $Id: G4QDecayChan.cc,v 1.2 2000-09-10 13:58:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -23,7 +23,7 @@
 
 #include "G4QDecayChanVector.hh"
 
-//G4QDecayChan::G4QDecayChan(){};
+G4QDecayChan::G4QDecayChan(){};
 
 G4QDecayChan::G4QDecayChan(G4double pLev, G4int PDG1, G4int PDG2, G4int PDG3):
   aDecayChanLimit(pLev)
@@ -46,7 +46,49 @@ G4QDecayChan::G4QDecayChan(G4double pLev, G4int PDG1, G4int PDG2, G4int PDG3):
 #endif
 }
 
+G4QDecayChan::G4QDecayChan(const G4QDecayChan& right)
+{
+  aDecayChanLimit     = right.aDecayChanLimit;
+  theMinMass          = right.theMinMass;
+  //aVecOfSecHadrons (Vector)
+  G4int nSH           = right.aVecOfSecHadrons.entries();
+  if(nSH) for(G4int ih=0; ih<nSH; ih++)
+  {
+    G4QPDGCode* curPC = new G4QPDGCode(right.aVecOfSecHadrons[ih]);
+    aVecOfSecHadrons.insert(curPC);
+  }
+}
+
+G4QDecayChan::G4QDecayChan(G4QDecayChan* right)
+{
+  aDecayChanLimit     = right->aDecayChanLimit;
+  theMinMass          = right->theMinMass;
+  //aVecOfSecHadrons (Vector)
+  G4int nSH           = right->aVecOfSecHadrons.entries();
+  if(nSH) for(G4int ih=0; ih<nSH; ih++)
+  {
+    G4QPDGCode* curPC = new G4QPDGCode(right->aVecOfSecHadrons[ih]);
+    aVecOfSecHadrons.insert(curPC);
+  }
+}
+
 G4QDecayChan::~G4QDecayChan() {aVecOfSecHadrons.clearAndDestroy();}
+
+// Assignment operator
+const G4QDecayChan& G4QDecayChan::operator=(const G4QDecayChan& right)
+{
+  aDecayChanLimit     = right.aDecayChanLimit;
+  theMinMass          = right.theMinMass;
+  //aVecOfSecHadrons (Vector)
+  G4int nSH           = right.aVecOfSecHadrons.entries();
+  if(nSH) for(G4int ih=0; ih<nSH; ih++)
+  {
+    G4QPDGCode* curPC = new G4QPDGCode(right.aVecOfSecHadrons[ih]);
+    aVecOfSecHadrons.insert(curPC);
+  }
+
+  return *this;
+}
 
 // Standard output for QDecayChan
 ostream& operator<<(ostream& lhs, G4QDecayChan& rhs)
@@ -65,11 +107,6 @@ ostream& operator<<(ostream& lhs, G4QDecayChan& rhs)
   lhs << "]";
   return lhs;
 }
-
-//G4int G4QDecayChan::() // Prototype
-//    ===========================================
-//{
-//}
 
 
 

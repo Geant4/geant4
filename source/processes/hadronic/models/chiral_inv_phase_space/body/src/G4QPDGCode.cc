@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QPDGCode.cc,v 1.2 2000-09-04 07:44:01 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.3 2000-09-10 13:58:58 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,6 +44,12 @@ G4QPDGCode::G4QPDGCode(const G4QPDGCode& rhs)
 {
   thePDGCode =rhs.thePDGCode;
   theQCode   =rhs.theQCode;
+}
+
+G4QPDGCode::G4QPDGCode(G4QPDGCode* rhs)
+{
+  thePDGCode =rhs->thePDGCode;
+  theQCode   =rhs->theQCode;
 }
 
 const G4QPDGCode& G4QPDGCode::operator=(const G4QPDGCode& rhs)
@@ -459,6 +465,8 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   static const G4double mP    = G4QPDGCode(2212).GetMass();
   static const G4double mN    = G4QPDGCode(2112).GetMass();
   static const G4double mL    = G4QPDGCode(3122).GetMass();
+  static const G4double mK    = G4QPDGCode( 321).GetMass();
+  static const G4double mK0   = G4QPDGCode( 311).GetMass();
   static const G4int nSh = 164;
   static G4double sh[nSh] = {0.,                        // Fake element for C++ N=Z=0
                                -4.315548,   2.435504,  -1.170501,   3.950887,   5.425238,
@@ -520,21 +528,63 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
 				   {50.000,40.820,33.050,20.174,13.369, 3.125, 2.863, 2.855,10.680},
 				   {55.000,48.810,40.796,25.076,16.562, 3.020, 0.101,-4.737,1.9520},
 				   {60.000,55.000,50.100,33.660,23.664, 9.873, 5.683,-0.809,0.8730}};
-  G4double A=Z+N;
-  G4double D=N-Z;
-  G4double m=A*um;
+  G4double k=0.;                      // Mass Sum of K+ mesons
+  if(S<0)                             // @@ Can be improved by K0/K+ search of minimum
+  {
+    if(Z+N+S<1) return 0.;
+    if(Z>0)
+	{
+      if(Z>=-S)                         // => "Enough protons in nucleus" case
+	  {
+        k=-S*mK;
+        Z+=S;
+	  }
+      else
+	  {
+        k=Z*mK-(S+Z)*mK0;
+        N+=S+Z;
+        if(N<0) return 0.;
+        Z=0;
+	  }
+	}
+    else if(N>0)
+	{
+      if(N>=-S)                         // => "Enough neutrons in nucleus" case
+	  {
+        k=-S*mK0;
+        N+=S;
+	  }
+      else
+	  {
+        k=N*mK0-(S+N)*mK;
+        Z+=S+N;
+        if(Z<0) return 0.;
+        N=0;
+	  }
+	}
+    else return 0.;
+    S=0;
+  }
+  G4double A=Z+N;                     // Baryon Number of the nucleus
+  G4double m=k+A*um;                  // Expected mass in atomic units
+  G4double D=N-Z;                     // Isotopic shift of the nucleus
   if (Z==-1||N==-1)                   // Iso-Nuclei
   {
-    if(Z==-1) return delMi+(N-1)*mN+S*mL;
-    else      return delPP+(Z-1)*mP+S*mL;
+    if(Z==-1) return k+delMi+(N-1)*mN+S*mL;
+    else      return k+delPP+(Z-1)*mP+S*mL;
   }
-  else if(A<1||Z<0||N<0) return 0.;
-  if     (!Z) return N*mN+S*mL+(N+S)*.001;  // @@ n+LAMBDA states are not implemented
-  else if(!N) return Z*mP+S*mL+(Z+S)*.001;  // @@ p+LAMBDA states are not implemented
+  else if(A<1||Z<0||N<0)              // @@ Can be generalized to anti-nuclei
+  {
+    //G4cerr<<"***G4QPDGCode::GetNuclMass: A="<<A<<"<1 || Z="<<Z<<"<0 || N="<<N<<"<0"<<G4endl;
+    //@@G4Exception("***G4QPDGCode::GetNuclMass: Impossible nucleus");
+    return 0.;                        // @@ Temporary
+  }
+  if     (!Z) return k+N*mN+S*mL+(N+S)*.001;  // @@ n+LAMBDA states are not implemented
+  else if(!N) return k+Z*mP+S*mL+(Z+S)*.001;  // @@ p+LAMBDA states are not implemented
   else if(N<=9&&Z<=9) m+=1.433e-5*pow(double(Z),2.39)-Z*me+c[N-1][Z-1];
   else m+=-sh[Z]-sh[N]+b1*D*D*pow(A,b2)+b3*(1.-2./(1.+exp(b4*D)))+Z*Z*(b5*pow(A,b9)+b6/A);
   //else m=G4NucleiProperties::GetNuclearMass(Z+N,Z);
-  G4double maxM= Z*mP+N*mN+S*mL+.001;
+  G4double maxM= k+Z*mP+N*mN+S*mL+.001;       // @@ .001 ?? Wings of the Mass parabola
   if(m>maxM) m=maxM;
   if(S>0)
   {

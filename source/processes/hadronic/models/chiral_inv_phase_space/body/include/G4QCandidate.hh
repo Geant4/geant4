@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QCandidate.hh,v 1.4 2000-08-17 13:53:02 mkossov Exp $
+// $Id: G4QCandidate.hh,v 1.5 2000-09-10 13:58:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,11 +29,12 @@ class G4QCandidate : public G4QHadron
 {
 public:
   G4QCandidate();                                            // Default Constructor
-  G4QCandidate(G4int PDGcode);                               //Constructor
-  G4QCandidate(const G4QCandidate &right);                   // Copy Constructor
+  G4QCandidate(G4int PDGcode);                               // Constructor by PDG Code
+  G4QCandidate(const G4QCandidate& right);                   // Copy Constructor by value
+  G4QCandidate(G4QCandidate* right);                         // Copy Constructor by pointer
   ~G4QCandidate();                                           // Destructor
   // Overloaded Operators
-  const G4QCandidate & operator=(const G4QCandidate &right);
+  const G4QCandidate& operator=(const G4QCandidate& right);
   G4int operator==(const G4QCandidate &right) const;
   G4int operator!=(const G4QCandidate &right) const;
   // Specific Selectors
@@ -54,15 +55,16 @@ public:
   void SetPossibility(G4bool choice);       // Set possibility(true)/forbiding(false) to be a hadr./fragm.
   void SetParPossibility(G4bool choice);    // Set possibility(true)/forbiding(false) to be a parent
   void SetKMin(G4double kmin);              // Set k-minimal for the candidate
-  void SetDenseProbability(G4double prep);    // Set dense-probability for the candidate 
+  void SetDenseProbability(G4double prep);   // Set dense-probability for the candidate 
   void SetPreProbability(G4double prep);    // Set pre-probability for the candidate 
   void SetRelProbability(G4double relP);    // Set the relative probility of hadronization
   void SetIntegProbability(G4double intP);  // Set integrated probability for randomization
   void SetSecondRelProb(G4double relP);     // Set 2nd relative probility of hadronization
   void SetSecondIntProb(G4double intP);     // Set 2nd integr. probability for randomization
   void SetMass(G4double newMass);           // Set 4Momentum at rest with the new Mass
-										   
-private:  								   
+
+// Body  								   
+private:
   G4bool   possible;                        // permission/forbiding preFlag to be a hadron/fragment
   G4bool   parPossible;                     // permission/forbiding preFlag to be a parent
   G4double kMin;                            // mu^2/2M (Q-case), ~BindingEnergy (Clust.-case)
@@ -91,16 +93,20 @@ inline G4double G4QCandidate::GetSecondRelProb()          const {return secondRe
 inline G4double G4QCandidate::GetSecondIntProb()          const {return secondIntProbability;}
 
 inline void G4QCandidate::ClearParClustVector()             {thePClusters.clearAndDestroy();}
-inline void G4QCandidate::FillPClustVec(G4QParentCluster* pCl)    {thePClusters.insert(pCl);}
-inline void G4QCandidate::SetPossibility(G4bool choice)           {possible=choice;}
-inline void G4QCandidate::SetParPossibility(G4bool choice)        {parPossible=choice;}
-inline void G4QCandidate::SetKMin(G4double kmin)                  {kMin=kmin;}
-inline void G4QCandidate::SetDenseProbability(G4double prep)      {denseProbability=prep;}
-inline void G4QCandidate::SetPreProbability(G4double prep)        {preProbability=prep;}
-inline void G4QCandidate::SetRelProbability(G4double relP)        {relativeProbability=relP;}
-inline void G4QCandidate::SetIntegProbability(G4double intP)      {integralProbability=intP;}
-inline void G4QCandidate::SetSecondRelProb(G4double relP)         {secondRelProbability=relP;}
-inline void G4QCandidate::SetSecondIntProb(G4double intP)         {secondIntProbability=intP;}
+inline void G4QCandidate::FillPClustVec(G4QParentCluster* pCl)
+{
+  G4QParentCluster* npCl = new G4QParentCluster(pCl);
+  thePClusters.insert(npCl);                              // Fill new instance of PCl
+}
+inline void G4QCandidate::SetPossibility(G4bool choice)         {possible=choice;}
+inline void G4QCandidate::SetParPossibility(G4bool choice)      {parPossible=choice;}
+inline void G4QCandidate::SetKMin(G4double kmin)                {kMin=kmin;}
+inline void G4QCandidate::SetDenseProbability(G4double prep)    {denseProbability=prep;}
+inline void G4QCandidate::SetPreProbability(G4double prep)      {preProbability=prep;}
+inline void G4QCandidate::SetRelProbability(G4double relP)      {relativeProbability=relP;}
+inline void G4QCandidate::SetIntegProbability(G4double intP)    {integralProbability=intP;}
+inline void G4QCandidate::SetSecondRelProb(G4double relP)       {secondRelProbability=relP;}
+inline void G4QCandidate::SetSecondIntProb(G4double intP)       {secondIntProbability=intP;}
 inline void G4QCandidate::SetMass(G4double newM)  {Set4Momentum(G4LorentzVector(0,0,0,newM));}
 
 #endif

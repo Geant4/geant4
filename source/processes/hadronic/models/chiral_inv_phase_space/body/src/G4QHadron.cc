@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QHadron.cc,v 1.3 2000-08-17 13:53:19 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.4 2000-09-10 13:58:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -116,12 +116,12 @@ G4QHadron::~G4QHadron() {}
 G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
        G4LorentzVector& dir, G4double maxCost, G4double minCost)
 {//    ===================================================================
-  G4double fM  = f4Mom.m();                // Mass of the 1st Hadron
   G4double fM2 = f4Mom.m2();
-  G4double sM  = s4Mom.m();                // Mass of the 2nd Hadron
+  G4double fM  = sqrt(fM2);                // Mass of the 1st Hadron
   G4double sM2 = s4Mom.m2();
-  G4double iM  = theMomentum.m();          // Mass of the decaying hadron
+  G4double sM  = sqrt(sM2);                // Mass of the 2nd Hadron
   G4double iM2 = theMomentum.m2();
+  G4double iM  = sqrt(iM2);                // Mass of the decaying hadron
   G4ThreeVector ltb = theMomentum.boostVector(); // Boost vector for backward Lorentz Trans.
   G4ThreeVector ltf = -ltb;                      // Boost vector for forward Lorentz Trans.
   G4LorentzVector cdir = dir;              // A copy to make a transformation to CMS
@@ -143,10 +143,18 @@ G4bool G4QHadron::RelDecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
 #ifdef debug
   cout<<"G4QHadron::RelDecayIn2:iM="<<iM<<" => fM="<<fM<<" + sM="<<sM<<",ob="<<vx<<vy<<vz<<endl;
 #endif
-  //@@ Later on make a quark content check for the decay
-  if (iM<fM+sM || iM==0. || maxCost<-1. || maxCost>1.)
+  if(maxCost>1.) maxCost=1.;
+  if (abs(iM-fM-sM)<.001)
   {
-    cerr<<"***G4QHadron::RelDecayIn2*** f="<<fM<<"+sM="<<sM<<">iM="<<iM<<",mC="<<maxCost<<endl;
+    G4double fR=fM/iM;
+    G4double sR=sM/iM;
+    f4Mom=fR*theMomentum;
+    s4Mom=sR*theMomentum;
+    return true;
+  }
+  else if (iM<fM+sM || iM==0. || maxCost<-1.)
+  {//@@ Later on make a quark content check for the decay
+    G4cerr<<"***G4QHadron::RelDecayIn2:fM="<<fM<<"+sM="<<sM<<">iM="<<iM<<",mC="<<maxCost<<G4endl;
     return false;
   }
   G4double d2 = iM2-fM2-sM2;
@@ -202,7 +210,15 @@ G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
   cout << "G4QHadron::DecayIn2: iM="<<iM<<theMomentum<<" => fM="<<fM<<" + sM="<<sM<< endl;
 #endif
   //@@ Later on make a quark content check for the decay
-  if (iM<fM+sM || iM==0.)
+  if (abs(iM-fM-sM)<.001)
+  {
+    G4double fR=fM/iM;
+    G4double sR=sM/iM;
+    f4Mom=fR*theMomentum;
+    s4Mom=sR*theMomentum;
+    return true;
+  }
+  else if (iM<fM+sM || iM==0.)
   {
     cerr << "***G4QHadron::DecayIn2*** fM="<<fM<<" + sM="<<sM<<" > iM="<<iM<< endl;
     return false;

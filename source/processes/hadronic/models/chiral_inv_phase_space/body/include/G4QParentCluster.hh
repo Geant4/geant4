@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QParentCluster.hh,v 1.2 2000-09-04 07:44:01 mkossov Exp $
+// $Id: G4QParentCluster.hh,v 1.3 2000-09-10 13:58:56 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -32,7 +32,8 @@ public:
   // Constructors
   G4QParentCluster(G4int PDGCode = 0);               // Construction by PDGCode
   G4QParentCluster(G4int PDGCode, G4double prob);    // Construction by PDGCode & Probab
-  G4QParentCluster(const G4QParentCluster& rhs);     // Copy Constructor
+  G4QParentCluster(const G4QParentCluster& rhs);     // Copy Constructor by value
+  G4QParentCluster(G4QParentCluster* rhs);           // Copy Constructor by pointer
 
   ~G4QParentCluster();                               // Destructor
 

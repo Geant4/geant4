@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QCHIPSWorld.hh,v 1.1 2000-09-04 07:46:20 mkossov Exp $
+// $Id: G4QCHIPSWorld.hh,v 1.2 2000-09-10 13:58:41 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,8 +31,13 @@ class G4QCHIPSWorld
 public:
   // Constructors
   G4QCHIPSWorld(G4int nOfParts = 0);                // Construction with N particles
+  G4QCHIPSWorld(const G4QCHIPSWorld& right);        // Copy Constructor by value
+  G4QCHIPSWorld(G4QCHIPSWorld* right);              // Copy Constructor by pointer
 
   ~G4QCHIPSWorld();                                 // Destructor
+
+  // Overloaded Operators
+  const G4QCHIPSWorld& operator=(const G4QCHIPSWorld& right);
 
   // Selectors
   G4QParticle* GetQParticle(G4int PDG)       const; // Get pointer to particle in CHIPS World
@@ -43,6 +48,7 @@ public:
 private:
   G4QParticleVector* InitCHIPSWorld(G4int nOfParts);// nOfParts<0 kills the CHIPS World @@??
 
+// Body
 private:
   G4QParticleVector* qWorld;                        // Pointer to the CHIPS World (C++ Hip)
 };

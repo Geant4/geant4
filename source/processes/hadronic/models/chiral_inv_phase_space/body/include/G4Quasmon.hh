@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.hh,v 1.6 2000-09-04 07:44:01 mkossov Exp $
+// $Id: G4Quasmon.hh,v 1.7 2000-09-10 13:58:56 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,34 +39,45 @@
 class G4Quasmon 
 {
 public:
-  G4Quasmon(const G4QContent& qQCont, const G4LorentzVector& q4M,
+  G4Quasmon(G4QContent qQCont    = G4QContent(0,0,0,0,0,0),
+            G4LorentzVector q4M  = G4LorentzVector(0.,0.,0.,0.),
             G4LorentzVector ph4M = G4LorentzVector(0.,0.,0.,0.));// Direct Constructor
   G4Quasmon(const G4Quasmon& right);                             // Copy Quasmon by object
   G4Quasmon(G4Quasmon* right);                                   // Copy Quasmon by pointer
 
   ~G4Quasmon();
 
+  // Overloaded Operators
+  const G4Quasmon& operator=(const G4Quasmon& right);
   int operator==(const G4Quasmon &right) const;
   int operator!=(const G4Quasmon &right) const;
 
-  //Selectors
-  G4LorentzVector   Get4Momentum() const;
-  G4QContent        GetQC()        const;
-  G4int             GetStatus()    const;
-  //Modifiers
-  G4QHadronVector*  Fragment(G4QNucleus& nucEnviron); //Pub-wrapper for HadronizeQuasmon()
-  void              ClearOutput();     // Clear but not destroy the output *** DESTROY ***
   // Static functions
   static void SetParameters(G4double temperature, G4double ssin2g, G4double etaetap);
+  static void SetTemper(G4double temperature);
+  static void SetSOverU(G4double ssin2g);
+  static void SetEtaSup(G4double etaetap);
+
+  //Selectors
+  G4double          GetTemper()    const;
+  G4double          GetSOverU()    const;
+  G4double          GetEtaSup()    const;
+  G4LorentzVector   Get4Momentum() const;
+  G4QContent        GetQC()        const;
+  G4QPDGCode        GetQPDG()      const;
+  G4int             GetStatus()    const;
+
+  //Modifiers
+  G4QHadronVector*  Fragment(G4QNucleus& nucEnviron); // Pub-wrapper for HadronizeQuasmon()
+  void              ClearOutput();                    // Clear but not destroy the output
+  void              InitQuasmon(const G4QContent& qQCont, const G4LorentzVector& q4M);
+  void              KillQuasmon();                    // Kill Quasmon (status=0)
 
 private:  
   G4QHadronVector    HadronizeQuasmon(G4QNucleus& qEnv); // Return new neuclear environment (!)
   G4double           GetRandomMass(G4int PDGCode, G4double maxM);
   G4double           CoulombBarrier(const G4double& tZ, const G4double& tA, const G4double& cZ,
                                     const G4double& cA);
-  void               InitQuasmon(const G4QContent projQC,      const G4int targPDG,
-                                 const G4LorentzVector proj4M, const G4LorentzVector targ4Mom,
-                                 G4int nOfParts);
   void               ModifyInMatterCandidates();
   void               InitCandidateVector(G4int maxMes, G4int maxBar, G4int maxClust);
   void               CalculateNumberOfQPartons(G4double qMass);
@@ -104,8 +115,12 @@ private:
 
 inline int G4Quasmon::operator==(const G4Quasmon &right) const {return this == &right;}
 inline int G4Quasmon::operator!=(const G4Quasmon &right) const {return this != &right;}
+inline G4double        G4Quasmon::GetTemper()    const {return Temperature;}
+inline G4double        G4Quasmon::GetSOverU()    const {return SSin2Gluons;}
+inline G4double        G4Quasmon::GetEtaSup()    const {return EtaEtaprime;}
 inline G4LorentzVector G4Quasmon::Get4Momentum() const {return q4Mom;}
 inline G4QContent      G4Quasmon::GetQC()        const {return valQ;}
+inline G4QPDGCode      G4Quasmon::GetQPDG()      const {return G4QPDGCode(valQ);}
 inline G4int           G4Quasmon::GetStatus()    const {return status;}
 inline void            G4Quasmon::ClearOutput()        {theQHadrons.clear();}
 inline G4double        G4Quasmon::GetRandomMass(G4int PDG, G4double maxM)
@@ -113,6 +128,22 @@ inline G4double        G4Quasmon::GetRandomMass(G4int PDG, G4double maxM)
   G4QParticle* part = theWorld.GetQParticle(PDG);
   return G4QHadron(part, maxM).GetMass();
 }
+inline void G4Quasmon::InitQuasmon(const G4QContent& qQCont, const G4LorentzVector& q4M)
+{
+  valQ  = qQCont;
+  q4Mom = q4M;
+  status= 3;
+}
+
+inline void G4Quasmon::KillQuasmon()
+{
+  static const G4QContent zeroQC(0,0,0,0,0,0);
+  static const G4LorentzVector nothing(0.,0.,0.,0.);
+  valQ  = zeroQC;
+  q4Mom = nothing;
+  status= 0;
+}
+
 #endif
 
 

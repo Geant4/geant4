@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.1 2000-09-04 07:46:39 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.2 2000-09-10 13:58:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -19,9 +19,9 @@
 //  class for Multy Quasmon Environment used by the CHIPS Model
 // ------------------------------------------------------------
  
-#define debug
-#define pdebug
-#define ppdebug
+//#define debug
+//#define pdebug
+//#define ppdebug
 //#define sdebug
 
 #include "G4QEnvironment.hh"
@@ -103,21 +103,98 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
   }
 } // End of the G4QEnvironment constructor
 
-G4QEnvironment::G4QEnvironment(const G4QEnvironment &right) {}
+G4QEnvironment::G4QEnvironment(const G4QEnvironment &right)
+{
+  // theQHadrons (Vector)
+  G4int nQH             = right.theQHadrons.entries();
+  if(nQH) for(G4int ih=0; ih<nQH; ih++)
+  {
+    G4QHadron* curQH    = new G4QHadron(right.theQHadrons[ih]);
+    theQHadrons.insert(curQH);
+  }
+
+  theWorld              = right.theWorld;
+  nBarClust             = right.nBarClust;
+  f2all                 = right.f2all;
+
+  // theQuasmons (Vector)
+  G4int nQ              = right.theQuasmons.entries();
+  if(nQ) for(G4int iq=0; iq<nQ; iq++)
+  {
+    G4Quasmon* curQ     = new G4Quasmon(right.theQuasmons[iq]);
+    theQuasmons.insert(curQ);
+  }
+
+  // theQCandidates (Vector)
+  G4int nQC             = right.theQCandidates.entries();
+  if(nQC) for(G4int ic=0; ic<nQC; ic++)
+  {
+    G4QCandidate* curQC = new G4QCandidate(right.theQCandidates[ic]);
+    theQCandidates.insert(curQC);
+  }
+
+  theEnvironment        = right.theEnvironment;
+}
+
+G4QEnvironment::G4QEnvironment(G4QEnvironment* right)
+{
+  // theQHadrons (Vector)
+  G4int nQH             = right->theQHadrons.entries();
+  if(nQH) for(G4int ih=0; ih<nQH; ih++)
+  {
+    G4QHadron* curQH    = new G4QHadron(right->theQHadrons[ih]);
+    theQHadrons.insert(curQH);
+  }
+
+  theWorld              = right->theWorld;
+  nBarClust             = right->nBarClust;
+  f2all                 = right->f2all;
+
+  // theQuasmons (Vector)
+  G4int nQ              = right->theQuasmons.entries();
+  if(nQ) for(G4int iq=0; iq<nQ; iq++)
+  {
+    G4Quasmon* curQ     = new G4Quasmon(right->theQuasmons[iq]);
+    theQuasmons.insert(curQ);
+  }
+
+  // theQCandidates (Vector)
+  G4int nQC             = right->theQCandidates.entries();
+  if(nQC) for(G4int ic=0; ic<nQC; ic++)
+  {
+    G4QCandidate* curQC = new G4QCandidate(right->theQCandidates[ic]);
+    theQCandidates.insert(curQC);
+  }
+
+  theEnvironment        = right->theEnvironment;
+}
 
 G4QEnvironment::~G4QEnvironment()
 {
+#ifdef debug
+  G4cout<<"~G4QEnvironment: before theQCandidates"<<G4endl;
+#endif
   theQCandidates.clearAndDestroy();
+#ifdef debug
+  G4cout<<"~G4QEnvironment: before theQuasmons nQ="<<theQuasmons.entries()<<G4endl;
+#endif
   theQuasmons.clearAndDestroy();
+#ifdef debug
+  G4cout<<"~G4QEnvironment: before theQHadrons"<<G4endl;
+#endif
   theQHadrons.clearAndDestroy();
+#ifdef debug
+  G4cout<<"~G4QEnvironment: === DONE ==="<<G4endl;
+#endif
 }
-G4bool   G4QEnvironment::EnergyFlux=false;  // Flag for Energy Flux use (not Multy Quasmon)
+
 G4double G4QEnvironment::SolidAngle=0.8;    // Part of Solid Angle to capture (@@A-dep.)
+G4bool   G4QEnvironment::EnergyFlux=false;  // Flag for Energy Flux use (not Multy Quasmon)
 G4double G4QEnvironment::PiPrThresh=141.4;  // Pion Production Threshold for gammas
 G4double G4QEnvironment::M2ShiftVir=20000.; // Shift for M2=-Q2=m_pi^2 of the virtual gamma
 G4double G4QEnvironment::DiNuclMass=1880.;  // Double Nucleon Mass for virtual normalization
 // Fill the private static parameters
-void G4QEnvironment::SetParameters(G4bool efFlag, G4double solAn, G4double piThresh,
+void G4QEnvironment::SetParameters(G4double solAn, G4bool efFlag, G4double piThresh,
                                    G4double mpisq, G4double dinum)
 {//  =======================================================================================
   EnergyFlux=efFlag;       // Flag for Energy Flux use instead of Multy Quasmon
@@ -127,6 +204,38 @@ void G4QEnvironment::SetParameters(G4bool efFlag, G4double solAn, G4double piThr
   DiNuclMass=dinum;        // Double Nucleon Mass for virtual normalization
 }
 
+const G4QEnvironment& G4QEnvironment::operator=(const G4QEnvironment &right)
+{// ========================================================================
+  // theQHadrons (Vector)
+  G4int nQH             = right.theQHadrons.entries();
+  if(nQH) for(G4int ih=0; ih<nQH; ih++)
+  {
+    G4QHadron* curQH    = new G4QHadron(right.theQHadrons[ih]);
+    theQHadrons.insert(curQH);
+  }
+
+  theWorld              = right.theWorld;
+  nBarClust             = right.nBarClust;
+  f2all                 = right.f2all;
+
+  // theQuasmons (Vector)
+  G4int nQ              = right.theQuasmons.entries();
+  if(nQ) for(G4int iq=0; iq<nQ; iq++)
+  {
+    G4Quasmon* curQ     = new G4Quasmon(right.theQuasmons[iq]);
+    theQuasmons.insert(curQ);
+  }
+
+  // theQCandidates (Vector)
+  G4int nQC             = right.theQCandidates.entries();
+  if(nQC) for(G4int ic=0; ic<nQC; ic++)
+  {
+    G4QCandidate* curQC = new G4QCandidate(right.theQCandidates[ic]);
+    theQCandidates.insert(curQC);
+  }
+
+  theEnvironment        = right.theEnvironment;
+}
 
 // Member function for Quasmon Creation & Environment nucleus modification
 void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVector& proj4M)
@@ -226,8 +335,9 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       q4Mom=G4LorentzVector(0,0,0,barMass)+proj4M; // 4-momentum of the intermediate B-Bbar Quasmon
       valQ=targQC+projQC;                          // Quark Content of the intermediate B-Bbar Quasmon
       G4Quasmon* pan = new G4Quasmon(valQ,q4Mom);  // The intermediate B-Bbar Quasmon creation
-      G4QNucleus vE = vacuum;
-      G4QHadronVector* output = pan->Fragment(vE); // Output of the Periferal in Vacuum Annihilation
+      G4QNucleus vE = vacuum;                      // The annihilation as in vacuum (@@in NuclMatter?)
+      G4QHadronVector* output = pan->Fragment(vE); // Output of "in Vacuum" Annihilation **!DESTROY!**
+      delete pan;
       G4QHadronVector input;                       // Input for MultyQuasmon **!!DESTROY!!**
       G4int trgPDG = theEnvironment.GetPDG();      // New PDG Code for the Residual Nucleus
       G4LorentzVector trg4M(0.,0.,0.,resMass);     // New 4-momentum for the Residual Nucleus
@@ -264,7 +374,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 		    else                                   // => Case of MultyQuasmon fragmentation
 		    {
               G4QHadron* mqHadron = new G4QHadron(curHadr);
-              input.insert(mqHadron);
+              input.insert(mqHadron);              // "input" is filled by new hadron-copies
 #ifdef pdebug
               G4int hPDG=curHadr->GetPDGCode();
               G4LorentzVector h4M = curHadr->Get4Momentum();
@@ -280,22 +390,49 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 		    G4cout<<"G4QE::CrQ: Fill OUT #"<<ind<<",PDG="<<hPDG<<",h4M="<<h4M<<G4endl;
 #endif
             G4QHadron* curHadron = new G4QHadron(curHadr);
-            theQHadrons.insert(curHadron);
+            theQHadrons.insert(curHadron);         // TheQHadrons are filled by new hadron-copies
           }
 		}
-	  }
-      delete pan;
-      output->clearAndDestroy();                   // Destroy old members of b-bbar annihilation
+        delete output->at(ind);                    // DESTROY hadrons of "output"
+	  } // End of LOOP over "output" of annihilation
+      delete output;                               // DELETE "output"
       if(!efFlag)                                  // ==> Not Energy Flux case: MultyQuasmon case
 	  {
         if(!(input.entries())) return;             // *** RETURN *** Without Quasmon creation
-        G4QEnvironment* muq=new G4QEnvironment(input,theEnvironment.GetPDG());
-        theEnvironment=muq->GetEnvironment();      // Get residual Environment after interaction
-        G4QuasmonVector* outQ = muq->GetQuasmons();// Copy of quasmons of residual interaction
-	    G4int nMQ = outQ->entries();               // A#of Quasmons in MultyQuasmon output
-        for(G4int mh=0; mh<nMQ; mh++) theQuasmons.insert(outQ->at(mh)); // Instead "Destroy outQ" 
-        input.clearAndDestroy();
+        G4Quasmon fakeQ;                           // fake Quasmon to get parameters
+        G4double QTemper=fakeQ.GetTemper();        // Temperature defined by user for Quasmons
+        G4double QSOverU=fakeQ.GetSOverU();        // S/U defined by user for Quasmons
+        G4double QEtaSup=fakeQ.GetEtaSup();        // Eta Suppresion defined by user for Quasmons
+        G4Quasmon::SetParameters(180.,.1,.3);      //@@Hardwired parameters for N-barN annihilation
+        G4QEnvironment* muq = new G4QEnvironment(input,theEnvironment.GetPDG());
+#ifdef pdebug
+	    G4cout<<"G4QEnvironment::CreateQ: before input.clearAndDestroy()"<<G4endl;
+#endif
+        input.clearAndDestroy();                   // Here we are DESTROING input
+        theEnvironment =muq->GetEnvironment();     // Get residual Environment after interaction
+        G4QuasmonVector* outQ = muq->GetQuasmons();// Copy of quasmons **!!DESTROY!!**
+#ifdef pdebug
+	    G4cout<<"G4QEnvironment::CreateQ: before delete muq"<<G4endl;
+#endif
         delete muq;
+        G4Quasmon::SetParameters(QTemper,QSOverU,QEtaSup); // Recover user's parameters for Quasmons
+	    G4int nMQ = outQ->entries();               // A#of Quasmons in MultyQuasmon output
+#ifdef pdebug
+	    G4cout<<"G4QEnvironment::CreateQ: after GetQuasmon nMQ="<<nMQ<<G4endl;
+#endif
+        if(nMQ) for(G4int mh=0; mh<nMQ; mh++)      // @@ One can escape creation/distruction but...
+        {
+          G4Quasmon* curQ = new G4Quasmon(outQ->at(mh));
+          theQuasmons.insert(curQ);                // Here we fill in theQuasmons new Quasmon-copies 
+          delete outQ->at(mh);
+		}
+#ifdef pdebug
+	    G4cout<<"G4QEnvironment::CreateQ: delete outQ"<<G4endl;
+#endif
+        delete outQ;
+#ifdef pdebug
+	    G4cout<<"G4QEnvironment::CreateQ: befor return"<<G4endl;
+#endif
         return;                                    // *** RETURN *** 
       }
       else                                         // ==> Energy Flux case
@@ -332,17 +469,17 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
       G4cout<<"G4QEnv::CreateQ:Q="<<q4Mom<<valQ<<"+vg="<<proj4M<<", QEnv="<<theEnvironment<<G4endl;
 #endif
       G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom, proj4M); // Interaction gamma+quark inside
-      theQuasmons.insert(curQuasmon);
+      theQuasmons.insert(curQuasmon);              // New Quasmon is inserted without gamma in Q     
 	}
     else
 	{
       q4Mom=proj4M+G4LorentzVector(0.,0.,0.,tgMass-envMass);//Projectile + BoundCluster
       valQ=EnFlQC+targClust.GetQCZNS();
 #ifdef pdebug
-      G4cout<<"G4QEnvironment::CreateQ: Q="<<q4Mom<<valQ<<", QEnv="<<theEnvironment<<G4endl;
+      G4cout<<"G4QEnv::CreateQ: Q="<<q4Mom<<valQ<<", QEnv="<<theEnvironment<<G4endl;
 #endif
       G4Quasmon* curQuasmon = new G4Quasmon(valQ, q4Mom);
-      theQuasmons.insert(curQuasmon);
+      theQuasmons.insert(curQuasmon);              // New Quasmon is inserted with hadron/gamma in Q     
 	}
   }
   else
@@ -456,57 +593,68 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
   static const G4QNucleus vacuum(90000000);
   static const G4QContent K0QC(1,0,0,0,0,1);
   static const G4QContent KpQC(0,1,0,0,0,1);
+  //static const G4QContent alQC(6,6,0,0,0,0);
   static const G4double mPi0 = G4QPDGCode(111).GetMass();
   static const G4double mPi  = G4QPDGCode(211).GetMass();
   static const G4double mK   = G4QPDGCode(321).GetMass();
   static const G4double mK0  = G4QPDGCode(311).GetMass();
   static const G4double mNeut= G4QPDGCode(2112).GetMass();
   static const G4double mProt= G4QPDGCode(2212).GetMass();
+  //static const G4double mAlpha = G4QPDGCode(2112).GetNuclMass(2,2,0);
 #ifdef pdebug
   G4cout<<"G4QEnv::HadrQEnv:***===>>> START HADRONIZATION OF Q-ENVIRONMENT<<<===***"<<G4endl;
 #endif
   G4int nQuasmons = theQuasmons.entries();
-  if(nQuasmons<1)
+  if(nQuasmons<1)                                // "No Quasmons" case -> Fill QEnviron
   {
-#ifdef pdebug
-    G4cout<<"G4QEnvironment::HadronizeQEnvironment: a#of Quasmons ="<<nQuasmons<<G4endl;
-#endif
-    FillNEnvInVector();
+    G4int nPDG = theEnvironment.GetPDG();        // PDG code of the residual Nucl.Environ.
+    G4QHadron* rNucleus = new G4QHadron(nPDG);   // Create a Hadron for the Environment
+    G4LorentzVector e4Mom=theEnvironment.Get4Momentum();
+    rNucleus->Set4Momentum(e4Mom);               // Copy 4-momentum of Environment to Hadron
+    theQHadrons.insert(rNucleus);                // Fill "new rNucleus", GS - no further decay 
     return theQHadrons;
   }
-  if(theEnvironment.GetPDG()==NUCPDG)          // ==> "Environment is Vacuum" case
+  if(theEnvironment.GetPDG()==NUCPDG)            // ==> "Environment is Vacuum" case
   {
 #ifdef pdebug
     G4cout<<"G4QEnv::HadrQEnv:Vacuum #ofQ="<<nQuasmons<<G4endl;
 #endif
     G4QNucleus vE = vacuum;
-	for (G4int iq=0; iq<nQuasmons; iq++)
+	if (nQuasmons) for (G4int iq=0; iq<nQuasmons; iq++)
 	{
-	  G4QHadronVector* output=theQuasmons[iq]->Fragment(vE);
+	  G4QHadronVector* output=theQuasmons[iq]->Fragment(vE); // **!!DESTROY!!**
       G4int nHadrons = output->entries();
-      if(nHadrons>0)                           // Transfer QHadrons from Quasmon to Output
+      if(nHadrons>0)                             // Transfer QHadrons from Quasmon to Output
 	  {
-    	for (G4int ih=0; ih<nHadrons; ih++) theQHadrons.insert(output->at(ih)); // output!
+    	for (G4int ih=0; ih<nHadrons; ih++)
+        {
+          G4QHadron* curH = new G4QHadron(output->at(ih));
+          theQHadrons.insert(curH);              // Fill in theQHadrons a new hadron-copies
+          delete output->at(ih);
+        }
+        delete output;
         return theQHadrons;
 	  }
 	}
   }
-  else                                         // ==> "Nuclear environment" case
+  else                                           // ==> "Nuclear environment" case
   {
 #ifdef pdebug
     G4cout<<"G4QEnv::HadrQEnv:FRAGMENTATION IN NUCLEAR ENVIRONMENT nQ="<<nQuasmons<<G4endl;
 #endif
-    G4int  sumstat=2;                            // Sum of statuses of all Quasmons
+    G4int  sumstat= 2;                           // Sum of statuses of all Quasmons
+    G4bool force  = false;                       // Prototype of the Force Major Flag
     while (sumstat)                              // ===***=== The MAIN FOREVER LOOP ===***===
 	{
       G4QContent envQC=theEnvironment.GetQCZNS();// QuarkContent of current NuclearEnvironment
       G4QContent totQC=envQC;                    // Total QuarkContent in the system
       G4double   envM =theEnvironment.GetMass(); // mass of Nuclear Environment (@@GetMZNS())
       G4double   sumM =envM;                     // Sum of all residual masses in the System @@??
-      G4LorentzVector env4M=G4LorentzVector(0.,0.,0.,envM);      
+      G4LorentzVector env4M=theEnvironment.Get4Momentum();      
       G4LorentzVector tot4M=env4M;               // 4-momentum of the Total System
       sumstat         =0;
       G4int     fCount=0;                        // Counter of successful but not final fragm's
+
 	  for (G4int iq=0; iq<nQuasmons; iq++)       // Sum parameters of Quasmons to make a decision
 	  {
 	    G4Quasmon*      pQ = theQuasmons[iq];
@@ -519,7 +667,8 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
         G4int           Qst= pQ->GetStatus();
         sumstat           += Qst;
 #ifdef pdebug
-	    G4cout<<"G4QEnv::HadrQEnv: #"<<iq<<", Qst="<<Qst<<", Q4M="<<Q4M<<", QQC="<<QQC<<G4endl;
+	    G4cout<<"G4QEnv::HadrQEnv: #"<<iq<<", Qst="<<Qst<<", QM="<<Q4M.m()<<", QQC="<<QQC
+              <<G4endl;
 #endif
         if(Qst==1||Qst==3) fCount++;             // Increment a counter of fragmentations 
 	  } // End of summation LOOP over Quasmons
@@ -527,36 +676,139 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
       G4int      totBN  =totQC.GetBaryonNumber();// Total Baryon Number of the Total System @@??
       G4double   totM   =totN.GetMZNS();         // min (GroundSt) Mass of the Total System
       G4int      totPDG =totN.GetPDG();          // Total PDG Code for the Current compound @@??
+      G4int      nOH    =theQHadrons.entries();  // A#of output hadrons
+      G4LorentzVector s4M=tot4M;                 // Total 4-momentum (@@ only for checking)
+      if(nOH) for(G4int ih=0; ih<nOH; ih++) s4M+=theQHadrons[ih]->Get4Momentum();     
 #ifdef pdebug
-	  G4cout<<"G4QEnv::HadrQEnv: BN="<<totBN<<", sumstat="<<sumstat<<", fCount="<<fCount<<G4endl;
+	  G4cout<<"G4QEnv::HadrQEnv: BN="<<totBN<<", sumstat="<<sumstat<<", fCount="<<fCount
+            <<", QEnv="<<theEnvironment<<", nOUT="<<nOH<<", tLV="<<s4M<<G4endl;
 #endif
       if(totBN<2)                                // ==> "Baryons or Mesons" case (@@ anti Baryon)
       {
         totPDG =totQC.GetSPDGCode();
         if(totPDG!=10) totM=G4QPDGCode(totPDG).GetMass();
 	  }
-      G4double   totMass=tot4M.m();              // Total effective Mass
-      if(sumstat&&fCount)                        // ==> "Still try to decay Quasmons" case
+      G4double   totMass= tot4M.m();             // Total effective Mass
+      if(sumstat&&fCount&&!force)                // ==> "Still try to decay Quasmons" case
 	  {
 	    for (G4int jq=0; jq<nQuasmons; jq++)     // Fragmentation LOOP over Quasmons
 	    {
 	      G4Quasmon* pQ     = theQuasmons[jq];   // Pointer to the current Quasmon
-          G4double   status = pQ->GetStatus();   // Old status of the Quasmon
-          if(status)
+          G4int      status = pQ->GetStatus();   // Old status of the Quasmon
+          if(status)                             // Skip dead Quasmons
 		  {
- 	        G4QHadronVector* output=pQ->Fragment(theEnvironment);
+ 	        G4QHadronVector* output=pQ->Fragment(theEnvironment); // **!!DESTROY!!**
             status = pQ->GetStatus();            // New status after fragmentation attempt
+#ifdef pdebug
+	        G4cout<<"G4QEnv::HadrQEnv: after FragmAttempt jq="<<jq<<", status="<<status<<G4endl;
+#endif
             G4int nHadrons = output->entries();
-            if(status<2||nHadrons)               // Something was filled
+            if(!status||status==1||nHadrons)     // Something was filled
 			{
               if(nHadrons>0)                     // Transfer QHadrons from Quasmon to Output
 	          {
-    	        for (G4int ih=0; ih<nHadrons; ih++) theQHadrons.insert(output->at(ih));
-                pQ->ClearOutput();//With filling!// Clear output for further fragmentation
+    	        for (G4int ih=0; ih<nHadrons; ih++) theQHadrons.insert(output->at(ih)); //@@??
+                pQ->ClearOutput();//Hadr's filled// Clear Frag-output for further fragmentation
 	          }
 			}
+            else if(status<0||status==2)
+			{
+              if(status<0&&nHadrons)
+			  {
+		        G4cerr<<"***G4QEnv::HadrQE: nH="<<nHadrons<<"< status="<<status<<G4endl;
+                G4Exception("G4QEnvironment::HadronizeQEnvironment: Strange PANIC");
+			  }
+              else if(status==2)                 // Check PANIC conditions for status=2
+			  {
+                if(theEnvironment!=vacuum)       // "Nuclear Environment" case
+				{
+                  G4LorentzVector t4M=pQ->Get4Momentum()+theEnvironment.Get4Momentum();
+                  G4double      tM=t4M.m();      // Real total (with environment) mass
+                  G4QContent   qQC= pQ->GetQC(); // QuarkContent of the Quasmon
+                  G4QContent envQC=theEnvironment.GetQCZNS(); // QuarkCont of NucEnviron
+                  G4QContent totQC=envQC+qQC;    // Total Quark Content
+                  G4QNucleus totE(totQC);        // Pseudo nucleus for the Total System
+                  G4double   totM=totE.GetMZNS();// min mass of the Total System
+#ifdef pdebug
+    		      G4cout<<"G4QEnv::HadrQEnv:#"<<jq<<", tM="<<tM<<" > gstM="<<totM<<totE<<G4endl;
+#endif
+                  if(tM<totM) status=-1;         // Q+E is below the Mass Shell - PANIC
+                }
+                else                             // "Vacuum" case
+				{
+                  G4LorentzVector t4M=pQ->Get4Momentum();
+                  G4QPDGCode QPDGQ=pQ->GetQPDG();// QPDG Code for the Quasmon
+                  G4int PDGQ=QPDGQ.GetPDGCode(); // PDG Code of the QUASMON
+#ifdef pdebug
+				  G4cout<<"G4QEnv::HadrQEnv: vacuum PDGQ="<<PDGQ<<G4endl;
+#endif
+                  if(!PDGQ) status=-1;           // Unknown Quasmon in Vaquum - PANIC
+                  else if (PDGQ!=10)             // @@ Chipolino can wait @@
+				  {
+                    G4double qM =t4M.m();        // Real mass of the Quasmon
+                    G4double gsM=QPDGQ.GetMass();// GSmass of the Quasmon
+#ifdef pdebug
+    		        G4cout<<"G4QEnv::HadrQEnv:#"<<jq<<", qM="<<qM<<" > gsM="<<gsM<<G4endl;
+#endif
+					if(abs(qM-gsM)<0.0001)       // "Fill & Kill" Case
+					{
+                      G4QHadron* resQ = new G4QHadron(PDGQ,t4M);
+                      theQHadrons.insert(resQ);  // @@ Check Dibarions @@
+                      pQ->KillQuasmon();
+					}
+                    else if(qM<gsM) status=-1;   // Below Mass Shell - PANIC
+				  }
+				}
+			  }
+              if(status<0)                       // Panic: Quasmon is below the mass shell
+			  {
+                G4int    ppm=jq;                 // Initialized by PANIC Quasmon pointer
+                G4int    nRQ=0;                  // Prototype of a#of additional real Quasmons
+#ifdef pdebug
+    		    G4cout<<"G4QEnv::HadrQEnv: ***PANIC*** for jq="<<jq<<G4endl;
+#endif
+                G4ThreeVector vp= pQ->Get4Momentum().vect(); // momentum of the PANIC Quasmon
+                G4double dpm=1.e+30;             // Just a big number (dot product of momenta)
+	            for(G4int ir=0; ir<nQuasmons; ir++)
+	            {
+                  if(ir!=jq)                     // Skip the current (PANIC) Quasmon
+				  {
+	                G4Quasmon* rQ = theQuasmons[ir];
+                    G4int Qst = rQ->GetStatus(); // Status of a Quasmon
+                    if(Qst>0)                    // Skip dead Quasmons
+				    {
+					  nRQ++;                     // Increment real-Quasmon-counter
+                      G4double dp=vp.dot(rQ->Get4Momentum().vect());
+                      if(dp<dpm)
+					  {
+                        ppm=ir;
+                        dpm=dp;
+					  }
+				    }
+				  }
+                }// End of the partner-search-for-the-PANIC-Quasmon LOOP
+                if(nRQ)                            // Merge with the best candidate
+    		    {
+	              G4Quasmon*      rQ = theQuasmons[ppm];
+                  G4QContent      rQC= rQ->GetQC();
+                  G4LorentzVector r4M= rQ->Get4Momentum();
+                  rQC               += pQ->GetQC();
+                  r4M               += pQ->Get4Momentum();
+                  rQ->InitQuasmon(rQC, r4M);
+                  pQ->KillQuasmon();
+			    }
+                else
+			    {
+#ifdef pdebug
+		          G4cerr<<"***G4QEnv::HadrQEnv: Cann't resolve PANIC, try to Evaporate"<<G4endl;
+#endif
+                  force=true;
+                  break;
+			    }
+			  }
+			}
 		  }
-	    } // End of fragmentation LOOP over Quasmons
+	    } // End of fragmentation LOOP over Quasmons (jq)
       }
       else if(totMass>totM+.001)                 // ==> "Try Evaporation or decay" case
 	  {
@@ -565,14 +817,14 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 		G4cout<<"G4QEnv::HadrQEnv: Evaporation dM="<<totMass-totM<<", S="<<totS<<G4endl;
 #endif
         theEnvironment= totN;                    // Define theEnvironment as a whole System @@??
-        if(totBN<2)                              // ==> "One residual Quasmon" case
+        if(totBN<2)                              // ==> "Baryon/Meson residual Quasmon" case
 		{
           if(totPDG==1114||totPDG==2224)         // ==> "DELTA- or DELTA++" case (@@anti DELTA)
 		  {
             if(totMass<totM+mPi0)
 			{
 		      G4cerr<<"***G4QEnv::HadrQE: tM="<<totMass<<"< GSM+mPi0="<<totM+mPi0<<G4endl;
-              G4Exception("G4QEnvironment::HadronizeQEnvironment: Cann't decay QEnv");
+              G4Exception("G4QEnvironment::HadronizeQEnvironment: (1) Cann't decay QEnv");
 			}
             else
 			{
@@ -666,12 +918,17 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 		  {
             G4Quasmon* resid = new G4Quasmon(totQC,tot4M);
             G4QNucleus vacuum(90000000);
- 	        G4QHadronVector* output=resid->Fragment(vacuum); // Don't destroy
+ 	        G4QHadronVector* output=resid->Fragment(vacuum); // **!!DESTROY!!**
             G4int nHadrons = output->entries();
             if(nHadrons>0)                       // Transfer QHadrons to Output
 	        {
-    	      for (G4int ih=0; ih<nHadrons; ih++) theQHadrons.insert(output->at(ih));
-              output->clear();
+    	      for (G4int ih=0; ih<nHadrons; ih++)
+              {
+                G4QHadron* curH = new G4QHadron(output->at(ih));
+                theQHadrons.insert(curH);        // Insert new hadron-copy
+                delete output->at(ih);
+			  }
+              delete output;
 	        }
 			else
 			{
@@ -683,8 +940,8 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 		  }
 		}
         else if(totS<0)                          // ==> "Decay in K0 or K+" case
-		{
-          if(totS<-2)
+	    {//@@ Can be moved to EvaporateResidual
+          if(totS<-2)                            //@@ Double anti-strange isn't implemented
 		  {
             G4cerr<<"***G4QEnv::HadronizeQEnv: S="<<totS<<", QC="<<totQC<<G4endl;
     	    G4Exception("G4QEnvironment::HadronizeQEnvironment: Too anti-strange");
@@ -695,15 +952,15 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
             G4QNucleus kpN(totQC-KpQC);          // Nucleus after K+ subtraction
             G4double   k0M = k0N.GetMZNS();      // GS Mass of the Residual to K0
             G4double   kpM = kpN.GetMZNS();      // GS Mass of the Residual to K+
-            G4int      mPDG= 321;                // K+
-            G4double   mM  = mK;
-            G4int      nPDG= kpN.GetPDG();       // PDG Code of residual to K+
-            G4double   nM  = kpM;
+            G4int      mPDG= 321;                // Prototype: PDG of K+ (as it is lighter)
+            G4double   mM  = mK;                 // Prototype: mass of K+
+            G4int      nPDG= kpN.GetPDG();       // Prototype: PDG Code of residual to K+
+            G4double   nM  = kpM;                // Prototype: mass of residual to K+
             if(mK+kpM>mK0+k0M)
 			{
-              mPDG= 311;                         // K0
+              mPDG= 311;                         // Change to K0
               mM  = mK0;
-              nPDG= kpN.GetPDG();                // PDG Code of residual to K0
+              nPDG= k0N.GetPDG();                // PDG Code of residual to K0
               nM  = k0M;
 			}
             G4QHadron* curK = new G4QHadron(mPDG);
@@ -783,48 +1040,152 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
         else                                     // ==> Now "Evaporation" case
 		{
           theEnvironment.InitByPDG(NUCPDG);      // Cancele the Environment 
-          G4QHadron* evH = new G4QHadron(totPDG);// Create a Real Hadron for ResidualNucl
-          evH->Set4Momentum(tot4M);              // Put 4Mom to evH
-          EvaporateResidual(evH);                // Fill "new curHadr"
+          G4QHadron* evH = new G4QHadron(totPDG,tot4M);// Create a Hadron for ResidualNucl
+          EvaporateResidual(evH);                // Try to evaporate residual
           return theQHadrons;
 		}
 	  }
       else                                       // ==> "Only GSEnvironment exists" case
-      {
+      { 
+        G4double dM=totMass-totM;
 #ifdef pdebug
-		G4cout<<"G4QEnv::HadrQEnv: Ground State dM="<<totMass-totM<<G4endl;
+		G4cout<<"G4QEnv::HadrQEnv: Ground State tM-GSM="<<dM<<", GSM="<<totM<<G4endl;
 #endif
-        FillNEnvInVector();
+        if(dM>-0.001)
+		{
+          G4QHadron* evH = new G4QHadron(totPDG,tot4M);// Create a Hadron for ResidualNucl
+          if(dM>0.001) EvaporateResidual(evH);   // Try to evaporate residual
+          else         theQHadrons.insert(evH);  // Fill to OUTPUT as it is
+		}
+        else if(nQuasmons==1)                    // => "Decay in Quasmon + QEnviron" case
+		{
+	      G4Quasmon*       pQ = theQuasmons[0];  // Pointer to the only Quasmon          
+          G4QPDGCode    QQPDG = pQ->GetQPDG();   // QPDG of the Quasmon
+          G4int          QPDG = QQPDG.GetPDGCode();
+          if(!QPDG)
+		  {
+			G4cerr<<"***G4QEnv::HadrQE: Quasmon is unknown QHadron: PDG="<<QPDG<<G4endl;
+			G4Exception("G4QEnvironment::HadronizeQEnvironment: (2) Cann't decay QEnv");
+		  }
+          else if(QPDG==10)                      // => "Quasmon-Chipolino" case
+		  {
+            G4QContent QQC = pQ->GetQC();        // Quark Content of the Quasmon
+            G4QChipolino QChip(QQC);             // define the Quasmon as a Chipolino
+            G4QPDGCode h1QPDG=QChip.GetQPDG1();  // QPDG of the first hadron
+            G4double   h1M  =h1QPDG.GetMass();   // Mass of the first hadron
+            G4QPDGCode h2QPDG=QChip.GetQPDG2();  // QPDG of the second hadron
+            G4double   h2M  =h2QPDG.GetMass();   // Mass of the second hadron
+            if(h1M+h2M+envM<totMass)             // => "Three parts decay" case
+			{
+              G4LorentzVector h14M(0.,0.,0.,h1M);
+              G4LorentzVector h24M(0.,0.,0.,h2M);
+              G4LorentzVector e4M(0.,0.,0.,envM);
+              if(!G4QHadron(tot4M).DecayIn3(h14M,h24M,e4M))
+			  {
+                 G4cerr<<"***G4QEnv::HadQEnv: tM="<<tot4M.m()<<"-> h1="<<h1QPDG<<"(M="
+					   <<h1M<<") + h2="<<h1QPDG<<"(M="<<h2M<<") + eM="<<envM<<G4endl;
+				 G4Exception("G4QEnv::HadrQEnv:QChipo+Env DecayIn3 did not succeed");
+			  }
+              G4int h1PDG =h1QPDG.GetPDGCode();  // PDG code of the first hadron            
+              G4int h2PDG =h2QPDG.GetPDGCode();  // PDG code of the second hadron
+              G4int envPDG=theEnvironment.GetPDG();// PDGCode of the NuclQEnvironment
+              G4QHadron* h1H = new G4QHadron(h1QPDG.GetPDGCode(),h24M);
+              theQHadrons.insert(h1H);
+              G4QHadron* h2H = new G4QHadron(h2QPDG.GetPDGCode(),h24M);
+              theQHadrons.insert(h2H);
+              G4QHadron* qeH = new G4QHadron(theEnvironment.GetPDG(),e4M);
+              theQHadrons.insert(qeH);
+			}
+		  }
+          else                                   // => "Two particles decay" case
+		  {
+            G4double QM = pQ->Get4Momentum().m();// Real Mass of the Quasmon
+            G4double GSM= QQPDG.GetMass();       // GS Mass of the Quasmon
+            if(QM<GSM||GSM+envM>totMass)
+			{
+		      G4cerr<<"***G4QEnv::HadrQE: QM="<<QM<<" < QGSM="<<GSM<<G4endl;
+              G4Exception("G4QEnvironment::HadronizeQEnvironment: (3) Cann't decay");
+			}
+            else                                 // => "Possible decay" case
+			{
+              G4LorentzVector fq4M(0.,0.,0.,GSM);
+              G4LorentzVector qe4M(0.,0.,0.,envM);
+              if(!G4QHadron(tot4M).DecayIn2(fq4M,qe4M))
+			  {
+                 G4cerr<<"***G4QEnv::HadQEnv: tM="<<tot4M.m()<<"-> QPDG="<<QPDG<<"(M="
+					   <<GSM<<") + envM="<<envM<<")"<<G4endl;
+				 G4Exception("G4QEnv::HadrQEnv: Quasmon+QEnv DecayIn2 did not succeed");
+			  }
+              G4QHadron* qH = new G4QHadron(QPDG,fq4M);
+              theQHadrons.insert(qH);
+              G4QHadron* qeH = new G4QHadron(theEnvironment.GetPDG(),qe4M);
+              theQHadrons.insert(qeH);
+			}
+		  }
+		}
+        else                                     // "Last decay was fatal" case
+		{
+#ifdef pdebug
+		  G4cerr<<"***G4QEnv::HadrQE: M="<<totMass<<",dM="<<dM<<",nQ="<<nQuasmons<<G4endl;
+#endif
+          G4int          nOfOUT  = theQHadrons.entries();
+          while(nOfOUT)
+          {
+            G4QHadron*     theLast = theQHadrons[nOfOUT-1];
+            G4LorentzVector last4M = theLast->Get4Momentum();
+            G4QContent      lastQC = theLast->GetQC();
+            G4int           lastS  = lastQC.GetStrangeness();
+            G4int           totS   = totQC.GetStrangeness();
+			if(lastS<0&&lastS+totS<0&&nOfOUT>1) // => "Skip K-meson" case @@ Skip a few @@
+			{
+              G4QHadron* thePrev = theQHadrons[nOfOUT-2];
+              theQHadrons.removeLast();         // the last QHadron is excluded from OUTPUT
+              theQHadrons.removeLast();         // the prev QHadron is excluded from OUTPUT
+              theQHadrons.insert(theLast);      // the Last becomes the prev
+              theLast = thePrev;                // Update parameters (Prev instead of Last)
+              last4M = theLast->Get4Momentum();
+              lastQC = theLast->GetQC();
+			}
+            else theQHadrons.removeLast();      // the last QHadron is excluded from OUTPUT 
+            delete          theLast;            // the last QHadron is deleated as instance
+            totQC+=lastQC;                      // Update (increase) the total QC
+            tot4M+=last4M;                      // Update (increase) the total 4-momentum
+            totMass=tot4M.m();                  // Calculate new real total mass
+            G4QNucleus newN(totQC,tot4M);
+            totPDG=newN.GetPDG();
+            totM  =newN.GetMZNS();              // Calculate new minimum (GS) mass
+            G4double dM=totMass-totM;
+            if(dM>-0.001)
+		    {
+              G4QHadron* evH = new G4QHadron(totPDG,tot4M);// Create a Hadron for ResNucl
+              if(dM>0.001)EvaporateResidual(evH);// Try to evaporate residual
+              else      theQHadrons.insert(evH);// Fill to OUTPUT as it is
+              break;
+		    }
+            nOfOUT  = theQHadrons.entries();    // Update the value of OUTPUT entries
+		  }
+		  if(!nOfOUT)
+		  {
+		    G4cerr<<"***G4QEnv::HadrQE: M="<<totMass<<" < gsM="<<totM<<", dM="<<dM<<G4endl;
+            G4Exception("G4QEnvironment::HadronizeQEnvironment: (4) Cann't decay QEnv");
+	      }
+		}
+        CleanUp();
         return theQHadrons;
 	  }
 	}
   }
 } // End of the main member function HadronizeQEnvironment
 
-// Fill the residual environment in the output Hadron Vector
-void G4QEnvironment::FillNEnvInVector()
-{//  =================================
-  G4int nPDG = theEnvironment.GetPDG();          // PDG code of the residual Nucl.Environ.
-#ifdef pdebug
-  G4cout<<"G4QEnvironment::FillNEnvInVector: nPDG="<<nPDG<<G4endl;
-#endif
-  G4QHadron* rNucleus = new G4QHadron(nPDG);     // Create a Hadron for the Environment
-#ifdef pdebug
-  G4cout<<"G4QEnvironment::FillNEnvInVector: Hadron's PDG="<<rNucleus->GetPDGCode()<<G4endl;
-#endif
-  G4LorentzVector e4Mom=theEnvironment.Get4Momentum();
-#ifdef pdebug
-  G4cout<<"G4QEnvironment::FillNEnvInVector: Hadron's 4Mom="<<e4Mom<<G4endl;
-#endif
-  rNucleus->Set4Momentum(e4Mom);                 // Copy 4-momentum of Environment to Hadron
-#ifdef pdebug
-  G4cout<<"G4QEnvironment::FillNEnvInVector: Filling HadronVector"<<G4endl;
-#endif
-  theQHadrons.insert(rNucleus);                  // Fill "new rNucleus", GS - no further decay 
-#ifdef pdebug
-  G4cout<<"G4QEnvironment::FillNEnvInVector: NuclEnv is filled to HadronVector"<<G4endl;
-#endif
-} // End of FillNEnvInVector
+// Clean up the QEnvironment to Zero
+void G4QEnvironment::CleanUp()
+//   =========================
+{
+  static const G4QNucleus vacuum(90000000);
+  theEnvironment=vacuum;
+  G4int nQuasmons = theQuasmons.entries();
+  if (nQuasmons) for (G4int iq=0; iq<nQuasmons; iq++)theQuasmons[iq]->KillQuasmon();
+}
 
 // Calculate a#of clusters in the nucleus
 void G4QEnvironment::PrepareClusters()
@@ -908,6 +1269,7 @@ void G4QEnvironment::PrepareClusters()
 void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
 {//  ==================================================
   static const G4double mAlpha = G4QPDGCode(2112).GetNuclMass(2,2,0);
+  static const G4double mDeutr = G4QPDGCode(2112).GetNuclMass(1,1,0);
   static const G4QContent neutQC(2,1,0,0,0,0);
   static const G4QContent protQC(1,2,0,0,0,0);
   static const G4QContent lambQC(1,1,1,0,0,0);
@@ -917,24 +1279,23 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
   static const G4int NUCPDG=90000000;
   G4int        thePDG = qH->GetPDGCode();      // Get PDG code of the Hadron
   G4LorentzVector q4M = qH->Get4Momentum();    // Get 4-momentum of the Hadron
-#ifdef ppdebug
+#ifdef pdebug
   cout<<"G4QEnv::EvaporateResidual:Hadron's PDG="<<thePDG<<",4Mom="<<q4M<<endl;
 #endif
-  // In the decay scheme only one resonance can be present & it should be the last
   if(thePDG>NUCPDG)                            // === Decay-Evaporation ===
   {
     G4double totMass=qH->GetMass();            // Real Mass of the nuclear fragment
     G4QNucleus qNuc(q4M,thePDG);               // Make a Nucleus out of the Hadron
     G4double GSMass =qNuc.GetGSMass();         // GrState Mass of the nuclear fragment
-#ifdef ppdebug
-	G4cout<<"G4QEnv::EvapResid: nucl="<<qNuc<<", nPDG="<<thePDG<<", GSM="<<GSMass<<G4endl;
+#ifdef pdebug
+	G4cout<<"G4QEnv::EvapResid:"<<qNuc<<",PDG="<<thePDG<<",M="<<q4M.m()<<",GSM="<<GSMass<<G4endl;
 #endif
     if(abs(totMass-GSMass)<.1)                 // ==> Case of possible decay
     {
       G4QContent totQC=qNuc.GetQCZNS();        // Total Quark Content of Residual Nucleus
       G4int    nN     =qNuc.GetN();            // A#of neutrons in the Nucleus
       G4int    nZ     =qNuc.GetZ();            // A#of protons in the Nucleus
-      G4int    nS     =qNuc.GetS();            // A#of protons in the Nucleus
+      G4int    nS     =qNuc.GetS();            // A#of lambdas in the Nucleus
       G4int    bA     =qNuc.GetA();            // A#of baryons in the Nucleus
       G4double nResM  =1000000.;               // Prototype of mass of residual for a neutron
       G4int    nResPDG=0;                      // Prototype of PDGCode of residual for a neutron
@@ -986,10 +1347,10 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
         G4double resM= mAlpha;
 		if     (totMass>nResM+mNeut)           // Can radiate a neutron (priority 1)
 		{
-          barPDG = 90000001;
-          resPDG = nResPDG;
-          barM= mNeut;
-          resM= nResM;
+          barPDG=90000001;
+          resPDG=nResPDG;
+          barM  =mNeut;
+          resM  =nResM;
 		}
 		else if(totMass>pResM+mProt)           // Can radiate a proton (priority 2)
 		{
@@ -1017,27 +1378,34 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
           G4cerr<<"***G4QEnv::EvapResid:PDG="<<thePDG<<",M="<<totMass<<"< GSM="<<GSMass<<G4endl;
           G4Exception("***G4QEnvironment::EvaporateResidual: M<GSM & cann't decay in p,n,l");
 		}
-        G4QHadron* HadrB = new G4QHadron(barPDG);
-        G4QHadron* HadrR = new G4QHadron(resPDG);
-        G4LorentzVector a4Mom(0.,0.,0.,barM);
-        G4LorentzVector b4Mom(0.,0.,0.,resM);
-        if(!qH->DecayIn2(a4Mom,b4Mom))
-        {
-          delete HadrB;                        // Delete "new fHadr"
-          delete HadrR;                        // Delete "new sHadr"
-          theQHadrons.insert(qH);              // No decay
-          G4cerr<<"***G4QEnv::EvapResid: Be8 decay did not succeeded"<<endl;
-	    }
-        else
-        {
-          qH->SetNFragments(2);                // Fill a#of fragments to decaying Hadron
-          theQHadrons.insert(qH);              // Fill hadron in the HadronVector with nf=2
-          HadrB->Set4Momentum(a4Mom);          // Put the randomized 4Mom to 1-st Hadron
-          theQHadrons.insert(HadrB);           // Fill the baryon to Output Hadr. Vector
-          HadrR->Set4Momentum(b4Mom);          // Put the randomized 4Mom to 2-nd Hadron
-          if(HadrR->GetBaryonNumber()>1) EvaporateResidual(HadrR); // Continue decay of residNucl
-          else theQHadrons.insert(HadrR);      // Fill ResidNucleus=Baryon to Output HadronVector
-        }
+        //if(totMass<barM+resM)theQHadrons.insert(qH);
+        //else
+		//{
+          G4QHadron* HadrB = new G4QHadron(barPDG);
+          G4QHadron* HadrR = new G4QHadron(resPDG);
+          G4LorentzVector a4Mom(0.,0.,0.,barM);
+          G4LorentzVector b4Mom(0.,0.,0.,resM);
+          if(!qH->DecayIn2(a4Mom,b4Mom))
+          {
+            delete HadrB;                      // Delete "new fHadr"
+            delete HadrR;                      // Delete "new sHadr"
+            theQHadrons.insert(qH);            // No decay
+            G4cerr<<"G4QEnv::EvapResid: rP="<<pResPDG<<",rN="<<nResPDG<<",rL="<<lResPDG<<",nN="
+                  <<nN<<",nZ="<<nZ<<",nL="<<nS<<",totM="<<totMass<<",n="<<totMass-nResM-mNeut
+                  <<",p="<<totMass-pResM-mProt<<",l="<<totMass-lResM-mLamb<<G4endl;
+            G4cerr<<"***G4QEnv::EvapResid: Decay failed bPDG="<<barPDG<<", rPDG="<<resPDG<<G4endl;
+	      }
+          else
+          {
+            qH->SetNFragments(2);              // Fill a#of fragments to decaying Hadron
+            theQHadrons.insert(qH);            // Fill hadron in the HadronVector with nf=2
+            HadrB->Set4Momentum(a4Mom);        // Put the randomized 4Mom to 1-st Hadron
+            theQHadrons.insert(HadrB);         // Fill the baryon to Output Hadr. Vector
+            HadrR->Set4Momentum(b4Mom);        // Put the randomized 4Mom to 2-nd Hadron
+            if(HadrR->GetBaryonNumber()>1) EvaporateResidual(HadrR); // Continue decay of residNucl
+            else theQHadrons.insert(HadrR);      // Fill ResidNucleus=Baryon to Output HadronVector
+          }
+		//}
 	  }
       else theQHadrons.insert(qH);             // No decay (Alpha decays are not implemented)
     }
@@ -1048,7 +1416,7 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
 	}
     else                                       // ===> Evaporation of excited system
 	{
-#ifdef ppdebug
+#ifdef pdebug
       G4cout<<"G4QEnv::EvapResid:Evaporate "<<thePDG<<",tM="<<totMass<<" > GS="<<GSMass
           <<qNuc.Get4Momentum()<<", m="<<qNuc.Get4Momentum().m()<<G4endl;
 #endif
@@ -1061,13 +1429,46 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
         delete rHadron;
         theQHadrons.insert(qH);                // Fill hadron in the HadronVector as it is
 	  }
-#ifdef ppdebug
-      G4cout<<"G4QEnv::EvapResid:Done b="<<bHadron->GetQPDG()<<",r="<<rHadron->GetQPDG()<<G4endl;
+      G4int bPDG=bHadron->GetPDGCode();
+      G4int rPDG=rHadron->GetPDGCode();
+#ifdef pdebug
+      G4cout<<"G4QEnv::EvapResid:Done evapFragmPDG="<<bPDG<<", resNuclPDG="<<rPDG<<G4endl;
 #endif
       qH->SetNFragments(2);                    // Fill a#of fragments to decaying Hadron
       theQHadrons.insert(qH);                  // Fill hadron in the HadronVector with nf=2
-      theQHadrons.insert(bHadron);             // Fill Evapor. Baryon to Output HadronVector
-      if(rHadron->GetBaryonNumber()>1) EvaporateResidual(rHadron); // Continue evaporation
+      G4int fB=bHadron->GetBaryonNumber();     // Baryon number of evaporated fragment
+      if(fB<2)theQHadrons.insert(bHadron);     // Fill Evapor. Baryon to Output HadronVector
+      else if(fB==2)                           // "Dibaryon" case needs decay
+	  {
+        G4double fGSM = bHadron->GetQPDG().GetMass(); // Ground State mass of the dibaryon
+        G4double fM   = bHadron->GetMass();   // Real mass of the dibaryon
+        if(fM<fGSM-0.003)
+		{
+          G4cerr<<"***G4QEnv::EvapRes: M="<<fM<<" < GSM="<<fGSM<<", d="<<fGSM-fM<<G4endl;
+          G4Exception("***G4QEnv::EvaporateResidual: Evaporation below mass shell");
+		}
+        else if(abs(fM-fGSM)<=0.001&&bPDG==90001001) theQHadrons.insert(bHadron);
+        else DecayDibaryon(bHadron);           // "Decay" case
+	  }
+      else
+	  {
+        G4cerr<<"***G4QEnv::EvapRes:fB="<<fB<<" > 2 - unexpected evaporated fragment"<<G4endl;
+        G4Exception("***G4QEnv::EvaporateResidual: Unexpected evaporation act");
+	  }
+      G4int rB=rHadron->GetBaryonNumber();     // Baryon number of the residual nucleus
+      if(rB>2) EvaporateResidual(rHadron);     // Continue evaporation
+      else if(rB==2)                           // "Dibaryon" case needs decay
+	  {
+        G4double fGSM = rHadron->GetQPDG().GetMass(); // Ground State mass of the dibaryon
+        G4double fM   = rHadron->GetMass();    // Real mass of the dibaryon
+        if(fM<fGSM-0.001)
+		{
+          G4cerr<<"***G4QEnv::EvapRes: <residual> M="<<fM<<" < GSM="<<fGSM<<G4endl;
+          G4Exception("***G4QEnv::EvaporateResidual: Evaporation below mass shell");
+		}
+        else if(abs(fM-fGSM)<=0.001&&bPDG==90001001)theQHadrons.insert(rHadron);
+        else DecayDibaryon(rHadron);           // "Decay" case
+	  }
       else theQHadrons.insert(rHadron);        // Fill ResidNucleus=Baryon to Output HadronVector
 	}
   }
@@ -1075,7 +1476,11 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
   {
     G4cerr<<"***G4QEnv::EvapResid: inputHadron="<<qH<<", PDG="<<thePDG<<G4endl;
     if(!thePDG&&thePDG!=10&&thePDG<NUCPDG) theQHadrons.insert(qH);
-    else G4Exception("***G4QEnv::EvaporateResidual: This is not a nucleus nor a hadron");
+    else
+    {
+      G4cerr<<"***G4QEnvironment::EvaporateResidual: residualPDG="<<thePDG<<G4endl;
+      G4Exception("***G4QEnv::EvaporateResidual: This is not a nucleus nor a hadron");
+    }
   }
 } // End of EvaporateResidual
 
@@ -1138,3 +1543,78 @@ G4QuasmonVector* G4QEnvironment::GetQuasmons()
 #endif
   return quasmons;
 } // End of GetQuasmons
+
+//Decay of the output dibayon
+void G4QEnvironment::DecayDibaryon(G4QHadron* qH)
+{//  ============================================
+  static const G4double mNeut= G4QPDGCode(2112).GetMass();
+  static const G4double mProt= G4QPDGCode(2212).GetMass();
+  static const G4double mLamb= G4QPDGCode(3122).GetMass();
+  static const G4double mDeut= G4QPDGCode(2112).GetNuclMass(1,1,0);
+  G4LorentzVector q4M = qH->Get4Momentum();  // Get 4-momentum of the Dibaryon
+  G4int          qPDG = qH->GetPDGCode();    // PDG Code of the decayin dybaryon
+  G4int          fPDG = 2212;                // Prototype for pp case
+  G4int          sPDG = 2212;
+  G4double       fMass= mProt;
+  G4double       sMass= mProt;
+  if     (qPDG==90000002)                    // "dineutron" case
+  {
+    fPDG = 2112;
+    sPDG = 2112;
+    fMass= mNeut;
+    sMass= mNeut;    
+  }
+  else if(qPDG==90001001)                    // "exdeutron" case
+  {
+    if(abs(q4M.m()-mDeut)<0.001)
+	{
+      theQHadrons.insert(qH);
+      return;
+	}
+    fPDG = 2112;
+    sPDG = 2212;
+    fMass= mProt;
+    sMass= mNeut;    
+  }
+  else if(qPDG==91000001)                    // "Lambda-neutron" case
+  {
+    fPDG = 2112;
+    sPDG = 3122;
+    fMass= mNeut;
+    sMass= mLamb;    
+  }
+  else if(qPDG==91001000)                    // "Lambda-proton" case
+  {
+    fPDG = 2212;
+    sPDG = 3122;
+    fMass= mProt;
+    sMass= mLamb;    
+  }
+  else if(qPDG==92000000)                    // "diLambda" case
+  {
+    fPDG = 3122;
+    sPDG = 3122;
+    fMass= mLamb;
+    sMass= mLamb;    
+  }
+  G4QHadron* H1 = new G4QHadron(fPDG);       // Create a Hadron for the 1-st baryon
+  G4LorentzVector f4Mom(0.,0.,0.,fMass);
+  G4QHadron* H2 = new G4QHadron(sPDG);       // Create a Hadron for the 2-nd baryon
+  G4LorentzVector s4Mom(0.,0.,0.,sMass);     // Mass is random since probab. time
+  if(!G4QHadron(q4M).DecayIn2(f4Mom, s4Mom))
+  {
+    G4cerr<<"***G4QEnv::DecayDibaryon:fPDG="<<fPDG<<"(fM="<<fMass<<") + sPDG="<<sPDG
+          <<"(sM="<<sMass<<")"<<" >? TotM="<<q4M.m()<<G4endl;
+    G4Exception("***G4QEnv::DecayDibaryon: DecayIn2 didn't succeed for dibaryon");
+  }
+#ifdef pdebug
+  G4cout<<"G4QEnv::DecayDibaryon: *DONE* f4M="<<f4Mom<<",fPDG="<<fPDG
+        <<", s4M="<<s4Mom<<",sPDG="<<sPDG<<G4endl;
+#endif
+  qH->SetNFragments(2);                      // Fill a#of fragments to decaying Dibaryon
+  theQHadrons.insert(qH);                    // Fill hadron in the HadronVector with nf=2
+  H1->Set4Momentum(f4Mom);                   // Put f4Mom to H1
+  theQHadrons.insert(H1);                    // Fill "new H1"
+  H2->Set4Momentum(s4Mom);                   // Put f4Mom to H2
+  theQHadrons.insert(H2);                    // Fill "new H2"
+} // End of DecayDibaryon

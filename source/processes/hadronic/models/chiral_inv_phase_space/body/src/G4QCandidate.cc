@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QCandidate.cc,v 1.4 2000-08-17 13:53:19 mkossov Exp $
+// $Id: G4QCandidate.cc,v 1.5 2000-09-10 13:58:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -36,23 +36,66 @@ G4QCandidate::G4QCandidate(G4int PDGcode) :
   SetQC(QPDG.GetQuarkContent());
 }
 
-G4QCandidate::G4QCandidate(const G4QCandidate &right)
+G4QCandidate::G4QCandidate(const G4QCandidate& right)
 {
   Set4Momentum         (right.Get4Momentum());
   SetQPDG              (right.GetQPDG());
   SetQC                (right.GetQC());
   SetNFragments        (right.GetNFragments());
   possible            = right.possible;
+  parPossible         = right.parPossible;
   kMin                = right.kMin;
+  denseProbability    = right.denseProbability;
   preProbability      = right.preProbability;
   relativeProbability = right.relativeProbability;
   integralProbability = right.integralProbability;
   secondRelProbability= right.secondRelProbability;
   secondIntProbability= right.secondIntProbability;
+  // thePClusters
+  G4int nParCl        = right.thePClusters.entries();
+  if(nParCl) for(G4int ip=0; ip<nParCl; ip++)
+  {
+    G4QParentCluster* curPC = new G4QParentCluster(right.thePClusters[ip]);
+    thePClusters.insert(curPC);
+  }
 }
 
-G4QCandidate::~G4QCandidate() {thePClusters.clearAndDestroy();}
+G4QCandidate::G4QCandidate(G4QCandidate* right)
+{
+  Set4Momentum         (right->Get4Momentum());
+  SetQPDG              (right->GetQPDG());
+  SetQC                (right->GetQC());
+  SetNFragments        (right->GetNFragments());
+  possible            = right->possible;
+  parPossible         = right->parPossible;
+  kMin                = right->kMin;
+  denseProbability    = right->denseProbability;
+  preProbability      = right->preProbability;
+  relativeProbability = right->relativeProbability;
+  integralProbability = right->integralProbability;
+  secondRelProbability= right->secondRelProbability;
+  secondIntProbability= right->secondIntProbability;
+  // thePClusters
+  G4int nParCl        = right->thePClusters.entries();
+  if(nParCl) for(G4int ip=0; ip<nParCl; ip++)
+  {
+    G4QParentCluster* curPC = new G4QParentCluster(right->thePClusters[ip]);
+    thePClusters.insert(curPC);
+  }
+}
 
+G4QCandidate::~G4QCandidate()
+{
+#ifdef debug
+  G4cout<<"~G4QCandidate: before thePClusters nC="<<thePClusters.entries()<<G4endl;
+#endif
+  thePClusters.clearAndDestroy();
+#ifdef debug
+  G4cout<<"~G4QCandidate: === DONE ==="<<G4endl;
+#endif
+}
+
+// Assignment operator
 const G4QCandidate& G4QCandidate::operator=(const G4QCandidate &right)
 {
   Set4Momentum         (right.Get4Momentum());
@@ -60,12 +103,21 @@ const G4QCandidate& G4QCandidate::operator=(const G4QCandidate &right)
   SetQC                (right.GetQC());
   SetNFragments        (right.GetNFragments());
   possible            = right.possible;
+  parPossible         = right.parPossible;
   kMin                = right.kMin;
+  denseProbability    = right.denseProbability;
   preProbability      = right.preProbability;
   relativeProbability = right.relativeProbability;
   integralProbability = right.integralProbability;
   secondRelProbability= right.secondRelProbability;
   secondIntProbability= right.secondIntProbability;
+  // thePClusters (Vector)
+  G4int nParCl        = right.thePClusters.entries();
+  if(nParCl) for(G4int ip=0; ip<nParCl; ip++)
+  {
+    G4QParentCluster* curPC = new G4QParentCluster(right.thePClusters[ip]);
+    thePClusters.insert(curPC);
+  }
 
   return *this;
 }
