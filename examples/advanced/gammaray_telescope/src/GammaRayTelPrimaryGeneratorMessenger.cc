@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorMessenger.cc,v 1.4 2002-12-05 01:17:51 asaim Exp $
+// $Id: GammaRayTelPrimaryGeneratorMessenger.cc,v 1.5 2002-12-08 13:03:58 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -55,27 +55,27 @@ GammaRayTelPrimaryGeneratorMessenger::GammaRayTelPrimaryGeneratorMessenger
   RndmCmd->SetParameterName("choice",true);
   RndmCmd->SetDefaultValue("on");
   RndmCmd->SetCandidates("on off");
-  RndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  RndmCmd->AvailableForStates(PreInit,Idle);
   
   SourceTypeCmd = new G4UIcmdWithAnInteger("/gun/sourceType",this);
   SourceTypeCmd->SetGuidance("Select the type of incident flux.");
   SourceTypeCmd->SetGuidance("  Choice : 0(default), 1(isotropic), 2(wide parallel beam)");
   SourceTypeCmd->SetParameterName("choice",true);
   SourceTypeCmd->SetDefaultValue((G4int)0);
-  SourceTypeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SourceTypeCmd->AvailableForStates(PreInit,Idle);
 
   VertexRadiusCmd = new G4UIcmdWithADoubleAndUnit("/gun/vertexRadius",this);
   VertexRadiusCmd->SetGuidance("Radius (and unit) of sphere for vertices of incident flux.");
   VertexRadiusCmd->SetParameterName("choice",true);
   VertexRadiusCmd->SetDefaultValue((G4double)1.*cm);
-  VertexRadiusCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  VertexRadiusCmd->AvailableForStates(PreInit,Idle);
   
   SpectrumTypeCmd = new G4UIcmdWithAnInteger("/gun/spectrumType",this);
   SpectrumTypeCmd->SetGuidance("Select the type of incident spectrum.");
   SpectrumTypeCmd->SetGuidance("  Choice : 0(default), 1(), 2(E^{-gamma}), 3()");
   SpectrumTypeCmd->SetParameterName("choice",true);
   SpectrumTypeCmd->SetDefaultValue((G4int)0);
-  SpectrumTypeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SpectrumTypeCmd->AvailableForStates(PreInit,Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
