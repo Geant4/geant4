@@ -20,31 +20,18 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 // 
-// $Id: EmGammaNucleusBuilder.cc,v 1.1 2004-12-02 10:34:07 vnivanch Exp $
+// $Id: EmGammaNucleusBuilder.cc,v 1.2 2004-12-03 11:06:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "EmGammaNucleusBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-#include "G4Deuteron.hh"
-#include "G4Triton.hh"
-#include "G4He3.hh"
-#include "G4Alpha.hh"
+#include "G4Gamma.hh"
+#include "G4Proton.hh"
+#include "G4Neutron.hh"
 #include "G4GenericIon.hh"
-
-#include "G4ExcitationHandler.hh"
-#include "G4Evaporation.hh"
-#include "G4FermiBreakUp.hh"
-#include "G4StatMF.hh"
-#include "G4GeneratorPrecompoundInterface.hh"
-
-#include "G4HadronInelasticProcess.hh"
-#include "G4BinaryLightIonReaction.hh"
-#include "G4TripathiCrossSection.hh"
-#include "G4IonsShenCrossSection.hh"
-#include "G4LEDeuteronInelastic.hh"
-#include "G4LETritonInelastic.hh"
-#include "G4LEAlphaInelastic.hh"
+#include "G4PhotoNuclearProcess.hh"
+#include "G4GammaNuclearReaction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,9 +46,25 @@ EmGammaNucleusBuilder::~EmGammaNucleusBuilder()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void EmGammaNucleusBuilder::ConstructParticle()
+{
+  G4Gamma::Gamma();
+  G4Proton::Proton();
+  G4Neutron::Neutron();
+  G4GenericIon::GenericIon();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void EmGammaNucleusBuilder::ConstructProcess()
 {
-
+  G4ParticleDefinition* particle = G4Gamma::Gamma();
+  G4ProcessManager* pmanager = particle->GetProcessManager();
+  G4PhotoNuclearProcess* pnp = new G4PhotoNuclearProcess("gNucler");
+  G4GammaNuclearReaction* gn = new G4GammaNuclearReaction();
+  gn->SetMaxEnergy(10.0*GeV);
+  pnp->RegisterMe(gn);
+  pmanager->AddDiscreteProcess(pnp);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

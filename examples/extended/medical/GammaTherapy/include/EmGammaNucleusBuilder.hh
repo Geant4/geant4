@@ -45,21 +45,21 @@
 
 class EmGammaNucleusBuilder : public G4VPhysicsConstructor
 {
-  public:
-    EmGammaNucleusBuilder(const G4String& name = "gamma_e_A");
-    virtual ~EmGammaNucleusBuilder();
+public:
+  EmGammaNucleusBuilder(const G4String& name = "gamma_e_A");
+  virtual ~EmGammaNucleusBuilder();
 
-  public:
-    // This method will be invoked in the Construct() method.
-    // each particle type will be instantiated
-    void ConstructParticle() {};
+public:
+  // This method will be invoked in the Construct() method.
+  // each particle type will be instantiated
+  void ConstructParticle();
 
-    // This method will be invoked in the Construct() method.
-    // each physics process will be instantiated and
-    // registered to the process manager of each particle type
-    void ConstructProcess();
-
-  private:
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  void ConstructProcess();
+  
+private:
 
 };
 
