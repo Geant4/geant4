@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EquationOfMotion.hh,v 1.8 2003-10-31 14:35:51 gcosmo Exp $
+// $Id: G4EquationOfMotion.hh,v 1.9 2003-11-05 12:48:45 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,7 +39,7 @@
 #ifndef G4_EquationOfMotion_DEF
 #define G4_EquationOfMotion_DEF
 
-#include "globals.hh"
+#include "G4Types.hh"      // "globals.hh"
 #include "G4Field.hh"   // required in inline method implementations
 
 class G4EquationOfMotion 
