@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Poisson.hh,v 1.2 1999-05-11 19:43:11 gcosmo Exp $
+// $Id: G4Poisson.hh,v 1.3 1999-09-08 14:45:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 #include "globals.hh"
 #include "Randomize.hh"
 
-G4long G4Poisson(G4double mean)
+inline G4long G4Poisson(G4double mean)
 {
   G4long number = 0;
   const G4int border = 16;
