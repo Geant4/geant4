@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.13 2001-02-05 17:45:15 gcosmo Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.14 2001-05-25 16:03:28 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,7 +107,7 @@ private:
   // partial sum of total crosssection
   G4OrderedTable PartialSumSigma;
   
-  G4double LowestKineticEnergy;      
+  G4double lowestKineticEnergy;      
   G4double HighestKineticEnergy;     
   
   G4double lowEnergyCut;    // lower limit of the energy sampling formula

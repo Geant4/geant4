@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.30 2001-05-07 23:32:08 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.31 2001-05-25 16:03:28 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,7 @@ G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& processName
     lowEnergyCut(0.1*eV),
     CutForLowEnergySecondaryPhotons(0.)
 { 
-    LowestKineticEnergy  = GetLowerBoundEloss();
+    lowestKineticEnergy  = GetLowerBoundEloss();
     HighestKineticEnergy = GetUpperBoundEloss();
     TotBin = GetNbinEloss();
 }
@@ -240,7 +240,7 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
   for (G4int J=0; J<numOfMaterials; J++){
     
       // create physics vector and fill it
-      G4PhysicsLogVector* aVector = new G4PhysicsLogVector(LowestKineticEnergy,
+      G4PhysicsLogVector* aVector = new G4PhysicsLogVector(lowestKineticEnergy,
 							   HighestKineticEnergy,
 							   TotBin);
       // get material parameters needed for the energy loss calculation
@@ -284,7 +284,7 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
 // tables are Build for MATERIALS. see GENERAL part of processes in GEANT4
   // manual
 {
-   G4double FixedEnergy = (LowestKineticEnergy + HighestKineticEnergy)/2.;
+   G4double FixedEnergy = (lowestKineticEnergy + HighestKineticEnergy)/2.;
 
    //create table
    if (theMeanFreePathTable) {
@@ -307,7 +307,7 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
    for ( G4int J=0 ; J < NumbOfMaterials; J++ ){ 
      
      //create physics vector then fill it ....
-     ptrVector = new G4PhysicsLogVector(LowestKineticEnergy, HighestKineticEnergy,
+     ptrVector = new G4PhysicsLogVector(lowestKineticEnergy, HighestKineticEnergy,
 					TotBin ) ;
      
      material= (*theMaterialTable)(J);
@@ -401,7 +401,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   //	 << ElectKinEn/keV << " keV " << G4endl;
   // MGP end
 
-  if(ElectKinEn <= LowestKineticEnergy){
+  if(ElectKinEn <= lowestKineticEnergy){
     
     aParticleChange.SetStatusChange(fStopAndKill);
     aParticleChange.SetEnergyChange(0.);
