@@ -65,7 +65,7 @@ p3:	# ::: problem 3 (Zr) weak medium energy ::: unknown reason POSTPONED
 	rm -r cascade.out; cascade 10000 1 256 91 40 > cascade.out; gmake a; 
 
 p4:	# ::: problem 4 (Be) too few pi+'s ::: general feature, POSTPONED
-	rm -r cascade.out; cascade 10000 1 585 9 4 > cascade.out; gmake a; 
+	rm cascade; rm -r cascade.out; make cascade;  cascade 10000 1 585 9 4 > cascade.out; make a; 
 
 p5:	# ::: problem 5 (Al) too many n's in medium energy ::: hunt using history data, POSTPONED
 	rm -r cascade.out; cascade 10000 1 585 27 13 > cascade.out; gmake a;
@@ -80,24 +80,47 @@ d:	# ::: study cascade model parameters
 	rm data; make data; rm -f data.out; data > data.out; cat data.out ; # make da;
 
 i:	# ::: test interface
-	rm testInterface; make testInterface; testInterface
+	rm -r testInterface.out; rm testInterface; make testInterface; testInterface > testInterface.out
 
 h:	# ::: compare h2 h1
 	make h2; make h1
 
 h1:	# ::: (H) A = 1 protiun 2 * 585 = 1170
-#	make t; rm -f cascade.out; cascade  10000 1 585 1 1 > cascade.out; make a;
-	make t; rm -f cascade.out; cascade  100 1 1000 1 1 > cascade.out; cat cascade.out
-#	make t; rm -f cascade.out; cascade  10000 1 585 1 1 > cascade.out; make a;
+	make t; rm -f cascade.out; cascade  10000 1 585 1 1 > cascade.out; make a;
+#	make t; rm -f cascade.out; cascade  100 1 585 1 1 > cascade.out; cat cascade.out
+#	make t; rm -f cascade.out; cascade  2 1 585 1 1 
+#	cascade  10000 1 5000 1 1;
+#	cascade  10000 1 4500 1 1;
+#	cascade  10000 1 4000 1 1;
+#	cascade  10000 1 3500 1 1;
+#	cascade  10000 1 3000 1 1;
+#	cascade  10000 1 2500 1 1;
+#	cascade  10000 1 2000 1 1;
+#	cascade  10000 1 1900 1 1;
+#	cascade  10000 1 1800 1 1;
+#	cascade  10000 1 1700 1 1;
+#	cascade  10000 1 1600 1 1;
+#	cascade  10000 1 1500 1 1;
+#	cascade  10000 1 1400 1 1;
+#	cascade  10000 1 1300 1 1;
+#	cascade  10000 1 1200 1 1;
+#	cascade  10000 1 1100 1 1;
+#	cascade  10000 1 1000 1 1;
+#	cascade  10000 1  900 1 1;
+#	cascade  10000 1  850 1 1;
+#	cascade  10000 1  800 1 1;
+#	cascade  10000 1  750 1 1;
+#	cascade  10000 1  700 1 1;	
 
+#	make t; rm -f cascade.out; cascade  1000 7 300 1 1 > cascade.out; make a;
 
 h2:	# ::: (H) A = 2 deuterium 
-#	rm -f cascade.out; cascade 10000 1 585 2 1 > cascade.out; make a;
-	make t; rm -f cascade.out; cascade 1 1 585 2 1 > cascade.out; cat cascade.out
+	rm -f cascade.out; cascade 10000 1 585 2 1 > cascade.out; make a;
+#	make t; rm -f cascade.out; cascade 100 7 585 2 1 > cascade.out; cat cascade.out
 
 h3:	# ::: (H) A = 3 tritium
-#	rm -f cascade.out; cascade 1000 1 585 3 1 > cascade.out; make a;
-	rm -f cascade.out; cascade 3 1 585 3 1 > cascade.out; cat cascade.out
+	rm -f cascade.out; cascade 10000 1 585 3 1 > cascade.out; make a;
+#	rm -f cascade.out; cascade 100 1 585 3 1 > cascade.out; cat cascade.out
 
 p8:	# ::: problem 8 (Zr) delta missing ::: general feature in codes, POSTPONED studies
 #	rm -f cascade.out; cascade 1000 2 800 91 40 > cascade.out; make a;
@@ -105,7 +128,10 @@ p8:	# ::: problem 8 (Zr) delta missing ::: general feature in codes, POSTPONED s
 
 p9:	# ::: problem 9 (Be) wrong spectrum, maybe too little energy goes to evaporation? (500 MeV ok)
 	rm -r cascade.out; cascade 10000 1 130 9 4 > cascade.out; gmake a; 
-#	rm -r cascade.out; cascade 10000 1 585 9 4 > cascade.out; gmake a; 
+
+p10:	# ::: problem 10 (Cu) energy not conserved? baryon number
+#	rm cascade; rm -r cascade.out; make cascade; cascade  100 1 1000 64 29 > cascade.out; cat cascade.out 
+	rm cascade; rm -r cascade.out; make cascade; cascade 10000 1 586 64 29 > cascade.out; gmake a; 
 
 leak:	# ::: find memory leaks
 	valgrind -v --leak-check=yes  --show-reachable=yes cascade 1

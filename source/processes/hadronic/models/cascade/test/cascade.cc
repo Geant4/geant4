@@ -146,7 +146,11 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     G4std::vector<G4double>  bulletMomentum(4, 0.0);
 
     //    bulletMomentum[3] = momZ;
-    bulletMomentum[3] = 2*momZ;
+    if ( G4int(A) == 1 ) {
+      bulletMomentum[3] = 2*momZ;
+    } else {
+      bulletMomentum[3] = 2*momZ;
+    }
 
     //    G4InuclParticle* bull = new G4InuclElementaryParticle(bulletMomentum, bulletType);
     bull = new G4InuclElementaryParticle(bulletMomentum, bulletType);
@@ -170,9 +174,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
       G4std::vector<G4double> tmom = targ->getMomentum();
       eInit += sqrt(tmom[0] * tmom[0]);
 
-      cout << "-----------------------------"<<eInit << endl;
-
-      if (verboseLevel > -1) {
+      if (verboseLevel > 2) {
 	G4cout << "Target:  " << G4endl;  
 	targ->printParticle();
       }
@@ -195,12 +197,11 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 	G4int is = 0;
 	targIsH = new G4InuclElementaryParticle(targetMomentum, 1);
 
-      G4std::vector<G4double>  bmom = bull->getMomentum();
-      eInit = sqrt(bmom[0] * bmom[0]);
+	G4std::vector<G4double>  bmom = bull->getMomentum();
+	eInit = sqrt(bmom[0] * bmom[0]);
 	G4std::vector<G4double> tmom = targIsH->getMomentum();
 	eInit += sqrt(tmom[0] * tmom[0]);
 
-	cout << "*************" << eInit << endl;
 	do {
 	  if (verboseLevel > 1) {
 	    G4cout << "Target:  " << G4endl;  
@@ -286,7 +287,7 @@ G4int printData(G4int i) {
 
       G4int type = 0; // :::
 
-      if (verboseLevel > -1) {
+      if (verboseLevel > 2) {
 	G4cout << " Fragment mass: " << ifrag->getMass()  << G4endl;
         G4cout << " Momentum magnitude: " << mom.mag() << G4endl;
       }
@@ -319,9 +320,9 @@ G4int printData(G4int i) {
 	  setw(13) << mom[2]       << 
 	  setw(13) << fA           << 
 	  setw(13) << fZ           << 
-	  setw(13) << fEx          << 
-	  setw(13) << sumBaryon    << 
-	  setw(13) << sumEnergy    << G4endl;
+	  setw(13) << fEx          << G4endl;
+	//	  setw(13) << sumBaryon    << 
+	//setw(13) << sumEnergy    << G4endl;
       }
 
       eKinTot += ekin;
@@ -358,9 +359,9 @@ G4int printData(G4int i) {
 	  setw(13) << mom[3]       << 
 	  setw(13) << 0            << 
 	  setw(13) << 0            << 
-	  setw(13) << 0.0          << 
-	  setw(13) << sumBaryon    << 
-	  setw(13) << sumEnergy    << G4endl;
+	  setw(13) << 0.0          << G4endl;
+	//	  setw(13) << sumBaryon    << 
+	// setw(13) << sumEnergy    << G4endl;
       }
       eKinTot += ekin;
     }
@@ -370,7 +371,7 @@ G4int printData(G4int i) {
     cout << "ERROR: no baryon number conservation, sum of baryons = " << sumBaryon << G4endl;
   }
 
-  if (verboseLevel > -1) {
+  if (verboseLevel > 2) {
     if (sumEnergy > 0.01 ) {
       cout << "NOTE: Kinetic energy conservation violated by " << sumEnergy << " GeV" << G4endl;
     }
@@ -382,7 +383,7 @@ G4int printData(G4int i) {
     cout << "FATAL ERROR: energy created  " << sumEnergy * GeV << " MeV" << G4endl;
   }
 
-  if (verboseLevel > -1) {
+  if (verboseLevel > 2) {
 
     G4cout << "Total energy           : " << eTot << "GeV" << G4endl; 
     G4cout << "Total kinetice energy  : " << eKinTot / GeV << "GeV" << G4endl; 
