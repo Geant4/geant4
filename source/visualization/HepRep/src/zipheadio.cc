@@ -27,7 +27,7 @@ std::istream& operator>> ( std::istream &is, ZipLocalEntry &zlh         ) {
     is.setstate ( std::ios::failbit ) ;
     return is ;
   }
-  
+
   zlh.extract_version = readUint16( is ) ;
   zlh.gp_bitfield     = readUint16( is ) ;
   zlh.compress_method = readUint16( is ) ;
@@ -41,7 +41,7 @@ std::istream& operator>> ( std::istream &is, ZipLocalEntry &zlh         ) {
 
   // Read filename and extra_field
   readByteSeq( is, zlh.filename, zlh.filename_len ) ;
-  readByteSeq( is, zlh.extra_field, zlh.extra_field_len ) ; 
+  readByteSeq( is, zlh.extra_field, zlh.extra_field_len ) ;
 
   if ( is )
     zlh._valid = true ;
@@ -49,14 +49,14 @@ std::istream& operator>> ( std::istream &is, ZipLocalEntry &zlh         ) {
 }
 
 
-std::istream& operator>> ( std::istream &is, DataDescriptor &dd ) {
+std::istream& operator>> ( std::istream &is, DataDescriptor &/*MD:dd*/ ) {
   return is ;
 }
 
 
 std::istream& operator>> ( std::istream &is, ZipCDirEntry &zcdh ) {
   zcdh._valid = false ; // set to true upon successful completion.
-  if ( ! is ) 
+  if ( ! is )
     return is ;
 
   if ( zcdh.signature != readUint32( is ) ) {
@@ -64,7 +64,7 @@ std::istream& operator>> ( std::istream &is, ZipCDirEntry &zcdh ) {
     is.setstate ( std::ios::failbit ) ;
     return is ;
   }
-  
+
   zcdh.writer_version       = readUint16( is ) ;
   zcdh.extract_version      = readUint16( is ) ;
   zcdh.gp_bitfield          = readUint16( is ) ;
@@ -76,7 +76,7 @@ std::istream& operator>> ( std::istream &is, ZipCDirEntry &zcdh ) {
   zcdh.uncompress_size      = readUint32( is ) ;
   zcdh.filename_len         = readUint16( is ) ;
   zcdh.extra_field_len      = readUint16( is ) ;
-  zcdh.file_comment_len     = readUint16( is ) ; 
+  zcdh.file_comment_len     = readUint16( is ) ;
   zcdh.disk_num_start       = readUint16( is ) ;
   zcdh.intern_file_attr     = readUint16( is ) ;
   zcdh.extern_file_attr     = readUint32( is ) ;
@@ -84,7 +84,7 @@ std::istream& operator>> ( std::istream &is, ZipCDirEntry &zcdh ) {
 
   // Read filename and extra_field
   readByteSeq( is, zcdh.filename, zcdh.filename_len ) ;
-  readByteSeq( is, zcdh.extra_field, zcdh.extra_field_len ) ; 
+  readByteSeq( is, zcdh.extra_field, zcdh.extra_field_len ) ;
   readByteSeq( is, zcdh.file_comment, zcdh.file_comment_len ) ;
 
   if ( is )
@@ -107,17 +107,17 @@ std::ostream &operator<< ( std::ostream &os, const ZipLocalEntry &zlh ) {
   writeUint32( zlh.uncompress_size, os ) ;
   writeUint16( zlh.filename_len   , os ) ;
   writeUint16( zlh.extra_field_len, os ) ;
- 
+
 
   // Write filename and extra_field
   writeByteSeq( os, zlh.filename ) ;
-  writeByteSeq( os, zlh.extra_field ) ; 
+  writeByteSeq( os, zlh.extra_field ) ;
 
   return os ;
 }
 
 std::ostream &operator<< ( std::ostream &os, const ZipCDirEntry &zcdh ) {
-  if ( ! os ) 
+  if ( ! os )
     return os ;
 
   writeUint32( zcdh.signature          , os ) ;
@@ -140,14 +140,14 @@ std::ostream &operator<< ( std::ostream &os, const ZipCDirEntry &zcdh ) {
 
   // Write filename and extra_field
   writeByteSeq( os, zcdh.filename ) ;
-  writeByteSeq( os, zcdh.extra_field ) ; 
+  writeByteSeq( os, zcdh.extra_field ) ;
   writeByteSeq( os, zcdh.file_comment ) ;
 
   return os ;
 }
 
 std::ostream &operator<< ( std::ostream &os, const EndOfCentralDirectory &eocd ) {
-  if ( ! os ) 
+  if ( ! os )
     return os ;
 
   writeUint32( eocd.signature       , os ) ;
@@ -158,7 +158,7 @@ std::ostream &operator<< ( std::ostream &os, const EndOfCentralDirectory &eocd )
   writeUint32( eocd.cdir_size       , os ) ;
   writeUint32( eocd.cdir_offset     , os ) ;
   writeUint16( eocd.zip_comment_len , os ) ;
-  
+
   writeByteSeq( os, eocd.zip_comment ) ;
 
   return os ;
@@ -178,17 +178,17 @@ std::ostream &operator<< ( std::ostream &os, const EndOfCentralDirectory &eocd )
 /*
   Zipios++ - a small C++ library that provides easy access to .zip files.
   Copyright (C) 2000  Thomas Søndergaard
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
   version 2 of the License, or (at your option) any later version.
-  
+
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA

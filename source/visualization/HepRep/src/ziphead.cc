@@ -114,7 +114,7 @@ bool ZipLocalEntry::isDirectory() const {
 }
 
 
-void ZipLocalEntry::setComment( const string &comment ) {
+void ZipLocalEntry::setComment( const string &/*MD:comment*/ ) {
   // A local entry cannot hold a comment
 }
 

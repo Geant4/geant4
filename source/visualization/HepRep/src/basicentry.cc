@@ -22,7 +22,7 @@ using std::ios ;
 //
 
 BasicEntry::BasicEntry( const string &filename, const string &comment,
-		       const FilePath &basepath ) 
+		       const FilePath &basepath )
   : _filename ( filename ),
     _comment  ( comment  ),
     _basepath ( basepath )
@@ -69,7 +69,7 @@ string BasicEntry::getFileName() const {
   string::size_type pos ;
   pos = _filename.find_last_of( separator ) ;
   if ( pos != string::npos ) { // separator found!
-    // isDirectory() check means pos should not be last, so pos+1 is ok 
+    // isDirectory() check means pos should not be last, so pos+1 is ok
     return _filename.substr(pos + 1) ;
   } else {
     return _filename ;
@@ -99,16 +99,16 @@ void BasicEntry::setComment( const string &comment ) {
   _comment = comment ;
 }
 
-void BasicEntry::setCompressedSize( uint32 size ) {
+void BasicEntry::setCompressedSize( uint32 /*MD:size*/ ) {
 }
 
-void BasicEntry::setCrc( uint32 crc ) {
+void BasicEntry::setCrc( uint32 /*MD:crc*/ ) {
 }
 
-void BasicEntry::setExtra( const vector< unsigned char > &extra ) {
+void BasicEntry::setExtra( const vector< unsigned char > &/*MD:extra*/ ) {
 }
 
-void BasicEntry::setMethod( StorageMethod method ) {
+void BasicEntry::setMethod( StorageMethod /*MD:method*/ ) {
 }
 
 void BasicEntry::setName( const string &name ) {
@@ -119,7 +119,7 @@ void BasicEntry::setSize( uint32 size ) {
   _size = size ;
 }
 
-void BasicEntry::setTime( int time ) {
+void BasicEntry::setTime( int /*MD:time*/ ) {
 }
 
 
@@ -146,17 +146,17 @@ BasicEntry::~BasicEntry() {
 /*
   Zipios++ - a small C++ library that provides easy access to .zip files.
   Copyright (C) 2000  Thomas Søndergaard
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
   version 2 of the License, or (at your option) any later version.
-  
+
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA

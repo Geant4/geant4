@@ -396,7 +396,7 @@ local inflate_huft *fixed_td;
 #endif
 
 
-int inflate_trees_fixed(uIntf *bl, uIntf *bd, inflate_huft * FAR *tl, inflate_huft * FAR *td, z_streamp z)
+int inflate_trees_fixed(uIntf *bl, uIntf *bd, inflate_huft * FAR *tl, inflate_huft * FAR *td, z_streamp /*z*/)
 //uIntf *bl;               /* literal desired/actual bit depth */
 //uIntf *bd;               /* distance desired/actual bit depth */
 //inflate_huft * FAR *tl;  /* literal/length tree result */
