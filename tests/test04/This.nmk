@@ -1,0 +1,165 @@
+!include $(G4INSTALL)\tests\tools\NT\HeadT.nmk
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#  File produced by the Co/omake tool
+# using file Make.odb.
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#  The soft linked packages has been taken
+# from the property 'has' of the 
+# 'Make' object of file Make.odb.
+# It had the value :
+#    Win rogue CLHEP G4 GL Inventor
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+HAS_CPPFLAGS = \
+ $(test_CPPFLAGS)\
+ $(Win_CPPFLAGS)\
+ $(rogue_CPPFLAGS)\
+ $(CLHEP_CPPFLAGS)\
+ $(G4_CPPFLAGS)\
+ $(GL_CPPFLAGS)\
+ $(Inventor_CPPFLAGS)
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+all   :: mkdir
+
+clean ::
+	if exist $(bin)\*.obj del $(bin)\*.obj
+	if exist $(bin)\*.exe del $(bin)\*.exe
+	if exist $(bin)\*.lib del $(bin)\*.lib
+	if exist $(bin)\*.dll del $(bin)\*.dll
+	if exist $(bin)\*.exp del $(bin)\*.exp
+	if exist $(bin)\*.pdb del $(bin)\*.pdb
+rmlib ::
+	if exist $(bin)\*.lib del $(bin)\*.lib
+rmo   ::
+	if exist $(bin)\*.obj del $(bin)\*.obj
+rmexe ::
+	if exist $(bin)\*.exe del $(bin)\*.exe
+
+mkdir :
+	@if not exist $(bin) mkdir $(bin)
+
+libtest04_target = $(bin)\libtest04.$(lib_or_dll)
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+all :: mkdir \
+$(libtest04_target) \
+$(bin)\test04.exe 
+	@echo "test : all ok." 
+
+libs :: mkdir \
+$(libtest04_target) 
+	@echo "test : libs ok." 
+
+apps :: mkdir \
+$(bin)\test04.exe 
+	@echo "test : apps ok." 
+#--------------------------------------------
+rmexeo :
+	if exist $(bin)\test04.obj del $(bin)\test04.obj
+#--------------------------------------------
+test04 : $(bin)\test04.exe
+	@echo "test : test04 ok."
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#--------------------------------------------
+$(bin)\test04.exe : $(bin)\test04.obj \
+$(libtest04_target) 
+	$(CXXLD) $(CXXLDFLAGS) $(CCLDO)$(bin)\test04.exe $(bin)\test04.obj \
+$(libtest04) \
+$(libG4visualization) \
+$(libG4run) \
+$(libG4interfaces) \
+$(libG4tracking) \
+$(libG4track) \
+$(libG4processes) \
+$(libG4particles) \
+$(libG4event) \
+$(libG4materials) \
+$(libG4digits_hits) \
+$(libG4geometry) \
+$(libG4graphics_reps) \
+$(libG4intercoms) \
+$(libG4global) \
+$(libInventor) \
+$(libGLU) \
+$(libGL) \
+$(librwtool) \
+$(libCLHEP) \
+$(libWin) \
+$(CXXLDEND) 
+
+$(bin)\test04.obj   : $(app)\test04.cc
+	$(CXX) $(CXXFLAGS) $(APP_CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\test04.obj /Tp$(app)\test04.cc
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# libraries 
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#--------------------------------------------
+$(bin)\libtest04.dll : \
+$(bin)\MyDetectorConstruction.obj \
+$(bin)\MyEventAction.obj \
+$(bin)\MyPhysicsList.obj \
+$(bin)\MyPrimaryGeneratorAction.obj \
+$(bin)\MyRunAction.obj \
+$(bin)\MyStackingAction.obj \
+$(bin)\MyTrackerHit.obj \
+$(bin)\MyTrackerSD.obj 
+	if exist $(bin)\libtest04.lib del $(bin)\libtest04.lib 
+	if exist $(bin)\libtest04.exp del $(bin)\libtest04.exp 
+	lib.exe $(LIBFLAGS) /def:$(mgr)\libtest04.def /out:$(bin)\libtest04.lib
+	if exist $(bin)\libtest04.dll del $(bin)\libtest04.dll 
+	$(LINK32) $(LINK32FLAGS) /out:$(bin)\libtest04.dll $(bin)\libtest04.exp \
+$(bin)\MyDetectorConstruction.obj \
+$(bin)\MyEventAction.obj \
+$(bin)\MyPhysicsList.obj \
+$(bin)\MyPrimaryGeneratorAction.obj \
+$(bin)\MyRunAction.obj \
+$(bin)\MyStackingAction.obj \
+$(bin)\MyTrackerHit.obj \
+$(bin)\MyTrackerSD.obj 
+
+$(bin)\libtest04.lib : \
+$(bin)\MyDetectorConstruction.obj \
+$(bin)\MyEventAction.obj \
+$(bin)\MyPhysicsList.obj \
+$(bin)\MyPrimaryGeneratorAction.obj \
+$(bin)\MyRunAction.obj \
+$(bin)\MyStackingAction.obj \
+$(bin)\MyTrackerHit.obj \
+$(bin)\MyTrackerSD.obj 
+	if exist $(bin)\libtest04.lib del $(bin)\libtest04.lib 
+	lib.exe @<<
+/nologo /out:$(bin)\libtest04.lib
+$(bin)\MyDetectorConstruction.obj
+$(bin)\MyEventAction.obj
+$(bin)\MyPhysicsList.obj
+$(bin)\MyPrimaryGeneratorAction.obj
+$(bin)\MyRunAction.obj
+$(bin)\MyStackingAction.obj
+$(bin)\MyTrackerHit.obj
+$(bin)\MyTrackerSD.obj
+<<
+#--------------------------------------------
+# libtest04 dependencies 
+#--------------------------------------------
+$(bin)\MyDetectorConstruction.obj : src\MyDetectorConstruction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyDetectorConstruction.obj /Tpsrc\MyDetectorConstruction.cc
+
+$(bin)\MyEventAction.obj : src\MyEventAction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyEventAction.obj /Tpsrc\MyEventAction.cc
+
+$(bin)\MyPhysicsList.obj : src\MyPhysicsList.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyPhysicsList.obj /Tpsrc\MyPhysicsList.cc
+
+$(bin)\MyPrimaryGeneratorAction.obj : src\MyPrimaryGeneratorAction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyPrimaryGeneratorAction.obj /Tpsrc\MyPrimaryGeneratorAction.cc
+
+$(bin)\MyRunAction.obj : src\MyRunAction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyRunAction.obj /Tpsrc\MyRunAction.cc
+
+$(bin)\MyStackingAction.obj : src\MyStackingAction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyStackingAction.obj /Tpsrc\MyStackingAction.cc
+
+$(bin)\MyTrackerHit.obj : src\MyTrackerHit.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyTrackerHit.obj /Tpsrc\MyTrackerHit.cc
+
+$(bin)\MyTrackerSD.obj : src\MyTrackerSD.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\MyTrackerSD.obj /Tpsrc\MyTrackerSD.cc
+
+

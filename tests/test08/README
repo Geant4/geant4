@@ -1,0 +1,18 @@
+$Id: README,v 1.1 1999-01-08 16:35:14 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Test08
+                            ------
+
+ Test08 Created:  August 23rd,  1998  F. Behner 
+
+  This test has been started from an exact copy of exampleN03.
+
+  It tests EM processes and navigation in Parameterised Volumes with a 
+ larger number of events than used in exampleN03.
+
+  

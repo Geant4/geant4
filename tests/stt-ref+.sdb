@@ -1,0 +1,48 @@
+# $Id: stt-ref+.sdb,v 1.1 1999-01-08 16:34:13 gunter Exp $
+# .sdb files are read by checkout.sh and update.sh
+# Lines beginning "# " are ignored (the space after the '#' is important!
+# Blank lines are not allowed!
+# Super-categories
+geant4beta/config           beta03-ref-05
+geant4beta/data             beta03-ref-05
+# geant4beta/documents - not currently part of reference versions
+geant4beta/environments     beta03-ref-05
+geant4beta/examples         beta03-ref-05
+# geant4beta/source - split into categories - see below.
+# geant4beta/tests - checkout HEAD by hand and use this script.
+# Source categories
+geant4beta/source/GNUmakefile      beta03-ref-05
+geant4beta/source/digits+hits      beta03-ref-05
+geant4beta/source/event            beta03-ref-05
+geant4beta/source/g3tog4           beta03-ref-05
+geant4beta/source/geometry/GNUmakefile   beta03-ref-05
+geant4beta/source/geometry/History       beta03-ref-05
+geant4beta/source/geometry/magneticfield beta03-ref-05
+geant4beta/source/geometry/management    beta03-ref-05
+geant4beta/source/geometry/solids        beta03-ref-05
+geant4beta/source/geometry/volumes       beta03-ref-05        
+geant4beta/source/global           beta03-ref-05
+geant4beta/source/graphics_reps    beta03-ref-05
+geant4beta/source/intercoms        beta03-ref-05
+geant4beta/source/interfaces       beta03-ref-05
+geant4beta/source/materials        beta03-ref-05
+geant4beta/source/particles        beta03-ref-05        
+geant4beta/source/persistency      beta03-ref-05
+geant4beta/source/processes/GNUmakefile         beta03-ref-05
+geant4beta/source/processes/History             beta03-ref-05
+geant4beta/source/processes/decay	        beta03-ref-05        
+geant4beta/source/processes/electromagnetic	beta03-ref-05        
+geant4beta/source/processes/hadronic	        beta03-ref-05
+geant4beta/source/processes/hadronic/models/                 beta03-ref-05        
+geant4beta/source/processes/hadronic/stopping                beta03-ref-05        
+geant4beta/source/processes/hadronic/models                  beta03-ref-05
+geant4beta/source/processes/management        	beta03-ref-05
+geant4beta/source/processes/optical	        beta03-ref-05
+geant4beta/source/processes/parameterisation  	beta03-ref-05
+geant4beta/source/processes/photolepton_hadron  beta03-ref-05
+geant4beta/source/processes/transportation	beta03-ref-05
+geant4beta/source/readout          beta03-ref-05
+geant4beta/source/run              beta03-ref-05
+geant4beta/source/track            beta03-ref-05
+geant4beta/source/tracking         beta03-ref-05
+geant4beta/source/visualization    beta03-ref-05

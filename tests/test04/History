@@ -1,0 +1,33 @@
+$Id: History,v 1.1 1999-01-08 16:34:44 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 04 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+July 15, 98 Y. Morita
+- GNUmakefile  cleandb target revised
+- README  new instructions
+- g4odbms_setup.csh  example setup
+- test04.cc  bug fix
+
+July 14, 98 Y. Morita
+- Geometry persistency incorporated.
+
+July  8, 98 Y. Morita
+- First skeleton version to demonstrate persistency capability
+  in Geant4.
+
+June 27, 98 G. Cosmo
+- Created.
+

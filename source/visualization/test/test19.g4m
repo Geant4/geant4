@@ -1,0 +1,51 @@
+# This is test19.g4m
+#
+# Switch on echoing of commands and history mechanism.
+#
+/control/verbose 2
+/control/saveHistory
+#
+# John's personal preferences
+/vis/lights/move_with_camera true
+/vis/set/marker_choices 1
+#
+# See list of detector possibilities.
+/test19det/detector
+# Select detector.
+#/test19det/detector 1
+#/test19det/detector 4
+#
+# Initialise run, i.e., create geometry, set cuts, etc.
+/run/initialize
+#
+# Set gun for demo (detector 1)
+#/gun/particle e+
+#/gun/position 0 -100 0 cm
+#/gun/direction 0 1 0
+#
+# G4Ray demo
+#/vis/camera/zoom 2
+#/vis/camera/viewpoint 20 20
+#/vis/set/drawing_style 2
+#/vis/create_view/new_graphics_system RayX
+#/vis/ray/resolution 1
+#/vis/draw/current
+#
+# See list of graphics systems possibilities.
+help /vis/sceneHandler/create
+#
+# Create view.
+/vis/scene/create
+#/vis/sceneHandler/create DAWN
+#/vis/sceneHandler/create RayX
+#/vis/sceneHandler/create OGLIX
+#/vis/sceneHandler/create OGLSX
+#/vis/sceneHandler/create VRML1
+#/vis/sceneHandler/create VRML1FILE
+#/vis/sceneHandler/create Xo
+#/vis/sceneHandler/create Wo
+/vis/viewer/create
+#
+# Draw current scene
+#/vis/draw/current
+#/vis/show/view

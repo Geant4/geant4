@@ -1,0 +1,7 @@
+geant4beta/source/processes/hadronic/models/low_energy               lowe-00-04-01
+geant4beta/source/processes/hadronic/stopping                        stopping-00-04-01
+geant4beta/source/processes/hadronic/generator/kinetic_model         kinetic_model_00-04-01
+geant4beta/source/processes/hadronic/generator/pre_equilibrium       precompound-00-04-01
+geant4beta/source/processes/hadronic/generator/string_common         string_common-00-04-01
+geant4beta/source/processes/hadronic/generator/string_fragmentation  string_frag-00-04-01
+geant4beta/source/processes/hadronic/generator/diffractve_string     diff_string-00-04-01

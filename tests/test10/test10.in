@@ -1,0 +1,8 @@
+#
+# Macro file of "test10.cc"
+# for Optical photons geometry test
+#
+/run/initialize
+/tracking/verbose 1
+/mydet/SelectDetector Cone
+/run/beamOn 1

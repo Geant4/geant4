@@ -1,0 +1,116 @@
+#!/bin/sh
+# make_work_links
+# Intended to run in parent of module.
+# Usage: make_work_links module_name
+
+# Makes symbolic links to a directory *outside* the geant4alpha
+# structure so that the .d, .o, .a and executables don't have to be in
+# the structure.  For example:
+# 
+#   cd <your_working_directory_containing_geant4alpha>
+#   mkdir /tmp/HP-Local_geant4alpha
+#   ln -s /tmp/HP-Local_geant4alpha .
+#   geant4alpha/prototype/visualization/test/make_work_links \
+#   geant4alpha
+# 
+# will produce many such symbolic links.
+
+
+if [ $# -ne 1 ]
+then echo Usage: make_work_links module_name
+exit 1
+fi
+
+module=$1
+
+WDIR=`pwd`
+
+if [ ! -d $WDIR/$module ]
+then
+  echo $module not found!
+  echo Run this script in the directory containing $module.
+fi
+
+# Make structure for holding system-dependent files.
+
+if [ $G4SYSTEM ]
+then
+  structure=${G4SYSTEM}_$module
+  echo G4SYSTEM is $G4SYSTEM, structure is $structure.
+else
+  echo G4SYSTEM not set.
+  exit 3
+fi
+
+if [ ! -w $WDIR/$structure ]
+then
+  echo A writable $structure does not exist.
+  exit 4
+else
+  if [ '(' ! -d $WDIR/$structure ')' -a '(' ! -h $WDIR/$structure ')' ]
+  then
+    echo No directory or symbolic link exists.
+    exit 5
+  fi
+fi
+
+if [ ! -d $WDIR/$structure/$module ]
+then
+  command="mkdir $WDIR/$structure/$module"
+  echo $command
+  $command
+fi
+
+if [ ! -d $WDIR/$structure/$module/prototype ]
+then
+  command="mkdir $WDIR/$structure/$module/prototype"
+  echo $command
+  $command
+fi
+
+for i in `find $module -name GNUmakefile -print`
+do
+  j=`dirname $i`
+  k=$WDIR/$structure/$j
+  if [ ! -d $k/$G4SYSTEM ]
+  then
+    if [ ! -d $k ]
+    then
+      k1=`dirname $k`
+      if [ ! -d $k1 ]
+      then
+        k2=`dirname $k1`
+        if [ ! -d $k2 ]
+        then
+          command="mkdir $k2"
+          echo $command
+          $command
+        fi
+        command="mkdir $k1"
+        echo $command
+        $command
+      fi
+      command="mkdir $k"
+      echo $command
+      $command
+    fi
+    command="mkdir $k/$G4SYSTEM"
+    echo $command
+    $command
+  fi
+done
+
+# Make links.
+
+for i in `find $module -name GNUmakefile -print`
+do
+  j=`dirname $i`
+  if [ ! -e $j/$G4SYSTEM ]
+  then
+    command="ln -s $WDIR/${G4SYSTEM}_$module/$j/$G4SYSTEM $j/$G4SYSTEM"
+    echo $command
+    $command
+  fi
+done
+
+exit 0

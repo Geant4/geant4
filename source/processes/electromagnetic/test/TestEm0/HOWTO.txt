@@ -1,0 +1,87 @@
+
+Before doing anything else, please confirm that you are
+using the correct tags. Tags used for the profiler test 
+are listed in the result file (resDDMMMYY.txt).
+
+===========================================================
+
+ 
+For Performance test.
+
+1) copy architecture.gmk to geant4beta/config
+
+ % cp architecture.gmk ../../../../../config/.
+
+2) for the first time, remove all of tmp and lib files,
+  so that making sure all libraries are compiled in same 
+  options.
+
+ % cd ../../../../..
+ % rm -rf lib tmp
+
+3) compile everything
+
+ % cd source
+ % gmake glob
+
+4) make test binary
+
+ % cd processes/electromagnetic/test
+ % gmake
+
+5) run it
+
+ % ../../../../../bin/AIX-AFS/TestEm0 prof.mac
+
+
+------------------------------------------------------------
+
+For Checking the results
+
+1) edit TestEm0.cc
+
+ Remove comment mark (//) in front of #define Em0NoOptimize 1
+
+2) Re-build
+
+ % gmake
+
+3) run it
+
+ % ../../../../../bin/AIX-AFS/TestEm0 prof.mac
+
+
+------------------------------------------------------------
+
+Get verbosity of event / tracking / processes
+
+1) edit architecure.gmk
+
+ Comment out 
+    G4_NO_VEROBOSE := 1
+    G4_NO_STORE_TRAJECTORY := 1
+ on lines 297 and 298.
+
+2) for the first time, remove all of tmp and lib files,
+  so that making sure all libraries are compiled in same 
+  options.
+
+ % cd ../../../../..
+ % rm -rf lib tmp
+
+3) compile everything
+
+ % cd source
+ % gmake glob
+
+4) make test binary
+
+ % cd processes/electromagnetic/test
+ % gmake
+
+5) run it interactively
+
+ % ../../../../../bin/AIX-AFS/TestEm0
+
+
+

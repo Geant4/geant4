@@ -1,0 +1,225 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4EvGenMessenger.icc,v 1.1 1999-01-08 16:32:06 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
+#include "G4EventManager.hh"
+#include "G4UImessenger.hh"
+#include "G4UIcommand.hh"
+#include "G4UIparameter.hh"
+#include "G4ParticleGun.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ThreeVector.hh"
+#include "globals.hh"
+#include "G4ios.hh"
+#include <strstream.h>
+
+
+class G4EvGenMessenger: public G4UImessenger
+{
+  public:
+    G4EvGenMessenger(G4ParticleGun * fPtclGun);
+    void SetNewValue(G4UIcommand * command,G4String newValues);
+    G4String GetCurrentValue(G4UIcommand * command);
+  private:
+    G4ParticleGun * fParticleGun;
+    G4ParticleDefinition* geantino;
+    G4ParticleDefinition* MuonPlus;
+    G4ParticleDefinition* Electron;
+};
+
+G4EvGenMessenger::G4EvGenMessenger(G4ParticleGun * fPtclGun)
+:fParticleGun(fPtclGun)
+{
+  G4UIcommand * command;
+  G4UIparameter * param;
+
+  geantino = G4Geantino::Geantino();
+  MuonPlus = G4MuonPlus::MuonPlus();
+  Electron = G4Electron::Electron();
+
+  command = new G4UIcommand("/gun/",this);
+  command->SetGuidance("Particle Gun control commands.");
+  AddUIcommand(command);
+
+  command = new G4UIcommand("/gun/particle",this);
+  command->SetGuidance("Set particle to be generated.");
+  command->SetGuidance("Currently implimented are :");
+  command->SetGuidance(" geantino (default)");
+  command->SetGuidance(" muonPlus");
+  command->SetGuidance(" electron");
+  param = new G4UIparameter("particle name",'c',true);
+  param->SetDefaultValue("geantino");
+  fParticleGun->SetParticleDefinition( geantino );
+  param->SetGuidance("Particle name.");
+  command->SetParameter(param);
+  AddUIcommand(command);
+
+  command = new G4UIcommand("/gun/momentum",this);
+  command->SetGuidance("Set momentum direction.");
+  command->SetGuidance("Direction needs not to be a unit vector.");
+  param = new G4UIparameter("Px",'d',true);
+  param->SetDefaultValue(1.0);
+  param->SetGuidance("X-direction.");
+  command->SetParameter(param);
+  param = new G4UIparameter("Py",'d',true);
+  param->SetDefaultValue(0.0);
+  param->SetGuidance("Y-direction.");
+  command->SetParameter(param);
+  param = new G4UIparameter("Pz",'d',true);
+  param->SetDefaultValue(0.0);
+  param->SetGuidance("Z-direction.");
+  command->SetParameter(param);
+  fParticleGun->SetParticleMomentumDirection( G4ThreeVector(1.0,0.0,0.0) );
+  AddUIcommand(command);
+
+  command = new G4UIcommand("/gun/energy",this);
+  command->SetGuidance("Set particle energy.");
+  command->SetGuidance("Unit of the energy can be :");
+  command->SetGuidance(" Tev, GeV (default), MeV");
+  param = new G4UIparameter("Energy",'d',true);
+  param->SetDefaultValue(1.0);
+  param->SetGuidance("Energy");
+  command->SetParameter(param);
+  param = new G4UIparameter("Unit",'c',true);
+  param->SetDefaultValue("GeV");
+  param->SetGuidance("Unit : TeV, GeV (default), MeV");
+  command->SetParameter(param);
+  fParticleGun->SetParticleEnergy( 1.0*GeV );
+  AddUIcommand(command);
+
+  command = new G4UIcommand("/gun/position",this);
+  command->SetGuidance("Set starting position of the particle.");
+  command->SetGuidance("Unit of the position can be :");
+  command->SetGuidance(" m, cm (default), mm");
+  param = new G4UIparameter("X",'d',true);
+  param->SetDefaultValue(0.0);
+  param->SetGuidance("X position");
+  command->SetParameter(param);
+  param = new G4UIparameter("Y",'d',true);
+  param->SetDefaultValue(0.0);
+  param->SetGuidance("Y position");
+  command->SetParameter(param);
+  param = new G4UIparameter("Z",'d',true);
+  param->SetDefaultValue(0.0);
+  param->SetGuidance("Z position");
+  command->SetParameter(param);
+  param = new G4UIparameter("Unit",'c',true);
+  param->SetDefaultValue("cm");
+  param->SetGuidance("Unit : m, cm (default), mm");
+  command->SetParameter(param);
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.0*cm, 0.0*cm, 0.0*cm));
+  AddUIcommand(command);
+
+  command = new G4UIcommand("/gun/time",this);
+  command->SetGuidance("Set initial time of the particle.");
+  command->SetGuidance("Unit of the time can be :");
+  command->SetGuidance(" s, ms, ns (default)");
+  param = new G4UIparameter("t",'d',true);
+  param->SetDefaultValue(0.0);
+  param->SetGuidance("Initial time");
+  command->SetParameter(param);
+  param = new G4UIparameter("Unit",'c',true);
+  param->SetDefaultValue("ns");
+  param->SetGuidance("Unit : s, ms, ns (default)");
+  command->SetParameter(param);
+  fParticleGun->SetParticleTime( 0.0*ns );
+  AddUIcommand(command);
+}
+
+void G4EvGenMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
+{
+  const char* t = newValues;
+  if( command->GetCommandName() == "particle" )
+  {
+    if(newValues == "geantino")
+    { fParticleGun->SetParticleDefinition( geantino ); }
+    else if(newValues == "muonPlus")
+    { fParticleGun->SetParticleDefinition( MuonPlus ); }
+    else if(newValues == "electron")
+    { fParticleGun->SetParticleDefinition( Electron ); }
+    else
+    { 
+      G4cout << "Unknown particle <" << newValues 
+	   << ">. Command ignored." << endl;
+    }
+  }
+  if( command->GetCommandName() == "momentum" )
+  {
+    G4double px;
+    G4double py;
+    G4double pz;
+    istrstream is((char*)t);
+    is >> px >> py >> pz;
+    G4double pp = sqrt( sqr(px) + sqr(py) + sqr(pz) );
+    if( pp == 0.0 )
+    { G4cout << "Zero vector! command ignored." << endl; }
+    else
+    { 
+      fParticleGun->SetParticleMomentumDirection(
+       G4ThreeVector( px/pp, py/pp, pz/pp ) );
+    }
+  }
+  if( command->GetCommandName() == "energy" )
+  {
+    G4double ee;
+    char ues[10];
+    istrstream is((char*)t);
+    is >> ee >> ues;
+    G4String ue(ues);
+    if( ue == "TeV" )
+    { fParticleGun->SetParticleEnergy(ee*TeV); }
+    else if( ue == "GeV" )
+    { fParticleGun->SetParticleEnergy(ee*GeV); }
+    else if( ue == "MeV" )
+    { fParticleGun->SetParticleEnergy(ee*MeV); }
+    else
+    { G4cout << "Unknown unit <" << ue << ">. Command ignored." << endl; }
+  }
+  if( command->GetCommandName() == "position" )
+  {
+    G4double xx;
+    G4double xy;
+    G4double xz;
+    char uxs[10];
+    istrstream is((char*)t);
+    is >> xx >> xy >> xz >> uxs;
+    G4String ux(uxs);
+    if( ux == "m" )
+    { fParticleGun->SetParticlePosition(G4ThreeVector(xx*m,xy*m,xz*m)); }
+    else if( ux == "cm" )
+    { fParticleGun->SetParticlePosition(G4ThreeVector(xx*cm,xy*cm,xz*cm)); }
+    else if( ux == "mm" )
+    { fParticleGun->SetParticlePosition(G4ThreeVector(xx*mm,xy*mm,xz*mm)); }
+    else
+    { G4cout << "Unknown unit <" << ux << ">. Command ignored." << endl; }
+  }
+  if( command->GetCommandName() == "time" )
+  {
+    G4double et;
+    char uts[10];
+    istrstream is((char*)t);
+    is >> et >> uts;
+    G4String ut(uts);
+    if( ut == "s" )
+    { fParticleGun->SetParticleTime(et*s); }
+    else if( ut == "ms" )
+    { fParticleGun->SetParticleTime(et*ms); }
+    else if( ut == "ns" )
+    { fParticleGun->SetParticleTime(et*ns); }
+    else
+    { G4cout << "Unknown unit <" << ut << ">. Command ignored." << endl; }
+  }
+}
+
+G4String G4EvGenMessenger::GetCurrentValue(G4UIcommand * command)
+{
+  return G4String('\0');
+}
+

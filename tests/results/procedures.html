@@ -1,0 +1,232 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.05 [en] (X11; I; Linux 2.0.34 i586) [Netscape]">
+</HEAD>
+<BODY>
+
+<BLOCKQUOTE>
+<BLOCKQUOTE>
+<BLOCKQUOTE>
+<BLOCKQUOTE>
+<BLOCKQUOTE>
+<BLOCKQUOTE>
+<H1>
+System Test Procedures</H1>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<B><FONT SIZE=+4>Please note: Sytem Test Procedures are evolving.&nbsp;
+This page will be brought up to date soon.&nbsp; John and Serguei, 18th
+December 1998.</FONT></B>
+<H1>
+Reference Version</H1>
+There are always two versions of the code, libraries and executables on
+all test platforms in:
+<BLOCKQUOTE><B><TT><FONT SIZE=+1>&lt;system-test-directory>/ref/</FONT></TT></B>
+<BR><B><TT><FONT SIZE=+1>&lt;system-test-directory>/ref+/</FONT></TT></B></BLOCKQUOTE>
+<B><TT><FONT SIZE=+1>ref</FONT></TT></B> is the reference version and <B><TT><FONT SIZE=+1>ref+</FONT></TT></B>
+is where new tags are tested.&nbsp; The reason for having two directories
+is so that you can easily and with confidence go back to the previous version
+ifa tag is rejected.
+
+<P>The <B><TT><FONT SIZE=+1>system-test-directory</FONT></TT></B> for each
+platform is given in <B><TT><FONT SIZE=+1><A HREF="tags_database.html#CurrentTestPLatforms">geant4beta/tests/results/tags_database.html</A></FONT></TT></B>.
+
+<P>Under <B><TT><FONT SIZE=+1>ref</FONT></TT></B> and <B><TT><FONT SIZE=+1>ref+</FONT></TT></B>
+is a set of directories, e.g.:
+<BLOCKQUOTE><B><TT><FONT SIZE=+1>src/</FONT></TT></B>
+<BR><B><TT><FONT SIZE=+1>AIX-AFS/</FONT></TT></B>
+<BR><B><TT><FONT SIZE=+1>HP-aCC/</FONT></TT></B>
+<BR><B><TT><FONT SIZE=+1>...</FONT></TT></B></BLOCKQUOTE>
+The subdirectory names correspond to the environment variable <B><TT><FONT SIZE=+1>$G4SYSTEM</FONT></TT></B>.&nbsp;
+The breakdown into subdirectories is to allow the possibility of using
+different disc partitions.&nbsp; The <B><TT><FONT SIZE=+1>$G4SYSTEM</FONT></TT></B>
+subdirectories contain <B><TT><FONT SIZE=+1>bin</FONT></TT></B>, <B><TT><FONT SIZE=+1>lib</FONT></TT></B>,
+<B><TT><FONT SIZE=+1>stt</FONT></TT></B> and <B><TT><FONT SIZE=+1>tmp</FONT></TT></B>.
+<BR>&nbsp;
+<H1>
+Dealing with a Notified Tag</H1>
+When a tag is notified to the System Test Team (STT), one or more STT members
+"takes up" the tag for one or more platforms.&nbsp;&nbsp; A tag should
+be taken up if <I>if possible within 1 hour </I>of notification.&nbsp;
+Those STT members who are available when the tag is notified:
+<BLOCKQUOTE>
+<LI>
+<B><TT><FONT SIZE=+1>cd &lt;system-test-directory>/ref+/src</FONT></TT></B>.</LI>
+
+<BR>&nbsp;
+<LI>
+update to the head of <B><TT><FONT SIZE=+1>geant4beta/tests</FONT></TT></B>
+(<B><TT><FONT SIZE=+1>cvs update -d -P -A geant4beta/tests</FONT></TT></B>).</LI>
+
+<BR>&nbsp;
+<LI>
+Define the basic environment variables <B><TT><FONT SIZE=+1>G4SYSTEM</FONT></TT></B>,
+<B><TT><FONT SIZE=+1>G4INSTALL</FONT></TT></B>, <B><TT><FONT SIZE=+1>G4WORKDIR</FONT></TT></B>
+and <B><TT><FONT SIZE=+1>G4LIB</FONT></TT></B>:</LI>
+
+<BLOCKQUOTE><B><TT><FONT SIZE=+1>cd geant4beta/tests/tools/bin</FONT></TT></B>
+<BR><B><TT><FONT SIZE=+1>source setup.csh</FONT></TT></B> (or <B><FONT SIZE=+1>.
+<TT>setup.sh</TT></FONT></B>)</BLOCKQUOTE>
+For the time being, this does not work on all test platforms (we are working
+on it - see script <B><TT><FONT SIZE=+1>specific.csh/sh</FONT></TT></B>).&nbsp;
+In that case set these by hand.&nbsp; E.g.:
+<BR><B><TT><FONT SIZE=+1>setenv G4SYSTEM AIX-AFS</FONT></TT></B>
+<BR><B><TT><FONT SIZE=+1>setenv G4INSTALL /afs/cern.ch/rd44/ref+/src/geant4beta</FONT></TT></B>
+<BR><B><TT><FONT SIZE=+1>setenv G4WORKDIR /afs/cern.ch/rd44/ref+/$G4SYSTEM</FONT></TT></B>
+<BR><B><TT><FONT SIZE=+1>setenv G4LIB $G4WORKDIR/lib</FONT></TT></B>
+<BR><B><TT><FONT SIZE=+1>setenv G4DEBUG 1</FONT></TT></B>
+<BR>&nbsp;
+<LI>
+<B><TT><FONT SIZE=+1>cd $G4INSTALL</FONT></TT></B>.</LI>
+
+<BR>&nbsp;
+<LI>
+Inspect, and be prepared to edit, <B><TT><FONT SIZE=+1><A HREF="tags_database.html">tests/results/tags_database.html</A></FONT></TT></B>,
+where you will find <I>further instructions</I>.</LI>
+
+<BR>&nbsp;
+<LI>
+If you have taken a tag for testing, proceed with the following.</LI>
+
+<BR>&nbsp;
+<LI>
+On each of the test platforms you have selected, <B><TT><FONT SIZE=+1>cd
+$G4INSTALL</FONT></TT></B> (you should be in the <B><TT><FONT SIZE=+1>ref+</FONT></TT></B>
+version).</LI>
+
+<BR>&nbsp;
+<LI>
+Edit <B><TT><FONT SIZE=+1>geant4beta/tests/stt-ref+.sdb</FONT></TT></B>
+to include the new tag (unless someone has already done it).</LI>
+
+<BR>&nbsp;
+<LI>
+Update the reference version to the new category tag using <B><TT><FONT SIZE=+1>update.sh</FONT></TT></B>
+from <B><TT><FONT SIZE=+1>geant4beta/tests/tools/bin/</FONT></TT></B>:</LI>
+
+<BLOCKQUOTE><B><TT><FONT SIZE=+1>update.sh &amp;</FONT></TT></B></BLOCKQUOTE>
+Submitting to the background means you can monitor with commands like <B><TT><FONT SIZE=+1>jobs</FONT></TT></B>
+and <B><TT><FONT SIZE=+1>kill %1</FONT></TT></B>.&nbsp; If you forget to
+submit to the background you can always use <B><TT><FONT SIZE=+1>CNTL-Z</FONT></TT></B>
+and <B><TT><FONT SIZE=+1>bg</FONT></TT></B>.&nbsp; Use <B><TT><FONT SIZE=+1>nice
+</FONT></TT></B>to be nice to other users and <B><TT><FONT SIZE=+1>nohup</FONT></TT></B>
+if necessary to prevent the job being killed.
+
+<P>The script puts output in <B><TT><FONT SIZE=+1>$G4WORKDIR/stt/$G4SYSTEM/update.log</FONT></TT></B>.&nbsp;
+You may monitor progress by using:
+<BLOCKQUOTE><B><TT><FONT SIZE=+1>tail -f $G4WORKDIR/stt/$G4SYSTEM/update.log</FONT></TT></B></BLOCKQUOTE>
+
+<LI>
+If this action updates any files (it might or might not) then compile the
+libraries and build the test executables:</LI>
+
+<BLOCKQUOTE><B><TT><FONT SIZE=+1>build.sh all &amp;</FONT></TT></B></BLOCKQUOTE>
+This puts output in <B><TT><FONT SIZE=+1>$G4WORKDIR/stt/$G4SYSTEM/gmake.log</FONT></TT></B>.&nbsp;
+Monitor progress by using:
+<BLOCKQUOTE><B><TT><FONT SIZE=+1>g4tail</FONT></TT></B></BLOCKQUOTE>
+which is an alias for <B><TT><FONT SIZE=+1>tail -f G4WORKDIR/stt/$G4SYSTEM/gmake.log</FONT></TT></B>.
+<BR>&nbsp;
+<LI>
+Start the tests:</LI>
+
+<BLOCKQUOTE><B><TT><FONT SIZE=+1>run.sh all &amp;</FONT></TT></B></BLOCKQUOTE>
+This puts output in <B><TT><FONT SIZE=+1>$G4WORKDIR/stt/$G4SYSTEM/testNN.out</FONT></TT></B>
+and <B><TT><FONT SIZE=+1>testNN.diff</FONT></TT></B>.&nbsp; Monitor progress
+by using <B><TT><FONT SIZE=+1>jobs</FONT></TT></B> and <B><TT><FONT SIZE=+1>top</FONT></TT></B>.
+<BR>&nbsp;
+<LI>
+<I>Within 24 hours,</I> complete entries in the <A HREF="tags_database.html#TagsDatabaseTable">Tags
+Database Table </A>and inform the Acting System Test Coordinator.&nbsp;
+The Acting System Test Coordinator will make the decision to accept or
+reject the tag.</LI>
+</BLOCKQUOTE>
+
+<H1>
+Accepting or Rejecting a Tag</H1>
+These are recommended procedures for the Acting System Test Coordinator
+when tests are complete.
+<BLOCKQUOTE>
+<LI>
+Mark the tag as <B>accepted</B> or <B>rejected </B>in the <A HREF="tags_database.html#TagsDatabaseTable">Tags
+Database Table</A>.</LI>
+
+<BR>&nbsp;
+<LI>
+On occasion, make a global tag.&nbsp; In that case, copy optimised libraries
+to <B><TT><FONT SIZE=+1>/afs/cern.ch/rd44/dev/lib</FONT></TT></B>.</LI>
+
+<BR>&nbsp;
+<LI>
+Inform taggers of the decision.&nbsp; If accepted, ask him/her to announce
+on the Tags Blackboard.&nbsp; If rejected, ask for a new tag.</LI>
+
+<BR>&nbsp;
+<LI>
+Inspect the <A HREF="tags_database.html#TagsDatabaseTable">Tags Database
+Table </A>and select a new tags set.&nbsp; Mark them as <B>testing </B>and
+commit the file.</LI>
+
+<BR>&nbsp;
+<LI>
+Ask Platform Managers to update as required.</LI>
+</BLOCKQUOTE>
+
+<H1>
+Updating a Reference Version</H1>
+These are the recommended procedures for each System Test Platform Manager
+when the Acting System Test Coordinator asks for an update of the test
+versions.
+<BLOCKQUOTE>
+<LI>
+Edit <B><TT><FONT SIZE=+1>stt-ref.sdb</FONT></TT></B> and <B><TT><FONT SIZE=+1>stt-ref+.sdb</FONT></TT></B>
+appropriately and commit.&nbsp; Simplify by using the most recent global
+tag if appropriate.</LI>
+
+<BR>&nbsp;
+<LI>
+For each platform, save <B><TT><FONT SIZE=+1>ref+/$G4SYSTEM/stt/</FONT></TT></B>
+in <B><TT><FONT SIZE=+1>ref/$G4SYSTEM/stt-debug/</FONT></TT></B> to monitor
+possible problems with optimisation.</LI>
+
+<BR>&nbsp;
+<LI>
+Update <B><TT><FONT SIZE=+1>ref </FONT></TT></B>and <B><TT><FONT SIZE=+1>ref+</FONT></TT></B>
+(<B><TT><FONT SIZE=+1>update.sh</FONT></TT></B>), rebuild (<B><TT><FONT SIZE=+1>build.sh
+all)</FONT></TT></B> and rerun tests (<B><TT><FONT SIZE=+1>run.sh all</FONT></TT></B>).</LI>
+</BLOCKQUOTE>
+
+<H1>
+Making a Global Tag</H1>
+Two types of global tag:
+<BLOCKQUOTE>
+<LI>
+internal - includes <B><TT><FONT SIZE=+1>config environments examples source
+tests</FONT></TT></B>.</LI>
+
+<LI>
+public - as internal, but without <B><TT><FONT SIZE=+1>tests</FONT></TT></B>.&nbsp;
+Here are the commands for a public release.</LI>
+
+<LI>
+<B><TT><FONT SIZE=+1>nohup cvs tag &lt;tag-name> config environments examples
+source >&amp; /tmp/cvs.log &amp;</FONT></TT></B>.</LI>
+
+<LI>
+Update to this tag:</LI>
+
+<BR><B><TT><FONT SIZE=+1>nohup cvs update -d -P -r &lt;tag-name> config
+environments examples source >>&amp; /tmp/cvs.log &amp;</FONT></TT></B>.</BLOCKQUOTE>
+
+<BLOCKQUOTE>&nbsp;</BLOCKQUOTE>
+
+<HR WIDTH="100%">
+<BR><I><A HREF="mailto:John.Allison@man.ac.uk">John Allison</A>&nbsp; and
+<A HREF="mailto:Serguei.Sadilov@cern.ch">Serguei Sadilov</A>&nbsp; 19th
+December 1998</I>
+</BODY>
+</HTML>

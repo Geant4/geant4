@@ -1,0 +1,112 @@
+Unit category <Time> is not defined.
+Opening Federated Database G4EXAMPLE.
+  -- Tracker type sensitive detector
+
+****************************************************************
+****************************************************************
+**                                                            **
+**   G4MuPairProduction :                                     **
+**      cross section/energy loss is calculated using         **
+**      the accurate cross section formula of R.Kokoulin,     **
+**      ( building the tables takes a lot of time,            **
+**                   PLEASE BE PATIENT  ! )                   **
+**      sampling of the energy of the pair is generated       **
+**      according to the sampling tables.                     **
+**                                                            **
+****************************************************************
+****************************************************************
+
+****************************************************************
+****************************************************************
+**                                                            **
+**   G4MuPairProduction :                                     **
+**      cross section/energy loss is calculated using         **
+**      the accurate cross section formula of R.Kokoulin,     **
+**      ( building the tables takes a lot of time,            **
+**                   PLEASE BE PATIENT  ! )                   **
+**      sampling of the energy of the pair is generated       **
+**      according to the sampling tables.                     **
+**                                                            **
+****************************************************************
+****************************************************************
+MyPhysicsList::setCuts:CutLength : 1 (mm)
+>>> Event 0
+Event : 0
+mySD/EvenCollection
+Number of hits          10
+  Edep of the first hit 70.7118
+mySD/OddCollection
+Number of hits          48
+  Edep of the first hit 44.5668
+>>> Event 1
+Event : 1
+mySD/EvenCollection
+Number of hits          36
+  Edep of the first hit 22.3181
+mySD/OddCollection
+Number of hits          25
+  Edep of the first hit 41.5939
+>>> Event 2
+Event : 2
+mySD/EvenCollection
+Number of hits          12
+  Edep of the first hit 28.0978
+mySD/OddCollection
+Number of hits          52
+  Edep of the first hit 3.52978
+>>> Event 3
+Event : 3
+mySD/EvenCollection
+Number of hits          14
+  Edep of the first hit 5.96415
+mySD/OddCollection
+Number of hits          43
+  Edep of the first hit 3.18537
+>>> Event 4
+Event : 4
+mySD/EvenCollection
+Number of hits          7
+  Edep of the first hit 19.4871
+mySD/OddCollection
+Number of hits          57
+  Edep of the first hit 7.21456
+>>> Event 5
+Event : 5
+mySD/EvenCollection
+Number of hits          6
+  Edep of the first hit 1.65209
+mySD/OddCollection
+Number of hits          51
+  Edep of the first hit 19.1148
+>>> Event 6
+Event : 6
+mySD/EvenCollection
+Number of hits          10
+  Edep of the first hit 13.4296
+mySD/OddCollection
+Number of hits          47
+  Edep of the first hit 62.0367
+>>> Event 7
+Event : 7
+mySD/EvenCollection
+Number of hits          6
+  Edep of the first hit 36.4453
+mySD/OddCollection
+Number of hits          50
+  Edep of the first hit 19.1307
+>>> Event 8
+Event : 8
+mySD/EvenCollection
+Number of hits          16
+  Edep of the first hit 2.38804
+mySD/OddCollection
+Number of hits          52
+  Edep of the first hit 48.9265
+>>> Event 9
+Event : 9
+mySD/EvenCollection
+Number of hits          12
+  Edep of the first hit 19.3121
+mySD/OddCollection
+Number of hits          52
+  Edep of the first hit 11.5742

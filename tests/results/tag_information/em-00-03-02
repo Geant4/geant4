@@ -1,0 +1,4 @@
+   I have forgotten to mention that among the bugs were two
+ serious (in G4eIonisation.icc and G4eBremsstrahlung.icc).
+   The effect of these bugs was the production a lot of
+ low energy secondaries (e- and gamma , resp.).

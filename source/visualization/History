@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-01-07 16:14:33 gunter Exp $
+$Id: History,v 1.2 1999-01-08 16:33:51 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+vis-01-00-01  6th January 1999  John Allison
+- Made G4VisManager::GetInstance() private to prevent inadvertent misuse.
+- Removed #include GNU_GCC - no longer necessary for egcs.
+- Continued developing the new commands.
 
 vis-00-04-04  16th December 1998  John Allison
 - test/GNUmakefile for Linux-g++

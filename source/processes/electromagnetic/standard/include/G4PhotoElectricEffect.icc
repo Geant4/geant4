@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.icc,v 1.1 1999-01-07 16:11:14 gunter Exp $
+// $Id: G4PhotoElectricEffect.icc,v 1.2 1999-01-08 16:32:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,6 +26,7 @@
 // 13-03-97, adapted for the new physics scheme, M.Maire
 // 20-11-97, change for lowest energy limit default action
 // 17-11-98, use table of atomic shells in PostStepDoIt, mma
+// 06-01-99, use Sandia crossSection, V.Grichine mma
 // ---------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -45,16 +46,17 @@ inline G4double G4PhotoElectricEffect::GetCrossSectionPerAtom(
 
 {
    G4double crossSection;
-   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
-   G4bool isOutRange ;
+   G4double GammaEnergy  = aDynamicGamma->GetKineticEnergy();
+   G4double AtomicNumber = anElement->GetZ();
+   G4bool isOutRange;
 
    if (GammaEnergy > HighestEnergyLimit) 
      crossSection = 0.;
-   else {
-     if (GammaEnergy < LowestEnergyLimit) GammaEnergy = LowestEnergyLimit;
+   else if (GammaEnergy > LowestEnergyLimit)
      crossSection = (*theCrossSectionTable)(anElement->GetIndex())->
                                        GetValue(GammaEnergy, isOutRange);
-    } 
+   else
+     crossSection = ComputeSandiaCrossSection(GammaEnergy,AtomicNumber);     
 
    return crossSection;
 } 
@@ -78,11 +80,11 @@ inline G4double G4PhotoElectricEffect::GetMeanFreePath(const G4Track& aTrack,
 
    if (GammaEnergy > HighestEnergyLimit)
      MeanFreePath = DBL_MAX;
-   else {
-     if (GammaEnergy < LowestEnergyLimit) GammaEnergy = LowestEnergyLimit;
+   else if (GammaEnergy > LowestEnergyLimit) 
      MeanFreePath = (*theMeanFreePathTable)(aMaterial->GetIndex())->
                                        GetValue(GammaEnergy, isOutRange); 
-    }
+   else
+     MeanFreePath = ComputeSandiaMeanFreePath(GammaEnergy, aMaterial);   
 
    return MeanFreePath;
 }
@@ -90,7 +92,7 @@ inline G4double G4PhotoElectricEffect::GetMeanFreePath(const G4Track& aTrack,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4PhotoElectricEffect::ComputeMeanFreePath(G4double GammaEnergy,
-                                                         G4Material* aMaterial)
+                                                           G4Material* aMaterial)
 
 // returns the gamma mean free path in GEANT4 internal units
 
@@ -107,6 +109,24 @@ inline G4double G4PhotoElectricEffect::ComputeMeanFreePath(G4double GammaEnergy,
                                              (*theElementVector)(elm)->GetZ());
       }       
 
+  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+                                                         
+inline 
+G4double G4PhotoElectricEffect::ComputeSandiaMeanFreePath(G4double GammaEnergy,
+                                                          G4Material* aMaterial)
+{
+  G4double energy2 = GammaEnergy*GammaEnergy, energy3 = GammaEnergy*energy2, 
+           energy4 = energy2*energy2;
+
+  G4double* SandiaCof = aMaterial->GetSandiaTable()
+                                 ->GetSandiaCofForMaterial(GammaEnergy);
+
+  G4double SIGMA = SandiaCof[0]/GammaEnergy + SandiaCof[1]/energy2 +
+	           SandiaCof[2]/energy3     + SandiaCof[3]/energy4; 
+          
   return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX ;
 }
 

@@ -1,0 +1,30 @@
+$Id: History,v 1.1 1999-01-08 16:34:27 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 01 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+July  5, 98 J. Apostolakis   tst01-ver0.1
+
+9th August 1998  John Allison
+- Changed G4UIterminal to G4UIGAG.
+
+- Created first version. 
+  * I started from the old run/test_skeleton code.
+  * I renamed all classes from "MyXX" to "Tst01XX".
+
+
+June 27, 98 G. Cosmo
+- Created directory and "empty" test01.cc.
+

@@ -1,0 +1,23 @@
+#
+# Macro file for the initialization phase of "TestEm4.cc"
+#
+# Sets some default verbose
+# and initializes the graphic.
+#
+/control/verbose 2
+/run/verbose 2
+#
+/run/particle/dumpCutValues
+#
+# Edit the next line(s) to choose another graphic system
+#
+#/vis~/create_view/new_graphics_system DAWNFILE
+/vis~/create_view/new_graphics_system OGLIX
+/vis~/camera/zoom 1.5
+/vis~/draw/current
+/vis~/show/view
+#
+# for drawing the tracks
+# if too many tracks cause core dump => storeTrajectory 0
+/tracking/storeTrajectory 1
+/event/drawTracks charged

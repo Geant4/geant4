@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.1 1999-01-07 16:15:32 gunter Exp $
+// $Id: G4VisManager.cc,v 1.2 1999-01-08 16:33:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,15 +43,14 @@
 #include "G4VisToOldVisCommands.hh"
 
 #include "G4ios.hh"
-#include <assert.h>
 
 G4VisManager* G4VisManager::fpInstance = 0;
 
 G4VisManager::G4VisManager ():
   fInitialised     (false),
   fpGraphicsSystem (0),
-  fpScene          (0),
-  fpView           (0),
+  fpSceneHandler   (0),
+  fpViewer         (0),
   fVerbose         (0),
   fSceneDataObjectList (rwhash)  // All other objects use default constructors.
 {
@@ -200,15 +199,15 @@ void G4VisManager::ClearCurrentSceneData () {
 }
 
 void G4VisManager::CopyScene () {
-  if (fpScene) {
-    fSD = fpScene -> GetSceneData ();
+  if (fpSceneHandler) {
+    fSD = fpSceneHandler -> GetSceneData ();
   }
   IsValidView ();  // Checks.
 }
 
 void G4VisManager::CopyView () {
   if (IsValidView ()) {
-    fVP = fpView -> GetViewParameters ();
+    fVP = fpViewer -> GetViewParameters ();
   }
 }
 
@@ -222,24 +221,24 @@ void G4VisManager::Clear () {
 
   if (IsValidView ()) {
 
-    fpView -> ClearView ();
+    fpViewer -> ClearView ();
     // Clears current buffer, i.e., back buffer in case of double
     // buffered system.
 
-    fpView -> FinishView ();
+    fpViewer -> FinishView ();
     // Swaps buffers of double buffered systems.
 
-    fpView -> ClearView ();
+    fpViewer -> ClearView ();
     // Clears the swapped buffer.
 
-    fpView -> NeedKernelVisit ();
+    fpViewer -> NeedKernelVisit ();
     // Informs all views of need to revisit kernel.
 
-    fpScene -> ClearStore ();
+    fpSceneHandler -> ClearStore ();
     // Clears the graphics database (display lists) if any.
 
     fSD.Clear ();
-    fpScene -> SetSceneData (fSD);
+    fpSceneHandler -> SetSceneData (fSD);
     // Clears current scene data - then updates scene.
   }
 }
@@ -252,14 +251,14 @@ void G4VisManager::ClearScene () {
 
   if (IsValidView ()) {
 
-    fpView -> NeedKernelVisit ();
+    fpViewer -> NeedKernelVisit ();
     // Informs all views of need to revisit kernel.
 
-    fpScene -> ClearStore ();
+    fpSceneHandler -> ClearStore ();
     // Clears the graphics database (display lists) if any.
 
     fSD.Clear ();
-    fpScene -> SetSceneData (fSD);
+    fpSceneHandler -> SetSceneData (fSD);
     // Clears current scene data - then updates scene.
   }
 }
@@ -271,14 +270,14 @@ void G4VisManager::ClearView () {
 
   if (IsValidView ()) {
 
-    fpView -> ClearView ();
+    fpViewer -> ClearView ();
     // Clears current buffer, i.e., back buffer in case of double
     // buffered system.
 
-    fpView -> FinishView ();
+    fpViewer -> FinishView ();
     // Swaps buffers of double buffered systems.
 
-    fpView -> ClearView ();
+    fpViewer -> ClearView ();
     // Clears the swapped buffer.
   }
 }
@@ -289,40 +288,40 @@ void G4VisManager::Draw () {
 
     // If the current scene data are different to those of the 
     // current scene...
-    if (fSD != fpScene -> GetSceneData ()) {
+    if (fSD != fpSceneHandler -> GetSceneData ()) {
 
       // Copy current data to current scene.
-      fpScene -> SetSceneData (fSD);
+      fpSceneHandler -> SetSceneData (fSD);
 
       // Make sure viewing parameters are up to date.
-      fpView -> SetViewParameters (fVP);
+      fpViewer -> SetViewParameters (fVP);
     }
     // ...else just check viewing parameters of current view...
     else {
-      if (fVP != fpView -> GetViewParameters ()) {
-	fpView -> SetViewParameters (fVP);
+      if (fVP != fpViewer -> GetViewParameters ()) {
+	fpViewer -> SetViewParameters (fVP);
       }
     }
 
-    fpView -> DrawView ();
+    fpViewer -> DrawView ();
   }
 }
 
 void G4VisManager::Show () {
   if (IsValidView ()) {
-     fpView -> ShowView ();
+     fpViewer -> ShowView ();
   }
 }
 
 void G4VisManager::Draw (const G4Polyline& line,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
-    G4ModelingParameters* pMP = fpScene -> CreateModelingParameters ();
-    fpScene -> SetModel (new G4NullModel (pMP));
-    fpScene -> BeginPrimitives (objectTransform);
-    fpScene -> AddPrimitive (line);
-    fpScene -> EndPrimitives ();
-    fpScene -> SetModel (0);
+    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
+    fpSceneHandler -> SetModel (new G4NullModel (pMP));
+    fpSceneHandler -> BeginPrimitives (objectTransform);
+    fpSceneHandler -> AddPrimitive (line);
+    fpSceneHandler -> EndPrimitives ();
+    fpSceneHandler -> SetModel (0);
     delete pMP;
   }
 }
@@ -330,12 +329,12 @@ void G4VisManager::Draw (const G4Polyline& line,
 void G4VisManager::Draw (const G4Text& text,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
-    G4ModelingParameters* pMP = fpScene -> CreateModelingParameters ();
-    fpScene -> SetModel (new G4NullModel (pMP));
-    fpScene -> BeginPrimitives (objectTransform);
-    fpScene -> AddPrimitive (text);
-    fpScene -> EndPrimitives ();
-    fpScene -> SetModel (0);
+    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
+    fpSceneHandler -> SetModel (new G4NullModel (pMP));
+    fpSceneHandler -> BeginPrimitives (objectTransform);
+    fpSceneHandler -> AddPrimitive (text);
+    fpSceneHandler -> EndPrimitives ();
+    fpSceneHandler -> SetModel (0);
     delete pMP;
   }
 }
@@ -343,12 +342,12 @@ void G4VisManager::Draw (const G4Text& text,
 void G4VisManager::Draw (const G4Circle& circle,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
-    G4ModelingParameters* pMP = fpScene -> CreateModelingParameters ();
-    fpScene -> SetModel (new G4NullModel (pMP));
-    fpScene -> BeginPrimitives (objectTransform);
-    fpScene -> AddPrimitive (circle);
-    fpScene -> EndPrimitives ();
-    fpScene -> SetModel (0);
+    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
+    fpSceneHandler -> SetModel (new G4NullModel (pMP));
+    fpSceneHandler -> BeginPrimitives (objectTransform);
+    fpSceneHandler -> AddPrimitive (circle);
+    fpSceneHandler -> EndPrimitives ();
+    fpSceneHandler -> SetModel (0);
     delete pMP;
   }
 }
@@ -356,12 +355,12 @@ void G4VisManager::Draw (const G4Circle& circle,
 void G4VisManager::Draw (const G4Square& Square,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
-    G4ModelingParameters* pMP = fpScene -> CreateModelingParameters ();
-    fpScene -> SetModel (new G4NullModel (pMP));
-    fpScene -> BeginPrimitives (objectTransform);
-    fpScene -> AddPrimitive (Square);
-    fpScene -> EndPrimitives ();
-    fpScene -> SetModel (0);
+    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
+    fpSceneHandler -> SetModel (new G4NullModel (pMP));
+    fpSceneHandler -> BeginPrimitives (objectTransform);
+    fpSceneHandler -> AddPrimitive (Square);
+    fpSceneHandler -> EndPrimitives ();
+    fpSceneHandler -> SetModel (0);
     delete pMP;
   }
 }
@@ -369,12 +368,12 @@ void G4VisManager::Draw (const G4Square& Square,
 void G4VisManager::Draw (const G4Polymarker& polymarker,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
-    G4ModelingParameters* pMP = fpScene -> CreateModelingParameters ();
-    fpScene -> SetModel (new G4NullModel (pMP));
-    fpScene -> BeginPrimitives (objectTransform);
-    fpScene -> AddPrimitive (polymarker);
-    fpScene -> EndPrimitives ();
-    fpScene -> SetModel (0);
+    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
+    fpSceneHandler -> SetModel (new G4NullModel (pMP));
+    fpSceneHandler -> BeginPrimitives (objectTransform);
+    fpSceneHandler -> AddPrimitive (polymarker);
+    fpSceneHandler -> EndPrimitives ();
+    fpSceneHandler -> SetModel (0);
     delete pMP;
   }
 }
@@ -382,12 +381,12 @@ void G4VisManager::Draw (const G4Polymarker& polymarker,
 void G4VisManager::Draw (const G4Polyhedron& polyhedron,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
-    G4ModelingParameters* pMP = fpScene -> CreateModelingParameters ();
-    fpScene -> SetModel (new G4NullModel (pMP));
-    fpScene -> BeginPrimitives (objectTransform);
-    fpScene -> AddPrimitive (polyhedron);
-    fpScene -> EndPrimitives ();
-    fpScene -> SetModel (0);
+    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
+    fpSceneHandler -> SetModel (new G4NullModel (pMP));
+    fpSceneHandler -> BeginPrimitives (objectTransform);
+    fpSceneHandler -> AddPrimitive (polyhedron);
+    fpSceneHandler -> EndPrimitives ();
+    fpSceneHandler -> SetModel (0);
     delete pMP;
   }
 }
@@ -395,12 +394,12 @@ void G4VisManager::Draw (const G4Polyhedron& polyhedron,
 void G4VisManager::Draw (const G4NURBS& nurbs,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
-    G4ModelingParameters* pMP = fpScene -> CreateModelingParameters ();
-    fpScene -> SetModel (new G4NullModel (pMP));
-    fpScene -> BeginPrimitives (objectTransform);
-    fpScene -> AddPrimitive (nurbs);
-    fpScene -> EndPrimitives ();
-    fpScene -> SetModel (0);
+    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
+    fpSceneHandler -> SetModel (new G4NullModel (pMP));
+    fpSceneHandler -> BeginPrimitives (objectTransform);
+    fpSceneHandler -> AddPrimitive (nurbs);
+    fpSceneHandler -> EndPrimitives ();
+    fpSceneHandler -> SetModel (0);
     delete pMP;
   }
 }
@@ -409,12 +408,12 @@ void G4VisManager::Draw (const G4VSolid& solid,
 			 const G4VisAttributes& attribs,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
-    G4ModelingParameters* pMP = fpScene -> CreateModelingParameters ();
-    fpScene -> SetModel (new G4NullModel (pMP));
-    fpScene -> PreAddThis (objectTransform, attribs);
-    solid.DescribeYourselfTo (*fpScene);
-    fpScene -> PostAddThis ();
-    fpScene -> SetModel (0);
+    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
+    fpSceneHandler -> SetModel (new G4NullModel (pMP));
+    fpSceneHandler -> PreAddThis (objectTransform, attribs);
+    solid.DescribeYourselfTo (*fpSceneHandler);
+    fpSceneHandler -> PostAddThis ();
+    fpSceneHandler -> SetModel (0);
     delete pMP;
   }
 }
@@ -444,7 +443,7 @@ G4bool G4VisManager::Notify (G4ApplicationState requestedState) {
       const RWTPtrOrderedVector <G4VModel>& EOEModelList =
 	fSD.GetEndOfEventModelList ();
       for (int i = 0; i < EOEModelList.entries (); i++) {
-	EOEModelList [i] -> DescribeYourselfTo (*fpScene);
+	EOEModelList [i] -> DescribeYourselfTo (*fpSceneHandler);
       }
     }
   }
@@ -458,16 +457,16 @@ void G4VisManager::CreateScene (G4String name) {
     G4VView* pView;
     if (pScene) {
       fAvailableScenes.append (pScene);
-      fpScene = pScene;                         // Make current.
+      fpSceneHandler = pScene;                         // Make current.
     }
     else {
       G4cerr << "Error in G4VisManager::CreateScene during "
 	   << fpGraphicsSystem -> GetName ()
 	   << " scene creation."
 	   << endl;
-      fpScene = 0;
+      fpSceneHandler = 0;
     }
-    fpView  = 0;
+    fpViewer  = 0;
     // Make it impossible for user action code to Draw.
     fpConcreteInstance = 0;
   }
@@ -478,12 +477,12 @@ void G4VisManager::CreateView (G4String name) {
 
   if (!fInitialised) Initialise ();
 
-  if (fpScene) {
-    G4VView* p = fpGraphicsSystem -> CreateView (*fpScene, name);
+  if (fpSceneHandler) {
+    G4VView* p = fpGraphicsSystem -> CreateView (*fpSceneHandler, name);
     if (p) {
-      fpView = p;                             // Make current.
-      fpScene -> AddViewToList (fpView);
-      fpScene -> SetCurrentView (fpView);
+      fpViewer = p;                             // Make current.
+      fpSceneHandler -> AddViewToList (fpViewer);
+      fpSceneHandler -> SetCurrentView (fpViewer);
       // Make it possible for user action code to Draw.
       fpConcreteInstance = this;
 
@@ -521,11 +520,11 @@ void G4VisManager::CreateView (G4String name) {
 
 void G4VisManager::DeleteCurrentScene () {
   G4cout << "G4VisManager::DeleteCurrentScene: scene handler \""
-	 << fpScene -> GetName ()
+	 << fpSceneHandler -> GetName ()
 	 << "\"\n  and its viewer(s) are being deleted.";
-  if(fpScene) {
-    fAvailableScenes.remove (fpScene);
-    delete fpScene;
+  if(fpSceneHandler) {
+    fAvailableScenes.remove (fpSceneHandler);
+    delete fpSceneHandler;
   }
   const G4SceneList& sceneHandlerList = fAvailableScenes;
   G4int nSH = sceneHandlerList.entries ();
@@ -534,27 +533,27 @@ void G4VisManager::DeleteCurrentScene () {
     if (sceneHandlerList [iSH] -> GetViewList ().entries ()) break;
   }
   if (iSH < nSH) {
-    fpScene = sceneHandlerList [iSH];
+    fpSceneHandler = sceneHandlerList [iSH];
     G4cout << "\n  scene handler is now \""
-	   << fpScene -> GetName ();
-    fpView = fpScene -> GetViewList () [0];
+	   << fpSceneHandler -> GetName ();
+    fpViewer = fpSceneHandler -> GetViewList () [0];
     G4cout << "\"\n  and viewer now \""
-	   << fpView -> GetName ()
+	   << fpViewer -> GetName ()
 	   << ".";
     IsValidView ();  // Check.
   }
   else if (nSH) {
-    fpScene = fAvailableScenes [0];
+    fpSceneHandler = fAvailableScenes [0];
     G4cout << "\n  scene handler is now \""
-	   << fpScene -> GetName ();
-    fpView = 0;
+	   << fpSceneHandler -> GetName ();
+    fpViewer = 0;
     // Make it impossible for user action code to Draw.
     fpConcreteInstance = 0;
     G4cout << "\" but it has no viewers -\n  please create one.";
   }
   else {
-    fpScene = 0;
-    fpView  = 0;
+    fpSceneHandler = 0;
+    fpViewer  = 0;
     // Make it impossible for user action code to Draw.
     fpConcreteInstance = 0;
     G4cout <<
@@ -567,25 +566,25 @@ void G4VisManager::DeleteCurrentScene () {
 
 void G4VisManager::DeleteCurrentView () {
   G4cout << "G4VisManager::DeleteCurrentView: viewer \""
-	 << fpView -> GetName () 
+	 << fpViewer -> GetName () 
 	 << "\" being deleted.";
-  if (fpView ) {
-    fpView -> GetScene () -> RemoveViewFromList (fpView);
-    delete fpView;
+  if (fpViewer ) {
+    fpViewer -> GetScene () -> RemoveViewFromList (fpViewer);
+    delete fpViewer;
   }
-  const G4VViewList& viewerList = fpScene -> GetViewList ();
+  const G4VViewList& viewerList = fpSceneHandler -> GetViewList ();
   if (viewerList.entries () > 0) {
-    fpView = viewerList [0];
-    fpScene -> SetCurrentView (fpView);
+    fpViewer = viewerList [0];
+    fpSceneHandler -> SetCurrentView (fpViewer);
     if (IsValidView ()) {
       G4cout << "\n  viewer is now \""
-	     << fpView -> GetName ()
+	     << fpViewer -> GetName ()
 	     << "\".";
     }
   }
   else {
-    fpView = 0;
-    fpScene -> SetCurrentView (0);
+    fpViewer = 0;
+    fpSceneHandler -> SetCurrentView (0);
     // Make it impossible for user action code to Draw.
     fpConcreteInstance = 0;
     G4cout <<
@@ -697,24 +696,24 @@ void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
     if (sceneHandlerList [iSH] -> GetGraphicsSystem () == pSystem) break;
   }
   if (iSH < nSH) {
-    fpScene = sceneHandlerList [iSH];
+    fpSceneHandler = sceneHandlerList [iSH];
     G4cout << "\n  Scene Handler now "
-	   << fpScene -> GetName ();
-    const G4VViewList& viewerList = fpScene -> GetViewList ();
+	   << fpSceneHandler -> GetName ();
+    const G4VViewList& viewerList = fpSceneHandler -> GetViewList ();
     if (viewerList.entries ()) {
-      fpView = viewerList [0];
-      G4cout << "\n  Viewer now " << fpView -> GetName ();
+      fpViewer = viewerList [0];
+      G4cout << "\n  Viewer now " << fpViewer -> GetName ();
       IsValidView ();  // Checks.
     }
     else {
-      fpView = 0;
+      fpViewer = 0;
       // Make it impossible for user action code to Draw.
       fpConcreteInstance = 0;
     }
   }
   else {
-    fpScene = 0;
-    fpView = 0;
+    fpSceneHandler = 0;
+    fpViewer = 0;
     // Make it impossible for user action code to Draw.
     fpConcreteInstance = 0;
   }
@@ -722,7 +721,7 @@ void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
 }
 
 void G4VisManager::SetCurrentScene (G4VScene* pScene) {
-  fpScene = pScene;
+  fpSceneHandler = pScene;
   G4cout << "G4VisManager::SetCurrentScene: scene handler now \""
 	 << pScene -> GetName () << "\"";
   if (fpGraphicsSystem != pScene -> GetGraphicsSystem ()) {
@@ -730,21 +729,21 @@ void G4VisManager::SetCurrentScene (G4VScene* pScene) {
     G4cout << "\n  graphics system now \""
 	   << fpGraphicsSystem -> GetName () << "\"";
   }
-  const G4VViewList& viewerList = fpScene -> GetViewList ();
+  const G4VViewList& viewerList = fpSceneHandler -> GetViewList ();
   G4int nViewers = viewerList.entries ();
   if (nViewers) {
     G4int iViewer;
     for (iViewer = 0; iViewer < nViewers; iViewer++) {
-      if (fpView == viewerList [iViewer]) break;
+      if (fpViewer == viewerList [iViewer]) break;
     }
     if (iViewer >= nViewers) {
-      fpView = viewerList [0];
-      G4cout << "\n  Viewer now \"" << fpView -> GetName () << "\"";
+      fpViewer = viewerList [0];
+      G4cout << "\n  Viewer now \"" << fpViewer -> GetName () << "\"";
     }
     IsValidView ();  // Checks.
   }
   else {
-    fpView = 0;
+    fpViewer = 0;
     // Make it impossible for user action code to Draw.
     fpConcreteInstance = 0;
     G4cout << "\n  No viewers for this scene handler - please create one.";
@@ -753,18 +752,18 @@ void G4VisManager::SetCurrentScene (G4VScene* pScene) {
 }
 
 void G4VisManager::SetCurrentView (G4VView* pView) {
-  fpView  = pView;
+  fpViewer  = pView;
   G4cout << "G4VisManager::SetCurrentView: viewer now "
 	 << pView -> GetName ()
 	 << endl;
-  fpScene = fpView -> GetScene ();
-  fpScene -> SetCurrentView (pView);
-  fpGraphicsSystem = fpScene -> GetGraphicsSystem ();
+  fpSceneHandler = fpViewer -> GetScene ();
+  fpSceneHandler -> SetCurrentView (pView);
+  fpGraphicsSystem = fpSceneHandler -> GetGraphicsSystem ();
   IsValidView ();  // Checks.
 }
 
 void G4VisManager::PrintCurrentSystems () const {
-  if (fpGraphicsSystem && fpScene && fpView) {
+  if (fpGraphicsSystem && fpSceneHandler && fpViewer) {
     G4int nSystems = fAvailableGraphicsSystems.entries ();
     if (nSystems <= 0) {
       G4cout << "No graphics systems available yet." << endl;
@@ -777,7 +776,7 @@ void G4VisManager::PrintCurrentSystems () const {
 }
 
 void G4VisManager::PrintCurrentSystem () const {
-  if (fpGraphicsSystem && fpScene && fpView) {
+  if (fpGraphicsSystem && fpSceneHandler && fpViewer) {
     G4cout << "Current graphics system is: " << *fpGraphicsSystem;
     G4cout << endl;
   }
@@ -785,26 +784,26 @@ void G4VisManager::PrintCurrentSystem () const {
 }
 
 void G4VisManager::PrintCurrentScene () const {
-  if (fpGraphicsSystem && fpScene && fpView) {
-    G4cout << "Current Scene is: " << fpScene -> GetName ();
-    G4cout << '\n' << *fpScene;
+  if (fpGraphicsSystem && fpSceneHandler && fpViewer) {
+    G4cout << "Current Scene is: " << fpSceneHandler -> GetName ();
+    G4cout << '\n' << *fpSceneHandler;
     G4cout << endl;
   }
   else PrintInvalidPointers ();
 }
 
 void G4VisManager::PrintCurrentView () const {
-  if (fpGraphicsSystem && fpScene && fpView) {
+  if (fpGraphicsSystem && fpSceneHandler && fpViewer) {
     G4cout << "Current View is: ";
     G4cout << fpGraphicsSystem -> GetName () << '-'
-	 << fpScene  -> GetSceneId () << '-'
-	 << fpView   -> GetViewId ()
-	 << " selected (check: " << fpView -> GetName () << ").";
-    G4cout << '\n' << *fpView;
+	 << fpSceneHandler  -> GetSceneId () << '-'
+	 << fpViewer   -> GetViewId ()
+	 << " selected (check: " << fpViewer -> GetName () << ").";
+    G4cout << '\n' << *fpViewer;
     G4cout << "\nCurrent view parameters";
-    if (fVP != fpView -> GetViewParameters ()) {
+    if (fVP != fpViewer -> GetViewParameters ()) {
       G4cout << " differ in the following respect:\n";
-      fVP.PrintDifferences (fpView -> GetViewParameters ());
+      fVP.PrintDifferences (fpViewer -> GetViewParameters ());
     }
     else {
       G4cout << " are same."
@@ -905,15 +904,15 @@ void G4VisManager::PrintInvalidPointers () const {
   else {
     G4cerr << "\n graphics system is " << fpGraphicsSystem -> GetName ()
 	 << " but:";
-    if (!fpScene) G4cerr << "\nNull scene pointer. ";
-    if (!fpView ) G4cerr << "\nNull view pointer. ";
+    if (!fpSceneHandler) G4cerr << "\nNull scene pointer. ";
+    if (!fpViewer ) G4cerr << "\nNull view pointer. ";
   }
   G4cerr << endl;
 }
 
 void G4VisManager::RefreshCurrentView  () {  // Soft clear, then redraw.
   if (IsValidView ()) {
-    fpView -> ClearView ();  // Soft clear, i.e., clears buffer only.
+    fpViewer -> ClearView ();  // Soft clear, i.e., clears buffer only.
     Draw ();
     Show ();
   }
@@ -929,7 +928,7 @@ G4bool G4VisManager::IsValidView () {
 
   G4bool isValid = true;
   fpConcreteInstance = this;  // Unless we find a problem, users can use!
-  if ((!fpScene) || (!fpView)) {
+  if ((!fpSceneHandler) || (!fpViewer)) {
     G4cerr << "G4VisManager::IsValidView ():";
     G4cerr << "\n  Current view is not valid.";
     G4cerr << endl;
@@ -979,6 +978,7 @@ G4bool G4VisManager::IsValidView () {
 // use unbuilt systems.
 
 #ifndef G4VIS_BUILD_DAWN_DRIVER
+
 class G4FukuiRenderer: public G4VGraphicsSystem {
 public:
   G4FukuiRenderer ();
@@ -987,9 +987,11 @@ G4FukuiRenderer::G4FukuiRenderer ():
   G4VGraphicsSystem ("FukuiRenderer",
                      "DAWN",
 		     G4VGraphicsSystem::noFunctionality) {}
+
 #endif
 
 #ifndef G4VIS_BUILD_DAWNFILE_DRIVER
+
 class G4DAWNFILE: public G4VGraphicsSystem {
 public:
   G4DAWNFILE ();
@@ -998,11 +1000,11 @@ G4DAWNFILE::G4DAWNFILE ():
   G4VGraphicsSystem ("FukuiRendererFile",
                      "DAWNFILE",
 		     G4VGraphicsSystem::noFunctionality) {}
+
 #endif
 
-
-
 #ifndef G4VIS_BUILD_OPACS_DRIVER
+
 class G4Wo: public G4VGraphicsSystem {
 public:
   G4Wo ();
@@ -1010,6 +1012,7 @@ public:
 G4Wo::G4Wo ():
   G4VGraphicsSystem ("Wo",
 		     G4VGraphicsSystem::noFunctionality) {}
+
 class G4Xo: public G4VGraphicsSystem {
 public:
   G4Xo ();
@@ -1017,9 +1020,11 @@ public:
 G4Xo::G4Xo ():
   G4VGraphicsSystem ("Xo",
 		     G4VGraphicsSystem::noFunctionality) {}
+
 #endif
 
 #ifndef G4VIS_BUILD_OPENGLX_DRIVER
+
 class G4OpenGLImmediateX: public G4VGraphicsSystem {
 public:
   G4OpenGLImmediateX ();
@@ -1028,6 +1033,7 @@ G4OpenGLImmediateX::G4OpenGLImmediateX ():
   G4VGraphicsSystem ("OpenGLImmediateX",
                      "OGLIX",
 		     G4VGraphicsSystem::noFunctionality) {}
+
 class G4OpenGLStoredX: public G4VGraphicsSystem {
 public:
   G4OpenGLStoredX ();
@@ -1036,9 +1042,11 @@ G4OpenGLStoredX::G4OpenGLStoredX ():
   G4VGraphicsSystem ("OpenGLStoredX",
                      "OGLSX",
 		     G4VGraphicsSystem::noFunctionality) {}
+
 #endif
 
 #ifndef G4VIS_BUILD_OPENGLXM_DRIVER
+
 class G4OpenGLImmediateXm: public G4VGraphicsSystem {
 public:
   G4OpenGLImmediateXm ();
@@ -1047,6 +1055,7 @@ G4OpenGLImmediateXm::G4OpenGLImmediateXm ():
   G4VGraphicsSystem ("OpenGLImmediateXm",
                      "OGLIXm",
 		     G4VGraphicsSystem::noFunctionality) {}
+
 class G4OpenGLStoredXm: public G4VGraphicsSystem {
 public:
   G4OpenGLStoredXm ();
@@ -1055,9 +1064,11 @@ G4OpenGLStoredXm::G4OpenGLStoredXm ():
   G4VGraphicsSystem ("OpenGLStoredXm",
                      "OGLSXm",
 		     G4VGraphicsSystem::noFunctionality) {}
+
 #endif
 
 #ifndef G4VIS_BUILD_OIX_DRIVER
+
 class G4OpenInventorX: public G4VGraphicsSystem {
 public:
   G4OpenInventorX ();
@@ -1066,9 +1077,11 @@ G4OpenInventorX::G4OpenInventorX ():
   G4VGraphicsSystem ("OpenInventorX",
 		     "OIX",
 		     G4VGraphicsSystem::noFunctionality) {}
+
 #endif
 
 #ifndef G4VIS_BUILD_OIWIN32_DRIVER
+
 class G4OpenInventorWin32: public G4VGraphicsSystem {
 public:
   G4OpenInventorWin32 ();
@@ -1077,9 +1090,11 @@ G4OpenInventorWin32::G4OpenInventorWin32 ():
   G4VGraphicsSystem ("OpenInventorWin32",
 		     "OIWIN32",
 		     G4VGraphicsSystem::noFunctionality) {}
+
 #endif
 
 #ifndef G4VIS_BUILD_RAYX_DRIVER
+
 class G4RayX: public G4VGraphicsSystem {
 public:
   G4RayX ();
@@ -1088,9 +1103,11 @@ G4RayX::G4RayX ():
   G4VGraphicsSystem ("G4RayX",
 		     "RayX",
 		     G4VGraphicsSystem::noFunctionality) {}
+
 #endif
 
 #ifndef G4VIS_BUILD_VRML_DRIVER
+
 class G4VRML1: public G4VGraphicsSystem {
 public:
   G4VRML1 ();
@@ -1100,19 +1117,19 @@ G4VRML1::G4VRML1 ():
 		     "VRML1",
 		     G4VGraphicsSystem::noFunctionality) {}
 
-////////////////////////////////////
-//class G4VRML2: public G4VGraphicsSystem {
-//public:
-//  G4VRML2 ();
-//};
-//G4VRML2::G4VRML2 ():
-//  G4VGraphicsSystem ("VRML2.0",
-//		     "VRML2",
-//		     G4VGraphicsSystem::noFunctionality) {}
-///////////////////////////////////////
+class G4VRML2: public G4VGraphicsSystem {
+public:
+  G4VRML2 ();
+};
+G4VRML2::G4VRML2 ():
+  G4VGraphicsSystem ("VRML2.0",
+		     "VRML2",
+		     G4VGraphicsSystem::noFunctionality) {}
+
 #endif
 
 #ifndef G4VIS_BUILD_VRMLFILE_DRIVER
+
 class G4VRML1File: public G4VGraphicsSystem {
 public:
   G4VRML1File ();
@@ -1121,15 +1138,14 @@ G4VRML1File::G4VRML1File ():
   G4VGraphicsSystem ("VRML1.0File",
 		     "VRML1File",
 		     G4VGraphicsSystem::noFunctionality) {}
-/////////////////////////////////////////////////
-//class G4VRML2File: public G4VGraphicsSystem {
-//public:
-//  G4VRML2File ();
-//};
-//G4VRML2File::G4VRML2File ():
-//  G4VGraphicsSystem ("VRML2.0File",
-//		     "VRML2File",
-//		     G4VGraphicsSystem::noFunctionality) {}
-/////////////////////////////////////////////////
+
+class G4VRML2File: public G4VGraphicsSystem {
+public:
+  G4VRML2File ();
+};
+G4VRML2File::G4VRML2File ():
+  G4VGraphicsSystem ("VRML2.0File",
+		     "VRML2File",
+		     G4VGraphicsSystem::noFunctionality) {}
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.1 1999-01-07 16:15:29 gunter Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.2 1999-01-08 16:33:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -15,6 +15,7 @@
 #include "G4VisManager.hh"
 #include "G4GraphicsSystemList.hh"
 #include "G4VisCommandsScene.hh"
+#include "G4UImanager.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4ios.hh"
@@ -103,6 +104,14 @@ void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand* command,
 
   G4SceneDataObjectList& sceneList =
     fpVisManager -> SetSceneDataObjectList ();
+
+  if (sceneList.isEmpty ()) {
+    G4cout <<
+      "No valid scenes available yet.  Please create one."
+	   << endl;
+    return;
+  }
+
   if (sceneList.contains (sceneName)) {
     const G4SceneData& scene = sceneList [sceneName];
     pSceneHandler -> SetSceneData (scene);
@@ -124,28 +133,41 @@ G4VisCommandSceneHandlerCreate::G4VisCommandSceneHandlerCreate (): fId (0) {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/sceneHandler/create", this);
   fpCommand -> SetGuidance
-    ("/vis/sceneHandler/create [<graphics-system>] [<scene-handler-name>]");
+    ("/vis/sceneHandler/create");
+  fpCommand -> SetGuidance
+    ("     <graphics-system> [<scene-handler-name>] [<scene-name>]");
   fpCommand -> SetGuidance
     ("Creates an scene handler for a specific graphics system.");
   fpCommand -> SetGuidance
-    ("Default graphics system is current graphics system.");
-  fpCommand -> SetGuidance ("Invents a name if not supplied.");
+    ("Attaches specified scene.");
   fpCommand -> SetGuidance
-    ("This graphics system and scene handler become current.");
+    ("Default graphics system is current graphics system.");
+  fpCommand -> SetGuidance
+    ("Invents a name if not supplied.");
+  fpCommand -> SetGuidance
+    ("Default scene is current scene.  You can change attached scenes with");
+  fpCommand -> SetGuidance
+    ("  /vis/sceneHandler/attach [<scene-name>].");
+  fpCommand -> SetGuidance
+    ("This graphics system, scene handler and scene become current.");
   G4UIparameter* parameter;
-  parameter = new G4UIparameter ("graphics-system", 's', omitable = true);
-  parameter -> SetCurrentAsDefault (true);
+  parameter = new G4UIparameter ("graphics-system", 's', omitable = false);
+  //parameter -> SetCurrentAsDefault (true);
   const G4GraphicsSystemList& gslist =
     fpVisManager -> GetAvailableGraphicsSystems ();
   G4String candidates;
   for (int igslist = 0; igslist < gslist.entries (); igslist++) {
-    G4String name = gslist (igslist) -> GetName ();
-    G4String nickname = gslist (igslist) -> GetNickname ();
-    if (nickname.length () > 0) {
-      candidates += nickname + " ";
+    const G4String& name = gslist (igslist) -> GetName ();
+    const G4String& nickname = gslist (igslist) -> GetNickname ();
+    if (nickname.isNull ()) {
+      candidates += name;
     }
-    candidates += name + " ";
+    else {
+      candidates += nickname;
+    }
+    candidates += " ";
   }
+  candidates = candidates.strip ();
   parameter -> SetParameterCandidates(candidates);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter
@@ -167,23 +189,41 @@ G4String G4VisCommandSceneHandlerCreate::NextName () {
 
 G4String G4VisCommandSceneHandlerCreate::GetCurrentValue
 (G4UIcommand* command) {
+
   G4String graphicsSystemName;
-  const G4GraphicsSystemList& gslist =
-    fpVisManager -> GetAvailableGraphicsSystems ();
-  if (gslist.entries ()) {
-    graphicsSystemName = gslist [0] -> GetName ();
+  const G4VGraphicsSystem* graphicsSystem =
+    fpVisManager -> GetCurrentGraphicsSystem ();
+  if (graphicsSystem) {
+    graphicsSystemName = graphicsSystem -> GetName ();
   }
   else {
-    graphicsSystemName = "none";
+    const G4GraphicsSystemList& gslist =
+      fpVisManager -> GetAvailableGraphicsSystems ();
+    if (gslist.entries ()) {
+      graphicsSystemName = gslist [0] -> GetName ();
+    }
+    else {
+      graphicsSystemName = "none";
+    }
   }
-  return graphicsSystemName + " " + NextName ();
+
+  G4String sceneName;
+  const G4VScene* scene = fpVisManager -> GetCurrentScene ();
+  if (scene) {
+    sceneName = scene -> GetName ();
+  }
+  else {
+    sceneName = "none";
+  }
+
+  return graphicsSystemName + " " + NextName () + " " + sceneName;
 }
 
 void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
-  G4String graphicsSystem, newName;
+  G4String graphicsSystem, newName, sceneName;
   istrstream is ((char*)newValue.data());
-  is >> graphicsSystem >> newName;
+  is >> graphicsSystem >> newName >> sceneName;
 
   const G4GraphicsSystemList& gsl =
     fpVisManager -> GetAvailableGraphicsSystems ();
@@ -244,6 +284,10 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
   //Create scene handler.
   fpVisManager -> CreateScene (newName);
   G4cout << "New scene handler \"" << newName << "\" created." << endl;
+
+  // Attach scene.
+  G4String commandString = "/vis/sceneHandler/attach " + sceneName;
+  G4UImanager::GetUIpointer () -> ApplyCommand (commandString);
 
   UpdateCandidateLists ();
 }

@@ -1,0 +1,39 @@
+$Id: History,v 1.1 1999-01-08 16:33:57 gunter Exp $
+
+History file for visualization/test subdirectory
+------------------------------------------------
+
+12th August  Guy Barrand
+- introduce the X11 resource file test19.xrm
+  to control appearance of things. It is used
+  as usual with : setenv XENVIRONMENT test19.xrm
+
+10th August  Guy Barrand
+- test19.cc : execute win32.g4m on NT.
+- correct Initialize method in test_utils/SD files.
+- GNUmakefiles : use G4ATLAS variable to say where is ATLAS
+                 and test is it is installed.
+
+vis-00-02-02  9th August  John Allison
+- Commented out old commands in test19.g4m.
+
+vis-00-07-01  3rd July 1998  John Allison
+- Added CPPFLAGS += -I$(G4BASE)/digits+hits/digits/include to GNUmakefile.
+
+vis-00-06-06  11th June 1998  John Allison
+- GNUmakefile handles new digits+hits.
+- GNUmakefile uses default vis library creation (separate libraries).
+- test_utils/GNUmakefile and babar_utils/GNUmakefile use G4VIS_USE.gmk.
+- test_utils - various hacking to get it to work with alpha07!
+
+vis-00-06-01 29th April 1998  John Allison
+- Made template instantiations exclusive to GNU_GCC in
+  test_utils/src/MyTrackerHit.cc and MyCalorimeterHit.cc.
+
+27th April 1998 Guy Barrand
+- test19.odb : remove the Xo button so that user,
+               by default create, through "Wo" gs,
+               an XoCamera seen handled by Wo.
+
+vis-test-00-05-01  18th March  John Allison
+- Changes to accomodate MyPhysicsList.

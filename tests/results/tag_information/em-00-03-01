@@ -1,0 +1,16 @@
+    the em-00-03-01 tag contains 
+
+    - some bug fixes in G4hEnergyLoss/G4hIonisation
+    - the LPM effect is implemented in G4eBremsstrahlung
+    - optimisation in the initialisation of
+           G4MuPairProduction and G4MuNuclearInteraction
+           ( ->shorter int. time !)
+    - some optimisation in G4EnergyLossTables
+           ( ->slightly better running time)
+
+important cleanup in eBrems, eIonis, eEnergyLoss, photoelec, compton,
+gammaconversion. (to be consistent with the doc)
+ 
+Material: new method: GetMaterial by name.
+  change names of data member: numericDensity becomes
+NbOfAtomsPerVolume.

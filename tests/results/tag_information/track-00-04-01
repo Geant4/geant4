@@ -1,0 +1,10 @@
+ I've committed track category for new event biasing scheme discussed with you
+last week. This tag includes 
+- Added new member of weight in G4Track and modified ParticleChange for
+treatment of this weight.
+- Removed G4BiasingTag.hh
+- Implemented new event biasing mechanism based on MARS
+- Modification of arguments in G4Track
+ (It requires new tag of partilcies-00-04-01)
+
+To use this tag, we need modification of processes/parameterisation.

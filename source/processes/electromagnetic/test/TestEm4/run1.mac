@@ -1,0 +1,17 @@
+# $Id: run1.mac,v 1.1 1999-01-08 16:32:56 gunter Exp $
+#
+# Macro file for "TestEm4.cc"
+# 
+# (can be run in batch, without graphic)
+#
+/control/verbose  2
+#
+/run/particle/setCut 0.1 mm
+/run/initialize
+/run/particle/dumpCutValues
+#
+/run/verbose 2
+/event/drawTracks none
+/run/save on
+#
+/run/beamOn 100000

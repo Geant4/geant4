@@ -1,0 +1,1061 @@
+SimpleBox is now made of Pb
+PreInit> #
+PreInit> # Macro file of "skeleton.cc"
+PreInit> # for tests of physics processes
+PreInit> #
+PreInit> PreInit> /run/verbose 2
+PreInit> /run/initialize
+userDetector->Construct() start.
+physicsList->Construct() start.
+physicsList->setCut() start.
+Tst02PhysicsList::SetCuts:CutLength : 1 (mm)
+
+conv:  Total cross sections from a parametrisation(L.Urban). Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+
+phot:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to 50 MeV for all Z
+        PhysicsTables from 10 keV to 50 MeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100  eV to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a parametrisation(L.Urban). Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100  eV to 100 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100  eV to 100 TeV in 100 bins. 
+
+MuIoni:  knock-on electron cross sections .
+          Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+      PhysicsTables from 1 keV to 1000 PeV in 100 bins. 
+
+MuBrems:  cross sections from R. Kokoulin 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1000 PeV in 100 bins. 
+
+MuPairProd:  cross sections from R. Kokoulin 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1000 PeV in 50 bins. 
+Idle> #
+Idle> # SimpleBox geometry made by Al
+Idle> # gamma 500 MeV to the direction (1.,0.,0.)
+Idle> # 1 events
+Idle> #
+Idle> /mydet/SelectMaterial Al
+SimpleBox is now made of Al
+Idle> /gun/particle gamma
+Idle> /gun/energy 500 MeV
+Idle> /gun/direction 1 0 0
+Idle> /run/beamOn 1
+Start closing geometry.
+Start Run processing.
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1      45.5         0         0         0         0      45.5      45.5 conv
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+           45.5         0         0       247     0.152                 e-
+           45.5         0         0       252     0.152                 e+
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   41       191      -1.4      2.26         0    0.0458    0.0193       151 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+           56.9    0.0175    -0.189    0.0122      0.19              gamma
+           57.5    0.0176    -0.212     0.053     0.192              gamma
+           67.9    0.0405    -0.498     0.056     0.227              gamma
+           82.7   0.00794    -0.645      97.7     0.276              gamma
+           84.4    0.0246    -0.639     0.258     0.282              gamma
+           86.5    0.0623    -0.666      1.78     0.289              gamma
+             91     0.136    -0.591      8.84     0.303                 e-
+           93.5     0.125      -0.6     0.897     0.312                 e-
+           97.8     0.251    -0.637     0.657     0.326                 e-
+            104     0.452    -0.737      1.59     0.346              gamma
+            113   -0.0255    -0.782      1.07     0.375                 e-
+            113   -0.0915    -0.824     0.147     0.378              gamma
+            121    -0.767     -1.22       1.5     0.404              gamma
+            122    -0.802     -1.26     0.204     0.406              gamma
+            124    -0.849     -1.34      12.8     0.413              gamma
+            125    -0.849      -1.4     0.256     0.416              gamma
+            132    -0.955     -1.87     0.152     0.442              gamma
+            151    -0.731     -2.76     0.165     0.503              gamma
+            153    -0.596     -2.54      24.6     0.511              gamma
+            157    -0.455     -2.21      29.4     0.525              gamma
+            159    -0.368     -2.18     0.134      0.53              gamma
+            162    -0.111     -2.31      6.09     0.542              gamma
+            162    -0.103     -2.31     0.402     0.542              gamma
+            168     0.175      -2.5    0.0856     0.559              gamma
+            169     0.235     -2.09       1.4     0.564                 e-
+            174    -0.698     -1.07     0.578     0.581              gamma
+            175    -0.613    -0.833    0.0405     0.585              gamma
+            179    -0.798     -0.96     0.629     0.599              gamma
+            183    -0.775     0.235    0.0361      0.61              gamma
+            185      -2.4     -0.13     0.366     0.621              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   42       191      -1.4      2.26         0         0         0       151 annihil
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+           56.9    0.0175    -0.189    0.0122      0.19              gamma
+           57.5    0.0176    -0.212     0.053     0.192              gamma
+           67.9    0.0405    -0.498     0.056     0.227              gamma
+           82.7   0.00794    -0.645      97.7     0.276              gamma
+           84.4    0.0246    -0.639     0.258     0.282              gamma
+           86.5    0.0623    -0.666      1.78     0.289              gamma
+             91     0.136    -0.591      8.84     0.303                 e-
+           93.5     0.125      -0.6     0.897     0.312                 e-
+           97.8     0.251    -0.637     0.657     0.326                 e-
+            104     0.452    -0.737      1.59     0.346              gamma
+            113   -0.0255    -0.782      1.07     0.375                 e-
+            113   -0.0915    -0.824     0.147     0.378              gamma
+            121    -0.767     -1.22       1.5     0.404              gamma
+            122    -0.802     -1.26     0.204     0.406              gamma
+            124    -0.849     -1.34      12.8     0.413              gamma
+            125    -0.849      -1.4     0.256     0.416              gamma
+            132    -0.955     -1.87     0.152     0.442              gamma
+            151    -0.731     -2.76     0.165     0.503              gamma
+            153    -0.596     -2.54      24.6     0.511              gamma
+            157    -0.455     -2.21      29.4     0.525              gamma
+            159    -0.368     -2.18     0.134      0.53              gamma
+            162    -0.111     -2.31      6.09     0.542              gamma
+            162    -0.103     -2.31     0.402     0.542              gamma
+            168     0.175      -2.5    0.0856     0.559              gamma
+            169     0.235     -2.09       1.4     0.564                 e-
+            174    -0.698     -1.07     0.578     0.581              gamma
+            175    -0.613    -0.833    0.0405     0.585              gamma
+            179    -0.798     -0.96     0.629     0.599              gamma
+            183    -0.775     0.235    0.0361      0.61              gamma
+            185      -2.4     -0.13     0.366     0.621              gamma
+            191      -1.4      2.26     0.511     0.648              gamma
+            191      -1.4      2.26     0.511     0.648              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   10       305     -70.9     -28.2         0    0.0557      1.18       272 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    7       187      14.3      19.1         0    0.0517      6.96       142 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5       211     -10.2     -3.94         0     0.119      6.94        56 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       185     -2.86    -0.356         0    0.0361      3.05      3.05 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    4       252     -19.1     -16.8         0     0.137      12.3       132 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       177     -1.19    -0.903         0    0.0405       1.9       1.9 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    6       223      18.9     -16.5         0    0.0674      1.78       165 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5       169    -0.169      -2.6         0     0.189     0.196      2.58 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5       197      3.15      9.04         0    0.0515      19.3      68.1 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    9       162      -147     -6.33         0     0.078      19.5       268 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   10       549     -13.2      98.5         0    0.0557      2.16       550 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            488        46      26.2      5.48      1.64                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   11       497        46      23.5         0     0.175     0.175      12.6 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   12       270      4.45      50.2         0     0.047     0.159       264 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   13       447      21.9      47.6         0    0.0593      26.3       678 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            470      21.4      16.3      26.5      1.57                 e-
+            552      57.6      69.4      2.59      1.92                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    7       555      59.2      70.1         0      0.14     0.123      4.81 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            554      58.3      69.8     0.679      1.93                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    4       554      59.1      69.4         0    0.0965    0.0671      1.37 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   19       512      30.2      33.1         0    0.0474    0.0221      53.4 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            475      21.1      16.4     0.751      1.59              gamma
+            475      21.2      16.4     0.152      1.59              gamma
+            490      25.1      22.2     0.827      1.64                 e-
+            504      26.7      27.1     0.947      1.69                 e-
+            510      27.7      29.3     0.623      1.71                 e-
+            512      30.1      30.9    0.0238      1.73              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       512      29.5      31.6         0    0.0238      1.15      1.15 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    4       510      27.5      29.7         0      0.13     0.109      1.34 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    3       504      26.2      26.8         0     0.144     0.127      1.37 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    4       491        25      22.8         0     0.193     0.202      1.65 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    4       476      22.3        32         0    0.0785      10.8      34.7 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   10       460      -141       115         0    0.0499      13.6       396 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       197      2.34     0.333         0         0      43.7      43.7 conv
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            197      2.34     0.333      8.51     0.657                 e-
+            197      2.34     0.333      15.1     0.657                 e+
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   18       222      13.6      9.64         0    0.0419    0.0169      34.9 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            201      2.24     0.315    0.0824      0.67              gamma
+            205      3.01     0.881      1.61     0.684                 e-
+            208      3.65     0.664    0.0597     0.694              gamma
+            218      8.21      5.66    0.0239     0.736              gamma
+            219      11.7      6.62    0.0218     0.749              gamma
+            221      12.5      9.35    0.0162      0.76              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   19       222      13.6      9.64         0         0         0      34.9 annihil
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            201      2.24     0.315    0.0824      0.67              gamma
+            205      3.01     0.881      1.61     0.684                 e-
+            208      3.65     0.664    0.0597     0.694              gamma
+            218      8.21      5.66    0.0239     0.736              gamma
+            219      11.7      6.62    0.0218     0.749              gamma
+            221      12.5      9.35    0.0162      0.76              gamma
+            222      13.6      9.64     0.511     0.768              gamma
+            222      13.6      9.64     0.511     0.768              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    9       200      42.6     -9.09         0    0.0671      39.4       151 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    8       248      5.93      58.2         0    0.0666      33.5       110 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       222      14.3      10.1         0    0.0162       2.1       2.1 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       220      12.3      7.81         0    0.0218      1.38      1.38 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       219      10.9      9.49         0    0.0239      4.99      4.99 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    4       221     -21.1      -2.4         0    0.0446      16.5      62.1 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    6       205      1.75     0.626         0     0.162     0.154      3.73 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2       222      7.25     -19.5         0    0.0685      23.1      48.9 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   15       205      1.84     -9.89         0  0.000189  0.000607      20.7 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            202      2.17   0.00967    0.0246     0.675              gamma
+            202      2.32    -0.298    0.0555     0.677              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2       206      4.04      -1.6         0    0.0484      2.88      7.58 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2       204      5.72     -2.03         0    0.0241      3.11      5.24 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   10       239     -23.4      74.1         0    0.0452      20.1       214 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   11      90.5      12.2     -4.95         0    0.0414    0.0107        98 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    3       132   -0.0734     -6.35         0       0.1      8.49        13 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   10       184     -46.3     -66.8         0    0.0701        14       203 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            132    -0.856     -1.71      11.2     0.441                 e-
+            187     -31.1     -88.4     0.601     0.811                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    4       187     -31.3     -88.6         0    0.0348    0.0143      1.17 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   14       146      1.56      2.63         0   0.00856   0.00409      23.4 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            138     -2.13     -1.34     0.662     0.461              gamma
+            142    -0.706     -1.03      1.34     0.475                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    6       143    -0.552     -1.94         0     0.161     0.153      3.17 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   10       275      -129       188         0    0.0746      26.9       373 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       142     -1.06     -1.95         0     0.204        20        20 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5       241     -34.1     -30.3         0     0.139      74.4       179 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            195     -3.57     -3.43      1.12     0.652                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    7       197      -4.3     -3.87         0    0.0276    0.0106      2.51 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            196     -4.09      -3.4    0.0311     0.655              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       199     -4.67     -3.14         0    0.0311      2.87      2.87 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       122    -0.678     -1.13         0     0.147      8.61      8.61 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    6       114    -0.292     -1.72         0     0.107    0.0797      2.22 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            113    -0.287    -0.879    0.0157     0.377              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       113    -0.288     -0.88         0    0.0157   0.00164   0.00164 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    9       116     -75.2      49.8         0     0.107      20.8       339 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            225        24      81.9     0.656      0.88                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    4       225      24.2      82.5         0     0.185      0.19      1.31 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            225        24      82.2    0.0108     0.881              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       225      24.2      82.4         0    0.0108     0.282     0.282 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    4      98.1     0.193    -0.268         0   0.00538   0.00324      1.17 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5      94.2     0.278     -1.26         0     0.157     0.147      1.73 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+           94.3     0.264     -1.24    0.0259     0.316              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2      91.8    -0.795    0.0026         0    0.0249      1.18       3.7 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   14       106       1.7     0.207         0    0.0993    0.0704        19 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+             98      0.24     0.786      1.19     0.327                 e-
+           99.4     0.509      1.08     0.232     0.332              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2       115      -9.6        21         0     0.125      51.5       110 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5      99.1     0.638      1.54         0      0.12    0.0947       2.3 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+           98.8     0.778      1.36     0.207     0.331              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    7       112      60.4     -58.8         0     0.067        25       181 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    7       204      39.5       2.5         0    0.0939      6.08       253 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            245      2.19    -0.646       1.5     0.817                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    7       246     0.367     -1.32         0     0.188     0.195      4.02 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    6       217        32     -52.8         0    0.0783      11.9       254 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       128      0.78    -0.824         0         0      45.6      45.6 conv
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            128      0.78    -0.824      66.1     0.428                 e-
+            128      0.78    -0.824      30.6     0.428                 e+
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   20       178      5.63      2.12         0    0.0926    0.0589      60.5 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            129     0.784    -0.818     0.904     0.429              gamma
+            132     0.688    -0.756    0.0351      0.44              gamma
+            152      3.81      4.02      1.38      0.51                 e-
+            166      4.84      10.1       2.9     0.562              gamma
+            167       5.3      10.5    0.0684     0.566              gamma
+            171       7.1      11.1   0.00981     0.578              gamma
+            178      5.61      2.14    0.0073     0.623              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   21       178      5.63      2.12         0         0         0      60.5 annihil
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            129     0.784    -0.818     0.904     0.429              gamma
+            132     0.688    -0.756    0.0351      0.44              gamma
+            152      3.81      4.02      1.38      0.51                 e-
+            166      4.84      10.1       2.9     0.562              gamma
+            167       5.3      10.5    0.0684     0.566              gamma
+            171       7.1      11.1   0.00981     0.578              gamma
+            178      5.61      2.14    0.0073     0.623              gamma
+            178      5.63      2.12     0.511     0.623              gamma
+            178      5.63      2.12     0.511     0.623              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5       181      17.5      28.4         0      0.14      34.2      95.9 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    7       181      28.6        51         0    0.0896      9.11       153 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       178      5.62      1.98         0    0.0073     0.177     0.177 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       171      7.09      11.1         0   0.00981   0.00223   0.00223 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    3       129      16.5      40.6         0    0.0559      51.5        56 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   11       396       338     -89.8         0    0.0639      5.18       566 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            278      55.1      58.3      1.89         1                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    8       281      54.5      59.7         0     0.124    0.0998      4.82 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    6       153      3.79      4.08         0     0.138      0.12      3.12 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       133     0.841    -0.651         0    0.0351      1.26      1.26 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   10      34.5     -40.4     -59.9         0    0.0554      2.73       218 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            131     0.715    -0.885     0.669     0.436                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5       131     0.818     -1.17         0    0.0731    0.0432      1.31 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            131     0.707    -0.869    0.0316     0.436              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       135      5.99      2.03         0    0.0316      7.53      7.53 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   25       214       -22       -20         0     0.187     0.193       102 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            140      1.18    -0.179      13.5     0.469              gamma
+            146      1.73    -0.129    0.0967     0.489              gamma
+            155      2.54 -0.000516      5.44     0.518                 e-
+            158      2.05     -1.78     0.324     0.529              gamma
+            167     0.228     -6.52     0.634     0.563                 e-
+            168    -0.351     -7.03     0.283     0.567              gamma
+            176     -5.66     -8.28     0.284       0.6              gamma
+            176     -5.84     -8.37     0.229     0.601              gamma
+            180     -8.61     -10.2     0.799     0.617                 e-
+            187       -13     -12.1      0.35     0.646              gamma
+            193     -16.3     -12.6     0.778     0.668                 e-
+            203     -19.5     -13.9      2.07     0.705                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    8       204     -20.1     -12.7         0    0.0837    0.0535      4.98 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    6       194     -16.5     -13.1         0    0.0292    0.0114      1.67 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            193     -16.3     -12.6    0.0372     0.668              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    3       198     -18.8     -21.4         0    0.0328      9.93      27.8 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    7       196     -32.5     -32.4         0    0.0551      5.99       115 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5       181     -8.65       -11         0    0.0715    0.0416      1.81 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   12       174     -51.3      15.8         0    0.0425      11.4       181 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    9       227      63.6      11.7         0    0.0674      6.01       178 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5       215     -22.5        16         0    0.0855      4.43       181 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    4       168      0.77     -6.73         0     0.124     0.101      1.28 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            167     0.311     -6.54    0.0187     0.564              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       167     0.345      -6.7         0    0.0187     0.179     0.179 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    6       323      38.1      -103         0    0.0914      10.1       273 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   11       162     -1.07     -5.66         0     0.146     0.131      12.9 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            162     -1.23     -5.65    0.0711     0.556              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2       194      15.4       -37         0      0.06      27.2        77 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    3       147     -6.24     0.745         0    0.0723      4.67      17.1 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       148      1.75    -0.475         0         0      7.39      7.39 conv
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            148      1.75    -0.475      9.92     0.493                 e-
+            148      1.75    -0.475      2.59     0.493                 e+
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    8       146       0.7    -0.501         0     0.193     0.195      6.31 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    9       146       0.7    -0.501         0         0         0      6.31 annihil
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            146       0.7    -0.501     0.511     0.512              gamma
+            146       0.7    -0.501     0.511     0.512              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    8       137      4.54     -54.8         0    0.0691      15.3       155 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    6       168     -65.6      4.25         0    0.0761      19.6       145 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   15       158      2.67     -1.14         0    0.0932    0.0635      22.2 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            156      4.34    -0.428     0.177     0.522              gamma
+            159      4.75     -1.03    0.0145     0.548              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       159      4.59    -0.939         0    0.0145     0.184     0.184 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   11       181      -160     -45.2         0    0.0631        38       329 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1      86.8     0.157    -0.971         0     0.056      18.9      18.9 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1      62.5    0.0468    -0.418         0     0.053      5.02      5.02 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1      56.9    0.0174     -0.19         0    0.0122    0.0341    0.0341 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   51       265      10.9      7.38         0    0.0911    0.0612       234 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+           46.3   0.00144  -0.00174      2.96     0.154              gamma
+           49.9    0.0574   -0.0103      12.2     0.166              gamma
+           60.8      0.19     0.232      2.66     0.203              gamma
+           65.6     0.256     0.397    0.0602     0.219              gamma
+           69.8     0.247     0.537     0.642     0.233                 e-
+            111    -0.748      3.15      1.44     0.371              gamma
+            132    -0.248      5.51     0.703      0.44                 e-
+            134    -0.121      5.71    0.0286     0.448              gamma
+            135    -0.091      5.75     0.717      0.45              gamma
+            143     0.629      6.42     0.325     0.477              gamma
+            144     0.696      6.47      3.49     0.481              gamma
+            151      1.06      6.75     0.203     0.504              gamma
+            155      1.22      7.15      34.6     0.519              gamma
+            162      1.44       7.6       4.3     0.541              gamma
+            164      1.47      7.93      22.6     0.549              gamma
+            165      1.48      8.03    0.0583     0.552              gamma
+            169      1.58      8.55     0.644     0.564                 e-
+            175      1.92      9.25     0.331     0.586              gamma
+            175      1.93      9.26    0.0173     0.586              gamma
+            179      2.11      9.55   0.00704     0.599              gamma
+            184      2.44       9.9     0.149     0.615              gamma
+            191      2.85      10.1       1.1     0.639              gamma
+            191      2.86      10.1     0.956      0.64              gamma
+            194      2.93      10.2      5.76     0.649              gamma
+            195      2.93      10.2    0.0112     0.653              gamma
+            202      2.72      10.7     0.185     0.676              gamma
+            218      3.91      11.6      3.52     0.728              gamma
+            223      4.34      11.9      2.55     0.744              gamma
+            223      4.38      11.9    0.0192     0.746              gamma
+            234      4.99      12.8      27.1     0.783              gamma
+            236      5.13      12.8     0.478     0.788              gamma
+            240       5.4      13.1      18.6     0.804              gamma
+            241      5.41      13.2      2.79     0.806                 e-
+            246      6.14      13.5     0.206     0.821              gamma
+            254      6.36      12.9     0.218     0.849              gamma
+            263      9.76      12.2    0.0107     0.881              gamma
+            268      11.4      8.91   0.00916     0.904              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       268      11.4      8.87         0   0.00916    0.0392    0.0392 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       263      9.82      12.1         0    0.0107     0.194     0.194 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5       171       113       158         0    0.0862      4.02       228 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   11       347      0.63     -60.3         0     0.049      51.4       269 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    9       246      7.42      10.4         0      0.12     0.095      7.43 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       294      8.31      18.3         0         0      53.6      53.6 conv
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            294      8.31      18.3      4.33     0.983                 e-
+            294      8.31      18.3      13.3     0.983                 e+
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   16       318      14.1      28.3         0    0.0927     0.059      33.6 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            299      7.99      19.5    0.0259         1              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   17       318      14.1      28.3         0         0         0      33.6 annihil
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            299      7.99      19.5    0.0259         1              gamma
+            318      14.1      28.3     0.511      1.09              gamma
+            318      14.1      28.3     0.511      1.09              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5       322      77.3     -54.6         0    0.0671      3.47       138 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    8       315     -13.6      51.5         0    0.0742      27.2       124 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       302      8.14      20.5         0    0.0259       3.6       3.6 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   10       293      6.69      14.6         0    0.0914    0.0616      10.3 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   10       318     -29.8       143         0    0.0464      17.5       296 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       334      18.1      11.5         0         0       101       101 conv
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            334      18.1      11.5       3.8      1.12                 e-
+            334      18.1      11.5      22.2      1.12                 e+
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   18       365      4.91      25.6         0    0.0592    0.0286      49.5 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            352      20.6      12.6     0.126      1.18              gamma
+            355      19.5      13.9      2.58      1.19              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   19       365      4.91      25.6         0         0         0      49.5 annihil
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            352      20.6      12.6     0.126      1.18              gamma
+            355      19.5      13.9      2.58      1.19              gamma
+            365      4.91      25.6     0.511      1.28              gamma
+            365      4.91      25.6     0.511      1.28              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    8       323       -43     -60.6         0    0.0793      20.8       207 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   12       401      66.1     -59.2         0    0.0521      23.8       270 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    7       588     -59.6       154         0     0.144      17.5       356 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            500     -10.7       101      1.74      1.76                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    8       501     -9.54       103         0    0.0414    0.0182      4.36 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    8       344      24.1     -16.3         0    0.0481      2.02      68.2 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   11       338      19.9      10.1         0    0.0738    0.0438      9.96 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       224      4.46      11.9         0    0.0192      0.61      0.61 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    3       515     -24.2      31.9         0       0.3      52.2       357 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            437      20.9      26.7      1.37      1.46                 e-
+            504     -5.15      79.3      0.88      1.76                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5       505     -5.21      79.4         0    0.0824    0.0522      1.49 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            504     -5.15      79.3    0.0284      1.76              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       504     -4.65        81         0    0.0284      1.83      1.83 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    7       439      21.4      25.8         0    0.0726    0.0427      3.46 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       334      14.2      15.2         0     0.536       117       117 conv
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            334      14.2      15.2      1.96      1.12                 e+
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    8       335      13.9      15.8         0     0.182     0.178      5.36 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    9       335      13.9      15.8         0         0         0      5.36 annihil
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            335      13.9      15.8     0.511      1.13              gamma
+            335      13.9      15.8     0.511      1.13              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    8       355     -58.1      23.1         0     0.117        17       128 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    7       327      95.9       104         0    0.0888      12.8       179 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    6       198      33.5      30.6         0    0.0636      42.7       109 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       196      2.92      10.3         0    0.0112     0.234     0.234 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   12       308       105      86.8         0    0.0751      21.2       369 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            249      3.37      13.8      5.35     0.832                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   11       256      4.54      14.6         0     0.126     0.103      12.6 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    9       251      55.2     -29.8         0     0.065      15.7       405 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   11       292     -88.7      41.4         0    0.0736      1.89       303 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    6       162     -44.3      13.4         0    0.0589      27.6       115 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       179      2.12      9.56         0   0.00704     0.244     0.244 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       175      1.93      9.26         0    0.0173  0.000134  0.000134 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    8       172        79      99.1         0    0.0877      51.7       269 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    4       168      1.84      8.41         0     0.066    0.0367      1.23 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    3       196      13.7      12.9         0    0.0516     0.139      34.3 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       343      4.14      29.4         0         0       180       180 conv
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            343      4.14      29.4        11      1.15                 e-
+            343      4.14      29.4      10.6      1.15                 e+
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   18       360      5.07      38.8         0    0.0345    0.0128      28.3 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            344       4.1      29.6    0.0738      1.15              gamma
+            345      4.32      29.8    0.0139      1.16              gamma
+            360      7.33      37.7    0.0103      1.22              gamma
+            360      6.37      37.6    0.0319      1.23              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   19       360      5.07      38.8         0         0         0      28.3 annihil
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            344       4.1      29.6    0.0738      1.15              gamma
+            345      4.32      29.8    0.0139      1.16              gamma
+            360      7.33      37.7    0.0103      1.22              gamma
+            360      6.37      37.6    0.0319      1.23              gamma
+            360      5.07      38.8     0.511      1.24              gamma
+            360      5.07      38.8     0.511      1.24              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    9       399     -83.3      8.37         0    0.0921      27.7       180 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5       324      66.3        84         0     0.103      31.9       237 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       358    -0.257      40.4         0    0.0319       7.4       7.4 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       360      7.29      37.7         0    0.0103    0.0411    0.0411 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       347      5.16      30.1         0    0.0139      2.44      2.44 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5       332      26.5    -0.185         0    0.0546      40.1      67.5 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   14       362     0.543      26.2         0    0.0159   0.00599      24.5 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            349      2.49      30.1     0.123      1.17              gamma
+            358       2.1      27.7    0.0535       1.2              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       376      4.73      20.5         0    0.0535      19.7      19.7 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    3       442      3.52        57         0    0.0909      11.2       108 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   10       299      -123      57.9         0    0.0725      16.2       412 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            201      1.82      12.5      3.14     0.672                 e-
+            280     -36.8       113     0.833      1.12                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5       281     -36.6       113         0     0.115    0.0894      1.94 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   10       206      2.62        11         0    0.0209   0.00775      8.04 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       286      6.74      18.6         0         0       132       132 conv
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            286      6.74      18.6        11     0.958                 e-
+            286      6.74      18.6      22.6     0.958                 e+
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   21       308        28      26.7         0     0.109    0.0772        47 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            290      6.96      19.2     0.628     0.971              gamma
+            300      7.43      17.5    0.0158         1              gamma
+            302      8.15      18.8     0.235      1.01              gamma
+            303       8.7      19.4      3.05      1.02              gamma
+            303      8.92      19.6     0.032      1.02              gamma
+            304      10.5      21.1    0.0168      1.03              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   22       308        28      26.7         0         0         0        47 annihil
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            290      6.96      19.2     0.628     0.971              gamma
+            300      7.43      17.5    0.0158         1              gamma
+            302      8.15      18.8     0.235      1.01              gamma
+            303       8.7      19.4      3.05      1.02              gamma
+            303      8.92      19.6     0.032      1.02              gamma
+            304      10.5      21.1    0.0168      1.03              gamma
+            308        28      26.7     0.511      1.11              gamma
+            308        28      26.7     0.511      1.11              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5       351      5.06       126         0    0.0916      84.8       191 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5       243       101      30.5         0    0.0898      2.44       238 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       305      11.5        22         0    0.0168      1.76      1.76 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       304      9.66      20.3         0     0.032      1.24      1.24 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   10       347     -30.9       124         0    0.0638      33.7       293 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            317      20.7        33      1.53      1.09                 e-
+            376      17.1      91.7      1.22      1.37                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    4       377      16.8      91.9         0     0.162     0.154      1.82 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    6       318      22.4      33.8         0     0.139     0.121      3.06 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    9       384      79.7       123         0    0.0469      8.44       239 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       301      7.64      17.8         0    0.0158     0.614     0.614 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    7       314      86.7      72.2         0    0.0986      16.1       195 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   12       308      1.34      16.3         0    0.0699    0.0402      26.4 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    9       295     -8.64      21.2         0    0.0378      6.87       275 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    8       101      47.4     -18.3         0    0.0878        36       164 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            150      1.07      6.87      2.65     0.503                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    9       155      1.05      6.04         0    0.0639    0.0349      6.59 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    4       130      11.2      9.89         0    0.0983      12.2      59.6 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    7       366     -4.54      28.6         0    0.0651      18.1       347 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       140     0.263      6.13         0    0.0286      6.03      6.03 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    3       132    -0.436      5.98         0     0.102    0.0735     0.931 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5      86.6      35.8       2.7         0     0.181      23.3       128 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            128   -0.0518      4.64     0.699     0.428                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    4       129     0.196      4.79         0     0.155     0.144      1.48 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    4      70.5    0.0359     0.775         0     0.127     0.104      1.37 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2      81.6     -5.44     -3.96         0     0.053       7.4      24.5 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   11       238       157      96.6         0     0.083      19.9       447 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            129     0.161       2.2         2     0.431                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    8       131     0.519      2.31         0    0.0534    0.0265      4.69 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            130    -0.225      1.91     0.018     0.433              gamma
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    1       131    -0.739      2.21         0     0.018       1.3       1.3 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    6       123     -43.9      60.3         0    0.0727      4.77       316 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            177     0.929     0.785      11.9      0.59                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   15       200     -1.18      1.89         0     0.101    0.0722      28.6 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   11     -24.5     -98.7       138         0     0.061      6.14       368 phot
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+           48.2    0.0145  -0.00225       2.5     0.161                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   10      47.4     0.537     -2.41         0    0.0365    0.0152      6.84 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.3s Real=0.45s Sys=0.1s
+Idle> #
+Idle> # SimpleBox geometry made by Air
+Idle> # electron 500 MeV to the direction (1.,0.,0.)
+Idle> # 1 events
+Idle> #
+Idle> /mydet/SelectMaterial Air
+SimpleBox is now made of Air
+Idle> /gun/particle e-
+Idle> /gun/energy 500 MeV
+Idle> /gun/direction 1 0 0
+Idle> /run/beamOn 1
+Start Run processing.
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+   23     2e+03      2.56     0.819       500         0      61.2     2e+03 Transportation
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+           32.7   0.00744   0.00124   0.00455     0.109                 e-
+           47.2   0.00722 -0.000233   0.00115     0.157                 e-
+           57.6    0.0113  -0.00196    0.0028     0.192                 e-
+            111   0.00336    0.0328   0.00405     0.369                 e-
+            231   -0.0433     0.152   0.00168     0.772                 e-
+            396     0.243     0.249   0.00109      1.32                 e-
+            604     0.657     0.406   0.00253      2.02                 e-
+            606     0.659     0.406   0.00338      2.02                 e-
+            640     0.708     0.419   0.00109      2.13                 e-
+            672     0.753     0.422   0.00228      2.24                 e-
+            698     0.791     0.429   0.00112      2.33                 e-
+            909      1.17     0.615   0.00123      3.03                 e-
+            924       1.2     0.625   0.00124      3.08                 e-
+            976      1.32     0.668   0.00106      3.26                 e-
+       1.04e+03      1.44     0.712   0.00162      3.46                 e-
+       1.06e+03      1.49     0.756   0.00115      3.54                 e-
+       1.07e+03      1.51     0.775   0.00197      3.57                 e-
+       1.15e+03      1.64     0.866    0.0012      3.84                 e-
+       1.23e+03      1.75      0.98   0.00119      4.11                 e-
+       1.39e+03       1.9      1.04   0.00214      4.65                 e-
+       1.75e+03      2.11     0.865    0.0013      5.85                 e-
+       1.94e+03      2.41     0.859   0.00623      6.47                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    5  1.94e+03      3.42      2.32         0  0.000372      1.78      7.87 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2  1.75e+03      2.08     0.909         0  0.000935      2.82      3.79 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    3  1.39e+03      1.79      1.24         0  0.000604      2.27      4.38 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2  1.23e+03      1.69      1.04         0  0.000587      2.23      3.18 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2  1.15e+03      1.77     0.864         0  0.000591      2.24      3.19 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    3  1.07e+03      1.66      0.86         0  0.000986      2.89      5.05 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2  1.06e+03      1.45     0.617         0  0.000564      2.19      3.12 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    3  1.04e+03       1.2     0.469         0  0.000619      2.29      4.31 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2       976      1.18     0.677         0  0.000513      2.09         3 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2       924      1.26     0.749         0  0.000616      2.29      3.25 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2       909      1.04     0.767         0  0.000612      2.28      3.24 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2       698     0.832     0.288         0  0.000549      2.16      3.09 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    3       672     0.928     0.382         0  0.000234      1.41      3.71 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2       640     0.838     0.434         0  0.000533      2.13      3.05 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    4       605      0.62    0.0953         0  0.000512      2.09       5.6 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2       604     0.723     0.675         0  0.000999      2.91      4.15 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2       396     0.294     0.296         0  0.000531      2.12      3.04 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2       231   -0.0675    0.0264         0  0.000187      1.26      2.32 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    4       110    -0.471    -0.571         0  0.000717      2.47      5.18 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+            110    -0.356     -0.18   0.00115     0.377                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2       110      -0.5    -0.297         0  0.000562      2.19      3.12 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    3      57.5    -0.616   -0.0383         0  0.000953      2.84      5.22 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2      47.1     -0.14    0.0566         0  0.000567      2.19      3.13 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    3      32.2     0.409     0.305         0  0.000943      2.83      4.71 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+           32.4     0.253     0.456   0.00107      0.12                 e-
+#Step#     X(mm)     Y(mm)     Z(mm) KineE(MeV)   dE(MeV)  StepLeng TrackLeng   ProcName
+    2      32.3     0.242     0.596         0  0.000518       2.1      3.01 eIoni
+   -- List of secondaries generated : (x,y,z,kE,t,PID) --
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.0333s Real=0.0333s Sys=0.0167s
+Idle> #
+Idle> G4 kernel has come to Quit state.
+Deletion of G4 kernel class start.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManager is deleting.

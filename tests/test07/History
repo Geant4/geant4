@@ -1,0 +1,29 @@
+$Id: History,v 1.1 1999-01-08 16:35:06 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                     Test 07 History file
+                     --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+September 31, 98 G.Barrand
+- "standardize" the test ; do the prerun in test07.in, 
+  regenerate .out on HP-aCC.
+
+August 28, 98 F. Behner
+
+- Added histogramming
+
+August 24, 98 G. Cosmo
+
+- Created.
+

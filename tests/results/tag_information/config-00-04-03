@@ -1,0 +1,28 @@
+ config-00-04-03 includes the new G4SYSTEM setup.
+
+ - Updated architecture.gmk and binmake.gmk: G4SYSTEM revision.
+ - Added +DAportable compiler option to HP-aCC setup to support
+   HPPA 2.0 for PA8000 CPUs.
+
+ Here is the list of the new G4SYSTEM flavors, please update your
+ environment variables accordingly:
+
+ new            old
+ --------------------------------------------------------
+ AIX-xlC        AIX-AFS
+ SUN-CC         SUN-AFS
+ HP-aCC         HP-aCC (removed CC support, HP-AFS)
+ SGI-CC         SGI-AFS
+ DEC-cxx        DEC6-AFS (removed cxx-5 support, DEC-AFS)
+ Linux-g++      G++-Linux
+
+ The following flavors have been removed from architecture.gmk:
+ HP9-AFS, HP-Local, HP-G++, HP-UX, SGI-Local, SGI-G++, DEC6-AFS,
+ DEC-G++, DEC-Local, OSF1, G++-Local, G++-FreeBSD.
+ And also, of course:  AIX-AFS, SUN-AFS, HP-AFS, DEC-AFS, SGI-AFS.
+
+ I also added new links to the existing installations of RW-Tools.h++
+ and CLHEP at CERN. The old setup is still temporarly working by using
+ an old tag of config.
+ 
+ This tag requires a full recompilation _from scratch_ !

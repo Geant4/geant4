@@ -1,0 +1,31 @@
+# $Id: beta02-ref-00.sdb,v 1.1 1999-01-08 16:34:12 gunter Exp $
+# .sdb files are read by checkout.sh and update.sh
+# Lines beginning "# " are ignored (the space after the '#' is important!
+# Blank lines are not allowed!
+# Super-categories
+geant4beta/config           config-00-03-01
+# geant4beta/documents - not currently part of reference version.
+geant4beta/environments     envs-00-03-03
+geant4beta/examples         beta02-dev
+# geant4beta/source - split into categories - see below.
+# geant4beta/tests - checkout HEAD by hand and use this script.
+# Source categories
+geant4beta/source/GNUmakefile      beta02-dev
+geant4beta/source/digits+hits      beta02-dev
+geant4beta/source/event            event-00-03-01
+geant4beta/source/g3tog4           g3tog4-00-02-02
+geant4beta/source/geometry         geometry-00-03-01
+geant4beta/source/global           beta02-dev
+geant4beta/source/graphics_reps    greps-00-03-01
+geant4beta/source/intercoms        beta02-dev
+geant4beta/source/interfaces       interfaces-00-03-02
+geant4beta/source/materials        beta02-dev
+geant4beta/source/particles        beta02-dev
+geant4beta/source/persistency      beta02-dev
+geant4beta/source/processes        beta02-dev
+geant4beta/source/processes/hadronic/models/high_energy had_high-00-03-01
+geant4beta/source/readout          beta02-dev
+geant4beta/source/run              beta02-dev
+geant4beta/source/track            beta02-dev
+geant4beta/source/tracking         beta02-dev
+geant4beta/source/visualization    vis-00-03-01

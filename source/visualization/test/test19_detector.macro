@@ -1,0 +1,17 @@
+# Use this macro file to set the detector from a list.
+# Special to test19.
+#
+# See command.
+/control/verbose 2
+# See list of possibilities.
+/test19det/detector
+# Select detector.
+#/test19det/detector 1
+#/test19det/detector 4
+#
+# ATLAS...
+#/test19det/detector 5
+#/atlas/innerDetector/pixel 1
+#/atlas/innerDetector/all 1
+# Switch off the seeing of commands.
+/control/verbose 0

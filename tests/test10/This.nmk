@@ -1,0 +1,158 @@
+!include $(G4INSTALL)\tests\tools\NT\HeadT.nmk
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#  File produced by the Co/omake tool
+# using file Make.odb.
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#  The soft linked packages has been taken
+# from the property 'has' of the 
+# 'Make' object of file Make.odb.
+# It had the value :
+#    Win rogue CLHEP G4 GL Inventor
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+HAS_CPPFLAGS = \
+ $(test_CPPFLAGS)\
+ $(Win_CPPFLAGS)\
+ $(rogue_CPPFLAGS)\
+ $(CLHEP_CPPFLAGS)\
+ $(G4_CPPFLAGS)\
+ $(GL_CPPFLAGS)\
+ $(Inventor_CPPFLAGS)
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+all   :: mkdir
+
+clean ::
+	if exist $(bin)\*.obj del $(bin)\*.obj
+	if exist $(bin)\*.exe del $(bin)\*.exe
+	if exist $(bin)\*.lib del $(bin)\*.lib
+	if exist $(bin)\*.dll del $(bin)\*.dll
+	if exist $(bin)\*.exp del $(bin)\*.exp
+	if exist $(bin)\*.pdb del $(bin)\*.pdb
+rmlib ::
+	if exist $(bin)\*.lib del $(bin)\*.lib
+rmo   ::
+	if exist $(bin)\*.obj del $(bin)\*.obj
+rmexe ::
+	if exist $(bin)\*.exe del $(bin)\*.exe
+
+mkdir :
+	@if not exist $(bin) mkdir $(bin)
+
+libtest10_target = $(bin)\libtest10.$(lib_or_dll)
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+all :: mkdir \
+$(libtest10_target) \
+$(bin)\test10.exe 
+	@echo "test : all ok." 
+
+libs :: mkdir \
+$(libtest10_target) 
+	@echo "test : libs ok." 
+
+apps :: mkdir \
+$(bin)\test10.exe 
+	@echo "test : apps ok." 
+#--------------------------------------------
+rmexeo :
+	if exist $(bin)\test10.obj del $(bin)\test10.obj
+#--------------------------------------------
+test10 : $(bin)\test10.exe
+	@echo "test : test10 ok."
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#--------------------------------------------
+$(bin)\test10.exe : $(bin)\test10.obj \
+$(libtest10_target) 
+	$(CXXLD) $(CXXLDFLAGS) $(CCLDO)$(bin)\test10.exe $(bin)\test10.obj \
+$(libtest10) \
+$(libG4visualization) \
+$(libG4run) \
+$(libG4interfaces) \
+$(libG4tracking) \
+$(libG4track) \
+$(libG4processes) \
+$(libG4particles) \
+$(libG4event) \
+$(libG4materials) \
+$(libG4digits_hits) \
+$(libG4geometry) \
+$(libG4graphics_reps) \
+$(libG4intercoms) \
+$(libG4global) \
+$(libInventor) \
+$(libGLU) \
+$(libGL) \
+$(librwtool) \
+$(libCLHEP) \
+$(libWin) \
+$(CXXLDEND) 
+
+$(bin)\test10.obj   : $(app)\test10.cc
+	$(CXX) $(CXXFLAGS) $(APP_CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\test10.obj /Tp$(app)\test10.cc
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# libraries 
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#--------------------------------------------
+$(bin)\libtest10.dll : \
+$(bin)\Tst10DetectorConstruction.obj \
+$(bin)\Tst10DetectorMessenger.obj \
+$(bin)\Tst10EventAction.obj \
+$(bin)\Tst10PhysicsList.obj \
+$(bin)\Tst10PrimaryGeneratorAction.obj \
+$(bin)\Tst10RunAction.obj \
+$(bin)\Tst10VisManager.obj 
+	if exist $(bin)\libtest10.lib del $(bin)\libtest10.lib 
+	if exist $(bin)\libtest10.exp del $(bin)\libtest10.exp 
+	lib.exe $(LIBFLAGS) /def:$(mgr)\libtest10.def /out:$(bin)\libtest10.lib
+	if exist $(bin)\libtest10.dll del $(bin)\libtest10.dll 
+	$(LINK32) $(LINK32FLAGS) /out:$(bin)\libtest10.dll $(bin)\libtest10.exp \
+$(bin)\Tst10DetectorConstruction.obj \
+$(bin)\Tst10DetectorMessenger.obj \
+$(bin)\Tst10EventAction.obj \
+$(bin)\Tst10PhysicsList.obj \
+$(bin)\Tst10PrimaryGeneratorAction.obj \
+$(bin)\Tst10RunAction.obj \
+$(bin)\Tst10VisManager.obj 
+
+$(bin)\libtest10.lib : \
+$(bin)\Tst10DetectorConstruction.obj \
+$(bin)\Tst10DetectorMessenger.obj \
+$(bin)\Tst10EventAction.obj \
+$(bin)\Tst10PhysicsList.obj \
+$(bin)\Tst10PrimaryGeneratorAction.obj \
+$(bin)\Tst10RunAction.obj \
+$(bin)\Tst10VisManager.obj 
+	if exist $(bin)\libtest10.lib del $(bin)\libtest10.lib 
+	lib.exe @<<
+/nologo /out:$(bin)\libtest10.lib
+$(bin)\Tst10DetectorConstruction.obj
+$(bin)\Tst10DetectorMessenger.obj
+$(bin)\Tst10EventAction.obj
+$(bin)\Tst10PhysicsList.obj
+$(bin)\Tst10PrimaryGeneratorAction.obj
+$(bin)\Tst10RunAction.obj
+$(bin)\Tst10VisManager.obj
+<<
+#--------------------------------------------
+# libtest10 dependencies 
+#--------------------------------------------
+$(bin)\Tst10DetectorConstruction.obj : src\Tst10DetectorConstruction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\Tst10DetectorConstruction.obj /Tpsrc\Tst10DetectorConstruction.cc
+
+$(bin)\Tst10DetectorMessenger.obj : src\Tst10DetectorMessenger.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\Tst10DetectorMessenger.obj /Tpsrc\Tst10DetectorMessenger.cc
+
+$(bin)\Tst10EventAction.obj : src\Tst10EventAction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\Tst10EventAction.obj /Tpsrc\Tst10EventAction.cc
+
+$(bin)\Tst10PhysicsList.obj : src\Tst10PhysicsList.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\Tst10PhysicsList.obj /Tpsrc\Tst10PhysicsList.cc
+
+$(bin)\Tst10PrimaryGeneratorAction.obj : src\Tst10PrimaryGeneratorAction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\Tst10PrimaryGeneratorAction.obj /Tpsrc\Tst10PrimaryGeneratorAction.cc
+
+$(bin)\Tst10RunAction.obj : src\Tst10RunAction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\Tst10RunAction.obj /Tpsrc\Tst10RunAction.cc
+
+$(bin)\Tst10VisManager.obj : src\Tst10VisManager.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\Tst10VisManager.obj /Tpsrc\Tst10VisManager.cc
+
+

@@ -1,0 +1,341 @@
+*** Begin of history file: 13/02/92 - 17.33.18
+call fith7.ftn01
+call fith7.ftn02
+set ndvx 506
+set ndvy 506
+set ygti 0.2
+set ymgu 1.
+set ymgl 1.
+set xmgr 0.5
+set ymgl 1.5
+set ywin 0.8
+set xwin 1.2
+set gsiz 0.3
+set asiz 0.25
+set vsiz 0.25
+set ylab 0.6
+set xlab 1.2
+vect/create vx12(7) r 0.15 0.25 0.35 0.45 0.55 0.65 0.75
+vect/create vxe12(7) r  
+vect/create vy12(7) r 0.80 0.70 0.61 0.53 0.44 0.40 0.43
+vect/create vye12(7) r 0.03 0.02 0.02 0.02 0.015 0.015 0.03
+vect/create vy32(7) r 0.80 0.73 0.62 0.56 0.51 0.48 0.33
+vect/create vye32(7) r 0.015 0.015 0.015 0.015 0.015 0.015 0.015
+vect/create vx33(11) r 0.1 0.3 0.5 0.7 0.9 1.1 1.3 1.5 1.7 1.9 2.1
+vect/create vxe33(11) r 
+vect/create vy33(11) r 0.78 0.81 0.74 0.69 0.72 0.74 0.79 0.80 0.70 _
+     0.59 0.79
+vect/create vye33(11) r 0.02 0.02 0.02 0.02 0.02 0.035 0.045 0.06 0.08 _
+     0.11 0.20
+vect/create vy34(11) r 0.64 0.61 0.59 0.56 0.50 0.51 0.58 0.66 0.66 _
+     0.47 0.79 
+vect/create vye34(11) r 0.02 0.015 0.015 0.015 0.02 0.02 0.035 0.07 0.09 _
+     0.13 0.17
+vect/create vy35(8) r 0.43 0.46 0.51 0.53 0.38 0.29 0.43 0.42
+vect/create vye35(8) r 0.02 0.02 0.02 0.02 0.02 0.045 0.08 0.10
+vect/create vx03(12) r 0.1 0.3 0.5 0.7 0.9 1.1 1.3 1.5 1.7 1.9 2.1 2.3
+vect/create vxe03(12) r
+vect/create vy03a(12) r 16.9 11.2 5.92 2.32 0.72 0.24 0.079 0.028 0.0100 _
+  0.0043 0.00056 0.00030
+vect/create vye03a(12) r 0. 0. 0. 0. 0. 0. 0. 0. 0.001 0.001 0.0005 0.00025
+vect/create vy03b(12) r 16.3 12.1 5.29 1.78 0.62 0.28 0.099 0.04 0.016 _
+  0.0064 0.0022 0.0013
+vect/create vye03b(12) r 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.001 0.0005 0.0004
+vect/create vy04a(12) r 9.63 7.41 3.77 1.65 0.62 0.22 0.076 0.028 _
+  0.0084 0.0041 0.0011 0.00054
+vect/create vye04a(12) r 0. 0. 0. 0. 0. 0. 0. 0. 0.0015 0.0005 0.0005 _
+  0.00025
+vect/create vy04b(12) r 9.28 7.68 4.54 1.71 0.57 0.2 0.072 0.032 0.013 _
+  0.0063 0.0024 0.0014
+vect/create vye04b(12) r 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.0006 0.0004
+vect/create vy05a(12) r 6.37 5.08 3.00 1.22 0.47 0.17 0.054 0.022 _
+  0.0073 0.0030 0.0016 0.00052
+vect/create vye05a(12) r 0. 0. 0. 0. 0. 0. 0. 0. 0.001 0.001 0.0005 _
+  0.00025
+vect/create vy05b(12) r 5.91 4.54 3.23 1.52 0.51 0.17 0.054 0.019 0.0091 _
+  0.0046 0.0017 0.0014
+vect/create  vye05b(12) r 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.0005 0.0005 0.0003
+vect/create vy06a(12) r 5.08 3.76 2.14 0.93 0.42 0.15 0.043 0.016 _
+  0.0073 0.0036 0.00066 0.00025
+vect/create vye06a(12) r 0. 0. 0. 0. 0. 0. 0. 0.002 0.001 0.0005 _
+  0.00025 0.00015
+vect/create vy06b(12) r 5.08 3.49 1.98 1.22 0.42 0.16 0.052 0.019 _
+  0.0073 0.0026 0.0020 0.00082
+vect/create vye06b(12) r 0. 0. 0. 0. 0. 0. 0. 0. 0.001 0.001 0.001 0.0002
+vect/create vy07a(11) r 3.90 2.49 1.31 0.60 0.28 0.094 0.028 0.0091 _
+  0.0030 0.0011 0.00079
+vect/create vye07a(11) r 0. 0. 0. 0. 0. 0. 0. 0.001 0.001 0.0003 0.0002
+vect/create vy07b(11) r 3.49 2.22 1.09 0.69 0.35 0.094 0.033 0.013 _
+  0.0054 0.0020 0.00056
+vect/create vye07b(11) r 0. 0. 0. 0. 0. 0. 0. 0.001 0.001 0.0005 0.0002
+vect/create vy08a(11) r 3.12 1.77 0.77 0.44 0.18 0.075 0.016 0.006 _
+  0.0016 0.00068 0.00032
+vect/create vye08a(11) r 0. 0. 0. 0. 0. 0. 0.002 0.001 0.0006 0.0003 _
+  0.0002
+vect/create vy08b(11) r 3.12 1.71 0.67 0.38 0.22 0.11 0.016 0.005 _
+  0.002 0.00085
+vect/create vye08b(11) r 0. 0. 0. 0. 0. 0. 0.003 0.001 0.0005 0.0003
+vect/create vy09a(10) r 2.22 1.17 0.36 0.17 0.064 0.033 0.0099 0.0036 _
+  0.00040 0.00076
+vect/create vye09a(10) r 0. 0. 0. 0. 0.01 0.005 0.001 0.001 0.0002 0.0002
+vect/create vy09b(9) r 2.49 1.22 0.39 0.17 0.081 0.048 0.016 _
+  0.0036 0.0017
+vect/create vye09b(9) r 0. 0. 0. 0. 0. 0. 0.005 0.0015 0.0005     
+vect/create vx04c(5) r 0.9 1.1 1.3 1.5 2.2
+vect/create vy04c(5) r 0.48 0.13 0.043 0.021 0.0084
+vect/create vx04d(6) r 1.1 1.3 1.5 1.7 1.9 2.2
+vect/create vy04d(6) r 0.23 0.063 0.026 0.011 0.0029 0.00095
+vect/create vx05c(7) r 0.9 1.1 1.3 1.5 1.7 1.9 2.2
+vect/create vy05c(7) r 0.53 0.094 0.038 0.012 0.0043 0.0018 0.00056
+vect/create vx05d(5) r 1.3 1.5 1.7 1.9 2.2
+vect/create vy05d(5) r 0.054 0.025 0.0068 0.0019 0.00068
+vect/create vx06c(9) r 0.3 0.5 0.7 0.9 1.1 1.3 1.5 1.7 1.9
+vect/create vy06c(9) r 2.78 1.64 0.97 0.34 0.1 0.037 0.0099 0.0034 0.0014
+vect/create vx06d(3) r 1.7 1.9 2.2
+vect/create vy06d(3) r 0.0058 0.0017 0.00061
+vect/create vx07c(8) r 0.3 0.5 0.7 0.9 1.1 1.5 1.7 1.9
+vect/create vy07c(8) r 2.14 0.87 0.53 0.27 0.07 0.004 0.0016 0.00066
+vect/create vx08c(6) r 0.5 0.7 0.9 1.1 1.7 1.9
+vect/create vy08c(6) r 0.57 0.3 0.18 0.056 0.0015 0.00045
+vect/create vx09c(7) r 0.5 0.7 0.9 1.1 1.3 1.5 1.9
+vect/create vy09c(7) r 0.41 0.12 0.052 0.018 0.0068 0.0027 0.00025  
+vect/create vx06e(8) r 0.05 0.15 0.25 0.35 0.45 0.55 0.65 0.75
+vect/create vy06e(8) r 5.08 4.37 3.76 3.49 1.77 1.31 0.9 0.62
+vect/create vye06e(8) r 1. 1. 0.5 0.5 0.3 0.3 0.1 0.1
+vect/create vy07e(8) r 4.55 3.92 2.90 1.99 1.02 0.75 0.56 0.48
+vect/create vye07e(8) r 1. 0.5 0.5 0.5 0.1 0.1 0.1 0.1
+vect/create vy08e(8) r 4.74 2.81 2.42 1.79 0.91 0.58 0.35 0.3
+vect/create vye08e(8) r 1. 0.5 0.5 0.5 0.1 0.1 0.1 0.1
+vect/create vy09e(8) r 2.81 2.81 1.79 1.43 0.68 0.47 0.16 0.15
+vect/create vye09e(8) r 0.5 0.5 0.2 0.2 0.2 0.2 0.05 0.05 
+vect/create vx58(15) r 0.225 0.275 0.325 0.375 0.425 0.475 0.525 _
+  0.575 0.625 0.675 0.725 0.775 0.825 0.875 0.925
+vect/create vxe58(15) r
+vect/create vy58(15) r 3.33 2.98 2.62 2.42 2.1 1.89 1.68 1.65 1.53 _
+  1.61 1.57 1.68 1.68 1.91 2.64
+vect/create vye58(15) r 0.16 0.14 0.13 0.12 0.1 0.09 0.09 0.09 0.08 _
+  0.08 0.08 0.09 0.14 0.16 0.22
+vect/create vx80(9) r 0.525 0.575 0.625 0.675 0.725 0.775 0.825 0.875 _
+  0.925
+vect/create vxe80(9) r
+vect/create vy80(9) r 1.02 1.01 0.98 0.90 0.93 0.96 1.03 1.14 1.79
+vect/create vye80(9) r 0.08 0.07 0.06 0.06 0.06 0.06 0.07 0.08 0.14 
+vscale vy04a 0.1 vy04a
+vscale vy04b 0.1 vy04b
+vscale vye04a 0.1 vye04a
+vscale vye04b 0.1 vye04b
+vscale vy04c 0.1 vy04c
+vscale vy04d 0.1 vy04d 
+vscale vy05a 0.01 vy05a
+vscale vy05b 0.01 vy05b
+vscale vye05a 0.01 vye05a
+vscale vye05b 0.01 vye05b
+vscale vy05c 0.01 vy05c
+vscale vy05d 0.01 vy05d
+vscale vy06a 0.001 vy06a
+vscale vy06b 0.001 vy06b
+vscale vye06a 0.001 vye06a
+vscale vye06b 0.001 vye06b
+vscale vy06c 0.001 vy06c
+vscale vy06d 0.001 vy06d
+vscale vy06e 0.001 vy06e
+vscale vye06e 0.001 vye06e
+vscale vy07a 0.0001 vy07a
+vscale vy07b 0.0001 vy07b
+vscale vye07a 0.0001 vye07a
+vscale vye07b 0.0001 vye07b
+vscale vy07c 0.0001 vy07c
+vscale vy07e 0.0001 vy07e
+vscale vye07e 0.0001 vye07e
+vscale vy08a 1.e-5 vy08a
+vscale vy08b 1.e-5 vy08b
+vscale vye08a 1.e-5 vye08a
+vscale vye08b 1.e-5 vye08b
+vscale vy08c 1.e-5 vy08c
+vscale vy08e 1.e-5 vy08e
+vscale vye08e 1.e-5 vye08e
+vscale vy09a 1.e-6 vy09a
+vscale vy09b 1.e-6 vy09b
+vscale vye09a 1.e-6 vye09a
+vscale vye09b 1.e-6 vye09b
+vscale vy09c 1.e-6 vy09c
+vscale vy09e 1.e-6 vy09e
+vscale vye09e 1.e-6 vye09e
+* add 3 3 3 0.5 0.
+* add 4 4 4 0.5 0.
+* add 5 5 5 0.5 0.
+* add 6 6 6 0.5 0.
+* add 7 7 7 0.5 0.
+* add 8 8 8 0.5 0.
+* add 9 9 9 0.5 0.
+* add 12 12 12 0.85 0.
+* add 13 13 13 0.85 0.
+* add 14 14 14 0.85 0.
+* add 15 15 15 0.85 0.
+* add 32 32 32 0.5 0.
+* add 33 33 33 0.5 0.
+* add 34 34 34 0.5 0.
+* add 35 35 35 0.5 0.
+* add 58 58 58 0.5 0.
+* add 80 80 80 0.5 0.
+add 3 3 3 1.2  0.
+add 4 4 4 1.2  0.
+add 5 5 5 1.2  0.
+add 6 6 6 1.2  0.
+add 7 7 7 1.2  0.
+add 8 8 8 1.1  0.
+add 9 9 9 1.1  0.
+gon
+clr
+*fortran/file 60 disk$scratch:[xv.fesefeldt]fith7_03.ps
+*meta 60 -113
+title_gl '[p] p "5# [p^0!] X at 100 GeV/c' 
+opt logy
+hi/set/minimum 3 1.e-10
+hi/set/minimum 4 1.e-10 
+hi/set/maximum 3 50.
+hi/set/maximum 4 50.
+set xsiz 15.5
+set ysiz 18.
+zone 2 1
+hi/plot 3 
+set dmod 0
+hi/plot 5 s
+set dmod 0
+hi/plot 7 s
+set dmod 0
+hi/plot 9 s
+graph/hplot/errors vx03 vy03a vxe03 vye03a 12 24 0.17
+graph/hplot/errors vx03 vy03b vxe03 vye03b 12 20 0.17
+graph/hplot/errors vx03 vy05a vxe03 vye05a 12 24 0.17
+graph/hplot/errors vx03 vy05b vxe03 vye05b 12 20 0.17
+graph/hplot/errors vx03 vy07a vxe03 vye07a 11 24 0.17
+graph/hplot/errors vx03 vy07b vxe03 vye07b 11 20 0.17  
+graph/hplot/errors vx03 vy09a vxe03 vye09a 10 24 0.17
+graph/hplot/errors vx03 vy09b vxe03 vye09b  9 20 0.17
+graph/hplot/errors vx05c vy05c vxe03 vxe03  7 29 0.17
+graph/hplot/errors vx05d vy05d vxe03 vxe03  5 30 0.17
+graph/hplot/errors vx07c vy07c vxe03 vxe03  8 29 0.17
+graph/hplot/errors vx09c vy09c vxe03 vxe03  7 29 0.17 
+graph/hplot/errors vx06e vy07e vxe03 vye07e 8 31 0.17
+graph/hplot/errors vx06e vy09e vxe03 vye09e 8 31 0.17 
+atitle '   '  'E d^3![s]/dp^3! "M#mb GeV^-2!"N#'
+text 0.8 4.5 '0.1"L#x"L#0.2' 0.25 -45.
+text 0.8 0.025 '0.3"L#x"L#0.4 (*10^-2!)' 0.25 -45.
+text 0.8 1.5e-4 '0.5"L#x"L#0.6 (*10^-4!)' 0.25 -45.
+text 0.8 8.e-7  '0.7"L#x"L#0.8 (*10^-6!)' 0.25 -45.  
+text 2. 10. '(a)' 0.25 0.
+set dmod 0
+hi/plot 4 
+set dmod 0
+hi/plot 6 s
+set dmod 0
+hi/plot 8 s
+graph/hplot/errors vx03 vy04a vxe03 vye04a 12 24 0.17
+graph/hplot/errors vx04c vy04c vxe03 vxe03  5 29 0.17
+graph/hplot/errors vx04d vy04d vxe03 vxe03  6 30 0.17
+graph/hplot/errors vx03 vy04b vxe03 vye04b 12 20 0.17
+graph/hplot/errors vx03 vy06a vxe03 vye06a 12 24 0.17
+graph/hplot/errors vx03 vy06b vxe03 vye06b 12 20 0.17
+graph/hplot/errors vx03 vy08a vxe03 vye08a 11 24 0.17
+graph/hplot/errors vx03 vy08b vxe03 vye08b 10 20 0.17
+graph/hplot/errors vx06c vy06c vxe03 vxe03  9 29 0.17
+graph/hplot/errors vx06d vy06d vxe03 vxe03  3 30 0.17
+graph/hplot/errors vx08c vy08c vxe03 vxe03  6 29 0.17
+graph/hplot/errors vx06e vy06e vxe03 vye06e 8 31 0.17
+graph/hplot/errors vx06e vy08e vxe03 vye08e 8 31 0.17
+atitle 'p?T!"M#GeV/c"N#' '  '
+text 0.8 0.3 '0.2"L#x"L#0.3 (*10^-1!)' 0.25 -45.
+text 0.8 2.e-3 '0.4"L#x"L#0.5 (*10^-3!)' 0.25 -45.
+text 0.8 8.e-6 '0.6"L#x"L#0.7 (*10^-5!)' 0.25 -45.
+text 0.2 1.e-8 '- GHEISHA 100 GeV' 0.20 0.
+text 0.2 5.e-9 '"<0># Omega-Coll. 80 GeV' 0.20 0.
+text 0.2 3.e-9 '"0# Omega-Coll. 140 GeV' 0.20 0.
+text 0.2 1.5e-9 '"*# ACCMOR-Coll. 58 GeV' 0.20 0.
+text 0.2 8.e-10 '"4# Donaldsen et al. 100 GeV' 0.20 0.
+text 0.2 4.e-10 '"<4># Donaldsen et al. 200 GeV' 0.20 0.
+text 2. 10. '(b)' 0.25 0.
+exec hardcopy
+*meta 0
+*fort/close 60
+*fortran/file 60 disk$scratch:[xv.fesefeldt]fith7_32.ps
+*meta 60 -113
+clr
+title_gl '([p],K) p "5# [p^0!] X at 100 GeV/c'
+divide 32 12 32
+divide 33 13 33
+divide 34 14 34
+divide 35 15 35
+opt liny
+set xsiz 8.
+set ysiz 8.
+zone 1 1
+hi/plot 32
+graph/hplot/errors vx12 vy12 vxe12 vye12 7 20 0.17
+graph/hplot/errors vx12 vy32 vxe12 vye32 7 24 0.17 
+atitle 'x?F!' 'd[s]/dx(Kp"5#[p^0!])/d[s]/dx([p]p"5#[p^0!])'
+text 0.1 0.25 '- GHEISHA 100 GeV' 0.20 0.
+text 0.1 0.17 '"0# Omega-Coll. 80 GeV' 0.20 0.
+text 0.1 0.09 '"<0># Omega-Coll. 140 GeV' 0.20 0.
+exec hardcopy
+*meta 0
+*fort/close 60
+*fortran/file 60 disk$scratch:[xv.fesefeldt]fith7_33.ps
+*meta 60 -113  
+hi/set/maximum 33 1.5
+hi/set/maximum 34 1.5
+hi/set/maximum 35 1.5
+set xsiz 15.5
+set ysiz 8.
+zone 3 1
+hi/zoom 33 ! 1 22
+graph/hplot/errors vx33 vy33 vxe33 vye33 11 20 0.17
+atitle '  ' 'd[s]/dp?T!(Kp"5#[p^0!])/d[s]/dp?T!([p]p"5#[p^0!])'
+text 0.2 1.3 '(a) 0.1"L#x"L#0.3' 0.25 0.
+text 0.3 0.25 '"0# data' 0.20 0.
+text 0.3 0.1 '- GHEISHA' 0.20 0.
+hi/zoom 34 ! 1 22
+graph/hplot/errors vx33 vy34 vxe33 vye34 11 20 0.17
+text 0.2 1.3 '(b) 0.3"L#x"L#0.5' 0.25 0.
+hi/zoom 35 ! 1 22
+graph/hplot/errors vx33 vy35 vxe33 vye35 8 20 0.17
+atitle 'p?T!"M#GeV/c"N#'
+text 0.2 1.3 '(c) 0.5"L#x"L#0.7' 0.25 0.
+exec hardcopy
+*meta 0
+*fort/close 60
+*fortran/file 60 disk$scratch:[xv.fesefeldt]fith7_58.ps
+*meta 60 -113
+clr
+title_gl '([p^-!],K^-!) p at 58 GeV/c'
+hi/set/maximum 56 10.
+hi/set/minimum 56 0.001
+hi/set/maximum 76 10.
+hi/set/minimum 76 0.001 
+opt logy
+set xsiz 15.
+set ysiz 15.
+zone 2 1
+hi/plot 56
+hi/plot 57 s
+hi/plot 58 s
+hi/plot 59 s
+hi/plot 60 s
+graph/hplot/errors vx58 vy58 vxe58 vye58 15 20 0.17
+atitle '  ' '(x/[p])d[s]/dx"M#mb"N#'
+text 0.3 0.3 '"0# "<0># data' 0.20 0.
+text 0.3 0.2 '-- GHEISHA' 0.20 0.
+text 0.33 0.2 '-' 0.20 0.
+text 0.3 0.15 '-- GHEISHA' 0.20 0.
+hi/plot 76
+hi/plot 77 s
+hi/plot 78 s
+hi/plot 79 s
+hi/plot 80 s
+graph/hplot/errors vx80 vy80 vxe80 vye80  9 24 0.17 
+atitle 'x=p?L!/p?beam!' ' '
+exec hardcopy
+*meta 0
+*fort/close 60
+*** End   of history file: 13/02/92 - 17.33.18
+

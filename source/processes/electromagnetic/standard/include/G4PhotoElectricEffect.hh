@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.hh,v 1.1 1999-01-07 16:11:14 gunter Exp $
+// $Id: G4PhotoElectricEffect.hh,v 1.2 1999-01-08 16:32:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,7 +28,8 @@
 // 08-01-97, crossection table + meanfreepath table, M.Maire
 // 13-03-97, adapted for the new physics scheme, M.Maire
 // 13-08-98, new methods SetBining() PrintInfo()
-// 17-11-98, use table of atomic shells in PostStepDoIt, mma 
+// 17-11-98, use table of atomic shells in PostStepDoIt, mma
+// 06-01-99, Sandia crossSection below 50 keV, V.Grichine mma 
 // ------------------------------------------------------------
 
 #ifndef G4PhotoElectricEffect_h
@@ -81,11 +82,17 @@ class G4PhotoElectricEffect : public G4VDiscreteProcess
      virtual inline G4double ComputeL2BindingEnergy(G4double AtomicNumber);
 
      virtual G4double ComputeCrossSectionPerAtom(G4double PhotonEnergy, 
-                                                     G4double AtomicNumber);
-
+                                                 G4double AtomicNumber);
+						 
      virtual G4double ComputeMeanFreePath(G4double PhotonEnergy, 
                                           G4Material* aMaterial);
-
+					  
+     G4double ComputeSandiaCrossSection (G4double PhotonEnergy, 
+                                         G4double AtomicNumber);
+						 					  
+     G4double ComputeSandiaMeanFreePath(G4double PhotonEnergy, 
+                                        G4Material* aMaterial);
+					  
   private:
 
      G4Element* SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton,

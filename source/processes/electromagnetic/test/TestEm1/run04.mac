@@ -1,0 +1,28 @@
+# $Id: run04.mac,v 1.1 1999-01-08 16:32:39 gunter Exp $
+#
+# Macro file for "TestEm1.cc"
+# (can be run in batch, without graphic)
+#
+# full Ionisation only; e- 100 MeV
+#
+/control/verbose 2
+#
+/run/initialize
+#
+/process/eLoss/StepFunction 0.183 170 micrometer
+/calor/cutG  95 cm
+/calor/cutE  6.05 micrometer
+/run/initialize
+/run/particle/dumpCutValues
+#
+/process/inactivate phot
+/process/inactivate compt
+/process/inactivate conv
+/process/inactivate msc
+#
+/run/verbose 2
+/event/drawTracks none
+#
+/gun/particle e-
+/gun/energy 100 MeV
+/run/beamOn 100

@@ -1,0 +1,60 @@
+README
+
+This test case is created to optimise the speed of the pure e.m. physics processes.
+The runs and timings are taken on sp017.
+A dedicated program is created both in G4 and G3 to compare and optimise.
+
+
+
+CONDITIONS
+
+1 + "Infinite" medium, so that the full shower developes without leakage and very far
+    from any boundary so that safety is always much larger than the physics steps.
+
+2 + HepJamesRandom generator in G4.
+
+3 + No energy loss randomization of the step.
+
+4 + Comparison of threshold value for triggering automatic STMIN in G3 vs the value
+    coming from the new analytical formula in G4 (G3=170micron; G4=170micron).
+
+5 + Make sure that in G3 the data cards IABAN = 0, ELOSS = 1, DRAY = 1, and AUTO = 1.
+
+6 + All the cuts in G3 must be 10 KeV (including DCUTE and BCUTE). The cuts in range
+    of G4 must be corresponding to 10 KeV.
+
+7 + All gamma processes must be compared one by one (making the others inactive).
+
+8 + All e+/e- processes must be compared one by one, starting from pure continuous
+    components (checking to have the same contributors number) and after adding the 
+    discrete components one by one.
+
+9 + Eliminate any tracking overhead, checking with geantinos first; this means checking
+    that no user max_step_length is limiting the step, that no hits are recorded or
+    related function call overhead exist, checking that there are no user actions call 
+    overheads, and no trajectories related overhead; also exploit preprocessor flags to
+    eliminate all IF statements related to debug, verbose, and trajectories.
+    
+10- Eliminate any geometry overhead: 
+    +optimised update of TOF when no integral approach;
+    +no geometry invokation if physics steps smaller than safety; 
+    -no relocation at every step; 
+    +update of specialized particle change to cope with relocation needs; 
+    -run geometry/benchmarks/calorimeter.cc to confirm pure geometry benchmarks.
+
+
+
+OUTPUT
+
+-> Number of steps
+
+-> Number of each process invokation
+
+-> Number of total secondaries produced
+
+-> time
+
+-> number of sqrt and log and exp
+
+
+

@@ -1,0 +1,138 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4RotationMatrix.icc,v 1.1 1999-01-08 16:31:34 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Inline functions for class G4RotationMatrix
+// Converted from CLHEP:
+// Author: Leif Lonnblad
+//
+// History:
+// 30.11.94 P.Kent
+
+inline G4RotationMatrix & G4RotationMatrix::operator = (const G4RotationMatrix & m) {
+  xx = m.xx;
+  xy = m.xy;
+  xz = m.xz;
+  yx = m.yx;
+  yy = m.yy;
+  yz = m.yz;
+  zx = m.zx;
+  zy = m.zy;
+  zz = m.zz;
+  return *this;
+}
+
+inline G4bool G4RotationMatrix::operator == (const G4RotationMatrix& m) const
+{
+    return (  (xx == m.xx)
+	      &&(xy == m.xy)
+	      &&(xz == m.xz)
+	      &&(yx == m.yx)
+	      &&(yy == m.yy)
+	      &&(yz == m.yz)
+	      &&(zx == m.zx)
+	      &&(zy == m.zy)
+	      &&(zz == m.zz) ) ? true : false;
+} 
+
+inline G4ThreeVector G4RotationMatrix::operator * (const G4ThreeVector & p) const {
+  return G4ThreeVector(xx*p.x() + xy*p.y() + xz*p.z(),
+		     yx*p.x() + yy*p.y() + yz*p.z(),
+		     zx*p.x() + zy*p.y() + zz*p.z());
+}
+
+inline G4RotationMatrix & G4RotationMatrix::operator *= (const G4RotationMatrix & m) {
+  return *this = operator * (m);
+}
+
+inline G4RotationMatrix & G4RotationMatrix::transform(const G4RotationMatrix & m) {
+  return *this = m.operator * (*this);
+}
+
+inline G4RotationMatrix G4RotationMatrix::inverse() const {
+  G4RotationMatrix m(xx, yx, zx, xy, yy, zy, xz, yz, zz);
+  return m;
+}
+
+inline G4RotationMatrix & G4RotationMatrix::invert() {
+  return *this=inverse();
+}
+
+inline G4RotationMatrix & G4RotationMatrix::rotate(double psi, const G4ThreeVector * p) {
+  return rotate(psi, *p);
+}
+
+inline G4RotationMatrix::G4RotationMatrix(double mxx, double mxy, double mxz,
+			 double myx, double myy, double myz,
+			 double mzx, double mzy, double mzz)
+: xx(mxx), xy(mxy), xz(mxz), yx(myx), yy(myy), yz(myz),
+  zx(mzx), zy(mzy), zz(mzz) {}
+
+inline double G4RotationMatrix::phiX() const
+{
+    double radang;
+    if (yx) radang=atan2(yx,xx);
+    else radang=0.0;
+    return radang;
+}
+
+inline double G4RotationMatrix::phiY() const
+{
+    double radang;
+    if (yy) radang=atan2(yy,xy);
+    else radang=0.0;
+    return radang;
+}
+
+inline double G4RotationMatrix::phiZ() const
+{
+    double radang;
+    if (yz) radang=atan2(yz,xz);
+    else radang=0.0;
+    return radang;
+}
+
+inline double G4RotationMatrix::thetaX() const
+{
+//    double zang=xz;
+//    if (zang>=1.0) return 0;
+//    else if (zang <=1.0) return 180.0;
+//    else return acos(zang);
+    return acos(xz);
+}
+inline double G4RotationMatrix::thetaY() const
+
+{
+//Angs should always be <1.0 && >-1.0
+//    double zang=yz;
+//    if (zang>=1.0) return 0;
+//    else if (zang <=1.0) return 180.0;
+//    else return acos(zang);
+    return acos(yz);
+}
+
+inline double G4RotationMatrix::thetaZ() const
+{
+//Angs should always be <1.0 && >-1.0
+//    double zang=zz;
+//    if (zang>=1.0) return 0;
+//    else if (zang <=1.0) return 180.0;
+//    else return acos(zang);
+    return acos(zz);
+}
+
+// Return zero if identity, else non-zero
+// Does not use `fuzzy' check - must be exactly identity
+inline G4bool G4RotationMatrix::isIdentity() const
+{
+    return  (xx==1.0 && xy==0.0 && xz==0.0 &&
+	     yx==0.0 && yy==1.0 && yz==0.0 &&
+	     zx==0.0 && zy==0.0 && zz==1.0    ) ? true : false;
+             
+}

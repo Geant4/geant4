@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.1 1999-01-07 16:11:23 gunter Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.2 1999-01-08 16:32:24 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,7 @@
 // 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
 // 13-08-98, new methods SetBining() PrintInfo()
 // 17-11-98, use table of Atomic shells in PostStepDoIt
+// 06-01-99, use Sandia crossSection below 50 keV, V.Grichine mma
 // --------------------------------------------------------------
 
 #include "G4PhotoElectricEffect.hh"
@@ -44,7 +45,7 @@ G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName)
   : G4VDiscreteProcess (processName),             // initialization
     theCrossSectionTable(NULL),
     theMeanFreePathTable(NULL),
-    LowestEnergyLimit (10*keV),
+    LowestEnergyLimit (50*keV),
     HighestEnergyLimit(50*MeV),
     NumbBinTable(100)
 { }
@@ -143,7 +144,7 @@ void G4PhotoElectricEffect::BuildPhysicsTable(const G4ParticleDefinition& Photon
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 G4double G4PhotoElectricEffect::ComputeCrossSectionPerAtom (G4double PhotonEnergy,
-                                                                G4double AtomicNumber)
+                                                            G4double AtomicNumber)
  
 // Calculates the microscopic cross section in GEANT4 internal units.
 // A parametrized formula from L. Urban is used to estimate the total cross section.
@@ -194,6 +195,21 @@ G4double G4PhotoElectricEffect::ComputeCrossSectionPerAtom (G4double PhotonEnerg
  else CrossSection *= p1M;
 
  return CrossSection;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+                                                          
+G4double G4PhotoElectricEffect::ComputeSandiaCrossSection(G4double PhotonEnergy,
+                                                          G4double AtomicNumber)
+{  
+  G4double energy2 = PhotonEnergy*PhotonEnergy, energy3 = PhotonEnergy*energy2, 
+           energy4 = energy2*energy2;
+
+  G4double* SandiaCof 
+           = G4SandiaTable::GetSandiaCofPerAtom((int)AtomicNumber,PhotonEnergy);
+
+  return SandiaCof[0]/PhotonEnergy + SandiaCof[1]/energy2 +
+	 SandiaCof[2]/energy3      + SandiaCof[3]/energy4; 
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -250,14 +266,11 @@ G4VParticleChange* G4PhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
    //
    // Kill the incident photon 
    //
-
-   aParticleChange.SetMomentumChange( 0., 0., 0. ) ;
-   aParticleChange.SetEnergyChange( 0. ) ;
-   aParticleChange.SetLocalEnergyDeposit( PhotonEnergy - ElecKineEnergy ) ;  
-   aParticleChange.SetStatusChange( fStopAndKill ) ; 
+   aParticleChange.SetLocalEnergyDeposit(PhotonEnergy-ElecKineEnergy);  
+   aParticleChange.SetStatusChange(fStopAndKill); 
 
    //  Reset NbOfInteractionLengthLeft and return aParticleChange
-   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
+   return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -294,7 +307,8 @@ void G4PhotoElectricEffect::PrintInfoDefinition()
 {
   G4String comments = "Total cross sections from a parametrisation(L.Urban). ";
            comments += "Good description from 10 KeV to 50 MeV for all Z";
-                     
+           comments += "Sandia crossSection below 50 KeV";
+	             
   G4cout << endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << G4BestUnit(LowestEnergyLimit,"Energy")
          << " to " << G4BestUnit(HighestEnergyLimit,"Energy") 

@@ -1,0 +1,47 @@
+$Id: README,v 1.1 1999-01-08 16:35:48 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Test201
+                            -------
+
+  The purpose of this test is to test the visualization and 
+ graphical user interfaces.
+
+  In order to get correct test201.g4m, etc... files,
+ the test should be started in the subdirectory corresponding 
+ to the GUI choosed. For example :
+ - G4UIterminal, G4UIXm, G4UIWin32, G4UIXaw, start test from 
+   basic subdirectory.
+ - G4UIWo, start test from OPACS subdirectory.
+
+  Examples ; for G4UIXm :
+
+   UNIX> cd $G4INSTALL/tests/tools/bin
+    csh> source setup.csh
+   ( sh> . ./setup.sh)
+    csh> setenv XENVIRONMENT $G4INSTALL/tests/test201/test201.xrm
+   ( sh> XENVIRONMENT=$G4INSTALL/tests/test201/test201.xrm;export XENVIRONMENT)
+   UNIX> cd $G4INSTALL/tests/test201/basic
+   UNIX> $G4WORKDIR/bin/$G4SYSTEM/test201 Xm
+
+ and for G4UIWo :
+   UNIX> cd $G4INSTALL/tests/tools/bin
+    csh> source setup.csh
+    csh> setenv XENVIRONMENT $G4INSTALL/tests/test201/test201.xrm
+   ( sh> XENVIRONMENT=$G4INSTALL/tests/test201/test201.xrm;export XENVIRONMENT)
+   UNIX> cd $G4INSTALL/tests/test201/OPACS
+   UNIX> $G4WORKDIR/bin/$G4SYSTEM/test201 Wo
+
+  The upper assume that Geant4 libraries has been reconstructed
+ with the correct :
+     G4UI_BUILD_<session>_SESSION
+     G4VIS_BUILD_<driver>_DRIVER
+ and test201 has been reconstructed with the correct :
+     G4UI_USE_<session>
+     G4VIS_USE_<driver>
+ CPP flags.
+

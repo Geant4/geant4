@@ -1,0 +1,47 @@
+#! /usr/bin/tcsh -f
+
+# remove used database files
+
+set file = $G4EXAMPLE_BOOT             ; if (-e $file) rm $file
+set file = ${G4EXAMPLE_BOOT}.FDDB      ; if (-e $file) rm $file
+set dir  = `dirname $G4EXAMPLE_BOOT`
+set name = ${G4EXAMPLE_BOOT:t}
+set file = ${dir}/Events.${name}.DB    ; if (-e $file) rm $file
+set file = ${dir}/Geometry.${name}.DB  ; if (-e $file) rm $file
+set file = ${dir}/System.${name}.DB    ; if (-e $file) rm $file
+if (-e ${dir}/core) rm ${dir}/core
+
+set G4SCHEMA_DIR = ../../schema
+
+set CWD           = `pwd`
+set G4SYSTEM      = AIX-Local
+
+#if ( ! $?FDID ) then
+#  set FDID = 207
+#  if ( `hostname` == "ccdc4" && `whoami` == "morita" ) set FDID = 501
+#  echo "FDID set to $FDID"
+#endif
+
+echo "Creating a federated database  $G4EXAMPLE_BOOT"
+##${HEP_ODBMS_DIR}/etc/getdb \
+##${G4SCHEMA_DIR}/G4SCHEMA $G4EXAMPLE_BOOT $FDID
+cp $G4SCHEMA_DIR/G4SCHEMA      $G4EXAMPLE_BOOT_DIR/G4EXAMPLE
+cp $G4SCHEMA_DIR/G4SCHEMA.FDDB $G4EXAMPLE_BOOT_DIR/G4EXAMPLE.FDDB
+
+# Since the name of the federated database file G4EXAMPLE is hard
+# coded into the executable for now, it is neccessary to run it in
+# the same directory as $G4EXAMPLE_BOOT.
+
+echo "cd $G4EXAMPLE_BOOT_DIR" ; cd $G4EXAMPLE_BOOT_DIR
+
+if ( $?BACKGROUND ) then
+  if ( -e test04.log.old ) rm -f test04.log.old
+  if ( -e test04.log )     mv -f test04.log test04.log.old
+  ${CWD}/../../bin/${G4SYSTEM}/test04 ${CWD}/test04.in >& ${CWD}/test04.log &
+  echo "Job test04 submitted..."
+  sleep 2
+  echo "tail -f test04.log"
+  tail -f ${CWD}/test04.log
+else
+  ${CWD}/../../bin/${G4SYSTEM}/test04 ${CWD}/test04.in
+endif

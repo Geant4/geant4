@@ -1,0 +1,26 @@
+# $Id: run06.mac,v 1.1 1999-01-08 16:32:39 gunter Exp $
+#
+# Macro file for "TestEm1.cc"
+# (can be run in batch, without graphic)
+#
+# Compton + PhotoElectricEffect; Gamma 10 Mev
+#
+/control/verbose 2
+#
+/run/initialize
+#
+/process/eLoss/StepFunction 0.183 170 micrometer
+/calor/cutG  95 cm
+/calor/cutE  95 cm
+/run/initialize
+/run/particle/dumpCutValues
+#
+/process/inactivate conv
+/process/inactivate msc
+#
+/run/verbose 2
+/event/drawTracks none
+#
+/gun/particle gamma
+/gun/energy 10 MeV
+/run/beamOn 1000

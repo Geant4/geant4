@@ -1,0 +1,15 @@
+$Id: README,v 1.1 1999-01-08 16:35:07 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Test07
+                            ------
+
+If you like to do histogramming instead running the print out version
+of the test. Use gmake MAKEHISTO=1.
+You can run the job with:
+test07.job test07.jobinput
+It should produce 50 events, single e- 300MeV.

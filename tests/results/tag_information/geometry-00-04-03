@@ -1,0 +1,8 @@
+  More detail:
+
+     - BrepPCone in constructor, FPlane, Cylindrical, Conical surfaces.
+                       Ellipse and others.
+
+     - Navigator for Replica Navigation (edges).
+
+     - STEPinterface : several creators

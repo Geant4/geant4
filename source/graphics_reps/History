@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-01-07 16:09:08 gunter Exp $
+$Id: History,v 1.2 1999-01-08 16:32:03 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+greps-01-00-02  6th January 1999  John Allison
+- Very minor change in G4VisExtent.cc - 2 -> 2.
+- Inclusion of test/ in tag.
+
+greps-01-00-01  6th January 1999  John Allison
+- Corrected constructors of G4VisAttributes for initialisation of
+  fDaughtersInvisible.
 
 greps-00-04-02 02 December 1998 Evgeni Tcherniaev
 - Added G4NURBS::CalcPoint() for calculation coordinates of a

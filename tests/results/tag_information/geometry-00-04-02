@@ -1,0 +1,11 @@
+   New code in solids/CSG (other implementation of Pgon, Pcon - not exercised
+                           in tests)
+
+   Fixes in Boolean/src             portability & logical fixes
+            BREPS/src               logical problems (bPcone, ConeSurf,Plane)
+            magneticfield/include   interface problem
+                          src       printing in propagator (debuging only)
+            Breps                   renamed methods (from compiler warnings)
+                                    + many fixes: Fplane, BREPSolid, Cylinder
+            volumes/NormalNav       stores Copy No
+            management              no changes - but fixed versions (now head)

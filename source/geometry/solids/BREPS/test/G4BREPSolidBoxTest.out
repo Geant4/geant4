@@ -1,0 +1,39 @@
+
+ ============   Box test   ================
+
+Box created ! 
+
+----------------------------
+
+x=1  y=1  z=100 is inside
+
+Distance to out is :900
+
+Dir   : x=1 y=0 z=0
+Distance to out is :1499
+
+----------------------------
+
+x=1000  y=1000  z=5000 is outside
+
+Distance to in is :4000
+
+Dir   : x=0 y=1 z=0
+Distance to in is :9e+99
+----------------------------
+
+x=-1000  y=-1000  z=-5000 is outside
+
+Distance to in is :9e+99
+
+Dir   : x=0 y=0 z=1
+Distance to in is :4000
+----------------------------
+
+x=0  y=0  z=-100 is inside
+
+Distance to out is :900
+
+Dir   : x=1 y=1 z=-1
+Distance to out is :1558.85
+

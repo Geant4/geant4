@@ -1,0 +1,18 @@
+#
+# Macro file for the initialization phase of "TestEm0.cc"
+#
+# Sets some default verbose
+#
+/control/verbose 2
+#
+/run/verbose 2
+/tracking/storeTrajectory 0
+#
+/run/initialize
+#
+/process/eLoss/StepFunction 0.183 170 micrometer
+/calor/cutG 2.2 mm
+####/calor/cutE 1.4 micrometer     #before beta03-00  (17.11.98)
+/calor/cutE 6.05 micrometer     #from beta03-00  (17.11.98)
+/run/initialize
+/run/particle/dumpCutValues

@@ -1,0 +1,9 @@
+major features:
+
+low_energy models stable
+high_energy models tuned
+updates and fixes in stopping
+heavy debugging and testing in neutron
+generator models: total overhoal
+some added functionality in hadronics/util
+changes in GNUmakefiles.

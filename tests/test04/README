@@ -1,0 +1,128 @@
+$Id: README,v 1.1 1999-01-08 16:34:44 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Test04
+                            ------
+
+This program demonstrates how user can use object database using 
+HepODBMS interface.  Please contact your local system manager for
+the avaiability of HepODBMS and Objectivity/DB.
+
+To use HepODBMS and underlying Objectivity/DB package, user needs
+a deep knowledge of the object database and environmental set
+procedures, which is lacking in this release.  The code is provided
+here to give just a brief idea of the persistency in using Geant4.
+
+How to build:
+
+- Setup:
+
+In addition to Geant4 standard setup, HepODBMS, Objectivity/DB and
+federated database variables should be defined.
+
+For CERN AFS users, an example setup script "g4odbms_setup.csh" is
+provided in this directory.  Put a line such as
+
+source ${G4INSTALL}/tests/test04/g4odbms_setup.csh
+
+in your .cshrc file, where ${G4INSTALL} is the actual location of
+the Geant4 package.
+
+- libG4persistency.a
+
+Persistency in Geant4 is provided as a separate sub category.
+Geant4 installer must explictly go to ${G4INSTALL}/source/persistency
+directory and type
+
+  cd ...where Geant4 is installed...
+  cd source/persistency
+  gmake cleandb
+  gmake 
+  gmake global
+
+to create libG4persistency.a.  This process will also produce a base
+schema file in the directory $(G4INSTALL)/schema/.
+
+- Boot file:
+
+Boot file contains a database schema information of some basic
+HepODBMS and Objectivity/DB classes.  Each time you compile your
+own persistent-capable class, a schema is compiled into your 
+local copy of boot file.  User must compile the Geant4 persistent
+capable schema into your local copy of the boot file.
+Default location is $HOME/G4EXAMPLE.  If you want to have it
+to other location, define the following variables in your .cshrc.
+
+example: 
+  setenv G4EXAMPLE_BOOT_DIR   ${HOME}/tmp/G4EXAMPLE
+  setenv G4EXAMPLE_BOOT       ${G4EXAMPLE_BOOT_DIR}/G4EXAMPLE
+
+For each boot file, user must have unique federated database ID (FDID).
+This number can be obtained from your local manager of Objectivity
+lock server.  Define G4EXAMPLE_FDID in your .cshrc.
+
+Then type,
+
+  gmake cleandb
+
+to create your own boot file.
+
+example:
+  setenv G4EXAMPLE_FDID 501
+
+Note: On CERN AFS, user must run his/her own lock server process
+      due to a technical limitation on AFS and Objectivity.
+
+            oocheckls -notitle `hostname` || \
+              oolockserver -notitle -noauto `hostname`::${G4EXAMPLE_BOOT}
+
+      Then check the process with
+
+            ps -ef | grep ools
+
+      When you finish running this example, don't forget to kill
+      the lock server process by yourself.
+
+            ookillls
+      or
+            kill -9 <pid_of_ools>
+
+      User must have AFS ACL access enabled to HepODBMS and 
+      Objectivity/DB directories.
+
+- test04 executable
+
+test04 executable can be made by simply typing "gmake" in this directory.
+
+Current example of Geant4 persistency requires the executable to be
+run as the same directory as your local federated database.
+Use test04run csh-script for simple test.
+
+example:
+   gmake cleandb    # see above
+   gmake            # creates test04 executable
+   test04run        # run test04
+
+- Persistent output
+
+When test04 is run correctly, following database files will be created
+in your federated database directory.
+
+Events.G4EXAMPLE.DB    G4EXAMPLE.FDDB         System.G4EXAMPLE.DB
+G4EXAMPLE              Geometry.G4EXAMPLE.DB
+
+To browse the contents, use "ootoolmgr".
+
+  cd ...your federated database directory...
+  setenv DISPLAY <your_x_terminal>:0.0
+  ootoolmgr -notitle G4EXAMPLE &
+
+Make sure to terminate ootoolmgr when you finish browsing.
+Otherwise lockserver will remember the browsing as a transaction,
+and the further updates to the database will be blocked.
+
+--

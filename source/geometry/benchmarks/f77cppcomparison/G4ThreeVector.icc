@@ -1,0 +1,177 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ThreeVector.icc,v 1.1 1999-01-08 16:31:34 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// Inline functions for class G4ThreeVector
+// Converted from CLHEP:
+// Authors: Leif Lonnblad and Anders Nilsson.
+//
+// History:
+// 30.06.95 P.Kent
+
+#include <math.h>
+#include <assert.h>
+
+#include "G4RotationMatrix.hh"
+
+inline G4bool G4ThreeVector::operator == (const G4ThreeVector& v) const
+{
+    return (v.x()==x()&&v.y()==y()&&v.z()==z()) ? true : false;
+}
+
+inline G4ThreeVector& G4ThreeVector::operator += (const G4ThreeVector & p) {
+  dx += p.x();
+  dy += p.y();
+  dz += p.z();
+  return *this;
+}
+
+inline G4ThreeVector& G4ThreeVector::operator -= (const G4ThreeVector & p) {
+  dx -= p.x();
+  dy -= p.y();
+  dz -= p.z();
+  return *this;
+}
+
+inline G4ThreeVector G4ThreeVector::operator - () const {
+  G4ThreeVector q(-dx, -dy, -dz);
+  return q;
+}
+
+inline G4ThreeVector& G4ThreeVector::operator *= (G4double a) {
+  dx *= a;
+  dy *= a;
+  dz *= a;
+  return *this;
+}
+
+inline G4ThreeVector & G4ThreeVector::operator *= (const G4RotationMatrix & m){
+  *this = m * (*this);
+  return *this;
+}
+
+inline G4ThreeVector & G4ThreeVector::transform(const G4RotationMatrix & m) {
+  *this = m * (*this);
+  return *this;
+}
+
+inline G4double G4ThreeVector::dot(const G4ThreeVector & p) const {
+  return dx*p.x() + dy*p.y() + dz*p.z();
+}
+
+inline G4ThreeVector G4ThreeVector::cross(const G4ThreeVector & p) const {
+  G4ThreeVector q(dy*p.z() - p.y()*dz, dz*p.x() - p.z()*dx, dx*p.y() - p.x()*dy);
+  return q;
+}
+
+inline G4double G4ThreeVector::operator () (const EAxis p) const
+{
+    if (p==kXAxis)
+	{
+	    return dx;
+	}
+    else if (p==kYAxis)
+	{
+	    return dy;
+	}
+    else
+	{
+	    assert(p==kZAxis);
+	    return dz;
+	}
+}
+
+inline G4double G4ThreeVector::mag2() const {
+  return dx*dx + dy*dy + dz*dz;
+}
+
+inline G4double G4ThreeVector::mag() const {
+  return sqrt(mag2());
+}
+
+inline G4ThreeVector G4ThreeVector::unit() const {
+    G4double tot = dx*dx+dy*dy+dz*dz;
+    G4ThreeVector p(*this);
+// If 0 Magnitude, return same vector (null)
+    return tot >0.0 ? p*=(1.0/sqrt(tot)) : p;
+}
+
+inline G4double G4ThreeVector::perp2() const {
+  return dx*dx + dy*dy;
+}
+
+inline G4double G4ThreeVector::perp() const {
+  return sqrt(perp2());
+}
+
+inline G4double G4ThreeVector::perp2(const G4ThreeVector & p)  const {
+  G4double tot = p.mag2();
+//  return tot > 0.0 ? mag2()-sqr(dot(p))/tot : mag2();
+  return tot > 0.0 ? mag2()-(dot(p))*(dot(p))/tot : mag2();
+}
+
+inline G4double G4ThreeVector::perp(const G4ThreeVector & p) const {
+  return sqrt(perp2(p));
+}
+
+inline G4double G4ThreeVector::phi() const {
+  return dx == 0.0 && dy == 0.0 ? 0.0 : atan2(dy,dx);
+}
+
+inline G4double G4ThreeVector::theta() const {
+  return dx == 0.0 && dy == 0.0 && dz == 0.0 ? 0.0 : atan2(perp(),dz);
+}
+
+inline G4double G4ThreeVector::cosTheta() const {
+  G4double ptot = mag();
+  return ptot == 0.0 ? 1.0 : dz/ptot;
+}
+
+inline G4double G4ThreeVector::angle(const G4ThreeVector & q) const {
+  G4double ptot2 = mag2()*q.mag2();
+  return ptot2 <= 0.0 ? 0.0 : acos(dot(q)/sqrt(ptot2));
+}
+
+inline void G4ThreeVector::setX(G4double x) {
+  dx = x;
+}
+
+inline void G4ThreeVector::setY(G4double y) {
+  dy = y;
+}
+
+inline void G4ThreeVector::setZ(G4double z) {
+  dz = z;
+}
+
+inline G4ThreeVector operator + (const G4ThreeVector & a, const G4ThreeVector & b) {
+  G4ThreeVector p(a.x() + b.x(), a.y() + b.y(), a.z() + b.z());
+  return p;
+}
+
+inline G4ThreeVector operator - (const G4ThreeVector & a, const G4ThreeVector & b) {
+  G4ThreeVector p(a.x() - b.x(), a.y() - b.y(), a.z() - b.z());
+  return p;
+}
+
+inline G4ThreeVector operator * (const G4ThreeVector & p, G4double a) {
+  G4ThreeVector q(a*p.x(), a*p.y(), a*p.z());
+  return q;
+}
+
+inline G4ThreeVector operator * (G4double a, const G4ThreeVector & p) {
+  G4ThreeVector q(a*p.x(), a*p.y(), a*p.z());
+  return q;
+}
+
+inline G4double operator * (const G4ThreeVector & a, const G4ThreeVector & b) {
+  return a.dot(b);
+}
+

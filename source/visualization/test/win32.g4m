@@ -1,0 +1,30 @@
+# See commands :
+/control/verbose 2
+# ATLAS = detector 5 :
+#/test19det/detector 5
+/test19det/detector 4
+# Initialize :
+/run/initialize
+# Visualization setup, solid modeling,
+# needed so that G4OpenInventor works correctly :
+/vis~/set/culling off
+/vis~/set/drawing_style 2
+/vis~/create_view/new_graphics_system OIWIN32
+# Init event for detector 4 :
+/gun/position 0 -300 0 cm
+/gun/direction 0 1 0
+#/gun/particle geantino
+/gun/particle e-
+/gun/energy 1 GeV
+#
+# Type by hand in the G4UIWin32 window :
+# ------------------------------------
+#/vis~/draw/current
+#/vis~/show/view
+#
+# To shoot an event :
+#/run/beamOn 1
+# To exit type :
+#/control/exit
+
+

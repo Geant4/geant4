@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VView.cc,v 1.1 1999-01-07 16:15:27 gunter Exp $
+// $Id: G4VView.cc,v 1.2 1999-01-08 16:33:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -27,13 +27,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4Transform3D.hh"
 #include "G4Event.hh"
-
-// Forward declaration for g++ linker.
-#ifdef GNU_GCC
-  #include <rw/tvvector.h>
-  #include "G4Plane3D.hh"
-  template class RWTValVector<G4Plane3D>;
-#endif
 
 G4VView::G4VView (G4VScene& scene, G4int id, const G4String& name):
 fScene (scene),

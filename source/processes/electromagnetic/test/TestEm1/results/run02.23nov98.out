@@ -1,0 +1,470 @@
+
+1           USER'S DIRECTIVES TO RUN THIS JOB
+            ----------------------------------
+
+
+ ***** DATA CARD CONTENT      LIST                                                                            
+ ***** DATA CARD CONTENT      C                                                                               
+ ***** DATA CARD CONTENT      C       Eloss only; glandz fluctuations; e- 1 Gev                               
+ ***** DATA CARD CONTENT      C                                                                               
+ ***** DATA CARD CONTENT      CALOR   5 (Imat) 2000. (size) 0. (field)                                        
+ ***** DATA CARD CONTENT      TRIG    100                                                                     
+ ***** DATA CARD CONTENT      KINE    3 (Itype)   1.000 (Ekine)                                               
+ ***** DATA CARD CONTENT      DEBUG   10  5 1000                                                              
+ ***** DATA CARD CONTENT      SWIT    0 (draw) 0 (save)                                                       
+ ***** DATA CARD CONTENT      CUTS    10.E-6 (cutgam)    10.E-6 (cutele)  3*10.E-3 (cutneu/had/muo)           
+ ***** DATA CARD CONTENT            2*10.E+3 (bcute/m) 2*10.E+3 (dcute/m)   10.E-3 (ppcutm)                   
+ ***** DATA CARD CONTENT      ABAN    0                                                                       
+ ***** DATA CARD CONTENT      PHOT    0                                                                       
+ ***** DATA CARD CONTENT      COMP    0                                                                       
+ ***** DATA CARD CONTENT      PAIR    0                                                                       
+ ***** DATA CARD CONTENT      MULS    0                                                                       
+ ***** DATA CARD CONTENT      LOSS    1                                                                       
+ ***** DATA CARD CONTENT      TIME    2=1.                                                                    
+ ***** DATA CARD CONTENT      END                                                                             
+ ***** DATA CARD CONTENT     END                                                                             
+
+1************************************************************
+ *                                                          *
+ *    G E A N T  Version 3.2111      DATE/TIME 981112/1559  *
+ *                                                          *
+ *                      R U N      1                        *
+ *                                                          *
+ ************************************************************
+ *                                                          *
+ *      Data structure   Date   Time    GVERSN    ZVERSN    *
+ *      --------------   ----   ----    ------    ------    *
+ *                                                          *
+ *           INIT       981112  1559    3.2111     3.77     *
+ *                                                          *
+ *           KINE       981112  1559    3.2111     3.77     *
+ *                                                          *
+ *           HITS       981112  1559    3.2111     3.77     *
+ *                                                          *
+ *           DIGI       981112  1559    3.2111     3.77     *
+ *                                                          *
+ *     Random number seeds:          9876        54321      *
+ *     --------------------                                 *
+ *                                                          *
+ *----------------------------------------------------------*
+ *                                                          *
+ *              Standard TPAR for this run are              *
+ *              ------------------------------              *
+ *                                                          *
+ *  CUTGAM= 10.00 keV  CUTELE= 10.00 keV  CUTNEU= 10.00 MeV *
+ *  CUTHAD= 10.00 MeV  CUTMUO= 10.00 MeV                    *
+ *  BCUTE = 10.00 TeV  BCUTM = 10.00 TeV                    *
+ *  DCUTE = 10.00 TeV  DCUTM = 10.00 TeV  PPCUTM= 10.00 MeV *
+ *  IPAIR =        0.  ICOMP =        0.  IPHOT =        0. *
+ *  IPFIS =        0.  IDRAY =        1.  IANNI =        1. *
+ *  IBREM =        1.  IHADR =        1.  IMUNU =        1. *
+ *  IDCAY =        1.  ILOSS =        1.  IMULS =        0. *
+ *  IRAYL =        0.  ILABS =        0.  ISYNC =        0. *
+ *  ISTRA =        0.                                       *
+ *                                                          *
+ *                                                          *
+ ************************************************************
+
+
+0===================================================     MATERIALS      ==================================================
+0MATERIAL                           A         Z     DENSITY  RADIAT L  ABSORP L NMIXT
+
+        1 Air                     14.607     7.300      .001  .284E+05  .808E+05   2     A      Z     W
+                                                                                        14.01   7.00   .700
+                                                                                        16.00   8.00   .300
+        2 H2 Liquid                1.010     1.000      .071  .865E+03  .790E+03   1
+        3 Water                   14.320     7.215     1.000  .358E+02  .949E+02   2     A      Z     W
+                                                                                         1.01   1.00   .112
+                                                                                        16.00   8.00   .888
+        4 Liquid Ar               39.950    18.000     1.390  .140E+02  .840E+02   1
+        5 Aluminium               26.980    13.000     2.700  .890E+01  .372E+02   1
+        6 Iron                    55.850    26.000     7.870  .176E+01  .171E+02   1
+        7 Lead                   207.190    82.000    11.350  .560E+00  .185E+02   1
+        8 Uranium                238.030    92.000    18.950  .320E+00  .120E+02   1
+0===================================================   TRACKING MEDIA   ==================================================
+0TMED                          MATERIAL ISVOL IFIELD  FIELDM  TMAXFD  STEMAX    DEEMAX   EPSIL   STMIN
+
+      1 Container                  5       0     0       .00   10.00  .100E+11    .183    .001    .015
+0===================================================      VOLUMES       ==================================================
+0VOLUME NAME  NUMED SHAPE NPAR  PARAMETERS
+
+      1 aBox    1   BOX     3    .100E+04  .100E+04  .100E+04
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      ELECTRON        3     1.0005      .0000      .0000     1.0005     1.0000
+
+
+ nb tracks/event neutral:     .00  charged:    1.00
+ nb steps/event  neutral:     .00  charged:   43.60
+
+
+ nb of process calls per event: 
+        NEXT     MULS     LOSS     FIEL     DCAY     PAIR     COMP     PHOT     BREM     DRAY     ANNI     MUNU
+         .00      .00    42.60      .00      .00      .00      .00      .00      .00      .00      .00      .00
+
+
+1         **** NUMBER OF EVENTS PROCESSED =       100
+          **** RANDOM NUMBER GENERATOR AFTER LAST COMPLETE EVENT    362378205   673361404
+          **** TIME TO PROCESS ONE EVENT IS =     .0041 SECONDS
+
+
+Constructing Visualization Manager....
+Initialising Visualization Manager....
+Registering graphics systems....
+
+***** Table : Nb of materials = 8 *****
+
+ Material:      Air  density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161   m
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material: H2liquid  density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923   m
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:    Water  density:  1.000  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092  cm
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material: liquidArgon  density:  1.390  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065  cm
+   --->  Element: liquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Aluminium  density:  2.700  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893  cm
+   --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Iron  density:  7.870  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759  cm
+   --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Lead  density: 11.350  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612  mm
+   --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:  Uranium  density: 18.950  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.861  mm
+   --->  Element:  Uranium      Z = 82.0   N = 238.0   A = 238.03 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+
+
+ The Box is 20   m of Aluminium
+Em1PhysicsList::SetCuts:CutLength : 1 (mm)
+
+ 
+# $Id: run02.23nov98.out,v 1.1 1999-01-08 16:32:45 gunter Exp $
+#
+# Macro file for "TestEm1.cc"
+# (can be run in batch, without graphic)
+#
+# Eloss only; glandz fluctuations; e- 1 GeV
+#
+#
+/run/initialize
+#
+/process/eLoss/StepFunction 0.183 170 micrometer
+/calor/cutG  95 cm
+/run/cutoffModified
+/calor/cutE  95 cm
+/run/cutoffModified
+/run/initialize
+Em1PhysicsList::SetCuts:CutLength : 1 (mm)
+******** SetCuts for gamma ********************
+The maximal meaningful cut is 8.6e+02 mm.
+All the gammawill be killed !
+in the material Aluminium.
+******** SetCuts for gamma ********************
+The maximal meaningful cut is 2.1e+02 mm.
+All the gammawill be killed !
+in the material Iron.
+******** SetCuts for gamma ********************
+The maximal meaningful cut is 1.1e+02 mm.
+All the gammawill be killed !
+in the material Lead.
+******** SetCuts for gamma ********************
+The maximal meaningful cut is 74 mm.
+All the gammawill be killed !
+in the material Uranium.
+
+phot:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to 50 MeV for all Z
+        PhysicsTables from 10 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation(L.Urban). Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02  eV to 1e+02 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a parametrisation(L.Urban). Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02  eV to 1e+02 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02  eV to 1e+02 TeV in 100 bins. 
+
+MuIoni:  knock-on electron cross sections .
+          Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+
+MuBrems:  cross sections from R. Kokoulin 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+
+MuPairProd:  cross sections from R. Kokoulin 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+/run/particle/dumpCutValues
+============= The cut Energy ==============================
+                          gamma          e-         mu-      proton     neutron
+Cut in range [mm]       9.5e+02     9.5e+02           1           1           1
+Cut in energy [KeV]
+                Air         3.1     3.6e+02          48          83        0.99
+           H2liquid        0.99     3.1e+04     1.2e+03     3.2e+03        0.99
+              Water     7.7e+02       3e+05     3.4e+03       9e+03        0.99
+        liquidArgon     1.4e+03     3.9e+05     3.2e+03     8.3e+03        0.99
+          Aluminium    infinity     1.1e+06       5e+03     1.3e+04        0.99
+               Iron    infinity     1.1e+08     8.5e+03     2.2e+04        0.99
+               Lead    infinity    infinity     8.5e+03     2.1e+04        0.99
+            Uranium    infinity    infinity     1.1e+04     2.6e+04        0.99
+===================================================
+#
+/process/inactivate phot
+/process/inactivate compt
+/process/inactivate conv
+/process/inactivate msc
+/process/eLoss/fluct 1
+#
+/run/verbose 2
+/event/drawTracks none
+#
+/gun/particle e-
+/gun/energy 1 GeV
+/run/beamOn 100
+### Run 0 start.
+Start closing geometry.
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=0.59s Real=1.1s Sys=0.14s
+
+ nb tracks/event   neutral:    0.00   charged:    1.00
+ nb  steps/event   neutral:    0.00   charged:   26.78
+
+ nb of process calls per event: 
+       eIoni
+       26.78
+
+
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      ELECTRON        3     1.0005      .0000      .0000     1.0005     1.0000
+ =====> TRACK    1 STACK NR   0 NTMULT=    1     ELECTRON                 TOFG =      .000 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+       .0000      .0000      .0000      .0000 aBox    1      .0000     .0000     .0  eV    1.000 GeV NULL
+      1.8000      .0000      .0000     1.8000 aBox    1     1.8000    1.8000  174.4 MeV  825.576 MeV LOSS
+      3.5841      .0000      .0000     3.5841 aBox    1     3.5841    1.7841  143.7 MeV  681.840 MeV LOSS
+      5.3493      .0000      .0000     5.3493 aBox    1     5.3493    1.7652  115.6 MeV  566.283 MeV LOSS
+      7.0934      .0000      .0000     7.0934 aBox    1     7.0934    1.7442  115.0 MeV  451.239 MeV LOSS
+      8.8072      .0000      .0000     8.8072 aBox    1     8.8072    1.7137   76.4 MeV  374.879 MeV LOSS
+     10.4916      .0000      .0000    10.4916 aBox    1    10.4916    1.6844   67.6 MeV  307.307 MeV LOSS
+     12.1401      .0000      .0000    12.1401 aBox    1    12.1401    1.6485   47.3 MeV  259.964 MeV LOSS
+     13.7534      .0000      .0000    13.7534 aBox    1    13.7534    1.6132   56.5 MeV  203.432 MeV LOSS
+     15.3069      .0000      .0000    15.3069 aBox    1    15.3069    1.5535   41.7 MeV  161.736 MeV LOSS
+     16.7944      .0000      .0000    16.7944 aBox    1    16.7944    1.4875   26.0 MeV  135.783 MeV LOSS
+     18.2232      .0000      .0000    18.2232 aBox    1    18.2232    1.4288   23.6 MeV  112.142 MeV LOSS
+     19.5831      .0000      .0000    19.5831 aBox    1    19.5831    1.3599   20.4 MeV   91.721 MeV LOSS
+     20.8646      .0000      .0000    20.8646 aBox    1    20.8646    1.2814   15.6 MeV   76.094 MeV LOSS
+     22.0687      .0000      .0000    22.0687 aBox    1    22.0687    1.2042   13.1 MeV   62.976 MeV LOSS
+     23.1912      .0000      .0000    23.1912 aBox    1    23.1912    1.1225   10.7 MeV   52.267 MeV LOSS
+     24.2260      .0000      .0000    24.2260 aBox    1    24.2260    1.0348    8.4 MeV   43.827 MeV LOSS
+     25.1773      .0000      .0000    25.1773 aBox    1    25.1773     .9513    6.5 MeV   37.288 MeV LOSS
+     26.0537      .0000      .0000    26.0537 aBox    1    26.0537     .8764    6.5 MeV   30.807 MeV LOSS
+     26.8432      .0000      .0000    26.8432 aBox    1    26.8432     .7895    5.1 MeV   25.665 MeV LOSS
+     27.5513      .0000      .0000    27.5513 aBox    1    27.5513     .7081    4.8 MeV   20.899 MeV LOSS
+     28.1717      .0000      .0000    28.1717 aBox    1    28.1717     .6204    3.4 MeV   17.493 MeV LOSS
+     28.7211      .0000      .0000    28.7211 aBox    1    28.7211     .5495    2.7 MeV   14.823 MeV LOSS
+     29.2099      .0000      .0000    29.2099 aBox    1    29.2099     .4888    2.5 MeV   12.346 MeV LOSS
+     29.6375      .0000      .0000    29.6375 aBox    1    29.6375     .4276    1.9 MeV   10.438 MeV LOSS
+     30.0133      .0000      .0000    30.0133 aBox    1    30.0133     .3758    1.6 MeV    8.861 MeV LOSS
+     30.3433      .0000      .0000    30.3433 aBox    1    30.3433     .3301    1.4 MeV    7.486 MeV LOSS
+     30.6315      .0000      .0000    30.6315 aBox    1    30.6315     .2882    1.6 MeV    5.906 MeV LOSS
+     30.8683      .0000      .0000    30.8683 aBox    1    30.8683     .2368    1.4 MeV    4.485 MeV LOSS
+     31.0555      .0000      .0000    31.0555 aBox    1    31.0555     .1872  822.5 keV    3.662 MeV LOSS
+     31.2123      .0000      .0000    31.2123 aBox    1    31.2123     .1568  484.6 keV    3.178 MeV LOSS
+     31.3507      .0000      .0000    31.3507 aBox    1    31.3507     .1384  598.2 keV    2.580 MeV LOSS
+     31.4652      .0000      .0000    31.4652 aBox    1    31.4652     .1145  370.0 keV    2.210 MeV LOSS
+     31.5643      .0000      .0000    31.5643 aBox    1    31.5643     .0991  353.0 keV    1.857 MeV LOSS
+     31.6484      .0000      .0000    31.6484 aBox    1    31.6484     .0841  281.2 keV    1.575 MeV LOSS
+     31.7203      .0000      .0000    31.7203 aBox    1    31.7203     .0718  256.0 keV    1.319 MeV LOSS
+     31.7804      .0000      .0000    31.7804 aBox    1    31.7804     .0602  205.0 keV    1.114 MeV LOSS
+     31.8310      .0000      .0000    31.8310 aBox    1    31.8310     .0506  166.9 keV  947.363 keV LOSS
+     31.8736      .0000      .0000    31.8736 aBox    1    31.8736     .0426  203.7 keV  743.654 keV LOSS
+     31.9063      .0000      .0000    31.9063 aBox    1    31.9063     .0326  151.6 keV  592.032 keV LOSS
+     31.9313      .0000      .0000    31.9313 aBox    1    31.9313     .0250   81.9 keV  510.137 keV LOSS
+     31.9521      .0000      .0000    31.9521 aBox    1    31.9521     .0209   77.7 keV  432.392 keV LOSS
+     31.9692      .0000      .0000    31.9692 aBox    1    31.9692     .0171   65.7 keV  366.659 keV LOSS
+     31.9847      .0000      .0000    31.9847 aBox    1    31.9847     .0154   65.9 keV  300.785 keV LOSS
+     32.0001      .0000      .0000    32.0001 aBox    1    32.0001     .0154   68.7 keV  232.040 keV LOSS
+     32.0155      .0000      .0000    32.0155 aBox    1    32.0155     .0154  153.6 keV   78.399 keV LOSS
+     32.0200      .0000      .0000    32.0200 aBox    1    32.0200     .0044   78.4 keV     .000  eV LOSS STOP
+
+   Kine     Name          Type     Px         Py         Pz       Energy     Vorigin  Vgener
+     1      ELECTRON        3     1.0005      .0000      .0000     1.0005     1.0000
+ =====> TRACK    1 STACK NR   0 NTMULT=    1     ELECTRON                 TOFG =      .000 NS
+       X          Y          Z          R     NAME  NUMBER   SLENG      STEP      DESTEP     GEKIN   MECHANISMS
+       .0000      .0000      .0000      .0000 aBox    1      .0000     .0000     .0  eV    1.000 GeV NULL
+      1.8000      .0000      .0000     1.8000 aBox    1     1.8000    1.8000  175.7 MeV  824.292 MeV LOSS
+      3.5840      .0000      .0000     3.5840 aBox    1     3.5840    1.7840  134.9 MeV  689.416 MeV LOSS
+      5.3502      .0000      .0000     5.3502 aBox    1     5.3502    1.7663  114.9 MeV  574.496 MeV LOSS
+      7.0962      .0000      .0000     7.0962 aBox    1     7.0962    1.7459  117.6 MeV  456.866 MeV LOSS
+      8.8118      .0000      .0000     8.8118 aBox    1     8.8118    1.7156   77.4 MeV  379.490 MeV LOSS
+     10.4985      .0000      .0000    10.4985 aBox    1    10.4985    1.6867   72.8 MeV  306.691 MeV LOSS
+     12.1466      .0000      .0000    12.1466 aBox    1    12.1466    1.6481   73.4 MeV  233.253 MeV LOSS
+     13.7333      .0000      .0000    13.7333 aBox    1    13.7333    1.5867   39.2 MeV  194.007 MeV LOSS
+     15.2734      .0000      .0000    15.2734 aBox    1    15.2734    1.5402   33.2 MeV  160.803 MeV LOSS
+     16.7594      .0000      .0000    16.7594 aBox    1    16.7594    1.4860   26.9 MeV  133.939 MeV LOSS
+     18.1839      .0000      .0000    18.1839 aBox    1    18.1839    1.4245   29.7 MeV  104.214 MeV LOSS
+     19.5175      .0000      .0000    19.5175 aBox    1    19.5175    1.3336   44.3 MeV   59.905 MeV LOSS
+     20.6148      .0000      .0000    20.6148 aBox    1    20.6148    1.0973    9.7 MeV   50.250 MeV LOSS
+     21.6331      .0000      .0000    21.6331 aBox    1    21.6331    1.0183   10.8 MeV   39.441 MeV LOSS
+     22.5376      .0000      .0000    22.5376 aBox    1    22.5376     .9045    6.4 MeV   33.065 MeV LOSS
+     23.3588      .0000      .0000    23.3588 aBox    1    23.3588     .8212    6.2 MeV   26.866 MeV LOSS
+     24.0859      .0000      .0000    24.0859 aBox    1    24.0859     .7271    4.0 MeV   22.846 MeV LOSS
+     24.7427      .0000      .0000    24.7427 aBox    1    24.7427     .6569    4.3 MeV   18.539 MeV LOSS
+     25.3148      .0000      .0000    25.3148 aBox    1    25.3148     .5721    2.9 MeV   15.642 MeV LOSS
+     25.8237      .0000      .0000    25.8237 aBox    1    25.8237     .5088    3.8 MeV   11.889 MeV LOSS
+     26.2388      .0000      .0000    26.2388 aBox    1    26.2388     .4152    3.2 MeV    8.684 MeV LOSS
+     26.5637      .0000      .0000    26.5637 aBox    1    26.5637     .3248    1.6 MeV    7.121 MeV LOSS
+     26.8402      .0000      .0000    26.8402 aBox    1    26.8402     .2765    1.0 MeV    6.099 MeV LOSS
+     27.0836      .0000      .0000    27.0836 aBox    1    27.0836     .2434    1.0 MeV    5.078 MeV LOSS
+     27.2921      .0000      .0000    27.2921 aBox    1    27.2921     .2085  905.4 keV    4.172 MeV LOSS
+     27.4680      .0000      .0000    27.4680 aBox    1    27.4680     .1759  753.6 keV    3.419 MeV LOSS
+     27.6155      .0000      .0000    27.6155 aBox    1    27.6155     .1475  709.7 keV    2.709 MeV LOSS
+     27.7352      .0000      .0000    27.7352 aBox    1    27.7352     .1197  433.3 keV    2.276 MeV LOSS
+     27.8371      .0000      .0000    27.8371 aBox    1    27.8371     .1019  454.7 keV    1.821 MeV LOSS
+     27.9197      .0000      .0000    27.9197 aBox    1    27.9197     .0826  504.4 keV    1.317 MeV LOSS
+     27.9797      .0000      .0000    27.9797 aBox    1    27.9797     .0601  179.3 keV    1.137 MeV LOSS
+     28.0314      .0000      .0000    28.0314 aBox    1    28.0314     .0517  245.8 keV  891.543 keV LOSS
+     28.0713      .0000      .0000    28.0713 aBox    1    28.0713     .0399  107.6 keV  783.922 keV LOSS
+     28.1059      .0000      .0000    28.1059 aBox    1    28.1059     .0346  243.2 keV  540.745 keV LOSS
+     28.1283      .0000      .0000    28.1283 aBox    1    28.1283     .0224   70.1 keV  470.690 keV LOSS
+     28.1473      .0000      .0000    28.1473 aBox    1    28.1473     .0189   79.7 keV  391.023 keV LOSS
+     28.1627      .0000      .0000    28.1627 aBox    1    28.1627     .0154   62.9 keV  328.079 keV LOSS
+     28.1781      .0000      .0000    28.1781 aBox    1    28.1781     .0154   74.6 keV  253.486 keV LOSS
+     28.1935      .0000      .0000    28.1935 aBox    1    28.1935     .0154  100.7 keV  152.744 keV LOSS
+     28.2073      .0000      .0000    28.2073 aBox    1    28.2073     .0138  152.7 keV     .000  eV LOSS STOP
+
+
+ nb tracks/event neutral:     .00  charged:    1.00
+ nb steps/event  neutral:     .00  charged:   44.00
+
+
+ nb of process calls per event: 
+        NEXT     MULS     LOSS     FIEL     DCAY     PAIR     COMP     PHOT     BREM     DRAY     ANNI     MUNU
+         .00      .00    43.00      .00      .00      .00      .00      .00      .00      .00      .00      .00
+
+
+1         **** NUMBER OF EVENTS PROCESSED =         2
+          **** RANDOM NUMBER GENERATOR AFTER LAST COMPLETE EVENT   1546966467   825372790
+          **** TIME TO PROCESS ONE EVENT IS =     .0250 SECONDS
+
+
+
+Constructing Visualization Manager....
+Initialising Visualization Manager....
+Registering graphics systems....
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0        0  fm        0  fm        0  fm         1 GeV        0  eV        0  fm         0  fm   Container initStep
+    1     5.57  cm        0  fm        0  fm       534 MeV      466 MeV     5.57  cm      5.57  cm   Container eIoni
+    2     10.1  cm        0  fm        0  fm       310 MeV      224 MeV     4.57  cm      10.1  cm   Container eIoni
+    3     13.9  cm        0  fm        0  fm       209 MeV      101 MeV     3.74  cm      13.9  cm   Container eIoni
+    4       17  cm        0  fm        0  fm       117 MeV     91.4 MeV     3.16  cm        17  cm   Container eIoni
+    5     19.4  cm        0  fm        0  fm      84.8 MeV     32.4 MeV     2.38  cm      19.4  cm   Container eIoni
+    6     21.4  cm        0  fm        0  fm      61.6 MeV     23.2 MeV     1.99  cm      21.4  cm   Container eIoni
+    7       23  cm        0  fm        0  fm      47.2 MeV     14.4 MeV     1.64  cm        23  cm   Container eIoni
+    8     24.4  cm        0  fm        0  fm      37.3 MeV     9.93 MeV     1.38  cm      24.4  cm   Container eIoni
+    9     25.6  cm        0  fm        0  fm      29.6 MeV     7.72 MeV     1.17  cm      25.6  cm   Container eIoni
+   10     26.6  cm        0  fm        0  fm      22.8 MeV     6.75 MeV     9.88  mm      26.6  cm   Container eIoni
+   11     27.4  cm        0  fm        0  fm      17.9 MeV     4.89 MeV     8.12  mm      27.4  cm   Container eIoni
+   12     28.1  cm        0  fm        0  fm      14.2 MeV     3.77 MeV     6.72  mm      28.1  cm   Container eIoni
+   13     28.6  cm        0  fm        0  fm      11.4 MeV     2.78 MeV     5.56  mm      28.6  cm   Container eIoni
+   14     29.1  cm        0  fm        0  fm      8.66 MeV     2.73 MeV     4.65  mm      29.1  cm   Container eIoni
+   15     29.5  cm        0  fm        0  fm      6.84 MeV     1.82 MeV      3.7  mm      29.5  cm   Container eIoni
+   16     29.8  cm        0  fm        0  fm      5.65 MeV     1.19 MeV     3.03  mm      29.8  cm   Container eIoni
+   17       30  cm        0  fm        0  fm      4.79 MeV      861 keV     2.58  mm        30  cm   Container eIoni
+   18     30.2  cm        0  fm        0  fm      3.95 MeV      836 keV     2.24  mm      30.2  cm   Container eIoni
+   19     30.4  cm        0  fm        0  fm      3.21 MeV      742 keV     1.91  mm      30.4  cm   Container eIoni
+   20     30.6  cm        0  fm        0  fm      2.51 MeV      693 keV      1.6  mm      30.6  cm   Container eIoni
+   21     30.7  cm        0  fm        0  fm      1.92 MeV      593 keV     1.31  mm      30.7  cm   Container eIoni
+   22     30.8  cm        0  fm        0  fm      1.57 MeV      352 keV     1.05  mm      30.8  cm   Container eIoni
+   23     30.9  cm        0  fm        0  fm      1.21 MeV      354 keV      892 mum      30.9  cm   Container eIoni
+   24       31  cm        0  fm        0  fm       936 keV      279 keV      733 mum        31  cm   Container eIoni
+   25     31.1  cm        0  fm        0  fm      60.2 keV      875 keV      605 mum      31.1  cm   Container eIoni
+   26     31.1  cm        0  fm        0  fm         0  eV     60.2 keV     31.9 mum      31.1  cm   Container eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#        X            Y            Z         KineE           dE         StepLeng    TrackLeng   NextVolume ProcName
+    0        0  fm        0  fm        0  fm         1 GeV        0  eV        0  fm         0  fm   Container initStep
+    1     5.57  cm        0  fm        0  fm       534 MeV      466 MeV     5.57  cm      5.57  cm   Container eIoni
+    2     10.1  cm        0  fm        0  fm       310 MeV      224 MeV     4.57  cm      10.1  cm   Container eIoni
+    3     13.9  cm        0  fm        0  fm       198 MeV      112 MeV     3.74  cm      13.9  cm   Container eIoni
+    4       17  cm        0  fm        0  fm       138 MeV     60.1 MeV     3.08  cm        17  cm   Container eIoni
+    5     19.6  cm        0  fm        0  fm       101 MeV     36.7 MeV     2.59  cm      19.6  cm   Container eIoni
+    6     21.7  cm        0  fm        0  fm      27.9 MeV     72.9 MeV      2.2  cm      21.7  cm   Container eIoni
+    7     22.7  cm        0  fm        0  fm      22.2 MeV     5.75 MeV     9.46  mm      22.7  cm   Container eIoni
+    8     23.5  cm        0  fm        0  fm      17.9 MeV     4.28 MeV     7.94  mm      23.5  cm   Container eIoni
+    9     24.2  cm        0  fm        0  fm        14 MeV     3.84 MeV     6.71  mm      24.2  cm   Container eIoni
+   10     24.7  cm        0  fm        0  fm      11.2 MeV     2.84 MeV     5.52  mm      24.7  cm   Container eIoni
+   11     25.2  cm        0  fm        0  fm      9.04 MeV     2.16 MeV     4.59  mm      25.2  cm   Container eIoni
+   12     25.6  cm        0  fm        0  fm      7.55 MeV     1.49 MeV     3.84  mm      25.6  cm   Container eIoni
+   13     25.9  cm        0  fm        0  fm      6.34 MeV     1.21 MeV      3.3  mm      25.9  cm   Container eIoni
+   14     26.2  cm        0  fm        0  fm      5.34 MeV      998 keV     2.85  mm      26.2  cm   Container eIoni
+   15     26.4  cm        0  fm        0  fm      4.37 MeV      977 keV     2.46  mm      26.4  cm   Container eIoni
+   16     26.6  cm        0  fm        0  fm      3.63 MeV      735 keV     2.08  mm      26.6  cm   Container eIoni
+   17     26.8  cm        0  fm        0  fm      2.88 MeV      747 keV     1.78  mm      26.8  cm   Container eIoni
+   18     26.9  cm        0  fm        0  fm       297 keV     2.59 MeV     1.46  mm      26.9  cm   Container eIoni
+   19       27  cm        0  fm        0  fm      96.1 keV      201 keV      289 mum        27  cm   Container eIoni
+   20       27  cm        0  fm        0  fm         0  eV     96.1 keV     66.9 mum        27  cm   Container eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.033s Real=0.05s Sys=0s
+
+ nb tracks/event   neutral:    0.00   charged:    1.00
+ nb  steps/event   neutral:    0.00   charged:   20.00
+
+ nb of process calls per event: 
+       eIoni
+       20.00

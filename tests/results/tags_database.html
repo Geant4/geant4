@@ -1,0 +1,493 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.05 [en] (X11; I; Linux 2.0.34 i586) [Netscape]">
+</HEAD>
+<BODY>
+
+<H1>
+Taking a Tag or Set of Tags for Testing</H1>
+The name of <I>this</I> file in your checked out code is <B><TT><FONT SIZE=+1>geant4beta/tests/results/tags_database.html</FONT></TT></B>.
+<BLOCKQUOTE>
+<LI>
+Make sure <I>this</I> html file is the <I>head </I>version (<B><TT><FONT SIZE=+1>cvs
+update -d -P -A geant4beta/tests/results)</FONT></TT></B>.</LI>
+
+<LI>
+Inspect the <A HREF="#TagsDatabaseTable"><B>Tags Database Table</B> </A>below.&nbsp;
+You will need to edit it, i.e., you will need to edit <I>this </I>html
+page, either with a plain text editor or with Netscape Composer, or similar
+tool, and then commit it back to the repository (the AFS web page is then
+automatically updated).&nbsp; If CVS informs you that there is a conflict,
+it means that someone else has taken some action.&nbsp; You will need to
+resolve the conflict somehow - perhaps by moving your copy of this file,
+updating again, and starting again.</LI>
+
+<LI>
+There are 4 possible statuses for a tag or set of tags:</LI>
+
+<BLOCKQUOTE>
+<LI>
+<B>accepted </B>- these have been dealt with and need no further action.</LI>
+
+<LI>
+<B>rejected </B>- again, no need to take any further action.</LI>
+
+<LI>
+<B>testing </B>in progress.</LI>
+
+<LI>
+<B>awaiting </B>testing (signified by a blank entry in the <B>Status</B>
+column)</LI>
+</BLOCKQUOTE>
+
+<LI>
+If <B>testing </B>is in progress, look to see if any platforms have still
+to be checked, and take one or more if possible.&nbsp; Enter your name
+(make a new row if necessary), etc., and indicate by letter which platforms
+you have taken (some platform/compiler combinations are available in more
+than location - no need to duplicate).</LI>
+
+<LI>
+If <B>testing </B>is in progress, and all platforms are being covered,
+simply wait until the process is complete - please inform the tagger of
+a possible delay and check this page tomorrow.</LI>
+
+<LI>
+For an <B>awaiting </B>tag or set of tags, take the lowest order number
+(<B>#</B>) (take tags of the same order number together) and mark the status
+as <B>testing </B>and indicate the platform or platforms on which you propose
+to run the tests.</LI>
+
+<LI>
+Commit this file back to the repository and proceed with testing (go back
+to <A HREF="procedures.html">procedures </A>page).</LI>
+</BLOCKQUOTE>
+&nbsp;
+<TABLE BORDER WIDTH="100%" NOSAVE >
+<CAPTION><A NAME="CurrentTestPLatforms"></A><B><FONT SIZE=+2>Current Test
+Platforms</FONT></B></CAPTION>
+
+<TR>
+<TD></TD>
+
+<TD><B>IP</B></TD>
+
+<TD><B>uname -a</B></TD>
+
+<TD><B>C++</B></TD>
+
+<TD><B><FONT SIZE=-2>CLHEP</FONT></B></TD>
+
+<TD><B><FONT SIZE=-2>RogueWave</FONT></B></TD>
+
+<TD><B>System test directory</B></TD>
+
+<TD><B><TT><FONT SIZE=+1>G4SYSTEM</FONT></TT></B></TD>
+</TR>
+
+<TR>
+<TD><B>A</B></TD>
+
+<TD>rsplus.cern.ch</TD>
+
+<TD>AIX rsplus10 1 4 001520FD4C00</TD>
+
+<TD>xlC 3.1.3.2, rte 3.1.3.1</TD>
+
+<TD>1.3</TD>
+
+<TD>7.0.1</TD>
+
+<TD><B><TT><FONT SIZE=+1>/afs/cern.ch/rd44/stt/</FONT></TT></B></TD>
+
+<TD>AIX-AFS</TD>
+</TR>
+
+<TR>
+<TD><B>A6</B></TD>
+
+<TD>shift51.cern.ch</TD>
+
+<TD>AIX shift51 1 4 000986ECA300</TD>
+
+<TD>xlC 3.1.4.8, rte 3.1.4.0</TD>
+
+<TD>1.3</TD>
+
+<TD>7.0.1</TD>
+
+<TD><B><TT><FONT SIZE=+1>/afs/cern.ch/rd44/stt/</FONT></TT></B></TD>
+
+<TD>AIX-AFS</TD>
+</TR>
+
+<TR>
+<TD><B>D</B></TD>
+
+<TD>dxplus.cern.ch</TD>
+
+<TD>OSF1 dxplus01 V4.0 564 alpha</TD>
+
+<TD>DEC CXX T5.6-009 on Digital UNIX (Alpha)</TD>
+
+<TD>1.3</TD>
+
+<TD>7.0.1</TD>
+
+<TD><B><TT><FONT SIZE=+1>/afs/cern.ch/rd44/stt/</FONT></TT></B></TD>
+
+<TD>DEC-AFS abandon?</TD>
+</TR>
+
+<TR>
+<TD><B>D6</B></TD>
+
+<TD>axcnsi.cern.ch</TD>
+
+<TD>OSF1 axcnsi.cern.ch V4.0 564 alpha</TD>
+
+<TD>DIGITAL C++ V6.1-027 on DIGITAL UNIX V4.0 (Rev. 564)</TD>
+
+<TD>1.3</TD>
+
+<TD>7.0.1</TD>
+
+<TD><B><TT><FONT SIZE=+1>/afs/cern.ch/rd44/stt/</FONT></TT></B></TD>
+
+<TD>DEC6-AFS</TD>
+</TR>
+
+<TR>
+<TD><B>H</B></TD>
+
+<TD>hpplus.cern.ch</TD>
+
+<TD>HP-UX hpplus06 B.10.20 A 9000/735 2010153393</TD>
+
+<TD>HP C++ HPCPLUSPLUS&nbsp; A.10.30</TD>
+
+<TD>1.3</TD>
+
+<TD>7.0.1</TD>
+
+<TD><B><TT><FONT SIZE=+1>/afs/cern.ch/rd44/stt/</FONT></TT></B></TD>
+
+<TD></TD>
+</TR>
+
+<TR>
+<TD><B>Ha</B></TD>
+
+<TD>hpplus.cern.ch</TD>
+
+<TD>HP-UX hpplus06 B.10.20 A 9000/735 2010153393</TD>
+
+<TD>HP aC++ B3910B A.01.09&nbsp;
+<BR>Support Library B3910B A.01.01&nbsp;</TD>
+
+<TD>1.3</TD>
+
+<TD>7.0.1</TD>
+
+<TD><B><TT><FONT SIZE=+1>/afs/cern.ch/rd44/stt/</FONT></TT></B></TD>
+
+<TD>HP-aCC</TD>
+</TR>
+
+<TR>
+<TD><B>S</B></TD>
+
+<TD>sungeant.cern.ch</TD>
+
+<TD></TD>
+
+<TD>CC: WorkShop Compilers 4.2 18 Sep 1997 C++ 4.2 patch 104631-04</TD>
+
+<TD></TD>
+
+<TD></TD>
+
+<TD></TD>
+
+<TD></TD>
+</TR>
+
+<TR>
+<TD><B>Sasd</B></TD>
+
+<TD>sunasd1.cern.ch</TD>
+
+<TD>SunOS sunasd1 5.5.1 Generic_103640-12 sun4u sparc SUNW,Ultra-30</TD>
+
+<TD>CC: SC4.0 18 Oct 1995 C++ 4.1</TD>
+
+<TD>1.3</TD>
+
+<TD>7.0.1</TD>
+
+<TD><B><TT><FONT SIZE=+1>/afs/cern.ch/rd44/stt/</FONT></TT></B></TD>
+
+<TD>SUN-AFS</TD>
+</TR>
+
+<TR>
+<TD><B>Scms</B></TD>
+
+<TD>suncmsb.cern.ch</TD>
+
+<TD></TD>
+
+<TD>CC: WorkShop Compilers 4.2 18 Sep 1997 C++ 4.2 patch 104631-04</TD>
+
+<TD></TD>
+
+<TD></TD>
+
+<TD><B><TT><FONT SIZE=+1>/afs/cern.ch/rd44/stt/</FONT></TT></B></TD>
+
+<TD>SUN-AFS</TD>
+</TR>
+
+<TR>
+<TD><B>SG</B></TD>
+
+<TD>sgmedia.cern.ch</TD>
+
+<TD>IRIX sgmedia 6.2 03131015 IP22</TD>
+
+<TD></TD>
+
+<TD>1.3</TD>
+
+<TD>7.0.1</TD>
+
+<TD><B><TT><FONT SIZE=+1>/afs/cern.ch/rd44/stt/</FONT></TT></B></TD>
+
+<TD>SGI-AFS</TD>
+</TR>
+
+<TR>
+<TD><B>Do</B></TD>
+
+<TD>asc.lal.in2p3.fr</TD>
+
+<TD>OSF1 asc V4.0 878 alpha</TD>
+
+<TD>DIGITAL C++ V6.0-010 on DIGITAL UNIX V4.0 (Rev. 878)</TD>
+
+<TD>1.3</TD>
+
+<TD></TD>
+
+<TD><B><TT><FONT SIZE=+1>/geant4/stt/</FONT></TT></B></TD>
+
+<TD></TD>
+</TR>
+
+<TR>
+<TD><B>Hao</B></TD>
+
+<TD>aleph.lal.in2p3.fr</TD>
+
+<TD>HP-UX aleph B.10.20 A 9000/780 2011153535 two-user license</TD>
+
+<TD>aCC A.01.06</TD>
+
+<TD>1.3</TD>
+
+<TD></TD>
+
+<TD><B><TT><FONT SIZE=+1>/geant4/stt/</FONT></TT></B></TD>
+
+<TD></TD>
+</TR>
+
+<TR>
+<TD><B>L</B></TD>
+
+<TD>pcitvisit04.cern.ch</TD>
+
+<TD>Linux pcitvisit04 2.0.35 #1 Wed Sep 2 14:19:34 CEST 1998 i686 unknown</TD>
+
+<TD>gcc version egcs-2.91.57 19980901 (egcs-1.1 release)</TD>
+
+<TD></TD>
+
+<TD></TD>
+
+<TD></TD>
+
+<TD></TD>
+</TR>
+
+<TR>
+<TD><B>L3</B></TD>
+
+<TD>pcl3eth4.cern.ch</TD>
+
+<TD>Linux pcl3eth4 2.0.35 #5 Wed Aug 26 12:45:05 CEST 1998 i686 unknown</TD>
+
+<TD>gcc version egcs-2.91.57 19980901 (egcs-1.1 release)</TD>
+
+<TD>1.3</TD>
+
+<TD>7.0.1</TD>
+
+<TD><B><TT><FONT SIZE=+1>/afs/cern.ch/rd44/stt/</FONT></TT></B></TD>
+
+<TD>G++-Linux</TD>
+</TR>
+
+<TR>
+<TD><B>No</B></TD>
+
+<TD>PC-Barrand.lal.in2p3.fr</TD>
+
+<TD>NT 4.0</TD>
+
+<TD>VC 5.0</TD>
+
+<TD>1.3</TD>
+
+<TD></TD>
+
+<TD></TD>
+
+<TD></TD>
+</TR>
+</TABLE>
+
+<H1>
+<A NAME="TagsDatabaseTable"></A>Tags Database</H1>
+Note that a later global tag <I>includes</I> all earlier global tags.
+<BR>Tags up to and including geant4-00 are <A HREF="tags_database_geant4-00.html">archived.</A>
+<BR>&nbsp;
+<BR>&nbsp;
+<TABLE BORDER WIDTH="100%" NOSAVE >
+<CAPTION><B><FONT SIZE=+2>Essential Bug Fix Tags For geant4-00</FONT></B></CAPTION>
+
+<TR>
+<TD><B>Tag</B></TD>
+
+<TD><B>Global Tag</B></TD>
+
+<TD><B>Depends on/ Coworks with</B></TD>
+
+<TD><B>Features</B></TD>
+
+<TD><B>Notified by</B></TD>
+
+<TD><B>Date</B></TD>
+
+<TD><B><FONT SIZE=+1>#</FONT></B></TD>
+
+<TD><B>Status</B></TD>
+</TR>
+
+<TR>
+<TD>greps-01-00-01</TD>
+
+<TD></TD>
+
+<TD></TD>
+
+<TD>Corrects G4VisAttributes constructors.</TD>
+
+<TD>John Allison</TD>
+
+<TD>990106</TD>
+
+<TD></TD>
+
+<TD></TD>
+</TR>
+</TABLE>
+&nbsp;
+<TABLE BORDER WIDTH="100%" NOSAVE >
+<CAPTION><B><FONT SIZE=+2>Other Tags After geant4-00</FONT></B></CAPTION>
+
+<TR>
+<TD><B>Tag</B></TD>
+
+<TD><B>Global Tag</B></TD>
+
+<TD><B>Depends on/ Coworks with</B></TD>
+
+<TD><B>Features</B></TD>
+
+<TD><B>Notified by</B></TD>
+
+<TD><B>Date</B></TD>
+
+<TD><B><FONT SIZE=+1>#</FONT></B></TD>
+
+<TD><B>Status</B></TD>
+</TR>
+
+<TR>
+<TD>greps-01-00-02</TD>
+
+<TD></TD>
+
+<TD></TD>
+
+<TD>Cosmetic changes and consolidation.</TD>
+
+<TD>John Allison</TD>
+
+<TD>990106</TD>
+
+<TD></TD>
+
+<TD></TD>
+</TR>
+
+<TR>
+<TD>vis-01-00-01</TD>
+
+<TD></TD>
+
+<TD></TD>
+
+<TD>G4VisManager::GetInstance private.
+<BR>More New commands.</TD>
+
+<TD>John Allison</TD>
+
+<TD>990106</TD>
+
+<TD></TD>
+
+<TD></TD>
+</TR>
+</TABLE>
+&nbsp;
+<TABLE BORDER WIDTH="100%" NOSAVE >
+<CAPTION><B><FONT SIZE=+2>Blank for future tags</FONT></B></CAPTION>
+
+<TR>
+<TD><B>Tag</B></TD>
+
+<TD><B>Global Tag</B></TD>
+
+<TD><B>Depends on/ Coworks with</B></TD>
+
+<TD><B>Features</B></TD>
+
+<TD><B>Notified by</B></TD>
+
+<TD><B>Date</B></TD>
+
+<TD><B><FONT SIZE=+1>#</FONT></B></TD>
+
+<TD><B>Status</B></TD>
+</TR>
+</TABLE>
+&nbsp;
+<BR>
+<HR WIDTH="100%">
+<BR><I><A HREF="mailto:John.Allison@man.ac.uk">John Allison&nbsp;</A> 6th
+January 1999</I>
+</BODY>
+</HTML>

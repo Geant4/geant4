@@ -1,0 +1,34 @@
+$Id: History,v 1.1 1999-01-08 16:32:37 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm1 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+03-12-98  subdirectory geant3 which contains the geant3 equivalent
+          example.
+          
+24.11.98  due to new computation of SetCut for electron, the cut in range
+          for e-/+ has been modified in init.mac and run10.mac (beta03-00)
+     
+27.10.98  interactive command for setting StepFunction: deemax + stmin.
+          modifs in setxxCut functions (Hisaya).
+          Count occurence of processes.
+          Now TestEm1 is equivalent to g3-testem1
+          Both can be run in batch with reference files: 
+          run1.mac (g4), run1.dat (g3).
+               
+19.10.98  Moved in subdirectory electromagnetic/test/TestEm1.
+          Interactive commands in PhysicsList for setting cuts.
+              
+14.09.98  Created, Michel Maire
+     

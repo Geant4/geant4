@@ -1,0 +1,20 @@
+- Removed G4Allocator.cc containing all template declarations for
+  GNU-g++ compiler not supported anymore.
+- Removed g4templates.hh contining all template declarations for the
+  old DEC cxx 5.X compiler not supported anymore.
+- Moved G4ParticleTypes.hh to particles/management/include to remove
+  dependency over particles category.
+- Updated management/GNUmakefile: not anymore dependencies over
+  external categories. Dependency over intercoms to be fixed still.
+
+ I tested this tag on DEC-cxx based on:
+    beta03-ref-01  +  intercoms-00-04-02
+
+ I committed on the HEAD the following _needed_ fixes:
+ - processes/hadronic/stopping/src/G4StopDummyDeexcitation.cc
+   (removed useless (!?) inclusion of g4templates.hh)
+ - particles/management/include/G4ParticleTypes.hh
+   (moved from global/management/include)
+
+ This tag requires a full compilation _from scratch_ !
+ Please, consider this tag for your tests.

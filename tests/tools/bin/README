@@ -1,0 +1,77 @@
+
+ setup.csh :
+ ---------
+  A file that you source to set up the environment.
+ It defines also some aliases like :
+    g4make
+    g4build
+    g4tail
+    g4filter
+ to spawn a reconstruction and analyse log files.
+
+  setup.csh calls specific.csh. This files
+ is dedicated for stt members customisation.
+ it uses `uname -n` to execute stt specific things.
+
+ build.sh :
+ -------- 
+  This script spawn the reconstruction of libraries
+ from $G4INSTALL/tests/tools/bin directory. The output of the job
+ is put in $G4WORKDIR/stt/$G4SYSTEM/gmake.log.
+  Aliases g4tail, g4log, defined by the setup.csh(.sh) file
+ permits to follow the job, and to filter output.
+
+  Usage :
+     UNIX> cd <g4install>/tests/tools/bin
+     UNIX> chmod u+x build.sh
+     UNIX> ./build.sh all
+     UNIX> ./build.sh lib all
+     UNIX> ./build.sh lib <category>
+     UNIX> ./build.sh test all
+     UNIX> ./build.sh test <test>
+     UNIX> ./build.sh run
+  The last command spawn tests.
+
+ filter.sh :
+ ---------
+  This script takes a gmake.log file
+ produced by a reconstruction. It filters
+ this file by removing lines found in 
+ file in a specific .filter file.
+
+ Usage :
+     UNIX> cd <g4install>/tests/tools/bin
+     UNIX> chmod u+x filter.sh
+     UNIX> ./filter.sh OSF1
+ or :
+       csh> cd <g4install>/tests/tools/bin
+       csh> source setup.csh
+       csh> g4filter
+
+  Then you have to provide a :
+       tests/tools/bin/<g4system>.filter
+ corresponding to your g4system(s).
+ In it you put part of the lines that 
+ you don't want to appear in the filtered 
+ output. See OSF1.filter and HP-aCC.filter
+ output. 
+
+
+ summary :
+ -------
+  Then mainly with these files, to reconstruct
+ for example the libs and survey without aliases :
+   UNIX> cd <g4install>/tests/tools/bin
+   UNIX> ./build.sh lib all
+   UNIX> tail -f $G4WORKDIR/stt/$G4SYSTEM/gmake.log
+   UNIX> ./filter.sh $G4SYSTEM
+
+  In csh with setup file, to spwan reconstruction 
+ of lib and tests programs do :
+    csh> cd <g4install>/tests/tools/bin
+    csh> source setup.csh
+    csh> g4build all
+ and to survey do :
+    csh> g4tail
+    csh> g4filter
+

@@ -1,0 +1,62 @@
+ ////////////////////////////////////////////////////////
+
+  L. Broglia
+  October - November 1998
+
+ ////////////////////////////////////////////////////////
+
+ CurveTest
+
+ * Test the basic functionnality of the different curves :
+     - line
+     - circular curve
+     - ellipse
+     - parabola
+     - hyperbola
+
+ * Test the functionality of Axis2Placement3D and Project
+
+ This test is runing on Linux, HP, DEC and Sun
+
+ ////////////////////////////////////////////////////////
+
+ G4FPlaneTest
+
+ * Compare the 2 different creator.
+
+ * Show that the creation of the plane not depend on the 
+   points in the plane
+
+ * Test the function EvaluateIntersection
+
+ This test is runing on Linux, HP, DEC and Sun
+
+ ////////////////////////////////////////////////////////
+
+ G4BREPSolidBoxTest
+ G4BREPSolidConeTest
+ G4BREPSolidCylinderTest
+ G4BREPSolidPConeTest
+ G4BREPSolidPolyhedraTest
+ G4BREPSolidSphereTest
+ G4BREPSolidTorusTest
+
+ * Test the basical functions of each BREP solid
+    - creation
+    - distance to in
+    - distance to out
+
+ ////////////////////////////////////////////////////////
+
+ STEPTest
+
+ * Read a STEP file and create the STEP entities 
+
+ * Check that BREP solids & surfaces build 
+   the solid specified by the reader output
+ 
+ *  BREP checks 
+      -> Check methods :
+        - Inside
+        - DistanceToIn
+        - DistanceToOut

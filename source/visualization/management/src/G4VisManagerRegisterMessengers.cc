@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.1 1999-01-07 16:15:32 gunter Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.2 1999-01-08 16:33:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,7 +99,8 @@ into something that the graphics system can understand.
 
 The commands would look something like:
 
-/vis/sceneHandler/create <graphics-system> [<scene-handler-name>]
+/vis/sceneHandler/create
+       <graphics-system> [<scene-handler-name>] [<scene-name>]
 /vis/sceneHandler/attach [<scene-name>]
 /vis/sceneHandler/list
 /vis/sceneHandler/select [<scene-handler-name>]

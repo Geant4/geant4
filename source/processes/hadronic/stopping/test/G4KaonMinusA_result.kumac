@@ -1,0 +1,36 @@
+opt nfil
+set stat 10
+opt nstat
+opt nfit
+opt utit
+
+set pass 3
+set vsiz 0.3
+set tsiz 0.35
+set ymgl 1.8
+set yhti 1.0
+set xlab 1.4
+set ylab 1.0
+set asiz 0.35
+set xmgl 2.0
+set ywin 2.0
+set gsiz 0.45
+set ygti 0.2
+set ndvy 2
+set ndvx 10
+
+
+zone 1 2
+
+tit '[p]^-! momentum' -u
+*tit ' ' -u
+tit 'K^-! absorption on ^12!C at rest'
+vec/read piminus piminus.vec
+vec/plot piminus
+atit '"m#MeV/c!"n#' 'number of events'
+
+
+vec/read energydeposit energydeposit.vec
+tit 'Nuclear excitation energy' -u
+vec/plot energydeposit
+atit '"m#MeV/c^2!"n#' 'number of events'

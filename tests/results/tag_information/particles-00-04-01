@@ -1,0 +1,9 @@
+ It includes new features ( not includes in beta03-00) 
+   Migration of G4NucleiPropoerties
+   Change of treatments of LorentzVector in constructor of G4DynamicParticle
+   Change of G4VDecayChannel for treatment of dynamic mass for parent
+   and some bug fixes
+  (see detail in History)
+
+ Some modification in processes/hadronic category is necessary to cooperate with
+this tag.

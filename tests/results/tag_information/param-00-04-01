@@ -1,0 +1,49 @@
+Dear Hisaya,
+
+  I have just make a new tag for param: param-00-04-01 which has the 
+modification to work with track-00-04-01. I have not tested already, 
+however you should be able to compile now.
+
+Cheers,
+Marc
+
+
+On Wed, 18 Nov 1998, Hisaya Kurashige wrote:
+
+> Dear Marc,
+> 
+>   I'll make a short guidance to use G4Mars5GeVMechanism, the Event Biasing
+> Mechanism based on Mars.
+> 
+>   G4Mars5GeVMechanism has two important public methods other than
+> constructor and destructor. 
+>   virtual G4VParticleChange* ApplyMath( G4VParticleChange*, const G4Step&
+> );
+>   virtual G4bool IsApplicable(G4ParticleDefinition*) const;
+> 
+> IsApplicable returns "true" if the particle type is valid for MARS model.
+> In this model, valid particles are
+>   proton, neutron, pi+-, K+-, gamma, and anti_proton.
+> 
+>  ApplyMath methods returns a particle change which contains secondaries
+> with weight. Input arguments are the ParticleChange to be updated and step
+> information. In this MARS model, Particle Change will not be modified if a
+> kinetic energy of the incident particle is more than 5GeV.
+> 
+>  If ApplyMath method works, all secondaries in (input) Particle Change are
+> deleted. And then 3 (usually) scondaries will be added into the Particle
+> Change with their weights. The first one is a nucleon (i.e. proton or
+> neutron), the 
+> second one is a pion or kaon (i.e pi+- or K+-) and the last one is a pi0.
+> The weight of primary track is already included in the resultant values. 
+> Primary final state will be set to "StopAndKilled".
+> 
+>   So, if you want to use G4Mars5geVMechanism,
+> 1) check whether incident particle type is "applicable" or not
+> 2) check incident particle energy below tha 5 GeV
+> if OK
+> 3) prepare G4VParticleChangeObject (do not care about contents)
+> 4) execute G4ParticleChange::Initialize(const G4Track&);
+> 5) prepare Step information
+> 6) Do ApplyMath
+> Then, you can get soecondaries inside the ParticleChange.

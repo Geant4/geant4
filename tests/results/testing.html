@@ -1,0 +1,200 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.05 [en] (X11; I; Linux 2.0.34 i586) [Netscape]">
+   <TITLE>GEANT4 - Testing</TITLE>
+</HEAD>
+<BODY BACKGROUND="backg.jpg">
+
+<PRE>&nbsp;</PRE>
+
+<CENTER><IMG SRC="g4_small.gif" ALT="GEANT4" BORDER=0 ></CENTER>
+
+<CENTER>
+<H1>
+Testing</H1></CENTER>
+
+<HR>
+<H1>
+Introduction</H1>
+Some initial work is described in the following documents:
+<UL>
+<LI>
+<A HREF="http://wwwinfo.cern.ch/asd/geant/geant4_public/code_management/testing_framework.html">Testing
+framework</A>; see also the documentation for the script <TT><A HREF="http://wwwinfo.cern.ch/asd/geant/geant4_public/code_management/g4test.html">g4test</A></TT>.</LI>
+
+<LI>
+<A HREF="http://wwwcn.cern.ch/~paoli/GEANT4/G4_TestingSurveyReport.html" target="ext">GEANT4
+Software Testing, survey of current status</A></LI>
+</UL>
+See also our <A HREF="http://wwwinfo.cern.ch/asd/geant/geant4_public/code_management/cvs_policy.html">Tag
+&amp; Release Policy document</A>.
+<H1>
+System Testing</H1>
+A System Test Team was established following agreement at the Niigata Workshop
+in July 1998.&nbsp; Its members are:
+<BLOCKQUOTE>John Allison, (Manchester, BaBar) Coordinator (<A HREF="mailto:John.Allison@man.ac.uk">John.Allison@man.ac.uk</A>)
+<BR>Guy Barrand (IN2P3, ATLAS/BaBar) (<A HREF="mailto:barrand@lal.in2p3.fr">barrand@lal.in2p3.fr</A>)
+<BR>Frank Behner (Zurich, CMS) (<A HREF="mailto:Frank.Behner@cern.ch">Frank.Behner@cern.ch</A>)
+<BR>Ryosuke Hamatsu (Tokyo Metr.) (<A HREF="mailto:hamatsu@comp.metro-u.ac.jp">hamatsu@comp.metro-u.ac.jp</A>)
+<BR>Fred Jones (TRIUMF) (<A HREF="mailto:fwj@Triumf.CA">fwj@Triumf.CA</A>)
+<BR>Stefano Magni (INFN, Borex) (<A HREF="mailto:magni@mi.infn.it">magni@mi.infn.it</A>)
+<BR>Serguei Sadilov (IHEP,Protvino) (<A HREF="mailto:Serguei.Sadilov@cern.ch">Serguei.Sadilov@cern.ch</A>)</BLOCKQUOTE>
+and they can be mailed collectively on <A HREF="mailto:geant4-stt@listbox.cern.ch">geant4-stt@listbox.cern.ch</A>.
+
+<P>At our inaugural meeting we agreed (more or less!) the following, some
+of which places new requirements on the category coordinators.
+
+<P>Bugs will be "tracked", i.e., recorded and logged.
+
+<P>One thing we agreed was that it is <I>highly desirable </I>to avoid
+new features in the 2 weeks up to a public release.&nbsp; Ideally, those
+two weeks are reserved for bug fixing.&nbsp; There is a trade-off between
+having new features and having reliable code; the feeling was that we must
+move to higher reliability.
+<H2>
+Our Aim</H2>
+To improve the quality and robustness of GEANT4 code at the "System Level",
+that is to say, to ensure it compiles and runs without crashing on all
+supported platforms in tests wich cover a wide range of physics, geometries,
+particles, processes over many events.&nbsp; Although physics validation
+is not our aim, we will obviously be aware of the physics quality and seek
+cooperation with the category teams.
+<H2>
+Our Assumptions and Requirements.</H2>
+During normal development, tags will be tested and simply accepted or rejected
+- we call this <B>incremental acceptance</B>.&nbsp; Two weeks before a
+public release we go into the <B>release phase</B> - see below.
+<UL>
+<LI>
+We assume that code tagged and announced for System Testing has already
+been subject to Unit Testing by the category working group.</LI>
+
+<LI>
+We will encourage a steady improvement of Unit tests, e.g., to cover more
+platforms.</LI>
+
+<LI>
+When a category team want to include new code in the next release they
+should make a tag and inform the System Test Team.</LI>
+
+<LI>
+We encourage an early announcement of tags, so that tests can be spread
+over time, and <I>discourage</I> last minute tags.</LI>
+
+<LI>
+Each tag will be subject to tests and accepted or rejected on a short timescale
+- 2 working days.</LI>
+
+<UL>
+<LI>
+If accepted, it will become part of the "reference" version, and category
+coordinators will be asked to make a formal announcement of the tag on
+the Tags Blackboard.</LI>
+
+<LI>
+If rejected, a new category tag will be requested which fixes the problem(s).</LI>
+</UL>
+This is the <B>incremental acceptance phase.</B>
+<LI>
+Accepted tags will be tagged with a global tag from time to time for the
+convenience of developers.</LI>
+
+<LI>
+Two weeks before a release, <I>no new category tags will be accepted.</I>&nbsp;
+The existing accepted tags will form the basis of the release.&nbsp; A
+CVS branch will be created, if required, on which e<I>ssential </I>bug
+fixes can be made.&nbsp; This is the <B>release phase.</B></LI>
+
+<LI>
+We will feed problems back to category coordinators and expect an 24 hour
+acknowledgement and reasonable urgency to fix.</LI>
+
+<LI>
+We have the right to exclude code from a release if it causes problems.</LI>
+</UL>
+
+<H1>
+Communicating&nbsp; "Incidents" to Category Coordinators</H1>
+For each Test Incident, i.e., for each problem or bug, the STT member should
+make a Test Incident Report as follows.&nbsp; He/she should:
+<UL>
+<LI>
+describe the problem in a text file or html file.&nbsp; There is a template
+in geant4beta/tests/results/TIR_template.txt.</LI>
+
+<LI>
+mail the category coordinator of the category in which the problem first
+appears and copy to geant4-stt@listbox.cern.ch (see geant4beta/tests/responsibles
+for a list of coordinators and associates - include the associates if it
+seems reasonable).</LI>
+
+<LI>
+checkout/update geant4beta/tests/results/TIR_summary.html, add an entry,
+with a hyperlink to the text file or the html file, then commit.&nbsp;
+The text file or html file describing the report can also be comitted to
+an appropriate results/ sub-directory or placed under your own web server.</LI>
+
+<LI>
+<B>during the incremental acceptance phase, </B>ask the category coordinator
+to fix the problem and submit a new category tag.&nbsp; If the new tag
+fixes the problem, checkout/update geant4beta/tests/results/TIR_summary.html
+again and mark the TIR as "fixed", and ask the category coordinator to
+make a formal announcement of the tag on the Tags Blackboard.</LI>
+
+<LI>
+<B>during the release phase, if new problems arise, </B>ask the category
+coordinator to fix the problem on the branch and, if appropriate, also
+in the main trunk.&nbsp; On hearing from the category coordinator or his/her
+associate to the effect that fixes have been made, checkout/update geant4beta/tests/results/TIR_summary.html
+again and mark the TIR as "fixed".&nbsp; (Problems not fixed will be listed
+in the Release Notes.)</LI>
+</UL>
+
+<H1>
+Test Suite</H1>
+<A HREF="http://wwwinfo.cern.ch/asd/geant/geant4/homedirs/test/geant4beta/tests/results/test_suite.html">A set of tests in geant4beta/tests/</A>
+excercises the code.&nbsp; These will be continually enhanced.&nbsp; <A HREF="http://wwwinfo.cern.ch/asd/geant/geant4_public/G4UsersDocuments/UsersGuides/ForApplicationDeveloper/html/PracticalApplications/exampleCodes.html">The
+examples under geant4beta/examples/</A> are also tested.
+<H1>
+Test Incident Reports</H1>
+These are currently <A HREF="http://wwwinfo.cern.ch/asd/geant/geant4/homedirs/test/geant4beta/tests/results/TIR_summary.html">logged
+</A>in a simple fashion for members of the System Test Team.
+<H1>
+Test Procedures</H1>
+There are detailed <A HREF="http://wwwinfo.cern.ch/asd/geant/geant4/homedirs/test/geant4beta/tests/results/procedures.html">test
+procedures </A>for members of the System Test Team.
+<H1>
+Tags Database</H1>
+Category tags are notified and recorded in a <A HREF="http://wwwinfo.cern.ch/asd/geant/geant4/homedirs/test/geant4beta/tests/results/tags_database.html#TagsDatabaseTable">database</A>,
+tested then accepted or rejected according to the above <A HREF="http://wwwinfo.cern.ch/asd/geant/geant4/homedirs/test/geant4beta/tests/results/procedures.html">procedures</A>.
+<H1>
+Release Policy</H1>
+Hopefully, the above policies will mean that we go into the release phase
+with no outstanding problems.&nbsp; However, some new problems might emerge
+during the porting of the code on all supported platforms/compilers.&nbsp;
+There might also be some agreed "deferred" problems.&nbsp; If these cannot
+be fixed, and are not killers, they should be listed in the Release Notes.
+
+<P>We have agreed that the normal policy for making a System Test or Public
+Release is to make a CVS branch (see also <A HREF="http://wwwinfo.cern.ch/asd/geant/geant4_public/code_management/cvs_policy.html">Tag
+and Release Policy)</A>.&nbsp; Testers - including Category Testers - will
+have to checkout the branch into a separate working directory so as to
+avoid confusion with the main trunk (development) version.&nbsp; The branch
+will then be used for testing and any bugs found will have to be fixed
+there and, if appropriate, also in the development version.&nbsp; This
+will be done primarily by the Category Testers in response to TIRs.
+
+<P>A CVS branch behaves like an independent version of the code.&nbsp;
+This means that developers are free to continue developing. The down side
+is that System and Category Testers have to check out an independent version
+of the code in a separate working so that essential bugs (ESSENTIAL bugs
+only) can be fixed on the branch (and also be fixed in the HEAD if appropriate).&nbsp;
+But we have discussed this and we think it is an acceptable price to pay
+for giving us the freedom to patch releases and continue development.
+
+<P>
+<HR><I>27th November 1998 <A HREF="http://consult.cern.ch/xwho/people/1342">GF</A>
+&amp; <A HREF="mailto:John.Allison@man.ac.uk">JA</A></I>
+</BODY>
+</HTML>

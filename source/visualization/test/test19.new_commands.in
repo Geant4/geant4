@@ -1,0 +1,20 @@
+/vis/scene/create
+/vis/scene/add/volume calo_phys 2
+/vis/scene/add/volume tracker_phys
+/vis/sceneHandler/create OGLIX
+/vis/viewer/create
+/vis~/refresh/view
+/vis/scene/add/volume calo_phys 1
+/vis/scene/notifyHandlers
+/vis/scene/list
+/vis/viewer/list
+/vis/sceneHandler/list
+/vis/scene/select scene-0
+/vis/scene/remove scene-0
+/vis/scene/list
+/vis/sceneHandler/select scene-handler-0
+/vis/sceneHandler/remove scene-handler-0
+/vis/sceneHandler/list
+/vis/viewer/select viewer-0
+/vis/viewer/remove viewer-0
+/vis/viewer/list

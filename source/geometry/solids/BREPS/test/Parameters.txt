@@ -1,0 +1,48 @@
+stepfiles/atlas/coil1.step
+rayfiles/coil1.ray
+10e-6
+100
+
+
+stepfiles/atlas/coil1.step
+rayfiles/coil1.ray
+
+stepfiles/atlas/block.step
+rayfiles/Test.ray
+
+stepfiles/Sylinteripinta.step
+rayfiles/Cylinder.ray
+
+../stepfiles/test_ideas1.stp
+../rayfiles/Ellipse.ray
+../stepfiles/EllipticCurves.step
+../rayfiles/Ellipse.ray
+
+../rayfiles/srflineextr.ray
+../stepfiles/srflineextr.step
+../stepfiles/srfrev.step
+../stepfiles/Testfile.step
+// kopp_surf ei toimi. Vikaa oli COMPOSITE_CURVE_SEGMENTissa(nimea ei
+
+
+// pitais olla??) ja TrimmedCurve
+../stepfiles/EllipticCurves.step
+../stepfiles/cube2.p21
+
+../stepfiles/BoundaryCurves.step
+
+../stepfiles/b_spline_surface.step
+../rayfiles/b_spline.ray
+
+../stepfiles/Sylinteripinta.step
+../rayfiles/Cylinder.ray
+
+../stepfiles/extrude.step
+../rayfiles/b_spline.ray
+
+
+  cube2.p21          gasket1.p21        gasket3.p21        rod_aspect1.p21
+cube1.p21          g_r_assembly1.p21  gasket2.p21 hex_prism1.p21
+star1.p21
+
+

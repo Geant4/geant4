@@ -1,0 +1,31 @@
+#
+# Macro file test02.hadron.in
+# for tests of basic hadronic processes
+#
+/control/verbose 2
+/run/verbose 2
+/run/initialize
+/gun/direction 1 0 0
+#
+# proton 1 GeV in Pb
+#
+/mydet/SelectMaterial Pb
+/gun/particle proton
+/gun/energy 1 GeV
+/run/beamOn 1
+#
+# proton 1 GeV in Air
+#
+/mydet/SelectMaterial Air
+/gun/particle proton
+/gun/energy 1 GeV
+/run/beamOn 1
+#
+# proton 100 GeV in Pb
+#
+/mydet/SelectMaterial Pb
+/gun/particle proton
+/gun/energy 100 GeV
+/run/beamOn 1
+#
+exit

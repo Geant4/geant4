@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.1 1999-01-07 16:15:38 gunter Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.2 1999-01-08 16:33:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -301,7 +301,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   // the volumes are visible and opaque, and then only if no sections
   // or cutways are in operation.
   G4bool cullDaughter = thisToBeDrawn && IsDaughterCulled (pLV);
-  if (!(thisToBeDrawn && IsDaughterCulled (pLV))) {
+  if (!cullDaughter) {
     // OK, now let's check for daughters...
     if (soughtDepth != 0) {
       int nDaughters = pLV -> GetNoDaughters ();

@@ -1,0 +1,15 @@
+# $Id: GNUmakefile.hadronic.exerciser,v 1.1 1999-01-08 16:35:35 gunter Exp $
+# --------------------------------------------------------------
+# GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
+# --------------------------------------------------------------
+
+name := test11.hadronic.exerciser
+G4TARGET := $(name)
+
+ifndef G4INSTALL
+  G4INSTALL = ../..
+endif
+
+LDLIBS := -lG4global -lG4intercoms 
+
+include $(G4INSTALL)/config/binmake.gmk

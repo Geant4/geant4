@@ -1,0 +1,9 @@
+vis-00-04-03  9th December 1998  John Allison
+- Made /vis/ commands from /vis~/.  The idea is to maintain backwards
+  compatibility while allowing us to "deprecate" the old commands over
+  a period of time.  Some of these /vis/ commands respond with "superceded",
+  i.e., superceded by new commands, but still available in /vis~/.
+
+- 08/12/98 : G.Barrand : OpenInventor : due to 
+  huge load problems on various platforms, init only
+  the HEPVis things that are needed.

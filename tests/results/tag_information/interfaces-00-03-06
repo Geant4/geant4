@@ -1,0 +1,11 @@
+>> > >>  When G4UIGAG is deleted? If it is deleted AFTER the deletion of
+>> > >> the RunManager, G4UImanager does NOT exist anymore. In such a case,
+>> > >> G4UImanager::GetUIpointer() method returns NULL instead of the
+>> > >> pointer to the UImanager. In the destructor G4UIGAG::~G4UIGAG(),
+>> > >> the pointer UI is a class scope data member and it is initialized
+>> > >> at G4UIGAG constructor!!
+>> > >> 
+>> > >>  Here we find a BUG! It is assumed that the concrete session can
+>> > >> (or should?) be deleted AFTER the deletion of RunManager. Thus
+>> > >> in G4UIGAG destructor, the pointer to the UImanager should be
+>> > >> confirmed by G4UImanager::GetUIpointer() method.

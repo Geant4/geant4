@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisExtent.cc,v 1.1 1999-01-07 16:09:19 gunter Exp $
+// $Id: G4VisExtent.cc,v 1.2 1999-01-08 16:32:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,7 +47,7 @@ G4Point3D G4VisExtent::GetExtentCentre () const {
 G4double G4VisExtent::GetExtentRadius () const {
   return sqrt (((fXmax - fXmin) * (fXmax - fXmin)) +
 	       ((fYmax - fYmin) * (fYmax - fYmin)) +
-	       ((fZmax - fZmin) * (fZmax - fZmin))) / 2;
+	       ((fZmax - fZmin) * (fZmax - fZmin))) / 2.;
 }
  
 ostream& operator << (ostream& os, const G4VisExtent& e) {

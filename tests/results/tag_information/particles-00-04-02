@@ -1,0 +1,13 @@
+ I tagged particles directory as particles-00-04-02.
+
+ This tag is a bug-fix version of particles-00-04-01a.
+ It includes  
+ 1) Fixed bugs in encoding for deltas and nucleons
+ 2) Fixed bugs in G4DynamicParticle constructor/SetMomentum methods for zero
+mass particles
+ 3) Modified cut scheme for G4Ions
+
+ I checked it on HP-aCC with Beta03-01 tag.
+
+Best Regards,
+                                                Hisaya 

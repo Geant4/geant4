@@ -1,0 +1,47 @@
+#
+# Build stand-alone DistanceToIn tests for AIX
+#
+# boxtoinf77.aix - gnobox.f test
+# boxtoincpp.aix - DistanceToIn test [note: calls not virtual - modified
+#                                    G4Box.hh/.cc]
+# boxtoincpp.aix_fastfabs - DistanceToIn test, with `custom' inline fabs 
+#                           [actually slower than boxtoincpp.aix on SP2]
+
+all: boxtoinf77.aix boxtoincpp.aix boxtoincpp.aix_fastfabs
+
+boxtoinf77.aix: boxtoinf77.o gnobox.o
+	xlf -O3 -o boxtoinf77.aix boxtoinf77.o gnobox.o
+
+boxtoinf77.o: boxtoinf77.f
+	xlf -c -O3 boxtoinf77.f
+ 
+gnobox.o: gnobox.f
+	xlf -c -O3 gnobox.f
+
+boxtoincpp.aix: boxtoincpp.o G4Box.o
+	xlC -+ -O3 -o boxtoincpp.aix boxtoincpp.o G4Box.o -lm
+
+boxtoincpp.aix_fastfabs: boxtoincpp.o G4Box_fastfabs.o
+	xlC -+ -O3 -o boxtoincpp.aix_fastfabs boxtoincpp.o G4Box_fastfabs.o -lm
+
+boxtoincpp.o: boxtoincpp.cc
+	xlC -+ -O3 -c boxtoincpp.cc
+
+G4Box.o: G4Box.cc
+	xlC -+ -O3 -c G4Box.cc
+
+G4Box_fastfabs.o: G4Box_fastfabs.cc
+	xlC -+ -O3 -c G4Box_fastfabs.cc
+
+clean:
+	rm -f *.o boxtoinf77.aix boxtoincpp.aix boxtoincpp.aix_fastfabs
+
+
+
+
+
+
+ 
+ 
+
+

@@ -1,0 +1,44 @@
+# $Id: stt-ref.sdb,v 1.1 1999-01-08 16:34:13 gunter Exp $
+# .sdb files are read by checkout.sh and update.sh
+# Lines beginning "# " are ignored (the space after the '#' is important!
+# Blank lines are not allowed!
+# Super-categories
+geant4beta/config           pre-beta03-02
+# geant4beta/documents - not currently part of reference versions
+geant4beta/environments     pre-beta03-02
+geant4beta/examples         pre-beta03-03 (note 03-03 to get Makoto's changes)
+# geant4beta/source - split into categories - see below.
+# geant4beta/tests - checkout HEAD by hand and use this script.
+# Source categories
+geant4beta/source/GNUmakefile      pre-beta03-02
+geant4beta/source/digits+hits      digits+hits-00-03-01
+geant4beta/source/event            event-00-03-04
+geant4beta/source/g3tog4           pre-beta03-02
+geant4beta/source/geometry/GNUmakefile   pre-beta03-02 -> geometry-00-03-07?
+geant4beta/source/geometry/History       pre-beta03-02 -> geometry-00-03-07?
+geant4beta/source/geometry/magneticfield pre-beta03-02 -> tag set 12
+geant4beta/source/geometry/management    pre-beta03-02
+geant4beta/source/geometry/solids        pre-beta03-02 -> tag set 12
+geant4beta/source/geometry/volumes       pre-beta03-02  
+geant4beta/source/global           pre-beta03-02
+geant4beta/source/global/management/src/G4PhysicsOrderedFreeVector.cc global-00-03-05
+geant4beta/source/graphics_reps    pre-beta03-02
+geant4beta/source/intercoms        pre-beta03-02
+geant4beta/source/interfaces       pre-beta03-02
+geant4beta/source/materials        pre-beta03-02
+geant4beta/source/particles        particles-00-03-04a  (Hisaya's bug fixes)
+geant4beta/source/persistency      pre-beta03-02
+geant4beta/source/processes/GNUmakefile         pre-beta03-02
+geant4beta/source/processes/History             pre-beta03-02
+geant4beta/source/processes/decay	        pre-beta03-02 = beta01
+geant4beta/source/processes/electromagnetic	em-00-03-03
+geant4beta/source/processes/hadronic	        pre-beta03-02
+geant4beta/source/processes/management        	pre-beta03-02
+geant4beta/source/processes/optical	        op-00-03-02
+geant4beta/source/processes/parameterisation  	param-00-03-05
+geant4beta/source/processes/transportation	pre-beta03-02 -> tag set 12
+geant4beta/source/readout          pre-beta03-02
+geant4beta/source/run              pre-beta03-02
+geant4beta/source/track            pre-beta03-02
+geant4beta/source/tracking         pre-beta03-02
+geant4beta/source/visualization    pre-beta03-02

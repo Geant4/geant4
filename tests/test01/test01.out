@@ -1,0 +1,263 @@
+Now Detector is SimpleBox
+SimpleBox is now made of Pb
+PreInit> #
+PreInit> # Macro file of "skeleton.cc"
+PreInit> # for tracking performance test
+PreInit> #
+PreInit> PreInit> /run/verbose 2
+PreInit> #
+PreInit> # SimpleBox geometry made by Pb
+PreInit> # Geantino 100 GeV to the direction (1.,0.,0.)
+PreInit> # 10 events
+PreInit> #
+PreInit> /mydet/SwitchDetector SimpleBox
+Now Detector is SimpleBox
+/run/geometryModified
+PreInit> /mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+PreInit> /gun/particle geantino
+PreInit> /gun/energy 100 GeV
+PreInit> /gun/direction 1 0 0
+PreInit> /run/initialize
+userDetector->Construct() start.
+physicsList->Construct() start.
+physicsList->setCut() start.
+Tst01PhysicsList::SetCuts:CutLength : 1 (mm)
+
+conv:  Total cross sections from a parametrisation(L.Urban). Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+
+phot:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to 50 MeV for all Z
+        PhysicsTables from 10 keV to 50 MeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100  eV to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a parametrisation(L.Urban). Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100  eV to 100 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100  eV to 100 TeV in 100 bins. 
+
+MuIoni:  knock-on electron cross sections .
+          Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+      PhysicsTables from 1 keV to 1000 PeV in 100 bins. 
+
+MuBrems:  cross sections from R. Kokoulin 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1000 PeV in 100 bins. 
+
+MuPairProd:  cross sections from R. Kokoulin 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1000 PeV in 50 bins. 
+Idle> /tracking/verbose 1
+Idle> /run/beamOn 1
+Start closing geometry.
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     1e+05        0        0         0       SPhys initStep
+    1    2e+04        0        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.0166667s Real=0s Sys=0s
+Idle> /tracking/verbose 0
+Idle> /run/beamOn 10
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 10
+  User=0s Real=0s Sys=0s
+Idle> #
+Idle> # SimpleBox geometry made by Al
+Idle> # Geantino 100 GeV to the direction (0.,1.,0.)
+Idle> # 10 events
+Idle> #
+Idle> /mydet/SelectMaterial Al
+SimpleBox is now made of Al
+Idle> /gun/direction 0 1 0
+Idle> /tracking/verbose 1
+Idle> /run/beamOn 1
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     1e+05        0        0         0       SPhys initStep
+    1        0    2e+04        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0.0166667s Sys=0.0166667s
+Idle> /tracking/verbose 0
+Idle> /run/beamOn 10
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 10
+  User=0s Real=0s Sys=0s
+Idle> #
+Idle> # SimpleBox geometry made by Air
+Idle> # Geantino 100 GeV to the direction (1.,1.,0.)
+Idle> # 10 events
+Idle> #
+Idle> /mydet/SelectMaterial Air
+SimpleBox is now made of Air
+Idle> /gun/direction 1 1 0
+Idle> /tracking/verbose 1
+Idle> /run/beamOn 1
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     1e+05        0        0         0       SPhys initStep
+    1    2e+04    2e+04        0     1e+05        0 2.83e+04  2.83e+04  OutOfWorld Transportation
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+Idle> /tracking/verbose 0
+Idle> /run/beamOn 10
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 10
+  User=0s Real=0s Sys=0s
+Idle> #
+Idle> # Honeycomb geometry
+Idle> # Geantino 100 GeV to the direction (1.,0.,0.)
+Idle> # 10 events
+Idle> #
+Idle> /mydet/SwitchDetector Honeycomb
+Now Detector is Honeycomb
+/run/geometryModified
+Idle> /gun/direction 1 0 0
+Idle> /tracking/verbose 1
+Idle> /run/beamOn 1
+Start closing geometry.
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     1e+05        0        0         0       SPhys initStep
+    1    2e+04        0        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+Idle> /tracking/verbose 0
+Idle> /run/beamOn 10
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 10
+  User=0s Real=0s Sys=0s
+Idle> #
+Idle> # Honeycomb geometry
+Idle> # Geantino 100 GeV to the direction (0.,1.,0.)
+Idle> # 10 events
+Idle> #
+Idle> /gun/direction 0 1 0
+Idle> /tracking/verbose 1
+Idle> /run/beamOn 1
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     1e+05        0        0         0       SPhys initStep
+    1        0    2e+04        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+Idle> /tracking/verbose 0
+Idle> /run/beamOn 10
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 10
+  User=0s Real=0s Sys=0s
+Idle> #
+Idle> # Honeycomb geometry
+Idle> # Geantino 100 GeV to the direction (1.,1.,0.)
+Idle> # 10 events
+Idle> #
+Idle> /gun/direction 1 1 0
+Idle> /tracking/verbose 1
+Idle> /run/beamOn 1
+Start Run processing.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     1e+05        0        0         0       SPhys initStep
+    1    2e+04    2e+04        0     1e+05        0 2.83e+04  2.83e+04  OutOfWorld Transportation
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+Idle> /tracking/verbose 0
+Idle> /run/beamOn 10
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 10
+  User=0s Real=0s Sys=0s
+Idle> G4 kernel has come to Quit state.
+Deletion of G4 kernel class start.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManager is deleting.

@@ -1,0 +1,6 @@
+ new processes: standard/PolarizedCompton
+                standard/PhotoAbsortion
+                xrays/Scintillation
+
+ modif:         standard/MultipleScattering
+                standard/IMultipleScattering

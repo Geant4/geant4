@@ -1,0 +1,7 @@
+  1) New classes are added in shortlived category to create higher excited meson
+     states. ( tag particles-00-03-01 includes excited baryons)
+  2) Rule for particle encoding is modified in order to assign encoding to
+higher
+     excited meson states.
+  3) G4VDecayChannel and G4PhaseSpaceDecayChannel are modified to accept
+four-bodys decay.

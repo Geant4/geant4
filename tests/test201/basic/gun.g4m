@@ -1,0 +1,4 @@
+/gun/particle e+
+/gun/position 0 -100 0 cm
+/gun/direction 0 1 0
+/gun/energy 1 GeV

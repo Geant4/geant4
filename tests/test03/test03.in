@@ -1,0 +1,4 @@
+/control/verbose 2
+/run/initialize
+/run/beamOn 1
+exit

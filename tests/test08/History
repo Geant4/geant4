@@ -1,0 +1,74 @@
+$Id: History,v 1.1 1999-01-08 16:35:13 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 08 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+September 31, 98 G.Barrand
+- "standardize" the test ; do the prerun in test08.in, 
+  regenerate .out on HP-aCC.
+
+17th September 1998 John Apostolakis
+- Disabled muon processes (which were not used) to speed up execution.
+- Corrected geometry
+
+9th August 1998  John Allison
+- Removed trackerChamber_logVisAtt->SetForceWireframe(true);
+- Removed G4_SOLVE_TEMPLATES macros (now done in architecture.gmk).
+- Change G4UIterminal to G4UIGAG.
+
+16th July 1998  John Allison
+- Changed /vis~/Draw... to /vis~/draw.
+
+9th July 1998  John Allison
+- Added G4VIS_USE_DAWNFILE and G4VIS_USE_OPENGLWIN32 to T08VisManager.cc.
+
+8th July 1998  G.Cosmo
+- Protected visualization code with G4VIS_USE.
+
+6th July 1998  John Allison
+- Simplified T08VisManager.
+
+June 29 , 98 H.Kurashige
+- Modified T08PhysicsList. 
+
+May   15, 98 G. Cosmo
+
+- Added #ifdef protection to T08MagneticField.hh. Header now
+  included explicitly in T08DetectorConstruction.hh. Example now
+  links.
+
+May   07, 98 J. Apostolakis
+
+- Created Physical Volume Parameterisation for Tracker Chambers.
+- Copied from example6:
+       MyTrackerHit into T08TrackerHit
+
+May   05, 98 J. Apostolakis
+
+- Changed the geometry in DetectorConstruction.
+- Created the Magnetic Field
+
+May   01, 98 J. Apostolakis
+
+- Files created by copying from exampleEmPhys2, renaming the files 
+    and the classes within them, changing the string "My" into 
+
+- Major changes made:
+  * Event action: deleted energy counting.
+
+
+April 09, 98 G. Cosmo
+
+- Created.

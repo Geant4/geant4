@@ -1,0 +1,35 @@
+###Compiling 
+Making dependency for file 
+Creating/replacing object files in 
+ar: Warning: creating 
+ar r 
+is up to date.
+Merging object files in
+######### rogue #################
+rw/toolerr.h, line 
+extern const RWMsgId rwexport RWTOOL_
+------------------------------^
+######### X11 #######################
+cxx: Warning: /usr/include/X11/X
+extern X
+-------^
+extern  XrmQGetResource
+cxx: Warning: /usr/include/X11/ICE
+extern IceFlush
+######### G4 #################################
+statement is unreachable
+type qualifier on return type is meaningless
+type qualifier is meaningless on cast type
+######### G4/processes #######################
+cxx: Warning: include/G4NeutronHPSCFissionFS.hh, line 26: "G4DynamicParticleVector *G4NeutronHPSCFissionFS::ApplyYourself(G4int)" does not match "G4NeutronHPFinalState::ApplyYourself" -- virtual function override intended?
+cxx: Warning: include/G4NeutronHPTCFissionFS.hh, line 26: "G4DynamicParticleVector *G4NeutronHPTCFissionFS::ApplyYourself(G4int)" does not match "G4NeutronHPFinalState::ApplyYourself" -- virtual function override intended?
+cxx: Warning: include/G4NeutronHPLCFissionFS.hh, line 26: "G4DynamicParticleVector *G4NeutronHPLCFissionFS::ApplyYourself(G4int)" does not match "G4NeutronHPFinalState::ApplyYourself" -- virtual function override intended?
+cxx: Warning: include/G4NeutronHPFissionBaseFS.hh, line 39: "G4DynamicParticleVector *G4NeutronHPFissionBaseFS::ApplyYourself(G4int)" does not match "G4NeutronHPFinalState::ApplyYourself" -- virtual function override intended?
+  G4DynamicParticleVector * ApplyYourself(G4int Prompt);
+cxx: Warning: include/G4NeutronHPFCFissionFS.hh, line 26: "G4DynamicParticleVector *G4NeutronHPFCFissionFS::ApplyYourself(G4int)" does not match "G4NeutronHPFinalState::ApplyYourself" -- virtual function override intended?
+  G4DynamicParticleVector * ApplyYourself(G4int NNeutrons);
+cxx: Warning: include/G4NeutronHPFSFissionFS.hh, line 35: "G4DynamicParticleVector *G4NeutronHPFSFissionFS::ApplyYourself(G4int, G4int,
+          G4double *)" does not match "G4NeutronHPFinalState::ApplyYourself" -- virtual function override intended?
+  G4DynamicParticleVector * ApplyYourself(G4int Prompt, G4int delayed, G4double *decayconst);
+######### G4/STEP #######################
+cxx: Warning: /geant4/beta01/source/geometry/solids/STEP/include

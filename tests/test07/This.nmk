@@ -1,0 +1,200 @@
+!include $(G4INSTALL)\tests\tools\NT\HeadT.nmk
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#  File produced by the Co/omake tool
+# using file Make.odb.
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#  The soft linked packages has been taken
+# from the property 'has' of the 
+# 'Make' object of file Make.odb.
+# It had the value :
+#    Win rogue CLHEP G4 GL Inventor
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+HAS_CPPFLAGS = \
+ $(test_CPPFLAGS)\
+ $(Win_CPPFLAGS)\
+ $(rogue_CPPFLAGS)\
+ $(CLHEP_CPPFLAGS)\
+ $(G4_CPPFLAGS)\
+ $(GL_CPPFLAGS)\
+ $(Inventor_CPPFLAGS)
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+all   :: mkdir
+
+clean ::
+	if exist $(bin)\*.obj del $(bin)\*.obj
+	if exist $(bin)\*.exe del $(bin)\*.exe
+	if exist $(bin)\*.lib del $(bin)\*.lib
+	if exist $(bin)\*.dll del $(bin)\*.dll
+	if exist $(bin)\*.exp del $(bin)\*.exp
+	if exist $(bin)\*.pdb del $(bin)\*.pdb
+rmlib ::
+	if exist $(bin)\*.lib del $(bin)\*.lib
+rmo   ::
+	if exist $(bin)\*.obj del $(bin)\*.obj
+rmexe ::
+	if exist $(bin)\*.exe del $(bin)\*.exe
+
+mkdir :
+	@if not exist $(bin) mkdir $(bin)
+
+libtest07_target = $(bin)\libtest07.$(lib_or_dll)
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+all :: mkdir \
+$(libtest07_target) \
+$(bin)\test07.exe 
+	@echo "test : all ok." 
+
+libs :: mkdir \
+$(libtest07_target) 
+	@echo "test : libs ok." 
+
+apps :: mkdir \
+$(bin)\test07.exe 
+	@echo "test : apps ok." 
+#--------------------------------------------
+rmexeo :
+	if exist $(bin)\test07.obj del $(bin)\test07.obj
+#--------------------------------------------
+test07 : $(bin)\test07.exe
+	@echo "test : test07 ok."
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#--------------------------------------------
+$(bin)\test07.exe : $(bin)\test07.obj \
+$(libtest07_target) 
+	$(CXXLD) $(CXXLDFLAGS) $(CCLDO)$(bin)\test07.exe $(bin)\test07.obj \
+$(libtest07) \
+$(libG4visualization) \
+$(libG4run) \
+$(libG4interfaces) \
+$(libG4tracking) \
+$(libG4track) \
+$(libG4processes) \
+$(libG4particles) \
+$(libG4event) \
+$(libG4materials) \
+$(libG4digits_hits) \
+$(libG4geometry) \
+$(libG4graphics_reps) \
+$(libG4intercoms) \
+$(libG4global) \
+$(libInventor) \
+$(libGLU) \
+$(libGL) \
+$(librwtool) \
+$(libCLHEP) \
+$(libWin) \
+$(CXXLDEND) 
+
+$(bin)\test07.obj   : $(app)\test07.cc
+	$(CXX) $(CXXFLAGS) $(APP_CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\test07.obj /Tp$(app)\test07.cc
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# libraries 
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#--------------------------------------------
+$(bin)\libtest07.dll : \
+$(bin)\T07CalorHit.obj \
+$(bin)\T07CalorimeterSD.obj \
+$(bin)\T07DetectorConstruction.obj \
+$(bin)\T07DetectorMessenger.obj \
+$(bin)\T07EventAction.obj \
+$(bin)\T07EventActionMessenger.obj \
+$(bin)\T07PhysicsList.obj \
+$(bin)\T07PhysicsListMessenger.obj \
+$(bin)\T07PrimaryGeneratorAction.obj \
+$(bin)\T07PrimaryGeneratorMessenger.obj \
+$(bin)\T07RunAction.obj \
+$(bin)\T07SteppingAction.obj \
+$(bin)\T07VisManager.obj 
+	if exist $(bin)\libtest07.lib del $(bin)\libtest07.lib 
+	if exist $(bin)\libtest07.exp del $(bin)\libtest07.exp 
+	lib.exe $(LIBFLAGS) /def:$(mgr)\libtest07.def /out:$(bin)\libtest07.lib
+	if exist $(bin)\libtest07.dll del $(bin)\libtest07.dll 
+	$(LINK32) $(LINK32FLAGS) /out:$(bin)\libtest07.dll $(bin)\libtest07.exp \
+$(bin)\T07CalorHit.obj \
+$(bin)\T07CalorimeterSD.obj \
+$(bin)\T07DetectorConstruction.obj \
+$(bin)\T07DetectorMessenger.obj \
+$(bin)\T07EventAction.obj \
+$(bin)\T07EventActionMessenger.obj \
+$(bin)\T07PhysicsList.obj \
+$(bin)\T07PhysicsListMessenger.obj \
+$(bin)\T07PrimaryGeneratorAction.obj \
+$(bin)\T07PrimaryGeneratorMessenger.obj \
+$(bin)\T07RunAction.obj \
+$(bin)\T07SteppingAction.obj \
+$(bin)\T07VisManager.obj 
+
+$(bin)\libtest07.lib : \
+$(bin)\T07CalorHit.obj \
+$(bin)\T07CalorimeterSD.obj \
+$(bin)\T07DetectorConstruction.obj \
+$(bin)\T07DetectorMessenger.obj \
+$(bin)\T07EventAction.obj \
+$(bin)\T07EventActionMessenger.obj \
+$(bin)\T07PhysicsList.obj \
+$(bin)\T07PhysicsListMessenger.obj \
+$(bin)\T07PrimaryGeneratorAction.obj \
+$(bin)\T07PrimaryGeneratorMessenger.obj \
+$(bin)\T07RunAction.obj \
+$(bin)\T07SteppingAction.obj \
+$(bin)\T07VisManager.obj 
+	if exist $(bin)\libtest07.lib del $(bin)\libtest07.lib 
+	lib.exe @<<
+/nologo /out:$(bin)\libtest07.lib
+$(bin)\T07CalorHit.obj
+$(bin)\T07CalorimeterSD.obj
+$(bin)\T07DetectorConstruction.obj
+$(bin)\T07DetectorMessenger.obj
+$(bin)\T07EventAction.obj
+$(bin)\T07EventActionMessenger.obj
+$(bin)\T07PhysicsList.obj
+$(bin)\T07PhysicsListMessenger.obj
+$(bin)\T07PrimaryGeneratorAction.obj
+$(bin)\T07PrimaryGeneratorMessenger.obj
+$(bin)\T07RunAction.obj
+$(bin)\T07SteppingAction.obj
+$(bin)\T07VisManager.obj
+<<
+#--------------------------------------------
+# libtest07 dependencies 
+#--------------------------------------------
+$(bin)\T07CalorHit.obj : src\T07CalorHit.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\T07CalorHit.obj /Tpsrc\T07CalorHit.cc
+
+$(bin)\T07CalorimeterSD.obj : src\T07CalorimeterSD.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\T07CalorimeterSD.obj /Tpsrc\T07CalorimeterSD.cc
+
+$(bin)\T07DetectorConstruction.obj : src\T07DetectorConstruction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\T07DetectorConstruction.obj /Tpsrc\T07DetectorConstruction.cc
+
+$(bin)\T07DetectorMessenger.obj : src\T07DetectorMessenger.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\T07DetectorMessenger.obj /Tpsrc\T07DetectorMessenger.cc
+
+$(bin)\T07EventAction.obj : src\T07EventAction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\T07EventAction.obj /Tpsrc\T07EventAction.cc
+
+$(bin)\T07EventActionMessenger.obj : src\T07EventActionMessenger.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\T07EventActionMessenger.obj /Tpsrc\T07EventActionMessenger.cc
+
+$(bin)\T07PhysicsList.obj : src\T07PhysicsList.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\T07PhysicsList.obj /Tpsrc\T07PhysicsList.cc
+
+$(bin)\T07PhysicsListMessenger.obj : src\T07PhysicsListMessenger.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\T07PhysicsListMessenger.obj /Tpsrc\T07PhysicsListMessenger.cc
+
+$(bin)\T07PrimaryGeneratorAction.obj : src\T07PrimaryGeneratorAction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\T07PrimaryGeneratorAction.obj /Tpsrc\T07PrimaryGeneratorAction.cc
+
+$(bin)\T07PrimaryGeneratorMessenger.obj : src\T07PrimaryGeneratorMessenger.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\T07PrimaryGeneratorMessenger.obj /Tpsrc\T07PrimaryGeneratorMessenger.cc
+
+$(bin)\T07RunAction.obj : src\T07RunAction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\T07RunAction.obj /Tpsrc\T07RunAction.cc
+
+$(bin)\T07SteppingAction.obj : src\T07SteppingAction.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\T07SteppingAction.obj /Tpsrc\T07SteppingAction.cc
+
+$(bin)\T07VisManager.obj : src\T07VisManager.cc
+	$(CXX) $(CXXFLAGS) $(HAS_CPPFLAGS) /c /Fo$(bin)\T07VisManager.obj /Tpsrc\T07VisManager.cc
+
+

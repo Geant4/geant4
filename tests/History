@@ -1,0 +1,47 @@
+$Id: History,v 1.1 1999-01-08 16:34:12 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+September 10th, 1998 - Gabriele Cosmo
+- Added statements to each main() function to define RanecuEngine as
+  the default engine.
+- Updated the following reference-output files accordingly (run on SUN-AFS):
+  test01.geom1.out, test02.EM.out, test02.hadron.out, test03.out, test05.out
+  testT07.out.
+
+August 26th, 1998 - John Allison (tests-00-02-01)
+- Backed out G4UIGAG as default - G4UIterminal is now default.
+
+14th August 1998  John Allison
+- Added checkout.sh and 2 .sdb files.
+
+July 20th 1998 - G.Cosmo (tests-00-01-07)
+- Many updates since last _not_ announced tags on test01,02,04,05 and
+  new reference output files.
+
+July 8th 1998 - G.Cosmo (tests-00-01-03)
+- Created test04 (Y.Morita)
+- Added hadronic processes to Tst02PhysicsList.cc in test02 (F.Jones)
+- Removed test02.in from test02 (M.Asai)
+
+July 6th 1998 - G.Cosmo (tests-00-01-02)
+- Created test01
+- Tagged.
+
+July 6th 1998 - G.Cosmo
+- Created.

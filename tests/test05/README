@@ -1,0 +1,19 @@
+$Id: README,v 1.1 1999-01-08 16:34:48 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Test05
+                            ------
+
+                                                Jari Sulkimo
+                                                31/10/97
+
+This is an example using particle tracking in STEP CAD-models
+from the CMS detector project. The model can be changed
+by substituting the model name in the Parameters.txt file's
+first line with the other model name in the file.
+
+

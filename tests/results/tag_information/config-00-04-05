@@ -1,0 +1,23 @@
+December 5th, 1998 - G.Cosmo
+- architecture.gmk: introduced -fnonstd compiler option for SUN-CC.
+  This option causes non-standard initialization of floating-point
+  arithmetic hardware; it enables hardware traps for floating-point
+  overflow, division by zero, and invalid operation exceptions.
+December 4th, 1998 - G.Barrand
+- architecture.gmk: corrected paths for HepVis and HepInventor.
+- interactivity.gmk: fixed setup for LOAD_IV.
+December 3rd, 1998 - S.Tanaka
+- Revision to make compilation of DAWN (network) driver 
+  at Solaris and IRIX automatic. See below.
+- Added the following line to SUN-CC and SGI-CC
+  CPPFLAGS += -DSOCKET_IRIX_SOLARIS
+- Added -L/usr/lib -lsocket -lnsl  in X11LIBS for SUN-CC.
+
+ The new option introduced to SUN-CC architectures might impact
+ your tests. I would propose to have this check enabled by default
+ in order to easily catch FPEs or invalid operations at run-time.
+
+ NOTE that since tag config-00-04-03 all tests/examples main files
+ need to be modified to take into account the removal of the file
+ g4templates.hh !
+                     Cheers, Gabriele

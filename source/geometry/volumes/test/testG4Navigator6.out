@@ -1,0 +1,60 @@
+Built voxels User=0.01s Real=0.14s Sys=0s
+Shooting from (-50,0,0) along (1,0,0)
+Physical Location=World #0
+   Step=5  Safety=0  ---->
+Physical Location=Target #78
+   Step=10  Safety=0  ---->
+Physical Location=Target #79
+   Step=10  Safety=0  ---->
+Physical Location=Target #80
+   Step=10  Safety=0  ---->
+Physical Location=Target #81
+   Step=10  Safety=0  ---->
+Physical Location=Target #82
+   Step=10  Safety=0  ---->
+Physical Location=Target #83
+   Step=10  Safety=0  ---->
+Physical Location=Target #84
+   Step=10  Safety=0  ---->
+Physical Location=Target #85
+   Step=10  Safety=0  ---->
+Physical Location=Target #86
+   Step=10  Safety=0  ---->
+Physical Location=World #0
+   Step=5  Safety=0  ---->
+Shooting from (0,0,0) along (0.707107,0.707107,0)
+Physical Location=Target #82
+   Step=5  Safety=5  ---->
+Physical Location=World #0
+   Step=0.38126  Safety=0  ---->
+Physical Location=Target #35
+   Step=8.556  Safety=0  ---->
+Physical Location=World #0
+   Step=0.578615  Safety=0  ---->
+Physical Location=Target #36
+   Step=4.42891  Safety=0  ---->
+Physical Location=World #0
+   Step=2.81769  Safety=0  ---->
+Physical Location=Target #93
+   Step=9.25422  Safety=0  ---->
+Physical Location=World #0
+   Step=0.080475  Safety=0  ---->
+Physical Location=Target #47
+   Step=9.90334  Safety=0  ---->
+Physical Location=World #0
+   Step=0.935255  Safety=0  ---->
+Physical Location=Target #103
+   Step=7.54466  Safety=0  ---->
+Physical Location=World #0
+   Step=0.0367361  Safety=0  ---->
+Physical Location=Target #104
+   Step=6.524  Safety=0  ---->
+Physical Location=World #0
+   Step=1.54369  Safety=0  ---->
+Physical Location=Target #59
+   Step=9.70714  Safety=1.77636e-15  ---->
+Physical Location=World #0
+   Step=1.01631  Safety=0  ---->
+Locating...
+done
+User=0.75s Real=0.78s Sys=0s

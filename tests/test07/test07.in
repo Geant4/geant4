@@ -1,0 +1,21 @@
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+#
+/run/particle/dumpCutValues
+#
+#
+/gun/particle e+
+/gun/energy 300 MeV
+/run/beamOn 500
+/calor/setAbsMat Aluminium
+/calor/setGapMat Aerogel
+/calor/setAbsThick 2. cm
+/calor/setGapThick 5. cm
+/calor/setNbOfLayers 30
+/calor/setSizeYZ   1.5 m
+/calor/update
+/gun/particle gamma
+/gun/energy 500 MeV
+/run/beamOn 500
+exit

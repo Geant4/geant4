@@ -1,0 +1,40 @@
+
+  I put some number of the disk usage
+ for some STT machines.
+  The below numbers show huge differences
+ between at least HP/aCC and OSF1/cxx. It could
+ be fine to have numbers for other platforms to 
+ help evaluate disk needs, 
+
+  All number are in M bytes.
+ bin coresspond to test01, 02, 03, 05, 07, 08, 10
+ lib = archives + shlibs.
+
+ source 24
+
+aleph.lal.in2p3.fr, HP-UX, aCC :
+ lib 261
+ bin  71
+ tmp 278
+ -------
+     610
+
+asc.lal.in2p3.fr, OSF1, cxx :
+ lib  58
+ bin  58
+ tmp  62
+ -------
+     178
+ 
+ For asc.lal.in2p3.fr and aleph.lal.in2p3.fr
+ the sources are shared. Then :
+   geant4beta + HP-aCC + OSF1 = 894
+
+PC-Barrand.lal.in2p3.fr, NT 4.0, VC 5.0 :
+ lib  79
+ bin  19
+ -------
+      98
+
+
+

@@ -1,0 +1,645 @@
+*** Begin of history file: 04/03/92 - 11.19.42
+call fith2_01.f
+call fith2_02.f
+call fith2_03.f
+call fith2_04.f
+set ndvx 506
+set ndvy 506
+set ygti 0.2
+set ymgu 1.
+set ymgl 1.
+set xmgr 0.5
+set xmgl 1.5
+set ywin 0.8
+set xwin 1.20
+set gsiz 0.30
+set asiz 0.25
+set vsiz 0.25
+set ylab 0.60
+set xlab 1.20
+title_gl '([p^+!],K^+!)A at 250 GeV/c'
+vect/create vx11(21) r -5.25 -4.75 -4.25 -3.75 -3.25 -2.75 -2.25 _
+  -1.75 -1.25 -0.75 -0.25 0.25 0.75 1.25 1.75 2.25 2.75 3.25 3.75 _
+  4.25 4.75
+vect/create vxe11(21) r
+vect/create vy11(21) r
+vect/create vye11(21) r
+vect/create vy12(21) r
+vect/create vye12(21) r
+vect/create vy13(21) r
+vect/create vye13(21) r
+vect/create vy16(21) r
+vect/create vye16(21) r
+vect/create vy17(21) r
+vect/create vye17(21) r
+vect/create vy18(21) r
+vect/create vye18(21) r
+vect/create vx14(31) r 0.025 0.075 0.125 0.175 0.225 0.275 0.325 0.375 _
+  0.425 0.475 0.525 0.575 0.625 0.675 0.725 0.775 0.825 0.875 0.925 _
+  0.975 1.025 1.1 1.2 1.3 1.4 1.5 1.65 1.85 2.15 2.55 2.95
+vect/create vxe14(31) r
+vect/create vy14(31) r
+vect/create vye14(31) r
+vect/create vy15(31) r
+vect/create vye15(31) r
+vect/create vy19(31) r
+vect/create vye19(31) r
+vect/create vy20(31) r
+vect/create vye20(31) r
+vect/create vx33(19) r -4.25 -3.75 -3.25 -2.75 -2.25 -1.75 -1.25 -0.75 _
+  -0.25 0.25 0.75 1.25 1.75 2.25 2.75 3.25 3.75 4.25 4.75
+vect/create vxe33(19) r
+vect/create vy33k(19) r 8.3 5.9 8.1 3.5 2.0 1.4 1.4 1.4 1.18 1.37 1.18 _
+  1.09 0.96 0.85 0.86 0.78 100000. 100000. 1.34
+vect/create vye33k(19) r 2.0 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. _
+  0. 0. 0. 0.7
+vect/create vy34k(19) r 24.1 16.9 30.3 9.6 3.8 2.6 2.1 1.87 1.62 1.62 _
+  1.23 1.23 1.13 0.85 0.73 0.85 0.63 1.11 0.78
+vect/create vye34k(19) r 5. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. _
+  0. 0.1 0.3 0.45
+vect/create vy33p(19) r 9.8 4.2 2.7 2.1 1.75 1.44 1.44 1.36 1.33 1.25 _
+  1.2 1.15 1.05 0.93 0.85 0.69 0.87 0.75 1.54
+vect/create vye33p(19) r 2. 0.8 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. _
+  0. 0. 0. 0.2 0.5
+vect/create vy34p(19) r 34.6 11.1 7.3 5.2 3.4 2.5 2.15 1.9 1.75 1.48 _
+  1.36 1.20 1.12 0.91 0.77 0.69 0.75 0.44 0.58
+vect/create vye34p(19) r 5. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. _
+  0. 0. 0.1 0.2
+vect/create vy35k(18) r 5.7 6.5 5.9 3.5 2.2 2.05 1.5 1.5 1.32 1.32 1.27 _
+  1.12 1.03 1.03 0.84 1.03 0.99 0.4
+vect/create vye35k(18) r 2. 1. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. _
+  0.1 0.2 0.25
+vect/create vy36k(18) r 12.6 15.5 13.1 7.2 4.4 3.2 2.18 1.93 1.63 1.56 _
+  1.41 1.27 1.17 0.91 0.84 0.61 0.63 0.19
+vect/create vye36k(18) r 6. 2. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. _
+  0.15 0.2 0.18
+vect/create vy35p(18) r 5.0 6.7 5.2 3.8 2.5 1.93 1.7 1.5 1.38 1.27 1.38 _
+  1.1 1.1 0.95 0.91 0.87 0.65 0.68
+vect/create vye35p(18) r 1.5 1.0 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. _
+  0. 0.15 0.2
+vect/create vy36p(18) r 10.2 13.1 12.6 8.3 4.6 3.2 2.4 1.93 1.81 1.57 _
+  1.44 1.35 1.12 0.91 0.87 0.74 0.46 0.31
+vect/create vye36p(18) r 2. 2. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. _
+  0. 0.1 0.15
+vect/create vx33d(11) r -5. -4. -3. -2. -1. 0. 1. 2. 3. 4. 5.
+vect/create vy33dp(11) r 7.56 2.65 1.53 1.24 1.24 1.19 1.1 1.01 0.89 _
+  0.66 0.29
+vect/create vy33dk(11) r 2.33 1.74 1.47 1.3 1.19 1.14 1.05 0.93 0.82 _
+  0.69 0.58
+vect/create vy34dp(11) r 17.5 4.76 2.54 1.97 1.74 1.53 1.24 1.05 0.82 _
+  0.56 0.23
+vect/create vy34dk(11) r 6.13 3.4 2.24 1.89 1.6 1.41 1.19 1.05 0.82 _
+  0.66 0.43
+vect/create vx35d(10) r -4. -3. -2. -1. 0. 1. 2. 3. 4. 5.
+vect/create vy35dp(10) r 7.46 2.41 1.87 1.58 1.46 1.13 1.13 0.96 0.85 0.69
+vect/create vy35dk(10) r 5.56 2.22 1.8 1.46 1.34 1.23 1.13 0.96 0.85 0.69
+vect/create vy36dp(10) r 12.85 4.15 2.85 2.12 1.58 1.34 1.09 0.85 0.75 0.53
+vect/create vy36dk(10) r 12.86 3.82 2.73 2.04 1.65 1.4 1.09 0.96 0.72 0.49
+vect/create vx53(10) r -4.7 -4.2 -3.7 -3.2 -2.7 -2.2 -1.7 -1.2 -0.7 -0.2   
+vect/create vxe53(10) r
+vect/create vy53(10) r 0.042 0.07 0.136 0.287 0.48 0.46 0.297 0.149 _
+  0.059 0.012
+vect/create vye53(10) r 0. 0. 0. 0. 0.01 0.01 0. 0. 0. 0. 
+vect/create vy54(10) r 0.024 0.059 0.161 0.385 0.5 0.43 0.24 0.122 _
+  0.063 0.007
+vect/create vye54(10) r 0. 0. 0. 0. 0.02 0.01 0. 0. 0. 0. 
+vect/create vy55(10) r 0.024 0.066 0.212 0.45 0.52 0.39 0.212 0.1 _
+  0.024 0.007
+vect/create vye55(10) r 0. 0. 0. 0. 0.02 0.015 0. 0. 0. 0. 
+vect/create vy56(10) r 2.59 2.78 3.51 3.76 3.83 3.51 3.22 2.75 2.52 2.3
+vect/create vye56(10) r 
+vect/create vy57(10) r 3.35 4.9 5.89 6.02 5.32 4.84 4.11 3.41 2.9 2.9
+vect/create vye57(10) r 0.32 0.32 0.19 0.13 0.19 0.13 0.13 0.2 0.2 0.2
+vect/create vy58(10) r 4.81 7.73 7.73 8.11 7.22 6.1 5.0 3.73 3.48 2.02
+vect/create vye58(10) r 0.5 0.4 0.25 0.25 0.2 0.13 0.13 0.25 0.4 0.3 
+vect/create vy56d(10) r 1. 2.21 3.16 3.92 4.27 4.11 3.79 3.48 3. 2.14
+vect/create vy57d(10) r 2.02 3.54 4.49 5.06 5.22 5. 4.37 3.92 3.54 3.16
+vect/create vy58d(10) r 2.59 5.13 7.22 7.76 7.23 6.71 6.01 5.29 4.49 3.54 
+vect/create vx59(5) r 1. 2. 3. 4. 5.
+vect/create vxe59(5) r
+vect/create vye59(5) r
+vect/create vy59(5) r 0.286 0.122 0.071 0.042 0.030
+vect/create vy60(5) r 0.259 0.116 0.071 0.045 0.033
+vect/create vy61(5) r 0.235 0.112 0.07 0.047 0.033
+vect/create vx46(20) r 1. 2. 3. 4. 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. _
+  15. 16. 17. 18. 19. 20. 
+vect/create vxe46(20) r
+vect/create vy46(12) r 368. 375. 372. 363. 358. 359. 347. 342. 326. _
+  328. 338. 305. 
+vect/create vye46(12) r 5. 0. 0. 0. 0. 9. 0. 5. 7. 14. 23. 23.
+vect/create vy47(16) r 367. 387. 365. 363. 367. 361. 359. 367. 361. 354. _
+  355. 363. 328. 365. 335. 313.
+vect/create vye47(16) r 19. 7. 5. 5. 5. 5. 7. 7. 7. 12. 12. 9. 14. _
+  19. 33. 16.
+vect/create vy48(20) r 387. 358. 376. 373. 382. 375. 375. 359. 372. _
+  370. 362. 383. 354. 377. 366. 359. 365. 372. 338. 321.
+vect/create vye48(20) r 21. 12. 7. 7. 7. 7. 7. 5. 5. 7. 9. 12. 9. 12. _
+  12. 12. 16. 21. 14. 23.
+vect/create vx43(24) r -0.575 -0.525 -0.475 -0.425 -0.375 -0.325 -0.275 _
+  -0.225 -0.175 -0.125 -0.075 -0.025 0.025 0.075 0.125 0.175 0.225 0.275 _
+  0.325 0.375 0.425 0.475 0.525 0.575
+vect/create vxe43(24) r
+vect/create vy43(24) r 0.77 0.7 0.66 0.62 0.58 0.55 0.52 0.50 0.47 0.43 _
+  0.38 0.31 0.33 0.38 0.426 0.47 0.50 0.52 0.53 0.545 0.557 0.570 0.575 _
+  0.58
+vect/create vy44(24) r 0.615 0.767 0.568 0.515 0.482 0.458 0.446 0.437 _
+  0.423 0.42 0.36 0.289 0.301 0.402 0.461 0.479 0.503 0.520 0.556 0.69 _
+  0.574 0.562 0.595 0.604
+vect/create vye44(24) r 0.07 0.11 0.08 0.04 0.04 0.03 0.02 0.02 0.01 0.01 _
+  0. 0. 0. 0. 0. 0. 0.02 0.025 0.03 0.05 0.06 0.04 0.1 0.08
+vect/create vy45(24) r 0.699 0.479 0.598 0.525 0.491 0.470 0.423 0.378 _
+  0.375 0.363 0.348 0.301 0.31 0.429 0.477 0.518 0.575 0.62 0.593 _
+  0.703 0.706 0.882 0.649 0.795
+vect/create vye45(24) r 0.07 0.03 0.04 0.04 0.03 0.02 0.01 0. 0. 0. 0. _
+  0. 0. 0. 0. 0.02 0.025 0.04 0.04 0.06 0.05 0.1 0.125 0.125
+vect/create vy49(28) r 0.88 0.93 0.9 0.99 1.01 1.01 1.0 0.97 1.08 0.99 _
+  0.97 1.09 1.08 1.3 1.12 1.27 1.15 1.13 1.05 1.45 0.96 1.13 1.14 1.47 _
+  1.23 1.38 1.27 1.25
+vect/create vye49(28) r 0.07 0.06 0.04 0. 0. 0. 0.04 0.04 0.07 0.06 _
+  0.06 0.07 0.07 0.09 0.09 0.11 0.13 0.13 0.15 0.2 0.17 0.17 0.19 0.26 _
+  0.28 0.35 0.28 0.19
+vect/create vy50(28) r 0.73 0.87 0.93 1.06 0.99 0.99 1.03 1.02 1.01 _
+  1.14 1.06 1.15 1.08 1.1 1.38 1.09 1.36 0.93 1.25 1.34 1.58 1.13 1.41 _
+  1.62 1.36 1.13 1.54 2.05
+vect/create vye50(28) r 0.11 0.06 0.06 0.04 0. 0. 0.04 0.06 0.06 0.06 _
+  0.06 0.06 0.07 0.07 0.11 0.11 0.13 0.11 0.15 0.19 0.22 0.17 0.2 0.3 _
+  0.28 0.28 0.33 0.52
+vect/create vy51(28) r 0.94 1.19 1.07 0.99 0.99 0.94 0.9 0.9 0.99 0.99 _
+  0.89 1.04 0.92 0.97 0.92 1.06 1.02 1.19 1.01 1.17 1.13 1.36 1.34 0.84 _
+  1.32 1.25 1.48 1.18
+vect/create vye51(28) r 0.09 0.09 0.06 0. 0. 0. 0. 0. 0.04 0.04 0.06 _
+  0.06 0.06 0.07 0.07 0.09 0.09 0.13 0.13 0.15 0.17 0.17 0.2 0.18 0.28 _
+  0.35 0.33 0.35
+vect/create vy52(28) r 0.7 1.16 1.14 1.02 0.95 0.94 0.94 0.89 0.94 _
+  0.95 0.84 0.98 0.89 1.05 0.81 0.98 0.91 1.2 1.06 1.32 1.27 1.47 _
+  1.37 1.43 1.62 1.12 1.19 1.05
+vect/create vye52(28) r 0.17 0.09 0.06 0.04 0. 0. 0. 0.04 0.04 0.06 _
+  0.06 0.06 0.06 0.07 0.07 0.07 0.09 0.11 0.11 0.17 0.18 0.17 0.2 _
+  0.22 0.22 0.28 0.28 0.29  
+vect/create vy39(29) r 0.84 1.02 1.04 1. 1. 0.98 0.98 0.99 0.97 1. _
+  1.01 1.01 1.01 0.96 1.02 0.95 1.02 1.01 1.09 1.08 1.04 1.04 1.1 _
+  1.2 1.56 1.32 1.09 0.99 1.19
+vect/create vye39(29) r 0.11 0.08 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. _
+  0.04 0.04 0.06 0.08 0.08 0.08 0.08 0.08 0.08 0.11 0.15 0.17 0.13 _
+  0.17 0.17
+vect/create vy40(29) r 0.63 0.92 1.01 1.06 1. 0.98 1.04 1.07 1.05 _
+  1.03 0.99 1.03 1.02 0.99 1.06 1.01 1.07 1.1 1.11 1.16 1.2 1.06 _
+  1.24 1.07 1.47 1.37 1.11 1.05 1.19
+vect/create vye40(29) r 0.13 0.1 0.06 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. _
+  0.04 0.04 0.04 0.06 0.06 0.08 0.08 0.06 0.08 0.1 0.13 0.13 0.11 _ 
+  0.13 0.15
+vect/create vy41(29) r 0.98 1.08 1. 0.99 0.99 0.96 0.93 0.93 1.03 _
+  0.98 0.93 1.04 0.98 1.09 0.99 1.12 1.06 1.13 1.03 1.27 1.03 1.22 _
+  1.2 1.1 1.25 1.26 1.33 1.19 0.91
+vect/create vye41(29) r 0.07 0.06 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.04 0.04 _
+  0.06 0.06 0.07 0.07 0.09 0.09 0.11 0.11 0.11 0.11 0.15 0.18 0.22 0.22 _
+  0.26 0.20
+vect/create vy42(29) r 0.78 1.06 1.06 1.03 0.97 0.96 0.97 0.95 0.97 _
+  1.03 0.93 1.04 0.98 1.06 1.02 1.0 1.06 1.06 1.12 1.3 1.36 1.32 1.34 _
+  1.49 1.5 1.08 1.29 1.41 1.39
+vect/create vye42(29) r 0.15 0.07 0.04 0. 0. 0. 0. 0. 0. 0. 0. 0.04 0.04 _
+  0.06 0.06 0.06 0.06 0.07 0.09 0.13 0.13 0.09 0.13 0.18 0.22 0.18 0.18 _
+  0.28 0.26
+*gon
+clr
+fortran/file 60 fith2_11.ps
+meta 60 -113
+hi/get_vect/contents 11 vy11
+hi/get_vect/contents 12 vy12
+hi/get_vect/contents 13 vy13
+hi/get_vect/contents 16 vy16
+hi/get_vect/contents 17 vy17
+hi/get_vect/contents 18 vy18
+hi/get_vect/contents 21 vye11
+hi/get_vect/contents 22 vye12
+hi/get_vect/contents 23 vye13
+hi/get_vect/contents 26 vye16
+hi/get_vect/contents 27 vye17
+hi/get_vect/contents 28 vye18
+hi/set/maximum 1 100.
+hi/set/maximum 2 100.
+hi/set/maximum 3 100.
+hi/set/minimum 1 0.0005
+hi/set/minimum 2 0.0005
+hi/set/minimum 3 0.0005
+set xsiz 15.5
+set ysiz 10.5
+opt logy
+zone 3 1
+hi/pl 1
+hi/pl 6 s
+atitle '  ' '(1/N?ev!) dN/dy'
+text -1. 0.5 'Al' 0.25 0.
+text -1. 40. 'Au(*10)' 0.25 0.
+text -2. 0.005 '"0# data' 0.2 0.
+text -2. 0.003 '- GHEISHA' 0.2 0.
+text -4. 0.001 '(a) all positives' 0.25 0.
+graph/hplot/errors vx11 vy11 vxe11 vye11 21 20 0.15
+graph/hplot/errors vx11 vy16 vxe11 vye16 21 20 0.15
+hi/pl 2
+hi/pl 7 s
+text -1. 0.5 'Al' 0.25 0.
+text -1. 40. 'Au(*10)' 0.25 0.
+text -3. 0.001 '(b) positives' 0.25 0. 
+graph/hplot/errors vx11 vy12 vxe11 vye12 21 20 0.15
+graph/hplot/errors vx11 vy17 vxe11 vye17 21 20 0.15
+hi/pl 3
+hi/pl 8 s
+atitle 'Rapidity y' '  ' 
+text -1. 0.5 'Al' 0.25 0.
+text -1. 40. 'Au(*10)' 0.25 0.
+text -3. 0.001 '(c) negatives' 0.25 0.
+graph/hplot/errors vx11 vy13 vxe11 vye13 21 20 0.15
+graph/hplot/errors vx11 vy18 vxe11 vye18 21 20 0.15
+wait ' ' 0
+*exec hardcopy
+meta 0
+fort/close 60
+fortran/file 60 fith2_14.ps
+meta 60 -113
+clr
+hi/get_vect/contents 14 vy14
+hi/get_vect/contents 15 vy15
+hi/get_vect/contents 19 vy19
+hi/get_vect/contents 20 vy20
+hi/get_vect/contents 24 vye14
+hi/get_vect/contents 25 vye15
+hi/get_vect/contents 29 vye19
+hi/get_vect/contents 30 vye20
+hi/set/maximum 4 50.
+hi/set/maximum 5 50.
+hi/set/minimum 4 0.0001
+hi/set/minimum 5 0.0001
+set xsiz 15.5
+set ysiz 10.5
+opt logy
+zone 2 1
+hi/pl 4
+hi/pl 9 s
+atitle '  ' '(1/N) dN/dp?T! "M#(GeV/c)^-1!"N#'
+text 1.5 20. '(a) positives' 0.25 0.
+text 1.5 1.  'Au(*10)' 0.25 0.
+text 1. 0.01 'Al' 0.25 0.
+text 0.5 0.002 '"0# data' 0.2 0.
+text 0.5 0.001 '- GHEISHA' 0.2 0. 
+graph/hplot/errors vx14 vy14 vxe14 vye14 31 20 0.15
+graph/hplot/errors vx14 vy19 vxe14 vye19 31 20 0.15
+hi/pl 5
+hi/pl 10 s
+atitle 'p?T! "M#GeV/c"N#' '  '
+text 1.5 20. '(b) negatives' 0.25 0.
+text 1.5 1. 'Au(*10)' 0.25 0.
+text 1. 0.01 'Al' 0.25 0.
+graph/hplot/errors vx14 vy15 vxe14 vye15 31 20 0.15
+graph/hplot/errors vx14 vy20 vxe14 vye20 31 20 0.15 
+wait ' ' 0
+*exec hardcopy
+meta 0
+fort/close 60
+fortran/file 60 fith2_33.ps
+meta 60 -113
+clr
+hi/set/minimum 33 0.1
+hi/set/minimum 34 0.1
+hi/set/minimum 35 0.1
+hi/set/minimum 36 0.1
+hi/set/maximum 33 500.
+hi/set/maximum 34 500.
+hi/set/maximum 35 500.
+hi/set/maximum 36 500. 
+set xsiz 13.
+set ysiz 15.5
+opt logy
+zone 2 2
+hi/zoom 33 ! 2 21
+atitle ' ' 'Ratio R(y)'
+text -2. 200. '(a) Al positives' 0.25 0. 
+text -2. 100. '"0# data [p^+!]' 0.20 0. 
+text -2.  50. '"<0># data K^+!' 0.20 0.
+text -2.  20. '- GHEISHA [p^+!],K^+!' 0.20 0. 
+text -4.  0.4 'curves' 0.20 0.
+text -1.  0.4 '-- DPM [p^+!]' 0.20 0.
+text -0.8 0.4 '-' 0.20 0.
+text -1.  0.2 '-- DPM K^+!' 0.20 0.  
+graph/hplot/errors vx33 vy33k vxe33 vye33k 19 24 0.17
+graph/hplot/errors vx33 vy33p vxe33 vye33p 19 20 0.17
+set dmod 0
+graph 11 vx33d vy33dp c
+set dmod 2
+graph 11 vx33d vy33dk c
+set dmod 0
+hi/zoom 34 ! 2 21
+text -2. 200. '(b) Au positives' 0.25 0. 
+graph/hplot/errors vx33 vy34k vxe33 vye34k 19 24 0.17
+graph/hplot/errors vx33 vy34p vxe33 vye34p 19 20 0.17
+set dmod 0
+graph 11 vx33d vy34dp c
+set dmod 2
+graph 11 vx33d vy34dk c
+set dmod 0
+hi/zoom 35 ! 2 21
+text -2. 200. '(c) Al negatives' 0.25 0.
+graph/hplot/errors vx33 vy35k vxe33 vye35k 18 24 0.17
+graph/hplot/errors vx33 vy35p vxe33 vye35p 18 20 0.17
+set dmod 0
+graph 10 vx35d vy35dp c
+set dmod 2
+graph 10 vx35d vy35dk c
+set dmod 0
+hi/zoom 36 ! 2 21
+atitle 'Rapidity y' ' '
+text -2. 200. '(d) Au negatives' 0.25 0. 
+graph/hplot/errors vx33 vy36k vxe33 vye36k 18 24 0.17
+graph/hplot/errors vx33 vy36p vxe33 vye36p 18 20 0.17
+set dmod 0
+graph 10 vx35d vy36dp c
+set dmod 2
+graph 10 vx35d vy36dk c
+set dmod 0
+wait ' ' 0
+*exec hardcopy
+meta 0
+fort/close 60
+fortran/file 60 fith2_39.ps
+meta 60 -113
+clr
+hi/set/maximum 41 3.
+hi/set/maximum 42 3.
+set xsiz 15.5
+set ysiz 8.
+opt liny
+zone 2 1
+hi/zoom 42 ! 1 40
+atitle '   ' 'Ratio R(p?T!)'
+text 0.2 2.1 '"0# data' 0.2 0.
+text 0.2 1.9 '- GHEISHA' 0.2 0.
+text 0.2 2.5 '(a) Al negatives' 0.25 0.
+graph/hplot/errors vx14 vy41 vxe14 vye41 29 20 0.15
+hi/zoom 41 ! 1 40
+atitle 'p?T! "M#GeV/c"N#' '  '
+text 0.2 2.5 '(b) Au negatives' 0.25 0.
+graph/hplot/errors vx14 vy42 vxe14 vye42 29 20 0.15
+wait ' ' 0
+*exec hardcopy
+meta 0
+fort/close 60
+fortran/file 60 fith2_43.ps
+meta 60 -113 
+clr
+hi/set/maximum 43 1.2
+hi/set/maximum 44 1.2
+hi/set/maximum 45 1.2
+set xsiz 15.5
+set ysiz 8.
+opt liny
+zone 3 1
+hi/pl 43
+atitle '  ' '"L#p?T!"G# "M#GeV/c"N#'
+text -0.6 1.1 '(a) H negatives' 0.25 0.
+text -0.6 0.15 '-- data' 0.2 0.
+text -0.6 0.07 '-- GHEISHA' 0.2 0.
+text -0.58 0.07 '-' 0.2 0. 
+set dmod 2
+graph 24 vx43 vy43 c
+set dmod 0
+hi/pl 44 
+text -0.6 1.1 '(b) Al negatives' 0.25 0.
+text -0.6 0.15 '"0# data' 0.2 0.
+text -0.6 0.07 '- GHEISHA' 0.2 0. 
+graph/hplot/errors vx43 vy44 vxe43 vye44 24 20 0.15
+hi/pl 45 
+atitle 'x?F!' '  '
+text -0.6 1.1 '(c) Au negatives' 0.25 0.
+graph/hplot/errors vx43 vy45 vxe43 vye45 24 20 0.15
+wait ' ' 0
+*exec hardcopy
+meta 0
+fort/close 60
+fortran/file 60 fith2_46.ps
+meta 60 -113
+clr
+hi/set/maximum 46 0.5
+hi/set/maximum 47 0.5
+hi/set/maximum 48 0.5
+vscale vy46 0.001 vy46
+vscale vye46 0.001 vye46
+vscale vy47 0.001 vy47
+vscale vye47 0.001 vye47
+vscale vy48 0.001 vy48
+vscale vye48 0.001 vye48
+set xsiz 15.5
+set ysiz 8.
+opt liny
+zone 3 1
+hi/pl 46
+atitle '  ' '"L#p?T!"G# "M#GeV/c"N#'
+text 2. 0.45 '(a) H negatives' 0.25 0.
+graph/hplot/errors vx46 vy46 vxe46 vye46 12 20 0.15
+hi/pl 47
+text 2. 0.45 '(b) Al negatives' 0.25 0.
+text 4. 0.1 '"0# data' 0.20 0.
+text 4. 0.05 '- GHEISHA' 0.20 0. 
+graph/hplot/errors vx46 vy47 vxe46 vye47 16 20 0.15
+hi/pl 48 
+atitle 'n?-!' '  '
+text 2. 0.45 '(c) Au negatives' 0.25 0.
+graph/hplot/errors vx46 vy48 vxe46 vye48 20 20 0.15
+wait ' ' 0
+*exec hardcopy
+meta 0
+fort/close 60
+fortran/file 60 fith2_49.ps
+meta 60 -113
+clr
+hi/set/maximum 49 2.5
+hi/set/maximum 50 2.5
+hi/set/maximum 51 4.
+hi/set/maximum 52 4. 
+set xsiz 13.
+set ysiz 13.
+opt liny
+zone 2 2
+hi/pl 50
+atitle '  ' 'Ratio R(p?T!)'
+text 0.2 2.2 '(a) Al negatives' 0.25 0.
+text 0.2 1.9 'y"g#0' 0.25 0.
+text 0.2 0.4 '"0# data' 0.20 0.
+text 0.2 0.2 '- GHEISHA' 0.20 0.
+graph/hplot/errors vx14 vy49 vxe14 vye49 28 20 0.15
+hi/pl 49
+text 0.2 2.2 '(b) Au negatives' 0.25 0.
+text 0.2 1.9 'y"g#0' 0.25 0. 
+graph/hplot/errors vx14 vy50 vxe14 vye50 28 20 0.15
+hi/pl 52 
+text 0.2 3.4 '(c) Al negatives' 0.25 0.
+text 0.2 3.0 'y"l#0' 0.25 0. 
+graph/hplot/errors vx14 vy51 vxe14 vye51 28 20 0.15
+hi/pl 51
+atitle 'p?T! "M#GeV/c"N#' '  '
+text 0.2 3.4 '(d) Au negatives' 0.25 0.
+text 0.2 3.0 'y"l#0' 0.25 0.
+graph/hplot/errors vx14 vy52 vxe14 vye52 28 20 0.15
+wait ' ' 0
+*exec hardcopy
+meta 60
+fort/close 60
+fortran/file 60 fith2_53.ps
+meta 60 -113
+clr
+hi/set/maximum 53 0.8
+hi/set/maximum 54 0.8
+hi/set/maximum 55 0.8
+set xsiz 15.5
+set ysiz 8.
+opt liny
+zone 3 1
+hi/pl 53 
+atitle '  ' '(1/N?ev!) dN/d([D]y?max!)'
+text -4. 0.72 '(a) H' 0.25 0.
+text -4. 0.64 '"0# data' 0.20 0.
+text -4. 0.58 '- GHEISHA' 0.20 0.
+graph/hplot/errors vx53 vy53 vxe53 vye53 10 20 0.17
+hi/pl 54
+text -4. 0.72 '(b) Al' 0.25 0.
+graph/hplot/errors vx53 vy54 vxe53 vye54 10 20 0.17
+hi/pl 55
+atitle '[D]y?max!'  '  '
+text -4. 0.72 '(c) Au' 0.25 0.
+graph/hplot/errors vx53 vy55 vxe53 vye55 10 20 0.17
+wait ' ' 0
+*exec hardcopy
+meta 60
+fort/close 60
+fortran/file 60 fith2_56.ps
+meta 60 -113
+clr
+add 58 58 58 0.9 0.
+hi/set/maximum 56 10.
+hi/set/maximum 57 10.
+hi/set/maximum 58 10.
+set xsiz 15.5
+set ysiz 8.
+opt liny
+zone 3 1
+hi/pl 56
+atitle '  ' '"L#n?-!"G#'
+text -4. 9. '(a) H' 0.25 0.
+text -4. 8. '"0# data' 0.20 0.
+text -4. 7. '- GHEISHA' 0.20 0.
+text -4. 6. 'curves"j# DPM' 0.20 0.
+graph/hplot/errors vx53 vy56 vxe53 vye56 10 20 0.17
+graph 10 vx53 vy56d c
+hi/pl 57
+text -4. 9. '(b) Al' 0.25 0.
+graph/hplot/errors vx53 vy57 vxe53 vye57 10 20 0.17
+graph 10 vx53 vy57d c
+hi/pl 58
+atitle '[D]y?max!'  '  '
+text -4. 9. '(c) Au' 0.25 0.
+graph/hplot/errors vx53 vy58 vxe53 vye58 10 20 0.17
+graph 10 vx53 vy58d c
+wait ' ' 0
+*exec hardcopy
+meta 0
+fort/close 60
+fortran/file 60 fith2_61.ps
+meta 60 -113
+clr
+hi/set/maximum 61 0.5
+set xsiz 8.
+set ysiz 8.
+opt liny
+zone 1 1
+hi/pl 61
+hi/pl 60 s
+hi/pl 59 s
+atitle 'particle number' '"L#E/E?beam!"G#'
+text 2.5 0.36 '...... ' 0.20 0.
+text 2.5 0.32 '--- ' 0.20 0. 
+text 2.5 0.28 '--- ' 0.20 0.
+text 2.6 0.28 '--' 0.20 0.
+text 3.4 0.36 '"<2># H' 0.20
+text 3.4 0.32 '"<0># Al' 0.20 0.
+text 3.4 0.28 '"0# Au' 0.20 0.   
+graph/hplot/errors vx59 vy59 vxe59 vye59 5 26 0.17
+graph/hplot/errors vx59 vy60 vxe59 vye59 5 24 0.17
+graph/hplot/errors vx59 vy61 vxe59 vye59 5 20 0.17
+wait ' ' 0
+*exec hardcopy
+meta 0
+fort/close 60
+fortran/file 60 fith2_ry.ps
+meta 60 -113
+clr
+set dmod 0
+set xsiz 15.5
+set ysiz 8.
+opt logy
+zone 2 1
+divide 2 3 2 1. 1.
+divide 7 8 7 1. 1.
+divide 4 5 4 1. 1.
+divide 9 10 9 1. 1.
+vdivide vye12 vy12 vye12
+vdivide vye13 vy13 vye13
+vdivide vye14 vy14 vye14
+vdivide vye15 vy15 vye15
+vdivide vye17 vy17 vye17
+vdivide vye18 vy18 vye18
+vdivide vye19 vy19 vye19
+vdivide vye20 vy20 vye20     
+vdivide vy12 vy13 vy12
+vdivide vy17 vy18 vy17
+vdivide vy14 vy15 vy14
+vdivide vy19 vy20 vy19
+vadd vye12 vye13 vye12
+vadd vye17 vye18 vye17
+vadd vye14 vye15 vye14
+vadd vye19 vye20 vye19
+vmultiply vye12 vy12 vye12
+vmultiply vye17 vy17 vye17
+vmultiply vye14 vy14 vye14
+vmultiply vye19 vy19 vye19 
+hi/set/maximum 2 50.
+hi/set/maximum 7 50.
+hi/set/minimum 2 0.5
+hi/set/minimum 7 0.5
+hi/zoom 2 ! 3 20
+graph/hplot/errors vx11 vy12 vxe11 vye12 21 20 0.15
+atitle '   '  'Charge ratio d[s]^+!/d[s]^-!'
+text -3.5 30. '(a) Al' 0.25 0.
+text -3.5 15. '"0# data' 0.20 0.
+text -3.5 10. '- GHEISHA' 0.20 0.
+hi/zoom 7 ! 3 20 
+graph/hplot/errors vx11 vy17 vxe11 vye17 21 20 0.15
+atitle 'Rapidity y'  '  '
+text -3.5 30. '(b) Au' 0.25 0.
+wait ' ' 0
+*exec hardcopy
+meta 0
+fort/close 60
+fortran/file 60 fith2_rp.ps
+meta 60 -113
+clr
+set xsiz 15.5
+set ysiz 8.
+zone 2 1
+opt liny
+hi/set/maximum 4 2.
+hi/set/maximum 9 2.
+hi/zoom 4 ! 1 40
+graph/hplot/errors vx14 vy14 vxe14 vye14 28 20 0.15
+atitle '  ' 'Charge ratio d[s]^+!/d[s]^-!'
+text 0.2 1.8 '(a) Al' 0.25 0.
+text 0.2 0.4 '"0# data' 0.20 0.
+text 0.2 0.2 '- GHEISHA' 0.20 0.
+hi/zoom 9 ! 1 40
+graph/hplot/errors vx14 vy19 vxe14 vye19 28 20 0.15
+atitle 'p?T! "M#GeV/c"N#'  '  '
+text 0.2 1.8 '(b) Au' 0.25 0.
+wait ' ' 0
+*exec hardcopy
+meta 0
+fort/close 60  
+*** End   of history file: 04/03/92 - 11.19.43
+

@@ -1,0 +1,18 @@
+# $Id: run01.mac,v 1.1 1999-01-08 16:32:50 gunter Exp $
+#
+# Macro file for "exampleN03.cc" 
+# (can be run in batch, without graphic)
+#
+# Lead-liquidArgon 10 layers; electron 500 MeV
+#
+/control/verbose 2
+#
+#/run/initialize
+/run/particle/dumpCutValues
+#
+/run/verbose 2
+/event/drawTracks none
+#
+/gun/particle e-
+/gun/energy 500 MeV
+/run/beamOn 100

@@ -1,0 +1,63 @@
+
+OPTIMIZATION
+
+- Specialize the particle changes of all e.m. processes.
+
+
++ DEEMAX, STMIN business. 
+
++ redundant matrix calculations such as
+
+  // TdatMeV : kinetic energy values in MeV .......................
+    const G4double TdatMeV[22] = { 0.0001,0.0002,0.0004,0.0007,
+                       0.001,0.002,0.004,0.007,0.01,0.02,0.04,0.07,
+                       0.1,0.2,0.4,0.7,1.,2.,4.,7.,10.,20. } ;
+
+    G4double Tdat[22] ;
+
+    for (G4int iconv=0; iconv<22; iconv++)
+      Tdat[iconv] = TdatMeV[iconv]*MeV ;
+
+ in G4MultipleScattering. (MANY PLACES!!!)
+
++ Redundant lines G4MultipleScattering.cc line 295 and 296.
+
+     sigma /= (KineticEnergy*(TotalEnergy+ParticleMass)) ;
+     sigma /= (KineticEnergy*(TotalEnergy+ParticleMass)) ;
+
++  Deep copying instead of reference/pointer in 
+   G4EnergyLossTables::Interpolate and G4EnergyLossTables::GetPreciseDEDX
+   (potentially more, need check). 
+ 
+-  GetTables() method should return reference or pointer.
+
++ Potential BUG!!! in G4EnergyLossTables::Interpolate.
+
+  G4int bin = -1 ;
+  G4double x1,x2,x3,y1,y2,y3,ap,bp,cp,yvalue ;
+  G4double r1,r2,dy1,dy2,w11,w12,w21,w22,det,r,dx ;
+  G4bool isOut ;
+
+  do
+  {
+    bin += 1 ;
+  } while ((xvalue >= (*aTable)(materialIndex)->
+                     GetLowEdgeEnergy(bin))
+           &&
+           (bin < (t.theNumberOfBins-2))) ;
+
+    x1 = (*aTable)(materialIndex)->GetLowEdgeEnergy(bin-1) ; <++++++
+    x2 = (*aTable)(materialIndex)->GetLowEdgeEnergy(bin) ;
+    x3 = (*aTable)(materialIndex)->GetLowEdgeEnergy(bin+1) ;
+
+ Please not "bin" can be ZERO.
+
++ Boundary checks of RougeWave vector
+
+  Replace all [] for RW vector classes to ().
+
+7) UNKNOWN new and delete in all DoIt's.
+
+8) UNKNOWN RWCString construction and + operations.
+
+

@@ -1,0 +1,8 @@
+LIST
+TRIG  100000
+KINE  1 (Itype)    0.009(Ekine)
+DEBUG 1  5 1000
+SWIT  0 (draw) 1 (save)
+CUTS  10.E-6 (photon)  100.E-6 (electron)
+ABAN  0
+TIME  2= 1.

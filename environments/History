@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-01-07 16:03:49 gunter Exp $
+$Id: History,v 1.2 1999-01-08 16:31:23 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+envs-00-04-01	7th January 1999 hajime Yoshida
+- New Momo with make capabilities along with library selection
+- GGEmake updated for the latest g++ (egcs-1.1)
 envs-00-04-01  11th December 1998  Hajime Yoshida Masayasu Nagamatu
 - The latest version of GGE, the whole *.java, *.class and example files committed
 

@@ -1,0 +1,58 @@
+From Stefano.Paoli@cern.ch Thu Aug 13 15:23:32 1998
+
+Dear John,
+
+this is the form I suggest to record and track a "bug"
+found during system test.
+It might appear to heavy; we should discuss about that,
+probabily also with Simone and the others.
+
+*********************************************
+Test Incident Report (TIR)
+
+TIR ID             : progressive number
+Status             : Notified/Evaluated/In-progress/Corrected/
+                     Closed or Reopened / Cancelled
+SW product version :
+Date Detected      :
+Originator name    :
+
+Description of Incident
+-----------------------
+
+Functional Area(s) : where the bugs appears (description)
+
+Severity Code: number 1-4 (I'll provide a scheme)
+
+Test Chain ID:
+Test Case ID :
+General description of problem:
+
+Technical Assessment
+------------------------
+
+Date:
+Responsible:
+Priority: High/Medium/Low
+Origin of problem: Requirements/Analysis/.../Implementation
+Recommended solution: brief description
+
+Change approval
+---------------
+
+Date:
+Approved by:
+SW Release: (in which the bug is expected to be fixed)
+
+Regression Testing
+------------------
+
+Date:
+SW Version:
+Responsible:
+Regression Test performed:
+Approval: Pass/Fail
+Explanation: optional
+
+
+*********************************************

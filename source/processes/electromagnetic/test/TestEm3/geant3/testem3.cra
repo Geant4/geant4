@@ -1,0 +1,502 @@
++OPTION,MAPASM.
++ASM,23.
++USE,GCDES,TestEm3,T=EXE.
+*
++EXE,CRA*.
+*
++PAM,11,T=CARD,T=ATTACH.     /cern/pro/src/car/geant321.car
++PATCH,TestEm3.        
++DECK,BLANKDEK.
+* 
+* TestEm1   1.00 /01  980918 13.00 GEANT EXAMPLES
+* 
+*             TEST PROGRAM FOR GEANT TEST
+*                                                                               
+*             Author    M.Maire  *********
+*                                   
+*     
+* History                  
+* -------                                            
+*
+*                                      
++KEEP,CALOR.                  
+      COMMON/CALOR/Imat1,Imat2,NbLayer,thickn1,thickn2,calorYZ,Field,
+     &             thLayer,calorX,worldX,worldYZ   
+*                                                              
+*  Imat1   = Absorber material number.              (data card MATE )
+*  Imat2   = Gap material number.                   (data card MATE )
+*  NbLayer = Number of Layers                       (data card CALOR) 
+*  thickn1 = thickness of absorber   (cm)           (data card CALOR)
+*  thickn2 = thickness of gap        (cm)           (data card CALOR)
+*  calorYZ = tranverse size of calor (cm)           (data card CALOR)
+*  Field   = magnetic field (tesla)                 (data card CALOR)
+*
+*  thLayer = total thickness of a layer (cm)
+*  calorX  = total  X-size of the calor (cm)
+*  worldX  = total  X-size of the world (cm)
+*  worldYZ = total YZ-size of the world (cm)
+*                                                                               
++KEEP,CELOSS.                                                                                                                      
+      COMMON/CELOSS/ Edep1,Edep2,Trck1,Trck2,
+     &               sumEdep1,sumEdep2,sumTrck1,sumTrck2,                                                        
+     &               su2Edep1,su2Edep2,su2Trck1,su2Trck2
+     
++DECK,main,if=batch.
+      PROGRAM main
+*
+*
+      PARAMETER (NGBANK=100000, NHBOOK=40000)
+      COMMON/GCBANK/Q(NGBANK)
+      COMMON/PAWC  /H(NHBOOK)
+*
+      CALL GZEBRA( NGBANK)
+      CALL HLIMIT(-NHBOOK)
+*
+* *** Open metafile
+      CALL HPLINT (0)
+      OPEN (unit=8,file='testem3.view.ps',status='unknown',
+     &      form='formatted')
+      CALL HPLCAP (-8)
+*
+* *** GEANT initialisation
+      CALL UGINIT
+*
+* *** Start events processing
+      CALL GRUN
+*
+* *** End of RUN
+      CALL UGLAST
+*
+      STOP
+      END
++DECK,main,IF=-batch.
+      PROGRAM main
+*
+*     GEANT main program. To link with the MOTIF user interface
+*     the routine GPAWPP(NWGEAN,NWPAW) should be called, whereas
+*     the routine GPAW(NWGEAN,NWPAW) gives access to the basic
+*     graphics version.
+*
+      PARAMETER (NWGEAN=3000000, NWPAW=1000000)
+      COMMON/GCBANK/GEANT(NWGEAN)
+      COMMON/PAWC  /PAW  (NWPAW)
+*
+*
+      CALL GPAW (NWGEAN,NWPAW)
+*
+      END
+*
+      SUBROUTINE qnext
+      END
+*
+      SUBROUTINE czopen
+      END
+*
+      SUBROUTINE cztcp
+      END
+*
+      SUBROUTINE czclos
+      END
+*
+      SUBROUTINE czputa
+      END
++DECK,UGINIT                                                                    
+      SUBROUTINE UGINIT                                                         
+*                                                                               
+*     To initialise GEANT/USER  program and read data cards                     
+*
++SEQ,CALOR,CELOSS.                                                                               
++SEQ,GCKINE.
+*
+      CHARACTER*20 filnam                                                                                                                                                                                                      
+*                                                                               
+* *** Define the GEANT parameters                                                          
+      CALL GINIT 
+                                                                          
+* *** read data cards
+      PRINT *, 'G3 > gives the filename of the data cards to be read:'
+      READ (*,'(A)') filnam
+      IF (filnam.EQ.' ') filnam = 'testem3.dat'
+      OPEN (unit=5,file=filnam,status='unknown',form='formatted')
+                                              
+*
+* *** Calor definition
+      CALL FFKEY('MATE' ,Imat1  ,2,'INTEGER')                                                                                                                                                                          
+      CALL FFKEY('CALOR',NbLayer,5,'MIXED')
+*                                                                    
+* *** read data cards                                                           
+      CALL GFFGO 
+                                                                     
+*                                                                               
+      CALL GZINIT                                                               
+      CALL GPART 
+*
+      CALL GDINIT                                                                     
+*                                                                               
+* *** Geometry and materials description                                        
+      CALL UGEOM                                                                
+*                                                                               
+* *** Energy loss and cross-sections initialisations                            
+      CALL GPHYSI                                                               
+*                                                                               
+      CALL GPRINT('MATE',0)                                                     
+      CALL GPRINT('TMED',0)                                                     
+      CALL GPRINT('VOLU',0)                                                     
+*                                                                                                                                                              
+* *** Define user histograms                                                    
+      CALL UHINIT
+*
+* *** some initialisation
+      sumEdep1 = 0.
+      sumEdep2 = 0.
+      sumTrck1 = 0.
+      sumTrck2 = 0.
+*
+      su2Edep1 = 0.
+      su2Edep2 = 0.
+      su2Trck1 = 0.
+      su2Trck2 = 0.                                                              
+*                                                                               
+      END                                                                       
++DECK,UGEOM.                                                                    
+      SUBROUTINE UGEOM                                                          
+*                                                                               
+* *** Define user geometry set up                                               
+*                                                                                                                                                                                                                       
+*
++SEQ,CALOR.
+*                                                                               
+      DIMENSION PAR(3)
+      
+      DIMENSION Aair(2),Zair(2),Wair(2)
+      DIMENSION ACO2(2),ZCO2(2),WCO2(2)
+      DIMENSION AH2O(2),ZH2O(2),WH2O(2)                                        
+*                                                                               
+* *** Air compound parameters                                                   
+      DATA Aair/14.01, 16.00/                                            
+      DATA Zair/ 7.  ,  8.  /                                                     
+      DATA Wair/ 0.7 ,  0.3 /
+*                                                                               
+* *** CO2 compound parameters                                                   
+      DATA ACO2/12.01, 16.00/                                            
+      DATA ZCO2/ 6.  ,  8.  /                                                     
+      DATA WCO2/ 1.  ,  2.  /      
+*                                                                               
+* *** Water compound parameters                                                   
+      DATA AH2O/ 1.01, 16.00/                                            
+      DATA ZH2O/ 1.  ,  8.  /                                                     
+      DATA WH2O/ 2.  ,  1.  /                                                           
+*
+* *** Defines USER perticular materials
+      CALL GSMIXT( 1,'Air'      , Aair ,Zair, 1.29E-3, 2   , Wair)
+      CALL GSMIXT( 2,'CO2 gas'  , ACO2 ,ZCO2, 27.0E-3,-2   , WCO2)                                                
+      CALL GSMATE( 3,'H2 Liquid',  1.01,  1., 0.0708 , 865., 790., 0,0)   
+      CALL GSMIXT( 4,'Water'    , AH2O ,ZH2O, 1.0    ,-2   , WH2O)      
+      CALL GSMATE( 5,'Liquid Ar', 39.95, 18., 1.39   , 14.0, 84.0, 0,0)             
+      CALL GSMATE( 6,'Aluminium', 26.98, 13., 2.7    ,  8.9, 37.2, 0,0)
+      CALL GSMATE( 7,'Iron     ', 55.85, 26., 7.87   , 1.76, 17.1, 0,0)             
+      CALL GSMATE( 8,'Lead     ',207.19, 82., 11.35  , 0.56, 18.5, 0,0)              
+      CALL GSMATE( 9,'Uranium  ',238.03, 92., 18.95  , 0.32, 12. , 0,0)                    
+*                                               
+*                                                                               
+* *** Defines USER tracking media parameters
+      IFIELD = 0                                                             
+      IF (Field.GT.0.) IFIELD = 3
+      FIELDM = 10*Field                                                               
+      TMAXFD = 10.0                                                             
+      STEMAX = 1000.                                                            
+      DEEMAX = 0.20                                                            
+      EPSIL  = 0.001                                                           
+      STMIN  = 0.010                                                           
+*
+      CALL GSTMED( 1,'absorber',Imat1, 0 ,IFIELD,FIELDM,TMAXFD,                
+     *               STEMAX,DEEMAX,EPSIL,STMIN, 0 , 0 )
+*
+      CALL GSTMED( 2,'gap'     ,Imat2, 0 ,IFIELD,FIELDM,TMAXFD,                
+     *               STEMAX,DEEMAX,EPSIL,STMIN, 0 , 0 )
+*                                                                               
+      CALL GSTMED( 3,'default' ,1    , 0 ,IFIELD,FIELDM,TMAXFD,                
+     *               STEMAX,DEEMAX,EPSIL,STMIN, 0 , 0 )             
+*
+*
+* *** calor dimensions
+      thLayer = thickn1 + thickn2
+      calorX  = NbLayer*thLayer
+      worldX  = 1.2*calorX
+      worldYZ = 1.2*calorYZ
+*
+* *** world                                                                                     
+      PAR(1) = worldX /2.                                                               
+      PAR(2) = worldYZ/2.                                                               
+      PAR(3) = worldYZ/2.                                                               
+      CALL GSVOLU('worl','BOX ',3,PAR,3,IVOL)
+*
+* *** calorimeter                                                                                     
+      PAR(1) = calorX /2.                                                               
+      PAR(2) = calorYZ/2.                                                               
+      PAR(3) = calorYZ/2.                                                               
+      CALL GSVOLU('calo','BOX ',3,PAR,3,IVOL)
+      CALL GSPOS ('calo',1,'worl',0.,0.,0.,0,'only')
+*
+* *** layers
+      CALL GSDVN ('layr','calo',NbLayer,1)
+*
+* *** absorber and gap
+      IF (thickn1.GT.0.) THEN
+        PAR(1) = thickn1/2.                                                               
+        PAR(2) = calorYZ/2.                                                               
+        PAR(3) = calorYZ/2.                                                               
+        CALL GSVOLU('abso','BOX ',1,PAR,3,IVOL)
+        ogx = -0.5*thickn2
+        CALL GSPOS ('abso',1,'layr',ogx,0.,0.,0,'only')
+      ENDIF
+*
+      IF (thickn2.GT.0.) THEN
+        PAR(1) = thickn2/2.                                                               
+        PAR(2) = calorYZ/2.                                                               
+        PAR(3) = calorYZ/2.                                                               
+        CALL GSVOLU('sgap' ,'BOX ',2,PAR,3,IVOL)
+        ogx = 0.5*thickn1
+        CALL GSPOS ('sgap' ,1,'layr',ogx,0.,0.,0,'only')
+      ENDIF                                        
+*                                                                               
+* *** Close geometry banks. (mandatory system routine)                         
+      CALL GGCLOS                                                               
+*
+*
+* *** dessin
+      CALL GSATT ('*'   ,'SEEN',1)
+      CALL GSATT ('layr','SEEN',0)
+*
+      DO IX = 1,3
+        CALL GDOPEN (IX)
+        SCALE =   18./worldX
+        PAXIS =   0.
+        SAXIS =   1.
+        CALL GDRAWC ('worl',IX,0.,10.,9.3,SCALE,SCALE)
+        CALL GDAXIS (PAXIS,PAXIS,PAXIS,SAXIS)
+        CALL GDSCAL (10. , 0.3)
+        CALL GDCLOS
+      END DO
+*
+                                                                               
+      END                                                                       
++DECK,UHINIT.                                                                   
+      SUBROUTINE UHINIT                                                         
+*                                                                               
+*     To book the user's histograms                                             
+*
+      CHARACTER*5 chtags(4)
+*
+      DATA chtags /'Edep1','Edep2','Trck1','Trck2'/
+*      
+      CALL HBOOKN(1,'sum per event',4,' ',4000,chtags)                                                                                                                                                                                       
+*                                                                               
+      END                                                                       
++DECK,GUKINE                                                                    
+      SUBROUTINE GUKINE                                                         
+*                                                                               
+*    Generates Kinematics for primary track
+*
+*    Data card Kine : Itype  Ekine x0  y0  z0  ux  uy  uz                                       
+*                                                                               
++SEQ,GCBANK,GCFLAG,GCKINE.
++SEQ,CALOR.                                                                                                                           
+*                                                                               
+      DIMENSION VERTEX(3),PLAB(3)
+*
+* *** set/reset default kinematic
+      IF (IKINE.LT.0) THEN
+          IKINE = ABS(IKINE)                                                     
+          PKINE(2) = -0.5*worldX
+          PKINE(3) = 0.
+          PKINE(4) = 0.
+          PKINE(5) = 1.
+          PKINE(6) = 0.
+          PKINE(7) = 0.
+      ENDIF    
+*
+      VERTEX(1) = PKINE(2)
+      VERTEX(2) = PKINE(3)
+      VERTEX(3) = PKINE(4)
+*                                                                     
+      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
+*
+*
+      JPA     = LQ(JPART-IKINE)
+      XMASS   =  Q(JPA+7)
+      PMOM    = SQRT(PKINE(1)*(PKINE(1)+2*XMASS))
+      PLAB(1) = PMOM*PKINE(5)
+      PLAB(2) = PMOM*PKINE(6)
+      PLAB(3) = PMOM*PKINE(7)                                    
+*                                                          
+      CALL GSKINE(PLAB,IKINE,NVERT,0,0,NT)                           
+*                                                                   
+* *** Kinematics debug                     
+      IF (IEVENT.EQ.1.OR.IDEBUG.NE.0) CALL GPRINT('KINE',0)                                                                     
+*                                                                               
+      END                                                                       
++DECK,GUTREV                                                          
+      SUBROUTINE GUTREV                                                         
+*                                                                               
+*     User routine to control tracking of one event                 
+*     Called by GRUN                                                            
+*                                                                     
++SEQ,CELOSS                                                                     
+*                                                                          
+      Edep1 = 0.
+      Edep2 = 0.
+      Trck1 = 0.
+      Trck2 = 0.                                                               
+*                                                                               
+      CALL GTREVE                                                               
+*                                                                               
+      END                                                                       
++DECK,GUSTEP                                                                    
+      SUBROUTINE GUSTEP                                                         
+*                                                                               
+*     User routine called at the end of each tracking step           
+*                                                               
++SEQ,GCFLAG.
++SEQ,GCKINE,GCKING,GCTRAK,GCTMED.                                 
++SEQ,CELOSS.                                                             
+*                                                                               
+*                                                                               
+* *** Debug event and store tracks for drawing
+      IF (IDEBUG.NE.0)   CALL GPCXYZ      
+      IF ((ISWIT(1).EQ.1).AND.(CHARGE.NE.0.)) CALL GSXYZ
+      IF  (ISWIT(1).EQ.2)                     CALL GSXYZ                        
+*                                                                               
+* *** Something generated ?                                                     
+      IF(NGKINE.GT.0) CALL GSKING(0)                                            
+*                                                                               
+* *** Energy deposited and charged track length
+      IF (DESTEP.NE.0.) THEN                                                        
+         if (NUMED.EQ.1) Edep1 = Edep1 + DESTEP
+         if (NUMED.EQ.2) Edep2 = Edep2 + DESTEP
+      ENDIF
+*       
+      IF (CHARGE*STEP.NE.0.) THEN   
+         if (NUMED.EQ.1) Trck1 = Trck1 + STEP
+         if (NUMED.EQ.2) Trck2 = Trck2 + STEP
+      ENDIF            
+         
+      END                                                                       
++DECK,GUOUT                                                                     
+      SUBROUTINE GUOUT                                                          
+*                                                                               
+*     User routine called at the end of each event                              
+*                                                                               
++SEQ,GCFLAG.
++SEQ,CELOSS.
+*
+      DIMENSION sumevent(4)
+      CHARACTER*4 unit                                                              
+*                                                                               
+* *** drawing
+*                                                          
+        IF (ISWIT(1).NE.0) THEN
++self,if=batch.
+         CALL ICLRWK (0,0)
++self.
+         CALL GDHEAD (110110,'TestEm3',0.)
+         CALL GDSHOW (3)
+         CALL GDXYZ  (0)
+      END IF
+*
+*     ntuple: energies and track length per event
+      sumevent(1) = Edep1
+      sumevent(2) = Edep2
+      sumevent(3) = Trck1
+      sumevent(4) = Trck2
+      CALL HFN(1,sumevent)     
+*
+*     cumul energy deposited and charged track length
+      sumEdep1 = sumEdep1 + Edep1
+      sumEdep2 = sumEdep2 + Edep2
+      sumTrck1 = sumTrck1 + Trck1
+      sumTrck2 = sumTrck2 + Trck2
+*
+      su2Edep1 = su2Edep1 + Edep1**2
+      su2Edep2 = su2Edep2 + Edep2**2
+      su2Trck1 = su2Trck1 + Trck1**2
+      su2Trck2 = su2Trck2 + Trck2**2      
+*
+* *** print                                                                                
+      IF (ISWIT(1).NE.0) THEN
+         CALL GEVKEV (Edep1,Eunit,unit)
+         PRINT 751,Eunit,unit,Trck1
+         CALL GEVKEV (Edep2,Eunit,unit)           
+         PRINT 752,Eunit,unit,Trck2
+      ENDIF    
+
+  751 FORMAT(1X,'Absorber: Energy deposit: ',F8.3,A4,
+     &                 '.  Track length: '  ,F8.3,' cm')
+  752 FORMAT(1X,'Gap     : Energy deposit: ',F8.3,A4,
+     &                 '.  Track length: '  ,F8.3,' cm')         
+*                                                                                
+      END                                                                       
++DECK,UGLAST                                                                    
+      SUBROUTINE UGLAST                                                         
+*                                                                               
+*     Termination routine to print histograms and statistics                    
+*                                                                               
++SEQ,GCFLAG.
++SEQ,GCTRAK.
++SEQ,CELOSS.
+*                                                      
+      CHARACTER*4 unitm,unitr
+*
+* *** mean energy deposit and track length
+      fnorm    = 1./IEVENT
+      aveEdep1 = fnorm*sumEdep1
+      rmsEdep1 = fnorm*sqrt(abs(IEVENT*su2Edep1-sumEdep1**2))
+      aveEdep2 = fnorm*sumEdep2
+      rmsEdep2 = fnorm*sqrt(abs(IEVENT*su2Edep2-sumEdep2**2))
+      aveTrck1 = fnorm*sumTrck1
+      rmsTrck1 = fnorm*sqrt(abs(IEVENT*su2Trck1-sumTrck1**2))
+      aveTrck2 = fnorm*sumTrck2
+      rmsTrck2 = fnorm*sqrt(abs(IEVENT*su2Trck2-sumTrck2**2))
+*
+      PRINT 750,IEVENT      
+      CALL GEVKEV (aveEdep1,Emean,unitm)
+      CALL GEVKEV (rmsEdep1,Erms ,unitr)
+      PRINT 751,Emean,unitm,Erms,unitr,aveTrck1,rmsTrck1
+      CALL GEVKEV (aveEdep2,Emean,unitm)
+      CALL GEVKEV (rmsEdep2,Erms ,unitr)          
+      PRINT 752,Emean,unitm,Erms,unitr,aveTrck2,rmsTrck2      
+*                                                                                                                        
+* *** geant termination                                                                               
+      CALL GLAST
+*
+* *** close HIGZ file
+      CALL HPLEND
+*                                                                               
+* *** Save ntuple                                                  
+      IF (ISWIT(2).EQ.1) THEN                                                   
+         CALL HRPUT(0,'testem3.ntupl','N')                                                                        
+      ENDIF                                                                     
+*      
+*
+* *** formats            
+  750 FORMAT(//,1X,'Nb of events:',I6)
+  751 FORMAT(1X,'Absorber: Energy deposit: ',F8.3,A4,' +- ',F5.2,A4,
+     &                 '.  Track length: '  ,F8.3,' cm +- ',F5.2,' cm')
+  752 FORMAT(1X,'Gap     : Energy deposit: ',F8.3,A4,' +- ',F5.2,A4,
+     &                 '.  Track length: '  ,F8.3,' cm +- ',F5.2,' cm')
+*              
+      END
++DECK,ffread,T=data.      
+LIST
+MATE   8  (Imat1) 5 (Imat2)
+CALOR  10 (nbLay) 1.(thck1) 0.5 (thck2) 10. (calorYZ) 0. (field)
+TRIG   100
+KINE   3 (Itype) 0.500 (Ekine) -9. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
+DEBUG  10  5 1000
+SWIT   0 (draw) 1 (save)
+CUTS   10.e-6 (cutgam)    100.e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+ABAN   0
+LOSS   1
+HADR   0
+TIME   2=1.
++QUIT.

@@ -1,0 +1,22 @@
+$Id: README,v 1.1 1999-01-08 16:34:12 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      System Tests module
+                      -------------------
+
+This module collects a set of "system" tests which are used as part of the
+validation procedure, to verify and control the overall functionalities of
+the GEANT4 toolkit.
+The system tests must be considered as "global" regression tests aimed to
+verify the robustness and reliability of the product in many areas.
+Therefore, each test may include more than one test case, covering different
+initial conditions and setups. Initial setups for a specific tests are
+represented by *.in macros, reference outputs for each test case are represented
+by *.out files.
+This set of tests is going to be extended in future, to become more and more
+exhaustive and complete.
+ 

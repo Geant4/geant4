@@ -1,0 +1,45 @@
+###Compiling 
+Making dependency for file 
+Creating/replacing object files in 
+ar: Warning: creating 
+ar r 
+is up to date.
+######### rogue #################
+Error (future) 641: "/opt/aCC/include/rw/xvordvec.h", line 232 # Undeclared variable 'reshape'. Did you forget to make the variable dependent on the template type parameters so it would be looked up when templates are generated?
+      void                  resize(size_t N)        {if(N>=nitems_) reshape(N);}
+                                                                    ^^^^^^^     
+Error (future) 641: "/opt/aCC/include/rw/xvordvec.cc", line 130 # Undeclared variable 'reshape'. Did you forget to make the variable dependent on the template type parameters so it would be looked up when templates are generated?
+      reshape(RWDEFAULT_CAPACITY);
+      ^^^^^^^                     
+Error (future) 641: "/opt/aCC/include/rw/xpordvec.h", line 192 # Undeclared variable 'reshape'. Did you forget to make the variable dependent on the template type parameters so it would be looked up when templates are generated?
+      void                  clear()                 {nitems_=0; reshape(RWDEFAULT_CAPACITY);}
+                                                                ^^^^^^^                      
+Error (future) 641: "/opt/aCC/include/rw/xpordvec.h", line 216 # Undeclared variable 'reshape'. Did you forget to make the variable dependent on the template type parameters so it would be looked up when templates are generated?
+      void                  resize(size_t N)        {if(N>=nitems_) reshape(N);}
+                                                                    ^^^^^^^     
+Error (future) 641: "/opt/aCC/include/rw/xpsrtvec.cc", line 170 # Undeclared variable 'removeAt'. Did you forget to make the variable dependent on the template type parameters so it would be looked up when templates are generated?
+      return idx == RW_NPOS ? rwnil : removeAt(idx);
+                                      ^^^^^^^^      
+Error (future) 641: "/opt/aCC/include/rw/xpsrtvec.cc", line 203 # Undeclared variable 'entries'. Did you forget to make the variable dependent on the template type parameters so it would be looked up when templates are generated?
+      if (entries())
+          ^^^^^^^   
+Error (future) 641: "/opt/aCC/include/rw/xpsrtvec.cc", line 205 # Undeclared variable 'entries'. Did you forget to make the variable dependent on the template type parameters so it would be looked up when templates are generated?
+        size_t top = entries() - 1;
+                     ^^^^^^^       
+Error (future) 641: "/opt/aCC/include/rw/xpsrtvec.cc", line 236 # Undeclared variable 'entries'. Did you forget to make the variable dependent on the template type parameters so it would be looked up when templates are generated?
+        while ( end+1 < entries() && *((*this)(end+1)) == *key)
+Error (future) 641: "/opt/aCC/include/rw/xpsrtvec.cc", line 170 # Undeclared variable 'removeAt'. Did you forget to make the variable dependent on the template type parameters so it would be looked up when templates are generated?
+      return idx == RW_NPOS ? rwnil : removeAt(idx);
+                                      ^^^^^^^^      
+Error (future) 641: "/opt/aCC/include/rw/xpsrtvec.cc", line 203 # Undeclared variable 'entries'. Did you forget to make the variable dependent on the template type parameters so it would be looked up when templates are generated?
+      if (entries())
+          ^^^^^^^   
+Error (future) 641: "/opt/aCC/include/rw/xpsrtvec.cc", line 205 # Undeclared variable 'entries'. Did you forget to make the variable dependent on the template type parameters so it would be looked up when templates are generated?
+        size_t top = entries() - 1;
+                     ^^^^^^^       
+Error (future) 641: "/opt/aCC/include/rw/xpsrtvec.cc", line 236 # Undeclared variable 'entries'. Did you forget to make the variable dependent on the template type parameters so it would be looked up when templates are generated?
+        while ( end+1 < entries() && *((*this)(end+1)) == *key)
+Warning:	2 future errors were detected and ignored. Add a '+p' option to detect and fix them before they become fatal errors in a future release. Behavior of this ill-formed program is not guaranteed to match that of a well-formed program
+Warning:	4 future errors were detected and ignored. Add a '+p' option to detect and fix them before they become fatal errors in a future release. Behavior of this ill-formed program is not guaranteed to match that of a well-formed program
+Warning:	6 future errors were detected and ignored. Add a '+p' option to detect and fix them before they become fatal errors in a future release. Behavior of this ill-formed program is not guaranteed to match that of a well-formed program
+Warning:	8 future errors were detected and ignored. Add a '+p' option to detect and fix them before they become fatal errors in a future release. Behavior of this ill-formed program is not guaranteed to match that of a well-formed program

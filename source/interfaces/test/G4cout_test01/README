@@ -1,0 +1,29 @@
+		README G4cout_test01:
+
+					Nov. 3 1998
+					Masayasu Nagamatu
+
+This example program illustrates how to use "setCoutDestination" of G4cout
+in order to redirect the stream.
+The documentation of G4cout/G4cerr is found in the sections 2.1.6 and 3.15
+of the User's Guide of GEANT4.
+
+This example is created after examples/novice/exampleN01 which is a pure batch
+one. But this example can redirect the output to a file named "Mylog".
+
+
+1) Only one class "Mysession" (src/Mysession.cc and include/Mysession.hh) is
+added to the original ExN01 classes. The class "Mysession"  is derived 
+from G4UIsession and implements two methods to receive the stream 
+of G4cout and G4cerr respectively.
+      ReceiveG4cout(session)
+      ReceiveG4cerr(session)
+ 
+2) G4cout_test01.cc  has a line to instantiate the "session" of the above class.
+
+
+
+
+
+
+

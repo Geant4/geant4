@@ -1,0 +1,46 @@
+# Use this macro file to open a view and draw detector.
+# In test19, this is executed, then a normal prompt appears.
+#
+# Reflect commands to output.
+/control/verbose 2
+#
+# Set gun for demo (detector 1)
+#/gun/particle e+
+#/gun/position 0 -100 0 cm
+#/gun/direction 0 1 0
+#
+# Initialise physics and geometry.
+/init/all
+#
+# John's personal preferences
+/vis~/lights/move_with_camera true
+/vis~/set/marker_choices 1
+#
+# See list of graphics systems possibilities.
+/vis~/create_view/new_graphics_system
+#
+# Select view and draw.
+#/vis~/create_view/new_graphics_system DAWN
+#/vis~/create_view/new_graphics_system RayX
+#/vis~/create_view/new_graphics_system OGLIX
+/vis~/create_view/new_graphics_system OGLSX
+#/vis~/create_view/new_graphics_system VRML1
+#/vis~/create_view/new_graphics_system VRML1File
+#/vis~/create_view/new_graphics_system Xo
+#/vis~/create_view/new_graphics_system Wo
+#
+# G4Ray demo
+#/vis~/camera/zoom 2
+#/vis~/camera/viewpoint 20 20
+#/vis~/set/drawing_style 2
+#/vis~/create_view/new_graphics_system RayX
+#/vis~/ray/resolution 1
+#/vis~/draw/current
+#
+# Draw current scene
+/vis~/draw/current
+/vis~/show/view
+#
+# Switch off the reflecting of commands.
+/control/verbose 0
+

@@ -1,0 +1,189 @@
+
+***** Table : Nb of materials = 13 *****
+
+ Material: Aluminium  density:  2.700  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893  cm
+   --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: liquidArgon  density:  1.390  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065  cm
+   --->  Element: liquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:   Copper  density:  8.960  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.436  cm
+   --->  Element:   Copper      Z = 29.0   N =  63.5   A =  63.55 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Lead  density: 11.350  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612  mm
+   --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:    Water  density:  1.000  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092  cm
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material: Scintillator  density:  1.032  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  42.549  cm
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  91.45 %  Abundance  47.37 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   8.55 %  Abundance  52.63 %
+
+ Material:   quartz  density:  2.200  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  12.295  cm
+   --->  Element:  Silicon Si   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass:  46.75 %  Abundance  33.33 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  53.25 %  Abundance  66.67 %
+
+ Material:      Air  density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161   m
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material:  Aerogel  density: 200.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.493   m
+   --->  Element:  Silicon Si   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass:  29.22 %  Abundance  11.12 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  66.49 %  Abundance  44.42 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   4.19 %  Abundance  44.37 %
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   0.10 %  Abundance   0.09 %
+
+ Material: CarbonicGas  density: 27.000 mg/cm3  temperature: 325.00 K  pressure:  50.00 atm  RadLength:  13.406   m
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  27.29 %  Abundance  33.33 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  72.71 %  Abundance  66.67 %
+
+ Material: WaterSteam  density:  0.300 mg/cm3  temperature: 500.00 K  pressure:   2.00 atm  RadLength:   1.203  km
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material: Galactic  density:  0.000 mg/cm3  temperature:   0.10 K  pressure:   0.00 atm  RadLength: 6317232936888469300000.000  km
+   --->  Element: Galactic      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Beam  density:  0.010 mg/cm3  temperature: 273.15 K  pressure:   0.02 atm  RadLength:  36.786  km
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+
+
+ The calorimeter is made of 10 layers of: [ 10mm of Lead + 5mm of liquidArgon ] 
+T07PhysicsList::SetCuts:CutLength : 2 (mm)
+
+phot:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to 50 MeV for all Z
+        PhysicsTables from 10 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation(L.Urban). Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02  eV to 1e+02 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a parametrisation(L.Urban). Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02  eV to 1e+02 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02  eV to 1e+02 TeV in 100 bins. 
+
+MuIoni:  knock-on electron cross sections .
+          Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+
+MuBrems:  cross sections from R. Kokoulin 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+
+MuPairProd:  cross sections from R. Kokoulin 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+Idle> Idle> /control/saveHistory
+Idle> /run/verbose 2
+Idle> #
+Idle> /run/particle/dumpCutValues
+============= The cut Energy ==============================
+                          gamma          e-         mu-      proton     neutron
+Cut in range [mm]             2           2           2           2           2
+Cut in energy [KeV]
+          Aluminium         9.6       1e+03     7.4e+03     1.9e+04        0.99
+        liquidArgon         8.6     5.6e+02     4.8e+03     1.2e+04        0.99
+             Copper          36     2.7e+03     1.3e+04     3.4e+04        0.99
+               Lead     1.2e+02     2.6e+03     1.3e+04     3.2e+04        0.99
+              Water         3.9     5.7e+02       5e+03     1.3e+04        0.99
+       Scintillator         3.1     5.8e+02       5e+03     1.3e+04        0.99
+             quartz         7.6     9.1e+02     6.9e+03     1.8e+04        0.99
+                Air        0.99        0.99          82     1.7e+02        0.99
+            Aerogel         2.3     1.8e+02     1.9e+03     4.8e+03        0.99
+        CarbonicGas        0.99          54       6e+02     1.3e+03        0.99
+         WaterSteam        0.99        0.99          30          45        0.99
+           Galactic        0.99        0.99        0.99        0.99        0.99
+               Beam        0.99        0.99        0.99        0.99        0.99
+===================================================
+Idle> #
+Idle> #
+Idle> /gun/particle e+
+Idle> /gun/energy 300 MeV
+Idle> /run/beamOn 500
+### Run 0 start.
+Start closing geometry.
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 500
+  User=54s Real=59s Sys=5.7s
+Idle> /calor/setAbsMat Aluminium
+
+ The calorimeter is made of 10 layers of: [ 10mm of Aluminium + 5mm of liquidArgon ] 
+Idle> /calor/setGapMat Aerogel
+
+ The calorimeter is made of 10 layers of: [ 10mm of Aluminium + 5mm of Aerogel ] 
+Idle> /calor/setAbsThick 2. cm
+
+ The calorimeter is made of 10 layers of: [ 20mm of Aluminium + 5mm of Aerogel ] 
+Idle> /calor/setGapThick 5. cm
+
+ The calorimeter is made of 10 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
+Idle> /calor/setNbOfLayers 30
+
+ The calorimeter is made of 30 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
+Idle> /calor/setSizeYZ   1.5 m
+
+ The calorimeter is made of 30 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
+Idle> /calor/update
+
+ The calorimeter is made of 30 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
+Idle> /gun/particle gamma
+Idle> /gun/energy 500 MeV
+Idle> /run/beamOn 500
+### Run 1 start.
+Start closing geometry.
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 500
+  User=1.5e+02s Real=1.6e+02s Sys=15s
+Idle> G4 kernel has come to Quit state.
+Deletion of G4 kernel class start.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+G4SDManager deleted.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManager is deleting.

@@ -1,0 +1,15 @@
+
+ ============   Sphere test   ================
+
+Sphere created ! 
+Dir =  -1,0,0
+Start 19000,1,0
+Dist to in : 18900.5
+Start 0,0,0
+Dist to out: 99.4987
+Point 0,0,50
+Dist to out: 50
+Point 100000,0,50
+Dist to in: 99900
+
+

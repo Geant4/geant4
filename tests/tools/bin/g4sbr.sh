@@ -1,0 +1,128 @@
+#!/usr/local/bin/bash
+##########################
+# g4sbr.sh (SetupBuildRun)
+##########################
+
+TREE=$1
+REFTAG=$2
+ACTION=$3
+ACTARG1=$4
+ACTARG2=$5
+ACTARG3=$6
+NONINCREMENTAL=$7
+##############################################
+# We have agreement about tag name: tag_name+
+##############################################
+PREVTAG=`echo $REFTAG|cut -d + -f1`
+
+if [ X$TREE = X -o X$REFTAG = X ]
+then
+echo
+echo "Usage: g4sbr.sh [O]|[D] TAG_NAME Act arg1 arg2 arg3 NonIncrementalFlag"
+echo
+exit
+fi
+#
+
+if [ X$TREE = XD -o X$TREE = Xd ]
+then
+REFTREE=ref+
+else
+REFTREE=ref
+fi
+
+####################################################################
+# Setup environment in $REFTREE
+####################################################################
+cd /afs/cern.ch/rd44/stt/${REFTREE}/src/geant4beta/tests/tools/bin
+. /afs/cern.ch/rd44/stt/ref+/src/geant4beta/tests/tools/bin/setup.sh
+
+env | grep G4
+ulimit -a
+
+##########################
+# Check if INPROGRESS
+##########################
+if [ -e $G4WORKDIR/inprogress.stat ]; then
+echo "In progress already!"
+# exit 
+fi
+
+###########################################
+# Locks and stats
+###########################################
+trap "mv $G4WORKDIR/inprogress.stat $G4WORKDIR/interrupt.stat;touch $G4WORKDIR/interrupt.stat" TERM
+rm $G4WORKDIR/done.stat $G4WORKDIR/interrupt.stat
+touch $G4WORKDIR/inprogress.stat
+cat >>  $G4WORKDIR/inprogress.stat <<EOF
+${REFTAG}
+EOF
+
+######################################################################
+# Prepare in ref[+] if not incremental: moving stt/, clear bin|lib|tmp
+######################################################################
+if [ X$NONINCREMENTAL = X ]
+then
+cd /afs/cern.ch/rd44/stt/${REFTREE}/${G4SYSTEM}/stt/${G4SYSTEM}
+NEXT_NUMBER=$[`ls -c1 gmake.log.*|sort|tail -1|cut -d "." -f3`+1]
+mv gmake.log gmake.log.${NEXT_NUMBER}
+else
+cd /afs/cern.ch/rd44/stt/${REFTREE}/${G4SYSTEM}
+echo REMOVE
+mv stt stt.${PREVTAG}
+rm -r bin lib tmp
+fi
+########################################################
+
+################################
+# Build&run all in ref[+]
+################################
+cd /afs/cern.ch/rd44/stt/${REFTREE}/${G4SYSTEM}
+. /afs/cern.ch/rd44/stt/ref+/src/geant4beta/tests/tools/bin/limit.sh
+
+if [ X$ACTION = Xbuild -o X$ACTION = Xall  ]
+then
+#################
+# Maybe workaround about first building sublibs without TMPDIR,
+# but as afr as I know decision - use granular libs.
+# Shortlived decision - first build ALL without TMPDIR - then
+# with it.
+################
+#${G4INSTALL}/tests/tools/bin/build_specific.sh &
+#${G4INSTALL}/tests/tools/bin/build.sh
+. /afs/cern.ch/rd44/stt/ref+/src/geant4beta/tests/tools/bin/tmpenv.sh
+${G4INSTALL}/tests/tools/bin/build.sh $ACTARG1 $ACTARG2
+#unset $TMPDIR
+#${G4INSTALL}/tests/tools/bin/build.sh test all
+fi
+
+#
+# Shortlived solution for DEC6-AFS problems with templates
+#
+if [ X$G4SYSTEM = XDEC-cxx  ]
+then
+chmod +x /afs/cern.ch/rd44/stt/${REFTREE}/${G4SYSTEM}/bin/${G4SYSTEM}/*
+fi
+
+if [ X$ACTION = Xrun -o X$ACTION = Xall  ]
+then
+${G4INSTALL}/tests/tools/bin/run.sh $ACTARG3
+fi
+####################################################################
+
+########################
+# Waiting for complete
+########################
+wait
+mv $G4WORKDIR/inprogress.stat $G4WORKDIR/done.stat
+touch $G4WORKDIR/done.stat
+
+#######################################
+# Mail about completion in TEST accont
+#######################################
+#mail serguei.sadilov@cern.ch <<EOF
+#G4 sbr complete on $G4SYSTEM!
+#EOF
+
+
+

@@ -1,0 +1,17 @@
+# $Id: run00.mac,v 1.1 1999-01-08 16:32:38 gunter Exp $
+#
+# Macro file for "TestEm1.cc"
+# (can be run in batch, without graphic)
+#
+# geantino 1 GeV; 10000 evts
+#
+/control/verbose 2
+#
+/run/initialize
+#
+/run/verbose 2
+/event/drawTracks none
+#
+/gun/particle geantino
+/gun/energy 1 GeV
+/run/beamOn 10000

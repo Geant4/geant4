@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisAttributes.cc,v 1.1 1999-01-07 16:09:19 gunter Exp $
+// $Id: G4VisAttributes.cc,v 1.2 1999-01-08 16:32:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,36 +14,40 @@
 #include "G4VisAttributes.hh"
 
 G4VisAttributes::G4VisAttributes ():
-fVisible           (true),
-fColour            (G4Colour ()),
-fLineStyle         (unbroken),
-fLineWidth         (1.),
-fForceDrawingStyle (false)
+fVisible            (true),
+fDaughtersInvisible (false),
+fColour             (G4Colour ()),
+fLineStyle          (unbroken),
+fLineWidth          (1.),
+fForceDrawingStyle  (false)
 {}
 
 G4VisAttributes::G4VisAttributes (G4bool visibility):
-fVisible           (visibility),
-fColour            (G4Colour ()),
-fLineStyle         (unbroken),
-fLineWidth         (1.),
-fForceDrawingStyle (false)
+fVisible            (visibility),
+fDaughtersInvisible (false),
+fColour             (G4Colour ()),
+fLineStyle          (unbroken),
+fLineWidth          (1.),
+fForceDrawingStyle  (false)
 {}
 
 G4VisAttributes::G4VisAttributes (const G4Colour& colour):
-fVisible           (true),
-fColour            (colour),
-fLineStyle         (unbroken),
-fLineWidth         (1.),
-fForceDrawingStyle (false)
+fVisible            (true),
+fDaughtersInvisible (false),
+fColour             (colour),
+fLineStyle          (unbroken),
+fLineWidth          (1.),
+fForceDrawingStyle ( false)
 {}
 
 G4VisAttributes::G4VisAttributes (G4bool visibility,
-					 const G4Colour& colour):
-fVisible           (visibility),
-fColour            (colour),
-fLineStyle         (unbroken),
-fLineWidth         (1.),
-fForceDrawingStyle (false)
+				  const G4Colour& colour):
+fVisible            (visibility),
+fDaughtersInvisible (false),
+fColour             (colour),
+fLineStyle          (unbroken),
+fLineWidth          (1.),
+fForceDrawingStyle  (false)
 {}
 
 const G4VisAttributes  G4VisAttributes::Invisible = G4VisAttributes (false);
@@ -52,7 +56,9 @@ ostream& operator << (ostream& os, const G4VisAttributes& a) {
   
   os << "G4VisAttributes: ";
   if (&a){
-    if (!a.fVisible) os << " in";
+    if (!a.fVisible) os << "in";
+    os << "visible, daughters ";
+    if (a.fDaughtersInvisible) os << "in";
     os << "visible, colour: " << a.fColour;
     os << "\n  linestyle: ";
     switch (a.fLineStyle) {
@@ -89,6 +95,7 @@ G4bool operator != (const G4VisAttributes& a1,
 
   if (
       (a1.fVisible            != a2.fVisible)            ||
+      (a1.fDaughtersInvisible != a2.fDaughtersInvisible) ||
       (a1.fColour             != a2.fColour)             ||
       (a1.fLineStyle          != a2.fLineStyle)          ||
       (a1.fLineWidth          != a2.fLineWidth)          ||
