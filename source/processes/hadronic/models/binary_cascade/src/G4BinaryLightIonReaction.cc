@@ -22,8 +22,10 @@
     G4double m2=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(z2, a2);
     debug.push_back(a1);
     debug.push_back(z1);
+    debug.push_back(m1);
     debug.push_back(a2);
     debug.push_back(z2);
+    debug.push_back(m2);
     G4LorentzVector mom(aTrack.GetDynamicParticle()->Get4Momentum());
     debug.push_back(mom);
     debug.dump();
@@ -76,11 +78,15 @@
       debug.push_back("Constituent energies after push");
       debug.push_back(mom);
       G4LorentzVector tmpV(0,0,0,0);
+      G4LorentzVector nucleonMom(1./a1*mom);
+      nucleonMom.setZ(nucleonMom.vect().mag());
+      nucleonMom.setX(0);
+      nucleonMom.setY(0);
       while( (aNuc=projectile->GetNextNucleon()) )
       {
 	G4LorentzVector p4 = aNuc->GetMomentum();	
 	tmpV+=p4;
-	G4KineticTrack * it = new G4KineticTrack(aNuc, aNuc->GetPosition()+pos, p4 );
+	G4KineticTrack * it = new G4KineticTrack(aNuc, aNuc->GetPosition()+pos, nucleonMom );
 	initalState->push_back(it);
       }
       debug.push_back(tmpV);
@@ -104,6 +110,7 @@
       }     
     }
     debug.push_back("################# Through the loop ? "); debug.dump();
+    
     //inverse transformation in case we swapped.
     fancyNucleus->StartLoop();  
     G4int resA(0), resZ(0); 
@@ -124,7 +131,10 @@
       debug.push_back("collected a hit"); debug.dump();
     }
     delete fancyNucleus;
-    debug.push_back("have the hits"); debug.dump();
+    debug.push_back("have the hits"); 
+    debug.push_back(resA);
+    debug.push_back(resZ);
+    debug.dump();
     // Calculate excitation energy
     G4LorentzVector iState = mom;
     iState.setT(iState.getT()+m2);
@@ -133,7 +143,10 @@
     G4int i(0);
     for(i=0; i<result->size(); i++)
     {
-      fState += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
+      if( (*result)[i]->GetNewlyAdded() ) 
+      {
+        fState += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
+      }
     }
     G4LorentzVector momentum(iState-fState);
 
@@ -171,18 +184,21 @@
     theParticleChange.SetNumberOfSecondaries(result->size());
     for(i=0; i<result->size(); i++)
     {
-      G4DynamicParticle * aNew = 
-      new G4DynamicParticle((*result)[i]->GetDefinition(),
-                            (*result)[i]->GetTotalEnergy(),
-			    (*result)[i]->GetMomentum() );
-      G4LorentzVector tmp = aNew->Get4Momentum();
-      if(swapped)
+      if((*result)[i]->GetNewlyAdded())
       {
-        tmp*=toBreit.inverse();
-      }    
-      tmp *= toLab;
-      aNew->Set4Momentum(tmp);
-      theParticleChange.AddSecondary(aNew);
+	G4DynamicParticle * aNew = 
+	new G4DynamicParticle((*result)[i]->GetDefinition(),
+                              (*result)[i]->GetTotalEnergy(),
+			      (*result)[i]->GetMomentum() );
+	G4LorentzVector tmp = aNew->Get4Momentum();
+	if(swapped)
+	{
+          tmp*=toBreit.inverse();
+	}    
+	tmp *= toLab;
+	aNew->Set4Momentum(tmp);
+	theParticleChange.AddSecondary(aNew);
+      }
     }
     return &theResult;
   }

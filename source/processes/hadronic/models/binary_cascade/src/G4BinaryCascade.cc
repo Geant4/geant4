@@ -638,6 +638,14 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 	 aNew->SetMomentum(kt->Get4Momentum().vect());
 	 aNew->SetTotalEnergy(kt->Get4Momentum().e());
 	 Ekinout += aNew->GetKineticEnergy();
+	 if(kt->IsParticipant()) 
+	 {
+	   aNew->SetNewlyAdded(true);
+	 }
+	 else
+	 {
+	   aNew->SetNewlyAdded(false);
+	 }
 	 //G4cout << " Particle Ekin " << aNew->GetKineticEnergy() << G4endl;
 	 products->push_back(aNew);
 
@@ -923,6 +931,7 @@ void  G4BinaryCascade::FindCollisions(G4KineticTrackVector * secondaries)
 G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 //----------------------------------------------------------------------------
 {
+  G4ping debug("debug_ApplyCollision");
   //G4cerr << "G4BinaryCascade::ApplyCollision start"<<G4endl;
   G4KineticTrack * primary = collision->GetPrimary();
   G4KineticTrack * target = collision->GetTarget();
@@ -952,27 +961,6 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
     G4KineticTrack target_reloc(*target);
     initialBaryon += target->GetDefinition()->GetBaryonNumber();
     if(target->GetDefinition()->GetBaryonNumber()!=0) initialCharge+=static_cast<G4int>(target->GetDefinition()->GetPDGCharge()+.1);
-/*    //GF : Update Energy such that E' = E + Potential(pos(primary)-Potential(pos(target)
-    G4int PDGcode=target->GetDefinition()->GetPDGEncoding();
-    G4RKPropagation * RKprop=(G4RKPropagation *)thePropagator;
-     G4double cur_Potential=RKprop->GetField(PDGcode,target->GetPosition());
-     G4double new_Potential=RKprop->GetField(PDGcode,primary->GetPosition());
-     G4double dE=new_Potential - cur_Potential;
-     G4double pcur=mom.vect().mag();
-     G4double tmp=sqr(mom.e()+dE) - mom.mag2();
-    if (tmp < 0.)
-    {
-      //G4cerr << "G4BinaryCascade::ApplyCollision tmp problem"<<G4endl;
-      return false;
-    }
-    G4double pnew=sqrt(tmp);
-
-    mom.setE(mom.e() + dE );
-//
-//    G4LorentzVector mom=target->Get4Momentum();
-//    target_reloc.Set4Momentum(G4LorentzVector(0.1*mom.vect(),mom.e()));
-    target_reloc.SetPosition(primary->GetPosition());
-*/
   G4cerr << "G4BinaryCascade::ApplyCollision start 1"<<G4endl;
     products = theScatterer->Scatter(*primary, target_reloc);
   G4cerr << "G4BinaryCascade::ApplyCollision start 2"<<G4endl;
@@ -985,33 +973,14 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
        G4cerr << "G4BinaryCascade::ApplyCollision blocked"<<G4endl;
        return false;
     }
-/*
- *     if(!products || !CheckDecay(products))
- *     {
- *        G4cout << " ======Failed decay =====" << G4endl;
- *        if (products) ClearAndDestroy(products);
- *        delete products;
- *        return false;
- *     }
- */
-  }
+ }
 
   if(products == 0)
   {
      delete products;
      return false;
-     //G4cerr << "G4BinaryCascade::ApplyCollision failure"<<G4endl;
   }
 
-/*
- *   if(!CheckPauliPrinciple(products))
- *   {
- *      G4cout << " ======Failed Pauli =====" << G4endl;
- *      ClearAndDestroy(products);
- *      delete products;
- *      return false;
- *   }
- */
 // debug block
   #ifdef debug_1_BinaryCascade
   PrintKTVector(products,G4std::string(" Scatterer products"));
@@ -1034,6 +1003,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   if(target != NULL)
     oldTarget.push_back(target);
      //G4cerr << "G4BinaryCascade::ApplyCollision pre-update"<<G4endl;
+  debug.push_back("=======> we have hit nucleons <=======");
   primary->Hit();
   target->Hit();
   UpdateTracksAndCollisions(&oldSecondaries, &oldTarget, products);
