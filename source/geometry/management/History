@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2003-03-05 19:14:39 asaim Exp $
+$Id: History,v 1.55 2003-03-24 13:30:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-March 05, 2003  M.Asai                     geommng-V05-00-06
-- Fix a bug in G4Region for scanning parameterised materials
+March 24, 2003  G. Cosmo                   geommng-V05-00-07
+- G4Region.cc: fixed setting/resetting of regions in ScanVolumeTree().
+
+March 05, 2003  M. Asai                    geommng-V05-00-06
+- G4Region.cc: fix for scanning of parameterised materials.
 
 March 05, 2003  G. Cosmo                   geommng-V05-00-05
 - G4LogicalVolume.icc: added check for invalid geometry constructions.
