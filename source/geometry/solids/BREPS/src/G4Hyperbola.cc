@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hyperbola.cc,v 1.8 2003-03-28 13:11:58 gcosmo Exp $
+// $Id: G4Hyperbola.cc,v 1.9 2003-10-28 13:42:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -90,7 +90,8 @@ G4Hyperbola& G4Hyperbola::operator=(const G4Hyperbola& right)
 
 G4Curve* G4Hyperbola::Project(const G4Transform3D& tr)
 {
-  G4Exception("G4Hyperbola::Project");
+  G4Exception("G4Hyperbola::Project()", "NotImplemented",
+              FatalException, "Sorry, not yet implemented.");
 
   G4Point3D newLocation= tr*position.GetLocation();
   newLocation.setZ(0);

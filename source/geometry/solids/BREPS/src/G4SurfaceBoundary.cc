@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceBoundary.cc,v 1.11 2003-03-28 13:12:03 gcosmo Exp $
+// $Id: G4SurfaceBoundary.cc,v 1.12 2003-10-28 13:42:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -209,12 +209,14 @@ void G4SurfaceBoundary::SplitWithPlane(const G4Point3D&,
 				       G4SurfaceBoundary*&,
 				       G4SurfaceBoundary*&)
 {
-  G4Exception("To be implemented");
+  G4Exception("G4SurfaceBoundary::SplitWithPlane()", "NotImplemented",
+              FatalException, "Sorry, not yet implemented.");
 }
 
 void G4SurfaceBoundary::SplitWithCylinder(const G4CylindricalSurface&,
                                           G4SurfaceBoundary*&, 
                                           G4SurfaceBoundary*&)
 {
-  G4Exception("To be implemented");
+  G4Exception("G4SurfaceBoundary::SplitWithCylinder()", "NotImplemented",
+              FatalException, "Sorry, not yet implemented.");
 }

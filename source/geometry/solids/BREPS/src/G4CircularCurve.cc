@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CircularCurve.cc,v 1.7 2003-03-28 13:11:56 gcosmo Exp $
+// $Id: G4CircularCurve.cc,v 1.8 2003-10-28 13:42:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -145,16 +145,19 @@ G4double G4CircularCurve::GetPPoint(const G4Point3D& pt) const
 /*
 #include "G4CurveRayIntersection.hh"
 
-void G4CircularCurve::IntersectRay2D(const G4Ray& ray,
-				     G4CurveRayIntersection& is)
+void G4CircularCurve::IntersectRay2D(const G4Ray&,
+				     G4CurveRayIntersection&)
 {
-  G4Exception("G4CircularCurve is always 3D!");
-  exit(1);
+  G4Exception("G4CircularCurve::IntersectRay2D()",
+              "NotApplicable", FatalException,
+              "G4CircularCurve is always 3D!");
 }
 */
 
 G4int G4CircularCurve::IntersectRay2D(const G4Ray&)
 {
-  G4Exception("G4CircularCurve is always 3D!");
+  G4Exception("G4CircularCurve::IntersectRay2D()",
+              "NotApplicable", FatalException,
+              "G4CircularCurve is always 3D!");
   return 0;
 }
