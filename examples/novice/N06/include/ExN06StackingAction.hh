@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef ExN06StackingAction_H
+#define ExN06StackingAction_H 1
+
 #include "globals.hh"
 #include "G4UserStackingAction.hh"
 
