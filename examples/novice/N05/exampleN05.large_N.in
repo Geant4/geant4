@@ -7,16 +7,16 @@
 #/tracking/verbose 1
 #
 /gun/direction 0 .6 1.
-/run/beamOn 500
+/run/beamOn 250
 #
 /gun/direction 0 .3 1.
-/run/beamOn 500
+/run/beamOn 250
 #
 /gun/direction 0 -.3 1.
-/run/beamOn 500
+/run/beamOn 250
 #
 /gun/direction 0 -.6 1.
-/run/beamOn 500 
+/run/beamOn 250 
 #
 /gun/particle pi-
 /gun/energy 1 GeV
@@ -25,16 +25,16 @@
 #
 #
 /gun/direction 0 .6 1.
-/run/beamOn 500
+/run/beamOn 250
 #
 /gun/direction 0 .3 1.
-/run/beamOn 500
+/run/beamOn 250
 #
 /gun/direction 0 -.3 1.
-/run/beamOn 500
+/run/beamOn 250
 #
 /gun/direction 0 -.6 1.
-/run/beamOn 500
+/run/beamOn 250
 #
 #
 # switch off Fast Simulation
@@ -47,13 +47,13 @@
 /exN05/detector/switchUserLimits off
 #
 /gun/direction 0 .6 1.
-/run/beamOn 500
+/run/beamOn 250
 #
 #   switch on UserLimits
 /exN05/detector/switchUserLimits on
 #
 /gun/direction 0 .6 1.
-/run/beamOn 500
+/run/beamOn 250
 #
 
 exit
