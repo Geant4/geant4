@@ -18,6 +18,7 @@
 // Modified:
 // 16/09/2000 S. Chauvie  Oscillator for all materials
 // 23/05/2000 MGP  Made compliant to design
+// 01/06/2001 V.Ivanchenko replace names by Z
 //  
 // Class description:
 // Quantal Harmonic Oscillator Model for energy loss of low energy antiprotons 
@@ -96,8 +97,8 @@ private:
   G4double GetL2(G4double normEnergy) const;
   // terms in Z^4
   
-  //  material at now avaliable for the model
-  static const G4String materialAvailable[6];
+  // Z of element at now avaliable for the model
+  static const G4int materialAvailable[6];
   
   // number, energy and oscillator strenghts
   // for an harmonic oscillator model of material

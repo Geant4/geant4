@@ -44,6 +44,7 @@
 #include "G4LowEnergyRayleigh.hh"
 #include "G4hLowEnergyIonisation.hh"
 
+#include "G4VeEnergyLoss.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4ComptonScattering.hh"
@@ -74,7 +75,6 @@
 #include "G4ForceCondition.hh"
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
-
 #include "G4Step.hh"
 #include "G4GRSVolume.hh"
 
@@ -83,6 +83,7 @@
 #include "CLHEP/Hist/HBookFile.h"
 #include "CLHEP/Hist/Histogram.h"
 #include "CLHEP/Hist/Tuple.h"
+
 
 HepTupleManager* hbookManager;
 
@@ -138,6 +139,7 @@ int main(int argc,char** argv)
   ma[1] = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
   ma[2] = new G4Material("Al", 13., 26.98*g/mole, 2.7 *g/cm3);
   ma[3] = new G4Material("Si",   14., 28.055*g/mole, 2.33*g/cm3);
+  /*
   ma[4] = new G4Material("LAr",   18., 39.95*g/mole, 1.393*g/cm3);
   ma[5] = new G4Material("Fe",      26., 55.85*g/mole, 7.87*g/cm3);
   ma[6] = new G4Material("Cu",    29., 63.55*g/mole, 8.96*g/cm3);
@@ -163,7 +165,7 @@ int main(int argc,char** argv)
   ma[13] = new G4Material ("CsI" , 4.53*g/cm3, 2);
   ma[13]->AddElement(Cs,1);
   ma[13]->AddElement(I,1);
- 
+  */ 
   static const G4MaterialTable* theMaterialTable = 
                G4Material::GetMaterialTable();
 
@@ -308,6 +310,7 @@ int main(int argc,char** argv)
       break;
     }
 
+
     for (mat = 0; mat < nMaterials; mat++) {
       material = ma[mat];
       if(nameMat == material->GetName()) break;
@@ -451,6 +454,7 @@ int main(int argc,char** argv)
 
     if(success) G4cout  <<  "Physics tables are built"  <<  G4endl;  
     else        G4cout  <<  "Physics tables are not built!!!"  <<  G4endl;  
+
 
     // Create a DynamicParticle  
   

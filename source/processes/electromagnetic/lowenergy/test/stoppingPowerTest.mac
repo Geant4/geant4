@@ -14,6 +14,10 @@ standard
 1000.0
 #nbin
 1000
+#cutG(mm)
+1000.
+#cutE(mm)
+1000.
 //--------Electron_processes
 #particle
 1
