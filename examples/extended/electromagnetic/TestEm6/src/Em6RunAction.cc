@@ -33,9 +33,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em6RunAction::Em6RunAction()
-  :nbinStep(0.),nbinEn(0.),nbinTt(0.),nbinTb(0.),
-   nbinTsec(0.),nbinTh(0.),nbinThback(0.),nbinR(0.),nbinGamma(0.),
-   nbinvertexz(0.),
+  :nbinStep(0),nbinEn(0),nbinTt(0),nbinTb(0),
+   nbinTsec(0),nbinTh(0),nbinThback(0),nbinR(0),nbinGamma(0),
+   nbinvertexz(0),
 #ifndef G4NOHIST
    histName("histfile"),histo1(0),histo2(0),histo3(0),histo4(0),histo5(0),
    histo6(0),histo7(0),histo8(0),histo9(0),histo10(0),
@@ -932,7 +932,7 @@ void Em6RunAction::FillNbOfSteps(G4double ns)
     {
       n = ns+eps ;
       bin = (n-Steplow)/dStep ;
-      ibin= bin ;
+      ibin= G4int(bin) ;
       distStep[ibin] += 1. ;
     }
    histo1->accumulate(ns) ;
@@ -959,7 +959,7 @@ void Em6RunAction::FillEn(G4double En)
     else
     {
       bin = (En-Enlow)/dEn ;
-      ibin= bin ;
+      ibin= G4int(bin) ;
       distEn[ibin] += 1. ;
     }
   histo2->accumulate(En/MeV) ;
@@ -988,7 +988,7 @@ void Em6RunAction::FillTt(G4double En)
     else
     {
       bin = (En-Ttlow)/dTt ;
-      ibin= bin ;
+      ibin= G4int(bin) ;
       distTt[ibin] += 1. ;
     }
   histo5->accumulate(En/MeV) ;
@@ -1017,7 +1017,7 @@ void Em6RunAction::FillTb(G4double En)
     else
     {
       bin = (En-Tblow)/dTb ;
-      ibin= bin ;
+      ibin= G4int(bin) ;
       distTb[ibin] += 1. ;
     }
   histo7->accumulate(En/MeV) ;
@@ -1044,7 +1044,7 @@ void Em6RunAction::FillTsec(G4double En)
     else
     {
       bin = (En-Tseclow)/dTsec ;
-      ibin= bin ;
+      ibin= G4int(bin) ;
       distTsec[ibin] += 1. ;
     }
   histo8->accumulate(En/MeV) ;
@@ -1071,7 +1071,7 @@ void Em6RunAction::FillGammaSpectrum(G4double En)
     else
     {
       bin = log(En/ElowGamma)/dEGamma;
-      ibin= bin ;
+      ibin= G4int(bin) ;
       distGamma[ibin] += 1. ;
     }
   histo10->accumulate(log10(En/MeV)) ;
@@ -1103,7 +1103,7 @@ void Em6RunAction::FillTh(G4double Th)
     else
     {
       bin = (Th-Thlow)/dTh ;
-      ibin= bin ;
+      ibin= G4int(bin) ;
       Thbin = Thlow+ibin*dTh ;
       if(Th > 0.001*dTh)
         wg=cn/sin(Th) ;
@@ -1144,7 +1144,7 @@ void Em6RunAction::FillThBack(G4double Th)
     else
     {
       bin = (Th-Thlowback)/dThback ;
-      ibin= bin ;
+      ibin= G4int(bin) ;
       Thbin = Thlowback+ibin*dThback ;
       if(Th > 0.001*dThback)
         wg=cn/sin(Th) ;
@@ -1184,7 +1184,7 @@ void Em6RunAction::FillR(G4double R )
     else
     {
       bin = (R -Rlow)/dR  ;
-      ibin= bin ;
+      ibin= G4int(bin) ;
       distR[ibin] += 1. ;
     }
   histo4->accumulate(R/mm) ;
@@ -1211,7 +1211,7 @@ void Em6RunAction::Fillvertexz(G4double z )
     else
     {
       bin = (z -zlow)/dz  ;
-      ibin= bin ;
+      ibin= G4int(bin) ;
       distvertexz[ibin] += 1. ;
     }
   histo9->accumulate(z/mm) ;
