@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2002-10-28 18:52:54 vnivanch Exp $
+$Id: History,v 1.68 2002-11-12 17:22:26 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+12 nov 02: V.Ivant (stand-V04-01-05)
+eBremsstrahlung::BuiltLossTable: fix of division by 0 (G4int nn)
+ 
 28 oct 02: V.Ivant (stand-V04-01-04)
 -fix compilation warnings for STD classes
 
