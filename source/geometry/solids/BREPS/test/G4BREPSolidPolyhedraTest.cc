@@ -48,7 +48,7 @@ int main(int argc, char **argv)
   Z_Values[4] = 40;
 
 
-  G4cout << "\n=======     PGone test      ========"<<endl;
+  G4cout << "\n=======     PolyGon test      ========"<<endl;
 
   G4BREPSolidPolyhedra *MyPGone = new G4BREPSolidPolyhedra ("MyPolyhedra",
 							    0            ,
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 							    Z_Values     ,
 							    RMINVec      ,
 							    RMAXVec       );
-  G4cout << "\n\nPCone created ! "<<endl;
+  G4cout << "\n\nPgon (G4BREPSolid-Polyhedra) created ! "<<endl;
   // -> Check methods :
   //  - Inside
   //  - DistanceToIn
