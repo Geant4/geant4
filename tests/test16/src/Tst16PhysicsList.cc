@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst16PhysicsList.cc,v 1.6 2003-06-16 17:15:10 gunter Exp $
+// $Id: Tst16PhysicsList.cc,v 1.7 2003-10-31 12:53:09 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -467,10 +467,8 @@ void Tst16PhysicsList::ConstructHad()
          G4HEProtonInelastic* theHEInelasticModel = new G4HEProtonInelastic;
          theInelasticProcess->RegisterMe(theHEInelasticModel);
           // now the cross-sections.
-	 G4CrossSectionDataStore * theStore1 =
-            ((G4HadronInelasticProcess*)theInelasticProcess)->GetCrossSectionDataStore();
          G4ProtonInelasticCrossSection * theProtonData1 = new G4ProtonInelasticCrossSection;
-         theStore1->AddDataSet(theProtonData1);
+         theInelasticProcess->AddDataSet(theProtonData1);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
       else if (particleName == "anti_proton") {
@@ -496,10 +494,8 @@ void Tst16PhysicsList::ConstructHad()
                                     new G4HENeutronInelastic;
          theInelasticProcess->RegisterMe(theHEInelasticModel);
           // now the cross-sections.
-	 G4CrossSectionDataStore * theStore1 =
-            ((G4HadronInelasticProcess*)theInelasticProcess)->GetCrossSectionDataStore();
          G4NeutronInelasticCrossSection * theNeutronData1 = new G4NeutronInelasticCrossSection;
-         theStore1->AddDataSet(theNeutronData1);
+         theInelasticProcess->AddDataSet(theNeutronData1);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }  
       else if (particleName == "anti_neutron") {
