@@ -20,14 +20,13 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4MultipleScattering.cc,v 1.20 2002-05-06 11:02:06 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.21 2002-05-24 06:11:25 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
 // 16/05/01 value of cparm changed , L.Urban
 // 18/05/01 V.Ivanchenko Clean up against Linux ANSI compilation
-// 07/08/01 new methods Store/Retrieve PhysicsTable (mma) 
+// 07/08/01 new methods Store/Retrieve PhysicsTable (mma)
 // 23-08-01 new angle and z distribution,energy dependence reduced,
 //          Store,Retrieve methods commented out temporarily, L.Urban
 // 27-08-01 in BuildPhysicsTable:aParticleType.GetParticleName()=="mu+" (mma)
@@ -44,8 +43,9 @@
 // 17-04-02 NEW angle distribution + boundary algorithm modified, L.Urban
 // 22-04-02 boundary algorithm modified -> important improvement in timing !!!!
 //          (L.Urban)
-// 24-04-02 some minor changes in boundary algorithm, L.Urban 
+// 24-04-02 some minor changes in boundary algorithm, L.Urban
 // 06-05-02 bug fixed in GetContinuousStepLimit, L.Urban
+// 24-05-02 changes in angle distribution and boundary algorithm, L.Urban
 //
 // -----------------------------------------------------------------------------
 //
@@ -53,6 +53,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4MultipleScattering.hh"
+#include "G4StepStatus.hh"
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
 #include "Randomize.hh"
@@ -71,9 +72,8 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
        tLast (0.0),
        zLast (0.0),
        boundary(true),
-       volume(0),volumeold(0),
-       facrange(0.05),tlimit(1.e10),tmsc(tlimit),
-       stepno(0),stepnolastmsc(-1000000),stepnodif(3),
+       facrange(0.199),tlimit(1.e10),
+       stepno(0),stepnolastmsc(-1000000),nsmallstep(5),
        valueGPILSelectionMSC(NotCandidateForSelection),
        pcz(0.17),zmean(0.),
        range(1.0),T1(1.0),lambda1(-1.),cth1(1.),z1(1.e10),dtrl(0.15),
@@ -438,39 +438,35 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
   {
     // step limitation at boundary ?
     stepno = track.GetCurrentStepNumber() ;
-    volume = track.GetVolume() ;
     if(stepno == 1)
     {
       stepnolastmsc = -1000000 ;
-      volumeold=volume ;
       tlimit = 1.e10 ;
-      tmsc = tlimit ;
     } 
 
     if(stepno > 1) 
     {
-      if(volume != volumeold)
+      if(track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary)
       {
-         stepnolastmsc = stepno ;
-         tlimit = facrange*range ;
-         tmsc = tlimit ;
-         if(tPathLength > tlimit)
-         {
-           tPathLength = tlimit ;
-           valueGPILSelectionMSC = CandidateForSelection;
-         } 
-      }
-
-      if(((stepno - stepnolastmsc) <= stepnodif) && (stepno >= stepnolastmsc))
-      {
-        tmsc += G4float(stepno-stepnolastmsc)*tlimit ;
-        if(tmsc > range) tmsc = range ;
-        if(tPathLength > tmsc)
+        stepnolastmsc = stepno ;
+        tlimit = facrange*range ;
+        if(tPathLength > tlimit)
         {
-          tPathLength = tmsc ;
+          tPathLength = tlimit ;
           valueGPILSelectionMSC = CandidateForSelection;
         } 
-      }   
+      }
+      else if(stepno >= stepnolastmsc)
+      {
+        if((stepno - stepnolastmsc) < nsmallstep) 
+        {
+          if(tPathLength > tlimit)
+          {
+            tPathLength = tlimit ;
+            valueGPILSelectionMSC = CandidateForSelection;
+          } 
+        }
+      }
     }
   }
                       
@@ -514,7 +510,6 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
 
   tLast = tPathLength;
   zLast = zPathLength; 
-  volumeold = volume ;
 
   return zPathLength;
 }
@@ -568,10 +563,6 @@ G4VParticleChange* G4MultipleScattering::PostStepDoIt(
                                                const G4Step& stepData)
 {
   // angle distribution parameters
-  const G4double alfa0 = 0.507 ;
-  const G4double beta0 = 0.380, beta1 = 19.86 ;
-  const G4double ca = 2.26, cb = 11.56 ;
-  const G4double abig = 100., bbig = 100. ;
   const G4double kappapl1 = kappa+1., kappami1 = kappa-1. ;
   G4bool isOut;
 
@@ -601,56 +592,67 @@ G4VParticleChange* G4MultipleScattering::PostStepDoIt(
       if(tau > taubig)   cth = -1.+2.*G4UniformRand();
       else
       {
-          G4double c,c1,a,beta,b,bp1,bm1,bbp1,bbm1,xmean1,xmean2,prob ;
-          G4double ea=1. ;
+        const G4double alfa = 0.385 ;
+        const G4double beta = 0.0626 ;
+        const G4double c = 2.500 ;
+        const G4double x2mean3 = 1./3. ;
 
-          c = ca/(1.+cb*tau) ;        
+        G4double a,b,c1,bp1,bm1,bbp1,bbm1,
+                 xmean1,x2mean1,xmean2,x2mean2,
+                 x2mean,xmeanth,x2meanth,pp,qq ;
 
-          if(c == 2.) c = 2.001 ;
-          c1= c-1. ;
+        a = 2.*exp(-alfa*tau)/(1.-exp(-alfa*tau)) ;
 
-          a = 1./(alfa0*tau) ;
+        xmean1 = a/(a+2.) ;
+        x2mean1= (a*a+a+2.)/((a+2.)*(a+3.)) ;
 
-          beta = beta0+beta1*tau ;
-          b = 1.+beta*tau ;
+        b = exp((1.+beta)*tau) ;
 
-          if(a > abig)
-            xmean1 = 1.-1./a ;
+        c1 = 1.-c ;
+        bp1=b+1. ;
+        bm1=b-1. ;
+        bbp1=exp(log(bp1)*c1) ;
+        bbm1=exp(log(bm1)*c1) ;
+
+        xmean2 = -(bbp1+bbm1)/(bbp1-bbm1)+(bp1*bbp1-bm1*bbm1)/
+                 ((2.-c)*(bbp1-bbm1)) ;
+        x2mean2= 1.-2.*(bp1*bbp1+bm1*bbm1)/((2.-c)*(bbp1-bbm1))+
+              2.*(bp1*bp1*bbp1-bm1*bm1*bbm1)/((2.-c)*(3.-c)*(bbp1-bbm1)) ;
+
+        xmeanth = exp(-tau) ;
+        x2meanth = (1.+2.*exp(-kappa*tau))/3. ;
+
+        pp = (xmeanth-xmean2)/(xmean1-xmean2) ;
+        x2mean = pp*x2mean1+(1.-pp)*x2mean2 ;
+        if(x2mean >= x2meanth)
+        {
+          qq = 1. ;
+        }
+        else
+        {
+          pp = (x2meanth*xmean1-x2mean1*xmeanth+x2mean3*xmeanth
+                +x2mean1*xmean2-x2mean3*xmean2-x2mean2*xmean1)/
+               (xmean2*x2mean1-xmean2*x2mean3-xmean1*x2mean2+xmean1*x2mean3) ;
+
+          qq = (xmeanth-(1.-pp)*xmean2)/(pp*xmean1) ;
+        }
+
+        if(G4UniformRand() < pp)
+        {
+          if(G4UniformRand() < qq)
+          {
+            cth = -1.+2.*exp(log(G4UniformRand())/(1.+a)) ;
+          }
           else
           {
-            ea = exp(a) ;
-            xmean1 = (ea+1./ea)/(ea-1./ea)-1./a ;
+            cth = -1.+2.*G4UniformRand() ;
           }
+        }
+        else
+        {
+          cth = b- exp(log(bbp1-G4UniformRand()*(bbp1-bbm1))/c1) ;         
+        }
 
-          c1=c-1.;
-          bp1=b+1. ;
-          bm1=b-1.;
-          bbp1=exp(c1*log(bp1)) ;
-          bbm1=exp(c1*log(bm1)) ;
-
-          if(b > bbig)
-            xmean2 = c1/b ;
-          else
-            xmean2 = (bbp1+bbm1-(bbp1*bm1-bp1*bbm1)/(c-2.))/(bbp1-bbm1) ;
-          if(xmean2 < 0.) xmean2 = 0. ; 
-
-          prob = (exp(-tau)-xmean2)/(xmean1-xmean2) ;
-
-          if(G4UniformRand() < prob)
-          {
-            if(a > abig) 
-            {
-              cth = 1.+log(G4UniformRand())/a ;
-            }
-            else
-            {
-              cth = log(1./ea+G4UniformRand()*(ea-1./ea))/a ;
-            }
-          }
-          else
-          {
-            cth = b- bp1*bm1/exp(log(bbm1+G4UniformRand()*(bbp1-bbm1))/c1) ;
-          }
       }
     }
   }

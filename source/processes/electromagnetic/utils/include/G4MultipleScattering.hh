@@ -20,26 +20,26 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4MultipleScattering.hh,v 1.8 2002-04-24 10:45:33 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.9 2002-05-24 06:11:24 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// 
-//------------- G4MultipleScattering physics process --------------------------
-//               by Laszlo Urban, March 2001   
 //
-// 07-08-01 new methods Store/Retrieve PhysicsTable 
+//------------- G4MultipleScattering physics process --------------------------
+//               by Laszlo Urban, March 2001
+//
+// 07-08-01 new methods Store/Retrieve PhysicsTable
 // 23-08-01 new angle and z distribution,energy dependence reduced,
 //          Store,Retrieve methods commented out temporarily, L.Urban
 // 11-09-01 G4MultipleScatteringx put as default: G4MultipleScattering
 //          Store,Retrieve methods reactived (mma)
 // 13-09-01 Unused TrueToGeomTransformation method deleted,
 //          class description (L.Urban)
-// 19-09-01 come back to previous process name msc 
+// 19-09-01 come back to previous process name msc
 // 17-04-02 NEW angle distribution + boundary algorithm modified, L.Urban
 // 22-04-02 boundary algorithm modified -> important improvement in timing !!!!
 //          (L.Urban)
 // 24-04-02 some minor changes in boundary algorithm, L.Urban
-//            
+// 24-05-02 changes in data members, L.Urban
+//
 //------------------------------------------------------------------------------
 
 // class description
@@ -149,11 +149,14 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
    void Setdtrl(G4double value)                 {dtrl = value;};
      // to reduce the energy/step dependence
 
-   void SetBoundary(G4bool value)          {boundary = value;};
-   void SetFacrange(G4double val)          {facrange=val;
-                                            // estimated nb of steps at boundary
-                                            stepnodif =
-                                             G4int(exp(log(6./facrange)/3.)-1.);};
+   void SetBoundary(G4bool value)  {boundary = value;};
+   void SetFacrange(G4double val)  {facrange=val;
+                                    nsmallstep = G4int(1./facrange) ;
+                                    G4cout << " f=" << facrange 
+                                           << "  n=" << nsmallstep << G4endl ;};
+     // Steplimit after boundary crossing = facrange*range
+     // estimated nb of steps at boundary nsmallstep = 1/facrange
+
      // parameters needed near to boundary
 
    void SetTuning(G4double value)               {tuning = value;};
@@ -203,9 +206,8 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
 
    // model parameters
    G4bool   boundary;                         // spec. handling near boundaries
-   G4VPhysicalVolume *volume,*volumeold ;
-   G4double facrange,tlimit,tmsc;
-   G4int stepno,stepnolastmsc,stepnodif ;
+   G4double facrange,tlimit;
+   G4int stepno,stepnolastmsc,nsmallstep ;
    G4GPILSelection  valueGPILSelectionMSC;
 
    G4double pcz,zmean;                        // z(geom.step length)
