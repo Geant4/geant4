@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.cc,v 1.9 2000-08-15 09:42:45 urban Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.10 2000-08-17 18:20:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -21,6 +21,7 @@
 // 10/08/00 : V.Ivanchenko change AlongStepDoIt and
 //            add EnergyLossFluctuation in order to simulate
 //            energy losses of ions
+// 17/08/00 : V.Ivanchenko change EnergyLossFluctuation 
 // --------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -703,8 +704,8 @@ G4double G4VhEnergyLoss::EnergyLossFluctuation(
                                          G4double MeanLoss,
                                          G4double Step)
 {
-  G4double loss = MeanLoss/ChargeSquare ;
-  loss = GetLossWithFluct(aParticle,aMaterial,ChargeSquare,loss,Step)*ChargeSquare ;
+  G4double loss = GetLossWithFluct(aParticle,aMaterial,
+                                   ChargeSquare,MeanLoss,Step) ;
   return loss ;
 }
 
