@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.17 2003-03-04 12:53:32 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.18 2003-03-04 18:09:05 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -661,7 +661,13 @@ G4double Tst50DetectorConstruction::GetDensity()
   G4double Density=(TargetMaterial->GetDensity());
   return Density;
 }
+G4String Tst50DetectorConstruction::GetMaterialName()
+{
+  G4String name;
+  name=TargetMaterial->GetName();
+  return name; 
 
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Tst50DetectorConstruction::SetTargetThickness(G4double val)

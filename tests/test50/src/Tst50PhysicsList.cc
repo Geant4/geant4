@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PhysicsList.cc,v 1.10 2003-03-04 12:53:32 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.11 2003-03-04 18:09:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,7 +43,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst50PhysicsList::Tst50PhysicsList(G4bool LowEn,G4bool range,G4bool SP,G4bool RY,G4bool adr,G4bool penelope):  G4VUserPhysicsList()
+Tst50PhysicsList::Tst50PhysicsList(G4bool LowEn,G4bool range,G4bool SP,G4bool RY,G4bool adr,G4bool penelope, G4bool Back):  G4VUserPhysicsList()
 { RangeOn=range;
  Stopping= SP;
   Low=LowEn;
@@ -52,6 +52,7 @@ Tst50PhysicsList::Tst50PhysicsList(G4bool LowEn,G4bool range,G4bool SP,G4bool RY
   defaultCutValue = 1.*mm;
    SetVerboseLevel(1);
    Adronic=adr;
+   back=Back;
  physicsListMessenger = new Tst50PhysicsListMessenger(this);
  // cutForElectron = defaultCutValue ;
 }
@@ -243,12 +244,17 @@ else{
    
 
  
-     G4VProcess*  multipleScattering= new G4MultipleScattering();
+     G4MultipleScattering*  multipleScattering= new G4MultipleScattering();
 						
        pmanager->AddProcess(multipleScattering, -1, 1,1);
      
       pmanager->AddProcess(loweIon,     -1, 2,2);
-      pmanager->AddProcess(loweBrem,    -1,-1,3);      
+      pmanager->AddProcess(loweBrem,    -1,-1,3);
+
+ if(back==true){
+ multipleScattering->SetFacrange(0.00005);      
+ G4cout<<"SetFacrange(0.00005) fixed for e- in low "<<G4endl;}
+
  if(RangeOn==true || Stopping==true || RadiationY==true){
    pmanager->RemoveProcess(multipleScattering);
    G4VeLowEnergyLoss::SetEnlossFluc(false);
@@ -259,16 +265,20 @@ else{
  	
 	   G4VProcess* theeminusIonisation         = new G4eIonisation();
 	  G4VProcess* theeminusBremsstrahlung     = new G4eBremsstrahlung();
-	  G4VProcess* theeminusMultipleScattering=new G4MultipleScattering();
+	   
+     G4MultipleScattering* theeminusMultipleScattering=new G4MultipleScattering();
 	   pmanager->AddProcess( theeminusIonisation, -1, 2,2);
 	  pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3);
 pmanager->AddProcess(theeminusMultipleScattering,-1,1,1);
+if(back==true){
+ theeminusMultipleScattering->SetFacrange(0.00005);      
+ G4cout<<"SetFacrange(0.00005) fixed for e- in Standard"<<G4endl;}
 
  if(RangeOn==true || Stopping==true|| RadiationY==true){pmanager->RemoveProcess(theeminusMultipleScattering);}
       }
     } else if (particleName == "e+") {
     //positron
-      G4VProcess* theeplusMultipleScattering = new G4MultipleScattering();
+G4MultipleScattering* theeplusMultipleScattering = new G4MultipleScattering();
       G4VProcess* theeplusIonisation         = new G4eIonisation();
       G4VProcess* theeplusBremsstrahlung     = new G4eBremsstrahlung();
       G4VProcess* theeplusAnnihilation       = new G4eplusAnnihilation();
@@ -278,6 +288,11 @@ pmanager->AddProcess(theeminusMultipleScattering,-1,1,1);
       pmanager->AddProcess(theeplusIonisation, -1, 2,2);
       pmanager->AddProcess(theeplusBremsstrahlung, -1,-1,3);
       pmanager->AddProcess(theeplusAnnihilation,0,-1,4);
+if(back==true){
+ theeplusMultipleScattering->SetFacrange(0.00005);      
+ G4cout<<"SetFacrange(0.00005) fixed for e+"<<G4endl;}
+
+
     }
 else if (particleName == "proton")
           { G4VProcess*  multipleScattering= new G4MultipleScattering(); 

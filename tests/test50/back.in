@@ -1,9 +1,9 @@
 #processes
-LowE
+Standard
 #Foil
+on
+#Back
 on
 #Hadronic
 off
-#setMaxStep
-on
 end

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.cc,v 1.10 2003-02-10 15:09:50 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.11 2003-03-04 18:09:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -30,10 +30,12 @@
 #include "Tst50RunAction.hh"
 
 #include "G4Run.hh"
+#include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 #include "Tst50PrimaryGeneratorAction.hh"
+#include "Tst50DetectorConstruction.hh"
 #ifdef G4ANALYSIS_USE
 #include "Tst50AnalysisManager.hh"
 
@@ -86,7 +88,15 @@ G4int Tst50RunAction::GetRun_ID()
   return runID;
 }
 void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
-{
+{  
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  p_Primary =
+(Tst50PrimaryGeneratorAction*)(runManager->GetUserPrimaryGeneratorAction());
+G4double energy= p_Primary->GetInitialEnergy();
+  p_Detector =
+(Tst50DetectorConstruction*)(runManager->GetUserDetectorConstruction());
+
+  G4String name=p_Detector->GetMaterialName(); 
 #ifdef G4ANALYSIS_USE
  Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
 
@@ -105,7 +115,8 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
       G4double trans=(fg/numberEvents); 
 G4std::ofstream pmtfile("Transmission.txt", G4std::ios::app);
 if(pmtfile.is_open()){
-			
+  pmtfile<<" slab absorber material: "<<name<<G4endl;
+   pmtfile<<"primary particles energy (Mev): "<<energy/MeV <<G4endl;		
   pmtfile<<"Transmitted primary particles: "<<number <<G4endl;
    pmtfile<<"Backscattered primary particles: "<<numberB<<'\t'<<G4endl;
   pmtfile<<"Absorbed particles: "<<(numberEvents-(numberB+number))<<'\t'<<G4endl;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.hh,v 1.9 2003-02-10 15:09:50 guatelli Exp $
+// $Id: Tst50RunAction.hh,v 1.10 2003-03-04 18:09:05 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +38,7 @@
 class G4Run;
 class Tst50AnalysisManager;
 class Tst50PrimaryGeneratorAction;
+class Tst50DetectorConstruction;
 class Tst50RunAction : public G4UserRunAction
 {
   public:
@@ -64,6 +65,8 @@ private:
   G4int runID;
   G4bool Foil;
   G4double fg;
+  Tst50PrimaryGeneratorAction* p_Primary;
+  Tst50DetectorConstruction* p_Detector;
 
 };
 

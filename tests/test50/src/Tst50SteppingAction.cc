@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.24 2003-03-04 12:53:32 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.25 2003-03-04 18:09:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -176,13 +176,12 @@ G4double EnergyDepositSecondary= Step->GetTotalEnergyDeposit();
          particle_name=="gamma" )
       { 
 	
-  G4cout<< "arrivo dentro la particella"<<G4endl;
 
 if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
  
-  G4cout<< " la particella arriva dentro al target"<<G4endl;
+  
     if(Step->GetTrack()->GetNextVolume()->GetName() == "World" ) {
- G4cout<< " la particella arriva dentro al World"<<G4endl;
+
    //volume in cui si esce e' il target 
    
     MMoD=sqrt(pow(XMoD,2.0)+pow(YMoD,2.0)+pow(ZMoD,2.0));
@@ -196,7 +195,7 @@ if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
 if(0 == Step->GetTrack()->GetParentID() ) 
   { if(IDnow != IDold) 
     {
- G4cout<< " la particella e' primaria"<<G4endl;
+
  IDold=IDnow ;  
      if (ZMoD >= 0. )
      {

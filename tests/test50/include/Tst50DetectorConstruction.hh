@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.hh,v 1.6 2003-02-10 15:09:50 guatelli Exp $
+// $Id: Tst50DetectorConstruction.hh,v 1.7 2003-03-04 18:09:05 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,7 @@ class Tst50DetectorConstruction : public G4VUserDetectorConstruction
   
      void PrintParameters(); 
                     
-        
+  G4String  GetMaterialName();   
      G4Material* GetTargetMaterial()  {return TargetMaterial;};
      G4double    GetTargetThickness() {return TargetThickness;};      
      
