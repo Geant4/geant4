@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.cc,v 1.47 2002-12-12 13:25:53 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.48 2002-12-13 08:19:32 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -1078,12 +1078,12 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
         if(!fCount)premC--;                      // Reduce premium efforts counter
 	    for (G4int jq=0; jq<nQuasmons; jq++)     // Fragmentation LOOP over Quasmons
 	    {
-	      G4Quasmon* pQ     = theQuasmons[jq];   // Pointer to the current Quasmon
-          G4int      status = pQ->GetStatus();   // Old status of the Quasmon
-          if(status)                             // Skip dead Quasmons
+	      G4Quasmon* pQ     = theQuasmons[jq];   // Pointer to the current Quasmon <--<--<--<--<-+
+          G4int      status = pQ->GetStatus();   // Old status of the Quasmon                    ^
+          if(status)                             // Skip dead Quasmons                           ^
 		  {
- 	        G4QHadronVector* output=pQ->Fragment(theEnvironment,eCount);//**!!DESTROY!!** <--------+
-            status = pQ->GetStatus();            // New status after fragmentation attempt -<-<--+ ^
+ 	        G4QHadronVector* output=pQ->Fragment(theEnvironment,eCount);//**!!DESTROY!!** <------^-+
+            status = pQ->GetStatus();            // New status after fragmentation attempt       ^ ^
 #ifdef pdebug
 	        G4cout<<"G4QEnv::HadrQE: **FragmAttempt** jq="<<jq<<", status="<<status          //  ^ ^
                   <<", Environment="<<theEnvironment<<theEnvironment.Get4Momentum()<<G4endl; //  ^ ^
@@ -1151,6 +1151,9 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
               //if(eCount==1 && CheckGroundState(pQ,true))  //                                     ^
               if(eCount==1 && CheckGroundState(pQ))         //                                     ^
               {
+                G4std::for_each(output->begin(), output->end(), DeleteQHadron()); // >-------------^
+                output->clear();                     //                                            ^
+                delete output;                       // >==========================================^
                 pQ->KillQuasmon();               // If BackFusion succeeded, kill the Quasmon      ^
                 return theQHadrons;              //                                                ^
               }
@@ -1206,6 +1209,9 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 			  {
                 //if(eCount==1 && DecayInEnvQ(pQ)) //                                              ^
                 //{
+                //  G4std::for_each(output->begin(), output->end(), DeleteQHadron()); // >---------^
+                //  output->clear();                     //                                        ^
+                //  delete output;                       // >======================================^
                 //  pQ->KillQuasmon();                                                             ^
                 //  return theQHadrons;                                                            ^
                 //}
@@ -1249,22 +1255,28 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
                   //if(eCount==1 && CheckGroundState(pQ, true)) //  BackFusion attempt             ^
                   if(eCount==1 && CheckGroundState(pQ)) //  BackFusion attempt                     ^
                   {
+                    G4std::for_each(output->begin(), output->end(), DeleteQHadron()); // >---------^
+                    output->clear();                     //                                        ^
+                    delete output;                       // >======================================^
                     pQ->KillQuasmon();           //                                                ^
 					return theQHadrons;          //                                                ^
                   }
 #ifdef pdebug
 		          G4cout<<"G4QEnv::HadrQEnv: Cann't resolve PANIC, try to Evaporate"<<G4endl;//    ^
 #endif
+                  G4std::for_each(output->begin(), output->end(), DeleteQHadron()); // >-->-->-----^
+                  output->clear();                     //                                          ^
+                  delete output;                       // >========================================^
                   force=true;                    // Make the force decision                        ^
-                  break;                         //                                                ^
-			    }
-			  }
-			}
-            G4std::for_each(output->begin(), output->end(), DeleteQHadron()); // >-----------------^
-            output->clear();                     //                                                ^
-            delete output;                       // >==============================================^
-		  }
-	    } // End of fragmentation LOOP over Quasmons (jq)
+                  break;                         // Out of the fragmentation loop >->+             ^
+			    }                                //                                  |             ^
+			  }                                  //                                  |             ^
+			}                                    //                                  |             ^
+            G4std::for_each(output->begin(), output->end(), DeleteQHadron()); // >---|-------------^
+            output->clear();                     //                                  |             ^
+            delete output;                       // >================================|=============^
+		  }                                      //                                  |
+	    } // End of fragmentation LOOP over Quasmons (jq) <---------<----------<-----+
       }
       else if(totMass>totM+.001)                 // ==> "Try Evaporation or decay" case
 	  {
@@ -1438,7 +1450,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 			{
               G4cerr<<"***G4QEnv::HadronizeQEnv: MQ="<<tot4M.m()<<",QC="<<totQC<<G4endl;
 			  G4Exception("G4QEnvironment::HadronizeQEnv: Quasmon doesn't decay");//^
-			}
+			}                                    // *** Do not destroy instances ***^
             curout->clear();                     // The instances are filled above  ^
             delete curout;                       // >===============================^
             return theQHadrons;
