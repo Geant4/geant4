@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testProPerpSpin.cc,v 1.7 2002-07-27 04:20:22 japost Exp $
+// $Id: testProPerpSpin.cc,v 1.8 2002-10-29 14:00:11 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -281,15 +281,16 @@ G4PropagatorInField*  SetupPropagator( G4int type)
 }
 
 //  This is Done only for this test program ... the transportation does it.
+//  The method is now obsolete -- as propagator in Field has this method,
+//    in order to message the correct field manager's chord finder.
 //
-void  SetChargeMomentumMass(G4double charge, G4double MomentumXc, G4double Mass)
+void  ObsoleteSetChargeMomentumMass(G4double charge, G4double MomentumXc, G4double Mass)
 {
     G4ChordFinder*  pChordFinder; 
 
     pChordFinder= G4TransportationManager::GetTransportationManager()->
 		   GetFieldManager()->GetChordFinder();
 
-    // pMagFieldPropagator->set_magnetic_field();
     pChordFinder->SetChargeMomentumMass(
 		      charge,                    // charge in e+ units
 		      MomentumXc,   // Momentum in Mev/c ?
@@ -318,7 +319,8 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
                     GetTransportationManager()-> GetNavigatorForTracking();
     G4PropagatorInField *pMagFieldPropagator= SetupPropagator(type);
 
-    SetChargeMomentumMass(  +1.,                    // charge in e+ units
+    pMagFieldPropagator->SetChargeMomentumMass(  
+			    +1.,                    // charge in e+ units
 			    0.1*GeV,                // Momentum in Mev/c ?
 			    0.105658387*GeV );
     pNavig->SetWorldVolume(pTopNode);
@@ -361,8 +363,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
                   ( sqrt( momentum_val*momentum_val + rest_mass * rest_mass ) 
 		    + rest_mass );
        G4double labTof= 10.0*ns, properTof= 0.1*ns;
-
-       SetChargeMomentumMass(
+       pMagFieldPropagator->SetChargeMomentumMass(
 		      +1,                    // charge in e+ units
                       momentum_val, 
                       rest_mass);
