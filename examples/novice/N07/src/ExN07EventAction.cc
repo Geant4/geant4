@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07EventAction.cc,v 1.1 2003-03-10 01:43:36 asaim Exp $
+// $Id: ExN07EventAction.cc,v 1.2 2003-03-17 22:07:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -80,7 +80,7 @@ void ExN07EventAction::BeginOfEventAction(const G4Event* evt)
 
 void ExN07EventAction::EndOfEventAction(const G4Event* evt)
 {
-  if(evt->GetEventID()>4) return;
+  if(evt->GetEventID()>4 && (evt->GetEventID())%10!=0) return;
 
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   if(!HCE) return;
