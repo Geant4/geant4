@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWeightWindowProcess.hh,v 1.6 2003-08-19 15:18:22 dressel Exp $
+// $Id: G4ParallelWeightWindowProcess.hh,v 1.7 2003-08-19 16:01:07 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,9 +29,12 @@
 //
 // Class description:
 //
-// Used internally by importance sampling in a "parallel" geometry.
-// This is a G4ParallelTransport that also does importance
-// sampling in the "parallel" geometry.
+// Used internally by weight window technique in a "parallel" geometry.
+// This process is a forced post step process. It will apply
+// weight window biasing on collisions  or on collisions and
+// boundaries according to the G4PlaceOfAction argument. 
+// It is not used in the case where it ww should apply only on boundaries.
+
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -71,7 +74,7 @@ public:  // with description
 				       G4ForceCondition* condition);
     // make process beeing forced
   virtual G4VParticleChange *PostStepDoIt(const G4Track&, const G4Step&);
-    // manage the importance sampling in the "mass" geometry
+    // apply weight window sampliing
 
   virtual void KillTrack() const;
     // used in case no scoring process follows that does the killing

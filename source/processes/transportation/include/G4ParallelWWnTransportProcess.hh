@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWWnTransportProcess.hh,v 1.1 2003-08-19 15:18:22 dressel Exp $
+// $Id: G4ParallelWWnTransportProcess.hh,v 1.2 2003-08-19 16:01:07 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,9 +29,10 @@
 //
 // Class description:
 //
-// Used internally by importance sampling in a "parallel" geometry.
-// This is a G4ParallelTransport that also does importance
-// sampling in the "parallel" geometry.
+// Used internally by weight window technique in a "parallel" geometry.
+// This is a G4ParallelTransport that also does weight window
+// sampling in the "parallel" geometry. It is used in case
+// the ww is applied only on the paralle boundaries.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -65,7 +66,7 @@ public:  // with description
 
   virtual G4VParticleChange *PostStepDoIt(const G4Track&,
 					  const G4Step&);
-    // do the "parallel transport" and importance sampling.
+    // do the "parallel transport" and weight window sampling
 
   virtual void KillTrack() const;
     // used in case no scoring process follows that does the killing

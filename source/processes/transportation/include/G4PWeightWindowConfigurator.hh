@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4PWeightWindowConfigurator.hh,v 1.1 2003-08-19 15:18:22 dressel Exp $
+// $Id: G4PWeightWindowConfigurator.hh,v 1.2 2003-08-19 16:01:07 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4PWeightWindowConfigurator
 //
 // Class description:
-
+// Configure weight window processes for the paralle geometry.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------

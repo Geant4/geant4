@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4MWeightWindowConfigurator.hh,v 1.2 2003-08-19 15:17:40 dressel Exp $
+// $Id: G4MWeightWindowConfigurator.hh,v 1.3 2003-08-19 16:01:07 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // Class G4MWeightWindowConfigurator
 //
 // Class description:
-
+// Configuration of weight window processes.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
