@@ -4,7 +4,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.3 2000-04-19 17:56:47 davidw Exp $
+// $Id: G4VCSGfaceted.cc,v 1.4 2000-04-19 19:18:17 davidw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -342,6 +342,6 @@ G4VisExtent G4VCSGfaceted::GetExtent() const
 	} while( ++face < faces + numFace );
   
   	return G4VisExtent( -answers[0], answers[1], 
-			    -answers[2], answers[3]
+			    -answers[2], answers[3],
 			    -answers[4], answers[5]  );
 }
