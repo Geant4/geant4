@@ -15,7 +15,6 @@
 /lowenergy/cutG .01 micrometer
 /lowenergy/cutE .01 micrometer
 /lowenergy/secphotcut 10 eV
-/run/initialize
 /process/list
 /particle/list
 /run/particle/dumpCutValues
