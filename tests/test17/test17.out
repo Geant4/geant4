@@ -414,7 +414,15 @@ G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
 G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
 G4hLowEnergyIonisation::BuildPhysicsTable: end for IonC12
 G4hLowEnergyIonisation::BuildPhysicsTable for alpha mass(MeV)= 3727.42 charge= 2 type= nucleus
+Cuts are defined 
+G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
+G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
+G4hLowEnergyIonisation::BuildPhysicsTable: end for alpha
 G4hLowEnergyIonisation::BuildPhysicsTable for deuteron mass(MeV)= 1875.61 charge= 1 type= nucleus
+Cuts are defined 
+G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built
+G4hLowEnergyIonisation::BuildPhysicsTable: DEDX table will be built
+G4hLowEnergyIonisation::BuildPhysicsTable: end for deuteron
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -640,7 +648,7 @@ EvtNo= 727  length= 0.00913492  xend= 0.00199605
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.5s Real=4.25s Sys=1.75s
+  User=2.6s Real=4.46s Sys=1.66s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 999 for proton with Ekin = 0.5 MeV
@@ -755,7 +763,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.49s Real=4.24s Sys=1.75s
+  User=2.46s Real=4.89s Sys=1.87s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV
@@ -867,7 +875,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.92s Real=4.69s Sys=1.63s
+  User=2.99s Real=7.03s Sys=1.56s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for IonC12 with Ekin = 6 MeV
@@ -981,7 +989,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=8.43s Real=8.96s Sys=0.14s
+  User=8.59s Real=9.19s Sys=0.2s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV
@@ -1097,7 +1105,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=8.57s Real=8.75s Sys=0.18s
+  User=9.02s Real=10.64s Sys=0.18s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV
