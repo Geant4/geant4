@@ -1,4 +1,4 @@
-$Id: History,v 1.223 2003-05-30 13:14:50 johna Exp $
+$Id: History,v 1.224 2003-06-02 10:42:59 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+2nd June 2003  John Allison  (vis-V05-01-01)
+- Small fix for pedantic warnings in RayTracer.
 
 30th May 2003  John Allison  (vis-V05-01-00 - does not include HepRep below)
 - Improved README.built_in_commands.  Removed unlikely-to-be-implemented
