@@ -91,9 +91,7 @@ G4IonC12 G4IonC12::theIonC12(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4IonC12* G4IonC12::IonC12Definition(){return &theIonC12;}
-// initialization for static cut values
-G4double   G4IonC12::theIonC12LengthCut;
-G4double*  G4IonC12::theIonC12KineticEnergyCuts;
+G4IonC12* G4IonC12::IonC12(){return &theIonC12;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

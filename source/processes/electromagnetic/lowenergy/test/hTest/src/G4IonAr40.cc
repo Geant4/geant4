@@ -89,9 +89,7 @@ G4IonAr40 G4IonAr40::theIonAr40(
 );
 
 G4IonAr40* G4IonAr40::IonAr40Definition(){return &theIonAr40;}
-// initialization for static cut values
-G4double   G4IonAr40::theIonAr40LengthCut;
-G4double*  G4IonAr40::theIonAr40KineticEnergyCuts;
+G4IonAr40* G4IonAr40::IonAr40(){return &theIonAr40;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

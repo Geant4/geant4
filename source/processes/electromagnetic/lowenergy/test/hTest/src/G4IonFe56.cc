@@ -91,8 +91,6 @@ G4IonFe56 G4IonFe56::theIonFe56(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4IonFe56* G4IonFe56::IonFe56Definition(){return &theIonFe56;}
-// initialization for static cut values
-G4double   G4IonFe56::theIonFe56LengthCut;
-G4double*  G4IonFe56::theIonFe56KineticEnergyCuts;
+G4IonFe56* G4IonFe56::IonFe56(){return &theIonFe56;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
