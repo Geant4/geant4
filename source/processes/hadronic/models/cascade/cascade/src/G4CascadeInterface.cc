@@ -19,7 +19,10 @@
 #include "G4Track.hh"
 #include "G4Nucleus.hh"
 
+#include "G4FragmentVector.hh"
+
 typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
+typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
 G4CascadeInterface::G4CascadeInterface()
   :verboseLevel(1)  {
@@ -53,7 +56,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   // Make conversion between native Geant4 and Bertini cascade classes.
   // NOTE: Geant4 units are MeV = 1 and GeV = 1000. Cascade code by default use GeV = 1.
 
-  enum particleType { proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
+  enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
 
   G4int bulletType = 0;
 
@@ -119,14 +122,18 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
     output.printCollisionOutput();
   };
 
-  // Convert Bertini data to Geant4 format
-  G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
+  // Convert cascade data to use hadronics interface
+
+  G4std::vector<G4InuclNuclei>             nucleiFragments = output.getNucleiFragments();
+  G4std::vector<G4InuclElementaryParticle> particles =       output.getOutgoingParticles();
+
+  G4int numSecondaries = nucleiFragments.size()+particles.size();
+  theResult.SetNumberOfSecondaries(numSecondaries);
 
   if(!particles.empty()) { 
     particleIterator ipart;
     G4int outgoingParticle;
 
-    theResult.SetNumberOfSecondaries(particles.size());
     for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
       outgoingParticle = ipart->type();
       G4std::vector<G4double> mom = ipart->getMomentum();
@@ -175,6 +182,40 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
     }
   }
 
+  // Get nuclei fragments
+  if(!nucleiFragments.empty()) { 
+    nucleiIterator ifrag;
+    G4std::vector<G4double> mom(3);
+
+    for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) {
+      G4double eKin = ifrag->getKineticEnergy() * GeV;
+
+      mom = ifrag->getMomentum();
+      G4ThreeVector aMom(mom[1], mom[2], mom[3]);
+      aMom = aMom.unit();
+      G4LorentzVector momentum(aMom, eKin); // fix eKin to eTotal
+
+      G4double fragmentExitation = ifrag->getExitationEnergyInGeV();
+      G4int A = G4int(ifrag->getA());
+      G4int Z = G4int(ifrag->getZ());
+
+      if (verboseLevel > 2) {
+	G4cout << " Nuclei fragment: " << G4endl;
+        ifrag->printParticle();
+      }
+
+      G4FragmentVector * theFragments = new G4FragmentVector;
+
+      G4Fragment* fragment = new G4Fragment(A, Z, momentum);
+
+      fragment->SetExcitationEnergy(fragmentExitation); // ::: is dummy routine. 
+    
+      theFragments->push_back(fragment);
+      // :::  theResult.AddSecondary(theFragments); 
+    }
+  }
+
   return &theResult;
 }
+
 
