@@ -28,15 +28,11 @@
 #
 #/////////////////////////////////////////////////////////////////////////////
 
+# Hook the current plotter :
+plotter = Plotter('')
 
-page = ui.getCurrentPage()
-page.reset('page') 
-
-
-page.set('pageTitle','AnaEx01 analysis')
-
-# 2 regions :
-page.set('page','1 2')
+plotter.createRegions(1,2)
+plotter.setParameter('pageTitle','AnaEx01 analysis')
 
 rootTree = RootTree('AnaEx01.root','READ')
 rootTree.ls()
@@ -44,7 +40,6 @@ rootTree.ls()
 #/////////////////////////////////////////////////////////////////////////////
 # In first region, get and plot the EAbs histo :
 #/////////////////////////////////////////////////////////////////////////////
-page.set('region','0')
 
 rootTree.cd('histograms')
 rootTree.ls()
@@ -55,12 +50,11 @@ rootTree.ls()
 EAbs = H1D_get(rootTree,'EAbs')
 
 # Plot the histo :
-EAbs.show()
+plotter.plot(EAbs)
 
 #/////////////////////////////////////////////////////////////////////////////
 # In second region plot the EAbs histo built from the tuple :
 #/////////////////////////////////////////////////////////////////////////////
-page.set('region','1')
 
 rootTree.cd('..')
 rootTree.cd('tuples')
@@ -77,12 +71,13 @@ filter = Filter(tuple,'')
 
 # Project tuple AnaEx01/EAbs column on the tuple_EAbs histo :
 tuple.project(tuple_EAbs,evaluator,filter)
-tuple_EAbs.show()
+
+plotter.next()
+plotter.plot(tuple_EAbs)
+plotter.setParameter('histogramContext','color red modeling solid')
 
 # Evaluators and Filters are not managed, delete them explicitly :
 delete_IEvaluator(evaluator)
 delete_IFilter(filter)
-
-page.set('histogramContext','color red modeling solid')
 
 echo('The two histos must give the same information !')
