@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc,v 1.22 2005-02-22 10:18:12 grichine Exp $
+// $Id: G4IntersectionSolid.cc,v 1.23 2005-03-01 17:11:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
 // History:
 //
-// 17.02.05 V.Grichine: bug was fixed in DistanceToIn(p,v) based on the algorithm proposed by
-//                      Dino Bazzacco <dino.bazzacco@pd.infn.it>
+// 17.02.05 V.Grichine: bug was fixed in DistanceToIn(p,v) based on algorithm
+//                      proposed by Dino Bazzacco <dino.bazzacco@pd.infn.it>
 // 29.05.01 V.Grichine: bug was fixed in DistanceToIn(p,v)
 // 16.03.01 V.Grichine: modifications in CalculateExtent() and Inside()
 // 29.07.99 V.Grichine: modifications in DistanceToIn(p,v)
@@ -220,7 +220,7 @@ G4double
 G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
                                    const G4ThreeVector& v  ) const 
 {
-  G4double dist = 0.0, disTmp = 0.0 ;
+  G4double dist = 0.0;
   if( Inside(p) == kInside )
   {
 #ifdef G4BOOLDEBUG
@@ -238,15 +238,12 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
   }
   else // if( Inside(p) == kSurface ) 
   {
-    // algorithm proposed by :
-    // Dino Bazzacco <dino.bazzacco@pd.infn.it>
-    
     EInside wA = fPtrSolidA->Inside(p);
     EInside wB = fPtrSolidB->Inside(p);
 
     G4ThreeVector pA = p,  pB = p;
-    G4double      dA = 0., dA1, dA2;
-    G4double      dB = 0., dB1, dB2;
+    G4double      dA = 0., dA1=0., dA2=0.;
+    G4double      dB = 0., dB1=0., dB2=0.;
     G4bool        doA = true, doB = true;
 
     while(true) 
@@ -312,118 +309,6 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
       }
     }
   }
-  /*
-  else
-  {
-    if( fPtrSolidA->Inside(p) != kOutside    )
-    {
-      do
-      {
-        if( fPtrSolidB->Inside(p+dist*v) == kInside    )
-        {
-          disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v); 
-        }
-        else
-        {
-          disTmp = fPtrSolidB->DistanceToIn(p+dist*v,v);
-        }
-        if( disTmp != kInfinity )
-        {
-          dist += disTmp;
-
-          if(Inside(p+dist*v) == kOutside  )
-          {
-            if( fPtrSolidA->Inside(p+dist*v) == kInside    )
-            {
-              disTmp = fPtrSolidA->DistanceToOut(p+dist*v,v); 
-            }
-            else
-            {
-              disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v);
-            }
-            if( disTmp != kInfinity  ) dist += disTmp;           
-            else                       return  kInfinity;            
-          }
-          else  break;
-          
-        }
-        else    return kInfinity;         
-      }
-      while( Inside(p+dist*v) == kOutside );
-      // while( fPtrSolidB->Inside(p) != kOutside ) ;
-    }
-    else  if(  fPtrSolidB->Inside(p) != kOutside    )
-    {     
-      do 
-      {
-        if( fPtrSolidA->Inside(p+dist*v) == kInside    )
-        {
-          disTmp = fPtrSolidA->DistanceToOut(p+dist*v,v); 
-        }
-        else
-        {
-          disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v);
-        }   
-        if( disTmp != kInfinity )
-        {
-          dist += disTmp;
-
-          if(Inside(p+dist*v) == kOutside  )
-          {
-            if( fPtrSolidB->Inside(p+dist*v) == kInside    )
-            {
-              disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v); 
-            }
-            else
-            {
-              disTmp = fPtrSolidB->DistanceToIn(p+dist*v,v);
-            }
-            if( disTmp != kInfinity  ) dist += disTmp;
-            else                       return  kInfinity;            
-          }
-          else  break;          
-        }
-        else    return kInfinity;        
-      }
-      while( Inside(p+dist*v) == kOutside );
-    }
-    else
-    {
-      do
-      {
-        if( fPtrSolidB->Inside(p+dist*v) == kInside    )
-        {
-          disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v); 
-        }
-        else
-        {
-          disTmp = fPtrSolidB->DistanceToIn(p+dist*v,v);
-        }
-        if( disTmp != kInfinity )
-        {
-          dist += disTmp;
-
-          if(Inside(p+dist*v) == kOutside  )
-          {
-            if( fPtrSolidA->Inside(p+dist*v) == kInside    )
-            {
-              disTmp = fPtrSolidA->DistanceToOut(p+dist*v,v); 
-            }
-            else
-            {
-              disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v);
-            }
-            if( disTmp != kInfinity  ) dist += disTmp;           
-            else                       return  kInfinity;            
-          }
-          else  break;
-        }
-        else    return kInfinity; 
-      }
-      while( Inside(p+dist*v) == kOutside );
-    }
-  }
-  */
   return dist ;  
 }
 
