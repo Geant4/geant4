@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VXTRdEdx.hh,v 1.2 2001-02-27 09:34:02 grichine Exp $
+// $Id: G4VXTRdEdx.hh,v 1.3 2001-02-27 16:15:48 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,8 +21,8 @@
 //
 
 
-#ifndef G4VXrayTRadModel_h
-#define G4VXrayTRadModel_h 1
+#ifndef G4VXTRdEdx_h
+#define G4VXTRdEdx_h 1
 
 
 #include "globals.hh"
