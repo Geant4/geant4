@@ -1,0 +1,22 @@
+# $Id: storeTables.mac,v 1.1 2001-10-23 10:30:12 maire Exp $
+#
+# Macro file for "testEm3.cc"
+# 
+# can be run in batch, without graphic
+# or interactively: Idle> /control/execute run1.mac
+#
+/control/verbose 2
+#
+/run/initialize
+/run/particle/storePhysicsTable physdata
+#
+/gun/particle e-
+/gun/energy 1 GeV
+#
+/run/beamOn 3
+#
+/run/particle/retrievePhysicsTable physdata
+#
+/rndm/read beginOfRun.rndm
+/run/beamOn 3
+#

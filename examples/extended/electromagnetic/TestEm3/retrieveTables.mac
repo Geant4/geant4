@@ -1,0 +1,17 @@
+# $Id: retrieveTables.mac,v 1.1 2001-10-23 10:30:12 maire Exp $
+#
+# Macro file for "exampleN03.cc"
+# 
+# can be run in batch, without graphic
+# or interactively: Idle> /control/execute run1.mac
+#
+/control/verbose 2
+#
+/run/particle/retrievePhysicsTable physdata
+/run/initialize
+#
+/gun/particle e-
+/gun/energy 1 GeV
+#
+/run/beamOn 3
+#
