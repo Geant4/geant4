@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.18 2003-06-16 17:03:04 gunter Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.19 2003-09-25 13:42:11 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -2350,7 +2350,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
   else                                  // Search with the function
   {
     if(lastL<mL)G4cerr<<"**G4EleNucCS::GetEfPhE:L="<<lastL<<",S="<<lastSig<<",Y="<<Y[lastL]<<G4endl;
-    G4double f=(ris-Y[lastL])/lastH;    // The scaled residual value
+    G4double f=(ris-Y[lastL])/lastH;    // The scaled residual value of the cross-section integral
 #ifdef pdebug
 	G4cout<<"G4EleNucCS::GetEfPhE:HighEnergy f="<<f<<",ris="<<ris<<",lastH="<<lastH<<G4endl;
 #endif
@@ -2376,9 +2376,9 @@ G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
   static const G4double lmel=log(mel);                 // Log of electron mass
   static const G4double z=log(EMa);                    // Initial argument
   static const G4double p=poc*(z-pos)+shd*exp(-reg*z); // Initial function
-  static const G4int    imax=7;    // Not more than "imax" steps to find the solution
+  static const G4int    imax=27;   // Not more than "imax" steps to find the solution
   static const G4double eps=0.001; // Accuracy which satisfies the search
-  G4double x=z+f/p/(lastG+lmel-z); // First guess
+  G4double x=z+f/p/(lastG+lmel-z); // First guess (= the first step from the edge)
 #ifdef pdebug
   G4cout<<"SolveTheEq: e="<<eps<<",f="<<f<<",z="<<z<<",p="<<p<<",lastG="<<lastG<<",x="<<x<<G4endl;
 #endif
@@ -2392,6 +2392,7 @@ G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
     G4cout<<"SolveTheEq: i="<<i<<",d="<<d<<",x="<<x<<",fx="<<fx<<",df="<<df<<G4endl;
 #endif
     if(abs(d)<eps) break;
+    if(i+1>=imax)G4cerr<<"*SolveTheEq:i="<<i+1<<"=imax="<<imax<<". At that high E increase imax"<<G4endl;
   }
   return x;
 }

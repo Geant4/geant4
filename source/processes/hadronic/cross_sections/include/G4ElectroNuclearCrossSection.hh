@@ -26,7 +26,7 @@
 //
 // GEANT4 physics class: G4ElectroNuclearCrossSection -- header file
 // M.V. Kossov, ITEP(Moscow), 24-OCT-01
-// The last update: M.V. Kossov, CERN/ITEP (Moscow) 17-May-02
+// The last update: M.V. Kossov, CERN/ITEP (Moscow) 25-Sept-03
 //
 
 #ifndef G4ElectroNuclearCrossSection_h
@@ -138,27 +138,28 @@ inline G4double G4ElectroNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
   return dN;
 }
 
-inline G4double G4ElectroNuclearCrossSection::DFun(G4double /* x */) // Original PhoNuc cross section
+inline G4double G4ElectroNuclearCrossSection::DFun(G4double x) // Original PhoNuc cross section
 {
   static const G4double shd=1.0734;                    // HE PomShadowing(D)
   static const G4double poc=0.0375;                    // HE Pomeron coefficient
   static const G4double pos=16.5;                      // HE Pomeron shift
   static const G4double reg=.11;                       // HE Reggeon slope
-  static const G4double mel=0.5109989;                 // Mass of electron in MeV
-  static const G4double lmel=log(mel);                 // Log of electron mass
-  G4double lE=lastG+lmel;
-  return poc*(lE-pos)+shd*exp(-reg*lE);
+  return poc*(x-pos)+shd*exp(-reg*x);
 }
 
-inline G4double G4ElectroNuclearCrossSection::Fun(G4double /* x */) // Integrated PhoNuc cross section
+inline G4double G4ElectroNuclearCrossSection::Fun(G4double x) // Integrated PhoNuc cross section
 {
-  static const G4double mel=0.5109989;                 // Mass of electron in MeV
-  static const G4double lmel=log(mel);                 // Log of electron mass
-  G4double dlg1=lastG+lastG-1.;
-  G4double lgoe=lastG/lastE;
-  G4double lE=lastG+lmel;
-  G4double HE2=HighEnergyJ2(lE);
-  return dlg1*HighEnergyJ1(lE)-lgoe*(HE2+HE2-HighEnergyJ3(lE)/lastE);
+  static const G4double mel=0.5109989;                 // Mass of an electron in MeV
+  static const G4double lmel=log(mel);                 // Log of an electron mass
+  G4double lG=x-lmel;
+  G4double dlg1=lG+lG-1.;
+  G4double lgoe=lG/lastE;
+  //G4double dlg1=lastG+lastG-1.;
+  //G4double lgoe=lastG/lastE;
+  //G4double lE=lastG+lmel;                              // G4double lG=x-lmel
+  //G4double HE2=HighEnergyJ2(lE);
+  G4double HE2=HighEnergyJ2(x);
+  return dlg1*HighEnergyJ1(x)-lgoe*(HE2+HE2-HighEnergyJ3(x)/lastE);
 }
 
 inline G4double G4ElectroNuclearCrossSection::HighEnergyJ1(G4double lEn)
