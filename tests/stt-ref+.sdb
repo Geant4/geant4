@@ -1,48 +1,46 @@
-# $Id: stt-ref+.sdb,v 1.1 1999-01-08 16:34:13 gunter Exp $
+# $Id: stt-ref+.sdb,v 1.2 1999-02-12 14:03:55 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
 # Super-categories
-geant4beta/config           beta03-ref-05
-geant4beta/data             beta03-ref-05
-# geant4beta/documents - not currently part of reference versions
-geant4beta/environments     beta03-ref-05
-geant4beta/examples         beta03-ref-05
-# geant4beta/source - split into categories - see below.
-# geant4beta/tests - checkout HEAD by hand and use this script.
+geant4/config           geant4-00-patch2
+# geant4/documents - not currently part of reference versions
+geant4/environments     geant4-00-patch2
+geant4/examples         geant4-00-patch2
+# geant4/source - split into categories - see below.
+# geant4/tests - checkout HEAD by hand and use this script.
 # Source categories
-geant4beta/source/GNUmakefile      beta03-ref-05
-geant4beta/source/digits+hits      beta03-ref-05
-geant4beta/source/event            beta03-ref-05
-geant4beta/source/g3tog4           beta03-ref-05
-geant4beta/source/geometry/GNUmakefile   beta03-ref-05
-geant4beta/source/geometry/History       beta03-ref-05
-geant4beta/source/geometry/magneticfield beta03-ref-05
-geant4beta/source/geometry/management    beta03-ref-05
-geant4beta/source/geometry/solids        beta03-ref-05
-geant4beta/source/geometry/volumes       beta03-ref-05        
-geant4beta/source/global           beta03-ref-05
-geant4beta/source/graphics_reps    beta03-ref-05
-geant4beta/source/intercoms        beta03-ref-05
-geant4beta/source/interfaces       beta03-ref-05
-geant4beta/source/materials        beta03-ref-05
-geant4beta/source/particles        beta03-ref-05        
-geant4beta/source/persistency      beta03-ref-05
-geant4beta/source/processes/GNUmakefile         beta03-ref-05
-geant4beta/source/processes/History             beta03-ref-05
-geant4beta/source/processes/decay	        beta03-ref-05        
-geant4beta/source/processes/electromagnetic	beta03-ref-05        
-geant4beta/source/processes/hadronic	        beta03-ref-05
-geant4beta/source/processes/hadronic/models/                 beta03-ref-05        
-geant4beta/source/processes/hadronic/stopping                beta03-ref-05        
-geant4beta/source/processes/hadronic/models                  beta03-ref-05
-geant4beta/source/processes/management        	beta03-ref-05
-geant4beta/source/processes/optical	        beta03-ref-05
-geant4beta/source/processes/parameterisation  	beta03-ref-05
-geant4beta/source/processes/photolepton_hadron  beta03-ref-05
-geant4beta/source/processes/transportation	beta03-ref-05
-geant4beta/source/readout          beta03-ref-05
-geant4beta/source/run              beta03-ref-05
-geant4beta/source/track            beta03-ref-05
-geant4beta/source/tracking         beta03-ref-05
-geant4beta/source/visualization    beta03-ref-05
+geant4/source/GNUmakefile      geant4-00-patch2
+geant4/source/digits+hits      geant4-00-patch2
+geant4/source/event            geant4-00-patch2
+geant4/source/g3tog4           geant4-00-patch2
+geant4/source/geometry/GNUmakefile   geant4-00-patch2
+geant4/source/geometry/History       geant4-00-patch2
+geant4/source/geometry/magneticfield geant4-00-patch2
+geant4/source/geometry/management    geant4-00-patch2
+geant4/source/geometry/solids        geant4-00-patch2
+geant4/source/geometry/volumes       geant4-00-patch2  
+geant4/source/global           geant4-00-patch2
+geant4/source/graphics_reps    greps-01-00-03
+geant4/source/intercoms        geant4-00-patch2
+geant4/source/interfaces       geant4-00-patch2
+geant4/source/materials        geant4-00-patch2
+geant4/source/particles        particles-01-00-02
+geant4/source/persistency      geant4-00-patch2
+geant4/source/processes/GNUmakefile         geant4-00-patch2
+geant4/source/processes/History             geant4-00-patch2
+geant4/source/processes/decay	            geant4-00-patch2
+geant4/source/processes/electromagnetic	    geant4-00-patch2
+geant4/source/processes/hadronic            geant4-00-patch2
+geant4/source/processes/hadronic/util       hadronic-01-00-00-01
+geant4/source/processes/hadronic/models/generator/de_excitation hadronic-01-00-00-01
+geant4/source/processes/management          procman-01-00-01
+geant4/source/processes/optical	            geant4-00-patch2
+geant4/source/processes/parameterisation    geant4-00-patch2
+geant4/source/processes/transportation      geant4-00-patch2
+geant4/source/readout          geant4-00-patch2
+geant4/source/run              geant4-00-patch2
+geant4/source/track            geant4-00-patch2
+geant4/source/tracking         geant4-00-patch2
+geant4/source/visualization    vis-01-00-05
+
