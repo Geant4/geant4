@@ -1,4 +1,4 @@
-$Id: History,v 1.70 2002-12-04 14:58:27 vnivanch Exp $
+$Id: History,v 1.71 2003-01-06 17:17:07 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06 jan 03: V.Ivant (stand-V05-00-00)
+- Update interfaces to STD classes in order to be ready to migrade 
+  to "cut per region"
 
 04 dec 02: V.Ivant (stand-V04-01-07)
 - fix d-electron spectra for STD
