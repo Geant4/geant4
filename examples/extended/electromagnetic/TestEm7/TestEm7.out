@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (27-July-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -42,16 +42,8 @@ Current available graphics systems are:
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
 #
-/testem/det/tallyMat Water
-/testem/det/tallySize 2. 2. 2. mm
-/testem/det/tallyPosition -9.9 0. 0. cm
-/testem/det/tallyPosition -5.  0. 0. cm
-/testem/det/tallyPosition  0.  0. 0. cm
-/testem/det/tallyPosition  5.  0. 0. cm
-#
 /testem/phys/addPhysics  standard	# em physics     
 PhysicsList::AddPhysicsList: <standard>
-###/testem/phys/addPhysics  g4v52	# em physics
 ###/testem/phys/addPhysics  binary	# hadronic physics
 #
 /run/initialize
@@ -59,13 +51,6 @@ userDetector->Construct() start.
 
 ---------------------------------------------------------
 ---> The Absorber is 20 cm  of Water
-
----------------------------------------------------------
----> There are 4 tallies : 2 2 2 mm  of Water
-tally 0: position = -9.9 0 0 cm 
-tally 1: position = -5 0 0 cm 
-tally 2: position = 0 0 0 fm 
-tally 3: position = 5 0 0 cm 
 
 ---------------------------------------------------------
 World is registered to the default region.
@@ -78,7 +63,6 @@ PhysicsList::SetCuts:CutLength : 1 mm
 #
 /gun/particle proton
 /gun/energy 160 MeV
-/testem/gun/rndm 2 mm
 #
 /testem/event/printModulo 1000
 /testem/stepMax 1 mm
@@ -195,16 +179,6 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
-
-    Voxelisation: top CPU users:
-    Percent   Total CPU    System CPU       Memory  Volume
-    -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            0k Absorber
-
-    Voxelisation: top memory users:
-    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
-    -------   --------     ------   ------   --------   ----------    ----------
-     100.00          0k         1        5          8         0.00    Absorber
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -235,20 +209,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=154.28s Real=375.56s Sys=54.77s
+  User=141.04s Real=285.27s Sys=55.57s
 
----------------------------------------------------------
- Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
-tally 0: 	 	10.400219 GeV	0.65001367 % 	0.00020828743 Gy
-tally 1: 	 	7.9906299 GeV	0.49941437 % 	0.00016003008 Gy
-tally 2: 	 	3.6423712 GeV	0.2276482 % 	7.2946557e-05 Gy
-tally 3: 	 	1.8338852 GeV	0.11461782 % 	3.6727615e-05 Gy
+ The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 
----------------------------------------------------------
+ projected Range= 17.626 cm    rms= 3.3472 mm 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1800509887, 111688235
+ Current couple of seeds = 1097942102, 16763495
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (27-July-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -216,7 +216,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=12.22s Real=13.81s Sys=1.57s
+  User=12.82s Real=14.3s Sys=1.42s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -494,7 +494,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=13.15s Real=14.77s Sys=1.62s
+  User=13.52s Real=15.18s Sys=1.66s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -801,7 +801,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.94s Real=2.08s Sys=0.14s
+  User=1.99s Real=2.12s Sys=0.13s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1139,7 +1139,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=8.51s Real=9.95s Sys=1.44s
+  User=8.73s Real=10.09s Sys=1.33s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1157,7 +1157,7 @@ Region : Calor-A
     e-    in Absorber 17.142253 eV     in Gap 7.9280003 eV 
     e+    in Absorber 665.80551 keV    in Gap 1.1627031 MeV
  Total track length of e+/e- in an event :
-    Absorber 47.798725 cm       Gap 45.809723 cm 
+    Absorber 47.798725 cm       Gap 45.809722 cm 
  Total number of steps of e+/e- in an event :
     Absorber 1447.9      Gap 3025.7
 ############################################################
@@ -1165,17 +1165,17 @@ Region : Calor-B
  Production thresholds :
     gamma 100 mum    e- 100 mum    e+ 100 mum
  Energy deposition in an event :
-    Absorber 717.27801 MeV      Gap 309.71493 MeV
+    Absorber 717.278 MeV      Gap 309.71494 MeV
  Number of secondaries in an event :
     gamma in Absorber 94.6    in Gap 29.6
     e-    in Absorber 604    in Gap 298.4
     e+    in Absorber 4.1    in Gap 0.9
  Minimum kinetic energy of generated secondaries :
     gamma in Absorber 2.3165527 keV    in Gap 1.1265939 keV
-    e-    in Absorber 2.55373 eV     in Gap 23.392195 eV 
+    e-    in Absorber 2.5537303 eV     in Gap 23.392195 eV 
     e+    in Absorber 176.37501 keV    in Gap 2.0225778 MeV
  Total track length of e+/e- in an event :
-    Absorber 81.517666 cm       Gap 65.539464 cm 
+    Absorber 81.517666 cm       Gap 65.539465 cm 
  Total number of steps of e+/e- in an event :
     Absorber 859.1      Gap 432.3
 ############################################################

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (27-July-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -203,7 +203,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=28s Real=43s Sys=10s
+  User=29s Real=45s Sys=10s
 
  nb tracks/event   neutral:    27.0700   charged:   701.4100
  nb  steps/event   neutral:   145.7600   charged:  3504.0700

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (27-July-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -121,5 +121,5 @@ Test23 event # 700
 Test23 event # 800
 Test23 event # 900
 Test23 event # 1000
-Test23_Result: gam=2758(0.61096047), e-=14633(0.44771832), e+=40(2.7991143), p=213(4.2448965), n=940(4.8692449), d=71(5.0646093), t=29(5.8659167), He3=0(0), alph=79(1.8560522), nu=1000(80.842723), anu=140(34.905592), others=10483*0.20585587
+Test23_Result: gam=2909(0.73928407), e-=15605(0.44294977), e+=54(4.5725406), p=250(4.1599414), n=1067(5.245917), d=90(4.6713118), t=20(6.4021086), He3=0(0), alph=104(1.6025003), nu=1000(78.811055), anu=143(34.934431), others=10845*0.2123861
 Test23 is done

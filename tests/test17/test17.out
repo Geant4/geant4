@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (27-July-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -246,7 +246,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.34s Real=4.15s Sys=1.81s
+  User=2.49s Real=4.22s Sys=1.73s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV
@@ -289,7 +289,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.35s Real=4.1s Sys=1.75s
+  User=2.41s Real=4.23s Sys=1.82s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV
@@ -393,7 +393,7 @@ EvtNo= 995  length= 0.0087431  xend= 0.00304073
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.86s Real=4.51s Sys=1.65s
+  User=2.86s Real=4.53s Sys=1.66s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 936 for IonC12 with Ekin = 6 MeV
@@ -435,7 +435,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=9.98s Real=10.17s Sys=0.19s
+  User=9.88s Real=10.06s Sys=0.15s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV
@@ -479,7 +479,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=10.2s Real=10.93s Sys=0.21s
+  User=10.13s Real=10.25s Sys=0.12s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV

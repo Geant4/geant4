@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (27-July-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -244,7 +244,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=18.97s Real=25.54s Sys=2.85s
+  User=18.68s Real=25.98s Sys=2.97s
 
 ============   SUMMARY   ============
 
@@ -357,7 +357,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.94000000s Real=2.59000000s Sys=0.27000000s
+  User=0.95000000s Real=2.29000000s Sys=0.29000000s
 
 ============   SUMMARY   ============
 
@@ -469,7 +469,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.84000000s Real=2.96000000s Sys=0.44000000s
+  User=0.92000000s Real=2.18000000s Sys=0.32000000s
 
 ============   SUMMARY   ============
 
@@ -581,7 +581,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=19.04000000s Real=22.89000000s Sys=2.63000000s
+  User=18.64000000s Real=22.40000000s Sys=2.91000000s
 
 ============   SUMMARY   ============
 

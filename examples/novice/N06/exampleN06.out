@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (27-July-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -1034,7 +1034,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 ** Photon absorbed! **
     1   2.21 m    96.4 cm  -95.1 cm   3.74 eV      0 eV   2.59 m    2.59 m          Tank  OpAbsorption
 Number of optical photons produces in this event : 53
-number of event = 1 User=0.1s Real=0.23s Sys=0.13s
+number of event = 1 User=0.07s Real=0.23s Sys=0.16s
 #
 /process/inactivate Scintillation
 /N06/phys/verbose 0
@@ -1405,6 +1405,6 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1      5 m    1.84 m    2.32 m    2.27 eV      0 eV   5.81 m    5.81 m          Tank  Transportation
     2     10 m    4.77 m    6.01 m    2.27 eV      0 eV   6.87 m    12.7 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 38
-number of event = 1 User=0.04s Real=0.11s Sys=0.07s
+number of event = 1 User=0.03s Real=0.1s Sys=0.07s
 Graphics systems deleted.
 Visualization Manager deleting...

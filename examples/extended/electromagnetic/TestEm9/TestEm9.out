@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (27-July-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -245,28 +245,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=31.48s Real=35.19s Sys=3.65s
+  User=30.46s Real=34.25s Sys=3.79s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
 Average number of e-         1306
-Average number of gamma      684.6
-Average number of e+         48.98
-Average number of steps      3831
-Edep 1x1 =                   0.8336 +- 0.002815
-Edep 3x3 =                   0.9586 +- 0.001349
-Edep 5x5 =                   0.979 +- 0.001047
+Average number of gamma      685.7
+Average number of e+         48.55
+Average number of steps      3832
+Edep 1x1 =                   0.832 +- 0.002799
+Edep 3x3 =                   0.9587 +- 0.001343
+Edep 5x5 =                   0.9793 +- 0.000987
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8336  delEdep1x1= -0.004382 nrms= -1.374
-Erms1x1: 0.02815  delErms1x1= -0.003748 nrms= -1.175
-Edep3x3: 0.9586  delEdep3x3= -0.001905 nrms= -1.305
-Erms3x3: 0.01349  delErms3x3= -0.001111 nrms= -0.7611
-Edep5x5: 0.979  delEdep5x5= -0.001528 nrms= -1.295
-Erms5x5: 0.01047  delErms5x5= -0.00133 nrms= -1.127
+Edep1x1: 0.832  delEdep1x1= -0.006015 nrms= -1.886
+Erms1x1: 0.02799  delErms1x1= -0.003905 nrms= -1.224
+Edep3x3: 0.9587  delEdep3x3= -0.001826 nrms= -1.25
+Erms3x3: 0.01343  delErms3x3= -0.001166 nrms= -0.7985
+Edep5x5: 0.9793  delEdep5x5= -0.001216 nrms= -1.031
+Erms5x5: 0.00987  delErms5x5= -0.00193 nrms= -1.635
 <<<<<END>>>>>   IS ACCEPTED
 
 #
