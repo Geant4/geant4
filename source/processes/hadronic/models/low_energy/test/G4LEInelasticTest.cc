@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEInelasticTest.cc,v 1.3 2002-02-12 20:18:16 hpw Exp $
+// $Id: G4LEInelasticTest.cc,v 1.4 2002-06-13 12:19:06 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -35,8 +35,8 @@
 #include "G4ProcessManager.hh"
 #include "G4HadronInelasticProcess.hh"
  
-#include "G4NeutronInelasticProcess.hh"
-#include "G4LENeutronInelastic.hh"
+#include "G4PionMinusInelasticProcess.hh"
+#include "G4LEPionMinusInelastic.hh"
 
 #include "G4DynamicParticle.hh"
 #include "G4LeptonConstructor.hh"
@@ -138,21 +138,21 @@
     // ----------- now get all particles of interest ---------
    G4int numberOfParticles = 1;
    G4ParticleDefinition* theParticles[1];
-   G4ParticleDefinition* theNeutron = G4Neutron::NeutronDefinition();
-   theParticles[0]=theNeutron;
+   G4ParticleDefinition* thePionMinus = G4PionMinus::PionMinusDefinition();
+   theParticles[0]=thePionMinus;
    
    //------ here all the particles are Done ----------
    G4cout << "Done with all the particles" << G4endl;
    G4cout << "Starting process definitions" << G4endl;
    //--------- Processes definitions ---------
-   G4NeutronInelasticProcess* theProcesses[1];
+   G4PionMinusInelasticProcess* theProcesses[1];
       
-   G4ProcessManager* theNeutronProcessManager = new G4ProcessManager(theNeutron);
-   theNeutron->SetProcessManager(theNeutronProcessManager);
-   G4NeutronInelasticProcess theInelasticProcess; 
-   G4LENeutronInelastic theNeutronModel;
-   theInelasticProcess.RegisterMe(&theNeutronModel);
-   theNeutronProcessManager->AddDiscreteProcess(&theInelasticProcess);
+   G4ProcessManager* thePionMinusProcessManager = new G4ProcessManager(thePionMinus);
+   thePionMinus->SetProcessManager(thePionMinusProcessManager);
+   G4PionMinusInelasticProcess theInelasticProcess; 
+   G4LEPionMinusInelastic thePionMinusModel;
+   theInelasticProcess.RegisterMe(&thePionMinusModel);
+   thePionMinusProcessManager->AddDiscreteProcess(&theInelasticProcess);
    theProcesses[0] = &theInelasticProcess;
    
    G4ForceCondition* condition = new G4ForceCondition;
@@ -186,7 +186,7 @@
 //   G4cout <<"Now debug the DoIt: enter the problem event number"<< G4endl;
    G4int debugThisOne=1;
 //   G4cin >> debugThisOne;
-   G4cout << "Please enter the neutron energy"<<G4endl;
+   G4cout << "Please enter the PionMinus energy"<<G4endl;
    G4cin >> incomingEnergy;
    G4int errorOne;
    G4cout << "Please enter the problematic event number"<<G4endl;
@@ -229,7 +229,7 @@ int j = 0;
 	      hpw ++;
 	   }
            G4cout << "Last chance before DoIt call: "
-//                << theNeutronModel.GetNiso()
+//                << thePionMinusModel.GetNiso()
                 <<G4endl;
            aFinalState = (G4ParticleChange*)  (theProcesses[i]->PostStepDoIt( *aTrack, aStep ));
            G4cout << "NUMBER OF SECONDARIES="<<aFinalState->GetNumberOfSecondaries();
@@ -242,6 +242,12 @@ int j = 0;
            G4DynamicParticle * aSec;
            G4int isec;
 	   G4double QValue = 0;
+	   G4double QValueM1 = 0;
+	   G4double QValueM2 = 0;
+	   if(aFinalState->GetStatusChange() == fAlive)
+	   {
+	     QValue += aFinalState->GetEnergyChange();
+	   }
            for(isec=0;isec<aFinalState->GetNumberOfSecondaries();isec++)
            {
              second = aFinalState->GetSecondary(isec);
@@ -254,19 +260,28 @@ int j = 0;
 	     if(aSec->GetDefinition()->GetBaryonNumber()>0)
 	     {
                QValue += aSec->GetKineticEnergy();
+	       if(isec!=0) QValueM1 += aSec->GetKineticEnergy();
+	       if(isec>1) QValueM2 += aSec->GetKineticEnergy();
 	     }
 	     else if(aSec->GetDefinition()->GetBaryonNumber() == 0)
 	     {
                QValue += aSec->GetTotalEnergy();
+	       if(isec!=0) QValueM1 += aSec->GetTotalEnergy();
+	       if(isec>1) QValueM2 += aSec->GetKineticEnergy();
 	     }
 	     else
 	     {
                QValue += aSec->GetTotalEnergy();
                QValue += aSec->GetDefinition()->GetPDGMass();
+	       if(isec!=0) QValueM1 += aSec->GetTotalEnergy();
+	       if(isec!=0) QValueM1 += aSec->GetDefinition()->GetPDGMass();
+	       if(isec>1) QValueM2 += aSec->GetTotalEnergy();
+	       if(isec>1) QValueM2 += aSec->GetDefinition()->GetPDGMass();
+	       G4cout << "found an anti !!!" <<G4endl;
 	     }
 	     delete second;
            }
-	   G4cout << "QVALUE = "<<QValue<<G4endl;
+	   G4cout << "QVALUE = "<<QValue<<" "<<QValueM1<<" "<<QValueM2<<G4endl;
            delete aParticle;
            delete aTrack;
            aFinalState->Clear();
