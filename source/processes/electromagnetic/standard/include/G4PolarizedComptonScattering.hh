@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonScattering.hh,v 1.5 2001-07-11 10:03:28 gunter Exp $
+// $Id: G4PolarizedComptonScattering.hh,v 1.6 2001-08-31 14:58:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// --------- G4PolarizedComptonScattering physics process -----
+// --------- G4PolarizedComptonScattering physics process ----------------------
 //                   by Vicente Lara, March 1998
 //
-// ------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // class description
 //
