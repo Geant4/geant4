@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTouchable.hh,v 1.7 2004-11-19 07:26:25 gcosmo Exp $
+// $Id: G4VTouchable.hh,v 1.8 2004-11-19 07:30:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,7 +125,7 @@ class G4VTouchable
     // Methods for touchables with history.
 
   virtual void  UpdateYourself(G4VPhysicalVolume* pPhysVol,
-			       const G4NavigationHistory* history=NULL); 
+			       const G4NavigationHistory* history=0); 
     // Update method.
 
  public:  // without description
