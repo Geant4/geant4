@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NISTStepReader.cc,v 1.1 1999-01-07 16:07:44 gunter Exp $
+// $Id: G4NISTStepReader.cc,v 1.1 1999-11-08 09:48:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4NISTStepReader.hh"
