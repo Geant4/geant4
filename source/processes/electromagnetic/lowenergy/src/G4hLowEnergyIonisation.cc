@@ -324,13 +324,13 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
   if(verboseLevel > 0) {
     G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable: "
            << "Loss table is built "
-	   << theLossTable
+//	   << theLossTable
 	   << G4endl;
   }
 
   BuildLambdaTable(aParticleType) ;
   BuildDataForFluorescence(aParticleType);
-  
+
   if(verboseLevel > 1) {
     G4cout << (*theMeanFreePathTable) << G4endl;
   }
@@ -338,8 +338,8 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
   if(verboseLevel > 0) {
     G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable: "
            << "DEDX table will be built "
-	   << theDEDXpTable << " " << theDEDXpbarTable
-	   << " " << theRangepTable << " " << theRangepbarTable
+//	   << theDEDXpTable << " " << theDEDXpbarTable
+//	   << " " << theRangepTable << " " << theRangepbarTable
 	   << G4endl;
   }
 
