@@ -43,12 +43,13 @@ class BrachyEventAction : public G4UserEventAction
     void EndOfEventAction(const G4Event*);
 
   public:
-    const G4int m_NumVoxelX;
-    const G4int m_NumVoxelZ;
+    
     G4float *m_pVoxel;
 
   private:
     G4int m_HitsCollectionID;
+    G4int m_NumVoxelX;
+    G4int m_NumVoxelZ;
 };
 
 #endif

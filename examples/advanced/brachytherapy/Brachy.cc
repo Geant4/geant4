@@ -21,8 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: Brachy.cc,v 1.5 2001-07-11 09:56:54 gunter Exp $
+// 
+// $Id: Brachy.cc,v 1.6 2001-11-27 12:43:59 tropeano Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+
 //
 // --------------------------------------------------------------
 //                 GEANT 4 - Brachytherapy example
@@ -103,8 +105,8 @@ int main()
 	// Format = x coord [mm] <tab> z coord [mm] <tab> edep [MeV] <eol>
 	ofs.open("Brachy.out");
 		{
-		G4double VoxelWidth_X = pDetectorConstruction->m_BoxDimX/NumVoxelX;
-		G4double VoxelWidth_Z = pDetectorConstruction->m_BoxDimZ/NumVoxelZ;
+		G4double VoxelWidth_X = pDetectorConstruction->GetBoxDim_X()/NumVoxelX;
+		G4double VoxelWidth_Z = pDetectorConstruction->GetBoxDim_Z()/NumVoxelZ;
 		G4double x,z;
 
 		for(G4int k=0;k<NumVoxelZ;k++)

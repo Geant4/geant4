@@ -42,17 +42,23 @@ class BrachyDetectorConstruction : public G4VUserDetectorConstruction
 	~BrachyDetectorConstruction();
 
  public:
-	const G4double m_BoxDimX;
-	const G4double m_BoxDimY;
-	const G4double m_BoxDimZ;
 
-	const G4int m_NumVoxelX;
-	const G4int m_NumVoxelZ;
+  G4double GetBoxDim_X() {return  m_BoxDimX;}; 
+  G4double GetBoxDim_Z() {return  m_BoxDimZ;};
+  
+
 
 	G4String m_SDName;
 
  public:
 	G4VPhysicalVolume* Construct();
-};
+
+private:
+ const  G4int          m_NumVoxelX;
+ const  G4int          m_NumVoxelZ;
+  G4double        m_BoxDimX;
+  G4double        m_BoxDimY;
+  G4double        m_BoxDimZ;
+ };
 #endif
 
