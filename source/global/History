@@ -1,4 +1,4 @@
-$Id: History,v 1.115 2003-06-06 16:17:47 gcosmo Exp $
+$Id: History,v 1.116 2003-06-17 08:16:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 17, 2003  G.Cosmo (global-V05-02-00)
+- Archived g4std wrappers. Removed definition of G4std in G4Types.hh.
 
 June 6, 2003  G.Cosmo (global-V05-01-01)
 - Made g4std wrappers obsolete:
