@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering52.cc,v 1.1 2003-08-08 11:31:25 vnivanch Exp $
+// $Id: G4MultipleScattering52.cc,v 1.2 2004-10-25 09:32:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -659,7 +659,7 @@ G4VParticleChange* G4MultipleScattering52::AlongStepDoIt(
 
   //VI truePath length cannot be smaller than geomPathLength
   if (truePathLength < geomPathLength) truePathLength = geomPathLength;
-  fParticleChange.SetTrueStepLength(truePathLength);
+  fParticleChange.ProposeTrueStepLength(truePathLength);
 
   return &fParticleChange;
 
@@ -873,7 +873,7 @@ G4VParticleChange* G4MultipleScattering52::PostStepDoIt(
 
   G4ThreeVector newDirection(dirx,diry,dirz);
   newDirection.rotateUz(ParticleDirection);
-  fParticleChange.SetMomentumChange(newDirection.x(),
+  fParticleChange.ProposeMomentumDirection(newDirection.x(),
                                     newDirection.y(),
                                     newDirection.z());
 
@@ -920,7 +920,7 @@ G4VParticleChange* G4MultipleScattering52::PostStepDoIt(
 			   ->GetNavigatorForTracking();
 	  navigator->LocateGlobalPointWithinVolume(newPosition);
 
-	  fParticleChange.SetPositionChange(newPosition);
+	  fParticleChange.ProposePosition(newPosition);
         }
       }
     }

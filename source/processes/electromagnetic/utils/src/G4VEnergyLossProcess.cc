@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.32 2004-09-09 10:57:55 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.33 2004-10-25 09:32:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -695,8 +695,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
     finalT = 0.0;
 
-    if (hasRestProcess) fParticleChange.SetStatusChange(fStopButAlive);
-    else                fParticleChange.SetStatusChange(fStopAndKill);
+    if (hasRestProcess) fParticleChange.ProposeTrackStatus(fStopButAlive);
+    else                fParticleChange.ProposeTrackStatus(fStopAndKill);
   }
 
   eloss = preStepKinEnergy-finalT;

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.12 2004-09-16 09:08:07 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.13 2004-10-25 09:32:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -323,7 +323,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
     }
     delete newp;
   }
-  fParticleChange.SetLocalEnergyDeposit(edep);
+  fParticleChange.ProposeLocalEnergyDeposit(edep);
 
   return &fParticleChange;
 }

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.25 2004-08-27 08:39:51 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.26 2004-10-25 09:32:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -196,7 +196,7 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
     G4ThreeVector oldDirection = track.GetMomentumDirection();
     G4ThreeVector newDirection(dirx,diry,cth);
     newDirection.rotateUz(oldDirection);
-    fParticleChange.SetMomentumChange(newDirection);
+    fParticleChange.ProposeMomentumDirection(newDirection);
 
   /*
   if(0 < verboseLevel) {
@@ -229,7 +229,7 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
 
         navigator->LocateGlobalPointWithinVolume(newPosition);
 
-        fParticleChange.SetPositionChange(newPosition);
+        fParticleChange.ProposePosition(newPosition);
       }
     }
   }
