@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSectionTest.cc,v 1.10 2003-06-16 17:02:20 gunter Exp $
+// $Id: G4PAIxSectionTest.cc,v 1.11 2004-04-09 13:39:00 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,11 +43,14 @@
 #include "G4Isotope.hh"
 #include "G4Element.hh"
 #include "G4Material.hh"
+#include "G4MaterialCutsCouple.hh"
+#include "G4ProductionCuts.hh"
 #include "G4MaterialTable.hh"
 #include "G4SandiaTable.hh"
 
 #include "G4PAIonisation.hh"
 #include "G4PAIxSection.hh"
+#include "G4InitXscPAI.hh"
 
 int main()
 {
@@ -419,7 +422,7 @@ int main()
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
 
-  numOfMaterials = theMaterialTable->length();
+  numOfMaterials = theMaterialTable->size();
 
   G4cout<<"Available materials under test : "<< G4endl<<G4endl ;
   outFile<<"Available materials under test : "<< G4endl<<G4endl ;
@@ -433,14 +436,31 @@ int main()
   G4cout<<"Enter material name for test : "<<std::flush ;
   //  G4cin>>testName ;
 
+    
+  // G4Region* regGasDet = new G4Region("VertexDetector");
+  // regGasDet->AddRootLogicalVolume(logicAbsorber);
+   
+  G4ProductionCuts* cuts = new G4ProductionCuts();
+  cuts->SetProductionCut(30.*mm,"gamma");
+  cuts->SetProductionCut(30.*mm,"e-");
+  cuts->SetProductionCut(30.*mm,"e+");
+
+   // regGasDet->SetProductionCuts(cuts);
+   
+
+
   for(k=0;k<numOfMaterials;k++)
   {
     //    if((*theMaterialTable)[k]->GetName() != testName) continue ;
-
      outFile << "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
      G4cout << "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
 
      nbOfElements = (*theMaterialTable)[k]->GetNumberOfElements() ;
+
+
+     G4MaterialCutsCouple* matCC = new G4MaterialCutsCouple( (*theMaterialTable)[k], cuts);
+
+     G4InitXscPAI xscPAI(matCC);
 
      G4cout<<"Sandia cof according old PAI stuff"<<G4endl<<G4endl ;
      outFile<<"Sandia cof according old PAI stuff"<<G4endl<<G4endl ;
