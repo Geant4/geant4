@@ -1,4 +1,4 @@
-$Id: README,v 1.2 1999-01-27 17:13:11 maire Exp $
+$Id: README,v 1.3 1999-07-23 14:29:35 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -12,16 +12,15 @@ $Id: README,v 1.2 1999-01-27 17:13:11 maire Exp $
 	
  1- GEOMETRY DEFINITION
  
- 	The calorimeter is a box made of a given number of layers. A layer
- 	consists of an absorber plate and of a detection gap. The layer is
- 	replicated.
+ 	The calorimeter is a box made of a given number of layers.
+	A layer consists of a sequence of various absorbers (maximum 10).
+	The layer is replicated.
  	
- 	Six parameters define the calorimeter :
- 	- the material of the absorber,
-	- the thickness of an absorber plate,
- 	- the material of the detection gap,
- 	- the thickness of a  gap,
+ 	Parameters defining the calorimeter :
  	- the number of layers,
+ 	- the number of absorbers within a layer,		
+ 	- the material of the absorbers,
+	- the thickness of the absorbers,
  	- the transverse size of the calorimeter (the input face is a square). 
  	
  	In addition a transverse uniform magnetic field can be applied.
@@ -30,10 +29,9 @@ $Id: README,v 1.2 1999-01-27 17:13:11 maire Exp $
  	but all of the above parameters can be modified interactively via
  	the commands defined in the DetectorMessenger class.
  	
- 	NB. The thickness of the absorber or of the gap can be set to zero
- 	    (but not together), and the number of layers to 1. In this case we
- 	    have a unique homogeneous block of matter, which looks like
- 	    a bubble chamber rather than a calorimeter ...
+ 	NB. The number of absorbers and the number of layers can be set to 1.
+	    In this case we have a unique homogeneous block of matter,
+	    which looks like a bubble chamber rather than a calorimeter ...
  	    (see the macro of commands: newgeom.mac)
  	    
  2- AN EVENT : THE PRIMARY GENERATOR
@@ -55,15 +53,13 @@ $Id: README,v 1.2 1999-01-27 17:13:11 maire Exp $
  	A HIT is a record, event per event and volume per volume, of all the 
  	informations needed to simulate and analyse the detector response.
  	
- 	In this example a CalorHit is defined as a set of 4 informations per
+ 	In this example a CalorHit is defined as a set of 2*N informations per
 	layer :
- 	- the total energy deposit in the absorber plate,
- 	- the total tracklength of all charged particles in the absorber plate,  
- 	- the total energy deposit in the detection gap,
- 	- the total tracklength of all charged particles in the detection gap.
+ 	- the total energy deposit in the absorber[i],
+ 	- the total tracklength of all charged particles in the absorber[i],  
  	
- 	Therefore both the absorber and the detection gap are declared
- 	'sensitive detector' (SD), which means they can contribute to the hit.
+ 	Therefore all the absorbers are declared 'sensitive detector' (SD),
+        which means they can contribute to the hit.
  	
  	At the end of a run, from the CalorHitsCollection, one can study the
 	calorimeter performances such as :
@@ -74,8 +70,8 @@ $Id: README,v 1.2 1999-01-27 17:13:11 maire Exp $
  4- VISUALIZATION
  
  	The Visualization Manager is set in the main().
- 	The initialisation of the drawing is done via the command
- 	/vis~/create_view in the macro init.mac. This macro is
+ 	The initialisation of the drawing is done via commands
+ 	/vis/... in the macro init.mac. This macro is
  	automatically read from the main in case of interactive running mode.
  	
  	The detector has a default view which is a longitudinal view of the 
@@ -122,10 +118,8 @@ $Id: README,v 1.2 1999-01-27 17:13:11 maire Exp $
  
 	Content of this Ntuple:
   
-	EAbs = energy deposit in absorber per event
-	EGap = energy deposit in gap      per event
-	LAbs = charged track length in absorber per event
-	LGap = charged track length in gap      per event
+	EAbsI = energy deposit in absorber[I] per event
+	LAbsI = charged track length in absorber[I] per event
  
 	  
  	

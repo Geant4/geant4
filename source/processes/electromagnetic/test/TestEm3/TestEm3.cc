@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm3.cc,v 1.3 1999-03-03 09:50:37 maire Exp $
+// $Id: TestEm3.cc,v 1.4 1999-07-23 14:29:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Comments
@@ -29,13 +29,6 @@
 #include "Em3EventAction.hh"
 #include "Em3SteppingAction.hh"
 
-#ifdef GNU_GCC
-#include <rw/tpordvec.h>
-#include "Em3CalorHit.hh"
-template class RWTPtrOrderedVector <Em3CalorHit>;
-template class RWTPtrVector <Em3CalorHit>;
-template class G4Allocator  <Em3CalorHit>;
-#endif
 
 int main(int argc,char** argv) {
 
@@ -59,9 +52,9 @@ int main(int argc,char** argv) {
 #endif
     
   // set user action classes
-  Em3RunAction* RunAct = new Em3RunAction;
+  Em3RunAction* RunAct = new Em3RunAction(detector);
   runManager->SetUserAction(RunAct);
-  runManager->SetUserAction(new Em3EventAction(RunAct));
+  runManager->SetUserAction(new Em3EventAction(RunAct,detector));
   runManager->SetUserAction(new Em3SteppingAction);
   
   //Initialize G4 kernel

@@ -20,8 +20,7 @@
  
  Content of this Ntuple:
   
-   EAbs = energy deposit in absorber per event
-   EGap = energy deposit in gap      per event
-   LAbs = charged track length in absorber per event
-   LGap = charged track length in gap      per event
+   EAbsI = energy deposit in absorber(I) per event
+   LAbsI = charged track length in absorber(I) per event
+
  
