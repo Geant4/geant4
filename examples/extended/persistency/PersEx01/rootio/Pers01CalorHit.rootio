@@ -4,8 +4,8 @@
 #  Author: <youhei.morita@kek.jp>
 #
 #  Usage:
-#    Use fadsrootio.pl to generate ROOT I/O adapter classes:
-#      % fadsrootio.pl Pers01CalorHit.rootio
+#    Use g4rootio.pl to generate ROOT I/O adapter classes:
+#      % g4rootio.pl Pers01CalorHit.rootio
 #    This will generate the following files:
 #      Pers01CalorHitRoot.hh/cc, Pers01CalorHitsRoot.hh/cc, 
 #      Pers01CalorHitRootIs.hh/cc
