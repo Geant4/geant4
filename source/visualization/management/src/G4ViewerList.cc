@@ -5,12 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewerList.cc,v 1.1 2001-02-23 15:43:26 johna Exp $
+// $Id: G4ViewerList.cc,v 1.2 2001-03-07 14:37:50 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4ViewerList.hh"
 
-G4ViewerList::remove(G4VViewer* viewer) {
+void G4ViewerList::remove(G4VViewer* viewer) {
   G4ViewerListIterator iViewer;
   for (iViewer = begin(); iViewer != end(); ++iViewer) {
     if (*iViewer == viewer) break;

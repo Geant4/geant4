@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SceneHandlerList.hh,v 1.4 2001-02-23 15:43:16 johna Exp $
+// $Id: G4SceneHandlerList.hh,v 1.5 2001-03-07 14:37:41 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,7 +19,7 @@
 
 class G4SceneHandlerList: public G4std::vector<G4VSceneHandler*> {
 public:
-  remove(G4VSceneHandler*);
+  void remove(G4VSceneHandler*);
 };
 
 typedef G4std::vector<G4VSceneHandler*>::iterator G4SceneHandlerListIterator;

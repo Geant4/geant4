@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GraphicsSystemList.hh,v 1.5 2001-02-23 15:43:14 johna Exp $
+// $Id: G4GraphicsSystemList.hh,v 1.6 2001-03-07 14:37:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,7 +19,7 @@
 
 class G4GraphicsSystemList: public G4std::vector<G4VGraphicsSystem*> {
 public:
-  remove(G4VGraphicsSystem*);
+  void remove(G4VGraphicsSystem*);
 };
 
 typedef G4std::vector<G4VGraphicsSystem*>::iterator
