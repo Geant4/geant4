@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.25 2001-05-30 15:04:14 gunter Exp $
+# $Id: common.gmk,v 1.26 2001-06-21 07:16:44 gunter Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -45,7 +45,7 @@ endif
 #
 
 lib: 
-	@(MAKE_DFILES=1; export MAKE_DFILES; gmake lib_d)
+	@(MAKE_DFILES=1; export MAKE_DFILES; $(MAKE) lib_d)
 
 lib_d: $(g4libraries_to_build)
 
