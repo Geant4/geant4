@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.cc,v 1.31 2002-11-20 15:41:47 gcosmo Exp $
+// $Id: G4PAIonisation.cc,v 1.32 2003-01-10 12:34:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // **************************************************************
 //
+// 10.01.03 CutInRange for e- not for Particle (VI)
 // 08.11.01 particleMass becomes a local variable (mma)
 // 17.09.01 migration of Materials to pure STL (mma)
 // 28.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
@@ -187,7 +188,8 @@ G4PAIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
     G4double Charge = aParticleType.GetPDGCharge();
     //G4double Chargesquare = Charge*Charge ;     
-    CutInRange = aParticleType.GetLengthCuts(); 
+    //    CutInRange = aParticleType.GetLengthCuts(); 
+    CutInRange = (G4Electron::Electron())->GetLengthCuts(); 
 
     //  BuildLossTable(aParticleType) ;
  

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.cc,v 1.26 2002-12-04 15:45:53 vnivanch Exp $
+// $Id: G4MuIonisation.cc,v 1.27 2003-01-10 12:34:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------- G4MuIonisation physics process ------------------------------
