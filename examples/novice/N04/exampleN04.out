@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (15-Dec-2000)
+                                (23-Feb-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -93,7 +93,7 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
      146 hits are stored in ExN04TrackerHitsCollection.
-     65 hits are stored in ExN04CalorimeterHitsCollection.
+     56 hits are stored in ExN04CalorimeterHitsCollection.
      Total energy deposition in calorimeter : 0.69942 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 0 hits found in the muon chamber.

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (15-Dec-2000)
+                                (23-Feb-2001)
              Copyright : Geant4 Collaboration
 **********************************************
  Material: FluorCarbonate     density:  1.610 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  22.435 cm 
@@ -50,7 +50,7 @@ Cut in range                  1 mm            1 mm
 Cut in energy
      FluorCarbonate        3.61 keV         429 keV
 ===================================================
-# $Id: TestEm4.out,v 1.8 2001-01-25 10:11:49 stesting Exp $
+# $Id: TestEm4.out,v 1.9 2001-02-22 20:38:44 stesting Exp $
 #
 # Macro file for "TestEm4.cc"
 # 
@@ -86,7 +86,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=95.72s Real=105.57s Sys=9.78s
+  User=46.95s Real=51.67s Sys=4.63s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

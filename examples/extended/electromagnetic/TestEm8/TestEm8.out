@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (15-Dec-2000)
+                                (23-Feb-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -118,7 +118,7 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 8.377
 49	fGamma = 9.283e+04	sumE = 8.504
 
-total time for build X-ray TR tables = 12.3 s
+total time for build X-ray TR tables = 12.26 s
 Em8PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
@@ -182,7 +182,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=18.86 s 
+total time(SetCuts)=19.11 s 
 #
 # Macro file 'run11.mac' for the initialization phase of "TestEm8.cc"
 #
@@ -259,7 +259,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=226.7s Real=228.84s Sys=1.23s
+  User=230.36s Real=231.68s Sys=1.17s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=43.5243 +- 0.162705  mm  

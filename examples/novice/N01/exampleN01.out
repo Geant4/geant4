@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (15-Dec-2000)
+                                (23-Feb-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 Start Run processing.
@@ -193,5 +193,5 @@ Terminate current event processing.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.11s Real=0.16s Sys=0s
+  User=0.08s Real=0.11s Sys=0.01s
 G4 kernel has come to Quit state.

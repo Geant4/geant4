@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (15-Dec-2000)
+                                (23-Feb-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -400,7 +400,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=248.62s Real=263.17s Sys=14.22s
+  User=120.47s Real=127.54s Sys=6.94s
  ================== run summary =====================
  end of Run TotNbofEvents = 100000
     mean charged track length   in absorber=0.0209432 +- 1.3765e-05  mm  

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (15-Dec-2000)
+                                (23-Feb-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
@@ -10,7 +10,7 @@ SimpleBox is now made of Pb
 # /run/verbose 2
 /run/particle/setCut 1 m
 /run/initialize
-/afs/cern.ch/sw/geant4/stt/dev1/src/geant4/../G4NDL0.2
+/afs/cern.ch/sw/geant4/stt/dev2/src/geant4/../G4NDL0.2
 Tst11PhysicsList::SetCuts:CutLength : 1000 (mm)
 ******** SetCuts for gamma ********************
 The maximal meaningful cut is 857.187 mm.
