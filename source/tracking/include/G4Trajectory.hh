@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.hh,v 1.15 2002-09-04 02:09:37 asaim Exp $
+// $Id: G4Trajectory.hh,v 1.16 2002-10-16 11:38:36 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -112,8 +112,8 @@ public: // with description
 
    G4ParticleDefinition* GetParticleDefinition();
 
- // Get method for HEPRep style attributes
-   virtual const G4AttValueList* GetAttValues() const;
+   virtual const G4std::vector<G4AttDef>* GetAttDefs() const;
+   virtual G4std::vector<G4AttValue>* GetAttValues() const;
 
 //---------
    private:

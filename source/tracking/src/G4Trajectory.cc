@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.cc,v 1.15 2002-09-04 02:09:38 asaim Exp $
+// $Id: G4Trajectory.cc,v 1.16 2002-10-16 11:38:38 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -160,8 +160,11 @@ void G4Trajectory::DrawTrajectory(G4int i_mode) const
 
 }
 
-const G4AttValueList* G4Trajectory::GetAttValues() const
-{ return 0; }
+const G4std::vector<G4AttDef>* G4Trajectory::GetAttDefs() const
+{ return 0; }  // Empty for now.
+
+G4std::vector<G4AttValue>* G4Trajectory::GetAttValues() const
+{ return 0; }  // Empty for now.
 
 void G4Trajectory::AppendStep(const G4Step* aStep)
 {

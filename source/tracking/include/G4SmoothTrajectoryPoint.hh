@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.hh,v 1.2 2002-09-14 00:07:42 asaim Exp $
+// $Id: G4SmoothTrajectoryPoint.hh,v 1.3 2002-10-16 11:38:36 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,8 +69,8 @@ public: // without description
    { return fAuxiliaryPointVector; }
 
 // Get method for HEPRep style attributes
-   const G4AttValueList* GetAttValues() const;
-
+   virtual const G4std::vector<G4AttDef>* GetAttDefs() const;
+   virtual G4std::vector<G4AttValue>* GetAttValues() const;
 
 //---------
    private:

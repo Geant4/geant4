@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.cc,v 1.2 2002-09-16 13:38:32 johna Exp $
+// $Id: G4SmoothTrajectoryPoint.cc,v 1.3 2002-10-16 11:38:38 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,6 +59,8 @@ G4SmoothTrajectoryPoint::~G4SmoothTrajectoryPoint()
   }
 }
 
-const G4AttValueList* G4SmoothTrajectoryPoint::GetAttValues() const
-{ return 0; }
+const G4std::vector<G4AttDef>* G4SmoothTrajectoryPoint::GetAttDefs() const
+{ return 0; }  // Empty for now.
 
+G4std::vector<G4AttValue>* G4SmoothTrajectoryPoint::GetAttValues() const
+{ return 0; }  // Empty for now.

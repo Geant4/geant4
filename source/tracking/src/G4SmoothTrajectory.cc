@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc,v 1.1 2002-09-04 02:09:38 asaim Exp $
+// $Id: G4SmoothTrajectory.cc,v 1.2 2002-10-16 11:38:37 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -119,8 +119,11 @@ void G4SmoothTrajectory::DrawTrajectory(G4int i_mode) const
 {
 }
 
-const G4AttValueList* G4SmoothTrajectory::GetAttValues() const
-{ return 0; }
+const G4std::vector<G4AttDef>* G4SmoothTrajectory::GetAttDefs() const
+{ return 0; }  // Empty for now.
+
+G4std::vector<G4AttValue>* G4SmoothTrajectory::GetAttValues() const
+{ return 0; }  // Empty for now.
 
 void G4SmoothTrajectory::AppendStep(const G4Step* aStep)
 {

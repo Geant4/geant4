@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.hh,v 1.8 2002-09-16 13:34:20 johna Exp $
+// $Id: G4VTrajectory.hh,v 1.9 2002-10-16 11:38:37 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,7 +45,8 @@
 
 class G4Step;
 class G4VTrajectoryPoint;
-class G4AttValueList;
+class G4AttDef;
+class G4AttValue;
 
 #include "G4ios.hh"
 #include "g4std/vector"
@@ -86,7 +87,12 @@ class G4VTrajectory
    // to ostream. If default is used, it will be sent to G4cout.
    virtual void DrawTrajectory(G4int i_mode=0) const = 0;
    // Draw the trajectory
-   virtual const G4AttValueList* GetAttValues() const
+   virtual const G4std::vector<G4AttDef>* GetAttDefs() const
+   { return 0; }
+   // If implemented by a derived class, returns a pointer to a list
+   // of attribute definitions suitable, e.g., for picking.  The user
+   // must test the validity of this pointer.
+   virtual G4std::vector<G4AttValue>* GetAttValues() const
    { return 0; }
    // If implemented by a derived class, returns a pointer to a list
    // of attribute values suitable, e.g., for picking.  The user must

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectoryPoint.hh,v 1.7 2002-09-16 13:36:21 johna Exp $
+// $Id: G4VTrajectoryPoint.hh,v 1.8 2002-10-16 11:38:37 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,7 +39,9 @@
 #ifndef G4VTrajectoryPoint_h
 #define G4VTrajectoryPoint_h 1
 
-class G4AttValueList;
+class G4AttDef;
+class G4AttValue;
+
 #include "g4std/vector"
 #include "globals.hh"
 #include "G4ThreeVector.hh"
@@ -67,8 +69,15 @@ class G4VTrajectoryPoint
    // calculation of the step that can be used for drawing a smoother
    // trajectory.  The user must test the validity of this pointer.
 
- // Get method for HEPRep style attributes
-   virtual const G4AttValueList* GetAttValues() const
+ // Get method for HEPRep style attribute definitions
+   virtual const G4std::vector<G4AttDef>* GetAttDefs() const
+   { return 0; }
+   // If implemented by a derived class, returns a pointer to a list
+   // of attribute definitions suitable, e.g., for picking.  The user
+   // must test the validity of this pointer.
+
+ // Get method for HEPRep style attribute values
+   virtual G4std::vector<G4AttValue>* GetAttValues() const
    { return 0; }
    // If implemented by a derived class, returns a pointer to a list
    // of attribute values suitable, e.g., for picking.  The user must
