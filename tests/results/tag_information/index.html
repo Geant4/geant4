@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>System Testing report on large-N tests</title>
+<!-- Changed by: Serguei SADILOV, 22-Oct-2003 -->
 <!--Changed by: Serguei SADILOV,  9-Jul-2003  -->
 <!--Changed by: Serguei SADILOV,  8-Jul-2003  -->
 </head>
@@ -12,7 +13,7 @@
 </div>
 
 Report on Errors and Warnings arising from system testing on the
-<b><blink>geant4-05-02-ref-00</blink></b> development tag.
+<b><blink>geant4-05-02-ref-04</blink></b> development tag.
 <p>
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
       for all platforms. 
@@ -92,21 +93,6 @@ WL3
 boostVector computed for a non-timelike LorentzVector 
 at line 185 in file LorentzVector.cc
 
-WL4
----
-***G4Q::HQ: (2) qM=0,rPDG=22,dm=-9681.69
-
-WL5
----
-***G4QEnv::HadrQE:M=NaN<gsM=22341.8,dM=NaN, tPDG=90011013, t4M=(NaN,NaN,NaN;NaN)
-
-WL6
----
-*G4Q::HQ:*Boost* q4M=(1385.51,-1055.34,112.116;1745.27),P=1745.27 > E=1745.27
-
-WL7
----
-*G4QH::RDIn2:*Boost* 4M=(1385.51,-1055.34,112.116;1745.27),e-p=-4.77396e-15
 
 WL8
 ---
@@ -116,9 +102,6 @@ WL9
 ---
 ***G4ElectroNuclearCrossSection::GetEquPhotE:27.4547>11.2467,S=2.55752,ris=2.55144,B=46,E=335,Y=2.53088
 
-WLA
----
-*G4QHadron::DecayIn3: iM=169465, tM=939.566, sM=167586, fM=939.566, m12(s+f)=168526, d=3.41061e-12
 
 WLB
 ---
@@ -146,14 +129,14 @@ WLF
 ---
 G4ParticleChange::CheckIt
 
--------------------------------------------------------------------------------------------------------------------------
-EL1
+WLG
 ---
-exit 6
+*** G4Exception : 200
+      issued by : G4ParticleChange::CheckIt
+momentum, energy, and/or time was illegal
+*** Event Must Be Aborted 
 
-EL2
----
-exit 255
+-------------------------------------------------------------------------------------------------------------------------
 
 </pre>
 
