@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.7 2004-09-10 15:38:47 gcosmo Exp $
+// $Id: G4ReplicaNavigation.cc,v 1.8 2004-11-24 14:00:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -372,28 +372,19 @@ G4ReplicaNavigation::DistanceToOutPhi(const G4ThreeVector &localPoint,
     {
       // Outside full starting plane, inside full ending plane
       //
-      if ( compS>=0 )
-      {
-        if ( compE<0 )
-        {      
-          dist2 = pDistE/compE;
-          yi = localPoint.y()+dist2*localDirection.y();
+      if ( compE<0 )
+      {      
+        dist2 = pDistE/compE;
+        yi = localPoint.y()+dist2*localDirection.y();
 
-          // Check intersection in correct half-plane
-          // (if not -> remain in extent)
-          //
-          Dist = (yi>0) ? dist2 : kInfinity;
-        }
-        else
-        {
-          Dist = kInfinity;
-        }
-      }
-      else
-      {
-        // Leaving immediately by starting phi
+        // Check intersection in correct half-plane
+        // (if not -> remain in extent)
         //
-        Dist = (compE<0) ? 0 : kInfinity;
+        Dist = (yi>0) ? dist2 : kInfinity;
+      }
+      else  // Leaving immediately by starting phi
+      {
+        Dist = kInfinity;
       }
     }
     else
@@ -700,7 +691,7 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
   // Compute intersection with replica boundaries & replica safety
   //
 
-  sampleSafety = DistanceToOut(history.GetTopVolume(),
+  sampleSafety = DistanceToOut(repPhysical,
                                history.GetTopReplicaNo(),
                                localPoint);
 
@@ -710,7 +701,7 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
   }
   if ( sampleSafety<ourStep )
   {
-    sampleStep = DistanceToOut(history.GetTopVolume(),
+    sampleStep = DistanceToOut(repPhysical,
                                history.GetTopReplicaNo(),
                                localPoint,
                                localDirection);
@@ -903,7 +894,7 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
 }
 
 // ********************************************************************
-// ComputeTransformation
+// ComputeSafety
 //
 // Compute the isotropic distance to current volume's boundaries
 // and to daughter volumes.
