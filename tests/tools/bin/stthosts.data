@@ -1,0 +1,11 @@
+pcgeant  Linux-g++  deb   all all all all 1
+dxplus01 DEC-cxx    deb_ISO      all all all all 1
+dxplus02 DEC-cxx    opt_ISO      all all all all 1
+dxplus03 DEC-cxx    deb_NONISO   all all all all 1
+dxplus04 DEC-cxx    opt_NONISO   all all all all 1
+hpplus01 HP-aCC     deb          all all all all 1
+hpplus02 HP-aCC     opt          all all all all 1
+pcgeant  Linux-g++  opt          all all all all 1
+sungeant SUN-CC     opt_NONISO   all all all all 1
+% sleep 600
+sungeant SUN-CC     deb_NONISO   all all all all 1
