@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXViewer.cc,v 1.1 1999-01-09 16:23:33 allison Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.2 1999-02-07 17:12:49 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,17 @@
 
 static Bool WaitForNotify (Display*, XEvent* e, char* arg) {
   return (e->type == MapNotify) && (e->xmap.window == (Window) arg);
+}
+
+void G4OpenGLXViewer::SetView () {
+  glXMakeCurrent (dpy, win, cx);
+  G4OpenGLViewer::SetView ();  
+}
+
+void G4OpenGLXViewer::ShowView () {
+  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
+                //be propogated before progressing.
+  glFlush ();
 }
 
 void G4OpenGLXViewer::FinishView () {
