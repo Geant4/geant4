@@ -1,4 +1,4 @@
-$Id: History,v 1.61 2003-11-03 19:24:59 vnivanch Exp $
+$Id: History,v 1.62 2003-11-11 14:08:48 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 Nov 03: V.Ivant (muons-V05-02-09)
+- Remove force of verbose=0 for G4MuIonisation
 
 03 Nov 03: V.Ivant (muons-V05-02-08)
 - Remove STD processes

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.36 2003-11-03 19:22:59 vnivanch Exp $
+// $Id: G4MuIonisation.cc,v 1.37 2003-11-11 14:07:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -126,7 +126,6 @@ void G4MuIonisation::InitialiseProcess()
   AddEmModel(3, em2, flucModel);
 
   ratio = electron_mass_c2/mass;
-  SetVerboseLevel(0);
   isInitialised = true;
 }
 
