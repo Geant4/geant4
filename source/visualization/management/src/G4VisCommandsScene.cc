@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.23 2001-08-11 21:40:00 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.24 2001-08-14 18:33:34 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -67,6 +67,8 @@ void G4VVisCommandScene::UpdateCandidateLists () {
 void G4VVisCommandScene::UpdateVisManagerScene
 (const G4String& sceneName) {
 
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
 
   G4int iScene, nScenes = sceneList.size ();
@@ -78,7 +80,22 @@ void G4VVisCommandScene::UpdateVisManagerScene
   if (iScene < nScenes) {
     pScene = sceneList [iScene];
   }
+
+  if (!pScene) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: Scene \"" << sceneName << "\" not found."
+	     << G4endl;
+    }
+    return;
+  }
+
   fpVisManager -> SetCurrentScene (pScene);
+
+  // Scene has changed.  Trigger a rebuild of graphical database...
+  G4VViewer* pViewer = fpVisManager -> GetCurrentViewer();
+  if (pViewer && pViewer -> GetViewParameters().IsAutoRefresh()) {
+    G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/scene/notifyHandlers");
+  }
 }
 
 ////////////// /vis/scene/create ///////////////////////////////////////
@@ -140,13 +157,13 @@ void G4VisCommandSceneCreate::SetNewValue (G4UIcommand* command,
     sceneList.push_back (new G4Scene (newName));
     // Adds empty scene data object to list.
 
-    UpdateVisManagerScene (newName);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "New empty scene \"" << newName << "\" created." << G4endl;
     }
 
     UpdateCandidateLists ();
   }
+  UpdateVisManagerScene (newName);
 }
 
 ////////////// /vis/scene/edit ///////////////////////////////////////
@@ -401,29 +418,16 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
     fpVisManager -> SetAvailableSceneHandlers ();
 
   // Check scene name.
-  G4bool successful(true);
   const G4int nScenes = sceneList.size ();
   G4int iScene;
   for (iScene = 0; iScene < nScenes; iScene++) {
     G4Scene* scene = sceneList [iScene];
-    if (sceneName == scene -> GetName ()) {
-      successful = scene -> AddWorldIfEmpty (warn);
-      break;
-    }
+    if (sceneName == scene -> GetName ()) break;
   }
   if (iScene >= nScenes ) {
     if (verbosity >= G4VisManager::warnings) {
       G4cout << "WARNING: Scene \"" << sceneName << "\" not found."
 	"\n  /vis/scene/list to see scenes."
-	     << G4endl;
-    }
-    return;
-  }
-  if (!successful) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cout <<
-	"ERROR: Scene is empty.  Perhaps no geometry exists."
-	"\n  Try /run/initialize."
 	     << G4endl;
     }
     return;
@@ -439,20 +443,16 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
     if (aScene) {
       const G4String& aSceneName = aScene -> GetName ();
       if (sceneName == aSceneName) {
-	// Clear store and force a rebuild...
+	// Clear store and force a rebuild of graphical database...
 	aSceneHandler -> ClearStore ();
-	aSceneHandler -> ClearTransientStore ();
 	G4ViewerList& viewerList = aSceneHandler -> SetViewerList ();
 	const G4int nViewers = viewerList.size ();
 	for (G4int iV = 0; iV < nViewers; iV++) {
 	  G4VViewer* aViewer = viewerList [iV];
+	  aSceneHandler -> SetCurrentViewer (aViewer);  // Temporarily.
+	  aViewer -> SetView ();  // Temporarily switch contexts.
 	  aViewer -> ClearView ();
-	  aViewer -> SetView ();
 	  aViewer -> DrawView ();
-	  // Triggers rebuild of graphical database by notifying the scene
-	  // handler.  The viewer is supposed to be smart enough to know
-	  // when not to do this.  E.g., the second viewer of a scene
-	  // handler does not do it.
 	  if (verbosity >= G4VisManager::confirmations) {
 	    G4cout << "Viewer \"" << aViewer -> GetName ()
 		   << "\" of scene handler \"" << aSceneHandler -> GetName ()
@@ -471,6 +471,13 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
       }
     }
   }
+  // Reclaim original context...
+  G4VSceneHandler* pCurrentSceneHandler =
+    fpVisManager -> GetCurrentSceneHandler();
+  G4VViewer* pCurrentViewer = fpVisManager -> GetCurrentViewer();
+  if (pCurrentSceneHandler)
+    pCurrentSceneHandler -> SetCurrentViewer (pCurrentViewer);
+  if (pCurrentViewer) pCurrentViewer -> SetView ();
 }
 
 ////////////// /vis/scene/remove ///////////////////////////////////////
@@ -517,20 +524,20 @@ void G4VisCommandSceneRemove::SetNewValue (G4UIcommand* command,
     }
     UpdateCandidateLists ();
     if (sceneList.empty ()) {
-      UpdateVisManagerScene ();
       if (verbosity >= G4VisManager::warnings) {
 	G4cout << "WARNING: No scenes left.  Please create a new one."
 	       << G4endl;
       }
+      UpdateVisManagerScene ();
     }
     else {
       if (currentSceneName == removeName) {
-	UpdateVisManagerScene (sceneList [0] -> GetName ());
 	if (verbosity >= G4VisManager::warnings) {
 	  G4cout << "WARNING: Current scene is now \""
 		 << fpVisManager -> GetCurrentScene () -> GetName ()
 		 << "\"" << G4endl;
 	}
+	UpdateVisManagerScene (sceneList [0] -> GetName ());
       }
       else {
 	if (verbosity >= G4VisManager::confirmations) {
@@ -582,18 +589,19 @@ void G4VisCommandSceneSelect::SetNewValue (G4UIcommand* command,
   for (iScene = 0; iScene < nScenes; iScene++) {
     if (sceneList [iScene] -> GetName () == selectName) break;
   }
-  if (iScene < nScenes) {
-    UpdateVisManagerScene (selectName);
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Scene \"" << selectName
-	     << "\" selected." << G4endl;
-    }
-  }
-  else {
+  if (iScene >= nScenes) {
     if (verbosity >= G4VisManager::warnings) {
       G4cout << "WARNING: Scene \"" << selectName
 	     << "\" not found - \"/vis/scene/list\" to see possibilities."
 	     << G4endl;
     }
+    return;
   }
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Scene \"" << selectName
+	   << "\" selected." << G4endl;
+  }
+  UpdateVisManagerScene (selectName);
+
 }
