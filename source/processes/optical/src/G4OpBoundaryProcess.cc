@@ -499,17 +499,17 @@ void G4OpBoundaryProcess::DielectricDielectric()
 	         cost2 = -sqrt(1-sint2*sint2);
 	      }
 
-	      G4ThreeVector A_trans, Atrans, E1pp, E1pl;
+	      G4ThreeVector A_trans, A_paral, E1pp, E1pl;
 	      G4double E1_perp, E1_parl;
 
 	      if (sint1 > 0.0) {
 	         A_trans = OldMomentum.cross(theFacetNormal);
-                 Atrans  = A_trans.unit();
-	         E1_perp = OldPolarization * Atrans;
-                 E1pp    = E1_perp * Atrans;
+                 A_trans = A_trans.unit();
+	         E1_perp = OldPolarization * A_trans;
+                 E1pp    = E1_perp * A_trans;
                  E1pl    = OldPolarization - E1pp;
                  E1_parl = E1pl.mag();
-	      }
+              }
 	      else {
 	         A_trans  = OldPolarization;
 	         // Here we Follow Jackson's conventions and we set the
@@ -534,7 +534,6 @@ void G4OpBoundaryProcess::DielectricDielectric()
 	         TransCoeff = 0.0;
 	      }
 
-	      G4ThreeVector Refracted, Deflected;
 	      G4double E2_abs, C_parl, C_perp;
 
 	      if ( !G4BooleanRand(TransCoeff) ) {
@@ -564,12 +563,13 @@ void G4OpBoundaryProcess::DielectricDielectric()
 		       E2_parl   = Rindex2*E2_parl/Rindex1 - E1_parl;
 		       E2_perp   = E2_perp - E1_perp;
 		       E2_total  = E2_perp*E2_perp + E2_parl*E2_parl;
-		       Refracted = theFacetNormal + PdotN * NewMomentum;
+                       A_paral   = NewMomentum.cross(A_trans);
+                       A_paral   = A_paral.unit();
 		       E2_abs    = sqrt(E2_total);
 		       C_parl    = E2_parl/E2_abs;
 		       C_perp    = E2_perp/E2_abs;
 
-		       NewPolarization = C_parl*Refracted - C_perp*A_trans;
+                       NewPolarization = C_parl*A_paral + C_perp*A_trans;
 
 	             }
 
@@ -591,14 +591,16 @@ void G4OpBoundaryProcess::DielectricDielectric()
 	         if (sint1 > 0.0) {      // incident ray oblique
 
 		    G4double alpha = cost1 - cost2*(Rindex2/Rindex1);
-		    Deflected  = OldMomentum + alpha*theFacetNormal;
-		    NewMomentum = Deflected.unit();
+		    NewMomentum = OldMomentum + alpha*theFacetNormal;
+		    NewMomentum = NewMomentum.unit();
 		    PdotN = -cost2;
-		    Refracted  = theFacetNormal - PdotN*NewMomentum;
+                    A_paral = NewMomentum.cross(A_trans);
+                    A_paral = A_paral.unit();
 		    E2_abs     = sqrt(E2_total);
 		    C_parl     = E2_parl/E2_abs;
 		    C_perp     = E2_perp/E2_abs;
-		    NewPolarization = C_parl*Refracted + C_perp*A_trans;
+
+                    NewPolarization = C_parl*A_paral + C_perp*A_trans;
 
 	         }
 	         else {                  // incident ray perpendicular
@@ -610,8 +612,8 @@ void G4OpBoundaryProcess::DielectricDielectric()
 	      }
 	   }
 
-	   OldMomentum = NewMomentum;
-	   OldPolarization = NewPolarization;
+	   OldMomentum = NewMomentum.unit();
+	   OldPolarization = NewPolarization.unit();
 
 	   if (theStatus == FresnelRefraction) {
 	      Done = (NewMomentum * theGlobalNormal <= 0.0);
