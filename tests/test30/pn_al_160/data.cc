@@ -50,7 +50,7 @@
 
 int main(int argc, char** argv)
 {
-  int verbose = 2;
+  int verbose = 1;
 
   // -------------------------------------------------------------------
   // Control on input
