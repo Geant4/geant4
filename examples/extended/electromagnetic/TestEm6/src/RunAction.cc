@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.6 2004-03-15 11:23:17 maire Exp $
+// $Id: RunAction.cc,v 1.7 2004-03-31 16:33:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,11 +38,6 @@
 
 #ifdef USE_AIDA
  #include "AIDA/AIDA.h"
-#endif
-
-#ifdef USE_ROOT
- #include "TFile.h"
- #include "TH1F.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -88,19 +83,6 @@ void RunAction::bookHisto()
  delete tf;
  delete af;     
 #endif
-
-#ifdef USE_ROOT
- // Create a ROOT file
- tree = new TFile("testem7.root","recreate");
- 
- // Create the histogram
- histo[0] = new TH1F("1","1/(1+(theta+[g]+)**2)",100, 0 ,1.);
- histo[1] = new TH1F("2","log10(theta+ [g]+)",   100,-3.,1.);
- histo[2] = new TH1F("3","log10(theta- [g]-)",   100,-3.,1.);
- histo[3] = new TH1F("4","log10(theta+ [g]+ -theta- [g]-)",100,-3.,1.);
- histo[4] = new TH1F("5","xPlus" ,100,0.,1.);
- histo[5] = new TH1F("6","xMinus",100,0.,1.); 
-#endif
     
 }
 
@@ -112,13 +94,7 @@ void RunAction::cleanHisto()
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)  
   delete tree;
-#endif
-  
-#ifdef USE_ROOT
-  tree->Write();        // Writing the histograms to the file
-  tree->Close();        // and closing the file  
-  delete tree;
-#endif     
+#endif   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

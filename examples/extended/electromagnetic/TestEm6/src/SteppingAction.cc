@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.cc,v 1.4 2004-03-15 11:23:17 maire Exp $
+// $Id: SteppingAction.cc,v 1.5 2004-03-31 16:33:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,10 +37,6 @@
 
 #ifdef USE_AIDA
  #include "AIDA/IHistogram1D.h"
-#endif
-
-#ifdef USE_ROOT
-  #include "TH1F.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,19 +93,6 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  runAction->GetHisto(4)->fill(xPlus);
  runAction->GetHisto(5)->fill(xMinus); 
 #endif
-   	   
-#ifdef USE_ROOT
- runAction->GetHisto(0)->Fill(1./(1.+pow(thetaPlus*GammaPlus,2)));
- runAction->GetHisto(1)->Fill(log10(thetaPlus*GammaPlus));
-
- runAction->GetHisto(2)->Fill(log10(thetaMinus*GammaMinus));
- runAction->GetHisto(3)->Fill(log10(fabs(thetaPlus *GammaPlus
-                                              -thetaMinus*GammaMinus)));
- 
- runAction->GetHisto(4)->Fill(xPlus);
- runAction->GetHisto(5)->Fill(xMinus); 
-#endif
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

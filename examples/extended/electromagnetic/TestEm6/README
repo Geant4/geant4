@@ -1,4 +1,4 @@
-$Id: README,v 1.10 2004-03-24 18:29:13 maire Exp $
+$Id: README,v 1.11 2004-03-31 16:33:33 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -113,10 +113,10 @@ $Id: README,v 1.10 2004-03-24 18:29:13 maire Exp $
   Testem6 produces 6 histograms which illustrate the final state of 
   the GammaConversionToMuons process. See their definitions in RunAction.cc
    
-  The histograms are saved in paw (testem7.paw) or root format (testem7.root)
+  The histograms are saved as testem7.paw
    
   Note that, by default, histograms are disabled. To activate them, uncomment
-  G4ANALYSIS_USE and USE_AIDA or USE_ROOT (exclusive or) in GNUmakefile.
+  G4ANALYSIS_USE in GNUmakefile.
  
  8- Using the Anaphe implementation of the AIDA 3.0 histograms:
  --------------------------------------------------------------
@@ -133,18 +133,8 @@ $Id: README,v 1.10 2004-03-24 18:29:13 maire Exp $
  At cern 'setupAnaphe' is available at: 
  /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe.csh
  (or /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe)
-
- 9- ROOT
  
- To install root, see http://root.cern.ch
- Make sure that the environment variable ROOTSYS, used in GNUmakefile, is
- defined:
- 
- setenv ROOTSYS /???/ROOT/root_v3_10_02
- setenv PATH ${PATH}:${ROOTSYS}/bin
- setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${ROOTSYS}/lib:/usr/lib/gcc-lib/i386-redhat-linux/2.95.3:.
-  
- 10- HOW TO INCREASE STATISTICS ON gamma -> mu+mu- ?
+ 9- HOW TO INCREASE STATISTICS ON gamma -> mu+mu- ?
  
      The processes of gamma -> mu+mu-  and e+e- -> mu+mu-
      have a low cross section but can be important
