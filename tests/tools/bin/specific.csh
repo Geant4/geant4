@@ -82,14 +82,14 @@ if ( `uname -n | grep sgmedia` != "" ) then
   #######setenv G4UI_BUILD_TERMINAL_SESSION 1
   #######setenv G4UI_BUILD_GAG_SESSION      1
   #######setenv G4UI_BUILD_XM_SESSION       1
-  #######setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
-  #######setenv G4VIS_BUILD_OPENGLX_DRIVER  1
-  #######setenv G4VIS_BUILD_RAYX_DRIVER     1
-  #######setenv G4VIS_BUILD_OIX_DRIVER      1
-  #######setenv G4VIS_BUILD_DAWN_DRIVER     1
-  #######setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-  #######setenv G4VIS_BUILD_VRML_DRIVER     1
-  #######setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
+  setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
+  setenv G4VIS_BUILD_OPENGLX_DRIVER  1
+  setenv G4VIS_BUILD_RAYX_DRIVER     1
+  setenv G4VIS_BUILD_OIX_DRIVER      1
+  setenv G4VIS_BUILD_DAWN_DRIVER     1
+  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
+  setenv G4VIS_BUILD_VRML_DRIVER     1
+  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 endif
 
 if ( `uname -n | grep sun` != "" ) then
@@ -106,9 +106,9 @@ if ( `uname -n | grep sun` != "" ) then
   #######setenv G4VIS_BUILD_OPENGLX_DRIVER  1
   setenv G4VIS_BUILD_RAYX_DRIVER     1
   #######setenv G4VIS_BUILD_OIX_DRIVER      1
-  #######setenv G4VIS_BUILD_DAWN_DRIVER     1
+  setenv G4VIS_BUILD_DAWN_DRIVER     1
   setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-  #######setenv G4VIS_BUILD_VRML_DRIVER     1
+  setenv G4VIS_BUILD_VRML_DRIVER     1
   setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 endif
 

@@ -35,15 +35,14 @@ if [ X`uname -n | grep rsplus` != X  -o "$UNAMEN" = "shift51" ]; then
   #####export G4VIS_BUILD_OPENGLXM_DRIVER=1
 #  export G4VIS_BUILD_OPENGLX_DRIVER=1
 #  export OGLHOME=/afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
-#  export G4VIS_BUILD_RAYX_DRIVER=1
-#  export G4VIS_BUILD_RAYX_DRIVER=1
+  export G4VIS_BUILD_RAYX_DRIVER=1
   #####export G4VIS_BUILD_OIX_DRIVER=1
-#  export G4VIS_BUILD_DAWN_DRIVER=1
+  export G4VIS_BUILD_DAWN_DRIVER=1
 #  export DAWN_BSD_UNIX_DOMAIN=1
 #  export DAWN_HOME=/afs/cern.ch/sw/geant4/dev/DAWN/AIX-AFS
-#  export G4VIS_BUILD_DAWNFILE_DRIVER=1
-#  export G4VIS_BUILD_VRML_DRIVER=1
-#  export G4VIS_BUILD_VRMLFILE_DRIVER=1
+  export G4VIS_BUILD_DAWNFILE_DRIVER=1
+  export G4VIS_BUILD_VRML_DRIVER=1
+  export G4VIS_BUILD_VRMLFILE_DRIVER=1
 fi
 
 if [ `uname -n | grep sunasd1` ]; then
@@ -60,10 +59,10 @@ if [ `uname -n | grep sunasd1` ]; then
   #######export G4VIS_BUILD_OPENGLX_DRIVER=1
 #  export G4VIS_BUILD_RAYX_DRIVER=1
   #######export G4VIS_BUILD_OIX_DRIVER=1
-  #######export G4VIS_BUILD_DAWN_DRIVER=1
-#  export G4VIS_BUILD_DAWNFILE_DRIVER=1
-  #######export G4VIS_BUILD_VRML_DRIVER=1
-#  export G4VIS_BUILD_VRMLFILE_DRIVER=1
+  export G4VIS_BUILD_DAWN_DRIVER=1
+  export G4VIS_BUILD_DAWNFILE_DRIVER=1
+  export G4VIS_BUILD_VRML_DRIVER=1
+  export G4VIS_BUILD_VRMLFILE_DRIVER=1
 fi
 
 if [ `uname -n | grep suncmsb` ]; then
@@ -82,12 +81,12 @@ if [ `uname -n | grep suncmsb` ]; then
   #######export G4UI_BUILD_XM_SESSION=1
   #######export G4VIS_BUILD_OPENGLXM_DRIVER=1
   #######export G4VIS_BUILD_OPENGLX_DRIVER=1
-#  export G4VIS_BUILD_RAYX_DRIVER=1
+  export G4VIS_BUILD_RAYX_DRIVER=1
   #######export G4VIS_BUILD_OIX_DRIVER=1
-  #######export G4VIS_BUILD_DAWN_DRIVER=1
-#  export G4VIS_BUILD_DAWNFILE_DRIVER=1
-  #######export G4VIS_BUILD_VRML_DRIVER=1
-#  export G4VIS_BUILD_VRMLFILE_DRIVER=1
+  export G4VIS_BUILD_DAWN_DRIVER=1
+  export G4VIS_BUILD_DAWNFILE_DRIVER=1
+  export G4VIS_BUILD_VRML_DRIVER=1
+  export G4VIS_BUILD_VRMLFILE_DRIVER=1
 fi
 
 if [ `uname -n | grep sungeant` ]; then
@@ -102,12 +101,12 @@ if [ `uname -n | grep sungeant` ]; then
   #######export G4UI_BUILD_XM_SESSION=1
   #######export G4VIS_BUILD_OPENGLXM_DRIVER=1
   #######export G4VIS_BUILD_OPENGLX_DRIVER=1
-#  export G4VIS_BUILD_RAYX_DRIVER=1
+  export G4VIS_BUILD_RAYX_DRIVER=1
   #######export G4VIS_BUILD_OIX_DRIVER=1
-  #######export G4VIS_BUILD_DAWN_DRIVER=1
-#  export G4VIS_BUILD_DAWNFILE_DRIVER=1
-  #######export G4VIS_BUILD_VRML_DRIVER=1
-#  export G4VIS_BUILD_VRMLFILE_DRIVER=1
+  export G4VIS_BUILD_DAWN_DRIVER=1
+  export G4VIS_BUILD_DAWNFILE_DRIVER=1
+  export G4VIS_BUILD_VRML_DRIVER=1
+  export G4VIS_BUILD_VRMLFILE_DRIVER=1
 fi
 
 
@@ -123,12 +122,12 @@ if [ `uname -n | grep hpplus` ]; then
   ######export G4UI_BUILD_XM_SESSION=1
 #  export G4VIS_BUILD_OPENGLXM_DRIVER=1
 #  export G4VIS_BUILD_OPENGLX_DRIVER=1
-#  export G4VIS_BUILD_RAYX_DRIVER=1
+  export G4VIS_BUILD_RAYX_DRIVER=1
 #  export G4VIS_BUILD_OIX_DRIVER=1
-#  export G4VIS_BUILD_DAWN_DRIVER=1
-#  export G4VIS_BUILD_DAWNFILE_DRIVER=1
-#  export G4VIS_BUILD_VRML_DRIVER=1
-#  export G4VIS_BUILD_VRMLFILE_DRIVER=1
+  export G4VIS_BUILD_DAWN_DRIVER=1
+  export G4VIS_BUILD_DAWNFILE_DRIVER=1
+  export G4VIS_BUILD_VRML_DRIVER=1
+  export G4VIS_BUILD_VRMLFILE_DRIVER=1
 fi
 
 if [ `uname -n | grep axcnsi` ]; then
@@ -143,12 +142,12 @@ if [ `uname -n | grep axcnsi` ]; then
   ######export G4UI_BUILD_XM_SESSION=1
 #  export G4VIS_BUILD_OPENGLXM_DRIVER=1
 #  export G4VIS_BUILD_OPENGLX_DRIVER=1
-#  export G4VIS_BUILD_RAYX_DRIVER=1
+  export G4VIS_BUILD_RAYX_DRIVER=1
 #  export G4VIS_BUILD_OIX_DRIVER=1
-#  export G4VIS_BUILD_DAWN_DRIVER=1
-#  export G4VIS_BUILD_DAWNFILE_DRIVER=1
-#  export G4VIS_BUILD_VRML_DRIVER=1
-#  export G4VIS_BUILD_VRMLFILE_DRIVER=1
+  export G4VIS_BUILD_DAWN_DRIVER=1
+  export G4VIS_BUILD_DAWNFILE_DRIVER=1
+  export G4VIS_BUILD_VRML_DRIVER=1
+  export G4VIS_BUILD_VRMLFILE_DRIVER=1
 fi
 
 if [ `uname -n | grep dxplus` ]; then
@@ -163,12 +162,12 @@ if [ `uname -n | grep dxplus` ]; then
   ######export G4UI_BUILD_XM_SESSION=1
 #  export G4VIS_BUILD_OPENGLXM_DRIVER=1
 #  export G4VIS_BUILD_OPENGLX_DRIVER=1
-#  export G4VIS_BUILD_RAYX_DRIVER=1
+  export G4VIS_BUILD_RAYX_DRIVER=1
 #  export G4VIS_BUILD_OIX_DRIVER=1
-#  export G4VIS_BUILD_DAWN_DRIVER=1
-#  export G4VIS_BUILD_DAWNFILE_DRIVER=1
-#  export G4VIS_BUILD_VRML_DRIVER=1
-#  export G4VIS_BUILD_VRMLFILE_DRIVER=1
+  export G4VIS_BUILD_DAWN_DRIVER=1
+  export G4VIS_BUILD_DAWNFILE_DRIVER=1
+  export G4VIS_BUILD_VRML_DRIVER=1
+  export G4VIS_BUILD_VRMLFILE_DRIVER=1
 fi
 
 if [ `uname -n | grep pcitasd04` ]; then
@@ -183,12 +182,12 @@ if [ `uname -n | grep pcitasd04` ]; then
   ######export G4UI_BUILD_XM_SESSION=1
 #  export G4VIS_BUILD_OPENGLXM_DRIVER=1
 #  export G4VIS_BUILD_OPENGLX_DRIVER=1
-#  export G4VIS_BUILD_RAYX_DRIVER=1
+  export G4VIS_BUILD_RAYX_DRIVER=1
 #  export G4VIS_BUILD_OIX_DRIVER=1
-#  export G4VIS_BUILD_DAWN_DRIVER=1
-#  export G4VIS_BUILD_DAWNFILE_DRIVER=1
-#  export G4VIS_BUILD_VRML_DRIVER=1
-#  export G4VIS_BUILD_VRMLFILE_DRIVER=1
+  export G4VIS_BUILD_DAWN_DRIVER=1
+  export G4VIS_BUILD_DAWNFILE_DRIVER=1
+  export G4VIS_BUILD_VRML_DRIVER=1
+  export G4VIS_BUILD_VRMLFILE_DRIVER=1
 fi
 
 if [ `uname -n | grep pcgeant` ]; then
@@ -203,12 +202,12 @@ if [ `uname -n | grep pcgeant` ]; then
   ######export G4UI_BUILD_XM_SESSION=1
 #  export G4VIS_BUILD_OPENGLXM_DRIVER=1
 #  export G4VIS_BUILD_OPENGLX_DRIVER=1
-#  export G4VIS_BUILD_RAYX_DRIVER=1
+  export G4VIS_BUILD_RAYX_DRIVER=1
 #  export G4VIS_BUILD_OIX_DRIVER=1
-#  export G4VIS_BUILD_DAWN_DRIVER=1
-#  export G4VIS_BUILD_DAWNFILE_DRIVER=1
-#  export G4VIS_BUILD_VRML_DRIVER=1
-#  export G4VIS_BUILD_VRMLFILE_DRIVER=1
+  export G4VIS_BUILD_DAWN_DRIVER=1
+  export G4VIS_BUILD_DAWNFILE_DRIVER=1
+  export G4VIS_BUILD_VRML_DRIVER=1
+  export G4VIS_BUILD_VRMLFILE_DRIVER=1
 fi
 
 
@@ -224,12 +223,12 @@ if [ `uname -n | grep sgmedia` ]; then
   ######export G4UI_BUILD_XM_SESSION=1
 #  export G4VIS_BUILD_OPENGLXM_DRIVER=1
 #  export G4VIS_BUILD_OPENGLX_DRIVER=1
-#  export G4VIS_BUILD_RAYX_DRIVER=1
+  export G4VIS_BUILD_RAYX_DRIVER=1
 #  export G4VIS_BUILD_OIX_DRIVER=1
-#  export G4VIS_BUILD_DAWN_DRIVER=1
-#  export G4VIS_BUILD_DAWNFILE_DRIVER=1
-#  export G4VIS_BUILD_VRML_DRIVER=1
-#  export G4VIS_BUILD_VRMLFILE_DRIVER=1
+  export G4VIS_BUILD_DAWN_DRIVER=1
+  export G4VIS_BUILD_DAWNFILE_DRIVER=1
+  export G4VIS_BUILD_VRML_DRIVER=1
+  export G4VIS_BUILD_VRMLFILE_DRIVER=1
 fi
 
 
