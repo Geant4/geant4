@@ -1,4 +1,4 @@
-$Id: History,v 1.204 2002-11-25 12:10:42 gcosmo Exp $
+$Id: History,v 1.205 2002-11-27 11:45:50 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -22,6 +22,8 @@ committal in the CVS repository !
   kernel and specific implementations for persistency have been moved to
   examples. Setup for ODBMS no more required. G4USE_HEPODBMS is no longer
   used.
+- Updated configuration file AIX-xlC.gmk to port code on AIX with xlC 6.0
+  (K.Murakami).
 
 22nd November 2002  Gabriele Cosmo (config-V04-01-05)
 - liblist.c:
