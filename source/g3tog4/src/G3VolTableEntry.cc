@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTableEntry.cc,v 1.5 2000-11-24 09:50:12 gcosmo Exp $
+// $Id: G3VolTableEntry.cc,v 1.6 2000-11-28 12:07:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, 13.10.99
@@ -170,10 +170,8 @@ void G3VolTableEntry::SetHasNegPars(G4bool hasNegPars) {
 }
 
 void G3VolTableEntry::ClearG3PosCopy(G4int copy) {
-  if (fG3Pos.entries()>0 && copy>=0 && copy<fG3Pos.entries()) {
-    delete fG3Pos[copy];
-    fG3Pos[copy] = 0;
-  }  
+  if (fG3Pos.entries()>0 && copy>=0 && copy<fG3Pos.entries()) 
+    fG3Pos.removeAt(copy);
 }
 
 void G3VolTableEntry::ClearDivision() {
