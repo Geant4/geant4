@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoTau.cc,v 1.8 2001-10-16 08:16:18 kurasige Exp $
+// $Id: G4NeutrinoTau.cc,v 1.9 2001-10-24 10:02:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,9 +85,9 @@ G4NeutrinoTau* G4NeutrinoTau::NeutrinoTau(){return &theNeutrinoTau;}
 // **************************** SetCuts *********************************
 // **********************************************************************
 
-void G4NeutrinoTau::SetCuts(G4double aCut)
+void G4NeutrinoTau::CalcEnergyCuts()
 {
-  SetCutInMaxInteractionLength( aCut );
+  
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(0.0*keV); 

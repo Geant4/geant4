@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutrinoE.cc,v 1.8 2001-10-16 08:16:17 kurasige Exp $
+// $Id: G4AntiNeutrinoE.cc,v 1.9 2001-10-24 10:02:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -88,9 +88,9 @@ G4AntiNeutrinoE* G4AntiNeutrinoE::AntiNeutrinoE()
 // **************************** SetCuts *********************************
 // **********************************************************************
 
-void G4AntiNeutrinoE::SetCuts(G4double aCut)
+void G4AntiNeutrinoE::CalcEnergyCuts()
 {
-  SetCutInMaxInteractionLength( aCut );
+  
 
   // Set Energy Cut values to lowest  for all materials
   SetEnergyCutValues(0.0*keV);  
