@@ -18,8 +18,7 @@
 /vis/open DAWNFILE
 /vis/open OGLIX
 #
-/vis/viewer/refresh
-/vis/viewer/update
+/vis/viewer/flush
 #
 # for drawing the tracks
 # (if too many tracks cause core dump => storeTrajectory 0)
