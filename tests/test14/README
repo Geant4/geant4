@@ -1,4 +1,4 @@
-$Id: README,v 1.2 1999-06-14 15:19:29 aforti Exp $
+$Id: README,v 1.3 2003-02-24 02:03:55 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,3 +8,22 @@ $Id: README,v 1.2 1999-06-14 15:19:29 aforti Exp $
                             Test14
                             ------
 
+Modular PhysicsLists for verious families of electron/photon processes
+
+How to run
+----------
+
+test14 < test14_lowE.in		LowE processes based on EEDL and EPDL for
+				electrons/photons, standard processes for e+
+
+test14 < test14_std.in		standard processes
+
+test14 < test14_penelope.in     LowE processes based on EEDL for electrons,
+                                Penelope processes for photons, 
+                                standard processes for e+
+
+test14 < test14_polarised.in    LowE processes based on EEDL for electrons,
+                                LowE polarised processes for photons, 
+                                standard processes for e+
+
+Same for *.large_N.in           High statistics runs
