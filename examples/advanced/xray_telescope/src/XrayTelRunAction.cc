@@ -37,19 +37,16 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 
-#include "g4std/fstream"
-#include "g4std/vector"
-
 #include "XrayTelRunAction.hh"
+#ifdef G4ANALYSIS_USE
+#include "XrayTelAnalysisManager.hh"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayTelRunAction::XrayTelRunAction(G4std::vector<G4double*> *enEnergy,
-				   G4std::vector<G4ThreeVector*> *enDirect,
-				   G4bool* dEvent)
-  :EnteringEnergy(enEnergy),
-   EnteringDirection(enDirect),drawEvent(dEvent)
-{;}
+XrayTelRunAction::XrayTelRunAction(XrayTelAnalysisManager* aAnalysisManager)
+:fAnalysisManager(aAnalysisManager)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -69,8 +66,10 @@ void XrayTelRunAction::BeginOfRunAction(const G4Run* aRun)
     UI->ApplyCommand("/vis/scene/notifyHandlers");
   } 
 
-  EnteringEnergy->clear();
-  EnteringDirection->clear();
+#ifdef G4ANALYSIS_USE
+  if(fAnalysisManager) fAnalysisManager->BeginOfRun();
+#endif
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -81,29 +80,10 @@ void XrayTelRunAction::EndOfRunAction(const G4Run* )
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
   }
 
-  G4std::ofstream outscat("detector.hist", ios::app);
+#ifdef G4ANALYSIS_USE
+  if(fAnalysisManager) fAnalysisManager->EndOfRun();
+#endif
 
-  G4cout << "End of Run summary" << G4endl << G4endl;
-
-  G4double TotEnteringEnergy = 0.0;
-
-  for (G4int i=0;i< EnteringEnergy->size();i++)
-    TotEnteringEnergy += *(*EnteringEnergy)[i];
-  G4cout << "Total Entering Detector : " << EnteringEnergy->size()  << G4endl;
-  G4cout << "Total Entering Detector Energy : " << TotEnteringEnergy  << G4endl;
-
-  for (i=0;i<EnteringEnergy->size();i++) {
-    outscat << "  "
-	    << *(*EnteringEnergy)[i]
-            << "  "
-            << (*EnteringDirection)[i]->x()
-	    << "  "
-            << (*EnteringDirection)[i]->y()
-	    << "  "
-            << (*EnteringDirection)[i]->z()
-	    << G4endl;
-  }
-  outscat.close();
 }
 
 

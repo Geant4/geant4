@@ -32,7 +32,7 @@
 #ifndef XrayTelSteppingAction_h
 #define XrayTelSteppingAction_h 1
 
-class XrayTelHistogram;
+class XrayTelAnalysisManager;
 
 #include "G4UserSteppingAction.hh"
 #include "G4ThreeVector.hh"
@@ -40,22 +40,27 @@ class XrayTelHistogram;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class XrayTelSteppingAction : public G4UserSteppingAction
-{
-public:
+/*debug
   XrayTelSteppingAction(  
 			G4std::vector<G4double*> *enEnergy, 
 			G4std::vector<G4ThreeVector*> *enDirect,
 			G4bool* dEvent);
+  //    XrayTelHistogram* histoManager;
+  G4bool* drawEvent;
+  G4std::vector<G4double*>* EnteringEnergy;
+  G4std::vector<G4ThreeVector*>* EnteringDirection;
+*/
+
+class XrayTelSteppingAction : public G4UserSteppingAction
+{
+public:
+  XrayTelSteppingAction(XrayTelAnalysisManager* = 0);
   virtual ~XrayTelSteppingAction();
 
   virtual void UserSteppingAction(const G4Step*);
   
 private:
-  //    XrayTelHistogram* histoManager;
-  G4bool* drawEvent;
-  G4std::vector<G4double*>* EnteringEnergy;
-  G4std::vector<G4ThreeVector*>* EnteringDirection;
+  XrayTelAnalysisManager* fAnalysisManager;
 };
 
 #endif
