@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.33 2001-10-22 17:03:42 gcosmo Exp $
+// $Id: G4RunManager.cc,v 1.34 2001-10-23 16:35:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -208,7 +208,7 @@ void G4RunManager::RunInitialization()
     if(verboseLevel>1) G4cout << "Start closing geometry." << G4endl;
     G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
     geomManager->OpenGeometry();
-    geomManager->CloseGeometry(geometryToBeOptimized, verboseLevel>0);
+    geomManager->CloseGeometry(geometryToBeOptimized, verboseLevel>1);
     geometryNeedsToBeClosed = false;
   }
   G4StateManager* stateManager = G4StateManager::GetStateManager();
@@ -458,11 +458,3 @@ void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
   { fileNameWithDirectory = fileN; }
   HepRandom::restoreEngineStatus(fileNameWithDirectory);
 }
-
-
-
-
-
-
-
-
