@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.1 1999-01-07 15:58:32 gunter Exp $
+# $Id: binmake.gmk,v 1.2 1999-02-19 01:01:11 johna Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -92,35 +92,66 @@ ifdef G4ODBMS
               -DHep_HAS_BUILDIN_BOOL_CONSTANTS
 endif
 
-ifndef LDLIBS
+GLOBALLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.a && echo yes)
 
+ifdef LDLIBS
+  USER_DEFINED_LDLIBS := 1
+endif
+
+# Because of the script for granular libraries which replaces part of LDLIBS
+# and because of the way user defined LDLIBS was augmented historically I
+# have hadd to split LDLIBS into 4 parts...
+#
+ifndef USER_DEFINED_LDLIBS
+
+# LDLIBS1 contains the very high level libraries...
+#
 ifdef G4EXLIB
-  LDLIBS := -l$(G4TARGET) $(VISLIBS) $(UILIBS)
-else
-  LDLIBS := $(VISLIBS) $(UILIBS)
+  LDLIBS1 := -l$(G4TARGET)
+endif
+
+# VISLIBS and UILIBS are now handles by the granular library script...
+#
+ifdef GLOBALLIBS
+  LDLIBS1 += $(VISLIBS) $(UILIBS)
 endif
 
 ifdef G4ODBMS
-  LDLIBS += -lG4persistency
+  LDLIBS1 += -lG4persistency
 endif
 
-  LDLIBS += \
-            -lG4readout \
-            -lG4run \
-            -lG4event \
-            -lG4tracking \
-            -lG4processes \
-            -lG4particles \
-            -lG4digits+hits \
-            -lG4track \
-            -lG4materials \
-            -lG4geometry \
-            -lG4graphics_reps \
-            -lG4intercoms \
-            -lG4global \
-             $(INTYLIBS)
+# LDLIBS2 contains the libraries handled by the granular library script...
+#
+ifdef GLOBALLIBS
+  LDLIBS2 := -lG4readout \
+             -lG4run \
+             -lG4event \
+             -lG4tracking \
+             -lG4processes \
+             -lG4particles \
+             -lG4digits+hits \
+             -lG4track \
+             -lG4materials \
+             -lG4geometry \
+             -lG4graphics_reps \
+             -lG4intercoms \
+             -lG4global
+else
+# Add - for case of granular libraries - those which are needed
+#   twice because of circular dependencies...
+#
+  LDLIBS3 := -lG4track -lG4volumes -lG4magneticfield -lG4emutils
 endif
 
+# LDLIBS3 contains the first set of low level libraries...
+#
+  LDLIBS3 += $(INTYLIBS)
+
+endif # ifndef USER_DEFINED_LDLIBS
+
+# LDLIBS4 contains the next set of low level libraries which historically
+# (why?) the user is not supposed to be able to define...
+#
 ifdef G4ODBMS
   LDFLAGS  += -L$(OBJY_DIR)/lib \
               -L$(HEP_ODBMS_DIR)/lib
@@ -128,23 +159,38 @@ ifdef G4ODBMS
 #  Note: -loo_sahr.4.02 and -lHepODBMS should be placed
 #        _before_ -l$(CLHEP_LIB) -l$(RWLIB)
 
-  LDLIBS += -loo_shar.4.02 -lHepODBMS
+  LDLIBS4 += -loo_shar.4.02 -lHepODBMS
 endif
 
 CPPFLAGS += $(INCFLAGS)
 LDFLAGS += -L$(G4LIBDIR)
-LDLIBS += $(LOADLIBS)
+LDLIBS4 += $(LOADLIBS)
 
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(G4TARGET)
 G4BINDIR := $(G4BIN)/$(G4SYSTEM)
 
 ifdef G4EXLIB
-G4LIBDIR := $(G4TMPDIR)
-LDFLAGS += -L$(G4LIBDIR)
-include $(G4INSTALL)/config/common.gmk
+  G4LIBDIR := $(G4TMPDIR)
+  LDFLAGS += -L$(G4LIBDIR)
+  include $(G4INSTALL)/config/common.gmk
 endif
 
-LDLIBS += $(EXTRALIBS)
+LDLIBS4 += $(EXTRALIBS)
+
+# Define LDLIBS for global case, if not user defined...
+#
+ifndef USER_DEFINED_LDLIBS
+  ifdef GLOBALLIBS
+    LDLIBS := $(LDLIBS1) $(LDLIBS2) $(LDLIBS3)
+    USER_DEFINED_LDLIBS := 1
+  endif
+endif
+
+# Now user defined and globals are equivalent...
+#
+ifndef USER_DEFINED_LDLIBS
+  LDLIBS := $(LDLIBS) $(LDLIBS4)
+endif
 
 sources := $(wildcard $(G4TARGET).cc)
 objects := $(patsubst %.cc,$(G4TMPDIR)/exe/%.o,$(sources))
@@ -159,17 +205,49 @@ ifeq ($(G4SYSTEM),WIN32-VC-NICE)
   WIN32TMP := $(patsubst -L%,$(LIB_PATH)%,$(LDFLAGS))
   LDFLAGS  = $(patsubst /,$(PATH_DEL),$(WIN32TMP))
   LDLIBS := $(patsubst -l%,lib%.a,$(LDLIBS))
+  LDLIBS1 := $(patsubst -l%,lib%.a,$(LDLIBS1))
+  LDLIBS2 := $(patsubst -l%,lib%.a,$(LDLIBS2))
+  LDLIBS3 := $(patsubst -l%,lib%.a,$(LDLIBS3))
+  LDLIBS4 := $(patsubst -l%,lib%.a,$(LDLIBS4))
 endif
 
-$(G4BINDIR)/$(G4TARGET): $(G4TMPDIR)/exe/obj.last
+LINK_DEPENDENCIES := $(G4TMPDIR)/exe/obj.last
+ifndef USER_DEFINED_LDLIBS
+  LINK_DEPENDENCIES += $(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map
+endif
+
+$(G4BINDIR)/$(G4TARGET): $(LINK_DEPENDENCIES)
 	@if [ ! -d $(G4BINDIR) ] ; then mkdir $(G4BINDIR) ;fi
-ifdef CPPVERBOSE
+ifdef USER_DEFINED_LDLIBS
+  ifdef CPPVERBOSE
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) \
-	-o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) $(LDLIBS)
-else
+	  -o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
+	  $(LDLIBS)
+  else
 	@echo Linking $(G4TARGET) ...
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) \
-	-o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) $(LDLIBS)
+	  -o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
+	  $(LDLIBS)
+  endif
+else
+  ifdef CPPVERBOSE
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) \
+	  -o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
+	  $(LDLIBS1) \
+	  `$(G4BINDIR)/liblist \
+	  $(G4TMPDIR)/exe/*.d $(G4TMPDIR)/*.d \
+	  <$(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map` \
+	  $(LDLIBS3) $(LDLIBS4)
+  else
+	@echo Linking $(G4TARGET) ...
+	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) \
+	  -o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
+	  $(LDLIBS1) \
+	  `$(G4BINDIR)/liblist \
+	  $(G4TMPDIR)/exe/*.d $(G4TMPDIR)/*.d \
+	  <$(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map` \
+	  $(LDLIBS3) $(LDLIBS4)
+  endif
 endif
 
 # Touch the versioning file
@@ -205,6 +283,56 @@ else
 	g++ -MM $(RWINCGPP) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
 endif
 -include $(dependencies)
+
+$(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map: $(G4WORKDIR)/bin/$(G4SYSTEM)/liblist
+	@rm -f libname.map;
+	@rm -f /tmp/G4_all_lib_makefiles;
+	@rm -f /tmp/G4_granlib_makefiles;
+	@rm -f /tmp/G4libname.map.starter;
+	@echo "Searching $(G4INSTALL)/source"
+	@echo '  for GNUmakefiles containing "name" and sorting...'
+	@find $(G4INSTALL)/source \
+	  -name GNUmakefile -exec grep -l 'name :=' {} \; \
+	  | sort \
+	  > /tmp/G4_all_lib_makefiles;
+	@echo "Weeding out global level GNUmakefiles and non-libraries..."
+	@for i in `cat /tmp/G4_all_lib_makefiles`; \
+	do \
+	  grep -q SUBDIR $$i || \
+	  grep -q G4hepgeometry $$i || \
+	  echo $$i >> /tmp/G4_granlib_makefiles; \
+	done
+	@echo "Making libname.map starter file..."
+	@touch /tmp/G4libname.map.starter;
+	@for i in `cat /tmp/G4_granlib_makefiles`; \
+	do \
+	  grep 'name :=' $$i | cut -d \  -f 3 >> /tmp/G4libname.map.starter; \
+	  echo $$i >> /tmp/G4libname.map.starter; \
+	done
+	@echo "Making libname.map..."
+	$(G4WORKDIR)/bin/$(G4SYSTEM)/liblist -l \
+	  $(G4WORKDIR)/tmp/$(G4SYSTEM)/*/*.d \
+	  < /tmp/G4libname.map.starter \
+	  > $(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map
+	@rm -f /tmp/G4_all_lib_makefiles;
+	@rm -f /tmp/G4_granlib_makefiles;
+	@rm -f /tmp/G4libname.map.starter;
+
+$(G4WORKDIR)/bin/$(G4SYSTEM)/liblist: $(G4INSTALL)/config/liblist.c
+	@echo "Compiling liblist.c..."
+	@echo "WARNING: This assumes you are using granular libraries!"
+	@echo "WARNING: If you did not intend this, interrupt now (CTRL-C)!"
+	@echo "WARNING: This scripts looks for your global library G4global"
+	@echo "         and assumes you are using granular libraries if"
+	@echo "         this does not exist."
+	@echo "WARNING: So..."
+	@echo "            either..."
+	@echo "         a) Make sure your global libraries are all in place."
+	@echo "            or..."
+	@echo "         b) Make granular libraries, i.e., leave of the global"
+	@echo "            target when doing gmake."
+	@cc -g -o $(G4WORKDIR)/bin/$(G4SYSTEM)/liblist \
+	  $(G4INSTALL)/config/liblist.c
 
 clean:
 	@echo Cleaning up ...
