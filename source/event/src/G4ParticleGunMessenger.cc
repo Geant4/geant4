@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.cc,v 1.10 2003-11-19 19:28:43 asaim Exp $
+// $Id: G4ParticleGunMessenger.cc,v 1.11 2004-02-22 02:55:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -152,6 +152,7 @@ G4ParticleGunMessenger::~G4ParticleGunMessenger()
   delete timeCmd;
   delete polCmd;
   delete numberCmd;
+  delete ionCmd;
   delete gunDirectory;
 }
 
