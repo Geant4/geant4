@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                  (07-Dec-99)
+                                (10-Mar-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -148,9 +148,9 @@ Cut in energy
 ----------------------------------------
 >>> Event 0
     0 trajectories stored in this event.
-     10 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 2.8e+02 MeV       total track length:      17 cm 
-        Gap: total energy:      13 MeV       total track length:     6.2 cm 
+     9 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 2.8e+02 MeV       total track length:      16 cm 
+        Gap: total energy:     8.3 MeV       total track length:     3.8 cm 
 #
 # list the existing physics processes
      Transportation,                msc,              hIoni,              eIoni
@@ -165,13 +165,13 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 903484076, 2048332864
+ Current couple of seeds = 999629383, 314451985
 ----------------------------------------
 >>> Event 0
     0 trajectories stored in this event.
-     9 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 2.8e+02 MeV       total track length:      17 cm 
-        Gap: total energy:      22 MeV       total track length:      10 cm 
+     8 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 2.8e+02 MeV       total track length:      16 cm 
+        Gap: total energy:      17 MeV       total track length:       8 cm 
 #
 # switch on MultipleScattering
 #
@@ -194,10 +194,10 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 397522826, 1167906642
+ Current couple of seeds = 700815731, 1422985808
 ----------------------------------------
 >>> Event 0
     0 trajectories stored in this event.
-     30 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 3.4e+02 MeV       total track length:      79 cm 
-        Gap: total energy:      72 MeV       total track length:       2 m  
+     27 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy:   4e+02 MeV       total track length:      93 cm 
+        Gap: total energy:      81 MeV       total track length:     2.2 m  

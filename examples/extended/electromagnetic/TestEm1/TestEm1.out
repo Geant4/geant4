@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                  (07-Dec-99)
+                                (10-Mar-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -107,7 +107,7 @@ Cut in energy
                Lead         101 keV        1.38 MeV        8.52 MeV        20.9 MeV         990 eV 
             Uranium         110 keV        1.92 MeV        10.5 MeV        26.1 MeV         990 eV 
 ===================================================
-# $Id: TestEm1.out,v 1.2 2000-03-09 12:57:20 stesting Exp $
+# $Id: TestEm1.out,v 1.3 2000-05-03 12:45:37 stesting Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -211,18 +211,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=63s Real=68s Sys=4.7s
+  User=62s Real=67s Sys=4.6s
 
- nb tracks/event   neutral:   25.40   charged:  642.74
- nb  steps/event   neutral:  135.85   charged: 1277.47
+ nb tracks/event   neutral:   24.42   charged:  638.23
+ nb  steps/event   neutral:  131.24   charged: 1263.21
 
  nb of process calls per event: 
        eIoni    eBrem     phot     conv  annihil    compt
-     1253.51    22.49    23.93     1.47     1.47   110.45
+     1240.10    21.77    23.08     1.34     1.34   106.82
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1957444845, 1985317761
+ Current couple of seeds = 541160865, 1787587478
 ----------------------------------------
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
