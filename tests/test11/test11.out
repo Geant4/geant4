@@ -61,15 +61,6 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
         delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
- eIoni   Minimum Delta cut in range=100  mm.
-
-           material       min.delta energy(keV) 
-
-                 Air         87.453
-           Aluminium          75754
-                Lead     1.9789e+10
-                Lead     1.3326e+11
-
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
@@ -77,10 +68,10 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
 ******** ConvertCutToKineticEnergy for e+ ********************
-The cut energy is set 1.7977e+305GeV 
+The cut energy is set 1.79769e+305GeV 
 Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
 ******** ConvertCutToKineticEnergy for e+ ********************
-The cut energy is set 1.7977e+305GeV 
+The cut energy is set 1.79769e+305GeV 
 
 annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
         gamma energies sampled according Heitler
@@ -90,15 +81,6 @@ msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
         PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
-
- hIoni    Minimum Delta cut in range=100  mm.
-
-           material        min.delta energy(keV) 
-
-                 Air         87.453
-           Aluminium          75754
-                Lead     1.9789e+10
-                Lead     1.3326e+11
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
