@@ -398,22 +398,14 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
       theCollisionMgr->RemoveCollision(theCollisionMgr->GetNextCollision());
   }
 
-// ------ debug
-
-
-  G4cout << "theProjectileList" << G4endl;
-  PrintKTVector(&theProjectileList);
-  G4cout << "theSecondaryList" << G4endl;
-  PrintKTVector(&theSecondaryList);
-  G4cout << "theTargetList size: " << theTargetList.size() << G4endl;
-//  PrintKTVector(&theTargetList);
-  G4cout << "theCapturedList" << G4endl;
-  PrintKTVector(&theCapturedList);
-
-
-// ------ end debug
-
 #ifdef debug_G4BinaryCascade
+
+  PrintKTVector(&theProjectileList,std::string(" theProjectileList");
+  PrintKTVector(&theSecondaryList,std::string(" theSecondaryList");
+  G4cout << "theTargetList size: " << theTargetList.size() << G4endl;
+//  PrintKTVector(&theTargetList,std::string(" theTargetList");
+  PrintKTVector(&theCapturedList,std::string(" theCapturedList");
+
   G4cout << " ExcitE be4 Correct : " <<GetExcitationEnergy() << G4endl;
   G4cout << " Mom Transfered to nucleus : " << theMomentumTransfer << " " << theMomentumTransfer.mag() << G4endl;
   PrintKTVector(&theFinalState,std::string(" FinalState uncorrected"));
@@ -832,13 +824,13 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   }
 
 // debug block
-//  #ifdef debug_1_BinaryCascade
+  #ifdef debug_1_BinaryCascade
      G4KineticTrackVector debug1;
      debug1.push_back(collision->GetPrimary());
      PrintKTVector(&debug1,std::string(" Primary particle"));
      PrintKTVector(&collision->GetTargetCollection(),std::string(" Target particles"));
   PrintKTVector(products,std::string(" Scatterer products"));
-//  #endif
+  #endif
 
   G4int finalBaryon(0);
   G4int finalCharge(0);
@@ -1198,7 +1190,7 @@ void G4BinaryCascade::StepParticlesOut()
       // G4cout << "Absorb sucess " << G4endl;
     }
 
-    if(Capture(true))
+    if(Capture(false))
     {
 //       haveProducts = true;
 #ifdef debug_G4BinaryCascade
@@ -1648,7 +1640,6 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
 
      for ( iter =out->begin(); iter != out->end(); ++iter)
      {
-         G4cout << "outgoing : " << (*iter)->GetDefinition()->GetParticleName() << G4endl;
 	 ++secondaries_out;
 	 secondaryCharge_out += lrint((*iter)->GetDefinition()->GetPDGCharge());
 	 if ((*iter)->GetDefinition()->GetBaryonNumber()==1 )
