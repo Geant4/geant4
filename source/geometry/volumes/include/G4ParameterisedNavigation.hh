@@ -5,14 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParameterisedNavigation.hh,v 1.2 1999-12-15 14:50:23 gunter Exp $
+// $Id: G4ParameterisedNavigation.hh,v 1.3 2000-04-25 16:15:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// class G4ParameterisedNavigation: Utility for navigation in volumes
-// containing a single G4PVParameterised volume for which voxels for
-// the replicated volumes have been constructed.
-// [Voxels MUST be along one axis only: NOT refined] Paul Kent Aug 96
+// class G4ParameterisedNavigation
+//
+// Class description:
+//
+// Utility for navigation in volumes containing a single G4PVParameterised
+// volume for which voxels for the replicated volumes have been constructed.
+// [Voxels MUST be along one axis only: NOT refined]
+
+// History:
+// - Created. Paul Kent, Aug 96
 
 #ifndef G4PARAMETERISEDNAVIGATION_HH
 #define G4PARAMETERISEDNAVIGATION_HH
@@ -35,7 +41,8 @@
 
 class G4ParameterisedNavigation
 {
-public:
+  public:  // with description
+
 	G4ParameterisedNavigation();
         ~G4ParameterisedNavigation();
 	G4SmartVoxelNode* VoxelLocate(G4SmartVoxelHeader *pHead,
@@ -61,22 +68,24 @@ public:
         G4double ComputeSafety(const G4ThreeVector &localPoint,
 		               const  G4NavigationHistory &history,
 		               const G4double pProposedMaxLength=DBL_MAX );
-private:
+
+  private:
+
 	G4double ComputeVoxelSafety(const G4ThreeVector &localPoint) const;
 	G4bool LocateNextVoxel(const G4ThreeVector &localPoint,
 			const G4ThreeVector& localDirection,
 		        const G4double currentStep);
 
-    G4BlockingList fBList;	// Blocked volumes
+        G4BlockingList fBList;	// Blocked volumes
 //
 //  BEGIN Voxel Stack information
 //
-    EAxis fVoxelAxis;
-    G4int fVoxelNoSlices;
-    G4double fVoxelSliceWidth; 
-    G4int fVoxelNodeNo;	  
-    G4SmartVoxelHeader *fVoxelHeader;
-    G4SmartVoxelNode *fVoxelNode;
+        EAxis fVoxelAxis;
+        G4int fVoxelNoSlices;
+        G4double fVoxelSliceWidth; 
+        G4int fVoxelNodeNo;	  
+        G4SmartVoxelHeader *fVoxelHeader;
+        G4SmartVoxelNode *fVoxelNode;
 //
 //  END Voxel Stack information
 //
@@ -88,5 +97,3 @@ private:
 #include "G4ParameterisedNavigation.icc"
 
 #endif
-
-

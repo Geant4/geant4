@@ -5,13 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VoxelNavigation.hh,v 1.5 1999-12-15 14:50:25 gunter Exp $
+// $Id: G4VoxelNavigation.hh,v 1.6 2000-04-25 16:15:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// class G4VoxelNavigation: Utility for navigation in volumes
-// containing only G4PVPlacement daughter volumes for which voxels
-// have been constructed.                         Paul Kent Aug 96
+// class G4VoxelNavigation
+//
+// Class description:
+//
+// Utility for navigation in volumes containing only G4PVPlacement
+// daughter volumes for which voxels have been constructed.
+
+// History:
+// - Created. Paul Kent, Aug 96
 
 #ifndef G4VOXELNAVIGATION_HH
 #define G4VOXELNAVIGATION_HH
@@ -38,7 +44,8 @@ const G4int kNavigatorVoxelStackMax = 3;
 
 class G4VoxelNavigation
 {
-public:
+  public:  // with description
+
 	G4VoxelNavigation();
         ~G4VoxelNavigation();
 	G4SmartVoxelNode* VoxelLocate(G4SmartVoxelHeader *pHead,
@@ -66,7 +73,8 @@ public:
         G4double ComputeSafety(const G4ThreeVector &globalpoint,
 			       const G4NavigationHistory &history,
     		               const G4double pMaxLength=DBL_MAX );
-private:
+  private:
+
 	G4double ComputeVoxelSafety(const G4ThreeVector &localPoint) const;
 	G4bool LocateNextVoxel(const G4ThreeVector &localPoint,
 			const G4ThreeVector& localDirection,
@@ -76,34 +84,36 @@ private:
 			G4int pDepth);
 
     G4BlockingList fBList;	// Blocked volumes
-//
-//  BEGIN Voxel Stack information
-//
 
-// Note: fVoxelDepth==0+ => fVoxelAxisStack(0+) contains axes of voxel
-//       fVoxelDepth==-1 -> not in voxel
+    //
+    //  BEGIN Voxel Stack information
+    //
+
     G4int fVoxelDepth;
+      // Note: fVoxelDepth==0+ => fVoxelAxisStack(0+) contains axes of voxel
+      //       fVoxelDepth==-1 -> not in voxel
 
-// Voxel axes
     G4RWTValVector<EAxis> fVoxelAxisStack;
+      // Voxel axes
 
-// No slices per voxel at each level
     G4RWTValVector<G4int> fVoxelNoSlicesStack;
+      // No slices per voxel at each level
 
-// Width of voxels at each level 
     G4RWTValVector<G4double> fVoxelSliceWidthStack; 
+      // Width of voxels at each level 
 
-// Node no point is inside at each level 
     G4RWTValVector<G4int> fVoxelNodeNoStack;	  
+      // Node no point is inside at each level 
 				
-// Voxel headers at each level
     G4RWTPtrVector<G4SmartVoxelHeader> fVoxelHeaderStack;
+      // Voxel headers at each level
 
-// Node containing last located point
     G4SmartVoxelNode* fVoxelNode;
-//
-//  END Voxel Stack information
-//
+      // Node containing last located point
+
+    //
+    //  END Voxel Stack information
+    //
 
 };
 
@@ -112,7 +122,3 @@ private:
 #include "G4VoxelNavigation.icc"
 
 #endif
-
-
-
-

@@ -1,0 +1,50 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4LogicalBorderSurface.icc,v 1.1 2000-04-25 16:15:02 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// class G4LogicalBorderSurface inline implementation
+
+inline
+void G4LogicalBorderSurface::SetPhysicalVolumes(G4VPhysicalVolume* vol1,
+				                G4VPhysicalVolume* vol2)
+{
+  Volume1 = vol1;
+  Volume2 = vol2;
+}
+
+inline
+G4VPhysicalVolume* G4LogicalBorderSurface::GetVolume1() const
+{
+  return Volume1;
+}
+
+inline
+G4VPhysicalVolume* G4LogicalBorderSurface::GetVolume2() const
+{
+  return Volume2;
+}
+
+inline
+void G4LogicalBorderSurface::SetVolume1(G4VPhysicalVolume* vol1)
+{
+  Volume1 = vol1;
+}
+
+inline
+void G4LogicalBorderSurface::SetVolume2(G4VPhysicalVolume* vol2)
+{
+  Volume2 = vol2;
+}
+
+inline
+size_t G4LogicalBorderSurface::GetIndex() const
+{
+  return theIndexInTable;
+}

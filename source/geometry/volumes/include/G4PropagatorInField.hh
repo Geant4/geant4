@@ -5,30 +5,31 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.hh,v 1.6 1999-12-15 14:50:23 gunter Exp $
+// $Id: G4PropagatorInField.hh,v 1.7 2000-04-25 16:15:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// ------------------------------------------------------------------------
-//	GEANT 4  include file implementation
+// class G4PropagatorInField 
 //
-//	For information related to this code contact:
-//	CERN, IT Division (formely CN), ASD group
-// ------------------------------------------------------------------------
+// Class description:
 // 
-//  This class performs the navigation/propagation of a particle/track 
-//  in a magnetic field. The field is in general non-uniform.
-//    For the calculation of the path, it relies on the class G4MagTr.
+// This class performs the navigation/propagation of a particle/track 
+// in a magnetic field. The field is in general non-uniform.
+// For the calculation of the path, it relies on the class G4MagTr.
+// To create an object, must have an object that calculates the Curved 
+// paths and also must know the value of the maximum displacement allowed.
 //
-//  class G4PropagatorInField 
-//      Methods:
+// Methods:
 //        ComputeStep(..)
 //        CalculateStepTimeAndAccuracy(..) 
 //        LocateIntersectionPoint(..)
-//
+
+// History:
+// -------
 // 25.10.96 John Apostolakis,  design and implementation 
 // 25.03.97 John Apostolakis,  adaptation for G4Transportation and cleanup
 // ------------------------------------------------------------------------
+
 #ifndef G4PropagatorInField_hh 
 #define G4PropagatorInField_hh  1
 
@@ -44,12 +45,10 @@
 
 // #include "G4MagIntegratorDriver.hh"
 
-class G4PropagatorInField {
+class G4PropagatorInField
+{
 
- public:
-   //  To create an object, must have an object that calculates the Curved 
-   //  paths and also must know the value of the maximum displacement allowed
-   //
+ public:  // with description
 
    G4PropagatorInField( G4Navigator    *theNavigator, 
 			G4FieldManager *detectorFieldMgr);
@@ -57,8 +56,6 @@ class G4PropagatorInField {
    G4PropagatorInField( G4Navigator   *theNavigator );
   ~G4PropagatorInField(){};
 
-   // Compute the next geometric Step
-   //
    G4double ComputeStep(G4FieldTrack  &pFieldTrack,
 			G4double pCurrentProposedStepLength,
 			G4double       &pNewSafety, 
@@ -69,26 +66,22 @@ class G4PropagatorInField {
 		              G4double pCurrentProposedStepLength,
 			      G4double       &pNewSafety, 
                        	      G4VPhysicalVolume *pPhysVol=0 );
-                                        // Current Volume (to check)
+     // Compute the next geometric Step
 
-   // Return the state after the Step
-   // 
    G4ThreeVector  EndPosition();       
    G4ThreeVector  EndMomentumDir();
    G4bool         IsParticleLooping();
+     // Return the state after the Step
 
-   //   The accuracy of finding an intersection
-   //
    G4double  DeltaIntersection(); 
+     // The accuracy of finding an intersection
 
-   //   The accuracy of a single Step
-   //
    G4double  DeltaOneStep();
+     // The accuracy of a single Step
 
-   //   The ratio   DeltaOneStep()/h_current_step
-   //
    G4double  GetEpsilonStep();  // Relative accuracy for current Step (Calc.)
    void      SetEpsilonStep(G4double newEps);
+     // The ratio DeltaOneStep()/h_current_step
 
    void SetChargeMomentumMass( G4double Charge,         // in e+ units
 			       G4double Momentum,       // in Geant4 units
@@ -97,23 +90,22 @@ class G4PropagatorInField {
    G4ChordFinder* GetChordFinder();
    // void        SetChordFinder(G4ChordFinder* newCF);  // Not yet relevant
 
-   G4int  SetVerboseLevel( G4int Verbose ){ return fVerboseLevel=Verbose; }
-   G4int  Verbose(){ return fVerboseLevel; }
+   G4int  SetVerboseLevel( G4int Verbose );
+   G4int  Verbose();
 
-                                   //   Accuracies:
-   G4double  GetDeltaIntersection();   //   for boundary intersection
-   G4double  GetDeltaOneStep();        //   for one tracking/physics step
+   G4double  GetDeltaIntersection();
+     // Accuracy for boundary intersection.
+   G4double  GetDeltaOneStep();
+     // Accuracy for one tracking/physics step.
                                     
-   // Sets both accuracies,
-   //    maintaining a particular ratio Delta Interaction / OneStep )
    void    SetAccuraciesWithDeltaOneStep(G4double deltaOneStep);  
+     // Sets both accuracies, maintaining a particular ratio
+     // Delta Interaction / OneStep.
 
-   // A maximum for the number of steps that a (looping) particle can take
    G4int   GetMaxLoopCount();
    void    SetMaxLoopCount(G4int new_max);
+     // A maximum for the number of steps that a (looping) particle can take.
 
-   //   Print Method - useful mostly for debugging this class
-   //
    void printStatus( 
                   const G4FieldTrack&  StartFT,
 		  const G4FieldTrack&  CurrentFT, 
@@ -121,48 +113,51 @@ class G4PropagatorInField {
                   G4double             safety,
                   G4int                Step, 
                   G4VPhysicalVolume*   startVolume);
+     // Print Method - useful mostly for debugging.
 
-   //  The Field Manager of the Detector
-   // 
+   G4FieldTrack GetEndState();
+
+ public:  // without description
+
    // void  SetGlobalFieldMgr( G4FieldManager *detectorFieldMgr );
-   G4FieldTrack    GetEndState() { return End_PointAndTangent; }
+        // The Field Manager of the Detector.
 
  private:
-   // If such an intersection exists, this function 
-   // calculate the intersection point of the true path of the particle 
-   // with the surface of the current volume (or of one of its daughters). 
-   //  (Should use lateral displacement as measure of convergence). 
-   //
+
    G4bool LocateIntersectionPoint( 
 	    const  G4FieldTrack&       CurveStartPointTangent,  //  A
 	    const  G4FieldTrack&       CurveEndPointTangent,    //  B
 	    const  G4ThreeVector&     TrialPoint,              //  E
 		   G4FieldTrack&       IntersectPointTangent);  // Output
+     // If such an intersection exists, this function 
+     // calculate the intersection point of the true path of the particle 
+     // with the surface of the current volume (or of one of its daughters). 
+     //  (Should use lateral displacement as measure of convergence). 
 
 
   //  DATA Members
   // ----------------------------------------------------------------------
+
  private:
 
-   // The  Field Manager of the whole Detector
-   // 
    G4FieldManager *fDetectorFieldMgr; 
+     // The  Field Manager of the whole Detector.
 
    G4Navigator   *fNavigator;
 
    //  STATE information
    // ------------------
 
-   G4double    fEpsilonStep;  // Relative accuracy for current Step (Calc.)
+   G4double    fEpsilonStep;
+     // Relative accuracy for current Step (Calc.)
 
-   // End point storage:
-   //
    G4FieldTrack    End_PointAndTangent;
+     // End point storage
 
    G4bool      fParticleIsLooping;
 
-   //  For debuging purposes
    G4int  fVerboseLevel;
+     // For debuging purposes
 
    //  Values for the required accuracies
    //
@@ -177,16 +172,16 @@ class G4PropagatorInField {
    G4int  fmax_loop_count;
 
    //  Variables to keep track of "abnormal" case - which causes loop
+   //
    G4int     fNoZeroStep;                //  Counter of zeroStep
-   G4int     fThresholdNo_ZeroSteps;    //  Threshold: above this - action
+   G4int     fThresholdNo_ZeroSteps;     //  Threshold: above this - action
                        // G4double  fMidPoint_CurveLen_of_LastAttempt= -1;
    G4double  fFull_CurveLen_of_LastAttempt; 
    G4double  fLast_ProposedStepLength; 
-}; // End of class G4PropagatorInField {
+};
 
 //  Defines the constructor.
 //
 #include "G4PropagatorInField.icc"
 
 #endif 
-// End of   "#ifndef G4PropagatorInField_hh"

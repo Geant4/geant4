@@ -5,23 +5,25 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalSkinSurface.hh,v 1.3 1999-12-15 14:50:22 gunter Exp $
+// $Id: G4LogicalSkinSurface.hh,v 1.4 2000-04-25 16:15:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
-// G4LogicalSkinSurface Definition
+// class G4LogicalSkinSurface
 ////////////////////////////////////////////////////////////////////////
 //
-// File:        G4LogicalSkinSurface.hh
-// Description: A Logical Surface class for the surface  
-//                surrounding a single logical volume.
-// Version:     1.0
+// Class description:
+//
+// A Logical Surface class for the surface surrounding a single logical
+// volume.
+
+// History:
+// -------
 // Created:     1997-06-16
 // Author:      John Apostolakis
 // mail:        John.Apostolakis@cern.ch
 // Modified:    1997-06-16  John Apostolakis
 //
-// Id tag:      
 ////////////////////////////////////////////////////////////////////////
 
 #ifndef G4LogicalSkinSurface_h
@@ -46,7 +48,7 @@
 class G4LogicalSkinSurface : public G4LogicalSurface 
 {
 
-public:
+  public:
 
         ////////////////////////////////
         // Constructors and Destructor
@@ -62,53 +64,47 @@ public:
 	////////////
 	// Methods
         ////////////
-public:
-	// public methods
-
+  public:
+  
         static G4LogicalSkinSurface* GetSurface(const G4LogicalVolume* vol);
 
-	G4LogicalVolume* GetLogicalVolume() const {return LogVolume;};
-	void		 SetLogicalVolume(G4LogicalVolume* vol)
-						{LogVolume = vol;};
+	G4LogicalVolume* GetLogicalVolume() const;
+	void		 SetLogicalVolume(G4LogicalVolume* vol);
 
-
-	//   Methods dealing with the table of surfaces.
-	//
-        static size_t GetNumberOfSkinSurfaces()
-                                      { return theSurfaceTable.length(); };
+        static size_t GetNumberOfSkinSurfaces();
         static void DumpInfo(); // const 
+	  // Methods dealing with the table of surfaces.
 
 #if THESE_ARE_NEEDED
-	// static const G4RWTPtrOrderedVector<G4LogicalSkinSurface>* 
-	//          GetSurfaceTable()
-	//                              { return &theSurfaceTable; };
-
-	size_t GetIndex() const { return theIndexInTable; };
+	size_t GetIndex() const;
 #endif
 
         //////////////
         // Operators
         //////////////
-public:
+
 	G4int operator==(const G4LogicalSkinSurface &right) const;
 	G4int operator!=(const G4LogicalSkinSurface &right) const;
 
 private:
-	// Assignment and copying must be denied.
+
         G4LogicalSkinSurface(const G4LogicalSkinSurface &right);
 	const G4LogicalSkinSurface & operator=(const G4LogicalSkinSurface &right);
+	  // Assignment and copying must be denied.
 
 	// ------------------
 	// Basic data members ( To define a 'logical' surface)
 	// ------------------
+
 private:
-	G4LogicalVolume* LogVolume;	// Logical Volume pointer on side 1
+	G4LogicalVolume* LogVolume;
+	  // Logical Volume pointer on side 1
 
-//	The static Table of Surfaces
   	static G4RWTPtrOrderedVector<G4LogicalSkinSurface> theSurfaceTable;
-//	static G4LogicalSkinSurfaceTable theSurfaceTable;
+	  // The static Table of Surfaces
 
-	size_t theIndexInTable;		// Index of surface in the surface table
+	size_t theIndexInTable;
+	  // Index of surface in the surface table
 
 };
 
@@ -117,5 +113,7 @@ typedef G4RWTPtrOrderedVector<G4LogicalSkinSurface> G4LogicalSkinSurfaceTable;
 ////////////////////
 // Inline methods
 ////////////////////
+
+#include "G4LogicalSkinSurface.icc"
 
 #endif /* G4LogicalSkinSurface_h */

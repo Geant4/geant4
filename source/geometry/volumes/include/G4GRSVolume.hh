@@ -5,17 +5,22 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GRSVolume.hh,v 1.2 1999-12-15 14:50:21 gunter Exp $
+// $Id: G4GRSVolume.hh,v 1.3 2000-04-25 16:15:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// class G4GRSVolume     Paul Kent August 1996
+// class G4GRSVolume
+//
+// Class description:
 //
 // Object representing a touchable detector element - maintains
 // associations between a physical volume and its net resultant
-// local->global transform
+// local->global transform.
 //
 // NOTE: The (optional) rotation matrix is copied
+
+// History:
+// - Created. Paul Kent, August 1996
 
 #ifndef G4GRSVOLUME_HH
 #define G4GRSVOLUME_HH
@@ -28,25 +33,28 @@
 
 class G4GRSVolume : public G4VTouchable
 {
-public:
-  G4GRSVolume(G4VPhysicalVolume *pVol,
-	      const G4RotationMatrix *pRot,
-	      const G4ThreeVector &tlate);
-  G4GRSVolume(G4VPhysicalVolume *pVol,
-	      const G4RotationMatrix &rot,
-	      const G4ThreeVector &tlate);
-  ~G4GRSVolume();
-  G4VPhysicalVolume* GetVolume(G4int depth=0) const;
-  G4VSolid* GetSolid(G4int depth=0) const;
-  const G4ThreeVector& GetTranslation(G4int depth=0) const;
-  const G4RotationMatrix*  GetRotation(G4int depth=0) const;
+  public:  // with description
+
+    G4GRSVolume(G4VPhysicalVolume *pVol,
+	        const G4RotationMatrix *pRot,
+	        const G4ThreeVector &tlate);
+    G4GRSVolume(G4VPhysicalVolume *pVol,
+	        const G4RotationMatrix &rot,
+	        const G4ThreeVector &tlate);
+    ~G4GRSVolume();
+
+    G4VPhysicalVolume* GetVolume(G4int depth=0) const;
+    G4VSolid* GetSolid(G4int depth=0) const;
+    const G4ThreeVector& GetTranslation(G4int depth=0) const;
+    const G4RotationMatrix*  GetRotation(G4int depth=0) const;
   
-private:
+  private:
   
-  G4VPhysicalVolume *fvol;
-  G4RotationMatrix *frot;
-  G4ThreeVector ftlate;
+    G4VPhysicalVolume *fvol;
+    G4RotationMatrix *frot;
+    G4ThreeVector ftlate;
 };
 
 #include "G4GRSVolume.icc"
+
 #endif

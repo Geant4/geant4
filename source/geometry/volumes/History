@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2000-01-20 10:52:16 gcosmo Exp $
+$Id: History,v 1.21 2000-04-25 16:15:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 25th, 2000   G. Cosmo
+
+- Reorganised comments for the Software Reference Manual.
+- Moved inlined definition to .icc files, where needed.
+  Created: G4Transform.icc, G4LogicalBorderSurface.icc
+           and G4LogicalSkinSurface.icc.
 
 January 19th, 2000   G. Cosmo - geomvol-V01-00-00
 

@@ -5,14 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReplicaNavigation.hh,v 1.2 1999-12-15 14:50:24 gunter Exp $
+// $Id: G4ReplicaNavigation.hh,v 1.3 2000-04-25 16:15:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// class G4ReplicaNavigation: Utility for navigation in volumes
-// containing a single G4PVParameterised volume for which voxels for
-// the replicated volumes have been constructed.
-// [Voxels MUST be along one axis only: NOT refined] Paul Kent Aug 96
+// class G4ReplicaNavigation
+//
+// Class description:
+//
+// Utility for navigation in volumes containing a single G4PVParameterised
+// volume for which voxels for the replicated volumes have been constructed.
+// [Voxels MUST be along one axis only: NOT refined]
+
+// History:
+// - Created. Paul Kent, Aug 96
 
 #ifndef G4REPLICANAVIGATION_HH
 #define G4REPLICANAVIGATION_HH
@@ -37,7 +43,8 @@ class G4ReplicaNavigation
 {
   friend class G4ReplicaNavigationTester;
 
-public:
+ public:  // with description
+
   G4ReplicaNavigation();
   G4bool LevelLocate(G4NavigationHistory& history,
 		     const G4VPhysicalVolume *blockedVol,
@@ -89,7 +96,9 @@ public:
 			 const G4int replicaNo,
 			 const G4ThreeVector &localPoint,
 			 const G4ThreeVector &localDirection) const;
-private:
+
+ private:
+
   G4int VoxelLocate(const G4SmartVoxelHeader *pHead,
 		    const G4ThreeVector &localPoint,
 		    const G4int blocked=-1) const;
@@ -110,5 +119,3 @@ private:
 #include "G4ReplicaNavigation.icc"
 
 #endif
-
-

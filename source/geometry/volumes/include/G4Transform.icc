@@ -1,0 +1,152 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4Transform.icc,v 1.1 2000-04-25 16:15:04 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// class G4Transform inline implementation
+
+inline
+G4ThreeVector& G4Transform::Apply(G4ThreeVector& pVec) const
+{
+  if (frotation)
+  {
+    return pVec=frotation->operator*(pVec)+ftranslation;
+  }
+  else
+  {
+    return pVec+=ftranslation;
+  }
+}
+
+inline
+G4ThreeVector& G4Transform::ApplyReverse(G4ThreeVector& pVec) const
+{
+  if (frotation)
+  {
+    return pVec=frotation->inverse()*(pVec-ftranslation);
+  }
+  else
+  {
+    return pVec-=ftranslation;
+  }
+}
+
+inline
+G4ThreeVector G4Transform::Transform(const G4ThreeVector& pVec) const
+{
+  if (frotation)
+  {
+    return frotation->operator*(pVec)+ftranslation;
+  }
+  else
+  {
+    return pVec+ftranslation;
+  }
+}
+
+inline
+G4ThreeVector G4Transform::ReverseTransform(const G4ThreeVector& pVec) const
+{
+  if (frotation)
+  {
+    return frotation->inverse()*(pVec-ftranslation);
+  }
+  else
+  {
+    return pVec-ftranslation;
+  }
+}
+
+inline
+G4ThreeVector G4Transform::ComputeLocalAxis(const G4ThreeVector& pVec) const
+{
+  if (!frotation)
+  {
+    return pVec;
+  }
+  else
+  {
+    return  (*frotation)*pVec; // UNTESTED
+  }
+}
+
+inline
+G4RotationMatrix* G4Transform::GetRotation() const
+{
+  return frotation;
+}
+
+inline
+const G4ThreeVector& G4Transform::GetTranslation() const
+{
+  return ftranslation;
+}
+
+inline
+void G4Transform::SetTranslation(const G4ThreeVector& pVec)
+{
+  ftranslation=pVec;
+}
+
+inline
+void G4Transform::SetRotation(G4RotationMatrix* pRot)
+{
+  frotation=pRot;
+}
+
+inline
+G4Transform& G4Transform::ComputeCompoundTransform(const G4Transform& t1,
+					           const G4Transform& t2,
+					           G4RotationMatrix* pRot)
+{
+  if (!(t1.GetRotation()&&t2.GetRotation()))
+  {
+    SetTranslation(t1.GetTranslation()+t2.GetTranslation());
+    SetRotation(0);
+  }
+  else
+  {
+    pRot=pRot;		// Avoid unuse warning
+    assert(0==1);	// Unimpl 13.7.95
+  }
+  return *this;
+}
+
+inline
+G4Transform&
+G4Transform::ComputeCompoundReverseTransform(const G4Transform& t1,
+					     const G4Transform& t2,
+					     G4RotationMatrix* pRot)
+{
+  if (!(t1.GetRotation()&&t2.GetRotation()))
+  {
+    SetTranslation(t2.GetTranslation()-t1.GetTranslation());
+    SetRotation(0);
+  }
+  else
+  {
+    pRot=pRot;		// Avoid unused warning
+    assert(0==1);	// Unimpl 13.7.95
+  }
+  return *this;
+}
+
+inline
+G4bool G4Transform::IsRotated() const
+{
+  return (!frotation||frotation->isIdentity()) ? false : true;
+}
+
+inline
+G4bool G4Transform::operator == (const G4Transform& t) const
+{
+  return ((GetTranslation()==t.GetTranslation())&&
+	  (   (GetRotation()==t.GetRotation())
+	   || (*GetRotation()==*t.GetRotation()) )) ? true : false;
+}

@@ -5,23 +5,25 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalBorderSurface.hh,v 1.3 1999-12-15 14:50:22 gunter Exp $
+// $Id: G4LogicalBorderSurface.hh,v 1.4 2000-04-25 16:15:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
-// G4LogicalBorderSurface Definition
+// class G4LogicalBorderSurface
 ////////////////////////////////////////////////////////////////////////
 //
-// File:        G4LogicalBorderSurface.hh
-// Description: A Logical Surface class for surfaces defined by the
-//               boundary of two physical volumes.
-// Version:     1.0
+// Class description:
+//
+// A Logical Surface class for surfaces defined by the boundary
+// of two physical volumes.
+
+// History:
+// -------
 // Created:     1997-06-17
 // Author:      John Apostolakis
 // mail:        John.Apostolakis@cern.ch
 // Modified:    1997-06-16  John Apostolakis
 //
-// Id tag:      
 ////////////////////////////////////////////////////////////////////////
 
 #ifndef G4LogicalBorderSurface_h
@@ -50,7 +52,7 @@ class G4LogicalBorderSurface: public G4LogicalSurface
         ////////////////////////////////
         // Constructors and Destructor
         ////////////////////////////////
-public:
+  public:
 
 	G4LogicalBorderSurface(const G4String& name,
 			       G4VPhysicalVolume* vol1, 
@@ -62,44 +64,38 @@ public:
 	////////////
 	// Methods
         ////////////
-public:
-	// public methods
+
+  public:
 
 	static G4LogicalBorderSurface* GetSurface(const G4VPhysicalVolume* vol1,
-					    const G4VPhysicalVolume* vol2);
+					          const G4VPhysicalVolume* vol2);
 
 	void       SetPhysicalVolumes(G4VPhysicalVolume* vol1,
-				      G4VPhysicalVolume* vol2)
-				       { Volume1 = vol1; Volume2 = vol2; }
+				      G4VPhysicalVolume* vol2);
 
-	G4VPhysicalVolume* GetVolume1() const {return Volume1;}
-	G4VPhysicalVolume* GetVolume2() const {return Volume2;}
+	G4VPhysicalVolume* GetVolume1() const;
+	G4VPhysicalVolume* GetVolume2() const;
 
-        // These are potentially dangerous.
-	void		   SetVolume1(G4VPhysicalVolume* vol1)
-						{Volume1 = vol1;}
+	void SetVolume1(G4VPhysicalVolume* vol1);
+	void SetVolume2(G4VPhysicalVolume* vol2);
+          // These are potentially dangerous.
 
-	void		   SetVolume2(G4VPhysicalVolume* vol2)
-						{Volume2 = vol2;}
-
-	//   Methods dealing with the table of surfaces.
-	//
-        static const G4RWTPtrOrderedVector<G4LogicalBorderSurface>* GetSurfaceTable()
-					   { return &theBorderSurfaceTable; }
-        static size_t GetNumberOfBorderSurfaces()
-				   { return theBorderSurfaceTable.length(); }
+        static const G4RWTPtrOrderedVector<G4LogicalBorderSurface>* GetSurfaceTable();
+        static size_t GetNumberOfBorderSurfaces();
 	static void DumpInfo(); 
+	  //   Methods dealing with the table of surfaces.
 
-	size_t GetIndex() const { return theIndexInTable; }
+	size_t GetIndex() const;
 
         //////////////
         // Operators
         //////////////
-public:
+
 	G4int operator==(const G4LogicalBorderSurface &right) const;
 	G4int operator!=(const G4LogicalBorderSurface &right) const;
 
-private:
+  private:
+
         G4LogicalBorderSurface(const G4LogicalBorderSurface &right);
 	const G4LogicalBorderSurface & operator=(const G4LogicalBorderSurface &right);
 
@@ -107,15 +103,16 @@ private:
 	// Basic data members ( To define a 'logical' surface)
 	// ------------------
 
-private:
+  private:
+
 	G4VPhysicalVolume* Volume1;	// Physical Volume pointer on side 1
 	G4VPhysicalVolume* Volume2;	// Physical Volume pointer on side 2
 
-//	The static Table of Surfaces
 	static G4RWTPtrOrderedVector<G4LogicalBorderSurface> theBorderSurfaceTable;
+          // The static Table of Surfaces
 
-	size_t theIndexInTable;		// Index of surface in the surface table
-
+	size_t theIndexInTable;
+          // Index of surface in the surface table
 };
 
 typedef G4RWTPtrOrderedVector<G4LogicalBorderSurface> G4LogicalBorderSurfaceTable;
@@ -123,5 +120,7 @@ typedef G4RWTPtrOrderedVector<G4LogicalBorderSurface> G4LogicalBorderSurfaceTabl
 ////////////////////
 // Inline methods
 ////////////////////
+
+#include "G4LogicalBorderSurface.icc"
 
 #endif /* G4LogicalBorderSurface_h */

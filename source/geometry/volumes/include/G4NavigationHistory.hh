@@ -5,15 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationHistory.hh,v 1.4 1999-12-15 16:40:10 gcosmo Exp $
+// $Id: G4NavigationHistory.hh,v 1.5 2000-04-25 16:15:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4NavigationHistory
 //
-// Responsible for maintenance of the history of the path taken through
-// the geometrical hierarchy. Principally a utility class for use by
-// G4Navigator.
+// Class description:
 //
+// Responsible for maintenance of the history of the path taken through
+// the geometrical hierarchy. Principally a utility class for use by the
+// G4Navigator.
+
 // History:
 //
 // 25.07.96 P.Kent Initial version. Services derived from
@@ -38,7 +40,8 @@ const G4int kHistoryStride=16;   // History increase stride
 
 class G4NavigationHistory
 {
-public:
+ public:  // with description
+
   friend G4std::ostream& operator << (G4std::ostream &os,const G4NavigationHistory &h);
 
   G4NavigationHistory();
@@ -73,11 +76,11 @@ public:
   
   G4NavigationHistory& operator=(const G4NavigationHistory &h);
 
-private:
+ private:
   void EnlargeHistory();
 
-// Depth of stack: effectively depth in geometrical tree
   G4int fStackDepth;
+    // Depth of stack: effectively depth in geometrical tree
 
   G4RWTValVector<G4NavigationLevel>  fNavHistory;
   // G4RWTPtrVector<G4NavigationLevel>  fNavHistory;

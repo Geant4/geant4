@@ -5,14 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationLevel.hh,v 1.10 1999-12-15 16:40:10 gcosmo Exp $
+// $Id: G4NavigationLevel.hh,v 1.11 2000-04-25 16:15:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4NavigationLevel
 //
-// Maintains one level of the geometrical hierarchy. A utility class for use 
-//   by G4NavigationHistory.
+// Class description:
 //
+// Maintains one level of the geometrical hierarchy.
+// A utility class for use by G4NavigationHistory.
+
 // History:
 //
 // 30.09.97 J.Apostolakis Initial version. Services derived from
@@ -33,21 +35,21 @@
 class G4NavigationLevel
 {
 
- public:
+ public:  // with description
+
    G4NavigationLevel(G4VPhysicalVolume*       newPtrPhysVol,
 		     const G4AffineTransform& newT,
 		     EVolume                  newVolTp,
 		     G4int                    newRepNo= -1);
 
-  // As the previous constructor, but instead of giving Transform, give 
-  // the AffineTransform to the level above and the current level's 
-  // Transform relative to that.
-  //
    G4NavigationLevel(G4VPhysicalVolume*       newPtrPhysVol,
 		     const G4AffineTransform& levelAbove,
 		     const G4AffineTransform& relativeCurrent,
 		     EVolume                  newVolTp,
 		     G4int                    newRepNo= -1);
+     // As the previous constructor, but instead of giving Transform, give 
+     // the AffineTransform to the level above and the current level's 
+     // Transform relative to that.
 
    G4NavigationLevel();
    G4NavigationLevel( const G4NavigationLevel& );
@@ -63,23 +65,24 @@ class G4NavigationLevel
    EVolume                  GetVolumeType() const ;
    G4int                    GetReplicaNo() const ;
 
-   //  To try to resolve the possible problem with returning a reference.
-   const G4AffineTransform* GetPtrTransform() const;
+ public:  // without description
 
-   // Override "new" and "delete" to use "G4Allocator".
+   const G4AffineTransform* GetPtrTransform() const;
+     // To try to resolve the possible problem with returning a reference.
+
    inline void *operator new(size_t);
    inline void operator delete(void *aLevel);
+     // Override "new" and "delete" to use "G4Allocator".
 
-   // Pre-allocated 'new' and 'delete' for use with STL 
-   //    - do not (directly) use Allocator              F.Behner/J.Apostolakis
-   inline void *operator new(size_t, void *);       // void*);
+   inline void *operator new(size_t, void *);
 #ifndef G4NOT_ISO_DELETES
    inline void operator delete(void *ptr, void*);  // Not accepted Sun/HP
 #endif
+     // Pre-allocated 'new' and 'delete' for use with STL 
+     // Do not (directly) use Allocator   -   F.Behner/J.Apostolakis
 
- //  Data members: 
- // 
  private:
+
    G4NavigationLevelRep*  fLevelRep;
 };
 

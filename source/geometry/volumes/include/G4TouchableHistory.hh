@@ -5,15 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TouchableHistory.hh,v 1.2 1999-12-15 14:50:25 gunter Exp $
+// $Id: G4TouchableHistory.hh,v 1.3 2000-04-25 16:15:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// class G4TouchableHistory     Paul Kent August 1996
+// class G4TouchableHistory
 //
-// Object representing a touchable detector element, and
-// its history in the geomtrical hierarchy, including
-// its net resultant local->global transform
+// Class description:
+//
+// Object representing a touchable detector element, and its history in the
+// geomtrical hierarchy, including its net resultant local->global transform.
+
+// History:
+// - Created. Paul Kent, August 1996
 
 #ifndef G4TOUCHABLEHISTORY_HH
 #define G4TOUCHABLEHISTORY_HH
@@ -26,37 +30,43 @@
 
 class G4TouchableHistory : public G4VTouchable
 {
-public:
+
+ public:  // with description
+
   G4TouchableHistory(const G4NavigationHistory &history);
-  // The default constructor produces a touchable-history of 
-  //  'zero-depth', ie an "unphysical" and not very unusable one.
-  //  It is for initialisation only .  
   G4TouchableHistory(); 
+    // The default constructor produces a touchable-history of 
+    // 'zero-depth', ie an "unphysical" and not very unusable one.
+    // It is for initialisation only.  
   ~G4TouchableHistory();
+
   G4VPhysicalVolume* GetVolume(G4int depth=0) const;
   G4VSolid* GetSolid(G4int depth=0) const;
   const G4ThreeVector& GetTranslation(G4int depth=0) const;
   const G4RotationMatrix*  GetRotation(G4int depth=0) const;
 
-  // New access methods for touchables with history
   G4int GetReplicaNumber(G4int depth=0) const;
   G4int GetHistoryDepth()  const;
   G4int MoveUpHistory( G4int num_levels = 1 );
-  // void  ResetLevel();  // Set the level to the top level.
+    // Access methods for touchables with history
 
-  // Update methods for touchables with history
-  virtual void  UpdateYourself(     G4VPhysicalVolume*   pPhysVol,
-			      const G4NavigationHistory* history=NULL); 
+  virtual void  UpdateYourself(G4VPhysicalVolume*   pPhysVol,
+			       const G4NavigationHistory* history=NULL); 
+    // Update methods for touchables with history
 
-  // Should this method be "depricated" ?
-  //    it is used now in G4Navigator::LocateGlobalPointAndSetup
-  //
+ public:  // without description
+
   const G4NavigationHistory* GetHistory() const;
+    // Should this method be "depricated" ?
+    // it is used now in G4Navigator::LocateGlobalPointAndSetup
 
-private:
+  // void  ResetLevel();
+       // Set the level to the top level.
+
+ private:
+
   G4int CalculateHistoryIndex(G4int stackDepth) const;
 
-private:
   G4RotationMatrix frot;
   G4ThreeVector ftlate;
   G4NavigationHistory fhistory;
