@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlung.hh,v 1.6 2000-05-23 15:44:01 maire Exp $
+// $Id: G4eBremsstrahlung.hh,v 1.7 2000-08-08 10:26:19 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,6 +24,7 @@
 // 20/03/97: new energy loss+ionisation+brems scheme, L.Urban
 // 01-09-98, new method  PrintInfo() 
 // 10/02/00  modifications , new e.m. structure, L.Urban
+// 07/08/00  new cross section/en.loss parametrisation, LPM flag , L.Urban
 // ------------------------------------------------------------
 
 #ifndef G4eBremsstrahlung_h
@@ -71,7 +72,6 @@ class G4eBremsstrahlung : public G4VeEnergyLoss
      G4double GetLambda(
                    G4double KineticEnergy,G4Material* material);
 
-
   protected:
 
      G4double ComputeMeanFreePath( const G4ParticleDefinition* ParticleType,
@@ -110,6 +110,10 @@ class G4eBremsstrahlung : public G4VeEnergyLoss
 
      G4double ScreenFunction2(G4double ScreenVariable);
 
+     G4double SupressionFunction(const G4Material* aMaterial,
+                                  G4double KineticEnergy,
+                                  G4double GammaEnergy) ;
+
      G4eBremsstrahlung & operator=(const G4eBremsstrahlung &right);
      
      G4eBremsstrahlung(const G4eBremsstrahlung&);
@@ -129,6 +133,9 @@ class G4eBremsstrahlung : public G4VeEnergyLoss
      G4double LowestKineticEnergy,HighestKineticEnergy; // bining of the Eloss table
      G4int    TotBin;                                   // (from G4VeEnergyLoss)
 
+     static G4double probsup ;
+     static G4bool LPMflag ;
+
   public:
 
     static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
@@ -138,9 +145,10 @@ class G4eBremsstrahlung : public G4VeEnergyLoss
     static G4double GetUpperBoundLambda() { return UpperBoundLambda;};
     static G4int GetNbinLambda() {return NbinLambda;};
 
+    static void SetLPMflag(G4bool val) { LPMflag = val ; } ;
+    static G4bool GetLPMflag() { return LPMflag ; } ;
 };
 
 #include "G4eBremsstrahlung.icc"
   
 #endif
- 

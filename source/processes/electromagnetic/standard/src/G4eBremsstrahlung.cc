@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlung.cc,v 1.11 2000-05-23 15:44:29 maire Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.12 2000-08-08 10:28:01 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,7 @@
 // 13-08-98 : new methods SetBining() PrintInfo()
 // 03-03-99 : Bug fixed in LPM effect, L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
+// 07/08/00  new cross section/en.loss parametrisation, LPM flag , L.Urban
 // --------------------------------------------------------------
 
 #include "G4eBremsstrahlung.hh"
@@ -40,6 +41,8 @@
 G4double G4eBremsstrahlung::LowerBoundLambda = 1.*keV ;
 G4double G4eBremsstrahlung::UpperBoundLambda = 100.*TeV ;
 G4int	 G4eBremsstrahlung::NbinLambda = 100 ;
+G4double G4eBremsstrahlung::probsup = 0.50 ;
+G4bool G4eBremsstrahlung::LPMflag = true;  
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -49,7 +52,8 @@ G4int	 G4eBremsstrahlung::NbinLambda = 100 ;
 G4eBremsstrahlung::G4eBremsstrahlung(const G4String& processName)
   : G4VeEnergyLoss(processName),      // initialization
     theMeanFreePathTable(NULL)
-{MinThreshold = 10*keV; }
+{ // MinThreshold = 10*keV; 
+ MinThreshold = 1*keV; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -148,7 +152,6 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
          {
           KineticEnergy = aVector->GetLowEdgeEnergy(i) ;
           TotalEnergy = KineticEnergy+ParticleMass ;
-
           Cut = GammaCutInKineticEnergy[J] ;
           if (Cut < MinThreshold)  Cut = MinThreshold;
           if (Cut > KineticEnergy) Cut = KineticEnergy;
@@ -200,60 +203,30 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
 
             }
 
-           // now compute the correction due to the LPM effect
-           const G4double MigdalConstant = classic_electr_radius*
-                                           electron_Compton_length*
-                                           electron_Compton_length/pi ;
+           // now compute the correction due to the supression(s)
+           G4double kmin = 1.*eV ;
+           G4double kmax = Cut ;
 
-           const G4double LPMconstant = fine_structure_const*electron_mass_c2*
-                                electron_mass_c2/(8.*pi*hbarc) ;
-           const G4double kmin = 1.*eV ;
-           const G4double klim = 1.*keV ;
-
-           G4double LPMEnergy = LPMconstant*(material->GetRadlen()) ;
-           G4double TotalEnergysquare = TotalEnergy*TotalEnergy ;
-           G4double LPMGammaEnergyLimit = TotalEnergysquare/LPMEnergy ;
-
-           if(LPMGammaEnergyLimit > klim)
+           if(kmax > kmin)
            {
-             G4double kmax = G4std::min(Cut,LPMGammaEnergyLimit) ;
 
              G4double floss = 0. ;
-             G4int nmax = 1000 ;
+             G4int nmax = 100 ;
              G4int nn ;
              G4double vmin=log(kmin);
-             G4double vmax=log(Cut) ;
+             G4double vmax=log(kmax) ;
              nn = int(nmax*(vmax-vmin)/(log(HighestKineticEnergy)-vmin)) ;
-             G4double u,uu,s2lpm,sp,fac,c,v,dv,w ;
+             G4double u,fac,c,v,dv ;
              dv = (vmax-vmin)/nn ;
              v = vmin-dv ;
+            if(nn > 0)
+            {
              for(G4int n=0; n<=nn; n++)
              {
                v += dv ;
                u = exp(v) ;
-               uu = u*u ;
-               if(u<=kmax)
-               {
-                 sp=uu/(uu+MigdalConstant*TotalEnergysquare*
-                           (material->GetElectronDensity())) ;
-                 s2lpm=LPMEnergy*u/TotalEnergysquare ;
-                 if(s2lpm<1.)
-                 {
-                   w=s2lpm*(1.+sp) ;
-                   fac=sp*(sqrt(w*w+4.*s2lpm*sp*sp)-w)/
-                          (sqrt(1.+2.*sp+5.*sp*sp)-1.-sp) ;
-                 }
-                 else
-                 {
-                   fac=sp ;
-                 } 
-               }
-               else
-               {
-                 fac=1. ;
-               }
-
-               fac *= uu*u ;
+               
+               fac = u*SupressionFunction(material,KineticEnergy,u) ;
 
                if((n==0)||(n==nn))
                  c=0.5;
@@ -264,13 +237,18 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
                floss += fac ;
              }
 
-             floss *=dv*3./(Cut*Cut*Cut-kmin*kmin*kmin) ;
+             floss *=dv/(kmax-kmin) ;
+ 
+            }
+            else
+             floss = 1. ;
+
              if(floss > 1.) floss = 1. ; 
 
              // correct the loss
              bremloss *= floss ;
           }
-  
+          
           if(bremloss < 0.) bremloss = 0. ;
           aVector->PutValue(i,bremloss);  
         }
@@ -314,72 +292,96 @@ G4double G4eBremsstrahlung::ComputeBremLoss(G4double Z,G4double natom,
                          G4double T,G4double Cut,G4double x)
 
 // compute loss due to soft brems 
-// 'Migdal' version , this is the default in GEANT3 
 {
-  const G4double beta=0.99,ksi=2.51,ve=0.00004 ;
-  const G4double corrfac = classic_electr_radius*electron_Compton_length*electron_Compton_length/pi  ;
+  static const G4double beta=1.00,ksi=2.00  ;
+  static const G4double clossh = 0.254 , closslow = 1./3. , alosslow = 1. ;
+  static const G4double Tlim= 10.*MeV ;
 
-  static const G4double
-  CMbarn[]= {
-    -0.960613e-1, 0.631029e-1,-0.142819e-1, 0.150437e-2,-0.733286e-4, 0.131404e-5,
-     0.859343e-1,-0.529023e-1, 0.131899e-1,-0.159201e-2, 0.926958e-4,-0.208439e-5,
-    -0.684096e+1, 0.370364e+1,-0.786752e0,  0.822670e-1,-0.424710e-2, 0.867980e-4,
-    -0.200856e+1, 0.129573e+1,-0.306533e0,  0.343682e-1,-0.185931e-2, 0.392432e-4, 
-     0.127538e+1,-0.515705e0,  0.820644e-1,-0.641997e-2, 0.245913e-3,-0.365789e-5,
-     0.115792e0, -0.463143e-1, 0.725442e-2,-0.556266e-3, 0.208049e-4,-0.300895e-6};
+  static const G4double xlim = 1.2 ;
+  static const G4int NZ = 8 ;
+  static const G4int Nloss = 11 ;
+  static const G4double ZZ[NZ] =
+        {2.,4.,6.,14.,26.,50.,82.,92.};
+  static const G4double coefloss[NZ][Nloss] = {
+  // Z=2
+        0.98916,        0.47564,        -0.2505,       -0.45186,        0.14462,
+        0.21307,      -0.013738,      -0.045689,     -0.0042914,      0.0034429,
+     0.00064189,
 
-  static const G4double
-  CPbarn[]= {
-    -0.960613e-1, 0.631029e-1,-0.142819e-1, 0.150437e-2,-0.733286e-4, 0.131404e-5,
-     0.859343e-1,-0.529023e-1, 0.131899e-1,-0.159201e-2, 0.926958e-4,-0.208439e-5,
-    -0.271082e-1, 0.173949e-1,-0.452531e-2, 0.569405e-3,-0.344856e-4, 0.803964e-6,
-     0.419855e-2,-0.277188e-2, 0.737658e-3,-0.939463e-4, 0.569748e-5,-0.131737e-6,
-    -0.318752e-3, 0.215144e-3,-0.579787e-4, 0.737972e-5,-0.441485e-6, 0.994726e-8,
-     0.938233e-5,-0.651642e-5, 0.177303e-5,-0.224680e-6, 0.132080e-7,-0.288593e-9};
+  // Z=4
+         1.0626,        0.37662,       -0.23646,       -0.45188,        0.14295,
+        0.22906,      -0.011041,      -0.051398,     -0.0055123,      0.0039919,
+     0.00078003,
+  // Z=6
+         1.0954,          0.315,       -0.24011,       -0.43849,        0.15017,
+        0.23001,      -0.012846,      -0.052555,     -0.0055114,      0.0041283,
+     0.00080318,
 
-  static const G4double
-  CCMbarn[]= {
-    -0.245667e-3, 0.833406e-4,-0.129217e-4, 0.915099e-6,-0.247179e-7,
-     0.147696e-3,-0.498793e-4, 0.402375e-5, 0.989281e-7,-0.133378e-7,
-    -0.737702e-2, 0.333057e-2,-0.553141e-3, 0.402464e-4,-0.107977e-5,
-    -0.641533e-2, 0.290113e-2,-0.477641e-3, 0.342008e-4,-0.900582e-6,
-     0.574303e-5, 0.908521e-4,-0.256900e-4, 0.239921e-5,-0.741271e-7};
+  // Z=14
+         1.1649,        0.18976,       -0.24972,       -0.30124,         0.1555,
+        0.13565,      -0.024765,      -0.027047,    -0.00059821,      0.0019373,
+     0.00027647,
 
-  static const G4double
-  CCPbarn[]= {
-    -0.245667e-3, 0.833406e-4,-0.129217e-4, 0.915099e-6,-0.247179e-7,
-     0.147696e-3,-0.498793e-4, 0.402375e-5, 0.989281e-7,-0.133378e-7,
-    -0.341260e-4, 0.971711e-5,-0.172031e-6,-0.119455e-6, 0.704166e-8,
-     0.341740e-5,-0.775867e-6,-0.653231e-7, 0.225605e-7,-0.114860e-8,
-    -0.119391e-6, 0.194885e-7, 0.588959e-8,-0.127589e-8, 0.608247e-10};
+  // Z=26
+         1.2261,        0.14272,       -0.25672,       -0.28407,        0.13874,
+        0.13586,      -0.020562,      -0.026722,    -0.00089557,      0.0018665,
+     0.00026981,
 
-  G4double CM[36],CP[36],CCM[25],CCP[25]; //Set the unit: barn
-   
-  for (G4int i=0; i<36; i++)    { CM[i] = CMbarn[i]*barn;
-                                  CP[i] = CPbarn[i]*barn;
-                                }
-  for (G4int ii=0; ii<25; ii++) { CCM[ii] = CCMbarn[ii]*barn;
-                                  CCP[ii] = CCPbarn[ii]*barn;
-                                }
-  //  -----------------------------------------------------------
+  // Z=50
+         1.3147,       0.020049,       -0.35543,       -0.13927,        0.17666,
+       0.073746,      -0.036076,      -0.013407,      0.0025727,     0.00084005,
+    -1.4082e-05,
 
-  G4double TotalEnergy = T + electron_mass_c2;
-  G4double y=log(Cut/(ve*TotalEnergy));
+  // Z=82
+         1.3986,       -0.10586,       -0.49187,     -0.0048846,        0.23621,
+       0.031652,      -0.052938,     -0.0076639,      0.0048181,     0.00056486,
+    -0.00011995,
+
+  // Z=92
+         1.4217,         -0.116,       -0.55497,      -0.044075,        0.27506,
+       0.081364,      -0.058143,      -0.023402,      0.0031322,      0.0020201,
+     0.00017519
+
+    } ;
+
+  G4int iz = 0 ;
+  G4double delz = 1.e6 ;
+  for (G4int ii=0; ii<NZ; ii++)
+  {
+    if(abs(Z-ZZ[ii]) < delz)
+    {
+      iz = ii ;
+      delz = abs(Z-ZZ[ii]) ;
+    }
+  }
+
+  G4double xx = log10(T) ;
+  G4double fl = 1. ;
   
+  if(xx <= xlim)
+  {
+	  fl = coefloss[iz][Nloss-1] ;
+		for (G4int j=Nloss-2; j>=0; j--)
+          {
+		  fl = fl*xx+coefloss[iz][j] ;
+          }
+		if(fl < 0.) fl = 0. ;
+  }
+
   G4double loss;
-  
-  if (y <= 0.) loss = ComputeXYPolynomial(x, y, 6, 6, CM)
-                     + Z * ComputeXYPolynomial(x, y, 5, 5, CCM);
-  else         loss = ComputeXYPolynomial(x, y, 6, 6, CP)
-                     + Z * ComputeXYPolynomial(x, y, 5, 5, CCP);
+  G4double E = T+electron_mass_c2 ;
 
-  G4double rate = TotalEnergy/Cut ;
-  G4double corr = 1./(1.+corrfac*natom*rate*rate) ;
+ loss = Z*(Z+ksi)*E*E/(T+E)*exp(beta*log(Cut/T))*(2.-clossh*exp(log(Z)/4.)) ;
 
-  G4double factor = pow(Cut*corr/T,beta);
-  factor *= Z*(Z+ksi)*TotalEnergy*TotalEnergy/(TotalEnergy+electron_mass_c2) ;
+  if(T <= Tlim)
+    loss /= exp(closslow*log(Tlim/T)) ;
 
-  loss   *= factor ;
+  if(T <= Cut)
+    loss *= exp(alosslow*log(T/Cut)) ;
+
+  loss *= fl ;
+
+  loss /= Avogadro ; 
 
   return loss ;
 }
@@ -472,6 +474,67 @@ G4double G4eBremsstrahlung::ComputeMeanFreePath(
                                                      (*theElementVector)(i)->GetZ(), 
                                                      GammaEnergyCut );
       }       
+           // now compute the correction due to the supression(s)
+
+           G4double kmax = KineticEnergy ;
+           G4double kmin = GammaEnergyCut ;
+
+           static const G4double MigdalConstant = classic_electr_radius
+                                                 *electron_Compton_length
+                                                 *electron_Compton_length/pi;
+           G4double TotalEnergy = KineticEnergy+electron_mass_c2 ;
+           G4double kp2 = MigdalConstant*TotalEnergy*TotalEnergy*
+                                     (aMaterial->GetElectronDensity()) ;
+
+           if(kmax > kmin)
+           {
+
+             G4double fsig = 0. ;
+             G4int nmax = 100 ;
+             G4int nn ;
+             G4double vmin=log(kmin);
+             G4double vmax=log(kmax) ;
+             nn = int(nmax*(vmax-vmin)/(log(HighestKineticEnergy)-vmin)) ;
+             G4double u,fac,c,v,dv,y ;
+             dv = (vmax-vmin)/nn ;
+             v = vmin-dv ;
+            if(nn > 0)
+            {
+             for(G4int n=0; n<=nn; n++)
+             {
+               v += dv ;
+               u = exp(v) ;
+              
+               fac = SupressionFunction(aMaterial,KineticEnergy,u) ;
+
+               y = u/kmax ;
+
+               fac *= (4.-4.*y+3.*y*y)/3. ;
+
+               fac *= probsup*(u*u/(u*u+kp2))+1.-probsup ;
+
+               if((n==0)||(n==nn))
+                 c=0.5;
+               else
+                 c=1.;
+
+               fac *= c ;
+               fsig += fac ;
+             }
+            // fsig *=dv/log(kmax/kmin) ;
+             y = kmin/kmax ;
+             fsig *=dv/(-4.*log(y)/3.-4.*(1.-y)/3.+0.5*(1.-y*y)) ;
+
+            }
+            else
+             fsig = 1. ;
+
+             if(fsig > 1.) fsig = 1. ;
+
+             // correct the cross section
+             SIGMA *= fsig ;
+          }
+
 
   return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
 }
@@ -484,165 +547,103 @@ G4double G4eBremsstrahlung::ComputeMicroscopicCrossSection(
                                            G4double GammaEnergyCut)
  
 // Calculates the microscopic cross section in GEANT4 internal units.
-// A parametrized formula from L. Urban is used to estimate the total cross section.
-// This parametrization is derived from :
-//        tabulated cross-section values of Seltzer and Berger below 10 GeV,
-//        screened Bethe Heilter differential cross section above 10 GeV,
-//        Migdal corrections in both case. 
-//  Seltzer & Berger: Nim B 12:95 (1985)
-//  Nelson, Hirayama & Rogers: Technical report 265 SLAC (1985)
-//  Migdal: Phys Rev 103:1811 (1956); Messel & Crawford: Pergamon Press (1970)
 //
-// Above 100 GeV the Cross section is scaled in log(KineticEnergy).
  
 {
  G4double CrossSection = 0.0 ;
  if ( KineticEnergy < 1*keV ) return CrossSection;
  if ( KineticEnergy <= GammaEnergyCut ) return CrossSection;
 
- G4double LocalKineticEnergy = KineticEnergy, LocalGammaEnergyCut = GammaEnergyCut;
+ static const G4double ksi=2.0, alfa=1.00;
+ static const G4double csigh = 0.127, csiglow = 0.25, asiglow = 0.020*MeV ;
+ static const G4double Tlim = 10.*MeV ;
 
- const G4double KinLimitScale = 100.*GeV, CutLimitScale = 50.*GeV;
+  static const G4double xlim = 1.2 ;
+  static const G4int NZ = 8 ;
+  static const G4int Nsig = 11 ;
+  static const G4double ZZ[NZ] =
+        {2.,4.,6.,14.,26.,50.,82.,92.} ;
+  static const G4double coefsig[NZ][Nsig] = {
+  // Z=2
+         0.4638,        0.37748,        0.32249,      -0.060362,      -0.065004,
+      -0.033457,      -0.004583,       0.011954,      0.0030404,     -0.0010077,
+    -0.00028131,
 
+  // Z=4
+        0.50008,        0.33483,        0.34364,      -0.086262,      -0.055361,
+      -0.028168,     -0.0056172,       0.011129,      0.0027528,    -0.00092265,
+    -0.00024348,
 
- const G4double Tlim = 1.*MeV;
- if (KineticEnergy < Tlim) LocalKineticEnergy = Tlim;
+  // Z=6
+        0.51587,        0.31095,        0.34996,       -0.11623,      -0.056167,
+     -0.0087154,     0.00053943,      0.0054092,     0.00077685,    -0.00039635,
+    -6.7818e-05,
 
- if (KineticEnergy > KinLimitScale)
-     { LocalKineticEnergy = KinLimitScale;
-       if (GammaEnergyCut > KinLimitScale) LocalGammaEnergyCut = CutLimitScale;
-     }
+  // Z=14
+        0.55058,        0.25629,        0.35854,      -0.080656,      -0.054308,
+      -0.049933,    -0.00064246,       0.016597,      0.0021789,      -0.001327,
+    -0.00025983,
 
- static const G4double
-      aay0x0= 0.430748E-02*barn, aay0x1= 0.576058E-02*barn, aay0x2=-0.122564E-02*barn,
-      aay0x3= 0.114843E-03*barn, aay0x4=-0.489452E-05*barn, aay0x5= 0.795991E-07*barn;
+  // Z=26
+         0.5791,        0.26152,        0.38953,       -0.17104,      -0.099172,
+       0.024596,       0.023718,     -0.0039205,     -0.0036658,     0.00041749,
+     0.00023408,
 
- static const G4double
-      aay1x0= 0.326746E-02*barn, aay1x1=-0.132872E-02*barn, aay1x2= 0.217197E-03*barn,
-      aay1x3=-0.179769E-04*barn, aay1x4= 0.766114E-06*barn, aay1x5=-0.125603E-07*barn;
+  // Z=50
+        0.62085,        0.27045,        0.39073,       -0.37916,       -0.18878,
+        0.23905,       0.095028,      -0.068744,      -0.023809,      0.0062408,
+      0.0020407,
 
- static const G4double
-      amy2x0= 0.326452E-02*barn, amy2x1=-0.175331E-02*barn, amy2x2= 0.415488E-03*barn,
-      amy2x3=-0.507652E-04*barn, amy2x4= 0.297569E-05*barn, amy2x5=-0.651741E-07*barn;
+  // Z=82
+        0.66053,        0.24513,        0.35404,       -0.47275,       -0.22837,
+        0.35647,        0.13203,        -0.1049,      -0.034851,      0.0095046,
+      0.0030535,
 
- static const G4double
-      amy3x0= 0.847189E-03*barn, amy3x1=-0.433923E-03*barn, amy3x2= 0.116672E-03*barn,
-      amy3x3=-0.166799E-04*barn, amy3x4= 0.110237E-05*barn, amy3x5=-0.263383E-07*barn;
+  // Z=92
+        0.67143,        0.23079,        0.32256,       -0.46248,       -0.20013,
+         0.3506,        0.11779,        -0.1024,      -0.032013,      0.0092279,
+      0.0028592
 
- static const G4double
-      amy4x0= 0.846052E-04*barn, amy4x1=-0.415764E-04*barn, amy4x2= 0.129610E-04*barn,
-      amy4x3=-0.212844E-05*barn, amy4x4= 0.152871E-06*barn, amy4x5=-0.384393E-08*barn;
+    } ;
 
- static const G4double
-      amy5x0= 0.300838E-05*barn, amy5x1=-0.136833E-05*barn, amy5x2= 0.507296E-06*barn,
-      amy5x3=-0.943623E-07*barn, amy5x4= 0.720305E-08*barn, amy5x5=-0.187210E-09*barn;
-
- static const G4double
-      apy2x0= 0.448230E-01*barn, apy2x1=-0.210048E-01*barn, apy2x2= 0.379434E-02*barn,
-      apy2x3=-0.328431E-03*barn, apy2x4= 0.136710E-04*barn, apy2x5=-0.220593E-06*barn;
-
- static const G4double
-      apy3x0=-0.539248E-02*barn, apy3x1= 0.330244E-02*barn, apy3x2=-0.733726E-03*barn,
-      apy3x3= 0.732312E-04*barn, apy3x4=-0.336810E-05*barn, apy3x5= 0.583913E-07*barn;
-
- static const G4double
-      apy4x0=-0.106983E-02*barn, apy4x1= 0.378021E-03*barn, apy4x2=-0.384854E-04*barn,
-      apy4x3= 0.978156E-06*barn, apy4x4= 0.410622E-07*barn, apy4x5=-0.174250E-08*barn;
-
- static const G4double
-      apy5x0=-0.117501E-04*barn, apy5x1=-0.983887E-05*barn, apy5x2= 0.239644E-05*barn,
-      apy5x3=-0.190104E-06*barn, apy5x4= 0.619226E-08*barn, apy5x5=-0.680932E-10*barn;
-
- static const G4double
-      bby0x0= 0.168074E-03*barn, bby0x1=-0.934609E-04*barn, bby0x2= 0.141293E-04*barn,
-      bby0x3=-0.854216E-06*barn, bby0x4= 0.183287E-07*barn;
-
- static const G4double
-      bby1x0= 0.932144E-04*barn, bby1x1=-0.234926E-04*barn, bby1x2= 0.136656E-05*barn,
-      bby1x3= 0.351109E-07*barn, bby1x4=-0.330189E-08*barn;
-
- static const G4double
-      bmy2x0= 0.174523E-04*barn, bmy2x1= 0.253854E-05*barn, bmy2x2=-0.171643E-05*barn,
-      bmy2x3= 0.183074E-06*barn, bmy2x4=-0.566331E-08*barn;
-
- static const G4double
-      bmy3x0= 0.111970E-05*barn, bmy3x1= 0.112776E-05*barn, bmy3x2=-0.386924E-06*barn,
-      bmy3x3= 0.367597E-07*barn, bmy3x4=-0.108504E-08*barn;
-
- static const G4double
-      bmy4x0= 0.171604E-07*barn, bmy4x1= 0.738801E-07*barn, bmy4x2=-0.218761E-07*barn,
-      bmy4x3= 0.199032E-08*barn, bmy4x4=-0.576173E-10*barn;
-
- static const G4double
-      bpy2x0=-0.105531E-03*barn, bpy2x1= 0.362995E-04*barn, bpy2x2=-0.433334E-05*barn,
-      bpy2x3= 0.207664E-06*barn, bpy2x4=-0.330250E-08*barn;
-
- static const G4double
-      bpy3x0=-0.168293E-05*barn, bpy3x1=-0.773204E-06*barn, bpy3x2= 0.227974E-06*barn,
-      bpy3x3=-0.159385E-07*barn, bpy3x4= 0.321958E-09*barn;
-
- static const G4double
-      bpy4x0= 0.167046E-05*barn, bpy4x1=-0.440761E-06*barn, bpy4x2= 0.396377E-07*barn,
-      bpy4x3=-0.151053E-08*barn, bpy4x4= 0.215624E-10*barn;
-
- static const G4double ksi=1.8, alfa=0.98, vs= 1.E-4;
-
- G4double TotalEnergy = LocalKineticEnergy + electron_mass_c2;
- G4double X = log(TotalEnergy/electron_mass_c2),  X2=X*X, X3=X2*X, X4=X3*X, X5=X4*X;
- G4double Y = log(vs*TotalEnergy/LocalGammaEnergyCut), Y2=Y*Y, Y3=Y2*Y, Y4=Y3*Y, Y5=Y4*Y;
-
- G4double ay0, ay1, ay2, ay3, ay4, ay5, by0, by1, by2, by3, by4;
- if (Y < 0.) {
-    ay0 = aay0x0 + aay0x1*X + aay0x2*X2 + aay0x3*X3 + aay0x4*X4 + aay0x5*X5;
-    ay1 = aay1x0 + aay1x1*X + aay1x2*X2 + aay1x3*X3 + aay1x4*X4 + aay1x5*X5;
-    ay2 = amy2x0 + amy2x1*X + amy2x2*X2 + amy2x3*X3 + amy2x4*X4 + amy2x5*X5;
-    ay3 = amy3x0 + amy3x1*X + amy3x2*X2 + amy3x3*X3 + amy3x4*X4 + amy3x5*X5;
-    ay4 = amy4x0 + amy4x1*X + amy4x2*X2 + amy4x3*X3 + amy4x4*X4 + amy4x5*X5;
-    ay5 = amy5x0 + amy5x1*X + amy5x2*X2 + amy5x3*X3 + amy5x4*X4 + amy5x5*X5;
-
-    by0 = bby0x0 + bby0x1*X + bby0x2*X2 + bby0x3*X3 + bby0x4*X4;
-    by1 = bby1x0 + bby1x1*X + bby1x2*X2 + bby1x3*X3 + bby1x4*X4;
-    by2 = bmy2x0 + bmy2x1*X + bmy2x2*X2 + bmy2x3*X3 + bmy2x4*X4;
-    by3 = bmy3x0 + bmy3x1*X + bmy3x2*X2 + bmy3x3*X3 + bmy3x4*X4;
-    by4 = bmy4x0 + bmy4x1*X + bmy4x2*X2 + bmy4x3*X3 + bmy4x4*X4;
-  }
- else {
-    ay0 = aay0x0 + aay0x1*X + aay0x2*X2 + aay0x3*X3 + aay0x4*X4 + aay0x5*X5;
-    ay1 = aay1x0 + aay1x1*X + aay1x2*X2 + aay1x3*X3 + aay1x4*X4 + aay1x5*X5;
-    ay2 = apy2x0 + apy2x1*X + apy2x2*X2 + apy2x3*X3 + apy2x4*X4 + apy2x5*X5;
-    ay3 = apy3x0 + apy3x1*X + apy3x2*X2 + apy3x3*X3 + apy3x4*X4 + apy3x5*X5;
-    ay4 = apy4x0 + apy4x1*X + apy4x2*X2 + apy4x3*X3 + apy4x4*X4 + apy4x5*X5;
-    ay5 = apy5x0 + apy5x1*X + apy5x2*X2 + apy5x3*X3 + apy5x4*X4 + apy5x5*X5;
-
-    by0 = bby0x0 + bby0x1*X + bby0x2*X2 + bby0x3*X3 + bby0x4*X4;
-    by1 = bby1x0 + bby1x1*X + bby1x2*X2 + bby1x3*X3 + bby1x4*X4;
-    by2 = bpy2x0 + bpy2x1*X + bpy2x2*X2 + bpy2x3*X3 + bpy2x4*X4;
-    by3 = bpy3x0 + bpy3x1*X + bpy3x2*X2 + bpy3x3*X3 + bpy3x4*X4;
-    by4 = bpy4x0 + bpy4x1*X + bpy4x2*X2 + bpy4x3*X3 + bpy4x4*X4;
+  G4int iz = 0 ;
+  G4double delz = 1.e6 ;
+  for (G4int ii=0; ii<NZ; ii++)
+  {
+    if(abs(AtomicNumber-ZZ[ii]) < delz)
+    {
+      iz = ii ;
+      delz = abs(AtomicNumber-ZZ[ii]) ;
+    }
   }
 
- G4double F0 = ay0 + ay1*Y + ay2*Y2 + ay3*Y3 + ay4*Y4 + ay5*Y5,
-          F1 = by0 + by1*Y + by2*Y2 + by3*Y3 + by4*Y4;
+  G4double xx = log10(KineticEnergy) ;
+  G4double fs = 1. ;
+  
+  if(xx <= xlim)
+  {
+	  fs = coefsig[iz][Nsig-1] ;
+		for (G4int j=Nsig-2; j>=0; j--)
+          {
+		  fs = fs*xx+coefsig[iz][j] ;
+          }
+		if(fs < 0.) fs = 0. ;
+  }
 
- CrossSection = AtomicNumber*(AtomicNumber+ksi)*TotalEnergy*TotalEnergy
-               * pow(log(LocalKineticEnergy/LocalGammaEnergyCut),alfa)
-               * (F0 + F1*AtomicNumber)
-               / (LocalKineticEnergy*(LocalKineticEnergy+2*electron_mass_c2));
+
+ CrossSection = AtomicNumber*(AtomicNumber+ksi)*
+                (1.-csigh*exp(log(AtomicNumber)/4.))*
+                 pow(log(KineticEnergy/GammaEnergyCut),alfa) ;
+
+ if(KineticEnergy <= Tlim)
+     CrossSection *= exp(csiglow*log(Tlim/KineticEnergy))*
+                     (1.+asiglow/(sqrt(AtomicNumber)*KineticEnergy)) ;
 
  if (ParticleType == G4Positron::Positron())
-     CrossSection *= ComputePositronCorrFactorSigma(AtomicNumber, LocalKineticEnergy,
-                                                             LocalGammaEnergyCut);
-
- if (KineticEnergy < Tlim) CrossSection *= log(KineticEnergy/GammaEnergyCut)
-                                          /log(Tlim/GammaEnergyCut);
-
-
- // now comes the scaling above 100GeV
- if (KineticEnergy > KinLimitScale)
-     { G4double X1 = GammaEnergyCut/KineticEnergy, 
-                X2 = LocalGammaEnergyCut/LocalKineticEnergy;
-       CrossSection *= (-log(X1) -2./3. + X1 - X1*X1/3.)/(-log(X2) -2./3. + X2 - X2*X2/3.);
-     }
+     CrossSection *= ComputePositronCorrFactorSigma(AtomicNumber, KineticEnergy,
+                                                             GammaEnergyCut);
+ CrossSection *= fs ;
+ CrossSection /= Avogadro ;
 
  if (CrossSection < 0.) CrossSection = 0.;
  return CrossSection;
@@ -742,6 +743,8 @@ G4VParticleChange* G4eBremsstrahlung::PostStepDoIt(const G4Track& trackData,
                                         *electron_Compton_length/pi;
   const G4double LPMconstant = fine_structure_const*electron_mass_c2*
                                 electron_mass_c2/(8.*pi*hbarc) ;
+   G4double GammaEnergy ;
+   G4bool LPMOK = false ;
 
    aParticleChange.Initialize(trackData);
    G4Material* aMaterial=trackData.GetMaterial() ;
@@ -780,12 +783,12 @@ G4VParticleChange* G4eBremsstrahlung::PostStepDoIt(const G4Track& trackData,
    G4double TotalEnergy = KineticEnergy + electron_mass_c2;
    G4double TotalEnergysquare = TotalEnergy*TotalEnergy ;
    G4double LPMGammaEnergyLimit = TotalEnergysquare/LPMEnergy ;
-
    G4double xmin = GammaEnergyCut/KineticEnergy, epsilmin = GammaEnergyCut/TotalEnergy;
    G4double epsilmax = KineticEnergy/TotalEnergy;
 
    // Migdal factor
-   G4double MigdalFactor = (aMaterial->GetElectronDensity())*MigdalConstant
+   G4double   
+     MigdalFactor = (aMaterial->GetElectronDensity())*MigdalConstant
                           /(epsilmax*epsilmax);
 
    //
@@ -796,6 +799,7 @@ G4VParticleChange* G4eBremsstrahlung::PostStepDoIt(const G4Track& trackData,
    //  sample the energy rate of the emitted gamma for electron kinetic energy > 1 MeV
    //
 
+  do {
    if (KineticEnergy > 1.*MeV) 
      {
        // parameters
@@ -823,6 +827,7 @@ G4VParticleChange* G4eBremsstrahlung::PostStepDoIt(const G4Track& trackData,
        // sample the energy rate of the emitted Gamma 
        G4double screenvar;
 
+      
        do {
 
              x = pow(xmin, G4UniformRand());  
@@ -865,21 +870,24 @@ G4VParticleChange* G4eBremsstrahlung::PostStepDoIt(const G4Track& trackData,
         }  while( greject < G4UniformRand()*grejmax );
    }
 
-   G4double GammaEnergy = x*KineticEnergy; 
+   GammaEnergy = x*KineticEnergy; 
 
-   // now comes the supression due to the LPM effect
-   if(GammaEnergy < LPMGammaEnergyLimit)
+   if(LPMflag)
    {
-     G4double S2LPM = LPMEnergy*GammaEnergy/TotalEnergysquare ;
-     G4double Spol  = GammaEnergy*GammaEnergy/(GammaEnergy*GammaEnergy +
-                      MigdalConstant*(aMaterial->GetElectronDensity())*
-                      TotalEnergysquare) ;
-     G4double w=S2LPM*(1.+Spol) ;
-     G4double Supr=Spol*(sqrt(w*w+4.*S2LPM*Spol*Spol)-w)/
-                   (sqrt(1.+2.*Spol+5.*Spol*Spol)-1.-Spol) ;
-     if (G4UniformRand() > Supr)
-       GammaEnergy = 0. ;
+     // take into account the supression due to the LPM effect
+     if(GammaEnergy < LPMGammaEnergyLimit)
+     {
+       if (G4UniformRand() <= SupressionFunction(aMaterial,KineticEnergy,GammaEnergy))
+        LPMOK = true ;
+     }
+     else
+       LPMOK = true ;
    }
+   else
+     LPMOK = true ;
+
+  } while (!LPMOK) ;
+
 
    //protection: DO NOT PRODUCE a gamma with energy 0. !
    if (GammaEnergy <= 0.) 
@@ -953,10 +961,65 @@ G4Element* G4eBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+
+G4double G4eBremsstrahlung::SupressionFunction(const G4Material* aMaterial,
+                              G4double KineticEnergy,G4double GammaEnergy)
+{
+  // supression due to the LPM effect+polarisation of the medium/
+  //   supression due to the polarisation alone
+  const G4double MigdalConstant = classic_electr_radius*
+                                  electron_Compton_length*
+                                  electron_Compton_length/pi ;
+
+  const G4double LPMconstant = fine_structure_const*electron_mass_c2*
+                               electron_mass_c2/(8.*pi*hbarc) ;
+  G4double TotalEnergy,TotalEnergySquare,LPMEnergy,LPMGammaEnergyLimit,
+           LPMGammaEnergyLimit2,GammaEnergySquare,sp,s2lpm,supr,w,splim,Cnorm ;
+
+  TotalEnergy = KineticEnergy+electron_mass_c2 ;
+  TotalEnergySquare = TotalEnergy*TotalEnergy ;
+
+  LPMEnergy = LPMconstant*(aMaterial->GetRadlen()) ;
+  LPMGammaEnergyLimit = TotalEnergySquare/LPMEnergy ;
+  GammaEnergySquare = GammaEnergy*GammaEnergy ;
+
+  LPMGammaEnergyLimit2 = LPMGammaEnergyLimit*LPMGammaEnergyLimit ;
+  splim = LPMGammaEnergyLimit2/(LPMGammaEnergyLimit2+MigdalConstant*TotalEnergySquare*
+                                     (aMaterial->GetElectronDensity())) ;
+  w = 1.+1./splim ;
+  Cnorm = 2./(sqrt(w*w+4.)-w) ;
+
+  sp = GammaEnergySquare/(GammaEnergySquare+MigdalConstant*TotalEnergySquare*
+                                     (aMaterial->GetElectronDensity())) ;
+  if(LPMflag)
+  {
+    s2lpm = LPMEnergy*GammaEnergy/TotalEnergySquare ;
+
+    if(s2lpm < 1.)
+    {
+      w = s2lpm*(1.+1./sp) ;
+      supr = Cnorm*(sqrt(w*w+4.*s2lpm)-w)/2. ;
+    }
+    else
+    {
+      supr = sp ;
+    }
+  }
+  else
+    supr = sp ;
+
+  supr /= sp ;
+
+  return supr ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4eBremsstrahlung::PrintInfoDefinition()
 {
-  G4String comments = "Total cross sections from a parametrisation. ";
-           comments += "Good description from 10 KeV to 100 GeV.\n";
+  G4String comments = "Total cross sections from a NEW parametrisation based on the EEDL data library. ";
+          // comments += "Good description from 10 KeV to 100 GeV.\n";
+           comments += "\n Good description from 1 KeV to 100 GeV.\n";
            comments += "        log scale extrapolation above 100 GeV \n";
            comments += "        Gamma energy sampled from a parametrised formula.";
                      
