@@ -1,4 +1,3 @@
-#ifdef G4ANALYSIS_USE
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -21,8 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+#ifdef G4ANALYSIS_USE
 //
-// $Id: GammaRayTelAnalysis.cc,v 1.18 2003-06-16 16:46:22 gunter Exp $
+// $Id: GammaRayTelAnalysis.cc,v 1.19 2003-06-25 10:18:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

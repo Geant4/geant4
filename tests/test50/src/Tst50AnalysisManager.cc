@@ -1,4 +1,3 @@
-
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -28,7 +27,7 @@
 //    *******************************
 //
 
-// $Id: Tst50AnalysisManager.cc,v 1.21 2003-06-16 17:16:06 gunter Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.22 2003-06-25 10:20:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //

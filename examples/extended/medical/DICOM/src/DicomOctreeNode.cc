@@ -1,3 +1,5 @@
+//
+// ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
 // * The following disclaimer summarizes all the specific disclaimers *
@@ -16,7 +18,6 @@
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
-// ********************************************************************
 // ********************************************************************
 //
 // The code was written by :
