@@ -150,7 +150,7 @@ int main(int argc, char** argv)
         if (e1 == 0.0) {
           enddata = false;
           end = false;
-	}
+	      }
 
         if((x == 0.0 && an/degree > 10.) || !enddata) {
           cs.push_back(cross);
@@ -161,9 +161,9 @@ int main(int argc, char** argv)
             for(i=0; i<nbin; i++) {
                (*fout_c) << "e(MeV)= " << 0.5*((*energy)[i] + (*energy)[i+1]) 
                          << " cross(mb/MeV/sr)= " << (*cross)[i] << endl;
-	    }
+	          }
           }  
-	}
+	      }
 
 	// new data
         if(x == 0.0) {

@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-100000
+20000
 //--------Proton_processes
 #particle
 proton
@@ -41,7 +41,7 @@ Al
 LEparametrisation
 #paw
 par.paw
-#run
+//#run
 #generator
 preCompound
 #paw
@@ -51,11 +51,11 @@ prec.paw
 CHIPS
 #paw
 chips.paw
-#run
+//#run
 #generator
 kinetic
 #paw
 kin.paw
-//#run
+#run
 //--------Exit
 #exit
