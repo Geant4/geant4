@@ -28,6 +28,7 @@ persistency                 Youhei.Morita@cern.ch           Youhei Morita
 processes                   Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/electromagnetic           Michel.Maire@cern.ch            Michel Maire
 "/"/lowenergy               Maria.Grazia.Pia@cern.ch        Maria Grazia Pia
+                            pniemine@estec.esa.nl           Petteri Nieminen
 "/decay                     kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 "/hadronic                  Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/"/cross_sections          fwj@Triumf.CA                   Fred Jones
@@ -103,6 +104,7 @@ tests/test11                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 tests/test12                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 tests/test13                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 tests/test14                Maria.Grazia.Pia@cern.ch        Maria Grazia Pia
+                            pniemine@estec.esa.nl           Petteri Nieminen
 tests/test15                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 tests/test16                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 tests/test17                (not currently used - see tests/GNUmakefile)
