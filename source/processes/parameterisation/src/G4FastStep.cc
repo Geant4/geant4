@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastStep.cc,v 1.3 1999-04-19 14:27:51 mora Exp $
+// $Id: G4FastStep.cc,v 1.4 1999-05-11 14:29:38 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //$Id:
@@ -416,34 +416,61 @@ void G4FastStep::DumpInfo() const
 
 G4bool G4FastStep::CheckIt(const G4Track& aTrack)
 {
-  G4bool    itsOK = true;
+  //
+  //      In the G4FastStep::CheckIt
+  //      We only check a bit
+  //      
+  //      If the user violates the energy,
+  //      We don't care, we agree.
+  //
+  //      But for theMomentumDirectionChange,
+  //      We do pay attention.
+  //      And if too large is its range,
+  //      We issue an Exception.
+  //
+  //
+  // It means, the G4FastStep::CheckIt issues an exception only for the
+  // theMomentumDirectionChange which should be an unit vector
+  // and it corrects it because it could cause problems for the ulterior
+  // tracking.For the rest, only warning are issued.
 
-  itsOK = G4VParticleChange::CheckIt(aTrack);
-  if (theEnergyChange > aTrack.GetKineticEnergy()) {
-    G4cout << " !!! the energy becomes larger than the initial energy !!!"
-	   << " :  " << (theEnergyChange -aTrack.GetKineticEnergy())/MeV
-	   << "MeV " <<endl;
+  G4bool    itsOK = true;
+  G4bool    exitWithError = false;
+  G4double  accuracy;
+  
+  if (theEnergyChange > aTrack.GetKineticEnergy() * (1.0 - accuracyForWarning)) {
+    G4cout << "  G4FastStep::CheckIt    : ";
+    G4cout << "the energy becomes larger than the initial energy !!"
+	   << " Difference :  " << (theEnergyChange -aTrack.GetKineticEnergy())/MeV
+	   << "[MeV] " <<endl;
     itsOK = false;
   }
-  if ( (theEnergyChange >0.) && 
-       ( abs(theMomentumChange.mag2()-1.0) > 1.0e-5 ) ){
-    G4cout << " !!! the Momentum Change is not unit vector !!!!"
-	   << " :  " << theMomentumChange.mag()
-	   << endl;
+
+  G4bool itsOKforMomentum = true;
+  if ( theEnergyChange >0.) {
+    accuracy = abs(theMomentumChange.mag2()-1.0);
+    if (accuracy > accuracyForWarning) {
+      G4cout << "  G4FastStep::CheckIt    : ";
+      G4cout << "the Momentum Change is not unit vector !!"
+	     << "  Difference:  " << accuracy << endl;
+      itsOK = itsOKforMomentum = false;
+      if (accuracy > accuracyForException) exitWithError = true;
+    }
+  }
+  
+  accuracy = (aTrack.GetGlobalTime()- theTimeChange)/ns;  
+  if (accuracy > accuracyForWarning) {
+    G4cout << "  G4FastStep::CheckIt    : ";
+    G4cout << "the global time goes back  !!"
+	   << " Difference:  " << accuracy << "[ns] " <<endl;
     itsOK = false;
   }
-  if (theTimeChange < aTrack.GetGlobalTime()) {
-    G4cout << " !!! the global time goes back  !!!"
-	   << " :  " << aTrack.GetGlobalTime()/ns
-	   << " -> " << theTimeChange/ns
-	   << "[ns] " <<endl;
-    itsOK = false;
-  }
-  if (theProperTimeChange < aTrack.GetProperTime()) {
-    G4cout << " !!! the proper time goes back  !!!"
-	   << " :  " << aTrack.GetProperTime()/ns
-	   << " -> " << theProperTimeChange/ns
-	   << "[ns] " <<endl;
+  
+  accuracy = (aTrack.GetProperTime() - theProperTimeChange )/ns;
+  if (accuracy) {
+    G4cout << "  G4FastStep::CheckIt    : ";
+    G4cout << "the proper time goes back  !!"
+	   << " Difference:  " <<  accuracy  << "[ns] " <<endl;
     itsOK = false;
   }
   
@@ -452,5 +479,16 @@ G4bool G4FastStep::CheckIt(const G4Track& aTrack)
     G4cout << " pointer : " << this <<endl ;
     DumpInfo();
   }
+  
+  // Exit with error
+  if (exitWithError) G4Exception("G4ParticleChange::CheckIt");
+
+  //correction for Momentum only.
+  if (!itsOKforMomentum) {
+    G4double vmag = theMomentumChange.mag();
+    theMomentumChange = (1./vmag)*theMomentumChange;
+  }
+
+  itsOK = (itsOK) && G4VParticleChange::CheckIt(aTrack); 
   return itsOK;
 }
