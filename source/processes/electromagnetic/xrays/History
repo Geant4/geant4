@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2000-05-24 15:41:43 maire Exp $
+$Id: History,v 1.2 2000-08-03 08:45:15 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 aug 00: gc  (xrays-V02-00-00r)
+- G4Scintillation.cc: changed RandGauss to G4RandGauss for fixing
+  events' reproducibility problem.
      
 24 may 00: mma  (xrays-V01-01-02)  
      

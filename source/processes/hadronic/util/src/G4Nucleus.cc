@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Nucleus.cc,v 1.4 1999-12-15 14:53:40 gunter Exp $
+// $Id: G4Nucleus.cc,v 1.5 2000-08-03 08:50:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // original by H.P. Wellisch
@@ -195,8 +195,8 @@
     
     if( G4int(zEff+0.1) != 82 )
     { 
-      //G4double ran1 = RandGauss::shoot();
-      //G4double ran2 = RandGauss::shoot();
+      //G4double ran1 = G4RandGauss::shoot();
+      //G4double ran2 = G4RandGauss::shoot();
       G4double ran1 = -6.0;
       G4double ran2 = -6.0;
       for( G4int i=0; i<12; ++i )

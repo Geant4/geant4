@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LCapture.cc,v 1.3 1999-12-15 14:53:07 gunter Exp $
+// $Id: G4LCapture.cc,v 1.4 2000-08-03 08:49:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -95,7 +95,7 @@ G4LCapture::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
 
 // Make a gamma...
 
-   G4double ran = RandGauss::shoot();
+   G4double ran = G4RandGauss::shoot();
    G4double p = 0.0065 + ran*0.0010;
 
    G4double ran1 = G4UniformRand();

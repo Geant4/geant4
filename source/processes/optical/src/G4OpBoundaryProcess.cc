@@ -326,7 +326,7 @@ G4OpBoundaryProcess::GetFacetNormal(const G4ThreeVector& Momentum,
 
 	   do {
 	      do {
-	         alpha = RandGauss::shoot(0.0,sigma_alpha);
+	         alpha = G4RandGauss::shoot(0.0,sigma_alpha);
 	      } while (G4UniformRand()*f_max > sin(alpha) || alpha >= halfpi );
 
 	      G4double phi = G4UniformRand()*twopi;

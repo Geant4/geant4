@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LFission.cc,v 1.3 1999-12-15 14:53:09 gunter Exp $
+// $Id: G4LFission.cc,v 1.4 2000-08-03 08:49:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -129,10 +129,10 @@ G4LFission::ApplyYourself(const G4Track & aTrack,G4Nucleus & targetNucleus)
 // Average number of gammas
    G4double averg = 9.500 + 0.600*log(e1);
 
-   G4double ran = RandGauss::shoot();
+   G4double ran = G4RandGauss::shoot();
 // Number of neutrons
    G4int nn = avern + ran*1.23 + 0.5;
-   ran = RandGauss::shoot();
+   ran = G4RandGauss::shoot();
 // Number of gammas
    G4int ng = averg + ran*3. + 0.5;
    if (nn < 1) nn = 1;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scintillation.cc,v 1.3 1999-12-15 14:52:05 gunter Exp $
+// $Id: G4Scintillation.cc,v 1.4 2000-08-03 08:43:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -118,7 +118,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	G4double MeanNumPhotons = ScintillationYield * TotalEnergyDeposit;
 
 	G4int NumPhotons = (G4int) MeanNumPhotons +
-             int( ResolutionScale * RandGauss::shoot(0.0,sqrt(MeanNumPhotons)));
+             int( ResolutionScale * G4RandGauss::shoot(0.0,sqrt(MeanNumPhotons)));
 
 	if (NumPhotons <= 0) {
 
