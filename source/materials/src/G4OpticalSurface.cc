@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.cc,v 1.7 2001-10-17 07:59:54 gcosmo Exp $
+// $Id: G4OpticalSurface.cc,v 1.8 2003-11-28 00:29:59 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,21 +50,21 @@
         // Operators
         //////////////
 
-const G4OpticalSurface& 
-      G4OpticalSurface::operator=(const G4OpticalSurface& right)
-{
-  if (this != &right)
-    {
-      theName                    = right.theName;
-      theModel                   = right.theModel;
-      theFinish                  = right.theFinish;
-      theType                    = right.theType;
-      sigma_alpha                = right.sigma_alpha;
-      polish                     = right.polish;
-      theMaterialPropertiesTable = right.theMaterialPropertiesTable;
-     } 
-  return *this;
-}
+//const G4OpticalSurface& 
+//      G4OpticalSurface::operator=(const G4OpticalSurface& right)
+//{
+//  if (this != &right)
+//    {
+//      theName                    = right.theName;
+//      theModel                   = right.theModel;
+//      theFinish                  = right.theFinish;
+//      theType                    = right.theType;
+//      sigma_alpha                = right.sigma_alpha;
+//      polish                     = right.polish;
+//      theMaterialPropertiesTable = right.theMaterialPropertiesTable;
+//     } 
+//  return *this;
+//}
 
         /////////////////
         // Constructors
@@ -73,13 +73,12 @@ const G4OpticalSurface&
 G4OpticalSurface::G4OpticalSurface(const G4String& name,
 				   G4OpticalSurfaceModel model,
 				   G4OpticalSurfaceFinish finish,
-				   G4OpticalSurfaceType type,
+				   G4SurfaceType type,
 				   G4double value)
-					: theName(name),
-		  			  theModel(model),
-		  			  theFinish(finish),
-		  			  theType(type),
-		  			  theMaterialPropertiesTable(0)
+                                   : G4SurfaceProperty(name,type),
+				     theModel(model),
+				     theFinish(finish),
+				     theMaterialPropertiesTable(0)
 {
 	if (model == glisur ){
 		polish = value;
@@ -95,10 +94,10 @@ G4OpticalSurface::G4OpticalSurface(const G4String& name,
 	}
 }
 
-G4OpticalSurface::G4OpticalSurface(const G4OpticalSurface &right)
-{
-	*this = right;
-}
+//G4OpticalSurface::G4OpticalSurface(const G4OpticalSurface &right)
+//{
+//	*this = right;
+//}
 
 G4OpticalSurface::~G4OpticalSurface(){}
 
