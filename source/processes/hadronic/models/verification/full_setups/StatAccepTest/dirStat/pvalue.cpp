@@ -1,5 +1,5 @@
 //========================================================================
-// 20-July-2004            Program  pvalue.cpp
+//                         Program  pvalue.cpp
 //                         -------------------
 // This program reads in input two HBOOK files: 
 //          1)  ntuple_a.hbook 
@@ -57,7 +57,7 @@
 
 using namespace StatisticsTesting; 
 
-const double pvalueThreshold = 0.05;   // A p-value below this threshold is
+const double pvalueThreshold = 0.01;   // A p-value below this threshold is
                                        // considered as a "warning" that the
                                        // two distributions are not coming
                                        // from the same parent.
@@ -520,111 +520,97 @@ int main (int, char **) {
   treeHBookAout->commit();
   treeHBookBout->commit();
   
-  // -----------------------------------------------------------------
-  // Do the statistical tests: first binned tests, then unbinned ones.
-  // -----------------------------------------------------------------
-
-  // ---  I : binned tests   --- 
+  // ------------------------
+  // Do the statistical tests
+  // ------------------------
 
   StatisticsComparator< Chi2ComparisonAlgorithm > comparatorBin;                    
   // StatisticsComparator< CramerVonMisesBinnedComparisonAlgorithm > comparatorBin;
   // StatisticsComparator< AndersonDarlingBinnedComparisonAlgorithm > comparatorBin;
-  
-  std::cout << " ------------ Binned tests ------------- " << std::endl;
-  
-  std::cout << " \t ***  Chi2 test  *** " << std::endl;
-  
-  ComparisonResult resultBin1 = comparatorBin.compare( cA1bis->histogram(), 
-						       cB1bis->histogram() );
-  std::cout << " 1)"  
-	    << "  d=" << resultBin1.distance()
-	    << "  ndf=" << resultBin1.ndf() 
-	    << "  pvalue=" << resultBin1.quality();
-  if ( resultBin1.quality() < pvalueThreshold )  std::cout << "\t ***WARNING***";
-  std::cout << std::endl;
-      
-  ComparisonResult resultBin2 = comparatorBin.compare( cA2bis->histogram(), 
-						       cB2bis->histogram() );
-  std::cout << " 2)"  
-	    << "  d=" << resultBin2.distance()
-	    << "  ndf=" << resultBin2.ndf() 
-	    << "  pvalue=" << resultBin2.quality(); 
-  if ( resultBin2.quality() < pvalueThreshold )  std::cout << "\t ***WARNING***";
-  std::cout << std::endl;
-  
-  std::vector< ComparisonResult > resultBinL;
-  for ( int i = 0; i < numberOfReplicas; i++ ) {
-    ComparisonResult resultBinLvalue = comparatorBin.compare( cALbis[i]->histogram(),
-  							      cBLbis[i]->histogram() );
-    resultBinL.push_back( resultBinLvalue );
-    std::cout << " L[" << i << "]"   
-  	      << "  d=" << resultBinLvalue.distance()
-  	      << "  ndf=" << resultBinLvalue.ndf() 
-  	      << "  pvalue=" << resultBinLvalue.quality();
-    if ( resultBinLvalue.quality() < pvalueThreshold )  std::cout << "\t ***WARNING***";
-    std::cout << std::endl;
-  }
-  std::vector< ComparisonResult > resultBinR;
-  for ( int i = 0; i < numberOfRadiusBins; i++ ) {
-    ComparisonResult resultBinRvalue = comparatorBin.compare( cARbis[i]->histogram(),
-  							      cBRbis[i]->histogram() );
-    resultBinR.push_back( resultBinRvalue );
-    std::cout << " R[" << i << "]"   
-  	      << "  d=" << resultBinRvalue.distance()
-  	      << "  ndf=" << resultBinRvalue.ndf() 
-  	      << "  pvalue=" << resultBinRvalue.quality();
-    if ( resultBinRvalue.quality() < pvalueThreshold )  std::cout << "\t ***WARNING***";
-    std::cout << std::endl;
-  }
-  
-  // ---  II : unbinned tests  --- 
 
   StatisticsComparator< KolmogorovSmirnovComparisonAlgorithm > comparatorUnbin;
   // StatisticsComparator< CramerVonMisesUnbinnedComparisonAlgorithm > comparatorUnbin;
   // StatisticsComparator< AndersonDarlingUnbinnedComparisonAlgorithm > comparatorUnbin;
-
-  std::cout << " ------------ Unbinned tests ------------- " << std::endl;
-
-  std::cout << " \t ***  Kolmogorov-Smirnov test  *** " << std::endl;
-
+  
+  std::cout << " ------------ Starting tests ------------- " << std::endl;
+  
+  std::cout << "Observable 1";
+  ComparisonResult resultBin1 = comparatorBin.compare( cA1bis->histogram(), 
+						       cB1bis->histogram() );
   ComparisonResult resultUnbin1 = comparatorUnbin.compare( *cA1, *cB1 ); 
-  std::cout << " 1)"  
-            << "  d=" << resultUnbin1.distance()
-            << "  ndf=" << resultUnbin1.ndf() 
-            << "  pvalue=" << resultUnbin1.quality();
-  if ( resultUnbin1.quality() < pvalueThreshold )  std::cout << "\t ***WARNING***";
+  if ( resultBin1.quality() < pvalueThreshold  || 
+       resultUnbin1.quality() < pvalueThreshold ) {
+    std::cout << "\t ***WARNING***";
+  }
   std::cout << std::endl;
-
+  std::cout << "  Chi2" << "  d=" << resultBin1.distance()
+	    << "  ndf=" << resultBin1.ndf() 
+	    << "  pvalue=" << resultBin1.quality() << std::endl;
+  std::cout << "  KS" << "  d=" << resultUnbin1.distance()
+	    << "  ndf=" << resultUnbin1.ndf() 
+	    << "  pvalue=" << resultUnbin1.quality() << std::endl;
+      
+  std::cout << "Observable 2";
+  ComparisonResult resultBin2 = comparatorBin.compare( cA2bis->histogram(), 
+						       cB2bis->histogram() );
   ComparisonResult resultUnbin2 = comparatorUnbin.compare( *cA2, *cB2 ); 
-  std::cout << " 2)"  
-            << "  d=" << resultUnbin2.distance()
-            << "  ndf=" << resultUnbin2.ndf() 
-            << "  pvalue=" << resultUnbin2.quality();
-  if ( resultUnbin2.quality() < pvalueThreshold )  std::cout << "\t ***WARNING***";
+  if ( resultBin2.quality() < pvalueThreshold  || 
+       resultUnbin2.quality() < pvalueThreshold ) {
+    std::cout << "\t ***WARNING***";
+  }
   std::cout << std::endl;
-
+  std::cout << "  Chi2" << "  d=" << resultBin2.distance()
+	    << "  ndf=" << resultBin2.ndf() 
+	    << "  pvalue=" << resultBin2.quality() << std::endl;
+  std::cout << "  KS" << "  d=" << resultUnbin2.distance()
+            << "  ndf=" << resultUnbin2.ndf() 
+            << "  pvalue=" << resultUnbin2.quality() << std::endl;
+  
+  std::vector< ComparisonResult > resultBinL;
   std::vector< ComparisonResult > resultUnbinL;
   for ( int i = 0; i < numberOfReplicas; i++ ) {
+    std::cout << "Observable L" << i;   
+    ComparisonResult resultBinLvalue = comparatorBin.compare( cALbis[i]->histogram(),
+  							      cBLbis[i]->histogram() );
+    resultBinL.push_back( resultBinLvalue );
     ComparisonResult resultUnbinLvalue = comparatorUnbin.compare( *cAL[i], *cBL[i] );
     resultUnbinL.push_back( resultUnbinLvalue );
-    std::cout << " L[" << i << "]"   
-  	      << "  d=" << resultUnbinLvalue.distance()
-  	      << "  ndf=" << resultUnbinLvalue.ndf() 
-  	      << "  pvalue=" << resultUnbinLvalue.quality();
-    if ( resultUnbinLvalue.quality() < pvalueThreshold )  std::cout << "\t ***WARNING***";
+    if ( resultBinLvalue.quality() < pvalueThreshold ||
+	 resultUnbinLvalue.quality() < pvalueThreshold ) {
+      std::cout << "\t ***WARNING***";
+    }
     std::cout << std::endl;
+    std::cout << "  Chi2" << "  d=" << resultBinLvalue.distance()
+  	      << "  ndf=" << resultBinLvalue.ndf() 
+  	      << "  pvalue=" << resultBinLvalue.quality() << std::endl;
+    std::cout << "  KS" << "  d=" << resultUnbinLvalue.distance()
+  	      << "  ndf=" << resultUnbinLvalue.ndf() 
+  	      << "  pvalue=" << resultUnbinLvalue.quality() << std::endl;
   }
+
+  std::vector< ComparisonResult > resultBinR;
   std::vector< ComparisonResult > resultUnbinR;
   for ( int i = 0; i < numberOfRadiusBins; i++ ) {
+    std::cout << "Observable R" << i;   
+    ComparisonResult resultBinRvalue = comparatorBin.compare( cARbis[i]->histogram(),
+  							      cBRbis[i]->histogram() );
+    resultBinR.push_back( resultBinRvalue );
     ComparisonResult resultUnbinRvalue = comparatorUnbin.compare( *cAR[i], *cBR[i] );
     resultUnbinR.push_back( resultUnbinRvalue );
-    std::cout << " R[" << i << "]"   
-  	      << "  d=" << resultUnbinRvalue.distance()
-  	      << "  ndf=" << resultUnbinRvalue.ndf() 
-  	      << "  pvalue=" << resultUnbinRvalue.quality();
-    if ( resultUnbinRvalue.quality() < pvalueThreshold )  std::cout << "\t ***WARNING***";
+    if ( resultBinRvalue.quality() < pvalueThreshold ||
+	 resultUnbinRvalue.quality() < pvalueThreshold ) {
+      std::cout << "\t ***WARNING***";
+    }
     std::cout << std::endl;
+    std::cout << "  Chi2" << "  d=" << resultBinRvalue.distance()
+  	      << "  ndf=" << resultBinRvalue.ndf() 
+  	      << "  pvalue=" << resultBinRvalue.quality() << std::endl;
+    std::cout << "  KS" << "  d=" << resultUnbinRvalue.distance()
+  	      << "  ndf=" << resultUnbinRvalue.ndf() 
+  	      << "  pvalue=" << resultUnbinRvalue.quality() << std::endl;
   }
+  
+  std::cout << " ------------ Ending tests ------------- " << std::endl;
 
   // ---------------------
   // Closing all the trees 

@@ -50,11 +50,11 @@
  for the two versions of Geant4 that we want to compare.
  The program pvalue make the statitical tests between the
  various distributions, and signal a  ***WARNING***  when the
- p-value of that test is below a certain threshold, fixed at 10%.
+ p-value of that test is below a certain threshold, fixed at 1%.
  Notice that this does not mean necessarily that the two 
  distributions are statistically incompatible with each other,
- because, by definition, 10% of pair of distributions coming
- from the same parent distributions have a p-value below 10%.
+ because, by definition, 1% of pair of distributions coming
+ from the same parent distributions have a p-value below 1%.
  However, it is worth to take a look by eye to those distributions
  to see if there are really so different as could be in the
  presence of a bug.
