@@ -1,4 +1,4 @@
-$Id: History,v 1.76 2001-04-03 07:30:06 gcosmo Exp $
+$Id: History,v 1.77 2001-04-03 12:41:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-April 03, 2001 G.Cosmo (global-V03-00-09)
+April 03, 2001 G.Cosmo (global-V03-00-10)
+- Fixed minor bug in constructor of G4PhysicsLinearVector, G4PhysicsLnVector
+  and G4PhysicsLogVector (H.Kurasige).
+
+April 02, 2001 G.Cosmo (global-V03-00-09)
 - G4UnitsTable.cc: resolved ambiguity of old/new style iostream for
   formatting in G4UnitsTable::operator<<.
 - Fix for compilation on WIN32-VC: added typedef to base collection G4PhysCollection
