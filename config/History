@@ -1,4 +1,4 @@
-$Id: History,v 1.224 2003-10-17 10:17:11 gbarrand Exp $
+$Id: History,v 1.225 2003-10-22 15:19:51 gbarrand Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22th October 2003  Guy Barrand
+- OPACS : rm interfaces OPACS related things.
 
 17th October 2003  Guy Barrand
 - OPACS being (for long) deprecated, the OPACS related things

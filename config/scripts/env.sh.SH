@@ -216,24 +216,6 @@ echo "On this machine the G4UI_USE_WIN32=\$G4UI_USE_WIN32"
 fi
 fi 
 
-#+
-if [ X$g4ui_build_wo_session = Xy ] ; then
-G4UI_BUILD_WO_SESSION=1
-export G4UI_BUILD_WO_SESSION
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4UI_BUILD_WO_SESSION=\$G4UI_BUILD_WO_SESSION"
-fi
-fi 
-
-#+
-if [ X$g4ui_use_wo = Xy ] ; then
-G4UI_USE_WO=1
-export G4UI_USE_WO
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4UI_USE_WO=\$G4UI_USE_WO"
-fi
-fi 
-
 #
 # g4vis
 #

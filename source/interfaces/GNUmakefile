@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2001-08-11 22:47:37 johna Exp $
+# $Id: GNUmakefile,v 1.3 2003-10-22 15:17:53 gbarrand Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for interfaces.  John Allison, 5/7/98.
 # -----------------------------------------------------------------------
@@ -26,12 +26,6 @@ ifdef G4UI_BUILD
   SUBLIBS += G4UIbasic
   SUBDIRS += GAG
   SUBLIBS += G4UIGAG
-
-########################### interfaces/OPACS #######################
-ifdef G4UI_BUILD_WO_SESSION
-  SUBDIRS += OPACS
-  SUBLIBS += G4UIOPACS
-endif
 
 ########################### interfaces/XVT - not currently implemented #####
 

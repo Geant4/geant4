@@ -156,18 +156,6 @@ setenv G4UI_USE_WIN32 1
 echo "On this machine the G4UI_USE_WIN32=\$G4UI_USE_WIN32"
 endif
 
-#+
-if ( X$g4ui_build_wo_session == Xy ) then
-setenv G4UI_BUILD_WO_SESSION 1
-echo "On this machine the G4UI_BUILD_WO_SESSION=\$G4UI_BUILD_WO_SESSION"
-endif
-
-#+
-if ( X$g4ui_use_wo == Xy ) then
-setenv G4UI_USE_WO 1
-echo "On this machine the G4UI_USE_WO=\$G4UI_USE_WO"
-endif
-
 #
 # g4vis
 #
