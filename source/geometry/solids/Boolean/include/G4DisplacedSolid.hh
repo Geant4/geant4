@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DisplacedSolid.hh,v 1.7 2000-04-27 09:59:36 gcosmo Exp $
+// $Id: G4DisplacedSolid.hh,v 1.8 2000-11-02 12:25:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -115,12 +115,12 @@ class G4DisplacedSolid : public G4VSolid
     G4VSolid* fPtrSolid ;
     G4AffineTransform* fPtrTransform ;
     G4AffineTransform* fDirectTransform ;
-              
-} ;
 
-inline G4GeometryType G4DisplacedSolid::GetEntityType() const 
-{
-   return G4String("G4DisplacedSolid");
-}
+  private:
+
+    G4DisplacedSolid(const G4DisplacedSolid&);
+    G4DisplacedSolid& operator=(const G4DisplacedSolid&);
+      // Private copy constructor and assignment operator.
+} ;
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnionSolid.cc,v 1.9 2000-06-24 14:27:42 japost Exp $
+// $Id: G4UnionSolid.cc,v 1.10 2000-11-02 12:25:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -319,6 +319,15 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p ) const
     }
   }
   return distout;
+}
+
+//////////////////////////////////////////////////////////////
+//
+//
+
+G4GeometryType G4UnionSolid::GetEntityType() const 
+{
+  return G4String("G4UnionSolid");
 }
 
 //////////////////////////////////////////////////////////////

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DisplacedSolid.cc,v 1.11 2000-04-27 09:59:39 gcosmo Exp $
+// $Id: G4DisplacedSolid.cc,v 1.12 2000-11-02 12:25:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4DisplacedSolid class for boolean 
@@ -88,6 +88,11 @@ G4DisplacedSolid::~G4DisplacedSolid()
    delete fPtrTransform ;
    delete fDirectTransform;
   }
+}
+
+G4GeometryType G4DisplacedSolid::GetEntityType() const 
+{
+   return G4String("G4DisplacedSolid");
 }
 
 const G4DisplacedSolid* G4DisplacedSolid::GetDisplacedSolidPtr() const   

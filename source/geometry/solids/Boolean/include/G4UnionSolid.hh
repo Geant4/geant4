@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnionSolid.hh,v 1.4 2000-04-27 09:59:37 gcosmo Exp $
+// $Id: G4UnionSolid.hh,v 1.5 2000-11-02 12:25:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -87,11 +87,6 @@ class G4UnionSolid : public G4BooleanSolid
     G4NURBS*      CreateNURBS      () const ;
 
 };
-
-inline G4GeometryType G4UnionSolid::GetEntityType() const 
-{
-  return G4String("G4UnionSolid");
-}
 
 #endif
 

@@ -1,5 +1,5 @@
 
-$Id: History,v 1.13 2000-09-21 16:04:57 gcosmo Exp $
+$Id: History,v 1.14 2000-11-02 12:25:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,27 +20,34 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
- Sept 13  2000  Vladimir Grichine    geom-solid-bool-V02-00-00
+ Nov 2   2000  Gabriele Cosmo       geom-solid-bool-V02-00-01
+
+  - QA code revision and cleanup (+fixes from CodeWizard filtering):
+    o Added (private) declarations of copy constructor and assignment
+      operator where needed.
+    o Changed virtual functions to non-inline wherever's the case.
+
+ Sep 13  2000  Vladimir Grichine    geom-solid-bool-V02-00-00
 
   - G4SubtractionSolid.cc: relaxed behavior in SurfaceNormal(p), where
     it is allowed for a point to be inside the solid. A message is thrown
     to cerr instead of a G4Exception.
 
- June 26  2000  Vladimir Grichine    geom-solid-bool-V01-01-03
+ Jun 26  2000  Vladimir Grichine    geom-solid-bool-V01-01-03
 
   - Fixed bug in G4SubtractionSolid::DistanceToOut(p,v,...). validNorm
     flag was uncorrectly set to true. Fixes report #102.
 
- June 6   2000  John Apostolakis     geom-solid-bool-V01-01-02
+ Jun 6   2000  John Apostolakis     geom-solid-bool-V01-01-02
 
   - Protecting the use of pointers validNorm and n, if calcNorm is false
 
- June 6   2000  John Allison         geom-solid-bool-V01-01-01
+ Jun 6   2000  John Allison         geom-solid-bool-V01-01-01
 
   - Re-enabled CreatePolyhedron() method from G4UnionSolid, G4IntersectionSolid
     and G4SubtractionSolid.  Coworks with greps-V01-01-04.
 
- May 26   2000  John Allison         geom-solid-bool-V01-01-00
+ May 26  2000  John Allison         geom-solid-bool-V01-01-00
 
   - Disabled CreatePolyhedron() method from G4UnionSolid, G4IntersectionSolid
     and G4SubtractionSolid. It now temporarly returns a NULL pointer.
@@ -49,48 +56,48 @@ committal in the CVS repository !
     Files G4UnionSolid.cc, G4SubtractionSolid.cc and G4IntersectionSolid.cc
     are included in the branch-tag "boolean_nopoly_branch".
 
- Apr 27   2000  Gabriele Cosmo
+ Apr 27  2000  Gabriele Cosmo
 
   - Reorganised comments for the Software Reference Manual.
   - Added CVS headers and standard G4 header where missing.
 
- Apr 11   2000  John Allison
+ Apr 11  2000  John Allison
 
   - CreatePolyhedron implemented for BooleanSolids.
   - G4DisplacedSolid: reversed implementation of GetFrameRotation and
     GetObjectRotation, removing inappropriate invertion.
   - G4DisplacedSolid::GetConstituentMovedSolid() made const.
 
- Jan 19   2000	Gabriele Cosmo		geom-solid-bool-V01-00-00
+ Jan 19  2000	Gabriele Cosmo	    geom-solid-bool-V01-00-00
 
   - Syncronized file versions with HEAD (essentially CVS headers changes)
   - Fixed cases of G4std::min which were not migrated on the HEAD in files:
     G4UnionSolid.cc and G4IntersectionSolid.cc
 
- Nov 24   1999 				geom-solid-bool-V00-01-05
+ Nov 24  1999 			    geom-solid-bool-V00-01-05
 
   - Small fix in src/G4DisplacedSolid.cc to the return type 
          (const G4AffineTransform --> G4AffineTransform)
     to conform with the specification of the class.
 
- Nov 19   1999                          geom-solid-bool-V00-01-04
+ Nov 19  1999                       geom-solid-bool-V00-01-04
 
   -  Fixes from Vladimir, and additional tests
 
- Nov 10   1999                          geom-solid-bool-V00-01-03b
+ Nov 10  1999                       geom-solid-bool-V00-01-03b
 
   - Renamed  GetConstituentSolid to GetConstituentMovedSolid in G4DisplacedSolid
      to avoid clashing with method that gets the contituents of a G4BooleanSolid.
 
- Nov 10   1999                          geom-solid-bool-V00-01-03a
+ Nov 10  1999                       geom-solid-bool-V00-01-03a
 
   - Tag with additional methods for Persistency
 
- Nov 10   1999                          geom-solid-bool-V00-01-03-cand
+ Nov 10  1999                       geom-solid-bool-V00-01-03-cand
 
   New method: Get Object Rotation/Translation methods in Displaced Solid
 
- Nov  9   1999                          geom-solid-bool-V00-01-02-cand
+ Nov  9  1999                       geom-solid-bool-V00-01-02-cand
   
   - Tag with additional methods for Visualisation
 
@@ -103,10 +110,10 @@ committal in the CVS repository !
 
 
 
-  Dec  1   1998   John Apostolakis                       geom-boolean-4-ja
+  Dec  1  1998   John Apostolakis   geom-boolean-4-ja
 
     Code portability changes.
 
-  Nov 27   1998   John Apostolakis & Vladimir Grichine   geom-boolean-3-vg
+  Nov 27  1998   J.Apostolakis & V.Grichine   geom-boolean-3-vg
 
     Fixes agreed in code review were implemented.

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IntersectionSolid.cc,v 1.8 2000-06-24 14:27:41 japost Exp $
+// $Id: G4IntersectionSolid.cc,v 1.9 2000-11-02 12:25:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -406,6 +406,15 @@ G4IntersectionSolid::ComputeDimensions( G4VPVParameterisation* p,
                                         const G4VPhysicalVolume* pRep ) 
 {
   return ;
+}
+
+/////////////////////////////////////////////////
+//
+//                    
+
+G4GeometryType G4IntersectionSolid::GetEntityType() const 
+{
+  return G4String("G4IntersectionSolid");
 }
 
 /////////////////////////////////////////////////

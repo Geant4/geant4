@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IntersectionSolid.hh,v 1.3 2000-04-27 09:59:36 gcosmo Exp $
+// $Id: G4IntersectionSolid.hh,v 1.4 2000-11-02 12:25:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -89,11 +89,6 @@ class G4IntersectionSolid : public G4BooleanSolid
     G4NURBS*      CreateNURBS      () const ;
 
 } ;
-
-inline G4GeometryType G4IntersectionSolid::GetEntityType() const 
-{
-  return G4String("G4IntersectionSolid");
-}
 
 #endif
 

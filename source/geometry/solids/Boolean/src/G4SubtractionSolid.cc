@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SubtractionSolid.cc,v 1.9 2000-09-13 10:30:40 grichine Exp $
+// $Id: G4SubtractionSolid.cc,v 1.10 2000-11-02 12:25:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -336,6 +336,15 @@ G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p ) const
                fPtrSolidB->DistanceToIn(p) ) ; 
   }
   return dist; 
+}
+
+//////////////////////////////////////////////////////////////
+//
+//
+
+G4GeometryType G4SubtractionSolid::GetEntityType() const 
+{
+  return G4String("G4SubtractionSolid");
 }
 
 //////////////////////////////////////////////////////////////
