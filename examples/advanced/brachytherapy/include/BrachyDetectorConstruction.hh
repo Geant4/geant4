@@ -17,8 +17,11 @@
 class BrachyWaterBoxSD;
 class G4LogicalVolume;
 class G4Material;
+class G4Tubs;
 class G4Box;
-class G4UserLimits;
+class G4Sphere;
+class G4Tubs;
+
 class G4VPhysicalVolume;
 
 class BrachyDetectorConstruction : public G4VUserDetectorConstruction
@@ -31,39 +34,51 @@ class BrachyDetectorConstruction : public G4VUserDetectorConstruction
 	 G4double m_BoxDimX;
 	 G4double m_BoxDimY;
 	 G4double m_BoxDimZ;
-         G4double dimVoxel;
-	 G4int NumVoxelX;
+         G4int NumVoxelX;
 	 G4int NumVoxelZ;
-     
+         G4double dimVoxel;
          G4String m_SDName;
 
 public:
   void PrintDetectorParameters(); 
-  void SetMaterial(G4String);
-  void SetDimension(G4double);
-  void SetNumVoxel(G4int);
-  void UpdateGeometry();
-  G4double VoxelWidth_X() {return m_BoxDimX/NumVoxelX;};//num voxel
-  G4double VoxelWidth_Z() {return m_BoxDimZ/NumVoxelZ;};
-  G4int   GetNumVoxelX(){return NumVoxelX;};
-  G4int   GetNumVoxelZ(){return NumVoxelZ;};
-  G4double GetDimX(){return m_BoxDimX;};
+  
+const   G4double VoxelWidth_X() {return m_BoxDimX/NumVoxelX;};//num voxel
+const   G4double VoxelWidth_Z() {return m_BoxDimZ/NumVoxelZ;};
+const   G4int   GetNumVoxelX(){return NumVoxelX;};
+const   G4int   GetNumVoxelZ(){return NumVoxelZ;};
+const   G4double GetDimX(){return m_BoxDimX;};
 	
- // methods for UserLimits in Water
-  void      UseUserLimits(G4bool value); 
-  void  SetMaxStepInWater(G4double value); 
-
- G4bool           fUseUserLimits;
- G4UserLimits*    theUserLimitsForWater; 
- G4double         theMaxStepInWater;
+ 
  
  private:
- G4LogicalVolume*          WaterBoxLog;
-  G4Material*              MaterialBox;
-  G4Material*              DefaultMaterial;
-  G4Material*              Iodio;
-  G4Material*               Gold;
-  G4Material*              titanium;
+
+ G4Box*             ExpHall;    //pointer to the solid World 
+ G4LogicalVolume*   ExpHallLog;    //pointer to the logical World
+ G4VPhysicalVolume* ExpHallPhys;    //pointer to the physical World
+
+
+  G4Box*              WaterBox;
+  G4LogicalVolume*    WaterBoxLog;
+  G4VPhysicalVolume*   WaterBoxPhys;
+
+
+  G4Tubs* Capsule ;
+  G4LogicalVolume*  CapsuleLog;    //pointer to the logical World
+  G4VPhysicalVolume* CapsulePhys;
+ 
+  G4Sphere* CapsuleTip;
+  G4LogicalVolume* CapsuleTipLog;
+  G4VPhysicalVolume* CapsuleTipPhys;
+   
+  G4Tubs* IridiumCore;
+  G4LogicalVolume* IridiumCoreLog;
+  G4VPhysicalVolume* IridiumCorePhys;
+
+  G4Material*              air;
+  G4Material*              water;
+  G4Material*              CapsuleMat;
+  G4Material*              IridiumMat;
+ 
   
 public:
 	G4VPhysicalVolume* Construct();
@@ -86,6 +101,8 @@ inline void BrachyDetectorConstruction::ComputeDimVoxel()
 }
 
 #endif
+
+
 
 
 

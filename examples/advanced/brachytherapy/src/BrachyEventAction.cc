@@ -90,13 +90,24 @@ void BrachyEventAction::BeginOfEventAction(const G4Event* aEvent)
  G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
  if(m_HitsCollectionID == -1)
  	m_HitsCollectionID = pSDManager->GetCollectionID("WaterBoxHitsCollection");
+ 
 }
 
 //....
 
 void BrachyEventAction::EndOfEventAction(const G4Event* evt)
 {
- if(m_HitsCollectionID < 0)
+
+ G4int evno = fpEventManager->GetConstCurrentEvent()->GetEventID() ;
+ 
+
+
+ if((evno==100)||(evno==500)||(evno==1000)||(evno==2500)
+||(evno==5000)||(evno==7000)||(evno==9000)||
+    (evno==9500)||(evno==29000000)||(evno==29500000))
+   G4cout << evno << G4endl;
+ 
+if(m_HitsCollectionID < 0)
 	return;
 
  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
@@ -117,8 +128,9 @@ void BrachyEventAction::EndOfEventAction(const G4Event* evt)
                 m_pVoxel[j]+=(*CHC)[h]->GetEdep();
 		}
 		}
+      
      }
-
+ 
 
 
   // extract the trajectories and draw them

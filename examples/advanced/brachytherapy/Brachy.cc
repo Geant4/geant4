@@ -27,20 +27,20 @@
 // --------------------------------------------------------------
 //
 // Code developed by:
-// S. Agostinelli, F. Foppiano, S. Garelli and M. Tropeano
+// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano,S.Guatelli
 //
 // Brachytherapy simulates the dose deposition in a cubic (30*cm)
-// water phantom for a Ir-192 MicroSelectron High Dose Rate
+// water phantom for a IsoSeed I-125 Bebig
 // brachytherapy source.
 //
 // Simplified gamma generation is used.
 // Source axis is oriented along Z axis. 
 // Voxel data on the X-Z plan
-//e is output to ASCII file
-// "Brachy.out".
- 
-// 
-// $Id: Brachy.cc,v 1.9 2002-04-19 18:09:29 guatelli Exp $
+//e is output to 
+// "Brachy2.hbk".
+
+
+// $Id: Brachy.cc,v 1.10 2002-06-10 16:09:04 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -71,6 +71,7 @@
 #include "G4UImanager.hh"
 
 
+
 //Interactive mode//
 
 int main(int argc ,char ** argv)
@@ -79,14 +80,12 @@ int main(int argc ,char ** argv)
 // semi diversi li ha usati per l'errore
   
 
-  //HepRandom::setTheSeed(myseed);
-   HepRandom::setTheEngine(new RanecuEngine);
+  //HepRandom::setTheSeed(16520);
+
+  HepRandom::setTheEngine(new RanecuEngine);
  
   
-    
-  
- 
- // Construct the default run manager
+  // Construct the default run manager
  G4RunManager* pRunManager = new G4RunManager;
 
 
@@ -98,7 +97,14 @@ int main(int argc ,char ** argv)
  
  pRunManager->SetUserInitialization(new BrachyPhysicsList);
 
- G4UIsession* session=0;
+  
+#ifdef G4VIS_USE
+  // visualization manager
+ G4VisManager* visManager = new BrachyVisManager;
+ visManager->Initialize();
+#endif
+
+G4UIsession* session=0;
   
    
   if (argc==1)   // Define UI session for interactive mode.
@@ -114,36 +120,29 @@ int main(int argc ,char ** argv)
 #endif
 #endif
     }
-   
  
-#ifdef G4VIS_USE
-  // visualization manager
- G4VisManager* visManager = new BrachyVisManager;
- visManager->Initialize();
-#endif
-  
 
- // set user action classes
 
  BrachyEventAction *pEventAction=new BrachyEventAction(SDName);
  
- pRunManager->SetUserAction(pEventAction );
-   
- pRunManager->SetUserAction(new BrachyPrimaryGeneratorAction);
+  pRunManager->SetUserAction(pEventAction );
+  pRunManager->SetUserAction(new BrachyPrimaryGeneratorAction);
  
- BrachyRunAction *pRunAction=new BrachyRunAction(SDName);
-
- pRunManager->SetUserAction(pRunAction);
-  
-
+  BrachyRunAction *pRunAction=new BrachyRunAction(SDName);
+  pRunManager->SetUserAction(pRunAction);
+ 
+ 
   
 //Initialize G4 kernel
   pRunManager->Initialize();
 
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
+  UI->ApplyCommand("/run/verbose 0");
+  UI->ApplyCommand("/event/verbose 0");
+  UI->ApplyCommand("/tracking/verbose 0");
 
-  if (session)   // Define UI session for interactive mode.
+   if (session)   // Define UI session for interactive mode.
     {
       // G4UIterminal is a (dumb) terminal.
       UI->ApplyCommand("/control/execute initInter.mac");    
@@ -160,20 +159,24 @@ int main(int argc ,char ** argv)
       G4String fileName = argv[1];
       UI->ApplyCommand(command+fileName);
     }  
- 
-
-				
+  
+   //int numberOfEvent = 10000;
+   //pRunManager->BeamOn(numberOfEvent);
+  				
  	   
 	 
 // Job termination
 
-  // delete pRunManager; 
+
   
 #ifdef G4VIS_USE
   delete visManager;
 #endif
   
-  
+   
+
+ delete pRunManager;
+
  return 0;
 }
 
