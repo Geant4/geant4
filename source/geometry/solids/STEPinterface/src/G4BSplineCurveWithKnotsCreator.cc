@@ -1,5 +1,28 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4BSplineCurveWithKnotsCreator.cc,v 1.3 2000-01-21 13:45:58 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// Class G4BSplineCurveWithKnotsCreator
+//
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
+
+#include <instmgr.h>
 #include "G4BSplineCurveWithKnotsCreator.hh"
+#include "G4GeometryTable.hh"
 #include "G4BSplineCurve.hh"
+
 typedef G4RWTValVector<G4double> G4doubleVector;
 
 G4BSplineCurveWithKnotsCreator G4BSplineCurveWithKnotsCreator::csc;
@@ -11,7 +34,7 @@ G4BSplineCurveWithKnotsCreator::G4BSplineCurveWithKnotsCreator()
 }
 
 
-G4BSplineCurveWithKnotsCreator::~G4BSplineCurveWithKnotsCreator(){}
+G4BSplineCurveWithKnotsCreator::~G4BSplineCurveWithKnotsCreator() {}
 
 
 void G4BSplineCurveWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
@@ -78,7 +101,8 @@ void G4BSplineCurveWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
   
     MgrNode* MgrTmp = instanceManager.FindFileId(Index);
     Index = instanceManager.GetIndex(MgrTmp);
-    Entity = instanceManager.GetSTEPentity(Index);
+//  Entity = instanceManager.GetSTEPentity(Index);
+    Entity = instanceManager.GetApplication_instance(Index);
 
     void *tmp =G4GeometryTable::CreateObject(*Entity);
     G4Point3D* pt = (G4Point3D*) tmp;
@@ -184,10 +208,8 @@ void G4BSplineCurveWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
   bSpline->Init(degree, &controlPointsList, &knots, &weightsData);
   
   createdObject = bSpline;
-
 }
 
 void G4BSplineCurveWithKnotsCreator::CreateSTEPGeometry(void* G4obj)
 {
-
 }

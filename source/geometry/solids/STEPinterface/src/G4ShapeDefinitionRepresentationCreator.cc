@@ -1,10 +1,38 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ShapeDefinitionRepresentationCreator.cc,v 1.3 2000-01-21 13:46:06 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// ----------------------------------------------------------------------
+// Class G4ShapeDefinitionRepresentationCreator
+//
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
+
 #include "G4ShapeDefinitionRepresentationCreator.hh"
+#include "G4GeometryTable.hh"
 
-G4ShapeDefinitionRepresentationCreator G4ShapeDefinitionRepresentationCreator::csc;
+G4ShapeDefinitionRepresentationCreator
+  G4ShapeDefinitionRepresentationCreator::csc;
 
-G4ShapeDefinitionRepresentationCreator::G4ShapeDefinitionRepresentationCreator(){G4GeometryTable::RegisterObject(this);}
+G4ShapeDefinitionRepresentationCreator::
+  G4ShapeDefinitionRepresentationCreator()
+{
+  G4GeometryTable::RegisterObject(this);
+}
 
-G4ShapeDefinitionRepresentationCreator::~G4ShapeDefinitionRepresentationCreator(){}
+G4ShapeDefinitionRepresentationCreator::
+  ~G4ShapeDefinitionRepresentationCreator() {}
 
 void G4ShapeDefinitionRepresentationCreator::CreateG4Geometry(STEPentity& Ent)
 {
@@ -36,5 +64,4 @@ void G4ShapeDefinitionRepresentationCreator::CreateG4Geometry(STEPentity& Ent)
 
 void G4ShapeDefinitionRepresentationCreator::CreateSTEPGeometry(void* G4obj)
 {
-
 }

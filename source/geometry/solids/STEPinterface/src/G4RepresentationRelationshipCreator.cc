@@ -1,12 +1,39 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4RepresentationRelationshipCreator.cc,v 1.3 2000-01-21 13:46:06 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// ----------------------------------------------------------------------
+// Class G4RepresentationRelationshipCreator
+//
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
+
+#include <STEPcomplex.h>
+
 #include "G4RepresentationRelationshipCreator.hh"
+#include "G4GeometryTable.hh"
 #include "G4PlacementVector.hh"
-#include "STEPcomplex.h"
 
 G4RepresentationRelationshipCreator G4RepresentationRelationshipCreator::csc;
 G4int G4RepresentationRelationshipCreator::placeCount=0;
-G4RepresentationRelationshipCreator::G4RepresentationRelationshipCreator(){G4GeometryTable::RegisterObject(this);}
 
-G4RepresentationRelationshipCreator::~G4RepresentationRelationshipCreator(){}
+G4RepresentationRelationshipCreator::G4RepresentationRelationshipCreator()
+{
+  G4GeometryTable::RegisterObject(this);
+}
+
+G4RepresentationRelationshipCreator::~G4RepresentationRelationshipCreator() {}
 
 void G4RepresentationRelationshipCreator::CreateG4Geometry(STEPentity& Ent)
 {
@@ -63,8 +90,8 @@ void G4RepresentationRelationshipCreator::CreateG4Geometry(STEPentity& Ent)
       SdaiItem_defined_transformation* iTransf = 
 	transf->operator SdaiItem_defined_transformationH();
 	  
-      SdaiRepresentation_itemH repItem1 = iTransf->Transform_item_1();
-      SdaiRepresentation_itemH repItem2 = iTransf->Transform_item_2();
+      SdaiRepresentation_itemH repItem1 = iTransf->transform_item_1_();
+      SdaiRepresentation_itemH repItem2 = iTransf->transform_item_2_();
       
       subEnt = (STEPentity*)repItem1;
       itemDefPlaces = new G4PlacementVector();
@@ -108,5 +135,4 @@ void G4RepresentationRelationshipCreator::CreateG4Geometry(STEPentity& Ent)
 
 void G4RepresentationRelationshipCreator::CreateSTEPGeometry(void* G4obj)
 {
-
 }

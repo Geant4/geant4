@@ -1,11 +1,39 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4BoundedSurfaceCreator.cc,v 1.3 2000-01-21 13:45:58 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// Class G4BoundedSurfaceCreator
+//
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
+
+#include <instmgr.h>
+#include <STEPcomplex.h>
+
 #include "G4BoundedSurfaceCreator.hh"
-#include "STEPcomplex.h"
+#include "G4GeometryTable.hh"
+#include "G4ControlPoints.hh"
+#include "G4BSplineSurface.hh"
 
 G4BoundedSurfaceCreator G4BoundedSurfaceCreator::csc;
 
-G4BoundedSurfaceCreator::G4BoundedSurfaceCreator(){G4GeometryTable::RegisterObject(this);}
+G4BoundedSurfaceCreator::G4BoundedSurfaceCreator()
+{
+  G4GeometryTable::RegisterObject(this);
+}
 
-G4BoundedSurfaceCreator::~G4BoundedSurfaceCreator(){}
+G4BoundedSurfaceCreator::~G4BoundedSurfaceCreator() {}
 
 void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 {
@@ -36,8 +64,8 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 
 
   G4int u,v;
-  u=bSpline->U_degree();
-  v=bSpline->V_degree();
+  u=bSpline->u_degree_();
+  v=bSpline->v_degree_();
 
 
   // Get control points
@@ -50,7 +78,7 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
   G4int Index;
   STEPentity *Entity;
   SCLstring s;
-  STEPaggregate *Aggr=bSpline->Control_points_list();
+  STEPaggregate *Aggr=bSpline->control_points_list_();
   const char *Str = Aggr->asStr(s);
 
   G4int stringlength = strlen(Str);  
@@ -101,16 +129,17 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 	//Entity = InstanceList.GetSTEPentity(Index);
 	MgrNode* MgrTmp = instanceManager.FindFileId(Index);
 	Index = instanceManager.GetIndex(MgrTmp);
-	Entity = instanceManager.GetSTEPentity(Index);
+//      Entity = instanceManager.GetSTEPentity(Index);
+        Entity = instanceManager.GetApplication_instance(Index);
 	void *tmp =G4GeometryTable::CreateObject(*Entity);
 	controlPoints.put(a,b,*(G4PointRat*)tmp);
       }  
   
   
   // Get knot vectors
-      STEPaggregate *multAggr = bSplineWithKnots->U_multiplicities();
+  STEPaggregate *multAggr = bSplineWithKnots->u_multiplicities_();
   G4int uMultCount = multAggr->EntryCount();
-  STEPaggregate *knotAggr = bSplineWithKnots->U_knots();
+  STEPaggregate *knotAggr = bSplineWithKnots->u_knots_();
   G4int uKnotCount = knotAggr->EntryCount();
 
   G4int totalUKnotCount = 0;
@@ -146,10 +175,10 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 
 
   // V dir
-   multAggr = bSplineWithKnots->V_multiplicities();
+  multAggr = bSplineWithKnots->v_multiplicities_();
   G4int vMultCount = multAggr->EntryCount();
   
-  knotAggr = bSplineWithKnots->V_knots();
+  knotAggr = bSplineWithKnots->v_knots_();
   G4int vKnotCount = knotAggr->EntryCount();
 
   G4int totalVKnotCount = 0;
@@ -185,7 +214,8 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 
 
   // copy weights data
-    STEPaggregate *weightAggr =  rationalBSpline->Weights_data();
+  STEPaggregate *weightAggr =  rationalBSpline->weights_data_();
+
   // Temp solution until NIST supports
   // two dimensional instances.grrh
   const char* Str2 = weightAggr->asStr(s);
@@ -241,5 +271,4 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 
 void G4BoundedSurfaceCreator::CreateSTEPGeometry(void * G4obj)
 {
-
 }

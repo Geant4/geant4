@@ -1,28 +1,52 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ToroidalSurfaceCreator.hh,v 1.2 2000-01-21 13:45:31 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// Class G4ToroidalSurfaceCreator
+//
+// Class description:
+//
+//
+
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
 #ifndef G4TOROIDALSURFACECREATOR_HH
 #define G4TOROIDALSURFACECREATOR_HH
+
 #include "G4GeometryCreator.hh"
-#include "G4GeometryTable.hh"
 
 class G4ToroidalSurfaceCreator: private G4GeometryCreator 
 {
-public:
-//Constructor
-G4ToroidalSurfaceCreator();
-~G4ToroidalSurfaceCreator();
+  public:
 
-//Member functions
+  // Constructor & destructor
 
-void CreateG4Geometry(STEPentity&);
+    G4ToroidalSurfaceCreator();
+    ~G4ToroidalSurfaceCreator();
 
-void CreateSTEPGeometry(void* G4obj);
+  // Member functions
 
-G4String Name(){return "Toroidal_Surface";};
+    void CreateG4Geometry(STEPentity&);
+    void CreateSTEPGeometry(void* G4obj);
+    G4String Name() { return "Toroidal_Surface"; }
+    static G4ToroidalSurfaceCreator GetInstance() { return csc; }
 
-static G4ToroidalSurfaceCreator GetInstance(){return csc;};
+  // Members
 
-//Members
-private:
+  private:
 
-static G4ToroidalSurfaceCreator csc;
+    static G4ToroidalSurfaceCreator csc;
 };
+
 #endif

@@ -1,28 +1,52 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4OpenShellCreator.hh,v 1.2 2000-01-21 13:45:28 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// Class G4OpenShellCreator
+//
+// Class description:
+//
+//
+
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
 #ifndef G4OPENSHELLCREATOR_HH
 #define G4OPENSHELLCREATOR_HH
+
 #include "G4GeometryCreator.hh"
-#include "G4GeometryTable.hh"
 
 class G4OpenShellCreator: private G4GeometryCreator 
 {
-public:
-//Constructor
-G4OpenShellCreator();
-~G4OpenShellCreator();
+  public:
 
-//Member functions
+  // Constructor & destructor
 
-void CreateG4Geometry(STEPentity&);
+    G4OpenShellCreator();
+    ~G4OpenShellCreator();
 
-void CreateSTEPGeometry(void* G4obj);
+  // Member functions
 
-G4String Name(){return "Open_Shell";};
+    void CreateG4Geometry(STEPentity&);
+    void CreateSTEPGeometry(void* G4obj);
+    G4String Name() { return "Open_Shell"; }
+    static G4OpenShellCreator GetInstance() { return csc; }
 
-static G4OpenShellCreator GetInstance(){return csc;};
+  // Members
 
-//Members
-private:
+  private:
 
-static G4OpenShellCreator csc;
+    static G4OpenShellCreator csc;
 };
+
 #endif

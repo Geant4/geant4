@@ -1,5 +1,28 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4BSplineSurfaceCreator.cc,v 1.2 2000-01-21 13:45:58 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// Class G4BSplineSurfaceCreator
+//
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
+
+#include <instmgr.h>
 #include "G4BSplineSurfaceCreator.hh"
+#include "G4GeometryTable.hh"
 #include "G4ControlPoints.hh"
+
 G4BSplineSurfaceCreator G4BSplineSurfaceCreator::csc;
 
 G4BSplineSurfaceCreator::G4BSplineSurfaceCreator(){G4GeometryTable::RegisterObject(this);}
@@ -14,17 +37,17 @@ void G4BSplineSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
   G4String attrName("u_degree");
   STEPattribute *Attr = GetNamedAttribute(attrName, Ent);
   u = *Attr->ptr.i;
-  bSpline->U_degree(*Attr->ptr.i);
+  bSpline->u_degree_(*Attr->ptr.i);
   attrName = "v_degree";
   Attr = GetNamedAttribute(attrName, Ent);
   v=*Attr->ptr.i;
-  bSpline->V_degree(*Attr->ptr.i);
+  bSpline->v_degree_(*Attr->ptr.i);
 
   attrName = "control_points_list";
   Attr = GetNamedAttribute(attrName, Ent);
   STEPaggregate *Aggr = Attr->ptr.a;
   GenericAggregate* gAggr  =  (GenericAggregate*)Attr->ptr.a;
-  bSpline->Control_points_list(gAggr);
+  bSpline->control_points_list_(gAggr);
 
   // Get control points
   
@@ -86,7 +109,8 @@ void G4BSplineSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 	//Entity = InstanceList.GetSTEPentity(Index);
 	MgrNode* MgrTmp = instanceManager.FindFileId(Index);
 	Index = instanceManager.GetIndex(MgrTmp);
-	Entity = instanceManager.GetSTEPentity(Index);
+//      Entity = instanceManager.GetSTEPentity(Index);
+        Entity = instanceManager.GetApplication_instance(Index);
 	void *tmp =G4GeometryTable::CreateObject(*Entity);
 	controlPoints.put(a,b,*(G4PointRat*)tmp);
       }  

@@ -1,5 +1,31 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4AssemblyCreator.cc,v 1.4 2000-01-21 13:45:57 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// Class G4AssemblyCreator
+//
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
+
 #include "G4AssemblyCreator.hh"
 #include "G4Assembly.hh"
+
+#include "G4GeometryTable.hh"
+#include "G4StepFileReader.hh"
+#include "G4NISTStepReader.hh"
+#include "G4ToroidalSurface.hh"
+
 extern void HeaderSchemaInit (Registry & reg);
 
 G4AssemblyCreator G4AssemblyCreator::ci;
@@ -34,7 +60,7 @@ void G4AssemblyCreator::ReadStepFile()
   instanceManager = StepReader->GetInstanceManager();
 }
 
-void G4AssemblyCreator::CreateG4Geometry(STEPentity& Ent)
+void G4AssemblyCreator::CreateG4Geometry(STEPentity& sEntity)
 {  
   // Advanced_Brep_Shape_Representation are created into
   // Context_Dependent_Shape_Representation and
@@ -63,23 +89,25 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& Ent)
   // L. Broglia
   if(ConDepShapes>0)
   {
+    index = 0;
+    const char* keyw = "Context_Dependent_Shape_Representation";
+
     //#define G4_STEPINTERFACE_DEBUG 1 
 #ifdef G4_STEPINTERFACE_DEBUG
-    G4cout<<"\n\n Creating the Context_Dependent_Shape_Representation"<<G4endl;
+    G4cout<<"\n\n Creating the " << keyw << G4endl;
 #endif
-    index = 0;
   
     for( a=0; a< ConDepShapes; a++)
     {
 #ifdef G4_STEPINTERFACE_DEBUG
       G4cout<<"loop "<<a+1<<" of "<<ConDepShapes<<G4endl;
 #endif     
+
       // Be careful, tmpindex not correspond to STEPfile_id !
-      tmpindex = 
-	instanceManager.GetIndex("Context_Dependent_Shape_Representation",
-				 index                                    );
+      tmpindex = instanceManager.GetIndex(instanceManager.GetApplication_instance(keyw, index));
       
-      ent = instanceManager.GetSTEPentity(tmpindex);
+//    ent = instanceManager.GetSTEPentity(tmpindex);
+      ent = instanceManager.GetApplication_instance(tmpindex);
       
       if(ent!= ENTITY_NULL)
       {
@@ -97,8 +125,7 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& Ent)
 	index = ent->STEPfile_id ;
 
 #ifdef G4_STEPINTERFACE_DEBUG
-	G4cout<<" Context_Dependent_Shape_Representation find in index "
-	      <<index<<G4endl;
+	G4cout << keyw << " find in index " << index << G4endl;
 #endif
 
       }
@@ -111,8 +138,11 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& Ent)
   }
   else
   {       
+
+    const char* key = "Shape_Definition_Representation";
+    
 #ifdef G4_STEPINTERFACE_DEBUG
-    G4cout<<"\n Creating the Shape_Definition_Representation"<<G4endl;
+    G4cout <<"\n Creating the " << key << G4endl;
 #endif
 
     for(a=0; a<  ShapeDefReps ; a++)
@@ -122,10 +152,10 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& Ent)
 #endif
       
       // Be careful, tmpindex not correspond to STEPfile_id !
-      tmpindex = instanceManager.GetIndex("Shape_Definition_Representation",
-					  index                             );
-      
-      ent = instanceManager.GetSTEPentity(tmpindex);
+      tmpindex = instanceManager.GetIndex(instanceManager.GetApplication_instance(key, index));
+    
+//    ent = instanceManager.GetSTEPentity(tmpindex);
+      ent = instanceManager.GetApplication_instance(tmpindex);
     
       if(ent!= ENTITY_NULL)
       {
@@ -142,7 +172,7 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& Ent)
 
 	index = ent->STEPfile_id ;
 #ifdef G4_STEPINTERFACE_DEBUG
-	G4cout<<" Shape_Definition_Representation find in index "<<index<<G4endl;
+	G4cout<< key << " find in index "<< index << G4endl;
 #endif
       }
       
@@ -171,7 +201,3 @@ void G4AssemblyCreator::CreateSTEPGeometry(void* G4obj)
     void *tmp =G4GeometryTable::CreateSTEPObject(G4obj, name);
   }
 }
-
-
-
-

@@ -1,10 +1,38 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4BSplineSurfaceWithKnotsCreator.cc,v 1.2 2000-01-21 13:45:58 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// Class G4BSplineSurfaceWithKnotsCreator
+//
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
+
+#include <instmgr.h>
+
 #include "G4BSplineSurfaceWithKnotsCreator.hh"
+#include "G4GeometryTable.hh"
+#include "G4ControlPoints.hh"
+#include "G4KnotVector.hh"
 
 G4BSplineSurfaceWithKnotsCreator G4BSplineSurfaceWithKnotsCreator::csc;
 
-G4BSplineSurfaceWithKnotsCreator::G4BSplineSurfaceWithKnotsCreator(){G4GeometryTable::RegisterObject(this);}
+G4BSplineSurfaceWithKnotsCreator::G4BSplineSurfaceWithKnotsCreator()
+{
+  G4GeometryTable::RegisterObject(this);
+}
 
-G4BSplineSurfaceWithKnotsCreator::~G4BSplineSurfaceWithKnotsCreator(){}
+G4BSplineSurfaceWithKnotsCreator::~G4BSplineSurfaceWithKnotsCreator() {}
 
 void G4BSplineSurfaceWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
 {
@@ -12,7 +40,7 @@ void G4BSplineSurfaceWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
   // U dir
   G4String attrName("u_multiplicities");
   STEPattribute *Attr = GetNamedAttribute(attrName, Ent);
-  bSpline->U_multiplicities((IntAggregate*)Attr->ptr.a);
+  bSpline->u_multiplicities_((IntAggregate*)Attr->ptr.a);
   STEPaggregate *multAggr  = Attr->ptr.a;
   G4int uMultCount = multAggr->EntryCount();
   
@@ -37,7 +65,7 @@ void G4BSplineSurfaceWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
   RealNode* knotNode = (RealNode*)knotAggr->GetHead();
   multiNode = (IntNode*)multAggr->GetHead();
 
-  bSpline->U_knots((RealAggregate*)knotAggr);
+  bSpline->u_knots_((RealAggregate*)knotAggr);
 
   G4int multValue=0;
   G4double knotValue=0;
@@ -60,13 +88,13 @@ void G4BSplineSurfaceWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
   attrName = "v_multiplicities";
   Attr = GetNamedAttribute(attrName, Ent);
   multAggr = Attr->ptr.a;
-  bSpline->V_multiplicities((IntAggregate*)Attr->ptr.a);
+  bSpline->v_multiplicities_((IntAggregate*)Attr->ptr.a);
   G4int vMultCount = multAggr->EntryCount();
   
   attrName = "v_knots";
   Attr = GetNamedAttribute(attrName, Ent);
   knotAggr = Attr->ptr.a;
-  bSpline->V_knots((RealAggregate*)knotAggr);
+  bSpline->v_knots_((RealAggregate*)knotAggr);
   G4int vKnotCount = knotAggr->EntryCount();
 
   G4int totalVKnotCount = 0;
@@ -108,7 +136,7 @@ void G4BSplineSurfaceWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
   if(Attr)
     {
       u = *Attr->ptr.i;
-      bSpline->U_degree(*Attr->ptr.i);
+      bSpline->u_degree_(*Attr->ptr.i);
     }
 
 
@@ -117,7 +145,7 @@ void G4BSplineSurfaceWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
   if(Attr)
     {
       v=*Attr->ptr.i;
-      bSpline->V_degree(*Attr->ptr.i);
+      bSpline->v_degree_(*Attr->ptr.i);
     }
 
   attrName = "control_points_list";
@@ -126,7 +154,7 @@ void G4BSplineSurfaceWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
     {
       STEPaggregate *Aggr = Attr->ptr.a;
       GenericAggregate* gAggr  =  (GenericAggregate*)Attr->ptr.a;
-      bSpline->Control_points_list(gAggr);
+      bSpline->control_points_list_(gAggr);
       // Get control points
       
       G4int cols,rows;
@@ -187,22 +215,15 @@ void G4BSplineSurfaceWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
 	    //Entity = InstanceList.GetSTEPentity(Index);
 	    MgrNode* MgrTmp = instanceManager.FindFileId(Index);
 	    Index = instanceManager.GetIndex(MgrTmp);
-	    Entity = instanceManager.GetSTEPentity(Index);
+//          Entity = instanceManager.GetSTEPentity(Index);
+            Entity = instanceManager.GetApplication_instance(Index);
 	    void *tmp =G4GeometryTable::CreateObject(*Entity);
 	    controlPoints.put(a,b,*(G4PointRat*)tmp);
 	  }  
     }  
-
-  
-  createdObject = bSpline;
-  
+  createdObject = bSpline;  
 }
 
-  void G4BSplineSurfaceWithKnotsCreator::CreateSTEPGeometry(void* G4obj)
+void G4BSplineSurfaceWithKnotsCreator::CreateSTEPGeometry(void* G4obj)
 {
-
 }
-
-
-
-

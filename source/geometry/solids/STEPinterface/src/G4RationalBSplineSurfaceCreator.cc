@@ -1,10 +1,35 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4RationalBSplineSurfaceCreator.cc,v 1.2 2000-01-21 13:46:05 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// ----------------------------------------------------------------------
+// Class G4RationalBSplineSurfaceCreator
+//
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
+
 #include "G4RationalBSplineSurfaceCreator.hh"
+#include "G4GeometryTable.hh"
 
 G4RationalBSplineSurfaceCreator G4RationalBSplineSurfaceCreator::csc;
 
-G4RationalBSplineSurfaceCreator::G4RationalBSplineSurfaceCreator(){G4GeometryTable::RegisterObject(this);}
+G4RationalBSplineSurfaceCreator::G4RationalBSplineSurfaceCreator()
+{
+  G4GeometryTable::RegisterObject(this);
+}
 
-G4RationalBSplineSurfaceCreator::~G4RationalBSplineSurfaceCreator(){}
+G4RationalBSplineSurfaceCreator::~G4RationalBSplineSurfaceCreator() {}
 
 void G4RationalBSplineSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 {
@@ -12,7 +37,7 @@ void G4RationalBSplineSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
   STEPattribute *Attr = GetNamedAttribute(attrName, Ent);
   STEPaggregate *weightAggr = Attr->ptr.a;
   SdaiRational_b_spline_surface* bSpline = new SdaiRational_b_spline_surface(&Ent);
-  bSpline->Weights_data((GenericAggregate*)Attr->ptr.a);
+  bSpline->weights_data_((GenericAggregate*)Attr->ptr.a);
  
   // Temp solution until NIST supports
   // two dimensional instances.grrh
@@ -245,21 +270,16 @@ void G4RationalBSplineSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 	    //Entity = InstanceList.GetSTEPentity(Index);
 	    MgrNode* MgrTmp = instanceManager.FindFileId(Index);
 	    Index = instanceManager.GetIndex(MgrTmp);
-	    Entity = instanceManager.GetSTEPentity(Index);
+//          Entity = instanceManager.GetSTEPentity(Index);
+            Entity = instanceManager.GetApplication_instance(Index);
 	    void *tmp =G4GeometryTable::CreateObject(*Entity);
 	    controlPoints.put(a,b,*(G4PointRat*)tmp);
 	  }  
     }  
     */
-
-
-  
   createdObject = bSpline;
 }
 
 void G4RationalBSplineSurfaceCreator::CreateSTEPGeometry(void* G4obj)
 {
-
 }
-
-

@@ -1,4 +1,26 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4Axis2Placement3dCreator.cc,v 1.2 2000-01-21 13:45:58 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// Class G4Axis2Placement3dCreator
+//
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
+
 #include "G4Axis2Placement3dCreator.hh"
+#include "G4GeometryTable.hh"
+
 G4Axis2Placement3dCreator G4Axis2Placement3dCreator::csc;
 
 G4Axis2Placement3dCreator::G4Axis2Placement3dCreator()
@@ -6,7 +28,7 @@ G4Axis2Placement3dCreator::G4Axis2Placement3dCreator()
   G4GeometryTable::RegisterObject(this);
 }
 
-G4Axis2Placement3dCreator::~G4Axis2Placement3dCreator(){}
+G4Axis2Placement3dCreator::~G4Axis2Placement3dCreator() {}
 
 void G4Axis2Placement3dCreator::CreateG4Geometry(STEPentity& Ent)
 {
@@ -55,27 +77,22 @@ void G4Axis2Placement3dCreator::CreateSTEPGeometry(void* G4obj)
 
   // Get location
   void * tmp =G4GeometryTable::CreateSTEPObject(&pt, pointName);
-  place->Location((SdaiCartesian_point*)tmp);
+  place->location_((SdaiCartesian_point*)tmp);
 
   // Get axis
   tmp = G4GeometryTable::CreateSTEPObject(&axis, directionName);  
-  place->Axis((SdaiDirection*)tmp);
+  place->axis_((SdaiDirection*)tmp);
 
   // Get dir
   tmp = G4GeometryTable::CreateSTEPObject(&dir, directionName);
-  place->Ref_direction((SdaiDirection*)tmp);  
+  place->ref_direction_((SdaiDirection*)tmp);  
 
   // Set STEP info
   place->SetFileId(GetNextId());
-  place->Name("");
+  place->name_("");
 
   // Write out object & subobjects
   place->STEPwrite(G4cout);
 
   createdObject = place;
 }
-
-
-
-
-

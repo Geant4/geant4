@@ -1,11 +1,36 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ConicalSurfaceCreator.cc,v 1.2 2000-01-21 13:45:59 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// Class G4ConicalSurfaceCreator
+//
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
+
 #include "G4ConicalSurfaceCreator.hh"
+#include "G4GeometryTable.hh"
 #include "G4ConicalSurface.hh"
+#include "G4FConicalSurface.hh"
 
 G4ConicalSurfaceCreator G4ConicalSurfaceCreator::csc;
 
-G4ConicalSurfaceCreator::G4ConicalSurfaceCreator(){G4GeometryTable::RegisterObject(this);}
+G4ConicalSurfaceCreator::G4ConicalSurfaceCreator()
+{
+  G4GeometryTable::RegisterObject(this);
+}
 
-G4ConicalSurfaceCreator::~G4ConicalSurfaceCreator(){}
+G4ConicalSurfaceCreator::~G4ConicalSurfaceCreator() {}
 
 void G4ConicalSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 {
@@ -35,8 +60,6 @@ void G4ConicalSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 			  angle * 2*M_PI/360      );
 
   createdObject = aG4cone;
-
- 
 }
 
 void G4ConicalSurfaceCreator::CreateSTEPGeometry(void* G4obj)
@@ -47,20 +70,17 @@ void G4ConicalSurfaceCreator::CreateSTEPGeometry(void* G4obj)
   G4String placementName("Axis2Placement3d");
   void * tmp =G4GeometryTable::CreateSTEPObject(&fCon, placementName);
   SdaiAxis2_placement_3d *place = (SdaiAxis2_placement_3d*)tmp;
-  srf->Position(place);
+  srf->position_(place);
   // radius
-    srf->Radius(fCon->GetSmallRadius());
+  srf->radius_(fCon->GetSmallRadius());
   // semi-angle
   //srf->Semi_angle(fCon->GetAngle());
   // Set STEP info
   srf->SetFileId(GetNextId());
-  srf->Name("");
+  srf->name_("");
   
   // Write out object 
   srf->STEPwrite(G4cout);
 
   createdObject = srf;
 }
-
-
-

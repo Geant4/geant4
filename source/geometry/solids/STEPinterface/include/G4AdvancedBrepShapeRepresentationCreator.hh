@@ -1,28 +1,52 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4AdvancedBrepShapeRepresentationCreator.hh,v 1.2 2000-01-21 13:45:06 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// Class G4AdvancedBrepShapeRepresentationCreator
+//
+// Class description:
+//
+//
+
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
 #ifndef G4ADVANCEDBREPSHAPEREPRESENTATIONCREATOR_HH
 #define G4ADVANCEDBREPSHAPEREPRESENTATIONCREATOR_HH
+
 #include "G4GeometryCreator.hh"
-#include "G4GeometryTable.hh"
 
 class G4AdvancedBrepShapeRepresentationCreator: private G4GeometryCreator 
 {
-public:
-//Constructor
-G4AdvancedBrepShapeRepresentationCreator();
-~G4AdvancedBrepShapeRepresentationCreator();
+  public:
+  
+  // Constructor & destructor
 
-//Member functions
+    G4AdvancedBrepShapeRepresentationCreator();
+    ~G4AdvancedBrepShapeRepresentationCreator();
 
-void CreateG4Geometry(STEPentity&);
+  // Member functions
 
-void CreateSTEPGeometry(void* G4obj);
+    void CreateG4Geometry(STEPentity&);
+    void CreateSTEPGeometry(void* G4obj);
+    G4String Name() { return "Advanced_Brep_Shape_Representation"; }
+    static G4AdvancedBrepShapeRepresentationCreator GetInstance() { return csc; }
 
-G4String Name(){return "Advanced_Brep_Shape_Representation";};
+  // Members
 
-static G4AdvancedBrepShapeRepresentationCreator GetInstance(){return csc;};
+  private:
 
-//Members
-private:
-
-static G4AdvancedBrepShapeRepresentationCreator csc;
+    static G4AdvancedBrepShapeRepresentationCreator csc;
 };
+
 #endif

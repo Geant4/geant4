@@ -5,30 +5,27 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NISTStepReader.hh,v 1.2 1999-12-15 14:50:20 gunter Exp $
+// $Id: G4NISTStepReader.hh,v 1.3 2000-01-21 13:45:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ----------------------------------------------------------------------
+// Class G4NISTStepReader
+//
+// Class description:
+//
+//
+
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
 #ifndef G4NISTSTEPFILEREADER_HH
 #define G4NISTSTEPFILEREADER_HH
+
+#include <instmgr.h>
 #include "G4StepFileReader.hh"
-
-#include "STEPfile.h"   /*  STEPfile class and others used by SCL */
-#include "sdai.h"       /*  definitions of for EXRPESS built-in types  */
-#include "schema.h"
-#include "instmgr.h"
-//#include "G4StepFile.h"   /*  or suitable substitute   */
-
-
-#ifdef __O3DB__
-#include <OpenOODB.h>
-#endif
-
-#include "instmgr.h"
-#include "Registry.h"
-//#include "STEPfile.h"
-#include "STEPentity.h"
-#include "STEPaggregate.h"
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // Function defined as a stub (necessary to use the scl)
@@ -57,13 +54,12 @@ void AssignFileId (STEPentity *se, InstMgr& instance_list)
 // define this to be the name of the display window object for 
 // STEP entity instance editing or define your own.
 // This is only needed as there's a link to these from the toolkit
-class STEPentity;
-class InstMgr;
+
 class StepEntityEditor
 {
   public:
-    StepEntityEditor() {};
-    ~StepEntityEditor() {};
+    StepEntityEditor() {;}
+    ~StepEntityEditor() {;}
 };
 
 extern void AssignFileId (STEPentity *se, InstMgr& instance_list);
@@ -74,15 +70,16 @@ extern void SchemaInit (Registry &);
 
 class G4NISTStepReader: public G4StepFileReader
 {
- public:
-  void ReadSTEPFile(G4String);
-  void SaveSTEPFile();
-  void UpdateSTEPFile();
-  InstMgr GetInstanceManager(){return InstanceList;}
+  public:
 
- private:
-  InstMgr InstanceList;
-   
+    void ReadSTEPFile(G4String);
+    void SaveSTEPFile();
+    void UpdateSTEPFile();
+    InstMgr GetInstanceManager() { return InstanceList; }
+
+  private:
+
+    InstMgr InstanceList;
 };
 
 #endif

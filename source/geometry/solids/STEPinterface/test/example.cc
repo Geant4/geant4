@@ -18,7 +18,7 @@ int main(int argc,char** argv)
   
   char *filename;
   if ( argc == 1 ) {
-    filename = "stepfiles/G4rod_place_asm.stp";
+    filename = (char*)("stepfiles/G4rod_place_asm.stp");
   } else {
     filename = argv[1];
   }
@@ -29,8 +29,6 @@ int main(int argc,char** argv)
   MyAC.ReadStepFile();
   STEPentity *ent=0;
   MyAC.CreateG4Geometry(*ent);
-
-
   
     /*
        // G4Placement* place = new G4Placement();

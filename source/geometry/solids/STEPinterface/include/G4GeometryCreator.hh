@@ -1,63 +1,68 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4GeometryCreator.hh,v 1.3 2000-01-21 13:45:26 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// Class G4GeometryCreator
+//
+// Class description:
+//
+//
+
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
 #ifndef G4GEOMETRYCREATOR_HH
 #define G4GEOMETRYCREATOR_HH
-//#include "G4OrderedTable.hh"
-#include "G4STEPEntity.hh"
-#include "G4NISTStepReader.hh"
-#include "G4Curve.hh"
-#include "G4PlacedSolid.hh"
-//#include "G4Placement.hh"
-#include "G4Axis2Placement3D.hh"
 
-//typedef G4RWTPtrOrderedVector<G4Curve> G4CurveVector;
-//typedef G4RWTPtrOrderedVector<G4CurveVector> G4BoundaryVector;
+#include <schema.h>
+#include "globals.hh"
+#include "G4PlacedSolid.hh"
+#include "G4Surface.hh"
+#include "G4BREPSolid.hh"
+
 typedef G4RWTPtrOrderedVector<G4PlacedSolid> G4PlacedSolidVector;
-//typedef G4RWTPtrOrderedVector<G4GeometryCreator> G4CreatorVector;
 typedef G4RWTPtrOrderedVector<G4Surface> G4SurfaceVector;
 typedef G4RWTPtrOrderedVector<G4BREPSolid> G4SolidVector;
-//typedef G4RWTPtrOrderedVector<G4Placement> G4PlacementVector;
-
-//#include "G4STEPEntity.hh"
-//erator ==(class G4RWTPtrOrderedVector<G4Curve> a, class G4RWTPtrOrderedVector<G4Curve> b){}
-#include "globals.hh"
-#include "instmgr.h"
-#include "STEPentity.h"
-#include "STEPaggregate.h"
-
-#include "G4Curve.hh"
-//#include "G4Surface.hh"
-#include "G4FPlane.hh"
-#include "G4FConicalSurface.hh"
-#include "G4FCylindricalSurface.hh"
-#include "G4CylindricalSurface.hh"
-#include "G4ToroidalSurface.hh"
-#include "G4SphericalSurface.hh"
-#include "G4PlacedSolid.hh"
 
 class G4GeometryCreator
 {
   
-public:
-  G4GeometryCreator(){}
-  virtual ~G4GeometryCreator(){};
+  public:
 
-  virtual void CreateG4Geometry(STEPentity&)=0;
-  virtual void CreateSTEPGeometry(void* =0)=0;
+  // Constructor & destructor
+  
+    G4GeometryCreator() {;}
+    virtual ~G4GeometryCreator() {;}
 
-  virtual void* GetCreatedObject(){return createdObject;}
+  // Member functions
   
-  virtual G4String Name()=0;
-  virtual G4bool operator==(const G4GeometryCreator&){return 0;}
-  virtual STEPattribute* GetNamedAttribute(G4String&,STEPentity&);
-  virtual STEPentity* GetNamedEntity(G4String&,STEPentity&);  
-  G4int GetNextId(){objectId +=10 ; return objectId; }
+    virtual void CreateG4Geometry(STEPentity&)=0;
+    virtual void CreateSTEPGeometry(void* =0)=0;
+
+    virtual void* GetCreatedObject() { return createdObject; }
   
-  static G4int objectId;
-  static InstMgr instanceManager;
-  void* createdObject;
+    virtual G4String Name()=0;
+    virtual G4bool operator==(const G4GeometryCreator&) { return 0; }
+    virtual STEPattribute* GetNamedAttribute(G4String&,STEPentity&);
+    virtual STEPentity* GetNamedEntity(G4String&,STEPentity&);  
+    G4int GetNextId() { objectId+=10; return objectId; }
+
+  // Members
+    
+    static G4int objectId;
+    static InstMgr instanceManager;
+    void* createdObject;
 
 };
 
 #endif
-
-
-

@@ -5,10 +5,30 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NISTStepReader.cc,v 1.2 1999-12-15 14:50:21 gunter Exp $
+// $Id: G4NISTStepReader.cc,v 1.3 2000-01-21 13:46:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// 
+// ----------------------------------------------------------------------
+// Class G4NISTStepReader
+//
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
+
 #include "G4NISTStepReader.hh"
+
+#include "instmgr.h"
+#include "Registry.h"
+#include "STEPaggregate.h"
+#include "STEPfile.h"   /*  STEPfile class and others used by SCL */
+
+#ifdef __O3DB__
+  #include <OpenOODB.h>
+#endif
 
 void G4NISTStepReader::ReadSTEPFile(G4String STEPfilename)
 {
@@ -58,6 +78,6 @@ void G4NISTStepReader::ReadSTEPFile(G4String STEPfilename)
 }
 
 
-void G4NISTStepReader::SaveSTEPFile(){}
+void G4NISTStepReader::SaveSTEPFile() {}
 
-void G4NISTStepReader::UpdateSTEPFile(){}
+void G4NISTStepReader::UpdateSTEPFile() {}

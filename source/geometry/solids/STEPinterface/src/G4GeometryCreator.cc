@@ -1,11 +1,35 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4GeometryCreator.cc,v 1.3 2000-01-21 13:46:02 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// ----------------------------------------------------------------------
+// Class G4GeometryCreator
+//
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
+
+#include <instmgr.h>
+#include <STEPcomplex.h>
+
 #include "G4GeometryCreator.hh"
 #include "G4GeometryTable.hh"
-#include "STEPcomplex.h"
 
 InstMgr G4GeometryCreator::instanceManager;
 G4int G4GeometryCreator::objectId = 0;
 
-STEPattribute* G4GeometryCreator::GetNamedAttribute(G4String& attrName, STEPentity& Ent)
+STEPattribute*
+G4GeometryCreator::GetNamedAttribute(G4String& attrName, STEPentity& Ent)
 {
   STEPattribute* attr;
 
@@ -24,7 +48,8 @@ STEPattribute* G4GeometryCreator::GetNamedAttribute(G4String& attrName, STEPenti
   return 0; // NULL
 }
 
-STEPentity* G4GeometryCreator::GetNamedEntity(G4String& entName, STEPentity& Ent)
+STEPentity*
+G4GeometryCreator::GetNamedEntity(G4String& entName, STEPentity& Ent)
 {
   // Ent is a complex entity
 
@@ -48,6 +73,7 @@ STEPentity* G4GeometryCreator::GetNamedEntity(G4String& entName, STEPentity& Ent
 
   return 0;    
 }
+
 /*
 G4int[][] G4GeometryCreator::GetIds(GenericAggregate& aggr)
 {
@@ -57,12 +83,5 @@ G4int[][] G4GeometryCreator::GetIds(GenericAggregate& aggr)
 
   SCLstring str;
   G4String aggrStr = gNode->asStr(str); 
-  
-  
-  
 }
 */
-
-
-
-

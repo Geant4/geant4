@@ -1,4 +1,26 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ProductDefinitionShapeCreator.cc,v 1.3 2000-01-21 13:46:05 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// ----------------------------------------------------------------------
+// Class G4ProductDefinitionShapeCreator
+//
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
+
 #include "G4ProductDefinitionShapeCreator.hh"
+#include "G4GeometryTable.hh"
 
 G4ProductDefinitionShapeCreator G4ProductDefinitionShapeCreator::csc;
 
@@ -7,7 +29,7 @@ G4ProductDefinitionShapeCreator::G4ProductDefinitionShapeCreator()
   G4GeometryTable::RegisterObject(this);
 }
 
-G4ProductDefinitionShapeCreator::~G4ProductDefinitionShapeCreator(){}
+G4ProductDefinitionShapeCreator::~G4ProductDefinitionShapeCreator() {}
 
 void G4ProductDefinitionShapeCreator::CreateG4Geometry(STEPentity& Ent)
 {
@@ -32,5 +54,4 @@ void G4ProductDefinitionShapeCreator::CreateG4Geometry(STEPentity& Ent)
 
 void G4ProductDefinitionShapeCreator::CreateSTEPGeometry(void* G4obj)
 {
-
 }
