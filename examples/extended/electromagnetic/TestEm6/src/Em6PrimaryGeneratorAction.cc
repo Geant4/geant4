@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em6PrimaryGeneratorAction.cc,v 1.3 2000-01-28 04:26:32 vnivanch Exp $
+// $Id: Em6PrimaryGeneratorAction.cc,v 1.4 2000-03-31 15:23:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,7 +68,7 @@ void Em6PrimaryGeneratorAction::SetDefaultKinematic()
   particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
   particleGun->SetParticleEnergy(30.*MeV);
   //  G4double x0 = -0.5*(Em6Detector->GetWorldSizeX());
-  particleGun->SetParticlePosition(G4ThreeVector(-0.1*cm, 0*cm, 0*cm));  
+  particleGun->SetParticlePosition(G4ThreeVector(0.0*cm, 0.0*cm, 0.0*cm));  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

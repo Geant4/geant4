@@ -45,7 +45,7 @@ Em6PhysicsList::Em6PhysicsList(Em6DetectorConstruction* p)
   cutForProton    = defaultCutValue;
   
   //  MaxChargedStep = DBL_MAX; 
-  MaxChargedStep = 1*mm; 
+  MaxChargedStep = 0.1*mm; 
   
   SetVerboseLevel(2);
   physicsListMessenger = new Em6PhysicsListMessenger(this);
@@ -312,9 +312,16 @@ void Em6PhysicsList::SetCuts()
   // G4Timer theTimer ;
   // theTimer.Start() ;
 
+  //special for low energy physics
+  //
+  G4double lowlimit=1*eV;  
+  G4Gamma   ::SetEnergyRange(lowlimit,100*GeV);
+  G4Electron::SetEnergyRange(lowlimit,100*GeV);
+  G4Positron::SetEnergyRange(lowlimit,100*GeV);
+   
   if (verboseLevel >0){
     G4cout << "Em6PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
+    G4cout << "CutLength : " << G4BestUnit(MaxChargedStep,"Length") << G4endl;
   }  
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
@@ -361,7 +368,7 @@ void Em6PhysicsList::SetGammaCut(G4double val)
 
 void Em6PhysicsList::SetElectronCut(G4double val)
 {
-  ResetCuts();
+  //  ResetCuts();
   cutForElectron = val;
 }
 
@@ -369,7 +376,7 @@ void Em6PhysicsList::SetElectronCut(G4double val)
 
 void Em6PhysicsList::SetProtonCut(G4double val)
 {
-  ResetCuts();
+  //  ResetCuts();
   cutForProton = val;
 }
 

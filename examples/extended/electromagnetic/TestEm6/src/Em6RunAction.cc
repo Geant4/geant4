@@ -22,13 +22,13 @@
 #ifndef G4NOHIST
 #include "CLHEP/Hist/HBookFile.h"
 #include <assert.h>
-//#include <assert.h>
 #endif
 
 #include "G4hEnergyLoss.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4hLowEnergyIonisation.hh"
 #include "G4ionLowEnergyIonisation.hh"
+#include "Em6PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -37,16 +37,58 @@ Em6RunAction::Em6RunAction()
    nbinTsec(0),nbinTh(0),nbinThback(0),nbinR(0),nbinGamma(0),
    nbinvertexz(0),
 #ifndef G4NOHIST
-   histName("histfile"),histo1(0),histo2(0),histo3(0),histo4(0),histo5(0),
-   histo6(0),histo7(0),histo8(0),histo9(0),histo10(0),
+   histName("histfile"),
+  //   histo1(0),histo2(0),histo3(0),histo4(0),histo5(0),
+  //   histo6(0),histo7(0),histo8(0),histo9(0),histo10(0),
 #endif
    theProton (G4Proton::Proton()),
    theElectron ( G4Electron::Electron() ),
    LowestEnergy(0.01*keV),
    HighestEnergy(100.*TeV),
    TotBin(200)
+
 {
   runMessenger = new Em6RunMessenger(this);
+
+  nbinStep = 100;
+  Steplow  = -0.5;
+  Stephigh = 95.5;
+
+  nbinEn = 100;
+  Enlow  = 0.0;
+  Enhigh = 5.0;
+
+  nbinTh = 90;
+  Thlow  = 0.0;
+  Thhigh = 90.0;
+
+  nbinR  = 100;
+  Rlow   = 0.0;
+  Rhigh  = 1.0;
+
+  nbinTt = 100;
+  Ttlow  = 0.0;
+  Tthigh = 2.0;
+
+  nbinThback=90;
+  Thlowback =0.0;
+  Thhighback=90.0;
+
+  nbinTb=100;
+  Tblow =0.0;
+  Tbhigh=2.0;
+
+  nbinTsec=100;
+  Tseclow =0.0;
+  Tsechigh=2.0;
+
+  nbinvertexz=100;
+  zlow=0.0;
+  zhigh=10.;
+
+  nbinGamma=100;
+  ElowGamma=0.0;
+  EhighGamma=2.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -55,16 +97,16 @@ Em6RunAction::~Em6RunAction()
 {
   delete runMessenger;
 #ifndef G4NOHIST
-  if(histo1) delete histo1 ;
-  if(histo2) delete histo2 ;
-  if(histo3) delete histo3 ;
-  if(histo4) delete histo4 ;
-  if(histo5) delete histo5 ;
-  if(histo6) delete histo6 ;
-  if(histo7) delete histo7 ;
-  if(histo8) delete histo8 ;
-  if(histo9) delete histo9 ;
-  if(histo10) delete histo10 ;
+  delete histo1 ;
+  delete histo2 ;
+  delete histo3 ;
+  delete histo4 ;
+  delete histo5 ;
+  delete histo6 ;
+  delete histo7 ;
+  delete histo8 ;
+  delete histo9 ;
+  delete histo10 ;
   delete histo11 ;
   delete histo12 ;
   delete histo13 ;
@@ -108,6 +150,43 @@ Em6RunAction::~Em6RunAction()
   delete histo85 ;
   delete histo86 ;
   delete hbookManager;
+  delete ntup;
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#ifndef G4NOHIST
+HepTuple* Em6RunAction::GetNtuple()
+{
+  return ntup;
+}
+#endif
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Em6RunAction::SaveEvent()
+{
+#ifndef G4NOHIST
+  ntup->dumpData();
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Em6RunAction::SaveToTuple(G4String parname,G4double val)
+{
+#ifndef G4NOHIST
+  ntup->column(parname,val);
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Em6RunAction::SaveToTuple(G4String parname,G4double val,G4double defval)
+{
+#ifndef G4NOHIST
+  ntup->column(parname,val,defval);
 #endif
 }
 
@@ -116,72 +195,47 @@ Em6RunAction::~Em6RunAction()
 #ifndef G4NOHIST
 void Em6RunAction::bookHisto()
 {
+  G4cout << "Histo booked for the particle: " << Em6PrimaryGeneratorAction::GetPrimaryName() << endl;
+
   // init hbook
   hbookManager = new HBookFile(histName, 68);
-  //  assert (hbookManager != 0);
+
+  // book ntuple
+  ntup = hbookManager->ntuple("Range/Energy");
 
   // book histograms
-  if(nbinStep>0)
-  {
-    histo1 = hbookManager->histogram("number of steps/event"
+  histo1 = hbookManager->histogram("number of steps/event"
                                    ,nbinStep,Steplow,Stephigh) ;
-    //    assert (histo1 != 0);
-  }
-  if(nbinEn>0)
-  {
-    histo2 = hbookManager->histogram("energy deposit in absorber(in MeV)"
+
+  histo2 = hbookManager->histogram("energy deposit in absorber(in MeV)"
                                      ,nbinEn,Enlow,Enhigh) ;
-    //    assert (histo2 != 0);
-  }
-  if(nbinTh>0)
-  {
-    histo3 = hbookManager->histogram("angle distribution at exit(deg)"
-                                     ,nbinTh,Thlow/deg,Thhigh/deg) ;
-    //    assert (histo3 != 0);
-  }
-  if(nbinR>0)
-  {
-    histo4 = hbookManager->histogram("lateral distribution at exit(mm)"
+
+
+  histo3 = hbookManager->histogram("angle distribution at exit(deg)"
+                                     ,nbinTh,Thlow,Thhigh) ;
+
+  histo4 = hbookManager->histogram("lateral distribution at exit(mm)"
                                      ,nbinR ,Rlow,Rhigh)  ;
-    //    assert (histo4 != 0);
-  }
-  if(nbinTt>0)
-  {
-    histo5 = hbookManager->histogram("kinetic energy of the primary at exit(MeV)"
+
+  histo5 = hbookManager->histogram("kinetic energy of secondaries at exit(MeV)"
                                      ,nbinTt,Ttlow,Tthigh)  ;
-    //    assert (histo5 != 0);
-  }
-  if(nbinThback>0)
-  {
-    histo6 = hbookManager->histogram("angle distribution of backscattered primaries(deg)"
-                                     ,nbinThback,Thlowback/deg,Thhighback/deg) ;
-    //    assert (histo6 != 0);
-  }
-  if(nbinTb>0)
-  {
-    histo7 = hbookManager->histogram("kinetic energy of the backscattered primaries (MeV)"
+
+  histo6 = hbookManager->histogram("angle distribution of backscattered (deg)"
+                                     ,nbinThback,Thlowback,Thhighback) ;
+
+  histo7 = hbookManager->histogram("kinetic energy of the backscattered (MeV)"
                                      ,nbinTb,Tblow,Tbhigh)  ;
-    //    assert (histo7 != 0);
-  }
-  if(nbinTsec>0)
-  {
-    histo8 = hbookManager->histogram("kinetic energy of the charged secondaries (MeV)"
+
+  histo8 = hbookManager->histogram("kinetic energy of the charged secondaries (MeV)"
                                      ,nbinTsec,Tseclow,Tsechigh)  ;
-    //    assert (histo8 != 0);
-  }
-  if(nbinvertexz>0)
-  {
-    histo9 = hbookManager->histogram("z of secondary charged vertices(mm)"
-                                     ,nbinvertexz ,zlow,zhigh)  ;
-    //    assert (histo9 != 0);
-  }
-  if(nbinGamma>0)
-  {
-    histo10= hbookManager->histogram("kinetic energy of gammas escaping the absorber (MeV)"
-                                //     ,nbinGamma,ElowGamma,EhighGamma)  ;
-                                ,nbinGamma,log10(ElowGamma),log10(EhighGamma))  ;
-    //    assert (histo10 != 0);
-  }
+
+  histo9 = hbookManager->histogram("z of secondary charged vertices(mm)"
+                                     ,nbinvertexz ,undervertexz,oververtexz)  ;
+
+  histo10= hbookManager->histogram("kinetic energy of gammas escaping the absorber (MeV)"
+                       ,nbinGamma,ElowGamma,EhighGamma)  ;
+//                  ,nbinGamma,log10(ElowGamma),log10(EhighGamma))  ;
+
 
   // Test on G4hLowEnergyIonisation
   histo11 = hbookManager->histogram("proton 40 keV ionisation (keV*cm2/10^15!atoms) Z77p"
@@ -190,10 +244,10 @@ void Em6RunAction::bookHisto()
                                                   ,92,0.5,92.5) ;
   histo13 = hbookManager->histogram("He4 effective charge in Carbon"
                                    ,TotBin,log10(LowestEnergy),log10(HighestEnergy)) ;
-  histo14 = hbookManager->histogram("C12 ionisation in Al (MeV/(mg/cm^2)) Geant4"
+  histo14 = hbookManager->histogram("C12 ionisation in Al (MeV/(mg/cm2)) Geant4"
                                    ,TotBin,log10(LowestEnergy),log10(HighestEnergy)) ;
 
-  histo15 = hbookManager->histogram("Ar40 ionisation in Al (MeV/(mg/cm^2)) Geant4"
+  histo15 = hbookManager->histogram("Ar40 ionisation in Al (MeV/(mg/cm2)) Geant4"
                                    ,TotBin,log10(LowestEnergy),log10(HighestEnergy)) ;
 
   histo21 = hbookManager->histogram("proton 40 keV ionisation (keV*cm2/10^15!atoms) G4 Ziegler1977p"
@@ -413,7 +467,8 @@ void Em6RunAction::BeginOfRunAction(const G4Run* aRun)
 
   if(nbinGamma>0)
   {
-    dEGamma = log(EhighGamma/ElowGamma)/nbinGamma ;
+//    dEGamma = log(EhighGamma/ElowGamma)/nbinGamma ;
+    dEGamma = (EhighGamma-ElowGamma)/nbinGamma ;
     entryGamma = 0.;
     underGamma=0.;
     overGamma=0.;
@@ -433,10 +488,6 @@ void Em6RunAction::BeginOfRunAction(const G4Run* aRun)
       distvertexz[iz]=0.;
     }
   }
-
-#ifndef G4NOHIST
-  bookHisto();
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -498,21 +549,23 @@ void Em6RunAction::EndOfRunAction(const G4Run* aRun)
  G4int prec = G4cout.precision(6);
   G4cout << " end of Run TotNbofEvents = " <<  
            TotNbofEvents << G4endl ;
-  G4cout << "    mean charged track length   in absorber=" <<
+  G4cout << "    Range in absorber = " <<
            tlSumAbs/mm      << " +- " << sAbs/mm    <<
           "  mm  " << G4endl; 
   G4cout << G4endl;
-  G4cout << "            mean energy deposit in absorber=" <<
+  G4cout << "    Energy deposit in absorber = " <<
            EnergySumAbs/MeV << " +- " << sigAbs/MeV <<
           "  MeV " << G4endl ;
   G4cout << G4endl ;
-  G4cout << " mean number of steps in absorber (charged) =" <<
+  /*
+  G4cout << " mean number of steps in absorber (charged) = " <<
            nStepSumCharged         << " +- " << sigch     <<
           "      " << G4endl ;
-  G4cout << " mean number of steps in absorber (neutral) =" <<
+  G4cout << " mean number of steps in absorber (neutral) = " <<
            nStepSumNeutral         << " +- " << signe     <<
           "      " << G4endl ;
   G4cout << G4endl ;
+
   G4cout << "   mean number of charged secondaries = " <<
            SumCharged << " +- " << sigcharged << G4endl;  
   G4cout << G4endl ;
@@ -523,7 +576,7 @@ void Em6RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "   mean number of e-s =" << Selectron << 
             "  and e+s =" << Spositron << G4endl;
   G4cout << G4endl; 
-  
+  */
   G4cout << "(number) transmission coeff=" << Transmitted <<
             "  reflection coeff=" << Reflected << G4endl;
   G4cout << G4endl; 
@@ -1070,11 +1123,13 @@ void Em6RunAction::FillGammaSpectrum(G4double En)
       overGamma  += 1. ;
     else
     {
-      bin = log(En/ElowGamma)/dEGamma;
+//      bin = log(En/ElowGamma)/dEGamma;
+      bin = (En-ElowGamma)/dEGamma;
       ibin= G4int(bin) ;
       distGamma[ibin] += 1. ;
     }
-  histo10->accumulate(log10(En/MeV)) ;
+//  histo10->accumulate(log10(En/MeV)) ;
+  histo10->accumulate(En/MeV) ;
   }
 #endif
 }
@@ -1083,41 +1138,28 @@ void Em6RunAction::FillGammaSpectrum(G4double En)
 
 void Em6RunAction::FillTh(G4double Th)
 {
-  static const G4double cn=pi/(64800.*dTh) ;
-  static const G4double cs=pi/
-        (64800.*(cos(Thlow)-cos(Thlow+dTh)));      
-  G4double bin,Thbin ,wg;
+  G4double bin,Thbin,Th0;
   G4int ibin;
+
+  Th0 = Th/deg ;
 
 #ifndef G4NOHIST
   if(histo3)
   {
     entryTh += 1. ;
 
-    wg = 0.;
-
-    if(Th<Thlow)
+    if(Th0 < Thlow)
       underTh += 1. ;
-    else if(Th>=Thhigh)
+    else if(Th0 >= Thhigh)
       overTh  += 1. ;
     else
     {
-      bin = (Th-Thlow)/dTh ;
+      bin = (Th0-Thlow)/dTh ;
       ibin= G4int(bin) ;
-      Thbin = Thlow+ibin*dTh ;
-      if(Th > 0.001*dTh)
-        wg=cn/sin(Th) ;
-      else
-      {  
-        G4double thdeg=Th*180./pi;
-        G4cout << "theta < 0.001*dth (from plot excluded) theta="
-               << G4std::setw(12) << G4std::setprecision(4) << thdeg << G4endl;
-        wg=0. ; 
-      }
-      distTh[ibin] += wg  ;
+      distTh[ibin] += 1.0  ;
     }
 
-  histo3->accumulate(Th/deg, wg) ;
+  histo3->accumulate(Th0) ;
   }
 #endif
 }
@@ -1126,38 +1168,27 @@ void Em6RunAction::FillTh(G4double Th)
 
 void Em6RunAction::FillThBack(G4double Th)
 {
-  static const G4double cn=pi/(64800.*dThback) ;
-  static const G4double cs=pi/
-        (64800.*(cos(Thlowback)-cos(Thlowback+dThback)));      
-  G4double bin,Thbin,wg ;
+  G4double bin,Thbin,Th0 ;
   G4int ibin;
+
+  Th0 = Th/deg ;
 
 #ifndef G4NOHIST
   if(histo6)
   {
     entryThback += 1. ;
 
-    if(Th<Thlowback)
+    if(Th0 < Thlowback)
       underThback += 1. ;
-    else if(Th>=Thhighback)
+    else if(Th0 >= Thhighback)
       overThback  += 1. ;
     else
     {
-      bin = (Th-Thlowback)/dThback ;
+      bin = (Th0-Thlowback)/dThback ;
       ibin= G4int(bin) ;
-      Thbin = Thlowback+ibin*dThback ;
-      if(Th > 0.001*dThback)
-        wg=cn/sin(Th) ;
-      else
-      {  
-        G4double thdeg=Th*180./pi;
-        G4cout << "theta < 0.001*dth (from plot excluded) theta="
-               << G4std::setw(12) << G4std::setprecision(4) << thdeg << G4endl;
-        wg=0. ; 
-      }
-      distThback[ibin] += wg  ;
+      distThback[ibin] += 1.0  ;
     }
-  histo6->accumulate(Th/deg, wg) ;
+  histo6->accumulate(Th0) ;
   }
 #endif
 
@@ -1167,27 +1198,29 @@ void Em6RunAction::FillThBack(G4double Th)
 
 void Em6RunAction::FillR(G4double R )
 {
-  G4double bin ;
+  G4double bin, R0 ;
   G4int ibin;
+
+  R0 = R/mm ;
 
 #ifndef G4NOHIST
   if(histo4)
   {
     entryR  += 1. ;
-    Rmean += R ;
-    R2mean += R*R ;
+    Rmean += R0 ;
+    R2mean += R0*R0 ;
 
-    if(R <Rlow)
+    if(R0 <Rlow)
       underR  += 1. ;
-    else if(R >=Rhigh)
+    else if(R0 >=Rhigh)
       overR   += 1. ;
     else
     {
-      bin = (R -Rlow)/dR  ;
+      bin = (R0 -Rlow)/dR  ;
       ibin= G4int(bin) ;
       distR[ibin] += 1. ;
     }
-  histo4->accumulate(R/mm) ;
+  histo4->accumulate(R0) ;
   }
 #endif
 }
@@ -1196,25 +1229,27 @@ void Em6RunAction::FillR(G4double R )
 
 void Em6RunAction::Fillvertexz(G4double z )
 {
-  G4double bin ;
+  G4double bin, z0 ;
   G4int ibin;
+
+  z0 = z/mm ;
   
 #ifndef G4NOHIST
   if(histo9)
   {
     entryvertexz  += 1. ;
 
-    if(z <zlow)
+    if(z0 <zlow)
       undervertexz  += 1. ;
-    else if(z >=zhigh)
+    else if(z0 >=zhigh)
       oververtexz   += 1. ;
     else
     {
-      bin = (z -zlow)/dz  ;
+      bin = (z0 -zlow)/dz  ;
       ibin= G4int(bin) ;
       distvertexz[ibin] += 1. ;
     }
-  histo9->accumulate(z/mm) ;
+  histo9->accumulate(z0) ;
   }
 #endif
 }
@@ -1449,15 +1484,15 @@ void Em6RunAction::FillLowEnergyTest( )
     G4ionLowEnergyIonisation* ionLEIon = new G4ionLowEnergyIonisation() ;
     ionLEIon->SetIonDefinition(theProton) ;
 
-    //  G4ionLowEnergyIonisation* ionLEIonC = new G4ionLowEnergyIonisation() ;
-    //  G4ParticleDefinition* theC12 = G4IonC12::IonC12() ;
-    //  ionLEIonC->SetIonDefinition(theC12) ;
-  G4double chc = 6.0 ;
+    G4ionLowEnergyIonisation* ionLEIonC = new G4ionLowEnergyIonisation() ;
+    G4ParticleDefinition* theC12 = G4IonC12::IonC12() ;
+    ionLEIonC->SetIonDefinition(theC12) ;
+    G4double chc = 6.0 ;
 
-  //  G4ionLowEnergyIonisation* ionLEIonAr = new G4ionLowEnergyIonisation() ;
-  //  G4ParticleDefinition* theAr40 = G4IonAr40::IonAr40() ;
-  //  ionLEIonAr->SetIonDefinition(theAr40) ;
-  G4double cha = 18.0 ;
+    G4ionLowEnergyIonisation* ionLEIonAr = new G4ionLowEnergyIonisation() ;
+    G4ParticleDefinition* theAr40 = G4IonAr40::IonAr40() ;
+    ionLEIonAr->SetIonDefinition(theAr40) ;
+    G4double cha = 18.0 ;
 
 
   //  G4ionLowEnergyIonisation* ionLEIonFe = new G4ionLowEnergyIonisation() ;
@@ -1465,8 +1500,8 @@ void Em6RunAction::FillLowEnergyTest( )
   //  ionLEIonFe->SetIonDefinition(theFe56) ;
   //  G4double chf = 26.0 ;
 
-  //  G4double mrC12 = (theC12->GetPDGMass()) / (theH->GetPDGMass()) ; 
-  //  G4double mrAr40 = (theAr40->GetPDGMass()) / (theH->GetPDGMass()) ; 
+    G4double mrC12 = (theC12->GetPDGMass()) / (theH->GetPDGMass()) ; 
+    G4double mrAr40 = (theAr40->GetPDGMass()) / (theH->GetPDGMass()) ; 
 
   G4double de ;
 
@@ -1706,6 +1741,8 @@ void Em6RunAction::FillLowEnergyTest( )
 	tau = 0.5 * (aVector->GetLowEdgeEnergy(i) + aVector->GetLowEdgeEnergy(i+1)) ;
         dedx = G4EnergyLossTables::GetPreciseDEDX(theProton,tau/fac,material) ;
 	G4double cf = ionLEIon->GetIonEffChargeSquare(material, tau, cac) / (cac*cac);
+
+
         histo34->accumulate(log10(tau),dedx*cf) ;
 	cf = hLEIon->GetHeEffChargeSquare(79, tau*4.026/1.0073) ;
         histo35->accumulate(log10(tau),cf) ;
@@ -1717,14 +1754,14 @@ void Em6RunAction::FillLowEnergyTest( )
 	dedx = G4EnergyLossTables::GetPreciseDEDX(theProton,tau/fac,material) ;
 	G4double cf = ionLEIon->GetIonEffChargeSquare(material, tau, cac) / (cac*cac);
         histo51->accumulate(log10(tau),dedx*cf) ;
-	/*
+	
 	dedx = G4EnergyLossTables::GetPreciseDEDX(theC12,tau*mrC12,material) ;
 	cf = ionLEIonC->GetIonEffChargeSquare(material, tau*mrC12, chc) / (chc*chc);
         histo14->accumulate(log10(tau), dedx*cf / 270.0  ) ;
 	dedx = G4EnergyLossTables::GetPreciseDEDX(theAr40,tau*mrAr40,material) ;
 	cf = ionLEIonAr->GetIonEffChargeSquare(material, tau*mrAr40, cha) / (cha*cha);
         histo15->accumulate(log10(tau), dedx*cf / 270.0  ) ;
-	*/
+	
       }
     } else if ("Iron" == material->GetName()) {
       for (G4int i = 0 ; i < TotBin-1 ; i++)
@@ -1764,11 +1801,12 @@ void Em6RunAction::FillLowEnergyTest( )
   } 
     delete hLEIon ;
     delete ionLEIon ;
-    //    delete ionLEIonC ;
-    //    delete ionLEIonAr ;
+    delete ionLEIonC ;
+    delete ionLEIonAr ;
     //    delete ionLEIonFe ;
 }
 #endif
+
 
 
 

@@ -48,10 +48,10 @@ Em6DetectorConstruction::Em6DetectorConstruction()
  magField(NULL),calorimeterSD(NULL),defaultWorld(true)
 {
   // default parameter values of the calorimeter
-  AbsorberThickness = 1.0*mm;
+  AbsorberThickness = 100.0*mm;
   AbsorberSizeYZ    = 10.*cm;
   XposAbs           = 0.*cm ;  
-  NumberOfAbsorbers = 250;
+  NumberOfAbsorbers = 1;
   ComputeCalorParameters();
 
   // create commands for interactive definition of the calorimeter  
@@ -174,8 +174,9 @@ Air->AddElement(elO, fractionmass=0.3);
 G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //default materials of the calorimeter
-  AbsorberMaterial = H2O;
-  //  AbsorberMaterial = Si;
+  // AbsorberMaterial = H2O;
+  AbsorberMaterial = Si;
+  // AbsorberMaterial = Al;
   WorldMaterial    = Air;
 }
 
@@ -190,8 +191,8 @@ G4VPhysicalVolume* Em6DetectorConstruction::ConstructCalorimeter()
   // World
   //
   solidWorld = new G4Box("World",				//its name
-			 WorldSizeX/2,                          //its size X
-                         WorldSizeYZ/2,WorldSizeYZ/2);          //its size YZ
+			 WorldSizeX/2.0,                        //its size X
+                         WorldSizeYZ/2.0,WorldSizeYZ/2.0);      //its size YZ
                          
   logicWorld = new G4LogicalVolume(solidWorld,		//its solid
                                    WorldMaterial,	//its material
@@ -220,7 +221,7 @@ G4VPhysicalVolume* Em6DetectorConstruction::ConstructCalorimeter()
 
   for (G4int j=0; j<NumberOfAbsorbers; j++)
   {
-    x = XposAbs + AbsorberThickness * (double(j) + 0.5) ; 
+    x = XposAbs + AbsorberThickness * (G4double(j) + 0.5) ; 
     physiAbsorber = new G4PVPlacement(0,	   //no rotation
       		  G4ThreeVector(x,0.0,0.0),        //its position
                                 "Absorber",        //its name

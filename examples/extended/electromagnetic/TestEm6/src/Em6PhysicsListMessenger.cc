@@ -22,37 +22,37 @@ Em6PhysicsListMessenger::Em6PhysicsListMessenger(Em6PhysicsList * List)
 {
   cutGCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutG",this);
   cutGCmd->SetGuidance("Set cut values by RANGE for Gamma.");
-  cutGCmd->SetParameterName("range",false);
-  cutGCmd->SetRange("range>0.");
+  cutGCmd->SetParameterName("cutG",false);
+  cutGCmd->SetRange("cutG>0.");
   cutGCmd->SetUnitCategory("Length");
   cutGCmd->AvailableForStates(Idle);
 
   cutECmd = new G4UIcmdWithADoubleAndUnit("/calor/cutE",this);
   cutECmd->SetGuidance("Set cut values by RANGE for e- e+.");
-  cutECmd->SetParameterName("range",false);
-  cutECmd->SetRange("range>0.");
+  cutECmd->SetParameterName("cutE",false);
+  cutECmd->SetRange("cutE>0.");
   cutECmd->SetUnitCategory("Length");  
   cutECmd->AvailableForStates(Idle);
 
   cutPCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutP",this);
   cutPCmd->SetGuidance("Set cut values by RANGE for proton and others.");
-  cutPCmd->SetParameterName("range",false);
-  cutPCmd->SetRange("range>0.");
+  cutPCmd->SetParameterName("cutP",false);
+  cutPCmd->SetRange("cutP>0.");
   cutPCmd->SetUnitCategory("Length");    
   cutPCmd->AvailableForStates(Idle);
 
   eCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutEnergy",this);
   eCmd->SetGuidance("Set cut values by ENERGY for charged particles.");
-  eCmd->SetParameterName("energy",false);
-  eCmd->SetRange("energy>0.");
+  eCmd->SetParameterName("cutenergy",false);
+  eCmd->SetRange("cutenergy>0.");
   eCmd->SetUnitCategory("Energy");   
   eCmd->AvailableForStates(Idle);
 
   rCmd = new G4UIcmdWithADoubleAndUnit("/calor/range",this);
   rCmd->SetGuidance("Display the RANGE of Electron for the current material.");
-  rCmd->SetParameterName("energy",false);
-  rCmd->SetRange("energy>0.");
-  rCmd->SetUnitCategory("Energy");     
+  rCmd->SetParameterName("range",false);
+  rCmd->SetRange("range>0.");
+  rCmd->SetUnitCategory("Length");     
   rCmd->AvailableForStates(Idle);
 
   setMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/step/setMaxStep",this);

@@ -54,148 +54,111 @@ void Em6SteppingAction::UserSteppingAction(const G4Step* aStep)
 
   IDnow = evno+10000*(aStep->GetTrack()->GetTrackID())+
           100000000*(aStep->GetTrack()->GetParentID()); 
-  if(IDnow != IDold)
-  {
-   IDold=IDnow ;
-   if(
-      (((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "e-") &&
-       ((aStep->GetTrack()->GetTrackID() != 1) ||
-       (aStep->GetTrack()->GetParentID() != 0)) )
-       ||
-      (((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "e+") &&
-       ((aStep->GetTrack()->GetTrackID() != 1) ||
-       (aStep->GetTrack()->GetParentID() != 0)) )
-     )
-        runaction->Fillvertexz(aStep->GetTrack()->GetVertexPosition().x());
 
-   if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber")
-   {
-    if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-         GetPDGCharge()) != 0.0) )
-	 //        GetParticleName()) == "e-") &&
-	 //       ((aStep->GetTrack()->GetTrackID() != 1) ||
-	 //       (aStep->GetTrack()->GetParentID() != 0)) ) 
-    {
-        eventaction->AddCharged() ;
-        eventaction->AddE() ;
-        Tsec = aStep->GetTrack()->GetKineticEnergy() ;  // !!!!!!!!!!!!
-        Tsec += aStep->GetTotalEnergyDeposit() ;        // !!!!!!!!!!!!
-        runaction->FillTsec(Tsec) ;
+  Tkin = aStep->GetTrack()->GetKineticEnergy() ; 
+    //   Edep = aStep->GetTotalEnergyDeposit() ;         
+  Edep = aStep->GetDeltaEnergy() ;         
+  Tsec = Tkin - Edep ;
+  Theta = acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
+
+  // new particle
+  if(IDnow != IDold) {
+    IDold=IDnow ;
+
+    // primary
+    if(0 == aStep->GetTrack()->GetParentID() ) {
+      runaction->SaveToTuple("TKIN",Tsec/MeV);      
+      runaction->SaveToTuple("MASS",(aStep->GetTrack()->
+                 GetDynamicParticle()->GetDefinition()->GetPDGMass())/MeV);      
+      runaction->SaveToTuple("CHAR",(aStep->GetTrack()->
+                 GetDynamicParticle()->GetDefinition()->GetPDGCharge()));      
+
+    // secondary
+    } else {
+      if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
+            GetParticleName()) == "e-") 
+                 ||
+         ((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
+            GetParticleName()) == "e+") ) {
+
+            runaction->Fillvertexz(aStep->GetTrack()->GetVertexPosition().x());
+            eventaction->AddCharged() ;
+            eventaction->AddE() ;
+            runaction->FillTsec(Tsec) ;
+
+      } else {
+            eventaction->AddNeutral() ;
+      }
     }
-    /*    else
-    if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "e+") &&
-       ((aStep->GetTrack()->GetTrackID() != 1) ||
-       (aStep->GetTrack()->GetParentID() != 0)) ) 
-    {
-        eventaction->AddCharged() ;
-        eventaction->AddP() ;
-        Tsec = aStep->GetTrack()->GetKineticEnergy() ;  // !!!!!!!!!!!!
-        Tsec += aStep->GetTotalEnergyDeposit() ;        // !!!!!!!!!!!!
-        runaction->FillTsec(Tsec) ;
-    } */
-    else
-    if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "gamma") &&
-       ((aStep->GetTrack()->GetTrackID() != 1) ||
-       (aStep->GetTrack()->GetParentID() != 0)) ) 
-    {
-        eventaction->AddNeutral() ;
-    }
-   }
   }
 
-  if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber")
-  {
+  // After step in absorber
+  if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber") {
+
+    // Count number of steps in absorber
     if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-         GetPDGCharge()) != 0.0) )
-      /*        GetParticleName()) == "e-") 
-              ||
-       ((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "e+")) */  
-          eventaction->CountStepsCharged() ;
+	        GetPDGCharge()) != 0.0) ) {
+         eventaction->CountStepsCharged() ;
 
-    if ((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "gamma") 
-          eventaction->CountStepsNeutral() ;
-  }
+    } else {
+      if ((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
+                  GetParticleName()) == "gamma") 
+         eventaction->CountStepsNeutral() ;
+    }
 
-  if (
-      (((aStep->GetTrack()->GetTrackID() == 1) &&
-        (aStep->GetTrack()->GetParentID()== 0)) ||
-        (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName() ==
-        Em6PrimaryGeneratorAction::GetPrimaryName())) 
-        &&
-        (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber")
-        &&
-        (aStep->GetTrack()->GetNextVolume()->GetName()=="World") &&
-        (aStep->GetPostStepPoint()->GetProcessDefinedStep()
-              ->GetProcessName() == "Transportation") &&
-        (aStep->GetTrack()->GetMomentumDirection().x()>0.)
-                                                        )
-     {
-       eventaction->SetTr();
-       Theta = acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
-       runaction->FillTh(Theta) ;
-       Ttrans = aStep->GetTrack()->GetKineticEnergy() ;
-       runaction->FillTt(Ttrans) ;
-       yend= aStep->GetTrack()->GetPosition().y() ;
-       zend= aStep->GetTrack()->GetPosition().z() ;
-       rend = sqrt(yend*yend+zend*zend) ;
-       runaction->FillR(rend);
-     }
-       
-  if (
-      (((aStep->GetTrack()->GetTrackID() == 1) &&
-        (aStep->GetTrack()->GetParentID()== 0)) ||
-      (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-       GetParticleName() ==
-       Em6PrimaryGeneratorAction::GetPrimaryName())) 
-       &&
-      (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber") &&
-      (aStep->GetTrack()->GetNextVolume()->GetName()=="World") &&
-      (aStep->GetPostStepPoint()->GetProcessDefinedStep()
-               ->GetProcessName() == "Transportation") &&
-      (aStep->GetTrack()->GetMomentumDirection().z()<0.)
-                                                        )
-     {
-       eventaction->SetRef();
-       Thetaback = acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
-       Thetaback -= 0.5*pi ;
-       runaction->FillThBack(Thetaback) ;
-       Tback  = aStep->GetTrack()->GetKineticEnergy() ;
-       runaction->FillTb(Tback) ;
-     }
+    // Primary 
+    if(0 == aStep->GetTrack()->GetParentID() ) {
+
+      // Stopping or end of track
+      if((0.0 == Tkin) || 
+         (aStep->GetTrack()->GetNextVolume()->GetName()=="World") ) {
+
+            xend= aStep->GetTrack()->GetPosition().x()/mm ;
+            yend= aStep->GetTrack()->GetPosition().y()/mm ;
+            zend= aStep->GetTrack()->GetPosition().z()/mm ;
+            runaction->SaveToTuple("XEND",xend,1000.0);      
+            runaction->SaveToTuple("YEND",yend,1000.0);      
+            runaction->SaveToTuple("ZEND",zend,1000.0);      
+            runaction->SaveToTuple("TEND",Tkin/MeV,1000.0);
+            runaction->SaveToTuple("TET",Theta/deg,1000.0);      
+            runaction->AddnStepsCharged(xend) ;
+      }
+      rend = sqrt(xend*xend + yend*yend) ;
+
+    //secondary
+    } else {
+
+      if ( aStep->GetTrack()->GetNextVolume()->GetName() == "World" ) {
+
+        // charged secondaries forward
+        if(aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
+                  GetPDGCharge() != 0.0 ) { 
+
+          eventaction->SetTr();
+
+          if(0.5*pi > Theta) {
+            runaction->FillTh(Theta) ;
+            runaction->FillTt(Tkin) ;
+            yend= aStep->GetTrack()->GetPosition().y() ;
+            zend= aStep->GetTrack()->GetPosition().z() ;
+            rend = sqrt(yend*yend+zend*zend) ;
+            runaction->FillR(rend);
+
+  	 // charged secondaries backword
+          } else {
+            eventaction->SetRef();
+            Thetaback = pi - Theta ;
+            runaction->FillThBack(Thetaback) ;
+            runaction->FillTb(Tsec) ;
+          }
  
-
-  if (
-      ((aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber") &&
-      (aStep->GetTrack()->GetNextVolume()->GetName()=="World") &&
-      (aStep->GetPostStepPoint()->GetProcessDefinedStep()
-               ->GetProcessName() == "Transportation") &&
-      (aStep->GetTrack()->GetMomentumDirection().x()>0.) &&
-      (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()
-       ->GetParticleName() == "gamma"))
-     )
-     {
-       Egamma = aStep->GetTrack()->GetKineticEnergy() ;
-       runaction->FillGammaSpectrum(Egamma) ;
-     }
-      
+        // gammas
+        } else {
+          if (0.5*pi > Theta) runaction->FillGammaSpectrum(Tkin) ;
+        }
+      }
+    }
+  }
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-
-
-
-
-
 

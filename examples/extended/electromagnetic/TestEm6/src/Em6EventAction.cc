@@ -32,7 +32,7 @@
 
 Em6EventAction::Em6EventAction(Em6RunAction* Em6RA)
 :calorimeterCollID(-1),eventMessenger(NULL),
- verboselevel(0),runaction (Em6RA),drawFlag("all")
+ verboselevel(0),runaction(Em6RA),drawFlag("all")
 {
   eventMessenger = new Em6EventActionMessenger(this);
 }
@@ -47,7 +47,14 @@ Em6EventAction::~Em6EventAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Em6EventAction::BeginOfEventAction(const G4Event* evt)
-{  if(calorimeterCollID==-1)
+{  
+
+#ifndef G4NOHIST
+  if(0 == GetEventno()) runaction->bookHisto();
+#endif
+
+
+  if(calorimeterCollID==-1)
   {
     G4SDManager * SDman = G4SDManager::GetSDMpointer();
     calorimeterCollID = SDman->GetCollectionID("CalCollection");
@@ -70,6 +77,8 @@ void Em6EventAction::BeginOfEventAction(const G4Event* evt)
 
 void Em6EventAction::EndOfEventAction(const G4Event* evt)
 {
+  runaction->SaveEvent();
+
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   Em6CalorHitsCollection* CHC = NULL;
   if (HCE)
@@ -98,7 +107,6 @@ void Em6EventAction::EndOfEventAction(const G4Event* evt)
    // count event, add deposits to the sum ...
     runaction->CountEvent() ;
     runaction->AddTrackLength(totLAbs) ;
-    runaction->AddnStepsCharged(nstepCharged) ;
     runaction->AddnStepsNeutral(nstepNeutral) ;
     if(verboselevel==2)
       G4cout << " Ncharged=" << Nch << "  ,   Nneutral=" << Nne << G4endl;

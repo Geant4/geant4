@@ -6,31 +6,33 @@
 /control/verbose 2
 #control/saveHistory
 /run/verbose 2
-/step/verbose 2
-/tracking/verbose 2
-/stepping/verbose 2
-/event/verbose 2
+#/step/verbose 2
+#/tracking/verbose 2
+#/stepping/verbose 2
+#/event/verbose 2
 #
 #/calor/setAbsMat Aluminum   
+#/calor/setNumOfAbs 1   
 #/calor/setAbsThick 0.00002 mm  
 #/calor/setAbsYZ 10. cm
-#/calor/update
 /calor/cutG 100.0 micrometer
 /calor/cutE 100.0 micrometer
 /calor/cutP 100.0 micrometer
-/step/setMaxStep 1 mm
+#/step/setMaxStep 0.05 mm
+#/calor/update
 #  hist file name
-/plots/sethistName ple.pl 
-/run/initialize
+/plots/sethistName ple3.pl 
+#/run/initialize
 #/run/particle/dumpCutValues
 #/event/drawTracks none
 #
 # Gun with Protons 10 MeV
 #
 /gun/particle proton
-/gun/energy 100.0 MeV
+/gun/energy 33.0 MeV
+/run/initialize
 #
-/run/beamOn 10
+/run/beamOn 1000
 
 
 

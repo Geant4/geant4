@@ -130,7 +130,7 @@ inline void Em6DetectorConstruction::ComputeCalorParameters()
      
      if (defaultWorld)
        {
-        WorldSizeX  = 2.0*AbsorberThickness*NumberOfAbsorbers; 
+        WorldSizeX  = 2.1*AbsorberThickness*NumberOfAbsorbers; 
         WorldSizeYZ = 1.2*AbsorberSizeYZ;
        } 	
 }

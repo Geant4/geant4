@@ -32,6 +32,7 @@ class Em6RunMessenger;
 
 #ifndef G4NOHIST
 class HepTupleManager;
+class HepTuple;
 class HepHistogram;
 #endif
 
@@ -120,11 +121,17 @@ public: // Without description
     void Setnbinzvertex(G4int nbin);
     void Setzlow(G4double z);
     void Setzhigh(G4double z);
+#ifndef G4NOHIST
+    void bookHisto();
+    HepTuple* GetNtuple();
+#endif
+    void SaveToTuple(G4String parname,G4double val);
+    void SaveToTuple(G4String parname,G4double val,G4double defval);
+    void SaveEvent();
 
   private:
 
 #ifndef G4NOHIST
-    void bookHisto();
     void FillLowEnergyTest();
 #endif
 
@@ -143,6 +150,7 @@ public: // Without description
     HepHistogram *histo61, *histo62, *histo63, *histo64, *histo65;
     HepHistogram *histo71, *histo72, *histo73, *histo74, *histo75, *histo76;
     HepHistogram *histo81, *histo82, *histo83, *histo84, *histo85, *histo86;
+    HepTuple *ntup;
 #endif
 
     G4double LowestEnergy,HighestEnergy;
