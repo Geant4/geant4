@@ -21,29 +21,29 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.21 2001-09-13 11:16:20 urban Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.22 2001-09-13 12:54:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 // -----------------------------------------------------------
-// 7/10/98: bug fixes + some cleanup , L.Urban 
-// 22/10/98 : cleanup , L.Urban
-// 07/12/98 : works for ions as well+ bug corrected, L.Urban
-// 02/02/99 : several bugs fixed, L.Urban
-// 01/03/99 : creation of sub-cutoff delta rays, L.Urban
-// 28/04/99 : bug fixed in DoIt , L.Urban
-// 10/02/00  modifications , new e.m. structure, L.Urban
-// 18/07/00 : bug fix in AlongStepDoIt V.Ivanchenko
-// 10/08/00 : V.Ivanchenko change AlongStepDoIt and
-//            add EnergyLossFluctuation in order to simulate
-//            energy losses of ions
-// 17/08/00 : V.Ivanchenko change EnergyLossFluctuation 
-// 18/08/00 : V.Ivanchenko bug fixed in GetConstrained 
-// 23/01/01 : bug fixed in AlongStepDoIt , L.Urban
-// 27/03/01 : commented out the printing of subcutoff energies
-// 28/05/01 : V.Ivanchenko minor changes to provide ANSI -wall compilation 
-// 10/09/01 : bugfix in subcutoff delta generation, L.Urban
-// 12/09/01  min.delta cut is set as rcut/100 + some optimisation, L.Urban
+// 07/10/98: bug fixes + some cleanup , L.Urban 
+// 22/10/98: cleanup , L.Urban
+// 07/12/98: works for ions as well+ bug corrected, L.Urban
+// 02/02/99: several bugs fixed, L.Urban
+// 01/03/99: creation of sub-cutoff delta rays, L.Urban
+// 28/04/99: bug fixed in DoIt , L.Urban
+// 10/02/00: modifications , new e.m. structure, L.Urban
+// 18/07/00: bug fix in AlongStepDoIt V.Ivanchenko
+// 10/08/00: V.Ivanchenko change AlongStepDoIt and
+//           add EnergyLossFluctuation in order to simulate
+//           energy losses of ions
+// 17/08/00: V.Ivanchenko change EnergyLossFluctuation 
+// 18/08/00: V.Ivanchenko bug fixed in GetConstrained 
+// 23/01/01: bug fixed in AlongStepDoIt , L.Urban
+// 27/03/01: commented out the printing of subcutoff energies
+// 28/05/01: V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 10/09/01: bugfix in subcutoff delta generation, L.Urban
+// 12/09/01: min.delta cut is set as rcut/100 + some optimisation, L.Urban
 // --------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

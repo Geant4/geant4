@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2001-09-11 15:44:49 maire Exp $
+$Id: History,v 1.32 2001-09-13 12:54:17 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+13 sep 01: L/Urban (stand-V03-02-03)
+-G4VxEnergyLoss: min.delta cut is set as rcut/100 + some optimisation
+    
 11 sep 01: L.Urban (stand-V03-02-02)
 - G4VhEnergyLoss+G4VeEnergyLoss: bugfix in subcutoff delta generation
      
