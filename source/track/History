@@ -1,4 +1,4 @@
-$Id: History,v 1.62 2003-12-12 13:12:31 gcosmo Exp $
+$Id: History,v 1.63 2004-01-20 15:29:41 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan. 20, 04 V.Ivanchenko (track-V06-00-01)
+- Update G4ParticleChangeForLoss for utilisation in G4VEnergyLossProcess
+- Minor update G4ParticleChangeForMSC for utilisation in model design of msc
+- Change of volume in G4ParticleChangeForTransportation only if kinEnergy>0
 
 Dec. 12, 03 G.Cosmo (track-V06-00-00)
 - G4VParticleChange[.hh.cc]: removed unnecessary 'const' qualifier to
