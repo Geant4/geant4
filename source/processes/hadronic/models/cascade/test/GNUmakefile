@@ -75,14 +75,17 @@ p5:	# ::: problem 5 (Al) too many n's in medium energy ::: hunt using history da
 p7:	# ::: problem 7 (H)  missing pions ::: CRITICAL, TO BE DONE
 	rm -r cascade.out; cascade 10000 1 585 1 1 > cascade.out; make a; 
 
+H:	# ::: (H) solving p8 Ok in hydrogen case A=2 Z=1. Also He is ok.
+	rm -r cascade.out cascade.eps; cascade 1000 1 585 2 1 > cascade.out; make a;
+
 p8:	# ::: problem 8 (Zr) delta missing ::: general feature in codes, POSTPONED studies
-	rm -r cascade.out cascade.ps; cascade 1000 2 800 91 40 > cascade.out; make a;
+	rm -r cascade.out cascade.eps; cascade 1000 2 800 91 40 > cascade.out; make a;
 
 time: 	# :: timing for target t
 	time -v gmake t
 
 a: 	# ::: a(nalysis) of data in  cascade.dat with batch run of Root
-	rm cascade.ps; root -b -q cascade.C; gv cascade.ps; 
+	rm cascade.eps; root -b -q cascade.C; gv cascade.eps; 
 
 b: 	# ::: b(enchmark) testing
 	rm -r benchmarks benchmark.out; make benchmarks; benchmarks > benchmarks.out; diff benchmarks.out benchmarks.data
@@ -95,3 +98,6 @@ eps: 	# ::: generate eps-files for documentation
 
 clean:  # ::: clean
 	rm -f \#*.*\# \#*\# \#* .*~ .#* *.*~ *~ *.o; rm -f core cascade ; rm benchmarks; rm *.eps *.root
+
+
+
