@@ -21,9 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: Tst13PhysicsList.cc,v 1.9 2001-07-11 10:09:55 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #include "globals.hh"
 #include "Tst13PhysicsList.hh"
 #include "G4ParticleDefinition.hh"
@@ -292,6 +289,7 @@ void Tst13PhysicsList::ConstructEM()
 #include "G4StringModel.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4QGSModel.hh"
+#include "G4QGSParticipants.hh"
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 
@@ -336,7 +334,7 @@ void Tst13PhysicsList::ConstructHad()
     // the string model; still not quite according to design - Explicite use of the forseen interfaces 
     // will be tested and documented in this program by beta-02 at latest.
     G4VPartonStringModel * theStringModel;
-    theStringModel = new G4QGSModel;
+    theStringModel = new G4QGSModel<G4QGSParticipants>;
     theTheoModel->SetTransport(theCascade);
     theTheoModel->SetHighEnergyGenerator(theStringModel);
     theTheoModel->SetMinEnergy(19*GeV);
