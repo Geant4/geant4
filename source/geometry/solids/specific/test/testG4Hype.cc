@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Hype.cc,v 1.3 2001-07-11 10:00:17 gunter Exp $
+// $Id: testG4Hype.cc,v 1.4 2002-01-08 16:38:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -270,7 +270,7 @@ G4bool testG4Hype()
     return true;
 }
 
-G4int main()
+int main()
 {
 #ifdef NDEBUG
     G4Exception("FAIL: *** Assertions must be compiled in! ***");

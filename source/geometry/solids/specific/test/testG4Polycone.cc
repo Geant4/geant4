@@ -41,8 +41,6 @@
 
 int main(int argc, char **argv)
 {
-  G4Timer timer;
-  
   double RMINVec[8];
   RMINVec[0] = 30;
   RMINVec[1] = 30;
@@ -93,7 +91,7 @@ int main(int argc, char **argv)
   EInside in;
   
   G4cout<<"\n\n==================================================";
-  G4Point3D  pt(0, -100, 24);
+  G4ThreeVector pt(0, -100, 24);
   G4int y;
   for (y = -100; y<=100; y+=10)
   {
@@ -112,8 +110,8 @@ int main(int argc, char **argv)
   }
 
   G4cout<<"\n\n==================================================";
-  G4Point3D  start( 0, 0, -30);
-  G4Vector3D dir(1./sqrt(2.), 1./sqrt(2.), 0);
+  G4ThreeVector start( 0, 0, -30);
+  G4ThreeVector dir(1./sqrt(2.), 1./sqrt(2.), 0);
   G4double   d;
   G4int z;
   
@@ -151,8 +149,8 @@ int main(int argc, char **argv)
   }
 
   G4cout<<"\n\n==================================================";
-  G4Point3D  start2( 0, -100, -30);
-  G4Vector3D dir2(0, 1, 0);
+  G4ThreeVector start2( 0, -100, -30);
+  G4ThreeVector dir2(0, 1, 0);
   G4double   d2;
 
   G4cout<<"\nPdep is (0, -100, z)";
@@ -169,8 +167,8 @@ int main(int argc, char **argv)
   }
 
   G4cout<<"\n\n==================================================";
-  G4Point3D  start3( 0, 0, -50);
-  G4Vector3D dir3(0, 0, 1);
+  G4ThreeVector start3( 0, 0, -50);
+  G4ThreeVector dir3(0, 0, 1);
   G4double   d3;
 
   G4cout<<"\nPdep is (0, y, -50)";
