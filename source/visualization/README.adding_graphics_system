@@ -12,7 +12,7 @@ To add a graphics system:
 
 2) Add to SUBDIRS and SUBLIBS in visualization/GNUmakefile.
 
-3) Look at the XXX graphics system teamplate in visualization/XXX and
+3) Look at the XXX graphics system skeleton in visualization/XXX and
    use it to build your graphics system.
 
    You might also find it useful to look at ASCIITree (and VTree) as
