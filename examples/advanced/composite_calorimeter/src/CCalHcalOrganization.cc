@@ -40,8 +40,8 @@ unsigned int CCalHcalOrganization::GetUnitID(const G4Step* aStep) const {
 
   G4TouchableHistory* theTouchable = 
     (G4TouchableHistory*)( aStep->GetPreStepPoint()->GetTouchable() );
-  int level = theTouchable->GetHistoryDepth();  
-  G4int idunit = theTouchable->GetReplicaNumber( level - 1 );
-
-  return idunit;
+  if ((theTouchable->GetHistoryDepth()) > 0)  
+    return theTouchable->GetReplicaNumber( 1 );
+  else
+    return 0;
 }

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.15 2003-11-04 08:07:13 ribon Exp $
+$Id: History,v 1.16 2003-11-05 18:35:47 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.15 2003-11-04 08:07:13 ribon Exp $
 
                       Example History file
                       ---------------------
+
+05.11.03 - A.Ribon (ccal-V05-02-03)
+- Add some modifications from Sunanda on how to handle "GetReplicaNumber()".
 
 03.11.03 - A.Ribon (ccal-V05-02-02)
 - Removed "GetCopyNo()" and replaced it with "GetReplicaNumber()"

@@ -33,8 +33,7 @@ int CCalVOrganization::Levels(const G4Step* aStep) const {
   //Find number of levels
   G4TouchableHistory* theTouchable = 
     (G4TouchableHistory*)( aStep->GetPreStepPoint()->GetTouchable() );
-  int level = theTouchable->GetHistoryDepth();
-  return level;
+  return ((theTouchable->GetHistoryDepth()) + 1);
 }
 
 

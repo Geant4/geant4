@@ -195,8 +195,8 @@ void CCaloSD::createNewHit() {
   G4TouchableHistory* theTouchable
     = (G4TouchableHistory*)( theTrack->GetTouchable() );
   if ( theTouchable ) {
-    currentCopyNo = theTouchable->GetReplicaNumber();
-    if ( theTouchable->GetHistoryDepth() > 1 ) {
+    currentCopyNo = theTouchable->GetReplicaNumber( 0 );
+    if ( theTouchable->GetHistoryDepth() > 0 ) {
       motherCopyNo = theTouchable->GetReplicaNumber( 1 );
     }
   }

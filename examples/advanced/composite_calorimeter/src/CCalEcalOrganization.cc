@@ -39,16 +39,14 @@ unsigned int CCalEcalOrganization::GetUnitID(const G4Step* aStep) const {
 
   G4TouchableHistory* theTouchable = 
     (G4TouchableHistory*)( aStep->GetPreStepPoint()->GetTouchable() );
-  int level = theTouchable->GetHistoryDepth();  
 
-  int idx=0, idl=0, idn=0;
+  int idl=0, idn=0;
+  int level = theTouchable->GetHistoryDepth();  
+  int idx = theTouchable->GetReplicaNumber( 0 ) - 1;
   if ( level > 0 ) {
-    idx = theTouchable->GetReplicaNumber( 0 ) - 1;
+    idl = theTouchable->GetReplicaNumber( 1 ) - 1;
     if ( level > 1 ) {
-      idl = theTouchable->GetReplicaNumber( 1 ) - 1;
-      if ( level > 2 ) {
-	idn = theTouchable->GetReplicaNumber( 2 );
-      }
+      idn = theTouchable->GetReplicaNumber( 2 );
     }
   }
 
