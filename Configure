@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.66 2004-12-15 23:13:42 stesting Exp $
+# $Id: Configure,v 1.67 2004-12-16 09:10:41 stesting Exp $
 #
-# Generated on Wed Dec 15 23:52:58 CET 2004 [metaconfig 3.0 PL70]
+# Generated on Thu Dec 16 10:02:58 CET 2004 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2443,7 +2443,8 @@ esac
 case "$g4install" in
 '')
 if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
-	g4install="c:/geant4"
+#	g4install="c:/geant4"
+	g4install=$abssrc
 else
 #	if [ X"$HOME" = X/ ] ; then
 #	HOME=""
@@ -2822,7 +2823,6 @@ According to it will be set:
 
 CLHEP_INCLUDE_DIR		
 CLHEP_LIB_DIR			
-CLHEP_LIB		
 
 You can customise these settings next.
 EOM`
@@ -2840,7 +2840,6 @@ According to it will be set:
 
 CLHEP_INCLUDE_DIR		
 CLHEP_LIB_DIR			
-CLHEP_LIB		
 
 You will be asked about customizing these next.
 EOM`
@@ -2898,12 +2897,14 @@ while test 1 = 1  ; do
 
 g4message=`cat << EOM
 
-You can customize paths of you CLHEP installation:
+You can customize paths and library name of you CLHEP installation:
 
 1) CLHEP_INCLUDE_DIR:		$g4clhep_include_dir
 2) CLHEP_LIB_DIR:		$g4clhep_lib_dir
 3) CLHEP_LIB:			$g4clhep_lib
 
+Note: for WIN32-VC you need to use full library name with its extension 
+(e.g. libCLHEP.lib).
 To modify default settings, select number above (e.g. 2) 
 EOM`
 

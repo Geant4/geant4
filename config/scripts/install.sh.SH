@@ -407,11 +407,13 @@ if test -f \$g4conf/g4make.log ; then
 # different arithmetic expansion...So we are doing it by 'text'
 # in two steps...
  
-err=\`grep Error $g4conf/g4make.log | wc -w\` 
-int=\`grep Stop\. $g4conf/g4make.log | wc -w\` 
+err=\`grep " Error " $g4conf/g4make.log | wc -w\` 
+int=\`grep " Interrupt " $g4conf/g4make.log | wc -w\` 
+stp=\`grep Stop\. $g4conf/g4make.log | wc -w\` 
 
 err2=\`echo \$err\`
 int2=\`echo \$int\`
+stp2=\`echo \$stp\`
 
 if [ X\$err2 = X0 -a X\$int2 = X0 ] ; then
 echo ""
