@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: VisManager.cc,v 1.1 2002-05-23 13:30:45 maire Exp $
+// $Id: VisManager.cc,v 1.2 2002-11-13 21:40:02 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+//
 // John Allison 24th January 1998.
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,6 +41,7 @@
 #include "G4DAWNFILE.hh"
 #include "G4GAGTree.hh"
 #include "G4HepRepFile.hh"
+#include "G4HepRep.hh"
 #include "G4RayTracer.hh"
 #include "G4VRML1File.hh"
 #include "G4VRML2File.hh"
@@ -97,6 +98,7 @@ void VisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4DAWNFILE);
   RegisterGraphicsSystem (new G4GAGTree);
   RegisterGraphicsSystem (new G4HepRepFile);
+  RegisterGraphicsSystem (new G4HepRep);
   RegisterGraphicsSystem (new G4RayTracer);
   RegisterGraphicsSystem (new G4VRML1File);
   RegisterGraphicsSystem (new G4VRML2File);
