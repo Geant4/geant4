@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2000-09-04 18:17:06 pia Exp $
+$Id: History,v 1.36 2000-09-05 13:37:04 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05.09.2000 - MGP, tag emlowen-V02-00-05
+	     Fixes to remove warnings (hiding member functions and 
+             data members) in hadron classes 
 
 04.09.2000 - MGP, tag emlowen-V02-00-04
              Same as emlowen-V02-00-03, with V.I.'s new implementations
