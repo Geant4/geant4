@@ -1,4 +1,4 @@
-$Id: History,v 1.5 1999-05-03 19:48:14 gcosmo Exp $
+$Id: History,v 1.6 1999-05-11 21:49:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 11th G.Cosmo
+- Updates and fixes to STLInterface headers. Input mainly from DEC and HP.
+- Added G4Poisson.hh to HEPRandom/include. It includes the implementation
+  of the global function "G4long G4Poisson(G4double)" which reproduces the
+  GPOISS algorithm adopted in Geant3. Uses the CLHEP standard engines as
+  basic random generators.
 
 May 3rd G.Cosmo (global-01-00-00)
 - Updates to STL interface ISO/ANSI headers (F.Benher)
