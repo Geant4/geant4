@@ -19,14 +19,11 @@
 //                     E-mail: Vladimir.Ivantchenko@cern.ch
 //                            April 2000
 // **************************************************************
+//    25.04.00  V.Ivanchenko replace arrays by STL vectors
 //-----------------------------------------------------------------------------
 
 #include "G4StopElementSelector.hh"
-//#include <string.h>
-//#include <math.h>
-//#include <stdio.h>
-//#include <sys/types.h>
-//#include <sys/stat.h>
+#include "g4std/vector"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -108,7 +105,8 @@ G4double  G4StopElementSelector::GetMuonCaptureRate(G4double Z, G4double A)
 {
   // Initialized data
 
-  static G4double zeff[100] = {
+  //  static G4std::vector<G4double> zeff(100);
+    static G4double zeff[100] = {
     1.,1.98,2.95,3.89,4.8,5.72,6.61,7.49,8.32,9.12,9.95,10.69,11.48,12.22,
     12.91,13.64,14.24,14.89,15.53,16.15,16.75,17.38,18.04,18.49,
     19.06,19.59,20.1,20.66,21.12,21.61,22.02,22.43,22.84,23.24,
@@ -124,7 +122,8 @@ G4double  G4StopElementSelector::GetMuonCaptureRate(G4double Z, G4double A)
   // Atomizdat, 1978. (Experimental capture velocities)
 
   const size_t ListZE = 65;
-  const G4int ListZExp[ListZE] = {
+  //  static G4std::vector<G4int> ListZExp[ListZE] = {
+  static G4int ListZExp[ListZE] = {
       3,  4,  5,  6,  7,  8,  9, 10, 11, 12,
      13, 14, 15, 16, 17, 18, 19, 20, 22, 23,
      24, 25, 26, 27, 28, 31, 32, 33, 34, 37,
@@ -132,7 +131,8 @@ G4double  G4StopElementSelector::GetMuonCaptureRate(G4double Z, G4double A)
      50, 51, 52, 53, 55, 56, 57, 58, 59, 60,
      62, 64, 65, 67, 72, 73, 74, 80, 81, 82,
      83, 90, 92, 93};
-  const G4double ListCaptureVel[ListZE] = {
+  //  static G4std::vector<G4double> ListCaptureVel[ListZE] = {
+  static G4double ListCaptureVel[ListZE] = {
      0.0057, 0.010, 0.0258, 0.0371, 0.0644,
      0.0974, 0.144, 0.250,  0.386,  0.479,
      0.700,  0.849, 1.119,  1.338,  1.40, 
@@ -194,6 +194,57 @@ G4double  G4StopElementSelector::GetMuonDecayRate(G4double Z, G4double A)
   if( 0.5 > lambda ) lambda = 0.5;
   return lambda * 0.445 / microsecond; 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

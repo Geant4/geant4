@@ -49,11 +49,11 @@ G4double G4MuMinusCaptureCascade::GetKShellEnergy(G4double Z)
   // the Energy of Hydrogen Atom taken into account finite size of the
   // nucleus (V.Ivanchenko)
    const size_t ListK = 27;
-   const G4double ListZK[ListK] = {
+   static G4double ListZK[ListK] = {
       2.,  4.,  6.,  8., 11., 14., 17., 18., 21., 24.,
      26., 29., 32., 38., 40., 41., 44., 49., 53., 55.,
      60., 65., 70., 75., 81., 85., 92.};
-   const G4double ListKEnergy[ListK] = {
+   static G4double ListKEnergy[ListK] = {
      0.011, 0.043, 0.098, 0.173, 0.326,
      0.524, 0.765, 0.853, 1.146, 1.472,
      1.708, 2.081, 2.475, 3.323, 3.627, 
@@ -258,6 +258,15 @@ void G4MuMinusCaptureCascade::DoBoundMuonMinusDecay(G4double Z, G4double massA,
 
   return;
 }
+
+
+
+
+
+
+
+
+
 
 
 
