@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2002-03-25 17:15:31 gcosmo Exp $
+$Id: History,v 1.24 2002-03-28 14:36:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar  28, 2002 M.Dressel - transport-V04-00-00
+-----------------------
+- First implementation of transportation classes and managers for importance
+  biasing and scoring. Co-works with "geometry-V04-00-01".
 
 Mar  25, 2002 G.Cosmo
 ---------------------
