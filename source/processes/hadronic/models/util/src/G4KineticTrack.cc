@@ -49,6 +49,8 @@
 #include "G4KaonZeroLong.hh"
 #include "G4AntiKaonZero.hh"
 
+#include "G4HadTmpUtil.hh"
+
 //
 // Some static clobal for integration
 //
@@ -487,6 +489,8 @@ G4KineticTrackVector* G4KineticTrack::Decay()
     //  cout << "DECAY Actual Width IND/ActualW " << index1 << "  " << theActualWidth[index1] << G4endl;
     //  cout << "DECAY Actual Mass " << theActualMass << G4endl;
  
+ G4int chargeBalance = G4lrint(theDefinition->GetPDGCharge() );     
+ G4int baryonBalance = G4lrint(theDefinition->GetBaryonNumber() );
  G4double theTotalActualWidth = this->EvaluateTotalActualWidth();
  if (theTotalActualWidth !=0)
     {
@@ -569,12 +573,15 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      G4LorentzVector momentum;
      G4KineticTrackVector* theDecayProductList = new G4KineticTrackVector;
      G4int dEntries = theDecayProducts->entries();
+     G4ParticleDefinition * aProduct = 0;
      for (G4int i=dEntries; i > 0; i--)
         {
-         theDynamicParticle = theDecayProducts->PopProducts();
-         theDefinition = theDynamicParticle->GetDefinition();
+	 theDynamicParticle = theDecayProducts->PopProducts();
+         aProduct = theDynamicParticle->GetDefinition();
+         chargeBalance -= G4lrint(aProduct->GetPDGCharge() );
+         baryonBalance -= G4lrint(aProduct->GetBaryonNumber() );
          momentum = toMoving*theDynamicParticle->Get4Momentum();
-         theDecayProductList->push_back(new G4KineticTrack (theDefinition,
+         theDecayProductList->push_back(new G4KineticTrack (aProduct,
                                                          theFormationTime,
                                                          thePosition,
                                                          momentum));
@@ -582,6 +589,11 @@ G4KineticTrackVector* G4KineticTrack::Decay()
         }
      delete theDecayProducts;
      delete [] theCumActualWidth;
+     if(getenv("DecayEnergyBalanceCheck"))
+       std::cout << "DEBUGGING energy balance D: "
+  	         <<chargeBalance<<" "
+	         <<baryonBalance<<" "
+  	         <<G4endl;
      return theDecayProductList;
     }
  else
