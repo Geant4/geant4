@@ -4,23 +4,23 @@
 /tracking/verbose 0
 # create empty scene
 #
-#/vis/scene/create
+/vis/scene/create
 #
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphic system)
 #/control/saveHistory
 #
 #/vis/open OGLIX
-#/vis/open DAWNFILE
-#/vis/viewer/flush
-#/vis/viewer/update
+/vis/open DAWNFILE
+/vis/viewer/flush
+/vis/viewer/update
 /tracking/storeTrajectory 1
-#/vis/scene/endOfEventAction accumulate
-/target/setTargetThick 1. mm
+/vis/scene/endOfEventAction accumulate
+/target/setTargetThick 15. mm
 /target/setTargetMat  Silicon
 /target/update
-/le/cutE 0.1 micrometer
-/gun/particle proton
-/gun/energy 1. MeV
-/run/beamOn 5
+#/le/cutE 0.1 micrometer
+/gun/particle gamma
+/gun/energy 0.5 MeV
+/run/beamOn 1000
 

@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.14 2003-02-07 13:27:49 guatelli Exp $
+// $Id: test50.cc,v 1.15 2003-02-10 11:21:04 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -215,7 +215,7 @@ G4std::ofstream ofs;
 	ofs.open(filename);
 		{
 
-		  ofs<<"Global information about primary particles (e+ or e-)"<<G4endl;}
+		  ofs<<"Global information about primary particles (e+ or e- or proton or gamma)"<<G4endl;}
 	       
        ofs.close();                     
 		

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.14 2003-02-07 11:42:55 parlati Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.15 2003-02-10 11:21:04 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -551,7 +551,7 @@ G4VPhysicalVolume* Tst50DetectorConstruction::ConstructWorld()
   // World
   //
   solidWorld = new G4Box("World",				//its name
-                   20000.*m,20000.*m,20000.*m);	//its size
+                   200000.*m,200000.*m,200000.*m);	//its size
                          
   logicWorld = new G4LogicalVolume(solidWorld,		//its solid
                                    defaultMaterial,	//its material

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.21 2003-02-07 13:27:49 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.22 2003-02-10 11:21:04 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -152,10 +152,10 @@ G4double EnergyDepositSecondary= Step->GetTotalEnergyDeposit();
 
     if (Foil)
       {     
-if(0 == Step->GetTrack()->GetParentID() ) 
-  {
+
    
-    if(particle_name=="e-"|| particle_name=="e+"|| particle_name=="proton")
+    if(particle_name=="e-"|| particle_name=="e+"|| particle_name=="proton" ||
+         particle_name=="gamma" )
       { 
 if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
  
@@ -172,7 +172,12 @@ if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
      G4double energy=(KinE/initial_energy);
 
      G4double angle=(acos((XMoD*XIMD+YMoD*YIMD+ZMoD*ZIMD)/(MMoD*MIMD))/deg);
-    if (ZMoD>0)
+if(0 == Step->GetTrack()->GetParentID() ) 
+  { if(IDnow != IDold) 
+    {
+ 
+ IDold=IDnow ;  
+     if (ZMoD >= 0. )
      {
        runaction->Trans_number();
 #ifdef G4ANALYSIS_USE
@@ -180,15 +185,18 @@ if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
        analysis ->angleT(angle);
 #endif
 
+
 }
-    if(ZMoD<0) 
+     // if((ZMoD<0.) && (angle>(90./deg)))
+ else
   {
 
 #ifdef G4ANALYSIS_USE
        analysis ->energy_backscatter(energy); 
        analysis ->angleB(angle);
 #endif 
-       runaction->Back_number();
+       runaction->Back_number(); 
+
   }
 
     G4double initial=initial_energy/MeV;
@@ -196,8 +204,7 @@ if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
 #ifdef G4ANALYSIS_USE
     analysis ->fill_data(initial,energy,angle);
 #endif
-    }
-}}}}
+}  }}}}}
 
     if (Foil)
       {
@@ -206,6 +213,9 @@ if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
     if(name=="gamma")
   { if(Step->GetTrack()->GetParentID()== 1)
     { 
+      if(IDnow != IDold) {
+
+	IDnow= IDold;
 if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
    
     if(Step->GetTrack()->GetNextVolume()->GetName() == "World" )
@@ -220,12 +230,10 @@ if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
      analysis->fill_dataBrem(kin,angle);
      analysis->angle_energy_gamma(angle,kin);
 #endif
-      }}}}}}
-
-/*
+      }}}}}}}
    
-
-if(particle_name=="gamma")
+ /*
+   if(particle_name=="gamma")
      {    
       if(0 == Step->GetTrack()->GetParentID() ) //primary particle 
 	{ 
@@ -261,24 +269,9 @@ if (process=="LowEnConversion"||process=="conv")
 	     runaction->primary_processes(5);	
 	   }
 
-
-	
-      //per il coeff di attenuazione// 
-      // G4cout<<Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()<<G4endl; 
- if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
-   
-    if(Step->GetTrack()->GetNextVolume()->GetName() == "World" ) {
-
-   //volume in cui si esce e' il target 
-    if(XMoD==0 && YMoD==0 && ZMoD==1){
-      
-      if(KinE ==initial_energy)
-	{
+ */
 
 
- runaction->Trans_number();
- }}}}}}*/
- 
     if(StoppingPower)
       {
 G4std::ofstream pmtfile(filename, G4std::ios::app);
