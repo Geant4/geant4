@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05MinEkineCuts.cc,v 1.6 2003-08-27 16:15:42 vnivanch Exp $
+// $Id: ExN05MinEkineCuts.cc,v 1.7 2003-12-09 08:42:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,6 +87,7 @@ G4double ExN05MinEkineCuts::PostStepGetPhysicalInteractionLength(
        // charged particles only
        G4double rangeMin = G4EnergyLossTables::GetRange(aParticleDef,eMin,couple);
        temp = rangeNow - rangeMin;
+       if (temp<0.) temp=0.;
        if (proposedStep > temp) proposedStep = temp;
      }
    }
