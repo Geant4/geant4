@@ -1,0 +1,159 @@
+#
+# Macro file for test20
+# for tests of polarised low energy e.m. processes
+#
+/control/verbose 2
+/run/verbose 2
+/run/initialize
+#
+/calor/setAbsThick 10 cm  
+/calor/setAbsRad 12.0 cm
+/calor/update
+#
+/lowenergy/lowlimG 2.5e-4
+/lowenergy/lowlimE 2.5e-4
+/lowenergy/cutG .01 micrometer
+/lowenergy/cutE .01 micrometer
+/lowenergy/secphotcut 10 eV
+/run/initialize
+/process/list
+/particle/list
+/run/particle/dumpCutValues
+#
+/gun/direction 0 0 1
+#
+/calor/setAbsMat Aluminium
+#=========================
+/gun/particle gamma
+#------------------
+# 
+/gun/energy 10 keV
+/gun/polarization 1. 0. 0.
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+# 
+/gun/energy 2 keV
+/gun/polarization 0. 1. 0.
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+/gun/energy 600 eV
+/gun/polarization 0. 0. 0.
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+/gun/energy 300 eV
+/gun/polarization 1. 0. 0.
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+/calor/setAbsMat Lead      
+#====================
+#
+/gun/particle gamma
+#------------------
+#
+/gun/energy 10 keV
+/gun/polarization 1. 0. 0.
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+# 
+/gun/energy 2 keV
+/gun/polarization 0. 1. 0.
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+/gun/energy 600 eV
+/gun/polarization 0. 0. 0.
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+/gun/energy 300 eV
+/gun/polarization 1. 0. 0.
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+/calor/setAbsMat Water
+#======================
+#
+/gun/particle gamma
+#------------------
+#
+/gun/energy 10 keV
+/gun/polarization 1. 0. 0.
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+# 
+/gun/energy 2 keV
+/gun/polarization 0. 1. 0.
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+/gun/energy 600 eV
+/gun/polarization 0. 0. 0.
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+/gun/energy 300 eV
+/gun/polarization 1. 0. 0.
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+/gun/particle gamma
+#------------------
+/process/inactivate LowEnRayleigh
+/process/inactivate LowEnCompton
+/process/inactivate LowEnPhotoElec
+/process/inactivate eIoni
+/process/inactivate LowEnergyIoni
+/process/inactivate msc
+/process/inactivate eBrem
+/process/inactivate LowEnBrem
+
+/calor/setAbsMat Aluminium
+#======================
+/tracking/verbose 0
+/gun/energy 2 MeV
+/run/beamOn 1000
+/gun/energy 100 MeV
+/run/beamOn 1000
+/calor/setAbsMat Lead
+#======================
+/tracking/verbose 0
+/gun/energy 2 MeV
+/run/beamOn 1000
+/gun/energy 100 MeV
+/run/beamOn 1000
+/calor/setAbsMat Water
+#======================
+/tracking/verbose 0
+/gun/energy 2 MeV
+/run/beamOn 1000
+/gun/energy 100 MeV
+/run/beamOn 1000
+
+exit

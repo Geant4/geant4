@@ -1,0 +1,23 @@
+$Id: History,v 1.1 2001-05-25 10:20:27 pia Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 20 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+25 May 2001 - MGP, tag test15-V03-01-01
+              Cloned test14 into test20 and adapted for test of
+              polarised LowE processes
+
+25 May 2001 - F.Longo, tag test20-V03-01-00
+              First version - further improvements expected

@@ -1,25 +1,23 @@
-# $Id: GNUmakefile,v 1.1 2001-05-24 19:48:14 flongo Exp $
+# $Id: GNUmakefile,v 1.2 2001-05-25 10:20:27 pia Exp $
 # --------------------------------------------------------------
-# GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
+# GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
 
 name := test20
 G4TARGET := $(name)
 G4EXLIB := true
+GENERAL=1
 
 ifndef G4INSTALL
-  G4INSTALL = ../../
+  G4INSTALL = ../..
 endif
 
-.PHONY: all
+.PHONY: all tools
+ 
+tools:
+	cd ../tools/lib; $(MAKE)
+	$(MAKE) all
+
 all: lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
-
-#$(G4INSTALL)/tests/tools/lib/$(G4SYSTEM)/libG4TestTool.a:
-#		cd $(G4INSTALL)/tests/tools/lib; $(MAKE)
-
-
-
-
-
