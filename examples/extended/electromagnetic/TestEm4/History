@@ -1,0 +1,20 @@
+$Id: History,v 1.1 1999-10-12 11:26:53 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm4 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+16.12.98 - created. Michel Maire
+12.10.99 - moved to examples/extended/electromagnetic
+

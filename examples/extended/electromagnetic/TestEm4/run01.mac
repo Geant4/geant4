@@ -1,0 +1,17 @@
+# $Id: run01.mac,v 1.1 1999-10-12 11:26:54 maire Exp $
+#
+# Macro file for "TestEm4.cc"
+# 
+# (can be run in batch, without graphic)
+#
+/control/verbose  2
+#
+#/run/particle/setCut 1.0 mm
+#/run/initialize
+#
+/run/verbose 2
+/event/drawTracks none
+/event/printModulo 1000
+/run/save on
+#
+/run/beamOn 100000

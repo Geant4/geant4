@@ -1,0 +1,68 @@
+$Id: README,v 1.1 1999-10-12 11:26:53 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm4
+                            -------
+
+	This example has been setup to test the low energy gamma processes. 
+	
+ 1- GEOMETRY DEFINITION
+ 
+ 	It is a cylinder of 5 cm radius filled with C6F6.
+ 	
+ 2- PHYSICS LIST
+ 
+ 	The particle list contains only gamma, electron,positron.
+ 	The physics list contains the 'standard' electromagnetic processes.
+ 	 
+ 3- AN EVENT : THE PRIMARY GENERATOR
+ 
+ 	The primary kinematic is a single 9 MeV gamma randomly shooted at the
+ 	middle of the cylinder. 
+ 	 				
+ 4- VISUALIZATION
+ 
+ 	The Visualization Manager is set in the main().
+ 	The initialisation of the drawing is done via the command
+ 	/vis~/create_view in the macro init.mac. This macro is
+ 	automatically read from the main in case of interactive running mode.
+ 	
+ 	The detector has a default view which is a transversal view of the 
+ 	cylinder.
+ 	
+ 	The tracks are drawn at the end of event, and erased at the end of run.
+ 	Optionaly one can choose to draw all particles, only the charged one,
+ 	or none. This command is defined in EventActionMessenger class.
+ 	
+ 5- PHYSICS SURVEY
+ 
+ 	the energy deposited in C6F6 is histogramed (HEP Hist)
+ 	the command '/run/save on' allows to save the histogram on file.
+ 	
+ 6- HOW TO START ?
+ 
+ 	- compile and link to generate an executable
+ 		% cd examples/extended/electromagnetic/TestEm4
+ 		% gmake
+ 		
+ 	- execute TestEm4 in 'batch' mode from macro files
+ 		% TestEm4   run01.mac
+ 		
+ 	- execute TestEm4 in 'interactive mode' with visualization
+ 		% TestEm4
+ 		....
+ 		Idle> type your commands
+ 		....
+ 		Idle> exit
+ 		
+ 	- visualize the histogram
+ 		paw> h/file 1 testem4.histo
+ 		paw> option stat
+ 		paw> option logy
+ 		paw> h/pl 1 	
+ 	  
+ 	
