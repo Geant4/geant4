@@ -83,6 +83,7 @@
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4BinaryCascade.hh"
+#include "G4BinaryLightIonReaction.hh"
 #include "G4CascadeInterface.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -234,6 +235,13 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
     hkm->SetDeExcitation(0);
+
+  } else if(gen_name == "binary_ion") {
+    G4BinaryLightIonReaction* hkm = new G4BinaryLightIonReaction();
+    sg = new Test30VSecondaryGenerator(hkm, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+//    hkm->SetDeExcitation(0);
 
   } else if(gen_name == "bertini") {
     G4CascadeInterface* hkm = new G4CascadeInterface();
