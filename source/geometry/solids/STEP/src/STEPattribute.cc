@@ -5,7 +5,7 @@
 
 
 //
-// $Id: STEPattribute.cc,v 1.3 1999-12-15 14:50:16 gunter Exp $
+// $Id: STEPattribute.cc,v 1.4 1999-12-15 18:04:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -23,6 +23,11 @@
 
 //static char rcsid[] ="";
 
+#ifndef G4USE_STD_NAMESPACE
+  #ifndef WIN32
+    #include <stream.h>
+  #endif
+#endif
 
 #include <read_func.h>
 #include <STEPattribute.h>
@@ -504,11 +509,10 @@ STEPattribute::STEPwrite (G4std::ostream& out)
         // style output used below should shift such things to e-notation
         // automagically.
         
-#ifndef WIN32
-        out << form("%.*g", (int) Real_Num_Precision,tmp);
-#else
-        out << (int) Real_Num_Precision << " " << tmp;
-#endif
+        char* outBuf="";
+        sprintf(outBuf, "%.*G", (int) Real_Num_Precision,tmp);
+        out << outBuf;
+
 	break;	  
       }
 
@@ -993,8 +997,14 @@ STEPattribute::AddErrorInfo()
 char
 STEPattribute::SkipBadAttr(G4std::istream& in, char *StopChars)
 {
-#ifndef WIN32
-    int sk = in.skip(0);  //turn skipping whitespace off
+
+// turn skipping whitespace off
+#ifdef G4USE_STD_NAMESPACE
+    in.unsetf(G4std::ios::skipws);
+#else
+    #ifndef WIN32
+      int sk = in.skip(0);  
+    #endif
 #endif
 
 	// read bad data until end of this attribute or entity.
@@ -1022,9 +1032,16 @@ STEPattribute::SkipBadAttr(G4std::istream& in, char *StopChars)
 	_error.AppendToDetailMsg(errStr);
     }
     in.putback (c);
-#ifndef WIN32
-    in.skip(sk);     //set skip whitespace to its original state
+
+// set skip whitespace to its original state
+#ifdef G4USE_STD_NAMESPACE
+    in.setf(G4std::ios::skipws);
+#else
+    #ifndef WIN32
+      in.skip(sk);
+    #endif
 #endif
+
     return c;
 }
 

@@ -5,7 +5,7 @@
 
 
 //
-// $Id: SingleLinkList_inline.cc,v 1.3 1999-12-15 14:50:19 gunter Exp $
+// $Id: SingleLinkList_inline.cc,v 1.4 1999-12-15 18:04:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -23,11 +23,8 @@
 /*  */
 
 #include <SingleLinkList.h>
-#ifdef WIN32
-#  include "G4ios.hh"
-#else
-#  include <stream.h>
-#endif
+
+#include "G4ios.hh"
 
 SingleLinkNode * 	
 SingleLinkNode::NextNode ()  const

@@ -5,7 +5,7 @@
 
 
 //
-// $Id: mgrnode.cc,v 1.2 1999-05-21 20:21:09 japost Exp $
+// $Id: mgrnode.cc,v 1.3 1999-12-15 18:04:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,11 +30,7 @@
 #include <instmgr.h>
 #include <STEPentity.h>
 
-#ifdef WIN32
-#  include "G4ios.hh"
-#else
-#  include <stream.h>
-#endif
+#include "G4ios.hh"
 
 void *MgrNode::SEE()
 {

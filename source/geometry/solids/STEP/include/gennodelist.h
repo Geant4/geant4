@@ -5,7 +5,7 @@
 
 
 //
-// $Id: gennodelist.h,v 1.2 1999-05-21 20:20:41 japost Exp $
+// $Id: gennodelist.h,v 1.3 1999-12-15 18:04:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -29,11 +29,7 @@
 #include <OpenOODB.h>
 #endif
 
-#ifdef WIN32
-#  include "G4ios.hh"
-#else
-#  include <stream.h>
-#endif
+#include "G4ios.hh"
 
 //////////////////////////////////////////////////////////////////////////////
 // class GenNodeList
