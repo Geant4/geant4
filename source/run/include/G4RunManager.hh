@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.37 2003-11-04 01:58:00 asaim Exp $
+// $Id: G4RunManager.hh,v 1.38 2004-08-10 23:57:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -255,7 +255,10 @@ class G4RunManager
     inline void SetUserInitialization(G4VUserDetectorConstruction* userInit)
     { userDetector = userInit; }
     inline void SetUserInitialization(G4VUserPhysicsList* userInit)
-    { physicsList = userInit; }
+    {
+      physicsList = userInit;
+      kernel->SetPhysics(userInit);
+    }
     inline void SetUserAction(G4UserRunAction* userAction)
     { userRunAction = userAction; }
     inline void SetUserAction(G4VUserPrimaryGeneratorAction* userAction)

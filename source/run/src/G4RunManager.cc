@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.83 2003-08-01 19:30:14 asaim Exp $
+// $Id: G4RunManager.cc,v 1.84 2004-08-10 23:57:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -327,7 +327,7 @@ void G4RunManager::InitializePhysics()
   if(physicsList)
   {
     if(verboseLevel>1) G4cout << "physicsList->Construct() start." << G4endl;
-    kernel->InitializePhysics(physicsList);
+    kernel->InitializePhysics();
   }
   else
   {

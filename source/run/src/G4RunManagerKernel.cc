@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.16 2004-07-21 14:23:28 gcosmo Exp $
+// $Id: G4RunManagerKernel.cc,v 1.17 2004-08-10 23:57:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -31,10 +31,9 @@
 #include "G4StateManager.hh"
 #include "G4ApplicationState.hh"
 #include "G4ExceptionHandler.hh"
-//#include "G4EventManager.hh"
+#include "G4PrimaryTransformer.hh"
 #include "G4GeometryManager.hh"
 #include "G4TransportationManager.hh"
-//#include "G4Navigator.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VUserPhysicsList.hh"
@@ -79,7 +78,7 @@ G4RunManagerKernel::G4RunManagerKernel()
 
   // version banner
   versionString
-    = " Geant4 version $Name: not supported by cvs2svn $   (27-July-2004)";
+    = " Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)";
   G4cout << G4endl
     << "*************************************************************" << G4endl
     << versionString << G4endl
@@ -193,7 +192,14 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
   { stateManager->SetNewState(G4State_Idle); }
 } 
   
-void G4RunManagerKernel::InitializePhysics(G4VUserPhysicsList* uPhys)
+void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
+{
+  physicsList = uPhys;
+  if(verboseLevel>1) G4cout << "physicsList->ConstructParticle() start." << G4endl;
+  physicsList->ConstructParticle();
+}
+  
+void G4RunManagerKernel::InitializePhysics()
 {
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
@@ -206,7 +212,6 @@ void G4RunManagerKernel::InitializePhysics(G4VUserPhysicsList* uPhys)
     return;
   }
 
-  physicsList = uPhys;
   if(!physicsList)
   {
     G4Exception("G4RunManagerKernel::InitializePhysics",
@@ -263,6 +268,8 @@ G4bool G4RunManagerKernel::RunInitialization()
 
   if(geometryNeedsToBeClosed) ResetNavigator();
  
+  GetPrimaryTransformer()->CheckUnknown();
+
   stateManager->SetNewState(G4State_GeomClosed);
   return true;
 }

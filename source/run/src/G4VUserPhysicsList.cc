@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.48 2003-11-10 15:49:39 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.49 2004-08-10 23:57:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

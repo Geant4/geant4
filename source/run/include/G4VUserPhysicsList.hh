@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.25 2003-11-03 02:16:36 kurasige Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.26 2004-08-10 23:57:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,22 +98,17 @@ class G4VUserPhysicsList
 
   public:  // with description
     // By calling the "Construct" method, 
-    // particles and processes are created    
+    // processes are created with invoking ConstructProcess() protected method.
     void Construct();
  
-
-  protected: // with description
-   // These two methods of  ConstructParticle() and ConstructProcess()
-   // will be invoked in the Construct() method. 
-
    // each particle type will be instantiated
    virtual void ConstructParticle() = 0;
  
+  protected: // with description
    // each physics process will be instantiated and
    // registered to the process manager of each particle type 
    virtual void ConstructProcess() = 0;
 
-  protected: // with description
    //  User must invoke this method in his ConstructProcess() 
    //  implementation in order to insures particle transportation.
    //  !! Caution: this class must not be overriden !!
@@ -325,10 +320,7 @@ inline void G4VUserPhysicsList::Construct()
 {
 #ifdef G4VERBOSE  
   if (verboseLevel >1) G4cout << "G4VUserPhysicsList::Construct()" << G4endl;  
-
-  if (verboseLevel >1) G4cout << "Construct particles " << G4endl;  
 #endif
-  ConstructParticle();
 
   InitializeProcessManager();
 
