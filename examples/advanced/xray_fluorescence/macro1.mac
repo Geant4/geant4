@@ -1,29 +1,12 @@
-/apparate/setSamThick 8 cm
-
-/apparate/setSamSizeYZ 8 cm
 
 
-/apparate/setSamMat Scintillator
+/lowenergy/lowlimGE 250 eV
 
-/apparate/setSamMat Silicon
+/lowenergy/cutEnergy 250 eV
 
-/apparate/update
+# B-flare spectrum
+/gun/spectrum on
 
+/gun/particle gamma
 
-
-
-/energy/lowlimGE 250 eV
-
-/gun/particle  gamma
-
-/gun/particle e-
-
-/gun/energy 5 MeV 
-
-/tracking/verbose 2
-
-/run/beamOn   1000
-
-
-
-
+/run/beamOn 100

@@ -20,14 +20,17 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//---------------------------------------------------------------
 //
-// XrayFluoSteppingVerbose.cc
+// $Id: XrayFluoSteppingVerbose.cc
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
-// Description:
-//    Implementation of  the XrayFluoSteppingVerbose class
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
-//---------------------------------------------------------------
+// History:
+// -----------
+// 28 Nov 2001 Elena Guardincerri     Created
+//
+// -------------------------------------------------------------------
 
 #include "XrayFluoSteppingVerbose.hh"
 #include "G4SteppingManager.hh"
@@ -110,7 +113,7 @@ void XrayFluoSteppingVerbose::StepInfo()
 	       << " ---------------"
 	       << G4endl;
 
-	for(G4int lp1=(*fSecondary).size()-tN2ndariesTot; 
+	for(size_t lp1=(*fSecondary).size()-tN2ndariesTot; 
                         lp1<(*fSecondary).size(); lp1++){
 	  G4cout << "    : "
 		 << G4std::setw(6)

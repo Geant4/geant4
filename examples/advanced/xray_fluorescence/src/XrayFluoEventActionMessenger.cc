@@ -20,7 +20,17 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: XrayFluoEventActionMessenger.cc
+// GEANT4 tag $Name: xray_fluo-V03-02-00
+//
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+//
+// History:
+// -----------
+// 28 Nov 2001 Elena Guardincerri     Created
+//
+// -------------------------------------------------------------------
 
 #include "XrayFluoEventActionMessenger.hh"
 
@@ -28,6 +38,7 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "globals.hh"
+#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

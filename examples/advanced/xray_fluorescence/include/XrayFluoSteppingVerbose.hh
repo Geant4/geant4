@@ -20,15 +20,18 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//---------------------------------------------------------------
 //
-// mySteppingVerbose.hh
+// $Id: XrayFluoSteppingVerbose.hh
+// GEANT4 tag $Name:  xray_fluo-V03-02-00
 //
-// Description:
-//   This class manages the verbose outputs in G4SteppingManager. 
-//   It inherits from G4SteppingVerbose   
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
-//---------------------------------------------------------------
+// History:
+// -----------
+//  28 Nov 2001  Elena Guardincerri   Created
+//
+// -------------------------------------------------------------------
+
 
 class XrayFluoSteppingVerbose;
 
@@ -38,14 +41,18 @@ class XrayFluoSteppingVerbose;
 #include "G4SteppingVerbose.hh"
 
 class XrayFluoSteppingVerbose : public G4SteppingVerbose {
-public:   
-  
+
+public: 
+ 
+// Constructor/Destructor
   XrayFluoSteppingVerbose();
-  ~XrayFluoSteppingVerbose();
-  
+ ~XrayFluoSteppingVerbose();
+
   void StepInfo();
   void TrackingStarted();
-    
+
+
+
 };
 
 #endif

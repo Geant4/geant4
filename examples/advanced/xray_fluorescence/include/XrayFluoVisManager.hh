@@ -20,7 +20,17 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: XrayFluoVisManager.hh
+// GEANT4 tag $Name: xray_fluo-V03-02-00
+//
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+//
+// History:
+// -----------
+//  28 Nov 2001  Elena Guardincerri   Created
+//
+// -------------------------------------------------------------------
 
 // Example Visualization Manager implementing virtual function
 //   RegisterGraphicsSystems.  Exploits C-pre-processor variables
@@ -32,8 +42,8 @@
 
 // Alternatively, you can implement an empty function here and just
 //   register the systems you want in your main(), e.g.:
-//   G4VisManager* myVisManager = new MyVisManager;
-//   myVisManager -> RegisterGraphicsSystem (new MyGraphicsSystem);
+//   G4VisManager* XrayFluoVisManager = new XrayFluoVisManager;
+//   XrayFluoVisManager -> RegisterGraphicsSystem (new XrayFluoGraphicsSystem);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -51,11 +61,11 @@ class XrayFluoVisManager: public G4VisManager {
 public:
 
   XrayFluoVisManager ();
-  
+
 private:
-  
+
   void RegisterGraphicsSystems ();
-  
+
 };
 
 #endif

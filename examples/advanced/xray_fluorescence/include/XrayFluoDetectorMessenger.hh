@@ -20,7 +20,17 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....#ifndef 
+//
+// $Id: XrayFluoDetectorMessenger.hh
+// GEANT4 tag $Name: xray_fluo-V03-02-00
+//
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+//
+// History:
+// -----------
+//  28 Nov 2001  Elena Guardincerri   Created
+//
+// -------------------------------------------------------------------
 
 #ifndef XrayFluoDetectorMessenger_h
 #define XrayFluoDetectorMessenger_h 1
@@ -47,16 +57,13 @@ class XrayFluoDetectorMessenger: public G4UImessenger
  private:
     XrayFluoDetectorConstruction*    Detector;
     G4UIdirectory*             detDir;
-    G4UIcmdWithAString*        SenMaterCmd;
-    G4UIcmdWithAString*        SamMaterCmd;  
-    G4UIcmdWithADoubleAndUnit* SenThickCmd;
-    G4UIcmdWithADoubleAndUnit* SamThickCmd;
-    G4UIcmdWithADoubleAndUnit* SenSizeYZCmd;
-    G4UIcmdWithADoubleAndUnit* SamSizeYZCmd;
-    G4UIcmdWithADoubleAndUnit* SenDistCmd;
-    G4UIcmdWithADoubleAndUnit* SenAngleCmd;
-    G4UIcmdWithADoubleAndUnit* SenRotCmd;
+
     G4UIcmdWithoutParameter*   UpdateCmd;
 };
 
 #endif
+
+
+
+
+

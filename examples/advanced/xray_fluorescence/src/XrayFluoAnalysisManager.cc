@@ -20,511 +20,237 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// $Id: XrayFluoAnalysisManager.cc
+// GEANT4 tag $Name: xray_fluo-V03-02-00
+//
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+//
+// History:
+// -----------
+// 28 Nov 2001 Elena Guardincerri     Created
+//
+// -------------------------------------------------------------------
 #ifdef  G4ANALYSIS_USE
 
-#include <stdlib.h>
-#include "g4std/fstream"
 #include "XrayFluoAnalysisManager.hh"
-#include "G4VAnalysisSystem.hh"
-#include "XrayFluoDetectorConstruction.hh"
 #include "XrayFluoAnalysisMessenger.hh"
-#include <IHistogramFactory.h>
-#include <IHistogram1D.h>
+#include "G4Step.hh"
 
-#include <IPlotter.h>
-#include <IVector.h>
-#include <IVectorFactory.h>
-
-#include "G4LizardSystem.hh"
+XrayFluoAnalysisManager* XrayFluoAnalysisManager::instance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoAnalysisManager::XrayFluoAnalysisManager(XrayFluoDetectorConstruction* XrayFluoDC): 
-  Detector(XrayFluoDC), 
-  
-  histoGammaKenergy(0),
-  histoIoniEnergy(0),
-  histoPhotoEnergy(0),
-  histoBremEnergy(0),
-  histoComptEnergy(0),
-  histoConvEnergy(0),
-  histoRaylEnergy(0),
-  histoGammaOutEnergy(0),
-  histoElecKenergy(0),
-  histoeIoniEnergy(0),
-  histoePhotoEnergy(0),
-  histoeBremEnergy(0),
-  histoeComptEnergy(0),
-  histoeConvEnergy(0),
-  histoeRaylEnergy(0),
-  histoElecOutEnergy(0),
-  
-  histoFactory(0), pl(0),
-  histo1DDraw("disable"),histo1DSave("enable")
-  
+XrayFluoAnalysisManager::XrayFluoAnalysisManager()
 {
-  // Define the messenger and the analysis system
   analysisMessenger = new XrayFluoAnalysisMessenger(this);
-  analysisSystem = new G4LizardSystem;
-  
-  histoFactory = analysisSystem->GetHistogramFactory();  
-  
-  //   The following lines set the plotter and the vectorfactory that
-  //   are needed in this example for a multiple histograms
-  //   visualization.
-  
-  fVectorFactory = createIVectorFactory();          
-  pl = createIPlotter();  
+  histoManager = createIHistoManager(); 
+  factory = Lizard::createNTupleFactory();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoAnalysisManager::~XrayFluoAnalysisManager() {
-  
-  delete histoGammaKenergy;
-  delete histoIoniEnergy;
-  delete histoPhotoEnergy;
-  delete histoBremEnergy;
-  delete histoComptEnergy;
-  delete histoConvEnergy;
-  delete histoRaylEnergy;
-  delete histoGammaOutEnergy;
-  delete histoElecKenergy;
-  delete histoeIoniEnergy;
-  delete histoePhotoEnergy;
-  delete histoeBremEnergy;
-  delete histoeComptEnergy;
-  delete histoeConvEnergy;
-  delete histoeRaylEnergy;
-  delete histoElecOutEnergy;
-
-  delete analysisSystem;
-  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4bool XrayFluoAnalysisManager::RegisterAnalysisSystem(G4VAnalysisSystem*)
+XrayFluoAnalysisManager::~XrayFluoAnalysisManager() 
 {
-  return true;
+
+  delete analysisMessenger; 
+  analysisMessenger = 0;
+  delete  histoManager;
+  histoManager = 0;
+  delete factory;
+  factory = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-IHistogramFactory* XrayFluoAnalysisManager::GetHistogramFactory(const G4String& aSystem)
+XrayFluoAnalysisManager* XrayFluoAnalysisManager::getInstance()
 {
-  return histoFactory;
+  if (instance == 0) instance = new XrayFluoAnalysisManager;
+  return instance;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void XrayFluoAnalysisManager::Store(IHistogram* histo, const G4String& ID)
-{
-  analysisSystem->Store(histo, ID);
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-   void XrayFluoAnalysisManager::Plot(IHistogram* histo = 0)
+void XrayFluoAnalysisManager::book()
+
 {
- 
-  IVector* vgKe = 0;
-  IVector* vIoe = 0;
-  IVector* vPhe = 0;
-  IVector* vBre = 0;
-  IVector* vCoe = 0;
-  IVector* vCve = 0;
-  IVector* vRae = 0;
-  IVector* vGoe = 0;
-  IVector* veKe = 0;
-  IVector* veIoe = 0;
-  IVector* vePhe = 0;
-  IVector* veBre = 0;
-  IVector* veCoe = 0;
-  IVector* veCve = 0;
-  IVector* veRae = 0;
-  IVector* vEoe = 0;
+  histoManager->selectStore("XrayFluo.his");
 
- // We fill them with the histograms
+  // Book histograms
+  histoManager->create1D("1","Energy Deposit", 100,0.,10.);
+ histoManager->create1D("2","Gamma born in the sample", 100,0.,10.);
+ histoManager->create1D("3","Electrons  born in the sample", 100,0.,10.);
+ histoManager->create1D("4","Gammas leaving the sample", 100,0.,10.);
+ histoManager->create1D("5","Electrons leaving the sample ", 100,0.,10.);
+ histoManager->create1D("6","Gammas reaching the detector", 100,0.,10.);
+ histoManager->create1D("7","Spectrum of the incident particles", 100,0.,10.);
+ histoManager->create1D("8","Protons reaching the detector", 100,0.,10.);
+ histoManager->create1D("9","Protons leaving the sample", 100,0.,10.);
 
- if(histo1DDraw == "enable")
+ // Book ntuples
+  ntuple = factory->createC("XrayFluo.his::1");
+
+ //  Add and bind the attributes to the ntuple
+  if ( !( ntuple->addAndBind( "energy", eDep) &&
+  	  ntuple->addAndBind( "counts"     , counts   ) ) )
+
     {
-     
-      vgKe = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoGammaKenergy)); 
-      vIoe = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoIoniEnergy));    
-      vPhe = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoPhotoEnergy));
-      vBre = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoBremEnergy));
-
-  
-      vCoe = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoComptEnergy));
-      vCve = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoConvEnergy));
-      vRae = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoRaylEnergy));
-      vGoe = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoGammaOutEnergy));
-      veKe = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoElecKenergy)); 
-      veIoe = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoeIoniEnergy));    
-      vePhe = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoePhotoEnergy));
-      veBre = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoeBremEnergy));
-
-  
-      veCoe = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoeComptEnergy));
-      veCve = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoeConvEnergy));
-      veRae = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoeRaylEnergy));
-      vEoe = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoElecOutEnergy));
-
-
-
-      pl->plot(vgKe);  
-      pl->plot(vIoe); 
-      pl->plot(vPhe);
-      pl->plot(vBre); 
-      pl->plot(vCoe);
-      pl->plot(vCve); 
-      pl->plot(vRae); 
-      pl->plot(vGoe); 
-      pl->plot(veKe);  
-      pl->plot(veIoe); 
-      pl->plot(vePhe);
-      pl->plot(veBre); 
-      pl->plot(veCoe);
-      pl->plot(veCve); 
-      pl->plot(veRae); 
-      pl->plot(vEoe); 
-      pl->refresh();
-    }
-
-
-  delete vgKe;
-  delete vIoe;
-  delete vPhe;
-  delete vBre;
-  delete vCoe;
-  delete vCve;
-  delete vRae;
-  delete vGoe;
-  delete veKe;
-  delete veIoe;
-  delete vePhe;
-  delete veBre;
-  delete veCoe;
-  delete veCve;
-  delete veRae;
-  delete vEoe;
+      delete ntuple;
+      G4Exception("XrayFluoAnalysisManager::book - Could not addAndBind ntuple");
+    }  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-void XrayFluoAnalysisManager::InsertKEnergy(double gKe)
+void XrayFluoAnalysisManager::finish()
 {
-  histoGammaKenergy->fill(gKe);
+
+  histoManager->store("1");
+  histoManager->store("3");
+  histoManager->store("2");
+  histoManager->store("4");
+  histoManager->store("5");
+  histoManager->store("6");
+  histoManager->store("7");
+  histoManager->store("8");
+  histoManager->store("9");
+
+
+  delete ntuple;
+  ntuple = 0;
+  G4cout << "Deleted ntuple" << G4endl;
 }
-
-
-void XrayFluoAnalysisManager::InsertIoniEnergy(double Ioe)
-{
- histoIoniEnergy->fill(Ioe);
-}
-
-void XrayFluoAnalysisManager::InsertPhotoEnergy(double Phe)
-{
- histoPhotoEnergy->fill(Phe);
-}
-
-void XrayFluoAnalysisManager::InsertBremEnergy(double Bre)
-  {
-   histoBremEnergy->fill(Bre);
- }
-
-void XrayFluoAnalysisManager::InsertComptEnergy(double Coe)
-  {
-   histoComptEnergy->fill(Coe);
- }
-
-void XrayFluoAnalysisManager::InsertConvEnergy(double Cve)
-  {
-   histoConvEnergy->fill(Cve);
- }
-
-void XrayFluoAnalysisManager::InsertRaylEnergy(double Rae)
-  {
-  histoRaylEnergy->fill(Rae);
-  }
-void XrayFluoAnalysisManager::InsertOutEnergy(double Goe)
-{
- histoGammaOutEnergy->fill(Goe);
-}
-void XrayFluoAnalysisManager::InserteKEnergy(double eKe)
-{
-  histoElecKenergy->fill(eKe);
-}
-
-void XrayFluoAnalysisManager::InserteIoniEnergy(double eIoe)
-{
- histoeIoniEnergy->fill(eIoe);
-}
-
-void XrayFluoAnalysisManager::InsertePhotoEnergy(double ePhe)
-{
- histoePhotoEnergy->fill(ePhe);
-}
-
-void XrayFluoAnalysisManager::InserteBremEnergy(double eBre)
-  {
-   histoeBremEnergy->fill(eBre);
- }
-
-void XrayFluoAnalysisManager::InserteComptEnergy(double eCoe)
-  {
-   histoeComptEnergy->fill(eCoe);
- }
-
-void XrayFluoAnalysisManager::InserteConvEnergy(double eCve)
-  {
-   histoeConvEnergy->fill(eCve);
- }
-
-void XrayFluoAnalysisManager::InserteRaylEnergy(double eRae)
-  {
-  histoeRaylEnergy->fill(eRae);
-  }
-void XrayFluoAnalysisManager::InserteOutEnergy(double Eoe)
-{
- histoElecOutEnergy->fill(Eoe);
-}
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-// This member reset the histograms and it is called at the begin
-// of each run; here we put the inizialization so that the histograms have 
-// always the right dimensions depending from the detector geometry
-
-void XrayFluoAnalysisManager::BeginOfRun() 
-{ 
- 
-  if (histoFactory) 
-    {
- 
-      histoFactory->destroy(histoGammaKenergy);
-      histoGammaKenergy = histoFactory->create1D("Energy of the  gammas at the preStepPoint when created(keV)", 300, 0,5000);
-      histoFactory->destroy(histoIoniEnergy);
-      histoIoniEnergy = histoFactory->create1D("Energy of the gammas created by LowEIoni(keV)", 300, 0,5000);
-      histoFactory->destroy(histoPhotoEnergy);
-      histoPhotoEnergy = histoFactory->create1D("Energy of the gammas created by LowEPhotoelec(keV)", 300, 0,5000);
-      histoFactory->destroy(histoBremEnergy);
-      histoBremEnergy = histoFactory->create1D("Energy of the gammas created by LowEBrem(keV)", 300, 0,5000);
-      histoFactory->destroy(histoComptEnergy);
-      histoComptEnergy = histoFactory->create1D("Energy of the gammas created by LowECompt(keV)", 300, 0,5000);
-      histoFactory->destroy(histoConvEnergy);
-      histoConvEnergy = histoFactory->create1D("Energy of the gammas created by LowEGammaConv(keV)", 300, 0,5000);
-      histoFactory->destroy(histoRaylEnergy);
-      histoRaylEnergy = histoFactory->create1D("Energy of the gammas created by LowERayleigh(keV)", 300, 0,5000);
-      histoFactory->destroy(histoGammaOutEnergy);
-      histoGammaOutEnergy = histoFactory->create1D("Energy of the outgoing gammas (keV)", 300, 0,5000);
-       histoFactory->destroy(histoElecKenergy);
-      histoElecKenergy = histoFactory->create1D("All electrons created (keV)", 500, 0,1000);
-      histoFactory->destroy(histoeIoniEnergy);
-      histoeIoniEnergy = histoFactory->create1D("Energy of the electrons created by LowEIoni(keV)", 500, 0,1000);
-      histoFactory->destroy(histoePhotoEnergy);
-      histoePhotoEnergy = histoFactory->create1D("Electrons created by LowEPhotoelec(keV)", 500, 0,1000);
-      histoFactory->destroy(histoeBremEnergy);
-      histoeBremEnergy = histoFactory->create1D("Electrons created by LowEBrem(keV)", 500, 0,1000);
-      histoFactory->destroy(histoeComptEnergy);
-      histoeComptEnergy = histoFactory->create1D("Electrons created by LowECompt(keV)", 500, 0,1000);
-      histoFactory->destroy(histoeConvEnergy);
-      histoeConvEnergy = histoFactory->create1D("Electrons created by LowEGammaConv(keV)", 500, 0,1000);
-      histoFactory->destroy(histoeRaylEnergy);
-      histoeRaylEnergy = histoFactory->create1D("Electrons created by LowERayleigh(keV)", 500, 0,1000);
-      histoFactory->destroy(histoElecOutEnergy);
-      histoElecOutEnergy = histoFactory->create1D(" Outgoing electrons (keV)", 500, 0,1000);
-         
+void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
+{
+  G4double gammaAtTheDetPre=0;
+  G4double protonsAtTheDetPre=0;
+  G4double gammaLeavingSample=0;
+  G4double eleLeavingSample=0;
+  G4double protonsLeavSam=0;
+  G4double gammaBornInSample=0;
+  G4double eleBornInSample=0;
+  if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Sample"){
     
+    if(aStep->GetTrack()->GetNextVolume()->GetName() == "World" ) 
+      { 
+	if ((aStep->GetTrack()->GetDynamicParticle()
+	     ->GetDefinition()-> GetParticleName()) == "gamma" )
+	  {
+	    gammaLeavingSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
+	    IHistogram1D* h1 = histoManager->retrieveHisto1D("4");
+	    h1->fill(gammaLeavingSample/keV);
+	  }
       }
-
-  if(histoGammaKenergy)
-    histoGammaKenergy->reset();
-  if(histoIoniEnergy)
-    histoIoniEnergy->reset();
-  if(histoPhotoEnergy)
-    histoPhotoEnergy->reset();
-  if(histoBremEnergy)
-    histoBremEnergy->reset();
-  if(histoComptEnergy)
-    histoComptEnergy->reset();
-  if(histoConvEnergy)
-    histoConvEnergy->reset();
-  if(histoRaylEnergy)
-    histoRaylEnergy->reset(); 
-  if(histoGammaOutEnergy)
-    histoGammaOutEnergy->reset();
-  if(histoElecKenergy)
-    histoElecKenergy->reset();
-  if(histoeIoniEnergy)
-    histoeIoniEnergy->reset();
-  if(histoePhotoEnergy)
-    histoePhotoEnergy->reset();
-  if(histoeBremEnergy)
-    histoeBremEnergy->reset();
-  if(histoeComptEnergy)
-    histoeComptEnergy->reset();
-  if(histoeConvEnergy)
-    histoeConvEnergy->reset();
-  if(histoeRaylEnergy)
-    histoeRaylEnergy->reset(); 
-  if(histoElecOutEnergy)
-    histoElecOutEnergy->reset();
-
-  pl->zone(4,4);
-
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
-//   This member is called at the end of each run 
-
-void XrayFluoAnalysisManager::EndOfRun(G4int n) 
-{
-  // This variable contains the names of the PS files
-   char name[15];
-  // We define some vectors
- 
-   IVector* vgKe   = 0;
-   IVector* vIoe   = 0;
-   IVector* vPhe   = 0;
-   IVector* vBre   = 0;
-   IVector* vCoe   = 0;
-   IVector* vCve   = 0;
-   IVector* vRae   = 0;
-   IVector* vGoe   = 0;
-   IVector* veKe   = 0;
-   IVector* veIoe   = 0;
-   IVector* vePhe   = 0;
-   IVector* veBre   = 0;
-   IVector* veCoe   = 0;
-   IVector* veCve   = 0;
-   IVector* veRae   = 0;
-   IVector* vEoe   = 0;
-  
-  // Temporary we set one single zone for the plotter
-  pl->zone(1,1);
-  
-  // We now print the histograms, each one in a separate file 
-
-  if(histo1DSave == "enable")
-    {
-      vgKe   = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoGammaKenergy));
-      vIoe   = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoIoniEnergy));
-      vPhe   = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoPhotoEnergy));
-      vBre   = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoBremEnergy));
-      vCoe   = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoComptEnergy));
-      vCve   = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoConvEnergy));
-      vRae   = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoRaylEnergy));
-      vGoe   = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoGammaOutEnergy));
-      veKe   = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoElecKenergy));
-      veIoe   = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoeIoniEnergy));
-      vePhe   = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoePhotoEnergy));
-      veBre   = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoeBremEnergy));
-      veCoe   = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoeComptEnergy));
-      veCve   = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoeConvEnergy));
-      veRae   = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoeRaylEnergy));
-      vEoe   = fVectorFactory->from1D(dynamic_cast<IHistogram1D*>(histoElecOutEnergy));
-
+  }
+  if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Sample"){
     
-   sprintf(name,"gam_gen.ps", n);
-      pl->plot(vgKe);
-      pl->psPrint(name);
-
-      sprintf(name,"gam_ion.ps", n);
-      pl->plot(vIoe);
-      pl->psPrint(name);
-
-      sprintf(name,"gam_ipho.ps", n);
-      pl->plot(vPhe);
-      pl->psPrint(name);
-
-      sprintf(name,"gam_brem.ps", n);
-      pl->plot(vBre);
-      pl->psPrint(name);
-
-      sprintf(name,"gam_comp.ps", n);
-      pl->plot(vCoe);
-      pl->psPrint(name);
-
-      sprintf(name,"gam_conv.ps", n);
-      pl->plot(vCve);
-      pl->psPrint(name);
-
-      sprintf(name,"gam_ray.ps", n);
-      pl->plot(vRae);
-      pl->psPrint(name);
-
-      sprintf(name,"gam_out.ps", n);
-      pl->plot(vGoe);
-      pl->psPrint(name);  
-
-      sprintf(name,"ele_gen.ps", n);
-      pl->plot(veKe);
-      pl->psPrint(name);
-
-      sprintf(name,"ele_ion.ps", n);
-      pl->plot(veIoe);
-      pl->psPrint(name);
-
-      sprintf(name,"ele_ipho.ps", n);
-      pl->plot(vePhe);
-      pl->psPrint(name);
-
-      sprintf(name,"ele_brem.ps", n);
-      pl->plot(veBre);
-      pl->psPrint(name);
-
-      sprintf(name,"ele_comp.ps", n);
-      pl->plot(veCoe);
-      pl->psPrint(name);
-
-      sprintf(name,"ele_conv.ps", n);
-      pl->plot(veCve);
-      pl->psPrint(name);
-
-      sprintf(name,"ele_ray.ps", n);
-      pl->plot(veRae);
-      pl->psPrint(name);
-
-      sprintf(name,"ele_out.ps", n);
-      pl->plot(vEoe);
-      pl->psPrint(name);
- 
+    if(aStep->GetTrack()->GetNextVolume()->GetName() == "World" ) 
+      { 
+	if ((aStep->GetTrack()->GetDynamicParticle()
+	     ->GetDefinition()-> GetParticleName()) == "e-" ) 
+	  {
+	    eleLeavingSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
+	    
+	    IHistogram1D* h2 = histoManager->retrieveHisto1D("5");
+	    h2->fill(eleLeavingSample/keV);
+	  }
+	else if ((aStep->GetTrack()->GetDynamicParticle()
+		  ->GetDefinition()-> GetParticleName()) == "proton" )
+	  {
+	    protonsLeavSam = (aStep->GetPreStepPoint()->GetKineticEnergy());
+	     IHistogram1D* h3 = histoManager->retrieveHisto1D("9");
+	     h3->fill(protonsLeavSam/keV);
+	  }
+	
+      }
   }
-  delete vgKe;
-  delete vPhe;
-  delete vIoe;
-  delete vBre;
-  delete vCoe;
-  delete vCve;
-  delete vRae;
-  delete vGoe;
-  delete veKe;
-  delete vePhe;
-  delete veIoe;
-  delete veBre;
-  delete veCoe;
-  delete veCve;
-  delete veRae;
-  delete vEoe;
   
   
+  if((aStep->GetTrack()->GetDynamicParticle()
+      ->GetDefinition()-> GetParticleName()) == "gamma" )
+    
+    {if(1== (aStep->GetTrack()->GetCurrentStepNumber()))
+      
+      {if(0 != aStep->GetTrack()->GetParentID())
+	
+	{if(aStep->GetTrack()->GetVolume()->GetName() == "Sample")
+	  {
+	    gammaBornInSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
+	    IHistogram1D* h4 = histoManager->retrieveHisto1D("2");
+	    h4->fill(gammaBornInSample);
+	    
+	  }
+	}
+      }
+    }
+  if((aStep->GetTrack()->GetDynamicParticle()
+      ->GetDefinition()-> GetParticleName()) == "e-" )
+    
+    {if(1== (aStep->GetTrack()->GetCurrentStepNumber()))
+      
+      {if(0 != aStep->GetTrack()->GetParentID())
+	
+	{if(aStep->GetTrack()->GetVolume()->GetName() == "Sample")
+	  {
+	    eleBornInSample = (aStep->GetPreStepPoint()->GetKineticEnergy());
+	    IHistogram1D* h5 = histoManager->retrieveHisto1D("3");
+	    h5->fill(eleBornInSample);
+	  }
+	}
+      }
+    }
+  
+  if(aStep->GetTrack()->GetNextVolume()){
+    
+    if(aStep->GetTrack()->GetVolume()->GetName() == "World"){
+      
+      if(aStep->GetTrack()->GetNextVolume()->GetName() == "HPGeDetector")
+	
+	{ 
+	  if ((aStep->GetTrack()->GetDynamicParticle()
+	       ->GetDefinition()-> GetParticleName()) == "gamma" ) 
+	    {
+	      gammaAtTheDetPre = (aStep->GetPreStepPoint()->GetKineticEnergy());
+	      IHistogram1D* h6 = histoManager->retrieveHisto1D("6");
+	      h6->fill( gammaAtTheDetPre);
+	    }
+	  else if ((aStep->GetTrack()->GetDynamicParticle()
+		    ->GetDefinition()-> GetParticleName()) == "proton" ) 
+	    {
+	      protonsAtTheDetPre = (aStep->GetPreStepPoint()->GetKineticEnergy());
+	      IHistogram1D* h7 = histoManager->retrieveHisto1D("8");
+	      h7->fill( protonsAtTheDetPre);
+	    }
+	}
+    }
   }
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-//  This member is called at the end of every event 
-void XrayFluoAnalysisManager::EndOfEvent(G4int flag) 
+void XrayFluoAnalysisManager::analyseEnergyDep(G4double energyDep)
 {
-  // The histograms are updated only if there is some
-  // hits in the event
-  if(flag) Plot();
+  IHistogram1D* h8 = histoManager->retrieveHisto1D("1");
+  h8->fill(energyDep/keV);
+  counts = 1.;
+  ntuple->addRow();
+
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void XrayFluoAnalysisManager::analysePrimaryGenerator(G4double energy)
+{
+ IHistogram1D* h9 = histoManager->retrieveHisto1D("7");
+	      h9->fill(energy/keV);
+
+}
 #endif
+
+
+
 
 
 

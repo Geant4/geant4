@@ -20,36 +20,38 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: XrayFluoSteppingAction.hh
+// GEANT4 tag $Name:  xray_fluo-V03-02-00
+//
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+//
+// History:
+// -----------
+//  28 Nov 2001  Elena Guardincerri   Created
+//
+// -------------------------------------------------------------------
 
 #ifndef XrayFluoSteppingAction_h
-#define  XrayFluoSteppingAction_h 1
-
+#define XrayFluoSteppingAction_h 1
+#include "globals.hh"
 #include "G4UserSteppingAction.hh"
-#ifdef G4ANALYSIS_USE
-#include "XrayFluoAnalysisManager.hh"
-#endif
 
-class  XrayFluoDetectorConstruction;
+class XrayFluoDetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class  XrayFluoSteppingAction : public G4UserSteppingAction
+class XrayFluoSteppingAction : public G4UserSteppingAction
 {
-public:
-#ifdef G4ANALYSIS_USE    
-  XrayFluoSteppingAction( XrayFluoDetectorConstruction*,XrayFluoAnalysisManager*);
-#else
-  XrayFluoSteppingAction();   
-#endif
-  ~ XrayFluoSteppingAction();
-  
-  void UserSteppingAction(const G4Step*);
+  public:
+
+  XrayFluoSteppingAction(); 
+   ~XrayFluoSteppingAction();
+
+    void UserSteppingAction(const G4Step*);
 private:
-  XrayFluoDetectorConstruction* detector;
-#ifdef G4ANALYSIS_USE   
-  XrayFluoAnalysisManager* analysisManager;
-#endif
+
+
 };
 
 #endif

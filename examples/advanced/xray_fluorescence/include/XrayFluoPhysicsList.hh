@@ -20,7 +20,17 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: XrayFluoPhysicsList.hh
+// GEANT4 tag $Name: xray_fluo-V03-02-00
+//
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+//
+// History:
+// -----------
+//  28 Nov 2001  Elena Guardincerri   Created
+//
+// -------------------------------------------------------------------
 
 #ifndef XrayFluoPhysicsList_h
 #define XrayFluoPhysicsList_h 1
@@ -29,55 +39,64 @@
 #include "globals.hh"
 
 class XrayFluoPhysicsListMessenger;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+class G4LowEnergyIonisation;
+class G4LowEnergyPhotoElectric;
+class G4LowEnergyBremsstrahlung;
+class XrayFluoDetectorConstruction;
 class XrayFluoPhysicsList: public G4VUserPhysicsList
 {
-  public:
-    XrayFluoPhysicsList();
-   ~XrayFluoPhysicsList();
-
-  protected:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
- 
-    void SetCuts();
- 
 public:
-    
-// Set/Get cut values 
-    void      SetCutForGamma(G4double);
-    void      SetCutForElectron(G4double);
-    void      SetCutForProton(G4double);           
-    G4double  GetCutForGamma() const;
-    G4double  GetCutForElectron() const;
-    G4double  GetCutForProton() const;
-    void SetElectronLowLimit(G4double);    
-    void SetGammaLowLimit(G4double);
-    void SetGELowLimit(G4double);
- 
-  protected:
-    
-// these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBaryons();
 
-  protected:
+  XrayFluoPhysicsList(XrayFluoDetectorConstruction*);
+  virtual ~XrayFluoPhysicsList();
+  
+protected:
+
+  // Construct particle and physics
+  virtual void ConstructParticle();
+  virtual void ConstructProcess();
+  
+protected:
+
+  // these methods Construct particles 
+  virtual void ConstructBosons();
+  virtual void ConstructLeptons();
+  virtual void ConstructBarions();
+  virtual void ConstructIons();
+
+protected:
   // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
+  void ConstructEM();
+  void ConstructGeneral();
 
-  private:
-    G4double cutForGamma;
-    G4double cutForElectron; 
-    G4double cutForProton;
-    G4double currentDefaultCut;
-    XrayFluoPhysicsListMessenger* physicsListMessenger;
+public:
+ 
+  void SetCuts();
+  void SetGammaCut(G4double);
+  void SetElectronCut(G4double);
+
+  void SetGammaLowLimit(G4double);
+  void SetElectronLowLimit(G4double);
+  void SetGELowLimit(G4double);
+  void SetLowEnSecPhotCut(G4double);
+  void SetLowEnSecElecCut(G4double);
+  void SetProtonCut(G4double);
+  void SetCutsByEnergy(G4double);
+  
+
+private:
+
+  G4LowEnergyIonisation*  LeIoprocess;
+  G4LowEnergyPhotoElectric* LePeprocess;
+  G4LowEnergyBremsstrahlung* LeBrprocess;
+  XrayFluoPhysicsListMessenger* physicsListMessenger;
+  G4double cutForGamma;
+  G4double cutForElectron;
+  G4double cutForProton;
+  XrayFluoDetectorConstruction* pDet;
+  
 };
+
 #endif
 
 

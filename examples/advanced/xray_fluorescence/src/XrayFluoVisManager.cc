@@ -20,7 +20,17 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: XrayFluoVisManager.cc
+// GEANT4 tag $Name: xray_fluo-V03-02-00
+//
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+//
+// History:
+// -----------
+// 28 Nov 2001 Elena Guardincerri     Created
+//
+// -------------------------------------------------------------------
 
 #ifdef G4VIS_USE
 
@@ -143,7 +153,14 @@ void XrayFluoVisManager::RegisterGraphicsSystems () {
     PrintAvailableGraphicsSystems ();
   }
 }
-
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+
+
+
+
+

@@ -20,36 +20,64 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: XrayFluoPhysicsListMessenger.hh
+// GEANT4 tag $Name: xray_fluo-V03-02-00
+//
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+//
+// History:
+// -----------
+//  28 Nov 2001  Elena Guardincerri   Created
+//
+// -------------------------------------------------------------------
+
 
 #ifndef XrayFluoPhysicsListMessenger_h
-#define  XraFluocPhysicsListMessenger_h 1
+#define XrayFluoPhysicsListMessenger_h 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class  XrayFluoPhysicsList;
+class XrayFluoPhysicsList;
 class G4UIdirectory;
+class G4UIcmdWithoutParameter;
+class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class  XrayFluoPhysicsListMessenger: public G4UImessenger
+class XrayFluoPhysicsListMessenger: public G4UImessenger
 {
-  public:
+  
+public:
 
-   XrayFluoPhysicsListMessenger(XrayFluoPhysicsList*);
-  ~ XrayFluoPhysicsListMessenger();
+  XrayFluoPhysicsListMessenger(XrayFluoPhysicsList*);
+  ~XrayFluoPhysicsListMessenger();
   
   void SetNewValue(G4UIcommand*, G4String);
+  
+private:
 
- private:
+  XrayFluoPhysicsList*          XrayFluoList;
 
-   XrayFluoPhysicsList*        XrayFluoList;
-
-  G4UIdirectory* EnDir;
+  G4UIdirectory* lowEnDir;
   G4UIcmdWithADoubleAndUnit* cutGLowLimCmd;
   G4UIcmdWithADoubleAndUnit* cutELowLimCmd;
   G4UIcmdWithADoubleAndUnit* cutGELowLimCmd;
+  G4UIcmdWithADoubleAndUnit* cutSecPhotCmd;
+  G4UIcmdWithADoubleAndUnit* cutSecElecCmd;
+  G4UIcmdWithADoubleAndUnit* cutGCmd;
+  G4UIcmdWithADoubleAndUnit* cutECmd;
+  G4UIcmdWithADoubleAndUnit* cutPCmd;
+  G4UIcmdWithADoubleAndUnit* eCmd;
 };
 
 #endif
+
+
+
+
+
+
+
+

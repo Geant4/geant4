@@ -20,49 +20,59 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: XrayFluoPrimarygeneratorMessenger.cc
+// GEANT4 tag $Name: xray_fluo-V03-02-00
+//
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+//
+// History:
+// -----------
+// 28 Nov 2001 Elena Guardincerri     Created
+//
+// -------------------------------------------------------------------
 
 #include "XrayFluoPrimaryGeneratorMessenger.hh"
-
 #include "XrayFluoPrimaryGeneratorAction.hh"
-#include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoPrimaryGeneratorMessenger::XrayFluoPrimaryGeneratorMessenger(XrayFluoPrimaryGeneratorAction* Gun)
-:Action(Gun)
+XrayFluoPrimaryGeneratorMessenger::XrayFluoPrimaryGeneratorMessenger(XrayFluoPrimaryGeneratorAction* XrayFluoGun)
+:XrayFluoAction(XrayFluoGun)
 { 
   RndmCmd = new G4UIcmdWithAString("/gun/random",this);
   RndmCmd->SetGuidance("Shoot randomly the incident particle.");
-  RndmCmd->SetGuidance("  Choice : off(default), on");
+  RndmCmd->SetGuidance("  Choice : on(default), off");
   RndmCmd->SetParameterName("choice",true);
-  RndmCmd->SetDefaultValue("off");
+  RndmCmd->SetDefaultValue("on");
   RndmCmd->SetCandidates("on off");
   RndmCmd->AvailableForStates(PreInit,Idle);
-  
-  RndmCmmd = new G4UIcmdWithAString("/gun/randomEnergy",this);
-  RndmCmmd->SetGuidance("Shoot randomly the energy of the incident particle.");
-  RndmCmmd->SetGuidance("  Choice : off(default), on");
-  RndmCmmd->SetParameterName("choice",true);
-  RndmCmmd->SetDefaultValue("off");
-  RndmCmmd->SetCandidates("on off");
-  RndmCmmd->AvailableForStates(PreInit,Idle);
 
-  SigmAngleCmd = new G4UIcmdWithADoubleAndUnit("/gun/sigmaAngle",this);
-  SigmAngleCmd->SetGuidance("Select standard deviation of the direction of the     beam.");
-  SigmAngleCmd->SetParameterName("choice",false);
-  SigmAngleCmd->SetRange("Size>=0.,Size<(2*pi)");
-  SigmAngleCmd->SetUnitCategory("Length");
-  SigmAngleCmd->AvailableForStates(Idle);
- 
-  SigmaMomentumCmd = new G4UIcmdWithADoubleAndUnit("/gun/sigmaMomentum",this);
-  SigmaMomentumCmd->SetGuidance("Select standard deviation of the momentum of the particles.");
-  SigmaMomentumCmd->SetParameterName("choice",false);
-  SigmaMomentumCmd->SetRange("Size>=0.");
-  SigmaMomentumCmd->SetUnitCategory("Length");
-  SigmaMomentumCmd->AvailableForStates(Idle);
+  RndmVert = new G4UIcmdWithAString("/gun/randomVert",this);
+  RndmVert->SetGuidance("Shoot randomly the incident particle.");
+  RndmVert->SetGuidance("  Choice : on(default), off");
+  RndmVert->SetParameterName("choice",true);
+  RndmVert->SetDefaultValue("on");
+  RndmVert->SetCandidates("on off");
+  RndmVert->AvailableForStates(PreInit,Idle);
+
+  spectrum = new G4UIcmdWithAString("/gun/spectrum",this);
+  spectrum->SetGuidance("Shoot the incident particle with a certain energy spectrum.");
+  spectrum->SetGuidance("  Choice : on(default), off");
+  spectrum->SetParameterName("choice",true);
+  spectrum->SetDefaultValue("on");
+  spectrum->SetCandidates("on off");
+  spectrum->AvailableForStates(PreInit,Idle);
+
+  isoVert = new G4UIcmdWithAString("/gun/isoVert",this);
+  isoVert->SetGuidance("Shoot the incident particle from an isotrofic direction.");
+  isoVert->SetGuidance("  Choice : on(default), off");
+  isoVert->SetParameterName("choice",true);
+  isoVert->SetDefaultValue("on");
+  isoVert->SetCandidates("on off");
+  isoVert->AvailableForStates(PreInit,Idle);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -70,29 +80,24 @@ XrayFluoPrimaryGeneratorMessenger::XrayFluoPrimaryGeneratorMessenger(XrayFluoPri
 XrayFluoPrimaryGeneratorMessenger::~XrayFluoPrimaryGeneratorMessenger()
 {
   delete RndmCmd;
-  delete RndmCmmd;
-  delete SigmaMomentumCmd;
-  delete SigmAngleCmd;
+  delete  RndmVert;
+  delete spectrum;
+  delete isoVert;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XrayFluoPrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4String newValue )
+void XrayFluoPrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 { 
   if( command == RndmCmd )
-   { Action->SetRndmFlag(newValue);}
- 
-  if( command == RndmCmmd )
-    { Action->SetRandomizePrimary(newValue);}
-  if(command == SigmAngleCmd)
-    { Action->SetSigmaAngle(SigmAngleCmd->GetNewDoubleValue(newValue));}
-  if(command == SigmaMomentumCmd) 
-    { Action->SetSigmaMomentum(SigmaMomentumCmd->
-     GetNewDoubleValue(newValue));}
+   { XrayFluoAction->SetRndmFlag(newValue);}
+ if( command == RndmVert )
+   { XrayFluoAction->SetRndmVert(newValue);}
+ if( command == spectrum )
+   { XrayFluoAction->SetSpectrum(newValue);} 
+ if( command == isoVert )
+   { XrayFluoAction->SetIsoVert(newValue);}
 }
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

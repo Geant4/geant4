@@ -20,6 +20,21 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// $Id: XrayFluoAnalysisMessenger.hh
+// GEANT4 tag $Name: xray_fluo-V03-02-00
+//
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+//
+// History:
+// -----------
+//  28 Nov 2001  Elena Guardincerri   Created
+//
+// -------------------------------------------------------------------
+
+
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifdef G4ANALYSIS_USE
@@ -45,13 +60,11 @@ public:
   void SetNewValue(G4UIcommand*, G4String);
   
 private:
+
+  //pointer to XrayFluoAnalysisManager
   XrayFluoAnalysisManager* XrayFluoAnalysis;
   G4UIdirectory*              XrayFluoAnalysisDir;
-  
-  G4UIcmdWithAString*        Histo1DDrawCmd;
-  G4UIcmdWithAString*        Histo1DSaveCmd;
  
 };
 #endif
 #endif
-

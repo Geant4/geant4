@@ -20,7 +20,17 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: XrayFluoSensorHit.cc
+// GEANT4 tag $Name: xray_fluo-V03-02-00
+//
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+//
+// History:
+// -----------
+// 28 Nov 2001 Elena Guardincerri     Created
+//
+// -------------------------------------------------------------------
 
 #include "XrayFluoSensorHit.hh"
 
@@ -30,32 +40,37 @@ G4Allocator<XrayFluoSensorHit> XrayFluoSensorHitAllocator;
 
 XrayFluoSensorHit::XrayFluoSensorHit()
 {
-   EdepDet = 0.; TrackLengthDet = 0.;
-   EdepSam = 0.; TrackLengthSam = 0.;
+   EdepTot = 0.;  
+   EdepDetect = 0.;
+   
   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoSensorHit::~XrayFluoSensorHit()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 XrayFluoSensorHit::XrayFluoSensorHit(const XrayFluoSensorHit& right)
 {
-  EdepDet = right.EdepDet; TrackLengthDet = right.TrackLengthDet;
-  EdepSam = right.EdepSam; TrackLengthSam = right.TrackLengthSam;
+   EdepTot = right.EdepTot ; 
+  EdepDetect = right.EdepDetect;
  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+XrayFluoSensorHit::~XrayFluoSensorHit()
+{
+ 
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 const XrayFluoSensorHit& XrayFluoSensorHit::operator=(const XrayFluoSensorHit& right)
 {
-  EdepDet = right.EdepDet; TrackLengthDet = right.TrackLengthDet;
-  EdepSam = right.EdepSam; TrackLengthSam = right.TrackLengthSam;
- return *this;
+  EdepTot = right.EdepTot ; 
+  EdepDetect = right.EdepDetect;
+ 
+  return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -65,7 +80,6 @@ int XrayFluoSensorHit::operator==(const XrayFluoSensorHit& right) const
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoSensorHit::Draw()
 {;}
@@ -76,9 +90,6 @@ void XrayFluoSensorHit::Print()
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
 
 
 

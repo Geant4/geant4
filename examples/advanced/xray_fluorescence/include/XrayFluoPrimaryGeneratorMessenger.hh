@@ -20,7 +20,18 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+// $Id: XrayFluoPrimaryGeneratorMessenger.hh
+// GEANT4 tag $Name:  xray_fluo-V03-02-00
+//
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+//
+// History:
+// -----------
+//  28 Nov 2001  Elena Guardincerri   Created
+//
+// -------------------------------------------------------------------
+
 
 #ifndef XrayFluoPrimaryGeneratorMessenger_h
 #define XrayFluoPrimaryGeneratorMessenger_h 1
@@ -30,32 +41,33 @@
 
 class XrayFluoPrimaryGeneratorAction;
 class G4UIcmdWithAString;
-class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class XrayFluoPrimaryGeneratorMessenger: public G4UImessenger
 {
-public:
+  public:
   XrayFluoPrimaryGeneratorMessenger(XrayFluoPrimaryGeneratorAction*);
   ~XrayFluoPrimaryGeneratorMessenger();
   
   void SetNewValue(G4UIcommand*, G4String);
   
 private:
-  XrayFluoPrimaryGeneratorAction* Action; 
+
+  XrayFluoPrimaryGeneratorAction* XrayFluoAction; 
+
+  //command to set a random impact point
   G4UIcmdWithAString*          RndmCmd;
-  G4UIcmdWithAString*          RndmCmmd;
-  G4UIcmdWithADoubleAndUnit*     SigmAngleCmd;
-  G4UIcmdWithADoubleAndUnit*  SigmaMomentumCmd;
+
+ //command to choose a plane circular source
+  G4UIcmdWithAString*          RndmVert;
+ 
+  //command to shot particles according to certain spectra
+  G4UIcmdWithAString*        spectrum;
+
+ //command to shot particles from an isotropic source
+  G4UIcmdWithAString*        isoVert;
 };
 
 #endif
-
-
-
-
-
-
-
 
