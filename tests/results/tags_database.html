@@ -7,568 +7,95 @@
 <body>
 
 <h1>
-Taking a Tag or Set of Tags for Testing</h1>
-The name of <i>this</i> file in your checked out code is <b><tt><font size=+1>geant4/tests/results/tags_database.html</font></tt></b>.
-<blockquote>
-<li>
-Make sure <i>this</i> html file is the <i>head </i>version (<b><tt><font size=+1>cvs
-update -d -P -A geant4/tests/results)</font></tt></b>.</li>
+The Bonsai Database for Tags and Testing</h1>
+
+<H2>
+The "<a href="http://wwwinfo.cern.ch/asdcgi/geant4/bonsai/tagquery.cgi?treeid=default&module=&branch=ANY&branchtype=match&dir=geant4/&category=&categorytype=&who=&whotype=match&status=Any&sortby=&hours=2&date=all&mindate=&maxdate=&cvsroot=/afs/cern.ch/sw/geant4/cvs&tag_type=Add&tag_when=957282120&tag_whoid=stesting&tag_repositoryid=/afs/cern.ch/sw/geant4/cvs&tag_dirid=geant4/tests&tag_categoryid=&tag_branchid=tests-V01-01-00&tag_status=Proposed&tag_descid=9&tag_globaltagid=1&new_status=Selected">Bonsai</a>" System.
+</H2>
+
+<P>
+The bonsai system was intoduced in June 2000 and has been used to track tags and testing
+since the global tag geant4-01-01-ref-03.
+<br>
+If all is well then tagging in the cvs repository will create an entry in the bonsai database.
 
 <li>
-Inspect the <a href="#TagsDatabaseTable"><b>Tags Database Table</b> </a>below.&nbsp;
-You will need to edit it, i.e., you will need to edit <i>this </i>html
-page, either with a plain text editor or with Netscape Composer, or similar
-tool, and then commit it back to the repository (the AFS web page is then
-automatically updated).&nbsp; If CVS informs you that there is a conflict,
-it means that someone else has taken some action.&nbsp; You will need to
-resolve the conflict somehow - perhaps by moving your copy of this file,
-updating again, and starting again.</li>
-
-<li>
-There are 4 possible statuses for a tag or set of tags:</li>
+There are 6 possible statuses for a tag:</li>
 
 <blockquote>
 <li>
-<b>accepted </b>- these have been dealt with and need no further action.</li>
+<b>Internal </b>- if you do not see your tag reach this state in bonsai database 
+please contact the stt team.</li>
 
 <li>
-<b>rejected </b>- these should have been dealt with by notifying the appropriate
-person; expect a correction tag soon.</li>
+<b>Proposed for Testing </b>- You may request a transition from Internal to 
+Proposed for Testing (check who can do this) or this may be performed by the stt.
+This is a good opportunity to enter a description of your tag.
+This is essential a queue of work for the stt team, howver it may be appropriate
+to revert to this state if one, but not all, of a set of co-working tags are
+rejected.
+</li>
 
 <li>
-<b>testing </b>in progress.</li>
+<b>Selected for Testing </b>- The tag is being tested.
+The tag has been selected for testing and will contribute
+to an sdb file extracted from the bonsai database. 
+There are three directories (prod,dev1 and dev2) in which testing may take place.
+(You cannot tell from the first stage of the Bonsai database which code is on test
+in which directories - maybe add to this page later. These was possible from the 
+two rightmost columns of the html file with headings  # and Status).
+</li>
 
 <li>
-<b>awaiting </b>testing (signified by a <i>blank</i> entry in the <b>Status</b>
-column)</li>
+<b>Tag Accepted </b>- the tag has passed the stt procedures and no futher action 
+from the author is anticipated. The tag should be included in the next reference tag.
+</li>
+
+<li>
+<b>Tag Rejected </b>- the tag has failed the stt procedures. This may happen if the 
+author (or one of the required platform compilers) fails to compile the code,
+build the libraries and executables 
+or unacceptable results are produced when executing the test program suite.
+The stt team should contact the submitter with further information by mail.
+</li>
+
+<li>
+<b>Global </b>- the tag is a global reference tag and should conform to Geant4 
+naming conventions.
+</li>
+
 </blockquote>
-
-<li>
-If no <b>testing </b>is in progress, take the lowest order number (<b>#</b>)
-(take tags of the same order number together) and mark the status as <b>testing</b>.&nbsp;
-Commit this file back to the repository and proceed with testing (go back
-to <a href="procedures.html">procedures </a>page).</li>
-
-<li>
-When <b>testing </b>is finished, mark as <b>accepted </b>or <b>rejected
-</b>and
-commit this file back to the repository</li>
-</blockquote>
-
-<h1>
-<a NAME="TagsDatabaseTable"></a>Tags Database</h1>
-Note that a later global tag <i>includes</i> all earlier global tags, unless
-otherwise mentioned.
-<br>Tags up to and including geant4-01-01-ref-01 are <a href="tags_database_geant4-01-01-ref-01.html">archived</a>.
-<br>&nbsp;
-<table BORDER WIDTH="100%" NOSAVE >
-<caption>&nbsp;
-<br><b><font size=+2>Tags after <a href="tag_information/geant4-01-01-ref-01">geant4-01-01-ref-01</a>
-(<a href="tag_information/geant4-01-01-ref-01.problems">problems</a>)</font></b></caption>
-
-<tr>
-<td><b>Tag</b></td>
-
-<td><b>Global Tag</b></td>
-
-<td><b>Depends on/ Coworks with</b></td>
-
-<td><b>Features</b></td>
-
-<td><b>Notified by</b></td>
-
-<td><b>Date</b></td>
-
-<td><b><font size=+1>#</font></b></td>
-
-<td><b>Status</b></td>
-</tr>
-
-<tr>
-<td>testem6-V01-00-02</td>
-
-<td>geant4-01-01-ref-02</td>
-
-<td>emlowen-V01-01-07</td>
-
-<td>Simulation of ranges and straggling of hadrons/ions</td>
-
-<td>Vladimir Ivanchenko</td>
-
-<td>000406</td>
-
-<td>21</td>
-
-<td>accepted in dev2</td>
-</tr>
-
-<tr>
-<td>emlowen-V01-01-05</td>
-
-<td></td>
-
-<td>testem6-V01-00-02</td>
-
-<td>em provements</td>
-
-<td>Maria Grazia Pia and Petteri Nieminen</td>
-
-<td>000406</td>
-
-<td>21</td>
-
-<td>rejected in dev2</td>
-</tr>
-
-<tr>
-<td>greps-V01-01-00</td>
-
-<td>geant4-01-01-ref-02</td>
-
-<td></td>
-
-<td><a href="tag_information/greps-V01-01-00">Code Tidy and boolean operations
-on HepPolyhedron</a></td>
-
-<td>Evgeni Chernaev and John Allison</td>
-
-<td>000406</td>
-
-<td>21</td>
-
-<td>accepted in dev2</td>
-</tr>
-
-<tr>
-<td>config-V01-01-02</td>
-
-<td>geant4-01-01-ref-02</td>
-
-<td></td>
-
-<td><a href="tag_information/config-V01-01-02">nmake.gmk add geometry/solids/specific;
-g4step_correct.pl</a></td>
-
-<td>Gabriele Cosmo</td>
-
-<td>000407</td>
-
-<td>21</td>
-
-<td>accepted in dev2</td>
-</tr>
-
-<tr>
-<td>g3tog4-V01-01-00</td>
-
-<td>geant4-01-01-ref-02</td>
-
-<td></td>
-
-<td><a href="tag_information/g3tog4-V01-01-00">make files, geometry/solids/specific</a></td>
-
-<td>Gabriele Cosmo</td>
-
-<td>000407</td>
-
-<td>21</td>
-
-<td>accepted in dev2</td>
-</tr>
-
-<tr>
-<td>geometry-V01-01-00</td>
-
-<td>geant4-01-01-ref-02</td>
-
-<td>config-V01-01-02 g3tog4-V01-01-00 vis-V01-01-00</td>
-
-<td><a href="tag_information/geometry-V01-01-00">Restructured CSG</a></td>
-
-<td>Gabriele Cosmo</td>
-
-<td>000407</td>
-
-<td>21</td>
-
-<td>accepted in dev2</td>
-</tr>
-
-<tr>
-<td>vis-V01-01-00</td>
-
-<td>geant4-01-01-ref-02</td>
-
-<td>geometry-V01-01-00</td>
-
-<td>make files for Restructured CSG</td>
-
-<td>John Allison</td>
-
-<td>000407</td>
-
-<td>21</td>
-
-<td>accepted in dev2</td>
-</tr>
-
-<tr>
-<td>neu-V01-01-01</td>
-
-<td>geant4-01-01-ref-02</td>
-
-<td></td>
-
-<td>Q-values on Lithium-6, gamma production on Iron56, triton production
-on B-10.</td>
-
-<td>Hans-Peter Wellisch</td>
-
-<td>000409</td>
-
-<td>22</td>
-
-<td>accepted in dev1</td>
-</tr>
-
-<tr>
-<td>geometry-V01-01-01</td>
-
-<td>geant4-01-01-ref-02</td>
-
-<td>greps-V01-01-01</td>
-
-<td><a href="tag_information/geometry-V01-01-01">Changes for visualization.</a>
-<br><a href="tag_information/geometry-V01-01-01">G4DisplacedSolid: fixed
-and reversed implementation of GetFrameRotation and GetObjectRotation.</a></td>
-
-<td>Gabriele Cosmo</td>
-
-<td>000412</td>
-
-<td>22</td>
-
-<td>accepted in dev1</td>
-</tr>
-
-<tr>
-<td>greps-V01-01-01</td>
-
-<td>geant4-01-01-ref-02</td>
-
-<td></td>
-
-<td>Code Tidy to remove HP Compiler warnings</td>
-
-<td>John Allison</td>
-
-<td>000412</td>
-
-<td>22</td>
-
-<td>accepted in dev1</td>
-</tr>
-
-<tr>
-<td>vis-V01-01-01</td>
-
-<td>geant4-01-01-ref-02</td>
-
-<td>geometry-V01-01-01, greps-V01-01-01</td>
-
-<td><a href="tag_information/vis-V01-01-01">boolean solid visualization
-with G4Polyhedron objects</a></td>
-
-<td>John Allison</td>
-
-<td>000412</td>
-
-<td>22</td>
-
-<td>accepted in dev1</td>
-</tr>
-
-<tr>
-<td>emlowen-V01-01-07</td>
-
-<td>geant4-01-01-ref-02</td>
-
-<td></td>
-
-<td>Correction to emlowen-V01-01-05 in G4LowEnergyBremsstrahlung.cc.</td>
-
-<td>Maria Grazia Pia</td>
-
-<td>000418</td>
-
-<td>22</td>
-
-<td>accepted in dev1</td>
-</tr>
-</table>
-
-<br>&nbsp;
-<table BORDER WIDTH="100%" NOSAVE >
-<caption><b><font size=+2>Tags after <a href="tag_information/geant4-01-01-ref-02">geant4-01-01-ref-02</a>
-(<a href="tag_information/geant4-01-01-ref-02.problems">problems</a>)</font></b></caption>
-
-<tr>
-<td><b>Tag</b></td>
-
-<td><b>Global Tag</b></td>
-
-<td><b>Depends on/ Coworks with</b></td>
-
-<td><b>Features</b></td>
-
-<td><b>Notified by</b></td>
-
-<td><b>Date</b></td>
-
-<td><b><font size=+1>#</font></b></td>
-
-<td><b>Status</b></td>
-</tr>
-
-<tr>
-<td>field-V01-01-00</td>
-
-<td>geant4-01-01-ref-03</td>
-
-<td></td>
-
-<td>Fixes by J.Apostolakis for an implementation error due to a change
-in interface to geometry/magneticfield and concerning the helical steppers.</td>
-
-<td>Gabriele Cosmo</td>
-
-<td>000413</td>
-
-<td>23</td>
-
-<td>accepted in dev2</td>
-</tr>
-
-<tr>
-<td>had-V01-01-00a</td>
-
-<td></td>
-
-<td></td>
-
-<td><a href="tag_information/had-V01-01-00a">A number of changes and additions.</a></td>
-
-<td>Hans-Peter Wellisch</td>
-
-<td>000417</td>
-
-<td>24</td>
-
-<td>rejected in dev1</td>
-</tr>
-
-<tr>
-<td>emlowen-V01-01-08</td>
-
-<td>geant4-01-01-ref-03</td>
-
-<td>test14-V01-01-00
-<br>testem6-V01-00-02</td>
-
-<td>Modifications for integration of cross sections, float/G4double conversions
-and corrections of fluorescence transition probabilities to take into account
-non-radiative transitions (Veronique Lefebure).</td>
-
-<td>Maria Grazia Pia</td>
-
-<td>000418</td>
-
-<td>25</td>
-
-<td>accepted in dev2</td>
-</tr>
-
-<tr>
-<td>emlowen-V01-01-09</td>
-
-<td>geant4-01-01-ref-03</td>
-
-<td>test14-V01-01-00
-<br>testem6-V01-00-02</td>
-
-<td>Modifications for first implementation of continuous energy loss in
-G4LowEnergyBremsstrahlung (Veronique Lefebure).</td>
-
-<td>Maria Grazia Pia</td>
-
-<td>000419</td>
-
-<td>25</td>
-
-<td>accepted in dev2</td>
-</tr>
-
-<tr>
-<td>examples-V01-01-00</td>
-
-<td>geant4-01-01-ref-03</td>
-
-<td></td>
-
-<td>Updated exampleN04[.EMtest].out for field-V01-01-00.</td>
-
-<td>John Allison</td>
-
-<td>000420</td>
-
-<td>24</td>
-
-<td>accepted in dev1</td>
-</tr>
-
-<tr>
-<td>test14-V01-01-01</td>
-
-<td>geant4-01-01-ref-03</td>
-
-<td></td>
-
-<td>Updated test14.out for emlowen-V01-01-09.</td>
-
-<td>John Allison</td>
-
-<td>000426</td>
-
-<td>25</td>
-
-<td>accepted in dev2</td>
-</tr>
-</table>
-
-<br>&nbsp;
-<table BORDER WIDTH="100%" NOSAVE >
-<caption><b><font size=+2>Tags after <a href="tag_information/geant4-01-01-ref-03">geant4-01-01-ref-03</a>
-(<a href="tag_information/geant4-01-01-ref-03.problems">problems</a>)</font></b></caption>
-
-<tr>
-<td><b>Tag</b></td>
-
-<td><b>Global Tag</b></td>
-
-<td><b>Depends on/ Coworks with</b></td>
-
-<td><b>Features</b></td>
-
-<td><b>Notified by</b></td>
-
-<td><b>Date</b></td>
-
-<td><b><font size=+1>#</font></b></td>
-
-<td><b>Status</b></td>
-</tr>
-
-<tr>
-<td>em-V01-01-00</td>
-
-<td></td>
-
-<td></td>
-
-<td>- Muls moved in utils
-<br>- tuning parameter in Muls
-<br>- all EnergyLoss classes in standard and muons renamed G4V...
-<br>- bugs corrections in MuPairProduction</td>
-
-<td>Michel Maire</td>
-
-<td>000426</td>
-
-<td>26</td>
-
-<td>rejected in dev1</td>
-</tr>
-
-<tr>
-<td>geometry-V01-01-02</td>
-
-<td></td>
-
-<td></td>
-
-<td>Mainly reorganisation of comments to headers&nbsp;</td>
-
-<td>Gabriele Cosmo</td>
-
-<td>000427</td>
-
-<td>27</td>
-
-<td>accepted in dev2</td>
-</tr>
-
-<tr>
-<td>em-V01-01-01</td>
-
-<td></td>
-
-<td></td>
-
-<td>Muls moved in Utils</td>
-
-<td>Michel Maire</td>
-
-<td>000428</td>
-
-<td>27</td>
-
-<td>rejected in dev2</td>
-</tr>
-
-<tr>
-<td>vis-V01-01-02</td>
-
-<td></td>
-
-<td></td>
-
-<td>Geometry V01-01-02 Compatibility</td>
-
-<td>John Allison</td>
-
-<td>000502</td>
-
-<td>27</td>
-
-<td>accepted in dev2</td>
-</tr>
-</table>
 
 <h2>
-From geant4-01-01-ref-03 we are using a new "<a href="http://wwwinfo.cern.ch/asdcgi/geant4/bonsai/tagquery.cgi?treeid=default&module=&branch=ANY&branchtype=match&dir=geant4/&category=&categorytype=&who=&whotype=match&status=Any&sortby=&hours=2&date=all&mindate=&maxdate=&cvsroot=/afs/cern.ch/sw/geant4/cvs&tag_type=Add&tag_when=957282120&tag_whoid=stesting&tag_repositoryid=/afs/cern.ch/sw/geant4/cvs&tag_dirid=geant4/tests&tag_categoryid=&tag_branchid=tests-V01-01-00&tag_status=Proposed&tag_descid=9&tag_globaltagid=1&new_status=Selected">Bonsai</a>"
-(tree control) system.</h2>
-
-<h1>
-Tag descriptions and problems</h1>
+Tag descriptions and problems</h2>
 
 <blockquote>
 <li>
-<a href="tag_information/geant4-01-01-ref-04">geant4-01-01-ref-04</a> (<a href="tag_information/geant4-01-01-ref-04.problems">problems</a>)</li>
+<a href="tag_information/geant4-02-00-ref-01">geant4-02-00-ref-01</a> </li>
 <li>
-<a href="tag_information/geant4-01-01-ref-05">geant4-01-01-ref-05</a> (<a href="tag_information/geant4-01-01-ref-05.problems">problems</a>)</li>
-<li>
-<a href="tag_information/geant4-01-01-ref-06">geant4-01-01-ref-06</a> (<a href="tag_information/geant4-01-01-ref-06.problems">problems</a>)</li>
-<li>
-<a href="tag_information/geant4-01-01-ref-07">geant4-01-01-ref-07</a> (<a href="tag_information/geant4-01-01-ref-07.problems">problems</a>)</li>
+<a href="tag_information/geant4-02-00-cand-00">geant4-02-00-cand-00</a> (<a href="tag_information/geant4-02-00-cand-00.problems">problems</a>)</li>
 <li>
 <a href="tag_information/geant4-01-01-ref-08">geant4-01-01-ref-08</a> (<a href="tag_information/geant4-01-01-ref-08.problems">problems</a>)</li>
 <li>
-<a href="tag_information/geant4-02-00-cand-00">geant4-02-00-cand-00</a> (<a href="tag_information/geant4-02-00-cand-00.problems">problems</a>)</li>
-<a href="tag_information/geant4-02-00-ref-01">geant4-02-00-ref-01</a> </li>
+<a href="tag_information/geant4-01-01-ref-07">geant4-01-01-ref-07</a> (<a href="tag_information/geant4-01-01-ref-07.problems">problems</a>)</li>
+<li>
+<a href="tag_information/geant4-01-01-ref-06">geant4-01-01-ref-06</a> (<a href="tag_information/geant4-01-01-ref-06.problems">problems</a>)</li>
+<li>
+<a href="tag_information/geant4-01-01-ref-05">geant4-01-01-ref-05</a> (<a href="tag_information/geant4-01-01-ref-05.problems">problems</a>)</li>
+<li>
+<a href="tag_information/geant4-01-01-ref-04">geant4-01-01-ref-04</a> (<a href="tag_information/geant4-01-01-ref-04.problems">problems</a>)</li>
 </blockquote>
 
+<h2>
+<a NAME="TagsDatabaseTable"></a>The Tags Database to May 2000</h2>
+<P>
+The tags database was maintained via the manual editting of files in the geant4 tests
+results directory. The last such
+<a href="tags_database_geant4-01-01-ref-03.html"> old html tags database </a>
+file, including the instructions for the System Testing Team (stt) is still available.
+<br> You may also navigate through this page to earlier tag information.
 <hr WIDTH="100%">
 <br><i><a href="mailto:John.Allison@man.ac.uk">John Allison</a> <a href="mailto:Steve.O'Neale@cern.ch">Steve
-O'Neale</a> 20th April 2000</i>
+O'Neale</a> 1st August 2000</i>
 </body>
 </html>
