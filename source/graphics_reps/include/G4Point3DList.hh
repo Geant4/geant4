@@ -5,11 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Point3DList.hh,v 1.3 1999-11-11 15:36:03 gunter Exp $
+// $Id: G4Point3DList.hh,v 1.4 1999-11-17 07:39:24 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  July 1995
+
+// Class Description:
+// A set of 3D points.
+// Class Description - End:
 
 #ifndef G4POINT3DLIST_HH
 #define G4POINT3DLIST_HH

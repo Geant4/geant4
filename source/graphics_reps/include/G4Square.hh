@@ -5,11 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Square.hh,v 1.2 1999-06-05 15:13:12 johna Exp $
+// $Id: G4Square.hh,v 1.3 1999-11-17 07:39:25 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  17/11/96.
+
+// Class Description:
+// G4Square is a kind of 3D-position marker. 
+// Its shape is 2-dimensional right square.
+// It inherits G4VMarker.  See G4VMarker.hh for more details.
+// Class Description - End:
 
 #ifndef G4SQUARE_HH
 #define G4SQUARE_HH
@@ -18,7 +24,7 @@
 
 class G4Square: public G4VMarker {
 
-public:
+public: // With description
 
   G4Square ();
   G4Square (const G4Point3D& pos);

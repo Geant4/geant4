@@ -5,14 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisExtent.hh,v 1.2 1999-05-25 09:10:15 johna Exp $
+// $Id: G4VisExtent.hh,v 1.3 1999-11-17 07:39:26 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // A.Walkden 28/11/95
-// VisExtent.hh, header file to prototype Extent functions for use in
+
+// Class Description:
+// G4VisExtent is a class to prototype extent functions for use in
 // instantiating Visualisation windows with an appropriate field of
 // view for the object(s) being drawn.
+// Class Description - End:
 
 #ifndef G4VISEXTENT_HH
 #define G4VISEXTENT_HH
@@ -22,7 +25,8 @@
 
 class G4VisExtent
 {
-public:
+public: // With description
+
   G4VisExtent (G4double xmin = 0., G4double xmax = 0., 
                G4double ymin = 0., G4double ymax = 0., 
                G4double zmin = 0., G4double zmax = 0.);

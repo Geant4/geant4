@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBStubesector.hh,v 1.2 1999-05-19 08:33:40 stesting Exp $
+// $Id: G4NURBStubesector.hh,v 1.3 1999-11-17 07:39:24 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,6 +13,13 @@
 
 // Tubesector builder prototype
 // OC 290896
+
+// Class Description:
+// Tubesector builder prototype for NURBS.
+// See documentation in graphics_reps/doc for details.
+// Class Description - End:
+
+
 
 #include "G4NURBS.hh"
 

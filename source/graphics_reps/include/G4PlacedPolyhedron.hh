@@ -5,8 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PlacedPolyhedron.hh,v 1.5 1999-11-11 15:36:03 gunter Exp $
+// $Id: G4PlacedPolyhedron.hh,v 1.6 1999-11-17 07:39:24 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+
+
+// Class Description:
+// G4Polyhedron placed in the real world.
+// It has information of its location and orientation.
+// Class Description - End:
+
 
 #ifndef G4PLACEDPOLYHEDRON_HH
 #define G4PLACEDPOLYHEDRON_HH
@@ -17,7 +24,7 @@
 
 class G4PlacedPolyhedron {
 
-public:
+public: // With description
 
   G4PlacedPolyhedron ();
   G4PlacedPolyhedron (const G4Polyhedron&, const G4Transform3D&);

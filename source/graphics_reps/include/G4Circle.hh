@@ -5,11 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Circle.hh,v 1.2 1999-06-05 15:13:10 johna Exp $
+// $Id: G4Circle.hh,v 1.3 1999-11-17 07:39:20 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  17/11/96.
+
+// Class Description:
+// G4Circle is a kind of 3D-position marker. 
+// Its shape is 2-dimensional circle.
+// It inherits G4VMarker.  See G4VMarker.hh for more details.
+// Class Description - End:
 
 #ifndef G4CIRCLE_HH
 #define G4CIRCLE_HH
@@ -18,7 +24,7 @@
 
 class G4Circle: public G4VMarker {
 
-public:
+public: // With description
 
   G4Circle ();
   G4Circle (const G4Point3D& pos);

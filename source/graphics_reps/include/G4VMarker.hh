@@ -5,13 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMarker.hh,v 1.4 1999-05-25 09:10:13 johna Exp $
+// $Id: G4VMarker.hh,v 1.5 1999-11-17 07:39:25 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // G4VMarker - base class for markers - circles, squares, etc.
 // John Allison  17/11/96.
 
+// Class Description:
 // G4VMarkers are 2-dimensional G4VVisPrims with the special
 // properties (a) of always facing the camera and (b) of having the
 // possibility of a size defined in screen units.  The convention is
@@ -20,7 +21,7 @@
 // viewing transformation in effect.
 //
 // "Size" means "overall size", e.g., diameter of circle, side of
-// Square, height of text (but Diameter and Radius access functions
+// square, height of text (but diameter and radius access functions
 // are defined to avoid ambiguity).
 //
 // So the user who constructs the marker decides whether it should be
@@ -38,7 +39,8 @@
 //
 // void G4XXXGraphicsSceneHandler::AddPrimitive (const G4Circle& circle) {
 //   G4bool hidden = !(fpView -> GetViewParameters().IsMarkerNotHidden());
-//   const G4Colour&     colour = GetColour (circle);  // Base class GetColour.
+//   const G4Colour&     colour = GetColour (circle);  
+//                                   // Base class GetColour.
 //   G4VMarker::FillStyle style = circle.GetFillStyle();
 //   const G4Point3D&    centre = circle.GetPosition();
 //   MarkerSizeType sizeType;
@@ -55,6 +57,8 @@
 //     break;
 //   }
 // }
+// Class Description - End:
+
 
 #ifndef G4VMARKER_HH
 #define G4VMARKER_HH
@@ -69,7 +73,7 @@ class G4VMarker: public G4VVisPrim {
 
   friend ostream& operator << (ostream& os, const G4VMarker& marker);
 
-public:
+public: // With description
 
   enum FillStyle {noFill, hashed, filled};
 

@@ -5,11 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyline.hh,v 1.3 1999-05-25 09:10:09 johna Exp $
+// $Id: G4Polyline.hh,v 1.4 1999-11-17 07:39:25 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  July 1995
+
+// Class Description:
+// A set of line segments defined with a set of vertices.
+// G4Polyline is used for visualizing trajectories, steps, coordinate axes,
+// etc.
+// Class Description - End:
+
 
 #ifndef G4POLYLINE_HH
 #define G4POLYLINE_HH
@@ -19,7 +26,9 @@
 
 class G4Polyline: public G4VVisPrim, public G4Point3DList {
   friend ostream& operator << (ostream& os, const G4Polyline& line);
-public:
+
+public: // With description
+
   G4Polyline ();
   G4Polyline (const G4VVisPrim& prim);
   virtual G4Visible&  operator = (const G4Visible& right);

@@ -5,11 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBShexahedron.hh,v 1.3 1999-05-19 08:33:39 stesting Exp $
+// $Id: G4NURBShexahedron.hh,v 1.4 1999-11-17 07:39:23 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hexa hedron builder prototype
 // OC 17 9 96
+
+// Class Description:
+// Hexa hedron builder prototype for NURBS.
+// See documentation in graphics_reps/doc for details.
+// Class Description - End:
+
 
 #include "G4NURBS.hh"
 

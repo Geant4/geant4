@@ -5,11 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyhedron.hh,v 1.2 1999-05-19 08:33:41 stesting Exp $
+// $Id: G4Polyhedron.hh,v 1.3 1999-11-17 07:39:24 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //
+
+// Class Description:
 // G4Polyhedron is an intermediate class between G4 and visualization
 // systems. It is intended to provide some service like:
 //   - polygonization of the G4 shapes with triangulization
@@ -67,6 +69,8 @@
 //   GetNextEdge(p1, p2, edgeFlag) - get next edge;
 //                      returns false for the last edge;
 //   SetNumberOfRotationSteps(G4int n) - Set number of steps for whole circle;
+// Class Description - End:
+
 // History:
 // 20.06.96 Evgeni Chernyaev <Evgueni.Tcherniaev@cern.ch> - initial version
 //
@@ -124,7 +128,8 @@ class G4Facet {
   struct G4Edge { G4int v,f; };
   G4Edge edge[4];
 
- public:
+ public: // With description
+
   G4Facet(G4int v1=0, G4int f1=0, G4int v2=0, G4int f2=0, 
 	  G4int v3=0, G4int f3=0, G4int v4=0, G4int f4=0)
   { edge[0].v=v1; edge[0].f=f1; edge[1].v=v2; edge[1].f=f2;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBS.hh,v 1.3 1999-05-19 08:33:37 stesting Exp $
+// $Id: G4NURBS.hh,v 1.4 1999-11-17 07:39:21 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -13,6 +13,13 @@
 // G4NURBS.hh
 // prototype for class G4NURBS - see documentation in graphics_reps/doc.
 // OC 280896
+
+// Class Description:
+// Base class for shapes with NURBS drawing style.
+// See documentation in graphics_reps/doc for details.
+// Class Description - End:
+
+
 
 #ifndef __C_G4NURBS__ 
 #define __C_G4NURBS__ 1

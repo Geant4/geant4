@@ -5,15 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Visible.hh,v 1.3 1999-10-04 15:18:57 johna Exp $
+// $Id: G4Visible.hh,v 1.4 1999-11-17 07:39:26 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  30th October 1996
-// Base class for all things visible, i.e., which have Vis Attributes.
 
+// Class Description:
+// Base class for all things visible, i.e., which have Vis Attributes.
+//
 // Note: a null pointer implies no attributes.  Under those circumstances
 // the visualization system is free to choose some.
+// Class Description - End:
+
 
 #ifndef G4VISIBLE_HH
 #define G4VISIBLE_HH
@@ -27,7 +31,7 @@ class G4Visible {
 
   friend ostream& operator << (ostream& os, const G4Visible& v);
 
-public:
+public: // With description
 
   G4Visible ();
   G4Visible (const G4Visible& visible);
