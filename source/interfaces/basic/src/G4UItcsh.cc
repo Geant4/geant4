@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UItcsh.cc,v 1.1 2000-03-26 23:04:04 asaim Exp $
+// $Id: G4UItcsh.cc,v 1.2 2000-06-14 03:19:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -85,7 +85,7 @@ void G4UItcsh::MakePrompt()
       case 'h':  // history#
 	{
 	char st[20];
-	ostrstream os(st,20);
+	G4std::ostrstream os(st,20);
         os << currentHistoryNo << '\0';
 	promptString.append(st);
 	i++;
@@ -128,7 +128,7 @@ void G4UItcsh::InsertCharacter(char cc)
     G4cout << commandLine[i];
   for(i=cursorPosition-1; i<commandLine.length() ;i++)
     G4cout << AsciiBS;
-  G4cout << flush;
+  G4cout << G4std::flush;
     
   // command line string...
   if(IsCursorLast()) {  // add
@@ -147,7 +147,7 @@ void G4UItcsh::BackspaceCharacter()
 
   // display...
   if(IsCursorLast()) {  
-    G4cout << AsciiBS << ' ' << AsciiBS << flush;
+    G4cout << AsciiBS << ' ' << AsciiBS << G4std::flush;
   } else { 
     G4cout << AsciiBS;
     G4int i;
@@ -158,7 +158,7 @@ void G4UItcsh::BackspaceCharacter()
     for(i=cursorPosition-2; i< commandLine.length() ;i++){
       G4cout << AsciiBS;
     }
-    G4cout << flush;
+    G4cout << G4std::flush;
   }
 
   // command line string...
@@ -182,7 +182,7 @@ void G4UItcsh::DeleteCharacter()
   for(i=cursorPosition-1; i< commandLine.length() ;i++){
     G4cout << AsciiBS;
   }
-  G4cout << flush;
+  G4cout << G4std::flush;
 
   // command lin string...
   commandLine.erase(cursorPosition-1, 1);
@@ -197,7 +197,7 @@ void G4UItcsh::ClearLine()
   for(i= cursorPosition; i>=2; i--) G4cout << AsciiBS;
   for(i=1; i<=commandLine.length(); i++) G4cout << ' ';
   for(i=1; i<=commandLine.length(); i++) G4cout << AsciiBS;
-  G4cout << flush;
+  G4cout << G4std::flush;
   
   // command line string...
   commandLine.erase();
@@ -214,7 +214,7 @@ void G4UItcsh::ClearAfterCursor()
   G4int i;
   for(i=cursorPosition; i<=commandLine.length(); i++) G4cout << ' ';
   for(i=commandLine.length(); i>=cursorPosition; i--) G4cout << AsciiBS;
-  G4cout << flush;
+  G4cout << G4std::flush;
 
   // command line string...
   commandLine.erase(cursorPosition-1, 
@@ -228,10 +228,10 @@ void G4UItcsh::ClearScreen()
   if(! clearString.empty() ) {
     G4cout << clearString;
 
-    G4cout << promptString << commandLine << flush;
+    G4cout << promptString << commandLine << G4std::flush;
     // reset cursur position
     for(G4int i=commandLine.length()+1; i>=cursorPosition+1; i--) 
-      G4cout << AsciiBS << flush;
+      G4cout << AsciiBS << G4std::flush;
   }
 }
 
@@ -241,7 +241,7 @@ void G4UItcsh::ForwardCursor()
 {
   if(IsCursorLast()) return;
 
-  G4cout << commandLine[cursorPosition-1] << flush;
+  G4cout << commandLine[cursorPosition-1] << G4std::flush;
   cursorPosition++;
 }
 
@@ -252,7 +252,7 @@ void G4UItcsh::BackwardCursor()
   if(cursorPosition==1) return;
 
   cursorPosition--;
-  G4cout << AsciiBS << flush;
+  G4cout << AsciiBS << G4std::flush;
 }
 
 //////////////////////////////
@@ -262,7 +262,7 @@ void G4UItcsh::MoveCursorTop()
   for(G4int i=cursorPosition; i>1; i--){
     G4cout << AsciiBS;
   }
-  G4cout << flush;
+  G4cout << G4std::flush;
   cursorPosition=1;
 }
 
@@ -273,7 +273,7 @@ void G4UItcsh::MoveCursorEnd()
   for(G4int i=cursorPosition-1; i<commandLine.length(); i++){
     G4cout << commandLine[i];
   }
-  G4cout << flush;
+  G4cout << G4std::flush;
   cursorPosition=commandLine.length()+1;
 }
 
@@ -292,7 +292,7 @@ void G4UItcsh::PreviousCommand()
     relativeHistoryIndex--;
     commandLine= RestoreHistory(currentHistoryNo+relativeHistoryIndex);
 
-    G4cout << commandLine << flush;
+    G4cout << commandLine << G4std::flush;
     cursorPosition= commandLine.length()+1;
   }
 }
@@ -311,7 +311,7 @@ void G4UItcsh::NextCommand()
     if(relativeHistoryIndex==0) commandLine= commandLineBuf;
     else commandLine= RestoreHistory(currentHistoryNo+relativeHistoryIndex);
 
-    G4cout << commandLine << flush;      
+    G4cout << commandLine << G4std::flush;      
     cursorPosition= commandLine.length()+1;
   }
 }
@@ -353,7 +353,7 @@ void G4UItcsh::ListMatchedCommand()
   // list matched dirs/commands
   ListCommand(vpath, vpath+vcmd);
 
-  G4cout << promptString << commandLine << flush;
+  G4cout << promptString << commandLine << G4std::flush;
 }
 
 ////////////////////////////////
@@ -451,7 +451,7 @@ void G4UItcsh::CompleteCommand()
   for(i=jt; i<=input.length()-1; i++) dspstr+= G4String(AsciiBS); 
 
   dspstr+= stream;
-  G4cout << dspstr << flush; 
+  G4cout << dspstr << G4std::flush; 
 
   // command line string
   input.remove(jt);
@@ -473,7 +473,7 @@ G4String G4UItcsh::ReadLine()
 
   char cc;
   do{  // input loop
-    cin.get(cc);
+    G4cin.get(cc);
 
     // treatment for special character
     switch(cc){
@@ -531,9 +531,9 @@ G4String G4UItcsh::ReadLine()
 
     // treatment for ESC. character
     if( cc == AsciiESC) { // ESC
-      cin.get(cc);
+      G4cin.get(cc);
       if (cc == '[') {
-	cin.get(cc);
+	G4cin.get(cc);
 	switch(cc) {
 	case 'A': // [UP]
 	  cc = 'P' - '@';
@@ -575,7 +575,7 @@ G4String G4UItcsh::GetCommandLine()
   MakePrompt(); // update
   relativeHistoryIndex= 0;
 
-  G4cout << promptString << flush;
+  G4cout << promptString << G4std::flush;
 
   G4String newCommand= ReadLine();  // read line...
   // multi-line
@@ -583,7 +583,7 @@ G4String G4UItcsh::GetCommandLine()
     newCommand.remove(newCommand.length()-1);
     G4cout << G4endl;
     promptString= "? ";
-    G4cout << promptString << flush;
+    G4cout << promptString << G4std::flush;
     G4String newLine= ReadLine();
     newCommand.append(newLine);
   }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIterminal.cc,v 1.9 2000-05-19 06:39:12 asaim Exp $
+// $Id: G4UIterminal.cc,v 1.10 2000-06-14 03:19:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -227,7 +227,12 @@ G4String G4UIterminal::GetCommand()
 G4int G4UIterminal::ReceiveG4cout(G4String coutString)
 //////////////////////////////////////////////////////
 {
-  cout << coutString << flush;
+#ifndef G4USE_STD_NAMESPACE
+  cout 
+#else
+  std::cout
+#endif
+    << coutString << G4std::flush;
   return 0;
 }
 
@@ -235,7 +240,12 @@ G4int G4UIterminal::ReceiveG4cout(G4String coutString)
 G4int G4UIterminal::ReceiveG4cerr(G4String cerrString)
 //////////////////////////////////////////////////////
 {
-  cerr << cerrString << flush;
+#ifndef G4USE_STD_NAMESPACE
+  cerr 
+#else
+  std::cerr
+#endif
+     << cerrString << G4std::flush;
   return 0;
 }
 
@@ -243,10 +253,10 @@ G4int G4UIterminal::ReceiveG4cerr(G4String cerrString)
 G4bool G4UIterminal::GetHelpChoice(G4int& aInt)
 ///////////////////////////////////////////////
 {
-  cin >> aInt;
-  if(!cin.good()){
-    cin.clear();
-    cin.ignore(30,'\n');
+  G4cin >> aInt;
+  if(!G4cin.good()){
+    G4cin.clear();
+    G4cin.ignore(30,'\n');
     return FALSE;
   }
   return TRUE;
@@ -257,6 +267,6 @@ void G4UIterminal::ExitHelp()
 /////////////////////////////
 {
   char temp[100];
-  cin.getline(temp, 100);
+  G4cin.getline(temp, 100);
 }
 

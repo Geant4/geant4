@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUIshell.cc,v 1.1 2000-03-26 23:04:07 asaim Exp $
+// $Id: G4VUIshell.cc,v 1.2 2000-06-14 03:19:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -276,7 +276,7 @@ void G4VUIshell::ListCommand(const G4String& dir,
   // waring : not matched
   if(!isMatch && candidate.empty()) 
     G4cout << "<" << input 
-	   << ">: No such directory or command" << flush;
+	   << ">: No such directory or command" << G4std::flush;
 
   // display
   G4UIArrayString arrayString(stream);

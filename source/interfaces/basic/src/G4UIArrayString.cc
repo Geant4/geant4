@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIArrayString.cc,v 1.1 2000-03-26 23:03:53 asaim Exp $
+// $Id: G4UIArrayString.cc,v 1.2 2000-06-14 03:18:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -162,11 +162,11 @@ void G4UIArrayString::Show(G4int ncol)
         colorWord= word(0,5);
         word.erase(0,5);
       }
-      if(!colorWord.empty()) G4cout << colorWord << flush;
+      if(!colorWord.empty()) G4cout << colorWord << G4std::flush;
 
-      G4cout << setiosflags(ios::left) << setw(GetNField(ix)) 
-             << word << flush;
-      if(ix != nc) G4cout << "  " << flush;
+      G4cout << G4std::setiosflags(G4std::ios::left) << G4std::setw(GetNField(ix)) 
+             << word << G4std::flush;
+      if(ix != nc) G4cout << "  " << G4std::flush;
       else G4cout << G4endl;      
     }
   }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcsh.cc,v 1.1 2000-03-26 23:03:58 asaim Exp $
+// $Id: G4UIcsh.cc,v 1.2 2000-06-14 03:18:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,12 +30,12 @@ G4String G4UIcsh::GetCommandLine()
 //////////////////////////////////
 {
   MakePrompt();
-  G4cout << promptString << flush;
+  G4cout << promptString << G4std::flush;
 
   G4String newCommand;
-  newCommand.readLine(cin, FALSE);
-  if (!cin.good()) {
-    cin.clear(); 
+  newCommand.readLine(G4cin, FALSE);
+  if (!G4cin.good()) {
+    G4cin.clear(); 
     newCommand= "exit";
     return newCommand;
   }
@@ -44,9 +44,9 @@ G4String G4UIcsh::GetCommandLine()
   while( newCommand[newCommand.length()-1] == '_' ) {
     G4String newLine;
     newCommand.remove(newCommand.length()-1);
-    newLine.readLine(cin, FALSE);
-    if (!cin.good()) { 
-      cin.clear(); 
+    newLine.readLine(G4cin, FALSE);
+    if (!G4cin.good()) { 
+      G4cin.clear(); 
       newCommand= "exit";
       return newCommand;
     }
