@@ -21,38 +21,39 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.cc,v 1.14 2001-10-01 15:00:29 maire Exp $
+// $Id: G4GammaConversion.cc,v 1.15 2002-02-11 15:09:01 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4GammaConversion physics process -------------------------
 //                   by Michel Maire, 24 May 1996
 // 
-// 11-06-96, Added SelectRandomAtom() method, M.Maire
-// 21-06-96, SetCuts implementation, M.Maire
-// 24-06-96, simplification in ComputeCrossSectionPerAtom, M.Maire
-// 24-06-96, in DoIt : change the particleType stuff, M.Maire
-// 25-06-96, modification in the generation of the teta angle, M.Maire
-// 16-09-96, minors optimisations in DoIt. Thanks to P.Urban
-//           dynamical array PartialSumSigma
-// 13-12-96, fast sampling of epsil below 2 MeV, L.Urban
-// 14-01-97, crossection table + meanfreepath table.
-//           PartialSumSigma removed, M.Maire
-// 14-01-97, in DoIt the positron is always created, even with Ekine=0,
-//           for further annihilation, M.Maire
-// 14-03-97, new Physics scheme for geant4alpha, M.Maire
-// 28-03-97, protection in BuildPhysicsTable, M.Maire
-// 19-06-97, correction in ComputeCrossSectionPerAtom, L.Urban
-// 04-06-98, in DoIt, secondary production condition:
-//             range>G4std::min(threshold,safety)
-// 13-08-98, new methods SetBining() PrintInfo()
-// 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation
-// 11-07-01, PostStepDoIt - sampling epsil: power(rndm,0.333333)
-// 13-07-01, DoIt: suppression of production cut for the (e-,e+) (mma)
-// 06-08-01, new methods Store/Retrieve PhysicsTable (mma)
-// 06-08-01, BuildThePhysicsTable() called from constructor (mma)
-// 17-09-01, migration of Materials to pure STL (mma)
-// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
-// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)         
+// 11-06-96 Added SelectRandomAtom() method, M.Maire
+// 21-06-96 SetCuts implementation, M.Maire
+// 24-06-96 simplification in ComputeCrossSectionPerAtom, M.Maire
+// 24-06-96 in DoIt : change the particleType stuff, M.Maire
+// 25-06-96 modification in the generation of the teta angle, M.Maire
+// 16-09-96 minors optimisations in DoIt. Thanks to P.Urban
+//          dynamical array PartialSumSigma
+// 13-12-96 fast sampling of epsil below 2 MeV, L.Urban
+// 14-01-97 crossection table + meanfreepath table.
+//          PartialSumSigma removed, M.Maire
+// 14-01-97 in DoIt the positron is always created, even with Ekine=0,
+//          for further annihilation, M.Maire
+// 14-03-97 new Physics scheme for geant4alpha, M.Maire
+// 28-03-97 protection in BuildPhysicsTable, M.Maire
+// 19-06-97 correction in ComputeCrossSectionPerAtom, L.Urban
+// 04-06-98 in DoIt, secondary production condition:
+//            range>G4std::min(threshold,safety)
+// 13-08-98 new methods SetBining() PrintInfo()
+// 28-05-01 V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 11-07-01 PostStepDoIt - sampling epsil: power(rndm,0.333333)
+// 13-07-01 DoIt: suppression of production cut for the (e-,e+) (mma)
+// 06-08-01 new methods Store/Retrieve PhysicsTable (mma)
+// 06-08-01 BuildThePhysicsTable() called from constructor (mma)
+// 17-09-01 migration of Materials to pure STL (mma)
+// 20-09-01 DoIt: fminimalEnergy = 1*eV (mma)
+// 01-10-01 come back to BuildPhysicsTable(const G4ParticleDefinition&)
+// 11-01-02 ComputeCrossSection: correction of extrapolation below EnergyLimit        
 // -----------------------------------------------------------------------------
 
 #include "G4GammaConversion.hh"
@@ -208,7 +209,8 @@ G4double G4GammaConversion::ComputeCrossSectionPerAtom
 
  if (GammaEnergySave < GammaEnergyLimit)
    {
-     X=GammaEnergySave-2.*electron_mass_c2;
+     X = (GammaEnergySave - 2.*electron_mass_c2)
+        /(GammaEnergyLimit- 2.*electron_mass_c2);
      CrossSection *= X*X;
    }
 
