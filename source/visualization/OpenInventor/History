@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2004-11-11 19:53:33 gbarrand Exp $
+$Id: History,v 1.24 2004-11-12 10:56:53 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,7 +21,6 @@ History file for visualization/OpenInventor
 -------------------------------------------
 
 11th November 2004  Guy Barrand
-- End of the first world war. Death of Arrafat.
 - Add SoPolyhedron that permits to visualize directly HepPolyhedron.
 - G4OpenInventorSceneHandler::AddThis : uses the generic
   SoPolyhedron. Modeling is wireFrame by default.
@@ -33,6 +32,8 @@ History file for visualization/OpenInventor
 - SoStyleCache : permit to cache commonly used colors, line styles and
   light models.
 - G4OpenInventorSceneHandler : use SoStyleCache to minimize number of nodes.
+- End of the first world war. 
+- Death of Arrafat.
 
 10th November 2004  Guy Barrand
 - SoMarkerSet, SoGL2PSAction : corrections to work with SGI Inventor.
