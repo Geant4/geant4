@@ -5,17 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05RunAction.hh,v 1.5 1999-12-15 14:49:29 gunter Exp $
+// $Id: ExN05RunAction.hh,v 1.6 2000-01-06 15:06:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef ExN05RunAction_h
 #define ExN05RunAction_h 1
 
-#include "G4Timer.hh"
 #include "globals.hh"
 #include "G4UserRunAction.hh"
 
+class G4Timer;
 class G4Run;
 
 class ExN05RunAction : public G4UserRunAction

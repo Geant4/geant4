@@ -9,10 +9,10 @@
 #ifndef ExN06RunAction_h
 #define ExN06RunAction_h 1
 
-#include "G4Timer.hh"
 #include "globals.hh"
 #include "G4UserRunAction.hh"
 
+class G4Timer;
 class G4Run;
 
 class ExN06RunAction : public G4UserRunAction

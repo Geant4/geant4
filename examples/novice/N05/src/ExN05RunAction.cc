@@ -5,12 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05RunAction.cc,v 1.4 1999-12-15 14:49:31 gunter Exp $
+// $Id: ExN05RunAction.cc,v 1.5 2000-01-06 15:06:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#include "ExN05RunAction.hh"
+// Make this appear first!
+#include "G4Timer.hh"
 
+#include "ExN05RunAction.hh"
 #include "G4Run.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"

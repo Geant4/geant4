@@ -6,6 +6,9 @@
 // and all its terms.
 //
 
+// Make this appear first!
+#include "G4Timer.hh"
+
 #include "ExN06RunAction.hh"
 
 #include "G4ios.hh"
