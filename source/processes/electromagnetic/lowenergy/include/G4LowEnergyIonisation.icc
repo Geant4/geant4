@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.icc,v 1.5 1999-07-05 14:31:18 aforti Exp $
+// $Id: G4LowEnergyIonisation.icc,v 1.6 1999-07-06 13:21:19 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,7 @@ inline G4double G4LowEnergyIonisation::GetMeanFreePath(
    G4bool isOutRange ;
 
    if( KineticEnergy < LowestKineticEnergy )
-     MeanFreePath = DBL_MAX;
+     MeanFreePath = DBL_MIN;
    else {
      if (KineticEnergy > HighestKineticEnergy) KineticEnergy = HighestKineticEnergy;
 
@@ -72,30 +72,6 @@ inline G4double G4LowEnergyIonisation::GetMeanFreePath(
   }
 
   return MeanFreePath ;
-}
-
-inline G4double G4LowEnergyIonisation::GetContinuousStepLimit(
-                                               const G4Track& track,
-                                               G4double,
-                                               G4double currentMinimumStep,
-                                               G4double&)
-{
- 
-  G4double kinEn = track.GetDynamicParticle()->GetKineticEnergy();
-  G4double Step;
-	
-  if(kinEn <= 250*eV){
-
-    Step = 0.1*nanometer;
-
-  }
-  else{
-
-    Step = DBL_MAX;
-  }
-
-  if ((Step>0.0)&&(Step<currentMinimumStep)) currentMinimumStep = Step;
-  return Step ;
 }
 
 
