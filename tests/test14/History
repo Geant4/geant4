@@ -1,4 +1,4 @@
--n $Id: History,v 1.26 2003-11-06 12:14:05 pia Exp $
+-n $Id: History,v 1.27 2003-11-06 12:56:06 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-06 Nov 2003 - MGP, test14-V05-02-01
+06 Nov 2003 - MGP, tag test14-V05-02-01
               Introduced test of Bremsstrahlung angular distributions
+              Goes together with emlowen-V05-02-05
 
 03 Oct 2003 - V.Ivanchenko, tag test14-V05-02-00
               Obsolete interface to energy limits of cuts is substituted 
