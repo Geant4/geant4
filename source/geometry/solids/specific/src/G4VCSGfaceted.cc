@@ -26,7 +26,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.10 2003-06-16 16:54:01 gunter Exp $
+// $Id: G4VCSGfaceted.cc,v 1.11 2004-09-01 23:40:21 davidw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -318,7 +318,8 @@ G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector &p,
     }
   }
   else
-  {
+  { 
+    if (Inside(p) == kSurface) distance = 0;
     if (calcNorm) *validNorm = false;
   }
 
