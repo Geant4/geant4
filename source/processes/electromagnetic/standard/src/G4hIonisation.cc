@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.28 2002-04-09 17:34:44 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.29 2002-05-01 16:05:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation physics process -------------------------------
@@ -118,7 +118,7 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
 
   if(verboseLevel > 0) {
-    G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable for "
+    G4cout << "G4hIonisation::BuildPhysicsTable for "
            << aParticleType.GetParticleName()
            << " mass(MeV)= " << aParticleType.GetPDGMass()/MeV
            << " charge= " << aParticleType.GetPDGCharge()/eplus
