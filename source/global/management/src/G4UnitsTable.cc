@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.cc,v 1.9 2000-01-19 11:17:50 gcosmo Exp $
+// $Id: G4UnitsTable.cc,v 1.10 2000-05-25 15:40:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -212,6 +212,7 @@ void G4UnitDefinition::BuildUnitsTable()
  //Volumic Mass
  new G4UnitDefinition( "g/cm3", "g/cm3","Volumic Mass", g/cm3);
  new G4UnitDefinition("mg/cm3","mg/cm3","Volumic Mass",mg/cm3);
+ new G4UnitDefinition("kg/m3", "kg/m3", "Volumic Mass",kg/m3);
  
  //Power
  new G4UnitDefinition("watt","W","Power",watt);
