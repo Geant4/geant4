@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildHouse.cc,v 1.1 2004-07-01 15:52:08 johna Exp $
+// $Id: BuildHouse.cc,v 1.2 2004-07-13 12:56:03 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,6 +120,7 @@ G4VPhysicalVolume* BuildHouse()
   G4LogicalVolume * northWall_log =
     new G4LogicalVolume
     (wallNSWithWindowHole,
+     //(wallNS,  // if window not required.
      wallMaterial, "North wall", 0, 0, 0);
   // G4VPhysicalVolume* northWall_phys =
     new G4PVPlacement
@@ -131,6 +132,7 @@ G4VPhysicalVolume* BuildHouse()
   G4LogicalVolume * southWall_log =
     new G4LogicalVolume
     (wallNSWithWindowHole,
+     //(wallNS,  // if window not required.
      wallMaterial, "South wall", 0, 0, 0);
   G4RotationMatrix* rmS = new G4RotationMatrix;
   rmS->rotateY(180*deg);
@@ -144,6 +146,7 @@ G4VPhysicalVolume* BuildHouse()
   G4LogicalVolume * eastWall_log =
     new G4LogicalVolume
     (wallEWWithWindowHole,
+     //(wallEW,  // if window not required.
      wallMaterial, "East wall", 0, 0, 0);
   G4RotationMatrix* rmE = new G4RotationMatrix;
   rmE->rotateY(-90*deg);
@@ -157,6 +160,7 @@ G4VPhysicalVolume* BuildHouse()
   G4LogicalVolume * westWall_log =
     new G4LogicalVolume
     (wallEWWithWindowHole,
+     //(wallEW,  // if window not required.
      wallMaterial, "West wall", 0, 0, 0);
   G4RotationMatrix* rmW = new G4RotationMatrix;
   rmW->rotateY(90*deg);
