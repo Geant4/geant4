@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.4 1999-10-28 17:20:15 gcosmo Exp $
+# $Id: globlib.gmk,v 1.5 1999-11-10 15:22:37 morita Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -19,7 +19,7 @@ ifndef G4ODBMS
 else
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) headers); done
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) d_files); done
-	@for dir in $(SUBDIRS); do (cd $$dir; G4ODBMS_DEPEND=1; export G4ODBMS_DEPEND; $(MAKE)); done
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done
 	@rm -f $(G4SCHEMA_DIR)/G4SCHEMA
 	@rm -f $(G4SCHEMA_DIR)/G4SCHEMA.FDDB
 	@echo Copying schema file to $(G4SCHEMA_DIR) for FDID $(G4SCHEMA_FDID)
@@ -30,7 +30,7 @@ endif
 ifndef G4ODBMS
 glob global: objs wipe_libs $(G4LIBDIR)/lib$(name).a
 else
-glob global: all $(G4LIBDIR)/lib$(name).a $(G4SCHEMA_DIR)/G4SCHEMA.FDDB
+glob global: headers d_files objs wipe_libs $(G4LIBDIR)/lib$(name).a $(G4SCHEMA_DIR)/G4SCHEMA.FDDB
 endif
 
 $(G4LIBDIR)/lib$(name).a: \
