@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: CHIPS_StringModel_Analysis.cc,v 1.1 2000-09-13 07:26:22 hpw Exp $
+// $Id: CHIPS_StringModel_Analysis.cc,v 1.2 2000-09-15 08:45:57 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -52,7 +52,7 @@
 #include "G4XiZeroInelasticProcess.hh"
  
 #include "G4TheoFSGenerator.hh"
-#include "G4StringChipsInterface.hh"
+#include "G4StringChipsParticleLevelInterface.hh"
 #include "G4Fancy3DNucleus.hh"
 #include "G4StringModel.hh"
 #include "G4VPreCompoundModel.hh"
@@ -652,7 +652,7 @@
     incomingEnergy *= GeV/MeV;
 
     theTheoModel->SetTransport(theCascade);
-    G4StringChipsInterface * theChipsCascade = new G4StringChipsInterface();
+    G4StringChipsParticleLevelInterface * theChipsCascade = new G4StringChipsParticleLevelInterface();
     theTheoModel->SetTransport(theChipsCascade);
 //    G4StringInfoDump * theDummyCascade = new G4StringInfoDump;
 //    G4DymmyINC * theDummyCascade = new G4DymmyINC;
