@@ -32,7 +32,7 @@
 #endif
 
 RemSimSensitiveDetector::RemSimSensitiveDetector(G4String name)
-:G4VSensitiveDetector(name)
+  :G4VSensitiveDetector(name)
 {
   G4String HCname;
   collectionName.insert(HCname="trackerCollection");
@@ -44,46 +44,32 @@ void RemSimSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
 {
   static G4int HCID = -1;
   trackerCollection = new RemSimHitsCollection
-                      (SensitiveDetectorName,collectionName[0]); 
+    (SensitiveDetectorName,collectionName[0]); 
   if(HCID<0)
-  { HCID = GetCollectionID(0); }
-  HCE->AddHitsCollection(HCID,trackerCollection);
+    { HCID = GetCollectionID(0); }
+  HCE -> AddHitsCollection(HCID,trackerCollection);
 }
 
 G4bool RemSimSensitiveDetector::ProcessHits(G4Step* aStep, 
                                             G4TouchableHistory* ROhist)
 {
-  G4double edep = aStep->GetTotalEnergyDeposit();
+  G4double edep = aStep -> GetTotalEnergyDeposit();
   if(edep==0.) return false;
  
-  G4int i = ROhist->GetReplicaNumber();
+  G4int i = ROhist -> GetReplicaNumber();
   
-  //G4double z = aStep->GetPreStepPoint()->GetPosition().z();
-
   RemSimHit* newHit = new RemSimHit();
-  newHit->SetEdep(edep);
-  newHit->SetIndexes(i);
-  newHit->SetPosition( aStep->GetPreStepPoint()->GetPosition());
-  trackerCollection->insert( newHit );
-        
-  //newHit->Draw(); 
+  newHit -> SetEdep(edep);
+  newHit -> SetIndexes(i);
+  newHit->SetPosition(aStep->GetPreStepPoint()->GetPosition());
+  trackerCollection -> insert( newHit );
 
-  /*
-  G4cout <<edep/keV <<":in astronaut in position"
-         <<x/cm<<" "<<y/cm<<" "<<z/cm<<" "
-         <<"index"<<i<<":i" 
-         <<G4endl;
-  */
 #ifdef G4ANALYSIS_USE
   RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
   analysis -> energyDepositStore(i,edep/MeV);
-  G4double x = aStep->GetPreStepPoint()->GetPosition().x();
-  G4double y = aStep->GetPreStepPoint()->GetPosition().y();
-  
-  if(i==0)analysis-> energyDeposit1(x/m,y/m);
-  if(i==3)analysis-> energyDeposit2(x/m,y/m);
-  if(i==6)analysis-> energyDeposit3(x/m,y/m);
 
+  if(aStep -> GetTrack() -> GetTrackID()!=1)
+    analysis -> SecondaryEnergyDeposit(i,edep/MeV);
 #endif
 
   return true;
@@ -91,10 +77,4 @@ G4bool RemSimSensitiveDetector::ProcessHits(G4Step* aStep,
 
 void RemSimSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
 {
-  /*
-     G4int NbHits = trackerCollection->entries();
-     G4cout << "\n-------->Hits Collection: in this event they are " << NbHits 
-            << " hits in the astronaut: " << G4endl;
-     for (G4int i=0;i<NbHits;i++) (*trackerCollection)[i]->Print();
-  */
 }

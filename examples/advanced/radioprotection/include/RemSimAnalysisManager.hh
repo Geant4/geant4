@@ -26,7 +26,7 @@
 //    *                                *
 //    **********************************
 // 
-
+//
 // the class Analysis creates and managed histograms and ntuples
 ///
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -63,25 +63,29 @@ public:
   
   ~RemSimAnalysisManager();
   static RemSimAnalysisManager* getInstance();
-  void book();
-  void energyDeposit1(G4double,G4double);
-  void energyDeposit2(G4double,G4double);
-  void energyDeposit3(G4double,G4double);
-  void energyDepositStore(G4int, G4double);
-  void leptonsEnergySpectrum1(G4double);
-  void hadronEnergySpectrum1(G4double);
-  void gammaEnergySpectrum1(G4double);
-  void leptonsEnergySpectrum2(G4double);
-  void hadronEnergySpectrum2(G4double);
-  void gammaEnergySpectrum2(G4double);
-  void leptonsEnergySpectrum3(G4double);
-  void hadronEnergySpectrum3(G4double);
-  void gammaEnergySpectrum3(G4double);
-  void neutronEnergyDistribution(G4double);
-  void photonEnergyDistribution(G4double);
-  void electronEnergyDistribution(G4double);
-  void hadronEnergyDistribution(G4double);
+  void book(); // booking the hbook file
+
+  void energyDepositStore(G4int, G4double); 
+  // Collect the energy deposit in the phantom 
+                                           
   void primaryParticleEnergyDistribution(G4double);
+  // Energy of primary particles
+
+  void SecondaryEnergyDeposit(G4int, G4double);
+  // Energy deposit given by secondary particles in the phantom
+
+  void PrimaryInitialEnergyIn(G4double);
+  // Initial energy of primary particles impinging on the phantom
+
+  void PrimaryInitialEnergyOut(G4double);
+  // Initial energy of primary particles outgoing the phantom 
+
+  void PrimaryEnergyIn(G4double);
+  // Energy of primary particles impinging on the phantom
+
+  void PrimaryEnergyOut(G4double);
+  // Energy of primary particles outgoing the phantom 
+
   void finish();
 
 private:
@@ -98,24 +102,12 @@ private:
 
   AIDA::IDataPointSet *  dataPoint; 
   AIDA::IHistogram1D* energyDeposit; 
-  AIDA::IHistogram2D* histo1;
-  AIDA::IHistogram2D* histo2;
-  AIDA::IHistogram2D* histo3;
-  AIDA::IHistogram1D* trasmission1;  
-  AIDA::IHistogram1D* trasmission2; 
-  AIDA::IHistogram1D* trasmission3;  
-  AIDA::IHistogram1D* trasmission12;  
-  AIDA::IHistogram1D* trasmission22; 
-  AIDA::IHistogram1D* trasmission32; 
-  AIDA::IHistogram1D* trasmission13;  
-  AIDA::IHistogram1D* trasmission23; 
-  AIDA::IHistogram1D* trasmission33;
-  AIDA::IHistogram1D* neutron;
-  AIDA::IHistogram1D* photon;
-  AIDA::IHistogram1D* electron; 
-  AIDA::IHistogram1D* hadron;
-  AIDA::IHistogram1D* primary; 
-
+  AIDA::IHistogram1D* primary;  
+  AIDA::IHistogram1D* secondaryDeposit;
+  AIDA::IHistogram1D* primaryInitialE;
+  AIDA::IHistogram1D* primaryInitialEout;
+  AIDA::IHistogram1D* initialE;
+  AIDA::IHistogram1D* initialEout;
 };
 #endif
 #endif

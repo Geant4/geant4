@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: remsim.cc,v 1.4 2004-03-12 09:20:34 guatelli Exp $
+// $Id: remsim.cc,v 1.5 2004-05-17 10:34:56 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ int main(int argc,char** argv)
   RemSimRunAction* run = new RemSimRunAction();
   runManager->SetUserAction(run);
 
-  runManager->SetUserAction(new RemSimSteppingAction(primary,event,detector));
+  runManager->SetUserAction(new RemSimSteppingAction(primary));
 
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimSteppingAction.hh,v 1.2 2004-03-12 10:55:54 guatelli Exp $
+// $Id: RemSimSteppingAction.hh,v 1.3 2004-05-17 10:34:57 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -44,23 +44,22 @@
 
 class G4Step;
 class RemSimPrimaryGeneratorAction;
-class RemSimDetectorConstruction;
-class RemSimEventAction;
+class RemSimSteppingActionMessenger;
+
 class RemSimSteppingAction : public G4UserSteppingAction
 {
 public:
 
-  RemSimSteppingAction(RemSimPrimaryGeneratorAction*,
-		       RemSimEventAction*, 
-		       RemSimDetectorConstruction*);
+  RemSimSteppingAction(RemSimPrimaryGeneratorAction*);
+
   ~RemSimSteppingAction();
 
   void UserSteppingAction(const G4Step* aStep);
+  void SetHadronicAnalysis(G4String); 
+
 private:
-  RemSimPrimaryGeneratorAction* primaryAction;
-  RemSimEventAction* eventAction; 
-  G4int IDnow;
-  G4int IDold;
-  RemSimDetectorConstruction* detector;  
+  RemSimPrimaryGeneratorAction* primaryAction; 
+  G4String hadronic;
+  RemSimSteppingActionMessenger* messenger;
 };
 #endif

@@ -30,6 +30,42 @@ The example is provided of:
 
 1.2 Primary particles
 
+The user can select different set-ups to generate primary particles:
+
+- "Basic": monochromatic particle beam (default configuration)
+- "Interplanetary": particle beam with energy derived from a given 
+  energy spectrum. 
+- "Moon": particles generated with energy derived from a given 
+  energy spectrum on a given hemisphere with random direction.
+
+The energy spectrum is written is ASCII file:
+first column: energy in MeV
+second column: flux
+The flux is used as probability of generating a particle with a particular 
+energy. The sum of the fluxes is normalised to 1 in the RunAction. 
+
+Examples of ASCII files --
+
+- Galactic Cosmic Rays fluxes (envelope of CREME96 1977 and CREME86 1975 solar
+minimum spectra):
+p: gcrZ=1.txt
+alpha: gcrZ=2.txt
+carbon ion: gcrZ=6.txt
+oxygen ion: gcrZ=8.txt
+silicon ion: gcrZ=14.txt
+iron ion: gcrZ=26.txt
+The ions are completly stripped.
+
+- Solar Particle Events (envelope of CREME96 October 1989 and 
+August 1972 spectra)
+p: speZ=1.txt
+alpha: speZ=2.txt
+
+The user can select interactively the configuration with the following
+UI commands:
+/gun/generator Basic
+/gun/energy Interplanetary
+/gun/generator Moon
 
 1.3 Geometry
 

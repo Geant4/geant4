@@ -32,5 +32,7 @@
 /vis/viewer/set/viewpointThetaPhi 90 180 deg
 /vis/viewer/zoom 2
 /tracking/storeTrajectory 1
-/gun/particle IonO16
-/gun/energy 500. MeV
+/gun/particle proton
+/gun/energy 1. GeV
+/step/hadronicVerbose On
+ 

@@ -21,50 +21,42 @@
 // ********************************************************************
 //
 //
-// Code developed by:
-//  S.Guatelli
+//    *****************************************
+//    *                                       *
+//    *      RemSimDetectrorMessenger.hh      *
+//    *                                       *
+//    *****************************************
 //
-//    *********************************
-//    *                               *
-//    *    RemSimPrimaryGeneratorMessenger.cc *
-//    *                               *
-//    *********************************
-//
-//
-// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.4 2004-05-17 10:34:57 guatelli Exp $
+// $Id: RemSimRunMessenger.hh,v 1.1 2004-05-17 10:34:57 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+#ifndef RemSimRunMessenger_h
+#define RemSimRunMessenger_h 1
 
-#include "RemSimPrimaryGeneratorMessenger.hh"
-#include "RemSimRunAction.hh"
-#include "RemSimPrimaryGeneratorAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithoutParameter.hh"
+#include "globals.hh"
+#include "G4UImessenger.hh"
 
-RemSimPrimaryGeneratorMessenger::RemSimPrimaryGeneratorMessenger( RemSimPrimaryGeneratorAction* prim): primary(prim)
-{  
-  gunDir = new G4UIdirectory("/gun/");
-  gunDir->SetGuidance("Select the generation configuration of primary particles.");
-        
-  fluxCmd = new G4UIcmdWithAString("/gun/generator",this);
-  fluxCmd -> SetGuidance("Assign the configuration of generation of primary particles."); 
-  fluxCmd -> SetParameterName("choice",true);
-  fluxCmd -> SetCandidates("Moon Interplanetary Basic");
-  fluxCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
- }
+class RemSimRunAction;
+class RemSimRunAction;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithoutParameter;
 
-RemSimPrimaryGeneratorMessenger::~RemSimPrimaryGeneratorMessenger()
+class RemSimRunMessenger: public G4UImessenger
 {
-  delete fluxCmd;
-  delete gunDir;
-} 
- 
-void RemSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
- if(command == fluxCmd) primary -> SelectPrimaries(newValue);
-}
+public:
+  RemSimRunMessenger(RemSimRunAction* );
+  ~RemSimRunMessenger();
+    
+  void SetNewValue(G4UIcommand*, G4String);
+  
+private:
+  RemSimRunAction*  run;
+  G4UIdirectory*    runDir; 
+  G4UIcmdWithAString* readFileCmd; //change data.txt 
+};
+#endif
 

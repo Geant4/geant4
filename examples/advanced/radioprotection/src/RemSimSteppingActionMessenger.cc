@@ -21,50 +21,33 @@
 // ********************************************************************
 //
 //
-// Code developed by:
-//  S.Guatelli
-//
-//    *********************************
-//    *                               *
-//    *    RemSimPrimaryGeneratorMessenger.cc *
-//    *                               *
-//    *********************************
-//
-//
-// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.4 2004-05-17 10:34:57 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
+#include "RemSimSteppingActionMessenger.hh"
+#include "RemSimSteppingAction.hh"
 
-#include "RemSimPrimaryGeneratorMessenger.hh"
-#include "RemSimRunAction.hh"
-#include "RemSimPrimaryGeneratorAction.hh"
+#include "globals.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithoutParameter.hh"
 
-RemSimPrimaryGeneratorMessenger::RemSimPrimaryGeneratorMessenger( RemSimPrimaryGeneratorAction* prim): primary(prim)
-{  
-  gunDir = new G4UIdirectory("/gun/");
-  gunDir->SetGuidance("Select the generation configuration of primary particles.");
-        
-  fluxCmd = new G4UIcmdWithAString("/gun/generator",this);
-  fluxCmd -> SetGuidance("Assign the configuration of generation of primary particles."); 
-  fluxCmd -> SetParameterName("choice",true);
-  fluxCmd -> SetCandidates("Moon Interplanetary Basic");
-  fluxCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
- }
-
-RemSimPrimaryGeneratorMessenger::~RemSimPrimaryGeneratorMessenger()
+RemSimSteppingActionMessenger::RemSimSteppingActionMessenger(RemSimSteppingAction* SA)
+:steppingAction(SA)
 {
-  delete fluxCmd;
-  delete gunDir;
-} 
- 
-void RemSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
- if(command == fluxCmd) primary -> SelectPrimaries(newValue);
+  stepDirectory = new G4UIdirectory("/step/");
+  stepDirectory -> SetGuidance("Step control command.");
+
+  hadronicCmd = new G4UIcmdWithAString("/step/hadronicVerbose",this);
+  hadronicCmd -> SetGuidance("Set the verbose level of hadronic processes");
+  hadronicCmd -> SetParameterName("choice", true);
+  hadronicCmd -> SetCandidates("On Off");
+  hadronicCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
+}
+RemSimSteppingActionMessenger::~RemSimSteppingActionMessenger()
+{
+  delete hadronicCmd;
+  delete stepDirectory;
+}
+
+void RemSimSteppingActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+ if(command == hadronicCmd) steppingAction -> SetHadronicAnalysis(newValue);
 }
 

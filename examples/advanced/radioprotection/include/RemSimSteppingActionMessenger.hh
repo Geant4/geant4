@@ -21,50 +21,33 @@
 // ********************************************************************
 //
 //
-// Code developed by:
-//  S.Guatelli
-//
-//    *********************************
-//    *                               *
-//    *    RemSimPrimaryGeneratorMessenger.cc *
-//    *                               *
-//    *********************************
-//
-//
-// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.4 2004-05-17 10:34:57 guatelli Exp $
+// $Id: RemSimSteppingActionMessenger.hh,v 1.1 2004-05-17 10:34:57 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
 
-#include "RemSimPrimaryGeneratorMessenger.hh"
-#include "RemSimRunAction.hh"
-#include "RemSimPrimaryGeneratorAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithoutParameter.hh"
+#ifndef RemSimSteppingActionMessenger_h
+#define RemSimSteppingActionMessenger_h 1
 
-RemSimPrimaryGeneratorMessenger::RemSimPrimaryGeneratorMessenger( RemSimPrimaryGeneratorAction* prim): primary(prim)
-{  
-  gunDir = new G4UIdirectory("/gun/");
-  gunDir->SetGuidance("Select the generation configuration of primary particles.");
-        
-  fluxCmd = new G4UIcmdWithAString("/gun/generator",this);
-  fluxCmd -> SetGuidance("Assign the configuration of generation of primary particles."); 
-  fluxCmd -> SetParameterName("choice",true);
-  fluxCmd -> SetCandidates("Moon Interplanetary Basic");
-  fluxCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
- }
+#include "globals.hh"
+#include "G4UImessenger.hh"
+#include "G4UIcommand.hh"
 
-RemSimPrimaryGeneratorMessenger::~RemSimPrimaryGeneratorMessenger()
+class RemSimSteppingAction;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+
+class RemSimSteppingActionMessenger: public G4UImessenger
 {
-  delete fluxCmd;
-  delete gunDir;
-} 
- 
-void RemSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
- if(command == fluxCmd) primary -> SelectPrimaries(newValue);
-}
+public:
+  RemSimSteppingActionMessenger(RemSimSteppingAction*);
+  ~RemSimSteppingActionMessenger();
+  void SetNewValue(G4UIcommand*, G4String);
+
+private:
+  RemSimSteppingAction* steppingAction;
+  G4UIdirectory*        stepDirectory;
+  G4UIcmdWithAString*   hadronicCmd;
+};
+
+#endif
 

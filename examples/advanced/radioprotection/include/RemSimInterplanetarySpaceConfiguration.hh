@@ -21,50 +21,38 @@
 // ********************************************************************
 //
 //
-// Code developed by:
-//  S.Guatelli
-//
-//    *********************************
-//    *                               *
-//    *    RemSimPrimaryGeneratorMessenger.cc *
-//    *                               *
-//    *********************************
-//
-//
-// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.4 2004-05-17 10:34:57 guatelli Exp $
+// $Id: RemSimInterplanetarySpaceConfiguration.hh,v 1.4 2004-05-17 10:34:56 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
 
-#include "RemSimPrimaryGeneratorMessenger.hh"
-#include "RemSimRunAction.hh"
-#include "RemSimPrimaryGeneratorAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithoutParameter.hh"
+#ifndef RemSimInterplanetarySpaceConfiguration_h
+#define RemSimInterplanetarySpaceConfiguration_h 1
 
-RemSimPrimaryGeneratorMessenger::RemSimPrimaryGeneratorMessenger( RemSimPrimaryGeneratorAction* prim): primary(prim)
-{  
-  gunDir = new G4UIdirectory("/gun/");
-  gunDir->SetGuidance("Select the generation configuration of primary particles.");
-        
-  fluxCmd = new G4UIcmdWithAString("/gun/generator",this);
-  fluxCmd -> SetGuidance("Assign the configuration of generation of primary particles."); 
-  fluxCmd -> SetParameterName("choice",true);
-  fluxCmd -> SetCandidates("Moon Interplanetary Basic");
-  fluxCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
- }
+#include "RemSimVPrimaryGeneratorFactory.hh"
+#include "globals.hh"
+#include "G4DataVector.hh"
+class G4ParticleGun;
+class G4Event;
+class RemSimRunAction;
 
-RemSimPrimaryGeneratorMessenger::~RemSimPrimaryGeneratorMessenger()
+class RemSimInterplanetarySpaceConfiguration : 
+public RemSimVPrimaryGeneratorFactory
 {
-  delete fluxCmd;
-  delete gunDir;
-} 
- 
-void RemSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
- if(command == fluxCmd) primary -> SelectPrimaries(newValue);
-}
+
+public:
+  RemSimInterplanetarySpaceConfiguration();
+  ~RemSimInterplanetarySpaceConfiguration();
+
+public:
+  void GeneratePrimaries(G4Event* anEvent);
+  G4double  GetInitialEnergy();
+
+private:
+  G4ParticleGun* particleGun;
+  G4String spectrum;
+  G4double energy;
+  RemSimRunAction* run;
+};
+#endif
+
 

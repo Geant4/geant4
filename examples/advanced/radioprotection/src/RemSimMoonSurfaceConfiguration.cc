@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimMoonSurfaceConfiguration.cc,v 1.1 2004-05-17 07:37:28 guatelli Exp $
+// $Id: RemSimMoonSurfaceConfiguration.cc,v 1.2 2004-05-17 10:34:57 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "CLHEP/Random/RandGeneral.h"
@@ -78,10 +78,16 @@ void RemSimMoonSurfaceConfiguration::GeneratePrimaries(G4Event* anEvent)
       partSum += (*data)[j];
       j++;
     }
+  particleGun -> SetParticleEnergy((*energies)[j]);   
 
-//Generate the primary particles on a hemisphere with random direction
+#ifdef G4ANALYSIS_USE   
+ G4double energy = particleGun -> GetParticleEnergy(); 
+ RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
+ analysis -> primaryParticleEnergyDistribution(energy/MeV);
+#endif
+
+ //Generate the primary particles on a hemisphere with random direction
  //position
-
   G4double radius = 25.* m;
   G4double angle = pi * G4UniformRand()*rad;
   G4double y0 = radius*cos(angle);
@@ -104,12 +110,7 @@ void RemSimMoonSurfaceConfiguration::GeneratePrimaries(G4Event* anEvent)
       G4ThreeVector direction(a,b,c);
       particleGun -> SetParticleMomentumDirection(direction);
 	}
- 
-#ifdef G4ANALYSIS_USE   
- G4double energy = particleGun -> GetParticleEnergy(); 
- RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
- analysis -> primaryParticleEnergyDistribution(energy/MeV);
-#endif
+
   particleGun -> GeneratePrimaryVertex(anEvent);
 }
 
