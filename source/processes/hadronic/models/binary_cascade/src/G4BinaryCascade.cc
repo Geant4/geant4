@@ -54,7 +54,7 @@
 #include <algorithm>
 #include "G4ShortLivedConstructor.hh"
 // #define debug_1_BinaryCascade 1
-#define debug_G4BinaryCascade 1
+// #define debug_G4BinaryCascade 1
 //
 //  C O N S T R U C T O R S   A N D   D E S T R U C T O R S
 //
@@ -631,7 +631,6 @@ G4double G4BinaryCascade::GetExcitationEnergy()
   G4double nucleusMass(0);
   if(currentZ>.5)
   {
-     G4cerr <<"mon - we know Z A          "<<currentZ<<" "<<currentA<<G4endl;
      nucleusMass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(currentZ,currentA);
   } 
   else if (currentZ==0 && currentA==1 )
@@ -1893,16 +1892,17 @@ G4LorentzVector G4BinaryCascade::GetFinalNucleusMomentum()
     // G4cout << "GetFinalNucleusMomentum GetFinal4Momentum= " <<NucleusMomentum <<" "<<NucleusMomentum.mag()<<G4endl;
     // boost nucleus to a frame such that the momentum of nucleus == momentum of Captured
       G4ThreeVector boost= (NucleusMomentum.vect() -CapturedMomentum.vect())/NucleusMomentum.e();
-    //G4cout << "GetFinalNucleusMomentum boost= " <<boost<<G4endl;
-    #ifdef debug_G4BinaryCascade
-      if(boost.mag()>1.0)
+      if(boost.mag2()>1.0)
       {
+#     ifdef debug_G4BinaryCascade
 	G4cerr << "G4BinaryCascade::GetFinalNucleusMomentum - Fatal"<<G4endl;
 	G4cerr << "it 0"<<boost <<G4endl;
 	G4cerr << "it 01"<<NucleusMomentum<<" "<<CapturedMomentum<<" "<<G4endl;
 	G4cout <<" testing boost "<<boost<<" "<<boost.mag()<<G4endl;
+#      endif
+	boost=G4ThreeVector(0);
+	NucleusMomentum=G4LorentzVector(0);
       }
-    #endif
       G4LorentzRotation  nucleusBoost( -boost );
       precompoundLorentzboost.set( boost );
     #ifdef debug_G4BinaryCascade
