@@ -1,5 +1,5 @@
- 20-Aug-2004 A.R.
-
+ A.R. Created 20-Aug-2004 ; Last change 5-Nov-2004.
+ 
  This directory contains a configurable calorimeter setup to be used
  as statistical acceptance suite of Geant4, that is to validate a
  new release with respect the previous one (regression test).
@@ -54,9 +54,23 @@
  Notice that this does not mean necessarily that the two 
  distributions are statistically incompatible with each other,
  because, by definition, 1% of pair of distributions coming
- from the same parent distributions have a p-value below 1%.
+ from the same parent distributions have a p-value below 10%.
  However, it is worth to take a look by eye to those distributions
  to see if there are really so different as could be in the
  presence of a bug.
  
- 
+ Some scripts and one kumac has been provided to allow a full
+ automatization of this Statistical Acceptance suite.
+ Here the structure of these scripts/kumac:
+
+    1)  mainScript.py 
+         ---> 2)  simuDriver.sh  
+                  ---> 3a)  writeSetup.py
+                  ---> 3b)  execute mainAcceptanceTest
+                  ---> 3c)  dirStat/driver.py        
+                            ---> 4)  drivePlot.py
+                                     ---> 5a)  execute  pvalue 
+                                     ---> 5b)  plot.py
+                                               ---> 6) plot.kumac
+
+ only the first one, mainScript.py , needs to be modified by the user.

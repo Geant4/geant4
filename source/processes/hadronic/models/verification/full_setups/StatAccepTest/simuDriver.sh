@@ -1,29 +1,39 @@
 #!/bin/sh
 #
 #----------------------------------------------------------------------------
-# This Bash-shell script is the main, starting one.
-# In  ***LOOKHERE***  you have to specify which Geant4 references you want
-# to use, which Physics List, which calorimeter setup, which beam particle,
-# which beam energy, which number of events.
-# This program assumes the existence of the following executables:
-#     mainStatAccepTest-$REF-$PHYSICS
-# for the Geant4 reference and Physics List considered.
-# This script invokes the following Python scripts:
-#     writeSetup.py
+# This Bash shell script has the following 7 parameters:
+#
+#   1) Geant4 reference; e.g. 4.6.2.ref01 
+#   2) Geant4 reference; e.g. 4.6.2.ref03
+#   3) Physics List; e.g. LHEP
+#   4) Calorimeter type; e.g. FeSci
+#   5) Particle type; e.g. pi+
+#   6) Beam Energy; e.g. 20GeV
+#   7) Number of Events; e.g. 5k
+#
+# This script invokes the Python  writeSetup.py  that writes the setup
+# and the Geant4 command files necessary to run the simulation of the 
+# two Geant4 references. After that, this script invokes the Python
+# script  dirStat/driver.py  that does the Statistical tests.
 #----------------------------------------------------------------------------
 #
-echo '========== START mainScript.sh ========== '
+echo ' ========== START simuDriver.sh ========== '
 #
-#***LOOKHERE***
-export REF1=4.6.2.ref01
-export REF2=4.6.2.ref03
-export PHYSICS=LHEP
-export CALORIMETER=FeSci
-export PARTICLE=p
-export ENERGY=20GeV
-export EVENTS=5k
-#export EVENTS=100
-#***endLOOKHERE***
+export REF1=$1
+export REF2=$2
+export PHYSICS=$3
+export CALORIMETER=$4
+export PARTICLE=$5
+export ENERGY=$6
+export EVENTS=$7
+#
+echo ' REF1        =' $REF1
+echo ' REF2        =' $REF2
+echo ' PHYSICS     =' $PHYSICS
+echo ' CALORIMETER =' $CALORIMETER
+echo ' PARTICLE    =' $PARTICLE
+echo ' ENERGY      =' $ENERGY
+echo ' EVENTS      =' $EVENTS
 #
 #--- Run the first reference ---
 #
@@ -51,10 +61,10 @@ export EVENTS=5k
 #
 #--- Run the statistical tests ---
 #
-export LABEL=$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS
-. setup.sh-$REF1-$LABEL
-cd dirStat/
-python2.2 driver.py $REF1 $REF2 $LABEL
+( export LABEL=$PHYSICS-$CALORIMETER-$PARTICLE-$ENERGY-$EVENTS
+  . setup.sh-$REF1-$LABEL
+  cd dirStat/
+  python2.2 driver.py $REF1 $REF2 $LABEL )
 #
-echo '========== END mainScript.sh ========== '
+echo ' ========== END simuDriver.sh ========== '
 #
