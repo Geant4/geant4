@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.cc,v 1.2 2003-10-16 10:42:43 arce Exp $
+// $Id: G4ParameterisationTrd.cc,v 1.3 2003-10-21 09:52:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationTrd Implementation file
@@ -58,9 +58,7 @@ G4ParameterisationTrdX( EAxis axis, G4int nDiv,
   else if( divType == DivNDIV )
   {
     G4Trd* mtrd = (G4Trd*)(msolid);
-    fwidth = CalculateWidth( 2*mtrd->GetXHalfLength1(),
-                             nDiv, offset );
-    G4cout << " G4ParameterisationTrdX::CalculateWidth " << fwidth << " " << 2*mtrd->GetXHalfLength1() << " " << nDiv << " " << offset << G4endl;
+    fwidth = CalculateWidth( 2*mtrd->GetXHalfLength1(), nDiv, offset );
   }
 
   if( verbose >= -1 )
@@ -119,7 +117,6 @@ G4ParameterisationTrdX::
 ComputeDimensions( G4Trd& trd, const G4int copyNo,
                    const G4VPhysicalVolume* pv ) const
 {
-  G4cout << " G4ParameterisationTrdX:: ComputeDimensions( G4Trd& trd, " << G4endl;
   G4Trd* msol = (G4Trd*)(fmotherSolid);
 
   G4double pDy1 = msol->GetYHalfLength1();
@@ -146,10 +143,17 @@ void G4ParameterisationTrdX::CheckAxisIsValid()
   G4double mpDx1 = msol->GetXHalfLength1();
   G4double mpDx2 = msol->GetXHalfLength2();
 
-  if( fabs(mpDx1 - mpDx2) > kCarTolerance ){
-    G4Exception(" G4ParameterisationTrdX ", " ", FatalErrorInArgument, " Not supported making a division of a TRD along axis X while the X half lengths are not equal (it will result in non-equal children solids. Please run with verbosity on " );
+  if( fabs(mpDx1 - mpDx2) > kCarTolerance )
+  {
+    G4cerr << "ERROR - G4ParameterisationTrdX::CheckAxisIsValid()" << G4endl
+           << "        Making a division of a TRD along axis X while" << G4endl
+           << "        the X half lengths are not equal." << G4endl
+           << "        It will result in non-equal division solids." << G4endl
+           << "        Please run with verbosity on." << G4endl;
+    G4Exception("G4ParameterisationTrdX::CheckAxisIsValid()",
+                "InvalidAxis", FatalErrorInArgument,
+                "Invalid construct. NOT supported." );
   }
-
 }
 
 
@@ -174,7 +178,6 @@ G4ParameterisationTrdY( EAxis axis, G4int nDiv,
     G4Trd* mtrd = (G4Trd*)(msolid);
     fwidth = CalculateWidth( 2*mtrd->GetYHalfLength1(),
                              nDiv, offset );
-    G4cout << " G4ParameterisationTrdY::CalculateWidth " << fwidth << " " << 2*mtrd->GetYHalfLength1() << " " << nDiv << " " << offset << G4endl;
   }
 
   if( verbose >= 1 )
@@ -256,10 +259,17 @@ void G4ParameterisationTrdY::CheckAxisIsValid()
   G4double mpDy1 = msol->GetYHalfLength1();
   G4double mpDy2 = msol->GetYHalfLength2();
 
-  if( fabs(mpDy1 - mpDy2) > kCarTolerance ){
-    G4Exception(" G4ParameterisationTrdY ", " ", FatalErrorInArgument, " Not supported making a division of a TRD along axis Y while the Y half lengths are not equal (it will result in non-equal children solids. Please run with verbosity on " );
+  if( fabs(mpDy1 - mpDy2) > kCarTolerance )
+  {
+    G4cerr << "ERROR - G4ParameterisationTrdY::CheckAxisIsValid()" << G4endl
+           << "        Making a division of a TRD along axis Y while" << G4endl
+           << "        the Y half lengths are not equal." << G4endl
+           << "        It will result in non-equal division solids." << G4endl
+           << "        Please run with verbosity on." << G4endl;
+    G4Exception("G4ParameterisationTrdY::CheckAxisIsValid()",
+                "InvalidAxis", FatalErrorInArgument,
+                "Invalid construct. NOT supported." );
   }
-
 }
 
 
@@ -283,7 +293,6 @@ G4ParameterisationTrdZ( EAxis axis, G4int nDiv,
     G4Trd* mtrd = (G4Trd*)(msolid);
     fwidth = CalculateWidth( 2*mtrd->GetZHalfLength(),
                              nDiv, offset );
-    G4cout << " G4ParameterisationTrdZ::CalculateWidth " << fwidth << " " << 2*mtrd->GetZHalfLength() << " " << nDiv << " " << offset << G4endl;
   }
 
   if( verbose >= 1 )
@@ -347,7 +356,8 @@ ComputeDimensions(G4Trd& trd, const G4int copyNo,
   G4double DDy = (msol->GetYHalfLength2() - msol->GetYHalfLength1() ) / fnDiv;
   G4double pDz = fwidth/2.;
  
-  trd.SetAllParameters ( pDx1+DDx*copyNo, pDx1+DDx*(copyNo+1), pDy1+DDy*copyNo, pDy1+DDy*(copyNo+1), pDz );
+  trd.SetAllParameters ( pDx1+DDx*copyNo, pDx1+DDx*(copyNo+1),
+                         pDy1+DDy*copyNo, pDy1+DDy*(copyNo+1), pDz );
 
   if( verbose >= 1 )
   {
