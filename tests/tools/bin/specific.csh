@@ -470,26 +470,26 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
   setenv G4LEVELGAMMADATA $G4WORKDIR/data/PhotonEvaporation
   setenv G4RADIOACTIVEDATA $G4WORKDIR/data/RadiativeDecay
   setenv G4LEDATA $G4WORKDIR/data/G4EMLOW0.3
-#
+# CMT :
+  source /lal/CMT/v1r10/mgr/setup.csh
 # OpenGL driver :
 #  setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
 #  setenv G4VIS_BUILD_OPENGLX_DRIVER 1
 #  setenv G4VIS_USE_OPENGLXM 1
 #  setenv G4VIS_USE_OPENGLX 1
-  setenv OGLHOME /lal/Mesa/3.2/Linux
+#  setenv OGLHOME /lal/Mesa/3.2/Linux
 # Inventor driver :
-  source /lal/CMT/v1r10/mgr/setup.csh
-  source /projects/HEPVis/v5r2p1/cmt/cleanup.csh
-  source /projects/HEPVis/v5r2p1/cmt/setup.csh
+#  source /projects/HEPVis/v5r2p1/cmt/cleanup.csh
+#  source /projects/HEPVis/v5r2p1/cmt/setup.csh
 #  setenv G4VIS_BUILD_OIX_DRIVER 1
 #  setenv G4VIS_USE_OIX 1
-  setenv TTFLIBS "-L/lal/freetype/1.3.1/Linux/lib -lttf"
-  setenv OIVFLAGS "-I$HEPVISROOT/include -I$SOFREEROOT/include -I$SOFREEXTROOT/include"
-  setenv OIVLIBS "-L$SOFREEXTROOT/$SOFREEXTCONFIG -lSoFreeXt -L$HEPVISROOT/$HEPVISCONFIG -lHEPVisXt -lHEPVis ${TTFLIBS} -L$SOFREEROOT/$SOFREECONFIG -lSoFree"
+#  setenv TTFLIBS "-L/lal/freetype/1.3.1/Linux/lib -lttf"
+#  setenv OIVFLAGS "-I$HEPVISROOT/include -I$SOFREEROOT/include -I$SOFREEXTROOT/include"
+#  setenv OIVLIBS "-L$SOFREEXTROOT/$SOFREEXTCONFIG -lSoFreeXt -L$HEPVISROOT/$HEPVISCONFIG -lHEPVisXt -lHEPVis ${TTFLIBS} -L$SOFREEROOT/$SOFREECONFIG -lSoFree"
 # UI Xm :
 #  setenv G4UI_BUILD_XM_SESSION 1
-#  setenv G4UI_USE_XM 1
-  setenv XENVIRONMENT $G4INSTALL/examples/novice/N03/visTutor/g4Xt.xrm
+# setenv G4UI_USE_XM 1
+#  setenv XENVIRONMENT $G4INSTALL/examples/novice/N03/visTutor/g4Xt.xrm
 # AIDA :
   setenv G4ANALYSIS_USE 1
 # Falsetto implementation :
