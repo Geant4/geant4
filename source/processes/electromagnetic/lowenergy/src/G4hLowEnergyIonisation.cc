@@ -33,6 +33,7 @@
 // 24 May    2000 MG Pia  Code properly indented to improve legibility
 // 17 July   2000 V.Ivanchenko Bug in scaling AlongStepDoIt method
 // 25 July   2000 V.Ivanchenko New design iteration
+// 17 August 2000 V.Ivanchenko Add ion fluctuation models
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -64,6 +65,8 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     theAntiProtonModel(NULL),
     theNuclearStoppingModel(NULL),
     theIonEffChargeModel(NULL),
+    theIonChuFlactuationModel(NULL),
+    theIonYangFlactuationModel(NULL),
     nStopping(true),
     theBarkas(true),
     theProton (G4Proton::Proton()),
@@ -88,6 +91,8 @@ G4hLowEnergyIonisation::~G4hLowEnergyIonisation()
   if(theAntiProtonModel)delete theAntiProtonModel;
   if(theNuclearStoppingModel)delete theNuclearStoppingModel;
   if(theIonEffChargeModel)delete theIonEffChargeModel;
+  if(theIonChuFlactuationModel)delete theIonChuFlactuationModel;
+  if(theIonYangFlactuationModel)delete theIonYangFlactuationModel;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -129,6 +134,8 @@ void G4hLowEnergyIonisation::InicialiseParametrisation()
   theAntiProtonModel = new G4QAOLowEnergyLoss(theAntiProtonTable) ;
   theNuclearStoppingModel = new G4hNuclearStoppingModel(theNuclearTable) ;
   theIonEffChargeModel = new G4hIonEffChargeSquare("Ziegler1988") ;
+  theIonChuFlactuationModel = new G4IonChuFlactuationModel("Chu") ;
+  theIonYangFlactuationModel = new G4IonYangFlactuationModel("Chu") ;
 
   // Energy limits for parametrisation of electronic energy losses
   protonLowEnergy = G4std::max(protonLowEnergy,
@@ -1059,10 +1066,12 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 {
    static const G4double minLoss = 1.*eV ;
    static const G4double kappa = 10. ;
+   static const G4double theBohrVelocity2 = 50.0 * keV/protonMass ;
 
-  G4int    imat        = material->GetIndex(); 
-  G4double ipotFluct   = material->GetIonisation()->GetMeanExcitationEnergy();
-  G4double electronDensity = material->GetElectronDensity();
+  G4int    imat        = material->GetIndex() ; 
+  G4double ipotFluct   = material->GetIonisation()->GetMeanExcitationEnergy() ;
+  G4double electronDensity = material->GetElectronDensity() ;
+  G4double zeff = electronDensity/(material->GetTotNbOfAtomsPerVolume()) ;
 
   // get particle data
   G4double tkin   = particle->GetKineticEnergy();
@@ -1090,8 +1099,20 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
   // Gaussian fluctuation 
   if(meanLoss > kappa*tmax)
   {
-    siga = sqrt(tmax * (0.5-0.25*beta2) * step *
-                factor * electronDensity * chargeSquare/ beta2) ;
+    siga = tmax * (0.5-0.25*beta2) * step * factor * electronDensity / beta2 ;
+
+    // High velocity
+    if( 3.0 < beta2/(theBohrVelocity2*zeff)) {
+      siga = sqrt( siga * chargeSquare ) ;
+
+    // Low velocity - additional ion charge fluctuations according to
+    // Q.Yang et al., NIM B61(1991)149-155.
+    } else {
+      G4double chu = theIonChuFlactuationModel->TheValue(particle, material);
+      G4double yang = theIonYangFlactuationModel->TheValue(particle, material);
+      siga = sqrt( siga * (chargeSquare * chu + yang)) ;
+    }
+
     loss = G4RandGauss::shoot(meanLoss,siga) ;
     if(loss < 0.) loss = 0. ;
     return loss ;
@@ -1275,14 +1296,14 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 void G4hLowEnergyIonisation::PrintInfoDefinition() const
 {
   G4String comments = "  Knock-on electron cross sections . ";
-  comments += "\n         Good description above the mean excitation energy.\n";
-  comments += "         delta ray energy sampled from  differential Xsection.";
+  comments += "\n        Good description above the mean excitation energy.\n";
+  comments += "        Delta ray energy sampled from  differential Xsection.";
   
   G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << LowestKineticEnergy / eV << " eV " 
          << " to " << HighestKineticEnergy / TeV << " TeV "
          << " in " << TotBin << " bins."
- << "\n        Parametrisation model for protons is  " 
+ << "\n        Electronic stopping power model is  " 
  << theProtonTable
          << "\n        from " << protonLowEnergy / keV << " keV "
          << " to " << protonHighEnergy / MeV << " MeV " << "." << G4endl ;

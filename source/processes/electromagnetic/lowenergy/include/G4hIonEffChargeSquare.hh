@@ -12,7 +12,7 @@
 // For information related to this code contact:
 // Geant4 Collaboration
 //
-// File name:     G4hBetheBlochModel
+// File name:     G4hIonEffChargeSquare
 //
 // Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
 // 
@@ -24,6 +24,8 @@
 // Class Description: 
 //
 // Ion effective charge model
+// J.F.Ziegler and J.M.Manoyan, The stopping of ions in compaunds,
+// Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
 //
 // Class Description: End 
 //
@@ -75,10 +77,7 @@ private:
                                     G4double kineticEnergy,
                                     G4double particleMass,
                                     G4double ionCharge) const;
-  // This method returns ion effective charge square parametrised according to
-  // J.F.Ziegler, J.P. Biersack, U. Littmark
-  // The Stopping and Range of Ions in Matter,
-  // Vol.1, Pergamon Press, 1985
+  // This method returns ion effective charge square parametrised 
 
   const G4double protonMass;
   const G4double theHeMassAMU;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: hTestPrimaryGeneratorAction.cc,v 1.2 2000-08-10 20:22:02 vnivanch Exp $
+// $Id: hTestPrimaryGeneratorAction.cc,v 1.3 2000-08-18 13:34:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,7 +77,6 @@ void hTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event
   // 
-    G4cout << "Generate primary!!!  " << G4endl;
 
   thePrimaryParticleName = particleGun->GetParticleDefinition()->
                                                 GetParticleName();

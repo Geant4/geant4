@@ -41,13 +41,13 @@ hTestPhysicsList::hTestPhysicsList(hTestDetectorConstruction* p)
 {
   pDet = p;
 
-  defaultCutValue = 1*mm;
+  defaultCutValue = 1*cm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForProton    = defaultCutValue;
   
   //  MaxChargedStep = DBL_MAX; 
-  MaxChargedStep = 2*mm; 
+  MaxChargedStep = 1*cm; 
   
   SetVerboseLevel(2);
   physicsListMessenger = new hTestPhysicsListMessenger(this);
@@ -163,7 +163,6 @@ void hTestPhysicsList::ConstructProcess()
 #include "G4MuonMinusCaptureAtRest.hh"
 
 #include "G4hIonisation.hh"
-#include "G4ionIonisation.hh"
 #include "G4hLowEnergyIonisation.hh"
 
 #include "hTestStepCut.hh"
@@ -228,19 +227,19 @@ void hTestPhysicsList::ConstructEM()
       G4cout << "Hadronic processes for " << particleName << G4endl; 
 
       // Standard ionisation
-      //       G4hIonisation* hIon = new G4hIonisation() ;
+      //      G4hIonisation* hIon = new G4hIonisation() ;
 
-      G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
-      //hIon->SetNuclearStoppingOff() ;
-      //      hIon->SetNuclearStoppingOn() ;
+       G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
+      // hIon->SetNuclearStoppingOff() ;
+      // hIon->SetNuclearStoppingOn() ;
 
-       //hIon->SetStoppingPowerTableName("Ziegler1977He") ;
-       //hIon->SetStoppingPowerTableName("Ziegler1977H") ;
-      //  hIon->SetStoppingPowerTableName("ICRU_R49p") ;
-       //hIon->SetStoppingPowerTableName("ICRU_R49He") ;
-       //hIon->SetStoppingPowerTableName("ICRU_R49PowersHe") ;
+      // hIon->SetStoppingPowerTableName("Ziegler1977He") ;
+      // hIon->SetStoppingPowerTableName("Ziegler1977H") ;
+      // hIon->SetStoppingPowerTableName("ICRU_R49p") ;
+      // hIon->SetStoppingPowerTableName("ICRU_R49He") ;
+      // hIon->SetStoppingPowerTableName("ICRU_R49PowersHe") ;
 
-      //hIon->SetAntiProtonStoppingOn(); 
+      // hIon->SetAntiProtonStoppingOn(); 
 
       pmanager->AddProcess(hIon,-1,2,2);
       
@@ -260,19 +259,20 @@ void hTestPhysicsList::ConstructEM()
       G4cout << "Ionic processes for " << particleName << G4endl; 
 
       // Standard ionisation
-      //      G4hIonisation* iIon = new G4hIonisation() ;
+      //        G4hIonisation* iIon = new G4hIonisation() ;
 
       // Standard ionisation with low energy extantion
-       G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
-      //      iIon->SetNuclearStoppingOff() ;
-	//  iIon->SetNuclearStoppingOn() ;
-	//iIon->SetIonDefinition(particle) ;
+        G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
 
-      //iIon->SetStoppingPowerTableName("Ziegler1977He") ;
-      //iIon->SetStoppingPowerTableName("Ziegler1977H") ;
-	// iIon->SetStoppingPowerTableName("ICRU_R49p") ;
-      //iIon->SetStoppingPowerTableName("ICRU_R49He") ;
-      //iIon->SetStoppingPowerTableName("ICRU_R49PowersHe") ;
+      // iIon->SetNuclearStoppingOff() ;
+      // iIon->SetNuclearStoppingOn() ;
+      // iIon->SetIonDefinition(particle) ;
+
+      // iIon->SetStoppingPowerTableName("Ziegler1977He") ;
+      // iIon->SetStoppingPowerTableName("Ziegler1977H") ;
+      // iIon->SetStoppingPowerTableName("ICRU_R49p") ;
+      // iIon->SetStoppingPowerTableName("ICRU_R49He") ;
+      // iIon->SetStoppingPowerTableName("ICRU_R49PowersHe") ;
 
       pmanager->AddProcess(iIon,-1,2,2);
       

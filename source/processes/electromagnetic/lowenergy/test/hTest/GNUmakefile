@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2000-05-23 18:53:25 pia Exp $
+# $Id: GNUmakefile,v 1.3 2000-08-18 13:33:59 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # G4NOHIST variable is checked.  Vladimir Ivanchenko, 2000/01/18
@@ -25,3 +25,4 @@ else
 endif
 
 include $(G4INSTALL)/config/binmake.gmk
+

@@ -31,7 +31,8 @@
 // 20 August 1999 G.Mancinelli implemented ICRU parametrization (alpha)  
 // 31 August 1999 V.Ivanchenko update and cleen up 
 // 25 July   2000 V.Ivanchenko New design iteration
-// 09 July   2000 V.Ivanchenko Add GetContinuousStepLimit
+// 09 August 2000 V.Ivanchenko Add GetContinuousStepLimit
+// 17 August 2000 V.Ivanchenko Add IonFluctuationModel
 // ------------------------------------------------------------
  
 #ifndef G4hLowEnergyIonisation_h
@@ -49,6 +50,8 @@
 #include "G4hParametrisedLossModel.hh"
 #include "G4QAOLowEnergyLoss.hh"
 #include "G4hIonEffChargeSquare.hh"
+#include "G4IonChuFlactuationModel.hh"
+#include "G4IonYangFlactuationModel.hh"
 
 class G4hLowEnergyIonisation : public G4hLowEnergyLoss
 {
@@ -187,6 +190,8 @@ private:
   G4VLowEnergyModel* theAntiProtonModel;
   G4VLowEnergyModel* theIonEffChargeModel;
   G4VLowEnergyModel* theNuclearStoppingModel;
+  G4VLowEnergyModel* theIonChuFlactuationModel;
+  G4VLowEnergyModel* theIonYangFlactuationModel;
 
   // name of parametrisation table of electron stopping power
   G4String theProtonTable;

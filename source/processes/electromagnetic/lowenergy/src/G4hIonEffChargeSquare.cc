@@ -24,6 +24,8 @@
 // Class Description: 
 //
 // Ion effective charge model
+// J.F.Ziegler and J.M.Manoyan, The stopping of ions in compaunds,
+// Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
 //
 // Class Description: End 
 //
@@ -57,7 +59,7 @@ G4double G4hIonEffChargeSquare::TheValue(const G4DynamicParticle* particle,
 {
   G4double energy = particle->GetKineticEnergy() ;
   G4double particleMass = particle->GetMass() ;
-  G4double charge = particle->GetCharge() ;
+  G4double charge = (particle->GetCharge())/eplus ;
 
   G4double q = IonEffChargeSquare(material,energy,particleMass,charge) ;
 
@@ -72,7 +74,7 @@ G4double G4hIonEffChargeSquare::TheValue(const G4ParticleDefinition* aParticle,
 {
   //  SetRateMass(aParticle) ;
   G4double particleMass = aParticle->GetPDGMass() ;
-  G4double charge = aParticle->GetPDGCharge() ;
+  G4double charge = (aParticle->GetPDGCharge())/eplus ;
 
   G4double q = IonEffChargeSquare(material,kineticEnergy,particleMass,charge) ;
 
@@ -91,8 +93,8 @@ G4double G4hIonEffChargeSquare::HighEnergyLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hIonEffChargeSquare::LowEnergyLimit(
-                             const G4ParticleDefinition* aParticle,
-                             const G4Material* material) const
+                          const G4ParticleDefinition* aParticle,
+                          const G4Material* material) const
 {
   return 0.0 ;
 }
@@ -100,7 +102,7 @@ G4double G4hIonEffChargeSquare::LowEnergyLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hIonEffChargeSquare::HighEnergyLimit(
-                             const G4ParticleDefinition* aParticle) const
+                          const G4ParticleDefinition* aParticle) const
 {
   return 1.0*TeV ;
 }
@@ -108,7 +110,7 @@ G4double G4hIonEffChargeSquare::HighEnergyLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hIonEffChargeSquare::LowEnergyLimit(
-                             const G4ParticleDefinition* aParticle) const
+                          const G4ParticleDefinition* aParticle) const
 {
   return 0.0 ;
 }
@@ -132,10 +134,10 @@ G4bool G4hIonEffChargeSquare::IsInCharge(const G4ParticleDefinition* aParticle,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hIonEffChargeSquare::IonEffChargeSquare(
-                                 const G4Material* material,
-                                       G4double kineticEnergy,
-                                       G4double particleMass,
-                                       G4double ionCharge) const
+                                const G4Material* material,
+                                      G4double kineticEnergy,
+                                      G4double particleMass,
+                                      G4double ionCharge) const
 {
   // The aproximation of ion effective charge from: 
   // J.F.Ziegler, J.P. Biersack, U. Littmark
