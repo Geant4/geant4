@@ -75,7 +75,7 @@ Idle> /gun/particle proton
 Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-Idle> /run/beamOn 3
+Idle> /run/beamOn 1
 Idle> #
 Idle> # proton at 400 GeV in Pb
 Idle> #
@@ -83,7 +83,15 @@ Idle> /gun/particle proton
 Idle> /gun/energy 400 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
-Idle> /run/beamOn 3
+Idle> /run/beamOn 1
+Idle> #
+Idle> # proton at 1 TeV in Pb
+Idle> #
+Idle> /gun/particle proton
+Idle> /gun/energy 1 TeV
+Idle> /mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+Idle> /run/beamOn 1
 Idle> #
 Idle> # proton at 100 GeV in Al
 Idle> #
@@ -91,7 +99,7 @@ Idle> /gun/particle proton
 Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-Idle> /run/beamOn 3
+Idle> /run/beamOn 1
 Idle> #
 Idle> # proton at 400 GeV in Al
 Idle> #
@@ -99,7 +107,15 @@ Idle> /gun/particle proton
 Idle> /gun/energy 400 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
-Idle> /run/beamOn 3
+Idle> /run/beamOn 1
+Idle> #
+Idle> # proton at 1 TeV in Al
+Idle> #
+Idle> /gun/particle proton
+Idle> /gun/energy 1 TeV
+Idle> /mydet/SelectMaterial Al
+SimpleBox is now made of Al
+Idle> /run/beamOn 1
 Idle> #
 Idle> # proton at 100 GeV in Air
 Idle> #
@@ -107,7 +123,7 @@ Idle> /gun/particle proton
 Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-Idle> /run/beamOn 3
+Idle> /run/beamOn 1
 Idle> #
 Idle> # proton at 400 GeV in Air
 Idle> #
@@ -115,5 +131,13 @@ Idle> /gun/particle proton
 Idle> /gun/energy 400 GeV
 Idle> /mydet/SelectMaterial Air
 SimpleBox is now made of Air
-Idle> /run/beamOn 3
+Idle> /run/beamOn 1
+Idle> #
+Idle> # proton at 1 TeV in Air
+Idle> #
+Idle> /gun/particle proton
+Idle> /gun/energy 1 TeV
+Idle> /mydet/SelectMaterial Air
+SimpleBox is now made of Air
+Idle> /run/beamOn 1
 Idle> 
