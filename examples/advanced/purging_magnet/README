@@ -49,6 +49,10 @@ Users can download the analysis tools from:
 http://aida.freehep.org/
 http://www.cern.ch/PI
 
+The required data-file for the field map can be downloaded from:
+   http://cern.ch/geant4/source/source/PurgMag3D.TABLE.gz
+
+
 2. How to run the example
 -------------------------
 
