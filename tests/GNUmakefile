@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 1999-11-18 11:31:26 stesting Exp $
+# $Id: GNUmakefile,v 1.7 1999-11-18 15:01:48 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -14,11 +14,13 @@ SUBDIRS = test01 test02 test03
 # SUBDIRS += test04 ## Persistency.
 SUBDIRS += test05 test06 test07 test08 test09 test10
 SUBDIRS += test11 test12
-# SUBDIRS += test13 ## Kinetic model
+SUBDIRS += test13 ## Dual Parton Model
 SUBDIRS += test14 ## LowEnegery em.
+SUBDIRS += test15 ## Isotope Production
+SUBDIRS += test16 ## n and p Cross-Sections
 
 # Tests with hadronic exercisers.
-HADEXERDIRS = test02 test11 test12 test13
+HADEXERDIRS = test02 test11 test12 test13 test15 test16
 
 # Symbolic links to examples...
 EXAMPLES = 01 02 03 04 05 06
