@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.12 1999-06-07 09:59:15 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.13 1999-06-11 15:44:38 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -143,10 +143,18 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   
   G4int g = 0;
   while(g < theBindEnVec->GetVectorLength() && PhotonEnergy < (*theBindEnVec)(g)){
+
     g++;
   }
 
   G4int thePrimaryShell = (G4int) theBindEnVec->GetLowEdgeEnergy(g);
+
+  if(thePrimShVec.length() != 0){
+    
+    thePrimShVec.clear();
+  }
+
+  thePrimShVec.insert(thePrimaryShell);
 
   // Create lists of pointers to DynamicParticles (photons and electrons)
   G4ParticleVector photvec;
@@ -225,6 +233,9 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	  theEnergyDeposit -= lastTransEnergy*MeV;
 	  
 	}
+
+	thePrimShVec.insert(thePrimaryShell);
+
       }
      
     } //END OF THE CHECK ON ATOMIC NUMBER
