@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.15 2003-03-17 00:50:53 kurasige Exp $
+// $Id: G4ParticleDefinition.hh,v 1.16 2003-04-02 21:56:46 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -311,6 +311,27 @@ class G4ParticleDefinition
  
  private:
    G4int verboseLevel;
+
+ public: // With Description
+  // Following methods are moved from G4ParticleWithCuts class
+  // for keeping backward compatibility. These methods are obsolete
+  // and will be completely removed away in near future.
+      void SetCuts(G4double aCut);
+      // Set the range of aCut for all materials
+      void SetRangeCut(G4double aCut, const G4Material*);
+      // Set the cut range of aCut for a material
+      void SetRangeCutVector(G4std::vector<G4double>&);
+      // Set the vector of range cuts for all material
+
+      G4double* GetLengthCuts() const;
+      // Get an array of range cuts for all materials
+      G4double  GetRangeThreshold(const G4Material* ) const;
+      // Get a range cut for a material
+      G4double* GetEnergyCuts() const;
+      // Get an array of energy cuts for all materials
+      G4double  GetEnergyThreshold(const G4Material* ) const;
+      // Get a energy cut for a material
+
 };
 
 #include "G4ParticleDefinition.icc"

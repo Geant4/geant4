@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.hh,v 1.6 2003-03-10 08:18:52 kurasige Exp $
+// $Id: G4ProductionCuts.hh,v 1.7 2003-04-02 21:56:46 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,8 +102,9 @@ class G4ProductionCuts
   void             PhysicsTableUpdated();
   // inform end of calculation of PhysicsTable  to ProductionCut 
  
-  protected:
-  G4int            GetIndex(const G4String& name) const;
+  public:
+  static G4int GetIndex(const G4String& name);
+  static G4int GetIndex(const G4ParticleDefinition* ptcl);
 
   protected:
   G4std::vector<G4double>         fRangeCuts;

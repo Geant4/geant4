@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.10 2003-03-11 03:10:45 kurasige Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.11 2003-04-02 21:56:47 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -488,7 +488,7 @@ G4bool  G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
     fOut.setf(G4std::ios::scientific);
   
     // material name and density
-    for (size_t idx=0; idx<numberOfMaterial; ++idx){
+    for (size_t idx=0; G4int(idx)<numberOfMaterial; ++idx){
       fOut << G4std::setw(FixedStringLengthForStore) << ((*matTable)[idx])->GetName();
       fOut << G4std::setw(FixedStringLengthForStore) << ((*matTable)[idx])->GetDensity()/(g/cm3) << G4endl;
     }
@@ -509,7 +509,7 @@ G4bool  G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
     fOut.write( (char*)(&numberOfMaterial), sizeof (G4int));
     
     // material name and density
-    for (size_t imat=0; imat<numberOfMaterial; ++imat){
+    for (size_t imat=0; G4int(imat)<numberOfMaterial; ++imat){
       G4String name =  ((*matTable)[imat])->GetName();
       G4double density = ((*matTable)[imat])->GetDensity();
       for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
@@ -549,7 +549,6 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
   }
   
   char temp[FixedStringLengthForStore];
-  size_t i;
 
   // key word
   G4String keyword;    
@@ -803,7 +802,7 @@ G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& direc
   } else {
     fIn.read( (char*)(&numberOfCouples), sizeof (G4int));
   }
-  if ( numberOfCouples != coupleTable.size()) {
+  if ( size_t(numberOfCouples) != coupleTable.size()) {
 #ifdef G4VERBOSE  
     G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
     G4cout << "Number of couples is inconsistent "<< G4endl;
@@ -1019,14 +1018,14 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
     fIn.read( (char*)(&numberOfCouples), sizeof (G4int));
   }
 
-  for (size_t idx=0; idx <NumberOfG4CutIndex; idx++) {
+  for (size_t idx=0; G4int(idx) <NumberOfG4CutIndex; idx++) {
     G4CutVectorForAParticle* fRange  = rangeCutTable[idx];
     G4CutVectorForAParticle* fEnergy = energyCutTable[idx];
     fRange->clear();
     fEnergy->clear();
 
     // Loop over all couples
-    for (size_t i=0; i< numberOfCouples; i++){      
+    for (size_t i=0; G4int(i)< numberOfCouples; i++){      
       G4double rcut, ecut;
       if (ascii) {
 	fIn >> rcut >> ecut;
