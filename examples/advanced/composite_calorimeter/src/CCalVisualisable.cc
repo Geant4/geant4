@@ -1,9 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: Visualisable.cc
-// Date: 03/98 I. Gonzalez
-// Modification: 27/03/00 SB In OSCAR
+// File: CCalVisualisable.cc
+// Description: Sets visualisable attributes from .vis files
 ///////////////////////////////////////////////////////////////////////////////
-#include "Visualisable.hh"
+#include "CCalVisualisable.hh"
 
 #include <fstream.h>
 #include "utils.hh"
@@ -12,21 +11,21 @@
 //#define debug
 
 const char* visEnvName = "OSCARVISPATH";
-const char* Visualisable::pathName=0;
+const char* CCalVisualisable::pathName=0;
 
-Visualisable::Visualisable(G4String file):visFile(file) {
+CCalVisualisable::CCalVisualisable(G4String file):visFile(file) {
   if (!pathName)
     setPath();
   setDefault();
   readFile();
 }
 
-bool Visualisable::readFile(G4String file) { 
+bool CCalVisualisable::readFile(G4String file) { 
   visFile=file;
   return readFile();
 }
 
-void Visualisable::setDefault(){
+void CCalVisualisable::setDefault(){
   theParameters[Sensitive] = visParameters(true);
   theParameters[Electronics] = visParameters(false);
   theParameters[Support] = visParameters(false);
@@ -35,13 +34,13 @@ void Visualisable::setDefault(){
   theParameters[PseudoVolumes] = visParameters(false);
 }
 
-void Visualisable::setColor(visType v, double r, double g, double b){
+void CCalVisualisable::setColor(visType v, double r, double g, double b){
   theParameters[v].rColor=r;
   theParameters[v].gColor=g;
   theParameters[v].bColor=b;
 }
 
-void Visualisable::setPath() {
+void CCalVisualisable::setPath() {
   pathName = getenv(visEnvName);
   if (!pathName) {
     cerr << "ERROR: " << visEnvName << " environmental variable not set!" 
@@ -51,7 +50,7 @@ void Visualisable::setPath() {
   }
 }
 
-bool Visualisable::readFile() {
+bool CCalVisualisable::readFile() {
   if (visFile=="") {
     cerr << "ERROR: No file was specified from which to read Visualisation parameters" 
 	 << endl;
@@ -130,7 +129,7 @@ bool Visualisable::readFile() {
   return true;
 }
 
-double Visualisable::checkColorRange(double cvalue, char ctype) const {
+double CCalVisualisable::checkColorRange(double cvalue, char ctype) const {
   if (cvalue>1) {
     cerr << "ERROR: In " << visFile << ". Color " << ctype << "=" 
 	 << cvalue << " > 1" << endl;

@@ -1,26 +1,24 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: SDList.hh
-// Date: 10.1999 
+// File: CCalSDList.hh
 // Description: Records name of all SD objects and classify them into
 //              CALO and Tracker SD
 //              Singleton class
-// Modifications:
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef SDList_h
-#define SDList_h 1
+#ifndef CCalSDList_h
+#define CCalSDList_h 1
 
 #include <vector>
 #include "globals.hh"
 
 typedef G4String nameType;
 
-class SDList{
+class CCalSDList{
 private: 
-  SDList();
-  ~SDList();
+  CCalSDList();
+  ~CCalSDList();
 
 public:
-  static SDList* getInstance();
+  static CCalSDList* getInstance();
       
 public:
      
@@ -34,12 +32,12 @@ public:
   int getNumberOfTrackerSD();
   
 private:
-  static SDList* theList;
+  static CCalSDList* theList;
   vector<nameType> caloSD;
   vector<nameType> trackerSD;
   
 private:
-  SDList& operator=(SDList&);   
+  CCalSDList& operator=(CCalSDList&);   
 
 };
 

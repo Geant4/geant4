@@ -1,16 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CMSDetector.cc
-// Date: 03/98 I. Gonzalez
-// Modifications: 24/03/98 I.G.
-//                03/05/99 I.G. Added sensitive behaviour
-//                02/05/00 I.G. S.B. Use local file if available
-//                15/05/02 S.B. Remove persistency
+// File: CCalDetector.cc
+// Description: CCalDetector is a detector factory class
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "CMSDetector.hh"
+#include "CCalDetector.hh"
 
 #include <fstream>
-#include "GeometryConfiguration.hh"
+#include "CCalGeometryConfiguration.hh"
 #include "utils.hh"
 
 //Comment/Uncomment to hide/show some debug information
@@ -18,30 +14,30 @@
 //Comment/Uncomment to hide/show some more debug information
 //#define ddebug
 
-G4String CMSDetector::pathName = getenv("OSCARGEOMPATH");
+G4String CCalDetector::pathName = getenv("OSCARGEOMPATH");
 
-CMSDetector::CMSDetector(const G4String &name):
-  cmsDetectorName(name) {
+CCalDetector::CCalDetector(const G4String &name):
+  detectorName(name) {
 #ifdef ddebug
     cout << "OSCARGEOMPATH=" << pathName << endl;
 #endif
     fileName      = 
-      GeometryConfiguration::getInstance()->getFileName(name);
+      CCalGeometryConfiguration::getInstance()->getFileName(name);
     constructFlag = 
-      GeometryConfiguration::getInstance()->getConstructFlag(name);
+      CCalGeometryConfiguration::getInstance()->getConstructFlag(name);
 }
 
-CMSDetector::~CMSDetector() {
-  CMSDetectorTable::iterator ite;
+CCalDetector::~CCalDetector() {
+  CCalDetectorTable::iterator ite;
   for( ite = theDetectorsInside.begin(); ite != theDetectorsInside.end(); ite++ ) {
     delete *ite;
   }
   theDetectorsInside.clear();
 }
 
-void CMSDetector::construct() {
+void CCalDetector::construct() {
 #ifdef debug
-  cout << "===> Entering CMSDetector::construct() for " << cmsDetectorName << endl;
+  cout << "===> Entering CCalDetector::construct() for " << CCalDetectorName << endl;
 #endif
   int isgood = 0;
 
@@ -59,13 +55,13 @@ void CMSDetector::construct() {
     }
   }
 #ifdef debug
-  cout << "===> Exiting CMSDetector::construct() for " << cmsDetectorName 
+  cout << "===> Exiting CCalDetector::construct() for " << detectorName 
        << endl;
 #endif
 }
 
 
-void CMSDetector::addDetector(CMSDetector* det) {
+void CCalDetector::addDetector(CCalDetector* det) {
   theDetectorsInside.push_back(det);
 }
 
@@ -73,7 +69,7 @@ void CMSDetector::addDetector(CMSDetector* det) {
 
 //========================================================================
 //Protected and private methods.
-int CMSDetector::buildFromFile() {
+int CCalDetector::buildFromFile() {
   return readFile();
 }
 
@@ -81,8 +77,8 @@ int CMSDetector::buildFromFile() {
 
 //========================================================================
 //Global operators
-ostream& operator<<(ostream& os, const CMSDetector& det) {
-  os << "Detector \"" << det.cmsDetectorName 
+ostream& operator<<(ostream& os, const CCalDetector& det) {
+  os << "Detector \"" << det.detectorName 
      << "\" read from " << det.fileName << "." << endl;
 
   os << "With " << det.theDetectorsInside.size() 

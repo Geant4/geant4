@@ -28,7 +28,7 @@
 ////////////////////////////////////////////////////////////////////
 
 G4HcalTB96HCal::G4HcalTB96HCal(const G4String &name):
-  HcalTB96HCal(name), G4Able(name), sclLog(0), absLog(0) {}
+  HcalTB96HCal(name), CCalG4Able(name), sclLog(0), absLog(0) {}
 
 G4HcalTB96HCal::~G4HcalTB96HCal(){
   if (sclLog)
@@ -66,7 +66,7 @@ G4VPhysicalVolume* G4HcalTB96HCal::constructIn(G4VPhysicalVolume* mother) {
   G4VSolid*   solid  = new G4Box (Name(), getDx_2Cal()*mm, getDy_2Cal()*mm,
 				  getDy_2Cal()*mm);
   G4LogicalVolume* logh = new G4LogicalVolume(solid, matter, Name());
-  setVisType(Visualisable::PseudoVolumes,logh);
+  setVisType(CCalVisualisable::PseudoVolumes,logh);
 #ifdef debug
     cout << tab << Name() << " Box made of " << getGenMat()
          << " of dimension " << getDx_2Cal()*mm << " " << getDy_2Cal()*mm
@@ -88,7 +88,7 @@ G4VPhysicalVolume* G4HcalTB96HCal::constructIn(G4VPhysicalVolume* mother) {
   matter = matfact->findMaterial(getBoxMat());
   name   = Name() + "Wall";
   G4LogicalVolume* logw = new G4LogicalVolume(solid, matter, name);
-  setVisType(Visualisable::Support,logw);
+  setVisType(CCalVisualisable::Support,logw);
 #ifdef debug
   cout << tab << name << " Box made of " << getBoxMat()
        << " of dimension " << 0.5*getWallThickBox()*mm << " " 
@@ -103,7 +103,7 @@ G4VPhysicalVolume* G4HcalTB96HCal::constructIn(G4VPhysicalVolume* mother) {
     solid  = new G4Box (name, getDx_2Box()*mm, getDy_2Box()*mm, 
 			getDy_2Box()*mm);
     logb[i]= new G4LogicalVolume(solid, matter, name);
-    setVisType(Visualisable::PseudoVolumes,logb[i]);
+    setVisType(CCalVisualisable::PseudoVolumes,logb[i]);
 #ifdef debug
     cout << tab << name << " Box made of " << getGenMat()
 	 << " of dimension " << getDx_2Box()*mm << " " << getDy_2Box()*mm
@@ -190,7 +190,7 @@ G4LogicalVolume* G4HcalTB96HCal::constructScintillatorLayer(G4int lay) {
 				  getDy_2ScntLay(lay)*mm,
 				  getDy_2ScntLay(lay)*mm);
   G4LogicalVolume* log = new G4LogicalVolume(solid, matter, name);
-  setVisType(Visualisable::PseudoVolumes,log);
+  setVisType(CCalVisualisable::PseudoVolumes,log);
 #ifdef debug
   cout << tab << name << " Box made of " << getGenMat() << " of dimension " 
        << getDx_2ScntLay(lay)*mm << " " << getDy_2ScntLay(lay)*mm << " " 
@@ -206,7 +206,7 @@ G4LogicalVolume* G4HcalTB96HCal::constructScintillatorLayer(G4int lay) {
     solid  = new G4Box (name, getDx_2Wrap(lay)*mm, 
 			getDy_2ScntLay(lay)*mm, getDy_2ScntLay(lay)*mm);
     logd   = new G4LogicalVolume(solid, matter, name);
-    setVisType(Visualisable::Support,logd);
+    setVisType(CCalVisualisable::Support,logd);
 #ifdef debug
     cout << tab << name << " Box made of " << getWrapMat() << " of dimension " 
 	 << getDx_2Wrap(lay)*mm << " " << getDy_2ScntLay(lay)*mm << " " 
@@ -232,7 +232,7 @@ G4LogicalVolume* G4HcalTB96HCal::constructScintillatorLayer(G4int lay) {
   solid  = new G4Box (name, getDx_2FrontP(lay)*mm, getDy_2ScntLay(lay)*mm, 
 		      getDy_2ScntLay(lay)*mm);
   logd   = new G4LogicalVolume(solid, matter, name);
-  setVisType(Visualisable::Cable,logd);
+  setVisType(CCalVisualisable::Cable,logd);
 #ifdef debug
   cout << tab << name << " Box made of " << getPlasMat() << " of dimension " 
        << getDx_2FrontP(lay)*mm << " " << getDy_2ScntLay(lay)*mm << " " 
@@ -248,7 +248,7 @@ G4LogicalVolume* G4HcalTB96HCal::constructScintillatorLayer(G4int lay) {
   solid  = new G4Box (name, getDx_2BackP(lay)*mm, getDy_2ScntLay(lay)*mm, 
 		      getDy_2ScntLay(lay)*mm);
   logd   = new G4LogicalVolume(solid, matter, name);
-  setVisType(Visualisable::Cable,logd);
+  setVisType(CCalVisualisable::Cable,logd);
 #ifdef debug
   cout << tab << name << " Box made of " << getPlasMat() << " of dimension " 
        << getDx_2BackP(lay)*mm << " " << getDy_2ScntLay(lay)*mm << " " 
@@ -268,7 +268,7 @@ G4LogicalVolume* G4HcalTB96HCal::constructScintillatorLayer(G4int lay) {
   solid  = new G4Box (name, getDx_2Scnt(lay)*mm, getDy_2ScntLay(lay)*mm, 
 		      getDy_2ScntLay(lay)*mm);
   logd   = new G4LogicalVolume(solid, matter, name);
-  setVisType(Visualisable::Sensitive,logd);
+  setVisType(CCalVisualisable::Sensitive,logd);
   allSensitiveLogs.push_back(logd);
 #ifdef debug
   cout << tab << name << " Box made of " << getScntMat() << " of dimension " 
@@ -298,7 +298,7 @@ G4LogicalVolume* G4HcalTB96HCal::constructAbsorberLayer(G4int lay) {
   G4VSolid*   solid  = new G4Box (name, getDx_2Abs(lay)*mm, getDy_2Abs()*mm,
 				  getDy_2Abs()*mm);
   G4LogicalVolume* log = new G4LogicalVolume(solid, matter, name);
-  setVisType(Visualisable::Absorber,log);
+  setVisType(CCalVisualisable::Absorber,log);
 #ifdef debug
   cout << tab << name << " Box made of " << getAbsMat() << " of dimension " 
        << getDx_2Abs(lay)*mm << " " << getDy_2Abs()*mm << " " 

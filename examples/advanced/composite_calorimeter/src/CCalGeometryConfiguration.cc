@@ -1,14 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: GeometryConfiguration.cc
-// Author: I. Gonzalez, 2/98
-// Date: 03/98 I. Gonzalez
-// Modifications: 24/03/98 I.G.
-//                03/05/99 I.G. Added sensitive behaviour
-//                16/12/99 I.G. Updated for STL.  Needs revision!!! 
-//                02/05/00 I.G. S.B. Use local file if available
+// File: CCalGeometryConfiguration.cc
+// Description: Handles geometry configuration to be constructed
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "GeometryConfiguration.hh"
+#include "CCalGeometryConfiguration.hh"
 
 #include <fstream>
 
@@ -16,23 +11,23 @@
 //#define debug
 
 
-GeometryConfiguration * GeometryConfiguration::instance = 0;
+CCalGeometryConfiguration * CCalGeometryConfiguration::instance = 0;
 
-GeometryConfiguration* GeometryConfiguration::getInstance(){
+CCalGeometryConfiguration* CCalGeometryConfiguration::getInstance(){
   if (!instance) 
-    instance = new GeometryConfiguration;
+    instance = new CCalGeometryConfiguration;
   return instance;
 }
 
 
-int GeometryConfiguration::getConstructFlag(const G4String& n) /*const*/ {
+int CCalGeometryConfiguration::getConstructFlag(const G4String& n) /*const*/ {
   int flag = -1;
-  GeometryConfIterator it = theConfiguration.find(n);
+  CCalGeometryConfIterator it = theConfiguration.find(n);
 
   if (it != theConfiguration.end())
     flag = (*it).second.ConstructFlag;
   else {
-    cerr << "ERROR: In GeometryConfiguration::getConstructFlag(const G4String& n)" 
+    cerr << "ERROR: In CCalGeometryConfiguration::getConstructFlag(const G4String& n)" 
 	 << endl 
 	 << "       " << n << " not found in configuration file" << endl;
   }
@@ -40,14 +35,14 @@ int GeometryConfiguration::getConstructFlag(const G4String& n) /*const*/ {
   return flag;
 }
 
-G4String GeometryConfiguration::getFileName(const G4String& n) /*const*/ {
+G4String CCalGeometryConfiguration::getFileName(const G4String& n) /*const*/ {
   G4String fn;
-  GeometryConfIterator it = theConfiguration.find(n);
+  CCalGeometryConfIterator it = theConfiguration.find(n);
 
   if (it != theConfiguration.end())
     fn = (*it).second.FileName;
   else {
-    cerr << "ERROR: In GeometryConfiguration::getConstructFlag(const G4String& n)" 
+    cerr << "ERROR: In CCalGeometryConfiguration::getConstructFlag(const G4String& n)" 
 	 << endl 
 	 << "       " << n << " not found in configuration file" << endl;
   }
@@ -55,7 +50,7 @@ G4String GeometryConfiguration::getFileName(const G4String& n) /*const*/ {
   return fn;
 }
 
-GeometryConfiguration::GeometryConfiguration():
+CCalGeometryConfiguration::CCalGeometryConfiguration():
   theConfiguration() {
 
   ///////////////////////////////////////////////////////////////
@@ -82,8 +77,9 @@ GeometryConfiguration::GeometryConfiguration():
     readName(is, gcinfo.FileName);
     is >> gcinfo.ConstructFlag >> jump;
 #ifdef debug
-    cout << "GeometryConfiguration constructor: Read \"" << name << "\" \"" 
-	 << gcinfo.FileName << "\"" << tab << gcinfo.ConstructFlag << endl;
+    cout << "CCalGeometryConfiguration constructor: Read \"" << name 
+	 << "\" \"" << gcinfo.FileName << "\"" << tab << gcinfo.ConstructFlag 
+	 << endl;
 #endif
     theConfiguration[name] = gcinfo;
   }

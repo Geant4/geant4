@@ -7,13 +7,13 @@
 #ifndef CrystalMatrix_h
 #define CrystalMatrix_h 1
 
-#include "CMSDetector.hh"
+#include "CCalDetector.hh"
 
-class CrystalMatrix: public CMSDetector {
+class CrystalMatrix: public CCalDetector {
 public:
   //Constructor and Destructor
   CrystalMatrix(const G4String &name):
-    CMSDetector(name) {}
+    CCalDetector(name) {}
   virtual ~CrystalMatrix();
 
   //Get Methods

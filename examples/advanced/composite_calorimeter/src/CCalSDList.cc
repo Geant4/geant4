@@ -1,47 +1,45 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: SDList.cc
-// Date: 10.1999 V.Lefebure
-// Modifications:
+// File: CCalSDList.cc
+// Description: Records names of all SD objects
 ///////////////////////////////////////////////////////////////////////////////
+#include "CCalSDList.hh"
 
-#include "SDList.hh"
+CCalSDList* CCalSDList::theList = 0;
 
-SDList* SDList::theList = 0;
+CCalSDList::CCalSDList(){}
+CCalSDList::~CCalSDList(){ delete theList;}
 
-SDList::SDList(){}
-SDList::~SDList(){ delete theList;}
-
-SDList* SDList::getInstance(){
+CCalSDList* CCalSDList::getInstance(){
 
   if (theList == 0) 
-    theList = new SDList;
+    theList = new CCalSDList;
   return theList;
 }
      
-void SDList::addCalo(nameType name){
+void CCalSDList::addCalo(nameType name){
     
   theList->caloSD.push_back(name);
 }
 
-void SDList::addTracker(nameType name){
+void CCalSDList::addTracker(nameType name){
 
   theList->trackerSD.push_back(name);
 } 
 
-nameType SDList::getCaloSDName(int i){
+nameType CCalSDList::getCaloSDName(int i){
   
   if (i>=theList->getNumberOfCaloSD() || i<0) {
-    cout << "SDList invalid calo SD no: " << i << " max is "
+    cout << "CCalSDList invalid calo SD no: " << i << " max is "
 	 << theList->getNumberOfCaloSD() << endl;
     return " ";
   } else 
     return theList->caloSD[i];
 }
 
-nameType SDList::getTrackerSDName(int i){
+nameType CCalSDList::getTrackerSDName(int i){
 
   if (i>=theList->getNumberOfTrackerSD() || i<0) {
-    cout << "SDList invalid tracker SD no: " << i << " max is "
+    cout << "CCalSDList invalid tracker SD no: " << i << " max is "
 	 << theList->getNumberOfTrackerSD() << endl;
     return " ";
   }   
@@ -50,18 +48,18 @@ nameType SDList::getTrackerSDName(int i){
 }
 
       
-int SDList::getNumberOfCaloSD(){
+int CCalSDList::getNumberOfCaloSD(){
   
   return theList->caloSD.size();
 }
 
-int SDList::getNumberOfTrackerSD(){
+int CCalSDList::getNumberOfTrackerSD(){
 
   return theList->trackerSD.size();
 }
      
 
-SDList& SDList::operator=(SDList&){
+CCalSDList& CCalSDList::operator=(CCalSDList&){
 
   return *this;
 }  

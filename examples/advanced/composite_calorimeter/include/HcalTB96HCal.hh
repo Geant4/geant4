@@ -7,9 +7,9 @@
 #ifndef HcalTB96HCal_h
 #define HcalTB96HCal_h 1
 
-#include "CMSDetector.hh"
+#include "CCalDetector.hh"
 
-class HcalTB96HCal: public CMSDetector {
+class HcalTB96HCal: public CCalDetector {
 public:
   //Constructor and Destructor
   HcalTB96HCal(const G4String &name);

@@ -8,7 +8,7 @@
 #include "G4SDManager.hh"
 #include "G4VTouchable.hh"
 #include "CCalVOrganization.hh"
-#include "SDList.hh"
+#include "CCalSDList.hh"
 
 #include<iostream>
 
@@ -29,7 +29,7 @@ CCaloSD::CCaloSD(G4String name, CCalVOrganization* numberingScheme):
   cout << "*                                                     *" << endl;
   cout << "*******************************************************" << endl;
 
-  SDList::getInstance()->addCalo(name);
+  CCalSDList::getInstance()->addCalo(name);
 }
 
 

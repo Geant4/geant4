@@ -8,12 +8,12 @@
 #define G4CrystalMatrix_h 1
 
 #include "CrystalMatrix.hh"
-#include "G4Able.hh"
+#include "CCalG4Able.hh"
 #include <vector>
 
 typedef G4LogicalVolume* ptrG4Log;
 
-class G4CrystalMatrix: public CrystalMatrix, public G4Able {
+class G4CrystalMatrix: public CrystalMatrix, public CCalG4Able {
 public:
   //Backward or Forward type
   enum CMType {module1, module2};

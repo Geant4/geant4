@@ -13,7 +13,7 @@
 
 //#define debug
 
-HcalTB96::HcalTB96(const G4String &name): CMSDetector(name) {}
+HcalTB96::HcalTB96(const G4String &name): CCalDetector(name) {}
 
 HcalTB96::~HcalTB96() {}
 

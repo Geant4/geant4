@@ -10,7 +10,7 @@
 #include "CCalG4HitCollection.hh"
 #include "CCalG4Hit.hh"
 #include "CCaloOrganization.hh"
-#include "SDList.hh"
+#include "CCalSDList.hh"
 #include "CCalSteppingAction.hh"
 
 #include "G4ios.hh"
@@ -53,7 +53,7 @@ HcalTB96EndOfEventAction::~HcalTB96EndOfEventAction() {
 void HcalTB96EndOfEventAction::initialize() {
 
   isInitialized = true;
-  numberOfSD = SDList::getInstance()->getNumberOfCaloSD();
+  numberOfSD = CCalSDList::getInstance()->getNumberOfCaloSD();
 #ifdef debug
   cout << "HcalTB96EndOfEventAction look for " << numberOfSD 
        << " calorimeter-like SD" << endl;
@@ -61,7 +61,7 @@ void HcalTB96EndOfEventAction::initialize() {
   if (numberOfSD > 0)
     SDnames = new nameType[numberOfSD];
   for (int i=0; i<numberOfSD; i++) {
-    SDnames[i] = G4String(SDList::getInstance()->getCaloSDName(i));
+    SDnames[i] = G4String(CCalSDList::getInstance()->getCaloSDName(i));
 #ifdef debug
     cout << "HcalTB96EndOfEventAction: found SD " << i << " name "
 	 << SDnames[i] << endl;

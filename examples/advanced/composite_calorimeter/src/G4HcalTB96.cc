@@ -25,7 +25,7 @@
 ////////////////////////////////////////////////////////////////////
 
 G4HcalTB96::G4HcalTB96(const G4String &name):
-  HcalTB96(name),G4Able(name) {}
+  HcalTB96(name),CCalG4Able(name) {}
 
 G4HcalTB96::~G4HcalTB96() {}
 
@@ -56,7 +56,7 @@ G4VPhysicalVolume* G4HcalTB96::constructIn(G4VPhysicalVolume* mother) {
 
   G4Material* matter = matfact->findMaterial(getMaterial());
   G4LogicalVolume* glog = new G4LogicalVolume (solid, matter, Name(), 0, 0, 0);
-  setVisType(Visualisable::PseudoVolumes,glog);
+  setVisType(CCalVisualisable::PseudoVolumes,glog);
 
   G4VPhysicalVolume* volume = new G4PVPlacement(0,G4ThreeVector(),Name(),
                                                 glog,mother,false,0);
@@ -76,11 +76,11 @@ void G4HcalTB96::constructDaughters(){
   //Hadron Calorimeter
   G4HcalTB96HCal* hcal = new G4HcalTB96HCal("HadronCalorimeter");
   addDetector(hcal);
-  AddG4Able(hcal);
+  AddCCalG4Able(hcal);
 
   //Crystal matrix
   G4CrystalMatrix* xtalmod = new G4CrystalMatrix("CrystalMatrixModule");
   xtalmod->setType(G4CrystalMatrix::module1);
   addDetector(xtalmod);
-  AddG4Able(xtalmod);
+  AddCCalG4Able(xtalmod);
 }

@@ -1,11 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: Visualisable.hh
-// Date: 03/98 
-// Modification: 27/03/00 SB In OSCAR
+// File: CCalVisualisable.hh
 // Description: Sets visualisable attributes from the information in flat file
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef Visualisable_hh
-#define Visualisable_hh 1
+#ifndef CCalVisualisable_hh
+#define CCalVisualisable_hh 1
 
 #include "globals.hh"
 
@@ -13,7 +11,7 @@
    typedef G4bool bool;
 #endif
 
-class Visualisable {
+class CCalVisualisable {
 public:
 
   //Here we define the different type of volumes we consider.
@@ -43,9 +41,9 @@ private:
   
 public:
   //Constructs this object from this file
-  Visualisable(G4String file);
+  CCalVisualisable(G4String file);
   
-  virtual ~Visualisable() {}
+  virtual ~CCalVisualisable() {}
 
   //Reads this object from file
   bool readFile(G4String file);

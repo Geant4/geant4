@@ -38,7 +38,7 @@ G4String G4CrystalMatrix::idName = "CrystalMatrix";
 ////////////////////////////////////////////////////////////////////
 
 G4CrystalMatrix::G4CrystalMatrix(const G4String &name):
-  CrystalMatrix(name), G4Able(name), type(module1) {}
+  CrystalMatrix(name), CCalG4Able(name), type(module1) {}
 
 G4CrystalMatrix::~G4CrystalMatrix() {}
 
@@ -136,7 +136,7 @@ G4LogicalVolume* G4CrystalMatrix::constructGlobal() {
        << 0.5*getLengBox()*mm << endl;
 #endif
   G4LogicalVolume* glog = new G4LogicalVolume (solid, matter, idName);
-  setVisType(Visualisable::PseudoVolumes,glog);
+  setVisType(CCalVisualisable::PseudoVolumes,glog);
 
   //Now the layers
   G4String name = idName + "Layer";
@@ -149,7 +149,7 @@ G4LogicalVolume* G4CrystalMatrix::constructGlobal() {
        << ", " << getLayPar(3)*mm << ", " << getLayPar(4)*mm << endl;
 #endif
   G4LogicalVolume* laylog = new G4LogicalVolume (solid, matter, name);
-  setVisType(Visualisable::OtherServices,laylog);
+  setVisType(CCalVisualisable::OtherServices,laylog);
 
   G4int i = 0;
   G4String rotstr;
@@ -193,7 +193,7 @@ G4LogicalVolume* G4CrystalMatrix::constructGlobal() {
 #endif
 
   G4LogicalVolume* detLog = new G4LogicalVolume (solid, matter, name);
-  setVisType(Visualisable::Sensitive,detLog);
+  setVisType(CCalVisualisable::Sensitive,detLog);
   sensitiveLogs.push_back(detLog);
   for (i = 0; i < getCrystNum(); i++) {
     angle  = 0.5 * getLayAngle() * (2*i + 1 - getCrystNum());
@@ -230,7 +230,7 @@ G4LogicalVolume* G4CrystalMatrix::constructGlobal() {
        << 0.5*getDzSupp()*mm << endl;
 #endif
   G4LogicalVolume* slog = new G4LogicalVolume (solid, matter, name);
-  setVisType(Visualisable::Support,slog);
+  setVisType(CCalVisualisable::Support,slog);
 
   zp   = (-0.5 * getLengBox() + getCrystLength() + getLengFront() +
 	  0.5 * getDzSupp() + getDistSupp()) * mm;

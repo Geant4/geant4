@@ -9,12 +9,12 @@
 #define G4HcalTB96HCal_h 1
 
 #include "HcalTB96HCal.hh"
-#include "G4Able.hh"
+#include "CCalG4Able.hh"
 #include <vector>
 
 typedef G4LogicalVolume* ptrG4Log;
 
-class G4HcalTB96HCal: public HcalTB96HCal, public G4Able {
+class G4HcalTB96HCal: public HcalTB96HCal, public CCalG4Able {
 public:
   //Constructor and Destructor
   G4HcalTB96HCal(const G4String &name);

@@ -11,7 +11,7 @@
 //#define debug
 
 HcalTB96HCal::HcalTB96HCal(const G4String &name):
-  CMSDetector(name),xposBox(0),typeLayerScnt(0),mothLayerScnt(0),
+  CCalDetector(name),xposBox(0),typeLayerScnt(0),mothLayerScnt(0),
   xposLayerScnt(0),typeLayerAbs(0),mothLayerAbs(0),xposLayerAbs(0),
   dx_2Absorber(0),dy_2ScntLayer(0),dx_2ScntLayer(0),dx_2Wrapper(0),
   dx_2FrontPlastic(0),dx_2BackPlastic(0),dx_2Scintillator(0) {}

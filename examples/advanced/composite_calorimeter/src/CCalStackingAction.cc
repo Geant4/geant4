@@ -7,7 +7,7 @@
 
 #include "G4SDManager.hh"
 #include "CCaloSD.hh"
-#include "SDList.hh"
+#include "CCalSDList.hh"
 #include "G4RunManager.hh"
 #include "G4Navigator.hh"
 
@@ -35,14 +35,14 @@ void CCalStackingAction::initialize(){
 
   isInitialized = true;
  
-  numberOfSD = SDList::getInstance()->getNumberOfCaloSD();
+  numberOfSD = CCalSDList::getInstance()->getNumberOfCaloSD();
 #ifdef debug
   cout << "CCalStackingAction look for " << numberOfSD 
        << " calorimeter-like SD" << endl;
 #endif
   int i = 0;
   for (i=0; i<numberOfSD; i++) {
-    G4String theName(SDList::getInstance()->getCaloSDName(i));
+    G4String theName(CCalSDList::getInstance()->getCaloSDName(i));
     SDName[i] = theName;
 #ifdef debug
     cout << "Found SD  name " << theName << endl;

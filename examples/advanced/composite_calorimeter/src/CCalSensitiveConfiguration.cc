@@ -1,10 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: G4GeometryConfiguration.cc
-// Date: 03/98 I. Gonzalez
-// Modifications: 27/03/00 SB In OSCAR
-//                02/05/00 I.G. S.B. Use local file if available
+// File: CCalSensitiveConfiguration.cc
+// Description: CCalSensitiveConfiguration handles the declaration of
+//              sensitive detectors and visibilities
 ///////////////////////////////////////////////////////////////////////////////
-#include "G4GeometryConfiguration.hh"
+#include "CCalSensitiveConfiguration.hh"
 
 #include <fstream.h>
 #include <stdlib.h>
@@ -14,48 +13,48 @@
 //#define debug
 
 
-G4GeometryConfiguration * G4GeometryConfiguration::instance = 0;
+CCalSensitiveConfiguration * CCalSensitiveConfiguration::instance = 0;
 
-G4GeometryConfiguration* G4GeometryConfiguration::getInstance(){
+CCalSensitiveConfiguration* CCalSensitiveConfiguration::getInstance(){
   if (!instance) 
-    instance = new G4GeometryConfiguration;
+    instance = new CCalSensitiveConfiguration;
   return instance;
 }
 
 
-int G4GeometryConfiguration::getSensitiveFlag(const G4String& n) /*const*/ {
+int CCalSensitiveConfiguration::getSensitiveFlag(const G4String& n) /*const*/ {
   int flag = -1;
-  G4GeometryConfIterator it = theConfiguration.find(n);
+  CCalSensitiveConfIterator it = theConfiguration.find(n);
 
   if (it != theConfiguration.end())
     flag = (*it).second.SensitiveFlag;
   else {
-    cerr << "ERROR: In GeometryConfiguration::getConstructFlag(const G4String& n)" 
-	 << endl 
+    cerr << "ERROR: In CCalSensitiveConfiguration::getConstructFlag(const "
+	 << "G4String& n)" << endl 
 	 << "       " << n << " not found in configuration file" << endl;
   }
 
   return flag;
 }
 
-G4String G4GeometryConfiguration::getFileName(const G4String& n) /*const*/ {
+G4String CCalSensitiveConfiguration::getFileName(const G4String& n) /*const*/ {
   G4String fn;
-  G4GeometryConfIterator it = theConfiguration.find(n);
+  CCalSensitiveConfIterator it = theConfiguration.find(n);
 
   if (it != theConfiguration.end())
     fn = (*it).second.FileName;
   else {
-    cerr << "ERROR: In GeometryConfiguration::getConstructFlag(const G4String& n)" 
-	 << endl 
+    cerr << "ERROR: In CCalSensitiveConfiguration::getConstructFlag(const "
+	 << "G4String& n)" << endl 
 	 << "       " << n << " not found in configuration file" << endl;
   }
 
   return fn;
 }
 
-G4GeometryConfiguration::G4GeometryConfiguration():
+CCalSensitiveConfiguration::CCalSensitiveConfiguration():
   theConfiguration() {
-
+  
   ///////////////////////////////////////////////////////////////
   // Open the file
   G4String pathName = getenv("OSCAR_CONFPATH");
@@ -80,12 +79,12 @@ G4GeometryConfiguration::G4GeometryConfiguration():
     readName(is, gcinfo.FileName);
     is >> gcinfo.SensitiveFlag >> jump;
 #ifdef debug
-    cout << "G4GeometryConfiguration constructor: Read \"" << name << "\" \"" 
-	 << gcinfo.FileName << "\"" << tab << gcinfo.SensitiveFlag << endl;
+    cout << "CCalSensitiveConfiguration constructor: Read \"" << name 
+	 << "\" \"" << gcinfo.FileName << "\"" << tab << gcinfo.SensitiveFlag 
+	 << endl;
 #endif
     theConfiguration[name] = gcinfo;
   }
-
   
 
   ///////////////////////////////////////////////////////////////
