@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RTMessenger.cc,v 1.3 2000-03-09 15:36:37 asaim Exp $
+// $Id: G4RTMessenger.cc,v 1.4 2000-06-07 02:52:45 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -80,7 +80,7 @@ G4RTMessenger::G4RTMessenger(G4RayTracer* p1,G4RTSteppingAction* p2)
   headCmd = new G4UIcmdWithADoubleAndUnit("/vis/rayTracer/headAngle",this);
   headCmd->SetGuidance("Define the head direction.");
   headCmd->SetParameterName("headAngle",true);
-  headCmd->SetDefaultValue(0.);
+  headCmd->SetDefaultValue(270.);
   headCmd->SetDefaultUnit("deg");
   headCmd->SetRange("headAngle>=0. && headAngle<360.");
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayTracer.cc,v 1.5 2000-05-02 10:05:36 johna Exp $
+// $Id: G4RayTracer.cc,v 1.6 2000-06-07 02:52:45 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,7 +56,7 @@ G4RayTracer::G4RayTracer(G4VFigureFileMaker* figMaker)
   targetPosition = G4ThreeVector(0.,0.,0.);
   lightDirection = G4ThreeVector(-0.1,-0.2,-0.3).unit();
   viewSpan = 5.0*deg;
-  headAngle = 30.*deg; //// headAngle=30.*deg when eyePosition(1.*m,1.*m,1.*m)
+  headAngle = 270.*deg; 
   attenuationLength = 1.0*m;
 
   distortionOn = false;
