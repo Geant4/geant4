@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.72 2004-05-26 21:25:52 duns Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.73 2004-05-26 21:45:21 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -943,13 +943,13 @@ void G4HepRepSceneHandler::addTopLevelAttributes(HepRepType* type) {
     
     // Some non-standard attributes
     type->addAttDef(  "Generator", "Generator of the file", "General", "");
-    type->addAttValue("Generator", "Geant4");
+    type->addAttValue("Generator", G4String("Geant4"));
 
     type->addAttDef(  "GeneratorVersion", "Version of the Generator", "General", "");
     type->addAttValue("GeneratorVersion", G4RunManagerKernel::GetRunManagerKernel()->GetVersionString());
 
     type->addAttDef(  "CoordinateSystem", "Coordinate System", "Draw", "");
-    type->addAttValue("CoordinateSystem", "xyz");    
+    type->addAttValue("CoordinateSystem", G4String("xyz"));    
     
     const G4ViewParameters parameters = GetCurrentViewer()->GetViewParameters();
     const G4Vector3D& viewPointDirection = parameters.GetViewpointDirection();    
@@ -1051,7 +1051,7 @@ HepRepTypeTree* G4HepRepSceneHandler::getGeometryTypeTree() {
 HepRepType* G4HepRepSceneHandler::getGeometryRootType() {
     if (_geometryRootType == NULL) {
         // Create the top level Geometry Type.
-        _geometryRootType = factory->createHepRepType((HepRepTypeTree*)NULL, rootVolumeName);
+        _geometryRootType = factory->createHepRepType(getGeometryTypeTree(), rootVolumeName);
         _geometryRootType->addAttValue("Layer", geometryLayer);
     
         // Add attdefs used by all geometry types.
@@ -1083,9 +1083,7 @@ HepRepType* G4HepRepSceneHandler::getGeometryRootType() {
         _geometryRootType->addAttValue("LineWidthMultiplier", 1.0);
 
         addTopLevelAttributes(_geometryRootType);       
-        
-        getGeometryTypeTree()->addType(_geometryRootType);
-        
+                
         _geometryType["/"+_geometryRootType->getName()] = _geometryRootType;
     }
     return _geometryRootType;
@@ -1170,7 +1168,7 @@ HepRepTypeTree* G4HepRepSceneHandler::getEventTypeTree() {
 HepRepType* G4HepRepSceneHandler::getEventType() {
     if (_eventType == NULL) {
         // Create the top level Event Type.
-        _eventType = factory->createHepRepType((HepRepTypeTree*)NULL, "Event");
+        _eventType = factory->createHepRepType(getEventTypeTree(), "Event");
         _eventType->addAttValue("Layer", eventLayer);
 
         // add defaults for Events
@@ -1186,7 +1184,6 @@ HepRepType* G4HepRepSceneHandler::getEventType() {
         _eventType->addAttValue("LineWidthMultiplier", 1.0);
 
         addTopLevelAttributes(_eventType);
-        getEventTypeTree()->addType(_eventType);
     }
     
     return _eventType;
