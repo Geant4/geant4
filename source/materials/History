@@ -1,4 +1,4 @@
-$Id: History,v 1.34 2002-02-26 17:34:33 maire Exp $
+$Id: History,v 1.35 2002-04-16 13:12:16 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
-22.01.02 M.Maire - materials-V04-00-01
+16.04.02 M.Maire - materials-V04-00-02
+         G4StaticSandiaData: bug fixed in Pb: comma after  15.861
+	 G4Exception put in constructor with chemical formula 
+	      
+22.02.02 M.Maire - materials-V04-00-01
          fIndexTable renewed in G4Material, G4Element, G4Isotope.
 
 22.01.02 M.Verderi - materials-V04-00-00

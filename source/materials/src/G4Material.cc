@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.19 2002-02-26 17:34:34 maire Exp $
+// $Id: G4Material.cc,v 1.20 2002-04-16 13:12:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,6 +53,7 @@
 // 17-07-01, migration to STL. M. Verderi.
 // 14-09-01, Suppression of the data member fIndexInTable
 // 26-02-02, fIndexInTable renewed
+// 16-04-02, G4Exception put in constructor with chemical formula
 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -161,50 +162,11 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
                        G4double z, G4double a, G4double density, 
                        G4State state, G4double temp, G4double pressure)
 :fName(name),fChemicalFormula(chFormula)
-{
-  G4cout 
-   << "---> warning from G4Material constructor with chemical formula."
-      " This constructor is going to be depreciated.\n" 
-      " Use material->SetChemicalFormula(const G4String&)" << G4endl;
-      
-  InitializePointers();
-    
-  if (density < universe_mean_density)
-     { G4cerr << "--- Warning from G4Material::G4Material()"
-              << " define a material with density=0 is not allowed. \n"
-              << " The material " << name << " will be constructed with the"
-              << " default minimal density: " << universe_mean_density/(g/cm3) 
-              << "g/cm3" << G4endl;
-       density = universe_mean_density;
-     } 
-
-  fDensity  = density;
-  fState    = state;
-  fTemp     = temp;
-  fPressure = pressure;
-
-  // Initialize theElementVector allocating one
-  // element corresponding to this material
-  maxNbComponents        = fNumberOfComponents = fNumberOfElements = 1;
-  fImplicitElement       = true;
-  theElementVector       = new G4ElementVector(1,(G4Element*)0);
-  (*theElementVector)[0] = new G4Element(name, " ", z, a);
-  fMassFractionVector    = new G4double[1];
-  fMassFractionVector[0] = 1. ;
-  
-  (*theElementVector)[0] -> increaseCountUse();
-  
-  if (fState == kStateUndefined)
-    {
-     if (fDensity > kGasThreshold) fState = kStateSolid;
-     else                          fState = kStateGas;
-    }
-
-  ComputeDerivedQuantities();
-
-  // Store in the table of Materials
-  theMaterialTable.push_back(this);
-  fIndexInTable = theMaterialTable.size() - 1;  
+{  
+  G4Exception 
+     ("---> from G4Material constructor with chemical formula."
+      " This constructor is depreciated.\n" 
+      " Use material->SetChemicalFormula(const G4String&)");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -218,37 +180,10 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
                        G4State state, G4double temp, G4double pressure)
 :fName(name),fChemicalFormula(chFormula)
 {
-  G4cout 
-   << "---> warning from G4Material constructor with chemical formula."
-      " This constructor is going to be depreciated.\n" 
-      " Use material->SetChemicalFormula(const G4String&)" << G4endl;
-       
-  InitializePointers();
-    
-  if (density < universe_mean_density)
-    {G4cerr << "--- Warning from G4Material::G4Material()"
-            << " define a material with density=0 is not allowed. \n"
-            << " The material " << name << " will be constructed with the"
-            << " default minimal density: " << universe_mean_density/(g/cm3) 
-            << "g/cm3" << G4endl;
-     density = universe_mean_density;
-    }
-        
-  fDensity  = density;
-  fState    = state;
-  fTemp     = temp;
-  fPressure = pressure;
-    
-  maxNbComponents     = nComponents;
-  fNumberOfComponents = fNumberOfElements = 0;
-  fImplicitElement    = false;
-  theElementVector    = new G4ElementVector(maxNbComponents,(G4Element*)0);
-    
-  if (fState == kStateUndefined) 
-    {
-     if (fDensity > kGasThreshold) fState = kStateSolid;
-     else                          fState = kStateGas;
-    }
+  G4Exception 
+     ("---> from G4Material constructor with chemical formula."
+      " This constructor is depreciated.\n" 
+      " Use material->SetChemicalFormula(const G4String&)");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
