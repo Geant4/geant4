@@ -1,4 +1,4 @@
-?RCS: $Id: Getfile.U,v 1.1 2001-05-17 10:12:22 sadilov Exp $
+?RCS: $Id: Getfile.U,v 1.2 2001-12-10 22:24:08 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.1  2001/05/17 10:12:22  sadilov
+?RCS: Import 'config'.
+?RCS:
 ?RCS: Revision 1.1  2000/12/12 23:31:34  sadilov
 ?RCS: Was added due to Gabriele's modification of Configure...
 ?RCS:
@@ -167,7 +170,7 @@ while test "$type"; do
 	rp="$orig_rp"
 	dflt="$orig_dflt"
 	case "$tilde" in
-	true) rp="$rp (~name ok)";;
+	true) rp="$rp ";;
 	esac
 	. UU/myread
 ?X: check for allowed escape sequence which may be accepted verbatim.
