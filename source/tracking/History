@@ -1,4 +1,4 @@
-$Id: History,v 1.61 2003-04-11 09:46:52 tsasaki Exp $
+$Id: History,v 1.62 2003-04-11 11:43:29 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 11, 2003 M.Asai (tracking-V05-00-03)
+- Recover "ApplyCuts" under "cuts-per-region"
+
 Apr 10, 2003 T.Sasaki (tracking-V05-00-02)
 - G4SteppingManger2.cc: Fix for the uninitilized variable
 Mar 17, 2003, G.Cosmo (tracking-V05-00-01)

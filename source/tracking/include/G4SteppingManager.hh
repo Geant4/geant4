@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.hh,v 1.22 2002-11-06 02:24:34 tsasaki Exp $
+// $Id: G4SteppingManager.hh,v 1.23 2003-04-11 11:43:30 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //---------------------------------------------------------------
@@ -199,6 +199,7 @@ public: //without description
    void SetNavigator(G4Navigator* value);
    G4double CalculateSafety();
       // Return the estimated safety value at the PostStepPoint
+   void ApplyProductionCut(G4Track*);
 
 // Member data 
    
