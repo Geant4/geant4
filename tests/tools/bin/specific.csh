@@ -391,6 +391,20 @@ if ( `uname -n` == "lx1" ) then
   #setenv CPPVERBOSE 1
 endif
 
+#---------------------------------------------------
+if ( `uname -n` == "NB-BARRAND" ) then
+  set prompt='g4-6.0-VC7> ' 
+  setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
+  setenv CVS_RSH ssh
+  setenv G4INSTALL /cygdrive/c/geant4/geant4.6.0
+  setenv G4WORKDIR $G4INSTALL/VisualC
+  setenv G4STTDIR  $G4WORKDIR/stt
+  setenv G4LIB     $G4WORKDIR/lib
+  setenv G4SYSTEM  WIN32-VC7
+  # Specific :
+  setenv CLHEP_BASE_DIR /cygdrive/c/CLHEP/1.8.1.0/rh72_gcc332
+endif
+
 if ( `uname -n` == "papou1" ) then
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /geant4/geant4-01-00-ref-02
