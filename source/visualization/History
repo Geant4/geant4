@@ -1,4 +1,4 @@
-$Id: History,v 1.100 2001-02-01 18:03:29 johna Exp $
+$Id: History,v 1.101 2001-02-03 18:38:58 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+3rd February 2001  John Allison  (vis-V03-00-02)
+- Tidied for CodeWizard.  Small changes to many files in management, modeling
+  and OpenGL.
 
 1st February 2001  John Allison  (vis-V03-00-01)
 - Fixed cause of crash when setting viewpoint before creating scene (Bug #157).

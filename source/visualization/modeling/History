@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2000-05-29 09:59:14 johna Exp $
+$Id: History,v 1.8 2001-02-03 18:39:56 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+3rd February 2001  John Allison  (vis-V03-00-02)
+- Tidied for CodeWizard.
 
 29th May 2000  John Allison
 - Moved code for maintaining depth, physical and logical volume

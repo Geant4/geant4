@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.hh,v 1.11 2000-05-02 09:49:27 johna Exp $
+// $Id: G4VSceneHandler.hh,v 1.12 2001-02-03 18:39:39 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -255,6 +255,9 @@ protected:
   G4LogicalVolume*   fpCurrentLV;   // Current logical volume.
 
 private:
+
+  G4VSceneHandler (const G4VSceneHandler&);
+  G4VSceneHandler& operator = (const G4VSceneHandler&);
 
   //////////////////////////////////////////////////////////////
   // Friend function accessed only by views of this scene.

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXViewer.hh,v 1.8 2000-05-22 08:06:50 johna Exp $
+// $Id: G4OpenGLXViewer.hh,v 1.9 2001-02-03 18:39:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,6 +102,9 @@ protected:
                                     iconName;
   char                              charViewName [100];
 
+private:
+  G4OpenGLXViewer (const G4OpenGLXViewer&);
+  G4OpenGLXViewer& operator = (const G4OpenGLXViewer&);
 };
 
 static const char* gouraudtriangleEPS[] =

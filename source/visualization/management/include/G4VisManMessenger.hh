@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessenger.hh,v 1.4 1999-12-15 14:54:22 gunter Exp $
+// $Id: G4VisManMessenger.hh,v 1.5 2001-02-03 18:39:50 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,10 +25,12 @@ class G4UIcommand;
 class G4VisManMessenger: public G4UImessenger {
 public:
   G4VisManMessenger (G4VisManager* pVMan);
-  ~G4VisManMessenger ();
+  virtual ~G4VisManMessenger ();
   void SetNewValue (G4UIcommand* command, G4String newValues);
   G4String GetCurrentValue (G4UIcommand* command);
 private:
+  G4VisManMessenger (const G4VisManMessenger&);
+  G4VisManMessenger& operator = (const G4VisManMessenger&);
   void AddCommandCamera      ();
   //  void AddCommandClear       ();
   //  void AddCommandCopy        ();

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmBox.hh,v 1.3 1999-12-15 14:54:05 gunter Exp $
+// $Id: G4OpenGLXmBox.hh,v 1.4 2001-02-03 18:39:07 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@ class G4OpenGLXmBox : public G4OpenGLXmVWidgetContainer
 public:
   G4OpenGLXmBox (char* = NULL,
 		 G4bool = False);   //constructor
-  ~G4OpenGLXmBox ();  //destructor
+  virtual ~G4OpenGLXmBox ();  //destructor
 
   void AddChild (G4OpenGLXmVWidgetComponent*);
   void AddYourselfTo (G4OpenGLXmVWidgetShell*);
@@ -46,6 +46,10 @@ protected:
   Widget* parent;
   Widget box_row_col;
   G4bool radio;
+
+private:
+  G4OpenGLXmBox (const G4OpenGLXmBox&);
+  G4OpenGLXmBox& operator = (const G4OpenGLXmBox&);
 };
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmPushButton.hh,v 1.3 1999-12-15 14:54:05 gunter Exp $
+// $Id: G4OpenGLXmPushButton.hh,v 1.4 2001-02-03 18:39:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,7 +24,7 @@ class G4OpenGLXmPushButton : public G4OpenGLXmVWidgetComponent
 public:
   G4OpenGLXmPushButton (char* = NULL,
 			XtCallbackRec* = NULL); //constructor
-  ~G4OpenGLXmPushButton ();                     //destructor
+  virtual ~G4OpenGLXmPushButton ();             //destructor
 
   void SetName (char*);
   char* GetName ();
@@ -35,6 +35,8 @@ public:
   Widget* GetPointerToWidget ();
 
 private:
+  G4OpenGLXmPushButton (const G4OpenGLXmPushButton&);
+  G4OpenGLXmPushButton& operator = (const G4OpenGLXmPushButton&);
   char* name;
   XtCallbackRec* callback;
   Widget button;

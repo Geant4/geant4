@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateXmViewer.cc,v 1.3 2000-05-22 08:16:29 johna Exp $
+// $Id: G4OpenGLImmediateXmViewer.cc,v 1.4 2001-02-03 18:39:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,6 +78,8 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
   //    glDrawBuffer (GL_FRONT);
   //  }
 }
+
+G4OpenGLImmediateXmViewer::~G4OpenGLImmediateXmViewer () {}
 
 void G4OpenGLImmediateXmViewer::DrawView () {
 

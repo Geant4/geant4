@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmTopLevelShell.hh,v 1.3 1999-12-15 14:54:06 gunter Exp $
+// $Id: G4OpenGLXmTopLevelShell.hh,v 1.4 2001-02-03 18:39:19 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,7 +25,7 @@ class G4OpenGLXmTopLevelShell : public G4OpenGLXmVWidgetShell
 
 public:
   G4OpenGLXmTopLevelShell(G4OpenGLXmViewer*, char*);   //constructor
-  ~G4OpenGLXmTopLevelShell();  //destructor
+  virtual ~G4OpenGLXmTopLevelShell();  //destructor
 
   void AddChild (G4OpenGLXmVWidgetContainer*);
   void Realize ();
@@ -34,6 +34,8 @@ public:
   char* GetName ();
 
 private:
+  G4OpenGLXmTopLevelShell (const G4OpenGLXmTopLevelShell&);
+  G4OpenGLXmTopLevelShell& operator = (const G4OpenGLXmTopLevelShell&);
   char* name;
   Widget toplevel;
   Widget top_box;

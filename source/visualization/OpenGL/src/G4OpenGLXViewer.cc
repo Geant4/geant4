@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXViewer.cc,v 1.8 2000-05-22 08:07:20 johna Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.9 2001-02-03 18:39:37 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -260,14 +260,16 @@ vectored_ps (true)
 	   << G4endl;
   }
 
-  if (vi_immediate = vi_single_buffer) {
+  if (vi_single_buffer) {
+    vi_immediate = vi_single_buffer;
     attributeList = snglBuf_RGBA;
     doublebuffer = false;
   }
   
   if (!vi_immediate){
     // next try for a double buffered RGB, but Draw to top buffer
-    if (vi_immediate = vi_double_buffer) {
+    if (vi_double_buffer) {
+      vi_immediate = vi_double_buffer;
       attributeList = dblBuf_RGBA;
       doublebuffer = true;
     }
@@ -275,9 +277,17 @@ vectored_ps (true)
 
   // Now try for a visual suitable for OpenGLStored...
   // Try for a double buffered RGB window
-  if (vi_stored = vi_double_buffer) {
+  if (vi_double_buffer) {
+    vi_stored = vi_double_buffer;
     attributeList = dblBuf_RGBA;
     doublebuffer = true;
+  }
+
+  if (!vi_immediate || !vi_stored) {
+    G4cout <<
+    "G4OpenGLXViewer::G4OpenGLXViewer: unable to get required visuals."
+	   << G4endl;
+    fViewId = -1;  // This flags an error.
   }
 
   //  glClearColor (0., 0., 0., 0.);
@@ -681,8 +691,8 @@ extern "C"
   static int
   compare(const void *a, const void *b)
   {
-    DepthIndex *p1 = (DepthIndex *) a;
-    DepthIndex *p2 = (DepthIndex *) b;
+    const DepthIndex *p1 = (DepthIndex *) a;
+    const DepthIndex *p2 = (DepthIndex *) b;
     GLfloat diff = p2->depth - p1->depth;
 
     if (diff > 0.0) {

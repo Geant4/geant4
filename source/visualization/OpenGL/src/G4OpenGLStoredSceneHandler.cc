@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.7 2000-04-12 13:09:07 johna Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.8 2001-02-03 18:39:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,7 +63,8 @@ void G4OpenGLStoredSceneHandler::BeginPrimitives
   G4VSceneHandler::BeginPrimitives (objectTransformation);
 
   if (fMemoryForDisplayLists) {
-    if (!(fDisplayListId = glGenLists (1))) {  // Could pre-allocate?
+    fDisplayListId = glGenLists (1);
+    if (!fDisplayListId) {  // Could pre-allocate?
       G4cout << "********************* WARNING! ********************\n"
 	   <<"Unable to allocate any more display lists in OpenGL.\n "
 	   << "      Continuing drawing in IMMEDIATE MODE.\n"

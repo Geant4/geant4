@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.10 2001-01-18 12:22:33 johna Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.11 2001-02-03 18:39:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,6 +122,12 @@ protected:
   G4VPhysicalVolume** fppCurrentPV;    // Current physical volume.
   G4LogicalVolume**   fppCurrentLV;    // Current logical volume.
 
+private:
+
+  // Private copy constructor and assigment operator - copying and
+  // assignment not allowed.  Keeps CodeWizard happy.
+  G4PhysicalVolumeModel (const G4PhysicalVolumeModel&);
+  G4PhysicalVolumeModel& operator = (const G4PhysicalVolumeModel&);
 };
 
 #endif

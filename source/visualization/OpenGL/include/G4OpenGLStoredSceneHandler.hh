@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.8 2000-08-19 18:34:23 johna Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.9 2001-02-03 18:39:03 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,6 @@ public:
   void BeginModeling ();
   void EndModeling ();
   static G4int GetSceneCount ();
-  G4bool fMemoryForDisplayLists; // avoid memory overflow
   
 private:
 friend class G4OpenGLStoredViewer;
@@ -47,6 +46,7 @@ friend class G4OpenGLStoredViewer;
   static G4int    fSceneIdCount;   // static counter for OpenGLStored scenes.
   static G4int    fSceneCount;     // No. of extanct scene handlers.
   G4int           fDisplayListId;  // Workspace.
+  G4bool  fMemoryForDisplayLists;  // avoid memory overflow
   
   // PODL = Persistent Object Display List.
   GLint           fTopPODL;       // List which calls the other PODLs.

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateXmViewer.hh,v 1.3 1999-12-15 14:54:04 gunter Exp $
+// $Id: G4OpenGLImmediateXmViewer.hh,v 1.4 2001-02-03 18:39:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,6 +33,7 @@ public G4OpenGLXmViewer, public G4OpenGLImmediateViewer{
 public:
   G4OpenGLImmediateXmViewer (G4OpenGLImmediateSceneHandler& scene,
 			   const G4String& name = "");
+  virtual ~G4OpenGLImmediateXmViewer ();
   void DrawView ();
 
 };

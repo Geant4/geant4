@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredXmViewer.hh,v 1.2 1999-12-15 14:54:05 gunter Exp $
+// $Id: G4OpenGLStoredXmViewer.hh,v 1.3 2001-02-03 18:39:04 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,7 @@ public G4OpenGLXmViewer, public G4OpenGLStoredViewer{
   
 public:
   G4OpenGLStoredXmViewer (G4OpenGLStoredSceneHandler& scene, const G4String& name = "");
+  virtual ~G4OpenGLStoredXmViewer ();
   void DrawView ();
 
 };

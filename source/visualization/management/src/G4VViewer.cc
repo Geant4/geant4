@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.cc,v 1.9 2000-05-13 10:52:51 johna Exp $
+// $Id: G4VViewer.cc,v 1.10 2001-02-03 18:39:54 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,6 +68,8 @@ void G4VViewer::NeedKernelVisit () {
     viewList [i] -> SetNeedKernelVisit ();
   }
 }
+
+void G4VViewer::FinishView () {}
 
 void G4VViewer::ShowView () {}
 

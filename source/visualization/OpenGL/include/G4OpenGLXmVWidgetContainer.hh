@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmVWidgetContainer.hh,v 1.3 1999-12-15 14:54:06 gunter Exp $
+// $Id: G4OpenGLXmVWidgetContainer.hh,v 1.4 2001-02-03 18:39:22 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,8 +25,8 @@ class G4OpenGLXmVWidgetContainer : public G4OpenGLXmVWidgetObject
 {
 
 public:
-  G4OpenGLXmVWidgetContainer();   //constructor
-  ~G4OpenGLXmVWidgetContainer();  //destructor
+  G4OpenGLXmVWidgetContainer();           //constructor
+  virtual ~G4OpenGLXmVWidgetContainer();  //destructor
 
   virtual void AddChild (G4OpenGLXmVWidgetComponent*) = 0;
   virtual void AddYourselfTo (G4OpenGLXmVWidgetShell*) = 0;

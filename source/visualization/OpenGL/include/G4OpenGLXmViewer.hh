@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmViewer.hh,v 1.3 1999-12-15 14:54:06 gunter Exp $
+// $Id: G4OpenGLXmViewer.hh,v 1.4 2001-02-03 18:39:26 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,7 @@ class G4OpenGLXmViewer: public G4OpenGLXViewer {
   
 public:
   G4OpenGLXmViewer (G4OpenGLSceneHandler& scene);
-  ~G4OpenGLXmViewer ();
+  virtual ~G4OpenGLXmViewer ();
   
 protected:
   virtual void ShowView ();
@@ -362,6 +362,10 @@ public:
   static G4int  get_int_userData (Widget w);
 
 friend class G4OpenGLXmVWidgetObject;
+
+private:
+  G4OpenGLXmViewer (const G4OpenGLXmViewer&);
+  G4OpenGLXmViewer& operator = (const G4OpenGLXmViewer&);
   
 };
 

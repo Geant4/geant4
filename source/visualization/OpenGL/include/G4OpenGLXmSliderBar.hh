@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmSliderBar.hh,v 1.3 1999-12-15 14:54:06 gunter Exp $
+// $Id: G4OpenGLXmSliderBar.hh,v 1.4 2001-02-03 18:39:16 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,7 @@ public:
 		       unsigned char = XmHORIZONTAL,
 		       unsigned char = XmMAX_ON_RIGHT); 
                                                //constructor
-  ~G4OpenGLXmSliderBar ();                     //destructor
+  virtual ~G4OpenGLXmSliderBar ();             //destructor
 
   void SetName (char*);
   void SetShow (G4bool);
@@ -59,6 +59,8 @@ public:
   Widget* GetPointerToWidget ();
 
 private:
+  G4OpenGLXmSliderBar (const G4OpenGLXmSliderBar&);
+  G4OpenGLXmSliderBar& operator = (const G4OpenGLXmSliderBar&);
   char* name;
   XtCallbackRec* callback;
   Widget sliderbar;

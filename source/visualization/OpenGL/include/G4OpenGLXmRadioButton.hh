@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmRadioButton.hh,v 1.3 1999-12-15 14:54:05 gunter Exp $
+// $Id: G4OpenGLXmRadioButton.hh,v 1.4 2001-02-03 18:39:13 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,7 +26,7 @@ public:
 			 XtCallbackRec*,
 			 G4bool,
 			 G4int);                    //constructor
-  ~G4OpenGLXmRadioButton ();                        //destructor
+  virtual ~G4OpenGLXmRadioButton ();                //destructor
 
   void SetName (char*);
   char* GetName ();
@@ -37,6 +37,8 @@ public:
   Widget* GetPointerToWidget ();
 
 private:
+  G4OpenGLXmRadioButton (const G4OpenGLXmRadioButton&);
+  G4OpenGLXmRadioButton& operator = (const G4OpenGLXmRadioButton&);
   char* name;
   XtCallbackRec* callback;
   Widget button;

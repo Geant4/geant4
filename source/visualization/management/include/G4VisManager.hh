@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.hh,v 1.13 2000-05-02 09:57:15 johna Exp $
+// $Id: G4VisManager.hh,v 1.14 2001-02-03 18:39:52 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -147,6 +147,11 @@ public: // With description
   virtual ~G4VisManager ();
 
 private:
+
+  // Private copy constructor and assigment operator - copying and
+  // assignment not allowed.  Keeps CodeWizard happy.
+  G4VisManager (const G4VisManager&);
+  G4VisManager& operator = (const G4VisManager&);
 
   static G4VisManager* GetInstance ();
   // Returns pointer to itself.  Throws a G4Exception if called before

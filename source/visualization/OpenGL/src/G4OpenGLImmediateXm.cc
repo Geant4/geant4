@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateXm.cc,v 1.5 2000-08-19 18:34:31 johna Exp $
+// $Id: G4OpenGLImmediateXm.cc,v 1.6 2001-02-03 18:39:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,8 @@ G4OpenGLImmediateXm::G4OpenGLImmediateXm ():
 		     "OGLIXm",
 		     G4VisFeaturesOfOpenGLIXm (),
 		     G4VGraphicsSystem::threeD) {}
+
+G4OpenGLImmediateXm::~G4OpenGLImmediateXm () {}
 
 G4VSceneHandler* G4OpenGLImmediateXm::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4OpenGLImmediateSceneHandler (*this, name);
