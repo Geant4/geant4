@@ -15,9 +15,13 @@
 //      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
 //      ------------ G4MuonMinusCaptureAtRest physics process --------
-//                   by Vladimir Ivanchenko
+//                   
 //                     E-mail: Vladimir.Ivantchenko@cern.ch
-//                            April 2000
+//
+//   Created:   02.04.00 V.Ivanchenko
+//
+//   Modified:  06.04.01 V.Ivanchenko Bug in theta distribution fixed
+//
 // **************************************************************
 //-----------------------------------------------------------------------------
 
@@ -105,12 +109,12 @@ G4ThreeVector G4MuMinusCaptureCascade::GetRandomVec()
    // generate uniform vector
    //
 
-   G4double Theta = (2.0 * G4UniformRand() - 1.0) * pi ;
-   G4double Phi  = twopi * G4UniformRand() ;
-   G4double sinTheta = sin(Theta);
+   G4double cosTheta = 2.0 * G4UniformRand() - 1.0;
+   G4double sinTheta = sqrt(1.0 - cosTheta*cosTheta);
+   G4double Phi  = twopi * G4UniformRand();
    G4double dirx = sinTheta * cos(Phi); 
    G4double diry = sinTheta * sin(Phi); 
-   G4double dirz = cos(Theta); 
+   G4double dirz = cosTheta; 
 
    return G4ThreeVector(dirx, diry, dirz);
 }
