@@ -26,7 +26,7 @@ echo " "
 # Will be set (if needed) in GNUmakefile!
 case "$g4lib_use_granular" in
 '')
-	g4lib_use_granular=n
+	g4lib_use_granular=y
 	;;
 esac
 
@@ -52,12 +52,14 @@ gans=$ans
 	n*|N*) 
 		g4global=n
 		g4granular=y
-		g4lib_use_granular=n
+		g4lib_use_granular=y
 		break
 		;;
 	y*|Y*) 
 		g4global=y
+# Shoud be comment out to keep settings from config.sh - not now to keep as in release
 		g4granular=n
+# Shoud be comment out to keep settings from config.sh - not now to keep as in release
 		g4lib_use_granular=n
 		break
 		;;
@@ -133,6 +135,7 @@ gans=$ans
 	case $gans in
 	
 	n*|N*) 
+		g4lib_use_granular=n
 		break
 		;;
 	y*|Y*) 
