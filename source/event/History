@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2002-11-04 10:52:39 dressel Exp $
+$Id: History,v 1.50 2002-11-04 13:44:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov 4th 2002 M.Dressel
+Nov 4th 2002 M.Dressel (event-V04-01-05)
      - remove G4std:: where it does not belong to
 
 Oct 28 2002, M.Dressel (event-V04-01-04)
