@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VXTRdEdx.cc,v 1.2 2001-02-27 09:34:16 grichine Exp $
+// $Id: G4VXTRdEdx.cc,v 1.3 2001-02-27 15:24:17 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -324,7 +324,9 @@ G4complex G4VXTRdEdx::OneInterfaceXTRdEdx( G4double energy,
 
 G4double G4VXTRdEdx::SpectralAngleXTRdEdx(G4double varAngle)
 {
-  return GetStackFactor(fEnergy,fGamma,varAngle)             ;
+  G4double result =  GetStackFactor(fEnergy,fGamma,varAngle) ;
+  if(result < 0.0) result = 0.0 ;
+  return result ;
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -348,7 +350,9 @@ G4double G4VXTRdEdx::SpectralXTRdEdx(G4double energy)
 
 G4double G4VXTRdEdx::AngleSpectralXTRdEdx(G4double energy)
 {
-  return GetStackFactor(energy,fGamma,fVarAngle) ;
+  G4double result =  GetStackFactor(energy,fGamma,fVarAngle) ;
+  if(result < 0) result = 0.0 ;
+  return result ;
 } 
 
 ///////////////////////////////////////////////////////////////////////////
