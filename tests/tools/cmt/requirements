@@ -3,7 +3,7 @@ package Geant4
 build_strategy no_prototypes
 include_path none
 
-include_dirs $(GEANT4ROOT)/include
+include_dirs $(G4INSTALL)/include
 
 #//////////////////////////////////////////////////
 #//////////////////////////////////////////////////
@@ -14,19 +14,23 @@ use CLHEP v1r1 Interfaces
 #//////////////////////////////////////////////////
 #//////////////////////////////////////////////////
 # /GR to enable RTTI and dynamic cast.
-#macro_append cppflags "" WIN32 " /GX /GR" 
+# /GX to enable C++ EH.
+macro_append cppflags "" WIN32 " /GX " 
 
-macro Geant4_source "../source"
+macro Geant4_source "${G4INSTALL}/source"
 macro Geant4_binDir "${CMTCONFIG}"
 
 pattern Geant4_pattern_linkopts \
   macro <lib>_linkopts "-L${GEANT4ROOT}/${Geant4_binDir} -l<lib>"\
                  WIN32 "${GEANT4ROOT}\${Geant4_binDir}\<lib>.lib"
 
+#macro Geant4_libopts "" WIN32 " -no_share "
+macro Geant4_libopts "" WIN32 ""
+
 #//////////////////////////////////////////////////
 #//////////////////////////////////////////////////
 #//////////////////////////////////////////////////
-#macro Geant4_cppflags " -fno-for-scope -DGNU_GCC -fPIC"
+#macro Geant4_cppflags " -fno-for-scope -DGNU_GCC -fPIC -DG4USE_STL -DG4USE_STD_NAMESPACE -DG4VERBOSE -DG4_STORE_TRAJECTORY"
 
 macro Geant4_cppflags "-DG4USE_STL -DG4USE_STD_NAMESPACE -DG4VERBOSE -DG4_STORE_TRAJECTORY" \
                 WIN32 "/DG4USE_STL /DG4USE_STD_NAMESPACE /DG4VERBOSE /DG4_STORE_TRAJECTORY"
@@ -34,13 +38,21 @@ macro Geant4_cppflags "-DG4USE_STL -DG4USE_STD_NAMESPACE -DG4VERBOSE -DG4_STORE_
 #//////////////////////////////////////////////////
 #//////////////////////////////////////////////////
 #//////////////////////////////////////////////////
-library G4global -s=${Geant4_source} \
+library G4global ${Geant4_libopts} -s=${Geant4_source} \
  global/HEPNumerics/src/*.cc \
  global/management/src/*.cc
-#macro G4global_shlibflags "${CLHEP_linkopts}"
-apply_pattern Geant4_pattern_linkopts app=G4global
+macro G4global_shlibflags ""
+apply_pattern Geant4_pattern_linkopts lib=G4global
 
-library G4particles -s=${Geant4_source}/particles \
+library G4materials ${Geant4_libopts} ${Geant4_source}/materials/src/*.cc  
+macro G4materials_shlibflags "${G4global_linkopts}"
+apply_pattern Geant4_pattern_linkopts lib=G4materials
+
+library G4intercoms ${Geant4_libopts} ${Geant4_source}/intercoms/src/*.cc 
+macro G4intercoms_shlibflags "${G4global_linkopts}"
+apply_pattern Geant4_pattern_linkopts lib=G4intercoms
+
+library G4particles ${Geant4_libopts} -s=${Geant4_source}/particles \
  management/src/*.cc \ 
  bosons/src/*.cc \ 
  leptons/src/*.cc \ 
@@ -48,9 +60,33 @@ library G4particles -s=${Geant4_source}/particles \
  hadrons/mesons/src/*.cc \
  hadrons/barions/src/*.cc \ 
  hadrons/ions/src/*.cc   
-apply_pattern Geant4_pattern_linkopts app=G4particles
+macro G4particles_shlibflags "${G4intercoms_linkopts} ${G4materials_linkopts} ${CLHEP_linkopts} ${G4global_linkopts}"
+apply_pattern Geant4_pattern_linkopts lib=G4particles
 
-library G4processes \
+library G4track ${Geant4_libopts} ${Geant4_source}/track/src/*.cc 
+macro G4track_shlibflags "${G4particles_linkopts} ${G4materials_linkopts} ${G4global_linkopts} ${CLHEP_linkopts}"
+apply_pattern Geant4_pattern_linkopts lib=G4track
+
+library G4graphics_reps ${Geant4_libopts} ${Geant4_source}/graphics_reps/src/*.cc 
+macro G4graphics_reps_shlibflags "${G4global_linkopts} ${CLHEP_linkopts}"
+apply_pattern Geant4_pattern_linkopts lib=G4graphics_reps
+
+library G4geometry ${Geant4_libopts} -s=${Geant4_source}/geometry \
+ solids/STEP/src/*.cc \
+ solids/CSG/src/*.cc \
+ solids/specific/src/*.cc \
+ solids/Boolean/src/*.cc \
+ solids/BREPS/src/*.cc \
+ solids/STEPinterface/src/*.cc \
+ management/src/*.cc \
+ volumes/src/*.cc \
+ magneticfield/src/*.cc \
+ verification/src/*.cc
+macro G4geometry_cppflags "" WIN32 "/Zm500"
+macro G4geometry_shlibflags "${G4intercoms_linkopts} ${G4graphics_reps_linkopts} ${G4global_linkopts} ${CLHEP_linkopts}"
+apply_pattern Geant4_pattern_linkopts lib=G4geometry
+
+library G4processes ${Geant4_libopts} \
  -s=${Geant4_source}/processes \
  management/src/*.cc \
  optical/src/*.cc \
@@ -87,54 +123,28 @@ library G4processes \
  string_common/src/*.cc \
  string_fragmentation/src/*.cc \
  util/src/*.cc
-apply_pattern Geant4_pattern_linkopts app=G4processes
+macro G4processes_shlibflags "${G4track_linkopts} ${G4particles_linkopts} ${G4intercoms_linkopts} ${G4materials_linkopts} ${CLHEP_linkopts} ${G4global_linkopts}"
+apply_pattern Geant4_pattern_linkopts lib=G4processes
 
-library G4geometry -s=${Geant4_source}/geometry \
- solids/STEP/src/*.cc \
- solids/CSG/src/*.cc \
- solids/specific/src/*.cc \
- solids/Boolean/src/*.cc \
- solids/BREPS/src/*.cc \
- solids/STEPinterface/src/*.cc \
- management/src/*.cc \
- volumes/src/*.cc \
- magneticfield/src/*.cc \
- verification/src/*.cc
-#macro SdaiCONFIG_CONTROL_DESIGN_cc_cppflags "-O0 " WIN32 "-Zm500 "
-#macro SdaiCONFIG_CONTROL_DESIGN_init_cc_cppflags "-O0 " WIN32 "-Zm500 "
-apply_pattern Geant4_pattern_linkopts app=G4geometry
-
-library G4digitsPlusHits -s=${Geant4_source}/digits+hits \
+library G4digitsPlusHits ${Geant4_libopts} -s=${Geant4_source}/digits+hits \
  detector/src/*.cc \
  digits/src/*.cc \
  hits/src/*.cc
-apply_pattern Geant4_pattern_linkopts app=G4digitsPlusHits
+apply_pattern Geant4_pattern_linkopts lib=G4digitsPlusHits
  
-library G4event ${Geant4_source}/event/src/*.cc 
-apply_pattern Geant4_pattern_linkopts app=G4event
+library G4event ${Geant4_libopts} ${Geant4_source}/event/src/*.cc 
+apply_pattern Geant4_pattern_linkopts lib=G4event
 
-library G4tracking ${Geant4_source}/tracking/src/*.cc 
-apply_pattern Geant4_pattern_linkopts app=G4tracking
+library G4tracking ${Geant4_libopts} ${Geant4_source}/tracking/src/*.cc 
+apply_pattern Geant4_pattern_linkopts lib=G4tracking
 
-library G4track ${Geant4_source}/track/src/*.cc 
-apply_pattern Geant4_pattern_linkopts app=G4track
+library G4run ${Geant4_libopts} ${Geant4_source}/run/src/*.cc 
+apply_pattern Geant4_pattern_linkopts lib=G4run
 
-library G4materials ${Geant4_source}/materials/src/*.cc  
-apply_pattern Geant4_pattern_linkopts app=G4materials
+library G4parameterisations ${Geant4_libopts} ${Geant4_source}/parameterisations/src/*.cc 
+apply_pattern Geant4_pattern_linkopts lib=G4parameterisations
 
-library G4run ${Geant4_source}/run/src/*.cc 
-apply_pattern Geant4_pattern_linkopts app=G4run
-
-library G4graphics_reps -s=${Geant4_source}/graphics_reps/src/*.cc 
-apply_pattern Geant4_pattern_linkopts app=G4graphics_reps
-
-library G4intercoms -s=${Geant4_source}/intercoms/src/*.cc 
-apply_pattern Geant4_pattern_linkopts app=G4intercoms
-
-library G4parameterisations -s=${Geant4_source}/parameterisations/src/*.cc 
-apply_pattern Geant4_pattern_linkopts app=G4parameterisations
-
-#library G4readout -s=${Geant4_source}/readout/src/*.cc 
-#apply_pattern Geant4_pattern_linkopts app=G4readout
+#library G4readout ${Geant4_libopts} ${Geant4_source}/readout/src/*.cc 
+#apply_pattern Geant4_pattern_linkopts lib=G4readout
 
 
