@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2002-06-14 09:16:24 gcosmo Exp $
+$Id: History,v 1.55 2002-11-06 08:14:10 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06 November 2002, Guy Barrand
+- G4Xt.cc, G4UIXm.cc, G4UIXaw.cc : fix some warings.
 
 14 June 2002, Hajime Yoshida (interfaces-V04-00-04)
 - Added protection #ifndef WIN32 to new class G4UIGainServer in definition

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIXm.cc,v 1.7 2001-07-11 10:01:21 gunter Exp $
+// $Id: G4UIXm.cc,v 1.8 2002-11-06 08:12:37 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -81,7 +81,7 @@ G4UIXm::G4UIXm (
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI!=NULL) UI->SetSession(this);
 
-  G4Xt* interactorManager = G4Xt::getInstance (argc,argv,"Xm");
+  G4Xt* interactorManager = G4Xt::getInstance (argc,argv,(char*)"Xm");
 
   Widget top = (Widget)interactorManager->GetMainInteractor();
 
@@ -90,19 +90,19 @@ G4UIXm::G4UIXm (
   shell = XtAppCreateShell ("G4UIXm","G4UIXm",
 			    topLevelShellWidgetClass,XtDisplay(top),
 			    args,1); 
-  form = XmCreateForm (shell,"form",NULL,0);
+  form = XmCreateForm (shell,(char*)"form",NULL,0);
   XtManageChild (form);
 
   XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_FORM);
   XtSetArg(args[1],XmNleftAttachment  ,XmATTACH_FORM);
   XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
-  menuBar = XmCreateMenuBar (form,"menuBar",args,3);
+  menuBar = XmCreateMenuBar (form,(char*)"menuBar",args,3);
 
   XtSetArg(args[0],XmNtopAttachment      ,XmATTACH_NONE);
   XtSetArg(args[1],XmNleftAttachment     ,XmATTACH_FORM);
   XtSetArg(args[2],XmNrightAttachment    ,XmATTACH_FORM);
   XtSetArg(args[3],XmNbottomAttachment   ,XmATTACH_FORM);
-  command = XmCreateCommand (form,"command",args,4);
+  command = XmCreateCommand (form,(char*)"command",args,4);
   XtManageChild (command);
 
   XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_NONE);
@@ -110,9 +110,9 @@ G4UIXm::G4UIXm (
   XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
   XtSetArg(args[3],XmNbottomAttachment,XmATTACH_WIDGET);
   XtSetArg(args[4],XmNbottomWidget    ,command);
-  XmString cps = XmStringLtoRCreate("Clear",XmSTRING_DEFAULT_CHARSET);
+  XmString cps = XmStringLtoRCreate((char*)"Clear",XmSTRING_DEFAULT_CHARSET);
   XtSetArg (args[5],XmNlabelString,cps);
-  Widget clearButton = XmCreatePushButton(form,"clearButton",args,6);
+  Widget clearButton = XmCreatePushButton(form,(char*)"clearButton",args,6);
   XmStringFree (cps);
   XtManageChild (clearButton);
 
@@ -125,7 +125,7 @@ G4UIXm::G4UIXm (
   XtSetArg(args[6],XmNeditMode        ,XmMULTI_LINE_EDIT);
   XtSetArg(args[7],XmNrows            ,12);
   XtSetArg(args[8],XmNcolumns         ,80);
-  text = XmCreateScrolledText (form,"text",args,9);
+  text = XmCreateScrolledText (form,(char*)"text",args,9);
   XtManageChild (text);
 
   XtAddCallback(clearButton,XmNactivateCallback,
@@ -389,7 +389,7 @@ void clearButtonCallback (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  XmTextSetString((Widget)a_tag,"");
+  XmTextSetString((Widget)a_tag,(char*)"");
 }
 /***************************************************************************/
 void G4UIXm::ButtonCallback (
