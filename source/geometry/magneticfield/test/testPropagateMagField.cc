@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.15 2002-10-29 14:57:37 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.16 2002-10-29 18:04:52 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -315,10 +315,10 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
                   G4int             Step, 
                   G4VPhysicalVolume* startVolume);
 
-    G4UniformMagField MagField(10.*tesla, 0., 0.);  // Tesla Defined ? 
+    G4UniformMagField MagField(10.*tesla, 0., 0.);
     G4Navigator   *pNavig= G4TransportationManager::
                     GetTransportationManager()-> GetNavigatorForTracking();
-    // G4PropagatorInField 
+    
     pMagFieldPropagator= SetupPropagator(type);
 
     pMagFieldPropagator->SetChargeMomentumMass( +1.,   // charge in e+ units
