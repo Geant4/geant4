@@ -22,7 +22,7 @@
 //
 //    ************************************
 //    *                                  *
-//    *    BrachyWaterBoxROGeometry.hh   *
+//    *    BrachyPhantomROGeometry.hh   *
 //    *                                  *
 //    ************************************
 
@@ -34,18 +34,18 @@
 
 class BrachyPhantomROGeometry : public G4VReadOutGeometry
 {
-public:
-  BrachyPhantomROGeometry(G4String aString,G4double DetDimX,G4double DetDimZ,G4int NumVoxelX,G4int NumVoxelZ);
-  ~BrachyPhantomROGeometry();
+  public:
+	BrachyPhantomROGeometry(G4String aString,G4double DetDimX,G4double DetDimZ,G4int NumVoxelX,G4int NumVoxelZ);
+  	~BrachyPhantomROGeometry();
 
-private:
-  const G4double m_DetDimX;
-  const G4double m_DetDimZ;
-  const G4int m_NumVoxelX;
-  const G4int m_NumVoxelZ;
+   private:
+	const G4double m_DetDimX;
+	const G4double m_DetDimZ;
+	const G4int m_NumVoxelX;
+	const G4int m_NumVoxelZ;
 
-private:
-  G4VPhysicalVolume* Build();
+  private:
+  	G4VPhysicalVolume* Build();
 };
 
 #endif

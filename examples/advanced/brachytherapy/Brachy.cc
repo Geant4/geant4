@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -26,26 +27,21 @@
 // --------------------------------------------------------------
 //
 // Code developed by:
-// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano,S.Guatelli
+// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
 //
-// Brachytherapy simulates the dose deposition in a cubic (30*cm)
-// water phantom for a IsoSeed I-125 Bebig
+// Brachytherapy simulates the energy deposition in a cubic (10*cm)
+//
 // brachytherapy source.
 //
 // Simplified gamma generation is used.
 // Source axis is oriented along Z axis. 
-// Voxel data on the X-Z plan
-//e is output to 
-// "Brachy3.hbk".
 
-
-// $Id: Brachy.cc,v 1.12 2002-06-25 13:12:54 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//default source Ir-192
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
-
+#include "BrachyFactoryIr.hh"
 #ifdef G4UI_USE_XM
 #include "G4UIXm.hh"
 #endif
@@ -57,55 +53,54 @@
 #include "BrachyEventAction.hh"
 #include "BrachyDetectorConstruction.hh"
 #include "BrachyPhysicsList.hh"
-#include "BrachyPrimaryGeneratorAction.hh"
 #include "BrachyPhantomSD.hh"
-
+#include "BrachyPrimaryGeneratorActionIr.hh"
 #include "G4SDManager.hh"
-
 #include"BrachyRunAction.hh"
-
 #include "Randomize.hh"  
 #include "G4RunManager.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
-
-
+#include "G4UImessenger.hh"
 
 //Interactive mode//
 
 int main(int argc ,char ** argv)
 
 { 
-  // semi diversi li ha usati per l'errore
-  
 
-  //HepRandom::setTheSeed(16520);
+
+  // fix the seed 
+  // HepRandom::setTheSeed(16520);
 
   HepRandom::setTheEngine(new RanecuEngine);
- 
-  
+  G4int seed=time(NULL);
+  HepRandom ::setTheSeed(seed);
+
+
   // Construct the default run manager
-  G4RunManager* pRunManager = new G4RunManager;
+ G4RunManager* pRunManager = new G4RunManager;
 
 
-  // Set mandatory initialization classes
-  G4String SDName = "Phantom";
- 
-  BrachyDetectorConstruction *pDetectorConstruction=new BrachyDetectorConstruction(SDName);
+ // Set mandatory initialization classes
+ G4String SDName = "Phantom";
+
+   BrachyDetectorConstruction  *pDetectorConstruction=new  BrachyDetectorConstruction(SDName);
+
   pRunManager->SetUserInitialization(pDetectorConstruction) ;
- 
-  pRunManager->SetUserInitialization(new BrachyPhysicsList);
 
-  
+     pRunManager->SetUserInitialization(new BrachyPhysicsList);
+
+     /*
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new BrachyVisManager;
-  visManager->Initialize();
+ G4VisManager* visManager = new BrachyVisManager;
+ visManager->Initialize();
 #endif
 
-  G4UIsession* session=0;
-  
-   
+G4UIsession* session=0;
+
+
   if (argc==1)   // Define UI session for interactive mode.
     {
       // G4UIterminal is a (dumb) terminal.
@@ -119,19 +114,18 @@ int main(int argc ,char ** argv)
 #endif
 #endif
     }
- 
+
+     */
+ BrachyEventAction *pEventAction=new BrachyEventAction(SDName);
+    pRunManager->SetUserAction(pEventAction );
 
 
-  BrachyEventAction *pEventAction=new BrachyEventAction(SDName);
- 
-  pRunManager->SetUserAction(pEventAction );
-  pRunManager->SetUserAction(new BrachyPrimaryGeneratorAction);
- 
-  BrachyRunAction *pRunAction=new BrachyRunAction();
+
+BrachyRunAction *pRunAction=new BrachyRunAction(SDName);
   pRunManager->SetUserAction(pRunAction);
- 
- 
-  
+
+
+
 //Initialize G4 kernel
   pRunManager->Initialize();
 
@@ -141,7 +135,9 @@ int main(int argc ,char ** argv)
   UI->ApplyCommand("/event/verbose 0");
   UI->ApplyCommand("/tracking/verbose 0");
 
-  if (session)   // Define UI session for interactive mode.
+  /*
+
+ if (session)   // Define UI session for interactive mode.
     {
       // G4UIterminal is a (dumb) terminal.
       UI->ApplyCommand("/control/execute initInter.mac");    
@@ -158,25 +154,24 @@ int main(int argc ,char ** argv)
       G4String fileName = argv[1];
       UI->ApplyCommand(command+fileName);
     }  
-  
-  //int numberOfEvent = 10000;
-  //pRunManager->BeamOn(numberOfEvent);
-  				
- 	   
-	 
-  // Job termination
+  */
+   int numberOfEvent = 1000;
+   pRunManager->BeamOn(numberOfEvent);
 
 
-  
+
+// Job termination
+
+   /*
 #ifdef G4VIS_USE
   delete visManager;
 #endif
-  
-   
+   */
 
-  delete pRunManager;
 
-  return 0;
+ delete pRunManager;
+
+ return 0;
 }
 
 

@@ -1,26 +1,3 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
-//
 #include "BrachyRunAction.hh"
 #include "BrachyEventAction.hh"
 #include "BrachyAnalysisManager.hh"
@@ -29,33 +6,56 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "BrachyDetectorConstruction.hh"
+#include "BrachyRunMessenger.hh"
 #include "G4SDManager.hh"
 #include "G4Timer.hh"
-
-BrachyRunAction::BrachyRunAction()
+#include "BrachyFactoryIr.hh"
+#include "BrachyFactoryI.hh"
+#include "BrachyFactory.hh"
+#include "BrachyRunAction.hh"
+BrachyRunAction::BrachyRunAction(G4String &SDNAME)
 {
- 
- 
-  
+  SDname=SDNAME;
+  pDet=new BrachyDetectorConstruction(SDname);
+  pRun= new BrachyRunMessenger(this);
 }
 
 BrachyRunAction::~BrachyRunAction()
-{  
-  
+{ delete pDet; 
+  delete pDetector;
+  delete pRun;
 }
 void BrachyRunAction::BeginOfRunAction(const G4Run* aRun)
 { BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
- analysis->book();
- G4RunManager*  pRunManager=G4RunManager::GetRunManager() ;
+   analysis->book();
+  
+   G4RunManager*  pRunManager=G4RunManager::GetRunManager() ;
 
+    if(pRunManager)
+     { switch(a)
+       { case 1:
+              factory=new BrachyFactoryI;
+       break;
 
-
- G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-
+       default:   
+          factory=new BrachyFactoryIr; 
+       }
+      
+       G4VUserPrimaryGeneratorAction* irPrimary=factory->CreatePrimaryGeneratorAction();
+      
+  
+      if(irPrimary)
+        { pRunManager->SetUserAction (irPrimary);}
+        
+     }
 }
 
-
-
+void BrachyRunAction::SelectEnergy(G4int choice)
+{a=choice;
+if (a==1)factory=new BrachyFactoryI;
+  else factory=new BrachyFactoryIr; 
+ 
+}
 
 void BrachyRunAction::EndOfRunAction(const G4Run* aRun)
 {
@@ -65,11 +65,11 @@ void BrachyRunAction::EndOfRunAction(const G4Run* aRun)
 
 
 
-  G4cout << "number of event = " << aRun->GetNumberOfEvent() << G4endl;
+   G4cout << "number of event = " << aRun->GetNumberOfEvent() << G4endl;
   
       
-  analysis->finish();
-      
+      analysis->finish();
+      delete factory;
 
       
 }

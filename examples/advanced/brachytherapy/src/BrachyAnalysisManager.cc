@@ -1,28 +1,3 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
-//
-
-
 #include <stdlib.h>
 #include "g4std/fstream"
 #include "BrachyAnalysisManager.hh"
@@ -48,20 +23,19 @@ BrachyAnalysisManager::BrachyAnalysisManager() :
 
 {
   //build up  the  factories
-  aFact = AIDA_createAnalysisFactory();
+   aFact = AIDA_createAnalysisFactory();
 
-  ITreeFactory     * treeFact = aFact->createTreeFactory();
+   AIDA::ITreeFactory *treeFact = aFact->createTreeFactory();
  
  
   
-  //parameters for the TreeFactory
-  bool fileExists = false;
-  bool readOnly   = false;
-  std::string fileName="Brachy3.hbk";
-  theTree = treeFact->create(fileName, readOnly, fileExists, "hbook");
+ //parameters for the TreeFactory
+ 
+  std::string fileName="brachytherapy.hbk";
+  theTree = treeFact->create(fileName,"hbook",false, true);
 
   delete treeFact;
-  //HistoFactory and TupleFactory depend on theTree
+ 
   histFact = aFact->createHistogramFactory( *theTree );
   tupFact  = aFact->createTupleFactory    ( *theTree );
  
@@ -74,7 +48,7 @@ BrachyAnalysisManager::~BrachyAnalysisManager()
   delete tupFact;
   tupFact=0;
 
-  delete histFact;
+   delete histFact;
   histFact=0;
 
   delete theTree;
@@ -94,70 +68,52 @@ BrachyAnalysisManager* BrachyAnalysisManager::getInstance()
 
 void BrachyAnalysisManager::book() 
 {
+  
+  h1 = histFact->createHistogram2D("10","Energy, pos",300 ,-150.,150.,300,-150.,150.);
 
-  // histograms and ntuple are managed by theTree
-  // h2 e h3 are not necessary  ,useful for:check for non-zero
-  //you could do  histFact->create2D("20","Energy, pos",300 ,-150.,150.,300,-15  //0.,150.);
- 
 
-  IHistogram2D *h2 = histFact->create2D("20","Energy, pos",300 ,-150.,150.,300,-150.,150.);
- 
-  // check for non-zero
+ h2= histFact->createHistogram1D("20","Initial Energy", 100,0.,4.);
 
-  IHistogram1D *h3 = histFact->create1D("30","Initial Energy", 100,0.,1.);
-  // check for non-zero
-
-  //Ntuple management
-  std::string columnNames = "float energy, float x, float z";
-  std::string options = "";
-  ITuple *tup = tupFact->create("1","brachy",columnNames, options);
-  // check for non-zero ...
-  if (tup) G4cout<<"The Ntuple is non-zero"<<G4endl;
+ std::string columnNames = "float energy, float x,float y, float z";
+ std::string options = "";
+ if (tupFact) ntuple = tupFact->create("1","1",columnNames, options);
+ // check for non-zero ...
+ if (ntuple) G4cout<<"The Ntuple is non-zero"<<G4endl;
 }
  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+ //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-void BrachyAnalysisManager::analyse(G4double xx,G4double zz,G4float en)
+void BrachyAnalysisManager::fill_Tuple(G4double xx,G4double yy, G4double zz,G4float en)
 {
 
-  ITuple * ntuple = dynamic_cast<ITuple *> ( theTree->find("1") );
+  //ntuple = dynamic_cast<ITuple *> ( theTree->find("1") );
 
- 
+  if (ntuple == 0) {
+    cout << "AAAAAAAGH" << endl;
+    return;
+  }
+
   ntuple->fill(1, en);// fill ( int column, double value )
   ntuple->fill(2, xx);
-  ntuple->fill(3, zz);
+  ntuple->fill(3, yy);
+  ntuple->fill(4, zz);
 
-  // alternatively(if all the columns are of the same type):
-  // std::vector<float> row;
-  // row.push_back(en);
-  // row.push_back(xx);
-  // row.push_back(zz);
-  // ntuple->fill(row);
-
-  // write Ntuple-row to file
-  // Should be called after fill is called for the columns.
-  // Unfilled columns will be filled with the default value for that column.
   ntuple->addRow();
 
 }
 
 void BrachyAnalysisManager::hist(G4double x,G4double z, G4float enn)
 { 
-  
-
-  IHistogram2D* h2 = dynamic_cast<IHistogram2D *> ( theTree->find("20") );
-  h2->fill(x,z,enn);  
+  h1->fill(x,z,enn);
+ 
 }
-
 
 void BrachyAnalysisManager::Spectrum(G4double Init_En)
-{ 
-  IHistogram1D* h3 = dynamic_cast<IHistogram1D *> ( theTree->find("30") );
-  h3->fill(Init_En);
+{
+  h2->fill(Init_En);
 }
-
 
 void BrachyAnalysisManager::finish() 
 {  

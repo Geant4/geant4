@@ -25,7 +25,7 @@
 //    *    BrachyEventAction.cc  	*
 //    *                             *
 //    *******************************
-
+#include "BrachyPrimaryGeneratorActionI.hh"
 #include "BrachyEventAction.hh"
 #include "BrachyPhantomHit.hh"
 #include "BrachyPhantomSD.hh"
@@ -42,21 +42,25 @@
 #include "G4ios.hh"
 #include "G4VVisManager.hh"
 #include"BrachyAnalysisManager.hh"
+#include "BrachyPrimaryGeneratorActionIr.hh"
 //....
 
 BrachyEventAction::BrachyEventAction(G4String &SDName) :
   drawFlag("all" ),printModulo(1)      
 {
+ 
   m_HitsCollectionID = -1;
 
-  SDname=SDName;
-  pDetector=new BrachyDetectorConstruction(SDname);
- 
-  m_NumVoxelX=pDetector-> GetNumVoxelX();
-  m_NumVoxelZ=pDetector->GetNumVoxelZ();
-  VoxelWidth_Z= pDetector -> VoxelWidth_Z()   ;
-  VoxelWidth_X=pDetector->VoxelWidth_X();
+ SDname=SDName;
 
+
+ pDetector=new BrachyDetectorConstruction(SDname);
+
+ 
+ m_NumVoxelX=pDetector-> GetNumVoxelX();
+ m_NumVoxelZ=pDetector->GetNumVoxelZ();
+ VoxelWidth_Z= 0.1*cm  ;
+ VoxelWidth_X=0.1*cm;
  
 }
 
@@ -64,7 +68,7 @@ BrachyEventAction::BrachyEventAction(G4String &SDName) :
 
 BrachyEventAction::~BrachyEventAction()
 {
-  delete pDetector;
+ delete pDetector;
  
 }
 
@@ -73,80 +77,82 @@ BrachyEventAction::~BrachyEventAction()
 void BrachyEventAction::BeginOfEventAction(const G4Event* aEvent)
 {
 
-  G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
-  if(m_HitsCollectionID == -1)
-    m_HitsCollectionID = pSDManager->GetCollectionID("PhantomHitsCollection");
- 
+ G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
+ if(m_HitsCollectionID == -1)
+ 	m_HitsCollectionID = pSDManager->GetCollectionID("PhantomHitsCollection");
+
 }
 
 //....
 
 void BrachyEventAction::EndOfEventAction(const G4Event* evt)
 {
-
-
-  G4int evno = fpEventManager->GetConstCurrentEvent()->GetEventID() ;
  
-  if((evno==100)||(evno==500)||(evno==1000)||(evno==2500)
-     ||(evno==5000)||(evno==7000)||(evno==9000)||
-     (evno==9500)||(evno==29000000)||(evno==29500000))
-    G4cout << evno << G4endl;
- 
-  if(m_HitsCollectionID < 0)
-    return;
+if(m_HitsCollectionID < 0)
+	return;
 
-  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  BrachyPhantomHitsCollection* CHC = NULL; 
+ G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
+ BrachyPhantomHitsCollection* CHC = NULL; 
  
-  if(HCE)
-    CHC = (BrachyPhantomHitsCollection*)(HCE->GetHC(m_HitsCollectionID));
+ if(HCE)
+	CHC = (BrachyPhantomHitsCollection*)(HCE->GetHC(m_HitsCollectionID));
 
-  if(CHC)
-    {
+ if(CHC)
+	{
 
 	
-      G4int HitCount = CHC->entries();
+	       G4int HitCount = CHC->entries();
 		
-      for (G4int h=0; h<HitCount; h++)
-	{
+   for (G4int h=0; h<HitCount; h++)
+                {
 	      
 			  
-	  BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();	
+                  BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();	
              
-	  i=((*CHC)[h])->GetZID();
-	  k=((*CHC)[h])->GetXID();
-                        
-	  j=i+k*m_NumVoxelX;
+                     i=((*CHC)[h])->GetZID();
+                     k=((*CHC)[h])->GetXID();
+                     j=((*CHC)[h])->GetYID();  
+                     
 
-	  EnergyDep=(*CHC)[h]->GetEdep();
+                      EnergyDep=((*CHC)[h]->GetEdep())/keV;
                       
-	  x = (-m_NumVoxelZ+1+2*k)*VoxelWidth_X/2; 
-	  z = (- m_NumVoxelZ+1+2*i)*VoxelWidth_Z/2;
-                       
-	  if(EnergyDep!=0){
-	    { if( abs(x)>0.56*mm && abs(z)>3.8*mm)
-	      analysis->hist(x,z,EnergyDep); analysis->analyse(x,z,EnergyDep);}}}
+                        x = (-m_NumVoxelZ+1+2*k)*VoxelWidth_X/2; 
+                        z = (- m_NumVoxelZ+1+2*i)*VoxelWidth_Z/2;
+                        y=(- m_NumVoxelZ+1+2*j)*VoxelWidth_Z/2;
 
-    }
+			if(EnergyDep!=0)
+                         
+			  { 
+                            
+			    if (y<1.*mm){if (y> -1.*mm) 
+                                  {analysis->hist(x,z,EnergyDep);}}
+			  
+			    
+			  }
+			 
+			if(EnergyDep!=0)analysis->fill_Tuple(x,y,z,EnergyDep);
 
-  // extract the trajectories and draw them
+		       
+		}
+	}
+// extract the trajectories and draw them
 
   if (G4VVisManager::GetConcreteInstance())
     {
-      G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-      G4int n_trajectories = 0;
-      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+     G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
+     G4int n_trajectories = 0;
+     if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
 
-      for (G4int i=0; i<n_trajectories; i++) 
+     for (G4int i=0; i<n_trajectories; i++) 
         { G4Trajectory* trj = (G4Trajectory*)((*(evt->
 						 GetTrajectoryContainer()))[i]);
 
  
-	if (drawFlag == "all") trj->DrawTrajectory(50);
-	else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-	  trj->DrawTrajectory(50);
-	else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-	  trj->DrawTrajectory(50);	     	     
+ if (drawFlag == "all") trj->DrawTrajectory(50);
+          else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
+                                  trj->DrawTrajectory(50);
+          else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
+                                  trj->DrawTrajectory(50);	     	     
 	}
     }
  

@@ -20,34 +20,52 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//    ********************************
-//    *                              *
-//    *       BrachyDummySD.hh       *
-//    *                              *
-//    ********************************
+//
+// $Id: BrachyRunMessenger.hh,v 1.1 2002-11-15 17:31:20 guatelli Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
 
-// Dummy sensitive used only to flag sensitivity in cells of RO geometry.
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef BrachyDummySD_h
-#define BrachyDummySD_h 1
+#ifndef BrachyRunMessenger_h
+#define BrachyRunMessenger_h 1
 
-#include "G4VSensitiveDetector.hh"
-class G4Step;
+#include "globals.hh"
+#include "G4UImessenger.hh"
 
-class BrachyDummySD : public G4VSensitiveDetector
+class BrachyRunAction;
+class BrachyFactoryIr;
+class BrachyRunAction;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithoutParameter;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class BrachyRunMessenger: public G4UImessenger
 {
- public:
- 	BrachyDummySD();
-  	~BrachyDummySD() {};
+  public:
+    BrachyRunMessenger(BrachyRunAction* );
+   ~BrachyRunMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
   
-	void Initialize(G4HCofThisEvent*HCE) {};
-	G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist) {return false;}
-	void EndOfEvent(G4HCofThisEvent*HCE) {};
-	void clear() {};
-	void DrawAll() {};
-	void PrintAll() {};
+  private:
+ 
+     BrachyRunAction*  pRun;
+     G4UIcmdWithAString*        selDetCmd;
+    
+    G4UIdirectory*             detDir;
+  G4UIdirectory*           mydetDir;
+    
+  
 };
 
-BrachyDummySD::BrachyDummySD() : G4VSensitiveDetector("dummySD")
-{}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
+

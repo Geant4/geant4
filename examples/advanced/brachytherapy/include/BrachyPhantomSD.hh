@@ -22,12 +22,12 @@
 //
 //    ********************************
 //    *                              *  
-//    *     BrachyWaterBoxSD.hh      *
+//    *     BrachyPhantomSD.hh      *
 //    *                              *
 //    ********************************
 
 #ifndef BrachyPhantomSD_h
-#define BrachyPHANTOMSD_h 1
+#define BrachyPhantomSD_h 1
 
 #include "G4VSensitiveDetector.hh"
 #include "BrachyPhantomHit.hh"
@@ -38,22 +38,23 @@ class G4TouchableHistory;
 
 class BrachyPhantomSD : public G4VSensitiveDetector
 {
-public:
-  BrachyPhantomSD(G4String name, G4int NumVoxelX, G4int NumVoxelZ);
-  ~BrachyPhantomSD();
+ public:
+      BrachyPhantomSD(G4String name, G4int NumVoxelX, G4int NumVoxelZ);
+      ~BrachyPhantomSD();
 
-  void Initialize(G4HCofThisEvent*HCE);
-  G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-  void EndOfEvent(G4HCofThisEvent*HCE);
-  void clear();
-  void DrawAll();
-  void PrintAll();
-private:
-  BrachyPhantomHitsCollection *m_pPhantomHitsCollection;
+      void Initialize(G4HCofThisEvent*HCE);
+      G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
+      void EndOfEvent(G4HCofThisEvent*HCE);
+      void clear();
+      void DrawAll();
+      void PrintAll();
+ private:
+      BrachyPhantomHitsCollection *m_pPhantomHitsCollection;
 	
-  const G4int m_NumVoxelX;
-  const G4int m_NumVoxelZ;
-  G4int *m_pVoxelID;
+      const G4int m_NumVoxelX;
+      const G4int m_NumVoxelZ;
+      G4int *m_pVoxelID;
 };
 #endif
+
 

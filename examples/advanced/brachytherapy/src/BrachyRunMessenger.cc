@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyDetectorMessenger.cc,v 1.3 2002-11-15 17:31:21 guatelli Exp $
+// $Id: BrachyRunMessenger.cc,v 1.1 2002-11-15 17:31:23 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,10 +29,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "BrachyDetectorMessenger.hh"
+#include "BrachyRunMessenger.hh"
 #include"BrachyFactoryIr.hh"
 #include "BrachyRunAction.hh"
-#include "BrachyDetectorConstruction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -41,77 +40,47 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* Det):
- Detector(Det)
+BrachyRunMessenger::BrachyRunMessenger( BrachyRunAction* pBrachyRun):
+ pRun(pBrachyRun)
 { 
-  detDir = new G4UIdirectory("/detector/");
-  detDir->SetGuidance(" detector control.");
-      
-  AbsMaterCmd = new G4UIcmdWithAString("/detector/setMaterial",this);
-  AbsMaterCmd->SetGuidance("Select Material of the detector.");
-  AbsMaterCmd->SetParameterName("choice",false);
-  AbsMaterCmd->AvailableForStates(Idle);
-   selDetCmd = new G4UIcmdWithAString("/geom/select",this);
+
+  mydetDir = new G4UIdirectory("/run/");
+  mydetDir->SetGuidance("Control gamma energy.");
+  selDetCmd=new G4UIcmdWithAString("/run/energy",this);
   
-  mydetDir = new G4UIdirectory("/geom/");
-  mydetDir->SetGuidance("Geometry setup commands.");
  
-  selDetCmd->SetGuidance("Select the way detector geometry is built.");
+  
+  selDetCmd->SetGuidance("Select the energy of gamma emitted by the source.");
   selDetCmd->SetGuidance(" Iodium:  Iodium Source ");
   selDetCmd->SetGuidance("  Iridium: Iridium  Source  "  );
-  selDetCmd->SetGuidance("  Leipzig: Leipzig Source  "  );
-   selDetCmd->SetParameterName("choice",true);
+  selDetCmd->SetParameterName("choice",true);
   selDetCmd->SetDefaultValue("Iridium");
-  selDetCmd->SetCandidates("Iridium / Iodium / Leipzig");
+  selDetCmd->SetCandidates("Iridium / Iodium");
   selDetCmd->AvailableForStates(PreInit,Idle);
-
-  switchCmd = new G4UIcmdWithAString("/geom/switch",this);
-  switchCmd->SetGuidance("Assign the selected geometry to G4RunManager.");
-  switchCmd->SetGuidance("In case the choice is present to this command,");
-  switchCmd->SetGuidance("\"/geom/select\" will be invoked and then switched.");
-  switchCmd->SetParameterName("choice",true);
-  switchCmd->SetDefaultValue(" ");
-  switchCmd->SetCandidates("Iridium Iodium Leipzig ");
-  switchCmd->AvailableForStates(PreInit,Idle);
 
  
  }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-BrachyDetectorMessenger::~BrachyDetectorMessenger()
+BrachyRunMessenger::~BrachyRunMessenger()
 {
  
-  delete AbsMaterCmd; 
+  delete selDetCmd; 
   delete   mydetDir;
-  delete detDir;
+  //delete detDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void BrachyDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void BrachyRunMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == AbsMaterCmd )
-   { Detector->SetAbsorberMaterial(newValue);}
+  
 
  if( command == selDetCmd )
-  {
-    Detector->SelectDetector(newValue);
+  {if (newValue== "Iodium") pRun->SelectEnergy(1);
+    else  pRun->SelectEnergy(0);
   }
-  if( command == switchCmd )
-  {
-    if(newValue=="Iodium" || newValue=="Iridium"|| newValue=="Leipzig")
-      { 
-      Detector->SelectDetector(newValue); 
-      Detector->SwitchDetector();
-       }
-
-  }  
-  
-  
+   
 }
 
-
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -33,42 +33,42 @@
 #include "globals.hh"
 class BrachyDetectorConstruction; 
 class BrachyAnalysisManager;
+class BrachyPrimaryGeneratorActionI;
+class BrachyPrimaryGeneratorActionIr;
 class BrachyEventAction : public G4UserEventAction
 {
 public:
-  BrachyEventAction(G4String&);
-  ~BrachyEventAction();
+BrachyEventAction(G4String&);
+~BrachyEventAction();
 
 public:
-  void BeginOfEventAction(const G4Event*);
-  void EndOfEventAction(const G4Event*);
-
- 
-
+void BeginOfEventAction(const G4Event*);
+void EndOfEventAction(const G4Event*);
 
 private:
-  G4double  EnergyDep;
-  G4int m_NumVoxelX;
-  G4int m_NumVoxelZ;
-    
-  BrachyDetectorConstruction *pDetector;
-  G4double VoxelWidth_Z;
-  G4double VoxelWidth_X;
- 
+G4double  EnergyDep;
+ G4int m_NumVoxelX;
+ G4int m_NumVoxelZ;
+
+G4double VoxelWidth_Z;
+G4double VoxelWidth_X;
+
 private:
-  G4int m_HitsCollectionID;
-  G4String       drawFlag;
-  G4int          j;
-  G4int i;
-  G4int k;
-  G4double x;
-  G4double z;
-  G4String      SDname;
-  G4int  printModulo;      
-   
+G4int m_HitsCollectionID;
+G4String       drawFlag;
+G4int          j;
+G4int i;
+G4int k;
+G4double x;
+G4double z;
+G4double y;
+G4String      SDname;
+G4int  printModulo;
+BrachyDetectorConstruction* pDetector;      
+
 };
 
 #endif
 
-    
+
 
