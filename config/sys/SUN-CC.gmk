@@ -50,6 +50,9 @@ ifeq ($(G4SYSTEM),SUN-CC)
     CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
     CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
   endif
+  ifdef G4ODBMS
+    G4DDLX_FLAGS += -DG4std=""
+  endif
 
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
