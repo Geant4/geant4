@@ -78,6 +78,15 @@ protected:
 						  const G4ParticleDefinition& aParticleType,
 						  G4double KineticEnergy,
 						  G4double AtomicNumber);
+  
+  //--------------------------------------------------------start
+    virtual G4double ComputeBarkasTerm(
+    				       const G4Material* material,
+  				       const G4double KinEnergy,
+				       const G4double PartMass);
+  //Function to compute the Barkas term						  
+  //---------------------------------------------------------end
+    
 public: // With description
   
   void SetStoppingPowerTableName(const G4String& dedxTable);
@@ -89,10 +98,14 @@ public: // With description
   void SetNuclearStoppingOff();
   // This method switch off calculation of the nuclear stopping power.
   
-  G4double GetParametrisedLoss(const G4Material* material, const G4double KinEnergy, 
-			       const G4double DeltaRayCutNow);
+  G4double GetParametrisedLoss(const G4Material* material,
+  			       const G4double KinEnergy,
+			       const G4double DeltaRayCutNow,
+			       const G4double PartMass,
+			       const G4double PartCharge);
   // This method returns parametrised energy loss.
-
+  // NEW**** modified totake account of the Barkas correction 
+  
   G4double GetBetheBlochLoss(const G4Material* material, const G4double KinEnergy,
 			     const G4double DeltaRayCutNow);
   // This method returns energy loss calculated via Bethe-Bloch formula.

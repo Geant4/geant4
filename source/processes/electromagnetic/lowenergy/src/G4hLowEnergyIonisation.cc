@@ -126,7 +126,7 @@ void G4hLowEnergyIonisation::SetNuclearStoppingOn()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hLowEnergyIonisation::SetNuclearStoppingOff()
-{
+{B
   nStopping = false ;
 }
 
@@ -175,13 +175,23 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
       
       DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[J] ;
       
+      // get particle mass
+      
+      const G4double PartMass = aParticleType.GetPDGMass()/MeV;
+      
+      // get particle charge
+      
+      const G4double PartCharge = aParticleType.GetPDGCharge();
+      
       // define constants A and B for this material  
       
       paramA  = GetParametrisedLoss(material, ParamLowEnergy, 
-                                   DeltaCutInKineticEnergyNow)/sqrt(ParamLowEnergy) ; 
+                                   DeltaCutInKineticEnergyNow,
+				   PartMass, PartCharge)/sqrt(ParamLowEnergy) ; 
 
       ionloss = GetParametrisedLoss(material, ParamHighEnergy, 
-                                    DeltaCutInKineticEnergyNow) ; 
+                                    DeltaCutInKineticEnergyNow,
+				    PartMass, PartCharge) ; 
 
       ionlossBB = GetBetheBlochLoss(material, ParamHighEnergy, 
                                     DeltaCutInKineticEnergyNow) ; 
@@ -205,7 +215,8 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
 	    } else {
 	      // Parametrisation for intermediate energy range
 	      ionloss = GetParametrisedLoss(material, LowEdgeEnergy, 
-                                            DeltaCutInKineticEnergyNow) ; 
+                                            DeltaCutInKineticEnergyNow,
+					    PartMass, PartCharge) ; 
 	    }
 	  } else {
 	    
@@ -560,8 +571,10 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(const G4Track& trackData
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material, 
-                                                     const G4double KinEnergy, 
-                                                     const G4double DeltaRayCutNow)
+                                                     const G4double KinEnergy,
+						     const G4double DeltaRayCutNow,
+						     const G4double PartMass,
+						     const G4double PartCharge)
 {
 
   G4double ionloss, ion, ionloss125, ion125;
@@ -725,11 +738,70 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
     ionloss    -= GetDeltaRaysEnergy(material, KinEnergy, DeltaRayCutNow) ;
   }
   
+    //NEW-----------------------------------------------------start
+    // Correction term for the Barkas effect
+    
+    G4double BarkasTerm=0;
+    
+    if(PartCharge == -1) BarkasTerm = ComputeBarkasTerm( material, KinEnergy, PartMass);
+    
+    if(PartCharge <= -2) BarkasTerm = sqrt( GetIonEffChargeSquare( material, KinEnergy, PartCharge))
+			            * ComputeBarkasTerm ( material, KinEnergy, PartMass);
+    
+    ionloss += BarkasTerm;   
+    //---------------------------------------------------------end
+   
   if ( ionloss <= 0.) ionloss = 0. ;
   
   return ionloss;
 }
 
+//NEW***-------------------------------------------------start
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//Function to compute the Barkas term from:
+//
+//Ref.
+//
+
+G4double G4hLowEnergyIonisation::ComputeBarkasTerm(const G4Material* material,
+  				                   const G4double KinEnergy,
+						   const G4double PartMass )
+{
+  static double FTable[37][2]={   0.02,21.5,   0.03,20.0,   0.04,18.0,   0.05,15.6,
+                                0.06,15.0,   0.07,14.0,   0.08,13.5,   0.09,13,
+                     0.1,12.2,  0.2,  9.25,  0.3,  7, 	  0.4,  6,     0.5,  4.5,
+                                0.6,  3.5,   0.7,  3, 	  0.8,  2.5,   0.9,  2, 
+                     1,   1.7,  1.2,  1.2,   1.3,  1,     1.4,  0.86,  1.5,  0.7,
+		                1.6,  0.61,  1.7,  0.52,  1.8,  0.5,   1.9,  0.43,
+		                2,    0.42,  2.1,  0.3,   2.4,  0.2,   
+				3,    0.13,  4,    0.052, 5,    0.024,
+                                6,    0.0013,7,    0.009, 8,    0.006, 9,    0.0032, 
+	            10,   0.0025};
+
+  // Information on particle and material
+  G4double ZMaterial  = material-> GetTotNbOfElectPerVolume();
+  G4double AMaterial  = material-> GetTotNbOfAtomsPerVolume();
+  G4double RoMaterial = material->GetDensity();
+  G4double Beta = sqrt( (2*KinEnergy) / PartMass );
+  G4double X = ( (137*Beta) * (137*Beta) ) / ZMaterial;
+  
+  // Variables to compute L_1
+  G4double Eta0Chi = 0.8;
+  G4double EtaChi = Eta0Chi * ( 1 + 6.02*pow( ZMaterial,-1.19 ) );
+  G4double W = ( EtaChi * pow( ZMaterial,1./6 ) ) / sqrt(X); 
+  G4double FunctionOfW = 0;
+    for(int IndexOfFTable=0;IndexOfFTable<27;IndexOfFTable++){
+     if(W<FTable[IndexOfFTable][0]){
+     		FunctionOfW =( FTable[IndexOfFTable][1] + FTable[IndexOfFTable-1][1] ) /2;
+		break;}
+    }
+  G4double BarkasCoeffLbyARB = FunctionOfW / ( sqrt(ZMaterial) * pow(X,3./2) );
+  G4double BarkasTerm = 2 * BarkasCoeffLbyARB * ( 0.30708 * ZMaterial * RoMaterial )
+               	          / ( AMaterial*Beta*Beta );
+  return BarkasTerm;
+}
+//NEW***---------------------------------------------------------end
+        
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hLowEnergyIonisation::GetMolecICRU_R49Loss(const G4Material* material, 
@@ -797,7 +869,7 @@ G4double G4hLowEnergyIonisation::GetMolecICRU_R49Loss(const G4Material* material
     // Correction due to delta-electrons energy loss Bethe-Bloch 
     // formula is used.
     ionloss -= GetDeltaRaysEnergy(material, KinEnergy, DeltaRayCutNow) ;
-    
+     
     if ( ionloss <= 0.) ionloss = 0. ;
     return ionloss;
   }
