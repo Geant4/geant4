@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2001-10-17 07:59:47 gcosmo Exp $
+$Id: History,v 1.28 2001-10-17 14:02:15 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,8 +22,8 @@ committal in the CVS repository !
          G4Material and G4SandiaTable. Now placed in respective .cc files.
          Fixed memory leak in G4SandiaTable::ComputeMatSandiaMatrix(),
          for deletion of temporary vectors Z, tmp1, tmp2.
-         Moved definitions of G4IsotopeVector and G4ElementVector to the
-         appropriate headers.
+         Moved definitions of G4IsotopeVector and G4ElementVector,
+	 G4ElementTable and G4MaterialTable to the appropriate headers.
          Replaced NULL with 0 whereever needed.
 
 19.09.01 G.Cosmo - materials-V03-02-03

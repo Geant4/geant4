@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh,v 1.17 2001-10-17 07:59:52 gcosmo Exp $
+// $Id: G4Material.hh,v 1.18 2001-10-17 14:02:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -87,9 +87,7 @@
 #include "G4IonisParamMat.hh"
 #include "G4SandiaTable.hh"
 #include "G4ElementVector.hh"
-
-class G4Material;              //forward declaration
-typedef G4std::vector<G4Material*> G4MaterialTable;
+#include "G4MaterialTable.hh"
 
 enum G4State { kStateUndefined, kStateSolid, kStateLiquid, kStateGas };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh,v 1.14 2001-10-17 07:59:51 gcosmo Exp $
+// $Id: G4Element.hh,v 1.15 2001-10-17 14:02:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -77,10 +77,7 @@
 #include "G4AtomicShells.hh"
 #include "G4IonisParamElm.hh"
 #include "G4IsotopeVector.hh"
-
-class G4Element;              //forward declaration
-typedef G4std::vector<G4Element*> G4ElementTable;
-
+#include "G4ElementTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

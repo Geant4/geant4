@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElementTable.hh,v 1.3 2001-07-11 10:01:25 gunter Exp $
+// $Id: G4ElementTable.hh,v 1.4 2001-10-17 14:02:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,8 @@
 #ifndef G4ELEMENTTABLE_HH
 #define G4ELEMENTTABLE_HH
 
-#include "G4Element.hh"
+class G4Element;
+
+typedef G4std::vector<G4Element*> G4ElementTable;
 
 #endif
