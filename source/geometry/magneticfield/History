@@ -1,4 +1,4 @@
-$Id: History,v 1.3 1999-02-17 16:45:48 japost Exp $
+$Id: History,v 1.4 1999-02-17 16:59:42 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 17th, 1998   J. Apostolakis  -  field-01-00-01a
+  
+ Moved G4PropagatorInField files to geometry/volumes. 
+ Updated GNUmakefile not to depend on geometry/volumes anymore.
+   -> the known circular dependency is removed
 
 February 17th, 1998   J. Apostolakis  -  field-01-00-01  
 
