@@ -467,10 +467,10 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
   setenv CLHEP_BASE_DIR /lal/CLHEP/1.7.0.0/Linux-gxx
   setenv LD_LIBRARY_PATH ${G4INSTALL}/lib/${G4SYSTEM}
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$CLHEP_BASE_DIR/lib
-  setenv NeutronHPCrossSections $G4INSTALL/data/G4NDL3.5
-  setenv G4LEVELGAMMADATA $G4INSTALL/data/PhotonEvaporation
-  setenv G4RADIOACTIVEDATA $G4INSTALL/data/RadiativeDecay
-  setenv G4LEDATA $G4INSTALL/data/G4EMLOW0.3
+  setenv NeutronHPCrossSections $G4WORKDIR/data/G4NDL3.5
+  setenv G4LEVELGAMMADATA $G4WORKDIR/data/PhotonEvaporation
+  setenv G4RADIOACTIVEDATA $G4WORKDIR/data/RadiativeDecay
+  setenv G4LEDATA $G4WORKDIR/data/G4EMLOW0.3
 #
 # OpenGL driver :
 #  setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
@@ -521,6 +521,7 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
 #  setenv PATH ${PATH}:/lal/jas/2.0alpha4/release
 #  setenv PATH "${PATH}:/lal/DAWN/dawn_3_85a/Linux/bin"
 # Examples :
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/AnaEx01
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/DMX
 endif
