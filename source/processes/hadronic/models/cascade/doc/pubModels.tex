@@ -7,7 +7,7 @@ Intranuclear cascade (INC) model developed by Bertini \cite{bertini68}, solves t
 Nuclear model consist of a three-region approximation to the continuously changing density distribution of nuclear matter within nuclei.
 
 INC model had been implemented in several codes such as HETC \cite{alsmiller90}. 
-Our model is based on re-engineering of INUCL code ~\cite{titarenko99a}.
+Our model is based on re-engineering of INUCL code~\cite{titarenko99a}.
 Models included are Bertini intra-nuclear cascade model with exitons, pre-equilibrium model, simple nucleus explosion model, 
 fission model, and evaporation model. 
 
@@ -21,7 +21,7 @@ fission model, and evaporation model.
 % pion aborption
 % pre-equilibrium exiton model 
 
-Reletivistic kinematics is applied throughout the cascade, with accurate conservation of energy and momentum.
+
 Cascade is stopped when all the particles, which can escape the nucleus, do it. 
 Then conformity with the energy - conservation law is checked and the given event is accepted, if $E_{exitation} > E_{cut} \approx $a few $MeV$.
 
@@ -35,7 +35,7 @@ Then conformity with the energy - conservation law is checked and the given even
 % \item the products of the interaction are tracked trough the regions  until the energy drops below a cut-off energy.
 % \end{itemize}
 
-In the following sections we give the overview of submodel features.
+In the following sections we give the overview of submodel basic features.
 
 %Originally the INUCL code was published in 1983 \cite{stepanov}.
 %Comprison of results between INCUL and LAHET, CEM95, HETC, CASCADE,
@@ -64,8 +64,18 @@ Nuclear radius parameterization: By the definition R(A) is derived from eq. $Den
 [Nuclear density]
 Nuclear density distribution are derived from the $Re(V_{opt}(r))$ distribution. In cascade part, nucleus is divided into a finite number of zones with constant density.
 Fermi energy calculated in a local density approximation.
+%The nucleons are assumed to to have a Fermi gas momentum distribution.
+%The potential well depth is taken to be 7 MeV.
 
-The potential well depth is taken to be 7 MeV.
+The nucleon potential energy is
+$ V_{N} = \frac{p_{f}^2}{2 m_{N}} + BE_{N}(A, Z)$
+
+%vz.push_back(0.5 * pff * pff / mproton + binding_energies[0]);
+, where $p_{f} = 1.932 r
+
+%G4double dd0 = 3.0 * z * oneBypiTimes4 / tot_vol;
+%G4double rd = dd0 * v[i] / v1[i];
+%G4double pff = pf_coeff * pow(rd, one_third);
 
 Nuclear density effects are recalculated after each step.
 
@@ -75,9 +85,10 @@ Distribution of potential energy.
 
 
 [Mass formula]
-Nucleons binding energies are calculated using mass formula. For pions $V_{opt}$ is taken to be constant (about 7 MeV).
+Nucleons binding energies (BE) are calculated using mass formula.
 A parametrization of the nuclear binding energy uses combintaion of Kummel mass formula, or
 experimental data. Asymptotic high temperature mass formula is used if it's impossible to use experimental data.
+%For pions $V_{opt}$ is taken to be constant (about 7 MeV).
 %Smooth liquid high energy formula  has  
 
 % Continuous charge dencity
@@ -123,9 +134,11 @@ experimental data. Asymptotic high temperature mass formula is used if it's impo
 % In each region protons and neutrons have different potential energy.  
 
 %\subsubsection{Quantum effects}
-% \subsubsection{Pauli exclusion principle}
-Pauli exclusion principle
-Pauli exclusion in the INC: Simulated particle-particle interaction is accepted only for secondary nucleons which have $E_n > E_f$.
+\subsubsection{Pauli exclusion principle}
+Pauli exclusion principle forbids interactions where the products would bi in occupied states.
+Following an assumption od completely degenerate Fermi gas, the levels are filled from the lowes level.
+The minimum energy allowed for the product of collision correspond to the lowest unfilled level of system, which is the Fermi energy in the region. 
+So in practice, Pauli exclusion prinsiple is taken into account by accepting only  secondary nucleons which have $E_n > E_f$.
 
 % Constrains imposed by the Pauli exclusion principle 
 % are taken into account 
@@ -227,11 +240,14 @@ Pauli exclusion in the INC: Simulated particle-particle interaction is accepted 
 % \subsection{Pre-equilibrium model}
 % \subsubsection{Separtion between INC and evaporation}
 
-\subsubsection{Cross sections}
+\subsubsection{Cross sections and kinematics}
 
 Cascade model has tabulated cross-sections
 
+Reletivistic kinematics is applied throughout the cascade, with accurate conservation of energy and momentum.
+
 Probabllility for interactions during INC is obtained using free (N, N) cross-sections. 
+Angles after collisions are sampled from experimental differential cross sections.
 %Cross-sections for production of one or two $\pi$ are included. 
 
 %pion absorption
@@ -262,9 +278,6 @@ Path lengths of nucleons in the nucleus are sampled according to the local densi
 %h - number of "holes" = number of nuclear nucleons involved in the cascade; energy - momentum of the exiton system derived from the conservation law.
 
 %exiton master equation
-
-
-
 
 
 % the Monte Carlo calculation of nuclear
@@ -334,6 +347,9 @@ Implementaion inclues holes and quasiparticles.
 % \subsubsection{Precompound phase}
 % %, describe the PE model used, parameters, i.e., partial state densities, transition rates? 
 
+% Parametrixations of the level density, tabulated both with A and Z dependence and with high temperature 
+%behaviour (the nuclei binding energy using smooth liquid high energy formula)
+
 %Main parameters are taken from (Ribansky I. et al, Nucl.Phys.,1973, A205, p.545 (level densities); 
 %Kolbach.C., Z.Phys.,1978, A287, p.319 (matrix elements)). 
 %N -> N, N -> N + 2, N -> N -2, N -> N - 1 channels are treated.)
@@ -375,7 +391,9 @@ Implementaion inclues holes and quasiparticles.
 
 \subsection{Fermi break-up model}
 
-Fermi break-up is allowed only in some extreme cases, i.e. for light nuclei ($A < 12$ and  $3(a-z) < Z < 6$ ) and $E(exitation) > 3.*Eb$ 
+Fermi break-up is allowed only in some extreme cases, i.e. for light nuclei ($A < 12$ and  $3 (a - z) < Z < 6$ ) and $E_{exitation} > 3 E_{binding}$ 
+%If the light nuclei exitation energy is higher than three times the binding energy, 
+%the nuclei expolision is performed. 
 
 Simple explosion model decays the nuleus into neutrons and protons and decreases exotic evaporation processes.
 
@@ -385,10 +403,12 @@ Fission model is phenomenological, incorporating some features of the fission st
 
 \subsection{Evaporation model}
 
-If the light nuclei exitation energy is higher than three times the binding energy, 
-the nuclei expolision is performed. 
+Physics of particle emission of the exited nucleus (de-exitation) remaining after the INC is based on statistical theory
+originally developed by Weisskopf \cite{weisskopf37}. This model assumes complete energy equilibration before the particle emission, and re-equilibration of excitation energies between successive evaporations. As a result the angular distribution of emitted particles is isotropic.
 
-The following evaportaion phase implementation is based on Dostrowski model \cite[].
+{\sc Geant4} evaporation model for cascade implementation adapts often used comutational method developed by Dostrowski \cite{dostrovsky59, dostrovsky60}.
+The emission of particles is computed until the exitation energy
+
 %Evaporation (Weisskopf - Ewing) 
 %Weisskopf-Ewing evaporation in competition with fission. 
 %Emissions of n,p,d,t,He3,He4,gamma is allowed. 
