@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Jun-2000)
+                                (15-Dec-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 Now Detector is SimpleBox
@@ -9,14 +9,14 @@ Now CGS is Box
 Now Boolean is Intersection
 fSize = 0
 #
-# Macro file of "skeleton.cc"
-# for tracking performance test
+# Macro file test01.in
+# for geometry/tracking performance test
 #
 # /run/verbose 2
 #
 # SimpleBox geometry made by Pb
 # Geantino 100 GeV to the direction (1.,0.,0.)
-# 10 events
+# 1000 events
 #
 /mydet/SwitchDetector SimpleBox
 Now Detector is SimpleBox
@@ -37,11 +37,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0     1e+05        0        0         0       SPhys initStep
     1    2e+04        0        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
 /tracking/verbose 0
-/run/beamOn 10
+/run/beamOn 1000
 #
 # SimpleBox geometry made by Al
 # Geantino 100 GeV to the direction (0.,1.,0.)
-# 10 events
+# 1000 events
 #
 /mydet/SelectMaterial Al
 Daughter CSG/Boolean will be made of Al
@@ -57,11 +57,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0     1e+05        0        0         0       SPhys initStep
     1        0    2e+04        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
 /tracking/verbose 0
-/run/beamOn 10
+/run/beamOn 1000
 #
 # SimpleBox geometry made by Air
 # Geantino 100 GeV to the direction (1.,1.,0.)
-# 10 events
+# 1000 events
 #
 /mydet/SelectMaterial Air
 Daughter CSG/Boolean will be made of Air
@@ -77,11 +77,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0     1e+05        0        0         0       SPhys initStep
     1    2e+04    2e+04        0     1e+05        0 2.83e+04  2.83e+04  OutOfWorld Transportation
 /tracking/verbose 0
-/run/beamOn 10
+/run/beamOn 1000
 #
 # Honeycomb geometry
 # Geantino 100 GeV to the direction (1.,0.,0.)
-# 10 events
+# 1000 events
 #
 /mydet/SwitchDetector Honeycomb
 Now Detector is Honeycomb
@@ -97,11 +97,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0     1e+05        0        0         0       WPhys initStep
     1    2e+04        0        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
 /tracking/verbose 0
-/run/beamOn 10
+/run/beamOn 1000
 #
 # Honeycomb geometry
 # Geantino 100 GeV to the direction (0.,1.,0.)
-# 10 events
+# 1000 events
 #
 /gun/direction 0 1 0
 /tracking/verbose 1
@@ -115,11 +115,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0     1e+05        0        0         0       WPhys initStep
     1        0    2e+04        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
 /tracking/verbose 0
-/run/beamOn 10
+/run/beamOn 1000
 #
 # Honeycomb geometry
 # Geantino 100 GeV to the direction (1.,1.,0.)
-# 10 events
+# 1000 events
 #
 /gun/direction 1 1 0
 /tracking/verbose 1
@@ -133,5 +133,81 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0        0     1e+05        0        0         0       WPhys initStep
     1    2e+04    2e+04        0     1e+05        0 2.83e+04  2.83e+04  OutOfWorld Transportation
 /tracking/verbose 0
-/run/beamOn 10
+/run/beamOn 1000
+#
+# Assembly geometry
+# Geantino 100 GeV to the direction (0.,0.,1.)
+# 1000 events
+#
+/mydet/SwitchDetector Assembly
+Now Detector is Assembly
+/gun/position  600  600 -601 mm
+/gun/direction 0      0    1
+/tracking/verbose 1
+/run/beamOn 1
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      600      600     -601     1e+05        0        0         0 AssemblyDetector initStep
+    1      600      600     -550     1e+05        0       51        51 av_1_impr_1_AssemblyCellLog_pv_0 Transportation
+    2      600      600     -450     1e+05        0      100       151 AssemblyDetector Transportation
+    3      600      600     -300     1e+05        0      150       301 av_1_impr_2_AssemblyCellLog_pv_0 Transportation
+    4      600      600     -200     1e+05        0      100       401 AssemblyDetector Transportation
+    5      600      600      -50     1e+05        0      150       551 av_1_impr_3_AssemblyCellLog_pv_0 Transportation
+    6      600      600       50     1e+05        0      100       651 AssemblyDetector Transportation
+    7      600      600      200     1e+05        0      150       801 av_1_impr_4_AssemblyCellLog_pv_0 Transportation
+    8      600      600      300     1e+05        0      100       901 AssemblyDetector Transportation
+    9      600      600      450     1e+05        0      150  1.05e+03 av_1_impr_5_AssemblyCellLog_pv_0 Transportation
+   10      600      600      550     1e+05        0      100  1.15e+03 AssemblyDetector Transportation
+   11      600      600    1e+03     1e+05        0      450   1.6e+03  OutOfWorld Transportation
+/tracking/verbose 0
+/run/beamOn 1000
+#
+# Assembly geometry
+# Geantino 100 GeV to the direction (1.,1.,1.)
+# 1000 events
+#
+/gun/position  0 0 0 mm
+/gun/direction 1 1 1
+/tracking/verbose 1
+/run/beamOn 1
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     1e+05        0        0         0 AssemblyDetector initStep
+    1      200      200      200     1e+05        0      346       346 av_1_impr_4_AssemblyCellLog_pv_0 Transportation
+    2      300      300      300     1e+05        0      173       520 AssemblyDetector Transportation
+    3      450      450      450     1e+05        0      260       779 av_1_impr_5_AssemblyCellLog_pv_0 Transportation
+    4      550      550      550     1e+05        0      173       953 AssemblyDetector Transportation
+    5    1e+03    1e+03    1e+03     1e+05        0      779  1.73e+03  OutOfWorld Transportation
+/tracking/verbose 0
+/run/beamOn 1000
+#
+# Assembly geometry
+# Geantino 100 GeV to the direction (-1.,-1.,-1.)
+# 1000 events
+#
+/gun/direction -1 -1 -1
+/tracking/verbose 1
+/run/beamOn 1
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0     1e+05        0        0         0 AssemblyDetector initStep
+    1     -200     -200     -200     1e+05        0      346       346 av_1_impr_2_AssemblyCellLog_pv_2 Transportation
+    2     -300     -300     -300     1e+05        0      173       520 AssemblyDetector Transportation
+    3     -450     -450     -450     1e+05        0      260       779 av_1_impr_1_AssemblyCellLog_pv_2 Transportation
+    4     -550     -550     -550     1e+05        0      173       953 AssemblyDetector Transportation
+    5   -1e+03   -1e+03   -1e+03     1e+05        0      779  1.73e+03  OutOfWorld Transportation
+/tracking/verbose 0
+/run/beamOn 1000
 exit
