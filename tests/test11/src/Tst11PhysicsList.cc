@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst11PhysicsList.cc,v 1.1 1999-01-08 16:35:38 gunter Exp $
+// $Id: Tst11PhysicsList.cc,v 1.2 1999-04-17 08:24:08 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -16,6 +16,12 @@
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
+#include "G4BosonConstructor.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BarionConstructor.hh"
+#include "G4IonConstructor.hh"
+#include "G4ShortLivedConstructor.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
@@ -44,6 +50,48 @@ void Tst11PhysicsList::ConstructParticle()
   ConstructAllBarions();
   ConstructAllIons();
   ConstructAllShortLiveds();
+}
+
+void Tst11PhysicsList::ConstructAllBosons()
+{
+  // Construct all bosons
+  G4BosonConstructor pConstructor;
+  pConstructor.ConstructParticle();
+}
+
+void Tst11PhysicsList::ConstructAllLeptons()
+{
+  // Construct all leptons
+  G4LeptonConstructor pConstructor;
+  pConstructor.ConstructParticle();
+}
+
+void Tst11PhysicsList::ConstructAllMesons()
+{
+  //  Construct all mesons
+  G4MesonConstructor pConstructor;
+  pConstructor.ConstructParticle();
+}
+
+void Tst11PhysicsList::ConstructAllBarions()
+{
+  //  Construct all barions
+  G4BarionConstructor pConstructor;
+  pConstructor.ConstructParticle();
+}
+
+void Tst11PhysicsList::ConstructAllIons()
+{
+  //  Construct light ions
+  G4IonConstructor pConstructor;
+  pConstructor.ConstructParticle();  
+}
+
+void Tst11PhysicsList::ConstructAllShortLiveds()
+{
+  //  Construct  resonaces and quarks
+  G4ShortLivedConstructor pConstructor;
+  pConstructor.ConstructParticle();  
 }
 
 void Tst11PhysicsList::ConstructProcess()
@@ -518,29 +566,13 @@ void Tst11PhysicsList::ConstructGeneral()
   }
 }
 
-void Tst11PhysicsList::SetCuts(G4double cut)
+void Tst11PhysicsList::SetCuts()
 {
   if (verboseLevel >0){
     G4cout << "Tst11PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
+    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << endl;
   }  
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
-  SetCutValue(cut, "gamma");
-  SetCutValue(cut, "e-");
-  SetCutValue(cut, "e+");
- 
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-  SetCutValue(cut, "proton");
-  SetCutValue(cut, "anti_proton");
-  
-  SetCutValueForOthers(cut);
-
-  if (verboseLevel>1) {
-    DumpCutValuesTable();
-  }
+ //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //   the default cut value for all particle types 
+  SetCutsWithDefault();   
 }
-
-
