@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayleighTest.cc,v 1.2 2001-05-07 18:04:14 pia Exp $
+// $Id: G4RayleighTest.cc,v 1.3 2001-05-07 20:11:06 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,7 +61,7 @@
 
 HepTupleManager* hbookManager;
 
-G4int main()
+int main()
 {
 
   // Setup
@@ -243,7 +243,7 @@ G4int main()
   // Track 
 
   G4ThreeVector aPosition(0.,0.,0.);
-  //  G4ThreeVector aPosition(0.,0.,0.001*mm);
+  G4ThreeVector newPosition(0.,0.,1.*mm);
   G4double aTime = 0. ;
 
   G4Track* gTrack = new G4Track(&dynamicPhoton,aTime,aPosition);
@@ -264,7 +264,10 @@ G4int main()
   G4double safety = 10000.*cm;
   aPoint->SetSafety(safety);
   step->SetPreStepPoint(aPoint);
-  step->SetPostStepPoint(aPoint);
+  G4StepPoint* newPoint = new G4StepPoint();
+  newPoint->SetPosition(newPosition);
+  newPoint->SetMaterial(material);
+  step->SetPostStepPoint(newPoint);
 
   // Check applicability
   
@@ -393,7 +396,7 @@ G4int main()
 	  hEKin->accumulate(eKin);
 	  hP->accumulate(p);
 	  
-	  G4int partType;
+	  G4int partType = 0;
 	  if (particleName == "e-") 
 	    {
 	      partType = 1;

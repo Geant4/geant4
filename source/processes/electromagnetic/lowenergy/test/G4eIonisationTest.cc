@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisationTest.cc,v 1.6 2001-05-07 18:04:14 pia Exp $
+// $Id: G4eIonisationTest.cc,v 1.7 2001-05-07 20:11:06 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -59,7 +59,7 @@
 
 HepTupleManager* hbookManager;
 
-G4int main()
+int main()
 {
 
   // Setup
@@ -395,7 +395,7 @@ G4int main()
 	  hEKin->accumulate(eKin);
 	  hP->accumulate(p);
 	  
-	  G4int partType;
+	  G4int partType = 0;
 	  if (particleName == "e-") 
 	    {
 	      partType = 1;

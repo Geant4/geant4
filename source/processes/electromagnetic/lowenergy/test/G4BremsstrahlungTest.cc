@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BremsstrahlungTest.cc,v 1.7 2001-05-07 18:04:14 pia Exp $
+// $Id: G4BremsstrahlungTest.cc,v 1.8 2001-05-07 20:11:06 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,7 +57,7 @@
 
 HepTupleManager* hbookManager;
 
-G4int main()
+int main()
 {
 
   // Setup
@@ -243,7 +243,7 @@ G4int main()
   // Track 
 
   G4ThreeVector aPosition(0.,0.,0.);
-  //  G4ThreeVector aPosition(0.,0.,0.001*mm);
+  G4ThreeVector newPosition(0.,0.,1.*mm);
   G4double aTime = 0. ;
 
   G4Track* eTrack = new G4Track(&dynamicElectron,aTime,aPosition);
@@ -264,8 +264,11 @@ G4int main()
   G4double safety = 10000.*cm;
   aPoint->SetSafety(safety);
   step->SetPreStepPoint(aPoint);
-  step->SetPostStepPoint(aPoint);
-
+  G4StepPoint* newPoint = new G4StepPoint();
+  newPoint->SetPosition(newPosition);
+  newPoint->SetMaterial(material);
+  step->SetPostStepPoint(newPoint);
+  
   // Check applicability
   
   if (! (bremProcess->IsApplicable(*electron)))
@@ -358,16 +361,13 @@ G4int main()
       ntuple1->column("pzch", pzChange);
       ntuple1->column("pch", zChange);  
       ntuple1->column("thetach", thetaChange);  
-      
+      ntuple1->dumpData(); 
+
       // Secondaries physical quantities 
       
       hNSec->accumulate(particleChange->GetNumberOfSecondaries());
       hDebug->accumulate(particleChange->GetLocalEnergyDeposit());
       
-      G4int nElectrons = 0;
-      G4int nPositrons = 0;
-      G4int nPhotons = 0;
-
       for (G4int i = 0; i < (particleChange->GetNumberOfSecondaries()); i++) 
 	{
 	  // The following two items should be filled per event, not
@@ -406,22 +406,11 @@ G4int main()
 	  hEKin->accumulate(eKin);
 	  hP->accumulate(p);
 	  
-	  G4int partType;
-	  if (particleName == "e-") 
-	    {
-	      partType = 1;
-	      nElectrons++;
-	    }
-	  else if (particleName == "e+") 
-	    {
-	      partType = 2;
-	      nPositrons++;
-	    }
-	  else if (particleName == "gamma") 
-	    {
-	      partType = 3;
-	      nPhotons++;
-	    }
+	  G4int partType = 0;
+	  if (particleName == "e-") partType = 1;
+	  else if (particleName == "e+") partType = 2;
+	  else if (particleName == "gamma") partType = 3;
+	  
 	  // Fill the secondaries ntuple
           ntuple2->column("eprimary",initEnergy);
 	  ntuple2->column("px", px);
@@ -437,12 +426,7 @@ G4int main()
 	  
 	  delete particleChange->GetSecondary(i);
 	}
-
-      ntuple1->column("nelectrons",nElectrons);
-      ntuple1->column("npositrons",nPositrons);
-      ntuple1->column("nphotons",nPhotons);
-      ntuple1->dumpData(); 
-	          
+      
       particleChange->Clear();
       
     } 
