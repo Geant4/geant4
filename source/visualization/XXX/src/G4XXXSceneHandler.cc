@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.6 2001-11-16 10:50:08 johna Exp $
+// $Id: G4XXXSceneHandler.cc,v 1.7 2002-10-24 15:18:24 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,9 @@
 #include "G4Square.hh"
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
+#include "G4VTrajectory.hh"
+#include "G4AttDef.hh"
+#include "G4AttValue.hh"
 
 G4int G4XXXSceneHandler::fSceneIdCount = 0;
 // Counter for XXX scene handlers.
@@ -198,6 +201,41 @@ void G4XXXSceneHandler::AddThis(const G4VSolid& solid) {
   PrintThings();
 #endif
   G4VSceneHandler::AddThis(solid);  // Invoke default action.
+}
+
+void G4XXXSceneHandler::AddThis(const G4VTrajectory& traj) {
+#ifdef G4XXXDEBUG
+  G4cout <<
+    "G4XXXSceneHandler::AddThis(const G4VTrajectory& traj) called."
+	 << G4endl;
+#endif
+  const G4std::vector<G4AttDef>* attDefs = traj.GetAttDefs();
+  G4std::vector<G4AttValue>* attValues = traj.GetAttValues();
+  G4std::vector<G4AttValue>::iterator i;
+  for (i = attValues->begin(); i != attValues->end(); ++i) {
+    G4std::vector<G4AttDef>::const_iterator j;
+    for (j = attDefs->begin(); j != attDefs->end(); ++j) {
+      if (j->GetName() == i->GetName()) break;
+    }
+    if (j == attDefs->end()) {
+      G4cout << "WARNING: No matching G4AttDef for "
+	     << i->GetName() << ": " << i->GetValue()
+	     << G4endl;
+    }
+    else {
+      G4cout << "  " << j->GetDesc() << ": " << i->GetValue() << G4endl;
+    }
+  }
+  delete attValues;  // AttValues must be deleted by the user.
+}
+
+void G4XXXSceneHandler::AddThis(const G4VHit& hit) {
+#ifdef G4XXXDEBUG
+  G4cout <<
+    "G4XXXSceneHandler::AddThis(const G4VHit& hit) called."
+	 << G4endl;
+#endif
+  G4VSceneHandler::AddThis(hit);  // Invoke default action.
 }
 
 
