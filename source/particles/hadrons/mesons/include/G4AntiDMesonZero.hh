@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiDMesonZero.hh,v 1.1 1999-01-07 16:10:08 gunter Exp $
+// $Id: G4AntiDMesonZero.hh,v 1.2 1999-04-13 08:35:48 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,12 +56,14 @@ class G4AntiDMesonZero : public G4VMeson
    );
 
  public:
+   virtual ~G4AntiDMesonZero() {}
+
    static G4AntiDMesonZero* AntiDMesonZeroDefinition();
    static G4AntiDMesonZero* AntiDMesonZero();
    static G4double GetCuts() {return theAntiDMesonZeroLengthCut;}   
    static G4double* GetCutsInEnergy() {return theAntiDMesonZeroKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 
