@@ -1,203 +1,77 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
-//
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
-//
-// $Id: Tst14SteppingAction.cc,v 1.1 1999-05-29 14:12:13 stesting Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#include "Tst14DetectorConstruction.hh"
-#include "G4EnergyLossTables.hh"
-#include "G4SteppingManager.hh"
-#include "G4TrackVector.hh"
 #include "Tst14SteppingAction.hh"
-#include "Tst14PrimaryGeneratorAction.hh"
-#include "Tst14EventAction.hh"
-#include "Tst14RunAction.hh"
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "Tst14SteppingMessenger.hh"
+#include "G4SteppingManager.hh"
+#include "G4Track.hh"
+#include "G4Step.hh"
+#include "G4StepPoint.hh"
+#include "G4TrackStatus.hh"
+#include "G4TrackVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTypes.hh"
 #include "G4ios.hh"
 #include <iomanip.h>
-#include "G4UImanager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-Tst14SteppingAction::Tst14SteppingAction(Tst14DetectorConstruction* DET,
-                                         Tst14EventAction* EA,
-                                         Tst14RunAction* RA)
-:detector (DET),eventaction (EA),runaction (RA),steppingMessenger(NULL),
- IDold(-1) ,evnoold(-1)
-{
-  steppingMessenger = new Tst14SteppingMessenger(this);
-
- }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+Tst14SteppingAction::Tst14SteppingAction()
+{;}
 
 Tst14SteppingAction::~Tst14SteppingAction()
+{;}
+
+void Tst14SteppingAction::UserSteppingAction(const G4Step * theStep)
 {
-  delete steppingMessenger ;
- }
+  G4SteppingManager * SM = fpSteppingManager;
+  G4Track * theTrack = theStep->GetTrack();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  // check if it is alive
+  if(theTrack->GetTrackStatus()==fAlive) { return; }
 
-void Tst14SteppingAction::UserSteppingAction(const G4Step* aStep)
-{ 
-
-  G4double Edep,Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,xend,yend,zend,rend ;
-  G4double Tkin ;
-  G4int evno = eventaction->GetEventno() ; 
-
-  IDnow = evno+10000*(aStep->GetTrack()->GetTrackID())+
-          100000000*(aStep->GetTrack()->GetParentID()); 
-  if(IDnow != IDold)
-  {
-   IDold=IDnow ;
-   if(
-      (((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "e-") &&
-       ((aStep->GetTrack()->GetTrackID() != 1) ||
-       (aStep->GetTrack()->GetParentID() != 0)) )
-       ||
-      (((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "e+") &&
-       ((aStep->GetTrack()->GetTrackID() != 1) ||
-       (aStep->GetTrack()->GetParentID() != 0)) )
-     )
-        runaction->Fillvertexz(aStep->GetTrack()->GetVertexPosition().z());
-
-   if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber")
-   {
-    if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "e-") &&
-       ((aStep->GetTrack()->GetTrackID() != 1) ||
-       (aStep->GetTrack()->GetParentID() != 0)) ) 
-    {
-        eventaction->AddCharged() ;
-        eventaction->AddE() ;
-        Tsec = aStep->GetTrack()->GetKineticEnergy() ;  // !!!!!!!!!!!!
-        Tsec += aStep->GetTotalEnergyDeposit() ;        // !!!!!!!!!!!!
-        runaction->FillTsec(Tsec) ;
+      G4cout << setw( 5) << "#Step#" << " "
+        << setw( 9) << "X(mm)" << " "
+          << setw( 9) << "Y(mm)" << " "
+            << setw( 9) << "Z(mm)" << " "
+              << setw( 9) << "KineE(MeV)" << " "
+                << setw( 9) << "dE(MeV)" << " "
+                  << setw( 9) << "StepLeng" << " "
+                    << setw( 9) << "TrackLeng" << " "
+                        << setw(10) << "ProcName" << endl;
+    G4cout.precision(3);
+    G4cout << setw( 5) << theTrack->GetCurrentStepNumber() << " "
+      << setw( 9) << theTrack->GetPosition().x() / mm << " "
+        << setw( 9) << theTrack->GetPosition().y() / mm << " "
+          << setw( 9) << theTrack->GetPosition().z() / mm << " "
+             << setw( 9) << theTrack->GetKineticEnergy() / MeV << " "
+              << setw( 9) << theStep->GetTotalEnergyDeposit() /MeV << " "
+                << setw( 9) << theStep->GetStepLength() / mm << " "
+                  << setw( 9) << theTrack->GetTrackLength() / mm << " ";
+    if(theStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
+      G4cout << theStep->GetPostStepPoint()->GetProcessDefinedStep()
+        ->GetProcessName();
+    } else {
+      G4cout << "User Limit";
     }
-    else
-    if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "e+") &&
-       ((aStep->GetTrack()->GetTrackID() != 1) ||
-       (aStep->GetTrack()->GetParentID() != 0)) ) 
-    {
-        eventaction->AddCharged() ;
-        eventaction->AddP() ;
-        Tsec = aStep->GetTrack()->GetKineticEnergy() ;  // !!!!!!!!!!!!
-        Tsec += aStep->GetTotalEnergyDeposit() ;        // !!!!!!!!!!!!
-        runaction->FillTsec(Tsec) ;
-    }
-    else
-    if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "gamma") &&
-       ((aStep->GetTrack()->GetTrackID() != 1) ||
-       (aStep->GetTrack()->GetParentID() != 0)) ) 
-    {
-        eventaction->AddNeutral() ;
-    }
-   }
-  }
+    G4cout << endl;
 
-  if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber")
-  {
-    if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "e-") 
-              ||
-       ((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "e+"))  
-          eventaction->CountStepsCharged() ;
+   G4TrackVector* fSecondary = SM->GetfSecondary();
+       G4cout << "   -- List of secondaries generated : "
+         << "(x,y,z,kE,t,PID) --" << endl;
+       for( G4int lp1=0;lp1<(*fSecondary).entries(); lp1++){
+         G4cout << "      "
+           << setw( 9)
+             << (*fSecondary)[lp1]->GetPosition().x() / mm << " "
+               << setw( 9)
+                 << (*fSecondary)[lp1]->GetPosition().y() / mm << " "
+                   << setw( 9)
+                     << (*fSecondary)[lp1]->GetPosition().z() / mm << " "
+                       << setw( 9)
+                         << (*fSecondary)[lp1]->GetKineticEnergy() / MeV << " "
+                           << setw( 9)
+                             << (*fSecondary)[lp1]->GetGlobalTime() / ns << " "
+                               << setw(18)
+                                 << (*fSecondary)[lp1]->GetDefinition()
+                                   ->GetParticleName();
+         G4cout << endl;
+       }
 
-    if ((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName()) == "gamma") 
-          eventaction->CountStepsNeutral() ;
-  }
-
-  if (
-      (((aStep->GetTrack()->GetTrackID() == 1) &&
-        (aStep->GetTrack()->GetParentID()== 0)) ||
-   //  most csak primary >>>
-       // (aStep->GetTrack()->GetParentID()== 0)) &&
-      (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-       GetParticleName() ==
-       Tst14PrimaryGeneratorAction::GetPrimaryName())) 
-       &&
-      (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber")
-      &&
-      (aStep->GetTrack()->GetNextVolume()->GetName()=="World") &&
-      (aStep->GetPostStepPoint()->GetProcessDefinedStep()
-               ->GetProcessName() == "Transportation") &&
-      (aStep->GetTrack()->GetMomentumDirection().z()>0.)
-                                                        )
-     {
-       eventaction->SetTr();
-       Theta = acos(aStep->GetTrack()->GetMomentumDirection().z()) ;
-       runaction->FillTh(Theta) ;
-       Ttrans = aStep->GetTrack()->GetKineticEnergy() ;
-       runaction->FillTt(Ttrans) ;
-       xend= aStep->GetTrack()->GetPosition().x() ;
-       yend= aStep->GetTrack()->GetPosition().y() ;
-       rend = sqrt(xend*xend+yend*yend) ;
-       runaction->FillR(rend);
-     }
-       
-  if (
-      (((aStep->GetTrack()->GetTrackID() == 1) &&
-        (aStep->GetTrack()->GetParentID()== 0)) ||
-      (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-       GetParticleName() ==
-       Tst14PrimaryGeneratorAction::GetPrimaryName())) 
-       &&
-      (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber") &&
-      (aStep->GetTrack()->GetNextVolume()->GetName()=="World") &&
-      (aStep->GetPostStepPoint()->GetProcessDefinedStep()
-               ->GetProcessName() == "Transportation") &&
-      (aStep->GetTrack()->GetMomentumDirection().z()<0.)
-                                                        )
-     {
-       eventaction->SetRef();
-       Thetaback = acos(aStep->GetTrack()->GetMomentumDirection().z()) ;
-       Thetaback -= 0.5*pi ;
-       runaction->FillThBack(Thetaback) ;
-       Tback  = aStep->GetTrack()->GetKineticEnergy() ;
-       runaction->FillTb(Tback) ;
-     }
- 
-
-  if (
-      ((aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber") &&
-      (aStep->GetTrack()->GetNextVolume()->GetName()=="World") &&
-      (aStep->GetPostStepPoint()->GetProcessDefinedStep()
-               ->GetProcessName() == "Transportation") &&
-      (aStep->GetTrack()->GetMomentumDirection().z()>0.) &&
-      (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()
-       ->GetParticleName() == "gamma"))
-     )
-     {
-       Egamma = aStep->GetTrack()->GetKineticEnergy() ;
-       runaction->FillGammaSpectrum(Egamma) ;
-     }
-      
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-
-
-
 
