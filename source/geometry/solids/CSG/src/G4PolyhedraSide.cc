@@ -549,7 +549,17 @@ EInside G4PolyhedraSide::Inside( const G4ThreeVector &p, const G4double toleranc
 //
 G4ThreeVector G4PolyhedraSide::Normal( const G4ThreeVector &p,  G4double *bestDistance )
 {
+	//
+	// Which phi segment is closest to this point?
+	//
 	G4int iPhi = ClosestPhiSegment( p.phi() );
+
+	//
+	// Get distance to this segment
+	//
+	G4double norm;
+	*bestDistance = DistanceToOneSide( p, vecs[iPhi], &norm );
+
 	return vecs[iPhi].normal;
 }
 
