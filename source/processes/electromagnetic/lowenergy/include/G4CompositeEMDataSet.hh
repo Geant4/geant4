@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeEMDataSet.hh,v 1.2 2001-10-08 07:45:32 pia Exp $
+// $Id: G4CompositeEMDataSet.hh,v 1.3 2001-10-08 15:27:01 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -55,12 +55,12 @@ class G4CompositeEMDataSet : public G4VEMDataSet
 { 
 public:
 
-  G4CompositeEMDataSet(const G4VDataSetAlgorithm* interpolation,
+  G4CompositeEMDataSet(G4VDataSetAlgorithm* interpolation,
 		       G4double unitE = MeV, G4double unitData = barn,
 		       G4int minZ = 1, G4int maxZ = 99);
 
   G4CompositeEMDataSet(const G4String& dataFile,
-		       const G4VDataSetAlgorithm* interpolation,
+		       G4VDataSetAlgorithm* interpolation,
 		       G4double unitE = MeV, G4double unitData = barn,
 		       G4int minZ = 1, G4int maxZ = 99);
 
@@ -83,7 +83,7 @@ private:
 
   void LoadData(const G4String& fileName);
 
-  const G4VDataSetAlgorithm* algorithm; 
+  G4VDataSetAlgorithm* algorithm; 
 
   G4std::vector<G4VEMDataSet*> components;
   size_t nComponents;

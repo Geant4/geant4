@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDataSetAlgorithm.hh,v 1.2 2001-10-08 07:45:36 pia Exp $
+// $Id: G4VDataSetAlgorithm.hh,v 1.3 2001-10-08 15:27:01 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -52,6 +52,8 @@ public:
  
   virtual G4std::vector<G4DynamicParticle*>* Generate(const G4Track& aTrack,
 						      const G4Step& aStep) const = 0;
+
+  virtual G4VDataSetAlgorithm* Clone() const = 0;
 
 private:
   
