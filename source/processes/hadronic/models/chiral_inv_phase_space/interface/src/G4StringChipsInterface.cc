@@ -77,7 +77,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     if(runningEnergy > theEnergyLostInFragmentation) break;
     
      // projectile 4-momentum needed in constructor of quasmon
-    proj4Mom += current->second->Get4Momentum().t();
+     //proj4Mom += current->second->Get4Momentum().t(); // HPW
+    proj4Mom += current->second->Get4Momentum(); // M.K. 23.8.00
     
      // projectile quark contects needed for G4QContent construction
     nD += current->second->GetDefinition()->GetQuarkContent(1);
