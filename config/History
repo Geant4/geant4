@@ -1,4 +1,4 @@
-$Id: History,v 1.178 2002-01-25 15:49:06 gcosmo Exp $
+$Id: History,v 1.179 2002-02-07 08:01:12 gcosmo Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07th February 2002 Gabriele Cosmo (config-V04-00-01)
+- liblist.c: added flags __CYGWIN__ and __CYGWIN32__ for triggering proper
+  parsing algorithm on Windows systems, also on most recent versions of Cygwin.
 
 25th January 2002 Gabriele Cosmo (config-V04-00-00)
 - sys/HP-aCC.gmk: removed include path to global/management/include/std/wrappers,
