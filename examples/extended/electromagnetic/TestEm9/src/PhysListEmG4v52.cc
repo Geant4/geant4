@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmModel.cc,v 1.3 2003-09-18 08:07:31 vnivanch Exp $
+// $Id: PhysListEmG4v52.cc,v 1.1 2003-10-13 15:41:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "PhysListEmModel.hh"
+#include "PhysListEmG4v52.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
@@ -47,20 +47,21 @@
 
 #include "G4hIonisation52.hh"
 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmModel::PhysListEmModel(const G4String& name)
+PhysListEmG4v52::PhysListEmG4v52(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmModel::~PhysListEmModel()
+PhysListEmG4v52::~PhysListEmG4v52()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysListEmModel::ConstructProcess()
+void PhysListEmG4v52::ConstructProcess()
 {
   // Add EM processes realised on base of prototype of model approach design
 
@@ -81,24 +82,24 @@ void PhysListEmModel::ConstructProcess()
       pmanager->AddProcess(new G4MultipleScattering52, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation52,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung52,    -1,-1,3);
-
+	    
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4MultipleScattering52, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation52,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung52,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,      0,-1,4);
-
-    } else if( particleName == "mu+" ||
+      
+    } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
-      //muon
+      //muon  
       pmanager->AddProcess(new G4MultipleScattering52,-1, 1,1);
       pmanager->AddProcess(new G4MuIonisation52,      -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung52,  -1,-1,3);
-      pmanager->AddProcess(new G4MuPairProduction52,  -1,-1,4);
-
+      pmanager->AddProcess(new G4MuPairProduction52,  -1,-1,4);       
+     
     } else if( particleName == "GenericIon" ) {
-
+ 
       pmanager->AddProcess(new G4MultipleScattering52,-1,1,1);
       pmanager->AddProcess(new G4hIonisation52,      -1,2,2);
 

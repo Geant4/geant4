@@ -22,20 +22,9 @@
 //
 #ifndef EventAction_h
 #define EventAction_h 1
- 
-// -------------------------------------------------------------
-//
-//
-// -------------------------------------------------------------
-//      GEANT4 
-//
-//      History: based on object model of
-//      2nd December 1995, G.Cosmo
-//      ---------- EventAction -------------
-//              
-//  Modified: 05.04.01 Vladimir Ivanchenko new design of  
-// 
-// -------------------------------------------------------------
+
+// $Id: EventAction.hh,v 1.2 2003-10-13 15:41:30 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -47,6 +36,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+class EventActionMessenger;
+
 class EventAction : public G4UserEventAction
 {
 public: // Without description
@@ -56,16 +47,18 @@ public: // Without description
 
     void BeginOfEventAction(const G4Event*);
     void   EndOfEventAction(const G4Event*);
-    
+
     void SetDrawFlag(G4String val)  {drawFlag = val;};
-    
+    void SetPrintModulo(G4int val)  {printModulo = val;};
+
   private:
 
     G4int    nEvt;
+    G4int    printModulo;
     G4int    verbose;
     G4String drawFlag;
+
+    EventActionMessenger*  eventMessenger;
 };
 
 #endif
-
-    

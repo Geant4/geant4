@@ -1,4 +1,4 @@
-# $Id: TestEm9.in,v 1.4 2003-09-18 08:07:30 vnivanch Exp $
+# $Id: TestEm9.in,v 1.5 2003-10-13 15:41:30 vnivanch Exp $
 #
 # Macro file for "test26.cc"
 # V.Ivanchenko
@@ -13,10 +13,10 @@
 #/testem/phys/addPhysics  g4v52
 /testem/phys/addPhysics  standard
 #
-/testem/phys/setCuts    1 mm
+/testem/phys/setCuts    0.3 mm
 /testem/phys/VertexCuts 0.01 mm
 /testem/phys/MuonCuts  10.0 mm
-/testem/stepMax         10 mm
+/testem/stepMax         100 mm
 #
 /process/eLoss/preciseRange  true
 /process/eLoss/integral      true

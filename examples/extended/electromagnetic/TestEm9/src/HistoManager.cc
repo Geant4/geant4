@@ -58,6 +58,8 @@ HistoManager::HistoManager()
   verbose = 1;
   histName = G4String("histo.hbook");
   nHisto = 10;
+  nEvt1  = -1;
+  nEvt2  = -1;
   maxEnergy = 50.0*MeV;
   beamEnergy= 1.*GeV;
   maxEnergyAbs = 10.*MeV;

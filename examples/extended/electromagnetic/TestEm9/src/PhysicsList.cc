@@ -31,13 +31,15 @@
 #include "PhysListParticles.hh"
 #include "PhysListGeneral.hh"
 #include "PhysListEmStandard.hh"
-#include "PhysListEmModel.hh"
-#include "PhysListEmModelP.hh"
+#include "PhysListEmG4v52.hh"
 #include "PhysListHadronElastic.hh"
 #include "PhysListBinaryCascade.hh"
 #include "G4RegionStore.hh"
 #include "G4Region.hh"
 #include "G4ProductionCuts.hh"
+#include "G4ProcessManager.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -74,7 +76,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   generalPhysicsList = new PhysListGeneral("general");
 
   // EM physics
-  emName = G4String("model");
+  emName = G4String("standard");
   emPhysicsList = new PhysListEmStandard(emName);
 
 }
@@ -132,14 +134,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmModel(name);
-
-  } else if (name == "model") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmModelP(name);
-
+    emPhysicsList = new PhysListEmG4v52(name);
 
   } else if (name == "elastic") {
 
@@ -156,12 +151,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
            << G4endl;
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -190,16 +179,15 @@ void PhysicsList::SetCuts()
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
   G4cout << "world cuts are set" << G4endl;
-  if( vertexDetectorCuts ) {
-    G4Region* region = (G4RegionStore::GetInstance())->GetRegion("VertexDetector");
-    region->SetProductionCuts(vertexDetectorCuts);
-  }
+
+  if( !vertexDetectorCuts ) SetVertexCut(cutForElectron);
+  G4Region* region = (G4RegionStore::GetInstance())->GetRegion("VertexDetector");
+  region->SetProductionCuts(vertexDetectorCuts);
   G4cout << "Vertex cuts are set" << G4endl;
 
-  if( muonDetectorCuts ) {
-    G4Region* region = (G4RegionStore::GetInstance())->GetRegion("MuonDetector");
-    region->SetProductionCuts(muonDetectorCuts);
-  }
+  if( !muonDetectorCuts ) SetMuonCut(cutForElectron);
+  region = (G4RegionStore::GetInstance())->GetRegion("MuonDetector");
+  region->SetProductionCuts(muonDetectorCuts);
   G4cout << "Muon cuts are set" << G4endl;
 
   if (verboseLevel>0) DumpCutValuesTable();

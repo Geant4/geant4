@@ -20,20 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// -------------------------------------------------------------
-//
-//
-//      ---------- EventAction -------------
-//
-//  Modified: 05.04.01 Vladimir Ivanchenko new design of IBREM
-//
-// -------------------------------------------------------------
+// $Id: EventAction.cc,v 1.2 2003-10-13 15:41:31 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "EventAction.hh"
 #include "HistoManager.hh"
+#include "EventActionMessenger.hh"
 
 #include "G4UImanager.hh"
 #include "G4TrajectoryContainer.hh"
@@ -46,9 +41,12 @@
 
 EventAction::EventAction():
   nEvt(0),
+  printModulo(100),
   verbose(0),
   drawFlag("all")
-{}
+{
+  eventMessenger = new EventActionMessenger(this);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -70,14 +68,6 @@ void EventAction::BeginOfEventAction(const G4Event*)
     verbose = 2;
     hi->SetVerbose(2);
     (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 2");
-/*
-    const G4ProcessManager* pm = G4Gamma::Gamma()->GetProcessManager();
-    const G4ProcessVector* pv = pm->GetProcessList();
-    G4int np = pm->GetProcessListLength();
-    for(G4int i=0; i<np; i++) {
-     ((*pv)[i])->SetVerboseLevel(2);
-    }
-*/
   }
 
   // Switch off verbose mode
@@ -110,9 +100,9 @@ void EventAction::EndOfEventAction(const G4Event* evt)
 
     for(G4int i=0; i<n_trajectories; i++) {
       G4Trajectory* t = (G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
-      if (drawFlag == "all") t->DrawTrajectory(50);
+      if (drawFlag == "all") t->DrawTrajectory(1000);
       else if ((drawFlag == "charged")&&(t->GetCharge() != 0.))
-                             t->DrawTrajectory(50);
+                             t->DrawTrajectory(1000);
     }
   }
 
