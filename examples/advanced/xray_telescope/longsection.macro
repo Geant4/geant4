@@ -1,0 +1,15 @@
+/run/verbose 2
+/run/particle/dumpCutValues
+/vis/scene/create
+/vis/camera/reset
+/vis/scene/add/volume
+/vis/sceneHandler/create OGLIX
+/vis/viewer/create
+/vis/scene/notifyHandlers
+/tracking/storeTrajectory 1
+/event/drawTracks charged
+/gun/random aperture
+/gun/particle proton
+/gun/energy 0.5 MeV
+/run/beamOn 100000
+
