@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.6 1999-05-10 14:04:17 johna Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.7 1999-05-12 13:58:48 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -83,7 +83,8 @@ G4VisCommandSceneHandlerAttach::~G4VisCommandSceneHandlerAttach () {
 }
 
 G4String G4VisCommandSceneHandlerAttach::GetCurrentValue (G4UIcommand* command) {
-  return fpVisManager -> GetCurrentScene () -> GetName ();
+  G4Scene* pScene = fpVisManager -> GetCurrentScene ();
+  return pScene ? pScene -> GetName () : G4String("");
 }
 
 void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand* command,
