@@ -1,9 +1,8 @@
-  cvs update -d -A run/src/G4RunManager.cc
-  cvs update -d -A geometry/volumes/include/G4NavigationLevel.hh
-  cvs update -d -A geometry/volumes/include/G4NavigationLevel.icc
-  cvs update -d -A geometry/volumes/src/G4Navigator.cc
-  cvs update -d -A geant4/source/geometry/management/src/G4SolidStore.cc
-  cvs update -d -A geant4/source/particles/management/include/G4NucleiPropertiesTable.hh
-  cvs update -d -A geant4/source/particles/management/src/G4ParticleTable.cc
-  cvs update -d -A geant4/source/particles/management/src/G4ParticleTable.cc
-  cvs update -d -A geant4/source/processes/hadronic/models/generator/de_excitation/src/G4NuclearLevelManager.cc
+  cvs update -r1.5 run/src/G4RunManager.cc
+  cvs update -r1.8 geometry/volumes/include/G4NavigationLevel.hh
+  cvs update -r1.8 geometry/volumes/include/G4NavigationLevel.icc
+  cvs update -r1.6 geometry/volumes/src/G4Navigator.cc
+  cvs update -r1.2 geometry/management/src/G4SolidStore.cc
+  cvs update -r1.3 particles/management/include/G4NucleiPropertiesTable.hh
+  cvs update -r1.4 particles/management/src/G4ParticleTable.cc
+  cvs update -r1.4 particles/management/src/G4ParticleTable.cc
