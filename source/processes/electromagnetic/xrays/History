@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2002-11-08 01:36:14 gum Exp $
+$Id: History,v 1.17 2002-11-21 23:11:28 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 November 02: P. Gumplinger (xrays-V04-01-02)
+- G4Scintillation now uses G4Poisson for small MeanNumPhotons in a step
+
+14 November 02: P. Gumplinger (xrays-V04-01-01)
+- G4Scintillation now uses the nearest integer to calculate the number of photons in DoIt
 
 07 November 02: P. Gumplinger (xrays-V04-01-00)
 - G4Scintillation now allows for fast and slow components. Scintillation properties are stored

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.12 2002-11-14 16:55:32 gum Exp $
+// $Id: G4Scintillation.cc,v 1.13 2002-11-21 23:10:43 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,9 @@
 // Version:     1.0
 // Created:     1998-11-07  
 // Author:      Peter Gumplinger
-// Updated:     2002-11-07 by Peter Gumplinger
+// Updated:     2002-11-21 by Peter Gumplinger
+//              > change to use G4Poisson for small MeanNumPhotons
+//              2002-11-07 by Peter Gumplinger
 //              > now allow for fast and slow scintillation component
 //              2002-11-05 by Peter Gumplinger
 //              > now use scintillation constants from G4Material
@@ -126,9 +128,9 @@ G4VParticleChange*
 G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 // This routine is called for each tracking step of a charged particle
-// in a scintillator. A Gaussian-distributed number of photons is generated
-// according to the scintillation yield formula, distributed evenly along 
-// the track segment and uniformly into 4pi.
+// in a scintillator. A Poisson/Gauss-distributed number of photons is 
+// generated according to the scintillation yield formula, distributed 
+// evenly along the track segment and uniformly into 4pi.
 
 {
         aParticleChange.Initialize(aTrack);
@@ -170,8 +172,14 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	G4double MeanNumPhotons = ScintillationYield * TotalEnergyDeposit;
 
-	G4int NumPhotons = G4int (0.5 + MeanNumPhotons +
-            ResolutionScale * G4RandGauss::shoot(0.0,sqrt(MeanNumPhotons)));
+        G4int NumPhotons;
+        if (MeanNumPhotons > 10.) {
+           G4double sigma = ResolutionScale * sqrt(MeanNumPhotons);
+           NumPhotons = G4int(G4RandGauss::shoot(MeanNumPhotons,sigma)+0.5);
+        }
+        else {
+           NumPhotons = G4int(G4Poisson(MeanNumPhotons));
+        }
 
 	if (NumPhotons <= 0) {
 

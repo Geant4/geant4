@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh,v 1.9 2002-11-08 01:33:18 gum Exp $
+// $Id: G4Scintillation.hh,v 1.10 2002-11-21 23:10:26 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,8 @@
 // Version:     1.0
 // Created:     1998-11-07
 // Author:      Peter Gumplinger
-// Updated:     2002-11-07 allow for fast and slow scintillation
+// Updated:     2002-11-21 change to user G4Poisson for small MeanNumPotons
+//              2002-11-07 allow for fast and slow scintillation
 //              2002-11-05 make use of constant material properties
 //              2002-05-16 changed to inherit from VRestDiscreteProcess
 //              2002-05-09 changed IsApplicable method
@@ -54,6 +55,7 @@
 #include "globals.hh"
 #include "templates.hh"
 #include "Randomize.hh"
+#include "G4Poisson.hh"
 #include "G4ThreeVector.hh"
 #include "G4ParticleMomentum.hh"
 #include "G4Step.hh"
