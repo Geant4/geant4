@@ -132,14 +132,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.05s Sys=0s
+  User=0.01s Real=0.03s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.5s Real=3.7s Sys=0.18s
+  User=3.9s Real=4.2s Sys=0.25s
 Idle> # 
 Idle> /gun/energy 2 keV
 Idle> /tracking/verbose 2
@@ -152,10 +152,10 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100     0.002        0        0         0       World initStep
-    1     61.5        0     -100         0 1.15e-05     61.5      61.5       World LowEnPhotoElec
+    1     3.03        0     -100         0 1.15e-05     3.03      3.03       World LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  2(Rest= 0,Along= 0,Post= 2), #SpawnTotal=  2 ---------------
-    :      61.5         0      -100    0.0016                 e-
-    :      61.5         0      -100  0.000393              gamma
+    :      3.03         0      -100    0.0016                 e-
+    :      3.03         0      -100  0.000393              gamma
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -163,50 +163,70 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     61.5        0     -100  0.000393        0        0         0       World initStep
-    1     61.1   -0.585    -99.4         0 2.31e-05    0.951     0.951       World LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :      61.1    -0.585     -99.4   0.00037                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 3
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     61.1   -0.585    -99.4   0.00037        0        0         0       World initStep
-    1     60.9   -0.925      -99         0  0.00037    0.553     0.553       World LowEnergyIoni
+    0     3.03        0     -100  0.000393        0        0         0       World initStep
+    1     3.03        0     -100  0.000393        0        0         0  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     61.5        0     -100    0.0016        0        0         0       World initStep
-    1     61.5        0     -100   0.00154 1.15e-05  0.00855   0.00855       World LowEnergyIoni
+    0     3.03        0     -100    0.0016        0        0         0       World initStep
+    1     3.03        0     -100   0.00152 7.77e-05  0.00331   0.00331       World LowEnergyIoni
+    2     3.03 -2.17e-05     -100    0.0015 1.54e-05 0.000944   0.00426       World LowEnergyIoni
+    3     3.03 -0.000188     -100   0.00148 2.19e-05  0.00386   0.00812       World LowEnergyIoni
+    4     3.04 0.000241     -100   0.00145  3.2e-05  0.00185   0.00997       World LowEnergyIoni
+    5     3.04 0.000326     -100   0.00143 1.69e-05   0.0002    0.0102       World LowEnergyIoni
+    6     3.04 0.000682     -100    0.0014 3.08e-05  0.00299    0.0132       World LowEnergyIoni
+    7     3.04 -0.000579     -100   0.00135 5.46e-05  0.00623    0.0194       World LowEnergyIoni
+    8     3.05 -0.00141     -100   0.00113 0.000211 0.000493    0.0199       World LowEnergyIoni
+    9     3.05 -0.000319     -100   0.00112 1.18e-05 0.000398    0.0203       World LowEnergyIoni
+   10     3.05 0.000664     -100   0.00111 1.31e-05 0.000342    0.0206       World LowEnergyIoni
+   11     3.05   0.0023     -100  0.000763 1.15e-05  0.00252    0.0231       World LowEnergyIoni
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :      61.5         0      -100  4.44e-05                 e-
+    :      3.05    0.0023      -100  0.000335                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    2     61.5        0     -100   0.00154        0        0   0.00855  OutOfWorld Transportation
+   12     3.05  0.00153     -100   0.00074 2.29e-05 0.000208    0.0234       World LowEnergyIoni
+   13     3.05  0.00154     -100  0.000468 1.15e-05   0.0027    0.0261       World LowEnergyIoni
+    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  2 ---------------
+    :      3.05   0.00154      -100  0.000261                 e-
+    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
+   14     3.05  0.00566     -100  0.000453  1.5e-05  0.00468    0.0307       World LowEnergyIoni
+   15     3.05  0.00893     -100   0.00044 1.31e-05  0.00261    0.0333       World LowEnergyIoni
+   16     3.06   0.0128     -100  0.000357  8.3e-05  0.00541    0.0388       World LowEnergyIoni
+   17     3.06   0.0141     -100  0.000339  1.8e-05  0.00148    0.0402       World LowEnergyIoni
+   18     3.06   0.0152     -100  0.000317 2.18e-05  0.00063    0.0409       World LowEnergyIoni
+   19     3.06   0.0157     -100   0.00029 2.63e-05 0.000814    0.0417       World LowEnergyIoni
+   20     3.06   0.0156     -100  0.000154 0.000137    4e-05    0.0417       World LowEnergyIoni
+   21     3.25    0.327     -100         0 0.000154    0.367     0.409       World LowEnergyIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     61.5        0     -100  4.44e-05        0        0         0       World initStep
-    1     61.5   0.0284    -99.9         0 4.44e-05    0.154     0.154       World LowEnergyIoni
+    0     3.05  0.00154     -100  0.000261        0        0         0       World initStep
+    1     3.05 -0.000415     -100  0.000248 1.24e-05   0.0008    0.0008       World LowEnergyIoni
+    2     3.34   -0.168    -99.7         0 0.000248    0.456     0.457       World LowEnergyIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     3.05   0.0023     -100  0.000335        0        0         0       World initStep
+    1     3.05 0.000485     -100  0.000335        0  0.00292   0.00292  OutOfWorld Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.03s Real=0.03s Sys=0s
+  User=0.07s Real=0.07s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=9.7s Real=10s Sys=0.27s
+  User=12s Real=13s Sys=0.81s
 Idle> #
 Idle> /gun/energy 800 eV
 Idle> /tracking/verbose 2
@@ -219,10 +239,10 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100    0.0008        0        0         0       World initStep
-    1    0.337        0     -100         0 1.15e-05    0.337     0.337       World LowEnPhotoElec
+    1     0.11        0     -100         0 1.15e-05     0.11      0.11       World LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  2(Rest= 0,Along= 0,Post= 2), #SpawnTotal=  2 ---------------
-    :     0.337         0      -100  0.000395                 e-
-    :     0.337         0      -100  0.000393              gamma
+    :      0.11         0      -100  0.000395                 e-
+    :      0.11         0      -100  0.000393              gamma
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -230,27 +250,21 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.337        0     -100  0.000393        0        0         0       World initStep
-    1     0.36    0.317    -99.8         0 1.41e-05    0.366     0.366       World LowEnPhotoElec
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :      0.36     0.317     -99.8  0.000379                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 3
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     0.36    0.317    -99.8  0.000379        0        0         0       World initStep
-    1    0.396    0.801    -99.5         0 0.000379    0.559     0.559       World LowEnergyIoni
+    0     0.11        0     -100  0.000393        0        0         0       World initStep
+    1     0.11        0     -100  0.000393        0        0         0  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.337        0     -100  0.000395        0        0         0       World initStep
-    1    0.909        0     -100         0 0.000395    0.572     0.572       World LowEnergyIoni
+    0     0.11        0     -100  0.000395        0        0         0       World initStep
+    1    0.113        0     -100   0.00037 2.52e-05  0.00286   0.00286       World LowEnergyIoni
+    2    0.114 4.54e-06     -100  0.000341 2.87e-05 0.000942    0.0038       World LowEnergyIoni
+    3    0.118 -0.00016     -100  0.000327 1.43e-05  0.00495   0.00875       World LowEnergyIoni
+    4    0.119 -0.000109     -100  0.000274 5.29e-05 0.000439   0.00919       World LowEnergyIoni
+    5    0.121 0.000563     -100  0.000249 2.51e-05  0.00231    0.0115       World LowEnergyIoni
+    6    0.576  0.00259     -100         0 0.000249    0.456     0.468       World LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -261,7 +275,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.3s Real=2.4s Sys=0.03s
+  User=5.7s Real=6.1s Sys=0.33s
 Idle> #
 Idle> /gun/energy 250 eV
 Idle> /tracking/verbose 2
@@ -274,9 +288,9 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100   0.00025        0        0         0       World initStep
-    1   0.0669        0     -100         0 1.15e-05   0.0669    0.0669       World LowEnPhotoElec
+    1    0.847        0     -100         0 1.15e-05    0.847     0.847       World LowEnPhotoElec
     :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :    0.0669         0      -100  0.000238                 e-
+    :     0.847         0      -100  0.000238                 e-
     :----------------------------------------------------------------- EndOf2ndaries Info ---------------
 
 *********************************************************************************************************
@@ -284,8 +298,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0669        0     -100  0.000238        0        0         0       World initStep
-    1    0.514        0     -100         0 0.000238    0.447     0.447       World LowEnergyIoni
+    0    0.847        0     -100  0.000238        0        0         0       World initStep
+    1     1.29        0     -100         0 0.000238    0.447     0.447       World LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -296,7 +310,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.2s Real=1.2s Sys=0s
+  User=1.3s Real=1.3s Sys=0s
 Idle> #
 Idle> # electron 500 eV in Al
 Idle> #
@@ -313,1398 +327,19 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100      0.01        0        0         0       World initStep
-    1 0.000535        0     -100   0.00998 1.15e-05 0.000535  0.000535       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :  0.000535         0      -100  7.84e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    2   0.0235 0.000261     -100   0.00995 2.66e-05    0.023    0.0235       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  2 ---------------
-    :    0.0235  0.000261      -100  1.98e-07                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    3   0.0412 -0.00265     -100   0.00994 1.15e-05   0.0179    0.0414       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  3 ---------------
-    :    0.0412  -0.00265      -100  2.58e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    4   0.0785 -0.00207     -100   0.00966 0.000193   0.0372    0.0786       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  4 ---------------
-    :    0.0785  -0.00207      -100  8.25e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    5   0.0889 -0.000806     -100   0.00955 0.000113   0.0105     0.089       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  5 ---------------
-    :    0.0889 -0.000806      -100  1.15e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    6   0.0916 0.000521     -100   0.00953 1.15e-05  0.00272    0.0917       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  6 ---------------
-    :    0.0916  0.000521      -100  1.19e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    7   0.0924  -0.0022     -100    0.0095 1.15e-05 0.000553    0.0923       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  7 ---------------
-    :    0.0924   -0.0022      -100  1.55e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    8    0.118 0.000104     -100   0.00922 0.000248    0.025     0.117       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  8 ---------------
-    :     0.118  0.000104      -100  3.01e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    9    0.124 -0.00174     -100   0.00919 1.15e-05  0.00662     0.124       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  9 ---------------
-    :     0.124  -0.00174      -100  2.28e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   10    0.185  -0.0136     -100    0.0091 8.56e-05   0.0683     0.192       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 10 ---------------
-    :     0.185   -0.0136      -100  5.66e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   11    0.229   0.0206     -100   0.00883 0.000254   0.0363     0.229       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 11 ---------------
-    :     0.229    0.0206      -100  1.04e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   12    0.249 0.000221     -100   0.00877 2.31e-05   0.0191     0.248       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 12 ---------------
-    :     0.249  0.000221      -100  3.41e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   13    0.261  0.00184     -100   0.00871 6.45e-05   0.0131     0.261       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 13 ---------------
-    :     0.261   0.00184      -100  4.52e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   14    0.288  -0.0278    -99.9   0.00862 8.19e-05   0.0375     0.298       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 14 ---------------
-    :     0.288   -0.0278     -99.9  4.01e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   15    0.311  -0.0211     -100    0.0086 1.15e-05    0.002       0.3       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 15 ---------------
-    :     0.311   -0.0211      -100  8.67e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   16    0.333  -0.0298     -100   0.00854 2.31e-05    0.019     0.319       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 16 ---------------
-    :     0.333   -0.0298      -100  3.84e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   17    0.332  -0.0335     -100   0.00852 1.15e-05 0.000367      0.32       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 17 ---------------
-    :     0.332   -0.0335      -100  1.84e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   18     0.37  -0.0387    -99.9   0.00834 0.000154   0.0526     0.372       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 18 ---------------
-    :      0.37   -0.0387     -99.9  2.65e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   19    0.347  -0.0167    -99.9   0.00832 1.15e-05  0.00208     0.374       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 19 ---------------
-    :     0.347   -0.0167     -99.9  7.11e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   20     0.37  -0.0838    -99.9    0.0083 1.15e-05   0.0197     0.394       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 20 ---------------
-    :      0.37   -0.0838     -99.9   1.3e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   21    0.377  -0.0899    -99.9   0.00827 1.15e-05  0.00813     0.402       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 21 ---------------
-    :     0.377   -0.0899     -99.9  2.35e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   22    0.359  -0.0488    -99.8   0.00818 6.44e-05   0.0323     0.435       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 22 ---------------
-    :     0.359   -0.0488     -99.8  1.63e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   23    0.362  -0.0546    -99.8   0.00807 0.000111  0.00877     0.443       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 23 ---------------
-    :     0.362   -0.0546     -99.8   5.1e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   24    0.302   0.0279    -99.6   0.00798 8.18e-05   0.0332     0.477       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 24 ---------------
-    :     0.302    0.0279     -99.6  8.44e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   25    0.483   -0.273    -99.7    0.0079 3.96e-05   0.0325     0.509       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 25 ---------------
-    :     0.483    -0.273     -99.7  3.46e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   26    0.499   -0.289    -99.7   0.00788 1.15e-05   0.0114      0.52       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 26 ---------------
-    :     0.499    -0.289     -99.7  1.25e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   27    0.616   -0.307     -100   0.00787 1.15e-05   0.0209     0.541       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 27 ---------------
-    :     0.616    -0.307      -100   1.8e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   28    0.645   -0.314    -99.9   0.00784 1.15e-05   0.0307     0.572       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 28 ---------------
-    :     0.645    -0.314     -99.9  2.04e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   29    0.679   -0.333     -100   0.00781 1.15e-05   0.0128     0.585       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 29 ---------------
-    :     0.679    -0.333      -100  1.08e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   30    0.683   -0.322     -100   0.00769 1.15e-05   0.0113     0.596       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 30 ---------------
-    :     0.683    -0.322      -100  0.000116                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   31    0.692   -0.293    -99.9   0.00754 0.000135   0.0183     0.614       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 31 ---------------
-    :     0.692    -0.293     -99.9   6.5e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   32    0.741    -0.31    -99.9   0.00741 0.000126   0.0561      0.67       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 32 ---------------
-    :     0.741     -0.31     -99.9   1.9e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   33    0.776   -0.348    -99.8   0.00725 0.000146    0.037     0.708       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 33 ---------------
-    :     0.776    -0.348     -99.8  1.81e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   34    0.789   -0.345    -99.8   0.00724 1.15e-05  0.00792     0.715       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 34 ---------------
-    :     0.789    -0.345     -99.8   2.4e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   35    0.809   -0.339    -99.8   0.00713 2.31e-05   0.0163     0.732       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 35 ---------------
-    :     0.809    -0.339     -99.8   8.4e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   36    0.879   -0.261    -99.9   0.00709 3.05e-05   0.0787      0.81       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 36 ---------------
-    :     0.879    -0.261     -99.9   6.1e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   37    0.894   -0.261    -99.9   0.00705 1.15e-05  0.00214     0.813       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 37 ---------------
-    :     0.894    -0.261     -99.9  2.96e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   38     0.91   -0.256    -99.9   0.00692 0.000104   0.0168     0.829       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 38 ---------------
-    :      0.91    -0.256     -99.9  2.51e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   39    0.911   -0.263    -99.8   0.00691 1.15e-05   0.0205      0.85       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 39 ---------------
-    :     0.911    -0.263     -99.8  4.79e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   40    0.923   -0.266    -99.8   0.00689 1.15e-05  0.00926     0.859       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 40 ---------------
-    :     0.923    -0.266     -99.8  1.57e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   41    0.987   -0.287    -99.8   0.00666 0.000198   0.0776     0.937       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 41 ---------------
-    :     0.987    -0.287     -99.8     4e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   42        1   -0.262    -99.8   0.00664 1.15e-05  0.00641     0.943       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 42 ---------------
-    :         1    -0.262     -99.8   9.7e-07                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   43     1.03   -0.302    -99.8   0.00663 1.15e-05  0.00665      0.95       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 43 ---------------
-    :      1.03    -0.302     -99.8  5.96e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   44     1.03   -0.298    -99.8   0.00661 1.15e-05   0.0108     0.961       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 44 ---------------
-    :      1.03    -0.298     -99.8  2.28e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   45     1.03   -0.304    -99.8    0.0066 1.15e-05  0.00759     0.968       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 45 ---------------
-    :      1.03    -0.304     -99.8  3.68e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   46    0.928   -0.101    -99.8   0.00641 0.000109   0.0124     0.981       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 46 ---------------
-    :     0.928    -0.101     -99.8  7.42e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   47    0.935  -0.0961    -99.7    0.0062 9.13e-05   0.0111     0.992       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 47 ---------------
-    :     0.935   -0.0961     -99.7  0.000119                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   48    0.941  -0.0962    -99.7   0.00619 1.15e-05  0.00872         1       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 48 ---------------
-    :     0.941   -0.0962     -99.7  4.85e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   49    0.949   -0.103    -99.7   0.00613  5.1e-05  0.00288         1       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 49 ---------------
-    :     0.949    -0.103     -99.7   5.7e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   50     0.95    0.123    -99.8   0.00603  7.2e-05   0.0343      1.04       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 50 ---------------
-    :      0.95     0.123     -99.8  2.73e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   51    0.964   0.0977    -99.8   0.00602 1.15e-05  0.00315      1.04       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 51 ---------------
-    :     0.964    0.0977     -99.8   1.3e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   52    0.948    0.145    -99.8   0.00599 1.15e-05  0.00621      1.05       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 52 ---------------
-    :     0.948     0.145     -99.8  1.86e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   53     1.13    0.163    -99.9   0.00595 3.49e-05   0.0111      1.06       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 53 ---------------
-    :      1.13     0.163     -99.9  6.91e-07                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   54     1.09    0.239    -99.9   0.00591 3.25e-05   0.0123      1.07       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 54 ---------------
-    :      1.09     0.239     -99.9  1.07e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   55     1.08     0.24    -99.9   0.00585 2.31e-05  0.00133      1.07       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 55 ---------------
-    :      1.08      0.24     -99.9  3.27e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   56     1.13    0.134    -99.8   0.00584 1.15e-05   0.0164      1.09       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 56 ---------------
-    :      1.13     0.134     -99.8  2.47e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   57     1.13     0.14    -99.8   0.00568 0.000155    0.014       1.1       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 57 ---------------
-    :      1.13      0.14     -99.8  5.17e-07                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   58     1.14    0.143    -99.8   0.00561 1.15e-05  0.00638      1.11       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 58 ---------------
-    :      1.14     0.143     -99.8  5.84e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   59     1.14    0.134    -99.8    0.0056 1.15e-05 0.000925      1.11       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 59 ---------------
-    :      1.14     0.134     -99.8  3.11e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   60     1.26   0.0914    -99.9   0.00557 2.31e-05   0.0277      1.14       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 60 ---------------
-    :      1.26    0.0914     -99.9  4.36e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   61     1.27   0.0759    -99.9   0.00546 7.97e-05  0.00483      1.14       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 61 ---------------
-    :      1.27    0.0759     -99.9   3.7e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   62     1.25    0.103    -99.9    0.0054 5.16e-05    0.026      1.17       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 62 ---------------
-    :      1.25     0.103     -99.9   3.6e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   63     1.25     0.12    -99.9   0.00535 1.15e-05  0.00309      1.17       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 63 ---------------
-    :      1.25      0.12     -99.9  3.65e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   64      1.2    0.235    -99.8   0.00518 0.000161   0.0239       1.2       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 64 ---------------
-    :       1.2     0.235     -99.8  7.44e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   65     1.19    0.233    -99.8   0.00516 1.15e-05  0.00136       1.2       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 65 ---------------
-    :      1.19     0.233     -99.8  1.29e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   66     1.29    0.257    -99.9   0.00509 6.25e-05   0.0215      1.22       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 66 ---------------
-    :      1.29     0.257     -99.9  9.51e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   67      1.3    0.257    -99.9   0.00487 0.000163   0.0132      1.23       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 67 ---------------
-    :       1.3     0.257     -99.9     6e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   68      1.3    0.271    -99.9   0.00481 4.68e-05  0.00608      1.24       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 68 ---------------
-    :       1.3     0.271     -99.9  4.92e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   69     1.29     0.27    -99.9   0.00458 2.31e-05  0.00101      1.24       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 69 ---------------
-    :      1.29      0.27     -99.9  0.000214                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   70     1.31    0.288    -99.9   0.00456 1.15e-05   0.0222      1.26       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 70 ---------------
-    :      1.31     0.288     -99.9   1.1e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   71     1.32    0.287    -99.9   0.00455 1.15e-05 0.000461      1.26       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 71 ---------------
-    :      1.32     0.287     -99.9  3.66e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   72     1.32    0.286    -99.9   0.00454 1.15e-05  0.00101      1.26       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 72 ---------------
-    :      1.32     0.286     -99.9  3.12e-07                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   73     1.31     0.33    -99.9   0.00438 0.000126   0.0298      1.29       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 73 ---------------
-    :      1.31      0.33     -99.9  3.13e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   74     1.32    0.343    -99.9   0.00429 6.77e-05   0.0151      1.31       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 74 ---------------
-    :      1.32     0.343     -99.9  2.67e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   75      1.3     0.43    -99.9   0.00427 1.15e-05   0.0232      1.33       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 75 ---------------
-    :       1.3      0.43     -99.9     6e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   76     1.31     0.42    -99.9   0.00426 1.15e-05  0.00388      1.33       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 76 ---------------
-    :      1.31      0.42     -99.9  1.14e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   77     1.32    0.432    -99.9   0.00412 0.000117   0.0234      1.36       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 77 ---------------
-    :      1.32     0.432     -99.9  2.08e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   78     1.33    0.441    -99.9    0.0041 1.15e-05  0.00443      1.36       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 78 ---------------
-    :      1.33     0.441     -99.9  3.13e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   79     1.34    0.442    -99.9   0.00395 0.000151  0.00817      1.37       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 79 ---------------
-    :      1.34     0.442     -99.9  2.36e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   80     1.34    0.442    -99.9   0.00394 1.15e-05  0.00434      1.37       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 80 ---------------
-    :      1.34     0.442     -99.9  9.84e-07                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   81     1.34    0.442    -99.9   0.00389 1.15e-05  0.00372      1.38       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 81 ---------------
-    :      1.34     0.442     -99.9  3.46e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   82     1.34    0.446    -99.9   0.00386 1.15e-05 0.000701      1.38       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 82 ---------------
-    :      1.34     0.446     -99.9  1.82e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   83     1.31     0.38    -99.8   0.00383 1.15e-05    0.005      1.38       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 83 ---------------
-    :      1.31      0.38     -99.8  1.99e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   84     1.32    0.382    -99.8   0.00326 0.000568  0.00418      1.39       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 84 ---------------
-    :      1.32     0.382     -99.8   6.3e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   85     1.19     0.39    -99.6   0.00314 9.51e-05   0.0231      1.41       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 85 ---------------
-    :      1.19      0.39     -99.6  2.45e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   86      1.2    0.388    -99.6    0.0031 1.15e-05   0.0137      1.42       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 86 ---------------
-    :       1.2     0.388     -99.6  2.96e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   87     1.22    0.384    -99.6   0.00306 1.15e-05   0.0139      1.44       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 87 ---------------
-    :      1.22     0.384     -99.6  2.82e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   88      1.2    0.402    -99.6   0.00298 1.15e-05 0.000924      1.44       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 88 ---------------
-    :       1.2     0.402     -99.6  6.22e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   89     1.21    0.402    -99.6   0.00282 1.15e-05  0.00634      1.45       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 89 ---------------
-    :      1.21     0.402     -99.6  0.000155                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   90     1.22    0.412    -99.6   0.00278 2.71e-05  0.00595      1.45       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 90 ---------------
-    :      1.22     0.412     -99.6  7.66e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   91     1.22     0.42    -99.6   0.00276 1.15e-05 0.000803      1.45       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 91 ---------------
-    :      1.22      0.42     -99.6   1.2e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   92     1.21    0.438    -99.6   0.00274 1.15e-05  0.00176      1.45       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 92 ---------------
-    :      1.21     0.438     -99.6  9.79e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   93     1.21    0.441    -99.6   0.00272 1.15e-05  0.00465      1.46       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 93 ---------------
-    :      1.21     0.441     -99.6  5.97e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   94     1.21    0.802    -99.6   0.00263 8.32e-05   0.0404       1.5       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 94 ---------------
-    :      1.21     0.802     -99.6  4.05e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   95      1.2    0.781    -99.6   0.00253 2.31e-05  0.00713      1.51       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 95 ---------------
-    :       1.2     0.781     -99.6  7.53e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   96     1.22    0.784    -99.6   0.00251 1.15e-05  0.00472      1.51       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 96 ---------------
-    :      1.22     0.784     -99.6  1.51e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   97     1.23     0.73    -99.6   0.00247 1.15e-05  0.00179      1.51       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 97 ---------------
-    :      1.23      0.73     -99.6  2.69e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   98     1.21    0.642    -99.6   0.00245 1.15e-05  0.00805      1.52       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 98 ---------------
-    :      1.21     0.642     -99.6  2.94e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   99     1.25    0.487    -99.7   0.00229 0.000139   0.0123      1.53       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 99 ---------------
-    :      1.25     0.487     -99.7  2.17e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-  100     1.25     0.18    -99.6   0.00122 1.15e-05  0.00462      1.54       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=100 ---------------
-    :      1.25      0.18     -99.6   0.00107                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-  101     1.18   0.0658    -99.6  0.000945 0.000265  0.00455      1.54       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=101 ---------------
-    :      1.18    0.0658     -99.6  6.05e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-  102     1.18   0.0544    -99.7  0.000922 2.03e-05 0.000781      1.54       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=102 ---------------
-    :      1.18    0.0544     -99.7   2.9e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-  103     1.18    0.052    -99.7  0.000875 4.62e-05  0.00307      1.55       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=103 ---------------
-    :      1.18     0.052     -99.7  1.28e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-  104     1.18   0.0548    -99.7   0.00084 1.55e-05 0.000353      1.55       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=104 ---------------
-    :      1.18    0.0548     -99.7   1.9e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-  105     1.18   0.0516    -99.7  0.000796 3.22e-05 0.000807      1.55       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=105 ---------------
-    :      1.18    0.0516     -99.7  1.22e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-  106     1.19   0.0512    -99.7  0.000757 2.48e-05  0.00118      1.55       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=106 ---------------
-    :      1.19    0.0512     -99.7   1.4e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-  107     1.19   0.0471    -99.6  0.000666 4.49e-05  0.00296      1.55       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=107 ---------------
-    :      1.19    0.0471     -99.6  4.57e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-  108     1.28    0.344    -99.8  0.000458 0.000134  0.00979      1.56       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=108 ---------------
-    :      1.28     0.344     -99.8  7.46e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-  109     1.72  -0.0793    -99.9         0 0.000458    0.618      2.18       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 109,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.28    0.344    -99.8  7.46e-05        0        0         0       World initStep
-    1     1.45    0.514    -99.9         0 7.46e-05    0.249     0.249       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 108,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.19   0.0471    -99.6  4.57e-05        0        0         0       World initStep
-    1     1.13   -0.102    -99.6         0 4.57e-05    0.159     0.159       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 107,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.19   0.0512    -99.7   1.4e-05        0        0         0       World initStep
-    1     1.21    0.089    -99.7         0  1.4e-05   0.0487    0.0487       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 106,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.18   0.0516    -99.7  1.22e-05        0        0         0       World initStep
-    1      1.2   0.0483    -99.6         0 1.22e-05   0.0425    0.0425       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 105,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.18   0.0548    -99.7   1.9e-05        0        0         0       World initStep
-    1     1.22    0.111    -99.7         0  1.9e-05   0.0662    0.0662       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 104,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.18    0.052    -99.7  1.28e-06        0        0         0       World initStep
-    1     1.18   0.0477    -99.7         0 1.28e-06  0.00446   0.00446       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 103,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.18   0.0544    -99.7   2.9e-06        0        0         0       World initStep
-    1     1.18   0.0527    -99.6         0  2.9e-06   0.0101    0.0101       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 102,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.18   0.0658    -99.6  6.05e-06        0        0         0       World initStep
-    1     1.18    0.047    -99.6         0 6.05e-06    0.021     0.021       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 101,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.25     0.18    -99.6   0.00107        0        0         0       World initStep
-    1     1.43    0.128    -99.7  0.000948 9.99e-05  0.00896   0.00896       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :      1.43     0.128     -99.7  1.68e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    2     1.48    0.148    -99.7   0.00092 2.41e-05  0.00112    0.0101       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  2 ---------------
-    :      1.48     0.148     -99.7  3.95e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    3     1.48    0.161    -99.8  0.000904 1.32e-05 0.000152    0.0102       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  3 ---------------
-    :      1.48     0.161     -99.8  2.95e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    4     1.48    0.172    -99.8  0.000809 6.06e-05  0.00332    0.0136       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  4 ---------------
-    :      1.48     0.172     -99.8  3.51e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    5     1.47    0.182    -99.8  0.000758 2.91e-05  0.00156    0.0151       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  5 ---------------
-    :      1.47     0.182     -99.8  2.13e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    6     1.48    0.187    -99.8  0.000593 3.97e-05   0.0025    0.0176       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  6 ---------------
-    :      1.48     0.187     -99.8  0.000125                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    7     1.53    0.377    -99.9  0.000435 6.14e-05  0.00442     0.022       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  7 ---------------
-    :      1.53     0.377     -99.9  9.72e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    8     1.91    0.191    -99.4         0 0.000435    0.601     0.623       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 116,   Parent ID = 101
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.53    0.377    -99.9  9.72e-05        0        0         0       World initStep
-    1     1.66    0.637    -99.9         0 9.72e-05    0.293     0.293       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 115,   Parent ID = 101
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.48    0.187    -99.8  0.000125        0        0         0       World initStep
-    1     1.46    0.518    -99.8         0 0.000125    0.334     0.334       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 114,   Parent ID = 101
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.47    0.182    -99.8  2.13e-05        0        0         0       World initStep
-    1     1.45    0.247    -99.8         0 2.13e-05   0.0741    0.0741       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 113,   Parent ID = 101
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.48    0.172    -99.8  3.51e-05        0        0         0       World initStep
-    1     1.39    0.225    -99.7         0 3.51e-05    0.122     0.122       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 112,   Parent ID = 101
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.48    0.161    -99.8  2.95e-06        0        0         0       World initStep
-    1     1.48    0.168    -99.8         0 2.95e-06   0.0103    0.0103       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 111,   Parent ID = 101
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.48    0.148    -99.7  3.95e-06        0        0         0       World initStep
-    1     1.48    0.147    -99.7         0 3.95e-06   0.0137    0.0137       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 110,   Parent ID = 101
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.43    0.128    -99.7  1.68e-05        0        0         0       World initStep
-    1     1.42    0.103    -99.6         0 1.68e-05   0.0585    0.0585       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 100,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.25    0.487    -99.7  2.17e-05        0        0         0       World initStep
-    1     1.28    0.447    -99.7         0 2.17e-05   0.0755    0.0755       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 99,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.21    0.642    -99.6  2.94e-06        0        0         0       World initStep
-    1     1.21    0.632    -99.6         0 2.94e-06   0.0102    0.0102       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 98,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.23     0.73    -99.6  2.69e-05        0        0         0       World initStep
-    1     1.26    0.779    -99.7         0 2.69e-05   0.0935    0.0935       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 97,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.22    0.784    -99.6  1.51e-05        0        0         0       World initStep
-    1     1.22    0.834    -99.6         0 1.51e-05   0.0525    0.0525       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 96,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      1.2    0.781    -99.6  7.53e-05        0        0         0       World initStep
-    1     1.14    0.945    -99.4         0 7.53e-05     0.25      0.25       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 95,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.21    0.802    -99.6  4.05e-06        0        0         0       World initStep
-    1      1.2    0.808    -99.6         0 4.05e-06   0.0141    0.0141       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 94,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.21    0.441    -99.6  5.97e-06        0        0         0       World initStep
-    1     1.21    0.455    -99.6         0 5.97e-06   0.0208    0.0208       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 93,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.21    0.438    -99.6  9.79e-06        0        0         0       World initStep
-    1      1.2    0.466    -99.6         0 9.79e-06    0.034     0.034       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 92,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.22     0.42    -99.6   1.2e-05        0        0         0       World initStep
-    1     1.22     0.46    -99.6         0  1.2e-05   0.0418    0.0418       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 91,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.22    0.412    -99.6  7.66e-06        0        0         0       World initStep
-    1     1.23     0.39    -99.6         0 7.66e-06   0.0267    0.0267       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 90,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.21    0.402    -99.6  0.000155        0        0         0       World initStep
-    1     1.14    0.761    -99.6         0 0.000155    0.369     0.369       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 89,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      1.2    0.402    -99.6  6.22e-05        0        0         0       World initStep
-    1     1.19    0.256    -99.4         0 6.22e-05    0.215     0.215       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 88,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.22    0.384    -99.6  2.82e-05        0        0         0       World initStep
-    1     1.28    0.376    -99.7         0 2.82e-05   0.0979    0.0979       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 87,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      1.2    0.388    -99.6  2.96e-05        0        0         0       World initStep
-    1     1.16    0.483    -99.6         0 2.96e-05    0.103     0.103       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 86,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.19     0.39    -99.6  2.45e-05        0        0         0       World initStep
-    1     1.14     0.46    -99.6         0 2.45e-05   0.0851    0.0851       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 85,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.32    0.382    -99.8   6.3e-06        0        0         0       World initStep
-    1     1.33    0.371    -99.8         0  6.3e-06   0.0219    0.0219       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 84,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.31     0.38    -99.8  1.99e-05        0        0         0       World initStep
-    1     1.27    0.437    -99.8         0 1.99e-05   0.0691    0.0691       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 83,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.34    0.446    -99.9  1.82e-05        0        0         0       World initStep
-    1     1.35    0.396    -99.8         0 1.82e-05   0.0635    0.0635       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 82,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.34    0.442    -99.9  3.46e-05        0        0         0       World initStep
-    1     1.43     0.43     -100         0 3.46e-05     0.12      0.12       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 81,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.34    0.442    -99.9  9.84e-07        0        0         0       World initStep
-    1     1.34    0.442    -99.9         0 9.84e-07  0.00342   0.00342       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 80,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.34    0.442    -99.9  2.36e-06        0        0         0       World initStep
-    1     1.34     0.45    -99.9         0 2.36e-06   0.0082    0.0082       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 79,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.33    0.441    -99.9  3.13e-06        0        0         0       World initStep
-    1     1.33    0.434    -99.9         0 3.13e-06   0.0109    0.0109       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 78,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.32    0.432    -99.9  2.08e-05        0        0         0       World initStep
-    1     1.31    0.498    -99.9         0 2.08e-05   0.0724    0.0724       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 77,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.31     0.42    -99.9  1.14e-06        0        0         0       World initStep
-    1     1.31    0.422    -99.9         0 1.14e-06  0.00396   0.00396       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 76,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      1.3     0.43    -99.9     6e-06        0        0         0       World initStep
-    1     1.31    0.423    -99.9         0    6e-06   0.0209    0.0209       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 75,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.32    0.343    -99.9  2.67e-05        0        0         0       World initStep
-    1     1.36     0.38     -100         0 2.67e-05   0.0929    0.0929       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 74,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.31     0.33    -99.9  3.13e-05        0        0         0       World initStep
-    1     1.36    0.363     -100         0 3.13e-05    0.109     0.109       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 73,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.32    0.286    -99.9  3.12e-07        0        0         0       World initStep
-    1     1.32    0.286    -99.9         0 3.12e-07  0.00109   0.00109       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 72,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.32    0.287    -99.9  3.66e-06        0        0         0       World initStep
-    1     1.31    0.294    -99.9         0 3.66e-06   0.0127    0.0127       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 71,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.31    0.288    -99.9   1.1e-06        0        0         0       World initStep
-    1     1.31    0.291    -99.9         0  1.1e-06  0.00382   0.00382       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 70,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.29     0.27    -99.9  0.000214        0        0         0       World initStep
-    1     1.21    0.167    -99.5         0 0.000214    0.425     0.425       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 69,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      1.3    0.271    -99.9  4.92e-06        0        0         0       World initStep
-    1     1.29    0.286    -99.9         0 4.92e-06   0.0171    0.0171       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 68,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      1.3    0.257    -99.9     6e-05        0        0         0       World initStep
-    1     1.42   0.0898    -99.9         0    6e-05    0.208     0.208       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 67,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.29    0.257    -99.9  9.51e-06        0        0         0       World initStep
-    1     1.28    0.243    -99.9         0 9.51e-06   0.0331    0.0331       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 66,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.19    0.233    -99.8  1.29e-05        0        0         0       World initStep
-    1     1.19    0.268    -99.9         0 1.29e-05    0.045     0.045       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 65,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      1.2    0.235    -99.8  7.44e-06        0        0         0       World initStep
-    1     1.19    0.259    -99.9         0 7.44e-06   0.0259    0.0259       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 64,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.25     0.12    -99.9  3.65e-05        0        0         0       World initStep
-    1     1.31   0.0111    -99.8         0 3.65e-05    0.127     0.127       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 63,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.25    0.103    -99.9   3.6e-06        0        0         0       World initStep
-    1     1.25   0.0994    -99.8         0  3.6e-06   0.0125    0.0125       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 62,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.27   0.0759    -99.9   3.7e-05        0        0         0       World initStep
-    1     1.21   0.0488    -99.8         0  3.7e-05    0.129     0.129       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 61,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.26   0.0914    -99.9  4.36e-06        0        0         0       World initStep
-    1     1.27   0.0806    -99.9         0 4.36e-06   0.0152    0.0152       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 60,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.14    0.134    -99.8  3.11e-06        0        0         0       World initStep
-    1     1.15    0.124    -99.8         0 3.11e-06   0.0108    0.0108       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 59,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.14    0.143    -99.8  5.84e-05        0        0         0       World initStep
-    1     1.02    0.146    -99.7         0 5.84e-05    0.203     0.203       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 58,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.13     0.14    -99.8  5.17e-07        0        0         0       World initStep
-    1     1.14    0.139    -99.8         0 5.17e-07   0.0018    0.0018       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 57,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.13    0.134    -99.8  2.47e-06        0        0         0       World initStep
-    1     1.12    0.142    -99.8         0 2.47e-06  0.00858   0.00858       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 56,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.08     0.24    -99.9  3.27e-05        0        0         0       World initStep
-    1     1.05    0.165    -99.8         0 3.27e-05    0.114     0.114       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 55,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.09    0.239    -99.9  1.07e-05        0        0         0       World initStep
-    1     1.07    0.225    -99.8         0 1.07e-05   0.0371    0.0371       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 54,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.13    0.163    -99.9  6.91e-07        0        0         0       World initStep
-    1     1.13    0.165    -99.9         0 6.91e-07   0.0024    0.0024       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 53,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.948    0.145    -99.8  1.86e-05        0        0         0       World initStep
-    1    0.991   0.0993    -99.8         0 1.86e-05   0.0648    0.0648       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 52,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.964   0.0977    -99.8   1.3e-06        0        0         0       World initStep
-    1    0.963   0.0939    -99.8         0  1.3e-06  0.00451   0.00451       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 51,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     0.95    0.123    -99.8  2.73e-05        0        0         0       World initStep
-    1     1.03    0.122    -99.8         0 2.73e-05   0.0951    0.0951       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 50,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.949   -0.103    -99.7   5.7e-06        0        0         0       World initStep
-    1    0.962   -0.116    -99.7         0  5.7e-06   0.0198    0.0198       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 49,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.941  -0.0962    -99.7  4.85e-06        0        0         0       World initStep
-    1    0.954  -0.0988    -99.7         0 4.85e-06   0.0169    0.0169       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 48,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.935  -0.0961    -99.7  0.000119        0        0         0       World initStep
-    1    0.896    0.224    -99.8         0 0.000119    0.325     0.325       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 47,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.928   -0.101    -99.8  7.42e-05        0        0         0       World initStep
-    1    0.971   0.0892    -99.9         0 7.42e-05    0.248     0.248       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 46,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.03   -0.304    -99.8  3.68e-06        0        0         0       World initStep
-    1     1.04   -0.312    -99.8         0 3.68e-06   0.0128    0.0128       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 45,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.03   -0.298    -99.8  2.28e-06        0        0         0       World initStep
-    1     1.02   -0.296    -99.8         0 2.28e-06  0.00792   0.00792       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 44,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.03   -0.302    -99.8  5.96e-06        0        0         0       World initStep
-    1     1.03    -0.32    -99.8         0 5.96e-06   0.0207    0.0207       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 43,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        1   -0.262    -99.8   9.7e-07        0        0         0       World initStep
-    1        1   -0.259    -99.8         0  9.7e-07  0.00337   0.00337       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 42,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.987   -0.287    -99.8     4e-05        0        0         0       World initStep
-    1     1.06   -0.274    -99.9         0    4e-05    0.139     0.139       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 41,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.923   -0.266    -99.8  1.57e-06        0        0         0       World initStep
-    1    0.925   -0.268    -99.9         0 1.57e-06  0.00547   0.00547       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 40,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.911   -0.263    -99.8  4.79e-06        0        0         0       World initStep
-    1    0.918   -0.265    -99.9         0 4.79e-06   0.0167    0.0167       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 39,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     0.91   -0.256    -99.9  2.51e-05        0        0         0       World initStep
-    1    0.936   -0.337    -99.9         0 2.51e-05   0.0872    0.0872       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 38,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.894   -0.261    -99.9  2.96e-05        0        0         0       World initStep
-    1    0.941   -0.344     -100         0 2.96e-05    0.103     0.103       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 37,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.879   -0.261    -99.9   6.1e-06        0        0         0       World initStep
-    1    0.888   -0.279    -99.9         0  6.1e-06   0.0212    0.0212       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 36,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.809   -0.339    -99.8   8.4e-05        0        0         0       World initStep
-    1    0.902   -0.589    -99.9         0  8.4e-05    0.269     0.269       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 35,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.789   -0.345    -99.8   2.4e-06        0        0         0       World initStep
-    1    0.788   -0.337    -99.8         0  2.4e-06  0.00836   0.00836       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 34,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.776   -0.348    -99.8  1.81e-05        0        0         0       World initStep
-    1    0.777     -0.3    -99.9         0 1.81e-05   0.0629    0.0629       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 33,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.741    -0.31    -99.9   1.9e-06        0        0         0       World initStep
-    1     0.74   -0.304    -99.9         0  1.9e-06  0.00662   0.00662       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 32,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.692   -0.293    -99.9   6.5e-06        0        0         0       World initStep
-    1    0.697    -0.29     -100         0  6.5e-06   0.0226    0.0226       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 31,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.683   -0.322     -100  0.000116        0        0         0       World initStep
-    1    0.575  -0.0219    -99.9         0 0.000116    0.322     0.322       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 30,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.679   -0.333     -100  1.08e-05        0        0         0       World initStep
-    1    0.674   -0.344    -99.9         0 1.08e-05   0.0374    0.0374       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 29,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.645   -0.314    -99.9  2.04e-05        0        0         0       World initStep
-    1    0.624   -0.247    -99.9         0 2.04e-05   0.0711    0.0711       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 28,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.616   -0.307     -100   1.8e-06        0        0         0       World initStep
-    1    0.614   -0.302     -100         0  1.8e-06  0.00626   0.00626       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 27,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.499   -0.289    -99.7  1.25e-05        0        0         0       World initStep
-    1    0.512    -0.28    -99.8         0 1.25e-05   0.0436    0.0436       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 26,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.483   -0.273    -99.7  3.46e-05        0        0         0       World initStep
-    1    0.439   -0.185    -99.6         0 3.46e-05     0.12      0.12       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 25,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.302   0.0279    -99.6  8.44e-06        0        0         0       World initStep
-    1    0.305  0.00353    -99.6         0 8.44e-06   0.0294    0.0294       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 24,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.362  -0.0546    -99.8   5.1e-06        0        0         0       World initStep
-    1    0.356   -0.039    -99.8         0  5.1e-06   0.0177    0.0177       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 23,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.359  -0.0488    -99.8  1.63e-05        0        0         0       World initStep
-    1    0.389  -0.0887    -99.8         0 1.63e-05   0.0568    0.0568       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 22,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.377  -0.0899    -99.9  2.35e-05        0        0         0       World initStep
-    1    0.418   -0.115    -99.9         0 2.35e-05   0.0816    0.0816       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 21,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     0.37  -0.0838    -99.9   1.3e-05        0        0         0       World initStep
-    1    0.354   -0.083    -99.8         0  1.3e-05   0.0451    0.0451       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 20,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.347  -0.0167    -99.9  7.11e-06        0        0         0       World initStep
-    1    0.338  0.00155    -99.9         0 7.11e-06   0.0247    0.0247       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 19,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     0.37  -0.0387    -99.9  2.65e-05        0        0         0       World initStep
-    1    0.385   -0.129    -99.9         0 2.65e-05   0.0923    0.0923       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 18,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.332  -0.0335     -100  1.84e-06        0        0         0       World initStep
-    1    0.333  -0.0273     -100         0 1.84e-06  0.00641   0.00641       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 17,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.333  -0.0298     -100  3.84e-05        0        0         0       World initStep
-    1    0.335  -0.0285     -100         0 3.84e-05  0.00526   0.00526  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 16,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.311  -0.0211     -100  8.67e-06        0        0         0       World initStep
-    1    0.301  -0.0345     -100         0 8.67e-06   0.0301    0.0301       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 15,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.288  -0.0278    -99.9  4.01e-06        0        0         0       World initStep
-    1    0.285  -0.0364    -99.9         0 4.01e-06   0.0139    0.0139       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 14,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.261  0.00184     -100  4.52e-06        0        0         0       World initStep
-    1    0.265  -0.0106     -100         0 4.52e-06   0.0157    0.0157       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 13,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.249 0.000221     -100  3.41e-05        0        0         0       World initStep
-    1    0.255  0.00525     -100         0 3.41e-05   0.0173    0.0173  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 12,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.229   0.0206     -100  1.04e-05        0        0         0       World initStep
-    1    0.221  0.00224     -100         0 1.04e-05   0.0362    0.0362       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 11,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.185  -0.0136     -100  5.66e-06        0        0         0       World initStep
-    1    0.186   0.0059     -100         0 5.66e-06   0.0197    0.0197       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 10,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.124 -0.00174     -100  2.28e-05        0        0         0       World initStep
-    1    0.124 -0.00194     -100  1.36e-05 9.12e-06 0.000807  0.000807  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 9,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.118 0.000104     -100  3.01e-05        0        0         0       World initStep
-    1    0.118  0.00211     -100  7.09e-06 2.31e-05  0.00204   0.00204  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0924  -0.0022     -100  1.55e-05        0        0         0       World initStep
-    1   0.0909  -0.0466     -100         0 1.55e-05   0.0539    0.0539       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0916 0.000521     -100  1.19e-05        0        0         0       World initStep
-    1   0.0922 -0.00169     -100         0 1.19e-05  0.00446   0.00446  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0889 -0.000806     -100  1.15e-06        0        0         0       World initStep
-    1   0.0889  0.00111     -100         0 1.15e-06  0.00401   0.00401       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0785 -0.00207     -100  8.25e-05        0        0         0       World initStep
-    1   0.0786 -0.00213     -100  7.65e-05 5.99e-06 0.000531  0.000531  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0412 -0.00265     -100  2.58e-06        0        0         0       World initStep
-    1   0.0411 -0.00926     -100         0 2.58e-06  0.00896   0.00896       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0235 0.000261     -100  1.98e-07        0        0         0       World initStep
-    1   0.0236 0.000889     -100         0 1.98e-07  0.00069   0.00069       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 0.000535        0     -100  7.84e-06        0        0         0       World initStep
-    1 0.000535        0     -100  7.84e-06        0        0         0  OutOfWorld Transportation
+    1  0.00203        0     -100   0.00997    3e-05  0.00203   0.00203       World LowEnergyIoni
+    2  0.00203        0     -100   0.00997        0        0   0.00203  OutOfWorld Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.75s Real=0.79s Sys=0.03s
+  User=0s Real=0s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=23s Real=24s Sys=1.1s
+  User=28s Real=31s Sys=2.2s
 Idle> #
 Idle> #/gun/particle e-
 Idle> /gun/energy 2 keV
@@ -1718,174 +353,19 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100     0.002        0        0         0       World initStep
-    1 0.000997        0     -100   0.00182 1.15e-05 0.000997  0.000997       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :  0.000997         0      -100  0.000173                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    2  0.00981 9.14e-05     -100    0.0015 2.01e-05  0.00868   0.00967       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  2 ---------------
-    :   0.00981  9.14e-05      -100  0.000294                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    3   0.0106 0.000484     -100   0.00143 6.26e-05  0.00088    0.0106       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  3 ---------------
-    :    0.0106  0.000484      -100   6.5e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    4   0.0169  0.00556     -100   0.00139 1.15e-05  0.00811    0.0187       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  4 ---------------
-    :    0.0169   0.00556      -100  3.18e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    5   0.0191   0.0117     -100   0.00121  0.00015  0.00569    0.0243       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  5 ---------------
-    :    0.0191    0.0117      -100   2.7e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    6   0.0231   0.0111     -100   0.00104 1.15e-05  0.00302    0.0274       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  6 ---------------
-    :    0.0231    0.0111      -100  0.000163                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    7   0.0242   0.0113     -100     0.001 3.04e-05  0.00105    0.0284       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  7 ---------------
-    :    0.0242    0.0113      -100  5.05e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    8   0.0263   0.0111     -100   0.00092 1.15e-05  0.00155      0.03       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  8 ---------------
-    :    0.0263    0.0111      -100  7.04e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    9   0.0407   0.0212     -100  0.000696 0.000189   0.0157    0.0457       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  9 ---------------
-    :    0.0407    0.0212      -100  3.53e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   10   0.0433    0.019     -100  0.000662 1.94e-05 0.000705    0.0464       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 10 ---------------
-    :    0.0433     0.019      -100  1.42e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   11   0.0454   0.0201     -100  0.000627 3.14e-05  0.00177    0.0482       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 11 ---------------
-    :    0.0454    0.0201      -100  3.96e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   12   0.0459   0.0195     -100   0.00059 2.39e-05 7.51e-05    0.0482       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 12 ---------------
-    :    0.0459    0.0195      -100  1.27e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   13   0.0522   0.0235     -100  0.000495 5.83e-05  0.00415    0.0524       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal= 13 ---------------
-    :    0.0522    0.0235      -100   3.7e-05                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-   14    0.433   -0.131    -99.5         0 0.000495    0.646     0.698       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 14,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0522   0.0235     -100   3.7e-05        0        0         0       World initStep
-    1   0.0701    0.052     -100         0  3.7e-05   0.0337    0.0337  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 13,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0459   0.0195     -100  1.27e-05        0        0         0       World initStep
-    1   0.0581   0.0618     -100         0 1.27e-05   0.0441    0.0441       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 12,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0454   0.0201     -100  3.96e-06        0        0         0       World initStep
-    1    0.037   0.0215     -100         0 3.96e-06   0.0138    0.0138       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 11,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0433    0.019     -100  1.42e-05        0        0         0       World initStep
-    1   0.0144 -0.000527     -100         0 1.42e-05   0.0493    0.0493       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 10,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0407   0.0212     -100  3.53e-05        0        0         0       World initStep
-    1   0.0471   0.0201     -100         0 3.53e-05  0.00769   0.00769  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 9,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0263   0.0111     -100  7.04e-05        0        0         0       World initStep
-    1   0.0264   0.0111     -100   6.8e-05 2.47e-06 0.000219  0.000219  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0242   0.0113     -100  5.05e-06        0        0         0       World initStep
-    1   0.0247   0.0113     -100         0 5.05e-06  0.00141   0.00141  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0231   0.0111     -100  0.000163        0        0         0       World initStep
-    1   0.0228   0.0144     -100  0.000123 4.06e-05   0.0036    0.0036  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0191   0.0117     -100   2.7e-05        0        0         0       World initStep
-    1  -0.0241   0.0831     -100         0  2.7e-05   0.0939    0.0939       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0169  0.00556     -100  3.18e-05        0        0         0       World initStep
-    1    0.018  0.00497     -100  1.42e-06 3.04e-05  0.00269   0.00269  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0106 0.000484     -100   6.5e-06        0        0         0       World initStep
-    1   0.0193    -0.01     -100         0  6.5e-06   0.0226    0.0226       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0  0.00981 9.14e-05     -100  0.000294        0        0         0       World initStep
-    1     0.24   -0.374    -99.8         0 0.000294    0.493     0.493       World LowEnergyIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 0.000997        0     -100  0.000173        0        0         0       World initStep
-    1 0.000997        0     -100  0.000173        0        0         0  OutOfWorld Transportation
+    1 0.000415        0     -100   0.00196 4.39e-05 0.000415  0.000415       World LowEnergyIoni
+    2 0.000415        0     -100   0.00196        0        0  0.000415  OutOfWorld Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.09s Real=0.09s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=8.6s Real=9s Sys=0.4s
+  User=9.6s Real=10s Sys=0.58s
 Idle> #
 Idle> #/gun/particle e-
 Idle> /gun/energy 800 eV
@@ -1899,30 +379,19 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100    0.0008        0        0         0       World initStep
-    1 0.000364        0     -100  0.000783 1.56e-05 0.000364  0.000364       World LowEnergyIoni
-    :----- List of 2ndaries - #SpawnInStep=  1(Rest= 0,Along= 0,Post= 1), #SpawnTotal=  1 ---------------
-    :  0.000364         0      -100  1.42e-06                 e-
-    :----------------------------------------------------------------- EndOf2ndaries Info ---------------
-    2 0.000364        0     -100  0.000783        0        0  0.000364  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 0.000364        0     -100  1.42e-06        0        0         0       World initStep
-    1  0.00137 -0.00482     -100         0 1.42e-06  0.00493   0.00493       World LowEnergyIoni
+    1  0.00379        0     -100  0.000774 2.61e-05  0.00379   0.00379       World LowEnergyIoni
+    2  0.00379        0     -100  0.000774        0        0   0.00379  OutOfWorld Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 1000
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.1s Real=4.3s Sys=0.22s
+  User=5s Real=5.5s Sys=0.45s
 Idle> #
 Idle> #/gun/particle e-
 Idle> /gun/energy 500 eV
@@ -1936,7 +405,15 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     -100    0.0005        0        0         0       World initStep
-    1    0.649        0     -100         0   0.0005    0.649     0.649       World LowEnergyIoni
+    1 0.000153        0     -100  0.000486  1.4e-05 0.000153  0.000153       World LowEnergyIoni
+    2  0.00144 -2.3e-05     -100  0.000472 1.42e-05  0.00129   0.00144       World LowEnergyIoni
+    3  0.00602 -5.14e-05     -100  0.000455 1.69e-05  0.00458   0.00602       World LowEnergyIoni
+    4  0.00633 -0.000215     -100   0.00044 1.54e-05 0.000312   0.00634       World LowEnergyIoni
+    5  0.00731 -0.000471     -100  0.000359 8.03e-05 0.000974   0.00731       World LowEnergyIoni
+    6   0.0113 -0.000692     -100  0.000346 1.31e-05    0.004    0.0113       World LowEnergyIoni
+    7   0.0131 -0.000506     -100  0.000318 2.79e-05  0.00182    0.0131       World LowEnergyIoni
+    8   0.0139 -0.00052     -100  0.000246 7.22e-05 0.000761    0.0139       World LowEnergyIoni
+    9   0.0832 0.000412     -100         0 0.000246   0.0694    0.0832  OutOfWorld Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -1947,7 +424,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.54s Real=0.54s Sys=0s
+  User=3.6s Real=3.8s Sys=0.22s
 Idle> #
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
