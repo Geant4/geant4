@@ -1,0 +1,229 @@
+
+                       geant4-05-01-ref-00
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Finalised cuts-by-region technique for EM processes and particles
+    maintaining compatibility with old interface for setting production
+    cuts if no additional regions are adopted.
+  o Restored ability to store/retrieve physics tables from files.
+  o Created new novice example demonstrating cuts-by-region feature and
+    other advanced funtionalities.
+  o New data set G4LOWEN2.1 for low-energy EM processes, including missing
+    data file for gamma conversion required for 'Penelope' model.
+  o Simplified design for multiple-scattering, introduced base class
+    G4VMultipleScattering.
+  o Introduced Bohr and Ion fluctuations for STD EM processes.
+  o Fixed critical bug affecting binary-cascade model.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+digits+hits                             digits_hits-V05-00-01
+-----------
+- Fixed G4VSensitiveDetector::GetCollectionID() for more than one
+  sensitive detector objects instantiated from one detector class.
+- Fixed few trivial strict pedantic warnings in compilation.
+
+geometry/biasing                        geombias-V05-00-03
+----------------
+- Modified implementation of IsInWorld() in G4IStore using
+  G4LogicalVolume::IsAncestor().
+- Fixed few trivial strict pedantic warnings in compilation.
+
+geometry/magneticfield                  field-V05-00-01
+----------------------
+- Created .cc files for G4MagneticField and G4ElecroMagneticField.
+- Fixed definition of copy constructors in fields inheritance chain.
+- Moved obsolete method StepWithEst() to private in G4RKG3_Stepper,
+  G4CashKarpRKF45 and G4ClassicalRK4.
+- Cleared strict pedantic warnings.
+
+geometry/management                     geommng-V05-00-09
+-------------------
+- G4LogicalVolume: added method for scanning recursively the volume
+  tree and retrieve if the current LV is ancestor of a given PV:
+    G4bool IsAncestor(const G4VPhysicalVolume*) const
+- Fixed trivial strict pedantic warnings in compilation in
+  G4VSolid.cc and G4PVPlacement.cc.
+
+geometry/solids/BREPS                   breps-V05-00-00
+---------------------
+- Fixed trivial strict pedantic warnings in compilation.
+- Updated unit tests.
+
+geometry/solids/specific                geom-specific-V05-00-00
+------------------------
+- Fixed initialisation of base class in copy contructor for:
+  G4PolyPhiFace, G4PolyconeSide, G4PolyhedraSide.
+- Fixed trivial pedantic warnings on G4Polycone and G4Polyhedra.
+
+geometry/solids/STEPinterface           stepinterface-V05-00-00
+-----------------------------
+- Fixed trivial strict pedantic warnings in compilation.
+
+geometry/volumes                        geomvol-V05-00-03
+----------------
+- Fixed few trivial strict pedantic warnings in compilation.
+
+global                                  global-V05-00-05
+------
+- Added simple unit tests for G4Allocator and G4Timer.
+
+graphics_reps                           greps-V05-00-00
+-------------
+- Fixed trivial strict pedantic warnings in compilation.
+
+particles                               particles-V05-00-10
+---------
+- Embed a string of file version to physics table file.
+- Fix in G4DynamicParticle to resolve the pi-0 decay problem.
+- Removed G4ParticleWithCuts class and changed to alias of
+  G4ParticleDefinition.
+- Implemented Store/Retrieve Cut in G4ProductionCutsTable.
+- G4ProductionCuts contains cuts only for gamma and e+/-.
+- Some clean up for release.
+
+processes/decay                         decay-V05-00-00
+---------------
+- Added initialisation of TouchableHandle for decay products.
+
+processes/electromagnetic/lowenergy     emlowen-V05-00-18
+-----------------------------------
+- New data set G4LOWEN2.1 including missing data file for gamma
+  conversion required for 'Penelope' model.
+- Fix in G4hLowEnergyIonisation in calculation of step-limit.
+- Fixes for "final range" and fix in G4VeLowEnergyLoss related to
+  cuts-by-region.
+- Bug fix to the Auger effect, in response to user report.
+- Bug fix to G4LowEnergyGammaConversion for angular distribution.
+- Implemented migration to cut-by-region for fluorescence emission
+  in AlongStepDoIt() for G4ShellVacancy, G4hLowEnergyIonisation,
+  G4LowEnergyIonisation.
+
+processes/electromagnetic/muons         muons-V05-00-08
+-------------------------------
+- Fix for store/restore physics tables for ions.
+- G4VeMuEnergyLoss
+  o made step-limit calculation region aware.
+  o added finalRangeRequested for region handling.
+
+processes/electromagnetic/standard      stand-V05-00-13
+----------------------------------
+- Fix for store/restore physics tables for ions.
+- Force table rebuilding in case of change of materials between runs
+  for hadrons and ions.
+- Fixed problem of computation of mean-free-path for PAI process.
+- Made step-limit calculation region aware.
+- G4VhEnergyLoss, G4hIonisation: fixed problem for cuts modified
+  between runs.
+
+processes/electromagnetic/utils         utils-V05-00-13
+-------------------------------
+- fix of store/retrieve tables for msc and STD
+- Introduced Bohr and Ion fluctuations for STD processes.
+- Fixed initialisation of variables for multiple-scattering
+  and added control on range effective for ions.
+- Added interface between standard and STD tables and UI messenger.
+- Fixed problem of negative step limit for STD processes.
+- Added DeRegistration mechanism in destructor of STD loss classes.
+- Introduced base class for multiple-scattering: G4VMultipleScattering.
+- Removed UI messenger for STD processes.
+- Added GetDEDXDispersion() method to STD loss tables.
+- G4VEnergyLoss: added finalRangeRequested for region handling.
+
+processes/hadronic/cross_sections                      gcross-V05-01-01
+---------------------------------
+- Introducing an upper limit in the alternative pion cross-section class
+  G4PiNuclearCrossSection.
+ 
+processes/hadronic/models/low_energy                   ghad-low-V05-00-01
+------------------------------------
+- Removed two un-physical exceptions in G4LENeutronInelastic.
+  No run-time change.
+
+processes/hadronic/models/generator/scattering         ghad-scatt-V05-00-01
+----------------------------------------------
+- Fixed critical bug affecting binary-cascade model. Modified files:
+  G4CollisionManager.cc, G4Scatterer.cc, G4VScatteringCollision.cc.
+
+processes/management                                   procman-V05-00-01
+--------------------
+- Fixed PostStepGetPhysicalInteractionLength() for discrete processes
+  to avoid unrealistic step of length 0 in rare cases of precision
+  mismatch. Fixes bug report #465.
+- Cleared few trivial strict pedantic warnings.
+
+processes/transportation                               transport-V05-00-04
+------------------------
+- Migrate to cut-by-region for G4UserSpecialCuts.
+- Cleared pedantic warnings and some cosmetic cleanups.
+
+run                                     run-V05-00-17
+---
+- Added commands for SetCuts.
+- Implemented store/retrieve physics list methods for cuts-by-region.
+- Removed BuildPhysicsTable() from Initialize() and moved to BeamOn.
+  and invoke it for dynamically created ions.
+
+tracking                                tracking-V05-00-03
+--------
+- G4SteppingManager:
+  o recover ApplyCuts() for cuts-by-region.
+  o fixed initilization of fAtRestDoItProcTriggered.
+
+g3tog4                                  g3tog4-V05-00-01
+------
+- Fixed trivial strict pedantic warnings in compilation.
+
+examples				examples-V05-00-02
+--------
+o Updated reference outputs.
+- advanced:
+  o composite_calorimeter (ccal-V05-01-00)
+    + CCalAnalysis.cc: fixed G4cout/G4endl and cleaned some
+      compilation warnings. 
+- extended:
+  o analysis
+    + A01 (examples-analysis-A01-V05-00-00)
+      - Added 2 more histograms to the example 
+      - Fixed NullPointerException by letting SDManager delete the
+        detectors  created in DetectorConstruction. 
+      - Added comment when quitting Geant4 that JAS window still
+        needs closing. 
+  o electromagnetic
+    + TestEm1 (testem1-V05-00-05)
+      - Use modular physics list.
+    + TestEm3 (testem3-V05-00-05)
+      - Defined BGO material.
+      - Use logical mother for G4PVPlacement.
+    + TestEm4 (testem4-V05-00-02)
+      - Use logical mother for G4PVPlacement.
+    + TestEm5 (testem5-V05-00-06)
+      - Fixed problem of 'OutOfWorld' volume.
+      - Use logical mother for G4PVPlacement.
+    + TestEm6 (testem6-V05-00-02)
+      - Use logical mother for G4PVPlacement.
+- novice
+  o N04 (exampleN04-V05-00-02)
+    + Correction to printout.
+  o N06 (exampleN06-V05-00-03)
+    + Corrected OpWaterSurface to be dieletric_dieletric.
+  o N07 (exampleN07-V05-00-04)
+    + Created new example demonstrating cuts-by-region, material
+      parameterisation, run-time modification of part of the geometry
+      setup, sharing of a sensitive detector definition for different
+      sub-detectors, customization of the G4Run, store/retrieve the
+      physics table.
+
+tests                                     tests-V05-00-02
+-----
+o Updated reference outputs.
+  + test18 (test18-V05-00-02)
+    Use /gun/ion command in macros.
+  + test26 (test26-V05-00-06)
+    Added macros to test store/restore physics tables.
+  + test33 (test33-V05-00-03)
+    Test new implementation of IsInWorld() in G4Istore.
