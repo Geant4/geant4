@@ -10,8 +10,8 @@
 /// that the resolution = 2^mNoLevels.
 // -------------------------------------------------------------------------
 
-#ifndef OCTREE_HH
-#define OCTREE_HH
+#ifndef DICOMOCTREE_HH
+#define DICOMOCTREE_HH
 
 #include "globals.hh"
 #include "DicomOctreeNode.hh"
@@ -23,12 +23,12 @@ class MiddleNode;
 class TerminalNode;
 class OctreeNode;
 
-class Octree
+class DicomOctree
 {
 public:
   
-  Octree( G4int noLevels, G4double size );
-  ~Octree();
+  DicomOctree( G4int noLevels, G4double size );
+  ~DicomOctree();
 
   OctreeNode* CreateNode( G4double i, G4double j, G4double k, G4int level );
   OctreeNode* operator()( G4double nodeX, G4double nodeY, 

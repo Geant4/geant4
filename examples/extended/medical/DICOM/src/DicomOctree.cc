@@ -5,20 +5,20 @@
 #include "DicomOctreeMiddleNode.hh"
 #include "DicomOctreeTerminalNode.hh"
 
-Octree::Octree( G4int noLevels, G4double size )
+DicomOctree::DicomOctree( G4int noLevels, G4double size )
 {
   mNoLevels = noLevels;
   mSize = size;
   mRoot = new MiddleNode(0);
 }
 
-Octree::~Octree()
+DicomOctree::~DicomOctree()
 {
   delete mRoot;
   mRoot = 0; 
 }
 
-OctreeNode* Octree::CreateNode( G4double nodeX, G4double nodeY, G4double nodeZ, G4int level )
+OctreeNode* DicomOctree::CreateNode( G4double nodeX, G4double nodeY, G4double nodeZ, G4int level )
 {
   OctreeNode* current = mRoot;
   G4double currentX = 0;
@@ -54,7 +54,7 @@ OctreeNode* Octree::CreateNode( G4double nodeX, G4double nodeY, G4double nodeZ, 
   return current;
 }
 
-OctreeNode* Octree::operator()( G4double nodeX, 
+OctreeNode* DicomOctree::operator()( G4double nodeX, 
                                 G4double nodeY, 
                                 G4double nodeZ, 
                                 G4int level )
@@ -84,13 +84,13 @@ OctreeNode* Octree::operator()( G4double nodeX,
     return current;
 }
 
-void Octree::DeleteTree()
+void DicomOctree::DeleteTree()
 {
   delete mRoot;
   mRoot = 0;
 }
 
-void Octree::CountRecursive( OctreeNode* pNode, 
+void DicomOctree::CountRecursive( OctreeNode* pNode, 
                              G4int rMiddle, 
                              G4int rTerminal )
 {
@@ -104,7 +104,7 @@ void Octree::CountRecursive( OctreeNode* pNode,
     }
 }
 
-G4int Octree::CountMemory( G4int rMiddle, G4int rTerminal )
+G4int DicomOctree::CountMemory( G4int rMiddle, G4int rTerminal )
 {
   CountRecursive( mRoot, rMiddle, rTerminal );
   G4int total = rMiddle*sizeof(MiddleNode) + rTerminal*sizeof(TerminalNode);
