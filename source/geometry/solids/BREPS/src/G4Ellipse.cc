@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ellipse.cc,v 1.2 1999-12-15 14:50:01 gunter Exp $
+// $Id: G4Ellipse.cc,v 1.3 2000-05-15 14:16:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,7 +34,17 @@ G4Curve* G4Ellipse::Project(const G4Transform3D& tr)
 
   G4Vector3D a = semiAxis1*xPrime;
   G4Vector3D b = semiAxis2*yPrime;
-  G4double   u = atan2( 2*a*b, a.mag2()-b.mag2() ) / 2;
+  
+  G4double u;
+  G4double abmag = a.mag2()-b.mag2();
+  G4double prod = 2*a*b;
+  if (abmag < FLT_MAX)
+    if (prod > 0)
+      u = pi/4;
+    else
+      u = -pi/4;
+  else
+    u = atan2(prod,abmag) / 2;
 
   // get the coordinate axis directions and the semiaxis lengths
   G4Vector3D sAxis1          = a*cos(u)+b*sin(u);

@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2000-04-12 08:25:41 gcosmo Exp $
+$Id: History,v 1.14 2000-05-15 14:16:42 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13/05/2000 : G. Cosmo
+- Added protection to arguments fed to atan2(x,y) in G4Ellipse::Project().
 
 11/04/2000 : J. Allison
 - Removed implementations of G4VisExtent GetExtent() in most sub-classes
