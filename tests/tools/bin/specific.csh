@@ -509,6 +509,17 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Bar
   setenv G4LEVELGAMMADATA $G4WORKDIR/data/PhotonEvaporation
   setenv G4RADIOACTIVEDATA $G4WORKDIR/data/RadiativeDecay
   setenv G4LEDATA $G4WORKDIR/data/G4EMLOW0.3
+# AIDA :
+  setenv G4ANALYSIS_USE 1
+# Falsetto implementation :
+#  source $HOME_BARRAND/OpenScientist/Falsetto/v1r2/cmt/setup.csh
+# Lab implementation :
+  source $HOME_BARRAND/OpenScientist/Lab/v10r0/cmt/setup.csh
+# Set AIDA compile and link access :
+  setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
+  setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
+# Set PYTHONPATH to access local scripts :
+  setenv PYTHONPATH ${PYTHONPATH}:.
 endif
 
 if ( `uname -n` == "nb-barrand2" ) then
