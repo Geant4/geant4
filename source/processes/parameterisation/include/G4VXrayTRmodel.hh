@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VXrayTRmodel.hh,v 1.2 2000-06-15 17:38:33 gcosmo Exp $
+// $Id: G4VXrayTRmodel.hh,v 1.3 2000-10-06 15:17:30 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,6 +91,8 @@ public:
   void     GetGasZmuProduct() ;
   G4double GetGasZmuProduct(G4double,G4double,G4double) ;
 
+  G4double GetXTRrandomEnergy( G4double scaledTkin, G4int iTkin ) ;
+  G4double GetXTRenergy( G4int iPlace, G4double position, G4int iTransfer  ) ;
 
 protected:
 

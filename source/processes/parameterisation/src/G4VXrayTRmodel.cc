@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VXrayTRmodel.cc,v 1.5 2000-08-03 09:01:39 gcosmo Exp $
+// $Id: G4VXrayTRmodel.cc,v 1.6 2000-10-06 15:17:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -231,17 +231,20 @@ void G4VXrayTRmodel::DoIt( const G4FastTrack& fastTrack ,
 
       G4double sumEnergyTR = 0.0 ;
 
-      for(iTR=0;iTR<numOfTR;iTR++)
-      {
-        energyPos = ((*(*fEnergyDistrTable)(iPlace))(0)*W1+
-                       (*(*fEnergyDistrTable)(iPlace + 1))(0)*W2)*G4UniformRand() ;
-        for(iTransfer=0;iTransfer<fBinTR-1;iTransfer++)
-  	{
-          if(energyPos >= ((*(*fEnergyDistrTable)(iPlace))(iTransfer)*W1+
-                       (*(*fEnergyDistrTable)(iPlace + 1))(iTransfer)*W2)) break ;
-   	}
-        energyTR = ((*fEnergyDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer))*W1+
-               ((*fEnergyDistrTable)(iPlace + 1)->GetLowEdgeEnergy(iTransfer))*W2 ;
+        for(iTR=0;iTR<numOfTR;iTR++)
+        {
+
+      //    energyPos = ((*(*fEnergyDistrTable)(iPlace))(0)*W1+
+      //          (*(*fEnergyDistrTable)(iPlace + 1))(0)*W2)*G4UniformRand() ;
+      //  for(iTransfer=0;iTransfer<fBinTR-1;iTransfer++)
+      //	{
+      //    if(energyPos >= ((*(*fEnergyDistrTable)(iPlace))(iTransfer)*W1+
+      //                 (*(*fEnergyDistrTable)(iPlace + 1))(iTransfer)*W2)) break ;
+      //	}
+      //   energyTR = ((*fEnergyDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer))*W1+
+      //     ((*fEnergyDistrTable)(iPlace + 1)->GetLowEdgeEnergy(iTransfer))*W2 ;
+
+      energyTR = GetXTRrandomEnergy(TkinScaled,iTkin) ;
 
 	  // G4cout<<"energyTR = "<<energyTR/keV<<"keV"<<endl ;
 
@@ -816,6 +819,95 @@ void G4VXrayTRmodel::GetNumberOfPhotons()
   }
   return ;
 }  
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Returns randon energy of a X-ray TR photon for given scaled kinetic energy
+// of a charged particle
+
+G4double G4VXrayTRmodel::GetXTRrandomEnergy( G4double scaledTkin, G4int iTkin )
+{
+  G4int iTransfer, iPlace  ;
+  G4double transfer = 0.0, position, E1, E2, W1, W2, W ;
+
+  iPlace = iTkin - 1 ;
+
+  //  G4cout<<"iPlace = "<<iPlace<<endl ;
+
+  if(iTkin == fTotBin) // relativistic plato, try from left
+  {
+      position = (*(*fEnergyDistrTable)(iPlace))(0)*G4UniformRand() ;
+
+      for(iTransfer=0;;iTransfer++)
+      {
+        if(position >= (*(*fEnergyDistrTable)(iPlace))(iTransfer)) break ;
+      }
+      transfer = GetXTRenergy(iPlace,position,iTransfer);
+  }
+  else
+  {
+    E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
+    E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
+    W  = 1.0/(E2 - E1) ;
+    W1 = (E2 - scaledTkin)*W ;
+    W2 = (scaledTkin - E1)*W ;
+
+    position =( (*(*fEnergyDistrTable)(iPlace))(0)*W1 + 
+                    (*(*fEnergyDistrTable)(iPlace+1))(0)*W2 )*G4UniformRand() ;
+
+        // G4cout<<position<<"\t" ;
+
+    for(iTransfer=0;;iTransfer++)
+    {
+          if( position >=
+          ( (*(*fEnergyDistrTable)(iPlace))(iTransfer)*W1 + 
+            (*(*fEnergyDistrTable)(iPlace+1))(iTransfer)*W2) ) break ;
+    }
+    transfer = GetXTRenergy(iPlace,position,iTransfer);
+    
+  } 
+  //  G4cout<<"XTR transfer = "<<transfer/keV<<" keV"<<endl ; 
+  if(transfer < 0.0 ) transfer = 0.0 ;
+  return transfer ;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Returns approximate position of X-ray photon energy during random sampling
+// over integral energy distribution
+
+G4double G4VXrayTRmodel::GetXTRenergy( G4int    iPlace, 
+                                       G4double position, 
+                                       G4int    iTransfer )
+{
+  G4double x1, x2, y1, y2, result ;
+
+  if(iTransfer == 0)
+  {
+    result = (*fEnergyDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+  }  
+  else
+  {
+    y1 = (*(*fEnergyDistrTable)(iPlace))(iTransfer-1) ;
+    y2 = (*(*fEnergyDistrTable)(iPlace))(iTransfer) ;
+
+    x1 = (*fEnergyDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer-1) ;
+    x2 = (*fEnergyDistrTable)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+
+    if ( x1 == x2 )    result = x2 ;
+    else
+    {
+      if ( y1 == y2  ) result = x1 + (x2 - x1)*G4UniformRand() ;
+      else
+      {
+        result = x1 + (position - y1)*(x2 - x1)/(y2 - y1) ;
+      }
+    }
+  }
+  return result ;
+}
+
+
 
 //
 //
