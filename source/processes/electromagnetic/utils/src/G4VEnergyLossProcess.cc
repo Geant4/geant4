@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.10 2004-03-12 11:42:57 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.11 2004-03-15 16:48:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -853,7 +853,8 @@ void G4VEnergyLossProcess::SetRangeTable(G4PhysicsTable* p)
   if(p) {
     size_t n = p->length();
     G4PhysicsVector* pv = (*p)[0];
-    G4double emax = pv->GetLowEdgeEnergy(pv->GetVectorLength());
+    //    G4double emax = pv->GetLowEdgeEnergy(pv->GetVectorLength());
+    G4double emax = maxKinEnergyForRange;
     G4bool b;
     theDEDXAtMaxEnergy = new G4double [n];
     theRangeAtMaxEnergy = new G4double [n];
