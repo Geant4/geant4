@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01RunAction.cc,v 1.7 2003-06-16 16:48:57 gunter Exp $
+// $Id: F01RunAction.cc,v 1.8 2003-06-25 17:40:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,7 +74,7 @@ void F01RunAction::BeginOfRunAction(const G4Run* aRun)
 
 /////////////////////////////////////////////////////////////////////////////
 
-void F01RunAction::EndOfRunAction(const G4Run* aRun)
+void F01RunAction::EndOfRunAction(const G4Run*)
 {
   if (G4VVisManager::GetConcreteInstance())
   {

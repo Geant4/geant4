@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01DetectorConstruction.cc,v 1.10 2003-06-25 17:01:59 gcosmo Exp $
+// $Id: F01DetectorConstruction.cc,v 1.11 2003-06-25 17:40:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -233,9 +233,12 @@ G4VPhysicalVolume* F01DetectorConstruction::ConstructCalorimeter()
       
   // Cleanup old geometry
 
-  G4PhysicalVolumeStore::GetInstance()->Clean();
-  G4LogicalVolumeStore::GetInstance()->Clean();
-  G4SolidStore::GetInstance()->Clean();
+  if (physiWorld)
+  {
+    G4PhysicalVolumeStore::GetInstance()->Clean();
+    G4LogicalVolumeStore::GetInstance()->Clean();
+    G4SolidStore::GetInstance()->Clean();
+  }
 
   // World
   
