@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.6 2000-08-22 09:05:21 hpw Exp $
+// $Id: G4Quasmon.cc,v 1.7 2000-08-22 09:06:44 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -2965,8 +2965,8 @@ G4QHadronVector *
 G4Quasmon::Fragment()
 {
   HadronizeQuasmon();
-  G4QHadronVector theResult = new G4QHadronVector;
-  for(G4int particle=0; particle<theQHadrons.entries; particle++)
+  G4QHadronVector * theResult = new G4QHadronVector;
+  for(G4int particle=0; particle<theQHadrons.entries(); particle++)
   {
     theResult->insert(theQHadrons[particle]);
   }
