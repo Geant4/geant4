@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.icc,v 1.14 2000-11-20 19:12:53 gcosmo Exp $
+// $Id: G4PropagatorInField.icc,v 1.15 2001-03-05 10:43:51 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,7 @@ G4PropagatorInField::G4PropagatorInField(G4Navigator    *theNavigator,
     fCurrentFieldMgr(detectorFieldMgr), 
     fNavigator(theNavigator),
     End_PointAndTangent(G4ThreeVector(0.,0.,0.),
-			G4ThreeVector(0.,0.,0.),0.0,0.0),
+			G4ThreeVector(0.,0.,0.),0.0,0.0,0.0,0.0,0.0),
     fVerboseLevel(0),
     fmax_loop_count(10000)
 {
@@ -67,7 +67,7 @@ void G4PropagatorInField::SetChargeMomentumMass(
 inline
 G4ThreeVector  G4PropagatorInField::EndPosition() const
 {
-      return   End_PointAndTangent.Position(); 
+      return   End_PointAndTangent.GetPosition(); 
 }
 
 inline
@@ -122,20 +122,20 @@ inline
 void
 G4PropagatorInField::SetAccuraciesWithDeltaOneStep(G4double valDeltaOneStep)
 { 
-  fDelta_One_Step_Value= valDeltaOneStep;  
-  fDelta_Intersection_Val = 0.4 * fDelta_One_Step_Value;
+//  fDelta_One_Step_Value= valDeltaOneStep;  
+//  fDelta_Intersection_Val = 0.4 * fDelta_One_Step_Value;
 }
 
 inline
 void G4PropagatorInField::SetDeltaOneStep(G4double valDeltaOneStep)
 { 
-  fDelta_One_Step_Value= valDeltaOneStep;  
+  // fDelta_One_Step_Value= valDeltaOneStep;  
 }
 
 inline
 void G4PropagatorInField::SetDeltaIntersection(G4double valDeltaIntersection)
 {
-  fDetectorFieldMgr->SetAccuraciesWithDeltaOneStep(valDeltaOneStep);
+  fDetectorFieldMgr->SetAccuraciesWithDeltaOneStep(valDeltaIntersection);
 }
 
 inline

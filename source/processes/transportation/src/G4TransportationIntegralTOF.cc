@@ -211,6 +211,8 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
 		      velocityVector,
 		      0.0, 
 		      track.GetKineticEnergy(),
+                      restMass,
+                      track.GetVelocity(), 
 		      track.GetLocalTime(),    // tof lab ?
 		      track.GetProperTime(),   // tof proper
 		      &spin );

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.13 2000-11-20 19:09:55 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.14 2001-03-05 10:44:25 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -167,7 +167,7 @@ G4PropagatorInField::
      //    On Exit:
      //         CurrentState is updated with the final position and velocity. 
 
-     G4ThreeVector  EndPointB= CurrentState.Position(); 
+     G4ThreeVector  EndPointB= CurrentState.GetPosition(); 
 
      // Calculate the direction and length of the chord AB
      
@@ -213,8 +213,8 @@ G4PropagatorInField::
 	   //  G is our EndPoint ...
 	   End_PointAndTangent= IntersectPointVelct_G;
 	   StepTaken = 
-	   TruePathLength= IntersectPointVelct_G.CurveS()
-	                         - OriginalState.CurveS(); // which is Zero now.
+	   TruePathLength= IntersectPointVelct_G.GetCurveLength()
+	                         - OriginalState.GetCurveLength(); // which is Zero now.
 #ifdef G4VERBOSE
 	   if( Verbose() > 0 )
 	      G4cout << " Found intersection after Step of length " << 
@@ -281,16 +281,16 @@ G4PropagatorInField::
 
 #ifdef G4VERBOSE
   // Check that "s" is correct 
-  if( fabs(OriginalState.CurveS() + TruePathLength 
-            - End_PointAndTangent.CurveS()) > 3.e-4 * TruePathLength )
+  if( fabs(OriginalState.GetCurveLength() + TruePathLength 
+            - End_PointAndTangent.GetCurveLength()) > 3.e-4 * TruePathLength )
   {
       G4cerr << " Error in G4PropagatorInField: Curve lenght mis-match, is advancement wrong ? ";
       G4cerr << " The curve length of the endpoint should be " 
-	   << OriginalState.CurveS() + TruePathLength 
-           << " and is " <<  End_PointAndTangent.CurveS() 
+	   << OriginalState.GetCurveLength() + TruePathLength 
+           << " and is " <<  End_PointAndTangent.GetCurveLength() 
            << " a difference of " 
-	   << OriginalState.CurveS() + TruePathLength 
-              - End_PointAndTangent.CurveS() << G4endl;
+	   << OriginalState.GetCurveLength() + TruePathLength 
+              - End_PointAndTangent.GetCurveLength() << G4endl;
   }
 #endif
 
@@ -361,8 +361,8 @@ G4PropagatorInField::LocateIntersectionPoint(
 
   do{					      // REPEAT
 
-    G4ThreeVector  Point_A=  CurrentA_PointVelocity.Position();  
-    G4ThreeVector  Point_B=  CurrentB_PointVelocity.Position();  
+    G4ThreeVector  Point_A=  CurrentA_PointVelocity.GetPosition();  
+    G4ThreeVector  Point_B=  CurrentB_PointVelocity.GetPosition();  
 
     // F = a point on true AB path close to point E  (the closest if possible)
     //
@@ -374,7 +374,7 @@ G4PropagatorInField::LocateIntersectionPoint(
 
     //  The above function is the most difficult part ...
     //        
-    G4ThreeVector CurrentF_Point= ApproxIntersecPointV.Position();
+    G4ThreeVector CurrentF_Point= ApproxIntersecPointV.GetPosition();
       // fMidPoint_CurveLen_of_LastAttempt = 
       //                         ApproxIntersecPointV.  GetCurveLength() -
       //                         CurrentA_PointVelocity.GetCurveLength(); 
@@ -395,7 +395,7 @@ G4PropagatorInField::LocateIntersectionPoint(
 	// IntersectPointVelocity.SetCurvePnt( 
 	//		  CurrentE_Point, 
 	//		  ApproxIntersecPointV.GetVelocity(), 
-	//		  ApproxIntersecPointV.CurveS() );
+	//		  ApproxIntersecPointV.GetCurveLength() );
 	IntersectPointVelocity = ApproxIntersecPointV;
         IntersectPointVelocity.SetPosition( CurrentE_Point );
 
@@ -502,10 +502,10 @@ G4PropagatorInField::LocateIntersectionPoint(
        // Ensure that the new endpoints are not further apart in space than on the curve
        //  due to different errors in the integration
        G4double linDistSq, curveDist; 
-       linDistSq= (  CurrentB_PointVelocity.Position() 
-		   - CurrentA_PointVelocity.Position() ).mag2(); 
-       curveDist=  CurrentB_PointVelocity.CurveS() -
-                   CurrentA_PointVelocity.CurveS();
+       linDistSq= (  CurrentB_PointVelocity.GetPosition() 
+		   - CurrentA_PointVelocity.GetPosition() ).mag2(); 
+       curveDist=  CurrentB_PointVelocity.GetCurveLength() -
+                   CurrentA_PointVelocity.GetCurveLength();
        if( curveDist*(curveDist+2*perMillion ) < linDistSq ){
 	  //  Re-integrate to obtain a new B
 	  G4FieldTrack   newEndpoint= CurrentA_PointVelocity;
