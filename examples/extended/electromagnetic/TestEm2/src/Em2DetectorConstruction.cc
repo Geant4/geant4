@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2DetectorConstruction.cc,v 1.2 1999-12-15 14:49:00 gunter Exp $
+// $Id: Em2DetectorConstruction.cc,v 1.3 2000-02-14 14:09:16 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -186,7 +186,7 @@ G4VPhysicalVolume* Em2DetectorConstruction::ConstructVolumes()
                                     physiRing,false,0);               
 
 
-  cout << "Absorber is " << G4BestUnit(EcalLength,"Length") 
+  G4cout << "Absorber is " << G4BestUnit(EcalLength,"Length") 
        << " of " << myMaterial->GetName() << G4endl; 
 
 
