@@ -107,6 +107,8 @@ public:
  
 protected:
 
+  G4ThreeVectorList*
+  CreateRotatedVertices(const G4AffineTransform& pTransform) const;
   G4bool  IsConvex();
   virtual void CalcBBoxes();
   void    CheckSurfaceNormals();

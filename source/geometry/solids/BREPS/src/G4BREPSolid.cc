@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolid.cc,v 1.5 1999-05-21 20:00:33 japost Exp $
+// $Id: G4BREPSolid.cc,v 1.6 1999-06-04 17:40:23 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4BREPSolid.hh"
@@ -500,106 +500,198 @@ G4bool G4BREPSolid::IsConvex()
 }
 
 
-G4bool G4BREPSolid::CalculateExtent(const     EAxis pAxis,
-				    const     G4VoxelLimits& pVoxelLimit,
-				    const     G4AffineTransform& pTransform,
-				    G4double& pMin, 
-				    G4double& pMax           ) const
+G4bool G4BREPSolid::CalculateExtent(const EAxis pAxis,
+			      const G4VoxelLimits& pVoxelLimit,
+			      const G4AffineTransform& pTransform,
+			      G4double& pMin, G4double& pMax) const
 {
   G4Point3D Min = bbox->GetBoxMin();
   G4Point3D Max = bbox->GetBoxMax();
-  
-  G4ThreeVector VMin(Min.x(),Min.y(),Min.z());
-  G4ThreeVector VMax(Max.x(),Max.y(),Max.z());  
 
-  // Stefano MAGNI	
-  // Inizio modifica
-  //
-  	
-	
-  G4double xoffset,xMin,xMax;
-  G4double yoffset,yMin,yMax;
-  G4double zoffset,zMin,zMax;
-  
-  xoffset = pTransform.NetTranslation().x();
-  xMin = xoffset + Min.x();
-  xMax = xoffset + Max.x();
-  
-  if (pVoxelLimit.IsXLimited())
-  {
-    if ( xMin > pVoxelLimit.GetMaxXExtent() ||
-	 xMax < pVoxelLimit.GetMinXExtent()    )
-      return false;
-    else
+  if (!pTransform.IsRotated())
     {
-      if (xMin<pVoxelLimit.GetMinXExtent())
-	xMin = pVoxelLimit.GetMinXExtent();
-    
-      if (xMax>pVoxelLimit.GetMaxXExtent())
-	xMax = pVoxelLimit.GetMaxXExtent();
-    }
-  }
+      // Special case handling for unrotated boxes
+      // Compute x/y/z mins and maxs respecting limits, with early returns
+      // if outside limits. Then switch() on pAxis
+      G4double xoffset,xMin,xMax;
+      G4double yoffset,yMin,yMax;
+      G4double zoffset,zMin,zMax;
 
-  yoffset = pTransform.NetTranslation().y();
-  yMin = yoffset + Min.y();
-  yMax = yoffset + Max.y();
-  
-  if (pVoxelLimit.IsYLimited())
-  {
-    if ( yMin > pVoxelLimit.GetMaxYExtent() ||
-	 yMax < pVoxelLimit.GetMinYExtent()    )
-      return false;
-    else
-    {
-      if (yMin < pVoxelLimit.GetMinYExtent())
-	yMin = pVoxelLimit.GetMinYExtent();
-	
-      if (yMax > pVoxelLimit.GetMaxYExtent())
-	yMax = pVoxelLimit.GetMaxYExtent();	
+      xoffset=pTransform.NetTranslation().x();
+      xMin=xoffset-Min.x();
+      xMax=xoffset+Max.x();
+      if (pVoxelLimit.IsXLimited())
+	{
+	  if (xMin>pVoxelLimit.GetMaxXExtent()
+	      ||xMax<pVoxelLimit.GetMinXExtent())
+	    {
+	      return false;
+	    }
+	  else
+	    {
+	      if (xMin<pVoxelLimit.GetMinXExtent())
+		{
+		  xMin=pVoxelLimit.GetMinXExtent();
+		}
+	      if (xMax>pVoxelLimit.GetMaxXExtent())
+		{
+		  xMax=pVoxelLimit.GetMaxXExtent();
+		}
+	    }
+	}
+
+
+      yoffset=pTransform.NetTranslation().y();
+      yMin=yoffset-Min.y();
+      yMax=yoffset+Max.y();
+      if (pVoxelLimit.IsYLimited())
+	{
+	  if (yMin>pVoxelLimit.GetMaxYExtent()
+	      ||yMax<pVoxelLimit.GetMinYExtent())
+	    {
+	      return false;
+	    }
+	  else
+	    {
+	      if (yMin<pVoxelLimit.GetMinYExtent())
+		{
+		  yMin=pVoxelLimit.GetMinYExtent();
+		}
+	      if (yMax>pVoxelLimit.GetMaxYExtent())
+		{
+		  yMax=pVoxelLimit.GetMaxYExtent();
+		}
+	    }
+	}
+
+
+      zoffset=pTransform.NetTranslation().z();
+      zMin=zoffset-Min.z();
+      zMax=zoffset+Max.z();
+      if (pVoxelLimit.IsZLimited())
+	{
+	  if (zMin>pVoxelLimit.GetMaxZExtent()
+	      ||zMax<pVoxelLimit.GetMinZExtent())
+	    {
+	      return false;
+	    }
+	  else
+	    {
+	      if (zMin<pVoxelLimit.GetMinZExtent())
+		{
+		  zMin=pVoxelLimit.GetMinZExtent();
+		}
+	      if (zMax>pVoxelLimit.GetMaxZExtent())
+		{
+		  zMax=pVoxelLimit.GetMaxZExtent();
+		}
+	    }
+	}
+
+
+      switch (pAxis)
+	{
+	case kXAxis:
+	  pMin=xMin;
+	  pMax=xMax;
+	  break;
+	case kYAxis:
+	  pMin=yMin;
+	  pMax=yMax;
+	  break;
+	case kZAxis:
+	  pMin=zMin;
+	  pMax=zMax;
+	  break;
+	}
+
+      pMin-=kCarTolerance;
+      pMax+=kCarTolerance;
+
+      return true;
     }
-  }
-  
-  zoffset = pTransform.NetTranslation().z();
-  zMin = zoffset+Min.z();
-  zMax = zoffset+Max.z();
-  
-  if (pVoxelLimit.IsZLimited())
-  {
-    if ( zMin > pVoxelLimit.GetMaxZExtent() ||
-	 zMax < pVoxelLimit.GetMinZExtent()    )
-      return false;
-    else
+  else
     {
-      if (zMin < pVoxelLimit.GetMinZExtent())
-	zMin = pVoxelLimit.GetMinZExtent();
-	
-      if (zMax > pVoxelLimit.GetMaxZExtent())
-	zMax = pVoxelLimit.GetMaxZExtent();  
+      // General rotated case - create and clip mesh to boundaries
+
+      G4bool existsAfterClip=false;
+      G4ThreeVectorList *vertices;
+
+      pMin=+kInfinity;
+      pMax=-kInfinity;
+      // Calculate rotated vertex coordinates
+
+      vertices=CreateRotatedVertices(pTransform);
+      ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
+      ClipCrossSection(vertices,4,pVoxelLimit,pAxis,pMin,pMax);
+      ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
+	    
+      if (pMin!=kInfinity||pMax!=-kInfinity)
+	{
+	  existsAfterClip=true;
+		    
+	  // Add 2*tolerance to avoid precision troubles
+	  pMin-=kCarTolerance;
+	  pMax+=kCarTolerance;
+		    
+	}
+      else
+	{
+	  // Check for case where completely enveloping clipping volume
+	  // If point inside then we are confident that the solid completely
+	  // envelopes the clipping volume. Hence set min/max extents according
+	  // to clipping volume extents along the specified axis.
+	  G4ThreeVector clipCentre(
+				   (pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
+				   (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
+				   (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
+		    
+	  if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
+	    {
+	      existsAfterClip=true;
+	      pMin=pVoxelLimit.GetMinExtent(pAxis);
+	      pMax=pVoxelLimit.GetMaxExtent(pAxis);
+	    }
+	}
+      delete vertices;
+      return existsAfterClip;
     }
-  }
-  
-  switch (pAxis)
-  {
-    case kXAxis:
-      pMin = xMin;
-      pMax = xMax;
-      break;
+}
+
+G4ThreeVectorList*
+G4BREPSolid::CreateRotatedVertices(const G4AffineTransform& pTransform) const
+{
+  G4Point3D Min = bbox->GetBoxMin();
+  G4Point3D Max = bbox->GetBoxMax();
+
+  G4ThreeVectorList *vertices;
+  vertices=new G4ThreeVectorList(8);
     
-    case kYAxis:
-      pMin = yMin;
-      pMax = yMax;
-      break;
-    
-    case kZAxis:
-      pMin = zMin;
-      pMax = zMax;
-      break;
-  }
-  
-  pMin -= kCarTolerance;
-  pMax += kCarTolerance;
-  
-  return true;
+  if (vertices)
+    {
+      G4ThreeVector vertex0(Min.x(),Min.y(),Min.z());
+      G4ThreeVector vertex1(Max.x(),Min.y(),Min.z());
+      G4ThreeVector vertex2(Max.x(),Max.y(),Min.z());
+      G4ThreeVector vertex3(Min.x(),Max.y(),Min.z());
+      G4ThreeVector vertex4(Min.x(),Min.y(),Max.z());
+      G4ThreeVector vertex5(Max.x(),Min.y(),Max.z());
+      G4ThreeVector vertex6(Max.x(),Max.y(),Max.z());
+      G4ThreeVector vertex7(Min.x(),Max.y(),Max.z());
+
+      vertices->insert(pTransform.TransformPoint(vertex0));
+      vertices->insert(pTransform.TransformPoint(vertex1));
+      vertices->insert(pTransform.TransformPoint(vertex2));
+      vertices->insert(pTransform.TransformPoint(vertex3));
+      vertices->insert(pTransform.TransformPoint(vertex4));
+      vertices->insert(pTransform.TransformPoint(vertex5));
+      vertices->insert(pTransform.TransformPoint(vertex6));
+      vertices->insert(pTransform.TransformPoint(vertex7));
+    }
+  else
+    {
+      G4Exception("G4BREPSolid::CreateRotatedVertices Out of memory - Cannot alloc vertices");
+    }
+  return vertices;
 }
 
 
