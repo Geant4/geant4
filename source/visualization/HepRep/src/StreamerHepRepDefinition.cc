@@ -27,11 +27,11 @@ bool StreamerHepRepDefinition::addAttDef(string name, string desc, string type, 
     return true;
 }
 
-HepRepAttDef* StreamerHepRepDefinition::getAttDefFromNode(string lowerCaseName) {
+HepRepAttDef* StreamerHepRepDefinition::getAttDefFromNode(string) {
     return NULL;
 }
 
-HepRepAttDef* StreamerHepRepDefinition::getAttDef(string name) {
+HepRepAttDef* StreamerHepRepDefinition::getAttDef(string) {
     return NULL;
 }
 

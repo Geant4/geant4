@@ -542,7 +542,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 }
 
 
-void G4HepRepSceneHandler::AddPrimitive (const G4Text& text) {
+void G4HepRepSceneHandler::AddPrimitive (const G4Text&) {
 #ifdef DEBUG
     G4cout << "G4HepRepSceneHandler::AddPrimitive(G4Text&) " << G4endl;
 #endif
@@ -574,7 +574,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
 
 //Method for handling G4NURBS objects for drawing solids.
 //Knots and Ctrl Pnts MUST be arrays of GLfloats.
-void G4HepRepSceneHandler::AddPrimitive (const G4NURBS& nurb) {
+void G4HepRepSceneHandler::AddPrimitive (const G4NURBS&) {
 #ifdef DEBUG
     G4cout << "G4HepRepSceneHandler::AddPrimitive(G4NURBS&) " << G4endl;
 #endif
@@ -1003,7 +1003,6 @@ HepRepInstance* G4HepRepSceneHandler::CreateEventInstance(G4String typeName, G4i
 
     // Copy the instance's G4AttValues to HepRepAttValues.
     G4std::vector<G4AttValue>::iterator iAttVal;
-    G4std::map<G4String,G4AttDef>::const_iterator iAttDef;
     if (attValues && attDefs) {
         for (iAttVal = attValues->begin(); iAttVal != attValues->end(); ++iAttVal) {
 	        G4std::map<G4String,G4AttDef>::const_iterator iAttDef =

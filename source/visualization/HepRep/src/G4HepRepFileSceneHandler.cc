@@ -43,7 +43,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.12 2003-02-28 19:21:22 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.13 2003-05-30 12:50:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -483,7 +483,11 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
   }
 }
 
+#ifdef G4HEPREPFILEDEBUG
 void G4HepRepFileSceneHandler::AddPrimitive(const G4Text& text) {
+#else
+void G4HepRepFileSceneHandler::AddPrimitive(const G4Text&) {
+#endif
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddPrimitive(const G4Text& text) called:"
@@ -564,7 +568,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   } while (notLastFace);
 }
 
-void G4HepRepFileSceneHandler::AddPrimitive(const G4NURBS& nurbs) {
+void G4HepRepFileSceneHandler::AddPrimitive(const G4NURBS&) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddPrimitive(const G4NURBS& nurbs) called."
