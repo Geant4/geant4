@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.3 2005-01-31 16:58:54 maire Exp $
+// $Id: HistoManager.hh,v 1.4 2005-02-01 11:34:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,8 +52,9 @@ class HistoManager
     HistoManager();
    ~HistoManager();
 
-    void SetFileName (const G4String& name) { fileName = name;};
-    void SetFileType (const G4String& name) { fileType = name;};
+    void SetFileName   (const G4String& name) { fileName[0] = name;};
+    void SetFileType   (const G4String& name) { fileType    = name;};
+    void SetFileOption (const G4String& name) { fileOption  = name;};    
     void book();
     void save();
     void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
@@ -66,8 +67,9 @@ class HistoManager
 
   private:
 
-    G4String                 fileName;
+    G4String                 fileName[2];
     G4String                 fileType;
+    G4String                 fileOption;    
     AIDA::IAnalysisFactory*  af;
     AIDA::ITree*             tree;
     AIDA::IHistogram1D*      histo[MaxHisto];

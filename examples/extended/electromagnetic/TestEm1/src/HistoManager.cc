@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.4 2005-01-31 16:58:54 maire Exp $
+// $Id: HistoManager.cc,v 1.5 2005-02-01 11:34:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,8 +49,9 @@ HistoManager::HistoManager()
   }
 #endif 
  
-  fileName = "testem1.aida";
-  fileType = "hbook";
+  fileName[0] = "testem1";
+  fileType    = "hbook";
+  fileOption = "uncompress";
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     histo[k] = 0;
@@ -81,20 +82,20 @@ void HistoManager::book()
   if(!af) return;
 
   // Creating a tree mapped to an hbook file.
+  fileName[1] = fileName[0] + "." + fileType;
   G4bool readOnly  = false;
   G4bool createNew = true;
-  G4String options = "uncompress";
   AIDA::ITreeFactory* tf  = af->createTreeFactory();
-  tree = tf->create(fileName, fileType, readOnly, createNew, options);
+  tree = tf->create(fileName[1], fileType, readOnly, createNew, fileOption);
   delete tf;
   if(!tree) {
     G4cout << "TestEm1::HistoManager::book :" 
            << " problem creating the AIDA tree with "
-           << " storeName = " << fileName
+           << " storeName = " << fileName[1]
            << " storeType = " << fileType
-           << " readOnly = " << readOnly
+           << " readOnly = "  << readOnly
            << " createNew = " << createNew
-           << " options = " << options
+           << " options = "   << fileOption
            << G4endl;
     return;
   }
@@ -111,8 +112,8 @@ void HistoManager::book()
     }
   }
   delete hf;
-  if(factoryOn) 
-      G4cout << "\n----> Histogram Tree is opened in " << fileName << G4endl;
+  if (factoryOn) 
+     G4cout << "\n----> Histogram Tree is opened in " << fileName[1] << G4endl;
 #endif
 }
 
@@ -124,7 +125,7 @@ void HistoManager::save()
   if (factoryOn) {
     tree->commit();       // Writing the histograms to the file
     tree->close();        // and closing the tree (and the file)
-    G4cout << "\n----> Histogram Tree is saved in " << fileName << G4endl;
+    G4cout << "\n----> Histogram Tree is saved in " << fileName[1] << G4endl;
 
     delete tree;
     tree = 0;
