@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.18 2001-07-20 11:52:43 gcosmo Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.19 2001-08-01 21:32:59 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,6 +39,12 @@
 //
 // History
 // -------
+// Bugfix 266 by Radovan Chytracek:
+// The situation when phi1 = 0 dphi1 = 2*pi and all RMINs = 0.0 is handled
+// now. In this case the inner planes are not created. The fix goes even
+// further this means it consideres more than 2 z-planes and inner planes
+// are not created whenever two consecutive RMINs are = 0.0 .
+// 
 // Corrections by S.Giani:
 // - Xaxis now corresponds to phi=0
 // - partial angle = phiTotal / Nsides
@@ -66,7 +72,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
 					   G4double RMAX[] )
   : G4BREPSolid(name)
 {
-  G4int sections= num_z_planes - 1;
+  G4int sections           = num_z_planes - 1;
   
   if(dphi >= 2*pi-perMillion)
     nb_of_surfaces = 2*(sections * sides) + 2;
@@ -74,7 +80,9 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     nb_of_surfaces = 2*(sections * sides) + 4;
 
 
-  SurfaceVec = new G4Surface*[nb_of_surfaces];
+  //SurfaceVec = new G4Surface*[nb_of_surfaces];
+  G4int       MaxNbOfSurfaces = nb_of_surfaces;
+  G4Surface** MaxSurfaceVec   = new G4Surface*[MaxNbOfSurfaces];
   
   G4Vector3D Axis(0,0,1);
   G4Vector3D XAxis(1,0,0);
@@ -103,6 +111,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     for(G4int b=0;b<sides;b++)
     {
       G4Point3DVector PointList(4);
+
       // Create inner side
       // Calc points for the planar surface boundary
       // The order of the point give the sense 
@@ -112,14 +121,26 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
       PointList[2] = LocalOrigin + (Length*Axis) + (RMIN[a+1] * TmpAxis);
       PointList[1] = LocalOrigin + (RMIN[a] * TmpAxis);   
 
-      // Add to surface list and reverse sense	  
-      SurfaceVec[Count] = new G4FPlane( &PointList, 0, 0);
+      // We must check if a pair of two consecutive RMINs is not = 0.0
+      // which means no inner planes can exist!
+      if( RMIN[a] != 0.0 && RMIN[a+1] != 0.0 )
+      {
+        // Add to surface list and reverse sense	  
+        MaxSurfaceVec[Count] = new G4FPlane( &PointList, 0, 0);
+      }
+      else
+      {
+        // Insert nothing into the vector of sufaces, we'll replicate the vector anyway later
+        MaxSurfaceVec[Count] = 0;
+        // We need to reduce the number of planes by 1, one we have just skipped
+        nb_of_surfaces--;
+      }      
 
       Count++;
-      
+
       // Rotate axis back for the other surface point calculation
       TmpAxis.rotateZ(-PartAngle);
-
+      
       // Create outer side
       // Calc points for the planar surface boundary
       // The order of the point give the sense 	  
@@ -131,8 +152,8 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
       PointList2[1] = LocalOrigin + (RMAX[a] * TmpAxis);	  
            
       // Add to surface list and set sense	   
-      SurfaceVec[Count] = new G4FPlane(&PointList2);
-
+      MaxSurfaceVec[Count] = new G4FPlane(&PointList2);
+      
       Count++;
     }
     
@@ -140,7 +161,6 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
   }
   
   // Create end planes
-
   if(dphi >= 2*pi-perMillion)
   {
     // Create only end planes
@@ -162,13 +182,51 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
       TmpAxis.rotateZ(-PartAngle);
     }
     
-    // Add to surface list and set sense
-    SurfaceVec[nb_of_surfaces-2] =
-      new G4FPlane(&EndPointList, &InnerPointList);
+    if( RMIN[0] != 0.0 )
+    {
+      // Add to surface list and set sense
+      MaxSurfaceVec[MaxNbOfSurfaces-2] = new G4FPlane(&EndPointList, &InnerPointList);
+    }
+    else
+    {
+      // Add to surface list and set sense
+      MaxSurfaceVec[MaxNbOfSurfaces-2] = new G4FPlane(&EndPointList, 0);
+    }
+
+    if( RMIN[sections] != 0.0 )
+    {    
+      // Add to surface list and reverse sense
+      MaxSurfaceVec[MaxNbOfSurfaces-1] = new G4FPlane(&EndPointList2, &InnerPointList2, 0);
+    }
+    else
+    {
+      // Add to surface list and reverse sense
+      MaxSurfaceVec[MaxNbOfSurfaces-1] = new G4FPlane(&EndPointList2, 0, 0);
+    }
     
-    // Add to surface list and reverse sense
-    SurfaceVec[nb_of_surfaces-1] =
-      new G4FPlane(&EndPointList2, &InnerPointList2, 0);
+    // Now let's replicate the relevant surfaces into polyhedra's vector of surfaces
+    SurfaceVec = new G4Surface*[nb_of_surfaces];
+    G4int sf = 0;
+    for( G4int srf = 0; srf < MaxNbOfSurfaces; srf++ )
+    {
+      if( MaxSurfaceVec[srf] != 0 )
+      {
+        if( sf < nb_of_surfaces )
+        {
+          SurfaceVec[sf] = MaxSurfaceVec[srf];
+        }
+        sf++;
+      }
+    }
+    
+    if( sf != nb_of_surfaces )
+    {
+      G4cerr << "Bad number of surfaces!\a\n" << "sf: " << sf << " nb_of_surfaces: " << nb_of_surfaces << G4endl;
+      // Should we call G4Exception here ?
+    }
+    
+    // Clean up the temporary vector of surfaces
+    delete [] MaxSurfaceVec;
   }
   else
   {
@@ -346,7 +404,9 @@ EInside G4BREPSolidPolyhedra::Inside(register const G4ThreeVector& Pt) const
   
   // Check if point is inside the Polyhedra bounding box
   if( !GetBBox()->Inside(Pttmp) )
+  {
     return kOutside;
+  }
 
   // Set the surfaces to active again
   Reset();
@@ -369,21 +429,25 @@ EInside G4BREPSolidPolyhedra::Inside(register const G4ThreeVector& Pt) const
       // was not found before
       if( (SurfaceVec[a]->Intersect(r)) & 1 )
       {
-	// test if the point is on the surface
-	if(SurfaceVec[a]->GetDistance() <= kCarTolerance*kCarTolerance)
-	  return kSurface;
+	      // test if the point is on the surface
+	      if(SurfaceVec[a]->GetDistance() <= kCarTolerance*kCarTolerance)
+        {
+	        return kSurface;
+        }
+  
+	      // test if this intersection was found before
+	      for(G4int i=0; i<a; i++)
+	        if(SurfaceVec[a]->GetDistance() == SurfaceVec[i]->GetDistance())
+	        {
+	          samehit++;
+	          break;
+	        }
 	
-	// test if this intersection was found before
-	for(G4int i=0; i<a; i++)
-	  if(SurfaceVec[a]->GetDistance() == SurfaceVec[i]->GetDistance())
-	  {
-	    samehit++;
-	    break;
-	  }
-	
-	// count the number of surfaces intersected by the ray
-	if(!samehit)
-	  hits++;
+	      // count the number of surfaces intersected by the ray
+	      if(!samehit)
+        {
+	        hits++;
+        }
       }
     }
   }
@@ -391,9 +455,13 @@ EInside G4BREPSolidPolyhedra::Inside(register const G4ThreeVector& Pt) const
   // if the number of surfaces intersected is odd,
   // the point is inside the solid
   if(hits&1)
+  {
     return kInside;
+  }
   else
+  {
     return kOutside;
+  }
 }
 
 G4ThreeVector
@@ -437,7 +505,7 @@ G4double G4BREPSolidPolyhedra::DistanceToIn(const G4ThreeVector& Pt) const
 
   // Set the surfaces to active again
   Reset();
-  
+   
   // compute the shortest distance of the point to each surfaces
   // Be careful : it's a signed value
   for(a=0; a< nb_of_surfaces; a++)  
@@ -460,11 +528,15 @@ G4double G4BREPSolidPolyhedra::DistanceToIn(const G4ThreeVector& Pt) const
   delete[] dists;
 
   if(Dist == kInfinity)
+  {
     // the point is inside the solid or on a surface
     return 0;
+  }
   else 
+  {
     //return Dist;
     return fabs(Dist);
+  }
 }
 
 G4double
@@ -498,25 +570,33 @@ G4BREPSolidPolyhedra::DistanceToIn(register const G4ThreeVector& Pt,
   {
     if(SurfaceVec[a]->IsActive())
     {
+      G4int intersects = SurfaceVec[a]->Intersect(r);
       // test if the ray intersect the surface
-      if( (SurfaceVec[a]->Intersect(r)) )
+      if( intersects != 0 )
       {
-	// if more than 1 surface is intersected,
-	// take the nearest one
-	if( SurfaceVec[a]->GetDistance() < ShortestDistance )
-	  if( SurfaceVec[a]->GetDistance() > halfTolerance )
-	  {
-	    ShortestDistance = SurfaceVec[a]->GetDistance();
-	  }
-	  else
-	  {
-	    // the point is within the boundary
-	    // ignored it if the direction is away from the boundary	     
-	    G4Vector3D Norm = SurfaceVec[a]->SurfaceNormal(Pttmp);
+        G4double surfDistance = SurfaceVec[a]->GetDistance();
+        
+	      // if more than 1 surface is intersected,
+	      // take the nearest one
+	      if( surfDistance < ShortestDistance )
+        {
+	        //if( surfDistance > halfTolerance )
+	        if( surfDistance > halfTolerance*halfTolerance )
+	        {
+	          ShortestDistance = surfDistance;
+	        }
+	        else
+	        {
+	          // the point is within the boundary
+	          // ignored it if the direction is away from the boundary	     
+	          G4Vector3D Norm = SurfaceVec[a]->SurfaceNormal(Pttmp);
 
-	    if( (Norm * Vtmp) < 0 )
-	      ShortestDistance = SurfaceVec[a]->GetDistance();
-	  }
+	          if( (Norm * Vtmp) < 0 )
+            {
+	            ShortestDistance = surfDistance;
+            }
+	        }
+        }
       }
     }
   }
@@ -524,10 +604,14 @@ G4BREPSolidPolyhedra::DistanceToIn(register const G4ThreeVector& Pt,
   // Be carreful !
   // SurfaceVec->Distance is in fact the squared distance
   if(ShortestDistance != kInfinity)
+  {
     return sqrt(ShortestDistance);
+  }
   else
+  {
     // no intersection, return kInfinity
     return kInfinity; 
+  }
 }
 
 G4double
@@ -573,37 +657,46 @@ G4BREPSolidPolyhedra::DistanceToOut(register const G4ThreeVector& Pt,
  
   for(a=0; a< nb_of_surfaces; a++)
   {
+    double surfDistance = SurfaceVec[a]->GetDistance();
+    
     if(SurfaceVec[a]->IsActive())
     {
+      G4int intersects = SurfaceVec[a]->Intersect(r);
       // test if the ray intersects the surface
-      if( (SurfaceVec[a]->Intersect(r)) )
+      if( intersects != 0 )
       {
         parity += 1;
 	
-	// if more than 1 surface is intersected,
-	// take the nearest one
-	if( SurfaceVec[a]->GetDistance() < ShortestDistance )
-	  if( SurfaceVec[a]->GetDistance() > halfTolerance*halfTolerance )
-	  {
-	    ShortestDistance = SurfaceVec[a]->GetDistance();
-	  }
-	  else
-	  {
-	    // the point is within the boundary: ignore it
-	    parity -= 1;
-	  }
-      }
+	      // if more than 1 surface is intersected,
+	      // take the nearest one
+	      if( surfDistance < ShortestDistance )
+        {
+          if( surfDistance > halfTolerance*halfTolerance )
+	        {
+	          ShortestDistance = surfDistance;
+	        }
+	        else
+	        {
+	          // the point is within the boundary: ignore it
+	          parity -= 1;
+	        }
+        }
+      }      
     }
   }
 
   // Be careful !
   // SurfaceVec->Distance is in fact the squared distance
   if((ShortestDistance != kInfinity) && (parity&1))
+  {
     return sqrt(ShortestDistance);
+  }
   else
+  {
     // if no intersection is found, the point is outside
     // so return 0
     return 0; 
+  }
 }
 
 G4double G4BREPSolidPolyhedra::DistanceToOut(const G4ThreeVector& Pt) const
@@ -620,8 +713,9 @@ G4double G4BREPSolidPolyhedra::DistanceToOut(const G4ThreeVector& Pt) const
   
   // calcul of the shortest distance of the point to each surfaces
   // Be carreful : it's a signed value
-  for(a=0; a< nb_of_surfaces; a++)
-    dists[a] = SurfaceVec[a]->HowNear(Pt);  
+  for(a=0; a< nb_of_surfaces; a++) {
+    dists[a] = SurfaceVec[a]->HowNear(Pt);
+  }
 
   G4double Dist = kInfinity;
   
@@ -633,19 +727,22 @@ G4double G4BREPSolidPolyhedra::DistanceToOut(const G4ThreeVector& Pt) const
   //   function. But I don`t know if it is really needed because dToOut is 
   //   called only if the point is inside )
 
-  for(a = 0; a < nb_of_surfaces; a++)
-    if( fabs(Dist) > fabs(dists[a]) ) 
+  for(a = 0; a < nb_of_surfaces; a++)  {
+    if( fabs(Dist) > fabs(dists[a]) ) {
       //if( dists[a] <= 0)
-	Dist = dists[a];
+	    Dist = dists[a];
+    }
+  }
   
   delete[] dists;
 
-  if(Dist == kInfinity)
+  if(Dist == kInfinity) {
     // the point is ouside the solid or on a surface
     return 0;
-  else
+  } else {
     // return Dist;
     return fabs(Dist);
+  }
 }
 
 //  In graphics_reps:   
