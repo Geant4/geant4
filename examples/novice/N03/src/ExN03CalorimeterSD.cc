@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03CalorimeterSD.cc,v 1.1 1999-01-07 16:05:56 gunter Exp $
+// $Id: ExN03CalorimeterSD.cc,v 1.2 1999-01-28 17:11:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,7 +69,8 @@ G4bool ExN03CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
     
   G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
   //theTouchable->MoveUpHistory();
-  G4int LayerNumber = theTouchable->GetReplicaNumber(1);
+  G4int LayerNumber = 0;
+  if (Detector->GetNbOfLayers()>1) LayerNumber=theTouchable->GetReplicaNumber(1);
 
   if (HitID[LayerNumber]==-1)
     { 
