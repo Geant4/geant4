@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2003-07-02 09:58:45 vnivanch Exp $
+$Id: History,v 1.54 2003-07-24 09:19:00 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 July 03: V.Ivant (muons-V05-02-01)
+-Update model interface according utils-V05-02-00
 
 02 July 03: V.Ivant (muons-V05-02-00)
 -Redo previous tag for 5.2
