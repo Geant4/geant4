@@ -35,12 +35,6 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     FCFLAGS   += -pg
     CCFLAGS   += -pg
   endif
-  ifdef G4LIB_BUILD_SHARED
-    CXXFLAGS  += -fPIC
-    FCFLAGS   += -fPIC
-    CCFLAGS   += -fPIC
-  endif
-#  G4RUNPATHOPTION := -Wl,-rpath 
   FC := g77
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   FCLIBS := -lg2c -lnsl
@@ -60,7 +54,6 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
-  #OIVFLAGS  += -I$(OIHOME)/include 
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
