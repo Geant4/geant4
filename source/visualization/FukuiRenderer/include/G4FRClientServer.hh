@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FRClientServer.hh,v 1.3 1999-12-15 14:54:00 gunter Exp $
+// $Id: G4FRClientServer.hh,v 1.4 2000-02-29 09:54:38 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA, Wed Jul  3 14:13:52 JST 1996
@@ -59,7 +59,7 @@ class G4FRClientServer {
 
  protected:
 
-	void		Err( char* message ) { perror(message) ;}
+	void		Err( const char* message ) { perror(message) ;}
 	void		SetSendingMessage( const char* message ) 
 				{ strcpy( fSendingMessage, message );}
 	void		Send() ; // send command in fSendingMessage
