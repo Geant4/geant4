@@ -1,4 +1,4 @@
-$Id: History,v 1.171 2001-11-29 12:14:00 johna Exp $
+$Id: History,v 1.172 2001-12-01 21:07:26 stanaka Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,12 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+01th December 2001 vis-V03-02-21 
+- Code refinements in FukuiRenderer/ directory:
+  * Noisy warnings for Linux-g++ are suppressed.
+    (%lg ==> %g etc)
+  * G4FRSceneFunc.icc is moved from /src to /include
 
 29th November 2001  John Allison
 - Fixed some pedantic warnings and a bug thrown up by such in OpenGL.
