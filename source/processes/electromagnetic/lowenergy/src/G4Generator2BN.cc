@@ -36,6 +36,7 @@
 //
 // Modifications: 
 // 21 Jun 2003                                 First implementation acording with new design
+// 05 Nov 2003  MGP                            Fixed compilation warning
 //
 // Class Description: 
 //
@@ -258,7 +259,7 @@ G4double G4Generator2BN::Generate2BN(G4double Ek, G4double k) const
   G4double Eel;
   G4double kmin2; 
   G4double kmax, t;
-  G4double cte1, cte2;
+  G4double cte2;
   G4double y, u;
   G4double fk, ft;
   G4double ds;
