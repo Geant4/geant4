@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: F01DetectorConstruction.cc,v 1.2 2001-03-30 15:12:22 grichine Exp $
+// $Id: F01DetectorConstruction.cc,v 1.3 2001-05-07 13:17:06 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,21 +46,22 @@ F01DetectorConstruction::F01DetectorConstruction()
   G4double inch = 2.54*cm ;
   G4double  mil = inch/1000.0 ;
 
-  WorldSizeZ = 80.*cm;
-  WorldSizeR = 20.*cm;
+  WorldSizeZ = 44000.*mm;
+  WorldSizeR = 22000.*mm;
 
-  AbsorberThickness = 10.0*mm;
+  AbsorberThickness = 1.0*mm;
 
-  AbsorberRadius   = 10.*cm;
-  zAbsorber = 36.*cm ;
+  AbsorberRadius   = 20000.*mm;
+
+  zAbsorber = 21990.0*mm ;
 
   fWindowThick = 51.0*micrometer ;
   fElectrodeThick = 10.0*micrometer ;
   fGapThick = 1.0*mm ;
 
-  fRadThickness = 25*micrometer ;   // 0.5*mil ;   
-  fGasGap       = 1500*micrometer  ;    // 30*mil ;    
-  fFoilNumber   = 188 ;
+  fRadThickness = 100*mm ;   // 0.5*mil ;   
+  fGasGap       = 100*mm  ;    // 30*mil ;    
+  fFoilNumber   = 100 ;
 
   fDetThickness = 40.0*mm ;
   fDetLength    = 200.0*cm  ;
@@ -293,7 +294,8 @@ H2O->AddElement(elO, natoms=1);
   Oxygen->AddElement(elO, 2);
 
 
-  density = 1.2928*mg/cm3 ;       // STP
+  density  = 1.2928*mg/cm3 ;       // STP
+  density *= 1.0e-8 ;       // pumped vacuum
   G4Material* Air = new G4Material(name="Air"  , density, ncomponents=3);
   Air->AddMaterial( Nitrogen, fractionmass = 0.7557 ) ;
   Air->AddMaterial( Oxygen,   fractionmass = 0.2315 ) ;
@@ -387,12 +389,12 @@ H2O->AddElement(elO, natoms=1);
 
   //default materials of the calorimeter and TR radiator
 
-  fRadiatorMat =  Mylar ; // CH2 ;   // Mylar ; 
+  fRadiatorMat =  Air ; // CH2 ;   // Mylar ; 
   
   fWindowMat = Mylar ;
   fElectrodeMat = Al ;
 
-  AbsorberMaterial = Kr20CO2 ;   // XeCO2CF4  ; 
+  AbsorberMaterial = Air ; //  Kr20CO2 ;   // XeCO2CF4  ; 
   fGapMat          = Kr20CO2 ;
 
   WorldMaterial    = Air ;
@@ -433,7 +435,64 @@ G4VPhysicalVolume* F01DetectorConstruction::ConstructCalorimeter()
                                  false,			//no boolean operation
                                  0);			//copy number
 
-                            
+  // TR radiator envelope
+
+  G4double radThick = fFoilNumber*(fRadThickness + fGasGap) + fDetGap   ;
+
+  G4double zRad = zAbsorber - 20*cm - 0.5*radThick ;
+  G4cout<<"zRad = "<<zRad/mm<<" mm"<<G4endl ;
+
+  radThick *= 1.02 ;
+  G4cout<<"radThick = "<<radThick/mm<<" mm"<<G4endl ;
+  G4cout<<"fFoilNumber = "<<fFoilNumber<<G4endl ;
+  G4cout<<"fRadiatorMat = "<<fRadiatorMat->GetName()<<G4endl ;
+  G4cout<<"WorldMaterial = "<<WorldMaterial->GetName()<<G4endl ;
+ 
+  if(solidRadiator) delete solidRadiator;
+  if(logicRadiator) delete logicRadiator;
+  if(physiRadiator) delete physiRadiator;
+
+  solidRadiator = new G4Tubs("Radiator",0.0, 
+                                              1.01*AbsorberRadius, 
+                                              0.5*radThick,0.0,twopi             ) ; 
+                         
+  logicRadiator = new G4LogicalVolume(solidRadiator,	
+                                                       WorldMaterial,      
+                                                       "Radiator");	       
+                                   
+  physiRadiator = new G4PVPlacement(0,
+                                     G4ThreeVector(0,0,zRad),	        
+                                     "Radiator", logicRadiator,		
+                                     physiWorld, false,	0       );  	
+
+  if(fSolidRadSlice) delete fSolidRadSlice;
+  if(fLogicRadSlice) delete fLogicRadSlice; 
+  if(fPhysicRadSlice) delete fPhysicRadSlice; 
+
+  fSolidRadSlice = new G4Tubs("RadSlice",0.0,
+                                AbsorberRadius,0.5*fRadThickness,0.0,twopi ) ;
+
+  fLogicRadSlice = new G4LogicalVolume(fSolidRadSlice,fRadiatorMat,
+                                          "RadSlice",0,0,0);
+
+  zModule = zRad + 0.5*radThick/1.02 ;   //  ??? + fRadThickness ; 
+  G4cout<<"zModule = "<<zModule/mm<<" mm"<<G4endl ;
+
+    for(j=0;j<fFoilNumber;j++)
+    {  
+
+      zRadiator = zModule - j*(fRadThickness + fGasGap) ;
+      G4cout<<zRadiator/mm<<" mm"<<"\t" ;
+      //   G4cout<<"j = "<<j<<"\t" ;         
+      
+      fPhysicRadSlice = new G4PVPlacement(0,G4ThreeVector(0.,0.,zRadiator-zRad),
+                                         "RadSlice",fLogicRadSlice,
+                                          physiRadiator,false,j);
+     }                                 
+  G4cout<<G4endl ;
+                     
+
+       
   // Absorber
 
   if (AbsorberThickness > 0.) 
@@ -442,15 +501,17 @@ G4VPhysicalVolume* F01DetectorConstruction::ConstructCalorimeter()
       if(logicAbsorber) delete logicAbsorber ;
       if(physiAbsorber) delete physiAbsorber ;
 
-      solidAbsorber = new G4Tubs("Absorber",		
-                          0.,AbsorberRadius,AbsorberThickness/2.,0.,twopi); 
+      solidAbsorber = new G4Tubs("Absorber", 1.0*mm, 
+                                  AbsorberRadius,
+                                  AbsorberThickness/2., 
+                                  0.0,twopi); 
                           
       logicAbsorber = new G4LogicalVolume(solidAbsorber,    
       			                  AbsorberMaterial, 
       			                  "Absorber");     
       			                  
       physiAbsorber = new G4PVPlacement(0,		   
-      		    G4ThreeVector(0.,0.,zAbsorber),        
+      		          G4ThreeVector(0.,0.,zAbsorber),        
                                         "Absorber",        
                                         logicAbsorber,     
                                         physiWorld,       

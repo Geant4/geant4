@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: F01DetectorConstruction.hh,v 1.1 2001-03-27 16:21:25 grichine Exp $
+// $Id: F01DetectorConstruction.hh,v 1.2 2001-05-07 13:18:02 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -110,6 +110,12 @@ class F01DetectorConstruction : public G4VUserDetectorConstruction
      G4Tubs*            fSolidRadRing;    // pointer to the solid  R-slice 
      G4LogicalVolume*   fLogicRadRing;    // pointer to the logical R-slide
      G4VPhysicalVolume* fPhysicRadRing;   // pointer to the physical R-slide
+
+
+     G4Tubs*             solidRadiator;
+     G4LogicalVolume*   logicRadiator; 
+     G4VPhysicalVolume* physiRadiator;
+
 
      G4Material* fRadiatorMat;        //pointer to the TR radiator material
 

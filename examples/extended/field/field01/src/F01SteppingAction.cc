@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: F01SteppingAction.cc,v 1.1 2001-03-27 16:22:23 grichine Exp $
+// $Id: F01SteppingAction.cc,v 1.2 2001-05-07 13:17:26 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -135,7 +135,7 @@ void F01SteppingAction::UserSteppingAction(const G4Step* aStep)
         (aStep->GetTrack()->GetNextVolume()->GetName()=="World") &&
         (aStep->GetPostStepPoint()->GetProcessDefinedStep()
               ->GetProcessName() == "Transportation") &&
-        (aStep->GetTrack()->GetMomentumDirection().x()>0.)
+        (aStep->GetTrack()->GetMomentumDirection().z()>0.)
                                                         )
      {
        eventaction->SetTr();
@@ -144,8 +144,8 @@ void F01SteppingAction::UserSteppingAction(const G4Step* aStep)
        Ttrans = aStep->GetTrack()->GetKineticEnergy() ;
        runaction->FillTt(Ttrans) ;
        yend= aStep->GetTrack()->GetPosition().y() ;
-       zend= aStep->GetTrack()->GetPosition().z() ;
-       rend = sqrt(yend*yend+zend*zend) ;
+       xend= aStep->GetTrack()->GetPosition().x() ;
+       rend = sqrt(yend*yend+xend*xend) ;
        runaction->FillR(rend);
      }
        

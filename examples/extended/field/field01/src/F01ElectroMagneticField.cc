@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: F01ElectroMagneticField.cc,v 1.5 2001-03-30 15:12:12 grichine Exp $
+// $Id: F01ElectroMagneticField.cc,v 1.6 2001-05-07 13:17:06 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -42,7 +42,10 @@
 F01ElectroMagneticField::F01ElectroMagneticField()
   :  fStepper(NULL),fChordFinder(NULL)
 {
-  fMagneticField = new G4UniformMagField(G4ThreeVector(0.0,0.2*tesla,0.0));
+  fMagneticField = new G4UniformMagField(
+		       G4ThreeVector(3.3*tesla,
+                                     0.0,         // 0.5*tesla,
+                                     0.0               ));
 
   //  G4FieldManager* fieldMgr = G4TransportationManager::GetTransportationManager()
   //                         ->GetFieldManager();  

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: F01RunAction.cc,v 1.1 2001-03-27 16:22:22 grichine Exp $
+// $Id: F01RunAction.cc,v 1.2 2001-05-07 13:17:06 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,7 +93,7 @@ void F01RunAction::bookHisto()
   }
   if(nbinR>0)
   {
-    histo4 = hbookManager->histogram("lateral distribution at exit(mm)"
+    histo4 = hbookManager->histogram("Lateral distribution at exit (mm)"
                                      ,nbinR ,Rlow,Rhigh)  ;
     assert (histo4 != 0);
   }
@@ -562,12 +562,20 @@ void F01RunAction::EndOfRunAction(const G4Run* aRun)
   }
 
   if(nbinR >0)
-  {G4double R , dnorm, norm,sig  ;
-   G4cout << "  R  distribution " << G4endl ;
-   G4cout << "#entries=" << entryR  << "    #underflows=" << underR  <<
+  {
+    G4double R , dnorm, norm,sig  ;
+
+    G4std::ofstream fileOut("diameter.out", G4std::ios::out ) ;
+    fileOut.setf( G4std::ios::scientific, G4std::ios::floatfield );
+
+    G4std::ofstream normOut("normDiameter.out", G4std::ios::out ) ;
+    normOut.setf( G4std::ios::scientific, G4std::ios::floatfield );
+
+    G4cout << "  R  distribution " << G4endl ;
+    G4cout << "#entries=" << entryR  << "    #underflows=" << underR  <<
              "    #overflows=" << overR  << G4endl ;
-   if( entryR >0.)
-   {
+    if( entryR >0.)
+    {
      Rmean /= entryR;
      sig = R2mean/entryR - Rmean*Rmean;
      if(sig<=0.) sig=0. ;
@@ -584,6 +592,8 @@ void F01RunAction::EndOfRunAction(const G4Run* aRun)
       G4cout << G4std::setw(5) << ier << G4std::setw(10) << R  <<
                 G4std::setw(12) << distR[ier] <<
                 G4std::setw(12) << dnorm << G4endl ;
+        fileOut << R/mm << "\t"<< distR[ier] << G4endl ;
+        normOut << R/mm << "\t"<< dnorm << G4endl ;
      }
      G4cout << G4endl;
    }

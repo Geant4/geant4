@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: F01PrimaryGeneratorAction.cc,v 1.1 2001-03-27 16:22:21 grichine Exp $
+// $Id: F01PrimaryGeneratorAction.cc,v 1.2 2001-05-07 13:17:06 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,10 +52,10 @@ F01PrimaryGeneratorAction::F01PrimaryGeneratorAction(
   
   thePrimaryParticleName = particle->GetParticleName() ;
 
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(100.*GeV);
+  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,-1.));
+  particleGun->SetParticleEnergy(1.*GeV);
 
-  zvertex = 0.0 ; //  -0.5*(F01Detector->GetAbsorberThickness());
+  zvertex = 21990.5 ; // 21989.0 ; //  -0.5*(F01Detector->GetAbsorberThickness());
   particleGun->SetParticlePosition(G4ThreeVector(xvertex,yvertex,zvertex));
 
 }
@@ -87,7 +87,7 @@ void F01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   {
     x0 = 0. ;
     y0 = 0. ;
-    z0 = 0. ; // -0.5*(F01Detector->GetWorldSizeZ()) ;
+    z0 = 21985.0 ; // -0.5*(F01Detector->GetWorldSizeZ()) ;
   }
   G4double r0,phi0 ;
   /* ****************************************************
@@ -98,7 +98,7 @@ void F01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       x0 = r0*cos(phi0);
       y0 = r0*sin(phi0);
   } 
-  ********************************************* */
+  ************************************************************ */
   particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
   particleGun->GeneratePrimaryVertex(anEvent);
 }
@@ -134,3 +134,8 @@ void F01PrimaryGeneratorAction::Setyvertex(G4double y)
   G4cout << " Y coordinate of the primary vertex = " << yvertex/mm <<
             " mm." << G4endl;
 }
+
+
+
+
+
