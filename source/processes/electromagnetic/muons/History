@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2000-08-11 10:37:28 maire Exp $
+$Id: History,v 1.5 2000-11-08 14:29:11 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+08 nov 00: mma (muons-V02-00-03)
+- signature in GetLossWithFluct changed L.Urban 30/10/00
      
 11 aug 00: mma (muons-V02-00-01)
 
